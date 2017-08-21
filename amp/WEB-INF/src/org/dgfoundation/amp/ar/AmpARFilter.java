@@ -362,6 +362,8 @@ public class AmpARFilter extends PropertyListable {
 	private Set<AmpOrgGroup> contractingAgencyGroups = null;
 	
 	private Set<AmpOrganisation> responsibleorg = null;
+	private Set<AmpOrganisation> componentFunding = null;
+	private Set<AmpOrganisation> componentSecondResponsible = null;
 	private Set<AmpOrganisation> executingAgency;
 	private Set<AmpOrganisation> contractingAgency;
 	private Set<AmpOrganisation> implementingAgency;
@@ -1499,6 +1501,12 @@ public class AmpARFilter extends PropertyListable {
 		String RESPONSIBLE_ORGANIZATION_FILTER = " SELECT v.amp_activity_id FROM v_responsible_organisation v  WHERE v.org_id IN ("
 			+ Util.toCSStringForIN(responsibleorg) + ")";
 
+		String COMPONENT_FUNDING_ORGANIZATION_FILTER = " SELECT v.amp_activity_id FROM v_component_funding_organization_name v  WHERE v.org_id IN ("
+			+ Util.toCSStringForIN(componentFunding) + ")";
+
+		String COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION_FILTER = " SELECT v.amp_activity_id FROM v_component_second_responsible_organization_name v  WHERE v.org_id IN ("
+			+ Util.toCSStringForIN(componentSecondResponsible) + ")";
+
 		String DONNOR_AGENCY_FILTER = " SELECT v.amp_activity_id FROM v_donors v  WHERE v.amp_donor_org_id IN ("
 			+ Util.toCSStringForIN(donnorgAgency) + ")";
 		String ARCHIVED_FILTER          = "";
@@ -1702,6 +1710,14 @@ public class AmpARFilter extends PropertyListable {
 		
 		if (responsibleorg!=null && responsibleorg.size() >0){
 			queryAppend(RESPONSIBLE_ORGANIZATION_FILTER);
+		}
+
+		if (componentFunding != null && componentFunding.size() > 0) {
+			queryAppend(COMPONENT_FUNDING_ORGANIZATION_FILTER);
+		}
+
+		if (componentSecondResponsible != null && componentSecondResponsible.size() > 0) {
+			queryAppend(COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION_FILTER);
 		}
 		
 		if (actualAppYear!=null && actualAppYear!=-1) {
@@ -3278,6 +3294,22 @@ public class AmpARFilter extends PropertyListable {
 
 	public void setResponsibleorg(Set<AmpOrganisation> responsibleorg) {
 		this.responsibleorg = responsibleorg;
+	}
+
+	public Set<AmpOrganisation> getComponentFunding() {
+		return componentFunding;
+	}
+
+	public void setComponentFunding(Set<AmpOrganisation> componentFunding) {
+		this.componentFunding = componentFunding;
+	}
+
+	public Set<AmpOrganisation> getComponentSecondResponsible() {
+		return componentSecondResponsible;
+	}
+
+	public void setComponentSecondResponsible(Set<AmpOrganisation> componentSecondResponsible) {
+		this.componentSecondResponsible = componentSecondResponsible;
 	}
 
 	public String getSortBy() {

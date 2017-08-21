@@ -84,7 +84,7 @@ public class AmpReportsToReportSpecification {
 	}
 
 	private void configureInvisibleHierarchies() {
-		if (report.getSplitByFunding()) {
+		if (report.getType() == ArConstants.DONOR_TYPE && report.getSplitByFunding()) {
 			spec.addColumn(new ReportColumn(ColumnConstants.FUNDING_ID));
 			spec.addInvisibleHierarchy(new ReportColumn(ColumnConstants.FUNDING_ID));
 		}

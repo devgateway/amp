@@ -55,6 +55,10 @@ public class FilterUtils {
 		mapSimpleColumn(FiltersConstants.APPROVAL_STATUS, ColumnConstants.APPROVAL_STATUS);
 		mapSimpleColumn(FiltersConstants.ARCHIVED, ColumnConstants.ARCHIVED);
 		mapSimpleColumn(FiltersConstants.BENEFICIARY_AGENCY, ColumnConstants.BENEFICIARY_AGENCY);
+		mapSimpleColumn(FiltersConstants.COMPONENT_FUNDING_ORGANIZATION,
+				ColumnConstants.COMPONENT_FUNDING_ORGANIZATION);
+		mapSimpleColumn(FiltersConstants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION,
+				ColumnConstants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION);
 		mapSimpleColumn(FiltersConstants.COMPUTED_YEAR, ColumnConstants.COMPUTED_YEAR);
 		mapSimpleColumn(FiltersConstants.CONCESSIONALITY_LEVEL, ColumnConstants.CONCESSIONALITY_LEVEL);
 		mapSimpleColumn(FiltersConstants.CONTRACTING_AGENCY, ColumnConstants.CONTRACTING_AGENCY);

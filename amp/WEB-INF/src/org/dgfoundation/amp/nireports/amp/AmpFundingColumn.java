@@ -263,7 +263,6 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 				    addCoordinateIfLongExists(coos, rs.rs, "related_project_id", schema.ACT_LEVEL_COLUMN);
 				
 				if (this.name.equals(ENTITY_COMPONENT_FUNDING)) {
-					addCoordinateIfLongExists(coos, rs.rs, "amp_component_id", schema.COMPONENT_LEVEL_COLUMN);
 					metaSet.add(MetaCategory.SOURCE_ROLE.category, Constants.FUNDING_AGENCY);
 				}
 				

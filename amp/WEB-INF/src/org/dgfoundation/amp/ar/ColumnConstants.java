@@ -58,6 +58,7 @@ public class ColumnConstants {
 	public static final String CAPITAL___EXPENDITURE = "Capital - Expenditure";
 	public static final String COMPONENT_DESCRIPTION = "Component description";
 	public static final String COMPONENT_FUNDING_ORGANIZATION = "Component Funding Organization";
+	public static final String COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION = "Component Second Responsible Organization";
 	public static final String COMPONENT_NAME = "Component Name";
 	public static final String COMPONENT_TYPE = "Component Type";
 	public static final String COMPUTED_YEAR = "Computed Year";

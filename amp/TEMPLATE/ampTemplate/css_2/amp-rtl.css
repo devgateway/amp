@@ -37,3 +37,7 @@ div.trnpanel div.trn-row ul {
     white-space: nowrap;
     width: 60px;
 }
+
+.ot-content {
+    direction: rtl;
+}

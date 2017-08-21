@@ -1992,16 +1992,16 @@ function collapseAll() {
 									<td class="prv_right">
 										<table width="100%" cellSpacing="1" cellPadding="0" class="box-border-nopadding">
 											<tr>
-												<td width="100" style="padding-left:5px;" bgcolor="#f0f0f0">
+												<td width="100" style="padding-left:5px;" vAlign="top" bgcolor="#f0f0f0">
 													<digi:trn key="aim:commitments">Commitments</digi:trn>
 												</td>
 												<td class="prv_right">
-												<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee" class="component-funding-table">
 													<c:forEach var="fd" items="${comp.commitments}">
+													<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee" class="component-funding-table">
 														<tr>
 															<module:display name="/Activity Form/Components/Component/Components Commitments" 
 																parentModule="/Activity Form/Components/Component">
-															<td width="50">
+															<td width="100">
 																<digi:trn key="aim:${fd.adjustmentTypeNameTrimmed}">
 																	<b><c:out value="${fd.adjustmentTypeName}" /></b>
 																</digi:trn>
@@ -2019,36 +2019,55 @@ function collapseAll() {
 																	<b><c:out value="${fd.currencyCode}"/></b>
 																</td>
 															</module:display>
-															<module:display name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Component Organization"
-																parentModule="/Activity Form/Components/Component/Components Commitments/Commitment Table">
-																<td class="prv_right">
-																	<b><digi:trn>Organisation</digi:trn>:</b>
-																	<logic:notEmpty property="componentOrganisation" name="fd">
-																		<c:out value="${fd.componentOrganisation.name}"/>
-																	</logic:notEmpty>
-																</td>
-															</module:display>
-															
 															<module:display name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Transaction Date"
-																parentModule="/Activity Form/Components/Component/Components Commitments/Commitment Table">
-																<td width="70">
+																			parentModule="/Activity Form/Components/Component/Components Commitments/Commitment Table">
+																<td width="80">
 																	<b><c:out value="${fd.transactionDate}"/></b>
 																</td>
 															</module:display>
 														</tr>
+															<module:display name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Component Organization"
+																parentModule="/Activity Form/Components/Component/Components Commitments/Commitment Table">
+																<tr>
+																	<td width="100">
+																		<b><digi:trn>Organisation</digi:trn>:</b>
+																	</td>
+																	<td colspan="3" style="padding-left: 15px">
+																		<logic:notEmpty property="componentOrganisation"
+																						name="fd">
+																			<c:out value="${fd.componentOrganisation.name}"/>
+																		</logic:notEmpty>
+																	</td>
+																</tr>
+															</module:display>
+															<module:display name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Second Reporting Organisation"
+																parentModule="/Activity Form/Components/Component/Components Commitments/Commitment Table">
+																<tr>
+																	<td width="100">
+																		<b><digi:trn>Second Reporting Organisation</digi:trn>:</b>
+																	</td>
+																	<td colspan="3" style="padding-left: 15px">
+																		<logic:notEmpty property="secondReportingOrganisation"
+																						name="fd">
+																			<c:out value="${fd.secondReportingOrganisation.name}"/>
+																		</logic:notEmpty>
+																	</td>
+																</tr>
+															</module:display>
 														<module:display name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Description"
 																parentModule="/Activity Form/Components/Component/Components Commitments/Commitment Table">
 															<tr>
-																<td width="50">
+																<td width="100">
 																	<b><digi:trn>Description</digi:trn></b>
 																</td>
-																<td colspan="5" style="padding-left: 15px">
+																<td colspan="3" style="padding-left: 15px">
 																	<b><c:out value="${fd.componentTransactionDescription}" /></b>
 																</td>
 															</tr>
 														</module:display>
+														</table> 
+														<hr />
 													</c:forEach>
-												</table> 
 												</td>
 											</tr>
 										</table> 
@@ -2063,12 +2082,14 @@ function collapseAll() {
 									<td class="prv_right">
 									<table width="100%" cellSpacing="1" cellPadding="1" class="box-border-nopadding">
 										<tr>
-											<td width="100" style="padding-left:5px;" bgcolor="#f0f0f0">
+											<td width="100" style="padding-left:5px;" vAlign="top" bgcolor="#f0f0f0">
 												<digi:trn key="aim:disbursements">Disbursements</digi:trn>
 											</td>
 											<td class="prv_right">
-											<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
 												<c:forEach var="fd" items="${comp.disbursements}">
+													<table width="100%" cellSpacing="1" cellPadding="1"
+														   bgcolor="#eeeeee"
+														   class="component-funding-table">
 													<tr>
 														<module:display name="/Activity Form/Components/Component/Components Disbursements"
 																parentModule="/Activity Form/Components/Component">
@@ -2098,8 +2119,50 @@ function collapseAll() {
 															</td>
 														</module:display>
 													</tr>
+															<module:display name="/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Component Organization"
+																parentModule="/Activity Form/Components/Component/Components Disbursements/Disbursement Table">
+																<tr>
+																	<td width="100">
+																		<b><digi:trn>Organisation</digi:trn>:</b>
+																	</td>
+																	<td colspan="3" style="padding-left: 15px">
+																		<logic:notEmpty property="componentOrganisation"
+																						name="fd">
+																			<c:out value="${fd.componentOrganisation.name}"/>
+																		</logic:notEmpty>
+																	</td>
+																</tr>
+															</module:display>
+															<module:display name="/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Second Reporting Organisation"
+																parentModule="/Activity Form/Components/Component/Components Disbursements/Disbursement Table">
+																<tr>
+																	<td width="100">
+																		<b><digi:trn>Second Reporting Organisation</digi:trn>:</b>
+																	</td>
+																	<td colspan="3" style="padding-left: 15px">
+																		<logic:notEmpty property="secondReportingOrganisation"
+																						name="fd">
+																			<c:out value="${fd.secondReportingOrganisation.name}"/>
+																		</logic:notEmpty>
+																	</td>
+																</tr>
+															</module:display>
+
+														<module:display name="/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Description"
+																parentModule="/Activity Form/Components/Component/Components Disbursements/Disbursement Table">
+															<tr>
+																<td width="100">
+																	<b><digi:trn>Description</digi:trn></b>
+																</td>
+																<td colspan="3" style="padding-left: 15px">
+																	<b><c:out value="${fd.componentTransactionDescription}" /></b>
+																</td>
+															</tr>
+														</module:display>
+														</table>
+														<hr />
 												</c:forEach>
-											</table>
+
 											</td>
 										</tr>
 								</table>
@@ -2113,14 +2176,14 @@ function collapseAll() {
 					<c:if test="${!empty comp.expenditures}">
 						<tr>
 							<td class="prv_right">
-							<table width="100%" cellSpacing="1" cellPadding="1" class="box-border-nopadding">
+							<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top" class="box-border-nopadding">
 								<tr>
-									<td width="100" bgcolor="#f0f0f0" style="padding-left:5px;">
+									<td width="100" bgcolor="#f0f0f0" vAlign="top" style="padding-left:5px;">
 										<digi:trn key="aim:expenditures">Expenditures</digi:trn>
 									</td>
 									<td class="prv_right">
-									<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
 										<c:forEach var="fd" items="${comp.expenditures}">
+											<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee" class="component-funding-table">
 											<tr>
 												<module:display name="/Activity Form/Components/Component/Components Expeditures" 
 													parentModule="/Activity Form/Components/Component">
@@ -2149,8 +2212,50 @@ function collapseAll() {
 													</td>
 												</module:display>
 											</tr>
+															<module:display name="/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Component Organization"
+																parentModule="/Activity Form/Components/Component/Components Expenditures/Expenditure Table">
+																<tr>
+																	<td width="100">
+																		<b><digi:trn>Organisation</digi:trn>:</b>
+																	</td>
+																	<td colspan="3" style="padding-left: 15px">
+																		<logic:notEmpty property="componentOrganisation"
+																						name="fd">
+																			<c:out value="${fd.componentOrganisation.name}"/>
+																		</logic:notEmpty>
+																	</td>
+																</tr>
+															</module:display>
+															<module:display name="/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Second Reporting Organisation"
+																parentModule="/Activity Form/Components/Component/Components Expenditures/Expenditure Table">
+																<tr>
+																	<td width="100">
+																		<b><digi:trn>Second Reporting Organisation</digi:trn>:</b>
+																	</td>
+																	<td colspan="3" style="padding-left: 15px">
+																		<logic:notEmpty property="secondReportingOrganisation"
+																						name="fd">
+																			<c:out value="${fd.secondReportingOrganisation.name}"/>
+																		</logic:notEmpty>
+																	</td>
+																</tr>
+															</module:display>
+
+														<module:display name="/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Description"
+																parentModule="/Activity Form/Components/Component/Components Expenditures/Expenditure Table">
+															<tr>
+																<td width="100">
+																	<b><digi:trn>Description</digi:trn></b>
+																</td>
+																<td colspan="3" style="padding-left: 15px">
+																	<b><c:out value="${fd.componentTransactionDescription}" /></b>
+																</td>
+															</tr>
+														</module:display>
+														</table>
+														<hr />
 										</c:forEach>
-									</table>
+
 									</td>
 								</tr>
 							</table>

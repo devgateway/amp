@@ -82,6 +82,8 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Object[] selectedDonnorAgency;
 	private Object[] selectedProjectCategory;
 	private Object[] selectedresponsibleorg;
+	private Object[] selectedComponentSecondResponsibleOrg;
+	private Object[] selectedComponentFundingOrg;
 	private Object[] selectedArchivedStatus = new Object[]{"1"};
 	private Object[] selectedHumanitarianAid;
 	private Object[] selectedDisasterResponse;
@@ -1415,6 +1417,22 @@ public class ReportsFilterPickerForm extends ActionForm {
 
 	public void setToFundingClosingDate(String toFundingClosingDate) {
 		this.toFundingClosingDate = toFundingClosingDate;
+	}
+
+	public Object[] getSelectedComponentSecondResponsibleOrg() {
+		return selectedComponentSecondResponsibleOrg;
+	}
+
+	public void setSelectedComponentSecondResponsibleOrg(Object[] selectedComponentSecondResponsibleOrg) {
+		this.selectedComponentSecondResponsibleOrg = selectedComponentSecondResponsibleOrg;
+	}
+
+	public Object[] getSelectedComponentFundingOrg() {
+		return selectedComponentFundingOrg;
+	}
+
+	public void setSelectedComponentFundingOrg(Object[] selectedComponentFundingOrg) {
+		this.selectedComponentFundingOrg = selectedComponentFundingOrg;
 	}
 
 	public DynamicDateFilter getDynamicIssueFilter() {

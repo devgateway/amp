@@ -1185,3 +1185,18 @@ div.footer {
 .header-corner {
 	background: url(../images/corner-r.gif) no-repeat;
 }
+
+.label-column{
+   text-align: right;
+   width: 30%;  
+   padding: 5px; 
+}
+
+.data-column{
+  text-align: left;
+  width: 70%;
+}
+
+.buttons-section{
+	text-align: center;
+}

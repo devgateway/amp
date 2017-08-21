@@ -14,7 +14,6 @@
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 
-
 <digi:context name="digiContext" property="context"/>
 
 <digi:instance property="aimNewAddLocationForm" />
@@ -148,7 +147,7 @@ function unload() {
 
 
 <!--  AMP Admin Logo -->
-
+<div  class="admin-content">
 <jsp:include page="teamPagesHeader.jsp"  />
 <!-- End of Logo -->
     <table cellPadding=5 cellspacing="0" width="600">
@@ -192,8 +191,8 @@ function unload() {
                                                                                 Name
                                                                             </digi:trn>
                                                                         </c:set>
-                                                                        <td width="30%" align="right"><FONT color=red>* </FONT><c:out value="${locName}"/></td>
-                                                                        <td width="70%" align="left">
+                                                                        <td class="label-column"><FONT color=red>* </FONT><c:out value="${locName}"/></td>
+                                                                        <td class="data-column">
                                                                             <html:text property="name" size="25"
                                                                                        onkeydown="textCounter(this.form.name,this.form.cname,200);"
                                                                                        onkeyup="textCounter(this.form.name,this.form.cname,200);" />
@@ -204,8 +203,8 @@ function unload() {
                                                                     <c:choose>
                                                                         <c:when test="${aimNewAddLocationForm.categoryLevelCountry}">
                                                                             <tr>
-                                                                                <td width="30%" align="right"><FONT color=red>* </FONT>ISO</td>
-                                                                                <td width="70%" align="left">
+                                                                                <td class="label-column"><FONT color=red>* </FONT>ISO</td>
+                                                                                <td class="data-column">
                                                                                     <html:text property="iso" size="5" maxlength="2" />
                                                                                     <br>
                                                                                     <a href="javascript:getIso(2)">
@@ -213,8 +212,8 @@ function unload() {
                                                                                 </td>
                                                                             </tr>
                                                                             <tr>
-                                                                                <td width="30%" align="right"><FONT color=red>* </FONT>ISO3</td>
-                                                                                <td width="70%" align="left">
+                                                                                <td class="label-column"><FONT color=red>* </FONT>ISO3</td>
+                                                                                <td class="data-column">
                                                                                     <html:text property="iso3" size="5" maxlength="3" />
                                                                                     <br>
                                                                                     <a href="javascript:getIso(3)">
@@ -222,49 +221,49 @@ function unload() {
                                                                                 </td>
                                                                             </tr>
                                                                               <tr>
-                                                                                <td width="30%" align="right"><digi:trn key="aim:lcCode">Code</digi:trn></td>
-                                                                                <td width="70%" align="left"><html:text property="code"
+                                                                                <td class="label-column"><digi:trn key="aim:lcCode">Code</digi:trn></td>
+                                                                                <td class="data-column"><html:text property="code"
                                                                                                                         size="10" /></td>
                                                                             </tr>
                                                                             <tr>
-                                                                                <td width="30%" align="right"></td>
-                                                                                <td width="70%" align="left">
+                                                                                <td class="label-column"></td>
+                                                                                <td class="data-column">
                                                                                       <digi:trn>All fields marked with an</digi:trn><FONT color=red><B><BIG> * </BIG></B></FONT><digi:trn>are required.</digi:trn>
                                                                                 </td>
                                                                             </tr>
                                                                         </c:when>
                                                                         <c:otherwise>
                                                                             <tr>
-                                                                                <td width="30%" align="right"><digi:trn key="aim:lcCode">Code</digi:trn></td>
-                                                                                <td width="70%" align="left"><html:text property="code"
+                                                                                <td class="label-column"><digi:trn key="aim:lcCode">Code</digi:trn></td>
+                                                                                <td class="data-column"><html:text property="code"
                                                                                                                         size="10" /></td>
                                                                             </tr>
                                                                             <tr>
-                                                                                <td width="30%" align="right"><digi:trn key="aim:lcLatitude">Latitude</digi:trn></td>
-                                                                                <td width="70%" align="left"><html:text property="gsLat"
+                                                                                <td class="label-column"><digi:trn key="aim:lcLatitude">Latitude</digi:trn></td>
+                                                                                <td class="data-column"><html:text property="gsLat"
                                                                                                                         size="10" /></td>
                                                                             </tr>
                                                                             <tr>
-                                                                                <td width="30%" align="right"><digi:trn key="aim:lcLongitude">Longitude</digi:trn></td>
-                                                                                <td width="70%" align="left"><html:text property="gsLong"
+                                                                                <td class="label-column"><digi:trn key="aim:lcLongitude">Longitude</digi:trn></td>
+                                                                                <td class="data-column"><html:text property="gsLong"
                                                                                                                         size="10" /></td>
                                                                             </tr>
                                                                             <tr>
-                                                                                <td width="30%" align="right"><digi:trn key="aim:lcGeoCode">Geo Code</digi:trn></td>
-                                                                                <td width="70%" align="left"><html:text
+                                                                                <td class="label-column"><digi:trn key="aim:lcGeoCode">Geo Code</digi:trn></td>
+                                                                                <td class="data-column"><html:text
                                                                                     property="geoCode" size="10" /></td>
                                                                             </tr>
                                                                             <tr>
-                                                                                <td width="30%" align="right"><digi:trn key="aim:lcDescription">Description</digi:trn></td>
-                                                                                <td width="70%" align="left"><html:textarea
+                                                                                <td class="label-column"><digi:trn key="aim:lcDescription">Description</digi:trn></td>
+                                                                                <td class="data-column"><html:textarea
                                                                                     property="description" cols="40" rows="3" /></td>
                                                                             </tr>
                                                                         </c:otherwise>
                                                                     </c:choose>
                                                                     <tr>
-                                                                        <td width=30% align=right>
+                                                                        <td class="label-column">
                                                                         </td>
-                                                                        <td width=70% align=left>
+                                                                        <td class="data-column">
                                                                             <font color=red><digi:trn key="aim:statusMandatoryFields">* Mandatory fields</digi:trn></font>
                                                                         </td>
                                                                     </tr>
@@ -272,27 +271,30 @@ function unload() {
                                                                         <td colspan="2" width="60%">
                                                                             <table width="100%" cellspacing="5">
                                                                                 <tr>
-                                                                                    <td width="45%" align="right">
+                                                                                    <td class="buttons-section">
                                                                                         <c:set var="translation">
                                                                                             <digi:trn key="btn:regionManagerSave">
                                                                                                 Save
                                                                                             </digi:trn>
                                                                                         </c:set>
-                                                                                    <input type="button" value="${translation}" class="dr-menu" onclick="addLoc()"></td>
-                                                                                    <td width="8%" align="left">
-                                                                                        <c:set var="translation">
+                                                                                    <input type="button" value="${translation}" class="dr-menu" onclick="addLoc()">
+                                                                                    
+                                                                                   <c:set var="translation">
                                                                                             <digi:trn key="btn:regionManagerReset">
                                                                                                 Reset
                                                                                             </digi:trn>
                                                                                         </c:set>
-                                                                                    <input type="reset" value="${translation}" class="dr-menu"></td>
-                                                                                    <td width="45%" align="left">
-                                                                                        <c:set var="translation">
+                                                                                    <input type="reset" value="${translation}" class="dr-menu"> 
+                                                                                     <c:set var="translation">
                                                                                             <digi:trn key="btn:regionManagerCancel">
                                                                                                 Cancel
                                                                                             </digi:trn>
                                                                                         </c:set>
-                                                                                    <input type="button" value="${translation}" class="dr-menu" onclick="move()"></td>
+                                                                                    <input type="button" value="${translation}" class="dr-menu" onclick="move()">
+                                                                                    
+                                                                                    
+                                                                                    </td>
+                                                                                    
                                                                                 </tr>
                                                                             </table>
                                                                         </td>
@@ -372,3 +374,4 @@ function unload() {
         <td>
         </td>
         </tr>
+        </div>

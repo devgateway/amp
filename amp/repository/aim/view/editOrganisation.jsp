@@ -1131,7 +1131,7 @@ border-right: 1px solid rgb(208, 208, 208);
                                                     <html:text name="aimAddOrgForm" property="fundingorgid" size="8" styleId="fundingorgid"/>
                                                 </td>
                                                 <td height="1" align="center" colspan="5"><digi:img
-                                                        src="/TEMPLATE/ampTemplate/images/arrow-014E86.gif" width="15"
+                                                        src="/TEMPLATE/ampTemplate/images/arrow-014E86.gif" styleClass="list-item-image" width="15"
                                                         height="10" /> <a href="javascript:addGroup()"> <digi:trn>Add a Group</digi:trn>
                                                     </a></td>
                                             </tr>

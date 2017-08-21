@@ -453,8 +453,7 @@ LoggerIdentifiable, Cloneable {
 	protected Date createdDate;
 	
 	@Interchangeable(fieldTitle = ActivityFieldsConstants.UPDATE_DATE,
-			label = "Activity updated on",
-			fmPath = "/Activity Form/Identification/Activity Updated On")
+			label = "Activity updated on")
 	@VersionableFieldSimple(fieldTitle = "Update Date", blockSingleChange = true)
 	protected Date updatedDate;
 
@@ -669,9 +668,8 @@ LoggerIdentifiable, Cloneable {
 	
 	protected Date modifiedDate;
 
-	@Interchangeable(fieldTitle = ActivityFieldsConstants.MODIFIED_BY, pickIdOnly=true, importable = true,
-			label = "Activity last updated by",
-			fmPath = "/Activity Form/Identification/Activity Last Updated by")
+	@Interchangeable(fieldTitle = ActivityFieldsConstants.MODIFIED_BY, pickIdOnly = true,
+            label = "Activity last updated by")
 	@VersionableFieldSimple(fieldTitle = "Modified By")
 	protected AmpTeamMember modifiedBy;
 	

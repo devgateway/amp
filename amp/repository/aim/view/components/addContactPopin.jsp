@@ -10,11 +10,8 @@
 <%@ taglib uri="/taglib/category" prefix="category"%>
 <%@ taglib uri="/taglib/aim" prefix="aim"%>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
-<style type="text/css">
-td {
-	padding: 5px 10px 5px 10px;	
-}
-</style>
+<digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
+
 <div class="admin-content contact-form">
 <digi:context name="digiContext" property="context" />
 <digi:instance property="aimAddContactForm" />

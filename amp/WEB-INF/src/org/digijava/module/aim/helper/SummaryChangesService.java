@@ -37,7 +37,7 @@ import org.hibernate.jdbc.Work;
 /**
  * @author Aldo Picca
  */
-public class SummaryChangesService {
+public final class SummaryChangesService {
 
     private static final Logger LOGGER = Logger.getLogger(SummaryChangesService.class);
     public static final String NEW = "New";
@@ -57,6 +57,9 @@ public class SummaryChangesService {
             HashMap<>(), CurrencyUtil::getAmpcurrency);
     private static VivificatingMap<Long, AmpCategoryValue> categoryValueCache = new VivificatingMap<Long,
             AmpCategoryValue>(new HashMap<>(), CategoryManagerUtil::getAmpCategoryValueFromDb);
+
+    private SummaryChangesService() {
+    }
 
     /**
      * Return a list of approvers whit the activities that changed.

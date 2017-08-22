@@ -20,6 +20,7 @@ import java.util.LinkedHashSet;
 public class SummaryChangeHtmlRenderer {
 
     private static final Logger LOGGER = Logger.getLogger(SummaryChangeHtmlRenderer.class);
+    public static final long SITE_ID = 3L;
     private final AmpActivityVersion activity;
     private final String locale;
     private final Collection<SummaryChange> changesList;
@@ -142,8 +143,9 @@ public class SummaryChangeHtmlRenderer {
                 return "orange";
             case SummaryChangesService.DELETED:
                 return "red";
+            default:
+                return null;
         }
-        return null;
     }
 
     private static String buildQuarterLabel(SummaryChange summaryChange, Quarter quarter) {
@@ -165,6 +167,6 @@ public class SummaryChangeHtmlRenderer {
     }
 
     protected String translateText(String text) {
-        return TranslatorWorker.translateText(text, this.locale, 3L);
+        return TranslatorWorker.translateText(text, this.locale, SITE_ID);
     }
 }

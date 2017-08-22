@@ -81,7 +81,8 @@ import org.hibernate.jdbc.Work;
 
 public class AmpMessageWorker {
 
-	public static final String DEFAULT_EMAIL_SENDER = "system@digijava.org";
+    public static final String DEFAULT_EMAIL_SENDER = "system@digijava.org";
+	public static final long SITE_ID = 3L;
 	private static Logger logger = Logger.getLogger(AmpMessageWorker.class);
 
 	public static void processEvent(Event e) throws Exception {
@@ -150,10 +151,10 @@ public class AmpMessageWorker {
 				} else if (e.getTrigger().equals(ApprovedResourceShareTrigger.class)
 						|| e.getTrigger().equals(RejectResourceSharetrigger.class)) {
 					newMsg = processResourceShareEvent(e, newApproval, template, false);
-				} else if(e.getTrigger().equals(DataFreezeEmailNotificationTrigger.class)){
-				    newMsg = proccessDataFreezeNotificationEvent(e, newAlert, template);
-				} else if(e.getTrigger().equals(SummaryChangeNotificationTrigger.class)){
-				    newMsg = proccessSummaryChangeEvent(e, newAlert, template);
+				} else if (e.getTrigger().equals(DataFreezeEmailNotificationTrigger.class)) {
+					newMsg = proccessDataFreezeNotificationEvent(e, newAlert, template);
+				} else if (e.getTrigger().equals(SummaryChangeNotificationTrigger.class)) {
+					newMsg = proccessSummaryChangeEvent(e, newAlert, template);
 				} else if (e.getTrigger().equals(ActivityMeassureComparisonTrigger.class)
 						|| e.getTrigger().equals(ActivityValidationWorkflowTrigger.class)) {
 
@@ -230,16 +231,13 @@ public class AmpMessageWorker {
 				} else if (e.getTrigger().equals(ApprovedResourceShareTrigger.class)
 						|| e.getTrigger().equals(RejectResourceSharetrigger.class)) {
 					defineReceiversForResourceShare(template, newMsg, false);
-
 				} else if (e.getTrigger().equals(UserAddedToFirstWorkspaceTrigger.class)) {
 					defineReceiversForUserAddedToWorkspace(newMsg, e);
-				} 
-				else if (e.getTrigger().equals(DataFreezeEmailNotificationTrigger.class)) {
-                    defineReceiversForDataFreezeNotification(newMsg, e, template);
-				}
-				else if (e.getTrigger().equals(SummaryChangeNotificationTrigger.class)) {
-                    defineReceiversForSummaryChange(newMsg, e, template);
-                } else { // <-- currently for else is left user registration
+				} else if (e.getTrigger().equals(DataFreezeEmailNotificationTrigger.class)) {
+					defineReceiversForDataFreezeNotification(newMsg, e, template);
+				} else if (e.getTrigger().equals(SummaryChangeNotificationTrigger.class)) {
+					defineReceiversForSummaryChange(newMsg, e, template);
+				} else { // <-- currently for else is left user registration
 							// or activity disbursement date triggers
 					List<String> emailReceivers = new ArrayList<String>();
 					List<AmpMessageState> statesRelatedToTemplate = null;
@@ -1320,12 +1318,15 @@ public class AmpMessageWorker {
 	        String senderEmail = (msgSender == null) ? DEFAULT_EMAIL_SENDER : msgSender.getUser().getEmail();
 	        AmpEmail ampEmail = emails.get(user.getRegisterLanguage().getCode());	        
 	        if (ampEmail == null) {
-	             String translatedName = TranslatorWorker.translateText(newMsg.getName(), user.getRegisterLanguage().getCode(), 3L);
-	             String translatedDescription = TranslatorWorker.translateText(newMsg.getDescription(), user.getRegisterLanguage().getCode(), 3L);
-	             ampEmail = new AmpEmail(senderEmail, DgUtil.fillPattern(translatedName, params), DgUtil.fillPattern(translatedDescription, params));
-	             DbUtil.saveOrUpdateObject(ampEmail);
-	             emails.put(user.getRegisterLanguage().getCode(), ampEmail);
-	         }        
+				String translatedName = TranslatorWorker.translateText(newMsg.getName(), user.getRegisterLanguage()
+						.getCode(), SITE_ID);
+				String translatedDescription = TranslatorWorker.translateText(newMsg.getDescription(), user
+						.getRegisterLanguage().getCode(), SITE_ID);
+				ampEmail = new AmpEmail(senderEmail, DgUtil.fillPattern(translatedName, params), DgUtil.fillPattern
+						(translatedDescription, params));
+				DbUtil.saveOrUpdateObject(ampEmail);
+				emails.put(user.getRegisterLanguage().getCode(), ampEmail);
+			}
 	        AmpEmailReceiver emailReceiver = new AmpEmailReceiver(user.getEmail(), ampEmail, MessageConstants.UNSENT_STATUS);
             DbUtil.saveOrUpdateObject(emailReceiver);	         
 	    }
@@ -1338,21 +1339,21 @@ public class AmpMessageWorker {
 		User user = UserUtils.getUserByEmail(e.getParameters().get(SummaryChangeNotificationTrigger
 				.PARAM_SUMMARY_EMAIL).toString());
 		HashMap<String, String> params = new HashMap<String, String>();
-		params.put(SummaryChangeNotificationTrigger.PARAM_SUMMARY_BODY, String.valueOf
-				(SummaryChangeNotificationTrigger.PARAM_SUMMARY_BODY));
+		params.put(SummaryChangeNotificationTrigger.PARAM_SUMMARY_BODY, String.valueOf(
+				SummaryChangeNotificationTrigger.PARAM_SUMMARY_BODY));
 
 		String senderEmail = DEFAULT_EMAIL_SENDER;
 		AmpEmail ampEmail;
 
 		String translatedName = TranslatorWorker.translateText(newMsg.getName(), user.getRegisterLanguage()
-				.getCode(), 3L) + ": " + e.getParameters().get(SummaryChangeNotificationTrigger
+				.getCode(), SITE_ID) + ": " + e.getParameters().get(SummaryChangeNotificationTrigger
 				.PARAM_SUMMARY_DATE).toString();
 
 		String translatedDescription = e.getParameters().get(SummaryChangeNotificationTrigger
 				.PARAM_SUMMARY_BODY).toString();
 
-		ampEmail = new AmpEmail(senderEmail, DgUtil.fillPattern(translatedName, params), DgUtil.fillPattern
-				(translatedDescription, params));
+		ampEmail = new AmpEmail(senderEmail, DgUtil.fillPattern(translatedName, params), DgUtil.fillPattern(
+				translatedDescription, params));
 		DbUtil.saveOrUpdateObject(ampEmail);
 
 		AmpEmailReceiver emailReceiver = new AmpEmailReceiver(user.getEmail(), ampEmail, MessageConstants

@@ -24,6 +24,15 @@ div.trnpanel div.trn-row ul {
     float: right;
 }
 
+.onepager-pic-icon {
+	right: -3px;
+	float: left;
+}
+
+.right_menu_header_cont {
+	padding-right: 10px;
+}
+
 .custom-file-label {
     display: inline;
     position: relative;

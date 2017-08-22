@@ -32,6 +32,9 @@ public class SystemDiff {
     @JsonProperty
     private ListDiff<String> activities;
 
+    @JsonProperty
+    private ListDiff<Long> contacts;
+
     @JsonProperty("possible-values-fields")
     private List<String> possibleValuesFields;
 
@@ -80,6 +83,10 @@ public class SystemDiff {
 
     public void setActivities(ListDiff<String> activities) {
         this.activities = activities;
+    }
+
+    public void setContacts(ListDiff<Long> contacts) {
+        this.contacts = contacts;
     }
 
     public void setTranslations(boolean translations) {

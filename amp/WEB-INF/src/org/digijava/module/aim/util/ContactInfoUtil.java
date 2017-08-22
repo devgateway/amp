@@ -9,13 +9,11 @@ import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpOrganisationContact;
 import org.digijava.module.aim.exception.AimException;
-import org.digijava.module.aim.form.EditActivityForm;
-import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.hibernate.criterion.Projections;
 
 public class ContactInfoUtil {
 	private static Logger logger = Logger.getLogger(ContactInfoUtil.class);
@@ -31,8 +29,15 @@ public class ContactInfoUtil {
 			throw new AimException("update failed",ex);
 		}
 	}
-	
-	
+
+	@SuppressWarnings("unchecked")
+	public static List<Long> getContactIds() {
+		return PersistenceManager.getRequestDBSession()
+				.createCriteria(AmpContact.class)
+				.setProjection(Projections.property("id"))
+				.list();
+	}
+
 	public static void deleteContact(AmpContact contact) throws Exception{
 		Session session= null;
 		try {

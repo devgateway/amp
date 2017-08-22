@@ -11,6 +11,13 @@ function getFile(){
     $("#upfile").click();
 }
 
+function setOpentip(){
+    if (typeof isRtl !== 'undefined' && isRtl) {
+		Opentip.styles.standard.tipJoint = "top right";
+    }
+    Opentip.findElements();
+}
+
 function setLabel(obj){
           var file = obj.value;
           var fileName = file.split("\\");
@@ -278,6 +285,8 @@ $(document).ready(function(){
 	if(isTabView){
 		switchTabs();
 	}
+
+  setOpentip();
 	
 	// change the min-height of the main content div when the height of the right menu is greater than DEFAULT_MAIN_BODY_MIN_HEIGHT
 	// the 20px value is used to make the distance between the lower point of the menu and the footer to be minimal

@@ -1,5 +1,6 @@
 package org.digijava.module.aim.helper;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.algo.VivificatingMap;
 import org.dgfoundation.amp.ar.FilterParam;
@@ -24,7 +25,6 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
@@ -112,7 +112,7 @@ public class SummaryChangesService {
                                 + "       AND EXISTS "
                                 + "         (SELECT actappr.amp_activity_id "
                                 + "          FROM amp_activity_version actappr "
-                                + "          WHERE approval_status = '%s' "
+                                + "          WHERE approval_status IN ( '%s', '%s' ) "
                                 + "            AND act.amp_activity_group_id = actappr.amp_activity_group_id ) ) "
                                 + "  AND ampAct.amp_team_id IN "
                                 + "    (SELECT amp_team_id "
@@ -120,10 +120,10 @@ public class SummaryChangesService {
                                 + "     WHERE isolated = FALSE "
                                 + "       OR isolated IS NULL ) ",
                         Constants.ACTIVITY_NEEDS_APPROVAL_STATUS,
-                        Constants.APPROVED_STATUS);
+                        Constants.APPROVED_STATUS, Constants.STARTED_APPROVED_STATUS);
 
                 ArrayList<FilterParam> params = new ArrayList<FilterParam>();
-                params.add(new FilterParam(fromDate, Types.DATE));
+                params.add(new FilterParam(DateUtils.addDays(fromDate, -1), Types.TIMESTAMP));
 
                 try (RsInfo rsi = SQLUtils.rawRunQuery(conn, queryString, params)) {
                     ResultSet rs = rsi.rs;

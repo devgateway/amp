@@ -1200,3 +1200,7 @@ div.footer {
 .buttons-section{
 	text-align: center;
 }
+
+.button-section-padding {
+	padding-top: 10px;
+}

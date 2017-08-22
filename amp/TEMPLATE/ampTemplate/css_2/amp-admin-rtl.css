@@ -24,3 +24,7 @@
   text-align: right !important;
   width: 70%;
 }
+
+span.geostyle{
+	display: inline-block !important;
+}

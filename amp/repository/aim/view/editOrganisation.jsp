@@ -13,6 +13,7 @@
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css"> 
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css_2/organization-manager.css"> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>
@@ -25,80 +26,6 @@
     <jsp:include page="scripts/calendar.js.jsp"  />
 </script>
 <jsp:include page="scripts/newCalendar.jsp"  />
-
-<style type="text/css">
-    .selectStyle {
-        Font-size:11px;
-        font-family:Arial;
-        width:210px;
-    }
-    .tableEven {
-        background-color:#dbe5f1;
-        border-left:none;
-        border-right:none;
-        font-size: 10px;
-        font-family:Arial;
-    }
-
-    .tableOdd {
-        background-color:#FFFFFF;
-        border-left:none;
-        border-right:none;
-        font-size: 11px;
-        font-family:Arial;
-       !important
-
-    }
-    .tableHeader {
-        background-color:#c7d4db;
-        color:white;
-        padding:2px;
-    }
-    .Hovered {
-        background-color:#a5bcf2;
-    }
-    input,textArea{
-        font-family:Arial;
-        font-size: 11px;
-    }
-    .tdClass{
-        font-family:Arial;
-        font-size: 11px;
-    }
-    .tdBoldClass{
-        font-family:Arial;
-        font-size: 11px;
-        font-weight:bold;
-    }
-     .legendClass{
-        font-family:Arial;
-        font-size: 13px;
-        font-weight:bold;
-        color:#ffffff;
-        float: left;
-    }
-    div.charcounter-progress-container {
-	width:50%; 
-	height:3px;
-	max-height:3px;
-	border: 1px solid gray; 
-	filter:alpha(opacity=20); 
-	opacity:0.2;
-}
-
-div.charcounter-progress-bar {
-	height:3px; 
-	max-height:3px;
-	font-size:3px;
-	background-color:#5E8AD1;
-}
-    
-.exportContactIcon{
- float: right;
-}
-
-</style>
-
 <jsp:include page="/repository/aim/view/addEditOrganizationsPopin.jsp"  />
 <jsp:include page="/repository/aim/view/addOrganizationPopin.jsp"  />
 <jsp:include page="/repository/aim/view/components/contactScripts.jsp"  />

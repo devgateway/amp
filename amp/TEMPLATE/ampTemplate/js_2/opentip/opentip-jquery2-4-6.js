@@ -1520,7 +1520,6 @@ Opentip.addAdapter = function(adapter) {
   Opentip.adapters[adapter.name] = adapter;
   if (firstAdapter) {
     Opentip.adapter = adapter;
-    adapter.domReady(Opentip.findElements);
     adapter.domReady(Opentip.followMousePosition);
     return firstAdapter = false;
   }

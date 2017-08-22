@@ -36,6 +36,14 @@ div.trnpanel div.trn-row ul {
     width: 60px;
 }
 
+.ot-content {
+    direction: rtl;
+}
+
+.wicketFloatLeft {
+    float: inherit;
+}
+
 .dropdwn_sm {
     margin: 0px 0px 0px 0px;
 }
@@ -78,3 +86,4 @@ div.trnpanel div.trn-row ul {
     text-align: right
 
 }
+

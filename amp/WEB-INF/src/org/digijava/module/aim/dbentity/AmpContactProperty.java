@@ -21,44 +21,33 @@ public class AmpContactProperty  implements Comparable, Serializable {
 	
 	@Interchangeable(fieldTitle = "Extension Value")
 	private String extensionValue;
-        /*this value is not saved in db, let's hope
-         somebody will refactor phone and use this*/
-    
-	private AmpCategoryValue categoryValue;
 
-    public String getActualValue() {
-        return actualValue;
+	private AmpCategoryValue type;
+
+    public AmpCategoryValue getType() {
+        return type;
     }
 
-    public void setActualValue(String actualValue) {
-        this.actualValue = actualValue;
-    }
-        //dummy variable
-        private String actualValue;
-
-    public AmpCategoryValue getCategoryValue() {
-        return categoryValue;
-    }
-
-    public void setCategoryValue(AmpCategoryValue categoryValue) {
-        this.categoryValue = categoryValue;
-    }
-
-    public String getActualPhoneNumber() {
-        return ContactInfoUtil.getActualPhoneNumber(value);
+    public void setType(AmpCategoryValue type) {
+        this.type = type;
     }
 
     public String getPhoneCategory() {
-        return ContactInfoUtil.getPhoneCategory(value);
+		if (type != null) {
+			return type.getValue();
+		} else {
+			return "None";
+		}
     }
     
     public String getValueAsFormatedPhoneNum () {
-        return ContactInfoUtil.getFormatedPhoneNum(value);
+        return ContactInfoUtil.getFormattedPhoneNum(type, value);
     }
 
 	public Long getId() {
 		return id;
 	}
+
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -108,13 +97,6 @@ public class AmpContactProperty  implements Comparable, Serializable {
 				if (this.getValue() != null && a.getValue() != null) {
 					if (this.getValue().equals(a.getValue())) {
 						return 0;
-					}
-				} else {
-					if (this.getActualValue() != null
-							&& a.getActualValue() != null) {
-						if (this.getActualValue().equals(this.getActualValue())) {
-							return 0;
-						} 
 					}
 				}
 				

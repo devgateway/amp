@@ -19,6 +19,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -36,6 +37,7 @@ import org.apache.struts.upload.FormFile;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.util.lang.Bytes;
 import org.apache.wicket.util.upload.FileItem;
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.helper.EditorStore;
@@ -43,6 +45,7 @@ import org.dgfoundation.amp.onepager.helper.ResourceTranslation;
 import org.dgfoundation.amp.onepager.helper.TemporaryDocument;
 import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
+import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.*;
@@ -56,6 +59,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.contentrepository.exception.JCRSessionException;
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
@@ -257,6 +261,7 @@ public class ActivityUtil {
 		updateComponentFunding(a, session);
 		saveAnnualProjectBudgets(a, session);
 		saveProjectCosts(a, session);
+		updatePerformanceIssue(a);
 	
         if (createNewVersion){
             //a.setAmpActivityId(null); //hibernate will save as a new version
@@ -274,7 +279,25 @@ public class ActivityUtil {
         return a;
 	}
 
-	/**
+    private static void updatePerformanceIssue(AmpActivityVersion a) {
+        PerformanceRuleManager ruleManager = PerformanceRuleManager.getInstance();
+
+        AmpCategoryValue activityLevel = ruleManager.getPerformanceIssueFromActivity(a);
+        AmpCategoryValue higherLevel = null;
+
+        if (ruleManager.canActivityContainPerformanceIssues(a)) {
+            AmpCategoryValue matchedLevel = ruleManager.matchActivity(a);
+            if (!ruleManager.getPerformanceRuleMatchers().isEmpty()) {
+                higherLevel = ruleManager.getHigherLevel(matchedLevel, activityLevel);
+            }
+        }
+        
+        if (!Objects.equals(activityLevel, higherLevel)) {
+            ruleManager.updatePerformanceIssueInActivity(a, activityLevel, higherLevel);
+        }
+    }
+
+    /**
 	 * Remove funding items with null amount (that means that the form is missconfigured)
 	 * set updateDate for modified records
 	 * @param ampFundingDetailsIterator

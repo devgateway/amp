@@ -72,7 +72,6 @@ import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.Funding;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;
-import org.digijava.module.aim.helper.FundingValidator;
 import org.digijava.module.aim.helper.GlobalSettings;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.Location;
@@ -3688,14 +3687,12 @@ public class ExportActivityToPDF extends Action {
                 }
 
                 if (FeaturesUtil.isVisibleModule(fmFields[ExportUtil.COMPONENT_FM_FIELD_SECOND_REPORTING]) && (fd
-                        .getSecondReportingOrganisation() != null)) {
+                        .getComponentSecondResponsibleOrganization() != null)) {
                     fdTable.completeRow();
                     fdTable.addCell(buildPdfCell("", null, 1));
-                    //fdTable.addCell(buildPdfCell(TranslatorWorker.translateText("Second Reporting Organisation"),
-                    //        titleFont, 1));
-                    String orgNameTxt = fd.getSecondReportingOrganisation() == null ? "" : fd
-                            .getSecondReportingOrganisation().getName();
-                    fdTable.addCell(buildPdfCell(TranslatorWorker.translateText("Second Reporting Organisation") +
+                    String orgNameTxt = fd.getComponentSecondResponsibleOrganization() == null ? "" : fd
+                            .getComponentSecondResponsibleOrganization().getName();
+                    fdTable.addCell(buildPdfCell(TranslatorWorker.translateText("Component Second Responsible Organization") +
                             ":" + orgNameTxt, null, fdTable.getNumberOfColumns() - 1));
                     fdTable.completeRow();
                 }

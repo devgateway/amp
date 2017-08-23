@@ -2040,16 +2040,16 @@ function collapseAll() {
 																	</td>
 																</tr>
 															</module:display>
-															<module:display name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Second Reporting Organisation"
+															<module:display name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Component Second Responsible Organization"
 																parentModule="/Activity Form/Components/Component/Components Commitments/Commitment Table">
 																<tr>
 																	<td width="100">
-																		<b><digi:trn>Second Reporting Organisation</digi:trn>:</b>
+																		<b><digi:trn>Component Second Responsible Organization</digi:trn>:</b>
 																	</td>
 																	<td colspan="3" style="padding-left: 15px">
-																		<logic:notEmpty property="secondReportingOrganisation"
+																		<logic:notEmpty property="componentSecondResponsibleOrganization"
 																						name="fd">
-																			<c:out value="${fd.secondReportingOrganisation.name}"/>
+																			<c:out value="${fd.componentSecondResponsibleOrganization.name}"/>
 																		</logic:notEmpty>
 																	</td>
 																</tr>
@@ -2133,16 +2133,16 @@ function collapseAll() {
 																	</td>
 																</tr>
 															</module:display>
-															<module:display name="/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Second Reporting Organisation"
+															<module:display name="/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Component Second Responsible Organization"
 																parentModule="/Activity Form/Components/Component/Components Disbursements/Disbursement Table">
 																<tr>
 																	<td width="100">
-																		<b><digi:trn>Second Reporting Organisation</digi:trn>:</b>
+																		<b><digi:trn>Component Second Responsible Organization</digi:trn>:</b>
 																	</td>
 																	<td colspan="3" style="padding-left: 15px">
-																		<logic:notEmpty property="secondReportingOrganisation"
+																		<logic:notEmpty property="componentSecondResponsibleOrganization"
 																						name="fd">
-																			<c:out value="${fd.secondReportingOrganisation.name}"/>
+																			<c:out value="${fd.componentSecondResponsibleOrganization.name}"/>
 																		</logic:notEmpty>
 																	</td>
 																</tr>
@@ -2226,16 +2226,16 @@ function collapseAll() {
 																	</td>
 																</tr>
 															</module:display>
-															<module:display name="/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Second Reporting Organisation"
+															<module:display name="/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Component Second Responsible Organization"
 																parentModule="/Activity Form/Components/Component/Components Expenditures/Expenditure Table">
 																<tr>
 																	<td width="100">
-																		<b><digi:trn>Second Reporting Organisation</digi:trn>:</b>
+																		<b><digi:trn>Component Second Responsible Organization</digi:trn>:</b>
 																	</td>
 																	<td colspan="3" style="padding-left: 15px">
-																		<logic:notEmpty property="secondReportingOrganisation"
+																		<logic:notEmpty property="componentSecondResponsibleOrganization"
 																						name="fd">
-																			<c:out value="${fd.secondReportingOrganisation.name}"/>
+																			<c:out value="${fd.componentSecondResponsibleOrganization.name}"/>
 																		</logic:notEmpty>
 																	</td>
 																</tr>

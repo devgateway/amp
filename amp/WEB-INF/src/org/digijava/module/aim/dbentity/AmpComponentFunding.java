@@ -31,8 +31,8 @@ public class AmpComponentFunding implements Cloneable, Serializable {
 	// reusing field to store the organisation related to the current component
 	// @Interchangeable(fieldTitle="Reporting Organization")
 	private AmpOrganisation reportingOrganization;
-	// @Interchangeable(fieldTitle="Second Reporting Organisation")
-	private AmpOrganisation secondReportingOrganisation;
+	// @Interchangeable(fieldTitle="Component Second Responsible Organization")
+	private AmpOrganisation componentSecondResponsibleOrganization;
     // @Interchangeable(fieldTitle="Currency")
 	private AmpCurrency currency;
 	// @Interchangeable(fieldTitle="Description")
@@ -160,16 +160,16 @@ public class AmpComponentFunding implements Cloneable, Serializable {
 	}
 
 	/**
-	 * @return Returns the secondReportingOrganisation.
+	 * @return Returns the componentSecondResponsibleOrganization.
 	 */
-	public AmpOrganisation getSecondReportingOrganisation() {
-		return secondReportingOrganisation;
+	public AmpOrganisation getComponentSecondResponsibleOrganization() {
+		return componentSecondResponsibleOrganization;
 	}
 	/**
-	 * @param secondReportingOrganisation The secondReportingOrganisation to set.
+	 * @param componentSecondResponsibleOrganization The componentSecondResponsibleOrganization to set.
 	 */
-	public void setSecondReportingOrganisation(AmpOrganisation secondReportingOrganisation) {
-		this.secondReportingOrganisation = secondReportingOrganisation;
+	public void setComponentSecondResponsibleOrganization(AmpOrganisation componentSecondResponsibleOrganization) {
+		this.componentSecondResponsibleOrganization = componentSecondResponsibleOrganization;
 	}
 	/**
 	 * @return Returns the transactionAmount.

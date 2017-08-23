@@ -31,5 +31,6 @@ export const initialTranslations = {
   'amp.performance-rule:parameters-required': 'All rule parameters are required.',
   'amp.performance-rule:time-unit-day': 'day(s)',
   'amp.performance-rule:time-unit-month': 'month(s)',
-  'amp.performance-rule:time-unit-year': 'year(s)'
+  'amp.performance-rule:time-unit-year': 'year(s)',
+  'amp.performance-rule:performance-rules':'Performance Rules'
 }

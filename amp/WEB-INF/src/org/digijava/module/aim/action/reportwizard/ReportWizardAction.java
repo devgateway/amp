@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.google.common.collect.ImmutableMap;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -105,6 +106,14 @@ public class ReportWizardAction extends MultiAction {
 
     private static final Comparator<AmpColumns> ME_COLS_COMPARATOR =
             Comparator.comparing(c -> ME_COLUMNS_ORDER.getOrDefault(c.getColumnName(), 999));
+
+    /**
+     * This structure maps columns from different report schemas to FM entries. For example one FM entry 'Region'
+     * controls the visibility of 'Region' column from donor reports and 'Regional Region' from regional reports.
+     */
+    private static final Map<String, String> COLUMN_TO_FM_FIELD_MAP = new ImmutableMap.Builder<String, String>()
+            .put(ColumnConstants.REGIONAL_REGION, ColumnConstants.REGION)
+            .build();
 
     private static Set<String> COLUMNS_IGNORED_IN_REPORT_WIZARD = new HashSet<>(Arrays.asList(ColumnConstants.EXPENDITURE_CLASS));
     
@@ -863,10 +872,13 @@ public class ReportWizardAction extends MultiAction {
 
         for(AmpColumns ampColumn:allAmpColumns)
         {
-            if (columnIgnoredInReportWizard(ampColumn.getColumnName()))
-            	continue;
+            String columnName = ampColumn.getColumnName();
+            if (columnIgnoredInReportWizard(columnName)) {
+                continue;
+            }
 
-            AmpFieldsVisibility ampFieldVisibility = ampAllFieldsByName.get(ampColumn.getColumnName());
+            String fmFieldName = COLUMN_TO_FM_FIELD_MAP.getOrDefault(columnName, columnName);
+            AmpFieldsVisibility ampFieldVisibility = ampAllFieldsByName.get(fmFieldName);
             if(ampFieldVisibility == null)
                 continue;
 

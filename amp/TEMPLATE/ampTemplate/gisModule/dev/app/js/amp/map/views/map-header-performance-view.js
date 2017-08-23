@@ -16,8 +16,9 @@ module.exports = Backbone.View.extend({
   initialize: function(options) {
     this.app = options.app;
     this.listenTo(this.app.data.title, 'update', this.render);
-    this.model.set('isPerformanceToggleSelected', true);
     this.listenTo(this.model, 'change:isPerformanceToggleAvailable', this.render);
+    this.model.set('isPerformanceToggleAvailable', true);
+	this.model.set('isPerformanceToggleSelected', null);  
   },
   render: function() {
 	  var self = this;	  
@@ -38,7 +39,7 @@ module.exports = Backbone.View.extend({
    
   onPerformanceToggleChange: function(event) {
 	  var self = this;
-	  this.model.set('isPerformanceToggleSelected', this.$('.map-header-performance-button:checked').length > 0);	  
+	  this.model.set('isPerformanceToggleSelected', this.$('.map-header-performance-button:checked').length > 0 ? true : null);	  
   }
 
 });

@@ -62,14 +62,14 @@ _.extend(GISData.prototype, Backbone.Events, {
 	   this.user = new User();
 
 	    //setup performance rule model
-	    var PerformanceToggleModel = Backbone.Model.extend({defaults: {isPerformanceToggleAvailable: false, isPerformanceToggleSelected: false}});
+	    var PerformanceToggleModel = Backbone.Model.extend({defaults: {isPerformanceToggleAvailable: false, isPerformanceToggleSelected: null}});
 	    this.performanceToggleModel = new PerformanceToggleModel();	    
 	    $.ajax({
 			  url: '/rest/gis/has-enabled-performance-rules'			 
 	      }).done(function(data) {	    	  
 	    	  self.performanceToggleModel.set('isPerformanceToggleAvailable', data.hasEnabledPerformanceRules);
 		});		
-	    
+
 	    this.activities = new Activities([], {
 	      settingsWidget: this.settingsWidget,
 	      filter: this.filter,

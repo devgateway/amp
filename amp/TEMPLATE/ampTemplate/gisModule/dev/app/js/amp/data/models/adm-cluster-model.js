@@ -54,8 +54,10 @@ module.exports = Backbone.Model
     filter.filters = filter.filters || {};
     filter.filters.adminLevel = this._translateADMToMagicWord(this.get('value'));
     
-    filter['performanceIssues'] = !this.collection.performanceToggleModel.get('isPerformanceToggleSelected');
-
+    if (this.collection.performanceToggleModel.get('isPerformanceToggleSelected') != null) {
+      filter['performanceIssues'] = !this.collection.performanceToggleModel.get('isPerformanceToggleSelected');	
+    }
+   
     options = _.defaults((options || {}), {
       type: 'POST',
       data: JSON.stringify(filter)

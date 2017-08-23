@@ -2,6 +2,7 @@ package org.digijava.module.aim.helper;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.digijava.kernel.ampapi.endpoints.scorecard.model.Quarter;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -10,6 +11,7 @@ import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.util.DbUtil;
 
+import java.text.DecimalFormat;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -25,6 +27,7 @@ public class SummaryChangeHtmlRenderer {
     private final String locale;
     private final Collection<SummaryChange> changesList;
     private AmpFiscalCalendar fiscalCalendar;
+    private AmountsUnits amountsUnits;
 
     public SummaryChangeHtmlRenderer(AmpActivityVersion activity, Collection<SummaryChange> changesList, String
             locale) {
@@ -35,6 +38,7 @@ public class SummaryChangeHtmlRenderer {
         }
         this.locale = locale;
         this.fiscalCalendar = setFiscalCalendar();
+        this.amountsUnits = AmountsUnits.getDefaultValue();
     }
 
     private AmpFiscalCalendar setFiscalCalendar() {
@@ -100,20 +104,23 @@ public class SummaryChangeHtmlRenderer {
             if (summaryChange.getChangeType() == SummaryChangesService.EDITED) {
                 res.append(String.format("<li style='list-style-type: disc;'>%s: %s %s</li>", translateText("Previous"
                                 + " amount"),
-                        FormatHelper.formatNumber(summaryChange.getPreviousValue()), summaryChange.getPreviousCurrency()
+                        FormatHelper.formatNumber(formatCurrency(summaryChange.getPreviousValue())), summaryChange
+                                .getPreviousCurrency()
                                 .getCurrencyCode()));
                 res.append(String.format("<li style='list-style-type: disc;'>%s: %s %s</li>", translateText("Current "
                                 + "amount"),
-                        FormatHelper.formatNumber(summaryChange.getCurrentValue()), summaryChange.getCurrentCurrency()
+                        FormatHelper.formatNumber(formatCurrency(summaryChange.getCurrentValue())), summaryChange
+                                .getCurrentCurrency()
                                 .getCurrencyCode()));
             } else {
                 if (summaryChange.getChangeType() == SummaryChangesService.NEW) {
                     res.append(String.format("<li style='list-style-type: disc;'>%s %s</li>", FormatHelper
-                                    .formatNumber(summaryChange.getCurrentValue()),
+                                    .formatNumber(formatCurrency(summaryChange.getCurrentValue())),
                             summaryChange.getCurrentCurrency().getCurrencyCode()));
                 } else {
                     res.append(String.format("<li style='list-style-type: disc;'>%s %s</li>", FormatHelper.formatNumber(
-                            summaryChange.getPreviousValue()), summaryChange.getPreviousCurrency().getCurrencyCode()));
+                            formatCurrency(summaryChange.getPreviousValue())), summaryChange.getPreviousCurrency()
+                            .getCurrencyCode()));
                 }
             }
             res.append("</ol>");
@@ -123,6 +130,10 @@ public class SummaryChangeHtmlRenderer {
         res.append("</td>\n");
         res.append("</tr>\n");
         return res.toString();
+    }
+
+    private double formatCurrency(Double amount) {
+        return amount / amountsUnits.divider;
     }
 
     protected StringBuilder renderBody(StringBuilder res) {

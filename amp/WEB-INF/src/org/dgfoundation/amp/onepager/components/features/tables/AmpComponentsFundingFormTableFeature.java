@@ -87,7 +87,7 @@ public class AmpComponentsFundingFormTableFeature extends
 
                 // selector for second related orgs
                 AmpSelectFieldPanel<AmpOrganisation> secondOrgSelect = buildSelectFieldPanel("secondOrgSelect",
-                        "Second Reporting Organisation", "secondReportingOrganisation",
+                        "Component Second Responsible Organization", "componentSecondResponsibleOrganization",
                         model, orgsList);
                 item.add(secondOrgSelect);
 

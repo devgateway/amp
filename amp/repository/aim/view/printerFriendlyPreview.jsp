@@ -2095,18 +2095,18 @@ body {background:none;}
 																									</tr>
 																								</module:display>
 																								<module:display
-																										name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Second Reporting Organisation"
+																										name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Component Second Responsible Organization"
 																										parentModule="/Activity Form/Components/Component/Components Commitments/Commitment Table">
 																									<tr bgcolor="#ffffff">
 																										<td>
-																											<b><digi:trn>Second Reporting Organisation</digi:trn></b>
+																											<b><digi:trn>Component Second Responsible Organization</digi:trn></b>
 																										</td>
 																										<td colspan="3">
 																											<logic:notEmpty
-																													property="secondReportingOrganisation"
+																													property="componentSecondResponsibleOrganization"
 																													name="fd">
 																									<span class="word_break">
-																										<c:out value="${fd.secondReportingOrganisation.name}"/>
+																										<c:out value="${fd.componentSecondResponsibleOrganization.name}"/>
 																									</span>
 																											</logic:notEmpty>
 																										</td>
@@ -2212,18 +2212,18 @@ body {background:none;}
 																									</tr>
 																								</module:display>
 																								<module:display
-																										name="/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Second Reporting Organisation"
+																										name="/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Component Second Responsible Organization"
 																										parentModule="/Activity Form/Components/Component/Components Disbursements/Disbursement Table">
 																									<tr bgcolor="#ffffff">
 																										<td>
-																											<b><digi:trn>Second Reporting Organisation</digi:trn></b>
+																											<b><digi:trn>Component Second Responsible Organization</digi:trn></b>
 																										</td>
 																										<td colspan="3">
 																											<logic:notEmpty
-																													property="secondReportingOrganisation"
+																													property="componentSecondResponsibleOrganization"
 																													name="fd">
 																									<span class="word_break">
-																										<c:out value="${fd.secondReportingOrganisation.name}"/>
+																										<c:out value="${fd.componentSecondResponsibleOrganization.name}"/>
 																									</span>
 																											</logic:notEmpty>
 																										</td>
@@ -2326,18 +2326,18 @@ body {background:none;}
 																									</tr>
 																								</module:display>
 																								<module:display
-																										name="/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Second Reporting Organisation"
+																										name="/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Component Second Responsible Organization"
 																										parentModule="/Activity Form/Components/Component/Components Expenditures/Expenditure Table">
 																									<tr bgcolor="#ffffff">
 																										<td>
-																											<b><digi:trn>Second Reporting Organisation</digi:trn></b>
+																											<b><digi:trn>Component Second Responsible Organization</digi:trn></b>
 																										</td>
 																										<td colspan="3">
 																											<logic:notEmpty
-																													property="secondReportingOrganisation"
+																													property="componentSecondResponsibleOrganization"
 																													name="fd">
 																									<span class="word_break">
-																										<c:out value="${fd.secondReportingOrganisation.name}"/>
+																										<c:out value="${fd.componentSecondResponsibleOrganization.name}"/>
 																									</span>
 																											</logic:notEmpty>
 																										</td>

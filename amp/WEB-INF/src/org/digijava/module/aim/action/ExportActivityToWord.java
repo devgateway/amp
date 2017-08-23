@@ -2292,8 +2292,9 @@ public class ExportActivityToWord extends Action {
             if (FeaturesUtil.isVisibleModule(componentFMfields[ExportUtil.COMPONENT_FM_FIELD_SECOND_REPORTING])) {
                 String orgString = compFnd.getComponentSecondResponsibleOrganization() != null ? compFnd
                         .getComponentSecondResponsibleOrganization().getName() : "";
-                eshCompFundingDetails.addRowData(getExportSectionHelperRowData("Component Second Responsible Organization",
-                        orgString, compFnd));
+                eshCompFundingDetails.addRowData(
+                        getExportSectionHelperRowData("Component Second Responsible Organization", orgString,
+                                compFnd));
             }
 
             if (FeaturesUtil.isVisibleModule(componentFMfields[ExportUtil.COMPONENT_FM_FIELD_DESCRIPTION])) {

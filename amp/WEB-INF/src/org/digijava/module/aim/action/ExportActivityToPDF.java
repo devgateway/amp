@@ -3692,8 +3692,9 @@ public class ExportActivityToPDF extends Action {
                     fdTable.addCell(buildPdfCell("", null, 1));
                     String orgNameTxt = fd.getComponentSecondResponsibleOrganization() == null ? "" : fd
                             .getComponentSecondResponsibleOrganization().getName();
-                    fdTable.addCell(buildPdfCell(TranslatorWorker.translateText("Component Second Responsible Organization") +
-                            ":" + orgNameTxt, null, fdTable.getNumberOfColumns() - 1));
+                    fdTable.addCell(buildPdfCell(
+                            TranslatorWorker.translateText("Component Second Responsible Organization")
+                                    + ":" + orgNameTxt, null, fdTable.getNumberOfColumns() - 1));
                     fdTable.completeRow();
                 }
 

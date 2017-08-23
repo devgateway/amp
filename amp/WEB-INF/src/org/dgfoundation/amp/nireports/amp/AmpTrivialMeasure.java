@@ -23,14 +23,12 @@ public class AmpTrivialMeasure extends NiTransactionMeasure {
 	 * trivial measure defined by a transaction type (say, Commitments), an adjustment name (say, Actual) and a directed/not directed boolean
 	 */
 	public AmpTrivialMeasure(String measureName, long transactionType, String adjustmentTypeName, boolean directed) {
-		this(measureName, transactionType, adjustmentTypeName, directed, cac -> false, false, null);
+		this(measureName, transactionType, adjustmentTypeName, directed, false);
 	}
 
-	/**
-	 * trivial measure defined by a transaction type (say, Commitments), an adjustment name (say, Actual), a directed/not directed boolean and an ignore/obey filters boolean
-	 */
-	public AmpTrivialMeasure(String measureName, long transactionType, String adjustmentTypeName, boolean directed, boolean ignoreFilters) {
-		this(measureName, transactionType, adjustmentTypeName, directed, cac -> false, ignoreFilters, null);
+	public AmpTrivialMeasure(String measureName, long transactionType, String adjustmentTypeName, boolean directed,
+			boolean anySource) {
+		this(measureName, transactionType, adjustmentTypeName, directed, anySource, cac -> false, false, null);
 	}
 
 	/**
@@ -79,20 +77,29 @@ public class AmpTrivialMeasure extends NiTransactionMeasure {
 			return directed ? new DirectedMeasureBehaviour() : TrivialMeasureBehaviour.getInstance();
 	}
 
-	public AmpTrivialMeasure(String measureName, long transactionType, String adjustmentTypeName, boolean directed, 
+	public AmpTrivialMeasure(String measureName, long transactionType, String adjustmentTypeName, boolean directed,
 			Predicate<CategAmountCell> or, boolean ignoreFilters, Behaviour<NiAmountCell> overridingBehaviour) {
-		this(measureName, transactionType, adjustmentTypeName, directed, or, ignoreFilters, overridingBehaviour, Collections.emptyMap());
+		this(measureName, transactionType, adjustmentTypeName, directed, false, or, ignoreFilters,
+				overridingBehaviour);
+	}
+
+	public AmpTrivialMeasure(String measureName, long transactionType, String adjustmentTypeName, boolean directed,
+			boolean anySource, Predicate<CategAmountCell> or, boolean ignoreFilters,
+			Behaviour<NiAmountCell> overridingBehaviour) {
+		this(measureName, transactionType, adjustmentTypeName, directed, anySource, or, ignoreFilters,
+				overridingBehaviour, Collections.emptyMap());
 	}
 	
-	public AmpTrivialMeasure(String measureName, long transactionType, String adjustmentTypeName, boolean directed, 
-			Predicate<CategAmountCell> or, boolean ignoreFilters, Behaviour<NiAmountCell> overridingBehaviour, Map<String, Boolean> precursors) {
+	public AmpTrivialMeasure(String measureName, long transactionType, String adjustmentTypeName, boolean directed,
+			boolean anySource, Predicate<CategAmountCell> or, boolean ignoreFilters,
+			Behaviour<NiAmountCell> overridingBehaviour, Map<String, Boolean> precursors) {
 
 		this(measureName, 
 				cac -> 
 					or.test(cac) || (
 						cac.metaInfo.containsMeta(MetaCategory.TRANSACTION_TYPE.category, Long.valueOf(transactionType)) &&
 						cac.metaInfo.containsMeta(MetaCategory.ADJUSTMENT_TYPE.category, adjustmentTypeName) &&
-						(directed ? isDirected(cac) : isDonorSourced(cac))
+						(directed ? isDirected(cac) : anySource || isDonorSourced(cac))
 					),
 				ignoreFilters,
 				getBehaviour(overridingBehaviour, directed),

@@ -8,3 +8,5 @@ export const FIELD_TYPE_AMOUNT = 'AMOUNT';
 export const ATTRIBUTE_TIME_UNIT = 'timeUnit';
 export const PLACEHOLDER_START = '{';
 export const PLACEHOLDER_END = '}';
+export const TRANSLATED_DESCRIPTION = 'TranslatedDescription';
+export const TRANSLATED_MESSAGE = 'TranslatedMessage';

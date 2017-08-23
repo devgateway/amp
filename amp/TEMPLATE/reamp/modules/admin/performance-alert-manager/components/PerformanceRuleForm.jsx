@@ -112,7 +112,7 @@ export default class PerformanceRuleForm extends Component {
         let message;
         const currentRuleType = this.props.typeList.filter(ruleType => ruleType.name === this.props.currentPerformanceRule['type-class-name'])[0];
         if (currentRuleType) {
-            message = currentRuleType[currentRuleType.name + 'TranslatedMessage']  || '';
+            message = currentRuleType[currentRuleType.name + Constants.TRANSLATED_MESSAGE]  || '';
             for (let attr of this.props.attributeList) {
                 const attribute = this.props.currentPerformanceRule.attributes.filter(a => a.name === attr.name)[0] || {};
                 let value = attribute.value;
@@ -157,7 +157,7 @@ export default class PerformanceRuleForm extends Component {
                                 <select className="form-control performance-input" name="type-class-name" value={this.props.currentPerformanceRule['type-class-name']} onChange={this.onInputChange}>
                                     <option>{this.props.translations['amp.performance-rule:select-type']} </option>
                                     {this.props.typeList && this.props.typeList.map(ruleType => 
-                                    <option value={ruleType.name} key={ruleType.name} >{ruleType[ruleType.name + 'TranslatedDescription']}</option>
+                                    <option value={ruleType.name} key={ruleType.name} >{ruleType[ruleType.name + Constants.TRANSLATED_DESCRIPTION]}</option>
                                     )}
                                 </select>
                             </td>
@@ -165,7 +165,7 @@ export default class PerformanceRuleForm extends Component {
                             <div className="row"><label>{this.props.translations['amp.performance-rule:rule-parameters']}</label></div>
                             {this.props.attributeList && this.props.attributeList.map((attribute, i) =>
                                 <div className={this.getErrorsForField(attribute.name).length > 0 ? 'row has-error' : 'row'} key={i}>
-                                <span className="required">*</span><span>{attribute[attribute.name + 'TranslatedDescription']}</span>  
+                                <span className="required">*</span><span>{attribute[attribute.name + Constants.TRANSLATED_DESCRIPTION]}</span>  
                                   {attribute['possible-values'] && attribute['possible-values'].length > 0 && 
                                       <select className="form-control performance-input" name={"attribute_" + attribute.name} data-type={attribute.type} data-name={attribute.name} value={this.getAttributeValue(attribute.name)} onChange={this.onInputChange}>
                                       <option value="">{this.props.translations['amp.performance-rule:select']}</option>

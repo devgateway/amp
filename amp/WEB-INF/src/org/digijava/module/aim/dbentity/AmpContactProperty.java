@@ -2,6 +2,8 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
+import org.digijava.kernel.ampapi.endpoints.contact.PhoneDiscriminatorContextMatcher;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.util.ContactInfoUtil;
@@ -12,16 +14,18 @@ public class AmpContactProperty  implements Comparable, Serializable {
 	
 	private Long id;
 	private AmpContact contact;
-	
-	@Interchangeable(fieldTitle = "Name")
+
 	private String name;
 	
-	@Interchangeable(fieldTitle = "Value")
+	@Interchangeable(fieldTitle = "Value", required = ActivityEPConstants.REQUIRED_ALWAYS, importable = true)
 	private String value;
 	
-	@Interchangeable(fieldTitle = "Extension Value")
+	@Interchangeable(fieldTitle = "Extension Value", importable = true,
+			context = PhoneDiscriminatorContextMatcher.class)
 	private String extensionValue;
 
+	@Interchangeable(fieldTitle = "Type", importable = true, pickIdOnly = true,
+			context = PhoneDiscriminatorContextMatcher.class)
 	private AmpCategoryValue type;
 
     public AmpCategoryValue getType() {

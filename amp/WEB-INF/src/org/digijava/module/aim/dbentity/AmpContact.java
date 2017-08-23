@@ -6,14 +6,15 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.categorymanager.util.CategoryConstants;
 
 /**
  * holds contact user's information
@@ -26,13 +27,13 @@ public class AmpContact implements Comparable, Serializable, Cloneable, Versiona
 	@Interchangeable(fieldTitle = "ID", id = true)
 	private Long id;
 	
-	@Interchangeable(fieldTitle="Name", importable = true)
+	@Interchangeable(fieldTitle = "Name", importable = true, required = ActivityEPConstants.REQUIRED_ALWAYS)
 	private String name;
 	
-	@Interchangeable(fieldTitle = "Last Name", importable = true)
+	@Interchangeable(fieldTitle = "Last Name", importable = true, required = ActivityEPConstants.REQUIRED_ALWAYS)
 	private String lastname;
 	
-	@Interchangeable(fieldTitle = "Title", discriminatorOption = CategoryConstants.CONTACT_TITLE_KEY)
+	@Interchangeable(fieldTitle = "Title", importable = true, pickIdOnly = true)
 	private AmpCategoryValue title;
 
 	@TranslatableField
@@ -47,13 +48,10 @@ public class AmpContact implements Comparable, Serializable, Cloneable, Versiona
 	private String officeaddress;
 	
 	// do we need it?
-	//@Interchangeable(fieldTitle = "Temporary ID")
 	private String temporaryId;
 	
-	@Interchangeable(fieldTitle = "Name and Last Name")
 	private String nameAndLastName;
 	
-	@Interchangeable(fieldTitle = "Full Name", value = true)
 	private String fullname;
 	
 	/**
@@ -67,10 +65,18 @@ public class AmpContact implements Comparable, Serializable, Cloneable, Versiona
 	
 	@Interchangeable(fieldTitle = "Organisation Contacts", importable = true)
 	private Set<AmpOrganisationContact> organizationContacts;
-	
-	@Interchangeable(fieldTitle = "Properties", importable = true)
+
+	@Interchangeable(fieldTitle = "Properties")
+	@InterchangeableDiscriminator(discriminatorField = "name", settings = {
+			@Interchangeable(fieldTitle = "email", discriminatorOption = Constants.CONTACT_PROPERTY_NAME_EMAIL,
+					importable = true),
+			@Interchangeable(fieldTitle = "phone", discriminatorOption = Constants.CONTACT_PROPERTY_NAME_PHONE,
+					importable = true),
+			@Interchangeable(fieldTitle = "fax", discriminatorOption = Constants.CONTACT_PROPERTY_NAME_FAX,
+					importable = true)
+	})
 	private Set<AmpContactProperty> properties;
-    
+
     public AmpContact(){
     	
     }

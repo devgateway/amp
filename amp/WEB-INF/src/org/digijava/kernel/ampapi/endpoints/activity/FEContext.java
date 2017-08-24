@@ -7,6 +7,9 @@ import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 
 /**
+ * Field Enumeration Context.
+ * Holds @Interchangeable and discrimination information about current and parent fields.
+ *
  * @author Octavian Ciubotaru
  */
 public class FEContext {

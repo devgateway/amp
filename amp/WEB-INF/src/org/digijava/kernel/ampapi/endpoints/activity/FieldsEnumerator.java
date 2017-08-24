@@ -79,11 +79,9 @@ public class FieldsEnumerator {
 	/**
 	 * gets fields from the type of the field
 	 * 
-	 * @param field
-	 * @param multilingual true if multilingual enabled
-	 * @return a list of JsonBeans, each a description of @Interchangeable
-	 *         fields in the definition of the field's class, or field's generic
-	 *         type, if it's a collection
+	 * @param field field to be described
+	 * @param context current context
+	 * @return field definitions
 	 */
 	private List<APIField> getChildrenOfField(Field field, FEContext context) {
 		if (!InterchangeUtils.isCollection(field))
@@ -96,8 +94,9 @@ public class FieldsEnumerator {
 	 * describes a field in a complex JSON structure
 	 * see the wiki for details, too many options to be listed here
 	 * 
-	 * @param field
-	 * @return
+	 * @param field field to be described
+	 * @param context current context
+	 * @return field definition
 	 */
 	private APIField describeField(Field field, FEContext context) {
 		Interchangeable interchangeable = context.getIntchStack().peek();
@@ -222,7 +221,8 @@ public class FieldsEnumerator {
 	 * Describes each @Interchangeable field of a class
 	 * 
 	 * @param clazz the class to be described
-	 * @return
+	 * @param context current context
+	 * @return field definitions
 	 */
 	private List<APIField> getAllAvailableFields(Class<?> clazz, FEContext context) {
 		List<APIField> result = new ArrayList<>();
@@ -292,11 +292,10 @@ public class FieldsEnumerator {
 	}
 	
 	/**
-	 * 
-	 * @param parentInterchangeable 
-	 * 
-	 * @param clazz the class to be described
-	 * @return
+	 * Find nested field with a percentage constraint.
+	 * @param field field to check
+	 * @param context current context
+	 * @return name of the field with percentage constraint
 	 */
 	private String getPercentageConstraint(Field field, FEContext context) {
 		Class<?> genericClass = InterchangeUtils.getGenericClass(field);
@@ -409,7 +408,8 @@ public class FieldsEnumerator {
 	/**
 	 * Gets the field required value.
 	 *
-	 * @param Field the field to get its required value
+	 * @param context current context
+	 * @param fieldTitle the field to get its required value
 	 * @return String with Y|ND|N, where Y (yes) = always required, ND=for draft status=false,
 	 * N (no) = not required. .
 	 */
@@ -434,7 +434,7 @@ public class FieldsEnumerator {
 
 	/**
 	 * Determine if the field contains unique validator
-	 * @param intchStack
+	 * @param context current context
 	 * @return boolean if the field contains unique validator
 	 */
 	private boolean hasUniqueValidatorEnabled(FEContext context) {
@@ -443,7 +443,7 @@ public class FieldsEnumerator {
 
 	/**
 	 * Determine if the field contains tree collection validator
-	 * @param intchStack
+	 * @param context current context
 	 * @return boolean if the field contains tree collection validator
 	 */
 	private boolean hasTreeCollectionValidatorEnabled(FEContext context) {
@@ -452,7 +452,7 @@ public class FieldsEnumerator {
 
 	/**
 	 * Determine if the field contains maxsize validator
-	 * @param intchStack
+	 * @param context current context
 	 * @return boolean if the field contains maxsize validator
 	 */
 	private boolean hasMaxSizeValidatorEnabled(Field field, FEContext context) {
@@ -471,7 +471,7 @@ public class FieldsEnumerator {
 
 	/**
 	 * Determine if the field contains required validator
-	 * @param intchStack
+	 * @param context current context
 	 * @return boolean if the field contains required validator
 	 */
 	private boolean hasRequiredValidatorEnabled(FEContext context) {
@@ -480,7 +480,7 @@ public class FieldsEnumerator {
 
 	/**
 	 * Determine if the field contains percentage validator
-	 * @param intchStack
+	 * @param context current context
 	 * @return boolean if the field contains percentage validator
 	 */
 	private boolean hasPercentageValidatorEnabled(FEContext context) {
@@ -489,7 +489,7 @@ public class FieldsEnumerator {
 
 	/**
 	 * Determine if the field contains a certain validator
-	 * @param intchStack
+	 * @param context current context
 	 * @param validatorName the name of the validator (unique, maxSize, minSize, percentage, treeCollection)
 	 * @return boolean if the field contains unique validator
 	 */

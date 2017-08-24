@@ -1941,6 +1941,7 @@ private void setLineMinistryObservationsToForm(AmpActivityVersion activity, Edit
 				fd.setFiscalYear(DateConversion.convertDateToFiscalYearString(ampCompFund.getTransactionDate()));
 				fd.setTransactionType(ampCompFund.getTransactionType().intValue());
 				fd.setComponentOrganisation(ampCompFund.getReportingOrganization());
+				fd.setSecondReportingOrganisation(ampCompFund.getSecondReportingOrganisation());
 				fd.setComponentTransactionDescription(ampCompFund.getDescription());
 				
 				if (fd.getTransactionType() == 0) {

@@ -377,6 +377,8 @@ public class AmpARFilter extends PropertyListable {
 	private Set<AmpOrgGroup> contractingAgencyGroups = null;
 	
 	private Set<AmpOrganisation> responsibleorg = null;
+	private Set<AmpOrganisation> componentFunding = null;
+	private Set<AmpOrganisation> componentSecondResponsible = null;
 	private Set<AmpOrganisation> executingAgency;
 	private Set<AmpOrganisation> contractingAgency;
 	private Set<AmpOrganisation> implementingAgency;
@@ -444,7 +446,14 @@ public class AmpARFilter extends PropertyListable {
 	private Integer dynActivityStartFilterAmount;
 	private String dynActivityStartFilterOperator;
 	private String dynActivityStartFilterXPeriod;
-	
+
+	private String fromIssueDate;
+	private String toIssueDate;
+	private String dynIssueFilterCurrentPeriod;
+	private Integer dynIssueFilterAmount;
+	private String dynIssueFilterOperator;
+	private String dynIssueFilterXPeriod;
+
 	private String fromActivityActualCompletionDate; // view: v_actual_completion_date, column name: Current Completion Date
 	private String toActivityActualCompletionDate;  // view: v_actual_completion_date, column name: Current Completion Date
 	private String dynActivityActualCompletionFilterCurrentPeriod;
@@ -1507,6 +1516,12 @@ public class AmpARFilter extends PropertyListable {
 		String RESPONSIBLE_ORGANIZATION_FILTER = " SELECT v.amp_activity_id FROM v_responsible_organisation v  WHERE v.org_id IN ("
 			+ Util.toCSStringForIN(responsibleorg) + ")";
 
+		String COMPONENT_FUNDING_ORGANIZATION_FILTER = " SELECT v.amp_activity_id FROM v_component_funding_organization_name v  WHERE v.org_id IN ("
+			+ Util.toCSStringForIN(componentFunding) + ")";
+
+		String COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION_FILTER = " SELECT v.amp_activity_id FROM v_component_second_responsible_organization_name v  WHERE v.org_id IN ("
+			+ Util.toCSStringForIN(componentSecondResponsible) + ")";
+
 		String DONNOR_AGENCY_FILTER = " SELECT v.amp_activity_id FROM v_donors v  WHERE v.amp_donor_org_id IN ("
 			+ Util.toCSStringForIN(donnorgAgency) + ")";
 		String ARCHIVED_FILTER          = "";
@@ -1712,6 +1727,14 @@ public class AmpARFilter extends PropertyListable {
 		if (responsibleorg!=null && responsibleorg.size() >0){
 			queryAppend(RESPONSIBLE_ORGANIZATION_FILTER);
 		}
+
+		if (componentFunding != null && componentFunding.size() > 0) {
+			queryAppend(COMPONENT_FUNDING_ORGANIZATION_FILTER);
+		}
+
+		if (componentSecondResponsible != null && componentSecondResponsible.size() > 0) {
+			queryAppend(COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION_FILTER);
+		}
 		
 		if (actualAppYear!=null && actualAppYear!=-1) {
 			queryAppend(ACTUAL_APPROVAL_YEAR_FILTER);
@@ -1824,6 +1847,18 @@ public class AmpARFilter extends PropertyListable {
 		if ( ACTIVITY_START_DATE_FILTER.length() > 0 ) {
 			ACTIVITY_START_DATE_FILTER = "SELECT asd.amp_activity_id from v_actual_start_date asd WHERE " + ACTIVITY_START_DATE_FILTER;
 			queryAppend(ACTIVITY_START_DATE_FILTER);
+		}
+
+		// build issue date filtering statements
+		dates = this.calculateDateFilters(fromIssueDate, toIssueDate, dynIssueFilterCurrentPeriod,
+				dynIssueFilterAmount, dynIssueFilterOperator, dynIssueFilterXPeriod);
+		fromDate = dates[0];
+		toDate = dates[1];
+
+		String ISSUE_DATE_FILTER = this.createDateCriteria(toDate, fromDate, "asd.issuedate");
+		if ( ISSUE_DATE_FILTER.length() > 0 ) {
+			ISSUE_DATE_FILTER = "SELECT asd.amp_activity_id from v_issue_date asd WHERE " + ISSUE_DATE_FILTER;
+			queryAppend(ISSUE_DATE_FILTER);
 		}
 		
 		dates = this.calculateDateFilters(fromActivityActualCompletionDate, toActivityActualCompletionDate, dynActivityActualCompletionFilterCurrentPeriod, dynActivityActualCompletionFilterAmount, dynActivityActualCompletionFilterOperator, dynActivityActualCompletionFilterXPeriod);
@@ -2796,6 +2831,32 @@ public class AmpARFilter extends PropertyListable {
 		this.fromActivityStartDate = fromActivityStartDate;
 	}
 
+	/**
+	 * @return the fromIssueDate
+	 */
+	public String getFromIssueDate() {
+		return fromIssueDate;
+	}
+
+	/**
+	 * @return a ['from', 'to'] pair for IssueDate range or [null, null] if none is configured
+	 */
+	public Date[] buildFromAndToIssueDateAsDate() {
+		Date[] dateRange = buildFromAndTo(fromIssueDate, toIssueDate);
+		if (dateRange != null) {
+			return dateRange;
+		} else {
+			return calculateDateFiltersAsDate(this.dynIssueFilterCurrentPeriod, this.dynIssueFilterAmount, this.dynIssueFilterOperator, this.dynIssueFilterXPeriod);
+		}
+	}
+
+	/**
+	 * @param fromIssueDate the fromIssueDate to set
+	 */
+	public void setFromIssueDate(String fromIssueDate) {
+		this.fromIssueDate = fromIssueDate;
+	}
+
 	public String getFromProposedApprovalDate() {
 		return fromProposedApprovalDate;
 	}
@@ -3249,6 +3310,22 @@ public class AmpARFilter extends PropertyListable {
 
 	public void setResponsibleorg(Set<AmpOrganisation> responsibleorg) {
 		this.responsibleorg = responsibleorg;
+	}
+
+	public Set<AmpOrganisation> getComponentFunding() {
+		return componentFunding;
+	}
+
+	public void setComponentFunding(Set<AmpOrganisation> componentFunding) {
+		this.componentFunding = componentFunding;
+	}
+
+	public Set<AmpOrganisation> getComponentSecondResponsible() {
+		return componentSecondResponsible;
+	}
+
+	public void setComponentSecondResponsible(Set<AmpOrganisation> componentSecondResponsible) {
+		this.componentSecondResponsible = componentSecondResponsible;
 	}
 
 	public String getSortBy() {
@@ -3859,5 +3936,45 @@ public class AmpARFilter extends PropertyListable {
 
 	public void setDynFundingClosingFilterXPeriod(String dynFundingClosingFilterXPeriod) {
 		this.dynFundingClosingFilterXPeriod = dynFundingClosingFilterXPeriod;
+	}
+
+	public String getToIssueDate() {
+		return toIssueDate;
+	}
+
+	public void setToIssueDate(String toIssueDate) {
+		this.toIssueDate = toIssueDate;
+	}
+
+	public String getDynIssueFilterCurrentPeriod() {
+		return dynIssueFilterCurrentPeriod;
+	}
+
+	public void setDynIssueFilterCurrentPeriod(String dynIssueFilterCurrentPeriod) {
+		this.dynIssueFilterCurrentPeriod = dynIssueFilterCurrentPeriod;
+	}
+
+	public Integer getDynIssueFilterAmount() {
+		return dynIssueFilterAmount;
+	}
+
+	public void setDynIssueFilterAmount(Integer dynIssueFilterAmount) {
+		this.dynIssueFilterAmount = dynIssueFilterAmount;
+	}
+
+	public String getDynIssueFilterOperator() {
+		return dynIssueFilterOperator;
+	}
+
+	public void setDynIssueFilterOperator(String dynIssueFilterOperator) {
+		this.dynIssueFilterOperator = dynIssueFilterOperator;
+	}
+
+	public String getDynIssueFilterXPeriod() {
+		return dynIssueFilterXPeriod;
+	}
+
+	public void setDynIssueFilterXPeriod(String dynIssueFilterXPeriod) {
+		this.dynIssueFilterXPeriod = dynIssueFilterXPeriod;
 	}
 }

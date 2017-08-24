@@ -223,7 +223,7 @@ public final class SummaryChangesService {
                         + "            OR a.amount <> b.amount "
                         + "            OR a.amp_currency_id <> b.amp_currency_id "
                         + "            OR a.amp_projected_categoryvalue_id <> b.amp_projected_categoryvalue_id) ) "
-                        + " ORDER BY transaction_date,reporting_date,amp_funding_id";
+                        + " ORDER BY amp_activity_id,reporting_date,amp_funding_id";
 
                 try (RsInfo rsi = SQLUtils.rawRunQuery(conn, queryString, null)) {
                     ResultSet rs = rsi.rs;

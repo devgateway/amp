@@ -65,7 +65,7 @@ stage('Checkstyle') {
 
 stage('Build') {
     timeout(time: 3, unit: 'DAYS') {
-        input "Proceed with build?"
+        input "Proceed with build?x"
     }
 
     node {

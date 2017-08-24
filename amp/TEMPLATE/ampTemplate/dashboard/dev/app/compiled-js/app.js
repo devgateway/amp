@@ -23765,7 +23765,7 @@ module.exports = Backbone.View.extend({
 
 },{"backbone":"backbone","bootstrap/dist/js/bootstrap":49,"underscore":"underscore"}],58:[function(require,module,exports){
 module.exports=require(49)
-},{"C:\\git\\desarrollo-amp\\amp\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":49}],59:[function(require,module,exports){
+},{"C:\\Users\\gerald\\git\\amp\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":49}],59:[function(require,module,exports){
 var jQuery = require('jquery');
 
 /*!
@@ -31336,6 +31336,7 @@ module.exports = Backbone.View.extend({
         this.filterViewsInstances.financials.filterCollection.add(tmpModel);
         break;
       case 'status':
+      case 'performance-alert-level':
       case 'approval-status':
         this.filterViewsInstances.activity.filterCollection.add(tmpModel);
         break;
@@ -32004,15 +32005,15 @@ module.exports = BaseFilterView.extend({
 
 },{"../views/base-filter-view":77,"underscore":"underscore"}],83:[function(require,module,exports){
 module.exports=require(49)
-},{"C:\\git\\desarrollo-amp\\amp\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":49}],84:[function(require,module,exports){
+},{"C:\\Users\\gerald\\git\\amp\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":49}],84:[function(require,module,exports){
 module.exports=require(59)
-},{"C:\\git\\desarrollo-amp\\amp\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\core.js":59,"jquery":"jquery"}],85:[function(require,module,exports){
+},{"C:\\Users\\gerald\\git\\amp\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\core.js":59,"jquery":"jquery"}],85:[function(require,module,exports){
 module.exports=require(61)
-},{"./core":84,"./mouse":86,"./widget":87,"C:\\git\\desarrollo-amp\\amp\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\draggable.js":61,"jquery":"jquery"}],86:[function(require,module,exports){
+},{"./core":84,"./mouse":86,"./widget":87,"C:\\Users\\gerald\\git\\amp\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\draggable.js":61,"jquery":"jquery"}],86:[function(require,module,exports){
 module.exports=require(62)
-},{"./widget":87,"C:\\git\\desarrollo-amp\\amp\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\mouse.js":62,"jquery":"jquery"}],87:[function(require,module,exports){
+},{"./widget":87,"C:\\Users\\gerald\\git\\amp\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\mouse.js":62,"jquery":"jquery"}],87:[function(require,module,exports){
 module.exports=require(63)
-},{"C:\\git\\desarrollo-amp\\amp\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\widget.js":63,"jquery":"jquery"}],88:[function(require,module,exports){
+},{"C:\\Users\\gerald\\git\\amp\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\widget.js":63,"jquery":"jquery"}],88:[function(require,module,exports){
 var Deferred = require('jquery').Deferred;
 var _ = require('underscore');
 var Backbone = require('backbone');
@@ -32051,6 +32052,12 @@ module.exports  = Backbone.Collection.extend({
 	findCurrencyById: function(id){
 		return _.find(this.get(Constants.CURRENCY_ID).get('value').options, function(option){ return option.id === id });		 
 	},
+    findAmountUnitsById: function(id){
+		return _.find(this.get(Constants.AMOUNT_UNIT_ID).get('value').options, function(option){ return option.id === id });
+	},
+    findAmountUnitsByValue: function(value){
+		return _.find(this.get(Constants.AMOUNT_UNIT_ID).get('value').options, function(option){ return option.value === value });
+	},
 	findCalendarById: function(id){
 		return _.find(this.get(Constants.CALENDAR_ID).get('value').options, function(option){ return option.id === id });
 	},
@@ -32060,6 +32067,9 @@ module.exports  = Backbone.Collection.extend({
 	getCurrencySetting: function(){
 		return this.get(Constants.CURRENCY_ID);
 	},
+	getAmountUnitsSetting: function(){
+		return this.get(Constants.AMOUNT_UNIT_ID);
+	},
 	getCalendarSetting: function(){
 		return this.get(Constants.CALENDAR_ID);
 	},	
@@ -32068,6 +32078,9 @@ module.exports  = Backbone.Collection.extend({
 	},
 	getDefaultCurrencyId: function(){
 		return this.getCurrencySetting().get('value').defaultId;
+	},
+	getDefaultAmountUnitsId: function(){
+		return this.getAmountUnitsSetting().get('value').defaultId;
 	},
 	getDefaultCalendarId: function(){
 		return this.getCalendarSetting().get('value').defaultId;
@@ -32099,6 +32112,10 @@ module.exports = {
 	CURRENCY_ID : 'currency-code',
 	FUNDING_TYPE_ID : 'funding-type',
 	CALENDAR_CURRENCIES_ID : 'calendar-currencies',
+    AMOUNT_FORMAT_ID : 'amount-format',
+    AMOUNT_UNIT_ID : 'number-divider',
+    AMOUNTS_OPTION_THOUSANDS : 1000,
+    AMOUNTS_OPTION_MILLIONS : 1000000,
 	YEAR_FROM_ID: "from",
 	YEAR_TO_ID: "to",	
 	CONTEXT : {
@@ -32216,6 +32233,7 @@ var Backbone = require('backbone');
 var Translator = require('amp-translate');
 var Template = "<% if(obj.isPopup) {%>\r\n<div class=\"panel-heading\">\r\n\t\t\t<button type=\"button\" class=\"close cancel\" aria-hidden=\"true\">x</button>\r\n\t\t\t<h3 class=\"panel-title\" data-i18n=\"amp.settings:title\">Settings</h3>\r\n</div>\r\n<%}%>\r\n<div class=\"panel-body\">\t\t\r\n<div class=\"container-fluid\">\r\n  <div class=\"settings\">\r\n    Loading...\r\n  </div>\r\n  <% if(!obj.isPopup) {%>\r\n  <div class=\"form-group\">\r\n  \t<button type=\"button\" class=\"btn btn-success apply-btn\" data-i18n=\"amp.settings:apply-button\">Apply</button>\r\n  </div>\r\n  <%}%>\r\n</div>\r\n</div>\r\n<% if(obj.isPopup) {%>\r\n<div class=\"panel-footer setting-dialog-footer\">\r\n    <button type=\"button\" class=\"btn btn-warning cancel-btn cancel\" data-i18n=\"amp.settings:cancel-button\">Cancel</button>\r\n  \t<button type=\"button\" class=\"btn btn-success apply-btn\" data-i18n=\"amp.settings:apply-button\">Apply</button>\r\n </div>\r\n <%}%>\r\n \r\n \r\n";
 var SelectTemplate = "<div class=\"form-group\">\n  <label class=\"control-label\" data-i18n=\"amp.settings:label-<%= obj.setting.id %>\"><%= obj.setting.name %></label>\n  <select class=\"form-control\" id=\"<%= obj.setting.id %>\">\n  <% _.each(obj.setting.value.options, function(option){ %>\n  <% var selected = obj.settingsSelections[obj.setting.id] || obj.appliedSettings[obj.setting.id];%>\n    <option value=\"<%= option.id %>\"  <% if(selected == option.id){ %> selected <% } %> >\n      <%= option.name %>\n    </option>\n  <%}); %>\n  </select>\n</div>\n";
+var SelectAmountUnitTemplate = "<div class=\"form-group\">\n  <label class=\"control-label\" data-i18n=\"amp.settings:label-<%= obj.setting.id %>\"><%= obj.setting.name %></label>\n  <select class=\"form-control\" id=\"<%= obj.setting.id %>\">\n  <% _.each(obj.setting.value.options, function(option){ %>\n  <% var selected = obj.settingsSelections[obj.setting.id] || obj.appliedSettings['amount-format'][obj.setting.id];%>\n    <option value=\"<%= option.value %>\"  <% if(selected == option.value){ %> selected <% } %> >\n      <%= option.name %>\n    </option>\n  <%}); %>\n  </select>\n</div>\n";
 var YearRangeTemplate = "<div class=\"form-group\"> \r\n<label data-i18n=\"amp.settings:label-<%= obj.id %>\"><%= obj.name %></label> \r\n <div class=\"row year-range \"> \r\n \r\n </div>  \r\n</div>";
 var YearSelectTemplate = "<div class=\"col-xs-2\">\r\n   <label data-i18n=\"amp.settings:label-<%= obj.setting.id %>\" ><%= obj.setting.name %></label>\r\n </div>\r\n  <div class=\"col-xs-4\">\r\n  <select class=\"form-control\" id=\"<%= obj.setting.id %>\">\r\n    <%\r\n      var applied = obj.appliedSettings['year-range'] ? obj.appliedSettings['year-range'][obj.setting.id] : null;\r\n      var selected = obj.settingsSelections[obj.setting.id];\r\n    %>\r\n    <option data-i18n=\"amp.settings:all\" value=\"-1\"<% if((selected || applied) == -1){ %> selected <% } %>>All</option>\r\n    <% for (i = obj.setting.from; i <= obj.setting.to; i++) { %>\r\n      <option value=\"<%= i %>\"<% if((selected || applied) == i){ %> selected <% } %>>\r\n      <%= i %>\r\n      </option>\r\n    <% } %>\r\n  </select>\r\n  </div>";
 var Constants = require('../common/constants');
@@ -32223,6 +32241,7 @@ var Constants = require('../common/constants');
 module.exports = Backbone.View.extend({
 	template : _.template(Template),
 	selectTemplate : _.template(SelectTemplate),
+    selectAmountUnitTemplate : _.template(SelectAmountUnitTemplate),
 	yearRangeTemplate : _.template(YearRangeTemplate),
 	yearSelectTemplate : _.template(YearSelectTemplate),
 	events : {
@@ -32262,6 +32281,9 @@ module.exports = Backbone.View.extend({
 		if(_.isEmpty(this.appliedSettings)){
 			this.settingsSelections[Constants.CALENDAR_ID] = this.definitions.findWhere({id : Constants.CALENDAR_ID }).get('value').defaultId;
 			this.settingsSelections[Constants.CURRENCY_ID] = this.definitions.findWhere({id : Constants.CURRENCY_ID }).get('value').defaultId;
+			if (this.caller === Constants.CONTEXT.REPORTS) {
+                this.settingsSelections[Constants.AMOUNT_UNIT_ID] = this.definitions.findWhere({id : Constants.AMOUNT_UNIT_ID }).get('value').defaultId;
+            }
 			if (this.caller !== Constants.CONTEXT.DASHBOARDS) {
 			   this.settingsSelections[Constants.FUNDING_TYPE_ID] = this.definitions.findWhere({id : Constants.FUNDING_TYPE_ID }).get('value').defaultId;
 			}
@@ -32290,6 +32312,9 @@ module.exports = Backbone.View.extend({
 		this.$('.settings').html('');
 		this.appendSetting(Constants.CALENDAR_ID);
 		this.appendSetting(Constants.CURRENCY_ID);
+        if (this.caller === Constants.CONTEXT.REPORTS) {
+            this.appendAmountUnitSetting();
+        }
 		if (this.caller !== Constants.CONTEXT.DASHBOARDS) {
 			this.appendSetting(Constants.FUNDING_TYPE_ID);
 		}
@@ -32310,6 +32335,18 @@ module.exports = Backbone.View.extend({
 				this.allCurrencies = setting.get('value').options;
 			}
 		}		
+	},
+	appendAmountUnitSetting : function() {
+		var setting = this.definitions.findWhere({
+			id : Constants.AMOUNT_UNIT_ID
+		});
+		if (setting) {
+			this.$('.settings').append(this.selectAmountUnitTemplate({
+				setting : setting.toJSON(),
+				appliedSettings : this.appliedSettings,
+				settingsSelections: this.settingsSelections
+			}));
+		}
 	},
 	appendYearRangeSetting : function() {
 		var yearRangeSetting = this.definitions.findWhere({
@@ -32378,21 +32415,24 @@ module.exports = Backbone.View.extend({
 		// store user selections in a temp object - only transfered to the applied settings if the apply button is clicked
 		this.settingsSelections[settingID] = selectedID;
 	},
-	updateAppliedSettings : function() {
-		// transfer user selections to applied settings object
-		var self = this;
-		_.each(this.settingsSelections, function(selectedID, settingID) {
-			if (settingID === Constants.YEAR_FROM_ID || settingID === Constants.YEAR_TO_ID) {
-				if (_.isUndefined(self.appliedSettings[Constants.YEAR_RANGE_ID])) {
-					self.appliedSettings[Constants.YEAR_RANGE_ID] = {};
-				}
-				self.appliedSettings[Constants.YEAR_RANGE_ID][settingID] = selectedID;
-			} else {
-				self.appliedSettings[settingID] = selectedID;
-			}
-		});
-		this.settingsSelections = {};
-	},
+    updateAppliedSettings: function () {
+        // transfer user selections to applied settings object
+        var self = this;
+        _.each(this.settingsSelections, function (selectedID, settingID) {
+            if (settingID === Constants.YEAR_FROM_ID || settingID === Constants.YEAR_TO_ID) {
+                if (_.isUndefined(self.appliedSettings[Constants.YEAR_RANGE_ID])) {
+                    self.appliedSettings[Constants.YEAR_RANGE_ID] = {};
+                }
+                self.appliedSettings[Constants.YEAR_RANGE_ID][settingID] = selectedID;
+            } else {
+                self.appliedSettings[settingID] = selectedID;
+                if (settingID === Constants.AMOUNT_UNIT_ID) {
+                    self.appliedSettings[Constants.AMOUNT_FORMAT_ID][Constants.AMOUNT_UNIT_ID] = Number(selectedID);
+                }
+            }
+        });
+        this.settingsSelections = {};
+    },
 	getCurrent : function() {
 		return this.appliedSettings;
 	},

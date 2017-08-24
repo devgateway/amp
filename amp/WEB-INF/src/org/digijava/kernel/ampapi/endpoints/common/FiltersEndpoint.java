@@ -581,7 +581,7 @@ public class FiltersEndpoint {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = true, id = FiltersConstants.PERFORMANCE_ALERT_LEVEL,
 			columns = ColumnConstants.PERFORMANCE_ALERT_LEVEL, name = ColumnConstants.PERFORMANCE_ALERT_LEVEL,
-			tab = EPConstants.TAB_OTHER)
+			tab = EPConstants.TAB_ACTIVITY)
 	public JsonBean getPerformanceAlertLevel() {
 		return getCategoryValue(CategoryConstants.PERFORMANCE_ALERT_LEVEL_KEY, ColumnConstants.PERFORMANCE_ALERT_LEVEL);
 	}

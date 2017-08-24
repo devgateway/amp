@@ -1,7 +1,36 @@
 @import url("./amp-admin-rtl.css");
 
+@import url("../fonts/droidarabicnaskh.css");
+
 #mainBodyContent {
-	direction: rtl;
+    direction: rtl;
+    font-family: 'Droid Arabic Naskh', Arial;
+}
+
+#AmpMenus {
+    font-family: 'Droid Arabic Naskh', Arial;
+}
+#homelayout {
+    font-family: 'Droid Arabic Naskh', Arial;
+}
+#main-desktop-container {
+    font-family: 'Droid Arabic Naskh', Arial;
+}
+
+#tabs-container {
+    font-family: 'Droid Arabic Naskh', Arial;
+}
+
+#identificationdiv {
+    font-family: 'Droid Arabic Naskh', Arial;
+}
+
+#aboutModal {
+    font-family: 'Droid Arabic Naskh', Arial;
+}
+
+.yui-panel {
+    font-family: 'Droid Arabic Naskh', Arial;
 }
 
 div.trnpanel div.trn-row a {

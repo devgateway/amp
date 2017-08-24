@@ -2,14 +2,16 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as startUp from '../actions/StartUpAction';
+import Utils from '../common/Utils';
 export default class PagingSection extends Component {
     constructor( props, context ) {
         super( props, context );     
-        this.state = { recordsPerPage: 10};
+        this.state = { recordsPerPage: this.props.page.recordsPerPage};
         this.goToClickedPage = this.goToClickedPage.bind( this );
         this.goToNextPage = this.goToNextPage.bind( this );
         this.goToLastPage = this.goToLastPage.bind( this );
-        this.updateRecordsPerPage = this.updateRecordsPerPage.bind( this );        
+        this.updateRecordsPerPage = this.updateRecordsPerPage.bind( this ); 
+        this.onRecordsPerPageChange= this.onRecordsPerPageChange.bind(this);
     }
 
     componentDidMount() { 
@@ -41,12 +43,8 @@ export default class PagingSection extends Component {
         return paginationLinks;
     }
     
-    updateRecordsPerPage() {
-        if ( this.refs.recordsPerPage && this.refs.recordsPerPage.value ) {
-            this.setState( { recordsPerPage: parseInt( this.refs.recordsPerPage.value ) }, function() {
-                this.props.updateRecordsPerPage(this.state.recordsPerPage);
-            }.bind( this ) );
-        }
+    updateRecordsPerPage() {        
+        this.props.updateRecordsPerPage(this.state.recordsPerPage);
     }
     
     displayPagingInfo() {
@@ -64,6 +62,12 @@ export default class PagingSection extends Component {
             } 
     }    
 
+    onRecordsPerPageChange(event) {     
+      if (Utils.isNumber(event.target.value) && parseInt(event.target.value) > 0 ) {
+          this.setState( { recordsPerPage: parseInt( this.refs.recordsPerPage.value ) });
+      }
+    }
+    
     render() {
         if (this.props.page ) {
                    return (               
@@ -85,7 +89,7 @@ export default class PagingSection extends Component {
                                         <span className="input-group-addon" id="basic-addon1">
                                             <span className="glyphicon glyphicon-arrow-right" onClick={this.updateRecordsPerPage}></span>
                                         </span>
-                                        <input type="text" className="form-control" ref="recordsPerPage" placeholder="" defaultValue={this.props.page.recordsPerPage} />
+                                        <input type="text" className="form-control" ref="recordsPerPage" placeholder="" value={this.state.recordsPerPage}  onChange={this.onRecordsPerPageChange}/>
                                     </div>
                                 </div>
                                 {this.displayPagingInfo()}

@@ -59,9 +59,9 @@ class Utils {
            }
             
            if(attr.type === Constants.FIELD_TYPE_AMOUNT) {
-               if(!this.isNumber(attribute.value)){
+               if(!this.isNumber(attribute.value) || attribute.value < 0){
                    errors.push({ messageKey: 'amp.performance-rule:invalid-input', id: rule.id, affectedFields: [attr.name] }); 
-               }
+               }              
            }
         }
         return errors;        

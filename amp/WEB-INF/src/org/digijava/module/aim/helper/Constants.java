@@ -75,6 +75,8 @@ public class Constants
 	public static final String SECTOR_GROUP = "SG" ;
 	public static final String EXECUTING_AGENCY = "EA";
 	public static final String RESPONSIBLE_ORGANISATION = "RO";
+	public static final String COMPONENT_FUNDING_ORGANIZATION = "CF";
+	public static final String COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION = "CS";
 	public static final String CONTRACTOR = "CT";
 	public static final String RELATED_INSTITUTIONS = "RL" ;
 	public static final int NUM_RECORDS = 10 ;
@@ -352,6 +354,8 @@ public class Constants
     public static final String ROLE_CODE_CONTRACTING_AGENCY			= "CA";
     public static final String ROLE_CODE_REGIONAL_GROUP				= "RG";
     public static final String ROLE_CODE_SECTOR_GROUP				= "SG";
+    public static final String ROLE_CODE_COMPONENT_FUNDING_ORGANIZATION	= "CF";
+    public static final String ROLE_CODE_COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION = "CS";
 
 	//global settings
 	public static final String GLOBAL_BUDGET_FILTER = "Public View Budget Filter";

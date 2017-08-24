@@ -22,25 +22,86 @@ println "Tag: ${tag}"
 def codeVersion
 def dbVersion
 
+def updateGitHubCommitStatus(context, message, state) {
+    repoUrl = sh(returnStdout: true, script: "git config --get remote.origin.url").trim()
+    lastAuthor = sh(returnStdout: true, script: "git log --pretty=%an -n 1").trim()
+    ref = lastAuthor.equals("Jenkins") ? "HEAD~1" : "HEAD"
+    commitSha = sh(returnStdout: true, script: "git rev-parse ${ref}").trim()
+
+    step([
+    $class: 'GitHubCommitStatusSetter',
+    reposSource: [$class: "ManuallyEnteredRepositorySource", url: repoUrl],
+    commitShaSource: [$class: "ManuallyEnteredShaSource", sha: commitSha],
+    contextSource: [$class: "ManuallyEnteredCommitContextSource", context: context],
+    statusBackrefSource: [$class: "ManuallyEnteredBackrefSource", backref: "${BUILD_URL}"],
+    errorHandlers: [[$class: 'ShallowAnyErrorHandler']],
+    statusResultSource: [
+        $class: "ConditionalStatusResultSource",
+        results: [[$class: "AnyBuildResult", message: message, state: state]]
+    ]
+    ])
+}
+
+// Run checkstyle only for PR builds
+stage('Checkstyle') {
+    if (branch == null) {
+        node {
+            try {
+                checkout scm
+
+                updateGitHubCommitStatus('jenkins/checkstyle', 'Checkstyle in progress', 'PENDING')
+
+                withEnv(["PATH+MAVEN=${tool 'M339'}/bin"]) {
+                    sh "cd amp && mvn inccheckstyle:check -DbaseBranch=remotes/origin/${CHANGE_TARGET}"
+                }
+
+                updateGitHubCommitStatus('jenkins/checkstyle', 'Checkstyle success', 'SUCCESS')
+            } catch(e) {
+                updateGitHubCommitStatus('jenkins/checkstyle', 'Checkstyle found violations', 'ERROR')
+            }
+        }
+    }
+}
+
 stage('Build') {
+    timeout(time: 3, unit: 'DAYS') {
+        input "Proceed with build?"
+    }
+
     node {
         checkout scm
 
-        withEnv(["PATH+MAVEN=${tool 'M339'}/bin"]) {
+        def format = branch != null ? "%H" : "%P"
+        def hash = sh(returnStdout: true, script: "git log --pretty=${format} -n 1").trim()
+        sh(returnStatus: true, script: "docker pull localhost:5000/amp-webapp:${tag} > /dev/null")
+        def imageIds = sh(returnStdout: true, script: "docker images -q -f \"label=git-hash=${hash}\"").trim()
+        sh(returnStatus: true, script: "docker rmi localhost:5000/amp-webapp:${tag} > /dev/null")
 
-            // Build AMP
-            sh "cd amp && mvn -T 4 clean compile war:exploded -Djdbc.user=amp -Djdbc.password=amp122006 -Djdbc.db=amp -Djdbc.host=db -Djdbc.port=5432 -DdbName=postgresql -Djdbc.driverClassName=org.postgresql.Driver -Dmaven.test.skip=true -Dapidocs=true -DbuildVersion=AMP -DbuildSource=${tag} -e"
+        // Find AMP version
+        codeVersion = (readFile('amp/TEMPLATE/ampTemplate/site-config.xml') =~ /(?s).*<\!ENTITY ampVersion "([\d\.]+)">.*/)[0][1]
 
-            // Find AMP version
-            codeVersion = (readFile('amp/TEMPLATE/ampTemplate/site-config.xml') =~ /(?s).*<\!ENTITY ampVersion "([\d\.]+)">.*/)[0][1]
+        if (imageIds.equals("")) {
+            withEnv(["PATH+MAVEN=${tool 'M339'}/bin"]) {
 
-            // Build Docker images & push it
-            sh "docker build -q -t localhost:5000/amp-webapp:${tag} --build-arg AMP_EXPLODED_WAR=target/amp-AMP --build-arg AMP_PULL_REQUEST='${pr}' --build-arg AMP_BRANCH='${branch}' amp"
-            sh "docker push localhost:5000/amp-webapp:${tag} > /dev/null"
+                // Build AMP
+                sh "cd amp && mvn -T 4 clean compile war:exploded -Djdbc.user=amp -Djdbc.password=amp122006 -Djdbc.db=amp -Djdbc.host=db -Djdbc.port=5432 -DdbName=postgresql -Djdbc.driverClassName=org.postgresql.Driver -Dmaven.test.skip=true -Dapidocs=true -DbuildVersion=AMP -DbuildSource=${tag} -e"
 
-            // Cleanup after Docker & Maven
-            sh "docker rmi localhost:5000/amp-webapp:${tag}"
-            sh "cd amp && mvn clean -Djdbc.db=dummy"
+                // Build Docker images & push it
+                sh "docker build -q -t localhost:5000/amp-webapp:${tag} --build-arg AMP_EXPLODED_WAR=target/amp-AMP --build-arg AMP_PULL_REQUEST='${pr}' --build-arg AMP_BRANCH='${branch}' --label git-hash='${hash}' amp"
+                sh "docker push localhost:5000/amp-webapp:${tag} > /dev/null"
+
+                // Cleanup after Docker & Maven
+                sh "docker rmi localhost:5000/amp-webapp:${tag}"
+                sh "cd amp && mvn clean -Djdbc.db=dummy"
+                sh "rm -r amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/node"
+                sh "rm -r amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/node_modules"
+                sh "rm -r amp/TEMPLATE/ampTemplate/node_modules/gis-layers-manager/node"
+                sh "rm -r amp/TEMPLATE/ampTemplate/node_modules/gis-layers-manager/node_modules"
+                sh "rm -r amp/TEMPLATE/ampTemplate/node_modules/amp-settings/node"
+                sh "rm -r amp/TEMPLATE/ampTemplate/node_modules/amp-settings/node_modules"
+                sh "rm -r amp/TEMPLATE/ampTemplate/gisModule/dev/node"
+                sh "rm -r amp/TEMPLATE/ampTemplate/gisModule/dev/node_modules"
+            }
         }
     }
 }

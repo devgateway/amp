@@ -36,6 +36,7 @@ import static org.digijava.module.aim.annotations.interchange.ActivityFieldsCons
 import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_FUNDING_DESCRIPTION;
 import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_FUNDING_TRANSACTION_DATE;
 import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_ORGANIZATION;
+import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_SECOND_REPORTING_ORGANIZATION;
 
 /**
  * @author aartimon@dginternational.org 
@@ -87,11 +88,16 @@ public class AmpComponentsFundingFormTableFeature extends
 
 
                 // selector for related orgs
-                AmpSelectFieldPanel<AmpOrganisation> orgSelect = new AmpSelectFieldPanel<AmpOrganisation>("orgSelect",
-                        new PropertyModel<AmpOrganisation>(model, "reportingOrganization"), orgsList, COMPONENT_ORGANIZATION, false, true, null, false);
-                orgSelect.add(UpdateEventBehavior.of(FundingOrgListUpdateEvent.class));
-                orgSelect.getChoiceContainer().add(new AttributeModifier("style", "width: 100px;"));
+                AmpSelectFieldPanel<AmpOrganisation> orgSelect = buildSelectFieldPanel("orgSelect",
+                        COMPONENT_ORGANIZATION, "reportingOrganization",
+                        model, orgsList);
                 item.add(orgSelect);
+
+                // selector for second related orgs
+                AmpSelectFieldPanel<AmpOrganisation> secondOrgSelect = buildSelectFieldPanel("secondOrgSelect",
+                        COMPONENT_SECOND_REPORTING_ORGANIZATION, "secondReportingOrganisation",
+                        model, orgsList);
+                item.add(secondOrgSelect);
 
                 AmpFundingAmountComponent amountComponent = new AmpFundingAmountComponent<AmpComponentFunding>("fundingAmount",
                         model, COMPONENT_FUNDING_AMOUNT, "transactionAmount", COMPONENT_FUNDING_CURRENCY,
@@ -109,6 +115,18 @@ public class AmpComponentsFundingFormTableFeature extends
 		add(editorList);
 
 	}
+
+    private AmpSelectFieldPanel<AmpOrganisation> buildSelectFieldPanel(String id, String fmName, String expression,
+                                                                       IModel<AmpComponentFunding> model,
+                                                                       AbstractReadOnlyModel<List<AmpOrganisation>>
+                                                                               orgsList) {
+        AmpSelectFieldPanel<AmpOrganisation> selectField = new AmpSelectFieldPanel<AmpOrganisation>(id,
+                new PropertyModel<AmpOrganisation>(model, expression), orgsList, fmName
+                , false, true, null, false);
+        selectField.add(UpdateEventBehavior.of(FundingOrgListUpdateEvent.class));
+        selectField.getChoiceContainer().add(new AttributeModifier("style", "width: 100px;"));
+        return selectField;
+    }
 
     public ListEditor<AmpComponentFunding> getEditorList() {
         return editorList;

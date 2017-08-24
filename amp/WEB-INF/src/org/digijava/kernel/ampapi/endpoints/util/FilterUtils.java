@@ -46,6 +46,7 @@ public class FilterUtils {
 		mapDateColumn(FiltersConstants.ACTUAL_START_DATE, ColumnConstants.ACTUAL_START_DATE);
 		mapDateColumn(FiltersConstants.EFFECTIVE_FUNDING_DATE, ColumnConstants.EFFECTIVE_FUNDING_DATE);
 		mapDateColumn(FiltersConstants.FINAL_DATE_FOR_CONTRACTING, ColumnConstants.FINAL_DATE_FOR_CONTRACTING);
+		mapDateColumn(FiltersConstants.ISSUE_DATE, ColumnConstants.ISSUE_DATE);
 		mapDateColumn(FiltersConstants.FUNDING_CLOSING_DATE, ColumnConstants.FUNDING_CLOSING_DATE);
 		mapDateColumn(FiltersConstants.PROPOSED_APPROVAL_DATE, ColumnConstants.PROPOSED_APPROVAL_DATE);
 		mapDateColumn(FiltersConstants.PROPOSED_COMPLETION_DATE, ColumnConstants.PROPOSED_COMPLETION_DATE);
@@ -54,6 +55,10 @@ public class FilterUtils {
 		mapSimpleColumn(FiltersConstants.APPROVAL_STATUS, ColumnConstants.APPROVAL_STATUS);
 		mapSimpleColumn(FiltersConstants.ARCHIVED, ColumnConstants.ARCHIVED);
 		mapSimpleColumn(FiltersConstants.BENEFICIARY_AGENCY, ColumnConstants.BENEFICIARY_AGENCY);
+		mapSimpleColumn(FiltersConstants.COMPONENT_FUNDING_ORGANIZATION,
+				ColumnConstants.COMPONENT_FUNDING_ORGANIZATION);
+		mapSimpleColumn(FiltersConstants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION,
+				ColumnConstants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION);
 		mapSimpleColumn(FiltersConstants.COMPUTED_YEAR, ColumnConstants.COMPUTED_YEAR);
 		mapSimpleColumn(FiltersConstants.CONCESSIONALITY_LEVEL, ColumnConstants.CONCESSIONALITY_LEVEL);
 		mapSimpleColumn(FiltersConstants.CONTRACTING_AGENCY, ColumnConstants.CONTRACTING_AGENCY);

@@ -13,6 +13,7 @@ import static org.digijava.module.aim.annotations.interchange.ActivityFieldsCons
 import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_FUNDING_TRANSACTION_DATE;
 import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_FUNDING_TRANSACTION_TYPE;
 import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_ORGANIZATION;
+import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_SECOND_REPORTING_ORGANIZATION;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -53,7 +54,10 @@ public class AmpComponentFunding implements Cloneable, Serializable {
 	@Interchangeable(fieldTitle = COMPONENT_ORGANIZATION, importable = true, pickIdOnly = true)
 	private AmpOrganisation reportingOrganization;
 
-	@Interchangeable(fieldTitle = COMPONENT_FUNDING_CURRENCY, importable = true, pickIdOnly = true, required = REQUIRED_ALWAYS)
+	//@Interchangeable(fieldTitle = COMPONENT_SECOND_REPORTING_ORGANIZATION, importable = true, pickIdOnly = true)
+	private AmpOrganisation secondReportingOrganisation;
+
+    @Interchangeable(fieldTitle = COMPONENT_FUNDING_CURRENCY, importable = true, pickIdOnly = true, required = REQUIRED_ALWAYS)
 	private AmpCurrency currency;
 
 	@Interchangeable(fieldTitle = COMPONENT_FUNDING_DESCRIPTION)
@@ -182,6 +186,18 @@ public class AmpComponentFunding implements Cloneable, Serializable {
 	}
 
 	/**
+	 * @return Returns the secondReportingOrganisation.
+	 */
+	public AmpOrganisation getSecondReportingOrganisation() {
+		return secondReportingOrganisation;
+	}
+	/**
+	 * @param secondReportingOrganisation The secondReportingOrganisation to set.
+	 */
+	public void setSecondReportingOrganisation(AmpOrganisation secondReportingOrganisation) {
+		this.secondReportingOrganisation = secondReportingOrganisation;
+	}
+	/**
 	 * @return Returns the transactionAmount.
 	 */
 	public Double getTransactionAmount() {
@@ -238,10 +254,10 @@ public class AmpComponentFunding implements Cloneable, Serializable {
 	 * NullPointerException(); if (!(obj instanceof AmpComponentFunding)) throw
 	 * new ClassCastException(); if(this.ampComponentFundingId == null) return
 	 * super.equals(obj);
-	 * 
+	 *
 	 * AmpComponentFunding comp = (AmpComponentFunding) obj; return
 	 * this.ampComponentFundingId.equals(comp.ampComponentFundingId);
-	 * 
+	 *
 	 * }
 	 */
 	public void setExchangeRate(Float exchangeRate) {

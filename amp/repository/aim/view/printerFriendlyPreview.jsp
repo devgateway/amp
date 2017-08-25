@@ -140,7 +140,11 @@ body {background:none;}
 													parentModule="/Activity Form/Identification">
 										<c:if test="${not empty aimEditActivityForm.identification.statusOtherInfo}">
 										<tr>
-											<td class="field_name" ></td>
+											<td class="field_name" >
+												<b>
+													<digi:trn>Status Other Info</digi:trn>
+												</b>
+											</td>
 											<td bgcolor="#ffffff">
 													<span class="word_break bold">
 															${aimEditActivityForm.identification.statusOtherInfo}
@@ -215,15 +219,19 @@ body {background:none;}
 								</tr>
 								</module:display>
 
-									<c:set var="modalitiesPath" value="/Activity Form/Funding/Modalities Other Info"/>
+									<c:set var="modalitiesPath" value="/Activity Form/Funding/Overview Section/Modalities Other Info"/>
 									<c:if test="${aimEditActivityForm.identification.team !=null && aimEditActivityForm.identification.team.isSSCWorkspace()}">
-										<c:set var="modalitiesPath" value="/Activity Form/Funding/SSC Modalities Other Info"/>
+										<c:set var="modalitiesPath" value="/Activity Form/Funding/Overview Section/SSC Modalities Other Info"/>
 									</c:if>
 									<module:display name="${modalitiesPath}"
 													parentModule="/Activity Form/Funding/Overview Section">
 										<c:if test="${not empty aimEditActivityForm.identification.modalitiesOtherInfo}">
 											<tr>
-												<td class="field_name" ></td>
+												<td class="field_name" >
+													<b>
+														<digi:trn>Modalities Other Info</digi:trn>
+													</b>
+												</td>
 												<td bgcolor="#ffffff">
 													<span class="word_break bold">
 															${aimEditActivityForm.identification.modalitiesOtherInfo}
@@ -659,7 +667,11 @@ body {background:none;}
 														   parentModule="/Activity Form/Identification">
 											   <c:if test="${not empty aimEditActivityForm.identification.projectCategoryOtherInfo}">
 												   <tr>
-													   <td class="field_name" ></td>
+													   <td class="field_name" >
+														   <b>
+															   <digi:trn>Project Category Other Info</digi:trn>
+														   </b>
+													   </td>
 													   <td bgcolor="#ffffff">
 													<span class="word_break bold">
 															${aimEditActivityForm.identification.projectCategoryOtherInfo}

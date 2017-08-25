@@ -625,6 +625,7 @@ function collapseAll() {
 			<module:display name="/Activity Form/Identification/Status Other Info"
 							parentModule="/Activity Form/Identification">
 				<c:if test="${not empty aimEditActivityForm.identification.statusOtherInfo}">
+					<digi:trn>Status Other Info</digi:trn>:&nbsp;<br />
 					<span class="word_break bold"><c:out value="${aimEditActivityForm.identification.statusOtherInfo}"/></span>
 					<hr />
 				</c:if>
@@ -672,9 +673,17 @@ function collapseAll() {
 				</c:if>
 				<hr />
 			</module:display>
-			<module:display name="/Activity Form/Funding/Overview Section/Modalities Other Info"
+
+
+			<c:set var="modalitiesPath" value="/Activity Form/Funding/Overview Section/Modalities Other Info"/>
+			<c:if test="${aimEditActivityForm.identification.team !=null && aimEditActivityForm.identification.team.isSSCWorkspace()}">
+				<c:set var="modalitiesPath" value="/Activity Form/Funding/Overview Section/SSC Modalities Other Info"/>
+			</c:if>
+
+			<module:display name="${modalitiesPath}"
 							parentModule="/Activity Form/Funding/Overview Section">
 				<c:if test="${not empty aimEditActivityForm.identification.modalitiesOtherInfo}">
+					<digi:trn>Modalities Other Info</digi:trn>:&nbsp;<br />
 					<span class="word_break bold"><c:out value="${aimEditActivityForm.identification.modalitiesOtherInfo}"/></span>
 					<hr />
 				</c:if>
@@ -1009,6 +1018,7 @@ function collapseAll() {
 			<module:display name="/Activity Form/Identification/Project Category Other Info"
 							parentModule="/Activity Form/Identification">
 				<c:if test="${not empty aimEditActivityForm.identification.projectCategoryOtherInfo}">
+					<digi:trn>Project Category Other Info</digi:trn>:&nbsp;<br />
 					<span class="word_break bold"><c:out value="${aimEditActivityForm.identification.projectCategoryOtherInfo}"/></span>
 					<hr />
 				</c:if>

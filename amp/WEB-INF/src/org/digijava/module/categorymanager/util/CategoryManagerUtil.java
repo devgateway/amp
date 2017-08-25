@@ -822,8 +822,15 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 		}
 		return retVal;
 	}
-	
 
+	public static Collection<AmpCategoryValue> getOrderedPossibleValues(AmpCategoryClass ampCategoryClass) {
+		if ( ampCategoryClass.getIsOrdered() && ampCategoryClass.getPossibleValues() != null ) {
+			TreeSet<AmpCategoryValue> treeSet	= new TreeSet<AmpCategoryValue>( new CategoryManagerUtil.CategoryComparator() );
+			treeSet.addAll( ampCategoryClass.getPossibleValues() );
+			return treeSet;
+		}
+		return ampCategoryClass.getPossibleValues();
+	}
 	
 	public static String checkImplementationLocationCategory ()  {
 			String errorString			= "The following values were not found: ";
@@ -863,7 +870,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 			}
 			return null;
 	}
-	
+
 	/**
 	 *
 	 * @author Alex Gartner

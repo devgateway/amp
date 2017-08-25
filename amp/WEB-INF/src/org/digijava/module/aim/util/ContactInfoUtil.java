@@ -437,79 +437,15 @@ public class ContactInfoUtil {
 		return retVal;
 	}
 
-    public static String getFormatedPhoneNum (String phoneNum) {
-        StringBuffer retVal = new StringBuffer();
-        if (phoneNum != null && phoneNum.length() > 0 && phoneNum.indexOf(" ") > -1) {
-            int typeIdSeparatorPos = phoneNum.indexOf(" ");
-            String phoneTypeIdStr = phoneNum.substring(0, typeIdSeparatorPos);
-            String phoneNumberStr = phoneNum.substring(typeIdSeparatorPos, phoneNum.length());
-            Long phoneTypeId = null;
+	public static String getFormattedPhoneNum(AmpCategoryValue type, String value) {
+		StringBuilder retVal = new StringBuilder();
 
-            try {
-                phoneTypeId = Long.parseLong(phoneTypeIdStr);
-                AmpCategoryValue catVal = CategoryManagerUtil.getAmpCategoryValueFromDb(phoneTypeId, false);
-                if(catVal!=null){
-                	retVal.append(catVal.getValue());
-                }                
-            } catch (NumberFormatException ex){
-                //Old style record processing
-                retVal.append(phoneTypeIdStr);
-            }
-            retVal.append(" ");
-            retVal.append(phoneNumberStr);
+		if (type != null) {
+			retVal.append(type.getValue()).append(" ");
+		}
 
-        } else {
-            retVal.append("Incorrect phone number");
-        }
+		retVal.append(value);
 
-        return retVal.toString();
-    }
-
-    //these methods are quick workaraound on translation problem
-    public static String getActualPhoneNumber (String phoneNum) {
-        String retVal = null;
-        if (phoneNum != null && phoneNum.length() > 0) {
-        	if(phoneNum.indexOf(" ") > -1){
-        		int typeIdSeparatorPos = phoneNum.indexOf(" ");
-                String phoneNumberStr = phoneNum.substring(typeIdSeparatorPos, phoneNum.length());
-                retVal=phoneNumberStr;
-        	}else if (phoneNum.indexOf(" ") == -1) {
-        		retVal=phoneNum;
-        	}
-        }
-        return retVal;
-    }
-    //these methods are  workaraound on translation problem
-
-    public static String getPhoneCategory(String phoneNum) {
-        String retVal = null;
-        AmpCategoryValue phoneCategoryValue = getPhoneCategoryValue(phoneNum);
-        if (phoneCategoryValue != null) {
-            retVal = phoneCategoryValue.getValue();
-        } else {
-            retVal = "None";
-        }
-
-
-        return retVal;
-    }
-
-    public static AmpCategoryValue getPhoneCategoryValue(String phoneNum) {
-        AmpCategoryValue phoneCategoryValue = null;
-        if (phoneNum != null && phoneNum.length() > 0 && phoneNum.indexOf(" ") > -1) {
-            int typeIdSeparatorPos = phoneNum.indexOf(" ");
-            String phoneTypeIdStr = phoneNum.substring(0, typeIdSeparatorPos);
-            Long phoneTypeId = null;
-            try {
-                phoneTypeId = Long.parseLong(phoneTypeIdStr);
-                phoneCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromDb(phoneTypeId, false);
-
-            } catch (NumberFormatException ex) {
-                return phoneCategoryValue;
-
-            }
-        }
-
-        return phoneCategoryValue;
-    }
+		return retVal.toString();
+	}
 }

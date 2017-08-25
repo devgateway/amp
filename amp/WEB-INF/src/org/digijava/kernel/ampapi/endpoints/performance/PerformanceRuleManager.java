@@ -307,5 +307,4 @@ public class PerformanceRuleManager {
         return !a.isCreatedAsDraft() && !a.getDraft() && !a.getDeleted() && a.getTeam() != null
                 && !AmpARFilter.validatedActivityStatus.contains(a.getApprovalStatus());
     }
-
 }

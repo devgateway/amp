@@ -47,6 +47,7 @@ import org.digijava.kernel.ampapi.endpoints.gis.services.LocationService;
 import org.digijava.kernel.ampapi.endpoints.gis.services.PublicGapAnalysis;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorEPConstants;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorUtils;
+import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleConstants;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
@@ -605,7 +606,9 @@ public class GisEndPoints implements ErrorReportingEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "hasEnabledPerformanceRules")
 	public JsonBean hasEnabledPerformanceRules() {
-	    return PerformanceRuleManager.getInstance().hasEnabledPerformanceRules();
+	    JsonBean result = new JsonBean();
+        result.set(PerformanceRuleConstants.HAS_ENABLED_PERFORMANCE_RULES, !PerformanceRuleManager.getInstance().getPerformanceRuleMatchers().isEmpty());
+        return result;
 	}
 
 	/**

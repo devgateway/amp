@@ -150,7 +150,9 @@ public class FilterUtil {
 		form.setSelectedSectors( FilterUtil.getObjectsIds(filter.getSelectedSectors()) );
 		form.setSelectedSecondarySectors( FilterUtil.getObjectsIds(filter.getSelectedSecondarySectors()) );
         form.setSelectedTertiarySectors( FilterUtil.getObjectsIds(filter.getSelectedTertiarySectors()));
-	
+		form.setSelectedQuaternarySectors(FilterUtil.getObjectsIds(filter.getSelectedQuaternarySectors()));
+		form.setSelectedQuinarySectors(FilterUtil.getObjectsIds(filter.getSelectedQuinarySectors()));
+
 		form.setSelectedNatPlanObj( FilterUtil.getObjectsIds(filter.getSelectedNatPlanObj()) );
 		form.setSelectedPrimaryPrograms( FilterUtil.getObjectsIds(filter.getSelectedPrimaryPrograms()) );
 		form.setSelectedSecondaryPrograms( FilterUtil.getObjectsIds(filter.getSelectedSecondaryPrograms()) );
@@ -179,6 +181,13 @@ public class FilterUtil {
 		form.getDynamicActivityStartFilter().setAmount(filter.getDynActivityStartFilterAmount());
 		form.getDynamicActivityStartFilter().setOperator(filter.getDynActivityStartFilterOperator());
 		form.getDynamicActivityStartFilter().setxPeriod(filter.getDynActivityStartFilterXPeriod());
+
+		form.setToIssueDate(convertArFilterToUiDate(filter.getToIssueDate()));
+		form.setFromIssueDate(convertArFilterToUiDate(filter.getFromIssueDate()));
+		form.getDynamicIssueFilter().setCurrentPeriod(filter.getDynIssueFilterCurrentPeriod());
+		form.getDynamicIssueFilter().setAmount(filter.getDynIssueFilterAmount());
+		form.getDynamicIssueFilter().setOperator(filter.getDynIssueFilterOperator());
+		form.getDynamicIssueFilter().setxPeriod(filter.getDynIssueFilterXPeriod());
 		
 		form.setToActivityActualCompletionDate(convertArFilterToUiDate(filter.getToActivityActualCompletionDate()));
 		form.setFromActivityActualCompletionDate(convertArFilterToUiDate(filter.getFromActivityActualCompletionDate()));
@@ -277,6 +286,8 @@ public class FilterUtil {
 		form.setSelectedImplementingAgency( FilterUtil.getObjectsIds(filter.getImplementingAgency()) );
 		form.setSelectedExecutingAgency( FilterUtil.getObjectsIds(filter.getExecutingAgency()) );
 		form.setSelectedresponsibleorg(FilterUtil.getObjectsIds(filter.getResponsibleorg()) );
+		form.setSelectedComponentFundingOrg(FilterUtil.getObjectsIds(filter.getComponentFunding()) );
+		form.setSelectedComponentSecondResponsibleOrg(FilterUtil.getObjectsIds(filter.getComponentSecondResponsible()) );
 		form.setSelectedContractingAgency( FilterUtil.getObjectsIds(filter.getContractingAgency()) );
 		
 		form.setAmountinthousands(filter.computeEffectiveAmountInThousand());			
@@ -331,6 +342,8 @@ public class FilterUtil {
 		Set<AmpSector> selectedSectors = arf.getSelectedSectors();
 		Set<AmpSector> selectedSecondarySectors = arf.getSelectedSecondarySectors();
 		Set<AmpSector> selectedTertiarySectors = arf.getSelectedTertiarySectors();
+		Set<AmpSector> selectedQuaternarySectors = arf.getSelectedQuaternarySectors();
+		Set<AmpSector> selectedQuinarySectors = arf.getSelectedQuinarySectors();
 		Set<AmpSector> selectedTagSectors = arf.getSelectedTagSectors();
 		
 		// for each sector we have also to add the subsectors
@@ -359,7 +372,25 @@ public class FilterUtil {
             arf.setSelectedTertiarySectors(null);
             arf.setTertiarySectorsAndAncestors(null);
         }
-        	
+        if (selectedQuaternarySectors != null && selectedQuaternarySectors.size() > 0) {
+            arf.setQuaternarySectors(SectorUtil.getSectorDescendents(selectedQuaternarySectors));
+            arf.setQuaternarySectorsAndAncestors(
+            		makeUnion(arf.getQuaternarySectors(), SectorUtil.getAmpParentSectors(selectedQuaternarySectors)));
+        } else {
+            arf.setQuaternarySectors(null);
+            arf.setSelectedQuaternarySectors(null);
+            arf.setQuaternarySectorsAndAncestors(null);
+        }
+        if (selectedQuinarySectors != null && selectedQuinarySectors.size() > 0) {
+            arf.setQuinarySectors(SectorUtil.getSectorDescendents(selectedQuinarySectors));
+            arf.setQuinarySectorsAndAncestors(
+            		makeUnion(arf.getQuinarySectors(), SectorUtil.getAmpParentSectors(selectedQuinarySectors)));
+        } else {
+            arf.setQuinarySectors(null);
+            arf.setSelectedQuinarySectors(null);
+            arf.setQuinarySectorsAndAncestors(null);
+        }
+
     	if (selectedTagSectors != null && selectedTagSectors.size() > 0) {
 			arf.setTagSectors(SectorUtil.getSectorDescendents(selectedTagSectors));
 			arf.setTagSectorsAndAncestors(makeUnion(arf.getTagSectors(), SectorUtil.getAmpParentSectors(selectedTagSectors)));

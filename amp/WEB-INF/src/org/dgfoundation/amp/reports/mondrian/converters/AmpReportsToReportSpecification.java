@@ -21,6 +21,7 @@ import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.reports.converters.AmpARFilterConverter;
+import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpMeasures;
@@ -83,7 +84,7 @@ public class AmpReportsToReportSpecification {
 	}
 
 	private void configureInvisibleHierarchies() {
-		if (report.getSplitByFunding()) {
+		if (report.getType() == ArConstants.DONOR_TYPE && report.getSplitByFunding()) {
 			spec.addColumn(new ReportColumn(ColumnConstants.FUNDING_ID));
 			spec.addInvisibleHierarchy(new ReportColumn(ColumnConstants.FUNDING_ID));
 		}
@@ -111,16 +112,8 @@ public class AmpReportsToReportSpecification {
 		}
 				
 		//workaround for AMP-18257, issue #1
-		final String groupingOption = report.getDrilldownTab() ? "" : report.getOptions(); 
-		
-		switch(groupingOption) {
-			case "A": spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY); break;
-			case "Q": spec.setGroupingCriteria(GroupingCriteria.GROUPING_QUARTERLY); break;
-			case "M": spec.setGroupingCriteria(GroupingCriteria.GROUPING_MONTHLY); break;
-			default: 
-				spec.setGroupingCriteria(GroupingCriteria.GROUPING_TOTALS_ONLY);
-			break;
-		}
+		final String groupingOption = report.getDrilldownTab() ? "" : report.getOptions();
+		ReportsUtil.setGroupingCriteria(spec, groupingOption);
 	}
 	
 	private Set<AmpColumns> getOrderedColumns() {

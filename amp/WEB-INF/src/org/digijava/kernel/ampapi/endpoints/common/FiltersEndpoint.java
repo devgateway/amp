@@ -16,6 +16,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
@@ -24,6 +25,7 @@ import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.digijava.kernel.ampapi.endpoints.dto.SimpleJsonBean;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersBuilder;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingField;
@@ -288,6 +290,16 @@ public class FiltersEndpoint {
 			id = FiltersConstants.FINAL_DATE_FOR_CONTRACTING, filterType = {
 			FilterType.REPORTS, FilterType.TAB }, tab = EPConstants.TAB_OTHER)
 	public JsonBean getDateForContracting() {
+		return new JsonBean();
+	}
+
+	@GET
+	@Path("/issueDate/")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(ui = true, name = ColumnConstants.ISSUE_DATE, columns = ColumnConstants.ISSUE_DATE,
+			id = FiltersConstants.ISSUE_DATE, filterType = {
+			FilterType.REPORTS, FilterType.TAB }, tab = EPConstants.TAB_OTHER)
+	public JsonBean getIssueDate() {
 		return new JsonBean();
 	}
 	
@@ -726,61 +738,19 @@ public class FiltersEndpoint {
 	 * @return
 	 */
 
-	private SimpleJsonBean getSectors(AmpSector as, String sectorConfigName,Integer level) {
+	private SimpleJsonBean getSectors(AmpSector as, String sectorConfigName, Integer level) {
 		SimpleJsonBean s = new SimpleJsonBean();
 		s.setId(as.getAmpSectorId());
 		s.setCode(as.getSectorCodeOfficial());
 		s.setName(as.getName());
-		s.setChildren(new ArrayList<SimpleJsonBean>());
-		String columnName=null;
-		if(AmpClassificationConfiguration.PRIMARY_CLASSIFICATION_CONFIGURATION_NAME.equals(sectorConfigName)){
-			switch (level) {
-			case 1:
-				columnName=ColumnConstants.PRIMARY_SECTOR;
-				break;
-			case 2:
-				columnName=ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR;
-				break;
-			case 3:
-				columnName=ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR;				
-				break;
-			}
-		}else{
-			if(AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME.equals(sectorConfigName)){	
-				switch (level) {
-				case 1:
-					columnName=ColumnConstants.SECONDARY_SECTOR;
-					break;
-				case 2:
-					columnName=ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR;
-					break;
-				case 3:
-					columnName=ColumnConstants.SECONDARY_SECTOR_SUB_SUB_SECTOR;				
-					break;
-				}
-			}else{
-				if (AmpClassificationConfiguration.TERTIARY_CLASSIFICATION_CONFIGURATION_NAME
-						.equals(sectorConfigName)) {
-					switch (level) {
-					case 1:
-						columnName = ColumnConstants.TERTIARY_SECTOR;
-						break;
-					case 2:
-						columnName = ColumnConstants.TERTIARY_SECTOR_SUB_SECTOR;
-						break;
-					case 3:
-						columnName = ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR;
-						break;
-					}
-				}
-			}
-		}
+		s.setChildren(new ArrayList<>());
+		String columnName = AmpClassificationConfiguration.NAME_TO_COLUMN_AND_LEVEL.get(sectorConfigName).get(level);
 		s.setFilterId(FilterUtils.INSTANCE.idFromColumnName(columnName));
 		level++;
 		for (AmpSector ampSectorChild : as.getSectors()) {
-			s.getChildren().add(getSectors(ampSectorChild,sectorConfigName,level));
+			s.getChildren().add(getSectors(ampSectorChild, sectorConfigName, level));
 		}
-		orderByProperty(s.getChildren(),NAME_PROPERTY);
+		orderByProperty(s.getChildren(), NAME_PROPERTY);
 		return s;
 	}
 	

@@ -364,7 +364,21 @@ public class ReportsFilterPicker extends Action {
  	 	 		}
  	 	 	}
 		}	
-	}	
+	}
+
+	private static void addComponentOrganisations(ReportsFilterPickerForm filterForm, String name, String
+			roleCode, String filterDivId, String selectId) {
+		if (FeaturesUtil.isVisibleField(name)) {
+			Collection<AmpOrganisation> relevantAgencies = (ReportsUtil.getComponentFundingOrgs(roleCode));
+			HierarchyListableUtil.changeTranslateable(relevantAgencies, false);
+			HierarchyListableImplementation rootRelevantAgencies = new HierarchyListableImplementation("All " + name,
+					"0", relevantAgencies);
+			GroupingElement<HierarchyListableImplementation> relevantAgenciesElement = new
+					GroupingElement<HierarchyListableImplementation>(name, filterDivId, rootRelevantAgencies,
+					selectId);
+			filterForm.getRelatedAgenciesElements().add(relevantAgenciesElement);
+		}
+	}
 	
 	private static void addAgencyFilterFaster(ReportsFilterPickerForm filterForm, String featureName, String roleCode, String rootElementName, String filterDivId, String selectId, boolean includeParent)
 	{		
@@ -648,6 +662,12 @@ public class ReportsFilterPicker extends Action {
  	 	addSectorElement(filterForm, "Sector", AmpClassificationConfiguration.PRIMARY_CLASSIFICATION_CONFIGURATION_NAME, "Primary Sectors", "filter_sectors_div", "selectedSectors");
  	 	addSectorElement(filterForm, "Secondary Sector", AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME, "Secondary Sectors", "filter_secondary_sectors_div", "selectedSecondarySectors");
  	 	addSectorElement(filterForm, "Tertiary Sector",  AmpClassificationConfiguration.TERTIARY_CLASSIFICATION_CONFIGURATION_NAME,  "Tertiary Sectors",  "filter_tertiary_sectors_div",  "selectedTertiarySectors");
+ 	 	addSectorElement(filterForm, "Quaternary Sector",
+				AmpClassificationConfiguration.QUATERNARY_CLASSIFICATION_CONFIGURATION_NAME, "Quaternary Sectors",
+				"filter_quaternary_sectors_div", "selectedQuaternarySectors");
+ 	 	addSectorElement(filterForm, "Quinary Sector",
+				AmpClassificationConfiguration.QUINARY_CLASSIFICATION_CONFIGURATION_NAME, "Quinary Sectors",
+				"filter_quinary_sectors_div", "selectedQuinarySectors");
  	 	addSectorElement(filterForm, "Sector Tag",      AmpClassificationConfiguration.TAG_CLASSIFICATION_CONFIGURATION_NAME,  "Tag Sector",              "filter_tag_sectors_div",       "selectedTagSectors");
  	 	 	 	        
  	 	
@@ -757,6 +777,13 @@ public class ReportsFilterPicker extends Action {
  	 	if(FeaturesUtil.isVisibleModule("/Activity Form/Organizations/Beneficiary Agency")){
 			addAgencyFilter(filterForm, "Beneficiary", Constants.ROLE_CODE_BENEFICIARY_AGENCY, false);
  	 	}
+
+		addComponentOrganisations(filterForm, ColumnConstants.COMPONENT_FUNDING_ORGANIZATION, Constants
+						.COMPONENT_FUNDING_ORGANIZATION,
+				"filter_component_funding_div", "selectedComponentFundingOrg");
+		addComponentOrganisations(filterForm, ColumnConstants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION, Constants
+						.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION, "filter_component_second_responsible_div",
+				"selectedComponentSecondResponsibleOrg");
 
 		// Contracting Agency Groups, based off Donor Groups
 		// stimate domnule GARTNER, ce face filterDonorGroups in afara de a exclude grupurile cu "guv" si "gouv" in nume din lista? E nevoie de ei aici? 
@@ -993,7 +1020,11 @@ public class ReportsFilterPicker extends Action {
 		
 		addDateFilter("Actual Start Date", "ActivityStart", "Actual Start Date",
 				filterForm.getDynamicActivityStartFilter(), "filter_activity_start_date_div", filterForm.getOtherCriteriaElements());
-		
+
+		addDateFilter("Issue Date", "Issue", "Issue Date",
+				filterForm.getDynamicIssueFilter(), "filter_issue_date_div", filterForm
+						.getOtherCriteriaElements());
+
 		addDateFilter("Current Completion Date", "ActivityActualCompletion",
 				"Current Completion Date", filterForm.getDynamicActivityActualCompletionFilter(), "filter_activity_actual_completion_date_div", filterForm.getOtherCriteriaElements());
 		
@@ -1311,11 +1342,17 @@ public class ReportsFilterPicker extends Action {
 		Set<AmpSector> selectedSectors = Util.getSelectedObjects(AmpSector.class, filterForm.getSelectedSectors());
 		Set<AmpSector> selectedSecondarySectors = Util.getSelectedObjects(AmpSector.class, filterForm.getSelectedSecondarySectors());
         Set<AmpSector> selectedTertiarySectors = Util.getSelectedObjects(AmpSector.class, filterForm.getSelectedTertiarySectors());
+		Set<AmpSector> selectedQuaternarySectors =
+				Util.getSelectedObjects(AmpSector.class, filterForm.getSelectedQuaternarySectors());
+		Set<AmpSector> selectedQuinarySectors =
+				Util.getSelectedObjects(AmpSector.class, filterForm.getSelectedQuinarySectors());
         Set<AmpSector> selectedTagSectors = Util.getSelectedObjects(AmpSector.class, filterForm.getSelectedTagSectors() );
 
 		arf.setSelectedSectors(nullOrCopy(selectedSectors));
 		arf.setSelectedSecondarySectors(nullOrCopy(selectedSecondarySectors));
 		arf.setSelectedTertiarySectors(nullOrCopy(selectedTertiarySectors));
+		arf.setSelectedQuaternarySectors(nullOrCopy(selectedQuaternarySectors));
+		arf.setSelectedQuinarySectors(nullOrCopy(selectedQuinarySectors));
 		arf.setSelectedTagSectors(nullOrCopy(selectedTagSectors));
 		
 
@@ -1356,8 +1393,14 @@ public class ReportsFilterPicker extends Action {
 		arf.setDynActivityStartFilterAmount(filterForm.getDynamicActivityStartFilter().getAmount());
 		arf.setDynActivityStartFilterOperator(filterForm.getDynamicActivityStartFilter().getOperator());
 		arf.setDynActivityStartFilterXPeriod(filterForm.getDynamicActivityStartFilter().getxPeriod());
-		
-		
+
+		arf.setToIssueDate(FilterUtil.convertUiToArFilterDate(filterForm.getToIssueDate()));
+		arf.setFromIssueDate(FilterUtil.convertUiToArFilterDate(filterForm.getFromIssueDate()));
+		arf.setDynIssueFilterCurrentPeriod(filterForm.getDynamicIssueFilter().getCurrentPeriod());
+		arf.setDynIssueFilterAmount(filterForm.getDynamicIssueFilter().getAmount());
+		arf.setDynIssueFilterOperator(filterForm.getDynamicIssueFilter().getOperator());
+		arf.setDynIssueFilterXPeriod(filterForm.getDynamicIssueFilter().getxPeriod());
+
 		arf.setFromProposedApprovalDate(FilterUtil.convertUiToArFilterDate(filterForm.getFromProposedApprovalDate()));
 		arf.setToProposedApprovalDate(FilterUtil.convertUiToArFilterDate(filterForm.getToProposedApprovalDate()));
 		arf.setDynProposedApprovalFilterCurrentPeriod(filterForm.getDynamicProposedApprovalFilter().getCurrentPeriod());
@@ -1573,7 +1616,9 @@ public class ReportsFilterPicker extends Action {
 		arf.setBeneficiaryAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedBeneficiaryAgency()));
 		arf.setDonnorgAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedDonnorAgency()));
 		arf.setResponsibleorg(ReportsUtil.processSelectedFilters(filterForm.getSelectedresponsibleorg()));
-		
+		arf.setComponentFunding(ReportsUtil.processSelectedFilters(filterForm.getSelectedComponentFundingOrg()));
+		arf.setComponentSecondResponsible(ReportsUtil.processSelectedFilters(filterForm.getSelectedComponentSecondResponsibleOrg()));
+
 		arf.setImplementingAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedImplementingAgency()));
 		arf.setExecutingAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedExecutingAgency()));
 		arf.setContractingAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedContractingAgency()));

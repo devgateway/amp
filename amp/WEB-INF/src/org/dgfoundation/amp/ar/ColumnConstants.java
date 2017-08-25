@@ -58,6 +58,7 @@ public class ColumnConstants {
 	public static final String CAPITAL___EXPENDITURE = "Capital - Expenditure";
 	public static final String COMPONENT_DESCRIPTION = "Component description";
 	public static final String COMPONENT_FUNDING_ORGANIZATION = "Component Funding Organization";
+	public static final String COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION = "Component Second Responsible Organization";
 	public static final String COMPONENT_NAME = "Component Name";
 	public static final String COMPONENT_TYPE = "Component Type";
 	public static final String COMPUTED_YEAR = "Computed Year";
@@ -129,6 +130,7 @@ public class ColumnConstants {
 	public static final String INTERNAL_USE_ID = "Internal Use Id";
 	public static final String INTEREST_RATE = "Loan Interest Rate";
 	public static final String ISSUES = "Issues";
+	public static final String ISSUE_DATE = "Issue Date";
 	public static final String ISSUES___MEASURES___ACTORS = "Issues / Measures / Actors";
 	public static final String JOINT_CRITERIA = "Joint Criteria";
 	public static final String MATURITY = "Loan Maturity Date";
@@ -218,6 +220,14 @@ public class ColumnConstants {
 	public static final String PLEDGES_TERTIARY_SECTORS = "Pledges Tertiary Sectors";
 	public static final String PLEDGES_TERTIARY_SUBSECTORS = "Pledges Tertiary Sub-Sectors";
 	public static final String PLEDGES_TERTIARY_SUBSUBSECTORS = "Pledges Tertiary Sub-Sub-Sectors";
+
+	public static final String PLEDGES_QUATERNARY_SECTORS = "Pledges Quaternary Sectors";
+	public static final String PLEDGES_QUATERNARY_SUBSECTORS = "Pledges Quaternary Sub-Sectors";
+	public static final String PLEDGES_QUATERNARY_SUBSUBSECTORS = "Pledges Quaternary Sub-Sub-Sectors";
+
+	public static final String PLEDGES_QUINARY_SECTORS = "Pledges Quinary Sectors";
+	public static final String PLEDGES_QUINARY_SUBSECTORS = "Pledges Quinary Sub-Sectors";
+	public static final String PLEDGES_QUINARY_SUBSUBSECTORS = "Pledges Quinary Sub-Sub-Sectors";
 
 	public static final String PLEDGE_STATUS = "Pledge Status";
 	public static final String PLEDGES_TERTIARY_PROGRAMS = "Pledges Tertiary Programs";
@@ -318,6 +328,12 @@ public class ColumnConstants {
 	public static final String TERTIARY_SECTOR = "Tertiary Sector";
 	public static final String TERTIARY_SECTOR_SUB_SECTOR = "Tertiary Sector Sub-Sector";
 	public static final String TERTIARY_SECTOR_SUB_SUB_SECTOR = "Tertiary Sector Sub-Sub-Sector";
+	public static final String QUATERNARY_SECTOR = "Quaternary Sector";
+	public static final String QUATERNARY_SECTOR_SUB_SECTOR = "Quaternary Sector Sub-Sector";
+	public static final String QUATERNARY_SECTOR_SUB_SUB_SECTOR = "Quaternary Sector Sub-Sub-Sector";
+	public static final String QUINARY_SECTOR = "Quinary Sector";
+	public static final String QUINARY_SECTOR_SUB_SECTOR = "Quinary Sector Sub-Sector";
+	public static final String QUINARY_SECTOR_SUB_SUB_SECTOR = "Quinary Sector Sub-Sub-Sector";
 	public static final String TOTAL_GRAND_ACTUAL_COMMITMENTS = "Total Grand Actual Commitments";
 	public static final String TOTAL_GRAND_ACTUAL_DISBURSEMENTS = "Total Grand Actual Disbursements";
 	public static final String TYPE_OF_ASSISTANCE = "Type Of Assistance";

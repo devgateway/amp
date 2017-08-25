@@ -32,11 +32,17 @@ public class SystemDiff {
     @JsonProperty
     private ListDiff<String> activities;
 
+    @JsonProperty("possible-values-fields")
+    private List<String> possibleValuesFields;
+
+    @JsonProperty("activity-possible-values-fields")
+    private List<String> activityPossibleValuesFields;
+
     @JsonProperty
     private ListDiff<Long> contacts;
 
-    @JsonProperty("possible-values-fields")
-    private List<String> possibleValuesFields;
+    @JsonProperty("contact-possible-values-fields")
+    private List<String> contactPossibleValuesFields;
 
     @JsonProperty
     private boolean translations;
@@ -93,8 +99,13 @@ public class SystemDiff {
         this.translations = translations;
     }
 
-    public void setPossibleValuesFields(List<String> possibleValuesFields) {
-        this.possibleValuesFields = possibleValuesFields;
+    public void setActivityPossibleValuesFields(List<String> activityPossibleValuesFields) {
+        this.activityPossibleValuesFields = activityPossibleValuesFields;
+        this.possibleValuesFields = activityPossibleValuesFields;
+    }
+
+    public void setContactPossibleValuesFields(List<String> contactPossibleValuesFields) {
+        this.contactPossibleValuesFields = contactPossibleValuesFields;
     }
 
     public void setExchangeRates(boolean exchangeRates) {

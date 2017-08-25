@@ -98,7 +98,7 @@
     
   
 	<!-- match images -->
-	<http pattern="[^ \t\r\n\v\f]+\.(gif|jpg|jpeg|tiff|png|js|css|swf)(\?)?.*$"
+	<http pattern="[^ \t\r\n\v\f]+\.(gif|jpg|jpeg|tiff|png|js|css|swf|eot|woff|woff2|ttf)(\?)?.*$"
 		request-matcher="regex" security="none" />
 
 	<!-- alllow bypass for login page -->

@@ -1,7 +1,13 @@
 @import url("./amp-admin-rtl.css");
 
+@import url("../fonts/droidarabicnaskh.css");
+
 #mainBodyContent {
-	direction: rtl;
+    direction: rtl;
+}
+
+body, div, p {
+    font-family: Droid Arabic Naskh, Arial !important;
 }
 
 div.trnpanel div.trn-row a {

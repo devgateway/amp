@@ -209,10 +209,10 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 	 * @param categKey
 	 * @return A prefixed category if exists.
 	 */
-	public static String getAlternateKey(AmpTeam currentTeam, final String categKey) {
-		if (currentTeam != null && currentTeam.getWorkspacePrefix() != null && (!categKey.equalsIgnoreCase
-				(CategoryConstants.IMPLEMENTATION_LEVEL_KEY) &&
-				!categKey.equalsIgnoreCase(CategoryConstants.IMPLEMENTATION_LOCATION_KEY))) {
+	public static String getAlternateKey(final AmpTeam currentTeam, final String categKey) {
+		if (currentTeam != null && currentTeam.getWorkspacePrefix() != null && (!categKey.
+				equalsIgnoreCase(CategoryConstants.IMPLEMENTATION_LEVEL_KEY)
+				&& !categKey.equalsIgnoreCase(CategoryConstants.IMPLEMENTATION_LOCATION_KEY))) {
 			String tmpKey = currentTeam.getWorkspacePrefix().getValue() + categKey;
 			if (CategoryManagerUtil.loadAmpCategoryClassByKey(tmpKey) != null) {
 				return tmpKey; // a prefixed category exists -> return its key
@@ -823,10 +823,11 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 		return retVal;
 	}
 
-	public static Collection<AmpCategoryValue> getOrderedPossibleValues(AmpCategoryClass ampCategoryClass) {
-		if ( ampCategoryClass.getIsOrdered() && ampCategoryClass.getPossibleValues() != null ) {
-			TreeSet<AmpCategoryValue> treeSet	= new TreeSet<AmpCategoryValue>( new CategoryManagerUtil.CategoryComparator() );
-			treeSet.addAll( ampCategoryClass.getPossibleValues() );
+	public static Collection<AmpCategoryValue> getOrderedPossibleValues(final AmpCategoryClass ampCategoryClass) {
+		if (ampCategoryClass.getIsOrdered() && ampCategoryClass.getPossibleValues() != null) {
+			TreeSet<AmpCategoryValue> treeSet = new TreeSet<AmpCategoryValue>(new CategoryManagerUtil
+					.CategoryComparator());
+			treeSet.addAll(ampCategoryClass.getPossibleValues());
 			return treeSet;
 		}
 		return ampCategoryClass.getPossibleValues();

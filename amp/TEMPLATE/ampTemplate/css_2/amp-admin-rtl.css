@@ -13,3 +13,18 @@
 .form-layout td{
 	padding: 5px;
 }
+
+.label-column{
+   text-align: left !important;
+   width: 30%;   
+   padding: 5px;
+}
+
+.data-column{
+  text-align: right !important;
+  width: 70%;
+}
+
+span.geostyle{
+	display: inline-block !important;
+}

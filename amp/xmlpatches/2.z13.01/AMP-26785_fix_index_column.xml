@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-26785</jira>
+	<keyword>fix index_column</keyword>
+	<author>apicca</author>
+	<description>Fix index_column for category ssc modalities</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				update AMP_CATEGORY_VALUE set index_column = 5 where amp_category_class_id = 57 and index_column = 6;
+				update AMP_CATEGORY_VALUE set index_column = 6 where amp_category_class_id = 57 and index_column = 7;
+				update AMP_CATEGORY_VALUE set index_column = 7 where amp_category_class_id = 57 and index_column = 8;
+				update AMP_CATEGORY_VALUE set index_column = 8 where amp_category_class_id = 57 and index_column = 9;
+				update AMP_CATEGORY_VALUE set index_column = 9 where amp_category_class_id = 57 and index_column = 10;
+				update AMP_CATEGORY_VALUE set index_column = 10 where amp_category_class_id = 57 and index_column = 11;
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

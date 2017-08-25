@@ -7,8 +7,10 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
+import org.digijava.kernel.ampapi.endpoints.contact.ContactTitlePossibleValuesProvider;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
+import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.helper.Constants;
@@ -32,7 +34,8 @@ public class AmpContact implements Comparable, Serializable, Cloneable, Versiona
 	
 	@Interchangeable(fieldTitle = "Last Name", importable = true, required = ActivityEPConstants.REQUIRED_ALWAYS)
 	private String lastname;
-	
+
+	@PossibleValues(ContactTitlePossibleValuesProvider.class)
 	@Interchangeable(fieldTitle = "Title", importable = true, pickIdOnly = true)
 	private AmpCategoryValue title;
 

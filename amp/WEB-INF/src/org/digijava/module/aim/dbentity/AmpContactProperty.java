@@ -3,8 +3,10 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
+import org.digijava.kernel.ampapi.endpoints.contact.ContactPhoneTypePossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.contact.PhoneDiscriminatorContextMatcher;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.util.ContactInfoUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -24,6 +26,7 @@ public class AmpContactProperty  implements Comparable, Serializable {
 			context = PhoneDiscriminatorContextMatcher.class)
 	private String extensionValue;
 
+	@PossibleValues(ContactPhoneTypePossibleValuesProvider.class)
 	@Interchangeable(fieldTitle = "Type", importable = true, pickIdOnly = true,
 			context = PhoneDiscriminatorContextMatcher.class)
 	private AmpCategoryValue type;

@@ -117,7 +117,8 @@ public class SyncService implements InitializingBean {
 
         systemDiff.setTranslations(shouldSyncTranslations(systemDiff, lastSyncTime));
 
-        systemDiff.setPossibleValuesFields(findChangedPossibleValuesFields(systemDiff, lastSyncTime));
+        systemDiff.setActivityPossibleValuesFields(findChangedPossibleValuesFields(systemDiff, lastSyncTime));
+        systemDiff.setContactPossibleValuesFields(findChangedContactPossibleValuesFields(systemDiff, lastSyncTime));
 
         systemDiff.setExchangeRates(shouldSyncExchangeRates(lastSyncTime));
 
@@ -171,6 +172,16 @@ public class SyncService implements InitializingBean {
     }
 
     private List<String> findChangedPossibleValuesFields(SystemDiff systemDiff, Date lastSyncTime) {
+        Predicate<Field> fieldFilter = getChangedFields(systemDiff, lastSyncTime);
+        return fieldsEnumerator.findActivityFieldPaths(fieldFilter);
+    }
+
+    private List<String> findChangedContactPossibleValuesFields(SystemDiff systemDiff, Date lastSyncTime) {
+        Predicate<Field> fieldFilter = getChangedFields(systemDiff, lastSyncTime);
+        return fieldsEnumerator.findContactFieldPaths(fieldFilter);
+    }
+
+    private Predicate<Field> getChangedFields(SystemDiff systemDiff, Date lastSyncTime) {
         Predicate<Field> fieldFilter;
         if (lastSyncTime == null) {
             fieldFilter = possibleValuesEnumerator.fieldsWithPossibleValues();
@@ -185,7 +196,7 @@ public class SyncService implements InitializingBean {
             }
             fieldFilter = possibleValuesEnumerator.fieldsDependingOn(changedEntities);
         }
-        return fieldsEnumerator.findFieldPaths(fieldFilter);
+        return fieldFilter;
     }
 
     private void updateDiffsForActivities(SystemDiff systemDiff, SyncRequest syncRequest) {

@@ -328,9 +328,15 @@ public class FieldsEnumerator {
 		return null;
 	}
 
-	public List<String> findFieldPaths(Predicate<Field> fieldFilter) {
+	public List<String> findActivityFieldPaths(Predicate<Field> fieldFilter) {
 		FieldNameCollectingVisitor visitor = new FieldNameCollectingVisitor(fieldFilter);
 		visit(AmpActivityFields.class, visitor, new VisitorContext());
+		return visitor.fields;
+	}
+
+	public List<String> findContactFieldPaths(Predicate<Field> fieldFilter) {
+		FieldNameCollectingVisitor visitor = new FieldNameCollectingVisitor(fieldFilter);
+		visit(AmpContact.class, visitor, new VisitorContext());
 		return visitor.fields;
 	}
 

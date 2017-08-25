@@ -47,8 +47,7 @@ _.extend(GISData.prototype, Backbone.Events, {
 	      caller: 'GIS'
 	    });
 	    // forces filter to start loading list immediately. TODO: move to an option for filter init.
-	    this.filter.view._getFilterList();
-
+	   this.filter.view._getFilterList();
 	   this.boundaries = new Boundaries();
 	   this.settingsWidget = new Settings.SettingsWidget({
 	  		draggable : true,
@@ -59,9 +58,8 @@ _.extend(GISData.prototype, Backbone.Events, {
 	
 	   this.generalSettings = new Settings.GeneralSettings();
 	   this.generalSettings.load();
-	    
-	    this.indicatorTypes = new IndicatorTypes();
-	    this.user = new User();
+	   this.indicatorTypes = new IndicatorTypes();
+	   this.user = new User();
 
 	    //setup performance rule model
 	    var PerformanceToggleModel = Backbone.Model.extend({defaults: {isPerformanceToggleAvailable: false, isPerformanceToggleSelected: false}});

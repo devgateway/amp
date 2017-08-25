@@ -55,7 +55,7 @@ export default class PagingSection extends Component {
             transParams.totalRecords = this.props.page.totalRecords;
             transParams.currentPageNumber = this.props.page.currentPageNumber;
             transParams.totalPageCount = this.props.page.totalPageCount;
-            return ( <div className="col-md-3 pull-right record-number">
+            return ( <div className="col-md-2 pull-right record-number">
                 <div>{this.props.translate( 'amp.performance-rule:records-displayed', transParams )}</div>
                 <div>{this.props.translate( 'amp.performance-rule:page-info', transParams )}</div>
              </div> )
@@ -71,25 +71,21 @@ export default class PagingSection extends Component {
     render() {
         if (this.props.page ) {
                    return (               
-                        <div className="row">
-                            <div className="col-md-8 pull-right pagination-wrapper">
-                                
-                                    <div className="col-md-4">
+                        <div >
+                            <div className="pull-right pagination-wrapper">                                
+                                    <div className="col-md-8">
                                         <ul className="pagination">
                                             {this.generatePaginationLinks()}
                                             <li className="next"><a onClick={this.goToNextPage}><span aria-hidden="true">&rarr;</span></a></li>
                                             <li className="page-item"><a onClick={this.goToLastPage} className="page-link">&raquo;</a></li>
                                         </ul>
-                                    </div>
-                                
-                                <div className="col-md-3">
-                                </div>
+                                    </div>                                
                                 <div className="col-md-2">
                                     <div className="input-group pull-right">
                                         <span className="input-group-addon" id="basic-addon1">
                                             <span className="glyphicon glyphicon-arrow-right" onClick={this.updateRecordsPerPage}></span>
                                         </span>
-                                        <input type="text" className="form-control" ref="recordsPerPage" placeholder="" value={this.state.recordsPerPage}  onChange={this.onRecordsPerPageChange}/>
+                                            <input type="text" className="form-control performance-input" ref="recordsPerPage" placeholder="" defaultValue={this.props.page.recordsPerPage} />
                                     </div>
                                 </div>
                                 {this.displayPagingInfo()}

@@ -47,6 +47,7 @@ import org.digijava.kernel.ampapi.endpoints.gis.services.LocationService;
 import org.digijava.kernel.ampapi.endpoints.gis.services.PublicGapAnalysis;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorEPConstants;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorUtils;
+import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
@@ -587,6 +588,24 @@ public class GisEndPoints implements ErrorReportingEndpoint {
 	@ApiMethod(ui = false, id = "reportExport")
 	public JsonBean getLastUpdated(@PathParam("report_config_id") String reportConfigId) {
 		return ReportsUtil.getApiState(reportConfigId);
+	}
+	
+	/**
+     * Provides information about the availability or not of enabled performance rules. This information is used for configuring the GIS UI.
+     * The performance rule toggle on GIS UI is only displayed if enabled performance rules are available.
+     * @return <pre>
+     * {
+     *     "hasEnabledPerformanceRules": true/false  
+     * }
+     * </pre>
+     * 
+     */
+	@GET
+    @Path("/has-enabled-performance-rules")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = false, id = "hasEnabledPerformanceRules")
+	public JsonBean hasEnabledPerformanceRules() {
+	    return PerformanceRuleManager.getInstance().hasEnabledPerformanceRules();
 	}
 
 	/**

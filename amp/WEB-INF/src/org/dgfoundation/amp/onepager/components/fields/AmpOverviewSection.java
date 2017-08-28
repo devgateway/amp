@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -15,19 +13,15 @@ import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.util.visit.IVisit;
-import org.apache.wicket.util.visit.IVisitor;
 import org.apache.wicket.validation.validator.RangeValidator;
 import org.apache.wicket.validation.validator.StringValidator;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.AmpRequiredComponentContainer;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpIdentificationFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpOverallFundingTotalsTable;
 import org.dgfoundation.amp.onepager.events.OverallFundingTotalsEvents;
 import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.dgfoundation.amp.onepager.models.AmpCategoryValueByKeyModel;
-import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.util.AttributePrepender;
 import org.dgfoundation.amp.onepager.util.OtherInfoBehavior;
@@ -123,11 +117,6 @@ public class AmpOverviewSection extends AmpComponentPanel<Void> implements AmpRe
 
 		modalitiesOtherInfo.getTextAreaContainer().add(StringValidator.maximumLength(255));
 		modalitiesOtherInfo.getTextAreaContainer().add(new AttributeModifier("style", "width: 328px; margin: 0px;"));
-		modalitiesOtherInfo.setOutputMarkupPlaceholderTag(true);
-		modalitiesOtherInfo.setOutputMarkupId(true);
-		modalitiesOtherInfo.setIgnoreFmVisibility(true);
-		modalitiesOtherInfo.setIgnorePermissions(true);
-		modalitiesOtherInfo.setVisible(false);
 		wmc.add(modalities);
 		wmc.add(modalitiesOtherInfo);
 

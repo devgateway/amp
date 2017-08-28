@@ -18,6 +18,30 @@ public class OtherInfoBehavior extends AjaxFormComponentUpdatingBehavior {
     public OtherInfoBehavior(final String event, final AmpTextAreaFieldPanel otherInfo) {
         super(event);
         this.otherInfo = otherInfo;
+        this.otherInfo.setOutputMarkupPlaceholderTag(true);
+        this.otherInfo.setVisible(false);
+        this.otherInfo.setOutputMarkupId(true);
+        this.otherInfo.setIgnoreFmVisibility(true);
+        this.otherInfo.setIgnorePermissions(true);
+    }
+
+    @Override
+    protected void onUpdate(final AjaxRequestTarget target) {
+        updateOtherInfo();
+        updateFields(target);
+    }
+
+    protected void onBind() {
+        super.onBind();
+        updateOtherInfo();
+    }
+
+    private void updateOtherInfo() {
+        toggleOtherInfo(isOtherInfoVisible());
+    }
+
+    private void updateFields(final AjaxRequestTarget target) {
+        target.add(this.otherInfo);
     }
 
     private void toggleOtherInfo(final boolean b) {
@@ -29,27 +53,13 @@ public class OtherInfoBehavior extends AjaxFormComponentUpdatingBehavior {
         }
     }
 
-    private void updateFields(final AjaxRequestTarget target) {
-        target.add(this.otherInfo.getParent());
-    }
-
-    private void updateOtherInfo() {
-        toggleOtherInfo(isOtherInfoVisible());
-    }
-
-    @Override
-    protected void onUpdate(final AjaxRequestTarget target) {
-        updateOtherInfo();
-        updateFields(target);
-    }
-
     private boolean isOtherInfoVisible() {
-        if (this.getFormComponent() != null && this.getFormComponent().getModelObject() != null) {
-            if (this.getFormComponent().getModelObject() instanceof AmpCategoryValue) {
-                AmpCategoryValue value = (AmpCategoryValue) this.getFormComponent().getModelObject();
-                return isOtherSelected(value.getValue());
-            } else {
-                Set<AmpCategoryValue> values = (Set<AmpCategoryValue>) this.getFormComponent().getModelObject();
+        if (this.getFormComponent().getModelObject() instanceof AmpCategoryValue) {
+            AmpCategoryValue value = (AmpCategoryValue) this.getFormComponent().getModelObject();
+            return isOtherSelected(value.getValue());
+        } else {
+            Set<AmpCategoryValue> values = (Set<AmpCategoryValue>) this.getFormComponent().getModelObject();
+            if (values != null) {
                 for (AmpCategoryValue value : values) {
                     if (isOtherSelected(value.getValue())) {
                         return true;
@@ -64,8 +74,4 @@ public class OtherInfoBehavior extends AjaxFormComponentUpdatingBehavior {
         return OTHER_INFO_KEY.equalsIgnoreCase(value);
     }
 
-    protected void onBind() {
-        super.onBind();
-        updateOtherInfo();
-    }
 }

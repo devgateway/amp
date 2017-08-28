@@ -64,6 +64,7 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 implements AmpRequiredComponentContainer{
 
 	private static final long serialVersionUID = 8568986144567957699L;
+	public static final int LENGTH = 255;
 	private AmpWarningComponentPanel<String> titleSimilarityWarning;
 	private List<FormComponent<?>> requiredFormComponents = new ArrayList<FormComponent<?>>();
 	private List<FormComponent<?>> requiredRichTextFormComponents = new ArrayList<FormComponent<?>>();
@@ -83,7 +84,7 @@ implements AmpRequiredComponentContainer{
 			final AmpTextAreaFieldPanel title = new AmpTextAreaFieldPanel("title", m, "Project Title", false, false, false, true,true);
 
 			title.getTextAreaContainer().add(new AmpUniqueActivityTitleValidator(new PropertyModel<AmpActivityGroup>(am, "ampActivityGroup")));
-			title.getTextAreaContainer().add(StringValidator.maximumLength(255));
+			title.getTextAreaContainer().add(StringValidator.maximumLength(LENGTH));
 			title.getTextAreaContainer().add(new AttributeModifier("style", "width: 710px; margin: 0px;"));
 			title.getTextAreaContainer().setRequired(true);
 
@@ -182,7 +183,7 @@ implements AmpRequiredComponentContainer{
 			AmpTextAreaFieldPanel statusOtherInfo = new AmpTextAreaFieldPanel("statusOtherInfo",
 				new PropertyModel<String>(am, "statusOtherInfo"), "Status Other Info", false, AmpFMTypes.MODULE);
 
-			statusOtherInfo.getTextAreaContainer().add(StringValidator.maximumLength(255));
+			statusOtherInfo.getTextAreaContainer().add(StringValidator.maximumLength(LENGTH));
 			statusOtherInfo.getTextAreaContainer().add(new AttributeModifier("style", "width: 328px; margin: 0px;"));
 
 			status.getChoiceContainer().add(new OtherInfoBehavior("onchange", statusOtherInfo));
@@ -365,8 +366,9 @@ implements AmpRequiredComponentContainer{
 					false, AmpFMTypes.MODULE);
 
 
-			projectCategoryOtherInfo.getTextAreaContainer().add(StringValidator.maximumLength(255));
-			projectCategoryOtherInfo.getTextAreaContainer().add(new AttributeModifier("style", "width: 328px; margin: 0px;"));
+			projectCategoryOtherInfo.getTextAreaContainer().add(StringValidator.maximumLength(LENGTH));
+			projectCategoryOtherInfo.getTextAreaContainer().add(new AttributeModifier("style",
+					"width: 328px; margin: 0px;"));
 
 			projectCategory.getChoiceContainer().add(new OtherInfoBehavior("onchange", projectCategoryOtherInfo));
 

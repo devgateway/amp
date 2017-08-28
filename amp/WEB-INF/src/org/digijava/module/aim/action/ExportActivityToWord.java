@@ -82,7 +82,6 @@ import org.digijava.module.aim.helper.Funding;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingDetailComparator;
 import org.digijava.module.aim.helper.FundingOrganization;
-import org.digijava.module.aim.helper.FundingValidator;
 import org.digijava.module.aim.helper.GlobalSettings;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.Location;
@@ -2291,10 +2290,11 @@ public class ExportActivityToWord extends Action {
             }
 
             if (FeaturesUtil.isVisibleModule(componentFMfields[ExportUtil.COMPONENT_FM_FIELD_SECOND_REPORTING])) {
-                String orgString = compFnd.getSecondReportingOrganisation() != null ? compFnd
-                        .getSecondReportingOrganisation().getName() : "";
-                eshCompFundingDetails.addRowData(getExportSectionHelperRowData("Second Reporting Organisation",
-                        orgString, compFnd));
+                String orgString = compFnd.getComponentSecondResponsibleOrganization() != null ? compFnd
+                        .getComponentSecondResponsibleOrganization().getName() : "";
+                eshCompFundingDetails.addRowData(
+                        getExportSectionHelperRowData("Component Second Responsible Organization", orgString,
+                                compFnd));
             }
 
             if (FeaturesUtil.isVisibleModule(componentFMfields[ExportUtil.COMPONENT_FM_FIELD_DESCRIPTION])) {

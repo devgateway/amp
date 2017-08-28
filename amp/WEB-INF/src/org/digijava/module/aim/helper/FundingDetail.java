@@ -52,7 +52,7 @@ public class FundingDetail implements Serializable, Comparable
     private Float capitalPercent;
     
     private AmpOrganisation componentOrganisation;
-    private AmpOrganisation secondReportingOrganisation;
+    private AmpOrganisation componentSecondResponsibleOrganization;
     private String componentTransactionDescription;
        
     private String attachedPledgeName;
@@ -306,12 +306,12 @@ public class FundingDetail implements Serializable, Comparable
 		return this.componentOrganisation;
 	}
 
-	public void setSecondReportingOrganisation(AmpOrganisation secondReportingOrganisation) {
-		this.secondReportingOrganisation = secondReportingOrganisation;
+	public void setComponentSecondResponsibleOrganization(AmpOrganisation componentSecondResponsibleOrganization) {
+		this.componentSecondResponsibleOrganization = componentSecondResponsibleOrganization;
 	}
 
-	public AmpOrganisation getSecondReportingOrganisation() {
-		return this.secondReportingOrganisation;
+	public AmpOrganisation getComponentSecondResponsibleOrganization() {
+		return this.componentSecondResponsibleOrganization;
 	}
 
 	public void setComponentTransactionDescription(String ctDescription) {

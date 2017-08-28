@@ -592,7 +592,8 @@ public class GisEndPoints implements ErrorReportingEndpoint {
 	}
 	
 	/**
-     * Provides information about the availability or not of enabled performance rules. This information is used for configuring the GIS UI.
+     * Provides information about the availability or not of enabled performance rules. 
+     * This information is used for configuring the GIS UI.
      * The performance rule toggle on GIS UI is only displayed if enabled performance rules are available.
      * @return <pre>
      * {
@@ -606,8 +607,10 @@ public class GisEndPoints implements ErrorReportingEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "hasEnabledPerformanceRules")
 	public JsonBean hasEnabledPerformanceRules() {
-	    JsonBean result = new JsonBean();
-        result.set(PerformanceRuleConstants.HAS_ENABLED_PERFORMANCE_RULES, !PerformanceRuleManager.getInstance().getPerformanceRuleMatchers().isEmpty());
+        JsonBean result = new JsonBean();
+        result.set(PerformanceRuleConstants.HAS_ENABLED_PERFORMANCE_RULES,
+                !PerformanceRuleManager.getInstance().getPerformanceRuleMatchers().isEmpty());
+        
         return result;
 	}
 

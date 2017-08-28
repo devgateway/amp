@@ -21,7 +21,7 @@
 
 		<many-to-one name="reportingOrganization" column="rep_organization_id"
 			class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none" />
-		<many-to-one name="secondReportingOrganisation" column="second_rep_organisation_id"
+		<many-to-one name="componentSecondResponsibleOrganization" column="component_second_rep_org_id"
 					 class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none" />
 		<many-to-one name="currency" column="currency_id"
 			class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" />

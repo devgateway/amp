@@ -164,7 +164,8 @@ public class ShowActivityPrintPreview
                 }
 
                 if (activity.getProjectCategoryOtherInfo() != null) {
-                    eaForm.getIdentification().setProjectCategoryOtherInfo(activity.getProjectCategoryOtherInfo().trim());
+                    eaForm.getIdentification().setProjectCategoryOtherInfo(activity.getProjectCategoryOtherInfo()
+                            .trim());
                 }
 
                 if (activity.getModalitiesOtherInfo() != null) {

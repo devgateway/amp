@@ -36,6 +36,7 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 
 public class AmpOverviewSection extends AmpComponentPanel<Void> implements AmpRequiredComponentContainer {
 	private static final long serialVersionUID = 3042844165981373432L;
+	public static final int LENGTH = 255;
 	protected IndicatingAjaxLink button;
 	private List<FormComponent<?>> requiredFormComponents = new ArrayList<FormComponent<?>>();
 
@@ -115,7 +116,7 @@ public class AmpOverviewSection extends AmpComponentPanel<Void> implements AmpRe
 				new PropertyModel<String>(am, "modalitiesOtherInfo"), "Modalities Other Info",
 				false, AmpFMTypes.MODULE);
 
-		modalitiesOtherInfo.getTextAreaContainer().add(StringValidator.maximumLength(255));
+		modalitiesOtherInfo.getTextAreaContainer().add(StringValidator.maximumLength(LENGTH));
 		modalitiesOtherInfo.getTextAreaContainer().add(new AttributeModifier("style", "width: 328px; margin: 0px;"));
 		wmc.add(modalities);
 		wmc.add(modalitiesOtherInfo);

@@ -1804,7 +1804,7 @@ public class ExportActivityToWord extends Action {
             if ("Proposed Project Cost".equals(costName)
                     && FeaturesUtil.isVisibleModule(
                     "/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost")) {
-                List <ProposedProjCost> proposedProjectCostList = myForm.getFunding().getProposedAnnualBudgets();
+                List<ProposedProjCost> proposedProjectCostList = myForm.getFunding().getProposedAnnualBudgets();
                 for (ProposedProjCost ppc : proposedProjectCostList) {
                     eshProjectCostTable.addRowData(new ExportSectionHelperRowData(
                             ppc.getFunDate(), null, null, true).addRowData(
@@ -2047,8 +2047,8 @@ public class ExportActivityToWord extends Action {
     /*
      * Issue section
      */
-    private List<Table> getIssuesTables (final HttpServletRequest request, final ServletContext ampContext,
-                                         final AmpActivityVersion act) throws BadElementException, WorkerException {
+    private List<Table> getIssuesTables(final HttpServletRequest request, final ServletContext ampContext,
+                                        final AmpActivityVersion act) throws BadElementException, WorkerException {
         List<Table> retVal = new ArrayList<Table>();
         HttpSession session=request.getSession();
         if (FeaturesUtil.isVisibleModule("/Activity Form/Issues Section")) {
@@ -2544,16 +2544,16 @@ public class ExportActivityToWord extends Action {
                                 "/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement",
                                 eshDonorInfo, "Agreement Title", funding.getCode(), true);
                         if (funding.getFundingClassificationDate() != null) {
-                            addFundingRowData(null, eshDonorInfo, "Funding Classification Date",funding.
-                                    getFundingClassificationDate(), false);
+                            addFundingRowData(null, eshDonorInfo, "Funding Classification Date",
+                                    funding.getFundingClassificationDate(), false);
                         }
                         if (funding.getEffectiveFundingDate() != null) {
-                            addFundingRowData(null, eshDonorInfo, "Effective Funding Date",funding.
-                                    getEffectiveFundingDate(), false);
+                            addFundingRowData(null, eshDonorInfo, "Effective Funding Date",
+                                    funding.getEffectiveFundingDate(), false);
                         }
                         if (funding.getFundingClosingDate() != null) {
-                            addFundingRowData(null, eshDonorInfo, "Funding Closing Date",funding.
-                                    getFundingClosingDate(), false);
+                            addFundingRowData(null, eshDonorInfo, "Funding Closing Date",
+                                    funding.getFundingClosingDate(), false);
                         }
                         
                         addFundingRowData("/Activity Form/Funding/Funding Group/Funding Item/Loan Details/Ratification Date",

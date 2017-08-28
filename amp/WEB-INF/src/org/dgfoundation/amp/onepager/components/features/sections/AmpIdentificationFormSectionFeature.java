@@ -13,7 +13,6 @@ import javax.servlet.ServletContext;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
@@ -23,7 +22,6 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.protocol.http.WebApplication;
-import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.validator.StringValidator;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
@@ -186,11 +184,6 @@ implements AmpRequiredComponentContainer{
 
 			statusOtherInfo.getTextAreaContainer().add(StringValidator.maximumLength(255));
 			statusOtherInfo.getTextAreaContainer().add(new AttributeModifier("style", "width: 328px; margin: 0px;"));
-			statusOtherInfo.setOutputMarkupPlaceholderTag(true);
-			statusOtherInfo.setOutputMarkupId(true);
-			statusOtherInfo.setIgnoreFmVisibility(true);
-			statusOtherInfo.setIgnorePermissions(true);
-			statusOtherInfo.setVisible(false);
 
 			status.getChoiceContainer().add(new OtherInfoBehavior("onchange", statusOtherInfo));
 
@@ -374,11 +367,6 @@ implements AmpRequiredComponentContainer{
 
 			projectCategoryOtherInfo.getTextAreaContainer().add(StringValidator.maximumLength(255));
 			projectCategoryOtherInfo.getTextAreaContainer().add(new AttributeModifier("style", "width: 328px; margin: 0px;"));
-			projectCategoryOtherInfo.setOutputMarkupPlaceholderTag(true);
-			projectCategoryOtherInfo.setOutputMarkupId(true);
-			projectCategoryOtherInfo.setIgnoreFmVisibility(true);
-			projectCategoryOtherInfo.setIgnorePermissions(true);
-			projectCategoryOtherInfo.setVisible(false);
 
 			projectCategory.getChoiceContainer().add(new OtherInfoBehavior("onchange", projectCategoryOtherInfo));
 

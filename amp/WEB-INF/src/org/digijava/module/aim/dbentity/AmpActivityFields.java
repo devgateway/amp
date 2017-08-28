@@ -40,33 +40,24 @@ LoggerIdentifiable, Cloneable {
 	
 	protected static String [] IMPLEMENTED_ACTIONS=new String[]{GatePermConst.Actions.EDIT};
 
-	@VersionableFieldTextEditor(fieldTitle = "Status Other Info")
-	protected String statusOtherInfo;
-
-	@VersionableFieldTextEditor(fieldTitle = "Project Category Other Info")
-	protected String projectCategoryOtherInfo;
-
-	@VersionableFieldTextEditor(fieldTitle = "Modalities Other Info")
-	protected String modalitiesOtherInfo;
-
-    @Interchangeable(fieldTitle = "Project Impact", importable = true, fmPath = "/Activity "
-            + "Form/Identification/Project Impact")
-    @VersionableFieldTextEditor(fieldTitle = "Project Impact")
+	@Interchangeable(fieldTitle = "Project Impact", importable = true,
+			fmPath = "/Activity Form/Identification/Project Impact")
+	@VersionableFieldTextEditor(fieldTitle = "Project Impact")
 	protected String projectImpact;
 
-    @Interchangeable(fieldTitle = "Activity Summary", importable = true, fmPath = "/Activity "
-            + "Form/Identification/Activity Summary")
-    @VersionableFieldTextEditor(fieldTitle = "Activity Summary")
+	@Interchangeable(fieldTitle = "Activity Summary", importable = true,
+			fmPath = "/Activity Form/Identification/Activity Summary")
+	@VersionableFieldTextEditor(fieldTitle = "Activity Summary")
 	protected String activitySummary;
 
-    @Interchangeable(fieldTitle = "Conditionalities", importable = true, fmPath = "/Activity "
-            + "Form/Identification/Conditionalities")
-    @VersionableFieldTextEditor(fieldTitle = "Conditionality")
+	@Interchangeable(fieldTitle = "Conditionalities", importable = true,
+			fmPath = "/Activity Form/Identification/Conditionalities")
+	@VersionableFieldTextEditor(fieldTitle = "Conditionality")
     protected String conditionality;
 
-    @Interchangeable(fieldTitle = "Project Management", importable = true, fmPath = "/Activity "
-            + "Form/Identification/Project Management")
-    @VersionableFieldTextEditor(fieldTitle = "Project Management")
+	@Interchangeable(fieldTitle = "Project Management", importable = true,
+			fmPath = "/Activity Form/Identification/Project Management")
+	@VersionableFieldTextEditor(fieldTitle = "Project Management")
     protected String projectManagement;
 
 	//getter and setter never used
@@ -581,6 +572,15 @@ LoggerIdentifiable, Cloneable {
 	})
 	@VersionableCollection(fieldTitle = "Categories")
 	protected Set<AmpCategoryValue> categories;
+
+	@VersionableFieldTextEditor(fieldTitle = "Status Other Info")
+	protected String statusOtherInfo;
+
+	@VersionableFieldTextEditor(fieldTitle = "Project Category Other Info")
+	protected String projectCategoryOtherInfo;
+
+	@VersionableFieldTextEditor(fieldTitle = "Modalities Other Info")
+	protected String modalitiesOtherInfo;
 
 	/*
 	 * Tanzania adds

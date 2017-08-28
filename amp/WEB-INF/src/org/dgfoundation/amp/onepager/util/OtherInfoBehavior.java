@@ -20,7 +20,7 @@ public class OtherInfoBehavior extends AjaxFormComponentUpdatingBehavior {
         this.otherInfo = otherInfo;
     }
 
-    private void toggleotherInfo(final boolean b) {
+    private void toggleOtherInfo(final boolean b) {
         if (this.otherInfo != null) {
             this.otherInfo.setVisible(b);
             if (this.otherInfo.isVisible()) {
@@ -34,7 +34,7 @@ public class OtherInfoBehavior extends AjaxFormComponentUpdatingBehavior {
     }
 
     private void updateOtherInfo() {
-        toggleotherInfo(isOtherInfoVisible());
+        toggleOtherInfo(isOtherInfoVisible());
     }
 
     @Override

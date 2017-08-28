@@ -47,7 +47,11 @@ div.trnpanel div.trn-row ul {
 }
 
 .wicketFloatLeft {
-    float: inherit;
+    float: right;
+}
+
+.wicketFloatRight {
+    float: left;
 }
 
 .dropdwn_sm {
@@ -71,7 +75,15 @@ div.trnpanel div.trn-row ul {
 .tri {
     -webkit-transform:scale(-1,1);
 }
+
 .tri b {
+    text-align: right;
+    display: table-cell;
+    -webkit-transform:scale(-1,1);
+    width: inherit;
+}
+
+.triText {
     text-align: right;
     display: table-cell;
     -webkit-transform:scale(-1,1);

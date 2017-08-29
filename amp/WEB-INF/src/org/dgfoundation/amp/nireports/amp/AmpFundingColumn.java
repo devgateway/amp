@@ -85,7 +85,12 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 	 * {@link #getName()} in case this column is used to fetch "Component Funding"
 	 */
 	public final static String ENTITY_COMPONENT_FUNDING = "Component Funding";
-	
+
+	/**
+	 * {@link #getName()} in case this column is used to fetch "Regional Funding"
+	 */
+	public static final String ENTITY_REGIONAL_FUNDING = "Regional Funding";
+
 	/*
 	 * the cell prototypes cache, plus some auxiliary info
 	 */
@@ -253,6 +258,10 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 				    addCoordinateIfLongExists(coos, rs.rs, "related_project_id", schema.ACT_LEVEL_COLUMN);
 				
 				if (this.name.equals(ENTITY_COMPONENT_FUNDING)) {
+					metaSet.add(MetaCategory.SOURCE_ROLE.category, Constants.FUNDING_AGENCY);
+				}
+
+				if (this.name.equals(ENTITY_REGIONAL_FUNDING)) {
 					metaSet.add(MetaCategory.SOURCE_ROLE.category, Constants.FUNDING_AGENCY);
 				}
 				

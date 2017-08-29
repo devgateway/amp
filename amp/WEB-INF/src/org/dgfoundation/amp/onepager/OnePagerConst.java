@@ -32,6 +32,7 @@ public final class OnePagerConst {
 	public final static String ONEPAGER_URL_PREFIX = "onepager";
 	public final static String ONEPAGER_URL_PARAMETER_ACTIVITY = "activity";
     public final static String ONEPAGER_URL_PARAMETER_SSC = "ssc";
+	public static final int STRING_VALIDATOR_MAX_LENGTH = 255;
 
 //	public final static MetaInfo<Integer>[] adjustmentTypes=new MetaInfo[] { new MetaInfo<Integer>("Actual",Constants.ACTUAL), 
 //		new MetaInfo<Integer>("Planned" ,Constants.PLANNED),  new MetaInfo<Integer>("Pipeline",Constants.ADJUSTMENT_TYPE_PIPELINE )};

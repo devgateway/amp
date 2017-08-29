@@ -337,8 +337,8 @@
 <field:display feature="Identification" name="Project Description"></field:display>
 <field:display feature="Identification" name="Contracting Arrangements"></field:display>
 <field:display name="Project Impact" feature="Identification"></field:display> 
-<field:display feature="Identification" name="Project Comments"></field:display> 
-<field:display feature="Identification" name="Objective Assumption"></field:display> 
+<field:display feature="Identification" name="Project Comments"></field:display>
+<field:display feature="Identification" name="Objective Assumption"></field:display>
 <field:display feature="Identification" name="Objective Comments"></field:display> 
 <field:display feature="Identification" name="Objective Objectively Verifiable Indicators"></field:display> 
 <field:display feature="Identification" name="Objective Verification"></field:display> 

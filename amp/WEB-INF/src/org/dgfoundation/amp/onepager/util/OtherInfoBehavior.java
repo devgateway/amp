@@ -20,7 +20,6 @@ public class OtherInfoBehavior extends AjaxFormComponentUpdatingBehavior {
         this.otherInfo = otherInfo;
         this.otherInfo.setOutputMarkupPlaceholderTag(true);
         this.otherInfo.setVisible(false);
-        this.otherInfo.setOutputMarkupId(true);
         this.otherInfo.setIgnoreFmVisibility(true);
         this.otherInfo.setIgnorePermissions(true);
     }

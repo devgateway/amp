@@ -22,9 +22,6 @@
 				JOIN amp_category_class c ON v.amp_category_class_id = c.id
 				WHERE c.keyname = 'SSC_modalities' ) x
 				WHERE x.id = cv.id;
-
-				ALTER TABLE amp_category_value ADD CONSTRAINT amp_category_class_id
-				UNIQUE(amp_category_class_id, index_column);
 			</lang>
 		</script>
 	</apply>

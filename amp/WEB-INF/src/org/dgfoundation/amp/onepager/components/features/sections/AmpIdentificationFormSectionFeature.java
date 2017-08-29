@@ -24,6 +24,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.validation.validator.StringValidator;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
+import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.AmpRequiredComponentContainer;
 import org.dgfoundation.amp.onepager.components.fields.AmpActivityBudgetExtrasPanel;
@@ -64,7 +65,6 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 implements AmpRequiredComponentContainer{
 
 	private static final long serialVersionUID = 8568986144567957699L;
-	public static final int LENGTH = 255;
 	private AmpWarningComponentPanel<String> titleSimilarityWarning;
 	private List<FormComponent<?>> requiredFormComponents = new ArrayList<FormComponent<?>>();
 	private List<FormComponent<?>> requiredRichTextFormComponents = new ArrayList<FormComponent<?>>();
@@ -84,7 +84,7 @@ implements AmpRequiredComponentContainer{
 			final AmpTextAreaFieldPanel title = new AmpTextAreaFieldPanel("title", m, "Project Title", false, false, false, true,true);
 
 			title.getTextAreaContainer().add(new AmpUniqueActivityTitleValidator(new PropertyModel<AmpActivityGroup>(am, "ampActivityGroup")));
-			title.getTextAreaContainer().add(StringValidator.maximumLength(LENGTH));
+			title.getTextAreaContainer().add(StringValidator.maximumLength(OnePagerConst.STRING_VALIDATOR_MAX_LENGTH));
 			title.getTextAreaContainer().add(new AttributeModifier("style", "width: 710px; margin: 0px;"));
 			title.getTextAreaContainer().setRequired(true);
 
@@ -177,14 +177,18 @@ implements AmpRequiredComponentContainer{
 					new AmpCategoryValueByKeyModel(
 							new PropertyModel<Set<AmpCategoryValue>>(am,"categories"),
 							CategoryConstants.ACTIVITY_STATUS_KEY),
-							CategoryConstants.ACTIVITY_STATUS_NAME, true, false, null, AmpFMTypes.MODULE);
+							CategoryConstants.ACTIVITY_STATUS_NAME, true, false, null,
+					 AmpFMTypes.MODULE);
 			status.getChoiceContainer().setRequired(true);
 
 			AmpTextAreaFieldPanel statusOtherInfo = new AmpTextAreaFieldPanel("statusOtherInfo",
-				new PropertyModel<String>(am, "statusOtherInfo"), "Status Other Info", false, AmpFMTypes.MODULE);
+				new PropertyModel<String>(am, "statusOtherInfo"), "Status Other Info", false,
+					AmpFMTypes.MODULE);
 
-			statusOtherInfo.getTextAreaContainer().add(StringValidator.maximumLength(LENGTH));
-			statusOtherInfo.getTextAreaContainer().add(new AttributeModifier("style", "width: 328px; margin: 0px;"));
+			statusOtherInfo.getTextAreaContainer().add(StringValidator.maximumLength(
+					OnePagerConst.STRING_VALIDATOR_MAX_LENGTH));
+			statusOtherInfo.getTextAreaContainer().add(new AttributeModifier("style",
+					"width: 328px; margin: 0px;"));
 
 			status.getChoiceContainer().add(new OtherInfoBehavior("onchange", statusOtherInfo));
 
@@ -366,7 +370,8 @@ implements AmpRequiredComponentContainer{
 					false, AmpFMTypes.MODULE);
 
 
-			projectCategoryOtherInfo.getTextAreaContainer().add(StringValidator.maximumLength(LENGTH));
+			projectCategoryOtherInfo.getTextAreaContainer().add(StringValidator.maximumLength(
+					OnePagerConst.STRING_VALIDATOR_MAX_LENGTH));
 			projectCategoryOtherInfo.getTextAreaContainer().add(new AttributeModifier("style",
 					"width: 328px; margin: 0px;"));
 

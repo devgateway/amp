@@ -43,7 +43,7 @@ public class ValueValidatorTest {
     @Before
     public void setUp() throws Exception {
         importer = mock(ActivityImporter.class);
-        when(importer.getPossibleValuesForFieldCached(any(), any())).thenReturn(SECTOR_POSSIBLE_VALUES);
+        when(importer.getPossibleValuesForFieldCached(any())).thenReturn(SECTOR_POSSIBLE_VALUES);
 
         sectorFieldDescription = new APIField();
         sectorFieldDescription.setFieldName(SECTOR_FIELD);

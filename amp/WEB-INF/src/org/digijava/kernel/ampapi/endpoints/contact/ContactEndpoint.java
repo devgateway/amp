@@ -10,7 +10,9 @@ import java.util.Objects;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
@@ -18,15 +20,18 @@ import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.AmpFieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesEnumerator;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
+import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.dbentity.AmpContact;
 
 /**
  * @author Octavian Ciubotaru
  */
 @Path("contact")
-public class ContactEndpoint {
+public class ContactEndpoint implements ErrorReportingEndpoint {
 
     /**
      * Provides full set of available fields and their settings/rules in a hierarchical structure.
@@ -121,5 +126,52 @@ public class ContactEndpoint {
 
     private List<PossibleValue> possibleValuesFor(String fieldName) {
         return PossibleValuesEnumerator.INSTANCE.getPossibleValuesForField(fieldName, AmpContact.class, null);
+    }
+
+    /**
+     * Retrieve contact.
+     * @param id contact id
+     */
+    @GET
+    @Path("{id}")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getContact", ui = false)
+    public JsonBean getContact(@PathParam("id") Long id) {
+        return ContactUtil.getContact(id);
+    }
+
+    /**
+     * Create new contact.
+     * @param contact the contact to create
+     * @return brief representation of contact
+     */
+    @PUT
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "createContact", ui = false)
+    public JsonBean createContact(JsonBean contact) {
+        ContactImporter importer = new ContactImporter();
+        List<ApiErrorMessage> errors = importer.createContact(contact);
+        return ContactUtil.getImportResult(importer.getContact(), importer.getNewJson(), errors);
+    }
+
+    /**
+     * Update an existing contact.
+     * @param id id of the existing contact
+     * @param contact updated contact
+     * @return brief representation of contact
+     */
+    @POST
+    @Path("{id}")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "updateContact", ui = false)
+    public JsonBean updateContact(@PathParam("id") Long id, JsonBean contact) {
+        ContactImporter importer = new ContactImporter();
+        List<ApiErrorMessage> errors = importer.updateContact(id, contact);
+        return ContactUtil.getImportResult(importer.getContact(), importer.getNewJson(), errors);
+    }
+
+    @Override
+    public Class getErrorsClass() {
+        return ContactErrors.class;
     }
 }

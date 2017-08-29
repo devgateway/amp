@@ -31,7 +31,7 @@ public class AmpContactProperty  implements Comparable, Serializable {
 			context = PhoneDiscriminatorContextMatcher.class)
 	private AmpCategoryValue type;
 
-    public AmpCategoryValue getType() {
+	public AmpCategoryValue getType() {
         return type;
     }
 

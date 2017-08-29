@@ -46,6 +46,6 @@ public abstract class AmpCategoryPossibleValuesProvider extends PossibleValuesPr
 
     @Override
     public Object toAmpFormat(Object obj) {
-        return obj;
+        return CategoryManagerUtil.getAmpCategoryValueFromDb(((Number) obj).longValue());
     }
 }

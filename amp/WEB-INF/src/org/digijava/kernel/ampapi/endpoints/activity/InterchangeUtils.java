@@ -352,9 +352,9 @@ public class InterchangeUtils {
 	 */
 	public static JsonBean getActivity(AmpActivityVersion activity, JsonBean filter) {
 		try {
-			ActivityExporter exporter = new ActivityExporter();
+			ActivityExporter exporter = new ActivityExporter(filter);
 		
-			return exporter.getActivity(activity, filter);
+			return exporter.export(activity);
 		} catch (Exception e) {
 			LOGGER.error("Error in loading activity. " + e.getMessage());
 			throw new RuntimeException(e);
@@ -545,7 +545,7 @@ public class InterchangeUtils {
 		}
 		return result;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public static boolean validateFilterActivityFields(JsonBean filterJson, JsonBean result) {
 		List<String> filteredItems = new ArrayList<String>();

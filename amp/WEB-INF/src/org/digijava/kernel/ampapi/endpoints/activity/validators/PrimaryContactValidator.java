@@ -10,8 +10,8 @@ import java.util.Set;
 
 import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 
@@ -39,7 +39,7 @@ public class PrimaryContactValidator extends InputValidator {
 	}
 
 	@Override
-	public boolean isValid(ActivityImporter importer, Map<String, Object> newFieldParent,
+	public boolean isValid(ObjectImporter importer, Map<String, Object> newFieldParent,
 						   Map<String, Object> oldFieldParent, APIField fieldDescription, String fieldPath) {
 		
 		boolean isValid = true;

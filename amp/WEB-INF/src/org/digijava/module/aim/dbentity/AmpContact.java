@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
@@ -64,7 +65,7 @@ public class AmpContact implements Comparable, Serializable, Cloneable, Versiona
 	private Boolean shared; //is contact shared between amp users
 	private AmpTeamMember creator; //who created the contact
 	
-	private Set<AmpActivityContact> activityContacts;
+	private SortedSet<AmpActivityContact> activityContacts;
 	
 	@Interchangeable(fieldTitle = "Organisation Contacts", importable = true)
 	private Set<AmpOrganisationContact> organizationContacts;
@@ -78,7 +79,7 @@ public class AmpContact implements Comparable, Serializable, Cloneable, Versiona
 			@Interchangeable(fieldTitle = "fax", discriminatorOption = Constants.CONTACT_PROPERTY_NAME_FAX,
 					importable = true)
 	})
-	private Set<AmpContactProperty> properties;
+	private SortedSet<AmpContactProperty> properties;
 
     public AmpContact(){
     	
@@ -132,10 +133,10 @@ public class AmpContact implements Comparable, Serializable, Cloneable, Versiona
 		this.creator = creator;
 	}
 
-	public Set<AmpActivityContact> getActivityContacts() {
+	public SortedSet<AmpActivityContact> getActivityContacts() {
 		return activityContacts;
 	}
-	public void setActivityContacts(Set<AmpActivityContact> activityContacts) {
+	public void setActivityContacts(SortedSet<AmpActivityContact> activityContacts) {
 		this.activityContacts = activityContacts;
 	}
 	public String getTemporaryId() {
@@ -157,10 +158,10 @@ public class AmpContact implements Comparable, Serializable, Cloneable, Versiona
 	public void setOfficeaddress(String officeaddress) {
 		this.officeaddress = officeaddress;
 	}
-	public Set<AmpContactProperty> getProperties() {
+	public SortedSet<AmpContactProperty> getProperties() {
 		return properties;
 	}
-	public void setProperties(Set<AmpContactProperty> properties) {
+	public void setProperties(SortedSet<AmpContactProperty> properties) {
 		this.properties = properties;
 	}
 

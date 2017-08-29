@@ -6,11 +6,10 @@ import java.util.Map;
 import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
-import org.digijava.module.aim.dbentity.AmpActivityFields;
 
 /**
  * Validates that field value is allowed
@@ -32,7 +31,7 @@ public class ValueValidator extends InputValidator {
 	}
 
 	@Override
-	public boolean isValid(ActivityImporter importer, Map<String, Object> newFieldParent,
+	public boolean isValid(ObjectImporter importer, Map<String, Object> newFieldParent,
 						   Map<String, Object> oldFieldParent, APIField fieldDescription, String fieldPath) {
 		
 		boolean importable = fieldDescription.isImportable();
@@ -47,8 +46,7 @@ public class ValueValidator extends InputValidator {
 			return false;
 
 		// FIXME possible values are not always available for all fields, must check only for select fields (not all)
-		List<PossibleValue> possibleValues = importer.getPossibleValuesForFieldCached(fieldPath,
-				AmpActivityFields.class);
+		List<PossibleValue> possibleValues = importer.getPossibleValuesForFieldCached(fieldPath);
 		
 		if (possibleValues.size() != 0) {
 			Object value = newFieldParent.get(fieldDescription.getFieldName());

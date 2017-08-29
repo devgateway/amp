@@ -3,7 +3,7 @@
  */
 package org.digijava.kernel.ampapi.endpoints.activity.validators;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +11,8 @@ import java.util.Set;
 
 import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
+import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
+import org.digijava.kernel.ampapi.endpoints.contact.validators.PrimaryOrganisationContactValidator;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -22,27 +23,44 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
  * @author Nadejda Mandrescu
  */
 public class InputValidatorProcessor {
-	/** defines validators list and their execution order */
-	private List<InputValidator> validators = new ArrayList<InputValidator>() {{
-			add(new ValidFieldValidator());
-			add(new AllowedInputValidator());
-			add(new InputTypeValidator());
-			add(new RequiredValidator());
-			add(new ActivityTitleValidator());
-			add(new AmpActivityIdValidator());
-			add(new MultipleEntriesValidator());
-			add(new UniqueValidator());
-			add(new PercentageValidator());
-			add(new ValueValidator());
-			add(new TreeCollectionValidator());
-			add(new DependencyValidator());
-			add(new PrimaryContactValidator());
-			add(new AgreementCodeValidator());
-			add(new AgreementTitleValidator());
-			add(new FundingOrgRolesValidator());
-			add(new ComponentFundingOrgsValidator());
-			}};
-	
+
+	public static List<InputValidator> getActivityValidators() {
+		return Arrays.asList(
+				new ValidFieldValidator(),
+				new AllowedInputValidator(),
+				new InputTypeValidator(),
+				new RequiredValidator(),
+				new ActivityTitleValidator(),
+				new AmpActivityIdValidator(),
+				new MultipleEntriesValidator(),
+				new UniqueValidator(),
+				new PercentageValidator(),
+				new ValueValidator(),
+				new TreeCollectionValidator(),
+				new DependencyValidator(),
+				new PrimaryContactValidator(),
+				new AgreementCodeValidator(),
+				new AgreementTitleValidator(),
+				new FundingOrgRolesValidator(),
+				new ComponentFundingOrgsValidator());
+	}
+
+	public static List<InputValidator> getContactValidators() {
+		return Arrays.asList(
+				new ValidFieldValidator(),
+				new InputTypeValidator(),
+				new RequiredValidator(),
+				new MultipleEntriesValidator(),
+				new ValueValidator(),
+				new PrimaryOrganisationContactValidator());
+	}
+
+	private final List<InputValidator> validators;
+
+	public InputValidatorProcessor(List<InputValidator> validators) {
+		this.validators = validators;
+	}
+
 	/**
 	 * Executes validation chain for the new field values 
 	 * 
@@ -53,7 +71,7 @@ public class InputValidatorProcessor {
 	 * @param errors 			map to store errors 
 	 * @return true if the current field passes the full validation chain
 	 */
-	public boolean isValid(ActivityImporter importer, Map<String, Object> newParent, Map<String, Object> oldParent,
+	public boolean isValid(ObjectImporter importer, Map<String, Object> newParent, Map<String, Object> oldParent,
 						   APIField fieldDef, String fieldPath, Map<Integer, ApiErrorMessage> errors) {
 		boolean valid = true;
 		String fieldName = fieldPath.substring(fieldPath.lastIndexOf("~") + 1);

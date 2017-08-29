@@ -622,6 +622,14 @@ function collapseAll() {
 				<b><category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.statusId}"/></b>
 				<hr />
 			</module:display>
+			<module:display name="/Activity Form/Identification/Status Other Info"
+							parentModule="/Activity Form/Identification">
+				<c:if test="${not empty aimEditActivityForm.identification.statusOtherInfo}">
+					<digi:trn>Status Other Info</digi:trn>:&nbsp;<br />
+					<span class="word_break bold"><c:out value="${aimEditActivityForm.identification.statusOtherInfo}"/></span>
+					<hr />
+				</c:if>
+			</module:display>
 
 			<module:display name="/Activity Form/Identification/Status Reason" parentModule="/Activity Form/Identification">
 				<digi:trn key="aim:statusReason">Status Reason</digi:trn>:&nbsp;
@@ -664,6 +672,21 @@ function collapseAll() {
 				</b>
 				</c:if>
 				<hr />
+			</module:display>
+
+
+			<c:set var="modalitiesPath" value="/Activity Form/Funding/Overview Section/Modalities Other Info"/>
+			<c:if test="${aimEditActivityForm.identification.team !=null && aimEditActivityForm.identification.team.isSSCWorkspace()}">
+				<c:set var="modalitiesPath" value="/Activity Form/Funding/Overview Section/SSC Modalities Other Info"/>
+			</c:if>
+
+			<module:display name="${modalitiesPath}"
+							parentModule="/Activity Form/Funding/Overview Section">
+				<c:if test="${not empty aimEditActivityForm.identification.modalitiesOtherInfo}">
+					<digi:trn>Modalities Other Info</digi:trn>:&nbsp;<br />
+					<span class="word_break bold"><c:out value="${aimEditActivityForm.identification.modalitiesOtherInfo}"/></span>
+					<hr />
+				</c:if>
 			</module:display>
 
 			
@@ -751,7 +774,7 @@ function collapseAll() {
 				</c:if>
 					<hr />
 			</module:display>
-					
+
 			<bean:define id="largeTextFeature" value="Identification" toScope="request"/>
 			<logic:present name="aimEditActivityForm" property="identification.projectImpact">
 				<bean:define id="moduleName" value="/Activity Form/Identification/Project Impact" toScope="request"/>
@@ -991,6 +1014,14 @@ function collapseAll() {
 					</span>
 					<hr />
 					</c:if>	
+			</module:display>
+			<module:display name="/Activity Form/Identification/Project Category Other Info"
+							parentModule="/Activity Form/Identification">
+				<c:if test="${not empty aimEditActivityForm.identification.projectCategoryOtherInfo}">
+					<digi:trn>Project Category Other Info</digi:trn>:&nbsp;<br />
+					<span class="word_break bold"><c:out value="${aimEditActivityForm.identification.projectCategoryOtherInfo}"/></span>
+					<hr />
+				</c:if>
 			</module:display>
 						 
 			<!-- MISSING FIELD IN THE NEW FM STRUCTURE -->

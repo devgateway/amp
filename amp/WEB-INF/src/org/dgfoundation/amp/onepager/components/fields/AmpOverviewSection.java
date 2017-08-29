@@ -14,16 +14,18 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.validator.RangeValidator;
+import org.apache.wicket.validation.validator.StringValidator;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
+import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.AmpRequiredComponentContainer;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpOverallFundingTotalsTable;
 import org.dgfoundation.amp.onepager.events.OverallFundingTotalsEvents;
 import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.dgfoundation.amp.onepager.models.AmpCategoryValueByKeyModel;
-import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.util.AttributePrepender;
+import org.dgfoundation.amp.onepager.util.OtherInfoBehavior;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingAmount;
@@ -109,8 +111,20 @@ public class AmpOverviewSection extends AmpComponentPanel<Void> implements AmpRe
 				new AmpCategoryValueByKeyModel(new PropertyModel<Set<AmpCategoryValue>>(am, "categories"),
 						CategoryConstants.MODALITIES_KEY),
 				CategoryConstants.MODALITIES_NAME, true, false, null, AmpFMTypes.MODULE);
-		wmc.add(modalities);					
-		
+
+		AmpTextAreaFieldPanel modalitiesOtherInfo = new AmpTextAreaFieldPanel("modalitiesOtherInfo",
+				new PropertyModel<String>(am, "modalitiesOtherInfo"), "Modalities Other Info",
+				false, AmpFMTypes.MODULE);
+
+		modalitiesOtherInfo.getTextAreaContainer().add(StringValidator.maximumLength(
+				OnePagerConst.STRING_VALIDATOR_MAX_LENGTH));
+		modalitiesOtherInfo.getTextAreaContainer().add(new AttributeModifier("style",
+				"width: 328px; margin: 0px;"));
+		wmc.add(modalities);
+		wmc.add(modalitiesOtherInfo);
+
+		modalities.getChoiceContainer().add(new OtherInfoBehavior("onchange", modalitiesOtherInfo));
+
 		AmpOverallFundingTotalsTable overallFunding = new AmpOverallFundingTotalsTable(
 				"overallFunding", "Overall Funding Totals", new PropertyModel<Set<AmpFunding>>(am, "funding"));
 		overallFunding.add(UpdateEventBehavior.of(OverallFundingTotalsEvents.class));

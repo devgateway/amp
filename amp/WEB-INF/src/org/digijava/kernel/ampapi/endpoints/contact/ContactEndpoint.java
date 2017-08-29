@@ -135,8 +135,8 @@ public class ContactEndpoint implements ErrorReportingEndpoint {
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getContract", ui = false)
-    public JsonBean getContract(@PathParam("id") Long id) {
+    @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getContact", ui = false)
+    public JsonBean getContact(@PathParam("id") Long id) {
         return ContactUtil.getContact(id);
     }
 
@@ -147,8 +147,8 @@ public class ContactEndpoint implements ErrorReportingEndpoint {
      */
     @PUT
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "createContract", ui = false)
-    public JsonBean createContract(JsonBean contact) {
+    @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "createContact", ui = false)
+    public JsonBean createContact(JsonBean contact) {
         ContactImporter importer = new ContactImporter();
         List<ApiErrorMessage> errors = importer.createContact(contact);
         return ContactUtil.getImportResult(importer.getContact(), importer.getNewJson(), errors);
@@ -163,8 +163,8 @@ public class ContactEndpoint implements ErrorReportingEndpoint {
     @POST
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "updateContract", ui = false)
-    public JsonBean updateContract(@PathParam("id") Long id, JsonBean contact) {
+    @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "updateContact", ui = false)
+    public JsonBean updateContact(@PathParam("id") Long id, JsonBean contact) {
         ContactImporter importer = new ContactImporter();
         List<ApiErrorMessage> errors = importer.updateContact(id, contact);
         return ContactUtil.getImportResult(importer.getContact(), importer.getNewJson(), errors);

@@ -12,6 +12,7 @@ require('../styles/less/main.less');
 import * as startUp from '../actions/StartUpAction';
 import * as performanceRuleActions from '../actions/PerformanceRuleActions';
 import * as Constants from '../common/Constants';
+import Utils from '../common/Utils';
 export default class PerformanceRuleForm extends Component {
     constructor(props, context) {
         super(props, context);
@@ -43,7 +44,7 @@ export default class PerformanceRuleForm extends Component {
            }else{
                currentPerformanceRule[field] = event.target.value;
            }                      
-           if(field === Constants.FIELD_TYPE) {
+           if (field === Constants.FIELD_TYPE) {
                currentPerformanceRule[Constants.FIELD_ATTRIBUTES] = [];
                this.props.actions.getAttributeList(event.target.value);
            } 
@@ -57,6 +58,8 @@ export default class PerformanceRuleForm extends Component {
         attribute.name = event.target.getAttribute('data-name');
         attribute.type = event.target.getAttribute('data-type');
         attribute.value = event.target.value;  
+        
+        if (attribute.type === Constants.FIELD_TYPE_AMOUNT && (!Utils.isNumber(attribute.value) || attribute.value < 0)) return;       
         
         if(attributes.filter(attr => attr.name === event.target.getAttribute('data-name')).length > 0){
             attributes = attributes.map(function(attr) { 

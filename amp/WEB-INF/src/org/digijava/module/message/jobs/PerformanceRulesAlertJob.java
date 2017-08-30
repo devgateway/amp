@@ -11,7 +11,6 @@ import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.util.FMUtil;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
-import org.digijava.kernel.ampapi.endpoints.performance.matcher.PerformanceRuleMatcher;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -20,7 +19,6 @@ import org.digijava.module.aim.startup.AMPStartupListener;
 import org.digijava.module.aim.startup.AmpBackgroundActivitiesCloser;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.message.triggers.PerformanceRuleAlertTrigger;
 import org.hibernate.Session;
 import org.quartz.JobExecutionContext;
@@ -73,9 +71,10 @@ public class PerformanceRulesAlertJob extends ConnectionCleaningJob implements S
         }
         
         for (Long actId : actIds) {
+            String lockKey = null;
             try {
-                String key = ActivityGatekeeper.lockActivity(Long.toString(actId), 0L);
-                if (key != null) {
+                lockKey = ActivityGatekeeper.lockActivity(Long.toString(actId), 0L);
+                if (lockKey != null) {
                     AmpActivityVersion a = org.digijava.module.aim.util.ActivityUtil.loadActivity(actId);
                     
                     AmpCategoryValue activityLevel = ruleManager.getPerformanceIssueFromActivity(a);
@@ -102,13 +101,15 @@ public class PerformanceRulesAlertJob extends ConnectionCleaningJob implements S
                     } else if (activityLevel != null) {
                         activitiesWithPerformanceIssues.add(a);
                     }
-                    ActivityGatekeeper.unlockActivity(Long.toString(actId), key);
                 } else {
                     logger.error(String.format("Activity is locked, amp_activity_id=%d", actId));
                 }
             } catch (Exception e) {
                 logger.error(String.format("\tactivity %d, error occured... %s", actId, e.getMessage()), e);
             } finally {
+                if (lockKey != null) {
+                    ActivityGatekeeper.unlockActivity(Long.toString(actId), lockKey);
+                }
                 PersistenceManager.endSessionLifecycle();
             }
         }

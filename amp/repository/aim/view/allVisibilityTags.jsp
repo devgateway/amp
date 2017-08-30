@@ -1082,6 +1082,7 @@ deleted 6 fields, do not reinsert
 <module:display name="Activity Preview" parentModule="PUBLIC VIEW"></module:display>
 <feature:display name="Contacts" module="Activity Preview"></feature:display>
 <feature:display name="Version History" module="Activity Preview"></feature:display>
+<field:display name="Show Change Summary" feature="Version History"></field:display>
 
 <module:display name="Show Editable Export Formats" parentModule="PUBLIC VIEW"></module:display>
 <module:display name="Public Reports and Tabs" parentModule="PUBLIC VIEW"></module:display>

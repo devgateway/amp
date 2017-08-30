@@ -234,15 +234,16 @@ public final class SummaryChangesService {
                         if (rs.getBoolean(ALL_DIFF_DETAIL)) {
                             SummaryChange summaryChange;
                             if (activitiesIds.get(rs.getLong(AMP_ACTIVITY_ID)) == rs.getLong(AMP_ACTIVITY_ID)) {
-                                summaryChange = new SummaryChange(rs.getInt(TRANSACTION_TYPE),
-                                        categoryValue, NEW, null, null,
-                                        rs.getDouble(TRANSACTION_AMOUNT), currency,
-                                        rs.getDate(TRANSACTION_DATE));
+                                summaryChange = new SummaryChange(rs.getInt(TRANSACTION_TYPE), categoryValue, NEW);
+                                summaryChange.setCurrentValue(rs.getDouble(TRANSACTION_AMOUNT));
+                                summaryChange.setCurrentCurrency(currency);
+                                summaryChange.setTransactionDate(rs.getDate(TRANSACTION_DATE));
                                 addChange(rs.getLong(AMP_ACTIVITY_ID), summaryChange, activitiesChanges);
                             } else {
-                                summaryChange = new SummaryChange(rs.getInt(TRANSACTION_TYPE),
-                                        categoryValue, DELETED, rs.getDouble(TRANSACTION_AMOUNT),
-                                        currency, null, null, rs.getDate(TRANSACTION_DATE));
+                                summaryChange = new SummaryChange(rs.getInt(TRANSACTION_TYPE), categoryValue, DELETED);
+                                summaryChange.setPreviousValue(rs.getDouble(TRANSACTION_AMOUNT));
+                                summaryChange.setPreviousCurrency(currency);
+                                summaryChange.setTransactionDate(rs.getDate(TRANSACTION_DATE));
                                 addChange(activitiesIds.get(rs.getLong(AMP_ACTIVITY_ID)), summaryChange,
                                         activitiesChanges);
                             }
@@ -250,19 +251,25 @@ public final class SummaryChangesService {
                         } else {
                             if (editedFunding.get(rs.getString(REPORTING_DATE)) == null) {
                                 SummaryChange summaryChange = new SummaryChange(rs.getInt(TRANSACTION_TYPE),
-                                        categoryValue, EDITED, rs.getDouble(TRANSACTION_AMOUNT), currency,
-                                        rs.getDouble(TRANSACTION_AMOUNT), currency, rs.getDate(TRANSACTION_DATE));
+                                        categoryValue, EDITED);
+                                summaryChange.setPreviousValue(rs.getDouble(TRANSACTION_AMOUNT));
+                                summaryChange.setCurrentValue(rs.getDouble(TRANSACTION_AMOUNT));
+                                summaryChange.setPreviousCurrency(currency);
+                                summaryChange.setCurrentCurrency(currency);
+                                summaryChange.setTransactionDate(rs.getDate(TRANSACTION_DATE));
                                 editedFunding.put(rs.getString(REPORTING_DATE), summaryChange);
                             } else {
                                 SummaryChange originalSummaryChange = editedFunding.get(rs.getString(REPORTING_DATE));
-
                                 originalSummaryChange.setCurrentValue(rs.getDouble(TRANSACTION_AMOUNT));
                                 originalSummaryChange.setCurrentCurrency(currency);
 
                                 SummaryChange newSummaryChange = new SummaryChange(rs.getInt(TRANSACTION_TYPE),
-                                        categoryValue, EDITED, originalSummaryChange.getPreviousValue(),
-                                        originalSummaryChange.getPreviousCurrency(),
-                                        rs.getDouble(TRANSACTION_AMOUNT), currency, rs.getDate(TRANSACTION_DATE));
+                                        categoryValue, EDITED);
+                                newSummaryChange.setPreviousValue(originalSummaryChange.getPreviousValue());
+                                newSummaryChange.setPreviousCurrency(originalSummaryChange.getPreviousCurrency());
+                                newSummaryChange.setCurrentValue(rs.getDouble(TRANSACTION_AMOUNT));
+                                newSummaryChange.setCurrentCurrency(currency);
+                                newSummaryChange.setTransactionDate(rs.getDate(TRANSACTION_DATE));
 
                                 boolean addOriginalSummary = false;
                                 if (!originalSummaryChange.getTransactionDate().equals(newSummaryChange

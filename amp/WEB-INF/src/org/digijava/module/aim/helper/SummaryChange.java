@@ -27,17 +27,10 @@ public class SummaryChange {
     private AmpCurrency currentCurrency;
     private Date transactionDate;
 
-    public SummaryChange(Integer transactionType, AmpCategoryValue adjustmentType, String changeType, Double
-            previousValue, AmpCurrency previousCurrency, Double currentValue, AmpCurrency currentCurrency, Date
-            transactionDate) {
+    public SummaryChange(Integer transactionType, AmpCategoryValue adjustmentType, String changeType) {
         this.transactionType = transactionType;
         this.adjustmentType = adjustmentType;
         this.changeType = changeType;
-        this.previousValue = previousValue;
-        this.previousCurrency = previousCurrency;
-        this.currentValue = currentValue;
-        this.currentCurrency = currentCurrency;
-        this.transactionDate = transactionDate;
     }
 
     public Integer getTransactionType() {

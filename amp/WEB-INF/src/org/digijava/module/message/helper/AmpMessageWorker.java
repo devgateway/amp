@@ -82,7 +82,7 @@ import org.hibernate.jdbc.Work;
 public class AmpMessageWorker {
 
     public static final String DEFAULT_EMAIL_SENDER = "system@digijava.org";
-	public static final long SITE_ID = 3L;
+    public static final long SITE_ID = 3L;
 	private static Logger logger = Logger.getLogger(AmpMessageWorker.class);
 
 	public static void processEvent(Event e) throws Exception {
@@ -1322,8 +1322,8 @@ public class AmpMessageWorker {
 						.getCode(), SITE_ID);
 				String translatedDescription = TranslatorWorker.translateText(newMsg.getDescription(), user
 						.getRegisterLanguage().getCode(), SITE_ID);
-				ampEmail = new AmpEmail(senderEmail, DgUtil.fillPattern(translatedName, params), DgUtil.fillPattern
-						(translatedDescription, params));
+				ampEmail = new AmpEmail(senderEmail, DgUtil.fillPattern(translatedName, params),
+						DgUtil.fillPattern(translatedDescription, params));
 				DbUtil.saveOrUpdateObject(ampEmail);
 				emails.put(user.getRegisterLanguage().getCode(), ampEmail);
 			}

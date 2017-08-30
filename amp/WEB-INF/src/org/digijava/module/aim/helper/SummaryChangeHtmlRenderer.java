@@ -94,7 +94,8 @@ public class SummaryChangeHtmlRenderer {
         res.append("<tr>");
         res.append(String.format("<td width='50%%' style='padding: 0px 0px 0px 5px;'><span style='font-weight: bold;"
                 + "'>%s</span></td>", translateText(title)));
-        res.append(String.format("<td width='50%%' style='padding: 0px 0px 0px 5px;'>%s</td>", (value != null ? value : "")));
+        res.append(String.format("<td width='50%%' style='padding: 0px 0px 0px 5px;'>%s</td>", (value != null ? value
+                : "")));
         res.append("</tr>");
         return res.toString();
     }

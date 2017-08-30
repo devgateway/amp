@@ -42,6 +42,7 @@ public abstract class ResourcePermission
     public final static String WRITE = "WRITE";
     public final static String CONTENT_ADMIN = "CONTENT_ADMIN";
     public final static String ADMIN = "ADMIN";
+    public final static String SUPER_ADMIN = "SUPER_ADMIN";
     public final static String TRANSLATE = "TRANSLATE";
 
     public final static int INT_READ = 0x1;
@@ -49,6 +50,7 @@ public abstract class ResourcePermission
     //public final static int INT_ADMIN = 0x7;
     public final static int INT_CONTENT_ADMIN = 0xFF3;
     public final static int INT_ADMIN = 0xFFF3;
+    public final static int INT_SUPER_ADMIN = 0xFFFF3;
     public final static int INT_TRANSLATE = 0x8;
 
 
@@ -138,6 +140,7 @@ public abstract class ResourcePermission
         actionsToCodes.put(WRITE, new Integer(INT_WRITE));
         actionsToCodes.put(CONTENT_ADMIN, new Integer(INT_CONTENT_ADMIN));
         actionsToCodes.put(ADMIN, new Integer(INT_ADMIN));
+        actionsToCodes.put(SUPER_ADMIN, new Integer(INT_SUPER_ADMIN));
         actionsToCodes.put(TRANSLATE,
                            new Integer(INT_TRANSLATE));
 

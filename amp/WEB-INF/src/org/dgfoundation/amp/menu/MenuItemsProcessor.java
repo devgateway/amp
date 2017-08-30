@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.dgfoundation.amp.menu.dynamic.DynamicMenu;
 import org.dgfoundation.amp.menu.dynamic.EmailMenu;
 import org.dgfoundation.amp.menu.dynamic.LanguageMenu;
@@ -22,6 +23,8 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamMemberUtil;
+
+import com.google.common.collect.ImmutableSet;
 
 /**
  * Updates current menu structure based on the current user & state
@@ -119,7 +122,7 @@ public class MenuItemsProcessor {
 	
 	private boolean isAllowedUserGroup(MenuItem mi) {
 		if (mi.groupKeys == null || mi.groupKeys.size() == 0 
-				|| AmpView.ADMIN == view && mi.groupKeys.contains(Group.ADMINISTRATORS)) {
+				|| AmpView.ADMIN == view && CollectionUtils.containsAny(mi.groupKeys, Group.ADMIN_GROUPS)) {
 			return true;
 		}
 		

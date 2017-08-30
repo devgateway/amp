@@ -51,7 +51,7 @@ public class SummaryChangeHtmlRenderer {
     public String render() {
         StringBuilder res = new StringBuilder("<table "
                 + "style='font-family:Arial, Helvetica, sans-serif;font-size:12px;border: 1px solid black;"
-                + "border-collapse:collapse' "
+                + "border-collapse:collapse;color:black;' "
                 + "cellspacing='2' cellpadding='2' border='1' "
                 + " width='100%'>");
         renderHeaders(res);

@@ -40,15 +40,15 @@ _.extend(GISData.prototype, Backbone.Events, {
   },
   
   initializeCollectionsAndModels: function(){
+	  var self = this;
 	  /* stub filled in by Filters service */
 	    this.filter = new Filter({
 	      draggable: true,
 	      caller: 'GIS'
 	    });
 	    // forces filter to start loading list immediately. TODO: move to an option for filter init.
-	    this.filter.view._getFilterList();
-
-	    this.boundaries = new Boundaries();
+	   this.filter.view._getFilterList();
+	   this.boundaries = new Boundaries();
 	   this.settingsWidget = new Settings.SettingsWidget({
 	  		draggable : true,
 	  		caller : 'GIS',
@@ -58,11 +58,18 @@ _.extend(GISData.prototype, Backbone.Events, {
 	
 	   this.generalSettings = new Settings.GeneralSettings();
 	   this.generalSettings.load();
+	   this.indicatorTypes = new IndicatorTypes();
+	   this.user = new User();
+
+	    //setup performance rule model
+	    var PerformanceToggleModel = Backbone.Model.extend({defaults: {isPerformanceToggleAvailable: false, isPerformanceToggleSelected: false}});
+	    this.performanceToggleModel = new PerformanceToggleModel();	    
+	    $.ajax({
+			  url: '/rest/gis/has-enabled-performance-rules'			 
+	      }).done(function(data) {	    	  
+	    	  self.performanceToggleModel.set('isPerformanceToggleAvailable', data.hasEnabledPerformanceRules);
+		});		
 	    
-	    this.indicatorTypes = new IndicatorTypes();
-	    this.user = new User();
-	    var PerformanceToggleModel = Backbone.Model.extend({defaults: {isPerformanceToggleAvailable: true, isPerformanceToggleSelected: false}});
-	    this.performanceToggleModel = new PerformanceToggleModel();
 	    this.activities = new Activities([], {
 	      settingsWidget: this.settingsWidget,
 	      filter: this.filter,
@@ -168,7 +175,6 @@ _.extend(GISData.prototype, Backbone.Events, {
 
     return _.chain(layers);
   }
-
 });
 
 

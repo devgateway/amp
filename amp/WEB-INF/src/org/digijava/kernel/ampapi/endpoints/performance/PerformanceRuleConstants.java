@@ -30,6 +30,8 @@ public final class PerformanceRuleConstants {
     public static final String JSON_ATTRIBUTE_TYPE_CLASS_NAME = "type-class-name";
     public static final String JSON_ATTRIBUTE_POSSIBLE_VALUES = "possible-values";
     public static final String JSON_ATTRIBUTE_TRANSLATED_LABEL = "translated-label";
+    
+    public static final String HAS_ENABLED_PERFORMANCE_RULES = "hasEnabledPerformanceRules";
 
     private PerformanceRuleConstants() { }
 

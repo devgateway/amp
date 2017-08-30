@@ -59,7 +59,7 @@ export default class PerformanceRuleForm extends Component {
         attribute.type = event.target.getAttribute('data-type');
         attribute.value = event.target.value;  
         
-        if (attribute.type === Constants.FIELD_TYPE_AMOUNT && (!Utils.isNumber(attribute.value) || attribute.value < 0)) return;       
+        if (attribute.type === Constants.FIELD_TYPE_AMOUNT && (!Utils.isNumber(attribute.value) || attribute.value < 0 || attribute.value > Number.MAX_SAFE_INTEGER)) return;     
         
         if(attributes.filter(attr => attr.name === event.target.getAttribute('data-name')).length > 0){
             attributes = attributes.map(function(attr) { 

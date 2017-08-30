@@ -54,12 +54,9 @@ public class SummaryChangeHtmlRenderer {
                 + "border-collapse:collapse' "
                 + "cellspacing='2' cellpadding='2' border='1' "
                 + " width='100%'>");
-        res.append("\n");
         renderHeaders(res);
-        res.append("\n");
         renderBody(res);
         res.append("</table>");
-        res.append("\n");
         return res.toString();
     }
 
@@ -98,7 +95,7 @@ public class SummaryChangeHtmlRenderer {
         res.append(String.format("<td width='50%%' style='padding: 0px 0px 0px 5px;'><span style='font-weight: bold;"
                 + "'>%s</span></td>", translateText(title)));
         res.append(String.format("<td width='50%%' style='padding: 0px 0px 0px 5px;'>%s</td>", (value != null ? value : "")));
-        res.append("</tr>\n");
+        res.append("</tr>");
         return res.toString();
     }
 
@@ -115,8 +112,8 @@ public class SummaryChangeHtmlRenderer {
             res.append("<tr>");
             res.append(String.format("<td width='100%%' style='padding: 0px 0px 0px 5px;'>"
                     + "<span style='color:red'>%s</span></td>", translateText(legend)));
-            res.append("</tr>\n");
-            res.append("</table>\n");
+            res.append("</tr>");
+            res.append("</table>");
         }
         return res.toString();
     }
@@ -175,8 +172,8 @@ public class SummaryChangeHtmlRenderer {
 
         }
 
-        res.append("</td>\n");
-        res.append("</tr>\n");
+        res.append("</td>");
+        res.append("</tr>");
         return res.toString();
     }
 
@@ -185,12 +182,12 @@ public class SummaryChangeHtmlRenderer {
     }
 
     protected StringBuilder renderBody(StringBuilder res) {
-        res.append("<tbody>\n");
+        res.append("<tbody>");
         LinkedHashMap<String, Collection<SummaryChange>> quarterList = buildQuarterGroup();
         for (String quarter : quarterList.keySet()) {
             res.append(renderChangeRow(quarter, quarterList.get(quarter)));
         }
-        res.append("</tbody>\n");
+        res.append("</tbody>");
         return res;
     }
 

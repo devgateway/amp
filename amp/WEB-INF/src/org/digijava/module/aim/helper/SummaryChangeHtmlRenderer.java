@@ -14,7 +14,6 @@ import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 
-import java.text.DecimalFormat;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -96,9 +95,9 @@ public class SummaryChangeHtmlRenderer {
     private String renderHeaderRow(String title, String value) {
         StringBuilder res = new StringBuilder();
         res.append("<tr>");
-        res.append(String.format("<td width='50%%' style='padding-left: 5px;'><span style='font-weight: bold;"
+        res.append(String.format("<td width='50%%' style='padding: 0px 0px 0px 5px;'><span style='font-weight: bold;"
                 + "'>%s</span></td>", translateText(title)));
-        res.append(String.format("<td width='50%%' style='padding-left: 5px;'>%s</td>", (value != null ? value : "")));
+        res.append(String.format("<td width='50%%' style='padding: 0px 0px 0px 5px;'>%s</td>", (value != null ? value : "")));
         res.append("</tr>\n");
         return res.toString();
     }
@@ -114,7 +113,7 @@ public class SummaryChangeHtmlRenderer {
                     + " width='100%'>");
 
             res.append("<tr>");
-            res.append(String.format("<td width='100%%' style='padding-left: 5px;'>"
+            res.append(String.format("<td width='100%%' style='padding: 0px 0px 0px 5px;'>"
                     + "<span style='color:red'>%s</span></td>", translateText(legend)));
             res.append("</tr>\n");
             res.append("</table>\n");
@@ -137,9 +136,9 @@ public class SummaryChangeHtmlRenderer {
     private String renderChangeRow(String quarter, Collection<SummaryChange> changes) {
         StringBuilder res = new StringBuilder();
         res.append("<tr>");
-        res.append(String.format("<td width='50%%' valign='top' style='padding-left: 5px;'>%s</td>", quarter));
+        res.append(String.format("<td width='50%%' valign='top' style='padding: 0px 0px 0px 5px;'>%s</td>", quarter));
 
-        res.append("<td width='50%%' valign='top' style='padding-left: 5px;'>");
+        res.append("<td width='50%%' valign='top' style='padding: 0px 0px 0px 5px;'>");
         for (SummaryChange summaryChange : changes) {
 
             res.append(String.format("<span style='font-weight: bold;'>%s</span>",

@@ -30,18 +30,18 @@ export default class UnfreezeAll extends Component {
                         <div>
                              <div id="filter-popup"></div>
                              <div>
-                                  <div class="row"><br/>
-                                       <table class="table table-bordered table-striped data-table">
+                                  <div className="row"><br/>
+                                       <table className="table table-bordered table-striped data-table">
                                             <thead>
                                             <tr>
-                                                 <th class="col-md-2">Data Freeze Date</th>
+                                                 <th className="col-md-2">Data Freeze Date</th>
                                                  <th># of Activities</th>
                                             </tr>
                                             </thead>
                                             <tbody>
                                             <tr>
-                                                 <td class="date-column">{this.props.frozenActivities.freezingDate}</td>
-                                                 <td class="text-left">{this.props.frozenActivities.count}</td>
+                                                 <td className="date-column">{this.props.frozenActivities.freezingDate}</td>
+                                                 <td className="text-left">{this.props.frozenActivities.count}</td>
                                             </tr>
                                             </tbody>
                                        </table></div>

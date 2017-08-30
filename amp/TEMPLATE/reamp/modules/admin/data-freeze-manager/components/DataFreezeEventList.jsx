@@ -193,7 +193,15 @@ export default class DataFreezeEventList extends Component {
                 </OverlayTrigger>
         )
     }
-    render() {
+    render() {         
+        if(this.props.paging.totalRecords === 0) {
+            return (
+                    <div className="container">
+                       {this.props.translations['amp.data-freezing:no-records']}
+                    </div>
+            )
+        }
+        
         const pages = ([...Array(this.props.paging.totalPageCount + 1).keys()]).slice(1);
         return (
             <div>
@@ -252,13 +260,13 @@ export default class DataFreezeEventList extends Component {
                     </table>
                   </div>               
                   </div>
-               
+                        {pages.length > 1 &&
                           <div >
                           <div className="row">
                             <div className="col-md-8 pull-right pagination-wrapper">
 
                               <div className="col-md-4">
-                        {pages.length > 1 &&
+                        
                             <nav>
                             <ul className="pagination fixed-pagination">
                             <li className={this.props.paging.currentPageNumber == 1 ? 'page-item disabled': 'page-item' }>
@@ -277,7 +285,7 @@ export default class DataFreezeEventList extends Component {
                         </a>
                         </li>
                         </ul>
-                        </nav>}
+                        </nav>
                          </div>
 
                               <div className="col-md-2">
@@ -301,6 +309,7 @@ export default class DataFreezeEventList extends Component {
                         </div>
                           </div>
                         </div>
+                        }
                      </div>
         );
     }

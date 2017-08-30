@@ -8,7 +8,8 @@ const defaultState = {
                recordsPerPage: 10,
                offset: 0,
                currentPageNumber: 1,
-               totalPageCount: 1
+               totalPageCount: 1,
+               totalRecords: 0
           },
           sorting: {
                orderBy: 'freezingDate',

@@ -7,7 +7,8 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <%@ page import="java.util.Map,java.util.List,java.util.ArrayList"%>
-
+<%@ page import="org.digijava.kernel.util.RequestUtils"%>
+<%@ page import="org.digijava.kernel.util.UserUtils"%>
 
 <%@page import="org.digijava.module.aim.helper.GlobalSettings"%>
 <%@page import="org.digijava.module.aim.form.GlobalSettingsForm"%>
@@ -342,7 +343,10 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 										<c:set var="key" scope="page"><digi:trn key="aim:Global:${globalSett.globalSettingsName}"><bean:write name="globalSett" property="globalSettingsName"/></digi:trn></c:set>
 										<jsp:useBean id="key" class="java.lang.String" scope="page"/>
 										<%
-											sortedglobalSett.put(key, globalSett);
+										   boolean isSuperAdmin = UserUtils.isSuperAdmin(RequestUtils.getUser(request), RequestUtils.getSite(request));
+										   if (isSuperAdmin || !globalSett.isInternal()) {
+										       sortedglobalSett.put(key, globalSett);
+										   }
 										%>
 									</logic:iterate>
 									</logic:notEmpty>

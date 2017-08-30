@@ -1,7 +1,8 @@
 import React, {
     Component,
-    PropTypes
+    PropTypes    
 } from 'react';
+import ReactDOM from 'react-dom';
 import {
     connect
 } from 'react-redux';
@@ -30,6 +31,12 @@ export default class PerformanceRuleList extends Component {
         this.props.actions.getLevelList();        
         this.props.actions.loadPerformanceRuleList({paging: this.props.paging});
     }  
+    
+    componentDidUpdate() {
+        if(this.props.errors.length > 0 || this.props.infoMessages.length > 0) {
+            ReactDOM.findDOMNode(this.refs.messageContainer).focus();
+        }       
+    }
     
     goToPage( pageNumber ) {        
         const paging =  Object.assign( {}, this.props.paging);
@@ -67,7 +74,7 @@ export default class PerformanceRuleList extends Component {
         return (
                 <div>
                 <ToolBar/> 
-                <div>
+                <div ref="messageContainer" tabIndex="0">
                  {this.showInfoMessages()}
                  {this.showErrors()}
                 </div>

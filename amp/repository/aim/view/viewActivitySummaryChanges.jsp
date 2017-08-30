@@ -29,7 +29,7 @@
 				<tr>
 					<td style="background-repeat: repeat-x; font-size: 12px; border-left-width: 1px; width: 13%">
 						<div align="center">
-							${changesTable}"
+							${changesTable}
 						</div>
 					</td>
 			</table>

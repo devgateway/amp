@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.PerformanceRuleMatcher;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.*;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -29,6 +30,10 @@ public class PerformanceRuleManager {
     private static PerformanceRuleManager performanceRuleManager;
     
     private List<PerformanceRuleMatcherDefinition> definitions;
+    
+    private List<AmpPerformanceRule> cachedPerformanceRules;
+    
+    private List<PerformanceRuleMatcher> cachedPerformanceRuleMatchers;
     
     private static final Logger logger = Logger.getLogger(PerformanceRuleManager.class);
     
@@ -92,6 +97,8 @@ public class PerformanceRuleManager {
 
         Session session = PersistenceManager.getSession();
         session.merge(performanceRule);
+        
+        updateCachedPerformanceRules();
     }
 
     public void savePerformanceRule(AmpPerformanceRule performanceRule) {
@@ -104,6 +111,8 @@ public class PerformanceRuleManager {
 
         Session session = PersistenceManager.getSession();
         session.saveOrUpdate(performanceRule);
+        
+        updateCachedPerformanceRules();
     }
 
     public void deletePerformanceRule(Long id) {
@@ -111,13 +120,42 @@ public class PerformanceRuleManager {
 
         Session session = PersistenceManager.getSession();
         session.delete(performanceRule);
+        
+        updateCachedPerformanceRules();
     }
 
     public List<AmpPerformanceRule> getPerformanceRules() {
-
+        if (cachedPerformanceRules == null) {
+            updateCachedPerformanceRules();
+        }
+        
+        return cachedPerformanceRules;
+    }
+    
+    private void updateCachedPerformanceRules() {
         Session session = PersistenceManager.getSession();
 
-        return session.createCriteria(AmpPerformanceRule.class).addOrder(Order.asc("id")).list();
+        cachedPerformanceRules = session.createCriteria(AmpPerformanceRule.class).addOrder(Order.asc("id")).list();
+        
+        updateCachedPerformanceRuleMatchers();
+    }
+    
+    private void updateCachedPerformanceRuleMatchers() {
+        List<AmpPerformanceRule> rules = getPerformanceRules().stream()
+                .filter(rule -> rule.getEnabled())
+                .collect(Collectors.toList());
+        
+        cachedPerformanceRuleMatchers = new ArrayList<>();
+        
+        for (AmpPerformanceRule rule : rules) {
+            try {
+                cachedPerformanceRuleMatchers.add(getMatcherDefinition(rule.getTypeClassName()).createMatcher(rule));
+            } catch (IllegalArgumentException e) {
+                logger.error("Rule [" + rule.getName() + "] is not valid. Please check the attributes");
+            } catch (PerformanceRuleException e) {
+                logger.error("Type [" + rule.getTypeClassName() + "] for rule [" + rule.getName() + "] is invalid.");
+            }
+        }
     }
 
     public ResultPage<AmpPerformanceRule> getPerformanceRules(int page, int size) {
@@ -149,22 +187,11 @@ public class PerformanceRuleManager {
     }
 
     public List<PerformanceRuleMatcher> getPerformanceRuleMatchers() {
-        List<AmpPerformanceRule> rules = getPerformanceRules().stream()
-                .filter(rule -> rule.getEnabled())
-                .collect(Collectors.toList());
-        
-        List<PerformanceRuleMatcher> matchers = new ArrayList<>();
-        for (AmpPerformanceRule rule : rules) {
-            try {
-                matchers.add(getMatcherDefinition(rule.getTypeClassName()).createMatcher(rule));
-            } catch (IllegalArgumentException e) {
-                logger.error("Rule [" + rule.getName() + "] is not valid. Please check the attributes");
-            } catch (PerformanceRuleException e) {
-                logger.error("Type [" + rule.getTypeClassName() + "] for rule [" + rule.getName() + "] is invalid.");
-            }
+        if (cachedPerformanceRuleMatchers == null) {
+            updateCachedPerformanceRuleMatchers();
         }
         
-        return matchers;
+        return cachedPerformanceRuleMatchers;
     }
     
     /**
@@ -257,6 +284,28 @@ public class PerformanceRuleManager {
                 .findAny().orElse(null);
         
         return performanceLevel;
+    }
+    
+    public AmpCategoryValue getPerformanceIssueFromActivity(AmpActivityVersion a) {
+        return a.getCategories().stream()
+                .filter(acv -> acv.getAmpCategoryClass().getKeyName()
+                        .equals(CategoryConstants.PERFORMANCE_ALERT_LEVEL_KEY))
+                .findAny().orElse(null);
+    }
+
+    public void updatePerformanceIssueInActivity(AmpActivityVersion a, AmpCategoryValue from, AmpCategoryValue to) {
+        if (from != null) {
+            a.getCategories().remove(from);
+        }
+
+        if (to != null) {
+            a.getCategories().add(to);
+        }
+    }
+
+    public boolean canActivityContainPerformanceIssues(AmpActivityVersion a) {
+        return !a.isCreatedAsDraft() && !a.getDraft() && !a.getDeleted() && a.getTeam() != null
+                && !AmpARFilter.validatedActivityStatus.contains(a.getApprovalStatus());
     }
     
 }

@@ -64,34 +64,31 @@ public class PerformanceRulesAlertJob extends ConnectionCleaningJob implements S
     private List<AmpActivityVersion> processActivitiesWithPerformanceRules(List<Long> actIds) {
         List<AmpActivityVersion> activitiesWithPerformanceIssues = new ArrayList<>();
         PerformanceRuleManager ruleManager = PerformanceRuleManager.getInstance();
-        List<PerformanceRuleMatcher> matchers = ruleManager.getPerformanceRuleMatchers();
+        
+        boolean noMatcherFound = ruleManager.getPerformanceRuleMatchers().isEmpty();
+        
+        if (noMatcherFound) {
+            logger.info("No performance rule matcher found.");
+        }
         
         for (Long actId : actIds) {
             try {
                 AmpActivityVersion a = org.digijava.module.aim.util.ActivityUtil.loadActivity(actId);
-                AmpCategoryValue matchedLevel = ruleManager.matchActivity(matchers, a);
                 
-                AmpCategoryValue activityLevel = a.getCategories().stream()
-                        .filter(acv -> acv.getAmpCategoryClass().getKeyName()
-                                .equals(CategoryConstants.PERFORMANCE_ALERT_LEVEL_KEY))
-                        .findAny().orElse(null);
+                AmpCategoryValue activityLevel = ruleManager.getPerformanceIssueFromActivity(a);
+                AmpCategoryValue higherLevel = null;
                 
-                AmpCategoryValue higherLevel = ruleManager.getHigherLevel(matchedLevel, activityLevel);
-
+                if (!noMatcherFound) {
+                    AmpCategoryValue matchedLevel = ruleManager.matchActivity(a);
+                    higherLevel = ruleManager.getHigherLevel(matchedLevel, activityLevel);
+                }
+               
                 if (!Objects.equals(activityLevel, higherLevel)) {
-                    if (activityLevel != null) {
-                        a.getCategories().remove(activityLevel);
-                    }
-
-                    if (higherLevel != null) {
-                        a.getCategories().add(higherLevel);
-                    }
-
-                    logger.info(String.format("\tactivity %d, changing performance alert level from <%s> to <%s>...",
+                    AmpActivityVersion updActivity = updateActivity(a);
+                    
+                    logger.info(String.format("\tactivity %d, updated performance alert level from <%s> to <%s>...",
                             actId, activityLevel == null ? null : activityLevel.getLabel(),
                             higherLevel == null ? null : higherLevel.getLabel()));
-
-                    AmpActivityVersion updActivity = updateActivity(a);
                     
                     if (higherLevel != null) {
                         activitiesWithPerformanceIssues.add(updActivity);

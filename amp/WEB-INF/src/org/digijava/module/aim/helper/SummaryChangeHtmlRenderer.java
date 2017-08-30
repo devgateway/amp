@@ -1,15 +1,18 @@
 package org.digijava.module.aim.helper;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.digijava.kernel.ampapi.endpoints.scorecard.model.Quarter;
+import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 import java.text.DecimalFormat;
 import java.util.Collection;
@@ -61,6 +64,21 @@ public class SummaryChangeHtmlRenderer {
         return res.toString();
     }
 
+    public String renderWithLegend() {
+        StringBuilder res = new StringBuilder();
+        res.append(addAmountsInThousandsLegend());
+        res.append(render().toString());
+        return res.toString();
+    }
+
+    private String render(boolean showAmountsInThousandsLegend) {
+        if (showAmountsInThousandsLegend) {
+            return renderWithLegend();
+        } else {
+            return render();
+        }
+    }
+
     protected StringBuilder renderHeaders(StringBuilder res) {
         res.append("<thead>");
 
@@ -83,6 +101,37 @@ public class SummaryChangeHtmlRenderer {
         res.append(String.format("<td width='50%%' style='padding-left: 5px;'>%s</td>", (value != null ? value : "")));
         res.append("</tr>\n");
         return res.toString();
+    }
+
+    private String addAmountsInThousandsLegend() {
+        StringBuilder res = new StringBuilder();
+        String legend = getAmountsInThousandsLegend();
+        if (legend != null) {
+            res.append("<table "
+                    + "style='font-family:Arial, Helvetica, sans-serif;font-size:12px;"
+                    + "border-collapse:collapse' "
+                    + "cellspacing='2' cellpadding='2' border='0' "
+                    + " width='100%'>");
+
+            res.append("<tr>");
+            res.append(String.format("<td width='100%%' style='padding-left: 5px;'>"
+                    + "<span style='color:red'>%s</span></td>", translateText(legend)));
+            res.append("</tr>\n");
+            res.append("</table>\n");
+        }
+        return res.toString();
+    }
+
+    private String getAmountsInThousandsLegend() {
+        int amountsUnitCode = Integer.valueOf(FeaturesUtil.getGlobalSettingValue(
+                GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS));
+
+        if (amountsUnitCode == AmpARFilter.AMOUNT_OPTION_IN_THOUSANDS) {
+            return SettingsConstants.ID_NAME_MAP.get(SettingsConstants.AMOUNT_UNITS_1000);
+        } else if (amountsUnitCode == AmpARFilter.AMOUNT_OPTION_IN_MILLIONS) {
+            return SettingsConstants.ID_NAME_MAP.get(SettingsConstants.AMOUNT_UNITS_1000000);
+        }
+        return null;
     }
 
     private String renderChangeRow(String quarter, Collection<SummaryChange> changes) {

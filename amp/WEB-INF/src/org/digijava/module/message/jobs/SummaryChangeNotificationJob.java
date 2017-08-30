@@ -57,7 +57,11 @@ public class SummaryChangeNotificationJob extends ConnectionCleaningJob implemen
                                 Collection<SummaryChange> changesList = activityList.get(activity.getAmpActivityId());
                                 SummaryChangeHtmlRenderer renderer = new SummaryChangeHtmlRenderer(activity,
                                         changesList, user.getRegisterLanguage().getCode());
-                                body.append(renderer.render());
+                                if (body.length() == 0) {
+                                    body.append(renderer.renderWithLegend());
+                                } else {
+                                    body.append(renderer.render());
+                                }
                             }
                             SummaryChangeData event = new SummaryChangeData();
                             event.setEmail(receiver);

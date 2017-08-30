@@ -117,7 +117,7 @@ public class ViewActivityHistory extends DispatchAction {
 			SummaryChangeHtmlRenderer renderer = new SummaryChangeHtmlRenderer(activity, changesList, RequestUtils
 					.getNavigationLanguage(request).getCode());
 
-			request.setAttribute("changesTable", renderer.render());
+			request.setAttribute("changesTable", renderer.renderWithLegend());
 		}
 
 		return mapping.findForward("summaryChanges");

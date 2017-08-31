@@ -21,7 +21,7 @@ export default class App extends Component {
     render() {
         return (
             <div className="container">
-              <h2>Performance Rules</h2>
+              <h2>{this.props.translations['amp.performance-rule:performance-rules']}</h2>
                <PerformanceRuleList/>
             </div>
 

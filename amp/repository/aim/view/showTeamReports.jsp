@@ -647,7 +647,7 @@ $(document).ready(function() {
 						<c:if test="${showViewReportIcon == true}">
 							<a href="${reportLink}"
 							   onclick="return popup(this,'');" class="img-padding" title="<digi:trn>Click here to view the report</digi:trn>">
-								<img src= "/TEMPLATE/ampTemplate/saikuui_nireports/images/saiku.png" border="0" /></a>
+								<img src= "/TEMPLATE/ampTemplate/saikuui_reports/images/saiku.png" border="0" /></a>
 						</c:if>
 
 						<c:set target="${urlParams}" property="event" value="edit" />

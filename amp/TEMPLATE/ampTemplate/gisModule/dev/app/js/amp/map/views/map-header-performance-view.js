@@ -17,8 +17,7 @@ module.exports = Backbone.View.extend({
     this.app = options.app;
     this.listenTo(this.app.data.title, 'update', this.render);
     this.listenTo(this.model, 'change:isPerformanceToggleAvailable', this.render);
-    this.model.set('isPerformanceToggleAvailable', true);
-	this.model.set('isPerformanceToggleSelected', null);  
+    this.model.set('isPerformanceToggleSelected', null);  
   },
   render: function() {
 	  var self = this;	  

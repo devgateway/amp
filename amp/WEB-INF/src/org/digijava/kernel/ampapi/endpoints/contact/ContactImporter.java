@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.AmpFieldsEnumerator;
+import org.digijava.kernel.ampapi.endpoints.activity.ObjectConversionException;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
@@ -39,21 +40,31 @@ public class ContactImporter extends ObjectImporter {
 
         List<APIField> fieldsDef = AmpFieldsEnumerator.PRIVATE_ENUMERATOR.getContactFields();
 
-        if (contactId == null) {
-            contact = new AmpContact();
-        } else {
-            contact = (AmpContact) PersistenceManager.getSession().load(AmpContact.class, contactId);
-            cleanImportableFields(fieldsDef, contact);
-        }
+        try {
+            if (contactId == null) {
+                contact = new AmpContact();
+            } else {
+                contact = (AmpContact) PersistenceManager.getSession().load(AmpContact.class, contactId);
+                cleanImportableFields(fieldsDef, contact);
+            }
 
-        contact = (AmpContact) validateAndImport(contact, null, fieldsDef, newJson.any(), null, null);
+            contact = (AmpContact) validateAndImport(contact, null, fieldsDef, newJson.any(), null, null);
 
-        if (contact != null) {
+            if (contact == null) {
+                throw new ObjectConversionException();
+            }
+
             setupBeforeSave(contact);
 
             PersistenceManager.getSession().saveOrUpdate(contact);
 
             PersistenceManager.flushAndCommit(PersistenceManager.getSession());
+        } catch (ObjectConversionException | RuntimeException e) {
+            PersistenceManager.rollbackCurrentSessionTx();
+
+            if (e instanceof RuntimeException) {
+                throw new RuntimeException("Failed to import contact", e);
+            }
         }
 
         return new ArrayList<>(errors.values());

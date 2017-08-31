@@ -358,33 +358,32 @@ public class ReportsUtil {
 		return spec;
 	}
 
-	/**
-	 * Updates report specification with the grouping criteria
-	 * @param spec - the specification that will be updated
-	 * @param groupingOption
-	 * @return the updated spec
-	 */
-	public static void setGroupingCriteria(ReportSpecificationImpl spec, String groupingOption) {
-		switch (groupingOption) {
-			case ReportConstants.GROUPING_YEARLY:
-				spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
-				break;
-			case ReportConstants.GROUPING_QUARTERLY:
-				spec.setGroupingCriteria(GroupingCriteria.GROUPING_QUARTERLY);
-				break;
-			case ReportConstants.GROUPING_MONTHLY:
-				spec.setGroupingCriteria(GroupingCriteria.GROUPING_MONTHLY);
-				break;
-			default:
-				spec.setGroupingCriteria(GroupingCriteria.GROUPING_TOTALS_ONLY);
-				break;
-		}
-	}
-
 	private static void addColumns(ReportSpecification spec, JsonBean formParams) {
 		//adding new columns if not present
 		if (formParams.get(EPConstants.ADD_COLUMNS) != null) {
 			addColumns(spec, (List<String>) formParams.get(EPConstants.ADD_COLUMNS));
+		}
+	}
+	/**
+	 	 * Updates report specification with the grouping criteria
+	 	 * @param spec - the specification that will be updated
+	 	 * @param groupingOption
+	 	 * @return the updated spec
+	 	 */
+	public static void setGroupingCriteria(ReportSpecificationImpl spec, String groupingOption) {
+		switch (groupingOption) {
+		case ReportConstants.GROUPING_YEARLY:
+			spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
+			break;
+		case ReportConstants.GROUPING_QUARTERLY:
+			spec.setGroupingCriteria(GroupingCriteria.GROUPING_QUARTERLY);
+			break;
+		case ReportConstants.GROUPING_MONTHLY:
+			spec.setGroupingCriteria(GroupingCriteria.GROUPING_MONTHLY);
+			break;
+		default:
+			spec.setGroupingCriteria(GroupingCriteria.GROUPING_TOTALS_ONLY);
+			break;
 		}
 	}
 	
@@ -713,6 +712,17 @@ public class ReportsUtil {
         if (forceHeaders != null) {
         	spec.setPopulateReportHeadersIfEmpty(forceHeaders);
         }
+        String groupingOption = (String) formParams.get(EPConstants.GROUPING_OPTION);
+		if (groupingOption != null) {
+			ReportsUtil.setGroupingCriteria(spec, groupingOption);
+		}
+		
+        Boolean summary = (Boolean) formParams.get(EPConstants.SUMMARY);
+		if (summary != null) {
+			ReportsUtil.setGroupingCriteria(spec, groupingOption);
+			spec.setSummaryReport(summary);
+		}
+		
 	}
 	
 	/**

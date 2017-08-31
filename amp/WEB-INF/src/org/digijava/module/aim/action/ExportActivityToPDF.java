@@ -72,7 +72,6 @@ import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.Funding;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;
-import org.digijava.module.aim.helper.FundingValidator;
 import org.digijava.module.aim.helper.GlobalSettings;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.Location;
@@ -150,9 +149,36 @@ public class ExportActivityToPDF extends Action {
     private static final String [] fundingEDDFMfields={"/Activity Form/Funding/Funding Group/Funding Item/Estimated Disbursements/Estimated Disbursements Table/Adjustment Type","/Activity Form/Funding/Funding Group/Funding Item/Estimated Disbursements/Estimated Disbursements Table/Disaster Response","/Activity Form/Funding/Funding Group/Funding Item/Estimated Disbursements/Estimated Disbursements Table/Transaction Date","/Activity Form/Funding/Funding Group/Funding Item/Estimated Disbursements/Estimated Disbursements Table/Amount","/Activity Form/Funding/Funding Group/Funding Item/Estimated Disbursements/Estimated Disbursements Table/Currency"};
     private static final String [] fundingDisbOrdersFMfields={"/Activity Form/Funding/Funding Group/Funding Item/Disbursement Orders/Disbursement Orders Table/Adjustment Type","/Activity Form/Funding/Funding Group/Funding Item/Disbursement Orders/Disbursement Orders Table/Disaster Response","/Activity Form/Funding/Funding Group/Funding Item/Disbursement Orders/Disbursement Orders Table/Transaction Date","/Activity Form/Funding/Funding Group/Funding Item/Disbursement Orders/Disbursement Orders Table/Amount","/Activity Form/Funding/Funding Group/Funding Item/Disbursement Orders/Disbursement Orders Table/Currency"};
 
-    private static final String [] componentCommitmentsFMfields={"/Activity Form/Components/Component/Components Commitments","/Activity Form/Components/Component/Components Commitments/Commitment Table/Amount","/Activity Form/Components/Component/Components Commitments/Commitment Table/Currency","/Activity Form/Components/Component/Components Commitments/Commitment Table/Transaction Date"};
-    private static final String [] componentDisbursementsFMfields={"/Activity Form/Components/Component/Components Disbursements","/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Amount","/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Currency","/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Transaction Date"};
-    private static final String [] componentExpendituresFMfields={"/Activity Form/Components/Component/Components Expenditures","/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Amount","/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Currency","/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Transaction Date"};
+    private static final String[] componentCommitmentsFMfields = {
+            "/Activity Form/Components/Component/Components Commitments",
+            "/Activity Form/Components/Component/Components Commitments/Commitment Table/Amount",
+            "/Activity Form/Components/Component/Components Commitments/Commitment Table/Currency",
+            "/Activity Form/Components/Component/Components Commitments/Commitment Table/Transaction Date",
+            "/Activity Form/Components/Component/Components Commitments/Commitment Table/Component Organization",
+            "/Activity Form/Components/Component/Components Commitments/Commitment Table/Second Reporting "
+                    + "Organisation",
+            "/Activity Form/Components/Component/Components Commitments/Commitment Table/Description"
+    };
+    private static final String[] componentDisbursementsFMfields = {
+            "/Activity Form/Components/Component/Components Disbursements",
+            "/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Amount",
+            "/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Currency",
+            "/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Transaction Date",
+            "/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Component Organization",
+            "/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Second Reporting "
+                    + "Organisation",
+            "/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Description"
+    };
+    private static final String[] componentExpendituresFMfields = {
+            "/Activity Form/Components/Component/Components Expenditures",
+            "/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Amount",
+            "/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Currency",
+            "/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Transaction Date",
+            "/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Component Organization",
+            "/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Second Reporting "
+                    + "Organisation",
+            "/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Description"
+    };
     private static final Chunk BULLET_SYMBOL = new Chunk("\u2022");
 
     private static final String [] mtefProjectionFields = {
@@ -269,6 +295,11 @@ public class ExportActivityToPDF extends Action {
                     createGeneralInfoRow(mainLayout, columnName, columnVal);
                 }
             }
+            //Status Other Info
+            if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Status Other Info")) {
+                columnName = TranslatorWorker.translateText("Status Other Info");
+                createGeneralInfoRow(mainLayout, columnName, activity.getStatusOtherInfo());
+            }
 
             if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Status Reason")) {
                 columnName = TranslatorWorker.translateText("Status Reason");
@@ -308,6 +339,12 @@ public class ExportActivityToPDF extends Action {
                 columnName = TranslatorWorker.translateText("Modalities");
                 columnVal = identification.getSscModalitiesAsString("\n");
                 createGeneralInfoRow(mainLayout, columnName, columnVal);
+            }
+            //Modalities Other Info
+            if (FeaturesUtil.isVisibleModule(
+                    "/Activity Form/Funding/Overview Section/" + sscPrefix + "Modalities Other Info")) {
+                columnName = TranslatorWorker.translateText("Modalities Other Info");
+                createGeneralInfoRow(mainLayout, columnName, activity.getModalitiesOtherInfo());
             }
 
             //objective
@@ -375,9 +412,10 @@ public class ExportActivityToPDF extends Action {
             }
 
             //project comments
-            if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Comments")){
-                columnName=TranslatorWorker.translateText("Project Comments");
-                createGeneralInfoRow(mainLayout,columnName,processEditTagValue(request, activity.getProjectComments()));
+            if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Comments")) {
+                columnName = TranslatorWorker.translateText("Project Comments");
+                createGeneralInfoRow(mainLayout, columnName, processEditTagValue(request, activity.
+                        getProjectComments()));
             }
             //Lessons learned
             if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Lessons Learned")){
@@ -620,6 +658,11 @@ public class ExportActivityToPDF extends Action {
                     }
                     createGeneralInfoRow(mainLayout,columnName,columnVal);
                 }
+            }
+            //Project Category Other Info
+            if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Category Other Info")) {
+                columnName = TranslatorWorker.translateText("Project Category Other Info");
+                createGeneralInfoRow(mainLayout, columnName, activity.getProjectCategoryOtherInfo());
             }
 
             if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Government Agreement Number")){
@@ -2497,128 +2540,139 @@ public class ExportActivityToPDF extends Action {
         mainLayout.addCell(relDocCell2);
     }
 
-    private void buildComponentsPart(EditActivityForm myForm,PdfPTable mainLayout,ServletContext ampContext,HttpSession session)	throws WorkerException, DocumentException {
+    private void buildComponentsPart(EditActivityForm myForm, PdfPTable mainLayout, ServletContext ampContext,
+                                     HttpSession session) throws WorkerException, DocumentException {
         Paragraph p1;
-        if(GlobalSettings.getInstance().getShowComponentFundingByYear()!=null && FeaturesUtil.isVisibleModule("/Activity Form/Components")){
-            PdfPCell compCell1=new PdfPCell();
-            p1=new Paragraph(TranslatorWorker.translateText("Components"),titleFont);
+        if (GlobalSettings.getInstance().getShowComponentFundingByYear() != null && FeaturesUtil.isVisibleModule
+                ("/Activity Form/Components")) {
+            PdfPCell compCell1 = new PdfPCell();
+            p1 = new Paragraph(TranslatorWorker.translateText("Components"), titleFont);
             p1.setAlignment(Element.ALIGN_RIGHT);
             compCell1.addElement(p1);
-            compCell1.setBackgroundColor(new Color(244,244,242));
+            compCell1.setBackgroundColor(new Color(244, 244, 242));
             compCell1.setBorder(0);
             mainLayout.addCell(compCell1);
             //now we should create nested table and add it as second cell in mainLayout
             PdfPTable componentsNestedTable = new PdfPTable(2);
             componentsNestedTable.getDefaultCell().setBorder(1);
 
-            boolean visibleModuleCompCommitments = FeaturesUtil.isVisibleModule("/Activity Form/Components/Component/Components Commitments");
-            boolean visibleModuleCompDisbursements = FeaturesUtil.isVisibleModule("/Activity Form/Components/Component/Components Disbursements");
-            boolean visibleModuleCompExpenditures = FeaturesUtil.isVisibleModule("/Activity Form/Components/Component/Components Expenditures");
+            boolean visibleModuleCompCommitments = FeaturesUtil.isVisibleModule("/Activity "
+                    + "Form/Components/Component/Components Commitments");
+            boolean visibleModuleCompDisbursements = FeaturesUtil.isVisibleModule("/Activity "
+                    + "Form/Components/Component/Components Disbursements");
+            boolean visibleModuleCompExpenditures = FeaturesUtil.isVisibleModule("/Activity "
+                    + "Form/Components/Component/Components Expenditures");
 
-            if(myForm.getComponents().getSelectedComponents()!=null){
+            if (myForm.getComponents().getSelectedComponents() != null) {
                 for (Components<FundingDetail> comp : myForm.getComponents().getSelectedComponents()) {
                     //first row- title
-                    PdfPCell nestedCell1=new PdfPCell();
-                    nestedCell1.setBackgroundColor(new Color(255,255,255));
+                    PdfPCell nestedCell1 = new PdfPCell();
+                    nestedCell1.setBackgroundColor(new Color(255, 255, 255));
                     nestedCell1.setBorder(0);
                     nestedCell1.setColspan(2);
-                    p1=new Paragraph(TranslatorWorker.translateText(comp.getTitle()),titleFont);
+                    p1 = new Paragraph(TranslatorWorker.translateText(comp.getTitle()), titleFont);
                     nestedCell1.addElement(p1);
                     componentsNestedTable.addCell(nestedCell1);
 
-                    if(! GlobalSettings.getInstance().getShowComponentFundingByYear()){ //false case
+                    if (!GlobalSettings.getInstance().getShowComponentFundingByYear()) { //false case
                         //Description
-                        PdfPCell descNestedCell=new PdfPCell();
-                        p1=new Paragraph(TranslatorWorker.translateText("Description")+":",plainFont);
+                        PdfPCell descNestedCell = new PdfPCell();
+                        p1 = new Paragraph(TranslatorWorker.translateText("Description") + ":", plainFont);
                         descNestedCell.addElement(p1);
-                        descNestedCell.setBackgroundColor(new Color(255,255,255));
-                        descNestedCell.setBorder(0);
-                        componentsNestedTable.addCell(descNestedCell);
-
-                        descNestedCell=new PdfPCell();
-                        p1=new Paragraph(new Phrase(TranslatorWorker.translateText(comp.getDescription()) ,plainFont));
-                        p1.setAlignment(Element.ALIGN_LEFT);
-                        descNestedCell.addElement(p1);
-                        descNestedCell.setBackgroundColor(new Color(255,255,255));
+                        descNestedCell.setBackgroundColor(new Color(255, 255, 255));
                         descNestedCell.setBorder(0);
                         componentsNestedTable.addCell(descNestedCell);
 
                         descNestedCell = new PdfPCell();
-                        p1 = new Paragraph(TranslatorWorker.translateText("Component Type")+":", plainFont);
+                        p1 = new Paragraph(new Phrase(TranslatorWorker.translateText(comp.getDescription()),
+                                plainFont));
+                        p1.setAlignment(Element.ALIGN_LEFT);
                         descNestedCell.addElement(p1);
-                        descNestedCell.setBackgroundColor(new Color(255,255,255));
+                        descNestedCell.setBackgroundColor(new Color(255, 255, 255));
                         descNestedCell.setBorder(0);
                         componentsNestedTable.addCell(descNestedCell);
 
-                        descNestedCell=new PdfPCell();
-                        p1=new Paragraph(new Phrase(TranslatorWorker.translateText(comp.getTypeName()), plainFont));
+                        descNestedCell = new PdfPCell();
+                        p1 = new Paragraph(TranslatorWorker.translateText("Component Type") + ":", plainFont);
+                        descNestedCell.addElement(p1);
+                        descNestedCell.setBackgroundColor(new Color(255, 255, 255));
+                        descNestedCell.setBorder(0);
+                        componentsNestedTable.addCell(descNestedCell);
+
+                        descNestedCell = new PdfPCell();
+                        p1 = new Paragraph(new Phrase(TranslatorWorker.translateText(comp.getTypeName()), plainFont));
                         p1.setAlignment(Element.ALIGN_LEFT);
                         descNestedCell.addElement(p1);
-                        descNestedCell.setBackgroundColor(new Color(255,255,255));
+                        descNestedCell.setBackgroundColor(new Color(255, 255, 255));
                         descNestedCell.setBorder(0);
                         componentsNestedTable.addCell(descNestedCell);
 
 
                         //third row - finanse of comp.
-                        PdfPCell financeCompNestedCell=new PdfPCell();
-                        financeCompNestedCell.setBackgroundColor(new Color(244,244,242));
+                        PdfPCell financeCompNestedCell = new PdfPCell();
+                        financeCompNestedCell.setBackgroundColor(new Color(244, 244, 242));
                         financeCompNestedCell.setBorder(0);
                         financeCompNestedCell.setColspan(2);
-                        p1=new Paragraph(TranslatorWorker.translateText("Component Funding"),titleFont);
+                        p1 = new Paragraph(TranslatorWorker.translateText("Component Funding"), titleFont);
                         p1.setAlignment(Element.ALIGN_LEFT);
                         financeCompNestedCell.addElement(p1);
                         componentsNestedTable.addCell(financeCompNestedCell);
                         //commitments row
-                        if(visibleModuleCompCommitments && comp.getCommitments()!=null && comp.getCommitments().size()>0){ //commitments row
-                            PdfPCell financeCell=new PdfPCell();
+                        if (visibleModuleCompCommitments && comp.getCommitments() != null && comp.getCommitments()
+                                .size() > 0) { //commitments row
+                            PdfPCell financeCell = new PdfPCell();
                             financeCell.setBorder(0);
                             financeCell.setColspan(2);
-                            PdfPTable financeTable=new PdfPTable(2);
-                            financeTable.setWidths(new float[]{1f,4f});
-                            //String[] fmFields=new String[] {"Components Actual/Planned Commitments","Components Amount Commitments","Components Currency Commitments","Components Date Commitments"};
-                            buildFinanceInfoOutput(financeTable, TranslatorWorker.translateText("Commitment"),(List) comp.getCommitments(),componentCommitmentsFMfields,ampContext,session);
+                            PdfPTable financeTable = new PdfPTable(2);
+                            financeTable.setWidths(new float[]{1f, 4f});
+                            buildFinanceInfoOutput(financeTable, TranslatorWorker.translateText("Commitment"), (List)
+                                    comp.getCommitments(), componentCommitmentsFMfields, ampContext, session);
                             financeCell.addElement(financeTable);
                             componentsNestedTable.addCell(financeCell);
                         }
                         //disbursments row
-                        if(visibleModuleCompDisbursements && comp.getDisbursements()!=null && comp.getDisbursements().size()>0){
-                            PdfPCell financeCell=new PdfPCell();
+                        if (visibleModuleCompDisbursements && comp.getDisbursements() != null && comp
+                                .getDisbursements().size() > 0) {
+                            PdfPCell financeCell = new PdfPCell();
                             financeCell.setBorder(0);
                             financeCell.setColspan(2);
-                            PdfPTable financeTable=new PdfPTable(2);
-                            financeTable.setWidths(new float[]{1f,4f});
-                            //String[] fmFields=new String[] {"Components Actual/Planned Disbursements","Components Amount Disbursements","Components Currency Disbursements","Components Date Disbursements"};
-                            buildFinanceInfoOutput(financeTable, TranslatorWorker.translateText("Disbursment"),(List) comp.getDisbursements(),componentDisbursementsFMfields,ampContext,session);
+                            PdfPTable financeTable = new PdfPTable(2);
+                            financeTable.setWidths(new float[]{1f, 4f});
+                            buildFinanceInfoOutput(financeTable, TranslatorWorker.translateText("Disbursment"),
+                                    (List) comp.getDisbursements(), componentDisbursementsFMfields, ampContext, session);
                             financeCell.addElement(financeTable);
                             componentsNestedTable.addCell(financeCell);
                         }
                         //expenditures row
-                        if(visibleModuleCompExpenditures && comp.getExpenditures()!=null && comp.getExpenditures().size()>0){
-                            PdfPCell financeCell=new PdfPCell();
+                        if (visibleModuleCompExpenditures && comp.getExpenditures() != null && comp.getExpenditures()
+                                .size() > 0) {
+                            PdfPCell financeCell = new PdfPCell();
                             financeCell.setBorder(0);
                             financeCell.setColspan(2);
-                            PdfPTable financeTable=new PdfPTable(2);
-                            financeTable.setWidths(new float[]{1f,4f});
-                            //final String[] fmFields=new String[] {"Components Actual/Planned Expenditures","Components Amount Expenditures","Components Currency Expenditures","Components Date Expenditures"};
-                            buildFinanceInfoOutput(financeTable, TranslatorWorker.translateText("Expenditures"),(List) comp.getExpenditures(),componentExpendituresFMfields,ampContext,session);
+                            PdfPTable financeTable = new PdfPTable(2);
+                            financeTable.setWidths(new float[]{1f, 4f});
+                            buildFinanceInfoOutput(financeTable, TranslatorWorker.translateText("Expenditures"),
+                                    (List) comp.getExpenditures(), componentExpendituresFMfields, ampContext, session);
                             financeCell.addElement(financeTable);
                             componentsNestedTable.addCell(financeCell);
                         }
                         //empty line
-                        PdfPCell emptyCell=new PdfPCell();
+                        PdfPCell emptyCell = new PdfPCell();
                         emptyCell.addElement(new Paragraph("\n"));
-                        emptyCell.setBackgroundColor(new Color(255,255,255));
+                        emptyCell.setBackgroundColor(new Color(255, 255, 255));
                         emptyCell.setBorder(0);
                         emptyCell.setColspan(2);
                         componentsNestedTable.addCell(emptyCell);
 
-                        int amountsUnitCode = Integer.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS));
+                        int amountsUnitCode = Integer.valueOf(FeaturesUtil.getGlobalSettingValue
+                                (GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS));
 
                         //amounts in thousands
-                        if(amountsUnitCode == AmpARFilter.AMOUNT_OPTION_IN_THOUSANDS){
-                            PdfPCell amountsInThousandsCell1 = new PdfPCell(new Paragraph(TranslatorWorker.translateText("The amount entered are in thousands (000)"),plainFont));
+                        if (amountsUnitCode == AmpARFilter.AMOUNT_OPTION_IN_THOUSANDS) {
+                            PdfPCell amountsInThousandsCell1 = new PdfPCell(new Paragraph(TranslatorWorker
+                                    .translateText("The amount entered are in thousands (000)"), plainFont));
                             amountsInThousandsCell1.setBorder(0);
-                            amountsInThousandsCell1.setBackgroundColor(new Color(255,255,204));
+                            amountsInThousandsCell1.setBackgroundColor(new Color(255, 255, 204));
                             amountsInThousandsCell1.setColspan(2);
                             //fundingTable.addCell(amountsInThousandsCell1);
                             componentsNestedTable.addCell(amountsInThousandsCell1);
@@ -2627,9 +2681,10 @@ public class ExportActivityToPDF extends Action {
                         //amounts in millions
                         if (amountsUnitCode == AmpARFilter.AMOUNT_OPTION_IN_MILLIONS) {
                             PdfPCell amountsInMillionsCell1 = new PdfPCell(new Paragraph(
-                                    TranslatorWorker.translateText("The amount entered are in millions (000 000)"), plainFont));
+                                    TranslatorWorker.translateText("The amount entered are in millions (000 000)"),
+                                    plainFont));
                             amountsInMillionsCell1.setBorder(0);
-                            amountsInMillionsCell1.setBackgroundColor(new Color(255,255,204));
+                            amountsInMillionsCell1.setBackgroundColor(new Color(255, 255, 204));
                             amountsInMillionsCell1.setColspan(2);
                             //fundingTable.addCell(amountsInThousandsCell1);
                             componentsNestedTable.addCell(amountsInMillionsCell1);
@@ -2637,86 +2692,89 @@ public class ExportActivityToPDF extends Action {
                     } else if (GlobalSettings.getInstance().getShowComponentFundingByYear()
                             && FeaturesUtil.isVisibleModule("Components Resume")) { //true case
                         //comp code
-                        PdfPCell compNestedCell=new PdfPCell();
-                        p1=new Paragraph(TranslatorWorker.translateText("Component Code")+":",titleFont);
+                        PdfPCell compNestedCell = new PdfPCell();
+                        p1 = new Paragraph(TranslatorWorker.translateText("Component Code") + ":", titleFont);
                         compNestedCell.addElement(p1);
-                        compNestedCell.setBackgroundColor(new Color(255,255,255));
+                        compNestedCell.setBackgroundColor(new Color(255, 255, 255));
                         compNestedCell.setBorder(0);
                         componentsNestedTable.addCell(compNestedCell);
 
-                        compNestedCell=new PdfPCell();
-                        p1=new Paragraph(comp.getCode() ,plainFont);
+                        compNestedCell = new PdfPCell();
+                        p1 = new Paragraph(comp.getCode(), plainFont);
                         compNestedCell.addElement(p1);
-                        compNestedCell.setBackgroundColor(new Color(255,255,255));
+                        compNestedCell.setBackgroundColor(new Color(255, 255, 255));
                         compNestedCell.setBorder(0);
                         componentsNestedTable.addCell(compNestedCell);
 
                         //finance of the comp
-                        PdfPCell financeCompNestedCell=new PdfPCell();
-                        financeCompNestedCell.setBackgroundColor(new Color(244,244,242));
+                        PdfPCell financeCompNestedCell = new PdfPCell();
+                        financeCompNestedCell.setBackgroundColor(new Color(244, 244, 242));
                         financeCompNestedCell.setBorder(0);
                         financeCompNestedCell.setColspan(2);
-                        p1=new Paragraph(TranslatorWorker.translateText("Finance of the component"));
+                        p1 = new Paragraph(TranslatorWorker.translateText("Finance of the component"));
                         p1.setAlignment(Element.ALIGN_LEFT);
                         financeCompNestedCell.addElement(p1);
                         componentsNestedTable.addCell(financeCompNestedCell);
                         //nested
                         for (Integer key : comp.getFinanceByYearInfo().keySet()) {
                             //first cell in nested2 table
-                            PdfPCell nestedCell5=new PdfPCell();
-                            p1=new Paragraph(key.toString(),plainFont);
+                            PdfPCell nestedCell5 = new PdfPCell();
+                            p1 = new Paragraph(key.toString(), plainFont);
                             p1.setAlignment(Element.ALIGN_LEFT);
                             nestedCell5.addElement(p1);
-                            nestedCell5.setBackgroundColor(new Color(255,255,255));
+                            nestedCell5.setBackgroundColor(new Color(255, 255, 255));
                             nestedCell5.setBorder(0);
                             componentsNestedTable.addCell(nestedCell5);
                             //second cell in nested2 table
-                            PdfPTable financeNestedTable=new PdfPTable(2);
-                            Map<String,Double> myMap=comp.getFinanceByYearInfo().get(key); //value of the  comp.getFinanceByYearInfo() Map
-                            PdfPCell pcs1=new PdfPCell();
-                            p1=new Paragraph(TranslatorWorker.translateText("Planned Commitments Sum"),plainFont);
+                            PdfPTable financeNestedTable = new PdfPTable(2);
+                            Map<String, Double> myMap = comp.getFinanceByYearInfo().get(key); //value of the  comp
+                            // .getFinanceByYearInfo() Map
+                            PdfPCell pcs1 = new PdfPCell();
+                            p1 = new Paragraph(TranslatorWorker.translateText("Planned Commitments Sum"), plainFont);
                             p1.setAlignment(Element.ALIGN_LEFT);
                             pcs1.addElement(p1);
-                            pcs1.setBackgroundColor(new Color(255,255,255));
+                            pcs1.setBackgroundColor(new Color(255, 255, 255));
                             pcs1.setBorder(0);
                             financeNestedTable.addCell(pcs1);
-                            PdfPCell pcs2=new PdfPCell();
+                            PdfPCell pcs2 = new PdfPCell();
                             Double a = myMap.get("MontoProgramado");
-                            Double plannedCommSum=new Double(new DecimalFormat("#.##").format(a));
-                            p1=new Paragraph(plannedCommSum.toString(),plainFont);
+                            Double plannedCommSum = new Double(new DecimalFormat("#.##").format(a));
+                            p1 = new Paragraph(plannedCommSum.toString(), plainFont);
                             p1.setAlignment(Element.ALIGN_LEFT);
                             pcs2.addElement(p1);
-                            pcs2.setBackgroundColor(new Color(255,255,255));
+                            pcs2.setBackgroundColor(new Color(255, 255, 255));
                             pcs2.setBorder(0);
                             financeNestedTable.addCell(pcs2);
 
 
-                            PdfPCell acs1=new PdfPCell();
-                            p1=new Paragraph(TranslatorWorker.translateText("Actual Commitments Sum"),plainFont);
+                            PdfPCell acs1 = new PdfPCell();
+                            p1 = new Paragraph(TranslatorWorker.translateText("Actual Commitments Sum"), plainFont);
                             p1.setAlignment(Element.ALIGN_LEFT);
                             acs1.addElement(p1);
                             financeNestedTable.addCell(acs1);
-                            PdfPCell acs2=new PdfPCell();
-                            acs2.setBackgroundColor(new Color(255,255,255));
+                            PdfPCell acs2 = new PdfPCell();
+                            acs2.setBackgroundColor(new Color(255, 255, 255));
                             acs2.setBorder(0);
-                            Double actCommSum=new Double(new DecimalFormat("#.##").format( myMap.get("MontoReprogramado") ));
-                            acs2.addElement(new Paragraph(actCommSum.toString(),plainFont));
+                            Double actCommSum = new Double(new DecimalFormat("#.##").format(myMap.get
+                                    ("MontoReprogramado")));
+                            acs2.addElement(new Paragraph(actCommSum.toString(), plainFont));
                             financeNestedTable.addCell(acs2);
 
 
-                            PdfPCell aes1=new PdfPCell();
-                            p1=new Paragraph(TranslatorWorker.translateText("Actual Expenditures Sum"),plainFont);
+                            PdfPCell aes1 = new PdfPCell();
+                            p1 = new Paragraph(TranslatorWorker.translateText("Actual Expenditures Sum"), plainFont);
                             p1.setAlignment(Element.ALIGN_LEFT);
                             aes1.addElement(p1);
-                            aes1.setBackgroundColor(new Color(255,255,255));
+                            aes1.setBackgroundColor(new Color(255, 255, 255));
                             aes1.setBorder(0);
                             financeNestedTable.addCell(aes1);
 
-                            PdfPCell aes2=new PdfPCell();
-                            aes2.setBackgroundColor(new Color(255,255,255));
+                            PdfPCell aes2 = new PdfPCell();
+                            aes2.setBackgroundColor(new Color(255, 255, 255));
                             aes2.setBorder(0);
-                            Double actExpSum=new Double(new DecimalFormat("#.##").format( myMap.get("MontoEjecutado") ));
-                            p1=new Paragraph(actExpSum.toString(),plainFont);
+                            Double actExpSum = new Double(new DecimalFormat("#.##").format(myMap.get
+                                    ("MontoEjecutado")));
+                            p1 = new Paragraph(actExpSum.toString(), plainFont);
                             aes2.addElement(p1);
                             p1.setAlignment(Element.ALIGN_LEFT);
                             financeNestedTable.addCell(aes2);
@@ -3589,73 +3647,87 @@ public class ExportActivityToPDF extends Action {
     /**
      * builds commitments, expenditures, disbursement data output
      */
-    private PdfPTable buildFinanceInfoOutput(PdfPTable nestedTable,String elemntName, List<FundingDetail> listToIterate,String[] fmFields,ServletContext ampContext,HttpSession session) throws WorkerException,DocumentException
-    {
+    private PdfPTable buildFinanceInfoOutput(PdfPTable nestedTable, String elemntName, List<FundingDetail>
+            listToIterate, String[] fmFields, ServletContext ampContext, HttpSession session) throws WorkerException,
+            DocumentException {
 
-        PdfPCell cell=new PdfPCell();
+        PdfPCell cell = new PdfPCell();
         cell.setBorder(0);
-        Paragraph paragraph=new Paragraph(postprocessText(elemntName),plainFont);
+        Paragraph paragraph = new Paragraph(postprocessText(elemntName), plainFont);
         paragraph.setAlignment(Element.ALIGN_LEFT);
         cell.addElement(paragraph);
-        cell.setBackgroundColor(new Color(255,255,255));
+        cell.setBackgroundColor(new Color(255, 255, 255));
         cell.setBorder(0);
         nestedTable.addCell(cell);
 
-        int visibleFmFieldsAmount=0;
-        for(int i=0;i<fmFields.length;i++){
-            if(FeaturesUtil.isVisibleModule(fmFields[i])){
+        int visibleFmFieldsAmount = 0;
+        for (int i = 0; i < fmFields.length - 3; i++) {
+            if (FeaturesUtil.isVisibleModule(fmFields[i])) {
                 visibleFmFieldsAmount++;
             }
         }
 
-        if (visibleFmFieldsAmount > 0)
-        {
-            PdfPTable fdTable=new PdfPTable(visibleFmFieldsAmount);
-            for (FundingDetail fd : listToIterate)
-            {
-                if(FeaturesUtil.isVisibleModule(fmFields[0])){
-                    fdTable.addCell(buildPdfCell(postprocessText(TranslatorWorker.translateText(fd.getAdjustmentTypeName().getValue())), plainFont, 1));
+        if (visibleFmFieldsAmount > 0) {
+            PdfPTable fdTable = new PdfPTable(visibleFmFieldsAmount);
+            for (FundingDetail fd : listToIterate) {
+                if (FeaturesUtil.isVisibleModule(fmFields[ExportUtil.COMPONENT_FM_FIELD_TYPE])) {
+                    fdTable.addCell(buildPdfCell(postprocessText(TranslatorWorker.translateText(fd
+                            .getAdjustmentTypeName().getValue())), plainFont, 1));
                 }
                 String output = "";
-                if (FeaturesUtil.isVisibleModule(fmFields[1])){
+                if (FeaturesUtil.isVisibleModule(fmFields[ExportUtil.COMPONENT_FM_FIELD_AMOUNT])) {
                     output += fd.getTransactionAmount();
                 }
-                if (FeaturesUtil.isVisibleModule(fmFields[2])){
+                if (FeaturesUtil.isVisibleModule(fmFields[ExportUtil.COMPONENT_FM_FIELD_CURRENCY])) {
                     output += " " + fd.getCurrencyCode();
                 }
                 fdTable.addCell(buildPdfCell(postprocessText(output), plainFont, 1));
 
-                if(FeaturesUtil.isVisibleModule(fmFields[3])){
+                if (FeaturesUtil.isVisibleModule(fmFields[ExportUtil.COMPONENT_FM_FIELD_TRANSCTION_DATE])) {
                     fdTable.addCell(buildPdfCell(fd.getTransactionDate(), plainFont, 1));
                 }
 
-                fdTable.addCell(buildPdfCell(fd.getFormattedRate()!=null?fd.getFormattedRate():" ", plainFont, 1));
+                fdTable.addCell(buildPdfCell(fd.getFormattedRate() != null ? fd.getFormattedRate() : " ", plainFont,
+                        1));
 
-                if (fmFields[0].equals("/Activity Form/Components/Component/Components Commitments")) // dirty hack to detect "we are rendering Components Commitments, so we need to render comp-funding organisation and description
-                {
-                    String descriptionFm = "/Activity Form/Components/Component/Components Commitments/Commitment Table/Description";
-                    String orgNameFm = "/Activity Form/Components/Component/Components Commitments/Commitment Table/Component Organization";
-
-                    if (FeaturesUtil.isVisibleModule(orgNameFm) && (fd.getComponentOrganisation() != null))
-                    {
-                        fdTable.completeRow();
-                        fdTable.addCell(buildPdfCell("", null, 1));
-                        fdTable.addCell(buildPdfCell(TranslatorWorker.translateText("Organization"), titleFont, 1));
-                        String orgNameTxt = fd.getComponentOrganisation() == null ? "" : fd.getComponentOrganisation().getName();
-                        fdTable.addCell(buildPdfCell(orgNameTxt, null, fdTable.getNumberOfColumns() - 2));
-                        fdTable.completeRow();
-                    }
-
-                    if (FeaturesUtil.isVisibleModule(descriptionFm) && (fd.getComponentTransactionDescription() != null) && (!fd.getComponentTransactionDescription().isEmpty()))
-                    {
-                        fdTable.completeRow();
-                        fdTable.addCell(buildPdfCell("", null, 1));
-                        fdTable.addCell(buildPdfCell(TranslatorWorker.translateText("Transaction Description"), titleFont, 1));
-                        fdTable.addCell(buildPdfCell(fd.getComponentTransactionDescription(), null, fdTable.getNumberOfColumns() - 2));
-                        fdTable.completeRow();
-                    }
-
+                if (FeaturesUtil.isVisibleModule(fmFields[ExportUtil.COMPONENT_FM_FIELD_ORGANISATION]) && (fd
+                        .getComponentOrganisation() != null)) {
+                    fdTable.completeRow();
+                    fdTable.addCell(buildPdfCell("", null, 1));
+                    //fdTable.addCell(buildPdfCell(TranslatorWorker.translateText("Organization"), titleFont, 1));
+                    String orgNameTxt = fd.getComponentOrganisation() == null ? "" : fd.getComponentOrganisation()
+                            .getName();
+                    fdTable.addCell(buildPdfCell(TranslatorWorker.translateText("Organization") + ":" + orgNameTxt,
+                            null,
+                            fdTable.getNumberOfColumns() - 1));
+                    fdTable.completeRow();
                 }
+
+                if (FeaturesUtil.isVisibleModule(fmFields[ExportUtil.COMPONENT_FM_FIELD_SECOND_REPORTING]) && (fd
+                        .getComponentSecondResponsibleOrganization() != null)) {
+                    fdTable.completeRow();
+                    fdTable.addCell(buildPdfCell("", null, 1));
+                    String orgNameTxt = fd.getComponentSecondResponsibleOrganization() == null ? "" : fd
+                            .getComponentSecondResponsibleOrganization().getName();
+                    fdTable.addCell(buildPdfCell(
+                            TranslatorWorker.translateText("Component Second Responsible Organization")
+                                    + ":" + orgNameTxt, null, fdTable.getNumberOfColumns() - 1));
+                    fdTable.completeRow();
+                }
+
+                if (FeaturesUtil.isVisibleModule(fmFields[ExportUtil.COMPONENT_FM_FIELD_DESCRIPTION]) && (fd
+                        .getComponentTransactionDescription() != null)
+                        && (!fd.getComponentTransactionDescription().isEmpty())) {
+                    fdTable.completeRow();
+                    fdTable.addCell(buildPdfCell("", null, 1));
+                    //fdTable.addCell(buildPdfCell(TranslatorWorker.translateText("Transaction Description"),
+                    //        titleFont, 1));
+                    fdTable.addCell(buildPdfCell(TranslatorWorker.translateText("Transaction Description") + ":" + fd
+                            .getComponentTransactionDescription(), null, fdTable
+                            .getNumberOfColumns() - 1));
+                    fdTable.completeRow();
+                }
+
             }
             nestedTable.addCell(fdTable);
         }

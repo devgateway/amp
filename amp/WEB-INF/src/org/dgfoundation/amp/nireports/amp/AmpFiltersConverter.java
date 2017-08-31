@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import com.google.common.collect.ImmutableMap;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.newreports.FilterRule;
@@ -71,7 +72,15 @@ public class AmpFiltersConverter extends BasicFiltersConverter {
         put(ColumnConstants.TERTIARY_SECTOR, ColumnConstants.PLEDGES_TERTIARY_SECTORS);
         put(ColumnConstants.TERTIARY_SECTOR_SUB_SECTOR, ColumnConstants.PLEDGES_TERTIARY_SUBSECTORS);
         put(ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR, ColumnConstants.PLEDGES_TERTIARY_SUBSUBSECTORS);
-        
+
+        put(ColumnConstants.QUATERNARY_SECTOR, ColumnConstants.PLEDGES_QUATERNARY_SECTORS);
+        put(ColumnConstants.QUATERNARY_SECTOR_SUB_SECTOR, ColumnConstants.PLEDGES_QUATERNARY_SUBSECTORS);
+        put(ColumnConstants.QUATERNARY_SECTOR_SUB_SUB_SECTOR, ColumnConstants.PLEDGES_QUATERNARY_SUBSUBSECTORS);
+
+        put(ColumnConstants.QUINARY_SECTOR, ColumnConstants.PLEDGES_QUINARY_SECTORS);
+        put(ColumnConstants.QUINARY_SECTOR_SUB_SECTOR, ColumnConstants.PLEDGES_QUINARY_SUBSECTORS);
+        put(ColumnConstants.QUINARY_SECTOR_SUB_SUB_SECTOR, ColumnConstants.PLEDGES_QUINARY_SUBSUBSECTORS);
+
         put(ColumnConstants.TYPE_OF_ASSISTANCE, ColumnConstants.PLEDGES_TYPE_OF_ASSISTANCE);
         
         put(ColumnConstants.ZONE, ColumnConstants.PLEDGES_ZONES);
@@ -79,6 +88,10 @@ public class AmpFiltersConverter extends BasicFiltersConverter {
         put(ColumnConstants.DISTRICT, ColumnConstants.PLEDGES_DISTRICTS);
         put(ColumnConstants.COUNTRY, ColumnConstants.PLEDGES_COUNTRIES);
     }};
+
+	public static final Map<String, String> DONOR_TO_REGIONAL_COLUMNS = new ImmutableMap.Builder<String, String>()
+			.put(ColumnConstants.REGION, ColumnConstants.REGIONAL_REGION)
+			.build();
 
 	/**
 	 * the dimensions whose {@link NiDimensionUsage} instances are ORed between themselves while filtering (please see the contract for {@link #shouldCollapseDimension(NiDimension)}
@@ -125,6 +138,10 @@ public class AmpFiltersConverter extends BasicFiltersConverter {
 			 * In order to support filtering in pledge reports, we will convert the donor-columns references to pledges-columns references 
 			 */
 	        columnName = DONOR_COLUMNS_TO_PLEDGE_COLUMNS.getOrDefault(columnName, columnName);
+		}
+
+		if (this.spec.getReportType() == ArConstants.REGIONAL_TYPE) {
+			columnName = DONOR_TO_REGIONAL_COLUMNS.getOrDefault(columnName, columnName);
 		}
 
 		if (schema.getColumns().containsKey(columnName)) {

@@ -46,6 +46,7 @@ public class FilterUtils {
 		mapDateColumn(FiltersConstants.ACTUAL_START_DATE, ColumnConstants.ACTUAL_START_DATE);
 		mapDateColumn(FiltersConstants.EFFECTIVE_FUNDING_DATE, ColumnConstants.EFFECTIVE_FUNDING_DATE);
 		mapDateColumn(FiltersConstants.FINAL_DATE_FOR_CONTRACTING, ColumnConstants.FINAL_DATE_FOR_CONTRACTING);
+		mapDateColumn(FiltersConstants.ISSUE_DATE, ColumnConstants.ISSUE_DATE);
 		mapDateColumn(FiltersConstants.FUNDING_CLOSING_DATE, ColumnConstants.FUNDING_CLOSING_DATE);
 		mapDateColumn(FiltersConstants.PROPOSED_APPROVAL_DATE, ColumnConstants.PROPOSED_APPROVAL_DATE);
 		mapDateColumn(FiltersConstants.PROPOSED_COMPLETION_DATE, ColumnConstants.PROPOSED_COMPLETION_DATE);
@@ -54,6 +55,10 @@ public class FilterUtils {
 		mapSimpleColumn(FiltersConstants.APPROVAL_STATUS, ColumnConstants.APPROVAL_STATUS);
 		mapSimpleColumn(FiltersConstants.ARCHIVED, ColumnConstants.ARCHIVED);
 		mapSimpleColumn(FiltersConstants.BENEFICIARY_AGENCY, ColumnConstants.BENEFICIARY_AGENCY);
+		mapSimpleColumn(FiltersConstants.COMPONENT_FUNDING_ORGANIZATION,
+				ColumnConstants.COMPONENT_FUNDING_ORGANIZATION);
+		mapSimpleColumn(FiltersConstants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION,
+				ColumnConstants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION);
 		mapSimpleColumn(FiltersConstants.COMPUTED_YEAR, ColumnConstants.COMPUTED_YEAR);
 		mapSimpleColumn(FiltersConstants.CONTRACTING_AGENCY, ColumnConstants.CONTRACTING_AGENCY);
 		mapSimpleColumn(FiltersConstants.CONTRACTING_AGENCY_GROUPS, ColumnConstants.CONTRACTING_AGENCY_GROUPS);
@@ -91,6 +96,8 @@ public class FilterUtils {
 		mapSimpleColumn(FiltersConstants.PLEDGES_SECONDARY_SECTORS, ColumnConstants.PLEDGES_SECONDARY_SECTORS);
 		mapSimpleColumn(FiltersConstants.PLEDGES_SECTORS, ColumnConstants.PLEDGES_SECTORS);
 		mapSimpleColumn(FiltersConstants.PLEDGES_TERTIARY_SECTORS, ColumnConstants.PLEDGES_TERTIARY_SECTORS);
+		mapSimpleColumn(FiltersConstants.PLEDGES_QUATERNARY_SECTORS, ColumnConstants.PLEDGES_QUATERNARY_SECTORS);
+		mapSimpleColumn(FiltersConstants.PLEDGES_QUINARY_SECTORS, ColumnConstants.PLEDGES_QUINARY_SECTORS);
 		mapSimpleColumn(FiltersConstants.PLEDGES_TITLES, ColumnConstants.PLEDGES_TITLES);
 		mapSimpleColumn(FiltersConstants.PRIMARY_PROGRAM, ColumnConstants.PRIMARY_PROGRAM);
 		mapSimpleColumn(FiltersConstants.PRIMARY_PROGRAM_LEVEL_1, ColumnConstants.PRIMARY_PROGRAM_LEVEL_1);
@@ -135,6 +142,13 @@ public class FilterUtils {
 		mapSimpleColumn(FiltersConstants.TERTIARY_SECTOR, ColumnConstants.TERTIARY_SECTOR);
 		mapSimpleColumn(FiltersConstants.TERTIARY_SECTOR_SUB_SECTOR, ColumnConstants.TERTIARY_SECTOR_SUB_SECTOR);
 		mapSimpleColumn(FiltersConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR, ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR);
+		mapSimpleColumn(FiltersConstants.QUATERNARY_SECTOR, ColumnConstants.QUATERNARY_SECTOR);
+		mapSimpleColumn(FiltersConstants.QUATERNARY_SECTOR_SUB_SECTOR, ColumnConstants.QUATERNARY_SECTOR_SUB_SECTOR);
+		mapSimpleColumn(FiltersConstants.QUATERNARY_SECTOR_SUB_SUB_SECTOR,
+				ColumnConstants.QUATERNARY_SECTOR_SUB_SUB_SECTOR);
+		mapSimpleColumn(FiltersConstants.QUINARY_SECTOR, ColumnConstants.QUINARY_SECTOR);
+		mapSimpleColumn(FiltersConstants.QUINARY_SECTOR_SUB_SECTOR, ColumnConstants.QUINARY_SECTOR_SUB_SECTOR);
+		mapSimpleColumn(FiltersConstants.QUINARY_SECTOR_SUB_SUB_SECTOR, ColumnConstants.QUINARY_SECTOR_SUB_SUB_SECTOR);
 		mapSimpleColumn(FiltersConstants.TYPE_OF_ASSISTANCE, ColumnConstants.TYPE_OF_ASSISTANCE);
 		mapSimpleColumn(FiltersConstants.WORKSPACES, ColumnConstants.WORKSPACES);
 		mapSimpleColumn(FiltersConstants.ZONE, ColumnConstants.ZONE);

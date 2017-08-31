@@ -54,12 +54,11 @@ module.exports = BaseControlView.extend({
   render: function() {
 	  var self = this;
 	  BaseControlView.prototype.render.apply(this);
-
-	  // add content
-	  this._loaded.then(function() {    	    
-		  //check if we need to show Project Sites
-		  var foundPS = self.app.data.generalSettings.get('project-sites');                      
-		  if (foundPS !== true) {
+	  // add content	  
+	  $.when(self.app.data.generalSettings.loaded, this._loaded).then(function() {
+		//check if we need to show Project Sites
+		  var foundPS = self.app.data.generalSettings.get('project-sites'); 		  
+		  if (foundPS !== true) {			  
 			  //need to remove project-sites
 			  //find the index of project-sites in projectLayerCollection
 			  var index = undefined;
@@ -69,7 +68,7 @@ module.exports = BaseControlView.extend({
 				  }
 			  }
 			  self.projectLayerCollection.models.splice(index, 1);  
-		  }
+		  } 
 		  self.$('.content', self.el).html(self.template({title: self.title}));
 		  self.$('.layer-selector', self.el).html(self.projectLayerCollection.map(function(cluster) {
 			  return (new OptionView({
@@ -77,8 +76,8 @@ module.exports = BaseControlView.extend({
 				  app: self.app
 			  })).render().el;
 		  }));
-
 	  });
+	  
 	  return this;
   }
 

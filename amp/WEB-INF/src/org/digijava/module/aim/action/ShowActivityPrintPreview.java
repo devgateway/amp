@@ -158,6 +158,19 @@ public class ShowActivityPrintPreview
                 if(activity.getProjectImpact()!=null){
                 	eaForm.getIdentification().setProjectImpact(activity.getProjectImpact().trim());
                 }
+
+                if (activity.getStatusOtherInfo() != null) {
+                    eaForm.getIdentification().setStatusOtherInfo(activity.getStatusOtherInfo().trim());
+                }
+
+                if (activity.getProjectCategoryOtherInfo() != null) {
+                    eaForm.getIdentification().setProjectCategoryOtherInfo(activity.getProjectCategoryOtherInfo()
+                            .trim());
+                }
+
+                if (activity.getModalitiesOtherInfo() != null) {
+                    eaForm.getIdentification().setModalitiesOtherInfo(activity.getModalitiesOtherInfo().trim());
+                }
                 
                 // fferreyra: Added null checking for field activity_summary
                 if(activity.getActivitySummary()!=null){
@@ -1020,7 +1033,7 @@ public class ShowActivityPrintPreview
 
 
 			Collection<AmpComponentFunding> fundingComponentActivity = ActivityUtil.getFundingComponentActivity(
-					tempComp.getComponentId(), actId);
+					tempComp.getComponentId());
 			Iterator cItr = fundingComponentActivity.iterator();
 			while (cItr.hasNext()) {
 				AmpComponentFunding ampCompFund = (AmpComponentFunding) cItr
@@ -1043,6 +1056,7 @@ public class ShowActivityPrintPreview
 				fd.setFiscalYear(DateConversion.convertDateToFiscalYearString(ampCompFund.getTransactionDate()));
 				fd.setTransactionType(ampCompFund.getTransactionType().intValue());
 				fd.setComponentOrganisation(ampCompFund.getReportingOrganization());
+				fd.setComponentSecondResponsibleOrganization(ampCompFund.getComponentSecondResponsibleOrganization());
 				fd.setComponentTransactionDescription(ampCompFund.getDescription());
 				if (fd.getTransactionType() == 0) {
 					tempComp.getCommitments().add(fd);

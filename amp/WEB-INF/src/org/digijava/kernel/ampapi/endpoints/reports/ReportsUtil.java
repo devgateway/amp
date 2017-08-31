@@ -30,6 +30,7 @@ import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GeneratedReport;
+import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
@@ -61,6 +62,7 @@ import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.MaxSizeLinkedHashMap;
+import org.digijava.kernel.ampapi.endpoints.util.ReportConstants;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
@@ -360,6 +362,28 @@ public class ReportsUtil {
 		//adding new columns if not present
 		if (formParams.get(EPConstants.ADD_COLUMNS) != null) {
 			addColumns(spec, (List<String>) formParams.get(EPConstants.ADD_COLUMNS));
+		}
+	}
+	/**
+	 	 * Updates report specification with the grouping criteria
+	 	 * @param spec - the specification that will be updated
+	 	 * @param groupingOption
+	 	 * @return the updated spec
+	 	 */
+	public static void setGroupingCriteria(ReportSpecificationImpl spec, String groupingOption) {
+		switch (groupingOption) {
+		case ReportConstants.GROUPING_YEARLY:
+			spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
+			break;
+		case ReportConstants.GROUPING_QUARTERLY:
+			spec.setGroupingCriteria(GroupingCriteria.GROUPING_QUARTERLY);
+			break;
+		case ReportConstants.GROUPING_MONTHLY:
+			spec.setGroupingCriteria(GroupingCriteria.GROUPING_MONTHLY);
+			break;
+		default:
+			spec.setGroupingCriteria(GroupingCriteria.GROUPING_TOTALS_ONLY);
+			break;
 		}
 	}
 	
@@ -688,6 +712,17 @@ public class ReportsUtil {
         if (forceHeaders != null) {
         	spec.setPopulateReportHeadersIfEmpty(forceHeaders);
         }
+        String groupingOption = (String) formParams.get(EPConstants.GROUPING_OPTION);
+		if (groupingOption != null) {
+			ReportsUtil.setGroupingCriteria(spec, groupingOption);
+		}
+		
+        Boolean summary = (Boolean) formParams.get(EPConstants.SUMMARY);
+		if (summary != null) {
+			ReportsUtil.setGroupingCriteria(spec, groupingOption);
+			spec.setSummaryReport(summary);
+		}
+		
 	}
 	
 	/**
@@ -846,12 +881,6 @@ public class ReportsUtil {
 	
 
 	public static String getUrl(AmpReports report) {
-		String prefix;
-		if (report.getType() != null && report.getType().equals((long) ArConstants.REGIONAL_TYPE)){
-			prefix = "/aim/viewNewAdvancedReport.do~view=reset&widget=false&resetSettings=true~ampReportId=";
-		} else {
-			prefix = "/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/open/";
-		}
-		return prefix + report.getAmpReportId();
+		return "/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/open/" + report.getAmpReportId();
 	}
 }

@@ -151,6 +151,10 @@ function continueInitialization( e, rmParams ){
 			tab2	= YAHOO.amp.reportwizard.tabView.getTab(2);
 			tab2.addListener("beforeActiveChange", generateHierarchies);
 		}
+
+		var reportType = document.querySelector('input[name = "reportType"]:checked').value;
+		updateColumnVisibility(reportType);
+
 		ColumnsDragAndDropObject.selectObjsByDbId ("source_col_div", "dest_col_ul", selectedCols);
 		generateHierarchies();
 		MyDragAndDropObject.selectObjsByDbId ("source_hierarchies_ul", "dest_hierarchies_ul", selectedHiers);
@@ -286,6 +290,7 @@ NormalReportManager.prototype.disableToolbarButton	= function (btn) {
 
 NormalReportManager.prototype.checkSteps	= function () {
 	createPreview();
+	toggleSplitByFundingCheckbox();
 	if ( this.checkReportDetails() )
 		if ( this.checkColumns() )
 			if ( this.checkHierarchies() )
@@ -298,10 +303,18 @@ NormalReportManager.prototype.checkSteps	= function () {
 	this.disableSave();
 };
 
+function toggleSplitByFundingCheckbox() {
+    if (getReportType() === 'donor') {
+        $("#splitByFundingDiv").show();
+    } else {
+        $("#splitByFundingDiv").hide();
+    }
+}
 
 NormalReportManager.prototype.callbackRepType = function (type) {
 	this.callbackRepTypeCall.success =$.proxy(this.callbackRepTypeCall.success,this);
 	var transaction = YAHOO.util.Connect.asyncRequest('GET', "/aim/reportWizard.do?action=getJSONrepType&repType=" + type, this.callbackRepTypeCall, null);
+    updateColumnVisibility(type);
 };
 
 

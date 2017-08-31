@@ -646,7 +646,8 @@ public class EditActivity extends Action {
           eaForm.getIdentification().setAccessionInstrument(new Long(ampCategoryValue.getId()));
 
         ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
-            CategoryConstants.ACTIVITY_STATUS_KEY, activity.getCategories());
+                CategoryManagerUtil.getAlternateKey(currentTeam, CategoryConstants.ACTIVITY_STATUS_KEY), activity
+                        .getCategories());
         if (ampCategoryValue != null)
           eaForm.getIdentification().setStatusId(new Long(ampCategoryValue.getId()));
 
@@ -684,8 +685,9 @@ public class EditActivity extends Action {
                 eaForm.getLocation().setLevelIdx(ampCategoryValue.getIndex());
             }
 
-        ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
-                    CategoryConstants.PROJECT_CATEGORY_KEY, activity.getCategories());
+          ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
+                  CategoryManagerUtil.getAlternateKey(currentTeam, CategoryConstants.PROJECT_CATEGORY_KEY), activity
+                          .getCategories());
             if (ampCategoryValue != null)
                   eaForm.getIdentification().setProjectCategory(new Long(ampCategoryValue.getId()));
 
@@ -780,15 +782,11 @@ public class EditActivity extends Action {
             }
         }
         
-        String sscPrefix = "";
-        if (currentTeam != null && currentTeam.getWorkspacePrefix() != null) {
-        	sscPrefix =  "SSC_";
-        }
-        
         //AMP-17127
         //for modalities that is a SSC category we have to add the SSC prefix
-        List<AmpCategoryValue> modalities = CategoryManagerUtil.getAmpCategoryValuesFromListByKey(sscPrefix + 
-        		CategoryConstants.MODALITIES_KEY, activity.getCategories());
+          List<AmpCategoryValue> modalities = CategoryManagerUtil.getAmpCategoryValuesFromListByKey(
+                  CategoryManagerUtil.getAlternateKey(currentTeam,
+                          CategoryConstants.MODALITIES_KEY), activity.getCategories());
         String[] actModalities=null;
         
         if(modalities !=null && modalities.size() >0){
@@ -803,11 +801,13 @@ public class EditActivity extends Action {
         eaForm.getIdentification().setSsc_modalities(actModalities );
        
         AmpCategoryValue typeOfCooperation = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
-        		sscPrefix + CategoryConstants.TYPE_OF_COOPERATION_KEY, activity.getCategories());
+                CategoryManagerUtil.getAlternateKey(currentTeam, CategoryConstants.TYPE_OF_COOPERATION_KEY), activity
+                        .getCategories());
         eaForm.getIdentification().setSsc_typeOfCooperation(typeOfCooperation == null ? null : typeOfCooperation.getLabel());
 
         AmpCategoryValue typeOfImplementation = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
-        		sscPrefix + CategoryConstants.TYPE_OF_IMPLEMENTATION_KEY, activity.getCategories());
+                CategoryManagerUtil.getAlternateKey(currentTeam, CategoryConstants.TYPE_OF_IMPLEMENTATION_KEY),
+                activity.getCategories());
         eaForm.getIdentification().setSsc_typeOfImplementation(typeOfImplementation == null ? null : typeOfImplementation.getLabel());
 
        // eaForm.getIdentification().setFundingSourcesNumber(activity.getFundingSourcesNumber());
@@ -954,6 +954,18 @@ public class EditActivity extends Action {
         	  eaForm.getIdentification().setLessonsLearned(activity.getLessonsLearned().trim());
 
       	eaForm.getIdentification().setProjectImpact(activity.getProjectImpact());
+
+            if (activity.getStatusOtherInfo() != null) {
+                eaForm.getIdentification().setStatusOtherInfo(activity.getStatusOtherInfo());
+            }
+
+            if (activity.getProjectCategoryOtherInfo() != null) {
+                eaForm.getIdentification().setProjectCategoryOtherInfo(activity.getProjectCategoryOtherInfo());
+            }
+
+            if (activity.getModalitiesOtherInfo() != null) {
+                eaForm.getIdentification().setModalitiesOtherInfo(activity.getModalitiesOtherInfo());
+            }
 
     	eaForm.getIdentification().setActivitySummary(activity.getActivitySummary());
 
@@ -1889,8 +1901,8 @@ private void setLineMinistryObservationsToForm(AmpActivityVersion activity, Edit
 			tempComp.setDisbursements(new ArrayList<FundingDetail>());
 			tempComp.setExpenditures(new ArrayList<FundingDetail>());
 
-			Collection<AmpComponentFunding> fundingComponentActivity = ActivityUtil.getFundingComponentActivity(tempComp.getComponentId(), activity.getAmpActivityId());
-			Iterator cItr = fundingComponentActivity.iterator();
+			Collection<AmpComponentFunding> fundingComponentActivity = temp.getFundings();
+			Iterator<AmpComponentFunding> cItr = fundingComponentActivity.iterator();
 
 			while (cItr.hasNext()) {
 				AmpComponentFunding ampCompFund = (AmpComponentFunding) cItr.next();
@@ -1928,6 +1940,7 @@ private void setLineMinistryObservationsToForm(AmpActivityVersion activity, Edit
 				fd.setFiscalYear(DateConversion.convertDateToFiscalYearString(ampCompFund.getTransactionDate()));
 				fd.setTransactionType(ampCompFund.getTransactionType().intValue());
 				fd.setComponentOrganisation(ampCompFund.getReportingOrganization());
+				fd.setComponentSecondResponsibleOrganization(ampCompFund.getComponentSecondResponsibleOrganization());
 				fd.setComponentTransactionDescription(ampCompFund.getDescription());
 				
 				if (fd.getTransactionType() == 0) {
@@ -1992,4 +2005,5 @@ private void setLineMinistryObservationsToForm(AmpActivityVersion activity, Edit
 		eaForm.getWarningMessges().add(TranslatorWorker.translateText("An error occurred when loading the page. Please contact the AMP administrator."));
 		logger.error(e.getMessage(), e);
 	}
+
 }

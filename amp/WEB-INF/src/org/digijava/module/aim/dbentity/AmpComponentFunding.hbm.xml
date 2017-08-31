@@ -19,16 +19,15 @@
 		<property name="description" column="description" type="text" />
 		<property name="exchangeRate" column="exchange_rate" type="java.lang.Float" />
 
-		<many-to-one name="activity" column="activity_id"
-			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" />
 		<many-to-one name="reportingOrganization" column="rep_organization_id"
 			class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none" />
+		<many-to-one name="componentSecondResponsibleOrganization" column="component_second_rep_org_id"
+					 class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none" />
 		<many-to-one name="currency" column="currency_id"
 			class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" />
 		<many-to-one name="component" column="amp_component_id"
-			class="org.digijava.module.aim.dbentity.AmpComponent" cascade="none" lazy="false" />
+			class="org.digijava.module.aim.dbentity.AmpComponent" />
 		<many-to-one name="adjustmentType" column="adjustment_type" 
 		    class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
-			
 	</class>
 </hibernate-mapping>

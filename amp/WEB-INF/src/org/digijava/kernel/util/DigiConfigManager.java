@@ -61,6 +61,11 @@ import org.xml.sax.SAXException;
 
 public class DigiConfigManager {
 
+    private static final String ENV_SMTP_HOST = "SMTP_HOST";
+    private static final String ENV_SMTP_USER = "SMTP_USER";
+    private static final String PROP_SMTP_HOST = "smtpHost";
+    private static final String PROP_SMTP_USER = "smtpUser";
+
     private static Logger logger = Logger.getLogger(DigiConfigManager.class);
 
     public static final String CONFIG_FILE = "digi.xml";
@@ -90,6 +95,7 @@ public class DigiConfigManager {
         try {
             logger.debug("Parsing " + configFile.getName());
             digiConfig = (DigiConfig) digester.parse(configFile);
+            afterDigiConfigParse();
             logger.info("File " + configFile.getName() + " was parsed successfully");
         }
         catch (Exception ex) {
@@ -102,6 +108,20 @@ public class DigiConfigManager {
         initializeConfigBeans();
 
         initialized = true;
+    }
+
+    private static void afterDigiConfigParse() {
+        attemptSmtpOverride(System.getenv(ENV_SMTP_HOST), System.getenv(ENV_SMTP_USER));
+        attemptSmtpOverride(System.getProperty(PROP_SMTP_HOST), System.getProperty(PROP_SMTP_USER));
+    }
+
+    private static void attemptSmtpOverride(String host, String user) {
+        if (host != null && user != null) {
+            Smtp smtp = new Smtp();
+            smtp.setHost(host);
+            smtp.setUserName(user);
+            digiConfig.setSmtp(smtp);
+        }
     }
 
     /**

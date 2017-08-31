@@ -66,7 +66,6 @@ import org.dgfoundation.amp.nireports.NiFilters;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.NiUtils;
 import org.dgfoundation.amp.nireports.amp.dimensions.CategoriesDimension;
-import org.dgfoundation.amp.nireports.amp.dimensions.ComponentsDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.OrganisationsDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.ProgramsDimension;
@@ -126,16 +125,25 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	 */
 	public final static Set<String> TRANSACTION_LEVEL_HIERARCHIES = Collections.unmodifiableSet(new HashSet<>(
 			Arrays.asList(
-				ColumnConstants.MODE_OF_PAYMENT, ColumnConstants.FUNDING_STATUS, ColumnConstants.FINANCING_INSTRUMENT, ColumnConstants.TYPE_OF_ASSISTANCE, ColumnConstants.DISASTER_RESPONSE_MARKER, ColumnConstants.RELATED_PROJECTS, 
-				ColumnConstants.PLEDGES_AID_MODALITY, ColumnConstants.RELATED_PLEDGES, ColumnConstants.PLEDGES_TYPE_OF_ASSISTANCE, ColumnConstants.EXPENDITURE_CLASS, ColumnConstants.AGREEMENT_CODE, ColumnConstants.DONOR_AGENCY,
-				ColumnConstants.DONOR_GROUP, ColumnConstants.DONOR_TYPE, ColumnConstants.FUNDING_ID)));
+					ColumnConstants.MODE_OF_PAYMENT, ColumnConstants.FUNDING_STATUS,
+					ColumnConstants.FINANCING_INSTRUMENT, ColumnConstants.TYPE_OF_ASSISTANCE,
+					ColumnConstants.DISASTER_RESPONSE_MARKER, ColumnConstants.RELATED_PROJECTS,
+					ColumnConstants.PLEDGES_AID_MODALITY, ColumnConstants.RELATED_PLEDGES,
+					ColumnConstants.PLEDGES_TYPE_OF_ASSISTANCE, ColumnConstants.EXPENDITURE_CLASS,
+					ColumnConstants.AGREEMENT_CODE, ColumnConstants.DONOR_AGENCY, ColumnConstants.DONOR_GROUP,
+					ColumnConstants.DONOR_TYPE, ColumnConstants.FUNDING_ID,
+					ColumnConstants.COMPONENT_FUNDING_ORGANIZATION,
+					ColumnConstants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION)));
 	
 	public final static OrganisationsDimension orgsDimension = OrganisationsDimension.instance;
 	public final static LocationsDimension locsDimension = LocationsDimension.instance;
 	public final static SectorsDimension secsDimension = SectorsDimension.instance;
 	public final static ProgramsDimension progsDimension = ProgramsDimension.instance;
 	public final static CategoriesDimension catsDimension = CategoriesDimension.instance;
-	public final static ComponentsDimension compsDimension = ComponentsDimension.instance;
+	public static final NiDimension COMPS_DIMENSION =
+			SqlSourcedNiDimension.buildDegenerateDimension("comps", "amp_components", "amp_component_id");
+	public static final NiDimension COMP_TYPES_DIMENSION =
+			SqlSourcedNiDimension.buildDegenerateDimension("compTypes", "amp_component_type", "type_id");
 	public final static BooleanDimension boolDimension = new BooleanDimension("bool", 1l, 2l); // corroborate with FilterRule.TRUE_VALUE
 	public final static NiDimension agreementsDimension = SqlSourcedNiDimension.buildDegenerateDimension("agrs", "amp_agreement", "id");
 	public final static NiDimension activitiesDimension = SqlSourcedNiDimension.buildDegenerateDimension("acts", "amp_activity_version", "amp_activity_id");
@@ -227,12 +235,15 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	public final static NiDimensionUsage SG_DIM_USG = orgsDimension.getDimensionUsage(Constants.SECTOR_GROUP);	
 	public final static NiDimensionUsage RAW_ORG_DIM_USG = orgsDimension.getDimensionUsage(Constants.ORGANIZATION);
 	public final static LevelColumn RAW_ORG_LEVEL_COLUMN = RAW_ORG_DIM_USG.getLevelColumn(LEVEL_ORGANISATION);
-	public final static NiDimensionUsage CF_DIM_USG = orgsDimension.getDimensionUsage("ComponentFunding");
-	
+	public static final NiDimensionUsage CFO_DIM_USG = orgsDimension.getDimensionUsage("ComponentFundingOrg");
+	public static final NiDimensionUsage CSRO_DIM_USG = orgsDimension.getDimensionUsage("ComponentSecondReportingOrg");
+
 	// the sectors-based NiDimensionUsage's
 	public final static NiDimensionUsage PS_DIM_USG = secsDimension.getDimensionUsage("Primary");
 	public final static NiDimensionUsage SS_DIM_USG = secsDimension.getDimensionUsage("Secondary");	
 	public final static NiDimensionUsage TS_DIM_USG = secsDimension.getDimensionUsage("Tertiary");	
+	public static final NiDimensionUsage Q4S_DIM_USG = secsDimension.getDimensionUsage("Quaternary");
+	public static final NiDimensionUsage Q5S_DIM_USG = secsDimension.getDimensionUsage("Quinary");
 	public final static NiDimensionUsage TAG_S_DIM_USG = secsDimension.getDimensionUsage("Tag");
 	public final static NiDimensionUsage RAW_SCT_DIM_USG = secsDimension.getDimensionUsage("Any");
 	public final static LevelColumn RAW_SCT_LEVEL_COLUMN = RAW_SCT_DIM_USG.getLevelColumn(LEVEL_ALL_IDS);
@@ -253,10 +264,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	
 	public final static NiDimensionUsage ACT_DIM_USG = activitiesDimension.getDimensionUsage("acts");
 	public final static LevelColumn ACT_LEVEL_COLUMN = ACT_DIM_USG.getLevelColumn(0);
-	
-	public final static NiDimensionUsage COMPS_DIM_USG = compsDimension.getDimensionUsage("comps");
-	public final static LevelColumn COMPONENT_LEVEL_COLUMN = COMPS_DIM_USG.getLevelColumn(ComponentsDimension.LEVEL_COMPONENT);
-	
+
 	public final static NiDimensionUsage PLEDGES_DIM_USG = pledgesDimension.getDimensionUsage("pledges");
 	public final static LevelColumn PLEDGES_LEVEL_COLUMN = PLEDGES_DIM_USG.getLevelColumn(0);
 	
@@ -305,6 +313,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	private AmpFundingColumn donorFundingColumn ;
 	private AmpFundingColumn pledgeFundingColumn ;
 	private AmpFundingColumn componentFundingColumn;
+	private AmpFundingColumn regionalFundingColumn;
 
 	/**
 	 * Map<amp_column_name, view_column_name>
@@ -328,6 +337,11 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 			.put(ColumnConstants.INDICATOR_LOGFRAME_CATEGORY, "me_indicator_logframe_id")
 			.put(ColumnConstants.INDICATOR_RISK, "me_indicator_risk_id")
 			.put(ColumnConstants.INDICATOR_TYPE, "me_indicator_type_id")
+			.put(ColumnConstants.COMPONENT_NAME, "amp_component_id")
+			.put(ColumnConstants.COMPONENT_TYPE, "component_type_id")
+			.put(ColumnConstants.COMPONENT_FUNDING_ORGANIZATION, "component_rep_org_id")
+			.put(ColumnConstants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION, "component_second_rep_org_id")
+			.put(ColumnConstants.REGIONAL_REGION, "region_location_id")
 			.build());
 
 	/**
@@ -346,7 +360,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		no_dimension(ColumnConstants.TEAM, "v_teams");
 		no_entity(ColumnConstants.OBJECTIVE, "v_objectives", DG_EDITOR_POSTPROCESSOR);
 		no_dimension(ColumnConstants.ISSUES, "v_issues");
-		
+		date_column(ColumnConstants.ISSUE_DATE, "v_issue_date");
+
 		no_dimension(ColumnConstants.ACTIVITY_PLEDGES_TITLE, "v_activity_pledges_title");
 		no_dimension(ColumnConstants.ACTIVITY_UPDATED_BY, "v_activity_modified_by");
 		no_dimension(ColumnConstants.ACTORS, "v_actors");
@@ -363,11 +378,14 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		single_dimension(ColumnConstants.BUDGET_PROGRAM, "v_budget_program", RAW_PRG_LEVEL_COLUMN);
 		degenerate_dimension(ColumnConstants.BUDGET_STRUCTURE, "v_budget_structure", boolDimension);
 		
-		single_dimension(ColumnConstants.COMPONENT_DESCRIPTION, "v_component_description", COMPONENT_LEVEL_COLUMN);
-		single_dimension(ColumnConstants.COMPONENT_FUNDING_ORGANIZATION, "v_component_funding_organization_name", CF_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
-		single_dimension(ColumnConstants.COMPONENT_NAME, "v_components", COMPONENT_LEVEL_COLUMN);
-		single_dimension(ColumnConstants.COMPONENT_TYPE, "v_component_type", COMPS_DIM_USG.getLevelColumn(ComponentsDimension.LEVEL_COMPONENT_TYPE));
-		single_dimension(ColumnConstants.DESCRIPTION_OF_COMPONENT_FUNDING, "v_component_funding_description", COMPONENT_LEVEL_COLUMN);
+		no_dimension(ColumnConstants.COMPONENT_DESCRIPTION, "v_component_description");
+		single_dimension(ColumnConstants.COMPONENT_FUNDING_ORGANIZATION,
+				"v_component_funding_organization_name", CFO_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
+		single_dimension(ColumnConstants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION,
+				"v_component_second_responsible_organization_name", CSRO_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
+		degenerate_dimension(ColumnConstants.COMPONENT_NAME, "v_components", COMPS_DIMENSION);
+		degenerate_dimension(ColumnConstants.COMPONENT_TYPE, "v_component_type", COMP_TYPES_DIMENSION);
+		no_dimension(ColumnConstants.DESCRIPTION_OF_COMPONENT_FUNDING, "v_component_funding_description");
 		
 		no_dimension(ColumnConstants.COSTING_DONOR, "v_costing_donors");
 		degenerate_dimension(ColumnConstants.DISASTER_RESPONSE_MARKER, "v_disaster_response_marker", boolDimension);
@@ -514,17 +532,32 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		with_percentage(ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR, "v_sub_sectors", PS_DIM_USG, LEVEL_SUBSECTOR);
 		with_percentage(ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR, "v_sub_sub_sectors", PS_DIM_USG, LEVEL_SUBSUBSECTOR);
 
-		with_percentage(ColumnConstants.SECTOR_TAG, "v_sectors", TAG_S_DIM_USG, LEVEL_ROOT);
-		with_percentage(ColumnConstants.SECTOR_TAG_SUB_SECTOR, "v_tag_sub_sectors", TAG_S_DIM_USG, LEVEL_SUBSECTOR);
-		with_percentage(ColumnConstants.SECTOR_TAG_SUB_SUB_SECTOR, "v_tag_sub_sub_sectors", TAG_S_DIM_USG, LEVEL_SUBSUBSECTOR);
-		
-		with_percentage(ColumnConstants.TERTIARY_SECTOR, "v_tertiary_sectors", TS_DIM_USG, LEVEL_ROOT);
-		with_percentage(ColumnConstants.TERTIARY_SECTOR_SUB_SECTOR, "v_tertiary_sub_sectors", TS_DIM_USG, LEVEL_SUBSECTOR);
-		with_percentage(ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR, "v_tertiary_sub_sub_sectors", TS_DIM_USG, LEVEL_SUBSUBSECTOR);
-
 		with_percentage(ColumnConstants.SECONDARY_SECTOR, "v_secondary_sectors", SS_DIM_USG, LEVEL_ROOT);
 		with_percentage(ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR, "v_secondary_sub_sectors", SS_DIM_USG, LEVEL_SUBSECTOR);
 		with_percentage(ColumnConstants.SECONDARY_SECTOR_SUB_SUB_SECTOR, "v_secondary_sub_sub_sectors", SS_DIM_USG, LEVEL_SUBSUBSECTOR);
+
+		with_percentage(ColumnConstants.TERTIARY_SECTOR, "v_tertiary_sectors", TS_DIM_USG, LEVEL_ROOT);
+		with_percentage(ColumnConstants.TERTIARY_SECTOR_SUB_SECTOR, "v_tertiary_sub_sectors", TS_DIM_USG,
+				LEVEL_SUBSECTOR);
+		with_percentage(ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR, "v_tertiary_sub_sub_sectors", TS_DIM_USG,
+				LEVEL_SUBSUBSECTOR);
+
+		with_percentage(ColumnConstants.QUATERNARY_SECTOR, "v_quaternary_sectors", Q4S_DIM_USG, LEVEL_ROOT);
+		with_percentage(ColumnConstants.QUATERNARY_SECTOR_SUB_SECTOR, "v_quaternary_sub_sectors", Q4S_DIM_USG,
+				LEVEL_SUBSECTOR);
+		with_percentage(ColumnConstants.QUATERNARY_SECTOR_SUB_SUB_SECTOR, "v_quaternary_sub_sub_sectors", Q4S_DIM_USG,
+				LEVEL_SUBSUBSECTOR);
+
+		with_percentage(ColumnConstants.QUINARY_SECTOR, "v_quinary_sectors", Q5S_DIM_USG, LEVEL_ROOT);
+		with_percentage(ColumnConstants.QUINARY_SECTOR_SUB_SECTOR, "v_quinary_sub_sectors", Q5S_DIM_USG,
+				LEVEL_SUBSECTOR);
+		with_percentage(ColumnConstants.QUINARY_SECTOR_SUB_SUB_SECTOR, "v_quinary_sub_sub_sectors", Q5S_DIM_USG,
+				LEVEL_SUBSUBSECTOR);
+
+		with_percentage(ColumnConstants.SECTOR_TAG, "v_sectors", TAG_S_DIM_USG, LEVEL_ROOT);
+		with_percentage(ColumnConstants.SECTOR_TAG_SUB_SECTOR, "v_tag_sub_sectors", TAG_S_DIM_USG, LEVEL_SUBSECTOR);
+		with_percentage(ColumnConstants.SECTOR_TAG_SUB_SUB_SECTOR, "v_tag_sub_sub_sectors", TAG_S_DIM_USG,
+				LEVEL_SUBSUBSECTOR);
 
 		with_percentage(ColumnConstants.PRIMARY_PROGRAM, "v_primaryprogram_level_1", PP_DIM_USG, LEVEL_1);
 		with_percentage(ColumnConstants.PRIMARY_PROGRAM_LEVEL_1, "v_primaryprogram_level_1", PP_DIM_USG, LEVEL_1);
@@ -572,7 +605,9 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		with_percentage(ColumnConstants.DISTRICT, "v_districts", LOC_DIM_USG, LEVEL_DISTRICT);
 		with_percentage(ColumnConstants.LOCATION, "v_raw_locations", LOC_DIM_USG, LEVEL_RAW);
 		with_percentage(ColumnConstants.GEOCODE, "v_geocodes", LOC_DIM_USG, LEVEL_RAW);
-		
+
+		single_dimension(ColumnConstants.REGIONAL_REGION, "v_regions", LOC_DIM_USG.getLevelColumn(LEVEL_REGION));
+
 		single_dimension(ColumnConstants.GRACE_PERIOD, "v_grace_period", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
 		date_column(ColumnConstants.MATURITY, "v_maturity", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
 		date_column(ColumnConstants.RATIFICATION_DATE, "v_ratification_date", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
@@ -626,6 +661,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         donorFundingColumn = new AmpFundingColumn(AmpFundingColumn.ENTITY_DONOR_FUNDING, "v_ni_donor_funding", subDimensions);
         pledgeFundingColumn = new AmpFundingColumn(AmpFundingColumn.ENTITY_PLEDGE_FUNDING, "v_ni_pledges_funding", subDimensions);
         componentFundingColumn = new AmpFundingColumn(AmpFundingColumn.ENTITY_COMPONENT_FUNDING, "v_ni_component_funding", subDimensions);
+        regionalFundingColumn = new AmpFundingColumn(AmpFundingColumn.ENTITY_REGIONAL_FUNDING,
+				"v_ni_regional_funding", subDimensions);
 	}
 
     private void addIndicatorColumns() {
@@ -704,7 +741,21 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		with_percentage(ColumnConstants.PLEDGES_TERTIARY_SECTORS, "v_pledges_tertiary_sectors", TS_DIM_USG, LEVEL_ROOT);
 		with_percentage(ColumnConstants.PLEDGES_TERTIARY_SUBSECTORS, "v_pledges_tertiary_sectors_subsectors", TS_DIM_USG, LEVEL_SUBSECTOR);
 		with_percentage(ColumnConstants.PLEDGES_TERTIARY_SUBSUBSECTORS, "v_pledges_tertiary_sectors_subsubsectors", TS_DIM_USG, LEVEL_SUBSUBSECTOR);
-		
+
+		with_percentage(ColumnConstants.PLEDGES_QUATERNARY_SECTORS, "v_pledges_quaternary_sectors",
+				Q4S_DIM_USG, LEVEL_ROOT);
+		with_percentage(ColumnConstants.PLEDGES_QUATERNARY_SUBSECTORS, "v_pledges_quaternary_sectors_subsectors",
+				Q4S_DIM_USG, LEVEL_SUBSECTOR);
+		with_percentage(ColumnConstants.PLEDGES_QUATERNARY_SUBSUBSECTORS, "v_pledges_quaternary_sectors_subsubsectors",
+				Q4S_DIM_USG, LEVEL_SUBSUBSECTOR);
+
+		with_percentage(ColumnConstants.PLEDGES_QUINARY_SECTORS, "v_pledges_quinary_sectors",
+				Q5S_DIM_USG, LEVEL_ROOT);
+		with_percentage(ColumnConstants.PLEDGES_QUINARY_SUBSECTORS, "v_pledges_quinary_sectors_subsectors",
+				Q5S_DIM_USG, LEVEL_SUBSECTOR);
+		with_percentage(ColumnConstants.PLEDGES_QUINARY_SUBSUBSECTORS, "v_pledges_quinary_sectors_subsubsectors",
+				Q5S_DIM_USG, LEVEL_SUBSUBSECTOR);
+
 		with_percentage(ColumnConstants.PLEDGES_COUNTRIES, "v_pledges_countries", LOC_DIM_USG, LEVEL_COUNTRY);
 		with_percentage(ColumnConstants.PLEDGES_REGIONS, "v_pledges_regions", LOC_DIM_USG, LEVEL_REGION);
 		with_percentage(ColumnConstants.PLEDGES_ZONES, "v_pledges_zones", LOC_DIM_USG, LEVEL_ZONE);
@@ -1081,7 +1132,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 			Integer trTypeId = pair.getValue();
 			for (AmpCategoryValue adj : sscAdjTypes) {
 				String measureName = adj.getValue() + " " + transactionType;
-				addMeasure(new AmpTrivialMeasure(measureName, trTypeId, adj.getValue(), false));
+				addMeasure(new AmpTrivialMeasure(measureName, trTypeId, adj.getValue(), false, true));
 			}
 		}
 		
@@ -1099,7 +1150,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 
 	List<NiDimension> whitelistedDegenerateDimensions = 
 			Arrays.asList(catsDimension, agreementsDimension, boolDimension, usersDimension, departmentsDimension,
-					fundingDimension);
+					fundingDimension, COMPS_DIMENSION, COMP_TYPES_DIMENSION);
 	
 	
 	/**
@@ -1213,7 +1264,10 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 				
 			case ArConstants.COMPONENT_TYPE:
 				return componentFundingColumn;
-				
+
+			case ArConstants.REGIONAL_TYPE:
+				return regionalFundingColumn;
+
 			default:
 				throw new RuntimeException(String.format("report type %d not implemented in NiReports yet", engine.spec.getReportType()));
 		}

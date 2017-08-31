@@ -155,6 +155,7 @@ public class AmpARFilterConverter {
 		addActivityDateFilter(arFilter.buildFromAndToActivityFinalContractingDateAsDate(), ColumnConstants.FINAL_DATE_FOR_CONTRACTING);
 		addActivityDateFilter(arFilter.buildFromAndToEffectiveFundingDateAsDate(), ColumnConstants.EFFECTIVE_FUNDING_DATE);
 		addActivityDateFilter(arFilter.buildFromAndToFundingClosingDateAsDate(), ColumnConstants.FUNDING_CLOSING_DATE);
+		addActivityDateFilter(arFilter.buildFromAndToIssueDateAsDate(), ColumnConstants.ISSUE_DATE);
 	}
 	
 	private void addActivityDateFilter(Date[] fromTo, String columnName) {
@@ -178,6 +179,8 @@ public class AmpARFilterConverter {
 		addFilter(arFilter.getExecutingAgency(), ColumnConstants.EXECUTING_AGENCY);
 		addFilter(arFilter.getBeneficiaryAgency(), ColumnConstants.BENEFICIARY_AGENCY);
 		addFilter(arFilter.getResponsibleorg(), ColumnConstants.RESPONSIBLE_ORGANIZATION);
+		addFilter(arFilter.getComponentFunding(), ColumnConstants.COMPONENT_FUNDING_ORGANIZATION);
+		addFilter(arFilter.getComponentSecondResponsible(), ColumnConstants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION);
 		addFilter(arFilter.getContractingAgency(), ColumnConstants.CONTRACTING_AGENCY);
 		//related agencies groups
 		addFilter(arFilter.getContractingAgencyGroups(), ColumnConstants.CONTRACTING_AGENCY_GROUPS);
@@ -188,7 +191,10 @@ public class AmpARFilterConverter {
 		addSectorSchemeFilters(arFilter.getSelectedSectors(), "Primary", ColumnConstants.PRIMARY_SECTOR);
 		addSectorSchemeFilters(arFilter.getSelectedSecondarySectors(), "Secondary", ColumnConstants.SECONDARY_SECTOR);
 		addSectorSchemeFilters(arFilter.getSelectedTertiarySectors(), "Tertiary", ColumnConstants.TERTIARY_SECTOR);
-		
+		addSectorSchemeFilters(arFilter.getSelectedQuaternarySectors(), "Quaternary",
+				ColumnConstants.QUATERNARY_SECTOR);
+		addSectorSchemeFilters(arFilter.getSelectedQuinarySectors(), "Quinary", ColumnConstants.QUINARY_SECTOR);
+
 		if (!arFilter.isPledgeFilter())
 			addSectorSchemeFilters(arFilter.getSelectedTagSectors(), "Tag", ColumnConstants.SECTOR_TAG);
 	}

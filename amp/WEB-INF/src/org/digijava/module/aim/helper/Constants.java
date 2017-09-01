@@ -448,4 +448,10 @@ public class Constants
 
 
 	public static final String AUTOMATIC_VALIDATION_JOB_CLASS_NAME = "org.digijava.module.message.jobs.ActivityAutomaticValidationJob" ;
+
+	public static final String EDITOR_KEY_PREFIX = "aim-";
+	public static final String EDITOR_KEY_IATI_IMPORT_PREFIX = "_iati_import_";
+	public static final String[] EDITOR_FIELDS = {"ActivitySummary", "Conditionality", "Description", "Environment",
+			"EqualOpportunity", "LessonsLearned", "Minorities", "Objective", "ProgramDescription", "ProjectComments",
+			"ProjectImpact", "ProjectManagement", "Purpose", "Results", "StatusReason"};
 }

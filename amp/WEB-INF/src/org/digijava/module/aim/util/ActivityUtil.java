@@ -9,7 +9,6 @@ import java.lang.reflect.Method;
 import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -23,7 +22,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.apache.commons.lang.time.DateUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.FilterParam;
@@ -34,8 +32,10 @@ import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.User;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.admin.helper.AmpActivityFake;
 import org.digijava.module.aim.dbentity.AmpActivity;
@@ -44,11 +44,8 @@ import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpAhsurvey;
-import org.digijava.module.aim.dbentity.AmpAhsurveyResponse;
 import org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicatorOption;
 import org.digijava.module.aim.dbentity.AmpAuditLogger;
-import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
@@ -86,6 +83,9 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.categorymanager.util.IdWithValueShim;
+import org.digijava.module.dataExchange.utils.DataExchangeUtils;
+import org.digijava.module.editor.dbentity.Editor;
+import org.digijava.module.editor.exception.EditorException;
 import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
 import org.hibernate.ObjectNotFoundException;
@@ -103,6 +103,8 @@ import org.hibernate.type.StringType;
 import org.joda.time.Period;
 
 import clover.org.apache.commons.lang.StringUtils;
+
+import javax.servlet.http.HttpServletRequest;
 
 public class ActivityUtil {
 
@@ -2026,6 +2028,59 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 		qry.setParameter(0, activity.getAmpActivityGroup().getAmpActivityGroupId());
 		qry.setParameter(1, activity.getAmpActivityId());
 		return (qry.list().size() > 0 ? (AmpActivityVersion) qry.list().get(0) : null);
+	}
+
+
+	public static void fixEditorFields(AmpActivityVersion activity, HttpServletRequest request) {
+
+		Site site = RequestUtils.getSite(request);
+		boolean saveActivity = false;
+
+		Class clazz = null;
+		try {
+			clazz = Class.forName("org.digijava.module.aim.dbentity.AmpActivityVersion");
+		} catch (ClassNotFoundException e) {
+			logger.error("AmpActivityVersion class not found.", e);
+		}
+
+		for (String field : Constants.EDITOR_FIELDS) {
+			String getter = new StringBuilder("get").append(field).toString();
+
+			try {
+				Method method = clazz.getMethod(getter);
+				String currentValue = (String) method.invoke(activity, null);
+
+				if (currentValue != null && currentValue.trim().length() > 0
+						&& !currentValue.startsWith(Constants.EDITOR_KEY_PREFIX) && !currentValue.startsWith(
+						Constants.EDITOR_KEY_IATI_IMPORT_PREFIX)) {
+
+					String key = new StringBuilder(Constants.EDITOR_KEY_PREFIX).append(field).append("-").append(
+							System.currentTimeMillis()).toString();
+					Editor editor = null;
+					editor = DataExchangeUtils.createEditor(site, key, TLSUtils.getLangCode());
+					editor.setLastModDate(new Date());
+					editor.setBody(currentValue);
+
+					String setter = new StringBuilder("set").append(field).toString();
+					Method set = clazz.getMethod(setter, String.class);
+					set.invoke(activity, key);
+					saveActivity = true;
+					try {
+						org.digijava.module.editor.util.DbUtil.saveEditor(editor);
+					} catch (EditorException e) {
+						logger.error("Unable to save editor", e);
+					}
+				}
+
+			} catch (Exception e) {
+				logger.error("Unable to check fields", e);
+			}
+
+		}
+		if (saveActivity) {
+			Session session = PersistenceManager.getRequestDBSession();
+			session.update(activity);
+		}
 	}
 
 } // End

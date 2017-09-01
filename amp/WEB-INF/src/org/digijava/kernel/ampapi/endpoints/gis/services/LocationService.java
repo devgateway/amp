@@ -105,6 +105,8 @@ public class LocationService {
 			if (filters != null) {
 				filterRules = FilterUtils.getFilterRules(filters, null, filterRules);
 			}
+			
+			GisUtils.configurePerformanceFilter(config, filterRules);
  		}
 		Map<Long, String> admLevelToGeoCode;
 		if (admlevel.equals(ColumnConstants.COUNTRY)) {
@@ -321,7 +323,9 @@ public class LocationService {
 		if (config != null) {
 			Map<String, Object> filterMap = (Map<String, Object>) config.get(EPConstants.FILTERS);
 			AmpReportFilters filterRules = FilterUtils.getFilters(filterMap, new AmpReportFilters(mrs.getCalendar()));
-
+			
+			GisUtils.configurePerformanceFilter(config, filterRules);
+			
 			if (filterRules != null) {
 				spec.setFilters(filterRules);
 			}
@@ -360,7 +364,8 @@ public class LocationService {
 		}
 		return activitiesId;
 	}
-	@SuppressWarnings("unchecked")
+	
+    @SuppressWarnings("unchecked")
 	public static List<AmpStructure> getStructures(JsonBean config) throws AmpApiException{
 		List<AmpStructure> al = null;
 		Set<Long> activitiesId = getActivitiesForFiltering( config,null);

@@ -19,6 +19,7 @@ import org.digijava.kernel.ampapi.endpoints.currency.Currencies;
 import org.digijava.kernel.ampapi.endpoints.dashboards.EndPoints;
 import org.digijava.kernel.ampapi.endpoints.gis.GisEndPoints;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorEndPoints;
+import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRulesEndpoint;
 import org.digijava.kernel.ampapi.endpoints.reports.Reports;
 import org.digijava.kernel.ampapi.endpoints.security.Security;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsDefinitionsEndpoint;
@@ -55,6 +56,7 @@ public class ApiError {
         put(IndicatorEndPoints.class.getName(), 6);
         put(GisEndPoints.class.getName(), 7);
         put(SettingsDefinitionsEndpoint.class.getName(), 8);
+        put(PerformanceRulesEndpoint.class.getName(), 9);
 	}};
 
 	private final static Set<String> COMPONENTS_WITH_NEW_ERROR_FORMAT = new HashSet<>(
@@ -125,6 +127,14 @@ public class ApiError {
 		
 		return getResultErrorBean(error);
 	};
+	
+	public static JsonBean toError(ApiErrorMessage apiErrorMessage, Throwable e) {
+		Map<String, Collection<Object>> error = new HashMap<>();
+		error.put(getErrorId(getErrorComponentIdFromException(e), apiErrorMessage.id), 
+				Arrays.asList(getErrorText(apiErrorMessage)));
+		
+		return getResultErrorBean(error);
+	};
 
     /**
      * Sets "Internal Server Error" marker if the marker was absent or 200 OK
@@ -175,6 +185,16 @@ public class ApiError {
 	private static Integer getErrorComponentId() {
 		StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
 		
+		return getErrorComponentIdFromStackTrace(stackTrace);
+	}
+	
+	private static Integer getErrorComponentIdFromException(Throwable e) {
+		StackTraceElement[] stackTrace = e.getStackTrace();
+		
+		return getErrorComponentIdFromStackTrace(stackTrace);
+	}
+	
+	private static Integer getErrorComponentIdFromStackTrace(StackTraceElement[] stackTrace) {
 		for (StackTraceElement st : stackTrace) {
 			if (COMPONENT_ID_CLASS_MAP.containsKey(st.getClassName())) {
 				return COMPONENT_ID_CLASS_MAP.get(st.getClassName());

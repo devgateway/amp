@@ -98,6 +98,7 @@ public class AmpARFilterConverter {
 		addBooleanFilter(arFilter.getShowArchived(), ColumnConstants.ARCHIVED);
 		addCategoryValueNamesFilter(arFilter.getProjectImplementingUnits(), ColumnConstants.PROJECT_IMPLEMENTING_UNIT);
 		addCategoryValueNamesFilter(arFilter.getActivityPledgesTitle(), ColumnConstants.PLEDGES_TITLES);
+		addCategoryValueNamesFilter(arFilter.getPerformanceAlertLevel(), ColumnConstants.PERFORMANCE_ALERT_LEVEL);
 	}
 	
 	/**

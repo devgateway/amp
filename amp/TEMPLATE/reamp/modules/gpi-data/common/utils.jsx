@@ -5,7 +5,7 @@ class Utils {
     
     static isUndefinedOrBlank(obj, field) {        
         var result = false;
-        if (obj[field] === '' || !obj[field]) {
+        if (obj[field] === '' || obj[field] == null) {
             result = true;
         }        
         return result;        
@@ -13,8 +13,7 @@ class Utils {
     
     static validateAidOnBudget(aidOnBudget){
         const errors = [];
-        var message;
-               
+        var message;        
         if (!this.isNumber(aidOnBudget['amount']) || this.isUndefinedOrBlank(aidOnBudget, 'amount')){
             message = {messageKey: 'amp.gpi-data:validation-all-fields-required', id: aidOnBudget.id, cid: aidOnBudget.cid, affectedFields:['amount']};                        
         }  

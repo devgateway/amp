@@ -62,21 +62,16 @@ public class DocumentManager extends Action {
 		DocumentManagerForm myForm		= (DocumentManagerForm) form;
 
 		request.setAttribute("ServletContext", this.getServlet().getServletContext() );
-//		if ( request.getParameter(CrConstants.REQUEST_GET_SHOW_DOCS) != null )
-//			showOnlyDocs 	= true;
-//		else
-//			showOnlyDocs	= false;
-//		if ( request.getParameter(CrConstants.REQUEST_GET_SHOW_LINKS) != null )
-//			showOnlyLinks 	= true;
-//		else
-//			showOnlyLinks	= false;
-				
-		
 		if (  myForm.getAjaxDocumentList() ) {
 			ajaxDocumentList(request, myForm);
 			return mapping.findForward("ajaxDocumentList");
 		}
-		
+        String maxFileSizeGS = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.CR_MAX_FILE_SIZE);
+        request.setAttribute("uploadFailedTooBigMsg", "The file size limit is {size} MB. This file exceeds the limit.");
+        request.setAttribute("maxFileSizeGS", maxFileSizeGS);
+        request.setAttribute("uploadMaxFileSize",
+                Long.toString(Bytes.megabytes(Long.parseLong(maxFileSizeGS)).bytes()));
+
 		if ( !isLoggeedIn(request) ) {
 			return mapping.findForward("publicView");
 		}
@@ -98,11 +93,6 @@ public class DocumentManager extends Action {
 		AmpApplicationSettings sett	= DbUtil.getTeamAppSettings(teamMember.getTeamId());
 		boolean shareWithoutApprovalNeeded=((sett!=null && sett.getAllowAddTeamRes()!=null && sett.getAllowAddTeamRes().intValue()>=CrConstants.TEAM_RESOURCES_ADD_ALLOWED_WORKSP_MEMBER) || teamMember.getTeamHead());
 		request.setAttribute("shareWithoutApprovalNeeded", shareWithoutApprovalNeeded);
-
-		String maxFileSizeGS = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.CR_MAX_FILE_SIZE);
-		request.setAttribute("uploadFailedTooBigMsg", "The file size limit is {size} MB. This file exceeds the limit.");
-		request.setAttribute("maxFileSizeGS", maxFileSizeGS);
-		request.setAttribute("uploadMaxFileSize", Long.toString(Bytes.megabytes(Long.parseLong(maxFileSizeGS)).bytes()));
 
 		return mapping.findForward("forward");
 	}

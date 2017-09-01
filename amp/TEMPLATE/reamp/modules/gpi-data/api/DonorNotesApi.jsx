@@ -11,13 +11,13 @@ class DonorNotesApi {
         });
     }
     
-    static getDonorNotesList(data, indicatorCode) { 
-        const url = '/rest/gpi/donor-notes/'+ indicatorCode + '?offset=' + data.paging.offset + '&count=' + data.paging.recordsPerPage + '&orderby=' + data.sorting.orderBy + '&sort=' + data.sorting.sortOrder;    
-        return new Promise((resolve, reject) => {
-            fetchJson(url).then((response) => {
-                resolve(response)
-            }).catch((error) => {
-                reject(error);
+    static getDonorNotesList( data, indicatorCode ) {
+        const url = '/rest/gpi/donor-notes/' + indicatorCode + '?offset=' + data.paging.offset + '&count=' + data.paging.recordsPerPage + '&orderby=' + data.sorting.orderBy + '&sort=' + data.sorting.sortOrder + '&timestamp=' + Date.now();
+        return new Promise(( resolve, reject ) => {
+            fetchJson( url ).then(( response ) => {
+                resolve( response )
+            }).catch(( error ) => {
+                reject( error );
             });
         });
     }

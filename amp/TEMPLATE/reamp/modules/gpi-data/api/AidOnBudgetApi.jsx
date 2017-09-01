@@ -2,7 +2,7 @@ import { postJson, delay, fetchJson, deleteJson } from 'amp/tools';
 class AidOnBudgetApi {  
     
     static getAidOnBudgetList(data) { 
-        const url = '/rest/gpi/aid-on-budget?offset=' + data.paging.offset + '&count=' + data.paging.recordsPerPage + '&orderby=' + data.sorting.orderBy + '&sort=' + data.sorting.sortOrder;    
+        const url = '/rest/gpi/aid-on-budget?offset=' + data.paging.offset + '&count=' + data.paging.recordsPerPage + '&orderby=' + data.sorting.orderBy + '&sort=' + data.sorting.sortOrder + '&timestamp=' + Date.now();   
         return new Promise((resolve, reject) => {
             fetchJson(url).then((response) => {
                 resolve(response)

@@ -193,7 +193,7 @@ export default class DonorNotesRow extends Component {
                     <textarea name="notes" className="form-control" rows="5" onChange={this.onChange}>{this.props.donorNotes.notes}</textarea>
                     </div>
                     </td>
-                    <td>
+                    <td className="actions-column">
                        <span className="glyphicon glyphicon-custom glyphicon-ok-circle success-color" onClick={this.save}> </span>
                        <span className="glyphicon glyphicon-custom glyphicon-remove-sign" onClick={this.cancel}></span>
                     </td>                      
@@ -218,7 +218,7 @@ export default class DonorNotesRow extends Component {
                         <div className="notes-container"> { notes} {this.showTextToggle()}</div>
                     }                    
                     </td>
-                    <td><span className="glyphicon glyphicon-custom glyphicon-pencil" onClick={this.toggleEdit}></span> <span className="glyphicon glyphicon-custom glyphicon-trash" onClick={this.deleteDonorNotes}></span></td>                
+                    <td className="actions-column"><span className="glyphicon glyphicon-custom glyphicon-pencil" onClick={this.toggleEdit}></span> <span className="glyphicon glyphicon-custom glyphicon-trash" onClick={this.deleteDonorNotes}></span></td>                
                     </tr>
                     
             );

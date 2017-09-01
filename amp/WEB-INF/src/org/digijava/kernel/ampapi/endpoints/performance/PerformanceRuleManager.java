@@ -93,12 +93,13 @@ public class PerformanceRuleManager {
             throw new PerformanceRuleException(PerformanceRulesErrors.REQUIRED_ATTRIBUTE, "level");
         }
 
-        requireCategoryValueExists(performanceRule.getLevel().getId());
+        AmpCategoryValue dbLevel = requireCategoryValueExists(performanceRule.getLevel().getId());
+        performanceRule.setLevel(dbLevel);
 
         Session session = PersistenceManager.getSession();
         session.merge(performanceRule);
         
-        updateCachedPerformanceRules();
+        invalidateCachedPerformanceRules();
     }
 
     public void savePerformanceRule(AmpPerformanceRule performanceRule) {
@@ -107,12 +108,13 @@ public class PerformanceRuleManager {
             throw new PerformanceRuleException(PerformanceRulesErrors.REQUIRED_ATTRIBUTE, "level");
         }
 
-        requireCategoryValueExists(performanceRule.getLevel().getId());
+        AmpCategoryValue dbLevel = requireCategoryValueExists(performanceRule.getLevel().getId());
+        performanceRule.setLevel(dbLevel);
 
         Session session = PersistenceManager.getSession();
         session.saveOrUpdate(performanceRule);
         
-        updateCachedPerformanceRules();
+        invalidateCachedPerformanceRules();
     }
 
     public void deletePerformanceRule(Long id) {
@@ -121,7 +123,7 @@ public class PerformanceRuleManager {
         Session session = PersistenceManager.getSession();
         session.delete(performanceRule);
         
-        updateCachedPerformanceRules();
+        invalidateCachedPerformanceRules();
     }
 
     public List<AmpPerformanceRule> getPerformanceRules() {
@@ -136,8 +138,12 @@ public class PerformanceRuleManager {
         Session session = PersistenceManager.getSession();
 
         cachedPerformanceRules = session.createCriteria(AmpPerformanceRule.class).addOrder(Order.asc("id")).list();
-        
-        updateCachedPerformanceRuleMatchers();
+        invalidateCachedPerformanceRuleMatchers();
+    }
+    
+    private void invalidateCachedPerformanceRules() {
+        cachedPerformanceRules = null;
+        invalidateCachedPerformanceRuleMatchers();
     }
     
     private void updateCachedPerformanceRuleMatchers() {
@@ -156,6 +162,10 @@ public class PerformanceRuleManager {
                 logger.error("Type [" + rule.getTypeClassName() + "] for rule [" + rule.getName() + "] is invalid.");
             }
         }
+    }
+    
+    private void invalidateCachedPerformanceRuleMatchers() {
+        cachedPerformanceRuleMatchers = null;
     }
 
     public ResultPage<AmpPerformanceRule> getPerformanceRules(int page, int size) {
@@ -239,10 +249,10 @@ public class PerformanceRuleManager {
         } else if (level2 == null) {
             return level1;
         } else if (level1.getIndex() > level2.getIndex()) {
-            return level2;
+            return level1;
         }
         
-        return level1;
+        return level2;
     }
     
     public int getCalendarTimeUnit(String timeUnit) {

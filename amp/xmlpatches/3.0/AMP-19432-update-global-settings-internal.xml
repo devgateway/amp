@@ -10,6 +10,8 @@
                 
                 UPDATE amp_global_settings SET internal = false;
                 
+                DELETE FROM amp_global_settings WHERE settingsname IN ('Translation hashcode patch');
+                
             </lang>
         </script>
     </apply>

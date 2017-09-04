@@ -431,17 +431,9 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 			                                    <html:text property="gsfValue" value="<%= globalSett.getGlobalSettingsValue()%>"></html:text> 
 			                                    <digi:trn key="aim:gloablSetting:customFormat">(Custom Format)</digi:trn>
 
- 												<%
- 													} else if (globalSett.getGlobalSettingsName().trim().equalsIgnoreCase("Budget Support for PI 9".trim())) {
- 												%>
-													<html:select property="listOfValues" styleClass="inp-text;width:100%" multiple="true" name="globalSett">
-														<logic:iterate name="aimGlobalSettingsForm" property='<%=possibleValues%>' id="global">
-															<html:option value="${global.key}">${global.value}</html:option>
-														</logic:iterate>
-													</html:select> 	
 			                                    <%
- 				                                    	} else {
- 				                                    %>
+			                                        } else {
+ 				                                %>
 			                                    
 			                                    <html:select   property="gsfValue" alt="prueba" style="max-width: 750px;" styleClass="inp-text" value='<%= globalSett.getGlobalSettingsValue() %>'>
 			                                      <logic:iterate name="aimGlobalSettingsForm" property='<%=possibleValues%>' id="global" type="org.digijava.module.aim.helper.KeyValue">

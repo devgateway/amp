@@ -155,22 +155,12 @@ public class PIReport9 extends PIAbstractReport {
 										.getTransactionAmount(), fromExchangeRate, toExchangeRate));
 
 								// Setup row.
-								if (showColumn[0]
-										&& ArrayUtils
-												.contains(
-														FeaturesUtil
-																.getGlobalSettingsStringArray(GlobalSettingsConstants.BUDGET_SUPPORT_FOR_PI9),
-														auxFunding.getFinancingInstrument().getId().toString())) {
+								if (showColumn[0]) {
 									auxRow.setColumn1(amount);
 								} else {
 									auxRow.setColumn1(new BigDecimal(0));
 								}
-								if (showColumn[1]
-										&& !ArrayUtils
-												.contains(
-														FeaturesUtil
-																.getGlobalSettingsStringArray(GlobalSettingsConstants.BUDGET_SUPPORT_FOR_PI9),
-														auxFunding.getFinancingInstrument().getId().toString())) {
+								if (showColumn[1]) {
 									auxRow.setColumn2(amount);
 								} else {
 									auxRow.setColumn2(new BigDecimal(0));

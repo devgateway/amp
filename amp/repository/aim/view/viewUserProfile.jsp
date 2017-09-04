@@ -96,9 +96,8 @@ td.inside_header {background-color:#C7D4DB; color:#000; height:30px; border-colo
 							<td class="inside"><digi:trn key="aim:autologinlink">Autologin Link</digi:trn></td>
 							<td class="inside">
 								<%
-								String value = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AUTO_LOGIN);
 								Long id = ((org.digijava.module.aim.helper.TeamMember) session.getAttribute("currentMember")).getMemberId();
-								if( request.getParameter("id") != null && value.equalsIgnoreCase("true") && id.equals(new Long(request.getParameter("id")))){
+								if( request.getParameter("id") != null && id.equals(new Long(request.getParameter("id")))){
 									org.digijava.kernel.user.User user = (org.digijava.kernel.user.User) session.getAttribute("org.digijava.kernel.user");
 									String encryptedPass = org.digijava.kernel.util.ShaCrypt.crypt(user.getEmail() + "_" + user.getPassword());
 								%>

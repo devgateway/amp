@@ -34,18 +34,6 @@ public class GisConstants {
 	public static final String ADM3 = "adm-3";
 	
 	/**
-	 * The order is important - this is the priority order between measures, 
-	 * that is used to convert the report config to gis funding type option   
-	 */
-	/* 
-	public static final Map<String, String> MEASURE_TO_NAME_MAP = new LinkedHashMap<String, String>() {{
-		put(MeasureConstants.ACTUAL_COMMITMENTS, COMMITMENTS);
-		put(MeasureConstants.ACTUAL_DISBURSEMENTS, DISBURSEMENTS);
-		put(MeasureConstants.ACTUAL_EXPENDITURES, EXPENDITURES);
-	}};
-	*/
-	
-	/**
 	 * Set of measures that can be used in GIS module as funding type options.
 	 * The priority doesn't matter anymore, but still adding some order via LinkedHashSet just for display.
 	 */

@@ -176,14 +176,9 @@ public class AmpStructuresFormSectionFeature extends
 		AmpAjaxLinkField addbutton = new AmpAjaxLinkField("addbutton", "Add Structure", "Add Structure") {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				AmpStructure stru = new AmpStructure();
-				if(FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.DEFAULT_STRUCTURE_TYPE)!=-1){
-					AmpStructureType s=(AmpStructureType)PersistenceManager.getSession().load(AmpStructureType.class, 
-							FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.DEFAULT_STRUCTURE_TYPE));
-					stru.setType(s);	
-				}
-				
-				list.addItem(stru);
+                AmpStructure stru = new AmpStructure();
+                list.addItem(stru);
+
 				target.add(this.getParent());
 				target.add(containter);
 				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(this.getParent()));

@@ -74,7 +74,7 @@ public class Group
     private Long parentId;
     private boolean inheritSecurity;
     
-    public final static Set<String> ADMIN_GROUPS = ImmutableSet.of(Group.ADMINISTRATORS, Group.SUPER_ADMINISTRATORS);
+    public static final Set<String> ADMIN_GROUPS = ImmutableSet.of(Group.ADMINISTRATORS, Group.SUPER_ADMINISTRATORS);
 
     public Group() {
     }

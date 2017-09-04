@@ -5,10 +5,18 @@ class Utils {
     
     static isUndefinedOrBlank(obj, field) {        
         var result = false;
-        if (obj[field] === '' || obj[field] == null) {
+        if (obj[field] == null || this.trim(obj[field]) === '') {
             result = true;
         }        
         return result;        
+    }
+    
+    static trim(str) {
+        if(str && typeof str === 'string'){
+            return str.trim();
+        }
+        
+        return str
     }
     
     static validateAidOnBudget(aidOnBudget){

@@ -557,6 +557,6 @@ public class SiteUtils {
      */
     public static boolean isEffectiveLangRTL() {
         Locale locale = getDefaultSite().getLocale(TLSUtils.getEffectiveLangCode());
-        return locale.getLeftToRight() == false;
+        return !locale.getLeftToRight();
     }
 }

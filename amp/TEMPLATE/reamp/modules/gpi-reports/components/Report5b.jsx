@@ -353,12 +353,7 @@ export default class Report5b extends Component {
                                     <option value={org.id} key={org.id} >{org.name}</option>
                                 )}
                             </select>
-                        </div>
-                        <div className="pull-right"><h4>{this.props.translations['amp.gpi-reports:currency']} {this.props.mainReport.settings['currency-code']}
-                        {(this.props.settings['number-divider'] != 1) &&
-                            <span className="amount-units"> ({this.props.translations['amp-gpi-reports:amount-in-' + this.props.settings['number-divider']]})</span>                    
-                        }
-                        </h4></div>
+                        </div>                        
                     </div>
                     <div className="section-divider"></div>
                         { this.props.mainReport.empty == false  &&

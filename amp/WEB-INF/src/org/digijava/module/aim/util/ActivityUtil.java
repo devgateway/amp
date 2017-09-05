@@ -1988,6 +1988,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         
         if (a.getFunding() != null) {
             activityTransactions = a.getFunding().stream()
+                    .filter(f -> f.getFundingDetails() != null)
                     .flatMap(f -> f.getFundingDetails().stream())
                     .filter(fd -> fd.getTransactionType() == transactionType)
                     .collect(Collectors.toList());

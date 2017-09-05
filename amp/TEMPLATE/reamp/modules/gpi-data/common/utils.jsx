@@ -5,16 +5,23 @@ class Utils {
     
     static isUndefinedOrBlank(obj, field) {        
         var result = false;
-        if (obj[field] === '' || !obj[field]) {
+        if (obj[field] == null || this.trim(obj[field]) === '') {
             result = true;
         }        
         return result;        
     }
     
+    static trim(str) {
+        if(str && typeof str === 'string'){
+            return str.trim();
+        }
+        
+        return str
+    }
+    
     static validateAidOnBudget(aidOnBudget){
         const errors = [];
-        var message;
-               
+        var message;        
         if (!this.isNumber(aidOnBudget['amount']) || this.isUndefinedOrBlank(aidOnBudget, 'amount')){
             message = {messageKey: 'amp.gpi-data:validation-all-fields-required', id: aidOnBudget.id, cid: aidOnBudget.cid, affectedFields:['amount']};                        
         }  

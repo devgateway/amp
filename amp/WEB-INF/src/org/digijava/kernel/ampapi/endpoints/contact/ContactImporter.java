@@ -10,7 +10,6 @@ import org.digijava.kernel.ampapi.endpoints.activity.ObjectConversionException;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
-import org.digijava.kernel.ampapi.endpoints.security.SecurityErrors;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpContact;
@@ -42,10 +41,11 @@ public class ContactImporter extends ObjectImporter {
 
         List<APIField> fieldsDef = AmpFieldsEnumerator.PRIVATE_ENUMERATOR.getContactFields();
 
-        AmpTeamMember createdBy = TeamMemberUtil.getAmpTeamMember(getCreatedByIdOrNull());
-        if (createdBy == null) {
+        Object createdById = newJson.get(ContactEPConstants.CREATED_BY);
+        AmpTeamMember createdBy = TeamMemberUtil.getAmpTeamMember(getLongOrNull(createdById));
+        if (createdById != null && createdBy == null) {
             String msg = "Invalid team member in " + ContactEPConstants.CREATED_BY + " field.";
-            return Collections.singletonList(SecurityErrors.INVALID_TEAM.withDetails(msg));
+            return Collections.singletonList(ContactErrors.FIELD_INVALID_VALUE.withDetails(msg));
         }
 
         try {
@@ -78,10 +78,9 @@ public class ContactImporter extends ObjectImporter {
         return new ArrayList<>(errors.values());
     }
 
-    private Long getCreatedByIdOrNull() {
-        Object idObj = newJson.get(ContactEPConstants.CREATED_BY);
-        if (idObj instanceof Number) {
-            return ((Number) idObj).longValue();
+    private Long getLongOrNull(Object obj) {
+        if (obj instanceof Number) {
+            return ((Number) obj).longValue();
         } else {
             return null;
         }

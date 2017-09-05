@@ -10,6 +10,7 @@ public final class ContactErrors {
     private ContactErrors() {
     }
 
+    public static final ApiErrorMessage FIELD_INVALID_VALUE = new ApiErrorMessage(3, "Invalid field value");
     public static final ApiErrorMessage UNIQUE_PRIMARY_ORG_CONTACT =
             new ApiErrorMessage(22, "Multiple primary organisation contacts are not allowed");
 }

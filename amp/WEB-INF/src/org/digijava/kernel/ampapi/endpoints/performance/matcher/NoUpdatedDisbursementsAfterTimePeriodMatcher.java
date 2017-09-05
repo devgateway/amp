@@ -38,16 +38,14 @@ public class NoUpdatedDisbursementsAfterTimePeriodMatcher extends PerformanceRul
     public boolean match(AmpActivityVersion a) {
         Date deadline = getDeadline(new Date(), timeUnit, timeAmount);
         for (AmpFunding f : a.getFunding()) {
-            if (f.getFundingDetails() == null) {
-                return false;
-            }
-            
-            boolean hasDisbursmentsAfterDeadline = f.getFundingDetails().stream()
-                    .filter(t -> t.getTransactionType() == Constants.DISBURSEMENT)
-                    .anyMatch(t -> t.getTransactionDate().after(deadline));
-            
-            if (hasDisbursmentsAfterDeadline) {
-                return false;
+            if (f.getFundingDetails() != null) {
+                boolean hasDisbursmentsAfterDeadline = f.getFundingDetails().stream()
+                        .filter(t -> t.getTransactionType() == Constants.DISBURSEMENT)
+                        .anyMatch(t -> t.getTransactionDate().after(deadline));
+                
+                if (hasDisbursmentsAfterDeadline) {
+                    return false;
+                }
             }
         }
         

@@ -1655,7 +1655,7 @@ function collapseAll() {
 	<fieldset>
 		<legend>
 			<span class=legend_label id="melink" style="cursor: pointer;">
-				<digi:trn>M &amp; E</digi:trn>
+				<digi:trn>M&E</digi:trn>
 			</span>	
 		</legend>
 

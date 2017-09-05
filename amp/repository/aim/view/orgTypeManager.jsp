@@ -96,7 +96,7 @@
 											<tr>
 											<td colspan="4">
 													<digi:trn key="aim:organizationPages">
-													Pages :</digi:trn>
+														Pages:</digi:trn>
 													<c:if test="${aimOrgTypeManagerForm.currentPage > 1}">
 														<jsp:useBean id="urlParamsFirst" type="java.util.Map" class="java.util.HashMap"/>
 														<c:set target="${urlParamsFirst}" property="page" value="1"/>

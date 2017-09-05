@@ -304,7 +304,7 @@ function page (page){
 	<!-- MAIN CONTENT PART END -->
 	<!-- Pagination -->
 		<div class="paging" style="font-size:11px;margin:10px;">
-			<b class="ins_title"><digi:trn>Pages :</digi:trn></b>
+			<b class="ins_title"><digi:trn>Pages:</digi:trn></b>
 			<c:forEach var="page" begin="1" end="${manageSourceForm.lastPage}">
 				<bean:define id="currPage" name="manageSourceForm" property="currentPage" />
 				<c:if test="${manageSourceForm.currentPage == page}">
@@ -531,7 +531,7 @@ function page (page){
 	<!-- MAIN CONTENT PART END -->
 	<!-- Pagination -->
 		<div class="paging" style="font-size:11px;margin:10px;">
-			<b class="ins_title"><digi:trn>Pages :</digi:trn></b>
+			<b class="ins_title"><digi:trn>Pages:</digi:trn></b>
 			<c:forEach var="page" begin="1" end="${manageSourceForm.lastPage}">
 				<bean:define id="currPage" name="manageSourceForm" property="currentPage" />
 				<c:if test="${manageSourceForm.currentPage == page}">

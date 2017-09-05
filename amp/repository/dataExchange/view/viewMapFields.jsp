@@ -567,7 +567,7 @@ span.extContactDropdownEmail {
 
 					</table>
 					<div class="paging" style="font-size:11px;margin:10px;">
-						<b class="ins_title"><digi:trn>Pages :</digi:trn></b>
+						<b class="ins_title"><digi:trn>Pages:</digi:trn></b>
 						<c:forEach var="page" begin="1" end="${mapFieldsForm.lastPage}">
 							<bean:define id="currPage" name="mapFieldsForm" property="currentPage" />
 							<c:if test="${mapFieldsForm.currentPage == page}">

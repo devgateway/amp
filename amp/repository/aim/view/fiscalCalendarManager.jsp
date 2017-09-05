@@ -159,7 +159,7 @@
 											<tr>
 												<td colspan="4">
 													<digi:trn key="aim:fiscalCalendarPages">
-													Pages :</digi:trn>
+														Pages:</digi:trn>
 													<logic:iterate name="aimFiscalCalendarForm" 	property="pages" id="pages" type="java.lang.Integer">
 													<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
 													<c:set target="${urlParams1}" property="page"><%=pages%>

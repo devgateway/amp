@@ -373,7 +373,7 @@
 															<tr>
 																<td colspan="4" align=center>
 																	<hr /> <digi:trn key="aim:organizationPages">
-													Pages :</digi:trn> <c:if test="${aimOrgManagerForm.currentPage > 1}">
+																	Pages:</digi:trn> <c:if test="${aimOrgManagerForm.currentPage > 1}">
 																		<jsp:useBean id="urlParamsFirst" type="java.util.Map"
 																			class="java.util.HashMap" />
 																		<c:set target="${urlParamsFirst}" property="page"

@@ -232,7 +232,7 @@
                                                                 <logic:notEmpty name="interchangeResultForm" property="results">
                                                                     <tr>
                                                                         <td colspan="4" nowrap="nowrap">
-                                                                            <digi:trn>Pages :</digi:trn>
+                                                                            <digi:trn>Pages:</digi:trn>
                                                                             <c:if test="${interchangeResultForm.currentPage > 1}">
                                                                                 <jsp:useBean id="urlParamsFirst" type="java.util.Map" class="java.util.HashMap"/>
                                                                                 <c:set target="${urlParamsFirst}" property="page" value="1"/>

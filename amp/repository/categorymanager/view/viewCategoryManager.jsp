@@ -94,9 +94,11 @@ function exportXSL(){
 								)
 							</td>
 							<td align="left" class="inside">
-								<digi:trn key='<%= CategoryManagerUtil.getTranslationKeyForCategoryName( category.getDescription() ) %>'>
-									<bean:write name="category" property="description" /> &nbsp;
-								</digi:trn>
+								<logic:notEmpty name="category" property="description">
+									<digi:trn key='<%= CategoryManagerUtil.getTranslationKeyForCategoryDescription( category.getKeyName() ) %>'>
+										<bean:write name="category" property="description" />
+									</digi:trn>
+								</logic:notEmpty>
 								&nbsp;
 							</td>
 							<td align="left" class="inside">

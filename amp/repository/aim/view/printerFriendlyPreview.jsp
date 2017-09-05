@@ -3096,7 +3096,7 @@ body {background:none;}
 									<module:display name="M & E" parentModule="MONITORING AND EVALUATING">
 										<tr>
 											<td class="field_name" >
-												<b><digi:trn>M &amp; E</digi:trn></b>
+												<b><digi:trn>M&E</digi:trn></b>
 											</td>
 											<td>
                                                 <bean:define id="aimEditActivityForm" name="aimEditActivityForm" scope="page" toScope="request"/>

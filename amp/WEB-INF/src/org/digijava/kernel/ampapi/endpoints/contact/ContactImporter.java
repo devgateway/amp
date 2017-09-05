@@ -1,6 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.contact;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.digijava.kernel.ampapi.endpoints.activity.APIField;
@@ -11,9 +12,9 @@ import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorPr
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.util.TeamMemberUtil;
 
 /**
@@ -40,6 +41,13 @@ public class ContactImporter extends ObjectImporter {
 
         List<APIField> fieldsDef = AmpFieldsEnumerator.PRIVATE_ENUMERATOR.getContactFields();
 
+        Object createdById = newJson.get(ContactEPConstants.CREATED_BY);
+        AmpTeamMember createdBy = TeamMemberUtil.getAmpTeamMember(getLongOrNull(createdById));
+        if (createdById != null && createdBy == null) {
+            String msg = "Invalid team member in " + ContactEPConstants.CREATED_BY + " field.";
+            return Collections.singletonList(ContactErrors.FIELD_INVALID_VALUE.withDetails(msg));
+        }
+
         try {
             if (contactId == null) {
                 contact = new AmpContact();
@@ -54,7 +62,7 @@ public class ContactImporter extends ObjectImporter {
                 throw new ObjectConversionException();
             }
 
-            setupBeforeSave(contact);
+            setupBeforeSave(contact, createdBy);
 
             PersistenceManager.getSession().saveOrUpdate(contact);
 
@@ -70,9 +78,17 @@ public class ContactImporter extends ObjectImporter {
         return new ArrayList<>(errors.values());
     }
 
-    private void setupBeforeSave(AmpContact contact) {
+    private Long getLongOrNull(Object obj) {
+        if (obj instanceof Number) {
+            return ((Number) obj).longValue();
+        } else {
+            return null;
+        }
+    }
+
+    private void setupBeforeSave(AmpContact contact, AmpTeamMember createdBy) {
         if (contact.getId() == null) {
-            contact.setCreator(TeamMemberUtil.getCurrentAmpTeamMember(TLSUtils.getRequest()));
+            contact.setCreator(createdBy);
         }
         contact.getProperties().forEach(p -> p.setContact(contact));
         contact.getOrganizationContacts().forEach(o -> o.setContact(contact));

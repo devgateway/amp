@@ -8,6 +8,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
+import org.digijava.kernel.ampapi.endpoints.contact.ContactFieldsConstants;
 import org.digijava.kernel.ampapi.endpoints.contact.ContactTitlePossibleValuesProvider;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
@@ -63,6 +64,8 @@ public class AmpContact implements Comparable, Serializable, Cloneable, Versiona
 	 * to link contact list to calendar and messaging 
 	 */
 	private Boolean shared; //is contact shared between amp users
+
+	@Interchangeable(fieldTitle = ContactFieldsConstants.CREATED_BY, pickIdOnly = true)
 	private AmpTeamMember creator; //who created the contact
 	
 	private SortedSet<AmpActivityContact> activityContacts;

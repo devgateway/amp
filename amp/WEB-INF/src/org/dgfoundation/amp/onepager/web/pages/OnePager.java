@@ -175,11 +175,18 @@ public class OnePager extends AmpHeaderFooter {
 
 		String activityId = activityParam.toString();
 		final ValueWrapper<Boolean>newActivity= new ValueWrapper<Boolean>(false);
-	    if ((activityId == null) || (activityId.compareTo("new") == 0)){
+
+		if (ActivityGatekeeper.isEditionLocked()) {
+			throw new RedirectToUrlException(ActivityGatekeeper.buildRedirectLink(activityId));
+		}
+
+		long currentUserId = ((AmpAuthWebSession) getSession()).getCurrentMember().getMemberId();
+		if ((activityId == null) || (activityId.compareTo("new") == 0)) {
 			am = new AmpActivityModel();
 
 			newActivity.value = true;
-			
+			ActivityGatekeeper.lockActivity(activityId, currentUserId);
+
 			PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_MEMBER, session.getCurrentMember());
 			PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.ACTIVITY, am.getObject());
 
@@ -199,7 +206,6 @@ public class OnePager extends AmpHeaderFooter {
 
 		}
 		else{
-			long currentUserId = ((AmpAuthWebSession)getSession()).getCurrentMember().getMemberId();
 			//try to acquire lock for activity editing
 			String key = ActivityGatekeeper.lockActivity(activityId, currentUserId);
 			if (key == null){ //lock not acquired

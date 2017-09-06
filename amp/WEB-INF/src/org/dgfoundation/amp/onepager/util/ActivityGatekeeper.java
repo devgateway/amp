@@ -103,21 +103,39 @@ public class ActivityGatekeeper {
 	private static Long getUserEditing(String id){
 		return userEditing.get(id);
 	}
-	
-	public static String buildRedirectLink(String id, long currentUserId){
-		Long editingUserId = ActivityGatekeeper.getUserEditing(String.valueOf(id));
-		if (editingUserId == null)
-		{
-			logger.error("user editing " + id + " not found in the userEditing list, inserting a dummy value!", new RuntimeException("dummy exception"));
-			editingUserId = currentUserId;
-		}
-		return "/aim/viewActivityPreview.do~public=true~activityId=" + id + "~pageId=2~editError=" + editingUserId;
-	}
-	
-	public static String buildPermissionRedirectLink(String id){
-		return "/aim/viewActivityPreview.do~public=true~activityId=" + id + "~pageId=2~editPermissionError=1";
-	}
-	public static String buildPreviewUrl(String id){
+
+    public static boolean isEditionLocked() {
+        checkEditionLock();
+        return !(timestamp == null || timestamp.size() == 0);
+    }
+
+    public static void checkEditionLock() {
+        long currentTime;
+        synchronized (timestamp) {
+            currentTime = System.currentTimeMillis();
+            timestamp.entrySet().removeIf(e -> currentTime - Long.parseLong(e.getValue()) < LOCK_TIMEOUT);
+        }
+    }
+
+    public static String buildRedirectLink(String id, long currentUserId) {
+        Long editingUserId = ActivityGatekeeper.getUserEditing(String.valueOf(id));
+        if (editingUserId == null) {
+            logger.error("user editing " + id + " not found in the userEditing list, inserting a dummy value!", new
+                    RuntimeException("dummy exception"));
+            editingUserId = currentUserId;
+        }
+        return "/aim/viewActivityPreview.do~public=true~activityId=" + id + "~pageId=2~editError=" + editingUserId;
+    }
+
+    public static String buildRedirectLink(String id) {
+        return "/aim/viewActivityPreview.do~public=true~activityId=" + id + "~pageId=2~editLockError=" + id;
+    }
+
+    public static String buildPermissionRedirectLink(String id) {
+        return "/aim/viewActivityPreview.do~public=true~activityId=" + id + "~pageId=2~editPermissionError=1";
+    }
+
+	public static String buildPreviewUrl(String id) {
 		return "/aim/viewActivityPreview.do~public=true~pageId=2~activityId=" + id;
 	}
 	

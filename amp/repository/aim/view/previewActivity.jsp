@@ -268,6 +268,23 @@ function collapseAll() {
 	
 
 <!-- MAIN CONTENT PART START -->
+<logic:present scope="request" parameter="editLockError">
+	<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center style="margin-top:15px;">
+	     <tr>
+		     <td align="center">
+		        <font color="red" size="3">
+		                <digi:trn key="aim:activityEditLocked">You may only edit one activity at a time.</digi:trn>
+		        </font>
+		     </td>
+	     </tr>           
+	     <tr>
+	         <td>&nbsp;
+	             
+	         </td>
+	     </tr>
+	</table>
+</logic:present>
+
 <logic:present scope="request" parameter="editError">
 	<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center style="margin-top:15px;">
 	     <tr>
@@ -276,10 +293,10 @@ function collapseAll() {
 		                <digi:trn key="aim:activityIsBeeingEdited">Current activity is being edited by:</digi:trn> <%= TeamMemberUtil.getTeamMember(Long.valueOf(request.getParameter("editError"))).getMemberName() %>
 		        </font>
 		     </td>
-	     </tr>           
+	     </tr>
 	     <tr>
 	         <td>&nbsp;
-	             
+
 	         </td>
 	     </tr>
 	</table>
@@ -319,7 +336,7 @@ function collapseAll() {
 	</table>
 </logic:present>
 
-<c:if test="${aimEditActivityForm.activityExists=='no'}">
+<c:if test="${aimEditActivityForm.activityExists=='no' && aimEditActivityForm.activityId > 0}">
 	<div class="activity_preview_header" style="font-size: 12px;text-align: center;color:red">
 		<ul style="padding-top: 5px;font-size: 12px">
 			<li><digi:trn>Couldn't find activity! It may have been deleted from the system</digi:trn></li>

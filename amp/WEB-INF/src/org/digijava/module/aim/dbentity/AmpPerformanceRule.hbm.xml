@@ -13,8 +13,8 @@
 		<property name="name" column="rule_name" type="java.lang.String" not-null="true"/>
 		<property name="description" column="rule_description" type="java.lang.String" />
 		<property name="typeClassName" column="rule_type_class_name" type="java.lang.String" not-null="true"/>
-		<property name="enabled" type="java.lang.Boolean" >
-		      <column name="enabled" default="false" />
+		<property name="enabled" type="java.lang.Boolean">
+		      <column name="enabled" default="false" not-null="true"/>
 		</property>
 		
 		<many-to-one name="level" column="level_category" 

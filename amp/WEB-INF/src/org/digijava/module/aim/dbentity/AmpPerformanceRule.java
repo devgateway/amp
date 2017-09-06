@@ -26,7 +26,7 @@ public class AmpPerformanceRule {
     @JsonProperty(PerformanceRuleConstants.JSON_ATTRIBUTE_TYPE_CLASS_NAME)
     private String typeClassName;
 
-    private Boolean enabled;
+    private Boolean enabled = false;
 
     @JsonSerialize(using = AmpCategoryValueSerializer.class)
     private AmpCategoryValue level;

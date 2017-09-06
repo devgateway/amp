@@ -41,6 +41,8 @@ public class GPIReportPdfExporter implements GPIReportExporter {
 
 	static final float MINIMUM_ROW_HEIGHT = 10f;
 	static final float SUMMARY_ROW_HEIGHT = 30f;
+	
+	static final float DEFAULT_TABLE_WIDTH_PERCENTAGE = 100f;
 
 	protected GPIReport report;
 	

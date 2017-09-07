@@ -3,8 +3,6 @@ package org.dgfoundation.amp.gpi.reports.export.pdf;
 import static java.util.stream.Collectors.groupingBy;
 
 import java.awt.Color;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -26,10 +24,7 @@ import org.dgfoundation.amp.gpi.reports.GPIReportUtils;
 import org.dgfoundation.amp.newreports.CalendarConverter;
 import org.dgfoundation.amp.newreports.ReportSettings;
 import org.digijava.kernel.ampapi.endpoints.gpi.GPIDataService;
-import org.digijava.kernel.ampapi.endpoints.settings.Settings;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.common.util.DateTimeUtil;
-import org.digijava.module.gpi.util.GPIConstants;
 
 import com.lowagie.text.Chunk;
 import com.lowagie.text.Document;
@@ -51,6 +46,8 @@ public class GPIReportIndicator1Output1PdfExporter extends GPIReportPdfExporter 
 
 	public static final int SUMMARY_TABLE_SIZE = 4;
 	public static final int PRIMARY_SECTORS_SIZE = 3;
+	public static final int PRIMARY_SECTORS_HEADER_SIZE = 3;
+	public static final int DOCUMENTS_HEADER_SIZE = 3;
 	
 	private CalendarConverter calendarConverter;
 
@@ -115,7 +112,7 @@ public class GPIReportIndicator1Output1PdfExporter extends GPIReportPdfExporter 
 
 		String summaryValue = report.getSummary().get(columns.get(columnName));
 		String cellValue = String.format("%s\n%s", summaryValue == null ? "" : summaryValue,
-				INDICATOR_1_1_SUMMARY_LABELS.get(columnName));
+		        getColumnHeaderLabel(GPIReportConstants.INDICATOR_1_1_SUMMARY_LABELS, columnName));
 		PdfPCell summaryCell = generatePdfCell(new Phrase(cellValue, bfBold14), Element.ALIGN_LEFT, Element.ALIGN_TOP,
 				1, 1, bkgColor);
 		insertCell(table, summaryCell, 30f);
@@ -126,52 +123,42 @@ public class GPIReportIndicator1Output1PdfExporter extends GPIReportPdfExporter 
 		Font bfBold11 = new Font(Font.HELVETICA, 7, Font.BOLD, new Color(0, 0, 0));
 		Color bkgColor = Color.LIGHT_GRAY;
 
-		insertCell(table, INDICATOR_1_1_COLUMN_LABELS.get(GPIReportConstants.COLUMN_YEAR), Element.ALIGN_CENTER, 1, 1,
+		insertCell(table, getHeaderColumnLabel(GPIReportConstants.COLUMN_YEAR), Element.ALIGN_CENTER, 1, 1,
 				bfBold11, bkgColor);
-		insertCell(table, INDICATOR_1_1_COLUMN_LABELS.get(ColumnConstants.DONOR_AGENCY), Element.ALIGN_CENTER, 1, 1,
+		insertCell(table, getHeaderColumnLabel(ColumnConstants.DONOR_AGENCY), Element.ALIGN_CENTER, 1, 1,
 				bfBold11, bkgColor);
-		insertCell(table, INDICATOR_1_1_COLUMN_LABELS.get(ColumnConstants.PROJECT_TITLE), Element.ALIGN_CENTER, 1, 1,
+		insertCell(table, getHeaderColumnLabel(ColumnConstants.PROJECT_TITLE), Element.ALIGN_CENTER, 1, 1,
 				bfBold11, bkgColor);
-		insertCell(table, INDICATOR_1_1_COLUMN_LABELS.get(GPIReportConstants.GPI_1_Q1), Element.ALIGN_CENTER, 1, 1,
+		insertCell(table, getHeaderColumnLabel(GPIReportConstants.GPI_1_Q1), Element.ALIGN_CENTER, 1, 1,
 				bfBold11, bkgColor);
-		insertCell(table, INDICATOR_1_1_COLUMN_LABELS.get(GPIReportConstants.GPI_1_Q2), Element.ALIGN_CENTER, 1, 1,
+		insertCell(table, getHeaderColumnLabel(GPIReportConstants.GPI_1_Q2), Element.ALIGN_CENTER, 1, 1,
 				bfBold11, bkgColor);
-		insertCell(table, INDICATOR_1_1_COLUMN_LABELS.get(GPIReportConstants.GPI_1_Q3), Element.ALIGN_CENTER, 1, 1,
+		insertCell(table, getHeaderColumnLabel(GPIReportConstants.GPI_1_Q3), Element.ALIGN_CENTER, 1, 1,
 				bfBold11, bkgColor);
-		insertCell(table, INDICATOR_1_1_COLUMN_LABELS.get(GPIReportConstants.GPI_1_Q4), Element.ALIGN_CENTER, 1, 1,
+		insertCell(table, getHeaderColumnLabel(GPIReportConstants.GPI_1_Q4), Element.ALIGN_CENTER, 1, 1,
 				bfBold11, bkgColor);
-		insertCell(table, INDICATOR_1_1_COLUMN_LABELS.get(GPIReportConstants.GPI_1_Q5), Element.ALIGN_CENTER, 3, 1,
+		insertCell(table, getHeaderColumnLabel(GPIReportConstants.GPI_1_Q5), Element.ALIGN_CENTER, 
+		        PRIMARY_SECTORS_HEADER_SIZE, 1,	bfBold11, bkgColor);
+		insertCell(table, getHeaderColumnLabel(ColumnConstants.GPI_1_Q6), Element.ALIGN_CENTER, 1, 1,
 				bfBold11, bkgColor);
-		insertCell(table, INDICATOR_1_1_COLUMN_LABELS.get(ColumnConstants.GPI_1_Q6), Element.ALIGN_CENTER, 1, 1,
+		insertCell(table, getHeaderColumnLabel(ColumnConstants.GPI_1_Q6_DESCRIPTION), Element.ALIGN_CENTER,	1, 1, 
+		        bfBold11, bkgColor);
+		insertCell(table, getHeaderColumnLabel(ColumnConstants.GPI_1_Q7), Element.ALIGN_CENTER, 1, 1,
 				bfBold11, bkgColor);
-		insertCell(table, INDICATOR_1_1_COLUMN_LABELS.get(ColumnConstants.GPI_1_Q6_DESCRIPTION), Element.ALIGN_CENTER,
-				1, 1, bfBold11, bkgColor);
-		insertCell(table, INDICATOR_1_1_COLUMN_LABELS.get(ColumnConstants.GPI_1_Q7), Element.ALIGN_CENTER, 1, 1,
+		insertCell(table, getHeaderColumnLabel(ColumnConstants.GPI_1_Q8), Element.ALIGN_CENTER, 1, 1,
 				bfBold11, bkgColor);
-		insertCell(table, INDICATOR_1_1_COLUMN_LABELS.get(ColumnConstants.GPI_1_Q8), Element.ALIGN_CENTER, 1, 1,
+		insertCell(table, getHeaderColumnLabel(ColumnConstants.GPI_1_Q9), Element.ALIGN_CENTER, 1, 1,
 				bfBold11, bkgColor);
-		insertCell(table, INDICATOR_1_1_COLUMN_LABELS.get(ColumnConstants.GPI_1_Q9), Element.ALIGN_CENTER, 1, 1,
+		insertCell(table, getHeaderColumnLabel(ColumnConstants.GPI_1_Q10), Element.ALIGN_CENTER, 1, 1,
 				bfBold11, bkgColor);
-		insertCell(table, INDICATOR_1_1_COLUMN_LABELS.get(ColumnConstants.GPI_1_Q10), Element.ALIGN_CENTER, 1, 1,
-				bfBold11, bkgColor);
-		insertCell(table, INDICATOR_1_1_COLUMN_LABELS.get(ColumnConstants.GPI_1_Q10_DESCRIPTION), Element.ALIGN_CENTER,
-				1, 1, bfBold11, bkgColor);
-		insertCell(table, INDICATOR_1_1_COLUMN_LABELS.get(GPIReportConstants.COLUMN_EXTENT_OF_USE_OF_COUNTRY_RESULT),
+		insertCell(table, getHeaderColumnLabel(ColumnConstants.GPI_1_Q10_DESCRIPTION), Element.ALIGN_CENTER, 1, 1, 
+		        bfBold11, bkgColor);
+		insertCell(table, getHeaderColumnLabel(GPIReportConstants.COLUMN_EXTENT_OF_USE_OF_COUNTRY_RESULT),
 				Element.ALIGN_CENTER, 1, 1, bfBold11, bkgColor);
-		insertCell(table, INDICATOR_1_1_COLUMN_LABELS.get(GPIReportConstants.COLUMN_EXTENT_OF_USE_OF_GOV_SOURCES),
+		insertCell(table, getHeaderColumnLabel(GPIReportConstants.COLUMN_EXTENT_OF_USE_OF_GOV_SOURCES),
 				Element.ALIGN_CENTER, 1, 1, bfBold11, bkgColor);
-		insertCell(table, INDICATOR_1_1_COLUMN_LABELS.get(GPIReportConstants.GPI_1_Q11), Element.ALIGN_CENTER, 3, 1,
-				bfBold11, bkgColor);
-
-		// insertCell(table,
-		// INDICATOR_1_1_COLUMN_LABELS.get(GPIReportConstants.GPI_1_Q11a),
-		// Element.ALIGN_CENTER, 1, 1, bfBold11, bkgColor);
-		// insertCell(table,
-		// INDICATOR_1_1_COLUMN_LABELS.get(GPIReportConstants.GPI_1_Q11b),
-		// Element.ALIGN_CENTER, 1, 1, bfBold11, bkgColor);
-		// insertCell(table,
-		// INDICATOR_1_1_COLUMN_LABELS.get(GPIReportConstants.GPI_1_Q11c),
-		// Element.ALIGN_CENTER, 1, 1, bfBold11, bkgColor);
+		insertCell(table, getHeaderColumnLabel(GPIReportConstants.GPI_1_Q11), Element.ALIGN_CENTER, 
+		        DOCUMENTS_HEADER_SIZE, 1, bfBold11, bkgColor);
 
 		table.setHeaderRows(1);
 	}
@@ -339,4 +326,8 @@ public class GPIReportIndicator1Output1PdfExporter extends GPIReportPdfExporter 
 			return Element.ALIGN_CENTER;
 		}
 	}
+	
+    protected String getHeaderColumnLabel(String columnName) {
+        return getColumnHeaderLabel(GPIReportConstants.INDICATOR_1_1_COLUMN_LABELS, columnName);
+    }
 }

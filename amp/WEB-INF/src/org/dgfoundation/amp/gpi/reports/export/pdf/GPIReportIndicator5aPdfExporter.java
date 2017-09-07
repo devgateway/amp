@@ -102,11 +102,7 @@ public class GPIReportIndicator5aPdfExporter extends GPIReportPdfExporter {
 
 	@Override
 	protected String getHeaderColumnName(GPIReportOutputColumn column) {
-		return getColumnHeaderLabel(column.originalColumnName);
+		return getColumnHeaderLabel(GPIReportConstants.INDICATOR_5A_COLUMN_LABELS, column.originalColumnName);
 	}
 
-	private String getColumnHeaderLabel(String columnName) {
-		return INDICATOR_5A_COLUMN_LABELS.containsKey(columnName) ? INDICATOR_5A_COLUMN_LABELS.get(columnName)
-				: columnName;
-	}
 }

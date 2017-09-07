@@ -19,6 +19,7 @@ import org.dgfoundation.amp.newreports.ReportSettings;
 import org.dgfoundation.amp.nireports.formulas.NiFormula;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.kernel.translator.TranslatorWorker;
 
 /**
  * A utility class to transform a GeneratedReport to GPI Report Output (headers, report data, summary)
@@ -198,4 +199,9 @@ public abstract class GPIReportOutputBuilder  {
                 : a.divide(b, NiFormula.DIVISION_MC).scaleByPowerOfTen(2).setScale(0, RoundingMode.HALF_UP);
     }
     
+	protected String getColumnLabel(Map<String, String> indicatorLabels, String columnName) {
+        return indicatorLabels.containsKey(columnName) 
+                ? TranslatorWorker.translateText(indicatorLabels.get(columnName)) : columnName;
+    }
+	
 }

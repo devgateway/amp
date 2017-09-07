@@ -2,9 +2,6 @@ package org.dgfoundation.amp.gpi.reports.export.excel;
 
 import static java.util.stream.Collectors.groupingBy;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -32,11 +29,8 @@ import org.dgfoundation.amp.gpi.reports.GPIReport;
 import org.dgfoundation.amp.gpi.reports.GPIReportConstants;
 import org.dgfoundation.amp.gpi.reports.GPIReportOutputColumn;
 import org.dgfoundation.amp.gpi.reports.GPIReportUtils;
-import org.dgfoundation.amp.newreports.CalendarConverter;
-import org.dgfoundation.amp.newreports.FilterRule;
 import org.digijava.kernel.ampapi.endpoints.gpi.GPIDataService;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.common.util.DateTimeUtil;
 
 /**
  * @author Viorel Chihai
@@ -124,53 +118,51 @@ public class GPIReportIndicator1Output1XlsxExporter extends GPIReportXlsxExporte
 		int firstRow = initHeaderRowOffset;
 		Row row = sheet.createRow(firstRow);
 
-		mergedCells.add(createHeaderCell(sheet, row, INDICATOR_1_1_COLUMN_LABELS.get(GPIReportConstants.COLUMN_YEAR), 
+		mergedCells.add(createHeaderCell(sheet, row, getHeaderColumnLabel(GPIReportConstants.COLUMN_YEAR), 
 				firstRow, firstRow + 1, firstCol, firstCol));
-		mergedCells.add(createHeaderCell(sheet, row, INDICATOR_1_1_COLUMN_LABELS.get(ColumnConstants.DONOR_AGENCY), 
+		mergedCells.add(createHeaderCell(sheet, row, getHeaderColumnLabel(ColumnConstants.DONOR_AGENCY), 
 				firstRow, firstRow + 1, firstCol + 1, firstCol + 1));
-		mergedCells.add(createHeaderCell(sheet, row, INDICATOR_1_1_COLUMN_LABELS.get(ColumnConstants.PROJECT_TITLE), 
+		mergedCells.add(createHeaderCell(sheet, row, getHeaderColumnLabel(ColumnConstants.PROJECT_TITLE), 
 				firstRow, firstRow + 1, firstCol + 2, firstCol + 2));
-		mergedCells.add(createHeaderCell(sheet, row, INDICATOR_1_1_COLUMN_LABELS.get(GPIReportConstants.GPI_1_Q1), 
+		mergedCells.add(createHeaderCell(sheet, row, getHeaderColumnLabel(GPIReportConstants.GPI_1_Q1), 
 				firstRow, firstRow + 1, firstCol + 3, firstCol + 3));
-		mergedCells.add(createHeaderCell(sheet, row, INDICATOR_1_1_COLUMN_LABELS.get(GPIReportConstants.GPI_1_Q2), 
+		mergedCells.add(createHeaderCell(sheet, row, getHeaderColumnLabel(GPIReportConstants.GPI_1_Q2), 
 				firstRow, firstRow + 1, firstCol + 4, firstCol + 4));
-		mergedCells.add(createHeaderCell(sheet, row, INDICATOR_1_1_COLUMN_LABELS.get(GPIReportConstants.GPI_1_Q3), 
+		mergedCells.add(createHeaderCell(sheet, row, getHeaderColumnLabel(GPIReportConstants.GPI_1_Q3), 
 				firstRow, firstRow + 1, firstCol + 5, firstCol + 5));
-		mergedCells.add(createHeaderCell(sheet, row, INDICATOR_1_1_COLUMN_LABELS.get(GPIReportConstants.GPI_1_Q4), 
+		mergedCells.add(createHeaderCell(sheet, row, getHeaderColumnLabel(GPIReportConstants.GPI_1_Q4), 
 				firstRow, firstRow + 1, firstCol + 6, firstCol + 6));
-		mergedCells.add(createHeaderCell(sheet, row, INDICATOR_1_1_COLUMN_LABELS.get(GPIReportConstants.GPI_1_Q5), 
+		mergedCells.add(createHeaderCell(sheet, row, getHeaderColumnLabel(GPIReportConstants.GPI_1_Q5), 
 				firstRow, firstRow + 1, firstCol + 7, firstCol + 9));
-		mergedCells.add(createHeaderCell(sheet, row, INDICATOR_1_1_COLUMN_LABELS.get(ColumnConstants.GPI_1_Q6), 
+		mergedCells.add(createHeaderCell(sheet, row, getHeaderColumnLabel(ColumnConstants.GPI_1_Q6), 
 				firstRow, firstRow + 1, firstCol + 10, firstCol + 10));
-		mergedCells.add(createHeaderCell(sheet, row, 
-				INDICATOR_1_1_COLUMN_LABELS.get(ColumnConstants.GPI_1_Q6_DESCRIPTION), 
+		mergedCells.add(createHeaderCell(sheet, row, getHeaderColumnLabel(ColumnConstants.GPI_1_Q6_DESCRIPTION), 
 				firstRow, firstRow + 1, firstCol + 11, firstCol + 11));
-		mergedCells.add(createHeaderCell(sheet, row, INDICATOR_1_1_COLUMN_LABELS.get(ColumnConstants.GPI_1_Q7), 
+		mergedCells.add(createHeaderCell(sheet, row, getHeaderColumnLabel(ColumnConstants.GPI_1_Q7), 
 				firstRow, firstRow + 1, firstCol + 12, firstCol + 12));
-		mergedCells.add(createHeaderCell(sheet, row, INDICATOR_1_1_COLUMN_LABELS.get(ColumnConstants.GPI_1_Q8), 
+		mergedCells.add(createHeaderCell(sheet, row, getHeaderColumnLabel(ColumnConstants.GPI_1_Q8), 
 				firstRow, firstRow + 1, firstCol + 13 , firstCol + 13));
-		mergedCells.add(createHeaderCell(sheet, row, INDICATOR_1_1_COLUMN_LABELS.get(ColumnConstants.GPI_1_Q9), 
+		mergedCells.add(createHeaderCell(sheet, row, getHeaderColumnLabel(ColumnConstants.GPI_1_Q9), 
 				firstRow, firstRow + 1, firstCol + 14, firstCol + 14));
-		mergedCells.add(createHeaderCell(sheet, row, INDICATOR_1_1_COLUMN_LABELS.get(ColumnConstants.GPI_1_Q10), 
+		mergedCells.add(createHeaderCell(sheet, row, getHeaderColumnLabel(ColumnConstants.GPI_1_Q10), 
 				firstRow, firstRow + 1, firstCol + 15, firstCol + 15));
-		mergedCells.add(createHeaderCell(sheet, row, 
-				INDICATOR_1_1_COLUMN_LABELS.get(ColumnConstants.GPI_1_Q10_DESCRIPTION), 
+		mergedCells.add(createHeaderCell(sheet, row, getHeaderColumnLabel(ColumnConstants.GPI_1_Q10_DESCRIPTION), 
 				firstRow, firstRow + 1, firstCol + 16, firstCol + 16));
 		mergedCells.add(createHeaderCell(sheet, row, 
-				INDICATOR_1_1_COLUMN_LABELS.get(GPIReportConstants.COLUMN_EXTENT_OF_USE_OF_COUNTRY_RESULT), 
+				getHeaderColumnLabel(GPIReportConstants.COLUMN_EXTENT_OF_USE_OF_COUNTRY_RESULT), 
 				firstRow, firstRow + 1, firstCol + 17, firstCol + 17));
 		mergedCells.add(createHeaderCell(sheet, row, 
-				INDICATOR_1_1_COLUMN_LABELS.get(GPIReportConstants.COLUMN_EXTENT_OF_USE_OF_GOV_SOURCES), 
+				getHeaderColumnLabel(GPIReportConstants.COLUMN_EXTENT_OF_USE_OF_GOV_SOURCES), 
 				firstRow, firstRow + 1, firstCol + 18, firstCol + 18));
-		mergedCells.add(createHeaderCell(sheet, row, INDICATOR_1_1_COLUMN_LABELS.get(GPIReportConstants.GPI_1_Q11), 
+		mergedCells.add(createHeaderCell(sheet, row, getHeaderColumnLabel(GPIReportConstants.GPI_1_Q11), 
 				firstRow, firstRow, firstCol + 19, firstCol + 21));
 		
 		row = sheet.createRow(firstRow + 1);
-		mergedCells.add(createHeaderCell(sheet, row, INDICATOR_1_1_COLUMN_LABELS.get(GPIReportConstants.GPI_1_Q11a), 
+		mergedCells.add(createHeaderCell(sheet, row, getHeaderColumnLabel(GPIReportConstants.GPI_1_Q11a), 
 				firstRow + 1, firstRow + 1, firstCol + 19, firstCol + 19));
-		mergedCells.add(createHeaderCell(sheet, row, INDICATOR_1_1_COLUMN_LABELS.get(GPIReportConstants.GPI_1_Q11b), 
+		mergedCells.add(createHeaderCell(sheet, row, getHeaderColumnLabel(GPIReportConstants.GPI_1_Q11b), 
 				firstRow + 1, firstRow + 1, firstCol + 20, firstCol + 20));
-		mergedCells.add(createHeaderCell(sheet, row, INDICATOR_1_1_COLUMN_LABELS.get(GPIReportConstants.GPI_1_Q11c), 
+		mergedCells.add(createHeaderCell(sheet, row, getHeaderColumnLabel(GPIReportConstants.GPI_1_Q11c), 
 				firstRow + 1, firstRow + 1, firstCol + 21, firstCol + 21));
 		
 		for (CellRangeAddress ca : mergedCells) {
@@ -276,7 +268,7 @@ public class GPIReportIndicator1Output1XlsxExporter extends GPIReportXlsxExporte
 		
 		String summaryValue = report.getSummary().get(columns.get(columnName));
 		String summaryLabel = String.format("%s\n%s", summaryValue == null ? "" : summaryValue,
-				INDICATOR_1_1_SUMMARY_LABELS.get(columnName));
+		        getColumnHeaderLabel(GPIReportConstants.INDICATOR_1_1_SUMMARY_LABELS, columnName));
 		
 		Cell cell = row.createCell(firstCol);
 		cell.setCellValue(summaryLabel);
@@ -455,4 +447,8 @@ public class GPIReportIndicator1Output1XlsxExporter extends GPIReportXlsxExporte
 	protected String getRemarkSheetName() {
 		return remarkSheetName;
 	}
+	
+	protected String getHeaderColumnLabel(String columnName) {
+        return getColumnHeaderLabel(GPIReportConstants.INDICATOR_1_1_COLUMN_LABELS, columnName);
+    }
 }

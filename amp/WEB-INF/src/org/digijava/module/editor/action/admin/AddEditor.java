@@ -57,7 +57,6 @@ public class AddEditor
         if (key != null &&
             key.length()>0) {
 
-            try {
 //                key = URLDecoder.decode(key, "UTF-8");
 
                 Editor ed = DbUtil.createEditor(user,
@@ -74,9 +73,6 @@ public class AddEditor
 
                     DbUtil.saveEditor(ed);
 
-            } catch (EditorException ex1) {
-                /**@todo exception handling */
-            }
         }
         return mapping.findForward(forward);
     }

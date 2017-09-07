@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.FilterParam;
@@ -2036,19 +2037,9 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 		Site site = RequestUtils.getSite(request);
 		boolean saveActivity = false;
 
-		Class clazz = null;
-		try {
-			clazz = Class.forName("org.digijava.module.aim.dbentity.AmpActivityVersion");
-		} catch (ClassNotFoundException e) {
-			logger.error("AmpActivityVersion class not found.", e);
-		}
-
 		for (String field : Constants.EDITOR_FIELDS) {
-			String getter = new StringBuilder("get").append(field).toString();
-
 			try {
-				Method method = clazz.getMethod(getter);
-				String currentValue = (String) method.invoke(activity, null);
+				String currentValue = (String) PropertyUtils.getSimpleProperty(activity, field);
 
 				if (currentValue != null && currentValue.trim().length() > 0
 						&& !currentValue.startsWith(Constants.EDITOR_KEY_PREFIX) && !currentValue.startsWith(
@@ -2061,18 +2052,12 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 					editor.setLastModDate(new Date());
 					editor.setBody(currentValue);
 
-					String setter = new StringBuilder("set").append(field).toString();
-					Method set = clazz.getMethod(setter, String.class);
-					set.invoke(activity, key);
+					PropertyUtils.setSimpleProperty(activity, field, key);
 					saveActivity = true;
-					try {
-						org.digijava.module.editor.util.DbUtil.saveEditor(editor);
-					} catch (EditorException e) {
-						logger.error("Unable to save editor", e);
-					}
+					org.digijava.module.editor.util.DbUtil.saveEditor(editor);
 				}
 
-			} catch (Exception e) {
+			} catch (ReflectiveOperationException e) {
 				logger.error("Unable to check fields", e);
 			}
 

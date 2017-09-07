@@ -429,9 +429,8 @@ public class DbUtil {
      * Save editor
      *
      * @param editor
-     * @throws EditorException
      */
-    public static void saveEditor(Editor editor) throws EditorException {
+    public static void saveEditor(Editor editor) {
         PersistenceManager.getSession().save(editor);
     }
 

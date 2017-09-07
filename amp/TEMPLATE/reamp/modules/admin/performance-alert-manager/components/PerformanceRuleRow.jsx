@@ -25,6 +25,9 @@ export default class PerformanceRuleRow extends Component {
     edit() {
         this.props.actions.clearMessages();
         this.props.actions.editPerformanceRule(this.props.performanceRule);
+        if(this.props.performanceRule['type-class-name']) {            
+            this.props.actions.getAttributeList(this.props.performanceRule['type-class-name']);
+        }
         this.props.focusOnForm();
     }
     

@@ -76,6 +76,7 @@ class PerformanceRuleApi {
         const url = '/rest/performance/attributes?rule-type=' + ruleType;
         return new Promise(( resolve, reject ) => {
             return fetchJson( url ).then(( response ) => {
+                response = response || [];
                 const toTranslate = {};
                 response.forEach( function( atrr ) {
                     toTranslate[atrr.name + Constants.TRANSLATED_DESCRIPTION] = atrr.description;                    

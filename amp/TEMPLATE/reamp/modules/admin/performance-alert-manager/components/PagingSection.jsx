@@ -14,11 +14,7 @@ export default class PagingSection extends Component {
         this.onRecordsPerPageChange= this.onRecordsPerPageChange.bind(this);
     }
 
-    componentDidMount() { 
-        
-    }    
-    
-    goToClickedPage( event ) {
+   goToClickedPage( event ) {
         const pageNumber = parseInt( event.target.getAttribute( 'data-page' ) );
         this.props.goToPage( pageNumber );
     }
@@ -72,9 +68,9 @@ export default class PagingSection extends Component {
         if (this.props.page ) {
                    return (               
                         <div >
-                            <div className="pull-right pagination-wrapper">                                
+                            <div className="pagination-wrapper row">                                
                                     <div className="col-md-8">
-                                        <ul className="pagination">
+                                        <ul className="pagination pull-right">
                                             {this.generatePaginationLinks()}
                                             <li className="next"><a onClick={this.goToNextPage}><span aria-hidden="true">&rarr;</span></a></li>
                                             <li className="page-item"><a onClick={this.goToLastPage} className="page-link">&raquo;</a></li>
@@ -85,7 +81,7 @@ export default class PagingSection extends Component {
                                         <span className="input-group-addon" id="basic-addon1">
                                             <span className="glyphicon glyphicon-arrow-right" onClick={this.updateRecordsPerPage}></span>
                                         </span>
-                                            <input type="text" className="form-control performance-input" ref="recordsPerPage" placeholder="" defaultValue={this.props.page.recordsPerPage} />
+                                            <input type="text" className="form-control performance-input" ref="recordsPerPage" placeholder="" value={this.state.recordsPerPage} onChange={this.onRecordsPerPageChange}/>
                                     </div>
                                 </div>
                                 {this.displayPagingInfo()}

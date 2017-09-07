@@ -46,7 +46,8 @@ export default function performanceRuleReducer(state: Object = defaultState.data
         newState.levelList = action.data;                              
         return newState;
     case ADD_PERFORMANCE_RULE:        
-        newState.currentPerformanceRule = action.data;                              
+        newState.currentPerformanceRule = action.data;  
+        newState.attributeList = [];
         return newState;
     case CLOSE_PERFORMANCE_RULE:        
         newState.currentPerformanceRule = action.data;                              

@@ -26,10 +26,6 @@ export default class PerformanceRuleForm extends Component {
         this.getMessage = this.getMessage.bind(this);
     }
 
-    componentWillMount() {        
-        
-    }
-    
     onInputChange(event) {
        const field = event.target.name;
        const currentPerformanceRule = Object.assign({}, this.props.currentPerformanceRule);

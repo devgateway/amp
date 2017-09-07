@@ -24,6 +24,7 @@ export default class PerformanceRuleList extends Component {
         this.state = {};      
         this.goToPage = this.goToPage.bind(this);
         this.updateRecordsPerPage = this.updateRecordsPerPage.bind(this);
+        this.focusOnForm = this.focusOnForm.bind(this);
     }
 
     componentWillMount() {  
@@ -70,6 +71,10 @@ export default class PerformanceRuleList extends Component {
         </div>) 
     }
     
+    focusOnForm() {
+       ReactDOM.findDOMNode(this.refs.form).focus();
+    }
+    
     render() {          
         return (
                 <div>
@@ -78,9 +83,11 @@ export default class PerformanceRuleList extends Component {
                  {this.showInfoMessages()}
                  {this.showErrors()}
                 </div>
+                <div ref="form" tabIndex="1">
                 {this.props.currentPerformanceRule &&
                     <PerformanceRuleForm {...this.props}/>
-                }                
+                }  
+                </div>
                 <div className="panel">
                     <table className="table data-table">
                         <thead>
@@ -94,7 +101,7 @@ export default class PerformanceRuleList extends Component {
                         </thead>
                         <tbody>               
                             {this.props.performanceRuleList.map((performanceRule, i) => 
-                               <PerformanceRuleRow performanceRule={performanceRule} key={i}/>
+                               <PerformanceRuleRow performanceRule={performanceRule} key={i} focusOnForm = {this.focusOnForm}/>
                             )}                
                         </tbody>
                     </table> 

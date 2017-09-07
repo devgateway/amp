@@ -25,6 +25,7 @@ export default class PerformanceRuleRow extends Component {
     edit() {
         this.props.actions.clearMessages();
         this.props.actions.editPerformanceRule(this.props.performanceRule);
+        this.props.focusOnForm();
     }
     
     deletePerformanceRule() {

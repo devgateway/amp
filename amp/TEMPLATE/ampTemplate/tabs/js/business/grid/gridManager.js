@@ -22,7 +22,7 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 	}
 
 	function getPreviewPageURL(id) {
-		return '/aim/viewActivityPreview.do~public=true~pageId=2~activityId=' + id;
+		return '/aim/viewActivityPreview.do~activityId=' + id;
 	}
 
 	GridManager.prototype = {

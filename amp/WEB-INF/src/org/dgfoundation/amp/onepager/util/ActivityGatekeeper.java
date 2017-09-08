@@ -19,6 +19,7 @@ import org.digijava.module.aim.util.TeamUtil;
 public class ActivityGatekeeper {
 	private static HashMap<String, String> timestamp = new HashMap<String, String>();
 	private static HashMap<String, String> keycode = new HashMap<String, String>();
+	private static HashMap<String, String> sessionLock = new HashMap<String, String>();
 	private static HashMap<String, Long> userEditing = new HashMap<String, Long>();
 	private static Boolean lock = false;
 	private static final long LOCK_TIMEOUT = 15000; //ms
@@ -38,6 +39,7 @@ public class ActivityGatekeeper {
 			timestamp.remove(id);
 			keycode.remove(id);
 			userEditing.remove(id);
+			sessionLock.remove(id);
 		}
 	}
 	
@@ -60,9 +62,10 @@ public class ActivityGatekeeper {
 				}
 			}
 			timestamp.put(id, String.valueOf(currentTime));
-            String hash = ShaCrypt.crypt(id + currentTime);;
+            String hash = ShaCrypt.crypt(id + currentTime);
             keycode.put(id, hash);
             userEditing.put(id, userId);
+			sessionLock.put(id, getUserSession());
             return hash;
         }
     }
@@ -105,16 +108,8 @@ public class ActivityGatekeeper {
 	}
 
     public static boolean isEditionLocked() {
-        checkEditionLock();
-        return !(timestamp == null || timestamp.size() == 0);
-    }
-
-    public static void checkEditionLock() {
-        long currentTime;
-        synchronized (timestamp) {
-            currentTime = System.currentTimeMillis();
-            timestamp.entrySet().removeIf(e -> currentTime - Long.parseLong(e.getValue()) < LOCK_TIMEOUT);
-        }
+		return sessionLock.entrySet().stream().filter(e -> e.getValue().equals(getUserSession())).findAny()
+                .orElse(null) != null;
     }
 
     public static String buildRedirectLink(String id, long currentUserId) {
@@ -124,19 +119,15 @@ public class ActivityGatekeeper {
                     RuntimeException("dummy exception"));
             editingUserId = currentUserId;
         }
-        return "/aim/viewActivityPreview.do~public=true~activityId=" + id + "~pageId=2~editError=" + editingUserId;
-    }
-
-    public static String buildRedirectLink(String id) {
-        return "/aim/viewActivityPreview.do~public=true~activityId=" + id + "~pageId=2~editLockError=" + id;
+        return "/aim/viewActivityPreview.do~activityId=" + id + "~editingUserId=" + editingUserId;
     }
 
     public static String buildPermissionRedirectLink(String id) {
-        return "/aim/viewActivityPreview.do~public=true~activityId=" + id + "~pageId=2~editPermissionError=1";
+        return "/aim/viewActivityPreview.do~activityId=" + id + "~editPermissionError=1";
     }
 
 	public static String buildPreviewUrl(String id) {
-		return "/aim/viewActivityPreview.do~public=true~pageId=2~activityId=" + id;
+		return "/aim/viewActivityPreview.do~activityId=" + id;
 	}
 	
 	/**
@@ -173,5 +164,9 @@ public class ActivityGatekeeper {
 			logger.error("error while trying to decide whether allowed to edit activity", e);
 			return false;
 		}
+	}
+
+	public static String getUserSession() {
+		return TLSUtils.getRequest().getSession().getId();
 	}
 }

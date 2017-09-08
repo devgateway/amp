@@ -55,7 +55,7 @@ var donorArray=new Array();function MapFind(activity){showLoading();dojo.forEach
 var pt=new esri.geometry.Point(location.lon,location.lat,new esri.SpatialReference({"wkid":4326}));else{return true;}}
 var sms=new esri.symbol.SimpleMarkerSymbol().setStyle(esri.symbol.SimpleMarkerSymbol.STYLE_SQUARE).setColor(new dojo.Color([255,0,0,0.5]));var attr={"Temp":"Temporal Attribute"};var infoTemplate=new esri.InfoTemplate("");var pgraphic=new esri.Graphic(pt,sms,attr,infoTemplate);dojo.forEach(activity.sectors,function(sector){primarysector=sector.sectorName;primarysectorschema=sector.sectorScheme;primarypercentage=sector.sectorPercentage;});var donorname;var donorCode;dojo.forEach(activity.donors,function(donor){if(!containsDonor(donor,donorArray)){donorArray.push(donor);}
 if(donorname==null){donorname=donor.donorname;donorCode=donor.donorCode;}else{donorname=donorname+","
-+donor.donorname;}});pgraphic.setAttributes({"Activity":'<a href="/aim/viewActivityPreview.do~pageId=2~activityId='
++donor.donorname;}});pgraphic.setAttributes({"Activity":'<a href="/aim/viewActivityPreview.do~activityId='
 +activity.id
 +'~isPreview=1" target="_blank">'
 +activity.activityname
@@ -122,18 +122,18 @@ function MapFindStructure(activity,structureGraphicLayer){var stinfoTemplate=new
 +"<tr><td nowrap style='padding-right:20px;'><b>Type<b></td><td>${Structure Type}</td></tr>"
 +"<tr><td nowrap style='padding-right:20px;'><b>Description<b></td><td>${Structure Description}</td></tr>"
 +"<tr><td nowrap style='padding-right:20px;'><b>Coordinates<b></td><td>${Coordinates}</td></tr></table>");dojo.forEach(activity.structures,function(structure){var sms=new esri.symbol.PictureMarkerSymbol('/esrigis/structureTypeManager.do~action=displayIcon~id='
-+structure.typeId,32,37);var pgraphic;if(structure.shape==""){var pt=new esri.geometry.Point(structure.lon,structure.lat,map.spatialReference);var transpt=esri.geometry.geographicToWebMercator(pt);var attr={"Temp":"Temporal Attribute"};pgraphic=new esri.Graphic(transpt,sms,attr,stinfoTemplate);pgraphic.setAttributes({"Structure Name":structure.name,"Activity":'<a href="/aim/viewActivityPreview.do~pageId=2~activityId='
++structure.typeId,32,37);var pgraphic;if(structure.shape==""){var pt=new esri.geometry.Point(structure.lon,structure.lat,map.spatialReference);var transpt=esri.geometry.geographicToWebMercator(pt);var attr={"Temp":"Temporal Attribute"};pgraphic=new esri.Graphic(transpt,sms,attr,stinfoTemplate);pgraphic.setAttributes({"Structure Name":structure.name,"Activity":'<a href="/aim/viewActivityPreview.do~activityId='
 +activity.ampactivityid
 +'~isPreview=1" target="_blank">'
 +activity.activityname
-+'</a>',"Structure Type":structure.type,"Structure Description":structure.description,"Coordinates":pt.x+" , "+pt.y});structures.push(pgraphic);}else{var jsonObject=eval('('+structure.shape+')');if(jsonObject.geometry!=null){pgraphic=new esri.Graphic(jsonObject);pgraphic.setAttributes({"Structure Name":structure.name,"Structure Type":structure.type,"Activity":'<a href="/aim/viewActivityPreview.do~pageId=2~activityId='
++'</a>',"Structure Type":structure.type,"Structure Description":structure.description,"Coordinates":pt.x+" , "+pt.y});structures.push(pgraphic);}else{var jsonObject=eval('('+structure.shape+')');if(jsonObject.geometry!=null){pgraphic=new esri.Graphic(jsonObject);pgraphic.setAttributes({"Structure Name":structure.name,"Structure Type":structure.type,"Activity":'<a href="/aim/viewActivityPreview.do~activityId='
 +activity.ampactivityid
 +'~isPreview=1" target="_blank">'
 +activity.activityname
 +'</a>',"Coordinates":pgraphic.geometry.x
 +" , "
 +pgraphic.geometry.y});pgraphic.setInfoTemplate(stinfoTemplate);if(jsonObject.symbol.style=="esriSMSCircle")
-{pgraphic.setSymbol(sms);}}else{pt=new esri.geometry.Point(jsonObject);var infoTemplate=stinfoTemplate;var attr={"Temp":"Temporal Attribute"};pgraphic=new esri.Graphic(pt,sms,attr,infoTemplate);pgraphic.setAttributes({"Structure Name":structure.name,"Structure Type":structure.type,"Activity":'<a href="/aim/viewActivityPreview.do~pageId=2~activityId='
+{pgraphic.setSymbol(sms);}}else{pt=new esri.geometry.Point(jsonObject);var infoTemplate=stinfoTemplate;var attr={"Temp":"Temporal Attribute"};pgraphic=new esri.Graphic(pt,sms,attr,infoTemplate);pgraphic.setAttributes({"Structure Name":structure.name,"Structure Type":structure.type,"Activity":'<a href="/aim/viewActivityPreview.do~activityId='
 +activity.ampactivityid
 +'~isPreview=1" target="_blank">'
 +activity.activityname

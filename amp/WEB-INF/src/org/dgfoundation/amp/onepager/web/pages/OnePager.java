@@ -176,11 +176,11 @@ public class OnePager extends AmpHeaderFooter {
 		String activityId = activityParam.toString();
 		final ValueWrapper<Boolean>newActivity= new ValueWrapper<Boolean>(false);
 
+		long currentUserId = ((AmpAuthWebSession) getSession()).getCurrentMember().getMemberId();
 		if (ActivityGatekeeper.isEditionLocked()) {
-			throw new RedirectToUrlException(ActivityGatekeeper.buildRedirectLink(activityId));
+			throw new RedirectToUrlException(ActivityGatekeeper.buildRedirectLink(activityId, currentUserId));
 		}
 
-		long currentUserId = ((AmpAuthWebSession) getSession()).getCurrentMember().getMemberId();
 		if ((activityId == null) || (activityId.compareTo("new") == 0)) {
 			am = new AmpActivityModel();
 

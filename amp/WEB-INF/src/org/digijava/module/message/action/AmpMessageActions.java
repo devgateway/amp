@@ -1111,8 +1111,9 @@ public class AmpMessageActions extends DispatchAction {
                 message.setRelatedActivityId(actId);
                 //now we must create activity URL
                 String fullModuleURL=RequestUtils.getFullModuleUrl(request);
-                String objUrl=fullModuleURL.substring(0,fullModuleURL.indexOf("message"))+"aim/viewActivityPreview.do~public=true~pageId=2~activityId="+activityId;
-                message.setObjectURL(objUrl);
+				String objUrl = fullModuleURL.substring(0, fullModuleURL.indexOf("message"))
+						+ "aim/viewActivityPreview.do~activityId=" + activityId;
+				message.setObjectURL(objUrl);
             } catch (NumberFormatException ex) {
                 if (errors == null) {
                     errors=new ActionErrors();

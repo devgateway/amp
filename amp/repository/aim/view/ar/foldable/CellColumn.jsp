@@ -27,7 +27,7 @@
 	<bean:define id="viewable" name="cell" type="org.dgfoundation.amp.ar.cell.Cell" scope="request" toScope="request"/>
 	<bean:define id="caller" name="cellColumn" type="org.dgfoundation.amp.ar.CellColumn" scope="page" toScope="request" />	
 	<logic:equal name="columnNo" value="0">
-				<a href='/aim/viewActivityPreview.do~public=true~pageId=2~activityId=<bean:write name="ownerId"/>' style="text-decoration: none">
+				<a href='/aim/viewActivityPreview.do~activityId=<bean:write name="ownerId"/>' style="text-decoration: none">
 	</logic:equal>
 	<jsp:include page="<%=viewable.getViewerPath()%>"/>
 	<logic:equal name="columnNo" value="0">
@@ -35,7 +35,7 @@
 	</logic:equal>
 <%}else{%>
 	<logic:equal name="columnNo" value="0">
-		<a href='/aim/viewActivityPreview.do~pageId=2~activityId=<bean:write name="ownerId"/>'>
+		<a href='/aim/viewActivityPreview.do~activityId=<bean:write name="ownerId"/>'>
 		<digi:trn key="amp:reports:unspecified">Unspecified</digi:trn>
 	</a>
 	</logic:equal>

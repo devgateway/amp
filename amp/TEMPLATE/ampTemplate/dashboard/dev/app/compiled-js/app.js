@@ -3271,7 +3271,7 @@ module.exports = ChartViewBase.extend({
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
 var util = require('../../ugly/util');
-var template = _.template("<div>\r\n\t<span class=\"number-divider-detail\"></span>\r\n</div>\r\n<div class=\"panel-default\">\r\n\t<div class=\"chart-tops-info-container\">\r\n\t\t<div class=\"chart-tops-info-content\">\r\n\t\t\t<% if(error) { %>\r\n\t\t\t\t<div class=\"alert alert-danger\" role=\"alert\">\r\n\t\t\t\t\t<strong><span data-i18n=\"amp.dashboard:error\">Error</span></strong>\r\n\t\t\t\t\t<span data-i18n=\"amp.dashboard:error-detail\">The Aid Management Platform has temporarily encountered an issue. We apologize for any inconvenience.</span>\r\n\t\t\t\t</div>\r\n\t\t\t<% } else if(values === undefined) { %>\r\n\t\t\t\t<img alt=\"\" src=\"/TEMPLATE/ampTemplate/dashboard/build/img/loading-icon.gif\">\r\n\t\t\t\t<span data-i18n=\"amp.dashboard:download-rendering\">Rendering...</span>\r\n\t\t\t<% } else { %>\r\n\t\t\t\t<% var rowClass = ''; %>\r\n\t\t\t\t<table class=\"table table-striped\">\r\n\t\t\t\t\t<thead>\r\n\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t<th class=\"header-row\"><span data-i18n=\"amp.dashboard:chart-tops-table-projecttitle\">Project Title</span></th>\r\n\t\t\t\t\t\t<th class=\"header-row\"><span class=\"funding-type-title-column\"></span> (<%=\r\n\t\t\t\t\t\t\tmodel.get('currency') %>)</th>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t\t</thead>\r\n\t\t\t\t\t<tbody>\r\n\t\t\t\t<% _(values).each(function(row, i) { %>\r\n\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t<td scope=\"row\">\r\n\t\t\t\t\t\t\t<a class=\"title-column\" target=\"_blank\"\r\n\t\t\t\t\t\t\t   href=\"/aim/viewActivityPreview.do~public=true~pageId=2~activityId=<%=row.id%>\" title=\"<%=row.name%>\">\r\n\t\t\t\t\t\t\t\t<%=row.name%>\r\n\t\t\t\t\t\t\t</a>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t<td class=\"amount-column\"><%=row.formattedAmount%></td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t<% }) %>\r\n\t\t\t\t\t</tbody>\r\n\t\t\t\t</table>\r\n\t\t\t<% } %>\r\n\t\t\t<div class=\"btn btn-success load-more\" style=\"display: none\"><span\r\n\t\t\t\t\tdata-i18n=\"amp.dashboard:chart-tops-table-loadmore\">load\r\n\t\t\t\tmore</span>...</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n");
+var template = _.template("<div>\r\n\t<span class=\"number-divider-detail\"></span>\r\n</div>\r\n<div class=\"panel-default\">\r\n\t<div class=\"chart-tops-info-container\">\r\n\t\t<div class=\"chart-tops-info-content\">\r\n\t\t\t<% if(error) { %>\r\n\t\t\t\t<div class=\"alert alert-danger\" role=\"alert\">\r\n\t\t\t\t\t<strong><span data-i18n=\"amp.dashboard:error\">Error</span></strong>\r\n\t\t\t\t\t<span data-i18n=\"amp.dashboard:error-detail\">The Aid Management Platform has temporarily encountered an issue. We apologize for any inconvenience.</span>\r\n\t\t\t\t</div>\r\n\t\t\t<% } else if(values === undefined) { %>\r\n\t\t\t\t<img alt=\"\" src=\"/TEMPLATE/ampTemplate/dashboard/build/img/loading-icon.gif\">\r\n\t\t\t\t<span data-i18n=\"amp.dashboard:download-rendering\">Rendering...</span>\r\n\t\t\t<% } else { %>\r\n\t\t\t\t<% var rowClass = ''; %>\r\n\t\t\t\t<table class=\"table table-striped\">\r\n\t\t\t\t\t<thead>\r\n\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t<th class=\"header-row\"><span data-i18n=\"amp.dashboard:chart-tops-table-projecttitle\">Project Title</span></th>\r\n\t\t\t\t\t\t<th class=\"header-row\"><span class=\"funding-type-title-column\"></span> (<%=\r\n\t\t\t\t\t\t\tmodel.get('currency') %>)</th>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t\t</thead>\r\n\t\t\t\t\t<tbody>\r\n\t\t\t\t<% _(values).each(function(row, i) { %>\r\n\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t<td scope=\"row\">\r\n\t\t\t\t\t\t\t<a class=\"title-column\" target=\"_blank\"\r\n\t\t\t\t\t\t\t   href=\"/aim/viewActivityPreview.do~activityId=<%=row.id%>\" title=\"<%=row.name%>\">\r\n\t\t\t\t\t\t\t\t<%=row.name%>\r\n\t\t\t\t\t\t\t</a>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t<td class=\"amount-column\"><%=row.formattedAmount%></td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t<% }) %>\r\n\t\t\t\t\t</tbody>\r\n\t\t\t\t</table>\r\n\t\t\t<% } %>\r\n\t\t\t<div class=\"btn btn-success load-more\" style=\"display: none\"><span\r\n\t\t\t\t\tdata-i18n=\"amp.dashboard:chart-tops-table-loadmore\">load\r\n\t\t\t\tmore</span>...</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n");
 
 module.exports = BackboneDash.View.extend({
     _currentPage: 0,
@@ -30796,8 +30796,8 @@ TreeNodeModel = Backbone.Model.extend({
     children: null,     // type TreeNodeCollection
     isSelectable: false  // is this node itself selectable (ie. should it have an 'unkown' child)
   },
-  ignoreList: ['donor-group', 'donor-type', 'implementing-agency', 'beneficiary-agency', 'executing-agency', 'responsible-organization'],//list of filterIds to ignore when serializing
-  ignoreOrgGroupList: ['implementing-agency','beneficiary-agency', 'executing-agency', 'responsible-organization'], // for this filterIds we do not deserialize org groups to avoid issues with same ids
+  ignoreList: ['donor-group', 'donor-type', 'implementing-agency', 'beneficiary-agency', 'executing-agency', 'responsible-organization', 'component-funding-organization', 'component-second-responsible-organization'],//list of filterIds to ignore when serializing
+  ignoreOrgGroupList: ['implementing-agency','beneficiary-agency', 'executing-agency', 'responsible-organization', 'component-funding-organization', 'component-second-responsible-organization'], // for this filterIds we do not deserialize org groups to avoid issues with same ids
   initialize:function(obj) {
     var self = this;
     var childrenCollection = new TreeNodeCollection();
@@ -31330,12 +31330,6 @@ module.exports = Backbone.View.extend({
     'click .cancel': 'cancel',
     'click .reset': 'resetFilters'
   },
-
-  // collection of top-level-filter views..
-  filterViewsInstances:{},
-
-  template: _.template(Template),
-  titleTemplate: _.template(TitleTemplate),
   PARAMS_DATE_FORMAT:'yy-mm-dd', //backend expects filters to be submitted in this format
   initialize:function(options) {
     var self = this;
@@ -31343,7 +31337,9 @@ module.exports = Backbone.View.extend({
     this.caller = options.caller;
     this.settings = new GeneralSettings();
     this.settings.fetch();
-    
+    this.filterViewsInstances = {};
+    this.template = _.template(Template);
+    this.titleTemplate = _.template(TitleTemplate);    
     this.dateFormatMappings = [];
     this.dateFormatMappings.push({ampformat: 'dd/MMM/yyyy', datepickerformat:'dd/M/yy'});
     this.dateFormatMappings.push({ampformat: 'MMM/dd/yyyy', datepickerformat:'M/dd/yy'});
@@ -31441,7 +31437,7 @@ module.exports = Backbone.View.extend({
 
   createTranslator: function(force) {
     var self = this;
-    var filterTranslateKeys = JSON.parse("{\r\n  \"amp.gis:title-Country\": \"Country\",\r\n  \"amp.gis:title-Region\": \"Region\",\r\n  \"amp.gis:title-Zone\": \"Zone\",\r\n  \"amp.gis:title-District\": \"District\",\r\n  \"amp.gis:title-filters\": \"Filter\",\r\n  \"amp.gis:pane-filters-search\": \"Go\",\r\n  \"amp.gis:pane-filters-select\": \"select all\",\r\n  \"amp.gis:pane-filters-deselect\": \"deselect all\",\r\n  \"[placeholder]amp.gis:pane-filters-search-placeholder\": \"Search...\",\r\n  \"amp.gis:pane-filters-FundingOrganizations\": \"Funding Organizations\",\r\n  \"amp.gis:pane-filters-Sector\": \"Sector\",\r\n  \"amp.gis:pane-filters-Sectors\": \"Sectors\",\r\n  \"amp.gis:pane-filters-Programs\": \"Programs\",\r\n  \"amp.gis:pane-filters-Activity\": \"Activity\",\r\n  \"amp.gis:pane-filters-AllAgencies\": \"All Agencies\",\r\n  \"amp.gis:pane-filters-Financial\": \"Financial\",\r\n  \"amp.gis:pane-filters-Location\": \"Location\",\r\n  \"amp.gis:pane-filters-Other\": \"Other\",\r\n  \"amp.gis:pane-subfilters-Donor\": \"Donor\",\r\n  \"amp.gis:pane-subfilters-Primary\": \"Primary\",\r\n  \"amp.gis:pane-subfilters-Secondary\": \"Secondary\",\r\n  \"amp.gis:pane-subfilters-NationalPlanObjective\": \"National Plan Objective\",\r\n  \"amp.gis:pane-subfilters-ActivityStatus\": \"Activity Status\",\r\n  \"amp.gis:pane-subfilters-ApprovalStatus\": \"Approval Status\",\r\n  \"amp.gis:pane-subfilters-ImplementingAgency\": \"Implementing Agency\",\r\n  \"amp.gis:pane-subfilters-ExecutingAgency\": \"Executing Agency\",\r\n  \"amp.gis:pane-subfilters-BeneficiaryAgency\": \"Beneficiary Agency\",\r\n  \"amp.gis:pane-subfilters-ContractingAgency\": \"Contracting Agency\",\r\n  \"amp.gis:pane-subfilters-AidModality\": \"Aid Modality\",\r\n  \"amp.gis:pane-subfilters-TypeOfAssistance\": \"Type Of Assistance\",\r\n  \"amp.gis:pane-subfilters-ResponsibleOrganization\": \"Responsible Organization\",\r\n  \"amp.gis:pane-subfilters-Dates\": \"Dates\",\r\n  \"amp.gis:pane-subfilters-RegionalGroup\": \"Regional Group\",\r\n  \"amp.gis:pane-subfilters-SectorGroup\": \"Sector Group\",\r\n  \"amp.gis:pane-subfilters-TertiarySectors\": \"Tertiary Sectors\",\r\n  \"amp.gis:pane-subfilters-FinancingInstruments\": \"Financing Instruments\",\r\n  \"amp.gis:pane-filters-all\": \"all\",\r\n  \"amp.gis:button-reset\": \"Reset\",\r\n  \"amp.gis:button-cancel\": \"Cancel\",\r\n  \"amp.gis:button-apply\": \"Apply\",\r\n  \"amp.gis:pane-subfilters-startdate\": \"Start Date:\",\r\n  \"amp.gis:pane-subfilters-enddate\": \"End Date:\",\r\n  \"amp.gis:pane-subfilters-empty\": \"No data for this filter\",\r\n  \"amp.gis:date-from\": \"From\",\r\n  \"amp.gis:date-until\": \"Until\"\r\n}\r\n");
+    var filterTranslateKeys = JSON.parse("{\r\n  \"amp.gis:title-Country\": \"Country\",\r\n  \"amp.gis:title-Region\": \"Region\",\r\n  \"amp.gis:title-Zone\": \"Zone\",\r\n  \"amp.gis:title-District\": \"District\",\r\n  \"amp.gis:title-filters\": \"Filter\",\r\n  \"amp.gis:pane-filters-search\": \"Go\",\r\n  \"amp.gis:pane-filters-select\": \"select all\",\r\n  \"amp.gis:pane-filters-deselect\": \"deselect all\",\r\n  \"[placeholder]amp.gis:pane-filters-search-placeholder\": \"Search...\",\r\n  \"amp.gis:pane-filters-FundingOrganizations\": \"Funding Organizations\",\r\n  \"amp.gis:pane-filters-Sector\": \"Sector\",\r\n  \"amp.gis:pane-filters-Sectors\": \"Sectors\",\r\n  \"amp.gis:pane-filters-Programs\": \"Programs\",\r\n  \"amp.gis:pane-filters-Activity\": \"Activity\",\r\n  \"amp.gis:pane-filters-AllAgencies\": \"All Agencies\",\r\n  \"amp.gis:pane-filters-Financial\": \"Financial\",\r\n  \"amp.gis:pane-filters-Location\": \"Location\",\r\n  \"amp.gis:pane-filters-Other\": \"Other\",\r\n  \"amp.gis:pane-subfilters-Donor\": \"Donor\",\r\n  \"amp.gis:pane-subfilters-Primary\": \"Primary\",\r\n  \"amp.gis:pane-subfilters-Secondary\": \"Secondary\",\r\n  \"amp.gis:pane-subfilters-NationalPlanObjective\": \"National Plan Objective\",\r\n  \"amp.gis:pane-subfilters-ActivityStatus\": \"Activity Status\",\r\n  \"amp.gis:pane-subfilters-ApprovalStatus\": \"Approval Status\",\r\n  \"amp.gis:pane-subfilters-ImplementingAgency\": \"Implementing Agency\",\r\n  \"amp.gis:pane-subfilters-ExecutingAgency\": \"Executing Agency\",\r\n  \"amp.gis:pane-subfilters-BeneficiaryAgency\": \"Beneficiary Agency\",\r\n  \"amp.gis:pane-subfilters-ContractingAgency\": \"Contracting Agency\",\r\n  \"amp.gis:pane-subfilters-AidModality\": \"Aid Modality\",\r\n  \"amp.gis:pane-subfilters-TypeOfAssistance\": \"Type Of Assistance\",\r\n  \"amp.gis:pane-subfilters-ResponsibleOrganization\": \"Responsible Organization\",\r\n  \"amp.gis:pane-subfilters-ComponentFundingOrganization\": \"Component Funding Organization\",\r\n  \"amp.gis:pane-subfilters-ComponentSecondResponsibleOrganization\": \"Component Second Responsible Organization\",\r\n  \"amp.gis:pane-subfilters-Dates\": \"Dates\",\r\n  \"amp.gis:pane-subfilters-RegionalGroup\": \"Regional Group\",\r\n  \"amp.gis:pane-subfilters-SectorGroup\": \"Sector Group\",\r\n  \"amp.gis:pane-subfilters-TertiarySectors\": \"Tertiary Sectors\",\r\n  \"amp.gis:pane-subfilters-FinancingInstruments\": \"Financing Instruments\",\r\n  \"amp.gis:pane-filters-all\": \"all\",\r\n  \"amp.gis:button-reset\": \"Reset\",\r\n  \"amp.gis:button-cancel\": \"Cancel\",\r\n  \"amp.gis:button-apply\": \"Apply\",\r\n  \"amp.gis:pane-subfilters-startdate\": \"Start Date:\",\r\n  \"amp.gis:pane-subfilters-enddate\": \"End Date:\",\r\n  \"amp.gis:pane-subfilters-empty\": \"No data for this filter\",\r\n  \"amp.gis:date-from\": \"From\",\r\n  \"amp.gis:date-until\": \"Until\"\r\n}\r\n");
     // setup any popovers as needed...
     self.popovers = self.$('[data-toggle="popover"]');
     self.popovers.popover();
@@ -31518,6 +31514,7 @@ module.exports = Backbone.View.extend({
       case 'funding-status':
       case 'effective-funding-date':
       case 'funding-closing-date':
+      case 'concessionality-level':
         this.filterViewsInstances.financials.filterCollection.add(tmpModel);
         break;
       case 'status':
@@ -32236,6 +32233,12 @@ module.exports  = Backbone.Collection.extend({
 	findCurrencyById: function(id){
 		return _.find(this.get(Constants.CURRENCY_ID).get('value').options, function(option){ return option.id === id });		 
 	},
+    findAmountUnitsById: function(id){
+		return _.find(this.get(Constants.AMOUNT_UNIT_ID).get('value').options, function(option){ return option.id === id });
+	},
+    findAmountUnitsByValue: function(value){
+		return _.find(this.get(Constants.AMOUNT_UNIT_ID).get('value').options, function(option){ return option.value === value });
+	},
 	findCalendarById: function(id){
 		return _.find(this.get(Constants.CALENDAR_ID).get('value').options, function(option){ return option.id === id });
 	},
@@ -32245,6 +32248,9 @@ module.exports  = Backbone.Collection.extend({
 	getCurrencySetting: function(){
 		return this.get(Constants.CURRENCY_ID);
 	},
+	getAmountUnitsSetting: function(){
+		return this.get(Constants.AMOUNT_UNIT_ID);
+	},
 	getCalendarSetting: function(){
 		return this.get(Constants.CALENDAR_ID);
 	},	
@@ -32253,6 +32259,9 @@ module.exports  = Backbone.Collection.extend({
 	},
 	getDefaultCurrencyId: function(){
 		return this.getCurrencySetting().get('value').defaultId;
+	},
+	getDefaultAmountUnitsId: function(){
+		return this.getAmountUnitsSetting().get('value').defaultId;
 	},
 	getDefaultCalendarId: function(){
 		return this.getCalendarSetting().get('value').defaultId;
@@ -32284,6 +32293,10 @@ module.exports = {
 	CURRENCY_ID : 'currency-code',
 	FUNDING_TYPE_ID : 'funding-type',
 	CALENDAR_CURRENCIES_ID : 'calendar-currencies',
+    AMOUNT_FORMAT_ID : 'amount-format',
+    AMOUNT_UNIT_ID : 'number-divider',
+    AMOUNTS_OPTION_THOUSANDS : 1000,
+    AMOUNTS_OPTION_MILLIONS : 1000000,
 	YEAR_FROM_ID: "from",
 	YEAR_TO_ID: "to",	
 	CONTEXT : {
@@ -32401,6 +32414,7 @@ var Backbone = require('backbone');
 var Translator = require('amp-translate');
 var Template = "<% if(obj.isPopup) {%>\r\n<div class=\"panel-heading\">\r\n\t\t\t<button type=\"button\" class=\"close cancel\" aria-hidden=\"true\">x</button>\r\n\t\t\t<h3 class=\"panel-title\" data-i18n=\"amp.settings:title\">Settings</h3>\r\n</div>\r\n<%}%>\r\n<div class=\"panel-body\">\t\t\r\n<div class=\"container-fluid\">\r\n  <div class=\"settings\">\r\n    Loading...\r\n  </div>\r\n  <% if(!obj.isPopup) {%>\r\n  <div class=\"form-group\">\r\n  \t<button type=\"button\" class=\"btn btn-success apply-btn\" data-i18n=\"amp.settings:apply-button\">Apply</button>\r\n  </div>\r\n  <%}%>\r\n</div>\r\n</div>\r\n<% if(obj.isPopup) {%>\r\n<div class=\"panel-footer setting-dialog-footer\">\r\n    <button type=\"button\" class=\"btn btn-warning cancel-btn cancel\" data-i18n=\"amp.settings:cancel-button\">Cancel</button>\r\n  \t<button type=\"button\" class=\"btn btn-success apply-btn\" data-i18n=\"amp.settings:apply-button\">Apply</button>\r\n </div>\r\n <%}%>\r\n \r\n \r\n";
 var SelectTemplate = "<div class=\"form-group\">\r\n  <label class=\"control-label\" data-i18n=\"amp.settings:label-<%= obj.setting.id %>\"><%= obj.setting.name %></label>\r\n  <select class=\"form-control\" id=\"<%= obj.setting.id %>\">\r\n  <% _.each(obj.setting.value.options, function(option){ %>\r\n  <% var selected = obj.settingsSelections[obj.setting.id] || obj.appliedSettings[obj.setting.id];%>\r\n    <option value=\"<%= option.id %>\"  <% if(selected == option.id){ %> selected <% } %> >\r\n      <%= option.name %>\r\n    </option>\r\n  <%}); %>\r\n  </select>\r\n</div>\r\n";
+var SelectAmountUnitTemplate = "<div class=\"form-group\">\r\n  <label class=\"control-label\" data-i18n=\"amp.settings:label-<%= obj.setting.id %>\"><%= obj.setting.name %></label>\r\n  <select class=\"form-control\" id=\"<%= obj.setting.id %>\">\r\n  <% _.each(obj.setting.value.options, function(option){ %>\r\n  <% var selected = obj.settingsSelections[obj.setting.id] || obj.appliedSettings['amount-format'][obj.setting.id];%>\r\n    <option value=\"<%= option.value %>\"  <% if(selected == option.value){ %> selected <% } %> >\r\n      <%= option.name %>\r\n    </option>\r\n  <%}); %>\r\n  </select>\r\n</div>\r\n";
 var YearRangeTemplate = "<div class=\"form-group\"> \r\n<label data-i18n=\"amp.settings:label-<%= obj.id %>\"><%= obj.name %></label> \r\n <div class=\"row year-range \"> \r\n \r\n </div>  \r\n</div>";
 var YearSelectTemplate = "<div class=\"col-xs-2\">\r\n   <label data-i18n=\"amp.settings:label-<%= obj.setting.id %>\" ><%= obj.setting.name %></label>\r\n </div>\r\n  <div class=\"col-xs-4\">\r\n  <select class=\"form-control\" id=\"<%= obj.setting.id %>\">\r\n    <%\r\n      var applied = obj.appliedSettings['year-range'] ? obj.appliedSettings['year-range'][obj.setting.id] : null;\r\n      var selected = obj.settingsSelections[obj.setting.id];\r\n    %>\r\n    <option data-i18n=\"amp.settings:all\" value=\"-1\"<% if((selected || applied) == -1){ %> selected <% } %>>All</option>\r\n    <% for (i = obj.setting.rangeFrom; i <= obj.setting.rangeTo; i++) { %>\r\n      <option value=\"<%= i %>\"<% if((selected || applied) == i){ %> selected <% } %>>\r\n      <%= i %>\r\n      </option>\r\n    <% } %>\r\n  </select>\r\n  </div>";
 var Constants = require('../common/constants');
@@ -32408,6 +32422,7 @@ var Constants = require('../common/constants');
 module.exports = Backbone.View.extend({
 	template : _.template(Template),
 	selectTemplate : _.template(SelectTemplate),
+    selectAmountUnitTemplate : _.template(SelectAmountUnitTemplate),
 	yearRangeTemplate : _.template(YearRangeTemplate),
 	yearSelectTemplate : _.template(YearSelectTemplate),
 	events : {
@@ -32427,6 +32442,8 @@ module.exports = Backbone.View.extend({
 		} else {
 			this.translator = options.translator;
 		}
+		this.appliedSettings = {};
+		this.settingsSelections = {};
 		_.bindAll(this, 'render', 'applySettings', 'updateUI', 'appendSetting', 'appendYearRangeSetting', 'configureUI','selectDefaults');
 	},
 	render : function() {
@@ -32447,8 +32464,13 @@ module.exports = Backbone.View.extend({
 		if(_.isEmpty(this.appliedSettings)){
 			this.settingsSelections[Constants.CALENDAR_ID] = this.definitions.findWhere({id : Constants.CALENDAR_ID }).get('value').defaultId;
 			this.settingsSelections[Constants.CURRENCY_ID] = this.definitions.findWhere({id : Constants.CURRENCY_ID }).get('value').defaultId;
-			if (this.caller !== Constants.CONTEXT.DASHBOARDS) {
-			   this.settingsSelections[Constants.FUNDING_TYPE_ID] = this.definitions.findWhere({id : Constants.FUNDING_TYPE_ID }).get('value').defaultId;
+			if (this.caller === Constants.CONTEXT.REPORTS) {
+                this.settingsSelections[Constants.AMOUNT_UNIT_ID] = this.definitions.findWhere({id : Constants.AMOUNT_UNIT_ID }).get('value').defaultId;
+            }
+			
+			var fundingType = this.definitions.findWhere({id : Constants.FUNDING_TYPE_ID });
+			if (this.caller !== Constants.CONTEXT.DASHBOARDS && fundingType) {
+			   this.settingsSelections[Constants.FUNDING_TYPE_ID] = fundingType.get('value').defaultId;
 			}
 			
 			var yearRangeSetting = this.definitions.findWhere({
@@ -32475,6 +32497,9 @@ module.exports = Backbone.View.extend({
 		this.$('.settings').html('');
 		this.appendSetting(Constants.CALENDAR_ID);
 		this.appendSetting(Constants.CURRENCY_ID);
+        if (this.caller === Constants.CONTEXT.REPORTS) {
+            this.appendAmountUnitSetting();
+        }
 		if (this.caller !== Constants.CONTEXT.DASHBOARDS) {
 			this.appendSetting(Constants.FUNDING_TYPE_ID);
 		}
@@ -32495,6 +32520,18 @@ module.exports = Backbone.View.extend({
 				this.allCurrencies = setting.get('value').options;
 			}
 		}		
+	},
+	appendAmountUnitSetting : function() {
+		var setting = this.definitions.findWhere({
+			id : Constants.AMOUNT_UNIT_ID
+		});
+		if (setting) {
+			this.$('.settings').append(this.selectAmountUnitTemplate({
+				setting : setting.toJSON(),
+				appliedSettings : this.appliedSettings,
+				settingsSelections: this.settingsSelections
+			}));
+		}
 	},
 	appendYearRangeSetting : function() {
 		var yearRangeSetting = this.definitions.findWhere({
@@ -32565,21 +32602,24 @@ module.exports = Backbone.View.extend({
 		// store user selections in a temp object - only transfered to the applied settings if the apply button is clicked
 		this.settingsSelections[settingID] = selectedID;
 	},
-	updateAppliedSettings : function() {
-		// transfer user selections to applied settings object
-		var self = this;
-		_.each(this.settingsSelections, function(selectedID, settingID) {
-			if (settingID === Constants.YEAR_FROM_ID || settingID === Constants.YEAR_TO_ID) {
-				if (_.isUndefined(self.appliedSettings[Constants.YEAR_RANGE_ID])) {
-					self.appliedSettings[Constants.YEAR_RANGE_ID] = {};
-				}
-				self.appliedSettings[Constants.YEAR_RANGE_ID][settingID] = selectedID;
-			} else {
-				self.appliedSettings[settingID] = selectedID;
-			}
-		});
-		this.settingsSelections = {};
-	},
+    updateAppliedSettings: function () {
+        // transfer user selections to applied settings object
+        var self = this;
+        _.each(this.settingsSelections, function (selectedID, settingID) {
+            if (settingID === Constants.YEAR_FROM_ID || settingID === Constants.YEAR_TO_ID) {
+                if (_.isUndefined(self.appliedSettings[Constants.YEAR_RANGE_ID])) {
+                    self.appliedSettings[Constants.YEAR_RANGE_ID] = {};
+                }
+                self.appliedSettings[Constants.YEAR_RANGE_ID][settingID] = selectedID;
+            } else {
+                self.appliedSettings[settingID] = selectedID;
+                if (settingID === Constants.AMOUNT_UNIT_ID) {
+                    self.appliedSettings[Constants.AMOUNT_FORMAT_ID][Constants.AMOUNT_UNIT_ID] = Number(selectedID);
+                }
+            }
+        });
+        this.settingsSelections = {};
+    },
 	getCurrent : function() {
 		return this.appliedSettings;
 	},

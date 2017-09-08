@@ -78,21 +78,20 @@ public class PerformanceRulesAlertJob extends ConnectionCleaningJob implements S
                     AmpActivityVersion a = org.digijava.module.aim.util.ActivityUtil.loadActivity(actId);
                     
                     AmpCategoryValue activityLevel = ruleManager.getPerformanceIssueFromActivity(a);
-                    AmpCategoryValue higherLevel = null;
+                    AmpCategoryValue matchedLevel = null;
                     
                     if (!noMatcherFound) {
-                        AmpCategoryValue matchedLevel = ruleManager.matchActivity(a);
-                        higherLevel = ruleManager.getHigherLevel(matchedLevel, activityLevel);
+                        matchedLevel = ruleManager.matchActivity(a);
                     }
                    
-                    if (!Objects.equals(activityLevel, higherLevel)) {
+                    if (!Objects.equals(activityLevel, matchedLevel)) {
                         AmpActivityVersion updActivity = updateActivity(a);
                         
                         logger.info(String.format("\tactivity %d, updated performance alert level from <%s> to <%s>...",
                                 actId, activityLevel == null ? null : activityLevel.getLabel(),
-                                higherLevel == null ? null : higherLevel.getLabel()));
+                                        matchedLevel == null ? null : matchedLevel.getLabel()));
                         
-                        if (higherLevel != null) {
+                        if (matchedLevel != null) {
                             activitiesWithPerformanceIssues.add(updActivity);
                         }
                         

@@ -72,6 +72,7 @@ public class GPIReport9bOutputBuilder extends GPIReportOutputBuilder {
 		headers.add(getColumns().get(MeasureConstants.NATIONAL_FINANCIAL_REPORTING_PROCEDURES));
 		headers.add(getColumns().get(MeasureConstants.NATIONAL_AUDITING_PROCEDURES));
 		headers.add(getColumns().get(MeasureConstants.NATIONAL_PROCUREMENT_EXECUTION_PROCEDURES));
+		headers.add(getColumns().get(GPIReportConstants.COLUMN_USE_OF_COUNTRY_SYSTEMS));
 
 		return headers;
 	}

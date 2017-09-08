@@ -309,18 +309,24 @@ export default class Report9b extends Component {
                                     <div className="stat-label">{this.getLocalizedColumnName( Constants.NATIONAL_FINANCIAL_REPORTING_PROCEDURES )}</div>
                                 </div>
                             </div>
-                            <div className="col-md-3">
+                            <div className="col-md-2">
                                 <div className="indicator-stat-wrapper">
                                     <div className="stat-value">{this.props.mainReport.summary[Constants.NATIONAL_AUDITING_PROCEDURES]}</div>
                                     <div className="stat-label">{this.getLocalizedColumnName( Constants.NATIONAL_AUDITING_PROCEDURES )}</div>
                                 </div>
                             </div>
-                            <div className="col-md-3">
+                            <div className="col-md-2">
                                 <div className="indicator-stat-wrapper">
                                     <div className="stat-value">{this.props.mainReport.summary[Constants.NATIONAL_PROCUREMENT_EXECUTION_PROCEDURES]}</div>
                                     <div className="stat-label">{this.getLocalizedColumnName( Constants.NATIONAL_PROCUREMENT_EXECUTION_PROCEDURES )}</div>
                                 </div>
                             </div>
+                            <div className="col-md-2">
+                                   <div className="indicator-stat-wrapper">
+                                        <div className="stat-value">{this.props.mainReport.summary[Constants.USE_OF_COUNTRY_SYSTEMS]}</div>
+                                        <div className="stat-label">{this.getLocalizedColumnName( Constants.USE_OF_COUNTRY_SYSTEMS )}</div>
+                                    </div>
+                            </div>                                    
                         </div>
                     }
                     <div className="container-fluid no-padding">

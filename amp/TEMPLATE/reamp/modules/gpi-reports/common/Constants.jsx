@@ -22,6 +22,7 @@ export const DISBURSEMENTS_THROUGH_OTHER_PROVIDERS = 'Disbursements through othe
 export const DISBURSEMENTS_AS_SCHEDULED = 'Disbursed as Scheduled';
 export const OVER_DISBURSED = 'Over Disbursed';
 export const USE_OF_COUNTRY_SYSTEMS = 'Use of country systems';
+export const NATIONAL_LEVEL = '(National Level)';
 export const REMARK = 'Remark';
 export const INDICATOR_1_CODE = '1';
 export const INDICATOR_1_1_CODE = '1_1';

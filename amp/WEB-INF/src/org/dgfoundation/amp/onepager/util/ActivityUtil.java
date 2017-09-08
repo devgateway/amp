@@ -34,7 +34,6 @@ import org.apache.struts.upload.FormFile;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.util.lang.Bytes;
 import org.apache.wicket.util.upload.FileItem;
-import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.helper.EditorStore;
@@ -279,18 +278,15 @@ public class ActivityUtil {
     private static void updatePerformanceIssue(AmpActivityVersion a) {
         PerformanceRuleManager ruleManager = PerformanceRuleManager.getInstance();
 
-        AmpCategoryValue activityLevel = ruleManager.getPerformanceIssueFromActivity(a);
-        AmpCategoryValue higherLevel = null;
+        AmpCategoryValue matchedLevel = null;
 
         if (ruleManager.canActivityContainPerformanceIssues(a)) {
-            AmpCategoryValue matchedLevel = ruleManager.matchActivity(a);
-            if (!ruleManager.getPerformanceRuleMatchers().isEmpty()) {
-                higherLevel = ruleManager.getHigherLevel(matchedLevel, activityLevel);
-            }
+            matchedLevel = ruleManager.matchActivity(a);
         }
         
-        if (!Objects.equals(activityLevel, higherLevel)) {
-            ruleManager.updatePerformanceIssueInActivity(a, activityLevel, higherLevel);
+        AmpCategoryValue activityLevel = ruleManager.getPerformanceIssueFromActivity(a);
+        if (!Objects.equals(activityLevel, matchedLevel)) {
+            ruleManager.updatePerformanceIssueInActivity(a, activityLevel, matchedLevel);
         }
     }
 

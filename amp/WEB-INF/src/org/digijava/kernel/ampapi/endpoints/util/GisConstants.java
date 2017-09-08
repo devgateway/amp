@@ -19,11 +19,6 @@ import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCateg
  */
 public class GisConstants {
 	
-	/*
-	public static final String COMMITMENTS = "Commitments";  
-	public static final String DISBURSEMENTS = "Disbursements";
-	public static final String EXPENDITURES = "Expenditures";
-	*/
 	public static final String USE_ICONS_FOR_SECTORS_IN_PROJECT_LIST =  "Use icons for Sectors in Project List";
 	public static final String PROJECT_SITES = "Project sites";
 	public static final String DOWNLOAD_MAP_SELECTOR = "Download Map selector";

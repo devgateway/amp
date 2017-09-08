@@ -549,10 +549,8 @@ public class UserUtils {
 	}
 	
     public static boolean isSuperAdmin(User user, Site site) {
-        boolean isSuperAdmin = false;
         Subject subject = UserUtils.getUserSubject(user);
-        isSuperAdmin = DgSecurityManager.permitted(subject, site, ResourcePermission.INT_SUPER_ADMIN);
-        
-        return isSuperAdmin;
+
+        return DgSecurityManager.permitted(subject, site, ResourcePermission.INT_SUPER_ADMIN);
     }
 }

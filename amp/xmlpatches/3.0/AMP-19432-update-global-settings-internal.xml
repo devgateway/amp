@@ -12,6 +12,7 @@
                 
                 UPDATE amp_global_settings SET internal = true 
                 WHERE settingsname IN ( 'AMP Server Name',
+                                        'Activate Auto Login', 
                                         'Country Latitude',
                                         'Country Longitude',
                                         'Currency exchange rate webservice implementation',
@@ -39,7 +40,6 @@
                 
                 DELETE FROM amp_global_settings 
                 WHERE settingsname IN ( 'Translation hashcode patch', 
-                                        'Activate Auto Login', 
                                         'Activity Levels',
                                         'Budget Support for PI 9',
                                         'Default Structure Type',

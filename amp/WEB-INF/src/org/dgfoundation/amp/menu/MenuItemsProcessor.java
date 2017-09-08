@@ -24,8 +24,6 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamMemberUtil;
 
-import com.google.common.collect.ImmutableSet;
-
 /**
  * Updates current menu structure based on the current user & state
  *  

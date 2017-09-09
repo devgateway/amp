@@ -150,7 +150,7 @@ export default class PerformanceRuleForm extends Component {
                             <td className={this.getErrorsForField('type-class-name').length > 0 ? 'col-md-6 has-error': 'col-md-6'} >                        
                                 <span className="required">*&nbsp;</span>{this.props.translations['amp.performance-rule:type']}
                                 <select className="form-control performance-input" name="type-class-name" value={this.props.currentPerformanceRule['type-class-name'] ? this.props.currentPerformanceRule['type-class-name'] : '' } onChange={this.onInputChange}>
-                                    <option value="">{this.props.translations['amp.performance-rule:select-type']} </option>
+                                    <option value="">{this.props.translations['amp.performance-rule:select-type'].toLowerCase()} </option>
                                     {this.props.typeList && this.props.typeList.map(ruleType => 
                                     <option value={ruleType.name} key={ruleType.name} >{ruleType[ruleType.name + Constants.TRANSLATED_DESCRIPTION]}</option>
                                     )}

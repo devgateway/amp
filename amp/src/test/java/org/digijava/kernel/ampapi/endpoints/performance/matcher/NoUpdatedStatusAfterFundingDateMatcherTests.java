@@ -27,7 +27,7 @@ import com.google.common.collect.ImmutableSet;
  * 
  * @author Viorel Chihai
  */
-public class NoUpdatedStatusAfterFundingDateMatcherTest extends PerformanceRuleMatcherTest {
+public class NoUpdatedStatusAfterFundingDateMatcherTests extends PerformanceRuleMatcherTests {
     
     @Before
     public void setUp() {
@@ -69,7 +69,7 @@ public class NoUpdatedStatusAfterFundingDateMatcherTest extends PerformanceRuleM
                                 .getCategoryValue())
                 .getActivity();
         
-        assertFalse(match(rule, a));
+        assertTrue(match(rule, a));
     }
     
     @Test

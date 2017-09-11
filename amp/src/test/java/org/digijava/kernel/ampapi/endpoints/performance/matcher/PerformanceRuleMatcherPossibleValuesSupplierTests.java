@@ -3,16 +3,13 @@ package org.digijava.kernel.ampapi.endpoints.performance.matcher;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleConstants;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleAttributeOption;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleMatcherPossibleValuesSupplier;
 import org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute.PerformanceRuleAttributeType;
 import org.digijava.module.aim.helper.Constants;
 
-public class PerformanceRuleMatcherPossibleValuesSupplierTest {
+public class PerformanceRuleMatcherPossibleValuesSupplierTests {
 
     public static List<PerformanceRuleAttributeOption> getDefaultPerformanceRuleAttributePossibleValues(
             PerformanceRuleAttributeType type) {

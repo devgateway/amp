@@ -11,7 +11,7 @@ import org.junit.Before;
 /**
  * @author Viorel Chihai
  */
-public class PerformanceRuleMatcherTest {
+public class PerformanceRuleMatcherTests {
     
     PerformanceRuleMatcherDefinition definition;
     
@@ -21,7 +21,7 @@ public class PerformanceRuleMatcherTest {
                 PerformanceRuleMatcherPossibleValuesSupplier.getInstance();
         
         supplierInstance.setSupplier(
-                PerformanceRuleMatcherPossibleValuesSupplierTest::getDefaultPerformanceRuleAttributePossibleValues);
+                PerformanceRuleMatcherPossibleValuesSupplierTests::getDefaultPerformanceRuleAttributePossibleValues);
     }
     
     protected boolean match(AmpPerformanceRule rule, AmpActivityVersion a) {

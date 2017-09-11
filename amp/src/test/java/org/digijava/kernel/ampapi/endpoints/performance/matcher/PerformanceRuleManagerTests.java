@@ -19,7 +19,7 @@ import com.google.common.collect.ImmutableList;
 /**
  * @author Viorel Chihai
  */
-public class PerformanceRuleManagerTest {
+public class PerformanceRuleManagerTests {
     
     @Before
     public void setUp() {
@@ -27,7 +27,7 @@ public class PerformanceRuleManagerTest {
                 PerformanceRuleMatcherPossibleValuesSupplier.getInstance();
         
         supplierInstance.setSupplier(
-                PerformanceRuleMatcherPossibleValuesSupplierTest::getDefaultPerformanceRuleAttributePossibleValues);
+                PerformanceRuleMatcherPossibleValuesSupplierTests::getDefaultPerformanceRuleAttributePossibleValues);
     }
     
     @Test
@@ -47,7 +47,7 @@ public class PerformanceRuleManagerTest {
                 .withIndex(1)
                 .getCategoryValue();
         
-        assertEquals(level1, manager.getHigherLevel(level1, level2));
+        assertEquals(level2, manager.getHigherLevel(level1, level2));
     }
     
     @Test

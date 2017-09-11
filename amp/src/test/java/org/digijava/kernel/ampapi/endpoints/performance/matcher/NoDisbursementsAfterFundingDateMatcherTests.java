@@ -1,5 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.performance.matcher;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -7,7 +8,7 @@ import org.dgfoundation.amp.activity.builder.ActivityBuilder;
 import org.dgfoundation.amp.activity.builder.FundingBuilder;
 import org.dgfoundation.amp.activity.builder.TransactionBuilder;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleConstants;
-import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.NoUpdatedDisbursementsAfterTimePeriodMatcherDefinition;
+import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.NoDisbursementsAfterFundingDateMatcherDefinition;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpPerformanceRule;
 import org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute;
@@ -20,33 +21,36 @@ import org.junit.Test;
 import com.google.common.collect.ImmutableSet;
 
 /**
- * Disbursements (actual or planned) from one or more donor have not been updated in the last 3 months
+ * A period have passed since the project signature date and still no disbursement from donor
  * 
  * @author Viorel Chihai
  */
-public class NoUpdatedDisbursementsAfterTimePeriodMatcherTest extends PerformanceRuleMatcherTest {
+public class NoDisbursementsAfterFundingDateMatcherTests extends PerformanceRuleMatcherTests {
     
     @Before
     public void setUp() {
         super.setUp();
-        definition = new NoUpdatedDisbursementsAfterTimePeriodMatcherDefinition();
+        definition = new NoDisbursementsAfterFundingDateMatcherDefinition();
     }
     
     @Test
     public void testValidation() {
-        AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_MONTH, "1", getCriticalLevel());
+        AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_MONTH, "1", 
+                PerformanceRuleConstants.FUNDING_CLASSIFICATION_DATE, getCriticalLevel());
         
         assertNotNull(definition.createMatcher(rule));
     }
 
     @Test
-    public void testOneDisbursementLastPeriod() {
+    public void testOneDisbursementBeforeFundingClassificationDate() {
        
-        AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_MONTH, "1", getMajorLevel());
+        AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_MONTH, "1", 
+                PerformanceRuleConstants.FUNDING_CLASSIFICATION_DATE, getCriticalLevel());
         
         AmpActivityVersion a = new ActivityBuilder()
                 .addFunding(
                         new FundingBuilder()
+                                .withClassificationDate(new LocalDate(2016, 12, 12).toDate())
                                 .addTransaction(new TransactionBuilder()
                                         .withTransactionType(Constants.DISBURSEMENT)
                                         .withTransactionDate(new LocalDate(2015, 12, 12).toDate())
@@ -58,31 +62,15 @@ public class NoUpdatedDisbursementsAfterTimePeriodMatcherTest extends Performanc
     }
     
     @Test
-    public void testNoDisbursementLastPeriod() {
+    public void testTwoDisbursementAfterFundingClassificationDate() {
        
-        AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_MONTH, "1", getMajorLevel());
+        AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_MONTH, "1", 
+                PerformanceRuleConstants.FUNDING_CLASSIFICATION_DATE, getCriticalLevel());
         
         AmpActivityVersion a = new ActivityBuilder()
                 .addFunding(
                         new FundingBuilder()
-                                .addTransaction(new TransactionBuilder()
-                                        .withTransactionType(Constants.COMMITMENT)
-                                        .withTransactionDate(new LocalDate(2017, 7, 12).toDate())
-                                        .getTransaction())
-                                .getFunding())
-                .getActivity();
-        
-        assertTrue(match(rule, a));
-    }
-    
-    @Test
-    public void testTwoDisbursementLastPeriod() {
-       
-        AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_DAY, "30", getCriticalLevel());
-        
-        AmpActivityVersion a = new ActivityBuilder()
-                .addFunding(
-                        new FundingBuilder()
+                                .withClassificationDate(new LocalDate(2015, 10, 12).toDate())
                                 .addTransaction(new TransactionBuilder()
                                         .withTransactionType(Constants.DISBURSEMENT)
                                         .withTransactionDate(new LocalDate(2015, 12, 12).toDate())
@@ -94,17 +82,43 @@ public class NoUpdatedDisbursementsAfterTimePeriodMatcherTest extends Performanc
                                 .getFunding())
                 .getActivity();
         
-        assertTrue(match(rule, a));
+        assertFalse(match(rule, a));
     }
     
     @Test
-    public void testTwoFundingsLastPeriod() {
+    public void testNoDisbursement() {
        
-        AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_YEAR, "1", getCriticalLevel());
+        AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_DAY, "20", 
+                PerformanceRuleConstants.FUNDING_CLASSIFICATION_DATE, getMinorLevel());
         
         AmpActivityVersion a = new ActivityBuilder()
                 .addFunding(
                         new FundingBuilder()
+                                .withClassificationDate(new LocalDate(2017, 5, 8).toDate())
+                                .addTransaction(new TransactionBuilder()
+                                        .withTransactionType(Constants.COMMITMENT)
+                                        .withTransactionDate(new LocalDate(2015, 12, 12).toDate())
+                                        .getTransaction())
+                                .addTransaction(new TransactionBuilder()
+                                        .withTransactionType(Constants.COMMITMENT)
+                                        .withTransactionDate(new LocalDate(2014, 12, 12).toDate())
+                                        .getTransaction())
+                                .getFunding())
+                .getActivity();
+        
+        assertTrue(match(rule, a));
+    }
+    
+    @Test
+    public void testTwoFundingsBeforeFundingClassificationDate() {
+       
+        AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_MONTH, "1", 
+                PerformanceRuleConstants.FUNDING_CLASSIFICATION_DATE, getCriticalLevel());
+        
+        AmpActivityVersion a = new ActivityBuilder()
+                .addFunding(
+                        new FundingBuilder()
+                                .withClassificationDate(new LocalDate(2016, 11, 13).toDate())
                                 .addTransaction(new TransactionBuilder()
                                         .withTransactionType(Constants.DISBURSEMENT)
                                         .withTransactionDate(new LocalDate(2015, 12, 12).toDate())
@@ -116,6 +130,7 @@ public class NoUpdatedDisbursementsAfterTimePeriodMatcherTest extends Performanc
                                 .getFunding())
                 .addFunding(
                         new FundingBuilder()
+                                .withClassificationDate(new LocalDate(2014, 11, 13).toDate())
                                 .addTransaction(new TransactionBuilder()
                                         .withTransactionType(Constants.DISBURSEMENT)
                                         .withTransactionDate(new LocalDate(2015, 12, 12).toDate())
@@ -127,13 +142,14 @@ public class NoUpdatedDisbursementsAfterTimePeriodMatcherTest extends Performanc
                                 .getFunding())
                 .getActivity();
         
-        assertTrue(match(rule, a));
+        assertFalse(match(rule, a));
     }
 
     /**
      * @return
      */
-    public AmpPerformanceRule createRule(String timeUnit, String timeAmount, AmpCategoryValue level) {
+    public AmpPerformanceRule createRule(String timeUnit, String timeAmount, String fundingDate, 
+            AmpCategoryValue level) {
         
         AmpPerformanceRule rule = new AmpPerformanceRule();
         
@@ -145,8 +161,12 @@ public class NoUpdatedDisbursementsAfterTimePeriodMatcherTest extends Performanc
         attr2.setName(PerformanceRuleConstants.ATTRIBUTE_TIME_AMOUNT);
         attr2.setType(AmpPerformanceRuleAttribute.PerformanceRuleAttributeType.AMOUNT);
         attr2.setValue(timeAmount);
+        AmpPerformanceRuleAttribute attr3 = new AmpPerformanceRuleAttribute();
+        attr3.setName(PerformanceRuleConstants.ATTRIBUTE_FUNDING_DATE);
+        attr3.setType(AmpPerformanceRuleAttribute.PerformanceRuleAttributeType.FUNDING_DATE);
+        attr3.setValue(fundingDate);
         
-        rule.setAttributes(ImmutableSet.of(attr1, attr2));
+        rule.setAttributes(ImmutableSet.of(attr1, attr2, attr3));
         rule.setLevel(level);
 
         return rule;

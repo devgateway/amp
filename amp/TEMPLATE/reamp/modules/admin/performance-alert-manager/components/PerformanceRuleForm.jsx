@@ -142,7 +142,7 @@ export default class PerformanceRuleForm extends Component {
         return (
                 <div className="panel panel-default">
                 <div className="panel-heading">{this.props.currentPerformanceRule.id ? this.props.translations['amp.performance-rule:heading-edit'] : this.props.translations['amp.performance-rule:heading-new']}</div>
-                <div className="panel-body custom-panel">
+                <div className="panel-body">
 
                     <table className="container-fluid data-selection-fields">  
                       <tbody>

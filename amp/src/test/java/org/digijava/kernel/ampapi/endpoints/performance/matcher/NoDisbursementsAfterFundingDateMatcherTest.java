@@ -58,7 +58,7 @@ public class NoDisbursementsAfterFundingDateMatcherTest extends PerformanceRuleM
                                 .getFunding())
                 .getActivity();
         
-        assertFalse(match(rule, a));
+        assertTrue(match(rule, a));
     }
     
     @Test
@@ -77,6 +77,30 @@ public class NoDisbursementsAfterFundingDateMatcherTest extends PerformanceRuleM
                                         .getTransaction())
                                 .addTransaction(new TransactionBuilder()
                                         .withTransactionType(Constants.DISBURSEMENT)
+                                        .withTransactionDate(new LocalDate(2014, 12, 12).toDate())
+                                        .getTransaction())
+                                .getFunding())
+                .getActivity();
+        
+        assertFalse(match(rule, a));
+    }
+    
+    @Test
+    public void testNoDisbursement() {
+       
+        AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_DAY, "20", 
+                PerformanceRuleConstants.FUNDING_CLASSIFICATION_DATE, getMinorLevel());
+        
+        AmpActivityVersion a = new ActivityBuilder()
+                .addFunding(
+                        new FundingBuilder()
+                                .withClassificationDate(new LocalDate(2017, 5, 8).toDate())
+                                .addTransaction(new TransactionBuilder()
+                                        .withTransactionType(Constants.COMMITMENT)
+                                        .withTransactionDate(new LocalDate(2015, 12, 12).toDate())
+                                        .getTransaction())
+                                .addTransaction(new TransactionBuilder()
+                                        .withTransactionType(Constants.COMMITMENT)
                                         .withTransactionDate(new LocalDate(2014, 12, 12).toDate())
                                         .getTransaction())
                                 .getFunding())
@@ -118,7 +142,7 @@ public class NoDisbursementsAfterFundingDateMatcherTest extends PerformanceRuleM
                                 .getFunding())
                 .getActivity();
         
-        assertTrue(match(rule, a));
+        assertFalse(match(rule, a));
     }
 
     /**

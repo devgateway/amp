@@ -49,12 +49,12 @@ public class NoDisbursementsAfterFundingDateMatcher extends PerformanceRuleMatch
                         .anyMatch(t -> t.getTransactionDate().after(deadline));
                 
                 if (hasDisbursmentsAfterDeadline) {
-                    return true;
+                    return false;
                 }
             }
         }
         
-        return false;
+        return true;
     }
 
     @Override

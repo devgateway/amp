@@ -13,8 +13,10 @@ import java.util.stream.Collectors;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.newreports.GeneratedReport;
+import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportSettings;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 
 /**
  * A utility class to transform a GeneratedReport to GPI Report Output (headers, report data, summary)
@@ -170,6 +172,15 @@ public abstract class GPIReportOutputBuilder  {
 		
 		return byYearDonorComparator;
 	}
+	
+	protected boolean isOnBudget(ReportArea budgetArea) {
+	    String activityBudgetOnValue = CategoryConstants.ACTIVITY_BUDGET_ON.getValueKey();
+        boolean match = budgetArea.getContents().entrySet().stream()
+                .anyMatch(e -> e.getKey().originalColumnName.equals(ColumnConstants.ON_OFF_TREASURY_BUDGET)
+                        && (String.valueOf(e.getValue().value)).equals(activityBudgetOnValue));
+
+        return match;
+    }
 	
 	public void setDonorAgency(boolean isDonorAgency) {
 		this.isDonorAgency = isDonorAgency;

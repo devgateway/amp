@@ -58,15 +58,18 @@ public abstract class AbstractOrgRoleGate extends Gate {
 
     protected void populateValues() {
         Object o = scope.get(GatePermConst.ScopeKeys.PERMISSIBLE);
-        if (o instanceof AmpActivityVersion)
+        if (o instanceof AmpActivityVersion) {
             ampa = (AmpActivityVersion) o;
+        }
         Object oo = scope.get(GatePermConst.ScopeKeys.ACTIVITY);
-        if (oo instanceof AmpActivityVersion)
+        if (oo instanceof AmpActivityVersion) {
             ampa = (AmpActivityVersion) oo;
+        }
 
         TeamMember tm = (TeamMember) scope.get(GatePermConst.ScopeKeys.CURRENT_MEMBER);
-        if (tm == null)
+        if (tm == null) {
             throw new RuntimeException("Team member not found in scope");
+        }
         user = TeamMemberUtil.getUserEntityByTMId(tm.getMemberId());
 
         paramRoleCode = parameters.poll().trim();
@@ -80,8 +83,9 @@ public abstract class AbstractOrgRoleGate extends Gate {
 
             String roleCode = (String) getObjectFromScope(GatePermConst.ScopeKeys.CURRENT_ORG_ROLE,
                     shouldCheckInRequest);
-            if (roleCode == null)
+            if (roleCode == null) {
                 throw new RuntimeException("CURRENT_ORG specified in scope without CURRENT_ORG_ROLE!");
+            }
             if (roleCode.equals(paramRoleCode) && user.hasVerifiedOrganizationId(org.getAmpOrgId())) {
                 canDo = true;
             } else {
@@ -91,7 +95,7 @@ public abstract class AbstractOrgRoleGate extends Gate {
         return canDo;
     }
 
-    protected Object getObjectFromScope(MetaInfo currentOrg,boolean shouldCheckInRequest) {
+    protected Object getObjectFromScope(MetaInfo currentOrg, boolean shouldCheckInRequest) {
         Object objFromScope = scope.get(currentOrg);
         if (objFromScope != null) {
             return objFromScope;
@@ -103,16 +107,18 @@ public abstract class AbstractOrgRoleGate extends Gate {
             return objFromScope;
         }
     }
+
     protected boolean checkVerifiedOrganisations() {
-        
         if (ampa != null) {
-            if (ampa.getOrgrole() == null)
+            if (ampa.getOrgrole() == null) {
                 return false;
+            }
             for (AmpOrgRole element : ampa.getOrgrole()) {
                 String roleCode = element.getRole().getRoleCode();
                 if (roleCode.equals(paramRoleCode)
-                        && user.hasVerifiedOrganizationId(element.getOrganisation().getAmpOrgId()))
+                        && user.hasVerifiedOrganizationId(element.getOrganisation().getAmpOrgId())) {
                     return true;
+                }
             }
         }
         return false;

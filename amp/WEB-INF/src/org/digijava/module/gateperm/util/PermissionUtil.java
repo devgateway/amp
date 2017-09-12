@@ -118,36 +118,21 @@ public final class PermissionUtil {
 		Set<CompositePermission> compositeLinkedPermissions = p.getCompositeLinkedPermissions();
 		Iterator<CompositePermission> i=compositeLinkedPermissions.iterator();
 		while (i.hasNext()) {
-//beginTransaction();
 		    CompositePermission element = (CompositePermission) i.next();
 		    element.getPermissions().remove(p);
 		    i.remove();
 		    hs.saveOrUpdate(element);
-		    //transaction.commit();
 		 }
 		
 		
 		Set<PermissionMap> permissibleObjects = p.getPermissibleObjects();
 		Iterator<PermissionMap> ii=permissibleObjects.iterator();
 		while (ii.hasNext()) {
-//beginTransaction();
 			PermissionMap permissionMap = (PermissionMap) ii.next();
 			p.getPermissibleObjects().remove(permissionMap);
 			hs.saveOrUpdate(p);
-			//transaction.commit();
 		}
-		
-		//delete perm maps:
-//		String hql="delete from "+PermissionMap.class.getName()+" where permission= :perm";
-//		Query query = hs.createQuery(hql);
-//		query.setEntity("perm", p);
-//		int rowCount = query.executeUpdate();
-//	    logger.info("Rows affected: " + rowCount);
-
-	    //delete the permission itself
 		hs.delete(p);
-		//hs.beginTransaction().commit();
-		
 	}
 	
 	public static boolean arrayContains(Object[] a,Object o) {
@@ -190,10 +175,12 @@ public final class PermissionUtil {
      */
     public static Map getScope(HttpServletRequest request) {
         Map scope = (Map) request.getAttribute(GatePermConst.SCOPE);
-        if(scope==null) return resetScope(request);
+        if (scope == null) {
+            return resetScope(request);
+        }
         return scope;
     }
-	
+
 	/**
 	 * Gets the object associated with the given key, if any, from the permissions scope
 	 * @param session
@@ -201,10 +188,10 @@ public final class PermissionUtil {
 	 * @return the object
 	 * @see PermissionUtil#putInScope(HttpSession, MetaInfo, Object)
 	 */
-	public static Object getFromScope(HttpSession session,MetaInfo key) {
-	    Map scope=getScope(session);
-	  return  scope.get(key);	    
-	}
+    public static Object getFromScope(HttpSession session, MetaInfo key) {
+        Map scope = getScope(session);
+        return scope.get(key);
+    }
 	
 	/**
 	 * Removes the object associated with the given key, if any, from the permissions scope
@@ -260,28 +247,16 @@ public final class PermissionUtil {
 	
  
     public static List<Permission> getAllPermissions() throws DgException {
-	Session session = null;
+        Session session = null;
 
-	try {
-	    session = PersistenceManager.getRequestDBSession();
-	    Query query = session.createQuery(" from " + Permission.class.getName());
-	    List list = query.list();
-
-	    return list;
-	} catch (HibernateException e) {
-	    logger.error(e);
-	    throw new RuntimeException("HibernateException Exception encountered", e);
-	} finally { 
-	    try {
-	    	//PersistenceManager.releaseSession(session);
-	    } catch (HibernateException e) {
-		// TODO Auto-generated catch block
-		throw new RuntimeException( "HibernateException Exception encountered", e);
-	    } //catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-		//}
-	}
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            Query query = session.createQuery(" from " + Permission.class.getName());
+            return query.list();
+        } catch (HibernateException e) {
+            logger.error(e);
+            throw new RuntimeException("HibernateException Exception encountered", e);
+        }
 
     }
 

@@ -52,7 +52,7 @@ public class AmpGPINiOrgRoleItemFeaturePanel extends AmpFeaturePanel<AmpOrgRole>
 
 	private static final long serialVersionUID = -1230689136852083970L;
 	private static final String INDICATOR_9B_CODE = "9b";
-	private IModel<AmpOrgRole>currentDonor;
+    private IModel<AmpOrgRole> currentDonor;
 
 	public AmpGPINiOrgRoleItemFeaturePanel(String id, String fmName,  IModel<AmpOrgRole> donor,
 			IModel<AmpActivityVersion> am, final AmpGPINiFormSectionFeature parent) throws Exception {
@@ -145,18 +145,11 @@ public class AmpGPINiOrgRoleItemFeaturePanel extends AmpFeaturePanel<AmpOrgRole>
 				listModel.getObject()) {
 			private static final long serialVersionUID = 1L;
 
-			@Override
-			protected boolean accept(AmpGPINiIndicator indicator) {
-
-				/**
-				 * the indicator 9B should be always visible
-				 * 
-				 * if (indicator.getCode().equals(INDICATOR_9B_CODE)) { return
-				 * hasDonorConcessionalityLevelFundings(am, donor); }
-				 */
-
-				return true;
-			}
+            @Override
+            protected boolean accept(AmpGPINiIndicator indicator) {
+                // the indicator 9B should be always visible
+                return true;
+            }
 		};
 
 		PropertyModel<AmpGPINiSurvey> surveyModel = new PropertyModel<AmpGPINiSurvey>(donor, "gpiNiSurvey");

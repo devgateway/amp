@@ -157,19 +157,22 @@ public final class PermissionUtil {
 	}
 	
 	
-	public static void putInScope(HttpServletRequest request,MetaInfo key, Object value){
-        Map scope=getScope(request);
+    public static void putInScope(HttpServletRequest request, MetaInfo key, Object value) {
+        Map scope = getScope(request);
         scope.put(key, value);
-        if (value!=null){
-            logger.debug("Object ["+key+"] with value ["+value.toString()+"] has been placed in the permission scope");
+        if (value != null) {
+            logger.debug("Object [" + key + "] with value [" + value.toString()
+                    + "] has been placed in the permission scope");
         }
-	    
-	}
+
+    }
 	
-	   /**
-     * gets the gate permissions scope. The scope is the place to put external objects needed by gates logical evaluation 
-     * (like the current user) which are not the permissible istelf (so objects other than the current object on which the
-     * permission query is invoked on)
+    /**
+     * gets the gate permissions scope. The scope is the place to put external
+     * objects needed by gates logical evaluation (like the current user) which
+     * are not the permissible istelf (so objects other than the current object
+     * on which the permission query is invoked on)
+     * 
      * @param session
      * @return
      */

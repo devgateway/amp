@@ -176,8 +176,8 @@ public class AmpGPINiOrgRoleItemFeaturePanel extends AmpFeaturePanel<AmpOrgRole>
 	
     @Override
     protected void onConfigure() {
-        HttpServletRequest request= (HttpServletRequest)RequestCycle.get().getRequest().getContainerRequest();
-        if (currentDonor != null && currentDonor.getObject() != null){
+        HttpServletRequest request = (HttpServletRequest) RequestCycle.get().getRequest().getContainerRequest();
+        if (currentDonor != null && currentDonor.getObject() != null) {
             FundingOrganization fo = new FundingOrganization();
             fo.setAmpOrgId(currentDonor.getObject().getOrganisation().getAmpOrgId());           
             PermissionUtil.putInScope(request, GatePermConst.ScopeKeys.CURRENT_ORG, fo);

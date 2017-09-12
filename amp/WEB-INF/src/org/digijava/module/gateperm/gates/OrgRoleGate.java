@@ -3,18 +3,8 @@
  */
 package org.digijava.module.gateperm.gates;
 
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Queue;
-import org.dgfoundation.amp.ar.MetaInfo;
-import org.digijava.kernel.user.User;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpOrgRole;
-import org.digijava.module.aim.helper.FundingOrganization;
-import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.TeamMemberUtil;
-import org.digijava.module.gateperm.core.Gate;
-import org.digijava.module.gateperm.core.GatePermConst;
 
 /**
  * Implements logic for organization roles user access filtering. users are

@@ -98,30 +98,31 @@ public class AmpStructuresFormSectionFeature extends
 //                structureTypes.getChoiceContainer().add(new AttributeModifier("style", "max-width: 100px;margin-bottom:20px;"));
 //				item.add(structureTypes);
 //								                
-			 final TextField<String> coords = new TextField<String>("coords", new PropertyModel<String>(structureModel, "coords"));            
-             coords.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+                final TextField<String> coords = new TextField<String>("coords",
+                        new PropertyModel<String>(structureModel, "coords"));
+                coords.add(new AjaxFormComponentUpdatingBehavior("onchange") {
                     @Override
                     protected void onUpdate(AjaxRequestTarget target) {
-                      if(coords.getDefaultModelObject() != null) {
-                          JsonBean data = JsonBean.getJsonBeanFromString(coords.getDefaultModelObject().toString());
-                          List<Map<String, String>> coordinates = (List<Map<String, String>>) data.get("coordinates");
-                          AmpStructure structure = structureModel.getObject();
-                          if(structure.getCoordinates() == null) {
-                              structure.setCoordinates(new LinkedHashSet<>());
-                          } else {
-                              structure.getCoordinates().clear();                              
-                          }                                                   
-                          if (coordinates != null) {
-                              for (Map<String, String> pair : coordinates) {
-                                  AmpStructureCoordinate ampStructureCoordinate = new AmpStructureCoordinate();
-                                  ampStructureCoordinate.setStructure(structure);
-                                  ampStructureCoordinate.setLatitude(String.valueOf(pair.get("latitude")));
-                                  ampStructureCoordinate.setLongitude(String.valueOf(pair.get("longitude")));
-                                  structure.getCoordinates().add(ampStructureCoordinate);
-                              }
-                          }  
-                            
-                      }                     
+                        if (coords.getDefaultModelObject() != null) {
+                            JsonBean data = JsonBean.getJsonBeanFromString(coords.getDefaultModelObject().toString());
+                            List<Map<String, String>> coordinates = (List<Map<String, String>>) data.get("coordinates");
+                            AmpStructure structure = structureModel.getObject();
+                            if (structure.getCoordinates() == null) {
+                                structure.setCoordinates(new LinkedHashSet<>());
+                            } else {
+                                structure.getCoordinates().clear();
+                            }
+                            if (coordinates != null) {
+                                for (Map<String, String> pair : coordinates) {
+                                    AmpStructureCoordinate ampStructureCoordinate = new AmpStructureCoordinate();
+                                    ampStructureCoordinate.setStructure(structure);
+                                    ampStructureCoordinate.setLatitude(String.valueOf(pair.get("latitude")));
+                                    ampStructureCoordinate.setLongitude(String.valueOf(pair.get("longitude")));
+                                    structure.getCoordinates().add(ampStructureCoordinate);
+                                }
+                            }
+
+                        }
                     }
                 });
                 
@@ -194,36 +195,36 @@ public class AmpStructuresFormSectionFeature extends
 					}
 					
 				};
-				item.add(delbutton);
-				
-				final AmpAjaxLinkField openMapPopup = new AmpAjaxLinkField("openMapPopup", "Map", "Map") {
-					@Override
-					public void onClick(AjaxRequestTarget target) {
-						target.appendJavaScript("gisPopup($('#"+this.getMarkupId()+"')[0]); return false;");
-			  	}
-				};
-				item.add(openMapPopup);	
-				final AmpAjaxLinkField viewCoords = new AmpAjaxLinkField("viewCoords","Map", "View") {
+                item.add(delbutton);
+
+                final AmpAjaxLinkField openMapPopup = new AmpAjaxLinkField("openMapPopup", "Map", "Map") {
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        target.appendJavaScript("gisPopup($('#" + this.getMarkupId() + "')[0]); return false;");
+                    }
+                };
+                item.add(openMapPopup);
+                final AmpAjaxLinkField viewCoords = new AmpAjaxLinkField("viewCoords", "Map", "View") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
                         List<JsonBean> coordinates = new ArrayList<>();
                         JsonBean data = new JsonBean();
                         AmpStructure structure = structureModel.getObject();
-                        for(AmpStructureCoordinate coord: structure.getCoordinates()) {
-                            JsonBean coordinate = new JsonBean(); 
+                        for (AmpStructureCoordinate coord : structure.getCoordinates()) {
+                            JsonBean coordinate = new JsonBean();
                             coordinate.set("latitude", coord.getLatitude());
                             coordinate.set("longitude", coord.getLongitude());
                             coordinates.add(coordinate);
-                        }                      
+                        }
                         data.set("coordinates", coordinates);
                         data.set("title", TranslatorWorker.translateText("Coordinates"));
-                        data.set("shape", structure.getShape() != null ? structure.getShape() : "" );
+                        data.set("shape", structure.getShape() != null ? structure.getShape() : "");
                         data.set("latitudeColName", TranslatorWorker.translateText("Latitude"));
                         data.set("longitudeColName", TranslatorWorker.translateText("Longitude"));
                         data.set("selectedShape", TranslatorWorker.translateText("Selected Shape"));
                         data.set("noData", TranslatorWorker.translateText("No Data"));
-                        target.appendJavaScript("viewCoordinates('"+ data.asJsonString() +"');");
-                }
+                        target.appendJavaScript("viewCoordinates('" + data.asJsonString() + "');");
+                    }
                 };
                 item.add(viewCoords);
 			}

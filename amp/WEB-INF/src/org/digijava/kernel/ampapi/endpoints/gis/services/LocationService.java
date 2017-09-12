@@ -382,7 +382,7 @@ public class LocationService {
 
 	}
 	 
-	public static FeatureGeoJSON buildFeatureGeoJSON(AmpStructure structure){
+	public static FeatureGeoJSON buildFeatureGeoJSON(AmpStructure structure) {
 	    FeatureGeoJSON fgj = new FeatureGeoJSON(); 
 	    try {                             
             fgj.geometry = getGeometry(structure);            
@@ -409,18 +409,19 @@ public class LocationService {
 	    
 	}
 	
-	private static GeoJSON getGeometry(AmpStructure structure){
-	    String shape = StringUtils.isEmpty(structure.getShape()) ? GisConstants.GIS_STRUCTURE_POINT : structure.getShape();	            
-	    switch(shape) {
-	    case GisConstants.GIS_STRUCTURE_POLYGON:
-	        return buildPolygon(structure);
-	    case GisConstants.GIS_STRUCTURE_POLYLINE:
-	        return buildPolyLine(structure);
-	    case GisConstants.GIS_STRUCTURE_POINT:
-	        return buildPoint(structure);
-	    default:
-	        return null;
-	    }	    
+	private static GeoJSON getGeometry(AmpStructure structure) {
+        String shape = StringUtils.isEmpty(structure.getShape()) ? GisConstants.GIS_STRUCTURE_POINT
+                : structure.getShape();
+        switch (shape) {
+        case GisConstants.GIS_STRUCTURE_POLYGON:
+            return buildPolygon(structure);
+        case GisConstants.GIS_STRUCTURE_POLYLINE:
+            return buildPolyLine(structure);
+        case GisConstants.GIS_STRUCTURE_POINT:
+            return buildPoint(structure);
+        default:
+            return null;
+        }
 	}
 	
 	private static PointGeoJSON buildPoint(AmpStructure structure) {
@@ -434,7 +435,7 @@ public class LocationService {
         LineStringGeoJSON line = new LineStringGeoJSON();
         line.coordinates = new ArrayList<>();
         if (structure.getCoordinates() != null) {
-          for(AmpStructureCoordinate coord : structure.getCoordinates()) {
+          for (AmpStructureCoordinate coord : structure.getCoordinates()) {
               List<Double> lngLat =  new ArrayList<>();              
               lngLat.add(parseDouble(coord.getLatitude()));
               lngLat.add(parseDouble(coord.getLongitude()));
@@ -445,7 +446,7 @@ public class LocationService {
         return line;
     }
     
-    private static PolygonGeoJSON buildPolygon(AmpStructure structure){
+    private static PolygonGeoJSON buildPolygon(AmpStructure structure) {
         PolygonGeoJSON polygon = new PolygonGeoJSON();
         polygon.coordinates = new ArrayList<>();
         if (structure.getCoordinates() != null) {

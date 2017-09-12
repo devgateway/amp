@@ -456,16 +456,17 @@ public class LocationService {
         PolygonGeoJSON polygon = new PolygonGeoJSON();
         polygon.coordinates = new ArrayList<>();
         if (structure.getCoordinates() != null) {
-              List<List<Double>> ring =  new ArrayList<>();
-              for(AmpStructureCoordinate coord : structure.getCoordinates()) {
-                  List<Double> lngLat =  new ArrayList<>();
-                  lngLat.add(parseDouble(coord.getLongitude()));
-                  lngLat.add(parseDouble(coord.getLatitude()));
-                  ring.add(lngLat);
-              }  
-              polygon.coordinates.add(ring);
+            List<List<Double>> ring = new ArrayList<>();
+            for (AmpStructureCoordinate coord : structure.getCoordinates()) {
+                List<Double> lngLat = new ArrayList<>();
+                lngLat.add(parseDouble(coord.getLatitude()));
+                lngLat.add(parseDouble(coord.getLongitude()));
+                ring.add(lngLat);
             }
-            
+
+            polygon.coordinates.add(ring);
+        }
+
         return polygon;
     }
     

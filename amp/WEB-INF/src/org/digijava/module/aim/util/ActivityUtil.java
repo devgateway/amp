@@ -33,10 +33,9 @@ import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.User;
-import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.SiteUtils;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.admin.helper.AmpActivityFake;
 import org.digijava.module.aim.dbentity.AmpActivity;
@@ -86,7 +85,6 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.categorymanager.util.IdWithValueShim;
 import org.digijava.module.dataExchange.utils.DataExchangeUtils;
 import org.digijava.module.editor.dbentity.Editor;
-import org.digijava.module.editor.exception.EditorException;
 import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
 import org.hibernate.ObjectNotFoundException;
@@ -104,8 +102,6 @@ import org.hibernate.type.StringType;
 import org.joda.time.Period;
 
 import clover.org.apache.commons.lang.StringUtils;
-
-import javax.servlet.http.HttpServletRequest;
 
 public class ActivityUtil {
 
@@ -2032,12 +2028,10 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 	}
 
 
-	public static void fixEditorFields(AmpActivityVersion activity, HttpServletRequest request) {
+	public static void fixEditorFields(AmpActivityVersion activity, String field) {
 
-		Site site = RequestUtils.getSite(request);
 		boolean saveActivity = false;
 
-		for (String field : Constants.EDITOR_FIELDS) {
 			try {
 				String currentValue = (String) PropertyUtils.getSimpleProperty(activity, field);
 
@@ -2048,7 +2042,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 					String key = new StringBuilder(Constants.EDITOR_KEY_PREFIX).append(field).append("-").append(
 							System.currentTimeMillis()).toString();
 					Editor editor = null;
-					editor = DataExchangeUtils.createEditor(site, key, TLSUtils.getLangCode());
+					editor = DataExchangeUtils.createEditor(SiteUtils.getDefaultSite(), key, TLSUtils.getLangCode());
 					editor.setLastModDate(new Date());
 					editor.setBody(currentValue);
 
@@ -2061,7 +2055,6 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 				logger.error("Unable to check fields", e);
 			}
 
-		}
 		if (saveActivity) {
 			Session session = PersistenceManager.getRequestDBSession();
 			session.update(activity);

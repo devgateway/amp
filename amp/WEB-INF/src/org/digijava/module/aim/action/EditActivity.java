@@ -274,10 +274,8 @@ public class EditActivity extends Action {
 					}
 				}
 
-        ActivityUtil.fixEditorFields(activity, request);
-
         eaForm.getIdentification().setWasDraft(activity.isCreatedAsDraft());
-        if(activity!=null)
+        if (activity != null)
         {
         	if (activity.getActivityCreator() != null && activity.getActivityCreator().getUser() != null)
         	{

@@ -12,7 +12,11 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.hibernate.Session;
 import org.hibernate.type.StandardBasicTypes;
 
-public class GisUtils {
+public final class GisUtils {
+    
+    private GisUtils() {
+
+    }
     
     public static void configurePerformanceFilter(JsonBean config, AmpReportFilters filterRules) {
         if (config.get(SettingsConstants.PERFORMANCE_ISSUES) != null) {

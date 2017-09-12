@@ -11,7 +11,7 @@ import org.digijava.module.aim.dbentity.AmpFundingDetail;
  */
 public class TransactionBuilder {
 
-    AmpFundingDetail transaction;
+    private AmpFundingDetail transaction;
 
     public TransactionBuilder() {
         transaction = new AmpFundingDetail();

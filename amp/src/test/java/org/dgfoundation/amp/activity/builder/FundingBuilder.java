@@ -13,7 +13,7 @@ import org.digijava.module.aim.dbentity.AmpFundingDetail;
  */
 public class FundingBuilder {
 
-    AmpFunding funding;
+    private AmpFunding funding;
 
     public FundingBuilder() {
         funding = new AmpFunding();

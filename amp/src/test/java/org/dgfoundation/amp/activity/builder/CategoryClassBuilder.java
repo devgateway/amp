@@ -9,7 +9,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
  */
 public class CategoryClassBuilder {
 
-    AmpCategoryClass categoryClass;
+    private AmpCategoryClass categoryClass;
 
     public CategoryClassBuilder() {
         categoryClass = new AmpCategoryClass();

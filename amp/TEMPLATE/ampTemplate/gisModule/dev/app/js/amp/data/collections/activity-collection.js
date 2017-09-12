@@ -40,6 +40,10 @@ module.exports = Backbone.Collection
       payload.settings = this.appData.settingsWidget.toAPIFormat();
     }
 
+    if (this.appData.performanceToggleModel.get('isPerformanceToggleSelected') != null) {
+    	payload['performanceIssues'] = !this.appData.performanceToggleModel.get('isPerformanceToggleSelected');	
+    }
+    
     /* These will always need to be reset when you do a raw fetch
      * like for new filters or settings
      **/
@@ -166,7 +170,11 @@ module.exports = Backbone.Collection
       if (this.appData.settingsWidget && !_.isEmpty(this.appData.settingsWidget.toAPIFormat())) {
         payload.settings = this.appData.settingsWidget.toAPIFormat();
       }
-
+      
+      if (this.appData.performanceToggleModel.get('isPerformanceToggleSelected') != null) {
+    	  payload['performanceIssues'] = !this.appData.performanceToggleModel.get('isPerformanceToggleSelected'); 
+      }
+      
       Backbone.Collection.prototype.fetch.call(this, {
         remove: false,
         data: JSON.stringify(payload),

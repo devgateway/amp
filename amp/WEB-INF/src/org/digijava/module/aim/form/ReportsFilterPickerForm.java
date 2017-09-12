@@ -174,6 +174,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private String selectedActivityPledgesSettings = "-1";
 	
 	private Object[] selectedExpenditureClasses;
+	private Object[] selectedPerformanceAlertLevels;
 	private DynamicDateFilter dynamicEffectiveFundingFilter = new DynamicDateFilter();
 	private DynamicDateFilter dynamicFundingClosingFilter = new DynamicDateFilter();
 	private String fromEffectiveFundingDate;
@@ -1369,6 +1370,14 @@ public class ReportsFilterPickerForm extends ActionForm {
 
 	public void setSelectedExpenditureClasses(Object[] selectedExpenditureClasses) {
 		this.selectedExpenditureClasses = selectedExpenditureClasses;
+	}
+
+	public Object[] getSelectedPerformanceAlertLevels() {
+		return selectedPerformanceAlertLevels;
+	}
+
+	public void setSelectedPerformanceAlertLevels(final Object[] selectedPerformanceAlertLevels) {
+		this.selectedPerformanceAlertLevels = selectedPerformanceAlertLevels;
 	}
 
 	public DynamicDateFilter getDynamicEffectiveFundingFilter() {

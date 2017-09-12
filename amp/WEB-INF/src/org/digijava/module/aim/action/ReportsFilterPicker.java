@@ -1036,8 +1036,17 @@ public class ReportsFilterPicker extends Action {
 		
 		//Finance date filter
 		addDateFilter(null, "", "Date Filter", filterForm.getDynamicDateFilter(), "filter_date_div", filterForm.getOtherCriteriaElements());
-		
-		
+
+		if (FeaturesUtil.isVisibleField(ColumnConstants.PERFORMANCE_ALERT_LEVEL)) {
+			Collection<AmpCategoryValue> categoryValues	= CategoryManagerUtil.getAmpCategoryValueCollectionByKey(
+					CategoryConstants.PERFORMANCE_ALERT_LEVEL_KEY, true);
+			HierarchyListableImplementation tree = new HierarchyListableImplementation("All", "0", categoryValues);
+			GroupingElement<HierarchyListableImplementation> groupingElement =
+					new GroupingElement<>("Performance Alert Level", "filter_performance_alert_level_div",
+							tree, "selectedPerformanceAlertLevels");
+			filterForm.getOtherCriteriaElements().add(groupingElement);
+		}
+
 		Collection<AmpIndicatorRiskRatings> meRisks = MEIndicatorsUtil.getAllIndicatorRisks();
 		for (AmpIndicatorRiskRatings element:meRisks) {
 			String value = element.getRatingName();
@@ -1499,7 +1508,9 @@ public class ReportsFilterPicker extends Action {
 		arf.setStatuses(pumpCategoryValueSetFromForm(filterForm.getSelectedStatuses()));
 		
 		arf.setExpenditureClass(pumpCategoryValueSetFromForm(filterForm.getSelectedExpenditureClasses()));
-		
+
+		arf.setPerformanceAlertLevel(pumpCategoryValueSetFromForm(filterForm.getSelectedPerformanceAlertLevels()));
+
 		if (filterForm.getSelectedWorkspaces() != null && filterForm.getSelectedWorkspaces().length > 0)
 			arf.setWorkspaces(new HashSet<AmpTeam>());
 		else

@@ -2,7 +2,7 @@
  * Copyright (c) 2013 Development Gateway (www.developmentgateway.org)
  */
 
-package org.digijava.module.dataExchange.jobs;
+package org.digijava.module.message.jobs;
 
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
@@ -11,7 +11,6 @@ import com.mashape.unirest.http.HttpResponse;
 import org.apache.log4j.Logger;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.message.jobs.ConnectionCleaningJob;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;

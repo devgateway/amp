@@ -205,7 +205,7 @@ export default class Report9b extends Component {
                 name = header.columnName;
             }
         }
-        return name;
+        return Utils.capitalizeFirst(name);
     }
 
     getYearCell( addedGroups, row ) {
@@ -215,7 +215,7 @@ export default class Report9b extends Component {
             return ( <td className="year-col" rowSpan={matches.length}>{row[Constants.YEAR]}</td> )
         }
     }
-
+    
     showSelectedDates() {
         var filters = this.filter.serialize().filters;
         var displayDates = '';

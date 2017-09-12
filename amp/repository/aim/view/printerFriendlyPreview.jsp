@@ -136,6 +136,23 @@ body {background:none;}
                                               </td>
                                         </tr>
                                     </module:display>
+									<module:display name="/Activity Form/Identification/Status Other Info"
+													parentModule="/Activity Form/Identification">
+										<c:if test="${not empty aimEditActivityForm.identification.statusOtherInfo}">
+										<tr>
+											<td class="field_name" >
+												<b>
+													<digi:trn>Status Other Info</digi:trn>
+												</b>
+											</td>
+											<td bgcolor="#ffffff">
+													<span class="word_break bold">
+															${aimEditActivityForm.identification.statusOtherInfo}
+													</span>
+											</td>
+										</tr>
+										</c:if>
+									</module:display>
 
                                     <module:display name="/Activity Form/Identification/Status Reason" parentModule="/Activity Form/Identification">
                                         <tr>
@@ -176,7 +193,13 @@ body {background:none;}
 										</span>
 									</tr>
 								</module:display>
-								<module:display name="/Activity Form/Funding/Modalities" parentModule="/Activity Form/Funding">
+
+								<c:set var="modalitiesPath" value="/Activity Form/Funding/Overview Section/Modalities"/>
+								<c:if test="${aimEditActivityForm.identification.team !=null && aimEditActivityForm.identification.team.isSSCWorkspace()}">
+									<c:set var="modalitiesPath" value="/Activity Form/Funding/Overview Section/SSC Modalities"/>
+								</c:if>
+
+								<module:display name="${modalitiesPath}" parentModule="/Activity Form/Funding/Overview Section">
 								<tr>
 									<td class="field_name">
 									<b><digi:trn>Modalities</digi:trn></b>
@@ -195,6 +218,28 @@ body {background:none;}
 									</td>
 								</tr>
 								</module:display>
+
+									<c:set var="modalitiesPath" value="/Activity Form/Funding/Overview Section/Modalities Other Info"/>
+									<c:if test="${aimEditActivityForm.identification.team !=null && aimEditActivityForm.identification.team.isSSCWorkspace()}">
+										<c:set var="modalitiesPath" value="/Activity Form/Funding/Overview Section/SSC Modalities Other Info"/>
+									</c:if>
+									<module:display name="${modalitiesPath}"
+													parentModule="/Activity Form/Funding/Overview Section">
+										<c:if test="${not empty aimEditActivityForm.identification.modalitiesOtherInfo}">
+											<tr>
+												<td class="field_name" >
+													<b>
+														<digi:trn>Modalities Other Info</digi:trn>
+													</b>
+												</td>
+												<td bgcolor="#ffffff">
+													<span class="word_break bold">
+															${aimEditActivityForm.identification.modalitiesOtherInfo}
+													</span>
+												</td>
+											</tr>
+										</c:if>
+									</module:display>
 
                                  <module:display name="/Activity Form/Identification/Objective" parentModule="/Activity Form/Identification">   	
                                     <tr>
@@ -616,6 +661,26 @@ body {background:none;}
 									</tr>
 									</c:if>
 									</module:display>
+
+
+										   <module:display name="/Activity Form/Identification/Project Category Other Info"
+														   parentModule="/Activity Form/Identification">
+											   <c:if test="${not empty aimEditActivityForm.identification.projectCategoryOtherInfo}">
+												   <tr>
+													   <td class="field_name" >
+														   <b>
+															   <digi:trn>Project Category Other Info</digi:trn>
+														   </b>
+													   </td>
+													   <td bgcolor="#ffffff">
+													<span class="word_break bold">
+															${aimEditActivityForm.identification.projectCategoryOtherInfo}
+													</span>
+													   </td>
+												   </tr>
+											   </c:if>
+										   </module:display>
+
 									<module:display name="/Activity Form/Identification/Government Agreement Number" parentModule="/Activity Form/Identification">
 									<c:if test="${not empty aimEditActivityForm.identification.govAgreementNumber}">
 									<tr>
@@ -2095,18 +2160,18 @@ body {background:none;}
 																									</tr>
 																								</module:display>
 																								<module:display
-																										name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Second Reporting Organisation"
+																										name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Component Second Responsible Organization"
 																										parentModule="/Activity Form/Components/Component/Components Commitments/Commitment Table">
 																									<tr bgcolor="#ffffff">
 																										<td>
-																											<b><digi:trn>Second Reporting Organisation</digi:trn></b>
+																											<b><digi:trn>Component Second Responsible Organization</digi:trn></b>
 																										</td>
 																										<td colspan="3">
 																											<logic:notEmpty
-																													property="secondReportingOrganisation"
+																													property="componentSecondResponsibleOrganization"
 																													name="fd">
 																									<span class="word_break">
-																										<c:out value="${fd.secondReportingOrganisation.name}"/>
+																										<c:out value="${fd.componentSecondResponsibleOrganization.name}"/>
 																									</span>
 																											</logic:notEmpty>
 																										</td>
@@ -2212,18 +2277,18 @@ body {background:none;}
 																									</tr>
 																								</module:display>
 																								<module:display
-																										name="/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Second Reporting Organisation"
+																										name="/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Component Second Responsible Organization"
 																										parentModule="/Activity Form/Components/Component/Components Disbursements/Disbursement Table">
 																									<tr bgcolor="#ffffff">
 																										<td>
-																											<b><digi:trn>Second Reporting Organisation</digi:trn></b>
+																											<b><digi:trn>Component Second Responsible Organization</digi:trn></b>
 																										</td>
 																										<td colspan="3">
 																											<logic:notEmpty
-																													property="secondReportingOrganisation"
+																													property="componentSecondResponsibleOrganization"
 																													name="fd">
 																									<span class="word_break">
-																										<c:out value="${fd.secondReportingOrganisation.name}"/>
+																										<c:out value="${fd.componentSecondResponsibleOrganization.name}"/>
 																									</span>
 																											</logic:notEmpty>
 																										</td>
@@ -2326,18 +2391,18 @@ body {background:none;}
 																									</tr>
 																								</module:display>
 																								<module:display
-																										name="/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Second Reporting Organisation"
+																										name="/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Component Second Responsible Organization"
 																										parentModule="/Activity Form/Components/Component/Components Expenditures/Expenditure Table">
 																									<tr bgcolor="#ffffff">
 																										<td>
-																											<b><digi:trn>Second Reporting Organisation</digi:trn></b>
+																											<b><digi:trn>Component Second Responsible Organization</digi:trn></b>
 																										</td>
 																										<td colspan="3">
 																											<logic:notEmpty
-																													property="secondReportingOrganisation"
+																													property="componentSecondResponsibleOrganization"
 																													name="fd">
 																									<span class="word_break">
-																										<c:out value="${fd.secondReportingOrganisation.name}"/>
+																										<c:out value="${fd.componentSecondResponsibleOrganization.name}"/>
 																									</span>
 																											</logic:notEmpty>
 																										</td>

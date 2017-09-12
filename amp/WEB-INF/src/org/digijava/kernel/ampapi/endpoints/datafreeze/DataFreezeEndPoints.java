@@ -20,16 +20,23 @@ import org.digijava.module.aim.dbentity.AmpDataFreezeSettings;
 public class DataFreezeEndPoints implements ErrorReportingEndpoint {
 
     /**
-     * Saves a data freeze object to the database
-     * </br>
+     * Saves a data freeze object to the database </br>
      * <dl>
      * </br>
      * The returned JSON object holds information regarding:
-     * <dt><b>data</b><dd> - the saved data freeze eevent
-     * <dt><b>result</b><dd> - result string that indicates if the save was successful or not - SAVE_SUCCESSFUL/SAVE_FAILED
-     * <dt><b>errors</b><dd> - an array of error objects for all the errors that occurred while saving
-     * </dl></br></br> 
+     * <dt><b>data</b>
+     * <dd>- the saved data freeze eevent
+     * <dt><b>result</b>
+     * <dd>- result string that indicates if the save was successful or not -
+     * SAVE_SUCCESSFUL/SAVE_FAILED
+     * <dt><b>errors</b>
+     * <dd>- an array of error objects for all the errors that occurred while
+     * saving
+     * </dl>
+     * </br>
+     * </br>
      * <h3>Sample Input:</h3>
+     * 
      * <pre>
      * {
      *      "enabled" : true,
@@ -41,9 +48,11 @@ public class DataFreezeEndPoints implements ErrorReportingEndpoint {
      *      "freezeOption" : "ENTIRE_ACTIVITY",
      *      "sendNotification" : false,
      *      "notificationDays" : ""
-     * } 
+     * }
      * </pre>
+     * 
      * <h3>Sample Output:</h3>
+     * 
      * <pre>
      * {
      *       "data" : {
@@ -64,7 +73,9 @@ public class DataFreezeEndPoints implements ErrorReportingEndpoint {
      *     "errors" : []
      * }
      * </pre>
-     * @param dataFreezeEvent - data freeze event object
+     * 
+     * @param dataFreezeEvent
+     *            - data freeze event object
      * @return
      */
 	@POST

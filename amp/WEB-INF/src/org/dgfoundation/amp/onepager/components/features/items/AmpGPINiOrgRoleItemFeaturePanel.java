@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -19,6 +20,8 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
@@ -35,6 +38,10 @@ import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpGPINiIndicator;
 import org.digijava.module.aim.dbentity.AmpGPINiSurvey;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.FundingOrganization;
+import org.digijava.module.gateperm.core.GatePermConst;
+import org.digijava.module.gateperm.util.PermissionUtil;
 import org.digijava.module.gpi.util.GPIUtils;
 
 /**
@@ -45,11 +52,12 @@ public class AmpGPINiOrgRoleItemFeaturePanel extends AmpFeaturePanel<AmpOrgRole>
 
 	private static final long serialVersionUID = -1230689136852083970L;
 	private static final String INDICATOR_9B_CODE = "9b";
+	private IModel<AmpOrgRole>currentDonor;
 
-	public AmpGPINiOrgRoleItemFeaturePanel(String id, String fmName, final IModel<AmpOrgRole> donor,
+	public AmpGPINiOrgRoleItemFeaturePanel(String id, String fmName,  IModel<AmpOrgRole> donor,
 			IModel<AmpActivityVersion> am, final AmpGPINiFormSectionFeature parent) throws Exception {
 		super(id, donor, fmName, true);
-
+		currentDonor = donor;
 		PropertyModel<String> orgName = new PropertyModel<String>(donor, "organisation.name");
 
 		Label indicatorNameURLLabel = new Label("organisationNameURL", orgName) {
@@ -91,7 +99,7 @@ public class AmpGPINiOrgRoleItemFeaturePanel extends AmpFeaturePanel<AmpOrgRole>
 			}
 		};
 		add(newItem);
-
+		
 		AmpLinkField deleteItem = new AmpDeleteLinkField("deleteItem", "Delete Item") {
 			@Override
 			protected void onClick(AjaxRequestTarget target) {
@@ -172,7 +180,18 @@ public class AmpGPINiOrgRoleItemFeaturePanel extends AmpFeaturePanel<AmpOrgRole>
 
 		add(indicatorPanel);
 	}
-
+	
+    @Override
+    protected void onConfigure() {
+        HttpServletRequest request= (HttpServletRequest)RequestCycle.get().getRequest().getContainerRequest();
+        if (currentDonor != null && currentDonor.getObject() != null){
+            FundingOrganization fo = new FundingOrganization();
+            fo.setAmpOrgId(currentDonor.getObject().getOrganisation().getAmpOrgId());           
+            PermissionUtil.putInScope(request, GatePermConst.ScopeKeys.CURRENT_ORG, fo);
+            PermissionUtil.putInScope(request, GatePermConst.ScopeKeys.CURRENT_ORG_ROLE, Constants.FUNDING_AGENCY);
+        }
+        super.onConfigure();
+    }
 	/**
 	 * Checks if the donor's fundings has concessionality field populated
 	 * 

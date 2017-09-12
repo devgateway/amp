@@ -17,8 +17,10 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.http.HttpRequest;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMFieldPermissionViewer;
@@ -70,20 +72,36 @@ public final class PermissionUtil {
 	public static String removeTabsNewlines(String text) {
 		return removeTabs(text).replace("\r\n", " ").replace("\n", " ");
 	}
-	
+    /**
+     * flushes the gate permissions scope
+     * @param sessiont
+     * @return
+     */
+    public static Map resetScope(HttpSession session) {
+        Map scope = (Map) session.getAttribute(GatePermConst.SCOPE);
+        if (scope == null) {
+            scope = new HashMap();
+            session.setAttribute(GatePermConst.SCOPE, scope);
+        } else {
+            scope.clear();
+        }
+        return scope;
+    }	
 	/**
 	 * flushes the gate permissions scope
-	 * @param session
+	 * @param request
 	 * @return
 	 */
-	public static Map resetScope(HttpSession session) {
-	    Map scope = (Map) session.getAttribute(GatePermConst.SCOPE);
-	    if(scope==null) {
-		scope=new HashMap();
-		session.setAttribute(GatePermConst.SCOPE, scope); 
-	    } else scope.clear();
-	    return scope;
-	}
+    public static Map resetScope(HttpServletRequest request) {
+        Map scope = (Map) request.getAttribute(GatePermConst.SCOPE);
+        if (scope == null) {
+            scope = new HashMap();
+            request.setAttribute(GatePermConst.SCOPE, scope);
+        } else {
+            scope.clear();
+        }
+        return scope;
+    }
 	
 	
 	/**
@@ -152,6 +170,29 @@ public final class PermissionUtil {
 			logger.debug("Object ["+key+"] with value ["+value.toString()+"] has been placed in the permission scope");
 		}
 	}
+	
+	
+	public static void putInScope(HttpServletRequest request,MetaInfo key, Object value){
+        Map scope=getScope(request);
+        scope.put(key, value);
+        if (value!=null){
+            logger.debug("Object ["+key+"] with value ["+value.toString()+"] has been placed in the permission scope");
+        }
+	    
+	}
+	
+	   /**
+     * gets the gate permissions scope. The scope is the place to put external objects needed by gates logical evaluation 
+     * (like the current user) which are not the permissible istelf (so objects other than the current object on which the
+     * permission query is invoked on)
+     * @param session
+     * @return
+     */
+    public static Map getScope(HttpServletRequest request) {
+        Map scope = (Map) request.getAttribute(GatePermConst.SCOPE);
+        if(scope==null) return resetScope(request);
+        return scope;
+    }
 	
 	/**
 	 * Gets the object associated with the given key, if any, from the permissions scope

@@ -9,7 +9,11 @@ import java.util.stream.Collectors;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.PerformanceRuleMatcher;
-import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.*;
+import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.DisbursementsAfterActivityDateMatcherDefinition;
+import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.NoDisbursementsAfterFundingDateMatcherDefinition;
+import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.NoUpdatedDisbursementsAfterTimePeriodMatcherDefinition;
+import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.NoUpdatedStatusAfterFundingDateMatcherDefinition;
+import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleMatcherDefinition;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpPerformanceRule;
@@ -25,18 +29,18 @@ import org.hibernate.criterion.Projections;
  * @author Viorel Chihai
  *
  */
-public class PerformanceRuleManager {
+public final class PerformanceRuleManager {
 
     private static PerformanceRuleManager performanceRuleManager;
-    
+
     private List<PerformanceRuleMatcherDefinition> definitions;
-    
+
     private List<AmpPerformanceRule> cachedPerformanceRules;
-    
+
     private List<PerformanceRuleMatcher> cachedPerformanceRuleMatchers;
-    
+
     private static final Logger logger = Logger.getLogger(PerformanceRuleManager.class);
-    
+
     private PerformanceRuleManager() {
         initPerformanceRuleDefinitions();
     }
@@ -49,10 +53,10 @@ public class PerformanceRuleManager {
         if (performanceRuleManager == null) {
             performanceRuleManager = new PerformanceRuleManager();
         }
-        
+
         return performanceRuleManager;
     }
-    
+
     private void initPerformanceRuleDefinitions() {
         definitions = new ArrayList<>();
         definitions.add(new NoUpdatedStatusAfterFundingDateMatcherDefinition());
@@ -60,7 +64,7 @@ public class PerformanceRuleManager {
         definitions.add(new DisbursementsAfterActivityDateMatcherDefinition());
         definitions.add(new NoUpdatedDisbursementsAfterTimePeriodMatcherDefinition());
     }
-    
+
     public List<PerformanceRuleMatcherDefinition> getPerformanceRuleDefinitions() {
         return definitions;
     }
@@ -98,7 +102,7 @@ public class PerformanceRuleManager {
 
         Session session = PersistenceManager.getSession();
         session.merge(performanceRule);
-        
+
         invalidateCachedPerformanceRules();
     }
 
@@ -113,7 +117,7 @@ public class PerformanceRuleManager {
 
         Session session = PersistenceManager.getSession();
         session.saveOrUpdate(performanceRule);
-        
+
         invalidateCachedPerformanceRules();
     }
 
@@ -122,7 +126,7 @@ public class PerformanceRuleManager {
 
         Session session = PersistenceManager.getSession();
         session.delete(performanceRule);
-        
+
         invalidateCachedPerformanceRules();
     }
 
@@ -130,29 +134,28 @@ public class PerformanceRuleManager {
         if (cachedPerformanceRules == null) {
             updateCachedPerformanceRules();
         }
-        
+
         return cachedPerformanceRules;
     }
-    
+
     private void updateCachedPerformanceRules() {
         Session session = PersistenceManager.getSession();
 
         cachedPerformanceRules = session.createCriteria(AmpPerformanceRule.class).addOrder(Order.asc("id")).list();
         invalidateCachedPerformanceRuleMatchers();
     }
-    
+
     private void invalidateCachedPerformanceRules() {
         cachedPerformanceRules = null;
         invalidateCachedPerformanceRuleMatchers();
     }
-    
+
     private void updateCachedPerformanceRuleMatchers() {
-        List<AmpPerformanceRule> rules = getPerformanceRules().stream()
-                .filter(rule -> rule.getEnabled())
+        List<AmpPerformanceRule> rules = getPerformanceRules().stream().filter(rule -> rule.getEnabled())
                 .collect(Collectors.toList());
-        
+
         cachedPerformanceRuleMatchers = new ArrayList<>();
-        
+
         for (AmpPerformanceRule rule : rules) {
             try {
                 cachedPerformanceRuleMatchers.add(getMatcherDefinition(rule.getTypeClassName()).createMatcher(rule));
@@ -163,7 +166,7 @@ public class PerformanceRuleManager {
             }
         }
     }
-    
+
     private void invalidateCachedPerformanceRuleMatchers() {
         cachedPerformanceRuleMatchers = null;
     }
@@ -200,15 +203,19 @@ public class PerformanceRuleManager {
         if (cachedPerformanceRuleMatchers == null) {
             updateCachedPerformanceRuleMatchers();
         }
-        
+
         return cachedPerformanceRuleMatchers;
     }
-    
+
     /**
-     * This method should only when the the user wants to match one activity.
-     * In order to match a list of activities, get the matcher list once and match the items one by one
-     * @param a activity
-     * @return performance alert level (null if activity does not have performance issues)
+     * This method should only when the the user wants to match one activity. In
+     * order to match a list of activities, get the matcher list once and match
+     * the items one by one
+     * 
+     * @param a
+     *            activity
+     * @return performance alert level (null if activity does not have
+     *         performance issues)
      */
     public AmpCategoryValue matchActivity(AmpActivityVersion a) {
         List<PerformanceRuleMatcher> matchers = getPerformanceRuleMatchers();
@@ -219,30 +226,28 @@ public class PerformanceRuleManager {
     public AmpCategoryValue matchActivity(List<PerformanceRuleMatcher> matchers, AmpActivityVersion a) {
 
         AmpCategoryValue level = null;
-        
+
         for (PerformanceRuleMatcher matcher : matchers) {
             AmpCategoryValue matchedLevel = matcher.match(a) ? matcher.getRule().getLevel() : null;
             level = getHigherLevel(level, matchedLevel);
         }
-        
+
         return level;
     }
-    
 
     public AmpPerformanceRuleAttribute getAttributeFromRule(AmpPerformanceRule rule, String attributeName) {
-        AmpPerformanceRuleAttribute attribute = rule.getAttributes().stream()                
-                .filter(attr -> attr.getName().equals(attributeName))
-                .findAny().orElse(null);
-        
+        AmpPerformanceRuleAttribute attribute = rule.getAttributes().stream()
+                .filter(attr -> attr.getName().equals(attributeName)).findAny().orElse(null);
+
         return attribute;
     }
-    
+
     public String getAttributeValue(AmpPerformanceRule rule, String attributeName) {
         AmpPerformanceRuleAttribute attribute = getAttributeFromRule(rule, attributeName);
-        
+
         return attribute.getValue();
     }
-    
+
     public AmpCategoryValue getHigherLevel(AmpCategoryValue level1, AmpCategoryValue level2) {
         if (level1 == null) {
             return level2;
@@ -251,55 +256,53 @@ public class PerformanceRuleManager {
         } else if (level1.getIndex() > level2.getIndex()) {
             return level1;
         }
-        
+
         return level2;
     }
-    
+
     public int getCalendarTimeUnit(String timeUnit) {
-        switch(timeUnit) {
-            case PerformanceRuleConstants.TIME_UNIT_DAY :
-                return Calendar.DAY_OF_YEAR;
-            case PerformanceRuleConstants.TIME_UNIT_MONTH :
-                return Calendar.MONTH;
-            case PerformanceRuleConstants.TIME_UNIT_YEAR :
-            default :
-                return Calendar.YEAR;
+        switch (timeUnit) {
+        case PerformanceRuleConstants.TIME_UNIT_DAY:
+            return Calendar.DAY_OF_YEAR;
+        case PerformanceRuleConstants.TIME_UNIT_MONTH:
+            return Calendar.MONTH;
+        case PerformanceRuleConstants.TIME_UNIT_YEAR:
+        default:
+            return Calendar.YEAR;
         }
     }
 
     public String buildPerformanceIssuesMessage(List<AmpActivityVersion> activities) {
         StringBuilder sb = new StringBuilder();
-        
+
         Map<AmpCategoryValue, List<AmpActivityVersion>> activitiesByPerformanceLevel = activities.stream()
                 .filter(a -> getPerformanceLevel(a) != null)
                 .collect(Collectors.groupingBy(a -> getPerformanceLevel(a)));
-        
+
         activitiesByPerformanceLevel.entrySet().forEach(e -> {
             sb.append("\n\n");
             sb.append(e.getKey().getLabel());
             sb.append("\n");
-            
+
             e.getValue().forEach(a -> {
                 sb.append(String.format("%d\t%s\t%s\n", a.getAmpActivityId(), a.getAmpId(), a.getName()));
             });
         });
-        
+
         return sb.toString();
     }
-    
+
     private AmpCategoryValue getPerformanceLevel(AmpActivityVersion a) {
-        AmpCategoryValue performanceLevel = a.getCategories().stream()
-                .filter(acv -> acv.getAmpCategoryClass().getKeyName()
-                        .equals(CategoryConstants.PERFORMANCE_ALERT_LEVEL_KEY))
+        AmpCategoryValue performanceLevel = a.getCategories().stream().filter(
+                acv -> acv.getAmpCategoryClass().getKeyName().equals(CategoryConstants.PERFORMANCE_ALERT_LEVEL_KEY))
                 .findAny().orElse(null);
-        
+
         return performanceLevel;
     }
-    
+
     public AmpCategoryValue getPerformanceIssueFromActivity(AmpActivityVersion a) {
-        return a.getCategories().stream()
-                .filter(acv -> acv.getAmpCategoryClass().getKeyName()
-                        .equals(CategoryConstants.PERFORMANCE_ALERT_LEVEL_KEY))
+        return a.getCategories().stream().filter(
+                acv -> acv.getAmpCategoryClass().getKeyName().equals(CategoryConstants.PERFORMANCE_ALERT_LEVEL_KEY))
                 .findAny().orElse(null);
     }
 

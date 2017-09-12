@@ -17,7 +17,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
  */
 public class ActivityBuilder {
 
-    AmpActivityVersion activity;
+    private AmpActivityVersion activity;
 
     public ActivityBuilder() {
         activity = new AmpActivityVersion();

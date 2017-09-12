@@ -10,7 +10,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
  */
 public class CategoryValueBuilder {
 
-    AmpCategoryValue categoryValue;
+    private AmpCategoryValue categoryValue;
 
     public CategoryValueBuilder() {
         categoryValue = new AmpCategoryValue();

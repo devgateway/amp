@@ -116,7 +116,7 @@ public class ActivityService {
  		mrs.setUnitsOption(AmountsUnits.AMOUNTS_OPTION_UNITS);
 
 		AmpReportFilters filterRules = FilterUtils.getFilterRules(filters, activitIds);
-		if (filterRules != null){
+        if (filterRules != null) {
 		    GisUtils.configurePerformanceFilter(config, filterRules);
 			spec.setFilters(filterRules);
 		}

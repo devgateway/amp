@@ -1358,18 +1358,6 @@
 		                <workingDirectory>${project.basedir}/TEMPLATE/reamp</workingDirectory>
 	                    </configuration>
                   </execution>
-                    <!--  
-                    <execution>
-                        <id>Webpack build for reamp</id>
-                        <goals>
-                            <goal>webpack</goal>
-                        </goals>
-                        <phase>process-resources</phase>
-                        <configuration>
-                            <workingDirectory>${project.basedir}/TEMPLATE/reamp</workingDirectory>
-							<arguments>-p</arguments>
-                        </configuration>
-                    </execution> -->
 <!--                    !!!! Next part is for building filters and dashboard. It was commented out until  -->
 <!--                     there is a decision on how to approach dependecies caching (node_modules) AMP-20022 !!! -->
                     

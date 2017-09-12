@@ -96,33 +96,32 @@ public class AmpStructuresFormSectionFeature extends
 //				structureTypes.setOutputMarkupId(true);
 //                structureTypes.getChoiceContainer().add(new AttributeModifier("style", "max-width: 100px;margin-bottom:20px;"));
 //				item.add(structureTypes);
-//				
-				                
-             final TextField<String> coords = new TextField<String>("coords", new PropertyModel<String>(structureModel, "coords"));            
-             coords.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+//								                
+                final TextField<String> coords = new TextField<String>("coords",
+                        new PropertyModel<String>(structureModel, "coords"));
+                coords.add(new AjaxFormComponentUpdatingBehavior("onchange") {
                     @Override
                     protected void onUpdate(AjaxRequestTarget target) {
-                      if(coords.getDefaultModelObject() != null) {
-                          JsonBean data = JsonBean.getJsonBeanFromString(coords.getDefaultModelObject().toString());
-                          List<Map<String, String>> coordinates = (List<Map<String, String>>) data.get("coordinates");
-                          AmpStructure structure = structureModel.getObject();
-                          if(structure.getCoordinates() == null) {
-                              structure.setCoordinates(new LinkedHashSet<>());
-                          } else {
-                              structureModel.getObject().getCoordinates().clear();
-                          }                                                   
-                          if (coordinates != null) {
-                              for (Map<String, String> pair : coordinates) {
-                                  AmpStructureCoordinate ampStructureCoordinate = new AmpStructureCoordinate();
-                                  ampStructureCoordinate.setStructure(structure);
-                                  ampStructureCoordinate.setLatitude(String.valueOf(pair.get("latitude")));
-                                  ampStructureCoordinate.setLongitude(String.valueOf(pair.get("longitude")));
-                                  structureModel.getObject().getCoordinates().add(ampStructureCoordinate);
-                              }
-                          }
-                          
-                          System.out.println(coords.getDefaultModelObject().toString());  
-                      }                     
+                        if (coords.getDefaultModelObject() != null) {
+                            JsonBean data = JsonBean.getJsonBeanFromString(coords.getDefaultModelObject().toString());
+                            List<Map<String, String>> coordinates = (List<Map<String, String>>) data.get("coordinates");
+                            AmpStructure structure = structureModel.getObject();
+                            if (structure.getCoordinates() == null) {
+                                structure.setCoordinates(new LinkedHashSet<>());
+                            } else {
+                                structure.getCoordinates().clear();
+                            }
+                            if (coordinates != null) {
+                                for (Map<String, String> pair : coordinates) {
+                                    AmpStructureCoordinate ampStructureCoordinate = new AmpStructureCoordinate();
+                                    ampStructureCoordinate.setStructure(structure);
+                                    ampStructureCoordinate.setLatitude(String.valueOf(pair.get("latitude")));
+                                    ampStructureCoordinate.setLongitude(String.valueOf(pair.get("longitude")));
+                                    structure.getCoordinates().add(ampStructureCoordinate);
+                                }
+                            }
+
+                        }
                     }
                 });
                 
@@ -195,15 +194,15 @@ public class AmpStructuresFormSectionFeature extends
 					}
 					
 				};
-				item.add(delbutton);
-				
-				final AmpAjaxLinkField openMapPopup = new AmpAjaxLinkField("openMapPopup", "Map", "Map") {
-					@Override
-					public void onClick(AjaxRequestTarget target) {
-						target.appendJavaScript("gisPopup($('#"+this.getMarkupId()+"')[0]); return false;");
-			  	}
-				};
-				item.add(openMapPopup);	
+                item.add(delbutton);
+
+                final AmpAjaxLinkField openMapPopup = new AmpAjaxLinkField("openMapPopup", "Map", "Map") {
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        target.appendJavaScript("gisPopup($('#" + this.getMarkupId() + "')[0]); return false;");
+                    }
+                };
+                item.add(openMapPopup);
 			}
 		};
 		containter.add(list);

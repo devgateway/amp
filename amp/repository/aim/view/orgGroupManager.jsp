@@ -230,7 +230,7 @@
 											<tr>
 												<td colspan="4" align=center style="font-size:12px; padding-top:15px;">
 													<digi:trn key="aim:organizationPages">
-													Pages :</digi:trn>
+														Pages:</digi:trn>
 													<logic:iterate name="aimOrgGroupManagerForm" 	property="pages" id="pages" type="java.lang.Integer">
 													<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
 													<c:set target="${urlParams1}" property="page"><%=pages%></c:set>

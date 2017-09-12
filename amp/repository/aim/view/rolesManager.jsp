@@ -133,8 +133,8 @@
 										<logic:notEmpty name="aimRolesForm" property="pages">
 										<tr>
 											<td colspan="4">
-												<digi:trn key="aim:rolesManagerPages">				
-												Pages :
+												<digi:trn key="aim:rolesManagerPages">
+													Pages:
 												</digi:trn>
 												<logic:iterate name="aimRolesForm" property="pages" id="pages" type="java.lang.Integer">
 													<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>

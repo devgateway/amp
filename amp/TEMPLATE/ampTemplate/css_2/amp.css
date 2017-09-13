@@ -1233,7 +1233,7 @@ div.footer {
 }
 
 .legend-item {
-	float:left;width:20%; 
+	float:left;width:20%;
 	margin-top:10px;
 	clear:both;
 }
@@ -1243,4 +1243,12 @@ div.footer {
     padding: 10px;
     font-size: 12px;
     height: 100%;
+}
+
+.right_menu_empty {
+    color: #376091;
+}
+
+.right_menu_empty {
+    color: #376091;
 }

@@ -40,6 +40,25 @@ public class NoDisbursementsAfterFundingDateMatcherTests extends PerformanceRule
         
         assertNotNull(definition.createMatcher(rule));
     }
+    
+    @Test
+    public void testNoFundingClassificationDate() {
+       
+        AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_MONTH, "1", 
+                PerformanceRuleConstants.FUNDING_CLASSIFICATION_DATE, getCriticalLevel());
+        
+        AmpActivityVersion a = new ActivityBuilder()
+                .addFunding(
+                        new FundingBuilder()
+                                .addTransaction(new TransactionBuilder()
+                                        .withTransactionType(Constants.DISBURSEMENT)
+                                        .withTransactionDate(new LocalDate(2015, 12, 12).toDate())
+                                        .getTransaction())
+                                .getFunding())
+                .getActivity();
+        
+        assertFalse(match(rule, a));
+    }
 
     @Test
     public void testOneDisbursementBeforeFundingClassificationDate() {
@@ -58,7 +77,7 @@ public class NoDisbursementsAfterFundingDateMatcherTests extends PerformanceRule
                                 .getFunding())
                 .getActivity();
         
-        assertTrue(match(rule, a));
+        assertFalse(match(rule, a));
     }
     
     @Test
@@ -82,7 +101,7 @@ public class NoDisbursementsAfterFundingDateMatcherTests extends PerformanceRule
                                 .getFunding())
                 .getActivity();
         
-        assertFalse(match(rule, a));
+        assertTrue(match(rule, a));
     }
     
     @Test
@@ -106,7 +125,7 @@ public class NoDisbursementsAfterFundingDateMatcherTests extends PerformanceRule
                                 .getFunding())
                 .getActivity();
         
-        assertTrue(match(rule, a));
+        assertFalse(match(rule, a));
     }
     
     @Test
@@ -142,7 +161,7 @@ public class NoDisbursementsAfterFundingDateMatcherTests extends PerformanceRule
                                 .getFunding())
                 .getActivity();
         
-        assertFalse(match(rule, a));
+        assertTrue(match(rule, a));
     }
 
     /**

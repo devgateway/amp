@@ -205,7 +205,8 @@ public class GPIUtils {
                         + " FROM  amp_organisation o, amp_funding af, amp_activity_version v, amp_role r   "
                         + " WHERE  o.amp_org_id = af.amp_donor_org_id  "
                         + " AND v.amp_activity_id = af.amp_activity_id  AND (v.deleted is false) "
-                        + " AND ((af.source_role_id IS NULL) OR af.source_role_id = r.amp_role_id and r.role_code = 'DN') "
+                        + " AND ((af.source_role_id IS NULL) "
+                        + " OR af.source_role_id = r.amp_role_id and r.role_code = 'DN') "
                         + " AND (o.deleted IS NULL OR o.deleted = false))";
                 query += " order by o.name";
 

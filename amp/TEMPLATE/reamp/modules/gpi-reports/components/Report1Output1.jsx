@@ -11,6 +11,7 @@ import Report1Output1Row from './Report1Output1Row';
 import RemarksPopup from './RemarksPopup';
 import ToolBar from './ToolBar';
 import HeaderToolTip from './HeaderToolTip';
+import Loading from './Loading';
 export default class Report1Output1 extends Component {
     constructor( props, context ) {
         super( props, context );
@@ -305,12 +306,15 @@ export default class Report1Output1 extends Component {
                       </table>
                     <div>
                          <PagingSection mainReport={this.props.mainReport} goToPage={this.goToPage.bind(this)} updateRecordsPerPage={this.updateRecordsPerPage.bind(this)}/>
-                    </div>
-                </div>
-            );
-        }
+               
+                       </div>
+                  </div>        
+               }
+            </div>
+                
+          );
+        
 
-        return ( <div></div> );
     }
 
 }

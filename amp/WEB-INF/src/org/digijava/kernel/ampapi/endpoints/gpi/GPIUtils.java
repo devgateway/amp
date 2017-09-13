@@ -198,27 +198,28 @@ public class GPIUtils {
         final List<JsonBean> donors = new ArrayList<JsonBean>();
         PersistenceManager.getSession().doWork(new Work() {
             public void execute(Connection conn) throws SQLException {
-                Map<Long, String> organisationsNames = QueryUtil.getTranslatedName(conn,"amp_organisation","amp_org_id","name");
-                String query =  "SELECT (o.amp_org_id) orgId, o.name, o.acronym FROM  amp_organisation o WHERE o.amp_org_id IN (SELECT distinct o.amp_org_id FROM  amp_organisation o, amp_funding af, amp_activity_version v, amp_role r   " +                
-                                "WHERE  o.amp_org_id = af.amp_donor_org_id  AND v.amp_activity_id = af.amp_activity_id  AND (v.deleted is false) " +
-                                "AND ((af.source_role_id IS NULL) OR af.source_role_id = r.amp_role_id and r.role_code = 'DN') "    + 
-                                "AND (o.deleted IS NULL OR o.deleted = false))";                        
-                                query +=" order by o.name";
-                
-                    try(RsInfo rsi = SQLUtils.rawRunQuery(conn, query, null)) {
+                Map<Long, String> organisationsNames = QueryUtil.getTranslatedName(conn, "amp_organisation",
+                        "amp_org_id", "name");
+                String query = "SELECT (o.amp_org_id) orgId, o.name, o.acronym FROM  amp_organisation o WHERE o.amp_org_id IN (SELECT distinct o.amp_org_id FROM  amp_organisation o, amp_funding af, amp_activity_version v, amp_role r   "
+                        + "WHERE  o.amp_org_id = af.amp_donor_org_id  AND v.amp_activity_id = af.amp_activity_id  AND (v.deleted is false) "
+                        + "AND ((af.source_role_id IS NULL) OR af.source_role_id = r.amp_role_id and r.role_code = 'DN') "
+                        + "AND (o.deleted IS NULL OR o.deleted = false))";
+                query += " order by o.name";
+
+                try (RsInfo rsi = SQLUtils.rawRunQuery(conn, query, null)) {
                     ResultSet rs = rsi.rs;
-                    
-                    while (rs.next()) {                              
-                            JsonBean org = new JsonBean();
-                            org.set("id", rs.getLong("orgId"));
-                            if (ContentTranslationUtil.multilingualIsEnabled()) {
-                                org.set("name", organisationsNames.get(rs.getLong("orgId")));
-                            } else {
-                                org.set("name", rs.getString("name"));
-                            }
-                            org.set("acronym", rs.getString("acronym"));
-                            donors.add(org);
-                        }                    
+
+                    while (rs.next()) {
+                        JsonBean org = new JsonBean();
+                        org.set("id", rs.getLong("orgId"));
+                        if (ContentTranslationUtil.multilingualIsEnabled()) {
+                            org.set("name", organisationsNames.get(rs.getLong("orgId")));
+                        } else {
+                            org.set("name", rs.getString("name"));
+                        }
+                        org.set("acronym", rs.getString("acronym"));
+                        donors.add(org);
+                    }
                 }
 
             }

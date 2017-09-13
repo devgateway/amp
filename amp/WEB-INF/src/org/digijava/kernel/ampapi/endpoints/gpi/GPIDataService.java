@@ -53,19 +53,20 @@ import org.hibernate.Session;
  */
 public class GPIDataService {
     public static JsonBean getAidOnBudgetById(Long id) {
-        if (hasGPIDataRights() == false) {
+        if (Boolean.FALSE.equals(hasGPIDataRights())) {
             ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
         }
 
         AmpGPINiAidOnBudget aidOnBudget = GPIUtils.getAidOnBudgetById(id);
-        if (aidOnBudget != null)
+        if (aidOnBudget != null) {
             return modelToJsonBean(aidOnBudget);
-        else
+        } else {
             return null;
+        }
     }
 
     public static JsonBean getAidOnBudgetList(Integer offset, Integer count, String orderBy, String sort) {
-        if (hasGPIDataRights() == false) {
+        if (Boolean.FALSE.equals(hasGPIDataRights())) {
             ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
         }
 
@@ -83,7 +84,7 @@ public class GPIDataService {
     }
 
     private static JsonBean modelToJsonBean(AmpGPINiAidOnBudget aidOnBudget) {
-        if (hasGPIDataRights() == false) {
+        if (Boolean.FALSE.equals(hasGPIDataRights())) {
             ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
         }
 
@@ -98,7 +99,7 @@ public class GPIDataService {
     }
 
     private static AmpGPINiAidOnBudget getAidOnBudget(JsonBean data) {
-        if (hasGPIDataRights() == false) {
+        if (Boolean.FALSE.equals(hasGPIDataRights())) {
             ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
         }
 
@@ -139,7 +140,7 @@ public class GPIDataService {
     }
 
     public static JsonBean saveAidOnBudget(JsonBean data) {
-        if (hasGPIDataRights() == false) {
+        if (Boolean.FALSE.equals(hasGPIDataRights())) {
             ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
         }
 
@@ -165,7 +166,7 @@ public class GPIDataService {
     }
 
     public static List<JsonBean> saveAidOnBudget(List<JsonBean> aidOnBudgetList) {
-        if (hasGPIDataRights() == false) {
+        if (Boolean.FALSE.equals(hasGPIDataRights())) {
             ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
         }
 
@@ -197,7 +198,7 @@ public class GPIDataService {
     }
 
     public static JsonBean deleteAidOnBudgetById(Long id) {
-        if (hasGPIDataRights() == false) {
+        if (Boolean.FALSE.equals(hasGPIDataRights())) {
             ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
         }
 
@@ -208,7 +209,7 @@ public class GPIDataService {
     }
 
     public static JsonBean saveDonorNotes(JsonBean data) {
-        if (hasGPIDataRights() == false) {
+        if (Boolean.FALSE.equals(hasGPIDataRights())) {
             ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
         }
 
@@ -235,7 +236,7 @@ public class GPIDataService {
     }
 
     public static List<JsonBean> saveDonorNotes(List<JsonBean> donorNotesList) {
-        if (hasGPIDataRights() == false) {
+        if (Boolean.FALSE.equals(hasGPIDataRights())) {
             ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
         }
 
@@ -306,7 +307,7 @@ public class GPIDataService {
 
     public static JsonBean getDonorNotesList(Integer offset, Integer count, String orderBy, String sort,
             String indicatorCode) {
-        if (hasGPIDataRights() == false) {
+        if (Boolean.FALSE.equals(hasGPIDataRights())) {
             ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
         }
 
@@ -326,7 +327,7 @@ public class GPIDataService {
     }
 
     public static JsonBean deleteDonorNotesById(Long id) {
-        if (hasGPIDataRights() == false) {
+        if (Boolean.FALSE.equals(hasGPIDataRights())) {
             ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
         }
 
@@ -343,7 +344,7 @@ public class GPIDataService {
     }
 
     public static List<JsonBean> getUsersVerifiedOrganizations() {
-        if (hasGPIDataRights() == false) {
+        if (Boolean.FALSE.equals(hasGPIDataRights())) {
             ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
         }
 
@@ -505,7 +506,8 @@ public class GPIDataService {
             List<AmpGPINiSurveyResponseDocument> filteredDocuments) {
 
         List<GPIDonorActivityDocument> donorActivityDocuments = new ArrayList<>();
-        Map<Long, Map<Long, List<AmpGPINiSurveyResponseDocument>>> grouppedDocuments = new HashMap<Long, Map<Long, List<AmpGPINiSurveyResponseDocument>>>();
+        Map<Long, Map<Long, List<AmpGPINiSurveyResponseDocument>>> grouppedDocuments = 
+                new HashMap<Long, Map<Long, List<AmpGPINiSurveyResponseDocument>>>();
 
         filteredDocuments.forEach(doc -> {
             AmpOrgRole orgRole = doc.getSurveyResponse().getAmpGPINiSurvey().getAmpOrgRole();
@@ -571,7 +573,7 @@ public class GPIDataService {
         StringBuilder downloadUrl = new StringBuilder();
         downloadUrl.append(scheme).append("://").append(serverName);
 
-        if (serverPort != 80 && serverPort != 443) {
+        if (serverPort != GPIEPConstants.DEFAULT_HTTP_PORT && serverPort != GPIEPConstants.DEFAULT_HTTPS_PORT) {
             downloadUrl.append(":").append(serverPort);
         }
 

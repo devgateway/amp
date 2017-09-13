@@ -19,13 +19,16 @@ import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.newreports.CompleteWorkspaceFilter;
+import org.digijava.kernel.ampapi.endpoints.datafreeze.DataFreezeUtil;
 import org.digijava.kernel.config.DigiConfig;
 import org.digijava.kernel.mail.DgEmailManager;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.DigiConfigManager;
+import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
@@ -52,7 +55,6 @@ import org.digijava.module.message.triggers.ActivityCurrentCompletionDateTrigger
 import org.digijava.module.message.triggers.ActivityDisbursementDateTrigger;
 import org.digijava.module.message.triggers.ActivityFinalDateForContractingTrigger;
 import org.digijava.module.message.triggers.ActivityFinalDateForDisbursementsTrigger;
-import org.digijava.module.message.triggers.ActivityLevelNotificationTrigger;
 import org.digijava.module.message.triggers.ActivityMeassureComparisonTrigger;
 import org.digijava.module.message.triggers.ActivityProposedApprovalDateTrigger;
 import org.digijava.module.message.triggers.ActivityProposedCompletionDateTrigger;
@@ -65,8 +67,10 @@ import org.digijava.module.message.triggers.ApprovedResourceShareTrigger;
 import org.digijava.module.message.triggers.AwaitingApprovalCalendarTrigger;
 import org.digijava.module.message.triggers.CalendarEventSaveTrigger;
 import org.digijava.module.message.triggers.CalendarEventTrigger;
+import org.digijava.module.message.triggers.DataFreezeEmailNotificationTrigger;
 import org.digijava.module.message.triggers.NotApprovedActivityTrigger;
 import org.digijava.module.message.triggers.NotApprovedCalendarEventTrigger;
+import org.digijava.module.message.triggers.SummaryChangeNotificationTrigger;
 import org.digijava.module.message.triggers.PendingResourceShareTrigger;
 import org.digijava.module.message.triggers.RejectResourceSharetrigger;
 import org.digijava.module.message.triggers.RemoveCalendarEventTrigger;
@@ -77,6 +81,8 @@ import org.hibernate.jdbc.Work;
 
 public class AmpMessageWorker {
 
+    public static final String DEFAULT_EMAIL_SENDER = "system@digijava.org";
+    public static final long SITE_ID = 3L;
 	private static Logger logger = Logger.getLogger(AmpMessageWorker.class);
 
 	public static void processEvent(Event e) throws Exception {
@@ -145,6 +151,10 @@ public class AmpMessageWorker {
 				} else if (e.getTrigger().equals(ApprovedResourceShareTrigger.class)
 						|| e.getTrigger().equals(RejectResourceSharetrigger.class)) {
 					newMsg = processResourceShareEvent(e, newApproval, template, false);
+				} else if (e.getTrigger().equals(DataFreezeEmailNotificationTrigger.class)) {
+					newMsg = proccessDataFreezeNotificationEvent(e, newAlert, template);
+				} else if (e.getTrigger().equals(SummaryChangeNotificationTrigger.class)) {
+					newMsg = proccessSummaryChangeEvent(e, newAlert, template);
 				} else if (e.getTrigger().equals(ActivityMeassureComparisonTrigger.class)
 						|| e.getTrigger().equals(ActivityValidationWorkflowTrigger.class)) {
 
@@ -221,9 +231,12 @@ public class AmpMessageWorker {
 				} else if (e.getTrigger().equals(ApprovedResourceShareTrigger.class)
 						|| e.getTrigger().equals(RejectResourceSharetrigger.class)) {
 					defineReceiversForResourceShare(template, newMsg, false);
-
 				} else if (e.getTrigger().equals(UserAddedToFirstWorkspaceTrigger.class)) {
 					defineReceiversForUserAddedToWorkspace(newMsg, e);
+				} else if (e.getTrigger().equals(DataFreezeEmailNotificationTrigger.class)) {
+					defineReceiversForDataFreezeNotification(newMsg, e, template);
+				} else if (e.getTrigger().equals(SummaryChangeNotificationTrigger.class)) {
+					defineReceiversForSummaryChange(newMsg, e, template);
 				} else { // <-- currently for else is left user registration
 							// or activity disbursement date triggers
 					List<String> emailReceivers = new ArrayList<String>();
@@ -666,6 +679,38 @@ public class AmpMessageWorker {
 		return createAlertFromTemplate(template, myHashMap, alert);
 	}
 
+	/**
+     * Data Freeze Notification Processing
+     */
+    private static AmpAlert proccessDataFreezeNotificationEvent(Event e, AmpAlert alert, TemplateAlert template) {        
+        alert.setSenderType(MessageConstants.SENDER_TYPE_SYSTEM);   
+        alert.setName(template.getName());
+        alert.setDescription(template.getDescription());
+        alert.setReceivers(template.getReceivers());
+        alert.setDraft(false);
+        Calendar cal = Calendar.getInstance();
+        alert.setCreationDate(cal.getTime());
+        return alert;
+            
+        
+    }
+
+	/**
+     * Summary Change Processing
+     */
+    private static AmpAlert proccessSummaryChangeEvent(Event e, AmpAlert alert, TemplateAlert template) {
+        alert.setSenderType(MessageConstants.SENDER_TYPE_SYSTEM);
+        alert.setName(template.getName());
+        alert.setDescription(template.getDescription());
+        alert.setReceivers(template.getReceivers());
+        alert.setDraft(false);
+        Calendar cal = Calendar.getInstance();
+        alert.setCreationDate(cal.getTime());
+        return alert;
+
+
+    }
+    
 	private static Approval createApprovalFromTemplate(TemplateAlert template, HashMap<String, String> myMap,
 			Approval newApproval, boolean needsApproval, boolean sourceIsResource, boolean activityApproval,
 			AmpTeamMember approver) {
@@ -1261,6 +1306,63 @@ public class AmpMessageWorker {
 		}
 	}
 
+	private static void defineReceiversForDataFreezeNotification(AmpMessage newMsg, Event e, TemplateAlert template) throws Exception {
+	    
+	    List<User> users = DataFreezeUtil.getUsers();
+	    AmpTeamMember msgSender = TeamMemberUtil.getAmpTeamMember(newMsg.getSenderId());
+	    HashMap<String, String> params = new HashMap<String, String>();
+	    HashMap<String, AmpEmail> emails = new HashMap<String, AmpEmail>();
+        params.put(DataFreezeEmailNotificationTrigger.PARAM_DATA_FREEZE_NOTIFICATION_DAYS, String.valueOf(DataFreezeEmailNotificationTrigger.DAYS_TO_FREEZE));
+        params.put(DataFreezeEmailNotificationTrigger.PARAM_DATA_FREEZING_DATE, e.getParameters().get(DataFreezeEmailNotificationTrigger.PARAM_DATA_FREEZING_DATE).toString());
+	    for(User user : users) { 	        
+	        String senderEmail = (msgSender == null) ? DEFAULT_EMAIL_SENDER : msgSender.getUser().getEmail();
+	        AmpEmail ampEmail = emails.get(user.getRegisterLanguage().getCode());	        
+	        if (ampEmail == null) {
+				String translatedName = TranslatorWorker.translateText(newMsg.getName(), user.getRegisterLanguage()
+						.getCode(), SITE_ID);
+				String translatedDescription = TranslatorWorker.translateText(newMsg.getDescription(), user
+						.getRegisterLanguage().getCode(), SITE_ID);
+				ampEmail = new AmpEmail(senderEmail, DgUtil.fillPattern(translatedName, params),
+						DgUtil.fillPattern(translatedDescription, params));
+				DbUtil.saveOrUpdateObject(ampEmail);
+				emails.put(user.getRegisterLanguage().getCode(), ampEmail);
+			}
+	        AmpEmailReceiver emailReceiver = new AmpEmailReceiver(user.getEmail(), ampEmail, MessageConstants.UNSENT_STATUS);
+            DbUtil.saveOrUpdateObject(emailReceiver);	         
+	    }
+              
+    }
+
+	private static void defineReceiversForSummaryChange(AmpMessage newMsg, Event e, TemplateAlert template) throws
+			Exception {
+
+		User user = UserUtils.getUserByEmail(e.getParameters().get(SummaryChangeNotificationTrigger
+				.PARAM_SUMMARY_EMAIL).toString());
+		HashMap<String, String> params = new HashMap<String, String>();
+		params.put(SummaryChangeNotificationTrigger.PARAM_SUMMARY_BODY, String.valueOf(
+				SummaryChangeNotificationTrigger.PARAM_SUMMARY_BODY));
+
+		String senderEmail = DEFAULT_EMAIL_SENDER;
+		AmpEmail ampEmail;
+
+		String translatedName = TranslatorWorker.translateText(newMsg.getName(), user.getRegisterLanguage()
+				.getCode(), SITE_ID) + ": " + e.getParameters().get(SummaryChangeNotificationTrigger
+				.PARAM_SUMMARY_DATE).toString();
+
+		String translatedDescription = e.getParameters().get(SummaryChangeNotificationTrigger
+				.PARAM_SUMMARY_BODY).toString();
+
+		ampEmail = new AmpEmail(senderEmail, DgUtil.fillPattern(translatedName, params), DgUtil.fillPattern(
+				translatedDescription, params));
+		DbUtil.saveOrUpdateObject(ampEmail);
+
+		AmpEmailReceiver emailReceiver = new AmpEmailReceiver(user.getEmail(), ampEmail, MessageConstants
+				.UNSENT_STATUS);
+		DbUtil.saveOrUpdateObject(emailReceiver);
+
+	}
+
+	
 	private static void createMsgState(AmpMessageState state, AmpMessage newMsg, boolean calendarSaveActionWasCalled)
 			throws Exception {
 		createMsgState(state.getReceiver(), newMsg, calendarSaveActionWasCalled);
@@ -1349,7 +1451,7 @@ public class AmpMessageWorker {
 													// be sent
 					ampEmail = new AmpEmail(msgSender.getUser().getEmail(), message.getName(), description);
 				} else {
-					ampEmail = new AmpEmail("system@digijava.org", message.getName(), description);
+					ampEmail = new AmpEmail(DEFAULT_EMAIL_SENDER, message.getName(), description);
 				}
 
 				DbUtil.saveOrUpdateObject(ampEmail);

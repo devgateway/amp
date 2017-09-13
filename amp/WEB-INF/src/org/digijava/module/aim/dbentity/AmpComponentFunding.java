@@ -31,7 +31,9 @@ public class AmpComponentFunding implements Cloneable, Serializable {
 	// reusing field to store the organisation related to the current component
 	// @Interchangeable(fieldTitle="Reporting Organization")
 	private AmpOrganisation reportingOrganization;
-	// @Interchangeable(fieldTitle="Currency")
+	// @Interchangeable(fieldTitle="Component Second Responsible Organization")
+	private AmpOrganisation componentSecondResponsibleOrganization;
+    // @Interchangeable(fieldTitle="Currency")
 	private AmpCurrency currency;
 	// @Interchangeable(fieldTitle="Description")
 	private String description;
@@ -158,6 +160,18 @@ public class AmpComponentFunding implements Cloneable, Serializable {
 	}
 
 	/**
+	 * @return Returns the componentSecondResponsibleOrganization.
+	 */
+	public AmpOrganisation getComponentSecondResponsibleOrganization() {
+		return componentSecondResponsibleOrganization;
+	}
+	/**
+	 * @param componentSecondResponsibleOrganization The componentSecondResponsibleOrganization to set.
+	 */
+	public void setComponentSecondResponsibleOrganization(AmpOrganisation componentSecondResponsibleOrganization) {
+		this.componentSecondResponsibleOrganization = componentSecondResponsibleOrganization;
+	}
+	/**
 	 * @return Returns the transactionAmount.
 	 */
 	public Double getTransactionAmount() {
@@ -214,10 +228,10 @@ public class AmpComponentFunding implements Cloneable, Serializable {
 	 * NullPointerException(); if (!(obj instanceof AmpComponentFunding)) throw
 	 * new ClassCastException(); if(this.ampComponentFundingId == null) return
 	 * super.equals(obj);
-	 * 
+	 *
 	 * AmpComponentFunding comp = (AmpComponentFunding) obj; return
 	 * this.ampComponentFundingId.equals(comp.ampComponentFundingId);
-	 * 
+	 *
 	 * }
 	 */
 	public void setExchangeRate(Float exchangeRate) {

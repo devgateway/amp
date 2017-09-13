@@ -19,6 +19,7 @@ import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.translator.LocalizableLabel;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
@@ -95,6 +96,7 @@ import org.digijava.module.aim.util.EUActivityUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil.HelperLocationAncestorLocationNamesAsc;
 import org.digijava.module.aim.util.ProgramUtil;
+import org.digijava.module.aim.util.QuartzJobUtils;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
@@ -291,13 +293,22 @@ public class EditActivity extends Action {
             }
 
             if (activity.getDraft() != null && activity.getDraft()) {
-                eaForm.getWarningMessges().add("This is a draft activity");
+                eaForm.getWarningMessges().add(TranslatorWorker.translateText("This is a draft activity"));
             } else {
                 if (Constants.ACTIVITY_NEEDS_APPROVAL_STATUS.contains(activity.getApprovalStatus())) {
                     if (hasTeamLeadOrValidator) {
-                        eaForm.getWarningMessges().add("The activity is awaiting approval.");
+                        if (isAutomaticValidationEnabled()) {
+                            LocalizableLabel label = new LocalizableLabel("The activity is awaiting approval and "
+                                    + "will be "
+                                    + "automatically approved within {0} days.", daysToValidation(activity.getUpdatedDate()));
+                            eaForm.getWarningMessges().add(label.toString());
+                        } else {
+                            eaForm.getWarningMessges().add(TranslatorWorker.translateText("The activity is awaiting "
+                                    + "approval."));
+                        }
                     } else {
-                        eaForm.getWarningMessges().add("This activity cannot be validated because there is no Workspace Manager.");
+                        eaForm.getWarningMessges().add(TranslatorWorker.translateText("This activity cannot be "
+                                + "validated because there is no Workspace Manager."));
                     }
                 }
             }
@@ -646,7 +657,8 @@ public class EditActivity extends Action {
           eaForm.getIdentification().setAccessionInstrument(new Long(ampCategoryValue.getId()));
 
         ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
-            CategoryConstants.ACTIVITY_STATUS_KEY, activity.getCategories());
+                CategoryManagerUtil.getAlternateKey(currentTeam, CategoryConstants.ACTIVITY_STATUS_KEY), activity
+                        .getCategories());
         if (ampCategoryValue != null)
           eaForm.getIdentification().setStatusId(new Long(ampCategoryValue.getId()));
 
@@ -684,8 +696,9 @@ public class EditActivity extends Action {
                 eaForm.getLocation().setLevelIdx(ampCategoryValue.getIndex());
             }
 
-        ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
-                    CategoryConstants.PROJECT_CATEGORY_KEY, activity.getCategories());
+          ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
+                  CategoryManagerUtil.getAlternateKey(currentTeam, CategoryConstants.PROJECT_CATEGORY_KEY), activity
+                          .getCategories());
             if (ampCategoryValue != null)
                   eaForm.getIdentification().setProjectCategory(new Long(ampCategoryValue.getId()));
 
@@ -779,16 +792,12 @@ public class EditActivity extends Action {
             	eaForm.getIdentification().setApprovalStatus(Constants.EDITED_STATUS);
             }
         }
-        
-        String sscPrefix = "";
-        if (currentTeam != null && currentTeam.getWorkspacePrefix() != null) {
-        	sscPrefix =  "SSC_";
-        }
-        
+
         //AMP-17127
         //for modalities that is a SSC category we have to add the SSC prefix
-        List<AmpCategoryValue> modalities = CategoryManagerUtil.getAmpCategoryValuesFromListByKey(sscPrefix + 
-        		CategoryConstants.MODALITIES_KEY, activity.getCategories());
+          List<AmpCategoryValue> modalities = CategoryManagerUtil.getAmpCategoryValuesFromListByKey(
+                  CategoryManagerUtil.getAlternateKey(currentTeam,
+                          CategoryConstants.MODALITIES_KEY), activity.getCategories());
         String[] actModalities=null;
         
         if(modalities !=null && modalities.size() >0){
@@ -803,11 +812,13 @@ public class EditActivity extends Action {
         eaForm.getIdentification().setSsc_modalities(actModalities );
        
         AmpCategoryValue typeOfCooperation = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
-        		sscPrefix + CategoryConstants.TYPE_OF_COOPERATION_KEY, activity.getCategories());
+                CategoryManagerUtil.getAlternateKey(currentTeam, CategoryConstants.TYPE_OF_COOPERATION_KEY), activity
+                        .getCategories());
         eaForm.getIdentification().setSsc_typeOfCooperation(typeOfCooperation == null ? null : typeOfCooperation.getLabel());
 
         AmpCategoryValue typeOfImplementation = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
-        		sscPrefix + CategoryConstants.TYPE_OF_IMPLEMENTATION_KEY, activity.getCategories());
+                CategoryManagerUtil.getAlternateKey(currentTeam, CategoryConstants.TYPE_OF_IMPLEMENTATION_KEY),
+                activity.getCategories());
         eaForm.getIdentification().setSsc_typeOfImplementation(typeOfImplementation == null ? null : typeOfImplementation.getLabel());
 
        // eaForm.getIdentification().setFundingSourcesNumber(activity.getFundingSourcesNumber());
@@ -954,6 +965,18 @@ public class EditActivity extends Action {
         	  eaForm.getIdentification().setLessonsLearned(activity.getLessonsLearned().trim());
 
       	eaForm.getIdentification().setProjectImpact(activity.getProjectImpact());
+
+            if (activity.getStatusOtherInfo() != null) {
+                eaForm.getIdentification().setStatusOtherInfo(activity.getStatusOtherInfo());
+            }
+
+            if (activity.getProjectCategoryOtherInfo() != null) {
+                eaForm.getIdentification().setProjectCategoryOtherInfo(activity.getProjectCategoryOtherInfo());
+            }
+
+            if (activity.getModalitiesOtherInfo() != null) {
+                eaForm.getIdentification().setModalitiesOtherInfo(activity.getModalitiesOtherInfo());
+            }
 
     	eaForm.getIdentification().setActivitySummary(activity.getActivitySummary());
 
@@ -1751,7 +1774,8 @@ public class EditActivity extends Action {
   private Long getCorrectActivityVersionIdToUse(Long activityId, EditActivityForm form) {
 	  Long lastVersionId	= ActivityVersionUtil.getLastVersionForVersion(activityId);
 	  if ( lastVersionId != null && !lastVersionId.equals(activityId) ) {
-		  form.getWarningMessges().add("Requested activity version was not the latest version. Preview switched to showing the last version!");
+		  form.getWarningMessges().add(TranslatorWorker.translateText("Requested activity version was not the latest "
+                  + "version. Preview switched to showing the last version!"));
 		  return lastVersionId;
 	  }
 	  return activityId;
@@ -1928,6 +1952,7 @@ private void setLineMinistryObservationsToForm(AmpActivityVersion activity, Edit
 				fd.setFiscalYear(DateConversion.convertDateToFiscalYearString(ampCompFund.getTransactionDate()));
 				fd.setTransactionType(ampCompFund.getTransactionType().intValue());
 				fd.setComponentOrganisation(ampCompFund.getReportingOrganization());
+				fd.setComponentSecondResponsibleOrganization(ampCompFund.getComponentSecondResponsibleOrganization());
 				fd.setComponentTransactionDescription(ampCompFund.getDescription());
 				
 				if (fd.getTransactionType() == 0) {
@@ -1992,4 +2017,20 @@ private void setLineMinistryObservationsToForm(AmpActivityVersion activity, Edit
 		eaForm.getWarningMessges().add(TranslatorWorker.translateText("An error occurred when loading the page. Please contact the AMP administrator."));
 		logger.error(e.getMessage(), e);
 	}
+
+     private int daysBetween(Date d1, Date d2) {
+         return (int) ((d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
+     }
+
+     private int daysToValidation(Date updatedDate) {
+         int result;
+         int daysBetween = daysBetween(updatedDate, new Date());
+         String daysBeforeValidation = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_OF_DAYS_BEFORE_AUTOMATIC_VALIDATION);
+         result = (Integer.parseInt(daysBeforeValidation) - daysBetween);
+         return result <= 0 ? 1 : result;
+     }
+
+     private boolean isAutomaticValidationEnabled() {
+         return (QuartzJobUtils.getJobByClassFullname(Constants.AUTOMATIC_VALIDATION_JOB_CLASS_NAME) == null ? false : true);
+     }
 }

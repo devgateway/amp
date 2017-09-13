@@ -5,13 +5,10 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.Date;
 
-import org.dgfoundation.amp.oracle.AMPOracleDialect;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.categorymanager.util.CategoryConstants;
-import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
 /**
@@ -55,6 +52,7 @@ public class FundingDetail implements Serializable, Comparable
     private Float capitalPercent;
     
     private AmpOrganisation componentOrganisation;
+    private AmpOrganisation componentSecondResponsibleOrganization;
     private String componentTransactionDescription;
        
     private String attachedPledgeName;
@@ -306,6 +304,14 @@ public class FundingDetail implements Serializable, Comparable
 
 	public AmpOrganisation getComponentOrganisation() {
 		return this.componentOrganisation;
+	}
+
+	public void setComponentSecondResponsibleOrganization(AmpOrganisation componentSecondResponsibleOrganization) {
+		this.componentSecondResponsibleOrganization = componentSecondResponsibleOrganization;
+	}
+
+	public AmpOrganisation getComponentSecondResponsibleOrganization() {
+		return this.componentSecondResponsibleOrganization;
 	}
 
 	public void setComponentTransactionDescription(String ctDescription) {

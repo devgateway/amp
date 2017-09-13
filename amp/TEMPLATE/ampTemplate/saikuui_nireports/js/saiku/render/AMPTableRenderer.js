@@ -387,7 +387,7 @@ function generateDataRows(page, options) {
 						if (applyTotalRowStyle === true) {
 							// Trying something new here: show tooltip on the now empty "Hierarchy Value Totals" row.
 							if (cleanTotalValue.text !== undefined) {
-								styleClass = " class='row_total tooltipped i18n' data-subtotal='true' original-title='" + escapeHtml(cleanTotalValue.text) + "' ";
+								styleClass = " class='row_total tooltipped i18n' data-subtotal='true' original-title='" + escapeQuotes(escapeHtml(cleanTotalValue.text)) + "' ";
 							} else {
 								styleClass = " class='row_total' ";
 							}
@@ -442,12 +442,17 @@ function getCellDataStyleClass(contentMatrix, cleanValue, i, j) {
 	}
 	
 	if (cleanValue.tooltip) {
-		styleClass += "tooltipped' original-title='" + escapeHtml(cleanValue.tooltip) + "' ";
+		styleClass += "tooltipped' original-title='" + escapeQuotes(escapeHtml(cleanValue.tooltip)) + "' ";
 	} else {
 		styleClass += "'";
 	}
 	
 	return styleClass;
+}
+
+function escapeQuotes(s) {
+	return s.replace(/"/g, '&quot;')
+			.replace(/'/g, '&apos;');
 }
 
 function cellContainsAsterisk(contentMatrix, i, j) {
@@ -650,19 +655,6 @@ function checkIfSummarizedReportWithConstant(page) {
  * tooltips for all subtotal row's cell, not only for the first one.
  */
 AMPTableRenderer.prototype.postProcessTooltips = function() {
-	/*var totalCells = $('table').find("[data-subtotal='true']");
-	for (var i = 0; i < totalCells.length; i++) {		
-		var cell = $(totalCells[i]); 		
-		var tooltip = $(cell).attr('original-title');
-		// Deactivated for now because it makes the rendering extra-extra-slow.
-		if(tooltip !== '') {
-			var row = $(cell).parent();
-			for (var j = 0; j < row.children().length; j++) {
-				$(row.children()[j]).attr('original-title', tooltip);
-				$(row.children()[j]).addClass('tooltipped');
-			}
-		}
-	}	*/
 	$(".tooltipped").tipsy();
 }
 

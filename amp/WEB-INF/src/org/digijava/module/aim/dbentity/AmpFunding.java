@@ -185,6 +185,18 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 			ret.append("-" + auxDetail.getDisbursementOrderRejected());
 			if (auxDetail.getRecipientOrg() != null) ret.append("- recipient " + auxDetail.getRecipientOrg().getAmpOrgId() + " with role of " + auxDetail.getRecipientRole().getAmpRoleId());
 		}
+
+		// Compare fields from AmpFundingMTEFProjection.
+		List<AmpFundingMTEFProjection> auxMTEFProjection = new ArrayList<AmpFundingMTEFProjection>(this
+				.mtefProjections);
+		Collections.sort(auxMTEFProjection, fundingMTEFProjectionComparator);
+		for (AmpFundingMTEFProjection projection : auxMTEFProjection) {
+			ret.append(projection.getTransactionType() + "-" + projection.getAmount() + "-"
+					+ projection.getAmpCurrencyId() + "-" + projection.getProjectionDate());
+			if (projection.getAdjustmentType() != null) {
+				ret.append("-" + projection.getAdjustmentType().getId());
+			}
+		}
 		return ret.toString();
 	}
 	// Compare by transaction type, then amount, then date.
@@ -206,7 +218,23 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 			}
 		}
 	};
-	
+
+	private transient Comparator fundingMTEFProjectionComparator = new Comparator() {
+		public int compare(Object o1, Object o2) {
+			AmpFundingMTEFProjection aux1 = (AmpFundingMTEFProjection) o1;
+			AmpFundingMTEFProjection aux2 = (AmpFundingMTEFProjection) o2;
+			if (aux1.getTransactionType().equals(aux2.getTransactionType())) {
+				if (aux1.getAmount().equals(aux2.getAmount())) {
+					return aux1.getProjectionDate().compareTo(aux2.getProjectionDate());
+				} else {
+					return aux1.getAmount().compareTo(aux2.getAmount());
+				}
+			} else {
+				return aux1.getTransactionType().compareTo(aux2.getTransactionType());
+			}
+		}
+	};
+
 	@Override
 	public Output getOutput() {
 		Output out = new Output();

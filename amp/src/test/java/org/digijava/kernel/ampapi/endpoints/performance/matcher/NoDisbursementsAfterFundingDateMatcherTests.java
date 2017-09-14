@@ -77,6 +77,22 @@ public class NoDisbursementsAfterFundingDateMatcherTests extends PerformanceRule
                                 .getFunding())
                 .getActivity();
         
+        assertTrue(match(rule, a));
+    }
+    
+    @Test
+    public void testNoDisbursementsNoFundingDate() {
+       
+        AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_MONTH, "1", 
+                PerformanceRuleConstants.FUNDING_EFFECTIVE_DATE, getCriticalLevel());
+        
+        AmpActivityVersion a = new ActivityBuilder()
+                .addFunding(
+                        new FundingBuilder()
+                                .withClassificationDate(new LocalDate(2016, 12, 12).toDate())
+                                .getFunding())
+                .getActivity();
+        
         assertFalse(match(rule, a));
     }
     
@@ -101,7 +117,7 @@ public class NoDisbursementsAfterFundingDateMatcherTests extends PerformanceRule
                                 .getFunding())
                 .getActivity();
         
-        assertTrue(match(rule, a));
+        assertFalse(match(rule, a));
     }
     
     @Test
@@ -125,7 +141,7 @@ public class NoDisbursementsAfterFundingDateMatcherTests extends PerformanceRule
                                 .getFunding())
                 .getActivity();
         
-        assertFalse(match(rule, a));
+        assertTrue(match(rule, a));
     }
     
     @Test
@@ -157,6 +173,41 @@ public class NoDisbursementsAfterFundingDateMatcherTests extends PerformanceRule
                                 .addTransaction(new TransactionBuilder()
                                         .withTransactionType(Constants.COMMITMENT)
                                         .withTransactionDate(new LocalDate(2013, 12, 12).toDate())
+                                        .getTransaction())
+                                .getFunding())
+                .getActivity();
+        
+        assertFalse(match(rule, a));
+    }
+    
+    public void testTwoFundingsBeforeFundingEffectiveDate() {
+        
+        AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_MONTH, "1", 
+                PerformanceRuleConstants.FUNDING_CLASSIFICATION_DATE, getCriticalLevel());
+        
+        AmpActivityVersion a = new ActivityBuilder()
+                .addFunding(
+                        new FundingBuilder()
+                                .withClassificationDate(new LocalDate(2016, 06, 30).toDate())
+                                .addTransaction(new TransactionBuilder()
+                                        .withTransactionType(Constants.DISBURSEMENT)
+                                        .withTransactionDate(new LocalDate(2015, 12, 12).toDate())
+                                        .getTransaction())
+                                .addTransaction(new TransactionBuilder()
+                                        .withTransactionType(Constants.DISBURSEMENT)
+                                        .withTransactionDate(new LocalDate(2017, 12, 31).toDate())
+                                        .getTransaction())
+                                .getFunding())
+                .addFunding(
+                        new FundingBuilder()
+                                .withClassificationDate(new LocalDate(2014, 11, 13).toDate())
+                                .addTransaction(new TransactionBuilder()
+                                        .withTransactionType(Constants.DISBURSEMENT)
+                                        .withTransactionDate(new LocalDate(2015, 12, 12).toDate())
+                                        .getTransaction())
+                                .addTransaction(new TransactionBuilder()
+                                        .withTransactionType(Constants.COMMITMENT)
+                                        .withTransactionDate(new LocalDate(2017, 6, 30).toDate())
                                         .getTransaction())
                                 .getFunding())
                 .getActivity();

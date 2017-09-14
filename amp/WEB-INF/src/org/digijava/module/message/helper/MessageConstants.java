@@ -16,9 +16,11 @@ import org.digijava.module.message.triggers.ApprovedCalendarEventTrigger;
 import org.digijava.module.message.triggers.ApprovedResourceShareTrigger;
 import org.digijava.module.message.triggers.CalendarEventSaveTrigger;
 import org.digijava.module.message.triggers.CalendarEventTrigger;
+import org.digijava.module.message.triggers.DataFreezeEmailNotificationTrigger;
 import org.digijava.module.message.triggers.AwaitingApprovalCalendarTrigger;
 import org.digijava.module.message.triggers.NotApprovedActivityTrigger;
 import org.digijava.module.message.triggers.NotApprovedCalendarEventTrigger;
+import org.digijava.module.message.triggers.SummaryChangeNotificationTrigger;
 import org.digijava.module.message.triggers.PendingResourceShareTrigger;
 import org.digijava.module.message.triggers.RejectResourceSharetrigger;
 import org.digijava.module.message.triggers.RemoveCalendarEventTrigger;
@@ -59,7 +61,9 @@ public class MessageConstants {
                                                                 RejectResourceSharetrigger.class,
                                                                 UserRegistrationTrigger.class,
                                                                 ActivityValidationWorkflowTrigger.class,
-                                                                ActivityMeassureComparisonTrigger.class
+                                                                ActivityMeassureComparisonTrigger.class,
+                                                                DataFreezeEmailNotificationTrigger.class,
+                                                                SummaryChangeNotificationTrigger.class
                                                                 };
 
     public static final  String[] triggerName=new String[] {"User added to workspace", 
@@ -85,7 +89,9 @@ public class MessageConstants {
                                                             "Reject Resource Share",
                                                             "New User Registration",
                                                             "Activity validation workflow notification",
-                                                            "Activity measure comparison notification"};
+                                                            "Activity measure comparison notification",
+                                                            "Data Freeze Email Notification",
+                                                            "Notify Summary Change"};
 
 	public static final String PRIORITY_LEVEL_NAME= "Priorty level";
 	public static final String PRIORITY_LEVEL_KEY= "priorty_level";

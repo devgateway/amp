@@ -78,6 +78,8 @@ public class AmpReportFiltersConverter {
 		addFilter(ColumnConstants.IMPLEMENTING_AGENCY, AmpOrganisation.class, "implementingAgency", true);
 		//addFilter(ColumnConstants.REGIONAL_GROUP, AmpOrganisation.class, "", true);
 		addFilter(ColumnConstants.RESPONSIBLE_ORGANIZATION, AmpOrganisation.class, "responsibleorg", true);
+		addFilter(ColumnConstants.COMPONENT_FUNDING_ORGANIZATION, AmpOrganisation.class, "componentFunding", true);
+		addFilter(ColumnConstants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION, AmpOrganisation.class, "componentSecondResponsible", true);
 		//addFilter(ColumnConstants.SECTOR_GROUP, AmpOrganisation.class, "", true);
 
 		// Sector´s section.
@@ -140,6 +142,7 @@ public class AmpReportFiltersConverter {
 		addFilter(ColumnConstants.FUNDING_STATUS, AmpCategoryValue.class, "fundingStatus", true);
 		addFilter(ColumnConstants.MODE_OF_PAYMENT, AmpCategoryValue.class, "modeOfPayment", true);
 		addFilter(ColumnConstants.EXPENDITURE_CLASS, AmpCategoryValue.class, "expenditureClass", true);
+		addFilter(ColumnConstants.CONCESSIONALITY_LEVEL, AmpCategoryValue.class, "concessionalityLevel", true);
 		
 		// Other section.
 		addFilter(ColumnConstants.HUMANITARIAN_AID, Integer.class, "humanitarianAid", true);

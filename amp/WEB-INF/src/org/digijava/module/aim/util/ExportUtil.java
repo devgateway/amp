@@ -5,6 +5,9 @@ import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
+import org.digijava.module.aim.dbentity.AmpContact;
+import org.digijava.module.aim.dbentity.AmpContactProperty;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
@@ -13,17 +16,21 @@ import org.h2.util.StringUtils;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
-import org.digijava.module.aim.dbentity.AmpContact;
-import org.digijava.module.aim.dbentity.AmpContactProperty;
-import org.digijava.module.aim.helper.Constants;
-import org.h2.util.StringUtils;
 
 /**
  * Created by anpicca on 24/11/2016.
  */
 public class ExportUtil {
+
     private static Logger logger = Logger.getLogger(ExportUtil.class);
+
+    public static final int COMPONENT_FM_FIELD_TYPE = 0;
+    public static final int COMPONENT_FM_FIELD_AMOUNT = 1;
+    public static final int COMPONENT_FM_FIELD_CURRENCY = 2;
+    public static final int COMPONENT_FM_FIELD_TRANSCTION_DATE = 3;
+    public static final int COMPONENT_FM_FIELD_ORGANISATION = 4;
+    public static final int COMPONENT_FM_FIELD_SECOND_REPORTING = 5;
+    public static final int COMPONENT_FM_FIELD_DESCRIPTION = 6;
 
     public static String buildInternalId(Set<AmpActivityInternalId> internalIds) {
         String result = "";

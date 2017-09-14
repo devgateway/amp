@@ -1,7 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.contact;
 
+import static java.util.Collections.singletonList;
+
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.digijava.kernel.ampapi.endpoints.activity.APIField;
@@ -15,6 +16,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamMemberUtil;
 
 /**
@@ -44,8 +46,15 @@ public class ContactImporter extends ObjectImporter {
         Object createdById = newJson.get(ContactEPConstants.CREATED_BY);
         AmpTeamMember createdBy = TeamMemberUtil.getAmpTeamMember(getLongOrNull(createdById));
         if (createdById != null && createdBy == null) {
-            String msg = "Invalid team member in " + ContactEPConstants.CREATED_BY + " field.";
-            return Collections.singletonList(ContactErrors.FIELD_INVALID_VALUE.withDetails(msg));
+            return singletonList(ContactErrors.FIELD_INVALID_VALUE.withDetails(ContactEPConstants.CREATED_BY));
+        }
+        if (contactId == null && createdBy == null) {
+            TeamMember teamMember = TeamMemberUtil.getLoggedInTeamMember();
+            if (teamMember != null) {
+                createdBy = TeamMemberUtil.getAmpTeamMember(teamMember.getMemberId());
+            } else {
+                return singletonList(ContactErrors.FIELD_REQUIRED.withDetails(ContactEPConstants.CREATED_BY));
+            }
         }
 
         try {

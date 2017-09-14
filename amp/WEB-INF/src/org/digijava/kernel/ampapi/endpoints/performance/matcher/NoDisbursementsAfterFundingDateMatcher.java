@@ -43,7 +43,7 @@ public class NoDisbursementsAfterFundingDateMatcher extends PerformanceRuleMatch
         for (AmpFunding f : a.getFunding()) {
             Date fundingSelectedDate = getFundingDate(f, selectedFundingDate);
             if (fundingSelectedDate != null) {
-                if(f.getFundingDetails() != null) {
+                if (f.getFundingDetails() != null) {
                     Date deadline = getDeadline(fundingSelectedDate, timeUnit, timeAmount);
                     
                     boolean hasDisbursmentsAfterDeadline = f.getFundingDetails().stream()

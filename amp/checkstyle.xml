@@ -10,6 +10,9 @@
 -->
 <module name="Checker">
   <property name="severity" value="warning"/>
+  <module name="SuppressionFilter">
+    <property name="file" value="suppressions.xml"/>
+  </module>
   <module name="TreeWalker">
     <property name="tabWidth" value="4"/>
     <module name="JavadocMethod">
@@ -81,7 +84,9 @@
     </module>
     <module name="IllegalInstantiation"/>
     <module name="InnerAssignment"/>
-    <module name="MagicNumber"/>
+    <module name="MagicNumber">
+      <property name="constantWaiverParentToken" value="ASSIGN,ARRAY_INIT,EXPR,UNARY_PLUS,UNARY_MINUS,TYPECAST,ELIST,LITERAL_NEW,METHOD_CALL,STAR,DIV,PLUS,MINUS,SLIST,INSTANCE_INIT,OBJBLOCK,DOT" />
+    </module>
     <module name="MissingSwitchDefault"/>
     <module name="SimplifyBooleanExpression"/>
     <module name="SimplifyBooleanReturn"/>

@@ -337,8 +337,8 @@
 <field:display feature="Identification" name="Project Description"></field:display>
 <field:display feature="Identification" name="Contracting Arrangements"></field:display>
 <field:display name="Project Impact" feature="Identification"></field:display> 
-<field:display feature="Identification" name="Project Comments"></field:display> 
-<field:display feature="Identification" name="Objective Assumption"></field:display> 
+<field:display feature="Identification" name="Project Comments"></field:display>
+<field:display feature="Identification" name="Objective Assumption"></field:display>
 <field:display feature="Identification" name="Objective Comments"></field:display> 
 <field:display feature="Identification" name="Objective Objectively Verifiable Indicators"></field:display> 
 <field:display feature="Identification" name="Objective Verification"></field:display> 
@@ -465,7 +465,8 @@
 <field:display name="Component description" feature="Activity - Component Step"></field:display>
 <field:display name="Description of Component Funding" feature="Activity - Component Step"></field:display>
 <field:display name="Component Funding Organization" feature="Activity - Component Step"></field:display> 
-<field:display name="Componente" feature="Planning"></field:display> 
+<field:display name="Component Second Responsible Organization" feature="Activity - Component Step"></field:display>
+<field:display name="Componente" feature="Planning"></field:display>
 <field:display name="Components Actual/Planned Commitments" feature="Activity - Component Step"></field:display> 
 <field:display name="Components Actual/Planned Disbursements" feature="Activity - Component Step"></field:display> 
 <field:display name="Components Actual/Planned Expenditures" feature="Activity - Component Step"></field:display> 
@@ -1081,6 +1082,7 @@ deleted 6 fields, do not reinsert
 <module:display name="Activity Preview" parentModule="PUBLIC VIEW"></module:display>
 <feature:display name="Contacts" module="Activity Preview"></feature:display>
 <feature:display name="Version History" module="Activity Preview"></feature:display>
+<field:display name="Show Change Summary" feature="Version History"></field:display>
 
 <module:display name="Show Editable Export Formats" parentModule="PUBLIC VIEW"></module:display>
 <module:display name="Public Reports and Tabs" parentModule="PUBLIC VIEW"></module:display>

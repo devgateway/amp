@@ -23,6 +23,7 @@ import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.exception.NoCategoryClassException;
 import org.digijava.module.calendar.entity.AmpEventType;
 import org.digijava.module.categorymanager.action.CategoryManager;
@@ -201,7 +202,25 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 		}
 		return null;
 	}
-	
+
+	/**
+	 *
+	 * @param currentTeam
+	 * @param categKey
+	 * @return A prefixed category if exists.
+	 */
+	public static String getAlternateKey(final AmpTeam currentTeam, final String categKey) {
+		if (currentTeam != null && currentTeam.getWorkspacePrefix() != null && (!categKey.
+				equalsIgnoreCase(CategoryConstants.IMPLEMENTATION_LEVEL_KEY)
+				&& !categKey.equalsIgnoreCase(CategoryConstants.IMPLEMENTATION_LOCATION_KEY))) {
+			String tmpKey = currentTeam.getWorkspacePrefix().getValue() + categKey;
+			if (CategoryManagerUtil.loadAmpCategoryClassByKey(tmpKey) != null) {
+				return tmpKey; // a prefixed category exists -> return its key
+			}
+		}
+		return categKey;
+	}
+
 	public static List<AmpCategoryValue> getAmpCategoryValuesFromListByKey(String categoryKey, Set<AmpCategoryValue> values) {
 		List<AmpCategoryValue> ret = new ArrayList<AmpCategoryValue>();
 		if ( categoryKey == null || values == null) {
@@ -803,8 +822,16 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 		}
 		return retVal;
 	}
-	
 
+	public static Collection<AmpCategoryValue> getOrderedPossibleValues(final AmpCategoryClass ampCategoryClass) {
+		if (ampCategoryClass.getIsOrdered() && ampCategoryClass.getPossibleValues() != null) {
+			TreeSet<AmpCategoryValue> treeSet = new TreeSet<AmpCategoryValue>(new CategoryManagerUtil
+					.CategoryComparator());
+			treeSet.addAll(ampCategoryClass.getPossibleValues());
+			return treeSet;
+		}
+		return ampCategoryClass.getPossibleValues();
+	}
 	
 	public static String checkImplementationLocationCategory ()  {
 			String errorString			= "The following values were not found: ";
@@ -844,7 +871,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 			}
 			return null;
 	}
-	
+
 	/**
 	 *
 	 * @author Alex Gartner

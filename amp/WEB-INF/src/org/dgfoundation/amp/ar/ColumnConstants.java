@@ -58,6 +58,7 @@ public class ColumnConstants {
 	public static final String CAPITAL___EXPENDITURE = "Capital - Expenditure";
 	public static final String COMPONENT_DESCRIPTION = "Component description";
 	public static final String COMPONENT_FUNDING_ORGANIZATION = "Component Funding Organization";
+	public static final String COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION = "Component Second Responsible Organization";
 	public static final String COMPONENT_NAME = "Component Name";
 	public static final String COMPONENT_TYPE = "Component Type";
 	public static final String COMPUTED_YEAR = "Computed Year";
@@ -282,6 +283,7 @@ public class ColumnConstants {
 	public static final String PURPOSE = "Purpose";
 	public static final String RATIFICATION_DATE = "Loan Ratification Date";
 	public static final String REGION = "Region";
+	public static final String REGIONAL_REGION = "Regional Region";
 	public static final String REGIONAL_GROUP = "Regional Group";
 	public static final String REGIONAL_GROUP_GROUP = "Regional Group Group";	
 	public static final String REGIONAL_GROUP_DEPARTMENT_DIVISION = "Regional Group Department/Division";

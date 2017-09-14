@@ -115,10 +115,10 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
 			);
 
 YAHOO.amp.reportwizard.fundingGroups["regional"]		= new Array(
-				'Region','Status','Primary Sector','Primary Sector Sub-Sector','National Planning Objectives','District','Zone'
+				'Status','Primary Sector','Primary Sector Sub-Sector','National Planning Objectives','Regional Region'
 			);
 YAHOO.amp.reportwizard.fundingGroups["component"]		= new Array(
-				 'Component Type','Region','Status','Primary Sector','National Planning Objectives','District','Zone','Component Name','Project Title'
+				 'Component Type','Region','Status','Primary Sector','National Planning Objectives','District','Zone','Component Name','Project Title','Component Funding Organization','Component Second Responsible Organization'
 			);
 YAHOO.amp.reportwizard.fundingGroups["contribution"]	= new Array(
 				'Costing Donor','Parent National Planning Objectives', 'National Planning Objectives', 'Primary Program', 
@@ -295,4 +295,18 @@ function isAmountColumn(colName) {
 
 function colIdToName(id) {
 	return YAHOO.amp.reportwizard.colIdToName[id];
+}
+
+function updateColumnVisibility(reportType) {
+    if (reportType === 'regional') {
+        ColumnsDragAndDropObject.showObjsByDbId('source_col_div', [colNameToId('Regional Region')]);
+        ColumnsDragAndDropObject.hideObjsByDbId('source_col_div', [colNameToId('Region')]);
+    } else {
+        ColumnsDragAndDropObject.showObjsByDbId('source_col_div', [colNameToId('Region')]);
+        ColumnsDragAndDropObject.hideObjsByDbId('source_col_div', [colNameToId('Regional Region')]);
+    }
+}
+
+function colNameToId(name) {
+	return YAHOO.amp.reportwizard.colIdToName.indexOf(name);
 }

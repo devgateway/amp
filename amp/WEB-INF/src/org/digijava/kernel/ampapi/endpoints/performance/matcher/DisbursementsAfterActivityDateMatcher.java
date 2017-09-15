@@ -33,9 +33,12 @@ public class DisbursementsAfterActivityDateMatcher extends PerformanceRuleMatche
     @Override
     public boolean match(AmpActivityVersion a) {
         Date deadline = getActivityDate(a, selectedActivityDate);
-        if (deadline != null) {
+        Date currentDate = new Date();
+        
+        if (deadline != null && deadline.before(currentDate)) {
             boolean hasDisbursmentsAfterDeadline = ActivityUtil.getTransactionsWithType(a, Constants.DISBURSEMENT)
                     .stream()
+                    .filter(t -> t.getTransactionDate().before(currentDate))
                     .anyMatch(t -> t.getTransactionDate().after(deadline));
                 
             if (hasDisbursmentsAfterDeadline) {

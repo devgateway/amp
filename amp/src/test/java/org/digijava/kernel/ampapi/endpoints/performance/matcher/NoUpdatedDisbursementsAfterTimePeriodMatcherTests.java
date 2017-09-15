@@ -1,5 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.performance.matcher;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -78,7 +79,7 @@ public class NoUpdatedDisbursementsAfterTimePeriodMatcherTests extends Performan
     @Test
     public void testTwoDisbursementLastPeriod() {
        
-        AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_DAY, "30", getCriticalLevel());
+        AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_DAY, "120", getCriticalLevel());
         
         AmpActivityVersion a = new ActivityBuilder()
                 .addFunding(
@@ -89,12 +90,12 @@ public class NoUpdatedDisbursementsAfterTimePeriodMatcherTests extends Performan
                                         .getTransaction())
                                 .addTransaction(new TransactionBuilder()
                                         .withTransactionType(Constants.DISBURSEMENT)
-                                        .withTransactionDate(new LocalDate(2014, 12, 12).toDate())
+                                        .withTransactionDate(new LocalDate(2017, 7, 12).toDate())
                                         .getTransaction())
                                 .getFunding())
                 .getActivity();
         
-        assertTrue(match(rule, a));
+        assertFalse(match(rule, a));
     }
     
     @Test

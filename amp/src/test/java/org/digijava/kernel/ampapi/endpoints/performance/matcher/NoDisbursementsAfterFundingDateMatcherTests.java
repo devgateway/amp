@@ -2,7 +2,6 @@ package org.digijava.kernel.ampapi.endpoints.performance.matcher;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import org.dgfoundation.amp.activity.builder.ActivityBuilder;
 import org.dgfoundation.amp.activity.builder.FundingBuilder;
@@ -69,7 +68,7 @@ public class NoDisbursementsAfterFundingDateMatcherTests extends PerformanceRule
         AmpActivityVersion a = new ActivityBuilder()
                 .addFunding(
                         new FundingBuilder()
-                                .withClassificationDate(new LocalDate(2016, 12, 12).toDate())
+                                .withClassificationDate(new LocalDate(2018, 12, 12).toDate())
                                 .addTransaction(new TransactionBuilder()
                                         .withTransactionType(Constants.DISBURSEMENT)
                                         .withTransactionDate(new LocalDate(2015, 12, 12).toDate())
@@ -77,7 +76,7 @@ public class NoDisbursementsAfterFundingDateMatcherTests extends PerformanceRule
                                 .getFunding())
                 .getActivity();
         
-        assertTrue(match(rule, a));
+        assertFalse(match(rule, a));
     }
     
     @Test
@@ -99,16 +98,16 @@ public class NoDisbursementsAfterFundingDateMatcherTests extends PerformanceRule
     @Test
     public void testTwoDisbursementAfterFundingClassificationDate() {
        
-        AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_MONTH, "1", 
+        AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_YEAR, "1", 
                 PerformanceRuleConstants.FUNDING_CLASSIFICATION_DATE, getCriticalLevel());
         
         AmpActivityVersion a = new ActivityBuilder()
                 .addFunding(
                         new FundingBuilder()
-                                .withClassificationDate(new LocalDate(2015, 10, 12).toDate())
+                                .withClassificationDate(new LocalDate(2016, 10, 12).toDate())
                                 .addTransaction(new TransactionBuilder()
                                         .withTransactionType(Constants.DISBURSEMENT)
-                                        .withTransactionDate(new LocalDate(2015, 12, 12).toDate())
+                                        .withTransactionDate(new LocalDate(2018, 12, 12).toDate())
                                         .getTransaction())
                                 .addTransaction(new TransactionBuilder()
                                         .withTransactionType(Constants.DISBURSEMENT)
@@ -129,7 +128,7 @@ public class NoDisbursementsAfterFundingDateMatcherTests extends PerformanceRule
         AmpActivityVersion a = new ActivityBuilder()
                 .addFunding(
                         new FundingBuilder()
-                                .withClassificationDate(new LocalDate(2017, 5, 8).toDate())
+                                .withClassificationDate(new LocalDate(2018, 5, 8).toDate())
                                 .addTransaction(new TransactionBuilder()
                                         .withTransactionType(Constants.COMMITMENT)
                                         .withTransactionDate(new LocalDate(2015, 12, 12).toDate())
@@ -141,7 +140,7 @@ public class NoDisbursementsAfterFundingDateMatcherTests extends PerformanceRule
                                 .getFunding())
                 .getActivity();
         
-        assertTrue(match(rule, a));
+        assertFalse(match(rule, a));
     }
     
     @Test
@@ -212,7 +211,7 @@ public class NoDisbursementsAfterFundingDateMatcherTests extends PerformanceRule
                                 .getFunding())
                 .getActivity();
         
-        assertTrue(match(rule, a));
+        assertFalse(match(rule, a));
     }
 
     /**

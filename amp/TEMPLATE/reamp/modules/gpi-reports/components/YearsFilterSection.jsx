@@ -69,7 +69,7 @@ export default class YearsFilterSection extends Component {
                            </ul>
                        </div>
                        <div className="selection-legend">
-                           <div className="pull-right">{this.showSelectedDates()}</div>
+                           <div className="pull-right">{this.showSelectedDates().length > 0 ? this.props.translations['amp-gpi-reports:selected'] : ''}{this.showSelectedDates()}</div>
                        </div>   
                       </div>
                            

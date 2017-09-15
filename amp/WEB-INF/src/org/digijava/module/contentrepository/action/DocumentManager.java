@@ -70,11 +70,8 @@ public class DocumentManager extends Action {
 			ajaxDocumentList(request, myForm);
 			return mapping.findForward("ajaxDocumentList");
 		}
-        String maxFileSizeGS = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.CR_MAX_FILE_SIZE);
-        request.setAttribute("uploadFailedTooBigMsg", "The file size limit is {size} MB. This file exceeds the limit.");
-        request.setAttribute("maxFileSizeGS", maxFileSizeGS);
-        request.setAttribute("uploadMaxFileSize",
-                Long.toString(Bytes.megabytes(Long.parseLong(maxFileSizeGS)).bytes()));
+
+		DocumentManagerUtil.setMaxFileSizeAttribute(request);
 
 		if ( !isLoggeedIn(request) ) {
 			return mapping.findForward("publicView");
@@ -100,7 +97,7 @@ public class DocumentManager extends Action {
 
 		return mapping.findForward("forward");
 	}
-	
+
 	private boolean ajaxDocumentList(HttpServletRequest myRequest, DocumentManagerForm myForm) {
 		// UGLY HACK. This needs to be re-written
 		if ( myRequest.getHeader("referer")!=null && myRequest.getHeader("referer").contains("documentManager.do") ) {

@@ -32,7 +32,10 @@ public class FiltersConstants {
     public static final String APPROVAL_STATUS = "approval-status";
     public static final String ARCHIVED = "archived";
     public static final String BENEFICIARY_AGENCY = "beneficiary-agency";
+    public static final String COMPONENT_FUNDING_ORGANIZATION = "component-funding-organization";
+    public static final String COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION = "component-second-responsible-organization";
     public static final String COMPUTED_YEAR = "computed-year";
+    public static final String CONCESSIONALITY_LEVEL = "concessionality-level";
     public static final String CONTRACTING_AGENCY = "contracting-agency";
     public static final String CONTRACTING_AGENCY_GROUPS = "contracting-agency-groups";
     public static final String COUNTRY = "country";
@@ -148,6 +151,8 @@ public class FiltersConstants {
         put(Constants.EXECUTING_AGENCY, EXECUTING_AGENCY);
         put(Constants.BENEFICIARY_AGENCY, BENEFICIARY_AGENCY);
         put(Constants.CONTRACTING_AGENCY, CONTRACTING_AGENCY);
-        put(Constants.RESPONSIBLE_ORGANISATION, RESPONSIBLE_ORGANIZATION);        
+        put(Constants.RESPONSIBLE_ORGANISATION, RESPONSIBLE_ORGANIZATION);
+        put(Constants.COMPONENT_FUNDING_ORGANIZATION, COMPONENT_FUNDING_ORGANIZATION);
+        put(Constants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION, COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION);
     }});
 }

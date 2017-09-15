@@ -210,6 +210,8 @@ public class GlobalSettingsConstants {
     
     public static final String  LIMIT_FILE_TYPE_FOR_UPLOAD = "Limit upload of file types";
 
+    public static final String  NUMBER_OF_DAYS_BEFORE_AUTOMATIC_VALIDATION = "Number of days before automatic validation";
+
     public static final String REORDER_FUNDING_ITEMS = "Reorder funding items";
 
     /**

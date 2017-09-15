@@ -1223,3 +1223,31 @@ div.footer {
 .right_menu_empty {
     color: #376091;
 }
+.frozen{
+	width:15px;
+	height:15px;
+	background-color:red;
+	float: left;
+	margin-right:5px;
+}
+
+.unfrozen{
+	width:15px;
+	height:15px;
+	background-color:green;
+	float: left;
+	margin-right:5px;
+}
+
+.legend-item {
+	float:left;width:20%;
+	margin-top:10px;
+	clear:both;
+}
+
+.summary-change-container {
+    border: 1px solid rgb(208, 208, 208);
+    padding: 10px;
+    font-size: 12px;
+    height: 100%;
+}

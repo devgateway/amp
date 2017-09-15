@@ -540,50 +540,62 @@ function collapseAll() {
 	<legend>
 		<span class=legend_label><digi:trn>Additional info</digi:trn></span>	</legend>
 	<div class="field_text_big word_break">
-	<digi:trn>Activity created by</digi:trn>: <br/>
-		<b> 
-			<c:out value="${aimEditActivityForm.identification.actAthFirstName}"/> 
-			<c:out value="${aimEditActivityForm.identification.actAthLastName}"/> 
+		<digi:trn>Activity created by</digi:trn>: <br/>
+		<b>
+			<c:out value="${aimEditActivityForm.identification.actAthFirstName}"/>
+			<c:out value="${aimEditActivityForm.identification.actAthLastName}"/>
 		</b>
 		<hr/>
-	<digi:trn>Created in workspace</digi:trn>: <br />
-	<c:if test="${aimEditActivityForm.identification.team !=null}">
-		<b>
-			<c:out value="${aimEditActivityForm.identification.team.name}"/> -
-			<digi:trn>
-				<c:out value="${aimEditActivityForm.identification.team.accessType}"/>
-			</digi:trn>
-		</b>
-	</c:if>
-	<hr />
- 	<digi:trn>Computation</digi:trn>: <br/>
-	<b>
-		<c:if test="${aimEditActivityForm.identification.team.computation == 'true'}">
-			<digi:trn key="aim:yes">Yes</digi:trn>
-		</c:if> 
-		<c:if test="${aimEditActivityForm.identification.team.computation == 'false'}">
-			<digi:trn key="aim:no">No</digi:trn>
+		<digi:trn>Activity created on</digi:trn>:<br/>
+		<b><c:out value="${aimEditActivityForm.identification.createdDate}"/></b>
+		<hr/>
+		<field:display name="Activity Last Updated by" feature="Identification">
+			<logic:notEmpty name="aimEditActivityForm" property="identification.modifiedBy">
+				<digi:trn>Activity last updated by</digi:trn>: <br/>
+				<b>
+					<c:out value="${aimEditActivityForm.identification.modifiedBy.user.firstNames}"/>
+					<c:out value="${aimEditActivityForm.identification.modifiedBy.user.lastName}"/>
+				</b>
+			</logic:notEmpty>
+		</field:display>
+		<hr/>
+		<field:display name="Activity Updated On" feature="Identification">
+			<logic:notEmpty name="aimEditActivityForm" property="identification.updatedDate">
+				<digi:trn>Activity updated on</digi:trn>: <br/>
+				<b><c:out value="${aimEditActivityForm.identification.updatedDate}"/></b>
+			</logic:notEmpty>
+		</field:display>
+		<hr/>
+
+		<digi:trn>Created in workspace</digi:trn>: <br/>
+		<c:if test="${aimEditActivityForm.identification.team !=null}">
+			<b>
+				<c:out value="${aimEditActivityForm.identification.team.name}"/> -
+				<digi:trn>
+					<c:out value="${aimEditActivityForm.identification.team.accessType}"/>
+				</digi:trn>
+			</b>
 		</c:if>
-	</b>
-	<hr/>
-	<digi:trn>Activity created on</digi:trn>:<br/>
-	<b><c:out value="${aimEditActivityForm.identification.createdDate}"/></b>
-	<hr />
-	<field:display name="Activity Updated On" feature="Identification">
-		<logic:notEmpty name="aimEditActivityForm" property="identification.updatedDate">
-			<digi:trn>Activity updated on</digi:trn>: <br />
-			<b><c:out value="${aimEditActivityForm.identification.updatedDate}"/></b>
-		</logic:notEmpty>
-	</field:display>
-	<hr />
-	<field:display name="Data Team Leader" feature="Identification">
-		<digi:trn>Data Team Leader</digi:trn>: <br />
+		<hr/>
+		<field:display name="Data Team Leader" feature="Identification">
+			<digi:trn>Workspace manager</digi:trn>: <br/>
+			<b>
+				<c:out value="${aimEditActivityForm.identification.team.teamLead.user.firstNames}"/>
+				<c:out value="${aimEditActivityForm.identification.team.teamLead.user.lastName}"/> -
+				<c:out value="${aimEditActivityForm.identification.team.teamLead.user.email}"/>
+			</b>
+		</field:display>
+
+		<hr/>
+		<digi:trn>Computation</digi:trn>: <br/>
 		<b>
-			<c:out value="${aimEditActivityForm.identification.team.teamLead.user.firstNames}"/> 
-			<c:out value="${aimEditActivityForm.identification.team.teamLead.user.lastName}"/>
-			<c:out value="${aimEditActivityForm.identification.team.teamLead.user.email}"/>
-		</b>	
-	</field:display>
+			<c:if test="${aimEditActivityForm.identification.team.computation == 'true'}">
+				<digi:trn key="aim:yes">Yes</digi:trn>
+			</c:if>
+			<c:if test="${aimEditActivityForm.identification.team.computation == 'false'}">
+				<digi:trn key="aim:no">No</digi:trn>
+			</c:if>
+		</b>
 	
 	</div>
 </fieldset>	
@@ -621,6 +633,14 @@ function collapseAll() {
 				<digi:trn key="aim:status">Status</digi:trn>:&nbsp;
 				<b><category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.statusId}"/></b>
 				<hr />
+			</module:display>
+			<module:display name="/Activity Form/Identification/Status Other Info"
+							parentModule="/Activity Form/Identification">
+				<c:if test="${not empty aimEditActivityForm.identification.statusOtherInfo}">
+					<digi:trn>Status Other Info</digi:trn>:&nbsp;<br />
+					<span class="word_break bold"><c:out value="${aimEditActivityForm.identification.statusOtherInfo}"/></span>
+					<hr />
+				</c:if>
 			</module:display>
 
 			<module:display name="/Activity Form/Identification/Status Reason" parentModule="/Activity Form/Identification">
@@ -664,6 +684,21 @@ function collapseAll() {
 				</b>
 				</c:if>
 				<hr />
+			</module:display>
+
+
+			<c:set var="modalitiesPath" value="/Activity Form/Funding/Overview Section/Modalities Other Info"/>
+			<c:if test="${aimEditActivityForm.identification.team !=null && aimEditActivityForm.identification.team.isSSCWorkspace()}">
+				<c:set var="modalitiesPath" value="/Activity Form/Funding/Overview Section/SSC Modalities Other Info"/>
+			</c:if>
+
+			<module:display name="${modalitiesPath}"
+							parentModule="/Activity Form/Funding/Overview Section">
+				<c:if test="${not empty aimEditActivityForm.identification.modalitiesOtherInfo}">
+					<digi:trn>Modalities Other Info</digi:trn>:&nbsp;<br />
+					<span class="word_break bold"><c:out value="${aimEditActivityForm.identification.modalitiesOtherInfo}"/></span>
+					<hr />
+				</c:if>
 			</module:display>
 
 			
@@ -751,7 +786,7 @@ function collapseAll() {
 				</c:if>
 					<hr />
 			</module:display>
-					
+
 			<bean:define id="largeTextFeature" value="Identification" toScope="request"/>
 			<logic:present name="aimEditActivityForm" property="identification.projectImpact">
 				<bean:define id="moduleName" value="/Activity Form/Identification/Project Impact" toScope="request"/>
@@ -991,6 +1026,14 @@ function collapseAll() {
 					</span>
 					<hr />
 					</c:if>	
+			</module:display>
+			<module:display name="/Activity Form/Identification/Project Category Other Info"
+							parentModule="/Activity Form/Identification">
+				<c:if test="${not empty aimEditActivityForm.identification.projectCategoryOtherInfo}">
+					<digi:trn>Project Category Other Info</digi:trn>:&nbsp;<br />
+					<span class="word_break bold"><c:out value="${aimEditActivityForm.identification.projectCategoryOtherInfo}"/></span>
+					<hr />
+				</c:if>
 			</module:display>
 						 
 			<!-- MISSING FIELD IN THE NEW FM STRUCTURE -->
@@ -1992,16 +2035,16 @@ function collapseAll() {
 									<td class="prv_right">
 										<table width="100%" cellSpacing="1" cellPadding="0" class="box-border-nopadding">
 											<tr>
-												<td width="100" style="padding-left:5px;" bgcolor="#f0f0f0">
+												<td width="100" style="padding-left:5px;" vAlign="top" bgcolor="#f0f0f0">
 													<digi:trn key="aim:commitments">Commitments</digi:trn>
 												</td>
 												<td class="prv_right">
-												<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee" class="component-funding-table">
 													<c:forEach var="fd" items="${comp.commitments}">
+													<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee" class="component-funding-table">												
 														<tr>
 															<module:display name="/Activity Form/Components/Component/Components Commitments" 
 																parentModule="/Activity Form/Components/Component">
-															<td width="50">
+															<td width="100">
 																<digi:trn key="aim:${fd.adjustmentTypeNameTrimmed}">
 																	<b><c:out value="${fd.adjustmentTypeName}" /></b>
 																</digi:trn>
@@ -2019,36 +2062,55 @@ function collapseAll() {
 																	<b><c:out value="${fd.currencyCode}"/></b>
 																</td>
 															</module:display>
-															<module:display name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Component Organization"
-																parentModule="/Activity Form/Components/Component/Components Commitments/Commitment Table">
-																<td class="prv_right">
-																	<b><digi:trn>Organisation</digi:trn>:</b>
-																	<logic:notEmpty property="componentOrganisation" name="fd">
-																		<c:out value="${fd.componentOrganisation.name}"/>
-																	</logic:notEmpty>
-																</td>
-															</module:display>
-															
 															<module:display name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Transaction Date"
-																parentModule="/Activity Form/Components/Component/Components Commitments/Commitment Table">
-																<td width="70">
+																			parentModule="/Activity Form/Components/Component/Components Commitments/Commitment Table">
+																<td width="80">
 																	<b><c:out value="${fd.transactionDate}"/></b>
 																</td>
 															</module:display>
 														</tr>
+															<module:display name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Component Organization"
+																parentModule="/Activity Form/Components/Component/Components Commitments/Commitment Table">
+																<tr>
+																	<td width="100">
+																		<b><digi:trn>Organisation</digi:trn>:</b>
+																	</td>
+																	<td colspan="3" style="padding-left: 15px">
+																		<logic:notEmpty property="componentOrganisation"
+																						name="fd">
+																			<c:out value="${fd.componentOrganisation.name}"/>
+																		</logic:notEmpty>
+																	</td>
+																</tr>
+															</module:display>
+															<module:display name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Component Second Responsible Organization"
+																parentModule="/Activity Form/Components/Component/Components Commitments/Commitment Table">
+																<tr>
+																	<td width="100">
+																		<b><digi:trn>Component Second Responsible Organization</digi:trn>:</b>
+																	</td>
+																	<td colspan="3" style="padding-left: 15px">
+																		<logic:notEmpty property="componentSecondResponsibleOrganization"
+																						name="fd">
+																			<c:out value="${fd.componentSecondResponsibleOrganization.name}"/>
+																		</logic:notEmpty>
+																	</td>
+																</tr>
+															</module:display>
 														<module:display name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Description"
 																parentModule="/Activity Form/Components/Component/Components Commitments/Commitment Table">
 															<tr>
-																<td width="50">
+																<td width="100">
 																	<b><digi:trn>Description</digi:trn></b>
 																</td>
-																<td colspan="5" style="padding-left: 15px">
+																<td colspan="3" style="padding-left: 15px">
 																	<b><c:out value="${fd.componentTransactionDescription}" /></b>
 																</td>
 															</tr>
 														</module:display>
+														</table> 
+														<hr />
 													</c:forEach>
-												</table> 
 												</td>
 											</tr>
 										</table> 
@@ -2063,11 +2125,11 @@ function collapseAll() {
 									<td class="prv_right">
 									<table width="100%" cellSpacing="1" cellPadding="1" class="box-border-nopadding">
 										<tr>
-											<td width="100" style="padding-left:5px;" bgcolor="#f0f0f0">
+											<td width="100" style="padding-left:5px;" vAlign="top" bgcolor="#f0f0f0">
 												<digi:trn key="aim:disbursements">Disbursements</digi:trn>
 											</td>
 											<td class="prv_right">
-											<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
+											<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee" class="component-funding-table">
 												<c:forEach var="fd" items="${comp.disbursements}">
 													<tr>
 														<module:display name="/Activity Form/Components/Component/Components Disbursements"
@@ -2098,8 +2160,50 @@ function collapseAll() {
 															</td>
 														</module:display>
 													</tr>
+															<module:display name="/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Component Organization"
+																parentModule="/Activity Form/Components/Component/Components Disbursements/Disbursement Table">
+																<tr>
+																	<td width="100">
+																		<b><digi:trn>Organisation</digi:trn>:</b>
+																	</td>
+																	<td colspan="3" style="padding-left: 15px">
+																		<logic:notEmpty property="componentOrganisation"
+																						name="fd">
+																			<c:out value="${fd.componentOrganisation.name}"/>
+																		</logic:notEmpty>
+																	</td>
+																</tr>
+															</module:display>
+															<module:display name="/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Component Second Responsible Organization"
+																parentModule="/Activity Form/Components/Component/Components Disbursements/Disbursement Table">
+																<tr>
+																	<td width="100">
+																		<b><digi:trn>Component Second Responsible Organization</digi:trn>:</b>
+																	</td>
+																	<td colspan="3" style="padding-left: 15px">
+																		<logic:notEmpty property="componentSecondResponsibleOrganization"
+																						name="fd">
+																			<c:out value="${fd.componentSecondResponsibleOrganization.name}"/>
+																		</logic:notEmpty>
+																	</td>
+																</tr>
+															</module:display>
+
+														<module:display name="/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Description"
+																parentModule="/Activity Form/Components/Component/Components Disbursements/Disbursement Table">
+															<tr>
+																<td width="100">
+																	<b><digi:trn>Description</digi:trn></b>
+																</td>
+																<td colspan="3" style="padding-left: 15px">
+																	<b><c:out value="${fd.componentTransactionDescription}" /></b>
+																</td>
+															</tr>
+														</module:display>
+														</table>
+														<hr />
 												</c:forEach>
-											</table>
+
 											</td>
 										</tr>
 								</table>
@@ -2113,13 +2217,13 @@ function collapseAll() {
 					<c:if test="${!empty comp.expenditures}">
 						<tr>
 							<td class="prv_right">
-							<table width="100%" cellSpacing="1" cellPadding="1" class="box-border-nopadding">
+							<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top" class="box-border-nopadding">
 								<tr>
-									<td width="100" bgcolor="#f0f0f0" style="padding-left:5px;">
+									<td width="100" bgcolor="#f0f0f0" vAlign="top" style="padding-left:5px;">
 										<digi:trn key="aim:expenditures">Expenditures</digi:trn>
 									</td>
 									<td class="prv_right">
-									<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
+									<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee" class="component-funding-table">
 										<c:forEach var="fd" items="${comp.expenditures}">
 											<tr>
 												<module:display name="/Activity Form/Components/Component/Components Expeditures" 
@@ -2149,8 +2253,50 @@ function collapseAll() {
 													</td>
 												</module:display>
 											</tr>
+															<module:display name="/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Component Organization"
+																parentModule="/Activity Form/Components/Component/Components Expenditures/Expenditure Table">
+																<tr>
+																	<td width="100">
+																		<b><digi:trn>Organisation</digi:trn>:</b>
+																	</td>
+																	<td colspan="3" style="padding-left: 15px">
+																		<logic:notEmpty property="componentOrganisation"
+																						name="fd">
+																			<c:out value="${fd.componentOrganisation.name}"/>
+																		</logic:notEmpty>
+																	</td>
+																</tr>
+															</module:display>
+															<module:display name="/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Component Second Responsible Organization"
+																parentModule="/Activity Form/Components/Component/Components Expenditures/Expenditure Table">
+																<tr>
+																	<td width="100">
+																		<b><digi:trn>Component Second Responsible Organization</digi:trn>:</b>
+																	</td>
+																	<td colspan="3" style="padding-left: 15px">
+																		<logic:notEmpty property="componentSecondResponsibleOrganization"
+																						name="fd">
+																			<c:out value="${fd.componentSecondResponsibleOrganization.name}"/>
+																		</logic:notEmpty>
+																	</td>
+																</tr>
+															</module:display>
+
+														<module:display name="/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Description"
+																parentModule="/Activity Form/Components/Component/Components Expenditures/Expenditure Table">
+															<tr>
+																<td width="100">
+																	<b><digi:trn>Description</digi:trn></b>
+																</td>
+																<td colspan="3" style="padding-left: 15px">
+																	<b><c:out value="${fd.componentTransactionDescription}" /></b>
+																</td>
+															</tr>
+														</module:display>
+														</table>
+														<hr />
 										</c:forEach>
-									</table>
+
 									</td>
 								</tr>
 							</table>
@@ -2769,7 +2915,7 @@ function collapseAll() {
 <!-- END CONTACT INFORMATION -->
 
 <!-- COSTING -->
-<feature:display name="Costing" module="Activity Costing">
+<module:display name="Activity Costing" parentModule="PROJECT MANAGEMENT">
 <fieldset>
 	<legend>
 		<span class=legend_label id="costinglink" style="cursor: pointer;">
@@ -2786,7 +2932,7 @@ function collapseAll() {
 		</table>
 	</div>
 </fieldset>
-</feature:display>
+</module:display>
 <!-- END COSTING -->
 <!-- IPA Contracting -->
 <feature:display name="Contracting" module="Contracting">

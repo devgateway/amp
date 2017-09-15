@@ -13,7 +13,7 @@ import org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute;
 import org.digijava.module.aim.helper.Constants;
 
 /**
- *  The matcher checks if no disbursements were updated during a certain period from the selected funding date
+ *  The matcher checks if no disbursements were updated during a certain period
  * 
  * @author Viorel Chihai
  *

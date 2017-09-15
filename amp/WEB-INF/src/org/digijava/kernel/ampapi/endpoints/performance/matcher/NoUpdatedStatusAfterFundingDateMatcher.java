@@ -55,6 +55,7 @@ public class NoUpdatedStatusAfterFundingDateMatcher extends PerformanceRuleMatch
         Date currentDate = new Date();
         
         Date tmpDeadlineDate = new Date(0);
+        boolean tmpDeadlineUpdated = false;
         for (AmpFunding f : a.getFunding()) {
             Date fundingSelectedDate = getFundingDate(f, selectedDate);
             if (fundingSelectedDate != null && StringUtils.isNotBlank(selectedStatus)) {
@@ -62,11 +63,12 @@ public class NoUpdatedStatusAfterFundingDateMatcher extends PerformanceRuleMatch
                 
                 if (deadline.after(tmpDeadlineDate) && deadline.before(currentDate)) {
                     tmpDeadlineDate = deadline;
+                    tmpDeadlineUpdated = true;
                 }
             }
         }
         
-        return !selectedStatus.equals(activityStatus.getLabel());
+        return tmpDeadlineUpdated && !selectedStatus.equals(activityStatus.getLabel());
     }
     
     @Override

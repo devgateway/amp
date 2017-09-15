@@ -51,7 +51,7 @@ public class NoDisbursementsAfterFundingDateMatcher extends PerformanceRuleMatch
                         boolean hasDisbursmentsAfterDeadline = f.getFundingDetails().stream()
                                 .filter(t -> t.getTransactionType() == Constants.DISBURSEMENT)
                                 .filter(t ->  t.getTransactionDate().before(currentDate))
-                                .anyMatch(t -> t.getTransactionDate().after(deadline));
+                                .anyMatch(t -> t.getTransactionDate().after(fundingSelectedDate));
                         
                         if (hasDisbursmentsAfterDeadline) {
                             return false;

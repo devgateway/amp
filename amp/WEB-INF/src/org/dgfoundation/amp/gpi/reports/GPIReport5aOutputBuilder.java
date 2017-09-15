@@ -309,14 +309,6 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 		return columns;
 	}
 
-	private boolean isOnBudget(ReportArea budgetArea) {
-		boolean match = budgetArea.getContents().entrySet().stream()
-				.anyMatch(e -> e.getKey().originalColumnName.equals(ColumnConstants.ON_OFF_TREASURY_BUDGET)
-						&& (String.valueOf(e.getValue().value)).equals(ACTIVITY_BUDGET_ON));
-
-		return match;
-	}
-
 	private boolean hasExecutingAgency(ReportArea execArea) {
 		boolean match = execArea.getContents().entrySet().stream()
 				.anyMatch(e -> e.getKey().originalColumnName.equals(ColumnConstants.HAS_EXECUTING_AGENCY)

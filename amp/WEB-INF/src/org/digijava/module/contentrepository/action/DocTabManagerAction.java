@@ -22,6 +22,7 @@ import org.digijava.module.contentrepository.dbentity.filter.DocumentFilter;
 import org.digijava.module.contentrepository.form.DocTabManagerForm;
 import org.digijava.module.contentrepository.helper.filter.DocumentFilterJson;
 import org.digijava.module.contentrepository.util.DocumentFilterDAO;
+import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 
 public class DocTabManagerAction extends MultiAction {
 
@@ -68,7 +69,8 @@ public class DocTabManagerAction extends MultiAction {
 		List<DocumentFilter> availableDocumentFilters	= dfDAO.getAll();
 		
 		myForm.setAvailableDocumentFilters(availableDocumentFilters);
-		
+		DocumentManagerUtil.setMaxFileSizeAttribute(request);
+
 		return mapping.findForward("forward");
 	}
 	
@@ -192,7 +194,9 @@ public class DocTabManagerAction extends MultiAction {
 			myForm.getPublicFiltersPositioned().addAll(positioned);
 			myForm.setPublicFiltersUnpositioned(unPositioned);
 		}
-		
+
+		DocumentManagerUtil.setMaxFileSizeAttribute(request);
+
 		return mapping.findForward("publicResources");
 	}
 	

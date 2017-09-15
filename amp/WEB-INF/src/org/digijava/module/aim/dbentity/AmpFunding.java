@@ -219,21 +219,10 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 		}
 	};
 
-	private transient Comparator fundingMTEFProjectionComparator = new Comparator() {
-		public int compare(Object o1, Object o2) {
-			AmpFundingMTEFProjection aux1 = (AmpFundingMTEFProjection) o1;
-			AmpFundingMTEFProjection aux2 = (AmpFundingMTEFProjection) o2;
-			if (aux1.getTransactionType().equals(aux2.getTransactionType())) {
-				if (aux1.getAmount().equals(aux2.getAmount())) {
-					return aux1.getProjectionDate().compareTo(aux2.getProjectionDate());
-				} else {
-					return aux1.getAmount().compareTo(aux2.getAmount());
-				}
-			} else {
-				return aux1.getTransactionType().compareTo(aux2.getTransactionType());
-			}
-		}
-	};
+    private transient Comparator fundingMTEFProjectionComparator = Comparator.comparing(
+            AmpFundingMTEFProjection::getTransactionType)
+            .thenComparing(AmpFundingMTEFProjection::getAmount)
+            .thenComparing(AmpFundingMTEFProjection::getProjectionDate);
 
 	@Override
 	public Output getOutput() {

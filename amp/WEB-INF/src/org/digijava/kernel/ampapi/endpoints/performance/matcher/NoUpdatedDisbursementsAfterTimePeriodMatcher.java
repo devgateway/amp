@@ -74,7 +74,7 @@ public class NoUpdatedDisbursementsAfterTimePeriodMatcher extends PerformanceRul
     public Date getDeadline(Date selectedDate, int timeUnit, int timeAmount) {
         Calendar c = Calendar.getInstance();
         c.setTime(selectedDate);
-        c.add(timeUnit, - timeAmount);
+        c.add(timeUnit, -timeAmount);
 
         return c.getTime();
     }

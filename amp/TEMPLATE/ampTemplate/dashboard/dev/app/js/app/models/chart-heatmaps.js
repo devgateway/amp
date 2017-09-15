@@ -102,11 +102,14 @@ module.exports = ChartModel.extend({
 				if (auxValue > 0 && auxValue < 1) {
 					//Do nothing;
 				} else {
-					if (values[i].value !== undefined) {
-						values[i].value = Math.floor(auxValue);
-					} else {
-						values[i] = Math.floor(auxValue);
-					}
+                    if (auxValue == null) {
+                        auxValue = -99;
+                    }
+                    if (values[i].value !== undefined) {
+                        values[i].value = Math.floor(auxValue);
+                    } else {
+                        values[i] = Math.floor(auxValue);
+                    }
 				}
 			}
 		}

@@ -234,11 +234,11 @@ public class HeatMapService {
                     if (xTotalEntry.getValue().compareTo(BigDecimal.ZERO) > 0) {
                         percentage = percentage.multiply(HUNDRED).divide(xTotalEntry.getValue(), SCALE, RoundingMode
                                 .HALF_EVEN);
+                        percentage = percentage.setScale(SCALE, RoundingMode.HALF_EVEN);
                     } else {
-                        percentage = HUNDRED;
+                        percentage = null;
                     }
 
-                    percentage = percentage.setScale(SCALE, RoundingMode.HALF_EVEN);
                     matrix[y][x].set("p", percentage);
                 }
                 x++;

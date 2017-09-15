@@ -239,10 +239,10 @@ public class TeamMemberUtil {
 			session = PersistenceManager.getRequestDBSession();
 			String queryString = "select teamMember from "
 					+ AmpTeamMember.class.getName()
-					+ " teamMember inner join teamMember.ampTeam  tm" +
-					" inner join teamMember.ampMemberRole role " +
-					" where (tm.deleted is null or tm.deleted = false) and tm.ampTeamId=:teamId and (role" +
-					".teamHead=true or role.approver=true)";
+					+ " teamMember inner join teamMember.ampTeam t "
+					+ " inner join teamMember.ampMemberRole role "
+					+ " where (teamMember.deleted is null or teamMember.deleted = false) and t.ampTeamId=:teamId and "
+					+ " (role.teamHead=true or role.approver=true)";
 			qry = session.createQuery(queryString);
 			qry.setLong("teamId", teamId);
 			@SuppressWarnings("unchecked")

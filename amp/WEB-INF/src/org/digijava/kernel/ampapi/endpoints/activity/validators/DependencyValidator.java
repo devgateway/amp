@@ -8,6 +8,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
+import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 
 /**
@@ -16,7 +17,7 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 public class DependencyValidator extends InputValidator {
 
 	@Override
-	public boolean isValid(ActivityImporter importer,
+	public boolean isValid(ObjectImporter importer,
 			Map<String, Object> newFieldParent,
 			Map<String, Object> oldFieldParent, APIField fieldDescription,
 			String fieldPath) {
@@ -30,8 +31,9 @@ public class DependencyValidator extends InputValidator {
 			for (String dep : deps) {
 				switch(InterchangeDependencyResolver.checkDependency(value, importer.getNewJson(), dep, newFieldParent)) {
 				case INVALID_REQUIRED:
-					if (importer.isDraftFMEnabled() && importer.getRequestedSaveMode() == null) {
-						importer.downgradeToDraftSave();
+					if (importer instanceof ActivityImporter && ((ActivityImporter) importer).isDraftFMEnabled()
+							&& ((ActivityImporter) importer).getRequestedSaveMode() == null) {
+						((ActivityImporter) importer).downgradeToDraftSave();
 					} else {
 						errors.add(dep);
 					}

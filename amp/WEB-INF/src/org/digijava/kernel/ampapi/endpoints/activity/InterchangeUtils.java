@@ -41,6 +41,7 @@ import org.digijava.module.aim.annotations.interchange.PossibleValuesEntity;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
+import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -74,6 +75,7 @@ public class InterchangeUtils {
 	public static Map<String, List<String>> discriminatedFieldsByFieldTitle = new HashMap<>();
 	static {
 		addUnderscoredTitlesToMap(AmpActivityFields.class);
+		addUnderscoredTitlesToMap(AmpContact.class);
 	}
 
 	private static final ThreadLocal<SimpleDateFormat> DATE_FORMATTER = new ThreadLocal<SimpleDateFormat>();
@@ -350,9 +352,9 @@ public class InterchangeUtils {
 	 */
 	public static JsonBean getActivity(AmpActivityVersion activity, JsonBean filter) {
 		try {
-			ActivityExporter exporter = new ActivityExporter();
+			ActivityExporter exporter = new ActivityExporter(filter);
 		
-			return exporter.getActivity(activity, filter);
+			return exporter.export(activity);
 		} catch (Exception e) {
 			LOGGER.error("Error in loading activity. " + e.getMessage());
 			throw new RuntimeException(e);
@@ -543,7 +545,7 @@ public class InterchangeUtils {
 		}
 		return result;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public static boolean validateFilterActivityFields(JsonBean filterJson, JsonBean result) {
 		List<String> filteredItems = new ArrayList<String>();

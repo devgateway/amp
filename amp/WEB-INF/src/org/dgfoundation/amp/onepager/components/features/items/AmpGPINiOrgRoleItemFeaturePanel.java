@@ -179,15 +179,17 @@ public class AmpGPINiOrgRoleItemFeaturePanel extends AmpFeaturePanel<AmpOrgRole>
         putDonorInRequest();
         super.onConfigure();
     }
-    public void putDonorInRequest(){
+
+    public void putDonorInRequest() {
         HttpServletRequest request = (HttpServletRequest) RequestCycle.get().getRequest().getContainerRequest();
         if (currentDonor != null && currentDonor.getObject() != null) {
             FundingOrganization fo = new FundingOrganization();
-            fo.setAmpOrgId(currentDonor.getObject().getOrganisation().getAmpOrgId());           
+            fo.setAmpOrgId(currentDonor.getObject().getOrganisation().getAmpOrgId());
             PermissionUtil.putInScope(request, GatePermConst.ScopeKeys.CURRENT_ORG, fo);
             PermissionUtil.putInScope(request, GatePermConst.ScopeKeys.CURRENT_ORG_ROLE, Constants.FUNDING_AGENCY);
-        }        
+        }
     }
+
 	/**
 	 * Checks if the donor's fundings has concessionality field populated
 	 * 

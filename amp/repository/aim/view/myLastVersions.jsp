@@ -24,7 +24,7 @@
 			</logic:notEmpty>
             </ul>
 			<logic:empty name="lastVersions" scope="session">
-				<p style="color: #376091"><digi:trn>No results</digi:trn></p>
+				<p class="right_menu_empty"><digi:trn>No results</digi:trn></p>
 			</logic:empty>
 		</div>
 	</div>

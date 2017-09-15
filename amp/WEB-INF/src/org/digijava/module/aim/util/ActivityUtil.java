@@ -22,7 +22,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.FilterParam;
@@ -35,7 +34,6 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.User;
-import org.digijava.kernel.util.SiteUtils;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.admin.helper.AmpActivityFake;
 import org.digijava.module.aim.dbentity.AmpActivity;
@@ -83,8 +81,6 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.categorymanager.util.IdWithValueShim;
-import org.digijava.module.dataExchange.utils.DataExchangeUtils;
-import org.digijava.module.editor.dbentity.Editor;
 import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
 import org.hibernate.ObjectNotFoundException;
@@ -2025,40 +2021,6 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 		qry.setParameter(0, activity.getAmpActivityGroup().getAmpActivityGroupId());
 		qry.setParameter(1, activity.getAmpActivityId());
 		return (qry.list().size() > 0 ? (AmpActivityVersion) qry.list().get(0) : null);
-	}
-
-
-	public static void fixEditorFields(AmpActivityVersion activity, String field) {
-
-		boolean saveActivity = false;
-
-			try {
-				String currentValue = (String) PropertyUtils.getSimpleProperty(activity, field);
-
-				if (currentValue != null && currentValue.trim().length() > 0
-						&& !currentValue.startsWith(Constants.EDITOR_KEY_PREFIX) && !currentValue.startsWith(
-						Constants.EDITOR_KEY_IATI_IMPORT_PREFIX)) {
-
-					String key = new StringBuilder(Constants.EDITOR_KEY_PREFIX).append(field).append("-").append(
-							System.currentTimeMillis()).toString();
-					Editor editor = null;
-					editor = DataExchangeUtils.createEditor(SiteUtils.getDefaultSite(), key, TLSUtils.getLangCode());
-					editor.setLastModDate(new Date());
-					editor.setBody(currentValue);
-
-					PropertyUtils.setSimpleProperty(activity, field, key);
-					saveActivity = true;
-					org.digijava.module.editor.util.DbUtil.saveEditor(editor);
-				}
-
-			} catch (ReflectiveOperationException e) {
-				logger.error("Unable to check fields", e);
-			}
-
-		if (saveActivity) {
-			Session session = PersistenceManager.getRequestDBSession();
-			session.update(activity);
-		}
 	}
 
 } // End

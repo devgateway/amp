@@ -451,25 +451,4 @@ public class Constants
 	public static final String AUTOMATIC_VALIDATION_JOB_CLASS_NAME =
 			"org.digijava.module.message.jobs.ActivityAutomaticValidationJob";
 
-	public static final String EDITOR_KEY_PREFIX = "aim-";
-	public static final String EDITOR_KEY_IATI_IMPORT_PREFIX = "_iati_import_";
-	public static final Map<String, String> EDITOR_FIELDS_MAP = Collections.unmodifiableMap(
-			new LinkedHashMap<String, String>() { {
-				put("activitySummary", "activity_summary");
-				put("conditionality", "conditionality");
-				put("description", "description");
-				put("environment", "environment");
-				put("equalOpportunity", "equalopportunity");
-				put("lessonsLearned", "lessons_learned");
-				put("minorities", "minorities");
-				put("objective", "objectives");
-				put("programDescription", "program_description");
-				put("projectComments", "projectcomments");
-				put("projectImpact", "project_impact");
-				put("projectManagement", "project_management");
-				put("purpose", "purpose");
-				put("results", "results");
-				put("statusReason", "status_reason");
-			} }
-	);
 }

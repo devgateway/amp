@@ -2,6 +2,7 @@ package org.digijava.kernel.ampapi.endpoints.performance.matcher;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import org.dgfoundation.amp.activity.builder.ActivityBuilder;
 import org.dgfoundation.amp.activity.builder.FundingBuilder;
@@ -176,7 +177,7 @@ public class NoDisbursementsAfterFundingDateMatcherTests extends PerformanceRule
                                 .getFunding())
                 .getActivity();
         
-        assertFalse(match(rule, a));
+        assertTrue(match(rule, a));
     }
     
     public void testTwoFundingsBeforeFundingEffectiveDate() {

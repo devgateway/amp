@@ -41,19 +41,21 @@ public class NoUpdatedDisbursementsAfterTimePeriodMatcher extends PerformanceRul
         Date deadline = getDeadline(currentDate, timeUnit, timeAmount);
         
         for (AmpFunding f : a.getFunding()) {
-            if (f.getFundingDetails() != null) {
-                boolean hasDisbursmentsAfterDeadline = f.getFundingDetails().stream()
-                        .filter(t -> t.getTransactionType() == Constants.DISBURSEMENT)
-                        .filter(t -> t.getTransactionDate().before(currentDate))
-                        .anyMatch(t -> t.getTransactionDate().after(deadline));
-                
-                if (hasDisbursmentsAfterDeadline) {
-                    return false;
-                }
+            if (f.getFundingDetails() == null || f.getFundingDetails().isEmpty()) {
+                return true;
+            }
+            
+            boolean hasDisbursmentsAfterDeadline = f.getFundingDetails().stream()
+                    .filter(t -> t.getTransactionType() == Constants.DISBURSEMENT)
+                    .filter(t -> t.getTransactionDate().before(currentDate))
+                    .anyMatch(t -> t.getTransactionDate().after(deadline));
+            
+            if (!hasDisbursmentsAfterDeadline) {
+                return true;
             }
         }
         
-        return true;
+        return false;
     }
     
     @Override

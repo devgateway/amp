@@ -9,7 +9,6 @@ import java.lang.reflect.Method;
 import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -43,11 +42,8 @@ import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpAhsurvey;
-import org.digijava.module.aim.dbentity.AmpAhsurveyResponse;
 import org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicatorOption;
 import org.digijava.module.aim.dbentity.AmpAuditLogger;
-import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
@@ -939,16 +935,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
      * @param session
      */
     public static Set<Long> getAllLegalAmpActivityIds() {
-        return getAllLegalAmpActivityIds(true);
-    }
-
-    public static Set<Long> getAllLegalAmpActivityIds(boolean inclideDrafts)
-    {
-    	String usedQuery = WorkspaceFilter.getWorkspaceFilterQuery(TLSUtils.getRequest().getSession());
-        if (!inclideDrafts) {
-            usedQuery += " and draft=false";
-        }
-    	return fetchLongs(usedQuery);
+    	return fetchLongs(WorkspaceFilter.getWorkspaceFilterQuery(TLSUtils.getRequest().getSession()));
     }
     
   	public static List<AmpActivityFake> getLastUpdatedActivities() {

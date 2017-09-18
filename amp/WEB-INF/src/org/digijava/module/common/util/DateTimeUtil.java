@@ -237,4 +237,18 @@ public class DateTimeUtil {
 		return sdf;
 	}
 
+	public static Date firstDayOfYear(int year) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.clear();
+		calendar.set(Calendar.YEAR, year);
+		return calendar.getTime();
+	}
+
+	public static Date lastDayOfYear(int year) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.clear();
+		calendar.set(Calendar.YEAR, year + 1);
+		calendar.add(Calendar.DAY_OF_YEAR, -1);
+		return calendar.getTime();
+	}
 }

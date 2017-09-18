@@ -35,7 +35,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.apache.lucene.document.Document;
 import org.dgfoundation.amp.PropertyListable;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.newreports.AmountsUnits;
@@ -60,16 +59,11 @@ import org.digijava.module.aim.helper.Constants.GlobalSettings;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.logic.AmpARFilterHelper;
-import org.digijava.module.aim.logic.Logic;
-import org.digijava.module.aim.startup.AMPStartupListener;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
-import org.digijava.module.aim.util.LuceneUtil;
-import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.aim.util.caching.AmpCaching;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
@@ -205,9 +199,6 @@ public class AmpARFilter extends PropertyListable {
 	
 	@PropertyListableIgnore
 	private Integer actualAppYear;
-	
-	@PropertyListableIgnore
-	private ArrayList<FilterParam> indexedParams=null;
 	
 	/**
 	 * whether this filter should queryAppend a WorkspaceFilter query in generateFilterQuery. Ignored when building a workspace filter (always ON)
@@ -505,9 +496,8 @@ public class AmpARFilter extends PropertyListable {
 	
 	@PropertyListableIgnore
 	private Collection<AmpCategoryValueLocations> relatedLocations;
-	
+
 	private Collection<AmpCategoryValueLocations> pledgesLocations;
-	private Boolean unallocatedLocation = null;
 	//private AmpCategoryValueLocations regionSelected = null;
 	private Collection<String> approvalStatusSelected;
 	
@@ -638,7 +628,6 @@ public class AmpARFilter extends PropertyListable {
 	private String sortBy;
 	private Boolean sortByAsc;
 	private List<String> hierarchySorters;
-	private List<Long> ampActivityIdOrder;
 
 	private Set<AmpCategoryValue> projectImplementingUnits; 
 	
@@ -851,7 +840,6 @@ public class AmpARFilter extends PropertyListable {
 		this.setProjectImplementingUnits(null);
 		this.setSortByAsc(true);
 		this.setHierarchySorters(new ArrayList<String>());
-		this.setAmpActivityIdOrder(new ArrayList<Long>());
 		this.budgetExport = false;
 		
 		HttpServletRequest request = TLSUtils.getRequest();
@@ -1150,29 +1138,6 @@ public class AmpARFilter extends PropertyListable {
 		this.generatedFilterQuery = initialFilterQuery;
 	}
 	
-	private String createDateCriteria(String to, String from, String sqlColumn) {
-		String dateCriteria	 	= "";
-		try {
-			if ( (to != null && to.length() > 0)  ) {
-				dateCriteria	= sqlColumn + " <= '" + sdfOut.format(sdfIn.parse(to)) + "'";
-			}
-			if ( (from != null && from.length() > 0)  ) {
-				if ( dateCriteria.length() > 0 ) {
-					dateCriteria += " AND ";
-				}
-				else
-					dateCriteria	= "";
-				
-				dateCriteria	+= sqlColumn + " >= '" + sdfOut.format(sdfIn.parse(from)) + "'";
-			}
-		}
-		catch (ParseException pe) {
-			pe.printStackTrace();
-		}
-		
-		return dateCriteria;
-	}
-
 	public boolean wasDateFilterUsed()
 	{
 		return (
@@ -1181,42 +1146,6 @@ public class AmpARFilter extends PropertyListable {
 				);
 	}
 	
-	public void generateFilterQuery(HttpServletRequest request, boolean workspaceFilter) {
-		generateFilterQuery(request, workspaceFilter, false);
-	}
-	
-	/**
-	 * generates SQL subquery which selects activity ids of activities which use one of the sectors of a given sector scheme
-	 * @param s the set of sectors
-	 * @param classificationName one of "Primary" / "Secondary" / "Tertiary" / "Tag"
-	 * @return
-	 */
-	protected static String generateSectorFilterSubquery(Set<AmpSector> s, String classificationName){
-		if (s == null || s.isEmpty())
-			return null;
-		String subquery = "SELECT DISTINCT(aas.amp_activity_id) FROM amp_activity_sector aas, amp_sector s, amp_classification_config c "
-				+ "WHERE aas.amp_sector_id=s.amp_sector_id AND s.amp_sec_scheme_id=c.classification_id "
-				+ "AND c.name='" + classificationName +"' AND aas.amp_sector_id in ("
-				+ Util.toCSStringForIN(s) + ")";
-		return subquery;
-	}
-	
-	/**
-	 * generates SQL subquery which selects activity ids of activities which use one of the sectors of a given sector scheme
-	 * @param s the set of sectors
-	 * @param classificationName one of "Primary" / "Secondary" / "Tertiary" / "Tag"
-	 * @return
-	 */
-	protected static String generateProgramFilterSubquery(Collection<AmpTheme> s, String classificationName){
-		if (s == null || s.isEmpty())
-			return null;
-		String subquery = "SELECT aap.amp_activity_id FROM amp_activity_program aap inner join  amp_theme p on aap.amp_program_id=p.amp_theme_id "
-				+ "inner join AMP_PROGRAM_SETTINGS ps on ps.amp_program_settings_id=aap.program_setting where ps.name='" + classificationName + "' AND "
-				+ " aap.amp_program_id in ("
-				+ Util.toCSStringForIN(s) + ")";
-		return subquery;
-	}
-
 	/**
 	 * generates SQL subquery which selects pledge ids of pledges which use one of the sectors of a given sector scheme
 	 * @param s the set of sectors
@@ -1249,11 +1178,13 @@ public class AmpARFilter extends PropertyListable {
 		return subquery;
 	}
 
+	/**
+	 * Used only by legacy reports.
+	 */
 	public void generatePledgeFilterQuery()
 	{
 		this.pledgeFilter = true;
-		indexedParams=new ArrayList<FilterParam>();
-		
+
 //		String WORKSPACE_ONLY = "";
 //		if (this.workspaceonly && "Management".equals(this.getAccessType())){
 //			WORKSPACE_ONLY = "SELECT v.pledge_id FROM v_pledges_projects v WHERE v.approval_status IN ("+Util.toCSString(activityStatus)+")";
@@ -1286,17 +1217,13 @@ public class AmpARFilter extends PropertyListable {
 			DynLocationManagerUtil.populateWithAscendants(this.pledgesLocations, locationSelected);
 			
 			this.relatedLocations = allSelectedLocations;
-			
+
 			String allSelectedLocationString = Util.toCSString(allSelectedLocations);
 			String subSelect = "SELECT aal.pledge_id FROM amp_funding_pledges_location aal, amp_location al " +
 					"WHERE ( aal.location_id=al.location_id AND " +
 					"al.location_id IN (" + allSelectedLocationString + ") )";
 			
-			if (REGION_SELECTED_FILTER.equals("")) {
-				REGION_SELECTED_FILTER	= subSelect;
-			} else {
-				REGION_SELECTED_FILTER += " OR amp_activity_id IN (" + subSelect + ")"; 
-			}			
+			REGION_SELECTED_FILTER	= subSelect;
 		}
 		
 		if (donnorgAgency != null && donnorgAgency.size() > 0){
@@ -1331,462 +1258,17 @@ public class AmpARFilter extends PropertyListable {
 		}
 	}
 
-	public void generateFilterQuery(HttpServletRequest request, boolean workspaceFilter, boolean skipPledgeCheck) {
-		AmpARFilterParams params =  org.dgfoundation.amp.ar.AmpARFilterParams.getParamsFromRequest(request, workspaceFilter, skipPledgeCheck);
-		generateFilterQuery(params);
+	/**
+	 * This method generates a query that returns filtered activities from either current workspace or
+	 * publicly visible activities.
+	 */
+	public void generateFilterQuery() {
+		Set<Long> ids = ActivityFilter.getInstance().filter(this);
+		generatedFilterQuery = String.format(
+				"SELECT amp_activity_id FROM amp_activity WHERE amp_activity_id IN (%s)",
+				Util.toCSString(ids));
 	}
-	
-	public void generateFilterQuery(AmpARFilterParams params) {
-		initFilterQuery(); //reinit filters or else they will grow indefinitely
-		if ( !params.getSkipPledgeCheck() &&  !params.getWorkspaceFilter() && ReportContextData.getFromRequest().isPledgeReport()){
-			generatePledgeFilterQuery();		
-			return;
-		}
-		
-		this.pledgeFilter = false;
-		
-		TeamMember loggedInTeamMember = params.getMember();		
-						
-		indexedParams=new ArrayList<FilterParam>();
-		
-		String BUDGET_FILTER = "SELECT amp_activity_id FROM v_on_off_budget WHERE budget_id IN ("
-			+ Util.toCSString(budget) + ")";			
 
-		String STATUS_FILTER = "SELECT amp_activity_id FROM v_status WHERE amp_status_id IN ("
-				+ Util.toCSString(statuses) + ")";
-
-
-
-        Set<AmpTeam> checkedWorkspaces;
-        boolean showWorkspaceFilterInTeamWorkspace = "true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SHOW_WORKSPACE_FILTER_IN_TEAM_WORKSPACES));
-        // https://jira.dgfoundation.org/browse/AMP-15117: ignore the "workspace" filter settings only in case of "team workspace without computation"
-        if (loggedInTeamMember != null && Constants.ACCESS_TYPE_TEAM.equals(loggedInTeamMember.getTeamAccessType()) &&
-        	!isTrue(loggedInTeamMember.getComputation()) && !showWorkspaceFilterInTeamWorkspace) {
-            AmpTeam selTeam = TeamUtil.getTeamByName(loggedInTeamMember.getTeamName());
-            checkedWorkspaces = new HashSet<AmpTeam>();
-            checkedWorkspaces.add(selTeam);
-        } else {
-            checkedWorkspaces = workspaces;
-        }
-
-		String WORKSPACE_FILTER = "select amp_activity_id from amp_activity where amp_team_id IN ("
-			+ Util.toCSStringForIN(checkedWorkspaces) + ")";
-
-		// String ORG_FILTER = "SELECT amp_activity_id FROM v_donor_groups WHERE
-		// amp_org_grp_id IN ("+Util.toCSString(donors,true)+")";
-		// String PARENT_SECTOR_FILTER="SELECT amp_activity_id FROM v_sectors
-		// WHERE amp_sector_id IN ("+Util.toCSString(sectors,true)+")";
-		// String SUB_SECTOR_FILTER="SELECT amp_activity_id FROM v_sub_sectors
-		// WHERE amp_sector_id IN ("+Util.toCSString(sectors,true)+")";
-		// String SECTOR_FILTER="(("+PARENT_SECTOR_FILTER+") UNION
-		// ("+SUB_SECTOR_FILTER+"))";
-
-		String SECTOR_FILTER = generateSectorFilterSubquery(sectors, "Primary");
-
-		// String SECONDARY_PARENT_SECTOR_FILTER=
-		// "SELECT amp_activity_id FROM v_secondary_sectors WHERE amp_sector_id
-		// IN ("+Util.toCSString(secondarySectors,true)+")";
-		// String SECONDARY_SUB_SECTOR_FILTER=
-		// "SELECT amp_activity_id FROM v_secondary_sub_sectors WHERE
-		// amp_sector_id IN ("+Util.toCSString(secondarySectors,true)+")";
-		// String SECONDARY_SECTOR_FILTER="(("+SECONDARY_PARENT_SECTOR_FILTER+")
-		// UNION ("+SECONDARY_SUB_SECTOR_FILTER+"))";
-		String SECONDARY_SECTOR_FILTER = generateSectorFilterSubquery(secondarySectors, "Secondary");
-
-       String TERTIARY_SECTOR_FILTER = generateSectorFilterSubquery(tertiarySectors, "Tertiary");
-
-       String quinarySectorFilter = generateSectorFilterSubquery(quinarySectors, "Quinary");
-
-       String quaternarySectorFilter = generateSectorFilterSubquery(quaternarySectors, "Quaternary");
-
-       String TAG_SECTOR_FILTER = generateSectorFilterSubquery(tagSectors, "Tag");
-
-		String REGION_FILTER = "SELECT amp_activity_id FROM v_regions WHERE name IN ("
-				+ Util.toCSStringForIN(regions) + ")";
-		String FINANCING_INSTR_FILTER = "SELECT amp_activity_id FROM v_financing_instrument WHERE id IN ("
-				+ Util.toCSStringForIN(financingInstruments) + ")";
-		String AID_MODALITIES_FILTER = "SELECT amp_activity_id FROM v_modalities WHERE level_code IN (" + Util.toCSStringForIN(aidModalities) + ")";
-		String LINE_MIN_RANK_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE line_min_rank IN ("
-	 	 		+ Util.toCSStringForIN(lineMinRank) + ")";
-
-		String FUNDING_STATUS_FILTER = "SELECT amp_activity_id FROM v_funding_status WHERE funding_status_code IN ("
-				+ Util.toCSStringForIN(fundingStatus) + ")";
-		
-		
-	 	
-	 	String MULTI_DONOR		= "SELECT amp_activity_id FROM v_multi_donor WHERE value = '" + multiDonor + "'";
-	 	
-	 	String REGION_SELECTED_FILTER = "";
- 		if (unallocatedLocation != null) {
-			if (unallocatedLocation == true) {
-				REGION_SELECTED_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE amp_activity_id NOT IN(SELECT amp_activity_id FROM amp_activity_location)";
-			}
-		}
-		
-		String ACTUAL_APPROVAL_YEAR_FILTER = "";
-		if (actualAppYear!=null && actualAppYear!=-1) {
-			ACTUAL_APPROVAL_YEAR_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE EXTRACT (YEAR FROM actual_approval_date) = " + actualAppYear + " ";
-		}
-		
-		if (locationSelected != null) {
-			long a = System.currentTimeMillis();
-			Set<Long> allDescendantsIds = DynLocationManagerUtil.populateWithDescendantsIds(locationSelected, false);
-			long b = System.currentTimeMillis();
-			logger.error("generating " + allDescendantsIds.size() + " ids took " + (b - a) + " millies");
-			
-			List<AmpCategoryValueLocations> allAscendingLocations	= new ArrayList<AmpCategoryValueLocations>();
-			DynLocationManagerUtil.populateWithAscendants(allAscendingLocations, locationSelected);
-			
-			Set<Long> allSelectedLocations = new HashSet<Long>(allDescendantsIds);
-			for(AmpCategoryValueLocations ascendant:allAscendingLocations)
-				allSelectedLocations.add(ascendant.getId());
-			
-			String allDescendantsIdsString			= Util.toCSStringForIN(allDescendantsIds);
-			String subSelect			= "SELECT aal.amp_activity_id FROM amp_activity_location aal, amp_location al " +
-					"WHERE ( aal.amp_location_id=al.amp_location_id AND " +
-					"al.location_id IN (" + allDescendantsIdsString + ") )";
-			
-			this.relatedLocations = DynLocationManagerUtil.loadLocations(allSelectedLocations);
-			
-			if (REGION_SELECTED_FILTER.equals("")) {
-				REGION_SELECTED_FILTER	= subSelect;
-			} else {
-				REGION_SELECTED_FILTER += " OR amp_activity_id IN (" + subSelect + ")"; 
-			}			
-		}
-		
-		String approvalStatusQuery = "";
-		if (approvalStatusSelected != null) { 
-			approvalStatusQuery = "select amp_activity_id from amp_activity_version where 1=1 " + buildApprovalStatusQuery(approvalStatusSelected, false); 
-		}    
-		
-		String TYPE_OF_ASSISTANCE_FILTER = "SELECT amp_activity_id FROM v_terms_assist WHERE terms_assist_code IN ("
-			+ Util.toCSString(typeOfAssistance) + ")";
-		
-		String EXPENDITURE_CLASS_FILTER = "SELECT amp_activity_id FROM v_expenditure_class WHERE id IN (" + Util.toCSStringForIN(getExpenditureClassForFilters()) + ")";
-
-		String MODE_OF_PAYMENT_FILTER = "SELECT amp_activity_id FROM v_mode_of_payment WHERE mode_of_payment_code IN ("
-			+ Util.toCSString(modeOfPayment) + ")";
-		
-		String CONCESSIONALITY_LEVEL_FILTER = "SELECT amp_activity_id FROM v_concessionality_level WHERE id IN ("
-				+ Util.toCSString(concessionalityLevel) + ")";
-		
-		String ACTIVITY_PLEDGES_TITLE = "SELECT amp_activity_id FROM v_activity_pledges_title WHERE title_id IN (" 
-			+ Util.toCSString(activityPledgesTitle) + ")";
-
-		String PROJECT_CATEGORY_FILTER = "SELECT amp_activity_id FROM v_project_category WHERE amp_category_id IN ("
-			+ Util.toCSString(projectCategory) + ")";
-
-		String PROJECT_IMPL_UNIT_FILTER = "SELECT amp_activity_id FROM v_project_impl_unit WHERE proj_impl_unit_id IN ("
-			+ Util.toCSString(projectImplementingUnits) + ")";
-
-//		String DONOR_TYPE_FILTER = "SELECT aa.amp_activity_id "
-//				+ "FROM amp_activity aa, amp_org_role aor, amp_role rol, amp_org_type typ, amp_organisation og  "
-//				+ "WHERE aa.amp_activity_id = aor.activity AND aor.role = rol.amp_role_id AND rol.role_code='DN' "
-//				+ "AND typ.amp_org_type_id =  og.org_type_id AND og.amp_org_id = aor.organisation "
-//				+ "AND typ.amp_org_type_id IN ("
-//				+ Util.toCSString(donorTypes) + ")";
-		
-		String DONOR_TYPE_FILTER	= "SELECT amp_activity_id FROM v_donor_type WHERE org_type_id IN ("
-			+ Util.toCSStringForIN(donorTypes) + ")";
-
-		String DONOR_GROUP_FILTER = "SELECT amp_activity_id FROM v_donor_groups WHERE org_grp_id IN ("
-				+ Util.toCSStringForIN(donorGroups) + ")";
-
-		String CONTRACTING_AGENCY_GROUP_FILTER = "SELECT amp_activity_id FROM v_contracting_agency_groups WHERE org_grp_id IN ("
-				+ Util.toCSStringForIN(contractingAgencyGroups) + ")";
-				
-		String EXECUTING_AGENCY_FILTER = "SELECT v.amp_activity_id FROM v_executing_agency v  "
-				+ "WHERE v.org_id IN ("
-				+ Util.toCSStringForIN(executingAgency) + ")";
-		
-		String CONTRACTING_AGENCY_FILTER = "SELECT v.amp_activity_id FROM v_contracting_agency v  "
-				+ "WHERE v.org_id IN ("
-				+ Util.toCSStringForIN(contractingAgency) + ")";
-
-		
-		String BENEFICIARY_AGENCY_FILTER = "SELECT v.amp_activity_id FROM v_beneficiary_agency v  "
-				+ "WHERE v.org_id IN ("
-				+ Util.toCSStringForIN(beneficiaryAgency) + ")";
-		
-		String IMPLEMENTING_AGENCY_FILTER = "SELECT v.amp_activity_id FROM v_implementing_agency v  "
-				+ "WHERE v.org_id IN ("
-				+ Util.toCSStringForIN(implementingAgency) + ")";
-		
-		String RESPONSIBLE_ORGANIZATION_FILTER = " SELECT v.amp_activity_id FROM v_responsible_organisation v  WHERE v.org_id IN ("
-			+ Util.toCSStringForIN(responsibleorg) + ")";
-
-		String COMPONENT_FUNDING_ORGANIZATION_FILTER = " SELECT v.amp_activity_id FROM v_component_funding_organization_name v  WHERE v.org_id IN ("
-			+ Util.toCSStringForIN(componentFunding) + ")";
-
-		String COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION_FILTER = " SELECT v.amp_activity_id FROM v_component_second_responsible_organization_name v  WHERE v.org_id IN ("
-			+ Util.toCSStringForIN(componentSecondResponsible) + ")";
-
-		String DONNOR_AGENCY_FILTER = " SELECT v.amp_activity_id FROM v_donors v  WHERE v.amp_donor_org_id IN ("
-			+ Util.toCSStringForIN(donnorgAgency) + ")";
-		String ARCHIVED_FILTER          = "";
-		if (this.showArchived != null)
-			ARCHIVED_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE "
-					+ ((this.showArchived) ? "archived=true"
-							: "(archived=false or archived is null)");
-
-		String ACTIVITY_ID_FILTER = ""; 
-		if (params.getActivityIdFilter() != null) {
-			ACTIVITY_ID_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE amp_activity_id = " + params.getActivityIdFilter();
-		}
-		
-		buildDatesFilterStatements();
-
-		if (fromMonth == null) {
-			if (yearFrom != null) {
-				AmpARFilterHelper filterHelper = Logic.getInstance()
-						.getAmpARFilterHelper();
-				String FROM_FUNDING_YEAR_FILTER = filterHelper
-						.createFromYearQuery(yearFrom);
-				queryAppend(FROM_FUNDING_YEAR_FILTER);
-			}
-		} else {
-			AmpARFilterHelper filterHelper = Logic.getInstance()
-					.getAmpARFilterHelper();
-			String FROM_FUNDING_YEARMONTH_FILTER = filterHelper
-					.createFromMonthQuery(fromMonth, yearFrom);
-			queryAppend(FROM_FUNDING_YEARMONTH_FILTER);
-		}
-
-		if (toMonth == null) {
-			if (yearTo != null) {
-				AmpARFilterHelper filterHelper = Logic.getInstance()
-						.getAmpARFilterHelper();
-				String TO_FUNDING_YEAR_FILTER = filterHelper
-						.createToYearQuery(yearTo);
-				queryAppend(TO_FUNDING_YEAR_FILTER);
-			}
-		} else {
-			AmpARFilterHelper filterHelper = Logic.getInstance()
-					.getAmpARFilterHelper();
-			String TO_FUNDING_YEARMONTH_FILTER = filterHelper
-					.createToMonthQuery(toMonth, yearTo);
-			queryAppend(TO_FUNDING_YEARMONTH_FILTER);
-		}
-		
-		if (text != null) {
-			if (! "".equals(text.trim())) {
-				String TEXT_FILTER = "SELECT a.amp_activity_id from amp_activity a WHERE a.amp_id="
-						+ text;
-				queryAppend(TEXT_FILTER);
-			}
-		}
-
-        if (indexText != null && ! "".equals(indexText.trim())) {
-			//shouldn't enter here if not using an httprequest!
-
-            String LUCENE_ID_LIST = "";
-            searchMode = params.getLuceneSearchModeParam();
-
-			String index = AMPStartupListener.SERVLET_CONTEXT_ROOT_REAL_PATH + LuceneUtil.ACTIVITY_INDEX_DIRECTORY;
-			Document[] docs = LuceneUtil.search(index, "all", indexText, searchMode);
-            logger.info("New lucene search !");
-
-            for (Document doc : docs) {
-                if (LUCENE_ID_LIST.equals("")) {
-                    LUCENE_ID_LIST = doc.get("id");
-                } else {
-                    LUCENE_ID_LIST = LUCENE_ID_LIST + "," + doc.get("id");
-                }
-				ampActivityIdOrder.add(Long.parseLong(doc.get("id")));
-            }
-
-            logger.info("Lucene ID List:" + LUCENE_ID_LIST);
-            if (LUCENE_ID_LIST.length() < 1) {
-                logger.info("Not found!");
-                LUCENE_ID_LIST = "-1";
-            }
-            queryAppend(LUCENE_ID_LIST);
-		}
-
-		String RISK_FILTER = "SELECT v.activity_id from AMP_ME_INDICATOR_VALUE v, AMP_INDICATOR_RISK_RATINGS r where v.risk=r.amp_ind_risk_ratings_id and r.amp_ind_risk_ratings_id in ("
-				+ Util.toCSString(risks) + ")";
-
-		if (budget != null)
-			queryAppend(BUDGET_FILTER);
-
-		if (!params.getWorkspaceFilter())
-		{
-			// not workspace, e.g. normal report/tab filter
-			// Merge Filter with the Workspace Filter
-//			AmpARFilter teamFilter = (AmpARFilter) request.getSession().getAttribute(ArConstants.TEAM_FILTER);
-
-			if (!this.budgetExport && (params.getTeamFilter()!= null))
-			{
-				queryAppend(params.getTeamFilter().getGeneratedFilterQuery());
-			}
-		}
-		
-		if (statuses != null && statuses.size() > 0)
-			queryAppend(STATUS_FILTER);
-		
-		if (humanitarianAid != null)
-			queryAppend(String.format("SELECT v.amp_activity_id FROM v_humanitarian_aid v WHERE val_id IN (%s)", Util.toCSStringForIN(humanitarianAid)));
-			
-		if (disasterResponse != null)
-			queryAppend(String.format("SELECT v.amp_activity_id FROM v_disaster_response_marker v WHERE val_id IN (%s)", Util.toCSStringForIN(disasterResponse)));
-			
-		if (workspaces != null && workspaces.size() > 0)
-			queryAppend(WORKSPACE_FILTER);
-		// if(donors!=null && donors.size()>0) queryAppend(ORG_FILTER);
-		
-		queryAppend(SECTOR_FILTER);
-		queryAppend(SECONDARY_SECTOR_FILTER);
-		queryAppend(TERTIARY_SECTOR_FILTER);
-		queryAppend(quaternarySectorFilter);
-		queryAppend(quinarySectorFilter);
-		queryAppend(TAG_SECTOR_FILTER);
-
-		queryAppend(generateProgramFilterSubquery(nationalPlanningObjectives, "National Plan Objective"));
-		queryAppend(generateProgramFilterSubquery(primaryPrograms, "Primary Program"));
-		queryAppend(generateProgramFilterSubquery(secondaryPrograms, "Secondary Program"));
-		
-		if (this.getSelectedActivityPledgesSettings() != null && this.getSelectedActivityPledgesSettings() > 0) {
-			String hasPledgeFilter = "SELECT DISTINCT(amp_activity_id) FROM v_related_pledges";
-			if (this.getSelectedActivityPledgesSettings().equals(SELECTED_ACTIVITY_PLEDGES_SETTINGS_WITH_PLEDGES_ONLY)) {
-				queryAppend(hasPledgeFilter);
-			}
-			else {
-				queryNotAppend(hasPledgeFilter);
-			}
-		}
-		
-		if (regions != null && regions.size() > 0)
-			queryAppend(REGION_FILTER);
-		if (financingInstruments != null && financingInstruments.size() > 0)
-			queryAppend(FINANCING_INSTR_FILTER);
-		if (fundingStatus != null && fundingStatus.size() > 0)
-			queryAppend(FUNDING_STATUS_FILTER);
-		if (aidModalities != null && !aidModalities.isEmpty())
-			queryAppend(AID_MODALITIES_FILTER);
-		if (risks != null && risks.size() > 0)
-			queryAppend(RISK_FILTER);
-		if ((lineMinRank != null) && (lineMinRank.size() > 0))
-			queryAppend(LINE_MIN_RANK_FILTER);
-		//if (regionSelected != null)
-		//	queryAppend(REGION_SELECTED_FILTER);
-		if (!REGION_SELECTED_FILTER.equals("")) {
-			queryAppend(REGION_SELECTED_FILTER);
-		}
-		
-		queryAppend(approvalStatusQuery);
-
-		if (typeOfAssistance != null && typeOfAssistance.size() > 0)
-			queryAppend(TYPE_OF_ASSISTANCE_FILTER);
-		
-		if (expenditureClass != null && expenditureClass.size() > 0)
-			queryAppend(EXPENDITURE_CLASS_FILTER);
-		
-		if (modeOfPayment != null && modeOfPayment.size() > 0)
-			queryAppend(MODE_OF_PAYMENT_FILTER);
-		
-		if (concessionalityLevel != null && concessionalityLevel.size() > 0) {
-			queryAppend(CONCESSIONALITY_LEVEL_FILTER);
-		}
-		
-		if (projectCategory != null && projectCategory.size() > 0)
-			queryAppend(PROJECT_CATEGORY_FILTER);
-		
-		if ( activityPledgesTitle != null && activityPledgesTitle.size() > 0 ) {
-			queryAppend(ACTIVITY_PLEDGES_TITLE);
-		}
-		
-		if(projectImplementingUnits!=null && projectImplementingUnits.size() > 0){
-			queryAppend(PROJECT_IMPL_UNIT_FILTER);
-		}
-		
-		if (donorGroups != null && donorGroups.size() > 0)
-			queryAppend(DONOR_GROUP_FILTER);
-			
-		if ((contractingAgencyGroups != null) && (contractingAgencyGroups.size() > 0))
-			queryAppend(CONTRACTING_AGENCY_GROUP_FILTER);
-			
-		if (donorTypes != null && donorTypes.size() > 0)
-			queryAppend(DONOR_TYPE_FILTER);
-
-		if (executingAgency != null && executingAgency.size() > 0)
-			queryAppend(EXECUTING_AGENCY_FILTER);
-
-		if (contractingAgency != null && contractingAgency.size() > 0)
-			queryAppend(CONTRACTING_AGENCY_FILTER);
-
-		if (beneficiaryAgency != null && beneficiaryAgency.size() > 0)
-			queryAppend(BENEFICIARY_AGENCY_FILTER);
-		
-		if (implementingAgency != null && implementingAgency.size() > 0)
-			queryAppend(IMPLEMENTING_AGENCY_FILTER);
-
-		if (donnorgAgency != null && donnorgAgency.size() > 0)
-			queryAppend(DONNOR_AGENCY_FILTER);
-		
-		if (responsibleorg!=null && responsibleorg.size() >0){
-			queryAppend(RESPONSIBLE_ORGANIZATION_FILTER);
-		}
-
-		if (componentFunding != null && componentFunding.size() > 0) {
-			queryAppend(COMPONENT_FUNDING_ORGANIZATION_FILTER);
-		}
-
-		if (componentSecondResponsible != null && componentSecondResponsible.size() > 0) {
-			queryAppend(COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION_FILTER);
-		}
-		
-		if (actualAppYear!=null && actualAppYear!=-1) {
-			queryAppend(ACTUAL_APPROVAL_YEAR_FILTER);
-		}
-		
-		if (governmentApprovalProcedures != null) {
-			String GOVERNMENT_APPROVAL_FILTER = "SELECT a.amp_activity_id from amp_activity a where governmentApprovalProcedures="
-					+ ((governmentApprovalProcedures)?"true":"false");
-			queryAppend(GOVERNMENT_APPROVAL_FILTER);
-		}
-		if (jointCriteria != null) {
-			String JOINT_CRITERIA_FILTER = "SELECT a.amp_activity_id from amp_activity a where jointCriteria="
-					+ ((jointCriteria)?"true":"false");;
-			queryAppend(JOINT_CRITERIA_FILTER);
-		}
-		if (showArchived != null) {
-			queryAppend(ARCHIVED_FILTER);
-		}
-		if ( multiDonor != null ) {
-			queryAppend( MULTI_DONOR );
-		}
-		if (params.getActivityIdFilter() != null) {
-			queryAppend(ACTIVITY_ID_FILTER);
-		}
-		
-		
-		String ISOLATED_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE amp_activity_id IN (select amp_activity_id FROM amp_activity_version aav WHERE " 
-				+ "aav.amp_team_id IN (select amp_team_id from amp_team WHERE isolated = true)) ";
-		
-		/* TEAM FILTER HACK ZONE
-		 * because in certain situations this zone can add an OR, any queryAppend calls MUST be done BEFORE THIS AREA
-		 */
-		if ((loggedInTeamMember == null) || !loggedInTeamMember.getTeamIsolated()) {
-			queryNotAppend(ISOLATED_FILTER);
-		}
-		
-		
-		processTeamFilter(loggedInTeamMember, params.getWorkspaceFilter());
-		
-		/**
-		 * NO queryAppend CALLS AFTER THIS POINT !
-		 */
-		
-		if ( this.isPublicView() && ! this.budgetExport  ){
-			generatedFilterQuery = getOffLineQuery(generatedFilterQuery);
-		}
-
-		//DbUtil.countActivitiesByQuery(this.generatedFilterQuery,indexedParams);
-//		logger.error(this.generatedFilterQuery);
-	}
-	
-	
 	@PropertyListableIgnore
 	protected StringGenerator overridingTeamFilter = null;
 	
@@ -1802,161 +1284,7 @@ public class AmpARFilter extends PropertyListable {
 	{
 		return overridingTeamFilter;
 	}
-	
-	/**
-	 * appends to the query statements filtering by various date fields, most importantly - transaction date
-	 */
-	protected void buildDatesFilterStatements() {
-		// build transaction date filtering statements
-		boolean dateFilterHidesProjects = "true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DATE_FILTER_HIDES_PROJECTS));
-		
-		String[] dates = this.calculateDateFilters(fromDate, toDate, dynDateFilterCurrentPeriod, dynDateFilterAmount, dynDateFilterOperator, dynDateFilterXPeriod);
-		String fromDate = dates[0];
-		String toDate = dates[1];
-		
-		if (dateFilterHidesProjects && fromDate != null && fromDate.length() > 0) {
-			String FROM_DATE_FILTER = null;
-			try {
-				FROM_DATE_FILTER = " SELECT distinct(f.amp_activity_id) FROM amp_funding_detail fd, amp_funding f WHERE f.amp_funding_id=fd.amp_funding_id AND fd.transaction_date>='"
-					+ sdfOut.format(sdfIn.parse(fromDate)) + "'";
 
-			} catch (ParseException e) {
-				logger.error(e, e);
-			}
-			dateFilterUsed = true;
-			queryAppend(FROM_DATE_FILTER);
-		}
-		if (dateFilterHidesProjects && toDate != null && toDate.length()>0) {
-			String TO_DATE_FILTER=null;
-			try {
-				TO_DATE_FILTER = " SELECT distinct(f.amp_activity_id) FROM amp_funding_detail fd, amp_funding f WHERE f.amp_funding_id=fd.amp_funding_id AND fd.transaction_date<='"
-					+  sdfOut.format(sdfIn.parse(toDate)) + "'";
-			} catch (ParseException e) {
-				logger.error(e, e);
-			}
-			dateFilterUsed = true;
-			queryAppend(TO_DATE_FILTER);
-		}
-		
-		// build activity start date filtering statements
-		dates = this.calculateDateFilters(fromActivityStartDate, toActivityStartDate, dynActivityStartFilterCurrentPeriod, dynActivityStartFilterAmount, dynActivityStartFilterOperator, dynActivityStartFilterXPeriod);
-		fromDate = dates[0];
-		toDate = dates[1];
-
-		String ACTIVITY_START_DATE_FILTER	 	= this.createDateCriteria(toDate, fromDate, "asd.actual_start_date");
-		if ( ACTIVITY_START_DATE_FILTER.length() > 0 ) {
-			ACTIVITY_START_DATE_FILTER = "SELECT asd.amp_activity_id from v_actual_start_date asd WHERE " + ACTIVITY_START_DATE_FILTER;
-			queryAppend(ACTIVITY_START_DATE_FILTER);
-		}
-
-		// build issue date filtering statements
-		dates = this.calculateDateFilters(fromIssueDate, toIssueDate, dynIssueFilterCurrentPeriod,
-				dynIssueFilterAmount, dynIssueFilterOperator, dynIssueFilterXPeriod);
-		fromDate = dates[0];
-		toDate = dates[1];
-
-		String ISSUE_DATE_FILTER = this.createDateCriteria(toDate, fromDate, "asd.issuedate");
-		if ( ISSUE_DATE_FILTER.length() > 0 ) {
-			ISSUE_DATE_FILTER = "SELECT asd.amp_activity_id from v_issue_date asd WHERE " + ISSUE_DATE_FILTER;
-			queryAppend(ISSUE_DATE_FILTER);
-		}
-		
-		dates = this.calculateDateFilters(fromActivityActualCompletionDate, toActivityActualCompletionDate, dynActivityActualCompletionFilterCurrentPeriod, dynActivityActualCompletionFilterAmount, dynActivityActualCompletionFilterOperator, dynActivityActualCompletionFilterXPeriod);
-		fromDate = dates[0];
-		toDate = dates[1];
-
-		String ACTIVITY_ACTUAL_COMPLETION_DATE_FILTER	 	= this.createDateCriteria(toDate, fromDate, "acd.actual_completion_date");
-		if ( ACTIVITY_ACTUAL_COMPLETION_DATE_FILTER.length() > 0 ) {
-			ACTIVITY_ACTUAL_COMPLETION_DATE_FILTER = "SELECT acd.amp_activity_id from v_actual_completion_date acd WHERE " + ACTIVITY_ACTUAL_COMPLETION_DATE_FILTER;
-			queryAppend(ACTIVITY_ACTUAL_COMPLETION_DATE_FILTER);
-		}
-
-		dates = this.calculateDateFilters(fromActivityFinalContractingDate, toActivityFinalContractingDate, dynActivityFinalContractingFilterCurrentPeriod, dynActivityFinalContractingFilterAmount, dynActivityFinalContractingFilterOperator, dynActivityFinalContractingFilterXPeriod);
-		fromDate = dates[0];
-		toDate = dates[1];
-
-		String ACTIVITY_FINAL_CONTRACTING_DATE_FILTER	 	= this.createDateCriteria(toDate, fromDate, "ctrd.contracting_date");
-		if ( ACTIVITY_FINAL_CONTRACTING_DATE_FILTER.length() > 0 ) {
-			ACTIVITY_FINAL_CONTRACTING_DATE_FILTER = "SELECT ctrd.amp_activity_id from v_contracting_date ctrd WHERE " + ACTIVITY_FINAL_CONTRACTING_DATE_FILTER;
-			queryAppend(ACTIVITY_FINAL_CONTRACTING_DATE_FILTER);
-		}
-		
-		dates = this.calculateDateFilters(fromProposedApprovalDate, toProposedApprovalDate, dynProposedApprovalFilterCurrentPeriod, dynProposedApprovalFilterAmount, dynProposedApprovalFilterOperator, dynProposedApprovalFilterXPeriod);
-		fromDate = dates[0];
-		toDate = dates[1];
-		
-		String ACTIVITY_PROPOSED_APPROVAL_DATE_FILTER	 	= this.createDateCriteria(toDate, fromDate, "apsd.proposed_approval_date");
-		if ( ACTIVITY_PROPOSED_APPROVAL_DATE_FILTER.length() > 0 ) {
-			ACTIVITY_PROPOSED_APPROVAL_DATE_FILTER = "SELECT apsd.amp_activity_id from v_actual_proposed_date apsd WHERE " + ACTIVITY_PROPOSED_APPROVAL_DATE_FILTER;
-			queryAppend(ACTIVITY_PROPOSED_APPROVAL_DATE_FILTER);
-		}
-
-		dates = this.calculateDateFilters(fromEffectiveFundingDate, toEffectiveFundingDate, dynEffectiveFundingFilterCurrentPeriod, dynEffectiveFundingFilterAmount, dynEffectiveFundingFilterOperator, dynEffectiveFundingFilterXPeriod);
-		fromDate = dates[0];
-		toDate = dates[1];
-
-		String ACTIVITY_EFFECTIVE_FUNDING_DATE_FILTER	 	= this.createDateCriteria(toDate, fromDate, "apsd.effective_funding_date");
-		if (ACTIVITY_EFFECTIVE_FUNDING_DATE_FILTER.length() > 0) {
-			ACTIVITY_EFFECTIVE_FUNDING_DATE_FILTER = "SELECT apsd.amp_activity_id from v_actual_proposed_date apsd WHERE " + ACTIVITY_EFFECTIVE_FUNDING_DATE_FILTER;
-			queryAppend(ACTIVITY_EFFECTIVE_FUNDING_DATE_FILTER);
-		}
-
-		dates = this.calculateDateFilters(fromFundingClosingDate, toFundingClosingDate, dynFundingClosingFilterCurrentPeriod, dynFundingClosingFilterAmount, dynFundingClosingFilterOperator, dynFundingClosingFilterXPeriod);
-		fromDate = dates[0];
-		toDate = dates[1];
-
-		String ACTIVITY_FUNDING_CLOSING_DATE_FILTER	 	= this.createDateCriteria(toDate, fromDate, "apsd.funding_closing_date");
-		if (ACTIVITY_FUNDING_CLOSING_DATE_FILTER.length() > 0) {
-			ACTIVITY_FUNDING_CLOSING_DATE_FILTER = "SELECT apsd.amp_activity_id from v_funding_closing_date apsd WHERE " + ACTIVITY_FUNDING_CLOSING_DATE_FILTER;
-			queryAppend(ACTIVITY_FUNDING_CLOSING_DATE_FILTER);
-		}
-
-	}
-	
-
-	protected void processTeamFilter(TeamMember member, boolean workspaceFilter)
-	{
-		if (overridingTeamFilter != null)
-		{
-			if (overridingTeamFilter.getString() != null)
-				queryAppend(overridingTeamFilter.getString());
-			return;
-		}
-		
-		boolean thisIsComputedWorkspaceWithFilters = workspaceFilter && (member != null) && 
-				isTrue(member.getComputation()) && isTrue(member.getUseFilters());
-
-		String TEAM_FILTER = WorkspaceFilter.generateWorkspaceFilterQuery(member);
-
-		if (needsTeamFilter)
-		{
-			/* needsTeamFilter can only be true in public view
-			 * public views cannot be shared from within a computed Workspace (THIS IS NOT SUPPORTED NOW)
-			 */
-			 queryAppend(TEAM_FILTER);
-		}
-		else
-		if (workspaceFilter)
-		{
-			if (thisIsComputedWorkspaceWithFilters)
-			{
-				/* do a somewhat ugly hack: the TEAM_FILTER will only contain the activities from within the workspace
-				 * here we run the filter part of the workspace and OR with the own activities returned in TEAM_FILTER
-				 */
-				String activitiesInTheWorkspace = "SELECT amp_activity_id from amp_activity WHERE amp_activity_id IN (" + TEAM_FILTER + ")";
-				String otherActivities = this.generatedFilterQuery + (TeamUtil.hideDraft(member) ? " AND draft <> true" : "");
-				
-				this.generatedFilterQuery = String.format("(%s) UNION (%s)", otherActivities, activitiesInTheWorkspace);
-				//this.generatedFilterQuery = String.format("(%s) OR (%s)", this.generatedFilterQuery, queryToAppend);
-		}
-			else
-			{
-				// normal workspace filter, works hackless
-				queryAppend(TEAM_FILTER);
-			}
-		}
-	}
-	
 	private String[] calculateDateFilters(String startDate, String lastDate, String currentPeriod, Integer amount, String op, String xPeriod){
 		
 		String fromDate = startDate;
@@ -3299,10 +2627,6 @@ public class AmpARFilter extends PropertyListable {
 	public void setJustSearch(boolean justSearch) {
 		this.justSearch = justSearch;
 	}
-	@PropertyListableIgnore
-	public ArrayList<FilterParam> getIndexedParams() {
-		return indexedParams;
-	}
 
 	public Set<AmpOrganisation> getResponsibleorg() {
 		return responsibleorg;
@@ -3350,14 +2674,6 @@ public class AmpARFilter extends PropertyListable {
 
 	public void setHierarchySorters(List<String> hierarchySorters) {
 		this.hierarchySorters = cleanupHierarchySorters(hierarchySorters);
-	}
-
-	public List<Long> getAmpActivityIdOrder() {
-		return ampActivityIdOrder;
-	}
-
-	public void setAmpActivityIdOrder(List<Long> ampActivityIdOrder) {
-		this.ampActivityIdOrder = ampActivityIdOrder;
 	}
 
 	/** for each given sorting key only keeps the last entry */
@@ -3423,20 +2739,6 @@ public class AmpARFilter extends PropertyListable {
 	}
 
 	/**
-	 * @return the unallocatedLocation
-	 */
-	public Boolean getUnallocatedLocation() {
-		return unallocatedLocation;
-	}
-
-	/**
-	 * @param unallocatedLocation the unallocatedLocation to set
-	 */
-	public void setUnallocatedLocation(Boolean unallocatedLocation) {
-		this.unallocatedLocation = unallocatedLocation;
-	}
-	
-	/**
 	 * only call this function directly if you NEED to know that the underlying value is null. In case you just want to know the value of the option, call computeEffectiveAmountInThousand 
 	 * @return
 	 */
@@ -3474,7 +2776,7 @@ public class AmpARFilter extends PropertyListable {
 			Collection<AmpCategoryValueLocations> relatedLocations) {
 		this.relatedLocations = relatedLocations;
 	}
-	
+
 	public Collection<AmpCategoryValueLocations> getPledgesLocations() {
 		return pledgesLocations;
 	}
@@ -3516,17 +2818,6 @@ public class AmpARFilter extends PropertyListable {
 	 */
 	public void setShowArchived(Boolean showArchived) {
 		this.showArchived = showArchived;
-	}
-	
-	@PropertyListableIgnore
-	public String getFilterConditionOnly() {
-		String genFilter = this.getGeneratedFilterQuery();
-		int pos = genFilter.indexOf(initialFilterQuery);
-		genFilter = genFilter.substring(pos + initialFilterQuery.length());
-		pos = genFilter.indexOf("AND");
-		if (pos > 0)
-			genFilter = genFilter.substring(pos + 3); //don't crash on empty filters
-		return genFilter;
 	}
 	
 	@PropertyListableIgnore
@@ -3698,61 +2989,7 @@ public class AmpARFilter extends PropertyListable {
 			throw new RuntimeException(e);
 		}
 	}
-	
-	/**
-	 * Generates a fragment of the query to filter for a given approval status 
-	 * 
-	 * @param id, the approval status to query
-	 * @param inclusive, whether the element should be included or if it is a negative filter 
-	 * @return the fragment of the query
-	 */
-	public static String buildApprovalStatusQuery(int id, boolean negative) {
-		String verb = negative ? "NOT " : "";
-		
-		switch (id) {
-			case -1:
-				return "1=1";
-				
-			case 0:// Existing Un-validated - This will show all the activities that
-				// have been approved at least once and have since been edited
-				// and not validated.			
-				return String.format("%s(approval_status IN ('edited', 'not_approved', 'rejected') and draft <> true)", verb);
-		
-			case 1:// New Draft - This will show all the activities that have never
-				// been approved and are saved as drafts.
-				return String.format("%s(approval_status IN ('started', 'startedapproved') and draft is true) ", verb);
-				
-			case 2:// New Un-validated - This will show all activities that are new
-				// and have never been approved by the workspace manager.
-				return String.format("%s(approval_status = 'started' and draft <> true)", verb);
-			
-			case 3:// existing draft. This is because when you filter by Existing
-				// Unvalidated you get draft activites that were edited and
-				// saved as draft
-				return String.format("%s(approval_status IN ('edited', 'approved') AND (draft is true))", verb);
-			
-			case 4:// Validated Activities
-				return String.format("%s(approval_status IN ('approved', 'startedapproved') and (draft<>true))", verb);
-			
-			default:
-				throw new RuntimeException("unrecognized approval status value: " + id);
-		}
-	}
 
-	/**
-	 * Generates a fragment of the query to filter for a given approval status options (e.g., OR between options)
-	 * @param ids - a series of IDs which could be recognized by {@link #buildApprovalStatusQuery(int, boolean)}
-	 * @param negative
-	 * @return
-	 */
-	public static String buildApprovalStatusQuery(Collection<String> ids, boolean negative) {
-		List<String> queries = new ArrayList<>();
-		for(String id:ids)
-			queries.add(buildApprovalStatusQuery(Integer.parseInt(id), negative));
-		
-		return mergeStatements(queries, "OR");
-	}
-	
 	/**
 	 * returns:
 	 * 		"", if statements.empty

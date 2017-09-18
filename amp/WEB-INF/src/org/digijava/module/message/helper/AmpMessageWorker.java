@@ -14,11 +14,9 @@ import java.util.Set;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
-import org.dgfoundation.amp.newreports.CompleteWorkspaceFilter;
 import org.digijava.kernel.ampapi.endpoints.datafreeze.DataFreezeUtil;
 import org.digijava.kernel.config.DigiConfig;
 import org.digijava.kernel.mail.DgEmailManager;
@@ -28,7 +26,6 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.DigiConfigManager;
-import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.exception.AimException;
@@ -54,7 +51,6 @@ import org.digijava.module.message.triggers.ActivityCurrentCompletionDateTrigger
 import org.digijava.module.message.triggers.ActivityDisbursementDateTrigger;
 import org.digijava.module.message.triggers.ActivityFinalDateForContractingTrigger;
 import org.digijava.module.message.triggers.ActivityFinalDateForDisbursementsTrigger;
-import org.digijava.module.message.triggers.ActivityLevelNotificationTrigger;
 import org.digijava.module.message.triggers.ActivityMeassureComparisonTrigger;
 import org.digijava.module.message.triggers.ActivityProposedApprovalDateTrigger;
 import org.digijava.module.message.triggers.ActivityProposedCompletionDateTrigger;
@@ -927,23 +923,14 @@ public class AmpMessageWorker {
 				TeamMember member = new TeamMember(ampTeamMember);
 
 				TLSUtils.getRequest().getSession().setAttribute(Constants.CURRENT_MEMBER, member);
-				AmpARFilter af = FilterUtil.buildFilter(ampTeamMember.getAmpTeam(), null);
-				af.generateFilterQuery(TLSUtils.getRequest(), true);
 
-				CompleteWorkspaceFilter completeWorkspaceFilter = new CompleteWorkspaceFilter(member, af);
-				String wsQuery1 = WorkspaceFilter.generateWorkspaceFilterQuery(completeWorkspaceFilter.tm);
-				String wsQuery2 = completeWorkspaceFilter.workspaceFilter.getGeneratedFilterQuery();
+				String wsQuery = WorkspaceFilter.generateWorkspaceFilterQuery(member);
 
 				if (wsQueries.length() > 0) {
 					wsQueries.append(" UNION ");
 				}
-				wsQueries.append(addTeamIdToQuery(wsQuery1, ampTeamMember.getAmpTeam().getAmpTeamId(),
-						ampTeamMember.getAmpTeam().getName())).append(" UNION ");
-				wsQueries.append("select amp_activity_id ," + ampTeamMember.getAmpTeam().getAmpTeamId()
-						+ " as  ampTeamId, '" + ampTeamMember.getAmpTeam().getName() + "' as teamName from ( ");
-				wsQueries.append(wsQuery2);
-				wsQueries.append(") as activityTemp ");
-
+				wsQueries.append(addTeamIdToQuery(wsQuery, ampTeamMember.getAmpTeam().getAmpTeamId(),
+						ampTeamMember.getAmpTeam().getName()));
 			}
 			// we now turn queries into map, and store it at request level in
 			// case its needed again

@@ -122,7 +122,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	public static final Logger logger = Logger.getLogger(AmpReportsSchema.class);
 	
 	/**
-	 * put this to false if you are debugging the caching fetching layers of the schema (e.g. {@link AmpDifferentialColumn}, {@link AmpCachedColumn}, {@link AmpFundingColumn})
+	 * put this to false if you are debugging the caching fetching layers of the schema
+	 * (e.g. {@link AmpDifferentialColumn}, {@link AmpFundingColumn})
 	 */
 	public boolean ENABLE_CACHING = true;
 
@@ -372,7 +373,9 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		no_dimension(ColumnConstants.ACTIVITY_PLEDGES_TITLE, "v_activity_pledges_title");
 		no_dimension(ColumnConstants.ACTIVITY_UPDATED_BY, "v_activity_modified_by");
 		no_dimension(ColumnConstants.ACTORS, "v_actors");
-		
+
+		no_dimension(ColumnConstants.ARCHIVED, "v_archived");
+
 		single_dimension(ColumnConstants.AGREEMENT_CODE, "v_agreement_code", AGR_LEVEL_COLUMN);
 		single_dimension(ColumnConstants.AGREEMENT_TITLE_CODE, "v_agreement_title_code", AGR_LEVEL_COLUMN);
 		date_column(ColumnConstants.AGREEMENT_CLOSE_DATE, "v_agreement_close_date", AGR_LEVEL_COLUMN);

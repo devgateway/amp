@@ -27,13 +27,13 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-		OfflineNiReportsTestSuite.class,
 		NiReportsFetchingTests.class,
 		AmpSchemaSanityTests.class,
 		AmpSchemaSortingTests.class,
 		AmpSchemaFilteringTests.class,
 		AmpSchemaPledgesTests.class,
 		AmpSchemaComponentsTests.class,
+		OfflineNiReportsTestSuite.class,
 		ForecastExecutionRateTests.class,
 		FundingFlowsTests.class,
 		ExpenditureClassTests.class,

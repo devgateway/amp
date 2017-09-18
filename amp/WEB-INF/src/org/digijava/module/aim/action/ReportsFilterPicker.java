@@ -1604,7 +1604,7 @@ public class ReportsFilterPicker extends Action {
 		/*THIS IS USED FOR PLEDGES IN ORDER TO SHOW ONLY PLEDGES ASSOCIATED TO THE ACTIVITIES THAT BELONG TO THE WORKSPACE
 		 PLEASE DON'T DELETE IT AGAIN*/
 		if(arf.isWorkspaceonly()){
-			arf.setAmpTeamsforpledges(WorkspaceFilter.getAmpTeamsSet(arf.getTeamMemberId(), arf.getAccessType(), true, true));
+			arf.setAmpTeamsforpledges(WorkspaceFilter.getAmpTeamsSet(arf.getTeamMemberId(), arf.getAccessType()));
 		}else{
 			arf.setAmpTeamsforpledges(null);
 		}

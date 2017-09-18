@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.dgfoundation.amp.currencyconvertor.CurrencyConvertor;
+import org.dgfoundation.amp.nireports.NiPrecisionSetting;
+import org.dgfoundation.amp.nireports.runtime.CachingCalendarConverter;
 import org.digijava.kernel.translator.LocalizableLabel;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.algo.AlgoUtils;
@@ -197,9 +200,10 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 		AmpReportsSchema schema = (AmpReportsSchema) engine.schema;
 		boolean enableDiffing = schema.ENABLE_CACHING;
 		AmpCurrency usedCurrency = scratchpad.getUsedCurrency();
+
+		List<CategAmountCellProto> protos;
 		if (enableDiffing) {
 			long start = System.currentTimeMillis();
-			List<CategAmountCellProto> protos;
 			synchronized(CACHE_SYNC_OBJ) {
 				FundingFetcherContext cache = cacher.buildOrGetValue(true, engine);
 				Set<Long> deltas = scratchpad.differentiallyImportCells(engine.timer, mainColumn, cache.cache, ids -> fetchSkeleton(engine, ids, cache));
@@ -207,14 +211,24 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 				long delta = System.currentTimeMillis() - start;
 				engine.timer.putMetaInNode("hot_time", delta);
 			}
-			List<CategAmountCell> res = protos.stream().map(cacp -> cacp.materialize(usedCurrency, engine.calendar, schema.currencyConvertor, scratchpad.getPrecisionSetting())).collect(toList());
-			return res;
 		}
 		else {
-			return fetchSkeleton(engine, scratchpad.getMainIds(engine, this), resetCache(engine)).stream().map(cacp -> cacp.materialize(usedCurrency, engine.calendar, schema.currencyConvertor, scratchpad.getPrecisionSetting())).collect(toList());
+			protos = fetchSkeleton(engine, scratchpad.getMainIds(engine, this), resetCache(engine));
 		}
+
+		long start = System.currentTimeMillis();
+		CachingCalendarConverter calendar = engine.calendar;
+		CurrencyConvertor currencyConvertor = schema.currencyConvertor;
+		NiPrecisionSetting precisionSetting = scratchpad.getPrecisionSetting();
+		List<CategAmountCell> cells = protos.stream()
+				.map(cacp -> cacp.materialize(usedCurrency, calendar, currencyConvertor, precisionSetting))
+				.collect(toList());
+		long delta = System.currentTimeMillis() - start;
+		engine.timer.putMetaInNode("materialize_time", delta);
+
+		return cells;
 	}
-	
+
 	protected String buildSupplementalCondition(NiReportsEngine engine, Set<Long> ids, FundingFetcherContext context) {
 		return "1=1";
 	}

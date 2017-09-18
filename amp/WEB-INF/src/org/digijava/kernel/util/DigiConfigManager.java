@@ -62,9 +62,9 @@ import org.xml.sax.SAXException;
 public class DigiConfigManager {
 
     private static final String ENV_SMTP_HOST = "SMTP_HOST";
-    private static final String ENV_SMTP_USER = "SMTP_USER";
+    private static final String ENV_SMTP_FROM = "SMTP_FROM";
     private static final String PROP_SMTP_HOST = "smtpHost";
-    private static final String PROP_SMTP_USER = "smtpUser";
+    private static final String PROP_SMTP_FROM = "smtpFrom";
 
     private static Logger logger = Logger.getLogger(DigiConfigManager.class);
 
@@ -111,15 +111,15 @@ public class DigiConfigManager {
     }
 
     private static void afterDigiConfigParse() {
-        attemptSmtpOverride(System.getenv(ENV_SMTP_HOST), System.getenv(ENV_SMTP_USER));
-        attemptSmtpOverride(System.getProperty(PROP_SMTP_HOST), System.getProperty(PROP_SMTP_USER));
+        attemptSmtpOverride(System.getenv(ENV_SMTP_HOST), System.getenv(ENV_SMTP_FROM));
+        attemptSmtpOverride(System.getProperty(PROP_SMTP_HOST), System.getProperty(PROP_SMTP_FROM));
     }
 
-    private static void attemptSmtpOverride(String host, String user) {
-        if (host != null && user != null) {
+    private static void attemptSmtpOverride(String host, String from) {
+        if (host != null && from != null) {
             Smtp smtp = new Smtp();
             smtp.setHost(host);
-            smtp.setUserName(user);
+            smtp.setFrom(from);
             digiConfig.setSmtp(smtp);
         }
     }

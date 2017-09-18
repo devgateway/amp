@@ -1,5 +1,5 @@
 const CONTEXT = 'GPI_REPORTS';
-const SETTINGS_DEFINITIONS_EP = '/rest/settings-definitions/gpi-reports;'
+const SETTINGS_DEFINITIONS_EP = '/rest/settings-definitions/gpi-reports';
 class Utils {     
     static initializeFilterWidget() {               
           return new ampFilter( {

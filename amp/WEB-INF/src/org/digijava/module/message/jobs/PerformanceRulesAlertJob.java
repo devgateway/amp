@@ -1,8 +1,10 @@
 package org.digijava.module.message.jobs;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 
 import org.apache.log4j.Logger;
@@ -11,6 +13,7 @@ import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.util.FMUtil;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
+import org.digijava.kernel.ampapi.endpoints.performance.matcher.PerformanceRuleMatcher;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -39,9 +42,9 @@ public class PerformanceRulesAlertJob extends ConnectionCleaningJob implements S
         if (isPerformanceAlertIssuesEnabled()) {
             List<Long> actIds = org.digijava.module.aim.util.ActivityUtil.getValidatedActivityIds();
             
-            List<AmpActivityVersion> activitiesWithPerformanceIssues = processActivitiesWithPerformanceRules(actIds);
-            if (activitiesWithPerformanceIssues != null) {
-                new PerformanceRuleAlertTrigger(activitiesWithPerformanceIssues);
+            Map<AmpActivityVersion, List<PerformanceRuleMatcher>> actsWithPerfIssues = processActivities(actIds);
+            if (!actsWithPerfIssues.isEmpty()) {
+                new PerformanceRuleAlertTrigger(actsWithPerfIssues);
             }
         } else {
             logger.info("Performance rule module is not enabled...");
@@ -60,8 +63,9 @@ public class PerformanceRulesAlertJob extends ConnectionCleaningJob implements S
      * 
      * @param actIds
      */
-    private List<AmpActivityVersion> processActivitiesWithPerformanceRules(List<Long> actIds) {
-        List<AmpActivityVersion> activitiesWithPerformanceIssues = new ArrayList<>();
+    private Map<AmpActivityVersion, List<PerformanceRuleMatcher>> processActivities(List<Long> actIds) {
+        
+        Map<AmpActivityVersion, List<PerformanceRuleMatcher>> activitiesWithPerformanceIssues = new HashMap<>();
         PerformanceRuleManager ruleManager = PerformanceRuleManager.getInstance();
         
         boolean noMatcherFound = ruleManager.getPerformanceRuleMatchers().isEmpty();
@@ -72,6 +76,7 @@ public class PerformanceRulesAlertJob extends ConnectionCleaningJob implements S
         
         for (Long actId : actIds) {
             String lockKey = null;
+            List<PerformanceRuleMatcher> failedRuleMatchers = new ArrayList<>();
             try {
                 lockKey = ActivityGatekeeper.lockActivity(Long.toString(actId), 0L);
                 if (lockKey != null) {
@@ -81,7 +86,8 @@ public class PerformanceRulesAlertJob extends ConnectionCleaningJob implements S
                     AmpCategoryValue matchedLevel = null;
                     
                     if (!noMatcherFound) {
-                        matchedLevel = ruleManager.matchActivity(a);
+                        failedRuleMatchers = ruleManager.matchActivity(a);
+                        matchedLevel = ruleManager.getHigherLevelFromMatchers(failedRuleMatchers);
                     }
                    
                     if (!Objects.equals(activityLevel, matchedLevel)) {
@@ -91,14 +97,12 @@ public class PerformanceRulesAlertJob extends ConnectionCleaningJob implements S
                                 actId, activityLevel == null ? null : activityLevel.getLabel(),
                                         matchedLevel == null ? null : matchedLevel.getLabel()));
                         
-                        if (matchedLevel != null) {
-                            activitiesWithPerformanceIssues.add(updActivity);
-                        }
-                        
                         logger.info(String.format("... done, new amp_activity_id=%d\n", 
                                 updActivity.getAmpActivityId()));
-                    } else if (activityLevel != null) {
-                        activitiesWithPerformanceIssues.add(a);
+                    } 
+                    
+                    if (!failedRuleMatchers.isEmpty()) {
+                        activitiesWithPerformanceIssues.put(a, failedRuleMatchers);
                     }
                 } else {
                     logger.error(String.format("Activity is locked, amp_activity_id=%d", actId));

@@ -1,9 +1,10 @@
 package org.digijava.module.message.triggers;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
+import org.digijava.kernel.ampapi.endpoints.performance.matcher.PerformanceRuleMatcher;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.message.helper.Event;
 import org.digijava.module.message.helper.MessageConstants;
@@ -16,8 +17,8 @@ public class PerformanceRuleAlertTrigger extends Trigger {
     private static final String[] PARAMETER_STRINGS = new String[] { PARAM_TRIGGER_SENDER };
 
     public PerformanceRuleAlertTrigger(Object source) {
-        if (!(source instanceof List)) {
-            throw new RuntimeException("Incompatible object. Source must be a ! " + List.class);
+        if (!(source instanceof Map)) {
+            throw new RuntimeException("Incompatible object. Source must be a ! " + Map.class);
         }
         
         this.source = source;
@@ -27,10 +28,11 @@ public class PerformanceRuleAlertTrigger extends Trigger {
     @Override
     protected Event generateEvent() {
         Event e = new Event(PerformanceRuleAlertTrigger.class);
-        List<AmpActivityVersion> activities = (ArrayList<AmpActivityVersion>) source;
+        Map<AmpActivityVersion, List<PerformanceRuleMatcher>> activitiesWithPerfIssues = 
+                (Map<AmpActivityVersion, List<PerformanceRuleMatcher>>) source;
         
         PerformanceRuleManager manager = PerformanceRuleManager.getInstance();
-        String performanceIssues = manager.buildPerformanceIssuesMessage(activities);
+        String performanceIssues = manager.buildPerformanceIssuesMessage(activitiesWithPerfIssues);
         
         e.getParameters().put(PARAM_TRIGGER_SENDER, MessageConstants.SENDER_TYPE_SYSTEM);
         e.getParameters().put(PARAM_DATA_PERFORMANCE_ISSUES, performanceIssues);

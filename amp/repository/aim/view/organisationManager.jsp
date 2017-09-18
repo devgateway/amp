@@ -66,6 +66,7 @@
 	-->
 
 </script>
+<div class="admin-content">
 <digi:secure actions="ADMIN">
 <h1 class="admintitle"><digi:trn>Organization manager</digi:trn></h1>
 </digi:secure>
@@ -566,3 +567,4 @@
 				<c:if test="${!aimOrgManagerForm.adminSide}"></table></div></td></tr></c:if></table>
 					</td>
 					</tr></table> </digi:form>
+</div>

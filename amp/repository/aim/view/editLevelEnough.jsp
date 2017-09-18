@@ -37,7 +37,7 @@
 	}
 
 </script>
-
+<div class="admin-content">
 <digi:instance property="aimAddSectorForm" />
 <digi:context name="digiContext" property="context" />
 <digi:form action="/addSector.do" method="post">
@@ -241,7 +241,7 @@
 													</digi:trn>
 												</b>
 											</td>
-											<td background="module/aim/images/corner-r.gif" height="17" width=17></td>
+											<td class="header-corner" height="17" width=17></td>
 										</tr>
 									</table>
 									</td>
@@ -253,7 +253,7 @@
 										<field:display name="View Schemes Link" feature="Sectors">
 											<tr>
 												<td class="inside"><digi:img src="module/aim/images/arrow-014E86.gif"
-													width="15" height="10" /> <c:set var="translation">
+													width="15" height="10" styleClass="list-item-image" /> <c:set var="translation">
 													<digi:trn key="aim:clickToViewSchemes">Click here to the Schemes</digi:trn>
 												</c:set> <digi:link href="/getSectorSchemes.do"
 													title="${translation}">
@@ -265,7 +265,7 @@
 										</field:display>
 										<tr>
 											<td class="inside"><digi:img src="module/aim/images/arrow-014E86.gif"
-												width="15" height="10" /> <c:set var="translation">
+												width="15" height="10" styleClass="list-item-image"/> <c:set var="translation">
 												<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 											</c:set> <digi:link href="/admin.do" title="${translation}">
 												<digi:trn key="aim:AmpAdminHome">
@@ -287,7 +287,7 @@
 	</tr>
 </table>
 </digi:form>
-
+</div>
 
 
 

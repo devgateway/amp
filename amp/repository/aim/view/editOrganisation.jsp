@@ -13,6 +13,7 @@
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css"> 
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css_2/organization-manager.css"> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>
@@ -20,83 +21,11 @@
 <%@page import="org.digijava.module.aim.dbentity.AmpOrganisationDocument"%>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
+<div class="admin-content">
 <script language="JavaScript" type="text/javascript">
     <jsp:include page="scripts/calendar.js.jsp"  />
 </script>
 <jsp:include page="scripts/newCalendar.jsp"  />
-
- 
-
-
-
-<style type="text/css">
-    .selectStyle {
-        Font-size:11px;
-        font-family:Arial;
-        width:210px;
-    }
-    .tableEven {
-        background-color:#dbe5f1;
-        border-left:none;
-        border-right:none;
-        font-size: 10px;
-        font-family:Arial;
-    }
-
-    .tableOdd {
-        background-color:#FFFFFF;
-        border-left:none;
-        border-right:none;
-        font-size: 11px;
-        font-family:Arial;
-       !important
-
-    }
-    .tableHeader {
-        background-color:#c7d4db;
-        color:white;
-        padding:2px;
-    }
-    .Hovered {
-        background-color:#a5bcf2;
-    }
-    input,textArea{
-        font-family:Arial;
-        font-size: 11px;
-    }
-    .tdClass{
-        font-family:Arial;
-        font-size: 11px;
-    }
-    .tdBoldClass{
-        font-family:Arial;
-        font-size: 11px;
-        font-weight:bold;
-    }
-     .legendClass{
-        font-family:Arial;
-        font-size: 13px;
-        font-weight:bold;
-        color:#ffffff;
-    }
-    div.charcounter-progress-container {
-	width:50%; 
-	height:3px;
-	max-height:3px;
-	border: 1px solid gray; 
-	filter:alpha(opacity=20); 
-	opacity:0.2;
-}
-
-div.charcounter-progress-bar {
-	height:3px; 
-	max-height:3px;
-	font-size:3px;
-	background-color:#5E8AD1;
-}
-    
-</style>
-
 <jsp:include page="/repository/aim/view/addEditOrganizationsPopin.jsp"  />
 <jsp:include page="/repository/aim/view/addOrganizationPopin.jsp"  />
 <jsp:include page="/repository/aim/view/components/contactScripts.jsp"  />
@@ -1129,7 +1058,7 @@ border-right: 1px solid rgb(208, 208, 208);
                                                     <html:text name="aimAddOrgForm" property="fundingorgid" size="8" styleId="fundingorgid"/>
                                                 </td>
                                                 <td height="1" align="center" colspan="5"><digi:img
-                                                        src="/TEMPLATE/ampTemplate/images/arrow-014E86.gif" width="15"
+                                                        src="/TEMPLATE/ampTemplate/images/arrow-014E86.gif" styleClass="list-item-image" width="15"
                                                         height="10" /> <a href="javascript:addGroup()"> <digi:trn>Add a Group</digi:trn>
                                                     </a></td>
                                             </tr>
@@ -1176,7 +1105,7 @@ border-right: 1px solid rgb(208, 208, 208);
                                             <td width="100%" colspan="2">
                                                
                                                         <fieldset style="margin-left:10px; margin-right:10px;"><legend class="legendClass"><digi:trn>General Information</digi:trn></legend>
-														 <div style="float:right">
+														 <div class="exportContactIcon">
                                                     <a href="javascript:exportGeneralInfo();" >
                                                         <digi:img src="/TEMPLATE/ampTemplate/images/xls_icon.jpg" border="0"/>
                                                     </a>                        
@@ -1652,8 +1581,8 @@ border-right: 1px solid rgb(208, 208, 208);
                     <td colspan="2">
                       
                         <fieldset style="margin-left:10px; margin-right:10px;">
-                            <legend align="left" class="legendClass"><digi:trn>Budget Information</digi:trn></legend>
-							  <div style="float:right">
+                            <legend class="legendClass"><digi:trn>Budget Information</digi:trn></legend>
+							  <div class="exportContactIcon">
                             <a href="javascript:exportInfo('exportBudgetInfo')" >
                                 <digi:img src="/TEMPLATE/ampTemplate/images/xls_icon.jpg" border="0"/>
                             </a>
@@ -1974,8 +1903,8 @@ border-right: 1px solid rgb(208, 208, 208);
 	    <td colspan="2">
 	        
 	        <fieldset style="margin-left:10px; margin-right:10px; margin-bottom:15px;">
-	            <legend align="left" class="legendClass"><digi:trn>Contact Information</digi:trn></legend>
-				<div style="float:right">
+	            <legend class="legendClass"><digi:trn>Contact Information</digi:trn></legend>
+				<div class="exportContactIcon">
                                      <a href="javascript:exportInfo('exportContactInfo')" >
                                          <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/xls_icon.jpg" border="0"/>
                                      </a>
@@ -2266,3 +2195,4 @@ border-right: 1px solid rgb(208, 208, 208);
     
     var enterBinder	= new EnterHitBinder('addOrgBtn');
 </script>
+</div>

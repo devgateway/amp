@@ -8,12 +8,13 @@ import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.hibernate.jdbc.Work;
 
-public class AmpJobsUtil {
+public final class AmpJobsUtil {
+    private AmpJobsUtil() {
+
+    }
 
     public static void populateRequest() {
         if (TLSUtils.getRequest() == null) {

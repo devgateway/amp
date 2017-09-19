@@ -58,41 +58,18 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 	@Override
 	public void executeInternal(JobExecutionContext context) throws JobExecutionException {
 
-		if (TLSUtils.getRequest() == null) {
-			TLSUtils.populateMockTlsUtils();
-		}
-		
+	    AmpJobsUtil.populateRequest();		
 		Long ampTeamId = FeaturesUtil
 				.getGlobalSettingValueLong(GlobalSettingsConstants.WORKSPACE_TO_RUN_REPORT_FUNDING_GAP_NOTIFICATION);
-		final ValueWrapper<Long> ampTeamMemberId = new ValueWrapper<Long>(null);
 		// default percentage is 1
 		String measureA = MeasureConstants.ACTUAL_DISBURSEMENTS;
 		String measureB = MeasureConstants.PLANNED_DISBURSEMENTS;
-		// we set the team to run the report
 
-		// we need to fetch one team member of the configured team
-		final String query = "select min(tm.amp_team_mem_id) from amp_team_member tm ,amp_team  t "
-				+ " where tm.amp_member_role_id in(1,3) " + " and tm.amp_team_id=t.amp_team_id "
-				+ " and t.amp_team_id= " + ampTeamId + " group by tm.amp_team_id";
-
-		PersistenceManager.getSession().doWork(new Work() {
-			public void execute(Connection conn) throws SQLException {
-				RsInfo ampTeamMemberIdQry = SQLUtils.rawRunQuery(conn, query, null);
-				while (ampTeamMemberIdQry.rs.next()) {
-					ampTeamMemberId.value = ampTeamMemberIdQry.rs.getLong(1);
-				}
-				ampTeamMemberIdQry.close();
-			}
-
-		});
-
-		if (ampTeamMemberId.value != null) {
-			TeamUtil.setupFiltersForLoggedInUser(TLSUtils.getRequest(), TeamUtil.getAmpTeamMember(ampTeamMemberId.value));
-			// we first set the current member since its needed by features util
-
+		if (AmpJobsUtil.setTeamForNonRequestReport(ampTeamId)) {
 			Date lowerDateReport = null;
 			Date upperDateReport = null;
-			// we first need to check if we are DAYS_AFTER_QUARTER days after the last quarter
+			// we first need to check if we are DAYS_AFTER_QUARTER days after 
+			// the last quarter
 			// ended
 			Quarter previousQuarter = checkIfShouldRunReport();
 			if (previousQuarter != null) {

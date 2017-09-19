@@ -210,11 +210,13 @@ public class AmpStructuresFormSectionFeature extends
                         List<JsonBean> coordinates = new ArrayList<>();
                         JsonBean data = new JsonBean();
                         AmpStructure structure = structureModel.getObject();
-                        for (AmpStructureCoordinate coord : structure.getCoordinates()) {
-                            JsonBean coordinate = new JsonBean();
-                            coordinate.set("latitude", coord.getLatitude());
-                            coordinate.set("longitude", coord.getLongitude());
-                            coordinates.add(coordinate);
+                        if (structure.getCoordinates() != null) {
+                            for (AmpStructureCoordinate coord : structure.getCoordinates()) {
+                                JsonBean coordinate = new JsonBean();
+                                coordinate.set("latitude", coord.getLatitude());
+                                coordinate.set("longitude", coord.getLongitude());
+                                coordinates.add(coordinate);
+                            }
                         }
                         data.set("coordinates", coordinates);
                         data.set("title", TranslatorWorker.translateText("Coordinates"));

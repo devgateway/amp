@@ -203,7 +203,7 @@ gulp.task('build', ['clean', 'build-js', 'build-css'/*, 'revision'*/, 'copy-stuf
 gulp.task('build-js', ['clean', 'browserify'], function() {
   return gulp.src(paths.app.scripts.built)
   	//.pipe(react())
-    .pipe(g.streamify(g.uglify().on('error', gulpUtil.log)))
+    //.pipe(g.streamify(g.uglify().on('error', gulpUtil.log)))
     .pipe(gulp.dest(paths.dist.scripts));
 });
 

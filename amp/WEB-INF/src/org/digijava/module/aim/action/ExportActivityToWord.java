@@ -16,6 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.TreeSet;
 
 import javax.servlet.ServletContext;
@@ -61,6 +62,7 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpStructure;
+import org.digijava.module.aim.dbentity.AmpStructureCoordinate;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.dbentity.IPAContractDisbursement;
@@ -1761,12 +1763,28 @@ public class ExportActivityToWord extends Action {
                 eshProjectCostTable.addRowData(new ExportSectionHelperRowData(
                         "Description", null, null, true).addRowData(struc
                         .getDescription()));
-                eshProjectCostTable.addRowData(new ExportSectionHelperRowData(
-                        "Latitude", null, null, true).addRowData(struc
-                        .getLatitude()));
-                eshProjectCostTable.addRowData(new ExportSectionHelperRowData(
-                        "Longitude", null, null, true).addRowData(struc
-                        .getLongitude()));
+                if (struc.getLatitude() != null) {
+                    eshProjectCostTable.addRowData(new ExportSectionHelperRowData(
+                            "Latitude", null, null, true).addRowData(struc
+                            .getLatitude()));
+                }
+                if (struc.getLongitude() != null) {
+                    eshProjectCostTable.addRowData(new ExportSectionHelperRowData(
+                            "Longitude", null, null, true).addRowData(struc
+                            .getLongitude()));
+                }
+
+                if (struc.getCoordinates() != null && struc.getCoordinates().size() > 0) {
+                    StringJoiner coordinatesOutput = new StringJoiner("\n");
+                    for (AmpStructureCoordinate coordinate : struc.getCoordinates()) {
+                        coordinatesOutput.add(coordinate.getLatitude() + " " + coordinate.getLongitude());
+                    }
+
+                    eshProjectCostTable.addRowData(new ExportSectionHelperRowData(
+                            "Coordinates", null, null, true)
+                            .addRowData(coordinatesOutput.toString()));
+
+                }
                 retVal.add(createSectionTable(eshProjectCostTable, request, ampContext));
             }
 

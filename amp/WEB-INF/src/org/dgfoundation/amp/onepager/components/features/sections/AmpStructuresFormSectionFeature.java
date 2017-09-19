@@ -81,53 +81,6 @@ public class AmpStructuresFormSectionFeature extends
 			protected void onPopulateItem(
 					org.dgfoundation.amp.onepager.components.ListItem<AmpStructure> item) {
 				IModel<AmpStructure> structureModel = item.getModel();
-//				AmpSelectFieldPanel<AmpStructureType> structureTypes = new  AmpSelectFieldPanel<AmpStructureType>("structureTypes", new PropertyModel<AmpStructureType>(structureModel, "type"),
-//						new LoadableDetachableModel<List<AmpStructureType>>() {
-//							private static final long serialVersionUID = 1L;
-//		
-//							@Override
-//							protected List<AmpStructureType> load() {
-//								return new ArrayList<AmpStructureType>(AmpStructuresFormSectionFeature.this.structureTypes);
-//							}		
-//						}, 
-//						"Structure Type",true, false,  new ChoiceRenderer<AmpStructureType>("name","typeId")) ;
-//
-//				structureTypes.getChoiceContainer().setRequired(true);
-//				structureTypes.setOutputMarkupId(true);
-//                structureTypes.getChoiceContainer().add(new AttributeModifier("style", "max-width: 100px;margin-bottom:20px;"));
-//				item.add(structureTypes);
-//								                
-                final TextField<String> coords = new TextField<String>("coords",
-                        new PropertyModel<String>(structureModel, "coords"));
-                coords.add(new AjaxFormComponentUpdatingBehavior("onchange") {
-                    @Override
-                    protected void onUpdate(AjaxRequestTarget target) {
-                        if (coords.getDefaultModelObject() != null) {
-                            JsonBean data = JsonBean.getJsonBeanFromString(coords.getDefaultModelObject().toString());
-                            List<Map<String, String>> coordinates = (List<Map<String, String>>) data.get("coordinates");
-                            AmpStructure structure = structureModel.getObject();
-                            if (structure.getCoordinates() == null) {
-                                structure.setCoordinates(new LinkedHashSet<>());
-                            } else {
-                                structure.getCoordinates().clear();
-                            }
-                            if (coordinates != null) {
-                                for (Map<String, String> pair : coordinates) {
-                                    AmpStructureCoordinate ampStructureCoordinate = new AmpStructureCoordinate();
-                                    ampStructureCoordinate.setStructure(structure);
-                                    ampStructureCoordinate.setLatitude(String.valueOf(pair.get("latitude")));
-                                    ampStructureCoordinate.setLongitude(String.valueOf(pair.get("longitude")));
-                                    structure.getCoordinates().add(ampStructureCoordinate);
-                                }
-                            }
-
-                        }
-                    }
-                });
-                
-                coords.setOutputMarkupId(true);                                
-                item.add(coords);
-				
 				final AmpTextFieldPanel<String> name = new AmpTextFieldPanel<String>("name", new PropertyModel<String>(structureModel, "title"), "Structure Title",true, true);
 				name.setOutputMarkupId(true);
 				name.getTextContainer().add(new AttributeAppender("size", new Model("10px"), ";"));
@@ -156,6 +109,13 @@ public class AmpStructuresFormSectionFeature extends
 				longitude.setTextContainerDefaultMaxSize();
 
 				longitude.getTextContainer().add(new AttributeAppender("size", new Model("7px"), ";"));
+				longitude.getTextContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
+					@Override
+					protected void onUpdate(AjaxRequestTarget target) {
+						longitude.getTextContainer().setEnabled(!hasCoordinates(structureModel));
+						target.add(longitude);
+					}
+				});
 				item.add(longitude);
 
 				final AmpTextFieldPanel<String> latitude = new AmpTextFieldPanel<String>("latitude", new PropertyModel<String>(structureModel, "latitude"),"Structure Latitude", true, true);
@@ -163,6 +123,13 @@ public class AmpStructuresFormSectionFeature extends
 				latitude.setOutputMarkupId(true);
 
 				latitude.getTextContainer().add(new AttributeAppender("size", new Model("7px"), ";"));
+				latitude.getTextContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
+					@Override
+					protected void onUpdate(AjaxRequestTarget target) {
+						latitude.getTextContainer().setEnabled(!hasCoordinates(structureModel));
+						target.add(latitude);
+					}
+				});
 				item.add(latitude);
 
 				final AmpTextFieldPanel<String> shape = new AmpTextFieldPanel<String>("shape", new PropertyModel<String>(structureModel, "shape"),"Structure Shape", true, true);
@@ -170,11 +137,6 @@ public class AmpStructuresFormSectionFeature extends
 				
 				shape.getTextContainer().add(new AttributeAppender("size", new Model("7px"), ";"));
 				item.add(shape);
-				
-				
-				//final AmpStructureImgListComponent<AmpStructure> imgList = new AmpStructureImgListComponent<AmpStructure>("structureImgList", "", structureModel, am);
-				//item.add(imgList);
-				
 				
 				ListEditorRemoveButton delbutton = new ListEditorRemoveButton("deleteStructure", "Delete Structure"){
 
@@ -196,14 +158,7 @@ public class AmpStructuresFormSectionFeature extends
 				};
                 item.add(delbutton);
 
-                final AmpAjaxLinkField openMapPopup = new AmpAjaxLinkField("openMapPopup", "Map", "Map") {
-                    @Override
-                    public void onClick(AjaxRequestTarget target) {
-                        target.appendJavaScript("gisPopup($('#" + this.getMarkupId() + "')[0]); return false;");
-                    }
-                };
-                item.add(openMapPopup);
-                final AmpAjaxLinkField viewCoords = new AmpAjaxLinkField("viewCoords", "Map", "View") {
+				final AmpAjaxLinkField viewCoords = new AmpAjaxLinkField("viewCoords", "Map", "View") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
                         List<JsonBean> coordinates = new ArrayList<>();
@@ -227,7 +182,57 @@ public class AmpStructuresFormSectionFeature extends
                         target.appendJavaScript("viewCoordinates('" + data.asJsonString() + "');");
                     }
                 };
-                item.add(viewCoords);
+				item.add(viewCoords);
+
+				final AmpAjaxLinkField openMapPopup = new AmpAjaxLinkField("openMapPopup", "Map", "Map") {
+					@Override
+					public void onClick(AjaxRequestTarget target) {
+						latitude.getTextContainer().setEnabled(true);
+						longitude.getTextContainer().setEnabled(true);
+						viewCoords.getButton().setEnabled(true);
+						target.add(latitude);
+						target.add(longitude);
+						target.add(viewCoords);
+						target.appendJavaScript("gisPopup($('#" + this.getMarkupId() + "')[0]); return false;");
+					}
+				};
+				item.add(openMapPopup);
+
+				final TextField<String> coords = new TextField<String>("coords",
+						new PropertyModel<String>(structureModel, "coords"));
+				coords.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+					@Override
+					protected void onUpdate(AjaxRequestTarget target) {
+						if (coords.getDefaultModelObject() != null) {
+							JsonBean data = JsonBean.getJsonBeanFromString(coords.getDefaultModelObject().toString());
+							List<Map<String, String>> coordinates = (List<Map<String, String>>) data.get("coordinates");
+							AmpStructure structure = structureModel.getObject();
+							if (structure.getCoordinates() == null) {
+								structure.setCoordinates(new LinkedHashSet<>());
+							} else {
+								structure.getCoordinates().clear();
+							}
+							if (coordinates != null) {
+								for (Map<String, String> pair : coordinates) {
+									AmpStructureCoordinate ampStructureCoordinate = new AmpStructureCoordinate();
+									ampStructureCoordinate.setStructure(structure);
+									ampStructureCoordinate.setLatitude(String.valueOf(pair.get("latitude")));
+									ampStructureCoordinate.setLongitude(String.valueOf(pair.get("longitude")));
+									structure.getCoordinates().add(ampStructureCoordinate);
+								}
+							}
+							viewCoords.getButton().setEnabled(hasCoordinates(structureModel));
+							target.add(viewCoords);
+						}
+
+					}
+				});
+
+				coords.setOutputMarkupId(true);
+				item.add(coords);
+				latitude.getTextContainer().setEnabled(!hasCoordinates(structureModel));
+				longitude.getTextContainer().setEnabled(!hasCoordinates(structureModel));
+				viewCoords.getButton().setEnabled(hasCoordinates(structureModel));
 			}
 		};
 		containter.add(list);
@@ -260,7 +265,11 @@ public class AmpStructuresFormSectionFeature extends
 		
 		
 	}
-	
-	
+
+	private boolean hasCoordinates(IModel<AmpStructure> structureModel) {
+		return structureModel.getObject().getCoordinates() != null && structureModel.getObject().
+				getCoordinates().size() > 0;
+	}
+
 
 }

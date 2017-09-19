@@ -1689,6 +1689,7 @@ public class EditActivity extends Action {
     for (AmpStructure structure : structures) {
         Hibernate.initialize(structure.getImages());
         Hibernate.initialize(structure.getType());
+        Hibernate.initialize(structure.getCoordinates());
     }
 
     eaForm.setStructures(structures);

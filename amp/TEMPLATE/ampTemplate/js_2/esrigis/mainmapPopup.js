@@ -164,14 +164,21 @@ function selectLocationCallerShape(selectedGraphic){
 	    }	    
 	    window.opener.postvaluesx(shapeInput);	    
 	}
-   
     if ("createEvent" in document) {
         var evt = document.createEvent("HTMLEvents");
         evt.initEvent("change", false, true);
         coordsInput.dispatchEvent(evt);
+        var evtLatitude = document.createEvent("HTMLEvents");
+        evtLatitude.initEvent("change", false, true);
+        latitudeInput.dispatchEvent(evtLatitude);
+        var evtLongitude = document.createEvent("HTMLEvents");
+        evtLongitude.initEvent("change", false, true);
+        longitudeInput.dispatchEvent(evt);
     } else {
     	coordsInput.fireEvent("onchange");
-    } 
+        latitudeInput.fireEvent("onchange");
+        longitudeInput.fireEvent("onchange");
+    }
  
 	window.close();
 }

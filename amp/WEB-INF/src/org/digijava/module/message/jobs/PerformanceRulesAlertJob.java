@@ -92,6 +92,7 @@ public class PerformanceRulesAlertJob extends ConnectionCleaningJob implements S
                    
                     if (!Objects.equals(activityLevel, matchedLevel)) {
                         AmpActivityVersion updActivity = updateActivity(a);
+                        a = updActivity;
                         
                         logger.info(String.format("\tactivity %d, updated performance alert level from <%s> to <%s>...",
                                 actId, activityLevel == null ? null : activityLevel.getLabel(),
@@ -99,7 +100,7 @@ public class PerformanceRulesAlertJob extends ConnectionCleaningJob implements S
                         
                         logger.info(String.format("... done, new amp_activity_id=%d\n", 
                                 updActivity.getAmpActivityId()));
-                    } 
+                    }
                     
                     if (!failedRuleMatchers.isEmpty()) {
                         activitiesWithPerformanceIssues.put(a, failedRuleMatchers);

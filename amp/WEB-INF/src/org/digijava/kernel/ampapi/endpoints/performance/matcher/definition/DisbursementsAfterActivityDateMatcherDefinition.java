@@ -19,7 +19,7 @@ public class DisbursementsAfterActivityDateMatcherDefinition extends Performance
     
     public DisbursementsAfterActivityDateMatcherDefinition() {
         super("disbursementsAfterActivityDate", "Disbursements after selected activity date", 
-                String.format("A disbursement happened after the '%s'", 
+                String.format("A disbursement happened after the '{%s}'", 
                         PerformanceRuleConstants.ATTRIBUTE_ACTIVITY_DATE));
         
         Function<PerformanceRuleAttributeType, List<PerformanceRuleAttributeOption>> possibleValuesSupplier = 

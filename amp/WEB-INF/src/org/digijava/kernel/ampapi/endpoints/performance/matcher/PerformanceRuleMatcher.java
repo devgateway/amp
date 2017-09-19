@@ -77,8 +77,8 @@ public abstract class PerformanceRuleMatcher {
         }
     }
     
-    public String getMessage() {
-        return definition.getDescription();
+    public PerformanceRuleMatcherDefinition getDefinition() {
+        return definition;
     };
     
     public Date getDeadline(Date selectedDate, int timeUnit, int timeAmount) {

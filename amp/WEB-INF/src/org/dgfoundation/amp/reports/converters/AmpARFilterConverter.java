@@ -40,7 +40,7 @@ import org.digijava.module.common.util.DateTimeUtil;
  * Old AmpARFilter structure stores multiple information like the actual report filters, report settings,
  * sorting info...
  *
- * FIXME Not sure why activity columns are converted to pledge columns here since AmpFiltersConverter does this job too.
+ * TODO AMP-26970 activity columns are converted to pledge columns here and in AmpFiltersConverter as well.
  *
  * @author Nadejda Mandrescu
  */

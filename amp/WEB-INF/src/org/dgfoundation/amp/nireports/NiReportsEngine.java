@@ -245,7 +245,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	}
 
 	/**
-	 * Used only for computing workspace filters since NiReports keeps both filtered and unfiltered funding.
+	 * Filter activities by funding.
 	 */
 	private void applyFundingFilters() throws Exception {
 		fetchFunding();

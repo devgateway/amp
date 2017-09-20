@@ -132,7 +132,10 @@ public class AmpOfflineService {
 
     public void deleteRelease(AmpOfflineRelease release) {
         try {
-            Files.delete(getReleaseFile(release).toPath());
+            File releaseFile = getReleaseFile(release);
+            if (releaseFile.exists()) {
+                Files.delete(releaseFile.toPath());
+            }
         } catch (IOException e) {
             logger.warn("Failed to delete release file.", e);
         }
@@ -146,7 +149,7 @@ public class AmpOfflineService {
         return getReleaseFile(release);
     }
 
-    private File getReleaseFile(AmpOfflineRelease release) {
+    public File getReleaseFile(AmpOfflineRelease release) {
         DateFormat dateFormat = new SimpleDateFormat(EPConstants.ISO8601_DATE_FORMAT);
         String groupDir = release.getVersion() + "-" + dateFormat.format(release.getDate());
         return new File(new File(Constants.AMP_OFFLINE_RELEASES, groupDir), release.toFileName());

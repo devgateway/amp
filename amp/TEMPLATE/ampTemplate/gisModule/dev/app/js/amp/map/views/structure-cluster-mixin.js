@@ -66,10 +66,9 @@ module.exports = {
     }
 
     var marker = null;
-
     //Try and show icons if looking at sectors
     if (self.structureMenuModel.get('filterVertical') === 'Primary Sector' &&
-      self.rawData.features.length < self.MAX_NUM_FOR_ICONS) {
+      self.rawData.features.length < self.maxNumberOfIcons) {
 
       var filterVertical = self.structureMenuModel.get('filterVertical');
       var sectorCode = 0; // 0 is 'various sectors icon'

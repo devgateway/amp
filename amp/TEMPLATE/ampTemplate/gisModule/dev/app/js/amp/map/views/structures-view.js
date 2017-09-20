@@ -120,7 +120,7 @@ module.exports = Backbone.View
 			  feature.geometry.coordinates[0]);
 
 	  // Calculate only one time and not for all points (we can have thousands).
-	  if (self.MAX_NUM_FOR_ICONS === -1) {
+	  if (self.maxNumberOfIcons === -1) {
 		  //TODO: Move this code to a config class.        
 		  var useIconsForSectors = app.data.generalSettings.get('use-icons-for-sectors-in-project-list');
 		  var maxIcons = app.data.generalSettings.get('max-locations-icons');
@@ -129,19 +129,19 @@ module.exports = Backbone.View
 		  if (useIconsForSectors === true) {
 			  if (maxIcons !== '') {
 				  if (maxIcons === 0) {
-					  self.MAX_NUM_FOR_ICONS = 99999; //always show
+					  self.maxNumberOfIcons = 99999; //always show
 				  } else {
-					  self.MAX_NUM_FOR_ICONS = maxIcons;
+					  self.maxNumberOfIcons = maxIcons;
 				  }
 			  } else {
-				  self.MAX_NUM_FOR_ICONS = 0;
+				  self.maxNumberOfIcons = 0;
 			  }
 		  } else {
-			  self.MAX_NUM_FOR_ICONS = 0;
-		  }
-		  console.log('MAX_NUM_FOR_ICONS: ' + self.MAX_NUM_FOR_ICONS);
+			  self.maxNumberOfIcons = 0;
+		  }		  
 	  }
-	  if (self.rawData.features.length < self.MAX_NUM_FOR_ICONS &&
+	  
+	  if (self.rawData.features.length < self.maxNumberOfIcons &&
 			  self.structureMenuModel.get('filterVertical') === 'Primary Sector') {
 		  // create icon
 		  marker = self._createSectorMarker(latlng, feature);

@@ -55,7 +55,8 @@ public class SectorUtil {
 			AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME,
 			AmpClassificationConfiguration.TERTIARY_CLASSIFICATION_CONFIGURATION_NAME,
 			AmpClassificationConfiguration.QUATERNARY_CLASSIFICATION_CONFIGURATION_NAME,
-			AmpClassificationConfiguration.QUINARY_CLASSIFICATION_CONFIGURATION_NAME);
+			AmpClassificationConfiguration.QUINARY_CLASSIFICATION_CONFIGURATION_NAME,
+			AmpClassificationConfiguration.TAG_CLASSIFICATION_CONFIGURATION_NAME);
 
 	public static Collection searchForSector(String keyword, Long ampSecSchemeId) {
 		Session session = null;
@@ -738,11 +739,9 @@ public class SectorUtil {
 	}
 
 	/**
-	 * Returns All Configurations of Classifications in the right order
+	 * Returns All Configurations of Classifications in default order
 	 *
-	 * @return All Configurations
-	 * @throws DgException
-	 *             If exception occurred
+	 * @return All Configurations in default order
 	 */
 	public static List<AmpClassificationConfiguration> getAllClassificationConfigsOrdered() {
 

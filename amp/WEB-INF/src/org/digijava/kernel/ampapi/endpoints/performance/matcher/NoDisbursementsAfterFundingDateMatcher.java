@@ -39,22 +39,30 @@ public class NoDisbursementsAfterFundingDateMatcher extends PerformanceRuleMatch
 
     @Override
     public boolean match(AmpActivityVersion a) {
+        Date currentDate = new Date();
+        
         for (AmpFunding f : a.getFunding()) {
             Date fundingSelectedDate = getFundingDate(f, selectedFundingDate);
-            if (fundingSelectedDate != null && f.getFundingDetails() != null) {
+            if (fundingSelectedDate != null) {
                 Date deadline = getDeadline(fundingSelectedDate, timeUnit, timeAmount);
-                
-                boolean hasDisbursmentsAfterDeadline = f.getFundingDetails().stream()
-                        .filter(t -> t.getTransactionType() == Constants.DISBURSEMENT)
-                        .anyMatch(t -> t.getTransactionDate().after(deadline));
-                
-                if (hasDisbursmentsAfterDeadline) {
-                    return false;
+                if (deadline.before(currentDate)) {
+                    if (f.getFundingDetails() == null || f.getFundingDetails().isEmpty()) {
+                        return true;
+                    }
+                    
+                    boolean hasDisbursmentsAfterDeadline = f.getFundingDetails().stream()
+                            .filter(t -> t.getTransactionType() == Constants.DISBURSEMENT)
+                            .filter(t ->  t.getTransactionDate().before(currentDate))
+                            .anyMatch(t -> t.getTransactionDate().after(fundingSelectedDate));
+                    
+                    if (!hasDisbursmentsAfterDeadline) {
+                            return true;
+                    }
                 }
             }
         }
         
-        return true;
+        return false;
     }
 
     @Override

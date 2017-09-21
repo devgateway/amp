@@ -1004,7 +1004,7 @@
             <plugin>
                 <groupId>org.developmentgateway</groupId>
                 <artifactId>inccheckstyle-maven-plugin</artifactId>
-                <version>0.1</version>
+                <version>0.2</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

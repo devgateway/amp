@@ -74,7 +74,7 @@
 	}
 
 </script>
-
+<div class="admin-content">
 <digi:errors/>
 
 <digi:instance property="aimAddSectorForm" />
@@ -225,11 +225,11 @@
 
 															<td width="100%">	
 
-																<table width="100%" border="0"	 bgColor=#f4f4f2>
+																<table width="100%" border="0" class="form-layout" bgColor=#f4f4f2>
 
 																	<tr>
 
-																		<td width="40%" align="left">
+																		<td width="40%">
 
 																		<digi:trn key="aim:sectorName">Sector Name</digi:trn><font color="red">*</font>	
 
@@ -245,7 +245,7 @@
 
 																	<tr>
 
-																		<td width="40%" align="left">
+																		<td width="40%">
 
 																	        <digi:trn key="aim:sectorCode">Sector Code</digi:trn><font color="red">*</font>
 
@@ -261,7 +261,7 @@
 
 																	<tr>
 
-																		<td width="40%" align="left">
+																		<td width="40%" >
 
 																	        <digi:trn key="aim:sectorDescription">Description</digi:trn>	
 
@@ -322,25 +322,11 @@
 
 				<tr>
 
-					<td width="45%" align="right">
-
-					<%--
-
+					<td  align="center">
+										<%--
 						<html:submit value="Save" styleClass="dr-menu"/>--%>
-
-							<input  type="button" name="addBtn" class="dr-menu" value='<digi:trn jsFriendly="true" key="btn:save">Save</digi:trn>' onclick="updateScheme('<bean:write name="aimAddSectorForm" property="parentId" />')"/>
-
-					</td>
-					
-
-					<td width="10%" align="center">
-
+					    <input  type="button" name="addBtn" class="dr-menu" value='<digi:trn jsFriendly="true" key="btn:save">Save</digi:trn>' onclick="updateScheme('<bean:write name="aimAddSectorForm" property="parentId" />')"/>					
 						<html:reset  styleClass="dr-menu"><digi:trn key="btn:reset">Reset</digi:trn></html:reset>
-
-					</td>
-					
-					
-					<td width="45%" align="left">
 						<input type="button" value='<digi:trn jsFriendly="true" key="btn:cancel">Cancel</digi:trn>' class="dr-menu" onclick="return cancel()"/>
 					</td>
 					
@@ -410,7 +396,7 @@
 </table>
 
 </digi:form>
-
+</div>
 
 
 

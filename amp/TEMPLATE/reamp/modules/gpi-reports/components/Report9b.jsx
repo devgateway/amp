@@ -205,7 +205,7 @@ export default class Report9b extends Component {
                 name = header.columnName;
             }
         }
-        return name;
+        return Utils.capitalizeFirst(name);
     }
 
     getYearCell( addedGroups, row ) {
@@ -215,7 +215,7 @@ export default class Report9b extends Component {
             return ( <td className="year-col" rowSpan={matches.length}>{row[Constants.YEAR]}</td> )
         }
     }
-
+    
     showSelectedDates() {
         var filters = this.filter.serialize().filters;
         var displayDates = '';
@@ -309,18 +309,24 @@ export default class Report9b extends Component {
                                     <div className="stat-label">{this.getLocalizedColumnName( Constants.NATIONAL_FINANCIAL_REPORTING_PROCEDURES )}</div>
                                 </div>
                             </div>
-                            <div className="col-md-3">
+                            <div className="col-md-2">
                                 <div className="indicator-stat-wrapper">
                                     <div className="stat-value">{this.props.mainReport.summary[Constants.NATIONAL_AUDITING_PROCEDURES]}</div>
                                     <div className="stat-label">{this.getLocalizedColumnName( Constants.NATIONAL_AUDITING_PROCEDURES )}</div>
                                 </div>
                             </div>
-                            <div className="col-md-3">
+                            <div className="col-md-2">
                                 <div className="indicator-stat-wrapper">
                                     <div className="stat-value">{this.props.mainReport.summary[Constants.NATIONAL_PROCUREMENT_EXECUTION_PROCEDURES]}</div>
                                     <div className="stat-label">{this.getLocalizedColumnName( Constants.NATIONAL_PROCUREMENT_EXECUTION_PROCEDURES )}</div>
                                 </div>
                             </div>
+                            <div className="col-md-2">
+                                   <div className="indicator-stat-wrapper">
+                                        <div className="stat-value">{this.props.mainReport.summary[Constants.USE_OF_COUNTRY_SYSTEMS]}</div>
+                                        <div className="stat-label">{this.getLocalizedColumnName( Constants.USE_OF_COUNTRY_SYSTEMS )}</div>
+                                    </div>
+                            </div>                                    
                         </div>
                     }
                     <div className="container-fluid no-padding">
@@ -347,7 +353,7 @@ export default class Report9b extends Component {
                         </ul>
                     </div>
                     <div className="selection-legend">
-                        <div className="pull-right">{this.showSelectedDates()}</div>
+                        <div className="pull-right">{this.showSelectedDates().length > 0 ? this.props.translations['amp-gpi-reports:selected'] : ''} {this.showSelectedDates()}</div>
                     </div>
                     <div className="container-fluid no-padding">
                         <div className="dropdown">

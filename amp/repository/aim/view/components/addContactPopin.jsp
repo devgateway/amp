@@ -10,7 +10,9 @@
 <%@ taglib uri="/taglib/category" prefix="category"%>
 <%@ taglib uri="/taglib/aim" prefix="aim"%>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
+<digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 
+<div class="admin-content contact-form">
 <digi:context name="digiContext" property="context" />
 <digi:instance property="aimAddContactForm" />
 <html:hidden name="aimAddContactForm" property="contactId"
@@ -25,19 +27,19 @@
 		<div style="font-size:12px; margin-bottom:5px;"><digi:trn>Please search a contact before adding a new one to avoid contact duplications in database</digi:trn></div>
 			<table style="margin-bottom:10px;">
 				<tr>
-					<td align="right" style="font-size:12px;"><strong><digi:trn>Firstname</digi:trn></strong></td>
-					<td align="left" style="padding-right:10px;"><html:text property="firstName" styleClass="inputx" size="30"
+					<td  style="font-size:12px;"><strong><digi:trn>Firstname</digi:trn></strong></td>
+					<td ><html:text property="firstName" styleClass="inputx" size="30"
 						styleId="name" onkeypress="checkKeyAndSearch(event);"/></td>
 
-					<td align="right" style="font-size:12px;"><strong><digi:trn>Lastname</digi:trn></strong></td>
-					<td align="left" style="padding-right:10px;"><html:text property="lastname" styleClass="inputx" size="30"
+					<td  style="font-size:12px;"><strong><digi:trn>Lastname</digi:trn></strong></td>
+					<td  ><html:text property="lastname" styleClass="inputx" size="30"
 						styleId="lastname" onkeypress="checkKeyAndSearch(event);"/></td>
-					<td align="left">
+					<td >
 					<html:button property="submitButton"
 						onclick="return searchContact()" styleId="searchBtn" styleClass="buttonx_sm">
 						<digi:trn>Search</digi:trn>
 					</html:button></td>
-					<td align="left"><html:button property="submitButton"
+					<td ><html:button property="submitButton"
 						onclick="myPanelContact.hide()" styleClass="buttonx_sm">
 						<digi:trn>Cancel</digi:trn>
 					</html:button></td>
@@ -318,3 +320,4 @@
 		</c:otherwise>
 	</c:choose>
 </digi:form>
+</div>

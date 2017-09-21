@@ -13,7 +13,6 @@ import static org.digijava.module.aim.annotations.interchange.ActivityFieldsCons
 import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_FUNDING_TRANSACTION_DATE;
 import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_FUNDING_TRANSACTION_TYPE;
 import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_ORGANIZATION;
-import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_SECOND_REPORTING_ORGANIZATION;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -55,7 +54,7 @@ public class AmpComponentFunding implements Cloneable, Serializable {
 	private AmpOrganisation reportingOrganization;
 
 	//@Interchangeable(fieldTitle = COMPONENT_SECOND_REPORTING_ORGANIZATION, importable = true, pickIdOnly = true)
-	private AmpOrganisation secondReportingOrganisation;
+	private AmpOrganisation componentSecondResponsibleOrganization;
 
     @Interchangeable(fieldTitle = COMPONENT_FUNDING_CURRENCY, importable = true, pickIdOnly = true, required = REQUIRED_ALWAYS)
 	private AmpCurrency currency;
@@ -186,16 +185,16 @@ public class AmpComponentFunding implements Cloneable, Serializable {
 	}
 
 	/**
-	 * @return Returns the secondReportingOrganisation.
+	 * @return Returns the componentSecondResponsibleOrganization.
 	 */
-	public AmpOrganisation getSecondReportingOrganisation() {
-		return secondReportingOrganisation;
+	public AmpOrganisation getComponentSecondResponsibleOrganization() {
+		return componentSecondResponsibleOrganization;
 	}
 	/**
-	 * @param secondReportingOrganisation The secondReportingOrganisation to set.
+	 * @param componentSecondResponsibleOrganization The componentSecondResponsibleOrganization to set.
 	 */
-	public void setSecondReportingOrganisation(AmpOrganisation secondReportingOrganisation) {
-		this.secondReportingOrganisation = secondReportingOrganisation;
+	public void setComponentSecondResponsibleOrganization(AmpOrganisation componentSecondResponsibleOrganization) {
+		this.componentSecondResponsibleOrganization = componentSecondResponsibleOrganization;
 	}
 	/**
 	 * @return Returns the transactionAmount.

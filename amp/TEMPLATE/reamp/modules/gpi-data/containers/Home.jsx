@@ -21,7 +21,7 @@ export default class App extends Component {
         return (
             <div >
                 <div>
-                 <ul className="nav nav-tabs" role="tablist">                  
+                 <ul className="nav nav-tabs indicator-tabs" role="tablist">                  
                 {this.props.verifiedOrgList.length > 0 && <li role="presentation" className="active"><a href="#indicator1" aria-controls="indicator1" role="tab" data-toggle="tab">{this.props.translations['amp.gpi-data-donor-notes-indicator1:title']}</a></li>}
                 {this.props.verifiedOrgList.length > 0 && <li role="presentation" ><a href="#indicator5a" aria-controls="indicator1" role="tab" data-toggle="tab">{this.props.translations['amp.gpi-data-donor-notes-indicator5a:title']}</a></li>}                
                 {this.props.userInfo['national-coordinator'] &&  <li role="presentation" className = {this.props.verifiedOrgList.length == 0 ? 'active' : ''} ><a href="#indicator6" aria-controls="indicator6" role="tab" data-toggle="tab">{this.props.translations['amp.gpi-data-aid-on-budget:title']}</a></li>}

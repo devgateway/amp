@@ -340,7 +340,7 @@ a:hover {
   padding: 10px 5px 15px 10px;
 }
 .stat-value {
-  font-size:35px;
+  font-size:20px;
   font-weight: bold;
   letter-spacing: -1;
   line-height: 115%;
@@ -510,7 +510,7 @@ a:hover {
   font-weight: normal;
   line-height: 120%;
   padding-bottom: 15px;
-  padding-right: 20px;
+  
 }
 
 .indicator-table > thead > tr > th > a{
@@ -529,8 +529,11 @@ a:hover {
   font-weight: normal;
   line-height: 120%;
   padding-bottom: 15px;
-  padding-right: 20px;
+  text-align: center;
+  padding-right: 10px !important;
+  padding-left: 10px !important;
 }
+
 
 .indicator-table > tbody > tr > td {
   border:1px solid #e7e9ed;
@@ -565,13 +568,15 @@ a:hover {
   margin: auto;
   text-align: center;
 }
-.table-icon {
-  float: left;
+.table-icon {  
   height: 12px;
   margin-right: 1px;
   margin-top: 1px;
-  opacity: 1;
+  opacity: 1;  
+  margin-bottom: 2px;
 }
+
+
 .table-icon:hover {
   opacity: 0.7;
 }
@@ -621,14 +626,7 @@ opacity: 0.4;
 
 .number-column {
   text-align: right;
-}
-
-.table-icon {
-  float: left;
-  height: 12px;
-  margin-right: 1px;
-  margin-top: 1px;
-  opacity: 1;/*new*/
+  padding-right: 4px !important; 
 }
 
 .popup-icon{
@@ -741,3 +739,9 @@ opacity: 0.4;
 .btn-years .caret{
      margin-left: 10px;
 }
+
+.report{
+  overflow-x:auto;
+  width: 100%;
+}
+

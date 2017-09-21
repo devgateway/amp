@@ -49,9 +49,9 @@
 	<link rel="stylesheet" href="tabs/css/bootstrap-theme.css">
 	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/dist/amp-boilerplate.js"/>"></script>
 	
-
-	 
-	
+<% if(org.digijava.kernel.util.SiteUtils.isEffectiveLangRTL() == true) {%>
+	 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css_2/amp-rtl.css"> 
+<% } %>	
 </head>
 
 

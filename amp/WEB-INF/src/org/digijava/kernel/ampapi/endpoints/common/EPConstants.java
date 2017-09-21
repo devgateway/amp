@@ -58,6 +58,7 @@ public class EPConstants {
     public static final String MD5_TOKEN = "MD5";
     public static final String COUNT = "count";
     public static final String SUMMARY = "summary";
+	public static final String GROUPING_OPTION = "groupingOption";
     
     // report type & activities configurations
     public static final String DEFAULT_REPORT_TYPE = "D";

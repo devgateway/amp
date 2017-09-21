@@ -5,26 +5,6 @@
 
 package org.digijava.module.aim.action;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.jcr.Node;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -136,8 +116,27 @@ import org.digijava.module.gateperm.util.PermissionUtil;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 
+import javax.jcr.Node;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
- /**
+
+/**
  * Loads the activity details of the activity specified in the form bean
  * variable 'activityId' to the EditActivityForm bean instance
  *
@@ -658,7 +657,8 @@ public class EditActivity extends Action {
           eaForm.getIdentification().setAccessionInstrument(new Long(ampCategoryValue.getId()));
 
         ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
-            CategoryConstants.ACTIVITY_STATUS_KEY, activity.getCategories());
+                CategoryManagerUtil.getAlternateKey(currentTeam, CategoryConstants.ACTIVITY_STATUS_KEY), activity
+                        .getCategories());
         if (ampCategoryValue != null)
           eaForm.getIdentification().setStatusId(new Long(ampCategoryValue.getId()));
 
@@ -696,8 +696,9 @@ public class EditActivity extends Action {
                 eaForm.getLocation().setLevelIdx(ampCategoryValue.getIndex());
             }
 
-        ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
-                    CategoryConstants.PROJECT_CATEGORY_KEY, activity.getCategories());
+          ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
+                  CategoryManagerUtil.getAlternateKey(currentTeam, CategoryConstants.PROJECT_CATEGORY_KEY), activity
+                          .getCategories());
             if (ampCategoryValue != null)
                   eaForm.getIdentification().setProjectCategory(new Long(ampCategoryValue.getId()));
 
@@ -791,16 +792,12 @@ public class EditActivity extends Action {
             	eaForm.getIdentification().setApprovalStatus(Constants.EDITED_STATUS);
             }
         }
-        
-        String sscPrefix = "";
-        if (currentTeam != null && currentTeam.getWorkspacePrefix() != null) {
-        	sscPrefix =  "SSC_";
-        }
-        
+
         //AMP-17127
         //for modalities that is a SSC category we have to add the SSC prefix
-        List<AmpCategoryValue> modalities = CategoryManagerUtil.getAmpCategoryValuesFromListByKey(sscPrefix + 
-        		CategoryConstants.MODALITIES_KEY, activity.getCategories());
+          List<AmpCategoryValue> modalities = CategoryManagerUtil.getAmpCategoryValuesFromListByKey(
+                  CategoryManagerUtil.getAlternateKey(currentTeam,
+                          CategoryConstants.MODALITIES_KEY), activity.getCategories());
         String[] actModalities=null;
         
         if(modalities !=null && modalities.size() >0){
@@ -815,11 +812,13 @@ public class EditActivity extends Action {
         eaForm.getIdentification().setSsc_modalities(actModalities );
        
         AmpCategoryValue typeOfCooperation = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
-        		sscPrefix + CategoryConstants.TYPE_OF_COOPERATION_KEY, activity.getCategories());
+                CategoryManagerUtil.getAlternateKey(currentTeam, CategoryConstants.TYPE_OF_COOPERATION_KEY), activity
+                        .getCategories());
         eaForm.getIdentification().setSsc_typeOfCooperation(typeOfCooperation == null ? null : typeOfCooperation.getLabel());
 
         AmpCategoryValue typeOfImplementation = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
-        		sscPrefix + CategoryConstants.TYPE_OF_IMPLEMENTATION_KEY, activity.getCategories());
+                CategoryManagerUtil.getAlternateKey(currentTeam, CategoryConstants.TYPE_OF_IMPLEMENTATION_KEY),
+                activity.getCategories());
         eaForm.getIdentification().setSsc_typeOfImplementation(typeOfImplementation == null ? null : typeOfImplementation.getLabel());
 
        // eaForm.getIdentification().setFundingSourcesNumber(activity.getFundingSourcesNumber());
@@ -966,6 +965,18 @@ public class EditActivity extends Action {
         	  eaForm.getIdentification().setLessonsLearned(activity.getLessonsLearned().trim());
 
       	eaForm.getIdentification().setProjectImpact(activity.getProjectImpact());
+
+            if (activity.getStatusOtherInfo() != null) {
+                eaForm.getIdentification().setStatusOtherInfo(activity.getStatusOtherInfo());
+            }
+
+            if (activity.getProjectCategoryOtherInfo() != null) {
+                eaForm.getIdentification().setProjectCategoryOtherInfo(activity.getProjectCategoryOtherInfo());
+            }
+
+            if (activity.getModalitiesOtherInfo() != null) {
+                eaForm.getIdentification().setModalitiesOtherInfo(activity.getModalitiesOtherInfo());
+            }
 
     	eaForm.getIdentification().setActivitySummary(activity.getActivitySummary());
 
@@ -1941,7 +1952,7 @@ private void setLineMinistryObservationsToForm(AmpActivityVersion activity, Edit
 				fd.setFiscalYear(DateConversion.convertDateToFiscalYearString(ampCompFund.getTransactionDate()));
 				fd.setTransactionType(ampCompFund.getTransactionType().intValue());
 				fd.setComponentOrganisation(ampCompFund.getReportingOrganization());
-				fd.setSecondReportingOrganisation(ampCompFund.getSecondReportingOrganisation());
+				fd.setComponentSecondResponsibleOrganization(ampCompFund.getComponentSecondResponsibleOrganization());
 				fd.setComponentTransactionDescription(ampCompFund.getDescription());
 				
 				if (fd.getTransactionType() == 0) {

@@ -127,9 +127,8 @@ export default class DonorNotesList extends Component {
     render() {       
         const pages = ([...Array(this.props.paging.totalPageCount + 1).keys()]).slice(1);        
         return (
-                <div >                
-                <br/>
-                <p>{this.props.translations['amp.gpi-data-donor-notes-indicator' + this.props.indicatorCode + ':header-info']}</p>
+                <div>               
+                <p className="indicator-description">{this.props.translations['amp.gpi-data-donor-notes-indicator' + this.props.indicatorCode + ':header-info']}</p>
                 <div className="panel panel-default">                 
                 <div className="panel-body custom-panel">
                 <span className="glyphicon glyphicon-plus" onClick={this.addNew}></span>
@@ -137,7 +136,7 @@ export default class DonorNotesList extends Component {
                 <span className="insert-data-text">{this.props.translations['amp.gpi-data:insert-data']}</span>
                 <span> / </span> <span className="glyphicon glyphicon-ok-circle success-color"> </span> <span className="click-save-text" >{this.props.translations['amp.gpi-data:click-save']}</span>
                 <span> / </span><span className="required-fields">{this.props.translations['amp.gpi-data:required-fields']}</span>
-                <span className="float-right"> <button type="button" className="btn btn-success" onClick = {this.saveAllEdits}>{this.props.translations['amp.gpi-data:button-save-all-edits']}</button></span>
+                <span className="float-right button-wrapper"> <button type="button" className="btn btn-success" onClick = {this.saveAllEdits}>{this.props.translations['amp.gpi-data:button-save-all-edits']}</button></span>
                 </div>                 
                 </div>  
                 {this.showErrors()}
@@ -145,11 +144,11 @@ export default class DonorNotesList extends Component {
                 <table className="table table-striped">
                 <thead>
                 <tr >
-                <th></th>
-                <th className="date-column"><span data-field="notesDate" onClick={this.sort} ><span className="error-color" >*&nbsp;</span>{this.props.translations['amp.gpi-data-donor-notes:date']}&nbsp;</span><span className = {this.showSortCaret('notesDate')} ></span></th>
-                <th><span data-field="donor"  onClick={this.sort}><span className="error-color" >*&nbsp;</span>{this.props.translations['amp.gpi-data-donor-notes:donor-agency']}&nbsp;</span><span className = {this.showSortCaret('donor')} ></span></th>
-                <th><span className="error-color" >*&nbsp;</span>{this.props.translations['amp.gpi-data-donor-notes:notes']}</th>
-                <th className="actions-column">{this.props.translations['amp.gpi-data-donor-notes:action']}</th>
+                <td></td>
+                <td className="date-column"><span data-field="notesDate" onClick={this.sort} ><span className="error-color" >*&nbsp;</span>{this.props.translations['amp.gpi-data-donor-notes:date']}&nbsp;</span><span className = {this.showSortCaret('notesDate')} ></span></td>
+                <td><span data-field="donor"  onClick={this.sort}><span className="error-color" >*&nbsp;</span>{this.props.translations['amp.gpi-data-donor-notes:donor-agency']}&nbsp;</span><span className = {this.showSortCaret('donor')} ></span></td>
+                <td><span className="error-color" >*&nbsp;</span>{this.props.translations['amp.gpi-data-donor-notes:notes']}</td>
+                <td className="actions-column">{this.props.translations['amp.gpi-data-donor-notes:action']}</td>
                 </tr>
                 </thead>
                 <tbody>               

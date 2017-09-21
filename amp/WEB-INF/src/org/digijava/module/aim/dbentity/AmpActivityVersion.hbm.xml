@@ -14,6 +14,9 @@
 		
 		<property name="description" column="description" type="text"  index="amp_activity_version_description_idx" />
 		<property name="lessonsLearned" column="lessons_learned" type="text"  index="amp_activity_version_lessons_learned_idx" />
+		<property name="statusOtherInfo" column="status_other_info" type="text" />
+		<property name="projectCategoryOtherInfo" column="project_category_other_info" type="text" />
+		<property name="modalitiesOtherInfo" column="modalities_other_info" type="text" />
 		<property name="objective" column="objectives" type="text" index="amp_activity_version_objectives_idx" />
 		<property name="results" column="results" type="text" index="amp_activity_version_results_idx" />
 		<property name="purpose" column="purpose" type="text" index="amp_activity_version_purpose_idx" />

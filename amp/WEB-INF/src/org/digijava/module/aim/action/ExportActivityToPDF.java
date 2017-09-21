@@ -295,6 +295,11 @@ public class ExportActivityToPDF extends Action {
                     createGeneralInfoRow(mainLayout, columnName, columnVal);
                 }
             }
+            //Status Other Info
+            if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Status Other Info")) {
+                columnName = TranslatorWorker.translateText("Status Other Info");
+                createGeneralInfoRow(mainLayout, columnName, activity.getStatusOtherInfo());
+            }
 
             if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Status Reason")) {
                 columnName = TranslatorWorker.translateText("Status Reason");
@@ -334,6 +339,12 @@ public class ExportActivityToPDF extends Action {
                 columnName = TranslatorWorker.translateText("Modalities");
                 columnVal = identification.getSscModalitiesAsString("\n");
                 createGeneralInfoRow(mainLayout, columnName, columnVal);
+            }
+            //Modalities Other Info
+            if (FeaturesUtil.isVisibleModule(
+                    "/Activity Form/Funding/Overview Section/" + sscPrefix + "Modalities Other Info")) {
+                columnName = TranslatorWorker.translateText("Modalities Other Info");
+                createGeneralInfoRow(mainLayout, columnName, activity.getModalitiesOtherInfo());
             }
 
             //objective
@@ -401,9 +412,10 @@ public class ExportActivityToPDF extends Action {
             }
 
             //project comments
-            if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Comments")){
-                columnName=TranslatorWorker.translateText("Project Comments");
-                createGeneralInfoRow(mainLayout,columnName,processEditTagValue(request, activity.getProjectComments()));
+            if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Comments")) {
+                columnName = TranslatorWorker.translateText("Project Comments");
+                createGeneralInfoRow(mainLayout, columnName, processEditTagValue(request, activity.
+                        getProjectComments()));
             }
             //Lessons learned
             if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Lessons Learned")){
@@ -646,6 +658,11 @@ public class ExportActivityToPDF extends Action {
                     }
                     createGeneralInfoRow(mainLayout,columnName,columnVal);
                 }
+            }
+            //Project Category Other Info
+            if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Category Other Info")) {
+                columnName = TranslatorWorker.translateText("Project Category Other Info");
+                createGeneralInfoRow(mainLayout, columnName, activity.getProjectCategoryOtherInfo());
             }
 
             if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Government Agreement Number")){
@@ -3697,15 +3714,14 @@ public class ExportActivityToPDF extends Action {
                 }
 
                 if (FeaturesUtil.isVisibleModule(fmFields[ExportUtil.COMPONENT_FM_FIELD_SECOND_REPORTING]) && (fd
-                        .getSecondReportingOrganisation() != null)) {
+                        .getComponentSecondResponsibleOrganization() != null)) {
                     fdTable.completeRow();
                     fdTable.addCell(buildPdfCell("", null, 1));
-                    //fdTable.addCell(buildPdfCell(TranslatorWorker.translateText("Second Reporting Organisation"),
-                    //        titleFont, 1));
-                    String orgNameTxt = fd.getSecondReportingOrganisation() == null ? "" : fd
-                            .getSecondReportingOrganisation().getName();
-                    fdTable.addCell(buildPdfCell(TranslatorWorker.translateText("Second Reporting Organisation") +
-                            ":" + orgNameTxt, null, fdTable.getNumberOfColumns() - 1));
+                    String orgNameTxt = fd.getComponentSecondResponsibleOrganization() == null ? "" : fd
+                            .getComponentSecondResponsibleOrganization().getName();
+                    fdTable.addCell(buildPdfCell(
+                            TranslatorWorker.translateText("Component Second Responsible Organization")
+                                    + ":" + orgNameTxt, null, fdTable.getNumberOfColumns() - 1));
                     fdTable.completeRow();
                 }
 

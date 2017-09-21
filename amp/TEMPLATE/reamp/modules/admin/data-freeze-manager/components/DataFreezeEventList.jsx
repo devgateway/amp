@@ -24,7 +24,7 @@ require('../styles/less/main.less');
 export default class DataFreezeEventList extends Component {
     constructor(props, context) {
         super(props, context);
-        this.state = {};
+        this.state = {waiting: true};
         this.showFreezeOption = this.showFreezeOption.bind(this);
         this.addNew = this.addNew.bind(this);
         this.showErrors = this.showErrors.bind(this);
@@ -39,10 +39,11 @@ export default class DataFreezeEventList extends Component {
         this.showFilterElement = this.showFilterElement.bind(this);
         this.hideFilterElement = this.hideFilterElement.bind(this);
         this.updateRecordsPerPage = this.updateRecordsPerPage.bind(this);
+        this.loadData = this.loadData.bind(this);
     }
 
-    componentWillMount() {
-        this.props.actions.loadDataFreezeEventList({
+    componentWillMount() {        
+        this.loadData({
             paging: this.props.paging,
             sorting: this.props.sorting
         });
@@ -87,7 +88,7 @@ export default class DataFreezeEventList extends Component {
             loadParams.sorting = this.props.sorting;
             loadParams.paging.currentPageNumber = pageNumber;
             loadParams.paging.offset = ((pageNumber - 1) * this.props.paging.recordsPerPage);
-            this.props.actions.loadDataFreezeEventList(loadParams);
+            this.loadData(loadParams);
         }
     }
 
@@ -103,7 +104,7 @@ export default class DataFreezeEventList extends Component {
                 loadParams.sorting.orderBy = field;
                 loadParams.sorting.sortOrder = 'asc';
             }
-            this.props.actions.loadDataFreezeEventList(loadParams);
+            this.loadData(loadParams);
         }
     }
 
@@ -113,12 +114,18 @@ export default class DataFreezeEventList extends Component {
             loadParams.paging = this.props.paging;
             loadParams.sorting = this.props.sorting;
             loadParams.paging.recordsPerPage = parseInt(this.refs.recordsPerPage.value);
-            loadParams.paging.currentPageNumber = 1
-            this.props.actions.loadDataFreezeEventList(loadParams);
+            loadParams.paging.currentPageNumber = 1;
+            this.loadData(loadParams);            
         }
     }
 
-
+    loadData(params) {
+        this.setState({waiting: true}); 
+        this.props.actions.loadDataFreezeEventList(params).then(function(){
+            this.setState({waiting: false});  
+        }.bind(this));
+    }
+    
     showErrors() {
         const messages = [];
         this.props.errors.forEach((error, index) => {
@@ -193,10 +200,21 @@ export default class DataFreezeEventList extends Component {
                 </OverlayTrigger>
         )
     }
+    
     render() {        
         const pages = ([...Array(this.props.paging.totalPageCount + 1).keys()]).slice(1);
         return (
-            <div>
+                <div>                
+                {this.state.waiting &&
+                   <div className="processing">                
+                    <div className="processing_inner">
+                        <div className="processing_content">
+                            <span className="processing_image">&nbsp;</span>
+                            <span className="processing_message">{this.props.translations['amp.data-freezing:loading-message']}</span>
+                        </div>
+                    </div>
+                   </div>
+                }
                 <div id="filter-popup" ref="filterPopup"> </div>                              
                 <div >                
                 <div className="row">                
@@ -287,24 +305,24 @@ export default class DataFreezeEventList extends Component {
                         </nav>
                          </div>
 
-                              <div className="col-md-2">
+                            <div className="col-md-2">
                                 <div className="input-group pull-right">
-                                  <span className="input-group-addon" id="basic-addon1">
-                                    <span className="glyphicon glyphicon-arrow-right" onClick={this.updateRecordsPerPage}></span>
-                                  </span>
-                                  <input type="text" ref="recordsPerPage" className="form-control" placeholder="" defaultValue={this.props.paging.recordsPerPage}/>
+                                    <span className="input-group-addon" id="basic-addon1">
+                                        <span className="glyphicon glyphicon-arrow-right" onClick={this.updateRecordsPerPage}></span>
+                                    </span>
+                                    <input type="text" ref="recordsPerPage" className="form-control" placeholder="" defaultValue={this.props.paging.recordsPerPage}/>
                                 </div>
-                              </div>
+                            </div>
 
 
-                              <div className="col-md-2">
+                            <div className="col-md-2">
                                 <div className="input-group pull-right">
-                                  <span className="input-group-addon" id="basic-addon1">
-                                    <span className="glyphicon glyphicon-th-list"></span>
-                                  </span>
-                                  <input type="text" className="form-control" placeholder=""/>
+                                    <span className="input-group-addon" id="basic-addon1">
+                                        <span className="glyphicon glyphicon-th-list"></span>
+                                    </span>
+                                    <input type="text" className="form-control" placeholder=""/>
                                 </div>
-                              </div>
+                            </div>
                         </div>
                           </div>
                         </div>

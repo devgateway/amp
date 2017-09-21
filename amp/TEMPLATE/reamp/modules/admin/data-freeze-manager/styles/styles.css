@@ -692,3 +692,13 @@ a:hover {
   color: #00aaff;
   text-shadow: none;
 }
+
+ .processing_image {
+  display: inline-block;
+  background-image: url('images/waiting.gif');
+  background-repeat: no-repeat;
+  width: 16px;
+  height: 16px;
+  margin-right: 5px;
+ }
+ 

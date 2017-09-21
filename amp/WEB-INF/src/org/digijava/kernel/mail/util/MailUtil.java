@@ -43,6 +43,7 @@ import org.digijava.kernel.util.DigiConfigManager;
 
 public class MailUtil {
     private static Logger logger = Logger.getLogger(MailUtil.class);
+    public static final int SUBJECT_MAX_LENGTH = 255;
 
     /**
      *
@@ -109,6 +110,14 @@ public class MailUtil {
             return list.size();
         }
         return 0;
+    }
+
+    public static String truncateSubject(String subject) {
+        if (subject.length() > SUBJECT_MAX_LENGTH) {
+            return subject.substring(0, SUBJECT_MAX_LENGTH);
+        } else {
+            return subject;
+        }
     }
 
 }

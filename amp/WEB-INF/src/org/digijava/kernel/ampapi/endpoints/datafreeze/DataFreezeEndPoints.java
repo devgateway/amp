@@ -1,8 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.datafreeze;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Set;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -15,21 +12,72 @@ import javax.ws.rs.core.MediaType;
 
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
-import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.module.aim.dbentity.AmpActivityFrozen;
 import org.digijava.module.aim.dbentity.AmpDataFreezeSettings;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.TeamMemberUtil;
-import org.digijava.module.aim.util.TeamUtil;
 
 @Path("data-freeze")
 public class DataFreezeEndPoints implements ErrorReportingEndpoint {
 
+    /**
+     * Saves a data freeze object to the database </br>
+     * <dl>
+     * </br>
+     * The returned JSON object holds information regarding:
+     * <dt><b>data</b>
+     * <dd>- the saved data freeze eevent
+     * <dt><b>result</b>
+     * <dd>- result string that indicates if the save was successful or not -
+     * SAVE_SUCCESSFUL/SAVE_FAILED
+     * <dt><b>errors</b>
+     * <dd>- an array of error objects for all the errors that occurred while
+     * saving
+     * </dl>
+     * </br>
+     * </br>
+     * <h3>Sample Input:</h3>
+     * 
+     * <pre>
+     * {
+     *      "enabled" : true,
+     *      "cid" : 1,
+     *      "freezingDate" : "2017-09-01",
+     *      "gracePeriod" : 30,
+     *      "openPeriodStart" : "2017-10-01",
+     *      "openPeriodEnd" : "2017-10-31",
+     *      "freezeOption" : "ENTIRE_ACTIVITY",
+     *      "sendNotification" : false,
+     *      "notificationDays" : ""
+     * }
+     * </pre>
+     * 
+     * <h3>Sample Output:</h3>
+     * 
+     * <pre>
+     * {
+     *       "data" : {
+     *       "id" : 30,
+     *       "enabled" : true,
+     *       "gracePeriod" : 30,
+     *       "freezingDate" : "2017-09-01",
+     *       "openPeriodStart" : "2017-10-01",
+     *       "openPeriodEnd" : "2017-10-31",
+     *       "freezeOption" : "ENTIRE_ACTIVITY",
+     *       "filters" : null,
+     *       "sendNotification" : false,
+     *       "count" : 88,
+     *       "notificationDays" : null,
+     *        "cid" : 1
+     *  },
+     *     "result" : "SAVE_SUCCESSFUL",
+     *     "errors" : []
+     * }
+     * </pre>
+     * 
+     * @param dataFreezeEvent
+     *            - data freeze event object
+     * @return
+     */
 	@POST
 	@Path("event")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -38,6 +86,10 @@ public class DataFreezeEndPoints implements ErrorReportingEndpoint {
 		return DataFreezeService.saveDataFreezeEvent(dataFreezeEvent);
 	}
 
+	/**
+     * Deletes an data freeze event
+     * @param id unique identifier used to find the data freeze event in the database
+     */
 	@DELETE
 	@Path("event/{id}")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -46,6 +98,27 @@ public class DataFreezeEndPoints implements ErrorReportingEndpoint {
 		DataFreezeService.deleteDataFreezeEvent(id);
 	}
 
+	/**
+	 * Retrieves a data freeze event object
+	 *<h3>Sample Output:</h3>
+     * <pre>
+     * {
+     *      "ampDataFreezeSettingsId" : 31,
+     *      "enabled" : true,
+     *      "executed" : false,
+     *      "gracePeriod" : 20,
+     *      "freezingDate" : 1512075600000,
+     *      "openPeriodStart" : 1517432400000,
+     *      "openPeriodEnd" : 1519765200000,
+     *      "sendNotification" : true,
+     *      "freezeOption" : "FUNDING",
+     *      "notificationDays" : 8,
+     *      "filters" : null
+     * }
+     * </pre>
+	 * @param id unique identifier used to find the data freeze event in the database
+	 * @return
+	 */
 	@GET
 	@Path("event/{id}")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -54,6 +127,50 @@ public class DataFreezeEndPoints implements ErrorReportingEndpoint {
 		return DataFreezeService.fetchOneDataFreezeEvent(id);
 	}
 
+	/**
+	 * Retrieves a list of data freeze event objects
+	 * <h3>Sample Output:</h3>
+     * <pre>
+     * {
+     *     "totalRecords" : 2,
+     *     "data" : [{
+     *                   "id" : 31,
+     *                    "cid" : null,
+     *                    "enabled" : true,
+     *                    "gracePeriod" : 20,
+     *                    "freezingDate" : "2017-12-01",
+     *                    "openPeriodStart" : "2018-02-01",
+     *                    "openPeriodEnd" : "2018-02-28",
+     *                    "sendNotification" : true,
+     *                    "freezeOption" : "FUNDING",
+     *                    "filters" : null,
+     *                    "count" : 88,
+     *                    "notificationDays" : 8,
+     *                    "executed" : false
+     *               }, {
+     *                     "id" : 30,
+     *                     "cid" : null,
+     *                     "enabled" : true,
+     *                     "gracePeriod" : 30,
+     *                     "freezingDate" : "2017-09-01",
+     *                     "openPeriodStart" : "2017-10-01",
+     *                     "openPeriodEnd" : "2017-10-31",
+     *                     "sendNotification" : false,
+     *                     "freezeOption" : "ENTIRE_ACTIVITY",
+     *                     "filters" : null,
+     *                     "count" : 88,
+     *                     "notificationDays" : null,
+     *                     "executed" : false
+     *               }
+     *               ]
+     *  }
+     * </pre>
+	 * @param offset first element in list
+	 * @param count maximum number of records to return
+	 * @param orderBy field that will be used for sorting
+	 * @param sort asc or desc order
+	 * @return
+	 */
 	@GET
 	@Path("event/list")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -64,6 +181,18 @@ public class DataFreezeEndPoints implements ErrorReportingEndpoint {
 		return DataFreezeService.fetchDataFreezeEventList(offset, count, orderBy, sort);
 	}
 	
+	/**
+	 * Gets an object containing the freeze date of the latest freeze event 
+	 * and number of activities affected the event.
+	 * <h3>Sample Output:</h3>
+     * <pre>
+	 *  {
+     *      "freezingDate" : 2017-08-30,
+     *      "freezingCount" : 345
+     *  }
+	 * </pre>
+	 * @return
+	 */
 	@GET
 	@Path("event/list-frozen-activities")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -71,24 +200,16 @@ public class DataFreezeEndPoints implements ErrorReportingEndpoint {
 	public JsonBean fetchFrozenActivities() {
 		return DataFreezeService.getFronzeActivitiesInformation();
 	}
-
+   
+	/**
+    * Disables all freeze events 
+    */
 	@POST
 	@Path("event/unfreeze-all")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = false, id = "unfreezeAll", authTypes = { AuthRule.IN_ADMIN })
 	public void unfreezeAll(JsonBean data) {
 		DataFreezeService.unfreezeAll();
-	}
-
-	@GET
-	@Path("event/activity-test")
-	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = false, id = "activityTest")
-	public boolean activityTest(@QueryParam("id") Long id) {
-		TeamMember tm = TeamUtil.getCurrentMember();
-		AmpTeamMember atm = TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
-		AmpActivityFrozen af = DataFreezeService.getActivityFrozenForActivity(id);
-		return DataFreezeService.isEditable(af, atm);
 	}
 
 	/**

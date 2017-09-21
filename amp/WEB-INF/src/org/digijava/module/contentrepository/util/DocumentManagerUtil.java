@@ -37,6 +37,7 @@ import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
+import org.apache.wicket.util.lang.Bytes;
 import org.digijava.kernel.ampapi.endpoints.filetype.FileTypeManager;
 import org.digijava.kernel.ampapi.endpoints.filetype.FileTypeValidationResponse;
 import org.digijava.kernel.ampapi.endpoints.filetype.FileTypeValidationStatus;
@@ -1348,5 +1349,12 @@ public class DocumentManagerUtil {
 		}
 		return retVal;
 	}
-	
+
+	public static void setMaxFileSizeAttribute(HttpServletRequest request) {
+		String maxFileSizeGS = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.CR_MAX_FILE_SIZE);
+		request.setAttribute("uploadFailedTooBigMsg", "The file size limit is {size} MB. This file exceeds the limit.");
+		request.setAttribute("maxFileSizeGS", maxFileSizeGS);
+		request.setAttribute("uploadMaxFileSize",
+				Long.toString(Bytes.megabytes(Long.parseLong(maxFileSizeGS)).bytes()));
+	}
 }

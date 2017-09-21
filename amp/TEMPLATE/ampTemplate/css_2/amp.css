@@ -1216,6 +1216,13 @@ div.footer {
   background: url(../images/corner-r.gif) no-repeat;
 }
 
+.right_menu_empty {
+    color: #376091;
+}
+
+.right_menu_empty {
+    color: #376091;
+}
 .frozen{
 	width:15px;
 	height:15px;
@@ -1233,7 +1240,7 @@ div.footer {
 }
 
 .legend-item {
-	float:left;width:20%; 
+	float:left;width:20%;
 	margin-top:10px;
 	clear:both;
 }

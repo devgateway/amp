@@ -10,6 +10,7 @@
 -->
 <module name="Checker">
   <property name="severity" value="warning"/>
+  <property name="charset" value="UTF-8"/>
   <module name="SuppressionFilter">
     <property name="file" value="suppressions.xml"/>
   </module>
@@ -106,6 +107,7 @@
       <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
     </module>
     <module name="UpperEll"/>
+    <module name="UnusedImports"/>
   </module>
   <module name="JavadocPackage">
     <property name="severity" value="ignore"/>

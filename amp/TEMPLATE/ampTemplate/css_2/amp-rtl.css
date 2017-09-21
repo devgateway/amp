@@ -111,6 +111,22 @@ div.trnpanel div.trn-row ul {
 
 .yui-skin-sam li {
     text-align: right
-
 }
 
+.feedbackPanel {
+    padding-right: 2px;
+}
+
+.feedbackPanelERROR {
+    text-align: right;
+}
+
+.right_menu_empty {
+    text-align: right;
+    color: #376091;
+}
+
+.right_menu_empty {
+    text-align: right;
+    color: #376091;
+}

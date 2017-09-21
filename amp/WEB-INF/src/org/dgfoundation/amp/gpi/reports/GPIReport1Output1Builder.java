@@ -252,16 +252,6 @@ public class GPIReport1Output1Builder extends GPIReportOutputBuilder {
 	}
 
 	/**
-	 * @param cnt
-	 * @param q6Cnt
-	 * @return
-	 */
-	private BigDecimal getPercentage(BigDecimal a, BigDecimal b) {
-		return BigDecimal.ZERO.equals(b) ? BigDecimal.ZERO
-				: a.divide(b, NiFormula.DIVISION_MC).scaleByPowerOfTen(2).setScale(0, RoundingMode.HALF_UP);
-	}
-
-	/**
 	 * @param items
 	 * @return
 	 */

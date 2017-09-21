@@ -2,8 +2,10 @@ package org.digijava.kernel.ampapi.endpoints.performance;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
@@ -13,16 +15,23 @@ import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.Disbu
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.NoDisbursementsAfterFundingDateMatcherDefinition;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.NoUpdatedDisbursementsAfterTimePeriodMatcherDefinition;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.NoUpdatedStatusAfterFundingDateMatcherDefinition;
+import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleAttributeOption;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleMatcherDefinition;
+import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleMatcherPossibleValuesSupplier;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.SiteDomain;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpPerformanceRule;
 import org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute;
+import org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute.PerformanceRuleAttributeType;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
+import org.thymeleaf.util.StringUtils;
 
 /**
  * 
@@ -214,25 +223,25 @@ public final class PerformanceRuleManager {
      * 
      * @param a
      *            activity
-     * @return performance alert level (null if activity does not have
-     *         performance issues)
+     * @return matchers
      */
-    public AmpCategoryValue matchActivity(AmpActivityVersion a) {
+    public List<PerformanceRuleMatcher> matchActivity(AmpActivityVersion a) {
         List<PerformanceRuleMatcher> matchers = getPerformanceRuleMatchers();
 
         return matchActivity(matchers, a);
     }
 
-    public AmpCategoryValue matchActivity(List<PerformanceRuleMatcher> matchers, AmpActivityVersion a) {
+    public List<PerformanceRuleMatcher> matchActivity(List<PerformanceRuleMatcher> matchers, AmpActivityVersion a) {
 
-        AmpCategoryValue level = null;
+        List<PerformanceRuleMatcher> matchedRules = new ArrayList<>();
 
         for (PerformanceRuleMatcher matcher : matchers) {
-            AmpCategoryValue matchedLevel = matcher.match(a) ? matcher.getRule().getLevel() : null;
-            level = getHigherLevel(level, matchedLevel);
+            if (matcher.match(a)) {
+                matchedRules.add(matcher);
+            }
         }
 
-        return level;
+        return matchedRules;
     }
 
     public AmpPerformanceRuleAttribute getAttributeFromRule(AmpPerformanceRule rule, String attributeName) {
@@ -272,32 +281,95 @@ public final class PerformanceRuleManager {
         }
     }
 
-    public String buildPerformanceIssuesMessage(List<AmpActivityVersion> activities) {
+    public String buildPerformanceIssuesMessage(Map<AmpActivityVersion, List<PerformanceRuleMatcher>> actPerfRules) {
         StringBuilder sb = new StringBuilder();
-
-        Map<AmpCategoryValue, List<AmpActivityVersion>> activitiesByPerformanceLevel = activities.stream()
-                .filter(a -> getPerformanceLevel(a) != null)
-                .collect(Collectors.groupingBy(a -> getPerformanceLevel(a)));
-
-        activitiesByPerformanceLevel.entrySet().forEach(e -> {
-            sb.append("\n\n");
-            sb.append(e.getKey().getLabel());
-            sb.append("\n");
-
-            e.getValue().forEach(a -> {
-                sb.append(String.format("%d\t%s\t%s\n", a.getAmpActivityId(), a.getAmpId(), a.getName()));
-            });
+        Map<PerformanceRuleMatcher, List<AmpActivityVersion>> activitiesByPerformanceRuleMatcher = new HashMap<>();
+        
+        actPerfRules.forEach((act, matchers) -> {
+            for (PerformanceRuleMatcher m : matchers) {
+                if (!activitiesByPerformanceRuleMatcher.containsKey(m)) {
+                    activitiesByPerformanceRuleMatcher.put(m, new ArrayList<>());
+                }
+                activitiesByPerformanceRuleMatcher.get(m).add(act);
+            }
         });
-
+        
+        String ampIdLabel = TranslatorWorker.translateText("AMP ID");
+        String titleLabel = TranslatorWorker.translateText("Title");
+        
+        //TODO get the url correctly
+        String url = getBaseUrl();
+        
+        activitiesByPerformanceRuleMatcher.entrySet().forEach(e -> {
+            sb.append("<br/>");
+            PerformanceRuleMatcher matcher = e.getKey();
+            sb.append(String.format("<b>%s (%s)</b>", 
+                    getPerformanceRuleMatcherMessage(matcher), matcher.getRule().getLevel().getLabel()));
+            sb.append("<br/>");
+            
+            sb.append("<table border=1 cellpadding=5 cellspacing=0>");
+            sb.append(String.format("<tr><td><b>%s</b></td><td><b>%s</b></td></tr>", ampIdLabel, titleLabel));
+            e.getValue().forEach(a -> {
+                sb.append("<tr>");
+                sb.append(String.format("<td>%s</td>", a.getAmpId()));
+                sb.append("<td>");
+                sb.append(String.format("<a href=\"http://%s/aim/viewActivityPreview.do~activityId=%s\">%s</a>", 
+                        url, a.getAmpActivityId(), a.getName()));
+                sb.append("</td>");
+                sb.append("</tr>");
+            });
+            sb.append("</table>");
+        });
+        
         return sb.toString();
     }
+    
+    private String getBaseUrl() {
+        String url = "";
+        Set<SiteDomain> siteDomains = SiteUtils.getDefaultSite().getSiteDomains();
+        SiteDomain principalSiteDomain = siteDomains.stream()
+                .filter(SiteDomain::isDefaultDomain)
+                .findFirst()
+                .orElse(null);
+        
+        if (principalSiteDomain != null) {
+            url = principalSiteDomain.getSiteDomain();
+        }
+        
+        return url;
+    }
 
-    private AmpCategoryValue getPerformanceLevel(AmpActivityVersion a) {
-        AmpCategoryValue performanceLevel = a.getCategories().stream().filter(
-                acv -> acv.getAmpCategoryClass().getKeyName().equals(CategoryConstants.PERFORMANCE_ALERT_LEVEL_KEY))
-                .findAny().orElse(null);
+    public String getPerformanceRuleMatcherMessage(PerformanceRuleMatcher matcher) {
+        String message = TranslatorWorker.translateText(matcher.getDefinition().getMessage());
+        for (AmpPerformanceRuleAttribute attr : matcher.getRule().getAttributes()) {
+            String attrValue = attr.getValue();
 
-        return performanceLevel;
+            if (!attr.getType().equals(PerformanceRuleAttributeType.AMOUNT)) {
+                attrValue = getTranslatedLabel(attr);
+
+                if (attr.getType().equals(PerformanceRuleAttributeType.TIME_UNIT)) {
+                    attrValue += "(s)";
+                }
+            }
+
+            message = StringUtils.replace(message, String.format("{%s}", attr.getName()), attrValue);
+        }
+
+        return message;
+    }
+    
+    public String getTranslatedLabel(AmpPerformanceRuleAttribute attribute) {
+        System.out.println(attribute.getName());
+        PerformanceRuleAttributeOption performanceRuleAttributeOption = PerformanceRuleMatcherPossibleValuesSupplier
+                .getDefaultPerformanceRuleAttributePossibleValues(attribute.getType())
+                .stream().filter(option -> option.getName().equals(attribute.getValue()))
+                .findAny().orElseGet(null);
+        
+        if (performanceRuleAttributeOption == null) {
+            return "";
+        } 
+        
+        return performanceRuleAttributeOption.getTranslatedLabel();
     }
 
     public AmpCategoryValue getPerformanceIssueFromActivity(AmpActivityVersion a) {
@@ -319,5 +391,14 @@ public final class PerformanceRuleManager {
     public boolean canActivityContainPerformanceIssues(AmpActivityVersion a) {
         return !a.isCreatedAsDraft() && !a.getDraft() && !a.getDeleted() && a.getTeam() != null
                 && AmpARFilter.validatedActivityStatus.contains(a.getApprovalStatus());
+    }
+
+    public AmpCategoryValue getHigherLevelFromMatchers(List<PerformanceRuleMatcher> matchers) {
+        AmpCategoryValue level = null;
+        for (PerformanceRuleMatcher matcher : matchers) {
+            level = getHigherLevel(level, matcher.getRule().getLevel());
+        }
+            
+        return level;
     }
 }

@@ -281,7 +281,7 @@ public class ActivityUtil {
         AmpCategoryValue matchedLevel = null;
 
         if (ruleManager.canActivityContainPerformanceIssues(a)) {
-            matchedLevel = ruleManager.matchActivity(a);
+            matchedLevel = ruleManager.getHigherLevelFromMatchers(ruleManager.matchActivity(a));
         }
         
         AmpCategoryValue activityLevel = ruleManager.getPerformanceIssueFromActivity(a);

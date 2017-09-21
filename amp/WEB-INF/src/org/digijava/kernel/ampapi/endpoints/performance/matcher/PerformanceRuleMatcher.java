@@ -76,7 +76,11 @@ public abstract class PerformanceRuleMatcher {
                 throw new IllegalArgumentException();
         }
     }
-
+    
+    public PerformanceRuleMatcherDefinition getDefinition() {
+        return definition;
+    };
+    
     public Date getDeadline(Date selectedDate, int timeUnit, int timeAmount) {
         Calendar c = Calendar.getInstance();
         c.setTime(selectedDate);

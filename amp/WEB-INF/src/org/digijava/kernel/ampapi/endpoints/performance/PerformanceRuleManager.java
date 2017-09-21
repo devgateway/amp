@@ -312,8 +312,10 @@ public final class PerformanceRuleManager {
             e.getValue().forEach(a -> {
                 sb.append("<tr>");
                 sb.append(String.format("<td>%s</td>", a.getAmpId()));
-                sb.append(String.format("<td><a href=\"http://%s/aim/viewActivityPreview.do~activityId=%s\">%s</a></td>", 
+                sb.append("<td>");
+                sb.append(String.format("<a href=\"http://%s/aim/viewActivityPreview.do~activityId=%s\">%s</a>", 
                         url, a.getAmpActivityId(), a.getName()));
+                sb.append("</td>");
                 sb.append("</tr>");
             });
             sb.append("</table>");

@@ -16,5 +16,5 @@ config.plugins.push(new webpack.DefinePlugin({
         'NODE_ENV': JSON.stringify('production')
     }
 }));
-
+//trigger Jenkins build
 module.exports = config;

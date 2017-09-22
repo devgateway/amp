@@ -16,6 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringJoiner;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletOutputStream;
@@ -51,6 +52,7 @@ import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpStructure;
+import org.digijava.module.aim.dbentity.AmpStructureCoordinate;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.EUActivity;
 import org.digijava.module.aim.dbentity.IPAContract;
@@ -1642,6 +1644,16 @@ public class ExportActivityToPDF extends Action {
                         costOutput+="\n"+TranslatorWorker.translateText("Latitude")+": "+struc.getLatitude();
                     if(struc.getLongitude()!=null)
                         costOutput+="\n"+TranslatorWorker.translateText("Longitude")+": "+struc.getLongitude();
+
+                    if (struc.getCoordinates() != null && struc.getCoordinates().size() > 0) {
+                        StringJoiner coordinatesOutput = new StringJoiner("\n");
+                        coordinatesOutput.add(TranslatorWorker.translateText("Coordinates") + ": ");
+                        for (AmpStructureCoordinate coordinate : struc.getCoordinates()) {
+                            coordinatesOutput.add(coordinate.getLatitude() + " " + coordinate.getLongitude());
+                        }
+                        costOutput += "\n" + coordinatesOutput.toString();
+                    }
+
                     costOutput+="\n";
                 }
 

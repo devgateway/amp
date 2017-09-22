@@ -3500,19 +3500,39 @@ body {background:none;}
 				<module:display
 					name="/Activity Form/Structures/Structure Latitude"
 					parentModule="/Activity Form/Structures">
-					<tr bgcolor="#f0f0f0">
-						<td align="right"><digi:trn key="trn:latitude">Latitude</digi:trn></td>
-						<td align="left"> <b> ${structure.latitude} </b></td>
-					</tr>
+					<c:if test="${not empty structure.latitude}">
+						<tr bgcolor="#f0f0f0">
+							<td align="right"><digi:trn key="trn:latitude">Latitude</digi:trn></td>
+							<td align="left"> <b> ${structure.latitude} </b></td>
+						</tr>
+					</c:if>
 				</module:display>
 				<module:display
 					name="/Activity Form/Structures/Structure Longitude"
 					parentModule="/Activity Form/Structures">
-					<tr bgcolor="#f0f0f0">
-						<td align="right"><digi:trn key="trn:longitude">Longitude</digi:trn></td>
-						<td align="left"><b> ${structure.longitude} </b></td>
-					</tr>
+					<c:if test="${not empty structure.longitude}">
+						<tr bgcolor="#f0f0f0">
+							<td align="right"><digi:trn key="trn:longitude">Longitude</digi:trn></td>
+							<td align="left"><b> ${structure.longitude} </b></td>
+						</tr>
+					</c:if>
 				</module:display>
+				<c:if test="${not empty structure.coordinates}">
+					<tr>
+						<td align="right" bgcolor="#f0f0f0" valign="top"><digi:trn>Coordinates</digi:trn></td>
+						<td bgcolor="#f0f0f0">
+							<table>
+								<logic:iterate id="coordinate" name="structure" property="coordinates"
+											   type="org.digijava.module.aim.dbentity.AmpStructureCoordinate">
+									<tr>
+										<td><b> ${coordinate.latitude}</b></td>
+										<td><b> ${coordinate.longitude}</b></td>
+									</tr>
+								</logic:iterate>
+							</table>
+						</td>
+					</tr>
+				</c:if>
 			
 	</table>
 	<br />

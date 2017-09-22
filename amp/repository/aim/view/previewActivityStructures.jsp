@@ -164,19 +164,40 @@ function moveDisplayedImages(structureId, imgCount, next){
 				<module:display
 					name="/Activity Form/Structures/Structure Latitude"
 					parentModule="/Activity Form/Structures">
+					<c:if test="${not empty structure.latitude}">
 					<tr>
 						<td bgcolor="#f0f0f0" style="padding-left:5px;"><digi:trn key="trn:latitude">Latitude</digi:trn></td>
 						<td align="left"> <b> ${structure.latitude} </b></td>
 					</tr>
+					</c:if>
 				</module:display>
 				<module:display
 					name="/Activity Form/Structures/Structure Longitude"
 					parentModule="/Activity Form/Structures">
+					<c:if test="${not empty structure.longitude}">
 					<tr>
 						<td bgcolor="#f0f0f0" style="padding-left:5px;"><digi:trn key="trn:longitude">Longitude</digi:trn></td>
 						<td align="left"><b> ${structure.longitude} </b></td>
 					</tr>
+					</c:if>
 				</module:display>
+				<c:if test="${not empty structure.coordinates}">
+					<tr>
+						<td bgcolor="#f0f0f0" valign="top" style="padding-left:5px;"><digi:trn
+						>Coordinates</digi:trn></td>
+						<td>
+							<table>
+								<logic:iterate id="coordinate" name="structure" property="coordinates"
+											   type="org.digijava.module.aim.dbentity.AmpStructureCoordinate">
+									<tr>
+										<td><b> ${coordinate.latitude}</b></td>
+										<td><b> ${coordinate.longitude}</b></td>
+									</tr>
+								</logic:iterate>
+							</table>
+						</td>
+					</tr>
+				</c:if>
 			
 			<c:if test="${not empty structure.images}">
 				<tr bgcolor="#f0f0f0">

@@ -33,10 +33,11 @@ public class AmpFreezingValidatorTransactionDate extends AmpSemanticValidator<St
         try {
             transactionDate = dateFormatter.parse(validatable.getValue());
         } catch (ParseException e) {
-            //we should actually never reach here since were formating in the model
+            // we should actually never reach here since were formating in the
+            // model
             throw new RuntimeException("Date unparseable");
         }
-        System.out.println("El valor es :" + validatable.getValue())    ;
+        System.out.println("El valor es :" + validatable.getValue());
 
         Boolean affectedByFreezing = org.apache.wicket.Session.get()
                 .getMetaData(OnePagerConst.ACTIVITY_IS_AFFECTED_BY_FREEZING);
@@ -49,8 +50,10 @@ public class AmpFreezingValidatorTransactionDate extends AmpSemanticValidator<St
                 || transactionDate.compareTo(ampActivityFrozen.getDataFreezeEvent().getOpenPeriodEnd()) > 0) {
             ValidationError error = new ValidationError();
             error.addKey("AmpFreezingEventTransactionDateValidator");
-            error.setVariable("openPeriodFrom", dateFormatter.format(ampActivityFrozen.getDataFreezeEvent().getOpenPeriodStart()));
-            error.setVariable("openPeriodTo", dateFormatter.format(ampActivityFrozen.getDataFreezeEvent().getOpenPeriodEnd()));
+            error.setVariable("openPeriodFrom",
+                    dateFormatter.format(ampActivityFrozen.getDataFreezeEvent().getOpenPeriodStart()));
+            error.setVariable("openPeriodTo",
+                    dateFormatter.format(ampActivityFrozen.getDataFreezeEvent().getOpenPeriodEnd()));
             validatable.error(error);
         }
 

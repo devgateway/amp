@@ -1127,15 +1127,22 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 							
                             target.add(component);
 							
-							//some of the fields that need to show errors are HiddenFieldS. These are cumulative error fields, that show error for groups of other fields
-							//like for example a list of sectors with percentages
-							//when these AmpCollectionValidatorFieldS are detected, their validation is revisited
-							if (component instanceof HiddenField) {									
-								if(component.getParent() instanceof AmpCollectionValidatorField<?, ?>) 
-									((AmpCollectionValidatorField<?, ?>)component.getParent()).reloadValidationField(target);									
+                            // some of the fields that need to show errors are
+                            // HiddenFieldS. These are cumulative error fields,
+                            // that show error for groups of other fields
+                            // like for example a list of sectors with
+                            // percentages
+                            // when these AmpCollectionValidatorFieldS are
+                            // detected, their validation is revisited
+                            if (component instanceof HiddenField) {
+                                if (component.getParent() instanceof AmpCollectionValidatorField<?, ?>) {
+                                    ((AmpCollectionValidatorField<?, ?>) component.getParent())
+                                            .reloadValidationField(target);
+                                }
                             } else {
                                 if (component.getParent() instanceof AmpSimpleValidatorField<?, ?>) {
-                                    ((AmpSimpleValidatorField<?, ?>) component.getParent()).reloadValidationField(target);
+                                    ((AmpSimpleValidatorField<?, ?>) component.getParent())
+                                            .reloadValidationField(target);
                                 } else {
                                     target.focusComponent(component);
                                     String js = null;
@@ -1147,11 +1154,11 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                                     // onChange
                                     if (component instanceof RadioChoice<?>
                                             || component instanceof CheckBoxMultipleChoice
-                                            || component instanceof RadioGroup<?> || component instanceof CheckGroup)
+                                            || component instanceof RadioGroup<?> || component instanceof CheckGroup) {
                                         js = String.format("$('#%s').click();", component.getMarkupId());
-                                    else
+                                    } else {
                                         js = String.format("$('#%s').change();", component.getMarkupId());
-
+                                    }
                                     target.appendJavaScript(js);
                                     target.add(component);
                                 }

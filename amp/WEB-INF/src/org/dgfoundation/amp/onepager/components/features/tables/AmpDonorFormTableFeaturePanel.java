@@ -230,8 +230,7 @@ public abstract class AmpDonorFormTableFeaturePanel extends
 	}
 
     protected void addFreezingvalidator(ListItem<AmpFundingDetail> item) {
-        AmpFreezingValidatorTransactionDateField ampFreezingValidatorTransactionDateField = new AmpFreezingValidatorTransactionDateField(
-                "freezingDateValidator", item.getModel(), "freezingDateValidator");
-        item.add(ampFreezingValidatorTransactionDateField);
-    }	
+        item.add(new AmpFreezingValidatorTransactionDateField("freezingDateValidator", item.getModel(),
+                "freezingDateValidator"));
+    }
 }

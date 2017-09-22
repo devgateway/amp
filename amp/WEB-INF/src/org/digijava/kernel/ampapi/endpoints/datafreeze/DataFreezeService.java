@@ -245,27 +245,15 @@ public final class DataFreezeService {
 	 * @param ampTeamMemberId
 	 * @return
 	 */
-	public static boolean isEditable(AmpActivityFrozen ampActivityFrozen, AmpTeamMember atm) {
-		
-	    boolean affectedByFreezing = isActivityAffectedByFreezing(ampActivityFrozen, atm);
-		// check if user is exempt for data freezing
-
-		if ( !affectedByFreezing || ampActivityFrozen.getDataFreezeEvent()
-				.getFreezeOption() == AmpDataFreezeSettings.FreezeOptions.FUNDING) {
-			return true;
-		} else {
-			return false;
-		}
-	}
+    public static boolean isEditable(AmpActivityFrozen ampActivityFrozen, AmpTeamMember atm) {
+        return !isActivityAffectedByFreezing(ampActivityFrozen, atm) || ampActivityFrozen.getDataFreezeEvent()
+                .getFreezeOption() == AmpDataFreezeSettings.FreezeOptions.FUNDING;
+    }
 
     public static boolean isActivityAffectedByFreezing(AmpActivityFrozen ampActivityFrozen, AmpTeamMember atm) {
-        
-        if (Boolean.TRUE.equals(atm.getUser().getExemptFromDataFreezing()) || ampActivityFrozen == null) {
-            return false;
-        } else {
-            return true;
-        }
+        return !(Boolean.TRUE.equals(atm.getUser().getExemptFromDataFreezing()) || ampActivityFrozen == null);
     }
+
 	public static void processFreezingEvent() {
 		AmpDataFreezeSettings currentFreezingEvent = DataFreezeUtil.getCurrentFreezingEvent();
 		if (currentFreezingEvent != null) {

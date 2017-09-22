@@ -138,7 +138,7 @@ function selectLocationCallerShape(selectedGraphic){
 	var shapeInput = callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[6];
 	shapeInput.value = "";
 	
-    if(selectedPointEvent.target instanceof L.Marker) {
+    if(selectedPointEvent.target instanceof L.Marker || selectedGraphic.target instanceof L.CircleMarker) {
     	latitudeInput.value = selectedGraphic.latlng.lat;
     	longitudeInput.value =  selectedGraphic.latlng.lng; 
     	shapeInput.value = MapConstants.SHAPE.POINT;
@@ -146,8 +146,7 @@ function selectLocationCallerShape(selectedGraphic){
         window.opener.postvaluesx(longitudeInput);  
         window.opener.postvaluesx(shapeInput);         
         coordsInput.value =  JSON.stringify({'coordinates': []});		
-	    window.opener.postvaluesx(coordsInput);
-	    
+	    window.opener.postvaluesx(coordsInput);	    
 	} else {
 		var latLngs = selectedGraphic.target.getLatLngs();
 		var data = []

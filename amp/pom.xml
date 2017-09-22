@@ -1357,85 +1357,75 @@
 		                   <arguments>run build</arguments>
 		                <workingDirectory>${project.basedir}/TEMPLATE/reamp</workingDirectory>
 	                    </configuration>
-                  </execution>
-<!--                    !!!! Next part is for building filters and dashboard. It was commented out until  -->
-<!--                     there is a decision on how to approach dependecies caching (node_modules) AMP-20022 !!! -->
+                  </execution>                    
+                      <!-- Installing node and npm for filters --> 
+                    <execution>
+                        <id>install node and npm for filters</id>
+                        <goals>
+                            <goal>install-node-and-npm</goal>
+                        </goals>
+                        <configuration>
+                             <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-filter</workingDirectory>
+                        </configuration>
+                    </execution>
+                    <!-- Running npm for filters --> 
+                    <execution>
+                        <id>npm install for filters</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                 		    <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-filter</workingDirectory>
+                        </configuration>
+                    </execution>
+                     <!--  Running gulp for filters --> 
+                    <execution>
+                        <id>gulp build for filters</id>
+                        <goals>
+                            <goal>gulp</goal>
+                        </goals>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                            <arguments>build</arguments>
+               				<workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-filter</workingDirectory>
+                        </configuration>
+                    </execution>
+                           
+                    <!-- Installing node and npm for dashboard --> 
+                    <execution>
+                        <id>install node and npm for dashboard</id>
+                        <goals>
+                            <goal>install-node-and-npm</goal>
+                        </goals>
+                        <configuration>
+                             <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/dashboard/dev</workingDirectory>
+                        </configuration>
+                    </execution>
+                     <!-- Running npm for dashboard -->
+                    <execution>
+                        <id>npm install for dashboard</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                 		    <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/dashboard/dev</workingDirectory>
+                        </configuration>
+                    </execution>
                     
-                    
-<!--                           Installing node and npm for filters -->
-<!--                     <execution> -->
-<!--                         <id>install node and npm for filters</id> -->
-<!--                         <goals> -->
-<!--                             <goal>install-node-and-npm</goal> -->
-<!--                         </goals> -->
-<!--                         <configuration> -->
-<!--                              <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-filter</workingDirectory> -->
-<!--                         </configuration> -->
-<!--                     </execution> -->
-<!--                     Running npm for filters -->
-<!--                     <execution> -->
-<!--                         <id>npm install for filters</id> -->
-<!--                         <goals> -->
-<!--                             <goal>npm</goal> -->
-<!--                         </goals> -->
-<!--                         <phase>generate-sources</phase> -->
-<!--                         <configuration> -->
-<!--                  		    <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-filter</workingDirectory> -->
-<!--                         </configuration> -->
-<!--                     </execution> -->
-<!--                         Running gulp for filters -->
-<!--                     <execution> -->
-<!--                         <id>gulp build for filters</id> -->
-<!--                         <goals> -->
-<!--                             <goal>gulp</goal> -->
-<!--                         </goals> -->
-<!--                         <phase>generate-sources</phase> -->
-<!--                         <configuration> -->
-<!--                             <arguments>build</arguments> -->
-<!--                				<workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-filter</workingDirectory> -->
-<!--                         </configuration> -->
-<!--                     </execution> -->
-                    
-                    
-                    
-<!--                     Installing node and npm for dashboard -->
-<!--                     <execution> -->
-<!--                         <id>install node and npm for dashboard</id> -->
-<!--                         <goals> -->
-<!--                             <goal>install-node-and-npm</goal> -->
-<!--                         </goals> -->
-<!--                         <configuration> -->
-<!--                              <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/dashboard/dev</workingDirectory> -->
-<!--                         </configuration> -->
-<!--                     </execution> -->
-<!--                       Running npm for dashboard -->
-<!--                     <execution> -->
-<!--                         <id>npm install for dashboard</id> -->
-<!--                         <goals> -->
-<!--                             <goal>npm</goal> -->
-<!--                         </goals> -->
-<!--                         <phase>generate-sources</phase> -->
-<!--                         <configuration> -->
-<!--                  		    <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/dashboard/dev</workingDirectory> -->
-<!--                         </configuration> -->
-<!--                     </execution> -->
-                    
-<!--                     Running gulp for dashboard -->
-<!--                     <execution> -->
-<!--                         <id>gulp build for dashboard</id> -->
-<!--                         <goals> -->
-<!--                             <goal>gulp</goal> -->
-<!--                         </goals> -->
-<!--                         <phase>generate-sources</phase> -->
-<!--                         <configuration> -->
-<!--                             <arguments>build</arguments> -->
-<!--                				<workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/dashboard/dev</workingDirectory> -->
-<!--                         </configuration> -->
-<!--                     </execution> -->
-                
-                
-                      
-                    
+                    <!-- Running gulp for dashboard -->
+                    <execution>
+                        <id>gulp build for dashboard</id>
+                        <goals>
+                            <goal>gulp</goal>
+                        </goals>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                            <arguments>build</arguments>
+               				<workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/dashboard/dev</workingDirectory>
+                        </configuration>
+                    </execution>                    
                 </executions>
                 
             </plugin>

@@ -57,6 +57,7 @@ public class HeatMapService {
     private static final int DEFAULT_X_COUNT = 25;
     private static final int DEFAULT_Y_COUNT = 10;
     private static final BigDecimal HUNDRED = new BigDecimal(100);
+    private static final BigDecimal ZERO = new BigDecimal(0);
     public static final int SCALE = 6;
 
     private JsonBean config;
@@ -259,7 +260,11 @@ public class HeatMapService {
         for (Entry<String, BigDecimal> xTotalEntry : xTotal.entrySet()) {
             xTotalAmounts.add(decimalFormatter.format(xTotalEntry.getValue()));
             // x % total = sum all data for X col / sum all data for X col, per current requirements
-            xTotalEntry.setValue(HUNDRED);
+            if (xTotalEntry.getValue().compareTo(BigDecimal.ZERO) > 0) {
+                xTotalEntry.setValue(HUNDRED);
+            } else {
+                xTotalEntry.setValue(ZERO);
+            }
         }
         
         return matrix;

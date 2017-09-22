@@ -3,6 +3,7 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -40,8 +41,10 @@ public class AmpStructure implements Serializable,Comparable, Versionable, Clone
 //	@Interchangeable(fieldTitle="")
 	private Set<AmpActivityVersion> activities;
 	private Set<AmpStructureImg> images;
-	
-	public Set getActivities() {
+	private Set<AmpStructureCoordinate> coordinates;	
+    private String coords;
+    
+    public Set getActivities() {
 		return activities;
 	}
 	public void setActivities(Set activities) {
@@ -189,6 +192,17 @@ public class AmpStructure implements Serializable,Comparable, Versionable, Clone
 				aux.images.add(auxImg);
 			}
 		}
+		
+		aux.coordinates = new LinkedHashSet<>();
+        if (this.coordinates != null) {
+            for (AmpStructureCoordinate coord : this.coordinates) {
+                AmpStructureCoordinate auxCoord = (AmpStructureCoordinate) coord.clone();
+                auxCoord.setAmpStructureCoordinateId(null);
+                auxCoord.setStructure(aux);
+                aux.coordinates.add(auxCoord);
+            }
+        }
+		
 		//aux.activities.add(newActivity);
 		aux.ampStructureId = null;
 		return aux;
@@ -224,7 +238,19 @@ public class AmpStructure implements Serializable,Comparable, Versionable, Clone
 		this.images = images;
 	}
 
-	@Override
+	public Set<AmpStructureCoordinate> getCoordinates() {
+        return coordinates;
+    }
+    public void setCoordinates(Set<AmpStructureCoordinate> coordinates) {
+        this.coordinates = coordinates;
+    }
+    public String getCoords() {
+        return coords;
+    }
+    public void setCoords(String coords) {
+        this.coords = coords;
+    }
+    @Override
 	public String toString()
 	{
 		return String.format("AmpStructure[id=%s], title = %s, description = %s", this.ampStructureId, this.title, this.description);

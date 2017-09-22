@@ -20,6 +20,7 @@ import org.digijava.module.message.triggers.AwaitingApprovalCalendarTrigger;
 import org.digijava.module.message.triggers.NotApprovedActivityTrigger;
 import org.digijava.module.message.triggers.NotApprovedCalendarEventTrigger;
 import org.digijava.module.message.triggers.PendingResourceShareTrigger;
+import org.digijava.module.message.triggers.PerformanceRuleAlertTrigger;
 import org.digijava.module.message.triggers.RejectResourceSharetrigger;
 import org.digijava.module.message.triggers.RemoveCalendarEventTrigger;
 import org.digijava.module.message.triggers.UserAddedToFirstWorkspaceTrigger;
@@ -59,7 +60,8 @@ public class MessageConstants {
                                                                 RejectResourceSharetrigger.class,
                                                                 UserRegistrationTrigger.class,
                                                                 ActivityValidationWorkflowTrigger.class,
-                                                                ActivityMeassureComparisonTrigger.class
+                                                                ActivityMeassureComparisonTrigger.class,
+                                                                PerformanceRuleAlertTrigger.class
                                                                 };
 
     public static final  String[] triggerName=new String[] {"User added to workspace", 
@@ -85,7 +87,8 @@ public class MessageConstants {
                                                             "Reject Resource Share",
                                                             "New User Registration",
                                                             "Activity validation workflow notification",
-                                                            "Activity measure comparison notification"};
+                                                            "Activity measure comparison notification",
+                                                            "Performance Rule Alert Email notification"};
 
 	public static final String PRIORITY_LEVEL_NAME= "Priorty level";
 	public static final String PRIORITY_LEVEL_KEY= "priorty_level";

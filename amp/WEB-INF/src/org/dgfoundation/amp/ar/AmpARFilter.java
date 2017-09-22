@@ -6,6 +6,9 @@
  */
 package org.dgfoundation.amp.ar;
 
+import static java.util.Collections.emptySet;
+import static java.util.stream.Collectors.toSet;
+
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
@@ -26,6 +29,7 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -381,6 +385,8 @@ public class AmpARFilter extends PropertyListable {
 	private Set<AmpCategoryValue> activityPledgesTitle = null;
 	
 	private Set<AmpCategoryValue> expenditureClass = null;
+
+	private Set<AmpCategoryValue> performanceAlertLevel = null;
 	
 	// private Long ampModalityId=null;
 
@@ -1449,6 +1455,9 @@ public class AmpARFilter extends PropertyListable {
 		
 		String EXPENDITURE_CLASS_FILTER = "SELECT amp_activity_id FROM v_expenditure_class WHERE id IN (" + Util.toCSStringForIN(getExpenditureClassForFilters()) + ")";
 
+		String performanceAlertLevelFilter = "SELECT amp_activity_id FROM v_performance_alert_level "
+				+ "WHERE level_code IN (" + Util.toCSStringForIN(getPerformanceAlertLevelForFilters()) + ")";
+
 		String MODE_OF_PAYMENT_FILTER = "SELECT amp_activity_id FROM v_mode_of_payment WHERE mode_of_payment_code IN ("
 			+ Util.toCSString(modeOfPayment) + ")";
 		
@@ -1497,8 +1506,8 @@ public class AmpARFilter extends PropertyListable {
 		String RESPONSIBLE_ORGANIZATION_FILTER = " SELECT v.amp_activity_id FROM v_responsible_organisation v  WHERE v.org_id IN ("
 			+ Util.toCSStringForIN(responsibleorg) + ")";
 
-		String COMPONENT_FUNDING_ORGANIZATION_FILTER = " SELECT v.amp_activity_id FROM v_component_funding_organization_name v  WHERE v.org_id IN ("
-			+ Util.toCSStringForIN(componentFunding) + ")";
+        String COMPONENT_FUNDING_ORGANIZATION_FILTER = " SELECT v.amp_activity_id FROM v_component_funding_organization_name v  WHERE v.org_id IN ("
+                + Util.toCSStringForIN(componentFunding) + ")";
 
 		String COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION_FILTER = " SELECT v.amp_activity_id FROM v_component_second_responsible_organization_name v  WHERE v.org_id IN ("
 			+ Util.toCSStringForIN(componentSecondResponsible) + ")";
@@ -1661,7 +1670,11 @@ public class AmpARFilter extends PropertyListable {
 		
 		if (expenditureClass != null && expenditureClass.size() > 0)
 			queryAppend(EXPENDITURE_CLASS_FILTER);
-		
+
+		if (performanceAlertLevel != null && performanceAlertLevel.size() > 0) {
+			queryAppend(performanceAlertLevelFilter);
+		}
+
 		if (modeOfPayment != null && modeOfPayment.size() > 0)
 			queryAppend(MODE_OF_PAYMENT_FILTER);
 		
@@ -3805,6 +3818,22 @@ public class AmpARFilter extends PropertyListable {
 	
 	public void setExpenditureClass(Set<AmpCategoryValue> expenditureClass) {
 		this.expenditureClass = expenditureClass;
+	}
+
+	public Set<AmpCategoryValue> getPerformanceAlertLevel() {
+		return performanceAlertLevel;
+	}
+
+	public void setPerformanceAlertLevel(final Set<AmpCategoryValue> performanceAlertLevel) {
+		this.performanceAlertLevel = performanceAlertLevel;
+	}
+
+	private Set<Long> getPerformanceAlertLevelForFilters() {
+		return Optional.ofNullable(performanceAlertLevel)
+				.orElse(emptySet())
+				.stream()
+				.map(AmpCategoryValue::getId)
+				.collect(toSet());
 	}
 
 	public static boolean isTrue(Boolean b) {

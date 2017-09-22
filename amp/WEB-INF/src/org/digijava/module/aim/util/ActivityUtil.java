@@ -9,7 +9,6 @@ import java.lang.reflect.Method;
 import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -22,9 +21,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.FilterParam;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
@@ -43,11 +44,8 @@ import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpAhsurvey;
-import org.digijava.module.aim.dbentity.AmpAhsurveyResponse;
 import org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicatorOption;
 import org.digijava.module.aim.dbentity.AmpAuditLogger;
-import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
@@ -78,6 +76,7 @@ import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingValidator;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -452,6 +451,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 			for(AmpStructure str:result.getStructures()) {
 				Hibernate.initialize(str.getImages());
 				Hibernate.initialize(str.getType());
+				Hibernate.initialize(str.getCoordinates());
 			}
 		} catch (ObjectNotFoundException e) {
 			logger.debug("AmpActivityVersion with id=" + id + " not found");
@@ -1978,5 +1978,52 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 
 		return new HashSet<String>(((List<String>) qry.list()));
 	}
+	
+	/**
+     * @param a
+     * @param activityDisbursements
+     * @return transactions of specified type
+     */
+    public static List<AmpFundingDetail> getTransactionsWithType(AmpActivityVersion a, int transactionType) {
+        List<AmpFundingDetail> activityTransactions = new ArrayList<>();
+        
+        if (a.getFunding() != null) {
+            activityTransactions = a.getFunding().stream()
+                    .filter(f -> f.getFundingDetails() != null)
+                    .flatMap(f -> f.getFundingDetails().stream())
+                    .filter(fd -> fd.getTransactionType() == transactionType)
+                    .collect(Collectors.toList());
+        }
+        
+        return activityTransactions;
+    }
+    
+    public static List<Long> getActivityIdsByApprovalStatus(Set<String> statuses) {
+        Long closedCatValue = FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.CLOSED_ACTIVITY_VALUE);
 
-} // End
+        String filterQuery = "SELECT amp_activity_id FROM amp_activity " 
+                + "WHERE (draft IS NULL or draft = false) "
+                + "AND (amp_team_id IS NOT NULL)" 
+                + "AND (deleted IS NULL OR deleted = false) "
+                + "AND approval_status IN (" + Util.toCSString(statuses) + ") "
+                + "AND amp_activity_id IN (SELECT amp_activity_id FROM v_status WHERE amp_status_id != "
+                + closedCatValue + ") ";
+
+        Session session = PersistenceManager.getRequestDBSession();
+
+        List<Long> validatedActivityIds = (List<Long>) session.createSQLQuery(filterQuery)
+                .addScalar("amp_activity_id", StandardBasicTypes.LONG)
+                .list();
+
+        return validatedActivityIds;
+    }
+
+    public static List<Long> getValidatedActivityIds() {
+        return getActivityIdsByApprovalStatus(AmpARFilter.validatedActivityStatus);
+    }
+    
+    public static List<Long> getUnvalidatedActivityIds() {
+        return getActivityIdsByApprovalStatus(AmpARFilter.unvalidatedActivityStatus);
+    }
+
+}

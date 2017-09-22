@@ -16,6 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.TreeSet;
 
 import javax.servlet.ServletContext;
@@ -61,6 +62,7 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpStructure;
+import org.digijava.module.aim.dbentity.AmpStructureCoordinate;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.dbentity.IPAContractDisbursement;
@@ -1761,12 +1763,28 @@ public class ExportActivityToWord extends Action {
                 eshProjectCostTable.addRowData(new ExportSectionHelperRowData(
                         "Description", null, null, true).addRowData(struc
                         .getDescription()));
-                eshProjectCostTable.addRowData(new ExportSectionHelperRowData(
-                        "Latitude", null, null, true).addRowData(struc
-                        .getLatitude()));
-                eshProjectCostTable.addRowData(new ExportSectionHelperRowData(
-                        "Longitude", null, null, true).addRowData(struc
-                        .getLongitude()));
+                if (struc.getLatitude() != null) {
+                    eshProjectCostTable.addRowData(new ExportSectionHelperRowData(
+                            "Latitude", null, null, true).addRowData(struc
+                            .getLatitude()));
+                }
+                if (struc.getLongitude() != null) {
+                    eshProjectCostTable.addRowData(new ExportSectionHelperRowData(
+                            "Longitude", null, null, true).addRowData(struc
+                            .getLongitude()));
+                }
+
+                if (struc.getCoordinates() != null && struc.getCoordinates().size() > 0) {
+                    StringJoiner coordinatesOutput = new StringJoiner("\n");
+                    for (AmpStructureCoordinate coordinate : struc.getCoordinates()) {
+                        coordinatesOutput.add(coordinate.getLatitude() + " " + coordinate.getLongitude());
+                    }
+
+                    eshProjectCostTable.addRowData(new ExportSectionHelperRowData(
+                            "Coordinates", null, null, true)
+                            .addRowData(coordinatesOutput.toString()));
+
+                }
                 retVal.add(createSectionTable(eshProjectCostTable, request, ampContext));
             }
 
@@ -2091,8 +2109,8 @@ public class ExportActivityToWord extends Action {
     /*
      * Component funding section
      */
-    private List<Table> getComponentTables (final HttpServletRequest request, final ServletContext ampContext,
-                                            final EditActivityForm myForm)	throws BadElementException, WorkerException {
+    private List<Table> getComponentTables(final HttpServletRequest request, final ServletContext ampContext,
+            final EditActivityForm myForm) throws BadElementException, WorkerException {
         final String[] componentCommitmentsFMfields = {
                 "/Activity Form/Components/Component/Components Commitments",
                 "/Activity Form/Components/Component/Components Commitments/Commitment Table/Amount",
@@ -2545,16 +2563,17 @@ public class ExportActivityToWord extends Action {
             for (FundingOrganization fundingOrganisation : myForm.getFunding().getFundingOrganizations()) {
                 if(fundingOrganisation.getFundings()!=null){
 
-                    for (Funding funding : (Collection<Funding>)fundingOrganisation.getFundings()) {
-                        ExportSectionHelper eshDonorInfo = new ExportSectionHelper(null, false).setWidth(WIDTH).setAlign("left");
-                        //addFundingRowData:
+                    for (Funding funding : (Collection<Funding>) fundingOrganisation.getFundings()) {
+                        ExportSectionHelper eshDonorInfo = new ExportSectionHelper(null, false).setWidth(WIDTH)
+                                .setAlign("left");
+                        // addFundingRowData:
                         addFundingRowData(
                                 "/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Organization Id",
                                 eshDonorInfo, "Funding Organization Id", funding.getOrgFundingId(), true);
                         addFundingRowData(null, eshDonorInfo, "Funding Organization Name",
                                 fundingOrganisation.getOrgName(), false);
-                        addFundingRowData(null, eshDonorInfo, "Organization Role", TranslatorWorker.
-                                translateText(funding.getSourceRole()), false);
+                        addFundingRowData(null, eshDonorInfo, "Organization Role",
+                                TranslatorWorker.translateText(funding.getSourceRole()), false);
                         addFundingRowData(
                                 "/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Type of Assistence",
                                 eshDonorInfo, "Type of Assistance", funding.getTypeOfAssistance(), true);
@@ -2569,8 +2588,8 @@ public class ExportActivityToWord extends Action {
                                 eshDonorInfo, "Mode of Payment", funding.getModeOfPayment(), true);
                         addFundingRowData("/Activity Form/Funding/Funding Group/Funding Item/Donor Objective",
                                 eshDonorInfo, "Donor Objective", funding.getDonorObjective(), true);
-                        addFundingRowData("/Activity Form/Funding/Funding Group/Funding Item/Conditions",
-                                eshDonorInfo, "Conditions", funding.getConditions(), true);
+                        addFundingRowData("/Activity Form/Funding/Funding Group/Funding Item/Conditions", eshDonorInfo,
+                                "Conditions", funding.getConditions(), true);
                         addFundingRowData(
                                 "/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement",
                                 eshDonorInfo, "Agreement Title", funding.getTitle(), true);
@@ -2589,39 +2608,13 @@ public class ExportActivityToWord extends Action {
                             addFundingRowData(null, eshDonorInfo, "Funding Closing Date",
                                     funding.getFundingClosingDate(), false);
                         }
-                        
-                        addFundingRowData("/Activity Form/Funding/Funding Group/Funding Item/Loan Details/Ratification Date",
+
+                        addFundingRowData(
+                                "/Activity Form/Funding/Funding Group/Funding Item/Loan Details/Ratification Date",
                                 eshDonorInfo, "Ratification Date", funding.getRatificationDate(), true);
-                        
+
                         eshDonorInfo.addRowData(new ExportSectionHelperRowData(null).setSeparator(true));
                         retVal.add(createSectionTable(eshDonorInfo, request, ampContext));
-
-
-
-
-//	                    TeamMember tm = (TeamMember) session.getAttribute("currentMember");
-//	                    String toCurrCode=null;
-//
-//	                    if (tm != null)
-//	                        toCurrCode = CurrencyUtil.getAmpcurrency(tm.getAppSettings().getCurrencyId()).getCurrencyCode();
-//						if (visibleModuleCommitments)
-//						{
-//							boolean visibleCommitmentsExchRate = true;
-////							boolean visibleCommitmentsExchRate = FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Exchange Rate", ampContext,session);
-////
-//							addFundingRegion(myForm, fundingTable, funding, funding.getSubtotalPlannedCommitments(), "PLANNED COMMITMENTS", Constants.COMMITMENT, CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey(), currencyCode, visibleCommitmentsExchRate, fundingCommitmentsFMfields,session);
-//							addFundingRegion(myForm, fundingTable, funding, funding.getSubtotalActualCommitments(), "ACTUAL COMMITMENTS", Constants.COMMITMENT, CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey(),  currencyCode, visibleCommitmentsExchRate, fundingCommitmentsFMfields,session);
-//							addFundingRegion(myForm, fundingTable, funding, funding.getSubtotalPipelineCommitments(), "PIPELINE COMMITMENTS", Constants.COMMITMENT, CategoryConstants.ADJUSTMENT_TYPE_PIPELINE.getValueKey(), currencyCode, visibleCommitmentsExchRate, fundingCommitmentsFMfields,session);
-//							
-//							// SSC: only commitments
-//							addFundingRegion(myForm, fundingTable, funding, funding.getSubtotalOfficialDevelopmentAidCommitments(), "Official Development Aid SSC", Constants.COMMITMENT, CategoryConstants.ADJUSTMENT_TYPE_ODA_SSC.getValueKey(), currencyCode, visibleCommitmentsExchRate, fundingCommitmentsFMfields,session);
-//							addFundingRegion(myForm, fundingTable, funding, funding.getSubtotalBilateralSscCommitments(), "Bilateral SSC", Constants.COMMITMENT, CategoryConstants.ADJUSTMENT_TYPE_BILATERAL_SSC.getValueKey(), currencyCode, visibleCommitmentsExchRate, fundingCommitmentsFMfields,session);
-//							addFundingRegion(myForm, fundingTable, funding, funding.getSubtotalTriangularSscCommitments(), "Triangular SSC", Constants.COMMITMENT, CategoryConstants.ADJUSTMENT_TYPE_TRIANGULAR_SSC.getValueKey(), currencyCode, visibleCommitmentsExchRate, fundingCommitmentsFMfields,session);					
-
-
-
-
-
                     }
                 }
             }

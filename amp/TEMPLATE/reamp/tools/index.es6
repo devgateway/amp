@@ -34,6 +34,31 @@ export function postJson(endpoint, payload){
   })
 }
 
+export function deleteJson(endpoint, payload){
+  return fetch(endpoint, {
+    method: 'delete',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(payload)
+  })
+}
+
+export function putJson(endpoint, payload){
+  return fetch(endpoint, {
+    method: 'put',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(payload)
+  })
+}
+
+
 export function fetchJsonDev(url) {
   url = 'http://localhost:8080' + url; 
   return fetch(url, {

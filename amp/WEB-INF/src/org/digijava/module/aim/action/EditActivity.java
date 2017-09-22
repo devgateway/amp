@@ -1204,10 +1204,11 @@ public class EditActivity extends Action {
           eaForm.getDocuments().setReferenceDocs(null);
 
           eaForm=setSectorsToForm(eaForm, activity);
-          if(isPreview){
-            	//we load classificationConfigs for been displayed in preview and printer friendly for issue AMP-16421
-            	List<AmpClassificationConfiguration> classificationConfigs=SectorUtil.getAllClassificationConfigs();
-            	eaForm.getSectors().setClassificationConfigs(classificationConfigs);
+            if (isPreview) {
+                //we load classificationConfigs for been displayed in preview and printer friendly for issue AMP-16421
+                List<AmpClassificationConfiguration> classificationConfigs = SectorUtil
+                        .getAllClassificationConfigsOrdered();
+                eaForm.getSectors().setClassificationConfigs(classificationConfigs);
             }    
           
           if (activity.getProgramDescription() != null)

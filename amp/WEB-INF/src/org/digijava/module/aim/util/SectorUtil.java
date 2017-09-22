@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -49,6 +50,13 @@ import org.hibernate.type.LongType;
 public class SectorUtil {
 
 	private static Logger logger = Logger.getLogger(SectorUtil.class);
+	private static List<String> sectorsOrder = Arrays.asList(AmpClassificationConfiguration
+					.PRIMARY_CLASSIFICATION_CONFIGURATION_NAME,
+			AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME,
+			AmpClassificationConfiguration.TERTIARY_CLASSIFICATION_CONFIGURATION_NAME,
+			AmpClassificationConfiguration.QUATERNARY_CLASSIFICATION_CONFIGURATION_NAME,
+			AmpClassificationConfiguration.QUINARY_CLASSIFICATION_CONFIGURATION_NAME,
+			AmpClassificationConfiguration.TAG_CLASSIFICATION_CONFIGURATION_NAME);
 
 	public static Collection searchForSector(String keyword, Long ampSecSchemeId) {
 		Session session = null;
@@ -731,6 +739,20 @@ public class SectorUtil {
 	}
 
 	/**
+	 * Returns All Configurations of Classifications in default order
+	 *
+	 * @return All Configurations in default order
+	 */
+	public static List<AmpClassificationConfiguration> getAllClassificationConfigsOrdered() {
+
+		List<AmpClassificationConfiguration> allClassificationConfigs = getAllClassificationConfigs();
+
+		allClassificationConfigs.sort(Comparator.comparingInt(item -> sectorsOrder.indexOf(item.getName())));
+
+		return allClassificationConfigs;
+	}
+
+	/**
 	 * Returns All Configurations of Classifications
 	 * 
 	 * @return All Configurations
@@ -741,7 +763,7 @@ public class SectorUtil {
 		String queryString = "select cls from " + AmpClassificationConfiguration.class.getName() + " cls ";
 		return PersistenceManager.getSession().createQuery(queryString).list();
 	}
-	
+
 	public static AmpClassificationConfiguration getClassificationConfigBySectorSchemeId(Long sectorSchemeId) {
 		String queryString = "select cls from " + AmpClassificationConfiguration.class.getName() + " cls  where cls.classification.ampSecSchemeId = " + sectorSchemeId;
 		return (AmpClassificationConfiguration) PersistenceManager.getSession().createQuery(queryString).uniqueResult();

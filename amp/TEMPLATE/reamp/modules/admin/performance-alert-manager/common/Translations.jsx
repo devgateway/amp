@@ -37,10 +37,5 @@ export const initialTranslations = {
   'amp.performance-rule:no-disbursement-status':'No disbursement status after selected funding date',
   'amp.performance-rule:disbursement-after-activity-date': 'Disbursements after selected activity date', 
   'amp.performance-rule:no-updated-disbursements': 'No updated disbursements',
-  'amp.performance-rule:rule-types': 'Rule types',
-  'amp.performance-rule:message1': "{timeAmount} {timeUnit} went by after the '{fundingDate}' and the project status was not modified to '{activityStatus}'",
-  'amp.performance-rule:message2': "{timeAmount} {timeUnit} have passed since the '{fundingDate}' and still no disbursement from donor",
-  'amp.performance-rule:message3': "A disbursement happened after the 'activityDate'",
-  'amp.performance-rule:message4': "Disbursements (actual or planned) from one or more donor have not been updated in the last {timeAmount} {timeUnit}"
-  
+  'amp.performance-rule:rule-types': 'Rule types' 
 }

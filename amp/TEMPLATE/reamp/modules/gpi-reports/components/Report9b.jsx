@@ -24,10 +24,10 @@ export default class Report9b extends Component {
         this.downloadPdfFile = this.downloadPdfFile.bind(this);
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.initializeFiltersAndSettings();
     }
-
+    
     initializeFiltersAndSettings() {
         this.filter = new ampFilter( {
             draggable: true,

@@ -21,7 +21,7 @@ public class NoUpdatedDisbursementsAfterTimePeriodMatcherDefinition extends Perf
         
         super("noUpdatedDisbursements", "No updated disbursements", 
                 String.format("Disbursements (actual or planned) from one or more donor "
-                        + "have not been updated in the last {%s} {%s}", 
+                        + "have not been added in the last {%s} {%s}", 
                         PerformanceRuleConstants.ATTRIBUTE_TIME_AMOUNT, 
                         PerformanceRuleConstants.ATTRIBUTE_TIME_UNIT));
         

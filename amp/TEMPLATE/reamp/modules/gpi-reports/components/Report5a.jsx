@@ -264,7 +264,6 @@ export default class Report5a extends Component {
                           <th className="col-md-2"><HeaderToolTip column={Constants.CONCESSIONAL} headers={this.props.mainReport.page.headers}/>{this.getLocalizedColumnName(Constants.CONCESSIONAL)}?</th>
                           <th>{this.getLocalizedColumnName(Constants.ACTUAL_DISBURSEMENTS)} <span className="light-weight"></span></th>
                           <th>{this.getLocalizedColumnName(Constants.PLANNED_DISBURSEMENTS)}<span className="light-weight"></span></th>
-                          <th className="col-md-2"><HeaderToolTip column={Constants.DISBURSEMENTS_THROUGH_OTHER_PROVIDERS} headers={this.props.mainReport.page.headers}/>{this.getLocalizedColumnName(Constants.DISBURSEMENTS_THROUGH_OTHER_PROVIDERS)}</th>
                           <th className="col-md-2"><HeaderToolTip column={Constants.DISBURSEMENTS_AS_SCHEDULED} headers={this.props.mainReport.page.headers}/>{this.getLocalizedColumnName(Constants.DISBURSEMENTS_AS_SCHEDULED)}</th>
                           <th className="col-md-2"><HeaderToolTip column={Constants.OVER_DISBURSED} headers={this.props.mainReport.page.headers}/>{this.getLocalizedColumnName(Constants.OVER_DISBURSED)}</th>
                           <th>
@@ -285,7 +284,6 @@ export default class Report5a extends Component {
                               <td className="number-column">{row[Constants.CONCESSIONAL]}</td>
                               <td className="number-column">{row[Constants.ACTUAL_DISBURSEMENTS]}</td>
                               <td className="number-column">{row[Constants.PLANNED_DISBURSEMENTS]}</td>
-                              <td className="number-column">{row[Constants.DISBURSEMENTS_THROUGH_OTHER_PROVIDERS]}</td>
                               <td className="number-column">{row[Constants.DISBURSEMENTS_AS_SCHEDULED]}</td>
                               <td className="number-column">{row[Constants.OVER_DISBURSED]}</td>
                               <td className="number-column"><img className="table-icon" src="images/remarks-icon.svg" data-url={row[Constants.REMARK]} onClick={this.showRemarksModal.bind(this)}/></td>

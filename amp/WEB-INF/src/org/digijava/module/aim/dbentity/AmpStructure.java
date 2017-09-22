@@ -194,8 +194,8 @@ public class AmpStructure implements Serializable,Comparable, Versionable, Clone
 		}
 		
 		aux.coordinates = new LinkedHashSet<>();
-		if (this.coordinates != null){
-            for(AmpStructureCoordinate coord : this.coordinates){
+        if (this.coordinates != null) {
+            for (AmpStructureCoordinate coord : this.coordinates) {
                 AmpStructureCoordinate auxCoord = (AmpStructureCoordinate) coord.clone();
                 auxCoord.setAmpStructureCoordinateId(null);
                 auxCoord.setStructure(aux);

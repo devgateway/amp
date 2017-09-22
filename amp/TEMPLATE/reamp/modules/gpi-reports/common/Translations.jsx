@@ -35,7 +35,7 @@ export const initialTranslations = {
         'amp.gpi-reports:indicator1-output1-summary-q1': 'Overall extent of use existing crfs',
         'amp.gpi-reports:indicator1-output1-summary-q2': 'Overall use of country owned results framework',
         'amp.gpi-reports:indicator1-output1-summary-q3': 'Overall use of country lead results monitoring frameworks',
-        'amp.gpi-reports:indicator1-output1-summary-q4': 'Overall existence of ex post',
+        'amp.gpi-reports:indicator1-output1-summary-q4': 'Overall existence of ex post (final evaluations)',
         'amp-gpi-reports:supporting-evidence': 'Supporting Evidence',
         'amp-gpi-reports:amount-in-1': 'Amounts in Units',
         'amp-gpi-reports:amount-in-1000': 'In Thousands',
@@ -44,4 +44,6 @@ export const initialTranslations = {
         'amp.gpi-reports:indicator5b-description': 'Development co-operation is more predictable (medium-term predictability )',
         'amp.gpi-reports:indicator6-description': 'Aid is on budgets which are subject to parliamentary scrutiny',
         'amp.gpi-reports:indicator9b-description': 'Effective institutions - developing countries’ systems  are strengthened and used (Use of developing country PFM and procurement systems)'      
+        'amp-gpi-reports:selected': 'Selected: ',
+        'amp-gpi-reports:loading-message': 'Loading...'
 };

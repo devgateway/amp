@@ -11,18 +11,18 @@ import Report1Output1Row from './Report1Output1Row';
 import RemarksPopup from './RemarksPopup';
 import ToolBar from './ToolBar';
 import HeaderToolTip from './HeaderToolTip';
+import Loading from './Loading';
 export default class Report1Output1 extends Component {
     constructor( props, context ) {
         super( props, context );
-        this.state = { recordsPerPage: 150, selectedYear: null, selectedDonor: "", remarksUrl:null, showRemarks: false};
+        this.state = { recordsPerPage: 150, selectedYear: null, selectedDonor: "", remarksUrl:null, showRemarks: false, waiting:true};
         this.showFilters = this.showFilters.bind( this );
         this.showSettings = this.showSettings.bind( this );
         this.onDonorFilterChange = this.onDonorFilterChange.bind( this );
         this.showRemarksModal = this.showRemarksModal.bind(this);
         this.closeRemarksModal = this.closeRemarksModal.bind(this);
         this.downloadExcelFile = this.downloadExcelFile.bind(this);
-        this.downloadPdfFile = this.downloadPdfFile.bind(this);
-        this.getYears = this.getYears.bind(this);
+        this.downloadPdfFile = this.downloadPdfFile.bind(this);        
     }
 
     componentDidMount() {
@@ -91,7 +91,10 @@ export default class Report1Output1 extends Component {
 
     fetchReportData( data ) {
         let requestData = data || this.getRequestData();
-        this.props.actions.fetchReportData( requestData, '1' );
+        this.setState({waiting:true});
+        this.props.actions.fetchReportData( requestData, '1' ).then(function(){
+            this.setState({waiting: false});  
+        }.bind(this));
     }
 
     onDonorFilterChange( e ) {
@@ -184,18 +187,27 @@ export default class Report1Output1 extends Component {
     }
 
     getYears() {
-       let settings  = this.settingsWidget.toAPIFormat()
-       let calendarId = settings && settings['calendar-id'] ?  settings['calendar-id'] : this.settingsWidget.definitions.getDefaultCalendarId();
-       let calendar = this.props.years.filter(calendar => calendar.calendarId == calendarId)[0];
-       return calendar.years.slice();        
+        let result = [];
+        if(this.settingsWidget) {
+            let settings  = this.settingsWidget.toAPIFormat()
+            let calendarId = settings && settings['calendar-id'] ?  settings['calendar-id'] : this.settingsWidget.definitions.getDefaultCalendarId();
+            let calendar = this.props.years.filter(calendar => calendar.calendarId == calendarId)[0];
+            result = calendar.years.slice();  
+        }
+        return result;
+               
     }
 
-    render() {
-        if ( this.props.mainReport && this.props.mainReport.page && this.settingsWidget && this.settingsWidget.definitions) {
+    render() {        
             let addedGroups = [];                       
-            var years = this.getYears();            
+            var years = Utils.getYears(this.settingsWidget, this.props.years);            
             return (
                 <div>
+                    {this.state.waiting &&                      
+                        <Loading/>                
+                    } 
+                    {this.props.mainReport && this.props.mainReport.page && this.settingsWidget && this.settingsWidget.definitions &&
+                     <div>                    
                     <div id="filter-popup" ref="filterPopup"> </div>
                     <div id="amp-settings" ref="settingsPopup"> </div>
                     <ToolBar showFilters={this.showFilters} showSettings={this.showSettings}  downloadPdfFile={this.downloadPdfFile}  downloadExcelFile={this.downloadExcelFile}/>
@@ -293,12 +305,15 @@ export default class Report1Output1 extends Component {
                       </table>
                     <div>
                          <PagingSection mainReport={this.props.mainReport} goToPage={this.goToPage.bind(this)} updateRecordsPerPage={this.updateRecordsPerPage.bind(this)}/>
-                    </div>
-                </div>
-            );
-        }
+               
+                       </div>
+                  </div>        
+               }
+            </div>
+                
+          );
+        
 
-        return ( <div></div> );
     }
 
 }

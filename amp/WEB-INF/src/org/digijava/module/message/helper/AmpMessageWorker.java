@@ -83,7 +83,9 @@ public class AmpMessageWorker {
 
     public static final String DEFAULT_EMAIL_SENDER = "system@digijava.org";
     public static final long SITE_ID = 3L;
-	private static Logger logger = Logger.getLogger(AmpMessageWorker.class);
+    private static final String PARAM_NAME = "name";
+    private static final int SUBJECT_MAX_LENGTH = 77;
+    private static Logger logger = Logger.getLogger(AmpMessageWorker.class);
 
 	public static void processEvent(Event e) throws Exception {
 		String triggerClassName = e.getTrigger().getName();
@@ -714,7 +716,7 @@ public class AmpMessageWorker {
 	private static Approval createApprovalFromTemplate(TemplateAlert template, HashMap<String, String> myMap,
 			Approval newApproval, boolean needsApproval, boolean sourceIsResource, boolean activityApproval,
 			AmpTeamMember approver) {
-		newApproval.setName(DgUtil.fillPattern(template.getName(), myMap));
+		newApproval.setName(truncateParameterName(template.getName(), myMap));
 		newApproval.setDescription(DgUtil.fillPattern(template.getDescription(), myMap));
 		newApproval.setDraft(false);
 		newApproval.setCreationDate(new Date());
@@ -776,7 +778,7 @@ public class AmpMessageWorker {
 	 */
 	private static AmpAlert createAlertFromTemplate(TemplateAlert template, HashMap<String, String> myMap,
 			AmpAlert newAlert, String receivers) {
-		newAlert.setName(DgUtil.fillPattern(template.getName(), myMap));
+		newAlert.setName(truncateParameterName(template.getName(), myMap));
 		newAlert.setDescription(DgUtil.fillPattern(template.getDescription(), myMap));
 		if (receivers == null) {
 			newAlert.setReceivers(template.getReceivers());
@@ -998,7 +1000,7 @@ public class AmpMessageWorker {
 
 	private static CalendarEvent createEventFromTemplate(TemplateAlert template, HashMap<String, String> myMap,
 			CalendarEvent newEvent) {
-		newEvent.setName(DgUtil.fillPattern(template.getName(), myMap));
+		newEvent.setName(truncateParameterName(template.getName(), myMap));
 		newEvent.setDescription(DgUtil.fillPattern(template.getDescription(), myMap));
 		newEvent.setReceivers(template.getReceivers());
 		newEvent.setDraft(false);
@@ -1473,6 +1475,30 @@ public class AmpMessageWorker {
 				+ "' as teamName " + StringUtils.mid(wsQuery, indexToReplace, wsQuery.length() - 1);
 		return wsQuery;
 	}
+
+	/**
+	 * Truncate activity name to limit the subject to SUBJECT_MAX_LENGTH
+	 *
+	 * @param subject
+	 * @param parameters
+	 * @return subject limited to SUBJECT_MAX_LENGTH
+	 */
+	private static String truncateParameterName(String subject, HashMap<String, String> parameters) {
+		String result = DgUtil.fillPattern(subject, parameters);
+
+		if (result != null && result.length() > SUBJECT_MAX_LENGTH) {
+			String activityName = parameters.get(PARAM_NAME);
+			if (activityName != null) {
+				activityName = activityName.substring((SUBJECT_MAX_LENGTH - (result.length() - activityName.length())),
+						activityName.length());
+				result = (result.replace(activityName, "..."));
+			} else {
+				result = result.substring(0, SUBJECT_MAX_LENGTH) + "...";
+			}
+		}
+		return result;
+	}
+
 	public static void main (String []args){
 		String receiver="Marina Baralo<maguibaralo@gmail.com>;Coordination Workspace;";
 		String email = receiver.substring(receiver.indexOf("<")+1,receiver.indexOf(">"));

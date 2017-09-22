@@ -12,16 +12,16 @@ import RemarksPopup from './RemarksPopup';
 import ToolBar from './ToolBar';
 import { Modal } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
+import Loading from './Loading';
 export default class Report1Output2 extends Component {
     constructor( props, context ) {
         super( props, context );
-        this.state = { recordsPerPage: 150, selectedYear: null, selectedDonor: ""};
+        this.state = { recordsPerPage: 150, selectedYear: null, selectedDonor: "", waiting:true};
         this.showFilters = this.showFilters.bind( this );
         this.showSettings = this.showSettings.bind( this );        
         this.onDonorFilterChange = this.onDonorFilterChange.bind( this );     
         this.downloadExcelFile = this.downloadExcelFile.bind(this);
-        this.downloadPdfFile = this.downloadPdfFile.bind(this);
-        this.getYears = this.getYears.bind(this);
+        this.downloadPdfFile = this.downloadPdfFile.bind(this);        
       }
 
     componentDidMount() {
@@ -89,7 +89,10 @@ export default class Report1Output2 extends Component {
 
     fetchReportData( data ) {
         let requestData = data || this.getRequestData();
-        this.props.actions.fetchReportData(requestData, '1');
+        this.setState({waiting:true});
+        this.props.actions.fetchReportData(requestData, '1').then(function(){
+            this.setState({waiting: false});  
+        }.bind(this));
     }
     
     onDonorFilterChange( e ) {
@@ -178,20 +181,17 @@ export default class Report1Output2 extends Component {
    downloadPdfFile(){
        this.props.actions.downloadPdfFile(this.getRequestData(), '1');
    }
-   
-   getYears() {
-       let settings  = this.settingsWidget.toAPIFormat()
-       let calendarId = settings && settings['calendar-id'] ?  settings['calendar-id'] : this.settingsWidget.definitions.getDefaultCalendarId();
-       let calendar = this.props.years.filter(calendar => calendar.calendarId == calendarId)[0];
-       return calendar.years.slice();     
-    }
-   
-   render() {
-        if ( this.props.output2 && this.props.output2.page && this.settingsWidget && this.settingsWidget.definitions ) {           
+ 
+   render() {                   
             let addedGroups = [];
-            var years = this.getYears();
+            var years = Utils.getYears(this.settingsWidget, this.props.years);
             return (
-                <div>
+                   <div>
+                    {this.state.waiting &&                      
+                        <Loading/>                
+                    } 
+                    {this.props.output2 && this.props.output2.page && this.settingsWidget && this.settingsWidget.definitions &&
+                    <div>                    
                     <div id="filter-popup" ref="filterPopup"> </div>
                     <div id="amp-settings" ref="settingsPopup"> </div>
                     <ToolBar showFilters={this.showFilters} showSettings={this.showSettings}  downloadPdfFile={this.downloadPdfFile}  downloadExcelFile={this.downloadExcelFile}/>
@@ -232,10 +232,9 @@ export default class Report1Output2 extends Component {
                          <PagingSection output2={this.props.output2} goToPage={this.goToPage.bind(this)} updateRecordsPerPage={this.updateRecordsPerPage.bind(this)}/>
                     </div>
                 </div>
-            );
-        }
-
-        return ( <div></div> );
+                }
+                </div>
+            );    
     }
 
 }

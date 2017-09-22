@@ -133,19 +133,25 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
 		return ret;
 	}
 
-	private void loadFreezingConfiguration(AmpActivityVersion a) {
+    private void loadFreezingConfiguration(AmpActivityVersion a) {
 
-		AmpAuthWebSession s = (AmpAuthWebSession) org.apache.wicket.Session.get();
-		s.setMetaData(OnePagerConst.FUNDING_FREEZING_CONFIGURATION, null);
-		s.setMetaData(OnePagerConst.ACTIVITY_FREEZING_CONFIGURATION, null);
-		// we get activity freezing configuration
-		AmpActivityFrozen ampActivityFrozen = DataFreezeService.getActivityFrozenForActivity(a.getAmpActivityId());
-		// even tough we can compute this further since its done once per field we store it already computed 
-		Boolean isActivityEditable = DataFreezeService.isEditable(ampActivityFrozen,s.getAmpCurrentMember());
-		org.apache.wicket.Session.get().setMetaData(OnePagerConst.ACTIVITY_FREEZING_CONFIGURATION, isActivityEditable);
+        AmpAuthWebSession s = (AmpAuthWebSession) org.apache.wicket.Session.get();
+        s.setMetaData(OnePagerConst.FUNDING_FREEZING_CONFIGURATION, null);
+        s.setMetaData(OnePagerConst.ACTIVITY_FREEZING_CONFIGURATION, null);
+        s.setMetaData(OnePagerConst.ACTIVITY_IS_AFFECTED_BY_FREEZING, null);
+        // we get activity freezing configuration
+        AmpActivityFrozen ampActivityFrozen = DataFreezeService.getActivityFrozenForActivity(a.getAmpActivityId());
+        // even tough we can compute this further since its done once per field
+        // we store it already computed
+        Boolean isActivityEditable = DataFreezeService.isEditable(ampActivityFrozen, s.getAmpCurrentMember());
 
-		org.apache.wicket.Session.get().setMetaData(OnePagerConst.FUNDING_FREEZING_CONFIGURATION, ampActivityFrozen);
-	}
+        Boolean isAffectedByFunding = DataFreezeService.isActivityAffectedByFreezing(ampActivityFrozen,
+                s.getAmpCurrentMember());
+        org.apache.wicket.Session.get().setMetaData(OnePagerConst.ACTIVITY_IS_AFFECTED_BY_FREEZING,
+                isAffectedByFunding);
+        org.apache.wicket.Session.get().setMetaData(OnePagerConst.ACTIVITY_FREEZING_CONFIGURATION, isActivityEditable);
+        org.apache.wicket.Session.get().setMetaData(OnePagerConst.FUNDING_FREEZING_CONFIGURATION, ampActivityFrozen);
+    }
     
 	@Override   
 	public void setObject(AmpActivityVersion arg0) {

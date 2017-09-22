@@ -22,8 +22,16 @@ import org.dgfoundation.amp.onepager.components.FundingListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpBooleanChoiceField;
+import org.dgfoundation.amp.onepager.components.fields.AmpFreezingValidatorTransactionDateField;
+import org.dgfoundation.amp.onepager.components.fields.AmpGPINiIndicatorValidatorField;
+import org.dgfoundation.amp.onepager.components.fields.AmpPercentageCollectionValidatorField;
 import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
+import org.dgfoundation.amp.onepager.events.FreezingUpdateEvent;
+import org.dgfoundation.amp.onepager.events.GPINiQuestionUpdateEvent;
+import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
+import org.dgfoundation.amp.onepager.validators.AmpFreezingValidatorTransactionDate;
+import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.IPAContract;
@@ -58,7 +66,6 @@ public class AmpDonorDisbursementsFormTableFeature extends
 				return ret;
 			}
 		};		
-		
 		list = new FundingListEditor<AmpFundingDetail>("listDisbursements", setModel, FundingDetailComparator
 				.getFundingDetailComparator()) {
 
@@ -67,9 +74,9 @@ public class AmpDonorDisbursementsFormTableFeature extends
 					org.dgfoundation.amp.onepager.components.ListItem<AmpFundingDetail> item) {
 				super.onPopulateItem(item);
 				item.add(getAdjustmentTypeComponent(item.getModel(), transactionType));
-				AmpFundingAmountComponent amountComponent = getFundingAmountComponent(item.getModel());
+                addFreezingvalidator(item);
+                AmpFundingAmountComponent amountComponent = getFundingAmountComponent(item.getModel());
 				item.add(amountComponent);
-
                 AmpTextFieldPanel<Float> capitalSpendingPercentage = new AmpTextFieldPanel<Float>(
                                         "capitalSpendingPercentage",
                                         new PropertyModel<Float>(item.getModel(), "capitalSpendingPercentage"), "Capital Spending Percentage", false, false);

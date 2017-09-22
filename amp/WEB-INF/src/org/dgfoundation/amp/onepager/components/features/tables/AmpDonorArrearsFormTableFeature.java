@@ -22,6 +22,7 @@ import org.dgfoundation.amp.onepager.components.ListItem;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpBooleanChoiceField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCheckBoxFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpFreezingValidatorTransactionDateField;
 import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.digijava.module.aim.dbentity.AmpFunding;
@@ -57,6 +58,7 @@ public class AmpDonorArrearsFormTableFeature extends
 					ListItem<AmpFundingDetail> item) {
 				item.add(getAdjustmentTypeComponent(item.getModel(), transactionType));
 
+				addFreezingvalidator(item);
 				AmpFundingAmountComponent amountComponent = getFundingAmountComponent(item.getModel());
 				item.add(amountComponent);
 				appendFixedExchangeRateToItem(item); 

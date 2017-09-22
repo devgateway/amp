@@ -63,7 +63,7 @@ public class AmpDonorCommitmentsFormTableFeature extends
 
 				AmpFundingAmountComponent amountComponent = getFundingAmountComponent(item.getModel());
 				item.add(amountComponent);
-
+                addFreezingvalidator(item);
                 IModel<List<FundingPledges>> pledgesModel = new LoadableDetachableModel<List<FundingPledges>>() {
 					protected java.util.List<FundingPledges> load() {
 						return PledgesEntityHelper

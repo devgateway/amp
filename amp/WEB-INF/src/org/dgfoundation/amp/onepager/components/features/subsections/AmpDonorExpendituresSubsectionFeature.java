@@ -16,6 +16,8 @@ import org.dgfoundation.amp.onepager.components.features.tables.AmpDonorCommitme
 import org.dgfoundation.amp.onepager.components.features.tables.AmpDonorExpendituresFormTableFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
+import org.dgfoundation.amp.onepager.events.FreezingUpdateEvent;
+import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.helper.Constants;
@@ -42,6 +44,7 @@ public class AmpDonorExpendituresSubsectionFeature extends
 			final IModel<AmpFunding> model, String fmName, int transactionType) throws Exception {
 		super(id, fmName, model,Constants.EXPENDITURE);
 		expTableFeature = new AmpDonorExpendituresFormTableFeature("expTableFeature", model, "Expenditures Table", transactionType);
+		expTableFeature.add(UpdateEventBehavior.of(FreezingUpdateEvent.class));              
 		add(expTableFeature);
 		
 		AmpAjaxLinkField addExp=new AmpAjaxLinkField("addExp","Add Expenditure","Add Expenditure") {

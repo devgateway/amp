@@ -26,6 +26,7 @@ import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFea
 import org.dgfoundation.amp.onepager.components.fields.AmpBooleanChoiceField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpCheckBoxFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpFreezingValidatorTransactionDateField;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.converters.CustomDoubleConverter;
 import org.dgfoundation.amp.onepager.models.AbstractMixedSetModel;
@@ -227,4 +228,10 @@ public abstract class AmpDonorFormTableFeaturePanel extends
 	protected void exchangeRateOnAjaxOnUpdate(AjaxRequestTarget target) {
 
 	}
+
+    protected void addFreezingvalidator(ListItem<AmpFundingDetail> item) {
+        AmpFreezingValidatorTransactionDateField ampFreezingValidatorTransactionDateField = new AmpFreezingValidatorTransactionDateField(
+                "freezingDateValidator", item.getModel(), "freezingDateValidator");
+        item.add(ampFreezingValidatorTransactionDateField);
+    }	
 }

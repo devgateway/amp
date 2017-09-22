@@ -85,6 +85,7 @@ import org.dgfoundation.amp.onepager.components.fields.AmpOverviewSection;
 import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
 import org.dgfoundation.amp.onepager.components.fields.AmpProjectCost;
 import org.dgfoundation.amp.onepager.components.fields.AmpSemanticValidatorField;
+import org.dgfoundation.amp.onepager.components.fields.AmpSimpleValidatorField;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.dgfoundation.amp.onepager.models.TranslationDecoratorModel;
@@ -1131,22 +1132,30 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 							//when these AmpCollectionValidatorFieldS are detected, their validation is revisited
 							if (component instanceof HiddenField) {									
 								if(component.getParent() instanceof AmpCollectionValidatorField<?, ?>) 
-									((AmpCollectionValidatorField)component.getParent()).reloadValidationField(target);									
-							} else {
-								target.focusComponent(component);
-								String js = null;
-								
-								//we simulate onClick over AmpGroupFieldS because radiochoices are treated differently they can't receive onChange.
-								//For the rest of the components we use onChange
-								if(component instanceof RadioChoice<?> || component instanceof CheckBoxMultipleChoice
-										|| component  instanceof RadioGroup<?> || component instanceof CheckGroup) 
-									js=String.format("$('#%s').click();",component.getMarkupId());										
-								else 											
-									js=String.format("$('#%s').change();",component.getMarkupId());
-								
-								target.appendJavaScript(js);
-								target.add(component);
-							}
+									((AmpCollectionValidatorField<?, ?>)component.getParent()).reloadValidationField(target);									
+                            } else {
+                                if (component.getParent() instanceof AmpSimpleValidatorField<?, ?>) {
+                                    ((AmpSimpleValidatorField<?, ?>) component.getParent()).reloadValidationField(target);
+                                } else {
+                                    target.focusComponent(component);
+                                    String js = null;
+
+                                    // we simulate onClick over AmpGroupFieldS
+                                    // because radiochoices are treated
+                                    // differently they can't receive onChange.
+                                    // For the rest of the components we use
+                                    // onChange
+                                    if (component instanceof RadioChoice<?>
+                                            || component instanceof CheckBoxMultipleChoice
+                                            || component instanceof RadioGroup<?> || component instanceof CheckGroup)
+                                        js = String.format("$('#%s').click();", component.getMarkupId());
+                                    else
+                                        js = String.format("$('#%s').change();", component.getMarkupId());
+
+                                    target.appendJavaScript(js);
+                                    target.add(component);
+                                }
+                            }
 						}
 					}
 				});

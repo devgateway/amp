@@ -47,6 +47,7 @@ public class AmpDonorDisbOrdersFormTableFeature extends
 			protected void onPopulateItem(
 					org.dgfoundation.amp.onepager.components.ListItem<AmpFundingDetail> item) {
 				item.add(getAdjustmentTypeComponent(item.getModel(), transactionType));
+                addFreezingvalidator(item);
 				item.add(getFundingAmountComponent(item.getModel()));
 
 				AmpTextFieldPanel<String> disbOrderId = new AmpTextFieldPanel<String>(

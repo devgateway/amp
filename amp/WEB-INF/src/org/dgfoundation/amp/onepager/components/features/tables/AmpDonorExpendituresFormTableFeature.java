@@ -116,6 +116,7 @@ public class AmpDonorExpendituresFormTableFeature extends
 				item.add(expenditureClass);
 				final AmpFundingAmountComponent amountComponent = getFundingAmountComponent(item.getModel());
 				item.add(amountComponent);
+                addFreezingvalidator(item);
 				
 				AmpTextFieldPanel<String> classification = new AmpTextFieldPanel<String>(
 						"classification", new PropertyModel<String>(

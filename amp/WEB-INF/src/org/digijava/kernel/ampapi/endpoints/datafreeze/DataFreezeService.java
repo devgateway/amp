@@ -246,12 +246,11 @@ public final class DataFreezeService {
 	 * @return
 	 */
 	public static boolean isEditable(AmpActivityFrozen ampActivityFrozen, AmpTeamMember atm) {
-		boolean result = true;
+		
+	    boolean affectedByFreezing = isActivityAffectedByFreezing(ampActivityFrozen, atm);
 		// check if user is exempt for data freezing
-		if (Boolean.TRUE.equals(atm.getUser().getExemptFromDataFreezing())) {
-			return result;
-		}
-		if (ampActivityFrozen == null || ampActivityFrozen.getDataFreezeEvent()
+
+		if ( !affectedByFreezing || ampActivityFrozen.getDataFreezeEvent()
 				.getFreezeOption() == AmpDataFreezeSettings.FreezeOptions.FUNDING) {
 			return true;
 		} else {
@@ -259,6 +258,14 @@ public final class DataFreezeService {
 		}
 	}
 
+    public static boolean isActivityAffectedByFreezing(AmpActivityFrozen ampActivityFrozen, AmpTeamMember atm) {
+        
+        if (Boolean.TRUE.equals(atm.getUser().getExemptFromDataFreezing()) || ampActivityFrozen == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 	public static void processFreezingEvent() {
 		AmpDataFreezeSettings currentFreezingEvent = DataFreezeUtil.getCurrentFreezingEvent();
 		if (currentFreezingEvent != null) {

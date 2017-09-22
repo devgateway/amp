@@ -72,7 +72,7 @@ public class AmpReleaseOfFundsFormTableFeature extends
 				item.add(getAdjustmentTypeComponent(item.getModel(), transactionType));
 				AmpFundingAmountComponent amountComponent = getFundingAmountComponent(item.getModel());
 				item.add(amountComponent);
-
+                addFreezingvalidator(item);
                 AmpTextFieldPanel<Float> capitalSpendingPercentage = new AmpTextFieldPanel<Float>(
                                         "capitalSpendingPercentage",
                                         new PropertyModel<Float>(item.getModel(), "capitalSpendingPercentage"), "Capital Spending Percentage", false, false);

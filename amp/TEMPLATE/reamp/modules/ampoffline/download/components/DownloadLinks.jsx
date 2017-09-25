@@ -1,7 +1,12 @@
 import React from "react";
 import Link from "react-router";
 import ReactDOM from "react-dom";
+import platform from "platform";
 import { fetchJson } from "amp/tools";
+
+const WINDOWS = 'windows';
+const MAC = 'mac';
+const LINUX = 'debian';
 
 var DownloadLinks = React.createClass( {
 
@@ -32,24 +37,50 @@ var DownloadLinks = React.createClass( {
     _getInstallerName( os, arch ) {
         let name = '';
         switch ( os ) {
-            case 'windows':
+            case WINDOWS:
                 name = `Windows Vista/7/8/10 - ${arch} bits`;
                 break;
-            case 'debian':
+            case LINUX:
                 name = `Ubuntu Linux (.deb) - ${arch} bits`;
                 break;
-            case 'mac':
-                name = `MacOS - ${arch} bits`;
+            case MAC:
+                name = `Mac OS - ${arch} bits`;
                 break;
         }
         return name;
+    },
+
+    _detectBestInstaller() {
+        const os = platform.os;
+        const arch = os.architecture;
+        const family = os.family.toLowerCase();
+        let osName = '';
+        if ( family.indexOf( WINDOWS ) > -1 ) {
+            osName = WINDOWS;
+        } else if ( family.indexOf( 'macintosh' ) > -1 ) {
+            osName = MAC;
+        } else if ( family.indexOf( 'linux' ) > -1 ) {
+            osName = LINUX;
+        } else {
+            return null;
+        }
+        const installer = this.state.data.filter( i => ( i.os === osName && i.arch === arch.toString() ) );
+        if ( installer.length > 0 ) {
+            const message = 'We have automatically detected which version of the application meets your operating system requirements. Other versions are available below.';
+            const installerName = this._getInstallerName( installer[0].os, installer[0].arch );
+            const link = <div><a href='' >Download AMP Offline {installer[0].version} for {installerName}</a></div>;
+            return ( <div className="alert alert-info" role="alert"><span>{message}</span>{link}</div> );
+        }
     },
 
     render: function() {
         var __ = key => this.props.translations[key];
         return (
             <div>
-                <h4>Available installers</h4>
+                <div>
+                    {this._detectBestInstaller()}
+                </div>
+                <h4>All installer versions</h4>
                 <div>
                     {this._buildLinksTable()}
                 </div>

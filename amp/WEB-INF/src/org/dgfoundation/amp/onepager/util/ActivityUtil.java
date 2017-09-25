@@ -28,6 +28,7 @@ import javax.jcr.RepositoryException;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
@@ -257,7 +258,7 @@ public class ActivityUtil {
 		updateComponentFunding(a, session);
 		saveAnnualProjectBudgets(a, session);
 		saveProjectCosts(a, session);
-		updatePerformanceIssue(a);
+		updatePerformanceIssues(a);
 	
         if (createNewVersion){
             //a.setAmpActivityId(null); //hibernate will save as a new version
@@ -275,18 +276,19 @@ public class ActivityUtil {
         return a;
 	}
 
-    private static void updatePerformanceIssue(AmpActivityVersion a) {
+    private static void updatePerformanceIssues(AmpActivityVersion a) {
         PerformanceRuleManager ruleManager = PerformanceRuleManager.getInstance();
 
-        AmpCategoryValue matchedLevel = null;
+        Set<AmpCategoryValue> matchedLevels = new HashSet<>();
 
         if (ruleManager.canActivityContainPerformanceIssues(a)) {
-            matchedLevel = ruleManager.getHigherLevelFromMatchers(ruleManager.matchActivity(a));
+            matchedLevels = ruleManager.getPerformanceLevelsFromMatchers(ruleManager.matchActivity(a));
         }
         
-        AmpCategoryValue activityLevel = ruleManager.getPerformanceIssueFromActivity(a);
-        if (!Objects.equals(activityLevel, matchedLevel)) {
-            ruleManager.updatePerformanceIssueInActivity(a, activityLevel, matchedLevel);
+        Set<AmpCategoryValue> activityLevels = ruleManager.getPerformanceIssuesFromActivity(a);
+        
+        if (!ruleManager.isEqualPerformanceLevelCollection(matchedLevels, activityLevels)) {
+            ruleManager.updatePerformanceIssuesInActivity(a, activityLevels, matchedLevels);
         }
     }
 

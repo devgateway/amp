@@ -455,6 +455,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 			for(AmpStructure str:result.getStructures()) {
 				Hibernate.initialize(str.getImages());
 				Hibernate.initialize(str.getType());
+				Hibernate.initialize(str.getCoordinates());
 			}
 		} catch (ObjectNotFoundException e) {
 			logger.debug("AmpActivityVersion with id=" + id + " not found");

@@ -14,7 +14,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
+import org.codehaus.jackson.node.POJONode;
+import org.codehaus.jackson.node.TextNode;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.algo.ValueWrapper;
 import org.dgfoundation.amp.ar.ArConstants;
@@ -45,12 +48,19 @@ import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
+import org.digijava.kernel.ampapi.helpers.geojson.FeatureGeoJSON;
+import org.digijava.kernel.ampapi.helpers.geojson.GeoJSON;
+import org.digijava.kernel.ampapi.helpers.geojson.LineStringGeoJSON;
+import org.digijava.kernel.ampapi.helpers.geojson.PointGeoJSON;
+import org.digijava.kernel.ampapi.helpers.geojson.PolygonGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.objects.ClusteredPoints;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpStructure;
+import org.digijava.module.aim.dbentity.AmpStructureCoordinate;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -371,4 +381,91 @@ public class LocationService {
 		return al;
 
 	}
+	 
+	public static FeatureGeoJSON buildFeatureGeoJSON(AmpStructure structure) {
+	    FeatureGeoJSON fgj = new FeatureGeoJSON(); 
+	    try {                             
+            fgj.geometry = getGeometry(structure);            
+            fgj.id = structure.getAmpStructureId().toString();
+            fgj.properties.put("title", new TextNode(structure.getTitle()));
+            if (structure.getDescription() != null && !structure.getDescription().trim().equals("")) {
+                fgj.properties.put("description", new TextNode(structure.getDescription()));
+            }
+            Set<AmpActivityVersion> av = structure.getActivities();
+            List<Long> actIds = new ArrayList<Long>();
+
+            for (AmpActivityVersion ampActivity : av) {
+                actIds.add(ampActivity.getAmpActivityId());
+            }
+
+            fgj.properties.put("activity", new POJONode(actIds));           
+        } catch (NumberFormatException e) {
+            logger.warn("Couldn't get parse latitude/longitude for structure with latitude: "
+                    + structure.getLatitude() + " longitude: " + structure.getLongitude() + " and title: "
+                    + structure.getTitle());
+        }
+	    
+	    return fgj;
+	    
+	}
+	
+	private static GeoJSON getGeometry(AmpStructure structure) {
+        String shape = StringUtils.isEmpty(structure.getShape()) ? GisConstants.GIS_STRUCTURE_POINT
+                : structure.getShape();
+        switch (shape) {
+        case GisConstants.GIS_STRUCTURE_POLYGON:
+            return buildPolygon(structure);
+        case GisConstants.GIS_STRUCTURE_POLYLINE:
+            return buildPolyLine(structure);
+        case GisConstants.GIS_STRUCTURE_POINT:
+            return buildPoint(structure);
+        default:
+            return null;
+        }
+	}
+	
+	private static PointGeoJSON buildPoint(AmpStructure structure) {
+        PointGeoJSON pg = new PointGeoJSON();        
+        pg.coordinates.add(parseDouble(structure.getLatitude()));
+        pg.coordinates.add(parseDouble(structure.getLongitude()));
+        return pg;
+    }
+    
+    private static LineStringGeoJSON buildPolyLine(AmpStructure structure) {
+        LineStringGeoJSON line = new LineStringGeoJSON();
+        line.coordinates = new ArrayList<>();
+        if (structure.getCoordinates() != null) {
+          for (AmpStructureCoordinate coord : structure.getCoordinates()) {
+              List<Double> lngLat =  new ArrayList<>();              
+              lngLat.add(parseDouble(coord.getLatitude()));
+              lngLat.add(parseDouble(coord.getLongitude()));
+              line.coordinates.add(lngLat);
+          }    
+        }
+        
+        return line;
+    }
+    
+    private static PolygonGeoJSON buildPolygon(AmpStructure structure) {
+        PolygonGeoJSON polygon = new PolygonGeoJSON();
+        polygon.coordinates = new ArrayList<>();
+        if (structure.getCoordinates() != null) {
+            List<List<Double>> ring = new ArrayList<>();
+            for (AmpStructureCoordinate coord : structure.getCoordinates()) {
+                List<Double> lngLat = new ArrayList<>();
+                lngLat.add(parseDouble(coord.getLatitude()));
+                lngLat.add(parseDouble(coord.getLongitude()));
+                ring.add(lngLat);
+            }
+
+            polygon.coordinates.add(ring);
+        }
+
+        return polygon;
+    }
+    
+    private static Double parseDouble(String value) {
+       return Double.parseDouble(value == null ? "0" : value);
+    }
+    
 }

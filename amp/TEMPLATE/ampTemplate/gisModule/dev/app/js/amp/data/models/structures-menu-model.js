@@ -20,6 +20,7 @@ module.exports = Backbone.Model
   initialize: function(things, options) {
     this.appData = options.appData;
     this.filter = options.filter;
+    this.settingsWidget = options.settingsWidget;
     this.structuresCollection = this.appData.structures;
     this.attachListeners();
   },
@@ -50,6 +51,7 @@ module.exports = Backbone.Model
     });
 
     this.listenTo(this.filter, 'apply', this.applyFilters);
+    this.listenTo(this.settingsWidget, 'applySettings', this.applyFilters);
 
     this.listenTo(this, 'change:filterVertical', function() {
       self.structuresCollection.updatePaletteSet();

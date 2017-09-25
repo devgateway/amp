@@ -1,8 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.gis;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,10 +8,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Set;
 import java.util.StringTokenizer;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
@@ -28,7 +24,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.PathSegment;
 import javax.ws.rs.core.StreamingOutput;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.codehaus.jackson.node.POJONode;
@@ -57,14 +52,11 @@ import org.digijava.kernel.ampapi.helpers.geojson.FeatureGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.PointGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.objects.ClusteredPoints;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpIndicatorColor;
 import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
 import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.helper.FormatHelper;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.ColorRampUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.esrigis.dbentity.AmpApiState;
 import org.digijava.module.esrigis.dbentity.AmpMapConfig;
@@ -73,7 +65,7 @@ import org.digijava.module.esrigis.helpers.MapConstants;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-import net.sf.json.JSONSerializer;
+
 
 /**
  * Class that holds entrypoing for GIS api methods
@@ -156,39 +148,14 @@ public class GisEndPoints implements ErrorReportingEndpoint {
 			}
 		}
   		
-      for (;start <= end;start++) {
-    	AmpStructure structure = al.get(start);
-		  try {
-				FeatureGeoJSON fgj = new FeatureGeoJSON();
-				PointGeoJSON pg = new PointGeoJSON();
-				pg.coordinates
-						.add(Double.parseDouble(structure.getLongitude() == null ? "0" : structure.getLongitude()));
-				pg.coordinates.add(Double.parseDouble(structure.getLatitude() == null ? "0" : structure.getLatitude()));
-				fgj.id = structure.getAmpStructureId().toString();
-				fgj.properties.put("title", new TextNode(structure.getTitle()));
-				if (structure.getDescription() != null && !structure.getDescription().trim().equals("")) {
-					fgj.properties.put("description", new TextNode(structure.getDescription()));
-				}
-				Set<AmpActivityVersion> av = structure.getActivities();
-				List<Long> actIds = new ArrayList<Long>();
-
-				for (AmpActivityVersion ampActivity : av) {
-					actIds.add(ampActivity.getAmpActivityId());
-				}
-
-				fgj.properties.put("activity", new POJONode(actIds));
-				fgj.geometry = pg;
-
-				f.features.add(fgj);
-			} catch (NumberFormatException e) {
-				logger.warn("Couldn't get parse latitude/longitude for structure with latitude: "
-						+ structure.getLatitude() + " longitude: " + structure.getLongitude() + " and title: "
-						+ structure.getTitle());
-			}
-		}
+        for (; start <= end; start++) {
+            AmpStructure structure = al.get(start);
+            f.features.add(LocationService.buildFeatureGeoJSON(structure));
+        }
 		return f;
 	}
-
+ 
+	
 	@POST
 	@Path("/saved-maps")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")

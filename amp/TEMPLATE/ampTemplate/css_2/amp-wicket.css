@@ -670,3 +670,14 @@ input[disabled], select[disabled]{
     position: relative;
     top: -15px;
 }
+
+.ui-dialog-titlebar-close:after { content: 'X'; font-weight:bold; }
+
+.coordinates-container{
+	margin: auto;
+}
+
+.ui-widget-header {
+	color: #2d5379 !important;
+    background: #ededed;
+}

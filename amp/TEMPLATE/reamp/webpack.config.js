@@ -9,7 +9,7 @@ config.entry["admin/data-freeze-manager/script"] = "./modules/admin/data-freeze-
 config.output.filename = "modules/[name].min.js";
 delete config.output.publicPath;
 delete config.devtool;
-config.plugins.push(new webpack.optimize.UglifyJsPlugin({sourceMap: false, compress: {warnings: false}}));
+config.plugins.push(new webpack.optimize.UglifyJsPlugin({sourceMap: false, compress: false}));
 config.plugins.push(new webpack.optimize.DedupePlugin());
 config.plugins.push(new webpack.DefinePlugin({
     'process.env': {

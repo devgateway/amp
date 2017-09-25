@@ -68,7 +68,7 @@ var DownloadLinks = React.createClass( {
         if ( installer.length > 0 ) {
             const message = this.props.translations['amp.offline:best-version-message'];
             const installerName = this._getInstallerName( installer[0].os, installer[0].arch );
-            const link = <div><a href={`${this.props.url}/${installer.id}`} >{this.props.translations['amp.offline:download']} {installer[0].version} - {installerName}</a></div>;
+            const link = <div><a href={`${this.props.url}/${installer[0].id}`} >{this.props.translations['amp.offline:download']} {installer[0].version} - {installerName}</a></div>;
             return ( <div className="alert alert-info" role="alert"><span>{message}</span>{link}</div> );
         }
     },

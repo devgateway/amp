@@ -6,7 +6,9 @@ import { fetchJson } from "amp/tools";
 
 const WINDOWS = 'windows';
 const MAC = 'mac';
-const LINUX = 'debian';
+const DEBIAN_LINUX = 'debian';
+const MACINTOSH = 'macintosh';
+const LINUX = 'linux';
 
 var DownloadLinks = React.createClass( {
 
@@ -40,7 +42,7 @@ var DownloadLinks = React.createClass( {
             case WINDOWS:
                 name = `Windows Vista/7/8/10 - ${arch} ${this.props.translations['amp.offline:bits']}`;
                 break;
-            case LINUX:
+            case DEBIAN_LINUX:
                 name = `Ubuntu Linux (.deb) - ${arch} ${this.props.translations['amp.offline:bits']}`;
                 break;
             case MAC:
@@ -57,10 +59,10 @@ var DownloadLinks = React.createClass( {
         let osName = '';
         if ( family.indexOf( WINDOWS ) > -1 ) {
             osName = WINDOWS;
-        } else if ( family.indexOf( 'macintosh' ) > -1 ) {
+        } else if ( family.indexOf( MACINTOSH ) > -1 ) {
             osName = MAC;
-        } else if ( family.indexOf( 'linux' ) > -1 ) {
-            osName = LINUX;
+        } else if ( family.indexOf( LINUX ) > -1 ) {
+            osName = DEBIAN_LINUX;
         } else {
             return null;
         }

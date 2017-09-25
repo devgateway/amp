@@ -38,13 +38,13 @@ var DownloadLinks = React.createClass( {
         let name = '';
         switch ( os ) {
             case WINDOWS:
-                name = `Windows Vista/7/8/10 - ${arch} bits`;
+                name = `Windows Vista/7/8/10 - ${arch} ${this.props.translations['amp.offline:bits']}`;
                 break;
             case LINUX:
-                name = `Ubuntu Linux (.deb) - ${arch} bits`;
+                name = `Ubuntu Linux (.deb) - ${arch} ${this.props.translations['amp.offline:bits']}`;
                 break;
             case MAC:
-                name = `Mac OS - ${arch} bits`;
+                name = `Mac OS - ${arch} ${this.props.translations['amp.offline:bits']}`;
                 break;
         }
         return name;
@@ -66,21 +66,20 @@ var DownloadLinks = React.createClass( {
         }
         const installer = this.state.data.filter( i => ( i.os === osName && i.arch === arch.toString() ) );
         if ( installer.length > 0 ) {
-            const message = 'We have automatically detected which version of the application meets your operating system requirements. Other versions are available below.';
+            const message = this.props.translations['amp.offline:best-version-message'];
             const installerName = this._getInstallerName( installer[0].os, installer[0].arch );
-            const link = <div><a href='' >Download AMP Offline {installer[0].version} for {installerName}</a></div>;
+            const link = <div><a href={`${this.props.url}/${installer.id}`} >{this.props.translations['amp.offline:download']} {installer[0].version} - {installerName}</a></div>;
             return ( <div className="alert alert-info" role="alert"><span>{message}</span>{link}</div> );
         }
     },
 
     render: function() {
-        var __ = key => this.props.translations[key];
         return (
             <div>
                 <div>
                     {this._detectBestInstaller()}
                 </div>
-                <h4>All installer versions</h4>
+                <h4>{this.props.translations['amp.offline:all-versions']}</h4>
                 <div>
                     {this._buildLinksTable()}
                 </div>
@@ -90,7 +89,10 @@ var DownloadLinks = React.createClass( {
 } );
 
 DownloadLinks.translations = {
-    "amp.offline:test": "Test",
+    "amp.offline:download": "Download AMP Offline",
+    "amp.offline:all-versions": "All installer versions",
+    "amp.offline:best-version-message": "We have automatically detected which version of the application meets your operating system requirements. Other versions are available below.",
+    "amp.offline:bits": "bits"
 };
 
 module.exports = DownloadLinks;

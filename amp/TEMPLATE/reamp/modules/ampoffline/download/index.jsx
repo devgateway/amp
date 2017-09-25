@@ -26,11 +26,11 @@ var AMPOfflineDownload = React.createClass( {
                 </div>
                 <div className='col-md-7'>
                     <div>
-                        <h2>Download the Offline Client</h2>
+                        <h2>{this.state.translations['amp.offline:download-title']}</h2>
                         <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vitae dapibus lectus. Donec sed ipsum neque. Sed orci nunc, fringilla vitae urna sed, porttitor tempor odio. Donec pulvinar accumsan mollis. Phasellus quis tellus interdum, consectetur lacus eget, mollis ante. Quisque turpis est, lobortis vitae ex at, porttitor dapibus neque. Phasellus finibus dui ut sem pellentesque, a tincidunt elit elementum. Sed suscipit, quam in pretium tincidunt, sem nisl pulvinar tortor, sit amet sagittis nibh risus eu erat. Proin ultricies gravida odio at molestie. Vestibulum eros quam, congue dignissim luctus quis, vulputate at risus. Duis feugiat, enim sit amet iaculis mattis, magna neque rhoncus nunc, sed scelerisque libero massa at lectus.</span>
                     </div>
                     <div>
-                        <DownloadLinks url={OFFLINE_INSTALLERS} translations = {this.state.translations} />
+                        <DownloadLinks url={OFFLINE_INSTALLERS} translations={this.state.translations} />
                     </div>
                 </div>
             </div>
@@ -43,8 +43,9 @@ var AMPOfflineDownload = React.createClass( {
 } );
 
 var translations = {
+    ...DownloadLinks.translations,
     "amp.offline:page-title": "Aid Management Platform - Download Offline Client",
+    "amp.offline:download-title": "Download the Offline Client"
 }
-
 
 module.exports = AMPOfflineDownload;

@@ -141,29 +141,27 @@ public class GPIReport9bOutputBuilder extends GPIReportOutputBuilder {
 	@Override
 	protected Map<GPIReportOutputColumn, String> getReportSummary(GeneratedReport generatedReport) {
 
-	    BigDecimal sumIndicator9b = BigDecimal.ZERO;
+	    GeneratedReport gpiReport5a = GPIReportUtils.getGeneratedReportForIndicator5a(originalFormParams);
+        BigDecimal actDisbSum = getTotalActualDisbForOnBudgetProjects(gpiReport5a);
+        
+        BigDecimal sumIndicator9b = BigDecimal.ZERO;
+        int numOfProcedures = 0;
 	    
 		Map<GPIReportOutputColumn, String> summaryColumns = new HashMap<>();
 		for (ReportOutputColumn roc : generatedReport.leafHeaders) {
 			ReportCell rc = generatedReport.reportContents.getContents().get(roc);
 			rc = rc != null ? rc : TextCell.EMPTY;
 			if (isTotalMeasureColumn(roc)) {
-				summaryColumns.put(new GPIReportOutputColumn(roc), rc.displayedValue);
-				sumIndicator9b = sumIndicator9b.add(new BigDecimal(((AmountCell) rc).extractValue()));
+			    BigDecimal nationalVal = new BigDecimal(((AmountCell) rc).extractValue());
+				summaryColumns.put(new GPIReportOutputColumn(roc), getPercentage(nationalVal, actDisbSum) + "%");
+				sumIndicator9b = sumIndicator9b.add(nationalVal);
+				numOfProcedures++;
 			}
 		}
 		
-		GeneratedReport gpiReport5a = GPIReportUtils.getGeneratedReportForIndicator5a(originalFormParams);
-		BigDecimal actDisbSum = getTotalActualDisbForOnBudgetProjects(gpiReport5a);
-        
-		BigDecimal perInd9b = BigDecimal.ZERO;
-        
-        if (actDisbSum.compareTo(BigDecimal.ZERO) > 0) {
-            perInd9b = sumIndicator9b
-                    .scaleByPowerOfTen(2)
-                    .divide(actDisbSum.multiply(new BigDecimal(summaryColumns.size())), NiFormula.DIVISION_MC)
-                    .setScale(0, RoundingMode.HALF_UP);
-        }
+		BigDecimal perInd9b = getPercentage(sumIndicator9b, actDisbSum)
+		        .divide(new BigDecimal(numOfProcedures), NiFormula.DIVISION_MC)
+		        .setScale(0, RoundingMode.HALF_UP);
         
 		summaryColumns.put(new GPIReportOutputColumn(GPIReportConstants.COLUMN_USE_OF_COUNTRY_SYSTEMS), perInd9b + "%");
 

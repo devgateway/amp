@@ -99,6 +99,7 @@ import org.digijava.module.aim.util.ExportActivityToPdfUtil;
 import org.digijava.module.aim.util.ExportUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
+import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.budget.dbentity.AmpBudgetSector;
 import org.digijava.module.budget.dbentity.AmpDepartments;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -394,7 +395,9 @@ public class ExportActivityToWord extends Action {
                     sectorsTbl.addCell(sectTitleCell);
 
                     if(sectors.getClassificationConfigs() != null){
-                        for (AmpClassificationConfiguration config : (List<AmpClassificationConfiguration>)sectors.getClassificationConfigs()) {
+                        List<AmpClassificationConfiguration> classificationConfigs = SectorUtil
+                                .getAllClassificationConfigsOrdered();
+                        for (AmpClassificationConfiguration config : classificationConfigs) {
                             //if(FeaturesUtil.isVisibleModule("/Activity Form/Sectors/"+config.getName()+" Sectors", ampContext,session)){
                             boolean hasSectors=false;
                             if (sectors.getActivitySectors() != null) {

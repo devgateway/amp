@@ -64,7 +64,7 @@ stage('Checkstyle') {
 }
 
 stage('Build') {
-    timeout(time: 3, unit: 'DAYS') {
+    timeout(15) {
         input "Proceed with build?"
     }
 
@@ -129,7 +129,7 @@ stage('Deploy') {
         }
     }
 
-    timeout(time: 3, unit: 'DAYS') {
+    timeout(time: 1, unit: 'HOURS') {
         milestone()
         country = input message: "Proceed with deploy?", parameters: [choice(choices: countries, name: 'country')]
         milestone()
@@ -161,7 +161,7 @@ stage('Deploy again') {
     if (deployed) {
         println 'Already deployed, skipping this step.'
     } else {
-        timeout(time: 7, unit: 'DAYS') {
+        timeout(time: 1, unit: 'HOURS') {
             milestone()
             input message: "Proceed with repeated deploy for ${country}?"
             milestone()

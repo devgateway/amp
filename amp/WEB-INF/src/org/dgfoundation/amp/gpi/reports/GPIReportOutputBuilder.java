@@ -1,6 +1,7 @@
 package org.dgfoundation.amp.gpi.reports;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,6 +16,7 @@ import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportSettings;
+import org.dgfoundation.amp.nireports.formulas.NiFormula;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
@@ -185,4 +187,15 @@ public abstract class GPIReportOutputBuilder  {
 	public void setDonorAgency(boolean isDonorAgency) {
 		this.isDonorAgency = isDonorAgency;
 	}
+	
+	/**
+     * @param cnt
+     * @param q6Cnt
+     * @return
+     */
+    protected BigDecimal getPercentage(BigDecimal a, BigDecimal b) {
+        return BigDecimal.ZERO.equals(b) ? BigDecimal.ZERO
+                : a.divide(b, NiFormula.DIVISION_MC).scaleByPowerOfTen(2).setScale(0, RoundingMode.HALF_UP);
+    }
+    
 }

@@ -1045,7 +1045,8 @@ public class ExportActivityToPDF extends Action {
                 mainLayout.addCell(sectorCell1);
 
                 String sectorsToAdd="";
-                List<AmpClassificationConfiguration> classificationConfigs=SectorUtil.getAllClassificationConfigs();
+                List<AmpClassificationConfiguration> classificationConfigs = SectorUtil
+                        .getAllClassificationConfigsOrdered();
                 for (AmpClassificationConfiguration configuration : classificationConfigs) {
 
                     boolean hasSectors = false;

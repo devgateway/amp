@@ -44,21 +44,21 @@ public class FundingListEditor<T> extends ListEditor<T> {
 		super(id, model, comparator);
 	}
 
-	@Override
-	protected void onPopulateItem(ListItem<T> item) {
-		Boolean enabled = item.isEnabled();
-
-		FundingInformationItem fundingDetailItem = (FundingInformationItem) item.getModel().getObject();
-		AmpActivityFrozen ampActivityFrozen = org.apache.wicket.Session.get()
-				.getMetaData(OnePagerConst.FUNDING_FREEZING_CONFIGURATION);
-		if (ampActivityFrozen != null && fundingDetailItem.getDbId() != null
-				&& fundingDetailItem.getTransactionDate() != null) {
-			AmpAuthWebSession s = (AmpAuthWebSession) org.apache.wicket.Session.get();
-			enabled = DataFreezeService.isFundingEditable(ampActivityFrozen, s.getAmpCurrentMember(),
-					fundingDetailItem.getTransactionDate()) && enabled;
-		}
-		item.setEnabled(enabled);
-		fundingDetailItem.setCheckSum(ActivityUtil.calculateFundingDetailCheckSum(fundingDetailItem));
-	}
+    @Override
+    protected void onPopulateItem(ListItem<T> item) {
+        Boolean enabled = item.isEnabled();
+        boolean fmMode = ((AmpAuthWebSession) getSession()).isFmMode();
+        FundingInformationItem fundingDetailItem = (FundingInformationItem) item.getModel().getObject();
+        AmpActivityFrozen ampActivityFrozen = org.apache.wicket.Session.get()
+                .getMetaData(OnePagerConst.FUNDING_FREEZING_CONFIGURATION);
+        if (ampActivityFrozen != null && fundingDetailItem.getDbId() != null
+                && fundingDetailItem.getTransactionDate() != null && !fmMode) {
+            AmpAuthWebSession s = (AmpAuthWebSession) org.apache.wicket.Session.get();
+            enabled = DataFreezeService.isFundingEditable(ampActivityFrozen, s.getAmpCurrentMember(),
+                    fundingDetailItem.getTransactionDate()) && enabled;
+        }
+        item.setEnabled(enabled);
+        fundingDetailItem.setCheckSum(ActivityUtil.calculateFundingDetailCheckSum(fundingDetailItem));
+    }
 
 }

@@ -1,36 +1,46 @@
 import * as AMP from "amp/architecture";
 import React from "react";
-import {HEAT_MAP_ADMIN} from "amp/config/endpoints";
-import HeatMapSettings from "./heat-map/index.jsx";
-import {loadTranslations} from "amp/modules/translate";
+import { OFFLINE_INSTALLERS } from "amp/config/endpoints";
+import { loadTranslations } from "amp/modules/translate";
 
-const TABS = {
-  HEAT_MAP: "heat-map"
-};
+var AMPOfflineDownload = React.createClass( {
 
-var DashboardSettings = React.createClass({displayName: 'Heat Map Settings',
-  getInitialState: function() {
-    return {translations: []};
-  },
-  componentDidMount: function() {
-    debugger;
-  	let toTranslate = new AMP.Model(translations).toJS();
-    loadTranslations(translations).then(trns => this.updateTranslations(trns));
-    console.log(this.state.translations);
-  },
-  render : function () {
-    return (
-    	<HeatMapSettings translations = {this.state.translations} url = {HEAT_MAP_ADMIN}/>
-    );
-  },
-  updateTranslations: function(translations) {
-  	this.setState({translations: translations})
-  }
-});
+    displayName: 'Download AMPOffline Client',
+
+    getInitialState: function() {
+        return { translations: [] };
+    },
+
+    componentDidMount: function() {
+        let toTranslate = new AMP.Model( translations ).toJS();
+        loadTranslations( translations ).then( trns => this.updateTranslations( trns ) );
+        console.log( this.state.translations );
+    },
+
+    render: function() {
+        return (
+            <div>
+                <div className='col-md-5'>
+                    <img src='/TEMPLATE/reamp/modules/ampoffline/download/images/monitor.png'/>
+                </div>
+                <div className='col-md-7'>
+                    <div>
+                        <h2>Download the Offline Client</h2>
+                        <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vitae dapibus lectus. Donec sed ipsum neque. Sed orci nunc, fringilla vitae urna sed, porttitor tempor odio. Donec pulvinar accumsan mollis. Phasellus quis tellus interdum, consectetur lacus eget, mollis ante. Quisque turpis est, lobortis vitae ex at, porttitor dapibus neque. Phasellus finibus dui ut sem pellentesque, a tincidunt elit elementum. Sed suscipit, quam in pretium tincidunt, sem nisl pulvinar tortor, sit amet sagittis nibh risus eu erat. Proin ultricies gravida odio at molestie. Vestibulum eros quam, congue dignissim luctus quis, vulputate at risus. Duis feugiat, enim sit amet iaculis mattis, magna neque rhoncus nunc, sed scelerisque libero massa at lectus. Fusce tempus, leo eu ultrices congue, tortor ex ultrices est, at facilisis metus mi id leo. Sed tincidunt urna in ornare fermentum. Nulla neque felis, elementum et elementum nec, vestibulum sit amet nibh. Donec quis dolor vitae mi molestie blandit quis sed mi. Donec rutrum elit sed euismod efficitur.</span>
+                    </div>
+                </div>
+            </div>
+        );
+    },
+
+    updateTranslations: function( translations ) {
+        this.setState( { translations: translations } )
+    }
+} );
 
 var translations = {
-	...HeatMapSettings.translations
+    "amp.offline:page-title": "Aid Management Platform - Download Offline Client",
 }
 
 
-module.exports = DashboardSettings;
+module.exports = AMPOfflineDownload;

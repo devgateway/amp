@@ -1,11 +1,11 @@
-import DashboardSettings from "./index.jsx";
+import AMPOfflineDownload from "./index.jsx";
 import ReactDOM from "react-dom";
 import React from "react";
 import boilerplate from "../../../../ampTemplate/node_modules/amp-boilerplate/dist/amp-boilerplate.js";
 
 ReactDOM.render(
-  <DashboardSettings />,
-  document.getElementById('heat-map')
+  <AMPOfflineDownload />,
+  document.getElementById('ampoffline-client-download')
 );
 
 new boilerplate.layout({showLogin: false});

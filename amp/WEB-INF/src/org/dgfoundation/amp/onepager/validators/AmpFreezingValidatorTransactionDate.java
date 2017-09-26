@@ -37,8 +37,6 @@ public class AmpFreezingValidatorTransactionDate extends AmpSemanticValidator<St
             // model
             throw new RuntimeException("Date unparseable");
         }
-        System.out.println("El valor es :" + validatable.getValue());
-
         Boolean affectedByFreezing = org.apache.wicket.Session.get()
                 .getMetaData(OnePagerConst.ACTIVITY_IS_AFFECTED_BY_FREEZING);
         if (validatable.getValue() == null || !affectedByFreezing) {

@@ -162,11 +162,21 @@ public class AmpFundingAmountComponent<T> extends Panel {
 			AmpDatePickerFieldPanel datetmp = new AmpDatePickerFieldPanel(
 					"date", new PropertyModel<Date>(model, propertyDate),
 					fmDate, null, hideLabel, hideNewLine) {
-				@Override
-				protected void onAjaxOnUpdate(AjaxRequestTarget target) {
-					onFundingDetailChanged(target);
+                @Override
+                protected void onAjaxOnUpdate(AjaxRequestTarget target) {
+                    onFundingDetailChanged(target);
+
+                    FundingListEditor parentPanel = findParent(FundingListEditor.class);
+                    parentPanel.visitChildren(AmpSimpleValidatorField.class,
+                            new IVisitor<AmpSimpleValidatorField, Void>() {
+                                @Override
+                                public void component(AmpSimpleValidatorField component, IVisit<Void> visit) {
+                                    component.reloadValidationField(target);
+                                    visit.dontGoDeeper();
+                                }
+                            });
                     send(getPage(), Broadcast.BREADTH, new FreezingUpdateEvent(target));
-				}
+                }
 			};
 			datetmp.getDate().setRequired(true);
 			datetmp.getDate().add(new AttributeModifier("class", "inputx_date"));

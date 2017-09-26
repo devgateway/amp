@@ -44,9 +44,8 @@ public class AmpDonorExpendituresSubsectionFeature extends
 			final IModel<AmpFunding> model, String fmName, int transactionType) throws Exception {
 		super(id, fmName, model,Constants.EXPENDITURE);
 		expTableFeature = new AmpDonorExpendituresFormTableFeature("expTableFeature", model, "Expenditures Table", transactionType);
-		expTableFeature.add(UpdateEventBehavior.of(FreezingUpdateEvent.class));              
 		add(expTableFeature);
-		
+
 		AmpAjaxLinkField addExp=new AmpAjaxLinkField("addExp","Add Expenditure","Add Expenditure") {
 			@Override
 			public void onClick(AjaxRequestTarget target) {

@@ -70,7 +70,6 @@ public class AmpEstimatedDonorDisbursementsSubsectionFeature extends
 		super(id, fmName, model);
 		
 		disbursementsTableFeature = new AmpEstimatedDonorDisbursementsFormTableFeature("disbursementsTableFeature", model, "Estimated Disbursements Table", transactionType);
-		disbursementsTableFeature.add(UpdateEventBehavior.of(FreezingUpdateEvent.class));              
 		add(disbursementsTableFeature);
 		fundingOrgModel = new PropertyModel<AmpOrganisation>(model,"ampDonorOrgId");
 		

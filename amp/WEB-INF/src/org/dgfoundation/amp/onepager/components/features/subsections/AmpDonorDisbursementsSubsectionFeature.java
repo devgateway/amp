@@ -70,10 +70,8 @@ public class AmpDonorDisbursementsSubsectionFeature extends
 			final IModel<AmpFunding> model, String fmName, int transactionType) throws Exception {
 		super(id, fmName, model,Constants.DISBURSEMENT);
 		disbursementsTableFeature = new AmpDonorDisbursementsFormTableFeature("disbursementsTableFeature", model, "Disbursements Table", transactionType);
-		disbursementsTableFeature.add(UpdateEventBehavior.of(FreezingUpdateEvent.class));              
 		add(disbursementsTableFeature);
-		fundingOrgModel = new PropertyModel<AmpOrganisation>(model,"ampDonorOrgId");
-		
+		fundingOrgModel = new PropertyModel<AmpOrganisation>(model,"ampDonorOrgId");              
 		AmpAjaxLinkField addDisbursement=new AmpAjaxLinkField("addDisbursement","Add Disbursement","Add Disbursement") {
 			@Override
 			public void onClick(AjaxRequestTarget target) {

@@ -104,9 +104,8 @@ public class AmpDonorDisbOrdersSubsectionFeature extends
 		super(id, fmName, model);
 		disbOrdersTableFeature = new AmpDonorDisbOrdersFormTableFeature(
 				"disbOrdersTableFeature", model, "Disbursement Orders Table", transactionType);
-		disbOrdersTableFeature.add(UpdateEventBehavior.of(FreezingUpdateEvent.class));              
 		add(disbOrdersTableFeature);
-
+		
 		AmpAjaxLinkField addDisbOrder = new AmpAjaxLinkField("addDisbOrder",
 				"Add Disbursement Order", "Add Disbursement Order") {
 			@Override

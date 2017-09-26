@@ -72,8 +72,7 @@ public class AmpReleaseOfFundsSubsectionFeature extends
 		
 		disbursementsTableFeature = new AmpReleaseOfFundsFormTableFeature("disbursementsTableFeature", model, "Release of Funds Table", transactionType);
 		add(disbursementsTableFeature);
-		disbursementsTableFeature.add(UpdateEventBehavior.of(FreezingUpdateEvent.class));              
-		fundingOrgModel = new PropertyModel<AmpOrganisation>(model,"ampDonorOrgId");
+        fundingOrgModel = new PropertyModel<AmpOrganisation>(model, "ampDonorOrgId");
 		
 		AmpAjaxLinkField addReleaseOfFunds=new AmpAjaxLinkField("addDisbursement","Add RoF","Add RoF") {
 			@Override

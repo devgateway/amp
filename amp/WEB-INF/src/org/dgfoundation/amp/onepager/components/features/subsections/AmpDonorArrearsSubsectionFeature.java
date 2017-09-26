@@ -39,9 +39,7 @@ public class AmpDonorArrearsSubsectionFeature extends AmpSubsectionFeatureFundin
 			final IModel<AmpFunding> model, String fmName, int transactionType) throws Exception {
 		super(id, fmName, model,Constants.ARREARS);
 		arrearsTableFeature = new AmpDonorArrearsFormTableFeature("arrearsTableFeature", model, "Arrears Table", transactionType);
-		arrearsTableFeature.add(UpdateEventBehavior.of(FreezingUpdateEvent.class));              
 		add(arrearsTableFeature);
-		
 		AmpAjaxLinkField addArrears = new AmpAjaxLinkField("addArrears","Add Arrears Transaction","Add Arrears Transaction") {
 			@Override
 			public void onClick(AjaxRequestTarget target) {

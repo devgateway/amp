@@ -28,12 +28,12 @@
           </td>
           <td>
             <% structure.activity.tempDirtyForceJoin().then(function(){ %>
-              <%= structure.activity._getDonorNames() %>
+              <%= structure.activity.toJSON().donorNames %>
             <%}); %>
           </td>
 <!--           <td>
             <% structure.activity.tempDirtyForceJoin().then(function(){ %>
-              <%= structure.activity._getSectorNames() %>
+              <%= structure.activity.toJSON().sectorNames %>
             <%}); %>
           </td> -->
         </tr>

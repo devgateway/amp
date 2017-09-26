@@ -46,15 +46,6 @@ public class CompositePermission extends Permission {
 		while (i.hasNext()) {
 			Permission element = (Permission) i.next();
 			Set<String> allowedActions = element.getAllowedActions(scope);
-//			
-//			Object o = scope.get(GatePermConst.ScopeKeys.PERMISSIBLE);
-//			if ( o instanceof AmpModulesVisibility )
-//			{
-//				if( ((AmpModulesVisibility)o).getName().contains("Project Title") )
-//					logger.debug("---------------CompositePermission " + ((AmpModulesVisibility)o).getName()+ " actions: "+actions);
-//				
-//			}
-//			
 			if(intersection==null || !intersection.booleanValue()) {
 			if(allowedActions!=null) 
 					actions.addAll(allowedActions);

@@ -139,7 +139,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 					ColumnConstants.AGREEMENT_CODE, ColumnConstants.DONOR_AGENCY, ColumnConstants.DONOR_GROUP,
 					ColumnConstants.DONOR_TYPE, ColumnConstants.FUNDING_ID,
 					ColumnConstants.COMPONENT_FUNDING_ORGANIZATION,
-					ColumnConstants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION, ColumnConstants.CONCESSIONALITY_LEVEL)));
+					ColumnConstants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION,
+                    ColumnConstants.CONCESSIONALITY_LEVEL)));
 	
 	public final static OrganisationsDimension orgsDimension = OrganisationsDimension.instance;
 	public final static LocationsDimension locsDimension = LocationsDimension.instance;
@@ -408,6 +409,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		degenerate_dimension(ColumnConstants.FUNDING_STATUS, "v_funding_status", catsDimension);
 		degenerate_dimension(ColumnConstants.HUMANITARIAN_AID, "v_humanitarian_aid", boolDimension);
 		degenerate_dimension(ColumnConstants.IMPLEMENTATION_LEVEL, "v_implementation_level", catsDimension);
+		degenerate_dimension(ColumnConstants.PERFORMANCE_ALERT_LEVEL, "v_performance_alert_level", catsDimension);
 		degenerate_dimension(ColumnConstants.INDIRECT_ON_BUDGET, "v_indirect_on_budget", boolDimension);
 		degenerate_dimension(ColumnConstants.INSTITUTIONS, "v_institutions", catsDimension);
 		no_dimension(ColumnConstants.MEASURES_TAKEN, "v_measures_taken");

@@ -792,7 +792,9 @@ public class EditActivity extends Action {
             	eaForm.getIdentification().setApprovalStatus(Constants.EDITED_STATUS);
             }
         }
+        
 
+        
         //AMP-17127
         //for modalities that is a SSC category we have to add the SSC prefix
           List<AmpCategoryValue> modalities = CategoryManagerUtil.getAmpCategoryValuesFromListByKey(
@@ -1204,10 +1206,11 @@ public class EditActivity extends Action {
           eaForm.getDocuments().setReferenceDocs(null);
 
           eaForm=setSectorsToForm(eaForm, activity);
-          if(isPreview){
-            	//we load classificationConfigs for been displayed in preview and printer friendly for issue AMP-16421
-            	List<AmpClassificationConfiguration> classificationConfigs=SectorUtil.getAllClassificationConfigs();
-            	eaForm.getSectors().setClassificationConfigs(classificationConfigs);
+            if (isPreview) {
+                //we load classificationConfigs for been displayed in preview and printer friendly for issue AMP-16421
+                List<AmpClassificationConfiguration> classificationConfigs = SectorUtil
+                        .getAllClassificationConfigsOrdered();
+                eaForm.getSectors().setClassificationConfigs(classificationConfigs);
             }    
           
           if (activity.getProgramDescription() != null)
@@ -1700,6 +1703,7 @@ public class EditActivity extends Action {
     for (AmpStructure structure : structures) {
         Hibernate.initialize(structure.getImages());
         Hibernate.initialize(structure.getType());
+        Hibernate.initialize(structure.getCoordinates());
     }
 
     eaForm.setStructures(structures);

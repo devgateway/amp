@@ -1,5 +1,5 @@
 const CONTEXT = 'GPI_REPORTS';
-const SETTINGS_DEFINITIONS_EP = '/rest/settings-definitions/gpi-reports;'
+const SETTINGS_DEFINITIONS_EP = '/rest/settings-definitions/gpi-reports';
 class Utils {     
     static initializeFilterWidget() {               
           return new ampFilter( {
@@ -33,7 +33,31 @@ class Utils {
         $(element).show();
         settingsWidget.on( 'close', onSettingsCancel);
         settingsWidget.on( 'applySettings', onSettingsApply);
-    }    
+    }  
+
+    static capitalizeFirst( str ) {
+        if ( str ) {
+            return str.charAt( 0 ).toUpperCase() + str.substr( 1 ).toLowerCase();
+        }
+
+        return str;
+    }
+
+    static getYears( settingsWidget, years ) {
+        let result = [];
+        if ( settingsWidget && settingsWidget.definitions ) {
+            settingsWidget.definitions.loaded.done( function() {
+                const settings = settingsWidget.toAPIFormat()
+                const calendarId = settings && settings['calendar-id'] ? settings['calendar-id'] : settingsWidget.definitions.getDefaultCalendarId();
+                const calendar = years.filter( calendar => calendar.calendarId == calendarId )[0];
+                if ( calendar ) {
+                    result = calendar.years.slice();
+                }
+            });
+        }
+        return result;
+    }        
+
 }
 
 export default Utils;

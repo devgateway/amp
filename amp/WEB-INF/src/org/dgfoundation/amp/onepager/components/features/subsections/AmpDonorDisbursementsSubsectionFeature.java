@@ -71,7 +71,7 @@ public class AmpDonorDisbursementsSubsectionFeature extends
 		super(id, fmName, model,Constants.DISBURSEMENT);
 		disbursementsTableFeature = new AmpDonorDisbursementsFormTableFeature("disbursementsTableFeature", model, "Disbursements Table", transactionType);
 		add(disbursementsTableFeature);
-		fundingOrgModel = new PropertyModel<AmpOrganisation>(model,"ampDonorOrgId");              
+        fundingOrgModel = new PropertyModel<AmpOrganisation>(model, "ampDonorOrgId");              
 		AmpAjaxLinkField addDisbursement=new AmpAjaxLinkField("addDisbursement","Add Disbursement","Add Disbursement") {
 			@Override
 			public void onClick(AjaxRequestTarget target) {

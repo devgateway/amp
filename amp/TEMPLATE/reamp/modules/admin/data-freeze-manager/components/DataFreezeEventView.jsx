@@ -106,7 +106,8 @@ export default class DataFreezeEventView extends Component {
                       {filterObject && Object.keys(filterObject.filters).length > 0 &&  this.state.showAppliedFilters &&
                           <AppliedFilters {...this.props}/>
                       }
-                    </td>                      
+                    </td>  
+                    <td> {this.props.dataFreezeEvent.enabled ? this.props.translations['amp.data-freezing:boolean-option-yes'] : this.props.translations['amp.data-freezing:boolean-option-no']}</td>
                     <td className="action-column">
                     {this.props.dataFreezeEvent.executed != true &&
                         <div>                   

@@ -194,7 +194,7 @@ public class GlobalSettingsConstants {
     
     public static final String FUNDING_GAP_NOTIFICATION_THRESHOLD ="Funding gap notification threshold";
     
-    public static final String WORKSPACE_TO_RUN_REPORT_FROM_JOB = "Workspace Team to run report reports from jobs";
+    public static final String WORKSPACE_TO_RUN_REPORT_FROM_JOB = "Workspace Team to run reports from jobs";
     
     public static final String  MEASURE_A_FOR_FUNDING_GAP_NOTIFICATION ="Measure A for Funding gap notification";
     

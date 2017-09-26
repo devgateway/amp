@@ -24,4 +24,7 @@
 	<entry key="AmpGPINiDependentQuestionValidator">${label} should only have values less than or equal to ${dest}</entry>
 	<entry key="AmpGPINiQuestionNumericValidator">Answers may only be positive whole numbers</entry>
 	<entry key="AmpFreezingEventTransactionDateValidator">Due to an active freezing event, you can only add a transaction with date between ${openPeriodFrom} and ${openPeriodTo}</entry>
+	<entry key="AmpFreezingEventTransactionDateValidatorNoOpenPeriod">Due to an active freezing event, you cannot add new transactions</entry>
+	<entry key="AmpFreezingEventTransactionDateValidatorNoEnd">Due to an active freezing event, you can only add a transaction with date greater than ${openPeriodFrom} </entry>
+	
 </properties>

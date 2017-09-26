@@ -108,7 +108,6 @@ public final class DataFreezeUtil {
 	 * frozen activities
 	 */
 	public static void disablePreviousFrozenActivities() {
-
 		PersistenceManager.getSession().doWork(new Work() {
 			public void execute(Connection conn) throws SQLException {
 				SQLUtils.executeQuery(conn, String.format("UPDATE AMP_ACTIVITY_FROZEN SET DELETED = %s", "TRUE"));

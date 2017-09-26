@@ -190,7 +190,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 
         // single-hierarchy reports
         for(boolean isSummary:Arrays.asList(true, false)) {
-            for(String hierName:hierarchiesToTry) {
+            for (String hierName : DONOR_HIERARCHIES_TO_TRY) {
                 ReportSpecificationImpl spec = buildSpecification(String.format("%s summary: %b", hierName, isSummary), 
                         Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.PROPOSED_PROJECT_AMOUNT, ColumnConstants.REVISED_PROJECT_AMOUNT, hierName), 
                         Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS), 
@@ -531,7 +531,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
               .withContents("Project Title", "", "Donor Agency", "", "Funding-2009-Actual Commitments", "100,000", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "60,000", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Funding-2013-Actual Commitments", "2,670,000", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "4,400,000", "Funding-2014-Actual Disbursements", "450,000", "Totals-Actual Commitments", "7,195,000", "Totals-Actual Disbursements", "522,000")
               .withChildren(
                 new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity", "Donor Agency", "Ministry of Finance", "Funding-2009-Actual Commitments", "100,000", "Funding-2010-Actual Disbursements", "60,000", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Totals-Actual Commitments", "125,000", "Totals-Actual Disbursements", "72,000"),
-                new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2", "Donor Agency", "USAID", "Funding-2013-Actual Commitments", "2,670,000", "Funding-2014-Actual Commitments", "4,400,000", "Funding-2014-Actual Disbursements", "450,000", "Totals-Actual Commitments", "7,070,000", "Totals-Actual Disbursements", "450,000")      ));
+                                new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2", "Donor Agency", "Finland, USAID", "Funding-2013-Actual Commitments", "2,670,000", "Funding-2014-Actual Commitments", "4,400,000", "Funding-2014-Actual Disbursements", "450,000", "Totals-Actual Commitments", "7,070,000", "Totals-Actual Disbursements", "450,000")      ));
         
         runNiTestCase(
             buildSpecification("AMP-18504",

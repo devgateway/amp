@@ -45,17 +45,17 @@ class Utils {
             errors.push( message );
         }
        // errors.push( ...this.validateFreezingDate( dataFreezeEvent ) );
-       //errors.push( ...this.validateStartAndEndDate( dataFreezeEvent ) );
+        //errors.push( ...this.validateStartAndEndDate( dataFreezeEvent ) );
         errors.push( ...this.validateGracePeriod( dataFreezeEvent ) );
         return errors
     }
 
     static validateFreezingDate( dataFreezeEvent ) {
-        let errors = [];
-        let freezingDate = moment( dataFreezeEvent.freezingDate, Constants.EP_DATE_FORMAT );
-        let today = moment();
+        const errors = [];
+        const freezingDate = moment( dataFreezeEvent.freezingDate, Constants.EP_DATE_FORMAT );
+        const today = moment();
         if ( today.startOf( 'day' ).isAfter( freezingDate ) ) {
-            errors.push( { messageKey: 'amp.data-freezing:invalid-freeze-date', id: dataFreezeEvent.id, cid: dataFreezeEvent.cid, affectedFields: ['freezingDate'] });
+            errors.push( { messageKey: 'amp.data-freezing:invalid-freeze-date', id: dataFreezeEvent.id, cid: dataFreezeEvent.cid, affectedFields: ['freezingDate'], context: Constants.DATA_FREEZE_EVENTS});
         }
         return errors;
     }
@@ -68,15 +68,16 @@ class Utils {
         }
             
         if (dataFreezeEvent.openPeriodStart && dataFreezeEvent.openPeriodEnd) {
-            let openPeriodStart = moment( dataFreezeEvent.openPeriodStart, Constants.EP_DATE_FORMAT );
-            let openPeriodEnd = moment( dataFreezeEvent.openPeriodEnd, Constants.EP_DATE_FORMAT );
-            let freezingDate = moment( dataFreezeEvent.freezingDate, Constants.EP_DATE_FORMAT );
+            const openPeriodStart = moment( dataFreezeEvent.openPeriodStart, Constants.EP_DATE_FORMAT );
+            const openPeriodEnd = moment( dataFreezeEvent.openPeriodEnd, Constants.EP_DATE_FORMAT );
+            const freezingDate = moment( dataFreezeEvent.freezingDate, Constants.EP_DATE_FORMAT );
+            
             if ( openPeriodStart.isAfter( freezingDate ) === false ) {
-                errors.push( { messageKey: 'amp.data-freezing:start-date-should-be-after-freeze-date', id: dataFreezeEvent.id, cid: dataFreezeEvent.cid, affectedFields: ['openPeriodStart', 'freezingDate'] });
+                errors.push( { messageKey: 'amp.data-freezing:start-date-should-be-after-freeze-date', id: dataFreezeEvent.id, cid: dataFreezeEvent.cid, affectedFields: ['openPeriodStart', 'freezingDate'], context: Constants.DATA_FREEZE_EVENTS  });
             }
 
             if ( openPeriodStart.isAfter( openPeriodEnd ) ) {
-                errors.push( { messageKey: 'amp.data-freezing:start-date-should-not-be-greater-than-end-date', id: dataFreezeEvent.id, cid: dataFreezeEvent.cid, affectedFields: ['openPeriodStart', 'openPeriodEnd'] });
+                errors.push( { messageKey: 'amp.data-freezing:start-date-should-not-be-greater-than-end-date', id: dataFreezeEvent.id, cid: dataFreezeEvent.cid, affectedFields: ['openPeriodStart', 'openPeriodEnd'], context: Constants.DATA_FREEZE_EVENTS });
             } 
         }        
         return errors;
@@ -84,9 +85,9 @@ class Utils {
     }
 
     static validateGracePeriod( dataFreezeEvent ) {
-        let errors = [];
+        const errors = [];
         if ( dataFreezeEvent.gracePeriod < 0 ) {
-            errors.push( { messageKey: 'amp.data-freezing:invalid-grace-period', id: dataFreezeEvent.id, cid: dataFreezeEvent.cid, affectedFields: ['gracePeriod'] });
+            errors.push( { messageKey: 'amp.data-freezing:invalid-grace-period', id: dataFreezeEvent.id, cid: dataFreezeEvent.cid, affectedFields: ['gracePeriod'], context: Constants.DATA_FREEZE_EVENTS });
         }
         return errors;
     }
@@ -96,7 +97,7 @@ class Utils {
             if ( message ) {
                 message.affectedFields.push( field );
             } else {
-                message = { messageKey: 'amp.data-freezing:required-fields-message', id: obj.id, cid: obj.cid, affectedFields: [field] }
+                message = { messageKey: 'amp.data-freezing:required-fields-message', id: obj.id, cid: obj.cid, affectedFields: [field] , context: Constants.DATA_FREEZE_EVENTS};
             }
         }
         return message;

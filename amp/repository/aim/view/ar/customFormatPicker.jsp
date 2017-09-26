@@ -126,7 +126,7 @@
 		<td width="40%" height="18" class="setting-label">
 			<digi:trn key="aim:formatPicket:Example">Example</digi:trn>
 		</td>
-	    <td width="60%" height="18" colspan="2" class="setting-option" style="font-weight:bold;">
+	    <td width="60%" height="18" colspan="2" class="setting-option bold">
 		      <div id="number" style="margin-left: 3px">
 		  	  <aim:formatNumber value="123456789.928" />
 	          </div></td>

@@ -792,7 +792,9 @@ public class EditActivity extends Action {
             	eaForm.getIdentification().setApprovalStatus(Constants.EDITED_STATUS);
             }
         }
+        
 
+        
         //AMP-17127
         //for modalities that is a SSC category we have to add the SSC prefix
           List<AmpCategoryValue> modalities = CategoryManagerUtil.getAmpCategoryValuesFromListByKey(

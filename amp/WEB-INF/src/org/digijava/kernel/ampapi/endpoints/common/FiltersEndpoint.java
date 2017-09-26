@@ -586,6 +586,21 @@ public class FiltersEndpoint {
 	}
 
 	/**
+	 * Funding status filter information
+	 *
+	 * @return
+	 */
+	@GET
+	@Path("/performanceAlertLevel")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(ui = true, id = FiltersConstants.PERFORMANCE_ALERT_LEVEL,
+			columns = ColumnConstants.PERFORMANCE_ALERT_LEVEL, name = ColumnConstants.PERFORMANCE_ALERT_LEVEL,
+			tab = EPConstants.TAB_ACTIVITY)
+	public JsonBean getPerformanceAlertLevel() {
+		return getCategoryValue(CategoryConstants.PERFORMANCE_ALERT_LEVEL_KEY, ColumnConstants.PERFORMANCE_ALERT_LEVEL);
+	}
+
+	/**
 	 * Return financing instruments 
 	 * 
 	 * @return

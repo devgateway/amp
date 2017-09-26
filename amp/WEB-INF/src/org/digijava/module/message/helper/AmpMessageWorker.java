@@ -72,6 +72,7 @@ import org.digijava.module.message.triggers.NotApprovedActivityTrigger;
 import org.digijava.module.message.triggers.NotApprovedCalendarEventTrigger;
 import org.digijava.module.message.triggers.SummaryChangeNotificationTrigger;
 import org.digijava.module.message.triggers.PendingResourceShareTrigger;
+import org.digijava.module.message.triggers.PerformanceRuleAlertTrigger;
 import org.digijava.module.message.triggers.RejectResourceSharetrigger;
 import org.digijava.module.message.triggers.RemoveCalendarEventTrigger;
 import org.digijava.module.message.triggers.UserAddedToFirstWorkspaceTrigger;
@@ -174,7 +175,10 @@ public class AmpMessageWorker {
 						createEmailsAndReceivers(ampMessage, receivers, false);
 					}
 
+				} else if (e.getTrigger().equals(PerformanceRuleAlertTrigger.class)) {
+				    newMsg = proccessPerformanceRuleAlertEvent(e, newAlert, template);
 				}
+
 				if (newMsg != null) {
 					AmpMessageUtil.saveOrUpdateMessage(newMsg);
 				} else {
@@ -239,7 +243,9 @@ public class AmpMessageWorker {
 					defineReceiversForDataFreezeNotification(newMsg, e, template);
 				} else if (e.getTrigger().equals(SummaryChangeNotificationTrigger.class)) {
 					defineReceiversForSummaryChange(newMsg, e, template);
-				} else { // <-- currently for else is left user registration
+				} else if (e.getTrigger().equals(PerformanceRuleAlertTrigger.class)) {
+				    defineReceiversForPerformanceRuleAlert(newMsg, e, template);
+                } else { // <-- currently for else is left user registration
 							// or activity disbursement date triggers
 					List<String> emailReceivers = new ArrayList<String>();
 					List<AmpMessageState> statesRelatedToTemplate = null;
@@ -684,8 +690,8 @@ public class AmpMessageWorker {
 	/**
      * Data Freeze Notification Processing
      */
-    private static AmpAlert proccessDataFreezeNotificationEvent(Event e, AmpAlert alert, TemplateAlert template) {        
-        alert.setSenderType(MessageConstants.SENDER_TYPE_SYSTEM);   
+    private static AmpAlert proccessDataFreezeNotificationEvent(Event e, AmpAlert alert, TemplateAlert template) {
+        alert.setSenderType(MessageConstants.SENDER_TYPE_SYSTEM);
         alert.setName(template.getName());
         alert.setDescription(template.getDescription());
         alert.setReceivers(template.getReceivers());
@@ -693,8 +699,8 @@ public class AmpMessageWorker {
         Calendar cal = Calendar.getInstance();
         alert.setCreationDate(cal.getTime());
         return alert;
-            
-        
+
+
     }
 
 	/**
@@ -712,7 +718,7 @@ public class AmpMessageWorker {
 
 
     }
-    
+
 	private static Approval createApprovalFromTemplate(TemplateAlert template, HashMap<String, String> myMap,
 			Approval newApproval, boolean needsApproval, boolean sourceIsResource, boolean activityApproval,
 			AmpTeamMember approver) {
@@ -852,6 +858,58 @@ public class AmpMessageWorker {
 
 		return alerts;
 	}
+
+	/**
+	 * Performance Rule Alert template
+	 */
+    private static AmpAlert proccessPerformanceRuleAlertEvent(Event e, AmpAlert alert, TemplateAlert template) {
+        alert.setSenderType(MessageConstants.SENDER_TYPE_SYSTEM);
+        alert.setName(template.getName());
+        alert.setDescription(template.getDescription());
+        alert.setReceivers(template.getReceivers());
+        alert.setDraft(false);
+
+        Calendar cal = Calendar.getInstance();
+        alert.setCreationDate(cal.getTime());
+
+        return alert;
+    }
+
+    private static void defineReceiversForPerformanceRuleAlert(AmpMessage newMsg, Event e, TemplateAlert template)
+            throws Exception {
+
+        AmpTeamMember msgSender = TeamMemberUtil.getAmpTeamMember(newMsg.getSenderId());
+
+        HashMap<String, String> params = new HashMap<String, String>();
+
+        params.put(PerformanceRuleAlertTrigger.PARAM_DATA_PERFORMANCE_ISSUES,
+                e.getParameters().get(PerformanceRuleAlertTrigger.PARAM_DATA_PERFORMANCE_ISSUES).toString());
+
+        List<String> receiversAddresses = new ArrayList<>();
+        if (template.getReceivers() != null) {
+            String[] receivers = template.getReceivers().split(",");
+            for (String receiver : receivers) {
+                receiversAddresses.add(getEmailFromReceiver(receiver));
+            }
+        }
+
+        if (receiversAddresses.size() > 0) {
+            for (String emailAddr : receiversAddresses) {
+                String senderEmail = (msgSender == null) ? DEFAULT_EMAIL_SENDER : msgSender.getUser().getEmail();
+                String translatedName = TranslatorWorker.translateText(newMsg.getName());
+                String translatedDescription = TranslatorWorker.translateText(newMsg.getDescription());
+
+                AmpEmail ampEmail = new AmpEmail(senderEmail, DgUtil.fillPattern(translatedName, params),
+                        DgUtil.fillPattern(translatedDescription, params));
+                DbUtil.saveOrUpdateObject(ampEmail);
+
+                AmpEmailReceiver emailReceiver = new AmpEmailReceiver(emailAddr, ampEmail,
+                        MessageConstants.UNSENT_STATUS);
+                DbUtil.saveOrUpdateObject(emailReceiver);
+            }
+        }
+    }
+
 	/**
 	 * 
 	 * @param string
@@ -864,6 +922,17 @@ public class AmpMessageWorker {
 		String team = string.substring(string.indexOf(";") + 1, string.lastIndexOf(";"));
 		return TeamMemberUtil.getAmpTeamMemberByEmailAndTeam(email, team);
 	}
+
+	/**
+     *
+     * @param string
+     * @return
+     */
+    private static String getEmailFromReceiver(String receiver) {
+        String email = receiver.substring(receiver.indexOf("<") + 1, receiver.indexOf(">"));
+
+        return email;
+    }
 
 	private static void createMsgState(TemplateAlert template, AmpMessage alert,AmpTeamMember receiver) throws Exception {
 		createMsgState(receiver, alert, false);
@@ -1309,16 +1378,16 @@ public class AmpMessageWorker {
 	}
 
 	private static void defineReceiversForDataFreezeNotification(AmpMessage newMsg, Event e, TemplateAlert template) throws Exception {
-	    
+
 	    List<User> users = DataFreezeUtil.getUsers();
 	    AmpTeamMember msgSender = TeamMemberUtil.getAmpTeamMember(newMsg.getSenderId());
 	    HashMap<String, String> params = new HashMap<String, String>();
 	    HashMap<String, AmpEmail> emails = new HashMap<String, AmpEmail>();
         params.put(DataFreezeEmailNotificationTrigger.PARAM_DATA_FREEZE_NOTIFICATION_DAYS, String.valueOf(DataFreezeEmailNotificationTrigger.DAYS_TO_FREEZE));
         params.put(DataFreezeEmailNotificationTrigger.PARAM_DATA_FREEZING_DATE, e.getParameters().get(DataFreezeEmailNotificationTrigger.PARAM_DATA_FREEZING_DATE).toString());
-	    for(User user : users) { 	        
+	    for(User user : users) {
 	        String senderEmail = (msgSender == null) ? DEFAULT_EMAIL_SENDER : msgSender.getUser().getEmail();
-	        AmpEmail ampEmail = emails.get(user.getRegisterLanguage().getCode());	        
+	        AmpEmail ampEmail = emails.get(user.getRegisterLanguage().getCode());
 	        if (ampEmail == null) {
 				String translatedName = TranslatorWorker.translateText(newMsg.getName(), user.getRegisterLanguage()
 						.getCode(), SITE_ID);
@@ -1330,9 +1399,9 @@ public class AmpMessageWorker {
 				emails.put(user.getRegisterLanguage().getCode(), ampEmail);
 			}
 	        AmpEmailReceiver emailReceiver = new AmpEmailReceiver(user.getEmail(), ampEmail, MessageConstants.UNSENT_STATUS);
-            DbUtil.saveOrUpdateObject(emailReceiver);	         
+            DbUtil.saveOrUpdateObject(emailReceiver);
 	    }
-              
+
     }
 
 	private static void defineReceiversForSummaryChange(AmpMessage newMsg, Event e, TemplateAlert template) throws
@@ -1364,7 +1433,7 @@ public class AmpMessageWorker {
 
 	}
 
-	
+
 	private static void createMsgState(AmpMessageState state, AmpMessage newMsg, boolean calendarSaveActionWasCalled)
 			throws Exception {
 		createMsgState(state.getReceiver(), newMsg, calendarSaveActionWasCalled);

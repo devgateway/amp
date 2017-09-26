@@ -56,11 +56,15 @@ module.exports = Backbone.Model
     this.listenTo(this, 'change:filterVertical', function() {
       self.structuresCollection.updatePaletteSet();
     });
+    
+    
+    this.listenTo(this.appData.performanceToggleModel, 'change:isPerformanceToggleSelected', this.applyFilters);
+    
   },
 
   applyFilters: function() {
     if (this.get('selected')) {
-      this.structuresCollection.fetchStructuresWithActivities();
+       this.structuresCollection.fetchStructuresWithActivities();
     }
   },
 

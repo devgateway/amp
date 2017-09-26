@@ -115,6 +115,8 @@ public class LocationService {
 			if (filters != null) {
 				filterRules = FilterUtils.getFilterRules(filters, null, filterRules);
 			}
+
+			GisUtils.configurePerformanceFilter(config, filterRules);
  		}
 		Map<Long, String> admLevelToGeoCode;
 		if (admlevel.equals(ColumnConstants.COUNTRY)) {
@@ -332,6 +334,8 @@ public class LocationService {
 			Map<String, Object> filterMap = (Map<String, Object>) config.get(EPConstants.FILTERS);
 			AmpReportFilters filterRules = FilterUtils.getFilters(filterMap, new AmpReportFilters(mrs.getCalendar()));
 
+			GisUtils.configurePerformanceFilter(config, filterRules);
+
 			if (filterRules != null) {
 				spec.setFilters(filterRules);
 			}
@@ -370,7 +374,8 @@ public class LocationService {
 		}
 		return activitiesId;
 	}
-	@SuppressWarnings("unchecked")
+
+    @SuppressWarnings("unchecked")
 	public static List<AmpStructure> getStructures(JsonBean config) throws AmpApiException{
 		List<AmpStructure> al = null;
 		Set<Long> activitiesId = getActivitiesForFiltering( config,null);
@@ -381,11 +386,11 @@ public class LocationService {
 		return al;
 
 	}
-	 
+
 	public static FeatureGeoJSON buildFeatureGeoJSON(AmpStructure structure) {
-	    FeatureGeoJSON fgj = new FeatureGeoJSON(); 
-	    try {                             
-            fgj.geometry = getGeometry(structure);            
+	    FeatureGeoJSON fgj = new FeatureGeoJSON();
+	    try {
+            fgj.geometry = getGeometry(structure);
             fgj.id = structure.getAmpStructureId().toString();
             fgj.properties.put("title", new TextNode(structure.getTitle()));
             if (structure.getDescription() != null && !structure.getDescription().trim().equals("")) {
@@ -398,17 +403,17 @@ public class LocationService {
                 actIds.add(ampActivity.getAmpActivityId());
             }
 
-            fgj.properties.put("activity", new POJONode(actIds));           
+            fgj.properties.put("activity", new POJONode(actIds));
         } catch (NumberFormatException e) {
             logger.warn("Couldn't get parse latitude/longitude for structure with latitude: "
                     + structure.getLatitude() + " longitude: " + structure.getLongitude() + " and title: "
                     + structure.getTitle());
         }
-	    
+
 	    return fgj;
-	    
+
 	}
-	
+
 	private static GeoJSON getGeometry(AmpStructure structure) {
         String shape = StringUtils.isEmpty(structure.getShape()) ? GisConstants.GIS_STRUCTURE_POINT
                 : structure.getShape();
@@ -423,29 +428,29 @@ public class LocationService {
             return null;
         }
 	}
-	
+
 	private static PointGeoJSON buildPoint(AmpStructure structure) {
-        PointGeoJSON pg = new PointGeoJSON();        
+        PointGeoJSON pg = new PointGeoJSON();
         pg.coordinates.add(parseDouble(structure.getLatitude()));
         pg.coordinates.add(parseDouble(structure.getLongitude()));
         return pg;
     }
-    
+
     private static LineStringGeoJSON buildPolyLine(AmpStructure structure) {
         LineStringGeoJSON line = new LineStringGeoJSON();
         line.coordinates = new ArrayList<>();
         if (structure.getCoordinates() != null) {
           for (AmpStructureCoordinate coord : structure.getCoordinates()) {
-              List<Double> lngLat =  new ArrayList<>();              
+              List<Double> lngLat =  new ArrayList<>();
               lngLat.add(parseDouble(coord.getLatitude()));
               lngLat.add(parseDouble(coord.getLongitude()));
               line.coordinates.add(lngLat);
-          }    
+          }
         }
-        
+
         return line;
     }
-    
+
     private static PolygonGeoJSON buildPolygon(AmpStructure structure) {
         PolygonGeoJSON polygon = new PolygonGeoJSON();
         polygon.coordinates = new ArrayList<>();
@@ -463,9 +468,9 @@ public class LocationService {
 
         return polygon;
     }
-    
+
     private static Double parseDouble(String value) {
        return Double.parseDouble(value == null ? "0" : value);
     }
-    
+
 }

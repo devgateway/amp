@@ -241,7 +241,7 @@ body {background:none;}
 										</c:if>
 									</module:display>
 
-                                 <module:display name="/Activity Form/Identification/Objective" parentModule="/Activity Form/Identification">   	
+                                 <module:display name="/Activity Form/Identification/Objective" parentModule="/Activity Form/Identification">
                                     <tr>
 										<td class="field_name">
 											<b>
@@ -3569,7 +3569,7 @@ body {background:none;}
 						</td>
 					</tr>
 				</c:if>
-			
+
 	</table>
 	<br />
 	<hr>

@@ -175,6 +175,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private String selectedActivityPledgesSettings = "-1";
 	
 	private Object[] selectedExpenditureClasses;
+	private Object[] selectedPerformanceAlertLevels;
 	private DynamicDateFilter dynamicEffectiveFundingFilter = new DynamicDateFilter();
 	private DynamicDateFilter dynamicFundingClosingFilter = new DynamicDateFilter();
 	private String fromEffectiveFundingDate;
@@ -1372,6 +1373,14 @@ public class ReportsFilterPickerForm extends ActionForm {
 		this.selectedExpenditureClasses = selectedExpenditureClasses;
 	}
 
+	public Object[] getSelectedPerformanceAlertLevels() {
+		return selectedPerformanceAlertLevels;
+	}
+
+	public void setSelectedPerformanceAlertLevels(final Object[] selectedPerformanceAlertLevels) {
+		this.selectedPerformanceAlertLevels = selectedPerformanceAlertLevels;
+	}
+
 	public DynamicDateFilter getDynamicEffectiveFundingFilter() {
 		return dynamicEffectiveFundingFilter;
 	}
@@ -1419,6 +1428,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	public void setToFundingClosingDate(String toFundingClosingDate) {
 		this.toFundingClosingDate = toFundingClosingDate;
 	}
+
 	public DynamicDateFilter getDynamicIssueFilter() {
 		return dynamicIssueFilter;
 	}
@@ -1445,7 +1455,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	public Long[] getSelectedConcensionalityLevel() {
 		return selectedConcensionalityLevel;
 	}
-	
+
 	public void setSelectedConcensionalityLevel(Long[] selectedConcensionalityLevel) {
 		this.selectedConcensionalityLevel = selectedConcensionalityLevel;
 	}

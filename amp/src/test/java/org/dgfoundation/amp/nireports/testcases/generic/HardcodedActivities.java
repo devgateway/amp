@@ -29,6 +29,8 @@ public class HardcodedActivities {
 	private void populateMaps() {
 
 		activity("activity 1 with agreement", 65);
+		activity("activity 1 with indicators", 95);
+		activity("activity 2 with indicators", 96);
 		activity("Activity 2 with multiple agreements", 66);
 		activity("Activity Linked With Pledge", 41);
 		activity("Activity with both MTEFs and Act.Comms", 70);
@@ -37,6 +39,7 @@ public class HardcodedActivities {
 		activity("activity with contracting agency", 52);
 		activity("activity with directed MTEFs", 73);
 		activity("activity with funded components", 63);
+		activity("activity with funded components 2", 99);
 		activity("activity with incomplete agreement", 68);
 		activity("activity with many MTEFs", 78);
 		activity("activity with pipeline MTEFs and act. disb", 76);
@@ -74,6 +77,9 @@ public class HardcodedActivities {
 		activity("Pure MTEF Project", 19);
 		activity("Real SSC Activity 1", 39);
 		activity("Real SSC Activity 2", 38);
+		activity("regional funding activity 1", 100);
+		activity("regional funding activity 2", 101);
+		activity("regional funding activity 3", 102);
 		activity("second with disaster response", 92);
 		activity("SSC Project 1", 30);
 		activity("SSC Project 2", 31);

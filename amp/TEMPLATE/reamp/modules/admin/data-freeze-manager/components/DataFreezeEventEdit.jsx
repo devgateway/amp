@@ -42,71 +42,52 @@ export default class DataFreezeEventEdit extends Component {
         this.onEnabledChange = this.onEnabledChange.bind(this);
         this.getErrorsForField = this.getErrorsForField.bind(this);
         this.onNotificationDaysChange = this.onNotificationDaysChange.bind(this);
-        this.toggleDatePickerByFieldName = this.toggleDatePickerByFieldName.bind(this);        
     }
 
-    toggleDatePicker(event) { 
-        const toggleState = this.state.showDatePicker;
-        const field = event.target.getAttribute('data-field'); 
-        for(const fieldName in toggleState){
-            if(field != fieldName){
-                toggleState[fieldName]  = false; 
-            }            
-        }
-        
+    toggleDatePicker(event) {
+        let field = event.target.getAttribute('data-field');
+        let toggleState = this.state.showDatePicker;
         toggleState[field] = !toggleState[field];
         this.setState({
             showDatePicker: toggleState
         });
     }
-    
-   toggleDatePickerByFieldName(fieldName){
-        const toggleState = this.state.showDatePicker;        
-        toggleState[fieldName] = !toggleState[fieldName];
-        this.setState({
-            showDatePicker: toggleState
-        });
-    }
- 
-   onFreezingDateChange(date) {
-        const currentRecord = this.props.dataFreezeEvent;
+
+    onFreezingDateChange(date) {
+        let currentRecord = this.props.dataFreezeEvent;
         currentRecord.freezingDate = moment(date, this.getDisplayDateFormat()).format(Constants.EP_DATE_FORMAT);
         this.setState({
             currentRecord: currentRecord
         });
-        this.toggleDatePickerByFieldName('freezingDate');
     }
 
     onOpenPeriodStartChange(date) {
-        const currentRecord = this.props.dataFreezeEvent;
+        let currentRecord = this.props.dataFreezeEvent;
         currentRecord.openPeriodStart = moment(date, this.getDisplayDateFormat()).format(Constants.EP_DATE_FORMAT);
         this.setState({
             currentRecord: currentRecord
         });
-        
-        this.toggleDatePickerByFieldName('openPeriodStart');
     }
 
     onOpenPeriodEndChange(date) {
-        const currentRecord = this.props.dataFreezeEvent;
+        let currentRecord = this.props.dataFreezeEvent;
         currentRecord.openPeriodEnd = moment(date, this.getDisplayDateFormat()).format(Constants.EP_DATE_FORMAT);
         this.setState({
             currentRecord: currentRecord
         });
-        this.toggleDatePickerByFieldName('openPeriodEnd');
     }
-    
+
     onGracePeriodChange(event) {
-        const gracePeriod = $(event.target).val();
-        const currentRecord = this.props.dataFreezeEvent;
+        let gracePeriod = $(event.target).val();
+        let currentRecord = this.props.dataFreezeEvent;
         currentRecord.gracePeriod = (gracePeriod && !isNaN(gracePeriod)) ? parseInt(gracePeriod) : '';
         this.setState({
             currentRecord: currentRecord
         });
     }
-    
+
     onSendNotificationChange(event) {
-        const currentRecord = this.props.dataFreezeEvent;
+        let currentRecord = this.props.dataFreezeEvent;
         currentRecord.sendNotification = $(event.target).val() === Constants.OPTION_YES;
         if ($(event.target).val() === Constants.OPTION_NO) {
             currentRecord.notificationDays = '';
@@ -117,7 +98,7 @@ export default class DataFreezeEventEdit extends Component {
     }
 
     onEnabledChange(event) {
-        const currentRecord = this.props.dataFreezeEvent;
+        let currentRecord = this.props.dataFreezeEvent;
         currentRecord.enabled = $(event.target).val() === Constants.OPTION_YES;
         this.setState({
             currentRecord: currentRecord
@@ -125,7 +106,7 @@ export default class DataFreezeEventEdit extends Component {
     }
 
     onFreezeOptionChange(event) {
-        const currentRecord = this.props.dataFreezeEvent;
+        let currentRecord = this.props.dataFreezeEvent;
         currentRecord.freezeOption = $(event.target).val();
         this.setState({
             currentRecord: currentRecord
@@ -133,8 +114,8 @@ export default class DataFreezeEventEdit extends Component {
     }
 
     onNotificationDaysChange(event) {
-        const currentRecord = this.props.dataFreezeEvent;
-        const notificationDays = $(event.target).val();
+        let currentRecord = this.props.dataFreezeEvent;
+        let notificationDays = $(event.target).val();
         currentRecord.notificationDays = (notificationDays && !isNaN(notificationDays)) ? parseInt(notificationDays) : '';
         this.setState({
             currentRecord: currentRecord
@@ -168,8 +149,8 @@ export default class DataFreezeEventEdit extends Component {
         }.bind(this));
 
         this.props.filter.on('apply', function () {
-            const currentRecord = this.props.dataFreezeEvent;
-            const filters = this.props.filter.serialize();
+            let currentRecord = this.props.dataFreezeEvent;
+            let filters = this.props.filter.serialize();
             if (filters) {
                 currentRecord.filters = JSON.stringify(filters);
                 this.setState({
@@ -184,8 +165,8 @@ export default class DataFreezeEventEdit extends Component {
         this.props.filter.reset({
             silent: true
         });
-        const currentRecord = this.props.dataFreezeEvent;
-        const filters = JSON.parse(currentRecord.filters || '{}')
+        let currentRecord = this.props.dataFreezeEvent;
+        let filters = JSON.parse(currentRecord.filters || '{}')
         this.props.filter.deserialize(filters, {
             silent: true
         });
@@ -212,7 +193,7 @@ export default class DataFreezeEventEdit extends Component {
               {this.state.showDatePicker.freezingDate &&
                <div className="datepicker-outer-wrapper">                      
                   <div className="datepicker-inner-wrapper">                        
-                    <DatePicker data-field="freezingDate"  onChange={this.onFreezingDateChange} date={this.toDisplayDateFormat(this.props.dataFreezeEvent.freezingDate)} dateFormat={this.getDisplayDateFormat()} />
+                    <DatePicker data-field="freezingDate"  onChange={this.onFreezingDateChange} date={this.toDisplayDateFormat(this.props.dataFreezeEvent.freezingDate)} dateFormat={this.getDisplayDateFormat()}/>
                   </div>
               </div>
               }
@@ -235,7 +216,7 @@ export default class DataFreezeEventEdit extends Component {
                 {this.state.showDatePicker.openPeriodStart &&
                     <div className="datepicker-outer-wrapper">                      
                     <div className="datepicker-inner-wrapper">                      
-                      <DatePicker onChange={this.onOpenPeriodStartChange} date={this.toDisplayDateFormat(this.props.dataFreezeEvent.openPeriodStart)} dateFormat={this.getDisplayDateFormat()} />
+                      <DatePicker onChange={this.onOpenPeriodStartChange} date={this.toDisplayDateFormat(this.props.dataFreezeEvent.openPeriodStart)} dateFormat={this.getDisplayDateFormat()}/>
                      </div>
                     </div>
                 }  
@@ -294,7 +275,10 @@ export default class DataFreezeEventEdit extends Component {
                   <span className="glyphicon glyphicon-plus-sign"></span>
                  </button>
                </td>
-               <td className="action-column">                  
+                <td>
+                      {this.props.dataFreezeEvent.enabled ? this.props.translations['amp.data-freezing:boolean-option-yes'] : this.props.translations['amp.data-freezing:boolean-option-no']}
+                 </td>
+                <td className="action-column">                  
                       <span className="glyphicon glyphicon-custom glyphicon-ok-circle success-color" onClick={this.save}> </span>
                       <span className="glyphicon glyphicon-custom glyphicon-remove-sign" onClick={this.props.cancel}></span>
                    </td>

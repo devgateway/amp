@@ -128,21 +128,19 @@ export default class DataFreezeEventList extends Component {
     
     showErrors() {
         const messages = [];
-        let errors = this.props.errors.filter(message => message.context == this.props.context );
-        errors.forEach((error, index) => {
+        this.props.errors.forEach((error, index) => {
             messages.push(<span key={index}>{this.props.translations[error.messageKey]} <br/></span>)
         });
 
-        return (errors.length > 0 && <div className="alert alert-danger" role="alert">
+        return (this.props.errors.length > 0 && <div className="alert alert-danger" role="alert">
             {messages}
      </div>)
     }
 
     showInfoMessages() {
-        let messages = this.props.infoMessages.filter(message => message.context == this.props.context );
-        return (messages.length > 0 &&            
+        return (this.props.infoMessages.length > 0 &&
             <div className="alert alert-info" role="alert">
-            {messages.map((info, index) =>
+            {this.props.infoMessages.map((info, index) =>
             <span  key={index} >{this.props.translate(info.messageKey, info.params)} <br/></span>
             )}
     </div>)
@@ -262,7 +260,8 @@ export default class DataFreezeEventList extends Component {
                           <th>{this.showInfoIcon('freeze-options')}{this.props.translations['amp.data-freezing:freeze-options']}<span className="error-color" >*&nbsp;</span></th>
                           <th>{this.showInfoIcon('notification-email')}{this.props.translations['amp.data-freezing:notification-email']}<span className="error-color" >*&nbsp;</span></th>
                           <th>{this.showInfoIcon('notification-days')}{this.props.translations['amp.data-freezing:notification-days']}</th>
-                          <th>{this.showInfoIcon('filters')}{this.props.translations['amp.data-freezing:filters']}</th>                          
+                          <th>{this.showInfoIcon('filters')}{this.props.translations['amp.data-freezing:filters']}</th>
+                          <th>{this.props.translations['amp.data-freezing:enabled']}</th>
                           <th></th>
                           <th></th>
                           </tr>

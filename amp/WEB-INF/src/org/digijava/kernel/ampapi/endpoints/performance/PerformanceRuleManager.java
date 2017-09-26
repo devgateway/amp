@@ -373,9 +373,13 @@ public final class PerformanceRuleManager {
     }
 
     public AmpCategoryValue getPerformanceIssueFromActivity(AmpActivityVersion a) {
-        return a.getCategories().stream().filter(
-                acv -> acv.getAmpCategoryClass().getKeyName().equals(CategoryConstants.PERFORMANCE_ALERT_LEVEL_KEY))
-                .findAny().orElse(null);
+        if (a.getCategories() != null) {
+            return a.getCategories().stream().filter(
+                    acv -> acv.getAmpCategoryClass().getKeyName().equals(CategoryConstants.PERFORMANCE_ALERT_LEVEL_KEY))
+                    .findAny().orElse(null);
+        } else {
+            return null;
+        }
     }
 
     public void updatePerformanceIssueInActivity(AmpActivityVersion a, AmpCategoryValue from, AmpCategoryValue to) {

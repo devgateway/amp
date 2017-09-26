@@ -135,7 +135,7 @@ public class AmpStructuresFormSectionFeature extends
 				
 				shape.getTextContainer().add(new AttributeAppender("size", new Model("7px"), ";"));
 				item.add(shape);
-				
+
 				ListEditorRemoveButton delbutton = new ListEditorRemoveButton("deleteStructure", "Delete Structure"){
 
 					@Override

@@ -42,19 +42,25 @@ import org.digijava.kernel.ampapi.endpoints.gis.services.LocationService;
 import org.digijava.kernel.ampapi.endpoints.gis.services.PublicGapAnalysis;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorEPConstants;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorUtils;
+import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleConstants;
+import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
+import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.helpers.geojson.FeatureCollectionGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.FeatureGeoJSON;
+import org.digijava.kernel.ampapi.helpers.geojson.LineStringGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.PointGeoJSON;
+import org.digijava.kernel.ampapi.helpers.geojson.PolygonGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.objects.ClusteredPoints;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
 import org.digijava.module.aim.dbentity.AmpIndicatorColor;
 import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
 import org.digijava.module.aim.dbentity.AmpStructure;
+import org.digijava.module.aim.dbentity.AmpStructureCoordinate;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.util.ColorRampUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -554,6 +560,29 @@ public class GisEndPoints implements ErrorReportingEndpoint {
 	@ApiMethod(ui = false, id = "reportExport")
 	public JsonBean getLastUpdated(@PathParam("report_config_id") String reportConfigId) {
 		return ReportsUtil.getApiState(reportConfigId);
+	}
+	
+	/**
+     * Provides information about the availability or not of enabled performance rules. 
+     * This information is used for configuring the GIS UI.
+     * The performance rule toggle on GIS UI is only displayed if enabled performance rules are available.
+     * @return <pre>
+     * {
+     *     "hasEnabledPerformanceRules": true/false  
+     * }
+     * </pre>
+     * 
+     */
+	@GET
+    @Path("/has-enabled-performance-rules")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = false, id = "hasEnabledPerformanceRules")
+	public JsonBean hasEnabledPerformanceRules() {
+        JsonBean result = new JsonBean();
+        result.set(PerformanceRuleConstants.HAS_ENABLED_PERFORMANCE_RULES,
+                !PerformanceRuleManager.getInstance().getPerformanceRuleMatchers().isEmpty());
+        
+        return result;
 	}
 
 	/**

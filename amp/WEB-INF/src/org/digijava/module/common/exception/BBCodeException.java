@@ -1,8 +1,8 @@
 /*
  *   BBCodeException.java
- * 	 @Author Maka Kharalashvili maka@digijava.org
- * 	 Created: Oct 20, 2003
- * 	 CVS-ID: $Id$
+ *   @Author Maka Kharalashvili maka@digijava.org
+ *   Created: Oct 20, 2003
+ *   CVS-ID: $Id$
  *
  *   This file is part of DiGi project (www.digijava.org).
  *   DiGi is a multi-site portal system written in Java/J2EE.

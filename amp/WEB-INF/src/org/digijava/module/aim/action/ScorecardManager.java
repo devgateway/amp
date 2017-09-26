@@ -22,46 +22,46 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 public class ScorecardManager extends Action {
-	
-	private final static String CANCEL = "CANCEL";
+    
+    private final static String CANCEL = "CANCEL";
 
-	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
-		ScorecardManagerForm scorecardSettingsForm = (ScorecardManagerForm) form;
-		Collection<AmpCategoryValue> allCategoryValues = 
-		CategoryManagerUtil.
-		getAmpCategoryValueCollectionByKey("activity_status");
-		
-		for (AmpCategoryValue acv : allCategoryValues) {
-			acv.setValue(CategoryManagerUtil.translateAmpCategoryValue(acv));
+    public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
+        ScorecardManagerForm scorecardSettingsForm = (ScorecardManagerForm) form;
+        Collection<AmpCategoryValue> allCategoryValues = 
+        CategoryManagerUtil.
+        getAmpCategoryValueCollectionByKey("activity_status");
+        
+        for (AmpCategoryValue acv : allCategoryValues) {
+            acv.setValue(CategoryManagerUtil.translateAmpCategoryValue(acv));
         }
-		
-		scorecardSettingsForm.setCategoryValues(allCategoryValues);
-		
-		List<AmpScorecardSettings> scorecardSettingsList = (List<AmpScorecardSettings>) DbUtil.getAll(AmpScorecardSettings.class);
-		AmpScorecardSettings settings = scorecardSettingsList.isEmpty() ? new AmpScorecardSettings() : scorecardSettingsList.get(0);
-		
-		if (scorecardSettingsForm.getAction() != null && scorecardSettingsForm.getAction().equals(CANCEL)) {
-			return mapping.findForward("index");
-		} else {
-			if (!scorecardSettingsList.isEmpty()) {
-					scorecardSettingsForm.setValidationPeriod(settings.getValidationPeriod());
-					scorecardSettingsForm.setValidationTime(settings.getValidationTime());
-					scorecardSettingsForm.setPercentageThreshold(settings.getPercentageThreshold());
-					scorecardSettingsForm.setSelectedCategoryValues(getSelectedClosedStatuses(settings.getClosedStatuses()));
-			}
-			
-			return mapping.findForward("forward");
-		}
-	}
-	
-	String[] getSelectedClosedStatuses(Set<AmpScorecardSettingsCategoryValue> categoryValues) {
-		ArrayList<String> selectedStatuses = new ArrayList<String>();
-		
-		for (AmpScorecardSettingsCategoryValue categoryValue : categoryValues) {
-			selectedStatuses.add(Long.toString(categoryValue.getAmpCategoryValueStatus().getId()));
-		}
-		
-		return selectedStatuses.toArray(new String[selectedStatuses.size()]);
-	}
+        
+        scorecardSettingsForm.setCategoryValues(allCategoryValues);
+        
+        List<AmpScorecardSettings> scorecardSettingsList = (List<AmpScorecardSettings>) DbUtil.getAll(AmpScorecardSettings.class);
+        AmpScorecardSettings settings = scorecardSettingsList.isEmpty() ? new AmpScorecardSettings() : scorecardSettingsList.get(0);
+        
+        if (scorecardSettingsForm.getAction() != null && scorecardSettingsForm.getAction().equals(CANCEL)) {
+            return mapping.findForward("index");
+        } else {
+            if (!scorecardSettingsList.isEmpty()) {
+                    scorecardSettingsForm.setValidationPeriod(settings.getValidationPeriod());
+                    scorecardSettingsForm.setValidationTime(settings.getValidationTime());
+                    scorecardSettingsForm.setPercentageThreshold(settings.getPercentageThreshold());
+                    scorecardSettingsForm.setSelectedCategoryValues(getSelectedClosedStatuses(settings.getClosedStatuses()));
+            }
+            
+            return mapping.findForward("forward");
+        }
+    }
+    
+    String[] getSelectedClosedStatuses(Set<AmpScorecardSettingsCategoryValue> categoryValues) {
+        ArrayList<String> selectedStatuses = new ArrayList<String>();
+        
+        for (AmpScorecardSettingsCategoryValue categoryValue : categoryValues) {
+            selectedStatuses.add(Long.toString(categoryValue.getAmpCategoryValueStatus().getId()));
+        }
+        
+        return selectedStatuses.toArray(new String[selectedStatuses.size()]);
+    }
 
 }

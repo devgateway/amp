@@ -12,22 +12,22 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
  */
 public class AmpAddLinkField extends AmpLinkField {
 
-	/**
-	 * @param id
-	 * @param fmName
-	 */
-	public AmpAddLinkField(String id, String fmName) {
-		super(id, fmName);
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * @param id
+     * @param fmName
+     */
+    public AmpAddLinkField(String id, String fmName) {
+        super(id, fmName);
+        // TODO Auto-generated constructor stub
+    }
 
-	/* (non-Javadoc)
-	 * @see org.dgfoundation.amp.onepager.components.fields.AmpLinkField#onClick(org.apache.wicket.ajax.AjaxRequestTarget)
-	 */
-	@Override
-	protected void onClick(AjaxRequestTarget target) {
-		// TODO Auto-generated method stub
+    /* (non-Javadoc)
+     * @see org.dgfoundation.amp.onepager.components.fields.AmpLinkField#onClick(org.apache.wicket.ajax.AjaxRequestTarget)
+     */
+    @Override
+    protected void onClick(AjaxRequestTarget target) {
+        // TODO Auto-generated method stub
 
-	}
+    }
 
 }

@@ -28,8 +28,8 @@ public final class CustomDoubleConverter extends AbstractNumberConverter<Double>
 
     @Override
     public Double convertToObject(String value, Locale locale) throws ConversionException {
-    	DoubleConverter converter = (DoubleConverter) DoubleConverter.INSTANCE;
-    	DecimalFormat formatter = FormatHelper.getDecimalFormat(true);
+        DoubleConverter converter = (DoubleConverter) DoubleConverter.INSTANCE;
+        DecimalFormat formatter = FormatHelper.getDecimalFormat(true);
         try {
             converter.setNumberFormat(locale, formatter);
             return converter.convertToObject(value, locale);

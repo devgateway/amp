@@ -6,15 +6,15 @@ import org.digijava.module.message.helper.Event;
 
 public class ApprovedCalendarEventTrigger extends AbstractCalendarEventTrigger{
 
-	public ApprovedCalendarEventTrigger(CalendarItem calendarItem,
-			String teamManager, AmpTeamMember creator) {
-		super(calendarItem, teamManager, creator,
-				"calendar/showCalendarEvent.do~ampCalendarId="+calendarItem.getId()+"~method=preview~resetForm=true");
-	}
+    public ApprovedCalendarEventTrigger(CalendarItem calendarItem,
+            String teamManager, AmpTeamMember creator) {
+        super(calendarItem, teamManager, creator,
+                "calendar/showCalendarEvent.do~ampCalendarId="+calendarItem.getId()+"~method=preview~resetForm=true");
+    }
 
-	@Override
-	protected Event getEvent() {
-		return new Event(ApprovedCalendarEventTrigger.class);
-	}
+    @Override
+    protected Event getEvent() {
+        return new Event(ApprovedCalendarEventTrigger.class);
+    }
 
 }

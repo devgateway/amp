@@ -21,46 +21,46 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.AuditLoggerUtil;
 
 public class TeamAuditLogger extends MultiAction {
-	
-	private static Logger logger = Logger.getLogger(TeamAuditLogger.class);
-	
-	private ServletContext ampContext = null;
-	
-	public ActionForward modePrepare(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
-		
-		boolean permitted = false;
-		HttpSession session = request.getSession();
-		if (session.getAttribute("ampAdmin") != null) {
-			String key = (String) session.getAttribute("ampAdmin");
-			if (key.equalsIgnoreCase("yes")) {
-				permitted = true;
-			} else {
-				if (session.getAttribute("teamLeadFlag") != null) {
-					key = (String) session.getAttribute("teamLeadFlag");
-					if (key.equalsIgnoreCase("true")) {
-						permitted = true;
-					}
-				}
-			}
-		}
-		if (!permitted) {
-			return mapping.findForward("index");
-		}
-		String teamname = null;
-		if (session.getAttribute("currentMember") != null) {
-			TeamMember tm = (TeamMember) session.getAttribute("currentMember");
-			teamname = tm.getTeamName();
-		}
-		
-		TeamAuditForm vForm = (TeamAuditForm) form;
-		
-		Collection<AmpAuditLogger> logs=AuditLoggerUtil.getTeamLogObjects(teamname);
-		
-		if (request.getParameter("sortBy")!=null){
-			vForm.setSortBy(request.getParameter("sortBy"));
-		}
+    
+    private static Logger logger = Logger.getLogger(TeamAuditLogger.class);
+    
+    private ServletContext ampContext = null;
+    
+    public ActionForward modePrepare(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
+        
+        boolean permitted = false;
+        HttpSession session = request.getSession();
+        if (session.getAttribute("ampAdmin") != null) {
+            String key = (String) session.getAttribute("ampAdmin");
+            if (key.equalsIgnoreCase("yes")) {
+                permitted = true;
+            } else {
+                if (session.getAttribute("teamLeadFlag") != null) {
+                    key = (String) session.getAttribute("teamLeadFlag");
+                    if (key.equalsIgnoreCase("true")) {
+                        permitted = true;
+                    }
+                }
+            }
+        }
+        if (!permitted) {
+            return mapping.findForward("index");
+        }
+        String teamname = null;
+        if (session.getAttribute("currentMember") != null) {
+            TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+            teamname = tm.getTeamName();
+        }
+        
+        TeamAuditForm vForm = (TeamAuditForm) form;
+        
+        Collection<AmpAuditLogger> logs=AuditLoggerUtil.getTeamLogObjects(teamname);
+        
+        if (request.getParameter("sortBy")!=null){
+            vForm.setSortBy(request.getParameter("sortBy"));
+        }
         if(vForm.getSortBy() == null){
             vForm.setSortBy("changedatedesc");
         }
@@ -121,58 +121,58 @@ public class TeamAuditLogger extends MultiAction {
           Collections.reverse((List<AmpAuditLogger>)logs);
         }
 
-		vForm.setPagesToShow(10);
-		int totalrecords=20;
-		int page = 0;
-		if (request.getParameter("page") == null) {
-			page = 1;
-		} else {
-			page = Integer.parseInt(request.getParameter("page"));
-		}
-		int stIndex = ((page - 1) * totalrecords) + 1;
-		int edIndex = page * totalrecords;
-		Collection tempCol = new ArrayList();
-		AmpAuditLogger[] tmplogs = (AmpAuditLogger[])logs.toArray(new AmpAuditLogger[0]);
-		for (int i = (stIndex - 1); i < edIndex; i++) {
-			if (logs.size() > i){
-				tempCol.add(tmplogs[i]);
-			}
-			else{
-				break;
-			}
-		 }
-		
-		Collection pages = null;
-		int numpages;
-		numpages = logs.size() / totalrecords;
-		numpages += (logs.size()  % totalrecords != 0) ? 1 : 0;
-		
-		if ((numpages) >= 1) {
-	        pages = new ArrayList();
-	        for (int i = 0; i < (numpages); i++) {
-	          Integer pageNum = new Integer(i + 1);
-	          pages.add(pageNum);
-	        }
-	     }else{
-	    	 pages = new ArrayList<AmpAuditLogger>();
-	     }
-	      
-	    vForm.setPages(pages);  
-		vForm.setCurrentPage(new Integer(page));
-		vForm.setLogs(tempCol);
-		vForm.setPagesSize(pages.size());
-		
-		return  modeSelect(mapping, form, request, response);
-	}
+        vForm.setPagesToShow(10);
+        int totalrecords=20;
+        int page = 0;
+        if (request.getParameter("page") == null) {
+            page = 1;
+        } else {
+            page = Integer.parseInt(request.getParameter("page"));
+        }
+        int stIndex = ((page - 1) * totalrecords) + 1;
+        int edIndex = page * totalrecords;
+        Collection tempCol = new ArrayList();
+        AmpAuditLogger[] tmplogs = (AmpAuditLogger[])logs.toArray(new AmpAuditLogger[0]);
+        for (int i = (stIndex - 1); i < edIndex; i++) {
+            if (logs.size() > i){
+                tempCol.add(tmplogs[i]);
+            }
+            else{
+                break;
+            }
+         }
+        
+        Collection pages = null;
+        int numpages;
+        numpages = logs.size() / totalrecords;
+        numpages += (logs.size()  % totalrecords != 0) ? 1 : 0;
+        
+        if ((numpages) >= 1) {
+            pages = new ArrayList();
+            for (int i = 0; i < (numpages); i++) {
+              Integer pageNum = new Integer(i + 1);
+              pages.add(pageNum);
+            }
+         }else{
+             pages = new ArrayList<AmpAuditLogger>();
+         }
+          
+        vForm.setPages(pages);  
+        vForm.setCurrentPage(new Integer(page));
+        vForm.setLogs(tempCol);
+        vForm.setPagesSize(pages.size());
+        
+        return  modeSelect(mapping, form, request, response);
+    }
 
-	public ActionForward modeSelect(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		// TODO Auto-generated method stub
-		//return modeNew(mapping, form, request, response);
-		if(request.getParameter("action")!=null)
-			{
-//				if(request.getParameter("action").compareTo("add")==0) return modeAddTemplate(mapping, form, request, response);
-			}
-		return mapping.findForward("forward");
-	}
-	
+    public ActionForward modeSelect(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        // TODO Auto-generated method stub
+        //return modeNew(mapping, form, request, response);
+        if(request.getParameter("action")!=null)
+            {
+//              if(request.getParameter("action").compareTo("add")==0) return modeAddTemplate(mapping, form, request, response);
+            }
+        return mapping.findForward("forward");
+    }
+    
 }

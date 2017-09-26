@@ -30,71 +30,71 @@ import org.digijava.module.gateperm.util.PermissionUtil;
  * since Nov 8, 2010
  */
 public class AmpReleaseOfFundsSubsectionFeature extends
-		AmpSubsectionFeaturePanel<AmpFunding> {
+        AmpSubsectionFeaturePanel<AmpFunding> {
 
-	private IModel<AmpOrganisation> fundingOrgModel; 
-	
-	protected AmpReleaseOfFundsFormTableFeature disbursementsTableFeature;
-	
-	public AmpReleaseOfFundsFormTableFeature getDisbursementsTableFeature() {
-		return disbursementsTableFeature;
-	}
-	
-	
-	@Override
-	protected void onConfigure() {
-		AmpAuthWebSession session = (AmpAuthWebSession) getSession();
-		if (fundingOrgModel != null && fundingOrgModel.getObject() != null){
-			FundingOrganization fo = new FundingOrganization();
-			fo.setAmpOrgId(fundingOrgModel.getObject().getAmpOrgId());
-			PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG, fo);
-			PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG_ROLE, Constants.FUNDING_AGENCY);
-		}
-		super.onConfigure();
-		if (fundingOrgModel != null && fundingOrgModel.getObject() != null){
-			PermissionUtil.removeFromScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG);
-			PermissionUtil.removeFromScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG_ROLE);
-		}
-	}
+    private IModel<AmpOrganisation> fundingOrgModel; 
+    
+    protected AmpReleaseOfFundsFormTableFeature disbursementsTableFeature;
+    
+    public AmpReleaseOfFundsFormTableFeature getDisbursementsTableFeature() {
+        return disbursementsTableFeature;
+    }
+    
+    
+    @Override
+    protected void onConfigure() {
+        AmpAuthWebSession session = (AmpAuthWebSession) getSession();
+        if (fundingOrgModel != null && fundingOrgModel.getObject() != null){
+            FundingOrganization fo = new FundingOrganization();
+            fo.setAmpOrgId(fundingOrgModel.getObject().getAmpOrgId());
+            PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG, fo);
+            PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG_ROLE, Constants.FUNDING_AGENCY);
+        }
+        super.onConfigure();
+        if (fundingOrgModel != null && fundingOrgModel.getObject() != null){
+            PermissionUtil.removeFromScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG);
+            PermissionUtil.removeFromScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG_ROLE);
+        }
+    }
 
 
-	/**
-	 * @param id
-	 * @param fmName
-	 * @param model
-	 * @throws Exception
-	 */
-	public AmpReleaseOfFundsSubsectionFeature(String id,
-			final IModel<AmpFunding> model, String fmName, int transactionType) throws Exception {
-		super(id, fmName, model);
-		
-		disbursementsTableFeature = new AmpReleaseOfFundsFormTableFeature("disbursementsTableFeature", model, "Release of Funds Table", transactionType);
-		add(disbursementsTableFeature);
-		fundingOrgModel = new PropertyModel<AmpOrganisation>(model,"ampDonorOrgId");
-		
-		AmpAjaxLinkField addCommit=new AmpAjaxLinkField("addDisbursement","Add RoF","Add RoF") {
-			@Override
-			public void onClick(AjaxRequestTarget target) {
-				AmpFundingDetail fd= new AmpFundingDetail();
-				fd.setAmpFundingId(model.getObject());
-				//fd.setTransactionAmount(0d);
-				fd.setReportingDate(new Date(System.currentTimeMillis()));
-				fd.setUpdatedDate(new Date(System.currentTimeMillis()));
-			//	fd.setAdjustmentType(Constants.ACTUAL);
-//				fd.setTransactionDate(new Date(System.currentTimeMillis()));
-				fd.setAmpCurrencyId(CurrencyUtil.getWicketWorkspaceCurrency());
-				fd.setTransactionType(Constants.RELEASE_OF_FUNDS);
-				disbursementsTableFeature.getEditorList().addItem(fd);
-			    disbursementsTableFeature.getEditorList().updateModel();
-				target.add(disbursementsTableFeature);
-				AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
-				parent.getFundingInfo().checkChoicesRequired(disbursementsTableFeature.getEditorList().getCount());
-				target.add(parent.getFundingInfo());
-				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
-				target.appendJavaScript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));
-			}
-		};
-		add(addCommit);
-	}
+    /**
+     * @param id
+     * @param fmName
+     * @param model
+     * @throws Exception
+     */
+    public AmpReleaseOfFundsSubsectionFeature(String id,
+            final IModel<AmpFunding> model, String fmName, int transactionType) throws Exception {
+        super(id, fmName, model);
+        
+        disbursementsTableFeature = new AmpReleaseOfFundsFormTableFeature("disbursementsTableFeature", model, "Release of Funds Table", transactionType);
+        add(disbursementsTableFeature);
+        fundingOrgModel = new PropertyModel<AmpOrganisation>(model,"ampDonorOrgId");
+        
+        AmpAjaxLinkField addCommit=new AmpAjaxLinkField("addDisbursement","Add RoF","Add RoF") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                AmpFundingDetail fd= new AmpFundingDetail();
+                fd.setAmpFundingId(model.getObject());
+                //fd.setTransactionAmount(0d);
+                fd.setReportingDate(new Date(System.currentTimeMillis()));
+                fd.setUpdatedDate(new Date(System.currentTimeMillis()));
+            //  fd.setAdjustmentType(Constants.ACTUAL);
+//              fd.setTransactionDate(new Date(System.currentTimeMillis()));
+                fd.setAmpCurrencyId(CurrencyUtil.getWicketWorkspaceCurrency());
+                fd.setTransactionType(Constants.RELEASE_OF_FUNDS);
+                disbursementsTableFeature.getEditorList().addItem(fd);
+                disbursementsTableFeature.getEditorList().updateModel();
+                target.add(disbursementsTableFeature);
+                AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
+                parent.getFundingInfo().checkChoicesRequired(disbursementsTableFeature.getEditorList().getCount());
+                target.add(parent.getFundingInfo());
+                target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
+                target.appendJavaScript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));
+            }
+        };
+        add(addCommit);
+    }
 
 }

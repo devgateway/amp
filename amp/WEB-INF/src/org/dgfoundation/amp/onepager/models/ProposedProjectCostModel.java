@@ -30,14 +30,14 @@ public class ProposedProjectCostModel implements IModel{
         public Double getObject() {
                 Double result = new Double(0);
                 if (setModel == null || setModel.getObject() == null || setModel.getObject().size() == 0)
-                		//if the set is empty we should return 0
+                        //if the set is empty we should return 0
                         return null;
                 else{
                         Set<AmpAnnualProjectBudget> set = setModel.getObject();
                         for (AmpAnnualProjectBudget b: set){
-                    		if(b.getYear()!=null && b.getAmpCurrencyId()!=null && b.getAmount()!=null && currencyModel.getObject()!=null){ 
-                    			result+=doCalculations(b.getAmount(),currencyModel.getObject(),b.getYear(),b.getAmpCurrencyId().getCurrencyCode()).doubleValue();
-                    		}                        }
+                            if(b.getYear()!=null && b.getAmpCurrencyId()!=null && b.getAmount()!=null && currencyModel.getObject()!=null){ 
+                                result+=doCalculations(b.getAmount(),currencyModel.getObject(),b.getYear(),b.getAmpCurrencyId().getCurrencyCode()).doubleValue();
+                            }                        }
                         return result;
                 }
         }
@@ -49,19 +49,19 @@ public class ProposedProjectCostModel implements IModel{
         //toCurrCode is the currency of the total
       //frmCurrCode is the currency of each annual item
         private DecimalWraper doCalculations(Double ammount,String toCurrCode,Date date,String frmCurrCode) {
-    		java.sql.Date dt = new java.sql.Date(date.getTime());
+            java.sql.Date dt = new java.sql.Date(date.getTime());
 
-    	
-    		double frmExRt;
-    			frmExRt = Util.getExchange(frmCurrCode, dt);
-    		double toExRt;
+        
+            double frmExRt;
+                frmExRt = Util.getExchange(frmCurrCode, dt);
+            double toExRt;
 
-    		if (frmCurrCode.equalsIgnoreCase(toCurrCode)) {
-    			toExRt = frmExRt;
-    		} else {
-    			toExRt = Util.getExchange(toCurrCode, dt);
-    		}
-    		return CurrencyWorker.convertWrapper(ammount, frmExRt, toExRt, dt);
+            if (frmCurrCode.equalsIgnoreCase(toCurrCode)) {
+                toExRt = frmExRt;
+            } else {
+                toExRt = Util.getExchange(toCurrCode, dt);
+            }
+            return CurrencyWorker.convertWrapper(ammount, frmExRt, toExRt, dt);
 
-    	}
+        }
 }

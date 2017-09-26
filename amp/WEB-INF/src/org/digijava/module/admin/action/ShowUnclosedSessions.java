@@ -45,27 +45,27 @@ public class ShowUnclosedSessions
       extends Action {
 
     public ActionForward execute(ActionMapping mapping,
-				 ActionForm form,
-				 javax.servlet.http.HttpServletRequest
-				 request,
-				 javax.servlet.http.HttpServletResponse
-				 response) throws java.lang.Exception {
+                 ActionForm form,
+                 javax.servlet.http.HttpServletRequest
+                 request,
+                 javax.servlet.http.HttpServletResponse
+                 response) throws java.lang.Exception {
 
-	UnclosedSessionsForm formBean = (UnclosedSessionsForm) form;
+    UnclosedSessionsForm formBean = (UnclosedSessionsForm) form;
 
-	if (!RequestUtils.getUser(request).isGlobalAdmin()) {
-	    return new ActionForward("/admin/index", true);
-	}
+    if (!RequestUtils.getUser(request).isGlobalAdmin()) {
+        return new ActionForward("/admin/index", true);
+    }
 
-	if (request.getParameter("show") == null ||
-	    (request.getParameter("show") != null && request.getParameter("show").equalsIgnoreCase("all"))) {
-	    formBean.setShowAll(true);
-	} else {
-	    formBean.setShowAll(false);
-	}
+    if (request.getParameter("show") == null ||
+        (request.getParameter("show") != null && request.getParameter("show").equalsIgnoreCase("all"))) {
+        formBean.setShowAll(true);
+    } else {
+        formBean.setShowAll(false);
+    }
 
     formBean.setUnclosedSeesions(null);
     formBean.setTotalCount(0);
-	return mapping.findForward("forward");
+    return mapping.findForward("forward");
     }
 }

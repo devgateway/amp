@@ -17,8 +17,8 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 
 public class MTEFYearsModel implements IModel<KeyValue> {
-	private static final long serialVersionUID = 1L;
-	private IModel<Date> sourceModel;
+    private static final long serialVersionUID = 1L;
+    private IModel<Date> sourceModel;
     private boolean fiscal;
 
 
@@ -56,29 +56,29 @@ public class MTEFYearsModel implements IModel<KeyValue> {
         return convert(year, fiscal);
     }
 
-	public MTEFYearsModel(IModel<Date> sourceModel) {
-		this.sourceModel = sourceModel;
+    public MTEFYearsModel(IModel<Date> sourceModel) {
+        this.sourceModel = sourceModel;
         this.fiscal = getFiscal();
-	}
-	
-	@Override
-	public void setObject(KeyValue object) {
+    }
+    
+    @Override
+    public void setObject(KeyValue object) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_YEAR, 1);
         calendar.set(Calendar.YEAR, Integer.parseInt(object.getKey()));
         sourceModel.setObject(calendar.getTime());
-	}
-	
-	@Override
-	public KeyValue getObject() {
+    }
+    
+    @Override
+    public KeyValue getObject() {
         Date date = sourceModel.getObject();
         return convert(date, fiscal);
-	}
+    }
 
-	@Override
-	public void detach() {
-		sourceModel.detach();
-	}
+    @Override
+    public void detach() {
+        sourceModel.detach();
+    }
 }
 
 

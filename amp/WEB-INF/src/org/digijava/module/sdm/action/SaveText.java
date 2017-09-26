@@ -59,7 +59,7 @@ public class SaveText
             SdmCommon.fillParagraph(paragraph, sdmItem);
 
             sdmItem.setContentText(paragraph.getContent());
-	    sdmItem.setContent(sdmItem.getContentText().getBytes());
+        sdmItem.setContent(sdmItem.getContentText().getBytes());
 
 //            sdmItem.setContentTitle(SdmCommon.createParagraph(paragraph));
 

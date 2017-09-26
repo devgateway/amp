@@ -64,9 +64,9 @@ import org.digijava.module.translation.security.TranslateSecurityManager;
 public class TrnTag
     extends BodyTagSupport {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private static final Logger logger = Logger.getLogger(TrnTag.class);
+    private static final Logger logger = Logger.getLogger(TrnTag.class);
 
     private static final int NUMBER_OF_PARAMETERS = 5;
 
@@ -99,23 +99,23 @@ public class TrnTag
     private boolean neverShowLinks = false; 
 
 
-	public boolean isNeverShowLinks() {
-		return neverShowLinks;
-	}
+    public boolean isNeverShowLinks() {
+        return neverShowLinks;
+    }
 
-	public void setNeverShowLinks(boolean neverShowLinks) {
-		this.neverShowLinks = neverShowLinks;
-	}
+    public void setNeverShowLinks(boolean neverShowLinks) {
+        this.neverShowLinks = neverShowLinks;
+    }
 
-	public Boolean getInvisibleLinks() {
-		return invisibleLinks;
-	}
+    public Boolean getInvisibleLinks() {
+        return invisibleLinks;
+    }
 
-	public void setInvisibleLinks(Boolean invisibleLinks) {
-		this.invisibleLinks = invisibleLinks;
-	}
+    public void setInvisibleLinks(Boolean invisibleLinks) {
+        this.invisibleLinks = invisibleLinks;
+    }
 
-	public TrnTag() {
+    public TrnTag() {
         args = new String[NUMBER_OF_PARAMETERS];
         linkAlwaysVisible = new Boolean(false);
         max = 0;
@@ -317,9 +317,9 @@ public class TrnTag
         //Compute back url...
         backUrl = "";
         if(neverShowLinks){
-        	showLinks = false;
+            showLinks = false;
         }else{
-        	showLinks = TranslatorWorker.isTranslationMode(request);
+            showLinks = TranslatorWorker.isTranslationMode(request);
             if (!showLinks) {
                 showLinks = linkAlwaysVisible.booleanValue();
             }
@@ -352,17 +352,17 @@ public class TrnTag
         }
         // determine User permissions
         if (showLinks&& (invisibleLinks==null||!invisibleLinks)){
-        	String relativeSourceURL = RequestUtils.getRelativeSourceURL(request).replaceFirst("/default/", "/");
-        	String backUrlParam = request.getParameter("overwriteBackUrl");
-        	if( backUrlParam!=null ) {
-        		relativeSourceURL = backUrlParam; 
-        	}
-			try{
-        	backUrl = java.net.URLEncoder.encode(relativeSourceURL,"UTF-8");
-        	} catch (Exception ex){
-        		logger.debug(ex);
+            String relativeSourceURL = RequestUtils.getRelativeSourceURL(request).replaceFirst("/default/", "/");
+            String backUrlParam = request.getParameter("overwriteBackUrl");
+            if( backUrlParam!=null ) {
+                relativeSourceURL = backUrlParam; 
+            }
+            try{
+            backUrl = java.net.URLEncoder.encode(relativeSourceURL,"UTF-8");
+            } catch (Exception ex){
+                logger.debug(ex);
             backUrl = relativeSourceURL;
-        	}
+            }
 
             Site rootSite = DgUtil.getRootSite(site);
             Subject subject = RequestUtils.getSubject(request);
@@ -389,7 +389,7 @@ public class TrnTag
     }
 
     private void translate(String key, Site site, String langCode, int trnType, String keyWords) throws WorkerException {
-    	ServletContext context = pageContext.getServletContext();
+        ServletContext context = pageContext.getServletContext();
         HashSet<String> checked = new HashSet<String>();
         String genKey = null;
 
@@ -498,10 +498,10 @@ public class TrnTag
      */
     protected void writeData(String localizedMsg) {
         try {
-        	String processedBody=TranslatorWorker.processSpecialChars(localizedMsg);
-        	if (this.jsFriendly!=null && this.jsFriendly){
-        		processedBody = TranslatorWorker.makeTextJSFriendly(processedBody);
-        	}
+            String processedBody=TranslatorWorker.processSpecialChars(localizedMsg);
+            if (this.jsFriendly!=null && this.jsFriendly){
+                processedBody = TranslatorWorker.makeTextJSFriendly(processedBody);
+            }
             JspWriter out = pageContext.getOut();
             out.print(processedBody);
         }
@@ -569,9 +569,9 @@ public class TrnTag
 
         if (showLinks) {
             if (this.getKey() != null
-					&& (this.getKey().trim().startsWith("cn") || this.getKey().trim().startsWith("ln"))) {
-				return translatorTag;
-			}
+                    && (this.getKey().trim().startsWith("cn") || this.getKey().trim().startsWith("ln"))) {
+                return translatorTag;
+            }
            
 
             String actualType = getActualEditType();
@@ -663,64 +663,64 @@ public class TrnTag
     }
 
     /**
-	 * Release any acquired resources.
-	 */
-	public void release() {
-		super.release();
-	}
+     * Release any acquired resources.
+     */
+    public void release() {
+        super.release();
+    }
 
     private String getActualEditType() {
-		if (siteId != null) {
-			return LOCAL_TRANSLATION;
-		} else if (LOCAL_TRANSLATION.equals(type)) {
-			return LOCAL_TRANSLATION;
+        if (siteId != null) {
+            return LOCAL_TRANSLATION;
+        } else if (LOCAL_TRANSLATION.equals(type)) {
+            return LOCAL_TRANSLATION;
 
-		}
-		return GROUP_TRANSLATION;
-	}
+        }
+        return GROUP_TRANSLATION;
+    }
 
     private int getActualTypeCode() {
-		if (siteId != null) {
-			return TranslatorWorker.TRNTYPE_LOCAL;
-		} else if (LOCAL_TRANSLATION.equals(type)) {
-			return TranslatorWorker.TRNTYPE_LOCAL;
+        if (siteId != null) {
+            return TranslatorWorker.TRNTYPE_LOCAL;
+        } else if (LOCAL_TRANSLATION.equals(type)) {
+            return TranslatorWorker.TRNTYPE_LOCAL;
 
-		} else if (GROUP_TRANSLATION.equals(type)) {
-			return TranslatorWorker.TRNTYPE_GROUP;
-		} else {
-			return TranslatorWorker.TRNTYPE_GLOBAL;
-		}
+        } else if (GROUP_TRANSLATION.equals(type)) {
+            return TranslatorWorker.TRNTYPE_GROUP;
+        } else {
+            return TranslatorWorker.TRNTYPE_GLOBAL;
+        }
 
-	}
+    }
 
-	/**
-	 * Returns system generated key.
-	 * Now this is hash code of the tag body - texts specified in the tag.
-	 * @return
-	 */
-	public String getGeneratedKey() {
-		if (getDefaultTranslation() != null) {
-			return TranslatorWorker.generateTrnKey(getDefaultTranslation().trim());	
-		} else {
-			return TranslatorWorker.generateTrnKey(null);
-		}
-	}
+    /**
+     * Returns system generated key.
+     * Now this is hash code of the tag body - texts specified in the tag.
+     * @return
+     */
+    public String getGeneratedKey() {
+        if (getDefaultTranslation() != null) {
+            return TranslatorWorker.generateTrnKey(getDefaultTranslation().trim()); 
+        } else {
+            return TranslatorWorker.generateTrnKey(null);
+        }
+    }
 
-	public void setKeyWords(String keyWords) {
-		this.keyWords = keyWords;
-	}
+    public void setKeyWords(String keyWords) {
+        this.keyWords = keyWords;
+    }
 
-	public String getKeyWords() {
-		return keyWords;
-	}
+    public String getKeyWords() {
+        return keyWords;
+    }
 
-	public void setJsFriendly(Boolean jsFriendly) {
-		this.jsFriendly = jsFriendly;
-	}
+    public void setJsFriendly(Boolean jsFriendly) {
+        this.jsFriendly = jsFriendly;
+    }
 
-	public Boolean getJsFriendly() {
-		return jsFriendly;
-	}
+    public Boolean getJsFriendly() {
+        return jsFriendly;
+    }
 
 
 }

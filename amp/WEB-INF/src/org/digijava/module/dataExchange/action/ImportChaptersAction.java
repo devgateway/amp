@@ -34,16 +34,16 @@ import org.apache.struts.action.ActionMessages;
  * 
  */
 public class ImportChaptersAction extends Action {
-	private static Logger logger = Logger.getLogger(ImportChaptersAction.class);
+    private static Logger logger = Logger.getLogger(ImportChaptersAction.class);
 
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response) throws Exception {
-		ImportChaptersForm icform = (ImportChaptersForm) form;
-		if (request.getParameter("importPerform") != null && icform.getUploadedFile()!=null && icform.getUploadedFile().getFileSize()>0) {
-			InputStream inp = icform.getUploadedFile().getInputStream();
+    public ActionForward execute(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response) throws Exception {
+        ImportChaptersForm icform = (ImportChaptersForm) form;
+        if (request.getParameter("importPerform") != null && icform.getUploadedFile()!=null && icform.getUploadedFile().getFileSize()>0) {
+            InputStream inp = icform.getUploadedFile().getInputStream();
             POIFSFileSystem poifs=null;
             Sheet sheet=null;
-			try {
+            try {
                 poifs = new POIFSFileSystem(inp);
                 HSSFWorkbook wb = new HSSFWorkbook(poifs);
                 sheet = wb.getSheetAt(0);
@@ -56,58 +56,58 @@ public class ImportChaptersAction extends Action {
                icform.setImportPerform(false);
                return mapping.findForward("forward");
             }
-			
-			boolean header = true;
-			int chaptersInserted = 0;
-			int chaptersUpdated = 0;
-			int imputationsInserted = 0;
-			int imputationsUpdated = 0;
-			int errorNumber = 0;
-			for (Iterator<Row> rit = sheet.rowIterator(); rit.hasNext();) {
-				try {
-					Row row = rit.next();
-					if (header) {
-						header = false;
-						continue;
-					}
-					String chapterCode = ChapterUtil.getNumberFromCell(row.getCell(1));
-					AmpChapter chapter = ChapterUtil
-							.getChapterByCode(chapterCode);
-					if (chapter == null) {
-						chapter = new AmpChapter(chapterCode);
-						chaptersInserted++;
-					} else
-						chaptersUpdated++;
-					if(row.getCell(2)!=null) chapter.setDescription(row.getCell(2).getStringCellValue()); else chapter.setDescription(null);
-					String year =  ChapterUtil.getNumberFromCell(row.getCell(0));
-					chapter.setYear(new Integer(year));
-					ChapterUtil.saveChapter(chapter);
-					logger.info("Processed chapter with code " + chapter.getCode());
-					String impCode = ChapterUtil.getNumberFromCell(row.getCell(3));
-					AmpImputation imp = ChapterUtil.getImputationByCode(impCode);
-					if (imp == null) {
-						imp = new AmpImputation(impCode);
-						imputationsInserted++;
-					} else
-						imputationsUpdated++;
-					imp.setChapter(chapter);
-					if(row.getCell(4)!=null) imp.setDescription(row.getCell(4).getStringCellValue());else imp.setDescription(null);
-					ChapterUtil.saveImputation(imp);
-					logger.info("Processed imputation with code " + imp.getCode());
-				} catch (Exception e) {
-					e.printStackTrace();
-					logger.error(e);
-					errorNumber++;
-				}
-			}
-			icform.setChaptersInserted(chaptersInserted);
-			icform.setChaptersUpdated(chaptersUpdated);
-			icform.setImputationsInserted(imputationsInserted);
-			icform.setImputationsUpdated(imputationsUpdated);
-			icform.setErrorNumber(errorNumber);
-			icform.setImportPerform(true);
-		}
+            
+            boolean header = true;
+            int chaptersInserted = 0;
+            int chaptersUpdated = 0;
+            int imputationsInserted = 0;
+            int imputationsUpdated = 0;
+            int errorNumber = 0;
+            for (Iterator<Row> rit = sheet.rowIterator(); rit.hasNext();) {
+                try {
+                    Row row = rit.next();
+                    if (header) {
+                        header = false;
+                        continue;
+                    }
+                    String chapterCode = ChapterUtil.getNumberFromCell(row.getCell(1));
+                    AmpChapter chapter = ChapterUtil
+                            .getChapterByCode(chapterCode);
+                    if (chapter == null) {
+                        chapter = new AmpChapter(chapterCode);
+                        chaptersInserted++;
+                    } else
+                        chaptersUpdated++;
+                    if(row.getCell(2)!=null) chapter.setDescription(row.getCell(2).getStringCellValue()); else chapter.setDescription(null);
+                    String year =  ChapterUtil.getNumberFromCell(row.getCell(0));
+                    chapter.setYear(new Integer(year));
+                    ChapterUtil.saveChapter(chapter);
+                    logger.info("Processed chapter with code " + chapter.getCode());
+                    String impCode = ChapterUtil.getNumberFromCell(row.getCell(3));
+                    AmpImputation imp = ChapterUtil.getImputationByCode(impCode);
+                    if (imp == null) {
+                        imp = new AmpImputation(impCode);
+                        imputationsInserted++;
+                    } else
+                        imputationsUpdated++;
+                    imp.setChapter(chapter);
+                    if(row.getCell(4)!=null) imp.setDescription(row.getCell(4).getStringCellValue());else imp.setDescription(null);
+                    ChapterUtil.saveImputation(imp);
+                    logger.info("Processed imputation with code " + imp.getCode());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    logger.error(e);
+                    errorNumber++;
+                }
+            }
+            icform.setChaptersInserted(chaptersInserted);
+            icform.setChaptersUpdated(chaptersUpdated);
+            icform.setImputationsInserted(imputationsInserted);
+            icform.setImputationsUpdated(imputationsUpdated);
+            icform.setErrorNumber(errorNumber);
+            icform.setImportPerform(true);
+        }
 
-		return mapping.findForward("forward");
-	}
+        return mapping.findForward("forward");
+    }
 }

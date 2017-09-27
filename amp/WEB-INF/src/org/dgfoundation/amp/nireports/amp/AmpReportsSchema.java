@@ -322,6 +322,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	private AmpFundingColumn pledgeFundingColumn ;
 	private AmpFundingColumn componentFundingColumn;
 	private AmpFundingColumn gpiFundingColumn;
+	private AmpFundingColumn regionalFundingColumn;
 
 	/**
 	 * Map<amp_column_name, view_column_name>
@@ -349,6 +350,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 			.put(ColumnConstants.COMPONENT_TYPE, "component_type_id")
 			.put(ColumnConstants.COMPONENT_FUNDING_ORGANIZATION, "component_rep_org_id")
 			.put(ColumnConstants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION, "component_second_rep_org_id")
+			.put(ColumnConstants.REGIONAL_REGION, "region_location_id")
 			.build());
 
 	/**
@@ -621,7 +623,9 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		with_percentage(ColumnConstants.DISTRICT, "v_districts", LOC_DIM_USG, LEVEL_DISTRICT);
 		with_percentage(ColumnConstants.LOCATION, "v_raw_locations", LOC_DIM_USG, LEVEL_RAW);
 		with_percentage(ColumnConstants.GEOCODE, "v_geocodes", LOC_DIM_USG, LEVEL_RAW);
-		
+
+		single_dimension(ColumnConstants.REGIONAL_REGION, "v_regions", LOC_DIM_USG.getLevelColumn(LEVEL_REGION));
+
 		single_dimension(ColumnConstants.GRACE_PERIOD, "v_grace_period", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
 		date_column(ColumnConstants.MATURITY, "v_maturity", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
 		date_column(ColumnConstants.RATIFICATION_DATE, "v_ratification_date", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
@@ -677,6 +681,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         pledgeFundingColumn = new AmpFundingColumn(AmpFundingColumn.ENTITY_PLEDGE_FUNDING, "v_ni_pledges_funding", subDimensions);
         componentFundingColumn = new AmpFundingColumn(AmpFundingColumn.ENTITY_COMPONENT_FUNDING, "v_ni_component_funding", subDimensions);
         gpiFundingColumn = new AmpFundingColumn(AmpFundingColumn.ENTITY_GPI_FUNDING, "v_ni_gpi_funding", subDimensions);
+        regionalFundingColumn = new AmpFundingColumn(AmpFundingColumn.ENTITY_REGIONAL_FUNDING,
+				"v_ni_regional_funding", subDimensions);
 	}
 
     private void addIndicatorColumns() {
@@ -1302,6 +1308,9 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 
 			case ArConstants.GPI_TYPE:
 				return gpiFundingColumn;
+
+			case ArConstants.REGIONAL_TYPE:
+				return regionalFundingColumn;
 
 			default:
 				throw new RuntimeException(String.format("report type %d not implemented in NiReports yet", engine.spec.getReportType()));

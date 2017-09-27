@@ -33,7 +33,15 @@ class Utils {
         $(element).show();
         settingsWidget.on( 'close', onSettingsCancel);
         settingsWidget.on( 'applySettings', onSettingsApply);
-    }    
+    }  
+    
+    static capitalizeFirst(str) {               
+        if (str) {
+            return str.charAt(0).toUpperCase() + str.substr(1).toLowerCase();             
+        } 
+        
+        return str;        
+    }
 }
 
 export default Utils;

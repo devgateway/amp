@@ -1,0 +1,116 @@
+@import url("./amp-admin-rtl.css");
+
+@import url("../fonts/droidarabicnaskh.css");
+
+#mainBodyContent {
+    direction: rtl;
+}
+
+body, div, p {
+    font-family: Droid Arabic Naskh, Arial !important;
+}
+
+div.trnpanel div.trn-row a {
+	background: none repeat scroll 0 0 #F3F3F3;
+	border: 1px solid #CCCCCC;
+	float: right;
+	font-size: 11px;
+	line-height: 12px;
+	padding: 2px 4px;
+	text-decoration: none;
+	margin-top: 1px;
+}
+
+div.trnpanel div.trn-row ul {
+    -webkit-padding-start: 3px;
+    padding-right: 0;
+}
+
+.resourceButtonPosition {
+    float: right;
+}
+
+.onepager-pic-icon {
+	right: -3px;
+	float: left;
+}
+
+.right_menu_header_cont {
+	padding-right: 10px;
+}
+
+.custom-file-label {
+    display: inline;
+    position: relative;
+    top: -25px;
+    right: 110px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    -o-text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 60px;
+}
+
+.ot-content {
+    direction: rtl;
+}
+
+.wicketFloatLeft {
+    float: right;
+}
+
+.wicketFloatRight {
+    float: left;
+}
+
+.dropdwn_sm {
+    margin: 0px 0px 0px 0px;
+}
+
+.close-link {
+    text-align: left;
+    float: left;
+    margin-left: 28px;
+}
+
+.step_head_cont {
+    padding-right: 10px;
+}
+
+.inside-header {
+    text-align: right;
+}
+
+.tri {
+    -webkit-transform:scale(-1,1);
+}
+
+.tri b {
+    text-align: right;
+    display: table-cell;
+    -webkit-transform:scale(-1,1);
+    width: inherit;
+}
+
+.triText {
+    text-align: right;
+    display: table-cell;
+    -webkit-transform:scale(-1,1);
+    width: inherit;
+}
+
+.del-funding {
+    float: left;
+    position: relative;
+    top: -15px;
+}
+
+.yui-skin-sam ul {
+    direction: rtl;
+}
+
+.yui-skin-sam li {
+    text-align: right
+
+}
+

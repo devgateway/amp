@@ -26,7 +26,7 @@
 					ct.type_id AS component_type_id,
 					c.amp_component_id,
 					f.rep_organization_id AS component_rep_org_id,
-					f.second_rep_organisation_id AS component_second_rep_org_id
+					f.component_second_rep_org_id AS component_second_rep_org_id
 				  FROM amp_activity_components aac
 					JOIN amp_components c ON aac.amp_component_id = c.amp_component_id
 					JOIN amp_component_type ct ON c.type = ct.type_id

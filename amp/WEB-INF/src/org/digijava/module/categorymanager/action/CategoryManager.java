@@ -169,12 +169,6 @@ public class CategoryManager extends Action {
 			for(AmpCategoryClass ampCategoryClass:myForm.getCategories()) {
 				myForm.getAllCategoryValues().addAll( ampCategoryClass.getPossibleValues() );
 				myForm.getAllCategoryValues().remove(null);
-				
-				if ( ampCategoryClass.getIsOrdered() && ampCategoryClass.getPossibleValues() != null ) {
-					TreeSet<AmpCategoryValue> treeSet	= new TreeSet<AmpCategoryValue>( new CategoryManagerUtil.CategoryComparator() );
-					treeSet.addAll( ampCategoryClass.getPossibleValues() );
-					ampCategoryClass.setPossibleValues( new ArrayList<AmpCategoryValue>(treeSet) );
-				}
 			}
 		}
                 

@@ -706,6 +706,9 @@
 				<page>tempFieldPreDefinedValues</page>
 				<page>docFromTemplate</page>
 			</module>
+			<module name="dataExchange">
+				<page>de_showLog</page>
+			</module>
 			<module name="help">
 				<page>printPreview</page>
 				<page>allHelpPrintPreview</page>
@@ -736,6 +739,10 @@
                 <page>largestProjectsPrinterFriendly</page>
                 <page>exportOptions</page>
 			</module>
+			<module name="dataExchange">
+				<page>de_showSourceDetails</page>
+				<page>de_showLogItemDetails</page>
+            </module>
             <module name="calendar">
                 <page>printPreviewPopupLayout</page>
                  <page>printViewPopupLayout</page>

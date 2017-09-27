@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8"?><ResultSet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:yahoo:lcl" totalResultsAvailable="2" totalResultsReturned="2" firstResultPosition="1"><Result><Name>Gigi</Name><Age>22</Age><Test>TRALALA</Test></Result><Result><Name>Lolo</Name><Age>32</Age><Test>DIDIDADADA</Test></Result></ResultSet>

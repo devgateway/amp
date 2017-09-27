@@ -17,7 +17,11 @@
 <module:display name="Resource Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Activity Approval Process" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Activity Costing" parentModule="PROJECT MANAGEMENT"></module:display> 
+<module:display name="Activity Export Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Structures Importer" parentModule="ADMINISTRATIVE SECTION"></module:display>
+<module:display name="Activity Import Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
+<module:display name="Budget Codes Exporter" parentModule="ADMINISTRATIVE SECTION"></module:display>
+<module:display name="Code Chapitre Importer" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Currency deflator" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Dashboards Manager" parentModule="ADMINISTRATIVE SECTION"/>
 <module:display name="Activity Levels" parentModule="PROJECT MANAGEMENT"></module:display>
@@ -98,6 +102,7 @@
 <module:display name="Structure Types Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Aid Effectiveness Indicators Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Indicator Layer Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
+<feature:display name="Synergy Client" module="Activity Import Manager"></feature:display>
 <feature:display module="Activity Costing" name="Costing"></feature:display> 
 <feature:display module="Contact Information" name="Government Contact Information"></feature:display> 
 <feature:display module="Contracting" name="Contracting"></feature:display> 

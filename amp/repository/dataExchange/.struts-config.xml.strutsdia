@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PROCESS model-entity="StrutsProcess">
+ <PROCESS-ITEM ID="#dataExchange#export" NAME="action0"
+  PATH="/dataExchange/export" SHAPE="32,17,0,0" TITLE="deExportForm"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="default" NAME="forward0"
+   PATH="/showLayout.do?layout=exportWizard" TARGET="action3"
+   TITLE="default" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#dataExchange#exportWizard" NAME="action1"
+  PATH="/dataExchange/exportWizard" SHAPE="32,129,0,0"
+  TITLE="deExportForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="default" NAME="forward0"
+   PATH="/showLayout.do?layout=exportWizard" TARGET="action3"
+   TITLE="default" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#showLayout" NAME="action3" PATH="/showLayout"
+  SHAPE="240,145,0,0" SUBTYPE="unknown" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#dataExchange#importWizard" NAME="action2"
+  PATH="/dataExchange/importWizard" SHAPE="32,241,0,0" SUBTYPE="forward"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action2"
+   PATH="/showLayout.do?layout=importWizard" TARGET="action3"
+   TITLE="forward" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#dataExchange#import" NAME="action4"
+  PATH="/dataExchange/import" SHAPE="32,353,0,0" TITLE="deImportForm"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="forward" NAME="forward0"
+   PATH="/showLayout.do?layout=importWizard" TARGET="action3"
+   TITLE="forward" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+</PROCESS>

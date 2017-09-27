@@ -24,9 +24,13 @@ public class AmpFreezingValidatorTransactionDate extends AmpSemanticValidator<St
 
     @Override
     public void semanticValidate(IValidatable<String> validatable) {
-        if (validatable.getValue() == null || validatable.getValue().trim().equals("")) {
+        Boolean affectedByFreezing = org.apache.wicket.Session.get()
+                .getMetaData(OnePagerConst.ACTIVITY_IS_AFFECTED_BY_FREEZING);
+        if (validatable.getValue() == null || validatable.getValue().trim().equals("") || affectedByFreezing == null
+                || !affectedByFreezing) {
             return;
         }
+        
         SimpleDateFormat dateFormatter = new SimpleDateFormat(
                 FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT));
         Date transactionDate;
@@ -36,12 +40,7 @@ public class AmpFreezingValidatorTransactionDate extends AmpSemanticValidator<St
             // we should actually never reach here since were formating in the
             // model
             throw new RuntimeException("Date unparseable");
-        }
-        Boolean affectedByFreezing = org.apache.wicket.Session.get()
-                .getMetaData(OnePagerConst.ACTIVITY_IS_AFFECTED_BY_FREEZING);
-        if (validatable.getValue() == null || !affectedByFreezing) {
-            return;
-        }
+        }        
         AmpActivityFrozen ampActivityFrozen = org.apache.wicket.Session.get()
                 .getMetaData(OnePagerConst.FUNDING_FREEZING_CONFIGURATION);
         if (ampActivityFrozen.getDataFreezeEvent().getOpenPeriodStart() == null

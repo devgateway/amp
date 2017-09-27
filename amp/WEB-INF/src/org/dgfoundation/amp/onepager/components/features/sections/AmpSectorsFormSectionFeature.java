@@ -40,16 +40,9 @@ public class AmpSectorsFormSectionFeature extends AmpFormSectionFeaturePanel {
 		RepeatingView view = new RepeatingView("allSectorsTables");
 		view.setOutputMarkupId(true);
 		add(view);
-		List<String> sectorsOrder = Arrays.asList(AmpClassificationConfiguration
-						.PRIMARY_CLASSIFICATION_CONFIGURATION_NAME,
-				AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME,
-				AmpClassificationConfiguration.TERTIARY_CLASSIFICATION_CONFIGURATION_NAME,
-				AmpClassificationConfiguration.QUATERNARY_CLASSIFICATION_CONFIGURATION_NAME,
-				AmpClassificationConfiguration.QUINARY_CLASSIFICATION_CONFIGURATION_NAME);
 
-		List<AmpClassificationConfiguration> allClassificationConfigs = SectorUtil.getAllClassificationConfigs();
+		List<AmpClassificationConfiguration> allClassificationConfigs = SectorUtil.getAllClassificationConfigsOrdered();
 
-		allClassificationConfigs.sort(Comparator.comparingInt(item -> sectorsOrder.indexOf(item.getName())));
 		for (AmpClassificationConfiguration sectorConf : allClassificationConfigs) {
 			AmpSectorsFormTableFeature sectorsTable=new AmpSectorsFormTableFeature(view.newChildId(), sectorConf.getName()+" Sectors", am,sectorConf);
 		    view.add(sectorsTable);	

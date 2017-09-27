@@ -64,15 +64,11 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 		// default percentage is 1
 		String measureA = MeasureConstants.ACTUAL_DISBURSEMENTS;
 		String measureB = MeasureConstants.PLANNED_DISBURSEMENTS;
-		// we set the team to run the report
 
 		if (AmpJobsUtil.setTeamForNonRequestReport(ampTeamId)) {
-			// we first set the current member since its needed by features util
-
 			Date lowerDateReport = null;
 			Date upperDateReport = null;
-			// we first need to check if we are DAYS_AFTER_QUARTER days after
-			// the last quarter
+			// we first need to check if we are DAYS_AFTER_QUARTER days after the last quarter
 			// ended
 			Quarter previousQuarter = checkIfShouldRunReport();
 			if (previousQuarter != null) {

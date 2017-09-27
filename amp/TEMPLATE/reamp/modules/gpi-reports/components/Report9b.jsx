@@ -6,11 +6,11 @@ import * as reportsActions from '../actions/ReportsActions';
 import * as commonListsActions from '../actions/CommonListsActions';
 import * as Constants from '../common/Constants';
 import HeaderToolTip from './HeaderToolTip';
-
+import Loading from './Loading';
 export default class Report9b extends Component {
     constructor( props, context ) {
         super( props, context );
-        this.state = { recordsPerPage: 150, hierarchy: 'donor-agency', selectedYear: null, selectedDonor: "" };
+        this.state = { recordsPerPage: 150, hierarchy: 'donor-agency', selectedYear: null, selectedDonor: "", waiting: true };
         this.showFilters = this.showFilters.bind( this );
         this.showSettings = this.showSettings.bind( this );
         this.goToClickedPage = this.goToClickedPage.bind( this );
@@ -24,10 +24,10 @@ export default class Report9b extends Component {
         this.downloadPdfFile = this.downloadPdfFile.bind(this);
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.initializeFiltersAndSettings();
     }
-
+    
     initializeFiltersAndSettings() {
         this.filter = new ampFilter( {
             draggable: true,
@@ -112,7 +112,10 @@ export default class Report9b extends Component {
 
     fetchReportData( requestData ) {
         var requestData = requestData || this.getRequestData();
-        this.props.actions.fetchReportData( requestData, '9b' );
+        this.setState({waiting: true});
+        this.props.actions.fetchReportData( requestData, '9b' ).then(function(){
+            this.setState({waiting: false});  
+        }.bind(this));
     }
 
     onDonorFilterChange( e ) {
@@ -258,21 +261,18 @@ export default class Report9b extends Component {
     
     downloadPdfFile(){
         this.props.actions.downloadPdfFile(this.getRequestData(), '9b');
-    } 
+    }    
     
-    getYears() {
-        let settings  = this.settingsWidget.toAPIFormat()
-        let calendarId = settings && settings['calendar-id'] ?  settings['calendar-id'] : this.settingsWidget.definitions.getDefaultCalendarId();
-        let calendar = this.props.years.filter(calendar => calendar.calendarId == calendarId)[0];
-        return calendar.years.slice();    
-    }
-    
-    render() {
-        if ( this.props.mainReport && this.props.mainReport.page && this.settingsWidget && this.settingsWidget.definitions) {
+    render() {        
             var addedGroups = [];
-            var years = this.getYears();
+            var years = Utils.getYears(this.settingsWidget, this.props.years);
             return (
                 <div>
+                    {this.state.waiting &&                      
+                        <Loading/>                
+                    }                     
+                    {this.props.mainReport && this.props.mainReport.page && this.settingsWidget && this.settingsWidget.definitions &&
+                     <div>                    
                     <div id="filter-popup" ref="filterPopup"> </div>
                     <div id="amp-settings" ref="settingsPopup"> </div>
                     <div className="container-fluid indicator-nav no-padding">
@@ -450,12 +450,12 @@ export default class Report9b extends Component {
                         </div>
                     </div>
 
-
+                  </div>
+                  }
                 </div>
             );
-        }
-
-        return ( <div></div> );
+        
+        
     }
 
 }

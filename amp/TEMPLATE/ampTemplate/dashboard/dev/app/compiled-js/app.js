@@ -21108,7 +21108,7 @@ _.extend(Widget.prototype, Backbone.Events, {
 		 _.bindAll(this, 'createTranslator', 'createViews','bubbleViewEvents','onMenuRendered');
 	},
 	createTranslator : function() {
-		var defaultKeys = JSON.parse("{\n\"amp.common:footer\": \"Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and DG\",\n\"amp.common:title\": \"AMP Toolbar\",\n\"amp.common:title-help\": \"Help\",\n\"amp.common:subtitle-amp-help\": \"AMP Help\",\n\"amp.common:subtitle-glossary\": \"Glossary\",\n\"amp.common:subtitle-email-support-team\": \"Email Support Team\",\n\"amp.common:title-logout\": \"Log Out\",\n\"amp.common:platform\": \"Aid Management Platform (AMP)\",\n\"[title]amp.common:platform\": \"Aid Management Platform\",\n\"amp.common:platform-short\": \"AMP\",\n\"amp.common:title-login\": \"Login\",\n\"amp.dashboard:close\": \"Close\",\n\"amp.about:modal.title\": \"About AMP\",\n\"amp.about:credits\": \"Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and Development Gateway Foundation.\",\n\"amp.about:trademark\": \"The Development Gateway and the The Development Gateway logo are trademarks for The Development Gateway Foundation\",\n\"amp.about:rights\": \"All Rights Reserved\",\n\"amp.about:version\": \"Version\"\n}\n\n");
+		var defaultKeys = JSON.parse("{\r\n\"amp.common:footer\": \"Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and DG\",\r\n\"amp.common:title\": \"AMP Toolbar\",\r\n\"amp.common:title-help\": \"Help\",\r\n\"amp.common:subtitle-amp-help\": \"AMP Help\",\r\n\"amp.common:subtitle-glossary\": \"Glossary\",\r\n\"amp.common:subtitle-email-support-team\": \"Email Support Team\",\r\n\"amp.common:title-logout\": \"Log Out\",\r\n\"amp.common:platform\": \"Aid Management Platform (AMP)\",\r\n\"[title]amp.common:platform\": \"Aid Management Platform\",\r\n\"amp.common:platform-short\": \"AMP\",\r\n\"amp.common:title-login\": \"Login\",\r\n\"amp.dashboard:close\": \"Close\",\r\n\"amp.about:modal.title\": \"About AMP\",\r\n\"amp.about:credits\": \"Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and Development Gateway Foundation.\",\r\n\"amp.about:trademark\": \"The Development Gateway and the The Development Gateway logo are trademarks for The Development Gateway Foundation\",\r\n\"amp.about:rights\": \"All Rights Reserved\",\r\n\"amp.about:version\": \"Version\"\r\n}\r\n\r\n");
 		this.translator = new Translator({
 			defaultKeys : defaultKeys
 		});
@@ -31359,6 +31359,7 @@ module.exports = Backbone.View.extend({
         this.filterViewsInstances.financials.filterCollection.add(tmpModel);
         break;
       case 'status':
+      case 'performance-alert-level':
       case 'approval-status':
         this.filterViewsInstances.activity.filterCollection.add(tmpModel);
         break;

@@ -33,6 +33,8 @@ public class AmpFreezingValidatorTransactionDateField extends AmpSimpleValidator
     public AmpFreezingValidatorTransactionDateField(String id, IModel<AmpFundingDetail> ampFundingDetail,
             String fmName) {
         super(id, ampFundingDetail, fmName, new AmpFreezingValidatorTransactionDate());
+        //we don't skype drafts
+        this.setShouldValidateDrafts(true);
         hiddenContainer.setType(String.class);
 
     }

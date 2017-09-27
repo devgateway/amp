@@ -4,6 +4,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
+import org.digijava.kernel.ampapi.endpoints.activity.ContextMatcher;
+import org.digijava.kernel.ampapi.endpoints.activity.DefaultContextMatcher;
 
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Interchangeable {
@@ -85,6 +87,8 @@ public @interface Interchangeable {
     String discriminatorOption() default "";
     
     Validators validators() default @Validators;
+
+    Class<? extends ContextMatcher> context() default DefaultContextMatcher.class;
     
     /* constraints for multi-level validators */
     boolean uniqueConstraint() default false;

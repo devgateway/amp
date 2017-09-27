@@ -6,6 +6,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
+import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.SaveMode;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 
@@ -27,7 +28,7 @@ public class RequiredValidator extends InputValidator {
 	}
 	
 	@Override
-	public boolean isValid(ActivityImporter importer, Map<String, Object> newFieldParent,
+	public boolean isValid(ObjectImporter importer, Map<String, Object> newFieldParent,
 						   Map<String, Object> oldFieldParent, APIField fieldDescription, String fieldPath) {
 		String fieldName = fieldDescription.getFieldName();
 		Object fieldValue = newFieldParent.get(fieldName);
@@ -39,17 +40,22 @@ public class RequiredValidator extends InputValidator {
 				// field is always required -> can't save it even as a draft
 				return false;
 			} else if (ActivityEPConstants.FIELD_NON_DRAFT_REQUIRED.equals(requiredStatus)) {
+				if (!(importer instanceof ActivityImporter)) {
+					throw new RuntimeException("Draft save not supported for " + importer.getClass());
+				}
+				ActivityImporter activityImporter = (ActivityImporter) importer;
 				// field required for submitted activities, but we can save it as a draft
 				// unless it's disabled in FM
-				if (!importer.isDraftFMEnabled() && importer.getRequestedSaveMode() != SaveMode.SUBMIT) {
+				if (!activityImporter.isDraftFMEnabled()
+						&& activityImporter.getRequestedSaveMode() != SaveMode.SUBMIT) {
 					this.draftDisabled = true;
 					return false;
 				}
 				// ok, it's enabled, downgrade to draft if save mode is not specified
-				if (importer.getRequestedSaveMode() == null) {
-					importer.downgradeToDraftSave();
+				if (activityImporter.getRequestedSaveMode() == null) {
+					activityImporter.downgradeToDraftSave();
 				}
-				return importer.getRequestedSaveMode() != SaveMode.SUBMIT;
+				return activityImporter.getRequestedSaveMode() != SaveMode.SUBMIT;
 			}
 		} 
 		// field value != null, it's fine from this validator's POV

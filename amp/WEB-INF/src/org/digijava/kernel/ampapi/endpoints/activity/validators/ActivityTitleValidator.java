@@ -10,6 +10,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.dbentity.AmpActivity;
@@ -33,7 +34,7 @@ public class ActivityTitleValidator extends InputValidator {
 	}
 
 	@Override
-	public boolean isValid(ActivityImporter importer, Map<String, Object> newFieldParent,
+	public boolean isValid(ObjectImporter importer, Map<String, Object> newFieldParent,
 						   Map<String, Object> oldFieldParent, APIField fieldDescription, String fieldPath) {
 		boolean isValid = true;
 		String fieldName = fieldDescription.getFieldName();
@@ -53,8 +54,9 @@ public class ActivityTitleValidator extends InputValidator {
 				isValid = false;
 				missingTitle = true;
 			} else {
-				AmpActivityGroup group = importer.getOldActivity() == null ? null : 
-					importer.getOldActivity().getAmpActivityGroup();
+				ActivityImporter activityImporter = (ActivityImporter) importer;
+				AmpActivityGroup group = activityImporter.getOldActivity() == null ? null
+						: activityImporter.getOldActivity().getAmpActivityGroup();
 				AmpActivity activityByName = ActivityUtil.getActivityByNameExcludingGroup(activityTitle, group);
 				isValid = activityByName == null;
 			}

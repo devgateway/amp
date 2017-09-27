@@ -16,6 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -39,6 +40,7 @@ import org.dgfoundation.amp.onepager.helper.TemporaryGPINiDocument;
 import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
@@ -72,6 +74,7 @@ import org.digijava.module.aim.util.ContactInfoUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.LuceneUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.contentrepository.exception.JCRSessionException;
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
@@ -295,7 +298,7 @@ public class ActivityUtil {
 			
 			saveIndicators(a, session);
 
-			saveActivityResources(a, session); 
+			saveActivityResources(a, session);
 			saveActivityGPINiResources(a, session);
 			saveEditors(session, createNewVersion); 
 			saveComments(a, session,draft); 
@@ -307,7 +310,8 @@ public class ActivityUtil {
 		updateComponentFunding(a, session);
 		saveAnnualProjectBudgets(a, session);
 		saveProjectCosts(a, session);
-	
+		updatePerformanceIssue(a);
+
         if (createNewVersion){
             //a.setAmpActivityId(null); //hibernate will save as a new version
             session.save(a);
@@ -324,6 +328,22 @@ public class ActivityUtil {
         return a;
 	}
 
+    private static void updatePerformanceIssue(AmpActivityVersion a) {
+        PerformanceRuleManager ruleManager = PerformanceRuleManager.getInstance();
+
+        AmpCategoryValue matchedLevel = null;
+
+        if (ruleManager.canActivityContainPerformanceIssues(a)) {
+            matchedLevel = ruleManager.getHigherLevelFromMatchers(ruleManager.matchActivity(a));
+        }
+
+        AmpCategoryValue activityLevel = ruleManager.getPerformanceIssueFromActivity(a);
+        if (!Objects.equals(activityLevel, matchedLevel)) {
+            ruleManager.updatePerformanceIssueInActivity(a, activityLevel, matchedLevel);
+        }
+    }
+
+    /**
 	/**
 	 * Since none of the AmpActivityGroup properties are changed hibernate does not automatically increment the
 	 * version. Yet activity can change and AmpActivityGroup would remains the same, thus forcing version
@@ -812,7 +832,7 @@ public class ActivityUtil {
 
 	/**
 	 * For Document Manager compatibility purposes
-	 * @param file 
+	 * @param file
 	 */
 	private static FormFile generateFormFile(FileUpload file) {
 		FormFile formFile = new FormFile() {
@@ -890,17 +910,17 @@ public class ActivityUtil {
 			HashSet<AmpActivityDocument> deletedResources, HashSet<TemporaryActivityDocument> existingTitles) {
 		if (existingTitles != null) {
         	HttpServletRequest req = SessionUtil.getCurrentServletRequest();
-        	
+
             for (TemporaryActivityDocument d : existingTitles) {
                 Node node = DocumentManagerUtil.getWriteNode(d.getExistingDocument().getUuid(), req);
                 if (node != null && d != null) {
                     NodeWrapper nw = new NodeWrapper(node);
-                 
+
                     //NodeWrapper's title will be null if the document is multilingual
             		//and it was saved in ONLY one language. Then language was changed
             		// and jackrabbit tries to retrieve the title for the other language.
-            		//The call to -> getTranslatedTitleByLang(TLSUtils.getLangCode()); 
-                    //returns null. 
+            		//The call to -> getTranslatedTitleByLang(TLSUtils.getLangCode());
+                    //returns null.
                     //In that scenario we act as if we were changing the document name
                     boolean onlyOneLanguageSaved = nw.getTitle() == null;
                     if (onlyOneLanguageSaved || !nw.getTitle().equals(d.getTitle())) {
@@ -960,7 +980,7 @@ public class ActivityUtil {
 				.getTitle(), TLSUtils.getLangCode()));
 		d.setTranslatedTitleList(translatedTitles);
 	}
-	
+
 	private static void saveActivityGPINiResources(AmpActivityVersion a, Session session) {
 		AmpAuthWebSession s = (AmpAuthWebSession) org.apache.wicket.Session.get();
 
@@ -974,7 +994,7 @@ public class ActivityUtil {
 		// insert new resources in the system
 		insertGPINiResources(a, newResources);
 	}
-	
+
 	/**
 	 *
 	 * @param deletedResources
@@ -1008,7 +1028,7 @@ public class ActivityUtil {
 			}
 		}
 	}
-	
+
 	/**
 	 * @param a
 	 * @param newResources

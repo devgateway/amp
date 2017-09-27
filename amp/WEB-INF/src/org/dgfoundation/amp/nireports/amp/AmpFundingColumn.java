@@ -85,13 +85,18 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 	 * {@link #getName()} in case this column is used to fetch "Component Funding"
 	 */
 	public final static String ENTITY_COMPONENT_FUNDING = "Component Funding";
-	
+
 	/**
 	 * {@link #getName()} in case this column is used to fetch GPI Funding"
 	 */
 	public final static String ENTITY_GPI_FUNDING = "GPI Funding";
 
 	/**
+	 * {@link #getName()} in case this column is used to fetch "Regional Funding"
+	 */
+	public static final String ENTITY_REGIONAL_FUNDING = "Regional Funding";
+
+	/*
 	 * the cell prototypes cache, plus some auxiliary info
 	 */
 	protected final ExpiringCacher<Boolean, NiReportsEngine, FundingFetcherContext> cacher;
@@ -265,7 +270,11 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 				if (this.name.equals(ENTITY_COMPONENT_FUNDING)) {
 					metaSet.add(MetaCategory.SOURCE_ROLE.category, Constants.FUNDING_AGENCY);
 				}
-				
+
+				if (this.name.equals(ENTITY_REGIONAL_FUNDING)) {
+					metaSet.add(MetaCategory.SOURCE_ROLE.category, Constants.FUNDING_AGENCY);
+				}
+
 				java.sql.Date transactionMoment = rs.rs.getDate("transaction_date");
 				BigDecimal transactionAmount = rs.rs.getBigDecimal("transaction_amount");
 				
@@ -284,7 +293,7 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 				addMetaIfIdValueExists(metaSet, "terms_assist_id", MetaCategory.TYPE_OF_ASSISTANCE, rs.rs, context.acvs);
 				addMetaIfIdValueExists(metaSet, "mode_of_payment_id", MetaCategory.MODE_OF_PAYMENT, rs.rs, context.acvs);
 				addMetaIfIdValueExists(metaSet, "concessionality_level_id", MetaCategory.CONCESSIONALITY_LEVEL, rs.rs, context.acvs);
-				
+
 				// add the directed-transactions meta, if appliable
 				if (metaSet.hasMetaInfo(MetaCategory.SOURCE_ROLE.category) && metaSet.hasMetaInfo(MetaCategory.RECIPIENT_ROLE.category)
 					&& metaSet.hasMetaInfo(MetaCategory.SOURCE_ORG.category) && metaSet.hasMetaInfo(MetaCategory.RECIPIENT_ORG.category)) 

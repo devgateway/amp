@@ -17,6 +17,7 @@ import java.util.function.Predicate;
 import com.google.common.collect.ImmutableSet;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.ampapi.filters.AmpOfflineModeHolder;
 import org.digijava.kernel.entity.Message;
@@ -29,6 +30,7 @@ import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
+import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.util.ProgramUtil;
 
 /**
@@ -77,28 +79,27 @@ public class FieldsEnumerator {
 	/**
 	 * gets fields from the type of the field
 	 * 
-	 * @param field
-	 * @param multilingual true if multilingual enabled
-	 * @return a list of JsonBeans, each a description of @Interchangeable
-	 *         fields in the definition of the field's class, or field's generic
-	 *         type, if it's a collection
+	 * @param field field to be described
+	 * @param context current context
+	 * @return field definitions
 	 */
-	private List<APIField> getChildrenOfField(Field field, Deque<Interchangeable> intchStack) {
+	private List<APIField> getChildrenOfField(Field field, FEContext context) {
 		if (!InterchangeUtils.isCollection(field))
-			return getAllAvailableFields(field.getType(), intchStack);
+			return getAllAvailableFields(field.getType(), context);
 		else
-			return getAllAvailableFields(InterchangeUtils.getGenericClass(field), intchStack);
+			return getAllAvailableFields(InterchangeUtils.getGenericClass(field), context);
 	}
 
 	/**
 	 * describes a field in a complex JSON structure
 	 * see the wiki for details, too many options to be listed here
 	 * 
-	 * @param field
-	 * @return
+	 * @param field field to be described
+	 * @param context current context
+	 * @return field definition
 	 */
-	private APIField describeField(Field field, Deque<Interchangeable> intchStack) {
-		Interchangeable interchangeable = intchStack.peek();
+	private APIField describeField(Field field, FEContext context) {
+		Interchangeable interchangeable = context.getIntchStack().peek();
         String fieldTitle = InterchangeUtils.underscorify(interchangeable.fieldTitle());
 
 		APIField apiField = new APIField();
@@ -118,7 +119,7 @@ public class FieldsEnumerator {
 		}
 		String label = getLabelOf(interchangeable);
 		apiField.setFieldLabel(InterchangeUtils.mapToBean(getTranslationsForLabel(label)));
-		apiField.setRequired(getRequiredValue(intchStack, fieldTitle));
+		apiField.setRequired(getRequiredValue(context, fieldTitle));
 		apiField.setImportable(interchangeable.importable());
 		if (AmpOfflineModeHolder.isAmpOfflineMode() && OFFLINE_REQUIRED_FIELDS.contains(interchangeable.fieldTitle())) {
 			apiField.setRequired(ActivityEPConstants.FIELD_ALWAYS_REQUIRED);
@@ -153,28 +154,28 @@ public class FieldsEnumerator {
 		
 		if (!InterchangeUtils.isSimpleType(field.getType())) {
 			if (InterchangeUtils.isCollection(field)) {
-				if (!hasMaxSizeValidatorEnabled(field, intchStack)
+				if (!hasMaxSizeValidatorEnabled(field, context)
 						&& interchangeable.multipleValues()) {
 					apiField.setMultipleValues(true);
 				} else {
 					apiField.setMultipleValues(false);
 				}
 				
-				if (hasPercentageValidatorEnabled(intchStack)) {
-					apiField.setPercentageConstraint(getPercentageConstraint(field, intchStack));
+				if (hasPercentageValidatorEnabled(context)) {
+					apiField.setPercentageConstraint(getPercentageConstraint(field, context));
 				}
 				
-				if (hasUniqueValidatorEnabled(intchStack)) {
-					apiField.setUniqueConstraint(getUniqueConstraint(field, intchStack));
+				if (hasUniqueValidatorEnabled(context)) {
+					apiField.setUniqueConstraint(getUniqueConstraint(field, context));
 				}
 				
-				if (hasTreeCollectionValidatorEnabled(intchStack)) {
+				if (hasTreeCollectionValidatorEnabled(context)) {
 					apiField.setTreeCollectionConstraint(true);
 				}
 			}
 			
 			if (!interchangeable.pickIdOnly() && !InterchangeUtils.isAmpActivityVersion(field.getClass())) {
-				List<APIField> children = getChildrenOfField(field, intchStack);
+				List<APIField> children = getChildrenOfField(field, context);
 				if (children != null && children.size() > 0) {
 					apiField.setChildren(children);
 				}
@@ -208,17 +209,22 @@ public class FieldsEnumerator {
 		return getAllAvailableFields(AmpActivityFields.class);
 	}
 
+	public List<APIField> getContactFields() {
+		return getAllAvailableFields(AmpContact.class);
+	}
+
 	List<APIField> getAllAvailableFields(Class<?> clazz) {
-		return getAllAvailableFields(clazz, new ArrayDeque<>());
+		return getAllAvailableFields(clazz, new FEContext());
 	}
 
 	/**
 	 * Describes each @Interchangeable field of a class
 	 * 
 	 * @param clazz the class to be described
-	 * @return
+	 * @param context current context
+	 * @return field definitions
 	 */
-	private List<APIField> getAllAvailableFields(Class<?> clazz, Deque<Interchangeable> intchStack) {
+	private List<APIField> getAllAvailableFields(Class<?> clazz, FEContext context) {
 		List<APIField> result = new ArrayList<>();
 		//StopWatch.next("Descending into", false, clazz.getName());
 		Field[] fields = clazz.getDeclaredFields();
@@ -227,10 +233,10 @@ public class FieldsEnumerator {
 			if (interchangeable == null || !internalUse && InterchangeUtils.isAmpActivityVersion(field.getType())) {
 				continue;
 			}
-			intchStack.push(interchangeable);
+			context.getIntchStack().push(interchangeable);
 			if (!InterchangeUtils.isCompositeField(field)) {
-				if (isVisible(interchangeable.fmPath(), intchStack)) {
-					APIField descr = describeField(field, intchStack);
+				if (isFieldVisible(context)) {
+					APIField descr = describeField(field, context);
 					if (descr != null) {
 						result.add(descr);
 					}
@@ -239,20 +245,27 @@ public class FieldsEnumerator {
 				InterchangeableDiscriminator discriminator = field.getAnnotation(InterchangeableDiscriminator.class);
 				Interchangeable[] settings = discriminator.settings();
 				for (int i = 0; i < settings.length; i++) {
-					String fmPath = settings[i].fmPath();
-					if (isVisible(fmPath, intchStack)) {
-						intchStack.push(settings[i]);
-						APIField descr = describeField(field, intchStack);
+					context.getDiscriminationInfoStack().push(getDiscriminationInfo(field, settings[i]));
+					context.getIntchStack().push(settings[i]);
+					if (isFieldVisible(context)) {
+						APIField descr = describeField(field, context);
 						if (descr != null) {
 							result.add(descr);
 						}
-						intchStack.pop();
 					}
+					context.getIntchStack().pop();
+					context.getDiscriminationInfoStack().pop();
 				}
 			}
-			intchStack.pop();
+			context.getIntchStack().pop();
 		}
 		return result;
+	}
+
+	private ImmutablePair<Class<?>, Object> getDiscriminationInfo(Field field, Interchangeable interchangeable) {
+		Class<?> classOfField = InterchangeUtils.getClassOfField(field);
+		String value = interchangeable.discriminatorOption();
+		return new ImmutablePair<>(classOfField, value);
 	}
 
 	/**
@@ -279,18 +292,17 @@ public class FieldsEnumerator {
 	}
 	
 	/**
-	 * 
-	 * @param parentInterchangeable 
-	 * 
-	 * @param clazz the class to be described
-	 * @return
+	 * Find nested field with a percentage constraint.
+	 * @param field field to check
+	 * @param context current context
+	 * @return name of the field with percentage constraint
 	 */
-	private String getPercentageConstraint(Field field, Deque<Interchangeable> intchStack) {
+	private String getPercentageConstraint(Field field, FEContext context) {
 		Class<?> genericClass = InterchangeUtils.getGenericClass(field);
 		Field[] fields = genericClass.getDeclaredFields();
 		for (Field f : fields) {
 			Interchangeable interchangeable = f.getAnnotation(Interchangeable.class);
-			if (interchangeable != null && isVisible(interchangeable.fmPath(), intchStack)
+			if (interchangeable != null && isVisible(interchangeable.fmPath(), context)
 					&& interchangeable.percentageConstraint()) {
 				return InterchangeUtils.underscorify(interchangeable.fieldTitle());
 			}
@@ -302,12 +314,12 @@ public class FieldsEnumerator {
 	/**
 	 * Describes each @Interchangeable field of a class
 	 */
-	private String getUniqueConstraint(Field field, Deque<Interchangeable> intchStack) {
+	private String getUniqueConstraint(Field field, FEContext context) {
 		Class<?> genericClass = InterchangeUtils.getGenericClass(field);
 		Field[] fields = genericClass.getDeclaredFields();
 		for (Field f : fields) {
 			Interchangeable interchangeable = f.getAnnotation(Interchangeable.class);
-			if (interchangeable != null && isVisible(interchangeable.fmPath(), intchStack)
+			if (interchangeable != null && isVisible(interchangeable.fmPath(), context)
 					&& interchangeable.uniqueConstraint()) {
 				return InterchangeUtils.underscorify(interchangeable.fieldTitle());
 			}
@@ -316,9 +328,15 @@ public class FieldsEnumerator {
 		return null;
 	}
 
-	public List<String> findFieldPaths(Predicate<Field> fieldFilter) {
+	public List<String> findActivityFieldPaths(Predicate<Field> fieldFilter) {
 		FieldNameCollectingVisitor visitor = new FieldNameCollectingVisitor(fieldFilter);
 		visit(AmpActivityFields.class, visitor, new VisitorContext());
+		return visitor.fields;
+	}
+
+	public List<String> findContactFieldPaths(Predicate<Field> fieldFilter) {
+		FieldNameCollectingVisitor visitor = new FieldNameCollectingVisitor(fieldFilter);
+		visit(AmpContact.class, visitor, new VisitorContext());
 		return visitor.fields;
 	}
 
@@ -348,7 +366,7 @@ public class FieldsEnumerator {
 
 	private class VisitorContext {
 		private Deque<String> pathStack = new ArrayDeque<>();
-		private Deque<Interchangeable> interchangeableStack = new ArrayDeque<>();
+		private FEContext feContext = new FEContext();
 	}
 
 	// TODO how to reuse this logic?
@@ -356,23 +374,25 @@ public class FieldsEnumerator {
 		for (Field field : clazz.getDeclaredFields()) {
 			Interchangeable ant = field.getAnnotation(Interchangeable.class);
 			if (ant != null) {
-				context.interchangeableStack.push(ant);
+				context.feContext.getIntchStack().push(ant);
 				if (!InterchangeUtils.isCompositeField(field)) {
-					if (isVisible(ant.fmPath(), context.interchangeableStack)) {
+					if (isFieldVisible(context.feContext)) {
 						visit(field, InterchangeUtils.underscorify(ant.fieldTitle()), ant, visitor, context);
 					}
 				} else {
 					InterchangeableDiscriminator antd = field.getAnnotation(InterchangeableDiscriminator.class);
 					Interchangeable[] settings = antd.settings();
 					for (Interchangeable ants : settings) {
-						if (isVisible(ants.fmPath(), context.interchangeableStack)) {
-							context.interchangeableStack.push(ants);
+						context.feContext.getDiscriminationInfoStack().push(getDiscriminationInfo(field, ants));
+						context.feContext.getIntchStack().push(ants);
+						if (isFieldVisible(context.feContext)) {
 							visit(field, InterchangeUtils.underscorify(ants.fieldTitle()), ant, visitor, context);
-							context.interchangeableStack.pop();
 						}
+						context.feContext.getIntchStack().pop();
+						context.feContext.getDiscriminationInfoStack().pop();
 					}
 				}
-				context.interchangeableStack.pop();
+				context.feContext.getIntchStack().pop();
 			}
 		}
 	}
@@ -394,20 +414,21 @@ public class FieldsEnumerator {
 	/**
 	 * Gets the field required value.
 	 *
-	 * @param Field the field to get its required value
+	 * @param context current context
+	 * @param fieldTitle the field to get its required value
 	 * @return String with Y|ND|N, where Y (yes) = always required, ND=for draft status=false,
 	 * N (no) = not required. .
 	 */
-	private String getRequiredValue(Deque<Interchangeable> intchStack, String fieldTitle) {
-		Interchangeable fieldIntch = intchStack.peek();
+	private String getRequiredValue(FEContext context, String fieldTitle) {
+		Interchangeable fieldIntch = context.getIntchStack().peek();
 		String requiredValue = ActivityEPConstants.FIELD_NOT_REQUIRED;
 		String required = fieldIntch.required();
 
 		if (required.equals(ActivityEPConstants.REQUIRED_ALWAYS)) {
 			requiredValue = ActivityEPConstants.FIELD_ALWAYS_REQUIRED;
 		} else if (required.equals(ActivityEPConstants.REQUIRED_ND)
-				|| (!required.equals(ActivityEPConstants.REQUIRED_NONE) && isVisible(required, intchStack))
-				|| (hasRequiredValidatorEnabled(intchStack))) {
+				|| (!required.equals(ActivityEPConstants.REQUIRED_NONE) && isVisible(required, context))
+				|| (hasRequiredValidatorEnabled(context))) {
 			if (fieldTitle.equals("location_percentage")) {
 				requiredValue = ActivityEPConstants.FIELD_ALWAYS_REQUIRED;
 			} else {
@@ -419,68 +440,68 @@ public class FieldsEnumerator {
 
 	/**
 	 * Determine if the field contains unique validator
-	 * @param intchStack
+	 * @param context current context
 	 * @return boolean if the field contains unique validator
 	 */
-	private boolean hasUniqueValidatorEnabled(Deque<Interchangeable> intchStack) {
-		return hasValidatorEnabled(intchStack, ActivityEPConstants.UNIQUE_VALIDATOR_NAME);
+	private boolean hasUniqueValidatorEnabled(FEContext context) {
+		return hasValidatorEnabled(context, ActivityEPConstants.UNIQUE_VALIDATOR_NAME);
 	}
 
 	/**
 	 * Determine if the field contains tree collection validator
-	 * @param intchStack
+	 * @param context current context
 	 * @return boolean if the field contains tree collection validator
 	 */
-	private boolean hasTreeCollectionValidatorEnabled(Deque<Interchangeable> intchStack) {
-		return hasValidatorEnabled(intchStack, ActivityEPConstants.TREE_COLLECTION_VALIDATOR_NAME);
+	private boolean hasTreeCollectionValidatorEnabled(FEContext context) {
+		return hasValidatorEnabled(context, ActivityEPConstants.TREE_COLLECTION_VALIDATOR_NAME);
 	}
 
 	/**
 	 * Determine if the field contains maxsize validator
-	 * @param intchStack
+	 * @param context current context
 	 * @return boolean if the field contains maxsize validator
 	 */
-	private boolean hasMaxSizeValidatorEnabled(Field field, Deque<Interchangeable> intchStack) {
+	private boolean hasMaxSizeValidatorEnabled(Field field, FEContext context) {
 		if (AmpActivityProgram.class.equals(InterchangeUtils.getGenericClass(field))) {
 			try {
 				AmpActivityProgramSettings setting = ProgramUtil.getAmpActivityProgramSettings(
-						intchStack.peek().discriminatorOption());
+						context.getIntchStack().peek().discriminatorOption());
 				return setting != null && !setting.isAllowMultiple();
 			} catch (DgException e) {
 				throw new RuntimeException(e);
 			}
 		} else {
-			return hasValidatorEnabled(intchStack, ActivityEPConstants.MAX_SIZE_VALIDATOR_NAME);
+			return hasValidatorEnabled(context, ActivityEPConstants.MAX_SIZE_VALIDATOR_NAME);
 		}
 	}
 
 	/**
 	 * Determine if the field contains required validator
-	 * @param intchStack
+	 * @param context current context
 	 * @return boolean if the field contains required validator
 	 */
-	private boolean hasRequiredValidatorEnabled(Deque<Interchangeable> intchStack) {
-		return hasValidatorEnabled(intchStack, ActivityEPConstants.MIN_SIZE_VALIDATOR_NAME);
+	private boolean hasRequiredValidatorEnabled(FEContext context) {
+		return hasValidatorEnabled(context, ActivityEPConstants.MIN_SIZE_VALIDATOR_NAME);
 	}
 
 	/**
 	 * Determine if the field contains percentage validator
-	 * @param intchStack
+	 * @param context current context
 	 * @return boolean if the field contains percentage validator
 	 */
-	private boolean hasPercentageValidatorEnabled(Deque<Interchangeable> intchStack) {
-		return hasValidatorEnabled(intchStack, ActivityEPConstants.PERCENTAGE_VALIDATOR_NAME);
+	private boolean hasPercentageValidatorEnabled(FEContext context) {
+		return hasValidatorEnabled(context, ActivityEPConstants.PERCENTAGE_VALIDATOR_NAME);
 	}
 
 	/**
 	 * Determine if the field contains a certain validator
-	 * @param intchStack
+	 * @param context current context
 	 * @param validatorName the name of the validator (unique, maxSize, minSize, percentage, treeCollection)
 	 * @return boolean if the field contains unique validator
 	 */
-	private boolean hasValidatorEnabled(Deque<Interchangeable> intchStack, String validatorName) {
+	private boolean hasValidatorEnabled(FEContext context, String validatorName) {
 		boolean isEnabled = false;
-		Interchangeable interchangeable = intchStack.peek();
+		Interchangeable interchangeable = context.getIntchStack().peek();
 		Validators validators = interchangeable.validators();
 
 		String validatorFmPath = "";
@@ -498,7 +519,7 @@ public class FieldsEnumerator {
 		}
 
 		if (StringUtils.isNotBlank(validatorFmPath)) {
-			isEnabled = isVisible(validatorFmPath, intchStack);
+			isEnabled = isVisible(validatorFmPath, context);
 		}
 
 		return isEnabled;
@@ -514,14 +535,30 @@ public class FieldsEnumerator {
 		return StringUtils.equals(this.iatiIdentifierField, fieldName);
 	}
 
-	private boolean isVisible(String fmPath,  Deque<Interchangeable> intchStack) {
-		Interchangeable interchangeable = intchStack.peek();
+	private boolean isFieldVisible(FEContext context) {
+		Interchangeable interchangeable = context.getIntchStack().peek();
+
+		try {
+			Class<? extends ContextMatcher> cmc = interchangeable.context();
+			ContextMatcher contextMatcher = cmc.newInstance();
+			if (!contextMatcher.inContext(context)) {
+				return false;
+			}
+		} catch (ReflectiveOperationException e) {
+			throw new RuntimeException("Context matcher failure", e);
+		}
+
+		return isVisible(interchangeable.fmPath(), context);
+	}
+
+	private boolean isVisible(String fmPath, FEContext context) {
+		Interchangeable interchangeable = context.getIntchStack().peek();
 		String fieldTitle = InterchangeUtils.underscorify(interchangeable.fieldTitle());
 
 		if (!AmpOfflineModeHolder.isAmpOfflineMode() && isFieldIatiIdentifier(fieldTitle)) {
 			return true;
 		} else {
-			return fmService.isVisible(fmPath, intchStack);
+			return fmService.isVisible(fmPath, context.getIntchStack());
 		}
 	}
 }

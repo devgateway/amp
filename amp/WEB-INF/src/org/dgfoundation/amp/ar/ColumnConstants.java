@@ -173,6 +173,7 @@ public class ColumnConstants {
 	public static final String MODALITIES = "Modalities";
 	public static final String OVERAGE_PROJECT = "Overage Project";
 	public static final String PAYMENT_CAPITAL___RECURRENT = "Payment Capital - Recurrent";
+	public static final String PERFORMANCE_ALERT_LEVEL = "Performance Alert Level";
 	public static final String PLEDGE_CONTACT_1___ADDRESS = "Pledge Contact 1 - Address";
 	public static final String PLEDGE_CONTACT_1___ALTERNATE_CONTACT = "Pledge Contact 1 - Alternate Contact";
 	public static final String PLEDGE_CONTACT_1___ALTERNATE_EMAIL = "Pledge Contact 1 - Alternate Email";
@@ -283,6 +284,7 @@ public class ColumnConstants {
 	public static final String PURPOSE = "Purpose";
 	public static final String RATIFICATION_DATE = "Loan Ratification Date";
 	public static final String REGION = "Region";
+	public static final String REGIONAL_REGION = "Regional Region";
 	public static final String REGIONAL_GROUP = "Regional Group";
 	public static final String REGIONAL_GROUP_GROUP = "Regional Group Group";	
 	public static final String REGIONAL_GROUP_DEPARTMENT_DIVISION = "Regional Group Department/Division";

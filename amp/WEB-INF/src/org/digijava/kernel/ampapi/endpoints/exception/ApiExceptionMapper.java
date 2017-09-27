@@ -1,8 +1,11 @@
 package org.digijava.kernel.ampapi.endpoints.exception;
 
+import java.util.Optional;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
@@ -10,9 +13,9 @@ import javax.ws.rs.ext.Provider;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 
 /**
  * Builds the generic response with error code 500 for all unhandled exceptions
@@ -34,16 +37,20 @@ public class ApiExceptionMapper implements ExceptionMapper<Exception> {
             return ((WebApplicationException) e).getResponse();
         }
 
+        String mediaType = Optional.ofNullable(httpRequest.getContentType()).orElse(MediaType.APPLICATION_JSON);
+
         logger.error("ApiExceptionMapper: ", e);
-        
+
         if (e instanceof ApiRuntimeException) {
     		ApiRuntimeException apiException = (ApiRuntimeException) e;
-    		return ApiErrorResponse.buildGenericError(apiException.getResponseStatus(), apiException.getError(), httpRequest.getContentType());
+
+    		return ApiErrorResponse.buildGenericError(apiException.getResponseStatus(), apiException.getError(),
+    		        mediaType);
     	}
 
         ApiErrorMessage apiErrorMessage = getApiErrorMessageFromException(e);
        
-        return ApiErrorResponse.buildGenericError(Response.Status.INTERNAL_SERVER_ERROR, apiErrorMessage,  httpRequest.getContentType());
+        return ApiErrorResponse.buildGenericError(Response.Status.INTERNAL_SERVER_ERROR, apiErrorMessage, mediaType);
     }
     
     /**

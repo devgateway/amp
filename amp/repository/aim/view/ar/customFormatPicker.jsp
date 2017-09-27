@@ -35,7 +35,7 @@
 			<td width="40%" height="18" class="setting-label">
 				<digi:trn key="aim:formatPicket:decimalSymbol">Decimal Separator</digi:trn>
 			</td>
-        	<td width="40%" colspan="2" height="18" class="setting-option">
+        	<td width="60%" colspan="2" height="18" class="setting-option">
         		<html:select styleClass="dropdwn_sm"
 					onchange="initFormatPopup();" property="customDecimalSymbol"
 					styleId="customDecimalSymbol">
@@ -49,8 +49,6 @@
 						<digi:trn>Custom</digi:trn>
 					</html:option>
 				</html:select>
-			</td>
-			<td width="20%" class="setting-option">
 				<html:text styleClass="inputx" disabled="true" size="5" maxlength="1" property="customDecimalSymbolTxt"  onchange="initFormatPopup()"/>
            </td>
       	</tr>
@@ -58,7 +56,7 @@
 			<td width="40%" height="18" class="setting-label">
 				<digi:trn key="aim:formatPicket:maxFracDigits">Maximum Fraction Digits</digi:trn>
 		    </td>
-    		<td width="40%" colspan="2" class="setting-option">
+    		<td width="60%" colspan="2" class="setting-option">
 	    		<html:select styleClass="dropdwn_sm" property="customDecimalPlaces" styleId="customDecimalPlaces" onchange="initFormatPopup();">
 		              <html:option value="-1">
 		              		<digi:trn key="aim:formatPicket:NoLimit">No Limit</digi:trn>
@@ -73,9 +71,7 @@
 		                <digi:trn key="aim:formatPicket:custom">Custom</digi:trn>
 		              </html:option>
 	            </html:select>
-			</td>
-			<td width="20%" class="setting-option">
-            	<html:text styleClass="inputx" disabled="true" size="5" maxlength="2" property="customDecimalPlacesTxt" onchange="initFormatPopup()" />
+				<html:text styleClass="inputx" disabled="true" size="5" maxlength="2" property="customDecimalPlacesTxt" onchange="initFormatPopup()" />
             </td>
       </tr>
 		<tr>
@@ -90,15 +86,13 @@
 			<td width="40%" height="18" class="setting-label">
 				<digi:trn key="aim:formatPicket:GroupingSeparator">Grouping Separator</digi:trn>
 			</td>
-	    	<td width="40%" colspan="2" height="18" class="setting-option">
+	    	<td width="60%" colspan="2" height="18" class="setting-option">
 	    		<html:select styleClass="dropdwn_sm" property="customGroupCharacter" styleId="customGroupCharacter" onchange="initFormatPopup();">
 	    			<c:forEach var="customGroupChar" items="${aimReportsFilterPickerForm.allgroupingseparators}">
 	    				<html:option value="${customGroupChar}"><c:out value="${customGroupChar}"/></html:option>
 	    			</c:forEach>
 	    			<html:option value="CUSTOM"><digi:trn>Custom</digi:trn></html:option>
             	</html:select>
-			</td>
-			<td width="20%" class="setting-option">
 				<html:text styleClass="inputx" disabled="true" size="5" maxlength="1"  value="" property="customGroupCharacterTxt"  onchange="initFormatPopup()"/>
             </td>
       	</tr>

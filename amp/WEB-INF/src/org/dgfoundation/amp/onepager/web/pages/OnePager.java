@@ -178,6 +178,10 @@ public class OnePager extends AmpHeaderFooter {
 
 		long currentUserId = ((AmpAuthWebSession) getSession()).getCurrentMember().getMemberId();
 		if (ActivityGatekeeper.isEditionLocked()) {
+			StringValue isCloseEdition = parameters.get("close");
+			if (isCloseEdition != null && isCloseEdition.toBoolean()) {
+				ActivityGatekeeper.pageModeChange(activityId);
+			}
 			throw new RedirectToUrlException(ActivityGatekeeper.buildRedirectLink(activityId, currentUserId));
 		}
 

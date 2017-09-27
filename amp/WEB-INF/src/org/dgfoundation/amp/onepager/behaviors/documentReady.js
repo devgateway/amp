@@ -232,7 +232,7 @@ $(document).ready(function(){
 		
 	    return $('#rightMenu').height() > DEFAULT_MAIN_BODY_MIN_HEIGHT ? ($('#rightMenu').height() - 20) : DEFAULT_MAIN_BODY_MIN_HEIGHT;
 	});
-
+    wireUpEvents();
 });
 
 $(window).resize(function() {
@@ -242,3 +242,42 @@ $(window).resize(function() {
 $(window).scroll(function() {
 	adjustQuickLinks();
 });
+
+var validNavigation = false;
+function wireUpEvents() {
+    window.onbeforeunload = function() {
+        if (!validNavigation) {
+            $.ajax({
+                type: 'get',
+                async: false,
+                url: '/wicket/onepager/activity/${activityId}/close/true',
+                success:function(data)
+                {
+                    console.log(data);
+                }
+            });
+        }
+    }
+
+	// Attach the event keypress to exclude the F5 refresh
+    $(document).bind('keypress', function(e) {
+        if (e.keyCode == 116){
+            validNavigation = true;
+        }
+    });
+
+	// Attach the event click for all links in the page
+    $("a").bind("click", function() {
+        validNavigation = true;
+    });
+
+    // Attach the event submit for all forms in the page
+    $("form").bind("submit", function() {
+        validNavigation = true;
+    });
+
+    // Attach the event click for all inputs in the page
+    $("input[type=submit]").bind("click", function() {
+        validNavigation = true;
+    });
+}

@@ -31,7 +31,8 @@ public class DocumentReadyBehavior extends Behavior {
 		variables.put("onepagerMode", activityFormOnePager);
 		variables.put("onepagerPath", "/" + OnePagerConst.ONEPAGER_URL_PREFIX + "/" + OnePagerConst.ONEPAGER_URL_PARAMETER_ACTIVITY + "/");
 		variables.put("isTabView",FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.ACTIVITY_FORM_FUNDING_SECTION_DESIGN));
-		
+		variables.put("activityId", ((OnePager) component).getPageParameters().get(1));
+
 		PackageTextTemplate ptt = new PackageTextTemplate(DocumentReadyBehavior.class, JS_FILE_NAME);
 		ptt.interpolate(variables);
 		JavaScriptTemplate jst = new JavaScriptTemplate(ptt);

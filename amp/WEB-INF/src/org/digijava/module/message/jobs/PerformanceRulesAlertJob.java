@@ -12,6 +12,7 @@ import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
 import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.util.FMUtil;
+import org.dgfoundation.amp.onepager.util.SaveContext;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.PerformanceRuleMatcher;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -143,7 +144,7 @@ public class PerformanceRulesAlertJob extends ConnectionCleaningJob implements S
                 .createActivityTeamMemberIfNeeded(oldActivity.getTeam(), user);
         
         updatedActivity = ActivityUtil.saveActivityNewVersion(oldActivity, null, modifyingMember,
-                oldActivity.getDraft(), session, false, false);
+                oldActivity.getDraft(), session, SaveContext.job());
             
         Locale javaLocale = new Locale(DEFAULT_LOCALE_LANGUAGE);
         

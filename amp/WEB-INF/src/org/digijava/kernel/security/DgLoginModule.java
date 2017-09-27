@@ -86,14 +86,14 @@ public class DgLoginModule
      * @param subject the <code>Subject</code> to be authenticated. <p>
      *
      * @param callbackHandler a <code>CallbackHandler</code> for communicating
-     *			with the end user (prompting for usernames and
-     *			passwords, for example). <p>
+     *          with the end user (prompting for usernames and
+     *          passwords, for example). <p>
      *
      * @param sharedState shared <code>LoginModule</code> state. <p>
      *
      * @param options options specified in the login
-     *			<code>Configuration</code> for this particular
-     *			<code>LoginModule</code>.
+     *          <code>Configuration</code> for this particular
+     *          <code>LoginModule</code>.
      */
     public void initialize(
         Subject subject,
@@ -284,7 +284,7 @@ public class DgLoginModule
      * @exception LoginException if the logout fails.
      *
      * @return true in all cases since this <code>LoginModule</code>
-     *		should not be ignored.
+     *      should not be ignored.
      */
     public boolean logout() throws LoginException {
 
@@ -382,9 +382,9 @@ public class DgLoginModule
         List list = null;
         Session session = null;
 
-       	session = PersistenceManager.getSession();
+        session = PersistenceManager.getSession();
            String queryString = "select u.id, u.password, u.salt from " + User.class.getName() +
-           					 " u where lower(u.email) = :email";
+                             " u where lower(u.email) = :email";
             
         Query query = session.createQuery(queryString);
         query.setString("email", email.toLowerCase());

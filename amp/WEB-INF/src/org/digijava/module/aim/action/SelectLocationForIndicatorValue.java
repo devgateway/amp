@@ -1,6 +1,6 @@
-	package org.digijava.module.aim.action;
-	
-	import java.util.Collection;
+    package org.digijava.module.aim.action;
+    
+    import java.util.Collection;
 import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,55 +24,55 @@ import org.digijava.module.aim.util.LocationUtil;
  *Todo refactoring whole code using Dynamic location manager
  * but not today. This is a quick bug fix version.
  */
-	public class SelectLocationForIndicatorValue   extends Action {
-		
-	    public ActionForward execute(ActionMapping mapping, ActionForm form,
-	                                 HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
-	        ThemeForm themeForm = (ThemeForm) form;
-	        String strIndex = request.getParameter("index");
-	        if(strIndex == null && themeForm.getParentIndex() == null) {
-	            return mapping.findForward("forward");
-	        } else if(strIndex != null) {
-	            themeForm.setParentIndex(Long.valueOf(strIndex));
-	        }
-	        
-	        
-	        String iso= FeaturesUtil.getDefaultCountryIso();
-	        Long countryId;
-	        Country ampGS=null;
-	        String CountryName = null; 
-	        if(iso!=null){
-	        	themeForm.setDefaultCountryIsSet(true);                 
-	            Collection<Country> b = FeaturesUtil.getDefaultCountry(iso);
-	            Iterator<Country> itr2 = b.iterator();
-	            while (itr2.hasNext()) {
-	            ampGS = (Country) itr2.next();
-	            CountryName = ampGS.getCountryName();            
-	          }
-	
-	          if (themeForm.getFill() == null || themeForm.getFill().trim().length() == 0) {
-	        	  themeForm.setCountry(CountryName);
-	        	  themeForm.setImpCountry(iso);
-	        	  themeForm.setRegions(DynLocationManagerUtil.getLocationsOfTypeRegionOfDefCountry());
-	          }
-	          else {
-	            if (themeForm.getFill().equals("zone")) {
-	              if (themeForm.getImpRegion() != null) {
+    public class SelectLocationForIndicatorValue   extends Action {
+        
+        public ActionForward execute(ActionMapping mapping, ActionForm form,
+                                     HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
+            ThemeForm themeForm = (ThemeForm) form;
+            String strIndex = request.getParameter("index");
+            if(strIndex == null && themeForm.getParentIndex() == null) {
+                return mapping.findForward("forward");
+            } else if(strIndex != null) {
+                themeForm.setParentIndex(Long.valueOf(strIndex));
+            }
+            
+            
+            String iso= FeaturesUtil.getDefaultCountryIso();
+            Long countryId;
+            Country ampGS=null;
+            String CountryName = null; 
+            if(iso!=null){
+                themeForm.setDefaultCountryIsSet(true);                 
+                Collection<Country> b = FeaturesUtil.getDefaultCountry(iso);
+                Iterator<Country> itr2 = b.iterator();
+                while (itr2.hasNext()) {
+                ampGS = (Country) itr2.next();
+                CountryName = ampGS.getCountryName();            
+              }
+    
+              if (themeForm.getFill() == null || themeForm.getFill().trim().length() == 0) {
+                  themeForm.setCountry(CountryName);
+                  themeForm.setImpCountry(iso);
+                  themeForm.setRegions(DynLocationManagerUtil.getLocationsOfTypeRegionOfDefCountry());
+              }
+              else {
+                if (themeForm.getFill().equals("zone")) {
+                  if (themeForm.getImpRegion() != null) {
                       AmpCategoryValueLocations selectedRegion=DynLocationManagerUtil.getLocation(themeForm.getImpRegion(), true);
                       if (selectedRegion != null) {
                           themeForm.setZones(selectedRegion.getChildLocations());
                       } else {
                           themeForm.setZones(null);
                       }
-	            	  themeForm.setRegions(DynLocationManagerUtil.getLocationsOfTypeRegionOfDefCountry());
-	            	  themeForm.setImpZone(null);
-	//            	  themeForm.setImpMultiZone(null);
-	//            	  themeForm.setImpMultiWoreda(null);
-	            	  themeForm.setImpWoreda(null); 
-	              }
-	            }
-	            else if (themeForm.getFill().equals("woreda")) {
-	              if (themeForm.getImpZone() != null) {
+                      themeForm.setRegions(DynLocationManagerUtil.getLocationsOfTypeRegionOfDefCountry());
+                      themeForm.setImpZone(null);
+    //                themeForm.setImpMultiZone(null);
+    //                themeForm.setImpMultiWoreda(null);
+                      themeForm.setImpWoreda(null); 
+                  }
+                }
+                else if (themeForm.getFill().equals("woreda")) {
+                  if (themeForm.getImpZone() != null) {
                       AmpCategoryValueLocations selectedRegion=DynLocationManagerUtil.getLocation(themeForm.getImpRegion(), true);
                      AmpCategoryValueLocations selectedZone=DynLocationManagerUtil.getLocation(themeForm.getImpZone(), true);
                       if (selectedZone != null) {
@@ -85,15 +85,15 @@ import org.digijava.module.aim.util.LocationUtil;
                       } else {
                           themeForm.setZones(null);
                       }
-	            	  themeForm.setRegions(DynLocationManagerUtil.getLocationsOfTypeRegionOfDefCountry());
-	            	  themeForm.setImpWoreda(null);
-	              }
-	            }
-	            else if (themeForm.getFill().equals("woredaSelected")) {
-	              if (themeForm.getImpWoreda() != null) {
+                      themeForm.setRegions(DynLocationManagerUtil.getLocationsOfTypeRegionOfDefCountry());
+                      themeForm.setImpWoreda(null);
+                  }
+                }
+                else if (themeForm.getFill().equals("woredaSelected")) {
+                  if (themeForm.getImpWoreda() != null) {
                      AmpCategoryValueLocations selectedRegion=DynLocationManagerUtil.getLocation(themeForm.getImpRegion(), true);
                      AmpCategoryValueLocations selectedZone=DynLocationManagerUtil.getLocation(themeForm.getImpZone(), true);
-	            	   if (selectedZone != null) {
+                       if (selectedZone != null) {
                           themeForm.setWoredas(selectedZone.getChildLocations());
                       } else {
                           themeForm.setWoredas(null);
@@ -103,36 +103,36 @@ import org.digijava.module.aim.util.LocationUtil;
                       } else {
                           themeForm.setZones(null);
                       }
-	            	  themeForm.setRegions(DynLocationManagerUtil.getLocationsOfTypeRegionOfDefCountry());
-	            	  //themeForm.setImpWoreda(null);
-	              }
-		        }
-	          }
-	        }
-	        else{
-	        	themeForm.setDefaultCountryIsSet(false);
-	      }        
-	
-	        
-	
-	        if(themeForm.getAction() != null && themeForm.getAction().equalsIgnoreCase("add")) {
-	        	
-	        	AmpPrgIndicatorValue indValue = (AmpPrgIndicatorValue) themeForm.getPrgIndValues().get(themeForm.getParentIndex().intValue());
-	        	
-	        	
+                      themeForm.setRegions(DynLocationManagerUtil.getLocationsOfTypeRegionOfDefCountry());
+                      //themeForm.setImpWoreda(null);
+                  }
+                }
+              }
+            }
+            else{
+                themeForm.setDefaultCountryIsSet(false);
+          }        
+    
+            
+    
+            if(themeForm.getAction() != null && themeForm.getAction().equalsIgnoreCase("add")) {
+                
+                AmpPrgIndicatorValue indValue = (AmpPrgIndicatorValue) themeForm.getPrgIndValues().get(themeForm.getParentIndex().intValue());
+                
+                
                 Long id=null;
 
               
-//	        	if(indValue.getLocation()!=null){
-//	        		location=indValue.getLocation();
-//	        	}else {
-//	        		location=new AmpLocation();
-//	        	}
-	            //National
-		   		if(themeForm.getLocationLevelIndex().intValue()==2){
+//              if(indValue.getLocation()!=null){
+//                  location=indValue.getLocation();
+//              }else {
+//                  location=new AmpLocation();
+//              }
+                //National
+                if(themeForm.getLocationLevelIndex().intValue()==2){
                     //Regional
-		   			id=themeForm.getImpRegion();
-		   		}
+                    id=themeForm.getImpRegion();
+                }
                 else{
                       if (themeForm.getLocationLevelIndex().intValue()==3){
                           //Zone
@@ -146,50 +146,50 @@ import org.digijava.module.aim.util.LocationUtil;
                       }
 
                 }
-		   	    AmpLocation ampLoc = null;
-		   	    if ( id != null ) {
-			   	    ampLoc		= LocationUtil.getAmpLocationByCVLocation(id);
-	                if (ampLoc == null) {
-	                    AmpCategoryValueLocations selectedLoc=DynLocationManagerUtil.getLocation(id, false);
-	                    ampLoc = new AmpLocation();
-	                    ampLoc.setRegionLocation(selectedLoc);
-	                    ampLoc.setLocation(selectedLoc);
-	                    LocationUtil.saveLocation(ampLoc);
-	                }
-		   	    }
-	            
-	            indValue.setLocation(ampLoc);
-	            themeForm.setLocationLevelIndex(-1);
-	            themeForm.setParentIndex(null);
-	            themeForm.setAction(null);
-	            themeForm.setSelectedLocationId(null);
-	            themeForm.setLocation(null);
-	            themeForm.setLocationLevelIndex(null);
-	            themeForm.setImpCountry(null);
-	            themeForm.setImpRegion(null);
-	            themeForm.setImpZone(null);
-	            themeForm.setImpWoreda(null);
-	            themeForm.setAction(null);
-	            return mapping.findForward("backToAddDataPage");
-	        }
-	
-	//        Collection<AmpRegion> locations = LocationUtil.getAmpLocations();
-	//        if(locations != null) {
-	//            List<AmpRegion> locationsList = new ArrayList<AmpRegion>(locations);
-	//            if(locationsList != null && themeForm.getKeyword() != null) {
-	//                for(Iterator iter = locationsList.iterator(); iter.hasNext(); ) {
-	//                    AmpRegion location = (AmpRegion) iter.next();
-	//                    if(location.getName().indexOf(themeForm.getKeyword()) == -1) {
-	//                        iter.remove();
-	//                    }
-	//                }
-	//            }
-	//            Collections.sort(locationsList, new LocationUtil.HelperAmpRegionNameComparator());
-	//            themeForm.setLocationsCol(locationsList);
-	//        }
-	        return mapping.findForward("forward");
-	    }
-	
-	    public SelectLocationForIndicatorValue() {
-	    }
-	}
+                AmpLocation ampLoc = null;
+                if ( id != null ) {
+                    ampLoc      = LocationUtil.getAmpLocationByCVLocation(id);
+                    if (ampLoc == null) {
+                        AmpCategoryValueLocations selectedLoc=DynLocationManagerUtil.getLocation(id, false);
+                        ampLoc = new AmpLocation();
+                        ampLoc.setRegionLocation(selectedLoc);
+                        ampLoc.setLocation(selectedLoc);
+                        LocationUtil.saveLocation(ampLoc);
+                    }
+                }
+                
+                indValue.setLocation(ampLoc);
+                themeForm.setLocationLevelIndex(-1);
+                themeForm.setParentIndex(null);
+                themeForm.setAction(null);
+                themeForm.setSelectedLocationId(null);
+                themeForm.setLocation(null);
+                themeForm.setLocationLevelIndex(null);
+                themeForm.setImpCountry(null);
+                themeForm.setImpRegion(null);
+                themeForm.setImpZone(null);
+                themeForm.setImpWoreda(null);
+                themeForm.setAction(null);
+                return mapping.findForward("backToAddDataPage");
+            }
+    
+    //        Collection<AmpRegion> locations = LocationUtil.getAmpLocations();
+    //        if(locations != null) {
+    //            List<AmpRegion> locationsList = new ArrayList<AmpRegion>(locations);
+    //            if(locationsList != null && themeForm.getKeyword() != null) {
+    //                for(Iterator iter = locationsList.iterator(); iter.hasNext(); ) {
+    //                    AmpRegion location = (AmpRegion) iter.next();
+    //                    if(location.getName().indexOf(themeForm.getKeyword()) == -1) {
+    //                        iter.remove();
+    //                    }
+    //                }
+    //            }
+    //            Collections.sort(locationsList, new LocationUtil.HelperAmpRegionNameComparator());
+    //            themeForm.setLocationsCol(locationsList);
+    //        }
+            return mapping.findForward("forward");
+        }
+    
+        public SelectLocationForIndicatorValue() {
+        }
+    }

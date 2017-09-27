@@ -20,28 +20,28 @@ import org.digijava.module.aim.util.DbUtil;
 
 public class ViewOrganisation extends Action {
 
-			  private static Logger logger = Logger.getLogger(ViewOrganisation.class);
+              private static Logger logger = Logger.getLogger(ViewOrganisation.class);
 
-			  public ActionForward execute(ActionMapping mapping,
-									ActionForm form,
-									HttpServletRequest request,
-									HttpServletResponse response) throws java.lang.Exception {
+              public ActionForward execute(ActionMapping mapping,
+                                    ActionForm form,
+                                    HttpServletRequest request,
+                                    HttpServletResponse response) throws java.lang.Exception {
 
-			  			 logger.debug("In view organisation action");
+                         logger.debug("In view organisation action");
 
-						 ViewOrgForm editForm = (ViewOrgForm) form;
-						 
-						 Collection ampOrg = null;
-						 ampOrg = DbUtil.getOrganisationAsCollection(new Long(Integer.parseInt(request.getParameter("ampOrgId"))));
-						 
-						 if (ampOrg == null) {
-						 	logger.info("ampOrg is null");
-						 	return mapping.findForward("index");
-						 }
-						 else {
-						 	logger.info("ampOrg is not null");
-						 	editForm.setOrg(ampOrg);
-						 	return mapping.findForward("forward");
-						 }
-	}
+                         ViewOrgForm editForm = (ViewOrgForm) form;
+                         
+                         Collection ampOrg = null;
+                         ampOrg = DbUtil.getOrganisationAsCollection(new Long(Integer.parseInt(request.getParameter("ampOrgId"))));
+                         
+                         if (ampOrg == null) {
+                            logger.info("ampOrg is null");
+                            return mapping.findForward("index");
+                         }
+                         else {
+                            logger.info("ampOrg is not null");
+                            editForm.setOrg(ampOrg);
+                            return mapping.findForward("forward");
+                         }
+    }
 }

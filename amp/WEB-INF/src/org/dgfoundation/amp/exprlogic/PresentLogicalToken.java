@@ -12,21 +12,21 @@ import org.dgfoundation.amp.ar.cell.CategAmountCell;
 * @see org.dgfoundation.amp.exprlogic.TokenRepository#buildUncommittedLogicalToken()
 */
 public class PresentLogicalToken extends LogicalToken {
-	protected String type;
-	public PresentLogicalToken(String type,boolean negation) {
-		this.negation=negation;
-		this.type=type;
-	}
-	
-	@Override
-	public boolean evaluate(CategAmountCell c) {
-		ret=c.existsMetaString(type);
-		return super.evaluate(c);
-	}
-	
-	@Override
-	public String toString()
-	{
-		return String.format("[%s %s]", this.negation ? "NOT HAS_META " : "HAS_META", this.type); 
-	}
+    protected String type;
+    public PresentLogicalToken(String type,boolean negation) {
+        this.negation=negation;
+        this.type=type;
+    }
+    
+    @Override
+    public boolean evaluate(CategAmountCell c) {
+        ret=c.existsMetaString(type);
+        return super.evaluate(c);
+    }
+    
+    @Override
+    public String toString()
+    {
+        return String.format("[%s %s]", this.negation ? "NOT HAS_META " : "HAS_META", this.type); 
+    }
 }

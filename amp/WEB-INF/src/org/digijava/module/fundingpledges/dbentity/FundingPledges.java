@@ -29,518 +29,518 @@ import org.hibernate.jdbc.Work;
  * @author Diego Dimunzio
  */
 public class FundingPledges implements Comparable<FundingPledges>, Serializable {
-	
-	private static final long serialVersionUID = 1L;
-	@Interchangeable(fieldTitle="ID")
-	private Long id;
-	@Interchangeable(fieldTitle="Title")
-	private AmpCategoryValue title;
-	@Interchangeable(fieldTitle="Status")
-	private AmpCategoryValue status;
-	@Interchangeable(fieldTitle="Title Free Text")
-	private String titleFreeText;
-	@Interchangeable(fieldTitle="Additional Information")
-	private String additionalInformation;
-	@Interchangeable(fieldTitle="Who Authorized Pledge")
-	private String whoAuthorizedPledge;
-	@Interchangeable(fieldTitle="Further Approval Needed")
-	private String furtherApprovalNedded;
-	@Deprecated
-	private AmpOrganisation organization;
-	@Interchangeable(fieldTitle="Organization Group")
-	private AmpOrgGroup organizationGroup;
-	@Interchangeable(fieldTitle="Sector List")
-	private Set<FundingPledgesSector> sectorlist;
-	@Interchangeable(fieldTitle="Location List")
-	private Set<FundingPledgesLocation> locationlist;
-	@Interchangeable(fieldTitle="Program List")
-	private Set<FundingPledgesProgram> programlist;
-	@Interchangeable(fieldTitle="Details")
-	private Set<FundingPledgesDetails> fundingPledgesDetails;
-	// "Point of Contact at Donors Conference on March 31st"
-	@Interchangeable(fieldTitle="Contact Name")
-	private String contactName;
-	@Interchangeable(fieldTitle="Contact Address")
-	private String contactAddress;
-	@Interchangeable(fieldTitle="Contact Email")
-	private String contactEmail;
-	@Interchangeable(fieldTitle="Contact Title")
-	private String contactTitle;
-	@Interchangeable(fieldTitle="Contact Ministry")
-	private String contactMinistry;
-	@Interchangeable(fieldTitle="Contact Telephone")
-	private String contactTelephone;
-	@Interchangeable(fieldTitle="Contact Fax")
-	private String contactFax;
-	@Interchangeable(fieldTitle="Contact Organization")
-	private AmpOrganisation contactOrganization;
-	@Interchangeable(fieldTitle="Contact Alternative Name")
-	private String contactAlternativeName;
-	@Interchangeable(fieldTitle="Contact Alternative Telephone")
-	private String contactAlternativeTelephone;
-	@Interchangeable(fieldTitle="Contact Alternative Email")
-	private String contactAlternativeEmail;
-	//"is Point of Contact for Follow Up"
-	@Interchangeable(fieldTitle="Contact Name 1")
-	private String contactName_1;
-	@Interchangeable(fieldTitle="Contact Address 1")
-	private String contactAddress_1;
-	@Interchangeable(fieldTitle="Contact Email 1")
-	private String contactEmail_1;
-	@Interchangeable(fieldTitle="Contact Title 1")
-	private String contactTitle_1;
-	@Interchangeable(fieldTitle="Contact Ministry 1")
-	private String contactMinistry_1;
-	@Interchangeable(fieldTitle="Contact Telephone 1")
-	private String contactTelephone_1;
-	@Interchangeable(fieldTitle="Contact Fax 1")
-	private String contactFax_1;
-	@Interchangeable(fieldTitle="Contact Organization 1")
-	private AmpOrganisation contactOrganization_1;
-	@Interchangeable(fieldTitle="Contact Alternative Name 1")
-	private String contactAlternativeName_1;
-	@Interchangeable(fieldTitle="Contact Alternative Telephone 1")
-	private String contactAlternativeTelephone_1;
-	@Interchangeable(fieldTitle="Contact Alternative Email 1")
-	private String contactAlternativeEmail_1;
-	@Interchangeable(fieldTitle="Years List")
-	private TreeSet<String> yearsList;
-	@Interchangeable(fieldTitle="Documents")
-	private Set<FundingPledgesDocument> documents;
-	
-	@Override
-	public boolean equals(Object o) {
-		if (o == null) return false;
-		if (!(o instanceof FundingPledges)) return false;
-		FundingPledges p = (FundingPledges)o;
-		return this.getId().equals(p.getId());
-	}
-	
-	@Override
-	public int compareTo(FundingPledges o) {
-		return (int)(this.getId() - o.getId());
-	}
-	
-	/**
-	 * computes the effectively-displayed name of the pledge
-	 * @return
-	 */
-	public String getEffectiveName(){
-		if (PledgesEntityHelper.useFreeText() && (this.titleFreeText != null) && (!this.titleFreeText.isEmpty()))
-			return this.titleFreeText;
-		else 
-			return this.getTitle() == null ? "(null)" : this.getTitle().getValue();
-	}
-	
-	public boolean isUsedInActivityFunding(){
-		return PersistenceManager.getLong(PersistenceManager.getSession().
-				createQuery("SELECT COUNT(*) FROM " + AmpFundingDetail.class.getName() + " p WHERE p.pledgeid = " + this.getId()).uniqueResult()) > 0;
-	}
-	// trash getters / setters below
-	
-	@java.lang.SuppressWarnings("all")
-	public Long getId() {
-		return this.id;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public AmpCategoryValue getTitle() {
-		return this.title;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public AmpCategoryValue getStatus() {
-		return this.status;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public String getTitleFreeText() {
-		return this.titleFreeText;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public String getAdditionalInformation() {
-		return this.additionalInformation;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public String getWhoAuthorizedPledge() {
-		return this.whoAuthorizedPledge;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public String getFurtherApprovalNedded() {
-		return this.furtherApprovalNedded;
-	}
-	
-	@java.lang.Deprecated
-	@java.lang.SuppressWarnings("all")
-	public AmpOrganisation getOrganization() {
-		return this.organization;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public AmpOrgGroup getOrganizationGroup() {
-		return this.organizationGroup;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Set<FundingPledgesSector> getSectorlist() {
-		return this.sectorlist;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Set<FundingPledgesLocation> getLocationlist() {
-		return this.locationlist;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Set<FundingPledgesProgram> getProgramlist() {
-		return this.programlist;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Set<FundingPledgesDetails> getFundingPledgesDetails() {
-		return this.fundingPledgesDetails;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public String getContactName() {
-		return this.contactName;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public String getContactAddress() {
-		return this.contactAddress;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public String getContactEmail() {
-		return this.contactEmail;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public String getContactTitle() {
-		return this.contactTitle;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public String getContactMinistry() {
-		return this.contactMinistry;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public String getContactTelephone() {
-		return this.contactTelephone;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public String getContactFax() {
-		return this.contactFax;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public AmpOrganisation getContactOrganization() {
-		return this.contactOrganization;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public String getContactAlternativeName() {
-		return this.contactAlternativeName;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public String getContactAlternativeTelephone() {
-		return this.contactAlternativeTelephone;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public String getContactAlternativeEmail() {
-		return this.contactAlternativeEmail;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public String getContactName_1() {
-		return this.contactName_1;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public String getContactAddress_1() {
-		return this.contactAddress_1;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public String getContactEmail_1() {
-		return this.contactEmail_1;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public String getContactTitle_1() {
-		return this.contactTitle_1;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public String getContactMinistry_1() {
-		return this.contactMinistry_1;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public String getContactTelephone_1() {
-		return this.contactTelephone_1;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public String getContactFax_1() {
-		return this.contactFax_1;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public AmpOrganisation getContactOrganization_1() {
-		return this.contactOrganization_1;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public String getContactAlternativeName_1() {
-		return this.contactAlternativeName_1;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public String getContactAlternativeTelephone_1() {
-		return this.contactAlternativeTelephone_1;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public String getContactAlternativeEmail_1() {
-		return this.contactAlternativeEmail_1;
-	}
-	
-	/**
-	 * calculates the sum of all the pledges <strong>in the currency of the workspace</strong>
-	 * @param currencyCode: the currency to make calculations in. If null, then use defaultCurrency (workspace / base)
-	 * @return
-	 */
-	public Double getTotalPledgedAmount(String currencyCode) {
-		FundingCalculationsHelper calc = new FundingCalculationsHelper();
-		if (currencyCode == null)
-			currencyCode = AmpARFilter.getDefaultCurrency().getCurrencyCode();
-		calc.doCalculations(this.getFundingPledgesDetails(), currencyCode, true);
-		return calc.getTotalPledged().doubleValue();
-	}
-		
-	@java.lang.SuppressWarnings("all")
-	public TreeSet<String> getYearsList() {
-		return this.yearsList;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setId(final Long id) {
-		this.id = id;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setTitle(final AmpCategoryValue title) {
-		this.title = title;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setStatus(final AmpCategoryValue status) {
-		this.status = status;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setTitleFreeText(final String titleFreeText) {
-		this.titleFreeText = titleFreeText;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setAdditionalInformation(final String additionalInformation) {
-		this.additionalInformation = additionalInformation;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setWhoAuthorizedPledge(final String whoAuthorizedPledge) {
-		this.whoAuthorizedPledge = whoAuthorizedPledge;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setFurtherApprovalNedded(final String furtherApprovalNedded) {
-		this.furtherApprovalNedded = furtherApprovalNedded;
-	}
-	
-	@java.lang.Deprecated
-	@java.lang.SuppressWarnings("all")
-	public void setOrganization(final AmpOrganisation organization) {
-		this.organization = organization;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setOrganizationGroup(final AmpOrgGroup organizationGroup) {
-		this.organizationGroup = organizationGroup;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setSectorlist(final Set<FundingPledgesSector> sectorlist) {
-		this.sectorlist = sectorlist;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setLocationlist(final Set<FundingPledgesLocation> locationlist) {
-		this.locationlist = locationlist;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setProgramlist(final Set<FundingPledgesProgram> programlist) {
-		this.programlist = programlist;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setFundingPledgesDetails(final Set<FundingPledgesDetails> fundingPledgesDetails) {
-		this.fundingPledgesDetails = fundingPledgesDetails;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setContactName(final String contactName) {
-		this.contactName = contactName;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setContactAddress(final String contactAddress) {
-		this.contactAddress = contactAddress;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setContactEmail(final String contactEmail) {
-		this.contactEmail = contactEmail;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setContactTitle(final String contactTitle) {
-		this.contactTitle = contactTitle;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setContactMinistry(final String contactMinistry) {
-		this.contactMinistry = contactMinistry;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setContactTelephone(final String contactTelephone) {
-		this.contactTelephone = contactTelephone;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setContactFax(final String contactFax) {
-		this.contactFax = contactFax;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setContactOrganization(final AmpOrganisation contactOrganization) {
-		this.contactOrganization = contactOrganization;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setContactAlternativeName(final String contactAlternativeName) {
-		this.contactAlternativeName = contactAlternativeName;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setContactAlternativeTelephone(final String contactAlternativeTelephone) {
-		this.contactAlternativeTelephone = contactAlternativeTelephone;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setContactAlternativeEmail(final String contactAlternativeEmail) {
-		this.contactAlternativeEmail = contactAlternativeEmail;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setContactName_1(final String contactName_1) {
-		this.contactName_1 = contactName_1;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setContactAddress_1(final String contactAddress_1) {
-		this.contactAddress_1 = contactAddress_1;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setContactEmail_1(final String contactEmail_1) {
-		this.contactEmail_1 = contactEmail_1;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setContactTitle_1(final String contactTitle_1) {
-		this.contactTitle_1 = contactTitle_1;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setContactMinistry_1(final String contactMinistry_1) {
-		this.contactMinistry_1 = contactMinistry_1;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setContactTelephone_1(final String contactTelephone_1) {
-		this.contactTelephone_1 = contactTelephone_1;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setContactFax_1(final String contactFax_1) {
-		this.contactFax_1 = contactFax_1;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setContactOrganization_1(final AmpOrganisation contactOrganization_1) {
-		this.contactOrganization_1 = contactOrganization_1;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setContactAlternativeName_1(final String contactAlternativeName_1) {
-		this.contactAlternativeName_1 = contactAlternativeName_1;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setContactAlternativeTelephone_1(final String contactAlternativeTelephone_1) {
-		this.contactAlternativeTelephone_1 = contactAlternativeTelephone_1;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setContactAlternativeEmail_1(final String contactAlternativeEmail_1) {
-		this.contactAlternativeEmail_1 = contactAlternativeEmail_1;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setYearsList(final TreeSet<String> yearsList) {
-		this.yearsList = yearsList;
-	}
-	
-	public Set<FundingPledgesDocument> getDocuments(){
-		return this.documents;
-	}
-	
-	public void setDocuments(Set<FundingPledgesDocument> documents){
-		this.documents = documents;
-	}
-	
+    
+    private static final long serialVersionUID = 1L;
+    @Interchangeable(fieldTitle="ID")
+    private Long id;
+    @Interchangeable(fieldTitle="Title")
+    private AmpCategoryValue title;
+    @Interchangeable(fieldTitle="Status")
+    private AmpCategoryValue status;
+    @Interchangeable(fieldTitle="Title Free Text")
+    private String titleFreeText;
+    @Interchangeable(fieldTitle="Additional Information")
+    private String additionalInformation;
+    @Interchangeable(fieldTitle="Who Authorized Pledge")
+    private String whoAuthorizedPledge;
+    @Interchangeable(fieldTitle="Further Approval Needed")
+    private String furtherApprovalNedded;
+    @Deprecated
+    private AmpOrganisation organization;
+    @Interchangeable(fieldTitle="Organization Group")
+    private AmpOrgGroup organizationGroup;
+    @Interchangeable(fieldTitle="Sector List")
+    private Set<FundingPledgesSector> sectorlist;
+    @Interchangeable(fieldTitle="Location List")
+    private Set<FundingPledgesLocation> locationlist;
+    @Interchangeable(fieldTitle="Program List")
+    private Set<FundingPledgesProgram> programlist;
+    @Interchangeable(fieldTitle="Details")
+    private Set<FundingPledgesDetails> fundingPledgesDetails;
+    // "Point of Contact at Donors Conference on March 31st"
+    @Interchangeable(fieldTitle="Contact Name")
+    private String contactName;
+    @Interchangeable(fieldTitle="Contact Address")
+    private String contactAddress;
+    @Interchangeable(fieldTitle="Contact Email")
+    private String contactEmail;
+    @Interchangeable(fieldTitle="Contact Title")
+    private String contactTitle;
+    @Interchangeable(fieldTitle="Contact Ministry")
+    private String contactMinistry;
+    @Interchangeable(fieldTitle="Contact Telephone")
+    private String contactTelephone;
+    @Interchangeable(fieldTitle="Contact Fax")
+    private String contactFax;
+    @Interchangeable(fieldTitle="Contact Organization")
+    private AmpOrganisation contactOrganization;
+    @Interchangeable(fieldTitle="Contact Alternative Name")
+    private String contactAlternativeName;
+    @Interchangeable(fieldTitle="Contact Alternative Telephone")
+    private String contactAlternativeTelephone;
+    @Interchangeable(fieldTitle="Contact Alternative Email")
+    private String contactAlternativeEmail;
+    //"is Point of Contact for Follow Up"
+    @Interchangeable(fieldTitle="Contact Name 1")
+    private String contactName_1;
+    @Interchangeable(fieldTitle="Contact Address 1")
+    private String contactAddress_1;
+    @Interchangeable(fieldTitle="Contact Email 1")
+    private String contactEmail_1;
+    @Interchangeable(fieldTitle="Contact Title 1")
+    private String contactTitle_1;
+    @Interchangeable(fieldTitle="Contact Ministry 1")
+    private String contactMinistry_1;
+    @Interchangeable(fieldTitle="Contact Telephone 1")
+    private String contactTelephone_1;
+    @Interchangeable(fieldTitle="Contact Fax 1")
+    private String contactFax_1;
+    @Interchangeable(fieldTitle="Contact Organization 1")
+    private AmpOrganisation contactOrganization_1;
+    @Interchangeable(fieldTitle="Contact Alternative Name 1")
+    private String contactAlternativeName_1;
+    @Interchangeable(fieldTitle="Contact Alternative Telephone 1")
+    private String contactAlternativeTelephone_1;
+    @Interchangeable(fieldTitle="Contact Alternative Email 1")
+    private String contactAlternativeEmail_1;
+    @Interchangeable(fieldTitle="Years List")
+    private TreeSet<String> yearsList;
+    @Interchangeable(fieldTitle="Documents")
+    private Set<FundingPledgesDocument> documents;
+    
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) return false;
+        if (!(o instanceof FundingPledges)) return false;
+        FundingPledges p = (FundingPledges)o;
+        return this.getId().equals(p.getId());
+    }
+    
+    @Override
+    public int compareTo(FundingPledges o) {
+        return (int)(this.getId() - o.getId());
+    }
+    
+    /**
+     * computes the effectively-displayed name of the pledge
+     * @return
+     */
+    public String getEffectiveName(){
+        if (PledgesEntityHelper.useFreeText() && (this.titleFreeText != null) && (!this.titleFreeText.isEmpty()))
+            return this.titleFreeText;
+        else 
+            return this.getTitle() == null ? "(null)" : this.getTitle().getValue();
+    }
+    
+    public boolean isUsedInActivityFunding(){
+        return PersistenceManager.getLong(PersistenceManager.getSession().
+                createQuery("SELECT COUNT(*) FROM " + AmpFundingDetail.class.getName() + " p WHERE p.pledgeid = " + this.getId()).uniqueResult()) > 0;
+    }
+    // trash getters / setters below
+    
+    @java.lang.SuppressWarnings("all")
+    public Long getId() {
+        return this.id;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public AmpCategoryValue getTitle() {
+        return this.title;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public AmpCategoryValue getStatus() {
+        return this.status;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public String getTitleFreeText() {
+        return this.titleFreeText;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public String getAdditionalInformation() {
+        return this.additionalInformation;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public String getWhoAuthorizedPledge() {
+        return this.whoAuthorizedPledge;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public String getFurtherApprovalNedded() {
+        return this.furtherApprovalNedded;
+    }
+    
+    @java.lang.Deprecated
+    @java.lang.SuppressWarnings("all")
+    public AmpOrganisation getOrganization() {
+        return this.organization;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public AmpOrgGroup getOrganizationGroup() {
+        return this.organizationGroup;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Set<FundingPledgesSector> getSectorlist() {
+        return this.sectorlist;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Set<FundingPledgesLocation> getLocationlist() {
+        return this.locationlist;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Set<FundingPledgesProgram> getProgramlist() {
+        return this.programlist;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Set<FundingPledgesDetails> getFundingPledgesDetails() {
+        return this.fundingPledgesDetails;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public String getContactName() {
+        return this.contactName;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public String getContactAddress() {
+        return this.contactAddress;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public String getContactEmail() {
+        return this.contactEmail;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public String getContactTitle() {
+        return this.contactTitle;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public String getContactMinistry() {
+        return this.contactMinistry;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public String getContactTelephone() {
+        return this.contactTelephone;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public String getContactFax() {
+        return this.contactFax;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public AmpOrganisation getContactOrganization() {
+        return this.contactOrganization;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public String getContactAlternativeName() {
+        return this.contactAlternativeName;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public String getContactAlternativeTelephone() {
+        return this.contactAlternativeTelephone;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public String getContactAlternativeEmail() {
+        return this.contactAlternativeEmail;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public String getContactName_1() {
+        return this.contactName_1;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public String getContactAddress_1() {
+        return this.contactAddress_1;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public String getContactEmail_1() {
+        return this.contactEmail_1;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public String getContactTitle_1() {
+        return this.contactTitle_1;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public String getContactMinistry_1() {
+        return this.contactMinistry_1;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public String getContactTelephone_1() {
+        return this.contactTelephone_1;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public String getContactFax_1() {
+        return this.contactFax_1;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public AmpOrganisation getContactOrganization_1() {
+        return this.contactOrganization_1;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public String getContactAlternativeName_1() {
+        return this.contactAlternativeName_1;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public String getContactAlternativeTelephone_1() {
+        return this.contactAlternativeTelephone_1;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public String getContactAlternativeEmail_1() {
+        return this.contactAlternativeEmail_1;
+    }
+    
+    /**
+     * calculates the sum of all the pledges <strong>in the currency of the workspace</strong>
+     * @param currencyCode: the currency to make calculations in. If null, then use defaultCurrency (workspace / base)
+     * @return
+     */
+    public Double getTotalPledgedAmount(String currencyCode) {
+        FundingCalculationsHelper calc = new FundingCalculationsHelper();
+        if (currencyCode == null)
+            currencyCode = AmpARFilter.getDefaultCurrency().getCurrencyCode();
+        calc.doCalculations(this.getFundingPledgesDetails(), currencyCode, true);
+        return calc.getTotalPledged().doubleValue();
+    }
+        
+    @java.lang.SuppressWarnings("all")
+    public TreeSet<String> getYearsList() {
+        return this.yearsList;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setId(final Long id) {
+        this.id = id;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setTitle(final AmpCategoryValue title) {
+        this.title = title;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setStatus(final AmpCategoryValue status) {
+        this.status = status;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setTitleFreeText(final String titleFreeText) {
+        this.titleFreeText = titleFreeText;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setAdditionalInformation(final String additionalInformation) {
+        this.additionalInformation = additionalInformation;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setWhoAuthorizedPledge(final String whoAuthorizedPledge) {
+        this.whoAuthorizedPledge = whoAuthorizedPledge;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setFurtherApprovalNedded(final String furtherApprovalNedded) {
+        this.furtherApprovalNedded = furtherApprovalNedded;
+    }
+    
+    @java.lang.Deprecated
+    @java.lang.SuppressWarnings("all")
+    public void setOrganization(final AmpOrganisation organization) {
+        this.organization = organization;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setOrganizationGroup(final AmpOrgGroup organizationGroup) {
+        this.organizationGroup = organizationGroup;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setSectorlist(final Set<FundingPledgesSector> sectorlist) {
+        this.sectorlist = sectorlist;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setLocationlist(final Set<FundingPledgesLocation> locationlist) {
+        this.locationlist = locationlist;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setProgramlist(final Set<FundingPledgesProgram> programlist) {
+        this.programlist = programlist;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setFundingPledgesDetails(final Set<FundingPledgesDetails> fundingPledgesDetails) {
+        this.fundingPledgesDetails = fundingPledgesDetails;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setContactName(final String contactName) {
+        this.contactName = contactName;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setContactAddress(final String contactAddress) {
+        this.contactAddress = contactAddress;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setContactEmail(final String contactEmail) {
+        this.contactEmail = contactEmail;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setContactTitle(final String contactTitle) {
+        this.contactTitle = contactTitle;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setContactMinistry(final String contactMinistry) {
+        this.contactMinistry = contactMinistry;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setContactTelephone(final String contactTelephone) {
+        this.contactTelephone = contactTelephone;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setContactFax(final String contactFax) {
+        this.contactFax = contactFax;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setContactOrganization(final AmpOrganisation contactOrganization) {
+        this.contactOrganization = contactOrganization;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setContactAlternativeName(final String contactAlternativeName) {
+        this.contactAlternativeName = contactAlternativeName;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setContactAlternativeTelephone(final String contactAlternativeTelephone) {
+        this.contactAlternativeTelephone = contactAlternativeTelephone;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setContactAlternativeEmail(final String contactAlternativeEmail) {
+        this.contactAlternativeEmail = contactAlternativeEmail;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setContactName_1(final String contactName_1) {
+        this.contactName_1 = contactName_1;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setContactAddress_1(final String contactAddress_1) {
+        this.contactAddress_1 = contactAddress_1;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setContactEmail_1(final String contactEmail_1) {
+        this.contactEmail_1 = contactEmail_1;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setContactTitle_1(final String contactTitle_1) {
+        this.contactTitle_1 = contactTitle_1;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setContactMinistry_1(final String contactMinistry_1) {
+        this.contactMinistry_1 = contactMinistry_1;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setContactTelephone_1(final String contactTelephone_1) {
+        this.contactTelephone_1 = contactTelephone_1;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setContactFax_1(final String contactFax_1) {
+        this.contactFax_1 = contactFax_1;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setContactOrganization_1(final AmpOrganisation contactOrganization_1) {
+        this.contactOrganization_1 = contactOrganization_1;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setContactAlternativeName_1(final String contactAlternativeName_1) {
+        this.contactAlternativeName_1 = contactAlternativeName_1;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setContactAlternativeTelephone_1(final String contactAlternativeTelephone_1) {
+        this.contactAlternativeTelephone_1 = contactAlternativeTelephone_1;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setContactAlternativeEmail_1(final String contactAlternativeEmail_1) {
+        this.contactAlternativeEmail_1 = contactAlternativeEmail_1;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setYearsList(final TreeSet<String> yearsList) {
+        this.yearsList = yearsList;
+    }
+    
+    public Set<FundingPledgesDocument> getDocuments(){
+        return this.documents;
+    }
+    
+    public void setDocuments(Set<FundingPledgesDocument> documents){
+        this.documents = documents;
+    }
+    
     public static String sqlStringForName(String idSource)
     {
-    	return InternationalizedModelDescription.getForProperty(FundingPledges.class, "name").getSQLFunctionCall(idSource);
+        return InternationalizedModelDescription.getForProperty(FundingPledges.class, "name").getSQLFunctionCall(idSource);
     }
     
     //introduced for the sake of AMP-18058
     public static Collection<String> getPledgeDocumentUuids() {
-    	final Collection<String> uuids = new HashSet<String>();
+        final Collection<String> uuids = new HashSet<String>();
         PersistenceManager.getSession().doWork(new Work(){
-			public void execute(Connection conn) throws SQLException {
-	            
-	    		String query = "SELECT uuid FROM amp_funding_pledges_document";
-	    		//the only limitation here might be that 500 results are fetched only there -- look out for it
-	    		try(RsInfo rsi = SQLUtils.rawRunQuery(conn, query, null)) {		            					
-	    			while (rsi.rs.next()) {
-	    				uuids.add(rsi.rs.getString("uuid"));
-	    			}
-	    		}
-			}
-		});    	
-    	return uuids;
+            public void execute(Connection conn) throws SQLException {
+                
+                String query = "SELECT uuid FROM amp_funding_pledges_document";
+                //the only limitation here might be that 500 results are fetched only there -- look out for it
+                try(RsInfo rsi = SQLUtils.rawRunQuery(conn, query, null)) {                                     
+                    while (rsi.rs.next()) {
+                        uuids.add(rsi.rs.getString("uuid"));
+                    }
+                }
+            }
+        });     
+        return uuids;
     }
 }

@@ -19,23 +19,23 @@ import com.lowagie.text.pdf.PdfPTable;
  */
 public class TotalAmountColumnPDF extends CellColumnPDF {
 
-	/**
-	 * @param parent
-	 * @param item
-	 */
-	public TotalAmountColumnPDF(Exporter parent, Viewable item) {
-		super(parent, item);
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * @param parent
+     * @param item
+     */
+    public TotalAmountColumnPDF(Exporter parent, Viewable item) {
+        super(parent, item);
+        // TODO Auto-generated constructor stub
+    }
 
-	/**
-	 * @param table
-	 * @param item
-	 * @param ownerId
-	 */
-	public TotalAmountColumnPDF(PdfPTable table, Viewable item, Long ownerId) {
-		super(table, item, ownerId);
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * @param table
+     * @param item
+     * @param ownerId
+     */
+    public TotalAmountColumnPDF(PdfPTable table, Viewable item, Long ownerId) {
+        super(table, item, ownerId);
+        // TODO Auto-generated constructor stub
+    }
 
 }

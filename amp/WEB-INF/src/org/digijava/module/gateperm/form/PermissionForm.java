@@ -24,165 +24,165 @@ import org.springframework.beans.BeanWrapperImpl;
  * @since 04.09.2007
  */
 public class PermissionForm extends ActionForm {
-	private String name;
-	private String description;
-	private String type;
-	private Long id;
-	private Boolean intersection;
-	
-	public Boolean getIntersection() {
-		return intersection;
-	}
+    private String name;
+    private String description;
+    private String type;
+    private Long id;
+    private Boolean intersection;
+    
+    public Boolean getIntersection() {
+        return intersection;
+    }
 
-	public void setIntersection(Boolean intersection) {
-		this.intersection = intersection;
-	}
+    public void setIntersection(Boolean intersection) {
+        this.intersection = intersection;
+    }
 
-	
-	@Override
-	public void reset(ActionMapping mapping, HttpServletRequest request) {
-		// TODO Auto-generated method stub
-		super.reset(mapping, request);
-		intersection=false;
-	}
-
-
-
-	private Long[] permissions;
-	private String gateTypeName;
-	private List<MetaInfo> gateParameters;
-	private String[] actions;
-	
-	private String mode;
-	
-	private List<Class> _availableGateTypes;
-	private List<BeanWrapperImpl> _availableActions;
-	private List<Permission> _availablePermissions;
-	
-	
-	public List<Permission> get_availablePermissions() {
-		return _availablePermissions;
-	}
-
-	public void List_availablePermissions(List<Permission> permissions) {
-		_availablePermissions = permissions;
-	}
-	
-	public void clear() {
-		permissions=null;
-		gateTypeName="";
-		gateParameters= new ArrayList<MetaInfo>();
-		actions=null;
-		name="";
-		description="";
-		mode="";
-		id=new Long(0);
-		type="Gate";
-		intersection=false;
-	}
-
-	public MetaInfo getGateParameter(int index) {
-		return gateParameters.get(index);
-	}
+    
+    @Override
+    public void reset(ActionMapping mapping, HttpServletRequest request) {
+        // TODO Auto-generated method stub
+        super.reset(mapping, request);
+        intersection=false;
+    }
 
 
-	
-	
-	/** Comment for <code>serialVersionUID</code> */
-	private static final long serialVersionUID = -4018921971886803673L;
+
+    private Long[] permissions;
+    private String gateTypeName;
+    private List<MetaInfo> gateParameters;
+    private String[] actions;
+    
+    private String mode;
+    
+    private List<Class> _availableGateTypes;
+    private List<BeanWrapperImpl> _availableActions;
+    private List<Permission> _availablePermissions;
+    
+    
+    public List<Permission> get_availablePermissions() {
+        return _availablePermissions;
+    }
+
+    public void List_availablePermissions(List<Permission> permissions) {
+        _availablePermissions = permissions;
+    }
+    
+    public void clear() {
+        permissions=null;
+        gateTypeName="";
+        gateParameters= new ArrayList<MetaInfo>();
+        actions=null;
+        name="";
+        description="";
+        mode="";
+        id=new Long(0);
+        type="Gate";
+        intersection=false;
+    }
+
+    public MetaInfo getGateParameter(int index) {
+        return gateParameters.get(index);
+    }
 
 
-	public List<BeanWrapperImpl> get_availableActions() {
-		return _availableActions;
-	}
+    
+    
+    /** Comment for <code>serialVersionUID</code> */
+    private static final long serialVersionUID = -4018921971886803673L;
 
-	public void set_availableActions(List<BeanWrapperImpl> actions2) {
-		_availableActions = actions2;
-	}
 
-	public List<Class> get_availableGateTypes() {
-		return _availableGateTypes;
-	}
+    public List<BeanWrapperImpl> get_availableActions() {
+        return _availableActions;
+    }
 
-	public void set_availableGateTypes(List<Class> gateTypes) {
-		_availableGateTypes = gateTypes;
-	}
+    public void set_availableActions(List<BeanWrapperImpl> actions2) {
+        _availableActions = actions2;
+    }
 
-	public String[] getActions() {
-		return actions;
-	}
+    public List<Class> get_availableGateTypes() {
+        return _availableGateTypes;
+    }
 
-	public void setActions(String[] actions) {
-		this.actions = actions;
-	}
+    public void set_availableGateTypes(List<Class> gateTypes) {
+        _availableGateTypes = gateTypes;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public String[] getActions() {
+        return actions;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public void setActions(String[] actions) {
+        this.actions = actions;
+    }
 
-	public List<MetaInfo> getGateParameters() {
-		return gateParameters;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public void setGateParameters(List<MetaInfo> gateParameters) {
-		this.gateParameters = gateParameters;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	public String getGateTypeName() {
-		return gateTypeName;
-	}
+    public List<MetaInfo> getGateParameters() {
+        return gateParameters;
+    }
 
-	public void setGateTypeName(String gateTypeName) {
-		this.gateTypeName = gateTypeName;
-	}
+    public void setGateParameters(List<MetaInfo> gateParameters) {
+        this.gateParameters = gateParameters;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getGateTypeName() {
+        return gateTypeName;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setGateTypeName(String gateTypeName) {
+        this.gateTypeName = gateTypeName;
+    }
 
-	public Long[] getPermissions() {
-		return permissions;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setPermissions(Long[] permissions) {
-		this.permissions = permissions;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getType() {
-		return type;
-	}
+    public Long[] getPermissions() {
+        return permissions;
+    }
 
-	public void setType(String type) {
-		this.type = type;
-	}
+    public void setPermissions(Long[] permissions) {
+        this.permissions = permissions;
+    }
 
-	public void set_availablePermissions(List<Permission> permissions) {
-		_availablePermissions = permissions;
-	}
+    public String getType() {
+        return type;
+    }
 
-	public String getMode() {
-		return mode;
-	}
+    public void setType(String type) {
+        this.type = type;
+    }
 
-	public void setMode(String mode) {
-		this.mode = mode;
-	}
+    public void set_availablePermissions(List<Permission> permissions) {
+        _availablePermissions = permissions;
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public String getMode() {
+        return mode;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setMode(String mode) {
+        this.mode = mode;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
 
 }

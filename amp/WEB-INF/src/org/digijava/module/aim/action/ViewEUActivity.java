@@ -20,23 +20,23 @@ import org.digijava.module.aim.util.DbUtil;
  *
  */
 public class ViewEUActivity extends Action {
-	private static Logger logger = Logger.getLogger(ViewEUActivity.class);
+    private static Logger logger = Logger.getLogger(ViewEUActivity.class);
 
-	public ActionForward execute(ActionMapping mapping, ActionForm form, 
-			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
-			{
+    public ActionForward execute(ActionMapping mapping, ActionForm form, 
+            HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
+            {
 
-		Long activityId=new Long(request.getParameter("euActivityId"));
-		
-		HttpSession session = request.getSession();
-		if (session.getAttribute("currentMember") == null) {
-			return mapping.findForward("index");
-		}
-		
-		EUActivity eua=(EUActivity) DbUtil.getEuActivity(activityId);
-		
-		request.setAttribute("euActivity",eua);
-		return mapping.findForward("forward");
-	}
-	
+        Long activityId=new Long(request.getParameter("euActivityId"));
+        
+        HttpSession session = request.getSession();
+        if (session.getAttribute("currentMember") == null) {
+            return mapping.findForward("index");
+        }
+        
+        EUActivity eua=(EUActivity) DbUtil.getEuActivity(activityId);
+        
+        request.setAttribute("euActivity",eua);
+        return mapping.findForward("forward");
+    }
+    
 }

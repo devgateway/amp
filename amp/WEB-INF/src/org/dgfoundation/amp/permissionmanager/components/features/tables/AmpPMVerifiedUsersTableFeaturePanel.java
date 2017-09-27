@@ -28,54 +28,54 @@ import org.digijava.module.aim.helper.TeamMember;
  */
 public class AmpPMVerifiedUsersTableFeaturePanel extends AmpFormTableFeaturePanel {
 
-	/**
-	 * @param id
-	 * @param model
-	 * @param fmName
-	 * @throws Exception
-	 */
-	public AmpPMVerifiedUsersTableFeaturePanel(String id, IModel model, String fmName) throws Exception {
-		super(id, model, fmName);
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * @param id
+     * @param model
+     * @param fmName
+     * @throws Exception
+     */
+    public AmpPMVerifiedUsersTableFeaturePanel(String id, IModel model, String fmName) throws Exception {
+        super(id, model, fmName);
+        // TODO Auto-generated constructor stub
+    }
 
-	/**
-	 * @param id
-	 * @param usersSetModel
-	 * @param fmName
-	 * @param hideLeadingNewLine
-	 * @throws Exception
-	 */
-	public AmpPMVerifiedUsersTableFeaturePanel(String id,final IModel<Set<User>> usersSetModel, String fmName, boolean hideLeadingNewLine) throws Exception {
-		super(id, usersSetModel, fmName, hideLeadingNewLine);
+    /**
+     * @param id
+     * @param usersSetModel
+     * @param fmName
+     * @param hideLeadingNewLine
+     * @throws Exception
+     */
+    public AmpPMVerifiedUsersTableFeaturePanel(String id,final IModel<Set<User>> usersSetModel, String fmName, boolean hideLeadingNewLine) throws Exception {
+        super(id, usersSetModel, fmName, hideLeadingNewLine);
 
-		final AbstractReadOnlyModel<List<User>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(usersSetModel);
-		
-		list = new PageableListView<User>("verifiedUsersList", listModel, 5) {
-			private static final long serialVersionUID = 7218457979728871528L;
-			@Override
-			protected void populateItem(final ListItem<User> item) {
-				final MarkupContainer listParent=this.getParent();
-				item.add(new Label("userLabel", item.getModelObject().getName()));
-				item.add(new Label("userEmailLabel", item.getModelObject().getEmail()));
-				
+        final AbstractReadOnlyModel<List<User>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(usersSetModel);
+        
+        list = new PageableListView<User>("verifiedUsersList", listModel, 5) {
+            private static final long serialVersionUID = 7218457979728871528L;
+            @Override
+            protected void populateItem(final ListItem<User> item) {
+                final MarkupContainer listParent=this.getParent();
+                item.add(new Label("userLabel", item.getModelObject().getName()));
+                item.add(new Label("userEmailLabel", item.getModelObject().getEmail()));
+                
                 final AmpDeleteLinkField propertyDeleteLink = new AmpDeleteLinkField("removeSelectedUser", "Remove Selected User Link") {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                    	usersSetModel.getObject().remove(item.getModelObject());
+                        usersSetModel.getObject().remove(item.getModelObject());
                         list.removeAll();
                         target.add(AmpPMVerifiedUsersTableFeaturePanel.this.getParent());
                     }
                 };
                 item.add(propertyDeleteLink);
-				
-			}
-		};
-		list.setReuseItems(true);
-		add(list);
-		
-	
-	}
+                
+            }
+        };
+        list.setReuseItems(true);
+        add(list);
+        
+    
+    }
 
 }

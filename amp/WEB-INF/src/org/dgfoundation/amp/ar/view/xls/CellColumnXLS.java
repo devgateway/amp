@@ -25,47 +25,47 @@ import org.digijava.module.aim.util.FeaturesUtil;
  */
 public class CellColumnXLS extends XLSExporter {
 
-	/**
-	 * @param parent
-	 * @param item
-	 */
-	public CellColumnXLS(Exporter parent, Viewable item) {
-		super(parent, item);
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * @param parent
+     * @param item
+     */
+    public CellColumnXLS(Exporter parent, Viewable item) {
+        super(parent, item);
+        // TODO Auto-generated constructor stub
+    }
 
-	/**
-	 * @param sheet
-	 * @param row
-	 * @param rowId
-	 * @param colId
-	 * @param ownerId
-	 * @param item
-	 */
-	public CellColumnXLS(HSSFWorkbook wb,HSSFSheet sheet, HSSFRow row, IntWrapper rowId,
-			IntWrapper colId, Long ownerId, Viewable item) {
-		super(wb, sheet, row, rowId, colId, ownerId, item);
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * @param sheet
+     * @param row
+     * @param rowId
+     * @param colId
+     * @param ownerId
+     * @param item
+     */
+    public CellColumnXLS(HSSFWorkbook wb,HSSFSheet sheet, HSSFRow row, IntWrapper rowId,
+            IntWrapper colId, Long ownerId, Viewable item) {
+        super(wb, sheet, row, rowId, colId, ownerId, item);
+        // TODO Auto-generated constructor stub
+    }
 
-	/* (non-Javadoc)
-	 * @see org.dgfoundation.amp.ar.Exporter#generate()
-	 */
-	public void generate() {
-		CellColumn col = (CellColumn) item;
-		Cell c = col.getByOwner(ownerId);
-		 if (c != null) {
-			 c.invokeExporter(this);
-		 }
-		 else {
-			 HSSFCell cell=this.getRegularCell();
-			 if (col.getClass().toString().equalsIgnoreCase("class org.dgfoundation.amp.ar.TotalAmountColumn") && FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.REPORTS_EMPTY_VALUES_AS_ZERO_XLS)){
-				 cell.setCellValue(0);
-			 }else{
-				 cell.setCellValue(" ");
-			 }
-			 colId.inc();
-		 }
-	}
+    /* (non-Javadoc)
+     * @see org.dgfoundation.amp.ar.Exporter#generate()
+     */
+    public void generate() {
+        CellColumn col = (CellColumn) item;
+        Cell c = col.getByOwner(ownerId);
+         if (c != null) {
+             c.invokeExporter(this);
+         }
+         else {
+             HSSFCell cell=this.getRegularCell();
+             if (col.getClass().toString().equalsIgnoreCase("class org.dgfoundation.amp.ar.TotalAmountColumn") && FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.REPORTS_EMPTY_VALUES_AS_ZERO_XLS)){
+                 cell.setCellValue(0);
+             }else{
+                 cell.setCellValue(" ");
+             }
+             colId.inc();
+         }
+    }
 
 }

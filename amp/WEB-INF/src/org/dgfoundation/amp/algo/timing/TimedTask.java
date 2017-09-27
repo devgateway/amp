@@ -7,5 +7,5 @@ package org.dgfoundation.amp.algo.timing;
  * @param <K> the time of exception thrown by the client code
  */
 public interface TimedTask<K extends Exception> {
-	public void run(RunNode selfTask) throws K;
+    public void run(RunNode selfTask) throws K;
 }

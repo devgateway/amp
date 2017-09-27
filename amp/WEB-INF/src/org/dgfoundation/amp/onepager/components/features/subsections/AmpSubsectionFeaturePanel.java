@@ -20,37 +20,37 @@ import org.digijava.module.aim.util.FeaturesUtil;
  */
 public abstract class AmpSubsectionFeaturePanel<T> extends AmpFeaturePanel<T> {
 
-	private TransparentWebMarkupContainer slider;
+    private TransparentWebMarkupContainer slider;
 
-	/**
-	 * @param id
-	 * @param fmName
-	 * @throws Exception
-	 */
-	public AmpSubsectionFeaturePanel(String id, String fmName){
-		this(id, fmName,null);
-		
-	}
+    /**
+     * @param id
+     * @param fmName
+     * @throws Exception
+     */
+    public AmpSubsectionFeaturePanel(String id, String fmName){
+        this(id, fmName,null);
+        
+    }
 
-	/**
-	 * @param id
-	 * @param fmName
-	 * @param model
-	 * @throws Exception
-	 */
-	public AmpSubsectionFeaturePanel(String id, String fmName, IModel<T> model){
+    /**
+     * @param id
+     * @param fmName
+     * @param model
+     * @throws Exception
+     */
+    public AmpSubsectionFeaturePanel(String id, String fmName, IModel<T> model){
         this(id, fmName, model, false);
-	}
+    }
 
     public AmpSubsectionFeaturePanel(String id, String fmName, IModel<T> model, boolean hideLabel){
         this(id, fmName, model , hideLabel, false);
     }
-	public AmpSubsectionFeaturePanel(String id, String fmName, IModel<T> model, boolean hideLabel, boolean hideAmountsInThousandsWarning) {
-		this(id, fmName,  model, hideLabel, hideAmountsInThousandsWarning,true);
-	}
+    public AmpSubsectionFeaturePanel(String id, String fmName, IModel<T> model, boolean hideLabel, boolean hideAmountsInThousandsWarning) {
+        this(id, fmName,  model, hideLabel, hideAmountsInThousandsWarning,true);
+    }
 
-	public AmpSubsectionFeaturePanel(String id, String fmName, IModel<T> model, boolean hideLabel, boolean hideAmountsInThousandsWarning,boolean showSummary) {
-		super(id, model,fmName, hideLabel);
+    public AmpSubsectionFeaturePanel(String id, String fmName, IModel<T> model, boolean hideLabel, boolean hideAmountsInThousandsWarning,boolean showSummary) {
+        super(id, model,fmName, hideLabel);
         Model<String> labelText = new Model<String>();
         Label amountsInThousandsLabel = new Label("amountsInThousands", labelText);
         amountsInThousandsLabel.setVisibilityAllowed(false);
@@ -72,18 +72,18 @@ public abstract class AmpSubsectionFeaturePanel<T> extends AmpFeaturePanel<T> {
 
         amountsInThousandsLabel.setVisibilityAllowed(!hideAmountsInThousandsWarning);
 
-		slider = new TransparentWebMarkupContainer("slider");
-		slider.setOutputMarkupId(true);
-		add(slider);
-		if (showSummary) {
-			TransparentWebMarkupContainer summary = new TransparentWebMarkupContainer("featureSummary");
-			add(summary);
-		}
-	}
-	
-	public TransparentWebMarkupContainer getSlider() {
-		return slider;
-	}
+        slider = new TransparentWebMarkupContainer("slider");
+        slider.setOutputMarkupId(true);
+        add(slider);
+        if (showSummary) {
+            TransparentWebMarkupContainer summary = new TransparentWebMarkupContainer("featureSummary");
+            add(summary);
+        }
+    }
+    
+    public TransparentWebMarkupContainer getSlider() {
+        return slider;
+    }
 
 
 }

@@ -16,37 +16,37 @@ package org.dgfoundation.amp.ar.exception;
  */
 public class IncompatibleColumnException extends Exception {
 
-	/**
-	 * 
-	 */
-	public IncompatibleColumnException() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * 
+     */
+    public IncompatibleColumnException() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
 
-	/**
-	 * @param message
-	 */
-	public IncompatibleColumnException(String message) {
-		super(message);
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * @param message
+     */
+    public IncompatibleColumnException(String message) {
+        super(message);
+        // TODO Auto-generated constructor stub
+    }
 
-	/**
-	 * @param message
-	 * @param cause
-	 */
-	public IncompatibleColumnException(String message, Throwable cause) {
-		super(message, cause);
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * @param message
+     * @param cause
+     */
+    public IncompatibleColumnException(String message, Throwable cause) {
+        super(message, cause);
+        // TODO Auto-generated constructor stub
+    }
 
-	/**
-	 * @param cause
-	 */
-	public IncompatibleColumnException(Throwable cause) {
-		super(cause);
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * @param cause
+     */
+    public IncompatibleColumnException(Throwable cause) {
+        super(cause);
+        // TODO Auto-generated constructor stub
+    }
 
 }

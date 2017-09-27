@@ -1,17 +1,11 @@
-/**
- * 
- */
 package org.digijava.kernel.ampapi.endpoints.activity;
 
 import static org.digijava.kernel.ampapi.endpoints.activity.SaveMode.DRAFT;
 import static org.digijava.kernel.ampapi.endpoints.activity.SaveMode.SUBMIT;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -38,7 +32,6 @@ import org.digijava.kernel.ampapi.endpoints.activity.utils.AIHelper;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
-import org.digijava.kernel.ampapi.endpoints.common.ReflectionUtil;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.exception.ApiExceptionMapper;
 import org.digijava.kernel.ampapi.endpoints.security.SecurityErrors;
@@ -50,7 +43,6 @@ import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
@@ -59,7 +51,6 @@ import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActor;
-import org.digijava.module.aim.dbentity.AmpAgreement;
 import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpComponent;
@@ -96,7 +87,7 @@ import org.hibernate.StaleStateException;
  * 
  * @author Nadejda Mandrescu
  */
-public class ActivityImporter {
+public class ActivityImporter extends ObjectImporter {
 	private static final Logger logger = Logger.getLogger(ActivityImporter.class);
 	/**
 	 * FM path for the "Save as Draft" feature being enabled 
@@ -106,19 +97,12 @@ public class ActivityImporter {
 	private AmpActivityVersion newActivity = null;
 	private AmpActivityVersion oldActivity = null;
 	private JsonBean oldJson = null;
-	private JsonBean newJson = null;
-	private Map<Integer, ApiErrorMessage> errors = new HashMap<Integer, ApiErrorMessage>();
-	protected Map<String, List<PossibleValue>> possibleValuesCached = new HashMap<>();
-	protected Map<String, String> possibleValuesQuery = new HashMap<String, String>();
-	protected Map<Object, Field> activityFieldsForPostprocess = new HashMap<Object, Field>();
 	private boolean update  = false;
 	private SaveMode requestedSaveMode;
 	private boolean downgradedToDraftSave = false;
-	private InputValidatorProcessor validator = new InputValidatorProcessor();
 	private List<AmpContentTranslation> translations = new ArrayList<AmpContentTranslation>();
 	private boolean isDraftFMEnabled;
 	private boolean isMultilingual;
-	private TranslationSettings trnSettings;
 	private User currentUser;
 	private String sourceURL;
     private String endpointContextPath;
@@ -130,61 +114,18 @@ public class ActivityImporter {
 	private Memoizer<Map<String, AmpActivityProgramSettings>> programSettingsByName =
 			new Memoizer<>(this::loadProgramSettings);
 
-    protected void init(JsonBean newJson, boolean update, String endpointContextPath) {
+	public ActivityImporter() {
+		super(AmpActivityFields.class, new InputValidatorProcessor(InputValidatorProcessor.getActivityValidators()));
+	}
+
+	private void init(JsonBean newJson, boolean update, String endpointContextPath) {
 		this.sourceURL = TLSUtils.getRequest().getRequestURL().toString();
 		this.update = update;
 		this.currentUser = TeamUtil.getCurrentUser();
 		this.newJson = newJson;
 		this.isDraftFMEnabled = FMVisibility.isVisible(SAVE_AS_DRAFT_PATH, null);
 		this.isMultilingual = ContentTranslationUtil.multilingualIsEnabled();
-		this.trnSettings = TranslationSettings.getCurrent();
         this.endpointContextPath = endpointContextPath;
-	}
-
-    /**
-     * Cleans all the fields of the new activity (except for AMP ID and internal ID),
-     * in the case it's an update process.
-     * It has to be this way because otherwise it would contain leftover data from the old activity 
-     * (in m2ms, like sectors)
-     */
-    private void cleanupNewActivity() {
-    	if (newActivity == null)
-    		return;
-    	
-		Map<String, Method> aafMethods = new HashMap<String, Method>();
-		for (Method method : AmpActivityFields.class.getMethods()) {
-			aafMethods.put(method.getName(), method);
-		}
-		
-		for (Field field : AmpActivityFields.class.getDeclaredFields()) {
-			Interchangeable ant = field.getAnnotation(Interchangeable.class);
-			if (isImportable(ant)) {
-				try {
-					if (ant.fieldTitle().equals(ActivityFieldsConstants.AMP_ACTIVITY_ID) ||
-							ant.fieldTitle().equals(ActivityFieldsConstants.AMP_ID))
-						continue;
-					// clean up everything importable in the new activity
-					Method setterMeth = aafMethods.get(InterchangeUtils.getSetterMethodName(field.getName()));
-					Method getterMeth = aafMethods.get(InterchangeUtils.getGetterMethodName(field.getName()));
-					if (Collection.class.isAssignableFrom(field.getType())) {
-						@SuppressWarnings("unchecked")
-						Collection<Object> col = (Collection<Object>) getterMeth.invoke(newActivity);
-						if (col != null)
-							col.clear();
-					} else {
-						setterMeth.invoke(newActivity, new Object[]{null});
-					}
-				} catch (Exception e) {
-					throw new RuntimeException(e);
-				}
-			}
-		}
-    }
-    
-	private boolean isImportable(Interchangeable ant) {
-		return ant != null && (ant.importable()
-				|| (AmpOfflineModeHolder.isAmpOfflineMode()
-				&& FieldsEnumerator.OFFLINE_REQUIRED_FIELDS.contains(ant.fieldTitle())));
 	}
 
 	/**
@@ -264,8 +205,8 @@ public class ActivityImporter {
 				oldActivity = ActivityVersionUtil.cloneActivity(oldActivity, teamMember);
 				oldActivity.setAmpId(newActivity.getAmpId());
 				oldActivity.setAmpActivityGroup(newActivity.getAmpActivityGroup().clone());
-				
-				cleanupNewActivity();
+
+				cleanImportableFields(fieldsDef, newActivity);
 
 				if (AmpOfflineModeHolder.isAmpOfflineMode()) {
 					PersistenceManager.getSession().evict(newActivity.getAmpActivityGroup());
@@ -389,220 +330,10 @@ public class ActivityImporter {
 		}
 	}
 
-	/**
-	 * Recursive method (through ->validateAndImport->validateSubElements->[this method]
-	 * that attempts to validate the incoming JSON and import its data. 
-	 * If there are any errors -> append them to the validator to propagate upwards
-	 * @param newParent Matched parent object in which resides the field of the activity we're importing or updating
-	 * 					(for example, AmpActivityVersion newActivity is newParent for 'sectors'
-	 * @param oldParent Matched parent object in which the old activity field resides
-	 * @param fieldsDef definitions of the fields in this parent (from Fields Enumeration EP)
-	 * @param newJsonParent parent JSON object in which reside the analyzed fields 
-	 * @param oldJsonParent old parent JSON
-	 * @param fieldPath the underscorified path to the field currently validated & imported
-	 * @return currently updated object or null if any validation error occurred
-	 */
-	protected Object validateAndImport(Object newParent, Object oldParent, List<APIField> fieldsDef,
-			Map<String, Object> newJsonParent, Map<String, Object> oldJsonParent, String fieldPath) {
-		Set<String> fields = new HashSet<String>(newJsonParent.keySet());
-		// process all valid definitions
-		for (APIField fieldDef : fieldsDef) {
-			newParent = validateAndImport(newParent, oldParent, fieldDef, newJsonParent, oldJsonParent, fieldPath);
-			fields.remove(fieldDef.getFieldName());
-		}
-		
-		// and error anything remained
-		// note: due to AMP-20766, we won't be able to fully detect invalid children
-		String fieldPathPrefix = fieldPath == null ? "" : fieldPath + "~";
-		if (fields.size() > 0 && !ignoreUnknownFields()) {
-			newParent = null;
-			for (String invalidField : fields) {
-				// no need to go through deep-first validation flow
-				validator.addError(newJsonParent, invalidField, fieldPathPrefix + invalidField, ActivityErrors.FIELD_INVALID, errors);
-			}
-		}
-		
-		return newParent;
-	}
-
-	private boolean ignoreUnknownFields() {
+	protected boolean ignoreUnknownFields() {
 		return AmpOfflineModeHolder.isAmpOfflineMode();
 	}
 
-	/**
-	 * Of all the fields from AmpActivityFields, these two (AMP ID and Internal ID) should be null 
-	 * on a fresh project import and, therefore, shouldn't be deleted if they are null 
-	 * in the new activity JSON.
-	 * 
-	 * @param currentFieldPath path to the field 
-	 * @return true if it's not AMP ID or Internal ID, false otherwise
-	 */
-	protected boolean fieldDeletableOnNull(String currentFieldPath) {
-		if (currentFieldPath.equals(ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME))
-			return false;
-		if (currentFieldPath.equals(ActivityEPConstants.AMP_ID_FIELD_NAME))
-			return false;
-		return true;
-	}
-	
-	/**
-	 * Validates and imports a single element (and its subelements)  
-	 * @param newParent parent object containing the field
-	 * @param oldParent old parent (for activity)
-	 * @param fieldDef JsonBean holding the description of the field (obtained from the Fields Enumerator EP)
-	 * @param newJsonParent JSON as imported
-	 * @param oldJsonParent JSON of the old activity (if it's update) from the Export Activity EP
-	 * @param fieldPath underscorified path to the field
-	 * @return currently updated object or null if any validation error occurred
-	 */
-	protected Object validateAndImport(Object newParent, Object oldParent, APIField fieldDef,
-			Map<String, Object> newJsonParent, Map<String, Object> oldJsonParent, String fieldPath) {
-		String fieldName = getFieldName(fieldDef, newJsonParent);
-		String currentFieldPath = (fieldPath == null ? "" : fieldPath + "~") + fieldName;
-		Object oldJsonValue = oldJsonParent == null ? null : oldJsonParent.get(fieldName);
-		Object newJsonValue = newJsonParent == null ? null : newJsonParent.get(fieldName);
-		// validate and import sub-elements first (if any)
-		newParent = validateSubElements(fieldDef, newParent, oldParent, newJsonValue, oldJsonValue, currentFieldPath);
-		// then validate current field itself
-		boolean valid = validator.isValid(this, newJsonParent, oldJsonParent, fieldDef, currentFieldPath, errors);
-		// and set new field only if all sub-elements are valid
-		if (valid && newParent != null) {
-			newParent = setNewField(newParent, fieldDef, newJsonParent, currentFieldPath);
-		} else if (!valid) {
-			newParent = null;
-		}
-		return newParent;
-	}
-	
-	/**
-	 * Obtains the field name
-	 * @param fieldDef
-	 * @param newJsonParent
-	 * @return
-	 */
-	protected String getFieldName(APIField fieldDef, Map<String, Object> newJsonParent) {
-		if (fieldDef == null) {
-			if (newJsonParent != null && newJsonParent.keySet().size() == 1) {
-				return newJsonParent.keySet().iterator().next();
-			}
-		} else {
-			return fieldDef.getFieldName();
-		}
-		return null;
-	}
-	
-	/**
-	 * Validates sub-elements (recursively)
-	 * @param fieldDef
-	 * @param newParent
-	 * @param oldParent
-	 * @param newJsonValue
-	 * @param oldJsonValue
-	 * @param fieldPath
-	 * @return currently updated object or null if any validation error occurred
-	 */
-	protected Object validateSubElements(APIField fieldDef, Object newParent, Object oldParent, Object newJsonValue,
-			Object oldJsonValue, String fieldPath) {
-		// simulate temporarily fieldDef
-		fieldDef = fieldDef == null ? new APIField() : fieldDef;
-		String fieldType = fieldDef.getFieldType();
-		/* 
-		 * Sub-elements by default are valid when not provided. 
-		 * Current field will be verified below and reported as invalid if sub-elements are mandatory and are not provided. 
-		 */
-		
-		// skip children validation immediately if only ID is expected
-		boolean idOnly = Boolean.TRUE.equals(fieldDef.isIdOnly());
-		if (idOnly)
-			return newParent;
-		
-		boolean isList = ActivityEPConstants.FIELD_TYPE_LIST.equals(fieldType);
-		
-		// first validate all sub-elements
-		@SuppressWarnings("unchecked")
-		List<APIField> childrenFields = fieldDef.getChildren();
-		List<Map<String, Object>> childrenNewValues = getChildrenValues(newJsonValue, isList);
-		List<Map<String, Object>> childrenOldValues = getChildrenValues(oldJsonValue, isList);
-		
-		// validate children, even if it is not a list -> to notify wrong entries
-		if ((isList || childrenFields != null && childrenFields.size() > 0) && childrenNewValues != null) {
-			String actualFieldName = fieldDef.getFieldNameInternal();
-			Field newField = ReflectionUtil.getField(newParent, actualFieldName);
-			// REFACTOR: remove old parent and field usage, not relevant anymore
-			Field oldField = ReflectionUtil.getField(oldParent, actualFieldName);
-			Object newFieldValue = null;
-			Object oldFieldValue = null;
-			Class<?> subElementClass = null;
-			boolean isCollection = false;
-			try {
-				newFieldValue = newField == null ? null : newField.get(newParent);
-				oldFieldValue = oldField == null ? null : oldField.get(oldParent);
-				if (newParent != null && newFieldValue == null) {
-					newFieldValue = getNewInstance(newParent, newField);
-				}
-				// AMP-20766: we cannot correctly detect isCollection when current validation already failed (no parent obj ref)
-				if (newFieldValue != null && Collection.class.isAssignableFrom(newFieldValue.getClass())) {
-					isCollection = true;
-					subElementClass = AIHelper.getGenericsParameterClass(newField);
-				}
-			} catch (IllegalArgumentException | IllegalAccessException e) {
-				logger.error(e.getMessage());
-				throw new RuntimeException(e);
-			}
-			
-			if (newFieldValue != null && AmpAgreement.class.isAssignableFrom(newFieldValue.getClass()) && childrenNewValues.size() == 1) {
-				Map<String, Object> agreementMap = childrenNewValues.get(0);
-				childrenNewValues.clear();
-				for (String key : agreementMap.keySet()) {
-					HashMap<String, Object> kv = new HashMap<String, Object>();
-					Object val = agreementMap.get(key);
-					
-					if (val instanceof String) {
-						val = StringUtils.trim((String) val);
-					}
-					
-					kv.put(key, val);
-					childrenNewValues.add(kv);
-				}
-			}
-			
-			// process children 
-			Iterator<Map<String, Object>> iterNew = childrenNewValues.iterator();
-			while (iterNew.hasNext()) {
-				Map<String, Object> newChild = iterNew.next();
-				APIField childFieldDef = getMatchedFieldDef(newChild, childrenFields);
-				Map<String, Object> oldChild = getMatchedOldValue(childFieldDef, childrenOldValues);
-				
-				if (oldChild != null) {
-					childrenOldValues.remove(oldChild);
-				}
-				Object res = null;
-				if (isCollection) {
-					try {
-						Object newSubElement = subElementClass.newInstance();
-						res = validateAndImport(newSubElement, null, childrenFields, newChild, oldChild, fieldPath);
-					} catch (InstantiationException | IllegalAccessException e) {
-						logger.error(e.getMessage());
-						throw new RuntimeException(e);
-					}
-				} else {
-					res = validateAndImport(newFieldValue, oldFieldValue, childFieldDef, newChild, oldChild, fieldPath);
-				}
-				
-				if (res == null) {
-					// validation failed, reset parent to stop config
-					newParent = null;
-				} else if (newParent != null && isCollection) {
-					// actual links will be updated
-					((Collection) newFieldValue).add(res);
-					configureCustom(res, fieldDef);
-				}
-			}
-			// TODO: we also need to validate other children, some can be mandatory
-		}
-		return newParent;
-	}
-	
 	/**
 	 * Identifies if an existing object has to be worked with
 	 * @param fieldDefOfAnObject
@@ -624,274 +355,12 @@ public class ActivityImporter {
 		}
 		return null;
 	}
-	
-	/**
-	 * Gets items marked under the "children" key in the hierarchical branch of the imported JSON
-	 * @param jsonValue
-	 * @param isList
-	 * @return
-	 */
-	private List<Map<String, Object>> getChildrenValues(Object jsonValue, boolean isList) {
-		if (jsonValue != null) {
-			if (jsonValue instanceof List) { 
-				return (List<Map<String, Object>>) jsonValue;
-			} else if (isList && jsonValue instanceof Map) {
-				List<Map<String, Object>> jsonValues = new ArrayList<Map<String, Object>>();
-				jsonValues.add((Map<String, Object>) jsonValue);
-				return jsonValues;
-			}
-		}
-		return null;
-	}
-	
-	/**
-	 * Generates an instance of the type of the field 
-	 * @param parent
-	 * @param field
-	 * @return
-	 */
-	protected Object getNewInstance(Object parent, Field field) {
-		Object fieldValue = null;
-		try {
-			if (Set.class.isAssignableFrom(field.getType())) {
-				fieldValue = new HashSet<Object>();
-			} else if (List.class.isAssignableFrom(field.getType())) {
-				fieldValue = new ArrayList<Object>();
-			} else if (Collection.class.isAssignableFrom(field.getType())) {
-				fieldValue = new ArrayList<Object>();
-			} else {
-				fieldValue = field.getType().newInstance();
-			}
-			field.set(parent, fieldValue);
-		} catch(InstantiationException | IllegalAccessException e) {
-			logger.error(e.getMessage());
-			throw new RuntimeException(e);
-		}
-		return fieldValue;
-	}
-	
-	protected void addActivityFieldForPostprocessing(Field field, Object obj) {
-		activityFieldsForPostprocess.put(obj, field);
-	}
-	
-	/**
-	 * Configures new value, no validation outside of this method scope, it must be verified before
-	 * @param newParent
-	 * @param field
-	 * @param newJson
-	 * @return 
-	 */
-	protected Object setNewField(Object newParent, APIField fieldDef, Map<String, Object> newJsonParent,
-			String fieldPath) {
-		boolean importable = fieldDef.isImportable();
-		
-		// note again: only checks in scope of this method are done here
-		
-		String fieldName = fieldDef.getFieldName();
-		String actualFieldName = fieldDef.getFieldNameInternal();
-		String fieldType = fieldDef.getFieldType();
-		Object fieldValue = newJsonParent.get(fieldName);
-		Field objField = ReflectionUtil.getField(newParent, actualFieldName);
-		if (objField == null) {
-			// cannot set
-			logger.error("Actual Field not found: " + actualFieldName + ", fieldPath: " + fieldPath);
-			return null;
-		}
-		
-		if (!importable) {
-			// custom process amp_activity_id links to other structures
-			if (InterchangeUtils.isAmpActivityVersion(objField.getType())) {
-				try {
-					objField.set(newParent, this.getNewActivity());
-				} catch (IllegalArgumentException | IllegalAccessException | SecurityException e) {
-					logger.error(e.getMessage());
-					throw new RuntimeException(e);
-				}
-			}
-			// skip reconfiguration at this level if the field is not importable
-			return newParent;
-		}
-		
-		// REFACTOR: remove old field usage
-		Object oldValue;
-		try {
-			oldValue = objField.get(newParent);
-		} catch (IllegalArgumentException | IllegalAccessException e1) {
-			logger.error(e1.getMessage());
-			throw new RuntimeException(e1);
-		}
-		Object newValue = getNewValue(objField, newParent, fieldValue, fieldDef, fieldPath);
-		
-		if (newValue == null && oldValue == null/* || newValue != null && newValue.equals(oldValue) */) {
-			// nothing to do
-		} else {
-			if (objField != null) {
-				try {
-					if (newParent instanceof Collection) {
-						((Collection<Object>) newParent).add(newValue);
-					} else {
-						objField.set(newParent, newValue);
-					}
-				} catch (IllegalArgumentException | IllegalAccessException | SecurityException e) {
-					logger.error(e.getMessage());
-					throw new RuntimeException(e);
-				}
-			}
-		}
-		return newParent;
-	}
-	
-	protected Map<String, Object> getMatchedOldValue(APIField childDef, List<Map<String, Object>> oldValues) {
-		if (childDef != null && oldValues != null && oldValues.size() > 0) {
-			String fieldName = childDef.getFieldName();
-			if (StringUtils.isNotBlank(fieldName)) {
-				for (Map<String, Object> oldValue : oldValues) {
-					if (oldValue.containsKey(fieldName)) {
-						return oldValue;
-					}
-				}
-			}
-		}
-		
-		return null;
-	}
-	
-	protected APIField getMatchedFieldDef(Map<String, Object> newValue, List<APIField> fieldDefs) {
-		if (fieldDefs != null && fieldDefs.size() > 0) {
-			// if we have only 1 child element, then this is a list of elements and only this definition is expected
-			// or new value is empty, but we expect something
-			if (fieldDefs.size() == 1 || newValue == null || newValue.isEmpty()) {
-				return fieldDefs.get(0);
-			} else {
-				// this is a complex type => simple maps like { field_name : new_value_obj } are expected
-				// TODO: if more than 1 value
-				String fieldName = newValue.keySet().iterator().next();
-				if (StringUtils.isNotBlank(fieldName)) {
-					for (APIField childDef : fieldDefs) {
-						if (fieldName.equals(childDef.getFieldName())) {
-							return childDef;
-						}
-					}
-				}
-			}
-		}
-		return null;
+
+	@Override
+	protected String extractString(Field field, Object parentObj, Object jsonValue) {
+		return extractTranslationsOrSimpleValue(field, parentObj, jsonValue);
 	}
 
-	//unused anywhere -- commenting out for now
-	//please delete it if it's September 2015 or later and you're reading this
-//	protected boolean valueChanged(JsonBean newValue, JsonBean oldValue) {
-//		// TODO:
-//		return true;
-//	}
-	/**
-	 * Gets the object identified by an ID, from the Possible Values EP
-	 * @param objectType
-	 * @param objectId
-	 * @return
-	 */
-	protected Object getObjectReferencedById(Class<?> objectType, Long objectId) {
-		if (Collection.class.isAssignableFrom(objectType))
-			throw new RuntimeException("Can't handle a collection of ID-linked objects yet!");
-		return InterchangeUtils.getObjectById(objectType, objectId);
-	}
-	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	protected Object getNewValue(Field field, Object parentObj, Object jsonValue, APIField fieldDef, String fieldPath) {
-		boolean isCollection = Collection.class.isAssignableFrom(field.getType());
-		if (jsonValue == null && !isCollection)
-			return null;
-		
-		Object value = null;
-		String fieldType = fieldDef.getFieldType();
-		List<PossibleValue> allowedValues = getPossibleValuesForFieldCached(fieldPath,
-				AmpActivityFields.class);
-		boolean idOnly = Boolean.TRUE.equals(fieldDef.isIdOnly());
-		
-		// this is an object reference
-		if (!isCollection && idOnly) {
-			Class<? extends PossibleValuesProvider> providerClass = InterchangeUtils.getPossibleValuesProvider(field);
-			if (providerClass != null) {
-				try {
-					PossibleValuesProvider provider = providerClass.newInstance();
-					return provider.toAmpFormat(jsonValue);
-				} catch (InstantiationException | IllegalAccessException e) {
-					throw new RuntimeException("Could not convert value to AMP object.", e);
-				}				
-			}
-			return getObjectReferencedById(field.getType(), ((Number)jsonValue).longValue());
-		}
-		
-		// this is a collection
-		if (Collection.class.isAssignableFrom(field.getType())) {
-			try {
-				value = field.get(parentObj);
-				Collection col = (Collection) value;
-				if (col == null) {
-					col = (Collection) getNewInstance(parentObj, field);
-				}
-				if (idOnly && jsonValue != null) {
-					Class<?> objectType = AIHelper.getGenericsParameterClass(field);
-					try {
-						Object res = getObjectReferencedById(objectType, Long.valueOf(jsonValue.toString()));
-						col.add(res);
-					} catch (IllegalArgumentException e) {
-						logger.error(e.getMessage());
-						throw new RuntimeException(e);
-					}
-					
-				}
-			} catch (IllegalArgumentException | IllegalAccessException e) {
-				logger.error(e.getMessage());
-				throw new RuntimeException(e);
-			}
-		// this is a simple type
-		} else if (InterchangeableClassMapper.SIMPLE_TYPES.contains(fieldType)) {
-			if (jsonValue == null)
-				return null;
-			try {
-				if (Date.class.equals(field.getType())) {
-					value = InterchangeUtils.parseISO8601Date((String) jsonValue);
-				} else if (String.class.equals(field.getType())) {
-					// check if this is a translatable that expects multiple entries
-					value = extractTranslationsOrSimpleValue(field, parentObj, jsonValue);
-				} else {
-					// a valueOf should work
-					Method valueOf = field.getType().getDeclaredMethod("valueOf", String.class);
-					
-					value = valueOf.invoke(field.getType(), String.valueOf(jsonValue));
-				}
-			} catch (SecurityException | IllegalArgumentException | IllegalAccessException | NoSuchMethodException 
-					| InvocationTargetException e) {
-				logger.error(e.getMessage());
-				throw new RuntimeException(e);
-			}
-		} else if (allowedValues != null && allowedValues.size() > 0) {
-			// => this is an object => it has children elements
-			if (fieldDef.getChildren() != null) {
-				for (APIField childDef : fieldDef.getChildren()) {
-					if (Boolean.TRUE.equals(childDef.isId())) {
-						Map<String, Object> jsonValueMap = (Map<String, Object>) jsonValue;
-						Long id = ((Integer) jsonValueMap.get(childDef.getFieldName())).longValue();
-						value = InterchangeUtils.getObjectById(field.getType(), id);
-						break;
-					}
-				}
-			}
-		} else {
-			try {
-				if (AmpAgreement.class.equals(field.getType())) {
-					value = field.get(parentObj);
-				}
-			} catch (IllegalArgumentException | IllegalAccessException e) {
-				logger.error(e.getMessage());
-				throw new RuntimeException(e);
-			}
-		}
-		
-		return value;
-	}
-	
 	protected String extractTranslationsOrSimpleValue(Field field, Object parentObj, Object jsonValue) {
 		TranslationType trnType = trnSettings.getTranslatableType(field);
 		// no translation expected
@@ -915,11 +384,11 @@ public class ActivityImporter {
 		}
 		return value;
 	}
-	
+
 	/**
 	 * Stores all provided translations
 	 * @param field the field to translate
-	 * @param parentObj the object the field is part of 
+	 * @param parentObj the object the field is part of
 	 * @param trnJson <lang, value> map of translations for each language
 	 * @return value to be stored in the base table
 	 */
@@ -927,7 +396,7 @@ public class ActivityImporter {
 		String value = null;
 		String currentLangValue = null;
 		String anyLangValue = null;
-		
+
 		String objectClass = parentObj.getClass().getName();
 		Long objId = (Long) ((Identifiable) parentObj).getIdentifier();
 		List<AmpContentTranslation> trnList = ContentTranslationUtil.loadFieldTranslations(objectClass, objId, field.getName());
@@ -973,11 +442,11 @@ public class ActivityImporter {
 			translations.addAll(trnList);
 		return value;
 	}
-	
+
 	/**
 	 * Stores Rich Text Editor entries
 	 * @param field reference field for the key
-	 * @param parentObj the object the field is part of 
+	 * @param parentObj the object the field is part of
 	 * @param trnJson <lang, value> map of translations for each language
 	 * @return dg_editor key reference to be stored in the base table
 	 */
@@ -1023,7 +492,7 @@ public class ActivityImporter {
 		}
 		return key;
 	}
-	
+
 	private String getEditorKey(String fieldName) {
 		// must start with "aim-" since it is expected by AF like this...
 		return "aim-import-" + fieldName + "-" + System.currentTimeMillis();
@@ -1072,6 +541,17 @@ public class ActivityImporter {
 		initDefaults();
 	}
 
+	protected void setupNotImportableField(Object object, Field field) {
+		if (InterchangeUtils.isAmpActivityVersion(field.getType())) {
+			try {
+				field.set(object, newActivity);
+			} catch (IllegalArgumentException | IllegalAccessException | SecurityException e) {
+				logger.error("Failed to set activity backwards reference.", e);
+				throw new RuntimeException(e);
+			}
+		}
+	}
+
 	private ChangeType determineChangeType() {
 		if (AmpOfflineModeHolder.isAmpOfflineMode()) {
 			return ChangeType.AMP_OFFLINE;
@@ -1095,7 +575,6 @@ public class ActivityImporter {
 		initLocations();
 		initFundings();
         initContacts();
-        postprocessActivityReferences();
         updateIssues();
         updatePPCAmount();
         updateRoleFundings();
@@ -1118,25 +597,6 @@ public class ActivityImporter {
 
 	private void initComponentFunding(AmpComponent component, AmpComponentFunding f) {
 		f.setComponent(component);
-	}
-
-
-	/*
-	 * First, every reference to AmpActivityVersion in all the m2ms has been added to a map; 
-	 * now, we're setting them all to point to the AmpActivityVersion we're importing
-	 */
-	// REFACTOR: not used anymore, candidate for removal
-	protected void postprocessActivityReferences() {
-		for (Map.Entry<Object, Field> entry : activityFieldsForPostprocess.entrySet()) {
-			Field field = entry.getValue();
-			Object obj = entry.getKey();
-			try {
-				field.set(obj, this.newActivity);
-			} catch (IllegalArgumentException | IllegalAccessException e) {
-				logger.error(e.getMessage());
-				throw new RuntimeException(e);
-			}
-		}
 	}
 
 	private void updateIssues() {
@@ -1335,11 +795,8 @@ public class ActivityImporter {
 			}
 		}
 	}
-	
-	/**
-	 * Execute custom configurations that is not worth to define generic for single use cases
-	 */
-	private void configureCustom(Object obj, APIField fieldDef) {
+
+	protected void configureCustom(Object obj, APIField fieldDef) {
 		if (obj instanceof AmpActivityContact) {
 			AmpActivityContact contact = (AmpActivityContact) obj;
 			contact.setContactType(fieldDef.getDiscriminator());
@@ -1402,13 +859,6 @@ public class ActivityImporter {
 	}
 
 	/**
-	 * @return the newJson
-	 */
-	public JsonBean getNewJson() {
-		return newJson;
-	}
-
-	/**
 	 * @return the errors
 	 */
 	public Map<Integer, ApiErrorMessage> getErrors() {
@@ -1445,29 +895,12 @@ public class ActivityImporter {
 	public List<AmpContentTranslation> getTranslations() {
 		return translations;
 	}
-	
-	// what is object for?
-	public List<PossibleValue> getPossibleValuesForFieldCached(String fieldPath,
-			Class<AmpActivityFields> clazz) {
-		if (!possibleValuesCached.containsKey(fieldPath)) {
-			possibleValuesCached.put(fieldPath, PossibleValuesEnumerator.INSTANCE
-					.getPossibleValuesForField(fieldPath, clazz, null));
-		}
-		return possibleValuesCached.get(fieldPath);
-	}
-	
+
 	/**
 	 * @return the isMultilingual
 	 */
 	public boolean isMultilingual() {
 		return isMultilingual;
-	}
-
-	/**
-	 * @return the trnSettings
-	 */
-	public TranslationSettings getTrnSettings() {
-		return trnSettings;
 	}
 
 	/**

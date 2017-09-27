@@ -16,8 +16,8 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
@@ -47,7 +47,7 @@ public class TreeCollectionValidator extends InputValidator {
 	}
 
 	@Override
-	public boolean isValid(ActivityImporter importer, Map<String, Object> newFieldParent,
+	public boolean isValid(ObjectImporter importer, Map<String, Object> newFieldParent,
 						   Map<String, Object> oldFieldParent, APIField fieldDescription, String fieldPath) {
 		String fieldName = fieldDescription.getFieldName();
 		boolean treeCollectionField = Boolean.TRUE.equals(fieldDescription.getTreeCollectionConstraint());

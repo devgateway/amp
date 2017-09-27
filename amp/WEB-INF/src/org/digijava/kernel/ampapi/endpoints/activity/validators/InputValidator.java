@@ -6,7 +6,7 @@ package org.digijava.kernel.ampapi.endpoints.activity.validators;
 import java.util.Map;
 
 import org.digijava.kernel.ampapi.endpoints.activity.APIField;
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
+import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 
 /**
@@ -29,7 +29,7 @@ public abstract class InputValidator {
 	 * @param update true if this is an update request
 	 * @return true if chain validation passed
 	 */
-	public abstract boolean isValid(ActivityImporter importer, Map<String, Object> newFieldParent,
+	public abstract boolean isValid(ObjectImporter importer, Map<String, Object> newFieldParent,
 									Map<String, Object> oldFieldParent, APIField fieldDescription, String fieldPath);
 	
 	/**

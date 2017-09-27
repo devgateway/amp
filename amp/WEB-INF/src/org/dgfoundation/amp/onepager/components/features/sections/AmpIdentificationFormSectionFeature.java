@@ -5,6 +5,7 @@
 package org.dgfoundation.amp.onepager.components.features.sections;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -21,9 +22,9 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.protocol.http.WebApplication;
-import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.validator.StringValidator;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
+import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.AmpRequiredComponentContainer;
 import org.dgfoundation.amp.onepager.components.fields.AmpActivityBudgetExtrasPanel;
@@ -41,6 +42,7 @@ import org.dgfoundation.amp.onepager.components.fields.TranslationDecorator;
 import org.dgfoundation.amp.onepager.models.AmpCategoryValueByKeyModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
+import org.dgfoundation.amp.onepager.util.OtherInfoBehavior;
 import org.dgfoundation.amp.onepager.validators.AmpUniqueActivityTitleValidator;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
 import org.digijava.kernel.request.Site;
@@ -67,7 +69,6 @@ implements AmpRequiredComponentContainer{
 	private List<FormComponent<?>> requiredFormComponents = new ArrayList<FormComponent<?>>();
 	private List<FormComponent<?>> requiredRichTextFormComponents = new ArrayList<FormComponent<?>>();
 
-	
 	/**
 	 * @param id
 	 * @param fmName
@@ -83,7 +84,7 @@ implements AmpRequiredComponentContainer{
 			final AmpTextAreaFieldPanel title = new AmpTextAreaFieldPanel("title", m, "Project Title", false, false, false, true,true);
 
 			title.getTextAreaContainer().add(new AmpUniqueActivityTitleValidator(new PropertyModel<AmpActivityGroup>(am, "ampActivityGroup")));
-			title.getTextAreaContainer().add(StringValidator.maximumLength(255));
+			title.getTextAreaContainer().add(StringValidator.maximumLength(OnePagerConst.STRING_VALIDATOR_MAX_LENGTH));
 			title.getTextAreaContainer().add(new AttributeModifier("style", "width: 710px; margin: 0px;"));
 			title.getTextAreaContainer().setRequired(true);
 
@@ -170,16 +171,30 @@ implements AmpRequiredComponentContainer{
             titleSimilarityWarning.getWarning().setVisible(true);
             titleSimilarityWarning.setVisible(true);
 			add(titleSimilarityWarning);
-			
+
 			 AmpCategorySelectFieldPanel status = new AmpCategorySelectFieldPanel(
 					"status", CategoryConstants.ACTIVITY_STATUS_KEY,
 					new AmpCategoryValueByKeyModel(
 							new PropertyModel<Set<AmpCategoryValue>>(am,"categories"),
 							CategoryConstants.ACTIVITY_STATUS_KEY),
-							CategoryConstants.ACTIVITY_STATUS_NAME, true, false, null, AmpFMTypes.MODULE);
+							CategoryConstants.ACTIVITY_STATUS_NAME, true, false, null,
+					 AmpFMTypes.MODULE);
 			status.getChoiceContainer().setRequired(true);
+
+			AmpTextAreaFieldPanel statusOtherInfo = new AmpTextAreaFieldPanel("statusOtherInfo",
+				new PropertyModel<String>(am, "statusOtherInfo"), "Status Other Info", false,
+					AmpFMTypes.MODULE);
+
+			statusOtherInfo.getTextAreaContainer().add(StringValidator.maximumLength(
+					OnePagerConst.STRING_VALIDATOR_MAX_LENGTH));
+			statusOtherInfo.getTextAreaContainer().add(new AttributeModifier("style",
+					"width: 328px; margin: 0px;"));
+
+			status.getChoiceContainer().add(new OtherInfoBehavior("onchange", statusOtherInfo));
+
 			add(status);
-			
+			add(statusOtherInfo);
+
 			add(new AmpTextAreaFieldPanel("statusReason",
 					new PropertyModel<String>(am, "statusReason"), "Status Reason", true, AmpFMTypes.MODULE));
 			
@@ -349,7 +364,22 @@ implements AmpRequiredComponentContainer{
 							new PropertyModel<Set<AmpCategoryValue>>(am,"categories"),
 							CategoryConstants.PROJECT_CATEGORY_KEY),
 							CategoryConstants.PROJECT_CATEGORY_NAME, true, true, null, AmpFMTypes.MODULE);
+
+			AmpTextAreaFieldPanel projectCategoryOtherInfo = new AmpTextAreaFieldPanel("projectCategoryOtherInfo",
+					new PropertyModel<String>(am, "projectCategoryOtherInfo"), "Project Category Other Info",
+					false, AmpFMTypes.MODULE);
+
+
+			projectCategoryOtherInfo.getTextAreaContainer().add(StringValidator.maximumLength(
+					OnePagerConst.STRING_VALIDATOR_MAX_LENGTH));
+			projectCategoryOtherInfo.getTextAreaContainer().add(new AttributeModifier("style",
+					"width: 328px; margin: 0px;"));
+
+			projectCategory.getChoiceContainer().add(new OtherInfoBehavior("onchange", projectCategoryOtherInfo));
+
 			add(projectCategory);
+			add(projectCategoryOtherInfo);
+
 			AmpCategorySelectFieldPanel projectImplementingUnit = new AmpCategorySelectFieldPanel(
 					"projectImplementingUnit",
 					CategoryConstants.PROJECT_IMPLEMENTING_UNIT_KEY,
@@ -364,8 +394,8 @@ implements AmpRequiredComponentContainer{
 
 			add(new AmpBooleanChoiceField("jointCriteria", 
 					new PropertyModel<Boolean>(am, "jointCriteria"), "Joint Criteria"));
-			
-			final AmpBooleanChoiceField humanitarianAid= new AmpBooleanChoiceField("humanitarianAid", 
+
+			final AmpBooleanChoiceField humanitarianAid = new AmpBooleanChoiceField("humanitarianAid",
 					new PropertyModel<Boolean>(am, "humanitarianAid"), "Humanitarian Aid");
 			
 
@@ -373,7 +403,7 @@ implements AmpRequiredComponentContainer{
                 @Override
                 protected void onConfigure() {
                     super.onConfigure();
-                    if (this.isVisible()){
+                    if (this.isVisible()) {
                     	humanitarianAid.getChoiceContainer().setRequired(true);
                     	requiredFormComponents.add(humanitarianAid.getChoiceContainer());
             			
@@ -384,7 +414,7 @@ implements AmpRequiredComponentContainer{
 			add(new AmpTextAreaFieldPanel("projectComments",
 					new PropertyModel<String>(am, "projectComments"),
 					"Project Comments", true, AmpFMTypes.MODULE));
-			final AmpTextAreaFieldPanel description=
+			final AmpTextAreaFieldPanel description =
 			new AmpTextAreaFieldPanel("description",
 					new PropertyModel<String>(am, "description"), "Description",
 					true, AmpFMTypes.MODULE);
@@ -468,12 +498,14 @@ implements AmpRequiredComponentContainer{
 					new PropertyModel<String>(am, "lessonsLearned"), "Lessons Learned", true, AmpFMTypes.MODULE));
 			add(new AmpTextAreaFieldPanel("projectImpact",
 					new PropertyModel<String>(am, "projectImpact"), "Project Impact", true, AmpFMTypes.MODULE));
+
 			add(new AmpTextAreaFieldPanel("activitySummary",
 					new PropertyModel<String>(am, "activitySummary"), "Activity Summary", true, AmpFMTypes.MODULE));
 			add(new AmpTextAreaFieldPanel("conditionalities",
 					new PropertyModel<String>(am, "conditionality"), "Conditionalities", true, AmpFMTypes.MODULE));
 			add(new AmpTextAreaFieldPanel("projectManagement",
 					new PropertyModel<String>(am, "projectManagement"), "Project Management", true, AmpFMTypes.MODULE));
+
 	}
 
 	public List<FormComponent<?>> getRequiredFormComponents() {
@@ -483,6 +515,6 @@ implements AmpRequiredComponentContainer{
     public List<FormComponent<?>> getRequiredRichTextFormComponents() {
         return requiredRichTextFormComponents;
     }
-	
+
 
 }

@@ -49,9 +49,7 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 		addColumn(new GPIReportOutputColumn(GPIReportConstants.COLUMN_YEAR));
 		addColumn(new GPIReportOutputColumn(GPIReportConstants.COLUMN_TOTAL_ACTUAL_DISBURSEMENTS));
 		addColumn(new GPIReportOutputColumn(GPIReportConstants.COLUMN_CONCESSIONAL,
-				GPIReportConstants.REPORT_5A_TOOLTIP.get(GPIReportConstants.COLUMN_CONCESSIONAL)));
-		addColumn(new GPIReportOutputColumn(GPIReportConstants.COLUMN_DISBURSEMENTS_OTHER_PROVIDERS,
-				GPIReportConstants.REPORT_5A_TOOLTIP.get(GPIReportConstants.COLUMN_DISBURSEMENTS_OTHER_PROVIDERS)));
+				GPIReportConstants.REPORT_5A_TOOLTIP.get(GPIReportConstants.COLUMN_CONCESSIONAL)));		
 		addColumn(new GPIReportOutputColumn(MeasureConstants.ACTUAL_DISBURSEMENTS));
 		addColumn(new GPIReportOutputColumn(MeasureConstants.PLANNED_DISBURSEMENTS));
 		addColumn(new GPIReportOutputColumn(MeasureConstants.DISBURSED_AS_SCHEDULED,
@@ -69,7 +67,7 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 	public final static Set<String> ON_BUDGET_MEASURES = Collections
 			.unmodifiableSet(new HashSet<>(Arrays.asList(MeasureConstants.ACTUAL_DISBURSEMENTS,
 					MeasureConstants.PLANNED_DISBURSEMENTS, MeasureConstants.DISBURSED_AS_SCHEDULED,
-					MeasureConstants.OVER_DISBURSED, GPIReportConstants.COLUMN_DISBURSEMENTS_OTHER_PROVIDERS)));
+					MeasureConstants.OVER_DISBURSED)));
 
 	public final static Map<String, ReportOutputColumn> headersMap = new HashMap<>();
 
@@ -104,7 +102,6 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 		headers.add(getColumns().get(GPIReportConstants.COLUMN_CONCESSIONAL));
 		headers.add(getColumns().get(MeasureConstants.ACTUAL_DISBURSEMENTS));
 		headers.add(getColumns().get(MeasureConstants.PLANNED_DISBURSEMENTS));
-		headers.add(getColumns().get(GPIReportConstants.COLUMN_DISBURSEMENTS_OTHER_PROVIDERS));
 		headers.add(getColumns().get(MeasureConstants.DISBURSED_AS_SCHEDULED));
 		headers.add(getColumns().get(MeasureConstants.OVER_DISBURSED));
 		headers.add(new GPIReportOutputColumn(GPIReportConstants.COLUMN_REMARK));
@@ -187,9 +184,7 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 											.equals(NiReportsEngine.TOTALS_COLUMN_NAME)) {
 								if (years.get(roc.parentColumn.originalColumnName) == null) {
 									years.put(roc.parentColumn.originalColumnName, new HashMap<>());
-								}
-								years.get(roc.parentColumn.originalColumnName)
-										.put(GPIReportConstants.COLUMN_DISBURSEMENTS_OTHER_PROVIDERS, rc);
+								}								
 							}
 						}
 					}
@@ -307,14 +302,6 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 				formatAmount(generatedReport, calculateOverDisbursed(actDisbSum, planDisbSum), false) + "%");
 
 		return columns;
-	}
-
-	private boolean isOnBudget(ReportArea budgetArea) {
-		boolean match = budgetArea.getContents().entrySet().stream()
-				.anyMatch(e -> e.getKey().originalColumnName.equals(ColumnConstants.ON_OFF_TREASURY_BUDGET)
-						&& (String.valueOf(e.getValue().value)).equals(ACTIVITY_BUDGET_ON));
-
-		return match;
 	}
 
 	private boolean hasExecutingAgency(ReportArea execArea) {

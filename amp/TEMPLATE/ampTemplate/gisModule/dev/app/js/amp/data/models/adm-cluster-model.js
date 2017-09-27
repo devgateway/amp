@@ -18,9 +18,9 @@ module.exports = Backbone.Model
       this.trigger(show ? 'show' : 'hide', this);
     });
 
-    this.listenTo(this.collection.filter, 'apply', this.refreshModel);
-    //this.listenTo(this.collection.settings, 'change:selected', this.refreshModel);
-    this.listenTo(this.collection.settingsWidget, 'applySettings', this.refreshModel);
+    this.listenTo(this.collection.filter, 'apply', this.refreshModel);    
+    this.listenTo(this.collection.settingsWidget, 'applySettings', this.refreshModel);    
+    this.listenTo(this.collection.performanceToggleModel, 'change:isPerformanceToggleSelected', this.refreshModel);
   },
 
   // if filters change and layer is selected update it.
@@ -53,7 +53,11 @@ module.exports = Backbone.Model
 
     filter.filters = filter.filters || {};
     filter.filters.adminLevel = this._translateADMToMagicWord(this.get('value'));
-
+    
+    if (this.collection.performanceToggleModel.get('isPerformanceToggleSelected') != null) {
+      filter['performanceIssues'] = !this.collection.performanceToggleModel.get('isPerformanceToggleSelected');	
+    }
+   
     options = _.defaults((options || {}), {
       type: 'POST',
       data: JSON.stringify(filter)

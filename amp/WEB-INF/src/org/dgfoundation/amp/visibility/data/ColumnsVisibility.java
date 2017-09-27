@@ -324,6 +324,7 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
 		put("Organizations and Project ID", ColumnConstants.ORGANIZATIONS_AND_PROJECT_ID);
 		put("Overage Project", ColumnConstants.OVERAGE_PROJECT);
 		put("Payment Capital - Recurrent", ColumnConstants.PAYMENT_CAPITAL___RECURRENT);
+		put("Performance Alert Level", ColumnConstants.PERFORMANCE_ALERT_LEVEL);
 		put("Pledges sectors", ColumnConstants.PLEDGES_SECTORS);
 		put("Pledges Aid Modality", ColumnConstants.PLEDGES_AID_MODALITY);
 		put("Pledge Contact 1 - Organization", ColumnConstants.PLEDGE_CONTACT_1___MINISTRY);

@@ -8,7 +8,7 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
+import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 
 /**
@@ -26,7 +26,7 @@ public class AgreementTitleValidator extends InputValidator {
 	}
 
 	@Override
-	public boolean isValid(ActivityImporter importer, Map<String, Object> newFieldParent,
+	public boolean isValid(ObjectImporter importer, Map<String, Object> newFieldParent,
 						   Map<String, Object> oldFieldParent, APIField fieldDescription, String fieldPath) {
 		
 		String fieldName = fieldDescription.getFieldName();

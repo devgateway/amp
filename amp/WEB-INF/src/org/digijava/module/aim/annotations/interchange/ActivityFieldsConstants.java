@@ -46,7 +46,7 @@ public class ActivityFieldsConstants {
     public static final String COMPONENT_DESCRIPTION = "Description";
     public static final String COMPONENT_TYPE = "Component Type";
     public static final String COMPONENT_ORGANIZATION = "Component Organization";
-    public static final String COMPONENT_SECOND_REPORTING_ORGANIZATION = "Second Reporting Organisation";
+    public static final String COMPONENT_SECOND_REPORTING_ORGANIZATION = "Component Second Responsible Organization";
     public static final String COMPONENT_FUNDING = "Funding";
     public static final String COMPONENT_FUNDING_CURRENCY = "Currency";
     public static final String COMPONENT_FUNDING_DESCRIPTION = "Description";

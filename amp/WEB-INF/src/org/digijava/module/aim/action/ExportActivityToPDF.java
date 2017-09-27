@@ -16,6 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringJoiner;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletOutputStream;
@@ -50,6 +51,7 @@ import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpStructure;
+import org.digijava.module.aim.dbentity.AmpStructureCoordinate;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.EUActivity;
 import org.digijava.module.aim.dbentity.IPAContract;
@@ -71,7 +73,6 @@ import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.Funding;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;
-import org.digijava.module.aim.helper.FundingValidator;
 import org.digijava.module.aim.helper.GlobalSettings;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.Location;
@@ -295,6 +296,11 @@ public class ExportActivityToPDF extends Action {
                     createGeneralInfoRow(mainLayout, columnName, columnVal);
                 }
             }
+            //Status Other Info
+            if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Status Other Info")) {
+                columnName = TranslatorWorker.translateText("Status Other Info");
+                createGeneralInfoRow(mainLayout, columnName, activity.getStatusOtherInfo());
+            }
 
             if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Status Reason")) {
                 columnName = TranslatorWorker.translateText("Status Reason");
@@ -334,6 +340,12 @@ public class ExportActivityToPDF extends Action {
                 columnName = TranslatorWorker.translateText("Modalities");
                 columnVal = identification.getSscModalitiesAsString("\n");
                 createGeneralInfoRow(mainLayout, columnName, columnVal);
+            }
+            //Modalities Other Info
+            if (FeaturesUtil.isVisibleModule(
+                    "/Activity Form/Funding/Overview Section/" + sscPrefix + "Modalities Other Info")) {
+                columnName = TranslatorWorker.translateText("Modalities Other Info");
+                createGeneralInfoRow(mainLayout, columnName, activity.getModalitiesOtherInfo());
             }
 
             //objective
@@ -401,9 +413,10 @@ public class ExportActivityToPDF extends Action {
             }
 
             //project comments
-            if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Comments")){
-                columnName=TranslatorWorker.translateText("Project Comments");
-                createGeneralInfoRow(mainLayout,columnName,processEditTagValue(request, activity.getProjectComments()));
+            if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Comments")) {
+                columnName = TranslatorWorker.translateText("Project Comments");
+                createGeneralInfoRow(mainLayout, columnName, processEditTagValue(request, activity.
+                        getProjectComments()));
             }
             //Lessons learned
             if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Lessons Learned")){
@@ -646,6 +659,11 @@ public class ExportActivityToPDF extends Action {
                     }
                     createGeneralInfoRow(mainLayout,columnName,columnVal);
                 }
+            }
+            //Project Category Other Info
+            if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Category Other Info")) {
+                columnName = TranslatorWorker.translateText("Project Category Other Info");
+                createGeneralInfoRow(mainLayout, columnName, activity.getProjectCategoryOtherInfo());
             }
 
             if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Government Agreement Number")){
@@ -1026,7 +1044,8 @@ public class ExportActivityToPDF extends Action {
                 mainLayout.addCell(sectorCell1);
 
                 String sectorsToAdd="";
-                List<AmpClassificationConfiguration> classificationConfigs=SectorUtil.getAllClassificationConfigs();
+                List<AmpClassificationConfiguration> classificationConfigs = SectorUtil
+                        .getAllClassificationConfigsOrdered();
                 for (AmpClassificationConfiguration configuration : classificationConfigs) {
 
                     boolean hasSectors = false;
@@ -1629,6 +1648,16 @@ public class ExportActivityToPDF extends Action {
                         costOutput+="\n"+TranslatorWorker.translateText("Latitude")+": "+struc.getLatitude();
                     if(struc.getLongitude()!=null)
                         costOutput+="\n"+TranslatorWorker.translateText("Longitude")+": "+struc.getLongitude();
+
+                    if (struc.getCoordinates() != null && struc.getCoordinates().size() > 0) {
+                        StringJoiner coordinatesOutput = new StringJoiner("\n");
+                        coordinatesOutput.add(TranslatorWorker.translateText("Coordinates") + ": ");
+                        for (AmpStructureCoordinate coordinate : struc.getCoordinates()) {
+                            coordinatesOutput.add(coordinate.getLatitude() + " " + coordinate.getLongitude());
+                        }
+                        costOutput += "\n" + coordinatesOutput.toString();
+                    }
+
                     costOutput+="\n";
                 }
 
@@ -3697,15 +3726,14 @@ public class ExportActivityToPDF extends Action {
                 }
 
                 if (FeaturesUtil.isVisibleModule(fmFields[ExportUtil.COMPONENT_FM_FIELD_SECOND_REPORTING]) && (fd
-                        .getSecondReportingOrganisation() != null)) {
+                        .getComponentSecondResponsibleOrganization() != null)) {
                     fdTable.completeRow();
                     fdTable.addCell(buildPdfCell("", null, 1));
-                    //fdTable.addCell(buildPdfCell(TranslatorWorker.translateText("Second Reporting Organisation"),
-                    //        titleFont, 1));
-                    String orgNameTxt = fd.getSecondReportingOrganisation() == null ? "" : fd
-                            .getSecondReportingOrganisation().getName();
-                    fdTable.addCell(buildPdfCell(TranslatorWorker.translateText("Second Reporting Organisation") +
-                            ":" + orgNameTxt, null, fdTable.getNumberOfColumns() - 1));
+                    String orgNameTxt = fd.getComponentSecondResponsibleOrganization() == null ? "" : fd
+                            .getComponentSecondResponsibleOrganization().getName();
+                    fdTable.addCell(buildPdfCell(
+                            TranslatorWorker.translateText("Component Second Responsible Organization")
+                                    + ":" + orgNameTxt, null, fdTable.getNumberOfColumns() - 1));
                     fdTable.completeRow();
                 }
 

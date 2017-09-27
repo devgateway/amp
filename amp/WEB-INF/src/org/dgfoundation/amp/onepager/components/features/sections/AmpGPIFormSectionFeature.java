@@ -4,26 +4,23 @@
  */
 package org.dgfoundation.amp.onepager.components.features.sections;
 
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.basic.Label;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.items.AmpGPIItemFeaturePanel;
-import org.dgfoundation.amp.onepager.components.features.items.AmpGPIQuestionItemFeaturePanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.helper.GPIFormSectionSurveyComparator;
 import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
-import org.dgfoundation.amp.onepager.translation.TrnLabel;
-import org.digijava.module.aim.dbentity.*;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.util.DbUtil;
-
-import java.util.*;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpGPISurvey;
 
 /**
  * GPI section

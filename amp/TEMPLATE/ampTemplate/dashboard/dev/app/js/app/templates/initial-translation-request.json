@@ -138,6 +138,7 @@
 "amp.dashboard:chart-heatmap-legend-more-than":"More than",
 "amp.dashboard:chart-heatmap-others":"Others",
 "amp.dashboard:percentage": "Percentage",
+"amp.dashboard:chart-heatmap-legend-n-a": "N/A",
 "amp.dashboard:chart-heatmap-help-text-location":"Each cell represents an intersection between a donor group and a location and represents how much that funder contributes to the total funding received by that location.",
 "amp.dashboard:chart-heatmap-help-text-sector":"Each cell represents an intersection between a donor group and a sector and represents how much that funder contributes to the total funding received by that sector.",
 "amp.dashboard:chart-heatmap-help-text-program":"Each cell represents an intersection between a donor group and a program and represents how much that funder contributes to the total funding received by that program.",

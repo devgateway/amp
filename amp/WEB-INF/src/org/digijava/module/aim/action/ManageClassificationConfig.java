@@ -35,7 +35,11 @@ public class ManageClassificationConfig extends Action {
             if (id != null) {
                 AmpClassificationConfiguration config = SectorUtil.getClassificationConfigById(id);
                 configForm.setConfigName(config.getName());
-                configForm.setSectorClassId(config.getClassification().getAmpSecSchemeId());
+                
+                if (config.getClassification() != null) {
+                    configForm.setSectorClassId(config.getClassification().getAmpSecSchemeId());
+                }
+                
                 Long multiSelect = 1l;
                 if (!config.isMultisector()) {
                     multiSelect = 2l;  //  multi sectors option is off

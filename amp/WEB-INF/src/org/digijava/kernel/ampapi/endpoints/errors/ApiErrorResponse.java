@@ -63,6 +63,11 @@ public class ApiErrorResponse {
         
     	return buildGenericError(status, ApiError.toError(msg), mediaType);
     }
+    
+    public static Response buildGenericError(Status status, ApiErrorMessage msg, Throwable e, String mediaType) {
+        
+    	return buildGenericError(status, ApiError.toError(msg, e), mediaType);
+    }
 	
 	/**
 	 * Reports that user authentication is required (HTTP 401)

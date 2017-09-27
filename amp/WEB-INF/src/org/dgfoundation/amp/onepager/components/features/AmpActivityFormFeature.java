@@ -530,10 +530,13 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		
 		AttributePrepender closeEditors = new AttributePrepender("onclick", new Model<String>("$('a[data-is_close=true]:visible').click();"), "");
 		AttributePrepender clickMonEval = new AttributePrepender("onclick", new Model<String>("$('.mon_eval_button:visible').click();"), "");
-		
+		AttributePrepender closeDialogs = new AttributePrepender("onclick", new Model<String>(
+				"$('.ui-dialog-content').dialog('close');"), "");
+
 		saveAndSubmit.getButton().add(new AttributeModifier("class", new Model<String>("sideMenuButtons")));
 		saveAndSubmit.getButton().add(updateEditors);
 		saveAndSubmit.getButton().add(closeEditors);
+		saveAndSubmit.getButton().add(closeDialogs);
 		saveAndSubmit.getButton().add(clickMonEval);
 		saveAndSubmit.getButton().setDefaultFormProcessing(false);
 		saveAndSubmit.setAffectedByFreezing(false);
@@ -581,6 +584,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 //		saveAsDraft.getButton().add(new AttributeModifier("onclick", "showDraftPanel();disableButton();"));
         saveAsDraft.getButton().add(new AttributePrepender("onclick", new Model<String>("showDraftPanel();disableButton();"), ""));
         saveAsDraft.getButton().add(closeEditors);
+        saveAsDraft.getButton().add(closeDialogs);
         saveAsDraft.getButton().add(clickMonEval);
 
 		saveAsDraft.setVisible(false);

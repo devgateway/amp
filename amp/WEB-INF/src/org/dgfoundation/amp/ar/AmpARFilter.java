@@ -6,6 +6,9 @@
  */
 package org.dgfoundation.amp.ar;
 
+import static java.util.Collections.emptySet;
+import static java.util.stream.Collectors.toSet;
+
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
@@ -27,6 +30,7 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -395,9 +399,11 @@ public class AmpARFilter extends PropertyListable {
 	private Set<AmpCategoryValue> modeOfPayment = null;
 	private Set<AmpCategoryValue> activityPledgesTitle = null;
 	private Set<AmpCategoryValue> concessionalityLevel = null;
-	
+
 	private Set<AmpCategoryValue> expenditureClass = null;
-	
+
+	private Set<AmpCategoryValue> performanceAlertLevel = null;
+
 	// private Long ampModalityId=null;
 
 	private AmpCurrency currency = null;
@@ -982,7 +988,7 @@ public class AmpARFilter extends PropertyListable {
 		return getDefaultYear(getEffectiveSettings(), current, false);
 	}
 	
-	public static Integer getDefaultYear(AmpApplicationSettings settings, AmpFiscalCalendar current, 
+	public static Integer getDefaultYear(AmpApplicationSettings settings, AmpFiscalCalendar current,
 			boolean startYear) {
 		
 		// 1st default priority are Workspace Settings
@@ -1465,13 +1471,16 @@ public class AmpARFilter extends PropertyListable {
 		
 		String EXPENDITURE_CLASS_FILTER = "SELECT amp_activity_id FROM v_expenditure_class WHERE id IN (" + Util.toCSStringForIN(getExpenditureClassForFilters()) + ")";
 
+		String performanceAlertLevelFilter = "SELECT amp_activity_id FROM v_performance_alert_level "
+				+ "WHERE level_code IN (" + Util.toCSStringForIN(getPerformanceAlertLevelForFilters()) + ")";
+
 		String MODE_OF_PAYMENT_FILTER = "SELECT amp_activity_id FROM v_mode_of_payment WHERE mode_of_payment_code IN ("
 			+ Util.toCSString(modeOfPayment) + ")";
 		
 		String CONCESSIONALITY_LEVEL_FILTER = "SELECT amp_activity_id FROM v_concessionality_level WHERE id IN ("
 				+ Util.toCSString(concessionalityLevel) + ")";
-		
-		String ACTIVITY_PLEDGES_TITLE = "SELECT amp_activity_id FROM v_activity_pledges_title WHERE title_id IN (" 
+
+		String ACTIVITY_PLEDGES_TITLE = "SELECT amp_activity_id FROM v_activity_pledges_title WHERE title_id IN ("
 			+ Util.toCSString(activityPledgesTitle) + ")";
 
 		String PROJECT_CATEGORY_FILTER = "SELECT amp_activity_id FROM v_project_category WHERE amp_category_id IN ("
@@ -1681,14 +1690,18 @@ public class AmpARFilter extends PropertyListable {
 		
 		if (expenditureClass != null && expenditureClass.size() > 0)
 			queryAppend(EXPENDITURE_CLASS_FILTER);
-		
+
+		if (performanceAlertLevel != null && performanceAlertLevel.size() > 0) {
+			queryAppend(performanceAlertLevelFilter);
+		}
+
 		if (modeOfPayment != null && modeOfPayment.size() > 0)
 			queryAppend(MODE_OF_PAYMENT_FILTER);
 		
 		if (concessionalityLevel != null && concessionalityLevel.size() > 0) {
 			queryAppend(CONCESSIONALITY_LEVEL_FILTER);
 		}
-		
+
 		if (projectCategory != null && projectCategory.size() > 0)
 			queryAppend(PROJECT_CATEGORY_FILTER);
 		
@@ -1735,7 +1748,7 @@ public class AmpARFilter extends PropertyListable {
 		if (componentSecondResponsible != null && componentSecondResponsible.size() > 0) {
 			queryAppend(COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION_FILTER);
 		}
-		
+
 		if (actualAppYear!=null && actualAppYear!=-1) {
 			queryAppend(ACTUAL_APPROVAL_YEAR_FILTER);
 		}
@@ -2680,7 +2693,7 @@ public class AmpARFilter extends PropertyListable {
 	public void setModeOfPayment(Set<AmpCategoryValue> modeOfPayment) {
 		this.modeOfPayment = modeOfPayment;
 	}
-	
+
 	public Set<AmpCategoryValue> getConcessionalityLevel() {
 		return concessionalityLevel;
 	}
@@ -3836,6 +3849,22 @@ public class AmpARFilter extends PropertyListable {
 	
 	public void setExpenditureClass(Set<AmpCategoryValue> expenditureClass) {
 		this.expenditureClass = expenditureClass;
+	}
+
+	public Set<AmpCategoryValue> getPerformanceAlertLevel() {
+		return performanceAlertLevel;
+	}
+
+	public void setPerformanceAlertLevel(final Set<AmpCategoryValue> performanceAlertLevel) {
+		this.performanceAlertLevel = performanceAlertLevel;
+	}
+
+	private Set<Long> getPerformanceAlertLevelForFilters() {
+		return Optional.ofNullable(performanceAlertLevel)
+				.orElse(emptySet())
+				.stream()
+				.map(AmpCategoryValue::getId)
+				.collect(toSet());
 	}
 
 	public static boolean isTrue(Boolean b) {

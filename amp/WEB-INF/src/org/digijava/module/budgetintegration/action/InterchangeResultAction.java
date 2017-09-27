@@ -1,4 +1,4 @@
-package org.digijava.module.dataExchange.action;
+package org.digijava.module.budgetintegration.action;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -7,9 +7,9 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpInterchangeableResult;
+import org.digijava.module.budgetintegration.form.InterchangeResultForm;
+import org.digijava.module.budgetintegration.util.DbUtil;
 import org.digijava.module.common.util.DateTimeUtil;
-import org.digijava.module.dataExchange.form.InterchangeResultForm;
-import org.digijava.module.dataExchange.util.DbUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

@@ -2,10 +2,10 @@
 <!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
 <struts-config>
 	<form-beans>
-		<form-bean name="interchangeResultForm" type="org.digijava.module.dataExchange.form.InterchangeResultForm"/>
+		<form-bean name="interchangeResultForm" type="org.digijava.module.budgetintegration.form.InterchangeResultForm"/>
 	</form-beans>
 	<action-mappings>
-		<action path="/dataExchange/interchangeResult" scope="request" type="org.digijava.module.dataExchange.action.InterchangeResultAction" name="interchangeResultForm" validate="false" parameter="action">
+		<action path="/budgetintegration/interchangeResult" scope="request" type="org.digijava.module.budgetintegration.action.InterchangeResultAction" name="interchangeResultForm" validate="false" parameter="action">
 			<forward name="forward" path="/showLayout.do?layout=de_interchangeResult"/>
 		</action>
 	</action-mappings>

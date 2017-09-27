@@ -1,4 +1,4 @@
-package org.digijava.module.dataExchange.form;
+package org.digijava.module.budgetintegration.form;
 
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.dbentity.AmpInterchangeableResult;

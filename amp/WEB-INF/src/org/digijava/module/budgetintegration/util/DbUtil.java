@@ -1,4 +1,4 @@
-package org.digijava.module.dataExchange.util;
+package org.digijava.module.budgetintegration.util;
 
 import java.sql.Date;
 import java.util.List;

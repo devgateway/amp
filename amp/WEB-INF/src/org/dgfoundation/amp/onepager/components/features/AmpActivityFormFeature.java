@@ -861,6 +861,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		if (am.getObject().getAmpActivityId() == null)
 			preview.setVisible(false);
 		preview.getButton().add(isSubmit);
+		preview.setAffectedByFreezing(false);
 		activityForm.add(preview);
 		
 		featureList = new ListView<AmpComponentPanel>("featureList", listModel) {

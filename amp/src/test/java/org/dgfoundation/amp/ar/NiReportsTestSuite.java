@@ -3,6 +3,7 @@ package org.dgfoundation.amp.ar;
 import org.dgfoundation.amp.ar.amp212.AmpSchemaComponentsTests;
 import org.dgfoundation.amp.ar.amp212.AmpSchemaFilteringTests;
 import org.dgfoundation.amp.ar.amp212.AmpSchemaPledgesTests;
+import org.dgfoundation.amp.ar.amp212.AmpSchemaRegionalTests;
 import org.dgfoundation.amp.ar.amp212.AmpSchemaSanityTests;
 import org.dgfoundation.amp.ar.amp212.AmpSchemaSortingTests;
 import org.dgfoundation.amp.ar.amp212.CurrencyConvertorTests;
@@ -34,6 +35,7 @@ import org.junit.runners.Suite;
 		AmpSchemaFilteringTests.class,
 		AmpSchemaPledgesTests.class,
 		AmpSchemaComponentsTests.class,
+		AmpSchemaRegionalTests.class,
 		ForecastExecutionRateTests.class,
 		FundingFlowsTests.class,
 		ExpenditureClassTests.class,

@@ -12,27 +12,27 @@ import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 
 public class ApprovalStatusPossibleValuesProvider extends PossibleValuesProvider {
 
-	@Override
-	public List<PossibleValue> getPossibleValues(TranslatorService translatorService) {
-		List<PossibleValue> values = new ArrayList<>();
-		for (Map.Entry<String, Integer> entry : AmpARFilter.activityStatusToNr.entrySet())
-			values.add(new PossibleValue(entry.getValue().toString(), entry.getKey(), ImmutableMap.of()));
-		return values;
-	}
+    @Override
+    public List<PossibleValue> getPossibleValues(TranslatorService translatorService) {
+        List<PossibleValue> values = new ArrayList<>();
+        for (Map.Entry<String, Integer> entry : AmpARFilter.activityStatusToNr.entrySet())
+            values.add(new PossibleValue(entry.getValue().toString(), entry.getKey(), ImmutableMap.of()));
+        return values;
+    }
 
-	@Override
-	public Object toJsonOutput( Object object) {
-		return object;
-	}
+    @Override
+    public Object toJsonOutput( Object object) {
+        return object;
+    }
 
-	@Override
-	public Long getIdOf(Object value) {
-		return null;
-	}
+    @Override
+    public Long getIdOf(Object value) {
+        return null;
+    }
 
-	@Override
-	public Object toAmpFormat(Object obj) {
-		return obj;
-	}
+    @Override
+    public Object toAmpFormat(Object obj) {
+        return obj;
+    }
 
 }

@@ -170,7 +170,7 @@ public class HeatMapService {
         result.set("matrix", matrix);
         // currency used.
         String currcode = spec.getSettings().getCurrencyCode();
-		result.set("currency", currcode);
+        result.set("currency", currcode);
     }
 
     private void prepareXYResults(List<String> yTotalAmounts, Map<String, BigDecimal> yTotal,

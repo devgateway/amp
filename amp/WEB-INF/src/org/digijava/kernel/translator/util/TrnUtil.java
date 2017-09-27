@@ -93,23 +93,23 @@ public class TrnUtil {
      * @param locale Locale string values like this 'en' 'fr' etc.
      * @return Integer value which is weight of local, NULL if no weight.
      */
-	private static Integer getLocaleWeight(String locale){
-		for (int i = 0; i < locales.length; i++) {
-			if (locale.equalsIgnoreCase(locales[i])){
-				return new Integer(i);
-			}
-		}
-		return null;
-		
-//		int w = locales.length;
-//		for (String language : locales) {
-//			if (language.equals(locale)){
-//				break;
-//			}
-//			w--;
-//		}
-//		return new Integer(w);
-	}
+    private static Integer getLocaleWeight(String locale){
+        for (int i = 0; i < locales.length; i++) {
+            if (locale.equalsIgnoreCase(locales[i])){
+                return new Integer(i);
+            }
+        }
+        return null;
+        
+//      int w = locales.length;
+//      for (String language : locales) {
+//          if (language.equals(locale)){
+//              break;
+//          }
+//          w--;
+//      }
+//      return new Integer(w);
+    }
 
 
     /**
@@ -402,19 +402,19 @@ public class TrnUtil {
 
                 Message trnMess = null;
                 if (site != null) {
-                	trnMess = trnWork.getByBody(defTrans, locale.getCode(), site.getId());
-                	if (trnMess == null && groupTranslation && site.getParentId() != null) {
-                		Site root = SiteCache.getInstance().getRootSite(site);
-                		trnMess = trnWork.getByBody(defTrans, locale.getCode(), root.getId());
-                	}
+                    trnMess = trnWork.getByBody(defTrans, locale.getCode(), site.getId());
+                    if (trnMess == null && groupTranslation && site.getParentId() != null) {
+                        Site root = SiteCache.getInstance().getRootSite(site);
+                        trnMess = trnWork.getByBody(defTrans, locale.getCode(), root.getId());
+                    }
                 } else {
-                	trnMess = trnWork.getByBody(defTrans, locale.getCode(), 0L);
+                    trnMess = trnWork.getByBody(defTrans, locale.getCode(), 0L);
                 }
                 if (trnMess == null) {
-                	trnString = defTrans;
+                    trnString = defTrans;
                 }
                 else {
-                	trnString = trnMess.getMessage();
+                    trnString = trnMess.getMessage();
                 }
 
                 Object[] sortObj = new Object[] {trnString, obj};
@@ -456,12 +456,12 @@ public class TrnUtil {
      * @return
      */
     public static List<LucModule<?>> getLuceneModules(){
-    	List<LucModule<?>> modules = new ArrayList<LucModule<?>>();
-    	LangSupport[] langs = LangSupport.values();
-    	for (LangSupport lang : langs) {
-			modules.add(new TrnLuceneModule(lang));
-		}
-    	return modules;
+        List<LucModule<?>> modules = new ArrayList<LucModule<?>>();
+        LangSupport[] langs = LangSupport.values();
+        for (LangSupport lang : langs) {
+            modules.add(new TrnLuceneModule(lang));
+        }
+        return modules;
     }
     
     /**
@@ -472,20 +472,20 @@ public class TrnUtil {
      * @throws DgException
      */
     @SuppressWarnings("unchecked")
-	public static List<Message> getMessagesForKeys(Set<String> keys) throws DgException{
-    	List<Message> messages = null;
-		if (keys!=null){
-			StringBuffer buff = new StringBuffer("from ");
-			buff.append(Message.class.getName());
-			buff.append(" as m where m.key in ( :keys )");
-			
-			String oql = buff.toString();
-			Session session = PersistenceManager.getRequestDBSession();
-			Query query = session.createQuery(oql);
-			query.setParameterList("keys", keys);
-			messages = query.list();
-		}
-		return messages;
+    public static List<Message> getMessagesForKeys(Set<String> keys) throws DgException{
+        List<Message> messages = null;
+        if (keys!=null){
+            StringBuffer buff = new StringBuffer("from ");
+            buff.append(Message.class.getName());
+            buff.append(" as m where m.key in ( :keys )");
+            
+            String oql = buff.toString();
+            Session session = PersistenceManager.getRequestDBSession();
+            Query query = session.createQuery(oql);
+            query.setParameterList("keys", keys);
+            messages = query.list();
+        }
+        return messages;
     }
     
     /**
@@ -495,23 +495,23 @@ public class TrnUtil {
      * @throws DgException
      */
     @SuppressWarnings("unchecked")
-	public static List<Message> getMessagesForLocales(EnumSet<LangSupport> locales, boolean exclude) throws DgException{
-    	List<Message> messages = null;
-		if (locales!=null && locales.size()>0){
-			StringBuffer buff = new StringBuffer("from ");
-			buff.append(Message.class.getName());
-			if (exclude){
-				buff.append(" as m where m.locale not in ( :langs )");
-			}else{
-				buff.append(" as m where m.locale in ( :langs )");
-			}
-			String oql = buff.toString();
-			Session session = PersistenceManager.getRequestDBSession();
-			Query query = session.createQuery(oql);
-			query.setParameterList("langs", LangSupport.toCodeList(locales));
-			messages = query.list();
-		}
-		return messages;
+    public static List<Message> getMessagesForLocales(EnumSet<LangSupport> locales, boolean exclude) throws DgException{
+        List<Message> messages = null;
+        if (locales!=null && locales.size()>0){
+            StringBuffer buff = new StringBuffer("from ");
+            buff.append(Message.class.getName());
+            if (exclude){
+                buff.append(" as m where m.locale not in ( :langs )");
+            }else{
+                buff.append(" as m where m.locale in ( :langs )");
+            }
+            String oql = buff.toString();
+            Session session = PersistenceManager.getRequestDBSession();
+            Query query = session.createQuery(oql);
+            query.setParameterList("langs", LangSupport.toCodeList(locales));
+            messages = query.list();
+        }
+        return messages;
     }
 
 
@@ -541,7 +541,7 @@ public class TrnUtil {
      * @throws DgException
      */
     public static Collection<MessageGroup> groupByKey(Collection<Message> messages) throws DgException{
-    	return groupByKey(messages,new StandardMessageGroupFactory());
+        return groupByKey(messages,new StandardMessageGroupFactory());
     }
 
     /**
@@ -553,7 +553,7 @@ public class TrnUtil {
      * @throws DgException
      */
     public static <E extends MessageGroup> Collection<E> groupByKey(Collection<Message> messages, MessageGroupFactory<E> factory) throws DgException{
-    	return groupByKey(messages, factory, null);
+        return groupByKey(messages, factory, null);
     }
 
     /**
@@ -568,33 +568,33 @@ public class TrnUtil {
      * @throws DgException
      */
     public static <E extends MessageGroup> Collection<E> groupByKey(Collection<Message> messages, MessageGroupFactory<E> factory, Map<String, Float> scoresByKey) throws DgException{
-    	Map<String, E> groupByKey = new HashMap<String, E>(messages.size());
-    	for (Message message : messages) {
-    		//get group for current message (by key)
-			E group = groupByKey.get(message.getKey());
-			//if we do not have group yet
-			if (null == group){
-				//create new group for current message
-				group = factory.createGroup(message.getKey(),message.getPrefix());
-				//put it in map to find next time for same key
-				groupByKey.put(message.getKey(), group);
-			}
-			//add current message to the group.
-			group.addMessage(message);
-			
-			//need to work with scores?
-			if (scoresByKey!=null){
-				//get score for the message
-				Float score = scoresByKey.get(message.getKey());
-				if (score == null) score = new Float(0);
-				//check if we need to update score value of the group
-				if (score !=null && (group.getScore()==null || group.getScore().floatValue() < score.floatValue())){
-					group.setScore(score);
-				}
-			}
-		}
-    	//return list of the groups
-    	return groupByKey.values();
+        Map<String, E> groupByKey = new HashMap<String, E>(messages.size());
+        for (Message message : messages) {
+            //get group for current message (by key)
+            E group = groupByKey.get(message.getKey());
+            //if we do not have group yet
+            if (null == group){
+                //create new group for current message
+                group = factory.createGroup(message.getKey(),message.getPrefix());
+                //put it in map to find next time for same key
+                groupByKey.put(message.getKey(), group);
+            }
+            //add current message to the group.
+            group.addMessage(message);
+            
+            //need to work with scores?
+            if (scoresByKey!=null){
+                //get score for the message
+                Float score = scoresByKey.get(message.getKey());
+                if (score == null) score = new Float(0);
+                //check if we need to update score value of the group
+                if (score !=null && (group.getScore()==null || group.getScore().floatValue() < score.floatValue())){
+                    group.setScore(score);
+                }
+            }
+        }
+        //return list of the groups
+        return groupByKey.values();
     }
     
     /**
@@ -604,7 +604,7 @@ public class TrnUtil {
      * @param <E>
      */
     public static interface MessageGroupFactory<E extends MessageGroup>{
-    	public E createGroup(String key,String prefix);
+        public E createGroup(String key,String prefix);
     }
     
     /**
@@ -613,10 +613,10 @@ public class TrnUtil {
      *
      */
     public static class StandardMessageGroupFactory implements MessageGroupFactory<MessageGroup>{
-		@Override
-		public MessageGroup createGroup(String key,String prefix) {
-			return new MessageGroup(key,prefix);
-		}
+        @Override
+        public MessageGroup createGroup(String key,String prefix) {
+            return new MessageGroup(key,prefix);
+        }
     }
     
     /**
@@ -625,10 +625,10 @@ public class TrnUtil {
      *
      */
     public static class PatcherMessageGroupFactory implements MessageGroupFactory<PatcherMessageGroup>{
-		@Override
-		public PatcherMessageGroup createGroup(String key, String prefix) {
-			return new PatcherMessageGroup(key);
-		}
+        @Override
+        public PatcherMessageGroup createGroup(String key, String prefix) {
+            return new PatcherMessageGroup(key);
+        }
 
     }
 
@@ -640,83 +640,83 @@ public class TrnUtil {
      * @return
      */
     public static <E extends MessageGroup> Collection<E> removeDuplicateHashCodes(Collection<E> groups){
-    	Map<String, E> hashKeyMap = new HashMap<String, E>();
-    	if (groups != null){
-    		for (E nextGroup : groups) {
-				E hashGroup = hashKeyMap.get(nextGroup.getHashKey());
-				if (hashGroup == null){
-					hashKeyMap.put(nextGroup.getHashKey(), nextGroup);
-				}else {
-					hashGroup.addMessagesFrom(nextGroup);
-				}
-			}
-    	}
-    	return hashKeyMap.values();
+        Map<String, E> hashKeyMap = new HashMap<String, E>();
+        if (groups != null){
+            for (E nextGroup : groups) {
+                E hashGroup = hashKeyMap.get(nextGroup.getHashKey());
+                if (hashGroup == null){
+                    hashKeyMap.put(nextGroup.getHashKey(), nextGroup);
+                }else {
+                    hashGroup.addMessagesFrom(nextGroup);
+                }
+            }
+        }
+        return hashKeyMap.values();
     }
     /**
      * Fixes all changes to translations in db.
      * @author Irakli Kobiashvili
      *
      */
-	public static class TrnDb implements OperationFixer<Message>{
+    public static class TrnDb implements OperationFixer<Message>{
 
-		private Session session = null;
-		private Transaction tx = null;
-		private TranslatorWorker worker = null;
-		
-		public TrnDb() throws DgException{
-			this.session = PersistenceManager.getRequestDBSession();
-			this.worker = TranslatorWorker.getInstance("");
-		}
+        private Session session = null;
+        private Transaction tx = null;
+        private TranslatorWorker worker = null;
+        
+        public TrnDb() throws DgException{
+            this.session = PersistenceManager.getRequestDBSession();
+            this.worker = TranslatorWorker.getInstance("");
+        }
 
-		@Override
-		public void add(Message element) throws WorkerException {
-			worker.save(element);
-		}
+        @Override
+        public void add(Message element) throws WorkerException {
+            worker.save(element);
+        }
 
-		@Override
-		public void update(Message element) {
-			worker.update(element);
-		}
+        @Override
+        public void update(Message element) {
+            worker.update(element);
+        }
 
-		@Override
-		public void delete(Message elemenet) throws WorkerException {
-			worker.delete(elemenet);
-		}
+        @Override
+        public void delete(Message elemenet) throws WorkerException {
+            worker.delete(elemenet);
+        }
 
-		@Override
-		public void start() throws WorkerException {
-			try {
+        @Override
+        public void start() throws WorkerException {
+            try {
 //beginTransaction();
-			} catch (HibernateException e) {
-				throw new WorkerException("Cannot start trasaction to fix translation changes.");
-			}
-		}
+            } catch (HibernateException e) {
+                throw new WorkerException("Cannot start trasaction to fix translation changes.");
+            }
+        }
 
-		@Override
-		public void end() throws WorkerException {
-			if (tx!=null){
-				try {
-					//tx.commit();
-				} catch (HibernateException e) {
-					throw new WorkerException("Cannot fix buffered changes.",e);
-				}
-			}
-		}
+        @Override
+        public void end() throws WorkerException {
+            if (tx!=null){
+                try {
+                    //tx.commit();
+                } catch (HibernateException e) {
+                    throw new WorkerException("Cannot fix buffered changes.",e);
+                }
+            }
+        }
 
-		@Override
-		public void error() throws WorkerException {
-			if (tx!=null){
-				try {
-					tx.rollback();
-				} catch (HibernateException e) {
-					throw new WorkerException("Cannot rollback transaction chnages",e);
-				}
-			}
-		}
-		
-		
-	}
+        @Override
+        public void error() throws WorkerException {
+            if (tx!=null){
+                try {
+                    tx.rollback();
+                } catch (HibernateException e) {
+                    throw new WorkerException("Cannot rollback transaction chnages",e);
+                }
+            }
+        }
+        
+        
+    }
 
 
     static {
@@ -753,16 +753,16 @@ public class TrnUtil {
      * @param session
      * @return
      */
-	@SuppressWarnings("unchecked")
-	public static ListChangesBuffer<String, Message> getBuffer(HttpSession session){
-		String sessionKey = "amp.translations.newAdvancedMode.changesList";
-		ListChangesBuffer<String, Message> result = (ListChangesBuffer<String, Message>)session.getAttribute(sessionKey);
-		if (result == null){
-			result = new ListChangesBuffer<String, Message>(new TrnUtil.MessageKeyLocaleResolver());
-			session.setAttribute(sessionKey, result);
-		}
-		return result;
-	}
+    @SuppressWarnings("unchecked")
+    public static ListChangesBuffer<String, Message> getBuffer(HttpSession session){
+        String sessionKey = "amp.translations.newAdvancedMode.changesList";
+        ListChangesBuffer<String, Message> result = (ListChangesBuffer<String, Message>)session.getAttribute(sessionKey);
+        if (result == null){
+            result = new ListChangesBuffer<String, Message>(new TrnUtil.MessageKeyLocaleResolver());
+            session.setAttribute(sessionKey, result);
+        }
+        return result;
+    }
 
     /**
      * Resolvs ony string key of Message.
@@ -770,9 +770,9 @@ public class TrnUtil {
      *
      */
     public static class MessageShortKeyResolver implements KeyResolver<String, Message>{
-		public String resolveKey(Message element) {
-			return element.getKey();
-		}
+        public String resolveKey(Message element) {
+            return element.getKey();
+        }
     }
     /**
      * Resolves locale_key as key of the message
@@ -780,9 +780,9 @@ public class TrnUtil {
      *
      */
     public static class MessageKeyLocaleResolver implements KeyResolver<String, Message>{
-		public String resolveKey(Message element) {
-			return element.getLocale()+"_"+element.getKey();
-		}
+        public String resolveKey(Message element) {
+            return element.getLocale()+"_"+element.getKey();
+        }
     }
     
     /**
@@ -791,9 +791,9 @@ public class TrnUtil {
      *
      */
     public static class MessageFullKeyResolver implements KeyResolver<String, Message>{
-		public String resolveKey(Message element) {
-			return element.getLocale()+"_"+element.getSiteId()+"_"+element.getKey();
-		}
+        public String resolveKey(Message element) {
+            return element.getLocale()+"_"+element.getSiteId()+"_"+element.getKey();
+        }
     }
     /**
      * Compares {@link MessageGroup} by score.
@@ -801,10 +801,10 @@ public class TrnUtil {
      *
      */
     public static class MsgGroupScoreComparator implements Comparator<MessageGroup>{
-		@Override
-		public int compare(MessageGroup m1, MessageGroup m2) {
-			return m2.getScore().compareTo(m1.getScore());
-		}
+        @Override
+        public int compare(MessageGroup m1, MessageGroup m2) {
+            return m2.getScore().compareTo(m1.getScore());
+        }
     }
 
     /**
@@ -820,20 +820,20 @@ public class TrnUtil {
      *
      */
     public static class MessageLocaleWeightComparator implements Comparator<Message>{
-		@Override
-		public int compare(Message m1, Message m2) {
-			Integer w1 = getLocaleWeight(m1.getLocale());
-			Integer w2 = getLocaleWeight(m2.getLocale());
-			if (w1==null && w2==null){
-				//if both do not have weights then compare by string value 
-				return m1.getLocale().compareTo(m2.getLocale());
-			}else if (w1 == null || w2 == null){
-				//if only one has weight than that one wins.
-				if (w1!=null) return -1;
-				if (w2!=null) return 1;
-			}
-			return w1.compareTo(w2);
-		}
+        @Override
+        public int compare(Message m1, Message m2) {
+            Integer w1 = getLocaleWeight(m1.getLocale());
+            Integer w2 = getLocaleWeight(m2.getLocale());
+            if (w1==null && w2==null){
+                //if both do not have weights then compare by string value 
+                return m1.getLocale().compareTo(m2.getLocale());
+            }else if (w1 == null || w2 == null){
+                //if only one has weight than that one wins.
+                if (w1!=null) return -1;
+                if (w2!=null) return 1;
+            }
+            return w1.compareTo(w2);
+        }
     }
     /**
      * Returns the current workspace prefix

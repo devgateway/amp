@@ -41,111 +41,111 @@ public class Message implements Serializable{
 
     private static final long serialVersionUID = 1;
 
-	private String key;
-	private String message;
-	private String locale;
-	private Timestamp created;
-	private Timestamp lastAccessed;
-	private String siteId;
-	private String keyWords;
+    private String key;
+    private String message;
+    private String locale;
+    private Timestamp created;
+    private Timestamp lastAccessed;
+    private String siteId;
+    private String keyWords;
     private int hashCode;
     private boolean hasHashCode;
     private String originalMessage;
     private String prefix;
-	private Boolean ampOffline;
-	public Message(){
+    private Boolean ampOffline;
+    public Message(){
         hasHashCode = false;
-	}
-	/**
-	 * @hibernate.property
-	 *  not-null="true"
-	 *  column="key"
-	 * @return
-	 */
-	public String getKey() {
-		return key;
-	}
+    }
+    /**
+     * @hibernate.property
+     *  not-null="true"
+     *  column="key"
+     * @return
+     */
+    public String getKey() {
+        return key;
+    }
 
-	/**
-	 * @hibernate.property
-	 *  not-null="true"
-	 *  column="lang_iso"
-	 * @return
-	 */
-	public String getLocale() {
-		return locale;
-	}
+    /**
+     * @hibernate.property
+     *  not-null="true"
+     *  column="lang_iso"
+     * @return
+     */
+    public String getLocale() {
+        return locale;
+    }
 
-	/**
-	 * @hibernate.property
-	 *  not-null="true"
-	 *  column="message_utf8"
-	 * @return
-	 */
-	public String getMessage() {
-		return message;
-	}
+    /**
+     * @hibernate.property
+     *  not-null="true"
+     *  column="message_utf8"
+     * @return
+     */
+    public String getMessage() {
+        return message;
+    }
 
-	/**
-	 * @param string
-	 */
-	public void setKey(String string) {
-		key = string;
+    /**
+     * @param string
+     */
+    public void setKey(String string) {
+        key = string;
         hasHashCode = false;
-	}
+    }
 
-	/**
-	 * @param string
-	 */
-	public void setLocale(String string) {
-		locale = string;
+    /**
+     * @param string
+     */
+    public void setLocale(String string) {
+        locale = string;
         hasHashCode = false;
-	}
+    }
 
-	/**
-	 * @param string
-	 */
-	public void setMessage(String string) {
-		message = string;
+    /**
+     * @param string
+     */
+    public void setMessage(String string) {
+        message = string;
         hasHashCode = false;
-	}
+    }
 
-	/* (non-Javadoc)
-		 * @see java.lang.Object#toString()
-		 */
+    /* (non-Javadoc)
+         * @see java.lang.Object#toString()
+         */
         /*
-	public String toString() {
-		return new ToStringBuilder(this)
-			.append("Key", (getKey()).toString())
-			.append("Locale", getLocale())
+    public String toString() {
+        return new ToStringBuilder(this)
+            .append("Key", (getKey()).toString())
+            .append("Locale", getLocale())
                         .append("siteId", getSiteId())
-			.toString();
-	}
+            .toString();
+    }
 */
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	public boolean equals(Object other) {
-		if (!(other instanceof Message))
-			return false;
-		Message castOther = (Message) other;
+    /* (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    public boolean equals(Object other) {
+        if (!(other instanceof Message))
+            return false;
+        Message castOther = (Message) other;
         return compareStrings(this.key, castOther.key) &&
             compareStrings(this.siteId, castOther.siteId) &&
             compareStrings(this.locale, castOther.locale);
         //return this.key.equals()
         /*
-		return new EqualsBuilder()
-			.append(this.key, castOther.key)
-			.append(this.siteId, castOther.siteId)
-			.append(this.locale, castOther.locale)
-			.isEquals();
+        return new EqualsBuilder()
+            .append(this.key, castOther.key)
+            .append(this.siteId, castOther.siteId)
+            .append(this.locale, castOther.locale)
+            .isEquals();
          */
-	}
+    }
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
-	 */
-	public int hashCode() {
+    /* (non-Javadoc)
+     * @see java.lang.Object#hashCode()
+     */
+    public int hashCode() {
         if (!hasHashCode) {
             hashCode = new HashCodeBuilder()
                 .append(key)
@@ -155,46 +155,46 @@ public class Message implements Serializable{
         }
 
         return hashCode;
-	}
-	/**
-	 * @return
-	 */
-	public Timestamp getCreated() {
-		return created;
-	}
+    }
+    /**
+     * @return
+     */
+    public Timestamp getCreated() {
+        return created;
+    }
 
-	/**
-	 * @param timestamp
-	 */
-	public void setCreated(Timestamp timestamp) {
-		created = timestamp;
-	}
+    /**
+     * @param timestamp
+     */
+    public void setCreated(Timestamp timestamp) {
+        created = timestamp;
+    }
 
-	/**
-	 * @return
-	 */
-	public String getSiteId() {
-		return siteId;
-	}
+    /**
+     * @return
+     */
+    public String getSiteId() {
+        return siteId;
+    }
 
 
-	/**
-	 * @deprecated - do not use directly as it subscribes you to a certain DB encoding. Use {@link #setSite(Site instead)}
-	 * @param timestamp
-	 */
-	public void setSiteId(String siteId) {
-		if ((siteId != null) && (!AmpMath.isLong(siteId)))
-		{
-			this.siteId = SiteCache.lookupByName(siteId).getId().toString();
-			Logger.getLogger(this.getClass()).error("wrong siteId in Message, should be number!" + siteId, new RuntimeException());
-		}
-		this.siteId = siteId;
-	}
-	
-	public void setSite(Site site)
-	{
-		setSiteId(site == null ? null : site.getId().toString());
-	}
+    /**
+     * @deprecated - do not use directly as it subscribes you to a certain DB encoding. Use {@link #setSite(Site instead)}
+     * @param timestamp
+     */
+    public void setSiteId(String siteId) {
+        if ((siteId != null) && (!AmpMath.isLong(siteId)))
+        {
+            this.siteId = SiteCache.lookupByName(siteId).getId().toString();
+            Logger.getLogger(this.getClass()).error("wrong siteId in Message, should be number!" + siteId, new RuntimeException());
+        }
+        this.siteId = siteId;
+    }
+    
+    public void setSite(Site site)
+    {
+        setSiteId(site == null ? null : site.getId().toString());
+    }
 
     private boolean compareStrings(String first, String second) {
         if (first != null && second != null) {
@@ -208,36 +208,36 @@ public class Message implements Serializable{
             return false;
         }
     }
-	public void setLastAccessed(Timestamp lastAccessed) {
-		this.lastAccessed = lastAccessed;
-	}
-	public Timestamp getLastAccessed() {
-		return lastAccessed;
-	}
-	public void setKeyWords(String keyWords) {
-		this.keyWords = keyWords;
-	}
-	public String getKeyWords() {
-		return keyWords;
-	}
-	public void setOriginalMessage(String originalMessage) {
-		this.originalMessage = originalMessage;
-	}
-	public String getOriginalMessage() {
-		return originalMessage;
-	}
-	public String getPrefix() {
-		return prefix;
-	}
-	public void setPrefix(String prefix) {
-		this.prefix = prefix;
-	}
+    public void setLastAccessed(Timestamp lastAccessed) {
+        this.lastAccessed = lastAccessed;
+    }
+    public Timestamp getLastAccessed() {
+        return lastAccessed;
+    }
+    public void setKeyWords(String keyWords) {
+        this.keyWords = keyWords;
+    }
+    public String getKeyWords() {
+        return keyWords;
+    }
+    public void setOriginalMessage(String originalMessage) {
+        this.originalMessage = originalMessage;
+    }
+    public String getOriginalMessage() {
+        return originalMessage;
+    }
+    public String getPrefix() {
+        return prefix;
+    }
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
+    }
 
-	public Boolean getAmpOffline() {
-		return ampOffline;
-	}
+    public Boolean getAmpOffline() {
+        return ampOffline;
+    }
 
-	public void setAmpOffline(Boolean ampOffline) {
-		this.ampOffline = ampOffline;
-	}
+    public void setAmpOffline(Boolean ampOffline) {
+        this.ampOffline = ampOffline;
+    }
 }

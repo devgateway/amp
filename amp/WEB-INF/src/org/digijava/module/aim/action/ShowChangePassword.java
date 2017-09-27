@@ -13,7 +13,7 @@ public class ShowChangePassword extends Action {
                                  javax.servlet.http.HttpServletResponse
                                  response) throws
         
-				java.lang.Exception {
+                java.lang.Exception {
 
 
         return mapping.findForward("forward");

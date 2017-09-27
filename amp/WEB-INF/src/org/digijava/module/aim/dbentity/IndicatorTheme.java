@@ -10,16 +10,16 @@ package org.digijava.module.aim.dbentity;
  *
  */
 public class IndicatorTheme extends IndicatorConnection {
-	
-	private static final long serialVersionUID = 3L;
+    
+    private static final long serialVersionUID = 3L;
 
-	private AmpTheme theme;
+    private AmpTheme theme;
 
-	public AmpTheme getTheme() {
-		return theme;
-	}
-	public void setTheme(AmpTheme theme) {
-		this.theme = theme;
-	}
-	
+    public AmpTheme getTheme() {
+        return theme;
+    }
+    public void setTheme(AmpTheme theme) {
+        this.theme = theme;
+    }
+    
 }

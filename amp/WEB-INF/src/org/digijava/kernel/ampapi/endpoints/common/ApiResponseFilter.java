@@ -30,11 +30,11 @@ public class ApiResponseFilter implements ContainerResponseFilter {
     @Override
     public ContainerResponse filter(ContainerRequest request, ContainerResponse response) {
 
-    	//clean session if it has been restored by the request filter
-		if("true".equals(TLSUtils.getRequest().getAttribute(SecurityUtil.REMOVE_SESSION))){
-			TLSUtils.getRequest().getSession().removeAttribute(Constants.CURRENT_MEMBER);
-			TLSUtils.getRequest().removeAttribute(SecurityUtil.REMOVE_SESSION);
-		}
+        //clean session if it has been restored by the request filter
+        if("true".equals(TLSUtils.getRequest().getAttribute(SecurityUtil.REMOVE_SESSION))){
+            TLSUtils.getRequest().getSession().removeAttribute(Constants.CURRENT_MEMBER);
+            TLSUtils.getRequest().removeAttribute(SecurityUtil.REMOVE_SESSION);
+        }
         Integer responseStatusMarker = EndpointUtils.getResponseStatusMarker();
         // override only the default 200 status with custom one
         if (responseStatusMarker != null && response.getStatus() == HttpServletResponse.SC_OK) {

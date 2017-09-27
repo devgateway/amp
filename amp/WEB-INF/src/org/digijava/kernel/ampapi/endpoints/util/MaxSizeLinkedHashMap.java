@@ -13,13 +13,13 @@ import java.util.Map;
  */
 public class MaxSizeLinkedHashMap<K, V> extends LinkedHashMap<K, V> {
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = 4467118985640179660L;
-	private final int maxSize;
+     * 
+     */
+    private static final long serialVersionUID = 4467118985640179660L;
+    private final int maxSize;
 
     public MaxSizeLinkedHashMap(int maxSize) {
-    	super();
+        super();
         this.maxSize = maxSize;
     }
 

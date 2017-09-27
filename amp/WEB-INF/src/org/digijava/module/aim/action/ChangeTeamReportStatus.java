@@ -19,88 +19,88 @@ import org.digijava.module.aim.util.TeamUtil;
 
 public class ChangeTeamReportStatus extends Action {
 
-	private static Logger logger = Logger
-			.getLogger(ChangeTeamReportStatus.class);
+    private static Logger logger = Logger
+            .getLogger(ChangeTeamReportStatus.class);
 
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws java.lang.Exception {
-		
-		boolean permitted = false;
-		HttpSession session = request.getSession();
-		if (session.getAttribute("ampAdmin") != null) {
-			String key = (String) session.getAttribute("ampAdmin");
-			if (key.equalsIgnoreCase("yes")) {
-				permitted = true;
-			} else {
-				if (session.getAttribute("teamLeadFlag") != null) {
-					key = (String) session.getAttribute("teamLeadFlag");
-					if (key.equalsIgnoreCase("true")) {
-						permitted = true;	
-					}
-				}
-			}
-		}
-		if (!permitted) {
-			return mapping.findForward("index");
-		}		
+    public ActionForward execute(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response)
+            throws java.lang.Exception {
+        
+        boolean permitted = false;
+        HttpSession session = request.getSession();
+        if (session.getAttribute("ampAdmin") != null) {
+            String key = (String) session.getAttribute("ampAdmin");
+            if (key.equalsIgnoreCase("yes")) {
+                permitted = true;
+            } else {
+                if (session.getAttribute("teamLeadFlag") != null) {
+                    key = (String) session.getAttribute("teamLeadFlag");
+                    if (key.equalsIgnoreCase("true")) {
+                        permitted = true;   
+                    }
+                }
+            }
+        }
+        if (!permitted) {
+            return mapping.findForward("index");
+        }       
 
-		SiteDomain currentDomain = RequestUtils.getSiteDomain(request);
-		String url = SiteUtils.getSiteURL(currentDomain, request.getScheme(),
-				request.getServerPort(), request.getContextPath());
+        SiteDomain currentDomain = RequestUtils.getSiteDomain(request);
+        String url = SiteUtils.getSiteURL(currentDomain, request.getScheme(),
+                request.getServerPort(), request.getContextPath());
 
-		if (request.getParameter("status") == null
-				|| request.getParameter("id") == null) {
-			url += "/aim/viewMyDesktop.do";
-			response.sendRedirect(url);
-		}
+        if (request.getParameter("status") == null
+                || request.getParameter("id") == null) {
+            url += "/aim/viewMyDesktop.do";
+            response.sendRedirect(url);
+        }
 
-		Long reportId = null;
+        Long reportId = null;
 
-		try {
-			reportId = new Long(Long.parseLong(request.getParameter("id")));
-		} catch (Exception e) {
-			url += "/aim/viewMyDesktop.do";
-			response.sendRedirect(url);
-		}
+        try {
+            reportId = new Long(Long.parseLong(request.getParameter("id")));
+        } catch (Exception e) {
+            url += "/aim/viewMyDesktop.do";
+            response.sendRedirect(url);
+        }
 
-		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
-		Long teamId = tm.getTeamId();
-		String status = request.getParameter("status");
-		AmpTeamReports teamReports = TeamUtil.getAmpTeamReport(teamId, reportId);
+        TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+        Long teamId = tm.getTeamId();
+        String status = request.getParameter("status");
+        AmpTeamReports teamReports = TeamUtil.getAmpTeamReport(teamId, reportId);
 
-		if (teamReports == null) {
-			// error. No report with id reportId exist for the team with id
-			// teamId
-			// Do handle it
-		}
+        if (teamReports == null) {
+            // error. No report with id reportId exist for the team with id
+            // teamId
+            // Do handle it
+        }
 
-		if (status.equals("team")) {
-			teamReports.setTeamView(true);
-		} else if (status.equals("member")) {
-			teamReports.setTeamView(false);
-		}
+        if (status.equals("team")) {
+            teamReports.setTeamView(true);
+        } else if (status.equals("member")) {
+            teamReports.setTeamView(false);
+        }
 
-		DbUtil.update(teamReports);
+        DbUtil.update(teamReports);
 
-		String returnPage = null;
-		if("teamReportList".equals(request.getParameter("returnPage"))){
-			returnPage = "/aim/teamReportList.do";
-		}else{ //if("teamDesktopTabList".equals(request.getParameter("returnPage"))){
-			returnPage = "/aim/teamDesktopTabList.do";
-		}
+        String returnPage = null;
+        if("teamReportList".equals(request.getParameter("returnPage"))){
+            returnPage = "/aim/teamReportList.do";
+        }else{ //if("teamDesktopTabList".equals(request.getParameter("returnPage"))){
+            returnPage = "/aim/teamDesktopTabList.do";
+        }
 
         String tempNumResultsParam = request.getParameter("tempNumResults");
         if (tempNumResultsParam != null && tempNumResultsParam.length() > 0) {
-        	returnPage += "~tempNumResults=" + tempNumResultsParam;
+            returnPage += "~tempNumResults=" + tempNumResultsParam;
         }
-		String currentPage = request.getParameter("currentPage");
-		if (currentPage != null && currentPage.length() > 0) {
-        	returnPage += "~currentPage=" + currentPage;
+        String currentPage = request.getParameter("currentPage");
+        if (currentPage != null && currentPage.length() > 0) {
+            returnPage += "~currentPage=" + currentPage;
         }
-		url += returnPage;
-		response.sendRedirect(url);
+        url += returnPage;
+        response.sendRedirect(url);
 
-		return null;
-	}
+        return null;
+    }
 }

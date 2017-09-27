@@ -25,35 +25,35 @@ package org.digijava.kernel.entity;
 
 public class Organization {
 
-	private String name;
-	private String type;
+    private String name;
+    private String type;
 
-	public Organization() {
-	}
+    public Organization() {
+    }
 
-	 Organization(String name, String type) {
-		this.name = name;
-		this.type = type;
-	}
+     Organization(String name, String type) {
+        this.name = name;
+        this.type = type;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getType() {
-		return type;
-	}
+    public String getType() {
+        return type;
+    }
 
-	public void setType(String type) {
-		/*
-		 * Should throw InvalidOrganizationTypeException if not accurate type is provided
-		 * The types are provided by DgOrganizationTypes persisted collection
-		 */
-		this.type = type;
-	}
+    public void setType(String type) {
+        /*
+         * Should throw InvalidOrganizationTypeException if not accurate type is provided
+         * The types are provided by DgOrganizationTypes persisted collection
+         */
+        this.type = type;
+    }
 
 }

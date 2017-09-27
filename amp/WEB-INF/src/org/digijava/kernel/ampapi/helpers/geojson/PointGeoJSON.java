@@ -21,17 +21,17 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 public class PointGeoJSON extends GeometryGeoJSON
 {
-	public List<Double> coordinates;
-	public Map<String,JsonNode> properties;
-	public PointGeoJSON() {
-		super();
-		this.coordinates = new ArrayList<Double>();
-		//this.properties =  new HashMap<String, JsonNode>();
-	}
+    public List<Double> coordinates;
+    public Map<String,JsonNode> properties;
+    public PointGeoJSON() {
+        super();
+        this.coordinates = new ArrayList<Double>();
+        //this.properties =  new HashMap<String, JsonNode>();
+    }
 
-	@Override
-	public boolean isValid( PositionValidator validator )
-	{
-		return validator.isValid(coordinates) && super.isValid(validator);
-	}
+    @Override
+    public boolean isValid( PositionValidator validator )
+    {
+        return validator.isValid(coordinates) && super.isValid(validator);
+    }
 }

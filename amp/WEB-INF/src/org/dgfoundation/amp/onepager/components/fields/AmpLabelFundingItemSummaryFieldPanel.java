@@ -8,21 +8,21 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 
 public class AmpLabelFundingItemSummaryFieldPanel<T> extends AmpComponentPanel<T> {
 
-	private static final long serialVersionUID = -1504307221179301769L;
-	AmpLabelInformationFieldPanel actual;
-	AmpLabelInformationFieldPanel planned;
-	
-	public AmpLabelFundingItemSummaryFieldPanel(String id, String fmName,IModel<T> model,int transactionType) {
-		super(id, fmName);
-		
-		actual = new AmpLabelInformationFieldPanel("actual", new AmpOverallFundingModel(null,
-				(IModel<AmpFunding>) model, transactionType,
-				CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey()),  "Actual " + fmName);
-		add(actual);
-		
-		planned = new AmpLabelInformationFieldPanel("planned", new AmpOverallFundingModel(null,
-				(IModel<AmpFunding>) model, transactionType,
-				CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey()), "Planned " + fmName);
-		add(planned);
-	}
+    private static final long serialVersionUID = -1504307221179301769L;
+    AmpLabelInformationFieldPanel actual;
+    AmpLabelInformationFieldPanel planned;
+    
+    public AmpLabelFundingItemSummaryFieldPanel(String id, String fmName,IModel<T> model,int transactionType) {
+        super(id, fmName);
+        
+        actual = new AmpLabelInformationFieldPanel("actual", new AmpOverallFundingModel(null,
+                (IModel<AmpFunding>) model, transactionType,
+                CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey()),  "Actual " + fmName);
+        add(actual);
+        
+        planned = new AmpLabelInformationFieldPanel("planned", new AmpOverallFundingModel(null,
+                (IModel<AmpFunding>) model, transactionType,
+                CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey()), "Planned " + fmName);
+        add(planned);
+    }
 }

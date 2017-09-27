@@ -7,37 +7,37 @@ import java.util.Set;
  *
  */
 public class TemplateDoc {
-	
-	private Long id;
-	private String name;
-	private Set<TemplateField> fields;
-	
-	public TemplateDoc(){
-		
-	}
-	
-	public TemplateDoc(String name){
-		this.name=name;
-	}
-	
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public Set<TemplateField> getFields() {
-		return fields;
-	}
-	public void setFields(Set<TemplateField> fields) {
-		this.fields = fields;
-	}
-	
-	
+    
+    private Long id;
+    private String name;
+    private Set<TemplateField> fields;
+    
+    public TemplateDoc(){
+        
+    }
+    
+    public TemplateDoc(String name){
+        this.name=name;
+    }
+    
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public Set<TemplateField> getFields() {
+        return fields;
+    }
+    public void setFields(Set<TemplateField> fields) {
+        this.fields = fields;
+    }
+    
+    
 }

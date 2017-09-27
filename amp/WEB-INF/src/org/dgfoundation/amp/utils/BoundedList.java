@@ -11,44 +11,44 @@ import java.util.*;
  *
  */
 public class BoundedList<K> extends LinkedList<K>{
-	
-	private Comparator<K> comparator;
-	private int maxN;
-	
-	public BoundedList(int maxN, Comparator<K> comparator)
-	{
-		this.maxN = maxN;
-		this.comparator = comparator;
-	}
-	
-	public boolean add(K item)
-	{
-		int pos = findItemPos(item);
-		if (pos >= 0)
-		{
-			// item already exists... remove it
-			remove(pos);
-		}
-		if (size() >= maxN)
-			removeLast();
-		super.addFirst(item);
-		return true;
-	}
-	
-	private int findItemPos(K item)
-	{
-		for(int i = 0; i < size(); i++)
-			if (equalItems(get(i), item))
-				return i;
-		return -1;
-	}
-	
-	private boolean equalItems(K item1, K item2)
-	{
-		if (comparator != null)
-			return comparator.compare(item1, item2) == 0;
-		return item1.equals(item2);
-	}
+    
+    private Comparator<K> comparator;
+    private int maxN;
+    
+    public BoundedList(int maxN, Comparator<K> comparator)
+    {
+        this.maxN = maxN;
+        this.comparator = comparator;
+    }
+    
+    public boolean add(K item)
+    {
+        int pos = findItemPos(item);
+        if (pos >= 0)
+        {
+            // item already exists... remove it
+            remove(pos);
+        }
+        if (size() >= maxN)
+            removeLast();
+        super.addFirst(item);
+        return true;
+    }
+    
+    private int findItemPos(K item)
+    {
+        for(int i = 0; i < size(); i++)
+            if (equalItems(get(i), item))
+                return i;
+        return -1;
+    }
+    
+    private boolean equalItems(K item1, K item2)
+    {
+        if (comparator != null)
+            return comparator.compare(item1, item2) == 0;
+        return item1.equals(item2);
+    }
 }
 
 

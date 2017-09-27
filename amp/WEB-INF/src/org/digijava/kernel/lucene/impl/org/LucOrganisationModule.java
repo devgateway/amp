@@ -23,76 +23,76 @@ import org.digijava.module.aim.util.DbUtil;
  *
  */
 public class LucOrganisationModule implements LucModule<AmpOrganisation> {
-	/**
-	 * PLEASE INCREMENT VALUE ECH TIME CLASS IS CHANGED. 
-	 */
-	private static final long serialVersionUID = 4L;
-	
-	private static final String NAME = "Organisations";
-	private static final String FIELD_ID = "orgId";
-	private static final String FIELD_NAME = "orgName";
+    /**
+     * PLEASE INCREMENT VALUE ECH TIME CLASS IS CHANGED. 
+     */
+    private static final long serialVersionUID = 4L;
+    
+    private static final String NAME = "Organisations";
+    private static final String FIELD_ID = "orgId";
+    private static final String FIELD_NAME = "orgName";
 
-	@Override
-	public Analyzer getAnalyzer() {
-		return new StandardAnalyzer();
-	}
+    @Override
+    public Analyzer getAnalyzer() {
+        return new StandardAnalyzer();
+    }
 
-	@Override
-	public String getSuffix() {
-		return null;
-	}
+    @Override
+    public String getSuffix() {
+        return null;
+    }
 
-	@Override
-	public String getName() {
-		return NAME;
-	}
+    @Override
+    public String getName() {
+        return NAME;
+    }
 
-	@Override
-	public List<AmpOrganisation> getItemsToIndex() {
-		return new ArrayList<>(DbUtil.getAll(AmpOrganisation.class));
-	}
+    @Override
+    public List<AmpOrganisation> getItemsToIndex() {
+        return new ArrayList<>(DbUtil.getAll(AmpOrganisation.class));
+    }
 
-	@Override
-	public boolean needIndexRebuild() {
-		return false;
-	}
+    @Override
+    public boolean needIndexRebuild() {
+        return false;
+    }
 
-	@Override
-	public long getSerialVersionUID() {
-		return serialVersionUID;
-	}
+    @Override
+    public long getSerialVersionUID() {
+        return serialVersionUID;
+    }
 
-	@Override
-	public Document convertToDocument(AmpOrganisation item) {
-		Document doc = new Document();
-		Field orgId = new Field(FIELD_ID,item.getAmpOrgId().toString(), Field.Store.YES, Field.Index.UN_TOKENIZED);
-		Field orgName = new Field(FIELD_NAME,item.getName(), Field.Store.YES, Field.Index.TOKENIZED);
-		doc.add(orgId);
-		doc.add(orgName);
-		return doc;
-	}
+    @Override
+    public Document convertToDocument(AmpOrganisation item) {
+        Document doc = new Document();
+        Field orgId = new Field(FIELD_ID,item.getAmpOrgId().toString(), Field.Store.YES, Field.Index.UN_TOKENIZED);
+        Field orgName = new Field(FIELD_NAME,item.getName(), Field.Store.YES, Field.Index.TOKENIZED);
+        doc.add(orgId);
+        doc.add(orgName);
+        return doc;
+    }
 
-	@Override
-	public Term getIdFieldTerm(AmpOrganisation item) {
-		Term term = new Term(FIELD_ID, item.getAmpOrgId().toString());
-		return term;
-	}
+    @Override
+    public Term getIdFieldTerm(AmpOrganisation item) {
+        Term term = new Term(FIELD_ID, item.getAmpOrgId().toString());
+        return term;
+    }
 
-	@Override
-	public String[] getSearchFieldNames() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public String[] getSearchFieldNames() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public AmpOrganisation hitToItem(Hit hit) throws IOException {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public AmpOrganisation hitToItem(Hit hit) throws IOException {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public Class<AmpOrganisation> getItemClass() {
-		return AmpOrganisation.class;
-	}
+    @Override
+    public Class<AmpOrganisation> getItemClass() {
+        return AmpOrganisation.class;
+    }
 
 }

@@ -88,7 +88,7 @@ public class DigiUserDetailsService
             }
         }
         catch(UsernameNotFoundException ex){
-        	throw ex; // rethrow - this will not print it
+            throw ex; // rethrow - this will not print it
         }
         catch (Exception ex) {
 

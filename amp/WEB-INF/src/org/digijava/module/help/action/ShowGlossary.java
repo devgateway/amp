@@ -26,26 +26,26 @@ import org.digijava.module.help.util.HelpTopicTreeNodeWorker;
  */
 public class ShowGlossary extends Action {
 
-	@Override
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
-		GlossaryForm glossForm = (GlossaryForm)form;
+    @Override
+    public ActionForward execute(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
+        GlossaryForm glossForm = (GlossaryForm)form;
 
-		List<HelpTopic> source = new ArrayList<HelpTopic>();
-		
-		String moduleInstnce = RequestUtils.getModuleInstance(request).getInstanceName();
-		Site site = RequestUtils.getSite(request);
-		//String siteIdNo = RequestUtils.getSite(request).getId().toString();
-		String locale = RequestUtils.getNavigationLanguage(request).getCode();
-		
-		source = GlossaryUtil.getAllGlosaryTopics(moduleInstnce, site);				//Flat list of all glossary items.
-		HelpTopicTreeNodeWorker worker = new HelpTopicTreeNodeWorker(site,locale);	//Node worker to build tree
-		List<HelpTopicTreeNode> tree = AmpCollectionUtils.createTree(source, worker);	//Build tree
-		
-		glossForm.setTree(tree);
-		return mapping.findForward("forward");
-	}
-	
-	
+        List<HelpTopic> source = new ArrayList<HelpTopic>();
+        
+        String moduleInstnce = RequestUtils.getModuleInstance(request).getInstanceName();
+        Site site = RequestUtils.getSite(request);
+        //String siteIdNo = RequestUtils.getSite(request).getId().toString();
+        String locale = RequestUtils.getNavigationLanguage(request).getCode();
+        
+        source = GlossaryUtil.getAllGlosaryTopics(moduleInstnce, site);             //Flat list of all glossary items.
+        HelpTopicTreeNodeWorker worker = new HelpTopicTreeNodeWorker(site,locale);  //Node worker to build tree
+        List<HelpTopicTreeNode> tree = AmpCollectionUtils.createTree(source, worker);   //Build tree
+        
+        glossForm.setTree(tree);
+        return mapping.findForward("forward");
+    }
+    
+    
 }

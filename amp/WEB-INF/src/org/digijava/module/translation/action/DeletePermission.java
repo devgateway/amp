@@ -32,22 +32,22 @@ public class DeletePermission
       extends Action {
 
     public ActionForward execute(ActionMapping mapping,
-				 ActionForm form,
-				 javax.servlet.http.HttpServletRequest request,
-				 javax.servlet.http.HttpServletResponse
-				 response) throws java.lang.Exception {
+                 ActionForm form,
+                 javax.servlet.http.HttpServletRequest request,
+                 javax.servlet.http.HttpServletResponse
+                 response) throws java.lang.Exception {
 
-	TranslationPermissionsForm formBean = (TranslationPermissionsForm) form;
-//	Site currentSite = RequestUtils.getSite(request);
+    TranslationPermissionsForm formBean = (TranslationPermissionsForm) form;
+//  Site currentSite = RequestUtils.getSite(request);
 
-	int index = Integer.parseInt(request.getParameter("index"));
-	formBean.getPermissions().remove(index);
+    int index = Integer.parseInt(request.getParameter("index"));
+    formBean.getPermissions().remove(index);
 
-	if (formBean.isUserMode()) {
-	    return mapping.findForward("forwardUser");
-	} else {
-	    return mapping.findForward("forwardGroup");
-	}
+    if (formBean.isUserMode()) {
+        return mapping.findForward("forwardUser");
+    } else {
+        return mapping.findForward("forwardGroup");
+    }
 
     }
 

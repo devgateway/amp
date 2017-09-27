@@ -20,36 +20,36 @@ import org.hibernate.type.LongType;
  *
  */
 public final class EUActivityUtil {
-	private static Logger logger = Logger.getLogger(EUActivityUtil.class);
+    private static Logger logger = Logger.getLogger(EUActivityUtil.class);
 
-	public static Collection<EUActivity> getEUActivities(Long actId) {
-		Session session = null;
-		Collection<EUActivity> euActivities = new ArrayList<EUActivity>();
+    public static Collection<EUActivity> getEUActivities(Long actId) {
+        Session session = null;
+        Collection<EUActivity> euActivities = new ArrayList<EUActivity>();
 
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select eu from " + EUActivity.class.getName() +
- 			 " eu " +  "where (eu.activity.ampActivityId=:actId)";
-			Query qry = session.createQuery(queryString);
-			qry.setParameter("actId",actId,LongType.INSTANCE);
-			Iterator itr = qry.list().iterator();
-			while (itr.hasNext()) {
-				EUActivity act = (EUActivity) itr.next();
-				euActivities.add(act);
-			}
-		} catch(Exception ex) {
-			logger.error("Unable to get EUActivities for activityid="+actId +" "+ ex);
-			ex.printStackTrace();
-		}
-		return euActivities;
-	}
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select eu from " + EUActivity.class.getName() +
+             " eu " +  "where (eu.activity.ampActivityId=:actId)";
+            Query qry = session.createQuery(queryString);
+            qry.setParameter("actId",actId,LongType.INSTANCE);
+            Iterator itr = qry.list().iterator();
+            while (itr.hasNext()) {
+                EUActivity act = (EUActivity) itr.next();
+                euActivities.add(act);
+            }
+        } catch(Exception ex) {
+            logger.error("Unable to get EUActivities for activityid="+actId +" "+ ex);
+            ex.printStackTrace();
+        }
+        return euActivities;
+    }
 
-	public static Double getTotalCostConverted(Collection euActivities,Long desktopCurrencyId) {
-		double ret=0;
-		Iterator i = euActivities.iterator();
-		while (i.hasNext()) {
-			EUActivity element = (EUActivity) i.next();
-			element.setDesktopCurrencyId(desktopCurrencyId);
+    public static Double getTotalCostConverted(Collection euActivities,Long desktopCurrencyId) {
+        double ret=0;
+        Iterator i = euActivities.iterator();
+        while (i.hasNext()) {
+            EUActivity element = (EUActivity) i.next();
+            element.setDesktopCurrencyId(desktopCurrencyId);
                         try {
                                 ret += element.getTotalCostConverted();
                         }
@@ -57,16 +57,16 @@ public final class EUActivityUtil {
                                 logger.error(
                                     "Unable to get total converted cost=" + ex);
                         }
-		}
-		return new Double(ret);
-	}
+        }
+        return new Double(ret);
+    }
 
-	public static Double getTotalContributionsConverted(Collection euActivities,Long desktopCurrencyId) {
-		double ret=0;
-		Iterator i = euActivities.iterator();
-		while (i.hasNext()) {
-			EUActivity element = (EUActivity) i.next();
-			element.setDesktopCurrencyId(desktopCurrencyId);
+    public static Double getTotalContributionsConverted(Collection euActivities,Long desktopCurrencyId) {
+        double ret=0;
+        Iterator i = euActivities.iterator();
+        while (i.hasNext()) {
+            EUActivity element = (EUActivity) i.next();
+            element.setDesktopCurrencyId(desktopCurrencyId);
                         try {
                                 ret += element.getTotalContributionsConverted();
                         }
@@ -74,8 +74,8 @@ public final class EUActivityUtil {
                                 logger.error("Unable to get total converted cost contribution" + ex);
                         }
 
-		}
-		return new Double(ret);
-	}
+        }
+        return new Double(ret);
+    }
 
 }

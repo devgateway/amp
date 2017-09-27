@@ -27,7 +27,7 @@ public class MonetConnection extends OlapDbConnection {
     //private static DataSource dataSource = null;
 
     private MonetConnection() throws SQLException {
-    	super(getDirectConnection(), getMapper());
+        super(getDirectConnection(), getMapper());
         //this.conn = DriverManager.getConnection("jdbc:monetdb://localhost/amp_moldova_210", "monetdb", "monetdb");
     }
 
@@ -157,28 +157,28 @@ public class MonetConnection extends OlapDbConnection {
     }
     
     public static EtlStrategy buildStrategy() {
-    	return new EtlStrategy() {
-			
-			@Override
-			public OlapDbConnection getOlapConnection() {
-				return getConnection();
-			}
-			
-			@Override
-			public String getDataSourceString() {
-				return String.format("jdbc:mondrian:JdbcDrivers=nl.cwi.monetdb.jdbc.MonetDriver;Jdbc=%s;JdbcUser=monetdb;JdbcPassword=monetdb;PoolNeeded=false", 
-						_getJdbcUrl());
-			}
+        return new EtlStrategy() {
+            
+            @Override
+            public OlapDbConnection getOlapConnection() {
+                return getConnection();
+            }
+            
+            @Override
+            public String getDataSourceString() {
+                return String.format("jdbc:mondrian:JdbcDrivers=nl.cwi.monetdb.jdbc.MonetDriver;Jdbc=%s;JdbcUser=monetdb;JdbcPassword=monetdb;PoolNeeded=false", 
+                        _getJdbcUrl());
+            }
 
-			@Override
-			public DbColumnTypesMapper getColumnTypesMapper() {
-				return getMapper();
-			}
+            @Override
+            public DbColumnTypesMapper getColumnTypesMapper() {
+                return getMapper();
+            }
 
-			@Override
-			public boolean isColumnarDatabase() {
-				return true;
-			}
-		};
+            @Override
+            public boolean isColumnarDatabase() {
+                return true;
+            }
+        };
     }
 }

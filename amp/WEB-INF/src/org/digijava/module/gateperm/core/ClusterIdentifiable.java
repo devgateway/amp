@@ -27,9 +27,9 @@ import org.digijava.module.aim.util.Identifiable;
  * http://docs.google.com/Doc?id=djf3gch_56gs9dqtjc
  */
 public interface ClusterIdentifiable extends Identifiable {
-	/**
-	 * @return a harmonized identifier, uniquely identifying the resource across
-	 *         a cluster of servers
-	 */
-	public String getClusterIdentifier();
+    /**
+     * @return a harmonized identifier, uniquely identifying the resource across
+     *         a cluster of servers
+     */
+    public String getClusterIdentifier();
 }

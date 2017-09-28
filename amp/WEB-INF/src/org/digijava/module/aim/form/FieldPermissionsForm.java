@@ -152,59 +152,59 @@ public class FieldPermissionsForm extends ActionForm {
     public void setGuRead(String guRead) {
         this.guRead = guRead;
     }
-	public String getRgRead() {
-		return rgRead;
-	}
-	public void setRgRead(String rgRead) {
-		this.rgRead = rgRead;
-	}
-	public String getRgEdit() {
-		return rgEdit;
-	}
-	public void setRgEdit(String rgEdit) {
-		this.rgEdit = rgEdit;
-	}
-	public String getSgRead() {
-		return sgRead;
-	}
-	public void setSgRead(String sgRead) {
-		this.sgRead = sgRead;
-	}
-	public String getSgEdit() {
-		return sgEdit;
-	}
-	public void setSgEdit(String sgEdit) {
-		this.sgEdit = sgEdit;
-	}
-	public String getFieldNameTrimmed() {
-		return this.fieldName.replaceAll(" ","");
-	}
-	public void setFieldNameTrimmed(String fieldNameTrimmed) {
-		this.fieldNameTrimmed = fieldNameTrimmed;
-	}
-	public String getOwRead() {
-		return owRead;
-	}
-	public void setOwRead(String owRead) {
-		this.owRead = owRead;
-	}
-	public String getOwEdit() {
-		return owEdit;
-	}
-	public void setOwEdit(String owEdit) {
-		this.owEdit = owEdit;
-	}
-	public String getRoRead() {
-		return roRead;
-	}
-	public void setRoRead(String roRead) {
-		this.roRead = roRead;
-	}
-	public String getRoEdit() {
-		return roEdit;
-	}
-	public void setRoEdit(String roEdit) {
-		this.roEdit = roEdit;
-	}
-	
+    public String getRgRead() {
+        return rgRead;
+    }
+    public void setRgRead(String rgRead) {
+        this.rgRead = rgRead;
+    }
+    public String getRgEdit() {
+        return rgEdit;
+    }
+    public void setRgEdit(String rgEdit) {
+        this.rgEdit = rgEdit;
+    }
+    public String getSgRead() {
+        return sgRead;
+    }
+    public void setSgRead(String sgRead) {
+        this.sgRead = sgRead;
+    }
+    public String getSgEdit() {
+        return sgEdit;
+    }
+    public void setSgEdit(String sgEdit) {
+        this.sgEdit = sgEdit;
+    }
+    public String getFieldNameTrimmed() {
+        return this.fieldName.replaceAll(" ","");
+    }
+    public void setFieldNameTrimmed(String fieldNameTrimmed) {
+        this.fieldNameTrimmed = fieldNameTrimmed;
+    }
+    public String getOwRead() {
+        return owRead;
+    }
+    public void setOwRead(String owRead) {
+        this.owRead = owRead;
+    }
+    public String getOwEdit() {
+        return owEdit;
+    }
+    public void setOwEdit(String owEdit) {
+        this.owEdit = owEdit;
+    }
+    public String getRoRead() {
+        return roRead;
+    }
+    public void setRoRead(String roRead) {
+        this.roRead = roRead;
+    }
+    public String getRoEdit() {
+        return roEdit;
+    }
+    public void setRoEdit(String roEdit) {
+        this.roEdit = roEdit;
+    }
+    
 }

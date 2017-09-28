@@ -44,7 +44,7 @@ import org.digijava.kernel.siteconfig.GroupedPage;
 
 public final class SiteConfigParser {
     private static Logger log =
-		Logger.getLogger(SiteConfigParser.class);
+        Logger.getLogger(SiteConfigParser.class);
 
     private static Digester digester = createDigester();
 

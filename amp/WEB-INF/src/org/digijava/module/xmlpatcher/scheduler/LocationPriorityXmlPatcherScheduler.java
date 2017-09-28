@@ -27,49 +27,49 @@ import org.digijava.module.xmlpatcher.util.XmlPatcherConstants;
  */
 public class LocationPriorityXmlPatcherScheduler extends XmlPatcherScheduler {
 
-	protected List<String> locationPriority;
+    protected List<String> locationPriority;
 
-	public class LocationPriorityXmlPatchComparator implements
-			Comparator<AmpXmlPatch> {
+    public class LocationPriorityXmlPatchComparator implements
+            Comparator<AmpXmlPatch> {
 
-		protected Integer getLocationKeyIndex(AmpXmlPatch patch) {
-			for (int i = 0; i < locationPriority.size(); i++)
-				if (patch.getLocation().contains(locationPriority.get(i)))
-					return new Integer(i);
-			return new Integer(-1);
-		}
+        protected Integer getLocationKeyIndex(AmpXmlPatch patch) {
+            for (int i = 0; i < locationPriority.size(); i++)
+                if (patch.getLocation().contains(locationPriority.get(i)))
+                    return new Integer(i);
+            return new Integer(-1);
+        }
 
-		@Override
-		public int compare(AmpXmlPatch arg0, AmpXmlPatch arg1) {
-			return getLocationKeyIndex(arg0).compareTo(
-					getLocationKeyIndex(arg1));
-		}
+        @Override
+        public int compare(AmpXmlPatch arg0, AmpXmlPatch arg1) {
+            return getLocationKeyIndex(arg0).compareTo(
+                    getLocationKeyIndex(arg1));
+        }
 
-	}
+    }
 
-	/**
-	 * @param properties
-	 * @param naturalOrderedPatches
-	 */
-	public LocationPriorityXmlPatcherScheduler(Map<String, Object> properties,
-			List<AmpXmlPatch> patches) {
-		super(properties, patches);
-		String locationPriorityString = (String) properties
-				.get(XmlPatcherConstants.SchedulerProperties.LOCATION_PRIORITY);
-		if (locationPriorityString != null)
-			locationPriority = Arrays.asList(locationPriorityString.split(","));
-	}
+    /**
+     * @param properties
+     * @param naturalOrderedPatches
+     */
+    public LocationPriorityXmlPatcherScheduler(Map<String, Object> properties,
+            List<AmpXmlPatch> patches) {
+        super(properties, patches);
+        String locationPriorityString = (String) properties
+                .get(XmlPatcherConstants.SchedulerProperties.LOCATION_PRIORITY);
+        if (locationPriorityString != null)
+            locationPriority = Arrays.asList(locationPriorityString.split(","));
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @seeorg.digijava.module.xmlpatcher.scheduler.XmlPatcherScheduler#
-	 * getScheduledPatchCollection()
-	 */
-	@Override
-	public Collection<AmpXmlPatch> getScheduledPatchCollection() {
-		Collections.sort(patches, new LocationPriorityXmlPatchComparator());
-		return patches;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @seeorg.digijava.module.xmlpatcher.scheduler.XmlPatcherScheduler#
+     * getScheduledPatchCollection()
+     */
+    @Override
+    public Collection<AmpXmlPatch> getScheduledPatchCollection() {
+        Collections.sort(patches, new LocationPriorityXmlPatchComparator());
+        return patches;
+    }
 
 }

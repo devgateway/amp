@@ -29,53 +29,53 @@ import org.digijava.module.help.util.HelpUtil;
  */
 public class GetHelpBodyHtml extends Action {
 
-	@Override
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
-		
-		HelpForm hform = (HelpForm) form;
-		
-		Long topicId = hform.getHelpTopicId();
-		//Load topic by ID
-		HelpTopic topic = HelpUtil.getHelpTopic(topicId);
-		//get current site
-		Site site = RequestUtils.getSite(request);
-		//get current language
-		String language = RequestUtils.getNavigationLanguage(request).getCode();
-		//get editor key
-		String editorKey = topic.getBodyEditKey();
-		if (editorKey == null){
-			String moduleInstance = RequestUtils.getModuleInstance(request).getInstanceName();
-			editorKey="glossary-" + moduleInstance + "-"+request.getSession().getId().hashCode() + "-" + String.valueOf(System.currentTimeMillis());
-			topic.setBodyEditKey(editorKey);
-			GlossaryUtil.createOrUpdateGlossaryTopic(topic, request);
-		}
-		//get body for help topic
-		String body = DbUtil.getEditorBodyEmptyInclude(site, editorKey, language);
-		if (body==null){
-			body="No text. Please edit and enter text.";
-			Editor editor = new Editor();
-			editor.setBody(body);
-			editor.setEditorKey(editorKey);
-			editor.setLanguage(language);
-			editor.setLastModDate(new Date());
-			editor.setSite(site);
-			editor.setTitle(editorKey);
-			editor.setUser(RequestUtils.getUser(request));
-			DbUtil.saveEditor(editor);
-		}
+    @Override
+    public ActionForward execute(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
+        
+        HelpForm hform = (HelpForm) form;
+        
+        Long topicId = hform.getHelpTopicId();
+        //Load topic by ID
+        HelpTopic topic = HelpUtil.getHelpTopic(topicId);
+        //get current site
+        Site site = RequestUtils.getSite(request);
+        //get current language
+        String language = RequestUtils.getNavigationLanguage(request).getCode();
+        //get editor key
+        String editorKey = topic.getBodyEditKey();
+        if (editorKey == null){
+            String moduleInstance = RequestUtils.getModuleInstance(request).getInstanceName();
+            editorKey="glossary-" + moduleInstance + "-"+request.getSession().getId().hashCode() + "-" + String.valueOf(System.currentTimeMillis());
+            topic.setBodyEditKey(editorKey);
+            GlossaryUtil.createOrUpdateGlossaryTopic(topic, request);
+        }
+        //get body for help topic
+        String body = DbUtil.getEditorBodyEmptyInclude(site, editorKey, language);
+        if (body==null){
+            body="No text. Please edit and enter text.";
+            Editor editor = new Editor();
+            editor.setBody(body);
+            editor.setEditorKey(editorKey);
+            editor.setLanguage(language);
+            editor.setLastModDate(new Date());
+            editor.setSite(site);
+            editor.setTitle(editorKey);
+            editor.setUser(RequestUtils.getUser(request));
+            DbUtil.saveEditor(editor);
+        }
 
-		//setup response for UTF-8
-		response.setContentType("text/html");
-		OutputStreamWriter outputStream = new OutputStreamWriter( response.getOutputStream(),"UTF-8");
-		PrintWriter out = new PrintWriter(outputStream, true);
-		//write o responce and close.
-		out.println(body);
-		out.close();
-		
-		return null;
-	}
+        //setup response for UTF-8
+        response.setContentType("text/html");
+        OutputStreamWriter outputStream = new OutputStreamWriter( response.getOutputStream(),"UTF-8");
+        PrintWriter out = new PrintWriter(outputStream, true);
+        //write o responce and close.
+        out.println(body);
+        out.close();
+        
+        return null;
+    }
 
-	
+    
 }

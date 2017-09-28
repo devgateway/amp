@@ -25,19 +25,19 @@ import java.util.Set;
  * @author mpostelnicu@dgateway.org since Nov 12, 2010
  */
 public abstract class AmpRegionalFormTableFeaturePanel extends
-		AmpFormTableFeaturePanel<Set<AmpRegionalFunding>, AmpRegionalFunding> {
-	
-	protected ListEditor<AmpRegionalFunding> list;
+        AmpFormTableFeaturePanel<Set<AmpRegionalFunding>, AmpRegionalFunding> {
+    
+    protected ListEditor<AmpRegionalFunding> list;
 
-	protected IModel<Set<AmpRegionalFunding>> setModel;
+    protected IModel<Set<AmpRegionalFunding>> setModel;
 
-	public AmpRegionalFormTableFeaturePanel(String id,
-			final IModel<Set<AmpRegionalFunding>> model, String fmName, final int transactionType,
-			int titleHeaderColSpan, final IModel<AmpCategoryValueLocations> cvLocationModel) throws Exception {
-		super(id, model, fmName);
+    public AmpRegionalFormTableFeaturePanel(String id,
+            final IModel<Set<AmpRegionalFunding>> model, String fmName, final int transactionType,
+            int titleHeaderColSpan, final IModel<AmpCategoryValueLocations> cvLocationModel) throws Exception {
+        super(id, model, fmName);
 
-		setTitleHeaderColSpan(titleHeaderColSpan);
-		
+        setTitleHeaderColSpan(titleHeaderColSpan);
+        
         setModel = new AbstractMixedSetModel<AmpRegionalFunding>(model) {
             @Override
             public boolean condition(AmpRegionalFunding item) {
@@ -46,46 +46,46 @@ public abstract class AmpRegionalFormTableFeaturePanel extends
                         .equals(cvLocationModel.getObject()));
             }
         };
-	}
+    }
 
-	protected AmpCategorySelectFieldPanel getAdjustmentTypeComponent(
+    protected AmpCategorySelectFieldPanel getAdjustmentTypeComponent(
             IModel<AmpRegionalFunding> model) {
-		try{
+        try{
             AmpCategorySelectFieldPanel adjustmentTypes = new AmpCategorySelectFieldPanel(
-				"adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_KEY,
-						new PropertyModel<AmpCategoryValue>(model,"adjustmentType"),
-						CategoryConstants.ADJUSTMENT_TYPE_NAME, //fmname
-						 false, false, true, null, true);
-		adjustmentTypes.getChoiceContainer().setRequired(true);
-		return adjustmentTypes;
-		}catch(Exception e)
-		{
-			logger.error("AmpCategoryGroupFieldPanel initialization failed", e);
-		}
-		return null;
-	}
-	
+                "adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_KEY,
+                        new PropertyModel<AmpCategoryValue>(model,"adjustmentType"),
+                        CategoryConstants.ADJUSTMENT_TYPE_NAME, //fmname
+                         false, false, true, null, true);
+        adjustmentTypes.getChoiceContainer().setRequired(true);
+        return adjustmentTypes;
+        }catch(Exception e)
+        {
+            logger.error("AmpCategoryGroupFieldPanel initialization failed", e);
+        }
+        return null;
+    }
+    
 
-	protected AmpFundingAmountComponent getFundingAmountComponent(
-			IModel<AmpRegionalFunding> model) {
-		return new AmpTableFundingAmountComponent<AmpRegionalFunding>("fundingAmount",
-				model, "Amount", "transactionAmount", "Currency",
-				"currency", "Transaction Date", "transactionDate", false);
-	}
+    protected AmpFundingAmountComponent getFundingAmountComponent(
+            IModel<AmpRegionalFunding> model) {
+        return new AmpTableFundingAmountComponent<AmpRegionalFunding>("fundingAmount",
+                model, "Amount", "transactionAmount", "Currency",
+                "currency", "Transaction Date", "transactionDate", false);
+    }
 
-	protected AmpDeleteLinkField getDeleteLinkField(String id, String fmName,
-			final ListItem<AmpRegionalFunding> item) {
-		return new AmpDeleteLinkField(id, fmName) {
-			@Override
-			public void onClick(AjaxRequestTarget target) {
-				model.getObject().remove(item.getModelObject());
-				target.add(AmpRegionalFormTableFeaturePanel.this);
-				list.removeAll();
-			}
-		};
-	}
-	
-	public ListEditor<AmpRegionalFunding> getListEditor() {
-		return list;
-	}
+    protected AmpDeleteLinkField getDeleteLinkField(String id, String fmName,
+            final ListItem<AmpRegionalFunding> item) {
+        return new AmpDeleteLinkField(id, fmName) {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                model.getObject().remove(item.getModelObject());
+                target.add(AmpRegionalFormTableFeaturePanel.this);
+                list.removeAll();
+            }
+        };
+    }
+    
+    public ListEditor<AmpRegionalFunding> getListEditor() {
+        return list;
+    }
 }

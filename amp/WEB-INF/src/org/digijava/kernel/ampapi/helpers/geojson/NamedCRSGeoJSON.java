@@ -13,10 +13,10 @@ package org.digijava.kernel.ampapi.helpers.geojson;
  */
 public class NamedCRSGeoJSON extends CRSGeoJSON
 {
-	public NamedCRSPropertiesGeoJSON properties;
+    public NamedCRSPropertiesGeoJSON properties;
 
-	public boolean isValid( PositionValidator validator )
-	{
-		return properties.isValid(validator);
-	}
+    public boolean isValid( PositionValidator validator )
+    {
+        return properties.isValid(validator);
+    }
 }

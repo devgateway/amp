@@ -33,82 +33,82 @@ import org.digijava.module.translation.util.TranslationManager;
 
 @Path("translations")
 public class TranslationsEndPoints {
-	
-	private static final Logger LOGGER = Logger.getLogger(TranslationsEndPoints.class); 
-	
-	@GET
-	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	public List<AvailableMethod> getAvailableFilters() {
-		return EndpointUtils.getAvailableMethods(TranslationsEndPoints.class.getName());
-	}	
-	
-	@POST
-	@Path("/label-translations")
-	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = false, id = "Translations")
-	public JsonBean getLangPack(final JsonBean param){
-		return getLangPack(null, param);
-	}
+    
+    private static final Logger LOGGER = Logger.getLogger(TranslationsEndPoints.class); 
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    public List<AvailableMethod> getAvailableFilters() {
+        return EndpointUtils.getAvailableMethods(TranslationsEndPoints.class.getName());
+    }   
+    
+    @POST
+    @Path("/label-translations")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = false, id = "Translations")
+    public JsonBean getLangPack(final JsonBean param){
+        return getLangPack(null, param);
+    }
 
-	@POST
-	@Path("/translate-labels/{langCode}")
-	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = false, id = "CustomLanguageTranslations")
-	public JsonBean getLangPack(@PathParam("langCode") String langCode, final JsonBean param){
-		String language = langCode == null ? TLSUtils.getEffectiveLangCode() : langCode;
-		for (String key:param.any().keySet()) {
-			String translating = param.get(key).toString();
-			String newValue= TranslatorWorker.translateText(translating, language, 3l);
-			//LOGGER.error("translating <" + translating + "> to <" + newValue + ">");
-			param.set(key, newValue);
-		}
-		return param;
-		
-	}
-	
-	@GET
-	@Path("/languages/")
-	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = false, id = "languages")
+    @POST
+    @Path("/translate-labels/{langCode}")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = false, id = "CustomLanguageTranslations")
+    public JsonBean getLangPack(@PathParam("langCode") String langCode, final JsonBean param){
+        String language = langCode == null ? TLSUtils.getEffectiveLangCode() : langCode;
+        for (String key:param.any().keySet()) {
+            String translating = param.get(key).toString();
+            String newValue= TranslatorWorker.translateText(translating, language, 3l);
+            //LOGGER.error("translating <" + translating + "> to <" + newValue + ">");
+            param.set(key, newValue);
+        }
+        return param;
+        
+    }
+    
+    @GET
+    @Path("/languages/")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = false, id = "languages")
     public List<Language> getLanguages() {
         return TranslationManager.getAmpLanguages();
     }
-	
-	@GET
-	@Path("/languages/{langCode}")
-	@ApiMethod(ui = false, id = "LanguageSwitch")
-	public void switchLanguage(@PathParam("langCode") String langCode,@Context HttpServletResponse response){
+    
+    @GET
+    @Path("/languages/{langCode}")
+    @ApiMethod(ui = false, id = "LanguageSwitch")
+    public void switchLanguage(@PathParam("langCode") String langCode,@Context HttpServletResponse response){
         Locale locale = new Locale();
         locale.setCode(langCode);
         DgUtil.switchLanguage(locale, TLSUtils.getRequest(), response);
-	}
-	
-	
-	/**
-	 * Gets the list of available languages for a site when multilingual is enabled.
-	 * When multilingual is disabled it returns the effective language (e.g. either the currently-set one OR 
-	 * the default one ("en")). 
-	 * @return List <SimpleJsonBean> with the available Locale
-	 */
-	@SuppressWarnings("rawtypes")
-	@GET
-	@Path("/multilingual-languages/")
-	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = false, id = "multilingualLanguages")
-	public List<SimpleJsonBean> getMultilingualLanguages() {
-		List<SimpleJsonBean> languages = new ArrayList<SimpleJsonBean>();
-		List<String[]> locales = TranslationManager.getLocale(PersistenceManager.getSession());
-		boolean onlyCurrentLanguage = !ContentTranslationUtil.multilingualIsEnabled();
-		for(String[] localeRecord:locales) {
-			boolean entryRelevant = onlyCurrentLanguage ? localeRecord[0].equals(TLSUtils.getEffectiveLangCode()) : true;
-			if (entryRelevant) {
-				languages.add(new SimpleJsonBean(localeRecord[0], localeRecord[1]));
-			}
-		}
-		return languages;
-	}
+    }
+    
+    
+    /**
+     * Gets the list of available languages for a site when multilingual is enabled.
+     * When multilingual is disabled it returns the effective language (e.g. either the currently-set one OR 
+     * the default one ("en")). 
+     * @return List <SimpleJsonBean> with the available Locale
+     */
+    @SuppressWarnings("rawtypes")
+    @GET
+    @Path("/multilingual-languages/")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = false, id = "multilingualLanguages")
+    public List<SimpleJsonBean> getMultilingualLanguages() {
+        List<SimpleJsonBean> languages = new ArrayList<SimpleJsonBean>();
+        List<String[]> locales = TranslationManager.getLocale(PersistenceManager.getSession());
+        boolean onlyCurrentLanguage = !ContentTranslationUtil.multilingualIsEnabled();
+        for(String[] localeRecord:locales) {
+            boolean entryRelevant = onlyCurrentLanguage ? localeRecord[0].equals(TLSUtils.getEffectiveLangCode()) : true;
+            if (entryRelevant) {
+                languages.add(new SimpleJsonBean(localeRecord[0], localeRecord[1]));
+            }
+        }
+        return languages;
+    }
 }

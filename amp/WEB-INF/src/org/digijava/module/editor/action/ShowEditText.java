@@ -68,7 +68,7 @@ public class ShowEditText
         String fieldName=(String)session.getAttribute("activityFieldName");
         //clear session from sdm item if language is changed
         if(session.getAttribute("document")!=null){
-        	session.removeAttribute("document");
+            session.removeAttribute("document");
         }
         EditorForm formBean = (EditorForm) form;
         formBean.setActivityName(name);
@@ -110,7 +110,7 @@ public class ShowEditText
                 dbEditorList = DbUtil.getEditorList(moduleInstance.getSite(), key, currentLang);
 /////////////////////////////////////
                 if(dbEditorList.isEmpty() )
-                	dbEditorList = null;
+                    dbEditorList = null;
                 
                 if (editor == null) { //create editor
                     Editor editorKey = new Editor();

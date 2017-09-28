@@ -6,14 +6,14 @@ package org.dgfoundation.amp.ar;
  * @author Viorel Chihai
  */
 public final class InvalidReportContextException extends IllegalStateException {
-	
-	public InvalidReportContextException(String s) {
-		super(s);
-	}
-	
-	public InvalidReportContextException(String s, Throwable t) {
+    
+    public InvalidReportContextException(String s) {
+        super(s);
+    }
+    
+    public InvalidReportContextException(String s, Throwable t) {
         super(s, t);
-	}
+    }
 
     public InvalidReportContextException(Throwable t) {
         super(t);

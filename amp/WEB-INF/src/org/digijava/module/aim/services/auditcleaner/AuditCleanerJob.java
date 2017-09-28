@@ -16,17 +16,17 @@ import org.quartz.JobExecutionException;
  * 
  */
 public class AuditCleanerJob extends ConnectionCleaningJob {
-	private static Logger logger = Logger.getLogger(AuditCleanerJob.class);
-	
-	/**
-	 * 
-	 */
-	@Override
-	public void executeInternal(JobExecutionContext contex) throws JobExecutionException {
-		String deletetime = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AUTOMATIC_AUDIT_LOGGER_CLEANUP);
-		logger.info("Starting to delete audit logs older than " + deletetime + " days.............................");
-		AuditLoggerUtil.deleteLogsByPeriod(deletetime);
-		logger.info("Delete Audit logs finished...................................................");
-	}
+    private static Logger logger = Logger.getLogger(AuditCleanerJob.class);
+    
+    /**
+     * 
+     */
+    @Override
+    public void executeInternal(JobExecutionContext contex) throws JobExecutionException {
+        String deletetime = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AUTOMATIC_AUDIT_LOGGER_CLEANUP);
+        logger.info("Starting to delete audit logs older than " + deletetime + " days.............................");
+        AuditLoggerUtil.deleteLogsByPeriod(deletetime);
+        logger.info("Delete Audit logs finished...................................................");
+    }
 
 }

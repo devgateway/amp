@@ -52,7 +52,7 @@ public class RenderTeaser
         }
 
       
-		TranslationManager.generateLanguages(generateRoots, request, formBean);
+        TranslationManager.generateLanguages(generateRoots, request, formBean);
 
         return null;
     }

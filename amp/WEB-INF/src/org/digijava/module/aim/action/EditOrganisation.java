@@ -84,8 +84,8 @@ public class EditOrganisation extends DispatchAction {
   }
   private boolean sessionChkForWInfo(HttpServletRequest request) {
       HttpSession session = request.getSession();
-   	  TeamMember tm = (TeamMember) session.getAttribute("currentMember");
-	    boolean plainTeamMember = tm==null||!tm.getTeamHead();
+      TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+        boolean plainTeamMember = tm==null||!tm.getTeamHead();
       if (session.getAttribute("ampAdmin") == null&&plainTeamMember) {
           return true;
       } else {
@@ -111,7 +111,7 @@ public class EditOrganisation extends DispatchAction {
       }
       AddOrgForm editForm = (AddOrgForm) form;
       if(request.getParameter("skipReset")==null){
-    	  clean(editForm);
+          clean(editForm);
       }
       request.setAttribute(MULTILINGUAL_ORG_PREFIX + "_name", editForm.buildMultilingualNameInputInstance());
       this.putDocumentsInSession(request, new AmpOrganisation());
@@ -230,9 +230,9 @@ public class EditOrganisation extends DispatchAction {
           editForm.setType(null);
       }
       if(request.getSession().getAttribute("reloadOrgDocsFromDb")!=null){
-    	  request.getSession().removeAttribute("reloadOrgDocsFromDb");
+          request.getSession().removeAttribute("reloadOrgDocsFromDb");
       }else{
-    	  this.putDocumentsInSession(request, organization);
+          this.putDocumentsInSession(request, organization);
       }
       
       editForm.setOrgUrl(organization.getOrgUrl());
@@ -242,16 +242,16 @@ public class EditOrganisation extends DispatchAction {
       List<AmpOrganisationContact> orgConts=ContactInfoUtil.getOrganizationContacts(organization.getAmpOrgId());
       editForm.setOrgContacts(new ArrayList<AmpOrganisationContact>());
       if (orgConts!= null && orgConts.size() > 0) {
-      	for (AmpOrganisationContact orgCont : orgConts) {
-				if(orgCont.getPrimaryContact()!=null && orgCont.getPrimaryContact()){
-					if(editForm.getPrimaryOrgContIds()==null){
-						editForm.setPrimaryOrgContIds(new String[1]);
-					}
-					String idToCompare=orgCont.getContact().getId()!=null ? orgCont.getContact().getId().toString() : orgCont.getContact().getTemporaryId();
-					editForm.getPrimaryOrgContIds()[0]=idToCompare;
-				}					
-				editForm.getOrgContacts().add(orgCont);
-			}
+        for (AmpOrganisationContact orgCont : orgConts) {
+                if(orgCont.getPrimaryContact()!=null && orgCont.getPrimaryContact()){
+                    if(editForm.getPrimaryOrgContIds()==null){
+                        editForm.setPrimaryOrgContIds(new String[1]);
+                    }
+                    String idToCompare=orgCont.getContact().getId()!=null ? orgCont.getContact().getId().toString() : orgCont.getContact().getTemporaryId();
+                    editForm.getPrimaryOrgContIds()[0]=idToCompare;
+                }                   
+                editForm.getOrgContacts().add(orgCont);
+            }
         //editForm.setOrgContacts(new ArrayList<AmpOrganisationContact>(organization.getOrganizationContacts()));
       }
       
@@ -316,35 +316,35 @@ public class EditOrganisation extends DispatchAction {
       //Budget Sectors
       Collection<Long> selectedbudgetsectors = new Vector<Long>();
       for (Iterator iterator = organization.getBudgetsectors().iterator(); iterator.hasNext();) {
-    	  AmpBudgetSector sector = (AmpBudgetSector) iterator.next();
-    	  selectedbudgetsectors.add(sector.getIdsector());
+          AmpBudgetSector sector = (AmpBudgetSector) iterator.next();
+          selectedbudgetsectors.add(sector.getIdsector());
       }
       if (selectedbudgetsectors.size()!= 0){
-    	  editForm.setSelectedbudgetsectors(selectedbudgetsectors.toArray(new Long[selectedbudgetsectors.size()]));
+          editForm.setSelectedbudgetsectors(selectedbudgetsectors.toArray(new Long[selectedbudgetsectors.size()]));
       }else{
-    	  Long[] defaultvalue = {0L}; 
-    	  editForm.setSelectedbudgetsectors(defaultvalue);
+          Long[] defaultvalue = {0L}; 
+          editForm.setSelectedbudgetsectors(defaultvalue);
       }
       
       //Departments
       Collection<Long> selecteddeps = new Vector<Long>();
       for (Iterator iterator = organization.getDepartments().iterator(); iterator.hasNext();) {
-    	  AmpDepartments ampdepartment = (AmpDepartments) iterator.next();
-    	  selecteddeps.add(ampdepartment.getId());
+          AmpDepartments ampdepartment = (AmpDepartments) iterator.next();
+          selecteddeps.add(ampdepartment.getId());
       }
       if (selecteddeps.size()!= 0){
-    	  editForm.setSelecteddepartments(selecteddeps.toArray(new Long[selecteddeps.size()]));
+          editForm.setSelecteddepartments(selecteddeps.toArray(new Long[selecteddeps.size()]));
       }else{
-    	  Long[] defaultvalue = {0L}; 
-    	  editForm.setSelecteddepartments(defaultvalue);
+          Long[] defaultvalue = {0L}; 
+          editForm.setSelecteddepartments(defaultvalue);
       }
-		HttpSession session = request.getSession();
-		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
-		if (tm!=null&&tm.getTeamHead()) {
-			return mapping.findForward("forwardWI");
-		} else {
-			return mapping.findForward("forward");
-		}
+        HttpSession session = request.getSession();
+        TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+        if (tm!=null&&tm.getTeamHead()) {
+            return mapping.findForward("forwardWI");
+        } else {
+            return mapping.findForward("forward");
+        }
       
   }
   
@@ -365,7 +365,7 @@ public class EditOrganisation extends DispatchAction {
       }
       
       if(!activities.isEmpty()){
-    	  flag =true;
+          flag =true;
       }
 
 //      while (itr1.hasNext()) {
@@ -417,7 +417,7 @@ public class EditOrganisation extends DispatchAction {
           }
 
 
-          try {          	            	
+          try {                             
               DbUtil.deleteOrg(org);
           } catch (JDBCException e) {
               // this is a quick solution
@@ -470,11 +470,11 @@ public class EditOrganisation extends DispatchAction {
       HttpSession session = request.getSession();
       request.setAttribute(MULTILINGUAL_ORG_PREFIX + "_name", editForm.restoreMultilingualNameInputInstance(request));
       TeamMember tm = (TeamMember) session.getAttribute("currentMember");
-		if (tm!=null&&tm.getTeamHead()) {
-			return mapping.findForward("forwardWI");
-		} else {
-			return mapping.findForward("forward");
-		}
+        if (tm!=null&&tm.getTeamHead()) {
+            return mapping.findForward("forwardWI");
+        } else {
+            return mapping.findForward("forward");
+        }
   }
 
   public ActionForward deleteStaffInfo(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)throws Exception {
@@ -506,17 +506,17 @@ public class EditOrganisation extends DispatchAction {
       editForm.setStaff(staff);
       editForm.setSelectedStaffId(null);
       request.setAttribute(MULTILINGUAL_ORG_PREFIX + "_name", editForm.restoreMultilingualNameInputInstance(request));
-		HttpSession session = request.getSession();
-		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
-		if (tm!=null&&tm.getTeamHead()) {
-			return mapping.findForward("forwardWI");
-		} else {
-			return mapping.findForward("forward");
-		}
+        HttpSession session = request.getSession();
+        TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+        if (tm!=null&&tm.getTeamHead()) {
+            return mapping.findForward("forwardWI");
+        } else {
+            return mapping.findForward("forward");
+        }
   
   }
   
-  	public ActionForward editStaffInfo(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ActionForward editStaffInfo(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception {
       if (sessionChkForWInfo(request)) {
           return mapping.findForward("index");
       }
@@ -526,13 +526,13 @@ public class EditOrganisation extends DispatchAction {
       editForm.setTypeOfStaff(staff.getType().getId());
       editForm.setNumberOfStaff(staff.getStaffNumber().toString());
       request.setAttribute(MULTILINGUAL_ORG_PREFIX + "_name", editForm.restoreMultilingualNameInputInstance(request));
-  	HttpSession session = request.getSession();
-	TeamMember tm = (TeamMember) session.getAttribute("currentMember");
-	if (tm!=null&&tm.getTeamHead()) {
-		return mapping.findForward("forwardWI");
-	} else {
-		return mapping.findForward("forward");
-	}
+    HttpSession session = request.getSession();
+    TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+    if (tm!=null&&tm.getTeamHead()) {
+        return mapping.findForward("forwardWI");
+    } else {
+        return mapping.findForward("forward");
+    }
   
   }
 
@@ -655,13 +655,13 @@ public class EditOrganisation extends DispatchAction {
       editForm.setSectors(prevSelSectors);
       session.removeAttribute("add");
       session.removeAttribute("sectorSelected");
-	TeamMember tm = (TeamMember) session.getAttribute("currentMember");
-	request.setAttribute(MULTILINGUAL_ORG_PREFIX + "_name", editForm.restoreMultilingualNameInputInstance(request));
-	if (tm!=null&&tm.getTeamHead()) {
-		return mapping.findForward("forwardWI");
-	} else {
-		return mapping.findForward("forward");
-	}
+    TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+    request.setAttribute(MULTILINGUAL_ORG_PREFIX + "_name", editForm.restoreMultilingualNameInputInstance(request));
+    if (tm!=null&&tm.getTeamHead()) {
+        return mapping.findForward("forwardWI");
+    } else {
+        return mapping.findForward("forward");
+    }
   
   }
 
@@ -698,14 +698,14 @@ public class EditOrganisation extends DispatchAction {
       }
 
       editForm.setSectors(newSectors);
-  	HttpSession session = request.getSession();
-	TeamMember tm = (TeamMember) session.getAttribute("currentMember");
-	request.setAttribute(MULTILINGUAL_ORG_PREFIX + "_name", editForm.restoreMultilingualNameInputInstance(request));
-	if (tm!=null&&tm.getTeamHead()) {
-		return mapping.findForward("forwardWI");
-	} else {
-		return mapping.findForward("forward");
-	}
+    HttpSession session = request.getSession();
+    TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+    request.setAttribute(MULTILINGUAL_ORG_PREFIX + "_name", editForm.restoreMultilingualNameInputInstance(request));
+    if (tm!=null&&tm.getTeamHead()) {
+        return mapping.findForward("forwardWI");
+    } else {
+        return mapping.findForward("forward");
+    }
   
   }
   
@@ -847,27 +847,27 @@ public class EditOrganisation extends DispatchAction {
 
   public ActionForward reload(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)throws Exception 
   {
-	  AddOrgForm editForm = (AddOrgForm) form;
-	  HttpSession session = request.getSession();
-	  TeamMember tm = (TeamMember) session.getAttribute("currentMember");
-	  String forwardWhere=(tm!=null&&tm.getTeamHead())?"forwardWI":"forward";
-	  String asynchCall=request.getParameter("asynchCall");
-	  if(asynchCall!=null && asynchCall.equals("true")){
-		  forwardWhere = null;
-	  }else{
-		  // AddOrgForm editForm = (AddOrgForm) form;
-		  if (editForm.getRecipients()!=null)
-		  {
-			  Collections.sort(editForm.getRecipients(), new DbUtil.HelperAmpOrgRecipientByOrgName());
-		  }
-	  }
-  	
-	  if (request.getSession().getAttribute("locations") != null)
-	  {
-		  Collection<Location> locs = (Collection<Location>) request.getSession().getAttribute("locations");
-		  if (editForm.getSelectedLocs() == null) {
-			  editForm.setSelectedLocs(new ArrayList<Location>());
-		  }
+      AddOrgForm editForm = (AddOrgForm) form;
+      HttpSession session = request.getSession();
+      TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+      String forwardWhere=(tm!=null&&tm.getTeamHead())?"forwardWI":"forward";
+      String asynchCall=request.getParameter("asynchCall");
+      if(asynchCall!=null && asynchCall.equals("true")){
+          forwardWhere = null;
+      }else{
+          // AddOrgForm editForm = (AddOrgForm) form;
+          if (editForm.getRecipients()!=null)
+          {
+              Collections.sort(editForm.getRecipients(), new DbUtil.HelperAmpOrgRecipientByOrgName());
+          }
+      }
+    
+      if (request.getSession().getAttribute("locations") != null)
+      {
+          Collection<Location> locs = (Collection<Location>) request.getSession().getAttribute("locations");
+          if (editForm.getSelectedLocs() == null) {
+              editForm.setSelectedLocs(new ArrayList<Location>());
+          }
           Collection<Location> selectedLocs = editForm.getSelectedLocs();
           for (Location location : locs) {
               if (!selectedLocs.contains(location)) {
@@ -878,24 +878,24 @@ public class EditOrganisation extends DispatchAction {
 
           request.getSession().removeAttribute("locations");
       }
-	  request.setAttribute(MULTILINGUAL_ORG_PREFIX + "_name", editForm.restoreMultilingualNameInputInstance(request));
-	  return mapping.findForward(forwardWhere);
+      request.setAttribute(MULTILINGUAL_ORG_PREFIX + "_name", editForm.restoreMultilingualNameInputInstance(request));
+      return mapping.findForward(forwardWhere);
   }
 
   public ActionForward save(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception {
-	  boolean isAdmin=!sessionChk(request);
-	  HttpSession session = request.getSession();
-	  TeamMember tm = (TeamMember) session.getAttribute("currentMember");
-	  AddOrgForm editForm = (AddOrgForm) form;
+      boolean isAdmin=!sessionChk(request);
+      HttpSession session = request.getSession();
+      TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+      AddOrgForm editForm = (AddOrgForm) form;
 
-	  request.setAttribute(MULTILINGUAL_ORG_PREFIX + "_name", editForm.restoreMultilingualNameInputInstance(request));
+      request.setAttribute(MULTILINGUAL_ORG_PREFIX + "_name", editForm.restoreMultilingualNameInputInstance(request));
 
-		
-	  boolean isTeamHead=tm!=null&&tm.getTeamHead();
+        
+      boolean isTeamHead=tm!=null&&tm.getTeamHead();
       if (!isAdmin) {
-    	  if(!isTeamHead){
-    		  return mapping.findForward("index");
-    	  }
+          if(!isTeamHead){
+              return mapping.findForward("index");
+          }
       }
 //      AddOrgForm editForm = (AddOrgForm) form;
       AmpOrganisation organization = null;
@@ -921,46 +921,46 @@ public class EditOrganisation extends DispatchAction {
           errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.organizationManager.saveOrgNameError"));
       }
       if(isAdmin){
-		if (editForm.getOrgCode() != null
-				&& editForm.getOrgCode().trim().length() > 0) {
-			Collection orgsCol = DbUtil.getOrgByCode(action,
-					editForm.getOrgCode(), editForm.getAmpOrgId());
-			if (!orgsCol.isEmpty()) { // To check for duplicate org-code
-				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
-						"error.aim.organizationManager.saveOrgCodeError"));
-			}
-		}
+        if (editForm.getOrgCode() != null
+                && editForm.getOrgCode().trim().length() > 0) {
+            Collection orgsCol = DbUtil.getOrgByCode(action,
+                    editForm.getOrgCode(), editForm.getAmpOrgId());
+            if (!orgsCol.isEmpty()) { // To check for duplicate org-code
+                errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
+                        "error.aim.organizationManager.saveOrgCodeError"));
+            }
+        }
       }
             
        String[] orgContsIds=editForm.getPrimaryOrgContIds();
 
         if(orgContsIds!=null && orgContsIds.length>1){ //more then one primary contact is not allowed
-			errors.add("invalidOrgCont",new ActionMessage("error.aim.addOrganization.invalidOrgCont", TranslatorWorker.translateText("Must Be One Primary Donor Contact")));
+            errors.add("invalidOrgCont",new ActionMessage("error.aim.addOrganization.invalidOrgCont", TranslatorWorker.translateText("Must Be One Primary Donor Contact")));
 
-		}
+        }
       
       if(!errors.isEmpty()){
-      	saveErrors(request, errors);
-    	if (isTeamHead) {
-    		return mapping.findForward("forwardWI");
-    	} else {
-    		return mapping.findForward("forward");
-    	}
+        saveErrors(request, errors);
+        if (isTeamHead) {
+            return mapping.findForward("forwardWI");
+        } else {
+            return mapping.findForward("forward");
+        }
       
       }
       
       if(editForm.getResetPrimaryOrgContIds()!=null && editForm.getResetPrimaryOrgContIds()){
-      	editForm.setPrimaryOrgContIds(null);
+        editForm.setPrimaryOrgContIds(null);
       }
       if(isAdmin){
-    	  if(ContentTranslationUtil.multilingualIsEnabled()){
-    		  organization.setName(editForm.getName());  
-    	  }else{
-    		  String name=MultilingualInputFieldValues.readParameter("AmpOrganisation_name_" + TLSUtils.getSite().getDefaultLanguage().getCode(), "AmpOrganisation_name", request).right;
-    		  organization.setName(name);
-    	  }
-    		  
-    	  
+          if(ContentTranslationUtil.multilingualIsEnabled()){
+              organization.setName(editForm.getName());  
+          }else{
+              String name=MultilingualInputFieldValues.readParameter("AmpOrganisation_name_" + TLSUtils.getSite().getDefaultLanguage().getCode(), "AmpOrganisation_name", request).right;
+              organization.setName(name);
+          }
+              
+          
           organization.setAcronym(editForm.getAcronym());
           organization.setFundingorgid(editForm.getFundingorgid());
 
@@ -1153,19 +1153,19 @@ public class EditOrganisation extends DispatchAction {
           //Budget sectors
           Set<AmpBudgetSector> budgetsectors = new HashSet<AmpBudgetSector>();
           if(editForm.getResetBudgetSectors()!=null && editForm.getResetBudgetSectors()){
-        	  editForm.setSelectedbudgetsectors(null) ;
+              editForm.setSelectedbudgetsectors(null) ;
           }     
           
           if (editForm.getSelectedbudgetsectors() != null) {
               Iterator<AmpBudgetSector> itr = editForm.getBudgetsectors().iterator();
               while (itr.hasNext()) {
-            	  AmpBudgetSector bsector = itr.next();
+                  AmpBudgetSector bsector = itr.next();
                   for (int i = 0; i < editForm.getSelectedbudgetsectors().length; i++) {
-                	  if(bsector.getIdsector().equals(editForm.getSelectedbudgetsectors()[i])){
-                		  budgetsectors.add(bsector);
-                	  }
-    			}
-            	  
+                      if(bsector.getIdsector().equals(editForm.getSelectedbudgetsectors()[i])){
+                          budgetsectors.add(bsector);
+                      }
+                }
+                  
               }
           }
           organization.setBudgetsectors(budgetsectors);
@@ -1173,19 +1173,19 @@ public class EditOrganisation extends DispatchAction {
           //Departments
           Set<AmpDepartments> departments = new HashSet<AmpDepartments>();
           if(editForm.getResetDepartments()!=null && editForm.getResetDepartments()){
-        	  editForm.setSelecteddepartments(null);
+              editForm.setSelecteddepartments(null);
           }
           
           if (editForm.getSelecteddepartments() != null) {
               Iterator<AmpDepartments> itr = editForm.getDepartments().iterator();
               while (itr.hasNext()) {
-            	  AmpDepartments dep = itr.next();
+                  AmpDepartments dep = itr.next();
                   for (int i = 0; i < editForm.getSelecteddepartments().length; i++) {
-                	  if(dep.getId().equals(editForm.getSelecteddepartments()[i])){
-                		  departments.add(dep);
-                	  }
-    			}
-            	  
+                      if(dep.getId().equals(editForm.getSelecteddepartments()[i])){
+                          departments.add(dep);
+                      }
+                }
+                  
               }
           }
           organization.setDepartments(departments);
@@ -1200,7 +1200,7 @@ public class EditOrganisation extends DispatchAction {
 
       Long schemeId = editForm.getAmpSecSchemeId();
       if(schemeId != null && schemeId > 0){
-    	  organization.setAmpSecSchemeId(DbUtil.getAmpSectorSchemeById(schemeId));
+          organization.setAmpSecSchemeId(DbUtil.getAmpSectorSchemeById(schemeId));
       }
 
       // staff information
@@ -1263,38 +1263,38 @@ public class EditOrganisation extends DispatchAction {
       }
       organization.setSectors(sectors);
       
-      	/**
+        /**
          * contacts
          */
 
         if(organization.getOrganizationContacts()==null){
-        	organization.setOrganizationContacts(new HashSet<AmpOrganisationContact>());
-        }else{        	
-        	organization.getOrganizationContacts().clear();
+            organization.setOrganizationContacts(new HashSet<AmpOrganisationContact>());
+        }else{          
+            organization.getOrganizationContacts().clear();
         }
         
         List<AmpOrganisationContact> allContacts=new ArrayList<AmpOrganisationContact>();
         if(editForm.getOrgContacts()!=null && editForm.getOrgContacts().size()>0){
-					allContacts.addAll(editForm.getOrgContacts());
-				}
+                    allContacts.addAll(editForm.getOrgContacts());
+                }
         
       if(allContacts!=null && allContacts.size()>0){
-			for (AmpOrganisationContact orgContact : allContacts) {				
-				fillOrganizationContactPrimaryField(editForm.getPrimaryOrgContIds(),orgContact);
-			}
-				organization.getOrganizationContacts().addAll(allContacts);
+            for (AmpOrganisationContact orgContact : allContacts) {             
+                fillOrganizationContactPrimaryField(editForm.getPrimaryOrgContIds(),orgContact);
+            }
+                organization.getOrganizationContacts().addAll(allContacts);
       }         
          
       this.saveDocuments(request, organization);
       DbUtil.saveOrg(organization);
-	  if (ContentTranslationUtil.multilingualIsEnabled()) {
-		  MultilingualInputFieldValues.serialize(organization, "name", null, null, request);
-	  }
+      if (ContentTranslationUtil.multilingualIsEnabled()) {
+          MultilingualInputFieldValues.serialize(organization, "name", null, null, request);
+      }
       return mapping.findForward("added");
   }
   
   public ActionForward deleteContact(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)throws Exception {
-	  if (sessionChkForWInfo(request)) {
+      if (sessionChkForWInfo(request)) {
           return mapping.findForward("index");
       }
       AddOrgForm editForm = (AddOrgForm) form;
@@ -1304,19 +1304,19 @@ public class EditOrganisation extends DispatchAction {
       List<AmpOrganisationContact> orgContsForRemoval=new ArrayList<AmpOrganisationContact>();
       Iterator<AmpOrganisationContact> orgContIter=odlOrgContacts.iterator();
       while(orgContIter.hasNext()){
-      	AmpOrganisationContact orgCont=orgContIter.next();
-      	AmpContact contact=orgCont.getContact();
-      	if (selContactId != null && selContactId.length()>0) {
+        AmpOrganisationContact orgCont=orgContIter.next();
+        AmpContact contact=orgCont.getContact();
+        if (selContactId != null && selContactId.length()>0) {
               if ((contact.getId() != null && contact.getId().toString().equals(selContactId))||(contact.getTemporaryId()!=null&&contact.getTemporaryId().equals(selContactId))) {
-              	orgContsForRemoval.add(orgCont); 
+                orgContsForRemoval.add(orgCont); 
                   break;
               }
           } else {
               if (selectedContactInfoIds != null) {
                   for (String contactId : selectedContactInfoIds) {
                       if ((contact.getId() != null && !contactId.startsWith("_") && contact.getId().equals(new Long(contactId))) || (contact.getTemporaryId() != null && contact.getTemporaryId().equals(contactId))) {
-                      	orgContsForRemoval.add(orgCont);
-                      	break;
+                        orgContsForRemoval.add(orgCont);
+                        break;
                       }
                   }
 
@@ -1328,13 +1328,13 @@ public class EditOrganisation extends DispatchAction {
       editForm.setOrgContacts(odlOrgContacts);
       editForm.setSelContactId(null);
       editForm.setSelectedContactInfoIds(null);
-		HttpSession session = request.getSession();
-		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
-		if (tm != null && tm.getTeamHead()) {
-			return mapping.findForward("forwardWI");
-		} else {
-			return mapping.findForward("forward");
-		}
+        HttpSession session = request.getSession();
+        TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+        if (tm != null && tm.getTeamHead()) {
+            return mapping.findForward("forwardWI");
+        } else {
+            return mapping.findForward("forward");
+        }
   }
   
   public static List<LabelValueBean> getYearsBeanList() {
@@ -1526,18 +1526,18 @@ public class EditOrganisation extends DispatchAction {
   }
   
   private void fillOrganizationContactPrimaryField(String[] orgContactIds,AmpOrganisationContact orgContact) {
-		if(orgContactIds!=null && orgContactIds.length>0){
-			for (int i = 0; i < orgContactIds.length; i++) {
-				String idToCompare=orgContact.getContact().getId()!=null ? orgContact.getContact().getId().toString() : orgContact.getContact().getTemporaryId();  
-				if(idToCompare.equals(orgContactIds[i])){
-					orgContact.setPrimaryContact(true);
-				}else{
-					orgContact.setPrimaryContact(false);
-				}
-			}
-		}else{
-			orgContact.setPrimaryContact(false);
-		}
-	}
+        if(orgContactIds!=null && orgContactIds.length>0){
+            for (int i = 0; i < orgContactIds.length; i++) {
+                String idToCompare=orgContact.getContact().getId()!=null ? orgContact.getContact().getId().toString() : orgContact.getContact().getTemporaryId();  
+                if(idToCompare.equals(orgContactIds[i])){
+                    orgContact.setPrimaryContact(true);
+                }else{
+                    orgContact.setPrimaryContact(false);
+                }
+            }
+        }else{
+            orgContact.setPrimaryContact(false);
+        }
+    }
   
 }

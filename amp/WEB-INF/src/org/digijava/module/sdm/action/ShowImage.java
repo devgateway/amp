@@ -62,13 +62,13 @@ public class ShowImage
 
         Long paramDocId = null;
         if(request.getParameter("documentId")!=null){
-        	paramDocId=new Long(request.getParameter("documentId"));
+            paramDocId=new Long(request.getParameter("documentId"));
         } else {
-          	if(request.getSession().getAttribute("document")!=null){ //view file from messaging/help module
-          		sdmDoc=(Sdm)request.getSession().getAttribute("document");
-          	}else{ //from sdm module
-          		sdmDoc = formBean.getSdmDocument();
-          	}      
+            if(request.getSession().getAttribute("document")!=null){ //view file from messaging/help module
+                sdmDoc=(Sdm)request.getSession().getAttribute("document");
+            }else{ //from sdm module
+                sdmDoc = formBean.getSdmDocument();
+            }      
           }
         
         
@@ -96,8 +96,8 @@ public class ShowImage
                     longValue(), paramParagId.longValue());
                 if (imageInfo != null)
                 {
-                	picture = imageInfo.getImageData();
-                	contentType = imageInfo.getContentType();
+                    picture = imageInfo.getImageData();
+                    contentType = imageInfo.getContentType();
                 }
             }
             if (picture != null) {

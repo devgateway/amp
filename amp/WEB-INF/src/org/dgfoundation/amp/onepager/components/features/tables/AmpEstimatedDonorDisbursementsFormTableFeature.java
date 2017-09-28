@@ -42,39 +42,39 @@ import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
  * @author mpostelnicu@dgateway.org since Nov 8, 2010
  */
 public class AmpEstimatedDonorDisbursementsFormTableFeature extends
-		AmpDonorFormTableFeaturePanel {
-	private static final long serialVersionUID = 1L;
-	private final static int SELECTOR_SIZE = 80;
-	/**
-	 * @param id
-	 * @param model
-	 * @param fmName
-	 * @throws Exception
-	 */
-	public AmpEstimatedDonorDisbursementsFormTableFeature(String id,
-			final IModel<AmpFunding> model, String fmName, final int transactionType) throws Exception {
-		super(id, model, fmName, Constants.ESTIMATED_DONOR_DISBURSEMENT, 8);
-	
-		final AbstractReadOnlyModel<List<String>> disbOrderIdModel = new AbstractReadOnlyModel<List<String>>() {
-			@Override
-			public List<String> getObject() {
-				List<String> ret=new ArrayList<String>(); 
-				for (AmpFundingDetail ampFundingDetail : parentModel.getObject()) 
-					if(ampFundingDetail.getTransactionType().equals(Constants.DISBURSEMENT_ORDER)) ret.add(ampFundingDetail.getDisbOrderId());
-				return ret;
-			}
-		};		
-		
-		list = new FundingListEditor<AmpFundingDetail>("listDisbursements", setModel, FundingDetailComparator
-				.getFundingDetailComparator()) {
+        AmpDonorFormTableFeaturePanel {
+    private static final long serialVersionUID = 1L;
+    private final static int SELECTOR_SIZE = 80;
+    /**
+     * @param id
+     * @param model
+     * @param fmName
+     * @throws Exception
+     */
+    public AmpEstimatedDonorDisbursementsFormTableFeature(String id,
+            final IModel<AmpFunding> model, String fmName, final int transactionType) throws Exception {
+        super(id, model, fmName, Constants.ESTIMATED_DONOR_DISBURSEMENT, 8);
+    
+        final AbstractReadOnlyModel<List<String>> disbOrderIdModel = new AbstractReadOnlyModel<List<String>>() {
+            @Override
+            public List<String> getObject() {
+                List<String> ret=new ArrayList<String>(); 
+                for (AmpFundingDetail ampFundingDetail : parentModel.getObject()) 
+                    if(ampFundingDetail.getTransactionType().equals(Constants.DISBURSEMENT_ORDER)) ret.add(ampFundingDetail.getDisbOrderId());
+                return ret;
+            }
+        };      
+        
+        list = new FundingListEditor<AmpFundingDetail>("listDisbursements", setModel, FundingDetailComparator
+                .getFundingDetailComparator()) {
 
-			@Override
-			protected void onPopulateItem(
-					org.dgfoundation.amp.onepager.components.ListItem<AmpFundingDetail> item) {
-				item.add(getAdjustmentTypeComponent(item.getModel(), transactionType));
+            @Override
+            protected void onPopulateItem(
+                    org.dgfoundation.amp.onepager.components.ListItem<AmpFundingDetail> item) {
+                item.add(getAdjustmentTypeComponent(item.getModel(), transactionType));
                 addFreezingvalidator(item);
-				AmpFundingAmountComponent amountComponent = getFundingAmountComponent(item.getModel());
-				item.add(amountComponent);
+                AmpFundingAmountComponent amountComponent = getFundingAmountComponent(item.getModel());
+                item.add(amountComponent);
                 addFreezingvalidator(item);
                 item.add(UpdateEventBehavior.of(FreezingUpdateEvent.class));                
                 AmpTextFieldPanel<Float> capitalSpendingPercentage = new AmpTextFieldPanel<Float>(
@@ -86,75 +86,75 @@ public class AmpEstimatedDonorDisbursementsFormTableFeature extends
                 item.add(capitalSpendingPercentage);
 
                 AmpSelectFieldPanel<String> disbOrdIdSelector = new AmpSelectFieldPanel<String>("disbOrderId",
-						new PropertyModel<String>(item.getModel(),
-								"disbOrderId")
-								,disbOrderIdModel,
-						"Disbursement Order Id", false, true, null, false);
+                        new PropertyModel<String>(item.getModel(),
+                                "disbOrderId")
+                                ,disbOrderIdModel,
+                        "Disbursement Order Id", false, true, null, false);
                 disbOrdIdSelector.getChoiceContainer().add(new AttributeAppender("style", new Model<String>("width: "+SELECTOR_SIZE+"px")));
-				item.add(disbOrdIdSelector);
-				
-				ArrayList<IPAContract> contractList;
-				if (model.getObject().getAmpActivityId() != null && model.getObject().getAmpActivityId().getContracts() != null)
-					contractList = new ArrayList<IPAContract>(model.getObject()
-						.getAmpActivityId().getContracts());
-				else
-					contractList = new ArrayList<IPAContract>();
-				AmpSelectFieldPanel<IPAContract> contractSelector = new AmpSelectFieldPanel<IPAContract>("contract",
-						new PropertyModel<IPAContract>(item.getModel(),
-								"contract"),
-						new Model<ArrayList<IPAContract>>(contractList),
-						"Contract", false, true, null, false);
-				
-				contractSelector.getChoiceContainer().add(new AttributeAppender("style", new Model<String>("width: "+SELECTOR_SIZE+"px")));
-				contractSelector.setAffectedByFreezing(false);
-				item.add(contractSelector);
-				
-				IModel<List<FundingPledges>> pledgesModel = new LoadableDetachableModel<List<FundingPledges>>() {
-					protected java.util.List<FundingPledges> load() {
-						return PledgesEntityHelper
-								.getPledgesByDonorGroup(model.getObject()
-								.getAmpDonorOrgId().getOrgGrpId().getAmpOrgGrpId());
-					};
-				};
-				
-				AmpSelectFieldPanel<FundingPledges> pledgeSelector = new AmpSelectFieldPanel<FundingPledges>("pledge",
-						new PropertyModel<FundingPledges>(item.getModel(),
-								"pledgeid"), pledgesModel,
-						"Pledges", false, true, new ChoiceRenderer<FundingPledges>() {
-							@Override
-							public Object getDisplayValue(FundingPledges arg0) {
-								return arg0.getTitle();
-							}
-						}, false);
-				pledgeSelector.getChoiceContainer().add(new AttributeAppender("style", new Model<String>("width: "+SELECTOR_SIZE+"px")));
-				pledgeSelector.setAffectedByFreezing(false);
-				item.add(pledgeSelector);
-				item.add(new ListEditorRemoveButton("delDisbursement", "Delete Disbursement"){
-					protected void onClick(final org.apache.wicket.ajax.AjaxRequestTarget target) {
-						AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
-						super.onClick(target);
-						parent.getFundingInfo().checkChoicesRequired(list.getCount());
-						target.add(parent.getFundingInfo());
-						target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
-						target.appendJavaScript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));
-						updateModel();
-					};
-				});
-				
-				
-				AmpOrgRoleSelectorComponent orgRoleSelector=new AmpOrgRoleSelectorComponent("orgRoleSelector", 
-						new PropertyModel<AmpActivityVersion>(model,"ampActivityId"), new PropertyModel<AmpRole>(item.getModel(),"recipientRole"), new PropertyModel<AmpOrganisation>(item.getModel(),"recipientOrg"),new String[] {Constants.RESPONSIBLE_ORGANISATION});
-				orgRoleSelector.getRoleSelect().getChoiceContainer().setRequired(true);
-				orgRoleSelector.getOrgSelect().getChoiceContainer().setRequired(true);
-	
-				item.add(orgRoleSelector);
-				
-			}
-		};
-		add(list);
-		
-		
-		
-	}
+                item.add(disbOrdIdSelector);
+                
+                ArrayList<IPAContract> contractList;
+                if (model.getObject().getAmpActivityId() != null && model.getObject().getAmpActivityId().getContracts() != null)
+                    contractList = new ArrayList<IPAContract>(model.getObject()
+                        .getAmpActivityId().getContracts());
+                else
+                    contractList = new ArrayList<IPAContract>();
+                AmpSelectFieldPanel<IPAContract> contractSelector = new AmpSelectFieldPanel<IPAContract>("contract",
+                        new PropertyModel<IPAContract>(item.getModel(),
+                                "contract"),
+                        new Model<ArrayList<IPAContract>>(contractList),
+                        "Contract", false, true, null, false);
+                
+                contractSelector.getChoiceContainer().add(new AttributeAppender("style", new Model<String>("width: "+SELECTOR_SIZE+"px")));
+                contractSelector.setAffectedByFreezing(false);
+                item.add(contractSelector);
+                
+                IModel<List<FundingPledges>> pledgesModel = new LoadableDetachableModel<List<FundingPledges>>() {
+                    protected java.util.List<FundingPledges> load() {
+                        return PledgesEntityHelper
+                                .getPledgesByDonorGroup(model.getObject()
+                                .getAmpDonorOrgId().getOrgGrpId().getAmpOrgGrpId());
+                    };
+                };
+                
+                AmpSelectFieldPanel<FundingPledges> pledgeSelector = new AmpSelectFieldPanel<FundingPledges>("pledge",
+                        new PropertyModel<FundingPledges>(item.getModel(),
+                                "pledgeid"), pledgesModel,
+                        "Pledges", false, true, new ChoiceRenderer<FundingPledges>() {
+                            @Override
+                            public Object getDisplayValue(FundingPledges arg0) {
+                                return arg0.getTitle();
+                            }
+                        }, false);
+                pledgeSelector.getChoiceContainer().add(new AttributeAppender("style", new Model<String>("width: "+SELECTOR_SIZE+"px")));
+                pledgeSelector.setAffectedByFreezing(false);
+                item.add(pledgeSelector);
+                item.add(new ListEditorRemoveButton("delDisbursement", "Delete Disbursement"){
+                    protected void onClick(final org.apache.wicket.ajax.AjaxRequestTarget target) {
+                        AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
+                        super.onClick(target);
+                        parent.getFundingInfo().checkChoicesRequired(list.getCount());
+                        target.add(parent.getFundingInfo());
+                        target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
+                        target.appendJavaScript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));
+                        updateModel();
+                    };
+                });
+                
+                
+                AmpOrgRoleSelectorComponent orgRoleSelector=new AmpOrgRoleSelectorComponent("orgRoleSelector", 
+                        new PropertyModel<AmpActivityVersion>(model,"ampActivityId"), new PropertyModel<AmpRole>(item.getModel(),"recipientRole"), new PropertyModel<AmpOrganisation>(item.getModel(),"recipientOrg"),new String[] {Constants.RESPONSIBLE_ORGANISATION});
+                orgRoleSelector.getRoleSelect().getChoiceContainer().setRequired(true);
+                orgRoleSelector.getOrgSelect().getChoiceContainer().setRequired(true);
+    
+                item.add(orgRoleSelector);
+                
+            }
+        };
+        add(list);
+        
+        
+        
+    }
 
 }

@@ -31,67 +31,67 @@ import org.digijava.module.aim.helper.FundingDetailComparator;
  * @author mpostelnicu@dgateway.org since Nov 8, 2010
  */
 public class AmpDonorDisbOrdersFormTableFeature extends
-		AmpDonorFormTableFeaturePanel {
+        AmpDonorFormTableFeaturePanel {
 
-	/**
-	 * @param id
-	 * @param model
-	 * @param fmName
-	 * @throws Exception
-	 */
-	public AmpDonorDisbOrdersFormTableFeature(String id,
-			final IModel<AmpFunding> model, String fmName, final int transactionType) throws Exception {
-		super(id, model, fmName, Constants.DISBURSEMENT_ORDER, 8);
+    /**
+     * @param id
+     * @param model
+     * @param fmName
+     * @throws Exception
+     */
+    public AmpDonorDisbOrdersFormTableFeature(String id,
+            final IModel<AmpFunding> model, String fmName, final int transactionType) throws Exception {
+        super(id, model, fmName, Constants.DISBURSEMENT_ORDER, 8);
 
-		list = new FundingListEditor<AmpFundingDetail>("listDisbOrders", setModel, FundingDetailComparator
-				.getFundingDetailComparator()) {
-			@Override
-			protected void onPopulateItem(
-					org.dgfoundation.amp.onepager.components.ListItem<AmpFundingDetail> item) {
-				item.add(getAdjustmentTypeComponent(item.getModel(), transactionType));
+        list = new FundingListEditor<AmpFundingDetail>("listDisbOrders", setModel, FundingDetailComparator
+                .getFundingDetailComparator()) {
+            @Override
+            protected void onPopulateItem(
+                    org.dgfoundation.amp.onepager.components.ListItem<AmpFundingDetail> item) {
+                item.add(getAdjustmentTypeComponent(item.getModel(), transactionType));
                 addFreezingvalidator(item);
-				item.add(getFundingAmountComponent(item.getModel()));
-				item.add(UpdateEventBehavior.of(FreezingUpdateEvent.class));
-				AmpTextFieldPanel<String> disbOrderId = new AmpTextFieldPanel<String>(
-						"disbOrderId", new PropertyModel<String>(
-								item.getModel(), "disbOrderId"),
-						"Disbursement Order ID",false, false);
-				disbOrderId.setEnabled(false);
-				disbOrderId.getTextContainer().add(new AttributeModifier("size", new Model<String>("5")));
-				item.add(disbOrderId);
-				
-				ArrayList<IPAContract> contractList;
-				if (model.getObject().getAmpActivityId() != null && model.getObject().getAmpActivityId().getContracts() != null)
-					contractList = new ArrayList<IPAContract>(model.getObject()
-						.getAmpActivityId().getContracts());
-				else
-					contractList = new ArrayList<IPAContract>();
+                item.add(getFundingAmountComponent(item.getModel()));
+                item.add(UpdateEventBehavior.of(FreezingUpdateEvent.class));
+                AmpTextFieldPanel<String> disbOrderId = new AmpTextFieldPanel<String>(
+                        "disbOrderId", new PropertyModel<String>(
+                                item.getModel(), "disbOrderId"),
+                        "Disbursement Order ID",false, false);
+                disbOrderId.setEnabled(false);
+                disbOrderId.getTextContainer().add(new AttributeModifier("size", new Model<String>("5")));
+                item.add(disbOrderId);
+                
+                ArrayList<IPAContract> contractList;
+                if (model.getObject().getAmpActivityId() != null && model.getObject().getAmpActivityId().getContracts() != null)
+                    contractList = new ArrayList<IPAContract>(model.getObject()
+                        .getAmpActivityId().getContracts());
+                else
+                    contractList = new ArrayList<IPAContract>();
 
-				item.add(new AmpSelectFieldPanel<IPAContract>("contract",
-						new PropertyModel<IPAContract>(item.getModel(),
-								"contract"),
+                item.add(new AmpSelectFieldPanel<IPAContract>("contract",
+                        new PropertyModel<IPAContract>(item.getModel(),
+                                "contract"),
                         new WildcardListModel<IPAContract>(contractList),
-						"Contract", false, true, null, false));
+                        "Contract", false, true, null, false));
 
-				AmpCheckBoxFieldPanel rejected = new AmpCheckBoxFieldPanel(
-						"rejected", new PropertyModel<Boolean>(item.getModel(),
-								"disbursementOrderRejected"), "Rejected", false, false);
-				item.add(rejected);
+                AmpCheckBoxFieldPanel rejected = new AmpCheckBoxFieldPanel(
+                        "rejected", new PropertyModel<Boolean>(item.getModel(),
+                                "disbursementOrderRejected"), "Rejected", false, false);
+                item.add(rejected);
 
-				item.add(new ListEditorRemoveButton("delDisbOrder", "Delete Disbursement Order"){
-					protected void onClick(org.apache.wicket.ajax.AjaxRequestTarget target) {
-						AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
-						super.onClick(target);
-						parent.getFundingInfo().checkChoicesRequired(list.getCount());
-						target.add(parent.getFundingInfo());
-						target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
-						target.appendJavaScript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));
-					};
-				});
-			}
-		};
-		add(list);
+                item.add(new ListEditorRemoveButton("delDisbOrder", "Delete Disbursement Order"){
+                    protected void onClick(org.apache.wicket.ajax.AjaxRequestTarget target) {
+                        AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
+                        super.onClick(target);
+                        parent.getFundingInfo().checkChoicesRequired(list.getCount());
+                        target.add(parent.getFundingInfo());
+                        target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
+                        target.appendJavaScript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));
+                    };
+                });
+            }
+        };
+        add(list);
 
-	}
+    }
 
 }

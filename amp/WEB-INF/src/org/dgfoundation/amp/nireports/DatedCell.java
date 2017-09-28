@@ -8,5 +8,5 @@ import org.dgfoundation.amp.nireports.meta.CategCell;
  *
  */
 public interface DatedCell extends CategCell {
-	public TranslatedDate getTranslatedDate();
+    public TranslatedDate getTranslatedDate();
 }

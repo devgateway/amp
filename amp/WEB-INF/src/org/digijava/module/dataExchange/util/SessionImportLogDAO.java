@@ -15,13 +15,13 @@ import org.hibernate.HibernateException;
  */
 public class SessionImportLogDAO extends ImportLogDAO {
 
-	/**
-	 * @throws HibernateException
-	 * @throws SQLException
-	 */
-	public SessionImportLogDAO() throws HibernateException, SQLException, DgException {
-		this.hbSession	= PersistenceManager.getRequestDBSession();
-	}
+    /**
+     * @throws HibernateException
+     * @throws SQLException
+     */
+    public SessionImportLogDAO() throws HibernateException, SQLException, DgException {
+        this.hbSession  = PersistenceManager.getRequestDBSession();
+    }
 
 
 }

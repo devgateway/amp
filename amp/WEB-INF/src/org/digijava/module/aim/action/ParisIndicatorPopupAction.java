@@ -11,13 +11,13 @@ import org.apache.struts.action.ActionMapping;
 
 public class ParisIndicatorPopupAction extends Action {
 
-	private static Logger logger = Logger.getLogger(ParisIndicatorPopupAction.class);
-	
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
+    private static Logger logger = Logger.getLogger(ParisIndicatorPopupAction.class);
+    
+    public ActionForward execute(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
 
-		logger.warn("entro a ParisIndicatorPopupAction");
-		return mapping.findForward("forward");
-	}
+        logger.warn("entro a ParisIndicatorPopupAction");
+        return mapping.findForward("forward");
+    }
 }

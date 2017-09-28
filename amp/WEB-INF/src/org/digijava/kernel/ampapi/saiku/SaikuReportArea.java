@@ -14,50 +14,50 @@ import org.dgfoundation.amp.newreports.ReportAreaImpl;
  */
 @Deprecated
 public class SaikuReportArea extends ReportAreaImpl {
-	private int origId;
-	private int origLeafId = -1; //not set
-	private boolean isTotalRow = false;
+    private int origId;
+    private int origLeafId = -1; //not set
+    private boolean isTotalRow = false;
 
-	/**
-	 * @return row index from the Saiku CellDataSet structure of the current report area content
-	 */
-	public int getOrigId() {
-		return origId;
-	}
+    /**
+     * @return row index from the Saiku CellDataSet structure of the current report area content
+     */
+    public int getOrigId() {
+        return origId;
+    }
 
-	/**
-	 * @param origId - the original index, e.g. row index from the Saiku CellDataSet structure of the current report area content
-	 */
-	public void setOrigId(int origId) {
-		this.origId = origId;
-	}
+    /**
+     * @param origId - the original index, e.g. row index from the Saiku CellDataSet structure of the current report area content
+     */
+    public void setOrigId(int origId) {
+        this.origId = origId;
+    }
 
-	/**
-	 * @return true if this the total row content
-	 */
-	public boolean isTotalRow() {
-		return isTotalRow;
-	}
+    /**
+     * @return true if this the total row content
+     */
+    public boolean isTotalRow() {
+        return isTotalRow;
+    }
 
-	/**
-	 * @param isTotalRow the isTotalRow to set
-	 */
-	public void setTotalRow(boolean isTotalRow) {
-		this.isTotalRow = isTotalRow;
-	}
+    /**
+     * @param isTotalRow the isTotalRow to set
+     */
+    public void setTotalRow(boolean isTotalRow) {
+        this.isTotalRow = isTotalRow;
+    }
 
-	/**
-	 * @return the origLeafId
-	 */
-	public int getOrigLeafId() {
-		return origLeafId;
-	}
+    /**
+     * @return the origLeafId
+     */
+    public int getOrigLeafId() {
+        return origLeafId;
+    }
 
-	/**
-	 * @param origLeafId the origLeafId to set
-	 */
-	public void setOrigLeafId(int origLeafId) {
-		this.origLeafId = origLeafId;
-	}
-	
+    /**
+     * @param origLeafId the origLeafId to set
+     */
+    public void setOrigLeafId(int origLeafId) {
+        this.origLeafId = origLeafId;
+    }
+    
 }

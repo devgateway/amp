@@ -26,7 +26,7 @@ import java.util.List;
  * Time: 1:08 PM
  */
 public class AddEditDeleteMapRule extends DispatchAction {
-    private static Logger logger	= Logger.getLogger(AddEditDeleteMapRule.class);
+    private static Logger logger    = Logger.getLogger(AddEditDeleteMapRule.class);
 
     public ActionForward unspecified(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {

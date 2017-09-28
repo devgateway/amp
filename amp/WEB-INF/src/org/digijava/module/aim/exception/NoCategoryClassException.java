@@ -8,10 +8,10 @@ package org.digijava.module.aim.exception;
  *
  */
 public class NoCategoryClassException extends Exception {
-	public NoCategoryClassException (String msg) {
-		super(msg);
-	}
-	public NoCategoryClassException () {
-		super();
-	}
+    public NoCategoryClassException (String msg) {
+        super(msg);
+    }
+    public NoCategoryClassException () {
+        super();
+    }
 }

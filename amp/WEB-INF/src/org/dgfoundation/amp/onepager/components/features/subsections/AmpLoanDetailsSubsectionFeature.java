@@ -33,32 +33,32 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 
 
 public class AmpLoanDetailsSubsectionFeature extends
-		AmpSubsectionFeaturePanel<AmpFunding> 
+        AmpSubsectionFeaturePanel<AmpFunding> 
 implements AmpRequiredComponentContainer{
 
-	private List<FormComponent<?>> requiredFormComponents = new ArrayList<FormComponent<?>>();
-	
-	/**
-	 * @param id
-	 * @param fmName
-	 * @param model
-	 * @throws Exception
-	 */
-	public AmpLoanDetailsSubsectionFeature(String id,
-			final IModel<AmpFunding> model, String fmName,final AmpFundingSummaryPanel sp) throws Exception {
-		super(id, fmName, model, false, true);		
-		
-		final AmpTextFieldPanel<Float> interestRate = new AmpTextFieldPanel<Float>(
+    private List<FormComponent<?>> requiredFormComponents = new ArrayList<FormComponent<?>>();
+    
+    /**
+     * @param id
+     * @param fmName
+     * @param model
+     * @throws Exception
+     */
+    public AmpLoanDetailsSubsectionFeature(String id,
+            final IModel<AmpFunding> model, String fmName,final AmpFundingSummaryPanel sp) throws Exception {
+        super(id, fmName, model, false, true);      
+        
+        final AmpTextFieldPanel<Float> interestRate = new AmpTextFieldPanel<Float>(
                 "interestRate",
                 new PropertyModel<Float>(model, "interestRate"), "Interest Rate", false, false);
-		interestRate.getTextContainer().add(new RangeValidator<Float>(0f, 100f));
-		interestRate.getTextContainer().add(new AttributeModifier("size", new Model<String>("5")));
+        interestRate.getTextContainer().add(new RangeValidator<Float>(0f, 100f));
+        interestRate.getTextContainer().add(new AttributeModifier("size", new Model<String>("5")));
         add(interestRate);
 
-        final AmpTextFieldPanel<Integer> gracePeriod =  new AmpTextFieldPanel<Integer>("gracePeriod", new PropertyModel<Integer>(model, "gracePeriod"), "Grace Period", false, false);		
-		add(gracePeriod);
-		
-		final PropertyModel<Date> ratificationDateModel = new PropertyModel<Date>(
+        final AmpTextFieldPanel<Integer> gracePeriod =  new AmpTextFieldPanel<Integer>("gracePeriod", new PropertyModel<Integer>(model, "gracePeriod"), "Grace Period", false, false);      
+        add(gracePeriod);
+        
+        final PropertyModel<Date> ratificationDateModel = new PropertyModel<Date>(
                 model, "ratificationDate");
         AmpDatePickerFieldPanel ratificationDate = new AmpDatePickerFieldPanel("ratificationDate", ratificationDateModel, null, "Ratification Date");
         add(ratificationDate);
@@ -70,14 +70,14 @@ implements AmpRequiredComponentContainer{
         AmpDatePickerFieldPanel maturity = new AmpDatePickerFieldPanel("maturity", maturityModel, null, "Maturity");
         add(maturity);
 
-	}
+    }
 
-	public List<FormComponent<?>> getRequiredFormComponents() {
-		return requiredFormComponents;
-	}
+    public List<FormComponent<?>> getRequiredFormComponents() {
+        return requiredFormComponents;
+    }
 
-	public void setRequiredFormComponents(List<FormComponent<?>> requiredFormComponents) {
-		this.requiredFormComponents = requiredFormComponents;
-	}
-	
+    public void setRequiredFormComponents(List<FormComponent<?>> requiredFormComponents) {
+        this.requiredFormComponents = requiredFormComponents;
+    }
+    
 }

@@ -33,38 +33,38 @@ package org.digijava.kernel.persistence;
 
 public class WorkerException extends Exception {
 
-	/**
-	 * Default Constructor
-	 */
-	public WorkerException() {
-		super();
-	}
+    /**
+     * Default Constructor
+     */
+    public WorkerException() {
+        super();
+    }
 
-	/**
-	 * Constructor. Creates a WorkerException object with a message
-	 * @param message the exception message
-	 */
-	public WorkerException(String message) {
-		super(message);
-	}
+    /**
+     * Constructor. Creates a WorkerException object with a message
+     * @param message the exception message
+     */
+    public WorkerException(String message) {
+        super(message);
+    }
 
-	/**
-	 * Constructor. Creates a WorkerException object with a single message and a nested exception
-	 * @param message the exception message
-	 * @param cause java.lang.Throwable, presumably an exception you've already caught
-	 */
+    /**
+     * Constructor. Creates a WorkerException object with a single message and a nested exception
+     * @param message the exception message
+     * @param cause java.lang.Throwable, presumably an exception you've already caught
+     */
 
-	public WorkerException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    public WorkerException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-	/**
-	 * Constructor. Creates a WorkerException object with a nested exception
-	 * @param cause java.lang.Throwable, presumably an exception you've already caught
-		 */
+    /**
+     * Constructor. Creates a WorkerException object with a nested exception
+     * @param cause java.lang.Throwable, presumably an exception you've already caught
+         */
 
-	public WorkerException(Throwable cause) {
-		super(cause);
-	}
+    public WorkerException(Throwable cause) {
+        super(cause);
+    }
 
 }

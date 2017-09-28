@@ -7,6 +7,6 @@ package org.dgfoundation.amp.nireports.runtime;
  * @param <K>
  */
 public interface ColumnVisitor<K> {
-	public K visit(CellColumn cc);
-	public K visit(GroupColumn cc);
+    public K visit(CellColumn cc);
+    public K visit(GroupColumn cc);
 }

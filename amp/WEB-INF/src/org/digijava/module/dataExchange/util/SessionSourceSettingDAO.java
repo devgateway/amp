@@ -15,13 +15,13 @@ import org.hibernate.HibernateException;
  */
 public class SessionSourceSettingDAO extends SourceSettingDAO {
 
-	/**
-	 * @throws HibernateException
-	 * @throws SQLException
-	 * @throws DgException 
-	 */
-	public SessionSourceSettingDAO() throws HibernateException, SQLException, DgException {
-		this.hbSession	= PersistenceManager.getRequestDBSession();
-	}
+    /**
+     * @throws HibernateException
+     * @throws SQLException
+     * @throws DgException 
+     */
+    public SessionSourceSettingDAO() throws HibernateException, SQLException, DgException {
+        this.hbSession  = PersistenceManager.getRequestDBSession();
+    }
 
 }

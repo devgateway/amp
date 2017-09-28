@@ -21,58 +21,58 @@ import org.digijava.module.aim.util.DbUtil;
 
 public class ParisIndicatorAdd extends Action 
 {
-	private static Logger logger = Logger.getLogger(ParisIndicatorAdd.class);
+    private static Logger logger = Logger.getLogger(ParisIndicatorAdd.class);
 
-	public ActionForward execute(ActionMapping mapping,
-								 ActionForm form,
-								 HttpServletRequest request,
-								 HttpServletResponse response) throws java.lang.Exception 
-	{
-		ParisIndicatorManagerForm parisForm = (ParisIndicatorManagerForm) form;
+    public ActionForward execute(ActionMapping mapping,
+                                 ActionForm form,
+                                 HttpServletRequest request,
+                                 HttpServletResponse response) throws java.lang.Exception 
+    {
+        ParisIndicatorManagerForm parisForm = (ParisIndicatorManagerForm) form;
 
-		String editquestion = request.getParameter("editquestion");
-		
-		if(editquestion!=null)
-		{
-			AmpAhsurveyQuestion surveyQuestion = new AmpAhsurveyQuestion();		
-			surveyQuestion.setQuestionText(parisForm.getPiQuestionGot());			
-			surveyQuestion.setQuestionNumber(parisForm.getPiQuestId());			
-			AmpAhsurveyIndicator surveyInd = new AmpAhsurveyIndicator();
-			surveyInd.setAmpIndicatorId(parisForm.getPiQuestionIndicatorId());		
-			surveyQuestion.setAmpIndicatorId(surveyInd);			
-			AmpAhsurveyQuestionType surveyQuestType = new AmpAhsurveyQuestionType();
-			surveyQuestType.setAmpTypeId(parisForm.getPiQuestTypeId());
-			surveyQuestion.setAmpTypeId(surveyQuestType);
-			surveyQuestion.setStatus(null);
-			
+        String editquestion = request.getParameter("editquestion");
+        
+        if(editquestion!=null)
+        {
+            AmpAhsurveyQuestion surveyQuestion = new AmpAhsurveyQuestion();     
+            surveyQuestion.setQuestionText(parisForm.getPiQuestionGot());           
+            surveyQuestion.setQuestionNumber(parisForm.getPiQuestId());         
+            AmpAhsurveyIndicator surveyInd = new AmpAhsurveyIndicator();
+            surveyInd.setAmpIndicatorId(parisForm.getPiQuestionIndicatorId());      
+            surveyQuestion.setAmpIndicatorId(surveyInd);            
+            AmpAhsurveyQuestionType surveyQuestType = new AmpAhsurveyQuestionType();
+            surveyQuestType.setAmpTypeId(parisForm.getPiQuestTypeId());
+            surveyQuestion.setAmpTypeId(surveyQuestType);
+            surveyQuestion.setStatus(null);
+            
 
-			if(editquestion.equalsIgnoreCase("false"))
-			{
-				surveyQuestion.setAmpQuestionId(parisForm.getPiQuestionId());
-				DbUtil.update(surveyQuestion);
-			}
-			if(editquestion.equalsIgnoreCase("true"))
-			{
-				DbUtil.add(surveyQuestion);
-			}
-		}
-		String create = request.getParameter("create");
-		logger.info("this is create..............."+create);
-		if(create!=null &&create.equals("indi"))
-		{
-			logger.info("in the edit indicator goin to save now....");
-			AmpAhsurveyIndicator surveyInd = new AmpAhsurveyIndicator();
-			surveyInd.setAmpIndicatorId(parisForm.getIndicatorvalue());
-			surveyInd.setName(parisForm.getAddNewIndicatorText());
-			surveyInd.setIndicatorCode(parisForm.getAddNewIndicatorCode());
-			surveyInd.setTotalQuestions(parisForm.getNumberOfQuestions());
-			surveyInd.setIndicatorNumber(parisForm.getIndicatorNumber());
-			DbUtil.update(surveyInd);
-			//parisForm.setParisIndicatorName(ParisUtil.getParisIndicators());
-			return mapping.findForward("parisIndiManager");
-		}
-			
-		
-		return mapping.findForward("parisIndiManager");
-	}
+            if(editquestion.equalsIgnoreCase("false"))
+            {
+                surveyQuestion.setAmpQuestionId(parisForm.getPiQuestionId());
+                DbUtil.update(surveyQuestion);
+            }
+            if(editquestion.equalsIgnoreCase("true"))
+            {
+                DbUtil.add(surveyQuestion);
+            }
+        }
+        String create = request.getParameter("create");
+        logger.info("this is create..............."+create);
+        if(create!=null &&create.equals("indi"))
+        {
+            logger.info("in the edit indicator goin to save now....");
+            AmpAhsurveyIndicator surveyInd = new AmpAhsurveyIndicator();
+            surveyInd.setAmpIndicatorId(parisForm.getIndicatorvalue());
+            surveyInd.setName(parisForm.getAddNewIndicatorText());
+            surveyInd.setIndicatorCode(parisForm.getAddNewIndicatorCode());
+            surveyInd.setTotalQuestions(parisForm.getNumberOfQuestions());
+            surveyInd.setIndicatorNumber(parisForm.getIndicatorNumber());
+            DbUtil.update(surveyInd);
+            //parisForm.setParisIndicatorName(ParisUtil.getParisIndicators());
+            return mapping.findForward("parisIndiManager");
+        }
+            
+        
+        return mapping.findForward("parisIndiManager");
+    }
 }

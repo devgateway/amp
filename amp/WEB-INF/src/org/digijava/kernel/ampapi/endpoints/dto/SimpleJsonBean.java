@@ -10,7 +10,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
  */
 @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 public class SimpleJsonBean {
-	Object id;
+    Object id;
     String code;
     String name;
     String displayName;
@@ -18,32 +18,32 @@ public class SimpleJsonBean {
     String filterId;
     String type;
     List<SimpleJsonBean> children;
-	
+    
     public SimpleJsonBean(){
-		
-	}
+        
+    }
     
     public SimpleJsonBean(Object id,String name,String code,Long type) {
-    	this(id,name, code);
-    	this.type=type.toString();
+        this(id,name, code);
+        this.type=type.toString();
     }
     public SimpleJsonBean(Object id,String name,String code,String displayName) {
-    	this(id,name,code);
-    	this.displayName=displayName;
+        this(id,name,code);
+        this.displayName=displayName;
     }
 
     public SimpleJsonBean(Object id,String name,String code) {
-    	this(id,name);
-    	this.code=code;
+        this(id,name);
+        this.code=code;
     }
     public SimpleJsonBean(Object id,String name) {
-    	this.id=id;
-    	this.name=name;
+        this.id=id;
+        this.name=name;
     }
 
     @Override
     public String toString() {
-    	return String.format("%sid: %s, code: %s, name: %s", this.children == null ? "with children " : "", id, code, name);
+        return String.format("%sid: %s, code: %s, name: %s", this.children == null ? "with children " : "", id, code, name);
     }
 
     public Object getId() {
@@ -72,29 +72,29 @@ public class SimpleJsonBean {
     }
 
     public String getType() {
-		return type;
-	}
-	public void setType(String type) {
-		this.type = type;
-	}
-	public List<SimpleJsonBean> getChildren() {
+        return type;
+    }
+    public void setType(String type) {
+        this.type = type;
+    }
+    public List<SimpleJsonBean> getChildren() {
         return children;
     }
 
     public void setChildren(List<SimpleJsonBean> children) {
         this.children = children;
     }
-	public String getFilterId() {
-		return filterId;
-	}
-	public void setFilterId(String filterId) {
-		this.filterId = filterId;
-	}
-	public String getDisplayName() {
-		return displayName;
-	}
-	public void setDisplayName(String displayName) {
-		this.displayName = displayName;
-	}
+    public String getFilterId() {
+        return filterId;
+    }
+    public void setFilterId(String filterId) {
+        this.filterId = filterId;
+    }
+    public String getDisplayName() {
+        return displayName;
+    }
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
 
 }

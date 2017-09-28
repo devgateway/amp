@@ -22,49 +22,49 @@ import bsh.Interpreter;
  */
 public class XmlPatcherBSHLangWorker extends XmlPatcherLangWorker {
 
-	/**
-	 * @param entity
-	 * @param log
-	 */
-	public XmlPatcherBSHLangWorker(Lang entity, Script parentEntity,
-			AmpXmlPatchLog log) {
-		super(entity, parentEntity, log);
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * @param entity
+     * @param log
+     */
+    public XmlPatcherBSHLangWorker(Lang entity, Script parentEntity,
+            AmpXmlPatchLog log) {
+        super(entity, parentEntity, log);
+        // TODO Auto-generated constructor stub
+    }
 
 
-	@Override
-	protected boolean processSelectStatement()
-			throws XmlPatcherLangWorkerException {
-		Interpreter it = new Interpreter();
-		Session session = XmlPatcherUtil.getHibernateSession();
-		try {
-			it.set("session", session);
-			returnValue=it.eval(entity.getValue());
-			return true;
-		} catch (EvalError e) {
-			throw new XmlPatcherLangWorkerException(e);
-		} finally {
-			XmlPatcherUtil.closeHibernateSession(session);
-		}
-		
-	}
+    @Override
+    protected boolean processSelectStatement()
+            throws XmlPatcherLangWorkerException {
+        Interpreter it = new Interpreter();
+        Session session = XmlPatcherUtil.getHibernateSession();
+        try {
+            it.set("session", session);
+            returnValue=it.eval(entity.getValue());
+            return true;
+        } catch (EvalError e) {
+            throw new XmlPatcherLangWorkerException(e);
+        } finally {
+            XmlPatcherUtil.closeHibernateSession(session);
+        }
+        
+    }
 
-	@Override
-	protected boolean processUpdateStatement()
-			throws XmlPatcherLangWorkerException {
-		Interpreter it = new Interpreter();
-		Session session = XmlPatcherUtil.getHibernateSession();
-		try {
-			it.set("session", session);
-			it.eval(entity.getValue());
-			return true;
-		} catch (EvalError e) {
-			throw new XmlPatcherLangWorkerException(e);
-		} finally {
-			XmlPatcherUtil.closeHibernateSession(session);
-		}
-		
-	}
+    @Override
+    protected boolean processUpdateStatement()
+            throws XmlPatcherLangWorkerException {
+        Interpreter it = new Interpreter();
+        Session session = XmlPatcherUtil.getHibernateSession();
+        try {
+            it.set("session", session);
+            it.eval(entity.getValue());
+            return true;
+        } catch (EvalError e) {
+            throw new XmlPatcherLangWorkerException(e);
+        } finally {
+            XmlPatcherUtil.closeHibernateSession(session);
+        }
+        
+    }
 
 }

@@ -7,15 +7,15 @@ import java.util.Set;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 
 public class LocationIdsExpander extends IdsExpander {
-	
-	public LocationIdsExpander(String factColumnName) {
-		super(factColumnName);
-	}
-	
-	@Override public Set<Long> expandIds(List<Long> values) {
-		Set<Long> res = new HashSet<>();
-		res.addAll(DynLocationManagerUtil.getRecursiveChildrenOfCategoryValueLocations(values, false));
-		//res.addAll(DynLocationManagerUtil.getRecursiveAscendantsOfCategoryValueLocations(values));
-		return res;
-	}
+    
+    public LocationIdsExpander(String factColumnName) {
+        super(factColumnName);
+    }
+    
+    @Override public Set<Long> expandIds(List<Long> values) {
+        Set<Long> res = new HashSet<>();
+        res.addAll(DynLocationManagerUtil.getRecursiveChildrenOfCategoryValueLocations(values, false));
+        //res.addAll(DynLocationManagerUtil.getRecursiveAscendantsOfCategoryValueLocations(values));
+        return res;
+    }
 }

@@ -8,24 +8,24 @@ import org.dgfoundation.amp.newreports.ReportRenderWarning;
  *
  */
 public class ReportRenderWarningEx {
-	
-	protected final long activityId;
-	protected final String message;
-	
-	public ReportRenderWarningEx(ReportRenderWarning rrw) {
-		this(rrw.subject.getEntityId(), rrw.warningType.toString());
-	}
-	
-	public ReportRenderWarningEx(long activityId, String message) {
-		this.activityId = activityId;
-		this.message = message;
-	}
+    
+    protected final long activityId;
+    protected final String message;
+    
+    public ReportRenderWarningEx(ReportRenderWarning rrw) {
+        this(rrw.subject.getEntityId(), rrw.warningType.toString());
+    }
+    
+    public ReportRenderWarningEx(long activityId, String message) {
+        this.activityId = activityId;
+        this.message = message;
+    }
 
-	public long getActivityId() {
-		return activityId;
-	}
+    public long getActivityId() {
+        return activityId;
+    }
 
-	public String getMessage() {
-		return message;
-	}
+    public String getMessage() {
+        return message;
+    }
 }

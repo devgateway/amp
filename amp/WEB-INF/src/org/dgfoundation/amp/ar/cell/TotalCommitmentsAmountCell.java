@@ -17,19 +17,19 @@ public class TotalCommitmentsAmountCell extends AmountCell {
 
 
     public TotalCommitmentsAmountCell() {
-    	super();
+        super();
     }
 
     public TotalCommitmentsAmountCell(AmountCell ac) {
-		super(ac.getOwnerId());
-		this.mergedCells = ac.getMergedCells();
+        super(ac.getOwnerId());
+        this.mergedCells = ac.getMergedCells();
     }
 
     /**
          * @param id
          */
     public TotalCommitmentsAmountCell(Long id) {
-    	super(id);
+        super(id);
     }
 
     /**
@@ -39,21 +39,21 @@ public class TotalCommitmentsAmountCell extends AmountCell {
          * @return Returns the amount.
          */
     public double getAmount() {
-		if (id != null)
-			return convert();
-		return Logic.getInstance().getCommitmentCalculator().calculateAmount((Set)mergedCells);
-	}
+        if (id != null)
+            return convert();
+        return Logic.getInstance().getCommitmentCalculator().calculateAmount((Set)mergedCells);
+    }
 
     @Override
     public AmountCell merge(Cell c) {
-		AmountCell ac = (AmountCell) super.merge(c);		
-		TotalCommitmentsAmountCell uac = new TotalCommitmentsAmountCell(ac);
-		return uac;
+        AmountCell ac = (AmountCell) super.merge(c);        
+        TotalCommitmentsAmountCell uac = new TotalCommitmentsAmountCell(ac);
+        return uac;
     }
 
     @Override
     public AmountCell newInstance() {
-    	return new TotalCommitmentsAmountCell();
+        return new TotalCommitmentsAmountCell();
     }
 
 }

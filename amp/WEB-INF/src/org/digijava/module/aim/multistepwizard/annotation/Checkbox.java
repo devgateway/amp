@@ -8,6 +8,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface Checkbox {
-	int step() default -1;
-	String resetValue() default "";
+    int step() default -1;
+    String resetValue() default "";
 }

@@ -36,123 +36,123 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class AmpAjaxBehavior extends AbstractDefaultAjaxBehavior{
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private static final Logger logger = Logger.getLogger(AmpAjaxBehavior.class);
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+    private static final Logger logger = Logger.getLogger(AmpAjaxBehavior.class);
 
-	public static final String JS_FILE_NAME = "ampAjaxBehavior.js";
-	
-	
-	/**
-	 * The respond message called, by the translator component, through AJAX. 
-	 */
-	@Override
-	protected void respond(AjaxRequestTarget target) {
-		
-		Request request = RequestCycle.get().getRequest();
+    public static final String JS_FILE_NAME = "ampAjaxBehavior.js";
+    
+    
+    /**
+     * The respond message called, by the translator component, through AJAX. 
+     */
+    @Override
+    protected void respond(AjaxRequestTarget target) {
+        
+        Request request = RequestCycle.get().getRequest();
         ServletWebRequest servletWebRequest = (ServletWebRequest) request;
         HttpServletRequest httpServletRequest = servletWebRequest.getContainerRequest();
         //TLSUtils.populate(httpServletRequest);
-		String method = request.getRequestParameters().getParameterValue("method").toString();
+        String method = request.getRequestParameters().getParameterValue("method").toString();
         String activityId = request.getRequestParameters().getParameterValue("actId").toString();
-		if ("translate".compareTo(method.toLowerCase()) == 0){
-			translate(request, target);
-		}
-		else
-			if ("switchtranslatormode".compareTo(method.toLowerCase()) == 0){
-				switchTranslatorMode(request, target);
-			}
-			else
-				if ("switchfmmode".compareTo(method.toLowerCase()) == 0){
-					switchFMMode(request, target);
-				}
-		
-	}
-	
-	private void translate(Request request, AjaxRequestTarget target){
-		String key = request.getRequestParameters().getParameterValue("editorKey").toString();
-		String message = request.getRequestParameters().getParameterValue("editorVal").toString();
-		String pLabelId = request.getRequestParameters().getParameterValue("labelId").toString();
-		String postSaveActions = request.getRequestParameters().getParameterValue("postSaveActions").toString();
-		
-		AmpAuthWebSession session = (AmpAuthWebSession)Session.get();
-		Locale locale = session.getLocale();
-		Site site = session.getSite();
+        if ("translate".compareTo(method.toLowerCase()) == 0){
+            translate(request, target);
+        }
+        else
+            if ("switchtranslatormode".compareTo(method.toLowerCase()) == 0){
+                switchTranslatorMode(request, target);
+            }
+            else
+                if ("switchfmmode".compareTo(method.toLowerCase()) == 0){
+                    switchFMMode(request, target);
+                }
+        
+    }
+    
+    private void translate(Request request, AjaxRequestTarget target){
+        String key = request.getRequestParameters().getParameterValue("editorKey").toString();
+        String message = request.getRequestParameters().getParameterValue("editorVal").toString();
+        String pLabelId = request.getRequestParameters().getParameterValue("labelId").toString();
+        String postSaveActions = request.getRequestParameters().getParameterValue("postSaveActions").toString();
+        
+        AmpAuthWebSession session = (AmpAuthWebSession)Session.get();
+        Locale locale = session.getLocale();
+        Site site = session.getSite();
 
-		TranslatorWorker translatorWorker = TranslatorWorker.getInstance(key);
-		Message msg;
-		try {
-			msg = translatorWorker.getByKey(key, locale.getLanguage(), site);
-			if (msg != null) {
-				msg.setMessage(message);
-				//msg.setKey(key);
-				//msg.setCreated(new java.sql.Timestamp(System.currentTimeMillis()));
-				//msg.setLocale(locale.getLanguage());
-				//msg.setSite(site);
-				translatorWorker.update(msg);
-				
-			} else {
-				Message newMsg = new Message();
-				newMsg.setMessage(message);
-				newMsg.setCreated(new java.sql.Timestamp(System.currentTimeMillis()));
-				newMsg.setKey(key);
-				newMsg.setSite(site);
-				newMsg.setLocale(locale.getLanguage());
-				translatorWorker.save(newMsg);
-			}
-		} catch (Exception e1) {
-			logger.error("Can't save translation: ", e1);
-			message = message + "(not saved due to error!)";
-		}
-		String javascript = "updateLabel(\""+pLabelId+"\", \""+message+"\");";
-		
-		//if post save actions were already executed we don't to show the label because this
-		//behavior was taken care by previously executed actions
-		if (postSaveActions == null) {
-			javascript += "showLabel(\""+pLabelId+"\");";
-		}
-		javascript+="window.status='';";
-		target.appendJavaScript(javascript);
-	}
-	
-	private void switchTranslatorMode(Request request, AjaxRequestTarget target){
-		((AmpAuthWebSession) Session.get()).switchTranslatorMode();
-		
-		String id = request.getRequestParameters().getParameterValue("activity").toString();
-		ActivityGatekeeper.pageModeChange(id);
+        TranslatorWorker translatorWorker = TranslatorWorker.getInstance(key);
+        Message msg;
+        try {
+            msg = translatorWorker.getByKey(key, locale.getLanguage(), site);
+            if (msg != null) {
+                msg.setMessage(message);
+                //msg.setKey(key);
+                //msg.setCreated(new java.sql.Timestamp(System.currentTimeMillis()));
+                //msg.setLocale(locale.getLanguage());
+                //msg.setSite(site);
+                translatorWorker.update(msg);
+                
+            } else {
+                Message newMsg = new Message();
+                newMsg.setMessage(message);
+                newMsg.setCreated(new java.sql.Timestamp(System.currentTimeMillis()));
+                newMsg.setKey(key);
+                newMsg.setSite(site);
+                newMsg.setLocale(locale.getLanguage());
+                translatorWorker.save(newMsg);
+            }
+        } catch (Exception e1) {
+            logger.error("Can't save translation: ", e1);
+            message = message + "(not saved due to error!)";
+        }
+        String javascript = "updateLabel(\""+pLabelId+"\", \""+message+"\");";
+        
+        //if post save actions were already executed we don't to show the label because this
+        //behavior was taken care by previously executed actions
+        if (postSaveActions == null) {
+            javascript += "showLabel(\""+pLabelId+"\");";
+        }
+        javascript+="window.status='';";
+        target.appendJavaScript(javascript);
+    }
+    
+    private void switchTranslatorMode(Request request, AjaxRequestTarget target){
+        ((AmpAuthWebSession) Session.get()).switchTranslatorMode();
+        
+        String id = request.getRequestParameters().getParameterValue("activity").toString();
+        ActivityGatekeeper.pageModeChange(id);
         target.appendJavaScript("var newLoc=window.location.href;newLoc=newLoc.substr(0,newLoc.lastIndexOf('?'));window.location.replace(newLoc);");
-	}
+    }
 
-	private void switchFMMode(Request request, AjaxRequestTarget target){
-		((AmpAuthWebSession) Session.get()).switchFMMode();
-		
-		String id = request.getRequestParameters().getParameterValue("activity").toString();
-		ActivityGatekeeper.pageModeChange(id);
+    private void switchFMMode(Request request, AjaxRequestTarget target){
+        ((AmpAuthWebSession) Session.get()).switchFMMode();
+        
+        String id = request.getRequestParameters().getParameterValue("activity").toString();
+        ActivityGatekeeper.pageModeChange(id);
         target.appendJavaScript("var newLoc=window.location.href;newLoc=newLoc.substr(0,newLoc.lastIndexOf('?'));window.location.replace(newLoc);");
-	}
-	
-	@Override
-	public void renderHead(Component component, IHeaderResponse response) {
-		super.renderHead(component, response);
-		
-		CharSequence callBackUrl = getCallbackUrl();
-		
-		HashMap<String, Object> variables = new HashMap<String, Object>();
-		String activityFormOnePager = "false";
-		try {
-			activityFormOnePager = FeaturesUtil.getGlobalSettingValue(
-					GlobalSettingsConstants.ACTIVITY_FORM_ONE_PAGER);
-		} catch (Exception ignored) {}
-		variables.put("onepagerMode", activityFormOnePager);
-		variables.put("onepagerPath", "/" + OnePagerConst.ONEPAGER_URL_PREFIX + "/" + OnePagerConst.ONEPAGER_URL_PARAMETER_ACTIVITY + "/");
-		variables.put("callBackUrl", callBackUrl);		
-		
-		PackageTextTemplate ptt = new PackageTextTemplate(AmpAjaxBehavior.class, JS_FILE_NAME);
-		ptt.interpolate(variables);
-		JavaScriptTemplate jst = new JavaScriptTemplate(ptt);
-		response.render(StringHeaderItem.forString(jst.asString()));
+    }
+    
+    @Override
+    public void renderHead(Component component, IHeaderResponse response) {
+        super.renderHead(component, response);
+        
+        CharSequence callBackUrl = getCallbackUrl();
+        
+        HashMap<String, Object> variables = new HashMap<String, Object>();
+        String activityFormOnePager = "false";
+        try {
+            activityFormOnePager = FeaturesUtil.getGlobalSettingValue(
+                    GlobalSettingsConstants.ACTIVITY_FORM_ONE_PAGER);
+        } catch (Exception ignored) {}
+        variables.put("onepagerMode", activityFormOnePager);
+        variables.put("onepagerPath", "/" + OnePagerConst.ONEPAGER_URL_PREFIX + "/" + OnePagerConst.ONEPAGER_URL_PARAMETER_ACTIVITY + "/");
+        variables.put("callBackUrl", callBackUrl);      
+        
+        PackageTextTemplate ptt = new PackageTextTemplate(AmpAjaxBehavior.class, JS_FILE_NAME);
+        ptt.interpolate(variables);
+        JavaScriptTemplate jst = new JavaScriptTemplate(ptt);
+        response.render(StringHeaderItem.forString(jst.asString()));
 
-	}
+    }
 }

@@ -12,20 +12,20 @@ import org.digijava.module.aim.util.FeaturesUtil;
  */
 
 public class AuditCleanerService extends AbstractServiceImpl {
-	AuditCleanerRunner crummer = null;
+    AuditCleanerRunner crummer = null;
 
-	protected void processInitEvent(ServiceContext serviceContext) {
-		String cleanerEnabled = FeaturesUtil
-				.getGlobalSettingValue(GlobalSettingsConstants.AUTOMATIC_AUDIT_LOGGER_CLEANUP);
-		if (cleanerEnabled != null) {
-			if (!("-1").equalsIgnoreCase(cleanerEnabled)) {
-				startCleaner(Integer.parseInt(cleanerEnabled));
-			}
-		}
-	}
+    protected void processInitEvent(ServiceContext serviceContext) {
+        String cleanerEnabled = FeaturesUtil
+                .getGlobalSettingValue(GlobalSettingsConstants.AUTOMATIC_AUDIT_LOGGER_CLEANUP);
+        if (cleanerEnabled != null) {
+            if (!("-1").equalsIgnoreCase(cleanerEnabled)) {
+                startCleaner(Integer.parseInt(cleanerEnabled));
+            }
+        }
+    }
 
-	public void startCleaner(int days) {
-		AuditCleaner adc = AuditCleaner.getInstance();
-		adc.start();
-	}
+    public void startCleaner(int days) {
+        AuditCleaner adc = AuditCleaner.getInstance();
+        adc.start();
+    }
 }

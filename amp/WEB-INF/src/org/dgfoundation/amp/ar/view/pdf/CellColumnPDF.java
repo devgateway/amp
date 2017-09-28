@@ -25,31 +25,31 @@ import com.lowagie.text.pdf.PdfPTable;
  */
 public class CellColumnPDF extends PDFExporter {
 
-	public CellColumnPDF(Exporter parent, Viewable item) {
-		super(parent, item);
-	}
-	
-	/**
-	 * @param table
-	 * @param item
-	 */
-	public CellColumnPDF(PdfPTable table, Viewable item, Long ownerId) {
-		super(table, item, ownerId);
-		// TODO Auto-generated constructor stub
-	}
+    public CellColumnPDF(Exporter parent, Viewable item) {
+        super(parent, item);
+    }
+    
+    /**
+     * @param table
+     * @param item
+     */
+    public CellColumnPDF(PdfPTable table, Viewable item, Long ownerId) {
+        super(table, item, ownerId);
+        // TODO Auto-generated constructor stub
+    }
 
-	/* (non-Javadoc)
-	 * @see org.dgfoundation.amp.ar.view.pdf.PDFExporter#generate()
-	 */
-	public void generate() {
-		CellColumn col=(CellColumn) item;
-		 Cell c=col.getByOwner(ownerId);
-		 if(c!=null)
-		 {
-			 c.invokeExporter(this);
-		 }
-		 else 
-			 table.addCell(new PdfPCell(new Paragraph(" ",new Font(ExportActivityToPDF.basefont, 10, Font.NORMAL))));
-	}
+    /* (non-Javadoc)
+     * @see org.dgfoundation.amp.ar.view.pdf.PDFExporter#generate()
+     */
+    public void generate() {
+        CellColumn col=(CellColumn) item;
+         Cell c=col.getByOwner(ownerId);
+         if(c!=null)
+         {
+             c.invokeExporter(this);
+         }
+         else 
+             table.addCell(new PdfPCell(new Paragraph(" ",new Font(ExportActivityToPDF.basefont, 10, Font.NORMAL))));
+    }
 
 }

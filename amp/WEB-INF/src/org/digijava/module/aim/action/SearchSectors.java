@@ -93,17 +93,17 @@ public class SearchSectors
 
         ssForm.setSearchedSectors(col);
 
-        //	ssForm.setCols(col);
+        //  ssForm.setCols(col);
         ssForm.setPagedCol(tempCol);
         ssForm.setPages(pages);
         ssForm.setCurrentPage(new Integer(page));
 
-//		eaForm.setSearchLocs(col);
-//		eaForm.setPagedCol(tempCol);
-//		eaForm.setPages(pages);
-//		eaForm.setCurrentPage(new Integer(1));
+//      eaForm.setSearchLocs(col);
+//      eaForm.setPagedCol(tempCol);
+//      eaForm.setPages(pages);
+//      eaForm.setCurrentPage(new Integer(1));
 
-//		eaForm.setSearchLocs(LocationUtil.searchForLocation(eaForm.getKeyword().trim(),implvl));
+//      eaForm.setSearchLocs(LocationUtil.searchForLocation(eaForm.getKeyword().trim(),implvl));
 
       }
       else {

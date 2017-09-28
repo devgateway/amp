@@ -20,1475 +20,1475 @@ import org.springframework.beans.BeanWrapperImpl;
  * @author mihai
  */
 public class ReportsFilterPickerForm extends ActionForm {
-	
-	/**
-	 */
-	private static final long serialVersionUID = -8336313984510706274L;
-	private Collection<AmpCurrency> currencies;
-	private Collection calendars;
-	private Collection<GroupingElement<HierarchyListableImplementation>> sectorElements;
-	private Collection<GroupingElement<AmpThemeSkeleton>> programElements;
-	private Collection<GroupingElement<HierarchyListableImplementation>> donorElements;
-	private Collection<GroupingElement<HierarchyListableImplementation>> relatedAgenciesElements;
-	private Collection<GroupingElement<HierarchyListableImplementation>> financingLocationElements;
-	private Collection<GroupingElement<HierarchyListableImplementation>> modeOfPayment;
-	private Collection<GroupingElement<HierarchyListableImplementation>> otherCriteriaElements;
-	private Object[] selectedHistory;
-	// private Collection donors;
-	private Collection risks;
-	private Collection<BeanWrapperImpl> fromYears;
-	private Collection<BeanWrapperImpl> toYears;
-	private Collection<BeanWrapperImpl> fromMonths;
-	private Collection<BeanWrapperImpl> toMonths;
-	private Collection<BeanWrapperImpl> countYears;
-	private Collection<BeanWrapperImpl> computedYearsRange;
-	private Collection<BeanWrapperImpl> actualAppYearsRange;
-	//private Collection actRankCollection;
-	private Collection pageSizes; // A0,A1,A2,A3,A4
-	//private Collection donorTypes; // Ex: Multilateral, Bilateral, Regional
-	// Governament
-	//private Collection donorGroups;
-	//private Collection executingAgency;
-	//private Collection<AmpOrganisation> donnorAgency;
-	//private Collection<AmpOrganisation> responsibleorg;
-	//private Collection implementingAgency;
-	//private Collection beneficiaryAgency;
-	private Object[] regionSelected;
-	private Object[] approvalStatusSelected;
-	
-//	private String teamAccessType; unused
-	private Object[] selectedSectors;
-	private Object[] selectedSecondarySectors;
-	private Object[] selectedTertiarySectors;
-	private Object[] selectedQuaternarySectors;
-	private Object[] selectedQuinarySectors;
-	private Object[] selectedTagSectors;
-	private Object[] selectedStatuses;
-	private Object[] selectedWorkspaces;
-	// private Object[] selectedDonors;
-	private Object[] selectedRisks;
-	private Object[] selectedFinancingInstruments;
-	private Object[] selectedFundingStatus;
-	private Object[] selectedAidModalities;
-	private Long[] selectedTypeOfAssistance;
-	private Long[] selectedModeOfPayment;
-	private Long[] selectedConcensionalityLevel;
-	private Object[] selectedDonorTypes; // ids of AmpOrgType
-	private Object[] selectedDonorGroups; //
-	private Object[] selectedContractingAgencyGroups; //
-	private Object[] selectedExecutingAgency;
-	private Object[] selectedContractingAgency;
-	private Object[] selectedImplementingAgency;
-	private Object[] selectedBeneficiaryAgency;
-	private Object[] selectedDonnorAgency;
-	private Object[] selectedProjectCategory;
-	private Object[] selectedresponsibleorg;
-	private Object[] selectedComponentSecondResponsibleOrg;
-	private Object[] selectedComponentFundingOrg;
-	private Object[] selectedArchivedStatus = new Object[]{"1"};
-	private Object[] selectedHumanitarianAid;
-	private Object[] selectedDisasterResponse;
-	private Object[] selectedActivitySettings;
-	private Object[] selectedActivityPledgesTitle;
-	//private Collection regionSelectedCollection;
-	private Collection approvalStatusSelectedCollection;//AMP-3386
-	private Long fromYear;
-	private Long toYear;
-	private Integer toMonth;
-	private Integer fromMonth;
-	private String fromDate;
-	private String toDate;
-	private DynamicDateFilter dynamicDateFilter = new DynamicDateFilter();
-	private String fromActivityStartDate;
-	private String toActivityStartDate;
-	private String fromIssueDate;
-	private String toIssueDate;
-	private DynamicDateFilter dynamicActivityStartFilter = new DynamicDateFilter();
-	private DynamicDateFilter dynamicIssueFilter = new DynamicDateFilter();
-	private String fromProposedApprovalDate;
-	private String toProposedApprovalDate;
-	private DynamicDateFilter dynamicProposedApprovalFilter = new DynamicDateFilter();
-	private String fromActivityActualCompletionDate;
-	private String toActivityActualCompletionDate;
-	private DynamicDateFilter dynamicActivityActualCompletionFilter = new DynamicDateFilter();
-	private String fromActivityFinalContractingDate;
-	private String toActivityFinalContractingDate;
-	private DynamicDateFilter dynamicActivityFinalContractingFilter = new DynamicDateFilter();
-	private Long countYear;
-	private Long currency;
-	private Long calendar;
-	private Long defaultCalendar;
-	private String ampReportId;
-	private Object[] lineMinRanks;
-	private Object[] selectedMultiDonor;
-	private String text;
-	private String indexString;
-	private String searchMode;
-	private String pageSize; // the specific page sizes
-	private Boolean governmentApprovalProcedures;
-	private Boolean jointCriteria;
-	private Long[] selectedBudgets = null;
-	private Boolean justSearch = null;
-	private Boolean pledged;
-	private Boolean unallocatedLocation = null;
-	// to keep the default currency after user changes
-	private Long defaultCurrency;
-	//private boolean isnewreport;
-	private Long countYearFrom;
-	
-//	private List nationalPlanningObjectives;
-//	private List primaryPrograms;
-//	private List secondaryPrograms;
-	private Object[] selectedNatPlanObj;
-	private Object[] selectedPrimaryPrograms;
-	private Object[] selectedSecondaryPrograms;
-	private Integer renderStartYear; // the range of dates columns that has
-	// to be render, years not in range will
-	// be computables for totals but wont be
-	// rederisables
-	private Integer renderEndYear;
-	private Integer resetRenderStartYear;
-	private Integer resetRenderEndYear;
-	private Collection<String> allgroupingseparators;
-	private Collection<String> alldecimalSymbols;
-	private String decimalSymbol;
-	private String customDecimalSymbol;
-	private String customDecimalSymbolTxt;
-	private Integer customDecimalPlaces;
-	private Boolean customUseGrouping;
-	private String customGroupCharacter;
-	private Integer customDecimalPlacesTxt;
-	private String customGroupCharacterTxt;
-	private Integer customGroupSize;
-	private Integer amountinthousands;
-	private String resetFormat;
-	private Boolean sourceIsReportWizard;
-	private Object[] disbursementOrders;
-	private String CRISNumber;
-	private String budgetNumber;
-	private Integer computedYear = -1;
-	private Integer actualAppYear = -1;
-	private Long[] selectedProjectImplUnit;
-	private Long reporttype;
-	private Boolean workspaceonly;
-	private boolean showWorkspaceFilter;
-	private String selectedActivityPledgesSettings = "-1";
-	
-	private Object[] selectedExpenditureClasses;
-	private Object[] selectedPerformanceAlertLevels;
-	private DynamicDateFilter dynamicEffectiveFundingFilter = new DynamicDateFilter();
-	private DynamicDateFilter dynamicFundingClosingFilter = new DynamicDateFilter();
-	private String fromEffectiveFundingDate;
-	private String toEffectiveFundingDate;
-	private String fromFundingClosingDate;
-	private String toFundingClosingDate;
+    
+    /**
+     */
+    private static final long serialVersionUID = -8336313984510706274L;
+    private Collection<AmpCurrency> currencies;
+    private Collection calendars;
+    private Collection<GroupingElement<HierarchyListableImplementation>> sectorElements;
+    private Collection<GroupingElement<AmpThemeSkeleton>> programElements;
+    private Collection<GroupingElement<HierarchyListableImplementation>> donorElements;
+    private Collection<GroupingElement<HierarchyListableImplementation>> relatedAgenciesElements;
+    private Collection<GroupingElement<HierarchyListableImplementation>> financingLocationElements;
+    private Collection<GroupingElement<HierarchyListableImplementation>> modeOfPayment;
+    private Collection<GroupingElement<HierarchyListableImplementation>> otherCriteriaElements;
+    private Object[] selectedHistory;
+    // private Collection donors;
+    private Collection risks;
+    private Collection<BeanWrapperImpl> fromYears;
+    private Collection<BeanWrapperImpl> toYears;
+    private Collection<BeanWrapperImpl> fromMonths;
+    private Collection<BeanWrapperImpl> toMonths;
+    private Collection<BeanWrapperImpl> countYears;
+    private Collection<BeanWrapperImpl> computedYearsRange;
+    private Collection<BeanWrapperImpl> actualAppYearsRange;
+    //private Collection actRankCollection;
+    private Collection pageSizes; // A0,A1,A2,A3,A4
+    //private Collection donorTypes; // Ex: Multilateral, Bilateral, Regional
+    // Governament
+    //private Collection donorGroups;
+    //private Collection executingAgency;
+    //private Collection<AmpOrganisation> donnorAgency;
+    //private Collection<AmpOrganisation> responsibleorg;
+    //private Collection implementingAgency;
+    //private Collection beneficiaryAgency;
+    private Object[] regionSelected;
+    private Object[] approvalStatusSelected;
+    
+//  private String teamAccessType; unused
+    private Object[] selectedSectors;
+    private Object[] selectedSecondarySectors;
+    private Object[] selectedTertiarySectors;
+    private Object[] selectedQuaternarySectors;
+    private Object[] selectedQuinarySectors;
+    private Object[] selectedTagSectors;
+    private Object[] selectedStatuses;
+    private Object[] selectedWorkspaces;
+    // private Object[] selectedDonors;
+    private Object[] selectedRisks;
+    private Object[] selectedFinancingInstruments;
+    private Object[] selectedFundingStatus;
+    private Object[] selectedAidModalities;
+    private Long[] selectedTypeOfAssistance;
+    private Long[] selectedModeOfPayment;
+    private Long[] selectedConcensionalityLevel;
+    private Object[] selectedDonorTypes; // ids of AmpOrgType
+    private Object[] selectedDonorGroups; //
+    private Object[] selectedContractingAgencyGroups; //
+    private Object[] selectedExecutingAgency;
+    private Object[] selectedContractingAgency;
+    private Object[] selectedImplementingAgency;
+    private Object[] selectedBeneficiaryAgency;
+    private Object[] selectedDonnorAgency;
+    private Object[] selectedProjectCategory;
+    private Object[] selectedresponsibleorg;
+    private Object[] selectedComponentSecondResponsibleOrg;
+    private Object[] selectedComponentFundingOrg;
+    private Object[] selectedArchivedStatus = new Object[]{"1"};
+    private Object[] selectedHumanitarianAid;
+    private Object[] selectedDisasterResponse;
+    private Object[] selectedActivitySettings;
+    private Object[] selectedActivityPledgesTitle;
+    //private Collection regionSelectedCollection;
+    private Collection approvalStatusSelectedCollection;//AMP-3386
+    private Long fromYear;
+    private Long toYear;
+    private Integer toMonth;
+    private Integer fromMonth;
+    private String fromDate;
+    private String toDate;
+    private DynamicDateFilter dynamicDateFilter = new DynamicDateFilter();
+    private String fromActivityStartDate;
+    private String toActivityStartDate;
+    private String fromIssueDate;
+    private String toIssueDate;
+    private DynamicDateFilter dynamicActivityStartFilter = new DynamicDateFilter();
+    private DynamicDateFilter dynamicIssueFilter = new DynamicDateFilter();
+    private String fromProposedApprovalDate;
+    private String toProposedApprovalDate;
+    private DynamicDateFilter dynamicProposedApprovalFilter = new DynamicDateFilter();
+    private String fromActivityActualCompletionDate;
+    private String toActivityActualCompletionDate;
+    private DynamicDateFilter dynamicActivityActualCompletionFilter = new DynamicDateFilter();
+    private String fromActivityFinalContractingDate;
+    private String toActivityFinalContractingDate;
+    private DynamicDateFilter dynamicActivityFinalContractingFilter = new DynamicDateFilter();
+    private Long countYear;
+    private Long currency;
+    private Long calendar;
+    private Long defaultCalendar;
+    private String ampReportId;
+    private Object[] lineMinRanks;
+    private Object[] selectedMultiDonor;
+    private String text;
+    private String indexString;
+    private String searchMode;
+    private String pageSize; // the specific page sizes
+    private Boolean governmentApprovalProcedures;
+    private Boolean jointCriteria;
+    private Long[] selectedBudgets = null;
+    private Boolean justSearch = null;
+    private Boolean pledged;
+    private Boolean unallocatedLocation = null;
+    // to keep the default currency after user changes
+    private Long defaultCurrency;
+    //private boolean isnewreport;
+    private Long countYearFrom;
+    
+//  private List nationalPlanningObjectives;
+//  private List primaryPrograms;
+//  private List secondaryPrograms;
+    private Object[] selectedNatPlanObj;
+    private Object[] selectedPrimaryPrograms;
+    private Object[] selectedSecondaryPrograms;
+    private Integer renderStartYear; // the range of dates columns that has
+    // to be render, years not in range will
+    // be computables for totals but wont be
+    // rederisables
+    private Integer renderEndYear;
+    private Integer resetRenderStartYear;
+    private Integer resetRenderEndYear;
+    private Collection<String> allgroupingseparators;
+    private Collection<String> alldecimalSymbols;
+    private String decimalSymbol;
+    private String customDecimalSymbol;
+    private String customDecimalSymbolTxt;
+    private Integer customDecimalPlaces;
+    private Boolean customUseGrouping;
+    private String customGroupCharacter;
+    private Integer customDecimalPlacesTxt;
+    private String customGroupCharacterTxt;
+    private Integer customGroupSize;
+    private Integer amountinthousands;
+    private String resetFormat;
+    private Boolean sourceIsReportWizard;
+    private Object[] disbursementOrders;
+    private String CRISNumber;
+    private String budgetNumber;
+    private Integer computedYear = -1;
+    private Integer actualAppYear = -1;
+    private Long[] selectedProjectImplUnit;
+    private Long reporttype;
+    private Boolean workspaceonly;
+    private boolean showWorkspaceFilter;
+    private String selectedActivityPledgesSettings = "-1";
+    
+    private Object[] selectedExpenditureClasses;
+    private Object[] selectedPerformanceAlertLevels;
+    private DynamicDateFilter dynamicEffectiveFundingFilter = new DynamicDateFilter();
+    private DynamicDateFilter dynamicFundingClosingFilter = new DynamicDateFilter();
+    private String fromEffectiveFundingDate;
+    private String toEffectiveFundingDate;
+    private String fromFundingClosingDate;
+    private String toFundingClosingDate;
 
-	public int getCalendarsSize() {
-		if (calendars == null) return 0;
-		return calendars.size();
-	}
-	
-	public String getCRISNumber() {
-		return CRISNumber;
-	}
-	
-	public void setCRISNumber(String number) {
-		CRISNumber = number;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public ReportsFilterPickerForm() {
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Collection<AmpCurrency> getCurrencies() {
-		return this.currencies;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Collection getCalendars() {
-		return this.calendars;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Collection<GroupingElement<HierarchyListableImplementation>> getSectorElements() {
-		return this.sectorElements;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Collection<GroupingElement<AmpThemeSkeleton>> getProgramElements() {
-		return this.programElements;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Collection<GroupingElement<HierarchyListableImplementation>> getDonorElements() {
-		return this.donorElements;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Collection<GroupingElement<HierarchyListableImplementation>> getRelatedAgenciesElements() {
-		return this.relatedAgenciesElements;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Collection<GroupingElement<HierarchyListableImplementation>> getFinancingLocationElements() {
-		return this.financingLocationElements;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Collection<GroupingElement<HierarchyListableImplementation>> getModeOfPayment() {
-		return this.modeOfPayment;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Collection<GroupingElement<HierarchyListableImplementation>> getOtherCriteriaElements() {
-		return this.otherCriteriaElements;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Object[] getSelectedHistory() {
-		return this.selectedHistory;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Collection getRisks() {
-		return this.risks;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Collection<BeanWrapperImpl> getFromYears() {
-		return this.fromYears;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Collection<BeanWrapperImpl> getToYears() {
-		return this.toYears;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Collection<BeanWrapperImpl> getFromMonths() {
-		return this.fromMonths;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Collection<BeanWrapperImpl> getToMonths() {
-		return this.toMonths;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Collection<BeanWrapperImpl> getCountYears() {
-		return this.countYears;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Collection<BeanWrapperImpl> getComputedYearsRange() {
-		return this.computedYearsRange;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Collection<BeanWrapperImpl> getActualAppYearsRange() {
-		return this.actualAppYearsRange;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Collection getPageSizes() {
-		return this.pageSizes;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Object[] getRegionSelected() {
-		return this.regionSelected;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Object[] getApprovalStatusSelected() {
-		return this.approvalStatusSelected;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Object[] getSelectedSectors() {
-		return this.selectedSectors;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Object[] getSelectedSecondarySectors() {
-		return this.selectedSecondarySectors;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Object[] getSelectedTertiarySectors() {
-		return this.selectedTertiarySectors;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Object[] getSelectedTagSectors() {
-		return this.selectedTagSectors;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Object[] getSelectedStatuses() {
-		return this.selectedStatuses;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Object[] getSelectedWorkspaces() {
-		return this.selectedWorkspaces;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Object[] getSelectedRisks() {
-		return this.selectedRisks;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Object[] getSelectedFinancingInstruments() {
-		return this.selectedFinancingInstruments;
-	}
-	
-	public Object[] getSelectedAidModalities(){
-		return this.selectedAidModalities;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Long[] getSelectedTypeOfAssistance() {
-		return this.selectedTypeOfAssistance;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Long[] getSelectedModeOfPayment() {
-		return this.selectedModeOfPayment;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Object[] getSelectedDonorTypes() {
-		return this.selectedDonorTypes;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Object[] getSelectedDonorGroups() {
-		return this.selectedDonorGroups;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Object[] getSelectedContractingAgencyGroups() {
-		return this.selectedContractingAgencyGroups;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Object[] getSelectedExecutingAgency() {
-		return this.selectedExecutingAgency;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Object[] getSelectedContractingAgency() {
-		return this.selectedContractingAgency;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Object[] getSelectedImplementingAgency() {
-		return this.selectedImplementingAgency;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Object[] getSelectedBeneficiaryAgency() {
-		return this.selectedBeneficiaryAgency;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Object[] getSelectedDonnorAgency() {
-		return this.selectedDonnorAgency;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Object[] getSelectedProjectCategory() {
-		return this.selectedProjectCategory;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Object[] getSelectedresponsibleorg() {
-		return this.selectedresponsibleorg;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Object[] getSelectedArchivedStatus() {
-		return this.selectedArchivedStatus;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Object[] getSelectedActivitySettings() {
-		return this.selectedActivitySettings;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Object[] getSelectedActivityPledgesTitle() {
-		return this.selectedActivityPledgesTitle;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Collection getApprovalStatusSelectedCollection() {
-		return this.approvalStatusSelectedCollection;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Long getFromYear() {
-		return this.fromYear;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Long getToYear() {
-		return this.toYear;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Integer getToMonth() {
-		return this.toMonth;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Integer getFromMonth() {
-		return this.fromMonth;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public String getFromDate() {
-		return this.fromDate;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public String getToDate() {
-		return this.toDate;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public DynamicDateFilter getDynamicDateFilter() {
-		return this.dynamicDateFilter;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public String getFromActivityStartDate() {
-		return this.fromActivityStartDate;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public String getToActivityStartDate() {
-		return this.toActivityStartDate;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public DynamicDateFilter getDynamicActivityStartFilter() {
-		return this.dynamicActivityStartFilter;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public String getFromProposedApprovalDate() {
-		return this.fromProposedApprovalDate;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public String getToProposedApprovalDate() {
-		return this.toProposedApprovalDate;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public DynamicDateFilter getDynamicProposedApprovalFilter() {
-		return this.dynamicProposedApprovalFilter;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public String getFromActivityActualCompletionDate() {
-		return this.fromActivityActualCompletionDate;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public String getToActivityActualCompletionDate() {
-		return this.toActivityActualCompletionDate;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public DynamicDateFilter getDynamicActivityActualCompletionFilter() {
-		return this.dynamicActivityActualCompletionFilter;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public String getFromActivityFinalContractingDate() {
-		return this.fromActivityFinalContractingDate;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public String getToActivityFinalContractingDate() {
-		return this.toActivityFinalContractingDate;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public DynamicDateFilter getDynamicActivityFinalContractingFilter() {
-		return this.dynamicActivityFinalContractingFilter;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Long getCountYear() {
-		return this.countYear;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Long getCurrency() {
-		return this.currency;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Long getCalendar() {
-		return this.calendar;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Long getDefaultCalendar() {
-		return this.defaultCalendar;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public String getAmpReportId() {
-		return this.ampReportId;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Object[] getLineMinRanks() {
-		return this.lineMinRanks;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Object[] getSelectedMultiDonor() {
-		return this.selectedMultiDonor;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public String getText() {
-		return this.text;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public String getIndexString() {
-		return this.indexString;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public String getSearchMode() {
-		return this.searchMode;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public String getPageSize() {
-		return this.pageSize;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Boolean getGovernmentApprovalProcedures() {
-		return this.governmentApprovalProcedures;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Boolean getJointCriteria() {
-		return this.jointCriteria;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Long[] getSelectedBudgets() {
-		return this.selectedBudgets;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Boolean getJustSearch() {
-		return this.justSearch;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Boolean getPledged() {
-		return this.pledged;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Boolean getUnallocatedLocation() {
-		return this.unallocatedLocation;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Long getDefaultCurrency() {
-		return this.defaultCurrency;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Long getCountYearFrom() {
-		return this.countYearFrom;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Object[] getSelectedNatPlanObj() {
-		return this.selectedNatPlanObj;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Object[] getSelectedPrimaryPrograms() {
-		return this.selectedPrimaryPrograms;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Object[] getSelectedSecondaryPrograms() {
-		return this.selectedSecondaryPrograms;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Integer getRenderStartYear() {
-		return this.renderStartYear;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Integer getRenderEndYear() {
-		return this.renderEndYear;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Integer getResetRenderStartYear() {
-		return this.resetRenderStartYear;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Integer getResetRenderEndYear() {
-		return this.resetRenderEndYear;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Collection<String> getAllgroupingseparators() {
-		return this.allgroupingseparators;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Collection<String> getAlldecimalSymbols() {
-		return this.alldecimalSymbols;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public String getDecimalSymbol() {
-		return this.decimalSymbol;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public String getCustomDecimalSymbol() {
-		return this.customDecimalSymbol;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public String getCustomDecimalSymbolTxt() {
-		return this.customDecimalSymbolTxt;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Integer getCustomDecimalPlaces() {
-		return this.customDecimalPlaces;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Boolean getCustomUseGrouping() {
-		return this.customUseGrouping;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public String getCustomGroupCharacter() {
-		return this.customGroupCharacter;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Integer getCustomDecimalPlacesTxt() {
-		return this.customDecimalPlacesTxt;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public String getCustomGroupCharacterTxt() {
-		return this.customGroupCharacterTxt;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Integer getCustomGroupSize() {
-		return this.customGroupSize;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Integer getAmountinthousands() {
-		return this.amountinthousands;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public String getResetFormat() {
-		return this.resetFormat;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Boolean getSourceIsReportWizard() {
-		return this.sourceIsReportWizard;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Object[] getDisbursementOrders() {
-		return this.disbursementOrders;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public String getBudgetNumber() {
-		return this.budgetNumber;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Integer getComputedYear() {
-		return this.computedYear;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Integer getActualAppYear() {
-		return this.actualAppYear;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Long[] getSelectedProjectImplUnit() {
-		return this.selectedProjectImplUnit;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Long getReporttype() {
-		return this.reporttype;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public Boolean getWorkspaceonly() {
-		return this.workspaceonly;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public boolean isShowWorkspaceFilter() {
-		return this.showWorkspaceFilter;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setCurrencies(final Collection<AmpCurrency> currencies) {
-		this.currencies = currencies;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setCalendars(final Collection calendars) {
-		this.calendars = calendars;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setSectorElements(final Collection<GroupingElement<HierarchyListableImplementation>> sectorElements) {
-		this.sectorElements = sectorElements;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setProgramElements(final Collection<GroupingElement<AmpThemeSkeleton>> programElements) {
-		this.programElements = programElements;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setDonorElements(final Collection<GroupingElement<HierarchyListableImplementation>> donorElements) {
-		this.donorElements = donorElements;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setRelatedAgenciesElements(final Collection<GroupingElement<HierarchyListableImplementation>> relatedAgenciesElements) {
-		this.relatedAgenciesElements = relatedAgenciesElements;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setFinancingLocationElements(final Collection<GroupingElement<HierarchyListableImplementation>> financingLocationElements) {
-		this.financingLocationElements = financingLocationElements;
-	}
+    public int getCalendarsSize() {
+        if (calendars == null) return 0;
+        return calendars.size();
+    }
+    
+    public String getCRISNumber() {
+        return CRISNumber;
+    }
+    
+    public void setCRISNumber(String number) {
+        CRISNumber = number;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public ReportsFilterPickerForm() {
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Collection<AmpCurrency> getCurrencies() {
+        return this.currencies;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Collection getCalendars() {
+        return this.calendars;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Collection<GroupingElement<HierarchyListableImplementation>> getSectorElements() {
+        return this.sectorElements;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Collection<GroupingElement<AmpThemeSkeleton>> getProgramElements() {
+        return this.programElements;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Collection<GroupingElement<HierarchyListableImplementation>> getDonorElements() {
+        return this.donorElements;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Collection<GroupingElement<HierarchyListableImplementation>> getRelatedAgenciesElements() {
+        return this.relatedAgenciesElements;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Collection<GroupingElement<HierarchyListableImplementation>> getFinancingLocationElements() {
+        return this.financingLocationElements;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Collection<GroupingElement<HierarchyListableImplementation>> getModeOfPayment() {
+        return this.modeOfPayment;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Collection<GroupingElement<HierarchyListableImplementation>> getOtherCriteriaElements() {
+        return this.otherCriteriaElements;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Object[] getSelectedHistory() {
+        return this.selectedHistory;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Collection getRisks() {
+        return this.risks;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Collection<BeanWrapperImpl> getFromYears() {
+        return this.fromYears;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Collection<BeanWrapperImpl> getToYears() {
+        return this.toYears;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Collection<BeanWrapperImpl> getFromMonths() {
+        return this.fromMonths;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Collection<BeanWrapperImpl> getToMonths() {
+        return this.toMonths;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Collection<BeanWrapperImpl> getCountYears() {
+        return this.countYears;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Collection<BeanWrapperImpl> getComputedYearsRange() {
+        return this.computedYearsRange;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Collection<BeanWrapperImpl> getActualAppYearsRange() {
+        return this.actualAppYearsRange;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Collection getPageSizes() {
+        return this.pageSizes;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Object[] getRegionSelected() {
+        return this.regionSelected;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Object[] getApprovalStatusSelected() {
+        return this.approvalStatusSelected;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Object[] getSelectedSectors() {
+        return this.selectedSectors;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Object[] getSelectedSecondarySectors() {
+        return this.selectedSecondarySectors;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Object[] getSelectedTertiarySectors() {
+        return this.selectedTertiarySectors;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Object[] getSelectedTagSectors() {
+        return this.selectedTagSectors;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Object[] getSelectedStatuses() {
+        return this.selectedStatuses;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Object[] getSelectedWorkspaces() {
+        return this.selectedWorkspaces;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Object[] getSelectedRisks() {
+        return this.selectedRisks;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Object[] getSelectedFinancingInstruments() {
+        return this.selectedFinancingInstruments;
+    }
+    
+    public Object[] getSelectedAidModalities(){
+        return this.selectedAidModalities;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Long[] getSelectedTypeOfAssistance() {
+        return this.selectedTypeOfAssistance;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Long[] getSelectedModeOfPayment() {
+        return this.selectedModeOfPayment;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Object[] getSelectedDonorTypes() {
+        return this.selectedDonorTypes;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Object[] getSelectedDonorGroups() {
+        return this.selectedDonorGroups;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Object[] getSelectedContractingAgencyGroups() {
+        return this.selectedContractingAgencyGroups;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Object[] getSelectedExecutingAgency() {
+        return this.selectedExecutingAgency;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Object[] getSelectedContractingAgency() {
+        return this.selectedContractingAgency;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Object[] getSelectedImplementingAgency() {
+        return this.selectedImplementingAgency;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Object[] getSelectedBeneficiaryAgency() {
+        return this.selectedBeneficiaryAgency;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Object[] getSelectedDonnorAgency() {
+        return this.selectedDonnorAgency;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Object[] getSelectedProjectCategory() {
+        return this.selectedProjectCategory;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Object[] getSelectedresponsibleorg() {
+        return this.selectedresponsibleorg;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Object[] getSelectedArchivedStatus() {
+        return this.selectedArchivedStatus;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Object[] getSelectedActivitySettings() {
+        return this.selectedActivitySettings;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Object[] getSelectedActivityPledgesTitle() {
+        return this.selectedActivityPledgesTitle;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Collection getApprovalStatusSelectedCollection() {
+        return this.approvalStatusSelectedCollection;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Long getFromYear() {
+        return this.fromYear;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Long getToYear() {
+        return this.toYear;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Integer getToMonth() {
+        return this.toMonth;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Integer getFromMonth() {
+        return this.fromMonth;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public String getFromDate() {
+        return this.fromDate;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public String getToDate() {
+        return this.toDate;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public DynamicDateFilter getDynamicDateFilter() {
+        return this.dynamicDateFilter;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public String getFromActivityStartDate() {
+        return this.fromActivityStartDate;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public String getToActivityStartDate() {
+        return this.toActivityStartDate;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public DynamicDateFilter getDynamicActivityStartFilter() {
+        return this.dynamicActivityStartFilter;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public String getFromProposedApprovalDate() {
+        return this.fromProposedApprovalDate;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public String getToProposedApprovalDate() {
+        return this.toProposedApprovalDate;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public DynamicDateFilter getDynamicProposedApprovalFilter() {
+        return this.dynamicProposedApprovalFilter;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public String getFromActivityActualCompletionDate() {
+        return this.fromActivityActualCompletionDate;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public String getToActivityActualCompletionDate() {
+        return this.toActivityActualCompletionDate;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public DynamicDateFilter getDynamicActivityActualCompletionFilter() {
+        return this.dynamicActivityActualCompletionFilter;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public String getFromActivityFinalContractingDate() {
+        return this.fromActivityFinalContractingDate;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public String getToActivityFinalContractingDate() {
+        return this.toActivityFinalContractingDate;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public DynamicDateFilter getDynamicActivityFinalContractingFilter() {
+        return this.dynamicActivityFinalContractingFilter;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Long getCountYear() {
+        return this.countYear;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Long getCurrency() {
+        return this.currency;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Long getCalendar() {
+        return this.calendar;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Long getDefaultCalendar() {
+        return this.defaultCalendar;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public String getAmpReportId() {
+        return this.ampReportId;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Object[] getLineMinRanks() {
+        return this.lineMinRanks;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Object[] getSelectedMultiDonor() {
+        return this.selectedMultiDonor;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public String getText() {
+        return this.text;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public String getIndexString() {
+        return this.indexString;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public String getSearchMode() {
+        return this.searchMode;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public String getPageSize() {
+        return this.pageSize;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Boolean getGovernmentApprovalProcedures() {
+        return this.governmentApprovalProcedures;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Boolean getJointCriteria() {
+        return this.jointCriteria;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Long[] getSelectedBudgets() {
+        return this.selectedBudgets;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Boolean getJustSearch() {
+        return this.justSearch;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Boolean getPledged() {
+        return this.pledged;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Boolean getUnallocatedLocation() {
+        return this.unallocatedLocation;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Long getDefaultCurrency() {
+        return this.defaultCurrency;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Long getCountYearFrom() {
+        return this.countYearFrom;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Object[] getSelectedNatPlanObj() {
+        return this.selectedNatPlanObj;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Object[] getSelectedPrimaryPrograms() {
+        return this.selectedPrimaryPrograms;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Object[] getSelectedSecondaryPrograms() {
+        return this.selectedSecondaryPrograms;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Integer getRenderStartYear() {
+        return this.renderStartYear;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Integer getRenderEndYear() {
+        return this.renderEndYear;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Integer getResetRenderStartYear() {
+        return this.resetRenderStartYear;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Integer getResetRenderEndYear() {
+        return this.resetRenderEndYear;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Collection<String> getAllgroupingseparators() {
+        return this.allgroupingseparators;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Collection<String> getAlldecimalSymbols() {
+        return this.alldecimalSymbols;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public String getDecimalSymbol() {
+        return this.decimalSymbol;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public String getCustomDecimalSymbol() {
+        return this.customDecimalSymbol;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public String getCustomDecimalSymbolTxt() {
+        return this.customDecimalSymbolTxt;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Integer getCustomDecimalPlaces() {
+        return this.customDecimalPlaces;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Boolean getCustomUseGrouping() {
+        return this.customUseGrouping;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public String getCustomGroupCharacter() {
+        return this.customGroupCharacter;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Integer getCustomDecimalPlacesTxt() {
+        return this.customDecimalPlacesTxt;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public String getCustomGroupCharacterTxt() {
+        return this.customGroupCharacterTxt;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Integer getCustomGroupSize() {
+        return this.customGroupSize;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Integer getAmountinthousands() {
+        return this.amountinthousands;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public String getResetFormat() {
+        return this.resetFormat;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Boolean getSourceIsReportWizard() {
+        return this.sourceIsReportWizard;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Object[] getDisbursementOrders() {
+        return this.disbursementOrders;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public String getBudgetNumber() {
+        return this.budgetNumber;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Integer getComputedYear() {
+        return this.computedYear;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Integer getActualAppYear() {
+        return this.actualAppYear;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Long[] getSelectedProjectImplUnit() {
+        return this.selectedProjectImplUnit;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Long getReporttype() {
+        return this.reporttype;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public Boolean getWorkspaceonly() {
+        return this.workspaceonly;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public boolean isShowWorkspaceFilter() {
+        return this.showWorkspaceFilter;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setCurrencies(final Collection<AmpCurrency> currencies) {
+        this.currencies = currencies;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setCalendars(final Collection calendars) {
+        this.calendars = calendars;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setSectorElements(final Collection<GroupingElement<HierarchyListableImplementation>> sectorElements) {
+        this.sectorElements = sectorElements;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setProgramElements(final Collection<GroupingElement<AmpThemeSkeleton>> programElements) {
+        this.programElements = programElements;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setDonorElements(final Collection<GroupingElement<HierarchyListableImplementation>> donorElements) {
+        this.donorElements = donorElements;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setRelatedAgenciesElements(final Collection<GroupingElement<HierarchyListableImplementation>> relatedAgenciesElements) {
+        this.relatedAgenciesElements = relatedAgenciesElements;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setFinancingLocationElements(final Collection<GroupingElement<HierarchyListableImplementation>> financingLocationElements) {
+        this.financingLocationElements = financingLocationElements;
+    }
 
-	@java.lang.SuppressWarnings("all")
-	public void setModeOfPayment(final Collection<GroupingElement<HierarchyListableImplementation>> modeOfPayment) {
-		this.modeOfPayment = modeOfPayment;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setOtherCriteriaElements(final Collection<GroupingElement<HierarchyListableImplementation>> otherCriteriaElements) {
-		this.otherCriteriaElements = otherCriteriaElements;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setSelectedHistory(final Object[] selectedHistory) {
-		this.selectedHistory = selectedHistory;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setRisks(final Collection risks) {
-		this.risks = risks;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setFromYears(final Collection<BeanWrapperImpl> fromYears) {
-		this.fromYears = fromYears;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setToYears(final Collection<BeanWrapperImpl> toYears) {
-		this.toYears = toYears;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setFromMonths(final Collection<BeanWrapperImpl> fromMonths) {
-		this.fromMonths = fromMonths;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setToMonths(final Collection<BeanWrapperImpl> toMonths) {
-		this.toMonths = toMonths;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setCountYears(final Collection<BeanWrapperImpl> countYears) {
-		this.countYears = countYears;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setComputedYearsRange(final Collection<BeanWrapperImpl> computedYearsRange) {
-		this.computedYearsRange = computedYearsRange;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setActualAppYearsRange(final Collection<BeanWrapperImpl> actualAppYearsRange) {
-		this.actualAppYearsRange = actualAppYearsRange;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setPageSizes(final Collection pageSizes) {
-		this.pageSizes = pageSizes;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setRegionSelected(final Object[] regionSelected) {
-		this.regionSelected = regionSelected;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setApprovalStatusSelected(final Object[] approvalStatusSelected) {
-		this.approvalStatusSelected = approvalStatusSelected;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setSelectedSectors(final Object[] selectedSectors) {
-		this.selectedSectors = selectedSectors;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setSelectedSecondarySectors(final Object[] selectedSecondarySectors) {
-		this.selectedSecondarySectors = selectedSecondarySectors;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setSelectedTertiarySectors(final Object[] selectedTertiarySectors) {
-		this.selectedTertiarySectors = selectedTertiarySectors;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setSelectedTagSectors(final Object[] selectedTagSectors) {
-		this.selectedTagSectors = selectedTagSectors;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setSelectedStatuses(final Object[] selectedStatuses) {
-		this.selectedStatuses = selectedStatuses;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setSelectedWorkspaces(final Object[] selectedWorkspaces) {
-		this.selectedWorkspaces = selectedWorkspaces;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setSelectedRisks(final Object[] selectedRisks) {
-		this.selectedRisks = selectedRisks;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setSelectedFinancingInstruments(final Object[] selectedFinancingInstruments) {
-		this.selectedFinancingInstruments = selectedFinancingInstruments;
-	}
-	
-	public Object[] getSelectedFundingStatus() {
-		return selectedFundingStatus;
-	}
+    @java.lang.SuppressWarnings("all")
+    public void setModeOfPayment(final Collection<GroupingElement<HierarchyListableImplementation>> modeOfPayment) {
+        this.modeOfPayment = modeOfPayment;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setOtherCriteriaElements(final Collection<GroupingElement<HierarchyListableImplementation>> otherCriteriaElements) {
+        this.otherCriteriaElements = otherCriteriaElements;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setSelectedHistory(final Object[] selectedHistory) {
+        this.selectedHistory = selectedHistory;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setRisks(final Collection risks) {
+        this.risks = risks;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setFromYears(final Collection<BeanWrapperImpl> fromYears) {
+        this.fromYears = fromYears;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setToYears(final Collection<BeanWrapperImpl> toYears) {
+        this.toYears = toYears;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setFromMonths(final Collection<BeanWrapperImpl> fromMonths) {
+        this.fromMonths = fromMonths;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setToMonths(final Collection<BeanWrapperImpl> toMonths) {
+        this.toMonths = toMonths;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setCountYears(final Collection<BeanWrapperImpl> countYears) {
+        this.countYears = countYears;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setComputedYearsRange(final Collection<BeanWrapperImpl> computedYearsRange) {
+        this.computedYearsRange = computedYearsRange;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setActualAppYearsRange(final Collection<BeanWrapperImpl> actualAppYearsRange) {
+        this.actualAppYearsRange = actualAppYearsRange;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setPageSizes(final Collection pageSizes) {
+        this.pageSizes = pageSizes;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setRegionSelected(final Object[] regionSelected) {
+        this.regionSelected = regionSelected;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setApprovalStatusSelected(final Object[] approvalStatusSelected) {
+        this.approvalStatusSelected = approvalStatusSelected;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setSelectedSectors(final Object[] selectedSectors) {
+        this.selectedSectors = selectedSectors;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setSelectedSecondarySectors(final Object[] selectedSecondarySectors) {
+        this.selectedSecondarySectors = selectedSecondarySectors;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setSelectedTertiarySectors(final Object[] selectedTertiarySectors) {
+        this.selectedTertiarySectors = selectedTertiarySectors;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setSelectedTagSectors(final Object[] selectedTagSectors) {
+        this.selectedTagSectors = selectedTagSectors;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setSelectedStatuses(final Object[] selectedStatuses) {
+        this.selectedStatuses = selectedStatuses;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setSelectedWorkspaces(final Object[] selectedWorkspaces) {
+        this.selectedWorkspaces = selectedWorkspaces;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setSelectedRisks(final Object[] selectedRisks) {
+        this.selectedRisks = selectedRisks;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setSelectedFinancingInstruments(final Object[] selectedFinancingInstruments) {
+        this.selectedFinancingInstruments = selectedFinancingInstruments;
+    }
+    
+    public Object[] getSelectedFundingStatus() {
+        return selectedFundingStatus;
+    }
 
-	public void setSelectedFundingStatus(Object[] selectedFundingStatus) {
-		this.selectedFundingStatus = selectedFundingStatus;
-	}
+    public void setSelectedFundingStatus(Object[] selectedFundingStatus) {
+        this.selectedFundingStatus = selectedFundingStatus;
+    }
 
-	public void setSelectedAidModalities(final Object[] selectedAidModalities){
-		this.selectedAidModalities = selectedAidModalities;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setSelectedTypeOfAssistance(final Long[] selectedTypeOfAssistance) {
-		this.selectedTypeOfAssistance = selectedTypeOfAssistance;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setSelectedModeOfPayment(final Long[] selectedModeOfPayment) {
-		this.selectedModeOfPayment = selectedModeOfPayment;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setSelectedDonorTypes(final Object[] selectedDonorTypes) {
-		this.selectedDonorTypes = selectedDonorTypes;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setSelectedDonorGroups(final Object[] selectedDonorGroups) {
-		this.selectedDonorGroups = selectedDonorGroups;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setSelectedContractingAgencyGroups(final Object[] selectedContractingAgencyGroups) {
-		this.selectedContractingAgencyGroups = selectedContractingAgencyGroups;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setSelectedExecutingAgency(final Object[] selectedExecutingAgency) {
-		this.selectedExecutingAgency = selectedExecutingAgency;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setSelectedContractingAgency(final Object[] selectedContractingAgency) {
-		this.selectedContractingAgency = selectedContractingAgency;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setSelectedImplementingAgency(final Object[] selectedImplementingAgency) {
-		this.selectedImplementingAgency = selectedImplementingAgency;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setSelectedBeneficiaryAgency(final Object[] selectedBeneficiaryAgency) {
-		this.selectedBeneficiaryAgency = selectedBeneficiaryAgency;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setSelectedDonnorAgency(final Object[] selectedDonnorAgency) {
-		this.selectedDonnorAgency = selectedDonnorAgency;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setSelectedProjectCategory(final Object[] selectedProjectCategory) {
-		this.selectedProjectCategory = selectedProjectCategory;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setSelectedresponsibleorg(final Object[] selectedresponsibleorg) {
-		this.selectedresponsibleorg = selectedresponsibleorg;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setSelectedArchivedStatus(final Object[] selectedArchivedStatus) {
-		this.selectedArchivedStatus = selectedArchivedStatus;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setSelectedActivitySettings(final Object[] selectedActivitySettings) {
-		this.selectedActivitySettings = selectedActivitySettings;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setSelectedActivityPledgesTitle(final Object[] selectedActivityPledgesTitle) {
-		this.selectedActivityPledgesTitle = selectedActivityPledgesTitle;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setApprovalStatusSelectedCollection(final Collection approvalStatusSelectedCollection) {
-		this.approvalStatusSelectedCollection = approvalStatusSelectedCollection;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setFromYear(final Long fromYear) {
-		this.fromYear = fromYear;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setToYear(final Long toYear) {
-		this.toYear = toYear;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setToMonth(final Integer toMonth) {
-		this.toMonth = toMonth;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setFromMonth(final Integer fromMonth) {
-		this.fromMonth = fromMonth;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setFromDate(final String fromDate) {
-		this.fromDate = fromDate;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setToDate(final String toDate) {
-		this.toDate = toDate;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setDynamicDateFilter(final DynamicDateFilter dynamicDateFilter) {
-		this.dynamicDateFilter = dynamicDateFilter;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setFromActivityStartDate(final String fromActivityStartDate) {
-		this.fromActivityStartDate = fromActivityStartDate;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setToActivityStartDate(final String toActivityStartDate) {
-		this.toActivityStartDate = toActivityStartDate;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setDynamicActivityStartFilter(final DynamicDateFilter dynamicActivityStartFilter) {
-		this.dynamicActivityStartFilter = dynamicActivityStartFilter;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setFromProposedApprovalDate(final String fromProposedApprovalDate) {
-		this.fromProposedApprovalDate = fromProposedApprovalDate;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setToProposedApprovalDate(final String toProposedApprovalDate) {
-		this.toProposedApprovalDate = toProposedApprovalDate;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setDynamicProposedApprovalFilter(final DynamicDateFilter dynamicProposedApprovalFilter) {
-		this.dynamicProposedApprovalFilter = dynamicProposedApprovalFilter;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setFromActivityActualCompletionDate(final String fromActivityActualCompletionDate) {
-		this.fromActivityActualCompletionDate = fromActivityActualCompletionDate;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setToActivityActualCompletionDate(final String toActivityActualCompletionDate) {
-		this.toActivityActualCompletionDate = toActivityActualCompletionDate;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setDynamicActivityActualCompletionFilter(final DynamicDateFilter dynamicActivityActualCompletionFilter) {
-		this.dynamicActivityActualCompletionFilter = dynamicActivityActualCompletionFilter;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setFromActivityFinalContractingDate(final String fromActivityFinalContractingDate) {
-		this.fromActivityFinalContractingDate = fromActivityFinalContractingDate;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setToActivityFinalContractingDate(final String toActivityFinalContractingDate) {
-		this.toActivityFinalContractingDate = toActivityFinalContractingDate;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setDynamicActivityFinalContractingFilter(final DynamicDateFilter dynamicActivityFinalContractingFilter) {
-		this.dynamicActivityFinalContractingFilter = dynamicActivityFinalContractingFilter;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setCountYear(final Long countYear) {
-		this.countYear = countYear;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setCurrency(final Long currency) {
-		this.currency = currency;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setCalendar(final Long calendar) {
-		this.calendar = calendar;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setDefaultCalendar(final Long defaultCalendar) {
-		this.defaultCalendar = defaultCalendar;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setAmpReportId(final String ampReportId) {
-		this.ampReportId = ampReportId;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setLineMinRanks(final Object[] lineMinRanks) {
-		this.lineMinRanks = lineMinRanks;
-	}
-	@java.lang.SuppressWarnings("all")
-	public void setSelectedMultiDonor(final Object[] selectedMultiDonor) {
-		this.selectedMultiDonor = selectedMultiDonor;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setText(final String text) {
-		this.text = text;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setIndexString(final String indexString) {
-		this.indexString = indexString;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setSearchMode(final String searchMode) {
-		this.searchMode = searchMode;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setPageSize(final String pageSize) {
-		this.pageSize = pageSize;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setGovernmentApprovalProcedures(final Boolean governmentApprovalProcedures) {
-		this.governmentApprovalProcedures = governmentApprovalProcedures;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setJointCriteria(final Boolean jointCriteria) {
-		this.jointCriteria = jointCriteria;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setSelectedBudgets(final Long[] selectedBudgets) {
-		this.selectedBudgets = selectedBudgets;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setJustSearch(final Boolean justSearch) {
-		this.justSearch = justSearch;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setPledged(final Boolean pledged) {
-		this.pledged = pledged;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setUnallocatedLocation(final Boolean unallocatedLocation) {
-		this.unallocatedLocation = unallocatedLocation;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setDefaultCurrency(final Long defaultCurrency) {
-		this.defaultCurrency = defaultCurrency;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setCountYearFrom(final Long countYearFrom) {
-		this.countYearFrom = countYearFrom;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setSelectedNatPlanObj(final Object[] selectedNatPlanObj) {
-		this.selectedNatPlanObj = selectedNatPlanObj;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setSelectedPrimaryPrograms(final Object[] selectedPrimaryPrograms) {
-		this.selectedPrimaryPrograms = selectedPrimaryPrograms;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setSelectedSecondaryPrograms(final Object[] selectedSecondaryPrograms) {
-		this.selectedSecondaryPrograms = selectedSecondaryPrograms;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setRenderStartYear(final Integer renderStartYear) {
-		this.renderStartYear = renderStartYear;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setRenderEndYear(final Integer renderEndYear) {
-		this.renderEndYear = renderEndYear;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setResetRenderStartYear(final Integer resetRenderStartYear) {
-		this.resetRenderStartYear = resetRenderStartYear;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setResetRenderEndYear(final Integer resetRenderEndYear) {
-		this.resetRenderEndYear = resetRenderEndYear;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setAllgroupingseparators(final Collection<String> allgroupingseparators) {
-		this.allgroupingseparators = allgroupingseparators;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setAlldecimalSymbols(final Collection<String> alldecimalSymbols) {
-		this.alldecimalSymbols = alldecimalSymbols;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setDecimalSymbol(final String decimalSymbol) {
-		this.decimalSymbol = decimalSymbol;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setCustomDecimalSymbol(final String customDecimalSymbol) {
-		this.customDecimalSymbol = customDecimalSymbol;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setCustomDecimalSymbolTxt(final String customDecimalSymbolTxt) {
-		this.customDecimalSymbolTxt = customDecimalSymbolTxt;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setCustomDecimalPlaces(final Integer customDecimalPlaces) {
-		this.customDecimalPlaces = customDecimalPlaces;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setCustomUseGrouping(final Boolean customUseGrouping) {
-		this.customUseGrouping = customUseGrouping;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setCustomGroupCharacter(final String customGroupCharacter) {
-		this.customGroupCharacter = customGroupCharacter;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setCustomDecimalPlacesTxt(final Integer customDecimalPlacesTxt) {
-		this.customDecimalPlacesTxt = customDecimalPlacesTxt;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setCustomGroupCharacterTxt(final String customGroupCharacterTxt) {
-		this.customGroupCharacterTxt = customGroupCharacterTxt;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setCustomGroupSize(final Integer customGroupSize) {
-		this.customGroupSize = customGroupSize;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setAmountinthousands(final Integer amountinthousands) {
-		this.amountinthousands = amountinthousands;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setResetFormat(final String resetFormat) {
-		this.resetFormat = resetFormat;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setSourceIsReportWizard(final Boolean sourceIsReportWizard) {
-		this.sourceIsReportWizard = sourceIsReportWizard;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setDisbursementOrders(final Object[] disbursementOrders) {
-		this.disbursementOrders = disbursementOrders;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setBudgetNumber(final String budgetNumber) {
-		this.budgetNumber = budgetNumber;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setComputedYear(final Integer computedYear) {
-		this.computedYear = computedYear;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setActualAppYear(final Integer actualAppYear) {
-		this.actualAppYear = actualAppYear;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setSelectedProjectImplUnit(final Long[] selectedProjectImplUnit) {
-		this.selectedProjectImplUnit = selectedProjectImplUnit;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setReporttype(final Long reporttype) {
-		this.reporttype = reporttype;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setWorkspaceonly(final Boolean workspaceonly) {
-		this.workspaceonly = workspaceonly;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public void setShowWorkspaceFilter(final boolean showWorkspaceFilter) {
-		this.showWorkspaceFilter = showWorkspaceFilter;
-	}
-	
-	public boolean isPledgeReport(){
-		Object attr = TLSUtils.getRequest().getSession().getAttribute(ReportsFilterPicker.PLEDGE_REPORT_REQUEST_ATTRIBUTE);
-		return (attr != null && attr.toString().equals("true")) || (this.reporttype != null && this.reporttype.longValue() == ArConstants.PLEDGES_TYPE);
-	}
-	
-	public String getSelectedActivityPledgesSettings() {
-		return this.selectedActivityPledgesSettings;
-	}
-	
-	public void setSelectedActivityPledgesSettings(String selectedActivityPledgesSettings) {
-		if (selectedActivityPledgesSettings != null)
-			this.selectedActivityPledgesSettings = selectedActivityPledgesSettings;
-	}
+    public void setSelectedAidModalities(final Object[] selectedAidModalities){
+        this.selectedAidModalities = selectedAidModalities;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setSelectedTypeOfAssistance(final Long[] selectedTypeOfAssistance) {
+        this.selectedTypeOfAssistance = selectedTypeOfAssistance;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setSelectedModeOfPayment(final Long[] selectedModeOfPayment) {
+        this.selectedModeOfPayment = selectedModeOfPayment;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setSelectedDonorTypes(final Object[] selectedDonorTypes) {
+        this.selectedDonorTypes = selectedDonorTypes;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setSelectedDonorGroups(final Object[] selectedDonorGroups) {
+        this.selectedDonorGroups = selectedDonorGroups;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setSelectedContractingAgencyGroups(final Object[] selectedContractingAgencyGroups) {
+        this.selectedContractingAgencyGroups = selectedContractingAgencyGroups;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setSelectedExecutingAgency(final Object[] selectedExecutingAgency) {
+        this.selectedExecutingAgency = selectedExecutingAgency;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setSelectedContractingAgency(final Object[] selectedContractingAgency) {
+        this.selectedContractingAgency = selectedContractingAgency;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setSelectedImplementingAgency(final Object[] selectedImplementingAgency) {
+        this.selectedImplementingAgency = selectedImplementingAgency;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setSelectedBeneficiaryAgency(final Object[] selectedBeneficiaryAgency) {
+        this.selectedBeneficiaryAgency = selectedBeneficiaryAgency;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setSelectedDonnorAgency(final Object[] selectedDonnorAgency) {
+        this.selectedDonnorAgency = selectedDonnorAgency;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setSelectedProjectCategory(final Object[] selectedProjectCategory) {
+        this.selectedProjectCategory = selectedProjectCategory;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setSelectedresponsibleorg(final Object[] selectedresponsibleorg) {
+        this.selectedresponsibleorg = selectedresponsibleorg;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setSelectedArchivedStatus(final Object[] selectedArchivedStatus) {
+        this.selectedArchivedStatus = selectedArchivedStatus;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setSelectedActivitySettings(final Object[] selectedActivitySettings) {
+        this.selectedActivitySettings = selectedActivitySettings;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setSelectedActivityPledgesTitle(final Object[] selectedActivityPledgesTitle) {
+        this.selectedActivityPledgesTitle = selectedActivityPledgesTitle;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setApprovalStatusSelectedCollection(final Collection approvalStatusSelectedCollection) {
+        this.approvalStatusSelectedCollection = approvalStatusSelectedCollection;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setFromYear(final Long fromYear) {
+        this.fromYear = fromYear;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setToYear(final Long toYear) {
+        this.toYear = toYear;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setToMonth(final Integer toMonth) {
+        this.toMonth = toMonth;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setFromMonth(final Integer fromMonth) {
+        this.fromMonth = fromMonth;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setFromDate(final String fromDate) {
+        this.fromDate = fromDate;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setToDate(final String toDate) {
+        this.toDate = toDate;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setDynamicDateFilter(final DynamicDateFilter dynamicDateFilter) {
+        this.dynamicDateFilter = dynamicDateFilter;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setFromActivityStartDate(final String fromActivityStartDate) {
+        this.fromActivityStartDate = fromActivityStartDate;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setToActivityStartDate(final String toActivityStartDate) {
+        this.toActivityStartDate = toActivityStartDate;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setDynamicActivityStartFilter(final DynamicDateFilter dynamicActivityStartFilter) {
+        this.dynamicActivityStartFilter = dynamicActivityStartFilter;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setFromProposedApprovalDate(final String fromProposedApprovalDate) {
+        this.fromProposedApprovalDate = fromProposedApprovalDate;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setToProposedApprovalDate(final String toProposedApprovalDate) {
+        this.toProposedApprovalDate = toProposedApprovalDate;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setDynamicProposedApprovalFilter(final DynamicDateFilter dynamicProposedApprovalFilter) {
+        this.dynamicProposedApprovalFilter = dynamicProposedApprovalFilter;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setFromActivityActualCompletionDate(final String fromActivityActualCompletionDate) {
+        this.fromActivityActualCompletionDate = fromActivityActualCompletionDate;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setToActivityActualCompletionDate(final String toActivityActualCompletionDate) {
+        this.toActivityActualCompletionDate = toActivityActualCompletionDate;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setDynamicActivityActualCompletionFilter(final DynamicDateFilter dynamicActivityActualCompletionFilter) {
+        this.dynamicActivityActualCompletionFilter = dynamicActivityActualCompletionFilter;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setFromActivityFinalContractingDate(final String fromActivityFinalContractingDate) {
+        this.fromActivityFinalContractingDate = fromActivityFinalContractingDate;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setToActivityFinalContractingDate(final String toActivityFinalContractingDate) {
+        this.toActivityFinalContractingDate = toActivityFinalContractingDate;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setDynamicActivityFinalContractingFilter(final DynamicDateFilter dynamicActivityFinalContractingFilter) {
+        this.dynamicActivityFinalContractingFilter = dynamicActivityFinalContractingFilter;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setCountYear(final Long countYear) {
+        this.countYear = countYear;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setCurrency(final Long currency) {
+        this.currency = currency;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setCalendar(final Long calendar) {
+        this.calendar = calendar;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setDefaultCalendar(final Long defaultCalendar) {
+        this.defaultCalendar = defaultCalendar;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setAmpReportId(final String ampReportId) {
+        this.ampReportId = ampReportId;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setLineMinRanks(final Object[] lineMinRanks) {
+        this.lineMinRanks = lineMinRanks;
+    }
+    @java.lang.SuppressWarnings("all")
+    public void setSelectedMultiDonor(final Object[] selectedMultiDonor) {
+        this.selectedMultiDonor = selectedMultiDonor;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setText(final String text) {
+        this.text = text;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setIndexString(final String indexString) {
+        this.indexString = indexString;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setSearchMode(final String searchMode) {
+        this.searchMode = searchMode;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setPageSize(final String pageSize) {
+        this.pageSize = pageSize;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setGovernmentApprovalProcedures(final Boolean governmentApprovalProcedures) {
+        this.governmentApprovalProcedures = governmentApprovalProcedures;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setJointCriteria(final Boolean jointCriteria) {
+        this.jointCriteria = jointCriteria;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setSelectedBudgets(final Long[] selectedBudgets) {
+        this.selectedBudgets = selectedBudgets;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setJustSearch(final Boolean justSearch) {
+        this.justSearch = justSearch;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setPledged(final Boolean pledged) {
+        this.pledged = pledged;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setUnallocatedLocation(final Boolean unallocatedLocation) {
+        this.unallocatedLocation = unallocatedLocation;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setDefaultCurrency(final Long defaultCurrency) {
+        this.defaultCurrency = defaultCurrency;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setCountYearFrom(final Long countYearFrom) {
+        this.countYearFrom = countYearFrom;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setSelectedNatPlanObj(final Object[] selectedNatPlanObj) {
+        this.selectedNatPlanObj = selectedNatPlanObj;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setSelectedPrimaryPrograms(final Object[] selectedPrimaryPrograms) {
+        this.selectedPrimaryPrograms = selectedPrimaryPrograms;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setSelectedSecondaryPrograms(final Object[] selectedSecondaryPrograms) {
+        this.selectedSecondaryPrograms = selectedSecondaryPrograms;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setRenderStartYear(final Integer renderStartYear) {
+        this.renderStartYear = renderStartYear;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setRenderEndYear(final Integer renderEndYear) {
+        this.renderEndYear = renderEndYear;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setResetRenderStartYear(final Integer resetRenderStartYear) {
+        this.resetRenderStartYear = resetRenderStartYear;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setResetRenderEndYear(final Integer resetRenderEndYear) {
+        this.resetRenderEndYear = resetRenderEndYear;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setAllgroupingseparators(final Collection<String> allgroupingseparators) {
+        this.allgroupingseparators = allgroupingseparators;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setAlldecimalSymbols(final Collection<String> alldecimalSymbols) {
+        this.alldecimalSymbols = alldecimalSymbols;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setDecimalSymbol(final String decimalSymbol) {
+        this.decimalSymbol = decimalSymbol;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setCustomDecimalSymbol(final String customDecimalSymbol) {
+        this.customDecimalSymbol = customDecimalSymbol;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setCustomDecimalSymbolTxt(final String customDecimalSymbolTxt) {
+        this.customDecimalSymbolTxt = customDecimalSymbolTxt;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setCustomDecimalPlaces(final Integer customDecimalPlaces) {
+        this.customDecimalPlaces = customDecimalPlaces;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setCustomUseGrouping(final Boolean customUseGrouping) {
+        this.customUseGrouping = customUseGrouping;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setCustomGroupCharacter(final String customGroupCharacter) {
+        this.customGroupCharacter = customGroupCharacter;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setCustomDecimalPlacesTxt(final Integer customDecimalPlacesTxt) {
+        this.customDecimalPlacesTxt = customDecimalPlacesTxt;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setCustomGroupCharacterTxt(final String customGroupCharacterTxt) {
+        this.customGroupCharacterTxt = customGroupCharacterTxt;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setCustomGroupSize(final Integer customGroupSize) {
+        this.customGroupSize = customGroupSize;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setAmountinthousands(final Integer amountinthousands) {
+        this.amountinthousands = amountinthousands;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setResetFormat(final String resetFormat) {
+        this.resetFormat = resetFormat;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setSourceIsReportWizard(final Boolean sourceIsReportWizard) {
+        this.sourceIsReportWizard = sourceIsReportWizard;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setDisbursementOrders(final Object[] disbursementOrders) {
+        this.disbursementOrders = disbursementOrders;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setBudgetNumber(final String budgetNumber) {
+        this.budgetNumber = budgetNumber;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setComputedYear(final Integer computedYear) {
+        this.computedYear = computedYear;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setActualAppYear(final Integer actualAppYear) {
+        this.actualAppYear = actualAppYear;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setSelectedProjectImplUnit(final Long[] selectedProjectImplUnit) {
+        this.selectedProjectImplUnit = selectedProjectImplUnit;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setReporttype(final Long reporttype) {
+        this.reporttype = reporttype;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setWorkspaceonly(final Boolean workspaceonly) {
+        this.workspaceonly = workspaceonly;
+    }
+    
+    @java.lang.SuppressWarnings("all")
+    public void setShowWorkspaceFilter(final boolean showWorkspaceFilter) {
+        this.showWorkspaceFilter = showWorkspaceFilter;
+    }
+    
+    public boolean isPledgeReport(){
+        Object attr = TLSUtils.getRequest().getSession().getAttribute(ReportsFilterPicker.PLEDGE_REPORT_REQUEST_ATTRIBUTE);
+        return (attr != null && attr.toString().equals("true")) || (this.reporttype != null && this.reporttype.longValue() == ArConstants.PLEDGES_TYPE);
+    }
+    
+    public String getSelectedActivityPledgesSettings() {
+        return this.selectedActivityPledgesSettings;
+    }
+    
+    public void setSelectedActivityPledgesSettings(String selectedActivityPledgesSettings) {
+        if (selectedActivityPledgesSettings != null)
+            this.selectedActivityPledgesSettings = selectedActivityPledgesSettings;
+    }
 
-	public Object[] getSelectedHumanitarianAid() {
-		return selectedHumanitarianAid;
-	}
+    public Object[] getSelectedHumanitarianAid() {
+        return selectedHumanitarianAid;
+    }
 
-	public void setSelectedHumanitarianAid(Object[] selectedHumanitarianAid) {
-		this.selectedHumanitarianAid = selectedHumanitarianAid;
-	}
-	
-	public Object[] getSelectedDisasterResponse() {
-		return selectedDisasterResponse;
-	}
+    public void setSelectedHumanitarianAid(Object[] selectedHumanitarianAid) {
+        this.selectedHumanitarianAid = selectedHumanitarianAid;
+    }
+    
+    public Object[] getSelectedDisasterResponse() {
+        return selectedDisasterResponse;
+    }
 
-	public void setSelectedDisasterResponse(Object[] selectedDisasterResponse) {
-		this.selectedDisasterResponse = selectedDisasterResponse;
-	}
+    public void setSelectedDisasterResponse(Object[] selectedDisasterResponse) {
+        this.selectedDisasterResponse = selectedDisasterResponse;
+    }
 
-	public Object[] getSelectedExpenditureClasses() {
-		return selectedExpenditureClasses;
-	}
+    public Object[] getSelectedExpenditureClasses() {
+        return selectedExpenditureClasses;
+    }
 
-	public void setSelectedExpenditureClasses(Object[] selectedExpenditureClasses) {
-		this.selectedExpenditureClasses = selectedExpenditureClasses;
-	}
+    public void setSelectedExpenditureClasses(Object[] selectedExpenditureClasses) {
+        this.selectedExpenditureClasses = selectedExpenditureClasses;
+    }
 
-	public Object[] getSelectedPerformanceAlertLevels() {
-		return selectedPerformanceAlertLevels;
-	}
+    public Object[] getSelectedPerformanceAlertLevels() {
+        return selectedPerformanceAlertLevels;
+    }
 
-	public void setSelectedPerformanceAlertLevels(final Object[] selectedPerformanceAlertLevels) {
-		this.selectedPerformanceAlertLevels = selectedPerformanceAlertLevels;
-	}
+    public void setSelectedPerformanceAlertLevels(final Object[] selectedPerformanceAlertLevels) {
+        this.selectedPerformanceAlertLevels = selectedPerformanceAlertLevels;
+    }
 
-	public DynamicDateFilter getDynamicEffectiveFundingFilter() {
-		return dynamicEffectiveFundingFilter;
-	}
+    public DynamicDateFilter getDynamicEffectiveFundingFilter() {
+        return dynamicEffectiveFundingFilter;
+    }
 
-	public void setDynamicEffectiveFundingFilter(DynamicDateFilter dynamicEffectiveFundingFilter) {
-		this.dynamicEffectiveFundingFilter = dynamicEffectiveFundingFilter;
-	}
+    public void setDynamicEffectiveFundingFilter(DynamicDateFilter dynamicEffectiveFundingFilter) {
+        this.dynamicEffectiveFundingFilter = dynamicEffectiveFundingFilter;
+    }
 
-	public DynamicDateFilter getDynamicFundingClosingFilter() {
-		return dynamicFundingClosingFilter;
-	}
+    public DynamicDateFilter getDynamicFundingClosingFilter() {
+        return dynamicFundingClosingFilter;
+    }
 
-	public void setDynamicFundingClosingFilter(DynamicDateFilter dynamicFundingClosingFilter) {
-		this.dynamicFundingClosingFilter = dynamicFundingClosingFilter;
-	}
+    public void setDynamicFundingClosingFilter(DynamicDateFilter dynamicFundingClosingFilter) {
+        this.dynamicFundingClosingFilter = dynamicFundingClosingFilter;
+    }
 
-	public String getFromEffectiveFundingDate() {
-		return fromEffectiveFundingDate;
-	}
+    public String getFromEffectiveFundingDate() {
+        return fromEffectiveFundingDate;
+    }
 
-	public void setFromEffectiveFundingDate(String fromEffectiveFundingDate) {
-		this.fromEffectiveFundingDate = fromEffectiveFundingDate;
-	}
+    public void setFromEffectiveFundingDate(String fromEffectiveFundingDate) {
+        this.fromEffectiveFundingDate = fromEffectiveFundingDate;
+    }
 
-	public String getToEffectiveFundingDate() {
-		return toEffectiveFundingDate;
-	}
+    public String getToEffectiveFundingDate() {
+        return toEffectiveFundingDate;
+    }
 
-	public void setToEffectiveFundingDate(String toEffectiveFundingDate) {
-		this.toEffectiveFundingDate = toEffectiveFundingDate;
-	}
+    public void setToEffectiveFundingDate(String toEffectiveFundingDate) {
+        this.toEffectiveFundingDate = toEffectiveFundingDate;
+    }
 
-	public String getFromFundingClosingDate() {
-		return fromFundingClosingDate;
-	}
+    public String getFromFundingClosingDate() {
+        return fromFundingClosingDate;
+    }
 
-	public void setFromFundingClosingDate(String fromFundingClosingDate) {
-		this.fromFundingClosingDate = fromFundingClosingDate;
-	}
+    public void setFromFundingClosingDate(String fromFundingClosingDate) {
+        this.fromFundingClosingDate = fromFundingClosingDate;
+    }
 
-	public String getToFundingClosingDate() {
-		return toFundingClosingDate;
-	}
+    public String getToFundingClosingDate() {
+        return toFundingClosingDate;
+    }
 
-	public void setToFundingClosingDate(String toFundingClosingDate) {
-		this.toFundingClosingDate = toFundingClosingDate;
-	}
+    public void setToFundingClosingDate(String toFundingClosingDate) {
+        this.toFundingClosingDate = toFundingClosingDate;
+    }
 
-	public DynamicDateFilter getDynamicIssueFilter() {
-		return dynamicIssueFilter;
-	}
+    public DynamicDateFilter getDynamicIssueFilter() {
+        return dynamicIssueFilter;
+    }
 
-	public void setDynamicIssueFilter(DynamicDateFilter dynamicIssueFilter) {
-		this.dynamicIssueFilter = dynamicIssueFilter;
-	}
+    public void setDynamicIssueFilter(DynamicDateFilter dynamicIssueFilter) {
+        this.dynamicIssueFilter = dynamicIssueFilter;
+    }
 
-	public String getFromIssueDate() {
-		return fromIssueDate;
-	}
+    public String getFromIssueDate() {
+        return fromIssueDate;
+    }
 
-	public void setFromIssueDate(String fromIssueDate) {
-		this.fromIssueDate = fromIssueDate;
-	}
+    public void setFromIssueDate(String fromIssueDate) {
+        this.fromIssueDate = fromIssueDate;
+    }
 
-	public String getToIssueDate() {
-		return toIssueDate;
-	}
+    public String getToIssueDate() {
+        return toIssueDate;
+    }
 
-	public void setToIssueDate(String toIssueDate) {
-		this.toIssueDate = toIssueDate;
-	}
-	public Long[] getSelectedConcensionalityLevel() {
-		return selectedConcensionalityLevel;
-	}
+    public void setToIssueDate(String toIssueDate) {
+        this.toIssueDate = toIssueDate;
+    }
+    public Long[] getSelectedConcensionalityLevel() {
+        return selectedConcensionalityLevel;
+    }
 
-	public void setSelectedConcensionalityLevel(Long[] selectedConcensionalityLevel) {
-		this.selectedConcensionalityLevel = selectedConcensionalityLevel;
-	}
+    public void setSelectedConcensionalityLevel(Long[] selectedConcensionalityLevel) {
+        this.selectedConcensionalityLevel = selectedConcensionalityLevel;
+    }
 
-	public Object[] getSelectedQuaternarySectors() {
-		return selectedQuaternarySectors;
-	}
+    public Object[] getSelectedQuaternarySectors() {
+        return selectedQuaternarySectors;
+    }
 
-	public void setSelectedQuaternarySectors(final Object[] selectedQuaternarySectors) {
-		this.selectedQuaternarySectors = selectedQuaternarySectors;
-	}
+    public void setSelectedQuaternarySectors(final Object[] selectedQuaternarySectors) {
+        this.selectedQuaternarySectors = selectedQuaternarySectors;
+    }
 
-	public Object[] getSelectedQuinarySectors() {
-		return selectedQuinarySectors;
-	}
+    public Object[] getSelectedQuinarySectors() {
+        return selectedQuinarySectors;
+    }
 
-	public void setSelectedQuinarySectors(final Object[] selectedQuinarySectors) {
-		this.selectedQuinarySectors = selectedQuinarySectors;
-	}
+    public void setSelectedQuinarySectors(final Object[] selectedQuinarySectors) {
+        this.selectedQuinarySectors = selectedQuinarySectors;
+    }
 
-	public Object[] getSelectedComponentSecondResponsibleOrg() {
-		return selectedComponentSecondResponsibleOrg;
-	}
+    public Object[] getSelectedComponentSecondResponsibleOrg() {
+        return selectedComponentSecondResponsibleOrg;
+    }
 
-	public void setSelectedComponentSecondResponsibleOrg(Object[] selectedComponentSecondResponsibleOrg) {
-		this.selectedComponentSecondResponsibleOrg = selectedComponentSecondResponsibleOrg;
-	}
+    public void setSelectedComponentSecondResponsibleOrg(Object[] selectedComponentSecondResponsibleOrg) {
+        this.selectedComponentSecondResponsibleOrg = selectedComponentSecondResponsibleOrg;
+    }
 
-	public Object[] getSelectedComponentFundingOrg() {
-		return selectedComponentFundingOrg;
-	}
+    public Object[] getSelectedComponentFundingOrg() {
+        return selectedComponentFundingOrg;
+    }
 
-	public void setSelectedComponentFundingOrg(Object[] selectedComponentFundingOrg) {
-		this.selectedComponentFundingOrg = selectedComponentFundingOrg;
-	}
+    public void setSelectedComponentFundingOrg(Object[] selectedComponentFundingOrg) {
+        this.selectedComponentFundingOrg = selectedComponentFundingOrg;
+    }
 }

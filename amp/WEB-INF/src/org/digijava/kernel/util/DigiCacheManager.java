@@ -43,7 +43,7 @@ public class DigiCacheManager {
      */
     public static synchronized DigiCacheManager getInstance() {
         if (instance == null) {
-        	cacheManager = new CacheManagerImpl();
+            cacheManager = new CacheManagerImpl();
             instance = new DigiCacheManager();
         }
         return instance;
@@ -62,9 +62,9 @@ public class DigiCacheManager {
      * @return cache for particular region
      */
     public synchronized AbstractCache getCache(String region) {
-    	
+        
         if (cacheManager != null) {
-        	AbstractCache cache = cacheManager.getCache(region); 
+            AbstractCache cache = cacheManager.getCache(region); 
             return cache;
         } else {
             throw new IllegalStateException("cacheManager isn't configured");
@@ -75,8 +75,8 @@ public class DigiCacheManager {
      * @return a list of available caches
      */
     public List<AbstractCache> getCaches() {
-    	if (cacheManager != null) {
-    		return cacheManager.getAvailableCaches();
+        if (cacheManager != null) {
+            return cacheManager.getAvailableCaches();
         } else {
             throw new IllegalStateException("cacheManager isn't configured");
         }
@@ -86,6 +86,6 @@ public class DigiCacheManager {
      * Perform clean shutdown of all caches
      */
     public static synchronized void shutdown() {
-    	 net.sf.ehcache.CacheManager.getInstance().shutdown();    	
+         net.sf.ehcache.CacheManager.getInstance().shutdown();      
     }
 }

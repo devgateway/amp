@@ -13,15 +13,15 @@ import org.dgfoundation.amp.nireports.schema.NiReportedEntity;
  *
  */
 public class MtefBehaviour extends TrivialMeasureBehaviour {
-	
-	final String totalColumnName;
-	public MtefBehaviour(String totalColumnName) {
-		this.totalColumnName = totalColumnName;
-	}
-	
-	@Override
-	public ImmutablePair<String, ColumnContents> getTotalCells(NiReportsEngine context, NiReportedEntity<?> entity, ColumnContents fetchedContents) {
-		// trivial measures are copied verbatim to totals
-		return new ImmutablePair<String, ColumnContents>(totalColumnName, fetchedContents);
-	}
+    
+    final String totalColumnName;
+    public MtefBehaviour(String totalColumnName) {
+        this.totalColumnName = totalColumnName;
+    }
+    
+    @Override
+    public ImmutablePair<String, ColumnContents> getTotalCells(NiReportsEngine context, NiReportedEntity<?> entity, ColumnContents fetchedContents) {
+        // trivial measures are copied verbatim to totals
+        return new ImmutablePair<String, ColumnContents>(totalColumnName, fetchedContents);
+    }
 }

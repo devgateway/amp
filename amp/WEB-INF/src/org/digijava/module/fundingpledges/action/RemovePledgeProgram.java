@@ -17,14 +17,14 @@ import org.digijava.module.fundingpledges.form.PledgeForm;
 
 public class RemovePledgeProgram extends Action {
 
-	private static Logger logger = Logger.getLogger(RemovePledgeProgram.class);
+    private static Logger logger = Logger.getLogger(RemovePledgeProgram.class);
 
-	private ArrayList<FundingPledgesProgram> selectedProgs = null;
+    private ArrayList<FundingPledgesProgram> selectedProgs = null;
 
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response) {
+    public ActionForward execute(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response) {
 
 // TODO: DELETE, NOT USED ANYMORE
-		return mapping.findForward("forward");
-	}
+        return mapping.findForward("forward");
+    }
 }

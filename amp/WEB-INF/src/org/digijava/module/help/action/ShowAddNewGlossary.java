@@ -18,24 +18,24 @@ import org.digijava.module.help.util.HelpUtil;
  */
 public class ShowAddNewGlossary extends Action {
 
-	@Override
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
-		
-		GlossaryForm gform = (GlossaryForm)form;
-		Long nodeId = gform.getNodeId();
-		if (nodeId!=null){
-			HelpTopic topic = HelpUtil.getHelpTopic(nodeId);
-			if (topic != null){
-				gform.setNodeParentName(topic.getTopicKey());
-			}
-		}else{
-			gform.setNodeParentName(null);		
-		}
-		gform.setParentNodeId(nodeId);
-		return mapping.findForward("forward");
-	}
+    @Override
+    public ActionForward execute(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
+        
+        GlossaryForm gform = (GlossaryForm)form;
+        Long nodeId = gform.getNodeId();
+        if (nodeId!=null){
+            HelpTopic topic = HelpUtil.getHelpTopic(nodeId);
+            if (topic != null){
+                gform.setNodeParentName(topic.getTopicKey());
+            }
+        }else{
+            gform.setNodeParentName(null);      
+        }
+        gform.setParentNodeId(nodeId);
+        return mapping.findForward("forward");
+    }
 
-	
+    
 }

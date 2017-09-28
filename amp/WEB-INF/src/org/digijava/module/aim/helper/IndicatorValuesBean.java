@@ -77,20 +77,20 @@ public class IndicatorValuesBean {
         this.valueTypeId = valueTypeId;
     }
 
-	public Long getIndicatorValueId() {
-		return indicatorValueId;
-	}
+    public Long getIndicatorValueId() {
+        return indicatorValueId;
+    }
 
-	public void setIndicatorValueId(Long indicatorValueId) {
-		this.indicatorValueId = indicatorValueId;
-	}
+    public void setIndicatorValueId(Long indicatorValueId) {
+        this.indicatorValueId = indicatorValueId;
+    }
 
-	public Long getConnectionId() {
-		return connectionId;
-	}
+    public Long getConnectionId() {
+        return connectionId;
+    }
 
-	public void setConnectionId(Long connectionId) {
-		this.connectionId = connectionId;
-	}
+    public void setConnectionId(Long connectionId) {
+        this.connectionId = connectionId;
+    }
 
 }

@@ -31,60 +31,60 @@ import org.digijava.module.aim.dbentity.AmpMeasure;
  * @since Oct 26, 2010
  */
 public class AmpIssuesFormSectionFeature extends
-		AmpFormSectionFeaturePanel {
+        AmpFormSectionFeaturePanel {
 
-	private static final long serialVersionUID = -6654390083784446344L;
+    private static final long serialVersionUID = -6654390083784446344L;
 
-	public AmpIssuesFormSectionFeature(String id, String fmName,
-			final IModel<AmpActivityVersion> am) throws Exception {
-		super(id, fmName, am);
-		final PropertyModel<Set<AmpIssues>> setModel=new PropertyModel<Set<AmpIssues>>(am,"issues");
-		if (setModel.getObject() == null)
-			setModel.setObject(new HashSet<AmpIssues>());
-		
-		final List<Class> classTree = new ArrayList<Class>();
-		final Map<Class, String> setName = new HashMap<Class, String>();
-		classTree.add(AmpIssues.class);
-		classTree.add(AmpMeasure.class);
-		classTree.add(AmpActor.class);
-		setName.put(AmpIssues.class, "measures");
-		setName.put(AmpMeasure.class, "actors");
-		final Map<Class, String> labelName = new HashMap<Class, String>();
-		labelName.put(AmpIssues.class, "Issue");
-		labelName.put(AmpMeasure.class, "Measure");
-		labelName.put(AmpActor.class, "Actor");
+    public AmpIssuesFormSectionFeature(String id, String fmName,
+            final IModel<AmpActivityVersion> am) throws Exception {
+        super(id, fmName, am);
+        final PropertyModel<Set<AmpIssues>> setModel=new PropertyModel<Set<AmpIssues>>(am,"issues");
+        if (setModel.getObject() == null)
+            setModel.setObject(new HashSet<AmpIssues>());
+        
+        final List<Class> classTree = new ArrayList<Class>();
+        final Map<Class, String> setName = new HashMap<Class, String>();
+        classTree.add(AmpIssues.class);
+        classTree.add(AmpMeasure.class);
+        classTree.add(AmpActor.class);
+        setName.put(AmpIssues.class, "measures");
+        setName.put(AmpMeasure.class, "actors");
+        final Map<Class, String> labelName = new HashMap<Class, String>();
+        labelName.put(AmpIssues.class, "Issue");
+        labelName.put(AmpMeasure.class, "Measure");
+        labelName.put(AmpActor.class, "Actor");
 
-		final ListEditor<AmpIssues> list = new ListEditor<AmpIssues>("list", setModel) {
-			private static final long serialVersionUID = 7218457979728871528L;
-			@Override
-			protected void onPopulateItem(
-					org.dgfoundation.amp.onepager.components.ListItem<AmpIssues> item) {
-				try {
-					AmpIssueTreePanel aitp = new AmpIssueTreePanel("issue", classTree, setName, labelName, item.getModel(), setModel, AmpIssues.class, 0, "Issue Field");
-					aitp.setOutputMarkupId(true);
-					item.add(aitp);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				
-			}
-		};
-		add(list);
-		
-		AmpAjaxLinkField addbutton = new AmpAjaxLinkField("addbutton", "Add Issue", "Add Issue") {
-			@Override
-			protected void onClick(AjaxRequestTarget target) {
-				AmpIssues issues = new AmpIssues();
-				issues.setName(new String(""));
-				issues.setIssueDate(new Date());
-				issues.setMeasures(new HashSet());
-				issues.setActivity(am.getObject());
-				list.addItem(issues);
-				target.add(this.getParent());
-			}
-		};
-		add(addbutton);
+        final ListEditor<AmpIssues> list = new ListEditor<AmpIssues>("list", setModel) {
+            private static final long serialVersionUID = 7218457979728871528L;
+            @Override
+            protected void onPopulateItem(
+                    org.dgfoundation.amp.onepager.components.ListItem<AmpIssues> item) {
+                try {
+                    AmpIssueTreePanel aitp = new AmpIssueTreePanel("issue", classTree, setName, labelName, item.getModel(), setModel, AmpIssues.class, 0, "Issue Field");
+                    aitp.setOutputMarkupId(true);
+                    item.add(aitp);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                
+            }
+        };
+        add(list);
+        
+        AmpAjaxLinkField addbutton = new AmpAjaxLinkField("addbutton", "Add Issue", "Add Issue") {
+            @Override
+            protected void onClick(AjaxRequestTarget target) {
+                AmpIssues issues = new AmpIssues();
+                issues.setName(new String(""));
+                issues.setIssueDate(new Date());
+                issues.setMeasures(new HashSet());
+                issues.setActivity(am.getObject());
+                list.addItem(issues);
+                target.add(this.getParent());
+            }
+        };
+        add(addbutton);
 
-	}
+    }
 
 }

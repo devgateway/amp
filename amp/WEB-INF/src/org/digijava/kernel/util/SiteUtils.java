@@ -138,23 +138,23 @@ public class SiteUtils {
 
     public static Site getGlobalSite()
     {
-    	return getDefaultSite();
+        return getDefaultSite();
     }
     
     private static Site ampSite;
     
     public static Site getDefaultSite()
     {
-    	try
-    	{
-    		if (ampSite == null)
-    			ampSite = getSiteByName("amp");    		
-    	}
-    	catch(DgException ex)
-    	{
-    		logger.error(ex);
-    	}
-		return ampSite;
+        try
+        {
+            if (ampSite == null)
+                ampSite = getSiteByName("amp");         
+        }
+        catch(DgException ex)
+        {
+            logger.error(ex);
+        }
+        return ampSite;
     }
     /**
      * Get <code>Site</code> object for the given site id
@@ -237,12 +237,12 @@ public class SiteUtils {
     }
     
     public static Collection<String> getUserLanguagesCodes(Site site) {
-    	Collection<String> codes = null;
-    	if (site != null) 
-    		codes = SiteCache.getInstance().getUserLanguagesCodes(site);
-    	if (codes == null)
-    		codes = new ArrayList<String>();
-    	return codes;
+        Collection<String> codes = null;
+        if (site != null) 
+            codes = SiteCache.getInstance().getUserLanguagesCodes(site);
+        if (codes == null)
+            codes = new ArrayList<String>();
+        return codes;
     }
         
 

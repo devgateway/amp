@@ -24,44 +24,44 @@ import org.digijava.module.aim.util.CurrencyUtil;
  */
 public class AmpDonorArrearsSubsectionFeature extends AmpSubsectionFeatureFundingPanel<AmpFunding> {
 
-	protected AmpDonorArrearsFormTableFeature arrearsTableFeature;
-	
-	/**
-	 * @param id
-	 * @param fmName
-	 * @param model
-	 * @param ampFundingItemFeaturePanel 
-	 * @throws Exception
-	 */
-	public AmpDonorArrearsSubsectionFeature(String id,
-			final IModel<AmpFunding> model, int transactionType) throws Exception {
-		super(id, AmpFundingItemFeaturePanel.FM_NAME_BY_TRANSACTION_TYPE.get(transactionType), model, transactionType);
-		arrearsTableFeature = new AmpDonorArrearsFormTableFeature("arrearsTableFeature", model, "Arrears Table", transactionType);
-		add(arrearsTableFeature);
-		
-		AmpAjaxLinkField addArrears = new AmpAjaxLinkField("addArrears","Add Arrears Transaction","Add Arrears Transaction") {
-			@Override
-			public void onClick(AjaxRequestTarget target) {
-				AmpFundingDetail fd= new AmpFundingDetail();
-				fd.setReportingDate(new Date(System.currentTimeMillis()));
-				fd.setUpdatedDate(new Date(System.currentTimeMillis())); 
-				fd.setAmpFundingId(model.getObject());
-				fd.setTransactionType(Constants.ARREARS);
-				fd.setAmpCurrencyId(CurrencyUtil.getWicketWorkspaceCurrency());
-				
-				arrearsTableFeature.getEditorList().addItem(fd);
-				target.add(arrearsTableFeature);
-				
-				AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
-				parent.getFundingInfo().checkChoicesRequired(arrearsTableFeature.getEditorList().getCount());
-				target.add(parent.getFundingInfo());
-				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
-				target.appendJavaScript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));
-				target.appendJavaScript(QuarterInformationPanel.getJSUpdate(getSession()));
-			}
-		};
-		addArrears.setAffectedByFreezing(false);
-		add(addArrears);
-	}
+    protected AmpDonorArrearsFormTableFeature arrearsTableFeature;
+    
+    /**
+     * @param id
+     * @param fmName
+     * @param model
+     * @param ampFundingItemFeaturePanel 
+     * @throws Exception
+     */
+    public AmpDonorArrearsSubsectionFeature(String id,
+            final IModel<AmpFunding> model, int transactionType) throws Exception {
+        super(id, AmpFundingItemFeaturePanel.FM_NAME_BY_TRANSACTION_TYPE.get(transactionType), model, transactionType);
+        arrearsTableFeature = new AmpDonorArrearsFormTableFeature("arrearsTableFeature", model, "Arrears Table", transactionType);
+        add(arrearsTableFeature);
+        
+        AmpAjaxLinkField addArrears = new AmpAjaxLinkField("addArrears","Add Arrears Transaction","Add Arrears Transaction") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                AmpFundingDetail fd= new AmpFundingDetail();
+                fd.setReportingDate(new Date(System.currentTimeMillis()));
+                fd.setUpdatedDate(new Date(System.currentTimeMillis())); 
+                fd.setAmpFundingId(model.getObject());
+                fd.setTransactionType(Constants.ARREARS);
+                fd.setAmpCurrencyId(CurrencyUtil.getWicketWorkspaceCurrency());
+                
+                arrearsTableFeature.getEditorList().addItem(fd);
+                target.add(arrearsTableFeature);
+                
+                AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
+                parent.getFundingInfo().checkChoicesRequired(arrearsTableFeature.getEditorList().getCount());
+                target.add(parent.getFundingInfo());
+                target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
+                target.appendJavaScript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));
+                target.appendJavaScript(QuarterInformationPanel.getJSUpdate(getSession()));
+            }
+        };
+        addArrears.setAffectedByFreezing(false);
+        add(addArrears);
+    }
 
 }

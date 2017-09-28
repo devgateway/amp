@@ -40,7 +40,7 @@ public class TranslationDecorator extends Panel {
     private IModel<Boolean> switchingDisabled = new Model<Boolean>(Boolean.FALSE);
     private Component currentLabel;
     private TranslationDecorator(String id, final IModel<?> model, final Component component) {
-    	this(id, model, component,false) ;
+        this(id, model, component,false) ;
     }
     
     private TranslationDecorator(String id, final IModel<?> model, final Component component,boolean checkDefaultLanguageOnSwitch) {
@@ -79,24 +79,24 @@ public class TranslationDecorator extends Panel {
                 IndicatingAjaxLink link = new IndicatingAjaxLink("link") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                    	//Only allow switching if the current language is set and checkDefaultLanguageOnSwitch is true 
-                    	if (checkDefaultLanguageOnSwitch && !language.equals(getSession().getLocale().getLanguage())
-								&& component.getDefaultModel().getObject() == null) {
+                        //Only allow switching if the current language is set and checkDefaultLanguageOnSwitch is true 
+                        if (checkDefaultLanguageOnSwitch && !language.equals(getSession().getLocale().getLanguage())
+                                && component.getDefaultModel().getObject() == null) {
 
-						} else {
-							if (language.equals(getSession().getLocale().getLanguage()))
-								langModel.setObject(null);
-							else
-								langModel.setObject(language);
+                        } else {
+                            if (language.equals(getSession().getLocale().getLanguage()))
+                                langModel.setObject(null);
+                            else
+                                langModel.setObject(language);
 
-							if (component instanceof FormComponent) {
-								FormComponent fc = (FormComponent) component;
-								fc.clearInput();
-							}
+                            if (component instanceof FormComponent) {
+                                FormComponent fc = (FormComponent) component;
+                                fc.clearInput();
+                            }
 
-							target.add(TranslationDecorator.this);
-							target.add(component);
-						}
+                            target.add(TranslationDecorator.this);
+                            target.add(component);
+                        }
                     }
                 };
                 String classValue = "tab" + item.getIndex();
@@ -161,7 +161,7 @@ public class TranslationDecorator extends Panel {
     }
     
     public static Component of(String id, IModel<?> model, Component textContainer){
-    	return of(id, model, textContainer,false);
+        return of(id, model, textContainer,false);
     }
     
     public static Component of(String id, IModel<?> model, Component textContainer,Boolean checkDefaultLanguageOnSwitch){
@@ -204,7 +204,7 @@ public class TranslationDecorator extends Panel {
             }
         }
         if (model instanceof ResourceTranslationModel) {
-        	return true;
+            return true;
         }
         return false;
     }

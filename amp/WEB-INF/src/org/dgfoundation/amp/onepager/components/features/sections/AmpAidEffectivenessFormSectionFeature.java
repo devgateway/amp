@@ -25,17 +25,17 @@ import org.digijava.module.aim.util.AidEffectivenessIndicatorUtil;
 
 
 public class AmpAidEffectivenessFormSectionFeature extends
-		AmpFormSectionFeaturePanel 
-		implements AmpRequiredComponentContainer {
-	
-	private List<org.apache.wicket.markup.html.form.FormComponent<?>> requiredFormComponents = new ArrayList<org.apache.wicket.markup.html.form.FormComponent<?>>();
+        AmpFormSectionFeaturePanel 
+        implements AmpRequiredComponentContainer {
+    
+    private List<org.apache.wicket.markup.html.form.FormComponent<?>> requiredFormComponents = new ArrayList<org.apache.wicket.markup.html.form.FormComponent<?>>();
 
 
     private Map<Long, AmpAidEffectivenessIndicatorOption> allOptions = null;
 
-	public AmpAidEffectivenessFormSectionFeature(String id, String fmName,
-			final IModel<AmpActivityVersion> am) throws Exception {
-		super(id, fmName, am);
+    public AmpAidEffectivenessFormSectionFeature(String id, String fmName,
+            final IModel<AmpActivityVersion> am) throws Exception {
+        super(id, fmName, am);
 
         allOptions = AidEffectivenessIndicatorUtil.getAllOptions();
 
@@ -109,34 +109,34 @@ public class AmpAidEffectivenessFormSectionFeature extends
                     indicatorChoices = new AmpGroupFieldPanel<Long>(
                             "ampIndicatorOptionId", decoratorModel, options,
                             indicator.getFmName(), false, false, renderer, indicator.getTooltipText()) {
-                    	
-                    		@Override
-							protected void configureTranslatorLinks() {
-                    			this.setTitleTranslatorEnabled(false);
-                    			this.setTooltipTranslatorEnabled(false);
-                    		};
-                    		
-                    		@Override
-							protected void configureLabelText() {
-                    			this.setLabelText(indicatorName);
-                    		};
-                    	};
+                        
+                            @Override
+                            protected void configureTranslatorLinks() {
+                                this.setTitleTranslatorEnabled(false);
+                                this.setTooltipTranslatorEnabled(false);
+                            };
+                            
+                            @Override
+                            protected void configureLabelText() {
+                                this.setLabelText(indicatorName);
+                            };
+                        };
                     choiceContainer = (AbstractSingleSelectChoice)((AmpGroupFieldPanel)indicatorChoices).getChoiceContainer();
                 } else {
                     indicatorChoices = new AmpSelectFieldPanel <Long>(
                             "ampIndicatorOptionId", decoratorModel, options,
                             indicator.getFmName(), false, false, renderer, false) {
-	                    	
-                    		@Override
-                    		protected void configureTranslatorLinks() {
-                    			this.setTitleTranslatorEnabled(false);
-                    			this.setTooltipTranslatorEnabled(false);
-	                		};
-	                		
-	                		@Override
-							protected void configureLabelText() {
-                    			this.setLabelText(indicatorName);
-                    		};
+                            
+                            @Override
+                            protected void configureTranslatorLinks() {
+                                this.setTitleTranslatorEnabled(false);
+                                this.setTooltipTranslatorEnabled(false);
+                            };
+                            
+                            @Override
+                            protected void configureLabelText() {
+                                this.setLabelText(indicatorName);
+                            };
                     };
 
                     choiceContainer = (AbstractSingleSelectChoice)((AmpSelectFieldPanel)indicatorChoices).getChoiceContainer();
@@ -158,11 +158,11 @@ public class AmpAidEffectivenessFormSectionFeature extends
 
         add(indicatorsList);
 
-	}
+    }
 
     public List<org.apache.wicket.markup.html.form.FormComponent<?>> getRequiredFormComponents() {
-		return requiredFormComponents;
-	}
+        return requiredFormComponents;
+    }
 
 
     private class OptionDecorator implements Serializable {

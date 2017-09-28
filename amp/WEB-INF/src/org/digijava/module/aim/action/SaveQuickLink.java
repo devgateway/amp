@@ -28,8 +28,8 @@ public class SaveQuickLink extends Action {
     public ActionForward execute(ActionMapping mapping,ActionForm form,
             HttpServletRequest request,HttpServletResponse response) throws Exception {
         
-    	throw new RuntimeException("not implemented!");
-//    	HttpSession session = request.getSession();
+        throw new RuntimeException("not implemented!");
+//      HttpSession session = request.getSession();
 //        String tempId = request.getParameter("id");
 //        String linkName = request.getParameter("nm"); 
 //        String link = request.getParameter("ln");
@@ -39,10 +39,10 @@ public class SaveQuickLink extends Action {
 //        if (tempId != null && linkName != null && link != null) {
 //            CMSContentItem cmsItem = new CMSContentItem();
 //            
-//			cmsItem.setDescription(" ");
-//			byte file[] = new byte[1];
-//			file[0] = 0;
-//			cmsItem.setFile(file);            
+//          cmsItem.setDescription(" ");
+//          byte file[] = new byte[1];
+//          file[0] = 0;
+//          cmsItem.setFile(file);            
 //            cmsItem.setIsFile(false);
 //            cmsItem.setTitle(linkName);
 //            cmsItem.setUrl(link);            
@@ -53,21 +53,21 @@ public class SaveQuickLink extends Action {
 //                cmsItem.setId(Long.parseLong(tempId));
 //                DbUtil.update(cmsItem);
 //            }
-//			Documents document = new Documents();
-//			document.setDocId(new Long(cmsItem.getId()));
-//			document.setTitle(cmsItem.getTitle());
-//			document.setIsFile(cmsItem.getIsFile());
-//			document.setFileName(cmsItem.getFileName());
-//			document.setUrl(cmsItem.getUrl());
-//			document.setDocDescription(cmsItem.getDescription());  
-//			document.setDate(cmsItem.getDate());
-//			Collection col = (Collection) session.getAttribute(
-//					Constants.MY_LINKS);
-//			if (col == null) {
-//				col = new ArrayList();
-//			}
-//			col.add(document);
-//			session.setAttribute(Constants.MY_LINKS,col);
+//          Documents document = new Documents();
+//          document.setDocId(new Long(cmsItem.getId()));
+//          document.setTitle(cmsItem.getTitle());
+//          document.setIsFile(cmsItem.getIsFile());
+//          document.setFileName(cmsItem.getFileName());
+//          document.setUrl(cmsItem.getUrl());
+//          document.setDocDescription(cmsItem.getDescription());  
+//          document.setDate(cmsItem.getDate());
+//          Collection col = (Collection) session.getAttribute(
+//                  Constants.MY_LINKS);
+//          if (col == null) {
+//              col = new ArrayList();
+//          }
+//          col.add(document);
+//          session.setAttribute(Constants.MY_LINKS,col);
 //        }
 //        return mapping.findForward("forward");
     }

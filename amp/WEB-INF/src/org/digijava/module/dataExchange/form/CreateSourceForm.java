@@ -21,52 +21,52 @@ import org.digijava.module.sdm.dbentity.Sdm;
  */
 public class CreateSourceForm extends ActionForm {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1898016793971504413L;
-	
-	private String name;
-	private String source;
-	private String approvalStatus;
-	private String uniqueIdentifier;
-	private String importStrategy;
-	private Long teamId;
-	
-	private String[] languages;
-	private List<KeyValue> importStrategyValues;
-	private List<KeyValue> sourceValues;
-	private List<KeyValue> approvalStatusValues;
-	private Collection<AmpTeam> teamValues;
-	private AmpColumnEntry activityTree = null;
-	private List <DESourceSetting> configurations;
-	private Long configurationId;
-	
-	private FormFile uploadedFile;
-	private String[] selectedLanguages;
-	
-	//private String[] options;
-	private String[] selectedOptions;
-	
-	private String frequency;
-	private String dayOfWeek;
-	private String time;
-	
-	private Long sourceId;
-	
-	private boolean errorName = false;
-	
-	private boolean displaySource = false;
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1898016793971504413L;
+    
+    private String name;
+    private String source;
+    private String approvalStatus;
+    private String uniqueIdentifier;
+    private String importStrategy;
+    private Long teamId;
+    
+    private String[] languages;
+    private List<KeyValue> importStrategyValues;
+    private List<KeyValue> sourceValues;
+    private List<KeyValue> approvalStatusValues;
+    private Collection<AmpTeam> teamValues;
+    private AmpColumnEntry activityTree = null;
+    private List <DESourceSetting> configurations;
+    private Long configurationId;
+    
+    private FormFile uploadedFile;
+    private String[] selectedLanguages;
+    
+    //private String[] options;
+    private String[] selectedOptions;
+    
+    private String frequency;
+    private String dayOfWeek;
+    private String time;
+    
+    private Long sourceId;
+    
+    private boolean errorName = false;
+    
+    private boolean displaySource = false;
     private boolean mergeDisbAndExp;
 
-	//holds attached files	
-	private Sdm sdmDocument;
-	
-	private List<ComponentFM> listComponents;
-	
-	private String [] moduleId;
-	private String [] moduleImport;
-	private String [] moduleAOW;
+    //holds attached files  
+    private Sdm sdmDocument;
+    
+    private List<ComponentFM> listComponents;
+    
+    private String [] moduleId;
+    private String [] moduleImport;
+    private String [] moduleAOW;
 
     private AmpCategoryValueLocations defaultLocation;
     private List<AmpCategoryValueLocations> locationList;
@@ -120,359 +120,359 @@ public class CreateSourceForm extends ActionForm {
     }
 
     public class ComponentFM{
-		private long id;
-		private String name;
-		private String iatiName;
-		private boolean state;
-		private boolean importComp;
-		private boolean autoOverwrite;
-		public String getName() {
-			return name;
-		}
-		public void setName(String name) {
-			this.name = name;
-		}
-		public boolean isState() {
-			return state;
-		}
-		public void setState(boolean state) {
-			this.state = state;
-		}
-		public boolean isImportComp() {
-			return importComp;
-		}
-		public void setImportComp(boolean importComp) {
-			this.importComp = importComp;
-		}
-		public boolean isAutoOverwrite() {
-			return autoOverwrite;
-		}
-		public void setAutoOverwrite(boolean autoOverwrite) {
-			this.autoOverwrite = autoOverwrite;
-		}
-		public long getId() {
-			return id;
-		}
-		public void setId(long id) {
-			this.id = id;
-		}
-		public String getIatiName() {
-			return iatiName;
-		}
-		public void setIatiName(String iatiName) {
-			this.iatiName = iatiName;
-		}
-	}	
+        private long id;
+        private String name;
+        private String iatiName;
+        private boolean state;
+        private boolean importComp;
+        private boolean autoOverwrite;
+        public String getName() {
+            return name;
+        }
+        public void setName(String name) {
+            this.name = name;
+        }
+        public boolean isState() {
+            return state;
+        }
+        public void setState(boolean state) {
+            this.state = state;
+        }
+        public boolean isImportComp() {
+            return importComp;
+        }
+        public void setImportComp(boolean importComp) {
+            this.importComp = importComp;
+        }
+        public boolean isAutoOverwrite() {
+            return autoOverwrite;
+        }
+        public void setAutoOverwrite(boolean autoOverwrite) {
+            this.autoOverwrite = autoOverwrite;
+        }
+        public long getId() {
+            return id;
+        }
+        public void setId(long id) {
+            this.id = id;
+        }
+        public String getIatiName() {
+            return iatiName;
+        }
+        public void setIatiName(String iatiName) {
+            this.iatiName = iatiName;
+        }
+    }   
 
-	public String[] getSelectedLanguages() {
-		return selectedLanguages;
-	}
+    public String[] getSelectedLanguages() {
+        return selectedLanguages;
+    }
 
-	public void setSelectedLanguages(String[] selectedLanguages) {
-		this.selectedLanguages = selectedLanguages;
-	}
+    public void setSelectedLanguages(String[] selectedLanguages) {
+        this.selectedLanguages = selectedLanguages;
+    }
 
-	public FormFile getUploadedFile() {
-		return uploadedFile;
-	}
+    public FormFile getUploadedFile() {
+        return uploadedFile;
+    }
 
-	public void setUploadedFile(FormFile uploadedFile) {
-		this.uploadedFile = uploadedFile;
-	}
+    public void setUploadedFile(FormFile uploadedFile) {
+        this.uploadedFile = uploadedFile;
+    }
 
-	public String[] getLanguages() {
-		return languages;
-	}
+    public String[] getLanguages() {
+        return languages;
+    }
 
-	public void setLanguages(String[] languages) {
-		this.languages = languages;
-	}
-
-
-	public String[] getSelectedOptions() {
-		return selectedOptions;
-	}
-
-	public void setSelectedOptions(String[] selectedOptions) {
-		this.selectedOptions = selectedOptions;
-	}
-
-	/**
-	 * @return the source
-	 */
-	public String getSource() {
-		return source;
-	}
-
-	/**
-	 * @param source the source to set
-	 */
-	public void setSource(String source) {
-		this.source = source;
-	}
-
-	/**
-	 * @return the approvalStatus
-	 */
-	public String getApprovalStatus() {
-		return approvalStatus;
-	}
-
-	/**
-	 * @param approvalStatus the approvalStatus to set
-	 */
-	public void setApprovalStatus(String approvalStatus) {
-		this.approvalStatus = approvalStatus;
-	}
-
-	/**
-	 * @return the uniqueIdentifier
-	 */
-	public String getUniqueIdentifier() {
-		return uniqueIdentifier;
-	}
-
-	/**
-	 * @param uniqueIdentifier the uniqueIdentifier to set
-	 */
-	public void setUniqueIdentifier(String uniqueIdentifier) {
-		this.uniqueIdentifier = uniqueIdentifier;
-	}
-
-	/**
-	 * @return the importStrategy
-	 */
-	public String getImportStrategy() {
-		return importStrategy;
-	}
-
-	/**
-	 * @param importStrategy the importStrategy to set
-	 */
-	public void setImportStrategy(String importStrategy) {
-		this.importStrategy = importStrategy;
-	}
-
-	/**
-	 * @return the importStrategyValues
-	 */
-	public List<KeyValue> getImportStrategyValues() {
-		return importStrategyValues;
-	}
-
-	/**
-	 * @param importStrategyValues the importStrategyValues to set
-	 */
-	public void setImportStrategyValues(List<KeyValue> importStrategyValues) {
-		this.importStrategyValues = importStrategyValues;
-	}
-
-	/**
-	 * @return the sourceValues
-	 */
-	public List<KeyValue> getSourceValues() {
-		return sourceValues;
-	}
-
-	/**
-	 * @param sourceValues the sourceValues to set
-	 */
-	public void setSourceValues(List<KeyValue> sourceValues) {
-		this.sourceValues = sourceValues;
-	}
-
-	/**
-	 * @return the activityTree
-	 */
-	public AmpColumnEntry getActivityTree() {
-		return activityTree;
-	}
-
-	/**
-	 * @param activityTree the activityTree to set
-	 */
-	public void setActivityTree(AmpColumnEntry activityTree) {
-		this.activityTree = activityTree;
-	}
-
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * @param name the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	/**
-	 * @return the teamId
-	 */
-	public Long getTeamId() {
-		return teamId;
-	}
-
-	/**
-	 * @param teamId the teamId to set
-	 */
-	public void setTeamId(Long teamId) {
-		this.teamId = teamId;
-	}
+    public void setLanguages(String[] languages) {
+        this.languages = languages;
+    }
 
 
-	/**
-	 * @return the teamValues
-	 */
-	public Collection<AmpTeam> getTeamValues() {
-		return teamValues;
-	}
+    public String[] getSelectedOptions() {
+        return selectedOptions;
+    }
 
-	/**
-	 * @return the frequency
-	 */
-	public String getFrequency() {
-		return frequency;
-	}
+    public void setSelectedOptions(String[] selectedOptions) {
+        this.selectedOptions = selectedOptions;
+    }
 
-	/**
-	 * @param frequency the frequency to set
-	 */
-	public void setFrequency(String frequency) {
-		this.frequency = frequency;
-	}
+    /**
+     * @return the source
+     */
+    public String getSource() {
+        return source;
+    }
 
-	/**
-	 * @return the dayOfWeek
-	 */
-	public String getDayOfWeek() {
-		return dayOfWeek;
-	}
+    /**
+     * @param source the source to set
+     */
+    public void setSource(String source) {
+        this.source = source;
+    }
 
-	/**
-	 * @param dayOfWeek the dayOfWeek to set
-	 */
-	public void setDayOfWeek(String dayOfWeek) {
-		this.dayOfWeek = dayOfWeek;
-	}
+    /**
+     * @return the approvalStatus
+     */
+    public String getApprovalStatus() {
+        return approvalStatus;
+    }
 
-	/**
-	 * @return the time
-	 */
-	public String getTime() {
-		return time;
-	}
+    /**
+     * @param approvalStatus the approvalStatus to set
+     */
+    public void setApprovalStatus(String approvalStatus) {
+        this.approvalStatus = approvalStatus;
+    }
 
-	/**
-	 * @param time the time to set
-	 */
-	public void setTime(String time) {
-		this.time = time;
-	}
+    /**
+     * @return the uniqueIdentifier
+     */
+    public String getUniqueIdentifier() {
+        return uniqueIdentifier;
+    }
 
-	/**
-	 * @param teamValues the teamValues to set
-	 */
-	public void setTeamValues(Collection<AmpTeam> teamValues) {
-		this.teamValues = teamValues;
-	}
+    /**
+     * @param uniqueIdentifier the uniqueIdentifier to set
+     */
+    public void setUniqueIdentifier(String uniqueIdentifier) {
+        this.uniqueIdentifier = uniqueIdentifier;
+    }
 
-	/**
-	 * @return the approvalStatusValues
-	 */
-	public List<KeyValue> getApprovalStatusValues() {
-		return approvalStatusValues;
-	}
+    /**
+     * @return the importStrategy
+     */
+    public String getImportStrategy() {
+        return importStrategy;
+    }
 
-	/**
-	 * @param approvalStatusValues the approvalStatusValues to set
-	 */
-	public void setApprovalStatusValues(List<KeyValue> approvalStatusValues) {
-		this.approvalStatusValues = approvalStatusValues;
-	}
+    /**
+     * @param importStrategy the importStrategy to set
+     */
+    public void setImportStrategy(String importStrategy) {
+        this.importStrategy = importStrategy;
+    }
 
-	public Long getSourceId() {
-		return sourceId;
-	}
+    /**
+     * @return the importStrategyValues
+     */
+    public List<KeyValue> getImportStrategyValues() {
+        return importStrategyValues;
+    }
 
-	public void setSourceId(Long sourceId) {
-		this.sourceId = sourceId;
-	}
+    /**
+     * @param importStrategyValues the importStrategyValues to set
+     */
+    public void setImportStrategyValues(List<KeyValue> importStrategyValues) {
+        this.importStrategyValues = importStrategyValues;
+    }
 
-	public Sdm getSdmDocument() {
-		return sdmDocument;
-	}
+    /**
+     * @return the sourceValues
+     */
+    public List<KeyValue> getSourceValues() {
+        return sourceValues;
+    }
 
-	public void setSdmDocument(Sdm sdmDocument) {
-		this.sdmDocument = sdmDocument;
-	}
+    /**
+     * @param sourceValues the sourceValues to set
+     */
+    public void setSourceValues(List<KeyValue> sourceValues) {
+        this.sourceValues = sourceValues;
+    }
+
+    /**
+     * @return the activityTree
+     */
+    public AmpColumnEntry getActivityTree() {
+        return activityTree;
+    }
+
+    /**
+     * @param activityTree the activityTree to set
+     */
+    public void setActivityTree(AmpColumnEntry activityTree) {
+        this.activityTree = activityTree;
+    }
+
+    /**
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * @return the teamId
+     */
+    public Long getTeamId() {
+        return teamId;
+    }
+
+    /**
+     * @param teamId the teamId to set
+     */
+    public void setTeamId(Long teamId) {
+        this.teamId = teamId;
+    }
 
 
-	public List<ComponentFM> getListComponents() {
-		return listComponents;
-	}
+    /**
+     * @return the teamValues
+     */
+    public Collection<AmpTeam> getTeamValues() {
+        return teamValues;
+    }
 
-	public void setListComponents(List<ComponentFM> listComponents) {
-		this.listComponents = listComponents;
-	}
+    /**
+     * @return the frequency
+     */
+    public String getFrequency() {
+        return frequency;
+    }
 
-	public String [] getModuleId() {
-		return moduleId;
-	}
+    /**
+     * @param frequency the frequency to set
+     */
+    public void setFrequency(String frequency) {
+        this.frequency = frequency;
+    }
 
-	public void setModuleId(String [] moduleId) {
-		this.moduleId = moduleId;
-	}
+    /**
+     * @return the dayOfWeek
+     */
+    public String getDayOfWeek() {
+        return dayOfWeek;
+    }
 
-	public String [] getModuleImport() {
-		return moduleImport;
-	}
+    /**
+     * @param dayOfWeek the dayOfWeek to set
+     */
+    public void setDayOfWeek(String dayOfWeek) {
+        this.dayOfWeek = dayOfWeek;
+    }
 
-	public void setModuleImport(String [] moduleImport) {
-		this.moduleImport = moduleImport;
-	}
+    /**
+     * @return the time
+     */
+    public String getTime() {
+        return time;
+    }
 
-	public String [] getModuleAOW() {
-		return moduleAOW;
-	}
+    /**
+     * @param time the time to set
+     */
+    public void setTime(String time) {
+        this.time = time;
+    }
 
-	public void setModuleAOW(String [] moduleAOW) {
-		this.moduleAOW = moduleAOW;
-	}
+    /**
+     * @param teamValues the teamValues to set
+     */
+    public void setTeamValues(Collection<AmpTeam> teamValues) {
+        this.teamValues = teamValues;
+    }
 
-	public boolean isErrorName() {
-		return errorName;
-	}
+    /**
+     * @return the approvalStatusValues
+     */
+    public List<KeyValue> getApprovalStatusValues() {
+        return approvalStatusValues;
+    }
 
-	public void setErrorName(boolean errorName) {
-		this.errorName = errorName;
-	}
+    /**
+     * @param approvalStatusValues the approvalStatusValues to set
+     */
+    public void setApprovalStatusValues(List<KeyValue> approvalStatusValues) {
+        this.approvalStatusValues = approvalStatusValues;
+    }
 
-	public boolean isDisplaySource() {
-		return displaySource;
-	}
+    public Long getSourceId() {
+        return sourceId;
+    }
 
-	public void setDisplaySource(boolean displaySource) {
-		this.displaySource = displaySource;
-	}
+    public void setSourceId(Long sourceId) {
+        this.sourceId = sourceId;
+    }
 
-	public List <DESourceSetting> getConfigurations() {
-		return configurations;
-	}
+    public Sdm getSdmDocument() {
+        return sdmDocument;
+    }
 
-	public void setConfigurations(List <DESourceSetting> configurations) {
-		this.configurations = configurations;
-	}
+    public void setSdmDocument(Sdm sdmDocument) {
+        this.sdmDocument = sdmDocument;
+    }
 
-	public Long getConfigurationId() {
-		return configurationId;
-	}
 
-	public void setConfigurationId(Long configurationId) {
-		this.configurationId = configurationId;
-	}
-	
+    public List<ComponentFM> getListComponents() {
+        return listComponents;
+    }
+
+    public void setListComponents(List<ComponentFM> listComponents) {
+        this.listComponents = listComponents;
+    }
+
+    public String [] getModuleId() {
+        return moduleId;
+    }
+
+    public void setModuleId(String [] moduleId) {
+        this.moduleId = moduleId;
+    }
+
+    public String [] getModuleImport() {
+        return moduleImport;
+    }
+
+    public void setModuleImport(String [] moduleImport) {
+        this.moduleImport = moduleImport;
+    }
+
+    public String [] getModuleAOW() {
+        return moduleAOW;
+    }
+
+    public void setModuleAOW(String [] moduleAOW) {
+        this.moduleAOW = moduleAOW;
+    }
+
+    public boolean isErrorName() {
+        return errorName;
+    }
+
+    public void setErrorName(boolean errorName) {
+        this.errorName = errorName;
+    }
+
+    public boolean isDisplaySource() {
+        return displaySource;
+    }
+
+    public void setDisplaySource(boolean displaySource) {
+        this.displaySource = displaySource;
+    }
+
+    public List <DESourceSetting> getConfigurations() {
+        return configurations;
+    }
+
+    public void setConfigurations(List <DESourceSetting> configurations) {
+        this.configurations = configurations;
+    }
+
+    public Long getConfigurationId() {
+        return configurationId;
+    }
+
+    public void setConfigurationId(Long configurationId) {
+        this.configurationId = configurationId;
+    }
+    
 }

@@ -9,9 +9,9 @@ import org.dgfoundation.amp.nireports.testcases.tanzania.TanzaniaBenchmarks;
  *
  */
 public class AllBenchmarks {
-	
-	public static void main(String[] args) {
-		TanzaniaBenchmarks.main(args);
-		DRCBenchmarks.main(args);
-	}
+    
+    public static void main(String[] args) {
+        TanzaniaBenchmarks.main(args);
+        DRCBenchmarks.main(args);
+    }
 }

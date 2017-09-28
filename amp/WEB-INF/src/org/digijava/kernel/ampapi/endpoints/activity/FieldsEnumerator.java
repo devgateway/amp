@@ -17,6 +17,7 @@ import java.util.function.Predicate;
 import com.google.common.collect.ImmutableSet;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.ampapi.filters.AmpOfflineModeHolder;
 import org.digijava.kernel.entity.Message;
@@ -29,6 +30,7 @@ import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
+import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.util.ProgramUtil;
 
 /**
@@ -37,491 +39,526 @@ import org.digijava.module.aim.util.ProgramUtil;
  * @author acartaleanu
  */
 public class FieldsEnumerator {
-	
-	private static final Logger LOGGER = Logger.getLogger(PossibleValuesEnumerator.class);
+    
+    private static final Logger LOGGER = Logger.getLogger(PossibleValuesEnumerator.class);
 
-	/**
-	 * Fields that are importable & required by AMP Offline clients.
-	 */
-	public static final Set<String> OFFLINE_REQUIRED_FIELDS = new ImmutableSet.Builder<String>()
-			.add(ActivityFieldsConstants.IS_DRAFT)
-			.add(ActivityFieldsConstants.APPROVED_BY)
-			.add(ActivityFieldsConstants.APPROVAL_STATUS)
-			.add(ActivityFieldsConstants.APPROVAL_DATE)
-			.build();
+    /**
+     * Fields that are importable & required by AMP Offline clients.
+     */
+    public static final Set<String> OFFLINE_REQUIRED_FIELDS = new ImmutableSet.Builder<String>()
+            .add(ActivityFieldsConstants.IS_DRAFT)
+            .add(ActivityFieldsConstants.APPROVED_BY)
+            .add(ActivityFieldsConstants.APPROVAL_STATUS)
+            .add(ActivityFieldsConstants.APPROVAL_DATE)
+            .build();
 
-	private boolean internalUse = false;
+    private boolean internalUse = false;
 
     private FieldInfoProvider fieldInfoProvider;
 
-	private FMService fmService;
+    private FMService fmService;
 
-	private TranslatorService translatorService;
+    private TranslatorService translatorService;
 
-	private String iatiIdentifierField;
+    private String iatiIdentifierField;
 
-	/**
-	 * Fields Enumerator
-	 * 
-	 * @param internalUse flags if additional information for internal use is needed 
-	 */
-	public FieldsEnumerator(FieldInfoProvider fieldInfoProvider, FMService fmService,
-							TranslatorService translatorService, boolean internalUse) {
-		this.fieldInfoProvider = fieldInfoProvider;
-		this.fmService = fmService;
-		this.translatorService = translatorService;
-		this.internalUse = internalUse;
-		this.iatiIdentifierField = InterchangeUtils.getAmpIatiIdentifierFieldName();
-	}
-	
-	/**
-	 * gets fields from the type of the field
-	 * 
-	 * @param field
-	 * @param multilingual true if multilingual enabled
-	 * @return a list of JsonBeans, each a description of @Interchangeable
-	 *         fields in the definition of the field's class, or field's generic
-	 *         type, if it's a collection
-	 */
-	private List<APIField> getChildrenOfField(Field field, Deque<Interchangeable> intchStack) {
-		if (!InterchangeUtils.isCollection(field))
-			return getAllAvailableFields(field.getType(), intchStack);
-		else
-			return getAllAvailableFields(InterchangeUtils.getGenericClass(field), intchStack);
-	}
+    /**
+     * Fields Enumerator
+     * 
+     * @param internalUse flags if additional information for internal use is needed 
+     */
+    public FieldsEnumerator(FieldInfoProvider fieldInfoProvider, FMService fmService,
+                            TranslatorService translatorService, boolean internalUse) {
+        this.fieldInfoProvider = fieldInfoProvider;
+        this.fmService = fmService;
+        this.translatorService = translatorService;
+        this.internalUse = internalUse;
+        this.iatiIdentifierField = InterchangeUtils.getAmpIatiIdentifierFieldName();
+    }
+    
+    /**
+     * gets fields from the type of the field
+     * 
+     * @param field field to be described
+     * @param context current context
+     * @return field definitions
+     */
+    private List<APIField> getChildrenOfField(Field field, FEContext context) {
+        if (!InterchangeUtils.isCollection(field))
+            return getAllAvailableFields(field.getType(), context);
+        else
+            return getAllAvailableFields(InterchangeUtils.getGenericClass(field), context);
+    }
 
-	/**
-	 * describes a field in a complex JSON structure
-	 * see the wiki for details, too many options to be listed here
-	 * 
-	 * @param field
-	 * @return
-	 */
-	private APIField describeField(Field field, Deque<Interchangeable> intchStack) {
-		Interchangeable interchangeable = intchStack.peek();
+    /**
+     * describes a field in a complex JSON structure
+     * see the wiki for details, too many options to be listed here
+     * 
+     * @param field field to be described
+     * @param context current context
+     * @return field definition
+     */
+    private APIField describeField(Field field, FEContext context) {
+        Interchangeable interchangeable = context.getIntchStack().peek();
         String fieldTitle = InterchangeUtils.underscorify(interchangeable.fieldTitle());
 
-		APIField apiField = new APIField();
-		apiField.setFieldName(fieldTitle);
+        APIField apiField = new APIField();
+        apiField.setFieldName(fieldTitle);
 
-		if (interchangeable.id()) {
-			apiField.setId(interchangeable.id());
-		}
-		
-		if (interchangeable.pickIdOnly()) {
-			apiField.setFieldType(InterchangeableClassMapper.getCustomMapping(java.lang.Long.class));
-		} else {
+        if (interchangeable.id()) {
+            apiField.setId(interchangeable.id());
+        }
+        
+        if (interchangeable.pickIdOnly()) {
+            apiField.setFieldType(InterchangeableClassMapper.getCustomMapping(java.lang.Long.class));
+        } else {
 
-			Class<?> fieldType = field.getType();
-			apiField.setFieldType(InterchangeableClassMapper.containsSimpleClass(fieldType)
-					? InterchangeableClassMapper.getCustomMapping(fieldType) : ActivityEPConstants.FIELD_TYPE_LIST);
-		}
-		String label = getLabelOf(interchangeable);
-		apiField.setFieldLabel(InterchangeUtils.mapToBean(getTranslationsForLabel(label)));
-		apiField.setRequired(getRequiredValue(intchStack, fieldTitle));
-		apiField.setImportable(interchangeable.importable());
-		if (AmpOfflineModeHolder.isAmpOfflineMode() && OFFLINE_REQUIRED_FIELDS.contains(interchangeable.fieldTitle())) {
-			apiField.setRequired(ActivityEPConstants.FIELD_ALWAYS_REQUIRED);
-			apiField.setImportable(true);
-		}
-		
-		if (!AmpOfflineModeHolder.isAmpOfflineMode() && isFieldIatiIdentifier(fieldTitle)) {
-		    apiField.setRequired(ActivityEPConstants.FIELD_ALWAYS_REQUIRED);
-		    apiField.setImportable(true);
+            Class<?> fieldType = field.getType();
+            apiField.setFieldType(InterchangeableClassMapper.containsSimpleClass(fieldType)
+                    ? InterchangeableClassMapper.getCustomMapping(fieldType) : ActivityEPConstants.FIELD_TYPE_LIST);
+        }
+        String label = getLabelOf(interchangeable);
+        apiField.setFieldLabel(InterchangeUtils.mapToBean(getTranslationsForLabel(label)));
+        apiField.setRequired(getRequiredValue(context, fieldTitle));
+        apiField.setImportable(interchangeable.importable());
+        if (AmpOfflineModeHolder.isAmpOfflineMode() && OFFLINE_REQUIRED_FIELDS.contains(interchangeable.fieldTitle())) {
+            apiField.setRequired(ActivityEPConstants.FIELD_ALWAYS_REQUIRED);
+            apiField.setImportable(true);
+        }
+        
+        if (!AmpOfflineModeHolder.isAmpOfflineMode() && isFieldIatiIdentifier(fieldTitle)) {
+            apiField.setRequired(ActivityEPConstants.FIELD_ALWAYS_REQUIRED);
+            apiField.setImportable(true);
         }
 
-		if (interchangeable.percentageConstraint()){
-			apiField.setPercentage(true);
-		}
-		List<String> actualDependencies = InterchangeDependencyResolver.getActualDependencies(interchangeable.dependencies());
-		if (actualDependencies != null) {
-			apiField.setDependencies(actualDependencies);
-		}
-		
-		if (internalUse) {
-			apiField.setFieldNameInternal(field.getName());
-			if (InterchangeUtils.isAmpActivityVersion(field.getType())) {
-				apiField.setActivity(true);
-			}
-		}
-		
-		/* list type */
-		
-		if (interchangeable.pickIdOnly()) {
-			apiField.setIdOnly(true);
-		}
-		
-		if (!InterchangeUtils.isSimpleType(field.getType())) {
-			if (InterchangeUtils.isCollection(field)) {
-				if (!hasMaxSizeValidatorEnabled(field, intchStack)
-						&& interchangeable.multipleValues()) {
-					apiField.setMultipleValues(true);
-				} else {
-					apiField.setMultipleValues(false);
-				}
-				
-				if (hasPercentageValidatorEnabled(intchStack)) {
-					apiField.setPercentageConstraint(getPercentageConstraint(field, intchStack));
-				}
-				
-				if (hasUniqueValidatorEnabled(intchStack)) {
-					apiField.setUniqueConstraint(getUniqueConstraint(field, intchStack));
-				}
-				
-				if (hasTreeCollectionValidatorEnabled(intchStack)) {
-					apiField.setTreeCollectionConstraint(true);
-				}
-			}
-			
-			if (!interchangeable.pickIdOnly() && !InterchangeUtils.isAmpActivityVersion(field.getClass())) {
-				List<APIField> children = getChildrenOfField(field, intchStack);
-				if (children != null && children.size() > 0) {
-					apiField.setChildren(children);
-				}
-			}
-		}
-		
-		// only String fields should clarify if they are translatable or not
-		if (java.lang.String.class.equals(field.getType())) {
-			apiField.setTranslatable(fieldInfoProvider.isTranslatable(field));
-		}
-		if (ActivityEPConstants.TYPE_VARCHAR.equals(fieldInfoProvider.getType(field))) {
-			apiField.setFieldLength(fieldInfoProvider.getMaxLength(field));
-		}
+        if (interchangeable.percentageConstraint()){
+            apiField.setPercentage(true);
+        }
+        List<String> actualDependencies = InterchangeDependencyResolver.getActualDependencies(interchangeable.dependencies());
+        if (actualDependencies != null) {
+            apiField.setDependencies(actualDependencies);
+        }
+        
+        if (internalUse) {
+            apiField.setFieldNameInternal(field.getName());
+            if (InterchangeUtils.isAmpActivityVersion(field.getType())) {
+                apiField.setActivity(true);
+            }
+        }
+        
+        /* list type */
+        
+        if (interchangeable.pickIdOnly()) {
+            apiField.setIdOnly(true);
+        }
+        
+        if (!InterchangeUtils.isSimpleType(field.getType())) {
+            if (InterchangeUtils.isCollection(field)) {
+                if (!hasMaxSizeValidatorEnabled(field, context)
+                        && interchangeable.multipleValues()) {
+                    apiField.setMultipleValues(true);
+                } else {
+                    apiField.setMultipleValues(false);
+                }
+                
+                if (hasPercentageValidatorEnabled(context)) {
+                    apiField.setPercentageConstraint(getPercentageConstraint(field, context));
+                }
+                
+                if (hasUniqueValidatorEnabled(context)) {
+                    apiField.setUniqueConstraint(getUniqueConstraint(field, context));
+                }
+                
+                if (hasTreeCollectionValidatorEnabled(context)) {
+                    apiField.setTreeCollectionConstraint(true);
+                }
+            }
+            
+            if (!interchangeable.pickIdOnly() && !InterchangeUtils.isAmpActivityVersion(field.getClass())) {
+                List<APIField> children = getChildrenOfField(field, context);
+                if (children != null && children.size() > 0) {
+                    apiField.setChildren(children);
+                }
+            }
+        }
+        
+        // only String fields should clarify if they are translatable or not
+        if (java.lang.String.class.equals(field.getType())) {
+            apiField.setTranslatable(fieldInfoProvider.isTranslatable(field));
+        }
+        if (ActivityEPConstants.TYPE_VARCHAR.equals(fieldInfoProvider.getType(field))) {
+            apiField.setFieldLength(fieldInfoProvider.getMaxLength(field));
+        }
 
-		apiField.setDiscriminator(interchangeable.discriminatorOption());
+        apiField.setDiscriminator(interchangeable.discriminatorOption());
 
-		return apiField;
-	}
+        return apiField;
+    }
 
-	private String getLabelOf(Interchangeable interchangeable) {
-		String label;
-		if (interchangeable.label().equals(ActivityEPConstants.FIELD_TITLE)) {
-			label = interchangeable.fieldTitle();
-		} else {
-			label = interchangeable.label();
-		}
-		return label;
-	}
+    private String getLabelOf(Interchangeable interchangeable) {
+        String label;
+        if (interchangeable.label().equals(ActivityEPConstants.FIELD_TITLE)) {
+            label = interchangeable.fieldTitle();
+        } else {
+            label = interchangeable.label();
+        }
+        return label;
+    }
 
-	public List<APIField> getAllAvailableFields() {
-		return getAllAvailableFields(AmpActivityFields.class);
-	}
+    public List<APIField> getAllAvailableFields() {
+        return getAllAvailableFields(AmpActivityFields.class);
+    }
 
-	List<APIField> getAllAvailableFields(Class<?> clazz) {
-		return getAllAvailableFields(clazz, new ArrayDeque<>());
-	}
+    public List<APIField> getContactFields() {
+        return getAllAvailableFields(AmpContact.class);
+    }
 
-	/**
-	 * Describes each @Interchangeable field of a class
-	 * 
-	 * @param clazz the class to be described
-	 * @return
-	 */
-	private List<APIField> getAllAvailableFields(Class<?> clazz, Deque<Interchangeable> intchStack) {
-		List<APIField> result = new ArrayList<>();
-		//StopWatch.next("Descending into", false, clazz.getName());
-		Field[] fields = clazz.getDeclaredFields();
-		for (Field field : fields) {
-			Interchangeable interchangeable = field.getAnnotation(Interchangeable.class);
-			if (interchangeable == null || !internalUse && InterchangeUtils.isAmpActivityVersion(field.getType())) {
-				continue;
-			}
-			intchStack.push(interchangeable);
-			if (!InterchangeUtils.isCompositeField(field)) {
-				if (isVisible(interchangeable.fmPath(), intchStack)) {
-					APIField descr = describeField(field, intchStack);
-					if (descr != null) {
-						result.add(descr);
-					}
-				}
-			} else {
-				InterchangeableDiscriminator discriminator = field.getAnnotation(InterchangeableDiscriminator.class);
-				Interchangeable[] settings = discriminator.settings();
-				for (int i = 0; i < settings.length; i++) {
-					String fmPath = settings[i].fmPath();
-					if (isVisible(fmPath, intchStack)) {
-						intchStack.push(settings[i]);
-						APIField descr = describeField(field, intchStack);
-						if (descr != null) {
-							result.add(descr);
-						}
-						intchStack.pop();
-					}
-				}
-			}
-			intchStack.pop();
-		}
-		return result;
-	}
+    List<APIField> getAllAvailableFields(Class<?> clazz) {
+        return getAllAvailableFields(clazz, new FEContext());
+    }
 
-	/**
-	 * Picks available translations for a label.
-	 * 
-	 * @param label the label to be translated
-	 * @return a map from the ISO2 code -> translation in said text
-	 */
-	private Map<String, String> getTranslationsForLabel(String label) {
-		Map<String, String> translations = new HashMap<>();
-		try {
-			Collection<Message> messages = translatorService.getAllTranslationOfBody(label, DEFAULT_SITE_ID);
-			for (Message m : messages) {
-				translations.put(m.getLocale(), m.getMessage());
-			}
-			if (translations.isEmpty()) {
-				translations.put("EN", label);
-			}
-		} catch (WorkerException e) {
-			LOGGER.error(e.getMessage());
-			throw new RuntimeException(e);
-		}
-		return translations;
-	}
-	
-	/**
-	 * 
-	 * @param parentInterchangeable 
-	 * 
-	 * @param clazz the class to be described
-	 * @return
-	 */
-	private String getPercentageConstraint(Field field, Deque<Interchangeable> intchStack) {
-		Class<?> genericClass = InterchangeUtils.getGenericClass(field);
-		Field[] fields = genericClass.getDeclaredFields();
-		for (Field f : fields) {
-			Interchangeable interchangeable = f.getAnnotation(Interchangeable.class);
-			if (interchangeable != null && isVisible(interchangeable.fmPath(), intchStack)
-					&& interchangeable.percentageConstraint()) {
-				return InterchangeUtils.underscorify(interchangeable.fieldTitle());
-			}
-		}
-		
-		return null;
-	}
-	
-	/**
-	 * Describes each @Interchangeable field of a class
-	 */
-	private String getUniqueConstraint(Field field, Deque<Interchangeable> intchStack) {
-		Class<?> genericClass = InterchangeUtils.getGenericClass(field);
-		Field[] fields = genericClass.getDeclaredFields();
-		for (Field f : fields) {
-			Interchangeable interchangeable = f.getAnnotation(Interchangeable.class);
-			if (interchangeable != null && isVisible(interchangeable.fmPath(), intchStack)
-					&& interchangeable.uniqueConstraint()) {
-				return InterchangeUtils.underscorify(interchangeable.fieldTitle());
-			}
-		}
-		
-		return null;
-	}
+    /**
+     * Describes each @Interchangeable field of a class
+     * 
+     * @param clazz the class to be described
+     * @param context current context
+     * @return field definitions
+     */
+    private List<APIField> getAllAvailableFields(Class<?> clazz, FEContext context) {
+        List<APIField> result = new ArrayList<>();
+        //StopWatch.next("Descending into", false, clazz.getName());
+        Field[] fields = clazz.getDeclaredFields();
+        for (Field field : fields) {
+            Interchangeable interchangeable = field.getAnnotation(Interchangeable.class);
+            if (interchangeable == null || !internalUse && InterchangeUtils.isAmpActivityVersion(field.getType())) {
+                continue;
+            }
+            context.getIntchStack().push(interchangeable);
+            if (!InterchangeUtils.isCompositeField(field)) {
+                if (isFieldVisible(context)) {
+                    APIField descr = describeField(field, context);
+                    if (descr != null) {
+                        result.add(descr);
+                    }
+                }
+            } else {
+                InterchangeableDiscriminator discriminator = field.getAnnotation(InterchangeableDiscriminator.class);
+                Interchangeable[] settings = discriminator.settings();
+                for (int i = 0; i < settings.length; i++) {
+                    context.getDiscriminationInfoStack().push(getDiscriminationInfo(field, settings[i]));
+                    context.getIntchStack().push(settings[i]);
+                    if (isFieldVisible(context)) {
+                        APIField descr = describeField(field, context);
+                        if (descr != null) {
+                            result.add(descr);
+                        }
+                    }
+                    context.getIntchStack().pop();
+                    context.getDiscriminationInfoStack().pop();
+                }
+            }
+            context.getIntchStack().pop();
+        }
+        return result;
+    }
 
-	public List<String> findFieldPaths(Predicate<Field> fieldFilter) {
-		FieldNameCollectingVisitor visitor = new FieldNameCollectingVisitor(fieldFilter);
-		visit(AmpActivityFields.class, visitor, new VisitorContext());
-		return visitor.fields;
-	}
+    private ImmutablePair<Class<?>, Object> getDiscriminationInfo(Field field, Interchangeable interchangeable) {
+        Class<?> classOfField = InterchangeUtils.getClassOfField(field);
+        String value = interchangeable.discriminatorOption();
+        return new ImmutablePair<>(classOfField, value);
+    }
 
-	private class FieldNameCollectingVisitor implements InterchangeVisitor {
+    /**
+     * Picks available translations for a label.
+     * 
+     * @param label the label to be translated
+     * @return a map from the ISO2 code -> translation in said text
+     */
+    private Map<String, String> getTranslationsForLabel(String label) {
+        Map<String, String> translations = new HashMap<>();
+        try {
+            Collection<Message> messages = translatorService.getAllTranslationOfBody(label, DEFAULT_SITE_ID);
+            for (Message m : messages) {
+                translations.put(m.getLocale(), m.getMessage());
+            }
+            if (translations.isEmpty()) {
+                translations.put("EN", label);
+            }
+        } catch (WorkerException e) {
+            LOGGER.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+        return translations;
+    }
+    
+    /**
+     * Find nested field with a percentage constraint.
+     * @param field field to check
+     * @param context current context
+     * @return name of the field with percentage constraint
+     */
+    private String getPercentageConstraint(Field field, FEContext context) {
+        Class<?> genericClass = InterchangeUtils.getGenericClass(field);
+        Field[] fields = genericClass.getDeclaredFields();
+        for (Field f : fields) {
+            Interchangeable interchangeable = f.getAnnotation(Interchangeable.class);
+            if (interchangeable != null && isVisible(interchangeable.fmPath(), context)
+                    && interchangeable.percentageConstraint()) {
+                return InterchangeUtils.underscorify(interchangeable.fieldTitle());
+            }
+        }
+        
+        return null;
+    }
+    
+    /**
+     * Describes each @Interchangeable field of a class
+     */
+    private String getUniqueConstraint(Field field, FEContext context) {
+        Class<?> genericClass = InterchangeUtils.getGenericClass(field);
+        Field[] fields = genericClass.getDeclaredFields();
+        for (Field f : fields) {
+            Interchangeable interchangeable = f.getAnnotation(Interchangeable.class);
+            if (interchangeable != null && isVisible(interchangeable.fmPath(), context)
+                    && interchangeable.uniqueConstraint()) {
+                return InterchangeUtils.underscorify(interchangeable.fieldTitle());
+            }
+        }
+        
+        return null;
+    }
 
-		private List<String> fields = new ArrayList<>();
+    public List<String> findActivityFieldPaths(Predicate<Field> fieldFilter) {
+        FieldNameCollectingVisitor visitor = new FieldNameCollectingVisitor(fieldFilter);
+        visit(AmpActivityFields.class, visitor, new VisitorContext());
+        return visitor.fields;
+    }
 
-		private Predicate<Field> fieldFilter;
+    public List<String> findContactFieldPaths(Predicate<Field> fieldFilter) {
+        FieldNameCollectingVisitor visitor = new FieldNameCollectingVisitor(fieldFilter);
+        visit(AmpContact.class, visitor, new VisitorContext());
+        return visitor.fields;
+    }
 
-		FieldNameCollectingVisitor(Predicate<Field> fieldFilter) {
-			this.fieldFilter = fieldFilter;
-		}
+    private class FieldNameCollectingVisitor implements InterchangeVisitor {
 
-		@Override
-		public void visit(Field field, String fieldName, VisitorContext context) {
-			if (fieldFilter.test(field)) {
-				StringJoiner fieldPath = new StringJoiner("~");
-				context.pathStack.descendingIterator().forEachRemaining(fieldPath::add);
-				fields.add(fieldPath.toString());
-			}
-		}
-	}
+        private List<String> fields = new ArrayList<>();
 
-	public interface InterchangeVisitor {
-		void visit(Field field, String fieldName, VisitorContext context);
-	}
+        private Predicate<Field> fieldFilter;
 
-	private class VisitorContext {
-		private Deque<String> pathStack = new ArrayDeque<>();
-		private Deque<Interchangeable> interchangeableStack = new ArrayDeque<>();
-	}
+        FieldNameCollectingVisitor(Predicate<Field> fieldFilter) {
+            this.fieldFilter = fieldFilter;
+        }
 
-	// TODO how to reuse this logic?
-	private void visit(Class<?> clazz, InterchangeVisitor visitor, VisitorContext context) {
-		for (Field field : clazz.getDeclaredFields()) {
-			Interchangeable ant = field.getAnnotation(Interchangeable.class);
-			if (ant != null) {
-				context.interchangeableStack.push(ant);
-				if (!InterchangeUtils.isCompositeField(field)) {
-					if (isVisible(ant.fmPath(), context.interchangeableStack)) {
-						visit(field, InterchangeUtils.underscorify(ant.fieldTitle()), ant, visitor, context);
-					}
-				} else {
-					InterchangeableDiscriminator antd = field.getAnnotation(InterchangeableDiscriminator.class);
-					Interchangeable[] settings = antd.settings();
-					for (Interchangeable ants : settings) {
-						if (isVisible(ants.fmPath(), context.interchangeableStack)) {
-							context.interchangeableStack.push(ants);
-							visit(field, InterchangeUtils.underscorify(ants.fieldTitle()), ant, visitor, context);
-							context.interchangeableStack.pop();
-						}
-					}
-				}
-				context.interchangeableStack.pop();
-			}
-		}
-	}
+        @Override
+        public void visit(Field field, String fieldName, VisitorContext context) {
+            if (fieldFilter.test(field)) {
+                StringJoiner fieldPath = new StringJoiner("~");
+                context.pathStack.descendingIterator().forEachRemaining(fieldPath::add);
+                fields.add(fieldPath.toString());
+            }
+        }
+    }
 
-	private void visit(Field field, String fieldName, Interchangeable ant, InterchangeVisitor visitor,
-			VisitorContext context) {
-		context.pathStack.push(InterchangeUtils.underscorify(fieldName));
+    public interface InterchangeVisitor {
+        void visit(Field field, String fieldName, VisitorContext context);
+    }
 
-		visitor.visit(field, fieldName, context);
+    private class VisitorContext {
+        private Deque<String> pathStack = new ArrayDeque<>();
+        private FEContext feContext = new FEContext();
+    }
 
-		Class classOfField = InterchangeUtils.getClassOfField(field);
-		if (!InterchangeUtils.isSimpleType(classOfField) && !ant.pickIdOnly()) {
-			visit(classOfField, visitor, context);
-		}
+    // TODO how to reuse this logic?
+    private void visit(Class<?> clazz, InterchangeVisitor visitor, VisitorContext context) {
+        for (Field field : clazz.getDeclaredFields()) {
+            Interchangeable ant = field.getAnnotation(Interchangeable.class);
+            if (ant != null) {
+                context.feContext.getIntchStack().push(ant);
+                if (!InterchangeUtils.isCompositeField(field)) {
+                    if (isFieldVisible(context.feContext)) {
+                        visit(field, InterchangeUtils.underscorify(ant.fieldTitle()), ant, visitor, context);
+                    }
+                } else {
+                    InterchangeableDiscriminator antd = field.getAnnotation(InterchangeableDiscriminator.class);
+                    Interchangeable[] settings = antd.settings();
+                    for (Interchangeable ants : settings) {
+                        context.feContext.getDiscriminationInfoStack().push(getDiscriminationInfo(field, ants));
+                        context.feContext.getIntchStack().push(ants);
+                        if (isFieldVisible(context.feContext)) {
+                            visit(field, InterchangeUtils.underscorify(ants.fieldTitle()), ant, visitor, context);
+                        }
+                        context.feContext.getIntchStack().pop();
+                        context.feContext.getDiscriminationInfoStack().pop();
+                    }
+                }
+                context.feContext.getIntchStack().pop();
+            }
+        }
+    }
 
-		context.pathStack.pop();
-	}
+    private void visit(Field field, String fieldName, Interchangeable ant, InterchangeVisitor visitor,
+            VisitorContext context) {
+        context.pathStack.push(InterchangeUtils.underscorify(fieldName));
 
-	/**
-	 * Gets the field required value.
-	 *
-	 * @param Field the field to get its required value
-	 * @return String with Y|ND|N, where Y (yes) = always required, ND=for draft status=false,
-	 * N (no) = not required. .
-	 */
-	private String getRequiredValue(Deque<Interchangeable> intchStack, String fieldTitle) {
-		Interchangeable fieldIntch = intchStack.peek();
-		String requiredValue = ActivityEPConstants.FIELD_NOT_REQUIRED;
-		String required = fieldIntch.required();
+        visitor.visit(field, fieldName, context);
 
-		if (required.equals(ActivityEPConstants.REQUIRED_ALWAYS)) {
-			requiredValue = ActivityEPConstants.FIELD_ALWAYS_REQUIRED;
-		} else if (required.equals(ActivityEPConstants.REQUIRED_ND)
-				|| (!required.equals(ActivityEPConstants.REQUIRED_NONE) && isVisible(required, intchStack))
-				|| (hasRequiredValidatorEnabled(intchStack))) {
-			if (fieldTitle.equals("location_percentage")) {
-				requiredValue = ActivityEPConstants.FIELD_ALWAYS_REQUIRED;
-			} else {
-				requiredValue = ActivityEPConstants.FIELD_NON_DRAFT_REQUIRED;
-			}
-		}
-		return requiredValue;
-	}
+        Class classOfField = InterchangeUtils.getClassOfField(field);
+        if (!InterchangeUtils.isSimpleType(classOfField) && !ant.pickIdOnly()) {
+            visit(classOfField, visitor, context);
+        }
 
-	/**
-	 * Determine if the field contains unique validator
-	 * @param intchStack
-	 * @return boolean if the field contains unique validator
-	 */
-	private boolean hasUniqueValidatorEnabled(Deque<Interchangeable> intchStack) {
-		return hasValidatorEnabled(intchStack, ActivityEPConstants.UNIQUE_VALIDATOR_NAME);
-	}
+        context.pathStack.pop();
+    }
 
-	/**
-	 * Determine if the field contains tree collection validator
-	 * @param intchStack
-	 * @return boolean if the field contains tree collection validator
-	 */
-	private boolean hasTreeCollectionValidatorEnabled(Deque<Interchangeable> intchStack) {
-		return hasValidatorEnabled(intchStack, ActivityEPConstants.TREE_COLLECTION_VALIDATOR_NAME);
-	}
+    /**
+     * Gets the field required value.
+     *
+     * @param context current context
+     * @param fieldTitle the field to get its required value
+     * @return String with Y|ND|N, where Y (yes) = always required, ND=for draft status=false,
+     * N (no) = not required. .
+     */
+    private String getRequiredValue(FEContext context, String fieldTitle) {
+        Interchangeable fieldIntch = context.getIntchStack().peek();
+        String requiredValue = ActivityEPConstants.FIELD_NOT_REQUIRED;
+        String required = fieldIntch.required();
 
-	/**
-	 * Determine if the field contains maxsize validator
-	 * @param intchStack
-	 * @return boolean if the field contains maxsize validator
-	 */
-	private boolean hasMaxSizeValidatorEnabled(Field field, Deque<Interchangeable> intchStack) {
-		if (AmpActivityProgram.class.equals(InterchangeUtils.getGenericClass(field))) {
-			try {
-				AmpActivityProgramSettings setting = ProgramUtil.getAmpActivityProgramSettings(
-						intchStack.peek().discriminatorOption());
-				return setting != null && !setting.isAllowMultiple();
-			} catch (DgException e) {
-				throw new RuntimeException(e);
-			}
-		} else {
-			return hasValidatorEnabled(intchStack, ActivityEPConstants.MAX_SIZE_VALIDATOR_NAME);
-		}
-	}
+        if (required.equals(ActivityEPConstants.REQUIRED_ALWAYS)) {
+            requiredValue = ActivityEPConstants.FIELD_ALWAYS_REQUIRED;
+        } else if (required.equals(ActivityEPConstants.REQUIRED_ND)
+                || (!required.equals(ActivityEPConstants.REQUIRED_NONE) && isVisible(required, context))
+                || (hasRequiredValidatorEnabled(context))) {
+            if (fieldTitle.equals("location_percentage")) {
+                requiredValue = ActivityEPConstants.FIELD_ALWAYS_REQUIRED;
+            } else {
+                requiredValue = ActivityEPConstants.FIELD_NON_DRAFT_REQUIRED;
+            }
+        }
+        return requiredValue;
+    }
 
-	/**
-	 * Determine if the field contains required validator
-	 * @param intchStack
-	 * @return boolean if the field contains required validator
-	 */
-	private boolean hasRequiredValidatorEnabled(Deque<Interchangeable> intchStack) {
-		return hasValidatorEnabled(intchStack, ActivityEPConstants.MIN_SIZE_VALIDATOR_NAME);
-	}
+    /**
+     * Determine if the field contains unique validator
+     * @param context current context
+     * @return boolean if the field contains unique validator
+     */
+    private boolean hasUniqueValidatorEnabled(FEContext context) {
+        return hasValidatorEnabled(context, ActivityEPConstants.UNIQUE_VALIDATOR_NAME);
+    }
 
-	/**
-	 * Determine if the field contains percentage validator
-	 * @param intchStack
-	 * @return boolean if the field contains percentage validator
-	 */
-	private boolean hasPercentageValidatorEnabled(Deque<Interchangeable> intchStack) {
-		return hasValidatorEnabled(intchStack, ActivityEPConstants.PERCENTAGE_VALIDATOR_NAME);
-	}
+    /**
+     * Determine if the field contains tree collection validator
+     * @param context current context
+     * @return boolean if the field contains tree collection validator
+     */
+    private boolean hasTreeCollectionValidatorEnabled(FEContext context) {
+        return hasValidatorEnabled(context, ActivityEPConstants.TREE_COLLECTION_VALIDATOR_NAME);
+    }
 
-	/**
-	 * Determine if the field contains a certain validator
-	 * @param intchStack
-	 * @param validatorName the name of the validator (unique, maxSize, minSize, percentage, treeCollection)
-	 * @return boolean if the field contains unique validator
-	 */
-	private boolean hasValidatorEnabled(Deque<Interchangeable> intchStack, String validatorName) {
-		boolean isEnabled = false;
-		Interchangeable interchangeable = intchStack.peek();
-		Validators validators = interchangeable.validators();
+    /**
+     * Determine if the field contains maxsize validator
+     * @param context current context
+     * @return boolean if the field contains maxsize validator
+     */
+    private boolean hasMaxSizeValidatorEnabled(Field field, FEContext context) {
+        if (AmpActivityProgram.class.equals(InterchangeUtils.getGenericClass(field))) {
+            try {
+                AmpActivityProgramSettings setting = ProgramUtil.getAmpActivityProgramSettings(
+                        context.getIntchStack().peek().discriminatorOption());
+                return setting != null && !setting.isAllowMultiple();
+            } catch (DgException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            return hasValidatorEnabled(context, ActivityEPConstants.MAX_SIZE_VALIDATOR_NAME);
+        }
+    }
 
-		String validatorFmPath = "";
+    /**
+     * Determine if the field contains required validator
+     * @param context current context
+     * @return boolean if the field contains required validator
+     */
+    private boolean hasRequiredValidatorEnabled(FEContext context) {
+        return hasValidatorEnabled(context, ActivityEPConstants.MIN_SIZE_VALIDATOR_NAME);
+    }
 
-		if (ActivityEPConstants.UNIQUE_VALIDATOR_NAME.equals(validatorName)) {
-			validatorFmPath = validators.unique();
-		} else if (ActivityEPConstants.MAX_SIZE_VALIDATOR_NAME.equals(validatorName)) {
-			validatorFmPath = validators.maxSize();
-		} else if (ActivityEPConstants.MIN_SIZE_VALIDATOR_NAME.equals(validatorName)) {
-			validatorFmPath = validators.minSize();
-		} else if (ActivityEPConstants.PERCENTAGE_VALIDATOR_NAME.equals(validatorName)) {
-			validatorFmPath = validators.percentage();
-		} else if (ActivityEPConstants.TREE_COLLECTION_VALIDATOR_NAME.equals(validatorName)) {
-			validatorFmPath = validators.treeCollection();
-		}
+    /**
+     * Determine if the field contains percentage validator
+     * @param context current context
+     * @return boolean if the field contains percentage validator
+     */
+    private boolean hasPercentageValidatorEnabled(FEContext context) {
+        return hasValidatorEnabled(context, ActivityEPConstants.PERCENTAGE_VALIDATOR_NAME);
+    }
 
-		if (StringUtils.isNotBlank(validatorFmPath)) {
-			isEnabled = isVisible(validatorFmPath, intchStack);
-		}
+    /**
+     * Determine if the field contains a certain validator
+     * @param context current context
+     * @param validatorName the name of the validator (unique, maxSize, minSize, percentage, treeCollection)
+     * @return boolean if the field contains unique validator
+     */
+    private boolean hasValidatorEnabled(FEContext context, String validatorName) {
+        boolean isEnabled = false;
+        Interchangeable interchangeable = context.getIntchStack().peek();
+        Validators validators = interchangeable.validators();
 
-		return isEnabled;
-	}
+        String validatorFmPath = "";
 
-	/**
-	 * Decides whether a field stores iati-identifier value
-	 *
-	 * @param fieldName
-	 * @return true if is iati-identifier
-	 */
-	private boolean isFieldIatiIdentifier(String fieldName) {
-		return StringUtils.equals(this.iatiIdentifierField, fieldName);
-	}
+        if (ActivityEPConstants.UNIQUE_VALIDATOR_NAME.equals(validatorName)) {
+            validatorFmPath = validators.unique();
+        } else if (ActivityEPConstants.MAX_SIZE_VALIDATOR_NAME.equals(validatorName)) {
+            validatorFmPath = validators.maxSize();
+        } else if (ActivityEPConstants.MIN_SIZE_VALIDATOR_NAME.equals(validatorName)) {
+            validatorFmPath = validators.minSize();
+        } else if (ActivityEPConstants.PERCENTAGE_VALIDATOR_NAME.equals(validatorName)) {
+            validatorFmPath = validators.percentage();
+        } else if (ActivityEPConstants.TREE_COLLECTION_VALIDATOR_NAME.equals(validatorName)) {
+            validatorFmPath = validators.treeCollection();
+        }
 
-	private boolean isVisible(String fmPath,  Deque<Interchangeable> intchStack) {
-		Interchangeable interchangeable = intchStack.peek();
-		String fieldTitle = InterchangeUtils.underscorify(interchangeable.fieldTitle());
+        if (StringUtils.isNotBlank(validatorFmPath)) {
+            isEnabled = isVisible(validatorFmPath, context);
+        }
 
-		if (!AmpOfflineModeHolder.isAmpOfflineMode() && isFieldIatiIdentifier(fieldTitle)) {
-			return true;
-		} else {
-			return fmService.isVisible(fmPath, intchStack);
-		}
-	}
+        return isEnabled;
+    }
+
+    /**
+     * Decides whether a field stores iati-identifier value
+     *
+     * @param fieldName
+     * @return true if is iati-identifier
+     */
+    private boolean isFieldIatiIdentifier(String fieldName) {
+        return StringUtils.equals(this.iatiIdentifierField, fieldName);
+    }
+
+    private boolean isFieldVisible(FEContext context) {
+        Interchangeable interchangeable = context.getIntchStack().peek();
+
+        try {
+            Class<? extends ContextMatcher> cmc = interchangeable.context();
+            ContextMatcher contextMatcher = cmc.newInstance();
+            if (!contextMatcher.inContext(context)) {
+                return false;
+            }
+        } catch (ReflectiveOperationException e) {
+            throw new RuntimeException("Context matcher failure", e);
+        }
+
+        return isVisible(interchangeable.fmPath(), context);
+    }
+
+    private boolean isVisible(String fmPath, FEContext context) {
+        Interchangeable interchangeable = context.getIntchStack().peek();
+        String fieldTitle = InterchangeUtils.underscorify(interchangeable.fieldTitle());
+
+        if (!AmpOfflineModeHolder.isAmpOfflineMode() && isFieldIatiIdentifier(fieldTitle)) {
+            return true;
+        } else {
+            return fmService.isVisible(fmPath, context.getIntchStack());
+        }
+    }
 }

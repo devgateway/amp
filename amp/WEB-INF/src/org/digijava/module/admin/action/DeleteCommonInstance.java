@@ -38,41 +38,41 @@ public class DeleteCommonInstance
       extends Action {
 
     public ActionForward execute(ActionMapping mapping,
-				 ActionForm form,
-				 javax.servlet.http.HttpServletRequest request,
-				 javax.servlet.http.HttpServletResponse
-				 response) throws java.lang.Exception {
-	if (!DgUtil.isModuleInstanceAdministrator(request)) {
-	    return new ActionForward("/admin/index", true);
-	}
+                 ActionForm form,
+                 javax.servlet.http.HttpServletRequest request,
+                 javax.servlet.http.HttpServletResponse
+                 response) throws java.lang.Exception {
+    if (!DgUtil.isModuleInstanceAdministrator(request)) {
+        return new ActionForward("/admin/index", true);
+    }
 
-	CommonInstancesForm formBean = (CommonInstancesForm) form;
+    CommonInstancesForm formBean = (CommonInstancesForm) form;
 
-	int instanceIndex = Integer.parseInt(request.getParameter("index"));
+    int instanceIndex = Integer.parseInt(request.getParameter("index"));
 
-	CommonInstancesForm.CommonInstanceInfo info = (CommonInstancesForm.
-	      CommonInstanceInfo) formBean.getCommonInstances().get(
-	      instanceIndex);
+    CommonInstancesForm.CommonInstanceInfo info = (CommonInstancesForm.
+          CommonInstanceInfo) formBean.getCommonInstances().get(
+          instanceIndex);
 
-	ActionMessages errors = new ActionMessages();
-	if ( (info.getModule().equals("admin") &&
-	      info.getInstance().equals("default")) ||
-	    (info.getModule().equals("um") && info.getInstance().equals("user"))) {
+    ActionMessages errors = new ActionMessages();
+    if ( (info.getModule().equals("admin") &&
+          info.getInstance().equals("default")) ||
+        (info.getModule().equals("um") && info.getInstance().equals("user"))) {
 
-	    Object[] param = {
-		  info.getModule(), info.getInstance()};
+        Object[] param = {
+          info.getModule(), info.getInstance()};
 
-	    errors.add(null,
-		       new ActionMessage("error.admin.blockRemove", param));
-	}
-	if (!errors.isEmpty()) {
-	    saveErrors(request, errors);
-	    return mapping.findForward("error");
-	}
-	else {
-	    formBean.getCommonInstances().remove(instanceIndex);
-	}
+        errors.add(null,
+               new ActionMessage("error.admin.blockRemove", param));
+    }
+    if (!errors.isEmpty()) {
+        saveErrors(request, errors);
+        return mapping.findForward("error");
+    }
+    else {
+        formBean.getCommonInstances().remove(instanceIndex);
+    }
 
-	return mapping.findForward("forward");
+    return mapping.findForward("forward");
     }
 }

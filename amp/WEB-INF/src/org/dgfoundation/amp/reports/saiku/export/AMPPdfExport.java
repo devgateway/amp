@@ -39,93 +39,93 @@ import com.itextpdf.tool.xml.pipeline.html.HtmlPipelineContext;
 
 public class AMPPdfExport extends PdfReport {
 
-	public byte[] pdf(JsonBean jb, String type, ReportSpecification report, LinkedHashMap<String, Object> queryModel)
-			throws Exception {
-		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		Document doc = createDocument(jb);
-		PdfWriter writer = PdfWriter.getInstance(doc, os);
-		doc.open();
-		populatePdf(doc, writer, jb, type, report, queryModel);
-		doc.close();
-		return os.toByteArray();
-	}
+    public byte[] pdf(JsonBean jb, String type, ReportSpecification report, LinkedHashMap<String, Object> queryModel)
+            throws Exception {
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        Document doc = createDocument(jb);
+        PdfWriter writer = PdfWriter.getInstance(doc, os);
+        doc.open();
+        populatePdf(doc, writer, jb, type, report, queryModel);
+        doc.close();
+        return os.toByteArray();
+    }
 
-	public void populatePdf(Document doc, PdfWriter writer, JsonBean jb, String type, ReportSpecification report,
-			LinkedHashMap<String, Object> queryModel) throws Exception {
-		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-		Date date = new Date();
-		String content = AMPJSConverter.convertToHtml(jb, type);
-		StringBuilder htmlString = new StringBuilder(
-				"<!DOCTYPE html><html><head><title></title></head><body><div>AMP Export - ").append(
-				dateFormat.format(date)).append("</div><div>&nbsp;</div>");
-		JSONReportPage jrp=(JSONReportPage)jb.get("page");
-		String currency = report.getSettings().getCurrencyCode();
-		if (queryModel.containsKey("settings")) {
-			LinkedHashMap<String, Object> settings = (LinkedHashMap<String, Object>) queryModel.get("settings");
-			currency = settings.get("1").toString();
-		}
-		if(currency == null){
-			//we get the default currency
-			currency = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
-		}
-		// AMP-21951: workaround to hide calendar id
-		currency = ConstantCurrency.retrieveCCCurrencyCodeWithoutCalendar(currency);
-		htmlString.append("<div><b>").append(TranslatorWorker.translateText("Currency")).append(": </b>")
-				.append(currency).append("</div>");
-		String units = report.getSettings().getUnitsOption().userMessage;
-		htmlString.append("<div><b>").append(TranslatorWorker.translateText(units)).append("</b></div>")
-				.append(content).append("</body></html>");
+    public void populatePdf(Document doc, PdfWriter writer, JsonBean jb, String type, ReportSpecification report,
+            LinkedHashMap<String, Object> queryModel) throws Exception {
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        Date date = new Date();
+        String content = AMPJSConverter.convertToHtml(jb, type);
+        StringBuilder htmlString = new StringBuilder(
+                "<!DOCTYPE html><html><head><title></title></head><body><div>AMP Export - ").append(
+                dateFormat.format(date)).append("</div><div>&nbsp;</div>");
+        JSONReportPage jrp=(JSONReportPage)jb.get("page");
+        String currency = report.getSettings().getCurrencyCode();
+        if (queryModel.containsKey("settings")) {
+            LinkedHashMap<String, Object> settings = (LinkedHashMap<String, Object>) queryModel.get("settings");
+            currency = settings.get("1").toString();
+        }
+        if(currency == null){
+            //we get the default currency
+            currency = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
+        }
+        // AMP-21951: workaround to hide calendar id
+        currency = ConstantCurrency.retrieveCCCurrencyCodeWithoutCalendar(currency);
+        htmlString.append("<div><b>").append(TranslatorWorker.translateText("Currency")).append(": </b>")
+                .append(currency).append("</div>");
+        String units = report.getSettings().getUnitsOption().userMessage;
+        htmlString.append("<div><b>").append(TranslatorWorker.translateText(units)).append("</b></div>")
+                .append(content).append("</body></html>");
 
-		InputStream contentIs = new ByteArrayInputStream(htmlString.toString().getBytes("UTF-8"));
-		// CSS
-		CSSResolver cssResolver = new StyleAttrCSSResolver();
-		CssFile cssFile = XMLWorkerHelper.getCSS(getClass().getResourceAsStream("saiku.table.pdf.css"));
-		cssResolver.addCss(cssFile);
-		// HTML
-		XMLWorkerFontProvider fontProvider = new XMLWorkerFontProvider(this.getClass().getResource("").getPath());
-		fontProvider.defaultEncoding = "UTF-8";
-		CssAppliers cssAppliers = new CssAppliersImpl(fontProvider);
-		HtmlPipelineContext htmlContext = new HtmlPipelineContext(cssAppliers);
-		htmlContext.setTagFactory(Tags.getHtmlTagProcessorFactory());
-		// Pipelines
-		PdfWriterPipeline pdf = new PdfWriterPipeline(doc, writer);
-		HtmlPipeline html = new HtmlPipeline(htmlContext, pdf);
-		CssResolverPipeline css = new CssResolverPipeline(cssResolver, html);
-		XMLWorker worker = new XMLWorker(css, true);
-		XMLParser p = new XMLParser(worker);
-		p.parse(contentIs, true);
-		int n = contentIs.available();
-		byte[] bytes = new byte[n];
-		contentIs.read(bytes, 0, n);
-	}
+        InputStream contentIs = new ByteArrayInputStream(htmlString.toString().getBytes("UTF-8"));
+        // CSS
+        CSSResolver cssResolver = new StyleAttrCSSResolver();
+        CssFile cssFile = XMLWorkerHelper.getCSS(getClass().getResourceAsStream("saiku.table.pdf.css"));
+        cssResolver.addCss(cssFile);
+        // HTML
+        XMLWorkerFontProvider fontProvider = new XMLWorkerFontProvider(this.getClass().getResource("").getPath());
+        fontProvider.defaultEncoding = "UTF-8";
+        CssAppliers cssAppliers = new CssAppliersImpl(fontProvider);
+        HtmlPipelineContext htmlContext = new HtmlPipelineContext(cssAppliers);
+        htmlContext.setTagFactory(Tags.getHtmlTagProcessorFactory());
+        // Pipelines
+        PdfWriterPipeline pdf = new PdfWriterPipeline(doc, writer);
+        HtmlPipeline html = new HtmlPipeline(htmlContext, pdf);
+        CssResolverPipeline css = new CssResolverPipeline(cssResolver, html);
+        XMLWorker worker = new XMLWorker(css, true);
+        XMLParser p = new XMLParser(worker);
+        p.parse(contentIs, true);
+        int n = contentIs.available();
+        byte[] bytes = new byte[n];
+        contentIs.read(bytes, 0, n);
+    }
 
-	private Document createDocument(JsonBean jb) {
-		Document doc = new Document(calculateDocumentSize(calculateWidth(jb)));
-		return doc;
-	}
+    private Document createDocument(JsonBean jb) {
+        Document doc = new Document(calculateDocumentSize(calculateWidth(jb)));
+        return doc;
+    }
 
-	private int calculateWidth(JsonBean jb) {
-		int ret = 0;
-		if (jb.get("headers") != null) {
-			ret = ((List) jb.get("headers")).size();
-		}
-		return ret;
-	}
+    private int calculateWidth(JsonBean jb) {
+        int ret = 0;
+        if (jb.get("headers") != null) {
+            ret = ((List) jb.get("headers")).size();
+        }
+        return ret;
+    }
 
-	private Rectangle calculateDocumentSize(int resultWidth) {
-		Rectangle size = PageSize.A4.rotate();
-		if (resultWidth >= 5) {
-			size = PageSize.A3.rotate();
-		}
-		if (resultWidth >= 10) {
-			size = PageSize.A2.rotate();
-		}
-		if (resultWidth >= 15) {
-			size = PageSize.A1.rotate();
-		}
-		if (resultWidth >= 20) {
-			size = PageSize.A0.rotate();
-		}
-		return size;
-	}
+    private Rectangle calculateDocumentSize(int resultWidth) {
+        Rectangle size = PageSize.A4.rotate();
+        if (resultWidth >= 5) {
+            size = PageSize.A3.rotate();
+        }
+        if (resultWidth >= 10) {
+            size = PageSize.A2.rotate();
+        }
+        if (resultWidth >= 15) {
+            size = PageSize.A1.rotate();
+        }
+        if (resultWidth >= 20) {
+            size = PageSize.A0.rotate();
+        }
+        return size;
+    }
 }

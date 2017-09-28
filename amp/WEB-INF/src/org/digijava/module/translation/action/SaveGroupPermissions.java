@@ -42,25 +42,25 @@ public class SaveGroupPermissions
       extends Action {
 
     public ActionForward execute(ActionMapping mapping,
-				 ActionForm form,
-				 javax.servlet.http.HttpServletRequest request,
-				 javax.servlet.http.HttpServletResponse
-				 response) throws java.lang.Exception {
+                 ActionForm form,
+                 javax.servlet.http.HttpServletRequest request,
+                 javax.servlet.http.HttpServletResponse
+                 response) throws java.lang.Exception {
 
-	TranslationPermissionsForm formBean = (
-	      TranslationPermissionsForm) form;
-	Site currentSite = RequestUtils.getSite(request);
+    TranslationPermissionsForm formBean = (
+          TranslationPermissionsForm) form;
+    Site currentSite = RequestUtils.getSite(request);
 
-	Group group = null;
-	if (formBean.getGroupId() != null) {
-	    group = org.digijava.module.admin.util.DbUtil.getGroup(formBean.
-		  getGroupId());
-	}
-	if (group != null) {
+    Group group = null;
+    if (formBean.getGroupId() != null) {
+        group = org.digijava.module.admin.util.DbUtil.getGroup(formBean.
+          getGroupId());
+    }
+    if (group != null) {
 
-	    ArrayList permissions = new ArrayList();
-	    Iterator iter = formBean.getPermissions().iterator();
-	    while (iter.hasNext()) {
+        ArrayList permissions = new ArrayList();
+        Iterator iter = formBean.getPermissions().iterator();
+        while (iter.hasNext()) {
             TranslationPermissionsForm.PermissionInfo pi = (
                 TranslationPermissionsForm.
                 PermissionInfo) iter.next();
@@ -71,13 +71,13 @@ public class SaveGroupPermissions
 
             permissions.add(new TranslatePermission(id, locale,
                 new Integer(TranslatePermission.INT_TRANSLATE)));
-	    }
+        }
 
-	    GroupPrincipal groupPrincipal = new GroupPrincipal(group);
-	    DigiSecurityManager.setPrincipalPermissions(groupPrincipal,
-		  permissions,new Class[] {TranslatePermission.class} );
-	}
+        GroupPrincipal groupPrincipal = new GroupPrincipal(group);
+        DigiSecurityManager.setPrincipalPermissions(groupPrincipal,
+          permissions,new Class[] {TranslatePermission.class} );
+    }
 
-	return mapping.findForward("forward");
+    return mapping.findForward("forward");
     }
 }

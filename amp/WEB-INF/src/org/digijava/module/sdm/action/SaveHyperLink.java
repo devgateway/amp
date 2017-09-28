@@ -65,7 +65,7 @@ public class SaveHyperLink
             sdmItem.setContentTitle(paragraph.getContent());
 //            sdmItem.setContentTitle(SdmCommon.createParagraph(paragraph));
             sdmItem.setContentText(formBean.getContent());
-	    sdmItem.setContent(sdmItem.getContentText().getBytes());
+        sdmItem.setContent(sdmItem.getContentText().getBytes());
 
             //@todo@ set content
             DbUtil.addUpdateItem(formBean.getSdmDocument(),sdmItem);

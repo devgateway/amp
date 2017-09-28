@@ -54,7 +54,7 @@ import org.hibernate.engine.spi.SessionImplementor;
 
 public class CachedTranslatorWorker extends TranslatorWorker {
 
-	private static Logger logger = Logger.getLogger(CachedTranslatorWorker.class);
+    private static Logger logger = Logger.getLogger(CachedTranslatorWorker.class);
 
     private AbstractCache messageCache;
 
@@ -64,21 +64,21 @@ public class CachedTranslatorWorker extends TranslatorWorker {
         
         //cache the first 5000 entries based on their access date     
         logger.info("Caching the last accessed 5000 translation entries...");
-       	Session session = PersistenceManager.openNewSession();
-       	try {
-       		Criteria criteria = session.createCriteria(Message.class);
-       		criteria.setMaxResults(5000);
-       		criteria.addOrder(Order.desc("lastAccessed"));
-       		criteria.add(Restrictions.isNotNull("lastAccessed"));
-       	
-       		List<Message> lastAccessedMessages = criteria.list();
-       		for (Message message : lastAccessedMessages) messageCache.put(message, message);
-       	}
-       	finally {
-       		PersistenceManager.closeSession(session);
-       	}
+        Session session = PersistenceManager.openNewSession();
+        try {
+            Criteria criteria = session.createCriteria(Message.class);
+            criteria.setMaxResults(5000);
+            criteria.addOrder(Order.desc("lastAccessed"));
+            criteria.add(Restrictions.isNotNull("lastAccessed"));
+        
+            List<Message> lastAccessedMessages = criteria.list();
+            for (Message message : lastAccessedMessages) messageCache.put(message, message);
+        }
+        finally {
+            PersistenceManager.closeSession(session);
+        }
 
-       	logger.info("Caching done.");
+        logger.info("Caching done.");
 
     }
 
@@ -129,7 +129,7 @@ public class CachedTranslatorWorker extends TranslatorWorker {
      * @see TranslatorWorker#getByKey(String, String, String, String, String)
      */
     public Message getByKey(String key, String body, String keyWords, String locale, Long siteId) {
-    	return getByKey(key, locale, siteId, true, keyWords);
+        return getByKey(key, locale, siteId, true, keyWords);
     }
 
     public Message getByKey(String key, String locale, Long siteId, boolean overwriteKeywords,String keywords) {
@@ -137,38 +137,38 @@ public class CachedTranslatorWorker extends TranslatorWorker {
     }
 
     private Message internalGetByKey(String key, String locale, Long siteId, boolean overwriteKeywords, String keywords) {
-    	Message message = new Message();
+        Message message = new Message();
         message.setLocale(locale);
         message.setSite(SiteCache.lookupById(siteId));
         message.setKey(key);
         //search message
         Object obj = messageCache.get(message);   
         if (obj == null) {
-        	//try loading it from db
-        	Session ses;
-			try {
-				ses = PersistenceManager.getSession();
-				Message realMsg = (Message) ses.get(Message.class, message);
-				if (realMsg != null) {
-					obj = realMsg;
-					Serializable identifier =
+            //try loading it from db
+            Session ses;
+            try {
+                ses = PersistenceManager.getSession();
+                Message realMsg = (Message) ses.get(Message.class, message);
+                if (realMsg != null) {
+                    obj = realMsg;
+                    Serializable identifier =
                             PersistenceManager.getClassMetadata(Message.class).getIdentifier(realMsg, (SessionImplementor)ses);
-					messageCache.put(identifier, realMsg);
-				}
-			} catch (HibernateException e) {
+                    messageCache.put(identifier, realMsg);
+                }
+            } catch (HibernateException e) {
                 logger.error("Failed reading message from database", e);
-			}
+            }
         }
         
         if (obj == null) {
             logger.debug("No translation exists for siteId="+ siteId + ", key = " + key + ",locale=" + locale+", creating new");
             return null;
         } else {
-        	Message foundMessage = (Message)obj;
-        	if (overwriteKeywords && keywords != null) {
-        		foundMessage.setKeyWords(keywords);
-        	}
-        	updateTimeStamp(foundMessage);
+            Message foundMessage = (Message)obj;
+            if (overwriteKeywords && keywords != null) {
+                foundMessage.setKeyWords(keywords);
+            }
+            updateTimeStamp(foundMessage);
             return foundMessage;
         }
     }
@@ -176,7 +176,7 @@ public class CachedTranslatorWorker extends TranslatorWorker {
 
     public void save(Message message) {
 
-    	saveDb(message); //message key and body will be processed there 
+        saveDb(message); //message key and body will be processed there 
         
         messageCache.put(message, message);
         fireRefreshAlert(message);
@@ -207,7 +207,7 @@ public class CachedTranslatorWorker extends TranslatorWorker {
         fireRefreshAlert(message);
     }
 
-	protected void setTimestamps(String key, Timestamp timestamp) throws WorkerException {
+    protected void setTimestamps(String key, Timestamp timestamp) throws WorkerException {
         if (key == null)
             return;
 
@@ -246,13 +246,13 @@ public class CachedTranslatorWorker extends TranslatorWorker {
         }
 
     }
-	
-	public void cleanMessageCache()
-	{
-		this.messageCache.clear();
-	}
+    
+    public void cleanMessageCache()
+    {
+        this.messageCache.clear();
+    }
 
-	@Override
+    @Override
     public Collection<Message> getAllTranslationsOfKeyInternal(String key, Long siteId) throws WorkerException {
         Collection<Message> messages = super.getAllTranslationsOfKeyInternal(key, siteId);
         messages.forEach(m -> messageCache.put(m, m));

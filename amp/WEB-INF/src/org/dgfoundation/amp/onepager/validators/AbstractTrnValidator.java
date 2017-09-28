@@ -24,31 +24,31 @@ import org.digijava.kernel.translator.TranslatorWorker;
  */
 public abstract class AbstractTrnValidator<T> extends AmpSemanticValidator<T> {
 
-	private Component component;
-	private static final Logger logger = Logger
-			.getLogger(AbstractTrnValidator.class);
+    private Component component;
+    private static final Logger logger = Logger
+            .getLogger(AbstractTrnValidator.class);
 
-	public AbstractTrnValidator(Component component) {
-		this.component = component;
-	}
+    public AbstractTrnValidator(Component component) {
+        this.component = component;
+    }
 
 
 
-	public ValidationError getTrnError(String errorString) {
-		ValidationError error = new ValidationError();
-		String genKey = TranslatorWorker.generateTrnKey(errorString);
-		AmpAuthWebSession session = (AmpAuthWebSession) component.getSession();
-		Site site = session.getSite();
-		try {
-			String translatedValue = TranslatorWorker.getInstance(genKey)
-					.translateFromTree(genKey, site,
-							session.getLocale().getLanguage(), errorString,
-							TranslatorWorker.TRNTYPE_LOCAL, null);
+    public ValidationError getTrnError(String errorString) {
+        ValidationError error = new ValidationError();
+        String genKey = TranslatorWorker.generateTrnKey(errorString);
+        AmpAuthWebSession session = (AmpAuthWebSession) component.getSession();
+        Site site = session.getSite();
+        try {
+            String translatedValue = TranslatorWorker.getInstance(genKey)
+                    .translateFromTree(genKey, site,
+                            session.getLocale().getLanguage(), errorString,
+                            TranslatorWorker.TRNTYPE_LOCAL, null);
 
-			error.setMessage(translatedValue);
-		} catch (WorkerException e) {
-			logger.error("Can't translate:", e);
-		}
-		return error;
-	}
+            error.setMessage(translatedValue);
+        } catch (WorkerException e) {
+            logger.error("Can't translate:", e);
+        }
+        return error;
+    }
 }

@@ -10,12 +10,12 @@ package org.digijava.kernel.ampapi.endpoints.filetype;
  *
  */
 public enum FileTypeValidationStatus {
-	
-	ALLOWED(),
-	
-	NOT_ALLOWED(),
-	
-	CONTENT_EXTENSION_MISMATCH(),
-	
-	INTERNAL_ERROR();
+    
+    ALLOWED(),
+    
+    NOT_ALLOWED(),
+    
+    CONTENT_EXTENSION_MISMATCH(),
+    
+    INTERNAL_ERROR();
 }

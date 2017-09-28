@@ -15,21 +15,21 @@ import org.digijava.module.aim.util.SectorUtil;
 
 @InterchangeableValue(ClassificationConfigurationValueProvider.class)
 public class AmpClassificationConfiguration implements Serializable, Identifiable {
-	
-	public static final String PRIMARY_CLASSIFICATION_CONFIGURATION_NAME	= "Primary";
-	public static final String SECONDARY_CLASSIFICATION_CONFIGURATION_NAME	= "Secondary";
-    public static final String TERTIARY_CLASSIFICATION_CONFIGURATION_NAME	= "Tertiary";
-    public static final String QUATERNARY_CLASSIFICATION_CONFIGURATION_NAME	= "Quaternary";
-    public static final String QUINARY_CLASSIFICATION_CONFIGURATION_NAME	= "Quinary";
-    public static final String TAG_CLASSIFICATION_CONFIGURATION_NAME	= "Tag";
+    
+    public static final String PRIMARY_CLASSIFICATION_CONFIGURATION_NAME    = "Primary";
+    public static final String SECONDARY_CLASSIFICATION_CONFIGURATION_NAME  = "Secondary";
+    public static final String TERTIARY_CLASSIFICATION_CONFIGURATION_NAME   = "Tertiary";
+    public static final String QUATERNARY_CLASSIFICATION_CONFIGURATION_NAME = "Quaternary";
+    public static final String QUINARY_CLASSIFICATION_CONFIGURATION_NAME    = "Quinary";
+    public static final String TAG_CLASSIFICATION_CONFIGURATION_NAME    = "Tag";
     
     @SuppressWarnings("serial")
-	public static final Map<String, String> NAME_TO_COLUMN_MAP = new HashMap<String, String>() {{
-    	put(PRIMARY_CLASSIFICATION_CONFIGURATION_NAME, ColumnConstants.PRIMARY_SECTOR);
-    	put(SECONDARY_CLASSIFICATION_CONFIGURATION_NAME, ColumnConstants.SECONDARY_SECTOR);
-    	put(TERTIARY_CLASSIFICATION_CONFIGURATION_NAME, ColumnConstants.TERTIARY_SECTOR);
-    	put(QUATERNARY_CLASSIFICATION_CONFIGURATION_NAME, ColumnConstants.QUATERNARY_SECTOR);
-    	put(QUINARY_CLASSIFICATION_CONFIGURATION_NAME, ColumnConstants.QUINARY_SECTOR);
+    public static final Map<String, String> NAME_TO_COLUMN_MAP = new HashMap<String, String>() {{
+        put(PRIMARY_CLASSIFICATION_CONFIGURATION_NAME, ColumnConstants.PRIMARY_SECTOR);
+        put(SECONDARY_CLASSIFICATION_CONFIGURATION_NAME, ColumnConstants.SECONDARY_SECTOR);
+        put(TERTIARY_CLASSIFICATION_CONFIGURATION_NAME, ColumnConstants.TERTIARY_SECTOR);
+        put(QUATERNARY_CLASSIFICATION_CONFIGURATION_NAME, ColumnConstants.QUATERNARY_SECTOR);
+        put(QUINARY_CLASSIFICATION_CONFIGURATION_NAME, ColumnConstants.QUINARY_SECTOR);
     }};
 
     private static final int LEVEL_1 = 1;
@@ -79,15 +79,15 @@ public class AmpClassificationConfiguration implements Serializable, Identifiabl
                     .put(QUATERNARY_CLASSIFICATION_CONFIGURATION_NAME, QUATERNARY_SECTOR_COLUMNS_BY_LEVEL)
                     .put(QUINARY_CLASSIFICATION_CONFIGURATION_NAME, QUINARY_SECTOR_COLUMNS_BY_LEVEL)
                     .build();
-	
-	@Interchangeable(fieldTitle="ID", id = true)
-	private Long id;
-	@Interchangeable(fieldTitle = "Name", value = true)
-	private String name;
-	@Interchangeable(fieldTitle="Description")
-	private String description;
-	@Interchangeable(fieldTitle="Classification", pickIdOnly=true)
-	private AmpSectorScheme classification;
+    
+    @Interchangeable(fieldTitle="ID", id = true)
+    private Long id;
+    @Interchangeable(fieldTitle = "Name", value = true)
+    private String name;
+    @Interchangeable(fieldTitle="Description")
+    private String description;
+    @Interchangeable(fieldTitle="Classification", pickIdOnly=true)
+    private AmpSectorScheme classification;
     private boolean multisector ;
     private boolean primary;
 
@@ -124,14 +124,14 @@ public class AmpClassificationConfiguration implements Serializable, Identifiabl
     }
     
     public String getDescription() {
-		return description;
-	}
+        return description;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	public boolean isPrimary() {
+    public boolean isPrimary() {
         return primary;
     }
     /**
@@ -155,10 +155,10 @@ public class AmpClassificationConfiguration implements Serializable, Identifiabl
         return used;
     }
 
-	@Override
-	public Object getIdentifier() {
-		return this.id;
-//		return null;
-	}
+    @Override
+    public Object getIdentifier() {
+        return this.id;
+//      return null;
+    }
 
 }

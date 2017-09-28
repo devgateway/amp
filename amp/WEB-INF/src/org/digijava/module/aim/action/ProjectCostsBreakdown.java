@@ -25,24 +25,24 @@ import org.digijava.module.gateperm.core.GatePermConst;
  *
  */
 public class ProjectCostsBreakdown extends TilesAction {
-	private static Logger logger = Logger.getLogger(ProjectCostsBreakdown.class);
+    private static Logger logger = Logger.getLogger(ProjectCostsBreakdown.class);
 
-	public ActionForward execute(ComponentContext context,
-			ActionMapping mapping, ActionForm form, HttpServletRequest request,
-			HttpServletResponse response) throws IOException, ServletException {
-		Long activityId=new Long(request.getParameter("ampActivityId"));
-		
-		HttpSession session = request.getSession();
-		request.setAttribute(GatePermConst.ACTION_MODE, GatePermConst.Actions.VIEW);
-		if (session.getAttribute("currentMember") == null) {
-			return mapping.findForward("index");
-		}
-		
-		Collection euActs=EUActivityUtil.getEUActivities(activityId);
-		// EUActivities = same as Costs
-		request.setAttribute("costs",euActs);
-		request.setAttribute("ampActivityId",activityId);
-		return null;
-	}
-	
+    public ActionForward execute(ComponentContext context,
+            ActionMapping mapping, ActionForm form, HttpServletRequest request,
+            HttpServletResponse response) throws IOException, ServletException {
+        Long activityId=new Long(request.getParameter("ampActivityId"));
+        
+        HttpSession session = request.getSession();
+        request.setAttribute(GatePermConst.ACTION_MODE, GatePermConst.Actions.VIEW);
+        if (session.getAttribute("currentMember") == null) {
+            return mapping.findForward("index");
+        }
+        
+        Collection euActs=EUActivityUtil.getEUActivities(activityId);
+        // EUActivities = same as Costs
+        request.setAttribute("costs",euActs);
+        request.setAttribute("ampActivityId",activityId);
+        return null;
+    }
+    
 }

@@ -13,15 +13,15 @@ import java.util.List;
  */
 public class GeometryCollectionGeoJSON extends GeoJSON
 {
-	public List<GeometryGeoJSON> geometries;
+    public List<GeometryGeoJSON> geometries;
 
-	@Override
-	public boolean isValid( PositionValidator validator )
-	{
-		for ( GeometryGeoJSON geom : geometries )
-		{
-			if ( !geom.isValid(validator) ) return false;
-		}
-		return super.isValid(validator);
-	}
+    @Override
+    public boolean isValid( PositionValidator validator )
+    {
+        for ( GeometryGeoJSON geom : geometries )
+        {
+            if ( !geom.isValid(validator) ) return false;
+        }
+        return super.isValid(validator);
+    }
 }

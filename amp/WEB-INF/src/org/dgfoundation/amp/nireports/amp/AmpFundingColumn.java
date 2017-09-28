@@ -95,6 +95,11 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 	public final static String ENTITY_GPI_FUNDING = "GPI Funding";
 
 	/**
+     * {@link #getName()} in case this column is used to fetch "Regional Funding"
+     */
+    public static final String ENTITY_REGIONAL_FUNDING = "Regional Funding";
+
+    /*
 	 * the cell prototypes cache, plus some auxiliary info
 	 */
 	protected final ExpiringCacher<Boolean, NiReportsEngine, FundingFetcherContext> cacher;
@@ -280,6 +285,10 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 					metaSet.add(MetaCategory.SOURCE_ROLE.category, Constants.FUNDING_AGENCY);
 				}
 				
+                if (this.name.equals(ENTITY_REGIONAL_FUNDING)) {
+                    metaSet.add(MetaCategory.SOURCE_ROLE.category, Constants.FUNDING_AGENCY);
+                }
+
 				java.sql.Date transactionMoment = rs.rs.getDate("transaction_date");
 				BigDecimal transactionAmount = rs.rs.getBigDecimal("transaction_amount");
 				

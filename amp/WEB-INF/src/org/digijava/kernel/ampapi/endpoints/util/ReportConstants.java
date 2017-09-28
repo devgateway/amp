@@ -6,11 +6,14 @@ package org.digijava.kernel.ampapi.endpoints.util;
  * @author apicca
  *
  */
-public class ReportConstants {
+public final class ReportConstants {
 
-	//describing the timeframe by which to group funding data in the report
-	public static final String GROUPING_YEARLY = "A";
-	public static final String GROUPING_QUARTERLY = "Q";
-	public static final String GROUPING_MONTHLY = "M";
+    // describing the timeframe by which to group funding data in the report
+    public static final String GROUPING_YEARLY = "A";
+    public static final String GROUPING_QUARTERLY = "Q";
+    public static final String GROUPING_MONTHLY = "M";
 
+    private ReportConstants() {
+
+    }
 }

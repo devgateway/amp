@@ -8,11 +8,11 @@ import org.dgfoundation.amp.ar.cell.*;
  *
  */
 public interface CellFilterCriteria {
-	
-	/**
-	 * returns a filtered cell to replace the source one (might be the src one) or NULL
-	 * @param source
-	 * @return
-	 */
-	public Cell filter(Cell source);
+    
+    /**
+     * returns a filtered cell to replace the source one (might be the src one) or NULL
+     * @param source
+     * @return
+     */
+    public Cell filter(Cell source);
 }

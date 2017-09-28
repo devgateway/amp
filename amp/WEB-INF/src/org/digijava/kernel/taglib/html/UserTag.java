@@ -48,8 +48,8 @@ import org.digijava.kernel.util.RequestUtils;
 public class UserTag
     extends TagSupport {
 
-	private static final long serialVersionUID = 1L;
-	final static String PROPERTY_NAME = "name";
+    private static final long serialVersionUID = 1L;
+    final static String PROPERTY_NAME = "name";
     final static String PROPERTY_URL = "url";
     final static String PROPERTY_FIRSTNAMES = "firstnames";
     final static String PROPERTY_LASTNAME = "lastname";

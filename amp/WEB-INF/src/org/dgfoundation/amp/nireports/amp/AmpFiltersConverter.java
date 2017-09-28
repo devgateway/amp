@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import com.google.common.collect.ImmutableMap;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.newreports.FilterRule;
@@ -88,6 +89,10 @@ public class AmpFiltersConverter extends BasicFiltersConverter {
         put(ColumnConstants.COUNTRY, ColumnConstants.PLEDGES_COUNTRIES);
     }};
 
+    public static final Map<String, String> DONOR_TO_REGIONAL_COLUMNS = new ImmutableMap.Builder<String, String>()
+            .put(ColumnConstants.REGION, ColumnConstants.REGIONAL_REGION)
+            .build();
+
 	/**
 	 * the dimensions whose {@link NiDimensionUsage} instances are ORed between themselves while filtering (please see the contract for {@link #shouldCollapseDimension(NiDimension)}
 	 */
@@ -135,6 +140,10 @@ public class AmpFiltersConverter extends BasicFiltersConverter {
 			 */
 	        columnName = DONOR_COLUMNS_TO_PLEDGE_COLUMNS.getOrDefault(columnName, columnName);
 		}
+
+        if (this.spec.getReportType() == ArConstants.REGIONAL_TYPE) {
+            columnName = DONOR_TO_REGIONAL_COLUMNS.getOrDefault(columnName, columnName);
+        }
 
 		if (schema.getColumns().containsKey(columnName)) {
 			super.processColumnElement(columnName, rule);

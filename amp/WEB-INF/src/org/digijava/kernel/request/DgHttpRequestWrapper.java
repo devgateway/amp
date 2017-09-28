@@ -323,17 +323,17 @@ public class DgHttpRequestWrapper
         return request.getRealPath(name);
     }
 
-	public String getLocalAddr() {
-		return request.getLocalAddr();
-	}
+    public String getLocalAddr() {
+        return request.getLocalAddr();
+    }
 
-	public String getLocalName() {
-		return request.getLocalName();
-	}
+    public String getLocalName() {
+        return request.getLocalName();
+    }
 
-	public int getLocalPort() {
-		return request.getLocalPort();
-	}
+    public int getLocalPort() {
+        return request.getLocalPort();
+    }
 
     @Override
     public ServletContext getServletContext() {
@@ -371,7 +371,7 @@ public class DgHttpRequestWrapper
     }
 
     public int getRemotePort() {
-		return request.getRemotePort();
-	}
+        return request.getRemotePort();
+    }
 
 }

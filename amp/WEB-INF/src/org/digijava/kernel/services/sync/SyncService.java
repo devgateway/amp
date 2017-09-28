@@ -1,5 +1,6 @@
 package org.digijava.kernel.services.sync;
 
+import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.singletonMap;
@@ -12,7 +13,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -46,6 +46,7 @@ import org.digijava.kernel.services.sync.model.Translation;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.util.ContactInfoUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -109,10 +110,12 @@ public class SyncService implements InitializingBean {
         updateDiffForWorkspaceMembers(systemDiff, lastSyncTime);
         updateDiffForUsers(systemDiff, lastSyncTime);
         updateDiffsForActivities(systemDiff, syncRequest);
+        updateDiffsForContacts(systemDiff, syncRequest);
 
         systemDiff.setTranslations(shouldSyncTranslations(systemDiff, lastSyncTime));
 
-        systemDiff.setPossibleValuesFields(findChangedPossibleValuesFields(systemDiff, lastSyncTime));
+        systemDiff.setActivityPossibleValuesFields(findChangedPossibleValuesFields(systemDiff, lastSyncTime));
+        systemDiff.setContactPossibleValuesFields(findChangedContactPossibleValuesFields(systemDiff, lastSyncTime));
 
         systemDiff.setExchangeRates(shouldSyncExchangeRates(lastSyncTime));
 
@@ -129,7 +132,7 @@ public class SyncService implements InitializingBean {
         if (syncRequest.getLastSyncTime() == null) {
             systemDiff.setFeatureManager(true);
         } else {
-            List<String> entities = Arrays.asList(GLOBAL_SETTINGS, WORKSPACES, FEATURE_MANAGER);
+            List<String> entities = asList(GLOBAL_SETTINGS, WORKSPACES, FEATURE_MANAGER);
             List<AmpOfflineChangelog> changelogs = loadChangeLog(syncRequest.getLastSyncTime(), entities);
             systemDiff.setFeatureManager(!changelogs.isEmpty());
             for (AmpOfflineChangelog changelog : changelogs) {
@@ -166,6 +169,16 @@ public class SyncService implements InitializingBean {
     }
 
     private List<String> findChangedPossibleValuesFields(SystemDiff systemDiff, Date lastSyncTime) {
+        Predicate<Field> fieldFilter = getChangedFields(systemDiff, lastSyncTime);
+        return fieldsEnumerator.findActivityFieldPaths(fieldFilter);
+    }
+
+    private List<String> findChangedContactPossibleValuesFields(SystemDiff systemDiff, Date lastSyncTime) {
+        Predicate<Field> fieldFilter = getChangedFields(systemDiff, lastSyncTime);
+        return fieldsEnumerator.findContactFieldPaths(fieldFilter);
+    }
+
+    private Predicate<Field> getChangedFields(SystemDiff systemDiff, Date lastSyncTime) {
         Predicate<Field> fieldFilter;
         if (lastSyncTime == null) {
             fieldFilter = possibleValuesEnumerator.fieldsWithPossibleValues();
@@ -180,7 +193,7 @@ public class SyncService implements InitializingBean {
             }
             fieldFilter = possibleValuesEnumerator.fieldsDependingOn(changedEntities);
         }
-        return fieldsEnumerator.findFieldPaths(fieldFilter);
+        return fieldFilter;
     }
 
     private void updateDiffsForActivities(SystemDiff systemDiff, SyncRequest syncRequest) {
@@ -283,6 +296,15 @@ public class SyncService implements InitializingBean {
         return sql.toString();
     }
 
+    private void updateDiffsForContacts(SystemDiff systemDiff, SyncRequest syncRequest) {
+        if (syncRequest.getLastSyncTime() == null) {
+            systemDiff.setContacts(new ListDiff<>(emptyList(), ContactInfoUtil.getContactIds()));
+        } else {
+            List<AmpOfflineChangelog> changeLogs = loadChangeLog(syncRequest.getLastSyncTime(), asList(CONTACT));
+            systemDiff.setContacts(toListDiffWithLongs(changeLogs, systemDiff));
+        }
+    }
+
     private void updateDiffForUsers(SystemDiff systemDiff, Date lastSyncTime) {
         if (lastSyncTime == null) {
             systemDiff.setUsers(new ListDiff<>(emptyList(), findAllUserIds()));
@@ -342,7 +364,7 @@ public class SyncService implements InitializingBean {
 
     private List<AmpOfflineChangelog> findChangedWsAndGs(Date lastSyncTime) {
         return loadChangeLog(lastSyncTime,
-                Arrays.asList(GLOBAL_SETTINGS, WORKSPACES, WORKSPACE_SETTINGS, WORKSPACE_FILTER_DATA));
+                asList(GLOBAL_SETTINGS, WORKSPACES, WORKSPACE_SETTINGS, WORKSPACE_FILTER_DATA));
     }
 
     private void updateDiffForWorkspaceMembers(SystemDiff systemDiff, Date lastSyncTime) {
@@ -351,12 +373,16 @@ public class SyncService implements InitializingBean {
 
             systemDiff.setWorkspaceMembers(new ListDiff<>(emptyList(), workspaceMemberIds));
         } else {
-            List<AmpOfflineChangelog> changelogs = findChangedWorkspaceMembers(lastSyncTime);
+            List<AmpOfflineChangelog> changeLogs = findChangedWorkspaceMembers(lastSyncTime);
+            systemDiff.setWorkspaceMembers(toListDiffWithLongs(changeLogs, systemDiff));
+        }
+    }
 
+    private ListDiff<Long> toListDiffWithLongs(List<AmpOfflineChangelog> changeLogs, SystemDiff systemDiff) {
             List<Long> removed = new ArrayList<>();
             List<Long> saved = new ArrayList<>();
 
-            for (AmpOfflineChangelog changelog : changelogs) {
+        for (AmpOfflineChangelog changelog : changeLogs) {
                 if (changelog.getOperationName().equals(DELETED)) {
                     removed.add(changelog.getEntityIdAsLong());
                 }
@@ -366,8 +392,7 @@ public class SyncService implements InitializingBean {
                 systemDiff.updateTimestamp(changelog.getOperationTime());
             }
 
-            systemDiff.setWorkspaceMembers(new ListDiff<>(removed, saved));
-        }
+        return new ListDiff<>(removed, saved);
     }
 
     private List<Long> findWorkspaceMembers() {

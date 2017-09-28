@@ -20,7 +20,7 @@ import java.text.SimpleDateFormat;
 
 public class ActivityProposedApprovalDateJob extends ConnectionCleaningJob implements StatefulJob {
     
-	@Override public void executeInternal(JobExecutionContext context) throws JobExecutionException{
+    @Override public void executeInternal(JobExecutionContext context) throws JobExecutionException{
         Date curDate=new Date();
         Date dateAfterDays=null;
         try{
@@ -38,7 +38,7 @@ public class ActivityProposedApprovalDateJob extends ConnectionCleaningJob imple
 
         List<AmpActivityVersion> actList = ActivityUtil.getActivitiesWhichMatchDate("proposedApprovalDate", dateAfterDays);
         for (AmpActivityVersion act : actList) {
-        	new ActivityProposedApprovalDateTrigger(act);
+            new ActivityProposedApprovalDateTrigger(act);
         }
     }
 }

@@ -79,7 +79,7 @@ public class IndicatorEPConstants {
     public static final String DATA = "data";
     
     public static final Set<Long> MULTI_COLOR_PALETTES = Collections.unmodifiableSet((new HashSet<Long>() {{
-		add(RED_GREEN_PALETTE_INDEX);	
-		add(BLUE_PURPLE_PALETTE_INDEX);
-	}}));
+        add(RED_GREEN_PALETTE_INDEX);   
+        add(BLUE_PURPLE_PALETTE_INDEX);
+    }}));
 }

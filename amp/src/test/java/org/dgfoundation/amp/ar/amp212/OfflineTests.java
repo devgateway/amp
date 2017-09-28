@@ -27,57 +27,57 @@ import org.digijava.kernel.util.resource.ResourceStreamHandlerFactory;
 public class OfflineTests
 {
 
-	public static Test suite() {
-		
-		setUp();
-		
-		TestSuite suite = new TestSuite(OfflineTests.class.getName());
-		
-		suite.addTest(new JUnit4TestAdapter(GraphAlgorithmsTests.class));
-		suite.addTest(new JUnit4TestAdapter(InclusiveRunnerTests.class));
-		suite.addTest(new JUnit4TestAdapter(MetaInfoTests.class)); 
-		suite.addTest(new JUnit4TestAdapter(FundingFlowsInnerTests.class));
-		suite.addTest(new JUnit4TestAdapter(DimensionSnapshotTests.class));
-		suite.addTest(new JUnit4TestAdapter(BigDecimalPrecisionTests.class));
-		suite.addTest(new JUnit4TestAdapter(HierarchyTrackingTestcases.class));
-		suite.addTest(new JUnit4TestAdapter(OffDbNiReportEngineTests.class));
-		suite.addTest(new JUnit4TestAdapter(OffDbNiReportSortingTests.class));
-		suite.addTest(new JUnit4TestAdapter(PercentagesCorrectorTests.class));
-		suite.addTest(new JUnit4TestAdapter(SummaryReportsTests.class));
-		suite.addTest(new JUnit4TestAdapter(PaginationTests.class));
-		suite.addTest(new JUnit4TestAdapter(FormattingTests.class));
-		suite.addTest(new JUnit4TestAdapter(OffDbNiReportFilteringTests.class));
-		suite.addTest(new JUnit4TestAdapter(UtilsTests.class));
-		suite.addTest(new JUnit4TestAdapter(UnitsSettingsUtilityTests.class));
-		suite.addTest(new JUnit4TestAdapter(ETLTests.class));
-		suite.addTest(new JUnit4TestAdapter(FilterRuleTests.class));
-		suite.addTest(new JUnit4TestAdapter(ExpressionTreeTestcases.class));
-		
-		return suite;
-	}
-	
-	public static void main(String[] args) {
-		junit.textui.TestRunner.run(suite());
-	}
+    public static Test suite() {
+        
+        setUp();
+        
+        TestSuite suite = new TestSuite(OfflineTests.class.getName());
+        
+        suite.addTest(new JUnit4TestAdapter(GraphAlgorithmsTests.class));
+        suite.addTest(new JUnit4TestAdapter(InclusiveRunnerTests.class));
+        suite.addTest(new JUnit4TestAdapter(MetaInfoTests.class)); 
+        suite.addTest(new JUnit4TestAdapter(FundingFlowsInnerTests.class));
+        suite.addTest(new JUnit4TestAdapter(DimensionSnapshotTests.class));
+        suite.addTest(new JUnit4TestAdapter(BigDecimalPrecisionTests.class));
+        suite.addTest(new JUnit4TestAdapter(HierarchyTrackingTestcases.class));
+        suite.addTest(new JUnit4TestAdapter(OffDbNiReportEngineTests.class));
+        suite.addTest(new JUnit4TestAdapter(OffDbNiReportSortingTests.class));
+        suite.addTest(new JUnit4TestAdapter(PercentagesCorrectorTests.class));
+        suite.addTest(new JUnit4TestAdapter(SummaryReportsTests.class));
+        suite.addTest(new JUnit4TestAdapter(PaginationTests.class));
+        suite.addTest(new JUnit4TestAdapter(FormattingTests.class));
+        suite.addTest(new JUnit4TestAdapter(OffDbNiReportFilteringTests.class));
+        suite.addTest(new JUnit4TestAdapter(UtilsTests.class));
+        suite.addTest(new JUnit4TestAdapter(UnitsSettingsUtilityTests.class));
+        suite.addTest(new JUnit4TestAdapter(ETLTests.class));
+        suite.addTest(new JUnit4TestAdapter(FilterRuleTests.class));
+        suite.addTest(new JUnit4TestAdapter(ExpressionTreeTestcases.class));
+        
+        return suite;
+    }
+    
+    public static void main(String[] args) {
+        junit.textui.TestRunner.run(suite());
+    }
 
-	
-	public static void configureLog4j() {
-		BasicConfigurator.configure();
-		LogManager.getRootLogger().setLevel(Level.ERROR);
-	}
-	
-	
-	public static void setUp() {
-		try {
-			configureLog4j();
-			org.digijava.kernel.ampapi.mondrian.util.Connection.IS_TESTING = true;
-			ResourceStreamHandlerFactory.installIfNeeded();
-			DigiConfigManager.initialize("./repository");
-			org.apache.struts.mock.MockHttpServletRequest mockRequest = new org.apache.struts.mock.MockHttpServletRequest(new org.apache.struts.mock.MockHttpSession());
-			TLSUtils.populate(mockRequest);
-		}
-		catch(Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
+    
+    public static void configureLog4j() {
+        BasicConfigurator.configure();
+        LogManager.getRootLogger().setLevel(Level.ERROR);
+    }
+    
+    
+    public static void setUp() {
+        try {
+            configureLog4j();
+            org.digijava.kernel.ampapi.mondrian.util.Connection.IS_TESTING = true;
+            ResourceStreamHandlerFactory.installIfNeeded();
+            DigiConfigManager.initialize("./repository");
+            org.apache.struts.mock.MockHttpServletRequest mockRequest = new org.apache.struts.mock.MockHttpServletRequest(new org.apache.struts.mock.MockHttpSession());
+            TLSUtils.populate(mockRequest);
+        }
+        catch(Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

@@ -33,31 +33,31 @@ public class NewIndicatorForm
     private Long sectorScheme;
     private Collection sectorSchemes;
     private Collection parentSectors;
-	private Collection childSectorsLevel1;
-	private Collection childSectorsLevel2;
-	private Long sector;
-	private Long subsectorLevel1;
-	private Long subsectorLevel2;
-	private Collection activitySectors;
-	private Long selectedActivity[];
+    private Collection childSectorsLevel1;
+    private Collection childSectorsLevel2;
+    private Long sector;
+    private Long subsectorLevel1;
+    private Long subsectorLevel2;
+    private Collection activitySectors;
+    private Long selectedActivity[];
 
     public Collection getSectorSchemes() {
-		return sectorSchemes;
-	}
+        return sectorSchemes;
+    }
 
-	public void setSectorSchemes(Collection sectorSchemes) {
-		this.sectorSchemes = sectorSchemes;
-	}
+    public void setSectorSchemes(Collection sectorSchemes) {
+        this.sectorSchemes = sectorSchemes;
+    }
 
-	public Long getThemeId() {
-		return themeId;
-	}
+    public Long getThemeId() {
+        return themeId;
+    }
 
-	public void setThemeId(Long themeId) {
-		this.themeId = themeId;
-	}
+    public void setThemeId(Long themeId) {
+        this.themeId = themeId;
+    }
 
-	public NewIndicatorForm() {
+    public NewIndicatorForm() {
     }
 
     public Integer getCategory() {
@@ -181,7 +181,7 @@ public class NewIndicatorForm
     }
 
 
-	
+    
     public void reset(){
         this.id=null;
         this.name=null;
@@ -204,120 +204,120 @@ public class NewIndicatorForm
     }
     
     public void resetsector(){
-    	this.sector = new Long(-1);
-    	this.subsectorLevel1 = new Long(-1);
-    	this.subsectorLevel2 = new Long(-1);
-    	this.sectorScheme = new Long(-1);
-    	this.parentSectors = null;
-    	this.childSectorsLevel1 = null;
-    	this.childSectorsLevel2 = null;
+        this.sector = new Long(-1);
+        this.subsectorLevel1 = new Long(-1);
+        this.subsectorLevel2 = new Long(-1);
+        this.sectorScheme = new Long(-1);
+        this.parentSectors = null;
+        this.childSectorsLevel1 = null;
+        this.childSectorsLevel2 = null;
     }
     
     
 
-	public Long[] getSelActivitySector() {
-		return selActivitySector;
-	}
+    public Long[] getSelActivitySector() {
+        return selActivitySector;
+    }
 
-	public void setSelActivitySector(Long[] selActivitySector) {
-		this.selActivitySector = selActivitySector;
-	}
+    public void setSelActivitySector(Long[] selActivitySector) {
+        this.selActivitySector = selActivitySector;
+    }
 
-	public boolean isSectorReset() {
-		return sectorReset;
-	}
+    public boolean isSectorReset() {
+        return sectorReset;
+    }
 
-	public void setSectorReset(boolean sectorReset) {
-		this.sectorReset = sectorReset;
-	}
+    public void setSectorReset(boolean sectorReset) {
+        this.sectorReset = sectorReset;
+    }
 
-	public Long getSectorScheme() {
-		return sectorScheme;
-	}
+    public Long getSectorScheme() {
+        return sectorScheme;
+    }
 
-	public void setSectorScheme(Long sectorScheme) {
-		this.sectorScheme = sectorScheme;
-	}
+    public void setSectorScheme(Long sectorScheme) {
+        this.sectorScheme = sectorScheme;
+    }
 
-	public Collection getParentSectors() {
-		return parentSectors;
-	}
+    public Collection getParentSectors() {
+        return parentSectors;
+    }
 
-	public void setParentSectors(Collection parentSectors) {
-		this.parentSectors = parentSectors;
-	}
+    public void setParentSectors(Collection parentSectors) {
+        this.parentSectors = parentSectors;
+    }
 
-	public Collection getChildSectorsLevel1() {
-		return childSectorsLevel1;
-	}
+    public Collection getChildSectorsLevel1() {
+        return childSectorsLevel1;
+    }
 
-	public void setChildSectorsLevel1(Collection childSectorsLevel1) {
-		this.childSectorsLevel1 = childSectorsLevel1;
-	}
+    public void setChildSectorsLevel1(Collection childSectorsLevel1) {
+        this.childSectorsLevel1 = childSectorsLevel1;
+    }
 
-	public Collection getChildSectorsLevel2() {
-		return childSectorsLevel2;
-	}
+    public Collection getChildSectorsLevel2() {
+        return childSectorsLevel2;
+    }
 
-	public void setChildSectorsLevel2(Collection childSectorsLevel2) {
-		this.childSectorsLevel2 = childSectorsLevel2;
-	}
+    public void setChildSectorsLevel2(Collection childSectorsLevel2) {
+        this.childSectorsLevel2 = childSectorsLevel2;
+    }
 
-	public Long getSector() {
-		return sector;
-	}
+    public Long getSector() {
+        return sector;
+    }
 
-	public void setSector(Long sector) {
-		this.sector = sector;
-	}
+    public void setSector(Long sector) {
+        this.sector = sector;
+    }
 
-	public Long getSubsectorLevel1() {
-		return subsectorLevel1;
-	}
+    public Long getSubsectorLevel1() {
+        return subsectorLevel1;
+    }
 
-	public void setSubsectorLevel1(Long subsectorLevel1) {
-		this.subsectorLevel1 = subsectorLevel1;
-	}
+    public void setSubsectorLevel1(Long subsectorLevel1) {
+        this.subsectorLevel1 = subsectorLevel1;
+    }
 
-	public Long getSubsectorLevel2() {
-		return subsectorLevel2;
-	}
+    public Long getSubsectorLevel2() {
+        return subsectorLevel2;
+    }
 
-	public void setSubsectorLevel2(Long subsectorLevel2) {
-		this.subsectorLevel2 = subsectorLevel2;
-	}
+    public void setSubsectorLevel2(Long subsectorLevel2) {
+        this.subsectorLevel2 = subsectorLevel2;
+    }
 
-	public Collection getActivitySectors() {
-		return activitySectors;
-	}
+    public Collection getActivitySectors() {
+        return activitySectors;
+    }
 
-	public void setActivitySectors(Collection activitySectors) {
-		this.activitySectors = activitySectors;
-	}
+    public void setActivitySectors(Collection activitySectors) {
+        this.activitySectors = activitySectors;
+    }
 
-	public String getPrgStatus() {
-		return prgStatus;
-	}
+    public String getPrgStatus() {
+        return prgStatus;
+    }
 
-	public void setPrgStatus(String prgStatus) {
-		this.prgStatus = prgStatus;
-	}
+    public void setPrgStatus(String prgStatus) {
+        this.prgStatus = prgStatus;
+    }
 
-	public String getPrjStatus() {
-		return prjStatus;
-	}
+    public String getPrjStatus() {
+        return prjStatus;
+    }
 
-	public void setPrjStatus(String prjStatus) {
-		this.prjStatus = prjStatus;
-	}
+    public void setPrjStatus(String prjStatus) {
+        this.prjStatus = prjStatus;
+    }
 
-	public Long[] getSelectedActivity() {
-		return selectedActivity;
-	}
+    public Long[] getSelectedActivity() {
+        return selectedActivity;
+    }
 
-	public void setSelectedActivity(Long[] selectedActivity) {
-		this.selectedActivity = selectedActivity;
-	}
+    public void setSelectedActivity(Long[] selectedActivity) {
+        this.selectedActivity = selectedActivity;
+    }
 
-	
+    
 }

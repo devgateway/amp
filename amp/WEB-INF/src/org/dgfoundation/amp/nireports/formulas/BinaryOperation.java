@@ -12,27 +12,27 @@ import java.util.function.BiFunction;
  */
 class BinaryOperation implements NiFormula {
 
-	final NiFormula left, right;
-	final BiFunction<BigDecimal, BigDecimal, BigDecimal> calculator;
-	final Set<String> deps;
-	
-	public BinaryOperation(NiFormula left, NiFormula right, BiFunction<BigDecimal, BigDecimal, BigDecimal> calculator) {
-		this.left = left;
-		this.right = right;
-		this.calculator = calculator;
-		this.deps = NiFormula.discoverDeps(left, right);
-	}
-	
-	@Override
-	public BigDecimal evaluate(Map<String, BigDecimal> datastore) {
-		BigDecimal l = left.evaluate(datastore);
-		BigDecimal r = right.evaluate(datastore);
-		return calculator.apply(l, r);
-	}
+    final NiFormula left, right;
+    final BiFunction<BigDecimal, BigDecimal, BigDecimal> calculator;
+    final Set<String> deps;
+    
+    public BinaryOperation(NiFormula left, NiFormula right, BiFunction<BigDecimal, BigDecimal, BigDecimal> calculator) {
+        this.left = left;
+        this.right = right;
+        this.calculator = calculator;
+        this.deps = NiFormula.discoverDeps(left, right);
+    }
+    
+    @Override
+    public BigDecimal evaluate(Map<String, BigDecimal> datastore) {
+        BigDecimal l = left.evaluate(datastore);
+        BigDecimal r = right.evaluate(datastore);
+        return calculator.apply(l, r);
+    }
 
-	@Override
-	public Set<String> getDependencies() {
-		return deps;
-	}
+    @Override
+    public Set<String> getDependencies() {
+        return deps;
+    }
 
 }

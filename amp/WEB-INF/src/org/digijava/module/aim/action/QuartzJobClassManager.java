@@ -26,9 +26,9 @@ public class QuartzJobClassManager extends Action {
             AmpQuartzJobClass jc=null;
 
             jc=QuartzJobClassUtils.getJobClassesByName(jcForm.getName());
-			
+            
             if(!classNameIsValid(mapping, jcForm)){
-    			return mapping.findForward("addJobClass");
+                return mapping.findForward("addJobClass");
             }
             if(jc==null){
                 jc=QuartzJobClassUtils.getJobClassesByClassfullName(jcForm.getClassFullname());
@@ -66,17 +66,17 @@ public class QuartzJobClassManager extends Action {
         return mapping.findForward("forward");
     }
 
-	private boolean classNameIsValid(ActionMapping mapping, QuartzJobClassManagerForm jcForm) {
-		boolean isValid = true;
-		try {
-			Class cls = Class.forName(jcForm.getClassFullname(), false, this.getClass().getClassLoader());
-			jcForm.setErrorCode(null);
-		} catch (java.lang.ClassNotFoundException e) {
-			jcForm.setErrorCode("1");
-			isValid=false;
-		}
-		return isValid;
-	}
+    private boolean classNameIsValid(ActionMapping mapping, QuartzJobClassManagerForm jcForm) {
+        boolean isValid = true;
+        try {
+            Class cls = Class.forName(jcForm.getClassFullname(), false, this.getClass().getClassLoader());
+            jcForm.setErrorCode(null);
+        } catch (java.lang.ClassNotFoundException e) {
+            jcForm.setErrorCode("1");
+            isValid=false;
+        }
+        return isValid;
+    }
 
     public QuartzJobClassManager() {
     }

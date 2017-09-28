@@ -23,30 +23,30 @@ import java.util.List;
  */
 public class PolygonGeoJSON extends GeometryGeoJSON
 {
-	public List<List<List<Double>>> coordinates;
+    public List<List<List<Double>>> coordinates;
 
-	@Override
-	public boolean isValid( PositionValidator validator )
-	{
-		if (coordinates==null) return false;
-		if (coordinates.size()==0) return false;
-		
-		for ( List<List<Double>> linearRing : coordinates )
-		{
-			if (linearRing==null) return false;
-			if (linearRing.size()<4) return false;
+    @Override
+    public boolean isValid( PositionValidator validator )
+    {
+        if (coordinates==null) return false;
+        if (coordinates.size()==0) return false;
+        
+        for ( List<List<Double>> linearRing : coordinates )
+        {
+            if (linearRing==null) return false;
+            if (linearRing.size()<4) return false;
 
-			for ( List<Double> position : linearRing )
-			{
-				if ( !validator.isValid(position) ) return false;
-			}
-			
-			List<Double> first = linearRing.get(0);
-			List<Double> last = linearRing.get(linearRing.size()-1);
-			
-			if ( !validator.isEquivalent(first,last) ) return false;
-		}
+            for ( List<Double> position : linearRing )
+            {
+                if ( !validator.isValid(position) ) return false;
+            }
+            
+            List<Double> first = linearRing.get(0);
+            List<Double> last = linearRing.get(linearRing.size()-1);
+            
+            if ( !validator.isEquivalent(first,last) ) return false;
+        }
 
-		return super.isValid(validator);
-	}
+        return super.isValid(validator);
+    }
 }

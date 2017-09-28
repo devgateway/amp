@@ -9,7 +9,7 @@ package org.digijava.module.aim.helper;
  * following code: 
  * <p>
  * 
- * &lt;logic:equal name="globalSettings" scope="application" ...  	&gt;
+ * &lt;logic:equal name="globalSettings" scope="application" ...    &gt;
  * 
  * <p>
  * Also, this bean should be updated each time GlobalSettings are being updated:
@@ -24,22 +24,22 @@ package org.digijava.module.aim.helper;
  * @author Mauricio Coria - coriamauricio@gmail.com
  */
 public class GlobalSettings {
-	private Boolean showComponentFundingByYear;
+    private Boolean showComponentFundingByYear;
 
-	private static final GlobalSettings INSTANCE = new GlobalSettings();
-	
-	private GlobalSettings(){}
-	
-	public static GlobalSettings getInstance(){
-		return INSTANCE;
-	}
+    private static final GlobalSettings INSTANCE = new GlobalSettings();
+    
+    private GlobalSettings(){}
+    
+    public static GlobalSettings getInstance(){
+        return INSTANCE;
+    }
 
-	public void setShowComponentFundingByYear(Boolean showComponentFundingByYear) {
-		this.showComponentFundingByYear = showComponentFundingByYear;
-	}
+    public void setShowComponentFundingByYear(Boolean showComponentFundingByYear) {
+        this.showComponentFundingByYear = showComponentFundingByYear;
+    }
 
-	public Boolean getShowComponentFundingByYear() {
-		return showComponentFundingByYear;
-	}
-	
+    public Boolean getShowComponentFundingByYear() {
+        return showComponentFundingByYear;
+    }
+    
 }

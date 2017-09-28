@@ -60,8 +60,8 @@ public class ShowCreateCalendarItem
             getNavigationLanguage(request).getCode());
         ArrayList sortedCountries = new ArrayList(countries);
         Collections.sort(sortedCountries, TrnUtil.countryNameComparator);
-	TrnCountry none = new TrnCountry(Calendar.noneCountryIso,Calendar.noneCountryName);
-	sortedCountries.add(0,none);
+    TrnCountry none = new TrnCountry(Calendar.noneCountryIso,Calendar.noneCountryName);
+    sortedCountries.add(0,none);
 
         calendForm.setCountryResidence(sortedCountries);
 

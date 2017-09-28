@@ -19,42 +19,42 @@ import org.digijava.module.xmlpatcher.dbentity.AmpXmlPatch;
  */
 public class NaturalLocationOrderXmlPatcherScheduler extends XmlPatcherScheduler {
 
-	
-	public static class NaturalLocationOrderPatchComparator implements
-			Comparator<AmpXmlPatch> {
-		@Override
-		public int compare(AmpXmlPatch arg0, AmpXmlPatch arg1) {
-			if(arg0.getLocation().compareTo(arg1.getLocation())==0){
-				return arg0.getPatchId().compareTo(arg1.getPatchId());
-			}
-			return arg0.getLocation().compareTo(arg1.getLocation());
-		}
+    
+    public static class NaturalLocationOrderPatchComparator implements
+            Comparator<AmpXmlPatch> {
+        @Override
+        public int compare(AmpXmlPatch arg0, AmpXmlPatch arg1) {
+            if(arg0.getLocation().compareTo(arg1.getLocation())==0){
+                return arg0.getPatchId().compareTo(arg1.getPatchId());
+            }
+            return arg0.getLocation().compareTo(arg1.getLocation());
+        }
 
-	}
+    }
 
-	/**
-	 * @see XmlPatcherScheduler#XmlPatcherScheduler(Map, Set)
-	 * @param properties
-	 * @param patches
-	 */
-	public NaturalLocationOrderXmlPatcherScheduler(Map<String, Object> properties,
-			List<AmpXmlPatch> patches) {
-		super(properties, patches);
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * @see XmlPatcherScheduler#XmlPatcherScheduler(Map, Set)
+     * @param properties
+     * @param patches
+     */
+    public NaturalLocationOrderXmlPatcherScheduler(Map<String, Object> properties,
+            List<AmpXmlPatch> patches) {
+        super(properties, patches);
+        // TODO Auto-generated constructor stub
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @seeorg.digijava.module.xmlpatcher.scheduler.XmlPatcherScheduler#
-	 * getScheduledPatchCollection()
-	 */
-	@Override
-	public Collection<AmpXmlPatch> getScheduledPatchCollection() {
-		Collection<AmpXmlPatch> ret = new TreeSet<AmpXmlPatch>(
-				new NaturalLocationOrderPatchComparator());
-		ret.addAll(patches);
-		return ret;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @seeorg.digijava.module.xmlpatcher.scheduler.XmlPatcherScheduler#
+     * getScheduledPatchCollection()
+     */
+    @Override
+    public Collection<AmpXmlPatch> getScheduledPatchCollection() {
+        Collection<AmpXmlPatch> ret = new TreeSet<AmpXmlPatch>(
+                new NaturalLocationOrderPatchComparator());
+        ret.addAll(patches);
+        return ret;
+    }
 
 }

@@ -9,21 +9,21 @@ import org.digijava.module.aim.util.FeaturesUtil;
 
 public class DEImportValidationEventHandler implements ValidationEventHandler {
 
-	private static Logger logger = Logger.getLogger(DEImportValidationEventHandler.class);
-	private String log = "";
-	
-	public String getLog() {
-		return log;
-	}
+    private static Logger logger = Logger.getLogger(DEImportValidationEventHandler.class);
+    private String log = "";
+    
+    public String getLog() {
+        return log;
+    }
 
-	public void setLog(String log) {
-		this.log = log;
-	}
+    public void setLog(String log) {
+        this.log = log;
+    }
 
-	public boolean handleEvent(ValidationEvent ve) {
-		// TODO Auto-generated method stub
+    public boolean handleEvent(ValidationEvent ve) {
+        // TODO Auto-generated method stub
 
-		if (ve.getSeverity()==ve.FATAL_ERROR ||  ve .getSeverity()==ve.ERROR) {
+        if (ve.getSeverity()==ve.FATAL_ERROR ||  ve .getSeverity()==ve.ERROR) {
             ValidationEventLocator  locator = ve.getLocator();
             //print message from validation event
             //System.out.println("Message is " + ve.getMessage());
@@ -35,8 +35,8 @@ public class DEImportValidationEventHandler implements ValidationEventHandler {
 //            int i,j;
 //            i=msg1.indexOf("'")+1;
 //            if(i>25) {
-//            	i=msg1.indexOf("\"")+1;
-//            	j=1+i+msg1.substring(i+1).indexOf("\"");
+//              i=msg1.indexOf("\"")+1;
+//              j=1+i+msg1.substring(i+1).indexOf("\"");
 //            }
 //            else j=1+i+msg1.substring(i+1).indexOf("'");
 //            String aux=msg1.substring(i,j);
@@ -46,6 +46,6 @@ public class DEImportValidationEventHandler implements ValidationEventHandler {
 //            log += "Line: <font color=\"#ff0000\">" + locator.getLineNumber() + "</font> | Column: <font color=\"#ff0000\">"+locator.getColumnNumber() +"</font> | Message: "+ msg + "<br>";
         }
     return true;
-	}
+    }
 
 }

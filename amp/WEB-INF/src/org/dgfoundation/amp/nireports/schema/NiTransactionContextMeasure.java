@@ -15,24 +15,24 @@ import org.dgfoundation.amp.nireports.NiReportsEngine;
  *
  */
 public class NiTransactionContextMeasure<K> extends NiReportMeasure<CategAmountCell> {
-	
-	public final BiFunction<K, CategAmountCell, Boolean> criterion;
-	public final Function<NiReportsEngine, K> contextBuilder;
-		
-	public NiTransactionContextMeasure(String measureName, Function<NiReportsEngine, K> contextBuilder, BiFunction<K, CategAmountCell, Boolean> criterion, Behaviour<?> behaviour, String description) {
-		super(measureName, behaviour, description);
-		this.criterion = criterion;
-		this.contextBuilder = contextBuilder;
-	}
-	
-	@Override
-	public List<CategAmountCell> fetch(NiReportsEngine engine) {
-		K context = contextBuilder.apply(engine);
-		return engine.funding.stream().filter(cell -> criterion.apply(context, cell)).collect(Collectors.toList());
-	} 
-	
-	@Override
-	public List<ReportRenderWarning> performCheck() {
-		return null;
-	}
+    
+    public final BiFunction<K, CategAmountCell, Boolean> criterion;
+    public final Function<NiReportsEngine, K> contextBuilder;
+        
+    public NiTransactionContextMeasure(String measureName, Function<NiReportsEngine, K> contextBuilder, BiFunction<K, CategAmountCell, Boolean> criterion, Behaviour<?> behaviour, String description) {
+        super(measureName, behaviour, description);
+        this.criterion = criterion;
+        this.contextBuilder = contextBuilder;
+    }
+    
+    @Override
+    public List<CategAmountCell> fetch(NiReportsEngine engine) {
+        K context = contextBuilder.apply(engine);
+        return engine.funding.stream().filter(cell -> criterion.apply(context, cell)).collect(Collectors.toList());
+    } 
+    
+    @Override
+    public List<ReportRenderWarning> performCheck() {
+        return null;
+    }
 }

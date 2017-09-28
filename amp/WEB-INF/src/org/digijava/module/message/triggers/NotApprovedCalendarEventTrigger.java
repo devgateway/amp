@@ -6,14 +6,14 @@ import org.digijava.module.message.helper.Event;
 
 public class NotApprovedCalendarEventTrigger extends AbstractCalendarEventTrigger{
 
-	public NotApprovedCalendarEventTrigger(CalendarItem calendarItem,
-			String teamManager, AmpTeamMember creator) {
-		super(calendarItem, teamManager, creator, null);
-	}
+    public NotApprovedCalendarEventTrigger(CalendarItem calendarItem,
+            String teamManager, AmpTeamMember creator) {
+        super(calendarItem, teamManager, creator, null);
+    }
 
-	@Override
-	protected Event getEvent() {
-		return new Event(NotApprovedCalendarEventTrigger.class);
-	}
+    @Override
+    protected Event getEvent() {
+        return new Event(NotApprovedCalendarEventTrigger.class);
+    }
 
 }

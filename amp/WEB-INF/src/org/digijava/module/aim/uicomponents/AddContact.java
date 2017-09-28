@@ -44,82 +44,82 @@ public class AddContact extends BodyTagSupport {
     }
     
     public String getContactType() {
-		return contactType;
-	}
+        return contactType;
+    }
 
-	public void setContactType(String contactType) {
-		this.contactType = contactType;
-	}
+    public void setContactType(String contactType) {
+        this.contactType = contactType;
+    }
 
 
 
-	public String getAddOrgBtn() {
-		return addOrgBtn;
-	}
+    public String getAddOrgBtn() {
+        return addOrgBtn;
+    }
 
-	public void setAddOrgBtn(String addOrgBtn) {
-		this.addOrgBtn = addOrgBtn;
-	}
+    public void setAddOrgBtn(String addOrgBtn) {
+        this.addOrgBtn = addOrgBtn;
+    }
 
-	public int doStartTag() throws JspException {
-		try {
+    public int doStartTag() throws JspException {
+        try {
             pageContext.getSession().setAttribute(PARAM_ADD_CONTACT_FORM_NAME, form);
-			JspWriter out = pageContext.getOut();
-			StringBuffer html = new StringBuffer();
-			html.append("<input type=\"button\" ");
-			if(!"".equalsIgnoreCase(styleClass)){
-				html.append(STYLE_CLASS_NAME);
-				html.append("=");
-				html.append("\""+styleClass+"\"");
-			}
-	
-			html.append(" onclick=\"javascript:selectContact('/aim/addAmpContactInfo.do~reset=true~action=checkDuplicationContacts~");
-			if (!"".equalsIgnoreCase(collection)) {
+            JspWriter out = pageContext.getOut();
+            StringBuffer html = new StringBuffer();
+            html.append("<input type=\"button\" ");
+            if(!"".equalsIgnoreCase(styleClass)){
+                html.append(STYLE_CLASS_NAME);
+                html.append("=");
+                html.append("\""+styleClass+"\"");
+            }
+    
+            html.append(" onclick=\"javascript:selectContact('/aim/addAmpContactInfo.do~reset=true~action=checkDuplicationContacts~");
+            if (!"".equalsIgnoreCase(collection)) {
 
-				html.append(PARAM_COLLECTION_NAME);
-				html.append("=");
-				html.append(collection);
-				html.append("~");
-			}
-			if(!"".equalsIgnoreCase(contactType)){
-				html.append(PARAM_CONTACT_TYPE);
-				html.append("=");
-				html.append(contactType);
-				html.append("~");
-			}
-			if(!"".equalsIgnoreCase(addOrgBtn)){
-				html.append(ADD_ORG_BUTTON);
-				html.append("=");
-				html.append(addOrgBtn);
-			}
-			
-			html.append("','addContactWindows','height=400,width=600,scrollbars=yes,resizable=yes')\" ");
+                html.append(PARAM_COLLECTION_NAME);
+                html.append("=");
+                html.append(collection);
+                html.append("~");
+            }
+            if(!"".equalsIgnoreCase(contactType)){
+                html.append(PARAM_CONTACT_TYPE);
+                html.append("=");
+                html.append(contactType);
+                html.append("~");
+            }
+            if(!"".equalsIgnoreCase(addOrgBtn)){
+                html.append(ADD_ORG_BUTTON);
+                html.append("=");
+                html.append(addOrgBtn);
+            }
+            
+            html.append("','addContactWindows','height=400,width=600,scrollbars=yes,resizable=yes')\" ");
 
-			out.write(html.toString());
-			return super.doStartTag();
-		} catch (IOException ioe) {
+            out.write(html.toString());
+            return super.doStartTag();
+        } catch (IOException ioe) {
 
-		}
-		return (EVAL_BODY_INCLUDE);
+        }
+        return (EVAL_BODY_INCLUDE);
 
-	}
+    }
 
-	@Override
-	public int doAfterBody() throws JspException {
-		// TODO Auto-generated method stub
-		return super.doAfterBody();
-	}
+    @Override
+    public int doAfterBody() throws JspException {
+        // TODO Auto-generated method stub
+        return super.doAfterBody();
+    }
 
-	@Override
-	public int doEndTag() throws JspException {
-		try {
-			pageContext.getOut().print("value=\"" + bodyContent.getString() + "\"/>");
-		} catch (Exception e) {
+    @Override
+    public int doEndTag() throws JspException {
+        try {
+            pageContext.getOut().print("value=\"" + bodyContent.getString() + "\"/>");
+        } catch (Exception e) {
 
-		}
+        }
 
-		return EVAL_PAGE;
-	}
+        return EVAL_PAGE;
+    }
 
 
 }

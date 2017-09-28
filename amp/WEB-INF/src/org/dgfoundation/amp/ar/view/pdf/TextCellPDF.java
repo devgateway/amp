@@ -29,37 +29,37 @@ import com.lowagie.text.pdf.PdfPTable;
  */
 public class TextCellPDF extends PDFExporter {
 
-	public TextCellPDF(Exporter parent,Viewable item) {
-		super(parent,item);
-	}
-	
-	/**
-	 * @param table
-	 * @param item
-	 */
-	public TextCellPDF(PdfPTable table, Viewable item,Long ownerId) {
-		super(table, item,ownerId);
-		// TODO Auto-generated constructor stub
-	}
+    public TextCellPDF(Exporter parent,Viewable item) {
+        super(parent,item);
+    }
+    
+    /**
+     * @param table
+     * @param item
+     */
+    public TextCellPDF(PdfPTable table, Viewable item,Long ownerId) {
+        super(table, item,ownerId);
+        // TODO Auto-generated constructor stub
+    }
 
-	/* (non-Javadoc)
-	 * @see org.dgfoundation.amp.ar.view.pdf.PDFExporter#generate()
-	 */
-	@Override
-	public void generate() {
-		TextCell c = (TextCell) item;
-		PdfPCell pdfc = null;
-		Font font;
-		if (c.isDisquisedPledgeCellWhichShouldBeHighlited()) {
-			font = new Font(ExportActivityToPDF.basefont, 9, Font.BOLD); 
-			font.setColor(106, 106, 0);
-		}
-		else { 
-			font = new Font(ExportActivityToPDF.basefont, 9, Font.NORMAL);
-		}
-		pdfc = new PdfPCell(new Paragraph(ExportActivityToPDF.postprocessText(c.toString()), font));
-		
-		table.addCell(pdfc);
-	}
+    /* (non-Javadoc)
+     * @see org.dgfoundation.amp.ar.view.pdf.PDFExporter#generate()
+     */
+    @Override
+    public void generate() {
+        TextCell c = (TextCell) item;
+        PdfPCell pdfc = null;
+        Font font;
+        if (c.isDisquisedPledgeCellWhichShouldBeHighlited()) {
+            font = new Font(ExportActivityToPDF.basefont, 9, Font.BOLD); 
+            font.setColor(106, 106, 0);
+        }
+        else { 
+            font = new Font(ExportActivityToPDF.basefont, 9, Font.NORMAL);
+        }
+        pdfc = new PdfPCell(new Paragraph(ExportActivityToPDF.postprocessText(c.toString()), font));
+        
+        table.addCell(pdfc);
+    }
 
 }

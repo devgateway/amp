@@ -18,28 +18,28 @@ import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 
 public class GetActivityIndicators extends Action {
-	
-	private static Logger logger = Logger.getLogger(GetActivityIndicators.class);
-	
-	public ActionForward execute(ActionMapping mapping,ActionForm form,
-			HttpServletRequest request,HttpServletResponse response) throws Exception {
-		
-		UpdateIndicatorValuesForm uIndValForm = (UpdateIndicatorValuesForm) form;
-		
-		HttpSession session = request.getSession();
-		
-		uIndValForm.setActivityId(uIndValForm.getActivityId());
-		
-		uIndValForm.setIndicators(IndicatorUtil.getActivityIndicatorHelperBeans(
-				uIndValForm.getActivityId()));
-		
-		uIndValForm.setIndicatorId(null);
-		uIndValForm.setIndicatorValId(null);
-		uIndValForm.setExpIndicatorId(new Long(-1));
-		if("true".equalsIgnoreCase((String)session.getAttribute("forStep9"))){
-			session.removeAttribute("forStep9");
-			return mapping.findForward("AddIndicatorForStepNine");
-		}
-		return mapping.findForward("forward");
-	}
+    
+    private static Logger logger = Logger.getLogger(GetActivityIndicators.class);
+    
+    public ActionForward execute(ActionMapping mapping,ActionForm form,
+            HttpServletRequest request,HttpServletResponse response) throws Exception {
+        
+        UpdateIndicatorValuesForm uIndValForm = (UpdateIndicatorValuesForm) form;
+        
+        HttpSession session = request.getSession();
+        
+        uIndValForm.setActivityId(uIndValForm.getActivityId());
+        
+        uIndValForm.setIndicators(IndicatorUtil.getActivityIndicatorHelperBeans(
+                uIndValForm.getActivityId()));
+        
+        uIndValForm.setIndicatorId(null);
+        uIndValForm.setIndicatorValId(null);
+        uIndValForm.setExpIndicatorId(new Long(-1));
+        if("true".equalsIgnoreCase((String)session.getAttribute("forStep9"))){
+            session.removeAttribute("forStep9");
+            return mapping.findForward("AddIndicatorForStepNine");
+        }
+        return mapping.findForward("forward");
+    }
 }

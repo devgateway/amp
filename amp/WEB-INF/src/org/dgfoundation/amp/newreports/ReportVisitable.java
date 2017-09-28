@@ -8,6 +8,6 @@ package org.dgfoundation.amp.newreports;
  */
 public interface ReportVisitable {
 
-	void accept(ReportVisitor visitor);
-			
+    void accept(ReportVisitor visitor);
+            
 }

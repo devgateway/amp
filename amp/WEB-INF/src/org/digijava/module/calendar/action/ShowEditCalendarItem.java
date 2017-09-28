@@ -49,51 +49,51 @@ public class ShowEditCalendarItem
       extends Action {
 
     public ActionForward execute(ActionMapping mapping,
-				 ActionForm form,
-				 javax.servlet.http.HttpServletRequest request,
-				 javax.servlet.http.HttpServletResponse
-				 response) throws java.lang.Exception {
+                 ActionForm form,
+                 javax.servlet.http.HttpServletRequest request,
+                 javax.servlet.http.HttpServletResponse
+                 response) throws java.lang.Exception {
 
-	CalendarItemForm calendForm = (CalendarItemForm) form;
-	User user = RequestUtils.getUser(request);
+    CalendarItemForm calendForm = (CalendarItemForm) form;
+    User user = RequestUtils.getUser(request);
 
-	Calendar event = null;
+    Calendar event = null;
 
-	calendForm.loadCalendar();
+    calendForm.loadCalendar();
 
-	//get countries list
-	Collection countries = TrnUtil.getCountries(RequestUtils.
-	      getNavigationLanguage(request).getCode());
-	ArrayList sortedCountries = new ArrayList(countries);
-	Collections.sort(sortedCountries, TrnUtil.countryNameComparator);
-	TrnCountry none = new TrnCountry(Calendar.noneCountryIso,
-					 Calendar.noneCountryName);
-	sortedCountries.add(0, none);
+    //get countries list
+    Collection countries = TrnUtil.getCountries(RequestUtils.
+          getNavigationLanguage(request).getCode());
+    ArrayList sortedCountries = new ArrayList(countries);
+    Collections.sort(sortedCountries, TrnUtil.countryNameComparator);
+    TrnCountry none = new TrnCountry(Calendar.noneCountryIso,
+                     Calendar.noneCountryName);
+    sortedCountries.add(0, none);
 
-	calendForm.setCountryResidence(sortedCountries);
+    calendForm.setCountryResidence(sortedCountries);
 
-	if (calendForm.getActiveCalendarItem() != null) {
+    if (calendForm.getActiveCalendarItem() != null) {
 
-	    event = DbUtil.getCalendarItem(calendForm.getActiveCalendarItem());
-	    CalendarItem calendarItem = event.getFirstCalendarItem();
+        event = DbUtil.getCalendarItem(calendForm.getActiveCalendarItem());
+        CalendarItem calendarItem = event.getFirstCalendarItem();
 
-	    calendForm.setTitle(calendarItem.getTitle());
-	    calendForm.setDescription(calendarItem.getDescription());
+        calendForm.setTitle(calendarItem.getTitle());
+        calendForm.setDescription(calendarItem.getDescription());
 
-	    calendForm.setCountry(event.getCountry());
-	    calendForm.setLocation(event.getLocation());
-	    calendForm.setSourceName(event.getSourceName());
-	    calendForm.setSourceUrl(event.getSourceUrl());
+        calendForm.setCountry(event.getCountry());
+        calendForm.setLocation(event.getLocation());
+        calendForm.setSourceName(event.getSourceName());
+        calendForm.setSourceUrl(event.getSourceUrl());
 
-	    // populating start date & end date
-	    CalendarUtil.populateDates(event, calendForm);
+        // populating start date & end date
+        CalendarUtil.populateDates(event, calendForm);
 
-	    calendForm.setEnableHTML(event.isEnableHTML());
-	    calendForm.setEnableSmiles(event.isEnableSmiles());
-	    calendForm.setCountry(event.getCountry());
-	    calendForm.setLocation(event.getLocation());
+        calendForm.setEnableHTML(event.isEnableHTML());
+        calendForm.setEnableSmiles(event.isEnableSmiles());
+        calendForm.setCountry(event.getCountry());
+        calendForm.setLocation(event.getLocation());
 
-	}
-	return mapping.findForward("forward");
+    }
+    return mapping.findForward("forward");
     }
 }

@@ -65,10 +65,10 @@ public class ShowLayout
 
     String layout;
     layout = request.getParameter("layout") == null? "default" : request.getParameter("layout");
-		// dirty fix sorry, Mikheil :(
-		if (layout.equals("login")
-				&& FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.PUBLIC_PORTAL)) {
-			layout = "publicPortalLoginLayout";
+        // dirty fix sorry, Mikheil :(
+        if (layout.equals("login")
+                && FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.PUBLIC_PORTAL)) {
+            layout = "publicPortalLoginLayout";
             String publicPortalUrl = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.PUBLIC_PORTAL_URL);
             request.setAttribute("publicPortalUrl", publicPortalUrl);
         }

@@ -42,8 +42,8 @@ public class ShowEditDocument
         SdmForm formBean = (SdmForm) form;
 
         if ((formBean.getActiveDocumentId() != null) || (formBean.getSdmDocument() != null)) {
-        	
-        	Sdm sdmDocument = null;
+            
+            Sdm sdmDocument = null;
 
             if (formBean.getActiveDocumentId() != null) {
                 sdmDocument = DbUtil.getDocument(formBean.getActiveDocumentId());

@@ -21,68 +21,59 @@ import java.util.TreeSet;
  * @since 25.08.2007
  */
 public class CompositePermission extends Permission {
-    
-    private static final long serialVersionUID = 7116433013946849925L;
-    protected Boolean intersection;
-    protected Set<Permission> permissions;
+	
+	private static final long serialVersionUID = 7116433013946849925L;
+	protected Boolean intersection;
+	protected Set<Permission> permissions;
 
-    public CompositePermission() {
-        permissions=new TreeSet<Permission>();
-        dedicated=false;
-    }
-    
-    public CompositePermission(boolean dedicated) {
-        super(dedicated);
-        permissions=new TreeSet<Permission>();
-    }
-    
-    /** @see org.digijava.module.gateperm.core.Permission#getAllowedActions()
-     */
-    @Override
-    public Set<String> getAllowedActions(Map scope) {
-        TreeSet<String> actions=new TreeSet<String>();
-        boolean firstRun=true;
-        Iterator<Permission> i=permissions.iterator();
-        while (i.hasNext()) {
-            Permission element = (Permission) i.next();
-            Set<String> allowedActions = element.getAllowedActions(scope);
-//          
-//          Object o = scope.get(GatePermConst.ScopeKeys.PERMISSIBLE);
-//          if ( o instanceof AmpModulesVisibility )
-//          {
-//              if( ((AmpModulesVisibility)o).getName().contains("Project Title") )
-//                  logger.debug("---------------CompositePermission " + ((AmpModulesVisibility)o).getName()+ " actions: "+actions);
-//              
-//          }
-//          
-            if(intersection==null || !intersection.booleanValue()) {
-            if(allowedActions!=null) 
-                    actions.addAll(allowedActions);
-            } else {
-                if(firstRun) {
-                        if(allowedActions!=null) actions.addAll(allowedActions);firstRun=false;
-                    }
-                    else if(allowedActions!=null) actions.retainAll(allowedActions); else actions.clear();
-            }
-            
-        }
-        return actions;
-    }
+	public CompositePermission() {
+		permissions=new TreeSet<Permission>();
+		dedicated=false;
+	}
+	
+	public CompositePermission(boolean dedicated) {
+	    super(dedicated);
+	    permissions=new TreeSet<Permission>();
+	}
+	
+	/** @see org.digijava.module.gateperm.core.Permission#getAllowedActions()
+	 */
+	@Override
+	public Set<String> getAllowedActions(Map scope) {
+		TreeSet<String> actions=new TreeSet<String>();
+		boolean firstRun=true;
+		Iterator<Permission> i=permissions.iterator();
+		while (i.hasNext()) {
+			Permission element = (Permission) i.next();
+			Set<String> allowedActions = element.getAllowedActions(scope);
+			if(intersection==null || !intersection.booleanValue()) {
+			if(allowedActions!=null) 
+					actions.addAll(allowedActions);
+			} else {
+				if(firstRun) {
+						if(allowedActions!=null) actions.addAll(allowedActions);firstRun=false;
+					}
+					else if(allowedActions!=null) actions.retainAll(allowedActions); else actions.clear();
+			}
+			
+		}
+		return actions;
+	}
 
-    public Set<Permission> getPermissions() {
-        return permissions;
-    }
+	public Set<Permission> getPermissions() {
+		return permissions;
+	}
 
-    public void setPermissions(Set<Permission> permissions) {
-        this.permissions = permissions;
-    }
+	public void setPermissions(Set<Permission> permissions) {
+		this.permissions = permissions;
+	}
 
-    public Boolean getIntersection() {
-        return intersection;
-    }
+	public Boolean getIntersection() {
+		return intersection;
+	}
 
-    public void setIntersection(Boolean intersection) {
-        this.intersection = intersection;
-    }
+	public void setIntersection(Boolean intersection) {
+		this.intersection = intersection;
+	}
 
 }

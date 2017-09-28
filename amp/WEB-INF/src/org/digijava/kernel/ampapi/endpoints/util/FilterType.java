@@ -8,9 +8,10 @@ package org.digijava.kernel.ampapi.endpoints.util;
  *
  */
 public enum FilterType {
-    ALL,
-    DASHBOARD,
-    REPORTS,
-    GIS,
-    TAB
+	ALL,
+	DASHBOARD,
+	REPORTS,
+	GIS,
+	TAB,
+	GPI_REPORTS
 };

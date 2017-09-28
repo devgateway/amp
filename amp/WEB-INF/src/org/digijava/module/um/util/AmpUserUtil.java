@@ -32,27 +32,27 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
  *
  */
 public class AmpUserUtil {
-    private static Logger logger = Logger.getLogger(AmpUserUtil.class);
+	private static Logger logger = Logger.getLogger(AmpUserUtil.class);
 
-    public static Collection<User> getAllUsers(boolean getBanned) {
-        Session session = null;
-        Query qry = null;
-        Collection<User> users = new ArrayList<User>();
+	public static Collection<User> getAllUsers(boolean getBanned) {
+		Session session = null;
+		Query qry = null;
+		Collection<User> users = new ArrayList<User>();
 
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            String queryString = "select u from " + User.class.getName() + " u"
-                    + " where u.banned=:banned and u.globalAdmin=false order by u.email";
-            qry = session.createQuery(queryString);
-            qry.setBoolean("banned", getBanned);
-            users = qry.list();
-        } catch (Exception e) {
-            logger.error("Unable to get user");
-            logger.error("Exception " + e);
-            e.printStackTrace();
-        }
-        return users;
-    }
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			String queryString = "select u from " + User.class.getName() + " u"
+					+ " where u.banned=:banned and u.globalAdmin=false order by u.email";
+			qry = session.createQuery(queryString);
+			qry.setBoolean("banned", getBanned);
+			users = qry.list();
+		} catch (Exception e) {
+			logger.error("Unable to get user");
+			logger.error("Exception " + e);
+			e.printStackTrace();
+		}
+		return users;
+	}
     /**
      * Returns Collection of users who have not activated their accounts
      * or were not activated by admin (i.e. admin has not removed ban status )
@@ -79,7 +79,7 @@ public class AmpUserUtil {
             e.printStackTrace();
         }
         return users;
-    }
+	}
 
     /**
      * Delete user who has not activated his/her accounts
@@ -128,22 +128,22 @@ public class AmpUserUtil {
             }
             e.printStackTrace();
         }
-    }
+	}
 
-    public static AmpUserExtension getAmpUserExtension(Long userId)
-            throws AimException {
-        User user = UserUtils.getUser(userId);
-        return getAmpUserExtension(user);
-    }
+	public static AmpUserExtension getAmpUserExtension(Long userId)
+			throws AimException {
+		User user = UserUtils.getUser(userId);
+		return getAmpUserExtension(user);
+	}
     /**
-     * Retrieves user extension .
-     * @param user 
-     * @return db entity
-     * @throws AimException
-     */
+	 * Retrieves user extension .
+	 * @param user 
+	 * @return db entity
+	 * @throws AimException
+	 */
 
-    public static AmpUserExtension getAmpUserExtension(User user)
-            throws AimException {
+	public static AmpUserExtension getAmpUserExtension(User user)
+			throws AimException {
          AmpUserExtension result = null;
         Session session = null;
         Query qry = null;
@@ -153,25 +153,25 @@ public class AmpUserUtil {
                     + " where ext is not null and ext=:ext";
             qry = session.createQuery(queryString);
             qry.setLong("ext", user.getId());
-            result =(AmpUserExtension) qry.uniqueResult();
+			result =(AmpUserExtension) qry.uniqueResult();
 
-        }
-         catch (Exception e) {
-            throw new AimException("Cannot retrive AmpUserExtension", e);
-        }
-        return result;
-        
-    }
-    
+		}
+		 catch (Exception e) {
+			throw new AimException("Cannot retrive AmpUserExtension", e);
+		}
+		return result;
+		
+	}
+	
     /**
-     * Retrieves user extension .
-     * @param org an AmpOrganisation that the user belongs to 
-     * @return db entity
-     * @throws AimException
-     */
+	 * Retrieves user extension .
+	 * @param org an AmpOrganisation that the user belongs to 
+	 * @return db entity
+	 * @throws AimException
+	 */
 
-    public static Collection<AmpUserExtension> getAmpUserExtensionByOrgId(Long orgId)
-            throws AimException {
+	public static Collection<AmpUserExtension> getAmpUserExtensionByOrgId(Long orgId)
+			throws AimException {
          Collection<AmpUserExtension> result = null;
         Session session = null;
         Query qry = null;
@@ -181,137 +181,140 @@ public class AmpUserUtil {
                     + " where ext.organization=:orgId";
             qry = session.createQuery(queryString);
             qry.setLong("orgId", orgId);
-            result = qry.list();
+			result = qry.list();
 
-        }
-         catch (Exception e) {
-            throw new AimException("Cannot retrive AmpUserExtension", e);
-        }
-        return result;
-        
-    }
+		}
+		 catch (Exception e) {
+			throw new AimException("Cannot retrive AmpUserExtension", e);
+		}
+		return result;
+		
+	}
 
-    /**
-     * Retrieves user extension with pk class.
-     * @param key primary key for user extension
-     * @return db entity
-     * @throws AimException
-     */
+	/**
+	 * Retrieves user extension with pk class.
+	 * @param key primary key for user extension
+	 * @return db entity
+	 * @throws AimException
+	 */
     @Deprecated
-    public static AmpUserExtension getAmpUserExtension(AmpUserExtensionPK key)
-            throws AimException {
+	public static AmpUserExtension getAmpUserExtension(AmpUserExtensionPK key)
+			throws AimException {
         AmpUserExtension result = null;
         try {
-            Session session = PersistenceManager.getRequestDBSession();
-            result = (AmpUserExtension) session.load(AmpUserExtension.class,
-                    key);
-        } catch (ObjectNotFoundException notFounExetion){
-            logger.debug("User Extension not found for user"+key.getUser().getEmail());
-            return null;
-        } catch (Exception e) {
-            throw new AimException("Cannot retrive AmpUserExtension", e);
-        }
-        return result;
-    }
+			Session session = PersistenceManager.getRequestDBSession();
+			result = (AmpUserExtension) session.load(AmpUserExtension.class,
+					key);
+		} catch (ObjectNotFoundException notFounExetion){
+			logger.debug("User Extension not found for user"+key.getUser().getEmail());
+			return null;
+		} catch (Exception e) {
+			throw new AimException("Cannot retrive AmpUserExtension", e);
+		}
+		return result;
+	}
 
-    /**
-     * Save user extensions.
-     * @param userExtension db entity to save, with correct id class.
-     * @throws AimException
-     */
-    public static void saveAmpUserExtension(AmpUserExtension userExtension)
-            throws AimException {
-        Transaction tx=null;
-        try {
-            Session session = PersistenceManager.getRequestDBSession();
+	/**
+	 * Save user extensions.
+	 * @param userExtension db entity to save, with correct id class.
+	 * @throws AimException
+	 */
+	public static void saveAmpUserExtension(AmpUserExtension userExtension)
+			throws AimException {
+		Transaction tx=null;
+		try {
+			Session session = PersistenceManager.getRequestDBSession();
 //beginTransaction();
-            session.save(userExtension);
-            //tx.commit();
-        } catch (Exception e) {
-            if (tx!=null){
-                try {
-                    tx.rollback();
-                } catch (Exception e1) {
-                    throw new AimException("Cannot rollback userExtension save operation",e1);
-                }
-            }
-            throw new AimException("Cannot save user extension",e);
-        }
-    }
-    public static Collection<User> getAllUsersNotBelongingToTeam(Long teamId,String keyword) throws Exception{
-        Collection<User> retVal=null;
-        Session session=null;
-        String queryString=null;
-        Query qry=null;
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            queryString="select u from " +User.class.getName() +" u where u.banned=:banned and u.id not in (select tm.user.id from "+AmpTeamMember.class.getName()+
-            " tm where tm.ampTeam.ampTeamId=:teamId ) ";
+			session.save(userExtension);
+			//tx.commit();
+		} catch (Exception e) {
+			if (tx!=null){
+				try {
+					tx.rollback();
+				} catch (Exception e1) {
+					throw new AimException("Cannot rollback userExtension save operation",e1);
+				}
+			}
+			throw new AimException("Cannot save user extension",e);
+		}
+	}
+	public static Collection<User> getAllUsersNotBelongingToTeam(Long teamId,String keyword) throws Exception{
+		Collection<User> retVal=null;
+		Session session=null;
+		String queryString=null;
+		Query qry=null;
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			queryString="select u from " +User.class.getName() +" u where u.banned=:banned and u.id not in (select tm.user.id from "+AmpTeamMember.class.getName()+
+			" tm where (tm.deleted is null or tm.deleted = false) and tm.ampTeam.ampTeamId=:teamId ) ";
                         if(keyword!=null&&keyword.length()>0){
                             queryString+=" and concat(u.firstNames,' ',u.lastName)=:keyword";
                         }
                         queryString+=" order by u.email";
-            qry=session.createQuery(queryString);
-            qry.setLong("teamId", teamId);
+			qry=session.createQuery(queryString);
+			qry.setLong("teamId", teamId);
                         if(keyword!=null&&keyword.length()>0){
                             qry.setString("keyword", keyword);
                         }
             qry.setBoolean("banned", false);            
-            retVal=qry.list();
-        } catch (Exception e) {
-            logger.error(e);
-            throw new AimException("Cannot get users", e);
-        }
-        return retVal;
-    }
-       public static List<String> searchUsesers(String searchStr, Long teamId) throws Exception {
-        Session session = null;
-        String queryString = null;
-        Query query = null;
-        List<String> users = null;
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            queryString = "select distinct concat(u.firstNames,' ',u.lastName) from " + User.class.getName() + 
-                    " u where  lower(concat(u.firstNames,' ',u.lastName)) like lower(:searchStr) and u.id not in (select tm.user.id from "+AmpTeamMember.class.getName()+
-            " tm where tm.ampTeam.ampTeamId=:teamId) and u.banned=:banned order by concat(u.firstNames,' ',u.lastName)";
-            query = session.createQuery(queryString);
-            query.setString("searchStr", searchStr + "%");
-            query.setLong("teamId", teamId);
-            query.setBoolean("banned", false);  
-            users = query.list();
-        } catch (Exception ex) {
-            logger.error("couldn't load user " + ex.getMessage(), ex);
-        }
+			retVal=qry.list();
+		} catch (Exception e) {
+			logger.error(e);
+			throw new AimException("Cannot get users", e);
+		}
+		return retVal;
+	}
+
+	public static List<String> searchUsesers(String searchStr, Long teamId) throws Exception {
+		Session session = null;
+		String queryString = null;
+		Query query = null;
+		List<String> users = null;
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			queryString = "select distinct concat(u.firstNames,' ',u.lastName) from " + User.class.getName()
+					+ " u where  lower(concat(u.firstNames,' ',u.lastName)) like lower(:searchStr) and u.id not in "
+					+ " (select tm.user.id from " + AmpTeamMember.class.getName()
+					+ " tm where (tm.deleted is null or tm.deleted = false) and tm.ampTeam.ampTeamId=:teamId) "
+					+ " and u.banned=:banned order by concat(u.firstNames,' ',u.lastName)";
+			query = session.createQuery(queryString);
+			query.setString("searchStr", searchStr + "%");
+			query.setLong("teamId", teamId);
+			query.setBoolean("banned", false);
+			users = query.list();
+		} catch (Exception ex) {
+			logger.error("couldn't load user " + ex.getMessage(), ex);
+		}
 
 
-        return users;
-    }
+		return users;
+	}
 
        public static List<String> getUserReminder(Date lastActivity){
-        Session session = null;
-        Query qry = null;
-        List<String> usersEmailAddr = new ArrayList<String>();
+    	Session session = null;
+   		Query qry = null;
+   		List<String> usersEmailAddr = new ArrayList<String>();
 
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            String queryString = " select al.authorEmail from "+ AmpAuditLogger.class.getName() +" al where al.action='login' and al.loggedDate>:startDate" +
-                    " and al.authorEmail not in (Select aal.authorEmail from "+ AmpAuditLogger.class.getName() +" aal " +
-                    "where aal.action='login' and aal.loggedDate>:compareDate group by aal.authorEmail) group by al.authorEmail";
-            /*String queryString = "select u from " + User.class.getName() + " u"
-                    + " where u.email not in(select al.authorEmail from " 
-                    + AmpAuditLogger.class.getName() +" al where al.action='login' and al.loggedDate>:date"
-                    +" group by al.authorEmail)";*/
-            qry = session.createQuery(queryString);
-            Date startDate = new Date(112, 2, 1);//March,2013
-            qry.setDate("startDate", startDate);
-            qry.setDate("compareDate", lastActivity);
-            usersEmailAddr = qry.list();
-        } catch (Exception e) {
-            logger.error("Unable to get list of emails");
-            logger.error("Exception " + e);
-            e.printStackTrace();
-        }
-        return usersEmailAddr;
+   		try {
+   			session = PersistenceManager.getRequestDBSession();
+   			String queryString = " select al.authorEmail from "+ AmpAuditLogger.class.getName() +" al where al.action='login' and al.loggedDate>:startDate" +
+   					" and al.authorEmail not in (Select aal.authorEmail from "+ AmpAuditLogger.class.getName() +" aal " +
+   					"where aal.action='login' and aal.loggedDate>:compareDate group by aal.authorEmail) group by al.authorEmail";
+   			/*String queryString = "select u from " + User.class.getName() + " u"
+   					+ " where u.email not in(select al.authorEmail from " 
+   					+ AmpAuditLogger.class.getName() +" al where al.action='login' and al.loggedDate>:date"
+   					+" group by al.authorEmail)";*/
+   			qry = session.createQuery(queryString);
+   			Date startDate = new Date(112, 2, 1);//March,2013
+   			qry.setDate("startDate", startDate);
+   			qry.setDate("compareDate", lastActivity);
+   			usersEmailAddr = qry.list();
+   		} catch (Exception e) {
+   			logger.error("Unable to get list of emails");
+   			logger.error("Exception " + e);
+   			e.printStackTrace();
+   		}
+   		return usersEmailAddr;
        }
 
 }

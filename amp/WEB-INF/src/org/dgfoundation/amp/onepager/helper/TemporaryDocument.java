@@ -5,186 +5,110 @@ package org.dgfoundation.amp.onepager.helper;
 
 import java.io.Serializable;
 import java.util.Calendar;
-import java.util.List;
+
 import org.apache.wicket.markup.html.form.upload.FileUpload;
-import org.digijava.module.aim.annotations.translation.TranslatableField;
-import org.digijava.module.aim.dbentity.AmpActivityDocument;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.contentrepository.jcrentity.Label;
+import org.digijava.module.contentrepository.helper.ObjectReferringDocument;
 /**
  * 
  * @author aartimon@dginternational.org
  * @since Apr 14, 2011
  */
 public class TemporaryDocument implements Serializable {
-    private String title;
-    private String description;
-    private String note;
-    private AmpCategoryValue type;
-    private FileUpload file;
-    private Calendar date;
-    private String year;
-    private boolean existing;
-    private AmpActivityDocument existingDocument;
-    private String webLink;
-    private double fileSize;
-    private String fileName;
-    private List<Label> labels;
-    private String contentType;
-    private List <ResourceTranslation> translatedTitleList;
-    private List <ResourceTranslation> translatedDescriptionList;
-    private List <ResourceTranslation> translatedNoteList;
-    private String newTemporaryDocumentId;
-    
-    
-    public TemporaryDocument() {
-        existing = false;
-    }
-    
-    public String getTitle() {
-        return title;
-    }
+	
+	private static final long serialVersionUID = 1L;
+	
+	private String title;
+	private FileUpload file;
+	private boolean existing;
+	private double fileSize;
+	private String contentType;
+	private Calendar date;
+	protected ObjectReferringDocument existingDocument;
+	private String webLink;
+	private String fileName;
+	private String newTemporaryDocumentId;
+	
+	public TemporaryDocument() {
+		existing = false;
+	}
+	
+	public String getTitle() {
+		return title;
+	}
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-    public String getDescription() {
-        return description;
-    }
+	public FileUpload getFile() {
+		return file;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	public void setFile(FileUpload file) {
+		this.file = file;
+	}
 
-    public String getNote() {
-        return note;
-    }
+	public boolean isExisting() {
+		return existing;
+	}
 
-    public void setNote(String note) {
-        this.note = note;
-    }
+	public void setExisting(boolean existing) {
+		this.existing = existing;
+	}
+	
+	public double getFileSize() {
+		return fileSize;
+	}
 
-    public AmpCategoryValue getType() {
-        return type;
-    }
+	public void setFileSize(double fileSize) {
+		this.fileSize = fileSize;
+	}
+	
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
+	}
 
-    public void setType(AmpCategoryValue type) {
-        this.type = type;
-    }
+	public String getContentType() {
+		return contentType;
+	}
+	
+	public Calendar getDate() {
+		return date;
+	}
 
-    public FileUpload getFile() {
-        return file;
-    }
+	public void setDate(Calendar date) {
+		this.date = date;
+	}
 
-    public void setFile(FileUpload file) {
-        this.file = file;
-    }
+	public ObjectReferringDocument getExistingDocument() {
+		return existingDocument;
+	}
 
-    public String getYear() {
-        return year;
-    }
+	public void setExistingDocument(ObjectReferringDocument existingDocument) {
+		this.existingDocument = existingDocument;
+	}
 
-    public void setYear(String year) {
-        this.year = year;
-    }
+	public String getWebLink() {
+		return webLink;
+	}
 
-    public boolean isExisting() {
-        return existing;
-    }
+	public void setWebLink(String webLink) {
+		this.webLink = webLink;
+	}
 
-    public void setExisting(boolean existing) {
-        this.existing = existing;
-    }
+	public String getFileName() {
+		return fileName;
+	}
 
-    public AmpActivityDocument getExistingDocument() {
-        return existingDocument;
-    }
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
 
-    public void setExistingDocument(AmpActivityDocument existingDocument) {
-        this.existingDocument = existingDocument;
-    }
+	public String getNewTemporaryDocumentId() {
+		return newTemporaryDocumentId;
+	}
 
-    public Calendar getDate() {
-        return date;
-    }
-
-    public void setDate(Calendar date) {
-        this.date = date;
-    }
-
-    public String getWebLink() {
-        return webLink;
-    }
-
-    public void setWebLink(String webLink) {
-        this.webLink = webLink;
-    }
-
-    public double getFileSize() {
-        return fileSize;
-    }
-
-    public void setFileSize(double fileSize) {
-        this.fileSize = fileSize;
-    }
-
-    public void setLabels(List<Label> labels) {
-        this.labels = labels;       
-    }
-
-    public List<Label> getLabels() {
-        return labels;
-    }
-
-    public String getFileName() {
-        return fileName;
-    }
-
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
-
-    public void setContentType(String contentType) {
-        this.contentType = contentType;
-    }
-
-    public String getContentType() {
-        return contentType;
-    }
-
-    public List<ResourceTranslation> getTranslatedTitleList() {
-        return translatedTitleList;
-    }
-
-    public void setTranslatedTitleList(List<ResourceTranslation> translatedTitleList) {
-        this.translatedTitleList = translatedTitleList;
-    }
-
-    public List<ResourceTranslation> getTranslatedDescriptionList() {
-        return translatedDescriptionList;
-    }
-
-    public void setTranslatedDescriptionList(List<ResourceTranslation> translatedDescriptionList) {
-        this.translatedDescriptionList = translatedDescriptionList;
-    }
-
-    public List<ResourceTranslation> getTranslatedNoteList() {
-        return translatedNoteList;
-    }
-
-    public void setTranslatedNoteList(List<ResourceTranslation> translatedNoteList) {
-        this.translatedNoteList = translatedNoteList;
-    }
-
-    public String getNewTemporaryDocumentId() {
-        return newTemporaryDocumentId;
-    }
-
-    public void setNewTemporaryDocumentId(String newTemporaryDocumentId) {
-        this.newTemporaryDocumentId = newTemporaryDocumentId;
-    }
-
-    
-    
+	public void setNewTemporaryDocumentId(String newTemporaryDocumentId) {
+		this.newTemporaryDocumentId = newTemporaryDocumentId;
+	}
 }

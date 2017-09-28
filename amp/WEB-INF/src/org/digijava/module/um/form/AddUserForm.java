@@ -41,16 +41,16 @@ import org.apache.struts.validator.ValidatorForm;
  */
 
 public class AddUserForm  extends ValidatorForm {
-    private Collection assignedWorkspaces;
-    private boolean addWorkspace;
-    private Long teamId;
-    private Long role;
-    private Long teamMemberId;
-    private Collection workspaces;
-    private Collection ampRoles;
-    private boolean sendEmail;
-    private boolean registrationByEmail;
-    private String firstNames;
+	private Collection assignedWorkspaces;
+	private boolean addWorkspace;
+	private Long teamId;
+	private Long role;
+	private Long teamMemberId;
+	private Collection workspaces;
+	private Collection ampRoles;
+	private boolean sendEmail;
+	private boolean registrationByEmail;
+	private String firstNames;
     private String lastName;
     private String email;
     private String emailConfirmation;
@@ -60,15 +60,15 @@ public class AddUserForm  extends ValidatorForm {
     private String organizationName;
     private Collection organizationType;
     private String selectedOrganizationType;
-    private Long selectedOrgType;       // added for Donor access
-    private Long selectedOrgGroup;      // added for Donor access
-    //private Collection orgGroupColl;  // added for Donor access
-    private TreeSet orgGroupColl;   // added for Donor access
-    //private Collection orgTypeColl;       // added for Donor access
-    private TreeSet orgTypeColl;        // added for Donor access    
-    private Collection orgColl;         // added for Donor access
-    private String orgGrp;              // hidden form field - added for Donor access
-    private String orgType;             // hidden form field - added for Donor access
+    private Long selectedOrgType;		// added for Donor access
+    private Long selectedOrgGroup;		// added for Donor access
+    //private Collection orgGroupColl;	// added for Donor access
+    private TreeSet orgGroupColl;	// added for Donor access
+    //private Collection orgTypeColl;		// added for Donor access
+    private TreeSet orgTypeColl;		// added for Donor access    
+    private Collection orgColl;			// added for Donor access
+    private String orgGrp;				// hidden form field - added for Donor access
+    private String orgType;				// hidden form field - added for Donor access
     private Collection howDidyouhear;
     private String howDidyouSelect;
     private String webSite;
@@ -93,7 +93,10 @@ public class AddUserForm  extends ValidatorForm {
     private String[] topicselectedItems = {};
     private Collection topicitems;
 
-    private Long siteId;
+    private Long siteId;    
+    private Boolean exemptFromDataFreezing;
+    
+    private boolean nationalCoordinator = false;
     
     public String[] getSelectedItems() {
         return this.selectedItems;
@@ -267,99 +270,99 @@ public class AddUserForm  extends ValidatorForm {
         this.selectedOrganizationType = selectedOrganizationType;
     }
     
-    /**
-     * @return Returns the selectedOrgType.
-     */
-    public Long getSelectedOrgType() {
-        return selectedOrgType;
-    }
-    /**
-     * @param selectedOrgType The selectedOrgType to set.
-     */
-    public void setSelectedOrgType(Long selectedOrgType) {
-        this.selectedOrgType = selectedOrgType;
-    }
-    /**
-     * @return Returns the selectedOrgGroup.
-     */
-    public Long getSelectedOrgGroup() {
-        return selectedOrgGroup;
-    }
-    /**
-     * @param selectedOrgGroup The selectedOrgGroup to set.
-     */
-    public void setSelectedOrgGroup(Long selectedOrgGroup) {
-        this.selectedOrgGroup = selectedOrgGroup;
-    }
-    
-    /**
-     * @return Returns the orgGroupColl.
-     */
-    public Collection getOrgGroupColl() {
-        return orgGroupColl;
-    }
-    /**
-     * @param orgGroupColl The orgGroupColl to set.
-     */
-    public void setOrgGroupColl(Collection orgGroupColl) {
-        
-        TreeSet aux=new TreeSet();
-        aux.addAll(orgGroupColl);
-        this.orgGroupColl = aux;
-    }
-    
-    /**
-     * @return Returns the orgTypeColl.
-     */
-    public Collection getOrgTypeColl() {
-        return orgTypeColl;
-    }
-    /**
-     * @param orgTypeColl The orgTypeColl to set.
-     */
-    public void setOrgTypeColl(Collection orgTypeColl) {
-        TreeSet aux=new TreeSet();
-        aux.addAll(orgTypeColl);
-        this.orgTypeColl = aux;
-    }
-    /**
-     * @return Returns the orgColl.
-     */
-    public Collection getOrgColl() {
-        return orgColl;
-    }
-    /**
-     * @param orgColl The orgColl to set.
-     */
-    public void setOrgColl(Collection orgColl) {
-        this.orgColl = orgColl;
-    }
-    
-    /**
-     * @return Returns the orgGrp.
-     */
-    public String getOrgGrp() {
-        return orgGrp;
-    }
-    /**
-     * @param orgGrp The orgGrp to set.
-     */
-    public void setOrgGrp(String orgGrp) {
-        this.orgGrp = orgGrp;
-    }
-    /**
-     * @return Returns the orgType.
-     */
-    public String getOrgType() {
-        return orgType;
-    }
-    /**
-     * @param orgType The orgType to set.
-     */
-    public void setOrgType(String orgType) {
-        this.orgType = orgType;
-    }
-    public Collection getNavigationLanguages() {
+	/**
+	 * @return Returns the selectedOrgType.
+	 */
+	public Long getSelectedOrgType() {
+		return selectedOrgType;
+	}
+	/**
+	 * @param selectedOrgType The selectedOrgType to set.
+	 */
+	public void setSelectedOrgType(Long selectedOrgType) {
+		this.selectedOrgType = selectedOrgType;
+	}
+	/**
+	 * @return Returns the selectedOrgGroup.
+	 */
+	public Long getSelectedOrgGroup() {
+		return selectedOrgGroup;
+	}
+	/**
+	 * @param selectedOrgGroup The selectedOrgGroup to set.
+	 */
+	public void setSelectedOrgGroup(Long selectedOrgGroup) {
+		this.selectedOrgGroup = selectedOrgGroup;
+	}
+	
+	/**
+	 * @return Returns the orgGroupColl.
+	 */
+	public Collection getOrgGroupColl() {
+		return orgGroupColl;
+	}
+	/**
+	 * @param orgGroupColl The orgGroupColl to set.
+	 */
+	public void setOrgGroupColl(Collection orgGroupColl) {
+		
+		TreeSet aux=new TreeSet();
+		aux.addAll(orgGroupColl);
+		this.orgGroupColl = aux;
+	}
+	
+	/**
+	 * @return Returns the orgTypeColl.
+	 */
+	public Collection getOrgTypeColl() {
+		return orgTypeColl;
+	}
+	/**
+	 * @param orgTypeColl The orgTypeColl to set.
+	 */
+	public void setOrgTypeColl(Collection orgTypeColl) {
+		TreeSet aux=new TreeSet();
+		aux.addAll(orgTypeColl);
+		this.orgTypeColl = aux;
+	}
+	/**
+	 * @return Returns the orgColl.
+	 */
+	public Collection getOrgColl() {
+		return orgColl;
+	}
+	/**
+	 * @param orgColl The orgColl to set.
+	 */
+	public void setOrgColl(Collection orgColl) {
+		this.orgColl = orgColl;
+	}
+	
+	/**
+	 * @return Returns the orgGrp.
+	 */
+	public String getOrgGrp() {
+		return orgGrp;
+	}
+	/**
+	 * @param orgGrp The orgGrp to set.
+	 */
+	public void setOrgGrp(String orgGrp) {
+		this.orgGrp = orgGrp;
+	}
+	/**
+	 * @return Returns the orgType.
+	 */
+	public String getOrgType() {
+		return orgType;
+	}
+	/**
+	 * @param orgType The orgType to set.
+	 */
+	public void setOrgType(String orgType) {
+		this.orgType = orgType;
+	}
+	public Collection getNavigationLanguages() {
         return navigationLanguages;
     }
 
@@ -422,7 +425,7 @@ public class AddUserForm  extends ValidatorForm {
 
         siteId = null;
         addWorkspace=false;
-       
+        nationalCoordinator = false;
     }
 
     /**
@@ -438,17 +441,17 @@ public class AddUserForm  extends ValidatorForm {
         ActionErrors olderrors = new ActionErrors();
         errors = new HashMap<String, String>();
 
-            if ( (this.getFirstNames() == null) ||
+        	if ( (this.getFirstNames() == null) ||
                 this.getFirstNames().trim().length() == 0) {
-                errors.put("error.registration.FirstNameBlank", "First Name is Blank");
+        		errors.put("error.registration.FirstNameBlank", "First Name is Blank");
             }
             if ( (this.getLastName() == null) ||
                 this.getLastName().trim().length() == 0) {
-                
-                errors.put("error.registration.LastNameBlank", "LastName is Blank");
+            	
+            	errors.put("error.registration.LastNameBlank", "LastName is Blank");
             }
             if ( (this.getEmail() == null) || this.getEmail().trim().length() == 0) {
-                errors.put("error.registration.noemail", "Please enter a valid email address.");
+            	errors.put("error.registration.noemail", "Please enter a valid email address.");
                    }
             if ( (this.getPassword() == null) ||
                     this.getPassword().trim().length() == 0) {
@@ -474,11 +477,11 @@ public class AddUserForm  extends ValidatorForm {
        
         
         if (null == selectedOrgGroup || selectedOrgGroup .equals(-1l)) {
-            errors.put("error.registration.NoOrgGroup", "Please Select Organization Group");
+        	errors.put("error.registration.NoOrgGroup", "Please Select Organization Group");
         }
 
         if ( selectedOrganizationId==null || selectedOrganizationId .equals(-1l)) {
-            errors.put("error.registration.NoOrganization", "Please Select Organization");
+        	errors.put("error.registration.NoOrganization", "Please Select Organization");
         }
         
         return errors.isEmpty()? null : olderrors ;
@@ -500,113 +503,128 @@ public class AddUserForm  extends ValidatorForm {
         this.organizationTypeOther = organizationTypeOther;
     }
 
-    public Long getSelectedOrganizationId() {
-        return selectedOrganizationId;
-    }
+	public Long getSelectedOrganizationId() {
+		return selectedOrganizationId;
+	}
 
-    public void setSelectedOrganizationId(Long selectedOrganizationId) {
-        this.selectedOrganizationId = selectedOrganizationId;
-    }
+	public void setSelectedOrganizationId(Long selectedOrganizationId) {
+		this.selectedOrganizationId = selectedOrganizationId;
+	}
 
-    public HashMap<String, String> getErrors() {
-        return errors;
-    }
+	public HashMap<String, String> getErrors() {
+		return errors;
+	}
 
-    public void setErrors(HashMap<String, String> errors) {
-        this.errors = errors;
-    }
-    public void addError(String key, String value) {
-        this.errors.put(key, value) ;
-    }
+	public void setErrors(HashMap<String, String> errors) {
+		this.errors = errors;
+	}
+	public void addError(String key, String value) {
+	    this.errors.put(key, value) ;
+	}
 
-    public void clearMessages(){
-        this.errors.clear();
-    }
+	public void clearMessages(){
+	    this.errors.clear();
+	}
     public boolean isSendEmail() {
-        return sendEmail;
+		return sendEmail;
+	}
+
+	public void setSendEmail(boolean sendEmail) {
+		this.sendEmail = sendEmail;
+	}
+	public Collection getWorkspaces() {
+		return workspaces;
+	}
+
+	public void setWorkspaces(Collection workspaces) {
+		this.workspaces = workspaces;
+	}
+
+	public Collection getAmpRoles() {
+		return ampRoles;
+	}
+
+	public void setAmpRoles(Collection ampRoles) {
+		this.ampRoles = ampRoles;
+	}
+	public Long getTeamId() {
+		return teamId;
+	}
+
+	public void setTeamId(Long teamId) {
+		this.teamId = teamId;
+	}
+
+	public Long getRole() {
+		return role;
+	}
+
+	public void setRole(Long role) {
+		this.role = role;
+	}
+	public boolean isAddWorkspace() {
+		return addWorkspace;
+	}
+
+	public void setAddWorkspace(boolean addWorkspace) {
+		this.addWorkspace = addWorkspace;
+	}
+	public Collection getAssignedWorkspaces() {
+		return assignedWorkspaces;
+	}
+
+	public void setAssignedWorskpaces(Collection assignedWorkspaces) {
+		this.assignedWorkspaces = assignedWorkspaces;
+	}
+	
+	public void setAssignedWorkspaces(Collection assignedWorkspaces) {
+		this.assignedWorkspaces = assignedWorkspaces;
+	}
+
+	public Long getTeamMemberId() {
+		return teamMemberId;
+	}
+
+	public void setTeamMemberId(Long teamMemberId) {
+		this.teamMemberId = teamMemberId;
+	}
+
+	/**
+	 * @return the pledger
+	 */
+	public Boolean getPledger() {
+		return pledger;
+	}
+
+	/**
+	 * @param pledger the pledger to set
+	 */
+	public void setPledger(Boolean pledger) {
+		this.pledger = pledger;
+	}
+
+	public boolean isRegistrationByEmail() {
+		return registrationByEmail;
+	}
+
+	public void setRegistrationByEmail(boolean registrationByEmail) {
+		this.registrationByEmail = registrationByEmail;
+	}
+
+    public Boolean getExemptFromDataFreezing() {
+        return exemptFromDataFreezing;
     }
 
-    public void setSendEmail(boolean sendEmail) {
-        this.sendEmail = sendEmail;
-    }
-    public Collection getWorkspaces() {
-        return workspaces;
+    public void setExemptFromDataFreezing(Boolean exemptFromDataFreezing) {
+        this.exemptFromDataFreezing = exemptFromDataFreezing;
     }
 
-    public void setWorkspaces(Collection workspaces) {
-        this.workspaces = workspaces;
-    }
+	public boolean getNationalCoordinator() {
+		return nationalCoordinator;
+	}
 
-    public Collection getAmpRoles() {
-        return ampRoles;
-    }
-
-    public void setAmpRoles(Collection ampRoles) {
-        this.ampRoles = ampRoles;
-    }
-    public Long getTeamId() {
-        return teamId;
-    }
-
-    public void setTeamId(Long teamId) {
-        this.teamId = teamId;
-    }
-
-    public Long getRole() {
-        return role;
-    }
-
-    public void setRole(Long role) {
-        this.role = role;
-    }
-    public boolean isAddWorkspace() {
-        return addWorkspace;
-    }
-
-    public void setAddWorkspace(boolean addWorkspace) {
-        this.addWorkspace = addWorkspace;
-    }
-    public Collection getAssignedWorkspaces() {
-        return assignedWorkspaces;
-    }
-
-    public void setAssignedWorskpaces(Collection assignedWorkspaces) {
-        this.assignedWorkspaces = assignedWorkspaces;
-    }
-    
-    public void setAssignedWorkspaces(Collection assignedWorkspaces) {
-        this.assignedWorkspaces = assignedWorkspaces;
-    }
-
-    public Long getTeamMemberId() {
-        return teamMemberId;
-    }
-
-    public void setTeamMemberId(Long teamMemberId) {
-        this.teamMemberId = teamMemberId;
-    }
-
-    /**
-     * @return the pledger
-     */
-    public Boolean getPledger() {
-        return pledger;
-    }
-
-    /**
-     * @param pledger the pledger to set
-     */
-    public void setPledger(Boolean pledger) {
-        this.pledger = pledger;
-    }
-
-    public boolean isRegistrationByEmail() {
-        return registrationByEmail;
-    }
-
-    public void setRegistrationByEmail(boolean registrationByEmail) {
-        this.registrationByEmail = registrationByEmail;
-    }
-
-    
+	public void setNationalCoordinator(boolean nationalCoordinator) {
+		this.nationalCoordinator = nationalCoordinator;
+	}
+	
 }

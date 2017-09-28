@@ -83,22 +83,11 @@ public class User
     private boolean globalAdmin;
     private String organizationTypeOther;
     private Set contacts;
-    private Long assignedOrgId;
     private AmpUserExtension userExtension;
+    private Boolean exemptFromDataFreezing;
 
     private Set<AmpOrganisation> assignedOrgs;
-    
-
-
-    public Long getAssignedOrgId() {
-        return assignedOrgId;
-    }
-
-    public void setAssignedOrgId(Long assignedOrgId) {
-        this.assignedOrgId = assignedOrgId;
-    }
-
-    public User() {}
+	public User() {}
 
     public User(String email, String firstNames, String lastName) {
         /**
@@ -420,64 +409,98 @@ public class User
         this.contacts = contacts;
     }
 
-    /**
-     * @return the pledger
-     */
-    public Boolean getPledger() {
-        return pledger;
-    }
+	/**
+	 * @return the pledger
+	 */
+	public Boolean getPledger() {
+		return pledger;
+	}
 
-    /**
-     * @param pledger the pledger to set
-     */
-    public void setPledger(Boolean pledger) {
-        this.pledger = pledger;
-    }
+	/**
+	 * @param pledger the pledger to set
+	 */
+	public void setPledger(Boolean pledger) {
+		this.pledger = pledger;
+	}
+	
+	@Override
+	public int compareTo(Object o) {
+		// TODO Auto-generated method stub
+		if(o == null || !(o instanceof User) ) return -1;
+		User aux = (User)o;
+		return this.getName().compareTo(aux.getName());
+	}
 
-    @Override
-    public int compareTo(Object o) {
-        // TODO Auto-generated method stub
-        if(o == null || !(o instanceof User) ) return -1;
-        User aux = (User)o;
-        return this.getName().compareTo(aux.getName());
-    }
-
-    public Set<AmpOrganisation> getAssignedOrgs() {
-        return assignedOrgs;
-    }
+   	public Set<AmpOrganisation> getAssignedOrgs() {
+   		return assignedOrgs;
+   	}
      
-    public void setAssignedOrgs(Set<AmpOrganisation> assignedOrgs) {
-        this.assignedOrgs = assignedOrgs;
+   	public void setAssignedOrgs(Set<AmpOrganisation> assignedOrgs) {
+   		this.assignedOrgs = assignedOrgs;
+   	}
+
+   	public void setUserExtension(AmpUserExtension userExt) {
+   		this.userExtension = userExt;
+   	}
+   	
+   	public AmpUserExtension getUserExtension() {
+   		return this.userExtension;
+   	}
+   	
+	public boolean hasVerifiedOrganizationId(Long ampOrgId) {
+   		if(ampOrgId == null) return false;
+   		//If it's not there, check in the Set<AmpOrganisation> assignedOrgs
+   		Iterator<AmpOrganisation> it = this.assignedOrgs.iterator();
+   		while(it.hasNext()){
+   			AmpOrganisation currentOrganization = it.next();
+   			if(currentOrganization.getAmpOrgId().equals(ampOrgId))
+   				return true;
+   		}
+   		return false;
+	}
+  
+	/**
+	 * Checks if user has a verified org and the org is role donor
+	 * @return 
+	 */
+	public boolean hasVerifiedDonor(){
+		if (this.assignedOrgs.size() == 0) {
+			return false;
+		}
+        
+		Iterator<AmpOrganisation> it = this.assignedOrgs.iterator();
+		while (it.hasNext()) {
+			AmpOrganisation currentOrganization = it.next();
+			if (org.digijava.module.aim.util.DbUtil.hasDonorRole(currentOrganization.getAmpOrgId()))
+				return true;
+		}
+		return false;	
+	}
+	public boolean hasNationalCoordinatorGroup(){
+		boolean result = false;
+		Set<Group> groups = this.groups;
+		for (Group group : groups) {
+			if (group.isNationalCoordinatorGroup()) {
+				result = true;
+				break;
+			}
+		}
+		return result;
+	}
+	public AmpCategoryValueLocations getRegion() {
+		return region;
+	}
+
+	public void setRegion(AmpCategoryValueLocations region) {
+		this.region = region;
+	}
+
+    public Boolean getExemptFromDataFreezing() {
+        return exemptFromDataFreezing;
     }
 
-    public void setUserExtension(AmpUserExtension userExt) {
-        this.userExtension = userExt;
+    public void setExemptFromDataFreezing(Boolean exemptFromDataFreezing) {
+        this.exemptFromDataFreezing = exemptFromDataFreezing;
     }
-    
-    public AmpUserExtension getUserExtension() {
-        return this.userExtension;
-    }
-    
-    public boolean hasVerifiedOrganizationId(Long ampOrgId) {
-        //First, check if the user has the Funding Organization in the property this.getAssignedOrgId()
-        if(ampOrgId == null) return false;
-        if(this.assignedOrgId != null && this.assignedOrgId.equals(ampOrgId)) return true;
-        //If it's not there, check in the Set<AmpOrganisation> assignedOrgs
-        Iterator<AmpOrganisation> it = this.assignedOrgs.iterator();
-        while(it.hasNext()){
-            AmpOrganisation currentOrganization = it.next();
-            if(currentOrganization.getAmpOrgId().equals(ampOrgId))
-                return true;
-        }
-        return false;
-    }
-
-    public AmpCategoryValueLocations getRegion() {
-        return region;
-    }
-
-    public void setRegion(AmpCategoryValueLocations region) {
-        this.region = region;
-    }
-    
+	
 }

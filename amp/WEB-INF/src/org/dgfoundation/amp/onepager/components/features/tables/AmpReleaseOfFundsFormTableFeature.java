@@ -19,6 +19,7 @@ import org.apache.wicket.validation.validator.RangeValidator;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
 import org.dgfoundation.amp.onepager.components.AmpOrgRoleSelectorComponent;
+import org.dgfoundation.amp.onepager.components.FundingListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
@@ -62,7 +63,7 @@ public class AmpReleaseOfFundsFormTableFeature extends
             }
         };      
         
-        list = new ListEditor<AmpFundingDetail>("listDisbursements", setModel, FundingDetailComparator
+        list = new FundingListEditor<AmpFundingDetail>("listDisbursements", setModel, FundingDetailComparator
                 .getFundingDetailComparator()) {
 
             @Override

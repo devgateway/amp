@@ -120,6 +120,9 @@ public class CategoryConstants {
     public static final String REPORT_CATEGORY_NAME                 ="Report Category";
     public static final String REPORT_CATEGORY_KEY                  ="report_category";
     
+    public static final String CONCESSIONALITY_LEVEL_NAME   = "Concessionality Level";
+    public static final String CONCESSIONALITY_LEVEL_KEY    = "concessionality_level";
+    
     
     //--- IPA Contracting Step 13
     

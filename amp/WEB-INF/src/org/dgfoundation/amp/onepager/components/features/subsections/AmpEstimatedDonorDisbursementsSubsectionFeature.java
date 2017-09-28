@@ -71,7 +71,7 @@ public class AmpEstimatedDonorDisbursementsSubsectionFeature extends
         add(disbursementsTableFeature);
         fundingOrgModel = new PropertyModel<AmpOrganisation>(model,"ampDonorOrgId");
         
-        AmpAjaxLinkField addCommit=new AmpAjaxLinkField("addDisbursement","Add Estimated Disbursement","Add Estimated Disbursement") {
+        AmpAjaxLinkField addEstimatedDisbursement=new AmpAjaxLinkField("addDisbursement","Add Estimated Disbursement","Add Estimated Disbursement") {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 AmpFundingDetail fd= new AmpFundingDetail();
@@ -93,7 +93,8 @@ public class AmpEstimatedDonorDisbursementsSubsectionFeature extends
                 target.appendJavaScript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));
             }
         };
-        add(addCommit);
+        addEstimatedDisbursement.setAffectedByFreezing(false);
+        add(addEstimatedDisbursement);
     }
 
 }

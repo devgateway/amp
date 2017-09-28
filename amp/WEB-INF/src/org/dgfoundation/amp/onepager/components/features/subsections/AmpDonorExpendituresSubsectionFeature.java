@@ -44,7 +44,7 @@ public class AmpDonorExpendituresSubsectionFeature extends
         expTableFeature = new AmpDonorExpendituresFormTableFeature("expTableFeature", model, "Expenditures Table", transactionType);
         add(expTableFeature);
         
-        AmpAjaxLinkField addCommit=new AmpAjaxLinkField("addExp","Add Expenditure","Add Expenditure") {
+        AmpAjaxLinkField addExp=new AmpAjaxLinkField("addExp","Add Expenditure","Add Expenditure") {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 AmpFundingDetail fd= new AmpFundingDetail();
@@ -63,7 +63,8 @@ public class AmpDonorExpendituresSubsectionFeature extends
                 target.appendJavaScript(QuarterInformationPanel.getJSUpdate(getSession()));
             }
         };
-        add(addCommit);
+        addExp.setAffectedByFreezing(false);
+        add(addExp);
     }
 
 }

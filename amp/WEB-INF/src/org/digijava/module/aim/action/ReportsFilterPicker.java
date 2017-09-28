@@ -820,6 +820,13 @@ public class ReportsFilterPicker extends Action {
         }else{
             removeElementByName(filterForm.getFinancingLocationElements(), "Mode of Payment");
         }
+        if (FeaturesUtil.isVisibleField("Concessionality Level")) {
+            addFinancingLocationElement(filterForm, "Concessionality Level", "All Concessionality Level Values", 
+                    CategoryConstants.CONCESSIONALITY_LEVEL_KEY, "Concessionality Level", 
+                    "filter_concessionality_level_div", "selectedConcensionalityLevel");
+        } else{
+            removeElementByName(filterForm.getFinancingLocationElements(), "Concessionality Level");
+        }
         if (FeaturesUtil.isVisibleField("Project Category")) {
             addFinancingLocationElement(filterForm, "Project Category", "All Project Category Values", CategoryConstants.PROJECT_CATEGORY_KEY, "Project Category", "filter_project_category_div", "selectedProjectCategory");
         }

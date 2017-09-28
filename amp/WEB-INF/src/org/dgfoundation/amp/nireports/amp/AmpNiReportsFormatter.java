@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportCell;
@@ -47,7 +48,8 @@ public class AmpNiReportsFormatter extends NiReportsFormatter {
         LinkedHashSet<ReportColumn> columns = new LinkedHashSet<>(spec.getColumns());
         columns.removeAll(spec.getHierarchies());
         columns.removeAll(spec.getInvisibleHierarchies());
-        Set<String> idsValuesColumns = columns.isEmpty() ? Collections.emptySet() : new HashSet<>(Arrays.asList(columns.iterator().next().getColumnName()));
+        Set<String> idsValuesColumns = columns.stream().map(ReportColumn::getColumnName).collect(Collectors.toSet());
+        
         return new OutputSettings(idsValuesColumns);
     }
     

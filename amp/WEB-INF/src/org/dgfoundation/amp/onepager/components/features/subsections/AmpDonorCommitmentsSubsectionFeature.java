@@ -68,6 +68,7 @@ public class AmpDonorCommitmentsSubsectionFeature extends AmpSubsectionFeatureFu
                 target.appendJavaScript(QuarterInformationPanel.getJSUpdate(getSession()));
             }
         };
+        addCommit.setAffectedByFreezing(false);
         add(addCommit);
     }
 

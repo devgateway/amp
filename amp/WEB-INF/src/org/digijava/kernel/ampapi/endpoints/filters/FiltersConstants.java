@@ -35,6 +35,7 @@ public class FiltersConstants {
     public static final String COMPONENT_FUNDING_ORGANIZATION = "component-funding-organization";
     public static final String COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION = "component-second-responsible-organization";
     public static final String COMPUTED_YEAR = "computed-year";
+    public static final String CONCESSIONALITY_LEVEL = "concessionality-level";
     public static final String CONTRACTING_AGENCY = "contracting-agency";
     public static final String CONTRACTING_AGENCY_GROUPS = "contracting-agency-groups";
     public static final String COUNTRY = "country";

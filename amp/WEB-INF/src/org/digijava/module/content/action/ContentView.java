@@ -16,34 +16,34 @@ import org.digijava.module.content.form.ContentForm;
 import org.digijava.module.content.util.DbUtil;
 
 public class ContentView extends TilesAction {
-	public ActionForward execute(ComponentContext context,
-			ActionMapping mapping, ActionForm form, HttpServletRequest request,
-			HttpServletResponse response) throws IOException, ServletException {
+    public ActionForward execute(ComponentContext context,
+            ActionMapping mapping, ActionForm form, HttpServletRequest request,
+            HttpServletResponse response) throws IOException, ServletException {
 
-		ContentForm contentForm = (ContentForm) form;
-		AmpContentItem contentItem = null;
+        ContentForm contentForm = (ContentForm) form;
+        AmpContentItem contentItem = null;
 
-		String pageCode = request.getParameter("c");
+        String pageCode = request.getParameter("c");
 
-		if (pageCode != null && !pageCode.isEmpty()) {
-			contentItem = DbUtil.getContentItemByPageCode(pageCode);
-		} else {
-			contentItem = DbUtil.getHomePage();
-		}
+        if (pageCode != null && !pageCode.isEmpty()) {
+            contentItem = DbUtil.getContentItemByPageCode(pageCode);
+        } else {
+            contentItem = DbUtil.getHomePage();
+        }
 
-		if (contentItem != null) {
-			contentForm.setAmpContentFormId(contentItem.getAmpContentItemId());
-			contentForm.setDescription(contentItem.getDescription());
-			contentForm.setTitle(contentItem.getTitle());
-			contentForm.setPageCode(contentItem.getPageCode());
-			contentForm.setLayout(contentItem.getLayout());
-			contentForm.setHtmlblock_1(contentItem.getHtmlblock_1());
-			contentForm.setHtmlblock_2(contentItem.getHtmlblock_2());
-			contentForm
-					.setContentThumbnails(contentItem.getContentThumbnails());
-		}
+        if (contentItem != null) {
+            contentForm.setAmpContentFormId(contentItem.getAmpContentItemId());
+            contentForm.setDescription(contentItem.getDescription());
+            contentForm.setTitle(contentItem.getTitle());
+            contentForm.setPageCode(contentItem.getPageCode());
+            contentForm.setLayout(contentItem.getLayout());
+            contentForm.setHtmlblock_1(contentItem.getHtmlblock_1());
+            contentForm.setHtmlblock_2(contentItem.getHtmlblock_2());
+            contentForm
+                    .setContentThumbnails(contentItem.getContentThumbnails());
+        }
 
-		return null;
-	}
+        return null;
+    }
 
 }

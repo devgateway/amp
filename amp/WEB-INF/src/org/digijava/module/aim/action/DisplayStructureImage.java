@@ -34,23 +34,23 @@ public class DisplayStructureImage
   public ActionForward execute(ActionMapping mapping, ActionForm form,
           HttpServletRequest request,
           HttpServletResponse response) throws Exception {
-	  
-	  Long strId = request.getParameter("structureId") != null ? Long.parseLong(request.getParameter("structureId")): null;
-	  Long imgId = request.getParameter("imgId") != null ? Long.parseLong(request.getParameter("imgId")): null;
-	  
-	  if(strId != null ){
-		  AmpStructureImg image = null;
-		  if( imgId != null){
-			  image = ActivityUtil.getStructureImage(strId, imgId);  
-		  }else{
-			  image = ActivityUtil.getMostRecentlyUploadedStructureImage(strId);
-		  }
-		  if(image != null){  
-			  response.setContentType(image.getContentType());
-			  response.getOutputStream().write(image.getImgFile());
-		  }
-	  }
-	  
-	  return null;	  
+      
+      Long strId = request.getParameter("structureId") != null ? Long.parseLong(request.getParameter("structureId")): null;
+      Long imgId = request.getParameter("imgId") != null ? Long.parseLong(request.getParameter("imgId")): null;
+      
+      if(strId != null ){
+          AmpStructureImg image = null;
+          if( imgId != null){
+              image = ActivityUtil.getStructureImage(strId, imgId);  
+          }else{
+              image = ActivityUtil.getMostRecentlyUploadedStructureImage(strId);
+          }
+          if(image != null){  
+              response.setContentType(image.getContentType());
+              response.getOutputStream().write(image.getImgFile());
+          }
+      }
+      
+      return null;    
   }
 }

@@ -49,14 +49,14 @@ public class DigiExceptionReportForm
     private Long rand; //random appended to a string - used in GetConfluenceDocs
 
     public Long getRand() {
-		return rand;
-	}
+        return rand;
+    }
 
-	public void setRand(Long rand) {
-		this.rand = rand;
-	}
+    public void setRand(Long rand) {
+        this.rand = rand;
+    }
 
-	/**
+    /**
      * Validate user input
      *
      * @param actionMapping

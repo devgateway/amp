@@ -25,33 +25,33 @@ import org.digijava.module.aim.dbentity.AmpSector;
  */
 public class SectorDimension extends ARDimension {
 
-	public SectorDimension() {
-		super();
-	}
+    public SectorDimension() {
+        super();
+    }
 
-	@Override
-	public void initialize() throws HibernateException, SQLException {
-		Session session = PersistenceManager.getSession();
-		Query createQuery = session.createQuery("select sector from "+AmpSector.class.getName()+" sector where (sector.deleted is null or sector.deleted = false)");
-		HashMap<Long,Long> sectorMap=new HashMap<Long, Long>();
-		links.put(AmpSector.class, sectorMap);
-		List list;
-		list = createQuery.list();
-		Iterator it=list.iterator();
-		while (it.hasNext()) {
-			AmpSector as= (AmpSector) it.next();
-			sectorMap.put(as.getAmpSectorId(), as.getParentSectorId()==null?null:as.getParentSectorId().getAmpSectorId());
-		}
-	}
+    @Override
+    public void initialize() throws HibernateException, SQLException {
+        Session session = PersistenceManager.getSession();
+        Query createQuery = session.createQuery("select sector from "+AmpSector.class.getName()+" sector where (sector.deleted is null or sector.deleted = false)");
+        HashMap<Long,Long> sectorMap=new HashMap<Long, Long>();
+        links.put(AmpSector.class, sectorMap);
+        List list;
+        list = createQuery.list();
+        Iterator it=list.iterator();
+        while (it.hasNext()) {
+            AmpSector as= (AmpSector) it.next();
+            sectorMap.put(as.getAmpSectorId(), as.getParentSectorId()==null?null:as.getParentSectorId().getAmpSectorId());
+        }
+    }
 
-	@Override
-	public Long getParentObject(Long parentId, Class relatedContentPersisterClass) {
-		// TODO Auto-generated method stub
-		Map<Long,Long> m=links.get(relatedContentPersisterClass);
-		if(m!=null)
-			return m.get(parentId);
-		return null;
-	}
+    @Override
+    public Long getParentObject(Long parentId, Class relatedContentPersisterClass) {
+        // TODO Auto-generated method stub
+        Map<Long,Long> m=links.get(relatedContentPersisterClass);
+        if(m!=null)
+            return m.get(parentId);
+        return null;
+    }
 
 
 }

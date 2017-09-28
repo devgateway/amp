@@ -18,29 +18,29 @@ import org.apache.wicket.util.string.Strings;
  * @since Mar 31, 2011
  */
 public class PIYesNoAnswerModel extends Model<String> {
-	private IModel<String> sourceModel;
-	
-	public PIYesNoAnswerModel(IModel<String> sourceModel) {
-		this.sourceModel = sourceModel;
-	}
-	
-	@Override
-	public void setObject(String object) {
-		if (object == null){
-			sourceModel.setObject(null);
-		}
-		else
-			sourceModel.setObject((object).toLowerCase());
-	}
-	
-	@Override
-	public String getObject() {
-		
-		String val = sourceModel.getObject();
-		
-		if (val == null)
-			return null;
-		else
-			return Strings.capitalize(val);
-	}
+    private IModel<String> sourceModel;
+    
+    public PIYesNoAnswerModel(IModel<String> sourceModel) {
+        this.sourceModel = sourceModel;
+    }
+    
+    @Override
+    public void setObject(String object) {
+        if (object == null){
+            sourceModel.setObject(null);
+        }
+        else
+            sourceModel.setObject((object).toLowerCase());
+    }
+    
+    @Override
+    public String getObject() {
+        
+        String val = sourceModel.getObject();
+        
+        if (val == null)
+            return null;
+        else
+            return Strings.capitalize(val);
+    }
 }

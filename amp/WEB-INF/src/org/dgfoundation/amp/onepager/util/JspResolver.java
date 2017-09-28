@@ -35,134 +35,134 @@ import org.digijava.kernel.viewmanager.ViewConfig;
 import org.digijava.kernel.viewmanager.ViewConfigFactory;
 
 public class JspResolver implements IComponentResolver {
-	private static final long serialVersionUID = 1L;
-	private static final Logger logger = Logger.getLogger(JspResolver.class);
-	
-	static {
-		// Register the jsp tag within the wicket tag namespace
-		WicketTagIdentifier.registerWellKnownTagName("jsp");
-	}
+    private static final long serialVersionUID = 1L;
+    private static final Logger logger = Logger.getLogger(JspResolver.class);
+    
+    static {
+        // Register the jsp tag within the wicket tag namespace
+        WicketTagIdentifier.registerWellKnownTagName("jsp");
+    }
 
-	public Component resolve(final MarkupContainer container, final MarkupStream markupStream, final ComponentTag tag) {
-		if (tag instanceof WicketTag) {
-			
-			WicketTag wtag = (WicketTag)tag;
-			
-			if ("jsp".equalsIgnoreCase(wtag.getName())) {
-				String file = wtag.getAttributes().getString("file");
-				if (file == null || file.trim().length() == 0) {
-					throw new MarkupException("Wrong format of <wicket:jsp file='foo.jsp'>: attribute 'file' is missing");
-				}
+    public Component resolve(final MarkupContainer container, final MarkupStream markupStream, final ComponentTag tag) {
+        if (tag instanceof WicketTag) {
+            
+            WicketTag wtag = (WicketTag)tag;
+            
+            if ("jsp".equalsIgnoreCase(wtag.getName())) {
+                String file = wtag.getAttributes().getString("file");
+                if (file == null || file.trim().length() == 0) {
+                    throw new MarkupException("Wrong format of <wicket:jsp file='foo.jsp'>: attribute 'file' is missing");
+                }
 
-				String layout = wtag.getAttributes().getString("layouts");
-				if (layout == null || layout.trim().compareTo("") == 0){
-					layout = null;
-				}
-				
-				JspFileContainer jfc = new JspFileContainer(file, layout);
-				// Add the jsp component to the component hierarchy
-				//container.autoAdd(jfc, markupStream);
-				
-				// We did process the tag
-				return jfc;
-			}
-		}
+                String layout = wtag.getAttributes().getString("layouts");
+                if (layout == null || layout.trim().compareTo("") == 0){
+                    layout = null;
+                }
+                
+                JspFileContainer jfc = new JspFileContainer(file, layout);
+                // Add the jsp component to the component hierarchy
+                //container.autoAdd(jfc, markupStream);
+                
+                // We did process the tag
+                return jfc;
+            }
+        }
 
-		// We did not process the tag
-		return null;
-	}
+        // We did not process the tag
+        return null;
+    }
 
-	private static class JspFileContainer extends MarkupContainer {
-		private static final long serialVersionUID = 1L;
+    private static class JspFileContainer extends MarkupContainer {
+        private static final long serialVersionUID = 1L;
 
-		private String _file;
-		private String _layout;
-		
-		public JspFileContainer(String file, String layout) {
-			super(file);
-			
-			_file = file;
-			_layout = layout;
-		}
-		
-		protected void onRender(MarkupStream markupStream) {
-		    markupStream.next();
-			
-		    ServletWebRequest swr = (ServletWebRequest) RequestCycle.get().getRequest();
-		    HttpServletRequest request   = swr.getContainerRequest();
-		    ServletResponse response = (ServletResponse) RequestCycle.get().getResponse();
-		    ServletContext context   = ((WebApplication)Application.get()).getServletContext();
-		    
-		    /*
-		     * START Prepare Amp request with needed data
-		     */
-		    if (ComponentContext.getContext(request) == null){
-				try {
-					ComponentContext compContext = new ComponentContext();
-					SiteDomain siteDomain = SiteCache.getInstance().getSiteDomain(request.getServerName(), null);
-					Site site = siteDomain.getSite();
+        private String _file;
+        private String _layout;
+        
+        public JspFileContainer(String file, String layout) {
+            super(file);
+            
+            _file = file;
+            _layout = layout;
+        }
+        
+        protected void onRender(MarkupStream markupStream) {
+            markupStream.next();
+            
+            ServletWebRequest swr = (ServletWebRequest) RequestCycle.get().getRequest();
+            HttpServletRequest request   = swr.getContainerRequest();
+            ServletResponse response = (ServletResponse) RequestCycle.get().getResponse();
+            ServletContext context   = ((WebApplication)Application.get()).getServletContext();
+            
+            /*
+             * START Prepare Amp request with needed data
+             */
+            if (ComponentContext.getContext(request) == null){
+                try {
+                    ComponentContext compContext = new ComponentContext();
+                    SiteDomain siteDomain = SiteCache.getInstance().getSiteDomain(request.getServerName(), null);
+                    Site site = siteDomain.getSite();
 
-					if (_layout != null){
-						// Put attributes into tiles context
-						ViewConfig viewConfig = ViewConfigFactory.getInstance().getViewConfig(site);
-						Map contextParameters;
-						
-						StringTokenizer st = new StringTokenizer(_layout, ";");
-						while (st.hasMoreTokens()){
-							String temp = st.nextToken();
-							contextParameters = viewConfig.getMasterContextAttributes(temp);
-							compContext.addAll(contextParameters);
-						}
-					}
-					ComponentContext.setContext(compContext, request);
-					
-					request.setAttribute(Constants.DIGI_CONTEXT, request.getContextPath() + siteDomain.getSitePath());
-					request.setAttribute(Constants.CURRENT_SITE, siteDomain);
-					/*
-		    		AmpAuthWebSession webSession = (AmpAuthWebSession) org.apache.wicket.Session.get();
-		    		if (webSession != null){
-		    			java.util.Locale locale = webSession.getLocale();
-		    			Locale lang = new Locale();
-		    			lang.setLeftToRight(true);
-		    			lang.setMessageLangKey("ln:" + locale.getLanguage());
-		    			lang.setCode(locale.getLanguage());
-		    			request.setAttribute(Constants.NAVIGATION_LANGUAGE, lang);
-		    		}
-		    		*/
-				} catch (DgException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-		    }
-		    /*
-		     * END
-		     */
-		    
-		    try {
-		    	// Make an attempt at locating the resource.
-		    	// If it does not exist, the requestDispatcher.include will simply ignore it.
-		    	if (context.getResource(_file) == null) {
-					if (shouldThrowExceptionForMissingFile()) {
-						throw new WicketRuntimeException(String.format("Cannot locate resource %s within current context: %s", _file, context));
-					} else {
-						logger.warn("File will not be processed. Cannot locate resource {" + _file + "} within current context: {" + context + "}");
-					}
-				}
-			} catch (MalformedURLException e) {
-				throw new WicketRuntimeException(e);
-			}
-		         
-		    try {	
-		    	context.getRequestDispatcher(_file).include(request, response);
-			} catch (ServletException e) {
-				throw new WicketRuntimeException(e);			
-			} catch (IOException e) {
-				throw new WicketRuntimeException(e);
-			}	
-		}
-	
-		private boolean shouldThrowExceptionForMissingFile() {
+                    if (_layout != null){
+                        // Put attributes into tiles context
+                        ViewConfig viewConfig = ViewConfigFactory.getInstance().getViewConfig(site);
+                        Map contextParameters;
+                        
+                        StringTokenizer st = new StringTokenizer(_layout, ";");
+                        while (st.hasMoreTokens()){
+                            String temp = st.nextToken();
+                            contextParameters = viewConfig.getMasterContextAttributes(temp);
+                            compContext.addAll(contextParameters);
+                        }
+                    }
+                    ComponentContext.setContext(compContext, request);
+                    
+                    request.setAttribute(Constants.DIGI_CONTEXT, request.getContextPath() + siteDomain.getSitePath());
+                    request.setAttribute(Constants.CURRENT_SITE, siteDomain);
+                    /*
+                    AmpAuthWebSession webSession = (AmpAuthWebSession) org.apache.wicket.Session.get();
+                    if (webSession != null){
+                        java.util.Locale locale = webSession.getLocale();
+                        Locale lang = new Locale();
+                        lang.setLeftToRight(true);
+                        lang.setMessageLangKey("ln:" + locale.getLanguage());
+                        lang.setCode(locale.getLanguage());
+                        request.setAttribute(Constants.NAVIGATION_LANGUAGE, lang);
+                    }
+                    */
+                } catch (DgException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+            /*
+             * END
+             */
+            
+            try {
+                // Make an attempt at locating the resource.
+                // If it does not exist, the requestDispatcher.include will simply ignore it.
+                if (context.getResource(_file) == null) {
+                    if (shouldThrowExceptionForMissingFile()) {
+                        throw new WicketRuntimeException(String.format("Cannot locate resource %s within current context: %s", _file, context));
+                    } else {
+                        logger.warn("File will not be processed. Cannot locate resource {" + _file + "} within current context: {" + context + "}");
+                    }
+                }
+            } catch (MalformedURLException e) {
+                throw new WicketRuntimeException(e);
+            }
+                 
+            try {   
+                context.getRequestDispatcher(_file).include(request, response);
+            } catch (ServletException e) {
+                throw new WicketRuntimeException(e);            
+            } catch (IOException e) {
+                throw new WicketRuntimeException(e);
+            }   
+        }
+    
+        private boolean shouldThrowExceptionForMissingFile() {
                     return Application.get().getResourceSettings().getThrowExceptionOnMissingResource();
-		}
-	}
+        }
+    }
 }

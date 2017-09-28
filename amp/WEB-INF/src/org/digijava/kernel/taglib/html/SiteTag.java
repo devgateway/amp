@@ -49,9 +49,9 @@ import org.digijava.kernel.util.SiteUtils;
 public class SiteTag
     extends TagSupport {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private static Logger logger = Logger.getLogger(SiteTag.class);
+    private static Logger logger = Logger.getLogger(SiteTag.class);
 
     String property;
     String siteId;

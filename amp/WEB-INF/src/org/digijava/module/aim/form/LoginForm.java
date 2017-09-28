@@ -11,84 +11,84 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 public class LoginForm extends ValidatorForm {
 
-	private String userId = null;
-	private String password = null;
-	private boolean login = false;
-	//Use to determine if should generate a token for the user
-	private boolean generateToken;
-	//url to redirect after token has been generated
-	private String callbackUrl;
-	private Collection members;
-	private Collection<AmpCategoryValue> workspaceGroups;
+    private String userId = null;
+    private String password = null;
+    private boolean login = false;
+    //Use to determine if should generate a token for the user
+    private boolean generateToken;
+    //url to redirect after token has been generated
+    private String callbackUrl;
+    private Collection members;
+    private Collection<AmpCategoryValue> workspaceGroups;
 
-	public boolean getLogin() {
-		return login;
-	}
+    public boolean getLogin() {
+        return login;
+    }
 
-	public void setLogin(boolean login) {
-		this.login = login;
-	}
+    public void setLogin(boolean login) {
+        this.login = login;
+    }
 
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
-	public String getUserId() {
-		return this.userId;
-	}
+    public String getUserId() {
+        return this.userId;
+    }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-	public String getPassword() {
-		return this.password;
-	}
+    public String getPassword() {
+        return this.password;
+    }
 
-	public ActionErrors validate(ActionMapping mapping,
-			HttpServletRequest request) {
+    public ActionErrors validate(ActionMapping mapping,
+            HttpServletRequest request) {
 
-		if (userId != null || password != null) {
-			return super.validate(mapping, request);
-		} else
-			return null;
-	}
+        if (userId != null || password != null) {
+            return super.validate(mapping, request);
+        } else
+            return null;
+    }
 
-	/**
-	 * @return Returns the members.
-	 */
-	public Collection getMembers() {
-		return members;
-	}
-	/**
-	 * @param members The members to set.
-	 */
-	public void setMembers(Collection members) {
-		this.members = members;
-	}
+    /**
+     * @return Returns the members.
+     */
+    public Collection getMembers() {
+        return members;
+    }
+    /**
+     * @param members The members to set.
+     */
+    public void setMembers(Collection members) {
+        this.members = members;
+    }
 
-	public void setWorkspaceGroups(Collection<AmpCategoryValue> workspaceGroups) {
-		this.workspaceGroups = workspaceGroups;
-	}
+    public void setWorkspaceGroups(Collection<AmpCategoryValue> workspaceGroups) {
+        this.workspaceGroups = workspaceGroups;
+    }
 
-	public Collection<AmpCategoryValue> getWorkspaceGroups() {
-		return workspaceGroups;
-	}
+    public Collection<AmpCategoryValue> getWorkspaceGroups() {
+        return workspaceGroups;
+    }
 
-	public boolean getGenerateToken() {
-		return generateToken;
-	}
+    public boolean getGenerateToken() {
+        return generateToken;
+    }
 
-	public void setGenerateToken(boolean generateToken) {
-		this.generateToken = generateToken;
-	}
+    public void setGenerateToken(boolean generateToken) {
+        this.generateToken = generateToken;
+    }
 
-	public String getCallbackUrl() {
-		return callbackUrl;
-	}
+    public String getCallbackUrl() {
+        return callbackUrl;
+    }
 
-	public void setCallbackUrl(String callbackUrl) {
-		this.callbackUrl = callbackUrl;
-	}
+    public void setCallbackUrl(String callbackUrl) {
+        this.callbackUrl = callbackUrl;
+    }
 
 }

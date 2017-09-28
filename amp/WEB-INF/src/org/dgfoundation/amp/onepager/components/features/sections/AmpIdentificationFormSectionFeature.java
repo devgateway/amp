@@ -64,52 +64,52 @@ import org.digijava.module.translation.util.ContentTranslationUtil;
 public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePanel 
 implements AmpRequiredComponentContainer{
 
-	private static final long serialVersionUID = 8568986144567957699L;
-	private AmpWarningComponentPanel<String> titleSimilarityWarning;
-	private List<FormComponent<?>> requiredFormComponents = new ArrayList<FormComponent<?>>();
-	private List<FormComponent<?>> requiredRichTextFormComponents = new ArrayList<FormComponent<?>>();
+    private static final long serialVersionUID = 8568986144567957699L;
+    private AmpWarningComponentPanel<String> titleSimilarityWarning;
+    private List<FormComponent<?>> requiredFormComponents = new ArrayList<FormComponent<?>>();
+    private List<FormComponent<?>> requiredRichTextFormComponents = new ArrayList<FormComponent<?>>();
 
-	/**
-	 * @param id
-	 * @param fmName
-	 * @throws Exception 
-	 *
-	 */
-	public AmpIdentificationFormSectionFeature(String id, String fmName,
-			final IModel<AmpActivityVersion> am) throws Exception {
-			super(id, fmName, am);
-			this.fmType = AmpFMTypes.MODULE;
-			
-			IModel<String> m = new PropertyModel<String>(am, "name");
-			final AmpTextAreaFieldPanel title = new AmpTextAreaFieldPanel("title", m, "Project Title", false, false, false, true,true);
+    /**
+     * @param id
+     * @param fmName
+     * @throws Exception 
+     *
+     */
+    public AmpIdentificationFormSectionFeature(String id, String fmName,
+            final IModel<AmpActivityVersion> am) throws Exception {
+            super(id, fmName, am);
+            this.fmType = AmpFMTypes.MODULE;
+            
+            IModel<String> m = new PropertyModel<String>(am, "name");
+            final AmpTextAreaFieldPanel title = new AmpTextAreaFieldPanel("title", m, "Project Title", false, false, false, true,true);
 
-			title.getTextAreaContainer().add(new AmpUniqueActivityTitleValidator(new PropertyModel<AmpActivityGroup>(am, "ampActivityGroup")));
-			title.getTextAreaContainer().add(StringValidator.maximumLength(OnePagerConst.STRING_VALIDATOR_MAX_LENGTH));
-			title.getTextAreaContainer().add(new AttributeModifier("style", "width: 710px; margin: 0px;"));
-			title.getTextAreaContainer().setRequired(true);
+            title.getTextAreaContainer().add(new AmpUniqueActivityTitleValidator(new PropertyModel<AmpActivityGroup>(am, "ampActivityGroup")));
+            title.getTextAreaContainer().add(StringValidator.maximumLength(OnePagerConst.STRING_VALIDATOR_MAX_LENGTH));
+            title.getTextAreaContainer().add(new AttributeModifier("style", "width: 710px; margin: 0px;"));
+            title.getTextAreaContainer().setRequired(true);
 
-			title.getTextAreaContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
-			
+            title.getTextAreaContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
+            
 
-				@Override
-				protected void onUpdate(AjaxRequestTarget target) {		
-					//if(!titleSimilarityWarning.isVisible()) return;
-					titleSimilarityWarning.getWarning().modelChanged();
-					//target.add(titleSimilarityWarning);
+                @Override
+                protected void onUpdate(AjaxRequestTarget target) {     
+                    //if(!titleSimilarityWarning.isVisible()) return;
+                    titleSimilarityWarning.getWarning().modelChanged();
+                    //target.add(titleSimilarityWarning);
                     target.add(titleSimilarityWarning.getWarning());
-				}
-				
-			});
-			
-			add(title);
-			
-		final AbstractReadOnlyModel<String> warningModel = new AbstractReadOnlyModel<String>() {
-			private static final long serialVersionUID = 3706184421459839210L;
+                }
+                
+            });
+            
+            add(title);
+            
+        final AbstractReadOnlyModel<String> warningModel = new AbstractReadOnlyModel<String>() {
+            private static final long serialVersionUID = 3706184421459839210L;
 
-			@Override
-			public String getObject() {
-				if (title.getTextAreaContainer().getModelObject() == null)
-					return null;
+            @Override
+            public String getObject() {
+                if (title.getTextAreaContainer().getModelObject() == null)
+                    return null;
 
                 String sTitle = title.getTextAreaContainer().getModelObject();
 
@@ -125,7 +125,7 @@ implements AmpRequiredComponentContainer{
                 }
 
                 ServletContext context = ((WebApplication) Application.get())
-                        .getServletContext();	
+                        .getServletContext();   
                 logger.info("Searching similar activity name for activity: "+ sTitle);
                 List<AmpActivity> list = LuceneUtil.findActivitiesMoreLikeThis(
                         context.getRealPath("/") + LuceneUtil.ACTIVITY_INDEX_DIRECTORY, sTitle, langCode, 2);
@@ -149,9 +149,9 @@ implements AmpRequiredComponentContainer{
                         if (activityId == null || (activity.getAmpId() != null
                                 && activityId.longValue() != Long.valueOf(activity.getAmpId()).longValue())) {
                             moreThanSelf = true;
-							logger.info("There is a similiarity match!. Current activity id: " + activityId
-									+ " Match activity id " + activity.getAmpId());
-							ret += " - " + activity.getName() + "\n";
+                            logger.info("There is a similiarity match!. Current activity id: " + activityId
+                                    + " Match activity id " + activity.getAmpId());
+                            ret += " - " + activity.getName() + "\n";
                         }
                     if (moreThanSelf) {
                         return ret;
@@ -164,131 +164,131 @@ implements AmpRequiredComponentContainer{
                 }
             }
         };
-			
-			titleSimilarityWarning = new AmpWarningComponentPanel<String>("titleSimilarityWarning", "Project Title Similarity Warning", warningModel);
-			//titleSimilarityWarning.setOutputMarkupId(true);
+            
+            titleSimilarityWarning = new AmpWarningComponentPanel<String>("titleSimilarityWarning", "Project Title Similarity Warning", warningModel);
+            //titleSimilarityWarning.setOutputMarkupId(true);
             titleSimilarityWarning.getWarning().setOutputMarkupId(true);
             titleSimilarityWarning.getWarning().setVisible(true);
             titleSimilarityWarning.setVisible(true);
-			add(titleSimilarityWarning);
+            add(titleSimilarityWarning);
 
-			 AmpCategorySelectFieldPanel status = new AmpCategorySelectFieldPanel(
-					"status", CategoryConstants.ACTIVITY_STATUS_KEY,
-					new AmpCategoryValueByKeyModel(
-							new PropertyModel<Set<AmpCategoryValue>>(am,"categories"),
-							CategoryConstants.ACTIVITY_STATUS_KEY),
-							CategoryConstants.ACTIVITY_STATUS_NAME, true, false, null,
-					 AmpFMTypes.MODULE);
-			status.getChoiceContainer().setRequired(true);
+             AmpCategorySelectFieldPanel status = new AmpCategorySelectFieldPanel(
+                    "status", CategoryConstants.ACTIVITY_STATUS_KEY,
+                    new AmpCategoryValueByKeyModel(
+                            new PropertyModel<Set<AmpCategoryValue>>(am,"categories"),
+                            CategoryConstants.ACTIVITY_STATUS_KEY),
+                            CategoryConstants.ACTIVITY_STATUS_NAME, true, false, null,
+                     AmpFMTypes.MODULE);
+            status.getChoiceContainer().setRequired(true);
 
-			AmpTextAreaFieldPanel statusOtherInfo = new AmpTextAreaFieldPanel("statusOtherInfo",
-				new PropertyModel<String>(am, "statusOtherInfo"), "Status Other Info", false,
-					AmpFMTypes.MODULE);
+            AmpTextAreaFieldPanel statusOtherInfo = new AmpTextAreaFieldPanel("statusOtherInfo",
+                new PropertyModel<String>(am, "statusOtherInfo"), "Status Other Info", false,
+                    AmpFMTypes.MODULE);
 
-			statusOtherInfo.getTextAreaContainer().add(StringValidator.maximumLength(
-					OnePagerConst.STRING_VALIDATOR_MAX_LENGTH));
-			statusOtherInfo.getTextAreaContainer().add(new AttributeModifier("style",
-					"width: 328px; margin: 0px;"));
+            statusOtherInfo.getTextAreaContainer().add(StringValidator.maximumLength(
+                    OnePagerConst.STRING_VALIDATOR_MAX_LENGTH));
+            statusOtherInfo.getTextAreaContainer().add(new AttributeModifier("style",
+                    "width: 328px; margin: 0px;"));
 
-			status.getChoiceContainer().add(new OtherInfoBehavior("onchange", statusOtherInfo));
+            status.getChoiceContainer().add(new OtherInfoBehavior("onchange", statusOtherInfo));
 
-			add(status);
-			add(statusOtherInfo);
+            add(status);
+            add(statusOtherInfo);
 
-			add(new AmpTextAreaFieldPanel("statusReason",
-					new PropertyModel<String>(am, "statusReason"), "Status Reason", true, AmpFMTypes.MODULE));
-			
-			AmpTextFieldPanel<String> budgetCodeProjectId = new AmpTextFieldPanel<String>(
-					"budgetCodeProjectID", new PropertyModel<String>(am,
-							"budgetCodeProjectID"), "Budget Code Project ID", AmpFMTypes.MODULE);
-			budgetCodeProjectId.setTextContainerDefaultMaxSize();
-			add(budgetCodeProjectId);
-	
-			AmpTextFieldPanel<String> donorProjectCode = new AmpTextFieldPanel<String>(
-					"donorProjectCode", new PropertyModel<String>(am,
-							"projectCode"), "Donor Project Code", AmpFMTypes.MODULE);
-			donorProjectCode.setTextContainerDefaultMaxSize();
-			add(donorProjectCode);
-			
-			AmpTextFieldPanel<String> govAgreementNum = new AmpTextFieldPanel<String>(
-					"govAgreementNum", new PropertyModel<String>(am,
-							"govAgreementNumber"), "Government Agreement Number", AmpFMTypes.MODULE);
-			govAgreementNum.setTextContainerDefaultMaxSize();
-			add(govAgreementNum);
-	
-			AmpTextFieldPanel<String> crisNumber = new AmpTextFieldPanel<String>(
-					"crisNumber", new PropertyModel<String>(am,
-							"crisNumber"), "Cris Number", AmpFMTypes.MODULE);
-			govAgreementNum.setTextContainerDefaultMaxSize();
-			add(crisNumber);
+            add(new AmpTextAreaFieldPanel("statusReason",
+                    new PropertyModel<String>(am, "statusReason"), "Status Reason", true, AmpFMTypes.MODULE));
+            
+            AmpTextFieldPanel<String> budgetCodeProjectId = new AmpTextFieldPanel<String>(
+                    "budgetCodeProjectID", new PropertyModel<String>(am,
+                            "budgetCodeProjectID"), "Budget Code Project ID", AmpFMTypes.MODULE);
+            budgetCodeProjectId.setTextContainerDefaultMaxSize();
+            add(budgetCodeProjectId);
+    
+            AmpTextFieldPanel<String> donorProjectCode = new AmpTextFieldPanel<String>(
+                    "donorProjectCode", new PropertyModel<String>(am,
+                            "projectCode"), "Donor Project Code", AmpFMTypes.MODULE);
+            donorProjectCode.setTextContainerDefaultMaxSize();
+            add(donorProjectCode);
+            
+            AmpTextFieldPanel<String> govAgreementNum = new AmpTextFieldPanel<String>(
+                    "govAgreementNum", new PropertyModel<String>(am,
+                            "govAgreementNumber"), "Government Agreement Number", AmpFMTypes.MODULE);
+            govAgreementNum.setTextContainerDefaultMaxSize();
+            add(govAgreementNum);
+    
+            AmpTextFieldPanel<String> crisNumber = new AmpTextFieldPanel<String>(
+                    "crisNumber", new PropertyModel<String>(am,
+                            "crisNumber"), "Cris Number", AmpFMTypes.MODULE);
+            govAgreementNum.setTextContainerDefaultMaxSize();
+            add(crisNumber);
 
-			AmpCategorySelectFieldPanel acChapter = new AmpCategorySelectFieldPanel(
-					"acChapter", CategoryConstants.ACCHAPTER_KEY,
-					new AmpCategoryValueByKeyModel(
-							new PropertyModel<Set<AmpCategoryValue>>(am,"categories"),
-							CategoryConstants.ACCHAPTER_KEY), 
-							CategoryConstants.ACCHAPTER_NAME, true, true, null, AmpFMTypes.MODULE);
-			add(acChapter);
-			
-			final AmpActivityBudgetExtrasPanel budgetExtras = new AmpActivityBudgetExtrasPanel("budgetExtras", am, "Budget Extras");
-			budgetExtras.setOutputMarkupId(true);
-			budgetExtras.setIgnoreFmVisibility(true);
+            AmpCategorySelectFieldPanel acChapter = new AmpCategorySelectFieldPanel(
+                    "acChapter", CategoryConstants.ACCHAPTER_KEY,
+                    new AmpCategoryValueByKeyModel(
+                            new PropertyModel<Set<AmpCategoryValue>>(am,"categories"),
+                            CategoryConstants.ACCHAPTER_KEY), 
+                            CategoryConstants.ACCHAPTER_NAME, true, true, null, AmpFMTypes.MODULE);
+            add(acChapter);
+            
+            final AmpActivityBudgetExtrasPanel budgetExtras = new AmpActivityBudgetExtrasPanel("budgetExtras", am, "Budget Extras");
+            budgetExtras.setOutputMarkupId(true);
+            budgetExtras.setIgnoreFmVisibility(true);
             budgetExtras.setIgnorePermissions(true);
 
-			WebMarkupContainer budgetExtrasContainter = new WebMarkupContainer("budgetExtrasContainer");
-			budgetExtrasContainter.add(budgetExtras);
-			budgetExtrasContainter.setOutputMarkupId(true);
-			add(budgetExtrasContainter);
-			
-			WebMarkupContainer budgetClassificationContainer = new WebMarkupContainer("budgetClassificationContainer");
-			budgetClassificationContainer.setOutputMarkupId(true);
-			final AmpBudgetClassificationField budgetClassification = new AmpBudgetClassificationField("budgetClassification", am, "Budget Classification");
-			budgetClassification.setOutputMarkupId(true);
-			budgetClassificationContainer.add(budgetClassification);
-			add(budgetClassificationContainer);
+            WebMarkupContainer budgetExtrasContainter = new WebMarkupContainer("budgetExtrasContainer");
+            budgetExtrasContainter.add(budgetExtras);
+            budgetExtrasContainter.setOutputMarkupId(true);
+            add(budgetExtrasContainter);
+            
+            WebMarkupContainer budgetClassificationContainer = new WebMarkupContainer("budgetClassificationContainer");
+            budgetClassificationContainer.setOutputMarkupId(true);
+            final AmpBudgetClassificationField budgetClassification = new AmpBudgetClassificationField("budgetClassification", am, "Budget Classification");
+            budgetClassification.setOutputMarkupId(true);
+            budgetClassificationContainer.add(budgetClassification);
+            add(budgetClassificationContainer);
 
 
-			final AmpCategorySelectFieldPanel activityBudget = new AmpCategorySelectFieldPanel(
-					"activityBudget",
-					CategoryConstants.ACTIVITY_BUDGET_KEY,
-					new AmpCategoryValueByKeyModel(
-							new PropertyModel<Set<AmpCategoryValue>>(am,"categories"),
-							CategoryConstants.ACTIVITY_BUDGET_KEY),
-							CategoryConstants.ACTIVITY_BUDGET_NAME, true, true, null, AmpFMTypes.MODULE);
-			activityBudget.getChoiceContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
-				private static final long serialVersionUID = 1L;
+            final AmpCategorySelectFieldPanel activityBudget = new AmpCategorySelectFieldPanel(
+                    "activityBudget",
+                    CategoryConstants.ACTIVITY_BUDGET_KEY,
+                    new AmpCategoryValueByKeyModel(
+                            new PropertyModel<Set<AmpCategoryValue>>(am,"categories"),
+                            CategoryConstants.ACTIVITY_BUDGET_KEY),
+                            CategoryConstants.ACTIVITY_BUDGET_NAME, true, true, null, AmpFMTypes.MODULE);
+            activityBudget.getChoiceContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
+                private static final long serialVersionUID = 1L;
 
-				{
-					updateBudget();
-				}
-				
-				private void toggleExtraFields(boolean b){
-					budgetExtras.setVisible(b);
-					budgetClassification.toggleActivityBudgetVisibility(b);
-				}
-				
-				private void updateExtraFields(AjaxRequestTarget target){
-					target.add(budgetExtras);
-					target.add(budgetExtras.getParent());
-					budgetClassification.addToTargetActivityBudget(target);
-				}
-				
-				private void updateBudget(){
-					AmpCategoryValue obj = (AmpCategoryValue) activityBudget.getChoiceContainer().getModelObject();
-					AmpCategoryValue budgetOn = CategoryConstants.ACTIVITY_BUDGET_ON.getAmpCategoryValueFromDB();
-				    long budgetOnId = (budgetOn==null)?1:budgetOn.getId();
-					if (obj != null && obj.getId() == budgetOnId) // "On" was selected
-						toggleExtraFields(true);
-					else
-						toggleExtraFields(false);
-				}
-				
-				@Override
-				protected void onUpdate(AjaxRequestTarget target) {
-					updateBudget();
-					updateExtraFields(target);
-				}
-			});
+                {
+                    updateBudget();
+                }
+                
+                private void toggleExtraFields(boolean b){
+                    budgetExtras.setVisible(b);
+                    budgetClassification.toggleActivityBudgetVisibility(b);
+                }
+                
+                private void updateExtraFields(AjaxRequestTarget target){
+                    target.add(budgetExtras);
+                    target.add(budgetExtras.getParent());
+                    budgetClassification.addToTargetActivityBudget(target);
+                }
+                
+                private void updateBudget(){
+                    AmpCategoryValue obj = (AmpCategoryValue) activityBudget.getChoiceContainer().getModelObject();
+                    AmpCategoryValue budgetOn = CategoryConstants.ACTIVITY_BUDGET_ON.getAmpCategoryValueFromDB();
+                    long budgetOnId = (budgetOn==null)?1:budgetOn.getId();
+                    if (obj != null && obj.getId() == budgetOnId) // "On" was selected
+                        toggleExtraFields(true);
+                    else
+                        toggleExtraFields(false);
+                }
+                
+                @Override
+                protected void onUpdate(AjaxRequestTarget target) {
+                    updateBudget();
+                    updateExtraFields(target);
+                }
+            });
             add(new AmpComponentPanel("activityBudgetRequired", "Required Validator for " + CategoryConstants.ACTIVITY_BUDGET_NAME) {
                 @Override
                 protected void onConfigure() {
@@ -296,221 +296,221 @@ implements AmpRequiredComponentContainer{
                     if (this.isVisible()){
                         activityBudget.getChoiceContainer().setRequired(true);
                         requiredFormComponents.add(activityBudget.getChoiceContainer());
-            			
+                        
                     }
                 }
             });
             add(activityBudget);
 
 
-			AmpCategoryGroupFieldPanel financialInstrument = new AmpCategoryGroupFieldPanel(
-					"financialInstrument",
-					CategoryConstants.FINANCIAL_INSTRUMENT_KEY,
-					new AmpCategoryValueByKeyModel(
-							new PropertyModel<Set<AmpCategoryValue>>(am,"categories"),
-							CategoryConstants.FINANCIAL_INSTRUMENT_KEY),
-							CategoryConstants.FINANCIAL_INSTRUMENT_NAME, true, true, null, AmpFMTypes.MODULE);
-			add(financialInstrument);
+            AmpCategoryGroupFieldPanel financialInstrument = new AmpCategoryGroupFieldPanel(
+                    "financialInstrument",
+                    CategoryConstants.FINANCIAL_INSTRUMENT_KEY,
+                    new AmpCategoryValueByKeyModel(
+                            new PropertyModel<Set<AmpCategoryValue>>(am,"categories"),
+                            CategoryConstants.FINANCIAL_INSTRUMENT_KEY),
+                            CategoryConstants.FINANCIAL_INSTRUMENT_NAME, true, true, null, AmpFMTypes.MODULE);
+            add(financialInstrument);
 
-			AmpCategorySelectFieldPanel procurementSystem = new AmpCategorySelectFieldPanel(
-					"procurementSystem",
-					CategoryConstants.PROCUREMENT_SYSTEM_KEY,
-					new AmpCategoryValueByKeyModel(
-							new PropertyModel<Set<AmpCategoryValue>>(am,"categories"),
-							CategoryConstants.PROCUREMENT_SYSTEM_KEY),
-							CategoryConstants.PROCUREMENT_SYSTEM_NAME, true, true, null, AmpFMTypes.MODULE);
-			add(procurementSystem);
-			
-			AmpCategorySelectFieldPanel reportingSystem = new AmpCategorySelectFieldPanel(
-					"reportingSystem",
-					CategoryConstants.REPORTING_SYSTEM_KEY,
-					new AmpCategoryValueByKeyModel(
-							new PropertyModel<Set<AmpCategoryValue>>(am,"categories"),
-							CategoryConstants.REPORTING_SYSTEM_KEY),
-							CategoryConstants.REPORTING_SYSTEM_NAME, true, true, null, AmpFMTypes.MODULE);
-			add(reportingSystem);
-			
-			AmpCategorySelectFieldPanel auditSystem = new AmpCategorySelectFieldPanel(
-					"auditSystem",
-					CategoryConstants.AUDIT_SYSTEM_KEY,
-					new AmpCategoryValueByKeyModel(
-							new PropertyModel<Set<AmpCategoryValue>>(am,"categories"),
-							CategoryConstants.AUDIT_SYSTEM_KEY),
-							CategoryConstants.AUDIT_SYSTEM_NAME, true, true, null, AmpFMTypes.MODULE);
-			add(auditSystem);
-			
-			AmpCategorySelectFieldPanel institutions = new AmpCategorySelectFieldPanel(
-					"institutions",
-					CategoryConstants.INSTITUTIONS_KEY,
-					new AmpCategoryValueByKeyModel(
-							new PropertyModel<Set<AmpCategoryValue>>(am,"categories"),
-							CategoryConstants.INSTITUTIONS_KEY),
-							CategoryConstants.INSTITUTIONS_NAME, true, true, null, AmpFMTypes.MODULE);
-			add(institutions);
-			
-			AmpCategorySelectFieldPanel accessionInstrument = new AmpCategorySelectFieldPanel(
-					"accessionInstrument",
-					CategoryConstants.ACCESSION_INSTRUMENT_KEY,
-					new AmpCategoryValueByKeyModel(
-							new PropertyModel<Set<AmpCategoryValue>>(am,"categories"),
-							CategoryConstants.ACCESSION_INSTRUMENT_KEY),
-							CategoryConstants.ACCESSION_INSTRUMENT_NAME, true, true, null, AmpFMTypes.MODULE);
-			add(accessionInstrument);
+            AmpCategorySelectFieldPanel procurementSystem = new AmpCategorySelectFieldPanel(
+                    "procurementSystem",
+                    CategoryConstants.PROCUREMENT_SYSTEM_KEY,
+                    new AmpCategoryValueByKeyModel(
+                            new PropertyModel<Set<AmpCategoryValue>>(am,"categories"),
+                            CategoryConstants.PROCUREMENT_SYSTEM_KEY),
+                            CategoryConstants.PROCUREMENT_SYSTEM_NAME, true, true, null, AmpFMTypes.MODULE);
+            add(procurementSystem);
+            
+            AmpCategorySelectFieldPanel reportingSystem = new AmpCategorySelectFieldPanel(
+                    "reportingSystem",
+                    CategoryConstants.REPORTING_SYSTEM_KEY,
+                    new AmpCategoryValueByKeyModel(
+                            new PropertyModel<Set<AmpCategoryValue>>(am,"categories"),
+                            CategoryConstants.REPORTING_SYSTEM_KEY),
+                            CategoryConstants.REPORTING_SYSTEM_NAME, true, true, null, AmpFMTypes.MODULE);
+            add(reportingSystem);
+            
+            AmpCategorySelectFieldPanel auditSystem = new AmpCategorySelectFieldPanel(
+                    "auditSystem",
+                    CategoryConstants.AUDIT_SYSTEM_KEY,
+                    new AmpCategoryValueByKeyModel(
+                            new PropertyModel<Set<AmpCategoryValue>>(am,"categories"),
+                            CategoryConstants.AUDIT_SYSTEM_KEY),
+                            CategoryConstants.AUDIT_SYSTEM_NAME, true, true, null, AmpFMTypes.MODULE);
+            add(auditSystem);
+            
+            AmpCategorySelectFieldPanel institutions = new AmpCategorySelectFieldPanel(
+                    "institutions",
+                    CategoryConstants.INSTITUTIONS_KEY,
+                    new AmpCategoryValueByKeyModel(
+                            new PropertyModel<Set<AmpCategoryValue>>(am,"categories"),
+                            CategoryConstants.INSTITUTIONS_KEY),
+                            CategoryConstants.INSTITUTIONS_NAME, true, true, null, AmpFMTypes.MODULE);
+            add(institutions);
+            
+            AmpCategorySelectFieldPanel accessionInstrument = new AmpCategorySelectFieldPanel(
+                    "accessionInstrument",
+                    CategoryConstants.ACCESSION_INSTRUMENT_KEY,
+                    new AmpCategoryValueByKeyModel(
+                            new PropertyModel<Set<AmpCategoryValue>>(am,"categories"),
+                            CategoryConstants.ACCESSION_INSTRUMENT_KEY),
+                            CategoryConstants.ACCESSION_INSTRUMENT_NAME, true, true, null, AmpFMTypes.MODULE);
+            add(accessionInstrument);
 
-			AmpCategorySelectFieldPanel projectCategory = new AmpCategorySelectFieldPanel(
-					"projectCategory",
-					CategoryConstants.PROJECT_CATEGORY_KEY,
-					new AmpCategoryValueByKeyModel(
-							new PropertyModel<Set<AmpCategoryValue>>(am,"categories"),
-							CategoryConstants.PROJECT_CATEGORY_KEY),
-							CategoryConstants.PROJECT_CATEGORY_NAME, true, true, null, AmpFMTypes.MODULE);
+            AmpCategorySelectFieldPanel projectCategory = new AmpCategorySelectFieldPanel(
+                    "projectCategory",
+                    CategoryConstants.PROJECT_CATEGORY_KEY,
+                    new AmpCategoryValueByKeyModel(
+                            new PropertyModel<Set<AmpCategoryValue>>(am,"categories"),
+                            CategoryConstants.PROJECT_CATEGORY_KEY),
+                            CategoryConstants.PROJECT_CATEGORY_NAME, true, true, null, AmpFMTypes.MODULE);
 
-			AmpTextAreaFieldPanel projectCategoryOtherInfo = new AmpTextAreaFieldPanel("projectCategoryOtherInfo",
-					new PropertyModel<String>(am, "projectCategoryOtherInfo"), "Project Category Other Info",
-					false, AmpFMTypes.MODULE);
+            AmpTextAreaFieldPanel projectCategoryOtherInfo = new AmpTextAreaFieldPanel("projectCategoryOtherInfo",
+                    new PropertyModel<String>(am, "projectCategoryOtherInfo"), "Project Category Other Info",
+                    false, AmpFMTypes.MODULE);
 
 
-			projectCategoryOtherInfo.getTextAreaContainer().add(StringValidator.maximumLength(
-					OnePagerConst.STRING_VALIDATOR_MAX_LENGTH));
-			projectCategoryOtherInfo.getTextAreaContainer().add(new AttributeModifier("style",
-					"width: 328px; margin: 0px;"));
+            projectCategoryOtherInfo.getTextAreaContainer().add(StringValidator.maximumLength(
+                    OnePagerConst.STRING_VALIDATOR_MAX_LENGTH));
+            projectCategoryOtherInfo.getTextAreaContainer().add(new AttributeModifier("style",
+                    "width: 328px; margin: 0px;"));
 
-			projectCategory.getChoiceContainer().add(new OtherInfoBehavior("onchange", projectCategoryOtherInfo));
+            projectCategory.getChoiceContainer().add(new OtherInfoBehavior("onchange", projectCategoryOtherInfo));
 
-			add(projectCategory);
-			add(projectCategoryOtherInfo);
+            add(projectCategory);
+            add(projectCategoryOtherInfo);
 
-			AmpCategorySelectFieldPanel projectImplementingUnit = new AmpCategorySelectFieldPanel(
-					"projectImplementingUnit",
-					CategoryConstants.PROJECT_IMPLEMENTING_UNIT_KEY,
-					new AmpCategoryValueByKeyModel(
-							new PropertyModel<Set<AmpCategoryValue>>(am,"categories"),
-							CategoryConstants.PROJECT_IMPLEMENTING_UNIT_KEY),
-							CategoryConstants.PROJECT_IMPLEMENTING_UNIT_NAME, true, true, null, AmpFMTypes.MODULE);
-			add(projectImplementingUnit);
+            AmpCategorySelectFieldPanel projectImplementingUnit = new AmpCategorySelectFieldPanel(
+                    "projectImplementingUnit",
+                    CategoryConstants.PROJECT_IMPLEMENTING_UNIT_KEY,
+                    new AmpCategoryValueByKeyModel(
+                            new PropertyModel<Set<AmpCategoryValue>>(am,"categories"),
+                            CategoryConstants.PROJECT_IMPLEMENTING_UNIT_KEY),
+                            CategoryConstants.PROJECT_IMPLEMENTING_UNIT_NAME, true, true, null, AmpFMTypes.MODULE);
+            add(projectImplementingUnit);
 
-			add(new AmpBooleanChoiceField("governmentApprovalProcedures", 
-					new PropertyModel<Boolean>(am, "governmentApprovalProcedures"), "Government Approval Procedures"));
+            add(new AmpBooleanChoiceField("governmentApprovalProcedures", 
+                    new PropertyModel<Boolean>(am, "governmentApprovalProcedures"), "Government Approval Procedures"));
 
-			add(new AmpBooleanChoiceField("jointCriteria", 
-					new PropertyModel<Boolean>(am, "jointCriteria"), "Joint Criteria"));
+            add(new AmpBooleanChoiceField("jointCriteria", 
+                    new PropertyModel<Boolean>(am, "jointCriteria"), "Joint Criteria"));
 
-			final AmpBooleanChoiceField humanitarianAid = new AmpBooleanChoiceField("humanitarianAid",
-					new PropertyModel<Boolean>(am, "humanitarianAid"), "Humanitarian Aid");
-			
+            final AmpBooleanChoiceField humanitarianAid = new AmpBooleanChoiceField("humanitarianAid",
+                    new PropertyModel<Boolean>(am, "humanitarianAid"), "Humanitarian Aid");
+            
 
             add(new AmpComponentPanel("humanitarianAidRequired", "Required Validator for Humanitarian Aid") {
                 @Override
                 protected void onConfigure() {
                     super.onConfigure();
                     if (this.isVisible()) {
-                    	humanitarianAid.getChoiceContainer().setRequired(true);
-                    	requiredFormComponents.add(humanitarianAid.getChoiceContainer());
-            			
+                        humanitarianAid.getChoiceContainer().setRequired(true);
+                        requiredFormComponents.add(humanitarianAid.getChoiceContainer());
+                        
                     }
                 }
-            });						
+            });                     
             add(humanitarianAid);
-			add(new AmpTextAreaFieldPanel("projectComments",
-					new PropertyModel<String>(am, "projectComments"),
-					"Project Comments", true, AmpFMTypes.MODULE));
-			final AmpTextAreaFieldPanel description =
-			new AmpTextAreaFieldPanel("description",
-					new PropertyModel<String>(am, "description"), "Description",
-					true, AmpFMTypes.MODULE);
+            add(new AmpTextAreaFieldPanel("projectComments",
+                    new PropertyModel<String>(am, "projectComments"),
+                    "Project Comments", true, AmpFMTypes.MODULE));
+            final AmpTextAreaFieldPanel description =
+            new AmpTextAreaFieldPanel("description",
+                    new PropertyModel<String>(am, "description"), "Description",
+                    true, AmpFMTypes.MODULE);
 
-			
-			//validator for description
+            
+            //validator for description
             add(new AmpComponentPanel("descriptionRequired", "Required Validator for Description") {
                 @Override
                 protected void onConfigure() {
                     super.onConfigure();
                     if (this.isVisible()){
-                    	description.getTextAreaContainer().setRequired(true);
-                    	requiredRichTextFormComponents.add(description.getTextAreaContainer());
-            			
+                        description.getTextAreaContainer().setRequired(true);
+                        requiredRichTextFormComponents.add(description.getTextAreaContainer());
+                        
                     }
                 }
-            });			
-			add(description);
-			final AmpTextAreaFieldPanel objective=new AmpTextAreaFieldPanel("objective",
-					new PropertyModel<String>(am, "objective"), "Objective", true, AmpFMTypes.MODULE);
-			//validator for objective
-			
-			
+            });         
+            add(description);
+            final AmpTextAreaFieldPanel objective=new AmpTextAreaFieldPanel("objective",
+                    new PropertyModel<String>(am, "objective"), "Objective", true, AmpFMTypes.MODULE);
+            //validator for objective
+            
+            
             add(new AmpComponentPanel("objectiveRequired", "Required Validator for Objective") {
                 @Override
                 protected void onConfigure() {
                     super.onConfigure();
                     if (this.isVisible()){
-                    	objective.getTextAreaContainer().setRequired(true);
-                    	requiredRichTextFormComponents.add(objective.getTextAreaContainer());
-            			
+                        objective.getTextAreaContainer().setRequired(true);
+                        requiredRichTextFormComponents.add(objective.getTextAreaContainer());
+                        
                     }
                 }
             });
             //we add objective AFTER the validator has been added so the star gets
             //rendered if the component is required
-			add(objective);
-			AmpAuthWebSession session = (AmpAuthWebSession) getSession();
-			Site site = session.getSite();
+            add(objective);
+            AmpAuthWebSession session = (AmpAuthWebSession) getSession();
+            Site site = session.getSite();
 
-			String txtValue = "OV Indicators";
-			String genKey = TranslatorWorker.generateTrnKey(txtValue);
-			String cOvIndicators = TranslatorWorker.getInstance(genKey).translateFromTree(genKey, site, session.getLocale().getLanguage(), txtValue, TranslatorWorker.TRNTYPE_LOCAL, null);
-			txtValue = "Assumption";
-			genKey = TranslatorWorker.generateTrnKey(txtValue);
-			String cAssumption = TranslatorWorker.getInstance(genKey).translateFromTree(genKey, site, session.getLocale().getLanguage(), txtValue, TranslatorWorker.TRNTYPE_LOCAL, null);
-			txtValue = "Verification";
-			genKey = TranslatorWorker.generateTrnKey(txtValue);
-			String cVerification = TranslatorWorker.getInstance(genKey).translateFromTree(genKey, site, session.getLocale().getLanguage(), txtValue, TranslatorWorker.TRNTYPE_LOCAL, null);
-			
-			List<ITab> objectiveTabs = new ArrayList<ITab>();
-			objectiveTabs.add(new AmpCommentTab(cOvIndicators , "Objective Objectively Verifiable Indicators", am, AmpCommentPanel.class));
-			objectiveTabs.add(new AmpCommentTab(cAssumption , "Objective Assumption", am, AmpCommentPanel.class));
-			objectiveTabs.add(new AmpCommentTab(cVerification , "Objective Verification", am, AmpCommentPanel.class));
-			
-			AmpCommentTabsFieldWrapper objTabs = new AmpCommentTabsFieldWrapper("objectiveTabs", "Objective Comments", objectiveTabs);
-			add(objTabs);
-			
-			add(new AmpTextAreaFieldPanel("purpose",
-					new PropertyModel<String>(am, "purpose"), "Purpose", true, AmpFMTypes.MODULE));
-			
-			List<ITab> tabs = new ArrayList<ITab>();
-			tabs.add(new AmpCommentTab(cOvIndicators , "Purpose Objectively Verifiable Indicators", am, AmpCommentPanel.class));
-			tabs.add(new AmpCommentTab(cAssumption , "Purpose Assumption", am, AmpCommentPanel.class));
-			tabs.add(new AmpCommentTab(cVerification , "Purpose Verification", am, AmpCommentPanel.class));
-			
-			AmpCommentTabsFieldWrapper purposeTabs = new AmpCommentTabsFieldWrapper("purposeTabs", "Purpose Comments", tabs);
-			add(purposeTabs);
-			
-			add(new AmpTextAreaFieldPanel("results",
-					new PropertyModel<String>(am, "results"), "Results", true, AmpFMTypes.MODULE));
-	
-			tabs = new ArrayList<ITab>();
-			tabs.add(new AmpCommentTab(cOvIndicators , "Results Objectively Verifiable Indicators", am, AmpCommentPanel.class));
-			tabs.add(new AmpCommentTab(cAssumption , "Results Assumption", am, AmpCommentPanel.class));
-			tabs.add(new AmpCommentTab(cVerification , "Results Verification", am, AmpCommentPanel.class));
-			
-			AmpCommentTabsFieldWrapper resultsTabs = new AmpCommentTabsFieldWrapper("resultsTabs", "Results Comments", tabs);
-			add(resultsTabs);
-			add(new AmpTextAreaFieldPanel("lessonsLearned",
-					new PropertyModel<String>(am, "lessonsLearned"), "Lessons Learned", true, AmpFMTypes.MODULE));
-			add(new AmpTextAreaFieldPanel("projectImpact",
-					new PropertyModel<String>(am, "projectImpact"), "Project Impact", true, AmpFMTypes.MODULE));
+            String txtValue = "OV Indicators";
+            String genKey = TranslatorWorker.generateTrnKey(txtValue);
+            String cOvIndicators = TranslatorWorker.getInstance(genKey).translateFromTree(genKey, site, session.getLocale().getLanguage(), txtValue, TranslatorWorker.TRNTYPE_LOCAL, null);
+            txtValue = "Assumption";
+            genKey = TranslatorWorker.generateTrnKey(txtValue);
+            String cAssumption = TranslatorWorker.getInstance(genKey).translateFromTree(genKey, site, session.getLocale().getLanguage(), txtValue, TranslatorWorker.TRNTYPE_LOCAL, null);
+            txtValue = "Verification";
+            genKey = TranslatorWorker.generateTrnKey(txtValue);
+            String cVerification = TranslatorWorker.getInstance(genKey).translateFromTree(genKey, site, session.getLocale().getLanguage(), txtValue, TranslatorWorker.TRNTYPE_LOCAL, null);
+            
+            List<ITab> objectiveTabs = new ArrayList<ITab>();
+            objectiveTabs.add(new AmpCommentTab(cOvIndicators , "Objective Objectively Verifiable Indicators", am, AmpCommentPanel.class));
+            objectiveTabs.add(new AmpCommentTab(cAssumption , "Objective Assumption", am, AmpCommentPanel.class));
+            objectiveTabs.add(new AmpCommentTab(cVerification , "Objective Verification", am, AmpCommentPanel.class));
+            
+            AmpCommentTabsFieldWrapper objTabs = new AmpCommentTabsFieldWrapper("objectiveTabs", "Objective Comments", objectiveTabs);
+            add(objTabs);
+            
+            add(new AmpTextAreaFieldPanel("purpose",
+                    new PropertyModel<String>(am, "purpose"), "Purpose", true, AmpFMTypes.MODULE));
+            
+            List<ITab> tabs = new ArrayList<ITab>();
+            tabs.add(new AmpCommentTab(cOvIndicators , "Purpose Objectively Verifiable Indicators", am, AmpCommentPanel.class));
+            tabs.add(new AmpCommentTab(cAssumption , "Purpose Assumption", am, AmpCommentPanel.class));
+            tabs.add(new AmpCommentTab(cVerification , "Purpose Verification", am, AmpCommentPanel.class));
+            
+            AmpCommentTabsFieldWrapper purposeTabs = new AmpCommentTabsFieldWrapper("purposeTabs", "Purpose Comments", tabs);
+            add(purposeTabs);
+            
+            add(new AmpTextAreaFieldPanel("results",
+                    new PropertyModel<String>(am, "results"), "Results", true, AmpFMTypes.MODULE));
+    
+            tabs = new ArrayList<ITab>();
+            tabs.add(new AmpCommentTab(cOvIndicators , "Results Objectively Verifiable Indicators", am, AmpCommentPanel.class));
+            tabs.add(new AmpCommentTab(cAssumption , "Results Assumption", am, AmpCommentPanel.class));
+            tabs.add(new AmpCommentTab(cVerification , "Results Verification", am, AmpCommentPanel.class));
+            
+            AmpCommentTabsFieldWrapper resultsTabs = new AmpCommentTabsFieldWrapper("resultsTabs", "Results Comments", tabs);
+            add(resultsTabs);
+            add(new AmpTextAreaFieldPanel("lessonsLearned",
+                    new PropertyModel<String>(am, "lessonsLearned"), "Lessons Learned", true, AmpFMTypes.MODULE));
+            add(new AmpTextAreaFieldPanel("projectImpact",
+                    new PropertyModel<String>(am, "projectImpact"), "Project Impact", true, AmpFMTypes.MODULE));
 
-			add(new AmpTextAreaFieldPanel("activitySummary",
-					new PropertyModel<String>(am, "activitySummary"), "Activity Summary", true, AmpFMTypes.MODULE));
-			add(new AmpTextAreaFieldPanel("conditionalities",
-					new PropertyModel<String>(am, "conditionality"), "Conditionalities", true, AmpFMTypes.MODULE));
-			add(new AmpTextAreaFieldPanel("projectManagement",
-					new PropertyModel<String>(am, "projectManagement"), "Project Management", true, AmpFMTypes.MODULE));
+            add(new AmpTextAreaFieldPanel("activitySummary",
+                    new PropertyModel<String>(am, "activitySummary"), "Activity Summary", true, AmpFMTypes.MODULE));
+            add(new AmpTextAreaFieldPanel("conditionalities",
+                    new PropertyModel<String>(am, "conditionality"), "Conditionalities", true, AmpFMTypes.MODULE));
+            add(new AmpTextAreaFieldPanel("projectManagement",
+                    new PropertyModel<String>(am, "projectManagement"), "Project Management", true, AmpFMTypes.MODULE));
 
-	}
+    }
 
-	public List<FormComponent<?>> getRequiredFormComponents() {
-		return requiredFormComponents;
-	}
+    public List<FormComponent<?>> getRequiredFormComponents() {
+        return requiredFormComponents;
+    }
 
     public List<FormComponent<?>> getRequiredRichTextFormComponents() {
         return requiredRichTextFormComponents;

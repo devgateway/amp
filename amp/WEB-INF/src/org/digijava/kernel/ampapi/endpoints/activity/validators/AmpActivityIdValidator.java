@@ -21,56 +21,56 @@ import org.digijava.module.aim.util.ActivityVersionUtil;
  * @author Nadejda Mandrescu
  */
 public class AmpActivityIdValidator extends InputValidator {
-	private boolean isOldActivityId = false;
+    private boolean isOldActivityId = false;
 
     @Override
-	public ApiErrorMessage getErrorMessage() {
-		if (isOldActivityId) {
+    public ApiErrorMessage getErrorMessage() {
+        if (isOldActivityId) {
             return ActivityErrors.UPDATE_ID_IS_OLD;
         }
-		return ActivityErrors.FIELD_INVALID_VALUE;
-	}
+        return ActivityErrors.FIELD_INVALID_VALUE;
+    }
 
-	@Override
-	public boolean isValid(ActivityImporter importer, Map<String, Object> newFieldParent, 
-			Map<String, Object> oldFieldParent, JsonBean fieldDescription, String fieldPath) {
-		// REFACTOR: let's define a flag (count = 2) once both amp_activity_id and amp_id are verified to immediately skip this validator
-		boolean isValid = true;
-		String fieldName = (String) fieldDescription.get(ActivityEPConstants.FIELD_NAME);
-		
-		// verify amp_activity_id, that is our main reference 
-		if (ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME.equals(fieldPath)) {
-			String internalId = String.valueOf(newFieldParent.get(ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME));
-			Long ampActivityId = NumberUtils.isNumber(internalId) ? Long.valueOf(internalId) : null; 
-			if (importer.isUpdate()) {
-				Long latestAmpActivityId = ampActivityId == null ? null :  
-						ActivityVersionUtil.getLastVersionForVersion(Long.valueOf(ampActivityId.toString()));
-				// if this is an update and we cannot match the id, then we report it as invalid
-				if (importer.getOldActivity() == null || latestAmpActivityId == null
-						|| !latestAmpActivityId.equals(importer.getOldActivity().getAmpActivityId())) {
-					isValid = false;
-					isOldActivityId = importer.getOldActivity() != null;
+    @Override
+    public boolean isValid(ActivityImporter importer, Map<String, Object> newFieldParent, 
+            Map<String, Object> oldFieldParent, JsonBean fieldDescription, String fieldPath) {
+        // REFACTOR: let's define a flag (count = 2) once both amp_activity_id and amp_id are verified to immediately skip this validator
+        boolean isValid = true;
+        String fieldName = (String) fieldDescription.get(ActivityEPConstants.FIELD_NAME);
+        
+        // verify amp_activity_id, that is our main reference 
+        if (ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME.equals(fieldPath)) {
+            String internalId = String.valueOf(newFieldParent.get(ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME));
+            Long ampActivityId = NumberUtils.isNumber(internalId) ? Long.valueOf(internalId) : null; 
+            if (importer.isUpdate()) {
+                Long latestAmpActivityId = ampActivityId == null ? null :  
+                        ActivityVersionUtil.getLastVersionForVersion(Long.valueOf(ampActivityId.toString()));
+                // if this is an update and we cannot match the id, then we report it as invalid
+                if (importer.getOldActivity() == null || latestAmpActivityId == null
+                        || !latestAmpActivityId.equals(importer.getOldActivity().getAmpActivityId())) {
+                    isValid = false;
+                    isOldActivityId = importer.getOldActivity() != null;
                     if (isOldActivityId) {
                         importer.setLatestActivityId(latestAmpActivityId);
                     }
-				}
-			} else if ((ampActivityId != null)) {
-					isValid = false;
-			}
-			
-		// verify amp_id
-		} else if (InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ID).equals(fieldName)) {
-			String ampId = (String) newFieldParent.get(InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ID));
-			if (importer.isUpdate()) {
-				if (importer.getOldActivity() == null || !importer.getOldActivity().getAmpId().equals(ampId)) {
-					isValid = false;
-				}
-			} else {
-				if (ampId != null) {
-					isValid = false;
-				}
-			}
-		}
-		return isValid;
-	}
+                }
+            } else if ((ampActivityId != null)) {
+                    isValid = false;
+            }
+            
+        // verify amp_id
+        } else if (InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ID).equals(fieldName)) {
+            String ampId = (String) newFieldParent.get(InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ID));
+            if (importer.isUpdate()) {
+                if (importer.getOldActivity() == null || !importer.getOldActivity().getAmpId().equals(ampId)) {
+                    isValid = false;
+                }
+            } else {
+                if (ampId != null) {
+                    isValid = false;
+                }
+            }
+        }
+        return isValid;
+    }
 }

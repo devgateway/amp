@@ -50,12 +50,12 @@ public class DigiConfig {
     
     private String ecsDisable;
     private String ecsServerName;
-	private String propertiesFile;
+    private String propertiesFile;
 
-	private int httpPort;
-	private int httpsPort;
-	
-	private ParamSafeHTML paramSafehtml; 	
+    private int httpPort;
+    private int httpsPort;
+    
+    private ParamSafeHTML paramSafehtml;    
     private ParamBbTag paramBbTag;
     private ForwardEmails forwardEmails;
     private ExceptionEmails exceptionEmails;
@@ -66,7 +66,7 @@ public class DigiConfig {
     private boolean ignore;
     private boolean enableLogging;
     private boolean enableAutoLogin;
-	private Integer accessLogPoolSize;
+    private Integer accessLogPoolSize;
     private Integer accessLogBuffSize;
     private String domainPrefix;
     private boolean enableOmniture;
@@ -346,13 +346,13 @@ public class DigiConfig {
         this.enableOmniture = enableOmniture;
     }
 
-	public boolean isCaseSensitiveTranslatioKeys() {
-		return caseSensitiveTranslatioKeys;
-	}
+    public boolean isCaseSensitiveTranslatioKeys() {
+        return caseSensitiveTranslatioKeys;
+    }
 
-	public void setCaseSensitiveTranslatioKeys(boolean caseSensitiveTranslatioKeys) {
-		this.caseSensitiveTranslatioKeys = caseSensitiveTranslatioKeys;
-	}
+    public void setCaseSensitiveTranslatioKeys(boolean caseSensitiveTranslatioKeys) {
+        this.caseSensitiveTranslatioKeys = caseSensitiveTranslatioKeys;
+    }
     public LogonSite getSiteDomain() {
         return siteDomain;
     }
@@ -362,51 +362,51 @@ public class DigiConfig {
     }
     
     public boolean isEnableAutoLogin() {
-		return enableAutoLogin;
-	}
+        return enableAutoLogin;
+    }
 
-	public void setEnableAutoLogin(boolean enableAutoLogin) {
-		this.enableAutoLogin = enableAutoLogin;
-	}
-	
-	public int getHttpPort() {
-		return httpPort;
-	}
+    public void setEnableAutoLogin(boolean enableAutoLogin) {
+        this.enableAutoLogin = enableAutoLogin;
+    }
+    
+    public int getHttpPort() {
+        return httpPort;
+    }
 
-	public void setHttpPort(int httpPort) {
-		this.httpPort = httpPort;
-	}
+    public void setHttpPort(int httpPort) {
+        this.httpPort = httpPort;
+    }
 
-	public int getHttpsPort() {
-		return httpsPort;
-	}
+    public int getHttpsPort() {
+        return httpsPort;
+    }
 
-	public void setHttpsPort(int httpsPort) {
-		this.httpsPort = httpsPort;
-	}
+    public void setHttpsPort(int httpsPort) {
+        this.httpsPort = httpsPort;
+    }
 
-	public String getEcsDisable() {
-		return ecsDisable;
-	}
+    public String getEcsDisable() {
+        return ecsDisable;
+    }
 
-	public void setEcsDisable(String ecsDisable) {
-		this.ecsDisable = ecsDisable;
-	}
+    public void setEcsDisable(String ecsDisable) {
+        this.ecsDisable = ecsDisable;
+    }
 
-	public String getEcsServerName() {
-		return ecsServerName;
-	}
+    public String getEcsServerName() {
+        return ecsServerName;
+    }
 
-	public void setEcsServerName(String ecsServerName) {
-		this.ecsServerName = ecsServerName;
-	}
+    public void setEcsServerName(String ecsServerName) {
+        this.ecsServerName = ecsServerName;
+    }
 
-	public String getPropertiesFile() {
-		return propertiesFile;
-	}
+    public String getPropertiesFile() {
+        return propertiesFile;
+    }
 
-	public void setPropertiesFile(String propertiesFile) {
-		this.propertiesFile = propertiesFile;
-	}
+    public void setPropertiesFile(String propertiesFile) {
+        this.propertiesFile = propertiesFile;
+    }
 
 }

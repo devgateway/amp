@@ -16,38 +16,38 @@ import org.digijava.module.gateperm.core.GatePermConst;
  */
 
 public class VerifiedRegionGate extends Gate {
-	
+    
     public static final MetaInfo<?>[] SCOPE_KEYS  = new MetaInfo[] { GatePermConst.ScopeKeys.CURRENT_MEMBER,
-    																GatePermConst.ScopeKeys.CURRENT_REGION};
+                                                                    GatePermConst.ScopeKeys.CURRENT_REGION};
 
     private static final String    DESCRIPTION = "This gate checks if the current user has a verified region assigned";
 
-	@Override
-	public boolean logic() throws Exception {
-		TeamMember tm = (TeamMember) scope.get(GatePermConst.ScopeKeys.CURRENT_MEMBER);
-		if (tm==null) 
-			return false; 
-		User user = TeamMemberUtil.getUserEntityByTMId(tm.getMemberId());
+    @Override
+    public boolean logic() throws Exception {
+        TeamMember tm = (TeamMember) scope.get(GatePermConst.ScopeKeys.CURRENT_MEMBER);
+        if (tm==null) 
+            return false; 
+        User user = TeamMemberUtil.getUserEntityByTMId(tm.getMemberId());
 
-		//check if the scope has a region in it, if it does use that directly
-		if (user.getRegion() != null)
-			return true;
-		return false;
-	}
+        //check if the scope has a region in it, if it does use that directly
+        if (user.getRegion() != null)
+            return true;
+        return false;
+    }
 
-	@Override
-	public MetaInfo<?>[] parameterInfo() {
-		//no parameters needed in the gate yet
-		return null;
-	}
+    @Override
+    public MetaInfo<?>[] parameterInfo() {
+        //no parameters needed in the gate yet
+        return null;
+    }
 
-	@Override
-	public MetaInfo[] mandatoryScopeKeys() {
-		return SCOPE_KEYS;
-	}
+    @Override
+    public MetaInfo[] mandatoryScopeKeys() {
+        return SCOPE_KEYS;
+    }
 
-	@Override
-	public String description() {
-		return DESCRIPTION;
-	}
+    @Override
+    public String description() {
+        return DESCRIPTION;
+    }
 }

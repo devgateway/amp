@@ -110,11 +110,11 @@ public class LuceneUtil implements Serializable {
     public final static String ID_FIELD = "id";
 
 
-    public final static int MAX_LUCENE_RESULTS	= 2000;
+    public final static int MAX_LUCENE_RESULTS  = 2000;
 
     /**
      * LUCENE INDEX PATH: use the LUCENE_BASE_DIR + new 
-     * 					  directory for your index
+     *                    directory for your index
      */
 
     /**
@@ -143,7 +143,7 @@ public class LuceneUtil implements Serializable {
 
     private static final int CHUNK_SIZE = 10000;
 
-    public final static Integer SEARCH_MODE_AND	= 1;
+    public final static Integer SEARCH_MODE_AND = 1;
 
     private static final boolean SEACH_TYPE_FUZZY = true;
     private static final float MINIMUM_SIMILARITY = 0.5f;
@@ -246,196 +246,196 @@ public class LuceneUtil implements Serializable {
 
 
     public static void checkActivityIndex(ServletContext sc) {
-    	checkLuceneIndex(sc, false, ACTIVITY_INDEX_SUFFIX, ACTIVITY_INDEX_DIRECTORY);
+        checkLuceneIndex(sc, false, ACTIVITY_INDEX_SUFFIX, ACTIVITY_INDEX_DIRECTORY);
     }
     
     public static void checkPledgeIndex(ServletContext sc) {
-    	checkLuceneIndex(sc, true, PLEDGE_INDEX_SUFFIX, PLEDGE_INDEX_DIRECTORY);
+        checkLuceneIndex(sc, true, PLEDGE_INDEX_SUFFIX, PLEDGE_INDEX_DIRECTORY);
     }
     
     public static void checkLuceneIndex(ServletContext sc, boolean pledge, String indexSuffix, String indexDirectory){
-    	logger.info("Lucene startup!");
-    	
-    	File idxStamp = new File(sc.getRealPath("/") + LUCENE_BASE_DIR + "/" + indexSuffix + LUCENE_STAMP_EXT);
-    	File idxDir = new File(sc.getRealPath("/") + indexDirectory);
-    	boolean deleteIndex = false;
-    	
-    	checkStamp:{
-    		if (idxStamp.exists()){
-    			logger.info("Checking stamp ...");
-    			
-    			FileInputStream fis = null;
-    			try {
-    				fis = new FileInputStream(idxStamp);
-    			} catch (FileNotFoundException e) {
-        			logger.error("Stamp file missing:",e);
-        			logger.info("Checking for index directory ...");
-        			deleteIndex = true;
-        			break checkStamp;
-    			}
-    			
-    			DataInputStream dis = new DataInputStream(fis);
-    			long serialId;
-    			long dbId;
-    			try {
-    				serialId = dis.readLong();
-    				dbId = dis.readLong();
-    				dis.close();
-    			} catch (IOException e) {
-        			logger.error("Error while reading stamp file:",e);
-        			logger.info("Checking for index directory ...");
-        			deleteIndex = true;
-        			break checkStamp;
-    			}
-    			
-    			//checking if the indexing algorithm has changed - new source code?
-    			if (serialVersionUID != serialId){
-    				logger.warn("Algorithm serial ID mismatch ... regenerating index");
-    				idxStamp.delete();
-    				logger.info("Stamp deleted, looking for index directory ...");
-    				deleteIndex = true;
-    				break checkStamp;
-    			}
-    			else{
-    				logger.info("Lucene Index algorithm serial ID is OK");
-    			}
-    			
-    			//getting DB timestamp
-    			long dbStamp = -1;
-    			try {
-					dbStamp = getIdxStamp(indexSuffix).getStamp();
-				} catch (Exception e) {
-					logger.error("", e);
-				}
-    			
-    			//checking the database for timestamp
-    			if (dbStamp != dbId){
-    				logger.warn("Database time stamp mismatch ... regenerating index");
-    				idxStamp.delete();
-    				logger.info("Stamp deleted, looking for index directory ...");
-    				deleteIndex = true;
-    				break checkStamp;
-    			}
-    			else{
-    				logger.info("Lucene Index database stamp is OK");
-    			}
-     		}
-    		else{
-    			logger.info("Stamp file missing, checking for index directory ...");
-    			deleteIndex = true;
-    		}
-    	}
-    	
-    	if (deleteIndex){
-    		if (idxDir.exists()){
-    		if (deleteIndex){
-    			logger.info("Found, deleting ...");
-    			if (deleteDirectory(idxDir))
-    				logger.info("Done");
-    			else
-    				logger.info("Can't delete!");
-    		}
-		}
-    		else{
-    			logger.info("Not found ... will be generated!");
-    		}
-    	}
-   	
-    	if (!idxDir.exists()){ //we need to create the index from 0  
-    		if (!idxDir.mkdirs()){
-    			logger.error("**********************************************************************");
-    			logger.error("*                                                                    *");
-    			logger.error("*                           WARNING                                  *");
-    			logger.error("*     Can't create Lucene Index directory, searching won't work!     *");
-    			logger.error("*                                                                    *");
-    			logger.error("**********************************************************************");
-    			return;
-    		}
-    		
-    		int mId = getMaxId(pledge);
-    		long startTime = System.currentTimeMillis();
-    		try {
-				IndexWriter fsWriter = new IndexWriter(idxDir, analyzer, true);
-				
-				int chunkNo = 0;
-		
-				while (createIndex(chunkNo, mId, fsWriter) != null){
-					chunkNo++;
-				}
-				fsWriter.optimize();
-				fsWriter.close();
-				long stopTime = System.currentTimeMillis();
-				
-				try {
-					AmpLuceneIndexStamp currentStamp = getIdxStamp(indexSuffix);
-					if (currentStamp != null)
-						DbUtil.deleteAllStamps(indexSuffix);
-				} catch (Exception e1) {
-				}
-				
-				AmpLuceneIndexStamp stamp = new AmpLuceneIndexStamp();
-				stamp.setIdxName(indexSuffix);
-				stamp.setStamp(stopTime);
-				
-				try {
-					Session session = PersistenceManager.getRequestDBSession();
-					//beginTransaction();
-					session.save(stamp);
-					//tx.commit();
-					//PersistenceManager.releaseSession(session);
-				}
-				catch (Exception e) {
-					logger.error("Error while saving lucene db stamp:", e);
-				}
+        logger.info("Lucene startup!");
+        
+        File idxStamp = new File(sc.getRealPath("/") + LUCENE_BASE_DIR + "/" + indexSuffix + LUCENE_STAMP_EXT);
+        File idxDir = new File(sc.getRealPath("/") + indexDirectory);
+        boolean deleteIndex = false;
+        
+        checkStamp:{
+            if (idxStamp.exists()){
+                logger.info("Checking stamp ...");
+                
+                FileInputStream fis = null;
+                try {
+                    fis = new FileInputStream(idxStamp);
+                } catch (FileNotFoundException e) {
+                    logger.error("Stamp file missing:",e);
+                    logger.info("Checking for index directory ...");
+                    deleteIndex = true;
+                    break checkStamp;
+                }
+                
+                DataInputStream dis = new DataInputStream(fis);
+                long serialId;
+                long dbId;
+                try {
+                    serialId = dis.readLong();
+                    dbId = dis.readLong();
+                    dis.close();
+                } catch (IOException e) {
+                    logger.error("Error while reading stamp file:",e);
+                    logger.info("Checking for index directory ...");
+                    deleteIndex = true;
+                    break checkStamp;
+                }
+                
+                //checking if the indexing algorithm has changed - new source code?
+                if (serialVersionUID != serialId){
+                    logger.warn("Algorithm serial ID mismatch ... regenerating index");
+                    idxStamp.delete();
+                    logger.info("Stamp deleted, looking for index directory ...");
+                    deleteIndex = true;
+                    break checkStamp;
+                }
+                else{
+                    logger.info("Lucene Index algorithm serial ID is OK");
+                }
+                
+                //getting DB timestamp
+                long dbStamp = -1;
+                try {
+                    dbStamp = getIdxStamp(indexSuffix).getStamp();
+                } catch (Exception e) {
+                    logger.error("", e);
+                }
+                
+                //checking the database for timestamp
+                if (dbStamp != dbId){
+                    logger.warn("Database time stamp mismatch ... regenerating index");
+                    idxStamp.delete();
+                    logger.info("Stamp deleted, looking for index directory ...");
+                    deleteIndex = true;
+                    break checkStamp;
+                }
+                else{
+                    logger.info("Lucene Index database stamp is OK");
+                }
+            }
+            else{
+                logger.info("Stamp file missing, checking for index directory ...");
+                deleteIndex = true;
+            }
+        }
+        
+        if (deleteIndex){
+            if (idxDir.exists()){
+            if (deleteIndex){
+                logger.info("Found, deleting ...");
+                if (deleteDirectory(idxDir))
+                    logger.info("Done");
+                else
+                    logger.info("Can't delete!");
+            }
+        }
+            else{
+                logger.info("Not found ... will be generated!");
+            }
+        }
+    
+        if (!idxDir.exists()){ //we need to create the index from 0  
+            if (!idxDir.mkdirs()){
+                logger.error("**********************************************************************");
+                logger.error("*                                                                    *");
+                logger.error("*                           WARNING                                  *");
+                logger.error("*     Can't create Lucene Index directory, searching won't work!     *");
+                logger.error("*                                                                    *");
+                logger.error("**********************************************************************");
+                return;
+            }
+            
+            int mId = getMaxId(pledge);
+            long startTime = System.currentTimeMillis();
+            try {
+                IndexWriter fsWriter = new IndexWriter(idxDir, analyzer, true);
+                
+                int chunkNo = 0;
+        
+                while (createIndex(chunkNo, mId, fsWriter) != null){
+                    chunkNo++;
+                }
+                fsWriter.optimize();
+                fsWriter.close();
+                long stopTime = System.currentTimeMillis();
+                
+                try {
+                    AmpLuceneIndexStamp currentStamp = getIdxStamp(indexSuffix);
+                    if (currentStamp != null)
+                        DbUtil.deleteAllStamps(indexSuffix);
+                } catch (Exception e1) {
+                }
+                
+                AmpLuceneIndexStamp stamp = new AmpLuceneIndexStamp();
+                stamp.setIdxName(indexSuffix);
+                stamp.setStamp(stopTime);
+                
+                try {
+                    Session session = PersistenceManager.getRequestDBSession();
+                    //beginTransaction();
+                    session.save(stamp);
+                    //tx.commit();
+                    //PersistenceManager.releaseSession(session);
+                }
+                catch (Exception e) {
+                    logger.error("Error while saving lucene db stamp:", e);
+                }
 
-				if (idxStamp.exists()){
-					idxStamp.delete();
-				}
-				
-				try{
-					FileOutputStream fos = new FileOutputStream(idxStamp);
-					DataOutputStream dos = new DataOutputStream(fos);
-					
-					dos.writeLong(serialVersionUID);
-					dos.writeLong(stopTime);
-					dos.close();
-				}
-				catch (Exception e) {
-					logger.error("Error while saving index stamp file:", e);
-				}
-				logger.info("Indexing took: " + (stopTime - startTime) + " ms");
-			} catch (IOException e) {
-				logger.error("Error while creting Lucene index:", e);
-				deleteDirectory(idxDir); //no directory .. no index
-				return;
-			}
-			
-			logger.info("Lucene Index successfully created!");
-    	}
-    	else
-    		logger.info("Lucene Index found, using saved one:" + idxDir.getAbsolutePath());
+                if (idxStamp.exists()){
+                    idxStamp.delete();
+                }
+                
+                try{
+                    FileOutputStream fos = new FileOutputStream(idxStamp);
+                    DataOutputStream dos = new DataOutputStream(fos);
+                    
+                    dos.writeLong(serialVersionUID);
+                    dos.writeLong(stopTime);
+                    dos.close();
+                }
+                catch (Exception e) {
+                    logger.error("Error while saving index stamp file:", e);
+                }
+                logger.info("Indexing took: " + (stopTime - startTime) + " ms");
+            } catch (IOException e) {
+                logger.error("Error while creting Lucene index:", e);
+                deleteDirectory(idxDir); //no directory .. no index
+                return;
+            }
+            
+            logger.info("Lucene Index successfully created!");
+        }
+        else
+            logger.info("Lucene Index found, using saved one:" + idxDir.getAbsolutePath());
     }
 
     private static int getMaxId(boolean pledge) {
-    	int ret = -1;
-		try{
-			Session session = PersistenceManager.getSession();
-			Connection	conn	= ((SessionImplementor)session).connection();
-			Statement st		= conn.createStatement();
-			String columnName = pledge? "pledge_id" : "amp_activity_id";
-			String tableName = pledge ? "v_pledges_titles" : "v_titles";
-			String qryStr		= String.format("select max(%s) mid from %s",columnName,tableName );
+        int ret = -1;
+        try{
+            Session session = PersistenceManager.getSession();
+            Connection  conn    = ((SessionImplementor)session).connection();
+            Statement st        = conn.createStatement();
+            String columnName = pledge? "pledge_id" : "amp_activity_id";
+            String tableName = pledge ? "v_pledges_titles" : "v_titles";
+            String qryStr       = String.format("select max(%s) mid from %s",columnName,tableName );
 
-			ResultSet rs		= st.executeQuery(qryStr);
-			
-			rs.next();
-			if(rs.getString("mid")==null) return 0;
-			ret = Integer.parseInt(rs.getString("mid"));
-		}
-		catch(Exception ex){
-			logger.error("Error while getting the max " + (pledge? "pledge" : "activity" )+ " id:", ex);
-		}
-		return ret;
+            ResultSet rs        = st.executeQuery(qryStr);
+            
+            rs.next();
+            if(rs.getString("mid")==null) return 0;
+            ret = Integer.parseInt(rs.getString("mid"));
+        }
+        catch(Exception ex){
+            logger.error("Error while getting the max " + (pledge? "pledge" : "activity" )+ " id:", ex);
+        }
+        return ret;
     }
     /**
      * Metod is used for first time index creation
@@ -444,11 +444,11 @@ public class LuceneUtil implements Serializable {
      */
     private static Integer createIndex(final int chunkNo, final int mId, final IndexWriter indexWriter) {
         // RAMDirectory index = new RAMDirectory();
-		/*
-		 * IndexWriter indexWriter = null; try { indexWriter = new
-		 * IndexWriter(index, analyzer, true); } catch (Exception e) {
-		 * e.printStackTrace(); }
-		 */
+        /*
+         * IndexWriter indexWriter = null; try { indexWriter = new
+         * IndexWriter(index, analyzer, true); } catch (Exception e) {
+         * e.printStackTrace(); }
+         */
 
         logger.info("Getting activity List for chunk no " + chunkNo + " !");
         Session session = null;
@@ -586,21 +586,21 @@ public class LuceneUtil implements Serializable {
                     //
                 }
 //
-//				// Bolivia contract number
-//				qryStr = "select * from v_convenio_numcont where amp_activity_id >= " + chunkStart
-//						+ " and amp_activity_id < " + chunkEnd + " ";
-//				rs = st.executeQuery(qryStr);
-//				rs.last();
-//				logger.info("Starting iteration of " + rs.getRow() + " results!");
-//				isNext = rs.first();
-//				while (isNext) {
-//					int actId = Integer.parseInt(rs.getString("amp_activity_id"));
-//					x = (Items) list.get(actId);
-//					if (x != null)
-//						x.numcont = rs.getString("numcont");
-//					isNext = rs.next();
-//					//
-//				}
+//              // Bolivia contract number
+//              qryStr = "select * from v_convenio_numcont where amp_activity_id >= " + chunkStart
+//                      + " and amp_activity_id < " + chunkEnd + " ";
+//              rs = st.executeQuery(qryStr);
+//              rs.last();
+//              logger.info("Starting iteration of " + rs.getRow() + " results!");
+//              isNext = rs.first();
+//              while (isNext) {
+//                  int actId = Integer.parseInt(rs.getString("amp_activity_id"));
+//                  x = (Items) list.get(actId);
+//                  if (x != null)
+//                      x.numcont = rs.getString("numcont");
+//                  isNext = rs.next();
+//                  //
+//              }
 
                 // Bolivia component code
                 qryStr = String.format("SELECT vt.* FROM v_bolivia_component_code vt JOIN v_activity_latest_and_validated lv ON vt.amp_activity_id = lv.amp_activity_id WHERE (vt.amp_activity_id >= %d) AND (vt.amp_activity_id < %d)", chunkStart, chunkEnd);
@@ -634,20 +634,20 @@ public class LuceneUtil implements Serializable {
                 }
 
                 // New fields for Senegal.
-				/*
-				 * qryStr =
-				 * "select * from v_senegal_cris_budget where amp_activity_id >= "
-				 * + chunkStart + " and amp_activity_id < " + chunkEnd + " "; rs
-				 * = st.executeQuery(qryStr); rs.last();
-				 * logger.info("Starting iteration of " + rs.getRow() +
-				 * " amp_activity_components!"); isNext = rs.first();
-				 * 
-				 * while (isNext) { int currActId =
-				 * rs.getInt("amp_activity_id"); x = (Items)
-				 * list.get(currActId); x.CRIS = rs.getString("cris_number");
-				 * x.budgetNumber = rs.getString("budget_number"); isNext =
-				 * rs.next(); }
-				 */
+                /*
+                 * qryStr =
+                 * "select * from v_senegal_cris_budget where amp_activity_id >= "
+                 * + chunkStart + " and amp_activity_id < " + chunkEnd + " "; rs
+                 * = st.executeQuery(qryStr); rs.last();
+                 * logger.info("Starting iteration of " + rs.getRow() +
+                 * " amp_activity_components!"); isNext = rs.first();
+                 * 
+                 * while (isNext) { int currActId =
+                 * rs.getInt("amp_activity_id"); x = (Items)
+                 * list.get(currActId); x.CRIS = rs.getString("cris_number");
+                 * x.budgetNumber = rs.getString("budget_number"); isNext =
+                 * rs.next(); }
+                 */
 
                 logger.info("Building the index ");
                 Iterator it = list.values().iterator();
@@ -788,14 +788,14 @@ public class LuceneUtil implements Serializable {
 
 
     public static Document pledge2Document(Long pledgeId, String title, String additionalInfo) {
-		Document doc = new Document();
-		String all = new String("");
+        Document doc = new Document();
+        String all = new String("");
 
-		if (pledgeId != null){
+        if (pledgeId != null){
             doc.add(new Field(ID_FIELD, pledgeId.toString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
             //all = all.concat(" " + actId);
         }
-		
+        
         HashMap<String, String> regularFieldNames = new HashMap<String, String>();
         regularFieldNames.put("pledgeId", String.valueOf(pledgeId));
         regularFieldNames.put("title", title);
@@ -806,44 +806,44 @@ public class LuceneUtil implements Serializable {
         {
             String luceneValue = buildLuceneValueForField(id, field);
             if (luceneValue == null)
-            	luceneValue = regularFieldNames.get(field);
+                luceneValue = regularFieldNames.get(field);
 
          // Added try/catch because Field can throw an exception if any of the parameters is wrong and that would break the process. 
             try {
-	            if ("title".equals(field)){
-	                doc.add(new Field(field, luceneValue, Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.YES));
-	            } else {
-	                doc.add(new Field(field, luceneValue, Field.Store.NO, Field.Index.ANALYZED));
-	            }
+                if ("title".equals(field)){
+                    doc.add(new Field(field, luceneValue, Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.YES));
+                } else {
+                    doc.add(new Field(field, luceneValue, Field.Store.NO, Field.Index.ANALYZED));
+                }
             } catch (Exception e) {
-            	logger.error("Error reindexing document - field:" + field + " - value:" + luceneValue);
-            	logger.error("", e);
+                logger.error("Error reindexing document - field:" + field + " - value:" + luceneValue);
+                logger.error("", e);
             }
             all = all.concat(" " + luceneValue);
         }
 
 /*
         if (projectId != null){
-			doc.add(new Field("projectId", projectId, Field.Store.NO, Field.Index.ANALYZED));
-			all = all.concat(" " + projectId);
-		}
-		if (title != null){
-			doc.add(new Field("title", title, Field.Store.YES, Field.Index.ANALYZED,Field.TermVector.YES));
-			all = all.concat(" " + title);
-		}*/
-		if (additionalInfo!= null && additionalInfo.length()>0){
-			doc.add(new Field("additionalInfo", additionalInfo, Field.Store.NO, Field.Index.ANALYZED));
-			all = all.concat(" " + additionalInfo);
-		}
-		
-		
-		
-		if (all.length() == 0)
-			return null;
-		
-		doc.add(new Field("all", all, Field.Store.NO, Field.Index.ANALYZED));
-		return doc;
-	}    
+            doc.add(new Field("projectId", projectId, Field.Store.NO, Field.Index.ANALYZED));
+            all = all.concat(" " + projectId);
+        }
+        if (title != null){
+            doc.add(new Field("title", title, Field.Store.YES, Field.Index.ANALYZED,Field.TermVector.YES));
+            all = all.concat(" " + title);
+        }*/
+        if (additionalInfo!= null && additionalInfo.length()>0){
+            doc.add(new Field("additionalInfo", additionalInfo, Field.Store.NO, Field.Index.ANALYZED));
+            all = all.concat(" " + additionalInfo);
+        }
+        
+        
+        
+        if (all.length() == 0)
+            return null;
+        
+        doc.add(new Field("all", all, Field.Store.NO, Field.Index.ANALYZED));
+        return doc;
+    }    
 
 
 
@@ -880,8 +880,8 @@ public class LuceneUtil implements Serializable {
                     // Added try/catch because Field can throw an exception if any of the parameters is wrong and that would break the process.
                     try {
                         if ("name".equals(field)){
-                            	/*logger.info("Adding activity name to lucene index. Name: "+translation.getTranslation()
-                            			+" Locale: "+translation.getLocale());*/
+                                /*logger.info("Adding activity name to lucene index. Name: "+translation.getTranslation()
+                                        +" Locale: "+translation.getLocale());*/
                             doc.add(new Field(field + "_" + translation.getLocale(),
                                     translation.getTranslation(),
                                     Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.YES));
@@ -907,16 +907,16 @@ public class LuceneUtil implements Serializable {
                 }
             }
         }
-	
-	/*
-	        if (projectId != null){
-				doc.add(new Field("projectId", projectId, Field.Store.NO, Field.Index.ANALYZED));
-				all = all.concat(" " + projectId);
-			}
-			if (title != null){
-				doc.add(new Field("title", title, Field.Store.YES, Field.Index.ANALYZED,Field.TermVector.YES));
-				all = all.concat(" " + title);
-			}*/
+    
+    /*
+            if (projectId != null){
+                doc.add(new Field("projectId", projectId, Field.Store.NO, Field.Index.ANALYZED));
+                all = all.concat(" " + projectId);
+            }
+            if (title != null){
+                doc.add(new Field("title", title, Field.Store.YES, Field.Index.ANALYZED,Field.TermVector.YES));
+                all = all.concat(" " + title);
+            }*/
         if (description != null && description.length()>0){
             doc.add(new Field("description", description, Field.Store.NO, Field.Index.ANALYZED));
             all = all.concat(" " + description);
@@ -986,7 +986,7 @@ public class LuceneUtil implements Serializable {
 
             IndexWriter indexWriter = null;
             indexWriter = new IndexWriter(rootRealPath + PLEDGE_INDEX_DIRECTORY, LuceneUtil.analyzer, false, MaxFieldLength.LIMITED);
-//				indexWriter = new IndexWriter(rootRealPath + ACTVITY_INDEX_DIRECTORY, LuceneUtil.analyzer, false);
+//              indexWriter = new IndexWriter(rootRealPath + ACTVITY_INDEX_DIRECTORY, LuceneUtil.analyzer, false);
             // Util.getEditorBody(site,act.getDescription(),navigationLanguage);
             Document doc = null;
             doc = pledge2Document(newfakePledge.getAmpId(), newfakePledge.getName(), newfakePledge.getAdditionalInfo());
@@ -1028,11 +1028,11 @@ public class LuceneUtil implements Serializable {
             Document doc = null;
 
             ArrayList<String> componentsCode = new ArrayList<String>();
-			if(newActivity.getComponents() != null && Hibernate.isInitialized(newActivity.getComponents())){
-				for (AmpComponent c : newActivity.getComponents()) {
-					componentsCode.add(c.getCode());
-				}
-			}
+            if(newActivity.getComponents() != null && Hibernate.isInitialized(newActivity.getComponents())){
+                for (AmpComponent c : newActivity.getComponents()) {
+                    componentsCode.add(c.getCode());
+                }
+            }
 
             String language = navigationLanguage.getLanguage();
             doc = activity2Document(String.valueOf(newActivity.getAmpActivityId()), projectid, String.valueOf(newActivity.getName()),
@@ -1207,12 +1207,12 @@ public class LuceneUtil implements Serializable {
     }
 
     private static String escape(String s) {
-    	StringBuilder bld = new StringBuilder(); 
-    	for (int i = 0; i < s.length(); i++) {
-    		bld.append("\\");
-    		bld.append(s.charAt(i));
-    	}
-    	return bld.toString();
+        StringBuilder bld = new StringBuilder(); 
+        for (int i = 0; i < s.length(); i++) {
+            bld.append("\\");
+            bld.append(s.charAt(i));
+        }
+        return bld.toString();
     }
 
     private static String getEscapedSearchString(String searchString) {
@@ -1370,7 +1370,7 @@ public class LuceneUtil implements Serializable {
      */
 
     public static void createHelp(ServletContext sc, ModuleInstance modInstance , String lang) throws  DgException{
-//		boolean createDir = LuceneUtil.checkHelpDir(sc);
+//      boolean createDir = LuceneUtil.checkHelpDir(sc);
         boolean createDir = LuceneUtil.checkHelpDir(sc,modInstance,lang);
 
         if(!createDir){

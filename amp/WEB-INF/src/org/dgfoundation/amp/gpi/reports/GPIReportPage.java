@@ -9,71 +9,71 @@ import java.util.Map;
  */
 public class GPIReportPage {
 
-	/**
-	 * Top report headers list
-	 */
-	protected List<GPIReportOutputColumn> headers;
+    /**
+     * Top report headers list
+     */
+    protected List<GPIReportOutputColumn> headers;
 
-	/**
-	 * The report data. Each lines hold information for each
-	 * {@link GPIReportOutputColumn} column
-	 */
-	protected List<Map<GPIReportOutputColumn, String>> contents;
+    /**
+     * The report data. Each lines hold information for each
+     * {@link GPIReportOutputColumn} column
+     */
+    protected List<Map<GPIReportOutputColumn, String>> contents;
 
-	protected int recordsPerPage;
+    protected int recordsPerPage;
 
-	protected int currentPageNumber;
+    protected int currentPageNumber;
 
-	protected int totalPageCount;
+    protected int totalPageCount;
 
-	protected int totalRecords;
+    protected int totalRecords;
 
-	public List<GPIReportOutputColumn> getHeaders() {
-		return headers;
-	}
+    public List<GPIReportOutputColumn> getHeaders() {
+        return headers;
+    }
 
-	public void setHeaders(List<GPIReportOutputColumn> headers) {
-		this.headers = headers;
-	}
+    public void setHeaders(List<GPIReportOutputColumn> headers) {
+        this.headers = headers;
+    }
 
-	public List<Map<GPIReportOutputColumn, String>> getContents() {
-		return contents;
-	}
+    public List<Map<GPIReportOutputColumn, String>> getContents() {
+        return contents;
+    }
 
-	public void setContents(List<Map<GPIReportOutputColumn, String>> contents) {
-		this.contents = contents;
-	}
+    public void setContents(List<Map<GPIReportOutputColumn, String>> contents) {
+        this.contents = contents;
+    }
 
-	public int getRecordsPerPage() {
-		return recordsPerPage;
-	}
+    public int getRecordsPerPage() {
+        return recordsPerPage;
+    }
 
-	public void setRecordsPerPage(int recordsPerPage) {
-		this.recordsPerPage = recordsPerPage;
-	}
+    public void setRecordsPerPage(int recordsPerPage) {
+        this.recordsPerPage = recordsPerPage;
+    }
 
-	public int getCurrentPageNumber() {
-		return currentPageNumber;
-	}
+    public int getCurrentPageNumber() {
+        return currentPageNumber;
+    }
 
-	public void setCurrentPageNumber(int currentPageNumber) {
-		this.currentPageNumber = currentPageNumber;
-	}
+    public void setCurrentPageNumber(int currentPageNumber) {
+        this.currentPageNumber = currentPageNumber;
+    }
 
-	public int getTotalPageCount() {
-		return totalPageCount;
-	}
+    public int getTotalPageCount() {
+        return totalPageCount;
+    }
 
-	public void setTotalPageCount(int totalPageCount) {
-		this.totalPageCount = totalPageCount;
-	}
+    public void setTotalPageCount(int totalPageCount) {
+        this.totalPageCount = totalPageCount;
+    }
 
-	public int getTotalRecords() {
-		return totalRecords;
-	}
+    public int getTotalRecords() {
+        return totalRecords;
+    }
 
-	public void setTotalRecords(int totalRecords) {
-		this.totalRecords = totalRecords;
-	}
+    public void setTotalRecords(int totalRecords) {
+        this.totalRecords = totalRecords;
+    }
 
 }

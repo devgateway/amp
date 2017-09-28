@@ -7,12 +7,12 @@ import org.quartz.StatefulJob;
 
 public class ActivityFreezingJob extends ConnectionCleaningJob implements StatefulJob {
 
-	@Override
-	public void executeInternal(JobExecutionContext context) throws JobExecutionException {
-		AmpJobsUtil.populateRequest();
-		AmpJobsUtil.setTeamForNonRequestReport(59L);
-		DataFreezeService.processFreezingEvent();
+    @Override
+    public void executeInternal(JobExecutionContext context) throws JobExecutionException {
+        AmpJobsUtil.populateRequest();
+        AmpJobsUtil.setTeamForNonRequestReport(59L);
+        DataFreezeService.processFreezingEvent();
 
-	}
+    }
 
 }

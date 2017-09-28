@@ -8,40 +8,40 @@ package org.dgfoundation.amp.gpi.reports;
  */
 public class GPIRemark {
 
-	private String donorAgency;
-	private String date;
-	private String remark;
-	
-	public GPIRemark() {}
-	
-	public GPIRemark(String donorAgency, String date, String remark) {
-		super();
-		this.donorAgency = donorAgency;
-		this.date = date;
-		this.remark = remark;
-	}
+    private String donorAgency;
+    private String date;
+    private String remark;
+    
+    public GPIRemark() {}
+    
+    public GPIRemark(String donorAgency, String date, String remark) {
+        super();
+        this.donorAgency = donorAgency;
+        this.date = date;
+        this.remark = remark;
+    }
 
-	public String getDonorAgency() {
-		return donorAgency;
-	}
+    public String getDonorAgency() {
+        return donorAgency;
+    }
 
-	public void setDonorAgency(String donorAgency) {
-		this.donorAgency = donorAgency;
-	}
+    public void setDonorAgency(String donorAgency) {
+        this.donorAgency = donorAgency;
+    }
 
-	public String getDate() {
-		return date;
-	}
+    public String getDate() {
+        return date;
+    }
 
-	public void setDate(String date) {
-		this.date = date;
-	}
+    public void setDate(String date) {
+        this.date = date;
+    }
 
-	public String getRemark() {
-		return remark;
-	}
+    public String getRemark() {
+        return remark;
+    }
 
-	public void setRemark(String remark) {
-		this.remark = remark;
-	}
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 }

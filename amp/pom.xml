@@ -16,6 +16,8 @@
         <saiku.version>3.0-RC2</saiku.version>
         <saiku3.version>3.0-RC2-DG</saiku3.version>
         <apidocs>false</apidocs>
+        <buildSource></buildSource>
+        <buildDate></buildDate>
     </properties>
     <repositories>
         <repository>
@@ -985,6 +987,8 @@
 
         <outputDirectory>${project.basedir}/WEB-INF/classes</outputDirectory>
 
+        <finalName>${project.artifactId}</finalName>
+
         <resources>
             <resource>
                 <directory>WEB-INF/src</directory>
@@ -1008,8 +1012,6 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.3</version>
                 <configuration>
-                    <warName>${project.version}</warName>
-
                     <recompressZippedFiles>false</recompressZippedFiles>
                     <archive>
                         <manifestEntries>
@@ -1040,11 +1042,16 @@
                                 <exclude>TEMPLATE/ampTemplate/site-config.xml</exclude>
                                 <exclude>TEMPLATE/ampTemplate/gisModule/dev/node/**</exclude>
                                 <exclude>TEMPLATE/ampTemplate/gisModule/dev/node_modules/**</exclude>
+                                <exclude>TEMPLATE/ampTemplate/dashboard/dev/node_modules/**</exclude>
                                 <exclude>TEMPLATE/ampTemplate/node_modules/amp-boilerplate/node/**</exclude>
                                 <exclude>TEMPLATE/ampTemplate/node_modules/amp-boilerplate/node_modules/**</exclude>
                                 <exclude>TEMPLATE/ampTemplate/node_modules/gis-layers-manager/node/**</exclude>
                                 <exclude>TEMPLATE/ampTemplate/node_modules/gis-layers-manager/node_modules/**</exclude>
                                 <exclude>TEMPLATE/ampTemplate/node_modules/amp-filter/node_modules/**</exclude>
+                                <exclude>TEMPLATE/ampTemplate/node_modules/amp-settings/node/**</exclude>
+                                <exclude>TEMPLATE/ampTemplate/node_modules/amp-settings/node_modules/**</exclude>
+                                <exclude>TEMPLATE/reamp/node/**</exclude>
+                                <exclude>TEMPLATE/reamp/node_modules/**</exclude>
                                 <exclude>src/**</exclude>
                                 <exclude>target/**</exclude>
                             </excludes>

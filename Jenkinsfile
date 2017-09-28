@@ -42,6 +42,11 @@ def updateGitHubCommitStatus(context, message, state) {
     ])
 }
 
+def readAMPVersion(pathToPom) {
+    def project = new XmlSlurper().parseFile(pathToPom)
+    project.version.text()
+}
+
 // Run checkstyle only for PR builds
 stage('Checkstyle') {
     if (branch == null) {
@@ -78,7 +83,7 @@ stage('Build') {
         sh(returnStatus: true, script: "docker rmi phosphorus:5000/amp-webapp:${tag} > /dev/null")
 
         // Find AMP version
-        codeVersion = (readFile('amp/TEMPLATE/ampTemplate/site-config.xml') =~ /(?s).*<\!ENTITY ampVersion "([\d\.]+)">.*/)[0][1]
+        codeVersion = readAMPVersion('amp/pom.xml')
 
         if (imageIds.equals("")) {
             withEnv(["PATH+MAVEN=${tool 'M339'}/bin"]) {

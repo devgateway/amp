@@ -23,29 +23,29 @@ import org.digijava.module.aim.util.DbUtil;
 
 public class ViewComponentDescription extends Action
 {
-	private static Logger logger = Logger.getLogger(ViewComponentDescription.class) ;
-	
-	public ActionForward execute(ActionMapping mapping, ActionForm form, 
-	HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
-	{
-		HttpSession session = request.getSession();
-		TeamMember teamMember=(TeamMember)session.getAttribute("currentMember");
-		PhysicalProgressForm formBean = (PhysicalProgressForm) form ; 
+    private static Logger logger = Logger.getLogger(ViewComponentDescription.class) ;
+    
+    public ActionForward execute(ActionMapping mapping, ActionForm form, 
+    HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
+    {
+        HttpSession session = request.getSession();
+        TeamMember teamMember=(TeamMember)session.getAttribute("currentMember");
+        PhysicalProgressForm formBean = (PhysicalProgressForm) form ; 
 
-		if(teamMember==null)
-		{
-			formBean.setValidLogin(false);
-		}
-		else
-		{
-			DecimalFormat mf = new DecimalFormat("###,###,###,###,###");
-			formBean.setValidLogin(true);
-			Long cid = new Long(request.getParameter("cid"));
-			logger.debug("CID is : " + cid.toString());
-			AmpComponent progress=DbUtil.getAmpComponentDescription(cid);
-			formBean.setTitle(progress.getTitle());
-			formBean.setDescription(progress.getDescription());
-		}
-		return mapping.findForward("forward");
-	}
+        if(teamMember==null)
+        {
+            formBean.setValidLogin(false);
+        }
+        else
+        {
+            DecimalFormat mf = new DecimalFormat("###,###,###,###,###");
+            formBean.setValidLogin(true);
+            Long cid = new Long(request.getParameter("cid"));
+            logger.debug("CID is : " + cid.toString());
+            AmpComponent progress=DbUtil.getAmpComponentDescription(cid);
+            formBean.setTitle(progress.getTitle());
+            formBean.setDescription(progress.getDescription());
+        }
+        return mapping.findForward("forward");
+    }
 }

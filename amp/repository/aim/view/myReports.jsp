@@ -86,12 +86,12 @@ function popup(mylink, windowname)
                         </digi:link>
                     </div>
            	</logic:notEmpty>
-			<logic:present name="currentMember" scope="session">
-            	<logic:empty name="lastViewedReports" scope="session">
-                	<digi:trn key="aim:noReportHaveBeenViewed">No reports have been viewed.</digi:trn>
-                 </logic:empty>
-			</logic:present> 
             </ul>
+			<logic:present name="currentMember" scope="session">
+				<logic:empty name="lastViewedReports" scope="session">
+					<p class="right_menu_empty"><digi:trn key="aim:noReportHaveBeenViewed">No reports have been viewed.</digi:trn></p>
+				</logic:empty>
+			</logic:present>
 		</div>
 	</div>
 </div>

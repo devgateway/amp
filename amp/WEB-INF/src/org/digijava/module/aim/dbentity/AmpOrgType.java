@@ -17,25 +17,25 @@ import org.digijava.module.aim.util.NameableOrIdentifiable;
 
 @TranslatableClass (displayName = "Organisation Type")
 public class AmpOrgType implements Serializable,Comparable,Identifiable, ARDimensionable, HierarchyListable, NameableOrIdentifiable {
-	//IATI-check: to not be ignored
-	@Interchangeable(fieldTitle="Organization Type ID", id = true)
-	private Long ampOrgTypeId;
-	@Interchangeable(fieldTitle="Organization Type", value = true)
-	@TranslatableField
-	private String orgType;
-	
-	@Interchangeable(fieldTitle="Organization Type Code")
+    //IATI-check: to not be ignored
+    @Interchangeable(fieldTitle="Organization Type ID", id = true)
+    private Long ampOrgTypeId;
+    @Interchangeable(fieldTitle="Organization Type", value = true)
     @TranslatableField
-	private String orgTypeCode;
-	@Deprecated
-	private Boolean orgTypeIsGovernmental;
-	//private Set organizations;
-	
-	// NGO, Governmental etc.
-	@Interchangeable(fieldTitle="Classification")
+    private String orgType;
+    
+    @Interchangeable(fieldTitle="Organization Type Code")
+    @TranslatableField
+    private String orgTypeCode;
+    @Deprecated
+    private Boolean orgTypeIsGovernmental;
+    //private Set organizations;
+    
+    // NGO, Governmental etc.
+    @Interchangeable(fieldTitle="Classification")
     private String classification;
     
-    private boolean translateable	= true;
+    private boolean translateable   = true;
     
     @Interchangeable(fieldTitle="Organization Groups", pickIdOnly=true)
     private Set<AmpOrgGroup> orgGroups;
@@ -47,99 +47,99 @@ public class AmpOrgType implements Serializable,Comparable,Identifiable, ARDimen
     public void setClassification(String classification) {
         this.classification = classification;
     }
-	
-	/**
-	 * @return Returns the ampOrgTypeId.
-	 */
-	public Long getAmpOrgTypeId() {
-		return ampOrgTypeId;
-	}
-	/**
-	 * @param ampOrgTypeId The ampOrgTypeId to set.
-	 */
-	public void setAmpOrgTypeId(Long ampOrgTypeId) {
-		this.ampOrgTypeId = ampOrgTypeId;
-	}
-	/**
-	 * @return Returns the orgType.
-	 */
-	public String getOrgType() {
-		return orgType;
-	}
-	/**
-	 * @param orgType The orgType to set.
-	 */
-	public void setOrgType(String orgType) {
-		this.orgType = orgType;
-	}
-	/**
-	 * @return Returns the orgTypeCode.
-	 */
-	public String getOrgTypeCode() {
-		return orgTypeCode;
-	}
-	/**
-	 * @param orgTypeCode The orgTypeCode to set.
-	 */
-	public void setOrgTypeCode(String orgTypeCode) {
-		this.orgTypeCode = orgTypeCode;
-	}
-	public int compareTo(Object arg0) {
-		// TODO Auto-generated method stub
+    
+    /**
+     * @return Returns the ampOrgTypeId.
+     */
+    public Long getAmpOrgTypeId() {
+        return ampOrgTypeId;
+    }
+    /**
+     * @param ampOrgTypeId The ampOrgTypeId to set.
+     */
+    public void setAmpOrgTypeId(Long ampOrgTypeId) {
+        this.ampOrgTypeId = ampOrgTypeId;
+    }
+    /**
+     * @return Returns the orgType.
+     */
+    public String getOrgType() {
+        return orgType;
+    }
+    /**
+     * @param orgType The orgType to set.
+     */
+    public void setOrgType(String orgType) {
+        this.orgType = orgType;
+    }
+    /**
+     * @return Returns the orgTypeCode.
+     */
+    public String getOrgTypeCode() {
+        return orgTypeCode;
+    }
+    /**
+     * @param orgTypeCode The orgTypeCode to set.
+     */
+    public void setOrgTypeCode(String orgTypeCode) {
+        this.orgTypeCode = orgTypeCode;
+    }
+    public int compareTo(Object arg0) {
+        // TODO Auto-generated method stub
 
-		return this.orgType.compareTo(((AmpOrgType)arg0).getOrgType());  
-		//return 0;
-	}
+        return this.orgType.compareTo(((AmpOrgType)arg0).getOrgType());  
+        //return 0;
+    }
 
-	public String toString() {
-		if (orgType != null) {
-			return orgType;
-		}
-		return "";
-	}
-	public Object getIdentifier() {
-		return ampOrgTypeId;
-	}
-	
-	public Class<?> getDimensionClass() {
-	    return DonorTypeDimension.class;
-	}
-	public Boolean getOrgTypeIsGovernmental() {
-		return orgTypeIsGovernmental;
-	}
-	public void setOrgTypeIsGovernmental(Boolean orgTypeIsGovernmental) {
-		this.orgTypeIsGovernmental = orgTypeIsGovernmental;
-	}
+    public String toString() {
+        if (orgType != null) {
+            return orgType;
+        }
+        return "";
+    }
+    public Object getIdentifier() {
+        return ampOrgTypeId;
+    }
+    
+    public Class<?> getDimensionClass() {
+        return DonorTypeDimension.class;
+    }
+    public Boolean getOrgTypeIsGovernmental() {
+        return orgTypeIsGovernmental;
+    }
+    public void setOrgTypeIsGovernmental(Boolean orgTypeIsGovernmental) {
+        this.orgTypeIsGovernmental = orgTypeIsGovernmental;
+    }
 
-	@Override
-	public Collection<AmpOrgType> getChildren() {
-		return null;
-	}
+    @Override
+    public Collection<AmpOrgType> getChildren() {
+        return null;
+    }
 
-	@Override
-	public int getCountDescendants() {
-		return 1;
-	}
+    @Override
+    public int getCountDescendants() {
+        return 1;
+    }
 
-	@Override
-	public String getLabel() {
-		return this.orgType;
-	}
+    @Override
+    public String getLabel() {
+        return this.orgType;
+    }
 
-	@Override
-	public String getUniqueId() {
+    @Override
+    public String getUniqueId() {
         return String.valueOf(this.ampOrgTypeId.longValue());
-	}
+    }
 
-	@Override
-	public boolean getTranslateable() {
-		return translateable;
-	}
+    @Override
+    public boolean getTranslateable() {
+        return translateable;
+    }
 
-	@Override
-	public void setTranslateable(boolean translateable) {
-		this.translateable = translateable;
-	}
+    @Override
+    public void setTranslateable(boolean translateable) {
+        this.translateable = translateable;
+    }
 
     @Override
     public String getAdditionalSearchString() {
@@ -147,25 +147,25 @@ public class AmpOrgType implements Serializable,Comparable,Identifiable, ARDimen
     }
     
     public Set<AmpOrgGroup> getOrgGroups(){
-    	return this.orgGroups;
+        return this.orgGroups;
     }
     
     public void setOrgGroups(Set<AmpOrgGroup> aog){
-    	this.orgGroups = aog;
+        this.orgGroups = aog;
     }
     
     public String getName() {
-    	return this.orgType;
+        return this.orgType;
     }
     
     public void setName(String orgType) {
-    	this.setOrgType(orgType);
+        this.setOrgType(orgType);
     }
     
     public static String hqlStringForName(String idSource)
     {
-    	return InternationalizedModelDescription.getForProperty(AmpOrgType.class, "orgType").getSQLFunctionCall(idSource + ".ampOrgTypeId");
+        return InternationalizedModelDescription.getForProperty(AmpOrgType.class, "orgType").getSQLFunctionCall(idSource + ".ampOrgTypeId");
     }
 
-	
+    
 }

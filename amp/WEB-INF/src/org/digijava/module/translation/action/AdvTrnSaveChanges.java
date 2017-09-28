@@ -28,46 +28,46 @@ import org.digijava.module.translation.util.ListChangesBuffer.Operation;
  */
 public class AdvTrnSaveChanges extends Action {
 
-	@Override
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
-		ServletContext context = request.getSession().getServletContext();
-		//get current site
-		Site site = RequestUtils.getSite(request);
-		//get buffer
-		ListChangesBuffer<String, Message> buffer = TrnUtil.getBuffer(request.getSession());
-		//get changes list from buffer
-		List<ChangedItem<String, Message>> changes = buffer.listChanges();
-		if (changes==null || changes.size()==0) return null;
-		//get translator worker
-		TranslatorWorker worker = TranslatorWorker.getInstance("");
-		//iterate changes
-		for (ChangedItem<String, Message> change : changes) {
-			Message message = change.getElement();
-			Operation operation = change.getOperation();
-			message.setSite(site);
-			String suffix =  message.getLocale();
-			
-			if (operation.equals(Operation.ADD)){
-				worker.save(message);
-				LuceneWorker.addItemToIndex(message, context,suffix);
-			}
-			if (operation.equals(Operation.UPDATE)){
-				worker.update(message);
-				LuceneWorker.deleteItemFromIndex(message, context,suffix);
-				LuceneWorker.addItemToIndex(message, context,suffix);
-			}
-			if (operation.equals(Operation.DELETE)){
-				worker.delete(message);
-				LuceneWorker.deleteItemFromIndex(message, context,suffix);
-			}
-			buffer.undoOperation(message);
-		}
-		
-		//buffer.fixChnages(new TrnUtil.TrnDb());
-		
-		return null;
-	}
+    @Override
+    public ActionForward execute(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
+        ServletContext context = request.getSession().getServletContext();
+        //get current site
+        Site site = RequestUtils.getSite(request);
+        //get buffer
+        ListChangesBuffer<String, Message> buffer = TrnUtil.getBuffer(request.getSession());
+        //get changes list from buffer
+        List<ChangedItem<String, Message>> changes = buffer.listChanges();
+        if (changes==null || changes.size()==0) return null;
+        //get translator worker
+        TranslatorWorker worker = TranslatorWorker.getInstance("");
+        //iterate changes
+        for (ChangedItem<String, Message> change : changes) {
+            Message message = change.getElement();
+            Operation operation = change.getOperation();
+            message.setSite(site);
+            String suffix =  message.getLocale();
+            
+            if (operation.equals(Operation.ADD)){
+                worker.save(message);
+                LuceneWorker.addItemToIndex(message, context,suffix);
+            }
+            if (operation.equals(Operation.UPDATE)){
+                worker.update(message);
+                LuceneWorker.deleteItemFromIndex(message, context,suffix);
+                LuceneWorker.addItemToIndex(message, context,suffix);
+            }
+            if (operation.equals(Operation.DELETE)){
+                worker.delete(message);
+                LuceneWorker.deleteItemFromIndex(message, context,suffix);
+            }
+            buffer.undoOperation(message);
+        }
+        
+        //buffer.fixChnages(new TrnUtil.TrnDb());
+        
+        return null;
+    }
 
 }

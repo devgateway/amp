@@ -29,7 +29,7 @@ import org.digijava.module.aim.helper.Constants;
 public class PostgresConnection extends OlapDbConnection {
 
     private PostgresConnection() throws SQLException {
-    	super(getDirectConnection(), getMapper());
+        super(getDirectConnection(), getMapper());
         //this.conn = DriverManager.getConnection("jdbc:monetdb://localhost/amp_moldova_210", "monetdb", "monetdb");
     }
 
@@ -75,7 +75,7 @@ public class PostgresConnection extends OlapDbConnection {
 //        if (tableExists(destTableName)) {
 //            dropTable(destTableName);
 //        };
-//    	SQLUtils.executeQuery(conn, "CREATE TABLE " + destTableName + " AS " + srcQuery);
+//      SQLUtils.executeQuery(conn, "CREATE TABLE " + destTableName + " AS " + srcQuery);
 //    }
 
     @Override
@@ -154,27 +154,27 @@ public class PostgresConnection extends OlapDbConnection {
     }
     
     public static EtlStrategy buildStrategy() {
-    	return new EtlStrategy() {
-			
-			@Override
-			public OlapDbConnection getOlapConnection() {
-				return getConnection();
-			}
-			
-			@Override
-			public String getDataSourceString() {
-				return String.format("jdbc:mondrian:DataSource=java:comp/env/ampDS");
-			}
+        return new EtlStrategy() {
+            
+            @Override
+            public OlapDbConnection getOlapConnection() {
+                return getConnection();
+            }
+            
+            @Override
+            public String getDataSourceString() {
+                return String.format("jdbc:mondrian:DataSource=java:comp/env/ampDS");
+            }
 
-			@Override
-			public DbColumnTypesMapper getColumnTypesMapper() {
-				return getMapper();
-			}
+            @Override
+            public DbColumnTypesMapper getColumnTypesMapper() {
+                return getMapper();
+            }
 
-			@Override
-			public boolean isColumnarDatabase() {
-				return false;
-			}
-		};
+            @Override
+            public boolean isColumnarDatabase() {
+                return false;
+            }
+        };
     }
 }

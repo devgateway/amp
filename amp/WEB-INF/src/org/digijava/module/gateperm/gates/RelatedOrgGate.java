@@ -33,15 +33,15 @@ public class RelatedOrgGate extends Gate {
          * @param parameters
          */
     public RelatedOrgGate(Map scope, Queue<String> parameters) {
-	super(scope, parameters);
-	// TODO Auto-generated constructor stub
+    super(scope, parameters);
+    // TODO Auto-generated constructor stub
     }
 
     /**
      * 
      */
     public RelatedOrgGate() {
-	// TODO Auto-generated constructor stub
+    // TODO Auto-generated constructor stub
     }
 
     /*
@@ -51,7 +51,7 @@ public class RelatedOrgGate extends Gate {
          */
     @Override
     public String description() {
-	return DESCRIPTION;
+    return DESCRIPTION;
     }
 
     /*
@@ -61,76 +61,76 @@ public class RelatedOrgGate extends Gate {
          */
     @Override
     public boolean logic() throws Exception {
-	
+    
     AmpActivityVersion ampa = null;
-//	Activity a = null;
-	Object o1 = scope.get(GatePermConst.ScopeKeys.PERMISSIBLE);
-	if ( o1 instanceof AmpModulesVisibility )
-	{
-		if( ((AmpModulesVisibility)o1).getName().contains("Project Title") )
-			logger.debug("---------------CompositePermission " + ((AmpModulesVisibility)o1).getName());
-		
-	}
+//  Activity a = null;
+    Object o1 = scope.get(GatePermConst.ScopeKeys.PERMISSIBLE);
+    if ( o1 instanceof AmpModulesVisibility )
+    {
+        if( ((AmpModulesVisibility)o1).getName().contains("Project Title") )
+            logger.debug("---------------CompositePermission " + ((AmpModulesVisibility)o1).getName());
+        
+    }
 
-	Object o = scope.get(GatePermConst.ScopeKeys.PERMISSIBLE);
-	if (o instanceof AmpActivityVersion)
-	    ampa = (AmpActivityVersion) o;
-	Object oo = scope.get(GatePermConst.ScopeKeys.ACTIVITY);
-	if (oo instanceof AmpActivityVersion)
-	    ampa = (AmpActivityVersion) oo;
-//	if (oo instanceof Activity)
-//	    a = (Activity) oo;
+    Object o = scope.get(GatePermConst.ScopeKeys.PERMISSIBLE);
+    if (o instanceof AmpActivityVersion)
+        ampa = (AmpActivityVersion) o;
+    Object oo = scope.get(GatePermConst.ScopeKeys.ACTIVITY);
+    if (oo instanceof AmpActivityVersion)
+        ampa = (AmpActivityVersion) oo;
+//  if (oo instanceof Activity)
+//      a = (Activity) oo;
 
-	TeamMember tm = (TeamMember) scope.get(GatePermConst.ScopeKeys.CURRENT_MEMBER);
-	//TODO AMP-2579 this IF was added to fix null pointer temporary.
-	if (tm==null) return false; 
-	//AmpTeamMember atm = (AmpTeamMember) session.get(AmpTeamMember.class, tm.getMemberId());
-	//AmpTeamMember atm=TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
-	
-	User user =  TeamMemberUtil.getUserEntityByTMId(tm.getMemberId() ); //atm.getUser();
+    TeamMember tm = (TeamMember) scope.get(GatePermConst.ScopeKeys.CURRENT_MEMBER);
+    //TODO AMP-2579 this IF was added to fix null pointer temporary.
+    if (tm==null) return false; 
+    //AmpTeamMember atm = (AmpTeamMember) session.get(AmpTeamMember.class, tm.getMemberId());
+    //AmpTeamMember atm=TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
+    
+    User user =  TeamMemberUtil.getUserEntityByTMId(tm.getMemberId() ); //atm.getUser();
 
-	
-	
-	
-	// iterate the assigned orgs:
-	if (ampa != null) {
-	    if (ampa.getOrgrole() == null)
-		return false;
-	    Iterator i = ampa.getOrgrole().iterator();
-	    while (i.hasNext()) {
-		AmpOrgRole element = (AmpOrgRole) i.next();
-		String roleCode = element.getRole().getRoleCode();
-		if (user.hasVerifiedOrganizationId(element.getOrganisation().getAmpOrgId()))
-		    return true;
-	    }
-	    
+    
+    
+    
+    // iterate the assigned orgs:
+    if (ampa != null) {
+        if (ampa.getOrgrole() == null)
+        return false;
+        Iterator i = ampa.getOrgrole().iterator();
+        while (i.hasNext()) {
+        AmpOrgRole element = (AmpOrgRole) i.next();
+        String roleCode = element.getRole().getRoleCode();
+        if (user.hasVerifiedOrganizationId(element.getOrganisation().getAmpOrgId()))
+            return true;
+        }
+        
 
-	}
-//	if (a != null) {
-//	    if (a.getRelOrgs() == null)
-//		return false;
-//	    Iterator i = a.getRelOrgs().iterator();
-//	    while (i.hasNext()) {
-//		RelOrganization element = (RelOrganization) i.next();
-//		String roleCode = element.getRole();
-//		if (element.getOrgId().equals(user.getAssignedOrgId()))
-//		    return true;
+    }
+//  if (a != null) {
+//      if (a.getRelOrgs() == null)
+//      return false;
+//      Iterator i = a.getRelOrgs().iterator();
+//      while (i.hasNext()) {
+//      RelOrganization element = (RelOrganization) i.next();
+//      String roleCode = element.getRole();
+//      if (element.getOrgId().equals(user.getAssignedOrgId()))
+//          return true;
 //
-//	    }
-//	}
-	
+//      }
+//  }
+    
 
-	return false;
+    return false;
     }
 
     @Override
     public MetaInfo[] mandatoryScopeKeys() {
-	return SCOPE_KEYS;
+    return SCOPE_KEYS;
     }
 
     @Override
     public MetaInfo[] parameterInfo() {
-	return PARAM_INFO;
+    return PARAM_INFO;
     }
 
 }

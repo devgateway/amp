@@ -1,8 +1,8 @@
 /*
  *   EditTag.java
- * 	 @Author Maka Kharalashvili maka@digijava.org
- * 	 Created: Dec 17, 2003
- * 	 CVS-ID: $Id$
+ *   @Author Maka Kharalashvili maka@digijava.org
+ *   Created: Dec 17, 2003
+ *   CVS-ID: $Id$
  *
  *   This file is part of DiGi project (www.digijava.org).
  *   DiGi is a multi-site portal system written in Java/J2EE.
@@ -88,10 +88,10 @@ public class EditTag
                 }
                 if(editorBody==null) return SKIP_BODY;
                 if (maxLength==null || maxLength==0 || (editorBody!=null && editorBody.length()<maxLength)) {
-                	setEditorBody(editorBody);
-				} else {
-					setEditorBody(formatLongText(editorBody, request));
-				}
+                    setEditorBody(editorBody);
+                } else {
+                    setEditorBody(formatLongText(editorBody, request));
+                }
                 
             }
             catch (EditorException ex) {
@@ -161,7 +161,7 @@ public class EditTag
             }
             else {
                 if(body!=null)
-            	editTag = body.getString();
+                editTag = body.getString();
                 
             }
         }
@@ -177,34 +177,34 @@ public class EditTag
     }
 
     private String formatLongText(String text, HttpServletRequest request) {
-    	String readMore = "Read More";
-    	String back = "Back";
-    	readMore = TranslatorWorker.translateText(readMore);
-    	back = TranslatorWorker.translateText(back);
-		//Avoids cutting HTML in half
-		String cutText = text;
-		cutText = cutText.substring(0, maxLength);
-		int openMark = cutText.lastIndexOf('<');
-		if (openMark != -1)
-		{
-			int closeMark = cutText.lastIndexOf('>');
-			if (openMark > closeMark)
-			{
-				cutText = cutText.substring(0, openMark);
-			}
-		}
-		
-    	String ret = "<div id='fullTextDiv' style='display: none'> " + text + " </div>";
-    	ret += "<div id='showPartTextDiv' style='display: none'><a href='javascript:' onClick='showPartText()'> << " + back + "</a></div>";
-    	ret += "<div id='partTextDiv'>" + cutText + "</div>";
-    	ret += "<div id='showFullTextDiv'><a href='javascript:' onClick='showFullText()'>" + readMore + " >> </a></div>";
-    	ret += "<script language='javascript' type='text/javascript'>";
+        String readMore = "Read More";
+        String back = "Back";
+        readMore = TranslatorWorker.translateText(readMore);
+        back = TranslatorWorker.translateText(back);
+        //Avoids cutting HTML in half
+        String cutText = text;
+        cutText = cutText.substring(0, maxLength);
+        int openMark = cutText.lastIndexOf('<');
+        if (openMark != -1)
+        {
+            int closeMark = cutText.lastIndexOf('>');
+            if (openMark > closeMark)
+            {
+                cutText = cutText.substring(0, openMark);
+            }
+        }
+        
+        String ret = "<div id='fullTextDiv' style='display: none'> " + text + " </div>";
+        ret += "<div id='showPartTextDiv' style='display: none'><a href='javascript:' onClick='showPartText()'> << " + back + "</a></div>";
+        ret += "<div id='partTextDiv'>" + cutText + "</div>";
+        ret += "<div id='showFullTextDiv'><a href='javascript:' onClick='showFullText()'>" + readMore + " >> </a></div>";
+        ret += "<script language='javascript' type='text/javascript'>";
     
-    	ret += "function showFullText() {";
+        ret += "function showFullText() {";
         ret += "document.getElementById('fullTextDiv').style.display = 'block';";
         ret += "document.getElementById('showPartTextDiv').style.display = 'block';";
         ret += "document.getElementById('partTextDiv').style.display = 'none';";
-        ret += "document.getElementById('showFullTextDiv').style.display = 'none';";	
+        ret += "document.getElementById('showFullTextDiv').style.display = 'none';";    
         ret += "}";
 
         ret += "function showPartText() {";
@@ -216,9 +216,9 @@ public class EditTag
         ret += "}";
 
         ret += "</script>";
-                 		
-		return ret;
-	}
+                        
+        return ret;
+    }
     
     public String getKey() {
         return key;
@@ -245,24 +245,24 @@ public class EditTag
     }
     
     public String getDisplayText() {
- 	 	return displayText;
- 	}
- 	
-	public void setDisplayText(String displayText) {
- 		this.displayText = displayText;
- 	}
+        return displayText;
+    }
+    
+    public void setDisplayText(String displayText) {
+        this.displayText = displayText;
+    }
 
-	/**
-	 * @return the maxLength
-	 */
-	public Integer getMaxLength() {
-		return maxLength;
-	}
+    /**
+     * @return the maxLength
+     */
+    public Integer getMaxLength() {
+        return maxLength;
+    }
 
-	/**
-	 * @param maxLength the maxLength to set
-	 */
-	public void setMaxLength(Integer maxLength) {
-		this.maxLength = maxLength;
-	}
+    /**
+     * @param maxLength the maxLength to set
+     */
+    public void setMaxLength(Integer maxLength) {
+        this.maxLength = maxLength;
+    }
 }

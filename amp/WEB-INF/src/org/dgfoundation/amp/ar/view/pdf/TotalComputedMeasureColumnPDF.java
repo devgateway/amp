@@ -14,15 +14,15 @@ import com.lowagie.text.pdf.PdfPTable;
  */
 public class TotalComputedMeasureColumnPDF extends TotalAmountColumnPDF {
 
-	public TotalComputedMeasureColumnPDF(Exporter parent, Viewable item) {
-		super(parent, item);
-		// TODO Auto-generated constructor stub
-	}
+    public TotalComputedMeasureColumnPDF(Exporter parent, Viewable item) {
+        super(parent, item);
+        // TODO Auto-generated constructor stub
+    }
 
-	public TotalComputedMeasureColumnPDF(PdfPTable table, Viewable item,
-			Long ownerId) {
-		super(table, item, ownerId);
-		// TODO Auto-generated constructor stub
-	}
+    public TotalComputedMeasureColumnPDF(PdfPTable table, Viewable item,
+            Long ownerId) {
+        super(table, item, ownerId);
+        // TODO Auto-generated constructor stub
+    }
 
 }

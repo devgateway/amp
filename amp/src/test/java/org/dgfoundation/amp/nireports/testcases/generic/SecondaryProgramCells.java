@@ -8,14 +8,14 @@ import org.dgfoundation.amp.nireports.PercentageTextCell;
 
 public class SecondaryProgramCells extends HardcodedCells<PercentageTextCell>{
 
-	public SecondaryProgramCells(Map<String, Long> activityNames, Map<String, Long> entityNames, LevelColumn lc) {
-		super(activityNames, entityNames, lc);
-	}
+    public SecondaryProgramCells(Map<String, Long> activityNames, Map<String, Long> entityNames, LevelColumn lc) {
+        super(activityNames, entityNames, lc);
+    }
 
-	@Override
-	protected List<PercentageTextCell> populateCells() {
-		return 	Arrays.asList(
+    @Override
+    protected List<PercentageTextCell> populateCells() {
+        return  Arrays.asList(
 );
-	}
+    }
 
 }

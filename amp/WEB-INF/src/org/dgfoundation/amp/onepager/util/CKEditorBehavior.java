@@ -8,28 +8,28 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.http.WebRequest;
 
 public class CKEditorBehavior extends Behavior{
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private Component component;
+    
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+    private Component component;
 
-	@Override
-	public void renderHead(Component component, IHeaderResponse response) {
+    @Override
+    public void renderHead(Component component, IHeaderResponse response) {
 
-		String renderOnDomReady = getRenderOnDomReadyJavaScript(response);
+        String renderOnDomReady = getRenderOnDomReadyJavaScript(response);
         if (renderOnDomReady != null)
-        	response.render(OnDomReadyHeaderItem.forScript(renderOnDomReady));
+            response.render(OnDomReadyHeaderItem.forScript(renderOnDomReady));
         /*
          * 
         String renderJavaScript = getRenderJavaScript(response);
         if (renderJavaScript != null)
             response.renderJavaScript(renderJavaScript, null);
          */
-	}
-	
-	protected String getRenderOnDomReadyJavaScript(IHeaderResponse response) {
+    }
+    
+    protected String getRenderOnDomReadyJavaScript(IHeaderResponse response) {
         if (component == null)
             throw new IllegalStateException("CKEditorBehavior is not bound to a component");
         //if (! mayRenderJavaScriptDirect())
@@ -38,10 +38,10 @@ public class CKEditorBehavior extends Behavior{
     }
 
     private boolean mayRenderJavaScriptDirect() {
-    	return RequestCycle.get().getRequest() instanceof WebRequest && !((WebRequest)RequestCycle.get().getRequest()).isAjax();
-	}
+        return RequestCycle.get().getRequest() instanceof WebRequest && !((WebRequest)RequestCycle.get().getRequest()).isAjax();
+    }
 
-	protected String getRenderJavaScript(IHeaderResponse response) {
+    protected String getRenderJavaScript(IHeaderResponse response) {
         if (component == null)
             throw new IllegalStateException("CKEditorBehavior is not bound to a component");
         if (mayRenderJavaScriptDirect())
@@ -63,7 +63,7 @@ public class CKEditorBehavior extends Behavior{
         this.component = component;
     }
 
-	private boolean isMarkupIdRequired() {
-		return true;
-	}
+    private boolean isMarkupIdRequired() {
+        return true;
+    }
 }

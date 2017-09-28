@@ -29,35 +29,35 @@ import org.digijava.module.aim.util.AdminXSLExportUtil;
 import org.digijava.module.aim.util.DbUtil;
 
 public class ExportOrganizationManager2XSL  extends Action {
-	 private static Logger logger = Logger.getLogger(ExportOrganizationManager2XSL.class);
+     private static Logger logger = Logger.getLogger(ExportOrganizationManager2XSL.class);
 
-	  public ActionForward execute(ActionMapping mapping, ActionForm form,
-	                               javax.servlet.http.HttpServletRequest request,
-	                               javax.servlet.http.HttpServletResponse response) throws
-	      java.lang.Exception {
-		HttpSession session = request.getSession();
-		if (session.getAttribute("ampAdmin") == null) {
-			return mapping.findForward("index");
-		} else {
-			String str = (String) session.getAttribute("ampAdmin");
-			if (str.equals("no")) {
-				return mapping.findForward("index");
-			}
-		}
-		response.setContentType("application/vnd.ms-excel");
-		response.setHeader("Content-disposition", "inline; filename=Export.xls");
-		OrgManagerForm eaForm = (OrgManagerForm) form;
-		Site site = RequestUtils.getSite(request);
-		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
-		Long siteId = site.getId();
-		String locale = navigationLanguage.getCode();
+      public ActionForward execute(ActionMapping mapping, ActionForm form,
+                                   javax.servlet.http.HttpServletRequest request,
+                                   javax.servlet.http.HttpServletResponse response) throws
+          java.lang.Exception {
+        HttpSession session = request.getSession();
+        if (session.getAttribute("ampAdmin") == null) {
+            return mapping.findForward("index");
+        } else {
+            String str = (String) session.getAttribute("ampAdmin");
+            if (str.equals("no")) {
+                return mapping.findForward("index");
+            }
+        }
+        response.setContentType("application/vnd.ms-excel");
+        response.setHeader("Content-disposition", "inline; filename=Export.xls");
+        OrgManagerForm eaForm = (OrgManagerForm) form;
+        Site site = RequestUtils.getSite(request);
+        Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
+        Long siteId = site.getId();
+        String locale = navigationLanguage.getCode();
 
-		HSSFWorkbook wb = new HSSFWorkbook();
-		HSSFSheet sheet = wb.createSheet("export");
-		// title cells
-		HSSFCellStyle titleCS =AdminXSLExportUtil.createTitleStyle(wb);
-		 //ordinary cell style
-		HSSFCellStyle  cs = AdminXSLExportUtil.createOrdinaryStyle(wb);
+        HSSFWorkbook wb = new HSSFWorkbook();
+        HSSFSheet sheet = wb.createSheet("export");
+        // title cells
+        HSSFCellStyle titleCS =AdminXSLExportUtil.createTitleStyle(wb);
+         //ordinary cell style
+        HSSFCellStyle  cs = AdminXSLExportUtil.createOrdinaryStyle(wb);
        
         int rowIndex = 0;
         int cellIndex = 0;
@@ -86,39 +86,39 @@ public class ExportOrganizationManager2XSL  extends Action {
         String alpha = eaForm.getAlpha();
         Collection<AmpOrganisation> organizations= (alpha!=null && !alpha.equals("viewAll"))? eaForm.getColsAlpha(): eaForm.getCols();
 
-	
-		if(organizations!=null){
-			for(AmpOrganisation organization:organizations){
-				cellIndex=0;
-				  HSSFRow row = sheet.createRow(rowIndex++);
-				  
-				HSSFCell cell = row.createCell(cellIndex++);
-				cell.setCellStyle(cs);
-				cell.setCellValue(organization.getName());
+    
+        if(organizations!=null){
+            for(AmpOrganisation organization:organizations){
+                cellIndex=0;
+                  HSSFRow row = sheet.createRow(rowIndex++);
+                  
+                HSSFCell cell = row.createCell(cellIndex++);
+                cell.setCellStyle(cs);
+                cell.setCellValue(organization.getName());
 
-				cell = row.createCell(cellIndex++);
-				cell.setCellStyle(cs);
-				cell.setCellValue(organization.getAcronym());
+                cell = row.createCell(cellIndex++);
+                cell.setCellStyle(cs);
+                cell.setCellValue(organization.getAcronym());
 
-				AmpOrgGroup group = organization.getOrgGrpId();
+                AmpOrgGroup group = organization.getOrgGrpId();
 
-				cell = row.createCell(cellIndex++);
-				cell.setCellStyle(cs);
-				cell.setCellValue(group.getOrgType().getOrgType());
+                cell = row.createCell(cellIndex++);
+                cell.setCellStyle(cs);
+                cell.setCellValue(group.getOrgType().getOrgType());
 
-				cell = row.createCell(cellIndex++);
-				cell.setCellStyle(cs);
-				cell.setCellValue(group.getOrgGrpName());
-					
-			}
-		}
-		sheet.autoSizeColumn(0); //adjust width of the first column
+                cell = row.createCell(cellIndex++);
+                cell.setCellStyle(cs);
+                cell.setCellValue(group.getOrgGrpName());
+                    
+            }
+        }
+        sheet.autoSizeColumn(0); //adjust width of the first column
         sheet.autoSizeColumn(1);
         sheet.autoSizeColumn(2);
         sheet.autoSizeColumn(3);
         wb.write(response.getOutputStream());
-		return null;
+        return null;
 
-	  }
+      }
 
 }

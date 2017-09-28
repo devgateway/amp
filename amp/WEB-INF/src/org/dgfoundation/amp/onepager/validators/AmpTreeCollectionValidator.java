@@ -13,26 +13,26 @@ import org.apache.wicket.validation.ValidationError;
  */
 public class AmpTreeCollectionValidator extends AmpSemanticValidator<String> {
 
-	/**
-	 * 
-	 */
-	public AmpTreeCollectionValidator() {
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * 
+     */
+    public AmpTreeCollectionValidator() {
+        // TODO Auto-generated constructor stub
+    }
 
-	/* (non-Javadoc)
-	 * @see org.apache.wicket.validation.IValidator#validate(org.apache.wicket.validation.IValidatable)
-	 */
-	@Override
-	public void semanticValidate(IValidatable<String> validatable) {
-		String value = validatable.getValue();
-		if(value.length()>0)
-		{
-			ValidationError error = new ValidationError();
-			error.addKey("AmpTreeCollectionValidator");
+    /* (non-Javadoc)
+     * @see org.apache.wicket.validation.IValidator#validate(org.apache.wicket.validation.IValidatable)
+     */
+    @Override
+    public void semanticValidate(IValidatable<String> validatable) {
+        String value = validatable.getValue();
+        if(value.length()>0)
+        {
+            ValidationError error = new ValidationError();
+            error.addKey("AmpTreeCollectionValidator");
             error.setVariable("label", value);
-			validatable.error(error);
-		}
-	}
+            validatable.error(error);
+        }
+    }
 
 }

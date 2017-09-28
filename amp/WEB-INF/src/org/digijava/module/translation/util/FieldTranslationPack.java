@@ -33,13 +33,13 @@ public class FieldTranslationPack {
     }
     
     public String getNonNullBaseTrn(String locale, String currentLocale){
-    	String ret = get(locale);
-    	if (ret == null){
-    		ret = get(currentLocale);
+        String ret = get(locale);
+        if (ret == null){
+            ret = get(currentLocale);
             if (ret != null) //this is used to get the base translation, if it's not set we need to set it
                 add(locale, ret);
-    	}
-    	return ret;
+        }
+        return ret;
     }
 
     public HashMap<String, String> getTranslations() {
@@ -56,6 +56,6 @@ public class FieldTranslationPack {
     
     @Override
     public String toString() {
-    	return "FieldTranslationPack[" + objClass + "(" + fieldName + "): {" + translations.toString() + "}]";
+        return "FieldTranslationPack[" + objClass + "(" + fieldName + "): {" + translations.toString() + "}]";
     }
 }

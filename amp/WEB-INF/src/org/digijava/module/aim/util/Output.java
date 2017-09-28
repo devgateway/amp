@@ -4,37 +4,37 @@ import java.util.List;
 
 public class Output {
 
-	private String[] title;
+    private String[] title;
 
-	private Object[] value;
+    private Object[] value;
 
-	private List<Output> outputs;
+    private List<Output> outputs;
 
     private Boolean translateValue = Boolean.FALSE;
-	
-	public String[] getTitle() {
-		return title;
-	}
+    
+    public String[] getTitle() {
+        return title;
+    }
 
-	public void setTitle(String[] title) {
-		this.title = title;
-	}
+    public void setTitle(String[] title) {
+        this.title = title;
+    }
 
-	public Object[] getValue() {
-		return value;
-	}
+    public Object[] getValue() {
+        return value;
+    }
 
-	public void setValue(Object[] value) {
-		this.value = value;
-	}
+    public void setValue(Object[] value) {
+        this.value = value;
+    }
 
-	public List<Output> getOutputs() {
-		return outputs;
-	}
+    public List<Output> getOutputs() {
+        return outputs;
+    }
 
-	public void setOutputs(List<Output> outputs) {
-		this.outputs = outputs;
-	}
+    public void setOutputs(List<Output> outputs) {
+        this.outputs = outputs;
+    }
 
     public Boolean getTranslateValue() {
         return translateValue;
@@ -45,19 +45,19 @@ public class Output {
     }
 
     public Output(List<Output> outputs, String[] title, Object[] value, Boolean translateValue) {
-		super();
-		this.outputs = outputs;
-		this.title = title;
-		this.value = value;
+        super();
+        this.outputs = outputs;
+        this.title = title;
+        this.value = value;
         this.translateValue = translateValue;
-	}
+    }
     public Output(List<Output> outputs, String[] title, Object[] value) {
         this(outputs, title, value, Boolean.FALSE);
     }
 
     public Output() {
-		super();
-	}
+        super();
+    }
 
     public int contains (String title) {
         int retVal = -1;

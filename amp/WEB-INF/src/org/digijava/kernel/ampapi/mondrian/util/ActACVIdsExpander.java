@@ -13,14 +13,14 @@ import org.digijava.module.aim.util.ActivityUtil;
  *
  */
 public class ActACVIdsExpander extends IdsExpander {
-	
-	public ActACVIdsExpander(String factColumnName) {
-		super(factColumnName);
-	}
-	
-	@Override public Set<Long> expandIds(final List<Long> values) {
-		Set<Long> res = new HashSet<>();
-		res.addAll(ActivityUtil.fetchLongs("SELECT amp_activity_id FROM amp_activities_categoryvalues WHERE amp_categoryvalue_id IN ( " + Util.toCSStringForIN(values) + ")"));
-		return res;
-	}
+    
+    public ActACVIdsExpander(String factColumnName) {
+        super(factColumnName);
+    }
+    
+    @Override public Set<Long> expandIds(final List<Long> values) {
+        Set<Long> res = new HashSet<>();
+        res.addAll(ActivityUtil.fetchLongs("SELECT amp_activity_id FROM amp_activities_categoryvalues WHERE amp_categoryvalue_id IN ( " + Util.toCSStringForIN(values) + ")"));
+        return res;
+    }
 }

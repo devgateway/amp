@@ -26,7 +26,7 @@ import java.io.Serializable;
 import java.util.LinkedList;
 
 public class ExceptionInfo implements Serializable {
-	public static final String EXCEPTION_INFO = "exInfo";
+    public static final String EXCEPTION_INFO = "exInfo";
     private Integer exceptionCode;
     private String stackTrace;
     private String errorMessage;
@@ -44,14 +44,14 @@ public class ExceptionInfo implements Serializable {
     private Throwable exception;
 
     public Throwable getException() {
-		return exception;
-	}
+        return exception;
+    }
 
-	public void setException(Throwable exception) {
-		this.exception = exception;
-	}
+    public void setException(Throwable exception) {
+        this.exception = exception;
+    }
 
-	public Integer getExceptionCode() {
+    public Integer getExceptionCode() {
         return exceptionCode;
     }
 
@@ -131,36 +131,36 @@ public class ExceptionInfo implements Serializable {
         this.timestamp = timestamp;
     }
 
-	public String getUserMessage() {
-		return userMessage;
-	}
+    public String getUserMessage() {
+        return userMessage;
+    }
 
-	public void setUserMessage(String userMessage) {
-		this.userMessage = userMessage;
-	}
+    public void setUserMessage(String userMessage) {
+        this.userMessage = userMessage;
+    }
 
-	public String getMainTag() {
-		return mainTag;
-	}
+    public String getMainTag() {
+        return mainTag;
+    }
 
-	public void setMainTag(String mainTag) {
-		this.mainTag = mainTag;
-	}
+    public void setMainTag(String mainTag) {
+        this.mainTag = mainTag;
+    }
 
-	public String getBackLink() {
-		return backLink;
-	}
+    public String getBackLink() {
+        return backLink;
+    }
 
-	public void setBackLink(String backLink) {
-		this.backLink = backLink;
-	}
+    public void setBackLink(String backLink) {
+        this.backLink = backLink;
+    }
 
-	public LinkedList<String> getTags() {
-		return tags;
-	}
+    public LinkedList<String> getTags() {
+        return tags;
+    }
 
-	public void setTags(LinkedList<String> tags) {
-		this.tags = tags;
-	}
-	
+    public void setTags(LinkedList<String> tags) {
+        this.tags = tags;
+    }
+    
 }

@@ -18,27 +18,27 @@ import org.dgfoundation.amp.ar.Column;
  */
 public class ErrorCell extends TextCell {
 
-	/**
-	 * 
-	 */
-	public ErrorCell() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * 
+     */
+    public ErrorCell() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
 
-	public ErrorCell(String text,Column column) {
-		super();
-		value=text;
-		this.column=column;
-	}
+    public ErrorCell(String text,Column column) {
+        super();
+        value=text;
+        this.column=column;
+    }
 
-	
-	/**
-	 * @param id
-	 */
-	public ErrorCell(Long id) {
-		super(id);
-		// TODO Auto-generated constructor stub
-	}
+    
+    /**
+     * @param id
+     */
+    public ErrorCell(Long id) {
+        super(id);
+        // TODO Auto-generated constructor stub
+    }
 
 }

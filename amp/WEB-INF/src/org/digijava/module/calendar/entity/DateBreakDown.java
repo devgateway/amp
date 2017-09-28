@@ -43,7 +43,7 @@ public class DateBreakDown {
     }
 
     public DateBreakDown(GregorianCalendar calendar, int type) throws CalendarException, WorkerException {
-    	this(calendar, type, null);
+        this(calendar, type, null);
     }
     public DateBreakDown(GregorianCalendar calendar, int type, HttpServletRequest request) throws
         CalendarException, WorkerException {
@@ -68,26 +68,26 @@ public class DateBreakDown {
         Long siteId;
         String locale = ""; 
         if (request == null){
-        	siteId = CalendarThread.getSite().getId();
-        	locale = CalendarThread.getLocale().getCode();
+            siteId = CalendarThread.getSite().getId();
+            locale = CalendarThread.getLocale().getCode();
         }else{
            siteId = RequestUtils.getSite(request).getId();
-  	       locale =  RequestUtils.getNavigationLanguage(request).getCode().toLowerCase();
+           locale =  RequestUtils.getNavigationLanguage(request).getCode().toLowerCase();
         }
         
         if (locale != null) {
-        	String ms = TranslatorWorker.translateText(monthNameShort, locale, siteId);
-        	String ml = TranslatorWorker.translateText(monthNameLong, locale, siteId);
-        	dateInLocaleWeek = dayOfMonth + " " + ms + " " + year;
-        	dateInLocaleDay = dayOfMonth + " " + ml + " " + year;
-        	dateInLocaleMonth = ml + " " + year;
+            String ms = TranslatorWorker.translateText(monthNameShort, locale, siteId);
+            String ml = TranslatorWorker.translateText(monthNameLong, locale, siteId);
+            dateInLocaleWeek = dayOfMonth + " " + ms + " " + year;
+            dateInLocaleDay = dayOfMonth + " " + ml + " " + year;
+            dateInLocaleMonth = ml + " " + year;
         } else {
-        	// default to english
-        	String ms = TranslatorWorker.translateText(monthNameShort, locale, siteId);
-        	String ml = TranslatorWorker.translateText(monthNameLong, locale, siteId);
-        	dateInLocaleWeek = ms + " " + dayOfMonth + ", " + year;
-        	dateInLocaleDay = ml + " " + dayOfMonth + ", " + year;
-        	dateInLocaleMonth = ml + ", " + year;
+            // default to english
+            String ms = TranslatorWorker.translateText(monthNameShort, locale, siteId);
+            String ml = TranslatorWorker.translateText(monthNameLong, locale, siteId);
+            dateInLocaleWeek = ms + " " + dayOfMonth + ", " + year;
+            dateInLocaleDay = ml + " " + dayOfMonth + ", " + year;
+            dateInLocaleMonth = ml + ", " + year;
         }
     }
 
@@ -289,7 +289,7 @@ public class DateBreakDown {
     }
 
     public static boolean isValidDate(int type, String date) { //
-    	if (date == null || !date.matches("^[0-9]{2}\\/[0-9]{2}\\/[0-9]{4}$")) {
+        if (date == null || !date.matches("^[0-9]{2}\\/[0-9]{2}\\/[0-9]{4}$")) {
             return false;
         }
         try {
@@ -327,7 +327,7 @@ public class DateBreakDown {
     }
 
     public String formatDateString() {
-    	return FormatHelper.formatDate(this.getGregorianCalendar().getTime());
+        return FormatHelper.formatDate(this.getGregorianCalendar().getTime());
     }
 
     public String formatTimeString() {
@@ -414,29 +414,29 @@ public class DateBreakDown {
         this.minute = minute;
     }
 
-	
-	public String getDateInLocaleWeek() {
-		return this.dateInLocaleWeek;
-	}
+    
+    public String getDateInLocaleWeek() {
+        return this.dateInLocaleWeek;
+    }
 
-	public void setDateInLocaleWeek(String dateInLocaleWeek) {
-		this.dateInLocaleWeek = dateInLocaleWeek;
-	}
+    public void setDateInLocaleWeek(String dateInLocaleWeek) {
+        this.dateInLocaleWeek = dateInLocaleWeek;
+    }
 
-	public String getDateInLocaleMonth() {
-		return this.dateInLocaleMonth;
-	}
+    public String getDateInLocaleMonth() {
+        return this.dateInLocaleMonth;
+    }
 
-	public void setDateInLocaleMonth(String dateInLocaleMonth) {
-		this.dateInLocaleMonth = dateInLocaleMonth;
-	}
+    public void setDateInLocaleMonth(String dateInLocaleMonth) {
+        this.dateInLocaleMonth = dateInLocaleMonth;
+    }
 
-	public String getDateInLocaleDay() {
-		return this.dateInLocaleDay;
-	}
+    public String getDateInLocaleDay() {
+        return this.dateInLocaleDay;
+    }
 
-	public void setDateInLocaleDay(String dateInLocaleDay) {
-		this.dateInLocaleDay = dateInLocaleDay;
-	}
+    public void setDateInLocaleDay(String dateInLocaleDay) {
+        this.dateInLocaleDay = dateInLocaleDay;
+    }
 
 }

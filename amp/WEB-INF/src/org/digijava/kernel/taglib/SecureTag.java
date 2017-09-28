@@ -51,9 +51,9 @@ import org.digijava.module.aim.helper.TeamMember;
 public class SecureTag
     extends BodyTagSupport {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private static Logger logger = Logger.getLogger(SecureTag.class);
+    private static Logger logger = Logger.getLogger(SecureTag.class);
 
     private Boolean globalAdmin = null;
     private String actions;
@@ -116,12 +116,12 @@ public class SecureTag
         }
         else {
             if (authenticated != null) {
-                User user 			= RequestUtils.getUser(request);
+                User user           = RequestUtils.getUser(request);
                 boolean userIsNull = user==null;
                 if (userIsNull) {
-                	TeamMember tm	= (TeamMember)request.getSession().getAttribute(Constants.CURRENT_MEMBER);
-                	if (tm != null)
-                		userIsNull 	= false;
+                    TeamMember tm   = (TeamMember)request.getSession().getAttribute(Constants.CURRENT_MEMBER);
+                    if (tm != null)
+                        userIsNull  = false;
                 }
                 if ( (!userIsNull && authenticated.booleanValue()) ||
                     (userIsNull && !authenticated.booleanValue())
@@ -132,24 +132,24 @@ public class SecureTag
                     return SKIP_BODY;
                 }
             } else if (getGroup() != null){
-            	Site site = RequestUtils.getSite(request);
-            	Iterator siteGroupIter = site.getGroups().iterator();
-            	while (siteGroupIter.hasNext()){
-            		Group siteGroup = (Group) siteGroupIter.next();
-            		if (siteGroup.getName().equals(this.getGroup())){
-            			User user = RequestUtils.getUser(request);
-            			if (user == null) return SKIP_BODY;
-            			Iterator userGroupIter = user.getGroups().iterator();
-            			while(userGroupIter.hasNext()){
-            				Group userGroup = (Group)userGroupIter.next();
-            				if (userGroup.getName().equals(this.getGroup())){
-            					return EVAL_BODY_INCLUDE;
-            				}
-            			}
-            			return SKIP_BODY;
-            		}
-            	}
-            	return SKIP_BODY;
+                Site site = RequestUtils.getSite(request);
+                Iterator siteGroupIter = site.getGroups().iterator();
+                while (siteGroupIter.hasNext()){
+                    Group siteGroup = (Group) siteGroupIter.next();
+                    if (siteGroup.getName().equals(this.getGroup())){
+                        User user = RequestUtils.getUser(request);
+                        if (user == null) return SKIP_BODY;
+                        Iterator userGroupIter = user.getGroups().iterator();
+                        while(userGroupIter.hasNext()){
+                            Group userGroup = (Group)userGroupIter.next();
+                            if (userGroup.getName().equals(this.getGroup())){
+                                return EVAL_BODY_INCLUDE;
+                            }
+                        }
+                        return SKIP_BODY;
+                    }
+                }
+                return SKIP_BODY;
             } else {
                 try {
                     Subject subject = RequestUtils.getSubject(request);
@@ -297,12 +297,12 @@ public class SecureTag
         this.permissionClass = permissionClass;
     }
 
-	public void setGroup(String group) {
-		this.group = group;
-	}
+    public void setGroup(String group) {
+        this.group = group;
+    }
 
-	public String getGroup() {
-		return group;
-	}
+    public String getGroup() {
+        return group;
+    }
 
 }

@@ -23,43 +23,43 @@ import org.digijava.module.gateperm.core.GatePermConst;
 
 public class ViewPhysicalProgress extends TilesAction {
 
-	public ActionForward execute(ComponentContext context,
-			ActionMapping mapping, ActionForm form, HttpServletRequest request,
-			HttpServletResponse response) throws IOException, ServletException {
+    public ActionForward execute(ComponentContext context,
+            ActionMapping mapping, ActionForm form, HttpServletRequest request,
+            HttpServletResponse response) throws IOException, ServletException {
 
 
-		HttpSession session = request.getSession();
-		TeamMember teamMember = (TeamMember) session
-				.getAttribute("currentMember");
-		request.setAttribute(GatePermConst.ACTION_MODE, GatePermConst.Actions.VIEW);
-		PhysicalProgressForm formBean = (PhysicalProgressForm) form;
+        HttpSession session = request.getSession();
+        TeamMember teamMember = (TeamMember) session
+                .getAttribute("currentMember");
+        request.setAttribute(GatePermConst.ACTION_MODE, GatePermConst.Actions.VIEW);
+        PhysicalProgressForm formBean = (PhysicalProgressForm) form;
 
-		if (teamMember == null) {
-			formBean.setValidLogin(false);
-		} else {
-		    formBean.setValidLogin(true);
+        if (teamMember == null) {
+            formBean.setValidLogin(false);
+        } else {
+            formBean.setValidLogin(true);
                     if (teamMember.getAppSettings() != null) {
                       ApplicationSettings appSettings = teamMember.
                           getAppSettings();
                     }
 
-		    String compId = request.getParameter("compId");
-		    if (compId != null) {
-		        long cId = Long.parseLong(compId);
-		        Iterator itr = formBean.getComponents().iterator();
-		        while (itr.hasNext()) {
-		            Components comp = (Components) itr.next();
-		            if (comp.getComponentId().longValue() == cId) {
-		                formBean.setComponent(comp);
-		                break;
-		            }
-		        }
-		        return null;
-		    }
-			Long ampActivityId = new Long(request.getParameter("ampActivityId"));
-			formBean.setComponents(ActivityUtil.getAllComponents(ampActivityId));
-			formBean.setIssues(new ArrayList()); //dummy value
-		}
-		return null;
-	}
+            String compId = request.getParameter("compId");
+            if (compId != null) {
+                long cId = Long.parseLong(compId);
+                Iterator itr = formBean.getComponents().iterator();
+                while (itr.hasNext()) {
+                    Components comp = (Components) itr.next();
+                    if (comp.getComponentId().longValue() == cId) {
+                        formBean.setComponent(comp);
+                        break;
+                    }
+                }
+                return null;
+            }
+            Long ampActivityId = new Long(request.getParameter("ampActivityId"));
+            formBean.setComponents(ActivityUtil.getAllComponents(ampActivityId));
+            formBean.setIssues(new ArrayList()); //dummy value
+        }
+        return null;
+    }
 }

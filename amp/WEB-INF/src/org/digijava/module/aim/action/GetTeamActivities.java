@@ -31,11 +31,11 @@ import org.digijava.module.aim.util.TeamUtil;
 public class GetTeamActivities extends Action {
 
     private static Logger logger = Logger.getLogger(GetTeamActivities.class);
-    public static final String ARCHIVED_PARAMETER	= "selectedSubTab";
-    public static final String ARCHIVED_SUB_TAB		= "4";
-    public static final String UNARCHIVED_SUB_TAB	= "3";
-    public static final String ARCHIVE_COMMAND		= "archive";
-    public static final String UNARCHIVE_COMMAND	= "unarchive";
+    public static final String ARCHIVED_PARAMETER   = "selectedSubTab";
+    public static final String ARCHIVED_SUB_TAB     = "4";
+    public static final String UNARCHIVED_SUB_TAB   = "3";
+    public static final String ARCHIVE_COMMAND      = "archive";
+    public static final String UNARCHIVE_COMMAND    = "unarchive";
 
     public ActionForward execute(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
 
@@ -73,13 +73,13 @@ public class GetTeamActivities extends Action {
             if(request.getParameter("id") != null){
                 id = new Long(request.getParameter("id"));
             }else{
-            	id=taForm.getTeamId();
+                id=taForm.getTeamId();
             }
            
             if(adminView && request.getParameter("reset")==null){
-            	numRecords= taForm.getTempNumResults();
+                numRecords= taForm.getTempNumResults();
             }else{
-            	if (id!=null){
+                if (id!=null){
                     AmpApplicationSettings appSettings = DbUtil.getTeamAppSettings(id);
                     if(appSettings != null) {
                         numRecords = appSettings.getDefaultRecordsPerPage().intValue();
@@ -93,24 +93,24 @@ public class GetTeamActivities extends Action {
                 } else if(tm != null) {
                     id = tm.getTeamId();
                     if(tm.getAppSettings() != null){
-                    	numRecords = tm.getAppSettings().getDefRecsPerPage();
+                        numRecords = tm.getAppSettings().getDefRecsPerPage();
                     }
                         
                     //String appSettingsForPages = request.getParameter("appSettingsForPages");
                     String reset = request.getParameter("reset");
                     
                     if(reset!=null && reset.equalsIgnoreCase("true")){
-                    	//taForm.setTempNumResults(-1);
-                    	if (numRecords!=0) {
-                    		taForm.setTempNumResults(numRecords);
-                    	}
+                        //taForm.setTempNumResults(-1);
+                        if (numRecords!=0) {
+                            taForm.setTempNumResults(numRecords);
+                        }
                     }
                     numRecords = taForm.getTempNumResults();
                 }
             }
             
             if(request.getParameter("reset")!=null){
-            	taForm.setKeyword(null);
+                taForm.setKeyword(null);
             }
             //taForm.setTeamId(id);
 
@@ -134,7 +134,7 @@ public class GetTeamActivities extends Action {
                         col = TeamUtil.getManagementTeamActivities(id, taForm.getKeyword());
                         taForm.setDonorFlag(true);
                     } else {
-                    	col = TeamUtil.getAllTeamActivities(id, true, taForm.getKeyword());
+                        col = TeamUtil.getAllTeamActivities(id, true, taForm.getKeyword());
                         taForm.setDonorFlag(false);
                     }
                    
@@ -183,13 +183,13 @@ public class GetTeamActivities extends Action {
 
                 int totActivities = taForm.getAllActivities().size();
                 if(numRecords == -1 || numRecords > totActivities){
-                	numRecords = totActivities;
+                    numRecords = totActivities;
                 } else if(totActivities / numRecords > 50) {
-                	numRecords = totActivities / 50;
+                    numRecords = totActivities / 50;
                 }
-                 	
+                    
                 int numPages = numRecords == 0 ? 1 : 
-                	(totActivities / numRecords) + ((totActivities % numRecords != 0) ? 1 : 0);
+                    (totActivities / numRecords) + ((totActivities % numRecords != 0) ? 1 : 0);
                 
                 if (page > numPages){
                     page = numPages;
@@ -234,44 +234,44 @@ public class GetTeamActivities extends Action {
         return null;
     }
  private static void decideArchiveMode(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) {
-    	
-    	TeamActivitiesForm tForm	= (TeamActivitiesForm) form;
-    	String showArchived			= request.getParameter("showArchivedActivities");
-    	String archiveComand		= tForm.getRemoveActivity();
-    	Boolean showArchivedActivities	= null;
-    	tForm.setRemoveActivity(null);
-    	
-    	if ( archiveComand != null ) {
-    		if ( ARCHIVE_COMMAND.equals(archiveComand) )
-    			showArchivedActivities	= false;
-    		if ( UNARCHIVE_COMMAND.equals(archiveComand) )
-    			showArchivedActivities	= true;
-    	}
-    	if ( showArchivedActivities == null && showArchived != null ) 
-    		showArchivedActivities	= Boolean.parseBoolean(showArchived);
-    	
+        
+        TeamActivitiesForm tForm    = (TeamActivitiesForm) form;
+        String showArchived         = request.getParameter("showArchivedActivities");
+        String archiveComand        = tForm.getRemoveActivity();
+        Boolean showArchivedActivities  = null;
+        tForm.setRemoveActivity(null);
+        
+        if ( archiveComand != null ) {
+            if ( ARCHIVE_COMMAND.equals(archiveComand) )
+                showArchivedActivities  = false;
+            if ( UNARCHIVE_COMMAND.equals(archiveComand) )
+                showArchivedActivities  = true;
+        }
+        if ( showArchivedActivities == null && showArchived != null ) 
+            showArchivedActivities  = Boolean.parseBoolean(showArchived);
+        
         if ( showArchivedActivities != null ) {
-        	if ( !showArchivedActivities ) {
-        		request.setAttribute(ARCHIVED_PARAMETER, UNARCHIVED_SUB_TAB);
-        	}
-        	else
-        		request.setAttribute(ARCHIVED_PARAMETER, ARCHIVED_SUB_TAB);
-        	GetTeamActivities.filterArchivedActivities(tForm.getAllActivities(), showArchivedActivities);
+            if ( !showArchivedActivities ) {
+                request.setAttribute(ARCHIVED_PARAMETER, UNARCHIVED_SUB_TAB);
+            }
+            else
+                request.setAttribute(ARCHIVED_PARAMETER, ARCHIVED_SUB_TAB);
+            GetTeamActivities.filterArchivedActivities(tForm.getAllActivities(), showArchivedActivities);
         }
     }
     
     private static void filterArchivedActivities ( Collection<AmpActivityVersion> activities, boolean archived) {
-    	if (activities != null) {
-    		Iterator<AmpActivityVersion> iter	= activities.iterator();
-    		while ( iter.hasNext() ) {
-    			AmpActivityVersion activity	=  iter.next();
-    			Boolean actArchived		= activity.getArchived();
-    			if (actArchived == null)
-    				actArchived = false;
-    			if ( actArchived != archived ) {
-    				iter.remove();
-    			}
-    		}
-    	}
+        if (activities != null) {
+            Iterator<AmpActivityVersion> iter   = activities.iterator();
+            while ( iter.hasNext() ) {
+                AmpActivityVersion activity =  iter.next();
+                Boolean actArchived     = activity.getArchived();
+                if (actArchived == null)
+                    actArchived = false;
+                if ( actArchived != archived ) {
+                    iter.remove();
+                }
+            }
+        }
     }
 }

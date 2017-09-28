@@ -42,39 +42,39 @@ import org.digijava.kernel.util.RequestUtils;
 
 public final class TranslatorNavigation extends Action {
 
-	/* This method overrides the Action classes execute method. This is the function called by the
-	 * controller servlet
-	 * @param mapping
-	 * @param form
-	 * @param request
-	 * @param response
-	 * @return ActionForward
-	 */
-	public ActionForward execute(
-		ActionMapping mapping,
-		ActionForm form,
-		HttpServletRequest request,
-		HttpServletResponse response)
-		throws IOException, ServletException {
+    /* This method overrides the Action classes execute method. This is the function called by the
+     * controller servlet
+     * @param mapping
+     * @param form
+     * @param request
+     * @param response
+     * @return ActionForward
+     */
+    public ActionForward execute(
+        ActionMapping mapping,
+        ActionForm form,
+        HttpServletRequest request,
+        HttpServletResponse response)
+        throws IOException, ServletException {
 
-		TranslatorNavForm nav = (TranslatorNavForm) form;
+        TranslatorNavForm nav = (TranslatorNavForm) form;
 
-		java.util.Set languages = RequestUtils.getSiteDomain(request).getSite().getTranslationLanguages();
-		java.util.Iterator itLang = languages.iterator();
-		java.util.ArrayList rtList = new java.util.ArrayList();
+        java.util.Set languages = RequestUtils.getSiteDomain(request).getSite().getTranslationLanguages();
+        java.util.Iterator itLang = languages.iterator();
+        java.util.ArrayList rtList = new java.util.ArrayList();
 
-		while(itLang.hasNext()){
+        while(itLang.hasNext()){
 
-				org.digijava.kernel.entity.Locale locale = (org.digijava.kernel.entity.Locale)itLang.next();
+                org.digijava.kernel.entity.Locale locale = (org.digijava.kernel.entity.Locale)itLang.next();
 
-				LabelValueBean lvb = new LabelValueBean(locale.getCode(),locale.getName());
-				rtList.add(lvb);
+                LabelValueBean lvb = new LabelValueBean(locale.getCode(),locale.getName());
+                rtList.add(lvb);
 
-			}
+            }
 
-		nav.setLocales(rtList);
-		nav.setLocalesSelected(request.getParameter("lang"));
-		return mapping.findForward("success");
+        nav.setLocales(rtList);
+        nav.setLocalesSelected(request.getParameter("lang"));
+        return mapping.findForward("success");
 
-	}
+    }
 }

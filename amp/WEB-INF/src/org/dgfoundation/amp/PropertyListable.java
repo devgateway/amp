@@ -30,14 +30,14 @@ import org.digijava.module.aim.annotations.reports.IgnorePersistence;
 public abstract class PropertyListable implements Cloneable {
 
     @Retention(RetentionPolicy.RUNTIME)
-    public @interface PropertyListableIgnore {    	
+    public @interface PropertyListableIgnore {      
     }
     
 
     
     @Override
     public Object clone() throws CloneNotSupportedException {
-	return super.clone();
+    return super.clone();
     }
     
     protected static Logger logger = Logger.getLogger(PropertyListable.class);
@@ -48,25 +48,25 @@ public abstract class PropertyListable implements Cloneable {
     
     @PropertyListableIgnore
     public String getJspFile() {
-	return "/repository/aim/view/listableBean.jsp";
+    return "/repository/aim/view/listableBean.jsp";
     }
     
     @PropertyListableIgnore
     public Map getPersistencePropertiesMap() {
-    	ArrayList<Class> annotations	= new ArrayList<Class>();
-    	annotations.add( PropertyListableIgnore.class );
-    	annotations.add( IgnorePersistence.class );
-    	return this.generatePropertiesMap( annotations );
+        ArrayList<Class> annotations    = new ArrayList<Class>();
+        annotations.add( PropertyListableIgnore.class );
+        annotations.add( IgnorePersistence.class );
+        return this.generatePropertiesMap( annotations );
     }
     
     @PropertyListableIgnore
     public String getStringRepresentation()
     {
-    	Map<String, Object> map = getPropertiesMap();
-    	StringBuilder bld = new StringBuilder();
-    	for(String key: map.keySet())
-    		bld.append(String.format("key: %s has value: %s\n", key, map.get(key)));
-    	return bld.toString();
+        Map<String, Object> map = getPropertiesMap();
+        StringBuilder bld = new StringBuilder();
+        for(String key: map.keySet())
+            bld.append(String.format("key: %s has value: %s\n", key, map.get(key)));
+        return bld.toString();
     }
     
     /**
@@ -74,9 +74,9 @@ public abstract class PropertyListable implements Cloneable {
      */
     @PropertyListableIgnore
     public Map<String, Object> getPropertiesMap() {
-    	ArrayList<Class> annotations	= new ArrayList<Class>();
-    	annotations.add( PropertyListableIgnore.class );
-    	return this.generatePropertiesMap( annotations );
+        ArrayList<Class> annotations    = new ArrayList<Class>();
+        annotations.add( PropertyListableIgnore.class );
+        return this.generatePropertiesMap( annotations );
     }
     
     /**
@@ -87,38 +87,38 @@ public abstract class PropertyListable implements Cloneable {
     
     @PropertyListableIgnore
     private Map<String, Object> generatePropertiesMap(Collection<Class> annonations) {
-	Map<String, Object> ret = new TreeMap<String, Object>();
-	BeanInfo beanInfo = null;
-	try {
-	    beanInfo = Introspector.getBeanInfo(this.getClass());
-	    PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
-	    
-	    for (int i = 0; i < propertyDescriptors.length; i++) {	
-			if(propertyDescriptors[i].getName().equals("class")) continue;
-			Method m = propertyDescriptors[i].getReadMethod();
-			//if(m.isAnnotationPresent(PropertyListableIgnore.class))continue;
-			Iterator<Class> iter	= annonations.iterator();
-			
-			boolean skip		= false;
-			while ( iter.hasNext() ) {
-				if ( m.isAnnotationPresent(iter.next()) ) {
-					skip		= true;
-					break;
-				}
-			}
-			if ( skip )
-					continue;
-			
-			Object object = m.invoke(this, new Object[] {});
-			
-			if ((object == null) || (object instanceof String)
-							&& ("".equalsIgnoreCase((String) object))) continue;
-			if ( object instanceof Collection && ((Collection)object).size() == 0 )
-							continue;
-			//AMP-3372
+    Map<String, Object> ret = new TreeMap<String, Object>();
+    BeanInfo beanInfo = null;
+    try {
+        beanInfo = Introspector.getBeanInfo(this.getClass());
+        PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
+        
+        for (int i = 0; i < propertyDescriptors.length; i++) {  
+            if(propertyDescriptors[i].getName().equals("class")) continue;
+            Method m = propertyDescriptors[i].getReadMethod();
+            //if(m.isAnnotationPresent(PropertyListableIgnore.class))continue;
+            Iterator<Class> iter    = annonations.iterator();
+            
+            boolean skip        = false;
+            while ( iter.hasNext() ) {
+                if ( m.isAnnotationPresent(iter.next()) ) {
+                    skip        = true;
+                    break;
+                }
+            }
+            if ( skip )
+                    continue;
+            
+            Object object = m.invoke(this, new Object[] {});
+            
+            if ((object == null) || (object instanceof String)
+                            && ("".equalsIgnoreCase((String) object))) continue;
+            if ( object instanceof Collection && ((Collection)object).size() == 0 )
+                            continue;
+            //AMP-3372
             /*
-			ret.put(propertyDescriptors[i].getName(), object instanceof Collection ? Util.collectionAsString(
-				(Collection) object) : object);*/
+            ret.put(propertyDescriptors[i].getName(), object instanceof Collection ? Util.collectionAsString(
+                (Collection) object) : object);*/
 
             //AMP-11638
             Collection selProps = null;
@@ -130,21 +130,21 @@ public abstract class PropertyListable implements Cloneable {
             }
 
             ret.put(propertyDescriptors[i].getName(), selProps);
-	    }
-	} catch (IntrospectionException e) {
-	    logger.error(e);
-	    e.printStackTrace();
-	} catch (IllegalArgumentException e) {
-	    logger.error(e);
-	    e.printStackTrace();
-	} catch (IllegalAccessException e) {
-	    logger.error(e);
-	    e.printStackTrace();
-	} catch (InvocationTargetException e) {
-	    logger.error(e);
-	    e.printStackTrace();
-	}
-	return ret;
+        }
+    } catch (IntrospectionException e) {
+        logger.error(e);
+        e.printStackTrace();
+    } catch (IllegalArgumentException e) {
+        logger.error(e);
+        e.printStackTrace();
+    } catch (IllegalAccessException e) {
+        logger.error(e);
+        e.printStackTrace();
+    } catch (InvocationTargetException e) {
+        logger.error(e);
+        e.printStackTrace();
+    }
+    return ret;
 
     }
 

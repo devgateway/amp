@@ -34,14 +34,14 @@ public class DisplayThumbnail extends Action {
                 response.setContentType("text/plain");
                 Boolean hasRelDocs = (Boolean) session.getAttribute("homeThumbnailOptfile" + placeholder);
                 if (hasRelDocs != null && hasRelDocs){
-		            try {
-		            	AmpHomeThumbnail test = FeaturesUtil.getAmpHomeThumbnail(Integer.parseInt(placeholder));
-		            	String resp = hasRelDocs.toString()+"*";
-		            	resp += test.getThumbnailLabel()+"*";
-		            	response.getWriter().print(resp);
-		            } catch (IOException e) {
-		                  logger.error("Trying to parse " + placeholder + " to int",e);
-		            }
+                    try {
+                        AmpHomeThumbnail test = FeaturesUtil.getAmpHomeThumbnail(Integer.parseInt(placeholder));
+                        String resp = hasRelDocs.toString()+"*";
+                        resp += test.getThumbnailLabel()+"*";
+                        response.getWriter().print(resp);
+                    } catch (IOException e) {
+                          logger.error("Trying to parse " + placeholder + " to int",e);
+                    }
                 }
             } else {
 
@@ -50,7 +50,7 @@ public class DisplayThumbnail extends Action {
                     ServletOutputStream os = response.getOutputStream();
                     AmpHomeThumbnail test = FeaturesUtil.getAmpHomeThumbnail(temp);
                     if (test != null) {
-						os.write(test.getThumbnail());
+                        os.write(test.getThumbnail());
                         boolean optFile = false;
                         if (test.getOptionalFile() != null) {
                             optFile = true;

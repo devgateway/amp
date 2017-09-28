@@ -11,14 +11,14 @@ import org.digijava.module.aim.util.SectorUtil;
 @TranslatableClass (displayName = "Sector Scheme")
 public class AmpSectorScheme implements Serializable
 {
-	//IATI-check: might be relevant, but obtained from possible values
-	@Interchangeable(fieldTitle="AMP Sector Scheme ID", id = true)
-	private Long ampSecSchemeId ;
-	@Interchangeable(fieldTitle="Sector Scheme Code")
-	private String secSchemeCode ;
-	@Interchangeable(fieldTitle="Sector Scheme Name", value = true)
-	@TranslatableField
-	private String secSchemeName ;
+    //IATI-check: might be relevant, but obtained from possible values
+    @Interchangeable(fieldTitle="AMP Sector Scheme ID", id = true)
+    private Long ampSecSchemeId ;
+    @Interchangeable(fieldTitle="Sector Scheme Code")
+    private String secSchemeCode ;
+    @Interchangeable(fieldTitle="Sector Scheme Name", value = true)
+    @TranslatableField
+    private String secSchemeName ;
 
     private Boolean showInRMFilters;
 
@@ -31,46 +31,46 @@ public class AmpSectorScheme implements Serializable
     }
 
     /**
-	 * @return
-	 */
-	public Long getAmpSecSchemeId() {
-		return ampSecSchemeId;
-	}
+     * @return
+     */
+    public Long getAmpSecSchemeId() {
+        return ampSecSchemeId;
+    }
 
-	/**
-	 * @return
-	 */
-	public String getSecSchemeCode() {
-		return secSchemeCode;
-	}
+    /**
+     * @return
+     */
+    public String getSecSchemeCode() {
+        return secSchemeCode;
+    }
 
-	/**
-	 * @return
-	 */
-	public String getSecSchemeName() {
-		return secSchemeName;
-	}
+    /**
+     * @return
+     */
+    public String getSecSchemeName() {
+        return secSchemeName;
+    }
 
-	/**
-	 * @param long1
-	 */
-	public void setAmpSecSchemeId(Long long1) {
-		ampSecSchemeId = long1;
-	}
+    /**
+     * @param long1
+     */
+    public void setAmpSecSchemeId(Long long1) {
+        ampSecSchemeId = long1;
+    }
 
-	/**
-	 * @param string
-	 */
-	public void setSecSchemeCode(String string) {
-		secSchemeCode = string;
-	}
+    /**
+     * @param string
+     */
+    public void setSecSchemeCode(String string) {
+        secSchemeCode = string;
+    }
 
-	/**
-	 * @param string
-	 */
-	public void setSecSchemeName(String string) {
-		secSchemeName = string;
-	}
+    /**
+     * @param string
+     */
+    public void setSecSchemeName(String string) {
+        secSchemeName = string;
+    }
         
        public boolean isUsed() {
         boolean used = true;
@@ -84,9 +84,9 @@ public class AmpSectorScheme implements Serializable
         return used;
     }
        
-   	public static String hqlStringForName(String idSource)
-   	{
-   		return InternationalizedModelDescription.getForProperty(AmpSectorScheme.class, "secSchemeName").getSQLFunctionCall(idSource + ".ampSecSchemeId");
-   	}
+    public static String hqlStringForName(String idSource)
+    {
+        return InternationalizedModelDescription.getForProperty(AmpSectorScheme.class, "secSchemeName").getSQLFunctionCall(idSource + ".ampSecSchemeId");
+    }
 
 }

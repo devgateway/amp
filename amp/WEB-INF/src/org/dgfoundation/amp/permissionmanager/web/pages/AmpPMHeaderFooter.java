@@ -31,67 +31,67 @@ import org.dgfoundation.amp.onepager.util.UrlEmbederComponent;
  */
 public class AmpPMHeaderFooter extends WebPage {
 
-	/**
-	 * 
-	 */
-	public AmpPMHeaderFooter() {
-		
-		List<Cookie> cookies = ((WebRequest)getRequestCycle().getRequest()).getCookies();
-		if (cookies != null) {
-			Iterator<Cookie> it = cookies.iterator();
-			while (it.hasNext()) {
-				Cookie cookie = (Cookie) it.next();
-				if (cookie.getName().equals("digi_language")) {
-                	String languageCode = cookie.getValue();
-                	Session.get().setLocale(new Locale(languageCode));
+    /**
+     * 
+     */
+    public AmpPMHeaderFooter() {
+        
+        List<Cookie> cookies = ((WebRequest)getRequestCycle().getRequest()).getCookies();
+        if (cookies != null) {
+            Iterator<Cookie> it = cookies.iterator();
+            while (it.hasNext()) {
+                Cookie cookie = (Cookie) it.next();
+                if (cookie.getName().equals("digi_language")) {
+                    String languageCode = cookie.getValue();
+                    Session.get().setLocale(new Locale(languageCode));
                     if (languageCode != null) {
                         break;
                     }
                 }
-			}
+            }
         }
-		
-		AmpAjaxBehavior ampajax = new AmpAjaxBehavior();
-		add(ampajax);
-		add(new IndicatingAjaxLink("fmmode", new Model("FM Mode")) {
-			@Override
-			public void onClick(AjaxRequestTarget arg0) {
-				AmpAuthWebSession session = (AmpAuthWebSession) getSession();
-				if (session.isFmMode())
-					session.setFmMode(false);
-				else
-					session.setFmMode(true);
-				setResponsePage(PermissionManager.class);
-			}
-		});
-		add(new UrlEmbederComponent("wHeader", "/showLayout.do?layout=wicketAdminHeaderLayout", "$(\"#switchTranslationMode\").attr('href', 'javascript:wicketSwitchTranslationMode()');$(\"#switchFMMode\").css(\"display\", \"block\");"));
-		add(new UrlEmbederComponent("wFooter", "/showLayout.do?layout=wicketFooter"));
+        
+        AmpAjaxBehavior ampajax = new AmpAjaxBehavior();
+        add(ampajax);
+        add(new IndicatingAjaxLink("fmmode", new Model("FM Mode")) {
+            @Override
+            public void onClick(AjaxRequestTarget arg0) {
+                AmpAuthWebSession session = (AmpAuthWebSession) getSession();
+                if (session.isFmMode())
+                    session.setFmMode(false);
+                else
+                    session.setFmMode(true);
+                setResponsePage(PermissionManager.class);
+            }
+        });
+        add(new UrlEmbederComponent("wHeader", "/showLayout.do?layout=wicketAdminHeaderLayout", "$(\"#switchTranslationMode\").attr('href', 'javascript:wicketSwitchTranslationMode()');$(\"#switchFMMode\").css(\"display\", \"block\");"));
+        add(new UrlEmbederComponent("wFooter", "/showLayout.do?layout=wicketFooter"));
 
-	}
-	
-	public HttpServletRequest getServletRequest(){
-		ServletWebRequest servletWebRequest = (ServletWebRequest) getRequest();
-		HttpServletRequest request = servletWebRequest.getContainerRequest();
-		return request;
-	}
-	
-	public HttpSession getHttpSession(){
-		HttpSession session = getServletRequest().getSession();
-		return session;
-	}
-	
-	@Override
-	protected void setHeaders(WebResponse response) {
-		super.setHeaders(response);
-		response.setHeader("Cache-Control", "no-cache, max-age=0, must-revalidate, no-store");
-	}
-	
-	@Override
-	public void renderHead(IHeaderResponse response) {
-		super.renderHead(response);
-		response.render(JavaScriptHeaderItem.forUrl("/ckeditor/ckeditor.js"));
-		response.render(JavaScriptHeaderItem.forUrl("/TEMPLATE/ampTemplate/js_2/opentip/opentip-jquery2-4-6.js"));
-		response.render(JavaScriptHeaderItem.forReference(new PackageResourceReference(AmpStructuresFormSectionFeature.class, "gisPopup.js")));
-	}
-	
+    }
+    
+    public HttpServletRequest getServletRequest(){
+        ServletWebRequest servletWebRequest = (ServletWebRequest) getRequest();
+        HttpServletRequest request = servletWebRequest.getContainerRequest();
+        return request;
+    }
+    
+    public HttpSession getHttpSession(){
+        HttpSession session = getServletRequest().getSession();
+        return session;
+    }
+    
+    @Override
+    protected void setHeaders(WebResponse response) {
+        super.setHeaders(response);
+        response.setHeader("Cache-Control", "no-cache, max-age=0, must-revalidate, no-store");
+    }
+    
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.render(JavaScriptHeaderItem.forUrl("/ckeditor/ckeditor.js"));
+        response.render(JavaScriptHeaderItem.forUrl("/TEMPLATE/ampTemplate/js_2/opentip/opentip-jquery2-4-6.js"));
+        response.render(JavaScriptHeaderItem.forReference(new PackageResourceReference(AmpStructuresFormSectionFeature.class, "gisPopup.js")));
+    }
+    
 }

@@ -15,49 +15,49 @@ package org.dgfoundation.amp.nireports;
  * @author Dolghier Constantin
  */
 public class TranslatedDate implements Comparable<TranslatedDate> {
-	public final ComparableValue<String> year;
-	public final ComparableValue<String> month;
-	public final ComparableValue<String> quarter;
-	
-	public TranslatedDate(int year, String yearStr, int quarter, int month, String monthName) {
-		this(new ComparableValue<>(yearStr, year), new ComparableValue<>(String.format("Q%d", quarter), quarter), new ComparableValue<>(monthName, month));
-	}
-	
-	public TranslatedDate(ComparableValue<String> year, ComparableValue<String> quarter, ComparableValue<String> month) {
-		this.year = year;
-		this.month = month;
-		this.quarter = quarter;
-	}
+    public final ComparableValue<String> year;
+    public final ComparableValue<String> month;
+    public final ComparableValue<String> quarter;
+    
+    public TranslatedDate(int year, String yearStr, int quarter, int month, String monthName) {
+        this(new ComparableValue<>(yearStr, year), new ComparableValue<>(String.format("Q%d", quarter), quarter), new ComparableValue<>(monthName, month));
+    }
+    
+    public TranslatedDate(ComparableValue<String> year, ComparableValue<String> quarter, ComparableValue<String> month) {
+        this.year = year;
+        this.month = month;
+        this.quarter = quarter;
+    }
 
-	public TranslatedDate withMonth(ComparableValue<String> newMonth) {
-		return new TranslatedDate(this.year, this.quarter, newMonth);
-	}
+    public TranslatedDate withMonth(ComparableValue<String> newMonth) {
+        return new TranslatedDate(this.year, this.quarter, newMonth);
+    }
 
-	@Override
-	public String toString() {
-		return "TranslatedDate [year=" + year + ", month=" + month + ", quarter=" + quarter + "]";
-	}
+    @Override
+    public String toString() {
+        return "TranslatedDate [year=" + year + ", month=" + month + ", quarter=" + quarter + "]";
+    }
 
-	@Override
-	public int compareTo(TranslatedDate o) {
-		int deltaYear = year.compareTo(o.year);
-		if (deltaYear != 0) return deltaYear;
-		
-		int deltaQuarter = quarter.compareTo(o.quarter);
-		if (deltaQuarter != 0) return deltaQuarter;
-		
-		int deltaMonth = month.compareTo(o.month);
-		return deltaMonth;
-	}
-	
-	@Override
-	public int hashCode() {
-		return year.hashCode() + 37 * quarter.hashCode() + 967 * month.hashCode();
-	}
-	
-	@Override
-	public boolean equals(Object oth) {
-		TranslatedDate o = (TranslatedDate) oth;
-		return year.equals(o.year) && quarter.equals(o.quarter) && month.equals(o.month);
-	}
+    @Override
+    public int compareTo(TranslatedDate o) {
+        int deltaYear = year.compareTo(o.year);
+        if (deltaYear != 0) return deltaYear;
+        
+        int deltaQuarter = quarter.compareTo(o.quarter);
+        if (deltaQuarter != 0) return deltaQuarter;
+        
+        int deltaMonth = month.compareTo(o.month);
+        return deltaMonth;
+    }
+    
+    @Override
+    public int hashCode() {
+        return year.hashCode() + 37 * quarter.hashCode() + 967 * month.hashCode();
+    }
+    
+    @Override
+    public boolean equals(Object oth) {
+        TranslatedDate o = (TranslatedDate) oth;
+        return year.equals(o.year) && quarter.equals(o.quarter) && month.equals(o.month);
+    }
 }

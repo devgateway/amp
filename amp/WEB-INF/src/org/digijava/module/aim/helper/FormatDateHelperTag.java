@@ -9,50 +9,50 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
 
 public class FormatDateHelperTag extends BodyTagSupport {
 
-	/**
-	 * 
-	 */
-	
-	private static final long serialVersionUID = 1L;
-	private Date value;
+    /**
+     * 
+     */
+    
+    private static final long serialVersionUID = 1L;
+    private Date value;
 
-	@Override
-	public int doStartTag() throws JspException {
-		try {
+    @Override
+    public int doStartTag() throws JspException {
+        try {
 
-			JspWriter out = pageContext.getOut();
-			String result = "";
-			if (value != null) {
-				result = DateConversion.convertDateToLocalizedString(value);
-			}
+            JspWriter out = pageContext.getOut();
+            String result = "";
+            if (value != null) {
+                result = DateConversion.convertDateToLocalizedString(value);
+            }
 
-			out.write(result);
-			return super.doStartTag();
-		} catch (IOException ioe) {
+            out.write(result);
+            return super.doStartTag();
+        } catch (IOException ioe) {
 
-		}
+        }
 
-		return (EVAL_BODY_INCLUDE);
-	}
+        return (EVAL_BODY_INCLUDE);
+    }
 
-	@Override
-	public int doAfterBody() throws JspException {
-		// TODO Auto-generated method stub
-		return super.doAfterBody();
-	}
+    @Override
+    public int doAfterBody() throws JspException {
+        // TODO Auto-generated method stub
+        return super.doAfterBody();
+    }
 
-	@Override
-	public int doEndTag() throws JspException {
+    @Override
+    public int doEndTag() throws JspException {
 
-		return EVAL_PAGE;
-	}
+        return EVAL_PAGE;
+    }
 
-	public void setValue(Date value) {
-		this.value = value;
-	}
+    public void setValue(Date value) {
+        this.value = value;
+    }
 
-	public Date getValue() {
-		return value;
-	}
+    public Date getValue() {
+        return value;
+    }
 
 }

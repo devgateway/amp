@@ -9,23 +9,23 @@ package org.digijava.kernel.ampapi.endpoints.scorecard.service;
 
 public class ScorecardNoUpdateDonor {
 
-	private Long ampDonorId;
-	private String name;
+    private Long ampDonorId;
+    private String name;
 
-	public Long getAmpDonorId() {
-		return ampDonorId;
-	}
+    public Long getAmpDonorId() {
+        return ampDonorId;
+    }
 
-	public void setAmpDonorId(Long ampDonorId) {
-		this.ampDonorId = ampDonorId;
-	}
+    public void setAmpDonorId(Long ampDonorId) {
+        this.ampDonorId = ampDonorId;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
 }

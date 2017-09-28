@@ -13,28 +13,28 @@ import org.apache.wicket.model.IModel;
  */
 public class AmpHiddenFieldPanel<T> extends AmpFieldPanel<T> {
 
-	protected HiddenField<T> hiddenContainer;
-	
-	public HiddenField<T> getHiddenContainer() {
-		return hiddenContainer;
-	}
+    protected HiddenField<T> hiddenContainer;
+    
+    public HiddenField<T> getHiddenContainer() {
+        return hiddenContainer;
+    }
 
-	
-	/**
-	 * @param id
-	 * @param model
-	 * @param fmName
-	 */
-	public AmpHiddenFieldPanel(String id, IModel<T> model, String fmName) {	
-		this(id,fmName);
-		hiddenContainer.setModel(model);
-	}
+    
+    /**
+     * @param id
+     * @param model
+     * @param fmName
+     */
+    public AmpHiddenFieldPanel(String id, IModel<T> model, String fmName) { 
+        this(id,fmName);
+        hiddenContainer.setModel(model);
+    }
 
-	
-	public AmpHiddenFieldPanel(String id, String fmName) {	
-		super(id, fmName, true, true);
-		hiddenContainer = new HiddenField<T>("hiddenContainer");
-		hiddenContainer.setOutputMarkupId(true);
-		addFormComponent(hiddenContainer);
-	}
+    
+    public AmpHiddenFieldPanel(String id, String fmName) {  
+        super(id, fmName, true, true);
+        hiddenContainer = new HiddenField<T>("hiddenContainer");
+        hiddenContainer.setOutputMarkupId(true);
+        addFormComponent(hiddenContainer);
+    }
 }

@@ -8,32 +8,32 @@ import org.digijava.module.aim.helper.ActivityHistory;
 
 public class ViewActivityHistoryForm extends ActionForm implements Serializable {
 
-	private Long activityId;
-	private Boolean enableadvanceoptions;
-	private List<ActivityHistory> activities;
+    private Long activityId;
+    private Boolean enableadvanceoptions;
+    private List<ActivityHistory> activities;
 
-	public Long getActivityId() {
-		return activityId;
-	}
+    public Long getActivityId() {
+        return activityId;
+    }
 
-	public void setActivityId(Long activityId) {
-		this.activityId = activityId;
-	}
+    public void setActivityId(Long activityId) {
+        this.activityId = activityId;
+    }
 
-	public List<ActivityHistory> getActivities() {
-		return activities;
-	}
+    public List<ActivityHistory> getActivities() {
+        return activities;
+    }
 
-	public void setActivities(List<ActivityHistory> activities) {
-		this.activities = activities;
-	}
+    public void setActivities(List<ActivityHistory> activities) {
+        this.activities = activities;
+    }
 
-	public Boolean getEnableadvanceoptions() {
-		return enableadvanceoptions;
-	}
+    public Boolean getEnableadvanceoptions() {
+        return enableadvanceoptions;
+    }
 
-	public void setEnableadvanceoptions(Boolean enableadvanceoptions) {
-		this.enableadvanceoptions = enableadvanceoptions;
-	}
+    public void setEnableadvanceoptions(Boolean enableadvanceoptions) {
+        this.enableadvanceoptions = enableadvanceoptions;
+    }
 
 }

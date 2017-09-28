@@ -16,21 +16,21 @@ public interface FxtopServicesPortType extends java.rmi.Remote {
      * Date parameter is left blank.  If User and Password are not provided,
      * conversion will be performed with a date in 1999.
      */
-	/**
-	 * Returns amount (OriginalAmount) converted from source currency
+    /**
+     * Returns amount (OriginalAmount) converted from source currency
      (C1 is a 3 letters Iso Code) to destination currency (C2 is a 3 letters
      Iso Code) at a specific date (Date format DD/MM/YYYY) or today if
       Date parameter is left blank.  .
-	 * 
-	 * @param originalAmount
-	 * @param c1 source currency - 3 letters Iso Code
-	 * @param c2 destination currency - 3 letters Iso Code
-	 * @param date (Date format DD/MM/YYYY) or today if Date parameter is left blank
-	 * @param user user name that is suscribed to the service
-	 * @param password password of the subscription
-	 * @return
-	 * @throws java.rmi.RemoteException
-	 */
+     * 
+     * @param originalAmount
+     * @param c1 source currency - 3 letters Iso Code
+     * @param c2 destination currency - 3 letters Iso Code
+     * @param date (Date format DD/MM/YYYY) or today if Date parameter is left blank
+     * @param user user name that is suscribed to the service
+     * @param password password of the subscription
+     * @return
+     * @throws java.rmi.RemoteException
+     */
     public org.digijava.module.currencyrates.fxtop.ConvertResult convert(java.lang.String originalAmount, java.lang.String c1, java.lang.String c2, java.lang.String date, java.lang.String user, java.lang.String password) throws java.rmi.RemoteException;
 
     /**

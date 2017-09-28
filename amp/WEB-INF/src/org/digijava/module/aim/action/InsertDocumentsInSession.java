@@ -15,27 +15,27 @@ import org.digijava.module.aim.dbentity.AmpOrganisationDocument;
 import org.digijava.module.contentrepository.action.SelectDocumentDM;
 
 public class InsertDocumentsInSession extends Action {
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
+    public ActionForward execute(ActionMapping mapping, ActionForm form,
             HttpServletRequest request,
             HttpServletResponse response) throws Exception {
-		
-		Long objId				= Long.parseLong( request.getParameter("objId") );
-		String sessionName		= request.getParameter("sessionName");
-		
-		if ( objId!=null && sessionName!=null ) {
-			if ( AmpOrganisationDocument.SESSION_NAME.equals(sessionName) ) {
-				List<AmpOrganisationDocument>ampOrgDocs	= AmpOrganisationDocument.findDocumentsByOrganisation(objId);
-				Set<String> UUIDs						= SelectDocumentDM.getSelectedDocsSet(request, sessionName, true);
-				UUIDs.clear();
-				Iterator<AmpOrganisationDocument> iter	= ampOrgDocs.iterator();
-				while ( iter.hasNext() ) {
-					UUIDs.add( iter.next().getUuid() );
-				}
-				
-			}
-		}
-		
-		return mapping.findForward("forward");
-	}
-	
+        
+        Long objId              = Long.parseLong( request.getParameter("objId") );
+        String sessionName      = request.getParameter("sessionName");
+        
+        if ( objId!=null && sessionName!=null ) {
+            if ( AmpOrganisationDocument.SESSION_NAME.equals(sessionName) ) {
+                List<AmpOrganisationDocument>ampOrgDocs = AmpOrganisationDocument.findDocumentsByOrganisation(objId);
+                Set<String> UUIDs                       = SelectDocumentDM.getSelectedDocsSet(request, sessionName, true);
+                UUIDs.clear();
+                Iterator<AmpOrganisationDocument> iter  = ampOrgDocs.iterator();
+                while ( iter.hasNext() ) {
+                    UUIDs.add( iter.next().getUuid() );
+                }
+                
+            }
+        }
+        
+        return mapping.findForward("forward");
+    }
+    
 }

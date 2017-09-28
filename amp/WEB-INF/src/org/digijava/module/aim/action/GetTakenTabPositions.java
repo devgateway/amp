@@ -22,35 +22,35 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamMemberUtil;
 
 public class GetTakenTabPositions extends Action {
-	
-	private static Logger logger	= Logger.getLogger(GetTakenTabPositions.class);
-	
-	@Override
-	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		HttpSession session = request.getSession();
-		TeamMember teamMember	= (TeamMember)session.getAttribute( Constants.CURRENT_MEMBER );
-		AmpTeamMember member=TeamMemberUtil.getAmpTeamMember(teamMember.getMemberId());
-		Set<AmpDesktopTabSelection> selections=member.getDesktopTabSelections();
-		JSONArray jsonArray = new JSONArray();
-		if (selections != null) {
-			for (AmpDesktopTabSelection selection : selections) {
-				JSONObject jposition = new JSONObject();
-				jposition.put("position", selection.getIndex());
-				jsonArray.add(jposition);
-			}
-		}
-		response.setContentType("text/plain");
-		OutputStreamWriter outputStream = null;
+    
+    private static Logger logger    = Logger.getLogger(GetTakenTabPositions.class);
+    
+    @Override
+    public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        HttpSession session = request.getSession();
+        TeamMember teamMember   = (TeamMember)session.getAttribute( Constants.CURRENT_MEMBER );
+        AmpTeamMember member=TeamMemberUtil.getAmpTeamMember(teamMember.getMemberId());
+        Set<AmpDesktopTabSelection> selections=member.getDesktopTabSelections();
+        JSONArray jsonArray = new JSONArray();
+        if (selections != null) {
+            for (AmpDesktopTabSelection selection : selections) {
+                JSONObject jposition = new JSONObject();
+                jposition.put("position", selection.getIndex());
+                jsonArray.add(jposition);
+            }
+        }
+        response.setContentType("text/plain");
+        OutputStreamWriter outputStream = null;
 
-		try {
-			outputStream = new OutputStreamWriter(response.getOutputStream(),"UTF-8");
-			outputStream.write(jsonArray.toString());
-		} finally {
-			if (outputStream != null) {
-				outputStream.close();
-			}
-		}
-		return null;
-	}
+        try {
+            outputStream = new OutputStreamWriter(response.getOutputStream(),"UTF-8");
+            outputStream.write(jsonArray.toString());
+        } finally {
+            if (outputStream != null) {
+                outputStream.close();
+            }
+        }
+        return null;
+    }
 
 }

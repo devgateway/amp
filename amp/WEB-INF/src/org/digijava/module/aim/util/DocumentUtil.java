@@ -173,7 +173,7 @@ public class DocumentUtil {
     }
 
     private static List<ManagedDocument> getContentItems(Node node) throws RepositoryException {
-    	NodeIterator iter = node.getNodes();
+        NodeIterator iter = node.getNodes();
         ArrayList<ManagedDocument> nodeList = new ArrayList<>();
         while(iter.hasNext()) {
             Node childItem = (Node) iter.next();
@@ -217,7 +217,7 @@ public class DocumentUtil {
         } else {
             contentItem.setDescription(null);
         }
-        Property documentType	 = childItem.getProperty("cm:docType");
+        Property documentType    = childItem.getProperty("cm:docType");
         if(documentType != null) {
             contentItem.setDocType(documentType.getString());
         } else {

@@ -10,22 +10,22 @@ import java.util.Set;
  *
  */
 public class IdentityExpander extends IdsExpander {
-	
-	public final Long extraValue;
-	
-	public IdentityExpander(String factColumnName, Long extraValue) {
-		super(factColumnName);
-		this.extraValue = extraValue;
-	}
-	
-	public IdentityExpander(String factColumnName) {
-		this(factColumnName, null);
-	}
-	
-	@Override public Set<Long> expandIds(final List<Long> values) {
-		final Set<Long> res = new HashSet<>(values);
-		if (extraValue != null)
-			res.add(extraValue);
-		return res;
-	}
+    
+    public final Long extraValue;
+    
+    public IdentityExpander(String factColumnName, Long extraValue) {
+        super(factColumnName);
+        this.extraValue = extraValue;
+    }
+    
+    public IdentityExpander(String factColumnName) {
+        this(factColumnName, null);
+    }
+    
+    @Override public Set<Long> expandIds(final List<Long> values) {
+        final Set<Long> res = new HashSet<>(values);
+        if (extraValue != null)
+            res.add(extraValue);
+        return res;
+    }
 }

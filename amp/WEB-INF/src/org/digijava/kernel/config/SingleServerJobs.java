@@ -30,15 +30,15 @@ public class SingleServerJobs {
     private Map singleServerJobs;
 
     public SingleServerJobs() {
-	singleServerJobs = new HashMap();
+    singleServerJobs = new HashMap();
     }
 
     public Map getSingleServerJobs() {
-	return singleServerJobs;
+    return singleServerJobs;
     }
 
     public void addSingleServerJob(SingleServerJob singleServerJob) {
-	singleServerJobs.put(singleServerJob.getClassName(), singleServerJob);
+    singleServerJobs.put(singleServerJob.getClassName(), singleServerJob);
     }
 
 }

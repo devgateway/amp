@@ -146,7 +146,7 @@ public class SiteInstancesForm
         
         @Override
         public String toString() {
-        	return this.getModule() + "/" + this.getInstance() + "/" + this.getId() ;
+            return this.getModule() + "/" + this.getInstance() + "/" + this.getId() ;
         }
     }
 

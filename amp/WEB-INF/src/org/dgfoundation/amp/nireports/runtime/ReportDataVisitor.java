@@ -7,6 +7,6 @@ package org.dgfoundation.amp.nireports.runtime;
  * @param <K> the output type 
  */
 public interface ReportDataVisitor<K> {
-	public K visitLeaf(ColumnReportData crd);
-	public K visitGroup(GroupReportData grd);
+    public K visitLeaf(ColumnReportData crd);
+    public K visitGroup(GroupReportData grd);
 }

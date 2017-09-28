@@ -17,10 +17,10 @@ import org.apache.struts.tiles.actions.TilesAction;
  */
 public class ShowDesktopActivities extends TilesAction {
 
-	private static Logger logger = Logger.getLogger(ShowDesktopActivities.class);
+    private static Logger logger = Logger.getLogger(ShowDesktopActivities.class);
 
-	public ActionForward execute(ActionMapping mapping,ActionForm form,
-			HttpServletRequest request,HttpServletResponse response) throws Exception {
-		return null;
-	}
+    public ActionForward execute(ActionMapping mapping,ActionForm form,
+            HttpServletRequest request,HttpServletResponse response) throws Exception {
+        return null;
+    }
 }

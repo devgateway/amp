@@ -15,22 +15,22 @@ import java.util.Set;
  */
 public class AmpActivity extends AmpActivityVersion implements Cloneable, HierarchyListable {
 
-	/**
-	 * 
-	 * NOTE:
-	 *    You shouldn't have the need to add new fields here.
-	 *    This class should be identical with AmpActivityVersion
-	 * 
-	 */
-	
-	@Override
-	public Object clone() throws CloneNotSupportedException {
-		try {
-			return (AmpActivity) super.clone();
-		} catch (CloneNotSupportedException e) {
-			throw new InternalError(e.toString());
-		}
-	}
+    /**
+     * 
+     * NOTE:
+     *    You shouldn't have the need to add new fields here.
+     *    This class should be identical with AmpActivityVersion
+     * 
+     */
+    
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        try {
+            return (AmpActivity) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new InternalError(e.toString());
+        }
+    }
 
 
     //methods for HierarchyListable interface

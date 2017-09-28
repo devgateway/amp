@@ -15,41 +15,41 @@ import org.dgfoundation.amp.algo.ExceptionRunnable;
  *
  */
 public class LockHolder {
-	public final ReentrantLock lock;
-	public final String name;
-	
-	public LockHolder(String name) {
-		this.name = name;
-		this.lock = new ReentrantLock();
-	}
-	
-	public void runUnderLock(ExceptionRunnable<?> r) {
-		runUnderLock(lock, r);
-	}
-		
-	public static void runUnderLock(Lock lock, ExceptionRunnable<?> r) {
-		try{
-			lock.lock();
-			r.run();
-		}
-		catch(Exception e) {
-			throw AlgoUtils.translateException(e);
-		}
-		finally {
-			lock.unlock();
-		}
-	}
-	
-	@Override public String toString() {
-		return "lockholder for " + name;
-	}
-	
-	@Override public int hashCode() {
-		return toString().hashCode();
-	}
-	
-	@Override public boolean equals(Object oth) {
-		LockHolder other = (LockHolder) oth;
-		return this.toString().equals(other.toString()) && this.lock.equals(other.lock);
-	}
+    public final ReentrantLock lock;
+    public final String name;
+    
+    public LockHolder(String name) {
+        this.name = name;
+        this.lock = new ReentrantLock();
+    }
+    
+    public void runUnderLock(ExceptionRunnable<?> r) {
+        runUnderLock(lock, r);
+    }
+        
+    public static void runUnderLock(Lock lock, ExceptionRunnable<?> r) {
+        try{
+            lock.lock();
+            r.run();
+        }
+        catch(Exception e) {
+            throw AlgoUtils.translateException(e);
+        }
+        finally {
+            lock.unlock();
+        }
+    }
+    
+    @Override public String toString() {
+        return "lockholder for " + name;
+    }
+    
+    @Override public int hashCode() {
+        return toString().hashCode();
+    }
+    
+    @Override public boolean equals(Object oth) {
+        LockHolder other = (LockHolder) oth;
+        return this.toString().equals(other.toString()) && this.lock.equals(other.lock);
+    }
 }

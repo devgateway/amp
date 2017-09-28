@@ -21,22 +21,22 @@ public class AmpPMTreeField extends Panel {
 
 
 
-	/**
-	 * @param id
-	 * @param model
-	 * @param fmName
-	 */
-	public AmpPMTreeField(String id, IModel<?> model, String fmName) {
-		super(id);
-		// TODO Auto-generated constructor stub
-		
-		CheckBox fieldCheck =	new CheckBox("fieldFM", new PropertyModel(((DefaultMutableTreeNode)model.getObject()).getUserObject(), "checked"));
-		fieldCheck.setOutputMarkupId(true);
-		add(fieldCheck);
-		
-		Label fieldName = new Label("fieldFMName",((DefaultMutableTreeNode)model.getObject()).getUserObject().toString());
-		fieldName.setOutputMarkupId(true);
-		add(fieldName);
-	}
+    /**
+     * @param id
+     * @param model
+     * @param fmName
+     */
+    public AmpPMTreeField(String id, IModel<?> model, String fmName) {
+        super(id);
+        // TODO Auto-generated constructor stub
+        
+        CheckBox fieldCheck =   new CheckBox("fieldFM", new PropertyModel(((DefaultMutableTreeNode)model.getObject()).getUserObject(), "checked"));
+        fieldCheck.setOutputMarkupId(true);
+        add(fieldCheck);
+        
+        Label fieldName = new Label("fieldFMName",((DefaultMutableTreeNode)model.getObject()).getUserObject().toString());
+        fieldName.setOutputMarkupId(true);
+        add(fieldName);
+    }
 
 }

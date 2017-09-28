@@ -17,23 +17,23 @@ public class NotBoundGateInputException extends Exception {
      * 
      */
     public NotBoundGateInputException() {
-	// TODO Auto-generated constructor stub
+    // TODO Auto-generated constructor stub
     }
 
     /** TODO description here
      * @param message
      */
     public NotBoundGateInputException(String message) {
-	super(message);
-	// TODO Auto-generated constructor stub
+    super(message);
+    // TODO Auto-generated constructor stub
     }
 
     /** TODO description here
      * @param cause
      */
     public NotBoundGateInputException(Throwable cause) {
-	super(cause);
-	// TODO Auto-generated constructor stub
+    super(cause);
+    // TODO Auto-generated constructor stub
     }
 
     /** TODO description here
@@ -41,8 +41,8 @@ public class NotBoundGateInputException extends Exception {
      * @param cause
      */
     public NotBoundGateInputException(String message, Throwable cause) {
-	super(message, cause);
-	// TODO Auto-generated constructor stub
+    super(message, cause);
+    // TODO Auto-generated constructor stub
     }
 
 }

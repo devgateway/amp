@@ -9,17 +9,17 @@ import java.util.List;
  *
  */
 public class ConstantNiDimension extends TabularSourcedNiDimension {
-	
-	public final List<List<Long>> data;
-	
-	public ConstantNiDimension(String name, int depth, List<List<Long>> data) {
-		super(name, depth);
-		this.data = Collections.unmodifiableList(data);
-	}
+    
+    public final List<List<Long>> data;
+    
+    public ConstantNiDimension(String name, int depth, List<List<Long>> data) {
+        super(name, depth);
+        this.data = Collections.unmodifiableList(data);
+    }
 
-	@Override
-	protected List<List<Long>> getTabularData() {
-		return data;
-	}
-	
+    @Override
+    protected List<List<Long>> getTabularData() {
+        return data;
+    }
+    
 }

@@ -16,71 +16,71 @@ import java.text.DecimalFormat;
  */
 public class AmpByAssistTypeAmount implements Cloneable {
 
-	
-	private static DecimalFormat mf = new DecimalFormat("###,###,###,###,###") ;
-	private String fundingTerms;
+    
+    private static DecimalFormat mf = new DecimalFormat("###,###,###,###,###") ;
+    private String fundingTerms;
 
-	private double fundingAmount;
+    private double fundingAmount;
 
-	public AmpByAssistTypeAmount() {
-		
-	}
-	
-	public String toString() {
-		return mf.format(fundingAmount);
-	}
-	
-	public AmpByAssistTypeAmount(String fundingTerms, double fundingAmount) {
-		this.fundingAmount = fundingAmount;
-		this.fundingTerms = fundingTerms==null?"Unknown":fundingTerms;
-	}
-	
-	/**
-	 * @return Returns the fundingAmount.
-	 */
-	public double getFundingAmount() {
-		return fundingAmount;
-	}
+    public AmpByAssistTypeAmount() {
+        
+    }
+    
+    public String toString() {
+        return mf.format(fundingAmount);
+    }
+    
+    public AmpByAssistTypeAmount(String fundingTerms, double fundingAmount) {
+        this.fundingAmount = fundingAmount;
+        this.fundingTerms = fundingTerms==null?"Unknown":fundingTerms;
+    }
+    
+    /**
+     * @return Returns the fundingAmount.
+     */
+    public double getFundingAmount() {
+        return fundingAmount;
+    }
 
-	/**
-	 * @param fundingAmount
-	 *            The fundingAmount to set.
-	 */
-	public void setFundingAmount(double fundingAmount) {
-		this.fundingAmount = fundingAmount;
-	}
+    /**
+     * @param fundingAmount
+     *            The fundingAmount to set.
+     */
+    public void setFundingAmount(double fundingAmount) {
+        this.fundingAmount = fundingAmount;
+    }
 
-	/**
-	 * @return Returns the fundingTerms.
-	 */
-	public String getFundingTerms() {
-		return fundingTerms;
-	}
+    /**
+     * @return Returns the fundingTerms.
+     */
+    public String getFundingTerms() {
+        return fundingTerms;
+    }
 
-	/**
-	 * @param fundingTerms
-	 *            The fundingTerms to set.
-	 */
-	public void setFundingTerms(String fundingTerms) {
-		this.fundingTerms = fundingTerms;
-	}
+    /**
+     * @param fundingTerms
+     *            The fundingTerms to set.
+     */
+    public void setFundingTerms(String fundingTerms) {
+        this.fundingTerms = fundingTerms;
+    }
 
-	public void addFundingAmount(double fundingAmount) {
-		this.fundingAmount += fundingAmount;
-	}
-	
-	public void substractFundingAmount(double fundingAmount) {
-		this.fundingAmount -= fundingAmount;
-	}
+    public void addFundingAmount(double fundingAmount) {
+        this.fundingAmount += fundingAmount;
+    }
+    
+    public void substractFundingAmount(double fundingAmount) {
+        this.fundingAmount -= fundingAmount;
+    }
 
-	
-	public Object clone() {
-		try {
-			return super.clone();
-		} catch (CloneNotSupportedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
-	}
+    
+    public Object clone() {
+        try {
+            return super.clone();
+        } catch (CloneNotSupportedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

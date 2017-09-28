@@ -55,8 +55,8 @@ public class AddUsersToGroup
         GroupMembersForm membersForm = (GroupMembersForm) form;
         
         if (!RequestUtils.isAdmin(response, request.getSession(), request)) {
-			return null;
-		}
+            return null;
+        }
 
         Group group = null;
         try {

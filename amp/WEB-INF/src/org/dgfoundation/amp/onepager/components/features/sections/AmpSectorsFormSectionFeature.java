@@ -20,30 +20,30 @@ import org.digijava.module.aim.util.SectorUtil;
  */
 public class AmpSectorsFormSectionFeature extends AmpFormSectionFeaturePanel {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5601918041949098629L;
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -5601918041949098629L;
 
-	/**
-	 * @param id
-	 * @param fmName
-	 * @throws Exception
-	 */
-	public AmpSectorsFormSectionFeature(String id, String fmName,final IModel<AmpActivityVersion> am)
-			throws Exception {
-		super(id, fmName, am);
-		this.fmType = AmpFMTypes.MODULE;
-		
-		RepeatingView view = new RepeatingView("allSectorsTables");
-		view.setOutputMarkupId(true);
-		add(view);
-		List<AmpClassificationConfiguration> allClassificationConfigs = SectorUtil.getAllClassificationConfigs();
-		for (AmpClassificationConfiguration sectorConf : allClassificationConfigs) {
-			AmpSectorsFormTableFeature sectorsTable=new AmpSectorsFormTableFeature(view.newChildId(), sectorConf.getName()+" Sectors", am,sectorConf);
-		    view.add(sectorsTable);	
-		}
-	    
-	}
+    /**
+     * @param id
+     * @param fmName
+     * @throws Exception
+     */
+    public AmpSectorsFormSectionFeature(String id, String fmName,final IModel<AmpActivityVersion> am)
+            throws Exception {
+        super(id, fmName, am);
+        this.fmType = AmpFMTypes.MODULE;
+        
+        RepeatingView view = new RepeatingView("allSectorsTables");
+        view.setOutputMarkupId(true);
+        add(view);
+        List<AmpClassificationConfiguration> allClassificationConfigs = SectorUtil.getAllClassificationConfigs();
+        for (AmpClassificationConfiguration sectorConf : allClassificationConfigs) {
+            AmpSectorsFormTableFeature sectorsTable=new AmpSectorsFormTableFeature(view.newChildId(), sectorConf.getName()+" Sectors", am,sectorConf);
+            view.add(sectorsTable); 
+        }
+        
+    }
 
 }

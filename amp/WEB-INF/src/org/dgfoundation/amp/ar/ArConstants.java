@@ -120,8 +120,9 @@ public final class ArConstants {
     public final static int REGIONAL_TYPE = 3;
     public final static int CONTRIBUTION_TYPE = 4;
     public final static int PLEDGES_TYPE = 5;
+    public final static int GPI_TYPE = 6;
     public final static Set<Integer> LEGAL_REPORT_TYPES = Collections.unmodifiableSet(new HashSet<Integer>(Arrays.asList(
-            DONOR_TYPE, COMPONENT_TYPE, REGIONAL_TYPE, CONTRIBUTION_TYPE, PLEDGES_TYPE
+            DONOR_TYPE, COMPONENT_TYPE, REGIONAL_TYPE, CONTRIBUTION_TYPE, PLEDGES_TYPE, GPI_TYPE
             )));
     
     //metainfo values:

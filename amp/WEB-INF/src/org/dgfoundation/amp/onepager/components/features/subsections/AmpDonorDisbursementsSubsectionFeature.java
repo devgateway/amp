@@ -71,7 +71,7 @@ public class AmpDonorDisbursementsSubsectionFeature extends
         add(disbursementsTableFeature);
         fundingOrgModel = new PropertyModel<AmpOrganisation>(model,"ampDonorOrgId");
         
-        AmpAjaxLinkField addCommit=new AmpAjaxLinkField("addDisbursement","Add Disbursement","Add Disbursement") {
+        AmpAjaxLinkField addDisbursement=new AmpAjaxLinkField("addDisbursement","Add Disbursement","Add Disbursement") {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 AmpFundingDetail fd= new AmpFundingDetail();
@@ -93,7 +93,8 @@ public class AmpDonorDisbursementsSubsectionFeature extends
                 target.appendJavaScript(QuarterInformationPanel.getJSUpdate(getSession()));
             }
         };
-        add(addCommit);
+        addDisbursement.setAffectedByFreezing(false);
+        add(addDisbursement);
     }
 
 }

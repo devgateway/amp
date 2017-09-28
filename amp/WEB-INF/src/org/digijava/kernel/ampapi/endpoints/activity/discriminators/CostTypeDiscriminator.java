@@ -14,13 +14,13 @@ import org.digijava.module.aim.dbentity.AmpFundingAmount;
  * @author Nadejda Mandrescu
  */
 public class CostTypeDiscriminator extends FieldsDiscriminator {
-    private static final Map<String, String> options = new HashMap<String, String>() {{
+    private static final Map<Object, Object> options = new HashMap<Object, Object>() {{
         put(AmpFundingAmount.FundingType.PROPOSED.name(), AmpFundingAmount.FundingType.PROPOSED.name());
         put(AmpFundingAmount.FundingType.REVISED.name(), AmpFundingAmount.FundingType.REVISED.name());
     }};
 
     @Override
-    public Map<String, ?> getPossibleValues() {
+    public Map<Object, Object> getPossibleValues() {
         return options;
     }
 

@@ -97,7 +97,7 @@ public class DbUtil {
               spool.setBcc(InternetAddress.toString(bcc));
 
           spool.setReplayToSender(from.toString());
-          spool.setSubject(subject);
+          spool.setSubject(MailUtil.truncateSubject(subject));
           spool.setBody(text);
           spool.setHtml(asHtml);
           spool.setCharset(charset);

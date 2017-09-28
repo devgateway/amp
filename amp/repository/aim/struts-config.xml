@@ -1117,8 +1117,10 @@
       <forward name="accessDenyed" path="/showLayout.do?layout=editActivityDenyed" />
     </action>
     
-    <action name="aimViewActivityHistoryForm" path="/aim/viewActivityHistory" scope="session" type="org.digijava.module.aim.action.ViewActivityHistory">
+    <action name="aimViewActivityHistoryForm" path="/aim/viewActivityHistory" scope="session" type="org.digijava.module.aim.action.ViewActivityHistory" parameter="actionMethod">
     	<forward name="forward" path="/showLayout.do?layout=viewActivityHistory" />
+        <forward name="summaryChanges" path="/showLayout.do?layout=viewActivitySummaryChanges" />
+        <forward name="reload"  path="/aim/viewActivityPreview.do" />
     </action>
     <action name="aimCompareActivityVersionsForm" path="/aim/compareActivityVersions" scope="session" type="org.digijava.module.aim.action.CompareActivityVersions" parameter="method">
     	<forward name="forward" path="/showLayout.do?layout=viewActivityDifferences" />

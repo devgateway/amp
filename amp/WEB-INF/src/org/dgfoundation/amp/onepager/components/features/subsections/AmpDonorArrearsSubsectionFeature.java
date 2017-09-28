@@ -60,6 +60,7 @@ public class AmpDonorArrearsSubsectionFeature extends AmpSubsectionFeatureFundin
                 target.appendJavaScript(QuarterInformationPanel.getJSUpdate(getSession()));
             }
         };
+        addArrears.setAffectedByFreezing(false);
         add(addArrears);
     }
 

@@ -118,15 +118,19 @@ public interface NiFormula {
      * @return
      */
     public static NiFormula condition(NiFormula left, NiFormula right, BiFunction<BigDecimal, BigDecimal, Boolean> cond, BiFunction<BigDecimal, BigDecimal, BigDecimal> func) {
-        return new BinaryOperation(left, right, (a, b) -> isDefined(a) && isDefined(b) && cond.apply(a, b)? func.apply(a, b) : UNDEFINED); 
+        return new BinaryOperation(left, right, (a, b) -> isDefined(a) && isDefined(b) && cond.apply(a, b) ? func.apply(a, b) : UNDEFINED); 
     }
-
+    
     public static NiFormula ADD(NiFormula left, NiFormula right) {
         return ifDefined(left, right, BigDecimal::add);
     }
 
     public static NiFormula SUBTRACT(NiFormula left, NiFormula right) {
         return ifDefined(left, right, BigDecimal::subtract);
+    }
+    
+    public static NiFormula SUBTRACTIFGREATER(NiFormula left, NiFormula right) {
+        return condition(left, right, (a, b) -> a.compareTo(b) >= 0, BigDecimal::subtract);
     }
 
     public static NiFormula MULTIPLY(NiFormula left, NiFormula right) {
@@ -135,6 +139,22 @@ public interface NiFormula {
 
     public static NiFormula DIVIDE(NiFormula left, NiFormula right) {
         return condition(left, right, (a, b) -> b.compareTo(BigDecimal.ZERO) != 0, (a, b) -> a.divide(b, DIVISION_MC));
+    }
+    
+    /**
+     * 
+     * the result of DIVIDEIFLOWER(A, B) is
+     * 1, if A >= B OR (A == 0 AND B == 0)
+     * A/B, if A <= B AND B != 0 
+     * 0, if (B == 0 AND A <> 0) OR (A == 0 AND B <> 0)
+     * 
+     * @param left
+     * @param right
+     * @return formula
+     */
+    public static NiFormula DIVIDEIFLOWER(NiFormula left, NiFormula right) {
+        return condition(left, right, (a, b) -> b.compareTo(BigDecimal.ZERO) != 0 || (a.compareTo(BigDecimal.ZERO) == 0 && b.compareTo(BigDecimal.ZERO) == 0), 
+                (a, b) -> a.compareTo(b) >= 0 ? BigDecimal.ONE : a.divide(b, DIVISION_MC));
     }
 
     public static NiFormula MINIMUM(NiFormula left, NiFormula right) {
@@ -157,6 +177,14 @@ public interface NiFormula {
      */
     public static NiFormula PERCENTAGE(String left, String right) {
         return PERCENTAGE(VARIABLE(left), VARIABLE(right));
+    }
+    
+    /**
+     * See {@link NiFormula.DIVIDEIFLOWER)
+     * 
+     */
+    public static NiFormula PERCENTAGEIFLOWER(NiFormula left, NiFormula right) {
+        return MULTIPLY(DIVIDEIFLOWER(left, right), CONSTANT(100));
     }
     
     public static NiFormula ZERO = CONSTANT(BigDecimal.ZERO);

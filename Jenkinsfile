@@ -45,7 +45,7 @@ def updateGitHubCommitStatus(context, message, state) {
 @NonCPS
 def readAMPVersion(pathToPom) {
     def project = new XmlSlurper().parseText(readFile(pathToPom))
-    project.version.text()
+    project.version.text().trim()
 }
 
 // Run checkstyle only for PR builds
@@ -85,6 +85,7 @@ stage('Build') {
 
         // Find AMP version
         codeVersion = readAMPVersion('amp/pom.xml')
+        println "AMP Version: ${codeVersion}"
 
         if (imageIds.equals("")) {
             withEnv(["PATH+MAVEN=${tool 'M339'}/bin"]) {

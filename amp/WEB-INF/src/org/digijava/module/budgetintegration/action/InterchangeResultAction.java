@@ -8,7 +8,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpInterchangeableResult;
 import org.digijava.module.budgetintegration.form.InterchangeResultForm;
-import org.digijava.module.budgetintegration.util.DbUtil;
+import org.digijava.module.budgetintegration.util.BudgetIntegrationUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 
 import javax.servlet.http.HttpServletRequest;
@@ -48,8 +48,8 @@ public class InterchangeResultAction extends Action {
             Date filterDate = StringUtils.isNotBlank(strFilterDate)? new Date(DateTimeUtil.parseDate(strFilterDate).getTime()): null;
             Integer offset = interchangeResultForm.getOffset();
             Integer pageSize = interchangeResultForm.getPageSize();
-            List<AmpInterchangeableResult> result = DbUtil.getInterchangeResult(filterDate, offset, pageSize, order);
-            Integer totalResults = DbUtil.getInterchangeResultCount(filterDate);
+            List<AmpInterchangeableResult> result = BudgetIntegrationUtil.getInterchangeResult(filterDate, offset, pageSize, order);
+            Integer totalResults = BudgetIntegrationUtil.getInterchangeResultCount(filterDate);
             Integer lastPage = interchangeResultForm.getPageSize() == -1 ? 1 : Math.floorDiv(totalResults, interchangeResultForm.getPageSize()) + 1;
             Integer currentPage = interchangeResultForm.getCurrentPage();
             int numberOfPages = Integer.min(lastPage, interchangeResultForm.getPagesToShow());
@@ -76,7 +76,7 @@ public class InterchangeResultAction extends Action {
             for(String id: idsArray) {
                 results.add(new AmpInterchangeableResult(Long.valueOf(id)));
             }
-            DbUtil.deleteResult(results);
+            BudgetIntegrationUtil.deleteResult(results);
         }
     }
 
@@ -84,7 +84,7 @@ public class InterchangeResultAction extends Action {
         String strId = request.getParameter("id");
         if(StringUtils.isNotBlank(strId)) {
             Long id = Long.valueOf(strId);
-            DbUtil.deleteResult(Collections.singleton(new AmpInterchangeableResult(id)));
+            BudgetIntegrationUtil.deleteResult(Collections.singleton(new AmpInterchangeableResult(id)));
         }
     }
 }

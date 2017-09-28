@@ -175,6 +175,7 @@
     <form-bean name="aimOrgProfileReport" type="org.digijava.module.aim.form.OrgProfileReportForm"/>
     <form-bean name="emptyForm" type="org.digijava.module.aim.form.EmptyForm"/>
     <form-bean name="aidEffectivenessIndicatorsForm" type="org.digijava.module.aim.form.AidEffectivenessIndicatorForm"/>
+    <form-bean name="interchangeResultForm" type="org.digijava.module.budgetintegration.form.InterchangeResultForm"/>
 
 </form-beans>
 
@@ -1467,6 +1468,10 @@
     	    <forward name="forward" path="/showLayout.do?layout=aim_orgProfileReportGenerator" />
     	    <forward name="showReport" path="/showLayout.do?layout=aim_orgProfileReport" />
 
+    </action>
+    
+    <action path="/aim/interchangeResult" scope="request" type="org.digijava.module.budgetintegration.action.InterchangeResultAction" name="interchangeResultForm" validate="false" parameter="action">
+        <forward name="forward" path="/showLayout.do?layout=de_interchangeResult"/>
     </action>
 	    
   </action-mappings>

@@ -425,7 +425,7 @@
                             <c:set var="translation">
                               <digi:trn key="aim:clickToViewInterchangeResult" invisibleLinks="true">Click here to view Interchange Result</digi:trn>
                             </c:set>
-                            <digi:link module="dataExchange" href="/interchangeResult.do" title="${translation}">
+                            <digi:link href="/interchangeResult.do" title="${translation}">
                               <digi:trn key="aim:interchangeResult">Data Import Manager Results</digi:trn>
                             </digi:link>
                           </td>

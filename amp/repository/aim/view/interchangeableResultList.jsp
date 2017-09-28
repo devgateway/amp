@@ -41,7 +41,7 @@
         if(ids.length > 0) {
             if(confirm('${translationDeleteSelected}')) {
                 document.getElementById("selectedIds").value = ids;
-                document.interchangeResultForm.action = "/dataExchange/interchangeResult.do?deleteAll=true";
+                document.interchangeResultForm.action = "/budgetIntegration/interchangeResult.do?deleteAll=true";
                 document.interchangeResultForm.submit();
             }
         }
@@ -179,12 +179,12 @@
                                                                                     </td>
                                                                                     <td height="30" width="220">
                                                                                         <c:if test="${not empty interchangeResultForm.sortBy && interchangeResultForm.sortBy!='dateAscending'}">
-                                                                                            <digi:link module="dataExchange" href="/interchangeResult.do?sortBy=dateAscending">
+                                                                                            <digi:link module="budgetIntegration" href="/interchangeResult.do?sortBy=dateAscending">
                                                                                                 <b><digi:trn>Date</digi:trn></b>
                                                                                             </digi:link>
                                                                                         </c:if>
                                                                                         <c:if test="${empty interchangeResultForm.sortBy || interchangeResultForm.sortBy=='dateAscending'}">
-                                                                                            <digi:link module="dataExchange" href="/interchangeResult.do?sortBy=dateDescending&reset=false">
+                                                                                            <digi:link module="budgetIntegration" href="/interchangeResult.do?sortBy=dateDescending&reset=false">
                                                                                                 <b><digi:trn>Date</digi:trn></b>
                                                                                             </digi:link>
                                                                                         </c:if>
@@ -218,7 +218,7 @@
                                                                                             <c:set var="translation">
                                                                                                 <digi:trn>Delete</digi:trn>
                                                                                             </c:set>
-                                                                                            <digi:link module="dataExchange" href="/interchangeResult.do?delete=true&id=${res.id}" onclick="deleteResult()">${translation}</digi:link>
+                                                                                            <digi:link module="budgetIntegration" href="/interchangeResult.do?delete=true&id=${res.id}" onclick="deleteResult()">${translation}</digi:link>
                                                                                         </td>
                                                                                     </tr>
                                                                                 </c:forEach>
@@ -237,14 +237,14 @@
                                                                                 <jsp:useBean id="urlParamsFirst" type="java.util.Map" class="java.util.HashMap"/>
                                                                                 <c:set target="${urlParamsFirst}" property="page" value="1"/>
                                                                                 <c:set var="translation"><digi:trn>First Page</digi:trn></c:set>
-                                                                                <digi:link module="dataExchange" href="/interchangeResult.do" style="text-decoration=none" name="urlParamsFirst" title="${translation}">
+                                                                                <digi:link module="budgetIntegration" href="/interchangeResult.do" style="text-decoration=none" name="urlParamsFirst" title="${translation}">
                                                                                     &lt;&lt;
                                                                                 </digi:link>
 
                                                                                 <jsp:useBean id="urlParamsPrevious" type="java.util.Map" class="java.util.HashMap"/>
                                                                                 <c:set target="${urlParamsPrevious}" property="page" value="${interchangeResultForm.currentPage - 1}"/>
                                                                                 <c:set var="translation"><digi:trn>Previous Page</digi:trn></c:set>
-                                                                                <digi:link module="dataExchange" href="/interchangeResult.do" name="urlParamsPrevious" style="text-decoration=none" title="${translation}">
+                                                                                <digi:link module="budgetIntegration" href="/interchangeResult.do" name="urlParamsPrevious" style="text-decoration=none" title="${translation}">
                                                                                     &lt;
                                                                                 </digi:link>
                                                                             </c:if>
@@ -258,7 +258,7 @@
                                                                                     <c:set var="translation">
                                                                                         <digi:trn key="aim:clickToViewNextPage">Click here to go to Next Page</digi:trn>
                                                                                     </c:set>
-                                                                                    <digi:link module="dataExchange" href="/interchangeResult.do" name="urlParams1" title="${translation}"><%=pageNumber%></digi:link>
+                                                                                    <digi:link module="budgetIntegration" href="/interchangeResult.do" name="urlParams1" title="${translation}"><%=pageNumber%></digi:link>
                                                                                 </c:if>
                                                                                 |&nbsp;
                                                                             </logic:iterate>
@@ -268,13 +268,13 @@
                                                                                 <c:set var="translation">
                                                                                     <digi:trn key="aim:nextpage">Next Page</digi:trn>
                                                                                 </c:set>
-                                                                                <digi:link module="dataExchange" href="/interchangeResult.do" style="text-decoration=none" name="urlParamsNext" title="${translation}">
+                                                                                <digi:link module="budgetIntegration" href="/interchangeResult.do" style="text-decoration=none" name="urlParamsNext" title="${translation}">
                                                                                     &gt;
                                                                                 </digi:link>
                                                                                 <jsp:useBean id="urlParamsLast" type="java.util.Map" class="java.util.HashMap"/>
                                                                                 <c:set target="${urlParamsLast}" property="page" value="${interchangeResultForm.lastPage}"/>
                                                                                 <c:set var="translation"><digi:trn key="aim:lastpage">Last Page</digi:trn></c:set>
-                                                                                <digi:link module="dataExchange" href="/interchangeResult.do" style="text-decoration=none" name="urlParamsLast" title="${translation}">
+                                                                                <digi:link module="budgetIntegration" href="/interchangeResult.do" style="text-decoration=none" name="urlParamsLast" title="${translation}">
                                                                                     &gt;&gt;
                                                                                 </digi:link>
                                                                             </c:if>&nbsp;

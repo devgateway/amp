@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<config>
-	<secondary-pages>
-		<page name="de_interchangeResult" page="interchangeableResultList" title="Data Import Manager Results" />
-	</secondary-pages>
-	<module>
-	</module>
-</config>

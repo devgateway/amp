@@ -24,13 +24,13 @@ public class PermissionMapForm extends ActionForm {
     /** Comment for <code>serialVersionUID</code> */
     private static final long serialVersionUID = 6352329100263590016L;
 
-    private String	    permissibleCategory;
+    private String      permissibleCategory;
 
-    private String	    objectIdentifier;
+    private String      objectIdentifier;
     
-    private Map<String,Class>		_permissibleCategoriesMap;
+    private Map<String,Class>       _permissibleCategoriesMap;
    
-    private Long	      permissionId;
+    private Long          permissionId;
 
     private List<Class>       _availablePermissibleCategories;
 
@@ -38,30 +38,30 @@ public class PermissionMapForm extends ActionForm {
 
     private List<Permission>  _availablePermissions;
 
-    private String	    mode;
+    private String      mode;
 
     public String getMode() {
-	return mode;
+    return mode;
     }
 
     public void setMode(String mode) {
-	this.mode = mode;
+    this.mode = mode;
     }
 
     public void clear() {
-	permissionId = null;
-	permissibleCategory = null;
-	objectIdentifier = null;
-	_permissibleCategoriesMap=new HashMap<String, Class>();
-	permissionMaps=new ArrayList<PermissionMap>();
+    permissionId = null;
+    permissibleCategory = null;
+    objectIdentifier = null;
+    _permissibleCategoriesMap=new HashMap<String, Class>();
+    permissionMaps=new ArrayList<PermissionMap>();
     }
 
     public List<Class> get_availablePermissibleCategories() {
-	return _availablePermissibleCategories;
+    return _availablePermissibleCategories;
     }
 
     public void set_availablePermissibleCategories(List<Class> availablePermissibleCategories) {
-	_availablePermissibleCategories = availablePermissibleCategories;
+    _availablePermissibleCategories = availablePermissibleCategories;
     }
 
     public List<PermissionMap> getPermissionMaps() {
@@ -69,39 +69,39 @@ public class PermissionMapForm extends ActionForm {
     }
 
     public List<Permission> get_availablePermissions() {
-	return _availablePermissions;
+    return _availablePermissions;
     }
 
     public void set_availablePermissions(List<Permission> permissions) {
-	_availablePermissions = permissions;
+    _availablePermissions = permissions;
     }
 
     public String getPermissibleCategory() {
-	return permissibleCategory;
+    return permissibleCategory;
     }
 
     public void setPermissibleCategory(String permissibleCategory) {
-	this.permissibleCategory = permissibleCategory;
+    this.permissibleCategory = permissibleCategory;
     }
 
     public Long getPermissionId() {
-	return permissionId;
+    return permissionId;
     }
 
     public void setPermissionId(Long permissionId) {
-	this.permissionId = permissionId;
+    this.permissionId = permissionId;
     }
 
     public String getObjectIdentifier() {
-	return objectIdentifier;
+    return objectIdentifier;
     }
 
     public void setObjectIdentifier(String objectIdentifier) {
-	this.objectIdentifier = objectIdentifier;
+    this.objectIdentifier = objectIdentifier;
     }
 
-    public PermissionMap getPermissionMap(int index) {	
-	return permissionMaps.get(index);
+    public PermissionMap getPermissionMap(int index) {  
+    return permissionMaps.get(index);
 }
 
     public void setPermissionMaps(List<PermissionMap> permissionMaps) {

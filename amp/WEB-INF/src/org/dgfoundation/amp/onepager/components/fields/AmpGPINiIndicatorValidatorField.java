@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.OnePagerConst;
+import org.dgfoundation.amp.onepager.components.features.items.AmpGPINiOrgRoleItemFeaturePanel;
 import org.dgfoundation.amp.onepager.helper.TemporaryGPINiDocument;
 import org.dgfoundation.amp.onepager.validators.AmpGPINiIndicatorValidator;
 import org.digijava.module.aim.dbentity.AmpGPINiQuestion.GPINiQuestionType;
@@ -127,5 +128,13 @@ public class AmpGPINiIndicatorValidatorField extends AmpCollectionValidatorField
             isEmptyAfterDelete = (currentDocs.size() <= 0);
         }
         return isEmptyAfterDelete;
+    }
+
+    @Override
+    protected void onConfigure() {
+        AmpGPINiOrgRoleItemFeaturePanel obj = (AmpGPINiOrgRoleItemFeaturePanel) this
+                .findParent(AmpGPINiOrgRoleItemFeaturePanel.class);
+        obj.putDonorInRequest();
+        super.onConfigure();
     }
 }

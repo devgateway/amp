@@ -34,5 +34,5 @@ public class ActivityProposedStartDateTrigger extends Trigger {
     @Override
     public String[] getParameterNames() {
         return parameterNames;
-	}
+    }
 }

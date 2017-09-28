@@ -52,9 +52,9 @@ public class ShowUserChangePassword
                                  response) throws
         java.lang.Exception {
 
-		UserChangePasswordForm pwdForm = (UserChangePasswordForm) form;
-		User user = (User)RequestUtils.getUser(request);
-		pwdForm.setUserName(user.getFirstNames() + " " + user.getLastName());
+        UserChangePasswordForm pwdForm = (UserChangePasswordForm) form;
+        User user = (User)RequestUtils.getUser(request);
+        pwdForm.setUserName(user.getFirstNames() + " " + user.getLastName());
 
         return mapping.findForward("forward");
     }

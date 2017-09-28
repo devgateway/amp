@@ -28,48 +28,48 @@ import org.digijava.module.gateperm.util.PermissionUtil;
  * @author mpostelnicu@dgateway.org since Nov 3, 2010
  */
 public class AmpRegionalFundingItemFeaturePanel extends AmpFeaturePanel<Set<AmpRegionalFunding>> {
-	private static final long serialVersionUID = 1L;
-	private IModel<AmpCategoryValueLocations> cvLocationModel; 
-	
-	/**
-	 * @param id
-	 * @param fmName
-	 * @param am 
-	 * @throws Exception
-	 */
-	public AmpRegionalFundingItemFeaturePanel(String id, String fmName,
-			IModel<AmpActivityVersion> am, IModel<Set<AmpRegionalFunding>> fundingModel, IModel<AmpCategoryValueLocations> cvLocationModel) throws Exception {
-		super(id, fundingModel, fmName, true);
-		
-		this.cvLocationModel = cvLocationModel;
-		
-		AmpLabelFieldPanel<AmpCategoryValueLocations> regionLocation = new AmpLabelFieldPanel<AmpCategoryValueLocations>(
-				"region", cvLocationModel, "Region", true);
-		add(regionLocation);
-		
-		AmpRegionalTransactionsSubsectionFeature commitments = new AmpRegionalTransactionsSubsectionFeature(
-				"commitments", am,fundingModel,"Commitments",Constants.COMMITMENT,cvLocationModel);
-		add(commitments);
-		
-		AmpRegionalTransactionsSubsectionFeature disbursements = new AmpRegionalTransactionsSubsectionFeature(
-				"disbursements", am,fundingModel,"Disbursements",Constants.DISBURSEMENT,cvLocationModel);
-		add(disbursements);
-		
-		AmpRegionalTransactionsSubsectionFeature expenditures = new AmpRegionalTransactionsSubsectionFeature(
-				"expenditures", am,fundingModel,"Expenditures",Constants.EXPENDITURE,cvLocationModel);
-		add(expenditures);
-	
-	}
+    private static final long serialVersionUID = 1L;
+    private IModel<AmpCategoryValueLocations> cvLocationModel; 
+    
+    /**
+     * @param id
+     * @param fmName
+     * @param am 
+     * @throws Exception
+     */
+    public AmpRegionalFundingItemFeaturePanel(String id, String fmName,
+            IModel<AmpActivityVersion> am, IModel<Set<AmpRegionalFunding>> fundingModel, IModel<AmpCategoryValueLocations> cvLocationModel) throws Exception {
+        super(id, fundingModel, fmName, true);
+        
+        this.cvLocationModel = cvLocationModel;
+        
+        AmpLabelFieldPanel<AmpCategoryValueLocations> regionLocation = new AmpLabelFieldPanel<AmpCategoryValueLocations>(
+                "region", cvLocationModel, "Region", true);
+        add(regionLocation);
+        
+        AmpRegionalTransactionsSubsectionFeature commitments = new AmpRegionalTransactionsSubsectionFeature(
+                "commitments", am,fundingModel,"Commitments",Constants.COMMITMENT,cvLocationModel);
+        add(commitments);
+        
+        AmpRegionalTransactionsSubsectionFeature disbursements = new AmpRegionalTransactionsSubsectionFeature(
+                "disbursements", am,fundingModel,"Disbursements",Constants.DISBURSEMENT,cvLocationModel);
+        add(disbursements);
+        
+        AmpRegionalTransactionsSubsectionFeature expenditures = new AmpRegionalTransactionsSubsectionFeature(
+                "expenditures", am,fundingModel,"Expenditures",Constants.EXPENDITURE,cvLocationModel);
+        add(expenditures);
+    
+    }
 
-	@Override
-	protected void onConfigure() {
-		AmpAuthWebSession session = (AmpAuthWebSession) getSession();
-		if (cvLocationModel != null && cvLocationModel.getObject() != null){
-			PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_REGION, cvLocationModel.getObject());
-		}
-		super.onConfigure();
-		if (cvLocationModel != null && cvLocationModel.getObject() != null){
-			PermissionUtil.removeFromScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_REGION);
-		}
-	}
+    @Override
+    protected void onConfigure() {
+        AmpAuthWebSession session = (AmpAuthWebSession) getSession();
+        if (cvLocationModel != null && cvLocationModel.getObject() != null){
+            PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_REGION, cvLocationModel.getObject());
+        }
+        super.onConfigure();
+        if (cvLocationModel != null && cvLocationModel.getObject() != null){
+            PermissionUtil.removeFromScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_REGION);
+        }
+    }
 }

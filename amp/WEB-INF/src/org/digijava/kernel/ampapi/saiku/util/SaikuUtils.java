@@ -73,56 +73,56 @@ import org.springframework.web.context.request.ServletRequestAttributes;
  * @author Nadejda Mandrescu
  */
 public class SaikuUtils {
-	
-	  /*
-	   * 
-	   */
-	public static List<IRepositoryObject> getReports() {
-		Session session = null;
-		try {
-			session = PersistenceManager.getCurrentSession().getSessionFactory().openSession(); // is there any reason the current request's session won't do?
-			AmpTeamMember ampTeamMember = getLoggedUser();
-	        Query query = session.createQuery("from AmpAnalyticalReport where owner = :owner ")
-	        		.setParameter("owner", ampTeamMember);
+    
+      /*
+       * 
+       */
+    public static List<IRepositoryObject> getReports() {
+        Session session = null;
+        try {
+            session = PersistenceManager.getCurrentSession().getSessionFactory().openSession(); // is there any reason the current request's session won't do?
+            AmpTeamMember ampTeamMember = getLoggedUser();
+            Query query = session.createQuery("from AmpAnalyticalReport where owner = :owner ")
+                    .setParameter("owner", ampTeamMember);
 
-	        List<AmpAnalyticalReport> list = query.list();
-	        List<IRepositoryObject> listFiles = new ArrayList<IRepositoryObject>();
-	        for(AmpAnalyticalReport report : list) {
-	        	listFiles.add(new RepositoryFileObject(report.getName(), report.getName(), "", report.getName(), null));
-	        }
-			return listFiles;
-		}
-		finally {
-			PersistenceManager.closeSession(session);
-		}
-	}
+            List<AmpAnalyticalReport> list = query.list();
+            List<IRepositoryObject> listFiles = new ArrayList<IRepositoryObject>();
+            for(AmpAnalyticalReport report : list) {
+                listFiles.add(new RepositoryFileObject(report.getName(), report.getName(), "", report.getName(), null));
+            }
+            return listFiles;
+        }
+        finally {
+            PersistenceManager.closeSession(session);
+        }
+    }
 
-	public static AmpAnalyticalReport getReport(int id) {
-		Session session = PersistenceManager.getSession();
-		AmpAnalyticalReport report = (AmpAnalyticalReport)session.get(AmpAnalyticalReport.class, id);
+    public static AmpAnalyticalReport getReport(int id) {
+        Session session = PersistenceManager.getSession();
+        AmpAnalyticalReport report = (AmpAnalyticalReport)session.get(AmpAnalyticalReport.class, id);
         return report;
-	}
+    }
 
-	public static void saveReport(AmpAnalyticalReport report) {
-		Session session = PersistenceManager.getSession();
-		AmpAnalyticalReport existingReport = getReports(report.getName());
-		if(existingReport != null) {
-			existingReport.setData(report.getData());
-			report = existingReport;
-		}
-		
-		if(report.getId() != null) {
-	    	session.merge(report);
-		}
-		else
-		{
-			session.save(report);
-		}
-    	session.flush();
-	}
+    public static void saveReport(AmpAnalyticalReport report) {
+        Session session = PersistenceManager.getSession();
+        AmpAnalyticalReport existingReport = getReports(report.getName());
+        if(existingReport != null) {
+            existingReport.setData(report.getData());
+            report = existingReport;
+        }
+        
+        if(report.getId() != null) {
+            session.merge(report);
+        }
+        else
+        {
+            session.save(report);
+        }
+        session.flush();
+    }
 
-	public static AmpAnalyticalReport getReports(String name) {
-		Session session = PersistenceManager.getSession();
+    public static AmpAnalyticalReport getReports(String name) {
+        Session session = PersistenceManager.getSession();
         Query query = session.createQuery("from AmpAnalyticalReport where name = :name and owner = :owner ");
         query.setParameter("name", name);
         query.setParameter("owner", getLoggedUser());
@@ -131,21 +131,21 @@ public class SaikuUtils {
             return report;
         }
         return null;
-	}
+    }
 
-	public static AmpAnalyticalReport createReport(String name, String content) {
-		AmpAnalyticalReport report = new AmpAnalyticalReport();
-    	report.setName(name);
-    	report.setData(content);
-		report.setOwner(getLoggedUser());
-		return report;
-	}
+    public static AmpAnalyticalReport createReport(String name, String content) {
+        AmpAnalyticalReport report = new AmpAnalyticalReport();
+        report.setName(name);
+        report.setData(content);
+        report.setOwner(getLoggedUser());
+        return report;
+    }
 
-	private static AmpTeamMember getLoggedUser() {
-		ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+    private static AmpTeamMember getLoggedUser() {
+        ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
 
-		TeamMember tm = (TeamMember) attr.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
-		AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(tm.getMemberId());
-		return ampTeamMember;
-	}
+        TeamMember tm = (TeamMember) attr.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
+        AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(tm.getMemberId());
+        return ampTeamMember;
+    }
 }

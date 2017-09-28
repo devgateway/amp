@@ -25,50 +25,50 @@ import org.digijava.module.aim.util.DbUtil;
 
 public class SimpleExportAction extends Action {
 
-	private static Logger logger = Logger.getLogger(SimpleExportAction.class);
+    private static Logger logger = Logger.getLogger(SimpleExportAction.class);
 
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
-		//
-		response.setContentType("application/vnd.ms-excel");
-		response.setHeader("Content-Disposition",
-				"inline; filename=export.csv ");
-		//
-		StringBuffer buffer = new StringBuffer();
-		//
-		List<AmpActivityVersion> list = ActivityUtil.getAllActivitiesByName("");
-		AmpActivityVersion activity = null;
-		//		
-		for (Iterator<AmpActivityVersion> it = list.iterator(); it.hasNext();) {
-			activity = it.next();
-			//
-			List<AmpFunding> fundings = DbUtil.getAmpFunding(activity.getAmpActivityId());
-			if ((fundings != null) && (fundings.size() > 0)) {
-				AmpFunding funding = null;
-				AmpOrganisation organisation = null;
-				Collection fundingDetails = null;
-				for (Iterator itf = fundings.iterator(); itf.hasNext();) {
-					funding = (AmpFunding) itf.next();
-					organisation = funding.getAmpDonorOrgId();					
-//					fundingDetails = DbUtil.getFundingDetails(funding.getAmpFundingId());
-//					AmpFundingDetail fundingDetail = null;
-//					for (Iterator itfd = fundingDetails.iterator(); itfd.hasNext();) {
-//						fundingDetail = (AmpFundingDetail) itfd.next();
-//						fundingDetail.
-//					}
-					//
-					buffer.append("\""+organisation.getOrgCode()+"\""+","+"\""+activity.getBudgetCodeProjectID()+"\""+","+"\""+activity.getProjectCode()+"\""+"\n");
-				}
-			} else {
-				buffer.append("\"\","+"\""+activity.getBudgetCodeProjectID()+"\""+","+"\""+activity.getProjectCode()+"\""+"\n");
-			}
-		}
-		PrintWriter out = new PrintWriter(new OutputStreamWriter(response
-				.getOutputStream(), "UnicodeLittle"), true);
-		out.println(buffer.toString());
-		out.close();
-		//
-		return mapping.findForward("forward");
-	}
+    public ActionForward execute(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
+        //
+        response.setContentType("application/vnd.ms-excel");
+        response.setHeader("Content-Disposition",
+                "inline; filename=export.csv ");
+        //
+        StringBuffer buffer = new StringBuffer();
+        //
+        List<AmpActivityVersion> list = ActivityUtil.getAllActivitiesByName("");
+        AmpActivityVersion activity = null;
+        //      
+        for (Iterator<AmpActivityVersion> it = list.iterator(); it.hasNext();) {
+            activity = it.next();
+            //
+            List<AmpFunding> fundings = DbUtil.getAmpFunding(activity.getAmpActivityId());
+            if ((fundings != null) && (fundings.size() > 0)) {
+                AmpFunding funding = null;
+                AmpOrganisation organisation = null;
+                Collection fundingDetails = null;
+                for (Iterator itf = fundings.iterator(); itf.hasNext();) {
+                    funding = (AmpFunding) itf.next();
+                    organisation = funding.getAmpDonorOrgId();                  
+//                  fundingDetails = DbUtil.getFundingDetails(funding.getAmpFundingId());
+//                  AmpFundingDetail fundingDetail = null;
+//                  for (Iterator itfd = fundingDetails.iterator(); itfd.hasNext();) {
+//                      fundingDetail = (AmpFundingDetail) itfd.next();
+//                      fundingDetail.
+//                  }
+                    //
+                    buffer.append("\""+organisation.getOrgCode()+"\""+","+"\""+activity.getBudgetCodeProjectID()+"\""+","+"\""+activity.getProjectCode()+"\""+"\n");
+                }
+            } else {
+                buffer.append("\"\","+"\""+activity.getBudgetCodeProjectID()+"\""+","+"\""+activity.getProjectCode()+"\""+"\n");
+            }
+        }
+        PrintWriter out = new PrintWriter(new OutputStreamWriter(response
+                .getOutputStream(), "UnicodeLittle"), true);
+        out.println(buffer.toString());
+        out.close();
+        //
+        return mapping.findForward("forward");
+    }
 }

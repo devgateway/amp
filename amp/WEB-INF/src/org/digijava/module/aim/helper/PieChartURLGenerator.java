@@ -49,8 +49,8 @@ public class PieChartURLGenerator implements PieURLGenerator, Serializable {
         String keyEng = "";
         try {
             // get risks associated with this activity
-        	if(ampActivityId!=null && !ampActivityId.equals(new Long(0))){
-        		Collection<AmpIndicatorRiskRatings> risks = IndicatorUtil.getRisks(ampActivityId);
+            if(ampActivityId!=null && !ampActivityId.equals(new Long(0))){
+                Collection<AmpIndicatorRiskRatings> risks = IndicatorUtil.getRisks(ampActivityId);
                 Iterator<AmpIndicatorRiskRatings> riskIterator = risks.iterator();
                 while (riskIterator.hasNext()) {
                     AmpIndicatorRiskRatings risk = riskIterator.next();
@@ -66,7 +66,7 @@ public class PieChartURLGenerator implements PieURLGenerator, Serializable {
                 } else {
                     url += "?" + this.categoryParameterName + "=" + keyEng;
                 }
-        	}           
+            }           
             
             if (this.indexParameterName != null) {
                 url += "&amp;" + this.indexParameterName + "=" + String.valueOf(pieIndex);

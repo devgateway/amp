@@ -72,23 +72,23 @@ public class TagUtil {
      */
     public static Object getForm( HttpServletRequest request, String name ) throws JspException 
     {
-    	String formName = getCanonicalFormName(request, name, null);
-    	
+        String formName = getCanonicalFormName(request, name, null);
+        
         Object objectForm = request.getAttribute(formName);
         if (objectForm != null)
-        	return objectForm;
+            return objectForm;
         objectForm = request.getSession().getAttribute(formName);
         if (objectForm != null)
-        	return objectForm;
+            return objectForm;
 
         logger.debug("Action form not found in any scope (request,session)  " + formName);
         formName = getCanonicalFormName(request, name, name);
         objectForm = request.getAttribute(formName);
         if (objectForm != null)
-        	return objectForm;
+            return objectForm;
         objectForm = request.getSession().getAttribute(formName);
         if (objectForm != null)
-        	return objectForm;
+            return objectForm;
         
         return objectForm; // e.g. null
     }
@@ -102,12 +102,12 @@ public class TagUtil {
      */
     public static String getCanonicalFormName(HttpServletRequest request, String name, String forcedModuleInstanceName) throws JspException
     {
-    	ComponentContext context = ComponentContext.getContext(request);
-    	      
+        ComponentContext context = ComponentContext.getContext(request);
+              
         // Get Teaser(module) name from tiles context
         String moduleInstanceName = context != null ? (String) context.getAttribute(Constants.MODULE_INSTANCE) : null;
         if (forcedModuleInstanceName != null)
-        	moduleInstanceName = forcedModuleInstanceName;
+            moduleInstanceName = forcedModuleInstanceName;
         
         // If Teaser(module) name not set in tiles context then throw exception
         if (moduleInstanceName == null) {
@@ -122,14 +122,14 @@ public class TagUtil {
         }
         
         //Get current site information from request
-    	SiteDomain siteDomain = (SiteDomain) request.getAttribute(Constants.CURRENT_SITE);
+        SiteDomain siteDomain = (SiteDomain) request.getAttribute(Constants.CURRENT_SITE);
         if (siteDomain == null) {
             throw new JspException("TagUtil: unknown site");
         }
         
         // Generate full form name from teaser and form
-    	String formName = "site" + siteDomain.getSite().getSiteId() + moduleInstanceName + name;
-    	return formName;
+        String formName = "site" + siteDomain.getSite().getSiteId() + moduleInstanceName + name;
+        return formName;
     }
     
     /**
@@ -142,13 +142,13 @@ public class TagUtil {
      */
     public static void setForm( HttpServletRequest request, String name , ActionForm formObj, boolean inSession) throws JspException
     {
-    	String formName = getCanonicalFormName(request, name, null);
-    	logger.debug("Action form name is: " + formName);
-    	if ( inSession ) {
-    		request.getSession().setAttribute(formName, formObj);
-    	}
-    	else
-    		request.setAttribute(formName, formObj);            
+        String formName = getCanonicalFormName(request, name, null);
+        logger.debug("Action form name is: " + formName);
+        if ( inSession ) {
+            request.getSession().setAttribute(formName, formObj);
+        }
+        else
+            request.setAttribute(formName, formObj);            
     }
 
     

@@ -28,6 +28,10 @@ public class GisConstants {
 	public static final String ADM2 = "adm-2";
 	public static final String ADM3 = "adm-3";
 	
+    public static final String GIS_STRUCTURE_POLYGON = "Polygon";
+    public static final String GIS_STRUCTURE_POINT = "Point";
+    public static final String GIS_STRUCTURE_POLYLINE = "Polyline";
+    
 	/**
 	 * Set of measures that can be used in GIS module as funding type options.
 	 * The priority doesn't matter anymore, but still adding some order via LinkedHashSet just for display.

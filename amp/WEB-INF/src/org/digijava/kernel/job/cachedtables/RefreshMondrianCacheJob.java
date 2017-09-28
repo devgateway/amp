@@ -18,21 +18,21 @@ import org.quartz.StatefulJob;
  *
  */
 public class RefreshMondrianCacheJob extends ConnectionCleaningJob implements StatefulJob {
-		
-	private static Logger logger = Logger.getLogger(RefreshMondrianCacheJob.class);
-	
-	@Override 
-	public void executeInternal(JobExecutionContext context) throws JobExecutionException
-	{	
-		try(Connection connection = PersistenceManager.getJdbcConnection()) {
-			connection.setAutoCommit(false);
-			connection.setAutoCommit(true);
-			PublicViewColumnsUtil.maintainPublicViewCaches(connection, true); // let Java do all the repetitive work
-			connection.setAutoCommit(false); // this will commit any unfinished transaction started by PublicViewColumnsUtil
-			connection.commit();
-		} catch (SQLException e) {
-			logger.error(e, e);
-		}
-		logger.info("Refresh Mondrian Cache Job Successful!");
-	}
+        
+    private static Logger logger = Logger.getLogger(RefreshMondrianCacheJob.class);
+    
+    @Override 
+    public void executeInternal(JobExecutionContext context) throws JobExecutionException
+    {   
+        try(Connection connection = PersistenceManager.getJdbcConnection()) {
+            connection.setAutoCommit(false);
+            connection.setAutoCommit(true);
+            PublicViewColumnsUtil.maintainPublicViewCaches(connection, true); // let Java do all the repetitive work
+            connection.setAutoCommit(false); // this will commit any unfinished transaction started by PublicViewColumnsUtil
+            connection.commit();
+        } catch (SQLException e) {
+            logger.error(e, e);
+        }
+        logger.info("Refresh Mondrian Cache Job Successful!");
+    }
 }

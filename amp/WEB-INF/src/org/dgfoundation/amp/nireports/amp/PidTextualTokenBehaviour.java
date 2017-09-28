@@ -15,15 +15,15 @@ import org.dgfoundation.amp.nireports.output.nicells.NiTextCell;
  *
  */
 public class PidTextualTokenBehaviour extends TextualTokenBehaviour {
-	
-	public final static PidTextualTokenBehaviour instance = new PidTextualTokenBehaviour(); 
-	PidTextualTokenBehaviour(){
-		super();
-	}
+    
+    public final static PidTextualTokenBehaviour instance = new PidTextualTokenBehaviour(); 
+    PidTextualTokenBehaviour(){
+        super();
+    }
 
-	@Override
-	public NiOutCell getEmptyCell(ReportSpecification spec) {
-		return new NiTextCell("0", -1, null);
-	}
+    @Override
+    public NiOutCell getEmptyCell(ReportSpecification spec) {
+        return new NiTextCell("0", -1, null);
+    }
 
 }

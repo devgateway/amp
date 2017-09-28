@@ -14,16 +14,16 @@ import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
 
 @Deprecated
-public class QuarterlyDiscrepancyAllFilter extends TilesAction	{
-	private static Logger logger = Logger.getLogger(QuarterlyDiscrepancyAllFilter.class);
-	
-	public ActionForward execute(ComponentContext context,
-								 ActionMapping mapping,
-								 ActionForm form,
-								 HttpServletRequest request,
-								 HttpServletResponse response)	
-								 throws IOException,ServletException 	{
-								 	
-		return null;					 	
-	}
-}	
+public class QuarterlyDiscrepancyAllFilter extends TilesAction  {
+    private static Logger logger = Logger.getLogger(QuarterlyDiscrepancyAllFilter.class);
+    
+    public ActionForward execute(ComponentContext context,
+                                 ActionMapping mapping,
+                                 ActionForm form,
+                                 HttpServletRequest request,
+                                 HttpServletResponse response)  
+                                 throws IOException,ServletException    {
+                                    
+        return null;                        
+    }
+}   

@@ -38,67 +38,67 @@ import org.apache.struts.tiles.UntypedAttribute;
 public class DefinitionTag extends org.apache.struts.tiles.taglib.DefinitionTag
 {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Process nested &lg;put&gt; tag.
-	 * Method is called from nested &lg;put&gt; tags.
-	 * Nested list is added to current list.
-	 * If role is defined, nested attribute is wrapped into an untyped definition
-	 * containing attribute value and role.
-	 */
+    /**
+     * Process nested &lg;put&gt; tag.
+     * Method is called from nested &lg;put&gt; tags.
+     * Nested list is added to current list.
+     * If role is defined, nested attribute is wrapped into an untyped definition
+     * containing attribute value and role.
+     */
   public void processNestedTag(PutTag nestedTag) throws JspException
    {
-	  // Get real value and check role
-	  // If role is set, add it in attribute definition if any.
-	  // If no attribute definition, create untyped one and set role.
-	Object attributeValue = nestedTag.getRealValue();
-	AttributeDefinition def;
+      // Get real value and check role
+      // If role is set, add it in attribute definition if any.
+      // If no attribute definition, create untyped one and set role.
+    Object attributeValue = nestedTag.getRealValue();
+    AttributeDefinition def;
 
-	if( nestedTag.getRole() != null )
-	  {
-	  try
-		{
-		def = ((AttributeDefinition)attributeValue);
-		}
-	   catch( ClassCastException ex )
-		{
-		def = new UntypedAttribute( attributeValue );
-		}
-	  def.setRole(nestedTag.getRole());
-	  attributeValue = def;
-	  } // end if
-	  // now add attribute to enclosing parent (i.e. : this object)
+    if( nestedTag.getRole() != null )
+      {
+      try
+        {
+        def = ((AttributeDefinition)attributeValue);
+        }
+       catch( ClassCastException ex )
+        {
+        def = new UntypedAttribute( attributeValue );
+        }
+      def.setRole(nestedTag.getRole());
+      attributeValue = def;
+      } // end if
+      // now add attribute to enclosing parent (i.e. : this object)
 
           // Commented by L.D.
-//	putAttribute( nestedTag.getName(), RequestProcessor.changeSitePath((HttpServletRequest) pageContext.getRequest(),(String)attributeValue));
-	}
+//  putAttribute( nestedTag.getName(), RequestProcessor.changeSitePath((HttpServletRequest) pageContext.getRequest(),(String)attributeValue));
+    }
 
-	/**
-	 * Process nested &lg;putList&gt; tag.
-	 * Method is called from nested &lg;putList&gt; tags.
-	 * Nested list is added to current list.
-	 * If role is defined, nested attribute is wrapped into an untyped definition
-	 * containing attribute value and role.
-	 */
+    /**
+     * Process nested &lg;putList&gt; tag.
+     * Method is called from nested &lg;putList&gt; tags.
+     * Nested list is added to current list.
+     * If role is defined, nested attribute is wrapped into an untyped definition
+     * containing attribute value and role.
+     */
   public void processNestedTag(PutListTag nestedTag) throws JspException
    {
-	  // Get real value and check role
-	  // If role is set, add it in attribute definition if any.
-	  // If no attribute definition, create untyped one and set role.
-	Object attributeValue = nestedTag.getList();
+      // Get real value and check role
+      // If role is set, add it in attribute definition if any.
+      // If no attribute definition, create untyped one and set role.
+    Object attributeValue = nestedTag.getList();
 
-	if( nestedTag.getRole() != null )
-	  {
-	  AttributeDefinition  def = new UntypedAttribute( attributeValue );
-	  def.setRole(nestedTag.getRole());
-	  attributeValue = def;
-	  } // end if
-	  // Check if a name is defined
-	if( nestedTag.getName() == null)
-	  throw new JspException( "Error - PutList : attribute name is not defined. It is mandatory as the list is added to a 'definition'." );
-	  // now add attribute to enclosing parent (i.e. : this object).
-	putAttribute(nestedTag.getName(), attributeValue);
-	}
+    if( nestedTag.getRole() != null )
+      {
+      AttributeDefinition  def = new UntypedAttribute( attributeValue );
+      def.setRole(nestedTag.getRole());
+      attributeValue = def;
+      } // end if
+      // Check if a name is defined
+    if( nestedTag.getName() == null)
+      throw new JspException( "Error - PutList : attribute name is not defined. It is mandatory as the list is added to a 'definition'." );
+      // now add attribute to enclosing parent (i.e. : this object).
+    putAttribute(nestedTag.getName(), attributeValue);
+    }
 
 }

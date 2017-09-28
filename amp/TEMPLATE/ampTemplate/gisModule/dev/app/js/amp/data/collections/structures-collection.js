@@ -53,7 +53,9 @@ module.exports = Backbone.Collection
       _.extend(payload, this.appData.filter.serialize());
     }
 
-    payload['performanceIssues'] = !this.appData.performanceToggleModel.get('isPerformanceToggleSelected');
+    if (this.appData.performanceToggleModel.get('isPerformanceToggleSelected') != null) {
+        payload['performanceIssues'] = !this.appData.performanceToggleModel.get('isPerformanceToggleSelected');
+     }
     
     /* get "settings" */
     // TODO: re-enable?? check for listener....?

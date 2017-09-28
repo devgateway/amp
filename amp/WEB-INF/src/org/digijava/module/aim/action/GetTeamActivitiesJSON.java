@@ -67,7 +67,7 @@ public class GetTeamActivitiesJSON
             if (request.getParameter("id") != null) {
                 id = Long.parseLong(request.getParameter("id"));
             } else {
-            	id=taForm.getTeamId();
+                id=taForm.getTeamId();
             }
             if (id == null && request.getAttribute("teamId") != null) {
                 id = (Long) request.getAttribute("teamId");
@@ -113,8 +113,8 @@ public class GetTeamActivitiesJSON
                 };
                 Comparator racronymComp = new Comparator() {
                     public int compare(Object o1, Object o2) {
-                    	AmpActivity r1 = (AmpActivity) o1;
-                    	AmpActivity r2 = (AmpActivity) o2;
+                        AmpActivity r1 = (AmpActivity) o1;
+                        AmpActivity r2 = (AmpActivity) o2;
                         return -(r1.getDonors().trim().toLowerCase().compareTo(r2.getDonors().trim().toLowerCase()));
                     }
                 };
@@ -142,8 +142,8 @@ public class GetTeamActivitiesJSON
                 }
                 taForm.setAllActivities(temp);
 
-    			JSONArray jsonArray = new JSONArray();
-    			Collection col =  taForm.getAllActivities();
+                JSONArray jsonArray = new JSONArray();
+                Collection col =  taForm.getAllActivities();
 
                 for (Object aCol : col) {
                     AmpActivityVersion act = (AmpActivityVersion) aCol;
@@ -154,17 +154,17 @@ public class GetTeamActivitiesJSON
 
                 }
 
-    			response.setContentType("text/json-comment-filtered");
-    			OutputStreamWriter outputStream = null;
+                response.setContentType("text/json-comment-filtered");
+                OutputStreamWriter outputStream = null;
 
-    			try {
-    				outputStream = new OutputStreamWriter(response.getOutputStream(), "UTF-8");
-    				outputStream.write(jsonArray.toString());
-    			} finally {
-    				if (outputStream != null) {
-    					outputStream.close();
-    				}
-    			}			
+                try {
+                    outputStream = new OutputStreamWriter(response.getOutputStream(), "UTF-8");
+                    outputStream.write(jsonArray.toString());
+                } finally {
+                    if (outputStream != null) {
+                        outputStream.close();
+                    }
+                }           
             } else {
                 return null;
             }

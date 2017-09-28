@@ -14,12 +14,12 @@ public class SurveyFunding {
     private Long orgID;
 
     public String getAcronim() {
-		return acronim;
-	}
-	public void setAcronim(String acronim) {
-		this.acronim = acronim;
-	}
-	/**
+        return acronim;
+    }
+    public void setAcronim(String acronim) {
+        this.acronim = acronim;
+    }
+    /**
      * @return Returns the fundingOrgName.
      */
     public String getFundingOrgName() {
@@ -53,11 +53,11 @@ public class SurveyFunding {
         this.deliveryDonorName = deliveryDonorName;
     }
     
-	public Long getOrgID() {
-		return orgID;
-	}
-	
-	public void setOrgID(Long orgID) {
-		this.orgID = orgID;
-	}
+    public Long getOrgID() {
+        return orgID;
+    }
+    
+    public void setOrgID(Long orgID) {
+        this.orgID = orgID;
+    }
 }

@@ -49,11 +49,11 @@ public class ViewUserProfile
             email = request.getParameter("email");
             user = DbUtil.getUser(email);
             if (user == null || user.getId() == null) {
-            	 errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.invalidUserIdLogs"));
+                 errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.invalidUserIdLogs"));
                  saveErrors(request, errors);
                  return mapping.findForward("forward");
             } else {
-            	userId = user.getId();
+                userId = user.getId();
             }
         }
 
@@ -65,32 +65,32 @@ public class ViewUserProfile
             }
             
             if (member == null) {
-            	if(userId != null) {
-	                if (userId.equals(teamMember.getMemberId())) {
-	                    user = DbUtil.getUser(teamMember.getMemberId());
-	                    memberInformationn.add(new TeamMember(teamMember.getTeamName(), teamMember.getRoleName()));
-	                } else {
-	                	user = DbUtil.getUser(userId);
-	                	if (user == null) {
-	                		errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.invalidUserId"));
-	                    	saveErrors(request, errors);
-	                    	mapping.findForward("forward");
-	                	}
-	                }
-            	}
+                if(userId != null) {
+                    if (userId.equals(teamMember.getMemberId())) {
+                        user = DbUtil.getUser(teamMember.getMemberId());
+                        memberInformationn.add(new TeamMember(teamMember.getTeamName(), teamMember.getRoleName()));
+                    } else {
+                        user = DbUtil.getUser(userId);
+                        if (user == null) {
+                            errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.invalidUserId"));
+                            saveErrors(request, errors);
+                            mapping.findForward("forward");
+                        }
+                    }
+                }
             } else {
-            	user = DbUtil.getUser(member.getUser().getId());    
+                user = DbUtil.getUser(member.getUser().getId());    
             }
         } else {
-        	user = DbUtil.getUser(userId);
+            user = DbUtil.getUser(userId);
         }
         
 
         if (user != null) {
-        	if (memberInformationn.size() == 0) {
-        		memberInformationn = TeamMemberUtil.getMemberInformation(user.getId());
-        	}
-        	
+            if (memberInformationn.size() == 0) {
+                memberInformationn = TeamMemberUtil.getMemberInformation(user.getId());
+            }
+            
             formBean.setAddress(user.getAddress());
             formBean.setFirstNames(user.getFirstNames());
             formBean.setLastName(user.getLastName());

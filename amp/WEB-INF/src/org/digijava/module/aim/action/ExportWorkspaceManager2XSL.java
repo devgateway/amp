@@ -43,14 +43,14 @@ public class ExportWorkspaceManager2XSL extends Action {
             throws Exception {
         HttpSession session = request.getSession();
         WorkspaceForm wsForm = (WorkspaceForm) form;
-		if (session.getAttribute("ampAdmin") == null) {
-			return mapping.findForward("index");
-		} else {
-			String str = (String) session.getAttribute("ampAdmin");
-			if (str.equals("no")) {
-				return mapping.findForward("index");
-			}
-		}
+        if (session.getAttribute("ampAdmin") == null) {
+            return mapping.findForward("index");
+        } else {
+            String str = (String) session.getAttribute("ampAdmin");
+            if (str.equals("no")) {
+                return mapping.findForward("index");
+            }
+        }
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-disposition", "inline; filename=Export.xls");
         Site site = RequestUtils.getSite(request);
@@ -151,14 +151,14 @@ public class ExportWorkspaceManager2XSL extends Action {
                 HSSFCell emptyCell=row.createCell(cellIndex++);
                 HSSFCell emptyCell2=row.createCell(cellIndex++);
                 if(merge>1){
-                	nameCell.setCellStyle(cs); 
-                	emptyCell.setCellStyle(cs);
-                	emptyCell2.setCellStyle(cs);
+                    nameCell.setCellStyle(cs); 
+                    emptyCell.setCellStyle(cs);
+                    emptyCell2.setCellStyle(cs);
                 }
                 else{
-                	nameCell.setCellStyle(csLastCell);
-                	emptyCell.setCellStyle(csLastCell);
-                	emptyCell2.setCellStyle(csLastCell);
+                    nameCell.setCellStyle(csLastCell);
+                    emptyCell.setCellStyle(csLastCell);
+                    emptyCell2.setCellStyle(csLastCell);
                 }
               
                 for(int j=1;j<=merge;j++){
@@ -167,12 +167,12 @@ public class ExportWorkspaceManager2XSL extends Action {
                     cellIndex = 0;
                     HSSFCell workspaceNameCell=row.createCell(cellIndex++);
                     boolean isLastCellInColumn = j==merge;
-					if(isLastCellInColumn){ // last cell from merged cells
-                    	 workspaceNameCell.setCellStyle(csLastCell);
-                	}
-                	else{
-                		 workspaceNameCell.setCellStyle(cs);
-                	}
+                    if(isLastCellInColumn){ // last cell from merged cells
+                         workspaceNameCell.setCellStyle(csLastCell);
+                    }
+                    else{
+                         workspaceNameCell.setCellStyle(cs);
+                    }
                     HSSFCell membCell;
                     if (memberSize >= j) {
                         membCell = row.createCell(cellIndex++);
@@ -182,31 +182,31 @@ public class ExportWorkspaceManager2XSL extends Action {
                         membCell.setCellValue(membValue);
                     }
                     else{
-                    	membCell=row.createCell(cellIndex++);
+                        membCell=row.createCell(cellIndex++);
                     }
                     if(isLastCellInColumn){ // last cell from merged cells
-                    	membCell.setCellStyle(csLastCell);
-                	}
-                	else{
-                		membCell.setCellStyle(cs);
-                	}
+                        membCell.setCellStyle(csLastCell);
+                    }
+                    else{
+                        membCell.setCellStyle(cs);
+                    }
                     HSSFCell activityCell;
                     if (activitySize >= j) {
-                    	activityCell = row.createCell(cellIndex++);
+                        activityCell = row.createCell(cellIndex++);
                         String activityName = BULLETCHAR + activityList.get(j-1).getName();
                         HSSFRichTextString membValue = new HSSFRichTextString(activityName);
                         activityCell.setCellStyle(style);
                         activityCell.setCellValue(membValue);
                     }
                     else{
-                    	 activityCell=row.createCell(cellIndex++);
+                         activityCell=row.createCell(cellIndex++);
                     }
                     if(isLastCellInColumn){ // last cell from merged cells
-                    	activityCell.setCellStyle(csLastCell);
-                	}
-                	else{
-                		activityCell.setCellStyle(cs);
-                	}
+                        activityCell.setCellStyle(csLastCell);
+                    }
+                    else{
+                        activityCell.setCellStyle(cs);
+                    }
 
                 }
                           

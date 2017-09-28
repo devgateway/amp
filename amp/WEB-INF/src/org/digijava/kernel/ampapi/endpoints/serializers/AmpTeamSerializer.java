@@ -92,13 +92,13 @@ public class AmpTeamSerializer extends AmpJsonSerializer<AmpTeam> {
                 return set;
             }
             if (AmpARFilter.DATE_PROPERTIES.contains(filter.getPropertyName())) {
-            	// no dynamic dates filter conversion, just passing that config further as it is 
-            	Field dateField = AmpARFilter.class.getDeclaredField(filter.getPropertyName());
-            	dateField.setAccessible(true);
-            	return sdfApiOut.get().format(sdfIn.get().parse((String) dateField.get(arFilter)));
+                // no dynamic dates filter conversion, just passing that config further as it is 
+                Field dateField = AmpARFilter.class.getDeclaredField(filter.getPropertyName());
+                dateField.setAccessible(true);
+                return sdfApiOut.get().format(sdfIn.get().parse((String) dateField.get(arFilter)));
             }
             if (String.class.equals(clazz)) {
-            	return filter.getValue();
+                return filter.getValue();
             }
             if (Identifiable.class.isAssignableFrom(clazz)) {
                 return Long.parseLong(filter.getValue());

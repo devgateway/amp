@@ -19,20 +19,20 @@ import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.message.triggers.RejectResourceSharetrigger;
 
 public class RejectResource extends DispatchAction {
-	
-	 public ActionForward rejectShare(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)throws Exception {
-		 DocumentManagerForm myForm = (DocumentManagerForm) form;
-		 HttpSession	httpSession		= request.getSession();
-		 TeamMember teamMember		= (TeamMember)httpSession.getAttribute(Constants.CURRENT_MEMBER);
-		 String nodeBaseUUID=request.getParameter("uuid");
-		 CrSharedDoc sharedDoc=DocumentManagerUtil.getCrSharedDoc(nodeBaseUUID, teamMember.getTeamId(), CrConstants.PENDING_STATUS);
-		 String sharedPrivateResourceVersionUUID=sharedDoc.getSharedNodeVersionUUID();
-		 DbUtil.delete(sharedDoc);
-		 //create approval
-		 Node node=DocumentManagerUtil.getReadNode(sharedPrivateResourceVersionUUID, request);
-		 new RejectResourceSharetrigger(node);
-		 DocumentManagerUtil.logoutJcrSessions(request);
-		 request.getSession().setAttribute("resourcesTab", request.getParameter("type"));
-		 return null;
-	}
+    
+     public ActionForward rejectShare(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)throws Exception {
+         DocumentManagerForm myForm = (DocumentManagerForm) form;
+         HttpSession    httpSession     = request.getSession();
+         TeamMember teamMember      = (TeamMember)httpSession.getAttribute(Constants.CURRENT_MEMBER);
+         String nodeBaseUUID=request.getParameter("uuid");
+         CrSharedDoc sharedDoc=DocumentManagerUtil.getCrSharedDoc(nodeBaseUUID, teamMember.getTeamId(), CrConstants.PENDING_STATUS);
+         String sharedPrivateResourceVersionUUID=sharedDoc.getSharedNodeVersionUUID();
+         DbUtil.delete(sharedDoc);
+         //create approval
+         Node node=DocumentManagerUtil.getReadNode(sharedPrivateResourceVersionUUID, request);
+         new RejectResourceSharetrigger(node);
+         DocumentManagerUtil.logoutJcrSessions(request);
+         request.getSession().setAttribute("resourcesTab", request.getParameter("type"));
+         return null;
+    }
 }

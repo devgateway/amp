@@ -29,70 +29,70 @@ import org.digijava.kernel.exception.DgException;
 public class ActionServlet extends org.apache.struts.action.ActionServlet {
 
 
-	private static final String STRUTS_CONFIG_FILE = "struts-config.xml";
-	private static final String MODULE_DIRECTORY = "/repository";
+    private static final String STRUTS_CONFIG_FILE = "struts-config.xml";
+    private static final String MODULE_DIRECTORY = "/repository";
 
-	public void init() {
+    public void init() {
 
-		try {
+        try {
 
-			String configFiles = getConfigFiles();
+            String configFiles = getConfigFiles();
 
-			if (configFiles != null && configFiles.trim().length() != 0) {
-				super.config = configFiles;
-			}
+            if (configFiles != null && configFiles.trim().length() != 0) {
+                super.config = configFiles;
+            }
 
-			super.init();
+            super.init();
 
-		}
-		catch (Exception ex) {
-			ex.printStackTrace();
-		}
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+        }
 
-	}
+    }
 
-	private String getConfigFiles() throws DgException {
+    private String getConfigFiles() throws DgException {
 
-		File configDir = new File(getServletContext().getRealPath(MODULE_DIRECTORY));
-		File tmpFile;
-		StringBuffer retVal = new StringBuffer();
+        File configDir = new File(getServletContext().getRealPath(MODULE_DIRECTORY));
+        File tmpFile;
+        StringBuffer retVal = new StringBuffer();
 
-		if (!configDir.exists() || !configDir.isDirectory()) {
-			throw new DgException("Configuration directory " + MODULE_DIRECTORY + " does not exist or is not directory");
-		}
+        if (!configDir.exists() || !configDir.isDirectory()) {
+            throw new DgException("Configuration directory " + MODULE_DIRECTORY + " does not exist or is not directory");
+        }
 
-		String[] dirList = configDir.list();
+        String[] dirList = configDir.list();
 
-		tmpFile = new File(configDir.getAbsolutePath() +
-				File.separator + STRUTS_CONFIG_FILE);
+        tmpFile = new File(configDir.getAbsolutePath() +
+                File.separator + STRUTS_CONFIG_FILE);
 
-		if (tmpFile.exists() && tmpFile.isFile()) {
-			retVal.append(MODULE_DIRECTORY);
-			retVal.append("/");
-			retVal.append(tmpFile.getName());
-		}
+        if (tmpFile.exists() && tmpFile.isFile()) {
+            retVal.append(MODULE_DIRECTORY);
+            retVal.append("/");
+            retVal.append(tmpFile.getName());
+        }
 
-		for (int i = 0; i<dirList.length; i++) {
+        for (int i = 0; i<dirList.length; i++) {
 
-			tmpFile =  new File(configDir.getAbsolutePath() +
-					File.separator + dirList[i] +
-					File.separator + STRUTS_CONFIG_FILE);
+            tmpFile =  new File(configDir.getAbsolutePath() +
+                    File.separator + dirList[i] +
+                    File.separator + STRUTS_CONFIG_FILE);
 
-			if (tmpFile.exists() && tmpFile.isFile()) {
+            if (tmpFile.exists() && tmpFile.isFile()) {
 
-				retVal.append(",");
-				retVal.append(MODULE_DIRECTORY);
-				retVal.append("/");
-				retVal.append(dirList[i]);
-				retVal.append("/");
-				retVal.append(tmpFile.getName());
+                retVal.append(",");
+                retVal.append(MODULE_DIRECTORY);
+                retVal.append("/");
+                retVal.append(dirList[i]);
+                retVal.append("/");
+                retVal.append(tmpFile.getName());
 
-			}
+            }
 
-		}
+        }
 
-		return retVal.toString();
+        return retVal.toString();
 
-	}
+    }
 
 }

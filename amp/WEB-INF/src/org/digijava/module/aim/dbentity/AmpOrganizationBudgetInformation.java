@@ -16,18 +16,18 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 public class AmpOrganizationBudgetInformation implements Serializable,OrgProfileValue{
 
-	//IATI-check: to be ignored
-	//	@Interchangeable(fieldTitle="ID")
+    //IATI-check: to be ignored
+    //  @Interchangeable(fieldTitle="ID")
     private Long id;
-//	@Interchangeable(fieldTitle="Type")
+//  @Interchangeable(fieldTitle="Type")
     private AmpCategoryValue type;
-//	@Interchangeable(fieldTitle="Year")
+//  @Interchangeable(fieldTitle="Year")
     private Long year;
-//	@Interchangeable(fieldTitle="Amount")
+//  @Interchangeable(fieldTitle="Amount")
     private Double amount;
-//	@Interchangeable(fieldTitle="Currency")
+//  @Interchangeable(fieldTitle="Currency")
     private AmpCurrency currency;
-//	@Interchangeable(fieldTitle="Organization", recursive=true)
+//  @Interchangeable(fieldTitle="Organization", recursive=true)
     private AmpOrganisation organization;
     private boolean newlyCreated;
 //    @Interchangeable(fieldTitle="Organizations", recursive=true)
@@ -99,26 +99,26 @@ public class AmpOrganizationBudgetInformation implements Serializable,OrgProfile
     }
     @Override
     public List<ValueTranslatabePair> getValuesForOrgReport(){
-    	List<ValueTranslatabePair> values=new ArrayList<ValueTranslatabePair>();
-    	values.add(new ValueTranslatabePair(Arrays.asList(new String[]{getYear().toString()}),false));
-    	values.add(new ValueTranslatabePair(Arrays.asList(new String[]{getType().getValue()}),true));
-    	Set<AmpOrganisation> orgs=getOrganizations();
-    	List<String> orgNames=new ArrayList<String>();
-    	if(orgs!=null&&!orgs.isEmpty()){
-    		for(AmpOrganisation org:orgs){
-    			orgNames.add(org.getName());
-    		}
-    	}
-    	values.add(new ValueTranslatabePair(orgNames,false));
-    	values.add(new ValueTranslatabePair(Arrays.asList(new String[]{getAmount().toString()}),false));
-    	values.add(new ValueTranslatabePair(Arrays.asList(new String[]{getCurrency().getCurrencyCode()}),false));
-    	return values;
+        List<ValueTranslatabePair> values=new ArrayList<ValueTranslatabePair>();
+        values.add(new ValueTranslatabePair(Arrays.asList(new String[]{getYear().toString()}),false));
+        values.add(new ValueTranslatabePair(Arrays.asList(new String[]{getType().getValue()}),true));
+        Set<AmpOrganisation> orgs=getOrganizations();
+        List<String> orgNames=new ArrayList<String>();
+        if(orgs!=null&&!orgs.isEmpty()){
+            for(AmpOrganisation org:orgs){
+                orgNames.add(org.getName());
+            }
+        }
+        values.add(new ValueTranslatabePair(orgNames,false));
+        values.add(new ValueTranslatabePair(Arrays.asList(new String[]{getAmount().toString()}),false));
+        values.add(new ValueTranslatabePair(Arrays.asList(new String[]{getCurrency().getCurrencyCode()}),false));
+        return values;
     }
 
-	@Override
-	public String[] getSubHeaders() {
-		String[] subHeaders={"Year","Type","Organization(s)","Amount","Currency"};
-		return subHeaders;
-	}
+    @Override
+    public String[] getSubHeaders() {
+        String[] subHeaders={"Year","Type","Organization(s)","Amount","Currency"};
+        return subHeaders;
+    }
  
 }

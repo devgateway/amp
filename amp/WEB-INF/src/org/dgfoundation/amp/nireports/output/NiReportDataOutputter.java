@@ -23,43 +23,43 @@ import org.dgfoundation.amp.nireports.runtime.ReportDataVisitor;
  *
  */
 public class NiReportDataOutputter implements ReportDataVisitor<NiReportData> {
-		
-	final NiHeaderInfo headers;
-	final NiReportsEngine engine;
-	
-	public NiReportDataOutputter(NiHeaderInfo headers, NiReportsEngine engine) {
-		this.headers = headers;
-		this.engine = engine;
-	}
-		
-	/**
-	 * builds the trail cells for GroupReportData 
-	 */
-	Map<CellColumn, NiOutCell> buildGroupTrailCells(GroupReportData grd, List<NiReportData> visitedChildren) {
-		return headers.leafColumns.stream().collect(toMap(Function.identity(), cellColumn ->
-			cellColumn.getBehaviour().buildGroupTrailCell(grd, cellColumn, visitedChildren)));
-	}
-		
-	/**
-	 * builds the trail cells for ColumnReportData 
-	 */
-	Map<CellColumn, NiOutCell> buildTrailCells(ColumnReportData crd, Map<CellColumn, Map<NiRowId, NiOutCell>> mappedContents) {
-		return headers.leafColumns.stream().collect(toMap(Function.identity(), cellColumn -> 
-			cellColumn.getBehaviour().buildColumnTrailCell(crd, cellColumn, mappedContents)));
-	}
-		
-	@Override
-	public NiReportData visitLeaf(ColumnReportData crd) {
-		//System.out.format("visiting leaf %s", crd);
-		Map<CellColumn, Map<NiRowId, NiOutCell>> contents = AmpCollections.remap(crd.getContents(), (cellColumn, columnContents) -> columnContents.flatten(cellColumn.getBehaviour(), engine), null);
-		return new NiColumnReportData(contents, buildTrailCells(crd, contents), crd.splitter);
-	}
+        
+    final NiHeaderInfo headers;
+    final NiReportsEngine engine;
+    
+    public NiReportDataOutputter(NiHeaderInfo headers, NiReportsEngine engine) {
+        this.headers = headers;
+        this.engine = engine;
+    }
+        
+    /**
+     * builds the trail cells for GroupReportData 
+     */
+    Map<CellColumn, NiOutCell> buildGroupTrailCells(GroupReportData grd, List<NiReportData> visitedChildren) {
+        return headers.leafColumns.stream().collect(toMap(Function.identity(), cellColumn ->
+            cellColumn.getBehaviour().buildGroupTrailCell(grd, cellColumn, visitedChildren)));
+    }
+        
+    /**
+     * builds the trail cells for ColumnReportData 
+     */
+    Map<CellColumn, NiOutCell> buildTrailCells(ColumnReportData crd, Map<CellColumn, Map<NiRowId, NiOutCell>> mappedContents) {
+        return headers.leafColumns.stream().collect(toMap(Function.identity(), cellColumn -> 
+            cellColumn.getBehaviour().buildColumnTrailCell(crd, cellColumn, mappedContents)));
+    }
+        
+    @Override
+    public NiReportData visitLeaf(ColumnReportData crd) {
+        //System.out.format("visiting leaf %s", crd);
+        Map<CellColumn, Map<NiRowId, NiOutCell>> contents = AmpCollections.remap(crd.getContents(), (cellColumn, columnContents) -> columnContents.flatten(cellColumn.getBehaviour(), engine), null);
+        return new NiColumnReportData(contents, buildTrailCells(crd, contents), crd.splitter);
+    }
 
-	@Override
-	public NiReportData visitGroup(GroupReportData grd) {
-		//System.out.format("visiting grd %s with %d subreports: %s\n", grd, grd.getSubReports().size(), grd.getSubReports());
-		List<NiReportData> visitedChildren = grd.getSubReports().stream().map(z -> z.accept(this)).collect(toList());
-		return new NiGroupReportData(visitedChildren, buildGroupTrailCells(grd, visitedChildren), grd.splitter);
-	}
-		
+    @Override
+    public NiReportData visitGroup(GroupReportData grd) {
+        //System.out.format("visiting grd %s with %d subreports: %s\n", grd, grd.getSubReports().size(), grd.getSubReports());
+        List<NiReportData> visitedChildren = grd.getSubReports().stream().map(z -> z.accept(this)).collect(toList());
+        return new NiGroupReportData(visitedChildren, buildGroupTrailCells(grd, visitedChildren), grd.splitter);
+    }
+        
 }

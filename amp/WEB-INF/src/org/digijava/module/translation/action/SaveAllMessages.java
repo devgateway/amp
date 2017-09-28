@@ -39,60 +39,60 @@ import org.digijava.module.translation.util.DbUtil;
 
 public class SaveAllMessages extends Action {
 
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			javax.servlet.http.HttpServletRequest request,
-			javax.servlet.http.HttpServletResponse response)
-			throws java.lang.Exception {
+    public ActionForward execute(ActionMapping mapping, ActionForm form,
+            javax.servlet.http.HttpServletRequest request,
+            javax.servlet.http.HttpServletResponse response)
+            throws java.lang.Exception {
 
-		AdvancedTranslationForm formBean = (AdvancedTranslationForm) form;
+        AdvancedTranslationForm formBean = (AdvancedTranslationForm) form;
 
-		boolean permitted = true;
+        boolean permitted = true;
 
-		if (!DgUtil.isLocalTranslatorForSite(request)) {
-			permitted = TranslateSecurityManager.isTranslationPermittedForSite(
-					request, formBean.getSiteId(), formBean
-							.getSelectedLangTarget());
-		}
+        if (!DgUtil.isLocalTranslatorForSite(request)) {
+            permitted = TranslateSecurityManager.isTranslationPermittedForSite(
+                    request, formBean.getSiteId(), formBean
+                            .getSelectedLangTarget());
+        }
 
-		if (permitted) {
-			List messages = formBean.getMessages();
-			Iterator iterator = messages.iterator();
-			while (iterator.hasNext()) {
-				AdvancedTranslationForm.MessageInfo currentMsg = (AdvancedTranslationForm.MessageInfo) iterator
-						.next();
+        if (permitted) {
+            List messages = formBean.getMessages();
+            Iterator iterator = messages.iterator();
+            while (iterator.hasNext()) {
+                AdvancedTranslationForm.MessageInfo currentMsg = (AdvancedTranslationForm.MessageInfo) iterator
+                        .next();
 
-				if (currentMsg != null && currentMsg.getKey() != null
-						&& currentMsg.getKey().length() > 0) {
+                if (currentMsg != null && currentMsg.getKey() != null
+                        && currentMsg.getKey().length() > 0) {
 
-					Message msg = DbUtil.getMessage(currentMsg.getKey(),
-							formBean.getSelectedLangTarget(), formBean.getSiteId());
-					boolean saveOrUpdate = true; //update
-					if (msg == null) {
-						saveOrUpdate = false; //save
-						msg = new Message();
-						msg.setSite(SiteCache.lookupById(formBean.getSiteId()));
-					}
+                    Message msg = DbUtil.getMessage(currentMsg.getKey(),
+                            formBean.getSelectedLangTarget(), formBean.getSiteId());
+                    boolean saveOrUpdate = true; //update
+                    if (msg == null) {
+                        saveOrUpdate = false; //save
+                        msg = new Message();
+                        msg.setSite(SiteCache.lookupById(formBean.getSiteId()));
+                    }
 
-					msg.setKey(currentMsg.getKey());
-					msg.setMessage(currentMsg.getTargetValue());
-					msg.setLocale(formBean.getSelectedLangTarget());
+                    msg.setKey(currentMsg.getKey());
+                    msg.setMessage(currentMsg.getTargetValue());
+                    msg.setLocale(formBean.getSelectedLangTarget());
 
-					if (saveOrUpdate) {
-						TranslatorWorker.getInstance(msg.getKey()).update(msg);
-						// DbUtil.updateMessage(msg);
-					} else {
-						TranslatorWorker.getInstance(msg.getKey()).save(msg);
+                    if (saveOrUpdate) {
+                        TranslatorWorker.getInstance(msg.getKey()).update(msg);
+                        // DbUtil.updateMessage(msg);
+                    } else {
+                        TranslatorWorker.getInstance(msg.getKey()).save(msg);
 
-						// DbUtil.saveMessage(msg);
-					}
-				}
-			}
-		}
+                        // DbUtil.saveMessage(msg);
+                    }
+                }
+            }
+        }
 
-		return new ActionForward(
-	            "/translation/showAdvancedTranslation.do?d-1338053-p=" +
-	            request.getParameter("d-1338053-p"),true);
+        return new ActionForward(
+                "/translation/showAdvancedTranslation.do?d-1338053-p=" +
+                request.getParameter("d-1338053-p"),true);
 
-	}
+    }
 
 }

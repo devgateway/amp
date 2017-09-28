@@ -25,34 +25,34 @@ import com.lowagie.text.pdf.PdfPTable;
  */
 public class AmountCellPDF extends PDFExporter {
 
-	
-	public AmountCellPDF(Exporter parent,Viewable item) {
-		super(parent, item);
-	}
-	
-	/**
-	 * @param table
-	 * @param item
-	 */
-	public AmountCellPDF(PdfPTable table, Viewable item, Long ownerId) {
-		super(table, item, ownerId);
-		// TODO Auto-generated constructor stub
-	}
+    
+    public AmountCellPDF(Exporter parent,Viewable item) {
+        super(parent, item);
+    }
+    
+    /**
+     * @param table
+     * @param item
+     */
+    public AmountCellPDF(PdfPTable table, Viewable item, Long ownerId) {
+        super(table, item, ownerId);
+        // TODO Auto-generated constructor stub
+    }
 
-	/* (non-Javadoc)
-	 * @see org.dgfoundation.amp.ar.view.pdf.PDFExporter#generate()
- 	 */
-	public void generate()
-	{
-		AmountCell ac = (AmountCell) item;
-		PdfPCell pdfc = new PdfPCell(new Paragraph(ac.toString(),new Font(ExportActivityToPDF.basefont, 9, Font.NORMAL)));
-		pdfc.setVerticalAlignment(Element.ALIGN_CENTER);
-		pdfc.setHorizontalAlignment(Element.ALIGN_RIGHT);
-		if (getExportState().currentBackColor != null)
-		{
-			pdfc.setBackgroundColor(getExportState().currentBackColor);
-		}
-		table.addCell(pdfc);
-	}
+    /* (non-Javadoc)
+     * @see org.dgfoundation.amp.ar.view.pdf.PDFExporter#generate()
+     */
+    public void generate()
+    {
+        AmountCell ac = (AmountCell) item;
+        PdfPCell pdfc = new PdfPCell(new Paragraph(ac.toString(),new Font(ExportActivityToPDF.basefont, 9, Font.NORMAL)));
+        pdfc.setVerticalAlignment(Element.ALIGN_CENTER);
+        pdfc.setHorizontalAlignment(Element.ALIGN_RIGHT);
+        if (getExportState().currentBackColor != null)
+        {
+            pdfc.setBackgroundColor(getExportState().currentBackColor);
+        }
+        table.addCell(pdfc);
+    }
  
 }

@@ -27,10 +27,10 @@ import org.dgfoundation.amp.onepager.validators.TranslatableValidators;
  */
 public class AmpTextAreaFieldPanel extends AmpFieldPanel<String> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 335388041997101521L;
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 335388041997101521L;
     private final boolean wysiwyg;
     protected TextArea<String> textAreaContainer;
     private Component translationDecorator;
@@ -43,8 +43,8 @@ public class AmpTextAreaFieldPanel extends AmpFieldPanel<String> {
      */
     private boolean uniqueTitleValidatorError = false;
     public TextArea<String> getTextAreaContainer() {
-		return textAreaContainer;
-	}
+        return textAreaContainer;
+    }
 
     public AmpTextAreaFieldPanel(String id,IModel<String> model, String fmName,boolean wysiwyg,boolean hideLabel, boolean hideNewLine) {
         this(id, model, fmName, wysiwyg, hideLabel, hideNewLine, false,false);
@@ -54,15 +54,15 @@ public class AmpTextAreaFieldPanel extends AmpFieldPanel<String> {
      * @param fmName
      * @param wysiwyg if true, CKeditor will be added to the {@link TextArea}
      */
-	public AmpTextAreaFieldPanel(String id,IModel<String> model, String fmName,boolean wysiwyg,boolean hideLabel, boolean hideNewLine, boolean showReqStar,boolean currentNavigationLanguageRequired) {
-		//super(id, model, fmName, hideLabel, hideNewLine, false, showReqStar);
-		super(id, model, fmName, hideLabel, hideNewLine, showReqStar);
+    public AmpTextAreaFieldPanel(String id,IModel<String> model, String fmName,boolean wysiwyg,boolean hideLabel, boolean hideNewLine, boolean showReqStar,boolean currentNavigationLanguageRequired) {
+        //super(id, model, fmName, hideLabel, hideNewLine, false, showReqStar);
+        super(id, model, fmName, hideLabel, hideNewLine, showReqStar);
         this.wysiwyg = wysiwyg;
-		if (wysiwyg){
-			model = (IModel<String>) new EditorWrapperModel((IModel<String>) model, id);
-		}
+        if (wysiwyg){
+            model = (IModel<String>) new EditorWrapperModel((IModel<String>) model, id);
+        }
         final IModel<String> finalModel = model;
-		textAreaContainer = new TextArea<String>("richText", TranslationDecorator.proxyModel((IModel<String>) model)){
+        textAreaContainer = new TextArea<String>("richText", TranslationDecorator.proxyModel((IModel<String>) model)){
             @Override
             protected void onInitialize() {
                 //get validators and put them in the {@link TranslatableValidators}
@@ -70,17 +70,17 @@ public class AmpTextAreaFieldPanel extends AmpFieldPanel<String> {
                 super.onInitialize();
             }
         };
-		textAreaContainer.setOutputMarkupId(true);
-		
-		final Label preview = (Label) new Label("previewText", model).setEscapeModelStrings(false);
+        textAreaContainer.setOutputMarkupId(true);
+        
+        final Label preview = (Label) new Label("previewText", model).setEscapeModelStrings(false);
 
         closeLink = new WebMarkupContainer("closeLink");
         
         closeLink.add(new AttributePrepender("data-is_close", new Model<String>("true"), ""));
         
-		closeLink.setOutputMarkupId(true);
-		closeLink.add(new AttributeModifier("onclick",
-			"if (CKEDITOR.instances['" + textAreaContainer.getMarkupId() + "']!=null) { CKEDITOR.instances['" + textAreaContainer.getMarkupId() + "'].updateElement(); }" +
+        closeLink.setOutputMarkupId(true);
+        closeLink.add(new AttributeModifier("onclick",
+            "if (CKEDITOR.instances['" + textAreaContainer.getMarkupId() + "']!=null) { CKEDITOR.instances['" + textAreaContainer.getMarkupId() + "'].updateElement(); }" +
             "$('#" + preview.getMarkupId() + "').html($('#" + textAreaContainer.getMarkupId() + "').val()); " +
             "$('#" + preview.getMarkupId() + "').show(); " +
             "if (CKEDITOR.instances['" + textAreaContainer.getMarkupId() + "']!=null) {CKEDITOR.instances['" + textAreaContainer.getMarkupId() + "'].destroy();} " +
@@ -93,60 +93,60 @@ public class AmpTextAreaFieldPanel extends AmpFieldPanel<String> {
             "$('#" + preview.getMarkupId() + "').show(); " +
             "return false;"));
 
-		add(closeLink);
-		
-		preview.setVisible(false);
-		preview.setOutputMarkupId(true);
-		if(wysiwyg){
-			preview.setVisible(true);
-			AmpAuthWebSession ses = (AmpAuthWebSession) getSession();
-			
-			String language = ses.getLocale().getLanguage();
-			if (language == null || language.length() == 0)
-				language = "en";
-			
-			textAreaContainer.add(new AttributeModifier("style", "display: none;"));
-			
-			 preview.add(new AttributeModifier("onclick",
-					"if($('#loadingEditorDiv').length == 0) {"+
-						"$('#"+ preview.getMarkupId() +"').hide();" +
-						"function showRichEditor () {" +
-						"try {"+
-							"CKEDITOR.replace('" + textAreaContainer.getMarkupId() + "', {language: '" + language + "', on:{instanceReady:function(ev){this.focus();}, change:function(ev) {}}});" +
-	                    "} catch(err){};"+
-	                    "$('#"+ closeLink.getMarkupId() +"').show();" +
-	                    "$('#"+ preview.getMarkupId() +"').hide();" +
-	                    "}"+
-	                    "$('#"+ preview.getMarkupId() +"').hide();" +
-	                    "$('#"+ closeLink.getMarkupId() +"').show();"+
-	                    "var ua = window.navigator.userAgent;"+
-	                    "var msie = ua.indexOf('MSIE');"+
-	                    "if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\\:11\\./)  || window.ActiveXObject) {  "+
-	                    	"$('#"+textAreaContainer.getMarkupId()+"').parent().parent().append(\"<div id='loadingEditorDiv'><img src='/repository/aim/view/scripts/ajaxtabs/loading.gif' style='margin-right:7px;'/>" + TranslatorUtil.getTranslatedText("Loading please wait...") + "</div>\");"+
-	                    	"$('#"+ closeLink.getMarkupId() +"').click();"+
-	                    	"setTimeout(function(){showRichEditor();"+
-	                    	"$('#loadingEditorDiv').remove();"+
-	                    	"},3500);}" +
-					     "else {" +
-					     	"showRichEditor();}"+
-				     "};"
-				     ));
-		}
-		add(preview);
-		
-		translationDecorator = TranslationDecorator.of("trnContainer", (IModel<String>) textAreaContainer.getModel(), (wysiwyg ? this : textAreaContainer),currentNavigationLanguageRequired);
+        add(closeLink);
+        
+        preview.setVisible(false);
+        preview.setOutputMarkupId(true);
+        if(wysiwyg){
+            preview.setVisible(true);
+            AmpAuthWebSession ses = (AmpAuthWebSession) getSession();
+            
+            String language = ses.getLocale().getLanguage();
+            if (language == null || language.length() == 0)
+                language = "en";
+            
+            textAreaContainer.add(new AttributeModifier("style", "display: none;"));
+            
+             preview.add(new AttributeModifier("onclick",
+                    "if($('#loadingEditorDiv').length == 0) {"+
+                        "$('#"+ preview.getMarkupId() +"').hide();" +
+                        "function showRichEditor () {" +
+                        "try {"+
+                            "CKEDITOR.replace('" + textAreaContainer.getMarkupId() + "', {language: '" + language + "', on:{instanceReady:function(ev){this.focus();}, change:function(ev) {}}});" +
+                        "} catch(err){};"+
+                        "$('#"+ closeLink.getMarkupId() +"').show();" +
+                        "$('#"+ preview.getMarkupId() +"').hide();" +
+                        "}"+
+                        "$('#"+ preview.getMarkupId() +"').hide();" +
+                        "$('#"+ closeLink.getMarkupId() +"').show();"+
+                        "var ua = window.navigator.userAgent;"+
+                        "var msie = ua.indexOf('MSIE');"+
+                        "if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\\:11\\./)  || window.ActiveXObject) {  "+
+                            "$('#"+textAreaContainer.getMarkupId()+"').parent().parent().append(\"<div id='loadingEditorDiv'><img src='/repository/aim/view/scripts/ajaxtabs/loading.gif' style='margin-right:7px;'/>" + TranslatorUtil.getTranslatedText("Loading please wait...") + "</div>\");"+
+                            "$('#"+ closeLink.getMarkupId() +"').click();"+
+                            "setTimeout(function(){showRichEditor();"+
+                            "$('#loadingEditorDiv').remove();"+
+                            "},3500);}" +
+                         "else {" +
+                            "showRichEditor();}"+
+                     "};"
+                     ));
+        }
+        add(preview);
+        
+        translationDecorator = TranslationDecorator.of("trnContainer", (IModel<String>) textAreaContainer.getModel(), (wysiwyg ? this : textAreaContainer),currentNavigationLanguageRequired);
         add(translationDecorator);
-		addFormComponent(textAreaContainer);
-	}
+        addFormComponent(textAreaContainer);
+    }
 
-	public AmpTextAreaFieldPanel(String id,IModel<String> model, String fmName,boolean wysiwyg, AmpFMTypes fmType) {
-		this(id, model, fmName, wysiwyg);
-		this.fmType = fmType;
-	}
-	
-	public AmpTextAreaFieldPanel(String id,IModel<String> model, String fmName,boolean wysiwyg) {
-		this(id, model, fmName, wysiwyg, false, false);
-	}
+    public AmpTextAreaFieldPanel(String id,IModel<String> model, String fmName,boolean wysiwyg, AmpFMTypes fmType) {
+        this(id, model, fmName, wysiwyg);
+        this.fmType = fmType;
+    }
+    
+    public AmpTextAreaFieldPanel(String id,IModel<String> model, String fmName,boolean wysiwyg) {
+        this(id, model, fmName, wysiwyg, false, false);
+    }
 
     public WebMarkupContainer getCloseLink() {
         return closeLink;
@@ -174,14 +174,14 @@ public class AmpTextAreaFieldPanel extends AmpFieldPanel<String> {
     }
     
     public boolean isComponentMultilingual () {
-    	return translationDecorator instanceof TranslationDecorator;
+        return translationDecorator instanceof TranslationDecorator;
     }
 
-	public boolean isUniqueTitleValidatorError() {
-		return uniqueTitleValidatorError;
-	}
+    public boolean isUniqueTitleValidatorError() {
+        return uniqueTitleValidatorError;
+    }
 
-	public void setUniqueTitleValidatorError(boolean uniqueTitleValidatorError) {
-		this.uniqueTitleValidatorError = uniqueTitleValidatorError;
-	}
+    public void setUniqueTitleValidatorError(boolean uniqueTitleValidatorError) {
+        this.uniqueTitleValidatorError = uniqueTitleValidatorError;
+    }
 }

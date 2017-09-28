@@ -13,14 +13,14 @@ import com.lowagie.text.pdf.PdfPTable;
 
 public class ComputedMeasureCellPDF extends AmountCellPDF {
 
-	public ComputedMeasureCellPDF(Exporter parent, Viewable item) {
-		super(parent, item);
-		// TODO Auto-generated constructor stub
-	}
+    public ComputedMeasureCellPDF(Exporter parent, Viewable item) {
+        super(parent, item);
+        // TODO Auto-generated constructor stub
+    }
 
-	public ComputedMeasureCellPDF(PdfPTable table, Viewable item, Long ownerId) {
-		super(table, item, ownerId);
-		// TODO Auto-generated constructor stub
-	}
+    public ComputedMeasureCellPDF(PdfPTable table, Viewable item, Long ownerId) {
+        super(table, item, ownerId);
+        // TODO Auto-generated constructor stub
+    }
 
 }

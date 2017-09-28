@@ -28,24 +28,24 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-		OfflineNiReportsTestSuite.class,
-		NiReportsFetchingTests.class,
-		AmpSchemaSanityTests.class,
-		AmpSchemaSortingTests.class,
-		AmpSchemaFilteringTests.class,
-		AmpSchemaPledgesTests.class,
-		AmpSchemaComponentsTests.class,
-		AmpSchemaRegionalTests.class,
-		ForecastExecutionRateTests.class,
-		FundingFlowsTests.class,
-		ExpenditureClassTests.class,
-		NiComputedMeasuresTests.class,
-		CurrencyConvertorTests.class,
-		UnitsSettingsUtilityTests.class,
-		DimensionsFetchingTests.class,
-		SQLUtilsTests.class,
-		InflationRatesTests.class,
-		DateTimeTests.class
+        OfflineNiReportsTestSuite.class,
+        NiReportsFetchingTests.class,
+        AmpSchemaSanityTests.class,
+        AmpSchemaSortingTests.class,
+        AmpSchemaFilteringTests.class,
+        AmpSchemaPledgesTests.class,
+        AmpSchemaComponentsTests.class,
+        AmpSchemaRegionalTests.class,
+        ForecastExecutionRateTests.class,
+        FundingFlowsTests.class,
+        ExpenditureClassTests.class,
+        NiComputedMeasuresTests.class,
+        CurrencyConvertorTests.class,
+        UnitsSettingsUtilityTests.class,
+        DimensionsFetchingTests.class,
+        SQLUtilsTests.class,
+        InflationRatesTests.class,
+        DateTimeTests.class
 })
 public class NiReportsTestSuite {
 }

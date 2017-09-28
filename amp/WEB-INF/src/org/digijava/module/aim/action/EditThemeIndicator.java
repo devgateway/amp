@@ -19,31 +19,31 @@ import org.digijava.module.aim.util.ProgramUtil;
 
 public class EditThemeIndicator extends Action 
 {
-	private static Logger logger = Logger.getLogger(EditThemeIndicator.class);
-	
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws java.lang.Exception 
-	{
-		HttpSession session = request.getSession();
-		if (session.getAttribute("ampAdmin") == null) 
-		{
-			return mapping.findForward("index");
-		} else 
-		{
-			String str = (String) session.getAttribute("ampAdmin");
-			if (str.equals("no")) 
-			{
-				return mapping.findForward("index");
-			}
-		}
-		
-		ThemeForm themeForm = (ThemeForm) form;
-		Long id = new Long(Long.parseLong(request.getParameter("indicatorId")));
-		
-		AllPrgIndicators alPrgInd = ProgramUtil.getThemeIndicator(id);
-		
-		return mapping.findForward("forward");
-	}
+    private static Logger logger = Logger.getLogger(EditThemeIndicator.class);
+    
+    public ActionForward execute(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response)
+            throws java.lang.Exception 
+    {
+        HttpSession session = request.getSession();
+        if (session.getAttribute("ampAdmin") == null) 
+        {
+            return mapping.findForward("index");
+        } else 
+        {
+            String str = (String) session.getAttribute("ampAdmin");
+            if (str.equals("no")) 
+            {
+                return mapping.findForward("index");
+            }
+        }
+        
+        ThemeForm themeForm = (ThemeForm) form;
+        Long id = new Long(Long.parseLong(request.getParameter("indicatorId")));
+        
+        AllPrgIndicators alPrgInd = ProgramUtil.getThemeIndicator(id);
+        
+        return mapping.findForward("forward");
+    }
 }
-		
+        

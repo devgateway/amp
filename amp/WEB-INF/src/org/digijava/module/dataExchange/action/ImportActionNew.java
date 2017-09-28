@@ -89,8 +89,8 @@ import org.xml.sax.SAXException;
  * To change this template use File | Settings | File Templates.
  */
 public class ImportActionNew extends DispatchAction {
-	private static final Logger logger = Logger.getLogger(ImportActionNew.class); 
-	
+    private static final Logger logger = Logger.getLogger(ImportActionNew.class); 
+    
     public static final String IATI_LABELS_SORTED = "IATI_LABELS_SORTED";
 
     public static final int IATI_IMPORT_PAGE_UPLOAD = 0;
@@ -117,7 +117,7 @@ public class ImportActionNew extends DispatchAction {
         myform.resetForm();
 
         myform.setPage(IATI_IMPORT_PAGE_UPLOAD);
-        List<DESourceSetting> sources		= new SessionSourceSettingDAO().getAmpSourceSettingsObjects(0, "name", false);
+        List<DESourceSetting> sources       = new SessionSourceSettingDAO().getAmpSourceSettingsObjects(0, "name", false);
         List<DESourceSetting> viewSources = new ArrayList<DESourceSetting>();
         for(int i=0;i<sources.size();i++){
             if(sources.get(i).getAttachedFile()==null)
@@ -250,7 +250,7 @@ public class ImportActionNew extends DispatchAction {
         }
 
 
-        DELogPerExecution execLog 	= new DELogPerExecution(upSess.getSettingsAssigned());
+        DELogPerExecution execLog   = new DELogPerExecution(upSess.getSettingsAssigned());
         if (execLog.getLogItems() == null) {
             execLog.setLogItems(new ArrayList<DELogPerItem>());
         }
@@ -298,20 +298,20 @@ public class ImportActionNew extends DispatchAction {
     }
     
     private Map<String, String> getLanguages(String fileSrc, String currentIsoLanguage) {
-    	Map<String, String> langMap = new TreeMap<String, String>();
+        Map<String, String> langMap = new TreeMap<String, String>();
 
-    	Matcher m = LANG_PATTERN.matcher(fileSrc);
-    	while(m.find()) {
-    		String isoLang = m.group();
-    		isoLang = isoLang.substring("xml:lang=\"".length(), isoLang.length()-1);
-    		if (!langMap.containsKey(isoLang))
-    			langMap.put(isoLang, getLanguageNameOrIso(isoLang));
-    	}
+        Matcher m = LANG_PATTERN.matcher(fileSrc);
+        while(m.find()) {
+            String isoLang = m.group();
+            isoLang = isoLang.substring("xml:lang=\"".length(), isoLang.length()-1);
+            if (!langMap.containsKey(isoLang))
+                langMap.put(isoLang, getLanguageNameOrIso(isoLang));
+        }
 
         /** Do not add language if one is absent in the import file. AMP-18053
-    	if (!langMap.containsKey(currentIsoLanguage))
-			langMap.put(currentIsoLanguage, getLanguageNameOrIso(currentIsoLanguage));
-		*/
+        if (!langMap.containsKey(currentIsoLanguage))
+            langMap.put(currentIsoLanguage, getLanguageNameOrIso(currentIsoLanguage));
+        */
         /** add it only if map is empty - i.e. no languages are defined in the import file
          *
          */
@@ -320,12 +320,12 @@ public class ImportActionNew extends DispatchAction {
         }
 
 
-    	return langMap;
+        return langMap;
     }
     
     private String getLanguageNameOrIso(String isoLang) {
-    	String codeName = IatiHelper.getIatiCodeName(IatiCodeTypeEnum.Language, isoLang);
-		return codeName==null ? isoLang :codeName;
+        String codeName = IatiHelper.getIatiCodeName(IatiCodeTypeEnum.Language, isoLang);
+        return codeName==null ? isoLang :codeName;
     }
 
     private Map <String, Set<IatiActivity>> getCountryActivityMap (Map <IatiActivity, Set<DEMappingFields>> items) {
@@ -382,7 +382,7 @@ public class ImportActionNew extends DispatchAction {
                 }
 
                 if (title != null && iatiIdt != null) {
-                	 filteredActNames.add(new StringBuilder(title).append(" - ").append(iatiIdt).toString());
+                     filteredActNames.add(new StringBuilder(title).append(" - ").append(iatiIdt).toString());
                      break;
                 }
             }
@@ -510,7 +510,7 @@ public class ImportActionNew extends DispatchAction {
 
     public ActionForward executeImportAll(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
-    	 ImportFormNew myform = (ImportFormNew) form;
+         ImportFormNew myform = (ImportFormNew) form;
          myform.setPage(IATI_IMPORT_PAGE_LOGS);
          List<DELogPerItem> iterableLogItems = Collections.unmodifiableList(myform.getLogItems());
          AmpDEUploadSession sess = myform.getUpSess();
@@ -519,37 +519,37 @@ public class ImportActionNew extends DispatchAction {
 
          DELogPerItem selLogItem = null;
          for (DELogPerItem delog : iterableLogItems) {
-	         if (!delog.getLogType().equals("OK")) {
-	             	continue;
-	         }
-	         selLogItem = delog;
-	         List<DELogPerItem> logItems = new ArrayList<DELogPerItem>();
-	         InputStream is = new ByteArrayInputStream(sess.getFileSrc().getBytes("UTF-8"));
+             if (!delog.getLogType().equals("OK")) {
+                    continue;
+             }
+             selLogItem = delog;
+             List<DELogPerItem> logItems = new ArrayList<DELogPerItem>();
+             InputStream is = new ByteArrayInputStream(sess.getFileSrc().getBytes("UTF-8"));
 
              String selectedCountry = getSelectedCountry(sess.getSelCountries());
 
-	         Map <IatiActivity, Set<DEMappingFields>> importAndGetImportedItemMap
+             Map <IatiActivity, Set<DEMappingFields>> importAndGetImportedItemMap
                      = getImportedItemMap(sess, is, request, logItems, false, String.valueOf(selLogItem.getId()), selectedCountry);
-	
-	         //Update import date
-	         Date newDateTime = new Date();
-	         DELogPerItem dbObj = (DELogPerItem) DbUtil.getObject(DELogPerItem.class, selLogItem.getId());
-	
-	         for (DELogPerItem logItem : logItems) {
-	             if (selLogItem.getName().equals(logItem.getName())) {
-	                 dbObj.update(logItem);
-	                 selLogItem.update(logItem);
-	             }
-	         }
-	
-	         dbObj.setImportDoneOn(newDateTime);
-	         selLogItem.setImportDoneOn(newDateTime);
-	         DbUtil.saveObject(dbObj);
+    
+             //Update import date
+             Date newDateTime = new Date();
+             DELogPerItem dbObj = (DELogPerItem) DbUtil.getObject(DELogPerItem.class, selLogItem.getId());
+    
+             for (DELogPerItem logItem : logItems) {
+                 if (selLogItem.getName().equals(logItem.getName())) {
+                     dbObj.update(logItem);
+                     selLogItem.update(logItem);
+                 }
+             }
+    
+             dbObj.setImportDoneOn(newDateTime);
+             selLogItem.setImportDoneOn(newDateTime);
+             DbUtil.saveObject(dbObj);
          }
          
          return mapping.findForward("sessions");
     }
-    	
+        
     
     public ActionForward executeImport(ActionMapping mapping, ActionForm form,
                                   HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
@@ -609,10 +609,10 @@ public class ImportActionNew extends DispatchAction {
     
     public ActionForward showLangFilters(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
-    	ImportFormNew myform = (ImportFormNew) form;
-    	myform.setPage(IATI_IMPORT_LANG_FILTERS);
-    	return mapping.findForward("forward");
-	}
+        ImportFormNew myform = (ImportFormNew) form;
+        myform.setPage(IATI_IMPORT_LANG_FILTERS);
+        return mapping.findForward("forward");
+    }
 
     public ActionForward showMapping(ActionMapping mapping, ActionForm form,
                                   HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
@@ -627,9 +627,9 @@ public class ImportActionNew extends DispatchAction {
         //Modify XML on initial serialization (will not be able to change country filters anymore)
         String xmlSrc = null;
         if (upSess.getId() == null) {
-        	//getting IATI Activities
-        	DEImportValidationEventHandler fromXmllog = new DEImportValidationEventHandler();
-        	InputStream is = myform.getFile().getInputStream();
+            //getting IATI Activities
+            DEImportValidationEventHandler fromXmllog = new DEImportValidationEventHandler();
+            InputStream is = myform.getFile().getInputStream();
             IatiActivities parsed = fromXml(is, fromXmllog);
             
             //applying country filter, if any
@@ -741,8 +741,8 @@ public class ImportActionNew extends DispatchAction {
     }
     
     private void addLanguageFilters(AmpDEUploadSession sess, ImportFormNew form) {
-    	sess.setSelDefaultLanugage(form.getDefaultLanguage());
-    	sess.setSelLanugages(Arrays.asList(form.getSelLanguages()));
+        sess.setSelDefaultLanugage(form.getDefaultLanguage());
+        sess.setSelLanugages(Arrays.asList(form.getSelLanguages()));
     }
 
     /**
@@ -754,102 +754,102 @@ public class ImportActionNew extends DispatchAction {
      * @return updated XML
      */
     private String cleanupByLang(String xml, ImportFormNew importForm) {
-    	IatiVersion iatiVersion = IatiVersion.V_1_01; //TODO: should be detected from XML, part upcoming AMP-17873
-    	boolean regenerateXML = false;
-    	List<String> removedElementsSignature = new ArrayList<String>();
-    	//extract translations that must be completely excluded from processing
-    	List<String> notAllowedLangs = getNotAllowedLangs(importForm);
-    	
-    	//prepare XQuery strings
-    	String allowedMultilingual = ""; //query for list of elements with useful translations to be kept
-    	String or = "";
-    	for(String allowedElem: IatiRules.getMultilingualElements(iatiVersion)) {
-    		allowedMultilingual += or + "//" + allowedElem;
-    		or = " | ";
-    	}
-    	String langNodes = "//iati-activity//*[@lang]"; 		//query for all nodes with lang attribute
-    	//String noLangNodes = "//iati-activity//*[not(@lang)]"; 	//query for all nodes with no lang attribute
-    	String notAllowed = "//iati-activity//*["; 				//query for elements to be completely ignored
-    	or = "";
-    	for(String notAllowedLang : notAllowedLangs) {
-    		notAllowed += or + "@lang='" + notAllowedLang + "'";
-    		or = " or ";
-    	}
-    	notAllowed += "]"; 
+        IatiVersion iatiVersion = IatiVersion.V_1_01; //TODO: should be detected from XML, part upcoming AMP-17873
+        boolean regenerateXML = false;
+        List<String> removedElementsSignature = new ArrayList<String>();
+        //extract translations that must be completely excluded from processing
+        List<String> notAllowedLangs = getNotAllowedLangs(importForm);
+        
+        //prepare XQuery strings
+        String allowedMultilingual = ""; //query for list of elements with useful translations to be kept
+        String or = "";
+        for(String allowedElem: IatiRules.getMultilingualElements(iatiVersion)) {
+            allowedMultilingual += or + "//" + allowedElem;
+            or = " | ";
+        }
+        String langNodes = "//iati-activity//*[@lang]";         //query for all nodes with lang attribute
+        //String noLangNodes = "//iati-activity//*[not(@lang)]";    //query for all nodes with no lang attribute
+        String notAllowed = "//iati-activity//*[";              //query for elements to be completely ignored
+        or = "";
+        for(String notAllowedLang : notAllowedLangs) {
+            notAllowed += or + "@lang='" + notAllowedLang + "'";
+            or = " or ";
+        }
+        notAllowed += "]"; 
 
-    	XPath xpath = XPathFactory.newInstance().newXPath();
-    	try {
-    		InputStream is = new ByteArrayInputStream(xml.getBytes("UTF-8"));
-    		DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-    		Document document = builder.parse(is);
-    		XPathExpression expr = null;
-    		NodeList nodes = null;
-    		
-    		//removes translations to be ignored 
-    		if (notAllowedLangs.size()>0) {
-	    		expr = xpath.compile(notAllowed);
-				nodes = (NodeList) expr.evaluate(document, XPathConstants.NODESET);
-				regenerateXML = IatiHelper.removeNodes(nodes, removedElementsSignature);
-    		}
-			
-			/*
-			//store the list of nodes with no lang attribute 
-			expr = xpath.compile(noLangNodes);
-			NodeList noLangNodeList = (NodeList) expr.evaluate(document, XPathConstants.NODESET);
-			
-			//update to parent or default language
-			IatiHelper.setAttr(document, document, "xml:lang", importForm.getDefaultLanguage(), true, false);
-			*/
-			
-			//get allowed multilingual nodes
-			Set<Node> processed = new HashSet<Node>();
-			expr = xpath.compile(allowedMultilingual);
-			nodes = (NodeList) expr.evaluate(document, XPathConstants.NODESET);
-			for (int i=0; i<nodes.getLength(); i++)
-				processed.add(nodes.item(i)); //mark them as processed to not be touched during duplicate elements removal below
-			
-			//remove duplicate elements with useless translations
-			expr = xpath.compile(langNodes);
-			nodes = (NodeList) expr.evaluate(document, XPathConstants.NODESET);
-			regenerateXML = IatiHelper.removeUselessTranslations(nodes, importForm.getDefaultLanguage(), processed, removedElementsSignature) || regenerateXML;
-			
-			/*
-			//restore noLang
-			for (int i=0; i<noLangNodeList.getLength(); i++) {
-				IatiHelper.removeAttr(noLangNodeList.item(i), "xml:lang");
-			}
-			*/
-			logger.info("The following XML entries are removed based on language filters (selected languages = " + importForm.getSelLanguages().toString() 
-					+ ", default language = " + importForm.getDefaultLanguage() + "): " + removedElementsSignature.toString());
-			
-			if (regenerateXML) { //from altered document structure 
-				Transformer transformer = TransformerFactory.newInstance().newTransformer();
-				transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-				StringWriter sw = new StringWriter();
-				transformer.transform(new DOMSource(document), new StreamResult(sw));
-				xml = sw.toString();
-			}
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-		}     	
-    	return xml;
+        XPath xpath = XPathFactory.newInstance().newXPath();
+        try {
+            InputStream is = new ByteArrayInputStream(xml.getBytes("UTF-8"));
+            DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            Document document = builder.parse(is);
+            XPathExpression expr = null;
+            NodeList nodes = null;
+            
+            //removes translations to be ignored 
+            if (notAllowedLangs.size()>0) {
+                expr = xpath.compile(notAllowed);
+                nodes = (NodeList) expr.evaluate(document, XPathConstants.NODESET);
+                regenerateXML = IatiHelper.removeNodes(nodes, removedElementsSignature);
+            }
+            
+            /*
+            //store the list of nodes with no lang attribute 
+            expr = xpath.compile(noLangNodes);
+            NodeList noLangNodeList = (NodeList) expr.evaluate(document, XPathConstants.NODESET);
+            
+            //update to parent or default language
+            IatiHelper.setAttr(document, document, "xml:lang", importForm.getDefaultLanguage(), true, false);
+            */
+            
+            //get allowed multilingual nodes
+            Set<Node> processed = new HashSet<Node>();
+            expr = xpath.compile(allowedMultilingual);
+            nodes = (NodeList) expr.evaluate(document, XPathConstants.NODESET);
+            for (int i=0; i<nodes.getLength(); i++)
+                processed.add(nodes.item(i)); //mark them as processed to not be touched during duplicate elements removal below
+            
+            //remove duplicate elements with useless translations
+            expr = xpath.compile(langNodes);
+            nodes = (NodeList) expr.evaluate(document, XPathConstants.NODESET);
+            regenerateXML = IatiHelper.removeUselessTranslations(nodes, importForm.getDefaultLanguage(), processed, removedElementsSignature) || regenerateXML;
+            
+            /*
+            //restore noLang
+            for (int i=0; i<noLangNodeList.getLength(); i++) {
+                IatiHelper.removeAttr(noLangNodeList.item(i), "xml:lang");
+            }
+            */
+            logger.info("The following XML entries are removed based on language filters (selected languages = " + importForm.getSelLanguages().toString() 
+                    + ", default language = " + importForm.getDefaultLanguage() + "): " + removedElementsSignature.toString());
+            
+            if (regenerateXML) { //from altered document structure 
+                Transformer transformer = TransformerFactory.newInstance().newTransformer();
+                transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+                StringWriter sw = new StringWriter();
+                transformer.transform(new DOMSource(document), new StreamResult(sw));
+                xml = sw.toString();
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }       
+        return xml;
     }
     
     private List<String> getNotAllowedLangs(ImportFormNew importForm) {
-    	List<String> notAllowedLangs = new ArrayList<String>();
-    	for (Map.Entry<String, String> entry : importForm.getLanguageList()) {
-    		boolean found = false;
-    		for (String allowed : importForm.getSelLanguages())
-    		{
-    			if (allowed.equals(entry.getKey())) {
-    				found = true;
-    				break;
-    			}
-    		}
-    		if (!found)
-    			notAllowedLangs.add(entry.getKey());
-    	}
-    	return notAllowedLangs;
+        List<String> notAllowedLangs = new ArrayList<String>();
+        for (Map.Entry<String, String> entry : importForm.getLanguageList()) {
+            boolean found = false;
+            for (String allowed : importForm.getSelLanguages())
+            {
+                if (allowed.equals(entry.getKey())) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found)
+                notAllowedLangs.add(entry.getKey());
+        }
+        return notAllowedLangs;
     }
     
     public ActionForward getMappingObjects(ActionMapping mapping, ActionForm form,

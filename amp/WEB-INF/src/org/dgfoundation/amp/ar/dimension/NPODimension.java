@@ -20,30 +20,30 @@ import org.hibernate.Session;
  */
 public class NPODimension extends ARDimension  {
 
-	/* (non-Javadoc)
-	 * @see org.dgfoundation.amp.ar.dimension.ARDimension#initialize()
-	 */
-	@Override
-	public void initialize() throws HibernateException, SQLException {
-		Session session = PersistenceManager.getSession();
-		Query createQuery = session.createQuery("from "+AmpTheme.class.getName());
-		HashMap<Long,Long> programsMap=new HashMap<Long, Long>();
-		links.put(AmpTheme.class, programsMap);
-		List list;
-		list = createQuery.list();
-		Iterator it=list.iterator();
-		while (it.hasNext()) {
-			AmpTheme prog= (AmpTheme) it.next();
-			programsMap.put(prog.getAmpThemeId(), prog.getParentThemeId()==null?null:prog.getParentThemeId().getAmpThemeId() );
-		}
-	}
-	
-	@Override
-	public Long getParentObject(Long parentId,	Class relatedContentPersisterClass) {
-		// TODO Auto-generated method stub
-		Map<Long,Long> m=links.get(relatedContentPersisterClass);
-		if(m!=null)
-			return m.get(parentId);
-		return null;
-	}
+    /* (non-Javadoc)
+     * @see org.dgfoundation.amp.ar.dimension.ARDimension#initialize()
+     */
+    @Override
+    public void initialize() throws HibernateException, SQLException {
+        Session session = PersistenceManager.getSession();
+        Query createQuery = session.createQuery("from "+AmpTheme.class.getName());
+        HashMap<Long,Long> programsMap=new HashMap<Long, Long>();
+        links.put(AmpTheme.class, programsMap);
+        List list;
+        list = createQuery.list();
+        Iterator it=list.iterator();
+        while (it.hasNext()) {
+            AmpTheme prog= (AmpTheme) it.next();
+            programsMap.put(prog.getAmpThemeId(), prog.getParentThemeId()==null?null:prog.getParentThemeId().getAmpThemeId() );
+        }
+    }
+    
+    @Override
+    public Long getParentObject(Long parentId,  Class relatedContentPersisterClass) {
+        // TODO Auto-generated method stub
+        Map<Long,Long> m=links.get(relatedContentPersisterClass);
+        if(m!=null)
+            return m.get(parentId);
+        return null;
+    }
 }

@@ -26,23 +26,23 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
  */
 public class AmpActivityBudgetExtrasPanel extends AmpFieldPanel<AmpActivityVersion>
 implements AmpRequiredComponentContainer{
-	private static final long serialVersionUID = 1L;
-	private List<FormComponent<?>> requiredFormComponents = new ArrayList<FormComponent<?>> ();
+    private static final long serialVersionUID = 1L;
+    private List<FormComponent<?>> requiredFormComponents = new ArrayList<FormComponent<?>> ();
 
-	public AmpActivityBudgetExtrasPanel(String id, IModel<AmpActivityVersion> model, String fmName) {
-		super(id, model, fmName, true);
-		this.fmType = AmpFMTypes.MODULE;
-		
-		String startYear = FeaturesUtil
-				.getGlobalSettingValue(GlobalSettingsConstants.YEAR_RANGE_START);
-		int rangeStartYear = Integer.parseInt(startYear);
-		String numbYearsRange = FeaturesUtil
-				.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_OF_YEARS_IN_RANGE);
-		int rangeNumber = Integer.parseInt(numbYearsRange);
-		List<String> years = new ArrayList<String>();
-		for (int i = rangeStartYear; i < rangeStartYear + rangeNumber; i++) {
-			years.add("" + i);
-		}
+    public AmpActivityBudgetExtrasPanel(String id, IModel<AmpActivityVersion> model, String fmName) {
+        super(id, model, fmName, true);
+        this.fmType = AmpFMTypes.MODULE;
+        
+        String startYear = FeaturesUtil
+                .getGlobalSettingValue(GlobalSettingsConstants.YEAR_RANGE_START);
+        int rangeStartYear = Integer.parseInt(startYear);
+        String numbYearsRange = FeaturesUtil
+                .getGlobalSettingValue(GlobalSettingsConstants.NUMBER_OF_YEARS_IN_RANGE);
+        int rangeNumber = Integer.parseInt(numbYearsRange);
+        List<String> years = new ArrayList<String>();
+        for (int i = rangeStartYear; i < rangeStartYear + rangeNumber; i++) {
+            years.add("" + i);
+        }
 
         AmpCheckBoxFieldPanel indirectOnBudget = new AmpCheckBoxFieldPanel("indirectOnBudget", "Indirect On Budget", new PropertyModel<Boolean>(model, "indirectOnBudget"));
         add(indirectOnBudget);
@@ -50,59 +50,59 @@ implements AmpRequiredComponentContainer{
         final AmpSelectFieldPanel fy = new AmpSelectFieldPanel<String>("fy", new ActivityFYModel(new PropertyModel<String>(model, "FY")), years, "FY", false, true, false);
 
         fy.getChoiceContainer().setOutputMarkupId(true);
-		fy.setOutputMarkupId(true);
-		fy.getChoiceContainer().add(new AjaxFormComponentUpdatingBehavior("onchange"){
-			@Override
-			protected void onUpdate(AjaxRequestTarget target) {
-				target.add(fy);		
-			}		
-	      });
-		// add(new AmpTextFieldPanel<String>("fy", new PropertyModel(model,
-		// "FY"), "FY", false, false));
+        fy.setOutputMarkupId(true);
+        fy.getChoiceContainer().add(new AjaxFormComponentUpdatingBehavior("onchange"){
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                target.add(fy);     
+            }       
+          });
+        // add(new AmpTextFieldPanel<String>("fy", new PropertyModel(model,
+        // "FY"), "FY", false, false));
         add(new AmpComponentPanel("fyRequired", "Required Validator for fy" ) {
             @Override
             protected void onConfigure() {
                 super.onConfigure();
                 if (this.isVisible()){
-                	fy.getChoiceContainer().setRequired(true);
+                    fy.getChoiceContainer().setRequired(true);
                     requiredFormComponents.add(fy.getChoiceContainer());
-        			
+                    
                 }
             }
-        });		
-		
-		add(fy);
-		final AmpTextFieldPanel<String> projectCode = new AmpTextFieldPanel<String>("projectCode", new PropertyModel<String>(model, "projectCode"), "Project Code", false, false,false,true);
-		projectCode.setTextContainerDefaultMaxSize();
-		add(projectCode);
-		
-		final AmpTextFieldPanel<String> vote = new AmpTextFieldPanel<String>("vote", new PropertyModel<String>(model, "vote"), "Vote", false, false,false,true);
-		final AmpTextFieldPanel<String> subVote = new AmpTextFieldPanel<String>("subVote", new PropertyModel<String>(model, "subVote"), "Sub-Vote", false, false,false,true);
-		final AmpTextFieldPanel<String> subProgram = new AmpTextFieldPanel<String>("subProgram", new PropertyModel<String>(model, "subProgram"), "Sub-Program", false, false,false,true);
-		final AmpTextFieldPanel<String> ministryCode = new AmpTextFieldPanel<String>("ministryCode", new PropertyModel<String>(model, "ministryCode"), "Ministry Code", false, false,false,true);
-		vote.getTextContainer().setRequired(true);
-		subVote.getTextContainer().setRequired(true);
-		subProgram.getTextContainer().setRequired(true);
-		ministryCode.getTextContainer().setRequired(true);
-		projectCode.getTextContainer().setRequired(true);
-		requiredFormComponents.add(vote.getTextContainer());
-		requiredFormComponents.add(subVote.getTextContainer());
-		requiredFormComponents.add(subProgram.getTextContainer());
-		requiredFormComponents.add(ministryCode.getTextContainer());
-		requiredFormComponents.add(projectCode.getTextContainer());
-		vote.setTextContainerDefaultMaxSize();
-		add(vote);
-		subVote.setTextContainerDefaultMaxSize();
-		add(subVote);
-		subProgram.setTextContainerDefaultMaxSize();
-		add(subProgram);
-		ministryCode.setTextContainerDefaultMaxSize();
-		add(ministryCode);
-		
-	}
+        });     
+        
+        add(fy);
+        final AmpTextFieldPanel<String> projectCode = new AmpTextFieldPanel<String>("projectCode", new PropertyModel<String>(model, "projectCode"), "Project Code", false, false,false,true);
+        projectCode.setTextContainerDefaultMaxSize();
+        add(projectCode);
+        
+        final AmpTextFieldPanel<String> vote = new AmpTextFieldPanel<String>("vote", new PropertyModel<String>(model, "vote"), "Vote", false, false,false,true);
+        final AmpTextFieldPanel<String> subVote = new AmpTextFieldPanel<String>("subVote", new PropertyModel<String>(model, "subVote"), "Sub-Vote", false, false,false,true);
+        final AmpTextFieldPanel<String> subProgram = new AmpTextFieldPanel<String>("subProgram", new PropertyModel<String>(model, "subProgram"), "Sub-Program", false, false,false,true);
+        final AmpTextFieldPanel<String> ministryCode = new AmpTextFieldPanel<String>("ministryCode", new PropertyModel<String>(model, "ministryCode"), "Ministry Code", false, false,false,true);
+        vote.getTextContainer().setRequired(true);
+        subVote.getTextContainer().setRequired(true);
+        subProgram.getTextContainer().setRequired(true);
+        ministryCode.getTextContainer().setRequired(true);
+        projectCode.getTextContainer().setRequired(true);
+        requiredFormComponents.add(vote.getTextContainer());
+        requiredFormComponents.add(subVote.getTextContainer());
+        requiredFormComponents.add(subProgram.getTextContainer());
+        requiredFormComponents.add(ministryCode.getTextContainer());
+        requiredFormComponents.add(projectCode.getTextContainer());
+        vote.setTextContainerDefaultMaxSize();
+        add(vote);
+        subVote.setTextContainerDefaultMaxSize();
+        add(subVote);
+        subProgram.setTextContainerDefaultMaxSize();
+        add(subProgram);
+        ministryCode.setTextContainerDefaultMaxSize();
+        add(ministryCode);
+        
+    }
 
-	@Override
-	public List<FormComponent<?>> getRequiredFormComponents() {
-		return requiredFormComponents;
-	}
+    @Override
+    public List<FormComponent<?>> getRequiredFormComponents() {
+        return requiredFormComponents;
+    }
 }

@@ -7,8 +7,8 @@ import org.dgfoundation.amp.nireports.NiPrecisionSetting;
 
 public class TestcasesPrecisionSetting implements NiPrecisionSetting {
 
-	@Override
-	public BigDecimal adjustPrecision(BigDecimal src) {
-		return src.setScale(6, RoundingMode.HALF_EVEN);
-	}
+    @Override
+    public BigDecimal adjustPrecision(BigDecimal src) {
+        return src.setScale(6, RoundingMode.HALF_EVEN);
+    }
 }

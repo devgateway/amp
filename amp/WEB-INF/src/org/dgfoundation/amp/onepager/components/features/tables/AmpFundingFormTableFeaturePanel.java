@@ -21,24 +21,24 @@ import org.dgfoundation.amp.onepager.util.AmpFMTypes;
  * @param <L> the type of the object displayed on each row of the {@link ListView}
  */
 public abstract class AmpFundingFormTableFeaturePanel<T,L> extends AmpFormTableFeaturePanel<T,L> {
-	protected ListEditor<L> list;
-	@Override
-	public ListView getList() {
-		throw new RuntimeException("NOT ALLOWED!");
-	}
-	
-	public ListEditor<L> getEditorList(){
-		return list;
-	}
-	
-	public AmpFundingFormTableFeaturePanel(String id, final IModel<T> model,
-			String fmName) throws Exception {
-		super(id, model, fmName);
-	}
-	public AmpFundingFormTableFeaturePanel(String id, final IModel<T> model, String fmName, boolean hideLeadingNewLine)  {
-		super(id, model, fmName, hideLeadingNewLine);
-	}
-	public AmpFundingFormTableFeaturePanel(String id, final IModel<T> model, String fmName, boolean hideLeadingNewLine, boolean showRequiredStar){
-		super(id, model, fmName, hideLeadingNewLine, showRequiredStar);
-	}
+    protected ListEditor<L> list;
+    @Override
+    public ListView getList() {
+        throw new RuntimeException("NOT ALLOWED!");
+    }
+    
+    public ListEditor<L> getEditorList(){
+        return list;
+    }
+    
+    public AmpFundingFormTableFeaturePanel(String id, final IModel<T> model,
+            String fmName) throws Exception {
+        super(id, model, fmName);
+    }
+    public AmpFundingFormTableFeaturePanel(String id, final IModel<T> model, String fmName, boolean hideLeadingNewLine)  {
+        super(id, model, fmName, hideLeadingNewLine);
+    }
+    public AmpFundingFormTableFeaturePanel(String id, final IModel<T> model, String fmName, boolean hideLeadingNewLine, boolean showRequiredStar){
+        super(id, model, fmName, hideLeadingNewLine, showRequiredStar);
+    }
 }

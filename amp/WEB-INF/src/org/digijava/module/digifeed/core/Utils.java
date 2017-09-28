@@ -13,5 +13,5 @@ package org.digijava.module.digifeed.core;
  *
  */
 public final class Utils {
-	
+    
 }

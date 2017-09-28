@@ -15,6 +15,7 @@ module.exports = Backbone.Collection
     this.boundaries = options.boundaries;
     this.filter = options.filter;
     this.settingsWidget = options.settingsWidget;
+    this.performanceToggleModel = options.performanceToggleModel;
 
     this.listenTo(this, 'sync', this._setDefault);
   },

@@ -34,9 +34,9 @@ public class ModuleTeaser {
 
     private String showTeaser;
 
-	private Long order;
+    private Long order;
 
-	private String showItemsPerTeaser;
+    private String showItemsPerTeaser;
 
     public ModuleTeaser() {
     }
@@ -53,7 +53,7 @@ public class ModuleTeaser {
         this.id = id;
     }
 
-	public Long getOrder() {
+    public Long getOrder() {
         return order;
     }
 
@@ -62,7 +62,7 @@ public class ModuleTeaser {
     }
 
 
-	public String getShowTeaser() {
+    public String getShowTeaser() {
         return showTeaser;
     }
 
@@ -70,10 +70,10 @@ public class ModuleTeaser {
         this.showTeaser = showTeaser;
     }
     public String getShowItemsPerTeaser() {
-		return showItemsPerTeaser;
-	}
+        return showItemsPerTeaser;
+    }
 
-	public void setShowItemsPerTeaser(String showItemsPerTeaser) {
-		this.showItemsPerTeaser = showItemsPerTeaser;
+    public void setShowItemsPerTeaser(String showItemsPerTeaser) {
+        this.showItemsPerTeaser = showItemsPerTeaser;
     }
 }

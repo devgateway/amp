@@ -26,7 +26,11 @@ module.exports = Backbone.View.extend({
 	  this.render();
   },
   render: function() {
-	  var self = this;	  
+	  var self = this;
+      var gapAnalysisMapEnabled = self.app.data.generalSettings.get('gap-analysis-map');
+      if (!gapAnalysisMapEnabled) {
+          return this;
+	  }
 	  this.$el.html(this.template({
 		  isGapAnalysisAvailable: self.model.get('isGapAnalysisAvailable'),
 		  isGapAnalysisSelected: self.model.get('isGapAnalysisSelected') 

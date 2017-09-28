@@ -14,18 +14,18 @@ import org.dgfoundation.amp.onepager.validators.AmpMinSizeCollectionValidator;
  *
  */
 public class AmpMinSizeCollectionValidationField<T> extends
-		AmpSizeCollectionValidationField<T> {	
-	
-	
-	
-	/**
-	 * @param id
-	 * @param collectionModel
-	 * @param fmName
-	 */
-	public AmpMinSizeCollectionValidationField(String id,
-			IModel<? extends Collection<T>> collectionModel, String fmName) {
-		super(id, collectionModel, fmName,new AmpMinSizeCollectionValidator(1));
-	}
+        AmpSizeCollectionValidationField<T> {   
+    
+    
+    
+    /**
+     * @param id
+     * @param collectionModel
+     * @param fmName
+     */
+    public AmpMinSizeCollectionValidationField(String id,
+            IModel<? extends Collection<T>> collectionModel, String fmName) {
+        super(id, collectionModel, fmName,new AmpMinSizeCollectionValidator(1));
+    }
 
 }

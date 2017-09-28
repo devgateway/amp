@@ -19,23 +19,23 @@ import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMCh
  */
 public class AmpPMTreeVisibilityFieldPermission extends AmpPMBaseTreePanel implements IAjaxIndicatorAware  {
 
-	private BaseTree tree;
-	private final AjaxIndicatorAppender indicatorAppender = new AjaxIndicatorAppender();
-	private TransparentWebMarkupContainer loadingIcon;
-	
-	public String getAjaxIndicatorMarkupId() {
-		return indicatorAppender.getMarkupId();
-	}
+    private BaseTree tree;
+    private final AjaxIndicatorAppender indicatorAppender = new AjaxIndicatorAppender();
+    private TransparentWebMarkupContainer loadingIcon;
+    
+    public String getAjaxIndicatorMarkupId() {
+        return indicatorAppender.getMarkupId();
+    }
 
-	/**
-	 * @param id
-	 * @param ampTreeVisibilityModel
-	 * @param string
-	 */
-	public AmpPMTreeVisibilityFieldPermission(String id, IModel<TreeModel> iTreeModel, String fmName) {
-		super(id, iTreeModel, fmName);
-		
-		tree = new AmpPMCheckBoxTree("tree", iTreeModel.getObject());
+    /**
+     * @param id
+     * @param ampTreeVisibilityModel
+     * @param string
+     */
+    public AmpPMTreeVisibilityFieldPermission(String id, IModel<TreeModel> iTreeModel, String fmName) {
+        super(id, iTreeModel, fmName);
+        
+        tree = new AmpPMCheckBoxTree("tree", iTreeModel.getObject());
         tree.getTreeState().setAllowSelectMultiple(true);
         add(tree);
         tree.getTreeState().collapseAll();
@@ -44,31 +44,31 @@ public class AmpPMTreeVisibilityFieldPermission extends AmpPMBaseTreePanel imple
         loadingIcon.setOutputMarkupId(true);
         loadingIcon.add(indicatorAppender);
         add(loadingIcon);
-	}
+    }
 
 
-	public void refreshTree(IModel<TreeModel> iTreeModel){
-		tree.setModelObject(iTreeModel.getObject());
-		tree.invalidateAll();
-	}
+    public void refreshTree(IModel<TreeModel> iTreeModel){
+        tree.setModelObject(iTreeModel.getObject());
+        tree.invalidateAll();
+    }
 
-	/* (non-Javadoc)
-	 * @see org.dgfoundation.amp.permissionmanager.components.features.sections.AmpPMBaseTreePanel#getTree()
-	 */
-	@Override
-	protected AbstractTree getTree() {
-		// TODO Auto-generated method stub
-		return tree;
-	}
-	
+    /* (non-Javadoc)
+     * @see org.dgfoundation.amp.permissionmanager.components.features.sections.AmpPMBaseTreePanel#getTree()
+     */
+    @Override
+    protected AbstractTree getTree() {
+        // TODO Auto-generated method stub
+        return tree;
+    }
+    
 
-	/**
-	 * @param id
-	 * @param fmName
-	 */
-	public AmpPMTreeVisibilityFieldPermission(String id, String fmName) {
-		super(id, fmName);
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * @param id
+     * @param fmName
+     */
+    public AmpPMTreeVisibilityFieldPermission(String id, String fmName) {
+        super(id, fmName);
+        // TODO Auto-generated constructor stub
+    }
 
 }

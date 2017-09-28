@@ -10,6 +10,10 @@
 -->
 <module name="Checker">
   <property name="severity" value="warning"/>
+  <property name="charset" value="UTF-8"/>
+  <module name="SuppressionFilter">
+    <property name="file" value="suppressions.xml"/>
+  </module>
   <module name="TreeWalker">
     <property name="tabWidth" value="4"/>
     <module name="JavadocMethod">
@@ -81,7 +85,9 @@
     </module>
     <module name="IllegalInstantiation"/>
     <module name="InnerAssignment"/>
-    <module name="MagicNumber"/>
+    <module name="MagicNumber">
+      <property name="constantWaiverParentToken" value="ASSIGN,ARRAY_INIT,EXPR,UNARY_PLUS,UNARY_MINUS,TYPECAST,ELIST,LITERAL_NEW,METHOD_CALL,STAR,DIV,PLUS,MINUS,SLIST,INSTANCE_INIT,OBJBLOCK,DOT" />
+    </module>
     <module name="MissingSwitchDefault"/>
     <module name="SimplifyBooleanExpression"/>
     <module name="SimplifyBooleanReturn"/>
@@ -101,6 +107,7 @@
       <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
     </module>
     <module name="UpperEll"/>
+    <module name="UnusedImports"/>
   </module>
   <module name="JavadocPackage">
     <property name="severity" value="ignore"/>

@@ -13,5 +13,5 @@ import org.dgfoundation.amp.mondrian.monet.OlapDbConnection;
  *
  */
 public interface MondrianTableLogue {
-	public void run(EtlConfiguration etlConfiguration, Connection conn, OlapDbConnection monetConn, LinkedHashSet<String> locales) throws SQLException;
+    public void run(EtlConfiguration etlConfiguration, Connection conn, OlapDbConnection monetConn, LinkedHashSet<String> locales) throws SQLException;
 }

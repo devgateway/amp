@@ -23,6 +23,7 @@ public class FiltersConstants {
     public static final String ACTUAL_START_DATE = "actual-start-date";
     public static final String EFFECTIVE_FUNDING_DATE = "effective-funding-date";
     public static final String FINAL_DATE_FOR_CONTRACTING = "final-date-for-contracting";
+    public static final String ISSUE_DATE = "issue-date";
     public static final String FUNDING_CLOSING_DATE = "funding-closing-date";
     public static final String PROPOSED_APPROVAL_DATE = "proposed-approval-date";
     public static final String PROPOSED_COMPLETION_DATE = "proposed-completion-date";
@@ -31,6 +32,8 @@ public class FiltersConstants {
     public static final String APPROVAL_STATUS = "approval-status";
     public static final String ARCHIVED = "archived";
     public static final String BENEFICIARY_AGENCY = "beneficiary-agency";
+    public static final String COMPONENT_FUNDING_ORGANIZATION = "component-funding-organization";
+    public static final String COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION = "component-second-responsible-organization";
     public static final String COMPUTED_YEAR = "computed-year";
     public static final String CONCESSIONALITY_LEVEL = "concessionality-level";
     public static final String CONTRACTING_AGENCY = "contracting-agency";
@@ -61,6 +64,7 @@ public class FiltersConstants {
     public static final String NATIONAL_PLANNING_OBJECTIVES_LEVEL_7 = "national-planning-objectives-level-7";
     public static final String NATIONAL_PLANNING_OBJECTIVES_LEVEL_8 = "national-planning-objectives-level-8";
     public static final String ON_OFF_TREASURY_BUDGET = "on-off-treasury-budget";
+    public static final String PERFORMANCE_ALERT_LEVEL = "performance-alert-level";
     public static final String PLEDGES_AID_MODALITY = "pledges-aid-modality";
     public static final String PLEDGES_DONOR_GROUP = "pledges-donor-group";
     public static final String PLEDGES_NATIONAL_PLAN_OBJECTIVES = "pledges-national-plan-objectives";
@@ -148,6 +152,8 @@ public class FiltersConstants {
         put(Constants.EXECUTING_AGENCY, EXECUTING_AGENCY);
         put(Constants.BENEFICIARY_AGENCY, BENEFICIARY_AGENCY);
         put(Constants.CONTRACTING_AGENCY, CONTRACTING_AGENCY);
-        put(Constants.RESPONSIBLE_ORGANISATION, RESPONSIBLE_ORGANIZATION);        
+        put(Constants.RESPONSIBLE_ORGANISATION, RESPONSIBLE_ORGANIZATION);
+        put(Constants.COMPONENT_FUNDING_ORGANIZATION, COMPONENT_FUNDING_ORGANIZATION);
+        put(Constants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION, COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION);
     }});
 }

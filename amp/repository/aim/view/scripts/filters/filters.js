@@ -54,6 +54,7 @@ function resetFilter(){
         
         resetElement(aimReportsFilterPickerForm.selectedTypeOfAssistance);
         resetElement(aimReportsFilterPickerForm.selectedExpenditureClasses);
+        resetElement(aimReportsFilterPickerForm.selectedPerformanceAlertLevels);
         resetElement(aimReportsFilterPickerForm.selectedModeOfPayment);
         resetElement(aimReportsFilterPickerForm.selectedProjectImplUnit);
  		resetElement(aimReportsFilterPickerForm.selectedDonorGroups);
@@ -64,8 +65,11 @@ function resetFilter(){
  		resetElement(aimReportsFilterPickerForm.selectedImplementingAgency);
  		resetElement(aimReportsFilterPickerForm.selectedDonnorAgency);
  		resetElement(aimReportsFilterPickerForm.selectedresponsibleorg);
+ 		resetElement(aimReportsFilterPickerForm.selectedComponentFundingOrg);
+ 		resetElement(aimReportsFilterPickerForm.selectedComponentSecondResponsibleOrg);
+
  		resetElement(aimReportsFilterPickerForm.selectedConcensionalityLevel);
- 		
+
  		resetElement(aimReportsFilterPickerForm.disbursementOrders);
  		resetElement(aimReportsFilterPickerForm.selectedBudgets);
  		resetElement(aimReportsFilterPickerForm.lineMinRanks);

@@ -15,37 +15,37 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
  *
  */
 public class ReportGenerationInfo {
-	
-	/**
-	 * the report rendered as Json (mwahahaha)
-	 */
-	public final JsonBean jb;
-	
-	/**
-	 * the report type, one of AMPReportExportConstants.XXX fields
-	 */
-	public final String type;
-	
-	/**
-	 * the report specification which lead to this report having been generated. Does not consistently include data from {@link #queryModel}! (I warned you it's a mess)
-	 */
-	public final ReportSpecification report;
-	
-	/**
-	 * the settings applied on top of the reportSpecification (wtf, ReportSpecificationImpl should have been enough)
-	 */
-	public final Map<String, Object> queryModel;
-	
-	/**
-	 * suffix to add to all created sheets
-	 */
-	public final String suffix;
-	
-	public ReportGenerationInfo(JsonBean jb, String type, ReportSpecification report, LinkedHashMap<String, Object> queryModel, String suffix) {
-		this.jb = jb;
-		this.type = type;
-		this.report = report;
-		this.queryModel = Collections.unmodifiableMap(new LinkedHashMap<String, Object>(queryModel));
-		this.suffix = suffix == null ? "" : suffix;
-	}
+    
+    /**
+     * the report rendered as Json (mwahahaha)
+     */
+    public final JsonBean jb;
+    
+    /**
+     * the report type, one of AMPReportExportConstants.XXX fields
+     */
+    public final String type;
+    
+    /**
+     * the report specification which lead to this report having been generated. Does not consistently include data from {@link #queryModel}! (I warned you it's a mess)
+     */
+    public final ReportSpecification report;
+    
+    /**
+     * the settings applied on top of the reportSpecification (wtf, ReportSpecificationImpl should have been enough)
+     */
+    public final Map<String, Object> queryModel;
+    
+    /**
+     * suffix to add to all created sheets
+     */
+    public final String suffix;
+    
+    public ReportGenerationInfo(JsonBean jb, String type, ReportSpecification report, LinkedHashMap<String, Object> queryModel, String suffix) {
+        this.jb = jb;
+        this.type = type;
+        this.report = report;
+        this.queryModel = Collections.unmodifiableMap(new LinkedHashMap<String, Object>(queryModel));
+        this.suffix = suffix == null ? "" : suffix;
+    }
 }

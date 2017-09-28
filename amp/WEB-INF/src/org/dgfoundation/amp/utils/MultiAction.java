@@ -33,54 +33,54 @@ import org.apache.struts.action.ActionMapping;
  */
 public abstract class MultiAction extends Action {
 
-	private static Logger logger = Logger.getLogger(MultiAction.class);
+    private static Logger logger = Logger.getLogger(MultiAction.class);
 
-	/**
-	 * @param mapping object list to be passed to other modes
-	 * @param form the form (if available) to be passed to other modes
-	 * @param request
-	 * @param response
-	 * @return the forward to be passed to execute() method.
-	 * This overrides execute() and implements exception catching and some global properties
-	 * @throws Exception this will be caught in the main execute method
-	 */
-	public ActionForward execute(ActionMapping mapping,
-			ActionForm form,
-			HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
-		try {
-		return modePrepare(mapping, form, request, response);
-		} catch(Exception e) {
-			logger.error(e);
-			e.printStackTrace();
-			return mapping.findForward("error");
-		}
-	}
+    /**
+     * @param mapping object list to be passed to other modes
+     * @param form the form (if available) to be passed to other modes
+     * @param request
+     * @param response
+     * @return the forward to be passed to execute() method.
+     * This overrides execute() and implements exception catching and some global properties
+     * @throws Exception this will be caught in the main execute method
+     */
+    public ActionForward execute(ActionMapping mapping,
+            ActionForm form,
+            HttpServletRequest request,
+            HttpServletResponse response) throws Exception {
+        try {
+        return modePrepare(mapping, form, request, response);
+        } catch(Exception e) {
+            logger.error(e);
+            e.printStackTrace();
+            return mapping.findForward("error");
+        }
+    }
 
-	/**
-	 * @param mapping object list to be passed to other modes
-	 * @param form the form (if available) to be passed to other modes
-	 * @param request
-	 * @param response
-	 * @return the forward to be passwd to execute() method.
-	 * This is the default mode that will be implemented in the subclass
-	 * @throws Exception this will be caught in the main execute method
-	 */
-	public abstract ActionForward modePrepare(ActionMapping mapping,
-			ActionForm form, HttpServletRequest request,
-			HttpServletResponse response) throws Exception;
+    /**
+     * @param mapping object list to be passed to other modes
+     * @param form the form (if available) to be passed to other modes
+     * @param request
+     * @param response
+     * @return the forward to be passwd to execute() method.
+     * This is the default mode that will be implemented in the subclass
+     * @throws Exception this will be caught in the main execute method
+     */
+    public abstract ActionForward modePrepare(ActionMapping mapping,
+            ActionForm form, HttpServletRequest request,
+            HttpServletResponse response) throws Exception;
 
-	/**
-	 * @param mapping object list to be passed to other modes
-	 * @param form the form (if available) to be passed to other modes
-	 * @param request
-	 * @param response
-	 * @return the forward to be passwd to execute() method.
-	 * This is returned by the current mode, after execution.
-	 * Further mode selection is done within this method implementation.
-	 * @throws Exception this will be caught in the main execute method
-	 */
-	public abstract ActionForward modeSelect(ActionMapping mapping,
-			ActionForm form, HttpServletRequest request,
-			HttpServletResponse response) throws Exception;
+    /**
+     * @param mapping object list to be passed to other modes
+     * @param form the form (if available) to be passed to other modes
+     * @param request
+     * @param response
+     * @return the forward to be passwd to execute() method.
+     * This is returned by the current mode, after execution.
+     * Further mode selection is done within this method implementation.
+     * @throws Exception this will be caught in the main execute method
+     */
+    public abstract ActionForward modeSelect(ActionMapping mapping,
+            ActionForm form, HttpServletRequest request,
+            HttpServletResponse response) throws Exception;
 }

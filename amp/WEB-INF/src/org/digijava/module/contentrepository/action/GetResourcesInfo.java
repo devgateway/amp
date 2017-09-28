@@ -21,22 +21,22 @@ import org.digijava.module.contentrepository.util.DocumentManagerUtil;
  *
  */
 public class GetResourcesInfo extends Action {
-	@Override
-	public ActionForward execute(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)throws Exception {
-		 DocumentManagerForm myForm		= (DocumentManagerForm) form;
-		 Boolean exists=true;
-		 HttpSession	httpSession		= request.getSession();
-		 TeamMember teamMember		= (TeamMember)httpSession.getAttribute(Constants.CURRENT_MEMBER);
-		
-		 Session jcrWriteSession		= DocumentManagerUtil.getWriteSession(request);
-		 String tabType= request.getParameter("type");
-		 if(tabType.equals("private")){
-			 exists = DocumentManagerUtil.privateDocumentsExist(jcrWriteSession, teamMember);
-		 }else if (tabType.equals("team")){
-			 exists = DocumentManagerUtil.teamDocumentsExist(jcrWriteSession, teamMember);
-		 }
-		    
-		XMLDocument msgInfo = new XMLDocument();
+    @Override
+    public ActionForward execute(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)throws Exception {
+         DocumentManagerForm myForm     = (DocumentManagerForm) form;
+         Boolean exists=true;
+         HttpSession    httpSession     = request.getSession();
+         TeamMember teamMember      = (TeamMember)httpSession.getAttribute(Constants.CURRENT_MEMBER);
+        
+         Session jcrWriteSession        = DocumentManagerUtil.getWriteSession(request);
+         String tabType= request.getParameter("type");
+         if(tabType.equals("private")){
+             exists = DocumentManagerUtil.privateDocumentsExist(jcrWriteSession, teamMember);
+         }else if (tabType.equals("team")){
+             exists = DocumentManagerUtil.teamDocumentsExist(jcrWriteSession, teamMember);
+         }
+            
+        XMLDocument msgInfo = new XMLDocument();
         XML root = new XML("resource-info");
         root.addAttribute("docsExist", exists);
         root.addAttribute("tabType", tabType);
@@ -44,6 +44,6 @@ public class GetResourcesInfo extends Action {
         msgInfo.addElement(root);
         msgInfo.output(response.getOutputStream());
         response.getOutputStream().close();
-		return null;
-	}
+        return null;
+    }
 }

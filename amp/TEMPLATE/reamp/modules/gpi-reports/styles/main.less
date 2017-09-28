@@ -340,7 +340,7 @@ a:hover {
   padding: 10px 5px 15px 10px;
 }
 .stat-value {
-  font-size:35px;
+  font-size:20px;
   font-weight: bold;
   letter-spacing: -1;
   line-height: 115%;
@@ -509,8 +509,7 @@ a:hover {
   font-size: 13px;
   font-weight: normal;
   line-height: 120%;
-  padding-bottom: 15px;
-  padding-right: 20px;
+  padding-bottom: 15px;  
 }
 
 .indicator-table > thead > tr > th > a{
@@ -529,8 +528,11 @@ a:hover {
   font-weight: normal;
   line-height: 120%;
   padding-bottom: 15px;
-  padding-right: 20px;
+  text-align: center;
+  padding-right: 10px !important;
+  padding-left: 10px !important;
 }
+
 
 .indicator-table > tbody > tr > td {
   border:1px solid #e7e9ed;
@@ -565,13 +567,15 @@ a:hover {
   margin: auto;
   text-align: center;
 }
-.table-icon {
-  float: left;
+.table-icon {  
   height: 12px;
   margin-right: 1px;
   margin-top: 1px;
-  opacity: 1;
+  opacity: 1;  
+  margin-bottom: 2px;
 }
+
+
 .table-icon:hover {
   opacity: 0.7;
 }
@@ -621,14 +625,7 @@ opacity: 0.4;
 
 .number-column {
   text-align: right;
-}
-
-.table-icon {
-  float: left;
-  height: 12px;
-  margin-right: 1px;
-  margin-top: 1px;
-  opacity: 1;/*new*/
+  padding-right: 4px !important; 
 }
 
 .popup-icon{
@@ -737,3 +734,48 @@ opacity: 0.4;
 .document a:hover{
  color: #90c845;
 }
+
+.btn-years .caret{
+     margin-left: 10px;
+}
+
+.report{
+  overflow-x:auto;
+  width: 100%;
+}
+
+
+/** blockUI */
+.processing_container, .blockOverlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: #fff;
+	opacity: 0.5;
+	z-index: 9999;
+    padding: 20px;
+}
+.processing_content {
+    padding: 5px;
+    display: inline;
+}
+.processing, .blockElement {
+    border-radius: 3px;
+    border: 1px solid #CCC;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.10);
+    -moz-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.10);
+    -webkit-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.10);
+    z-index: 10001;
+    background-color: #fff;
+    position: fixed;
+    width: 20%;
+    min-width: 300px;
+    left: 40%;
+    top: 50%;
+    padding: 20px;
+}
+

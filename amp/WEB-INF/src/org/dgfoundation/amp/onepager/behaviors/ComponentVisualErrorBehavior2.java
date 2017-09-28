@@ -16,9 +16,9 @@ import org.apache.wicket.extensions.markup.html.form.DateTextField;
 import org.digijava.kernel.translator.TranslatorWorker;
 
 public class ComponentVisualErrorBehavior2 extends Behavior implements IAjaxRegionMarkupIdProvider {
-	private static final Logger logger = Logger.getLogger(ComponentVisualErrorBehavior2.class);
-	public static final String INVALID_CLASS="formcomponent invalid";
-	private static final long serialVersionUID = 1L;
+    private static final Logger logger = Logger.getLogger(ComponentVisualErrorBehavior2.class);
+    public static final String INVALID_CLASS="formcomponent invalid";
+    private static final long serialVersionUID = 1L;
 
     @Override
     public void onConfigure(Component component) {
@@ -26,46 +26,46 @@ public class ComponentVisualErrorBehavior2 extends Behavior implements IAjaxRegi
     }
 
     @Override
-	public void onComponentTag(Component component, ComponentTag tag) {
-		if (!((FormComponent<?>) component).isValid()){
-			String c1 = tag.getAttribute("class");
-			if (c1 == null)
-				tag.put("class", INVALID_CLASS);
-			else
-				tag.put("class", INVALID_CLASS + " " + c1);
-		}
-	}
-	
-	@Override
-	public void beforeRender(Component component) {
-		Response r = component.getResponse();
-		r.write("<span id=\"");
-		r.write(getAjaxRegionMarkupId(component));
-		r.write("\">");
-	}
-	
-	@Override
-	public void afterRender(Component component) {
-		FeedbackMessages messages = component.getFeedbackMessages();
-		Response r = component.getResponse();
-		if (component.hasFeedbackMessage()){
-			r.write("<ul class=\"feedbackPanel\">");
-			for (FeedbackMessage message: messages){
-				r.write("<li class=\"feedbackPanel");
-				r.write(message.getLevelAsString().toUpperCase());
-				r.write("\">");
-				r.write(TranslatorWorker.translateText(Strings.escapeMarkup(message.getMessage().toString()).toString()));
-				r.write("</li>");
-				logger.error("Rendered error: " + message.getMessage().toString());
-				message.markRendered();
-			}
+    public void onComponentTag(Component component, ComponentTag tag) {
+        if (!((FormComponent<?>) component).isValid()){
+            String c1 = tag.getAttribute("class");
+            if (c1 == null)
+                tag.put("class", INVALID_CLASS);
+            else
+                tag.put("class", INVALID_CLASS + " " + c1);
+        }
+    }
+    
+    @Override
+    public void beforeRender(Component component) {
+        Response r = component.getResponse();
+        r.write("<span id=\"");
+        r.write(getAjaxRegionMarkupId(component));
+        r.write("\">");
+    }
+    
+    @Override
+    public void afterRender(Component component) {
+        FeedbackMessages messages = component.getFeedbackMessages();
+        Response r = component.getResponse();
+        if (component.hasFeedbackMessage()){
+            r.write("<ul class=\"feedbackPanel\">");
+            for (FeedbackMessage message: messages){
+                r.write("<li class=\"feedbackPanel");
+                r.write(message.getLevelAsString().toUpperCase());
+                r.write("\">");
+                r.write(TranslatorWorker.translateText(Strings.escapeMarkup(message.getMessage().toString()).toString()));
+                r.write("</li>");
+                logger.error("Rendered error: " + message.getMessage().toString());
+                message.markRendered();
+            }
             r.write("</ul>");
-		}
-		r.write("</span>");
-	}
+        }
+        r.write("</span>");
+    }
 
-	@Override
-	public String getAjaxRegionMarkupId(Component component) {
-		return component.getMarkupId() + "_fd";
-	}	
+    @Override
+    public String getAjaxRegionMarkupId(Component component) {
+        return component.getMarkupId() + "_fd";
+    }   
 }

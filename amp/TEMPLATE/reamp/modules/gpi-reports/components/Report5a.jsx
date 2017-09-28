@@ -13,17 +13,17 @@ import ToolBar from './ToolBar';
 import { Modal } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
 import HeaderToolTip from './HeaderToolTip';
+import Loading from './Loading';
 export default class Report5a extends Component {
     constructor( props, context ) {
         super( props, context );
-        this.state = { recordsPerPage: 150, hierarchy: 'donor-agency', selectedYear: null, selectedDonor: "", remarksUrl:null, showRemarks: false};
+        this.state = { recordsPerPage: 150, hierarchy: 'donor-agency', selectedYear: null, selectedDonor: "", remarksUrl:null, showRemarks: false, waiting:true};
         this.showFilters = this.showFilters.bind( this );
         this.showSettings = this.showSettings.bind( this );        
         this.onDonorFilterChange = this.onDonorFilterChange.bind( this );
         this.toggleHierarchy = this.toggleHierarchy.bind( this );  
         this.downloadExcelFile = this.downloadExcelFile.bind(this);
-        this.downloadPdfFile = this.downloadPdfFile.bind(this);
-        this.getYears = this.getYears.bind(this);
+        this.downloadPdfFile = this.downloadPdfFile.bind(this);        
       }
 
     componentDidMount() {
@@ -92,7 +92,10 @@ export default class Report5a extends Component {
 
     fetchReportData( data ) {
         let requestData = data || this.getRequestData();
-        this.props.actions.fetchReportData( requestData, '5a' );
+        this.setState({waiting: true});
+        this.props.actions.fetchReportData( requestData, '5a' ).then(function(){
+            this.setState({waiting: false});  
+        }.bind(this));
     }
     
     onDonorFilterChange( e ) {
@@ -193,20 +196,18 @@ export default class Report5a extends Component {
     downloadPdfFile(){
         this.props.actions.downloadPdfFile(this.getRequestData(), '5a');
     }
-    
-    getYears() {
-        let settings  = this.settingsWidget.toAPIFormat()
-        let calendarId = settings && settings['calendar-id'] ?  settings['calendar-id'] : this.settingsWidget.definitions.getDefaultCalendarId();
-        let calendar = this.props.years.filter(calendar => calendar.calendarId == calendarId)[0];
-        return calendar.years.slice();       
-   }
-    
-    render() {
-        if ( this.props.mainReport && this.props.mainReport.page && this.settingsWidget && this.settingsWidget.definitions) {
+     
+    render() {        
             let addedGroups = [];
-            var years = this.getYears(); 
+            var years = Utils.getYears(this.settingsWidget, this.props.years);
             return (
-                <div>
+                  <div>                   
+                    {this.state.waiting &&                      
+                        <Loading/>                
+                    } 
+                    
+                    {this.props.mainReport && this.props.mainReport.page && this.settingsWidget && this.settingsWidget.definitions &&
+                     <div>                    
                     <div id="filter-popup" ref="filterPopup"> </div>
                     <div id="amp-settings" ref="settingsPopup"> </div>
                     <ToolBar showFilters={this.showFilters} showSettings={this.showSettings} downloadPdfFile={this.downloadPdfFile}  downloadExcelFile={this.downloadExcelFile} />
@@ -263,7 +264,6 @@ export default class Report5a extends Component {
                           <th className="col-md-2"><HeaderToolTip column={Constants.CONCESSIONAL} headers={this.props.mainReport.page.headers}/>{this.getLocalizedColumnName(Constants.CONCESSIONAL)}?</th>
                           <th>{this.getLocalizedColumnName(Constants.ACTUAL_DISBURSEMENTS)} <span className="light-weight"></span></th>
                           <th>{this.getLocalizedColumnName(Constants.PLANNED_DISBURSEMENTS)}<span className="light-weight"></span></th>
-                          <th className="col-md-2"><HeaderToolTip column={Constants.DISBURSEMENTS_THROUGH_OTHER_PROVIDERS} headers={this.props.mainReport.page.headers}/>{this.getLocalizedColumnName(Constants.DISBURSEMENTS_THROUGH_OTHER_PROVIDERS)}</th>
                           <th className="col-md-2"><HeaderToolTip column={Constants.DISBURSEMENTS_AS_SCHEDULED} headers={this.props.mainReport.page.headers}/>{this.getLocalizedColumnName(Constants.DISBURSEMENTS_AS_SCHEDULED)}</th>
                           <th className="col-md-2"><HeaderToolTip column={Constants.OVER_DISBURSED} headers={this.props.mainReport.page.headers}/>{this.getLocalizedColumnName(Constants.OVER_DISBURSED)}</th>
                           <th>
@@ -284,7 +284,6 @@ export default class Report5a extends Component {
                               <td className="number-column">{row[Constants.CONCESSIONAL]}</td>
                               <td className="number-column">{row[Constants.ACTUAL_DISBURSEMENTS]}</td>
                               <td className="number-column">{row[Constants.PLANNED_DISBURSEMENTS]}</td>
-                              <td className="number-column">{row[Constants.DISBURSEMENTS_THROUGH_OTHER_PROVIDERS]}</td>
                               <td className="number-column">{row[Constants.DISBURSEMENTS_AS_SCHEDULED]}</td>
                               <td className="number-column">{row[Constants.OVER_DISBURSED]}</td>
                               <td className="number-column"><img className="table-icon" src="images/remarks-icon.svg" data-url={row[Constants.REMARK]} onClick={this.showRemarksModal.bind(this)}/></td>
@@ -296,10 +295,10 @@ export default class Report5a extends Component {
                          <PagingSection mainReport={this.props.mainReport} goToPage={this.goToPage.bind(this)} updateRecordsPerPage={this.updateRecordsPerPage.bind(this)}/>
                     </div>
                 </div>
-            );
-        }
-
-        return ( <div></div> );
+                }
+               </div>
+                          
+            );            
     }
 
 }

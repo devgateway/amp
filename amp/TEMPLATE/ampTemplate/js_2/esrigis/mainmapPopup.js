@@ -18,6 +18,11 @@ var MapConstants = {
 			   "BASE" : 1,
 			   "INDICATOR" : 2,
 			   "OSM" : 3
+		   },
+		   "SHAPE" : {
+			   "POINT": "Point",
+			   "POLYGON": "Polygon",
+			   "POLYLINE": "Polyline"
 		   }
 		};
 var basemapUrl;
@@ -87,13 +92,10 @@ function loadBaseMap() {
 	basemaps.on('change', function() {
 		setBasemap(this.value);
 	});
-	map.on('click', onMapClick);
-	map.on( "zoomend", function( e ) {
-		if (circlePoint != null) {
-		circlePoint.setRadius (pointRadious[map.getZoom()+1]);
-	    console.log( "zoom level is " + map.getZoom() );
-		}
-	});
+
+	var drawnItems = L.featureGroup().addTo(map);
+	addDrawControls(drawnItems);
+
 	
 }
 
@@ -124,15 +126,63 @@ function onMapClick (e) {
 function selectLocationCallerShape(selectedGraphic){
 	var callerButton = window.opener.callerGisObject;
 	//Lat
-	callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[1].value = "";
+	var latitudeInput = callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[1];
+	latitudeInput.value = "";
 	//Long
-	callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[2].value = "";
-	callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[1].value = selectedGraphic.latlng.lat;
-	callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[2].value =  selectedGraphic.latlng.lng;
-	element = callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[1];
-	window.opener.postvaluesy(element);
-    element = callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[2];
-    window.opener.postvaluesx(element);
+	var longitudeInput = callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[2];
+	longitudeInput.value = "";
+
+	var coordsInput = callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[5];
+	coordsInput.value = "";
+
+	var shapeInput = callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[6];
+	shapeInput.value = "";
+
+    if(selectedPointEvent.target instanceof L.Marker || selectedGraphic.target instanceof L.CircleMarker) {
+    	latitudeInput.value = selectedGraphic.latlng.lat;
+    	longitudeInput.value =  selectedGraphic.latlng.lng;
+    	shapeInput.value = MapConstants.SHAPE.POINT;
+    	window.opener.postvaluesy(latitudeInput);
+        window.opener.postvaluesx(longitudeInput);
+        window.opener.postvaluesx(shapeInput);
+        coordsInput.value =  JSON.stringify({'coordinates': []});
+	    window.opener.postvaluesx(coordsInput);
+	} else {
+		var latLngs = selectedGraphic.target.getLatLngs();
+		var data = []
+		for(i = 0; i < latLngs.length; i++){
+			var obj = {}
+			obj.latitude = latLngs[i].lat;
+			obj.longitude = latLngs[i].lng;
+			data.push(obj)
+		}
+		coordsInput.value =  JSON.stringify({'coordinates': data});
+	    window.opener.postvaluesx(coordsInput);
+	    if( selectedPointEvent.target instanceof L.Polyline) {
+	    	if (selectedPointEvent.target instanceof L.Polygon) {
+	    		shapeInput.value = MapConstants.SHAPE.POLYGON;
+	    	} else {
+	    		shapeInput.value = MapConstants.SHAPE.POLYLINE;
+	    	}
+	    }
+	    window.opener.postvaluesx(shapeInput);
+	}
+    if ("createEvent" in document) {
+        var evt = document.createEvent("HTMLEvents");
+        evt.initEvent("change", false, true);
+        coordsInput.dispatchEvent(evt);
+        var evtLatitude = document.createEvent("HTMLEvents");
+        evtLatitude.initEvent("change", false, true);
+        latitudeInput.dispatchEvent(evtLatitude);
+        var evtLongitude = document.createEvent("HTMLEvents");
+        evtLongitude.initEvent("change", false, true);
+        longitudeInput.dispatchEvent(evt);
+    } else {
+    	coordsInput.fireEvent("onchange");
+        latitudeInput.fireEvent("onchange");
+        longitudeInput.fireEvent("onchange");
+    }
+
 	window.close();
 }
 
@@ -222,6 +272,41 @@ function setBasemap(basemap) {
 	}
 }
 
+
+
+function addDrawControls(drawnItems) {
+	 map.addControl(new L.Control.Draw({
+	        edit: {
+	            featureGroup: drawnItems,
+	            poly: {
+	                allowIntersection: false
+	            }
+	        },
+	        draw: {
+	            polygon: {
+	                allowIntersection: false,
+	                showArea: true
+	            },
+	            circle : false
+	        }
+	    }));
+
+
+	 map.on(L.Draw.Event.CREATED, function (event) {
+	        var layer = event.layer;
+	        layer.on('contextmenu', function(e) {
+	        	e.layerz = layer;
+	        	selectedPointEvent = e;
+            	isMenuOpen = true;
+       	        var y = e.originalEvent.clientY;
+       	        var x = e.originalEvent.clientX;
+       		    showMenu (y,x);
+
+            });
+	        drawnItems.addLayer(layer);
+	    });
+}
+
 /**
  * Checks if the geometry's type combobox contains the option value received as a parameter
  * @param searchtext, the select options's value to search for
@@ -248,21 +333,6 @@ function filterLocation (value) {
 			searchLocationsLayer.removeLayer (layer);
 		} 
 	});
-
-}
-
-function createPoint () {
-	isDrawActive = true;
-	$('#map').css("cursor","pointer");
-	$('#pointBtn').addClass("button-pressed");
-	$('#deactivateBtn').removeClass("button-pressed");
-}
-
-function deactivate () {
-	isDrawActive = false;
-	$('#map').css("cursor","-webkit-grab");
-	$('#deactivateBtn').addClass("button-pressed");
-	$('#pointBtn').removeClass("button-pressed");
 
 }
 

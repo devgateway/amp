@@ -1147,6 +1147,11 @@ a.disabled_toolbar:hover {
     background-position: 7px 7px;
 }
 
+.workspace_toolbar .export_xml {
+    background-image: url('../../../images/src/button_xml.png');
+    background-position: 7px 7px;
+}
+
 .workspace_toolbar .toggle_fields {
     background-position: -913px 7px;
 }

@@ -4,13 +4,13 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 
 public class IndicatorErrors {
 
-	// Validation errors
-	public static final ApiErrorMessage UNKNOWN_ERROR = new ApiErrorMessage(0, "Unknown Error");
+    // Validation errors
+    public static final ApiErrorMessage UNKNOWN_ERROR = new ApiErrorMessage(0, "Unknown Error");
 
     public static final ApiErrorMessage UNAUTHORIZED = new ApiErrorMessage(1, "Unauthorized operation");
 
-	public static final ApiErrorMessage FIELD_INVALID_TYPE = new ApiErrorMessage(2, "Invalid field type");
-	public static final ApiErrorMessage FIELD_INVALID_VALUE = new ApiErrorMessage(3, "Invalid field value");
+    public static final ApiErrorMessage FIELD_INVALID_TYPE = new ApiErrorMessage(2, "Invalid field type");
+    public static final ApiErrorMessage FIELD_INVALID_VALUE = new ApiErrorMessage(3, "Invalid field value");
 
     public static final ApiErrorMessage INVALID_ID = new ApiErrorMessage(4, "Invalid id");
 

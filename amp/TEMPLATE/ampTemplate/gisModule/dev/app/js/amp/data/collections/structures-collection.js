@@ -53,6 +53,8 @@ module.exports = Backbone.Collection
       _.extend(payload, this.appData.filter.serialize());
     }
 
+    payload['performanceIssues'] = !this.appData.performanceToggleModel.get('isPerformanceToggleSelected');
+    
     /* get "settings" */
     // TODO: re-enable?? check for listener....?
     /*if (this.appData.settings) {
@@ -103,12 +105,18 @@ module.exports = Backbone.Collection
 
         // activity.attributes is a dirty way of checking if already a model...
         // if not joined yet, then join structure to parent activity.
+        
         if (!(activity && activity.attributes)) {
           var match = self.activities.find(function(model) {
             return model.id === structure.get('activityZero');
           });
+          match.joinFilters();
           structure.set('activity', match);
+        } else if (activity.attributes) {
+        	activity.joinFilters();
         }
+        
+        
       });
 
       // all activites joined filters
@@ -131,13 +139,13 @@ module.exports = Backbone.Collection
       .value();
   },
 
-  toGeoJSON: function() {
-    var featureList = this.map(function(model) {
+  toGeoJSON: function() {	
+    var featureList = this.map(function(model) {    	
       return {
         type: 'Feature',
         geometry: {
-          type: 'Point',
-          coordinates: [model.get('lng'), model.get('lat')]
+          type: model.get('geometryType'),
+          coordinates: model.get('coordinates'),
         },
         properties: model.attributes  // not toJSON() for performance
       };

@@ -10,5 +10,5 @@ import org.dgfoundation.amp.menu.MenuItem;
  * @author Nadejda Mandrescu
  */
 public interface DynamicMenu {
-	void process(MenuItem menuItem);
+    void process(MenuItem menuItem);
 }

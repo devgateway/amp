@@ -30,13 +30,13 @@ public class RemoveTeamActivity extends Action {
         if (taForm.getSelActivities() != null) {
             TeamUtil.removeActivitiesFromTeam(taForm.getSelActivities(),taForm.getTeamId());
             Long selActivities[] = taForm.getSelActivities();
-			for(Long selActivityId:selActivities){
-				AmpActivityVersion activity=ActivityUtil.loadAmpActivity(selActivityId);
-				String detail="unassigned from team";
-				List<String> details=new ArrayList<String>();
-				details.add(detail);
-				AuditLoggerUtil.logActivityUpdate(request, activity, details);
-			}
+            for(Long selActivityId:selActivities){
+                AmpActivityVersion activity=ActivityUtil.loadAmpActivity(selActivityId);
+                String detail="unassigned from team";
+                List<String> details=new ArrayList<String>();
+                details.add(detail);
+                AuditLoggerUtil.logActivityUpdate(request, activity, details);
+            }
         }
         
         return mapping.findForward("forward");

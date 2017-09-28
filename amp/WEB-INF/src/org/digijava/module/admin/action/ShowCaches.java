@@ -52,8 +52,8 @@ public class ShowCaches
 
         Comparator comparator = new Comparator() {
             public int compare(Object o1, Object o2) {
-            	AbstractCache i1 = (AbstractCache) o1;
-            	AbstractCache i2 = (AbstractCache) o2;
+                AbstractCache i1 = (AbstractCache) o1;
+                AbstractCache i2 = (AbstractCache) o2;
 
                 return i1.getName().compareTo(i2.getName());
             }
@@ -69,7 +69,7 @@ public class ShowCaches
             Collection<AbstractCache> caches = DigiCacheManager.getInstance().getCaches();
             if (caches != null) {
                 for (AbstractCache cache : caches) {
-                	
+                    
                     formBean.getHibernateCachesList().add(cache);
 
                     if (formBean.getHibernateKey() != null &&

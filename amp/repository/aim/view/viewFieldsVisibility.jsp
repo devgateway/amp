@@ -123,9 +123,7 @@
 	
 	<tr><td bgColor=#c7d4db height="25" align="center" colspan="3">
 	<!-- Table title -->
-	<digi:trn key="aim:ampFields">
-		<b>AMP Fields</b> 
-	</digi:trn>
+	<b><digi:trn key="aim:ampFields">AMP Fields</digi:trn></b>
 	<!-- end table title -->										
 	</td></tr>
 	<digi:form action="/visibilityManager.do" method="post" >
@@ -133,13 +131,13 @@
 	
 	<table width="100%" cellspacing="0" cellpadding="0" valign="top" align=left border="0" style="font-size:12px;" class="inside">
 		<tr>
-			<td height=20 bgcolor=#F2F2f2 align=center width=70% class="inside"><digi:trn key="aim:ampField"><b>Field</b></digi:trn>
+			<td height=20 bgcolor=#F2F2f2 align=center width=70% class="inside"><b><digi:trn key="aim:ampField">Field</digi:trn></b>
 			</th>
-			<td height=20 bgcolor=#F2F2f2 align=center width=10% class="inside"><digi:trn key="aim:ampSection"><b>Section</b></digi:trn>
+			<td height=20 bgcolor=#F2F2f2 align=center width=10% class="inside"><b><digi:trn key="aim:ampSection">Section</digi:trn></b>
 			</th>
-			<td height=20 bgcolor=#F2F2f2 align=center width=10% class="inside"><digi:trn key="aim:ampFeature"><b>Feature</b></digi:trn>
+			<td height=20 bgcolor=#F2F2f2 align=center width=10% class="inside"><b><digi:trn key="aim:ampFeature">Feature</digi:trn></b>
 			</th>
-			<td height=20 bgcolor=#F2F2f2 align=center width=10% class="inside"><digi:trn key="aim:ampAction"><b>Action</b></digi:trn>
+			<td height=20 bgcolor=#F2F2f2 align=center width=10% class="inside"><b><digi:trn key="aim:ampAction">Action</digi:trn></b>
 			</th>
 		</tr>
 		<jsp:useBean id="urlParamsDelField" type="java.util.Map" class="java.util.HashMap"/>

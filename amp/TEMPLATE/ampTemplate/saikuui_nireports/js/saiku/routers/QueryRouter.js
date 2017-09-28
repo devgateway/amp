@@ -70,9 +70,11 @@ var process_spec = function(data) {
 		filters: data.reportMetadata.reportSpec.filters,
 		settings: data.reportMetadata.reportSpec.settings,
 		hierarchies : data.reportMetadata.reportSpec.hierarchies,
+		measures: data.reportMetadata.reportSpec.measures,
 		columns : data.reportMetadata.reportSpec.columns,
 		report_type : data.reportMetadata.reportSpec.reportType,
-		settings_data: data.reportMetadata.settings
+		settings_data: data.reportMetadata.settings,
+		page_timestamp: + new Date()
 	};
 	defaults[report_fieldname] = report_identifier;
 	var model = Backbone.Model.extend({

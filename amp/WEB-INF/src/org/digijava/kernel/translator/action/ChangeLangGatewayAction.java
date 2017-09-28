@@ -42,78 +42,78 @@ import org.digijava.kernel.util.RequestUtils;
 
 public final class ChangeLangGatewayAction extends Action {
 
-	private static Logger logger =
-		Logger.getLogger(ChangeLangGatewayAction.class);
+    private static Logger logger =
+        Logger.getLogger(ChangeLangGatewayAction.class);
 
-	/* This method overrides the Action classes execute method. This is the function called by the
-	 * controller servlet
-	 * @param mapping
-	 * @param form
-	 * @param request
-	 * @param response
-	 * @return ActionForward
-	 */
-	public ActionForward execute(
-		ActionMapping mapping,
-		ActionForm form,
-		HttpServletRequest request,
-		HttpServletResponse response)
-		throws IOException, ServletException {
+    /* This method overrides the Action classes execute method. This is the function called by the
+     * controller servlet
+     * @param mapping
+     * @param form
+     * @param request
+     * @param response
+     * @return ActionForward
+     */
+    public ActionForward execute(
+        ActionMapping mapping,
+        ActionForm form,
+        HttpServletRequest request,
+        HttpServletResponse response)
+        throws IOException, ServletException {
 
-		//TranslatorNavForm nav = (TranslatorNavForm) form;
+        //TranslatorNavForm nav = (TranslatorNavForm) form;
 
-		//Set locale
-		org.digijava.kernel.entity.Locale locale = new org.digijava.kernel.entity.Locale();
-		String selectedLocale = request.getParameter("lang");
-		if(selectedLocale == null)
-			selectedLocale = java.util.Locale.ENGLISH.getLanguage();
+        //Set locale
+        org.digijava.kernel.entity.Locale locale = new org.digijava.kernel.entity.Locale();
+        String selectedLocale = request.getParameter("lang");
+        if(selectedLocale == null)
+            selectedLocale = java.util.Locale.ENGLISH.getLanguage();
 
-		if(logger.isDebugEnabled()){
-			logger.debug(" Selected locale " + selectedLocale);
-		}
+        if(logger.isDebugEnabled()){
+            logger.debug(" Selected locale " + selectedLocale);
+        }
 
-		locale.setCode(selectedLocale);
+        locale.setCode(selectedLocale);
 
-		DgUtil.switchLanguage(locale,request,response);
+        DgUtil.switchLanguage(locale,request,response);
 
-		String localeUrl = "";
+        String localeUrl = "";
 
-		//first check for site-domain/site-path mapping to the destination locale...
-		java.util.Collection col = RequestUtils.getSite(request).getSiteDomains();
-		java.util.Iterator it = col.iterator();
+        //first check for site-domain/site-path mapping to the destination locale...
+        java.util.Collection col = RequestUtils.getSite(request).getSiteDomains();
+        java.util.Iterator it = col.iterator();
 
-		while(it.hasNext()){
-			org.digijava.kernel.request.SiteDomain domain =(org.digijava.kernel.request.SiteDomain)it.next();
-			if(domain.getLanguage() != null && domain.getLanguage().getCode().equals(selectedLocale)){
-				localeUrl = DgUtil.getSiteUrl(domain, request);
-				break;
-			}
+        while(it.hasNext()){
+            org.digijava.kernel.request.SiteDomain domain =(org.digijava.kernel.request.SiteDomain)it.next();
+            if(domain.getLanguage() != null && domain.getLanguage().getCode().equals(selectedLocale)){
+                localeUrl = DgUtil.getSiteUrl(domain, request);
+                break;
+            }
 
-			if(logger.isDebugEnabled())
-				logger.debug(" domain object got " + domain);
-		}
+            if(logger.isDebugEnabled())
+                logger.debug(" domain object got " + domain);
+        }
 
 
 
-		if(localeUrl.equals("")){
-			it = col.iterator();
-			while(it.hasNext()){
-				org.digijava.kernel.request.SiteDomain domain1 = (org.digijava.kernel.request.SiteDomain)it.next();
-				if(domain1.getLanguage() == null){
+        if(localeUrl.equals("")){
+            it = col.iterator();
+            while(it.hasNext()){
+                org.digijava.kernel.request.SiteDomain domain1 = (org.digijava.kernel.request.SiteDomain)it.next();
+                if(domain1.getLanguage() == null){
 
-					if(localeUrl.equals("")){
-						localeUrl = DgUtil.getSiteUrl(domain1, request);
-						break;
-					}
-				}
-			}
-		}
+                    if(localeUrl.equals("")){
+                        localeUrl = DgUtil.getSiteUrl(domain1, request);
+                        break;
+                    }
+                }
+            }
+        }
 
-		String url = localeUrl + request.getParameter("back_url");
+        String url = localeUrl + request.getParameter("back_url");
 
-		if(logger.isDebugEnabled())
-			logger.debug(" Url being redirected to " + url);
-		return new ActionForward(url,true);
+        if(logger.isDebugEnabled())
+            logger.debug(" Url being redirected to " + url);
+        return new ActionForward(url,true);
 
-	}
+    }
 }

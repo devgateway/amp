@@ -263,7 +263,7 @@ function toggleSettings(){
 				<logic:iterate name="generatedReport" property="levelSorters" id="sorter" indexId="levelId">
 					<div id="level-sorter">
 					<logic:present name="sorter">
-						<digi:trn>${hierarchies[levelId].column.columnName}</digi:trn>&nbsp;<digi:trn key="rep:pop:sortedBy">sorted by</digi:trn>&nbsp;<bean:write name="sorter"/>
+						<digi:colNameTrn>${hierarchies[levelId].column.columnName}</digi:colNameTrn>&nbsp;<digi:trn key="rep:pop:sortedBy">sorted by</digi:trn>&nbsp;<bean:write name="sorter"/>
 						<br />		
 					</logic:present>
 				</div>

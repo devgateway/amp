@@ -37,7 +37,6 @@ import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.kernel.text.regex.RegexBatch;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
@@ -62,7 +61,7 @@ public class DbUtil {
 
     private static Logger logger = Logger.getLogger(DbUtil.class);
     
-	 /**
+     /**
      * Get editor item by key from database
      *
      * @param key
@@ -70,7 +69,7 @@ public class DbUtil {
      * @throws EditorException
      */
     @SuppressWarnings("unchecked")
-	public static List<Editor> getEditorList(Site site, String editorKey, String language) throws EditorException {
+    public static List<Editor> getEditorList(Site site, String editorKey, String language) throws EditorException {
 
         Session session = null;
         List<Editor> items = new ArrayList<Editor>();
@@ -103,46 +102,46 @@ public class DbUtil {
      * @return
      * @throws EditorException
      */
-	@SuppressWarnings("unchecked")
-	public static List<Editor> getEditorList(String editorKey, Site site) throws EditorException {
+    @SuppressWarnings("unchecked")
+    public static List<Editor> getEditorList(String editorKey, Site site) throws EditorException {
 
-		Session session = null;
-		List<Editor> items = new ArrayList<Editor>();
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			Query q = session.createQuery("from "
-							+ Editor.class.getName()
-							+ " e where (e.siteId=:siteId) and (e.editorKey=:editorKey)");
+        Session session = null;
+        List<Editor> items = new ArrayList<Editor>();
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            Query q = session.createQuery("from "
+                            + Editor.class.getName()
+                            + " e where (e.siteId=:siteId) and (e.editorKey=:editorKey)");
 
-			q.setString("siteId", site.getSiteId());
-			q.setString("editorKey", editorKey);
+            q.setString("siteId", site.getSiteId());
+            q.setString("editorKey", editorKey);
 
-			items = q.list();
-		} catch (Exception ex) {
-			logger.debug("Unable to get editor item from database ", ex);
-			throw new EditorException(
-					"Unable to get editor item from database", ex);
-		}
+            items = q.list();
+        } catch (Exception ex) {
+            logger.debug("Unable to get editor item from database ", ex);
+            throw new EditorException(
+                    "Unable to get editor item from database", ex);
+        }
 
-		return items;
-	}    
-	
-	public static List<Editor> getEditorList(String editorKey, Site site, Session session) throws EditorException {
-		List<Editor> items = new ArrayList<Editor>();
-		try {
-			Query q = session.createQuery("from "+ Editor.class.getName()+ " e where (e.siteId=:siteId) and (e.editorKey=:editorKey)");
-			q.setString("siteId", site.getSiteId());
-			q.setString("editorKey", editorKey);
+        return items;
+    }    
+    
+    public static List<Editor> getEditorList(String editorKey, Site site, Session session) throws EditorException {
+        List<Editor> items = new ArrayList<Editor>();
+        try {
+            Query q = session.createQuery("from "+ Editor.class.getName()+ " e where (e.siteId=:siteId) and (e.editorKey=:editorKey)");
+            q.setString("siteId", site.getSiteId());
+            q.setString("editorKey", editorKey);
 
-			items = q.list();
-		} catch (Exception ex) {
-			logger.debug("Unable to get editor item from database ", ex);
-			throw new EditorException(
-					"Unable to get editor item from database", ex);
-		}
+            items = q.list();
+        } catch (Exception ex) {
+            logger.debug("Unable to get editor item from database ", ex);
+            throw new EditorException(
+                    "Unable to get editor item from database", ex);
+        }
 
-		return items;
-	}    
+        return items;
+    }    
     
     public static void deleteEditor(Editor ed) throws
         EditorException {
@@ -184,7 +183,7 @@ public class DbUtil {
             q.setString("siteId", site.getSiteId());
 
             @SuppressWarnings("unchecked")
-			List<Editor> result = q.list();
+            List<Editor> result = q.list();
             if (result != null && (result.size() != 0)) {
                 items = result;
             }
@@ -218,7 +217,7 @@ public class DbUtil {
             q.setString("language", lang);
 
             @SuppressWarnings("unchecked")
-			List<Editor> result = q.list();
+            List<Editor> result = q.list();
             if (result != null && (result.size() != 0)) {
                 items = result;
             }
@@ -248,19 +247,19 @@ public class DbUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
             try {
-            	Query q = session.createQuery("from " + Editor.class.getName() +" e where e.siteId=:siteId and e.editorKey=:editorKey");
-            		q.setString("siteId", site.getSiteId());
-            		q.setString("editorKey", editorKey);
-            		//q.setString("language", language);
-            		@SuppressWarnings("unchecked")
-					Collection<Editor> edits=q.list();
-            		for (Iterator iterator = edits.iterator(); iterator.hasNext();) {
-        				Editor editor = (Editor) iterator.next();
-        				if (editor.getLanguage().equalsIgnoreCase(language) && !"".equalsIgnoreCase(editor.getBody())){
-        					item = editor;
-        					break;
-        				}
-        			}
+                Query q = session.createQuery("from " + Editor.class.getName() +" e where e.siteId=:siteId and e.editorKey=:editorKey");
+                    q.setString("siteId", site.getSiteId());
+                    q.setString("editorKey", editorKey);
+                    //q.setString("language", language);
+                    @SuppressWarnings("unchecked")
+                    Collection<Editor> edits=q.list();
+                    for (Iterator iterator = edits.iterator(); iterator.hasNext();) {
+                        Editor editor = (Editor) iterator.next();
+                        if (editor.getLanguage().equalsIgnoreCase(language) && !"".equalsIgnoreCase(editor.getBody())){
+                            item = editor;
+                            break;
+                        }
+                    }
             }
             catch (ObjectNotFoundException ex1) {
                 logger.error("DbUtil:getEditor:Unable to get Editor item", ex1);
@@ -280,11 +279,11 @@ public class DbUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
             try {
-            	Query q = session.createQuery("from " + Editor.class.getName() +" e where e.siteId=:siteId and e.editorKey=:editorKey and e.language=:language");
-            		q.setString("siteId", siteId);
-            		q.setString("editorKey", editorKey);
-            		q.setString("language", language);
-            		item = (Editor)q.uniqueResult();
+                Query q = session.createQuery("from " + Editor.class.getName() +" e where e.siteId=:siteId and e.editorKey=:editorKey and e.language=:language");
+                    q.setString("siteId", siteId);
+                    q.setString("editorKey", editorKey);
+                    q.setString("language", language);
+                    item = (Editor)q.uniqueResult();
             }
             catch (ObjectNotFoundException ex1) {
                 logger.error("DbUtil:getEditor:Unable to get Editor item", ex1);
@@ -313,12 +312,12 @@ public class DbUtil {
             q.setInteger("orderIndex", new Integer(orderIndex));
 
             @SuppressWarnings("unchecked")
-			List<Editor> result = q.list();
+            List<Editor> result = q.list();
             if (result != null && (result.size() != 0)) {
-            	for (Editor editor : result) {
+                for (Editor editor : result) {
                     item = editor;
                     break;
-				}
+                }
             }
             else {
                 item = null;
@@ -352,9 +351,9 @@ public class DbUtil {
             q.setString("language", language);
 
             @SuppressWarnings("unchecked")
-			List<Editor> result = q.list();
+            List<Editor> result = q.list();
             if (result != null && (result.size() != 0)) {
-            	item = result.get(0);
+                item = result.get(0);
             }
             else {
                 item = null;
@@ -414,7 +413,7 @@ public class DbUtil {
 //beginTransaction();
             for (Editor editor : editors) {
                 session.update(editor);
-			}
+            }
             //tx.commit();
         }
         catch (Exception ex) {
@@ -494,22 +493,22 @@ public class DbUtil {
         List<Object[]> res = PersistenceManager.getSession().createSQLQuery(stat).list();
         for(Object[] entry:res)
         {
-        	String editorBody = PersistenceManager.getString(entry[0]);
-        	String editorLanguage = PersistenceManager.getString(entry[1]);
-            	
-        	if ("".equals(editorBody))
-        		continue; // ignore this one
-            	
-        	if (editorLanguage.equalsIgnoreCase(language))
-        		return editorBody;
-        	
-        	if (editorLanguage.equalsIgnoreCase("en"))
-        		bodyEn = editorBody;
-        	else
-        		bodyOther = editorBody;
+            String editorBody = PersistenceManager.getString(entry[0]);
+            String editorLanguage = PersistenceManager.getString(entry[1]);
+                
+            if ("".equals(editorBody))
+                continue; // ignore this one
+                
+            if (editorLanguage.equalsIgnoreCase(language))
+                return editorBody;
+            
+            if (editorLanguage.equalsIgnoreCase("en"))
+                bodyEn = editorBody;
+            else
+                bodyOther = editorBody;
         }
         if (bodyEn != null)
-        	return bodyEn;
+            return bodyEn;
         return bodyOther;
     }
     
@@ -560,8 +559,8 @@ public class DbUtil {
      * @throws EditorException
      */
     public static String getEditorBodyFiltered(Site site, String editorKey, String language) throws EditorException {
-    	String body = getEditorBody(site, editorKey, language);
-    	return DgUtil.cleanHtmlTags(body);
+        String body = getEditorBody(site, editorKey, language);
+        return DgUtil.cleanHtmlTags(body);
     }
 
     /**
@@ -591,14 +590,14 @@ public class DbUtil {
             q.setString("language", language);
 
             @SuppressWarnings("unchecked")
-			List<String> result = q.list();
+            List<String> result = q.list();
             if (result != null && (result.size() != 0)) {
-            	for (String editorTitle : result) {
-            		if (editorTitle != null){
-    					title = editorTitle;
-    					break;
-            		}
-				}
+                for (String editorTitle : result) {
+                    if (editorTitle != null){
+                        title = editorTitle;
+                        break;
+                    }
+                }
 //                Iterator iter = result.iterator();
 //                while (iter.hasNext()) {
 //                    Object item = iter.next();

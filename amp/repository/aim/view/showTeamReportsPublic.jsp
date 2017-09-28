@@ -430,15 +430,14 @@ function submitForm(action){
 																				<td align="center" class="report_inside"
 																					style="font-size: 11px;" bgcolor="${color}"><c:forEach
 																						var="hierarchy" items="${report.hierarchies}">
-																						<digi:trn
-																							key="aim:report:${hierarchy.column.columnName}">${hierarchy.column.columnName}</digi:trn>
+																						<digi:colNameTrn>${hierarchy.column.columnName}</digi:colNameTrn>
+
 																						<br />
 																					</c:forEach>&nbsp;</td>
 																				<td align="center" class="report_inside"
 																					style="font-size: 11px;" bgcolor="${color}"><c:forEach
 																						var="column" items="${report.columns}">
-																						<digi:trn
-																							key="aim:report:${column.column.columnName}">${column.column.columnName}</digi:trn>
+																						<digi:colNameTrn>${column.column.columnName}</digi:colNameTrn>
 																						<br />
 																					</c:forEach></td>
 																				<td align="center" class="report_inside"
@@ -460,7 +459,7 @@ function submitForm(action){
 																						<c:set target="${urlParams}" property="event" value="edit" />
 
 																						<a href="${reportLink}"
-						                                								onclick="return popup(this,'');" style="padding-right: 5px;" title="<digi:trn>Click here to view the NiReport in Saiku</digi:trn>">
+						                                								onclick="return popup(this,'');" style="padding-right: 5px;" title="<digi:trn>Click here to view the report</digi:trn>">
 						                                								<img src= "/TEMPLATE/ampTemplate/saikuui_nireports/images/saiku.png" border="0" /></a>
 																						
 																						<c:set var="showExportExcelSetting" scope="page" value="true"/>

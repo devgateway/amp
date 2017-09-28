@@ -66,10 +66,9 @@ module.exports = {
     }
 
     var marker = null;
-
     //Try and show icons if looking at sectors
     if (self.structureMenuModel.get('filterVertical') === 'Primary Sector' &&
-      self.rawData.features.length < self.MAX_NUM_FOR_ICONS) {
+      self.rawData.features.length < self.maxNumberOfIcons) {
 
       var filterVertical = self.structureMenuModel.get('filterVertical');
       var sectorCode = 0; // 0 is 'various sectors icon'
@@ -86,11 +85,11 @@ module.exports = {
         console.warn('markers not done loading :(, missing feature markers[0]', markers[0]);
       }
 
-      //icons need to be abit bigger than plain circles, so bump up by 2
+      //icons need to be abit bigger than plain circles, so bump up by 2      
+      var icon = self.structureMenuModel.iconMappings[sectorCode] || self.structureMenuModel.iconMappings[self.structureMenuModel.DEFAULT_ICON_CODE];      
       marker = new L.circleDivIcon(Math.max(18, size + 2), {
         className: 'marker-cluster ',
-        html: '<img src="img/map-icons/' +
-          self.structureMenuModel.iconMappings[sectorCode] +
+        html: '<img src="img/map-icons/' + icon +
           '"><div class="text">' + markers.length + '</div>',
         color: '#444',
         fillColor: '#fff',

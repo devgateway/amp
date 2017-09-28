@@ -2,6 +2,7 @@ package org.dgfoundation.amp.nireports;
 
 import java.math.BigDecimal;
 
+import org.apache.commons.collections.ComparatorUtils;
 import org.dgfoundation.amp.newreports.ReportSettings;
 
 /**
@@ -10,18 +11,19 @@ import org.dgfoundation.amp.newreports.ReportSettings;
  *
  */
 public interface NumberedCell extends Comparable {
-	
-	public BigDecimal getAmount();
-	public NiPrecisionSetting getPrecision();
-	
-	/**
-	 * whether this cell should respond be scaled according to {@link ReportSettings#getUnitsOption()}
-	 */
-	public boolean isScalableByUnits();
-	
-	@Override
-	public default int compareTo(Object oth) {
-		NumberedCell other = (NumberedCell) oth;
-		return getAmount().compareTo(other.getAmount());
-	}
+    
+    public BigDecimal getAmount();
+    public NiPrecisionSetting getPrecision();
+    
+    /**
+     * whether this cell should respond be scaled according to {@link ReportSettings#getUnitsOption()}
+     */
+    public boolean isScalableByUnits();
+    
+    @Override
+    public default int compareTo(Object oth) {
+        NumberedCell other = (NumberedCell) oth;
+        
+        return ComparatorUtils.nullLowComparator(null).compare(getAmount(), other.getAmount());
+    }
 }

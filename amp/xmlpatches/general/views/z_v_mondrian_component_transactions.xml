@@ -23,7 +23,7 @@
 			    CREATE OR REPLACE VIEW v_mondrian_component_transactions AS
 			    
 SELECT
-	f.activity_id AS amp_activity_id, f.amp_component_funding_id, 
+	aac.amp_activity_id AS amp_activity_id, f.amp_component_funding_id, 
 	f.amp_component_id AS amp_component_id, 
 	COALESCE(f.rep_organization_id, 999999999) AS component_organisation_id,
 	f.transaction_type, f.adjustment_type, 
@@ -42,7 +42,7 @@ SELECT
 
 FROM
 	amp_component_funding f, amp_activity_components aac
-WHERE f.activity_id = aac.amp_activity_id AND f.amp_component_id = aac.amp_component_id
+WHERE f.amp_component_id = aac.amp_component_id
 
 UNION ALL
 

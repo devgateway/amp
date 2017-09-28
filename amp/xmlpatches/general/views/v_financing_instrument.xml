@@ -18,18 +18,33 @@
 	</trigger> 
 	<apply>
 		<script>
-			<lang delimiter=";" type="postgres">
+			<lang delimiter=";" type="postgres"><![CDATA[
 				DROP VIEW IF EXISTS v_financing_instrument CASCADE;
-			   	CREATE OR REPLACE VIEW v_financing_instrument AS
-			   		SELECT f.amp_activity_id, val.category_value, f.financing_instr_category_value AS id
-			   			FROM amp_funding f
-			   				JOIN amp_category_value val ON f.financing_instr_category_value = val.id
-			   		UNION
-			   		SELECT eu.amp_activity_id, val.category_value, eu_con.financing_instr_category_value AS id
-			   			FROM amp_eu_activity eu 
-			   				JOIN amp_eu_activity_contributions eu_con ON eu_con.eu_activity_id = eu.id
-			   				JOIN amp_category_value val ON eu_con.financing_instr_category_value = val.id;
-			</lang>
+				CREATE OR REPLACE VIEW v_financing_instrument AS
+				  SELECT f.amp_activity_id, val.category_value,
+					f.financing_instr_category_value AS id,
+					f.type_of_assistance_category_va as terms_assist_id,
+					f.financing_instr_category_value as financing_instrument_id,
+					f.amp_donor_org_id as donor_org_id,
+					f.mode_of_payment_category_va as mode_of_payment_id,
+					f.funding_status_category_va as funding_status_id,
+					f.agreement as agreement_id,
+					f.amp_funding_id as funding_id
+				  FROM amp_funding f
+					JOIN amp_category_value val ON f.financing_instr_category_value = val.id
+				  UNION
+				  SELECT eu.amp_activity_id, val.category_value, eu_con.financing_instr_category_value AS id,
+					null::bigint as terms_assist_id,
+					null::bigint as financing_instrument_id,
+					null::bigint as donor_org_id,
+					null::bigint as mode_of_payment_id,
+					null::bigint as funding_status_id,
+					null::bigint as agreement_id,
+					null::bigint as funding_id
+				  FROM amp_eu_activity eu
+					JOIN amp_eu_activity_contributions eu_con ON eu_con.eu_activity_id = eu.id
+					JOIN amp_category_value val ON eu_con.financing_instr_category_value = val.id;
+			]]></lang>
 		</script>
 	</apply>
 </tns:patch>

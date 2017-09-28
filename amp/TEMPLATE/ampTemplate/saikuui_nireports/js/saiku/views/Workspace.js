@@ -261,8 +261,14 @@ var Workspace = Backbone.View
 					
 				//this.adjust();
 				//this.switch_view_state(this.viewState, true);
-					
-				self.query.run(true);			
+			    window.currentFilter.loaded.done(function() {
+		            var auxFilters = self.query.get('filters');			            
+		            window.currentFilter.deserialize({filters: auxFilters}, {
+		            	silent : true
+		            });
+		            var filterObject = window.currentFilter.serialize();
+		            self.query.run(true, null,filterObject.filters ||{} );	
+	            });
 				Saiku.i18n.translate();
 			},
 

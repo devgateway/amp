@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.google.common.collect.ImmutableMap;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -58,7 +59,6 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.AdvancedReportUtil;
 import org.digijava.module.aim.util.AmpMath;
-import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -79,41 +79,77 @@ import com.google.common.collect.HashBiMap;
 public class ReportWizardAction extends MultiAction {
 
     public static final String MULTILINGUAL_REPORT_PREFIX = "multilingual_report";
-	private static Set<String> COLUMNS_IGNORED_IN_REPORT_WIZARD = new HashSet<>(Arrays.asList(ColumnConstants.EXPENDITURE_CLASS));
+
+    private static final Map<String, Integer> ME_COLUMNS_ORDER = new HashMap<>();
+    static {
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_NAME, 1);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_CODE, 2);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_SECTOR, 3);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_DESCRIPTION, 4);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_TYPE, 5);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_CREATION_DATE, 6);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_LOGFRAME_CATEGORY, 7);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_BASE_VALUE, 8);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_BASE_DATE, 9);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_BASE_COMMENT, 10);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_TARGET_VALUE, 11);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_TARGET_DATE, 12);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_TARGET_COMMENT, 13);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_REVISED_TARGET_VALUE, 14);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_REVISED_TARGET_DATE, 15);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_REVISED_TARGET_COMMENT, 16);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_ACTUAL_VALUE, 17);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_ACTUAL_DATE, 18);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_ACTUAL_COMMENT, 19);
+        ME_COLUMNS_ORDER.put(ColumnConstants.INDICATOR_RISK, 20);
+    }
+
+    private static final Comparator<AmpColumns> ME_COLS_COMPARATOR =
+            Comparator.comparing(c -> ME_COLUMNS_ORDER.getOrDefault(c.getColumnName(), 999));
+
+    /**
+     * This structure maps columns from different report schemas to FM entries. For example one FM entry 'Region'
+     * controls the visibility of 'Region' column from donor reports and 'Regional Region' from regional reports.
+     */
+    private static final Map<String, String> COLUMN_TO_FM_FIELD_MAP = new ImmutableMap.Builder<String, String>()
+            .put(ColumnConstants.REGIONAL_REGION, ColumnConstants.REGION)
+            .build();
+
+    private static Set<String> COLUMNS_IGNORED_IN_REPORT_WIZARD = new HashSet<>(Arrays.asList(ColumnConstants.EXPENDITURE_CLASS));
     
-    private static Logger logger 		= Logger.getLogger(ReportWizardAction.class);
+    private static Logger logger        = Logger.getLogger(ReportWizardAction.class);
 
     public final static Map<String, Long> reportTypesMap = new HashMap<String, Long>()
-    	{
-    		{
-    			put("donor", new Long(ArConstants.DONOR_TYPE));
-    			put("regional", new Long(ArConstants.REGIONAL_TYPE));
-    			put("component", new Long(ArConstants.COMPONENT_TYPE));
-    			put("contribution", new Long(ArConstants.CONTRIBUTION_TYPE));
-    			put("pledge", new Long(ArConstants.PLEDGES_TYPE));
-    		}
-    	};
-    	public static HashBiMap<String, Long> reportTypesBiMap = HashBiMap.create(reportTypesMap);    
+        {
+            {
+                put("donor", new Long(ArConstants.DONOR_TYPE));
+                put("regional", new Long(ArConstants.REGIONAL_TYPE));
+                put("component", new Long(ArConstants.COMPONENT_TYPE));
+                put("contribution", new Long(ArConstants.CONTRIBUTION_TYPE));
+                put("pledge", new Long(ArConstants.PLEDGES_TYPE));
+            }
+        };
+        public static HashBiMap<String, Long> reportTypesBiMap = HashBiMap.create(reportTypesMap);    
     
     
     public ActionForward modePrepare(ActionMapping mapping, ActionForm form,
                                      HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
     {
-    	//if not logged in we have to check if Reporting/Public Report Generator is enabled if not 
-    	//we redirect to login page
-    	if(request.getSession().getAttribute(Constants.CURRENT_MEMBER) == null && !FeaturesUtil.isVisibleModule("Public Report Generator")) {
-    		return mapping.findForward("index");
-    	}
-    	
+        //if not logged in we have to check if Reporting/Public Report Generator is enabled if not 
+        //we redirect to login page
+        if(request.getSession().getAttribute(Constants.CURRENT_MEMBER) == null && !FeaturesUtil.isVisibleModule("Public Report Generator")) {
+            return mapping.findForward("index");
+        }
+        
         if (request.getParameter("repType")!=null && request.getParameter("repType").length()>0)
             return this.getJSONrepType(mapping, form, request, response);
 
-        ReportWizardForm myForm		= (ReportWizardForm) form;
+        ReportWizardForm myForm     = (ReportWizardForm) form;
 
         myForm.setDuplicateName(false);
         myForm.setnoReportNameSupplied(false);
 
-        TeamMember teamMember		=(TeamMember)request.getSession().getAttribute( Constants.CURRENT_MEMBER );
+        TeamMember teamMember       =(TeamMember)request.getSession().getAttribute( Constants.CURRENT_MEMBER );
         PermissionUtil.putInScope(request.getSession(), GatePermConst.ScopeKeys.CURRENT_MEMBER, teamMember);
 
         return this.modeSelect(mapping, form, request, response);
@@ -122,17 +158,17 @@ public class ReportWizardAction extends MultiAction {
     public ActionForward modeSelect(ActionMapping mapping, ActionForm form,
                                     HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
 
-        ReportWizardForm myForm		= (ReportWizardForm) form;
+        ReportWizardForm myForm     = (ReportWizardForm) form;
 
         //if ( request.getParameter("onepager")!=null && "true".equals(request.getParameter("onepager")) )
-        //	myForm.setOnePager(true);
-        String onePagerGS	= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.REPORT_GENERATOR_ONE_PAGER);
+        //  myForm.setOnePager(true);
+        String onePagerGS   = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.REPORT_GENERATOR_ONE_PAGER);
         if ("true".equals(onePagerGS) )
             myForm.setOnePager(true);
         else
             myForm.setOnePager(false);
-		
-		/* This gets called for new reports/tabs */
+        
+        /* This gets called for new reports/tabs */
         if ( request.getParameter("reset")!=null && "true".equals(request.getParameter("reset")) )
         {
             request.setAttribute(ReportContextData.BACKUP_REPORT_ID_KEY, ReportContextData.REPORT_ID_REPORT_WIZARD);
@@ -171,8 +207,8 @@ public class ReportWizardAction extends MultiAction {
             }
             request.setAttribute(ReportContextData.BACKUP_REPORT_ID_KEY, reportWizardId);
         }
-		
-		/* If there's no report title in the request then we decide to show the wizard */
+        
+        /* If there's no report title in the request then we decide to show the wizard */
         if (request.getParameter("reportTitle") == null){
             if ( "true".equals( request.getParameter("tab") ) )
                 myForm.setDesktopTab(true);
@@ -184,9 +220,9 @@ public class ReportWizardAction extends MultiAction {
             // NOTE since multilingual report names have been introduced, this is a dummy, ignored parameter - only used as a flag
             // any request without a "reportTitle" parameter will result in the wizard popin being rendered!
             try{
-//				if ( "true".equalsIgnoreCase(request.getParameter("dynamicSaveReport")) || "true".equals(request.getParameter("forceNameOverwrite"))) 
-//					return this.modeDynamicSave(mapping, form, request, response);
-//				else
+//              if ( "true".equalsIgnoreCase(request.getParameter("dynamicSaveReport")) || "true".equals(request.getParameter("forceNameOverwrite"))) 
+//                  return this.modeDynamicSave(mapping, form, request, response);
+//              else
                 return this.modeSave(mapping, form, request, response, !"true".equals(request.getParameter("forceNameOverwrite")));
             }
             catch(DuplicateReportNameException e) {
@@ -224,7 +260,7 @@ public class ReportWizardAction extends MultiAction {
     public void modeReset(ActionMapping mapping, ActionForm form,
                           HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
 
-        ReportWizardForm myForm		= (ReportWizardForm) form;
+        ReportWizardForm myForm     = (ReportWizardForm) form;
 
         myForm.setReportId(null);
         myForm.setReportTitle( null );
@@ -243,6 +279,7 @@ public class ReportWizardAction extends MultiAction {
         myForm.setPublicReport(false);
         myForm.setWorkspaceLinked(false);
         myForm.setAllowEmptyFundingColumns(false);
+        myForm.setSplitByFunding(false);
         myForm.setUseFilters(false);
         myForm.setBudgetExporter(false);
         myForm.setReportCategory(new Long(0));
@@ -255,7 +292,7 @@ public class ReportWizardAction extends MultiAction {
     public ActionForward modeShow(ActionMapping mapping, ActionForm form,
                                   HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
 
-        ReportWizardForm myForm		= (ReportWizardForm) form;
+        ReportWizardForm myForm     = (ReportWizardForm) form;
 
         String onePager = "";
         if ( myForm.getOnePager() )
@@ -302,7 +339,7 @@ public class ReportWizardAction extends MultiAction {
         }
 
         if ( ! "true".equals(request.getAttribute("editedBudgetExporter")) ) {
-            String budgetExporter		= request.getParameter("budgetExporter");
+            String budgetExporter       = request.getParameter("budgetExporter");
             if ( "true".equals(budgetExporter) )
                 myForm.setBudgetExporter(true);
             else
@@ -367,7 +404,7 @@ public class ReportWizardAction extends MultiAction {
 
         modeReset(mapping, form, request, response);
 
-        ReportWizardForm myForm		= (ReportWizardForm) form;
+        ReportWizardForm myForm     = (ReportWizardForm) form;
         Session session = PersistenceManager.getRequestDBSession();
 
         Long reportId = Long.parseLong( request.getParameter("editReportId") );
@@ -385,6 +422,7 @@ public class ReportWizardAction extends MultiAction {
         myForm.setWorkspaceLinked(ampReport.getWorkspaceLinked());
         myForm.setHideActivities( ampReport.getHideActivities() );
         myForm.setAllowEmptyFundingColumns( ampReport.getAllowEmptyFundingColumns() );
+        myForm.setSplitByFunding(ampReport.getSplitByFunding());
         myForm.setAlsoShowPledges(ampReport.getAlsoShowPledges());
         if(ampReport.getReportCategory() !=null){
             myForm.setReportCategory(ampReport.getReportCategory().getId());
@@ -403,18 +441,18 @@ public class ReportWizardAction extends MultiAction {
         myForm.setReportType(reportTypesBiMap.inverse().get(ampReport.getType()));
         myForm.setReportBeingEdited(true);
 
-        TreeSet<AmpReportColumn> cols		= new TreeSet<AmpReportColumn> ( new FieldsComparator() );
-        TreeSet<AmpReportHierarchy> hiers	= new TreeSet<AmpReportHierarchy> ( new FieldsComparator() );
-        TreeSet<AmpReportMeasures> meas		= new TreeSet<AmpReportMeasures> ( new FieldsComparator() );
+        TreeSet<AmpReportColumn> cols       = new TreeSet<AmpReportColumn> ( new FieldsComparator() );
+        TreeSet<AmpReportHierarchy> hiers   = new TreeSet<AmpReportHierarchy> ( new FieldsComparator() );
+        TreeSet<AmpReportMeasures> meas     = new TreeSet<AmpReportMeasures> ( new FieldsComparator() );
 
         cols.addAll( ampReport.getColumns() );
         meas.addAll( ampReport.getMeasures() );
         if ( ampReport.getHierarchies()!=null )
             hiers.addAll( ampReport.getHierarchies() );
 
-        myForm.setSelectedColumns( 		new Long[cols.size()] );
-        myForm.setSelectedHierarchies( 	new Long[hiers.size()] );
-        myForm.setSelectedMeasures( 	new Long[meas.size()] );
+        myForm.setSelectedColumns(      new Long[cols.size()] );
+        myForm.setSelectedHierarchies(  new Long[hiers.size()] );
+        myForm.setSelectedMeasures(     new Long[meas.size()] );
 
         this.getFieldIds(myForm.getSelectedColumns(), cols);
         this.getFieldIds(myForm.getSelectedHierarchies(), hiers);
@@ -423,15 +461,15 @@ public class ReportWizardAction extends MultiAction {
         AmpARFilter filter = ReportContextData.getFromRequest().loadOrCreateFilter(true, ampReport);
         logger.info("loaded filters: " + filter.toString());
 
-        Set<AmpFilterData> fdSet	= ampReport.getFilterDataSet();
+        Set<AmpFilterData> fdSet    = ampReport.getFilterDataSet();
         if ( fdSet != null && fdSet.size() > 0 ) {
-//			AmpARFilter filter		= new AmpARFilter();
-//			FilterUtil.populateFilter(ampReport, filter);
-//			FilterUtil.prepare(request, filter);
-//			ReportContextData.getFromRequest().setSerializedFilter(filter);
-//			ReportsFilterPickerForm rfpForm	= (ReportsFilterPickerForm)TagUtil.getForm(request, "aimReportsFilterPickerForm");
-//			ReportsFilterPicker.modeRefreshDropdowns(mapping, rfpForm, request, response, getServlet().getServletContext() );
-//			FilterUtil.populateForm(rfpForm, filter, null);
+//          AmpARFilter filter      = new AmpARFilter();
+//          FilterUtil.populateFilter(ampReport, filter);
+//          FilterUtil.prepare(request, filter);
+//          ReportContextData.getFromRequest().setSerializedFilter(filter);
+//          ReportsFilterPickerForm rfpForm = (ReportsFilterPickerForm)TagUtil.getForm(request, "aimReportsFilterPickerForm");
+//          ReportsFilterPicker.modeRefreshDropdowns(mapping, rfpForm, request, response, getServlet().getServletContext() );
+//          FilterUtil.populateForm(rfpForm, filter, null);
             myForm.setUseFilters(true);
         }
 
@@ -440,7 +478,7 @@ public class ReportWizardAction extends MultiAction {
 
     /**
      * handles the following 3 cases:
-     * 	1. save a brand new report (myForm.reportId == null)
+     *  1. save a brand new report (myForm.reportId == null)
      *  2. "save" over an existing report (myForm.reportId != null, saveACopy = false)
      *  3. "save as" (myForm.reportId != null, saveACopy = true)
      * @param mapping
@@ -453,30 +491,31 @@ public class ReportWizardAction extends MultiAction {
     public ActionForward modeSave(ActionMapping mapping, ActionForm form,
                                   HttpServletRequest request, HttpServletResponse response, boolean saveACopy) throws java.lang.Exception {
 
-        ReportWizardForm myForm		= (ReportWizardForm) form;
+        ReportWizardForm myForm     = (ReportWizardForm) form;
 
         boolean dynamicSaveReport = Boolean.valueOf( request.getParameter("dynamicSaveReport") );
         boolean noReportNameSupplied = Boolean.valueOf( request.getParameter("noReportNameSupplied") );
         if (noReportNameSupplied)
         {
-        	if(myForm.getRunReport()){
-        		//If we are running the report with out being saved we use a generic translatable name
-        		myForm.setReportTitle(TranslatorWorker.translateText("Dynamic report"));
-        	}else{
-        		throw new NoReportNameSuppliedException("No report name supplied");
-        	}
+            if(myForm.getRunReport()){
+                //If we are running the report with out being saved we use a generic translatable name
+                myForm.setReportTitle(TranslatorWorker.translateText("Dynamic report"));
+            }else{
+                throw new NoReportNameSuppliedException("No report name supplied");
+            }
         }
         myForm.setWorkspaceLinked(Boolean.valueOf(request.getParameter("workspaceLinked"))); //Struts for some reason ignores this field and I am tired of it
         myForm.setAlsoShowPledges(Boolean.valueOf(request.getParameter("alsoShowPledges")));
+        myForm.setSplitByFunding(Boolean.valueOf(request.getParameter("splitByFunding")));
 
-        TeamMember teamMember		=(TeamMember)request.getSession().getAttribute( Constants.CURRENT_MEMBER );
+        TeamMember teamMember       =(TeamMember)request.getSession().getAttribute( Constants.CURRENT_MEMBER );
         
         AmpTeamMember ampTeamMember = null;
         if (teamMember != null) {
-        	ampTeamMember = TeamUtil.getAmpTeamMember(teamMember.getMemberId());
+            ampTeamMember = TeamUtil.getAmpTeamMember(teamMember.getMemberId());
         }
-        Collection<AmpColumns> availableCols	= AdvancedReportUtil.getColumnList();
-        Collection<AmpMeasures> availableMeas	= AdvancedReportUtil.getMeasureList();
+        Collection<AmpColumns> availableCols    = AdvancedReportUtil.getColumnList();
+        Collection<AmpMeasures> availableMeas   = AdvancedReportUtil.getMeasureList();
 
         AmpReports ampReport = null;
         AmpReports oldReport = loadSourceReport(request);
@@ -490,12 +529,12 @@ public class ReportWizardAction extends MultiAction {
         
         String newName ;
         if (!myForm.getRunReport()){
-        	newName = MultilingualInputFieldValues.getDefaultName(AmpReports.class, "name", null, request);
-        	if (otherReportsWithSameNameExist(ampReport, newName)) {
+            newName = MultilingualInputFieldValues.getDefaultName(AmpReports.class, "name", null, request);
+            if (otherReportsWithSameNameExist(ampReport, newName)) {
                 throw new DuplicateReportNameException("a different report with the same name exists");
             }
         }else{
-        	newName = myForm.getReportTitle();
+            newName = myForm.getReportTitle();
         }
         
 
@@ -524,34 +563,35 @@ public class ReportWizardAction extends MultiAction {
             }
 
             ampReport.setAllowEmptyFundingColumns( myForm.getAllowEmptyFundingColumns());
+            ampReport.setSplitByFunding(myForm.getSplitByFunding());
             ampReport.setBudgetExporter(myForm.getBudgetExporter() != null && myForm.getBudgetExporter());
 
             ampReport.setColumns( new HashSet<AmpReportColumn>() );
             ampReport.setHierarchies( new HashSet<AmpReportHierarchy>() );
             ampReport.setMeasures( new HashSet<AmpReportMeasures>() );
 
-            AmpCategoryValue level1		= CategoryManagerUtil.getAmpCategoryValueFromDb( CategoryConstants.ACTIVITY_LEVEL_KEY , 0L);
+            AmpCategoryValue level1     = CategoryManagerUtil.getAmpCategoryValueFromDb( CategoryConstants.ACTIVITY_LEVEL_KEY , 0L);
 
             this.addFields(myForm.getSelectedColumns(), availableCols, ampReport.getColumns(), AmpReportColumn.class, level1);
             this.addFields(myForm.getSelectedHierarchies(), availableCols, ampReport.getHierarchies(), AmpReportHierarchy.class, level1);
             this.addFields(myForm.getSelectedMeasures(), availableMeas, ampReport.getMeasures(), AmpReportMeasures.class, level1);
-			
-			/* If all columns are set as hierarchies we add the Project Title column */
+            
+            /* If all columns are set as hierarchies we add the Project Title column */
             if (  ampReport.getColumns() != null && ampReport.getHierarchies() != null ) {
-                int numOfCols		= ampReport.getColumns().size();
-                int numOfHiers		= ampReport.getHierarchies().size();
+                int numOfCols       = ampReport.getColumns().size();
+                int numOfHiers      = ampReport.getHierarchies().size();
                 if ( numOfCols == numOfHiers && (ampReport.getHideActivities() == null || !ampReport.getHideActivities()) ) {
                     for ( AmpColumns tempCol: availableCols ) {
                         if ( ArConstants.COLUMN_PROJECT_TITLE.equals(tempCol.getColumnName()) ) {
                             if (!AdvancedReportUtil.isColumnAdded(ampReport.getColumns(), ArConstants.COLUMN_PROJECT_TITLE)) {
-                                AmpReportColumn titleCol			= new AmpReportColumn();
+                                AmpReportColumn titleCol            = new AmpReportColumn();
                                 titleCol.setLevel(level1);
                                 titleCol.setOrderId( new Long((ampReport.getColumns().size()+1)));
                                 titleCol.setColumn(tempCol);
                                 ampReport.getColumns().add(titleCol);
                                 break;
                             }else{
-								/*if Project Title column is already added then remove it from hierarchies list*/
+                                /*if Project Title column is already added then remove it from hierarchies list*/
                                 if(!FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.PROJECT_TITLE_HIRARCHY).equalsIgnoreCase("true"))
                                     AdvancedReportUtil.removeColumnFromHierarchies(ampReport.getHierarchies(), ArConstants.COLUMN_PROJECT_TITLE);
                                 break;
@@ -570,7 +610,7 @@ public class ReportWizardAction extends MultiAction {
 
         AmpARFilter filter = ReportContextData.getFromRequest().getFilter();
         if ( filter != null && myForm.getUseFilters()) {
-            Set<AmpFilterData> fdSet	= AmpFilterData.createFilterDataSet(ampReport, filter);
+            Set<AmpFilterData> fdSet    = AmpFilterData.createFilterDataSet(ampReport, filter);
             if ( ampReport.getFilterDataSet() == null )
                 ampReport.setFilterDataSet(fdSet);
             else {
@@ -581,9 +621,9 @@ public class ReportWizardAction extends MultiAction {
 
         modeReset(mapping, form, request, response);
         if ((request.getParameter("runReport") != null) && request.getParameter("runReport").equals("true")) {
-        	return runReport(ampReport,request,response);
+            return runReport(ampReport,request,response);
         }else{
-        	return serializeReportAndOpen(ampReport, teamMember, request, response);
+            return serializeReportAndOpen(ampReport, teamMember, request, response);
         }
     }
 /**
@@ -595,23 +635,23 @@ public class ReportWizardAction extends MultiAction {
  * @throws Exception
  */
     private ActionForward runReport(AmpReports ampReport, HttpServletRequest request, HttpServletResponse response)throws Exception {
-    	Integer reportToken = UUID.randomUUID().toString().hashCode();
-    	//Even is quite not possible to have a reportId with such a big number
-    	//we use a negative number just in case
-		if (reportToken > 0) {
-			reportToken = reportToken * (-1);
-		}
-    	MaxSizeLinkedHashMap<Integer, AmpReports> reportsList = (MaxSizeLinkedHashMap<Integer, AmpReports>)request.getSession().getAttribute("reportStack");
-    	if (reportsList == null) {
-    		reportsList = new MaxSizeLinkedHashMap<Integer, AmpReports>(Constants.MAX_REPORTS_IN_SESSION);
-    	}
-    	reportsList.put(reportToken, ampReport);
-    	request.getSession().setAttribute("reportStack", reportsList);
-        callSaikuReport(reportToken, response, "runReportToken", ampReport.hasAvailableMeasures());
-		return null;
-		
-	}
-	/**
+        Integer reportToken = UUID.randomUUID().toString().hashCode();
+        //Even is quite not possible to have a reportId with such a big number
+        //we use a negative number just in case
+        if (reportToken > 0) {
+            reportToken = reportToken * (-1);
+        }
+        MaxSizeLinkedHashMap<Integer, AmpReports> reportsList = (MaxSizeLinkedHashMap<Integer, AmpReports>)request.getSession().getAttribute("reportStack");
+        if (reportsList == null) {
+            reportsList = new MaxSizeLinkedHashMap<Integer, AmpReports>(Constants.MAX_REPORTS_IN_SESSION);
+        }
+        reportsList.put(reportToken, ampReport);
+        request.getSession().setAttribute("reportStack", reportsList);
+        callSaikuReport(reportToken, response, "runReportToken");
+        return null;
+        
+    }
+    /**
      * returns true if a report with the same name exists in the database AND that report is not going to be overwritten by the in-memory representation
      * @param ampReport
      * @return
@@ -674,26 +714,25 @@ public class ReportWizardAction extends MultiAction {
         MultilingualInputFieldValues.serialize(ampReport, "name", null, null, request);
 
         if ((request.getParameter("openReport") != null) && request.getParameter("openReport").equals("true")) {
-            boolean saiku = ampReport.hasAvailableMeasures() && ampReport.getType().intValue() != ArConstants.REGIONAL_TYPE;
-            callSaikuReport (ampReport.getAmpReportId().intValue(), response,"openReportId", saiku);
+            callSaikuReport(ampReport.getAmpReportId().intValue(), response, "openReportId");
         }
         return null;
     }
 
-	private void callSaikuReport(Integer reportId, HttpServletResponse response, String varName, boolean saiku) throws IOException {
-		PrintWriter out = response.getWriter();
-		StringBuilder responseString = new StringBuilder();
-		responseString.append(varName + "=" + reportId);
-		responseString.append(",");
-		responseString.append("saiku=" + saiku);
-		
-		out.write(responseString.toString());
-		out.flush();
-		out.close();
-	}
+    private void callSaikuReport(Integer reportId, HttpServletResponse response, String varName) throws IOException {
+        PrintWriter out = response.getWriter();
+        StringBuilder responseString = new StringBuilder();
+        responseString.append(varName + "=" + reportId);
+        responseString.append(",");
+        responseString.append("saiku=" + true);
+        
+        out.write(responseString.toString());
+        out.flush();
+        out.close();
+    }
 
     private AmpReports loadSourceReport(HttpServletRequest request) {
-        String ampReportId			= request.getParameter("reportId");
+        String ampReportId          = request.getParameter("reportId");
         String backupAmpReportId = (String) request.getSession().getAttribute("report_wizard_current_id");
 
         if (ampReportId == null || ampReportId.isEmpty())
@@ -712,83 +751,83 @@ public class ReportWizardAction extends MultiAction {
         if (filter == null)
             throw new RuntimeException("No filter object found in http Session");
 
-        Long reportId				= Long.parseLong(ampReportId);
+        Long reportId               = Long.parseLong(ampReportId);
 
         AmpReports sourceReport = reportId > 0 ? (AmpReports) PersistenceManager.getSession().load(AmpReports.class, reportId) : rcd.getReportMeta();
         return sourceReport;
     }
-//	/**
-//	 * saves a report based on an another one. In short, copies a report into a new one (with different filters, name and maybe owner). If the "new report" has the same name as the new one, it is overwritten - subject to ownership not changing
-//	 * @param mapping
-//	 * @param form
-//	 * @param request
-//	 * @param response
-//	 * @return
-//	 * @throws java.lang.Exception in case of an error or forbidden operation (like overwriting a different user's report)
-//	 */
-//	public ActionForward modeDynamicSave(ActionMapping mapping, ActionForm form, 
-//			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception { 
-//		
-//		ReportWizardForm myForm		= (ReportWizardForm) form;
-//		
-//		AmpReports sourceReport = loadSourceReport();
-//		if ( sourceReport == null )
-//			throw new Exception ("There was a problem getting access to the old report");
-//		
-//		AmpReports ampReport = ReportWizardAction.duplicateReportData(reportId, request); // make a detached copy
-//		if ( ampReport == null )
-//			throw new Exception ("There was a problem duplicating report");
+//  /**
+//   * saves a report based on an another one. In short, copies a report into a new one (with different filters, name and maybe owner). If the "new report" has the same name as the new one, it is overwritten - subject to ownership not changing
+//   * @param mapping
+//   * @param form
+//   * @param request
+//   * @param response
+//   * @return
+//   * @throws java.lang.Exception in case of an error or forbidden operation (like overwriting a different user's report)
+//   */
+//  public ActionForward modeDynamicSave(ActionMapping mapping, ActionForm form, 
+//          HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception { 
+//      
+//      ReportWizardForm myForm     = (ReportWizardForm) form;
+//      
+//      AmpReports sourceReport = loadSourceReport();
+//      if ( sourceReport == null )
+//          throw new Exception ("There was a problem getting access to the old report");
+//      
+//      AmpReports ampReport = ReportWizardAction.duplicateReportData(reportId, request); // make a detached copy
+//      if ( ampReport == null )
+//          throw new Exception ("There was a problem duplicating report");
 //
-//		
-//		if ( ampReportTitle.equals(ampReport.getName()) ) { // we need to override the report
-//			if (sourceReport.getOwnerId() == null)
-//				throw new RuntimeException("unknown owner id of source report");
-//			if (!sourceReport.getOwnerId().getAmpTeamMemId().equals(ampTeamMember.getAmpTeamMemId()))
-//			{
-//				myForm.setOverwritingForeignReport(true);
-//				throw new Exception("you are not allowed to override someone else's report");
-//			}
-//			ampReport.setAmpReportId( reportId );
-//			AmpFilterData.deleteOldFilterData( reportId );
-//		}
-//		
-//		if ( AdvancedReportUtil.checkDuplicateReportName(ampReportTitle, teamMember.getMemberId(), reportId, myForm.getDesktopTab() ) ) {
-//			myForm.setDuplicateName(true);
-//			throw new DuplicateReportNameException("The name " + ampReportTitle + " is already used by another report");
-//		}
-//		
-//		ampReport.setName( ampReportTitle );
-//		ampReport.setOwnerId( ampTeamMember );
-//		ampReport.setUpdatedDate( new Date(System.currentTimeMillis()) );
-//		ampReport.setFilterDataSet( AmpFilterData.createFilterDataSet(ampReport, filter) );
-//		
-//		return serializeReportAndOpen(ampReport, teamMember, mapping, myForm, false, request, response);
-//	}
+//      
+//      if ( ampReportTitle.equals(ampReport.getName()) ) { // we need to override the report
+//          if (sourceReport.getOwnerId() == null)
+//              throw new RuntimeException("unknown owner id of source report");
+//          if (!sourceReport.getOwnerId().getAmpTeamMemId().equals(ampTeamMember.getAmpTeamMemId()))
+//          {
+//              myForm.setOverwritingForeignReport(true);
+//              throw new Exception("you are not allowed to override someone else's report");
+//          }
+//          ampReport.setAmpReportId( reportId );
+//          AmpFilterData.deleteOldFilterData( reportId );
+//      }
+//      
+//      if ( AdvancedReportUtil.checkDuplicateReportName(ampReportTitle, teamMember.getMemberId(), reportId, myForm.getDesktopTab() ) ) {
+//          myForm.setDuplicateName(true);
+//          throw new DuplicateReportNameException("The name " + ampReportTitle + " is already used by another report");
+//      }
+//      
+//      ampReport.setName( ampReportTitle );
+//      ampReport.setOwnerId( ampTeamMember );
+//      ampReport.setUpdatedDate( new Date(System.currentTimeMillis()) );
+//      ampReport.setFilterDataSet( AmpFilterData.createFilterDataSet(ampReport, filter) );
+//      
+//      return serializeReportAndOpen(ampReport, teamMember, mapping, myForm, false, request, response);
+//  }
 
     private void addFields (Long [] sourceVector, Collection<?> availableFields, Collection container,
                             Class<?> reportFieldClass, AmpCategoryValue level ) throws Exception {
         if ( sourceVector == null )
             return;
         for (int i=0; i<sourceVector.length; i++ ) {
-            Object reportField			= reportFieldClass.newInstance();
-            Object [] param1			= new Object[1];
-            param1[0]					= level;
+            Object reportField          = reportFieldClass.newInstance();
+            Object [] param1            = new Object[1];
+            param1[0]                   = level;
             invokeSetterForBeanPropertyWithAnnotation(reportField, Level.class, param1 );
             //rc.setLevel(level);
-            Object [] param2			= new Object[1];
-            param2[0]					=  new Long(i+1);
+            Object [] param2            = new Object[1];
+            param2[0]                   =  new Long(i+1);
             invokeSetterForBeanPropertyWithAnnotation(reportField, Order.class, param2 );
             //rc.setOrderId(""+i);
 
-            Iterator<?> iter	= availableFields.iterator();
-            boolean foundCol	= false;
+            Iterator<?> iter    = availableFields.iterator();
+            boolean foundCol    = false;
             while( iter.hasNext() ) {
-                Object field			= iter.next();
+                Object field            = iter.next();
                 if ( sourceVector[i].equals( invokeGetterForBeanPropertyWithAnnotation(field, Identificator.class, new Object[0]) ) ) {
-                    Object [] param3			= new Object[1];
-                    param3[0]					= field;
+                    Object [] param3            = new Object[1];
+                    param3[0]                   = field;
                     invokeSetterForBeanPropertyWithAnnotation(reportField, ColumnLike.class, param3);
-                    foundCol					= true;
+                    foundCol                    = true;
                     break;
                 }
             }
@@ -798,13 +837,13 @@ public class ReportWizardAction extends MultiAction {
     }
 
     private void getFieldIds (Long [] destVector, Collection container ) throws Exception {
-        Iterator<?> iter	= container.iterator();
-        int i				= 0;
+        Iterator<?> iter    = container.iterator();
+        int i               = 0;
         while ( iter.hasNext() ) {
-            Object reportField	= iter.next();
-            Object field		= invokeGetterForBeanPropertyWithAnnotation(reportField, ColumnLike.class, new Object[0]);
-            Object id			= invokeGetterForBeanPropertyWithAnnotation(field, Identificator.class,new Object[0]);
-            destVector[i++]		= (Long)id;
+            Object reportField  = iter.next();
+            Object field        = invokeGetterForBeanPropertyWithAnnotation(reportField, ColumnLike.class, new Object[0]);
+            Object id           = invokeGetterForBeanPropertyWithAnnotation(field, Identificator.class,new Object[0]);
+            destVector[i++]     = (Long)id;
         }
     }
 
@@ -818,7 +857,6 @@ public class ReportWizardAction extends MultiAction {
         Collection<AmpFieldsVisibility> ampAllFields = FeaturesUtil.getAMPFieldsVisibility();
         Collection<AmpColumns> allAmpColumns = formColumns;
 
-        TreeSet<String> ampThemes = new TreeSet<String>();
         TreeSet<AmpColumnsOrder> ampThemesOrdered = new TreeSet<AmpColumnsOrder>();
 
         ArrayList<AmpColumnsOrder> ampColumnsOrder = (ArrayList<AmpColumnsOrder>) ampContext.getAttribute("ampColumnsOrder");
@@ -834,10 +872,13 @@ public class ReportWizardAction extends MultiAction {
 
         for(AmpColumns ampColumn:allAmpColumns)
         {
-            if (columnIgnoredInReportWizard(ampColumn.getColumnName()))
-            	continue;
+            String columnName = ampColumn.getColumnName();
+            if (columnIgnoredInReportWizard(columnName)) {
+                continue;
+            }
 
-            AmpFieldsVisibility ampFieldVisibility = ampAllFieldsByName.get(ampColumn.getColumnName());
+            String fmFieldName = COLUMN_TO_FM_FIELD_MAP.getOrDefault(columnName, columnName);
+            AmpFieldsVisibility ampFieldVisibility = ampAllFieldsByName.get(fmFieldName);
             if(ampFieldVisibility == null)
                 continue;
 
@@ -853,7 +894,6 @@ public class ReportWizardAction extends MultiAction {
             ampColumnVisibilityObj.setAmpfield(ampFieldVisibility);
             ampColumnVisibilityObj.setParent((AmpFeaturesVisibility) ampFieldVisibility.getParent());
             ampColumnsVisibles.add(ampColumnVisibilityObj);
-            ampThemes.add(ampFieldVisibility.getParent().getName());
 
             if (type == ArConstants.PLEDGES_TYPE)
             {
@@ -867,13 +907,13 @@ public class ReportWizardAction extends MultiAction {
             }
             else
             {
-                AmpColumnsOrder aco = ampColumnsOrderByName.get(ampFieldVisibility.getParent().getName());
+                AmpColumnsOrder aco = ampColumnsOrderByName.get(getThemeName(ampFieldVisibility.getParent().getName()));
                 if (aco == null)
                     continue;
 
                 if (!aco.getColumnName().equalsIgnoreCase(ArConstants.PLEDGES_COLUMNS) && !aco.getColumnName().equalsIgnoreCase(ArConstants.PLEDGES_CONTACTS_1)
                         && !aco.getColumnName().equalsIgnoreCase(ArConstants.PLEDGES_CONTACTS_2)){
-                    ampThemesOrdered.add(aco);
+                     ampThemesOrdered.add(aco);
                 }
             }
         }
@@ -888,15 +928,18 @@ public class ReportWizardAction extends MultiAction {
             for (AmpColumnsVisibility acv:ampColumnsVisibles)
             {
                 //iterations2 ++;
-                if(themeName.compareTo(acv.getParent().getName()) == 0)
+                if(themeName.equals(getThemeName(acv.getParent().getName())))
                 {
                     aux.add( acv.getAmpColumn() );
-                    added	= true;
+                    added   = true;
                 }
 
             }
             if(added)
             {
+                if (themeName.equals("M & E")) {
+                    aux.sort(ME_COLS_COMPARATOR);
+                }
                 ampTreeColumn.put(themeName, aux);
             }
         }
@@ -904,12 +947,24 @@ public class ReportWizardAction extends MultiAction {
         return ampTreeColumn;
     }
 
+    /**
+     * Get theme name from feature name. Usually theme name matches feature name, but in some cases it was not
+     * possible to do so. Indicator columns are grouped under /Monitoring & Evaluation/M & E/Reports, in this case
+     * this mechanism allows to swap Reports with M & E.
+     *
+     * @param featureName feature name
+     * @return theme name
+     */
+    private String getThemeName(String featureName) {
+        return "Reports".equals(featureName) ? "M & E" : featureName;
+    }
+
     public static void invokeSetterForBeanPropertyWithAnnotation (Object beanObj, Class annotationClass, Object [] params ) throws Exception {
-        Class myClass		= beanObj.getClass();
-        Field[] fields		= myClass.getDeclaredFields();
+        Class myClass       = beanObj.getClass();
+        Field[] fields      = myClass.getDeclaredFields();
         for (int i=0; i<fields.length; i++) {
             if ( fields[i].getAnnotation(annotationClass) != null) {
-                PropertyDescriptor beanProperty	= new PropertyDescriptor(fields[i].getName(), myClass);
+                PropertyDescriptor beanProperty = new PropertyDescriptor(fields[i].getName(), myClass);
                 beanProperty.getWriteMethod().invoke(beanObj, params);
                 return;
             }
@@ -920,11 +975,11 @@ public class ReportWizardAction extends MultiAction {
     }
 
     public static Object invokeGetterForBeanPropertyWithAnnotation (Object beanObj, Class annotationClass, Object [] params ) throws Exception {
-        Class myClass		= beanObj.getClass();
-        Field[] fields		= myClass.getDeclaredFields();
+        Class myClass       = beanObj.getClass();
+        Field[] fields      = myClass.getDeclaredFields();
         for (int i=0; i<fields.length; i++) {
             if ( fields[i].getAnnotation(annotationClass) != null) {
-                PropertyDescriptor beanProperty	= new PropertyDescriptor(fields[i].getName(), myClass);
+                PropertyDescriptor beanProperty = new PropertyDescriptor(fields[i].getName(), myClass);
                 return beanProperty.getReadMethod().invoke(beanObj, params);
             }
         }
@@ -940,20 +995,20 @@ public class ReportWizardAction extends MultiAction {
      * @param request
      * @return
      */
-	public static AmpReports loadAmpReport(Long ampReportId, HttpServletRequest request)
-	{
-		AmpReports ampReport	= null;
-		try {
-			if (ampReportId > 0)
-				ampReport	=  (AmpReports) PersistenceManager.getSession().load(AmpReports.class, ampReportId );
-			else 
-				ampReport	= ReportContextData.getFromRequest().getReportMeta();
-		}
-		catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-		return ampReport;
-	}
+    public static AmpReports loadAmpReport(Long ampReportId, HttpServletRequest request)
+    {
+        AmpReports ampReport    = null;
+        try {
+            if (ampReportId > 0)
+                ampReport   =  (AmpReports) PersistenceManager.getSession().load(AmpReports.class, ampReportId );
+            else 
+                ampReport   = ReportContextData.getFromRequest().getReportMeta();
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return ampReport;
+    }
 
     /**
      * detaches a report from the DB, effectively creating a new, identical one
@@ -980,13 +1035,13 @@ public class ReportWizardAction extends MultiAction {
             HashSet<AmpReportColumn> columns = new HashSet<AmpReportColumn>();
             columns.addAll( ampReport.getColumns() );
 
-            HashSet<AmpReportHierarchy> hierarchies	= new HashSet<AmpReportHierarchy>();
+            HashSet<AmpReportHierarchy> hierarchies = new HashSet<AmpReportHierarchy>();
             hierarchies.addAll( ampReport.getHierarchies() );
 
-            HashSet<AmpReportMeasures> measures	= new HashSet<AmpReportMeasures>();
+            HashSet<AmpReportMeasures> measures = new HashSet<AmpReportMeasures>();
             measures.addAll( ampReport.getMeasures() );
 
-            HashSet<AmpMeasures> reportMeasures	= new HashSet<AmpMeasures>();
+            HashSet<AmpMeasures> reportMeasures = new HashSet<AmpMeasures>();
 
             if ( ampReport.getReportMeasures() != null )
                 reportMeasures.addAll( ampReport.getReportMeasures() );
@@ -1023,8 +1078,8 @@ public class ReportWizardAction extends MultiAction {
 
     }
     
-	public static boolean columnIgnoredInReportWizard(String columnName) {
-		return COLUMNS_IGNORED_IN_REPORT_WIZARD.contains(columnName);
-	}
+    public static boolean columnIgnoredInReportWizard(String columnName) {
+        return COLUMNS_IGNORED_IN_REPORT_WIZARD.contains(columnName);
+    }
 
 }

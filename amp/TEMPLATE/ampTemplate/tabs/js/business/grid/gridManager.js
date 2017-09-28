@@ -28,7 +28,7 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 	/**
 	 * Apply filters and refresh the grid.
 	 */
-	GridManager.filter = function(id, jsonFilters, settings) {
+	GridManager.filter = function(id, jsonFilters, settings) {		
 		// Until we refactor the Filter Widget we will transform some filters here before sending the params to the backend.
 						
 		var grid = jQuery("#" + gridBaseName + id);
@@ -64,6 +64,7 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 	};
 
 	GridManager.populateGrid = function(id, dynamicLayoutView, firstContent) {
+		app.TabsApp.serializedFilters = app.TabsApp.filtersWidget.serialize() || {};		
 		var TableSectionView = Marionette.ItemView.extend({
 			template : '#grid-template'
 		});
@@ -77,6 +78,9 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 		jQuery(grid).attr("id", gridBaseName + id);
 		var pager = jQuery("#tab_grid_pager");
 		jQuery(pager).attr("id", gridPagerBaseName + id);
+		
+		// the report should be regenerated when the page is loaded/refreshed
+		var reportTimestamp = new Date();
 
 		// IMPORTANT NOTE: We need to call jqgrid this way because using the
 		// standar require way will generate side effects like grouping buttons
@@ -106,7 +110,7 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 							page : 1,
 							regenerate : true,
 							columns_with_ids : app.TabsApp.COLUMNS_WITH_IDS,
-							filters : null
+							filters : app.TabsApp.serializedFilters.filters
 						},
 						jsonReader : {
 							repeatitems : false,
@@ -160,7 +164,7 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 							}
 							data.MD5 = generateMD5(data.filters, data.settings,  
 									{sidx: jQuery(grid).jqGrid('getGridParam','sortname'), sord: jQuery(grid).jqGrid('getGridParam','sortorder')}, 
-									id, app.TabsApp.generalSettings.get('language'));
+									id, app.TabsApp.generalSettings.get('language'), reportTimestamp);
 							
 							return JSON.stringify(data);
 						},
@@ -618,7 +622,7 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 
 	return GridManager;
 	
-	function generateMD5(filters, settings, sorting, id, lang) {
+	function generateMD5(filters, settings, sorting, id, lang, timestamp) {
 		var model = {queryModel: {}};
 		if (filters !== null) {
 			model.queryModel.filters = filters;
@@ -629,7 +633,8 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 		if (sorting !== null) {
 			model.queryModel.sorting = sorting;
 		}
-		var md5 = CommonFilterUtils.calculateMD5FromParameters(model, id, lang);
+		var md5 = CommonFilterUtils.calculateMD5FromParameters(model, id, lang, timestamp);
+		
 		return md5;
 	}
 });

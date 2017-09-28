@@ -23,45 +23,45 @@ public class AmpTreeVisibilityModelBean implements Serializable
     
     
     public AmpObjectVisibility getAmpObjectVisibility() {
-		return ampObjectVisibility;
-	}
+        return ampObjectVisibility;
+    }
     
-	public void setAmpObjectVisibility(AmpObjectVisibility aov) {
-		this.ampObjectVisibility = aov;
-	}
+    public void setAmpObjectVisibility(AmpObjectVisibility aov) {
+        this.ampObjectVisibility = aov;
+    }
 
-	public String getName() {
-		if(name.contains("/"))
-			return name.substring(name.lastIndexOf("/")+1, name.length());
-		return name;
-	}
+    public String getName() {
+        if(name.contains("/"))
+            return name.substring(name.lastIndexOf("/")+1, name.length());
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public List<Object> getItems() {
-		return items;
-	}
+    public List<Object> getItems() {
+        return items;
+    }
 
-	public void setItems(List<Object> items) {
-		this.items = items;
-	}
+    public void setItems(List<Object> items) {
+        this.items = items;
+    }
 
-	public Boolean getChecked() {
-		return checked;
-	}
+    public Boolean getChecked() {
+        return checked;
+    }
 
-	public void setChecked(Boolean checked) {
-		this.checked = checked;
-	}
+    public void setChecked(Boolean checked) {
+        this.checked = checked;
+    }
 
-	/**
+    /**
      * Creates the bean.
      * 
      * @param s
      *            String that will be suffix of each property.
-	 * @param ampObjectVisibility 
+     * @param ampObjectVisibility 
      */
     public AmpTreeVisibilityModelBean(String s, List<Object> items, AmpObjectVisibility ampObjectVisibility)
     {
@@ -73,15 +73,15 @@ public class AmpTreeVisibilityModelBean implements Serializable
 
     
     public AmpTreeVisibilityModelBean(){
-    	this.items=new ArrayList();
-    	checked = false;
+        this.items=new ArrayList();
+        checked = false;
     }
     
     public AmpTreeVisibilityModelBean(String name, AmpObjectVisibility ampObjectVisibility){
-    	checked = false;
-    	this.name = name;
-    	this.items=new ArrayList();
-    	this.ampObjectVisibility = ampObjectVisibility;
+        checked = false;
+        this.name = name;
+        this.items=new ArrayList();
+        this.ampObjectVisibility = ampObjectVisibility;
     }
     /**
      * @see java.lang.Object#toString()

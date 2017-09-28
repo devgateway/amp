@@ -11,18 +11,18 @@ import java.util.List;
  */
 public class ResourceTranslationStore {
 
-	
-	private HashMap <String, List<ResourceTranslation>> resourceFieldTranslations;
-	
-	
-	public ResourceTranslationStore () {
-		resourceFieldTranslations = new HashMap<String,List<ResourceTranslation>> ();
-	}
+    
+    private HashMap <String, List<ResourceTranslation>> resourceFieldTranslations;
+    
+    
+    public ResourceTranslationStore () {
+        resourceFieldTranslations = new HashMap<String,List<ResourceTranslation>> ();
+    }
 
 
-	public HashMap<String, List<ResourceTranslation>> getResourceFieldTranslations() {
-		return resourceFieldTranslations;
-	}
-	
-	
+    public HashMap<String, List<ResourceTranslation>> getResourceFieldTranslations() {
+        return resourceFieldTranslations;
+    }
+    
+    
  }

@@ -12,35 +12,35 @@ import java.util.List;
  */
 public class MultiPolygonGeoJSON extends GeometryGeoJSON
 {
-	public List<List<List<List<Double>>>> coordinates;
+    public List<List<List<List<Double>>>> coordinates;
 
-	public boolean isValid( PositionValidator validator )
-	{
-		if (coordinates==null) return false;
-		if (coordinates.size()==0) return false;
+    public boolean isValid( PositionValidator validator )
+    {
+        if (coordinates==null) return false;
+        if (coordinates.size()==0) return false;
 
-		for ( List<List<List<Double>>> polygon : coordinates )
-		{
-			if (polygon==null) return false;
-			if (polygon.size()==0) return false;
-			
-			for ( List<List<Double>> linearRing : polygon )
-			{
-				if (linearRing==null) return false;
-				if (linearRing.size()<4) return false;
+        for ( List<List<List<Double>>> polygon : coordinates )
+        {
+            if (polygon==null) return false;
+            if (polygon.size()==0) return false;
+            
+            for ( List<List<Double>> linearRing : polygon )
+            {
+                if (linearRing==null) return false;
+                if (linearRing.size()<4) return false;
 
-				for ( List<Double> position : linearRing )
-				{
-					if ( !validator.isValid(position) ) return false;
-				}
-				
-				List<Double> first = linearRing.get(0);
-				List<Double> last = linearRing.get(linearRing.size()-1);
-				
-				if ( !validator.isEquivalent(first,last) ) return false;
-			}
-		}
-		
-		return super.isValid(validator);
-	}
+                for ( List<Double> position : linearRing )
+                {
+                    if ( !validator.isValid(position) ) return false;
+                }
+                
+                List<Double> first = linearRing.get(0);
+                List<Double> last = linearRing.get(linearRing.size()-1);
+                
+                if ( !validator.isEquivalent(first,last) ) return false;
+            }
+        }
+        
+        return super.isValid(validator);
+    }
 }

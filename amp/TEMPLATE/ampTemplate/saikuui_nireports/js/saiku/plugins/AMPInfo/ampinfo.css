@@ -4,9 +4,15 @@
     position: relative;
     /* top: 79px; */
     right: 35px;
-    margin-bottom: 10px;
+    margin-bottom: 10px;    
 }
 
+#amp_info_filters>h3{
+	color: #00496B;
+	font-weight: 500;
+	font-family: "Helvetica Neue", Arial, Helvetica, sans-serif !important;
+    font-size: 11px;
+}
 #amp_info_settings>h5{
 	font-weight: bold;
 }

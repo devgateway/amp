@@ -18,7 +18,7 @@ public class Settings {
     private String calendarId;
 
     @JsonProperty(SettingsConstants.YEAR_RANGE_ID)
-    private YearRange yearRange;
+    private SettingRange yearRange;
 
     @JsonProperty(SettingsConstants.AMOUNT_FORMAT_ID)
     private AmountFormat amountFormat;
@@ -39,11 +39,11 @@ public class Settings {
         this.calendarId = calendarId;
     }
 
-    public YearRange getYearRange() {
+    public SettingRange getYearRange() {
         return yearRange;
     }
 
-    public void setYearRange(YearRange yearRange) {
+    public void setYearRange(SettingRange yearRange) {
         this.yearRange = yearRange;
     }
 
@@ -53,28 +53,6 @@ public class Settings {
 
     public void setAmountFormat(AmountFormat amountFormat) {
         this.amountFormat = amountFormat;
-    }
-
-    static class YearRange {
-
-        private String from;
-        private String to;
-
-        public String getFrom() {
-            return from;
-        }
-
-        public void setFrom(String from) {
-            this.from = from;
-        }
-
-        public String getTo() {
-            return to;
-        }
-
-        public void setTo(String to) {
-            this.to = to;
-        }
     }
 
     static class AmountFormat {

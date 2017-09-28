@@ -45,6 +45,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.struts.tiles.ComponentContext;
@@ -66,7 +68,6 @@ import org.digijava.kernel.security.ModuleInstancePermission;
 import org.digijava.kernel.security.ResourcePermission;
 import org.digijava.kernel.security.SitePermission;
 import org.digijava.kernel.service.ServiceManager;
-import org.digijava.kernel.text.regex.RegexBatch;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.user.UserInfo;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
@@ -77,38 +78,11 @@ import org.digijava.module.aim.util.DbUtil;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
 
 public class DgUtil {
-	
-	/**
-	 * Flags used for regex matching to strip out all unneeded html.
-	 * Can combine multiple patterns like this = Pattern.DOTALL | Pattern.MULTILINE; 
-	 */
-	private static final int REGEX_FLAGS = Pattern.DOTALL;
-	
-	/**
-	 * Regexes split and ordered so that it will leave only 
-	 * text required for Lucene indexing.  
-	 */
-	private static final String[] HTML_STRIP_REGEXES = 
-	{
-			"<!--.*?-->"						//commented texts
-			, "<!DOCTYPE.*?>"					//doc type tags
-			, "<head.*?>.*?</head>"				//head tag with content
-			, "<script.*?>.*?</script>"			//script tag with content
-			, "<style.*?>.*?</style>"			//style tag with content
-			, "<(link|input|a|br|hr|meta).*?>"	//some tags
-			, "<\\s*?[a-z]+(:[a-z0-9]+)?.*?>"	//Beginnings of tags 
-			, "</\\s*?[a-z]+(:[a-z0-9]+)?.*?>"	//Endings of tags
-			, "&[a-z]*?;"						//&nbsp; and things like that
-			,"\\s{2,}"							//multiple spaces
-	};
-	
-	/**
-	 * Stripps html tags from text.
-	 */
-	private static final RegexBatch htmlStripper = new RegexBatch(HTML_STRIP_REGEXES,REGEX_FLAGS);
-
+    
     private static Logger logger = I18NHelper.getKernelLogger(DgUtil.class);
 
     private static final int FASTSPLIT_MAXSIZE = 2048;
@@ -206,8 +180,8 @@ public class DgUtil {
         if (user == null) {
             return;
         }
-    	org.hibernate.Session session = PersistenceManager.getSession();
-    	Site rootSite = getRootSite(RequestUtils.getSite(request));
+        org.hibernate.Session session = PersistenceManager.getSession();
+        Site rootSite = getRootSite(RequestUtils.getSite(request));
         UserLangPreferences preferences;
 
         try {
@@ -229,14 +203,14 @@ public class DgUtil {
 
     protected static void saveWorkspaceLanguagePreferences(HttpServletRequest request, Locale language) {
         TeamMember tm = (TeamMember) request.getSession(true).getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
-    	if (tm == null || tm.getAppSettings() == null || tm.getMemberId() == null)
-    		return;
-    	if (language.getCode().equals(tm.getAppSettings().getLanguage()))
-    		return;
-    	tm.getAppSettings().setLanguage(language.getCode());
-    	AmpTeamMember atm = (AmpTeamMember) PersistenceManager.getSession().get(AmpTeamMember.class, tm.getMemberId());
-    	AmpTeam team = atm.getAmpTeam();
-    	PersistenceManager.getSession().createQuery("update " + AmpApplicationSettings.class.getName() + " aas SET language='" + language.getCode() + "' where aas.team.ampTeamId = " + team.getAmpTeamId()).executeUpdate();
+        if (tm == null || tm.getAppSettings() == null || tm.getMemberId() == null)
+            return;
+        if (language.getCode().equals(tm.getAppSettings().getLanguage()))
+            return;
+        tm.getAppSettings().setLanguage(language.getCode());
+        AmpTeamMember atm = (AmpTeamMember) PersistenceManager.getSession().get(AmpTeamMember.class, tm.getMemberId());
+        AmpTeam team = atm.getAmpTeam();
+        PersistenceManager.getSession().createQuery("update " + AmpApplicationSettings.class.getName() + " aas SET language='" + language.getCode() + "' where aas.team.ampTeamId = " + team.getAmpTeamId()).executeUpdate();
     }
 
     public static void saveWorkspaceLanguagePreferences(HttpServletRequest request, AmpTeam ampTeam, User user) {
@@ -278,7 +252,7 @@ public class DgUtil {
                 return;
             }
            
-          	saveUserLanguagePreferences(request, language);
+            saveUserLanguagePreferences(request, language);
             saveWorkspaceLanguagePreferences(request, language);
             request.setAttribute(Constants.NAVIGATION_LANGUAGE, language);
             request.getSession().setAttribute(Constants.NAVIGATION_LANGUAGE, language);
@@ -289,7 +263,7 @@ public class DgUtil {
     public static void setSessionLanguage(HttpServletRequest request, HttpServletResponse response, Locale language) {
         request.setAttribute(Constants.NAVIGATION_LANGUAGE, language);
         if (request.getSession() != null)
-        	request.getSession().setAttribute(Constants.NAVIGATION_LANGUAGE, language);
+            request.getSession().setAttribute(Constants.NAVIGATION_LANGUAGE, language);
         setLanguageCookie(language, request, response);
     }
     
@@ -389,7 +363,7 @@ public class DgUtil {
             }
             
             if(request.getParameter("language")!=null){
-            	language = getSupportedLanguage(request.getParameter("language"),
+                language = getSupportedLanguage(request.getParameter("language"),
                         currentSite,
                         isLocalTranslatorForSite(request));
             }
@@ -423,14 +397,14 @@ public class DgUtil {
             
             //using session attribute
             if (request.getSession() != null){
-            	language = (Locale)request.getSession().getAttribute(Constants.NAVIGATION_LANGUAGE);
-            	if(language != null){
-            		logger.debug("Language, determined from session attribute is: " +
+                language = (Locale)request.getSession().getAttribute(Constants.NAVIGATION_LANGUAGE);
+                if(language != null){
+                    logger.debug("Language, determined from session attribute is: " +
                             language.getCode());
-            		return language;
-            	}
+                    return language;
+                }
             }
-            	
+                
             // Determine list of accepted languages from request
 
             // request.getLocales() contains at least one value: if
@@ -1291,7 +1265,7 @@ public class DgUtil {
 
         if (result == null) {
             logger.debug("Unable to get User#" + activeUserId + "from database");
-            /*	    throw new DgException("Unable to get User#" + activeUserId +
+            /*      throw new DgException("Unable to get User#" + activeUserId +
                   "from database");*/
             result = new UserInfo();
         }
@@ -1835,77 +1809,77 @@ public class DgUtil {
         return retVal;
     }
     
-	/**
-	 * precompile these patterns (a slow process) for some speedup and for copy-paste avoidance
-	 */
-	private static Pattern ptr	= Pattern.compile("<!--.*-->", Pattern.DOTALL);
-	private static Pattern ptr2	= Pattern.compile("<[^<]*>", Pattern.DOTALL);
-	private static Pattern[] monotonousPatterns = new Pattern[]{
-									Pattern.compile("Version:[1-9]\\.[0-9]+"), // no DOTALL needed
-									Pattern.compile("StartHTML:[0-9]+"), // no DOTALL needed
-									Pattern.compile("EndHTML:[0-9]+"), // no DOTALL needed
-									Pattern.compile("StartFragment:[0-9]+"), // no DOTALL needed
-									Pattern.compile("EndFragment:[0-9]+") // no DOTALL needed
-	};
-	
-	
-	private static Set<Character> trimmableChars = new HashSet<Character>() {{add(' '); add('\n'); add('\t');}};
+    /**
+     * precompile these patterns (a slow process) for some speedup and for copy-paste avoidance
+     */
+    private static Pattern ptr  = Pattern.compile("<!--.*-->", Pattern.DOTALL);
+    private static Pattern ptr2 = Pattern.compile("<[^<]*>", Pattern.DOTALL);
+    private static Pattern[] monotonousPatterns = new Pattern[]{
+                                    Pattern.compile("Version:[1-9]\\.[0-9]+"), // no DOTALL needed
+                                    Pattern.compile("StartHTML:[0-9]+"), // no DOTALL needed
+                                    Pattern.compile("EndHTML:[0-9]+"), // no DOTALL needed
+                                    Pattern.compile("StartFragment:[0-9]+"), // no DOTALL needed
+                                    Pattern.compile("EndFragment:[0-9]+") // no DOTALL needed
+    };
+    
+    
+    private static Set<Character> trimmableChars = new HashSet<Character>() {{add(' '); add('\n'); add('\t');}};
 
-	/**
-	 * trims any chars appearing at the right or left of a string. the set of the trimmable chars is in trimmableChars
-	 * @param src
-	 * @return
-	 */
-	public static String trimChars(String src)
-	{
-		if (src == null)
-			return src;
-		src = src.replace("\r\n", "\n");
-		int begPos = 0, len = src.length(), endPos = len - 1;
-		while(begPos < len)
-			if (trimmableChars.contains(src.charAt(begPos)))
-				begPos ++;
-			else
-				break;
-		while (endPos > begPos)
-			if (trimmableChars.contains(src.charAt(endPos)))
-				endPos --;
-			else
-				break;
-		if (begPos == len)
-			return "";
-		return src.substring(begPos, endPos + 1);
-	}
-	
-	/**
-	 * cleans a text copy-pasted from Word from all of its tags and returns the plain text
-	 * also does sanity cleanups, like replacing tabs with spaces and multiple spaces with a single one
-	 * @param src
-	 * @return
-	 */
-	public static String cleanWordTags(String src)
-	{
-		if (src == null)
-			return src;
-		src	= ptr.matcher(src).replaceAll("").trim();
-		src	= src.replaceAll("<style.*</style>", "");
-		src	= src.replaceAll("\\<.*?>", "");
-		src	= ptr2.matcher(src).replaceAll("");
-		for(Pattern pattern:monotonousPatterns)
-			src = pattern.matcher(src).replaceFirst(" "); // replaceFirst is enough, as there is one or none matches
-		src = src.replace('\t', ' ').replace("&nbsp;", " ").trim();
-		src = trimChars(src);
-		while (src.indexOf("  ") >= 0)
-			src = src.replace("  ", " ");
-		return src;
-	}
+    /**
+     * trims any chars appearing at the right or left of a string. the set of the trimmable chars is in trimmableChars
+     * @param src
+     * @return
+     */
+    public static String trimChars(String src)
+    {
+        if (src == null)
+            return src;
+        src = src.replace("\r\n", "\n");
+        int begPos = 0, len = src.length(), endPos = len - 1;
+        while(begPos < len)
+            if (trimmableChars.contains(src.charAt(begPos)))
+                begPos ++;
+            else
+                break;
+        while (endPos > begPos)
+            if (trimmableChars.contains(src.charAt(endPos)))
+                endPos --;
+            else
+                break;
+        if (begPos == len)
+            return "";
+        return src.substring(begPos, endPos + 1);
+    }
+    
+    /**
+     * cleans a text copy-pasted from Word from all of its tags and returns the plain text
+     * also does sanity cleanups, like replacing tabs with spaces and multiple spaces with a single one
+     * @param src
+     * @return
+     */
+    public static String cleanWordTags(String src)
+    {
+        if (src == null)
+            return src;
+        src = ptr.matcher(src).replaceAll("").trim();
+        src = src.replaceAll("<style.*</style>", "");
+        src = src.replaceAll("\\<.*?>", "");
+        src = ptr2.matcher(src).replaceAll("");
+        for(Pattern pattern:monotonousPatterns)
+            src = pattern.matcher(src).replaceFirst(" "); // replaceFirst is enough, as there is one or none matches
+        src = src.replace('\t', ' ').replace("&nbsp;", " ").trim();
+        src = trimChars(src);
+        while (src.indexOf("  ") >= 0)
+            src = src.replace("  ", " ");
+        return src;
+    }
 
-	public static String cleanHtmlTags(String content) {
-		if (content != null) {
-			RegexBatch batch = new RegexBatch(HTML_STRIP_REGEXES,REGEX_FLAGS);
-			content = batch.replaceAll(content, " ");
-		}
-		
-		return content;
-	}
+    public static String cleanHtmlTags(String content) {
+        if (content == null) {
+            return null;
+        }
+        String noTags = Jsoup.clean(content, Whitelist.none());
+        String noNbsp = noTags.replace("&nbsp;", " ");
+        return StringUtils.normalizeSpace(StringEscapeUtils.unescapeHtml4(noNbsp));
+    }
 }

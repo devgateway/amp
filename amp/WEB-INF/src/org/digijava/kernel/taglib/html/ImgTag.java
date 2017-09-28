@@ -54,9 +54,9 @@ import org.digijava.kernel.util.RequestUtils;
 public class ImgTag
     extends org.apache.struts.taglib.html.ImgTag {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	// log4J class initialize String
+    // log4J class initialize String
 //    private static Logger logger = I18NHelper.getKernelLogger(ImgTag.class);
 
     private String cache = "false";

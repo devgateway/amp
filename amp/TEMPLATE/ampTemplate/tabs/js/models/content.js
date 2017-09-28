@@ -9,33 +9,16 @@ define([ 'underscore', 'backbone', 'documentModel' ], function(_, Backbone, Docu
 				async : false,
 				error : function(collection, response) {					
 				},
-				success : function(collection, response) {					
+				success : function(collection, response) {	
+					
 				}
 			});
 		},
 		parse : function(resp, xhr) {
 			 var data =(resp.data) ? resp.data: resp;			 
-			 this.rawFilters = {filters: this.processFilters(data.reportMetadata.reportSpec.filters || {}) };  	
+			 this.rawFilters = {filters: data.reportMetadata.reportSpec.filters || {} };  	
 			 return data;
-		},
-		processFilters: function(filters){
-			var processedFilters = {}
-			for ( var propertyName in filters) {
-				var filter = filters[propertyName];
-				if(Array.isArray(filter)){
-					var values = [];
-					_.each(filter, function(item) {
-						var value = isNaN(item) ? item : parseInt(item);
-						values.push(value);
-					});
-					processedFilters[propertyName] = values; 
-				} else {					
-					processedFilters[propertyName] = isNaN(filter) ? filter : parseInt(filter);					
-				}
-			}
-			return processedFilters;
-			
-		},
+		},		
 		defaults : {
 			reportMetadata : {
 				name : '',
@@ -44,6 +27,23 @@ define([ 'underscore', 'backbone', 'documentModel' ], function(_, Backbone, Docu
 				},
 				settings : {}
 			}
+		},
+		filtersToJSON : function() {
+			  var json = _.clone(this.get('reportMetadata').get('reportSpec').get('filters').attributes);
+			  for(var attr in json) {
+			    if((json[attr] instanceof Backbone.Model) || (json[attr] instanceof Backbone.Collection)) {
+			    	if (json[attr] instanceof Backbone.Collection){
+			    		var arr = [];
+			    		json[attr].each(function(m) {
+			    			arr.push(m.toJSON());
+			    	    });
+			    		json[attr] = arr;
+			    	} else {
+			    		json[attr] = json[attr].toJSON();
+			    	}			               
+			    }
+			  }
+			  return {filters:json};
 		}
 	});
 

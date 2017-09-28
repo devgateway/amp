@@ -2,6 +2,7 @@
 require('babel-core/polyfill');
 import Model from "./model";
 import React from "react";
+import ReactDOM from 'react-dom';
 import createAction from "./actions";
 import {ensureArray} from "amp/tools";
 
@@ -43,13 +44,13 @@ export function run({model, view, update, element, actions}){
       model: newState
     };
     if(reactElement.shouldComponentUpdate(props)){
-      reactElement = React.render(<View {...props}/>, element, doPostUpdate);
+      reactElement = ReactDOM.render(<View {...props}/>, element, doPostUpdate);
     } else {
       doPostUpdate();
     }
   }
   attachedActions = actions.forward(processAction);
-  reactElement = React.render(<View actions={attachedActions} model={model}/>, element);
+  reactElement = ReactDOM.render(<View actions={attachedActions} model={model}/>, element);
 }
 
 export function updateSubmodel(path:Array<string>, update, action, model){

@@ -406,7 +406,7 @@ function typeChanged(value){
           <tr>
             <td colspan="2" align=center>
             <span style="color:red;">*</span>
-            <digi:trn><b>Job Type</b></digi:trn>
+            <b><digi:trn>Job Type</digi:trn></b>
             <table width="439" cellpadding="2" cellspacing="1" style="border:dashed 1px;width:400px;">
               <tr>
                 <td colspan="2">

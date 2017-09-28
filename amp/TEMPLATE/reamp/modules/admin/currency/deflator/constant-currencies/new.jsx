@@ -2,7 +2,7 @@ import * as AMP from "amp/architecture";
 import React from "react";
 import {callFunc, identity, fetchJson, range} from "amp/tools";
 import {MIN_YEAR, MAX_YEAR} from "amp/tools/validate";
-import {SETTINGS} from "amp/config/endpoints";
+//import {SETTINGS} from "amp/config/endpoints";
 
 var within = arr => maybeEl => arr.indexOf(maybeEl) !== -1;
 

@@ -23,11 +23,8 @@
 			<td>
 				<html:select property="levelPicked" styleClass="dropdwn_sm">
 					<logic:iterate name="reportMeta" property="hierarchies"  id="iter">
-						<c:set var="key" value="aim:popsort:hierarchy:${iter.column.columnName}"/>
 						<html:option value="${iter.levelId}">
-							<digi:trn key="${key}">
-							${iter.column.columnName}
-						</digi:trn>
+							<digi:colNameTrn>${iter.column.columnName}</digi:colNameTrn>
 						</html:option>
 					</logic:iterate>
 				</html:select>
@@ -52,7 +49,7 @@
 								    ${col.name}
 								  </c:when>
 								  <c:otherwise>
-								    <digi:trn>${col.name}</digi:trn>
+                                    <digi:colNameTrn>${col.name}</digi:colNameTrn>
 								  </c:otherwise>
 								</c:choose>
 								&nbsp;

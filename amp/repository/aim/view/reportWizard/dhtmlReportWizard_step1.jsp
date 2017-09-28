@@ -181,6 +181,10 @@
 					                                    <digi:trn key="rep:wizard:allowEmptyFundingCols">Allow empty funding columns for year, quarter and month</digi:trn>
 			                                    		<br />
 			                                    	</c:if>
+													<div id="splitByFundingDiv">
+														<nested:checkbox property="splitByFunding"/>
+														<digi:trn>Split by funding</digi:trn>
+													</div>
 			                                    </div>
 											</fieldset>
 										</td>

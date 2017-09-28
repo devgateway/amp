@@ -14,26 +14,26 @@ import org.apache.wicket.validation.ValidationError;
  */
 public class AmpMinSizeCollectionValidator extends AmpSemanticValidator<Integer>{
 
-	private Integer minimum;
-	
-	public AmpMinSizeCollectionValidator(int minimum) {
-		this.minimum=minimum;
-	}
+    private Integer minimum;
+    
+    public AmpMinSizeCollectionValidator(int minimum) {
+        this.minimum=minimum;
+    }
 
-	/* (non-Javadoc)
-	 * @see org.apache.wicket.validation.IValidator#validate(org.apache.wicket.validation.IValidatable)
-	 */
-	@Override
-	public void semanticValidate(IValidatable<Integer> validatable) {
-		Integer value = validatable.getValue();
-		if (value.compareTo(minimum) < 0)
-		{
-			ValidationError error = new ValidationError();
-			error.addKey("AmpMinSizeCollectionValidator");
-			error.setVariable("minimum", minimum);		
-			validatable.error(error);
-		}
+    /* (non-Javadoc)
+     * @see org.apache.wicket.validation.IValidator#validate(org.apache.wicket.validation.IValidatable)
+     */
+    @Override
+    public void semanticValidate(IValidatable<Integer> validatable) {
+        Integer value = validatable.getValue();
+        if (value.compareTo(minimum) < 0)
+        {
+            ValidationError error = new ValidationError();
+            error.addKey("AmpMinSizeCollectionValidator");
+            error.setVariable("minimum", minimum);      
+            validatable.error(error);
+        }
 
-	}
+    }
 
 }

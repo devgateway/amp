@@ -28,10 +28,15 @@ this.hiddenColumnNames = undefined;
 this.ACTIVITY_STATUS_CODES = undefined;
 this.PLEDGE_ID_ADDER = 800000000; // java-side constant, taken MondrianETL
 this.rowsFromBatch = 100;
+var measureless = false;
 
 AMPTableRenderer.prototype.render = function(data, options) {
 	Saiku.logger.log('AMPTableRenderer.render INIT');
 	window.saiku_time = new Date().getTime();
+
+	var measures = data.workspace.query.attributes.measures;
+	var hasMeasures = (measures instanceof Array) && measures.length > 0;
+	measureless = !hasMeasures;
 
 	if (data !== undefined && data.page !== null && data.page.pageArea !== null && !data.isEmpty) {
 		ACTIVITY_STATUS_CODES = data.colorSettings.activityStatusCodes;
@@ -296,7 +301,8 @@ function generateContentHtml(page, options) {
 
 	// Add last row with totals.
 	var totalsRowNeeded =
-		(this.lastHeaderRow  >= 0) && // there exists a header 
+		(this.lastHeaderRow  >= 0) && // there exists a header
+		(!this.measureless) &&
 		(this.metadataHierarchies.length + this.metadataColumns.length <= this.headerMatrix[this.lastHeaderRow].length);
 
 	var totalRow = totalsRowNeeded ? buildTotalsRow(page) : "";
@@ -306,12 +312,18 @@ function generateContentHtml(page, options) {
 	return content;
 }
 
+function valueOrNbsp(val) {
+	return val ? val : "&nbsp;";
+}
+
 function generateDataRows(page, options) {
 	var self = this;
 	var content = "";
 	// Transform the tree data structure to 2d matrix.
-	this.numberOfRows = (page.pageArea.children !== null ? -1 : 0);
-	this.getNumberOfRows(page.pageArea);
+	this.numberOfRows = this.getNumberOfRows(page.pageArea);
+	if (page.pageArea.children !== null && !measureless) {
+		this.numberOfRows--;
+	}
 	this.contentMatrix = new Array(this.numberOfRows);
 	this.rowHierarchyLevel = new Array(this.numberOfRows);
 	for (var i = 0; i < this.numberOfRows; i++) {
@@ -375,7 +387,7 @@ function generateDataRows(page, options) {
 						if (applyTotalRowStyle === true) {
 							// Trying something new here: show tooltip on the now empty "Hierarchy Value Totals" row.
 							if (cleanTotalValue.text !== undefined) {
-								styleClass = " class='row_total tooltipped i18n' data-subtotal='true' original-title='" + escapeHtml(cleanTotalValue.text) + "' ";
+								styleClass = " class='row_total tooltipped i18n' data-subtotal='true' original-title='" + escapeQuotes(escapeHtml(cleanTotalValue.text)) + "' ";
 							} else {
 								styleClass = " class='row_total' ";
 							}
@@ -386,7 +398,7 @@ function generateDataRows(page, options) {
 					}
 
 					cell = "<th" + styleClass + rowSpan + ">";
-					cell += coloredPrefix + escapeHtml(cleanValue.text);
+					cell += coloredPrefix + valueOrNbsp(escapeHtml(cleanValue.text));
 					cell += "</th>";
 				} else {
 					// Change amount styles if is a subtotal.
@@ -419,7 +431,7 @@ function generateDataRows(page, options) {
 }
 
 function getCellDataStyleClass(contentMatrix, cleanValue, i, j) {
-	var styleClass = " class='row ";
+	var styleClass = " class='row " + contentMatrix[i][j].formatType + " ";
 		
 	if (contentMatrix[i][j].color) {
 		styleClass += this.contentMatrix[i][j].color + " ";
@@ -430,12 +442,17 @@ function getCellDataStyleClass(contentMatrix, cleanValue, i, j) {
 	}
 	
 	if (cleanValue.tooltip) {
-		styleClass += "tooltipped' original-title='" + escapeHtml(cleanValue.tooltip) + "' ";
+		styleClass += "tooltipped' original-title='" + escapeQuotes(escapeHtml(cleanValue.tooltip)) + "' ";
 	} else {
 		styleClass += "'";
 	}
 	
 	return styleClass;
+}
+
+function escapeQuotes(s) {
+	return s.replace(/"/g, '&quot;')
+			.replace(/'/g, '&apos;');
 }
 
 function cellContainsAsterisk(contentMatrix, i, j) {
@@ -459,7 +476,7 @@ function findGroupVertically(matrix, i, j) {
 			// Due to the way the tree data is structured we don't need to check
 			// for cells with the same value than the one being compared but
 			// with empty cells.
-			if (k > 0 && matrix[k][j].displayedValue === matrix[k-1][j].displayedValue) {
+			if (k > 0 && matchesPreviousRow(matrix, k, j)) {
 				count++;
 				// Mark the cell so we don't draw it later.
 				matrix[k][j].isGrouped = true;
@@ -473,6 +490,19 @@ function findGroupVertically(matrix, i, j) {
 }
 
 /**
+ * Returns true if previous row (i-1) matches current row (i) for all columns
+ * starting at 0 and ending at jmax inclusive.
+ */
+function matchesPreviousRow(matrix, i, jmax) {
+	for (j = 0; j <= jmax; j++) {
+		if (matrix[i][j].displayedValue !== matrix[i-1][j].displayedValue) {
+			return false;
+		}
+	}
+	return true;
+}
+
+/**
  * Convert data tree to 2d matrix structure.
  */
 function extractDataFromTree(node, parentNode, level, isLastSubNode, hierarchiesData) {
@@ -483,7 +513,7 @@ function extractDataFromTree(node, parentNode, level, isLastSubNode, hierarchies
 			var dataValue = node.contents[this.headerMatrix[this.lastHeaderRow][i].hierarchicalName];
 			// Save isTotal flag.
 			if (dataValue === null || dataValue === undefined) {				
-				 dataValue = {displayedValue: ""};				
+				 dataValue = {displayedValue: "", formatType: "text"};				
 			}
 			if (dataValue.displayedValue === "" && i < level) {
 				dataValue.displayedValue = hierarchiesData[i].displayedValue;
@@ -493,6 +523,7 @@ function extractDataFromTree(node, parentNode, level, isLastSubNode, hierarchies
 			}
 			
 			dataValue.isTotal = node.isTotal;
+			dataValue.formatType = this.headerMatrix[this.lastHeaderRow][i].formatType;
 			this.contentMatrix[this.currentContentIndexRow][i] = dataValue;
 			this.rowHierarchyLevel[this.currentContentIndexRow] = level;
 		}
@@ -503,13 +534,15 @@ function extractDataFromTree(node, parentNode, level, isLastSubNode, hierarchies
 		for (var i = 0; i < node.children.length; i++) {
 			extractDataFromTree(node.children[i], node, level + 1, i === node.children.length - 1, hierarchiesData);
 		}
-		// Add the node that represents the subtotal.
-		node.children = null;
-		node.isTotal = true;
-		if (isLastSubNode) {
-			node.contents[colName].isGrouped = true;
+		if (!this.measureless) {
+			// Add the node that represents the subtotal.
+			node.children = null;
+			node.isTotal = true;
+			if (isLastSubNode) {
+				node.contents[colName].isGrouped = true;
+			}
+			extractDataFromTree(node, parentNode, level, isLastSubNode, hierarchiesData);
 		}
-		extractDataFromTree(node, parentNode, level, isLastSubNode, hierarchiesData);
 	}
 }
 
@@ -517,12 +550,16 @@ function extractDataFromTree(node, parentNode, level, isLastSubNode, hierarchies
  * Return the number of rows (adding the total rows per category).
  */
 function getNumberOfRows(node) {
+	var c = 0;
 	if (node.children !== null) {
 		for (var i = 0; i < node.children.length; i++) {
-			getNumberOfRows(node.children[i]);
+			c += getNumberOfRows(node.children[i]);
 		}
 	}
-	this.numberOfRows++;
+	if (!measureless || node.children == null) {
+		c++;
+	}
+	return c;
 }
 
 /**
@@ -618,19 +655,6 @@ function checkIfSummarizedReportWithConstant(page) {
  * tooltips for all subtotal row's cell, not only for the first one.
  */
 AMPTableRenderer.prototype.postProcessTooltips = function() {
-	/*var totalCells = $('table').find("[data-subtotal='true']");
-	for (var i = 0; i < totalCells.length; i++) {		
-		var cell = $(totalCells[i]); 		
-		var tooltip = $(cell).attr('original-title');
-		// Deactivated for now because it makes the rendering extra-extra-slow.
-		if(tooltip !== '') {
-			var row = $(cell).parent();
-			for (var j = 0; j < row.children().length; j++) {
-				$(row.children()[j]).attr('original-title', tooltip);
-				$(row.children()[j]).addClass('tooltipped');
-			}
-		}
-	}	*/
 	$(".tooltipped").tipsy();
 }
 

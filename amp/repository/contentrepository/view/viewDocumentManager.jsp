@@ -472,7 +472,7 @@ border-right: 1px solid rgb(208, 208, 208);
 <div id="menuContainerDiv"></div>
 <div id="addDocumentDiv" class="dialog">
 				<div align="center">
-				<div id="addDocumentErrorHolderDiv" style="font-size:11px; color: red"></div>
+				<div id="addDocumentErrorHolderDiv" style="font-size:11px; color: red; padding:10px;"></div>
 				<digi:form action="/documentManager.do" method="post" enctype="multipart/form-data" >
 					<input type="hidden" name="type" id="typeId"/>
 					<input type="hidden" name="uuid" id="nodeUUID"/>					

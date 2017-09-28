@@ -295,7 +295,7 @@ YAHOOAmp.namespace("YAHOOAmp.amp");
 	<tr><td colspan="2"><digi:errors/></td></tr>
 	<tr>
 		<td colspan="2" bgcolor=#c7d4db height=25 align=center>
-			<span class="subtitle-blue"><digi:trn><b style="font-size:12px;">Create/Edit template document</b></digi:trn></span>
+			<span class="subtitle-blue"><b style="font-size:12px;"><digi:trn>Create/Edit template document</digi:trn></b></span>
 		</td>
 	</tr>
 	<tr>

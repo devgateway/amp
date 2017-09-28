@@ -325,15 +325,15 @@
 															<div style='position:relative;display:none;' id='report-<bean:write name="reports" property="ampReportId"/>'> 
                                 <logic:iterate name="reports" property="columns" id="column" indexId="index"  >
                                   <%if (index.intValue()%2==0){ %>
-                                    <li class="bullet">                                      
-                                    	<digi:trn key="aim:report:${column.column.columnName}">
-                                      	<bean:write name="column" property="column.columnName" />
-                                    	</digi:trn>
+                                    <li class="bullet">
+                                        <digi:colNameTrn>
+                                            <bean:write name="column" property="column.columnName" />
+                                        </digi:colNameTrn>
                                   <% } else {%>
                                     ,
-                                    	<digi:trn key="aim:report:${column.column.columnName}">
-                                      	<bean:write name="column" property="column.columnName" />
-                                    	</digi:trn>
+                                        <digi:colNameTrn>
+                                            <bean:write name="column" property="column.columnName" />
+                                        </digi:colNameTrn>
                                     </li>
                                   <%} %>
                                 </logic:iterate>

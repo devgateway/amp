@@ -37,69 +37,69 @@ import org.apache.log4j.Logger;
 
 public class IsAdmin extends BodyTagSupport {
 
-	private static final long serialVersionUID = 1L;
-	private Logger log =
-		Logger.getLogger("org.developmentgateway.core.taglib.AuthorizeTag");
-	/**
-	 * Process the start tag.
-	 *
-	 * @exception JspException if a JSP exception has occurred
-	 */
-	public int doStartTag() {
+    private static final long serialVersionUID = 1L;
+    private Logger log =
+        Logger.getLogger("org.developmentgateway.core.taglib.AuthorizeTag");
+    /**
+     * Process the start tag.
+     *
+     * @exception JspException if a JSP exception has occurred
+     */
+    public int doStartTag() {
 
-		try {
-			//set up the logger
-			//log.setResourceBundle(I18NHelper.getAiDABundle());
+        try {
+            //set up the logger
+            //log.setResourceBundle(I18NHelper.getAiDABundle());
 
-			HttpServletRequest request =
-				(HttpServletRequest) pageContext.getRequest();
-
-
-//			boolean showData = false;
+            HttpServletRequest request =
+                (HttpServletRequest) pageContext.getRequest();
 
 
-				if (request.getParameter("user") == null) {
-					return (SKIP_BODY);
-				}else{
+//          boolean showData = false;
 
-					if(request.getParameter("user").equalsIgnoreCase("admin")){
 
-							return EVAL_BODY_INCLUDE;
+                if (request.getParameter("user") == null) {
+                    return (SKIP_BODY);
+                }else{
 
-						}else{
-							return (SKIP_BODY);
+                    if(request.getParameter("user").equalsIgnoreCase("admin")){
 
-							}
+                            return EVAL_BODY_INCLUDE;
 
-					}
+                        }else{
+                            return (SKIP_BODY);
 
-		} catch (Exception exception) {
+                            }
 
-			//TODO: comment this
+                    }
+
+        } catch (Exception exception) {
+
+            //TODO: comment this
             log.error("Could not retrieve an internationalized messages",exception);
 
-			//TODO: UnCOMMENT this
-			//if (log.isEnabledFor(Level.ERROR)) {
-			//	Object[] obj = { "AuthorizeTag - doStartTag()" };
-			//	log.l7dlog(
-				//	Level.ERROR,
-				//	"TaglibClass.Exception.err",
-				//	obj,
-				//	exception);
-			//}
-		}
+            //TODO: UnCOMMENT this
+            //if (log.isEnabledFor(Level.ERROR)) {
+            //  Object[] obj = { "AuthorizeTag - doStartTag()" };
+            //  log.l7dlog(
+                //  Level.ERROR,
+                //  "TaglibClass.Exception.err",
+                //  obj,
+                //  exception);
+            //}
+        }
 
-		// Continue processing this page
-		return (SKIP_BODY);
-	}
+        // Continue processing this page
+        return (SKIP_BODY);
+    }
 
-	/**
-	 * Release any acquired resources.
-	 */
-	public void release() {
+    /**
+     * Release any acquired resources.
+     */
+    public void release() {
 
-		super.release();
+        super.release();
 
-	}
+    }
 
 }

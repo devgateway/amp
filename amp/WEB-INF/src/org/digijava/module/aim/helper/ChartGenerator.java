@@ -422,7 +422,9 @@ public class ChartGenerator {
 					targetValue = getSmallStuff(ampIndValue, "target", siteId, langCode); 
 				break;
 			case AmpIndicatorValue.REVISED:
+                if (ampIndValue.getValue() != null) {
 				targetValue = getSmallStuff(ampIndValue, "target", siteId, langCode); 
+                }
 				break;
 		}
 		return new PerformanceChartValues(baseValue, actualValue, targetValue);

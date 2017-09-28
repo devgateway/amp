@@ -1,5 +1,6 @@
 YAHOO.namespace("YAHOO.amp.reportwizard");
 YAHOO.amp.reportwizard.colIdToName		= new Array();
+YAHOO.amp.reportwizard.measureIdToName	= new Array();
 YAHOO.amp.reportwizard.fundingGroups	= new Array();
 YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
 				 'A.C. Chapter'
@@ -98,14 +99,26 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
                 , 'Budget Structure'
                 , 'Indirect On Budget'
                 , 'Humanitarian Aid'
+                , 'Concessionality Level'
                 , 'Disaster Response Marker'
+                , 'Indicator Name'
+                , 'Logframe Category'
+                , 'Risk'
+                , 'Indicator Sector'
+                , 'Indicator Type'
+                , 'Quaternary Sector'
+                , 'Quaternary Sector Sub-Sector'
+                , 'Quaternary Sector Sub-Sub-Sector'
+                , 'Quinary Sector'
+                , 'Quinary Sector Sub-Sector'
+                , 'Quinary Sector Sub-Sub-Sector'
 			);
 
 YAHOO.amp.reportwizard.fundingGroups["regional"]		= new Array(
-				'Region','Status','Primary Sector','Primary Sector Sub-Sector','National Planning Objectives','District','Zone'
+				'Status','Primary Sector','Primary Sector Sub-Sector','National Planning Objectives','Regional Region'
 			);
 YAHOO.amp.reportwizard.fundingGroups["component"]		= new Array(
-				 'Component Type','Region','Status','Primary Sector','National Planning Objectives','District','Zone','Component Name','Project Title'
+				 'Component Type','Region','Status','Primary Sector','National Planning Objectives','District','Zone','Component Name','Project Title','Component Funding Organization','Component Second Responsible Organization'
 			);
 YAHOO.amp.reportwizard.fundingGroups["contribution"]	= new Array(
 				'Costing Donor','Parent National Planning Objectives', 'National Planning Objectives', 'Primary Program', 
@@ -119,7 +132,7 @@ YAHOO.amp.reportwizard.fundingGroups["contribution"]	= new Array(
 YAHOO.amp.reportwizard.fundingGroups["pledge"]= new Array(
 		'Related Projects', 'Pledges Donor Group', 'Pledges Regions', 'Pledges Aid Modality',
 		'Pledges Type Of Assistance',
-		'Pledges Titles', 'Pledges sectors', 'Pledges Secondary Sectors', 'Pledges Tertiary Sectors', 
+		'Pledges Titles', 'Pledges sectors', 'Pledges Secondary Sectors', 'Pledges Tertiary Sectors', 'Pledges Quaternary Sectors', 'Pledges Quinary Sectors',
 		'Pledges Programs', 'Pledges Secondary Programs', 'Pledges Tertiary Programs', 
 		'Pledges Regions', 'Pledges Zones', 'Pledge Status'
 	);
@@ -127,9 +140,22 @@ YAHOO.amp.reportwizard.fundingGroups["pledge"]= new Array(
 YAHOO.amp.reportwizard.fundingGroups["incompatible_hierarchies"]= new Array(
 	);
 
+YAHOO.amp.reportwizard.fundingGroups["measureless_only_hierarchies"]= new Array(
+	  'Indicator Name'
+    , 'Logframe Category'
+    , 'Risk'
+    , 'Indicator Sector'
+    , 'Indicator Type'
+);
+
 function insertColInfo (id, name) {
 		YAHOO.amp.reportwizard.colIdToName[id]=name;
 }
+
+function insertMeasureInfo (id, name) {
+		YAHOO.amp.reportwizard.measureIdToName[id]=name;
+}
+
 
 function checkIfColIsHierarchy(id) {
 	var reportGroupDivEl		= document.getElementById("reportGroupDiv") ;
@@ -144,6 +170,11 @@ function checkIfColIsHierarchy(id) {
 		}
 	}
 	if (fgArray == null) return false;
+
+	if (repManager.forDesktopTabs
+		&& YAHOO.amp.reportwizard.fundingGroups["measureless_only_hierarchies"].indexOf(colName) >= 0) {
+		return false;
+	}
 	
 	for (j=0; j<fgArray.length; j++) {
 		if ( fgArray[j]==colName ) 
@@ -243,3 +274,39 @@ function generateHierarchies(e) {
 	repManager.showHideHierarchies();
 }
 
+function findMeasurelessOnlyHiers(hiersColIds) {
+	return hiersColIds.map(colIdToName).filter(isMeasurelessOnlyHierarchy);
+}
+
+function isMeasurelessOnlyHierarchy(colName) {
+	return YAHOO.amp.reportwizard.fundingGroups["measureless_only_hierarchies"].indexOf(colName) !== -1
+}
+
+var mtefPattern = /MTEF \d\d\d\d/;
+var pipelineMtefPattern = /Pipeline MTEF Projections \d\d\d\d/;
+var projectionMtefPattern = /Projection MTEF Projections \d\d\d\d/;
+var realMtefPattern = /Real MTEF \d\d\d\d/;
+
+function isAmountColumn(colName) {
+	return colName == 'Proposed Project Amount' || colName == 'Revised Project Amount'
+		|| mtefPattern.test(colName) || pipelineMtefPattern.test(colName) || projectionMtefPattern.test(colName)
+		|| realMtefPattern.test(colName);
+}
+
+function colIdToName(id) {
+	return YAHOO.amp.reportwizard.colIdToName[id];
+}
+
+function updateColumnVisibility(reportType) {
+    if (reportType === 'regional') {
+        ColumnsDragAndDropObject.showObjsByDbId('source_col_div', [colNameToId('Regional Region')]);
+        ColumnsDragAndDropObject.hideObjsByDbId('source_col_div', [colNameToId('Region')]);
+    } else {
+        ColumnsDragAndDropObject.showObjsByDbId('source_col_div', [colNameToId('Region')]);
+        ColumnsDragAndDropObject.hideObjsByDbId('source_col_div', [colNameToId('Regional Region')]);
+    }
+}
+
+function colNameToId(name) {
+	return YAHOO.amp.reportwizard.colIdToName.indexOf(name);
+}

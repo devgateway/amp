@@ -43,7 +43,6 @@ var Query = Backbone.Model.extend({
         this.model = _.extend({ name: this.uuid }, SaikuQueryTemplate);
         this.helper = new SaikuQueryHelper(this);
         this.result = new Result({ limit: Settings.RESULT_LIMIT }, { query: this });
-        this.timestamp = new Date().getTime();
 
         //Start Custom Code for Pagination
        	this.set({page:1});
@@ -54,7 +53,7 @@ var Query = Backbone.Model.extend({
         //End Custom Code for Pagination
         
         this.transformSavedFilters();
-    },    
+    },
     
     transformSavedFilters: function() {
     	Saiku.logger.log("Query.transformSavedFilters");
@@ -205,7 +204,7 @@ var Query = Backbone.Model.extend({
         this.firstLoad = false;
         
         Saiku.logger.log("QueryRouter.calculateMD5FromParameters");
-        exModel.MD5 = CommonFilterUtils.calculateMD5FromParameters(exModel, this.get('report_id'), Saiku.i18n.locale);
+        exModel.MD5 = CommonFilterUtils.calculateMD5FromParameters(exModel, this.get('report_id'), Saiku.i18n.locale, this.get('page_timestamp'));
         exModel.querySettings.info = this.get('info');
 
         // Run it

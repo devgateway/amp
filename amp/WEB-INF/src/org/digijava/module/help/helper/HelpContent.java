@@ -9,20 +9,20 @@ import org.digijava.module.sdm.dbentity.Sdm;
  *
  */
 public class HelpContent {
-	private Editor editor;
-	private Sdm document;
-	
-	public Editor getEditor() {
-		return editor;
-	}
-	public void setEditor(Editor editor) {
-		this.editor = editor;
-	}
-	public Sdm getDocument() {
-		return document;
-	}
-	public void setDocument(Sdm document) {
-		this.document = document;
-	}
-	
+    private Editor editor;
+    private Sdm document;
+    
+    public Editor getEditor() {
+        return editor;
+    }
+    public void setEditor(Editor editor) {
+        this.editor = editor;
+    }
+    public Sdm getDocument() {
+        return document;
+    }
+    public void setDocument(Sdm document) {
+        this.document = document;
+    }
+    
 }

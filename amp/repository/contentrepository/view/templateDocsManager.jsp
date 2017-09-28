@@ -59,7 +59,7 @@
 									<table width="100%" cellspacing="1" cellpadding="1" valign="top" align="left">
 										<tr><td bgColor="#c7d4db" class="box-title" height="30" align="center">
 											<!-- Table title -->
-											<digi:trn><b style="font-size:12px;">Templates</b></digi:trn>
+											<b style="font-size:12px;"><digi:trn>Templates</digi:trn></b>
 											<!-- end table title -->
 										</td></tr>
 										<tr><td>

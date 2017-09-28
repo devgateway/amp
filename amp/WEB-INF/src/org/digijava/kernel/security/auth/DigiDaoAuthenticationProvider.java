@@ -64,29 +64,29 @@ public class DigiDaoAuthenticationProvider
             }
         }
 
-		boolean passwordMatched = false;
-					compare = pass.trim();
+        boolean passwordMatched = false;
+                    compare = pass.trim();
 
-					// first try new user ( using SHA1 )
-					encryptPassword = ShaCrypt.crypt(compare.trim()).trim();
-	
-			
-				// check user in database
-				if (encryptPassword.equalsIgnoreCase(userPassword.trim())) {
-					passwordMatched = true;
-				}
-		
-			if (!passwordMatched) {
-				throw new BadCredentialsException(
-						"Invalid username/password, login denied");
-			}
-		}
-	
+                    // first try new user ( using SHA1 )
+                    encryptPassword = ShaCrypt.crypt(compare.trim()).trim();
+    
+            
+                // check user in database
+                if (encryptPassword.equalsIgnoreCase(userPassword.trim())) {
+                    passwordMatched = true;
+                }
+        
+            if (!passwordMatched) {
+                throw new BadCredentialsException(
+                        "Invalid username/password, login denied");
+            }
+        }
+    
 
-	public boolean supports(Class authentication) {
-		return (UsernamePasswordAuthenticationToken.class
-				.isAssignableFrom(authentication));
-	}
+    public boolean supports(Class authentication) {
+        return (UsernamePasswordAuthenticationToken.class
+                .isAssignableFrom(authentication));
+    }
 
     public Object getSalt(UserDetails userDetails) {
         String email = userDetails.getUsername();

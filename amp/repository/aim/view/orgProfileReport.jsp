@@ -150,7 +150,7 @@ function optionChanged(flag) {
 											test="${helper.allTypeProperty||helper.ngoOnlyProperty==record.ngo}">
 											<c:choose>
 													<c:when test="${empty helper.subHeaders}">
-														<digi:trn><c:out value="${helper.columnName}"/></digi:trn>:
+														<digi:colNameTrn><c:out value="${helper.columnName}"/></digi:colNameTrn>:
 														<c:forEach var="value" items="${helper.values}">
 																<c:forEach var="val" items="${value}"><b><c:out value="${val}"/></b><br/></c:forEach>
 															</c:forEach>

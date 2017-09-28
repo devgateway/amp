@@ -16,6 +16,7 @@ const readyStateConnectionEstablished = 1;
 const readyStateRequestReceived = 2;
 const readyStateProcessingRequest = 3;
 const readyStateResponseReady = 4;
+const JOIN_BOUNDARIES_PREFIX = 'J';
 
 module.exports = Backbone.Model
 .extend(LoadOnceMixin).extend({
@@ -90,7 +91,7 @@ module.exports = Backbone.Model
     return boundaryLoaded;
   },
 
-  loadAll: function(options) {
+loadAll: function(options) {
 	  if(this.get('type') === 'joinBoundaries' && this.get('colorRamp')){		  	  
 		  this.url = '/rest/gis/indicators/' + this.getId(); 
 	  }else if(this.get('type') === 'Indicator Layers'){
@@ -232,10 +233,16 @@ module.exports = Backbone.Model
         // replacing for now, to save weight
     	var admCode = feature.properties[admKey + '_CODE'];
     	feature.id = admCode ? $.trim(admCode) : admCode;
-        feature.properties.name = feature.properties[admKey + '_NAME'] || '';       
+        feature.properties.name = feature.properties[admKey + '_NAME'] || ''; 
+        
+        var value = null;
+        if (!_.isUndefined(indexedValues[feature.id]) && !_.isNull(indexedValues[feature.id])) {
+        	value = indexedValues[feature.id].value;
+        } 
+        
         return _.extend(feature, {
           properties: _.extend(feature.properties, {
-            value: indexedValues[feature.id] ? indexedValues[feature.id].value : null 
+            value: value 
           })
         });
       })

@@ -19,23 +19,23 @@ import org.digijava.module.help.util.HelpUtil;
  */
 public class SaveTopicTitle extends Action {
 
-	@Override
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
-		GlossaryForm glossForm = (GlossaryForm)form;
-		//check data
-		if (glossForm.getNodeName() == null 
-				|| glossForm.getNodeName().trim().length() == 0
-			) throw new Exception("Node title value is null or empty string.");
-		if (glossForm.getNodeId()==null) throw new Exception("Node id not specified.");
-		//load topic
-		HelpTopic topic = HelpUtil.getHelpTopic(glossForm.getNodeId());
-		if (topic == null) throw new Exception("Topic with id "+glossForm.getNodeId()+" not exists");
-		//do job
-		topic.setTopicKey(glossForm.getNodeName());
-		HelpUtil.saveOrUpdateHelpTopic(topic, request);
-		return null;
-	}
+    @Override
+    public ActionForward execute(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
+        GlossaryForm glossForm = (GlossaryForm)form;
+        //check data
+        if (glossForm.getNodeName() == null 
+                || glossForm.getNodeName().trim().length() == 0
+            ) throw new Exception("Node title value is null or empty string.");
+        if (glossForm.getNodeId()==null) throw new Exception("Node id not specified.");
+        //load topic
+        HelpTopic topic = HelpUtil.getHelpTopic(glossForm.getNodeId());
+        if (topic == null) throw new Exception("Topic with id "+glossForm.getNodeId()+" not exists");
+        //do job
+        topic.setTopicKey(glossForm.getNodeName());
+        HelpUtil.saveOrUpdateHelpTopic(topic, request);
+        return null;
+    }
 
 }

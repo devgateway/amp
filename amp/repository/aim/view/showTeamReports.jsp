@@ -578,9 +578,7 @@ $(document).ready(function() {
 							<td class="inside" style="padding-right: 10px; padding-left: 10px;  font-size: 11px; width: 20%;" bgcolor="<%=color%>">
 								<ul>
 									<logic:iterate name="report" property="hierarchies" id="hierarchy" >
-										<li> <digi:trn key="aim:report:${hierarchy.column.columnName}">
-												<bean:write name="hierarchy" property="column.columnName" />
-										</digi:trn> </li>
+										<li> <digi:colNameTrn><bean:write name="hierarchy" property="column.columnName" /></digi:colNameTrn> </li>
 									</logic:iterate>
 								</ul>
 							</td>
@@ -591,14 +589,10 @@ $(document).ready(function() {
 									<logic:iterate name="report" property="columns" id="column" indexId="index">
 										<%if (index.intValue()%2==0){ %>
 											<li>
-												<digi:trn key="aim:report:${column.column.columnName}">
-													<bean:write name="column" property="column.columnName" />
-												</digi:trn>
+												<digi:colNameTrn><bean:write name="column" property="column.columnName" /></digi:colNameTrn>
 										<% } else {%>
 										,
-											<digi:trn key="aim:report:${column.column.columnName}">
-													<bean:write name="column" property="column.columnName" />
-												</digi:trn>
+												<digi:colNameTrn><bean:write name="column" property="column.columnName" /></digi:colNameTrn>
 											</li>
 										<%} %>
 	 								</logic:iterate>
@@ -642,11 +636,20 @@ $(document).ready(function() {
 						<c:set target="${urlParams}" property="rid">
 							<bean:write name="report" property="ampReportId" />
 						</c:set>
+
+						<c:set var="showViewReportIcon" value="false"></c:set>
 						<c:if test="${!aimTeamReportsForm.showTabs}">
-							<a href="${reportLink}"
-							onclick="return popup(this,'');" class="img-padding" title="<digi:trn>Click here to view the NiReport in Saiku</digi:trn>">
-							<img src= "/TEMPLATE/ampTemplate/saikuui_nireports/images/saiku.png" border="0" /></a>
+							<c:set var="showViewReportIcon" value="true"></c:set>
 						</c:if>
+						<%if(FeaturesUtil.isVisibleFeature("Enable Saiku icon in Tab Manager")){ %>
+							<c:set var="showViewReportIcon" value="true"></c:set>
+						<%}%>
+						<c:if test="${showViewReportIcon == true}">
+							<a href="${reportLink}"
+							   onclick="return popup(this,'');" class="img-padding" title="<digi:trn>Click here to view the report</digi:trn>">
+								<img src= "/TEMPLATE/ampTemplate/saikuui_nireports/images/saiku.png" border="0" /></a>
+						</c:if>
+
 						<c:set target="${urlParams}" property="event" value="edit" />
 						<logic:equal name="teamLeadFlag" scope="session" value="true"> 
 							<c:set var="translation">

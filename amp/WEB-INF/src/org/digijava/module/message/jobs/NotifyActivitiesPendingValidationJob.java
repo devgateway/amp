@@ -34,42 +34,42 @@ import com.mockrunner.mock.web.MockRequestDispatcher;
  */
 public class NotifyActivitiesPendingValidationJob extends ConnectionCleaningJob implements StatefulJob {
 
-	@Override
-	public void executeInternal(JobExecutionContext context) throws JobExecutionException {
-		final List<AmpActivityVersion> activitiesToNotify = new ArrayList<>();
-		PersistenceManager.getSession().doWork(new Work() {
+    @Override
+    public void executeInternal(JobExecutionContext context) throws JobExecutionException {
+        final List<AmpActivityVersion> activitiesToNotify = new ArrayList<>();
+        PersistenceManager.getSession().doWork(new Work() {
 
-			@Override
-			public void execute(Connection connection) throws SQLException {
-				String daysToNotify = FeaturesUtil
-						.getGlobalSettingValue(GlobalSettingsConstants.DAYS_NOTIFY_ACTIVITY_SUBMITED_VALIDATION);
-				String condition = " where date_updated::date =(current_date - " + daysToNotify + ") "
-						+ " and approval_status in (" + Constants.ACTIVITY_NEEDS_APPROVAL_STATUS + ") and draft=false";
+            @Override
+            public void execute(Connection connection) throws SQLException {
+                String daysToNotify = FeaturesUtil
+                        .getGlobalSettingValue(GlobalSettingsConstants.DAYS_NOTIFY_ACTIVITY_SUBMITED_VALIDATION);
+                String condition = " where date_updated::date =(current_date - " + daysToNotify + ") "
+                        + " and approval_status in (" + Constants.ACTIVITY_NEEDS_APPROVAL_STATUS + ") and draft=false";
 
-				ViewFetcher v = DatabaseViewFetcher.getFetcherForView("amp_activity", condition,
-						TLSUtils.getEffectiveLangCode(), new HashMap<PropertyDescription, ColumnValuesCacher>(),
-						connection, "*");
-				RsInfo activities = v.fetch(null);
-				while (activities.rs.next()) {
-					AmpActivityVersion activity = new AmpActivityVersion();
+                ViewFetcher v = DatabaseViewFetcher.getFetcherForView("amp_activity", condition,
+                        TLSUtils.getEffectiveLangCode(), new HashMap<PropertyDescription, ColumnValuesCacher>(),
+                        connection, "*");
+                RsInfo activities = v.fetch(null);
+                while (activities.rs.next()) {
+                    AmpActivityVersion activity = new AmpActivityVersion();
 
-					activity.setAmpActivityId(activities.rs.getLong("amp_activity_id"));
-					activity.setName(activities.rs.getString("name"));
-					activitiesToNotify.add(activity);
-				}
-				activities.close();
-			}
-		});
+                    activity.setAmpActivityId(activities.rs.getLong("amp_activity_id"));
+                    activity.setName(activities.rs.getString("name"));
+                    activitiesToNotify.add(activity);
+                }
+                activities.close();
+            }
+        });
 
-		try {
-			for (AmpActivityVersion ampActivityVersion : activitiesToNotify) {
-				new ActivityValidationWorkflowTrigger(ampActivityVersion);
-			}
-		} finally {
-			//clean request Thread created with mockito
-			TLSUtils.getThreadLocalInstance().request = null;
-		}
+        try {
+            for (AmpActivityVersion ampActivityVersion : activitiesToNotify) {
+                new ActivityValidationWorkflowTrigger(ampActivityVersion);
+            }
+        } finally {
+            //clean request Thread created with mockito
+            TLSUtils.getThreadLocalInstance().request = null;
+        }
 
-	}
+    }
 
 }

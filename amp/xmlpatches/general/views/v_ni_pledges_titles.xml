@@ -18,18 +18,27 @@
 	</trigger> 
 	<apply>
 		<script>
-			<lang delimiter=";" type="postgres">
-				<!-- DROP VIEW IF EXISTS v_pledges_titles CASCADE;   -->
-				CREATE OR REPLACE VIEW v_ni_pledges_titles AS 
-       			(( SELECT p.id AS pledge_id, val.category_value AS title, val.id AS title_id
-           				FROM amp_funding_pledges p
-      					JOIN amp_category_value val ON p.title = val.id
-      					WHERE NOT EXISTS (SELECT z.id FROM amp_funding_pledges z WHERE z.id = p.id AND z.titlefreetext IS NOT NULL AND z.titlefreetext &lt;&gt; '')
-     				)
-					UNION
-						(SELECT p.id AS pledge_id, p.titlefreetext, -p.id 
-           				FROM amp_funding_pledges p WHERE (p.titlefreetext IS NOT NULL) AND (NOT p.titlefreetext = ''))) ORDER BY pledge_id, title_id; <!-- free text comes last -->
-			</lang>
+			<lang delimiter=";" type="postgres"><![CDATA[
+				CREATE OR REPLACE VIEW v_ni_pledges_titles AS
+				  ((SELECT
+					  p.id               AS pledge_id,
+					  val.category_value AS title,
+					  val.id             AS title_id
+					FROM amp_funding_pledges p
+					  JOIN amp_category_value val ON p.title = val.id
+					WHERE NOT EXISTS(SELECT z.id
+									 FROM amp_funding_pledges z
+									 WHERE z.id = p.id AND z.titlefreetext IS NOT NULL AND z.titlefreetext <> '')
+				   )
+				   UNION
+				   (SELECT p.id AS pledge_id, p.titlefreetext, -p.id
+					FROM amp_funding_pledges p
+					WHERE (p.titlefreetext IS NOT NULL) AND (NOT p.titlefreetext = ''))
+				   )
+				   UNION
+				   SELECT 999999999, 'Unallocated Transations'::varchar(255), -999999999
+				   ORDER BY pledge_id, title_id;
+			]]></lang>
 		</script>
 	</apply>
 </tns:patch>

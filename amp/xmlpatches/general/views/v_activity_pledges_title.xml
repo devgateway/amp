@@ -18,18 +18,25 @@
 	</trigger> 
 	<apply>
 		<script>
-			<lang delimiter=";" type="postgres">
-			DROP VIEW IF EXISTS v_activity_pledges;
-			
-			CREATE OR REPLACE VIEW v_activity_pledges_title AS 
-	    	 SELECT DISTINCT ac.amp_activity_id, cv.category_value as pledge_title ,fp.id AS pledge_id, cv.id AS title_id  
-			   FROM amp_funding_pledges fp 
-			   JOIN amp_category_value cv ON cv.id = fp.title 
-			   JOIN amp_funding_detail fd ON fd.pledge_id = fp.id 
-			   JOIN amp_funding fu ON fd.amp_funding_id = fu.amp_funding_id 
-			   JOIN amp_activity_version ac ON fu.amp_activity_id = ac.amp_activity_id  
-			  WHERE ac.amp_team_id IS NOT NULL AND ac.deleted &lt;&gt; true AND ac.draft &lt;&gt; true;; 
-        </lang>
+			<lang delimiter=";" type="postgres"><![CDATA[
+				DROP VIEW IF EXISTS v_activity_pledges;
+
+				CREATE OR REPLACE VIEW v_activity_pledges_title AS
+				  SELECT DISTINCT ac.amp_activity_id, cv.category_value as pledge_title ,fp.id AS pledge_id, cv.id AS title_id,
+					fu.type_of_assistance_category_va as terms_assist_id,
+					fu.financing_instr_category_value as financing_instrument_id,
+					fu.amp_donor_org_id as donor_org_id,
+					fu.mode_of_payment_category_va as mode_of_payment_id,
+					fu.funding_status_category_va as funding_status_id,
+					fu.agreement as agreement_id,
+					fu.amp_funding_id as funding_id
+				  FROM amp_funding_pledges fp
+					JOIN amp_category_value cv ON cv.id = fp.title
+					JOIN amp_funding_detail fd ON fd.pledge_id = fp.id
+					JOIN amp_funding fu ON fd.amp_funding_id = fu.amp_funding_id
+					JOIN amp_activity_version ac ON fu.amp_activity_id = ac.amp_activity_id
+				  WHERE ac.amp_team_id IS NOT NULL AND ac.deleted <> true AND ac.draft <> true;
+			]]></lang>
 		</script>
 	</apply>
 </tns:patch>

@@ -1,8 +1,7 @@
 package org.digijava.module.aim.helper;
 
 import java.io.IOException;
-import java.sql.Date;
-import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -10,49 +9,50 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
 
 public class FormatDateHelperTag extends BodyTagSupport {
 
-	/**
-	 * 
-	 */
-	
-	private static final long serialVersionUID = 1L;
-	private Timestamp value;
-	
-	@Override
-	public int doStartTag() throws JspException {
-		try {
+    /**
+     * 
+     */
+    
+    private static final long serialVersionUID = 1L;
+    private Date value;
 
-			JspWriter out = pageContext.getOut();
-			Timestamp time = getValue();
-			String result="";
-			if (value!=null)
-				result = DateConversion.convertDateToLocalizedString( new Date(value.getTime()) );
-			
-			out.write(result);
-			return super.doStartTag();
-		} catch (IOException ioe) {
+    @Override
+    public int doStartTag() throws JspException {
+        try {
 
-		}
+            JspWriter out = pageContext.getOut();
+            String result = "";
+            if (value != null) {
+                result = DateConversion.convertDateToLocalizedString(value);
+            }
 
-		return (EVAL_BODY_INCLUDE);
-	}
+            out.write(result);
+            return super.doStartTag();
+        } catch (IOException ioe) {
 
-	@Override
-	public int doAfterBody() throws JspException {
-		// TODO Auto-generated method stub
-		return super.doAfterBody();
-	}
+        }
 
-	@Override
-	public int doEndTag() throws JspException {
+        return (EVAL_BODY_INCLUDE);
+    }
 
-		return EVAL_PAGE;
-	}
+    @Override
+    public int doAfterBody() throws JspException {
+        // TODO Auto-generated method stub
+        return super.doAfterBody();
+    }
 
-	public void setValue(Timestamp value) {
-		this.value = value;
-	}
+    @Override
+    public int doEndTag() throws JspException {
 
-	public Timestamp getValue() {
-		return value;
-	}
+        return EVAL_PAGE;
+    }
+
+    public void setValue(Date value) {
+        this.value = value;
+    }
+
+    public Date getValue() {
+        return value;
+    }
+
 }

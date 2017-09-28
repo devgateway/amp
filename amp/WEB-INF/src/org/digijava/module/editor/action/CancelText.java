@@ -12,9 +12,9 @@ import org.digijava.module.editor.form.EditorForm;
 public class CancelText extends Action{
 @Override
 public ActionForward execute(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)
-		throws Exception {
-	
-	EditorForm formBean = (EditorForm) form;
-	return new ActionForward((formBean.getReturnUrl() == null ? "/" : formBean.getReturnUrl()), true);
-	}
+        throws Exception {
+    
+    EditorForm formBean = (EditorForm) form;
+    return new ActionForward((formBean.getReturnUrl() == null ? "/" : formBean.getReturnUrl()), true);
+    }
 }

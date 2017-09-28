@@ -14,7 +14,7 @@ public class AmpContentTranslation {
     private String translation;
 
     public AmpContentTranslation(){
-    	super();
+        super();
     }
     
     public AmpContentTranslation(String objectClass, Long objectId, String fieldName, String locale, String translation) {
@@ -76,18 +76,18 @@ public class AmpContentTranslation {
     @Override
     public String toString()
     {
-    	return String.format("%s[%d, %s].%s = %s; id = %s", compressClassName(objectClass), objectId, locale, fieldName, this.translation, id);
+        return String.format("%s[%d, %s].%s = %s; id = %s", compressClassName(objectClass), objectId, locale, fieldName, this.translation, id);
     }
     
     public static String compressClassName(String className)
     {
-    	if (className == null)
-    		return className;
-    	
-    	int pos = className.lastIndexOf('.');
-    	if (pos == -1)
-    		return className;
-    	
-    	return className.substring(pos + 1);
+        if (className == null)
+            return className;
+        
+        int pos = className.lastIndexOf('.');
+        if (pos == -1)
+            return className;
+        
+        return className.substring(pos + 1);
     }
 }

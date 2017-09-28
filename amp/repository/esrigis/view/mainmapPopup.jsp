@@ -20,11 +20,49 @@
       on iOS devices-->
     <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no"/>
  
-    <digi:ref href="/TEMPLATE/ampTemplate/gisModule/dev/node_modules/leaflet/dist/leaflet.css" type="text/css" rel="stylesheet" />
+    <digi:ref href="/TEMPLATE/ampTemplate/css_2/leaflet.css" type="text/css" rel="stylesheet" />
     <digi:ref href="/TEMPLATE/ampTemplate/css_2/mappopupstyles.css" type="text/css" rel="stylesheet" />
   
-   	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/gisModule/dev/node_modules/leaflet/dist/leaflet.js"/>"></script>
-    <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/gisModule/dev/node_modules/esri-leaflet/dist/esri-leaflet.js"/>"></script>
+   	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/leaflet/leaflet.js"/>"></script>
+    <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/leaflet/esri-leaflet.js"/>"></script>    
+     
+     <!--Leaflet Draw-->      
+     <script src="/TEMPLATE/ampTemplate/js_2/leaflet-draw/Leaflet.draw.js"></script>
+    <script src="/TEMPLATE/ampTemplate/js_2/leaflet-draw/Leaflet.Draw.Event.js"></script>
+    <link rel="stylesheet" href="/TEMPLATE/ampTemplate/js_2/leaflet-draw/leaflet.draw.css"/>
+
+    <script src="/TEMPLATE/ampTemplate/js_2/leaflet-draw/Toolbar.js"></script>
+    <script src="/TEMPLATE/ampTemplate/js_2/leaflet-draw/Tooltip.js"></script>
+
+    <script src="/TEMPLATE/ampTemplate/js_2/leaflet-draw/ext/GeometryUtil.js"></script>
+    <script src="/TEMPLATE/ampTemplate/js_2/leaflet-draw/ext/LatLngUtil.js"></script>
+    <script src="/TEMPLATE/ampTemplate/js_2/leaflet-draw/ext/LineUtil.Intersect.js"></script>
+    <script src="/TEMPLATE/ampTemplate/js_2/leaflet-draw/ext/Polygon.Intersect.js"></script>
+    <script src="/TEMPLATE/ampTemplate/js_2/leaflet-draw/ext/Polyline.Intersect.js"></script>
+    <script src="/TEMPLATE/ampTemplate/js_2/leaflet-draw/ext/TouchEvents.js"></script>
+
+    <script src="/TEMPLATE/ampTemplate/js_2/leaflet-draw/draw/DrawToolbar.js"></script>
+    <script src="/TEMPLATE/ampTemplate/js_2/leaflet-draw/draw/handler/Draw.Feature.js"></script>
+    <script src="/TEMPLATE/ampTemplate/js_2/leaflet-draw/draw/handler/Draw.SimpleShape.js"></script>
+    <script src="/TEMPLATE/ampTemplate/js_2/leaflet-draw/draw/handler/Draw.Polyline.js"></script>
+    <script src="/TEMPLATE/ampTemplate/js_2/leaflet-draw/draw/handler/Draw.Circle.js"></script>
+    <script src="/TEMPLATE/ampTemplate/js_2/leaflet-draw/draw/handler/Draw.Marker.js"></script>
+    <script src="/TEMPLATE/ampTemplate/js_2/leaflet-draw/draw/handler/Draw.Polygon.js"></script>
+    <script src="/TEMPLATE/ampTemplate/js_2/leaflet-draw/draw/handler/Draw.Rectangle.js"></script>
+
+
+    <script src="/TEMPLATE/ampTemplate/js_2/leaflet-draw/edit/EditToolbar.js"></script>
+    <script src="/TEMPLATE/ampTemplate/js_2/leaflet-draw/edit/handler/EditToolbar.Edit.js"></script>
+    <script src="/TEMPLATE/ampTemplate/js_2/leaflet-draw/edit/handler/EditToolbar.Delete.js"></script>
+
+    <script src="/TEMPLATE/ampTemplate/js_2/leaflet-draw/Control.Draw.js"></script>
+
+    <script src="/TEMPLATE/ampTemplate/js_2/leaflet-draw/edit/handler/Edit.Poly.js"></script>
+    <script src="/TEMPLATE/ampTemplate/js_2/leaflet-draw/edit/handler/Edit.SimpleShape.js"></script>
+    <script src="/TEMPLATE/ampTemplate/js_2/leaflet-draw/edit/handler/Edit.Circle.js"></script>
+    <script src="/TEMPLATE/ampTemplate/js_2/leaflet-draw/edit/handler/Edit.Rectangle.js"></script>
+    <script src="/TEMPLATE/ampTemplate/js_2/leaflet-draw/edit/handler/Edit.Marker.js"></script>
+    
     <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
     <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/mainmapPopup.js"/>"></script>
    	    
@@ -38,9 +76,7 @@
   	<img id="loadingImg" src="/TEMPLATE/ampTemplate/img_2/ajax-loader.gif" style="position:absolute;left:50%;top:50%; z-index:100;display: none;" />
     <div id="map"></div>
     <span id="location-wrapper">
-    <button id="pointBtn" class="gradient"   onclick="createPoint()"><digi:trn>Point</digi:trn></button>
-	<button id="deactivateBtn" class="gradient" onclick="deactivate()"><digi:trn>Deactivate</digi:trn></button> 
-	<input type="text" id="address" size="10"/>
+    <input type="text" id="address" size="10"/>
     <button id="localeBtn"  onclick="locate()"><digi:trn>Locate</digi:trn></button>
 	 <select id="fclList" style="width:90px;" onchange="filterLocation(this.value)">
 	    	<option><digi:trn>All</digi:trn></option>
@@ -61,7 +97,7 @@
 	</div>
    <span id="custom-menu-wrapper">
    <ul class='custom-menu'>
-	  <li data-action="select"><digi:trn>Select point</digi:trn></li>
+	  <li data-action="select"><digi:trn>Select</digi:trn></li>
 	  <li data-action="remove"><digi:trn>Remove</digi:trn></li>
 	</ul>
   </span>

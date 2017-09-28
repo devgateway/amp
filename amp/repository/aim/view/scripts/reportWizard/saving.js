@@ -30,6 +30,13 @@ function getAlsoShowPledges() {
 	return checkboxObject.checked;
 }
 
+function getSplitByFunding() {
+    if (aimReportWizardForm.splitByFunding == null)
+        return false;
+    var checkboxObject = aimReportWizardForm.splitByFunding;
+    return checkboxObject.checked;
+}
+
 function getReportTitleEl() {
 	var divEl	= document.getElementById("titlePanelBody");
 	var titleEl	= divEl.getElementsByTagName("input")[0];
@@ -135,6 +142,44 @@ function getSelectedFieldsNames( ulId ) {
 		ret.push(fields[i].parentNode.innerHTML.replace(/<[^>]*>/g, "").replace(/^\s+|\s+$/g, '') );
 	}
 	return ret;	
+}
+
+function getColInfo (id) {
+    var colName	= YAHOO.amp.reportwizard.colIdToName[id];
+    if ( colName == null ) {
+        return undefined;
+    } else {
+        return colName;
+    }
+}
+
+function getMeasureInfo (id) {
+    var measureName	= YAHOO.amp.reportwizard.measureIdToName[id];
+    if ( measureName == null ) {
+        return undefined;
+    } else {
+        return measureName;
+    }
+}
+
+function getSelectedFieldsRealNames( ulId, isMeasure ) {
+	var ret			= new Array();
+	var ulEl		= document.getElementById( ulId );
+
+	var fields		= ulEl.getElementsByTagName( "input" );
+	for ( var i=0; i<fields.length; i++ ) {
+        var fieldName;
+        if (isMeasure) {
+            fieldName = getMeasureInfo( fields[i].value );
+        } else {
+            fieldName = getColInfo( fields[i].value );
+		}
+
+		if (fieldName) {
+            ret.push(fieldName);
+        }
+	}
+	return ret;
 }
 
 function SaveReportEngine ( savingMessage, failureMessage ) {
@@ -313,7 +358,8 @@ SaveReportEngine.prototype.saveAndOrOpenReport = function (openReport) {
 							"&publicReport="+getPublicReport() +
 							"&workspaceLinked="+getWorkspaceLinked() +
 							"&alsoShowPledges="+getAlsoShowPledges() +
-							//"&onlyShowProjectsRelatedPledges=" + getOnlyShowProjectsRelatedPledges() + 
+							"&splitByFunding="+getSplitByFunding() +
+							//"&onlyShowProjectsRelatedPledges=" + getOnlyShowProjectsRelatedPledges() +
 							"&hideActivities="+getHideActivities() +
 							"&useFilters="+getUseFilters()+
 							"&openReport=" + openReport +

@@ -29,8 +29,8 @@ public class ViewIndicators
     public ActionForward execute(ActionMapping mapping, ActionForm form,
                                  HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
    
-    	List<IndicatorsBean> allInds = new ArrayList<IndicatorsBean>();
-    	Collection sectorsName = new ArrayList();
+        List<IndicatorsBean> allInds = new ArrayList<IndicatorsBean>();
+        Collection sectorsName = new ArrayList();
       
         ViewIndicatorsForm allIndForm = (ViewIndicatorsForm) form;
         allIndForm.setThemeName("");
@@ -38,9 +38,9 @@ public class ViewIndicators
     
         if(view!=null){
         if(view.equalsIgnoreCase("viewall")){
-        	allIndForm.setSectorId(new Long(-1));
-        	allIndForm.setKeyword(null);
-        	
+            allIndForm.setSectorId(new Long(-1));
+            allIndForm.setKeyword(null);
+            
          }
         }
         
@@ -51,70 +51,70 @@ public class ViewIndicators
        allIndForm.setSectors(allSectors);
        allInds.clear();
        for(AmpIndicator indicator : searchResult){
-        	
-        	
-        	IndicatorsBean indbean = new IndicatorsBean(indicator);
-        	
-        	indbean.setName(indicator.getName());
-         	indbean.setType("0");
-         	indbean.setCategory(Integer.valueOf(indbean.getCategory()));
+            
+            
+            IndicatorsBean indbean = new IndicatorsBean(indicator);
+            
+            indbean.setName(indicator.getName());
+            indbean.setType("0");
+            indbean.setCategory(Integer.valueOf(indbean.getCategory()));
             indbean.setSectorName("Z");
-         	
-         	
-         	Collection indSector=indbean.getSector();
-         	
-         	
-         	if(indSector != null){
-				for(Iterator sectItr=indSector.iterator();sectItr.hasNext();){
-        	        AmpSector sect=(AmpSector)sectItr.next();
-        	        indbean.getSectorNames().add(sect.getName());
-        	        indbean.setSectorName(sect.getName());
-        			
-        			
-				 }
-			  }
-          	
-         	boolean addFlag = false;
-         	  if(allIndForm.getSectorId()!=-1){
-  				Collection indSectors=indbean.getSector();
-  				if(indSectors!=null){
-   					for(Iterator sectItr=indSectors.iterator();sectItr.hasNext();){
-  						AmpSector sect=(AmpSector)sectItr.next();
-  						
-  						if(sect.getAmpSectorId().equals(allIndForm.getSectorId())){
-  							addFlag = true;
-  							break;
-  						}
-  					}
-  				}
-  			}else{
-  				addFlag=true;
-  			}
-         	if (addFlag) {
-				if (allIndForm.getKeyword() != ""
-						&& allIndForm.getKeyword() != null) {
-					if (indbean.getName().toLowerCase().indexOf(
-							allIndForm.getKeyword().toLowerCase()) > -1) {
-						allInds.add(indbean);
-					}
-				} else {
-					allInds.add(indbean);
-				}
-			}
-		}
-         	 
+            
+            
+            Collection indSector=indbean.getSector();
+            
+            
+            if(indSector != null){
+                for(Iterator sectItr=indSector.iterator();sectItr.hasNext();){
+                    AmpSector sect=(AmpSector)sectItr.next();
+                    indbean.getSectorNames().add(sect.getName());
+                    indbean.setSectorName(sect.getName());
+                    
+                    
+                 }
+              }
+            
+            boolean addFlag = false;
+              if(allIndForm.getSectorId()!=-1){
+                Collection indSectors=indbean.getSector();
+                if(indSectors!=null){
+                    for(Iterator sectItr=indSectors.iterator();sectItr.hasNext();){
+                        AmpSector sect=(AmpSector)sectItr.next();
+                        
+                        if(sect.getAmpSectorId().equals(allIndForm.getSectorId())){
+                            addFlag = true;
+                            break;
+                        }
+                    }
+                }
+            }else{
+                addFlag=true;
+            }
+            if (addFlag) {
+                if (allIndForm.getKeyword() != ""
+                        && allIndForm.getKeyword() != null) {
+                    if (indbean.getName().toLowerCase().indexOf(
+                            allIndForm.getKeyword().toLowerCase()) > -1) {
+                        allInds.add(indbean);
+                    }
+                } else {
+                    allInds.add(indbean);
+                }
+            }
+        }
+             
         if(allIndForm.getSortBy()!=null){
-        	if(allIndForm.getSortBy().equalsIgnoreCase("nameAsc")){
-        		 Collections.sort(allInds, new ProgramUtil.HelperAllIndicatorBeanNameComparator());
-        	}else if(allIndForm.getSortBy().equalsIgnoreCase("nameDesc")){
-        		Collections.sort(allInds, new ProgramUtil.HelperAllIndicatorBeanNameDescendingComparator());
-        	}else if(allIndForm.getSortBy().equalsIgnoreCase("sectAsc")){
-        		Collections.sort(allInds, new ProgramUtil.HelperAllIndicatorBeanSectorComparator());
-        	}else if(allIndForm.getSortBy().equalsIgnoreCase("sectDesc")){
-        		Collections.sort(allInds, new ProgramUtil.HelperAllIndicatorBeanSectorDescendingComparator());
-        	}
+            if(allIndForm.getSortBy().equalsIgnoreCase("nameAsc")){
+                 Collections.sort(allInds, new ProgramUtil.HelperAllIndicatorBeanNameComparator());
+            }else if(allIndForm.getSortBy().equalsIgnoreCase("nameDesc")){
+                Collections.sort(allInds, new ProgramUtil.HelperAllIndicatorBeanNameDescendingComparator());
+            }else if(allIndForm.getSortBy().equalsIgnoreCase("sectAsc")){
+                Collections.sort(allInds, new ProgramUtil.HelperAllIndicatorBeanSectorComparator());
+            }else if(allIndForm.getSortBy().equalsIgnoreCase("sectDesc")){
+                Collections.sort(allInds, new ProgramUtil.HelperAllIndicatorBeanSectorDescendingComparator());
+            }
         }else{
-        	Collections.sort(allInds, new ProgramUtil.HelperAllIndicatorBeanNameComparator());
+            Collections.sort(allInds, new ProgramUtil.HelperAllIndicatorBeanNameComparator());
         }
         
 //        switch(allIndForm.getSortBy()) {
@@ -140,9 +140,9 @@ public class ViewIndicators
  
         ActionMessages errors = (ActionMessages)request.getSession().getAttribute("removeIndicatorErrors");
         if(errors!=null){
-        	saveErrors(request, errors);
-        	request.getSession().removeAttribute("removeIndicatorErrors");
- 	 	}
+            saveErrors(request, errors);
+            request.getSession().removeAttribute("removeIndicatorErrors");
+        }
         return mapping.findForward("forward");
     }
   }

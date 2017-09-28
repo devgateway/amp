@@ -43,13 +43,15 @@ var AMPInfo = Backbone.View.extend({
     	content += "<h3><span class='i18n'>Applied filters</span></h3>";
     	content += "<div id='amp_info_filters_block'></div>";
     	content += "</div>";
+    	var notification = this.build_notification();
     	if(settings){
     		var currencyCode = settings[window.settingsWidget.Constants.CURRENCY_ID];
     		var currencyValue = window.settingsWidget.definitions.findCurrencyById(currencyCode).value;
         	content += "<div id='amp_info_settings'><h5><span class='i18n'>Currency</span>: " + currencyValue;
         	content += "</h5></div>";
+            notification = this.build_notificationFromSettings(settings);
     	}
-    	content = content.replace("{0}", this.build_notification());
+    	content = content.replace("{0}", notification);
     	return content;
     },
     
@@ -59,6 +61,20 @@ var AMPInfo = Backbone.View.extend({
 				case "AMOUNTS_OPTION_THOUSANDS": return "Amounts are in thousands (000)";
 				case "AMOUNTS_OPTION_MILLIONS": return "Amounts are in millions (000 000)";
 			}
+    	return "";
+    },
+
+    build_notificationFromSettings: function(settings) {
+    	Saiku.logger.log("AMPInfo.build_notificationFromSettings");
+    	var amountFormat = settings[window.settingsWidget.Constants.AMOUNT_FORMAT_ID];
+        	if (amountFormat) {
+                switch (amountFormat[window.settingsWidget.Constants.AMOUNT_UNIT_ID]) {
+                    case window.settingsWidget.Constants.AMOUNTS_OPTION_THOUSANDS:
+                        return "Amounts are in thousands (000)";
+                    case window.settingsWidget.Constants.AMOUNTS_OPTION_MILLIONS:
+                        return "Amounts are in millions (000 000)";
+                }
+            }
     	return "";
     },
     
@@ -165,24 +181,28 @@ var createDateFilterObject= function(filters, propertyName){
 			auxProperty.start = auxProperty.start || "";
 			auxProperty.end = auxProperty.end || "";
 
-			var startDatePrefix = TranslationManager.getTranslated((auxProperty.start.length > 0 && auxProperty.end.length === 0) ? "From" : "") + '&nbsp;';
-			var endDatePrefix = TranslationManager.getTranslated((auxProperty.start.length === 0 && auxProperty.end.length > 0) ? "Until" : "") + '&nbsp';
-
-			if(auxProperty.start.length > 0){
-				filter.values.push({
-					id : auxProperty.start,
-					name : auxProperty.start,
-					trnName : startDatePrefix + " " + window.currentFilter.formatDate(auxProperty.start) 
-				});
-			}
-
+			var startDatePrefix = TranslationManager.getTranslated((auxProperty.start.length > 0 && auxProperty.end.length === 0) ? "From" : "");
+			var endDatePrefix = TranslationManager.getTranslated((auxProperty.start.length === 0 && auxProperty.end.length > 0) ? "Until" : "");
+			var trnName = "";
+			
+			if(auxProperty.start.length > 0 ){
+				trnName = startDatePrefix + " " + window.currentFilter.formatDate(auxProperty.start);				
+			}			
+						
 			if(auxProperty.end.length > 0){
-				filter.values.push({
-					id : auxProperty.end,
-					name : auxProperty.end,
-					trnName : endDatePrefix + " " + window.currentFilter.formatDate(auxProperty.end) 					
-				});		
-			}									
+				if(auxProperty.start.length > 0){
+					trnName += " - ";
+				}
+				trnName += endDatePrefix + " " + window.currentFilter.formatDate(auxProperty.end);					
+			}	
+			
+			filter.values.push({
+				id : auxProperty.end + auxProperty.start ,
+				name : auxProperty.end + auxProperty.start,
+				trnName : trnName 					
+			});	
+			
+			
 		} else if (auxProperty.modelType === 'YEAR-SINGLE-VALUE') {
 			if(auxProperty.year){				
 				filter.values.push({

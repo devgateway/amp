@@ -64,7 +64,7 @@
 											<input type="checkbox" style='line-height:15px; margin-top:6px;' id="fieldVis:<bean:write name="ampColumnFromTree" property="columnId"/>" name="selectedColumns" value="<bean:write name="ampColumnFromTree" property="columnId"/>"/>
 											<a id="field:<bean:write name="ampColumnFromTree" property="columnId"/>" style="font-size: 11px;text-decoration:none"></a>
 											<span style="font-size: 11px; text-decoration:none">
-												<digi:trn key="aim:report:${ampColumnFromTree.columnName}"><bean:write name="ampColumnFromTree" property="columnName"/></digi:trn>
+												<digi:colNameTrn><bean:write name="ampColumnFromTree" property="columnName"/></digi:colNameTrn>
 												<logic:notEmpty name="ampColumnFromTree" property="description">
 													<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn key="aim:report:tip:${ampColumnFromTree.columnName}:${ampColumnFromTree.description}">${ampColumnFromTree.description}</digi:trn>">
 												</logic:notEmpty>

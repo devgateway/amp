@@ -27,60 +27,60 @@ import org.digijava.kernel.user.User;
  */
 public class AmpPMManageUsersTableFeaturePanel extends AmpFormTableFeaturePanel implements IHeaderContributor{
 
-	private List<TransparentWebMarkupContainer> sliders;
-	
-	public AmpPMManageUsersTableFeaturePanel(String id, IModel<Set<User>> model, String fmName, boolean hideLeadingNewLine) throws Exception {
-		super(id, model, fmName, hideLeadingNewLine);
-		// TODO Auto-generated constructor stub
-	}
+    private List<TransparentWebMarkupContainer> sliders;
+    
+    public AmpPMManageUsersTableFeaturePanel(String id, IModel<Set<User>> model, String fmName, boolean hideLeadingNewLine) throws Exception {
+        super(id, model, fmName, hideLeadingNewLine);
+        // TODO Auto-generated constructor stub
+    }
 
-	public AmpPMManageUsersTableFeaturePanel(String id, IModel<Set<User>> model, String fmName) throws Exception {
-		super(id, model, fmName);
-		sliders = new ArrayList<TransparentWebMarkupContainer>();
+    public AmpPMManageUsersTableFeaturePanel(String id, IModel<Set<User>> model, String fmName) throws Exception {
+        super(id, model, fmName);
+        sliders = new ArrayList<TransparentWebMarkupContainer>();
 
-		AbstractReadOnlyModel<List<User>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(model);
-		
-		list = new PageableListView<User>("usersList", listModel, 5) {
-			private static final long serialVersionUID = 7218457979728871528L;
-			@Override
-			protected void populateItem(final ListItem<User> item) {
-				item.add(new Label("userLabel", item.getModelObject().getName()));
-				item.add(new Label("userEmailLabel", item.getModelObject().getEmail()));
+        AbstractReadOnlyModel<List<User>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(model);
+        
+        list = new PageableListView<User>("usersList", listModel, 5) {
+            private static final long serialVersionUID = 7218457979728871528L;
+            @Override
+            protected void populateItem(final ListItem<User> item) {
+                item.add(new Label("userLabel", item.getModelObject().getName()));
+                item.add(new Label("userEmailLabel", item.getModelObject().getEmail()));
 
-				final TransparentWebMarkupContainer slider;
-				slider = new TransparentWebMarkupContainer("sliderUserInfo");
-				slider.setOutputMarkupId(true);
-				item.add(slider);
-				sliders.add(slider);
-				try {
-					item.add(new AmpPMSearchOrganizationsFeaturePanel("assignedOrgsPerUser", item.getModel(), "Assigning Organizations", true));
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}	
-			}
-		};
-		list.setReuseItems(true);
-		add(list);
-		
-	}
-	
-	public List<TransparentWebMarkupContainer> getSliders() {
-		return sliders;
-	}
+                final TransparentWebMarkupContainer slider;
+                slider = new TransparentWebMarkupContainer("sliderUserInfo");
+                slider.setOutputMarkupId(true);
+                item.add(slider);
+                sliders.add(slider);
+                try {
+                    item.add(new AmpPMSearchOrganizationsFeaturePanel("assignedOrgsPerUser", item.getModel(), "Assigning Organizations", true));
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }   
+            }
+        };
+        list.setReuseItems(true);
+        add(list);
+        
+    }
+    
+    public List<TransparentWebMarkupContainer> getSliders() {
+        return sliders;
+    }
 
-	public void setSliders(List<TransparentWebMarkupContainer> sliders) {
-		this.sliders = sliders;
-	}
+    public void setSliders(List<TransparentWebMarkupContainer> sliders) {
+        this.sliders = sliders;
+    }
 
-	@Override
-	public void renderHead(IHeaderResponse response) {
-		 for (TransparentWebMarkupContainer c: sliders) {
-			 response.render(OnDomReadyHeaderItem.forScript(OnePagerUtil.getToggleJS(c)));
-		};
-		 
-	}
+    @Override
+    public void renderHead(IHeaderResponse response) {
+         for (TransparentWebMarkupContainer c: sliders) {
+             response.render(OnDomReadyHeaderItem.forScript(OnePagerUtil.getToggleJS(c)));
+        };
+         
+    }
 
-	
+    
 
 }

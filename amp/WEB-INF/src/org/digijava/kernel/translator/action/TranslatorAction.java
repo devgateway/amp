@@ -48,111 +48,111 @@ import org.digijava.kernel.util.RequestUtils;
 
 public class TranslatorAction extends Action {
 
-	private static Logger logger =
-		I18NHelper.getKernelLogger(TranslatorAction.class);
+    private static Logger logger =
+        I18NHelper.getKernelLogger(TranslatorAction.class);
 
-	/**
-	 * Process the specified HTTP request, and create the corresponding HTTP
-	 * response (or forward to another web component that will create it).
-	 * Return an <code>ActionForward</code> instance describing where and how
-	 * control should be forwarded, or <code>null</code> if the response has
-	 * already been completed.
-	 *
-	 * @param servlet The ActionServlet making this request
-	 * @param mapping The ActionMapping used to select this instance
-	 * @param actionForm The optional ActionForm bean for this request (if any)
-	 * @param request The HTTP request we are processing
-	 * @param response The HTTP response we are creating
-	 *
-	 * @exception IOException if an input/output error occurs
-	 * @exception ServletException if a servlet exception occurs
-	 */
-	public ActionForward execute(
-		ActionMapping mapping,
-		ActionForm form,
-		HttpServletRequest request,
-		HttpServletResponse response)
-		throws IOException, ServletException {
-		if (logger.isDebugEnabled()) {
-			Object[] param = { "TranslatorAction", "execute()" };
-			logger.l7dlog(
-				Level.DEBUG,
-				"ActionClass.MethodEnter.db",
-				param,
-				null);
-		}
-		ServletContext context = getServlet().getServletContext();
-		TranslatorForm tForm = (TranslatorForm) form;
-		try {
-			if (tForm.getMode() == null) {
-				return null;
-			}
+    /**
+     * Process the specified HTTP request, and create the corresponding HTTP
+     * response (or forward to another web component that will create it).
+     * Return an <code>ActionForward</code> instance describing where and how
+     * control should be forwarded, or <code>null</code> if the response has
+     * already been completed.
+     *
+     * @param servlet The ActionServlet making this request
+     * @param mapping The ActionMapping used to select this instance
+     * @param actionForm The optional ActionForm bean for this request (if any)
+     * @param request The HTTP request we are processing
+     * @param response The HTTP response we are creating
+     *
+     * @exception IOException if an input/output error occurs
+     * @exception ServletException if a servlet exception occurs
+     */
+    public ActionForward execute(
+        ActionMapping mapping,
+        ActionForm form,
+        HttpServletRequest request,
+        HttpServletResponse response)
+        throws IOException, ServletException {
+        if (logger.isDebugEnabled()) {
+            Object[] param = { "TranslatorAction", "execute()" };
+            logger.l7dlog(
+                Level.DEBUG,
+                "ActionClass.MethodEnter.db",
+                param,
+                null);
+        }
+        ServletContext context = getServlet().getServletContext();
+        TranslatorForm tForm = (TranslatorForm) form;
+        try {
+            if (tForm.getMode() == null) {
+                return null;
+            }
 
-			if (tForm.getMode().equals("update")) {
+            if (tForm.getMode().equals("update")) {
 
-				//Update the database
-				String flag = tForm.getType();
-				Message msg = new Message();
+                //Update the database
+                String flag = tForm.getType();
+                Message msg = new Message();
 
-				msg.setKey(tForm.getKey());
-				msg.setLocale(tForm.getDestLocale());
-				msg.setCreated(
-					new java.sql.Timestamp(System.currentTimeMillis()));
+                msg.setKey(tForm.getKey());
+                msg.setLocale(tForm.getDestLocale());
+                msg.setCreated(
+                    new java.sql.Timestamp(System.currentTimeMillis()));
 
-				if (flag.equalsIgnoreCase("local")) {
+                if (flag.equalsIgnoreCase("local")) {
 
-					msg.setSite(RequestUtils.getSiteDomain(request).getSite());
-				} else {
+                    msg.setSite(RequestUtils.getSiteDomain(request).getSite());
+                } else {
 
-					msg.setSite(DgUtil.getRootSite(RequestUtils.getSiteDomain(request).getSite()));
+                    msg.setSite(DgUtil.getRootSite(RequestUtils.getSiteDomain(request).getSite()));
 
-				}
+                }
 
                 TranslatorWorker translatorWorker = TranslatorWorker.getInstance(msg.getKey());
 
-				Message message =
-					translatorWorker.getByKey(
-						msg.getKey(),
-						msg.getLocale(),
-						Long.parseLong(msg.getSiteId()));
+                Message message =
+                    translatorWorker.getByKey(
+                        msg.getKey(),
+                        msg.getLocale(),
+                        Long.parseLong(msg.getSiteId()));
 
-				if (message != null) {
+                if (message != null) {
 
-					message.setMessage(tForm.getText());
-					message.setCreated(
-						new java.sql.Timestamp(System.currentTimeMillis()));
+                    message.setMessage(tForm.getText());
+                    message.setCreated(
+                        new java.sql.Timestamp(System.currentTimeMillis()));
 
-					translatorWorker.update(message);
+                    translatorWorker.update(message);
 
-				} else {
+                } else {
 
-					msg.setMessage(tForm.getText());
+                    msg.setMessage(tForm.getText());
 
-					translatorWorker.save(msg);
+                    translatorWorker.save(msg);
 
-				}
+                }
 
-				context.log(
-					"Update Succeeded Key" + request.getParameter("key"));
-			}
+                context.log(
+                    "Update Succeeded Key" + request.getParameter("key"));
+            }
 
-		} catch (Exception e) {
+        } catch (Exception e) {
 
-			Object[] param = { "TranslatorAction" };
-			logger.l7dlog(Level.ERROR, "ActionClass.Exception.err", param, e);
+            Object[] param = { "TranslatorAction" };
+            logger.l7dlog(Level.ERROR, "ActionClass.Exception.err", param, e);
 
-		}
+        }
 
-		if (logger.isDebugEnabled()) {
-			Object[] param = { "TranslatorLocaleUpdate", "execute()" };
-			logger.l7dlog(
-				Level.DEBUG,
-				"ActionClass.MethodReturn.db",
-				param,
-				null);
-		}
-		return new ActionForward(request.getParameter("back_url"), true);
+        if (logger.isDebugEnabled()) {
+            Object[] param = { "TranslatorLocaleUpdate", "execute()" };
+            logger.l7dlog(
+                Level.DEBUG,
+                "ActionClass.MethodReturn.db",
+                param,
+                null);
+        }
+        return new ActionForward(request.getParameter("back_url"), true);
 
-	}
+    }
 
 }

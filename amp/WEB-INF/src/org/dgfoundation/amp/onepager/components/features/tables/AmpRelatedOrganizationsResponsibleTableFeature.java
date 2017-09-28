@@ -34,101 +34,101 @@ import org.digijava.module.aim.util.FeaturesUtil;
  * @since Nov 12, 2012
  */
 public class AmpRelatedOrganizationsResponsibleTableFeature extends AmpRelatedOrganizationsBaseTableFeature {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * @param id
-	 * @param fmName
-	 * @param am
-	 * @throws Exception
-	 */
-	public AmpRelatedOrganizationsResponsibleTableFeature(String id, String fmName,
-			final IModel<AmpActivityVersion> am, final String roleName,AmpDonorFundingFormSectionFeature donorFundingSection) throws Exception {
-		super(id, fmName, am, roleName, donorFundingSection, null);
-		Long value = Long.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_ORG_GROUP));
-		if (value.longValue()!=-1) {
-		setDefaultOrgGroup(DbUtil.getAmpOrgGroup(value));
-		}
-		
-		
-		setTitleHeaderColSpan(5);
-		list.setObject(new ListView<AmpOrgRole>("list", listModel) {
-			private static final long serialVersionUID = 7218457979728871528L;
-			@Override
-			protected void populateItem(final ListItem<AmpOrgRole> item) {
-				final MarkupContainer listParent=this.getParent();
-				
-				item.add(new AmpTextFieldPanel<String>(
-						"departmentDivision",
-						new PropertyModel<String>(item.getModel(), "additionalInfo"), "relOrgadditionalInfo", true, true));
-				
-				item.add(new Label("name", item.getModelObject().getOrganisation().getAcronymAndName()));	
-				
-				PropertyModel<Double> percModel = new PropertyModel<Double>(item.getModel(), "percentage");
-				AmpPercentageTextField percentageField = new AmpPercentageTextField("percentage", percModel, "percentage",percentageValidationField);
-				item.add(percentageField);
-				
-				final AmpOrgRole oRole = item.getModelObject();
-				if (oRole.getBudgets() == null) {
-					oRole.setBudgets(new HashSet <AmpOrgRoleBudget> ());
-				}
-				final String orgCode = oRole.getOrganisation().getBudgetOrgCode();
-				final PropertyModel<Set<Object>> budgetsModel = new PropertyModel<Set<Object>>(oRole, "budgets");
+    /**
+     * @param id
+     * @param fmName
+     * @param am
+     * @throws Exception
+     */
+    public AmpRelatedOrganizationsResponsibleTableFeature(String id, String fmName,
+            final IModel<AmpActivityVersion> am, final String roleName,AmpDonorFundingFormSectionFeature donorFundingSection) throws Exception {
+        super(id, fmName, am, roleName, donorFundingSection, null);
+        Long value = Long.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_ORG_GROUP));
+        if (value.longValue()!=-1) {
+        setDefaultOrgGroup(DbUtil.getAmpOrgGroup(value));
+        }
+        
+        
+        setTitleHeaderColSpan(5);
+        list.setObject(new ListView<AmpOrgRole>("list", listModel) {
+            private static final long serialVersionUID = 7218457979728871528L;
+            @Override
+            protected void populateItem(final ListItem<AmpOrgRole> item) {
+                final MarkupContainer listParent=this.getParent();
+                
+                item.add(new AmpTextFieldPanel<String>(
+                        "departmentDivision",
+                        new PropertyModel<String>(item.getModel(), "additionalInfo"), "relOrgadditionalInfo", true, true));
+                
+                item.add(new Label("name", item.getModelObject().getOrganisation().getAcronymAndName()));   
+                
+                PropertyModel<Double> percModel = new PropertyModel<Double>(item.getModel(), "percentage");
+                AmpPercentageTextField percentageField = new AmpPercentageTextField("percentage", percModel, "percentage",percentageValidationField);
+                item.add(percentageField);
+                
+                final AmpOrgRole oRole = item.getModelObject();
+                if (oRole.getBudgets() == null) {
+                    oRole.setBudgets(new HashSet <AmpOrgRoleBudget> ());
+                }
+                final String orgCode = oRole.getOrganisation().getBudgetOrgCode();
+                final PropertyModel<Set<Object>> budgetsModel = new PropertyModel<Set<Object>>(oRole, "budgets");
 
-				final ListEditor list = new ListEditor<Object>("budgets", budgetsModel) {
-					private static final long serialVersionUID = 7218457979728871528L;
-					@Override
-					protected void onPopulateItem(
-							org.dgfoundation.amp.onepager.components.ListItem item) {
-							 final PropertyModel <String> budgetModel = new PropertyModel<String>(item.getModelObject(), "budgetCode"); 	
-				             if (budgetModel.getObject() == null || "".equals(budgetModel.getObject().trim()))
-				                	budgetModel.setObject(orgCode); //if budget code not entered yet, add the first part from the org budget code
+                final ListEditor list = new ListEditor<Object>("budgets", budgetsModel) {
+                    private static final long serialVersionUID = 7218457979728871528L;
+                    @Override
+                    protected void onPopulateItem(
+                            org.dgfoundation.amp.onepager.components.ListItem item) {
+                             final PropertyModel <String> budgetModel = new PropertyModel<String>(item.getModelObject(), "budgetCode");     
+                             if (budgetModel.getObject() == null || "".equals(budgetModel.getObject().trim()))
+                                    budgetModel.setObject(orgCode); //if budget code not entered yet, add the first part from the org budget code
 
-							AmpTextFieldPanel<String> budgetCode = new AmpTextFieldPanel<String>("budgetCodeEdit", budgetModel, "Budget Code", true, true);
-							budgetCode.getTextContainer().add(new AttributeModifier("style", "width: 80px;"));
-							budgetCode.getTextContainer().add(new AttributeModifier("maxlength", "6"));
-							budgetCode.setOutputMarkupId(true);
-							budgetCode.getTextContainer().setRequired(true);
-							ListEditorRemoveButton delBudget = new ListEditorRemoveButton("delBudget", "Delete Budget");
-							item.add(delBudget);
-							item.add(budgetCode);
-					}
-				};
-			
+                            AmpTextFieldPanel<String> budgetCode = new AmpTextFieldPanel<String>("budgetCodeEdit", budgetModel, "Budget Code", true, true);
+                            budgetCode.getTextContainer().add(new AttributeModifier("style", "width: 80px;"));
+                            budgetCode.getTextContainer().add(new AttributeModifier("maxlength", "6"));
+                            budgetCode.setOutputMarkupId(true);
+                            budgetCode.getTextContainer().setRequired(true);
+                            ListEditorRemoveButton delBudget = new ListEditorRemoveButton("delBudget", "Delete Budget");
+                            item.add(delBudget);
+                            item.add(budgetCode);
+                    }
+                };
+            
 
-				list.setOutputMarkupId(true);
-				item.setOutputMarkupId(true);
-				item.add(list);
-				
-				AmpAjaxLinkField add = new AmpAjaxLinkField("addBudget", "Add New Budget", "Add New Budget"){
-		          @Override
-					protected void onClick(AjaxRequestTarget target) {
-		        	  AmpOrgRoleBudget budget = new AmpOrgRoleBudget();
-		        	  budget.setBudgetCode(orgCode);
-		        	  list.addItem(budget);
-		        	  target.add(this.getParent());
-					}
-		        };
-		        item.add(add);
-		    
-				/*if (disableBudgetCode){
-					budgetCode.setIgnorePermissions(true);
-					budgetCode.setEnabled(false);
-				}*/
-				
-				AmpDeleteLinkField delRelOrg = new AmpDeleteLinkField("delRelOrg", "Delete Related Organisation") {
-					private static final long serialVersionUID = 1L;
+                list.setOutputMarkupId(true);
+                item.setOutputMarkupId(true);
+                item.add(list);
+                
+                AmpAjaxLinkField add = new AmpAjaxLinkField("addBudget", "Add New Budget", "Add New Budget"){
+                  @Override
+                    protected void onClick(AjaxRequestTarget target) {
+                      AmpOrgRoleBudget budget = new AmpOrgRoleBudget();
+                      budget.setBudgetCode(orgCode);
+                      list.addItem(budget);
+                      target.add(this.getParent());
+                    }
+                };
+                item.add(add);
+            
+                /*if (disableBudgetCode){
+                    budgetCode.setIgnorePermissions(true);
+                    budgetCode.setEnabled(false);
+                }*/
+                
+                AmpDeleteLinkField delRelOrg = new AmpDeleteLinkField("delRelOrg", "Delete Related Organisation") {
+                    private static final long serialVersionUID = 1L;
 
-					@Override
-					public void onClick(AjaxRequestTarget target) {
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
                         onDeleteOrg(target, item, am);
                     }
-				};
-				item.add(delRelOrg);
-			}
-		});
-		
-		add(list.getObject());
-	}
+                };
+                item.add(delRelOrg);
+            }
+        });
+        
+        add(list.getObject());
+    }
 
 }

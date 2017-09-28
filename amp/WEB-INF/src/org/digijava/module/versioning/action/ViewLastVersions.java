@@ -24,13 +24,13 @@ import org.digijava.module.versioning.form.AmpLastVersionsForm;
 
 public class ViewLastVersions extends TilesAction {
 
-	public ActionForward execute(ComponentContext context, ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ActionForward execute(ComponentContext context, ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-		HttpSession session = request.getSession();
-		
-		List<AmpActivityFake> updatedAcitvities = ActivityUtil.getLastUpdatedActivities();
-		session.setAttribute(Constants.MY_LAST_VERSIONS, updatedAcitvities);
-		return null;
-	}
+        HttpSession session = request.getSession();
+        
+        List<AmpActivityFake> updatedAcitvities = ActivityUtil.getLastUpdatedActivities();
+        session.setAttribute(Constants.MY_LAST_VERSIONS, updatedAcitvities);
+        return null;
+    }
 }

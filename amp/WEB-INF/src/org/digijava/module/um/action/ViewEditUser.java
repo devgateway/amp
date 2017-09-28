@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
@@ -43,15 +44,16 @@ import org.digijava.module.um.form.ViewEditUserForm;
 import org.digijava.module.um.util.AmpUserUtil;
 import org.digijava.module.um.util.DbUtil;
 import org.digijava.module.um.util.UmUtil;
+import org.digijava.kernel.user.Group;
 
 public class ViewEditUser extends Action {
 
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
-    	
-    	//Clear users cache
-    	TeamMemberUtil.users.clear();
-    	TeamMemberUtil.atmUsers.clear();
-    	
+        
+        //Clear users cache
+        TeamMemberUtil.users.clear();
+        TeamMemberUtil.atmUsers.clear();
+        
         ViewEditUserForm uForm = (ViewEditUserForm) form;
         User user = null;
         HttpSession session = request.getSession();
@@ -70,7 +72,7 @@ public class ViewEditUser extends Action {
         }
         
         if (!RequestUtils.isAdmin(response, session, request)) {
-        	return null;
+            return null;
         }
 
         try {
@@ -83,45 +85,45 @@ public class ViewEditUser extends Action {
         Boolean isBanned = uForm.getBan();
         
         
-        if (isBanned != null) {        	
-            if (isAmpAdmin.equalsIgnoreCase("yes")) {            	
-            	if (isBanned) {
-            		//see if the user we want to ban is admin
+        if (isBanned != null) {         
+            if (isAmpAdmin.equalsIgnoreCase("yes")) {               
+                if (isBanned) {
+                    //see if the user we want to ban is admin
                     Site site = RequestUtils.retreiveSiteDomain(request).getSite();        
                     boolean siteAdmin = UserUtils.isAdmin(user, site);
                     if(siteAdmin){ // should be impossible to ban admin
-                    	errors.add(ActionMessages.GLOBAL_MESSAGE,new ActionMessage("error.um.errorBanningAdmin"));
+                        errors.add(ActionMessages.GLOBAL_MESSAGE,new ActionMessage("error.um.errorBanningAdmin"));
                     }else{
-                    	List ampTeamMembers	= TeamMemberUtil.getAmpTeamMembersbyDgUserId(userId);
-                		if ( ampTeamMembers != null && ampTeamMembers.size() == 0 ) {
-                			user.setBanned(true);
-                			DbUtil.updateUser(user);
-                		}
-                		if ( ampTeamMembers != null && ampTeamMembers.size() > 0 ) {
-                			String teamNames	= "";
-                			Iterator iter		= ampTeamMembers.iterator();
-                			while ( iter.hasNext() ) {
-    	            			AmpTeamMember atm	= (AmpTeamMember) iter.next();
-    	            			AmpTeam team		= atm.getAmpTeam();
-    	            			if (team != null && team.getName() != null)  {
-    	            				if (teamNames.length() == 0)
-    	            					teamNames	+= "'" + team.getName() + "'";
-    	            				else
-    	            					teamNames	+= ", '" + team.getName() + "'";
-    	            			}
-                			}
-                			errors.add("title",
+                        List ampTeamMembers = TeamMemberUtil.getAmpTeamMembersbyDgUserId(userId);
+                        if ( ampTeamMembers != null && ampTeamMembers.size() == 0 ) {
+                            user.setBanned(true);
+                            DbUtil.updateUser(user);
+                        }
+                        if ( ampTeamMembers != null && ampTeamMembers.size() > 0 ) {
+                            String teamNames    = "";
+                            Iterator iter       = ampTeamMembers.iterator();
+                            while ( iter.hasNext() ) {
+                                AmpTeamMember atm   = (AmpTeamMember) iter.next();
+                                AmpTeam team        = atm.getAmpTeam();
+                                if (team != null && team.getName() != null)  {
+                                    if (teamNames.length() == 0)
+                                        teamNames   += "'" + team.getName() + "'";
+                                    else
+                                        teamNames   += ", '" + team.getName() + "'";
+                                }
+                            }
+                            errors.add("title",
                                     new ActionMessage("error.um.userIsInTeams", teamNames));
-                		}
-                		if ( ampTeamMembers == null ) {
-                			errors.add("title",new ActionMessage("error.um.errorBanning"));
-                		}
+                        }
+                        if ( ampTeamMembers == null ) {
+                            errors.add("title",new ActionMessage("error.um.errorBanning"));
+                        }
                     }
-            	}
-            	else {
-            		user.setBanned(false);
-            		DbUtil.updateUser(user);
-            	}
+                }
+                else {
+                    user.setBanned(false);
+                    DbUtil.updateUser(user);
+                }
                 /*user.setBanned(isBanned);
                 if (isBanned) {
                     Site site = RequestUtils.getSite(request);
@@ -184,6 +186,8 @@ public class ViewEditUser extends Action {
             uForm.setDisplaySuccessMessage(null);
             uForm.setAddWorkspace(false);
             uForm.setEmailerror(false);
+            uForm.setExemptFromDataFreezing(false);
+            uForm.setNationalCoordinator(false);
             if (user != null) {
                 uForm.setMailingAddress(user.getAddress());
                 AmpUserExtension userExt = AmpUserUtil.getAmpUserExtension(user);
@@ -193,7 +197,7 @@ public class ViewEditUser extends Action {
                 }
                 
                 if (user.getRegion() != null) {
-                	uForm.setSelectedRegionId(user.getRegion().getId());
+                    uForm.setSelectedRegionId(user.getRegion().getId());
                 }
 
                 uForm.setId(user.getId());
@@ -202,18 +206,10 @@ public class ViewEditUser extends Action {
                 uForm.setLastName(user.getLastName());
                 uForm.setName(user.getName());
                 uForm.setUrl(user.getUrl());
-                uForm.setAssignedOrgId(user.getAssignedOrgId());
                 uForm.getAssignedOrgs().addAll(user.getAssignedOrgs());
                 uForm.setPledger(user.getPledger());
-                if(user.getAssignedOrgId()!=null && user.getAssignedOrgId() > 0) {
-                    uForm.setOrgs(new ArrayList<AmpOrganisation>());
-                    AmpOrganisation organization = org.digijava.module.aim.util.DbUtil.getOrganisation(user.getAssignedOrgId());
-                    if(organization != null){
-                    	uForm.getOrgs().add(organization);
-                    }
-                }
                 uForm.setBanReadOnly(user.isBanned());
-
+                uForm.setExemptFromDataFreezing(user.getExemptFromDataFreezing());
 
                 Locale language = null;
                 if (langPref == null) {
@@ -226,16 +222,16 @@ public class ViewEditUser extends Action {
                 uForm.setSelectedOrgName(user.getOrganizationName());
 
                 if (userExt!=null){
-                	if (userExt.getOrgGroup()!=null){
-                		uForm.setSelectedOrgGroupId(userExt.getOrgGroup().getAmpOrgGrpId());
-                	}
-                	if (userExt.getOrgType()!=null){
-                		uForm.setSelectedOrgTypeId(userExt.getOrgType().getAmpOrgTypeId().toString());
-                	}
-                	if (userExt.getOrganization()!=null){
-                		uForm.setSelectedOrgName(userExt.getOrganization().getName());
-                		uForm.setSelectedOrgId(userExt.getOrganization().getAmpOrgId());
-                	}
+                    if (userExt.getOrgGroup()!=null){
+                        uForm.setSelectedOrgGroupId(userExt.getOrgGroup().getAmpOrgGrpId());
+                    }
+                    if (userExt.getOrgType()!=null){
+                        uForm.setSelectedOrgTypeId(userExt.getOrgType().getAmpOrgTypeId().toString());
+                    }
+                    if (userExt.getOrganization()!=null){
+                        uForm.setSelectedOrgName(userExt.getOrganization().getName());
+                        uForm.setSelectedOrgId(userExt.getOrganization().getAmpOrgId());
+                    }
 
                 }
 
@@ -278,42 +274,45 @@ public class ViewEditUser extends Action {
                     uForm.setOrgs(DbUtil.getOrgByGroup(uForm.getSelectedOrgGroupId()));
                     //workspaces
                     if(uForm.getWorkspaces() == null){
-                    	uForm.setWorkspaces(TeamUtil.getAllTeams());
+                        uForm.setWorkspaces(TeamUtil.getAllTeams());
                     }
-                    uForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
+                    uForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());      
+                    
+                    uForm.setNationalCoordinator(user.hasNationalCoordinatorGroup());
+                   
 //                }
             }
-        } else {        	
+        } else {            
             if (uForm.getEvent().equalsIgnoreCase("save")) {
                 if (user != null) {
-                	uForm.setEmailerror(false);
-                	  if (!DbUtil.EmailExist(uForm.getEmail(), user.getId())){
-                			uForm.setEmailerror(true);
-                			uForm.setEvent(null);
-                			return mapping.findForward("forward");
+                    uForm.setEmailerror(false);
+                      if (!DbUtil.EmailExist(uForm.getEmail(), user.getId())){
+                            uForm.setEmailerror(true);
+                            uForm.setEvent(null);
+                            return mapping.findForward("forward");
                       }
-                	
-                	// TODO ideally, user, userLangPreferences, and userExtension should be saved in one transaction.
-                	AmpUserExtension userExt=AmpUserUtil.getAmpUserExtension(user);
-                	if (userExt==null){
-                		userExt=new AmpUserExtension(new AmpUserExtensionPK(user));
-                	}
+                    
+                    // TODO ideally, user, userLangPreferences, and userExtension should be saved in one transaction.
+                    AmpUserExtension userExt=AmpUserUtil.getAmpUserExtension(user);
+                    if (userExt==null){
+                        userExt=new AmpUserExtension(new AmpUserExtensionPK(user));
+                    }
 
                     if (userExt!=null){
-            			AmpOrgType orgType=org.digijava.module.aim.util.DbUtil.getAmpOrgType(new Long(uForm.getSelectedOrgTypeId()));
-            			userExt.setOrgType(orgType);
-            			AmpOrgGroup orgGroup=org.digijava.module.aim.util.DbUtil.getAmpOrgGroup(uForm.getSelectedOrgGroupId());
-            			userExt.setOrgGroup(orgGroup);
-            			AmpOrganisation organ = org.digijava.module.aim.util.DbUtil.getOrganisation(uForm.getSelectedOrgId());
-            			userExt.setOrganization(organ);
-            			AmpUserUtil.saveAmpUserExtension(userExt);
+                        AmpOrgType orgType=org.digijava.module.aim.util.DbUtil.getAmpOrgType(new Long(uForm.getSelectedOrgTypeId()));
+                        userExt.setOrgType(orgType);
+                        AmpOrgGroup orgGroup=org.digijava.module.aim.util.DbUtil.getAmpOrgGroup(uForm.getSelectedOrgGroupId());
+                        userExt.setOrgGroup(orgGroup);
+                        AmpOrganisation organ = org.digijava.module.aim.util.DbUtil.getOrganisation(uForm.getSelectedOrgId());
+                        userExt.setOrganization(organ);
+                        AmpUserUtil.saveAmpUserExtension(userExt);
                     }
 
                     user.setCountry(org.digijava.module.aim.util.DbUtil.getDgCountry(uForm.getSelectedCountryIso()));
                     if(uForm.getSelectedRegionId()==-1){
-                    	user.setRegion(null);
+                        user.setRegion(null);
                     }else
-                    	user.setRegion(LocationUtil.getAmpCategoryValueLocationById(uForm.getSelectedRegionId()));
+                        user.setRegion(LocationUtil.getAmpCategoryValueLocationById(uForm.getSelectedRegionId()));
                     user.setEmail(uForm.getEmail());
                     user.setFirstNames(uForm.getFirstNames());
                     user.setLastName(uForm.getLastName());
@@ -321,10 +320,8 @@ public class ViewEditUser extends Action {
                     user.setOrganizationName(uForm.getSelectedOrgName());
                     
                     user.getAssignedOrgs().clear();
-     	 	 	 	user.getAssignedOrgs().addAll(uForm.getAssignedOrgs());
+                    user.getAssignedOrgs().addAll(uForm.getAssignedOrgs());
                     
-     	 	 	 	user.setAssignedOrgId(uForm.getAssignedOrgId());
-
                     user.setUrl(uForm.getUrl());
 
                     SiteDomain siteDomain = (SiteDomain) request.getAttribute(Constants.CURRENT_SITE);
@@ -338,11 +335,18 @@ public class ViewEditUser extends Action {
 
                     user.setUserLangPreferences(userLangPreferences);
                     user.setPledger(uForm.getPledger());
+                    user.setExemptFromDataFreezing(uForm.getExemptFromDataFreezing());
+                    
+                    if (uForm.getNationalCoordinator()) {
+                        user.getGroups().add(org.digijava.module.admin.util.DbUtil.getGroupByKey(Group.NATIONAL_COORDINATORS));                     
+                    } else {
+                        user.getGroups().remove(org.digijava.module.admin.util.DbUtil.getGroupByKey(Group.NATIONAL_COORDINATORS));
+                    }
                     DbUtil.updateUser(user);
                     //assign workspace place
                     if(uForm.isAddWorkspace()){
-                    	uForm.setAssignedWorkspaces(TeamMemberUtil.getAllAmpTeamMembersByUser(user));
-                    	return mapping.findForward("assignWorkspace");
+                        uForm.setAssignedWorkspaces(TeamMemberUtil.getAllAmpTeamMembersByUser(user));
+                        return mapping.findForward("assignWorkspace");
                     }
                     
                     uForm.setEvent(null);
@@ -351,52 +355,52 @@ public class ViewEditUser extends Action {
                 }
 
             }else if(uForm.getEvent().equalsIgnoreCase("assignWorkspaceToUser")){
-            	uForm.setEvent(null);
-            	AmpTeam ampTeam = TeamUtil.getAmpTeam(uForm.getTeamId());
-    			//User user = org.digijava.module.aim.util.DbUtil.getUser(uForm.getEmail());
-    			
-    			if (uForm.getRole() == null) {
-    				uForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
-    				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.addTeamMember.roleNotSelected"));
-    				saveErrors(request, errors);
-    				return mapping.findForward("forward");			
-    			}
-    			
-    			/* check if user have selected role as Team Lead when a team lead 
-    			 * already exist for the team */
-    			if (ampTeam.getTeamLead() != null &&
-    					ampTeam.getTeamLead().getAmpMemberRole().getAmpTeamMemRoleId().equals(uForm.getRole())) {
-    				uForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
-    				errors.add(ActionMessages.GLOBAL_MESSAGE,new ActionMessage("error.aim.addTeamMember.teamLeadAlreadyExist"));
-    				saveErrors(request, errors);
-    				return mapping.findForward("assignWorkspace");			
-    			}
-    			
-    			/* check if user is already part of the selected team */
-    			if (TeamUtil.isMemberExisting(uForm.getTeamId(),uForm.getEmail())) {
-    				uForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
-    				errors.add(ActionMessages.GLOBAL_MESSAGE,new ActionMessage(
-    						"error.aim.addTeamMember.teamMemberAlreadyExist"));
-    				saveErrors(request, errors);
-    				//logger.debug("Member is already existing");
-    				return mapping.findForward("assignWorkspace");			
-    			}
-    			
-    			   
-    			addWorkSpace(UmUtil.assignWorkspaceToUser(request, uForm.getRole(), user, ampTeam), uForm);
-    			return mapping.findForward("assignWorkspace");
-    			
+                uForm.setEvent(null);
+                AmpTeam ampTeam = TeamUtil.getAmpTeam(uForm.getTeamId());
+                //User user = org.digijava.module.aim.util.DbUtil.getUser(uForm.getEmail());
+                
+                if (uForm.getRole() == null) {
+                    uForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
+                    errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.addTeamMember.roleNotSelected"));
+                    saveErrors(request, errors);
+                    return mapping.findForward("forward");          
+                }
+                
+                /* check if user have selected role as Team Lead when a team lead 
+                 * already exist for the team */
+                if (ampTeam.getTeamLead() != null &&
+                        ampTeam.getTeamLead().getAmpMemberRole().getAmpTeamMemRoleId().equals(uForm.getRole())) {
+                    uForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
+                    errors.add(ActionMessages.GLOBAL_MESSAGE,new ActionMessage("error.aim.addTeamMember.teamLeadAlreadyExist"));
+                    saveErrors(request, errors);
+                    return mapping.findForward("assignWorkspace");          
+                }
+                
+                /* check if user is already part of the selected team */
+                if (TeamUtil.isMemberExisting(uForm.getTeamId(),uForm.getEmail())) {
+                    uForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
+                    errors.add(ActionMessages.GLOBAL_MESSAGE,new ActionMessage(
+                            "error.aim.addTeamMember.teamMemberAlreadyExist"));
+                    saveErrors(request, errors);
+                    //logger.debug("Member is already existing");
+                    return mapping.findForward("assignWorkspace");          
+                }
+                
+                   
+                addWorkSpace(UmUtil.assignWorkspaceToUser(request, uForm.getRole(), user, ampTeam), uForm);
+                return mapping.findForward("assignWorkspace");
+                
             } else if (uForm.getEvent().equalsIgnoreCase("deleteWS")){
-            	uForm.setEvent(null);
-            	Long wId = new Long(request.getParameter("wId"));
-            	TeamMemberUtil.removeTeamMembers(new Long[]{wId});
+                uForm.setEvent(null);
+                Long wId = new Long(request.getParameter("wId"));
+                TeamMemberUtil.removeTeamMembers(new Long[]{wId});
                 Collection asWS = uForm.getAssignedWorkspaces();
                 for(java.util.Iterator it = asWS.iterator(); it.hasNext(); ){
-                	AmpTeamMember newMember = (AmpTeamMember)it.next();
-                	if(newMember.getAmpTeamMemId().compareTo(wId)==0){
-                		asWS.remove(newMember);
-                		break;
-                	}
+                    AmpTeamMember newMember = (AmpTeamMember)it.next();
+                    if(newMember.getAmpTeamMemId().compareTo(wId)==0){
+                        asWS.remove(newMember);
+                        break;
+                    }
                 }
                 return mapping.findForward("assignWorkspace");
             }else {
@@ -432,26 +436,26 @@ public class ViewEditUser extends Action {
                 } else if (uForm.getEvent().equalsIgnoreCase("groupSelected")) {
                     uForm.setOrgs(DbUtil.getOrgByGroup(uForm.getSelectedOrgGroupId()));
                 } else if(uForm.getEvent().equalsIgnoreCase("addOrg")){
-	     	 	 	 	     uForm.setEvent(null);
-	     	 	 	 	     if(uForm.getAssignedOrgId()!=-1) {
-	     	 	 	 	    	 AmpOrganisation organisation = org.digijava.module.aim.util.DbUtil.getOrganisation(uForm.getAssignedOrgId());
-	     	 	 	 		     uForm.getAssignedOrgs().add(organisation);
-	     	 	 	 		 }
-     	 	 	 		} 
-                		else if(uForm.getEvent().equalsIgnoreCase("delOrgs")){
-     	 	 	 		     	uForm.setEvent(null);
-     	 	 	 		        for(int i=0;i<uForm.getSelAssignedOrgs().length;i++) {
-     	 	 	 		        	AmpOrganisation organisation = org.digijava.module.aim.util.DbUtil.getOrganisation(uForm.getSelAssignedOrgs()[i]);
-     	 	 	 		            uForm.getAssignedOrgs().remove(organisation);
-     	 	 	 		        }
-     	 	 	 		    }
+                             uForm.setEvent(null);
+                             if(uForm.getAssignedOrgId()!=-1) {
+                                 AmpOrganisation organisation = org.digijava.module.aim.util.DbUtil.getOrganisation(uForm.getAssignedOrgId());
+                                 uForm.getAssignedOrgs().add(organisation);
+                             }
+                        } 
+                        else if(uForm.getEvent().equalsIgnoreCase("delOrgs")){
+                                uForm.setEvent(null);
+                                for(int i=0;i<uForm.getSelAssignedOrgs().length;i++) {
+                                    AmpOrganisation organisation = org.digijava.module.aim.util.DbUtil.getOrganisation(uForm.getSelAssignedOrgs()[i]);
+                                    uForm.getAssignedOrgs().remove(organisation);
+                                }
+                            }
             }
         }
         resetViewEditUserForm(uForm);
         return mapping.findForward("forward");
     }
 
-	
+    
 
     public ViewEditUser() {
     }
@@ -467,13 +471,13 @@ public class ViewEditUser extends Action {
     }
     
     private void addWorkSpace(AmpTeamMember newMember, ViewEditUserForm upMemForm) {
-		Collection assignedWS = upMemForm.getAssignedWorkspaces();
-		if(assignedWS==null){
-			ArrayList assWS = new ArrayList();
-			upMemForm.setAssignedWorkspaces(assWS);
-		}
-		upMemForm.getAssignedWorkspaces().add(newMember);
-		upMemForm.setTeamId(-1L);
-		upMemForm.setRole(-1L);
-	}
+        Collection assignedWS = upMemForm.getAssignedWorkspaces();
+        if(assignedWS==null){
+            ArrayList assWS = new ArrayList();
+            upMemForm.setAssignedWorkspaces(assWS);
+        }
+        upMemForm.getAssignedWorkspaces().add(newMember);
+        upMemForm.setTeamId(-1L);
+        upMemForm.setRole(-1L);
+    }
 }

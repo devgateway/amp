@@ -44,13 +44,11 @@ define([ 'marionette', 'models/content', 'models/legend', 'views/dynamicContentV
 			// --------------------------------------------------------------------------------------//
 			// TODO: Move filters section elsewhere.
 			// Create collection of Filters used for legends.	
-			app.TabsApp.rawFilters = firstContent.rawFilters;
-
+			app.TabsApp.rawFilters = firstContent.filtersToJSON();
 			app.TabsApp.filtersWidget.loaded.done(function() {
-				app.TabsApp.filtersWidget.deserialize(app.TabsApp.rawFilters, {
+				app.TabsApp.filtersWidget.deserialize(firstContent.filtersToJSON(), {
 					silent : true
 				});
-				
 				
 				app.TabsApp.filters = FilterUtils.extractFilters(app.TabsApp.filtersWidget.serializeToModels());
 				

@@ -281,7 +281,7 @@ public class DummyServletContext implements ServletContext {
     }
 
     public String getContextPath() {
-		/**@todo Implement this javax.servlet.ServletContext method*/
-		throw new java.lang.UnsupportedOperationException("Method getContextPath() not yet implemented.");
-	}
+        /**@todo Implement this javax.servlet.ServletContext method*/
+        throw new java.lang.UnsupportedOperationException("Method getContextPath() not yet implemented.");
+    }
 }

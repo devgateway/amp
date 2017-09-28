@@ -1,6 +1,8 @@
 <%@page import="org.digijava.module.aim.util.FeaturesUtil"%>
 <%@page import="org.digijava.module.aim.helper.GlobalSettingsConstants"%>
+<%@page import="org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants"%>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
+<%@ taglib uri="/taglib/resourcesettings" prefix="rs" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
@@ -311,7 +313,9 @@ font-weight : bold;
 <c:set var="translation_validation_url">
 			<digi:trn>Please specify a Url !</digi:trn>
 </c:set>
-
+<c:set var="translation_upload_failed_too_big">
+	<digi:trn>${uploadFailedTooBigMsg}</digi:trn>
+</c:set>
 <c:set var="translation_url_format">
 			<digi:trn>Please specify correct Url !</digi:trn>
 </c:set>
@@ -575,7 +579,7 @@ myTable.enhanceMarkup = function(markupName) {
 
 function sortColumn() {
 	//debugger;
-	var columnSettingString = '<gs:value name="<%=GlobalSettingsConstants.DEFAULT_RESOURCES_SORT_COLUMN %>" />';
+	var columnSettingString = '<rs:value name="<%=SettingsConstants.SORT_COLUMN %>" />';
 	// the setting has the value [ColumnName]_[ASC/DESC];
 	
 	var separatorPos = columnSettingString.lastIndexOf('_');
@@ -1277,6 +1281,9 @@ function toggleView(elementId, iconId, isMinus) {
 	}
 	return isMinus;
 }
+
+$.getScript("/TEMPLATE/ampTemplate/script/common/FileTypeValidator.js");
+
 /* Configures the form with id typeId */
 function configPanel(panelNum, title, description, optionId, uuid, isAUrl,yearOfPublication, index, category) {
 	document.getElementById('addDocumentErrorHolderDiv').innerHTML = '';
@@ -1441,23 +1448,36 @@ function validateAddDocument() {
 	}
 
 	var webUrlVisible=document.getElementById('tr_url');
-	if(webUrlVisible.style.display=='none' && document.forms['crDocumentManagerForm'].fileData.value == ''){ //adding document
-		msg = msg + "${translation_validation_filedata}"+'<br>';
-	}
-	if(webUrlVisible.style.display!='none' && document.forms['crDocumentManagerForm'].webLink.value == ''){ //adding url
+	if(webUrlVisible.style.display=='none') { 
+		if(document.forms['crDocumentManagerForm'].fileData.value == '') { //adding document
+			msg = msg + "${translation_validation_filedata}"+'<br>';
+		} else if(!FileTypeValidator.isValid(fileData.value)) {
+			msg = msg + FileTypeValidator.errorMessage +'<br>';
+		}
+	} else if(document.forms['crDocumentManagerForm'].webLink.value == '') { //adding url
 		msg = msg + "${translation_validation_url}"+'<br>' ;
-	}else if(webUrlVisible.style.display!='none'){
+	} else {
 		var enteredWebLink = document.forms['crDocumentManagerForm'].webLink.value;
 		var found	= urlFormat.test(enteredWebLink); //urlFormat.exec(enteredWebLink);//		
-		if ( found == false) {
+		if (found == false) {
 			msg = msg + "${translation_url_format}"+'<br>' ;
-			
 		}
 	}
+
+    if (document.forms['crDocumentManagerForm'].fileData.files[0].size > ${uploadMaxFileSize}) {
+        msg = msg + showFailedTooBigMsg('${translation_upload_failed_too_big}', ${maxFileSizeGS}) + '<br>';
+    }
+
 	document.getElementById('addDocumentErrorHolderDiv').innerHTML	= msg;
-	if (msg.length == 0)
+	if (msg.length == 0) {
 			return true;
+	}
+	
 	return false;
+}
+
+function showFailedTooBigMsg(msg, maxFileSizeGS){
+	return msg.replace('{size}', maxFileSizeGS);
 }
 
 function setHeightOfDiv(divId, maxLimit, value ){
@@ -1557,7 +1577,6 @@ function createToolTips(containerElement) {
 			createToolTip(elements[i], containerElement);
 		}
 	}
-	
 }
 
 function createToolTip (id, containerElement) {

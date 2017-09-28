@@ -18,30 +18,30 @@ import org.digijava.module.aim.util.ComponentsUtil;
 
 public class AmpUniqueComponentTitleValidator implements IValidator<String> {
 
-	private final PropertyModel<AmpActivityGroup> ampActivityGroupModel;
+    private final PropertyModel<AmpActivityGroup> ampActivityGroupModel;
 
-	/**
-	 * @param propertyModel 
-	 * 
-	 */
-	public AmpUniqueComponentTitleValidator(PropertyModel<AmpActivityGroup> propertyModel) {
-		this.ampActivityGroupModel = propertyModel;
-	}
+    /**
+     * @param propertyModel 
+     * 
+     */
+    public AmpUniqueComponentTitleValidator(PropertyModel<AmpActivityGroup> propertyModel) {
+        this.ampActivityGroupModel = propertyModel;
+    }
 
-	/* (non-Javadoc)
-	 * @see org.apache.wicket.validation.IValidator#validate(org.apache.wicket.validation.IValidatable)
-	 */
-	@Override
-	public void validate(IValidatable<String> validatable) {
-		if(validatable.getValue().trim().length()==0) 
-			return;
-		
-		boolean exists = ComponentsUtil.checkComponentNameExistsExcludingGroup(validatable.getValue(), ampActivityGroupModel.getObject());
-		if(exists){
-			ValidationError error = new ValidationError();
-			error.addMessageKey("AmpUniqueComponentTitleValidator");
-			validatable.error(error);
-		}
-	}
+    /* (non-Javadoc)
+     * @see org.apache.wicket.validation.IValidator#validate(org.apache.wicket.validation.IValidatable)
+     */
+    @Override
+    public void validate(IValidatable<String> validatable) {
+        if(validatable.getValue().trim().length()==0) 
+            return;
+        
+        boolean exists = ComponentsUtil.checkComponentNameExistsExcludingGroup(validatable.getValue(), ampActivityGroupModel.getObject());
+        if(exists){
+            ValidationError error = new ValidationError();
+            error.addMessageKey("AmpUniqueComponentTitleValidator");
+            validatable.error(error);
+        }
+    }
 
 }

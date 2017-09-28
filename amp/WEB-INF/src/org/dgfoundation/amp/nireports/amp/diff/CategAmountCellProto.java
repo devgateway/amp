@@ -26,64 +26,64 @@ import org.digijava.module.aim.dbentity.AmpCurrency;
  *
  */
 public class CategAmountCellProto extends Cell {
-	public final MetaInfoSet metaInfo;
-	public final BigDecimal origAmount;
-	public final AmpCurrency origCurrency;
-	public final BigDecimal fixed_exchange_rate;
-	public final java.sql.Date transactionMoment;
-	public final LocalDate transactionDate;
-	
-	public CategAmountCellProto(long activityId, BigDecimal origAmount, AmpCurrency origCurrency, java.sql.Date transactionMoment, MetaInfoSet metaInfo, Map<NiDimensionUsage, Coordinate> coos, BigDecimal fixed_exchange_rate) {
-		super(activityId, -1, coos, Optional.empty());
-		this.origAmount = origAmount;
-		this.origCurrency = origCurrency;
-		this.transactionMoment = transactionMoment;
-		this.metaInfo = metaInfo;
-		this.fixed_exchange_rate = fixed_exchange_rate;
-		this.transactionDate = transactionMoment.toLocalDate();
-		
-		NiUtils.failIf(origAmount == null, String.format("Amount cannot be null for %s", this));
-		NiUtils.failIf(origCurrency == null, String.format("Currency cannot be null for %s", this));
-	}
-	
-	/**
-	 * materializes this instance into a full transaction. The operation is O(1) cheap because the heavyweight components of a cell are deeply immutable structures
-	 * which are shared between with the prototype (namely, {@link #metaInfo} and {@link #getCoordinates()})
-	 * @param usedCurrency the {@link AmpCurrency} to use for converting the natural transaction to
-	 * @param calendarConverter the O(1) {@link CalendarConverter} to use for translating the natural transaction's date
-	 * @param currencyConvertor the O(1) {@link CurrencyConvertor} to use for for converting amounts between currencies
-	 * @param precisionSetting the precision settings to use while doing the amount conversions and to store in the generated {@link MonetaryAmount}
-	 * @return
-	 */
-	public CategAmountCell materialize(AmpCurrency usedCurrency, CachingCalendarConverter calendarConverter, CurrencyConvertor currencyConvertor, NiPrecisionSetting precisionSetting) {
-		BigDecimal usedExchangeRate = BigDecimal.valueOf(currencyConvertor.getExchangeRate(origCurrency.getCurrencyCode(), usedCurrency.getCurrencyCode(), fixed_exchange_rate == null ? null : fixed_exchange_rate.doubleValue(), transactionDate));
-		MonetaryAmount amount = new MonetaryAmount(origAmount.multiply(usedExchangeRate), origAmount, origCurrency, transactionDate, precisionSetting);
-		CategAmountCell cell = new CategAmountCell(activityId, amount, metaInfo, coordinates, calendarConverter.translate(transactionMoment));
-		return cell;
-	}
+    public final MetaInfoSet metaInfo;
+    public final BigDecimal origAmount;
+    public final AmpCurrency origCurrency;
+    public final BigDecimal fixed_exchange_rate;
+    public final java.sql.Date transactionMoment;
+    public final LocalDate transactionDate;
+    
+    public CategAmountCellProto(long activityId, BigDecimal origAmount, AmpCurrency origCurrency, java.sql.Date transactionMoment, MetaInfoSet metaInfo, Map<NiDimensionUsage, Coordinate> coos, BigDecimal fixed_exchange_rate) {
+        super(activityId, -1, coos, Optional.empty());
+        this.origAmount = origAmount;
+        this.origCurrency = origCurrency;
+        this.transactionMoment = transactionMoment;
+        this.metaInfo = metaInfo;
+        this.fixed_exchange_rate = fixed_exchange_rate;
+        this.transactionDate = transactionMoment.toLocalDate();
+        
+        NiUtils.failIf(origAmount == null, String.format("Amount cannot be null for %s", this));
+        NiUtils.failIf(origCurrency == null, String.format("Currency cannot be null for %s", this));
+    }
+    
+    /**
+     * materializes this instance into a full transaction. The operation is O(1) cheap because the heavyweight components of a cell are deeply immutable structures
+     * which are shared between with the prototype (namely, {@link #metaInfo} and {@link #getCoordinates()})
+     * @param usedCurrency the {@link AmpCurrency} to use for converting the natural transaction to
+     * @param calendarConverter the O(1) {@link CalendarConverter} to use for translating the natural transaction's date
+     * @param currencyConvertor the O(1) {@link CurrencyConvertor} to use for for converting amounts between currencies
+     * @param precisionSetting the precision settings to use while doing the amount conversions and to store in the generated {@link MonetaryAmount}
+     * @return
+     */
+    public CategAmountCell materialize(AmpCurrency usedCurrency, CachingCalendarConverter calendarConverter, CurrencyConvertor currencyConvertor, NiPrecisionSetting precisionSetting) {
+        BigDecimal usedExchangeRate = BigDecimal.valueOf(currencyConvertor.getExchangeRate(origCurrency.getCurrencyCode(), usedCurrency.getCurrencyCode(), fixed_exchange_rate == null ? null : fixed_exchange_rate.doubleValue(), transactionDate));
+        MonetaryAmount amount = new MonetaryAmount(origAmount.multiply(usedExchangeRate), origAmount, origCurrency, transactionDate, precisionSetting);
+        CategAmountCell cell = new CategAmountCell(activityId, amount, metaInfo, coordinates, calendarConverter.translate(transactionMoment));
+        return cell;
+    }
 
-	@Override
-	public CategAmountCellProto changeOwnerId(long newActivityId) {
-		return new CategAmountCellProto(newActivityId, origAmount, origCurrency, transactionMoment, metaInfo, this.coordinates, fixed_exchange_rate);
-	}
+    @Override
+    public CategAmountCellProto changeOwnerId(long newActivityId) {
+        return new CategAmountCellProto(newActivityId, origAmount, origCurrency, transactionMoment, metaInfo, this.coordinates, fixed_exchange_rate);
+    }
 
-	@Override
-	public int compareTo(Object o) {
-		throw new RuntimeException("not implemented");
-	}
+    @Override
+    public int compareTo(Object o) {
+        throw new RuntimeException("not implemented");
+    }
 
-	@Override
-	public MetaInfoSet getMetaInfo() {
-		return this.metaInfo;
-	}
+    @Override
+    public MetaInfoSet getMetaInfo() {
+        return this.metaInfo;
+    }
 
-	@Override
-	public String getDisplayedValue() {
-		return String.format("CategAmountCellProto, actId: %d, %d %s on %s", activityId, this.origAmount, origCurrency, this.transactionDate);
-	}
-	
-	@Override
-	public String toString() {
-		return String.format("(actId: %d, amt: %s %s, coos: {%s}, meta: {%s}", this.activityId, origAmount, origCurrency, AmpCollections.sortedMap(coordinates, (a, b) -> a.toString().compareTo(b.toString())), metaInfo);
-	}
+    @Override
+    public String getDisplayedValue() {
+        return String.format("CategAmountCellProto, actId: %d, %d %s on %s", activityId, this.origAmount, origCurrency, this.transactionDate);
+    }
+    
+    @Override
+    public String toString() {
+        return String.format("(actId: %d, amt: %s %s, coos: {%s}, meta: {%s}", this.activityId, origAmount, origCurrency, AmpCollections.sortedMap(coordinates, (a, b) -> a.toString().compareTo(b.toString())), metaInfo);
+    }
 }

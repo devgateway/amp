@@ -1,7 +1,13 @@
 package org.digijava.module.aim.util;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.apache.log4j.Logger;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
+import org.digijava.module.aim.dbentity.AmpContact;
+import org.digijava.module.aim.dbentity.AmpContactProperty;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
@@ -10,13 +16,21 @@ import org.h2.util.StringUtils;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by anpicca on 24/11/2016.
  */
 public class ExportUtil {
+
     private static Logger logger = Logger.getLogger(ExportUtil.class);
+
+    public static final int COMPONENT_FM_FIELD_TYPE = 0;
+    public static final int COMPONENT_FM_FIELD_AMOUNT = 1;
+    public static final int COMPONENT_FM_FIELD_CURRENCY = 2;
+    public static final int COMPONENT_FM_FIELD_TRANSCTION_DATE = 3;
+    public static final int COMPONENT_FM_FIELD_ORGANISATION = 4;
+    public static final int COMPONENT_FM_FIELD_SECOND_REPORTING = 5;
+    public static final int COMPONENT_FM_FIELD_DESCRIPTION = 6;
 
     public static String buildInternalId(Set<AmpActivityInternalId> internalIds) {
         String result = "";
@@ -53,7 +67,7 @@ public class ExportUtil {
         } else if (value.getValueType() == AmpIndicatorValue.TARGET) {
             return "Target";
         } else if (value.getValueType() == AmpIndicatorValue.REVISED) {
-            return "Revised Target";
+            return "Revised";
         }
         return null;
     }
@@ -66,4 +80,17 @@ public class ExportUtil {
         return result;
     }
 
+    public static String getContactInformation(AmpContact contact) {
+        String output = "";
+        String emails = "";
+        String telephones = "";
+        Set<AmpContactProperty> contactProperties = contact.getProperties();
+        if (contactProperties != null) {
+            emails = contactProperties.stream().filter(z -> Constants.CONTACT_PROPERTY_NAME_EMAIL.equals(z.getName())).limit(2).map(entry -> entry.getValue()).collect(Collectors.joining(", "));
+
+            telephones = contactProperties.stream().filter(z -> Constants.CONTACT_PROPERTY_NAME_PHONE.equals(z.getName())).limit(2).map(entry -> entry.getValue()).collect(Collectors.joining(", "));
+        }
+        output += contact.getName() + " " + contact.getLastname() + (clover.org.apache.commons.lang.StringUtils.isNotEmpty(emails) ? " - " + emails : "") + (clover.org.apache.commons.lang.StringUtils.isNotEmpty(telephones) ? " - " + telephones : "") + ";\n";
+        return output;
+    }
 }

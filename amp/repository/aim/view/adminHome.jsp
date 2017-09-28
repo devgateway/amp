@@ -112,14 +112,29 @@
                             <td class="admin_box_label">
                               <c:set var="trnDataFreezeManager">
                                 <digi:trn invisibleLinks="true">Click here to access Data Freeze Manager</digi:trn>
-                              </c:set>
-                              <digi:link href="/dataFreezeManager.do" title="${trnDataFreezeManager}" >
+                              </c:set>                             
+                              <a href="/TEMPLATE/reamp/modules/admin/data-freeze-manager/index.html"
+                                 title="${trnDataFreezeManager}">
                                 <digi:trn>Data Freeze Manager</digi:trn>
-                              </digi:link>
+                              </a>
                             </td>
                           </tr>
                         </module:display>                        
                         
+                        <module:display name="Project Performance Alerts Manager" parentModule="ADMINISTRATIVE SECTION">
+                          <tr>
+                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+                            <td class="admin_box_label">
+                                <c:set var="trnProjectPerformanceAlertsManager">
+                                    <digi:trn invisibleLinks="true">Click here to access Project Performance Alerts Manager</digi:trn>
+                                </c:set>
+                                <a href="/TEMPLATE/reamp/modules/admin/performance-alert-manager/index.html" 
+                                title="${trnProjectPerformanceAlertsManager}">
+                                    <digi:trn>Project Performance Alerts Manager</digi:trn>
+                                </a>
+                            </td>
+                          </tr>
+                        </module:display>
                       </table>
                     </div></td>
                   <td width=10>&nbsp;</td>
@@ -703,6 +718,20 @@
                             </td>
                           </tr>
                         </module:display>
+                        <module:display name="Resource Manager" parentModule="ADMINISTRATIVE SECTION">
+							<tr>
+								<td><img width="16" align="left"
+									src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+								<td class="admin_box_label">
+									<c:set var="translation">
+										<digi:trn invisibleLinks="true">Click here to view Document manager admin</digi:trn>
+									</c:set> 
+									<a href="/TEMPLATE/reamp/modules/admin/resource-manager-admin/index.html"
+									title="${translation}"> <digi:trn>Resource Manager</digi:trn>
+									</a>
+								</td>
+							</tr>
+                        </module:display>
                       </table>
 
                     </div></td>
@@ -741,14 +770,14 @@
                               <c:set var="translation">
                                 <digi:trn invisibleLinks="true">Click here to view Dashboard Manager</digi:trn>
                               </c:set>
-                              <a href="/TEMPLATE/reamp/modules/admin/dashboard/index.html"
+                                 <a href="/TEMPLATE/reamp/modules/admin/dashboard/index.html"
                                  title="${translation}">
                                 <digi:trn>Dashboard Manager</digi:trn>
                               </a>
                             </td>
                           </tr>
                         </module:display>
-                      </table>
+					</table>
                     </div></td>
                 </tr>
               </table>

@@ -253,36 +253,36 @@ public class UmUtil {
     }
     
     public static AmpTeamMember assignWorkspaceToUser(HttpServletRequest request,Long roleId ,User user, AmpTeam ampTeam) {
-		AmpTeamMember newMember = null;
-		AmpTeamMemberRoles role = TeamMemberUtil.getAmpTeamMemberRole(roleId);
-		if (role != null) {
-			newMember = new AmpTeamMember();
-			newMember.setUser(user);
-			newMember.setAmpTeam(ampTeam);
-			newMember.setAmpMemberRole(role);
-			// add the default application settings for the user  
-//			AmpApplicationSettings ampAppSettings = org.digijava.module.aim.util.DbUtil.getTeamAppSettings(ampTeam.getAmpTeamId());
-//			AmpApplicationSettings newAppSettings = new AmpApplicationSettings();
-//			//newAppSettings.setTeam(ampAppSettings.getTeam());
-//			newAppSettings.setTeam(newMember.getAmpTeam());
-//			newAppSettings.setMember(newMember);
-//			newAppSettings.setDefaultRecordsPerPage(ampAppSettings
-//					.getDefaultRecordsPerPage());
-//			newAppSettings.setCurrency(ampAppSettings.getCurrency());
-//			newAppSettings.setFiscalCalendar(ampAppSettings
-//					.getFiscalCalendar());
-//			newAppSettings.setLanguage(ampAppSettings.getLanguage());
-//			newAppSettings.setUseDefault(new Boolean(true));
-			Site site = RequestUtils.getSite(request);
-			try{
-				TeamUtil.addTeamMember(newMember,site);				
-			}catch (Exception e){
-					e.printStackTrace();
-					//logger.error("error when trying to add a new member: " + newMember.getUser().getEmail() + " from team: "+ newMember.getAmpTeam().getName());
-			}			
-		}
-		return newMember;
-	}
+        AmpTeamMember newMember = null;
+        AmpTeamMemberRoles role = TeamMemberUtil.getAmpTeamMemberRole(roleId);
+        if (role != null) {
+            newMember = new AmpTeamMember();
+            newMember.setUser(user);
+            newMember.setAmpTeam(ampTeam);
+            newMember.setAmpMemberRole(role);
+            // add the default application settings for the user  
+//          AmpApplicationSettings ampAppSettings = org.digijava.module.aim.util.DbUtil.getTeamAppSettings(ampTeam.getAmpTeamId());
+//          AmpApplicationSettings newAppSettings = new AmpApplicationSettings();
+//          //newAppSettings.setTeam(ampAppSettings.getTeam());
+//          newAppSettings.setTeam(newMember.getAmpTeam());
+//          newAppSettings.setMember(newMember);
+//          newAppSettings.setDefaultRecordsPerPage(ampAppSettings
+//                  .getDefaultRecordsPerPage());
+//          newAppSettings.setCurrency(ampAppSettings.getCurrency());
+//          newAppSettings.setFiscalCalendar(ampAppSettings
+//                  .getFiscalCalendar());
+//          newAppSettings.setLanguage(ampAppSettings.getLanguage());
+//          newAppSettings.setUseDefault(new Boolean(true));
+            Site site = RequestUtils.getSite(request);
+            try{
+                TeamUtil.addTeamMember(newMember,site);             
+            }catch (Exception e){
+                    e.printStackTrace();
+                    //logger.error("error when trying to add a new member: " + newMember.getUser().getEmail() + " from team: "+ newMember.getAmpTeam().getName());
+            }           
+        }
+        return newMember;
+    }
 
     public static List<SuspendLogin> getUserSuspendReasons (User user) {
         return DbUtil.getUserSuspendReasonsFromDB(user);

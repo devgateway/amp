@@ -11,8 +11,8 @@ public class ListEditorRemoveButton extends ListEditorButton {
         super(id, fmName, question);
     }
 
-	@Override
-	protected void onClick(AjaxRequestTarget target) {
+    @Override
+    protected void onClick(AjaxRequestTarget target) {
         int idx = getItem().getIndex();
         
         for (int i = idx + 1; i < getItem().getParent().size(); i++){
@@ -26,5 +26,5 @@ public class ListEditorRemoveButton extends ListEditorButton {
         getEditor().remove(getItem());
     
        
-	}
+    }
 }

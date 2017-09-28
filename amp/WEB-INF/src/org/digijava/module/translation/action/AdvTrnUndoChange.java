@@ -14,21 +14,21 @@ import org.digijava.module.translation.util.ListChangesBuffer;
 
 public class AdvTrnUndoChange extends Action {
 
-	@Override
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
-		NewAdvancedTrnForm trnForm = (NewAdvancedTrnForm)form;
-		
-		ListChangesBuffer<String, Message> buffer = TrnUtil.getBuffer(request.getSession());
-		
-		String[] changes = trnForm.getUndoChanges();
-		if (changes!=null){
-			for (String change : changes) {
-				buffer.undoOperationFor(change);
-			}
-		}
-		return null;
-	}
+    @Override
+    public ActionForward execute(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
+        NewAdvancedTrnForm trnForm = (NewAdvancedTrnForm)form;
+        
+        ListChangesBuffer<String, Message> buffer = TrnUtil.getBuffer(request.getSession());
+        
+        String[] changes = trnForm.getUndoChanges();
+        if (changes!=null){
+            for (String change : changes) {
+                buffer.undoOperationFor(change);
+            }
+        }
+        return null;
+    }
 
 }

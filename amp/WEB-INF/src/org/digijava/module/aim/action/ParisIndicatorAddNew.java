@@ -22,39 +22,39 @@ import org.digijava.module.aim.util.ParisUtil;
 
 public class ParisIndicatorAddNew extends Action 
 {
-	private static Logger logger = Logger.getLogger(ParisIndicatorAddNew.class);
+    private static Logger logger = Logger.getLogger(ParisIndicatorAddNew.class);
 
-	public ActionForward execute(ActionMapping mapping,
-								 ActionForm form,
-								 HttpServletRequest request,
-								 HttpServletResponse response) throws java.lang.Exception 
-	{
-		ParisIndicatorManagerForm parisForm = (ParisIndicatorManagerForm) form;
-		AmpAhsurveyIndicator surveyInd = new AmpAhsurveyIndicator();
-		surveyInd.setIndicatorCode(parisForm.getAddNewIndicatorCode());
-		Integer a1 = new Integer(15);
-		surveyInd.setIndicatorNumber(a1);
-		surveyInd.setName(parisForm.getAddNewIndicatorText());		
-		Integer a2 = new Integer(1); 
-		surveyInd.setTotalQuestions(a2);		
-		surveyInd.setStatus(null);
-		DbUtil.add(surveyInd);
+    public ActionForward execute(ActionMapping mapping,
+                                 ActionForm form,
+                                 HttpServletRequest request,
+                                 HttpServletResponse response) throws java.lang.Exception 
+    {
+        ParisIndicatorManagerForm parisForm = (ParisIndicatorManagerForm) form;
+        AmpAhsurveyIndicator surveyInd = new AmpAhsurveyIndicator();
+        surveyInd.setIndicatorCode(parisForm.getAddNewIndicatorCode());
+        Integer a1 = new Integer(15);
+        surveyInd.setIndicatorNumber(a1);
+        surveyInd.setName(parisForm.getAddNewIndicatorText());      
+        Integer a2 = new Integer(1); 
+        surveyInd.setTotalQuestions(a2);        
+        surveyInd.setStatus(null);
+        DbUtil.add(surveyInd);
 
-		
-		
-		AmpAhsurveyIndicator ahSurveyInd = ParisUtil.findIndicatorId(parisForm.getAddNewIndicatorText(),parisForm.getAddNewIndicatorCode());
-		AmpAhsurveyQuestion surveyQuestion = new AmpAhsurveyQuestion();
-		
-		surveyQuestion.setQuestionText(parisForm.getPiQuestionGot());
-		surveyQuestion.setQuestionNumber(parisForm.getPiQuestId());
-		surveyQuestion.setAmpIndicatorId(ahSurveyInd);
-		AmpAhsurveyQuestionType surveyQuestType = new AmpAhsurveyQuestionType();
-		surveyQuestType.setAmpTypeId(parisForm.getPiQuestTypeId());
-		surveyQuestion.setAmpTypeId(surveyQuestType);
-		surveyQuestion.setStatus(null);
-		
-		DbUtil.add(surveyQuestion);
+        
+        
+        AmpAhsurveyIndicator ahSurveyInd = ParisUtil.findIndicatorId(parisForm.getAddNewIndicatorText(),parisForm.getAddNewIndicatorCode());
+        AmpAhsurveyQuestion surveyQuestion = new AmpAhsurveyQuestion();
+        
+        surveyQuestion.setQuestionText(parisForm.getPiQuestionGot());
+        surveyQuestion.setQuestionNumber(parisForm.getPiQuestId());
+        surveyQuestion.setAmpIndicatorId(ahSurveyInd);
+        AmpAhsurveyQuestionType surveyQuestType = new AmpAhsurveyQuestionType();
+        surveyQuestType.setAmpTypeId(parisForm.getPiQuestTypeId());
+        surveyQuestion.setAmpTypeId(surveyQuestType);
+        surveyQuestion.setStatus(null);
+        
+        DbUtil.add(surveyQuestion);
 
-		return mapping.findForward("parisIndiManager");
-	}
+        return mapping.findForward("parisIndiManager");
+    }
 }

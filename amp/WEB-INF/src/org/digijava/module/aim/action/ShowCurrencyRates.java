@@ -37,121 +37,121 @@ import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.currencyrates.CurrencyRatesService;
 
 public class ShowCurrencyRates extends Action {
-	
-	private static final long SEVEN_DAYS = 604800000; // in miliseconds
-	// 7 * 24 * 60 * 60 * 1000
-	
-	private static final int ABSOLUTELY_ALL_ACTIVE_RATES = -1;	
+    
+    private static final long SEVEN_DAYS = 604800000; // in miliseconds
+    // 7 * 24 * 60 * 60 * 1000
+    
+    private static final int ABSOLUTELY_ALL_ACTIVE_RATES = -1;  
 
-	private static Logger logger = Logger.getLogger(ShowCurrencyRates.class);
+    private static Logger logger = Logger.getLogger(ShowCurrencyRates.class);
 
-	public ActionForward execute(ActionMapping mapping,ActionForm form,
-			HttpServletRequest request,HttpServletResponse response) throws Exception {
+    public ActionForward execute(ActionMapping mapping,ActionForm form,
+            HttpServletRequest request,HttpServletResponse response) throws Exception {
 
-		CurrencyRateForm crForm = (CurrencyRateForm) form;
+        CurrencyRateForm crForm = (CurrencyRateForm) form;
                 Boolean isFromAdminHome=crForm.isClean();
         HttpSession httpSession = request.getSession();
         
         ActionMessages errors = null;
         errors = (ActionMessages) httpSession.getAttribute("CurrencyRateFileUploadError");
         if(errors!=null) {
-        	saveErrors(request, errors);
-        	httpSession.setAttribute("CurrencyRateFileUploadError",null);
+            saveErrors(request, errors);
+            httpSession.setAttribute("CurrencyRateFileUploadError",null);
         }
         
-        String baseCurrency				= FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.BASE_CURRENCY );
+        String baseCurrency             = FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.BASE_CURRENCY );
         if ( baseCurrency == null )
-      	  baseCurrency			= "USD";
+          baseCurrency          = "USD";
 
-		try {
+        try {
 
-		if (crForm.getDoAction() != null &&
-				crForm.getDoAction().equals("delete")) {
-			CurrencyUtil.deleteCurrencyRates(crForm.getSelectedRates());
-			AbstractCache ratesCache = DigiCacheManager.getInstance().getCache(ArConstants.EXCHANGE_RATES_CACHE);
+        if (crForm.getDoAction() != null &&
+                crForm.getDoAction().equals("delete")) {
+            CurrencyUtil.deleteCurrencyRates(crForm.getSelectedRates());
+            AbstractCache ratesCache = DigiCacheManager.getInstance().getCache(ArConstants.EXCHANGE_RATES_CACHE);
             ratesCache.clear();
-			crForm.setAllRates(null);
-			crForm.setDoAction("");
-		}
+            crForm.setAllRates(null);
+            crForm.setDoAction("");
+        }
 
-		if (crForm.getDoAction() != null &&
-				crForm.getDoAction().equals("loadRates")) {
-			if (crForm.getRatesFile() != null &&
-					crForm.getRatesFile().length() > 0) {
-				logger.info("File name = " + crForm.getRatesFile());
-				Collection currRates = CurrencyRateLoader.getCurrencyRates(
-						crForm.getRatesFile());
-				CurrencyUtil.saveCurrencyRates(currRates, baseCurrency);
-				crForm.setDoAction("");
-				crForm.setAllRates(null);
-			}
-		}
+        if (crForm.getDoAction() != null &&
+                crForm.getDoAction().equals("loadRates")) {
+            if (crForm.getRatesFile() != null &&
+                    crForm.getRatesFile().length() > 0) {
+                logger.info("File name = " + crForm.getRatesFile());
+                Collection currRates = CurrencyRateLoader.getCurrencyRates(
+                        crForm.getRatesFile());
+                CurrencyUtil.saveCurrencyRates(currRates, baseCurrency);
+                crForm.setDoAction("");
+                crForm.setAllRates(null);
+            }
+        }
 
         int page = 1;
-		String temp = request.getParameter("page");
-		if (temp != null) {
-			page = Integer.parseInt(temp.trim());
-		}
+        String temp = request.getParameter("page");
+        if (temp != null) {
+            page = Integer.parseInt(temp.trim());
+        }
 
 
 
-		if (crForm.getFilterByDateFrom() == null
-				|| crForm.getFilterByDateFrom().trim().length() == 0||(isFromAdminHome!=null && isFromAdminHome)) {
-//			crForm.setFilterByDateFrom(Constants.CURRENCY_RATE_DEAFULT_END_DATE);//AMP-1421
-			crForm.setFilterByDateFrom(DateTimeUtil.formatDate(new Date()));
+        if (crForm.getFilterByDateFrom() == null
+                || crForm.getFilterByDateFrom().trim().length() == 0||(isFromAdminHome!=null && isFromAdminHome)) {
+//          crForm.setFilterByDateFrom(Constants.CURRENCY_RATE_DEAFULT_END_DATE);//AMP-1421
+            crForm.setFilterByDateFrom(DateTimeUtil.formatDate(new Date()));
                         crForm.setClean(false);
-		}
+        }
 
 
 
-			crForm.setPrevFromDate(crForm.getFilterByDateFrom());
+            crForm.setPrevFromDate(crForm.getFilterByDateFrom());
             Date toDate = DateConversion.getDate(crForm.getFilterByDateFrom());
 
             Calendar cal=Calendar.getInstance();
             cal.setTime(toDate);
             int timePeriod=crForm.getTimePeriod();
             if(timePeriod==ShowCurrencyRates.ABSOLUTELY_ALL_ACTIVE_RATES){
-            	crForm.setAllRates(CurrencyUtil.getAllActiveRates());            	
+                crForm.setAllRates(CurrencyUtil.getAllActiveRates());               
             }
             else{
-	           switch (timePeriod) {
-               case 1:	cal.add(Calendar.DATE,-7);    break;
-               case 2:	cal.add(Calendar.DATE, -14);  break;
-               case 3:	cal.add(Calendar.MONTH,-1);   break;
-               case 4:	cal.add(Calendar.MONTH, -4);  break;
-               case 5:	cal.add(Calendar.YEAR, -1);	  break;
+               switch (timePeriod) {
+               case 1:  cal.add(Calendar.DATE,-7);    break;
+               case 2:  cal.add(Calendar.DATE, -14);  break;
+               case 3:  cal.add(Calendar.MONTH,-1);   break;
+               case 4:  cal.add(Calendar.MONTH, -4);  break;
+               case 5:  cal.add(Calendar.YEAR, -1);   break;
                default:break;
-	           }
-	           Date fromDate=cal.getTime();
-	           crForm.setAllRates(CurrencyUtil.getActiveRates(fromDate, toDate));
+               }
+               Date fromDate=cal.getTime();
+               crForm.setAllRates(CurrencyUtil.getActiveRates(fromDate, toDate));
             }
 
-		ArrayList tempList = new ArrayList();
-		Iterator itr = null;
+        ArrayList tempList = new ArrayList();
+        Iterator itr = null;
 
-		boolean filtered = false;
-		if (crForm.getFilterByCurrCode() != null &&
-				crForm.getFilterByCurrCode().trim().length() > 0)  {
-			logger.debug("Filtering based on currency code ....");
-			itr = crForm.getAllRates().iterator();
-			CurrencyRates cRates = null;
-			while (itr.hasNext()) {
-				cRates = (CurrencyRates) itr.next();
-				if (cRates.getCurrencyCode().equals(
-						crForm.getFilterByCurrCode())) {
-					tempList.add(cRates);
-				}
-			}
-			filtered = true;
-		}
+        boolean filtered = false;
+        if (crForm.getFilterByCurrCode() != null &&
+                crForm.getFilterByCurrCode().trim().length() > 0)  {
+            logger.debug("Filtering based on currency code ....");
+            itr = crForm.getAllRates().iterator();
+            CurrencyRates cRates = null;
+            while (itr.hasNext()) {
+                cRates = (CurrencyRates) itr.next();
+                if (cRates.getCurrencyCode().equals(
+                        crForm.getFilterByCurrCode())) {
+                    tempList.add(cRates);
+                }
+            }
+            filtered = true;
+        }
 
-		if (!filtered) {
-			tempList = new ArrayList(crForm.getAllRates());
-		}
+        if (!filtered) {
+            tempList = new ArrayList(crForm.getAllRates());
+        }
 
-		if (crForm.getNumResultsPerPage() == 0) {
-			crForm.setNumResultsPerPage(Constants.NUM_RECORDS);
-		}
+        if (crForm.getNumResultsPerPage() == 0) {
+            crForm.setNumResultsPerPage(Constants.NUM_RECORDS);
+        }
 
         if(tempList.size() > 0) {
             int numPages = tempList.size() / crForm.getNumResultsPerPage();
@@ -183,33 +183,33 @@ public class ShowCurrencyRates extends Action {
             crForm.setPages(null);
         }
 
-		crForm.setCurrentPage(new Integer(page));		
-		crForm.setCurrencyCodes(CurrencyUtil.getActiveAmpCurrencyByName(true));
-		crForm.setTimePeriods(getTimePeriods());
-		crForm.setUpdateCRateAmount(null);
-		crForm.setUpdateCRateCode(null);
-		crForm.setUpdateCRateDate(null);
-		crForm.setUpdateCRateId(null);
+        crForm.setCurrentPage(new Integer(page));       
+        crForm.setCurrencyCodes(CurrencyUtil.getActiveAmpCurrencyByName(true));
+        crForm.setTimePeriods(getTimePeriods());
+        crForm.setUpdateCRateAmount(null);
+        crForm.setUpdateCRateCode(null);
+        crForm.setUpdateCRateDate(null);
+        crForm.setUpdateCRateId(null);
 
-		} catch (Exception e) {
-			logger.error("Exception " + e);
-			e.printStackTrace(System.out);
-		}
-		String lastUpdate = CurrencyRatesService.getStringLastTimeUpdate(CurrencyUtil.RATE_FROM_WEB_SERVICE);
-		crForm.setLastRateUpdate(lastUpdate);
-		return mapping.findForward("forward");
-	}
-	
-	private List<LabelValueBean>  getTimePeriods(){
-		List<LabelValueBean> timePeriods=new ArrayList<LabelValueBean>();
-		timePeriods.add(new LabelValueBean("7 Days","1"));
-		timePeriods.add(new LabelValueBean("2 weeks","2"));
-		timePeriods.add(new LabelValueBean("Month","3"));
-		timePeriods.add(new LabelValueBean("Quarter","4"));
-		timePeriods.add(new LabelValueBean("Year","5"));
-		timePeriods.add(new LabelValueBean("ALL",String.valueOf(ShowCurrencyRates.ABSOLUTELY_ALL_ACTIVE_RATES)));		
-		return timePeriods;
-	}
+        } catch (Exception e) {
+            logger.error("Exception " + e);
+            e.printStackTrace(System.out);
+        }
+        String lastUpdate = CurrencyRatesService.getStringLastTimeUpdate(CurrencyUtil.RATE_FROM_WEB_SERVICE);
+        crForm.setLastRateUpdate(lastUpdate);
+        return mapping.findForward("forward");
+    }
+    
+    private List<LabelValueBean>  getTimePeriods(){
+        List<LabelValueBean> timePeriods=new ArrayList<LabelValueBean>();
+        timePeriods.add(new LabelValueBean("7 Days","1"));
+        timePeriods.add(new LabelValueBean("2 weeks","2"));
+        timePeriods.add(new LabelValueBean("Month","3"));
+        timePeriods.add(new LabelValueBean("Quarter","4"));
+        timePeriods.add(new LabelValueBean("Year","5"));
+        timePeriods.add(new LabelValueBean("ALL",String.valueOf(ShowCurrencyRates.ABSOLUTELY_ALL_ACTIVE_RATES)));       
+        return timePeriods;
+    }
 
 }
 

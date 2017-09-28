@@ -28,13 +28,13 @@ import com.lowagie.text.pdf.PdfWriter;
 
 public class CreatePdf extends Action {
 @Override
-	public ActionForward execute(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)
-		throws Exception {
-	com.lowagie.text.Document doc = new com.lowagie.text.Document(PageSize.A4);
+    public ActionForward execute(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)
+        throws Exception {
+    com.lowagie.text.Document doc = new com.lowagie.text.Document(PageSize.A4);
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     try {
-//    	 PdfWriter.getInstance(doc, baos);
-//    	 doc.open();
+//       PdfWriter.getInstance(doc, baos);
+//       doc.open();
 //         com.lowagie.text.Font pageTitleFont = com.lowagie.text.FontFactory.getFont("Arial", 24, com.lowagie.text.Font.BOLD);
 //         Paragraph pageTitle = new Paragraph(TranslatorWorker.translateText("Test PDF", request), pageTitleFont);
 //         pageTitle.setAlignment(Element.ALIGN_CENTER);
@@ -47,24 +47,24 @@ public class CreatePdf extends Action {
 //         String contentType="application/pdf";
 //         int fileSize=pdfbody.length;
 //         //create jcr node
-//         Session jcrWriteSession		= DocumentManagerUtil.getWriteSession(request);
-//         Node userHomeNode			= DocumentManagerUtil.getUserPrivateNode(jcrWriteSession, getCurrentTeamMember(request));
-//         NodeWrapper nodeWrapper		= new NodeWrapper(null, request, userHomeNode, false, new ActionErrors());
-//			if ( nodeWrapper != null && !nodeWrapper.isErrorAppeared() ){
-//				nodeWrapper.saveNode(jcrWriteSession);
-//			}
-		//aq mere last approved version unda davaupdate-o am node-is
-		//public resource unda gavaketo am node-isgan
-		
+//         Session jcrWriteSession      = DocumentManagerUtil.getWriteSession(request);
+//         Node userHomeNode            = DocumentManagerUtil.getUserPrivateNode(jcrWriteSession, getCurrentTeamMember(request));
+//         NodeWrapper nodeWrapper      = new NodeWrapper(null, request, userHomeNode, false, new ActionErrors());
+//          if ( nodeWrapper != null && !nodeWrapper.isErrorAppeared() ){
+//              nodeWrapper.saveNode(jcrWriteSession);
+//          }
+        //aq mere last approved version unda davaupdate-o am node-is
+        //public resource unda gavaketo am node-isgan
+        
     }catch (Exception e) {
-		// TODO: handle exception
-	}
-		return mapping.findForward("forward");
-	}
+        // TODO: handle exception
+    }
+        return mapping.findForward("forward");
+    }
 
-	private TeamMember getCurrentTeamMember( HttpServletRequest request ) {
-		HttpSession httpSession		= request.getSession();
-		TeamMember teamMember		= (TeamMember)httpSession.getAttribute(Constants.CURRENT_MEMBER);
-		return teamMember;
-	}
+    private TeamMember getCurrentTeamMember( HttpServletRequest request ) {
+        HttpSession httpSession     = request.getSession();
+        TeamMember teamMember       = (TeamMember)httpSession.getAttribute(Constants.CURRENT_MEMBER);
+        return teamMember;
+    }
 }

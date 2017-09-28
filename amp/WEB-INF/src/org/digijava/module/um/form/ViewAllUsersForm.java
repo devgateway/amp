@@ -37,75 +37,75 @@ public class ViewAllUsersForm
     private String[] digitPages;
     private String[] alphaPages = null;
     
-    private boolean showBanned	= false;
+    private boolean showBanned  = false;
     
-	public void reset(ActionMapping mapping, HttpServletRequest request) {
+    public void reset(ActionMapping mapping, HttpServletRequest request) {
           //pages = null;
           // currentAlpha = null;        
           //pagedUsers = null;
-		if(reset!=null && reset.equals("true")){
-			keyword = null;       
-			type = -1;
-			numResults = tempNumResults = 10;
-	        setReset("false");
-	       
-		}	
-		 //setTempNumResults(10);
+        if(reset!=null && reset.equals("true")){
+            keyword = null;       
+            type = -1;
+            numResults = tempNumResults = 10;
+            setReset("false");
+           
+        }   
+         //setTempNumResults(10);
       }
-	
-	public String getReset() {
-		return reset;
-	}
+    
+    public String getReset() {
+        return reset;
+    }
 
-	public void setReset(String reset) {
-		this.reset = reset;
-	}
+    public void setReset(String reset) {
+        this.reset = reset;
+    }
 
     public Collection getPages() {
-		return pages;
-	}
+        return pages;
+    }
 
-	public void setPages(Collection pages) {
-		this.pages = pages;
-		if(pages!=null)
-	    {    
-	    	this.pagesSize=pages.size();
-	    }
-	}
+    public void setPages(Collection pages) {
+        this.pages = pages;
+        if(pages!=null)
+        {    
+            this.pagesSize=pages.size();
+        }
+    }
 
-	public int getTempNumResults() {
-		return tempNumResults;
-	}
+    public int getTempNumResults() {
+        return tempNumResults;
+    }
 
-	public void setTempNumResults(int tempNumResults) {
-		this.tempNumResults = tempNumResults;
-	}
+    public void setTempNumResults(int tempNumResults) {
+        this.tempNumResults = tempNumResults;
+    }
 
-	public String[] getAlphaPages() {
-		return alphaPages;
-	}
+    public String[] getAlphaPages() {
+        return alphaPages;
+    }
 
-	public void setAlphaPages(String[] alphaPages) {
-		this.alphaPages = alphaPages;
-	}
+    public void setAlphaPages(String[] alphaPages) {
+        this.alphaPages = alphaPages;
+    }
 
-	public Integer getCurrentPage() {
-		return currentPage;
-	}
+    public Integer getCurrentPage() {
+        return currentPage;
+    }
 
-	public void setCurrentPage(Integer currentPage) {
-		this.currentPage = currentPage;
-	}
+    public void setCurrentPage(Integer currentPage) {
+        this.currentPage = currentPage;
+    }
 
-	public String getCurrentAlpha() {
-		return currentAlpha;
-	}
+    public String getCurrentAlpha() {
+        return currentAlpha;
+    }
 
-	public void setCurrentAlpha(String currentAlpha) {
-		this.currentAlpha = currentAlpha;
-	}
+    public void setCurrentAlpha(String currentAlpha) {
+        this.currentAlpha = currentAlpha;
+    }
 
-	public ViewAllUsersForm() {
+    public ViewAllUsersForm() {
     }
 
     public String getKeyword() {
@@ -132,85 +132,85 @@ public class ViewAllUsersForm
         this.type = type;
     }
 
-	public int getNumResults() {
-		return numResults;
-	}
+    public int getNumResults() {
+        return numResults;
+    }
 
-	public void setNumResults(int numResults) {
-		this.numResults = numResults;
-	}
+    public void setNumResults(int numResults) {
+        this.numResults = numResults;
+    }
 
-	public Collection<UserBean> getPagedUsers() {
-		return pagedUsers;
-	}
+    public Collection<UserBean> getPagedUsers() {
+        return pagedUsers;
+    }
 
-	public void setPagedUsers(Collection<UserBean> pagedUsers) {
-		this.pagedUsers = pagedUsers;
-	}
+    public void setPagedUsers(Collection<UserBean> pagedUsers) {
+        this.pagedUsers = pagedUsers;
+    }
 
-	public Collection<UserBean> getAlphaUsers() {
-		return alphaUsers;
-	}
+    public Collection<UserBean> getAlphaUsers() {
+        return alphaUsers;
+    }
 
-	public void setAlphaUsers(Collection<UserBean> alphaUsers) {
-		this.alphaUsers = alphaUsers;
-	}
+    public void setAlphaUsers(Collection<UserBean> alphaUsers) {
+        this.alphaUsers = alphaUsers;
+    }
 
-	public boolean isSelectedNoLetter() {
-		return selectedNoLetter;
-	}
+    public boolean isSelectedNoLetter() {
+        return selectedNoLetter;
+    }
 
-	public void setSelectedNoLetter(boolean selectedNoLetter) {
-		this.selectedNoLetter = selectedNoLetter;
-	}
+    public void setSelectedNoLetter(boolean selectedNoLetter) {
+        this.selectedNoLetter = selectedNoLetter;
+    }
 
-	public String getSortBy() {
-		return sortBy;
-	}
+    public String getSortBy() {
+        return sortBy;
+    }
 
-	public void setSortBy(String sortBy) {
-		this.sortBy = sortBy;
-	}
-	
-	public int getPagesToShow() {
-		return pagesToShow;
-	}
+    public void setSortBy(String sortBy) {
+        this.sortBy = sortBy;
+    }
+    
+    public int getPagesToShow() {
+        return pagesToShow;
+    }
 
-	public void setPagesToShow(int pagesToShow) {
-		this.pagesToShow = pagesToShow;
-	}
+    public void setPagesToShow(int pagesToShow) {
+        this.pagesToShow = pagesToShow;
+    }
 
-	public int getOffset() {
-		int value;
-		if (getCurrentPage()> (this.getPagesToShow()/2)){
-			value = (this.getCurrentPage() - (this.getPagesToShow()/2))-1;
-		}
-		else {
-			value = 0;
-		}
-		setOffset(value);
-		return offset;
-	}
+    public int getOffset() {
+        int value;
+        if (getCurrentPage()> (this.getPagesToShow()/2)){
+            value = (this.getCurrentPage() - (this.getPagesToShow()/2))-1;
+        }
+        else {
+            value = 0;
+        }
+        setOffset(value);
+        return offset;
+    }
 
-	public void setOffset(int offset) {
-		this.offset = offset;
-	}
-	
-	public int getPagesSize() {
-		return pagesSize;
-	}
+    public void setOffset(int offset) {
+        this.offset = offset;
+    }
+    
+    public int getPagesSize() {
+        return pagesSize;
+    }
 
-	public void setPagesSize(int pagesSize) {
-		this.pagesSize = pagesSize;
-	}
+    public void setPagesSize(int pagesSize) {
+        this.pagesSize = pagesSize;
+    }
 
-	public boolean getShowBanned() {
-		return showBanned;
-	}
+    public boolean getShowBanned() {
+        return showBanned;
+    }
 
-	public void setShowBanned(boolean showBanned) {
-		this.showBanned = showBanned;
-	}
+    public void setShowBanned(boolean showBanned) {
+        this.showBanned = showBanned;
+    }
 
     public void setDigitPages(String[] digitPages) {
         this.digitPages = digitPages;
@@ -220,6 +220,6 @@ public class ViewAllUsersForm
         return digitPages;
     }
 
-	
-	
+    
+    
 }

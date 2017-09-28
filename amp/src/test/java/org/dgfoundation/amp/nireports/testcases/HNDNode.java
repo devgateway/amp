@@ -18,28 +18,28 @@ import java.util.Set;
  */
 public class HNDNode {
 
-	
-	public final long id;
-	public final String name;
-	public final List<HNDNode> children;
-	
-	public HNDNode(long id, String name, List<HNDNode> children) {
-		this.id = id;
-		this.name = name;
-		this.children = children;
-	}
+    
+    public final long id;
+    public final String name;
+    public final List<HNDNode> children;
+    
+    public HNDNode(long id, String name, List<HNDNode> children) {
+        this.id = id;
+        this.name = name;
+        this.children = children;
+    }
 
-	public Set<Long> getChildrenIds() {
-		Set<Long> res = new HashSet<Long>();
-		for (HNDNode node : this.children)
-			res.add(node.id);
-		return res;
-	}
-	public static HNDNode element(long id, String name, HNDNode ... children) {
-		return new HNDNode(id, name, Arrays.asList(children));
-	}
-	
-	public String toString() {
-		return String.format("%d : %s", this.id, this.name);
-	}
+    public Set<Long> getChildrenIds() {
+        Set<Long> res = new HashSet<Long>();
+        for (HNDNode node : this.children)
+            res.add(node.id);
+        return res;
+    }
+    public static HNDNode element(long id, String name, HNDNode ... children) {
+        return new HNDNode(id, name, Arrays.asList(children));
+    }
+    
+    public String toString() {
+        return String.format("%d : %s", this.id, this.name);
+    }
 }

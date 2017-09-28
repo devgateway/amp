@@ -21,7 +21,16 @@ import java.util.Map;
  * Created by anpicca on 24/11/2016.
  */
 public class ExportUtil {
+
     private static Logger logger = Logger.getLogger(ExportUtil.class);
+
+    public static final int COMPONENT_FM_FIELD_TYPE = 0;
+    public static final int COMPONENT_FM_FIELD_AMOUNT = 1;
+    public static final int COMPONENT_FM_FIELD_CURRENCY = 2;
+    public static final int COMPONENT_FM_FIELD_TRANSCTION_DATE = 3;
+    public static final int COMPONENT_FM_FIELD_ORGANISATION = 4;
+    public static final int COMPONENT_FM_FIELD_SECOND_REPORTING = 5;
+    public static final int COMPONENT_FM_FIELD_DESCRIPTION = 6;
 
     public static String buildInternalId(Set<AmpActivityInternalId> internalIds) {
         String result = "";

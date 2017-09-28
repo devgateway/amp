@@ -41,14 +41,14 @@ public class ShowAddKey
       extends Action {
 
     public ActionForward execute(ActionMapping mapping,
-				 ActionForm form,
-				 javax.servlet.http.HttpServletRequest request,
-				 javax.servlet.http.HttpServletResponse
-				 response) throws java.lang.Exception {
+                 ActionForm form,
+                 javax.servlet.http.HttpServletRequest request,
+                 javax.servlet.http.HttpServletResponse
+                 response) throws java.lang.Exception {
 
-	AdvancedTranslationForm formBean = (AdvancedTranslationForm) form;
-	formBean.setAddKey(true);
-	return mapping.findForward("forward");
+    AdvancedTranslationForm formBean = (AdvancedTranslationForm) form;
+    formBean.setAddKey(true);
+    return mapping.findForward("forward");
     }
 
 }

@@ -73,13 +73,13 @@ public class FMEndpoint {
      * @param config a JSON object with requested options (see the provided example) 
      * @return list of FM settings as a JSON Object
      */
-	@POST
-	@Path("/fm")
-	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui=false, name="fm", id="")
-	public JsonBean getFMSettings(JsonBean config) {
-		return FMService.getFMSettings(config);
-	}
+    @POST
+    @Path("/fm")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiMethod(ui=false, name="fm", id="")
+    public JsonBean getFMSettings(JsonBean config) {
+        return FMService.getFMSettings(config);
+    }
 }
 
-	
+    

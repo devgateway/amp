@@ -9,5 +9,5 @@ import org.dgfoundation.amp.newreports.ReportSpecification;
  * @param <K> the type of the generated instances
  */
 public interface NiReportOutputBuilder<K> {
-	public K buildOutput(ReportSpecification spec, NiReportRunResult reportRun);
+    public K buildOutput(ReportSpecification spec, NiReportRunResult reportRun);
 }

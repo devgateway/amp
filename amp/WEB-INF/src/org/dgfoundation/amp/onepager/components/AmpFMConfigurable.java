@@ -21,6 +21,6 @@ import org.dgfoundation.amp.onepager.util.FMUtil;
  * @see AmpComponentPanel
  */
 public interface AmpFMConfigurable {
-	public AmpFMTypes getFMType();
-	public String getFMName();
+    public AmpFMTypes getFMType();
+    public String getFMName();
 }

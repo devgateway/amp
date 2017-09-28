@@ -13,19 +13,19 @@ import org.digijava.module.um.util.DbUtil;
  */
 public class ConfirmUserRegistration extends Action{
 
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			javax.servlet.http.HttpServletRequest request,
-			javax.servlet.http.HttpServletResponse response) throws
+    public ActionForward execute(ActionMapping mapping, ActionForm form,
+            javax.servlet.http.HttpServletRequest request,
+            javax.servlet.http.HttpServletResponse response) throws
 
-	java.lang.Exception {
+    java.lang.Exception {
 
-		String id=request.getParameter("id");
+        String id=request.getParameter("id");
                 boolean successfully=DbUtil.registerUser(id);
                 if(successfully){
-		return mapping.findForward("forward");
+        return mapping.findForward("forward");
                 }
                 else{
                     return mapping.findForward("index");
                 }
-	}
+    }
 }

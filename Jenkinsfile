@@ -42,12 +42,6 @@ def updateGitHubCommitStatus(context, message, state) {
     ])
 }
 
-@NonCPS
-def readAMPVersion(pathToPom) {
-    def project = new XmlSlurper().parseText(readFile(pathToPom))
-    project.version.text().toString().trim()
-}
-
 // Run checkstyle only for PR builds
 stage('Checkstyle') {
     if (branch == null) {
@@ -84,7 +78,7 @@ stage('Build') {
         sh(returnStatus: true, script: "docker rmi phosphorus:5000/amp-webapp:${tag} > /dev/null")
 
         // Find AMP version
-        codeVersion = readAMPVersion('amp/pom.xml')
+        codeVersion = readMavenPom('amp/pom.xml').version
         println "AMP Version: ${codeVersion}"
 
         if (imageIds.equals("")) {

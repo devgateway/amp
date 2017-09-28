@@ -14,18 +14,18 @@ import org.dgfoundation.amp.nireports.NiReportsEngine;
  *
  */
 public class NiReportRunResult {
-	public final NiReportData reportOut;
-	public final RunNode timings;
-	public final NiHeaderInfo headers;
-	public final long wallclockTime;
-	public final SortedMap<Long, SortedSet<ReportWarning>> warnings; 
-	
-	public NiReportRunResult(NiReportData reportOut, RunNode timings, long wallclockTime, NiHeaderInfo headers, 
-			SortedMap<Long, SortedSet<ReportWarning>> warnings) {
-		this.reportOut = reportOut;
-		this.timings = timings;
-		this.wallclockTime = wallclockTime;
-		this.headers = headers;
-		this.warnings = warnings;
-	}
+    public final NiReportData reportOut;
+    public final RunNode timings;
+    public final NiHeaderInfo headers;
+    public final long wallclockTime;
+    public final SortedMap<Long, SortedSet<ReportWarning>> warnings; 
+    
+    public NiReportRunResult(NiReportData reportOut, RunNode timings, long wallclockTime, NiHeaderInfo headers, 
+            SortedMap<Long, SortedSet<ReportWarning>> warnings) {
+        this.reportOut = reportOut;
+        this.timings = timings;
+        this.wallclockTime = wallclockTime;
+        this.headers = headers;
+        this.warnings = warnings;
+    }
 }

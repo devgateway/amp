@@ -14,5 +14,5 @@ package org.dgfoundation.amp.ar;
  * it is inherited from the column name (ex: "sector", "title")
  */
 public interface ColumnIdentifiable {
-	public Object getColumnId();
+    public Object getColumnId();
 }

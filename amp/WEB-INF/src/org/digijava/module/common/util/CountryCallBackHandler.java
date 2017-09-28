@@ -1,8 +1,8 @@
 
 /*
  *   CountryCallBackHandler.java
- * 	 Created by Shamanth Murthy shamanth.murthy@mphasis.com
- * 	 Date: Mar 18, 2004
+ *   Created by Shamanth Murthy shamanth.murthy@mphasis.com
+ *   Date: Mar 18, 2004
  *
  *
  *   This file is part of DiGi project (www.digijava.org).
@@ -33,22 +33,22 @@ import org.digijava.kernel.translator.util.TranslationCallback;
 
 public class CountryCallBackHandler implements TranslationCallback{
 
-	private final String siteId = "0";
+    private final String siteId = "0";
 
-	public String getSiteId(Object o){
-		return siteId;
-	}
+    public String getSiteId(Object o){
+        return siteId;
+    }
 
-	public String getTranslationKey(Object o){
+    public String getTranslationKey(Object o){
 
-		if(o != null)
-			return ("cn:" + o.toString());
+        if(o != null)
+            return ("cn:" + o.toString());
 
-		return null;
+        return null;
 
-	}
+    }
     public String getDefaultTranslation(Object o){
 
-		return "";
-	}
+        return "";
+    }
 }

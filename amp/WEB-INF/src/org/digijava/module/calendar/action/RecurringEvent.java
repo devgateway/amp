@@ -20,22 +20,22 @@ import org.digijava.module.calendar.form.CalendarItemForm;
 import org.digijava.module.calendar.util.AmpDbUtil;
 
 public class RecurringEvent extends Action {
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-	                             HttpServletRequest request,
-	                             HttpServletResponse response) throws Exception {
-		CalendarEventForm calForm=(CalendarEventForm)form;
-	
-	    DgDateFormatSymbols dgDateFormatSymbols = new DgDateFormatSymbols();
+    public ActionForward execute(ActionMapping mapping, ActionForm form,
+                                 HttpServletRequest request,
+                                 HttpServletResponse response) throws Exception {
+        CalendarEventForm calForm=(CalendarEventForm)form;
+    
+        DgDateFormatSymbols dgDateFormatSymbols = new DgDateFormatSymbols();
         String[] shortMonth = dgDateFormatSymbols.getShortMonths();
         ArrayList month = new ArrayList();
 
         for(int i = 1; i<shortMonth.length; i++) {
-        	month.add(shortMonth[i]);
+            month.add(shortMonth[i]);
         }
         calForm.setMonths(month);
-	  
+      
         
-	    return mapping.findForward("forward");
-	}
+        return mapping.findForward("forward");
+    }
 
 }

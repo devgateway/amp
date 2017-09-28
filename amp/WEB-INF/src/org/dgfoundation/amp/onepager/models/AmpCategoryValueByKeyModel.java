@@ -26,50 +26,50 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
  * since Sep 24, 2010
  */
 public class AmpCategoryValueByKeyModel implements
-		IModel<Set<AmpCategoryValue>> {
+        IModel<Set<AmpCategoryValue>> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4083598609567863027L;
-	private IModel<Set<AmpCategoryValue>> model;
-	private String categoryKey;
-	private transient Set<AmpCategoryValue> set = null;
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -4083598609567863027L;
+    private IModel<Set<AmpCategoryValue>> model;
+    private String categoryKey;
+    private transient Set<AmpCategoryValue> set = null;
 
-	/**
-	 * 
-	 */
-	public AmpCategoryValueByKeyModel(IModel<Set<AmpCategoryValue>> model, String categoryKey) {
-		this.model=model;
-		this.categoryKey= AmpCategoryFieldPanel.getAlternateKey(Session.get(), categoryKey);
-	}
+    /**
+     * 
+     */
+    public AmpCategoryValueByKeyModel(IModel<Set<AmpCategoryValue>> model, String categoryKey) {
+        this.model=model;
+        this.categoryKey= AmpCategoryFieldPanel.getAlternateKey(Session.get(), categoryKey);
+    }
 
-	@Override
-	public void detach() {
-		model.detach();
-	}
+    @Override
+    public void detach() {
+        model.detach();
+    }
 
-	@Override
-	public Set<AmpCategoryValue> getObject() {
-		if (set == null)
-			set = new TreeSet<AmpCategoryValue>();
-		else
-			set.clear();
-		if(model.getObject()!=null) 
-			set.addAll(CategoryManagerUtil.getAmpCategoryValuesFromListByKey(categoryKey, model.getObject()));
-		return set;
-	}
+    @Override
+    public Set<AmpCategoryValue> getObject() {
+        if (set == null)
+            set = new TreeSet<AmpCategoryValue>();
+        else
+            set.clear();
+        if(model.getObject()!=null) 
+            set.addAll(CategoryManagerUtil.getAmpCategoryValuesFromListByKey(categoryKey, model.getObject()));
+        return set;
+    }
 
-	@Override
-	public void setObject(Set<AmpCategoryValue> newValues) {
-		if (model.getObject() != null){
-			Collection oldValues = CategoryManagerUtil.getAmpCategoryValuesFromListByKey(categoryKey, model.getObject());
-			model.getObject().removeAll(oldValues);
-		}
-		else{
-			model.setObject(new HashSet<AmpCategoryValue>());
-		}
-		model.getObject().addAll(newValues);
-	}
+    @Override
+    public void setObject(Set<AmpCategoryValue> newValues) {
+        if (model.getObject() != null){
+            Collection oldValues = CategoryManagerUtil.getAmpCategoryValuesFromListByKey(categoryKey, model.getObject());
+            model.getObject().removeAll(oldValues);
+        }
+        else{
+            model.setObject(new HashSet<AmpCategoryValue>());
+        }
+        model.getObject().addAll(newValues);
+    }
 
 }

@@ -41,60 +41,60 @@ import org.digijava.module.aim.util.NpdUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 
 public class GetProgramIndicators extends Action {
-	private static Logger logger = Logger.getLogger(GetProgramIndicators.class);
-	public static final String ROOT_TAG = "indicatorsList";
+    private static Logger logger = Logger.getLogger(GetProgramIndicators.class);
+    public static final String ROOT_TAG = "indicatorsList";
 
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
-		logger.debug("got asynchronous request for indicators list");
+    public ActionForward execute(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
+        logger.debug("got asynchronous request for indicators list");
 
-		response.setContentType("text/xml");
-		NpdForm npdForm = (NpdForm) form;
+        response.setContentType("text/xml");
+        NpdForm npdForm = (NpdForm) form;
 
-		OutputStreamWriter outputStream = new OutputStreamWriter(
-				response.getOutputStream(), "UTF-8");
-		PrintWriter out = new PrintWriter(outputStream, true);
+        OutputStreamWriter outputStream = new OutputStreamWriter(
+                response.getOutputStream(), "UTF-8");
+        PrintWriter out = new PrintWriter(outputStream, true);
 
-		try {
+        try {
 
-			Long programId = npdForm.getProgramId();
-			AmpTheme currentTheme = ProgramUtil.getThemeById(programId);
-			Set<IndicatorTheme> indicators = currentTheme.getIndicators();
-			// if there are indicators
-			String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-			xml += "<" + ROOT_TAG + ">";
-			if (indicators != null && indicators.size() > 0) {
-				// convert to list
-				SortedSet<IndicatorTheme> sortedIndicators = new TreeSet<IndicatorTheme>(
-						new IndicatorUtil.IndThemeIndciatorNameComparator());
-				// sort
-				sortedIndicators.addAll(indicators);
-				for (IndicatorTheme ind : sortedIndicators) {
-					AmpIndicator indicator = ind.getIndicator();
-					xml += "<"
-							+ "indicator name=\""
-							+ org.digijava.module.aim.util.DbUtil
-									.filter(indicator.getName()) + "\" ";
-					xml += " id=\"" + indicator.getIndicatorId() + "\" />";
-				}
-			}
-				xml += "</" + ROOT_TAG + ">";
-				out.println(xml);
-				// outputStream.write(xml.getBytes());
-				out.close();
-				// return xml
-				logger.debug("closing and returning response XML of NPD Activities");
-				outputStream.close();
-			
-		} catch (Exception e) {
-			logger.info(e);
-			e.printStackTrace();
+            Long programId = npdForm.getProgramId();
+            AmpTheme currentTheme = ProgramUtil.getThemeById(programId);
+            Set<IndicatorTheme> indicators = currentTheme.getIndicators();
+            // if there are indicators
+            String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+            xml += "<" + ROOT_TAG + ">";
+            if (indicators != null && indicators.size() > 0) {
+                // convert to list
+                SortedSet<IndicatorTheme> sortedIndicators = new TreeSet<IndicatorTheme>(
+                        new IndicatorUtil.IndThemeIndciatorNameComparator());
+                // sort
+                sortedIndicators.addAll(indicators);
+                for (IndicatorTheme ind : sortedIndicators) {
+                    AmpIndicator indicator = ind.getIndicator();
+                    xml += "<"
+                            + "indicator name=\""
+                            + org.digijava.module.aim.util.DbUtil
+                                    .filter(indicator.getName()) + "\" ";
+                    xml += " id=\"" + indicator.getIndicatorId() + "\" />";
+                }
+            }
+                xml += "</" + ROOT_TAG + ">";
+                out.println(xml);
+                // outputStream.write(xml.getBytes());
+                out.close();
+                // return xml
+                logger.debug("closing and returning response XML of NPD Activities");
+                outputStream.close();
+            
+        } catch (Exception e) {
+            logger.info(e);
+            e.printStackTrace();
 
-		}
+        }
 
-		return null;
+        return null;
 
-	}
+    }
 
 }

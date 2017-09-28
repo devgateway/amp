@@ -10,7 +10,7 @@ import org.codehaus.jackson.annotate.JsonTypeInfo.Id;
  */
 @JsonTypeInfo(use=Id.NAME,include=As.PROPERTY,property="type")
 @JsonSubTypes({
-	@JsonSubTypes.Type(value=NamedCRSGeoJSON.class,  name="name"),
-	@JsonSubTypes.Type(value=LinkedCRSGeoJSON.class, name="link")
+    @JsonSubTypes.Type(value=NamedCRSGeoJSON.class,  name="name"),
+    @JsonSubTypes.Type(value=LinkedCRSGeoJSON.class, name="link")
 })
 abstract class CRSGeoJSON implements Validation {}

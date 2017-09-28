@@ -17,17 +17,17 @@ import com.lowagie.text.pdf.PdfPTable;
 
 public class ComputedDateCellPDF extends TextCellPDF {
 
-	public ComputedDateCellPDF(Exporter parent, Viewable item) {
-		super(parent, item);
-	}
+    public ComputedDateCellPDF(Exporter parent, Viewable item) {
+        super(parent, item);
+    }
 
-	/**
-	 * @param table
-	 * @param item
-	 */
-	public ComputedDateCellPDF(PdfPTable table, Viewable item, Long ownerId) {
-		super(table, item, ownerId);
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * @param table
+     * @param item
+     */
+    public ComputedDateCellPDF(PdfPTable table, Viewable item, Long ownerId) {
+        super(table, item, ownerId);
+        // TODO Auto-generated constructor stub
+    }
 
 }

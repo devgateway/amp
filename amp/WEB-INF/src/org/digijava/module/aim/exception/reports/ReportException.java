@@ -9,13 +9,13 @@ package org.digijava.module.aim.exception.reports;
  */
 public class ReportException extends Exception {
 
-	/**
-	 * @param message
-	 * @param cause
-	 */
-	public ReportException(String message, Throwable cause) {
-		super(message, cause);
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * @param message
+     * @param cause
+     */
+    public ReportException(String message, Throwable cause) {
+        super(message, cause);
+        // TODO Auto-generated constructor stub
+    }
 
 }

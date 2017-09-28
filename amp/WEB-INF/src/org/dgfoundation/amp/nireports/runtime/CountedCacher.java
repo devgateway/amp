@@ -12,19 +12,19 @@ import java.util.function.Function;
  * @param <V>
  */
 public class CountedCacher<K, V> {
-	public final CacheHitsCounter stats;
-	public final Map<K, V> cache = new HashMap<>();
-	
-	public CountedCacher(CacheHitsCounter stats) {
-		this.stats = stats;
-	}
-	
-	public V retrieveOrCompute(K k, int estimatedCost, Function<K, V> func) {
-		stats.registerCall();
-		return cache.computeIfAbsent(k, key -> {
-			stats.registerMiss(estimatedCost);
-			return func.apply(key);
-		});
-	}
-		
+    public final CacheHitsCounter stats;
+    public final Map<K, V> cache = new HashMap<>();
+    
+    public CountedCacher(CacheHitsCounter stats) {
+        this.stats = stats;
+    }
+    
+    public V retrieveOrCompute(K k, int estimatedCost, Function<K, V> func) {
+        stats.registerCall();
+        return cache.computeIfAbsent(k, key -> {
+            stats.registerMiss(estimatedCost);
+            return func.apply(key);
+        });
+    }
+        
 }

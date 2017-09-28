@@ -25,104 +25,104 @@ import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
  */
 public class AmpReportFilters extends ReportFiltersImpl {
 
-	private final Map<ReportColumn, FilterRule> dateFilterRules = new HashMap<>();
+    private final Map<ReportColumn, FilterRule> dateFilterRules = new HashMap<>();
 
-	@JsonIgnore
-	protected AmpFiscalCalendar calendar;
+    @JsonIgnore
+    protected AmpFiscalCalendar calendar;
 
-	/**
-	 * also known as "selected year"
-	 */
-	@JsonProperty(FiltersConstants.COMPUTED_YEAR)
-	protected Integer computedYear;
+    /**
+     * also known as "selected year"
+     */
+    @JsonProperty(FiltersConstants.COMPUTED_YEAR)
+    protected Integer computedYear;
 
-	public AmpReportFilters(Map<ReportElement, FilterRule> filterRules) {
-		super(filterRules);
-	}
-	
-	public AmpReportFilters() {
+    public AmpReportFilters(Map<ReportElement, FilterRule> filterRules) {
+        super(filterRules);
+    }
+    
+    public AmpReportFilters() {
         this(AmpARFilter.getDefaultCalendar());
     }
 
-	public AmpReportFilters(AmpFiscalCalendar calendar) {
-		this.calendar = calendar;
-	}
-	
-	public Integer getComputedYear() {
-		return computedYear;
-	}
+    public AmpReportFilters(AmpFiscalCalendar calendar) {
+        this.calendar = calendar;
+    }
+    
+    public Integer getComputedYear() {
+        return computedYear;
+    }
 
-	public void setComputedYear(Integer computedYear) {
-		this.computedYear = computedYear;
-	}
-	
- 	public AmpFiscalCalendar getCalendar() {
- 		return calendar;
- 	}
-		
-	public AmpReportFilters(Map<ReportElement, FilterRule> filterRules, AmpFiscalCalendar calendar) {
-		super(filterRules);
-		this.calendar = calendar;
-	}
+    public void setComputedYear(Integer computedYear) {
+        this.computedYear = computedYear;
+    }
+    
+    public AmpFiscalCalendar getCalendar() {
+        return calendar;
+    }
+        
+    public AmpReportFilters(Map<ReportElement, FilterRule> filterRules, AmpFiscalCalendar calendar) {
+        super(filterRules);
+        this.calendar = calendar;
+    }
 
-	/***
-	 * the date-columns filter rules. They lie separate here instead of being merged into {@link #getFilterRules()} because  this is the way they have been implemented in the old Mondrian/API/frontend
-	 * TODO: make this field disappear when reimplementing (?) the filter widget backend API
-	 * @return
-	 */
-	@JsonIgnore
-	public Map<ReportColumn, FilterRule> getDateFilterRules() {
-		return this.dateFilterRules;
-	}
+    /***
+     * the date-columns filter rules. They lie separate here instead of being merged into {@link #getFilterRules()} because  this is the way they have been implemented in the old Mondrian/API/frontend
+     * TODO: make this field disappear when reimplementing (?) the filter widget backend API
+     * @return
+     */
+    @JsonIgnore
+    public Map<ReportColumn, FilterRule> getDateFilterRules() {
+        return this.dateFilterRules;
+    }
 
-	@JsonAnyGetter
-	public Map<String, FilterRule> getAllFilterRulesForJackson() {
-		return AmpCollections.remap(getAllFilterRules(), this::idForReportElement, Function.identity(), false);
-	}
+    @JsonAnyGetter
+    public Map<String, FilterRule> getAllFilterRulesForJackson() {
+        return AmpCollections.remap(getAllFilterRules(), this::idForReportElement, Function.identity(), false);
+    }
 
-	private String idForReportElement(ReportElement re) {
-		String id;
-		if (ElementType.ENTITY.equals(re.type)) {
-			String entityName = re.entity.getEntityName();
-			id = FilterUtils.INSTANCE.idFromColumnName(entityName);
-			if (id == null) {
-				throw new RuntimeException("No matching filter for column name: " + entityName);
-			}
-		} else {
-			id = re.type.toString().toLowerCase();
-		}
-		return id;
-	}
+    private String idForReportElement(ReportElement re) {
+        String id;
+        if (ElementType.ENTITY.equals(re.type)) {
+            String entityName = re.entity.getEntityName();
+            id = FilterUtils.INSTANCE.idFromColumnName(entityName);
+            if (id == null) {
+                throw new RuntimeException("No matching filter for column name: " + entityName);
+            }
+        } else {
+            id = re.type.toString().toLowerCase();
+        }
+        return id;
+    }
 
-	/**
-	 * concatenates {@link #getFilterRules()} with {@link #getDateFilterRules()}
-	 */
-	@JsonIgnore
-	@Override
-	public Map<ReportElement, FilterRule> getAllFilterRules() {
-		if (dateFilterRules == null || dateFilterRules.isEmpty())
-			return getFilterRules();
-		
-		Map<ReportElement, FilterRule> res = new HashMap<>(getFilterRules());
-		res.putAll(AmpCollections.remap(getDateFilterRules(), rc -> new ReportElement(rc), Function.identity(), false));
-		return res;
-	}
+    /**
+     * concatenates {@link #getFilterRules()} with {@link #getDateFilterRules()}
+     */
+    @JsonIgnore
+    @Override
+    public Map<ReportElement, FilterRule> getAllFilterRules() {
+        if (dateFilterRules == null || dateFilterRules.isEmpty())
+            return getFilterRules();
+        
+        Map<ReportElement, FilterRule> res = new HashMap<>(getFilterRules());
+        res.putAll(AmpCollections.remap(getDateFilterRules(), rc -> new ReportElement(rc), Function.identity(), false));
+        return res;
+    }
 
-	protected <T> void addFilterRule(Map<T, FilterRule> filterRules, T elem, FilterRule filterRule) {
-		filterRules.put(elem, filterRule);
-	}
-	
-	public static int getReportSelectedYear(ReportSpecification spec) {
-		AmpReportFilters filters = (AmpReportFilters) spec.getFilters();
-		Integer year = filters == null ? null : filters.getComputedYear();
-		// if not set, then it means Current Year
-		if (year == null) {
-			year = Calendar.getInstance().get(Calendar.YEAR);
-		}
-		return year;
-	}
-	
-	/**
+    protected <T> void addFilterRule(Map<T, FilterRule> filterRules, T elem, FilterRule filterRule) {
+        filterRules.put(elem, filterRule);
+    }
+    
+    public static int getReportSelectedYear(ReportSpecification spec) {
+        AmpReportFilters filters = (AmpReportFilters) spec.getFilters();
+        Integer year = filters == null ? null : filters.getComputedYear();
+        // if not set, then it means Current Year
+        if (year == null) {
+            year = Calendar.getInstance().get(Calendar.YEAR);
+        }
+        return year;
+    }
+    
+    /**
      * Adds a date range filter [from .. to] or [from .. infinite ) or (infinite .. to]
      * @param from - the date to start from or null
      * @param to - the date to end with or null

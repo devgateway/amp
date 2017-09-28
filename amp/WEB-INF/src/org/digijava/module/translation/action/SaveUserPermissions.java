@@ -41,22 +41,22 @@ public class SaveUserPermissions
       extends Action {
 
     public ActionForward execute(ActionMapping mapping,
-				 ActionForm form,
-				 javax.servlet.http.HttpServletRequest request,
-				 javax.servlet.http.HttpServletResponse
-				 response) throws java.lang.Exception {
+                 ActionForm form,
+                 javax.servlet.http.HttpServletRequest request,
+                 javax.servlet.http.HttpServletResponse
+                 response) throws java.lang.Exception {
 
-	TranslationPermissionsForm formBean = (
-	      TranslationPermissionsForm) form;
+    TranslationPermissionsForm formBean = (
+          TranslationPermissionsForm) form;
 
-	User user = null;
-	if (formBean.getUserId() != null) {
-	    user = UserUtils.getUser(formBean.getUserId());
-	}
+    User user = null;
+    if (formBean.getUserId() != null) {
+        user = UserUtils.getUser(formBean.getUserId());
+    }
 
-	if (user != null) {
-	    ArrayList permissions = new ArrayList();
-	    Iterator iter = formBean.getPermissions().iterator();
+    if (user != null) {
+        ArrayList permissions = new ArrayList();
+        Iterator iter = formBean.getPermissions().iterator();
         while (iter.hasNext()) {
             TranslationPermissionsForm.PermissionInfo pi = (
                 TranslationPermissionsForm.
@@ -72,12 +72,12 @@ public class SaveUserPermissions
                 INT_TRANSLATE)));
         }
 
-	    UserPrincipal userPrincipal = new UserPrincipal(user);
-	    DigiSecurityManager.setPrincipalPermissions(userPrincipal,
-		  permissions,new Class[] {TranslatePermission.class} );
-	}
+        UserPrincipal userPrincipal = new UserPrincipal(user);
+        DigiSecurityManager.setPrincipalPermissions(userPrincipal,
+          permissions,new Class[] {TranslatePermission.class} );
+    }
 
-	return mapping.findForward("forward");
+    return mapping.findForward("forward");
 
     }
 

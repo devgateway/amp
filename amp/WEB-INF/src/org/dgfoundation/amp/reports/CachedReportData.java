@@ -12,15 +12,15 @@ import org.dgfoundation.amp.newreports.pagination.PaginatedReport;
  * @author Nadejda Mandrescu
  */
 public class CachedReportData {
-	
-	/** Generated report data */
-	public final GeneratedReport report;
-	
-	public final PaginatedReport paginationInfo; 
-	
-	public CachedReportData(GeneratedReport report) {
-		this.report = report;
-		this.paginationInfo = new PaginatedReport(report.reportContents);
-	}
-	
+    
+    /** Generated report data */
+    public final GeneratedReport report;
+    
+    public final PaginatedReport paginationInfo; 
+    
+    public CachedReportData(GeneratedReport report) {
+        this.report = report;
+        this.paginationInfo = new PaginatedReport(report.reportContents);
+    }
+    
 }

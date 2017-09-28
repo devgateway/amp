@@ -192,6 +192,43 @@ public class AmpStructure implements Serializable,Comparable, Versionable, Clone
                 aux.images.add(auxImg);
             }
         }
+
+    @Override
+    public Output getOutput() {
+        Output out = new Output();
+        out.setOutputs(new ArrayList<Output>());
+        out.getOutputs().add(
+                new Output(null, new String[] { "Title" }, new Object[] { this.title != null ? this.title
+                        : "Empty Title" }));
+        if (this.description != null && !this.description.trim().equals("")) {
+            out.getOutputs()
+                    .add(new Output(null, new String[] { "Description" }, new Object[] { this.description }));
+        }
+        if (this.creationdate != null) {
+            out.getOutputs().add(
+                    new Output(null, new String[] { "Creation Date" }, new Object[] { this.creationdate }));
+        }
+        return out;
+    }
+    @Override
+    public Object getValue() {
+        String value = " " + this.creationdate + this.description /*+ this.activity*/;
+        return value;
+    }
+    
+    @Override
+    public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
+        AmpStructure aux = (AmpStructure) clone();
+        aux.activities = new HashSet();
+        aux.images = new HashSet();
+        if (this.images != null){
+            for(AmpStructureImg img : this.images){
+                AmpStructureImg auxImg =(AmpStructureImg) img.clone();
+                auxImg.setId(null);
+                auxImg.setStructure(aux);
+                aux.images.add(auxImg);
+            }
+        }
         
         aux.coordinates = new LinkedHashSet<>();
         if (this.coordinates != null) {

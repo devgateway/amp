@@ -26,7 +26,7 @@ package org.digijava.kernel.entity;
 public class HowDidYouHear {
 
     private String id;
-	private String referral;
+    private String referral;
 
     public HowDidYouHear() {}
 
@@ -36,20 +36,20 @@ public class HowDidYouHear {
     }
 
 
-	public String getReferral() {
-		return referral;
-	}
+    public String getReferral() {
+        return referral;
+    }
 
-	public void setReferral(String referral) {
-		this.referral = referral;
-	}
+    public void setReferral(String referral) {
+        this.referral = referral;
+    }
 
-	public String getId() {
-		return id;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
 }

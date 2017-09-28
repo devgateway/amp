@@ -14,37 +14,37 @@ package org.dgfoundation.amp.ar.exception;
  */
 public class UnidentifiedItemException extends Exception {
 
-	/**
-	 * 
-	 */
-	public UnidentifiedItemException() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * 
+     */
+    public UnidentifiedItemException() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
 
-	/**
-	 * @param message
-	 */
-	public UnidentifiedItemException(String message) {
-		super(message);
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * @param message
+     */
+    public UnidentifiedItemException(String message) {
+        super(message);
+        // TODO Auto-generated constructor stub
+    }
 
-	/**
-	 * @param message
-	 * @param cause
-	 */
-	public UnidentifiedItemException(String message, Throwable cause) {
-		super(message, cause);
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * @param message
+     * @param cause
+     */
+    public UnidentifiedItemException(String message, Throwable cause) {
+        super(message, cause);
+        // TODO Auto-generated constructor stub
+    }
 
-	/**
-	 * @param cause
-	 */
-	public UnidentifiedItemException(Throwable cause) {
-		super(cause);
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * @param cause
+     */
+    public UnidentifiedItemException(Throwable cause) {
+        super(cause);
+        // TODO Auto-generated constructor stub
+    }
 
 }

@@ -14,24 +14,24 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 
 public class ActivityForm extends ActionForm implements Serializable {
 
-	public final String SortByColumn_ActivityName = "activityName";
+    public final String SortByColumn_ActivityName = "activityName";
 
-	private List<AmpActivityFake> activityList;
-	
-	private List<AmpActivityFake> allActivityList;
+    private List<AmpActivityFake> activityList;
+    
+    private List<AmpActivityFake> allActivityList;
 
-	private String sortByColumn;
+    private String sortByColumn;
 
-	private String keyword = "";
-	private String lastKeyword = "";
-	
-	private int tempNumResults = 10;
-	
-	private int page;
+    private String keyword = "";
+    private String lastKeyword = "";
+    
+    private int tempNumResults = 10;
+    
+    private int page;
 
-	private int pageSize = 10;
-	
-	private int totalPages;
+    private int pageSize = 10;
+    
+    private int totalPages;
 
     private int pagesToShow;
     private int offset;
@@ -44,84 +44,84 @@ public class ActivityForm extends ActionForm implements Serializable {
     private DataFreezeFilter dataFreezeFilter = DataFreezeFilter.ALL;
     
     private Set<Long> frozenActivityIds;
-	/**
-	 * @return Returns the activityList.
-	 */
-	public List<AmpActivityFake> getActivityList() {
-		return activityList;
-	}
+    /**
+     * @return Returns the activityList.
+     */
+    public List<AmpActivityFake> getActivityList() {
+        return activityList;
+    }
 
-	/**
-	 * @param activityList
-	 *            The activityList to set.
-	 */
-	public void setActivityList(List<AmpActivityFake> activityList) {
-		this.activityList = activityList;
-	}
+    /**
+     * @param activityList
+     *            The activityList to set.
+     */
+    public void setActivityList(List<AmpActivityFake> activityList) {
+        this.activityList = activityList;
+    }
 
-	public void setSortByColumn(String sortByColumn) {
-		this.sortByColumn = sortByColumn;
-	}
+    public void setSortByColumn(String sortByColumn) {
+        this.sortByColumn = sortByColumn;
+    }
 
-	public String getSortByColumn() {
-		return sortByColumn;
-	}
+    public String getSortByColumn() {
+        return sortByColumn;
+    }
 
-	public void setKeyword(String keyword) {
-		this.keyword = keyword;
-	}
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
+    }
 
-	public String getKeyword() {
-		return keyword;
-	}
-	
-	public int getTempNumResults() {
-		return tempNumResults;
-	}
+    public String getKeyword() {
+        return keyword;
+    }
+    
+    public int getTempNumResults() {
+        return tempNumResults;
+    }
 
-	public void setTempNumResults(int tempNumResults) {
-		this.tempNumResults = tempNumResults;
-	}
+    public void setTempNumResults(int tempNumResults) {
+        this.tempNumResults = tempNumResults;
+    }
 
 
-	public void setPage(int page) {
-		this.page = page;
-		
-	}
-	
-	public int getPage() {
-		return page;
-	}
+    public void setPage(int page) {
+        this.page = page;
+        
+    }
+    
+    public int getPage() {
+        return page;
+    }
 
-	public void setAllActivityList(List<AmpActivityFake> allActivityList) {
-		this.allActivityList = allActivityList;
-	}
+    public void setAllActivityList(List<AmpActivityFake> allActivityList) {
+        this.allActivityList = allActivityList;
+    }
 
-	public List<AmpActivityFake> getAllActivityList() {
-		return allActivityList;
-	}
+    public List<AmpActivityFake> getAllActivityList() {
+        return allActivityList;
+    }
 
-	public void setPageSize(int pageSize) {
-		this.pageSize = pageSize;
-	}
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
 
-	public int getPageSize() {
-		return pageSize;
-	}
+    public int getPageSize() {
+        return pageSize;
+    }
 
-	public void setTotalPages(int totalPages) {
-		this.totalPages = totalPages;
-	}
+    public void setTotalPages(int totalPages) {
+        this.totalPages = totalPages;
+    }
 
-	public int getTotalPages() {
-		return totalPages;
-	}
+    public int getTotalPages() {
+        return totalPages;
+    }
     /**
      * 
      * @return pagesToShow
      */
     public int getPagesToShow() {
-    	return pagesToShow;
+        return pagesToShow;
     }
     
     /**
@@ -130,22 +130,22 @@ public class ActivityForm extends ActionForm implements Serializable {
      */
     
     public void setPagesToShow(int pagesToShow) {
-    	this.pagesToShow = pagesToShow;
+        this.pagesToShow = pagesToShow;
     }
     /**
      * 
      * @return value of pagination star
      */
     public int getOffset() {
-    	int value;
-    	if (getCurrentPage()> (this.getPagesToShow()/2)){
-    		value = (this.getCurrentPage() - (this.getPagesToShow()/2))-1;
-    	}
-    	else {
-    		value = 0;
-    	}
-    	setOffset(value);
-    	return offset;
+        int value;
+        if (getCurrentPage()> (this.getPagesToShow()/2)){
+            value = (this.getCurrentPage() - (this.getPagesToShow()/2))-1;
+        }
+        else {
+            value = 0;
+        }
+        setOffset(value);
+        return offset;
     }
     
     /**
@@ -153,59 +153,59 @@ public class ActivityForm extends ActionForm implements Serializable {
      * @param offset
      */
     public void setOffset(int offset) {
-    	this.offset = offset;
+        this.offset = offset;
     }
     
     /**
-	 * @return Returns the currentPage.
-	 */
-	public Integer getCurrentPage() {
-		return currentPage;
-	}
-	/**
-	 * @param currentPage The currentPage to set.
-	 */
-	public void setCurrentPage(Integer currentPage) {
-		this.currentPage = currentPage;
-	}
-	
-	public Collection getPages() {
-	   return pages;
-	}
-	  
-	public void setPages(Collection pages) {
-	    this.pages = pages;
-	  }
+     * @return Returns the currentPage.
+     */
+    public Integer getCurrentPage() {
+        return currentPage;
+    }
+    /**
+     * @param currentPage The currentPage to set.
+     */
+    public void setCurrentPage(Integer currentPage) {
+        this.currentPage = currentPage;
+    }
+    
+    public Collection getPages() {
+       return pages;
+    }
+      
+    public void setPages(Collection pages) {
+        this.pages = pages;
+      }
 
-	public String getLastKeyword() {
-		return lastKeyword;
-	}
+    public String getLastKeyword() {
+        return lastKeyword;
+    }
 
-	public void setLastKeyword(String lastKeyword) {
-		this.lastKeyword = lastKeyword;
-	}
+    public void setLastKeyword(String lastKeyword) {
+        this.lastKeyword = lastKeyword;
+    }
 
-	public String getSort() {
-		return sort;
-	}
+    public String getSort() {
+        return sort;
+    }
 
-	public void setSort(String sort) {
-		this.sort = sort;
-	}
+    public void setSort(String sort) {
+        this.sort = sort;
+    }
 
-	public String getSortOrder() {
-		return sortOrder;
-	}
+    public String getSortOrder() {
+        return sortOrder;
+    }
 
-	public void setSortOrder(String sortOrder) {
-		this.sortOrder = sortOrder;
-	}
-	
-	public String getDataFreezeFilter() {
+    public void setSortOrder(String sortOrder) {
+        this.sortOrder = sortOrder;
+    }
+    
+    public String getDataFreezeFilter() {
         return dataFreezeFilter.toString();
     }
-	
-	public DataFreezeFilter getDataFreezeFilterEnum() {
+    
+    public DataFreezeFilter getDataFreezeFilterEnum() {
         return dataFreezeFilter;
     }
 
@@ -222,7 +222,7 @@ public class ActivityForm extends ActionForm implements Serializable {
     }
 
     public enum DataFreezeFilter {
-	      ALL, FROZEN, UNFROZEN
-	  };
+          ALL, FROZEN, UNFROZEN
+      };
 
 }

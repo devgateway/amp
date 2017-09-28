@@ -99,7 +99,7 @@ public class IndicatorEndPoints implements ErrorReportingEndpoint {
      *       "sharedWorkspaces": [],
      *       "numberOfImportedRecords": 0
      *     },
-     * 	....
+     *  ....
      *   ]
      * }</pre>
      *
@@ -441,14 +441,14 @@ public class IndicatorEndPoints implements ErrorReportingEndpoint {
                 "implementation_location", false);
         Map<String, JSONObject> jsonFilesMap = BoundariesService.getBoundariesAsList();        
         Collection<JsonBean> indicatorLayerList = new ArrayList<JsonBean>();
-        for (AmpCategoryValue admLevel: admLevels){        	
-			if (jsonFilesMap.containsKey(IndicatorEPConstants.ADM_PREFIX + admLevel.getIndex())) {
-        		JsonBean categoryValue = new JsonBean();
+        for (AmpCategoryValue admLevel: admLevels){         
+            if (jsonFilesMap.containsKey(IndicatorEPConstants.ADM_PREFIX + admLevel.getIndex())) {
+                JsonBean categoryValue = new JsonBean();
                 categoryValue.set(IndicatorEPConstants.ID, admLevel.getId());
                 categoryValue.set(IndicatorEPConstants.LABEL, admLevel.getLabel());
                 categoryValue.set(IndicatorEPConstants.VALUE, admLevel.getValue());
                 indicatorLayerList.add(categoryValue);
-        	}            
+            }            
         }
         return indicatorLayerList;
     }

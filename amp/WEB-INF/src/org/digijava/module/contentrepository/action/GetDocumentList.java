@@ -17,10 +17,10 @@ import org.apache.struts.action.ActionMapping;
  */
 public class GetDocumentList extends Action {
 
-	public ActionForward execute(ActionMapping mapping, ActionForm form, 
-			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
-	{
-		return mapping.findForward("forward");
-	}
-	
+    public ActionForward execute(ActionMapping mapping, ActionForm form, 
+            HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
+    {
+        return mapping.findForward("forward");
+    }
+    
 }

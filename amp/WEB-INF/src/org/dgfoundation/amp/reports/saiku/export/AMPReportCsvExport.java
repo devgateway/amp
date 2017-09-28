@@ -16,80 +16,80 @@ import org.jsoup.select.Elements;
 
 public class AMPReportCsvExport {
 
-	public static byte[] generateCSV(JsonBean jb, String type, ReportSpecification report,
-			LinkedHashMap<String, Object> queryModel, String separator) throws IOException {
+    public static byte[] generateCSV(JsonBean jb, String type, ReportSpecification report,
+            LinkedHashMap<String, Object> queryModel, String separator) throws IOException {
 
-		// Generate html table.
-		String content = AMPJSConverter.convertToHtml(jb, type);
-		// Parse the string.
-		Document doc = Jsoup.parse(content);
+        // Generate html table.
+        String content = AMPJSConverter.convertToHtml(jb, type);
+        // Parse the string.
+        Document doc = Jsoup.parse(content);
 
-		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		int columns = report.getColumns().size();
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        int columns = report.getColumns().size();
 
-		StringBuilder csvContent = parseDocument(doc, columns, separator);
+        StringBuilder csvContent = parseDocument(doc, columns, separator);
 
-		os.write(csvContent.toString().getBytes("UTF-8"));
-		os.flush();
-		os.close();
-		return os.toByteArray();
-	}
+        os.write(csvContent.toString().getBytes("UTF-8"));
+        os.flush();
+        os.close();
+        return os.toByteArray();
+    }
 
-	private static StringBuilder parseDocument(Document doc, int columns, String separator) {
-		StringBuilder header = new StringBuilder();
-		String lineSeparator = System.getProperty("line.separator");
-		boolean emptyAsZero = FeaturesUtil
-				.getGlobalSettingValueBoolean(GlobalSettingsConstants.REPORTS_EMPTY_VALUES_AS_ZERO_XLS);
+    private static StringBuilder parseDocument(Document doc, int columns, String separator) {
+        StringBuilder header = new StringBuilder();
+        String lineSeparator = System.getProperty("line.separator");
+        boolean emptyAsZero = FeaturesUtil
+                .getGlobalSettingValueBoolean(GlobalSettingsConstants.REPORTS_EMPTY_VALUES_AS_ZERO_XLS);
 
-		// Process header (we assume only 1 row, otherwise the data coming from JS is broken).
-		Element headerRows = doc.getElementsByTag("thead").first();
-		Element headerRowElement = headerRows.getElementsByTag("tr").first();
-		int j = 0;
-		for (Element headerColElement : headerRowElement.getElementsByTag("th")) {
-			// This is a header cell with a single <div> inside.
-			String cellContent = ((Element) headerColElement.getElementsByTag("div").first()).text();
-			if (j > 0) {
-				header.append(separator);
-			}
-			header.append("\"")
-					.append(cellContent.replaceAll("\\]\\[", " ").replaceAll("\\[", "").replaceAll("\\]", ""))
-					.append("\"");
-			j++;
-		}
+        // Process header (we assume only 1 row, otherwise the data coming from JS is broken).
+        Element headerRows = doc.getElementsByTag("thead").first();
+        Element headerRowElement = headerRows.getElementsByTag("tr").first();
+        int j = 0;
+        for (Element headerColElement : headerRowElement.getElementsByTag("th")) {
+            // This is a header cell with a single <div> inside.
+            String cellContent = ((Element) headerColElement.getElementsByTag("div").first()).text();
+            if (j > 0) {
+                header.append(separator);
+            }
+            header.append("\"")
+                    .append(cellContent.replaceAll("\\]\\[", " ").replaceAll("\\[", "").replaceAll("\\]", ""))
+                    .append("\"");
+            j++;
+        }
 
-		// Process content.
-		StringBuilder content = new StringBuilder();
-		Element contentRows = doc.getElementsByTag("tbody").first();
-		for (Element contentRowElement : contentRows.getElementsByTag("tr")) {
-			j = 0;
-			Elements rows = new Elements();
-			rows.addAll(contentRowElement.getElementsByTag("th"));
-			rows.addAll(contentRowElement.getElementsByTag("td"));
-			for (Element contentColElement : rows) {
-				String cellContent = ((Element) contentColElement).text();
-				if (j == 0) {
-					content.append(lineSeparator);
-				} else {
-					content.append(separator);
-				}
-				if (j < columns) {
-					// Use double quotes for all non measure columns.
-					content.append("\"").append(cellContent.replaceAll("\"", "'")).append("\"");
-				} else {
-					if (!cellContent.equals("null")) {
-						content.append(cellContent);
-					} else {
-						if (emptyAsZero) {
-							content.append("0");
-						} else {
-							content.append("");
-						}
-					}
-				}
-				j++;
-			}
-		}
+        // Process content.
+        StringBuilder content = new StringBuilder();
+        Element contentRows = doc.getElementsByTag("tbody").first();
+        for (Element contentRowElement : contentRows.getElementsByTag("tr")) {
+            j = 0;
+            Elements rows = new Elements();
+            rows.addAll(contentRowElement.getElementsByTag("th"));
+            rows.addAll(contentRowElement.getElementsByTag("td"));
+            for (Element contentColElement : rows) {
+                String cellContent = ((Element) contentColElement).text();
+                if (j == 0) {
+                    content.append(lineSeparator);
+                } else {
+                    content.append(separator);
+                }
+                if (j < columns) {
+                    // Use double quotes for all non measure columns.
+                    content.append("\"").append(cellContent.replaceAll("\"", "'")).append("\"");
+                } else {
+                    if (!cellContent.equals("null")) {
+                        content.append(cellContent);
+                    } else {
+                        if (emptyAsZero) {
+                            content.append("0");
+                        } else {
+                            content.append("");
+                        }
+                    }
+                }
+                j++;
+            }
+        }
 
-		return header.append(content);
-	}
+        return header.append(content);
+    }
 }

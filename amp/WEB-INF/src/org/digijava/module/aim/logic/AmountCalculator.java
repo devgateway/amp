@@ -10,6 +10,6 @@ import org.dgfoundation.amp.ar.cell.CategAmountCell;
  */
 public interface AmountCalculator {
 
-	double calculateAmount(Set<CategAmountCell> mergedCells);
+    double calculateAmount(Set<CategAmountCell> mergedCells);
 
 }

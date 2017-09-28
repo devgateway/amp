@@ -1,7 +1,10 @@
 package org.digijava.kernel.ampapi.endpoints.exception;
 
+import java.util.Optional;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
@@ -9,9 +12,9 @@ import javax.ws.rs.ext.Provider;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 
 /**
  * Builds the generic response with error code 500 for all unhandled exceptions
@@ -22,23 +25,27 @@ public class ApiExceptionMapper implements ExceptionMapper<Exception> {
     private static final Logger logger = Logger.getLogger(ApiExceptionMapper.class);
     private static final int MAX_EXCEPTION_NESTED = 2;
     public static final ApiErrorMessage INTERNAL_ERROR = new ApiErrorMessage(ApiError.GENERIC_UNHANDLED_ERROR_CODE, 
-    		ApiErrorResponse.INTERNAL_ERROR);
+            ApiErrorResponse.INTERNAL_ERROR);
     
     @Context
-	private HttpServletRequest httpRequest;
+    private HttpServletRequest httpRequest;
     
     @Override
     public Response toResponse(Exception e) {
-        logger.error("ApiExceptionMapper: ", e);
+        String mediaType = Optional.ofNullable(httpRequest.getContentType()).orElse(MediaType.APPLICATION_JSON);
+        
+        logger.error(e.getMessage(), e);
         
         if (e instanceof ApiRuntimeException) {
-    		ApiRuntimeException apiException = (ApiRuntimeException) e;
-    		return ApiErrorResponse.buildGenericError(apiException.getResponseStatus(), apiException.getError(), httpRequest.getContentType());
-    	}
-
+            ApiRuntimeException apiException = (ApiRuntimeException) e;
+            
+            return ApiErrorResponse.buildGenericError(apiException.getResponseStatus(), apiException.getError(), 
+                    mediaType);
+        }
+        
         ApiErrorMessage apiErrorMessage = getApiErrorMessageFromException(e);
        
-        return ApiErrorResponse.buildGenericError(Response.Status.INTERNAL_SERVER_ERROR, apiErrorMessage,  httpRequest.getContentType());
+        return ApiErrorResponse.buildGenericError(Response.Status.INTERNAL_SERVER_ERROR, apiErrorMessage, mediaType);
     }
     
     /**
@@ -47,8 +54,8 @@ public class ApiExceptionMapper implements ExceptionMapper<Exception> {
      * @return custom API error message
      */
     public ApiErrorMessage getApiErrorMessageFromException(Throwable e) {
-    	String message = extractMessageFromException(e);
-    	return INTERNAL_ERROR.withDetails(message);
+        String message = extractMessageFromException(e);
+        return INTERNAL_ERROR.withDetails(message);
     }
 
     private String extractMessageFromException(Throwable e) {
@@ -60,7 +67,7 @@ public class ApiExceptionMapper implements ExceptionMapper<Exception> {
     }
     
     private String extractMessageFromException(Throwable e, int rootCauseNest, StringBuilder accumulatedMessage) {
-    	// collect deeper cause
+        // collect deeper cause
         if (e.getCause() != null
                 && e.getCause().getMessage() != null
                 && rootCauseNest < MAX_EXCEPTION_NESTED) {

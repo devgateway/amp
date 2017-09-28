@@ -21,23 +21,23 @@ import org.junit.Test;
  *
  */
 public class OffDbNiReportFilteringTests extends FilteringSanityChecks {
-	
-	static Logger log = Logger.getLogger(OffDbNiReportFilteringTests.class);
-	
-	HardcodedReportsTestSchema schema = new HardcodedReportsTestSchema();
-	public OffDbNiReportFilteringTests() {
-		super("OffDbNiReportFiltering tests");
-		nrRunReports = 0;
-	}
-	
-	
-	@Override
-	protected NiReportExecutor getNiExecutor(List<String> activityNames) {
-		return getOfflineExecutor(activityNames);
-	}
-	
-	@Override
-	public void tearDown() {
-		//System.err.format("Sanity checks %s have run %d reports\n", this.getName(), nrRunReports);
-	}
+    
+    static Logger log = Logger.getLogger(OffDbNiReportFilteringTests.class);
+    
+    HardcodedReportsTestSchema schema = new HardcodedReportsTestSchema();
+    public OffDbNiReportFilteringTests() {
+        super("OffDbNiReportFiltering tests");
+        nrRunReports = 0;
+    }
+    
+    
+    @Override
+    protected NiReportExecutor getNiExecutor(List<String> activityNames) {
+        return getOfflineExecutor(activityNames);
+    }
+    
+    @Override
+    public void tearDown() {
+        //System.err.format("Sanity checks %s have run %d reports\n", this.getName(), nrRunReports);
+    }
 }

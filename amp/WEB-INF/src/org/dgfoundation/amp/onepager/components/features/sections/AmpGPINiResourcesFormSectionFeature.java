@@ -14,43 +14,43 @@ import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponseDocument;
 
 public class AmpGPINiResourcesFormSectionFeature extends AmpFeaturePanel<AmpGPINiSurveyResponse> {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public static Logger logger = Logger.getLogger(AmpGPINiResourcesFormSectionFeature.class);
+    public static Logger logger = Logger.getLogger(AmpGPINiResourcesFormSectionFeature.class);
 
-	public AmpGPINiResourcesFormSectionFeature(String id, String fmName,
-			final IModel<AmpGPINiSurveyResponse> responseModel) throws Exception {
+    public AmpGPINiResourcesFormSectionFeature(String id, String fmName,
+            final IModel<AmpGPINiSurveyResponse> responseModel) throws Exception {
 
-		super(id, fmName);
+        super(id, fmName);
 
-		if (responseModel.getObject().getSupportingDocuments() == null) {
-			responseModel.getObject().setSupportingDocuments(new HashSet<AmpGPINiSurveyResponseDocument>());
-		}
+        if (responseModel.getObject().getSupportingDocuments() == null) {
+            responseModel.getObject().setSupportingDocuments(new HashSet<AmpGPINiSurveyResponseDocument>());
+        }
 
-		if (getSession().getMetaData(OnePagerConst.GPI_RESOURCES_NEW_ITEMS) == null) {
-			getSession().setMetaData(OnePagerConst.GPI_RESOURCES_NEW_ITEMS, new HashSet<TemporaryGPINiDocument>());
-		}
+        if (getSession().getMetaData(OnePagerConst.GPI_RESOURCES_NEW_ITEMS) == null) {
+            getSession().setMetaData(OnePagerConst.GPI_RESOURCES_NEW_ITEMS, new HashSet<TemporaryGPINiDocument>());
+        }
 
-		if (getSession().getMetaData(OnePagerConst.GPI_RESOURCES_DELETED_ITEMS) == null) {
-			getSession().setMetaData(OnePagerConst.GPI_RESOURCES_DELETED_ITEMS,
-					new HashSet<AmpGPINiSurveyResponseDocument>());
-		}
+        if (getSession().getMetaData(OnePagerConst.GPI_RESOURCES_DELETED_ITEMS) == null) {
+            getSession().setMetaData(OnePagerConst.GPI_RESOURCES_DELETED_ITEMS,
+                    new HashSet<AmpGPINiSurveyResponseDocument>());
+        }
 
-		final AmpGPINiSurveyResourcesFormTableFeature resourcesList = new AmpGPINiSurveyResourcesFormTableFeature(
-				"resourcesList", "Supporting evidence", responseModel);
-		resourcesList.setOutputMarkupId(true);
-		resourcesList.setVisible(true);
-		add(resourcesList);
+        final AmpGPINiSurveyResourcesFormTableFeature resourcesList = new AmpGPINiSurveyResourcesFormTableFeature(
+                "resourcesList", "Supporting evidence", responseModel);
+        resourcesList.setOutputMarkupId(true);
+        resourcesList.setVisible(true);
+        add(resourcesList);
 
-		final AmpNewGPINiResourceFieldPanel newDoc = new AmpNewGPINiResourceFieldPanel("addNewDocument", responseModel,
-				"Add New Document", resourcesList, false);
-		newDoc.setOutputMarkupId(true);
-		add(newDoc);
+        final AmpNewGPINiResourceFieldPanel newDoc = new AmpNewGPINiResourceFieldPanel("addNewDocument", responseModel,
+                "Add New Document", resourcesList, false);
+        newDoc.setOutputMarkupId(true);
+        add(newDoc);
 
-		final AmpNewGPINiResourceFieldPanel newLink = new AmpNewGPINiResourceFieldPanel("addNewWebLink", responseModel,
-				"Add New Web Link", resourcesList, true);
-		newLink.setOutputMarkupId(true);
-		add(newLink);
-	}
+        final AmpNewGPINiResourceFieldPanel newLink = new AmpNewGPINiResourceFieldPanel("addNewWebLink", responseModel,
+                "Add New Web Link", resourcesList, true);
+        newLink.setOutputMarkupId(true);
+        add(newLink);
+    }
 
 }

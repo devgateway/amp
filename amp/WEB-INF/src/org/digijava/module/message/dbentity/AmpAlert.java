@@ -8,21 +8,21 @@ package org.digijava.module.message.dbentity;
  */
 public class AmpAlert extends AmpMessage{
 
-	private String alertTriggerClass;
+    private String alertTriggerClass;
 
-	/**
-	 * This method is used to define whether user should be able to edit message or not.
-	 *  It Message is of SystemMessage type,that user shouldn't be able to edit it.
-	 */
-	public String getClassName() {
-		return "a";
-	}
+    /**
+     * This method is used to define whether user should be able to edit message or not.
+     *  It Message is of SystemMessage type,that user shouldn't be able to edit it.
+     */
+    public String getClassName() {
+        return "a";
+    }
 
-	public String getAlertTriggerClass() {
-	    return alertTriggerClass;
-	}
+    public String getAlertTriggerClass() {
+        return alertTriggerClass;
+    }
 
-	public void setAlertTriggerClass(String alertTriggerClass) {
-	    this.alertTriggerClass = alertTriggerClass;
-	}
+    public void setAlertTriggerClass(String alertTriggerClass) {
+        this.alertTriggerClass = alertTriggerClass;
+    }
 }

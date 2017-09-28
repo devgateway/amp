@@ -13,31 +13,31 @@ import org.digijava.module.help.util.HelpUtil;
  *
  */
 public class LuceneModules implements LuceneModuleRegistry{
-	private final List<LucModule<?>> registeredModules;
-	
-	public LuceneModules() {
-		registeredModules = new ArrayList<LucModule<?>>();
-		//TRANSLATION
-		registeredModules.addAll(TrnUtil.getLuceneModules());
-		//HELP
-		registeredModules.addAll(HelpUtil.getLuceneModules());
-		//ORGANIZATION not used yet.
-		//modules.add(new LucOrganisationModule());
-	}
+    private final List<LucModule<?>> registeredModules;
+    
+    public LuceneModules() {
+        registeredModules = new ArrayList<LucModule<?>>();
+        //TRANSLATION
+        registeredModules.addAll(TrnUtil.getLuceneModules());
+        //HELP
+        registeredModules.addAll(HelpUtil.getLuceneModules());
+        //ORGANIZATION not used yet.
+        //modules.add(new LucOrganisationModule());
+    }
 
-	@Override
-	public LucModule<?> get(String name) {
-		//TODO do nothing, this is temporary fast solution!
-		return null;
-	}
+    @Override
+    public LucModule<?> get(String name) {
+        //TODO do nothing, this is temporary fast solution!
+        return null;
+    }
 
-	@Override
-	public void put(String name, LucModule<?> module) {
-		//TODO do nothing, this is temporary fast solution!
-	}
+    @Override
+    public void put(String name, LucModule<?> module) {
+        //TODO do nothing, this is temporary fast solution!
+    }
 
-	@Override
-	public List<LucModule<?>> getAll() {
-		return registeredModules;
-	}
+    @Override
+    public List<LucModule<?>> getAll() {
+        return registeredModules;
+    }
 }

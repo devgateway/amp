@@ -15,34 +15,34 @@ import org.apache.wicket.model.Model;
  * @since Jun 2, 2011
  */
 public abstract class IndicatingAjaxCheckBox<T> extends AjaxCheckBox implements
-		IAjaxIndicatorAware {
-	
-	private static final long serialVersionUID = 1L;
-	private final AjaxIndicatorAppender indicatorAppender = new AjaxIndicatorAppender();
+        IAjaxIndicatorAware {
+    
+    private static final long serialVersionUID = 1L;
+    private final AjaxIndicatorAppender indicatorAppender = new AjaxIndicatorAppender();
 
-	/**
-	 * @param id
-	 */
-	public IndicatingAjaxCheckBox(String id) {
-		this(id, new Model<Boolean>());
-	}
+    /**
+     * @param id
+     */
+    public IndicatingAjaxCheckBox(String id) {
+        this(id, new Model<Boolean>());
+    }
 
-	/**
-	 * @param id
-	 * @param model
-	 */
-	public IndicatingAjaxCheckBox(String id, IModel<Boolean> model) {
-		super(id, model);
-		add(indicatorAppender);
-	}
+    /**
+     * @param id
+     * @param model
+     */
+    public IndicatingAjaxCheckBox(String id, IModel<Boolean> model) {
+        super(id, model);
+        add(indicatorAppender);
+    }
 
-	/* (non-Javadoc)
-	 * @see org.apache.wicket.ajax.IAjaxIndicatorAware#getAjaxIndicatorMarkupId()
-	 */
-	@Override
-	public String getAjaxIndicatorMarkupId() {
-		return indicatorAppender.getMarkupId();
-	}
+    /* (non-Javadoc)
+     * @see org.apache.wicket.ajax.IAjaxIndicatorAware#getAjaxIndicatorMarkupId()
+     */
+    @Override
+    public String getAjaxIndicatorMarkupId() {
+        return indicatorAppender.getMarkupId();
+    }
 
 
 }

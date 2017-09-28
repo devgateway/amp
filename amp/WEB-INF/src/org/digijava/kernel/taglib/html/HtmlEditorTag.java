@@ -31,9 +31,9 @@ import org.apache.struts.taglib.html.Constants;
 @Deprecated
 public class HtmlEditorTag
     extends BaseInputTag {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-//	private static Logger logger = Logger.getLogger(HtmlEditorTag.class);
+//  private static Logger logger = Logger.getLogger(HtmlEditorTag.class);
 
     protected String name = Constants.BEAN_KEY;
     private Integer height = null;

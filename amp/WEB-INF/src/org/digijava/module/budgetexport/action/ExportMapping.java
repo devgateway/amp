@@ -24,10 +24,10 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class ExportMapping extends Action {
-	private static Logger logger	= Logger.getLogger(ExportMapping.class);
+    private static Logger logger    = Logger.getLogger(ExportMapping.class);
     public ActionForward execute(ActionMapping mapping, ActionForm form,
-    			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
-    	{
+                HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
+        {
             Long ruleId = Long.parseLong(request.getParameter("ruleId"));
             AmpBudgetExportMapRule rule = DbUtil.getMapRuleById(ruleId);
             List<AmpBudgetExportMapItem> items = rule.getItems();
@@ -94,7 +94,7 @@ public class ExportMapping extends Action {
             
 
             wb.write(response.getOutputStream());
-    		return null;
-    	}
+            return null;
+        }
 
 }

@@ -17,29 +17,29 @@ public abstract class AbstractCalendarEventTrigger extends Trigger{
     protected String url = null;
     
     public AbstractCalendarEventTrigger(CalendarItem calendarItem, String teamManager, AmpTeamMember creator, String url){
-    	this.source = calendarItem;
-    	this.teamManager = teamManager;
-    	this.creator = creator;
-    	this.url = url;
+        this.source = calendarItem;
+        this.teamManager = teamManager;
+        this.creator = creator;
+        this.url = url;
         forwardEvent();
-	}
+    }
     
-	@Override
-	protected Event generateEvent() {
+    @Override
+    protected Event generateEvent() {
         Event e = getEvent(); 
         CalendarItem calendarItem=(CalendarItem) source;
         e.getParameters().put(PARAM_TITLE, calendarItem.getTitle());
         e.getParameters().put(PARAM_TEAM_MANAGER, teamManager);
         if(url != null)
-        	e.getParameters().put(PARAM_URL,url);
+            e.getParameters().put(PARAM_URL,url);
         e.getParameters().put(PARAM_AUTHOR, creator);
         return e;
-	}
+    }
 
-	@Override
-	public String[] getParameterNames() {
-		return parameterNames;
-	}
-	
-	protected abstract Event getEvent();
+    @Override
+    public String[] getParameterNames() {
+        return parameterNames;
+    }
+    
+    protected abstract Event getEvent();
 }

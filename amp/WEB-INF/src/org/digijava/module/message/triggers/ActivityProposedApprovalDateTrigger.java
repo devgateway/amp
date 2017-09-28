@@ -34,5 +34,5 @@ public class ActivityProposedApprovalDateTrigger extends Trigger {
     @Override
     public String[] getParameterNames() {
         return parameterNames;
-	}
+    }
 }

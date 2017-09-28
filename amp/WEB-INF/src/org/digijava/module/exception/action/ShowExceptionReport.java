@@ -70,8 +70,8 @@ public final class ShowExceptionReport
             exceptionInfo = ExceptionHelper.getExceptioinInfo(request);
         }
         if (exceptionInfo != null) {
-        	Enumeration j = request.getHeaderNames();
-        	exceptionInfo.setBackLink(request.getHeader("Referer"));
+            Enumeration j = request.getHeaderNames();
+            exceptionInfo.setBackLink(request.getHeader("Referer"));
             formReport.setExceptionInfo(exceptionInfo);
         }
 
@@ -83,20 +83,20 @@ public final class ShowExceptionReport
         }
         
         if (exceptionInfo != null && exceptionInfo.getException() != null)
-        	ErrorReportingPlugin.handle(exceptionInfo.getException(), null, request);
+            ErrorReportingPlugin.handle(exceptionInfo.getException(), null, request);
         
         
         if ( "exception".equalsIgnoreCase(exceptionInfo.getModuleName() ) ) {
-        	try{
-	    		String errorInfo	= "<html><strong>AMP has encountered an error. Please try to go back to the <a href='/aim'>homepage</a> " +
-	    				"<br />If the problem persists please contact the system administrator. We're sorry for the inconvenience ! </strong></html>";
-	    		response.getOutputStream().println( errorInfo );
-	    		logger.error("Double exception occured !");
-	    	}
-	    	catch(Exception e) {
-	    		e.printStackTrace();
-	    	}
-	    	return null;
+            try{
+                String errorInfo    = "<html><strong>AMP has encountered an error. Please try to go back to the <a href='/aim'>homepage</a> " +
+                        "<br />If the problem persists please contact the system administrator. We're sorry for the inconvenience ! </strong></html>";
+                response.getOutputStream().println( errorInfo );
+                logger.error("Double exception occured !");
+            }
+            catch(Exception e) {
+                e.printStackTrace();
+            }
+            return null;
         }
        
         //generate a unique sufix

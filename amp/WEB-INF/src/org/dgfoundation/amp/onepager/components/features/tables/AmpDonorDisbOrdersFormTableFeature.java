@@ -12,6 +12,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.util.WildcardListModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
+import org.dgfoundation.amp.onepager.components.FundingListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
@@ -40,7 +41,7 @@ public class AmpDonorDisbOrdersFormTableFeature extends
             final IModel<AmpFunding> model, String fmName, final int transactionType) throws Exception {
         super(id, model, fmName, Constants.DISBURSEMENT_ORDER, 8);
 
-        list = new ListEditor<AmpFundingDetail>("listDisbOrders", setModel, FundingDetailComparator
+        list = new FundingListEditor<AmpFundingDetail>("listDisbOrders", setModel, FundingDetailComparator
                 .getFundingDetailComparator()) {
             @Override
             protected void onPopulateItem(

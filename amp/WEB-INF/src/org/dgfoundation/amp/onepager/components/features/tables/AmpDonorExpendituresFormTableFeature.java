@@ -101,7 +101,7 @@ public class AmpDonorExpendituresFormTableFeature extends
                 item.add(getAdjustmentTypeComponent(item.getModel(), transactionType));
                 
                 final AmpCategorySelectFieldPanel expenditureClass = getExpenditureClassTypeComponent(item.getModel());
-                
+                expenditureClass.setAffectedByFreezing(false);
                 item.add(new AmpComponentPanel("expenditureClassRequired", "Required Validator for Expenditure Class") {
                     @Override
                     protected void onConfigure() {
@@ -124,6 +124,7 @@ public class AmpDonorExpendituresFormTableFeature extends
 
                 classification.getTextContainer().add(new AttributeModifier("size", new Model<String>("12")));
                 classification.setTextContainerDefaultMaxSize();
+                classification.setAffectedByFreezing(false);
                 item.add(classification);
                 item.add(new ListEditorRemoveButton("delExp", "Delete Expenditure"){
                     protected void onClick(final org.apache.wicket.ajax.AjaxRequestTarget target) {

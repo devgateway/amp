@@ -358,14 +358,14 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
             }
         };
         activityForm.setOutputMarkupId(true);
-        
+
         String actNameStr = am.getObject().getName();
         if (actNameStr != null && !actNameStr.trim().isEmpty()) {
             actNameStr = "(" + actNameStr + ")";
         }
         Label activityName = new Label("activityName", actNameStr);
         add(activityName);
-        
+
         final FeedbackPanel feedbackPanel = new FeedbackPanel("feedbackPanel");
         feedbackPanel.setOutputMarkupPlaceholderTag(true);
         feedbackPanel.setOutputMarkupId(true);
@@ -539,7 +539,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         saveAndSubmit.getButton().add(closeDialogs);
         saveAndSubmit.getButton().add(clickMonEval);
         saveAndSubmit.getButton().setDefaultFormProcessing(false);
-        
+        saveAndSubmit.setAffectedByFreezing(false);
         activityForm.add(saveAndSubmit);
         
         AmpAjaxLinkField saveReject=new AmpAjaxLinkField("saveReject", "Reject Activity", "Reject activity") {
@@ -589,6 +589,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 
         saveAsDraft.setVisible(false);
         saveAsDraft.getButton().add(new AttributeModifier("class", new Model<String>("sideMenuButtons")));
+        saveAsDraft.setAffectedByFreezing(false);
         activityForm.add(saveAsDraft);
         activityForm.add(new Behavior(){
             @Override
@@ -640,6 +641,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         cancelSaveAsDraft.setVisible(true);
         cancelSaveAsDraft.getButton().add(new AttributeModifier("class", new Model<String>("sideMenuButtons")));
         cancelSaveAsDraft.setOutputMarkupId(true);
+        cancelSaveAsDraft.setAffectedByFreezing(false);
         activityForm.add(cancelSaveAsDraft);
 
         AmpButtonField saveAsDraftAction = new AmpButtonField("saveAsDraftAction", "Save as Draft", AmpFMTypes.MODULE, true) {
@@ -670,6 +672,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         saveAsDraftAction.getButton().add(new AttributePrepender("onclick", new Model<String>(onClickSaveAsDraft+" disableButton();"), ""));
         saveAsDraftAction.getButton().add(updateEditors);
         saveAsDraftAction.add(isSubmit);
+        saveAsDraftAction.setAffectedByFreezing(false);
         activityForm.add(saveAsDraftAction);
         
         //text area for the message
@@ -1121,7 +1124,10 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                         if (!component.isValid()) {
                             target.appendJavaScript("$('#"+ component.getMarkupId() +"').parents().show();");
                             target.appendJavaScript("$(window).scrollTop($('#"+component.getParent().getMarkupId()+"').position().top)");
-                            logger.error("Component is invalid, adding to target: " + component.getLabel().getObject());
+                            if (component.getLabel() != null) {
+                                logger.error("Component is invalid, adding to target: " + component.getLabel().getObject());
+                            }
+                            
                             target.add(component);
                             
                             //some of the fields that need to show errors are HiddenFieldS. These are cumulative error fields, that show error for groups of other fields

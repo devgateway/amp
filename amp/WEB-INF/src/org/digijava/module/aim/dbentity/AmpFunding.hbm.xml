@@ -76,6 +76,8 @@
 			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 		<many-to-one name="modeOfPayment" column="mode_of_payment_category_va"
 			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
+		<many-to-one name="concessionalityLevel" column="concessionality_level_va"
+			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 		<!--
 			<set name="survey" cascade="save-update" table="amp_ahsurvey" inverse="true">
 			<cache usage="read-write"/>

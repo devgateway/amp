@@ -129,6 +129,8 @@ public abstract class AmpDonorFormTableFeaturePanel extends
                         CategoryConstants.ADJUSTMENT_TYPE_NAME, //fmname
                          false, false, false, dependantModel, false);
             adjustmentTypes.getChoiceContainer().setRequired(true);
+            // adjustment type shouldn't be affected by overall freezing
+            adjustmentTypes.setAffectedByFreezing(false);
             return adjustmentTypes;
         }catch(Exception e)
         {
@@ -191,6 +193,7 @@ public abstract class AmpDonorFormTableFeaturePanel extends
         exchangeRate.setOutputMarkupId(true);
         exchangeRate.setIgnorePermissions(true);
         exchangeRate.setEnabled(fixedRate.getObject());
+        exchangeRate.setAffectedByFreezing(false);
         item.add(exchangeRate);
     
         @SuppressWarnings("serial")

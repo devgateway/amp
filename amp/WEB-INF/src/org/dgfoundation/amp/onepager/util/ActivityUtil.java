@@ -3,12 +3,9 @@
  */
 package org.dgfoundation.amp.onepager.util;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -19,7 +16,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -33,18 +29,42 @@ import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.util.lang.Bytes;
-import org.apache.wicket.util.upload.FileItem;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerConst;
+import org.dgfoundation.amp.onepager.components.upload.FileItemEx;
 import org.dgfoundation.amp.onepager.helper.EditorStore;
 import org.dgfoundation.amp.onepager.helper.ResourceTranslation;
-import org.dgfoundation.amp.onepager.helper.TemporaryDocument;
+import org.dgfoundation.amp.onepager.helper.TemporaryActivityDocument;
+import org.dgfoundation.amp.onepager.helper.TemporaryGPINiDocument;
 import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.dbentity.AmpActivityContact;
+import org.digijava.module.aim.dbentity.AmpActivityDocument;
+import org.digijava.module.aim.dbentity.AmpActivityFields;
+import org.digijava.module.aim.dbentity.AmpActivityGroup;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpAgreement;
+import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
+import org.digijava.module.aim.dbentity.AmpComments;
+import org.digijava.module.aim.dbentity.AmpComponent;
+import org.digijava.module.aim.dbentity.AmpComponentFunding;
+import org.digijava.module.aim.dbentity.AmpContentTranslation;
+import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpFundingAmount;
+import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
+import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponse;
+import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponseDocument;
+import org.digijava.module.aim.dbentity.AmpOrgRole;
+import org.digijava.module.aim.dbentity.AmpStructure;
+import org.digijava.module.aim.dbentity.AmpStructureImg;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
+import org.digijava.module.aim.dbentity.FundingInformationItem;
+import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
 import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.Constants;
@@ -91,45 +111,73 @@ public class ActivityUtil {
      * @param am
      */
     public static void saveActivity(AmpActivityModel am, boolean draft,boolean rejected){
-        Session session = AmpActivityModel.getHibernateSession();
+
         AmpAuthWebSession wicketSession = (AmpAuthWebSession) org.apache.wicket.Session.get();
         if (!wicketSession.getLocale().getLanguage().equals(TLSUtils.getLangCode())){
             logger.error("WRONG LANGUAGE: TLSUtils(" + TLSUtils.getLangCode() + ") vs Wicket(" + wicketSession.getLocale().getLanguage() + ")");
         }
-        
+
+        AmpTeamMember ampCurrentMember = wicketSession.getAmpCurrentMember();
+
+        ServletContext sc = wicketSession.getHttpSession().getServletContext();
+
         AmpActivityVersion oldA = am.getObject();
+
+        AmpActivityVersion newA = saveActivity(oldA, am.getTranslationHashMap().values(), ampCurrentMember, wicketSession.getSite(), wicketSession.getLocale(), sc.getRealPath("/"), draft, rejected, true);
+
+        am.setObject(newA);
+
+        ActivityGatekeeper.unlockActivity(String.valueOf(am.getId()), am.getEditingKey());
+        AmpActivityModel.endConversation();
+    }
+
+    /**
+     * Method used to save an Activity/ActivityVersion depending
+     * on activation of versioning option
+     *
+     * @param oldA
+     * @param values
+     * @param ampCurrentMember
+     * @param site
+     * @param locale
+     * @param rootRealPath
+     * @param draft
+     * @param rejected
+     */
+    public static AmpActivityVersion saveActivity(AmpActivityVersion oldA, Collection<AmpContentTranslation> values, AmpTeamMember ampCurrentMember, Site site, Locale locale, String rootRealPath, boolean draft, boolean rejected, boolean isActivityForm){
+        Session session;
+        if (isActivityForm) {
+            session = AmpActivityModel.getHibernateSession();
+        } else {
+            session = PersistenceManager.getSession();
+        }
 
         boolean newActivity = oldA.getAmpActivityId() == null;
         AmpActivityVersion a=null;
-        try 
+        try
         {
-            AmpTeamMember ampCurrentMember = wicketSession.getAmpCurrentMember();
-            a = saveActivityNewVersion(am.getObject(), am.getTranslationHashMap().values(), 
-                    ampCurrentMember, draft, session, rejected, true);
-            am.setObject(a);
+            a = saveActivityNewVersion(oldA, values,
+                    ampCurrentMember, draft, session, rejected, isActivityForm);
+
         } catch (Exception exception) {
-            logger.error("Error saving activity:", exception); // Log the exception         
+            logger.error("Error saving activity:", exception); // Log the exception
             throw new RuntimeException("Can't save activity:", exception);
 
         } finally {
-            ActivityGatekeeper.unlockActivity(String.valueOf(am.getId()), am.getEditingKey());
-            AmpActivityModel.endConversation();
-            
+
             if (Constants.ACTIVITY_NEEDS_APPROVAL_STATUS.contains(a.getApprovalStatus())) {
                 new ActivityValidationWorkflowTrigger(a);
             }
-            
+
             try {
-                ServletContext sc = wicketSession.getHttpSession().getServletContext();
-                Site site = wicketSession.getSite();
-                Locale locale = wicketSession.getLocale();
-                LuceneUtil.addUpdateActivity(sc.getRealPath("/"), !newActivity, site, locale, am.getObject(), oldA);
+                LuceneUtil.addUpdateActivity(rootRealPath, !newActivity, site, locale, a, oldA);
             } catch (Exception e) {
                 logger.error("error while trying to update lucene logs:", e);
-            }       
+            }
         }
+        return a;
     }
-    
+
     /**
      * saves a new version of an activity
      * returns newActivity
@@ -246,18 +294,18 @@ public class ActivityUtil {
             
             saveIndicators(a, session);
 
-            saveResources(a, session); 
+            saveActivityResources(a, session);
+            saveActivityGPINiResources(a, session);
             saveEditors(session, createNewVersion); 
             saveComments(a, session,draft); 
         }
 
         saveAgreements(a, session, isActivityForm);
-        saveContacts(a, session,(draft != draftChange));
-        
+        saveContacts(a, session, (draft != draftChange));       
         updateComponentFunding(a, session);
         saveAnnualProjectBudgets(a, session);
         saveProjectCosts(a, session);
-        updatePerformanceIssue(a);
+        updatePerformanceIssues(a);
     
         if (createNewVersion){
             //a.setAmpActivityId(null); //hibernate will save as a new version
@@ -275,18 +323,19 @@ public class ActivityUtil {
         return a;
     }
 
-    private static void updatePerformanceIssue(AmpActivityVersion a) {
+    private static void updatePerformanceIssues(AmpActivityVersion a) {
         PerformanceRuleManager ruleManager = PerformanceRuleManager.getInstance();
 
-        AmpCategoryValue matchedLevel = null;
+        Set<AmpCategoryValue> matchedLevels = new HashSet<>();
 
         if (ruleManager.canActivityContainPerformanceIssues(a)) {
-            matchedLevel = ruleManager.getHigherLevelFromMatchers(ruleManager.matchActivity(a));
+            matchedLevels = ruleManager.getPerformanceLevelsFromMatchers(ruleManager.matchActivity(a));
         }
         
-        AmpCategoryValue activityLevel = ruleManager.getPerformanceIssueFromActivity(a);
-        if (!Objects.equals(activityLevel, matchedLevel)) {
-            ruleManager.updatePerformanceIssueInActivity(a, activityLevel, matchedLevel);
+        Set<AmpCategoryValue> activityLevels = ruleManager.getPerformanceIssuesFromActivity(a);
+        
+        if (!ruleManager.isEqualPerformanceLevelCollection(matchedLevels, activityLevels)) {
+            ruleManager.updatePerformanceIssuesInActivity(a, activityLevels, matchedLevels);
         }
     }
 
@@ -325,7 +374,10 @@ public class ActivityUtil {
 
     private static void setActivityStatus(AmpTeamMember ampCurrentMember, boolean draft, AmpActivityFields a, AmpActivityVersion oldA, boolean newActivity,boolean rejected) {
         Long teamMemberTeamId=ampCurrentMember.getAmpTeam().getAmpTeamId();
-        ApplicationSettings appSettings = TeamUtil.getCurrentMember().getAppSettings();
+        ApplicationSettings appSettings = null;
+        if (TeamUtil.getCurrentMember() != null) {
+            appSettings = TeamUtil.getCurrentMember().getAppSettings();
+        }
         String validation = appSettings != null ? appSettings.getValidation() : 
             org.digijava.module.aim.util.DbUtil.getValidationFromTeamAppSettings(teamMemberTeamId);
         
@@ -653,32 +705,194 @@ public class ActivityUtil {
         return agreements;
     }
 
-    private static void saveResources(AmpActivityVersion a, Session session) {
-        AmpAuthWebSession s =  (AmpAuthWebSession) org.apache.wicket.Session.get();
-        
-        HttpServletRequest req = SessionUtil.getCurrentServletRequest();
-        
-        if (a.getActivityDocuments() == null)
+    private static void saveActivityResources(AmpActivityVersion a, Session session) {
+        AmpAuthWebSession s = (AmpAuthWebSession) org.apache.wicket.Session.get();
+
+        if (a.getActivityDocuments() == null) {
             a.setActivityDocuments(new HashSet<AmpActivityDocument>());
+        }
 
-        HashSet<TemporaryDocument> newResources = s.getMetaData(OnePagerConst.RESOURCES_NEW_ITEMS);
+        HashSet<TemporaryActivityDocument> newResources = s.getMetaData(OnePagerConst.RESOURCES_NEW_ITEMS);
         HashSet<AmpActivityDocument> deletedResources = s.getMetaData(OnePagerConst.RESOURCES_DELETED_ITEMS);
-        HashSet<TemporaryDocument> existingTitles = s.getMetaData(OnePagerConst.RESOURCES_EXISTING_ITEM_TITLES);
+        HashSet<TemporaryActivityDocument> existingTitles = s.getMetaData(OnePagerConst.RESOURCES_EXISTING_ITEM_TITLES);
 
-        /*
-         * update titles
-         */
+        // update titles
+        updateResourcesTitles(newResources, deletedResources, existingTitles);
+
+        // remove old resources
+        deleteResources(a, deletedResources);
+
+        // insert new resources in the system
+        insertResources(a, newResources);
+    }
+
+    /**
+     * @param a
+     * @param newResources
+     */
+    private static void insertResources(AmpActivityVersion a, HashSet<TemporaryActivityDocument> newResources) {
+        if (newResources != null) {
+            for (TemporaryActivityDocument temp : newResources) {
+                TemporaryDocumentData tdd = new TemporaryDocumentData();
+                tdd.setTitle(temp.getTitle());
+                tdd.setName(temp.getFileName());
+                tdd.setDescription(temp.getDescription());
+                tdd.setNotes(temp.getNote());
+                if (temp.getTranslatedTitleList() != null) {
+                    Map<String, String> translatedTitleMap = new HashMap<String, String>();
+                    for (ResourceTranslation titleTranslation : temp.getTranslatedTitleList()) {
+                        translatedTitleMap.put(titleTranslation.getLocale(), titleTranslation.getTranslation());
+                    }
+                    tdd.setTranslatedTitles(translatedTitleMap);
+                }
+
+                if (temp.getTranslatedDescriptionList() != null) {
+                    Map<String, String> translatedDescMap = new HashMap<String, String>();
+                    for (ResourceTranslation descTranslation : temp.getTranslatedDescriptionList()) {
+                        translatedDescMap.put(descTranslation.getLocale(), descTranslation.getTranslation());
+                    }
+                    tdd.setTranslatedDescriptions(translatedDescMap);
+                }
+
+                if (temp.getTranslatedNoteList() != null) {
+                    Map<String, String> translatedNoteMap = new HashMap<String, String>();
+                    for (ResourceTranslation noteTranslation : temp.getTranslatedDescriptionList()) {
+                        translatedNoteMap.put(noteTranslation.getLocale(), noteTranslation.getTranslation());
+                    }
+                    tdd.setTranslatedNotes(translatedNoteMap);
+                }
+
+                if (temp.getType() != null) {
+                    tdd.setCmDocTypeId(temp.getType().getId());
+                }
+                if (temp.getDate() != null) {
+                    tdd.setDate(temp.getDate().getTime());
+                }
+                if (temp.getYear() != null) {
+                    tdd.setYearofPublication(temp.getYear());
+                }
+                if (temp.getWebLink() == null || temp.getWebLink().length() == 0) {
+                    if (temp.getFile() != null) {
+                        tdd.setFileSize(temp.getFile().getSize());
+                        tdd.setFormFile(generateFormFile(temp.getFile()));
+                    }
+                }
+
+                tdd.setWebLink(temp.getWebLink());
+
+                ActionMessages messages = new ActionMessages();
+                try {
+                    NodeWrapper node = tdd.saveToRepository(SessionUtil.getCurrentServletRequest(), messages);
+
+                    AmpActivityDocument aad = new AmpActivityDocument();
+                    aad.setAmpActivity(a);
+                    aad.setDocumentType(ActivityDocumentsConstants.RELATED_DOCUMENTS);
+                    if (node != null) {
+                        aad.setUuid(node.getUuid());
+                    } else {
+                        aad.setUuid(temp.getExistingDocument().getUuid());
+                    }
+                    a.getActivityDocuments().add(aad);
+                } catch (JCRSessionException ex) {
+                    // we catch the exception and show a warning, but allow the activity to be saved
+                    logger.warn("The JCR Session couldn't be opened. " + "The document " + tdd.getName()
+                            + " will not be saved.", ex);
+                }
+            }
+        }
+    }
+
+    /**
+     * For Document Manager compatibility purposes
+     * @param file
+     */
+    private static FormFile generateFormFile(FileUpload file) {
+        FormFile formFile = new FormFile() {
+
+            @Override
+            public void setFileSize(int arg0) {
+            }
+
+            @Override
+            public void setFileName(String arg0) {
+            }
+
+            @Override
+            public void setContentType(String arg0) {
+            }
+
+            @Override
+            public InputStream getInputStream() throws FileNotFoundException, IOException {
+                return file.getInputStream();
+            }
+
+            @Override
+            public int getFileSize() {
+                return (int) file.getSize();
+            }
+
+            @Override
+            public String getFileName() {
+                return file.getClientFileName();
+            }
+
+            @Override
+            public byte[] getFileData() throws FileNotFoundException, IOException {
+                return file.getBytes();
+            }
+
+            @Override
+            public String getContentType() {
+                return file.getContentType();
+            }
+
+            @Override
+            public void destroy() {
+            }
+        };
+
+        return formFile;
+    }
+
+    /**
+     * @param a
+     * @param deletedResources
+     */
+    private static void deleteResources(AmpActivityVersion a, HashSet<AmpActivityDocument> deletedResources) {
+        if (deletedResources != null) {
+            for (AmpActivityDocument tmpDoc : deletedResources) {
+                Iterator<AmpActivityDocument> it2 = a.getActivityDocuments().iterator();
+                while (it2.hasNext()) {
+                    AmpActivityDocument existDoc = (AmpActivityDocument) it2.next();
+                    if (existDoc.getUuid().compareTo(tmpDoc.getUuid()) == 0) {
+                        it2.remove();
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * @param newResources
+     * @param deletedResources
+     * @param existingTitles
+     */
+    private static void updateResourcesTitles(HashSet<TemporaryActivityDocument> newResources,
+            HashSet<AmpActivityDocument> deletedResources, HashSet<TemporaryActivityDocument> existingTitles) {
         if (existingTitles != null) {
-            for (TemporaryDocument d : existingTitles) {
+            HttpServletRequest req = SessionUtil.getCurrentServletRequest();
+
+            for (TemporaryActivityDocument d : existingTitles) {
                 Node node = DocumentManagerUtil.getWriteNode(d.getExistingDocument().getUuid(), req);
                 if (node != null && d != null) {
                     NodeWrapper nw = new NodeWrapper(node);
-                 
+
                     //NodeWrapper's title will be null if the document is multilingual
                     //and it was saved in ONLY one language. Then language was changed
                     // and jackrabbit tries to retrieve the title for the other language.
-                    //The call to -> getTranslatedTitleByLang(TLSUtils.getLangCode()); 
-                    //returns null. 
+                    //The call to -> getTranslatedTitleByLang(TLSUtils.getLangCode());
+                    //returns null.
                     //In that scenario we act as if we were changing the document name
                     boolean onlyOneLanguageSaved = nw.getTitle() == null;
                     if (onlyOneLanguageSaved || !nw.getTitle().equals(d.getTitle())) {
@@ -708,88 +922,6 @@ public class ActivityUtil {
                                 logger.error("Error while getting data stream from JCR:", e);
                             }
 
-
-                            class FileItemEx implements FileItem{
-                                private String contentType;
-                                private String fileName;
-                                private Bytes fileSize;
-                                private InputStream fileData;
-                                public FileItemEx(String fileNameIn, String contentTypeIn, InputStream fileDataIn, Bytes fileSizeIn) {
-                                    fileName = fileNameIn;
-                                    contentType = contentTypeIn;
-                                    fileData = fileDataIn;
-                                    fileSize = fileSizeIn;
-                                }
-                                @Override
-                                public InputStream getInputStream() throws IOException {
-                                    return fileData;
-                                }
-
-                                @Override
-                                public String getContentType() {
-                                    return contentType;
-                                }
-
-                                @Override
-                                public String getName() {
-                                    return fileName;
-                                }
-
-                                @Override
-                                public boolean isInMemory() {
-                                    return false;
-                                }
-
-                                @Override
-                                public long getSize() {
-                                    if (fileSize == null)
-                                        return 0;
-                                    return fileSize.bytes();
-                                }
-
-                                @Override
-                                public byte[] get() {
-                                    return new byte[0];
-                                }
-
-                                @Override
-                                public String getString(String s) throws UnsupportedEncodingException {
-                                    return null;
-                                }
-
-                                @Override
-                                public String getString() {
-                                    return null;
-                                }
-
-                                @Override
-                                public void write(File file) {}
-
-                                @Override
-                                public void delete() {}
-
-                                @Override
-                                public String getFieldName() {
-                                    return null;
-                                }
-
-                                @Override
-                                public void setFieldName(String s) {}
-
-                                @Override
-                                public boolean isFormField() {
-                                    return false;
-                                }
-
-                                @Override
-                                public void setFormField(boolean b) {}
-
-                                @Override
-                                public OutputStream getOutputStream() throws IOException {
-                                    return null;
-                                }
-                            }
-
                             FileUpload file = new FileUpload(new FileItemEx(fileName, contentType, fileData, fileSize));
                             d.setFile(file);
                             newResources.add(d);
@@ -799,148 +931,9 @@ public class ActivityUtil {
                 }
             }
         }
-
-
-        /*
-         * remove old resources
-         */
-        if (deletedResources != null){
-            for (AmpActivityDocument tmpDoc : deletedResources) {
-                Iterator<AmpActivityDocument> it2 = a.getActivityDocuments().iterator();
-                while (it2.hasNext()) {
-                    AmpActivityDocument existDoc = (AmpActivityDocument) it2.next();
-                    if (existDoc.getUuid().compareTo(tmpDoc.getUuid()) == 0){
-                        it2.remove();
-                        break;
-                    }
-                }
-            }
-        }
-        
-        /*
-         * Add new resources
-         */
-        if (newResources != null){
-            for (TemporaryDocument temp : newResources) {
-                TemporaryDocumentData tdd = new TemporaryDocumentData(); 
-                tdd.setTitle(temp.getTitle());
-                tdd.setName(temp.getFileName());
-                tdd.setDescription(temp.getDescription());
-                tdd.setNotes(temp.getNote());
-                if (temp.getTranslatedTitleList() != null) {
-                    Map <String,String> translatedTitleMap = new HashMap<String,String>();
-                    for (ResourceTranslation titleTranslation:temp.getTranslatedTitleList()) {
-                        translatedTitleMap.put(titleTranslation.getLocale(), titleTranslation.getTranslation());
-                    }
-                    tdd.setTranslatedTitles(translatedTitleMap);
-                }
-            
-                
-                if (temp.getTranslatedDescriptionList() != null) {
-                    Map<String, String> translatedDescMap = new HashMap<String, String>();
-                    for (ResourceTranslation descTranslation : temp.getTranslatedDescriptionList()) {
-                        translatedDescMap.put(descTranslation.getLocale(), descTranslation.getTranslation());
-                    }
-                    tdd.setTranslatedDescriptions(translatedDescMap);
-                }
-                
-                if (temp.getTranslatedNoteList() != null) {
-                    Map<String, String> translatedNoteMap = new HashMap<String, String>();
-                    for (ResourceTranslation noteTranslation : temp.getTranslatedDescriptionList()) {
-                        translatedNoteMap.put(noteTranslation.getLocale(), noteTranslation.getTranslation());
-                    }
-                    tdd.setTranslatedNotes(translatedNoteMap);
-                }
-                
-                if(temp.getType()!=null)
-                    tdd.setCmDocTypeId(temp.getType().getId());
-                if (temp.getDate() != null)
-                    tdd.setDate(temp.getDate().getTime());
-                if (temp.getYear() != null)
-                    tdd.setYearofPublication(temp.getYear());
-                if (temp.getWebLink() == null || temp.getWebLink().length() == 0){
-                    if (temp.getFile() != null){
-
-                        tdd.setFileSize(temp.getFile().getSize());
-
-                        final FileUpload file = temp.getFile();
-                        /**
-                         * For Document Manager compatibility purposes
-                         */
-                        final FormFile formFile = new FormFile() {
-
-                            @Override
-                            public void setFileSize(int arg0) {
-                            }
-
-                            @Override
-                            public void setFileName(String arg0) {
-                            }
-
-                            @Override
-                            public void setContentType(String arg0) {
-                            }
-
-                            @Override
-                            public InputStream getInputStream() throws FileNotFoundException,
-                                    IOException {
-                                return file.getInputStream();
-                            }
-
-                            @Override
-                            public int getFileSize() {
-                                return (int) file.getSize();
-                            }
-
-                            @Override
-                            public String getFileName() {
-                                return file.getClientFileName();
-                            }
-
-                            @Override
-                            public byte[] getFileData() throws FileNotFoundException, IOException {
-                                return file.getBytes();
-                            }
-
-                            @Override
-                            public String getContentType() {
-                                return file.getContentType();
-                            }
-
-                            @Override
-                            public void destroy() {
-                            }
-                        };
-                        tdd.setFormFile(formFile);
-                    }
-                }
-                
-                tdd.setWebLink(temp.getWebLink());
-                
-                ActionMessages messages = new ActionMessages();
-                try {
-                    NodeWrapper node = tdd.saveToRepository(SessionUtil.getCurrentServletRequest(), messages);
-
-                    AmpActivityDocument aad = new AmpActivityDocument();
-                    aad.setAmpActivity(a);
-                    aad.setDocumentType(ActivityDocumentsConstants.RELATED_DOCUMENTS);
-                    if (node != null) {
-                        aad.setUuid(node.getUuid());
-                    }
-                    else  {
-                        aad.setUuid(temp.getExistingDocument().getUuid());
-                    }
-                    a.getActivityDocuments().add(aad);
-                } catch (JCRSessionException ex) {
-                    //we catch the exception and show a warning, but allow the activity to be saved
-                    logger.warn("The JCR Session couldn't be opened. The document "+tdd.getName() +" will not be saved.",ex);
-                }
-            }
-        }
-        
     }
 
-    private static void populateTranslatedTitles(TemporaryDocument d, NodeWrapper nw) {
+    private static void populateTranslatedTitles(TemporaryActivityDocument d, NodeWrapper nw) {
         List<ResourceTranslation> translatedTitles = d.getTranslatedTitleList();
         if (translatedTitles == null) {
             translatedTitles = new ArrayList<ResourceTranslation>();
@@ -958,6 +951,131 @@ public class ActivityUtil {
         translatedTitles.add(new ResourceTranslation(d.getExistingDocument().getUuid(), d
                 .getTitle(), TLSUtils.getLangCode()));
         d.setTranslatedTitleList(translatedTitles);
+    }
+
+    private static void saveActivityGPINiResources(AmpActivityVersion a, Session session) {
+        AmpAuthWebSession s = (AmpAuthWebSession) org.apache.wicket.Session.get();
+
+        HashSet<TemporaryGPINiDocument> newResources = s.getMetaData(OnePagerConst.GPI_RESOURCES_NEW_ITEMS);
+        HashSet<AmpGPINiSurveyResponseDocument> deletedResources = s.getMetaData(OnePagerConst
+                .GPI_RESOURCES_DELETED_ITEMS);
+
+        // remove old resources
+        deleteGPINiResources(a, deletedResources);
+
+        // insert new resources in the system
+        insertGPINiResources(a, newResources);
+    }
+
+    /**
+     *
+     * @param deletedResources
+     */
+    private static void deleteGPINiResources(AmpActivityVersion a, HashSet<AmpGPINiSurveyResponseDocument>
+            deletedResources) {
+        if (deletedResources != null) {
+            for (AmpGPINiSurveyResponseDocument tmpDoc : deletedResources) {
+                AmpGPINiSurveyResponse surveyResponse = tmpDoc.getSurveyResponse();
+
+                for (AmpOrgRole tempOrgRole : a.getOrgrole()) {
+                    if (tempOrgRole.getGpiNiSurvey() != null) {
+                        for (AmpGPINiSurveyResponse tempGPINiSurveyResponse : tempOrgRole.getGpiNiSurvey()
+                                .getResponses()) {
+                            if (tempGPINiSurveyResponse.getOldKey() == surveyResponse
+                                    .getAmpGPINiSurveyResponseId()) {
+
+                                Set<AmpGPINiSurveyResponseDocument> docsToBeRemoved = tempGPINiSurveyResponse
+                                        .getSupportingDocuments().stream()
+                                        .filter(d -> d.getUuid().equals(tmpDoc.getUuid()))
+                                        .collect(Collectors.toSet());
+
+                                tempGPINiSurveyResponse.getSupportingDocuments().removeAll(docsToBeRemoved);
+
+                            }
+
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * @param a
+     * @param newResources
+     */
+    private static void insertGPINiResources(AmpActivityVersion a, HashSet<TemporaryGPINiDocument> newResources) {
+        if (newResources != null) {
+
+            for (TemporaryGPINiDocument temp : newResources) {
+                AmpGPINiSurveyResponse surveyResponse = temp.getSurveyResponse();
+
+                TemporaryDocumentData tdd = new TemporaryDocumentData();
+                tdd.setTitle(temp.getTitle());
+                tdd.setName(temp.getFileName());
+
+                if (temp.getDate() != null) {
+                    tdd.setDate(temp.getDate().getTime());
+                }
+                if (temp.getWebLink() == null || temp.getWebLink().length() == 0) {
+                    if (temp.getFile() != null) {
+                        tdd.setFileSize(temp.getFile().getSize());
+                        tdd.setFormFile(generateFormFile(temp.getFile()));
+                    }
+                }
+
+                tdd.setWebLink(temp.getWebLink());
+
+                ActionMessages messages = new ActionMessages();
+                try {
+                    NodeWrapper node = tdd.saveToRepository(SessionUtil.getCurrentServletRequest(), messages);
+
+                    AmpGPINiSurveyResponseDocument responseDocument = new AmpGPINiSurveyResponseDocument();
+
+                    if (node != null) {
+                        responseDocument.setUuid(node.getUuid());
+                    } else {
+                        responseDocument.setUuid(temp.getExistingDocument().getUuid());
+                    }
+
+                    for (AmpOrgRole tempOrgRole : a.getOrgrole()) {
+                        if (tempOrgRole.getGpiNiSurvey() != null) {
+                            for (AmpGPINiSurveyResponse tempGPINiSurveyResponse : tempOrgRole.getGpiNiSurvey()
+                                    .getResponses()) {
+                                if (shouldResponseToBeUpdated(surveyResponse, tempGPINiSurveyResponse)
+                                        ) {
+                                    responseDocument.setSurveyResponse(tempGPINiSurveyResponse);
+
+                                    if (tempGPINiSurveyResponse.getSupportingDocuments() == null) {
+                                        tempGPINiSurveyResponse.setSupportingDocuments(new
+                                                HashSet<AmpGPINiSurveyResponseDocument>());
+                                    }
+
+                                    tempGPINiSurveyResponse.getSupportingDocuments().add(responseDocument);
+                                }
+
+                            }
+
+                        }
+                    }
+
+                } catch (JCRSessionException ex) {
+                    // we catch the exception and show a warning, but allow the activity to be saved
+                    logger.warn("The JCR Session couldn't be opened. " + "The document " + tdd.getName()
+                            + " will not be saved.", ex);
+                }
+
+            }
+        }
+    }
+
+    private static boolean shouldResponseToBeUpdated(AmpGPINiSurveyResponse surveyResponse, AmpGPINiSurveyResponse
+            tempGPINiSurveyResponse) {
+        return (tempGPINiSurveyResponse.getAmpGPINiSurvey().getAmpOrgRole().getOrganisation().getAmpOrgId()
+                == surveyResponse.getAmpGPINiSurvey().getAmpOrgRole().getOrganisation().getAmpOrgId()
+                && tempGPINiSurveyResponse.getAmpGPINiQuestion().getCode()
+                .equals(surveyResponse.getAmpGPINiQuestion().getCode()));
     }
 
     private static void saveIndicators(AmpActivityVersion a, Session session) throws Exception {

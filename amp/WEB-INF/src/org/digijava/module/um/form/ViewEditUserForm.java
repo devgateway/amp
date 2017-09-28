@@ -15,7 +15,9 @@ import org.digijava.module.aim.helper.CountryBean;
 public class ViewEditUserForm extends ActionForm {
 
     public void reset(ActionMapping mapping, HttpServletRequest request) {
-        this.pledger=false;
+        this.pledger = false;
+        this.nationalCoordinator = false;
+        this.exemptFromDataFreezing = false;
         }
     
     private static final long serialVersionUID = 1L;
@@ -68,6 +70,8 @@ public class ViewEditUserForm extends ActionForm {
     private Long role;
     private boolean emailerror;
     private boolean banReadOnly;
+    private Boolean exemptFromDataFreezing;
+    private boolean nationalCoordinator;
     
     public boolean isEmailerror() {
         return emailerror;
@@ -383,5 +387,20 @@ public class ViewEditUserForm extends ActionForm {
 
     public void setBanReadOnly(boolean banReadOnly) {
         this.banReadOnly = banReadOnly;
+    }
+
+    public Boolean getExemptFromDataFreezing() {
+        return exemptFromDataFreezing;
+    }
+
+    public void setExemptFromDataFreezing(Boolean exemptFromDataFreezing) {
+        this.exemptFromDataFreezing = exemptFromDataFreezing;
+    }
+    public boolean getNationalCoordinator() {
+        return nationalCoordinator;
+    }
+
+    public void setNationalCoordinator(boolean nationalCoordinator) {
+        this.nationalCoordinator = nationalCoordinator;
     }
 }

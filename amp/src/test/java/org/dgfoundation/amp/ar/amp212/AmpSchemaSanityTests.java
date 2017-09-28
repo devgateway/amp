@@ -132,7 +132,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                 MeasureConstants.PLEDGES_COMMITMENT_GAP, MeasureConstants.PLEDGES_PERCENTAGE_OF_DISBURSEMENT, MeasureConstants.PLEDGES_PLANNED_COMMITMENTS,
                 MeasureConstants.PLEDGES_PLANNED_DISBURSEMENTS, MeasureConstants.MTEF_PROJECTIONS, MeasureConstants.EXECUTION_RATE,
                 MeasureConstants.PREDICTABILITY_OF_FUNDING, MeasureConstants.CUMULATIVE_EXECUTION_RATE, MeasureConstants.AVERAGE_DISBURSEMENT_RATE,
-                MeasureConstants.FORECAST_EXECUTION_RATE, MeasureConstants.ALWAYS_PRESENT);
+                MeasureConstants.FORECAST_EXECUTION_RATE, MeasureConstants.ALWAYS_PRESENT, MeasureConstants.DISBURSED_AS_SCHEDULED, MeasureConstants.OVER_DISBURSED);
 
         buildDigest(
                 buildSpecification("testcase with all unusual measures",
@@ -2122,6 +2122,66 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
         specWithoutSplit.setSummaryReport(true);
 
         runNiTestCase(specWithoutSplit, "en", acts, cor);
+    }
+    
+    @Test
+    public void testSimpleHasExecutingAgencyReport() {
+        NiReportModel cor = new NiReportModel("testSimpleHasExecutingAgencyReport")
+                .withHeaders(Arrays.asList(
+                        "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 7))",
+                        "(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Executing Agency: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Has Executing Agency: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 3, colSpan: 3));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 6, colSpan: 1))",
+                        "(2010: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 1));(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 4, colSpan: 1));(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 5, colSpan: 1))",
+                        "(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1))"))
+                .withWarnings(Arrays.asList())
+                .withBody(      new ReportAreaForTests(null)
+                      .withContents("Project Title", "", "Executing Agency", "", "Has Executing Agency", "", "Funding-2010-Actual Disbursements", "143,777", "Funding-2013-Actual Disbursements", "545,000", "Funding-2014-Actual Disbursements", "50,000", "Totals-Actual Disbursements", "738,777")
+                      .withChildren(
+                        new ReportAreaForTests(new AreaOwner(18), "Project Title", "Test MTEF directed", "Executing Agency", "Water Foundation", "Has Executing Agency", "yes", "Funding-2010-Actual Disbursements", "143,777", "Totals-Actual Disbursements", "143,777"),
+                        new ReportAreaForTests(new AreaOwner(24), "Project Title", "Eth Water", "Executing Agency", "UNDP, World Bank", "Has Executing Agency", "yes", "Funding-2013-Actual Disbursements", "545,000", "Totals-Actual Disbursements", "545,000"),
+                        new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones", "Has Executing Agency", "no"),
+                        new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency", "Executing Agency", "Water Foundation", "Has Executing Agency", "yes", "Funding-2014-Actual Disbursements", "50,000", "Totals-Actual Disbursements", "50,000"),
+                        new ReportAreaForTests(new AreaOwner(79), "Project Title", "with weird currencies", "Has Executing Agency", "no")      ));
+
+        List<String> execActs = Arrays.asList("Eth Water", "Test MTEF directed", "Activity with Zones",
+                "activity with contracting agency", "with weird currencies","activity with contracting agency");
+        
+        ReportSpecificationImpl spec = buildSpecification("testSimpleHasExecutingAgencyReport",
+                Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.EXECUTING_AGENCY, ColumnConstants.HAS_EXECUTING_AGENCY),
+                Arrays.asList(MeasureConstants.ACTUAL_DISBURSEMENTS),
+                null,
+                GroupingCriteria.GROUPING_YEARLY);
+
+        runNiTestCase(spec, "en", execActs, cor);
+    }
+    
+    @Test
+    public void testReportWithHierByHasExecutingAgencyReport() {
+        NiReportModel cor = new NiReportModel("testReportWithHierByHasExecutingAgencyReport")
+                .withHeaders(Arrays.asList(
+                        "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 7))",
+                        "(Has Executing Agency: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Executing Agency: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 3, colSpan: 3));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 6, colSpan: 1))",
+                        "(2010: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 1));(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 4, colSpan: 1));(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 5, colSpan: 1))",
+                        "(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1))"))
+                .withWarnings(Arrays.asList())
+                .withBody(      new ReportAreaForTests(null).withContents("Has Executing Agency", "", "Project Title", "", "Executing Agency", "", "Funding-2010-Actual Disbursements", "143,777", "Funding-2013-Actual Disbursements", "545,000", "Funding-2014-Actual Disbursements", "50,000", "Totals-Actual Disbursements", "738,777")
+                      .withChildren(
+                              new ReportAreaForTests(new AreaOwner("Has Executing Agency", "yes", 1))
+                                .withContents("Project Title", "", "Executing Agency", "", "Funding-2010-Actual Disbursements", "143,777", "Funding-2013-Actual Disbursements", "545,000", "Funding-2014-Actual Disbursements", "50,000", "Totals-Actual Disbursements", "738,777", "Has Executing Agency", "yes")
+                                .withChildren(
+                                        new ReportAreaForTests(new AreaOwner(18), "Project Title", "Test MTEF directed", "Executing Agency", "Water Foundation", "Funding-2010-Actual Disbursements", "143,777", "Totals-Actual Disbursements", "143,777"),
+                                        new ReportAreaForTests(new AreaOwner(24), "Project Title", "Eth Water", "Executing Agency", "UNDP, World Bank", "Funding-2013-Actual Disbursements", "545,000", "Totals-Actual Disbursements", "545,000"),
+                                        new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency", "Executing Agency", "Water Foundation", "Funding-2014-Actual Disbursements", "50,000", "Totals-Actual Disbursements", "50,000")        )      ));
+
+        List<String> execActs = Arrays.asList("Eth Water", "Test MTEF directed", "Activity with Zones",
+                "activity with contracting agency", "with weird currencies","activity with contracting agency");
+        
+        ReportSpecificationImpl spec = buildSpecification("testReportWithHierByHasExecutingAgencyReport",
+                Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.EXECUTING_AGENCY, ColumnConstants.HAS_EXECUTING_AGENCY),
+                Arrays.asList(MeasureConstants.ACTUAL_DISBURSEMENTS),
+                Arrays.asList(ColumnConstants.HAS_EXECUTING_AGENCY),
+                GroupingCriteria.GROUPING_YEARLY);
+
+        runNiTestCase(spec, "en", execActs, cor);
     }
 
     @Test

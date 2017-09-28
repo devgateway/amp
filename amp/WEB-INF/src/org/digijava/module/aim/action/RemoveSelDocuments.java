@@ -16,19 +16,19 @@ import org.digijava.module.aim.util.DocumentUtil;
 
 public class RemoveSelDocuments extends Action {
 
-	private static Logger logger = Logger.getLogger(RemoveSelDocuments.class);
+    private static Logger logger = Logger.getLogger(RemoveSelDocuments.class);
 
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			javax.servlet.http.HttpServletRequest request,
-			javax.servlet.http.HttpServletResponse response)
-			throws java.lang.Exception {
+    public ActionForward execute(ActionMapping mapping, ActionForm form,
+            javax.servlet.http.HttpServletRequest request,
+            javax.servlet.http.HttpServletResponse response)
+            throws java.lang.Exception {
 
-		throw new RuntimeException("unimplemented!");
-//		EditActivityForm eaForm = (EditActivityForm) form;
+        throw new RuntimeException("unimplemented!");
+//      EditActivityForm eaForm = (EditActivityForm) form;
 //
-//		Collection prevDocs = null;
-//		Collection newDocs = new ArrayList();
-//		long selDocs[] = null;
+//      Collection prevDocs = null;
+//      Collection newDocs = new ArrayList();
+//      long selDocs[] = null;
 //
 //        if (eaForm.getDocuments().getDocFileOrLink().equals("document")) {
 //            Site currentSite = RequestUtils.getSite(request);
@@ -46,38 +46,38 @@ public class RemoveSelDocuments extends Action {
 //
 //        }
 //
-//		if (eaForm.getDocuments().getDocFileOrLink().equals("file")) {
-//			prevDocs = eaForm.getDocuments().getDocumentList();
-//			selDocs = eaForm.getDocuments().getSelDocs();
-//		} else {
-//			prevDocs = eaForm.getDocuments().getLinksList();
-//			selDocs = eaForm.getDocuments().getSelLinks();
-//		}
+//      if (eaForm.getDocuments().getDocFileOrLink().equals("file")) {
+//          prevDocs = eaForm.getDocuments().getDocumentList();
+//          selDocs = eaForm.getDocuments().getSelDocs();
+//      } else {
+//          prevDocs = eaForm.getDocuments().getLinksList();
+//          selDocs = eaForm.getDocuments().getSelLinks();
+//      }
 //
-//		Iterator itr = prevDocs.iterator();
-//		while (itr.hasNext()) {
-//			RelatedLinks rl = (RelatedLinks) itr.next();
-//			boolean flag = false;
-//			for (int i = 0;i < selDocs.length;i ++) {
-//				if (rl.getRelLink().getId() == selDocs[i]) {
-//					flag = true;
-//					break;
-//				}
-//			}
-//			if (!flag) {
-//				newDocs.add(rl);
-//			}
-//		}
+//      Iterator itr = prevDocs.iterator();
+//      while (itr.hasNext()) {
+//          RelatedLinks rl = (RelatedLinks) itr.next();
+//          boolean flag = false;
+//          for (int i = 0;i < selDocs.length;i ++) {
+//              if (rl.getRelLink().getId() == selDocs[i]) {
+//                  flag = true;
+//                  break;
+//              }
+//          }
+//          if (!flag) {
+//              newDocs.add(rl);
+//          }
+//      }
 //
-//		if (eaForm.getDocuments().getDocFileOrLink().equals("file")) {
-//			eaForm.getDocuments().setSelDocs(null);
-//			eaForm.getDocuments().setDocumentList(newDocs);
-//		} else {
-//			eaForm.getDocuments().setSelLinks(null);
-//			eaForm.getDocuments().setLinksList(newDocs);
-//		}
-//		eaForm.setStep("6");
+//      if (eaForm.getDocuments().getDocFileOrLink().equals("file")) {
+//          eaForm.getDocuments().setSelDocs(null);
+//          eaForm.getDocuments().setDocumentList(newDocs);
+//      } else {
+//          eaForm.getDocuments().setSelLinks(null);
+//          eaForm.getDocuments().setLinksList(newDocs);
+//      }
+//      eaForm.setStep("6");
 //
-//		return mapping.findForward("forward");
-	}
+//      return mapping.findForward("forward");
+    }
 }

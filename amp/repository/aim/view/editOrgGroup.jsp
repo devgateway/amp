@@ -1,3 +1,4 @@
+<%@page import="org.digijava.kernel.util.SiteUtils"%>
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
@@ -7,7 +8,9 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
-
+<% if(SiteUtils.isEffectiveLangRTL()) { %>
+  <link rel="stylesheet" href="/TEMPLATE/ampTemplate/css_2/amp-rtl.css">
+<% } %>
 <script language="JavaScript">
 
 	function msg() {
@@ -62,6 +65,7 @@
 
 	var enterBinder	= new EnterHitBinder('saveOrgGrpBtn');
 </script>
+<div class="admin-content">
 <div class="addOrgBox" style="background-color:#F8F8F8;">
 	<div class="">
 <digi:instance property="aimAddOrgGroupForm" />
@@ -214,3 +218,4 @@
 
 </digi:form>
 </div></div>
+</div>

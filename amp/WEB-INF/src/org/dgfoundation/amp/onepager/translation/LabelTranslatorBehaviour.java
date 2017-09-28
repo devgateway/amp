@@ -12,13 +12,13 @@ import org.apache.wicket.AttributeModifier;
  */
 public class LabelTranslatorBehaviour extends AttributeModifier {
 
-	private static final long serialVersionUID = 1L;
-	
-	private CharSequence key;
+    private static final long serialVersionUID = 1L;
+    
+    private CharSequence key;
 
-	public LabelTranslatorBehaviour() {
-		super("onclick", "spawnEditBox(this.id)");
-		
-	}
-	
+    public LabelTranslatorBehaviour() {
+        super("onclick", "spawnEditBox(this.id)");
+        
+    }
+    
 }

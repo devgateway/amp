@@ -17,7 +17,7 @@ import org.digijava.module.fundingpledges.form.ViewPledgesForm;
 
 public class ShowPledgesList extends Action {
 
-	public ActionForward execute(ActionMapping mapping,
+    public ActionForward execute(ActionMapping mapping,
             ActionForm form,
             HttpServletRequest request,
             HttpServletResponse response) throws java.lang.Exception {
@@ -30,21 +30,21 @@ public class ShowPledgesList extends Action {
         }
         request.setAttribute("pledgeUser", true);
 
-        	
-		ViewPledgesForm plForm = (ViewPledgesForm) form;
-		
-		List<FundingPledges> pledges = PledgesEntityHelper.getPledges();
-		Collections.sort(pledges);
-		
-		for (FundingPledges pledge : pledges) {
-			pledge.setYearsList(new TreeSet<String>());
-			for (FundingPledgesDetails fpd : pledge.getFundingPledgesDetails()) {
-				pledge.getYearsList().add(fpd.getDatesDescription());
-			}
-		}
-		plForm.setAllFundingPledges(pledges);
-		return mapping.findForward("forward");
-	}
+            
+        ViewPledgesForm plForm = (ViewPledgesForm) form;
+        
+        List<FundingPledges> pledges = PledgesEntityHelper.getPledges();
+        Collections.sort(pledges);
+        
+        for (FundingPledges pledge : pledges) {
+            pledge.setYearsList(new TreeSet<String>());
+            for (FundingPledgesDetails fpd : pledge.getFundingPledgesDetails()) {
+                pledge.getYearsList().add(fpd.getDatesDescription());
+            }
+        }
+        plForm.setAllFundingPledges(pledges);
+        return mapping.findForward("forward");
+    }
 
     private void handleNonPledgeUser(HttpServletRequest request) {
         ActionMessages errors = new ActionMessages();

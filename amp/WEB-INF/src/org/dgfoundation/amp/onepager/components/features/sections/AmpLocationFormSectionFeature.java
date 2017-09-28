@@ -37,92 +37,92 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
  * @see OnePager
  */
 public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
-	private static final long serialVersionUID = 8671173324087460636L;
+    private static final long serialVersionUID = 8671173324087460636L;
 
-	/**
-	 * @param id
-	 * @param fmName
-	 * @param regionalFundingFeature 
-	 * @throws Exception
-	 */
-	public AmpLocationFormSectionFeature(String id, String fmName,
-			final IModel<AmpActivityVersion> am, AmpComponentPanel regionalFundingFeature) throws Exception {
-		super(id, fmName, am);
-		this.fmType = AmpFMTypes.MODULE;
+    /**
+     * @param id
+     * @param fmName
+     * @param regionalFundingFeature 
+     * @throws Exception
+     */
+    public AmpLocationFormSectionFeature(String id, String fmName,
+            final IModel<AmpActivityVersion> am, AmpComponentPanel regionalFundingFeature) throws Exception {
+        super(id, fmName, am);
+        this.fmType = AmpFMTypes.MODULE;
 
-	
-		
-		final AmpCategorySelectFieldPanel implementationLevel = new AmpCategorySelectFieldPanel(
-				"implementationLevel",
-				CategoryConstants.IMPLEMENTATION_LEVEL_KEY,
-				new AmpCategoryValueByKeyModel(
-						new PropertyModel<Set<AmpCategoryValue>>(am,
-								"categories"),
-						CategoryConstants.IMPLEMENTATION_LEVEL_KEY),
-				CategoryConstants.IMPLEMENTATION_LEVEL_NAME, true, true, null, AmpFMTypes.MODULE);
-		add(implementationLevel);
+    
+        
+        final AmpCategorySelectFieldPanel implementationLevel = new AmpCategorySelectFieldPanel(
+                "implementationLevel",
+                CategoryConstants.IMPLEMENTATION_LEVEL_KEY,
+                new AmpCategoryValueByKeyModel(
+                        new PropertyModel<Set<AmpCategoryValue>>(am,
+                                "categories"),
+                        CategoryConstants.IMPLEMENTATION_LEVEL_KEY),
+                CategoryConstants.IMPLEMENTATION_LEVEL_NAME, true, true, null, AmpFMTypes.MODULE);
+        add(implementationLevel);
 
 
 
         final Model<Boolean> disablePercentagesForInternational = new Model<Boolean>(false);
-		final AmpCategorySelectFieldPanel implementationLocation = new AmpCategorySelectFieldPanel(
-				"implementationLocation",
-				CategoryConstants.IMPLEMENTATION_LOCATION_KEY,
-				new AmpCategoryValueByKeyModel(
-						new PropertyModel<Set<AmpCategoryValue>>(am,
-								"categories"),
-						CategoryConstants.IMPLEMENTATION_LOCATION_KEY),
-				CategoryConstants.IMPLEMENTATION_LOCATION_NAME, true, true,
-				null, implementationLevel.getChoiceModel(), AmpFMTypes.MODULE);
-		implementationLocation.setOutputMarkupId(true);
+        final AmpCategorySelectFieldPanel implementationLocation = new AmpCategorySelectFieldPanel(
+                "implementationLocation",
+                CategoryConstants.IMPLEMENTATION_LOCATION_KEY,
+                new AmpCategoryValueByKeyModel(
+                        new PropertyModel<Set<AmpCategoryValue>>(am,
+                                "categories"),
+                        CategoryConstants.IMPLEMENTATION_LOCATION_KEY),
+                CategoryConstants.IMPLEMENTATION_LOCATION_NAME, true, true,
+                null, implementationLevel.getChoiceModel(), AmpFMTypes.MODULE);
+        implementationLocation.setOutputMarkupId(true);
 
         final AmpLocationFormTableFeature locationsTable = new AmpLocationFormTableFeature(
                 "locationsTable", "Locations", am, (AmpRegionalFundingFormSectionFeature) regionalFundingFeature,
                 implementationLocation, implementationLevel, disablePercentagesForInternational);
 
-		implementationLocation.getChoiceContainer().add(
-				new AjaxFormComponentUpdatingBehavior("onchange") {
-					@Override
-					protected void onUpdate(AjaxRequestTarget target) {
-						defaultCountryChecks(implementationLevel, implementationLocation, disablePercentagesForInternational,
+        implementationLocation.getChoiceContainer().add(
+                new AjaxFormComponentUpdatingBehavior("onchange") {
+                    @Override
+                    protected void onUpdate(AjaxRequestTarget target) {
+                        defaultCountryChecks(implementationLevel, implementationLocation, disablePercentagesForInternational,
                                 target, locationsTable);
-					}
-				});
-		add(implementationLocation);
+                    }
+                });
+        add(implementationLocation);
 
 
-		// add behavior to update implementation location when implementation
-		// level choice changes
-		// when chaging implementation level, remove all locations
-		implementationLevel.getChoiceContainer().add(
-				new AjaxFormComponentUpdatingBehavior("onchange") {
-					private static final long serialVersionUID = -8419230552388122030L;
-					
-					@Override
-					protected void onUpdate(AjaxRequestTarget target) {
-						target.add(implementationLocation);
-						String mixedImplementationLocation = FeaturesUtil.getGlobalSettingValue(
-								GlobalSettingsConstants.MIXED_IMPLEMENTATION_LOCATION);
-						if ("false".equals(mixedImplementationLocation)){
-							Set<AmpActivityLocation> set = locationsTable.getSetModel().getObject();
-							if(set!=null && set.size()>0) {
-								locationsTable.getSetModel().getObject().clear();
-								locationsTable.getList().removeAll();
-								target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(locationsTable));
-								target.add(locationsTable);
-							}
-						}
-						defaultCountryChecks(implementationLevel, implementationLocation,
+        // add behavior to update implementation location when implementation
+        // level choice changes
+        // when chaging implementation level, remove all locations
+        implementationLevel.getChoiceContainer().add(
+                new AjaxFormComponentUpdatingBehavior("onchange") {
+                    private static final long serialVersionUID = -8419230552388122030L;
+                    
+                    @Override
+                    protected void onUpdate(AjaxRequestTarget target) {
+                        target.add(implementationLocation);
+                        String mixedImplementationLocation = FeaturesUtil.getGlobalSettingValue(
+                                GlobalSettingsConstants.MIXED_IMPLEMENTATION_LOCATION);
+                        if ("false".equals(mixedImplementationLocation)){
+                            Set<AmpActivityLocation> set = locationsTable.getSetModel().getObject();
+                            if(set!=null && set.size()>0) {
+                                locationsTable.getSetModel().getObject().clear();
+                                locationsTable.getList().removeAll();
+                                target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(locationsTable));
+                                target.add(locationsTable);
+                            }
+                        }
+                        defaultCountryChecks(implementationLevel, implementationLocation,
                                 disablePercentagesForInternational, target, locationsTable);
-					}
+                    }
                 });
 
-		// add location table
-		
-		add(locationsTable);
-		defaultCountryChecks(implementationLevel, implementationLocation, disablePercentagesForInternational,
+        // add location table
+        
+        add(locationsTable);
+        defaultCountryChecks(implementationLevel, implementationLocation, disablePercentagesForInternational,
                 null, locationsTable);
-	}
+    }
 
     private boolean checkInternationalCountry(AmpCategorySelectFieldPanel implementationLevel,
                                               AmpCategorySelectFieldPanel implementationLocation){
@@ -140,7 +140,7 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
         }
 
         boolean defaultCountryCheck = CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL.equalsCategoryValue(implLevel) &&
-        		CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(implLocValue);
+                CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(implLocValue);
         return defaultCountryCheck;
     }
 
@@ -160,7 +160,7 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
         }
 
         boolean defaultCountryCheck = (CategoryConstants.IMPLEMENTATION_LEVEL_NATIONAL.equalsCategoryValue(implLevel) || CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL.equalsCategoryValue(implLevel)) &&
-        		CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(implLocValue);
+                CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(implLocValue);
         return defaultCountryCheck;
     }
 
@@ -184,9 +184,9 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
             defaultCountry = DynLocationManagerUtil.getDefaultCountry();
 
             if (target!=null){ //we're in an ajax context, and not in init
-            	locationsTable.locationSelected(defaultCountry, am, disablePercentagesForInternational,true);
-            	target.add(locationsTable);
-            	target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(locationsTable));
+                locationsTable.locationSelected(defaultCountry, am, disablePercentagesForInternational,true);
+                target.add(locationsTable);
+                target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(locationsTable));
             }
         }
 

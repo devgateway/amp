@@ -81,19 +81,19 @@ public abstract class AbstractFileUploadResource extends AbstractResource
         final String responseContent;
         String accept = webRequest.getHeader("Accept");
         String agent = webRequest.getHeader("User-Agent");
-		if (wantsJSON(accept)) {
-			// a real browser (include IE11).
-			resourceResponse.setContentType("application/json");
-			responseContent = generateJsonResponse(resourceResponse, webRequest, fileItems);
-		} else if (wantsHtml(accept) || isOldIE(agent)) {
-			// Old versions of Internet Explorer (7,8, etc) only.
-			resourceResponse.setContentType("text/html");
-			responseContent = generateHtmlResponse(resourceResponse, webRequest, fileItems);
-		} else {
-			// a real browser
-			resourceResponse.setContentType("application/json");
-			responseContent = generateJsonResponse(resourceResponse, webRequest, fileItems);		
-		}        
+        if (wantsJSON(accept)) {
+            // a real browser (include IE11).
+            resourceResponse.setContentType("application/json");
+            responseContent = generateJsonResponse(resourceResponse, webRequest, fileItems);
+        } else if (wantsHtml(accept) || isOldIE(agent)) {
+            // Old versions of Internet Explorer (7,8, etc) only.
+            resourceResponse.setContentType("text/html");
+            responseContent = generateHtmlResponse(resourceResponse, webRequest, fileItems);
+        } else {
+            // a real browser
+            resourceResponse.setContentType("application/json");
+            responseContent = generateJsonResponse(resourceResponse, webRequest, fileItems);        
+        }        
 
         resourceResponse.setWriteCallback(new WriteCallback() {
             @Override
@@ -127,7 +127,7 @@ public abstract class AbstractFileUploadResource extends AbstractResource
     protected boolean wantsJSON(String acceptHeader)
     {
         //System.out.println(acceptHeader);
-    	return !Strings.isEmpty(acceptHeader) && acceptHeader.contains("application/json");
+        return !Strings.isEmpty(acceptHeader) && acceptHeader.contains("application/json");
     }
     
     /**
@@ -138,7 +138,7 @@ public abstract class AbstractFileUploadResource extends AbstractResource
     protected boolean wantsHtml(String acceptHeader)
     {
         //System.out.println(acceptHeader);
-    	return !Strings.isEmpty(acceptHeader) && acceptHeader.contains("text/html");
+        return !Strings.isEmpty(acceptHeader) && acceptHeader.contains("text/html");
     }
     
     /**
@@ -147,7 +147,7 @@ public abstract class AbstractFileUploadResource extends AbstractResource
      * @return
      */
     protected boolean isOldIE(String agent) {
-    	return agent.contains("MSIE");
+        return agent.contains("MSIE");
     }
 
 

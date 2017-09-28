@@ -51,177 +51,177 @@ import org.hibernate.Transaction;
 import org.hibernate.jdbc.Work;
 
 public class DbHelper {
-	private static Logger logger = Logger.getLogger(DbHelper.class);
+    private static Logger logger = Logger.getLogger(DbHelper.class);
 
-	public static void delete(AmpMapConfig map) {
-		Session sess = null;
-		Transaction tx = null;
+    public static void delete(AmpMapConfig map) {
+        Session sess = null;
+        Transaction tx = null;
 
-		try {
-			sess = PersistenceManager.getRequestDBSession();
-			// beginTransaction();
-			sess.delete(map);
-			// tx.commit();
-		} catch (Exception e) {
-			if (e instanceof JDBCException)
-				throw (JDBCException) e;
-			logger.error("Exception " + e.toString());
-			try {
-				tx.rollback();
-			} catch (HibernateException ex) {
-				logger.error("rollback() failed");
-				logger.error(ex.toString());
-			}
-		}
-	}
+        try {
+            sess = PersistenceManager.getRequestDBSession();
+            // beginTransaction();
+            sess.delete(map);
+            // tx.commit();
+        } catch (Exception e) {
+            if (e instanceof JDBCException)
+                throw (JDBCException) e;
+            logger.error("Exception " + e.toString());
+            try {
+                tx.rollback();
+            } catch (HibernateException ex) {
+                logger.error("rollback() failed");
+                logger.error(ex.toString());
+            }
+        }
+    }
 
-	public static AmpMapConfig getMap(Long id) {
-		Session session = null;
-		AmpMapConfig map = null;
-		try {
-			session = PersistenceManager.getRequestDBSession();
+    public static AmpMapConfig getMap(Long id) {
+        Session session = null;
+        AmpMapConfig map = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
             StringBuilder qs = new StringBuilder("from ").append(AmpMapConfig.class.getName()).
                     append(" mc where mc.id=:ID");
             Query q = session.createQuery(qs.toString());
             q.setLong("ID", id);
 
-			//map = (AmpMapConfig) session.load(AmpMapConfig.class, id);
+            //map = (AmpMapConfig) session.load(AmpMapConfig.class, id);
             map = (AmpMapConfig) q.uniqueResult();
-		} catch (Exception e) {
-			logger.error("Unable to get object of class "
-					+ AmpMapConfig.class.getName() + " width id=" + id
-					+ ". Error was:" + e);
-		}
-		return map;
-	}
+        } catch (Exception e) {
+            logger.error("Unable to get object of class "
+                    + AmpMapConfig.class.getName() + " width id=" + id
+                    + ". Error was:" + e);
+        }
+        return map;
+    }
 
-	public static void save(AmpMapConfig map) {
-		Session session = null;
+    public static void save(AmpMapConfig map) {
+        Session session = null;
 
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			session.saveOrUpdate(map);
-		} catch (Exception e) {
-			logger.error("Unable to save item", e);
-		}
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            session.saveOrUpdate(map);
+        } catch (Exception e) {
+            logger.error("Unable to save item", e);
+        }
 
-	}
-	
-	
-	public static ArrayList<Long> getInActivities(String query)
-			throws Exception {
-		Session session = PersistenceManager.getRequestDBSession();
-		List<Object> qResult = session.createSQLQuery(query).list();
-		ArrayList<Long> result = new ArrayList<Long>(qResult.size());
-		for (Object obj : qResult) {
-			result.add(PersistenceManager.getLong(obj));
-		}
-		return result;
-	}
+    }
+    
+    
+    public static ArrayList<Long> getInActivities(String query)
+            throws Exception {
+        Session session = PersistenceManager.getRequestDBSession();
+        List<Object> qResult = session.createSQLQuery(query).list();
+        ArrayList<Long> result = new ArrayList<Long>(qResult.size());
+        for (Object obj : qResult) {
+            result.add(PersistenceManager.getLong(obj));
+        }
+        return result;
+    }
 
-	
-	/**
-	 * returns a map of all the locations with a certain id
-	 * @param ids
-	 * @return
-	 */
-	protected static Map<Long, AmpCategoryValueLocations> getLocationsById(Set<Long> ids)
-	{
-		Map<Long, AmpCategoryValueLocations> locationsMap = new HashMap<Long, AmpCategoryValueLocations>();
-		
-		Session session = PersistenceManager.getSession();
-		Query createQuery = session.createQuery("from "+AmpCategoryValueLocations.class.getName() + " acvl WHERE acvl.id IN (" + Util.toCSStringForIN(ids) + ")");
-		Iterator<AmpCategoryValueLocations> it = createQuery.list().iterator();
-		while (it.hasNext()) {
-			AmpCategoryValueLocations loc = it.next();
-			locationsMap.put(loc.getId(), loc);
-		}
-		return locationsMap;
-	}
-	
-	/**
-	 * constructs a Map<ACVL.id, Region/Zone-ACVL.id>
-	 * @param allUsedAcvlIDs
-	 * @param impLevel
-	 * @return
-	 */
-	protected static Map<Long, Long> getLocationRegions(Set<Long> allUsedAcvlIDs, String impLevel)
-	{
-		final String findLocationRegionsQuery = 
-				String.format("SELECT acvl.id, getlocationidbyimpllocMap(acvl.id, '%s'::character varying) AS region_id FROM amp_category_value_location acvl WHERE acvl.id IN (" + Util.toCSStringForIN(allUsedAcvlIDs) + ")",
-						impLevel);		
-		final Map<Long, Long> locationToRegion = new HashMap<Long, Long>();
-		PersistenceManager.getSession().doWork(new Work() {
-			public void execute(java.sql.Connection conn) throws java.sql.SQLException {
-				try(RsInfo rsi = SQLUtils.rawRunQuery(conn, findLocationRegionsQuery, null)) {
-					while (rsi.rs.next()) {
-						Long locId = rsi.rs.getLong(1);
-						Long regionLocId = rsi.rs.getLong(2);
-						locationToRegion.put(locId, regionLocId);
-					}
-				}
-			}
-		});
-		return locationToRegion;
-	}
-	
-	/**
-	 * generate a list of (Location, Funding) entries based on an unsorted input soup of funding information
-	 * @param fundingDets - the input soup of raw funding information:
-	 * 	item[0] = FundingInformationItem fd
-	 * 	item[1] = [Long id] of region
-	 *  item[2] = [String name] of region
-	 *  item[3...end] = (optional) [Float locationPercentage, sectorPercentage, xxxPercentage]
-	 * @param currCode - the code of the currency to use while doing the calculations
-	 * @param adjustmentType - the adjustment type to add the totals to
-	 * @param impLevel - the implementation level, used for location levels while walking up the hierarchy
-	 * @param regListChildren - Collection<AmpCategoryValueLocations.id>, ignored
-	 * @param decimalsToShow: decimals to format the output
-	 * @param divideByDenominator: units used for formatting the output
-	 * @return
-	 */
-	protected static ArrayList<SimpleLocation> generateFundingSummaries(List<Object[]> fundingDets, String currCode, HardCodedCategoryValue adjustmentType, String impLevel, int decimalsToShow, BigDecimal divideByDenominator)
-	{
-		// collect all the location Ids existant in the system
-		Set<Long> allUsedAcvlIDs = new HashSet<Long>();
-		for(Object[] obj:fundingDets){
-			allUsedAcvlIDs.add((Long) obj[1]);
-		}
+    
+    /**
+     * returns a map of all the locations with a certain id
+     * @param ids
+     * @return
+     */
+    protected static Map<Long, AmpCategoryValueLocations> getLocationsById(Set<Long> ids)
+    {
+        Map<Long, AmpCategoryValueLocations> locationsMap = new HashMap<Long, AmpCategoryValueLocations>();
+        
+        Session session = PersistenceManager.getSession();
+        Query createQuery = session.createQuery("from "+AmpCategoryValueLocations.class.getName() + " acvl WHERE acvl.id IN (" + Util.toCSStringForIN(ids) + ")");
+        Iterator<AmpCategoryValueLocations> it = createQuery.list().iterator();
+        while (it.hasNext()) {
+            AmpCategoryValueLocations loc = it.next();
+            locationsMap.put(loc.getId(), loc);
+        }
+        return locationsMap;
+    }
+    
+    /**
+     * constructs a Map<ACVL.id, Region/Zone-ACVL.id>
+     * @param allUsedAcvlIDs
+     * @param impLevel
+     * @return
+     */
+    protected static Map<Long, Long> getLocationRegions(Set<Long> allUsedAcvlIDs, String impLevel)
+    {
+        final String findLocationRegionsQuery = 
+                String.format("SELECT acvl.id, getlocationidbyimpllocMap(acvl.id, '%s'::character varying) AS region_id FROM amp_category_value_location acvl WHERE acvl.id IN (" + Util.toCSStringForIN(allUsedAcvlIDs) + ")",
+                        impLevel);      
+        final Map<Long, Long> locationToRegion = new HashMap<Long, Long>();
+        PersistenceManager.getSession().doWork(new Work() {
+            public void execute(java.sql.Connection conn) throws java.sql.SQLException {
+                try(RsInfo rsi = SQLUtils.rawRunQuery(conn, findLocationRegionsQuery, null)) {
+                    while (rsi.rs.next()) {
+                        Long locId = rsi.rs.getLong(1);
+                        Long regionLocId = rsi.rs.getLong(2);
+                        locationToRegion.put(locId, regionLocId);
+                    }
+                }
+            }
+        });
+        return locationToRegion;
+    }
+    
+    /**
+     * generate a list of (Location, Funding) entries based on an unsorted input soup of funding information
+     * @param fundingDets - the input soup of raw funding information:
+     *  item[0] = FundingInformationItem fd
+     *  item[1] = [Long id] of region
+     *  item[2] = [String name] of region
+     *  item[3...end] = (optional) [Float locationPercentage, sectorPercentage, xxxPercentage]
+     * @param currCode - the code of the currency to use while doing the calculations
+     * @param adjustmentType - the adjustment type to add the totals to
+     * @param impLevel - the implementation level, used for location levels while walking up the hierarchy
+     * @param regListChildren - Collection<AmpCategoryValueLocations.id>, ignored
+     * @param decimalsToShow: decimals to format the output
+     * @param divideByDenominator: units used for formatting the output
+     * @return
+     */
+    protected static ArrayList<SimpleLocation> generateFundingSummaries(List<Object[]> fundingDets, String currCode, HardCodedCategoryValue adjustmentType, String impLevel, int decimalsToShow, BigDecimal divideByDenominator)
+    {
+        // collect all the location Ids existant in the system
+        Set<Long> allUsedAcvlIDs = new HashSet<Long>();
+        for(Object[] obj:fundingDets){
+            allUsedAcvlIDs.add((Long) obj[1]);
+        }
 
-		Map<Long, Long> locationToRegion = getLocationRegions(allUsedAcvlIDs, impLevel); // Map<acvl.id, region.id>
-		Map<Long, AmpCategoryValueLocations> regionLocations = getLocationsById(new HashSet<Long>(locationToRegion.values())); //Map<region.id, region>
-		        
-		// group all funding items by respective region/zone/whatever
+        Map<Long, Long> locationToRegion = getLocationRegions(allUsedAcvlIDs, impLevel); // Map<acvl.id, region.id>
+        Map<Long, AmpCategoryValueLocations> regionLocations = getLocationsById(new HashSet<Long>(locationToRegion.values())); //Map<region.id, region>
+                
+        // group all funding items by respective region/zone/whatever
         HashMap<Long, ArrayList<FundingInformationItem>> fundingByRegion = new HashMap<Long, ArrayList<FundingInformationItem>>();      
         for(Object[] item:fundingDets)
         {
-        	FundingInformationItem fd = (FundingInformationItem) item[0];
-        	FundingInformationItem currentFd;
-			if(fd.getTransactionType().equals(Constants.MTEFPROJECTION)){
-				currentFd=new AmpFundingMTEFProjection(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
-			}else{
-				currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
-			}
-        	Double finalAmount = currentFd.getAbsoluteTransactionAmount();
-        	for(int i = 3; i < item.length; i++)
-        		if (item[i] != null)
-        		{
-       				Float fl = (Float) item[i];
-       				finalAmount *= (fl / 100.0);
-        		}
-        	currentFd.setTransactionAmount(finalAmount);
-        	Long originald = (Long) item[1];
-        	Long regionId = locationToRegion.get(originald);
-        	if (regionId == null)
-        		continue; // this location has no region
-        	
-        	if (!fundingByRegion.containsKey(regionId))
-        		fundingByRegion.put(regionId, new ArrayList<FundingInformationItem>());
-        	
-        	fundingByRegion.get(regionId).add(currentFd);
+            FundingInformationItem fd = (FundingInformationItem) item[0];
+            FundingInformationItem currentFd;
+            if(fd.getTransactionType().equals(Constants.MTEFPROJECTION)){
+                currentFd=new AmpFundingMTEFProjection(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
+            }else{
+                currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
+            }
+            Double finalAmount = currentFd.getAbsoluteTransactionAmount();
+            for(int i = 3; i < item.length; i++)
+                if (item[i] != null)
+                {
+                    Float fl = (Float) item[i];
+                    finalAmount *= (fl / 100.0);
+                }
+            currentFd.setTransactionAmount(finalAmount);
+            Long originald = (Long) item[1];
+            Long regionId = locationToRegion.get(originald);
+            if (regionId == null)
+                continue; // this location has no region
+            
+            if (!fundingByRegion.containsKey(regionId))
+                fundingByRegion.put(regionId, new ArrayList<FundingInformationItem>());
+            
+            fundingByRegion.get(regionId).add(currentFd);
         }
         
-		ArrayList<SimpleLocation> regionTotals = new ArrayList<SimpleLocation>();
+        ArrayList<SimpleLocation> regionTotals = new ArrayList<SimpleLocation>();
         DecimalWraper totaldisbursement = null;
         DecimalWraper totalexpenditures = null;
         DecimalWraper totalcommitment = null;
@@ -233,36 +233,36 @@ public class DbHelper {
             //Long regionId = locationToRegion.get(locId);
             Long regionId = null;
             for (Map.Entry<Long, Long> e : locationToRegion.entrySet()) {
-            	if (e.getValue()==locId){
-            		regionId = e.getKey();
-            		break;
-            	}
+                if (e.getValue()==locId){
+                    regionId = e.getKey();
+                    break;
+                }
             }
             if (regionId!= 0L && regionId == null)
-            	continue;
+                continue;
 
-        	FundingCalculationsHelper cal = new FundingCalculationsHelper();
+            FundingCalculationsHelper cal = new FundingCalculationsHelper();
 
-        	ArrayList<FundingInformationItem> afda = fundingByRegion.get(locId);
+            ArrayList<FundingInformationItem> afda = fundingByRegion.get(locId);
             
             cal.doCalculations(afda, currCode, true);
            
             if (CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey().equals(adjustmentType.getValueKey())) {
-            	totalexpenditures = cal.getTotActualExp();
+                totalexpenditures = cal.getTotActualExp();
             } else {
-            	totalexpenditures = cal.getTotPlannedExp();
+                totalexpenditures = cal.getTotPlannedExp();
             }
             
             if (CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey().equals(adjustmentType.getValueKey())) {
-            	totaldisbursement = cal.getTotActualDisb();
+                totaldisbursement = cal.getTotActualDisb();
             } else {
-            	totaldisbursement = cal.getTotPlanDisb();
+                totaldisbursement = cal.getTotPlanDisb();
             }
             
             if (CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey().equals(adjustmentType.getValueKey())) {
-            	totalcommitment = cal.getTotActualComm();
+                totalcommitment = cal.getTotActualComm();
             } else {
-            	totalcommitment = cal.getTotPlannedComm();
+                totalcommitment = cal.getTotPlannedComm();
             }
 
             totalMtef = cal.getTotalMtef(); // no adjustment for MTEF
@@ -277,344 +277,344 @@ public class DbHelper {
             sl.setMtef(totalMtef.getValue().divide(divideByDenominator, RoundingMode.HALF_UP).setScale(decimalsToShow, RoundingMode.HALF_UP).toString());
             regionTotals.add(sl);
         }
-	
+    
         return regionTotals;
-	}
-	
-	
-	public static ArrayList<Long> getInActivitiesLong(String query)
-			throws Exception {
-		Session session = PersistenceManager.getRequestDBSession();
-		ArrayList<Long> result = (ArrayList<Long>) session.createSQLQuery(query).list();
-		return result;
-	}
-	
-	public static AmpCategoryValueLocations getTopLevelLocation(AmpCategoryValueLocations location, String level) {
-		if (level.equals("Region"))
-			if (location.getParentLocation() != null && !location.getParentLocation().getParentCategoryValue().getValue().equals("Country")) {
-				location = getTopLevelLocation(location.getParentLocation(), level);
-			}
-		if (level.equals("Zone"))
-			if (location.getParentLocation() != null && !location.getParentLocation().getParentCategoryValue().getValue().equals("Region")) {
-				location = getTopLevelLocation(location.getParentLocation(), level);
-			}
-		return location;
-	}
-	
-	public static List<AmpOrganisation> getDonorOrganisationByGroupId(
-			Long orgGroupId, boolean publicView) {
-		Session session = null;
-		Query q = null;
-		List<AmpOrganisation> organizations = new ArrayList<AmpOrganisation>();
-		StringBuilder queryString = new StringBuilder(
-				"select distinct org from "
-						+ AmpOrgRole.class.getName()
-						+ " orgRole inner join orgRole.role role inner join orgRole.organisation org ");
-		if (publicView) {
-			queryString
-					.append(" inner join orgRole.activity act  inner join act.team tm ");
-		}
-		queryString.append(" where  role.roleCode='DN' ");
-		if (orgGroupId != null && orgGroupId != -1) {
-			queryString.append(" and org.orgGrpId=:orgGroupId ");
-		}
-		if (publicView) {
-			queryString.append(String.format(" and (act.draft=false OR act.draft is null) and act.approvalStatus IN ('%s', '%s') and tm.parentTeamId is not null ", Constants.STARTED_APPROVED_STATUS, Constants.APPROVED_STATUS));
-		}
+    }
+    
+    
+    public static ArrayList<Long> getInActivitiesLong(String query)
+            throws Exception {
+        Session session = PersistenceManager.getRequestDBSession();
+        ArrayList<Long> result = (ArrayList<Long>) session.createSQLQuery(query).list();
+        return result;
+    }
+    
+    public static AmpCategoryValueLocations getTopLevelLocation(AmpCategoryValueLocations location, String level) {
+        if (level.equals("Region"))
+            if (location.getParentLocation() != null && !location.getParentLocation().getParentCategoryValue().getValue().equals("Country")) {
+                location = getTopLevelLocation(location.getParentLocation(), level);
+            }
+        if (level.equals("Zone"))
+            if (location.getParentLocation() != null && !location.getParentLocation().getParentCategoryValue().getValue().equals("Region")) {
+                location = getTopLevelLocation(location.getParentLocation(), level);
+            }
+        return location;
+    }
+    
+    public static List<AmpOrganisation> getDonorOrganisationByGroupId(
+            Long orgGroupId, boolean publicView) {
+        Session session = null;
+        Query q = null;
+        List<AmpOrganisation> organizations = new ArrayList<AmpOrganisation>();
+        StringBuilder queryString = new StringBuilder(
+                "select distinct org from "
+                        + AmpOrgRole.class.getName()
+                        + " orgRole inner join orgRole.role role inner join orgRole.organisation org ");
+        if (publicView) {
+            queryString
+                    .append(" inner join orgRole.activity act  inner join act.team tm ");
+        }
+        queryString.append(" where  role.roleCode='DN' ");
+        if (orgGroupId != null && orgGroupId != -1) {
+            queryString.append(" and org.orgGrpId=:orgGroupId ");
+        }
+        if (publicView) {
+            queryString.append(String.format(" and (act.draft=false OR act.draft is null) and act.approvalStatus IN ('%s', '%s') and tm.parentTeamId is not null ", Constants.STARTED_APPROVED_STATUS, Constants.APPROVED_STATUS));
+        }
 
-		queryString.append("order by org.name asc");
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			q = session.createQuery(queryString.toString());
-			if (orgGroupId != null && orgGroupId != -1) {
-				q.setLong("orgGroupId", orgGroupId);
-			}
-			organizations = q.list();
-		} catch (Exception ex) {
-			logger.error("Unable to get Amp organization names from database ",
-					ex);
-		}
-		return organizations;
-	}
+        queryString.append("order by org.name asc");
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            q = session.createQuery(queryString.toString());
+            if (orgGroupId != null && orgGroupId != -1) {
+                q.setLong("orgGroupId", orgGroupId);
+            }
+            organizations = q.list();
+        } catch (Exception ex) {
+            logger.error("Unable to get Amp organization names from database ",
+                    ex);
+        }
+        return organizations;
+    }
 
-	public static List<AmpOrganisation> getDonorOrganisationByType(
-			Long orgTypeId, boolean publicView) {
-		Session session = null;
-		Query q = null;
-		List<AmpOrganisation> organizations = new ArrayList<AmpOrganisation>();
-		StringBuilder queryString = new StringBuilder(
-				"select distinct org from "
-						+ AmpOrgRole.class.getName()
-						+ " orgRole inner join orgRole.role role inner join orgRole.organisation org ");
-		if (publicView) {
-			queryString
-					.append(" inner join orgRole.activity act  inner join act.team tm ");
-		}
-		queryString.append(" where  role.roleCode='DN' ");
-		if (orgTypeId != null && orgTypeId != -1) {
-			queryString.append(" and org.orgGrpId.orgType=:orgtypeId ");
-		}
-		if (publicView) {
-			queryString.append(String.format(" and (act.draft=false OR act.draft is null) and act.approvalStatus in ('%s', '%s') and tm.parentTeamId is not null ", Constants.STARTED_APPROVED_STATUS, Constants.APPROVED_STATUS));
-		}
+    public static List<AmpOrganisation> getDonorOrganisationByType(
+            Long orgTypeId, boolean publicView) {
+        Session session = null;
+        Query q = null;
+        List<AmpOrganisation> organizations = new ArrayList<AmpOrganisation>();
+        StringBuilder queryString = new StringBuilder(
+                "select distinct org from "
+                        + AmpOrgRole.class.getName()
+                        + " orgRole inner join orgRole.role role inner join orgRole.organisation org ");
+        if (publicView) {
+            queryString
+                    .append(" inner join orgRole.activity act  inner join act.team tm ");
+        }
+        queryString.append(" where  role.roleCode='DN' ");
+        if (orgTypeId != null && orgTypeId != -1) {
+            queryString.append(" and org.orgGrpId.orgType=:orgtypeId ");
+        }
+        if (publicView) {
+            queryString.append(String.format(" and (act.draft=false OR act.draft is null) and act.approvalStatus in ('%s', '%s') and tm.parentTeamId is not null ", Constants.STARTED_APPROVED_STATUS, Constants.APPROVED_STATUS));
+        }
 
-		queryString.append("order by org.name asc");
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			q = session.createQuery(queryString.toString());
-			if (orgTypeId != null && orgTypeId != -1) {
-				q.setLong("orgtypeId", orgTypeId);
-			}
-			organizations = q.list();
-		} catch (Exception ex) {
-			logger.error("Unable to get Amp organization names from database ",
-					ex);
-		}
-		return organizations;
-	}
+        queryString.append("order by org.name asc");
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            q = session.createQuery(queryString.toString());
+            if (orgTypeId != null && orgTypeId != -1) {
+                q.setLong("orgtypeId", orgTypeId);
+            }
+            organizations = q.list();
+        } catch (Exception ex) {
+            logger.error("Unable to get Amp organization names from database ",
+                    ex);
+        }
+        return organizations;
+    }
 
-	public static Collection<AmpStructureType> getAllStructureTypes() {
-		Session session = null;
-		Query q = null;
-		List<AmpStructureType> sts = new ArrayList<AmpStructureType>();
-		StringBuilder queryString = new StringBuilder(
-				"select structure_type from "
-						+ AmpStructureType.class.getName() + " structure_type ");
-		queryString.append("order by " + AmpStructureType.hqlStringForName("structure_type") + " asc");
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			q = session.createQuery(queryString.toString());
-			sts = q.list();
-		} catch (Exception ex) {
-			logger.error("Unable to get Amp Structure Types from database ", ex);
-		}
-		return sts;
-	}
+    public static Collection<AmpStructureType> getAllStructureTypes() {
+        Session session = null;
+        Query q = null;
+        List<AmpStructureType> sts = new ArrayList<AmpStructureType>();
+        StringBuilder queryString = new StringBuilder(
+                "select structure_type from "
+                        + AmpStructureType.class.getName() + " structure_type ");
+        queryString.append("order by " + AmpStructureType.hqlStringForName("structure_type") + " asc");
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            q = session.createQuery(queryString.toString());
+            sts = q.list();
+        } catch (Exception ex) {
+            logger.error("Unable to get Amp Structure Types from database ", ex);
+        }
+        return sts;
+    }
 
-	public static AmpStructureType getStructureTypesByName(String name) {
-		Session session = null;
-		Query q = null;
-		AmpStructureType stt = null;
-		ArrayList result;
-		StringBuilder queryString = new StringBuilder("select st from "
-				+ AmpStructureType.class.getName() + " st ");
-		queryString.append("where " + AmpStructureType.hqlStringForName("st") + "=:name");
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			q = session.createQuery(queryString.toString());
-			q.setString("name", name.trim());
-			result = (ArrayList) q.list();
-			if (result.size() > 0) {
-				stt = (AmpStructureType) result.get(0);
-			}
-		} catch (Exception ex) {
-			logger.error("Unable to get Amp Structure Type from database "
-					+ name + " ", ex);
-		}
-		return stt;
-	}
+    public static AmpStructureType getStructureTypesByName(String name) {
+        Session session = null;
+        Query q = null;
+        AmpStructureType stt = null;
+        ArrayList result;
+        StringBuilder queryString = new StringBuilder("select st from "
+                + AmpStructureType.class.getName() + " st ");
+        queryString.append("where " + AmpStructureType.hqlStringForName("st") + "=:name");
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            q = session.createQuery(queryString.toString());
+            q.setString("name", name.trim());
+            result = (ArrayList) q.list();
+            if (result.size() > 0) {
+                stt = (AmpStructureType) result.get(0);
+            }
+        } catch (Exception ex) {
+            logger.error("Unable to get Amp Structure Type from database "
+                    + name + " ", ex);
+        }
+        return stt;
+    }
 
-	public static Set<AmpActivity> getActivityByAmpId(String id) {
-		Session session = null;
-		Query q = null;
-		Set<AmpActivity> activities = null;
-		StringBuilder queryString = new StringBuilder("select a from "
-				+ AmpActivity.class.getName() + " a ");
-		queryString.append("where a.ampId=:id");
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			q = session.createQuery(queryString.toString());
-			q.setString("id", id);
-			activities = new HashSet<AmpActivity>(q.list());
+    public static Set<AmpActivity> getActivityByAmpId(String id) {
+        Session session = null;
+        Query q = null;
+        Set<AmpActivity> activities = null;
+        StringBuilder queryString = new StringBuilder("select a from "
+                + AmpActivity.class.getName() + " a ");
+        queryString.append("where a.ampId=:id");
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            q = session.createQuery(queryString.toString());
+            q.setString("id", id);
+            activities = new HashSet<AmpActivity>(q.list());
 
-		} catch (Exception ex) {
-			logger.error("Unable to get Amp Structure Type from database ", ex);
-		}
-		return activities;
-	}
+        } catch (Exception ex) {
+            logger.error("Unable to get Amp Structure Type from database ", ex);
+        }
+        return activities;
+    }
 
-	public static AmpActivityVersion getActivityById(Long id) {
-		Session session = null;
-		AmpActivityVersion activity = null;
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			activity = (AmpActivityVersion) session.load(
-					AmpActivityVersion.class, id);
+    public static AmpActivityVersion getActivityById(Long id) {
+        Session session = null;
+        AmpActivityVersion activity = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            activity = (AmpActivityVersion) session.load(
+                    AmpActivityVersion.class, id);
 
-		} catch (Exception ex) {
-			logger.error("Unable to get Amp Structure Type from database ", ex);
-		}
-		return activity;
-	}
+        } catch (Exception ex) {
+            logger.error("Unable to get Amp Structure Type from database ", ex);
+        }
+        return activity;
+    }
 
-	public static List<AmpMapConfig> getMaps() {
-		Session session = null;
-		Query q = null;
-		List<AmpMapConfig> maps = new ArrayList<AmpMapConfig>();
-		StringBuilder queryString = new StringBuilder("select a from "
-				+ AmpMapConfig.class.getName() + " a");
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			q = session.createQuery(queryString.toString());
-			maps = q.list();
-		} catch (Exception ex) {
-			logger.error("Unable to get maps from database ", ex);
-		}
-		return maps;
-	}
+    public static List<AmpMapConfig> getMaps() {
+        Session session = null;
+        Query q = null;
+        List<AmpMapConfig> maps = new ArrayList<AmpMapConfig>();
+        StringBuilder queryString = new StringBuilder("select a from "
+                + AmpMapConfig.class.getName() + " a");
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            q = session.createQuery(queryString.toString());
+            maps = q.list();
+        } catch (Exception ex) {
+            logger.error("Unable to get maps from database ", ex);
+        }
+        return maps;
+    }
 
-	public static AmpStructureType getStructureType(Long structureTypeId) {
-		Session session = null;
-		AmpStructureType ampStructureType = null;
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			ampStructureType = (AmpStructureType) session.load(
-					AmpStructureType.class, structureTypeId);
-		} catch (Exception e) {
-			logger.error("Unable to get object of class "
-					+ AmpStructureType.class.getName() + " width id="
-					+ structureTypeId + ". Error was:" + e);
-		}
-		return ampStructureType;
-	}
-	public static void deleteStructureType(AmpStructureType structureType) throws AdminException {
-		Session sess = null;
-		Transaction tx = null;
+    public static AmpStructureType getStructureType(Long structureTypeId) {
+        Session session = null;
+        AmpStructureType ampStructureType = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            ampStructureType = (AmpStructureType) session.load(
+                    AmpStructureType.class, structureTypeId);
+        } catch (Exception e) {
+            logger.error("Unable to get object of class "
+                    + AmpStructureType.class.getName() + " width id="
+                    + structureTypeId + ". Error was:" + e);
+        }
+        return ampStructureType;
+    }
+    public static void deleteStructureType(AmpStructureType structureType) throws AdminException {
+        Session sess = null;
+        Transaction tx = null;
 
-		try {
-			sess = PersistenceManager.getRequestDBSession();
+        try {
+            sess = PersistenceManager.getRequestDBSession();
             Query q = sess.createQuery("select st from " + AmpStructure.class.getName() + " st where st.type.typeId=:typeId "  );
             q.setLong("typeId", structureType.getTypeId());
             if (!q.list().isEmpty()){
-            	throw new AdminException("The Structure Type is being referenced, it can not be deleted.");	
-            }	
-			
+                throw new AdminException("The Structure Type is being referenced, it can not be deleted."); 
+            }   
+            
 //beginTransaction();
-			sess.delete(structureType);
-			//tx.commit();
-		}
-		catch (Exception e) {
-			if (e instanceof AdminException){
-				throw (AdminException)e;
-			}
-			if (e instanceof JDBCException)
-				throw (JDBCException) e;
-			logger.error("Exception " + e.toString());
-			try {
-				tx.rollback();
-			} catch (HibernateException ex) {
-				logger.error("rollback() failed");
-				logger.error(ex.toString());
-			}
-		}
+            sess.delete(structureType);
+            //tx.commit();
+        }
+        catch (Exception e) {
+            if (e instanceof AdminException){
+                throw (AdminException)e;
+            }
+            if (e instanceof JDBCException)
+                throw (JDBCException) e;
+            logger.error("Exception " + e.toString());
+            try {
+                tx.rollback();
+            } catch (HibernateException ex) {
+                logger.error("rollback() failed");
+                logger.error(ex.toString());
+            }
+        }
 
-	}
+    }
 
-	public static void saveStructure(AmpStructure structure) {
-		Session session = null;
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			session.save(structure);
+    public static void saveStructure(AmpStructure structure) {
+        Session session = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            session.save(structure);
 
-		} catch (Exception e) {
-			logger.error("Unable to save structure type", e);
-		}
+        } catch (Exception e) {
+            logger.error("Unable to save structure type", e);
+        }
 
-	}
+    }
 
-	public static void saveStructureType(AmpStructureType structureType) {
-		Session session = null;
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			session.save(structureType);
+    public static void saveStructureType(AmpStructureType structureType) {
+        Session session = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            session.save(structureType);
 
-		} catch (Exception e) {
-			logger.error("Unable to save structure type", e);
-		}
+        } catch (Exception e) {
+            logger.error("Unable to save structure type", e);
+        }
 
-	}
+    }
 
-	public static void saveMapConfig(AmpMapConfig map) {
-		Session session = null;
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			session.save(map);
-		} catch (Exception e) {
-			logger.error("Unable to save structure type", e);
-		}
+    public static void saveMapConfig(AmpMapConfig map) {
+        Session session = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            session.save(map);
+        } catch (Exception e) {
+            logger.error("Unable to save structure type", e);
+        }
 
-	}
+    }
 
-	private static Long[] getAllDescendants(Long[] sectorIds,
-			ArrayList<AmpSector> allSectorList) {
-		// Go through the list to determine the children
-		List<Long> tempSectorIds = new ArrayList<Long>();
-		for (AmpSector as : allSectorList) {
-			if(sectorIds != null) {
-				for (Long i : sectorIds) {
-					if (!tempSectorIds.contains(i))
-						tempSectorIds.add(i);
-					if (as.getParentSectorId() != null
-							&& as.getParentSectorId().getAmpSectorId().equals(i)) {
-						tempSectorIds.add(as.getAmpSectorId());
-					} else if (as.getParentSectorId() != null
-							&& as.getParentSectorId().getParentSectorId() != null
-							&& as.getParentSectorId().getParentSectorId()
-									.getAmpSectorId().equals(i)) {
-						tempSectorIds.add(as.getAmpSectorId());
-					}
-				}
-			} else {
-				tempSectorIds.add(new Long(-1));
-			}
-		}
-		return (Long[]) tempSectorIds.toArray(new Long[0]);
-	}
+    private static Long[] getAllDescendants(Long[] sectorIds,
+            ArrayList<AmpSector> allSectorList) {
+        // Go through the list to determine the children
+        List<Long> tempSectorIds = new ArrayList<Long>();
+        for (AmpSector as : allSectorList) {
+            if(sectorIds != null) {
+                for (Long i : sectorIds) {
+                    if (!tempSectorIds.contains(i))
+                        tempSectorIds.add(i);
+                    if (as.getParentSectorId() != null
+                            && as.getParentSectorId().getAmpSectorId().equals(i)) {
+                        tempSectorIds.add(as.getAmpSectorId());
+                    } else if (as.getParentSectorId() != null
+                            && as.getParentSectorId().getParentSectorId() != null
+                            && as.getParentSectorId().getParentSectorId()
+                                    .getAmpSectorId().equals(i)) {
+                        tempSectorIds.add(as.getAmpSectorId());
+                    }
+                }
+            } else {
+                tempSectorIds.add(new Long(-1));
+            }
+        }
+        return (Long[]) tempSectorIds.toArray(new Long[0]);
+    }
 
-	public static Long[] getAllDescendantsLocation(Long[] locationIds) 
-	{
-		Set<Long> ids = DynLocationManagerUtil.getRecursiveChildrenOfCategoryValueLocations(Arrays.asList(locationIds), false);
-		return (Long[]) ids.toArray(new Long[0]);
-	}
+    public static Long[] getAllDescendantsLocation(Long[] locationIds) 
+    {
+        Set<Long> ids = DynLocationManagerUtil.getRecursiveChildrenOfCategoryValueLocations(Arrays.asList(locationIds), false);
+        return (Long[]) ids.toArray(new Long[0]);
+    }
 
-	public static AmpMapConfig getMapByType(Integer mapType) {
-		Session session = null;
-		Query q = null;
-		AmpMapConfig map = new AmpMapConfig();
-		StringBuilder queryString = new StringBuilder("select a from "
-				+ AmpMapConfig.class.getName() + " a where mapType = :mapType ");
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			q = session.createQuery(queryString.toString());
-			q.setInteger("mapType", mapType);
-			List<AmpMapConfig> maps = q.list();
-			if (maps.size() > 0)
-				map = maps.get(0);
-			else
-				map = null;
-		} catch (Exception ex) {
-			logger.error("Unable to get individual map from database, of type: " + mapType, ex);
-		}
-		return map;
-	}
+    public static AmpMapConfig getMapByType(Integer mapType) {
+        Session session = null;
+        Query q = null;
+        AmpMapConfig map = new AmpMapConfig();
+        StringBuilder queryString = new StringBuilder("select a from "
+                + AmpMapConfig.class.getName() + " a where mapType = :mapType ");
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            q = session.createQuery(queryString.toString());
+            q.setInteger("mapType", mapType);
+            List<AmpMapConfig> maps = q.list();
+            if (maps.size() > 0)
+                map = maps.get(0);
+            else
+                map = null;
+        } catch (Exception ex) {
+            logger.error("Unable to get individual map from database, of type: " + mapType, ex);
+        }
+        return map;
+    }
 
-	public static List<AmpMapConfig> getMapsBySubType(Integer mapSubType) {
-		Session session = null;
-		Query q = null;
-		
-		List<AmpMapConfig> maps = new ArrayList<AmpMapConfig>();
-		StringBuilder queryString = new StringBuilder("select a from "
-				+ AmpMapConfig.class.getName() + " a where mapSubType = :mapSubType ");
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			q = session.createQuery(queryString.toString());
-			q.setInteger("mapSubType", mapSubType);
-			maps = q.list();
-		} catch (Exception ex) {
-			logger.error("Unable to get individual map from database, of type: " + mapSubType, ex);
-		}
-		return maps;		
-	}
+    public static List<AmpMapConfig> getMapsBySubType(Integer mapSubType) {
+        Session session = null;
+        Query q = null;
+        
+        List<AmpMapConfig> maps = new ArrayList<AmpMapConfig>();
+        StringBuilder queryString = new StringBuilder("select a from "
+                + AmpMapConfig.class.getName() + " a where mapSubType = :mapSubType ");
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            q = session.createQuery(queryString.toString());
+            q.setInteger("mapSubType", mapSubType);
+            maps = q.list();
+        } catch (Exception ex) {
+            logger.error("Unable to get individual map from database, of type: " + mapSubType, ex);
+        }
+        return maps;        
+    }
 
     public static List<AmpCategoryValue> getPeacebuildingMarkers() {
         List<AmpCategoryValue> retVal = null;

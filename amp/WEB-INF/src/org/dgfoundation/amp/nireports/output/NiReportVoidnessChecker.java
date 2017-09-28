@@ -9,19 +9,19 @@ import org.dgfoundation.amp.nireports.runtime.CellColumn;
  */
 public class NiReportVoidnessChecker implements NiReportDataVisitor<Boolean> {
 
-	protected final CellColumn cc;
-	
-	public NiReportVoidnessChecker(CellColumn cc) {
-		this.cc = cc;
-	}	
+    protected final CellColumn cc;
+    
+    public NiReportVoidnessChecker(CellColumn cc) {
+        this.cc = cc;
+    }   
 
-	@Override
-	public Boolean visit(NiColumnReportData crd) {
-		return crd.contents.get(cc).isEmpty();
-	}
+    @Override
+    public Boolean visit(NiColumnReportData crd) {
+        return crd.contents.get(cc).isEmpty();
+    }
 
-	@Override
-	public Boolean visit(NiGroupReportData grd) {
-		return grd.subreports.stream().allMatch(z -> z.accept(this));
-	}
+    @Override
+    public Boolean visit(NiGroupReportData grd) {
+        return grd.subreports.stream().allMatch(z -> z.accept(this));
+    }
 }

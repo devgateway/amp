@@ -31,8 +31,8 @@ public class AddSelectedSectors
                                javax.servlet.http.HttpServletResponse response) throws
       Exception {
 
-	  HttpSession session = request.getSession();  
-	  
+      HttpSession session = request.getSession();  
+      
     eaForm = (SelectSectorForm) form;
     List sectors=new ArrayList();
     ActionMessages errors = new ActionMessages();
@@ -46,7 +46,7 @@ public class AddSelectedSectors
    
     if(removedsectorId != null && eaForm.getCols() != null ){
      for(int i= 0;  i < removedsectorId.length; i++){
-       	   checkDuplicateremove(removedsectorId[i]);
+           checkDuplicateremove(removedsectorId[i]);
          }
     }
  
@@ -80,11 +80,11 @@ public class AddSelectedSectors
       for (int i = 0; i < selsearchedSector.length; i++) {
         
         if(sctr.getSubsectorLevel2Id() == -1 && sctr.getSubsectorLevel1Id() != -1){
-        	sectorId = sctr.getSubsectorLevel1Id();
+            sectorId = sctr.getSubsectorLevel1Id();
         }else if(sctr.getSubsectorLevel1Id() == -1){
-        	sectorId = sctr.getSectorId();
+            sectorId = sctr.getSectorId();
         }else{
-        	sectorId = sctr.getSubsectorLevel2Id();
+            sectorId = sctr.getSubsectorLevel2Id();
         }
         
         logger.info("getsectorid: " + sectorId +
@@ -128,7 +128,7 @@ public class AddSelectedSectors
     }
 
     //checking duplicates
-    //	Sector dup = null;
+    //  Sector dup = null;
 
     if (request.getParameter("addButton") != null && !isDuplicated) {
       session.setAttribute("sectorSelected", sectr);
@@ -147,17 +147,17 @@ public class AddSelectedSectors
   }
 
   public boolean checkDuplicateremove(Long id){
-	  Iterator itr = eaForm.getCols().iterator();
-	  ActivitySector sector;
-	   boolean flag = false;
-	  while (itr.hasNext()) {
-		  sector = (ActivitySector) itr.next();
-		  if(sector.getSubsectorLevel2Id().equals(id) || sector.getSubsectorLevel1Id().equals(id) || sector.getSectorId().equals(id)){
-			  eaForm.getCols().remove(sector);
-			  break;
-		  }
-	  }
-	  return true;
+      Iterator itr = eaForm.getCols().iterator();
+      ActivitySector sector;
+       boolean flag = false;
+      while (itr.hasNext()) {
+          sector = (ActivitySector) itr.next();
+          if(sector.getSubsectorLevel2Id().equals(id) || sector.getSubsectorLevel1Id().equals(id) || sector.getSectorId().equals(id)){
+              eaForm.getCols().remove(sector);
+              break;
+          }
+      }
+      return true;
   }
   
   public boolean checkDuplicate(ActivitySector dup) {

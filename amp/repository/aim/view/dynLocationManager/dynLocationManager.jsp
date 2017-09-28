@@ -224,7 +224,7 @@
 	 }
 	 
 </script>
- <div style="margin:0 auto;width:1000px;">
+ <div style="margin:0 auto;width:1000px;" class="admin-content">
 <bean:define id="myForm" toScope="request" name="aimDynLocationManagerForm" />
 <table bgColor="#ffffff" cellPadding="0" cellSpacing="0" width="90%" class="box-border-nopadding">
 	<tr>
@@ -252,7 +252,7 @@
 				<!-- </tr> -->
 				<tr>
 					<td height="16" vAlign="center" width="571">
-					<h1 class="admintitle" style="text-align:left;">
+					<h1 class="admintitle" >
 							<digi:trn key="aim:regionManager">
 								Region Manager
 							</digi:trn>

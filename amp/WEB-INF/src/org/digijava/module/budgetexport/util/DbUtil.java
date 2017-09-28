@@ -27,7 +27,7 @@ import java.util.Set;
  * To change this template use File | Settings | File Templates.
  */
 public class DbUtil {
-    private static Logger logger	= Logger.getLogger(DbUtil.class);
+    private static Logger logger    = Logger.getLogger(DbUtil.class);
     public static void saveOrUpdateProject (AmpBudgetExportProject project) throws DgException {
         try {
             Session sess = PersistenceManager.getRequestDBSession();

@@ -24,10 +24,10 @@ import org.apache.log4j.Logger;
 
 public class DesktopDocumentsUtil {
 
-	protected static final Logger logger = Logger.getLogger(DesktopDocumentsUtil.class);
+    protected static final Logger logger = Logger.getLogger(DesktopDocumentsUtil.class);
 
-	public Collection<DocumentData> getLatestDesktopLinks(HttpServletRequest request, int top) {
-		ArrayList<DocumentData> reducedList = null;
+    public Collection<DocumentData> getLatestDesktopLinks(HttpServletRequest request, int top) {
+        ArrayList<DocumentData> reducedList = null;
 
         HttpSession session = request.getSession();
         TeamMember tm = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
@@ -58,16 +58,16 @@ public class DesktopDocumentsUtil {
         Collections.sort(allDocuments, new Comparator<DocumentData>() {
             @Override
             public int compare(DocumentData o1, DocumentData o2) {
-            	if(o1 == null) {
-            		if (o2 == null)
-            			return 0;
-            		return -1;
-            	} 
-            	
-            	if (o2 == null) 
-            		return 1;
+                if(o1 == null) {
+                    if (o2 == null)
+                        return 0;
+                    return -1;
+                } 
                 
-            	return o2.getDate().compareTo(o1.getDate());
+                if (o2 == null) 
+                    return 1;
+                
+                return o2.getDate().compareTo(o1.getDate());
             }
         });
 
@@ -84,141 +84,141 @@ public class DesktopDocumentsUtil {
         }
         DocumentManagerUtil.logoutJcrSessions(request);
 
-		return reducedList;
-	}
+        return reducedList;
+    }
 
-	public List<DocumentData> getPrivateDocuments(TeamMember teamMember, Node rootNode, HttpServletRequest request) {
-		Node userNode;
-		try {
-			userNode = DocumentManagerUtil.getUserPrivateNode(rootNode.getSession(), teamMember);
-		} catch (RepositoryException e) {
-			logger.warn("Failed to read user private documents from the Repository", e);
-			return Collections.emptyList();
-		}
-		return getDocuments(userNode, request);
-	}
+    public List<DocumentData> getPrivateDocuments(TeamMember teamMember, Node rootNode, HttpServletRequest request) {
+        Node userNode;
+        try {
+            userNode = DocumentManagerUtil.getUserPrivateNode(rootNode.getSession(), teamMember);
+        } catch (RepositoryException e) {
+            logger.warn("Failed to read user private documents from the Repository", e);
+            return Collections.emptyList();
+        }
+        return getDocuments(userNode, request);
+    }
 
-	public List<DocumentData> getTeamDocuments(TeamMember teamMember, Node rootNode, HttpServletRequest request) {
-		Node teamNode;
-		try {
-			teamNode = DocumentManagerUtil.getTeamNode(rootNode.getSession(), teamMember.getTeamId());
-		} catch (RepositoryException e) {
+    public List<DocumentData> getTeamDocuments(TeamMember teamMember, Node rootNode, HttpServletRequest request) {
+        Node teamNode;
+        try {
+            teamNode = DocumentManagerUtil.getTeamNode(rootNode.getSession(), teamMember.getTeamId());
+        } catch (RepositoryException e) {
             logger.warn("Failed to read team documents from the Repository", e);
             return Collections.emptyList();
-		}
-		return getDocuments(teamNode, request);
-	}
+        }
+        return getDocuments(teamNode, request);
+    }
 
-	private List<DocumentData> getDocuments(Node node, HttpServletRequest request) {
-		try {
-			NodeIterator nodeIterator = node.getNodes();
-			return getDocuments(nodeIterator, request);
-		} catch (RepositoryException e) {
+    private List<DocumentData> getDocuments(Node node, HttpServletRequest request) {
+        try {
+            NodeIterator nodeIterator = node.getNodes();
+            return getDocuments(nodeIterator, request);
+        } catch (RepositoryException e) {
             logger.warn("Failed to read documents from the Repository", e);
             return Collections.emptyList();
-		}
-	}
+        }
+    }
 
-	private List<DocumentData> getDocuments(Iterator nodeIterator, HttpServletRequest request) {
-		ArrayList<DocumentData> documents = new ArrayList<DocumentData>();
-		HashMap<String, CrDocumentNodeAttributes> uuidMapOrg = CrDocumentNodeAttributes.getPublicDocumentsMap(false);
-		HashMap<String, CrDocumentNodeAttributes> uuidMapVer = CrDocumentNodeAttributes.getPublicDocumentsMap(true);
-		Boolean hasMakePublicRights = DocumentManagerRights.hasMakePublicRights(request);
-		
-		List<String> gpiSupportiveDocuments = DocumentUtil.getAllSupportiveDocumentsUUID();
+    private List<DocumentData> getDocuments(Iterator nodeIterator, HttpServletRequest request) {
+        ArrayList<DocumentData> documents = new ArrayList<DocumentData>();
+        HashMap<String, CrDocumentNodeAttributes> uuidMapOrg = CrDocumentNodeAttributes.getPublicDocumentsMap(false);
+        HashMap<String, CrDocumentNodeAttributes> uuidMapVer = CrDocumentNodeAttributes.getPublicDocumentsMap(true);
+        Boolean hasMakePublicRights = DocumentManagerRights.hasMakePublicRights(request);
+        
+        List<String> gpiSupportiveDocuments = DocumentUtil.getAllSupportiveDocumentsUUID();
 
-		try {
-			while (nodeIterator.hasNext()) {
-				Node documentNode = (Node) nodeIterator.next();
-				
-				// hide gpi supportive documents
-				if (gpiSupportiveDocuments.contains(documentNode.getIdentifier())) {
-					continue;
-				}
-				
-				NodeWrapper nodeWrapper = new NodeWrapper(documentNode);
-				Boolean hasViewRights = false;
-				Boolean hasShowVersionsRights = false;
-				Boolean hasVersioningRights = false;
-				Boolean hasDeleteRights = false;
-				Boolean hasDeleteRightsOnPublicVersion = false;
+        try {
+            while (nodeIterator.hasNext()) {
+                Node documentNode = (Node) nodeIterator.next();
+                
+                // hide gpi supportive documents
+                if (gpiSupportiveDocuments.contains(documentNode.getIdentifier())) {
+                    continue;
+                }
+                
+                NodeWrapper nodeWrapper = new NodeWrapper(documentNode);
+                Boolean hasViewRights = false;
+                Boolean hasShowVersionsRights = false;
+                Boolean hasVersioningRights = false;
+                Boolean hasDeleteRights = false;
+                Boolean hasDeleteRightsOnPublicVersion = false;
 
-				String uuid = documentNode.getIdentifier();
-				boolean isPublicVersion = uuidMapVer.containsKey(uuid);
+                String uuid = documentNode.getIdentifier();
+                boolean isPublicVersion = uuidMapVer.containsKey(uuid);
 
-				if (isPublicVersion) { // This document is public and exactly
-					// this version is the public one
-					hasViewRights = true;
-				} else
-					hasViewRights = DocumentManagerRights.hasViewRights(documentNode, request);
+                if (isPublicVersion) { // This document is public and exactly
+                    // this version is the public one
+                    hasViewRights = true;
+                } else
+                    hasViewRights = DocumentManagerRights.hasViewRights(documentNode, request);
 
-				if (hasViewRights == null || !hasViewRights) {
-					continue;
-				}
+                if (hasViewRights == null || !hasViewRights) {
+                    continue;
+                }
 
-				String fileName = nodeWrapper.getName();
-				if (fileName == null && nodeWrapper.getWebLink() == null)
-					continue;
+                String fileName = nodeWrapper.getName();
+                if (fileName == null && nodeWrapper.getWebLink() == null)
+                    continue;
 
-				DocumentData documentData = DocumentData.buildFromNodeWrapper(nodeWrapper, fileName, null, null);
+                DocumentData documentData = DocumentData.buildFromNodeWrapper(nodeWrapper, fileName, null, null);
 
-				if (!isPublicVersion) {
-					hasShowVersionsRights = DocumentManagerRights.hasShowVersionsRights(documentNode, request);
-					if (hasShowVersionsRights != null)
-						documentData.setHasShowVersionsRights(hasShowVersionsRights);
+                if (!isPublicVersion) {
+                    hasShowVersionsRights = DocumentManagerRights.hasShowVersionsRights(documentNode, request);
+                    if (hasShowVersionsRights != null)
+                        documentData.setHasShowVersionsRights(hasShowVersionsRights);
 
-					hasVersioningRights = DocumentManagerRights.hasVersioningRights(documentNode, request);
-					if (hasVersioningRights != null) {
-						documentData.setHasVersioningRights(hasVersioningRights);
-					}
+                    hasVersioningRights = DocumentManagerRights.hasVersioningRights(documentNode, request);
+                    if (hasVersioningRights != null) {
+                        documentData.setHasVersioningRights(hasVersioningRights);
+                    }
 
-					hasDeleteRights = DocumentManagerRights.hasDeleteRights(documentNode, request);
-					if (hasDeleteRights != null) {
-						documentData.setHasDeleteRights(hasDeleteRights);
-					}
+                    hasDeleteRights = DocumentManagerRights.hasDeleteRights(documentNode, request);
+                    if (hasDeleteRights != null) {
+                        documentData.setHasDeleteRights(hasDeleteRights);
+                    }
 
-					if (hasMakePublicRights != null) {
-						documentData.setHasMakePublicRights(hasMakePublicRights);
-					}
+                    if (hasMakePublicRights != null) {
+                        documentData.setHasMakePublicRights(hasMakePublicRights);
+                    }
 
-					hasDeleteRightsOnPublicVersion = DocumentManagerRights.hasDeleteRightsOnPublicVersion(documentNode, request);
-					if (hasDeleteRightsOnPublicVersion != null) {
-						documentData.setHasDeleteRightsOnPublicVersion(hasDeleteRightsOnPublicVersion);
-					}
+                    hasDeleteRightsOnPublicVersion = DocumentManagerRights.hasDeleteRightsOnPublicVersion(documentNode, request);
+                    if (hasDeleteRightsOnPublicVersion != null) {
+                        documentData.setHasDeleteRightsOnPublicVersion(hasDeleteRightsOnPublicVersion);
+                    }
 
-					if (uuidMapOrg.containsKey(uuid)) {
-						documentData.setIsPublic(true);
+                    if (uuidMapOrg.containsKey(uuid)) {
+                        documentData.setIsPublic(true);
 
-						// Verify if the last (current) version is the public
-						// one.
-						Node lastVersion = DocumentManagerUtil.getNodeOfLastVersion(uuid, request);
-						String lastVerUUID = lastVersion.getIdentifier();
-						if (uuidMapVer.containsKey(lastVerUUID)) {
-							documentData.setLastVersionIsPublic(true);
-						}
-					} else
-						documentData.setIsPublic(false);
-				} else {
-					// This is not the actual document node. It is the node of the
-					// public version. That's why one shouldn't have
-					// the above rights.
-					
-					documentData.setShowVersionHistory(false);
-				}
-				
-				if (nodeWrapper.getCalendarDate() != null) {
-					documentData.setDate(nodeWrapper.getCalendarDate().getTime());
-				}
-				
-				documents.add(documentData);
-			}
+                        // Verify if the last (current) version is the public
+                        // one.
+                        Node lastVersion = DocumentManagerUtil.getNodeOfLastVersion(uuid, request);
+                        String lastVerUUID = lastVersion.getIdentifier();
+                        if (uuidMapVer.containsKey(lastVerUUID)) {
+                            documentData.setLastVersionIsPublic(true);
+                        }
+                    } else
+                        documentData.setIsPublic(false);
+                } else {
+                    // This is not the actual document node. It is the node of the
+                    // public version. That's why one shouldn't have
+                    // the above rights.
+                    
+                    documentData.setShowVersionHistory(false);
+                }
+                
+                if (nodeWrapper.getCalendarDate() != null) {
+                    documentData.setDate(nodeWrapper.getCalendarDate().getTime());
+                }
+                
+                documents.add(documentData);
+            }
 
-		} catch (RepositoryException | CrException e) {
+        } catch (RepositoryException | CrException e) {
             logger.warn("Failed to read documents from the Repository", e);
-			return Collections.emptyList();
-		}
+            return Collections.emptyList();
+        }
 
-		return documents;
-	}
-	
+        return documents;
+    }
+    
 }

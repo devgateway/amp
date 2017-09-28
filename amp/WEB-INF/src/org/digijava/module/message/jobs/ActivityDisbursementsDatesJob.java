@@ -18,8 +18,8 @@ import org.digijava.module.message.dbentity.AmpMessageSettings;
 import java.text.SimpleDateFormat;
 
 public class ActivityDisbursementsDatesJob extends ConnectionCleaningJob  implements StatefulJob {
-	
-	@Override public void executeInternal(JobExecutionContext context) throws JobExecutionException{
+    
+    @Override public void executeInternal(JobExecutionContext context) throws JobExecutionException{
 
         Date curDate=new Date();
         Date dateAfterDays=null;
@@ -38,7 +38,7 @@ public class ActivityDisbursementsDatesJob extends ConnectionCleaningJob  implem
 
         List<AmpActivityVersion> actList = ActivityUtil.getActivitiesWhichMatchDate("actualStartDate", dateAfterDays);
         for (AmpActivityVersion act : actList) {
-        	new ActivityDisbursementDateTrigger(act);
+            new ActivityDisbursementDateTrigger(act);
         }
     }
 }

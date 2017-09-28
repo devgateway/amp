@@ -50,6 +50,6 @@ export const initialTranslations = {
          'amp.data-freezing:server-errors-0001': 'Freezing events cannot be repeated.',
          'amp.data-freezing:server-errors-0002': 'The open period range cannot overlap with other freezing events.',
          'amp.data-freezing:invalid-open-period': 'Invalid Data Open Period. Please enter both the Data Open Period Start and the Data Open Period End',
-         'amp.data-freezing:no-records': 'No records to show'
-         
+         'amp.data-freezing:no-records': 'No records to show',
+         'amp.data-freezing:loading-message': 'Loading...'
 };

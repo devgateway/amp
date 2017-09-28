@@ -37,59 +37,59 @@ public class AmpHeaderFooter extends WebPage {
     private static Logger logger = Logger.getLogger(AmpHeaderFooter.class);
 
     public AmpHeaderFooter() {
-		List<Cookie> cookies = ((WebRequest)getRequestCycle().getRequest()).getCookies();
+        List<Cookie> cookies = ((WebRequest)getRequestCycle().getRequest()).getCookies();
 
-		if (cookies != null) {
-			boolean localeSet = false;
-			Iterator<Cookie> it = cookies.iterator();
-			while (it.hasNext()) {
-				Cookie cookie = (Cookie) it.next();
-				if (cookie.getName().equals("digi_language")) {
-                	String languageCode = cookie.getValue();
-                	Session.get().setLocale(new Locale(languageCode));
-                	if (languageCode != null) {
-                    	localeSet = true;
+        if (cookies != null) {
+            boolean localeSet = false;
+            Iterator<Cookie> it = cookies.iterator();
+            while (it.hasNext()) {
+                Cookie cookie = (Cookie) it.next();
+                if (cookie.getName().equals("digi_language")) {
+                    String languageCode = cookie.getValue();
+                    Session.get().setLocale(new Locale(languageCode));
+                    if (languageCode != null) {
+                        localeSet = true;
                         break;
                     }
                 }
-			}
+            }
 
             if (!localeSet){
-            	Session.get().setLocale(new Locale(TranslatorWorker.getDefaultLocalCode()));
+                Session.get().setLocale(new Locale(TranslatorWorker.getDefaultLocalCode()));
             }
         }
-		
-		add(new DocumentReadyBehavior());
-		AmpAjaxBehavior ampajax = new AmpAjaxBehavior();
-		add(ampajax);
-		
-		add(new UrlEmbederComponent("wHeader", "/showLayout.do?layout=wicketHeader", "$(\"#switchTranslationMode\").attr('href', 'javascript:wicketSwitchTranslationMode()');$(\"#switchFMMode\").css(\"display\", \"block\");"));
-		add(new UrlEmbederComponent("wFooter", "/showLayout.do?layout=wicketFooter"));
-	}
-	
-	public HttpServletRequest getServletRequest(){
-		ServletWebRequest servletWebRequest = (ServletWebRequest) getRequest();
-		HttpServletRequest request = servletWebRequest.getContainerRequest();
-		return request;
-	}
-	
-	public HttpSession getHttpSession(){
-		HttpSession session = getServletRequest().getSession();
-		return session;
-	}
-	
-	@Override
-	protected void setHeaders(WebResponse response) {
-		super.setHeaders(response);
-		response.setHeader("Cache-Control", "no-cache, max-age=0, must-revalidate, no-store");
-	}
-	
-	@Override
-	public void renderHead(IHeaderResponse response) {
-		super.renderHead(response);
-		YuiLib.load(response);
-		response.render(JavaScriptHeaderItem.forUrl("/ckeditor_4.4.6/ckeditor.js"));
-		response.render(JavaScriptHeaderItem.forUrl("/TEMPLATE/ampTemplate/js_2/opentip/opentip-jquery2-4-6.js"));
-		response.render(JavaScriptHeaderItem.forReference(new PackageResourceReference(AmpStructuresFormSectionFeature.class, "gisPopup.js")));
-	}
+        
+        add(new DocumentReadyBehavior());
+        AmpAjaxBehavior ampajax = new AmpAjaxBehavior();
+        add(ampajax);
+        
+        add(new UrlEmbederComponent("wHeader", "/showLayout.do?layout=wicketHeader", "$(\"#switchTranslationMode\").attr('href', 'javascript:wicketSwitchTranslationMode()');$(\"#switchFMMode\").css(\"display\", \"block\");"));
+        add(new UrlEmbederComponent("wFooter", "/showLayout.do?layout=wicketFooter"));
+    }
+    
+    public HttpServletRequest getServletRequest(){
+        ServletWebRequest servletWebRequest = (ServletWebRequest) getRequest();
+        HttpServletRequest request = servletWebRequest.getContainerRequest();
+        return request;
+    }
+    
+    public HttpSession getHttpSession(){
+        HttpSession session = getServletRequest().getSession();
+        return session;
+    }
+    
+    @Override
+    protected void setHeaders(WebResponse response) {
+        super.setHeaders(response);
+        response.setHeader("Cache-Control", "no-cache, max-age=0, must-revalidate, no-store");
+    }
+    
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        YuiLib.load(response);
+        response.render(JavaScriptHeaderItem.forUrl("/ckeditor_4.4.6/ckeditor.js"));
+        response.render(JavaScriptHeaderItem.forUrl("/TEMPLATE/ampTemplate/js_2/opentip/opentip-jquery2-4-6.js"));
+        response.render(JavaScriptHeaderItem.forReference(new PackageResourceReference(AmpStructuresFormSectionFeature.class, "gisPopup.js")));
+    }
 }

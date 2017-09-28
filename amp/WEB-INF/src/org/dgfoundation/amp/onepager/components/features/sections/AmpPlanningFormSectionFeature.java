@@ -29,130 +29,130 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
  */
 public class AmpPlanningFormSectionFeature extends AmpFormSectionFeaturePanel implements AmpRequiredComponentContainer {
 
-	private static final long serialVersionUID = -6658492193242970618L;
-	private List<FormComponent<?>> requiredFormComponents = new ArrayList<FormComponent<?>>();
-	/**
-	 * @param id
-	 * @param fmName
-	 */
-	public AmpPlanningFormSectionFeature(String id, String fmName,
-			final IModel<AmpActivityVersion> actModel) throws Exception {
-		super(id, fmName, actModel);
-		this.fmType = AmpFMTypes.MODULE;
-		
-		RangeValidator<Integer> rankValidator = new RangeValidator<Integer>(1,5);
-		AttributeModifier rankModifier = new AttributeModifier("size",new Model(2));
-		
-		AmpTextFieldPanel<Integer> lineMinistryRank = new AmpTextFieldPanel<Integer>(
-				"lineMinistryRank", new PropertyModel<Integer>(actModel, "lineMinRank"), "Line Ministry Rank", AmpFMTypes.MODULE);
-		lineMinistryRank.getTextContainer().add(rankValidator);
-		lineMinistryRank.getTextContainer().add(rankModifier);
-		add(lineMinistryRank);
-		
+    private static final long serialVersionUID = -6658492193242970618L;
+    private List<FormComponent<?>> requiredFormComponents = new ArrayList<FormComponent<?>>();
+    /**
+     * @param id
+     * @param fmName
+     */
+    public AmpPlanningFormSectionFeature(String id, String fmName,
+            final IModel<AmpActivityVersion> actModel) throws Exception {
+        super(id, fmName, actModel);
+        this.fmType = AmpFMTypes.MODULE;
+        
+        RangeValidator<Integer> rankValidator = new RangeValidator<Integer>(1,5);
+        AttributeModifier rankModifier = new AttributeModifier("size",new Model(2));
+        
+        AmpTextFieldPanel<Integer> lineMinistryRank = new AmpTextFieldPanel<Integer>(
+                "lineMinistryRank", new PropertyModel<Integer>(actModel, "lineMinRank"), "Line Ministry Rank", AmpFMTypes.MODULE);
+        lineMinistryRank.getTextContainer().add(rankValidator);
+        lineMinistryRank.getTextContainer().add(rankModifier);
+        add(lineMinistryRank);
+        
                 
-		
-		AmpDatePickerFieldPanel dateOfActualCompletion = new AmpDatePickerFieldPanel(
-				"actualCompletionDate", new PropertyModel<Date>(actModel,
-						"actualCompletionDate"), null,
-				"Actual Completion Date");
-		add(dateOfActualCompletion);
+        
+        AmpDatePickerFieldPanel dateOfActualCompletion = new AmpDatePickerFieldPanel(
+                "actualCompletionDate", new PropertyModel<Date>(actModel,
+                        "actualCompletionDate"), null,
+                "Actual Completion Date");
+        add(dateOfActualCompletion);
 
-		AmpDatePickerFieldPanel proposedCompletionDate = new AmpDatePickerFieldPanel(
-				"proposedCompletionDate", new PropertyModel<Date>(actModel,
-						"proposedCompletionDate"), null,
-				"Proposed Completion Date");
-		add(proposedCompletionDate);
+        AmpDatePickerFieldPanel proposedCompletionDate = new AmpDatePickerFieldPanel(
+                "proposedCompletionDate", new PropertyModel<Date>(actModel,
+                        "proposedCompletionDate"), null,
+                "Proposed Completion Date");
+        add(proposedCompletionDate);
 
-		AmpDatePickerFieldPanel proposedApprovalDate = new AmpDatePickerFieldPanel(
-				"proposedApprovalDate", new PropertyModel<Date>(actModel,
-				"proposedApprovalDate"), null, "Proposed Approval Date");
-		add(proposedApprovalDate);
+        AmpDatePickerFieldPanel proposedApprovalDate = new AmpDatePickerFieldPanel(
+                "proposedApprovalDate", new PropertyModel<Date>(actModel,
+                "proposedApprovalDate"), null, "Proposed Approval Date");
+        add(proposedApprovalDate);
 
-		AmpDatePickerFieldPanel dateOfSignedAgreement = new AmpDatePickerFieldPanel(
-				"actualApprovalDate", new PropertyModel<Date>(actModel,
-						"actualApprovalDate"), proposedApprovalDate,
-				"Actual Approval Date");
-		add(dateOfSignedAgreement);
-		
-		proposedApprovalDate.setDuplicateFieldOnChange(dateOfSignedAgreement);
-		
-		final AmpDatePickerFieldPanel proposedStartDate = new AmpDatePickerFieldPanel(
-				"proposedStartDate", new PropertyModel<Date>(actModel,
-						"proposedStartDate"), null, "Proposed Start Date");
-		add(new AmpComponentPanel("proposedStartDateRequired", "Required Validator for Proposed Start Date") {
+        AmpDatePickerFieldPanel dateOfSignedAgreement = new AmpDatePickerFieldPanel(
+                "actualApprovalDate", new PropertyModel<Date>(actModel,
+                        "actualApprovalDate"), proposedApprovalDate,
+                "Actual Approval Date");
+        add(dateOfSignedAgreement);
+        
+        proposedApprovalDate.setDuplicateFieldOnChange(dateOfSignedAgreement);
+        
+        final AmpDatePickerFieldPanel proposedStartDate = new AmpDatePickerFieldPanel(
+                "proposedStartDate", new PropertyModel<Date>(actModel,
+                        "proposedStartDate"), null, "Proposed Start Date");
+        add(new AmpComponentPanel("proposedStartDateRequired", "Required Validator for Proposed Start Date") {
             @Override
             protected void onConfigure() {
                 super.onConfigure();
                 if (this.isVisible()){
-                	proposedStartDate.getDate().setRequired(true);
+                    proposedStartDate.getDate().setRequired(true);
                     requiredFormComponents.add(proposedStartDate.getDate());
-        			
+                    
                 }
             }
-        });			
-		add(proposedStartDate);
-		
+        });         
+        add(proposedStartDate);
+        
 
                 
 
-		AmpDatePickerFieldPanel dateOfEffectiveAgreement = new AmpDatePickerFieldPanel(
-				"actualStartDate", new PropertyModel<Date>(actModel,
-						"actualStartDate"), proposedStartDate,
-				"Actual Start Date");
-		add(dateOfEffectiveAgreement);
-		proposedStartDate.setDuplicateFieldOnChange(dateOfEffectiveAgreement);
-		
-		AmpDatePickerFieldPanel finalDateForContracting = new AmpDatePickerFieldPanel(
-				"finalDateForContracting", new PropertyModel<Date>(actModel,
-						"contractingDate"), null, "Final Date for Contracting");
-		add(finalDateForContracting);
+        AmpDatePickerFieldPanel dateOfEffectiveAgreement = new AmpDatePickerFieldPanel(
+                "actualStartDate", new PropertyModel<Date>(actModel,
+                        "actualStartDate"), proposedStartDate,
+                "Actual Start Date");
+        add(dateOfEffectiveAgreement);
+        proposedStartDate.setDuplicateFieldOnChange(dateOfEffectiveAgreement);
+        
+        AmpDatePickerFieldPanel finalDateForContracting = new AmpDatePickerFieldPanel(
+                "finalDateForContracting", new PropertyModel<Date>(actModel,
+                        "contractingDate"), null, "Final Date for Contracting");
+        add(finalDateForContracting);
 
-		AmpDatePickerFieldPanel finalDateForDisbursements = new AmpDatePickerFieldPanel(
-				"finalDateForDisbursements", new PropertyModel<Date>(actModel,
-						"disbursmentsDate"), null,
-				"Final Date for Disbursements");
-		add(finalDateForDisbursements);
-				
-		AmpCommentSimpleWrapper acsw = new AmpCommentSimpleWrapper("finalDateDisbTabs", "Final Date for Disbursements", actModel);
-		acsw.setOutputMarkupId(true);
-		add(acsw);
+        AmpDatePickerFieldPanel finalDateForDisbursements = new AmpDatePickerFieldPanel(
+                "finalDateForDisbursements", new PropertyModel<Date>(actModel,
+                        "disbursmentsDate"), null,
+                "Final Date for Disbursements");
+        add(finalDateForDisbursements);
+                
+        AmpCommentSimpleWrapper acsw = new AmpCommentSimpleWrapper("finalDateDisbTabs", "Final Date for Disbursements", actModel);
+        acsw.setOutputMarkupId(true);
+        add(acsw);
 
-		final AmpDatePickerFieldPanel dateOfPlannedCompletion = new AmpDatePickerFieldPanel(
-				"originalCompDate", new PropertyModel<Date>(actModel,
-						"originalCompDate"), null, "Original Completion Date");
-		add(new AmpComponentPanel("originalCompDateRequired", "Required Validator for Original Completion Date") {
+        final AmpDatePickerFieldPanel dateOfPlannedCompletion = new AmpDatePickerFieldPanel(
+                "originalCompDate", new PropertyModel<Date>(actModel,
+                        "originalCompDate"), null, "Original Completion Date");
+        add(new AmpComponentPanel("originalCompDateRequired", "Required Validator for Original Completion Date") {
           @Override
           protected void onConfigure() {
               super.onConfigure();
-        	  if (this.isVisible()){
-        		  dateOfPlannedCompletion.getDate().setRequired(true);
-        		  requiredFormComponents.add(dateOfPlannedCompletion.getDate());
-        	  }
+              if (this.isVisible()){
+                  dateOfPlannedCompletion.getDate().setRequired(true);
+                  requiredFormComponents.add(dateOfPlannedCompletion.getDate());
+              }
 
           }
-		}
-				);
-		add(dateOfPlannedCompletion);
-		
-		AmpCommentSimpleWrapper acsw2 = new AmpCommentSimpleWrapper("revisedComplDateTabs", "current completion date", actModel);
-		acsw2.setOutputMarkupId(true);
-		add(acsw2);
-		
-		/*
-	    * Removed 'in days' from 'Proposed Project Life (in days)' because it appears in Global FM in this way,
-	    * and wen doing a check FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Project Life")
-	    * */
-		AmpTextFieldPanel<Integer> proposedProjectLife = new AmpTextFieldPanel<Integer>("proposedProjectLife", new PropertyModel<Integer>(actModel, "proposedProjectLife"),
-				"Proposed Project Life", AmpFMTypes.MODULE);
-		RangeValidator<Integer> proposedProjectLifeValidator = new RangeValidator<Integer>(0, 9999);
-		proposedProjectLife.getTextContainer().add(proposedProjectLifeValidator);
-		add(proposedProjectLife);
-	}
+        }
+                );
+        add(dateOfPlannedCompletion);
+        
+        AmpCommentSimpleWrapper acsw2 = new AmpCommentSimpleWrapper("revisedComplDateTabs", "current completion date", actModel);
+        acsw2.setOutputMarkupId(true);
+        add(acsw2);
+        
+        /*
+        * Removed 'in days' from 'Proposed Project Life (in days)' because it appears in Global FM in this way,
+        * and wen doing a check FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Project Life")
+        * */
+        AmpTextFieldPanel<Integer> proposedProjectLife = new AmpTextFieldPanel<Integer>("proposedProjectLife", new PropertyModel<Integer>(actModel, "proposedProjectLife"),
+                "Proposed Project Life", AmpFMTypes.MODULE);
+        RangeValidator<Integer> proposedProjectLifeValidator = new RangeValidator<Integer>(0, 9999);
+        proposedProjectLife.getTextContainer().add(proposedProjectLifeValidator);
+        add(proposedProjectLife);
+    }
 
-	@Override
-	public List<FormComponent<?>> getRequiredFormComponents() {
-		// TODO Auto-generated method stub
-		return requiredFormComponents;
-	}
+    @Override
+    public List<FormComponent<?>> getRequiredFormComponents() {
+        // TODO Auto-generated method stub
+        return requiredFormComponents;
+    }
 
 }

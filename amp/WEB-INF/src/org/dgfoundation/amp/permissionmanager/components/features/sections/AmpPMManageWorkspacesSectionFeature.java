@@ -25,82 +25,82 @@ import org.digijava.module.aim.dbentity.AmpTeam;
  */
 public class AmpPMManageWorkspacesSectionFeature extends AmpPMSectionFeaturePanel {
 
-	protected ListView<AmpTeam> idsList;
-	
-	/**
-	 * @param id
-	 * @param fmName
-	 * @throws Exception
-	 */
-	public AmpPMManageWorkspacesSectionFeature(String id, String fmName) throws Exception {
-		super(id, fmName);
-		// TODO Auto-generated constructor stub
-	}
+    protected ListView<AmpTeam> idsList;
+    
+    /**
+     * @param id
+     * @param fmName
+     * @throws Exception
+     */
+    public AmpPMManageWorkspacesSectionFeature(String id, String fmName) throws Exception {
+        super(id, fmName);
+        // TODO Auto-generated constructor stub
+    }
 
-	/**
-	 * @param id
-	 * @param model
-	 * @param fmName
-	 * @throws Exception
-	 */
-	public AmpPMManageWorkspacesSectionFeature(String id, IModel model, String fmName) throws Exception {
-		super(id, model, fmName);
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * @param id
+     * @param model
+     * @param fmName
+     * @throws Exception
+     */
+    public AmpPMManageWorkspacesSectionFeature(String id, IModel model, String fmName) throws Exception {
+        super(id, model, fmName);
+        // TODO Auto-generated constructor stub
+    }
 
-	/**
-	 * @param id
-	 * @param model
-	 * @param fmName
-	 * @param hideLabel
-	 * @throws Exception
-	 */
-	public AmpPMManageWorkspacesSectionFeature(String id, final IModel<Set<AmpTeam>> workspacesModel,	String fmName, boolean hideLabel) throws Exception {
-		super(id, workspacesModel, fmName, hideLabel);
-		
-		final AmpPMManageWorkspacesTableFeaturePanel workspacesTable = new AmpPMManageWorkspacesTableFeaturePanel("workspaces", workspacesModel, "Workspaces", false);
-		add(workspacesTable);
-		
-		PageableListView<AmpTeam> pageList= (PageableListView)workspacesTable.getList();
-		pageList.setItemsPerPage(10);
-		AmpPMAjaxPagingNavigator pager = new AmpPMAjaxPagingNavigator("workspacesNavigator", pageList);
-		add(pager);
-		
-		idsList = workspacesTable.getList();
-		final AmpAutocompleteFieldPanel<AmpTeam> autoComplete = new AmpAutocompleteFieldPanel<AmpTeam>("searchWorkspaces", "Search Workspaces",AmpPMWorkspaceSearchModel.class) {
+    /**
+     * @param id
+     * @param model
+     * @param fmName
+     * @param hideLabel
+     * @throws Exception
+     */
+    public AmpPMManageWorkspacesSectionFeature(String id, final IModel<Set<AmpTeam>> workspacesModel,   String fmName, boolean hideLabel) throws Exception {
+        super(id, workspacesModel, fmName, hideLabel);
+        
+        final AmpPMManageWorkspacesTableFeaturePanel workspacesTable = new AmpPMManageWorkspacesTableFeaturePanel("workspaces", workspacesModel, "Workspaces", false);
+        add(workspacesTable);
+        
+        PageableListView<AmpTeam> pageList= (PageableListView)workspacesTable.getList();
+        pageList.setItemsPerPage(10);
+        AmpPMAjaxPagingNavigator pager = new AmpPMAjaxPagingNavigator("workspacesNavigator", pageList);
+        add(pager);
+        
+        idsList = workspacesTable.getList();
+        final AmpAutocompleteFieldPanel<AmpTeam> autoComplete = new AmpAutocompleteFieldPanel<AmpTeam>("searchWorkspaces", "Search Workspaces",AmpPMWorkspaceSearchModel.class) {
 
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = -4113089893479844312L;
+            /**
+             * 
+             */
+            private static final long serialVersionUID = -4113089893479844312L;
 
-			@Override
-			protected String getChoiceValue(AmpTeam choice){
-				return choice.getName();
-			}
-			
-			@Override
-			public void onSelect(AjaxRequestTarget target, AmpTeam choice) {
-				Set<AmpTeam> set = workspacesModel.getObject();
-				set.clear();
-				set.add(choice);
-				idsList.removeAll();
-				//workspacesTable.getSliders().clear();
-				target.add(AmpPMManageWorkspacesSectionFeature.this);
-				target.appendJavaScript(OnePagerUtil.getToggleJS(AmpPMManageWorkspacesSectionFeature.this.getSliderPM()));
-			}
+            @Override
+            protected String getChoiceValue(AmpTeam choice){
+                return choice.getName();
+            }
+            
+            @Override
+            public void onSelect(AjaxRequestTarget target, AmpTeam choice) {
+                Set<AmpTeam> set = workspacesModel.getObject();
+                set.clear();
+                set.add(choice);
+                idsList.removeAll();
+                //workspacesTable.getSliders().clear();
+                target.add(AmpPMManageWorkspacesSectionFeature.this);
+                target.appendJavaScript(OnePagerUtil.getToggleJS(AmpPMManageWorkspacesSectionFeature.this.getSliderPM()));
+            }
 
-			@Override
-			public Integer getChoiceLevel(AmpTeam choice) {
-				// TODO Auto-generated method stub
-				return null;
-			}
-		};
-		AttributeModifier sizeModifier = new AttributeModifier("size",new Model(25));
-		autoComplete.add(sizeModifier);
-		//final AmpComboboxFieldPanel<AmpTeam> searchContacts=new AmpComboboxFieldPanel<AmpTeam>("searchWorkspaces", "Search Workspaces", autoComplete,false,true);
-		add(autoComplete);		
-		
-	}
-	
+            @Override
+            public Integer getChoiceLevel(AmpTeam choice) {
+                // TODO Auto-generated method stub
+                return null;
+            }
+        };
+        AttributeModifier sizeModifier = new AttributeModifier("size",new Model(25));
+        autoComplete.add(sizeModifier);
+        //final AmpComboboxFieldPanel<AmpTeam> searchContacts=new AmpComboboxFieldPanel<AmpTeam>("searchWorkspaces", "Search Workspaces", autoComplete,false,true);
+        add(autoComplete);      
+        
+    }
+    
 }

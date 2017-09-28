@@ -14,16 +14,16 @@ import java.util.Collection;
  * @since 31 July 2013
  */
 public class AmpMaxSizeCollectionValidationField<T> extends
-		AmpSizeCollectionValidationField<T> {
+        AmpSizeCollectionValidationField<T> {
 
-	/**
-	 * @param id
-	 * @param collectionModel
-	 * @param fmName
-	 */
-	public AmpMaxSizeCollectionValidationField(String id,
+    /**
+     * @param id
+     * @param collectionModel
+     * @param fmName
+     */
+    public AmpMaxSizeCollectionValidationField(String id,
                                                IModel<? extends Collection<T>> collectionModel, String fmName) {
-		super(id, collectionModel, fmName,new AmpMaxSizeCollectionValidator(1));
-	}
+        super(id, collectionModel, fmName,new AmpMaxSizeCollectionValidator(1));
+    }
 
 }

@@ -28,79 +28,79 @@ import java.util.Enumeration;
 
 public class GeoRegion implements Group {
 
-	private String id;
-	private String name;
-	private String type;
-	private String active;
+    private String id;
+    private String name;
+    private String type;
+    private String active;
 
-	public GeoRegion() {
-	}
+    public GeoRegion() {
+    }
 
-	public GeoRegion(String name, String id, String type) {
-		this.name = name;
-		this.id = id;
-		this.type = type;
-		this.active = "true";
-	}
+    public GeoRegion(String name, String id, String type) {
+        this.name = name;
+        this.id = id;
+        this.type = type;
+        this.active = "true";
+    }
 
-	public String getId() {
-		return id;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getType() {
-		return type;
-	}
+    public String getType() {
+        return type;
+    }
 
-	public void setType(String type) {
-		this.type = type;
-	}
+    public void setType(String type) {
+        this.type = type;
+    }
 
-	public static String getNameByISO2(String ISO2) {
-		/*
-		 * Uses the DgGeoRegionsCollection map
-		 */
-		return null;
-	}
+    public static String getNameByISO2(String ISO2) {
+        /*
+         * Uses the DgGeoRegionsCollection map
+         */
+        return null;
+    }
 
 
-	public String isActive() {
-		return active;
-	}
+    public String isActive() {
+        return active;
+    }
 
-	public void setActive(String active) {
-		this.active = active;
-	}
+    public void setActive(String active) {
+        this.active = active;
+    }
 
-	public String getActive(String active) {
-			return this.active;
-	}
+    public String getActive(String active) {
+            return this.active;
+    }
 
-	public boolean addMember(Principal member) {
-		return true;
-	}
+    public boolean addMember(Principal member) {
+        return true;
+    }
 
-	public boolean removeMember(Principal member) {
-		return true;
-	}
+    public boolean removeMember(Principal member) {
+        return true;
+    }
 
-	public boolean isMember(Principal member) {
-		return true;
-	}
+    public boolean isMember(Principal member) {
+        return true;
+    }
 
-	public Enumeration members() {
-		return null;
-	}
+    public Enumeration members() {
+        return null;
+    }
 
 }

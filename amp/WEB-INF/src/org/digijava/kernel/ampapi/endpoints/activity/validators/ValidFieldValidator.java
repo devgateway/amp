@@ -7,7 +7,7 @@ import java.util.Map;
 
 import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
+import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 
 /**
@@ -17,19 +17,19 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
  */
 public class ValidFieldValidator extends InputValidator {
 
-	@Override
-	public ApiErrorMessage getErrorMessage() {
-		return ActivityErrors.FIELD_INVALID;
-	}
+    @Override
+    public ApiErrorMessage getErrorMessage() {
+        return ActivityErrors.FIELD_INVALID;
+    }
 
-	@Override
-	public boolean isValid(ActivityImporter importer, Map<String, Object> newFieldParent,
-						   Map<String, Object> oldFieldParent, APIField fieldDescription, String fieldPath) {
-		boolean isValid = true;
-		if (fieldDescription == null) {
-			isValid = false;
-		}
-		return isValid;
-	}
+    @Override
+    public boolean isValid(ObjectImporter importer, Map<String, Object> newFieldParent,
+                           Map<String, Object> oldFieldParent, APIField fieldDescription, String fieldPath) {
+        boolean isValid = true;
+        if (fieldDescription == null) {
+            isValid = false;
+        }
+        return isValid;
+    }
 
 }

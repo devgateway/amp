@@ -10,8 +10,8 @@ import java.util.Set;
 import org.apache.commons.lang3.tuple.Pair;
 import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
@@ -42,7 +42,7 @@ public class FundingOrgRolesValidator extends InputValidator {
     private Set<Pair<Long, Long>> orgRoleDefinitions;
 
     @Override
-    public boolean isValid(ActivityImporter importer, Map<String, Object> newFieldParent,
+    public boolean isValid(ObjectImporter importer, Map<String, Object> newFieldParent,
                            Map<String, Object> oldFieldParent, APIField fieldDescription, String fieldPath) {
 
         if (fieldPath.equals(FUNDING)) {
@@ -59,7 +59,7 @@ public class FundingOrgRolesValidator extends InputValidator {
     /**
      * Check if all objects from collection use only allowed/defined organization roles.
      */
-    private boolean areOrgRolesValid(ActivityImporter importer, Map<String, Object> root, String collectionField,
+    private boolean areOrgRolesValid(ObjectImporter importer, Map<String, Object> root, String collectionField,
                                      String orgField, String roleField) {
         if (orgRoleDefinitions == null) {
             JsonBean activity = importer.getNewJson();

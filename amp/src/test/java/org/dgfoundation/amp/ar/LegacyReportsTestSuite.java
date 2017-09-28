@@ -28,22 +28,22 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-		DirectedDisbursementsTests.class,
-		MtefTests.class,
-		ActivityPreviewTests.class,
-		MiscColumnsTests.class,
-		FiltersTests.class,
-		MiscReportsTests.class,
-		OldReportsNewFeaturesTests.class,
-		HierarchyTests27.class,
-		DirectedDisbursementsTests_amp27.class,
-		MultilingualTests.class,
-		MultilingualThroughTrnTests.class,
-		CategoryManagerTests.class,
-		MultilingualTests28.class,
-		PledgesFormTests.class,
-		MiscTests28.class,
-		ProgramsTests.class,
+        DirectedDisbursementsTests.class,
+        MtefTests.class,
+        ActivityPreviewTests.class,
+        MiscColumnsTests.class,
+        FiltersTests.class,
+        MiscReportsTests.class,
+        OldReportsNewFeaturesTests.class,
+        HierarchyTests27.class,
+        DirectedDisbursementsTests_amp27.class,
+        MultilingualTests.class,
+        MultilingualThroughTrnTests.class,
+        CategoryManagerTests.class,
+        MultilingualTests28.class,
+        PledgesFormTests.class,
+        MiscTests28.class,
+        ProgramsTests.class,
 })
 public class LegacyReportsTestSuite {
 }

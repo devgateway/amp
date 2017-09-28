@@ -6,12 +6,12 @@ package org.dgfoundation.amp.newreports;
  *
  */
 public enum ReportCollapsingStrategy {
-	/** never collapse same-named subreports */
-	NEVER,
-	
-	/** only collapse unknowns (regardless of their names) */
-	UNKNOWNS,
-	
-	/** always collapse same-named subreports*/
-	ALWAYS;
+    /** never collapse same-named subreports */
+    NEVER,
+    
+    /** only collapse unknowns (regardless of their names) */
+    UNKNOWNS,
+    
+    /** always collapse same-named subreports*/
+    ALWAYS;
 }

@@ -31,78 +31,78 @@ import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
  *
  */
 public class DirectedMeasureBehaviour extends TrivialMeasureBehaviour {
-		
-	protected final String totalColumnName;
-	
-	public DirectedMeasureBehaviour() {
-		this(null);
-	}
-	
-	public DirectedMeasureBehaviour(String totalColumnName) {
-		this.totalColumnName = totalColumnName;
-	}
-	
-	/**
-	 * instructs the reporting engine to split this entity by the flow name. The flow name has been precomputed during fetching in {@link AmpFundingColumn}
-	 */
-	@Override
-	public List<VSplitStrategy> getSubMeasureHierarchies(NiReportsEngine context) {
-		VSplitStrategy byFundingFlow = VSplitStrategy.build(cell -> new ComparableValue<String>(getFlowName(cell.getCell()), getFlowName(cell.getCell())), AmpReportsSchema.PSEUDOCOLUMN_FLOW);
-		return Arrays.asList(byFundingFlow);
-	}
+        
+    protected final String totalColumnName;
+    
+    public DirectedMeasureBehaviour() {
+        this(null);
+    }
+    
+    public DirectedMeasureBehaviour(String totalColumnName) {
+        this.totalColumnName = totalColumnName;
+    }
+    
+    /**
+     * instructs the reporting engine to split this entity by the flow name. The flow name has been precomputed during fetching in {@link AmpFundingColumn}
+     */
+    @Override
+    public List<VSplitStrategy> getSubMeasureHierarchies(NiReportsEngine context) {
+        VSplitStrategy byFundingFlow = VSplitStrategy.build(cell -> new ComparableValue<String>(getFlowName(cell.getCell()), getFlowName(cell.getCell())), AmpReportsSchema.PSEUDOCOLUMN_FLOW);
+        return Arrays.asList(byFundingFlow);
+    }
 
-	public static String getFlowName(Cell cell) {
-		return cell.getMetaInfo().getMetaInfo(MetaCategory.DIRECTED_TRANSACTION_FLOW.category).v.toString();
-	}
-	
-	@Override
-	public ImmutablePair<String, ColumnContents> getTotalCells(NiReportsEngine context, NiReportedEntity<?> entity, ColumnContents fetchedContents) {
-		if (totalColumnName == null)
-			return super.getTotalCells(context, entity, fetchedContents);
-		return new ImmutablePair<String, ColumnContents>(totalColumnName, fetchedContents);
-	}
-	
-	/**
-	 * delegates to the superclass for non-orgs-related hierarchies. For orgs-related ones, filters on an OR basis
-	 */
-	@Override
-	public Cell filterCell(Map<NiDimensionUsage, IdsAcceptor> acceptors, Cell oldCell, Cell splitCell, boolean isTransactionLevelHierarchy) {
-		if ((!splitCell.mainLevel.isPresent()) || getHierarchiesListener().test(splitCell.mainLevel.get().dimensionUsage))
-			return super.filterCell(acceptors, oldCell, splitCell, isTransactionLevelHierarchy); // this is not a related-organisation hierarchy
-		
-		// gone till here -> we're doing a hierarchy by a related organisation
-		String srcRoleCode = oldCell.getMetaInfo().getMetaInfo(MetaCategory.SOURCE_ROLE.category).v.toString();
-		String recipientRoleCode = oldCell.getMetaInfo().getMetaInfo(MetaCategory.RECIPIENT_ROLE.category).v.toString();
-		
-		String dimUsgRole = splitCell.mainLevel.get().dimensionUsage.instanceName;
-		Coordinate coordinateToCheckOn = null;
-		if (srcRoleCode.equals(dimUsgRole))
-			coordinateToCheckOn = new Coordinate(OrganisationsDimension.LEVEL_ORGANISATION, (Long) oldCell.getMetaInfo().getMetaInfo(MetaCategory.SOURCE_ORG.category).v);
+    public static String getFlowName(Cell cell) {
+        return cell.getMetaInfo().getMetaInfo(MetaCategory.DIRECTED_TRANSACTION_FLOW.category).v.toString();
+    }
+    
+    @Override
+    public ImmutablePair<String, ColumnContents> getTotalCells(NiReportsEngine context, NiReportedEntity<?> entity, ColumnContents fetchedContents) {
+        if (totalColumnName == null)
+            return super.getTotalCells(context, entity, fetchedContents);
+        return new ImmutablePair<String, ColumnContents>(totalColumnName, fetchedContents);
+    }
+    
+    /**
+     * delegates to the superclass for non-orgs-related hierarchies. For orgs-related ones, filters on an OR basis
+     */
+    @Override
+    public Cell filterCell(Map<NiDimensionUsage, IdsAcceptor> acceptors, Cell oldCell, Cell splitCell, boolean isTransactionLevelHierarchy) {
+        if ((!splitCell.mainLevel.isPresent()) || getHierarchiesListener().test(splitCell.mainLevel.get().dimensionUsage))
+            return super.filterCell(acceptors, oldCell, splitCell, isTransactionLevelHierarchy); // this is not a related-organisation hierarchy
+        
+        // gone till here -> we're doing a hierarchy by a related organisation
+        String srcRoleCode = oldCell.getMetaInfo().getMetaInfo(MetaCategory.SOURCE_ROLE.category).v.toString();
+        String recipientRoleCode = oldCell.getMetaInfo().getMetaInfo(MetaCategory.RECIPIENT_ROLE.category).v.toString();
+        
+        String dimUsgRole = splitCell.mainLevel.get().dimensionUsage.instanceName;
+        Coordinate coordinateToCheckOn = null;
+        if (srcRoleCode.equals(dimUsgRole))
+            coordinateToCheckOn = new Coordinate(OrganisationsDimension.LEVEL_ORGANISATION, (Long) oldCell.getMetaInfo().getMetaInfo(MetaCategory.SOURCE_ORG.category).v);
 
-		if (recipientRoleCode.equals(dimUsgRole))
-			coordinateToCheckOn = new Coordinate(OrganisationsDimension.LEVEL_ORGANISATION, (Long) oldCell.getMetaInfo().getMetaInfo(MetaCategory.RECIPIENT_ORG.category).v);
+        if (recipientRoleCode.equals(dimUsgRole))
+            coordinateToCheckOn = new Coordinate(OrganisationsDimension.LEVEL_ORGANISATION, (Long) oldCell.getMetaInfo().getMetaInfo(MetaCategory.RECIPIENT_ORG.category).v);
 
-		if (coordinateToCheckOn == null)
-			return null; // related-org-role not implied in this kind of transaction
-		
-		NiDimensionUsage dimUsage = splitCell.mainLevel.get().dimensionUsage;
-		IdsAcceptor acceptor = acceptors.get(dimUsage);
-		if (acceptor.isAcceptable(coordinateToCheckOn))
-			return oldCell;
-		else
-			return null;
-	}
-	
-	/** 
-	 * disables percentages for NiDimensionUsages based on the Organisations dimension
-	 */
-	@Override
-	public Predicate<NiDimensionUsage> getHierarchiesListener() {
-		return dimUsg -> !dimUsg.dimension.name.equals("orgs");
-	}
-	
-	@Override
-	public boolean shouldDeleteLeafIfEmpty(CellColumn column) {
-		return true;
-	}
+        if (coordinateToCheckOn == null)
+            return null; // related-org-role not implied in this kind of transaction
+        
+        NiDimensionUsage dimUsage = splitCell.mainLevel.get().dimensionUsage;
+        IdsAcceptor acceptor = acceptors.get(dimUsage);
+        if (acceptor.isAcceptable(coordinateToCheckOn))
+            return oldCell;
+        else
+            return null;
+    }
+    
+    /** 
+     * disables percentages for NiDimensionUsages based on the Organisations dimension
+     */
+    @Override
+    public Predicate<NiDimensionUsage> getHierarchiesListener() {
+        return dimUsg -> !dimUsg.dimension.name.equals("orgs");
+    }
+    
+    @Override
+    public boolean shouldDeleteLeafIfEmpty(CellColumn column) {
+        return true;
+    }
 }

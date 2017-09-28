@@ -49,9 +49,9 @@ import org.digijava.module.aim.util.Output;
 public class Editor
     implements Serializable, Cloneable, Versionable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-//	private static Logger logger = Logger.getLogger(Editor.class);
+//  private static Logger logger = Logger.getLogger(Editor.class);
 
     private String siteId;
     private String editorKey;
@@ -86,17 +86,17 @@ public class Editor
      * @param siteId
      */
     public void setSiteId(String siteId) {
-    	if ((siteId != null) && (AmpMath.isLong(siteId)))
-    	{
-    		Logger.getLogger(this.getClass()).error("numeric siteId: " + siteId, new RuntimeException());
-    		this.siteId = SiteCache.lookupById(Long.parseLong(siteId)).getSiteId();
-    	}
+        if ((siteId != null) && (AmpMath.isLong(siteId)))
+        {
+            Logger.getLogger(this.getClass()).error("numeric siteId: " + siteId, new RuntimeException());
+            this.siteId = SiteCache.lookupById(Long.parseLong(siteId)).getSiteId();
+        }
         this.siteId = siteId;
     }
 
     public void setSite(Site site)
     {
-    	setSiteId(site == null ? null : site.getSiteId());
+        setSiteId(site == null ? null : site.getSiteId());
     }
     
     public String getUrl() {
@@ -202,39 +202,39 @@ public class Editor
     }
     
     @Override
-	protected Object clone() throws CloneNotSupportedException {
-		return super.clone();
-	}
-	
-	@Override
-	public boolean equalsForVersioning(Object obj) {
-		Editor aux = (Editor) obj;
-		if (this.body.compareTo(aux.getBody()) == 0) {
-			return true;
-		} else {
-			return false;
-		}
-	}
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+    
+    @Override
+    public boolean equalsForVersioning(Object obj) {
+        Editor aux = (Editor) obj;
+        if (this.body.compareTo(aux.getBody()) == 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-	@Override
-	public Output getOutput() {
-		Output out = new Output();
-		out.getOutputs().add(
-				new Output(null, new String[] { " Body:&nbsp;" },
-						new Object[] { this.body != null ? this.body : "" }));
-		return out;
-	}
+    @Override
+    public Output getOutput() {
+        Output out = new Output();
+        out.getOutputs().add(
+                new Output(null, new String[] { " Body:&nbsp;" },
+                        new Object[] { this.body != null ? this.body : "" }));
+        return out;
+    }
 
-	@Override
-	public Object getValue() {
-		return this.body != null ? this.body : "";
-	}
-	
-	@Override
-	public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
-		Editor aux = (Editor) clone(); 
-		aux.editorKey = null;
-		return aux;
-	}
+    @Override
+    public Object getValue() {
+        return this.body != null ? this.body : "";
+    }
+    
+    @Override
+    public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
+        Editor aux = (Editor) clone(); 
+        aux.editorKey = null;
+        return aux;
+    }
 
 }

@@ -23,40 +23,40 @@ import org.dgfoundation.amp.onepager.util.AmpFMTypes;
  * @author mpostelnicu@dgateway.org since Sep 28, 2010
  */
 public abstract class AmpFeaturePanel<T> extends AmpComponentPanel<T> implements IHeaderContributor {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 2998131911444530012L;
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 2998131911444530012L;
 
-	protected Label labelContainer;
+    protected Label labelContainer;
 
-	public AmpFeaturePanel(String id, String fmName){
-		this(id, null, fmName, false);
-	}
+    public AmpFeaturePanel(String id, String fmName){
+        this(id, null, fmName, false);
+    }
 
-	public AmpFeaturePanel(String id, String fmName, boolean hideLabel){
-		this(id, null, fmName, hideLabel);
-	}
+    public AmpFeaturePanel(String id, String fmName, boolean hideLabel){
+        this(id, null, fmName, hideLabel);
+    }
 
-	public AmpFeaturePanel(String id, IModel<T> model, String fmName) {
-		this(id, model, fmName, false);
-	}
+    public AmpFeaturePanel(String id, IModel<T> model, String fmName) {
+        this(id, model, fmName, false);
+    }
 
-	public AmpFeaturePanel(String id, IModel<T> model, String fmName, boolean hideLabel){
-		super(id, model, fmName, AmpFMTypes.MODULE);
-		this.fmType = AmpFMTypes.MODULE;
-		
-		labelContainer = new TrnLabel("featureLabel", fmName);
-		labelContainer.setVisible(!hideLabel);
-		add(labelContainer);
-		setOutputMarkupId(true);
-	}
+    public AmpFeaturePanel(String id, IModel<T> model, String fmName, boolean hideLabel){
+        super(id, model, fmName, AmpFMTypes.MODULE);
+        this.fmType = AmpFMTypes.MODULE;
+        
+        labelContainer = new TrnLabel("featureLabel", fmName);
+        labelContainer.setVisible(!hideLabel);
+        add(labelContainer);
+        setOutputMarkupId(true);
+    }
 
-	public Label getLabelContainer(){
-		return labelContainer;
-	}
-	@Override
-	public void renderHead(IHeaderResponse response){
-			response.render(OnDomReadyHeaderItem.forScript("Opentip.findElements();"));
-	}	
+    public Label getLabelContainer(){
+        return labelContainer;
+    }
+    @Override
+    public void renderHead(IHeaderResponse response){
+            response.render(OnDomReadyHeaderItem.forScript("Opentip.findElements();"));
+    }   
 }

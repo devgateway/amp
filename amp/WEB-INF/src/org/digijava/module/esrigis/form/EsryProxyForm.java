@@ -4,9 +4,9 @@ import org.apache.struts.action.ActionForm;
 
 public class EsryProxyForm extends ActionForm{
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
 
 }

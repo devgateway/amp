@@ -188,23 +188,23 @@ export default class AidOnBudgetRow extends Component {
                     </div>                    
                     </td>
                     <td>
-                    <div className={this.getErrorsForField('amount').length > 0 ? 'form-group has-error amount-column' : 'form-group amount-column' }>
-                    {this.props.numberFormatter.format(this.props.aidOnBudget.amount)} <br/>
-                    <input type="text" name="amount" className="form-control amount-column" placeholder="" value={this.props.aidOnBudget.amount} onChange={this.onChange} />
+                    <div className={this.getErrorsForField('amount').length > 0 ? 'form-group has-error amount-input' : 'form-group amount-input' }>
+                    <br/>
+                    <input type="text" name="amount" className="form-control amount-input" placeholder="" value={this.props.aidOnBudget.amount} onChange={this.onChange} />
                     </div>
                     </td>
                     <td>
                     <div className={this.getErrorsForField('currencyCode').length > 0 ? 'form-group has-error' : 'form-group' }>
                     <br/>
                     <select name="currencyCode" value={this.props.aidOnBudget.currencyCode} className="form-control" onChange={this.onChange}>
-                    <option value="">{this.props.translations['amp.gpi-data:select-currency']}</option>
+                    <option value="" >{this.props.translations['amp.gpi-data:select-currency'].toLowerCase()}</option>
                     {this.props.currencyList.map(currency => 
                     <option value={currency.id} key={currency.id} >{currency.id}</option>
                     )}
                     </select>
                     </div>                    
                     </td>
-                    <td><br/>
+                    <td className="actions-column"><br/>
                     <span className="glyphicon glyphicon-custom glyphicon-ok-circle success-color" onClick={this.save}> </span>                    
                     <span className="glyphicon glyphicon-custom glyphicon-remove-sign" onClick={this.cancel}></span>
                     </td>                      
@@ -218,7 +218,7 @@ export default class AidOnBudgetRow extends Component {
                     <td>{this.getOrgName(this.props.aidOnBudget.donorId)}</td>
                     <td className="amount-column">{this.formatAmount(this.props.aidOnBudget.amount)}</td>
                     <td>{this.props.aidOnBudget.currencyCode} </td>
-                    <td><span className="glyphicon glyphicon-custom glyphicon-pencil" onClick={this.toggleEdit}></span> <span className="glyphicon glyphicon-custom glyphicon-trash" onClick={this.deleteAidOnBudget}></span></td>                
+                    <td className="actions-column"><span className="glyphicon glyphicon-custom glyphicon-pencil" onClick={this.toggleEdit}></span> <span className="glyphicon glyphicon-custom glyphicon-trash" onClick={this.deleteAidOnBudget}></span></td>                
                     </tr>
                     
             );

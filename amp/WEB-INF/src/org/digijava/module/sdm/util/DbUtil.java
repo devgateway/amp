@@ -460,51 +460,51 @@ public class DbUtil {
 //beginTransaction();
             tx = session.beginTransaction();
             if(document.getId()==null){
-            	session.save(document);
-            	if(document.getItems()!=null){
-            		Iterator<SdmItem> iter=document.getItems().iterator();
-            		while(iter.hasNext()){
-            			SdmItem oldItem = iter.next();
-            			oldItem.setDocument(document);
-            			//save item
-            			 session.save(oldItem);
-            		}
-            	}
+                session.save(document);
+                if(document.getItems()!=null){
+                    Iterator<SdmItem> iter=document.getItems().iterator();
+                    while(iter.hasNext()){
+                        SdmItem oldItem = iter.next();
+                        oldItem.setDocument(document);
+                        //save item
+                         session.save(oldItem);
+                    }
+                }
             }
             else{
-            	Sdm doc=(Sdm)session.load(Sdm.class, document.getId());
-            	doc.setName(document.getName());
-            	doc.setInstanceId(document.getInstanceId());
-            	doc.setSiteId(document.getSiteId());
-            	if(document.getItems()!=null){
-            		for(Object item:document.getItems()){
-            			SdmItem sdmItem=(SdmItem)item;
-            			if(sdmItem.getDocument()==null){
-            				sdmItem.setDocument(document);
-            				session.save(sdmItem);
-            			}
-            			else{
-            				SdmItem oldItem=(SdmItem) session.load(SdmItem.class, new SdmItem(doc,sdmItem.getParagraphOrder()));
-            				oldItem.setAlignment(sdmItem.getAlignment());
-            				oldItem.setBold(sdmItem.getBold());
-            				oldItem.setContent(sdmItem.getContent());
-            				oldItem.setContentText(sdmItem.getContentText());
-            				oldItem.setContentTitle(sdmItem.getContentTitle());
-            				oldItem.setContentType(sdmItem.getContentType());
-            				oldItem.setFont(sdmItem.getFont());
-            				oldItem.setFontSize(sdmItem.getFontSize());
-            				oldItem.setItalic(sdmItem.getItalic());
-            				oldItem.setParagraphOrder(sdmItem.getParagraphOrder());
-            				oldItem.setRealType(sdmItem.getRealType());
-            				oldItem.setUnderline(sdmItem.getUnderline());
-                			//update item
-                			session.update(oldItem);
-            			}
-            		}
-            	}
-            	
-            	session.update(doc);
-            	
+                Sdm doc=(Sdm)session.load(Sdm.class, document.getId());
+                doc.setName(document.getName());
+                doc.setInstanceId(document.getInstanceId());
+                doc.setSiteId(document.getSiteId());
+                if(document.getItems()!=null){
+                    for(Object item:document.getItems()){
+                        SdmItem sdmItem=(SdmItem)item;
+                        if(sdmItem.getDocument()==null){
+                            sdmItem.setDocument(document);
+                            session.save(sdmItem);
+                        }
+                        else{
+                            SdmItem oldItem=(SdmItem) session.load(SdmItem.class, new SdmItem(doc,sdmItem.getParagraphOrder()));
+                            oldItem.setAlignment(sdmItem.getAlignment());
+                            oldItem.setBold(sdmItem.getBold());
+                            oldItem.setContent(sdmItem.getContent());
+                            oldItem.setContentText(sdmItem.getContentText());
+                            oldItem.setContentTitle(sdmItem.getContentTitle());
+                            oldItem.setContentType(sdmItem.getContentType());
+                            oldItem.setFont(sdmItem.getFont());
+                            oldItem.setFontSize(sdmItem.getFontSize());
+                            oldItem.setItalic(sdmItem.getItalic());
+                            oldItem.setParagraphOrder(sdmItem.getParagraphOrder());
+                            oldItem.setRealType(sdmItem.getRealType());
+                            oldItem.setUnderline(sdmItem.getUnderline());
+                            //update item
+                            session.update(oldItem);
+                        }
+                    }
+                }
+                
+                session.update(doc);
+                
             }           
 //      
             tx.commit();
@@ -527,36 +527,36 @@ public class DbUtil {
         return document;
     }
     
-	/**
-	 * After this issue: AMP-18018 we use this method to always have a unique paragraph.
-	 * @param document
-	 * @return
-	 */
+    /**
+     * After this issue: AMP-18018 we use this method to always have a unique paragraph.
+     * @param document
+     * @return
+     */
     public static Long getNewParagraphOrder(Sdm document) {
-		Long order = null;
-		try {
-			int i = 0;
-			boolean add = false;
-			if (document.getItems() != null) {
-				Iterator<SdmItem> iItems = document.getItems().iterator();
-				while (iItems.hasNext()) {
-					SdmItem item = iItems.next();
-					if (item.getParagraphOrder().intValue() > i) {
-						i = item.getParagraphOrder().intValue();
-					}
-					add = true;
-				}
-			}
-			if (add) {
-				order = new Long(i + 1);
-			} else {
-				order = new Long(i);
-			}
-		} catch (Exception e) {
-			logger.error(e);
-		}
-		return order;
-	}
+        Long order = null;
+        try {
+            int i = 0;
+            boolean add = false;
+            if (document.getItems() != null) {
+                Iterator<SdmItem> iItems = document.getItems().iterator();
+                while (iItems.hasNext()) {
+                    SdmItem item = iItems.next();
+                    if (item.getParagraphOrder().intValue() > i) {
+                        i = item.getParagraphOrder().intValue();
+                    }
+                    add = true;
+                }
+            }
+            if (add) {
+                order = new Long(i + 1);
+            } else {
+                order = new Long(i);
+            }
+        } catch (Exception e) {
+            logger.error(e);
+        }
+        return order;
+    }
 
     public static List getDocuments(HttpServletRequest request) throws
         SDMException {
@@ -651,8 +651,8 @@ public class DbUtil {
     }
 
     public static SdmItem getSdmItem(long sdmId, long paragraphId) throws SDMException {
-    	Session session = null;
-    	SdmItem result =null;
+        Session session = null;
+        SdmItem result =null;
         try {
             session = PersistenceManager.getRequestDBSession();
             Query query = session.createQuery("select itm from " +SdmItem.class.getName() +

@@ -10,5 +10,5 @@ import java.util.Set;
  *
  */
 public interface Waver<K> {
-	public Set<K> wave(Set<K> input);
+    public Set<K> wave(Set<K> input);
 }

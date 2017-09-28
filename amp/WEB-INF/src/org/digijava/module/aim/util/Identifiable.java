@@ -8,5 +8,5 @@ package org.digijava.module.aim.util;
  * Implements objects that can be identified by an unique Id that can be represented as an object.
  */
 public interface Identifiable {
-	public Object getIdentifier();
+    public Object getIdentifier();
 }

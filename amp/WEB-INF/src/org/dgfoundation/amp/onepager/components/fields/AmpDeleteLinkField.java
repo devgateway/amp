@@ -14,18 +14,18 @@ import org.apache.wicket.model.IModel;
  */
 public abstract class AmpDeleteLinkField extends AmpLinkField {
 
-	/**
-	 * @param id
-	 * @param fmName
-	 */
-	public AmpDeleteLinkField(String id, String fmName) {
-		super(id, fmName);
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * @param id
+     * @param fmName
+     */
+    public AmpDeleteLinkField(String id, String fmName) {
+        super(id, fmName);
+        // TODO Auto-generated constructor stub
+    }
 
-	public AmpDeleteLinkField(String id, String fmName,
-			final IModel<String> qModel) {
-		super(id, fmName, qModel);
-	}
+    public AmpDeleteLinkField(String id, String fmName,
+            final IModel<String> qModel) {
+        super(id, fmName, qModel);
+    }
 
 }

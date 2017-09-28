@@ -178,6 +178,7 @@
 	
 	<page name="viewActivityHistory" page="viewActivityHistory" title=" - View Activity History"/>
 	<page name="viewActivityDifferences" page="viewActivityDifferences" title=" - View Activity Differences"/>
+	<page name="viewActivitySummaryChanges" page="viewActivitySummaryChanges" title="Show Change Summary"/>
 
 	<!-- global settings-->
 	<page name="viewGlobalSettings"  title ="- Global Settings " />

@@ -13,5 +13,5 @@ package org.dgfoundation.amp.ar;
  *
  */
 public interface RowIdentifiable {
-	public Object getRowId();
+    public Object getRowId();
 }

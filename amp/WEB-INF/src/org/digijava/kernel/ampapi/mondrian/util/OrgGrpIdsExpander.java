@@ -18,21 +18,21 @@ import org.hibernate.jdbc.Work;
  *
  */
 public class OrgGrpIdsExpander extends IdsExpander {
-	
-	public OrgGrpIdsExpander(String factColumnName) {
-		super(factColumnName);
-	}
-	
-	@Override public Set<Long> expandIds(final List<Long> values) {
-		final Set<Long> res = new HashSet<>();
-		//res.add(MondrianETL.MONDRIAN_DUMMY_ID_FOR_ETL);
-		PersistenceManager.getSession().doWork(new Work() {
+    
+    public OrgGrpIdsExpander(String factColumnName) {
+        super(factColumnName);
+    }
+    
+    @Override public Set<Long> expandIds(final List<Long> values) {
+        final Set<Long> res = new HashSet<>();
+        //res.add(MondrianETL.MONDRIAN_DUMMY_ID_FOR_ETL);
+        PersistenceManager.getSession().doWork(new Work() {
 
-			@Override
-			public void execute(Connection connection) throws SQLException {
-				res.addAll(SQLUtils.fetchLongs(connection, "SELECT amp_org_id FROM amp_organisation WHERE org_grp_id IN (" + Util.toCSStringForIN(values) + ")"));
-			}
-		});
-		return res;
-	}
+            @Override
+            public void execute(Connection connection) throws SQLException {
+                res.addAll(SQLUtils.fetchLongs(connection, "SELECT amp_org_id FROM amp_organisation WHERE org_grp_id IN (" + Util.toCSStringForIN(values) + ")"));
+            }
+        });
+        return res;
+    }
 }

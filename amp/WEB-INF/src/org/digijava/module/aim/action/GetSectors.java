@@ -18,53 +18,53 @@ import org.digijava.module.aim.util.SectorUtil;
 
 public class GetSectors extends Action {
 
-		  private static Logger logger = Logger.getLogger(GetSectors.class);
+          private static Logger logger = Logger.getLogger(GetSectors.class);
 
-		  public ActionForward execute(ActionMapping mapping,
-								ActionForm form,
-								HttpServletRequest request,
-								HttpServletResponse response) throws java.lang.Exception {
+          public ActionForward execute(ActionMapping mapping,
+                                ActionForm form,
+                                HttpServletRequest request,
+                                HttpServletResponse response) throws java.lang.Exception {
 
-		HttpSession session = request.getSession();
-		if (session.getAttribute("ampAdmin") == null) {
-			return mapping.findForward("index");
-		} else {
-			String str = (String)session.getAttribute("ampAdmin");
-			if (str.equals("no")) {
-				return mapping.findForward("index");
-			}
-		}
-					 
-					 Collection sectors = null;
-					 SectorsForm sectorsForm = (SectorsForm) form;
-					
-					 logger.debug("In get sector action using info");					
-					 logger.debug("In get sector action using debug");
-					 if (request.getParameter("sectorId") == null || request.getParameter("sectorId").equals("0")) {
-								// access the top level sectors
-								sectors = SectorUtil.getSubSectors(new Long(0));
-								sectorsForm.setParentSector(null);
-								sectorsForm.setPrevViewedSectorId(null);
-								
-					 } else {
-								// access the sub sectors of the sector with id 'sectorId'
-								Long parentSecId = new Long(Long.parseLong(request.getParameter("sectorId")));
-								sectors = SectorUtil.getSubSectors(parentSecId);
+        HttpSession session = request.getSession();
+        if (session.getAttribute("ampAdmin") == null) {
+            return mapping.findForward("index");
+        } else {
+            String str = (String)session.getAttribute("ampAdmin");
+            if (str.equals("no")) {
+                return mapping.findForward("index");
+            }
+        }
+                     
+                     Collection sectors = null;
+                     SectorsForm sectorsForm = (SectorsForm) form;
+                    
+                     logger.debug("In get sector action using info");                   
+                     logger.debug("In get sector action using debug");
+                     if (request.getParameter("sectorId") == null || request.getParameter("sectorId").equals("0")) {
+                                // access the top level sectors
+                                sectors = SectorUtil.getSubSectors(new Long(0));
+                                sectorsForm.setParentSector(null);
+                                sectorsForm.setPrevViewedSectorId(null);
+                                
+                     } else {
+                                // access the sub sectors of the sector with id 'sectorId'
+                                Long parentSecId = new Long(Long.parseLong(request.getParameter("sectorId")));
+                                sectors = SectorUtil.getSubSectors(parentSecId);
 
-								Sector parentSector = SectorUtil.getSector(parentSecId);
-								sectorsForm.setParentSectorId(parentSecId);
-								sectorsForm.setParentSector(parentSector.getSectorName());
-								
-								AmpSector ampSector = SectorUtil.getAmpSector(parentSecId);
-								if (ampSector == null || ampSector.getParentSectorId() == null) {
-										  sectorsForm.setPrevViewedSectorId("0");
-								} else {
-										  sectorsForm.setPrevViewedSectorId("" + ampSector.getParentSectorId().getAmpSectorId());
-								}
-										  
-					 }
-					 sectorsForm.setSectors(sectors);
+                                Sector parentSector = SectorUtil.getSector(parentSecId);
+                                sectorsForm.setParentSectorId(parentSecId);
+                                sectorsForm.setParentSector(parentSector.getSectorName());
+                                
+                                AmpSector ampSector = SectorUtil.getAmpSector(parentSecId);
+                                if (ampSector == null || ampSector.getParentSectorId() == null) {
+                                          sectorsForm.setPrevViewedSectorId("0");
+                                } else {
+                                          sectorsForm.setPrevViewedSectorId("" + ampSector.getParentSectorId().getAmpSectorId());
+                                }
+                                          
+                     }
+                     sectorsForm.setSectors(sectors);
 
-					 return mapping.findForward("forward");
-		  }
+                     return mapping.findForward("forward");
+          }
 }

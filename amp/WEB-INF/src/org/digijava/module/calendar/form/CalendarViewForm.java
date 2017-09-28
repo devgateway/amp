@@ -14,14 +14,14 @@ import org.digijava.module.calendar.entity.DateNavigator;
 import org.digijava.module.calendar.entity.EventsFilter;
 
 public class CalendarViewForm  extends ActionForm {
-	
+    
    
-	/**
-	 * default serial version id
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	private String siteId;
+    /**
+     * default serial version id
+     */
+    private static final long serialVersionUID = 1L;
+    
+    private String siteId;
     private String instanceId;
     private User user;
     private GregorianCalendar currentDate;
@@ -229,59 +229,59 @@ public class CalendarViewForm  extends ActionForm {
   }
 
   public void reset(ActionMapping mapping, HttpServletRequest request) {
-//	  String[] emptylist = new String[0];
-//	  if (this.filter != null){
-//		  this.filter.setSelectedEventTypes(emptylist);
-//	  }
-//	  String[] emptyDonorsList=new String[0];
-//	  if (this.filter != null){
-//		  this.filter.setSelectedDonors(emptyDonorsList);
-//	  }
-	  /* if(filter!=null){
+//    String[] emptylist = new String[0];
+//    if (this.filter != null){
+//        this.filter.setSelectedEventTypes(emptylist);
+//    }
+//    String[] emptyDonorsList=new String[0];
+//    if (this.filter != null){
+//        this.filter.setSelectedDonors(emptyDonorsList);
+//    }
+      /* if(filter!=null){
        this.filter.setShowPublicEvents(false);
      }
     */
   }
   
   public Boolean getPrint() {
-		return print;
-	}
+        return print;
+    }
 
-	public void setPrint(Boolean print) {
-		this.print = print;
-	}
+    public void setPrint(Boolean print) {
+        this.print = print;
+    }
 
-	public int getPrintMode() {
-		return printMode;
-	}
+    public int getPrintMode() {
+        return printMode;
+    }
 
-	public void setPrintMode(int printMode) {
-		this.printMode = printMode;
-	}
+    public void setPrintMode(int printMode) {
+        this.printMode = printMode;
+    }
 
-	public int getprintData() {
-		return printData;
-	}
+    public int getprintData() {
+        return printData;
+    }
 
-	public void setprintData(int printData) {
-		this.printData = printData;
-	}
+    public void setprintData(int printData) {
+        this.printData = printData;
+    }
 
 
 public Boolean getResetDonors() {
-	return resetDonors;
+    return resetDonors;
 }
 
 public void setResetDonors(Boolean resetDonors) {
-	this.resetDonors = resetDonors;
+    this.resetDonors = resetDonors;
 }
 
 public Boolean getResetEventTypes() {
-	return resetEventTypes;
+    return resetEventTypes;
 }
 
 public void setResetEventTypes(Boolean resetEventTypes) {
-	this.resetEventTypes = resetEventTypes;
+    this.resetEventTypes = resetEventTypes;
 }
 
 

@@ -52,10 +52,10 @@ public class SaveTranslation
         String backUrl = null;
         try
         {
-        	backUrl = java.net.URLDecoder.decode(formBean.getBack_url(),"UTF-8");
+            backUrl = java.net.URLDecoder.decode(formBean.getBack_url(),"UTF-8");
         }catch (Exception ex){
-        	// need logger.
-        	backUrl = formBean.getBack_url();
+            // need logger.
+            backUrl = formBean.getBack_url();
         }
         
         backUrl = backUrl.replace("/translation/default", "/translation");

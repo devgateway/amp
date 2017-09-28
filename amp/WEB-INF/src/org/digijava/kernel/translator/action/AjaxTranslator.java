@@ -29,28 +29,28 @@ import org.digijava.kernel.util.RequestUtils;
  */
 public class AjaxTranslator extends Action {
 
-	private static Logger logger = I18NHelper.getKernelLogger(AjaxTranslator.class);
+    private static Logger logger = I18NHelper.getKernelLogger(AjaxTranslator.class);
 
-	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
-			throws IOException, ServletException {
+    public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
 
-		AjaxTranslatorForm tForm = (AjaxTranslatorForm) form;
-		String translatedText = "";
-		try {
-			if (tForm.getOriginalText() != null && tForm.getOriginalText().trim() != "") {
-				translatedText = TranslatorWorker.translateText(tForm.getOriginalText());
-			}
-			response.setContentType("text/json");
-			PrintWriter pw = response.getWriter();
-			JSONObject json = new JSONObject();
-			json.put("text", translatedText);
-			pw.write(json.toString());
-			pw.flush();
-			pw.close();
-			//logger.info(tForm.getOriginalText() + "-" + translatedText);
-		} catch (Exception e) {
-			logger.error(Level.ERROR, e);
-		}
-		return null;
-	}
+        AjaxTranslatorForm tForm = (AjaxTranslatorForm) form;
+        String translatedText = "";
+        try {
+            if (tForm.getOriginalText() != null && tForm.getOriginalText().trim() != "") {
+                translatedText = TranslatorWorker.translateText(tForm.getOriginalText());
+            }
+            response.setContentType("text/json");
+            PrintWriter pw = response.getWriter();
+            JSONObject json = new JSONObject();
+            json.put("text", translatedText);
+            pw.write(json.toString());
+            pw.flush();
+            pw.close();
+            //logger.info(tForm.getOriginalText() + "-" + translatedText);
+        } catch (Exception e) {
+            logger.error(Level.ERROR, e);
+        }
+        return null;
+    }
 }

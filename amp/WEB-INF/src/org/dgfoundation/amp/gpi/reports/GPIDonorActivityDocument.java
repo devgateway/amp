@@ -10,46 +10,46 @@ import java.util.List;
  */
 public class GPIDonorActivityDocument {
 
-	private String donorId;
-	private String activityId;
-	private List<GPIDocument> documents;
-	
-	public GPIDonorActivityDocument() {}
+    private String donorId;
+    private String activityId;
+    private List<GPIDocument> documents;
+    
+    public GPIDonorActivityDocument() {}
 
-	public GPIDonorActivityDocument(String donorId, String activityId, List<GPIDocument> documents) {
-		super();
-		this.donorId = donorId;
-		this.activityId = activityId;
-		this.documents = documents;
-	}
-	
-	public GPIDonorActivityDocument(String donorId, String activityId) {
-		super();
-		this.donorId = donorId;
-		this.activityId = activityId;
-	}
+    public GPIDonorActivityDocument(String donorId, String activityId, List<GPIDocument> documents) {
+        super();
+        this.donorId = donorId;
+        this.activityId = activityId;
+        this.documents = documents;
+    }
+    
+    public GPIDonorActivityDocument(String donorId, String activityId) {
+        super();
+        this.donorId = donorId;
+        this.activityId = activityId;
+    }
 
-	public String getDonorId() {
-		return donorId;
-	}
+    public String getDonorId() {
+        return donorId;
+    }
 
-	public void setDonorId(String donorId) {
-		this.donorId = donorId;
-	}
+    public void setDonorId(String donorId) {
+        this.donorId = donorId;
+    }
 
-	public String getActivityId() {
-		return activityId;
-	}
+    public String getActivityId() {
+        return activityId;
+    }
 
-	public void setActivityId(String activityId) {
-		this.activityId = activityId;
-	}
+    public void setActivityId(String activityId) {
+        this.activityId = activityId;
+    }
 
-	public List<GPIDocument> getDocuments() {
-		return documents;
-	}
+    public List<GPIDocument> getDocuments() {
+        return documents;
+    }
 
-	public void setDocuments(List<GPIDocument> documents) {
-		this.documents = documents;
-	}
+    public void setDocuments(List<GPIDocument> documents) {
+        this.documents = documents;
+    }
 }

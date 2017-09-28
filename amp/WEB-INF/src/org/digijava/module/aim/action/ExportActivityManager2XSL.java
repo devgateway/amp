@@ -31,26 +31,26 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
                              javax.servlet.http.HttpServletRequest request,
                              javax.servlet.http.HttpServletResponse response) throws
     java.lang.Exception {
-	HttpSession session = request.getSession();
-	if (session.getAttribute("ampAdmin") == null) {
-		return mapping.findForward("index");
-	} else {
-		String str = (String) session.getAttribute("ampAdmin");
-		if (str.equals("no")) {
-			return mapping.findForward("index");
-		}
-	}
-	response.setContentType("application/vnd.ms-excel");
-	response.setHeader("Content-disposition", "inline; filename=Export.xls");
-	ActivityForm actForm = (ActivityForm) form;
-	Site site = RequestUtils.getSite(request);
-	Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
-	Long siteId = site.getId();
-	String locale = navigationLanguage.getCode();
+    HttpSession session = request.getSession();
+    if (session.getAttribute("ampAdmin") == null) {
+        return mapping.findForward("index");
+    } else {
+        String str = (String) session.getAttribute("ampAdmin");
+        if (str.equals("no")) {
+            return mapping.findForward("index");
+        }
+    }
+    response.setContentType("application/vnd.ms-excel");
+    response.setHeader("Content-disposition", "inline; filename=Export.xls");
+    ActivityForm actForm = (ActivityForm) form;
+    Site site = RequestUtils.getSite(request);
+    Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
+    Long siteId = site.getId();
+    String locale = navigationLanguage.getCode();
 
-	HSSFWorkbook wb = new HSSFWorkbook();
-	HSSFSheet sheet = wb.createSheet("export");
-	// title cells
+    HSSFWorkbook wb = new HSSFWorkbook();
+    HSSFSheet sheet = wb.createSheet("export");
+    // title cells
  HSSFCellStyle titleCS = wb.createCellStyle();
  titleCS.setWrapText(true);
  titleCS.setFillForegroundColor(HSSFColor.BROWN.index);
@@ -83,23 +83,23 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
  HSSFRichTextString countryTitle = new HSSFRichTextString(TranslatorWorker.translateText("Activity Id ",locale,siteId));
  countryTitleCell.setCellValue(countryTitle);
  countryTitleCell.setCellStyle(titleCS);
-	Collection<AmpActivityFake> activities =actForm.getAllActivityList();
+    Collection<AmpActivityFake> activities =actForm.getAllActivityList();
 
-	if(activities!=null){
-		for(AmpActivityFake activity:activities){
-			cellIndex=0;
-			  HSSFRow row = sheet.createRow(rowIndex++);
-			  row.createCell(cellIndex++).setCellValue(activity.getName());
-			  row.createCell(cellIndex++).setCellValue((activity.getTeam()==null)?"":activity.getTeam().getName());
-			  row.createCell(cellIndex++).setCellValue(activity.getAmpId());
-			
-		}
-	}
-		sheet.autoSizeColumn(0); // adjust width of the first column
-		sheet.autoSizeColumn(1);
-		sheet.autoSizeColumn(2);
-		wb.write(response.getOutputStream());
-	return null;
+    if(activities!=null){
+        for(AmpActivityFake activity:activities){
+            cellIndex=0;
+              HSSFRow row = sheet.createRow(rowIndex++);
+              row.createCell(cellIndex++).setCellValue(activity.getName());
+              row.createCell(cellIndex++).setCellValue((activity.getTeam()==null)?"":activity.getTeam().getName());
+              row.createCell(cellIndex++).setCellValue(activity.getAmpId());
+            
+        }
+    }
+        sheet.autoSizeColumn(0); // adjust width of the first column
+        sheet.autoSizeColumn(1);
+        sheet.autoSizeColumn(2);
+        wb.write(response.getOutputStream());
+    return null;
 
 }
 

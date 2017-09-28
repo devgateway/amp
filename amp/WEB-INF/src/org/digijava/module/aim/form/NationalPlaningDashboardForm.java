@@ -43,12 +43,12 @@ public class NationalPlaningDashboardForm extends ActionForm {
     private Collection allThemes;
 
     public String[] getSelectedYears() {
-		return selectedYears;
-	}
+        return selectedYears;
+    }
 
-	public void setSelectedYears(String[] selectedYears) {
-		this.selectedYears = selectedYears;
-	}
+    public void setSelectedYears(String[] selectedYears) {
+        this.selectedYears = selectedYears;
+    }
 
     public void reset(ActionMapping mapping, HttpServletRequest request) {
         currentProgramId = null;
@@ -228,33 +228,33 @@ public class NationalPlaningDashboardForm extends ActionForm {
         this.xmlTree = xmlTree;
     }
 
-	public boolean isShowIndicators() {
-		return showIndicators;
-	}
+    public boolean isShowIndicators() {
+        return showIndicators;
+    }
 
-	public void setShowIndicators(boolean showIndicators) {
-		this.showIndicators = showIndicators;
-	}
+    public void setShowIndicators(boolean showIndicators) {
+        this.showIndicators = showIndicators;
+    }
 
-	public String getFundingSum() {
+    public String getFundingSum() {
         return fundingSum;
-	}
+    }
 
-	public void setFundingSum(String fundingSum) {
-		this.fundingSum=fundingSum;
-	}
-	
-	public void setAllThemes(Collection allThemes) {
-		this.allThemes	= allThemes;
-	}
-	public Collection getAllThemes () {
-		return this.allThemes;
-	}
-	
-	public Set getIndicators() {
-		return indicators;
-	}
-	public void setIndicators(Set indicators) {
-		this.indicators = indicators;
-	}
+    public void setFundingSum(String fundingSum) {
+        this.fundingSum=fundingSum;
+    }
+    
+    public void setAllThemes(Collection allThemes) {
+        this.allThemes  = allThemes;
+    }
+    public Collection getAllThemes () {
+        return this.allThemes;
+    }
+    
+    public Set getIndicators() {
+        return indicators;
+    }
+    public void setIndicators(Set indicators) {
+        this.indicators = indicators;
+    }
 }

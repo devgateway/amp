@@ -18,26 +18,26 @@ import org.digijava.module.aim.dbentity.AmpTeam;
  */
 public class AmpPMAddFieldPermissionPanel extends AmpComponentPanel {
 
-	public AmpPMAddFieldPermissionPanel(String id, IModel<AmpTreeVisibilityModelBean> ampTreeVisibilityBeanModel, String fmName, IModel<Set<AmpTeam>> teamsModel, IModel<AmpTreeVisibility> ampTreeVisibilityModel) {
-		super(id, ampTreeVisibilityBeanModel, fmName, AmpFMTypes.MODULE);
-		super.setOutputMarkupId(true);
+    public AmpPMAddFieldPermissionPanel(String id, IModel<AmpTreeVisibilityModelBean> ampTreeVisibilityBeanModel, String fmName, IModel<Set<AmpTeam>> teamsModel, IModel<AmpTreeVisibility> ampTreeVisibilityModel) {
+        super(id, ampTreeVisibilityBeanModel, fmName, AmpFMTypes.MODULE);
+        super.setOutputMarkupId(true);
 
-		AmpPMAssignFieldPermissionComponentPanel assignFieldPerm = new AmpPMAssignFieldPermissionComponentPanel("assignFieldPermission", ampTreeVisibilityBeanModel,"Assign Field Permission", teamsModel, ampTreeVisibilityModel);
-		assignFieldPerm.setOutputMarkupId(true);
-		add(assignFieldPerm);
-		
-	}
+        AmpPMAssignFieldPermissionComponentPanel assignFieldPerm = new AmpPMAssignFieldPermissionComponentPanel("assignFieldPermission", ampTreeVisibilityBeanModel,"Assign Field Permission", teamsModel, ampTreeVisibilityModel);
+        assignFieldPerm.setOutputMarkupId(true);
+        add(assignFieldPerm);
+        
+    }
 
-	public AmpPMAddFieldPermissionPanel(String id, IModel model, String fmName, AmpFMTypes fmBehavior) {
-		super(id, model, fmName, fmBehavior);
-	}
+    public AmpPMAddFieldPermissionPanel(String id, IModel model, String fmName, AmpFMTypes fmBehavior) {
+        super(id, model, fmName, fmBehavior);
+    }
 
-	public AmpPMAddFieldPermissionPanel(String id, String fmName, AmpFMTypes fmType) {
-		super(id, fmName, fmType);
-	}
+    public AmpPMAddFieldPermissionPanel(String id, String fmName, AmpFMTypes fmType) {
+        super(id, fmName, fmType);
+    }
 
-	public AmpPMAddFieldPermissionPanel(String id, String fmName) {
-		super(id, fmName);
-	}
+    public AmpPMAddFieldPermissionPanel(String id, String fmName) {
+        super(id, fmName);
+    }
 
 }

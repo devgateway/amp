@@ -43,9 +43,9 @@ import org.digijava.kernel.taglib.util.TagUtil;
 public class InstanceTag
     extends TagSupport {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public static final String PAGE_MODULE_INSTANCE = "page_moduleInstance";
+    public static final String PAGE_MODULE_INSTANCE = "page_moduleInstance";
 
   /**
    * Property key

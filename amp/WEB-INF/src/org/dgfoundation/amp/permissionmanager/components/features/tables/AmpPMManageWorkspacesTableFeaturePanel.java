@@ -29,47 +29,47 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 public class AmpPMManageWorkspacesTableFeaturePanel extends AmpFormTableFeaturePanel implements IHeaderContributor {
 
 
-	/**
-	 * @param id
-	 * @param model
-	 * @param fmName
-	 * @throws Exception
-	 */
-	public AmpPMManageWorkspacesTableFeaturePanel(String id, IModel model,	String fmName) throws Exception {
-		super(id, model, fmName);
-	}
+    /**
+     * @param id
+     * @param model
+     * @param fmName
+     * @throws Exception
+     */
+    public AmpPMManageWorkspacesTableFeaturePanel(String id, IModel model,  String fmName) throws Exception {
+        super(id, model, fmName);
+    }
 
-	/**
-	 * @param id
-	 * @param model
-	 * @param fmName
-	 * @param hideLeadingNewLine
-	 * @throws Exception
-	 */
-	public AmpPMManageWorkspacesTableFeaturePanel(String id, IModel<Set<AmpTeam>> model, String fmName, boolean hideLeadingNewLine) throws Exception {
-		super(id, model, fmName, hideLeadingNewLine);
+    /**
+     * @param id
+     * @param model
+     * @param fmName
+     * @param hideLeadingNewLine
+     * @throws Exception
+     */
+    public AmpPMManageWorkspacesTableFeaturePanel(String id, IModel<Set<AmpTeam>> model, String fmName, boolean hideLeadingNewLine) throws Exception {
+        super(id, model, fmName, hideLeadingNewLine);
 
-		AbstractReadOnlyModel<List<AmpTeam>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(model);
-		list = new PageableListView<AmpTeam>("usersList", listModel, 5) {
-			private static final long serialVersionUID = 7218457979728871528L;
-			@Override
-			protected void populateItem(final ListItem<AmpTeam> item) {
-				item.add(new Label("workspaceName", item.getModelObject().getName()));
-				
-				DropDownChoice<String> strategies = new DropDownChoice<String>("permStrategies", new PropertyModel<String>(item.getModelObject(), "permissionStrategy"),PMUtil.PERM_STRATEGIES);
-				item.add(strategies);
-				strategies.add(new AjaxFormComponentUpdatingBehavior("onchange") {
-					protected void onUpdate(AjaxRequestTarget target) {
-						PMUtil.updateAmpObj(item.getModelObject());
-		                target.add(AmpPMManageWorkspacesTableFeaturePanel.this);
-		            }
-		        });
-			}
-		};
-		list.setReuseItems(true);
-		add(list);
-		
-	}
-	
+        AbstractReadOnlyModel<List<AmpTeam>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(model);
+        list = new PageableListView<AmpTeam>("usersList", listModel, 5) {
+            private static final long serialVersionUID = 7218457979728871528L;
+            @Override
+            protected void populateItem(final ListItem<AmpTeam> item) {
+                item.add(new Label("workspaceName", item.getModelObject().getName()));
+                
+                DropDownChoice<String> strategies = new DropDownChoice<String>("permStrategies", new PropertyModel<String>(item.getModelObject(), "permissionStrategy"),PMUtil.PERM_STRATEGIES);
+                item.add(strategies);
+                strategies.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+                    protected void onUpdate(AjaxRequestTarget target) {
+                        PMUtil.updateAmpObj(item.getModelObject());
+                        target.add(AmpPMManageWorkspacesTableFeaturePanel.this);
+                    }
+                });
+            }
+        };
+        list.setReuseItems(true);
+        add(list);
+        
+    }
+    
 }
 

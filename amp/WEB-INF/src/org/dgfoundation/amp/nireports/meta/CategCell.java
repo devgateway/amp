@@ -7,5 +7,5 @@ package org.dgfoundation.amp.nireports.meta;
  *
  */
 public interface CategCell {
-	public MetaInfoSet getMetaInfo();
+    public MetaInfoSet getMetaInfo();
 }

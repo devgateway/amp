@@ -29,11 +29,11 @@ import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
  */
 public class AmpFiltersConverter extends BasicFiltersConverter {
 
-	/**
-	 * Map<DONOR_REPORT_COLUMN, corresponding PLEDGE_REPORT_COLUMN>
-	 */
+    /**
+     * Map<DONOR_REPORT_COLUMN, corresponding PLEDGE_REPORT_COLUMN>
+     */
     public static final Map<String, String> DONOR_COLUMNS_TO_PLEDGE_COLUMNS = new HashMap<String, String>() {{
-    	put(ColumnConstants.PROJECT_TITLE, ColumnConstants.PLEDGES_TITLES);
+        put(ColumnConstants.PROJECT_TITLE, ColumnConstants.PLEDGES_TITLES);
         put(ColumnConstants.STATUS, ColumnConstants.PLEDGE_STATUS);
         put(ColumnConstants.MODALITIES, ColumnConstants.PLEDGES_AID_MODALITY);
         
@@ -89,112 +89,112 @@ public class AmpFiltersConverter extends BasicFiltersConverter {
         put(ColumnConstants.COUNTRY, ColumnConstants.PLEDGES_COUNTRIES);
     }};
 
-	public static final Map<String, String> DONOR_TO_REGIONAL_COLUMNS = new ImmutableMap.Builder<String, String>()
-			.put(ColumnConstants.REGION, ColumnConstants.REGIONAL_REGION)
-			.build();
+    public static final Map<String, String> DONOR_TO_REGIONAL_COLUMNS = new ImmutableMap.Builder<String, String>()
+            .put(ColumnConstants.REGION, ColumnConstants.REGIONAL_REGION)
+            .build();
 
-	/**
-	 * the dimensions whose {@link NiDimensionUsage} instances are ORed between themselves while filtering (please see the contract for {@link #shouldCollapseDimension(NiDimension)}
-	 */
-	Set<String> ORED_DIMENSIONS = new HashSet<>(Arrays.asList("locs", "sectors", "progs", "orgs"));
-	
-	Set<String> locationColumns = new HashSet<>(Arrays.asList(ColumnConstants.COUNTRY, ColumnConstants.REGION, ColumnConstants.ZONE, ColumnConstants.DISTRICT, ColumnConstants.LOCATION));
+    /**
+     * the dimensions whose {@link NiDimensionUsage} instances are ORed between themselves while filtering (please see the contract for {@link #shouldCollapseDimension(NiDimension)}
+     */
+    Set<String> ORED_DIMENSIONS = new HashSet<>(Arrays.asList("locs", "sectors", "progs", "orgs"));
+    
+    Set<String> locationColumns = new HashSet<>(Arrays.asList(ColumnConstants.COUNTRY, ColumnConstants.REGION, ColumnConstants.ZONE, ColumnConstants.DISTRICT, ColumnConstants.LOCATION));
 
-	public AmpFiltersConverter(NiReportsEngine engine) {
-		super(engine);
-	}
+    public AmpFiltersConverter(NiReportsEngine engine) {
+        super(engine);
+    }
 
-	@Override
-	protected void processColumnElement(String columnName, FilterRule rule) {
-		if (columnName.equals(ColumnConstants.ARCHIVED))
-			return; //TODO: hack so that preexisting testcases are not broken while developing the feature
-		
-		if (columnName.equals(ColumnConstants.DONOR_ID))
-			columnName = ColumnConstants.DONOR_AGENCY; // Hello, filter widget with your weird peculiarities
-		
-		if (columnName.equals(ColumnConstants.DONOR_AGENCY) && (rule.filterType == FilterType.VALUES && rule.values.isEmpty()))
-			return; // temporary hack for https://jira.dgfoundation.org/browse/AMP-22602
-				
-		if (columnName.equals(ColumnConstants.ACTIVITY_ID)) {
-			// fast track for ACTIVITY_ID filtering: construct a predicate to run on top of the workspace filter
-			this.activityIdsPredicate = Optional.of(rule.buildPredicate());
-			return;
-		}
-		
-		if (columnName.equals(ColumnConstants.APPROVAL_STATUS)) {
-			/**
-			 * AMP-22621: the Filter widget uses a set of codes for filtering on activity (draft, status). 
-			 * The AMP schema implements by filtering on a non-user-visible column which generates the same codes and then filtering out based on their values.
-			 * Please see v_filtered_activity_status for a definition of this view (and also to understand the meaning of the Filter widget codes)
-			 */
-			columnName = ColumnConstants.FILTERED_APPROVAL_STATUS; 
-		}
-		
-		columnName = removeIdSuffixIfNeeded(schema, columnName);
+    @Override
+    protected void processColumnElement(String columnName, FilterRule rule) {
+        if (columnName.equals(ColumnConstants.ARCHIVED))
+            return; //TODO: hack so that preexisting testcases are not broken while developing the feature
+        
+        if (columnName.equals(ColumnConstants.DONOR_ID))
+            columnName = ColumnConstants.DONOR_AGENCY; // Hello, filter widget with your weird peculiarities
+        
+        if (columnName.equals(ColumnConstants.DONOR_AGENCY) && (rule.filterType == FilterType.VALUES && rule.values.isEmpty()))
+            return; // temporary hack for https://jira.dgfoundation.org/browse/AMP-22602
+                
+        if (columnName.equals(ColumnConstants.ACTIVITY_ID)) {
+            // fast track for ACTIVITY_ID filtering: construct a predicate to run on top of the workspace filter
+            this.activityIdsPredicate = Optional.of(rule.buildPredicate());
+            return;
+        }
+        
+        if (columnName.equals(ColumnConstants.APPROVAL_STATUS)) {
+            /**
+             * AMP-22621: the Filter widget uses a set of codes for filtering on activity (draft, status). 
+             * The AMP schema implements by filtering on a non-user-visible column which generates the same codes and then filtering out based on their values.
+             * Please see v_filtered_activity_status for a definition of this view (and also to understand the meaning of the Filter widget codes)
+             */
+            columnName = ColumnConstants.FILTERED_APPROVAL_STATUS; 
+        }
+        
+        columnName = removeIdSuffixIfNeeded(schema, columnName);
 
-		if (this.spec.getReportType() == ArConstants.PLEDGES_TYPE) {
-			/**
-			 * there is no "pledges filter widget": the filter widget uses hardcoded column names (the ones from the donor reports).
-			 * In order to support filtering in pledge reports, we will convert the donor-columns references to pledges-columns references 
-			 */
-	        columnName = DONOR_COLUMNS_TO_PLEDGE_COLUMNS.getOrDefault(columnName, columnName);
-		}
+        if (this.spec.getReportType() == ArConstants.PLEDGES_TYPE) {
+            /**
+             * there is no "pledges filter widget": the filter widget uses hardcoded column names (the ones from the donor reports).
+             * In order to support filtering in pledge reports, we will convert the donor-columns references to pledges-columns references 
+             */
+            columnName = DONOR_COLUMNS_TO_PLEDGE_COLUMNS.getOrDefault(columnName, columnName);
+        }
 
-		if (this.spec.getReportType() == ArConstants.REGIONAL_TYPE) {
-			columnName = DONOR_TO_REGIONAL_COLUMNS.getOrDefault(columnName, columnName);
-		}
+        if (this.spec.getReportType() == ArConstants.REGIONAL_TYPE) {
+            columnName = DONOR_TO_REGIONAL_COLUMNS.getOrDefault(columnName, columnName);
+        }
 
-		if (schema.getColumns().containsKey(columnName)) {
-			super.processColumnElement(columnName, rule);
-			return;
-		}
-				
-		// gone till here -> we're going to fail anyway, but using the superclass
-		super.processColumnElement(columnName, rule);
-	}
+        if (schema.getColumns().containsKey(columnName)) {
+            super.processColumnElement(columnName, rule);
+            return;
+        }
+                
+        // gone till here -> we're going to fail anyway, but using the superclass
+        super.processColumnElement(columnName, rule);
+    }
 
-	/**
-	 * cleanup the post-Mondrian mess: if filtering by a nonexistent "XXX Id" column, treat it as filtering by existent "XXX", 
-	 * since in Mondrian the "XXX" and "XXX Id" columns were distinct entities
-	 * @param schema the AMP-like reports schema used for checking for the (non)existence of columns by name
-	 * @param columnName
-	 * @return
-	 */
-	public static String removeIdSuffixIfNeeded(NiReportsSchema schema, String columnName) {
-		if (columnName.endsWith(" Id")) {
-			String newColumnName = columnName.substring(0, columnName.length() - 3);
-			if (schema.getColumns().containsKey(newColumnName)) {
-				return newColumnName;
-			}
-		}
-		return columnName;
-	}
-	
-	
-	@Override
-	protected void processMiscElement(ReportElement repElem, FilterRule rule) {
-		if (repElem.type == ElementType.DATE) {
-			addCellPredicate(NiReportsEngine.FUNDING_COLUMN_NAME, cell -> ((CategAmountCell) cell).amount.getJulianDayCode(), rule);
-		}
-	}
+    /**
+     * cleanup the post-Mondrian mess: if filtering by a nonexistent "XXX Id" column, treat it as filtering by existent "XXX", 
+     * since in Mondrian the "XXX" and "XXX Id" columns were distinct entities
+     * @param schema the AMP-like reports schema used for checking for the (non)existence of columns by name
+     * @param columnName
+     * @return
+     */
+    public static String removeIdSuffixIfNeeded(NiReportsSchema schema, String columnName) {
+        if (columnName.endsWith(" Id")) {
+            String newColumnName = columnName.substring(0, columnName.length() - 3);
+            if (schema.getColumns().containsKey(newColumnName)) {
+                return newColumnName;
+            }
+        }
+        return columnName;
+    }
+    
+    
+    @Override
+    protected void processMiscElement(ReportElement repElem, FilterRule rule) {
+        if (repElem.type == ElementType.DATE) {
+            addCellPredicate(NiReportsEngine.FUNDING_COLUMN_NAME, cell -> ((CategAmountCell) cell).amount.getJulianDayCode(), rule);
+        }
+    }
 
-	@Override
-	protected boolean shouldCreateVirtualHierarchy(String columnName) {
-		NiReportColumn<?> col = schema.getColumns().get(columnName);
-		return col != null && col.getBehaviour().hasPercentages();
-	}
+    @Override
+    protected boolean shouldCreateVirtualHierarchy(String columnName) {
+        NiReportColumn<?> col = schema.getColumns().get(columnName);
+        return col != null && col.getBehaviour().hasPercentages();
+    }
 
-	@Override
-	protected boolean shouldCollapseDimension(NiDimension dimension) {
-		return dimension.depth > 1 && ORED_DIMENSIONS.contains(dimension.name);
-	}
+    @Override
+    protected boolean shouldCollapseDimension(NiDimension dimension) {
+        return dimension.depth > 1 && ORED_DIMENSIONS.contains(dimension.name);
+    }
 
-	@Override
-	protected boolean shouldIgnoreFilteringColumn(String columnName) {
-		if (spec.isAlsoShowPledges() || spec.getReportType() == ArConstants.PLEDGES_TYPE) {
-			boolean supported = columnName.startsWith("Pledge") || columnName.equals(ColumnConstants.RELATED_PROJECTS) || DONOR_COLUMNS_TO_PLEDGE_COLUMNS.containsKey(columnName);
-			return !supported;
-		}
-		return false;
-	}
+    @Override
+    protected boolean shouldIgnoreFilteringColumn(String columnName) {
+        if (spec.isAlsoShowPledges() || spec.getReportType() == ArConstants.PLEDGES_TYPE) {
+            boolean supported = columnName.startsWith("Pledge") || columnName.equals(ColumnConstants.RELATED_PROJECTS) || DONOR_COLUMNS_TO_PLEDGE_COLUMNS.containsKey(columnName);
+            return !supported;
+        }
+        return false;
+    }
 }

@@ -15,29 +15,29 @@ import org.dgfoundation.amp.nireports.runtime.CellColumn;
  */
 public class ReportDataComparator implements Comparator<NiReportData> {
 
-	final LinkedHashMap<CellColumn, Boolean> colsSorting;
-	
-	public ReportDataComparator(LinkedHashMap<CellColumn, Boolean> colsSorting) {
-		this.colsSorting = colsSorting;
-	}
-	
-	@Override
-	public int compare(NiReportData nrd1, NiReportData nrd2) {
-		if (colsSorting == null || colsSorting.isEmpty())
-			return 0;
-		Comparator<NiOutCell> ascComp = Comparator.nullsFirst(Comparator.naturalOrder());
-		Comparator<NiOutCell> descComp = ascComp.reversed();
-		
-		for(Map.Entry<CellColumn, Boolean> cs:colsSorting.entrySet()) {
-			if (cs.getValue() == null)
-				continue;
-			NiOutCell cA = nrd1.trailCells.get(cs.getKey());
-			NiOutCell cB = nrd2.trailCells.get(cs.getKey());
-			Comparator<NiOutCell> comp = cs.getValue() ? ascComp : descComp;
-			int delta = comp.compare(cA, cB);
-			if (delta != 0)
-				return delta;
-		}
-		return 0;
-	}
+    final LinkedHashMap<CellColumn, Boolean> colsSorting;
+    
+    public ReportDataComparator(LinkedHashMap<CellColumn, Boolean> colsSorting) {
+        this.colsSorting = colsSorting;
+    }
+    
+    @Override
+    public int compare(NiReportData nrd1, NiReportData nrd2) {
+        if (colsSorting == null || colsSorting.isEmpty())
+            return 0;
+        Comparator<NiOutCell> ascComp = Comparator.nullsFirst(Comparator.naturalOrder());
+        Comparator<NiOutCell> descComp = ascComp.reversed();
+        
+        for(Map.Entry<CellColumn, Boolean> cs:colsSorting.entrySet()) {
+            if (cs.getValue() == null)
+                continue;
+            NiOutCell cA = nrd1.trailCells.get(cs.getKey());
+            NiOutCell cB = nrd2.trailCells.get(cs.getKey());
+            Comparator<NiOutCell> comp = cs.getValue() ? ascComp : descComp;
+            int delta = comp.compare(cA, cB);
+            if (delta != 0)
+                return delta;
+        }
+        return 0;
+    }
 }

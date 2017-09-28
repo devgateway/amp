@@ -181,48 +181,48 @@ public class ImportFormNew extends ActionForm {
     }
 
     /**
-	 * @return full list of languages detected in imported XML
-	 */
-	public Set<Map.Entry <String, String>> getLanguageList() {
-		return languageList;
-	}
+     * @return full list of languages detected in imported XML
+     */
+    public Set<Map.Entry <String, String>> getLanguageList() {
+        return languageList;
+    }
 
-	/**
-	 * @param languageList - full list of languages detected in imported XML
-	 */
-	public void setLanguageList(Set<Map.Entry <String, String>> languageList) {
-		this.languageList = languageList;
-	}
+    /**
+     * @param languageList - full list of languages detected in imported XML
+     */
+    public void setLanguageList(Set<Map.Entry <String, String>> languageList) {
+        this.languageList = languageList;
+    }
 
-	/**
-	 * @return the selected languages for import
-	 */
-	public String[] getSelLanguages() {
-		return selLanguages;
-	}
+    /**
+     * @return the selected languages for import
+     */
+    public String[] getSelLanguages() {
+        return selLanguages;
+    }
 
-	/**
-	 * @param selLanguages - selected languages for import
-	 */
-	public void setSelLanguages(String[] selLanguages) {
-		this.selLanguages = selLanguages;
-	}
+    /**
+     * @param selLanguages - selected languages for import
+     */
+    public void setSelLanguages(String[] selLanguages) {
+        this.selLanguages = selLanguages;
+    }
 
-	/**
-	 * @return the default language to be used if no language is detected for an element
-	 */
-	public String getDefaultLanguage() {
-		return defaultLanguage;
-	}
+    /**
+     * @return the default language to be used if no language is detected for an element
+     */
+    public String getDefaultLanguage() {
+        return defaultLanguage;
+    }
 
-	/**
-	 * @param defaultLanguage the default language to be used if no language is detected for an element
-	 */
-	public void setDefaultLanguage(String defaultLanguage) {
-		this.defaultLanguage = defaultLanguage;
-	}
+    /**
+     * @param defaultLanguage the default language to be used if no language is detected for an element
+     */
+    public void setDefaultLanguage(String defaultLanguage) {
+        this.defaultLanguage = defaultLanguage;
+    }
 
-	public FormFile getFile() {
+    public FormFile getFile() {
         return file;
     }
 

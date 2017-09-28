@@ -55,18 +55,18 @@ public class AmpOrgLocation implements Serializable,OrgProfileValue {
         this.percent = percent;
     }
 
-	@Override
-	public List<ValueTranslatabePair> getValuesForOrgReport() {
-		List<ValueTranslatabePair> values = new ArrayList<ValueTranslatabePair>();
-		values.add(new ValueTranslatabePair(Arrays.asList(new String[]{getLocation().getName()}), false));
-		values.add(new ValueTranslatabePair(Arrays.asList(new String[]{((getPercent() == null) ? "0%" : getPercent() + "%")}), false));
-		return values;
-	}
+    @Override
+    public List<ValueTranslatabePair> getValuesForOrgReport() {
+        List<ValueTranslatabePair> values = new ArrayList<ValueTranslatabePair>();
+        values.add(new ValueTranslatabePair(Arrays.asList(new String[]{getLocation().getName()}), false));
+        values.add(new ValueTranslatabePair(Arrays.asList(new String[]{((getPercent() == null) ? "0%" : getPercent() + "%")}), false));
+        return values;
+    }
 
-	@Override
-	public String[] getSubHeaders() {
-		String[] subHeaders = { "Name", "Percent" };
-		return subHeaders;
-	}
+    @Override
+    public String[] getSubHeaders() {
+        String[] subHeaders = { "Name", "Percent" };
+        return subHeaders;
+    }
 
 }

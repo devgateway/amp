@@ -248,20 +248,20 @@ public class EditorForm
         this.returnUrl = returnUrl;
     }
 
-	public String getActivityFieldName() {
-		return activityFieldName;
-	}
+    public String getActivityFieldName() {
+        return activityFieldName;
+    }
 
-	public void setActivityFieldName(String activityFieldName) {
-		this.activityFieldName = activityFieldName;
-	}
+    public void setActivityFieldName(String activityFieldName) {
+        this.activityFieldName = activityFieldName;
+    }
 
-	public FormFile getAttachment() {
-		return attachment;
-	}
+    public FormFile getAttachment() {
+        return attachment;
+    }
 
-	public void setAttachment(FormFile attachment) {
-		this.attachment = attachment;
-	}
-	
+    public void setAttachment(FormFile attachment) {
+        this.attachment = attachment;
+    }
+    
 }

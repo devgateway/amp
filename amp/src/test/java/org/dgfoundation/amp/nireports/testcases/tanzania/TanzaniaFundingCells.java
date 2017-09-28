@@ -13,13 +13,13 @@ import org.dgfoundation.amp.nireports.testcases.generic.AbstractFundingColumn;
  */
 public class TanzaniaFundingCells extends AbstractFundingColumn {
 
-	public TanzaniaFundingCells(Map<String, Long> activityNames) {
-		super(activityNames, TanzaniaReportsTestSchema.catsDimension, TanzaniaReportsTestSchema.DONOR_DIM_USG, new TanzaniaHardcodedFundingNames());
-	}
-	
-	@Override
-	protected List<CategAmountCell> populateCells() {
-		return decodeCells(this.getClass().getResourceAsStream("funding.gz"));
-	}
-	
+    public TanzaniaFundingCells(Map<String, Long> activityNames) {
+        super(activityNames, TanzaniaReportsTestSchema.catsDimension, TanzaniaReportsTestSchema.DONOR_DIM_USG, new TanzaniaHardcodedFundingNames());
+    }
+    
+    @Override
+    protected List<CategAmountCell> populateCells() {
+        return decodeCells(this.getClass().getResourceAsStream("funding.gz"));
+    }
+    
 }

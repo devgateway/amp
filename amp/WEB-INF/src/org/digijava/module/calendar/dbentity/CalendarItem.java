@@ -75,10 +75,10 @@ public class CalendarItem implements LoggerIdentifiable{
    */
   private Date creationDate;
 
-	/**
-	 * for Calendar events. 0 - Awaiting Approval 1 - Approved -1 - Not Approved
-	 */
-	private Integer approve = null;
+    /**
+     * for Calendar events. 0 - Awaiting Approval 1 - Approved -1 - Not Approved
+     */
+    private Integer approve = null;
 
   public CalendarItem() {
   }
@@ -147,32 +147,32 @@ public class CalendarItem implements LoggerIdentifiable{
     this.calendar = calendar;
   }
 
-	public Integer getApprove() {
-		return approve;
-	}
+    public Integer getApprove() {
+        return approve;
+    }
 
-	public void setApprove(Integer approve) {
-		this.approve = approve;
-	}
+    public void setApprove(Integer approve) {
+        this.approve = approve;
+    }
 
 
-	@Override
-	public String getObjectName() {
-		return  getTitle() + " " + getId();
-	}
+    @Override
+    public String getObjectName() {
+        return  getTitle() + " " + getId();
+    }
 
-	@Override
-	public Object getObjectType() {
-		return this.getClass().getName();
-	}
+    @Override
+    public Object getObjectType() {
+        return this.getClass().getName();
+    }
 
-	@Override
-	public Object getIdentifier() {
-		return  getId();
-	}
+    @Override
+    public Object getIdentifier() {
+        return  getId();
+    }
          @Override
         public String getObjectFilteredName() {
-		return DbUtil.filter(getObjectName());
-	}
+        return DbUtil.filter(getObjectName());
+    }
 
 }

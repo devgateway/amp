@@ -22,9 +22,9 @@ public class SelectProgramForIndicator
     extends Action {
     public ActionForward execute(ActionMapping mapping, ActionForm form,
                                  HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
-    	
-    	String edit = request.getParameter("edit");
-    	
+        
+        String edit = request.getParameter("edit");
+        
         NewIndicatorForm newIndForm=(NewIndicatorForm)form;
 
         Long id[]=newIndForm.getSelActivitySector();
@@ -50,9 +50,9 @@ public class SelectProgramForIndicator
             }
             newIndForm.setAction(null);
             if(edit == null){
-            	return mapping.findForward("add");
+                return mapping.findForward("add");
             }else{
-            	return mapping.findForward("edit");
+                return mapping.findForward("edit");
             }
         }
 

@@ -20,9 +20,9 @@ public abstract class Permission extends PropertyListable implements Serializabl
 
     private static final long serialVersionUID = -1450990323894485519L;
 
-    protected String	  name;
+    protected String      name;
 
-    protected String	  description;
+    protected String      description;
     
     protected boolean dedicated;
     
@@ -31,29 +31,29 @@ public abstract class Permission extends PropertyListable implements Serializabl
     protected Set<CompositePermission> compositeLinkedPermissions;
 
 
-    protected Long	    id;
+    protected Long      id;
     
 
-    public Permission() {	
+    public Permission() {   
     }
     
     public String getClusterIdentifier() {
-    	return name;
+        return name;
     }
     
     public Object getIdentifier() {
-    	return id;
+        return id;
     }
     
     
     
     public Permission(Boolean dedicated) {
-	this.dedicated=dedicated;
+    this.dedicated=dedicated;
     }
 
     public int compareTo(Object o) {
-	Permission p = (Permission) o;
-	return this.getName().compareTo(p.getName());
+    Permission p = (Permission) o;
+    return this.getName().compareTo(p.getName());
     }
 
     public abstract Set<String> getAllowedActions(Map scope);
@@ -61,32 +61,32 @@ public abstract class Permission extends PropertyListable implements Serializabl
     @Override
     @PropertyListableIgnore
     public String getBeanName() {
-	return name;
+    return name;
     }
 
     public String getDescription() {
-	return description;
+    return description;
     }
 
     public void setDescription(String description) {
-	this.description = description;
+    this.description = description;
     }
 
     @PropertyListableIgnore
     public Long getId() {
-	return id;
+    return id;
     }
 
     public void setId(Long id) {
-	this.id = id;
+    this.id = id;
     }
 
     public String getName() {
-	return name;
+    return name;
     }
 
     public void setName(String name) {
-	this.name = name;
+    this.name = name;
 
     }
 
@@ -99,7 +99,7 @@ public abstract class Permission extends PropertyListable implements Serializabl
     }
     
     public String toString() {
-	return name+"{"+this.getClass().getSimpleName()+"}";
+    return name+"{"+this.getClass().getSimpleName()+"}";
     }
 
     public Set<PermissionMap> getPermissibleObjects() {

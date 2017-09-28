@@ -38,76 +38,76 @@ public class TranslationInfo
     }
 
     public TranslationInfo(String code, String name, String trnName,
-			   String siteDbDomain, String sitePath) {
-	this.langCode = code;
-	if (trnName != null && trnName.length() > 0) {
-	    this.langName = trnName;
-	}
-	else {
-	    this.langName = name;
-	}
-	this.siteDomain = siteDbDomain == null ? null :
-	      SiteUtils.prefixDomainName(siteDbDomain);
-	this.sitePath = sitePath;
+               String siteDbDomain, String sitePath) {
+    this.langCode = code;
+    if (trnName != null && trnName.length() > 0) {
+        this.langName = trnName;
+    }
+    else {
+        this.langName = name;
+    }
+    this.siteDomain = siteDbDomain == null ? null :
+          SiteUtils.prefixDomainName(siteDbDomain);
+    this.sitePath = sitePath;
     }
 
     public TranslationInfo(String code, String key, String message) {
 
-	this.langCode = code;
-	this.key = key;
-	this.message = message;
+    this.langCode = code;
+    this.key = key;
+    this.message = message;
     }
 
 
     public String getLangCode() {
-	return langCode;
+    return langCode;
     }
 
     public void setLangCode(String langCode) {
-	this.langCode = langCode;
+    this.langCode = langCode;
     }
 
     public String getLangName() {
-	return langName;
+    return langName;
     }
 
     public void setLangName(String langName) {
-	this.langName = langName;
+    this.langName = langName;
     }
 
     public String getKey() {
-	return key;
+    return key;
     }
 
     public void setKey(String key) {
-	this.key = key;
+    this.key = key;
     }
 
     public int compareTo(Object o) {
-	return this.langCode.compareTo( ( (TranslationInfo) o).langCode);
+    return this.langCode.compareTo( ( (TranslationInfo) o).langCode);
     }
 
     public String getSiteDomain() {
-	return siteDomain;
+    return siteDomain;
     }
 
     public void setSiteDomain(String siteDomain) {
-	this.siteDomain = siteDomain;
+    this.siteDomain = siteDomain;
     }
 
     public String getSitePath() {
-	return sitePath;
+    return sitePath;
     }
 
     public void setSitePath(String sitePath) {
-	this.sitePath = sitePath;
+    this.sitePath = sitePath;
     }
 
     public String getMessage() {
-	return message;
+    return message;
     }
 
     public void setMessage(String message) {
-	this.message = message;
+    this.message = message;
     }
 }

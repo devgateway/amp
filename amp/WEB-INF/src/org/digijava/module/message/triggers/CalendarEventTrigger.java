@@ -12,13 +12,13 @@ public class CalendarEventTrigger extends Trigger {
     public static final String PARAM_NAME="name";
     public static final String PARAM_URL="url";
     public static final String EVENT_START_DATE="start date";
-	public static final String EVENT_END_DATE="end date";
+    public static final String EVENT_END_DATE="end date";
 
 
     public static final String [] parameterNames=new String[]{PARAM_ID,PARAM_NAME,PARAM_URL,EVENT_START_DATE,EVENT_END_DATE};
     
     public CalendarEventTrigger(){
-    	
+        
     }
 
     public CalendarEventTrigger(Object source) {

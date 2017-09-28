@@ -56,67 +56,67 @@ public class ViewIndicatorsForm  extends ActionForm {
     public ViewIndicatorsForm() {
     }
 
-	public Long[] getIndid() {
-		return indid;
-	}
+    public Long[] getIndid() {
+        return indid;
+    }
 
-	public void setIndid(Long[] indid) {
-		this.indid = indid;
-	}
+    public void setIndid(Long[] indid) {
+        this.indid = indid;
+    }
 
-	public String getEvent() {
-		return event;
-	}
+    public String getEvent() {
+        return event;
+    }
 
-	public void setEvent(String event) {
-		this.event = event;
-	}
+    public void setEvent(String event) {
+        this.event = event;
+    }
 
-	public Long getThemeid() {
-		return themeid;
-	}
+    public Long getThemeid() {
+        return themeid;
+    }
 
-	public void setThemeid(Long themeid) {
-		this.themeid = themeid;
-	}
+    public void setThemeid(Long themeid) {
+        this.themeid = themeid;
+    }
 
-	public Collection getSectors() {
-		return Sectors;
-	}
+    public Collection getSectors() {
+        return Sectors;
+    }
 
-	public void setSectors(Collection sectors) {
-		Sectors = sectors;
-	}
+    public void setSectors(Collection sectors) {
+        Sectors = sectors;
+    }
 
-	public Long getSectorId() {
-		return sectorId;
-	}
+    public Long getSectorId() {
+        return sectorId;
+    }
 
-	public void setSectorId(Long sectorId) {
-		this.sectorId = sectorId;
-	}
+    public void setSectorId(Long sectorId) {
+        this.sectorId = sectorId;
+    }
 
-	public String getThemeName() {
-		return themeName;
-	}
+    public String getThemeName() {
+        return themeName;
+    }
 
-	public void setThemeName(String themeName) {
-		this.themeName = themeName;
-	}
+    public void setThemeName(String themeName) {
+        this.themeName = themeName;
+    }
 
-	public String getFlag() {
-		return flag;
-	}
+    public String getFlag() {
+        return flag;
+    }
 
-	public void setFlag(String flag) {
-		this.flag = flag;
-	}
+    public void setFlag(String flag) {
+        this.flag = flag;
+    }
 
-	public String getSortBy() {
-		return sortBy;
-	}
+    public String getSortBy() {
+        return sortBy;
+    }
 
-	public void setSortBy(String sortBy) {
-		this.sortBy = sortBy;
-	}
+    public void setSortBy(String sortBy) {
+        this.sortBy = sortBy;
+    }
 }

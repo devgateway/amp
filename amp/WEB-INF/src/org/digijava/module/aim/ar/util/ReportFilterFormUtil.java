@@ -22,50 +22,50 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 
 public final class ReportFilterFormUtil {
-	
-	private static Logger logger 		= Logger.getLogger(ReportWizardAction.class);
+    
+    private static Logger logger        = Logger.getLogger(ReportWizardAction.class);
 
-	public static Integer getDefaultStartYear() {
-		AmpApplicationSettings tempSettings = AmpARFilter.getEffectiveSettings();
-		Integer rStart = -1;
-		if (tempSettings != null && tempSettings.getReportStartYear() != null && tempSettings.getReportStartYear().intValue() != 0) {
-			rStart = tempSettings.getReportStartYear();
-		} else {
-			String gvalue = FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.START_YEAR_DEFAULT_VALUE);
-			if (gvalue != null && !"".equalsIgnoreCase(gvalue) && Integer.parseInt(gvalue) > 0) {
-				rStart = Integer.parseInt(gvalue);
-			}
-		}
+    public static Integer getDefaultStartYear() {
+        AmpApplicationSettings tempSettings = AmpARFilter.getEffectiveSettings();
+        Integer rStart = -1;
+        if (tempSettings != null && tempSettings.getReportStartYear() != null && tempSettings.getReportStartYear().intValue() != 0) {
+            rStart = tempSettings.getReportStartYear();
+        } else {
+            String gvalue = FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.START_YEAR_DEFAULT_VALUE);
+            if (gvalue != null && !"".equalsIgnoreCase(gvalue) && Integer.parseInt(gvalue) > 0) {
+                rStart = Integer.parseInt(gvalue);
+            }
+        }
 
-		return rStart;
-	}
-	
-	public static Integer getDefaultEndYear() {
-		AmpApplicationSettings tempSettings = AmpARFilter.getEffectiveSettings();
-		Integer rEnd = -1;
-		if (tempSettings != null && tempSettings.getReportEndYear() != null && tempSettings.getReportEndYear().intValue() != 0) {
-			rEnd = tempSettings.getReportEndYear();
-		} else {
-			String gvalue = FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.END_YEAR_DEFAULT_VALUE);
-			if (gvalue != null && !"".equalsIgnoreCase(gvalue) && Integer.parseInt(gvalue) > 0) {
-				rEnd = Integer.parseInt(gvalue);
-			}
-		}
-		return rEnd;
-	}	
-	
-//	public static AmpApplicationSettings getAppSetting() {
-//		//retu
-//		HttpSession httpSession = TLSUtils.getRequest().getSession();
-//		TeamMember teamMember = (TeamMember) httpSession.getAttribute(Constants.CURRENT_MEMBER);
-//		AmpApplicationSettings tempSettings = null;
-//		if (teamMember != null) {
-//			tempSettings = DbUtil.getMemberAppSettings(teamMember.getMemberId());
-//			
-//			if (tempSettings == null) //team member has no settings, try to get team settings
-//				tempSettings = DbUtil.getTeamAppSettings(teamMember.getTeamId());
-//		}
-//		return tempSettings;
-//	}
-	
+        return rStart;
+    }
+    
+    public static Integer getDefaultEndYear() {
+        AmpApplicationSettings tempSettings = AmpARFilter.getEffectiveSettings();
+        Integer rEnd = -1;
+        if (tempSettings != null && tempSettings.getReportEndYear() != null && tempSettings.getReportEndYear().intValue() != 0) {
+            rEnd = tempSettings.getReportEndYear();
+        } else {
+            String gvalue = FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.END_YEAR_DEFAULT_VALUE);
+            if (gvalue != null && !"".equalsIgnoreCase(gvalue) && Integer.parseInt(gvalue) > 0) {
+                rEnd = Integer.parseInt(gvalue);
+            }
+        }
+        return rEnd;
+    }   
+    
+//  public static AmpApplicationSettings getAppSetting() {
+//      //retu
+//      HttpSession httpSession = TLSUtils.getRequest().getSession();
+//      TeamMember teamMember = (TeamMember) httpSession.getAttribute(Constants.CURRENT_MEMBER);
+//      AmpApplicationSettings tempSettings = null;
+//      if (teamMember != null) {
+//          tempSettings = DbUtil.getMemberAppSettings(teamMember.getMemberId());
+//          
+//          if (tempSettings == null) //team member has no settings, try to get team settings
+//              tempSettings = DbUtil.getTeamAppSettings(teamMember.getTeamId());
+//      }
+//      return tempSettings;
+//  }
+    
 }

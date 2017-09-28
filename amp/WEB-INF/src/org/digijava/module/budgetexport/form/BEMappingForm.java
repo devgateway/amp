@@ -31,18 +31,18 @@ public class BEMappingForm extends ActionForm {
         this.rules = rules;
     }
 
-	/**
-	 * @return the ampReportId
-	 */
-	public Long getAmpReportId() {
-		return ampReportId;
-	}
+    /**
+     * @return the ampReportId
+     */
+    public Long getAmpReportId() {
+        return ampReportId;
+    }
 
-	/**
-	 * @param ampReportId the ampReportId to set
-	 */
-	public void setAmpReportId(Long ampReportId) {
-		this.ampReportId = ampReportId;
-	}
+    /**
+     * @param ampReportId the ampReportId to set
+     */
+    public void setAmpReportId(Long ampReportId) {
+        this.ampReportId = ampReportId;
+    }
     
 }

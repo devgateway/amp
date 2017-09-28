@@ -1,8 +1,8 @@
 /*
  *   ModuleUtil.java
  *   @Author Lasha Dolidze lasha@digijava.org
- * 	 Created: Oct 20, 2003
- * 	 CVS-ID: $Id$
+ *   Created: Oct 20, 2003
+ *   CVS-ID: $Id$
  *
  *   This file is part of DiGi project (www.digijava.org).
  *   DiGi is a multi-site portal system written in Java/J2EE.
@@ -35,32 +35,32 @@ public class ModuleUtil {
      */
     public static String truncateWords(String words, int maxLength) {
 
-	if (words == null)
-	    return null;
+    if (words == null)
+        return null;
 
-	String title = new String();
+    String title = new String();
 
-	if (words.length() > maxLength) {
-	    StringTokenizer tokenizer = new StringTokenizer(words);
-	    while (tokenizer.hasMoreTokens()) {
-		String token = tokenizer.nextToken();
-		String pTitle = title + token;
+    if (words.length() > maxLength) {
+        StringTokenizer tokenizer = new StringTokenizer(words);
+        while (tokenizer.hasMoreTokens()) {
+        String token = tokenizer.nextToken();
+        String pTitle = title + token;
 
-		if (pTitle.length() > maxLength) {
-		    break;
-		}
-		title += token + " ";
-	    }
-	    if (title.trim().length() == 0) {
-		title = words.substring(0, maxLength - 1);
-	    }
-	    title = title.trim() + "...";
-	}
-	else {
-	    title = words;
-	}
+        if (pTitle.length() > maxLength) {
+            break;
+        }
+        title += token + " ";
+        }
+        if (title.trim().length() == 0) {
+        title = words.substring(0, maxLength - 1);
+        }
+        title = title.trim() + "...";
+    }
+    else {
+        title = words;
+    }
 
-	return title;
+    return title;
     }
 
     /**
@@ -71,7 +71,7 @@ public class ModuleUtil {
      * @return String
      */
     public static String extractShortDescription(String description) {
-	return description;
+    return description;
     }
 
     /**
@@ -82,7 +82,7 @@ public class ModuleUtil {
      * @return String
      */
     public static String parseDescription(String description) {
-	return description;
+    return description;
     }
 
     /**
@@ -93,49 +93,49 @@ public class ModuleUtil {
      * @return extracted - short version
      */
     public static String extractShortDescription(String description,
-						 String delimiter) {
-	String result = new String("");
+                         String delimiter) {
+    String result = new String("");
 
-	if (delimiter != null && delimiter.trim().length() != 0) {
-	    delimiter = delimiter.trim();
-	    StringTokenizer descriptionTokenizer = new StringTokenizer(
-		  description,
-		  delimiter, true);
+    if (delimiter != null && delimiter.trim().length() != 0) {
+        delimiter = delimiter.trim();
+        StringTokenizer descriptionTokenizer = new StringTokenizer(
+          description,
+          delimiter, true);
 
-	    if (descriptionTokenizer.hasMoreTokens()) {
+        if (descriptionTokenizer.hasMoreTokens()) {
 
-		boolean which = false;
-		while (descriptionTokenizer.hasMoreTokens()) {
-		    String token = descriptionTokenizer.nextToken();
+        boolean which = false;
+        while (descriptionTokenizer.hasMoreTokens()) {
+            String token = descriptionTokenizer.nextToken();
 
-		    if (delimiter.startsWith(token)) {
-			int l = 1;
-			while (descriptionTokenizer.hasMoreTokens() &&
-			       l < delimiter.length()) {
-			    token += descriptionTokenizer.nextToken();
-			    if (token.equals(delimiter)) {
-				break;
-			    }
-			    ++l;
-			}
-		    }
+            if (delimiter.startsWith(token)) {
+            int l = 1;
+            while (descriptionTokenizer.hasMoreTokens() &&
+                   l < delimiter.length()) {
+                token += descriptionTokenizer.nextToken();
+                if (token.equals(delimiter)) {
+                break;
+                }
+                ++l;
+            }
+            }
 
-		    if (token.equals(delimiter) && !which) {
-			break;
-		    }
-		    which = false;
+            if (token.equals(delimiter) && !which) {
+            break;
+            }
+            which = false;
 
-		    result += token;
-		    if (token.endsWith(ESCAPE_CHARACTER)) {
-			which = true;
-		    }
-		}
-	    }
-	    return parseDescription(result, delimiter);
-	}
-	else {
-	    return description;
-	}
+            result += token;
+            if (token.endsWith(ESCAPE_CHARACTER)) {
+            which = true;
+            }
+        }
+        }
+        return parseDescription(result, delimiter);
+    }
+    else {
+        return description;
+    }
     }
 
     /**
@@ -145,47 +145,47 @@ public class ModuleUtil {
      * @return description containing text without delimiters
      */
     public static String removeDelimiters(String description,
-					  String delimiter) {
-	String result = new String("");
+                      String delimiter) {
+    String result = new String("");
 
-	if (delimiter != null && delimiter.trim().length() != 0) {
-	    delimiter = delimiter.trim();
-	    StringTokenizer descriptionTokenizer = new StringTokenizer(
-		  description,
-		  delimiter, true);
+    if (delimiter != null && delimiter.trim().length() != 0) {
+        delimiter = delimiter.trim();
+        StringTokenizer descriptionTokenizer = new StringTokenizer(
+          description,
+          delimiter, true);
 
-	    if (descriptionTokenizer.hasMoreTokens()) {
+        if (descriptionTokenizer.hasMoreTokens()) {
 
-		boolean which = false;
-		while (descriptionTokenizer.hasMoreTokens()) {
-		    String token = descriptionTokenizer.nextToken();
+        boolean which = false;
+        while (descriptionTokenizer.hasMoreTokens()) {
+            String token = descriptionTokenizer.nextToken();
 
-		    if (delimiter.startsWith(token)) {
-			int l = 1;
-			while (descriptionTokenizer.hasMoreTokens() &&
-			       l < delimiter.length()) {
-			    token += descriptionTokenizer.nextToken();
-			    if (token.equals(delimiter)) {
-				break;
-			    }
-			    ++l;
-			}
-		    }
-		    if (!token.equals(delimiter) || which) {
-			result += token;
-			which = false;
-		    }
-		    if (token.endsWith(ESCAPE_CHARACTER)) {
-			which = true;
-		    }
+            if (delimiter.startsWith(token)) {
+            int l = 1;
+            while (descriptionTokenizer.hasMoreTokens() &&
+                   l < delimiter.length()) {
+                token += descriptionTokenizer.nextToken();
+                if (token.equals(delimiter)) {
+                break;
+                }
+                ++l;
+            }
+            }
+            if (!token.equals(delimiter) || which) {
+            result += token;
+            which = false;
+            }
+            if (token.endsWith(ESCAPE_CHARACTER)) {
+            which = true;
+            }
 
-		}
-	    }
-	    return parseDescription(result, delimiter);
-	}
-	else {
-	    return description;
-	}
+        }
+        }
+        return parseDescription(result, delimiter);
+    }
+    else {
+        return description;
+    }
     }
 
     /**
@@ -196,50 +196,50 @@ public class ModuleUtil {
      * @return - parsed description
      */
     public static String parseDescription(String description, String delimiter) {
-	String result = new String("");
+    String result = new String("");
 
-	if (delimiter != null && delimiter.trim().length() != 0) {
-	    delimiter = delimiter.trim();
-	    StringTokenizer descriptionTokenizer = new StringTokenizer(
-		  description,
-		  delimiter, true);
-	    while (descriptionTokenizer.hasMoreTokens()) {
-		String token = descriptionTokenizer.nextToken();
+    if (delimiter != null && delimiter.trim().length() != 0) {
+        delimiter = delimiter.trim();
+        StringTokenizer descriptionTokenizer = new StringTokenizer(
+          description,
+          delimiter, true);
+        while (descriptionTokenizer.hasMoreTokens()) {
+        String token = descriptionTokenizer.nextToken();
 
-		if (token.endsWith(ESCAPE_CHARACTER)) {
-		    String tokenDelimiter = new String("");
-		    boolean isDelimiter = false;
+        if (token.endsWith(ESCAPE_CHARACTER)) {
+            String tokenDelimiter = new String("");
+            boolean isDelimiter = false;
 
-		    if (descriptionTokenizer.hasMoreTokens()) {
-			while (descriptionTokenizer.hasMoreTokens()) {
-			    tokenDelimiter += descriptionTokenizer.nextToken();
-			    if (tokenDelimiter.equals(delimiter)) {
-				isDelimiter = true;
-				break;
-			    }
-			}
-			if (isDelimiter) {
-			    result += token.substring(0, token.length() - 1) +
-				  delimiter;
-			}
-			else {
-			    result += token + tokenDelimiter;
-			}
-		    }
-		    else {
-			result += token;
-		    }
-		}
-		else {
-		    result += token;
-		}
-	    }
+            if (descriptionTokenizer.hasMoreTokens()) {
+            while (descriptionTokenizer.hasMoreTokens()) {
+                tokenDelimiter += descriptionTokenizer.nextToken();
+                if (tokenDelimiter.equals(delimiter)) {
+                isDelimiter = true;
+                break;
+                }
+            }
+            if (isDelimiter) {
+                result += token.substring(0, token.length() - 1) +
+                  delimiter;
+            }
+            else {
+                result += token + tokenDelimiter;
+            }
+            }
+            else {
+            result += token;
+            }
+        }
+        else {
+            result += token;
+        }
+        }
 
-	    return result;
-	}
-	else {
-	    return description;
-	}
+        return result;
+    }
+    else {
+        return description;
+    }
 
     }
 
@@ -253,36 +253,36 @@ public class ModuleUtil {
 
     public static String truncateLines(String words, int maxLength) {
 
-	if (words == null)
-	    return null;
+    if (words == null)
+        return null;
 
-	StringBuffer title = new StringBuffer();
-	boolean first = true;
-	if (words.length() > maxLength) {
+    StringBuffer title = new StringBuffer();
+    boolean first = true;
+    if (words.length() > maxLength) {
 
-	    for (int i = 0; i < words.length(); i++) {
+        for (int i = 0; i < words.length(); i++) {
 
-		if (title.toString().length() <= maxLength) {
-		    title.append(words.charAt(i));
-		}
-		else {
-		    if (first) {
+        if (title.toString().length() <= maxLength) {
+            title.append(words.charAt(i));
+        }
+        else {
+            if (first) {
 
-			String rev = title.reverse().toString();
-			rev = rev.replaceFirst(" ", ">rb<");
-			title = (new StringBuffer(rev)).reverse();
-			first = false;
-		    }
-		    title.append(words.charAt(i));
-		}
-	    }
+            String rev = title.reverse().toString();
+            rev = rev.replaceFirst(" ", ">rb<");
+            title = (new StringBuffer(rev)).reverse();
+            first = false;
+            }
+            title.append(words.charAt(i));
+        }
+        }
 
-	}
-	else {
-	    title = new StringBuffer(words);
-	}
+    }
+    else {
+        title = new StringBuffer(words);
+    }
 
-	return title.toString();
+    return title.toString();
     }
 
 }

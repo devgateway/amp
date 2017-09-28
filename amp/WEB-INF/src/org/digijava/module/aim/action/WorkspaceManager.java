@@ -93,10 +93,10 @@ public class WorkspaceManager extends Action {
             NUM_RECORDS = ampWorkspaces.size();
         }
 
-		/*
-		 * check whether the numPages is less than the page . if yes return
-		 * error.
-		 */
+        /*
+         * check whether the numPages is less than the page . if yes return
+         * error.
+         */
         int currPage = wsForm.getPage();
         int stIndex = ((currPage - 1) * NUM_RECORDS);
         int edIndex = stIndex + NUM_RECORDS;

@@ -29,41 +29,41 @@ public class AmpPMVerifiedOrganizationsTableFeaturePanel extends AmpFormTableFea
 
 
 
-	public AmpPMVerifiedOrganizationsTableFeaturePanel(String id,final IModel<Set<AmpOrganisation>> orgsSetmodel, String fmName, boolean hideLeadingNewLine) throws Exception {
-		super(id, orgsSetmodel, fmName, hideLeadingNewLine);
-		
-		final AbstractReadOnlyModel<List<AmpOrganisation>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(orgsSetmodel);
-		
-		list = new PageableListView<AmpOrganisation>("verifiedOrgsList", listModel, 5) {
-			private static final long serialVersionUID = 7218457979728871528L;
-			@Override
-			protected void populateItem(final ListItem<AmpOrganisation> item) {
-				final MarkupContainer listParent=this.getParent();
-				item.add(new Label("orgName", item.getModelObject().getName()));
-				item.add(new Label("orgAcronym", item.getModelObject().getAcronym()));
-				
+    public AmpPMVerifiedOrganizationsTableFeaturePanel(String id,final IModel<Set<AmpOrganisation>> orgsSetmodel, String fmName, boolean hideLeadingNewLine) throws Exception {
+        super(id, orgsSetmodel, fmName, hideLeadingNewLine);
+        
+        final AbstractReadOnlyModel<List<AmpOrganisation>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(orgsSetmodel);
+        
+        list = new PageableListView<AmpOrganisation>("verifiedOrgsList", listModel, 5) {
+            private static final long serialVersionUID = 7218457979728871528L;
+            @Override
+            protected void populateItem(final ListItem<AmpOrganisation> item) {
+                final MarkupContainer listParent=this.getParent();
+                item.add(new Label("orgName", item.getModelObject().getName()));
+                item.add(new Label("orgAcronym", item.getModelObject().getAcronym()));
+                
                 final AmpDeleteLinkField propertyDeleteLink = new AmpDeleteLinkField("removeSelectedOrganization", "Remove Selected Organization Link") {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                    	orgsSetmodel.getObject().remove(item.getModelObject());
+                        orgsSetmodel.getObject().remove(item.getModelObject());
                         list.removeAll();
                         target.add(AmpPMVerifiedOrganizationsTableFeaturePanel.this.getParent());
                     }
                 };
                 item.add(propertyDeleteLink);
-				
-			}
-		};
-		list.setReuseItems(true);
-		add(list);
-	}
+                
+            }
+        };
+        list.setReuseItems(true);
+        add(list);
+    }
 
-	public AmpPMVerifiedOrganizationsTableFeaturePanel(String id, IModel<Set<AmpOrganisation>> model, String fmName) throws Exception {
-		super(id, model, fmName);
-		
-	}
+    public AmpPMVerifiedOrganizationsTableFeaturePanel(String id, IModel<Set<AmpOrganisation>> model, String fmName) throws Exception {
+        super(id, model, fmName);
+        
+    }
 
-	
+    
 
 }

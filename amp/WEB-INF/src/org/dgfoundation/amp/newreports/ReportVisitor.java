@@ -11,8 +11,8 @@ import java.util.Map;
 
 public interface ReportVisitor {
 
-	public void visit(ReportArea area);
+    public void visit(ReportArea area);
 
-	public void visit(Map<ReportOutputColumn, ReportCell> contents);
+    public void visit(Map<ReportOutputColumn, ReportCell> contents);
 
 }

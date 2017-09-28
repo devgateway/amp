@@ -18,16 +18,16 @@ import org.quartz.StatefulJob;
  *
  */
 public class ClearEmailsJob extends ConnectionCleaningJob implements StatefulJob { 
-	
-	@Override 
-	public void executeInternal(JobExecutionContext context) throws JobExecutionException{		
-		Session session = PersistenceManager.getSession();
-		List<AmpEmail> emailsForRemoval = AmpMessageUtil.loadSentEmails(session);
-		if (emailsForRemoval != null && emailsForRemoval.size() > 0) {
-			for (AmpEmail ampEmail : emailsForRemoval) {
-				session.delete(ampEmail);
-			}
-		}
-	}
+    
+    @Override 
+    public void executeInternal(JobExecutionContext context) throws JobExecutionException{      
+        Session session = PersistenceManager.getSession();
+        List<AmpEmail> emailsForRemoval = AmpMessageUtil.loadSentEmails(session);
+        if (emailsForRemoval != null && emailsForRemoval.size() > 0) {
+            for (AmpEmail ampEmail : emailsForRemoval) {
+                session.delete(ampEmail);
+            }
+        }
+    }
 
 }

@@ -35,8 +35,11 @@ module.exports = Backbone.Model.extend({
     	if (allFilters.filters && matchesFilters) {
     		_.each(matchesFilters, function(v, k) {
     			if (k == 'Primary Sector') {
-    				_.each(matchesFilters[k], function(sector, index) {
-    					matchesFilters[k][index] = new Backbone.Model(sector);                   
+    				_.each(matchesFilters[k], function(sector, index) {    					
+    				   if (!(sector instanceof Backbone.Model)) {    					
+    					   matchesFilters[k][index] = new Backbone.Model(sector);  
+    				   }
+    					                   
     				});        	   
     			} else {
     				//make sure it's a valid filter
@@ -70,20 +73,18 @@ module.exports = Backbone.Model.extend({
   // Use to hook in before template calls.
   toJSON: function() {
     var json = _.clone(this.attributes);
-
     json.donorNames = this._getNames('Donor Agency');
-    json.sectorNames = this._getNames('Executing Agency');
-    json.executingNames = this._getNames('Primary Sector');
-
+    json.executingNames = this._getNames('Executing Agency');
+    json.sectorNames = this._getNames('Primary Sector');
     return json;
   },
 
   _getNames: function(name) {
-    var matchesFilters = this.attributes.matchesFilters;
+	var matchesFilters = this.attributes.matchesFilters;
     if (matchesFilters && matchesFilters[name]) {
       if (matchesFilters[name].length > 1) {
         return 'Multiple';
-      } else if (matchesFilters[name][0] && matchesFilters[name][0].attributes) {
+      } else if (matchesFilters[name][0] && matchesFilters[name][0].attributes) {    	 
         return matchesFilters[name][0].get('name');
       }
     }

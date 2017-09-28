@@ -106,13 +106,13 @@ public class UpdateTeamMembers extends Action {
             AmpApplicationSettings ampAppSettings = DbUtil.getTeamAppSettings(ampTeam.getAmpTeamId());
             Integer docPublishingPermissions=ampAppSettings.getAllowPublishingResources();
             if(docPublishingPermissions!=null){
-            	if(docPublishingPermissions.equals(CrConstants.PUBLISHING_RESOURCES_ALLOWED_TM ) || 
-    					(docPublishingPermissions.equals(CrConstants.PUBLISHING_RESOURCES_ALLOWED_ONLY_TL) && (role.getTeamHead()!=null && role.getTeamHead())) ||
-    					(docPublishingPermissions.equals(CrConstants.PUBLISHING_RESOURCES_ALLOWED_SPECIFIC_USERS) && ampMember.getPublishDocPermission()!=null && ampMember.getPublishDocPermission())){
-                	ampMember.setPublishDocPermission(true);
-    			}else{
-    				ampMember.setPublishDocPermission(false);
-    			}
+                if(docPublishingPermissions.equals(CrConstants.PUBLISHING_RESOURCES_ALLOWED_TM ) || 
+                        (docPublishingPermissions.equals(CrConstants.PUBLISHING_RESOURCES_ALLOWED_ONLY_TL) && (role.getTeamHead()!=null && role.getTeamHead())) ||
+                        (docPublishingPermissions.equals(CrConstants.PUBLISHING_RESOURCES_ALLOWED_SPECIFIC_USERS) && ampMember.getPublishDocPermission()!=null && ampMember.getPublishDocPermission())){
+                    ampMember.setPublishDocPermission(true);
+                }else{
+                    ampMember.setPublishDocPermission(false);
+                }
             }           
             
             

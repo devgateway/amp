@@ -8,10 +8,10 @@ import org.dgfoundation.amp.error.AMPException;
  *
  */
 public interface ReportExecutor {
-	/**
-	 * Executes a report based on specifications provided
-	 * @param report - {@link ReportSpecification}
-	 * @throws AMPException
-	 */
-	public GeneratedReport executeReport(ReportSpecification report) throws AMPException;
+    /**
+     * Executes a report based on specifications provided
+     * @param report - {@link ReportSpecification}
+     * @throws AMPException
+     */
+    public GeneratedReport executeReport(ReportSpecification report) throws AMPException;
 }

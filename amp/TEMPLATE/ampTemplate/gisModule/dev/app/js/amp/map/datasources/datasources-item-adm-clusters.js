@@ -35,18 +35,32 @@ module.exports = Backbone.View.extend({
 						  fundingType = 'Planned';
 					  }
 
+                      var orgColumn, columnName1, columnName2;
 
+                      if (selected.toLowerCase().indexOf('ssc') >= 0) {
+                          columnName1 = 'Bilateral SSC Commitments';
+                          columnName2 = 'Triangular SSC Commitments';
+                          orgColumn = 'executingNames';
+                      } else {
+                          columnName1 = fundingType + ' Commitments';
+                          columnName2 = fundingType + ' Disbursements';
+                          orgColumn = 'donorNames';
+                      }
 
 					  // Format values.
-					  var formattedCommitments = ampFormatter.format(project.attributes[fundingType + ' Commitments']);
-					  var formattedDisbursements = ampFormatter.format(project.attributes[fundingType + ' Disbursements']);
+					  var formattedColumnName1 = ampFormatter.format(project.attributes[columnName1]);
+					  var formattedColumnName2 = ampFormatter.format(project.attributes[columnName2]);
 					  var currencyCode = self.app.data.settingsWidget.definitions.getSelectedOrDefaultCurrencyId();
 
-					  // put them on the page.
+                      var activity = project.toJSON()
+                      var orgColumnName = activity[orgColumn];
+
+                      // put them on the page.
 					  self.$el.append(self.template({
-						  activity: project.toJSON(),
-						  formattedCommitments: [formattedCommitments ? formattedCommitments : 0, ' ', currencyCode].join(''),
-						  formattedDisbursements: [formattedDisbursements ? formattedDisbursements : 0, ' ', currencyCode].join('')
+						  activity: activity,
+                          orgColumnName: orgColumnName ? orgColumnName : '',
+                          formattedColumnName1: [formattedColumnName1 ? formattedColumnName1 : 0, ' ', currencyCode].join(''),
+                          formattedColumnName2: [formattedColumnName2 ? formattedColumnName2 : 0, ' ', currencyCode].join('')
 					  }));
 				 
 			  });

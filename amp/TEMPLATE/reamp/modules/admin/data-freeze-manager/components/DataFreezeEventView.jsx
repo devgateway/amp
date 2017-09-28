@@ -109,7 +109,17 @@ export default class DataFreezeEventView extends Component {
                     </td>  
                     <td> {this.props.dataFreezeEvent.enabled ? this.props.translations['amp.data-freezing:boolean-option-yes'] : this.props.translations['amp.data-freezing:boolean-option-no']}</td>
                     <td className="action-column">
-                      <span className="glyphicon glyphicon-custom glyphicon-pencil" onClick={this.props.edit}></span> <span className="glyphicon glyphicon-custom glyphicon-trash" onClick={this.deleteDataFreezeEvent}></span>
+                    {this.props.dataFreezeEvent.executed != true &&
+                        <div>                   
+                         <span className="glyphicon glyphicon-custom glyphicon-pencil" onClick={this.props.edit}></span> <span className="glyphicon glyphicon-custom glyphicon-trash" onClick={this.deleteDataFreezeEvent}></span>
+                        </div>
+                    }  
+                    
+                    {this.props.dataFreezeEvent.executed == true &&
+                        <div>                   
+                        <span className="glyphicon glyphicon-custom glyphicon-pencil" style={{color: '#ccc'}} ></span> <span className="glyphicon glyphicon-custom glyphicon-trash" style={{color: '#ccc'}}></span>
+                       </div> 
+                    }
                     </td>               
                   </tr>
             );

@@ -139,11 +139,11 @@ public class PersistenceManager {
      * No other check is being done.
      */
     private static void removeClosedSessionsFromMap() {
-        int count	= 0;
+        int count   = 0;
         synchronized (sessionStackTraceMap) {
             Iterator<Entry<Session, Object[]>> iterator = PersistenceManager.sessionStackTraceMap.entrySet().iterator();
             while (iterator.hasNext()) {
-                Session sess	= iterator.next().getKey();
+                Session sess    = iterator.next().getKey();
                 if ( !sess.isOpen() ) {
                     iterator.remove();
                     count++;
@@ -671,15 +671,15 @@ public class PersistenceManager {
     }
 
     public final static Boolean getBoolean(Object obj) {
-    	if (obj == null)
-    		return null;
-    	if (obj instanceof Boolean)
-    		return (Boolean) obj;
-    	if (obj.toString().equals("true") || obj.toString().equals("yes"))
-    		return true;
-       	if (obj.toString().equals("false") || obj.toString().equals("no"))
-    		return false;
-       	throw new RuntimeException("cannot convert object " + obj + " to boolean");
+        if (obj == null)
+            return null;
+        if (obj instanceof Boolean)
+            return (Boolean) obj;
+        if (obj.toString().equals("true") || obj.toString().equals("yes"))
+            return true;
+        if (obj.toString().equals("false") || obj.toString().equals("no"))
+            return false;
+        throw new RuntimeException("cannot convert object " + obj + " to boolean");
     }
     
     public static StatelessSession openNewStatelessSession() {
@@ -708,7 +708,7 @@ public class PersistenceManager {
                 session.close();
             }
         }
-	}
+    }
 
     /**
      * Flushes the session and commits the transaction. It will not close the session and allows to rollback if an

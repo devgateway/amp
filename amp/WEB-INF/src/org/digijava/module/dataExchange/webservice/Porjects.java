@@ -16,17 +16,17 @@ public class Porjects {
     @GET 
     @Produces("text/xml")
     public String getActivities() {
-    	JAXBContext jc;
-		try {
-			jc = JAXBContext.newInstance(DEConstants.IDML_JAXB_INSTANCE);
-			Marshaller m = jc.createMarshaller();
-			m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-			java.io.StringWriter sw = new StringWriter();
-			m.marshal(WsHelper.GenerateWsExport(),sw);
-			return sw.toString();
-		} catch (JAXBException e) {
-			e.printStackTrace();
-		}
-		return null;
+        JAXBContext jc;
+        try {
+            jc = JAXBContext.newInstance(DEConstants.IDML_JAXB_INSTANCE);
+            Marshaller m = jc.createMarshaller();
+            m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+            java.io.StringWriter sw = new StringWriter();
+            m.marshal(WsHelper.GenerateWsExport(),sw);
+            return sw.toString();
+        } catch (JAXBException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

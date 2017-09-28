@@ -20,25 +20,25 @@ import org.digijava.module.gateperm.core.GatePermConst;
 
 public class ViewActivityDashboard extends TilesAction {
 
-	public ActionForward execute(ComponentContext context,ActionMapping mapping,
-			ActionForm form,HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
+    public ActionForward execute(ComponentContext context,ActionMapping mapping,
+            ActionForm form,HttpServletRequest request,
+            HttpServletResponse response) throws Exception {
 
-		Long actId = null;
-		
-		DynaActionForm adForm = (DynaActionForm) form;
-		request.setAttribute(GatePermConst.ACTION_MODE, GatePermConst.Actions.VIEW);
-		if (request.getParameter("ampActivityId") != null) {
-			actId = new Long(Long.parseLong(request.getParameter("ampActivityId")));
-			
-			int risk = IndicatorUtil.getOverallRisk(actId);
-			String riskName = MEIndicatorsUtil.getRiskRatingName(risk);
-			String rskColor = MEIndicatorsUtil.getRiskColor(risk);
-			adForm.set("overallRisk",riskName);
-			adForm.set("riskColor",rskColor);
-		}
-		request.setAttribute("actId",actId);
-		
-		return null;
-	}
+        Long actId = null;
+        
+        DynaActionForm adForm = (DynaActionForm) form;
+        request.setAttribute(GatePermConst.ACTION_MODE, GatePermConst.Actions.VIEW);
+        if (request.getParameter("ampActivityId") != null) {
+            actId = new Long(Long.parseLong(request.getParameter("ampActivityId")));
+            
+            int risk = IndicatorUtil.getOverallRisk(actId);
+            String riskName = MEIndicatorsUtil.getRiskRatingName(risk);
+            String rskColor = MEIndicatorsUtil.getRiskColor(risk);
+            adForm.set("overallRisk",riskName);
+            adForm.set("riskColor",rskColor);
+        }
+        request.setAttribute("actId",actId);
+        
+        return null;
+    }
 }

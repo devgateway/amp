@@ -21,6 +21,7 @@ export const ACTUAL_DISBURSEMENTS = 'Actual Disbursements';
 export const DISBURSEMENTS_THROUGH_OTHER_PROVIDERS = 'Disbursements through other providers';
 export const DISBURSEMENTS_AS_SCHEDULED = 'Disbursed as Scheduled';
 export const OVER_DISBURSED = 'Over Disbursed';
+export const USE_OF_COUNTRY_SYSTEMS = 'Use of country systems';
 export const REMARK = 'Remark';
 export const INDICATOR_1_CODE = '1';
 export const INDICATOR_1_1_CODE = '1_1';
@@ -62,3 +63,5 @@ export const PDF = 'pdf';
 export const IMG_INFO = 'IMG_INFO';
 export const IMG_VALUE = 'IMG_INFO';
 
+export const OPTION_YES = 'Yes';
+export const OPTION_NO = 'No';

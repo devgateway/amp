@@ -86,9 +86,12 @@
 "amp.gis:activities-project-id": "AMP ID",
 "amp.gis:activities-project-description": "Description",
 "amp.gis:activities-donors": "Funding Organizations",
+"amp.gis:activities-executings": "Executing Agency",
 "amp.gis:activities-sectors": "Sectors",
 "amp.gis:activities-commitments": "Actual Commitments",
 "amp.gis:activities-disbursements": "Actual Disbursements",
+"amp.gis:activities-bilateral-commitments": "Bilateral SSC Commitments",
+"amp.gis:activities-triangular-commitments": "Triangular SSC Commitments",
 "amp.gis:admclusters-projectlist": "Project List",
 "amp.gis:popup-loadmore": "load more",
 "amp.gis:popup-word-has":"has",
@@ -109,5 +112,6 @@
 "amp.gis-layers-manager:tooltip-created-on": "Created on",
 "amp.gis-layers-manager:tooltip-created-by": "by",
 "amp.gis:date-from": "From",
-"amp.gis:date-until": "Until"
+"amp.gis:date-until": "Until",
+"amp.gis:title-performance-selector": "Good Performance Projects View"
 }

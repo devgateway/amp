@@ -35,6 +35,11 @@ export const initialTranslations = {
         'amp.gpi-reports:indicator1-output1-summary-q1': 'Overall extent of use existing crfs',
         'amp.gpi-reports:indicator1-output1-summary-q2': 'Overall use of country owned results framework',
         'amp.gpi-reports:indicator1-output1-summary-q3': 'Overall use of country lead results monitoring frameworks',
-        'amp.gpi-reports:indicator1-output1-summary-q4': 'Overall existence of ex post',
-        'amp-gpi-reports:supporting-evidence': 'Supporting Evidence'       
+        'amp.gpi-reports:indicator1-output1-summary-q4': 'Overall existence of ex post (final evaluations)',
+        'amp-gpi-reports:supporting-evidence': 'Supporting Evidence',
+        'amp-gpi-reports:amount-in-1': 'Amounts in Units',
+        'amp-gpi-reports:amount-in-1000': 'In Thousands',
+        'amp-gpi-reports:amount-in-1000000': 'In Millions',
+        'amp-gpi-reports:selected': 'Selected: ',
+        'amp-gpi-reports:loading-message': 'Loading...'
 };

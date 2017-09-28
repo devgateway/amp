@@ -16,25 +16,25 @@ import org.dgfoundation.amp.ar.workers.ExpressionColWorker;
  */
 public class ExpressionAmountCell extends AmountCell {
 
-	/**
-	 * 
-	 */
-	public ExpressionAmountCell() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * 
+     */
+    public ExpressionAmountCell() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
 
-	/**
-	 * @param id
-	 */
-	public ExpressionAmountCell(Long id) {
-		super(id);
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * @param id
+     */
+    public ExpressionAmountCell(Long id) {
+        super(id);
+        // TODO Auto-generated constructor stub
+    }
 
-	public Class getWorker() {
-		return ExpressionColWorker.class;
-	}
+    public Class getWorker() {
+        return ExpressionColWorker.class;
+    }
 
-	
+    
 }

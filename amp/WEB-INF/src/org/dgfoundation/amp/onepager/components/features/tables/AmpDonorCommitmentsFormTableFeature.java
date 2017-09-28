@@ -16,6 +16,7 @@ import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
+import org.dgfoundation.amp.onepager.components.FundingListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.ListItem;
@@ -37,97 +38,100 @@ import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
  */
 @SuppressWarnings("serial")
 public class AmpDonorCommitmentsFormTableFeature extends
-		AmpDonorFormTableFeaturePanel {
+        AmpDonorFormTableFeaturePanel {
 
-	private boolean alertIfDisbursmentBiggerCommitments = false;
+    private boolean alertIfDisbursmentBiggerCommitments = false;
 
-	/**
-	 * @param id
-	 * @param model
-	 * @param fmName
-	 * @throws Exception
-	 */
-	@SuppressWarnings("serial")
-	public AmpDonorCommitmentsFormTableFeature(String id,
-			final IModel<AmpFunding> model, String fmName, final int transactionType) throws Exception {
-		super(id, model, fmName, Constants.COMMITMENT, 7);
+    /**
+     * @param id
+     * @param model
+     * @param fmName
+     * @throws Exception
+     */
+    @SuppressWarnings("serial")
+    public AmpDonorCommitmentsFormTableFeature(String id,
+            final IModel<AmpFunding> model, String fmName, final int transactionType) throws Exception {
+        super(id, model, fmName, Constants.COMMITMENT, 7);
 
-		list = new ListEditor<AmpFundingDetail>("listCommitments", setModel, FundingDetailComparator
-				.getFundingDetailComparator()) {
-			@Override
-			protected void onPopulateItem(
-					ListItem<AmpFundingDetail> item) {
-				item.add(getAdjustmentTypeComponent(item.getModel(), transactionType));
+        list = new FundingListEditor<AmpFundingDetail>("listCommitments", setModel, FundingDetailComparator
+                .getFundingDetailComparator()) {
+            @Override
+            protected void onPopulateItem(
+                    ListItem<AmpFundingDetail> item) {
+                super.onPopulateItem(item);
+                item.add(getAdjustmentTypeComponent(item.getModel(), transactionType));
 
-				AmpFundingAmountComponent amountComponent = getFundingAmountComponent(item.getModel());
-				item.add(amountComponent);
+                AmpFundingAmountComponent amountComponent = getFundingAmountComponent(item.getModel());
+                item.add(amountComponent);
 
                 IModel<List<FundingPledges>> pledgesModel = new LoadableDetachableModel<List<FundingPledges>>() {
-					protected java.util.List<FundingPledges> load() {
-						return PledgesEntityHelper
-								.getPledgesByDonorGroup(model.getObject()
-										.getAmpDonorOrgId().getOrgGrpId().getAmpOrgGrpId());
-					};
-				};
+                    protected java.util.List<FundingPledges> load() {
+                        return PledgesEntityHelper
+                                .getPledgesByDonorGroup(model.getObject()
+                                        .getAmpDonorOrgId().getOrgGrpId().getAmpOrgGrpId());
+                    };
+                };
 
-				appendFixedExchangeRateToItem(item);
+                appendFixedExchangeRateToItem(item);
+                AmpSelectFieldPanel pledgeAmpSelectFieldPanel=new AmpSelectFieldPanel<FundingPledges>("pledge",
+                        new PropertyModel<FundingPledges>(item.getModel(),
+                                "pledgeid"), pledgesModel,
+                                "Pledges", false, true, new ChoiceRenderer<FundingPledges>() {
+                    @Override
+                    public Object getDisplayValue(FundingPledges arg0) {
+                        return arg0.getEffectiveName();
+                    }
+                }, false);
+                // we need to find a generic way of doing this
+                pledgeAmpSelectFieldPanel.setAffectedByFreezing(false);
+                item.add(pledgeAmpSelectFieldPanel);
+                item.add(new ListEditorRemoveButton("delCommitment", "Delete Commitment"){
+                    protected void onClick(org.apache.wicket.ajax.AjaxRequestTarget target) {
+                        AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
+                        super.onClick(target);
+                        parent.getFundingInfo().checkChoicesRequired(list.getCount());
+                        target.add(parent.getFundingInfo());
+                        target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
+                        target.appendJavaScript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));
+                    };
+                });
+                //we create the role selector for recipient organization for commitments
+                item.add(OnePagerUtil.getFundingFlowRoleSelector(model, item.getModel()));
+                
+                //disaster response marker
+                final AmpBooleanChoiceField disasterResponse = new AmpBooleanChoiceField("disasterResponse", new PropertyModel<Boolean>(
+                        item.getModel(), "disasterResponse"),"Disaster Response");
+                item.add(getDisasterValidator(disasterResponse));
 
-				item.add(new AmpSelectFieldPanel<FundingPledges>("pledge",
-						new PropertyModel<FundingPledges>(item.getModel(),
-								"pledgeid"), pledgesModel,
-								"Pledges", false, true, new ChoiceRenderer<FundingPledges>() {
-					@Override
-					public Object getDisplayValue(FundingPledges arg0) {
-						return arg0.getEffectiveName();
-					}
-				}, false));
-				item.add(new ListEditorRemoveButton("delCommitment", "Delete Commitment"){
-					protected void onClick(org.apache.wicket.ajax.AjaxRequestTarget target) {
-						AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
-						super.onClick(target);
-						parent.getFundingInfo().checkChoicesRequired(list.getCount());
-						target.add(parent.getFundingInfo());
-						target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
-						target.appendJavaScript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));
-					};
-				});
-				//we create the role selector for recipient organization for commitments
-				item.add(OnePagerUtil.getFundingFlowRoleSelector(model, item.getModel()));
-				
-				//disaster response marker
-				final AmpBooleanChoiceField disasterResponse = new AmpBooleanChoiceField("disasterResponse", new PropertyModel<Boolean>(
-						item.getModel(), "disasterResponse"),"Disaster Response");
-				item.add(getDisasterValidator(disasterResponse));
+                item.add(disasterResponse); 
+            }
 
-				item.add(disasterResponse);	
-			}
+            
+        };
+        add(list);
+    }
 
-			
-		};
-		add(list);
-	}
+    @Override
+    protected void enableFixedRateOnAjaxOnUpdate(AjaxRequestTarget target) {
+        onFundingDetailChanged(target);
+    }
 
-	@Override
-	protected void enableFixedRateOnAjaxOnUpdate(AjaxRequestTarget target) {
-		onFundingDetailChanged(target);
-	}
+    @Override
+    protected void exchangeRateOnAjaxOnUpdate(AjaxRequestTarget target) {
+        onFundingDetailChanged(target);
+    }
 
-	@Override
-	protected void exchangeRateOnAjaxOnUpdate(AjaxRequestTarget target) {
-		onFundingDetailChanged(target);
-	}
+    private void onFundingDetailChanged(AjaxRequestTarget target) {
+        AmpComponentPanel parentPanel = findParent(AmpFundingItemFeaturePanel.class);
+        parentPanel.visitChildren(AmpCollectionValidatorField.class, new IVisitor<AmpCollectionValidatorField, Void>() {
+            @Override
+            public void component(AmpCollectionValidatorField component,
+                                  IVisit<Void> visit) {
+                component.reloadValidationField(target);
+                visit.dontGoDeeper();
+            }
+        });
 
-	private void onFundingDetailChanged(AjaxRequestTarget target) {
-		AmpComponentPanel parentPanel = findParent(AmpFundingItemFeaturePanel.class);
-		parentPanel.visitChildren(AmpCollectionValidatorField.class, new IVisitor<AmpCollectionValidatorField, Void>() {
-			@Override
-			public void component(AmpCollectionValidatorField component,
-								  IVisit<Void> visit) {
-				component.reloadValidationField(target);
-				visit.dontGoDeeper();
-			}
-		});
-
-		send(getPage(), Broadcast.BREADTH, new OverallFundingTotalsEvents(target));
-	}
+        send(getPage(), Broadcast.BREADTH, new OverallFundingTotalsEvents(target));
+    }
 }

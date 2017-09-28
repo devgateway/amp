@@ -14,20 +14,20 @@ import org.apache.wicket.feedback.IFeedbackMessageFilter;
 public class ErrorLevelsFeedbackMessageFilter implements IFeedbackMessageFilter
 {
 
-	/** The minimum error level */
-	private int[] filteredErrorLevels;
+    /** The minimum error level */
+    private int[] filteredErrorLevels;
 
-	/**
-	 * Constructor
-	 *
-	 * @param filteredErrorLevels The FeedbackMessages that have thes error levels will
+    /**
+     * Constructor
+     *
+     * @param filteredErrorLevels The FeedbackMessages that have thes error levels will
      *                            not be shown.
-	 */
-	public ErrorLevelsFeedbackMessageFilter(int[] filteredErrorLevels){
-		this.filteredErrorLevels = filteredErrorLevels;
-	}
+     */
+    public ErrorLevelsFeedbackMessageFilter(int[] filteredErrorLevels){
+        this.filteredErrorLevels = filteredErrorLevels;
+    }
 
-	/**
+    /**
      * Method accept, only accept FeedbackMessages that are not in the list of error levels to filter.
      *
      * @param message of type FeedbackMessage
@@ -41,5 +41,5 @@ public class ErrorLevelsFeedbackMessageFilter implements IFeedbackMessageFilter
         }
 
         return true;
-	}
+    }
 }

@@ -2,18 +2,22 @@ package org.digijava.kernel.ampapi.endpoints.datafreeze;
 
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.module.aim.dbentity.AmpActivityFrozen;
 import org.digijava.module.aim.dbentity.AmpDataFreezeExclusion;
 import org.digijava.module.aim.dbentity.AmpDataFreezeSettings;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.AmpDateUtils;
-import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.translation.exotic.AmpDateFormatter;
 import org.digijava.module.translation.exotic.AmpDateFormatterFactory;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -64,6 +68,21 @@ public final class DataFreezeService {
 
     private static List<JsonBean> validate(DataFreezeEvent dataFreezeEvent) {
         List<JsonBean> errors = new ArrayList<>();
+        if(DataFreezeUtil.freezeDateExists(dataFreezeEvent.getId(), DateTimeUtil.parseDate(dataFreezeEvent.getFreezingDate(), DataFreezeConstants.DATE_FORMAT))){
+            JsonBean error = new JsonBean();
+            error.set(ApiError.getErrorCode(DataFreezeErrors.FREEZING_DATE_EXISTS),
+                    DataFreezeErrors.FREEZING_DATE_EXISTS.description);
+            errors.add(error);
+        }
+        
+        Date openPeriodStart = DateTimeUtil.parseDate(dataFreezeEvent.getOpenPeriodStart(), DataFreezeConstants.DATE_FORMAT);
+        Date openPeriodEnd = DateTimeUtil.parseDate(dataFreezeEvent.getOpenPeriodEnd(), DataFreezeConstants.DATE_FORMAT);       
+        if(DataFreezeUtil.openPeriodOverlaps(dataFreezeEvent.getId(), openPeriodStart, openPeriodEnd)){
+            JsonBean error = new JsonBean();
+            error.set(ApiError.getErrorCode(DataFreezeErrors.OPEN_PERIOD_OVERLAPS),
+                    DataFreezeErrors.OPEN_PERIOD_OVERLAPS.description);
+            errors.add(error); 
+        }
         return errors;
     }
 
@@ -141,6 +160,7 @@ public final class DataFreezeService {
             dataFreezeEvent.setFreezeOption(event.getFreezeOption());
             dataFreezeEvent.setFilters(event.getFilters());
             dataFreezeEvent.setNotificationDays(event.getNotificationDays());
+            dataFreezeEvent.setExecuted(event.getExecuted());
             dataFreezeEvent.setCount(getCountOfFrozenActivities(event));
             freezeEvents.add(dataFreezeEvent);
         });
@@ -214,8 +234,8 @@ public final class DataFreezeService {
         DataFreezeUtil.unfreezeAll();
     }
 
-    public static boolean isEditable(Long activityId, Long ampTeamMemberId) {
-        return isEditable(activityId, TeamMemberUtil.getAmpTeamMember(ampTeamMemberId));
+    public static AmpActivityFrozen getActivityFrozenForActivity(Long activityId) {
+        return DataFreezeUtil.getAmpActivityFrozenForActivity(activityId);
     }
 
     /**
@@ -225,94 +245,60 @@ public final class DataFreezeService {
      * @param ampTeamMemberId
      * @return
      */
-    public static boolean isEditable(Long activityId, AmpTeamMember atm) {
+    public static boolean isEditable(AmpActivityFrozen ampActivityFrozen, AmpTeamMember atm) {
         boolean result = true;
         // check if user is exempt for data freezing
         if (Boolean.TRUE.equals(atm.getUser().getExemptFromDataFreezing())) {
             return result;
         }
-
-        // check if activity is frozen by any of the enabled data freeze events
-        List<AmpDataFreezeSettings> dataFreezeEvents = DataFreezeUtil
-                .getEnabledDataFreezeEvents(AmpDataFreezeSettings.FreezeOptions.ENTIRE_ACTIVITY);
-        for (AmpDataFreezeSettings event : dataFreezeEvents) {
-            AmpDataFreezeExclusion ampDataFreezeExclusion = DataFreezeUtil.findDataFreezeExclusion(activityId,
-                    event.getAmpDataFreezeSettingsId());
-            if (ampDataFreezeExclusion == null) {
-                GeneratedReport report = getFrozenActivitiesReport(event);
-                Set<Long> activityIds = getActivityIds(report);
-                Date todaysDate = getTodaysDate();
-                boolean isGracePeriod = isGracePeriod(event, todaysDate);
-                boolean isOpenPeriod = isOpenPeriod(event, todaysDate);
-
-                // if activity is in list of frozen activities and current date
-                // does
-                // not fall in open period and current date is not in grace
-                // period,
-                // then disable edit i.e return false
-                if (activityIds.contains(activityId) && Boolean.FALSE.equals(isOpenPeriod)
-                        && Boolean.FALSE.equals(isGracePeriod)) {
-                    result = false;
-                }
-            } else {
-                result = true;
-            }
-
+        if (ampActivityFrozen == null || ampActivityFrozen.getDataFreezeEvent()
+                .getFreezeOption() == AmpDataFreezeSettings.FreezeOptions.FUNDING) {
+            return true;
+        } else {
+            return false;
         }
+    }
 
-        return result;
+    public static void processFreezingEvent() {
+        AmpDataFreezeSettings currentFreezingEvent = DataFreezeUtil.getCurrentFreezingEvent();
+        if (currentFreezingEvent != null) {
+            freezeActivities(currentFreezingEvent);
+        }
+    }
+
+    private static void freezeActivities(AmpDataFreezeSettings currentFreezingEvent) {
+        // run the report for the corresponding freezing event
+        GeneratedReport report = getFrozenActivitiesReport(currentFreezingEvent);
+        Set<Long> activityIds = getActivityIds(report);
+        // we disable previous freezing event since we have only one set of
+        // activities frozen
+        DataFreezeUtil.disablePreviousFrozenActivities();
+        // we freeze the activities with the actual freezing event
+        DataFreezeUtil.freezeActivitiesForFreezingDate(currentFreezingEvent, activityIds);
     }
 
     /**
-     * Check if funding items are editable - uses the transaction dates of the
-     * funding items
+     * Return the freezing configuration with the open period if all funding is
+     * editable or the user is exempt we return null
      * 
      * @param activityId
      * @param ampTeamMemberId
      * @return
+     * 
      */
-    public static HashMap<Date, Boolean> isEditable(Long activityId, List<Date> transactionDates, AmpTeamMember atm) {
-        HashMap<Date, Boolean> editable = new HashMap<>();
-        for (Date transactionDate : transactionDates) {
-            editable.put(transactionDate, true);
-        }
+    public static boolean isFundingEditable(AmpActivityFrozen ampActivityFrozen, AmpTeamMember atm,
+            Date transactionDate) {
 
         // check if user is exempt for data freezing
         if (Boolean.TRUE.equals(atm.getUser().getExemptFromDataFreezing())) {
-            return editable;
+            return true;
         }
-
-        List<AmpDataFreezeSettings> dataFreezeEvents = DataFreezeUtil
-                .getEnabledDataFreezeEvents(AmpDataFreezeSettings.FreezeOptions.FUNDING);
-        for (AmpDataFreezeSettings event : dataFreezeEvents) {
-            AmpDataFreezeExclusion ampDataFreezeExclusion = DataFreezeUtil.findDataFreezeExclusion(activityId,
-                    event.getAmpDataFreezeSettingsId());
-            if (ampDataFreezeExclusion == null) {
-                GeneratedReport report = getFrozenActivitiesReport(event);
-                Set<Long> activityIds = getActivityIds(report);
-                Date todaysDate = getTodaysDate();
-                boolean isGracePeriod = isGracePeriod(event, todaysDate);
-                boolean isOpenPeriod = isOpenPeriod(event, todaysDate);
-
-                for (Date transactionDate : transactionDates) {
-                    // if activity is in list of frozen activities and current
-                    // date does
-                    // not fall in open period and current date is not in grace
-                    // period,
-                    // then disable edit i.e return false
-                    if (activityIds.contains(activityId) && Boolean.FALSE.equals(isOpenPeriod)
-                            && transactionDate.before(event.getFreezingDate()) && Boolean.FALSE.equals(isGracePeriod)) {
-                        editable.put(transactionDate, false);
-                    }
-                }
-            } else {
-                for (Date transactionDate : transactionDates) {
-                    editable.put(transactionDate, true);
-                }
-            }
+        if (ampActivityFrozen.getDataFreezeEvent().getOpenPeriodStart() == null
+                || ampActivityFrozen.getDataFreezeEvent().getOpenPeriodEnd() == null) {
+            return false;
         }
-
-        return editable;
+        return transactionDate.compareTo(ampActivityFrozen.getDataFreezeEvent().getOpenPeriodStart()) >= 0
+                && transactionDate.compareTo(ampActivityFrozen.getDataFreezeEvent().getOpenPeriodEnd()) <= 0;
     }
 
     public static Set<Long> getActivityIds(GeneratedReport report) {
@@ -353,38 +339,29 @@ public final class DataFreezeService {
         return today.getTime();
     }
 
-    public static Map<Long, Set<Long>> getFreezeActivityIdEventIdsMap() {
-        Map<Long, Set<Long>> activityIdEventsIdsMap = new HashMap<>();
-        List<AmpDataFreezeSettings> dataFreezeEvents = DataFreezeUtil.getEnabledDataFreezeEvents(null);
-        List<AmpDataFreezeExclusion> exclusions = DataFreezeUtil.findAllDataFreezeExclusion();
-        for (AmpDataFreezeSettings event : dataFreezeEvents) {
-            GeneratedReport report = getFrozenActivitiesReport(event);
-            Set<Long> activityIds = getActivityIds(report);
-
-            for (Long activityId : activityIds) {
-                AmpDataFreezeExclusion ampDataFreezeExclusion = exclusions.stream()
-                        .filter(exclusion -> exclusion.getDataFreezeEvent().getAmpDataFreezeSettingsId()
-                                .equals(event.getAmpDataFreezeSettingsId())
-                                && exclusion.getActivity().getAmpActivityId().equals(activityId))
-                        .findAny().orElse(null);
-
-                if (ampDataFreezeExclusion == null) {
-                    Set<Long> events = activityIdEventsIdsMap.get(activityId);
-                    if (events == null) {
-                        events = new HashSet<>();
-                    }
-
-                    events.add(event.getAmpDataFreezeSettingsId());
-                    activityIdEventsIdsMap.put(activityId, events);
-                }
-
-            }
-        }
-
-        return activityIdEventsIdsMap;
+    public static Set<Long> getFronzeActivities() {
+    return DataFreezeUtil.getFrozenActivities();
     }
 
-    public static void unfreezeActivities(Map<Long, Set<Long>> activityIdEventsIdsMap) {
-        DataFreezeUtil.unfreezeActivities(activityIdEventsIdsMap);
+    public static void unfreezeActivities(Set<Long>activitiesIdToFreeze) {
+        DataFreezeUtil.unfreezeActivities(activitiesIdToFreeze);
+    }
+
+    public static JsonBean getFronzeActivitiesInformation() {
+        String freezingDate = null;
+        Integer freezingCount = 0;
+        AmpDataFreezeSettings ampDataFreezeSettings = DataFreezeUtil.getLatestFreezingConfiguration();
+        if (ampDataFreezeSettings != null) {
+            Set<Long> frozenActivities = DataFreezeUtil.getFrozenActivities();
+            String defaultDateFormat = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT);
+            SimpleDateFormat dateFormatter = new SimpleDateFormat(defaultDateFormat);
+            freezingDate = dateFormatter.format(ampDataFreezeSettings.getFreezingDate());
+            freezingCount = frozenActivities.size();
+        }
+
+        JsonBean freezingInformation = new JsonBean();
+        freezingInformation.set("freezingDate", freezingDate);
+        freezingInformation.set("freezingCount", freezingCount);
+        return freezingInformation;
     }
 }

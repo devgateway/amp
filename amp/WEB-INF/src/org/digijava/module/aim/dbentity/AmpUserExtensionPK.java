@@ -13,37 +13,37 @@ import org.digijava.kernel.user.User;
  */
 public class AmpUserExtensionPK implements Serializable{
 
-	private static final long serialVersionUID = 1L;
-	
-	private User user;
+    private static final long serialVersionUID = 1L;
+    
+    private User user;
 
-	public AmpUserExtensionPK(){
-		
-	}
+    public AmpUserExtensionPK(){
+        
+    }
 
-	public AmpUserExtensionPK(User user){
-		this.user=user;
-	}
-	
-	public User getUser() {
-		return user;
-	}
+    public AmpUserExtensionPK(User user){
+        this.user=user;
+    }
+    
+    public User getUser() {
+        return user;
+    }
 
-	public void setUser(User user) {
-		this.user = user;
-	}
+    public void setUser(User user) {
+        this.user = user;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		AmpUserExtensionPK other=(AmpUserExtensionPK)obj;
-		return this.user.getId().equals(other.getUser().getId());
-	}
+    @Override
+    public boolean equals(Object obj) {
+        AmpUserExtensionPK other=(AmpUserExtensionPK)obj;
+        return this.user.getId().equals(other.getUser().getId());
+    }
 
-	@Override
-	public int hashCode() {
-		return (this.user!=null && this.user.getId()!=null)?this.user.getId().hashCode():0;
-	}
-	
-	
+    @Override
+    public int hashCode() {
+        return (this.user!=null && this.user.getId()!=null)?this.user.getId().hashCode():0;
+    }
+    
+    
 
 }

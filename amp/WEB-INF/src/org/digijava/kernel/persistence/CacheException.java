@@ -25,20 +25,20 @@ package org.digijava.kernel.persistence;
 
 
 public class CacheException extends Exception {
-	public CacheException() {
-		super();
-	}
+    public CacheException() {
+        super();
+    }
 
-	public CacheException(String message) {
-		super(message);
-	}
+    public CacheException(String message) {
+        super(message);
+    }
 
-	public CacheException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    public CacheException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-	public CacheException(Throwable cause) {
-		super(cause);
-	}
+    public CacheException(Throwable cause) {
+        super(cause);
+    }
 
 }

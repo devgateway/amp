@@ -24,53 +24,53 @@ import org.dgfoundation.amp.onepager.models.AmpMultiValueDropDownChoiceModel;
  */
 public class AmpSelectFieldPanel<T> extends AmpFieldPanel<T> {
 
-	protected AbstractChoice<?, T> choiceContainer;
+    protected AbstractChoice<?, T> choiceContainer;
 
-	public AbstractChoice<?, T> getChoiceContainer() {
-		return choiceContainer;
-	}
-	
-	public boolean dropDownChoiceIsDisabled(T object, int index, String selected){
-		return false;
-	}
-	
-	/**
-	 * Override this when onchange needs to be used
-	 * also set wantOnSelectionChangedNotifications
-	 * to return true
-	 * @param newSelection
-	 */
-	protected void onSelectionChanged(T newSelection){
-	}
-	
-	protected boolean wantOnSelectionChangedNotifications(){
-		return false;
-	}
+    public AbstractChoice<?, T> getChoiceContainer() {
+        return choiceContainer;
+    }
+    
+    public boolean dropDownChoiceIsDisabled(T object, int index, String selected){
+        return false;
+    }
+    
+    /**
+     * Override this when onchange needs to be used
+     * also set wantOnSelectionChangedNotifications
+     * to return true
+     * @param newSelection
+     */
+    protected void onSelectionChanged(T newSelection){
+    }
+    
+    protected boolean wantOnSelectionChangedNotifications(){
+        return false;
+    }
 
-	public AmpSelectFieldPanel(String id, IModel<T> model,
-			IModel<? extends List<? extends T>> choicesList, String fmName,
-			boolean hideLabel, boolean nullValid,
-			IChoiceRenderer<? super T> renderer, boolean hideNewLine) {
-		super(id, model, fmName, hideLabel, hideNewLine);
-		choiceContainer = new DropDownChoice<T>("choice", model, choicesList,
-				renderer){
-			protected boolean isDisabled(T object, int index, String selected) {
-				return dropDownChoiceIsDisabled(object, index, selected);
-			};
-			
-			@Override
-			protected boolean wantOnSelectionChangedNotifications() {
-				return AmpSelectFieldPanel.this.wantOnSelectionChangedNotifications();
-			};
-			
-			@Override
-			protected void onSelectionChanged(T newSelection) {
-				AmpSelectFieldPanel.this.onSelectionChanged(newSelection);
-			};
-		}.setNullValid(nullValid);
-		choiceContainer.setOutputMarkupId(true);
-		addFormComponent(choiceContainer);
-	}
+    public AmpSelectFieldPanel(String id, IModel<T> model,
+            IModel<? extends List<? extends T>> choicesList, String fmName,
+            boolean hideLabel, boolean nullValid,
+            IChoiceRenderer<? super T> renderer, boolean hideNewLine) {
+        super(id, model, fmName, hideLabel, hideNewLine);
+        choiceContainer = new DropDownChoice<T>("choice", model, choicesList,
+                renderer){
+            protected boolean isDisabled(T object, int index, String selected) {
+                return dropDownChoiceIsDisabled(object, index, selected);
+            };
+            
+            @Override
+            protected boolean wantOnSelectionChangedNotifications() {
+                return AmpSelectFieldPanel.this.wantOnSelectionChangedNotifications();
+            };
+            
+            @Override
+            protected void onSelectionChanged(T newSelection) {
+                AmpSelectFieldPanel.this.onSelectionChanged(newSelection);
+            };
+        }.setNullValid(nullValid);
+        choiceContainer.setOutputMarkupId(true);
+        addFormComponent(choiceContainer);
+    }
 
     public AmpSelectFieldPanel(String id, IModel<T> model,
                                IModel<? extends List<? extends T>> choicesList, String fmName,
@@ -78,80 +78,80 @@ public class AmpSelectFieldPanel<T> extends AmpFieldPanel<T> {
                                IChoiceRenderer<? super T> renderer){
         this(id, model, choicesList, fmName, hideLabel, nullValid, renderer, false);
     }
-	
-	public AmpSelectFieldPanel(String id, IModel<T> model,
-			IModel<? extends List<? extends T>> choicesList, String fmName,
-			boolean hideLabel, boolean nullValid) {
-		this(id,model,choicesList,fmName,hideLabel,nullValid,null);
-	}
+    
+    public AmpSelectFieldPanel(String id, IModel<T> model,
+            IModel<? extends List<? extends T>> choicesList, String fmName,
+            boolean hideLabel, boolean nullValid) {
+        this(id,model,choicesList,fmName,hideLabel,nullValid,null);
+    }
 
-	public AmpSelectFieldPanel(String id, IModel<T> model,
-			List<? extends T> choicesList, String fmName, boolean hideLabel,
-			boolean nullValid, IChoiceRenderer<? super T> renderer) {
-		this(id, model, new WildcardListModel<T>(choicesList), fmName,
-				hideLabel, nullValid, renderer);
-	}
-	
-	public AmpSelectFieldPanel(String id, IModel<T> model,
-			List<? extends T> choicesList, String fmName, boolean hideLabel,
-			boolean nullValid, IChoiceRenderer<? super T> renderer,boolean hideNewLine) {
-		this(id, model, new WildcardListModel<T>(choicesList), fmName,
-				hideLabel, nullValid, renderer,hideNewLine);
-	}
+    public AmpSelectFieldPanel(String id, IModel<T> model,
+            List<? extends T> choicesList, String fmName, boolean hideLabel,
+            boolean nullValid, IChoiceRenderer<? super T> renderer) {
+        this(id, model, new WildcardListModel<T>(choicesList), fmName,
+                hideLabel, nullValid, renderer);
+    }
+    
+    public AmpSelectFieldPanel(String id, IModel<T> model,
+            List<? extends T> choicesList, String fmName, boolean hideLabel,
+            boolean nullValid, IChoiceRenderer<? super T> renderer,boolean hideNewLine) {
+        this(id, model, new WildcardListModel<T>(choicesList), fmName,
+                hideLabel, nullValid, renderer,hideNewLine);
+    }
 
-	/**
-	 * @param id
-	 * @param fmName
-	 * @param hideLabel
-	 * @param nullValid
-	 * @param renderer
-	 */
-	public AmpSelectFieldPanel(String id,
-			IModel<? extends Collection<T>> model,
-			IModel<? extends List<? extends T>> choicesList, String fmName,
-			boolean hideLabel, boolean isMultiSelect, boolean nullValid,
-			IChoiceRenderer<? super T> renderer) {
-		super(id, fmName, hideLabel);
-		if (isMultiSelect)
-			choiceContainer = new ListMultipleChoice<T>("choice", model,
-					choicesList, renderer);
-		else
-			choiceContainer = new DropDownChoice<T>("choice",
-					new AmpMultiValueDropDownChoiceModel<T>(model),
-					choicesList, renderer).setNullValid(nullValid);
-		choiceContainer.setOutputMarkupId(true);
-		addFormComponent(choiceContainer);
-	}
+    /**
+     * @param id
+     * @param fmName
+     * @param hideLabel
+     * @param nullValid
+     * @param renderer
+     */
+    public AmpSelectFieldPanel(String id,
+            IModel<? extends Collection<T>> model,
+            IModel<? extends List<? extends T>> choicesList, String fmName,
+            boolean hideLabel, boolean isMultiSelect, boolean nullValid,
+            IChoiceRenderer<? super T> renderer) {
+        super(id, fmName, hideLabel);
+        if (isMultiSelect)
+            choiceContainer = new ListMultipleChoice<T>("choice", model,
+                    choicesList, renderer);
+        else
+            choiceContainer = new DropDownChoice<T>("choice",
+                    new AmpMultiValueDropDownChoiceModel<T>(model),
+                    choicesList, renderer).setNullValid(nullValid);
+        choiceContainer.setOutputMarkupId(true);
+        addFormComponent(choiceContainer);
+    }
 
-	public AmpSelectFieldPanel(String id,
-			IModel<? extends Collection<T>> model,
-			List<? extends T> choicesList, String fmName, boolean hideLabel,
-			boolean isMultiSelect, boolean nullValid,
-			IChoiceRenderer<? super T> renderer) {
-		this(id, model, new WildcardListModel<T>(choicesList), fmName,
-				hideLabel, isMultiSelect, nullValid, renderer);
-	}
+    public AmpSelectFieldPanel(String id,
+            IModel<? extends Collection<T>> model,
+            List<? extends T> choicesList, String fmName, boolean hideLabel,
+            boolean isMultiSelect, boolean nullValid,
+            IChoiceRenderer<? super T> renderer) {
+        this(id, model, new WildcardListModel<T>(choicesList), fmName,
+                hideLabel, isMultiSelect, nullValid, renderer);
+    }
 
-	public AmpSelectFieldPanel(String id, IModel<T> model,
-			List<? extends T> choicesList, String fmName, boolean hideLabel,
-			boolean nullValid) {
-		this(id, model, choicesList, fmName, hideLabel, nullValid, null);
-	}
+    public AmpSelectFieldPanel(String id, IModel<T> model,
+            List<? extends T> choicesList, String fmName, boolean hideLabel,
+            boolean nullValid) {
+        this(id, model, choicesList, fmName, hideLabel, nullValid, null);
+    }
 
-	public AmpSelectFieldPanel(String id,
-			IModel<? extends Collection<T>> model,
-			List<? extends T> choicesList, String fmName, boolean hideLabel,
-			boolean isMultiSelect, boolean nullValid) {
-		this(id, model, choicesList, fmName, hideLabel, isMultiSelect,
-				nullValid, null);
-	}
-	
-	public AmpSelectFieldPanel(String id,
-			IModel<? extends Collection<T>> model,
-			IModel<? extends List<? extends T>> choicesList, String fmName, boolean hideLabel,
-			boolean isMultiSelect, boolean nullValid) {
-		this(id, model, choicesList, fmName, hideLabel, isMultiSelect,
-				nullValid, null);
-	}
-	
+    public AmpSelectFieldPanel(String id,
+            IModel<? extends Collection<T>> model,
+            List<? extends T> choicesList, String fmName, boolean hideLabel,
+            boolean isMultiSelect, boolean nullValid) {
+        this(id, model, choicesList, fmName, hideLabel, isMultiSelect,
+                nullValid, null);
+    }
+    
+    public AmpSelectFieldPanel(String id,
+            IModel<? extends Collection<T>> model,
+            IModel<? extends List<? extends T>> choicesList, String fmName, boolean hideLabel,
+            boolean isMultiSelect, boolean nullValid) {
+        this(id, model, choicesList, fmName, hideLabel, isMultiSelect,
+                nullValid, null);
+    }
+    
 }

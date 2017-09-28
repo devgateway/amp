@@ -16,41 +16,41 @@ import org.dgfoundation.amp.nireports.runtime.CachingCalendarConverter;
  *
  */
 public interface SchemaSpecificScratchpad extends AutoCloseable {
-	
-	/** 
-	 * @return the precision with which to run the internal calculations. Should be at least 2 orders of magnitude better than the format used for displaying
-	 */
-	public NiPrecisionSetting getPrecisionSetting();
-	
-	/**
-	 * 
-	 * @return the Calendar to use in a report in case {@link ReportSpecification} does not specify one
-	 */
-	public CachingCalendarConverter buildCalendarConverter();
-	
-	public CalendarConverter getDefaultCalendar();
-	
-	public default CalendarConverter buildUnderlyingCalendarConverter(ReportSpecification spec) {
-		return spec.getSettings() != null && spec.getSettings().getCalendar() != null ? 
-				spec.getSettings().getCalendar() : getDefaultCalendar();
-	}
-	
-	/**
-	 * returns the ids to use for fetching a given column. By default returns the engine-wide {@link NiReportsEngine#getMainIds()}, 
-	 * but offers schemas the ability to override it in arbitrary ways
-	 * @param engine the context of the asking report
-	 * @param col the column to be fetched
-	 * @return
-	 */
-	public default Set<Long> getMainIds(NiReportsEngine engine, NiReportColumn<?> col) {
-		return engine.getMainIds();
-	}
+    
+    /** 
+     * @return the precision with which to run the internal calculations. Should be at least 2 orders of magnitude better than the format used for displaying
+     */
+    public NiPrecisionSetting getPrecisionSetting();
+    
+    /**
+     * 
+     * @return the Calendar to use in a report in case {@link ReportSpecification} does not specify one
+     */
+    public CachingCalendarConverter buildCalendarConverter();
+    
+    public CalendarConverter getDefaultCalendar();
+    
+    public default CalendarConverter buildUnderlyingCalendarConverter(ReportSpecification spec) {
+        return spec.getSettings() != null && spec.getSettings().getCalendar() != null ? 
+                spec.getSettings().getCalendar() : getDefaultCalendar();
+    }
+    
+    /**
+     * returns the ids to use for fetching a given column. By default returns the engine-wide {@link NiReportsEngine#getMainIds()}, 
+     * but offers schemas the ability to override it in arbitrary ways
+     * @param engine the context of the asking report
+     * @param col the column to be fetched
+     * @return
+     */
+    public default Set<Long> getMainIds(NiReportsEngine engine, NiReportColumn<?> col) {
+        return engine.getMainIds();
+    }
 
-	/**
-	 * returns the localised name for column used for time range sub totals. if sub totals are not needed then null
-	 * must be returned.
-	 * @param reportSpecification report specification
-	 * @return localized column name
-	 */
-	public String getTimeRangeSubTotalColumnName(ReportSpecification reportSpecification);
+    /**
+     * returns the localised name for column used for time range sub totals. if sub totals are not needed then null
+     * must be returned.
+     * @param reportSpecification report specification
+     * @return localized column name
+     */
+    public String getTimeRangeSubTotalColumnName(ReportSpecification reportSpecification);
 }

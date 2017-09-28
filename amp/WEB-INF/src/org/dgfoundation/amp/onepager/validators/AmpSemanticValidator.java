@@ -17,30 +17,30 @@ import org.dgfoundation.amp.onepager.components.fields.AmpCollectionValidatorFie
  *  @see AmpCollectionValidatorField
  */
 public abstract class AmpSemanticValidator<T> extends Behavior implements IValidator<T> {
-	private static final Logger logger = Logger.getLogger(AmpSemanticValidator.class);
-	
-	protected boolean enabled=true;
-	
-	public boolean isEnabled() {
-		return enabled;
-	}
-	public void setEnabled(boolean enabled) {
-		this.enabled=enabled;
-	}
-	
-	@Override
-	public void validate(IValidatable<T> validatable) {
-		if(!enabled) return;
-		semanticValidate(validatable);
-	}
-	
-	
-	/**
-	 * This is identical with the {@link #validate(IValidatable)} method but it is used as a wrapper.
-	 * Use this one for {@link AmpSemanticValidator}S. The real {@link #validate(IValidatable)} method
-	 * checks if {@link #isEnabled()} is true, and if so it invokes {@link #semanticValidate(IValidatable)} 
-	 * @see #validate(IValidatable)
-	 * @param validatable
-	 */
-	public abstract void semanticValidate(IValidatable<T> validatable);
+    private static final Logger logger = Logger.getLogger(AmpSemanticValidator.class);
+    
+    protected boolean enabled=true;
+    
+    public boolean isEnabled() {
+        return enabled;
+    }
+    public void setEnabled(boolean enabled) {
+        this.enabled=enabled;
+    }
+    
+    @Override
+    public void validate(IValidatable<T> validatable) {
+        if(!enabled) return;
+        semanticValidate(validatable);
+    }
+    
+    
+    /**
+     * This is identical with the {@link #validate(IValidatable)} method but it is used as a wrapper.
+     * Use this one for {@link AmpSemanticValidator}S. The real {@link #validate(IValidatable)} method
+     * checks if {@link #isEnabled()} is true, and if so it invokes {@link #semanticValidate(IValidatable)} 
+     * @see #validate(IValidatable)
+     * @param validatable
+     */
+    public abstract void semanticValidate(IValidatable<T> validatable);
 }

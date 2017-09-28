@@ -7,24 +7,24 @@ import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 
 public class FiscalCalendarForm extends ActionForm {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private Collection<AmpFiscalCalendar> fiscalCal;
-	private Collection<Integer> pages;
+    private Collection<AmpFiscalCalendar> fiscalCal;
+    private Collection<Integer> pages;
 
-	public Collection<AmpFiscalCalendar> getFiscalCal() {
-		return (this.fiscalCal);
-	}
+    public Collection<AmpFiscalCalendar> getFiscalCal() {
+        return (this.fiscalCal);
+    }
 
-	public void setFiscalCal(Collection<AmpFiscalCalendar> fiscalCal) {
-		this.fiscalCal = fiscalCal;
-	}
+    public void setFiscalCal(Collection<AmpFiscalCalendar> fiscalCal) {
+        this.fiscalCal = fiscalCal;
+    }
 
-	public Collection<Integer> getPages() {
-		return pages;
-	}
+    public Collection<Integer> getPages() {
+        return pages;
+    }
 
-	public void setPages(Collection<Integer> pages) {
-		this.pages = pages;
-	}
+    public void setPages(Collection<Integer> pages) {
+        this.pages = pages;
+    }
 }

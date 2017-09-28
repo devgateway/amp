@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -30,207 +31,206 @@ import org.digijava.module.aim.util.AuditLoggerUtil;
 
 
 public class ActivityManager extends Action {
-	private static Logger logger = Logger.getLogger(ActivityManager.class);
+    private static Logger logger = Logger.getLogger(ActivityManager.class);
 
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws java.lang.Exception {
-		HttpSession session = request.getSession();
-		String action = request.getParameter("action");
+    public ActionForward execute(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response)
+            throws java.lang.Exception {
+        HttpSession session = request.getSession();
+        String action = request.getParameter("action");
 
-		if (session.getAttribute("ampAdmin") == null)
-			return mapping.findForward("index");
-		else {
-			String str = (String) session.getAttribute("ampAdmin");
-			if (str.equals("no"))
-				return mapping.findForward("index");
-		}
-
-		ActivityForm actForm = (ActivityForm) form;
-		
-		//AMP-5518
-		if ((action != null) && (action.equals("search")) && (actForm.getKeyword() != null) && (actForm.getLastKeyword() != null) && (!actForm.getKeyword().equals(actForm.getLastKeyword())) && ("".equals(actForm.getKeyword().replaceAll(" ", "")))){
-			action="reset";
-		}
-
-		Map<Long, Set<Long>>freezeEventIdActivityIdsMap = DataFreezeService.getFreezeActivityIdEventIdsMap();		
-		actForm.setActivityIdFreezeEventsIdMap(freezeEventIdActivityIdsMap);       
-		if (action == null) {
-			reset(actForm, request);
-		} else if (action.equals("delete")) {
-			deleteActivity(actForm, request);
-		} else if (action.equals("search")) {		     
-			actForm.setLastKeyword(actForm.getKeyword());
-			searchActivities(actForm, request);
-		} else if (action.equals("reset")) {
-			reset(actForm, request);
-		} else if (action.equals("unfreeze")) {
-		    unfreezeActivities(actForm, request);
-		}
-			
-		sortActivities(actForm, request);
-		int page = 0;
-		if (request.getParameter("page") == null) {
-			page = 0;
-		} else {
-			page = Integer.parseInt(request.getParameter("page"));
-		}
-		actForm.setCurrentPage(new Integer (page));
-		actForm.setPagesToShow(-1);
-		
-		doPagination(actForm, request);
-
-		return mapping.findForward("forward");
-	}
-
-	private void reset(ActivityForm actForm, HttpServletRequest request) {
-		actForm.setAllActivityList(ActivityUtil.getAllActivitiesAdmin(null, null, ActivityForm.DataFreezeFilter.ALL));
-		actForm.setKeyword("");
-		actForm.setLastKeyword("");
-		actForm.setSortByColumn(null);
-		actForm.setPage(0);
-		actForm.setTempNumResults(-1);
-		actForm.setDataFreezeFilter(ActivityForm.DataFreezeFilter.ALL.toString());
-	}
-
-	private void doPagination(ActivityForm actForm, HttpServletRequest request) {
-		List<AmpActivityFake> allActivities = actForm.getAllActivityList();
-		//sort...
-		List<AmpActivityFake> pageList = actForm.getActivityList();
-		int pageSize = actForm.getTempNumResults();
-		if (pageList == null) {
-			pageList = new ArrayList<AmpActivityFake>();
-			actForm.setActivityList(pageList);
-		}
-
-		pageList.clear();
-		int i = 0;
-
-
-		int idx = 0;
-
-		if(pageSize != -1 && actForm.getPage() * actForm.getPageSize() < allActivities.size()){
-			idx =  actForm.getPage() * actForm.getPageSize();
-		}else{
-			idx = 0;
-			actForm.setPage(0);
-		}
-		
-		actForm.setPageSize(pageSize);
-
-		Double totalPages = 0.0;
-		if(pageSize != -1){
-			for (Iterator<AmpActivityFake> iterator = allActivities.listIterator(idx);
-					iterator.hasNext() && i < pageSize; i++) {
-				pageList.add(iterator.next());
-			}
-        	totalPages=Math.ceil(1.0*allActivities.size() / actForm.getPageSize());
-		}
-		else{
-			for (Iterator<AmpActivityFake> iterator = allActivities.listIterator(idx);
-				iterator.hasNext(); i++) {
-				pageList.add(iterator.next());
-	       }
-			totalPages=1.0;       	
+        if (session.getAttribute("ampAdmin") == null)
+            return mapping.findForward("index");
+        else {
+            String str = (String) session.getAttribute("ampAdmin");
+            if (str.equals("no"))
+                return mapping.findForward("index");
         }
 
-		actForm.setTotalPages(totalPages.intValue());
-	}
+        ActivityForm actForm = (ActivityForm) form;
+        
+        //AMP-5518
+        if ((action != null) && (action.equals("search")) && (actForm.getKeyword() != null) && (actForm.getLastKeyword() != null) && (!actForm.getKeyword().equals(actForm.getLastKeyword())) && ("".equals(actForm.getKeyword().replaceAll(" ", "")))){
+            action="reset";
+        }
+        actForm.setFrozenActivityIds(DataFreezeService.getFronzeActivities());
 
-	private void searchActivities(ActivityForm actForm, HttpServletRequest request) {
-		List<AmpActivityFake> activities = ActivityUtil.getAllActivitiesAdmin(null, null, ActivityForm.DataFreezeFilter.ALL);
-		actForm.setAllActivityList(activities);
-		sortActivities(actForm,request);
-	}
-	
-	private void sortActivities(ActivityForm actForm, HttpServletRequest request) {
-		List<AmpActivityFake> activities = null;
-		
-		if ((actForm.getKeyword() != null && actForm.getKeyword().trim().length()>0) || ActivityForm.DataFreezeFilter.FROZEN.equals(actForm.getDataFreezeFilterEnum()) || ActivityForm.DataFreezeFilter.UNFROZEN.equals(actForm.getDataFreezeFilterEnum())){
-		    activities = ActivityUtil.getAllActivitiesAdmin(actForm.getKeyword().trim(), actForm.getFrozenActivityIds(), actForm.getDataFreezeFilterEnum());
-		} else {
-			activities = actForm.getAllActivityList();
-		}
+        if (action == null) {
+            reset(actForm, request);
+        } else if (action.equals("delete")) {
+            deleteActivity(actForm, request);
+        } else if (action.equals("search")) {            
+            actForm.setLastKeyword(actForm.getKeyword());
+            searchActivities(actForm, request);
+        } else if (action.equals("reset")) {
+            reset(actForm, request);
+        } else if (action.equals("unfreeze")) {
+            unfreezeActivities(actForm, request);
+        }
+            
+        sortActivities(actForm, request);
+        int page = 0;
+        if (request.getParameter("page") == null) {
+            page = 0;
+        } else {
+            page = Integer.parseInt(request.getParameter("page"));
+        }
+        actForm.setCurrentPage(new Integer (page));
+        actForm.setPagesToShow(-1);
+        
+        doPagination(actForm, request);
 
-		String sort = (actForm.getSort() == null) ? null : actForm.getSort().trim();
-	    String sortOrder = (actForm.getSortOrder() == null) ? null : actForm.getSortOrder().trim();
-		int sortBy = 0;
-		if("activityName".equals(sort)&&"asc".equalsIgnoreCase(sortOrder)){
-			sortBy = 1;
-		}else if("activityName".equals(sort)&&"desc".equalsIgnoreCase(sortOrder)){
-			sortBy = 2;
-		}else if("activityId".equals(sort)&&"asc".equalsIgnoreCase(sortOrder)){
-			sortBy = 3;
-		}else if("activityId".equals(sort)&&"desc".equalsIgnoreCase(sortOrder)){
-			sortBy = 4;
-		}else if("activityTeamName".equals(sort)&&"asc".equalsIgnoreCase(sortOrder)){
-			sortBy = 5;
-		}else if("activityTeamName".equals(sort)&&"desc".equalsIgnoreCase(sortOrder)){
-			sortBy = 6;
-		}
+        return mapping.findForward("forward");
+    }
 
-		switch (sortBy) {
-		case 1:
-			Collections.sort(activities, new Comparator<AmpActivityFake>(){
-				public int compare(AmpActivityFake a1, AmpActivityFake a2) {
-					String s1	= a1.getName();
-					String s2	= a2.getName();
-					if ( s1 == null )
-						s1	= "";
-					if ( s2 == null )
-						s2	= "";
-					
-					return s1.toUpperCase().trim().compareTo(s2.toUpperCase().trim());
-					//return a1.getName().compareTo(a2.getName());
-				}
-			});
-			break;
-		case 2:
-			Collections.sort(activities, new Comparator<AmpActivityFake>(){
-				public int compare(AmpActivityFake a1, AmpActivityFake a2) {
-					String s1	= a1.getName();
-					String s2	= a2.getName();
-					if ( s1 == null )
-						s1	= "";
-					if ( s2 == null )
-						s2	= "";
-					
-					return -s1.toUpperCase().trim().compareTo(s2.toUpperCase().trim());
-					//return a1.getName().compareTo(a2.getName());
-				}
-			});
-			break;	
-		case 3:
-			Collections.sort(activities, new Comparator<AmpActivityFake>(){
-				public int compare(AmpActivityFake a1, AmpActivityFake a2) 
-				{
-					//return a1.getAmpActivityId().compareTo(a2.getAmpActivityId());
-					String c1="";
-					String c2="";
-					if(a1.getAmpId()!=null) c1=a1.getAmpId();
-					if(a2.getAmpId()!=null) c2=a2.getAmpId();
-					
-					return c1.compareTo(c2);
-				}
-			});
-			break;
-		case 4:
-			Collections.sort(activities, new Comparator<AmpActivityFake>(){
-				public int compare(AmpActivityFake a1, AmpActivityFake a2) 
-				{
-					//return a1.getAmpActivityId().compareTo(a2.getAmpActivityId());
-					String c1="";
-					String c2="";
-					if(a1.getAmpId()!=null) c1=a1.getAmpId();
-					if(a2.getAmpId()!=null) c2=a2.getAmpId();
-					
-					return -c1.compareTo(c2);
-				}
-			});
-			break;
-		case 5:
-			Collections.sort(activities, new Comparator<AmpActivityFake>(){
-				public int compare(AmpActivityFake a1, AmpActivityFake a2) {
+    private void reset(ActivityForm actForm, HttpServletRequest request) {
+        actForm.setAllActivityList(ActivityUtil.getAllActivitiesAdmin(null, null, ActivityForm.DataFreezeFilter.ALL));
+        actForm.setKeyword("");
+        actForm.setLastKeyword("");
+        actForm.setSortByColumn(null);
+        actForm.setPage(0);
+        actForm.setTempNumResults(-1);
+        actForm.setDataFreezeFilter(ActivityForm.DataFreezeFilter.ALL.toString());
+    }
+
+    private void doPagination(ActivityForm actForm, HttpServletRequest request) {
+        List<AmpActivityFake> allActivities = actForm.getAllActivityList();
+        //sort...
+        List<AmpActivityFake> pageList = actForm.getActivityList();
+        int pageSize = actForm.getTempNumResults();
+        if (pageList == null) {
+            pageList = new ArrayList<AmpActivityFake>();
+            actForm.setActivityList(pageList);
+        }
+
+        pageList.clear();
+        int i = 0;
+
+
+        int idx = 0;
+
+        if(pageSize != -1 && actForm.getPage() * actForm.getPageSize() < allActivities.size()){
+            idx =  actForm.getPage() * actForm.getPageSize();
+        }else{
+            idx = 0;
+            actForm.setPage(0);
+        }
+        
+        actForm.setPageSize(pageSize);
+
+        Double totalPages = 0.0;
+        if(pageSize != -1){
+            for (Iterator<AmpActivityFake> iterator = allActivities.listIterator(idx);
+                    iterator.hasNext() && i < pageSize; i++) {
+                pageList.add(iterator.next());
+            }
+            totalPages=Math.ceil(1.0*allActivities.size() / actForm.getPageSize());
+        }
+        else{
+            for (Iterator<AmpActivityFake> iterator = allActivities.listIterator(idx);
+                iterator.hasNext(); i++) {
+                pageList.add(iterator.next());
+           }
+            totalPages=1.0;         
+        }
+
+        actForm.setTotalPages(totalPages.intValue());
+    }
+
+    private void searchActivities(ActivityForm actForm, HttpServletRequest request) {
+        List<AmpActivityFake> activities = ActivityUtil.getAllActivitiesAdmin(null, null, ActivityForm.DataFreezeFilter.ALL);
+        actForm.setAllActivityList(activities);
+        sortActivities(actForm,request);
+    }
+    
+    private void sortActivities(ActivityForm actForm, HttpServletRequest request) {
+        List<AmpActivityFake> activities = null;
+        
+        if ((actForm.getKeyword() != null && actForm.getKeyword().trim().length()>0) || ActivityForm.DataFreezeFilter.FROZEN.equals(actForm.getDataFreezeFilterEnum()) || ActivityForm.DataFreezeFilter.UNFROZEN.equals(actForm.getDataFreezeFilterEnum())){
+            activities = ActivityUtil.getAllActivitiesAdmin(actForm.getKeyword().trim(), actForm.getFrozenActivityIds(), actForm.getDataFreezeFilterEnum());
+        } else {
+            activities = actForm.getAllActivityList();
+        }
+
+        String sort = (actForm.getSort() == null) ? null : actForm.getSort().trim();
+        String sortOrder = (actForm.getSortOrder() == null) ? null : actForm.getSortOrder().trim();
+        int sortBy = 0;
+        if("activityName".equals(sort)&&"asc".equalsIgnoreCase(sortOrder)){
+            sortBy = 1;
+        }else if("activityName".equals(sort)&&"desc".equalsIgnoreCase(sortOrder)){
+            sortBy = 2;
+        }else if("activityId".equals(sort)&&"asc".equalsIgnoreCase(sortOrder)){
+            sortBy = 3;
+        }else if("activityId".equals(sort)&&"desc".equalsIgnoreCase(sortOrder)){
+            sortBy = 4;
+        }else if("activityTeamName".equals(sort)&&"asc".equalsIgnoreCase(sortOrder)){
+            sortBy = 5;
+        }else if("activityTeamName".equals(sort)&&"desc".equalsIgnoreCase(sortOrder)){
+            sortBy = 6;
+        }
+
+        switch (sortBy) {
+        case 1:
+            Collections.sort(activities, new Comparator<AmpActivityFake>(){
+                public int compare(AmpActivityFake a1, AmpActivityFake a2) {
+                    String s1   = a1.getName();
+                    String s2   = a2.getName();
+                    if ( s1 == null )
+                        s1  = "";
+                    if ( s2 == null )
+                        s2  = "";
+                    
+                    return s1.toUpperCase().trim().compareTo(s2.toUpperCase().trim());
+                    //return a1.getName().compareTo(a2.getName());
+                }
+            });
+            break;
+        case 2:
+            Collections.sort(activities, new Comparator<AmpActivityFake>(){
+                public int compare(AmpActivityFake a1, AmpActivityFake a2) {
+                    String s1   = a1.getName();
+                    String s2   = a2.getName();
+                    if ( s1 == null )
+                        s1  = "";
+                    if ( s2 == null )
+                        s2  = "";
+                    
+                    return -s1.toUpperCase().trim().compareTo(s2.toUpperCase().trim());
+                    //return a1.getName().compareTo(a2.getName());
+                }
+            });
+            break;  
+        case 3:
+            Collections.sort(activities, new Comparator<AmpActivityFake>(){
+                public int compare(AmpActivityFake a1, AmpActivityFake a2) 
+                {
+                    //return a1.getAmpActivityId().compareTo(a2.getAmpActivityId());
+                    String c1="";
+                    String c2="";
+                    if(a1.getAmpId()!=null) c1=a1.getAmpId();
+                    if(a2.getAmpId()!=null) c2=a2.getAmpId();
+                    
+                    return c1.compareTo(c2);
+                }
+            });
+            break;
+        case 4:
+            Collections.sort(activities, new Comparator<AmpActivityFake>(){
+                public int compare(AmpActivityFake a1, AmpActivityFake a2) 
+                {
+                    //return a1.getAmpActivityId().compareTo(a2.getAmpActivityId());
+                    String c1="";
+                    String c2="";
+                    if(a1.getAmpId()!=null) c1=a1.getAmpId();
+                    if(a2.getAmpId()!=null) c2=a2.getAmpId();
+                    
+                    return -c1.compareTo(c2);
+                }
+            });
+            break;
+        case 5:
+            Collections.sort(activities, new Comparator<AmpActivityFake>(){
+                public int compare(AmpActivityFake a1, AmpActivityFake a2) {
                                 String s1 = "";
                                 String s2 = "";
                                 if (a1.getTeam() != null) {
@@ -252,11 +252,11 @@ public class ActivityManager extends Action {
                                 return s1.toUpperCase().trim().compareTo(s2.toUpperCase().trim());
                             //return a1.getName().compareTo(a2.getName());
                             }
-			});
-			break;
-		case 6:
-			Collections.sort(activities, new Comparator<AmpActivityFake>(){
-				public int compare(AmpActivityFake a1, AmpActivityFake a2) {
+            });
+            break;
+        case 6:
+            Collections.sort(activities, new Comparator<AmpActivityFake>(){
+                public int compare(AmpActivityFake a1, AmpActivityFake a2) {
                                 String s1 = "";
                                 String s2 = "";
                                 if (a1.getTeam() != null) {
@@ -278,84 +278,74 @@ public class ActivityManager extends Action {
                                 return -s1.toUpperCase().trim().compareTo(s2.toUpperCase().trim());
                             //return a1.getName().compareTo(a2.getName());
                             }
-			});
-			break;	
-		default:
-			Collections.sort(activities, new Comparator<AmpActivityFake>(){
-				public int compare(AmpActivityFake a1, AmpActivityFake a2) {
-					String s1	= a1.getName();
-					String s2	= a2.getName();
-					if ( s1 == null )
-						s1	= "";
-					if ( s2 == null )
-						s2	= "";
-					
-					return s1.toUpperCase().trim().compareTo(s2.toUpperCase().trim());
-				}
-			});
-			break;
-		}
-		
-		
-	 		
-	  for(AmpActivityFake activity : activities) {
-	      activity.setFrozen(actForm.getFrozenActivityIds().contains(activity.getAmpActivityId()));     
-	  }
-	  
-	  actForm.setAllActivityList(activities);
-	}
+            });
+            break;  
+        default:
+            Collections.sort(activities, new Comparator<AmpActivityFake>(){
+                public int compare(AmpActivityFake a1, AmpActivityFake a2) {
+                    String s1   = a1.getName();
+                    String s2   = a2.getName();
+                    if ( s1 == null )
+                        s1  = "";
+                    if ( s2 == null )
+                        s2  = "";
+                    
+                    return s1.toUpperCase().trim().compareTo(s2.toUpperCase().trim());
+                }
+            });
+            break;
+        }
+        
+        
+            
+      for(AmpActivityFake activity : activities) {
+          activity.setFrozen(actForm.getFrozenActivityIds().contains(activity.getAmpActivityId()));     
+      }
+      
+      actForm.setAllActivityList(activities);
+    }
 
-	/**
-	 * @param actForm
-	 * @param actForm
-	 * @param request
-	 * @param session
-	 * @throws DgException 
-	 */
-	private void deleteActivity(ActivityForm actForm, HttpServletRequest request) throws Exception {
-		HttpSession session = request.getSession();
-		String tIds=request.getParameter("tIds");
-		String advancedAdminDelete = request.getParameter("advancedAdminDelete");
-		List<Long> topicsIds=getActsIds(tIds.trim());
-		for (Long ampActId : topicsIds) {
-			AmpActivityVersion activity = ActivityUtil.loadAmpActivity(ampActId);
-			AuditLoggerUtil.logObject(session, request, activity, "delete");
-			//ActivityUtil.deleteActivity(ampActId);
-			if(advancedAdminDelete!=null && "true".compareTo(advancedAdminDelete)==0 )
-				ActivityUtil.deleteAmpActivityWithVersions(ampActId);
-			else
-				ActivityUtil.archiveAmpActivityWithVersions(ampActId);
-		}
-		actForm.setAllActivityList(ActivityUtil.getAllActivitiesAdmin(null, null, ActivityForm.DataFreezeFilter.ALL));		
-	}
-	private List<Long> getActsIds(String ids){
-		List<Long> actsIds=new ArrayList<Long>();
-		while(ids.indexOf(",")!= -1){
-			Long id= new Long(ids.substring(0,ids.indexOf(",")).trim());
-			actsIds.add(id);
-			ids=ids.substring(ids.indexOf(",")+1);
-		}
-		actsIds.add(new Long(ids.trim()));
-		return actsIds;
-	}
-	
-	
- private void unfreezeActivities(ActivityForm actForm, HttpServletRequest request) {
-     HttpSession session = request.getSession();
-     String activityIdsParam = request.getParameter("activityIds");
-     List<Long> activityIds = getActsIds(activityIdsParam.trim());
-     Map<Long,Set<Long>> activityIdEventsIdsMap = new HashMap<>();
-     for (Long activityId : activityIds) {
-         activityIdEventsIdsMap.put(activityId, actForm.getActivityIdFreezeEventsIdMap().get(activityId));         
-     }
-         
-     DataFreezeService.unfreezeActivities(activityIdEventsIdsMap);
-     
-     Map<Long, Set<Long>>freezeEventIdActivityIdsMap = DataFreezeService.getFreezeActivityIdEventIdsMap();      
-     actForm.setActivityIdFreezeEventsIdMap(freezeEventIdActivityIdsMap);     
-     actForm.setAllActivityList(ActivityUtil.getAllActivitiesAdmin(null, null, ActivityForm.DataFreezeFilter.ALL));
-     
- }
-	
+    /**
+     * @param actForm
+     * @param actForm
+     * @param request
+     * @param session
+     * @throws DgException 
+     */
+    private void deleteActivity(ActivityForm actForm, HttpServletRequest request) throws Exception {
+        HttpSession session = request.getSession();
+        String tIds=request.getParameter("tIds");
+        String advancedAdminDelete = request.getParameter("advancedAdminDelete");
+        List<Long> topicsIds=getActsIds(tIds.trim());
+        for (Long ampActId : topicsIds) {
+            AmpActivityVersion activity = ActivityUtil.loadAmpActivity(ampActId);
+            AuditLoggerUtil.logObject(session, request, activity, "delete");
+            //ActivityUtil.deleteActivity(ampActId);
+            if(advancedAdminDelete!=null && "true".compareTo(advancedAdminDelete)==0 )
+                ActivityUtil.deleteAmpActivityWithVersions(ampActId);
+            else
+                ActivityUtil.archiveAmpActivityWithVersions(ampActId);
+        }
+        actForm.setAllActivityList(ActivityUtil.getAllActivitiesAdmin(null, null, ActivityForm.DataFreezeFilter.ALL));      
+    }
+    private List<Long> getActsIds(String ids){
+        List<Long> actsIds=new ArrayList<Long>();
+        while(ids.indexOf(",")!= -1){
+            Long id= new Long(ids.substring(0,ids.indexOf(",")).trim());
+            actsIds.add(id);
+            ids=ids.substring(ids.indexOf(",")+1);
+        }
+        actsIds.add(new Long(ids.trim()));
+        return actsIds;
+    }
+    
+    
+    private void unfreezeActivities(ActivityForm actForm, HttpServletRequest request) {
+        String activityIdsParam = request.getParameter("activityIds");
+        Set<Long> activityIds = new LinkedHashSet<>(getActsIds(activityIdsParam.trim()));
+        DataFreezeService.unfreezeActivities(activityIds);
+        actForm.setFrozenActivityIds(DataFreezeService.getFronzeActivities());
+    }
+    
 }
 

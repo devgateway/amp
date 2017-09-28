@@ -20,6 +20,10 @@ public class SpringUtil {
      */
     public static <T> T getBean(Class<T> requiredType) {
         ServletContext sc = TLSUtils.getRequest().getServletContext();
+        return getBean(sc, requiredType);
+    }
+
+    public static <T> T getBean(ServletContext sc, Class<T> requiredType) {
         WebApplicationContext webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(sc);
         return webApplicationContext.getBean(requiredType);
     }

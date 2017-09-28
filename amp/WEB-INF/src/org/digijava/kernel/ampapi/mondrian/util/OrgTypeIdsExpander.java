@@ -18,31 +18,31 @@ import org.hibernate.jdbc.Work;
  *
  */
 public class OrgTypeIdsExpander extends IdsExpander {
-	
-	public OrgTypeIdsExpander(String factColumnName) {
-		super(factColumnName);
-	}
-	
-	@Override public Set<Long> expandIds(final List<Long> values) {
-		final Set<Long> res = new HashSet<>();
-		//res.add(MondrianETL.MONDRIAN_DUMMY_ID_FOR_ETL);
-		PersistenceManager.getSession().doWork(new Work() {
+    
+    public OrgTypeIdsExpander(String factColumnName) {
+        super(factColumnName);
+    }
+    
+    @Override public Set<Long> expandIds(final List<Long> values) {
+        final Set<Long> res = new HashSet<>();
+        //res.add(MondrianETL.MONDRIAN_DUMMY_ID_FOR_ETL);
+        PersistenceManager.getSession().doWork(new Work() {
 
-			@Override
-			public void execute(Connection connection) throws SQLException {
-				/**
-				 * select ao.amp_org_id, ao.org_grp_id, aot.* from 
-					amp_organisation ao 
-						JOIN amp_org_group aog ON aog.amp_org_grp_id = ao.org_grp_id
-						JOIN amp_org_type aot ON aot.amp_org_type_id = aog.org_type
-				 */
-				String query = "SELECT ao.amp_org_id FROM " +  
-						"amp_organisation ao " +  
-						"JOIN amp_org_group aog ON aog.amp_org_grp_id = ao.org_grp_id " + 
-						"WHERE aog.org_type IN (" + Util.toCSStringForIN(values) + ")";
-				res.addAll(SQLUtils.fetchLongs(connection, query));
-			}
-		});
-		return res;
-	}
+            @Override
+            public void execute(Connection connection) throws SQLException {
+                /**
+                 * select ao.amp_org_id, ao.org_grp_id, aot.* from 
+                    amp_organisation ao 
+                        JOIN amp_org_group aog ON aog.amp_org_grp_id = ao.org_grp_id
+                        JOIN amp_org_type aot ON aot.amp_org_type_id = aog.org_type
+                 */
+                String query = "SELECT ao.amp_org_id FROM " +  
+                        "amp_organisation ao " +  
+                        "JOIN amp_org_group aog ON aog.amp_org_grp_id = ao.org_grp_id " + 
+                        "WHERE aog.org_type IN (" + Util.toCSStringForIN(values) + ")";
+                res.addAll(SQLUtils.fetchLongs(connection, query));
+            }
+        });
+        return res;
+    }
 }

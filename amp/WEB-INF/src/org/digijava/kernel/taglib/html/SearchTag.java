@@ -40,8 +40,8 @@ import org.digijava.kernel.taglib.util.TagUtil;
 public class SearchTag
     extends BodyTagSupport {
 
-	private static final long serialVersionUID = 1L;
-	private String module;
+    private static final long serialVersionUID = 1L;
+    private String module;
     private String instance;
     private String name;
 

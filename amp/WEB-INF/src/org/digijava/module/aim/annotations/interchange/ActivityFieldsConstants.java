@@ -16,15 +16,15 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
  * @author Nadejda Mandrescu
  */
 public class ActivityFieldsConstants {
-	public static final String AMP_ACTIVITY_ID = "Internal ID";
-	public static final String CREATED_DATE = "Creation Date";
-	public static final String UPDATE_DATE = "Update Date";
-	public static final String PROJECT_CODE = "Project Code";
-	public static final String AMP_ID = "AMP Id";
-	public static final String TEAM = "Team";
-	public static final String WORKSPACES_EDIT = "Workspaces Edit";
-	public static final String PROJECT_TITLE = "Project Title";
-	public static final String IS_DRAFT = "Is Draft";
+    public static final String AMP_ACTIVITY_ID = "Internal ID";
+    public static final String CREATED_DATE = "Creation Date";
+    public static final String UPDATE_DATE = "Update Date";
+    public static final String PROJECT_CODE = "Project Code";
+    public static final String AMP_ID = "AMP Id";
+    public static final String TEAM = "Team";
+    public static final String WORKSPACES_EDIT = "Workspaces Edit";
+    public static final String PROJECT_TITLE = "Project Title";
+    public static final String IS_DRAFT = "Is Draft";
     public static final String CHANGE_TYPE = "Change Type";
     public static final String LAST_IMPORTED_AT = "Last Imported At";
     public static final String LAST_IMPORTED_BY = "Last Imported By";
@@ -46,6 +46,7 @@ public class ActivityFieldsConstants {
     public static final String COMPONENT_DESCRIPTION = "Description";
     public static final String COMPONENT_TYPE = "Component Type";
     public static final String COMPONENT_ORGANIZATION = "Component Organization";
+    public static final String COMPONENT_SECOND_REPORTING_ORGANIZATION = "Component Second Responsible Organization";
     public static final String COMPONENT_FUNDING = "Funding";
     public static final String COMPONENT_FUNDING_CURRENCY = "Currency";
     public static final String COMPONENT_FUNDING_DESCRIPTION = "Description";

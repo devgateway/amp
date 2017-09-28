@@ -104,33 +104,33 @@ public class AmpDEUploadSession {
     }
 
     public String getSelLanugageFilters() {
-    	return selLanugageFilters;
+        return selLanugageFilters;
     }
     
     public void setSelLanugageFilters(String selLanugageFilters) {
-    	this.selLanugageFilters = selLanugageFilters;
+        this.selLanugageFilters = selLanugageFilters;
     }
     
     public List<String> getSelLanugages() {
-		return Arrays.asList((selLanugageFilters==null? "":selLanugageFilters).split(","));
-	}
+        return Arrays.asList((selLanugageFilters==null? "":selLanugageFilters).split(","));
+    }
 
-	public void setSelLanugages(List<String> selLanugages) {
-		String langList = selLanugages==null ? "" : selLanugages.toString();
-		if (selLanugages!=null && langList.length()>0)
-			langList = langList.substring(1, langList.length()-1);
-		this.selLanugageFilters = langList;
-	}
+    public void setSelLanugages(List<String> selLanugages) {
+        String langList = selLanugages==null ? "" : selLanugages.toString();
+        if (selLanugages!=null && langList.length()>0)
+            langList = langList.substring(1, langList.length()-1);
+        this.selLanugageFilters = langList;
+    }
 
-	public String getSelDefaultLanugage() {
-		return selDefaultLanugage;
-	}
+    public String getSelDefaultLanugage() {
+        return selDefaultLanugage;
+    }
 
-	public void setSelDefaultLanugage(String selDefaultLanugage) {
-		this.selDefaultLanugage = selDefaultLanugage;
-	}
+    public void setSelDefaultLanugage(String selDefaultLanugage) {
+        this.selDefaultLanugage = selDefaultLanugage;
+    }
 
-	public String getFormatedUploadDate () {
+    public String getFormatedUploadDate () {
         return dateFormat.format(getUploadDate());
     }
 

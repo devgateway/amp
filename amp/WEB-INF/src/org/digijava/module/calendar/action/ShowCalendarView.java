@@ -38,20 +38,20 @@ public class ShowCalendarView extends Action {
         String printDate =  request.getParameter("date");
         Date printDateD = null;
         if (printDate!=null && !printDate.equals("NaN")) {
-        	printDateD = new Date(Long.parseLong(printDate));
-		}
+            printDateD = new Date(Long.parseLong(printDate));
+        }
         int numDays = 0;
         
         if(printView != null){
-        	if(printView.equals("daily")){
-        		numDays = 1;
-        	}else if (printView.equals("weekly")){
-        		numDays = 2;
-        	}else if (printView.equals("yearly")){        		
-        		numDays = 4;
-        	}else if (printView.equals("monthly")){
-        		numDays = 3;
-        	}
+            if(printView.equals("daily")){
+                numDays = 1;
+            }else if (printView.equals("weekly")){
+                numDays = 2;
+            }else if (printView.equals("yearly")){              
+                numDays = 4;
+            }else if (printView.equals("monthly")){
+                numDays = 3;
+            }
         }
         String print =  request.getParameter("print");
         
@@ -59,24 +59,24 @@ public class ShowCalendarView extends Action {
         
         if (calendarViewForm.getShowPublicEvents()!=null && calendarViewForm.getShowPublicEvents().length()>0) {
             try {
-			    showPublicEvents = Integer.valueOf(calendarViewForm.getShowPublicEvents());
+                showPublicEvents = Integer.valueOf(calendarViewForm.getShowPublicEvents());
             } catch (NumberFormatException nfex) {
                 showPublicEvents = new Integer (0); 
             }
-		}
+        }
         
         calendarViewForm.setPrintMode(numDays);
         if(print != null){
          if(print.equals("true")){
-        	calendarViewForm.setPrint(true);
+            calendarViewForm.setPrint(true);
          }else{
-        	 calendarViewForm.setPrint(false);
+             calendarViewForm.setPrint(false);
          }
         }else{
-        	calendarViewForm.setPrint(false);
+            calendarViewForm.setPrint(false);
         }
         if (showPublicEvents == null)
-        	showPublicEvents = 0;
+            showPublicEvents = 0;
         
         Object eventCreated=request.getAttribute("calendarEventCreated");
 
@@ -190,7 +190,7 @@ public class ShowCalendarView extends Action {
         
         Boolean resetEventTypes=calendarViewForm.getResetEventTypes();
         if(resetEventTypes!=null && resetEventTypes){
-        	filter.setSelectedEventTypes(new String[]{});
+            filter.setSelectedEventTypes(new String[]{});
         }
         // donors        
         Collection organisations = org.digijava.module.aim.util.DbUtil.getOrganisations();
@@ -204,7 +204,7 @@ public class ShowCalendarView extends Action {
         filter.setDonors(donors);
         Boolean resetDonors=calendarViewForm.getResetDonors();
         if(resetDonors!=null && resetDonors){
-        	filter.setSelectedDonors(new String[]{});
+            filter.setSelectedDonors(new String[]{});
         }
         // select event types, donors, showPublicEvents
         if (!calendarViewForm.isFilterInUse()||eventCreated!=null) {
@@ -219,7 +219,7 @@ public class ShowCalendarView extends Action {
             filter.setSelectedEventTypes(selectedEventTypes);
             
             if (eventCreated != null) {
-            	 filter.setShowPublicEvents(showPublicEvents);
+                 filter.setShowPublicEvents(showPublicEvents);
                 // we are showing private or public events depending on the newly created event
                 //Boolean showPubEvent = (Boolean) eventCreated;
                 //filter.setShowPublicEvents(showPubEvent);
@@ -235,13 +235,13 @@ public class ShowCalendarView extends Action {
          ses.setAttribute("view",calendarViewForm.getPrintMode());
          ses.setAttribute("print",calendarViewForm.getPrint());
          if (printDateD!=null){
-        	 java.util.Calendar gc = new GregorianCalendar ();
-        	 gc.setTime(printDateD);
-         	ses.setAttribute("printDay",gc.get(java.util.Calendar.DAY_OF_MONTH));
-         	ses.setAttribute("printMonth",gc.get(java.util.Calendar.MONTH) + 1);
-         	ses.setAttribute("printYear",gc.get(java.util.Calendar.YEAR));
+             java.util.Calendar gc = new GregorianCalendar ();
+             gc.setTime(printDateD);
+            ses.setAttribute("printDay",gc.get(java.util.Calendar.DAY_OF_MONTH));
+            ses.setAttribute("printMonth",gc.get(java.util.Calendar.MONTH) + 1);
+            ses.setAttribute("printYear",gc.get(java.util.Calendar.YEAR));
          } else {
-        	 ses.setAttribute("date",printDate);
+             ses.setAttribute("date",printDate);
          }
          ses.setAttribute("publicEvent", filter.getShowPublicEvents());
          ses.setAttribute("donor", filter.getSelectedDonors());
@@ -253,7 +253,7 @@ public class ShowCalendarView extends Action {
          
          
          if(calendarViewForm.getPrint()){
-        	 return mapping.findForward("print");
+             return mapping.findForward("print");
          }
         return mapping.findForward("success");
     }

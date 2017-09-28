@@ -35,6 +35,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.digijava.kernel.request.TLSUtils;
 import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -137,23 +138,23 @@ public class SiteUtils {
 
     public static Site getGlobalSite()
     {
-    	return getDefaultSite();
+        return getDefaultSite();
     }
     
     private static Site ampSite;
     
     public static Site getDefaultSite()
     {
-    	try
-    	{
-    		if (ampSite == null)
-    			ampSite = getSiteByName("amp");    		
-    	}
-    	catch(DgException ex)
-    	{
-    		logger.error(ex);
-    	}
-		return ampSite;
+        try
+        {
+            if (ampSite == null)
+                ampSite = getSiteByName("amp");         
+        }
+        catch(DgException ex)
+        {
+            logger.error(ex);
+        }
+        return ampSite;
     }
     /**
      * Get <code>Site</code> object for the given site id
@@ -236,12 +237,12 @@ public class SiteUtils {
     }
     
     public static Collection<String> getUserLanguagesCodes(Site site) {
-    	Collection<String> codes = null;
-    	if (site != null) 
-    		codes = SiteCache.getInstance().getUserLanguagesCodes(site);
-    	if (codes == null)
-    		codes = new ArrayList<String>();
-    	return codes;
+        Collection<String> codes = null;
+        if (site != null) 
+            codes = SiteCache.getInstance().getUserLanguagesCodes(site);
+        if (codes == null)
+            codes = new ArrayList<String>();
+        return codes;
     }
         
 
@@ -549,5 +550,15 @@ public class SiteUtils {
         }
 
         return siteIdentityService.getSiteId(service, site);
+    }
+
+    /**
+     * Returns true, if effective language LeftToRight is false.
+     *
+     * @return boolean value
+     */
+    public static boolean isEffectiveLangRTL() {
+        Locale locale = getDefaultSite().getLocale(TLSUtils.getEffectiveLangCode());
+        return !locale.getLeftToRight();
     }
 }

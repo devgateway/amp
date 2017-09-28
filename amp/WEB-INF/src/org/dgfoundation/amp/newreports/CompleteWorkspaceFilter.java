@@ -13,25 +13,25 @@ import org.digijava.module.aim.util.ActivityUtil;
  * @author Dolghier Constantin
  */
 public class CompleteWorkspaceFilter implements IdsGeneratorSource {
-	
-	private final TeamMember tm;
-	private final ExpiringCacher<Boolean, Boolean, Set<Long>> cacher = new ExpiringCacher<>(
-			"workspaceFilter",
-			(b, engine) -> computeIds(),
-			new DatabaseChangedDetector(),
-			3 * 60 * 1000);
-	
-	public CompleteWorkspaceFilter(TeamMember tm) {
-		this.tm = tm;
-	}
-	
-	@Override
-	public Set<Long> getIds() {
-		return cacher.buildOrGetValue(true, true);
-	}
-	
-	/** called when the cacher determines that the cache has been invalidated */
-	private Set<Long> computeIds() {
-		return ActivityUtil.fetchLongs(WorkspaceFilter.generateWorkspaceFilterQuery(tm));
-	}
+    
+    private final TeamMember tm;
+    private final ExpiringCacher<Boolean, Boolean, Set<Long>> cacher = new ExpiringCacher<>(
+            "workspaceFilter",
+            (b, engine) -> computeIds(),
+            new DatabaseChangedDetector(),
+            3 * 60 * 1000);
+    
+    public CompleteWorkspaceFilter(TeamMember tm) {
+        this.tm = tm;
+    }
+    
+    @Override
+    public Set<Long> getIds() {
+        return cacher.buildOrGetValue(true, true);
+    }
+    
+    /** called when the cacher determines that the cache has been invalidated */
+    private Set<Long> computeIds() {
+        return ActivityUtil.fetchLongs(WorkspaceFilter.generateWorkspaceFilterQuery(tm));
+    }
 }

@@ -1015,32 +1015,32 @@ public class AmpMessageWorker {
 
                 TeamMember member = new TeamMember(ampTeamMember);
 
-				TLSUtils.getRequest().getSession().setAttribute(Constants.CURRENT_MEMBER, member);
+                TLSUtils.getRequest().getSession().setAttribute(Constants.CURRENT_MEMBER, member);
 
-				String wsQuery = WorkspaceFilter.generateWorkspaceFilterQuery(member);
+                String wsQuery = WorkspaceFilter.generateWorkspaceFilterQuery(member);
 
-				if (wsQueries.length() > 0) {
-					wsQueries.append(" UNION ");
-				}
-				wsQueries.append(addTeamIdToQuery(wsQuery, ampTeamMember.getAmpTeam().getAmpTeamId(),
-						ampTeamMember.getAmpTeam().getName()));
-			}
-			// we now turn queries into map, and store it at request level in
-			// case its needed again
-			PersistenceManager.getSession().doWork(new Work() {
-				public void execute(Connection conn) throws SQLException {
-					RsInfo teamsInActivityQuery = SQLUtils.rawRunQuery(conn, wsQueries.toString(), null);
-					while (teamsInActivityQuery.rs.next()) {
-						// activityTeams
-						Long ampActivityId = teamsInActivityQuery.rs.getLong(1);
-						if (activityTeams.get(ampActivityId) == null) {
-							activityTeams.put(ampActivityId, new ArrayList<Team>());
-						}
-						activityTeams.get(ampActivityId).add(
-								new Team(teamsInActivityQuery.rs.getLong(2), teamsInActivityQuery.rs.getString(3)));
-					}
-					teamsInActivityQuery.close();
-				}
+                if (wsQueries.length() > 0) {
+                    wsQueries.append(" UNION ");
+                }
+                wsQueries.append(addTeamIdToQuery(wsQuery, ampTeamMember.getAmpTeam().getAmpTeamId(),
+                        ampTeamMember.getAmpTeam().getName()));
+            }
+            // we now turn queries into map, and store it at request level in
+            // case its needed again
+            PersistenceManager.getSession().doWork(new Work() {
+                public void execute(Connection conn) throws SQLException {
+                    RsInfo teamsInActivityQuery = SQLUtils.rawRunQuery(conn, wsQueries.toString(), null);
+                    while (teamsInActivityQuery.rs.next()) {
+                        // activityTeams
+                        Long ampActivityId = teamsInActivityQuery.rs.getLong(1);
+                        if (activityTeams.get(ampActivityId) == null) {
+                            activityTeams.put(ampActivityId, new ArrayList<Team>());
+                        }
+                        activityTeams.get(ampActivityId).add(
+                                new Team(teamsInActivityQuery.rs.getLong(2), teamsInActivityQuery.rs.getString(3)));
+                    }
+                    teamsInActivityQuery.close();
+                }
 
             });
             TLSUtils.getRequest().setAttribute("activityTeams", activityTeams);

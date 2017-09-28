@@ -1184,9 +1184,9 @@ public class AmpARFilter extends PropertyListable {
         return subquery;
     }
 
-	/**
-	 * Used only by legacy reports.
-	 */
+    /**
+     * Used only by legacy reports.
+     */
     public void generatePledgeFilterQuery()
     {
         this.pledgeFilter = true;
@@ -1264,49 +1264,49 @@ public class AmpARFilter extends PropertyListable {
         }
     }
 
-	/**
-	 * This method generates a query that returns filtered activities from either current workspace or
-	 * publicly visible activities.
-	 */
-	public void generateFilterQuery() {
-		Set<Long> ids = ActivityFilter.getInstance().filter(this);
-		generatedFilterQuery = String.format(
-				"SELECT amp_activity_id FROM amp_activity WHERE amp_activity_id IN (%s)",
-				Util.toCSString(ids));
-	}
+    /**
+     * This method generates a query that returns filtered activities from either current workspace or
+     * publicly visible activities.
+     */
+    public void generateFilterQuery() {
+        Set<Long> ids = ActivityFilter.getInstance().filter(this);
+        generatedFilterQuery = String.format(
+                "SELECT amp_activity_id FROM amp_activity WHERE amp_activity_id IN (%s)",
+                Util.toCSString(ids));
+    }
 
-	@PropertyListableIgnore
-	protected StringGenerator overridingTeamFilter = null;
+    @PropertyListableIgnore
+    protected StringGenerator overridingTeamFilter = null;
 
 
-	@PropertyListableIgnore
-	public void setOverridingTeamFilter(StringGenerator overridingTeamFilter)
-	{
-		this.overridingTeamFilter = overridingTeamFilter;
-	}
+    @PropertyListableIgnore
+    public void setOverridingTeamFilter(StringGenerator overridingTeamFilter)
+    {
+        this.overridingTeamFilter = overridingTeamFilter;
+    }
 
-	@PropertyListableIgnore
-	public StringGenerator getOverridingTeamFilter()
-	{
-		return overridingTeamFilter;
-	}
+    @PropertyListableIgnore
+    public StringGenerator getOverridingTeamFilter()
+    {
+        return overridingTeamFilter;
+    }
 
-	private String[] calculateDateFilters(String startDate, String lastDate, String currentPeriod, Integer amount, String op, String xPeriod){
-		
-		String fromDate = startDate;
-		String toDate = lastDate;
-		
-		Date[] ddates = calculateDateFiltersAsDate(currentPeriod, amount, op, xPeriod);
-		
-		Date dfromDate = ddates[0];
-		Date dtoDate = ddates[1];
-		
-		if (dfromDate != null){
-			fromDate = FormatHelper.formatDate(dfromDate);
-		}
-		if (dtoDate != null){
-			toDate = FormatHelper.formatDate(dtoDate);
-		}
+    private String[] calculateDateFilters(String startDate, String lastDate, String currentPeriod, Integer amount, String op, String xPeriod){
+        
+        String fromDate = startDate;
+        String toDate = lastDate;
+        
+        Date[] ddates = calculateDateFiltersAsDate(currentPeriod, amount, op, xPeriod);
+        
+        Date dfromDate = ddates[0];
+        Date dtoDate = ddates[1];
+        
+        if (dfromDate != null){
+            fromDate = FormatHelper.formatDate(dfromDate);
+        }
+        if (dtoDate != null){
+            toDate = FormatHelper.formatDate(dtoDate);
+        }
 
         return new String[]{fromDate, toDate};
     }

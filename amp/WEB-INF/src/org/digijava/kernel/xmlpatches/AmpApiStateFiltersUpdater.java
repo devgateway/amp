@@ -48,6 +48,7 @@ public class AmpApiStateFiltersUpdater extends AbstractAmpApiStateUpdater {
         put("Executing Agency Id", "executing-agency");
         put("Expenditure Class", "expenditure-class");
         put("Final Date for Contracting", "final-date-for-contracting");
+        put("Issue Date", "issue-date");
         put("Financing Instrument", "financing-instrument");
         put("Funding Closing Date", "funding-closing-date");
         put("Funding Status", "funding-status");
@@ -136,6 +137,9 @@ public class AmpApiStateFiltersUpdater extends AbstractAmpApiStateUpdater {
         put("Tertiary Program Level 7", "tertiary-program-level-7");
         put("Tertiary Program Level 8", "tertiary-program-level-8");
         put("Tertiary Sector", "tertiary-sector");
+        put("Quaternary Sector", "quaternary-sector");
+        put("Quinary Sector", "quinary-sector");
+
         put("Tertiary Sector Sub-Sector", "tertiary-sector-sub-sector");
         put("Tertiary Sector Sub-Sub-Sector", "tertiary-sector-sub-sub-sector");
         put("Type Of Assistance", "type-of-assistance");

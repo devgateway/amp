@@ -31,7 +31,7 @@ public class ViewEditIndicator
     extends Action {
     public ActionForward execute(ActionMapping mapping, ActionForm form,
                              HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
-    	
+        
         NewIndicatorForm indForm = (NewIndicatorForm) form;
 
         String action=request.getParameter("action");
@@ -42,8 +42,8 @@ public class ViewEditIndicator
 //                        return mapping.findForward("forward");
 //                    }
 
- //       	if(indForm.getIndType() == 2){
-        		
+ //         if(indForm.getIndType() == 2){
+                
                     AmpPrgIndicator newInd = new AmpPrgIndicator();
                     newInd.setIndicatorId(indForm.getId());
                     newInd.setCategory(indForm.getCategory());
@@ -59,16 +59,16 @@ public class ViewEditIndicator
                     newInd.setSelectedActivity(indForm.getSelectedActivities());  
                   
 //                    if(indForm.getPrjStatus().equals("prjUnchecked")){
-//                    	newInd.setPrjStatus(true);
-//                    	newInd.setType("programInd");
+//                      newInd.setPrjStatus(true);
+//                      newInd.setType("programInd");
 //                    }else 
-                    	if (indForm.getActivitySectors() != null  && indForm.getSelectedActivityId() != null){
-                    	newInd.setType("prg/prj");
+                        if (indForm.getActivitySectors() != null  && indForm.getSelectedActivityId() != null){
+                        newInd.setType("prg/prj");
                     }
 //                    
 //                    if(indForm.getPrgStatus().equals("prgUnchecked")){
-//                    	newInd.setPrgStatus(true);
-//                    	newInd.setType("projectInd");
+//                      newInd.setPrgStatus(true);
+//                      newInd.setType("projectInd");
 //                    }
                     
                     //TODO INDIC code above this needs to be refactored !!!!! or deleted!
@@ -82,12 +82,12 @@ public class ViewEditIndicator
                     indicator.setType(indForm.getType());
                     Collection sectors=indForm.getActivitySectors();
                     if (sectors!=null && sectors.size()>0){
-                    	indicator.setSectors(new HashSet<AmpSector>());
-                    	for (Iterator sectIter = sectors.iterator(); sectIter.hasNext();) {
-							ActivitySector actSector= (ActivitySector) sectIter.next();
-							AmpSector sector=SectorUtil.getAmpSector(actSector.getSectorId());
-							indicator.getSectors().add(sector);
-						}
+                        indicator.setSectors(new HashSet<AmpSector>());
+                        for (Iterator sectIter = sectors.iterator(); sectIter.hasNext();) {
+                            ActivitySector actSector= (ActivitySector) sectIter.next();
+                            AmpSector sector=SectorUtil.getAmpSector(actSector.getSectorId());
+                            indicator.getSectors().add(sector);
+                        }
                     }
                     if(!IndicatorUtil.validateIndicatorName(indicator)){
                         IndicatorUtil.saveIndicator(indicator);
@@ -107,13 +107,13 @@ public class ViewEditIndicator
 //                    ProgramUtil.saveThemeIndicators(newInd, existIndForm.getSelectedProgramId());
                     
 //                    break;
-       //	}
+       //   }
 //                }
 //                case 1: {
 //
 //                    AllMEIndicators newInd = new AllMEIndicators();
 //
-//					newInd.setAmpMEIndId(existIndForm.getId());
+//                  newInd.setAmpMEIndId(existIndForm.getId());
 //                    newInd.setCode(existIndForm.getCode());
 //                    newInd.setName(existIndForm.getName());
 //
@@ -150,57 +150,57 @@ public class ViewEditIndicator
             return mapping.findForward("showList");
         }else
                  {
-        	indForm.reset();
+            indForm.reset();
            // AllPrgIndicators ind= ProgramUtil.getThemeIndicator(Long.valueOf(indId));
             AllPrgIndicators ind = IndicatorUtil.getAmpIndicator(Long.valueOf(indId));
             if(ind!=null){
 
-            	indForm.setCode(ind.getCode());
-            	indForm.setDate(ind.getCreationDate());
-            	indForm.setDescription(ind.getDescription());
-            	indForm.setName(ind.getName());
-            	indForm.setType(ind.getType());
-            	indForm.setCategory(ind.getCategory());
-            	indForm.setId(ind.getIndicatorId());            	
-            	indForm.setPrjStatus(null);
-            	indForm.setPrgStatus(null);
-            	
-            	  Collection indSector=ind.getSector();
-            	  Collection Sectors = new ArrayList();
-  				if(indSector != null){
-  			
-  					for(Iterator sectItr=indSector.iterator();sectItr.hasNext();){
-  						
-  						AmpSector sect=(AmpSector)sectItr.next();
-  						ActivitySector actsec = new ActivitySector();
-  						
-  							actsec.setSectorId(sect.getAmpSectorId());
-		  					actsec.setSectorName(sect.getName());
-		  					actsec.setSubsectorLevel1Id(new Long(-1));
-		  		            		
-  		          		  Sectors.add(actsec);
-  		         
-  						}
-  					}
-  			   
-  			
-            	indForm.setActivitySectors(Sectors);
-            	
-            	Collection<LabelValueBean> actCol=new ArrayList<LabelValueBean>();
-            	if(ind.getActivity() !=null){
-            		for(Iterator activity = ind.getActivity().iterator(); activity.hasNext();){
-            			
-            			AmpActivity act = (AmpActivity) activity.next();
-            			act.getAmpActivityId();
-            			String actName = act.getName();
-            			LabelValueBean lvb=new LabelValueBean(actName,act.getAmpActivityId().toString());		
-            			actCol.add(lvb);
-            		}
-            	}
-            	indForm.setSelectedActivities(actCol);
+                indForm.setCode(ind.getCode());
+                indForm.setDate(ind.getCreationDate());
+                indForm.setDescription(ind.getDescription());
+                indForm.setName(ind.getName());
+                indForm.setType(ind.getType());
+                indForm.setCategory(ind.getCategory());
+                indForm.setId(ind.getIndicatorId());                
+                indForm.setPrjStatus(null);
+                indForm.setPrgStatus(null);
+                
+                  Collection indSector=ind.getSector();
+                  Collection Sectors = new ArrayList();
+                if(indSector != null){
+            
+                    for(Iterator sectItr=indSector.iterator();sectItr.hasNext();){
+                        
+                        AmpSector sect=(AmpSector)sectItr.next();
+                        ActivitySector actsec = new ActivitySector();
+                        
+                            actsec.setSectorId(sect.getAmpSectorId());
+                            actsec.setSectorName(sect.getName());
+                            actsec.setSubsectorLevel1Id(new Long(-1));
+                                    
+                          Sectors.add(actsec);
+                 
+                        }
+                    }
+               
+            
+                indForm.setActivitySectors(Sectors);
+                
+                Collection<LabelValueBean> actCol=new ArrayList<LabelValueBean>();
+                if(ind.getActivity() !=null){
+                    for(Iterator activity = ind.getActivity().iterator(); activity.hasNext();){
+                        
+                        AmpActivity act = (AmpActivity) activity.next();
+                        act.getAmpActivityId();
+                        String actName = act.getName();
+                        LabelValueBean lvb=new LabelValueBean(actName,act.getAmpActivityId().toString());       
+                        actCol.add(lvb);
+                    }
+                }
+                indForm.setSelectedActivities(actCol);
                
               
-            	
+                
 
 //                if(ind.getThemes() != null) {
 //                    Collection<LabelValueBean> prgCol=new ArrayList<LabelValueBean>();
@@ -227,7 +227,7 @@ public class ViewEditIndicator
     }    
   }
         //else if(indType.equalsIgnoreCase("project")){
-//        	existIndForm.reset();
+//          existIndForm.reset();
 //            Collection<AllActivities> actIdsCol = MEIndicatorsUtil.getAllActivityIds();
 //            if(actIdsCol != null) {
 //                for(Iterator itr = actIdsCol.iterator(); itr.hasNext(); ) {
@@ -238,10 +238,10 @@ public class ViewEditIndicator
 //                        for(Iterator indItr = prjIndsList.iterator(); indItr.hasNext(); ) {
 //                            AllMEIndicators tInd = (AllMEIndicators) indItr.next();
 //                            if(tInd.getAmpMEIndId().equals(Long.valueOf(indId))){
-//                            	existIndForm.setCode(tInd.getCode());
-//                            	existIndForm.setName(tInd.getName());
-//                            	existIndForm.setId(tInd.getAmpMEIndId());
-//                            	existIndForm.setIndType(2);
+//                              existIndForm.setCode(tInd.getCode());
+//                              existIndForm.setName(tInd.getName());
+//                              existIndForm.setId(tInd.getAmpMEIndId());
+//                              existIndForm.setIndType(2);
 //
 //                                Collection<LabelValueBean> actCol=new ArrayList<LabelValueBean>();
 //                                String actName=null;

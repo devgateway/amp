@@ -66,7 +66,7 @@ public class AMPActionServlet
      * Two attributes are stored in the application scope object for locking the activities
      * 1. sessionList - This will store all the sessionId who have inititated an edit
      * 2. editActivityList - This attribute is a Map which will store the sessionId as the key
-     * 	  against the activityId being edited by that session.
+     *    against the activityId being edited by that session.
      *
      */
     ArrayList sessionList = null;
@@ -135,7 +135,7 @@ public class AMPActionServlet
         }
       }
     }
-   	// Call the struts default ActionServlet process() method
-   	super.process(request, response);  // JSP rendered here
+    // Call the struts default ActionServlet process() method
+    super.process(request, response);  // JSP rendered here
     }
 }

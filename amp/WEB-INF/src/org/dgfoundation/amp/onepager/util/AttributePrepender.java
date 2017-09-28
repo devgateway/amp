@@ -14,19 +14,19 @@ import org.apache.wicket.model.IModel;
  */
 public class AttributePrepender extends AttributeAppender{
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	public AttributePrepender(String attribute, IModel<?> appendModel,
-			String separator) {
-		super(attribute, appendModel, separator);
-	}
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+    
+    public AttributePrepender(String attribute, IModel<?> appendModel,
+            String separator) {
+        super(attribute, appendModel, separator);
+    }
 
-	@Override
-	protected String newValue(String currentValue, String replacementValue) {
-		// swap currentValue and replacementValue in the call to the concatenator
-		return super.newValue(replacementValue, currentValue);
-	}
+    @Override
+    protected String newValue(String currentValue, String replacementValue) {
+        // swap currentValue and replacementValue in the call to the concatenator
+        return super.newValue(replacementValue, currentValue);
+    }
 }

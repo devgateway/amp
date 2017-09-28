@@ -51,13 +51,15 @@ import org.digijava.module.aim.helper.FormatHelper;
  * @author Nadejda Mandrescu
  */
 public class HeatMapService {
-    
+
     private static final Logger LOGGER = Logger.getLogger(HeatMapService.class);
     
     private static final int DEFAULT_X_COUNT = 25;
     private static final int DEFAULT_Y_COUNT = 10;
     private static final BigDecimal HUNDRED = new BigDecimal(100);
-    
+    private static final BigDecimal ZERO = new BigDecimal(0);
+    public static final int SCALE = 6;
+
     private JsonBean config;
     private String xCol;
     private String yCol;
@@ -138,7 +140,7 @@ public class HeatMapService {
         result.set("matrix", matrix);
         // currency used.
         String currcode = spec.getSettings().getCurrencyCode();
-		result.set("currency", currcode);
+        result.set("currency", currcode);
     }
     
     private void prepareXYResults(List<String> yTotalAmounts, Map<String, BigDecimal> yTotal, 
@@ -228,10 +230,16 @@ public class HeatMapService {
                     isEmpty = false;
                     matrix[y][x] = new JsonBean();
                     matrix[y][x].set("dv", amountCell.displayedValue);
-                    
+
                     BigDecimal percentage = (BigDecimal) amountCell.value;
-                    percentage = percentage.multiply(HUNDRED).divide(xTotalEntry.getValue(), 6, RoundingMode.HALF_EVEN);
-                    percentage = percentage.setScale(6, RoundingMode.HALF_EVEN);
+                    if (xTotalEntry.getValue().compareTo(BigDecimal.ZERO) > 0) {
+                        percentage = percentage.multiply(HUNDRED).divide(xTotalEntry.getValue(), SCALE, RoundingMode
+                                .HALF_EVEN);
+                        percentage = percentage.setScale(SCALE, RoundingMode.HALF_EVEN);
+                    } else {
+                        percentage = null;
+                    }
+
                     matrix[y][x].set("p", percentage);
                 }
                 x++;
@@ -252,7 +260,11 @@ public class HeatMapService {
         for (Entry<String, BigDecimal> xTotalEntry : xTotal.entrySet()) {
             xTotalAmounts.add(decimalFormatter.format(xTotalEntry.getValue()));
             // x % total = sum all data for X col / sum all data for X col, per current requirements
-            xTotalEntry.setValue(HUNDRED);
+            if (xTotalEntry.getValue().compareTo(BigDecimal.ZERO) > 0) {
+                xTotalEntry.setValue(HUNDRED);
+            } else {
+                xTotalEntry.setValue(ZERO);
+            }
         }
         
         return matrix;

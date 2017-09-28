@@ -105,7 +105,7 @@ public class AidEffectivenessIndicatorForm extends ActionForm {
     }
     
     public MultilingualInputFieldValues buildMultilingualInputInstance(String attributeName) {
-		return new MultilingualInputFieldValues(AmpAidEffectivenessIndicator.class, this.getAmpIndicatorId(), attributeName, null, null);
-	}
+        return new MultilingualInputFieldValues(AmpAidEffectivenessIndicator.class, this.getAmpIndicatorId(), attributeName, null, null);
+    }
 
 }

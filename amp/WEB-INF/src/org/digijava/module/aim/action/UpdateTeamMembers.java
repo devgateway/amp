@@ -15,8 +15,6 @@ import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.request.Site;
-import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpTeam;
@@ -108,13 +106,13 @@ public class UpdateTeamMembers extends Action {
             AmpApplicationSettings ampAppSettings = DbUtil.getTeamAppSettings(ampTeam.getAmpTeamId());
             Integer docPublishingPermissions=ampAppSettings.getAllowPublishingResources();
             if(docPublishingPermissions!=null){
-            	if(docPublishingPermissions.equals(CrConstants.PUBLISHING_RESOURCES_ALLOWED_TM ) || 
-    					(docPublishingPermissions.equals(CrConstants.PUBLISHING_RESOURCES_ALLOWED_ONLY_TL) && (role.getTeamHead()!=null && role.getTeamHead())) ||
-    					(docPublishingPermissions.equals(CrConstants.PUBLISHING_RESOURCES_ALLOWED_SPECIFIC_USERS) && ampMember.getPublishDocPermission()!=null && ampMember.getPublishDocPermission())){
-                	ampMember.setPublishDocPermission(true);
-    			}else{
-    				ampMember.setPublishDocPermission(false);
-    			}
+                if(docPublishingPermissions.equals(CrConstants.PUBLISHING_RESOURCES_ALLOWED_TM ) || 
+                        (docPublishingPermissions.equals(CrConstants.PUBLISHING_RESOURCES_ALLOWED_ONLY_TL) && (role.getTeamHead()!=null && role.getTeamHead())) ||
+                        (docPublishingPermissions.equals(CrConstants.PUBLISHING_RESOURCES_ALLOWED_SPECIFIC_USERS) && ampMember.getPublishDocPermission()!=null && ampMember.getPublishDocPermission())){
+                    ampMember.setPublishDocPermission(true);
+                }else{
+                    ampMember.setPublishDocPermission(false);
+                }
             }           
             
             
@@ -149,8 +147,6 @@ public class UpdateTeamMembers extends Action {
             logger.debug("In delete team member");
             Long selMembers[] = new Long[1];
             selMembers[0] = upForm.getTeamMemberId();
-            Site site = RequestUtils.getSite(request);
-            //TeamMemberUtil.updateAppSettingDefReport(selMembers[0]);
             TeamMemberUtil.removeTeamMembers(selMembers);
 
             if (ampTeam != null) {

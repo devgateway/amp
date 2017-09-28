@@ -12,9 +12,9 @@ import org.dgfoundation.amp.onepager.components.fields.AmpFieldPanel;
  */
 
 public class AmpPMGlobalPanel extends AmpFieldPanel {
-	public AmpPMGlobalPanel(String id, String fmName) {
-		super(id, fmName, true);
-		super.setOutputMarkupId(true);
-	}
-	
+    public AmpPMGlobalPanel(String id, String fmName) {
+        super(id, fmName, true);
+        super.setOutputMarkupId(true);
+    }
+    
 }

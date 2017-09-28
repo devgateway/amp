@@ -31,6 +31,9 @@
 					<logic:notEmpty name="currentMember" scope="session">
 						<input name="compareCheckboxes" type="checkbox" value="${item.activityId}" onchange="monitorCheckbox()" onclick="monitorCheckbox()" onkeyup="monitorCheckbox()" onkeypress="monitorCheckbox()"/>
 					</logic:notEmpty>
+						<logic:equal name="aimViewActivityHistoryForm" property="enableSummaryChange" value="true">
+							<input type="hidden" name="summaryChangesIds" id="summaryChangesIds" value="${item.activityId}" />
+						</logic:equal>
 					</td>
 					<td>
 						${item.modifiedBy}
@@ -62,7 +65,8 @@
 		
 	</div>
 	
-	<div style="position:absolute; bottom:0px;">
+	<div style="position:absolute; bottom:2px;overflow:auto">
+		<div style="float:left;">
 		<digi:form action="/compareActivityVersions.do" method="post" type="aimCompareActivityVersionsForm" >
 			<input type="hidden" name="activityCurrentVersion" id="activityCurrentVersion" value="" />
 			<input type="hidden" name="action" id="action" value=""/>
@@ -71,9 +75,26 @@
 			<input type="hidden" name="showMergeColumn" id="showMergeColumn" />
 			<input type="hidden" name="method" id="method" />
 			<input type="hidden" name="ampActivityId" id="ampActivityId" />
+			<input type="hidden" name="activityId" id="activityId"
+				   value="${aimViewActivityHistoryForm.activityId}" />
 			<logic:notEmpty name="currentMember" scope="session">
 				<input type="button" id="SubmitButton" value="<digi:trn>Compare versions</digi:trn>" onclick="submitCompare()"/>
-			 </logic:notEmpty>
-		
-		</digi:form>		
+			</logic:notEmpty>
+		</digi:form>
+		</div>
+		<div style="float:left;padding-left: 5px;">
+		<digi:form action="/viewActivityHistory.do" method="post" name="aimViewActivityHistoryForm" type="aimViewActivityHistoryForm" >
+			<input type="hidden" name="actionMethod" id="actionMethod" />
+			<input type="hidden" name="activityId" id="activityId"
+				   value="${aimViewActivityHistoryForm.activityId}" />
+			<logic:notEmpty name="currentUser" scope="session">
+				<input type="button" id="SubmitSummaryButton" value="<digi:trn>Show Change Summary</digi:trn>" onclick="submitChangeSummary()"/>
+			</logic:notEmpty>
+			<logic:empty name="currentUser" scope="session">
+				<field:display name="Show Change Summary" feature="Version History">
+					<input type="button" id="SubmitSummaryButton" value="<digi:trn>Show Change Summary</digi:trn>" onclick="submitChangeSummary()"/>
+				</field:display>
+			</logic:empty>
+		</digi:form>
+		</div>
 	</div>

@@ -22,25 +22,92 @@ println "Tag: ${tag}"
 def codeVersion
 def dbVersion
 
+def updateGitHubCommitStatus(context, message, state) {
+    repoUrl = sh(returnStdout: true, script: "git config --get remote.origin.url").trim()
+    lastAuthor = sh(returnStdout: true, script: "git log --pretty=%an -n 1").trim()
+    ref = lastAuthor.equals("Jenkins") ? "HEAD~1" : "HEAD"
+    commitSha = sh(returnStdout: true, script: "git rev-parse ${ref}").trim()
+
+    step([
+        $class: 'GitHubCommitStatusSetter',
+        reposSource: [$class: "ManuallyEnteredRepositorySource", url: repoUrl],
+        commitShaSource: [$class: "ManuallyEnteredShaSource", sha: commitSha],
+        contextSource: [$class: "ManuallyEnteredCommitContextSource", context: context],
+        statusBackrefSource: [$class: "ManuallyEnteredBackrefSource", backref: "${BUILD_URL}"],
+        errorHandlers: [[$class: 'ShallowAnyErrorHandler']],
+        statusResultSource: [
+            $class: "ConditionalStatusResultSource",
+            results: [[$class: "AnyBuildResult", message: message, state: state]]
+        ]
+    ])
+}
+
+// Run checkstyle only for PR builds
+stage('Checkstyle') {
+    if (branch == null) {
+        node {
+            try {
+                checkout scm
+
+                updateGitHubCommitStatus('jenkins/checkstyle', 'Checkstyle in progress', 'PENDING')
+
+                withEnv(["PATH+MAVEN=${tool 'M339'}/bin"]) {
+                    sh "cd amp && mvn inccheckstyle:check -DbaseBranch=remotes/origin/${CHANGE_TARGET}"
+                }
+
+                updateGitHubCommitStatus('jenkins/checkstyle', 'Checkstyle success', 'SUCCESS')
+            } catch(e) {
+                updateGitHubCommitStatus('jenkins/checkstyle', 'Checkstyle found violations', 'ERROR')
+            }
+        }
+    }
+}
+
 stage('Build') {
+    timeout(15) {
+        input "Proceed with build?"
+    }
+
     node {
         checkout scm
 
-        withEnv(["PATH+MAVEN=${tool 'M339'}/bin"]) {
+        def format = branch != null ? "%H" : "%P"
+        def hash = sh(returnStdout: true, script: "git log --pretty=${format} -n 1").trim()
+        sh(returnStatus: true, script: "docker pull phosphorus:5000/amp-webapp:${tag} > /dev/null")
+        def imageIds = sh(returnStdout: true, script: "docker images -q -f \"label=git-hash=${hash}\"").trim()
+        sh(returnStatus: true, script: "docker rmi phosphorus:5000/amp-webapp:${tag} > /dev/null")
 
-            // Build AMP
-            sh "cd amp && mvn -T 4 clean compile war:exploded -Djdbc.user=amp -Djdbc.password=amp122006 -Djdbc.db=amp -Djdbc.host=db -Djdbc.port=5432 -DdbName=postgresql -Djdbc.driverClassName=org.postgresql.Driver -Dmaven.test.skip=true -Dapidocs=true -DbuildVersion=AMP -DbuildSource=${tag} -e"
+        // Find AMP version
+        codeVersion = (readFile('amp/TEMPLATE/ampTemplate/site-config.xml') =~ /(?s).*<\!ENTITY ampVersion "([\d\.]+)">.*/)[0][1]
 
-            // Find AMP version
-            codeVersion = (readFile('amp/TEMPLATE/ampTemplate/site-config.xml') =~ /(?s).*<\!ENTITY ampVersion "([\d\.]+)">.*/)[0][1]
+        if (imageIds.equals("")) {
+            withEnv(["PATH+MAVEN=${tool 'M339'}/bin"]) {
+                try {
+                    sh returnStatus: true, script: 'tar -xf ../amp-node-cache.tar'
 
-            // Build Docker images & push it
-            sh "docker build -q -t localhost:5000/amp-webapp:${tag} --build-arg AMP_EXPLODED_WAR=target/amp-AMP --build-arg AMP_PULL_REQUEST='${pr}' --build-arg AMP_BRANCH='${branch}' amp"
-            sh "docker push localhost:5000/amp-webapp:${tag} > /dev/null"
+                    // Build AMP
+                    sh "cd amp && mvn -T 4 clean compile war:exploded -Djdbc.user=amp -Djdbc.password=amp122006 -Djdbc.db=amp -Djdbc.host=db -Djdbc.port=5432 -DdbName=postgresql -Djdbc.driverClassName=org.postgresql.Driver -Dmaven.test.skip=true -Dapidocs=true -DbuildVersion=AMP -DbuildSource=${tag} -e"
 
-            // Cleanup after Docker & Maven
-            sh "docker rmi localhost:5000/amp-webapp:${tag}"
-            sh "cd amp && mvn clean -Djdbc.db=dummy"
+                    // Build Docker images & push it
+                    sh "docker build -q -t phosphorus:5000/amp-webapp:${tag} --build-arg AMP_EXPLODED_WAR=target/amp-AMP --build-arg AMP_PULL_REQUEST='${pr}' --build-arg AMP_BRANCH='${branch}' --label git-hash='${hash}' amp"
+                    sh "docker push phosphorus:5000/amp-webapp:${tag} > /dev/null"
+                } finally {
+                    // Cleanup after Docker & Maven
+                    sh returnStatus: true, script: "docker rmi phosphorus:5000/amp-webapp:${tag}"
+                    sh returnStatus: true, script: "cd amp && mvn clean -Djdbc.db=dummy"
+                    sh returnStatus: true, script: "tar -cf ../amp-node-cache.tar --remove-files" +
+                            " amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/node" +
+                            " amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/node_modules" +
+                            " amp/TEMPLATE/ampTemplate/node_modules/gis-layers-manager/node" +
+                            " amp/TEMPLATE/ampTemplate/node_modules/gis-layers-manager/node_modules" +
+                            " amp/TEMPLATE/ampTemplate/node_modules/amp-settings/node" +
+                            " amp/TEMPLATE/ampTemplate/node_modules/amp-settings/node_modules" +
+                            " amp/TEMPLATE/ampTemplate/gisModule/dev/node" +
+                            " amp/TEMPLATE/ampTemplate/gisModule/dev/node_modules" +
+                            " amp/TEMPLATE/reamp/node" +
+                            " amp/TEMPLATE/reamp/node_modules"
+                }
+            }
         }
     }
 }
@@ -64,7 +131,7 @@ stage('Deploy') {
         }
     }
 
-    timeout(time: 3, unit: 'DAYS') {
+    timeout(time: 1, unit: 'HOURS') {
         milestone()
         country = input message: "Proceed with deploy?", parameters: [choice(choices: countries, name: 'country')]
         milestone()
@@ -96,7 +163,7 @@ stage('Deploy again') {
     if (deployed) {
         println 'Already deployed, skipping this step.'
     } else {
-        timeout(time: 7, unit: 'DAYS') {
+        timeout(time: 1, unit: 'HOURS') {
             milestone()
             input message: "Proceed with repeated deploy for ${country}?"
             milestone()

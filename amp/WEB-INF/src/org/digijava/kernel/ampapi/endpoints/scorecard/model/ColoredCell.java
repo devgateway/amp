@@ -25,79 +25,79 @@ import java.util.Set;
  */
 public class ColoredCell {
 
-	public static enum Colors {
-		GREEN, RED, GRAY, YELLOW
-	};
+    public static enum Colors {
+        GREEN, RED, GRAY, YELLOW
+    };
 
-	private Colors color;
-	private Long donorId;
-	private Quarter quarter;
-	// updated activities on the current quarter
-	private Set<String> updatedActivites = new HashSet<String>();
+    private Colors color;
+    private Long donorId;
+    private Quarter quarter;
+    // updated activities on the current quarter
+    private Set<String> updatedActivites = new HashSet<String>();
 
-	// updated activities on the grace period of the previous quarter
-	private Set<String> updatedActivitiesOnGracePeriod = new HashSet<String>();
-	private Integer totalActivities = 0;
+    // updated activities on the grace period of the previous quarter
+    private Set<String> updatedActivitiesOnGracePeriod = new HashSet<String>();
+    private Integer totalActivities = 0;
 
-	public ColoredCell(Colors color) {
-		this.color = color;
-	}
+    public ColoredCell(Colors color) {
+        this.color = color;
+    }
 
-	/**
-	 * Creates a new ColoredCell. 
-	 * New ColoredCells are given Colors.Red as default color
-	 * 
-	 */
-	public ColoredCell() {
-		this.color = Colors.RED;
-	}
+    /**
+     * Creates a new ColoredCell. 
+     * New ColoredCells are given Colors.Red as default color
+     * 
+     */
+    public ColoredCell() {
+        this.color = Colors.RED;
+    }
 
-	public Colors getColor() {
-		return color;
-	}
+    public Colors getColor() {
+        return color;
+    }
 
-	public void setColor(Colors color) {
-		this.color = color;
-	}
+    public void setColor(Colors color) {
+        this.color = color;
+    }
 
-	public Long getDonorId() {
-		return donorId;
-	}
+    public Long getDonorId() {
+        return donorId;
+    }
 
-	public void setDonorId(Long donorId) {
-		this.donorId = donorId;
-	}
+    public void setDonorId(Long donorId) {
+        this.donorId = donorId;
+    }
 
-	public Quarter getQuarter() {
-		return quarter;
-	}
+    public Quarter getQuarter() {
+        return quarter;
+    }
 
-	public void setQuarter(Quarter quarter) {
-		this.quarter = quarter;
-	}
+    public void setQuarter(Quarter quarter) {
+        this.quarter = quarter;
+    }
 
-	public Set<String> getUpdatedActivites() {
-		return updatedActivites;
-	}
+    public Set<String> getUpdatedActivites() {
+        return updatedActivites;
+    }
 
-	public void setUpdatedActivites(Set<String> updatedActivites) {
-		this.updatedActivites = updatedActivites;
-	}
+    public void setUpdatedActivites(Set<String> updatedActivites) {
+        this.updatedActivites = updatedActivites;
+    }
 
-	public Set<String> getUpdatedActivitiesOnGracePeriod() {
-		return updatedActivitiesOnGracePeriod;
-	}
+    public Set<String> getUpdatedActivitiesOnGracePeriod() {
+        return updatedActivitiesOnGracePeriod;
+    }
 
-	public void setUpdatedActivitiesOnGracePeriod(Set<String> updatedActivitiesOnGracePeriod) {
-		this.updatedActivitiesOnGracePeriod = updatedActivitiesOnGracePeriod;
-	}
+    public void setUpdatedActivitiesOnGracePeriod(Set<String> updatedActivitiesOnGracePeriod) {
+        this.updatedActivitiesOnGracePeriod = updatedActivitiesOnGracePeriod;
+    }
 
-	public Integer getTotalActivities() {
-		return totalActivities;
-	}
+    public Integer getTotalActivities() {
+        return totalActivities;
+    }
 
-	public void setTotalActivities(Integer totalActivities) {
-		this.totalActivities = totalActivities;
-	}
+    public void setTotalActivities(Integer totalActivities) {
+        this.totalActivities = totalActivities;
+    }
 
 }

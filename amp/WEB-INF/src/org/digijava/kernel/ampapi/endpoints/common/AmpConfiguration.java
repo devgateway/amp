@@ -17,22 +17,22 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 @Path("amp")
 public class AmpConfiguration {
-	
-	/**
-	 * Provides available settings and their possible values.
-	 * <br>
-	 * These settings should be supported by almost all API calls.<br>
-	 * Note: most API endpoints will also need to accept a 'settings' object on queries.<br>
-	 * <br>
-	 * Example of 'settings' json object provided as POST input in API endpoints: 
-	 * <pre>
-	 * settings : { "1": "CAD", 
-	 *              "2" : "6", 
-	 *              "yearRange": {"yearFrom":"2005", "yearTo":"2020"}
-	 *            }
-	 * </pre>
-	 * </br>
-	 * <h3>Sample Output:</h3><pre>
+    
+    /**
+     * Provides available settings and their possible values.
+     * <br>
+     * These settings should be supported by almost all API calls.<br>
+     * Note: most API endpoints will also need to accept a 'settings' object on queries.<br>
+     * <br>
+     * Example of 'settings' json object provided as POST input in API endpoints: 
+     * <pre>
+     * settings : { "1": "CAD", 
+     *              "2" : "6", 
+     *              "yearRange": {"yearFrom":"2005", "yearTo":"2020"}
+     *            }
+     * </pre>
+     * </br>
+     * <h3>Sample Output:</h3><pre>
      * [
      *   ...,
      *   {
@@ -63,15 +63,15 @@ public class AmpConfiguration {
      *  },
      *  ...
      * ]</pre>
-	 * 
-	 * @return a list of setting options
-	 * @see SettingOptions
-	 */
-	@GET
-	@Path("/settings")
-	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = false, id = "Settings")
-	public JsonBean getSettings() {
-		return SettingsUtils.getGeneralSettings();
-	}
+     * 
+     * @return a list of setting options
+     * @see SettingOptions
+     */
+    @GET
+    @Path("/settings")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = false, id = "Settings")
+    public JsonBean getSettings() {
+        return SettingsUtils.getGeneralSettings();
+    }
 }

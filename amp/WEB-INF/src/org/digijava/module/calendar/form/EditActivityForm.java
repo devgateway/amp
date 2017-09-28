@@ -128,7 +128,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
     private Collection pages;
     private String[] alphaPages;
 
-    //	For view comment popup
+    //  For view comment popup
     private String actionFlag = null;
     private boolean serializeFlag;
     private boolean commentFlag;
@@ -144,13 +144,13 @@ public class EditActivityForm extends ActionForm implements Serializable{
 
     // For aid harmonization survey indicators
     private Collection survey = null;
-    private List indicators = null; 	// holds collection of Indicator helper objects
-    private Collection pageColl = null;	// total number of survey pages
+    private List indicators = null;     // holds collection of Indicator helper objects
+    private Collection pageColl = null; // total number of survey pages
     private Integer currPage = null;
-    private Integer startIndex = null;	// starting record for iteartion over indicator collection on each page
-    private String fundingOrg = null;	// acronym of funding organisation
+    private Integer startIndex = null;  // starting record for iteartion over indicator collection on each page
+    private String fundingOrg = null;   // acronym of funding organisation
     private Long ampSurveyId = null;
-    private Boolean surveyFlag = null;	// if true then survey properties are cleared
+    private Boolean surveyFlag = null;  // if true then survey properties are cleared
 
     /* START FINANCIAL EDIT */
     private Collection fundingOrganizations; // Collection of FundingOrganization objects
@@ -3476,13 +3476,13 @@ public class EditActivityForm extends ActionForm implements Serializable{
         this.currCode = currCode;
     }
 
-	public Long getDocumentType() {
-		return documentType;
-	}
+    public Long getDocumentType() {
+        return documentType;
+    }
 
-	public void setDocumentType(Long documentType) {
-		this.documentType = documentType;
-	}
+    public void setDocumentType(Long documentType) {
+        this.documentType = documentType;
+    }
 
 
 }

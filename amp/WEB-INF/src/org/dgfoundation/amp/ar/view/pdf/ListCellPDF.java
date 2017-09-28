@@ -29,35 +29,35 @@ import com.lowagie.text.pdf.PdfPTable;
  */
 public class ListCellPDF extends PDFExporter {
 
-	public ListCellPDF(Exporter parent,Viewable item) {
-		super(parent,item);
-	}
-	
-	/**
-	 * @param table
-	 * @param item
-	 */
-	public ListCellPDF(PdfPTable table, Viewable item,Long ownerId) {
-		super(table, item,ownerId);
-		// TODO Auto-generated constructor stub
-	}
+    public ListCellPDF(Exporter parent,Viewable item) {
+        super(parent,item);
+    }
+    
+    /**
+     * @param table
+     * @param item
+     */
+    public ListCellPDF(PdfPTable table, Viewable item,Long ownerId) {
+        super(table, item,ownerId);
+        // TODO Auto-generated constructor stub
+    }
 
-	/* (non-Javadoc)
-	 * @see org.dgfoundation.amp.ar.view.pdf.PDFExporter#generate()
-	 */
-	public void generate() {
-		ListCell lc=(ListCell) item;
-		//Collection<Cell> items=(Collection<Cell>) lc.getValue();
-		String res="";
-		
-		Iterator<Cell> i = lc.iterator();		
-		while (i.hasNext()) {
-			Cell element = i.next();
-			res+=element.toString();
-			if(i.hasNext()) res+=", ";
-		}
-		PdfPCell pdfc = new PdfPCell(new Paragraph(ExportActivityToPDF.postprocessText(res),new Font(ExportActivityToPDF.basefont, 10, Font.NORMAL)));
-		table.addCell(pdfc);
-	}
+    /* (non-Javadoc)
+     * @see org.dgfoundation.amp.ar.view.pdf.PDFExporter#generate()
+     */
+    public void generate() {
+        ListCell lc=(ListCell) item;
+        //Collection<Cell> items=(Collection<Cell>) lc.getValue();
+        String res="";
+        
+        Iterator<Cell> i = lc.iterator();       
+        while (i.hasNext()) {
+            Cell element = i.next();
+            res+=element.toString();
+            if(i.hasNext()) res+=", ";
+        }
+        PdfPCell pdfc = new PdfPCell(new Paragraph(ExportActivityToPDF.postprocessText(res),new Font(ExportActivityToPDF.basefont, 10, Font.NORMAL)));
+        table.addCell(pdfc);
+    }
 
 }

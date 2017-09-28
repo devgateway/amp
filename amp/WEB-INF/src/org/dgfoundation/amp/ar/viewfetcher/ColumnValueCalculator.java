@@ -9,17 +9,17 @@ import java.sql.SQLException;
  *
  */
 public interface ColumnValueCalculator {
-	
-	/**
-	 * calculates the value of the column based on other columns. <b>NEVER EVER do anything except getLong() / getString() on the resultSet!</b>
-	 * @param resultSet  <b>NEVER EVER do anything except getLong() / getString() on the resultSet!</b>
-	 * @return
-	 */
-	public String calculateValue(ResultSet resultSet, java.sql.ResultSet rawCurrentLine, String locale) throws SQLException;
-	
-	/**
-	 * please see {@link PropertyDescription#getDeleteOriginal()} for contract - that call is straightforwarded here through the intermediary layers
-	 * @return
-	 */
-	public boolean getDeleteOriginal();
+    
+    /**
+     * calculates the value of the column based on other columns. <b>NEVER EVER do anything except getLong() / getString() on the resultSet!</b>
+     * @param resultSet  <b>NEVER EVER do anything except getLong() / getString() on the resultSet!</b>
+     * @return
+     */
+    public String calculateValue(ResultSet resultSet, java.sql.ResultSet rawCurrentLine, String locale) throws SQLException;
+    
+    /**
+     * please see {@link PropertyDescription#getDeleteOriginal()} for contract - that call is straightforwarded here through the intermediary layers
+     * @return
+     */
+    public boolean getDeleteOriginal();
 }

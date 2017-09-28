@@ -8,7 +8,7 @@ package org.digijava.module.aim.util;
  * Implements objects that can be identified by an unique Id that can be represented as an object.
  */
 public interface LoggerIdentifiable extends Identifiable{
-	public Object getObjectType();
-	public String getObjectName();
+    public Object getObjectType();
+    public String getObjectName();
         public String getObjectFilteredName();
 }

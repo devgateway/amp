@@ -10,35 +10,35 @@ import java.util.Collection;
 import org.apache.struts.action.ActionForm;
 
 public class DonorTeamsForm extends ActionForm {
-	
-	private Collection donorTeams;
-	private Long teamId;
+    
+    private Collection donorTeams;
+    private Long teamId;
 
-	/**
-	 * @return Returns the donorTeams.
-	 */
-	public Collection getDonorTeams() {
-		return donorTeams;
-	}
+    /**
+     * @return Returns the donorTeams.
+     */
+    public Collection getDonorTeams() {
+        return donorTeams;
+    }
 
-	/**
-	 * @param donorTeams The donorTeams to set.
-	 */
-	public void setDonorTeams(Collection donorTeams) {
-		this.donorTeams = donorTeams;
-	}
+    /**
+     * @param donorTeams The donorTeams to set.
+     */
+    public void setDonorTeams(Collection donorTeams) {
+        this.donorTeams = donorTeams;
+    }
 
-	/**
-	 * @return Returns the teamId.
-	 */
-	public Long getTeamId() {
-		return teamId;
-	}
+    /**
+     * @return Returns the teamId.
+     */
+    public Long getTeamId() {
+        return teamId;
+    }
 
-	/**
-	 * @param teamId The teamId to set.
-	 */
-	public void setTeamId(Long teamId) {
-		this.teamId = teamId;
-	}
+    /**
+     * @param teamId The teamId to set.
+     */
+    public void setTeamId(Long teamId) {
+        this.teamId = teamId;
+    }
 }

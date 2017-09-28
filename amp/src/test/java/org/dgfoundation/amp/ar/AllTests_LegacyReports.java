@@ -30,45 +30,45 @@ import junit.framework.TestSuite;
  */
 public class AllTests_LegacyReports {
 
-	public static Test suite() {
-		
-		setUp();
-//		LiberiaFiller.fillInDatabase();
-		TestSuite suite = new TestSuite(AllTests_LegacyReports.class.getName());
-		//$JUnit-BEGIN$
+    public static Test suite() {
+        
+        setUp();
+//      LiberiaFiller.fillInDatabase();
+        TestSuite suite = new TestSuite(AllTests_LegacyReports.class.getName());
+        //$JUnit-BEGIN$
 
-		//suite.addTestSuite(DirectedDisbursementsTests.class);
-		suite.addTest(DirectedDisbursementsTests.suite());
-		suite.addTest(MtefTests.suite());
-		suite.addTest(ActivityPreviewTests.suite());
-		suite.addTest(MiscColumnsTests.suite());
-		//suite.addTest(EsriTestCases.suite());
-		suite.addTest(FiltersTests.suite());
-		suite.addTest(MiscReportsTests.suite());
-		suite.addTest(new JUnit4TestAdapter(OldReportsNewFeaturesTests.class));	
-		suite.addTest(HierarchyTests27.suite());
-		suite.addTest(DirectedDisbursementsTests_amp27.suite());
-		suite.addTest(MultilingualTests.suite());
-		suite.addTest(MultilingualThroughTrnTests.suite());
-		suite.addTest(CategoryManagerTests.suite());
-		
-		suite.addTest(MultilingualTests28.suite());
-		suite.addTest(PledgesFormTests.suite());
-		suite.addTest(MiscTests28.suite());
-		suite.addTest(ProgramsTests.suite());
-		
-		//suite.addTest(new DirectedDisbursementsTests("testReports"));
-		//$JUnit-END$
-		return suite;
-	}
-	
-	public static void main(String[] args) {		
-		junit.textui.TestRunner.run(suite());
-	}
+        //suite.addTestSuite(DirectedDisbursementsTests.class);
+        suite.addTest(DirectedDisbursementsTests.suite());
+        suite.addTest(MtefTests.suite());
+        suite.addTest(ActivityPreviewTests.suite());
+        suite.addTest(MiscColumnsTests.suite());
+        //suite.addTest(EsriTestCases.suite());
+        suite.addTest(FiltersTests.suite());
+        suite.addTest(MiscReportsTests.suite());
+        suite.addTest(new JUnit4TestAdapter(OldReportsNewFeaturesTests.class)); 
+        suite.addTest(HierarchyTests27.suite());
+        suite.addTest(DirectedDisbursementsTests_amp27.suite());
+        suite.addTest(MultilingualTests.suite());
+        suite.addTest(MultilingualThroughTrnTests.suite());
+        suite.addTest(CategoryManagerTests.suite());
+        
+        suite.addTest(MultilingualTests28.suite());
+        suite.addTest(PledgesFormTests.suite());
+        suite.addTest(MiscTests28.suite());
+        suite.addTest(ProgramsTests.suite());
+        
+        //suite.addTest(new DirectedDisbursementsTests("testReports"));
+        //$JUnit-END$
+        return suite;
+    }
+    
+    public static void main(String[] args) {        
+        junit.textui.TestRunner.run(suite());
+    }
 
-	public static void setUp() {
-		AllTests_amp212.setUp();
-	}
-	
+    public static void setUp() {
+        AllTests_amp212.setUp();
+    }
+    
 }
 

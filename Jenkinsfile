@@ -42,8 +42,9 @@ def updateGitHubCommitStatus(context, message, state) {
     ])
 }
 
+@NonCPS
 def readAMPVersion(pathToPom) {
-    def project = new XmlSlurper().parse(pathToPom)
+    def project = new XmlSlurper().parseText(readFile(pathToPom))
     project.version.text()
 }
 

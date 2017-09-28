@@ -13,9 +13,9 @@ package org.digijava.module.digifeed.core;
  *
  */
 public final class FeedConstants {
-	public static final int maxBlockSize=50;
-	public static final int workerListSize=50;
-	public static final long defaultStartId=0;
-	public static final String defaultLang="en";
-	public static final String pluginPath = "/classes/org/digijava/module/digifeed/feeds";
+    public static final int maxBlockSize=50;
+    public static final int workerListSize=50;
+    public static final long defaultStartId=0;
+    public static final String defaultLang="en";
+    public static final String pluginPath = "/classes/org/digijava/module/digifeed/feeds";
 }

@@ -58,21 +58,21 @@ public class SelectTeam extends Action {
         String workspaceId = (String) request.getSession().getAttribute("j_autoWorkspaceId");
         request.getSession().removeAttribute("j_autoWorkspaceId");
         if(workspaceId != null){
-        	temp = workspaceId;
+            temp = workspaceId;
         } else {
-        	temp = request.getParameter("id");
+            temp = request.getParameter("id");
         }
 
         try {
-        	User user = RequestUtils.getUser(request);
-        	Long id = new Long(Long.parseLong(temp));
+            User user = RequestUtils.getUser(request);
+            Long id = new Long(Long.parseLong(temp));
             AmpTeamMember member = TeamMemberUtil.getAmpTeamMember(id);
             
             //AMP Security Issues - AMP-12638
             if (member == null || member.getUser().getId() != user.getId()){
-            	//session.invalidate();
+                //session.invalidate();
                 throw new RuntimeException("Access denied for url: " + request.getRequestURL());
-            	//return mapping.findForward("forward");
+                //return mapping.findForward("forward");
             }
 
             // ----------------------
@@ -97,9 +97,9 @@ public class SelectTeam extends Action {
             //AMP-4256 - Removing all settings that might come from the other workspace
             session.removeAttribute(Constants.CURRENT_TAB_REPORT);
             session.removeAttribute(Constants.DEFAULT_TEAM_REPORT);
-			session.removeAttribute(Constants.MY_REPORTS);
-			session.removeAttribute(Constants.MY_ACTIVE_TABS);
-			session.removeAttribute(Constants.TEAM_ID);
+            session.removeAttribute(Constants.MY_REPORTS);
+            session.removeAttribute(Constants.MY_ACTIVE_TABS);
+            session.removeAttribute(Constants.TEAM_ID);
             session.removeAttribute(Constants.MY_REPORTS_PER_PAGE);
             session.removeAttribute(Constants.LAST_VIEWED_REPORTS);
             session.removeAttribute(Constants.UNASSIGNED_ACTIVITY_LIST);
@@ -116,7 +116,7 @@ public class SelectTeam extends Action {
             FeaturesUtil.setAmpTreeVisibility(request.getServletContext(), session,ampTreeVisibility);
             
             if (sessionToken != null && sessionToken.getTeamMember() != tm) {
-            	SecurityUtil.generateToken();
+                SecurityUtil.generateToken();
             }
 
         } catch (Exception e) {
@@ -125,9 +125,9 @@ public class SelectTeam extends Action {
 
         //once we have selected the team we have to check if we need to generate the token
         if("true".equals(request.getParameter("generateToken"))){
-        	AmpApiToken token = SecurityUtil.generateToken();
-        	response.sendRedirect(request.getParameter("callbackUrl") + "?amp_api_token="+token.getToken());
-        	return null;
+            AmpApiToken token = SecurityUtil.generateToken();
+            response.sendRedirect(request.getParameter("callbackUrl") + "?amp_api_token="+token.getToken());
+            return null;
         }
         
         

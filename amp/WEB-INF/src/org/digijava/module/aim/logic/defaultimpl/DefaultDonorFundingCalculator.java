@@ -11,18 +11,18 @@ import org.digijava.module.aim.util.DecimalWraper;
 public class DefaultDonorFundingCalculator implements DonorFundingCalculator {
 
     public DecimalWraper getTotalCommtiments(DecimalWraper planned, DecimalWraper actual, DecimalWraper pipeline) {
-    	DecimalWraper value = new DecimalWraper();
+        DecimalWraper value = new DecimalWraper();
         value.setValue(new BigDecimal(actual.doubleValue() + pipeline.doubleValue()));
         return value;
     }
 
-	public DecimalWraper getunDisbursementsBalance(DecimalWraper a,
-		DecimalWraper b) {
-	    DecimalWraper ret=new DecimalWraper();
-	    ret.setValue(a.getValue().subtract(b.getValue()));
-	    ret.setCalculations("value is "+a.getCalculations()+" - "+b.getCalculations());
-	    return ret;
-	}
+    public DecimalWraper getunDisbursementsBalance(DecimalWraper a,
+        DecimalWraper b) {
+        DecimalWraper ret=new DecimalWraper();
+        ret.setValue(a.getValue().subtract(b.getValue()));
+        ret.setCalculations("value is "+a.getCalculations()+" - "+b.getCalculations());
+        return ret;
+    }
 
 
 }

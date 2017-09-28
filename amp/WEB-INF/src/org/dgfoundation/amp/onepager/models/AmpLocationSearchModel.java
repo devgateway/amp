@@ -32,27 +32,27 @@ import org.hibernate.criterion.Restrictions;
  * @author mpostelnicu@dgateway.org since Oct 13, 2010
  */
 public class AmpLocationSearchModel extends
-		AbstractAmpAutoCompleteModel<AmpCategoryValueLocations> {
+        AbstractAmpAutoCompleteModel<AmpCategoryValueLocations> {
 
     public static final Logger logger = Logger.getLogger(AmpLocationSearchModel.class);
     public static final String PARENT_DELIMITER="\\] \\[";
-	
-	public enum PARAM implements AmpAutoCompleteModelParam {
-		LAYER, LEVEL, ALL_SETUP_COUNTRIES
-	};
+    
+    public enum PARAM implements AmpAutoCompleteModelParam {
+        LAYER, LEVEL, ALL_SETUP_COUNTRIES
+    };
 
-	public AmpLocationSearchModel(String input,String language,
-			Map<AmpAutoCompleteModelParam, Object> params) {
-		super(input, language, params);
-	}
+    public AmpLocationSearchModel(String input,String language,
+            Map<AmpAutoCompleteModelParam, Object> params) {
+        super(input, language, params);
+    }
 
-	private static final long serialVersionUID = -1967371789152747599L;
+    private static final long serialVersionUID = -1967371789152747599L;
 
-	@Override
-	protected Collection<AmpCategoryValueLocations> load() {
-		Collection<AmpCategoryValueLocations> ret = new TreeSet<AmpCategoryValueLocations>(new AmpAutoCompleteDisplayable.AmpAutoCompleteComparator());
-		IModel<Set<AmpCategoryValue>> layerModel = (IModel<Set<AmpCategoryValue>>) getParam(PARAM.LAYER);
-		IModel<Set<AmpCategoryValue>> levelModel = (IModel<Set<AmpCategoryValue>>) getParam(PARAM.LEVEL);
+    @Override
+    protected Collection<AmpCategoryValueLocations> load() {
+        Collection<AmpCategoryValueLocations> ret = new TreeSet<AmpCategoryValueLocations>(new AmpAutoCompleteDisplayable.AmpAutoCompleteComparator());
+        IModel<Set<AmpCategoryValue>> layerModel = (IModel<Set<AmpCategoryValue>>) getParam(PARAM.LAYER);
+        IModel<Set<AmpCategoryValue>> levelModel = (IModel<Set<AmpCategoryValue>>) getParam(PARAM.LEVEL);
         Boolean allSetupCountries = (Boolean) getParam(PARAM.ALL_SETUP_COUNTRIES);
         AmpAuthWebSession wicketSession = (AmpAuthWebSession) org.apache.wicket.Session.get();
         AmpTeamMember currentMember = wicketSession.getAmpCurrentMember();
@@ -64,15 +64,15 @@ public class AmpLocationSearchModel extends
             }
         }
 
-		if (layerModel == null || layerModel.getObject().size() < 1 || levelModel==null || levelModel.getObject().size()<1)
-			return ret;
-		AmpCategoryValue cvLayer = layerModel.getObject().iterator().next();
-		AmpCategoryValue cvLevel= levelModel.getObject().iterator().next();
+        if (layerModel == null || layerModel.getObject().size() < 1 || levelModel==null || levelModel.getObject().size()<1)
+            return ret;
+        AmpCategoryValue cvLayer = layerModel.getObject().iterator().next();
+        AmpCategoryValue cvLevel= levelModel.getObject().iterator().next();
 
-		if (!CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL.equalsCategoryValue(cvLevel)
-				&& CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(cvLayer)) {
-			// then we can only return the current default country of the system
-			try {
+        if (!CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL.equalsCategoryValue(cvLevel)
+                && CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(cvLayer)) {
+            // then we can only return the current default country of the system
+            try {
                 Set<AmpCategoryValueLocations> filterCountries = new HashSet<AmpCategoryValueLocations>();
                 if (!allSetupCountries) {
                     filterCountries.add(DynLocationManagerUtil.getDefaultCountry());
@@ -85,46 +85,46 @@ public class AmpLocationSearchModel extends
                     }
                 }
 
-				ret = new ArrayList<AmpCategoryValueLocations>();
-				ret.addAll(filterCountries);
-				return ret;
+                ret = new ArrayList<AmpCategoryValueLocations>();
+                ret.addAll(filterCountries);
+                return ret;
 
-			} catch (Exception e) {
-				e.printStackTrace();
-				return null;
-			}
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
 
-		}
-		
-		Integer maxResults = (Integer) getParam(AbstractAmpAutoCompleteModel.PARAM.MAX_RESULTS);
+        }
+        
+        Integer maxResults = (Integer) getParam(AbstractAmpAutoCompleteModel.PARAM.MAX_RESULTS);
 
-		Session dbSession = PersistenceManager.getSession();
+        Session dbSession = PersistenceManager.getSession();
 
-		Criteria criteria = dbSession.createCriteria(AmpCategoryValueLocations.class);
-		criteria.setCacheable(true);
+        Criteria criteria = dbSession.createCriteria(AmpCategoryValueLocations.class);
+        criteria.setCacheable(true);
 
-		if (!CategoryConstants.IMPLEMENTATION_LOCATION_ALL.equalsCategoryValue(cvLayer)) {
-			criteria.add(Restrictions.eq("parentCategoryValue", cvLayer));
-		}
-		
-		criteria.add(Restrictions.eqOrIsNull("deleted", false));
+        if (!CategoryConstants.IMPLEMENTATION_LOCATION_ALL.equalsCategoryValue(cvLayer)) {
+            criteria.add(Restrictions.eq("parentCategoryValue", cvLayer));
+        }
+        
+        criteria.add(Restrictions.eqOrIsNull("deleted", false));
 
-		criteria.addOrder(Order.asc("name"));
-		if (maxResults != null && maxResults != 0)
-			criteria.setMaxResults(maxResults);			
-		List<AmpCategoryValueLocations> tempList = criteria.list();
+        criteria.addOrder(Order.asc("name"));
+        if (maxResults != null && maxResults != 0)
+            criteria.setMaxResults(maxResults);         
+        List<AmpCategoryValueLocations> tempList = criteria.list();
 
-		if (assignedRegion != null) {
-			Iterator<AmpCategoryValueLocations> it = tempList.iterator();
-			while (it.hasNext()) {
-				AmpCategoryValueLocations location = it.next();
-				AmpCategoryValueLocations locationRegion = DynLocationManagerUtil.getAncestorByLayer(location, CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
-				if (locationRegion == null || !assignedRegion.getId().equals(locationRegion.getId()))
-					it.remove();
-			}
-		}
+        if (assignedRegion != null) {
+            Iterator<AmpCategoryValueLocations> it = tempList.iterator();
+            while (it.hasNext()) {
+                AmpCategoryValueLocations location = it.next();
+                AmpCategoryValueLocations locationRegion = DynLocationManagerUtil.getAncestorByLayer(location, CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
+                if (locationRegion == null || !assignedRegion.getId().equals(locationRegion.getId()))
+                    it.remove();
+            }
+        }
         ret.addAll(tempList);
-		return ret;
-	}
+        return ret;
+    }
 
 }

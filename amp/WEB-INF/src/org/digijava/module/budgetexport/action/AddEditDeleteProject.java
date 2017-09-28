@@ -23,7 +23,7 @@ import java.util.Date;
  * Time: 12:56 PM
  */
 public class AddEditDeleteProject extends DispatchAction {
-    private static Logger logger	= Logger.getLogger(AddEditDeleteProject.class);
+    private static Logger logger    = Logger.getLogger(AddEditDeleteProject.class);
 
     public ActionForward unspecified(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {

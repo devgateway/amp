@@ -24,111 +24,111 @@ import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
  *
  */
 public final class CategAmountCell extends Cell implements CategCell, DatedCell, NumberedCell {
-		
-	/**
-	 * the amount stored in this cell, plus some accessory information like the date of the transaction.
-	 */
-	public final MonetaryAmount amount;
-	
-	/**
-	 * the opaque metadata 
-	 */
-	public final MetaInfoSet metaInfo;
-	
-	/**
-	 * the effective date of the cell - to be used while V-splitting reports 
-	 */
-	public final TranslatedDate translatedDate;
-	
-	/**
-	 * constructs an instance which has its fields trivially set to the supplied arguments. entityId will be set as -1, levelColumn will be set to empty() 
-	 * @param activityId the owning "activity" (fundamental entity)
-	 * @param amount  
-	 * @param metaInfo
-	 * @param coos
-	 * @param translatedDate
-	 */
-	public CategAmountCell(long activityId, MonetaryAmount amount, MetaInfoSet metaInfo, Map<NiDimensionUsage, Coordinate> coos, TranslatedDate translatedDate) {
-		super(activityId, -1, coos, Optional.empty());
-		this.amount = amount;
-		this.metaInfo = metaInfo.freeze();
-		this.translatedDate = translatedDate;
-	}
+        
+    /**
+     * the amount stored in this cell, plus some accessory information like the date of the transaction.
+     */
+    public final MonetaryAmount amount;
+    
+    /**
+     * the opaque metadata 
+     */
+    public final MetaInfoSet metaInfo;
+    
+    /**
+     * the effective date of the cell - to be used while V-splitting reports 
+     */
+    public final TranslatedDate translatedDate;
+    
+    /**
+     * constructs an instance which has its fields trivially set to the supplied arguments. entityId will be set as -1, levelColumn will be set to empty() 
+     * @param activityId the owning "activity" (fundamental entity)
+     * @param amount  
+     * @param metaInfo
+     * @param coos
+     * @param translatedDate
+     */
+    public CategAmountCell(long activityId, MonetaryAmount amount, MetaInfoSet metaInfo, Map<NiDimensionUsage, Coordinate> coos, TranslatedDate translatedDate) {
+        super(activityId, -1, coos, Optional.empty());
+        this.amount = amount;
+        this.metaInfo = metaInfo.freeze();
+        this.translatedDate = translatedDate;
+    }
 
-	/**
-	 * creates a new cell which is a clone of this one, save for the metadata which gets added a new entry
-	 * @param cat the category of the metadata entry to add
-	 * @param value the value of the metadata entry to add
-	 * @return
-	 */
-	public CategAmountCell withMeta(String cat, Object value) {
-		return new CategAmountCell(this.activityId, this.amount, this.metaInfo.newInstance(cat, value), this.coordinates, this.translatedDate);
-	}
-	
-	/**
-	 * creates a new cell with stripped coordinates (therefore yield a cell which ignores transaction-level hierarchies and filters)
-	 * @return
-	 */
-	public CategAmountCell withStrippedCoords() {
-		return new CategAmountCell(this.activityId, this.amount, this.metaInfo, Collections.emptyMap(), this.translatedDate);
-	}
-	
-	/**
-	 * creates a new cell which is a clone of this one, save for the {@link #amount} which is multiplied by a given value
-	 * @param cat the category of the metadata entry to add
-	 * @param value the value of the metadata entry to add
-	 * @return
-	 */
-	public CategAmountCell multiply(BigDecimal multipland) {
-		if (multipland.equals(BigDecimal.ONE))
-			return this;
-		return new CategAmountCell(this.activityId, this.amount.multiplyBy(multipland), this.metaInfo, this.coordinates, this.translatedDate);
-	}
+    /**
+     * creates a new cell which is a clone of this one, save for the metadata which gets added a new entry
+     * @param cat the category of the metadata entry to add
+     * @param value the value of the metadata entry to add
+     * @return
+     */
+    public CategAmountCell withMeta(String cat, Object value) {
+        return new CategAmountCell(this.activityId, this.amount, this.metaInfo.newInstance(cat, value), this.coordinates, this.translatedDate);
+    }
+    
+    /**
+     * creates a new cell with stripped coordinates (therefore yield a cell which ignores transaction-level hierarchies and filters)
+     * @return
+     */
+    public CategAmountCell withStrippedCoords() {
+        return new CategAmountCell(this.activityId, this.amount, this.metaInfo, Collections.emptyMap(), this.translatedDate);
+    }
+    
+    /**
+     * creates a new cell which is a clone of this one, save for the {@link #amount} which is multiplied by a given value
+     * @param cat the category of the metadata entry to add
+     * @param value the value of the metadata entry to add
+     * @return
+     */
+    public CategAmountCell multiply(BigDecimal multipland) {
+        if (multipland.equals(BigDecimal.ONE))
+            return this;
+        return new CategAmountCell(this.activityId, this.amount.multiplyBy(multipland), this.metaInfo, this.coordinates, this.translatedDate);
+    }
 
-	@Override
-	public Cell changeOwnerId(long newActivityId) {
-		return new CategAmountCell(newActivityId, this.amount, this.metaInfo, this.coordinates, this.translatedDate);
-	}
+    @Override
+    public Cell changeOwnerId(long newActivityId) {
+        return new CategAmountCell(newActivityId, this.amount, this.metaInfo, this.coordinates, this.translatedDate);
+    }
 
-	@Override
-	public String toString() {
-		return String.format("(actId: %d, amt: %s, coos: {%s}, meta: {%s}", this.activityId, amount, AmpCollections.sortedMap(coordinates, (a, b) -> a.toString().compareTo(b.toString())), metaInfo);
-	}
+    @Override
+    public String toString() {
+        return String.format("(actId: %d, amt: %s, coos: {%s}, meta: {%s}", this.activityId, amount, AmpCollections.sortedMap(coordinates, (a, b) -> a.toString().compareTo(b.toString())), metaInfo);
+    }
 
-	@Override
-	public MetaInfoSet getMetaInfo() {
-		return this.metaInfo;
-	}
+    @Override
+    public MetaInfoSet getMetaInfo() {
+        return this.metaInfo;
+    }
 
-	@Override
-	public TranslatedDate getTranslatedDate() {
-		return translatedDate;
-	}
+    @Override
+    public TranslatedDate getTranslatedDate() {
+        return translatedDate;
+    }
 
-	@Override
-	public int compareTo(Object o) {
-		CategAmountCell cac = (CategAmountCell) o;
-		return amount.compareTo(cac.amount);
-	}
+    @Override
+    public int compareTo(Object o) {
+        CategAmountCell cac = (CategAmountCell) o;
+        return amount.compareTo(cac.amount);
+    }
 
-	@Override
-	public String getDisplayedValue() {
-		return amount.getDisplayable();
-	}
+    @Override
+    public String getDisplayedValue() {
+        return amount.getDisplayable();
+    }
 
-	@Override
-	public BigDecimal getAmount() {
-		return amount.amount;
-	}
-	
-	@Override
-	public NiPrecisionSetting getPrecision() {
-		return amount.precisionSetting;
-	}
+    @Override
+    public BigDecimal getAmount() {
+        return amount.amount;
+    }
+    
+    @Override
+    public NiPrecisionSetting getPrecision() {
+        return amount.precisionSetting;
+    }
 
-	@Override
-	public boolean isScalableByUnits() {
-		return true;
-	}
+    @Override
+    public boolean isScalableByUnits() {
+        return true;
+    }
 
 }

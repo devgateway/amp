@@ -62,18 +62,18 @@ public class ShowFile
 
     Long paramDocId = null;
     if(request.getParameter("documentId")!=null){
-    	paramDocId=new Long(request.getParameter("documentId"));
+        paramDocId=new Long(request.getParameter("documentId"));
     }
 
     if (paramDocId != null) {
         sdmDoc = DbUtil.getDocument(paramDocId);
       }
       else {
-      	if(request.getSession().getAttribute("document")!=null){ //view file from messaging/help module
-      		sdmDoc=(Sdm)request.getSession().getAttribute("document");
-      	}else{ //from sdm module
-      		sdmDoc = formBean.getSdmDocument();
-      	}      
+        if(request.getSession().getAttribute("document")!=null){ //view file from messaging/help module
+            sdmDoc=(Sdm)request.getSession().getAttribute("document");
+        }else{ //from sdm module
+            sdmDoc = formBean.getSdmDocument();
+        }      
       }
     
     

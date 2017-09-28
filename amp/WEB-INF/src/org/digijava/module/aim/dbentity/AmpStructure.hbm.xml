@@ -31,6 +31,13 @@
 			<key column="amp_structure_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpStructureImg" />
 		</set>
+		
+		<set name="coordinates" table="AMP_STRUCTURE_COORDINATE" inverse="true"
+			cascade="all-delete-orphan" order-by="ampStructureCoordinateId">
+			<cache usage="read-write" />
+			<key column="amp_structure_id" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpStructureCoordinate" />
+		</set>
 
 	</class>
 </hibernate-mapping>

@@ -34,5 +34,5 @@ public class ActivityProposedCompletionDateTrigger extends Trigger {
     @Override
     public String[] getParameterNames() {
         return parameterNames;
-	}
+    }
 }

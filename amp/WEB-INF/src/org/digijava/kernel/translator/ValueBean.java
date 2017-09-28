@@ -24,71 +24,71 @@ package org.digijava.kernel.translator;
 
 import java.io.Serializable;
 public class ValueBean implements Serializable {
-	private static final long serialVersionUID = 1L;
-	private String keyId;
-	private String source;
-	private String target;
-	private String targetSiteId;
-	private String sourceSiteId;
-	boolean needsUpdate = false;
+    private static final long serialVersionUID = 1L;
+    private String keyId;
+    private String source;
+    private String target;
+    private String targetSiteId;
+    private String sourceSiteId;
+    boolean needsUpdate = false;
 
-	public ValueBean() {
+    public ValueBean() {
 
-	}
-	public ValueBean(String key,String message_source,String message_target,String sourceSiteId,String targetSiteId,boolean update) {
-		this.keyId = key;
-		this.source = message_source;
-		this.target = message_target;
-		this.needsUpdate = update;
-		this.targetSiteId = targetSiteId;
-		this.sourceSiteId = sourceSiteId;
-	}
+    }
+    public ValueBean(String key,String message_source,String message_target,String sourceSiteId,String targetSiteId,boolean update) {
+        this.keyId = key;
+        this.source = message_source;
+        this.target = message_target;
+        this.needsUpdate = update;
+        this.targetSiteId = targetSiteId;
+        this.sourceSiteId = sourceSiteId;
+    }
 
-	public String getKeyId() {
-		return this.keyId;
-	}
+    public String getKeyId() {
+        return this.keyId;
+    }
 
-	public String getSource() {
-			return this.source;
-	}
+    public String getSource() {
+            return this.source;
+    }
 
-	public String getTarget() {
-		return this.target;
-	}
+    public String getTarget() {
+        return this.target;
+    }
 
-	public void setKeyId(String key) {
-		this.keyId = key;
-	}
+    public void setKeyId(String key) {
+        this.keyId = key;
+    }
 
-	public void setSource(String message_source) {
-		this.source = message_source;
-	}
+    public void setSource(String message_source) {
+        this.source = message_source;
+    }
 
-	public void setTarget(String message_target) {
-		this.target = message_target;
-	}
+    public void setTarget(String message_target) {
+        this.target = message_target;
+    }
 
-	public void setTargetSiteId(String siteId) {
-		this.targetSiteId = siteId;
-	}
+    public void setTargetSiteId(String siteId) {
+        this.targetSiteId = siteId;
+    }
 
-	public String getTargetSiteId() {
-		return this.targetSiteId;
-	}
-	public void setSourceSiteId(String siteId) {
-		this.sourceSiteId = siteId;
-	}
+    public String getTargetSiteId() {
+        return this.targetSiteId;
+    }
+    public void setSourceSiteId(String siteId) {
+        this.sourceSiteId = siteId;
+    }
 
-	public String getSourceSiteId() {
-		return this.sourceSiteId;
-	}
-	public boolean isNeedsUpdate() {
-			return this.needsUpdate;
-	}
+    public String getSourceSiteId() {
+        return this.sourceSiteId;
+    }
+    public boolean isNeedsUpdate() {
+            return this.needsUpdate;
+    }
 
-	public void setNeedsUpdate(boolean b) {
-			needsUpdate = b;
-	}
+    public void setNeedsUpdate(boolean b) {
+            needsUpdate = b;
+    }
 
 
 }

@@ -28,15 +28,15 @@ import java.util.TreeSet;
  * @since Jan 2, 2013
  */
 public class AmpStructureImgListComponent<T> extends AmpComponentPanel {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public AmpStructureImgListComponent(String id, String fmName,
+    public AmpStructureImgListComponent(String id, String fmName,
                                         final IModel<AmpStructure> model, IModel<AmpActivityVersion> am) {
-		super(id, model, fmName);
-		init(model, am);
-	}
-	
-	private void init(final IModel<AmpStructure> model, IModel<AmpActivityVersion> am){
+        super(id, model, fmName);
+        init(model, am);
+    }
+    
+    private void init(final IModel<AmpStructure> model, IModel<AmpActivityVersion> am){
         String activityId = "new";
         if (am.getObject().getAmpActivityId() != null)
             activityId = Long.toString(am.getObject().getAmpActivityId());
@@ -79,15 +79,15 @@ public class AmpStructureImgListComponent<T> extends AmpComponentPanel {
             }
 
         });
-	}
-	
-	private ListEditor<AmpStructureImg> createImgList(IModel<AmpStructure> structureModel){
-		
-		final PropertyModel<Set<AmpStructureImg>> setModel=new PropertyModel<Set<AmpStructureImg>>(structureModel,"images");
-		if (setModel.getObject() == null)
-			setModel.setObject(new TreeSet<AmpStructureImg>());
-		
-		final ListEditor<AmpStructureImg> imgList = new ListEditor<AmpStructureImg>("imgList", setModel) {
+    }
+    
+    private ListEditor<AmpStructureImg> createImgList(IModel<AmpStructure> structureModel){
+        
+        final PropertyModel<Set<AmpStructureImg>> setModel=new PropertyModel<Set<AmpStructureImg>>(structureModel,"images");
+        if (setModel.getObject() == null)
+            setModel.setObject(new TreeSet<AmpStructureImg>());
+        
+        final ListEditor<AmpStructureImg> imgList = new ListEditor<AmpStructureImg>("imgList", setModel) {
             @Override
             protected void onPopulateItem(ListItem<AmpStructureImg> item) {
 
@@ -112,5 +112,5 @@ public class AmpStructureImgListComponent<T> extends AmpComponentPanel {
 
         };
         return imgList;
-	}	
+    }   
 }

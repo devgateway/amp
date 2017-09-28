@@ -44,13 +44,13 @@ public class DateRange implements Serializable {
             
             this.startDate =  startDate;
             this.endDate = endDate;
-	        
+            
         } catch ( IllegalArgumentException ex ) {
             throw new IllegalArgumentException ( ex.getMessage() + "\n" 
-                    								+ ex.getStackTrace() );
+                                                    + ex.getStackTrace() );
         }
         
-	        
+            
     }
     
     /**
@@ -67,14 +67,14 @@ public class DateRange implements Serializable {
         if  ( startDate == null || endDate == null ) {
             problem = true;
         } else {
-	        if ( startDate.after( endDate ) ) {
-	            problem = true;
-	        }
+            if ( startDate.after( endDate ) ) {
+                problem = true;
+            }
         }
         
         if ( problem ) {
             throw new IllegalArgumentException(" Start date may not exceed the " +
-			"end date and neither of them may be null");
+            "end date and neither of them may be null");
         }
     }
     
@@ -89,24 +89,24 @@ public class DateRange implements Serializable {
         
     public void setEndDate(Date endDate) {
         try {
-	        checkLegalRange(this.startDate, endDate);
-	        
-	        this.endDate = endDate;
+            checkLegalRange(this.startDate, endDate);
+            
+            this.endDate = endDate;
         } catch ( IllegalArgumentException ex ) {
             throw new IllegalArgumentException ( ex.getMessage() + "\n" 
-                    								+ ex.getStackTrace() );
+                                                    + ex.getStackTrace() );
         }
     }
     
     public void setStartDate(Date startDate) {
         try {
-	        checkLegalRange( startDate, this.endDate);
-	        
-	        this.startDate = startDate;
-	        
+            checkLegalRange( startDate, this.endDate);
+            
+            this.startDate = startDate;
+            
         } catch ( IllegalArgumentException ex ) {
             throw new IllegalArgumentException ( ex.getMessage() + "\n" 
-                    								+ ex.getStackTrace() );
+                                                    + ex.getStackTrace() );
         }
     }
     
@@ -127,19 +127,19 @@ public class DateRange implements Serializable {
         return false;
     }
     
-	public int hashCode() {
+    public int hashCode() {
        
-	    int hashCode = new HashCodeBuilder()
+        int hashCode = new HashCodeBuilder()
                 .append( startDate.toString() )
                 .append( endDate.toString() )
                 .toHashCode();
-	    
-	    return hashCode;
-	}
-	
-	public String toString() {
-	    return "Start Date: " + startDate + " " +
-	    		   "  End Date: " + endDate; 
-	}
+        
+        return hashCode;
+    }
+    
+    public String toString() {
+        return "Start Date: " + startDate + " " +
+                   "  End Date: " + endDate; 
+    }
     
 }

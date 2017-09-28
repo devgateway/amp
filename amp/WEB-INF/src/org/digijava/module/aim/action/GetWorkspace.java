@@ -27,43 +27,43 @@ import org.digijava.module.aim.util.TeamUtil;
 
 public class GetWorkspace extends Action {
 
-	private static Logger logger = Logger.getLogger(GetWorkspace.class);
+    private static Logger logger = Logger.getLogger(GetWorkspace.class);
 
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws java.lang.Exception {
+    public ActionForward execute(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response)
+            throws java.lang.Exception {
 
-		logger.debug("In GetWorkspace");
-		
-		ReportContextData.createWithId(request.getSession(), ReportContextData.REPORT_ID_WORKSPACE_EDITOR, true);
-		request.setAttribute(ReportContextData.BACKUP_REPORT_ID_KEY, ReportContextData.REPORT_ID_WORKSPACE_EDITOR);
+        logger.debug("In GetWorkspace");
+        
+        ReportContextData.createWithId(request.getSession(), ReportContextData.REPORT_ID_WORKSPACE_EDITOR, true);
+        request.setAttribute(ReportContextData.BACKUP_REPORT_ID_KEY, ReportContextData.REPORT_ID_WORKSPACE_EDITOR);
 
-		boolean permitted = false;
-		HttpSession session = request.getSession();
-		TeamMember tmember = (TeamMember) session.getAttribute("currentMember");
-		//////System.out.println("-----------------------------------"+tmember.getTeamHead());
-		if(tmember!=null)
-			permitted=tmember.getTeamHead();
-		if (session.getAttribute("ampAdmin") != null) {
-			String key = (String) session.getAttribute("ampAdmin");
-			if (key.equalsIgnoreCase("yes")) {
-				permitted = true;
-			} else {
-				if (session.getAttribute("teamLeadFlag") != null) {
-					key = (String) session.getAttribute("teamLeadFlag");
-					if (key.equalsIgnoreCase("true") || key.equalsIgnoreCase("yes")) {
-						permitted = true;	
-					}
-				}
-			}
-		}
-		if (!permitted) {
-			return mapping.findForward("justList");
-		}
-		String updated=request.getParameter("updated");
-		String dest = request.getParameter("dest");
-		String id	= request.getParameter("tId");
-		String action = request.getParameter("event");
+        boolean permitted = false;
+        HttpSession session = request.getSession();
+        TeamMember tmember = (TeamMember) session.getAttribute("currentMember");
+        //////System.out.println("-----------------------------------"+tmember.getTeamHead());
+        if(tmember!=null)
+            permitted=tmember.getTeamHead();
+        if (session.getAttribute("ampAdmin") != null) {
+            String key = (String) session.getAttribute("ampAdmin");
+            if (key.equalsIgnoreCase("yes")) {
+                permitted = true;
+            } else {
+                if (session.getAttribute("teamLeadFlag") != null) {
+                    key = (String) session.getAttribute("teamLeadFlag");
+                    if (key.equalsIgnoreCase("true") || key.equalsIgnoreCase("yes")) {
+                        permitted = true;   
+                    }
+                }
+            }
+        }
+        if (!permitted) {
+            return mapping.findForward("justList");
+        }
+        String updated=request.getParameter("updated");
+        String dest = request.getParameter("dest");
+        String id   = request.getParameter("tId");
+        String action = request.getParameter("event");
         if (updated == null || !Boolean.parseBoolean(updated)){
             UpdateWorkspaceForm uwForm = (UpdateWorkspaceForm) form;
             uwForm.setUpdateFlag(false);
@@ -105,7 +105,7 @@ public class GetWorkspace extends Action {
 
             AmpTeam ampTeam = TeamUtil.getAmpTeam(teamId);
             if (ampTeam != null){
-                Set<AmpTeamFilterData> fdSet	= ampTeam.getFilterDataSet();
+                Set<AmpTeamFilterData> fdSet    = ampTeam.getFilterDataSet();
                 if ( fdSet != null && fdSet.size() > 0 ) {
                     ReportContextData.getFromRequest().initFilters(ampTeam);
                 }
@@ -113,14 +113,14 @@ public class GetWorkspace extends Action {
 
             Workspace workspace = TeamUtil.getWorkspace(teamId);
             if (workspace != null) {
-                Long typeId		= new Long(0);
+                Long typeId     = new Long(0);
                 if ( workspace.getType() != null ) {
-                    typeId	= workspace.getType().getId();
+                    typeId  = workspace.getType().getId();
                 }
 
                 Long groupId = new Long(0);
                 if ( workspace.getWorkspaceGroup() != null ) {
-                    groupId	= workspace.getWorkspaceGroup().getId();
+                    groupId = workspace.getWorkspaceGroup().getId();
                 }
 
                 uwForm.setTeamId(new Long(workspace.getId()));
@@ -164,7 +164,7 @@ public class GetWorkspace extends Action {
 
 
                 if (null == uwForm.getRelatedTeam()) {
-                	{
+                    {
                         uwForm.setRelatedTeamFlag("nil");
                     }
                 }

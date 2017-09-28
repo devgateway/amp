@@ -33,59 +33,59 @@ import org.digijava.module.aim.dbentity.AmpRegionalObservationMeasure;
  * @since Nov 9, 2010
  */
 public class AmpRegionalObservationsFormSectionFeature extends
-		AmpFormSectionFeaturePanel {
+        AmpFormSectionFeaturePanel {
 
-	private static final long serialVersionUID = -6654390083784446344L;
+    private static final long serialVersionUID = -6654390083784446344L;
 
-	public AmpRegionalObservationsFormSectionFeature(String id, String fmName,
-			final IModel<AmpActivityVersion> am) throws Exception {
-		super(id, fmName, am);
-		final PropertyModel<Set<AmpRegionalObservation>> setModel=new PropertyModel<Set<AmpRegionalObservation>>(am,"regionalObservations");
-		final ListEditor<AmpRegionalObservation> list;
-		if (setModel.getObject() == null)
-			setModel.setObject(new HashSet<AmpRegionalObservation>());
-		
-		final List<Class> classTree = new ArrayList<Class>();
-		final Map<Class, String> setName = new HashMap<Class, String>();
-		classTree.add(AmpRegionalObservation.class);
-		classTree.add(AmpRegionalObservationMeasure.class);
-		classTree.add(AmpRegionalObservationActor.class);
-		setName.put(AmpRegionalObservation.class, "regionalObservationMeasures");
-		setName.put(AmpRegionalObservationMeasure.class, "actors");
-		final Map<Class, String> labelName = new HashMap<Class, String>();
-		labelName.put(AmpRegionalObservation.class, "Observation");
-		labelName.put(AmpRegionalObservationMeasure.class, "Measure");
-		labelName.put(AmpRegionalObservationActor.class, "Actor");
+    public AmpRegionalObservationsFormSectionFeature(String id, String fmName,
+            final IModel<AmpActivityVersion> am) throws Exception {
+        super(id, fmName, am);
+        final PropertyModel<Set<AmpRegionalObservation>> setModel=new PropertyModel<Set<AmpRegionalObservation>>(am,"regionalObservations");
+        final ListEditor<AmpRegionalObservation> list;
+        if (setModel.getObject() == null)
+            setModel.setObject(new HashSet<AmpRegionalObservation>());
+        
+        final List<Class> classTree = new ArrayList<Class>();
+        final Map<Class, String> setName = new HashMap<Class, String>();
+        classTree.add(AmpRegionalObservation.class);
+        classTree.add(AmpRegionalObservationMeasure.class);
+        classTree.add(AmpRegionalObservationActor.class);
+        setName.put(AmpRegionalObservation.class, "regionalObservationMeasures");
+        setName.put(AmpRegionalObservationMeasure.class, "actors");
+        final Map<Class, String> labelName = new HashMap<Class, String>();
+        labelName.put(AmpRegionalObservation.class, "Observation");
+        labelName.put(AmpRegionalObservationMeasure.class, "Measure");
+        labelName.put(AmpRegionalObservationActor.class, "Actor");
 
-		list = new ListEditor<AmpRegionalObservation>("list", setModel, new AmpRegionalObservation.RegionalObservationComparator()) {
-			private static final long serialVersionUID = 7218457979728871528L;
-			@Override
-			protected void onPopulateItem(
-					org.dgfoundation.amp.onepager.components.ListItem<AmpRegionalObservation> item) {
-				try {
-					AmpIssueTreePanel aitp = new AmpIssueTreePanel("issue", classTree, setName, labelName, item.getModel(), setModel, AmpRegionalObservation.class, 0, "Regional Obsevation Field");
-					aitp.setOutputMarkupId(true);
-					item.add(aitp);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		};
-		add(list);
+        list = new ListEditor<AmpRegionalObservation>("list", setModel, new AmpRegionalObservation.RegionalObservationComparator()) {
+            private static final long serialVersionUID = 7218457979728871528L;
+            @Override
+            protected void onPopulateItem(
+                    org.dgfoundation.amp.onepager.components.ListItem<AmpRegionalObservation> item) {
+                try {
+                    AmpIssueTreePanel aitp = new AmpIssueTreePanel("issue", classTree, setName, labelName, item.getModel(), setModel, AmpRegionalObservation.class, 0, "Regional Obsevation Field");
+                    aitp.setOutputMarkupId(true);
+                    item.add(aitp);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        add(list);
 
-		AmpAjaxLinkField addbutton = new AmpAjaxLinkField("addbutton","Add Observation", "Add Observation") {
-			@Override
-			protected void onClick(AjaxRequestTarget target) {
-				AmpRegionalObservation issues = new AmpRegionalObservation();
-				issues.setName(new String(""));
-				issues.setObservationDate(new Date());
-				issues.setRegionalObservationMeasures(new HashSet());
-				issues.setActivity(am.getObject());
-				list.addItem(issues);
-				target.add(this.getParent());
-			}
-		};
-		add(addbutton);
-	}
+        AmpAjaxLinkField addbutton = new AmpAjaxLinkField("addbutton","Add Observation", "Add Observation") {
+            @Override
+            protected void onClick(AjaxRequestTarget target) {
+                AmpRegionalObservation issues = new AmpRegionalObservation();
+                issues.setName(new String(""));
+                issues.setObservationDate(new Date());
+                issues.setRegionalObservationMeasures(new HashSet());
+                issues.setActivity(am.getObject());
+                list.addItem(issues);
+                target.add(this.getParent());
+            }
+        };
+        add(addbutton);
+    }
 
 }

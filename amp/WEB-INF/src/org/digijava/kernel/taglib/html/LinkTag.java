@@ -42,9 +42,9 @@ import org.digijava.kernel.util.SiteUtils;
 public class LinkTag
     extends org.apache.struts.taglib.html.LinkTag {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private static Logger logger = Logger.getLogger(LinkTag.class);
+    private static Logger logger = Logger.getLogger(LinkTag.class);
 
     private String context = "context/module/moduleinstance";
     private String site;
@@ -101,7 +101,7 @@ public class LinkTag
      * @throws JspException
      */
     public int doEndTag() throws JspException {
-    	//Moved from doStartTag to doEndTag for changes in struts LinkTag class in struts 1.3.10
+        //Moved from doStartTag to doEndTag for changes in struts LinkTag class in struts 1.3.10
 
 //        String contextPath = null;
         String action = null;
@@ -117,7 +117,7 @@ public class LinkTag
             String requestUrl = null;
             if (!SiteConfigUtils.getLogonSiteId().equalsIgnoreCase(getSite())) {
 
-            	Site site = SiteCache.lookupByName(getSite());
+                Site site = SiteCache.lookupByName(getSite());
                 SiteDomain domain = SiteUtils.getDefaultSiteDomain(site);
 
                 siteURL = SiteUtils.getSiteURL(domain, request.getScheme(),

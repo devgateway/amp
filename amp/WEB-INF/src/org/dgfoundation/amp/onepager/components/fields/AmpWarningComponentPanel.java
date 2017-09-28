@@ -16,22 +16,22 @@ import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
  */
 public class AmpWarningComponentPanel<T> extends AmpComponentPanel<String> {
 
-	protected MultiLineLabel warningContent;
-	
+    protected MultiLineLabel warningContent;
+    
 
-	public MultiLineLabel getWarning() {
-		return warningContent;
-	}
+    public MultiLineLabel getWarning() {
+        return warningContent;
+    }
 
-	public void setWarning(MultiLineLabel warning) {
-		this.warningContent = warning;
-	}
+    public void setWarning(MultiLineLabel warning) {
+        this.warningContent = warning;
+    }
 
-	public AmpWarningComponentPanel(String id, String fmName,
-			IModel<String> warningContentModel) {
-		super(id, warningContentModel, fmName);
+    public AmpWarningComponentPanel(String id, String fmName,
+            IModel<String> warningContentModel) {
+        super(id, warningContentModel, fmName);
 
-		warningContent = new MultiLineLabel("warningContent", warningContentModel);
-		add(warningContent);
-	}
+        warningContent = new MultiLineLabel("warningContent", warningContentModel);
+        add(warningContent);
+    }
 }

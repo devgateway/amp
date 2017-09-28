@@ -45,7 +45,7 @@ def updateGitHubCommitStatus(context, message, state) {
 @NonCPS
 def readAMPVersion(pathToPom) {
     def project = new XmlSlurper().parseText(readFile(pathToPom))
-    project.version.text().trim()
+    project.version.text().toString().trim()
 }
 
 // Run checkstyle only for PR builds

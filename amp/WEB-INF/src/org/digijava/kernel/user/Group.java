@@ -156,9 +156,9 @@ public class Group
     }
 
     public Boolean isNationalCoordinatorGroup(){
-    	if( key == null ) return false;
-        return key.equals(NATIONAL_COORDINATORS);		
-	}
+        if( key == null ) return false;
+        return key.equals(NATIONAL_COORDINATORS);       
+    }
     
     /**
      * Returns required action(s) for default group and null for non-default

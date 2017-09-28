@@ -78,7 +78,7 @@ stage('Build') {
         sh(returnStatus: true, script: "docker rmi phosphorus:5000/amp-webapp:${tag} > /dev/null")
 
         // Find AMP version
-        codeVersion = readMavenPom('amp/pom.xml').version
+        codeVersion = readMavenPom(file: 'amp/pom.xml').version
         println "AMP Version: ${codeVersion}"
 
         if (imageIds.equals("")) {

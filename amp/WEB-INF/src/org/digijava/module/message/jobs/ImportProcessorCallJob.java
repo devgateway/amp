@@ -24,11 +24,11 @@ import org.quartz.StatefulJob;
  */
 
 public class ImportProcessorCallJob extends ConnectionCleaningJob implements StatefulJob{
-	private static Logger logger = Logger.getLogger(ImportProcessorCallJob.class);
+    private static Logger logger = Logger.getLogger(ImportProcessorCallJob.class);
 
-	@Override
-	public void executeInternal(JobExecutionContext context) throws JobExecutionException {
-		String url = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.IMPORT_PROCESSOR_URL);
+    @Override
+    public void executeInternal(JobExecutionContext context) throws JobExecutionException {
+        String url = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.IMPORT_PROCESSOR_URL);
         HttpResponse<JsonNode> jsonResponse = null;
         try {
             jsonResponse = Unirest.post(url)

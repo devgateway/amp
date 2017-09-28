@@ -32,7 +32,7 @@ import java.util.Set;
  */
 public class IndicatorExporter {
 
-	protected static final Logger logger = Logger.getLogger(IndicatorExporter.class);
+    protected static final Logger logger = Logger.getLogger(IndicatorExporter.class);
     private int cellIndex;
 
     public static StreamingOutput download(long admLevelId, String name) {

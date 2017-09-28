@@ -20,41 +20,41 @@ import org.digijava.module.aim.util.FeaturesUtil;
 
 public class BoundariesService {
 
-	protected static Logger logger = Logger.getLogger(BoundariesService.class);
+    protected static Logger logger = Logger.getLogger(BoundariesService.class);
 
-	private static final String CONTEXT_PATH = TLSUtils.getRequest().getServletContext().getRealPath("/");
-	private static final String BOUNDARY_PATH = "gis" + File.separator + "boundaries" + File.separator;
+    private static final String CONTEXT_PATH = TLSUtils.getRequest().getServletContext().getRealPath("/");
+    private static final String BOUNDARY_PATH = "gis" + File.separator + "boundaries" + File.separator;
 
-	/**
-	 * Return the list .json files for this country as a JSONArray object.
-	 * 
-	 * @return
-	 */
-	public static JSONArray getBoundaries() {
-		String countryIso = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_COUNTRY);
-		String path = CONTEXT_PATH + BOUNDARY_PATH + countryIso.toUpperCase() + File.separator + "list.json";
-		try (InputStream is = new FileInputStream(path)) {
-			String jsonTxt = IOUtils.toString(is, StandardCharsets.UTF_8);
-			return (JSONArray) JSONSerializer.toJSON(jsonTxt);
-		} catch (IOException e) {
-			logger.error("Failed to load boundaries for " + countryIso, e);
-			throw new RuntimeException(e);
-		}
-	}
+    /**
+     * Return the list .json files for this country as a JSONArray object.
+     * 
+     * @return
+     */
+    public static JSONArray getBoundaries() {
+        String countryIso = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_COUNTRY);
+        String path = CONTEXT_PATH + BOUNDARY_PATH + countryIso.toUpperCase() + File.separator + "list.json";
+        try (InputStream is = new FileInputStream(path)) {
+            String jsonTxt = IOUtils.toString(is, StandardCharsets.UTF_8);
+            return (JSONArray) JSONSerializer.toJSON(jsonTxt);
+        } catch (IOException e) {
+            logger.error("Failed to load boundaries for " + countryIso, e);
+            throw new RuntimeException(e);
+        }
+    }
 
-	/**
-	 * Return the list of .json files for this country as a Map with the adm-N
-	 * for key.
-	 * 
-	 * @return
-	 */
-	public static Map<String, JSONObject> getBoundariesAsList() {
-		JSONArray boundariesJSON = BoundariesService.getBoundaries();
-		Map<String, JSONObject> boundariesMap = new HashMap<>();
-		for (final Object adm : boundariesJSON) {
-			boundariesMap.put(String.valueOf(((JSONObject) adm).get("id")),
-					(JSONObject) adm);
-		}
-		return boundariesMap;
-	}
+    /**
+     * Return the list of .json files for this country as a Map with the adm-N
+     * for key.
+     * 
+     * @return
+     */
+    public static Map<String, JSONObject> getBoundariesAsList() {
+        JSONArray boundariesJSON = BoundariesService.getBoundaries();
+        Map<String, JSONObject> boundariesMap = new HashMap<>();
+        for (final Object adm : boundariesJSON) {
+            boundariesMap.put(String.valueOf(((JSONObject) adm).get("id")),
+                    (JSONObject) adm);
+        }
+        return boundariesMap;
+    }
 }

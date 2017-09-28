@@ -375,26 +375,26 @@ public class CurrencyRateForm
   }
 
 public List<LabelValueBean> getTimePeriods() {
-	return timePeriods;
+    return timePeriods;
 }
 
 public void setTimePeriods(List<LabelValueBean> timePeriods) {
-	this.timePeriods = timePeriods;
+    this.timePeriods = timePeriods;
 }
 
 public int getTimePeriod() {
-	return timePeriod;
+    return timePeriod;
 }
 
 public void setTimePeriod(int timePeriod) {
-	this.timePeriod = timePeriod;
+    this.timePeriod = timePeriod;
 }
 
 public String getLastRateUpdate() {
-	return lastRateUpdate;
+    return lastRateUpdate;
 }
 
 public void setLastRateUpdate(String lastRateUpdate) {
-	this.lastRateUpdate = lastRateUpdate;
+    this.lastRateUpdate = lastRateUpdate;
 }
 }

@@ -13,29 +13,29 @@ import org.digijava.kernel.persistence.PersistenceManager;
  *
  */
 public class DatabaseWaver implements Waver<Long>{
-	
-	String query;
-	
-	/**
-	 * put $ in lieu of "in" in the SQL query
-	 * @param query
-	 */
-	public DatabaseWaver(String query)
-	{
-		this.query = query;
-	}
+    
+    String query;
+    
+    /**
+     * put $ in lieu of "in" in the SQL query
+     * @param query
+     */
+    public DatabaseWaver(String query)
+    {
+        this.query = query;
+    }
 
-	@Override
-	public Set<Long> wave(Set<Long> in)
-	{
-		final Set<Long> result = new HashSet<Long>();
-		if (in == null)
-			return result;
-		String query = this.query.replace("$", Util.toCSStringForIN(in));
-		List<?> ids = PersistenceManager.getSession().createSQLQuery(query).list();
-		for(Object longAsObj:ids)
-			result.add(PersistenceManager.getLong(longAsObj));
-		return result;
+    @Override
+    public Set<Long> wave(Set<Long> in)
+    {
+        final Set<Long> result = new HashSet<Long>();
+        if (in == null)
+            return result;
+        String query = this.query.replace("$", Util.toCSStringForIN(in));
+        List<?> ids = PersistenceManager.getSession().createSQLQuery(query).list();
+        for(Object longAsObj:ids)
+            result.add(PersistenceManager.getLong(longAsObj));
+        return result;
 
-	}
+    }
 }

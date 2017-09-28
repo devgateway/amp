@@ -12,17 +12,17 @@ import com.lowagie.text.pdf.PdfPCell;
  */
 public class ReportPdfExportState
 {
-	/**
-	 * this static array will hold the heading cells that need to be displayed on the start of each page.
-	 * it will get initialized only once and then used by onStartPage
-	 */
-	public ArrayList<PdfPCell> headingCells;	
-	public float[] widths;
-	public Color currentBackColor;
-   	public Color lastedUsedColor;
+    /**
+     * this static array will hold the heading cells that need to be displayed on the start of each page.
+     * it will get initialized only once and then used by onStartPage
+     */
+    public ArrayList<PdfPCell> headingCells;    
+    public float[] widths;
+    public Color currentBackColor;
+    public Color lastedUsedColor;
 
-   	public ReportPdfExportState(float[] widths)
-   	{
-   		this.widths = widths;
-   	}
+    public ReportPdfExportState(float[] widths)
+    {
+        this.widths = widths;
+    }
 }

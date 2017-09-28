@@ -24,33 +24,33 @@ import org.digijava.module.aim.util.CurrencyUtil;
  * @since Feb 8, 2011
  */
 public class AmpContractFundingAllocationSubsectionFeature extends
-		AmpSubsectionFeaturePanel<IPAContract> {
-	
-	private static Logger logger = Logger.getLogger(AmpContractFundingAllocationSubsectionFeature.class);
+        AmpSubsectionFeaturePanel<IPAContract> {
+    
+    private static Logger logger = Logger.getLogger(AmpContractFundingAllocationSubsectionFeature.class);
 
-	public AmpContractFundingAllocationSubsectionFeature(String id,
-			final IModel<IPAContract> model, String fmName){
-		super(id, fmName, model);
-		
-		
-		AmpTextFieldPanel<Double> totalValue = new AmpTextFieldPanel<Double>("totalValue", new PropertyModel<Double>(model, "contractTotalValue"), "Contract Total Value");
-		add(totalValue);
-		
-		AbstractReadOnlyModel<List<AmpCurrency>> currencyList = new AbstractReadOnlyModel<List<AmpCurrency>>() {
-			@Override
-			public List<AmpCurrency> getObject() {
-				return (List<AmpCurrency>) CurrencyUtil.getActiveAmpCurrencyByCode();
-			}
-		};
-		
-		AmpSelectFieldPanel<AmpCurrency> valueCurrency = new AmpSelectFieldPanel<AmpCurrency>("valueCurrency",
-				new PropertyModel<AmpCurrency>(model, "totalAmountCurrency"),
-				currencyList,
-				"Currency", false, false);
-		add(valueCurrency);
-		
-		add(new AmpEUAmountsComponent("EUAmounts", model, "EU Amounts"));
+    public AmpContractFundingAllocationSubsectionFeature(String id,
+            final IModel<IPAContract> model, String fmName){
+        super(id, fmName, model);
+        
+        
+        AmpTextFieldPanel<Double> totalValue = new AmpTextFieldPanel<Double>("totalValue", new PropertyModel<Double>(model, "contractTotalValue"), "Contract Total Value");
+        add(totalValue);
+        
+        AbstractReadOnlyModel<List<AmpCurrency>> currencyList = new AbstractReadOnlyModel<List<AmpCurrency>>() {
+            @Override
+            public List<AmpCurrency> getObject() {
+                return (List<AmpCurrency>) CurrencyUtil.getActiveAmpCurrencyByCode();
+            }
+        };
+        
+        AmpSelectFieldPanel<AmpCurrency> valueCurrency = new AmpSelectFieldPanel<AmpCurrency>("valueCurrency",
+                new PropertyModel<AmpCurrency>(model, "totalAmountCurrency"),
+                currencyList,
+                "Currency", false, false);
+        add(valueCurrency);
+        
+        add(new AmpEUAmountsComponent("EUAmounts", model, "EU Amounts"));
 
-	}
+    }
 
 }

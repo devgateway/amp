@@ -138,11 +138,11 @@ public class DgEmailManager {
      */
 
     /**
-     * Description					:  Function to convert regular text to the HTML version
-     * @param String				:  Text to be passed as body of the message
-     * @return						:  HTML version of the input text
-     * Note							:  Implementation of these conversions needs to be carried out in line with the existing HTML - Text conversion logic
-     * 	 */
+     * Description                  :  Function to convert regular text to the HTML version
+     * @param String                :  Text to be passed as body of the message
+     * @return                      :  HTML version of the input text
+     * Note                         :  Implementation of these conversions needs to be carried out in line with the existing HTML - Text conversion logic
+     *   */
 
     public static String convertTextToHtml(String strText) {
 
@@ -220,11 +220,11 @@ public class DgEmailManager {
     }
 
     /**
-     * Description					:  Function to convert HTML to text
-     * @param String				:  Html Text
-     * @return						:  Plain text
-     * Note							:  Implementation of these conversions needs to be carried out in line with the existing Text - Html conversion logic
-     * 	 */
+     * Description                  :  Function to convert HTML to text
+     * @param String                :  Html Text
+     * @return                      :  Plain text
+     * Note                         :  Implementation of these conversions needs to be carried out in line with the existing Text - Html conversion logic
+     *   */
 
     String convertHtmlToText(String strHtmlText) {
         return "";
@@ -493,15 +493,15 @@ public class DgEmailManager {
         
         try {
             // send mail directly
-        	logger.info("before connect: "+ System.currentTimeMillis());
+            logger.info("before connect: "+ System.currentTimeMillis());
             Transport transport = session.getTransport("smtp");
             transport.connect(smtp.getHost(), smtp.getUserName(),smtp.getUserPassword());
-        	logger.info("after connect: "+ System.currentTimeMillis());
+            logger.info("after connect: "+ System.currentTimeMillis());
 
             message.saveChanges(); // implicit with send()
             transport.sendMessage(message, message.getAllRecipients());
             transport.close();
-        	logger.info("after close: "+ System.currentTimeMillis());
+            logger.info("after close: "+ System.currentTimeMillis());
 
             // log mail
             if (log) {
@@ -519,8 +519,8 @@ public class DgEmailManager {
     }
     
     
-    public static void sendMail(Address[] to,String from,AmpMessage ampMessage,Sdm attachmentsHolder) throws Exception{    	
-    	// Get SMTP object from configuration file, see digi.xml for more details
+    public static void sendMail(Address[] to,String from,AmpMessage ampMessage,Sdm attachmentsHolder) throws Exception{     
+        // Get SMTP object from configuration file, see digi.xml for more details
         Smtp smtp = DigiConfigManager.getConfig().getSmtp();
         ForwardEmails forwardEmails = DigiConfigManager.getConfig().getForwardEmails();
 
@@ -539,10 +539,10 @@ public class DgEmailManager {
             for (int i = 0; i < forwardEmails.getEmails().size(); i++) {
                 addresses[i] = new InternetAddress( (String) forwardEmails.getEmails().get(i));
             }
-        }    	
-    	
-    	MimeMessage message = new MimeMessage(session);   
-    	 if (addresses != null) {
+        }       
+        
+        MimeMessage message = new MimeMessage(session);   
+         if (addresses != null) {
              message.addRecipients(Message.RecipientType.TO, addresses);
          }
         message.setFrom(new InternetAddress(from));
@@ -558,17 +558,17 @@ public class DgEmailManager {
         //add message text
         multipart.addBodyPart(messagePart);
         if(attachmentsHolder != null){
-        	Set<SdmItem> attachments=attachmentsHolder.getItems();
-        	if(attachments!=null && attachments.size()>0){
-        		for (SdmItem attachment : attachments) {
-        			MimeBodyPart attachmentPart = new MimeBodyPart();
-           		 	DataSource fileDataSource = new ByteArrayDataSource(attachment.getContent(),"application/octet-stream");
-           		 	attachmentPart.setDataHandler(new DataHandler(fileDataSource));
-           		 	attachmentPart.setFileName(attachment.getContentTitle());
-           		 	//add message attachments
-           	        multipart.addBodyPart(attachmentPart);
-				}        		 
-        	}
+            Set<SdmItem> attachments=attachmentsHolder.getItems();
+            if(attachments!=null && attachments.size()>0){
+                for (SdmItem attachment : attachments) {
+                    MimeBodyPart attachmentPart = new MimeBodyPart();
+                    DataSource fileDataSource = new ByteArrayDataSource(attachment.getContent(),"application/octet-stream");
+                    attachmentPart.setDataHandler(new DataHandler(fileDataSource));
+                    attachmentPart.setFileName(attachment.getContentTitle());
+                    //add message attachments
+                    multipart.addBodyPart(attachmentPart);
+                }                
+            }
         }
         
         message.setContent(multipart);
@@ -609,73 +609,73 @@ public class DgEmailManager {
 
 
     /**
-     * Description					:  Simple version of sending a mail
-     * @param Mail 					:  Mail Object with all respective values set
-     * @param boolean				:  boolean value specifying whether the message needs to be stored in the TRACK_ADDR_MESS_MAP table
-     * @return boolean 				:  Success / failure
-     * 	 */
+     * Description                  :  Simple version of sending a mail
+     * @param Mail                  :  Mail Object with all respective values set
+     * @param boolean               :  boolean value specifying whether the message needs to be stored in the TRACK_ADDR_MESS_MAP table
+     * @return boolean              :  Success / failure
+     *   */
 
     public static boolean sendEmail(Mail objMail, boolean bStore) {
         return true;
     }
 
     /**
-     * Description					:  This function will be used  for sending email to a collection of users.
-     * @param Mail 					:  The Mail Object with text property specifying the placeholders
-     * @param Collection			:  Collection of Users ( User Object), User names ( String)
-     * @return boolean 				:  Success / failure
-     * 	 */
+     * Description                  :  This function will be used  for sending email to a collection of users.
+     * @param Mail                  :  The Mail Object with text property specifying the placeholders
+     * @param Collection            :  Collection of Users ( User Object), User names ( String)
+     * @return boolean              :  Success / failure
+     *   */
 
     public static boolean sendEmail(Mail objMail, Collection objCollection) {
         return true;
     }
 
     /**
-     * Description					:  This function replaces all the occuranaces of the placeholders in the mentioned as keys in the HashMap
-     * @param Mail 					:  The Mail Object with text property specifying the placeholders
-     * @param HashMap 				:  Key Value pair, where key - placeholder, value - the Actual value which should get replaced
-     * @return String 				:  Email text with the placeholders replaced with the values from the HashMap
-     * 	 */
+     * Description                  :  This function replaces all the occuranaces of the placeholders in the mentioned as keys in the HashMap
+     * @param Mail                  :  The Mail Object with text property specifying the placeholders
+     * @param HashMap               :  Key Value pair, where key - placeholder, value - the Actual value which should get replaced
+     * @return String               :  Email text with the placeholders replaced with the values from the HashMap
+     *   */
 
     public static String prepareEmail(Mail objMail, HashMap hm) {
         return "";
     }
 
     /**
-     * Description					:  This function identifies the class associated with each of the Object passed as a parameter.
-     * 								   Using reflection, identify the class to which the Object.
-     * 								   Using reflection, identify the properties of the Object, which will be specified as placeholders.
-     * @param Mail 					:  The Mail Object with text property specifying the placeholders
-     * @param Object 				:  Object of any class
-     * @return String 				:  Email text with the placeholders replaced with the values from the HashMap
-     * 	 */
+     * Description                  :  This function identifies the class associated with each of the Object passed as a parameter.
+     *                                 Using reflection, identify the class to which the Object.
+     *                                 Using reflection, identify the properties of the Object, which will be specified as placeholders.
+     * @param Mail                  :  The Mail Object with text property specifying the placeholders
+     * @param Object                :  Object of any class
+     * @return String               :  Email text with the placeholders replaced with the values from the HashMap
+     *   */
 
     public static String prepareEmail(Mail objMail, Object obj) {
         return "";
     }
 
     /**
-     * Description					:  This function will use the dgmarket's, Translation Manager class
-     * 								   to translate the TRN Tags specified in the Text being sent.
-     * @param String				:  email Text with placeholders specified with the TRN Tags
-     * @param Object 				:  Site Id which will be used by the TRN tags to replace the Keys
-     * @return String 				:  Email text with the language specific Translation Text embedded
-     * 								   into the input Text.
-     * 	 */
+     * Description                  :  This function will use the dgmarket's, Translation Manager class
+     *                                 to translate the TRN Tags specified in the Text being sent.
+     * @param String                :  email Text with placeholders specified with the TRN Tags
+     * @param Object                :  Site Id which will be used by the TRN tags to replace the Keys
+     * @return String               :  Email text with the language specific Translation Text embedded
+     *                                 into the input Text.
+     *   */
 
     public static String translateEmail(String strText, String siteId) {
         return "";
     }
 
     /**
-     * Description					:   This function will decipher the mail id, User Id parameter and the Action performed on a URL sent with the message text.
-     * 									These values will be used to update TRACK_ADDR_MESS_MAP table, if found UNIQUE User Id
-     * 									c123456 - c- Create, 123 - MesssageId, 456 - UserId
-     * 									o123456 - o- Open, 123 - MesssageId, 456 - UserId
-     * 									This method might need to be synchornised.
-     * @param String				:  String to specify the c123456  parameter
-     * @return boolean 				:  true/false
-     * 	 */
+     * Description                  :   This function will decipher the mail id, User Id parameter and the Action performed on a URL sent with the message text.
+     *                                  These values will be used to update TRACK_ADDR_MESS_MAP table, if found UNIQUE User Id
+     *                                  c123456 - c- Create, 123 - MesssageId, 456 - UserId
+     *                                  o123456 - o- Open, 123 - MesssageId, 456 - UserId
+     *                                  This method might need to be synchornised.
+     * @param String                :  String to specify the c123456  parameter
+     * @return boolean              :  true/false
+     *   */
 
     public static boolean updateMessageStats(String strText) {
         return true;

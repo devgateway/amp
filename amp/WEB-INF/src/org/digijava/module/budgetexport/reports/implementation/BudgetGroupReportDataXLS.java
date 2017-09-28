@@ -23,59 +23,59 @@ import org.digijava.module.aim.form.AdvancedReportForm;
  */
 public class BudgetGroupReportDataXLS extends GroupReportDataXLS {
 
-	/**
-	 * @param parent
-	 * @param item
-	 */
-	public BudgetGroupReportDataXLS(Exporter parent, Viewable item) {
-		super(parent, item);
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * @param parent
+     * @param item
+     */
+    public BudgetGroupReportDataXLS(Exporter parent, Viewable item) {
+        super(parent, item);
+        // TODO Auto-generated constructor stub
+    }
 
-	/**
-	 * @param wb
-	 * @param sheet
-	 * @param row
-	 * @param rowId
-	 * @param colId
-	 * @param ownerId
-	 * @param item
-	 */
-	public BudgetGroupReportDataXLS(HSSFWorkbook wb, HSSFSheet sheet,
-			HSSFRow row, IntWrapper rowId, IntWrapper colId, Long ownerId,
-			Viewable item) {
-		super(wb, sheet, row, rowId, colId, ownerId, item);
-		// TODO Auto-generated constructor stub
-	}
-	
-	@Override
-	protected void showHeadings () {
-		GroupReportData grd = (GroupReportData) item;
-		//show Headings:		
-		BudgetReportHeadingsXLS headings=new BudgetReportHeadingsXLS(this,grd.getFirstColumnReport());
-		headings.setAutoSize(this.isAutoSize());
-		headings.generate();
-	}
-	
-	@Override
-	protected void createPrologueTrailCellsForGRD() {
-		
-	}
-	
-	@Override
-	protected void createConcludingTrailCellsForReport() {
-	}
-	
-	@Override
-	protected void invokeChildExporter( Viewable element) {
-		element.invokeExporter(this, true);
-	}
-	
-	@Override
-	public void createHeaderLogoAndStatement(HttpServletRequest request, AdvancedReportForm reportForm, String realPath) throws Exception {
-	}
-	
-	@Override
-	public void createHeaderNameAndDescription(HttpServletRequest request) throws Exception {
-	}
+    /**
+     * @param wb
+     * @param sheet
+     * @param row
+     * @param rowId
+     * @param colId
+     * @param ownerId
+     * @param item
+     */
+    public BudgetGroupReportDataXLS(HSSFWorkbook wb, HSSFSheet sheet,
+            HSSFRow row, IntWrapper rowId, IntWrapper colId, Long ownerId,
+            Viewable item) {
+        super(wb, sheet, row, rowId, colId, ownerId, item);
+        // TODO Auto-generated constructor stub
+    }
+    
+    @Override
+    protected void showHeadings () {
+        GroupReportData grd = (GroupReportData) item;
+        //show Headings:        
+        BudgetReportHeadingsXLS headings=new BudgetReportHeadingsXLS(this,grd.getFirstColumnReport());
+        headings.setAutoSize(this.isAutoSize());
+        headings.generate();
+    }
+    
+    @Override
+    protected void createPrologueTrailCellsForGRD() {
+        
+    }
+    
+    @Override
+    protected void createConcludingTrailCellsForReport() {
+    }
+    
+    @Override
+    protected void invokeChildExporter( Viewable element) {
+        element.invokeExporter(this, true);
+    }
+    
+    @Override
+    public void createHeaderLogoAndStatement(HttpServletRequest request, AdvancedReportForm reportForm, String realPath) throws Exception {
+    }
+    
+    @Override
+    public void createHeaderNameAndDescription(HttpServletRequest request) throws Exception {
+    }
 }

@@ -13,34 +13,34 @@ import org.apache.wicket.protocol.http.WebSession;
  */
 public class AmpWebSession extends WebSession {
 
-	private static final long serialVersionUID = -3391413377263782681L;
-	private boolean translatorMode;
-	private boolean fmMode;
+    private static final long serialVersionUID = -3391413377263782681L;
+    private boolean translatorMode;
+    private boolean fmMode;
 
-	public boolean isTranslatorMode() {
-		return translatorMode;
-	}
+    public boolean isTranslatorMode() {
+        return translatorMode;
+    }
 
-	public void setTranslatorMode(boolean translatorMode) {
-		this.translatorMode = translatorMode;
-	}
+    public void setTranslatorMode(boolean translatorMode) {
+        this.translatorMode = translatorMode;
+    }
 
-	public boolean isFmMode() {
-		return fmMode;
-	}
+    public boolean isFmMode() {
+        return fmMode;
+    }
 
-	public void setFmMode(boolean fmMode) {
-		this.fmMode = fmMode;
-	}
+    public void setFmMode(boolean fmMode) {
+        this.fmMode = fmMode;
+    }
 
-	/**
-	 * @param request
-	 */
-	public AmpWebSession(Request request) {
-		super(request);
-		fmMode=false;
-		translatorMode=false;
-	}
-	
+    /**
+     * @param request
+     */
+    public AmpWebSession(Request request) {
+        super(request);
+        fmMode=false;
+        translatorMode=false;
+    }
+    
 
 }

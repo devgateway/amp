@@ -15,24 +15,24 @@ import org.dgfoundation.amp.nireports.schema.TimeRange;
  *
  */
 public class NumericalColumnBehaviour extends TrivialMeasureBehaviour {
-	public static NumericalColumnBehaviour getInstance() {return instance;}
-	
-	private final static NumericalColumnBehaviour instance = new NumericalColumnBehaviour();
-	
-	protected NumericalColumnBehaviour() {}
-	
-	@Override
-	public TimeRange getTimeRange() {
-		return TimeRange.NONE;
-	}
-	
-	@Override
-	public ImmutablePair<String, ColumnContents> getTotalCells(NiReportsEngine context, NiReportedEntity<?> entity, ColumnContents fetchedContents) {
-		return null;
-	}
+    public static NumericalColumnBehaviour getInstance() {return instance;}
+    
+    private final static NumericalColumnBehaviour instance = new NumericalColumnBehaviour();
+    
+    protected NumericalColumnBehaviour() {}
+    
+    @Override
+    public TimeRange getTimeRange() {
+        return TimeRange.NONE;
+    }
+    
+    @Override
+    public ImmutablePair<String, ColumnContents> getTotalCells(NiReportsEngine context, NiReportedEntity<?> entity, ColumnContents fetchedContents) {
+        return null;
+    }
 
-	@Override
-	public NiOutCell getEmptyCell(ReportSpecification spec) {
-		return NiTextCell.EMPTY;
-	}
+    @Override
+    public NiOutCell getEmptyCell(ReportSpecification spec) {
+        return NiTextCell.EMPTY;
+    }
 }

@@ -79,16 +79,16 @@ public class AmpOrgStaffInformation implements Serializable,OrgProfileValue{
     }
     @Override
     public List<ValueTranslatabePair> getValuesForOrgReport(){
-    	List<ValueTranslatabePair> values=new ArrayList<ValueTranslatabePair>();
-    	values.add(new ValueTranslatabePair(Arrays.asList(new String[]{getYear().toString()}),false));
-    	values.add(new ValueTranslatabePair(Arrays.asList(new String[]{getType().getValue()}),true));
-    	values.add(new ValueTranslatabePair(Arrays.asList(new String[]{getStaffNumber().toString()}),false));
-    	return values;
+        List<ValueTranslatabePair> values=new ArrayList<ValueTranslatabePair>();
+        values.add(new ValueTranslatabePair(Arrays.asList(new String[]{getYear().toString()}),false));
+        values.add(new ValueTranslatabePair(Arrays.asList(new String[]{getType().getValue()}),true));
+        values.add(new ValueTranslatabePair(Arrays.asList(new String[]{getStaffNumber().toString()}),false));
+        return values;
     }
 
-	@Override
-	public String[] getSubHeaders() {
-		String[] subHeaders={"Year","Type of staff","Number of Staff"};
-		return subHeaders;
-	}
+    @Override
+    public String[] getSubHeaders() {
+        String[] subHeaders={"Year","Type of staff","Number of Staff"};
+        return subHeaders;
+    }
 }

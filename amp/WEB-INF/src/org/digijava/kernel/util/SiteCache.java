@@ -68,10 +68,10 @@ public class SiteCache implements Runnable {
         }
         
         private void initLanguageCodes() {
-        	this.userLanguagesCodes = new ArrayList<String>(this.userLanguages.size());
-        	for (Locale locale : userLanguages) {
-        		userLanguagesCodes.add(locale.getCode());
-        	}
+            this.userLanguagesCodes = new ArrayList<String>(this.userLanguages.size());
+            for (Locale locale : userLanguages) {
+                userLanguagesCodes.add(locale.getCode());
+            }
         }
 
         private Site site;
@@ -150,7 +150,7 @@ public class SiteCache implements Runnable {
 
     public static final Comparator<ModuleInstance> moduleInstanceComparator = new Comparator<ModuleInstance>() {
         public int compare(ModuleInstance i1,
-        					ModuleInstance i2) {
+                            ModuleInstance i2) {
             int result;
             result = i1.getModuleName().compareTo(i2.getModuleName());
             if (result == 0) {
@@ -215,15 +215,15 @@ public class SiteCache implements Runnable {
             session = PersistenceManager.getSession();
 
             String queryString = " from " + ModuleInstance.class.getName() +
-            					 " mi where mi.site is null";
+                                 " mi where mi.site is null";
             
             newSharedInstances = new ArrayList<ModuleInstance>(session.createQuery(queryString).list());
 
             Collections.sort(newSharedInstances, moduleInstanceComparator);
 
             queryString = "from " + SiteDomain.class.getName() + " sd left join fetch sd.site site " +
-            			  " left join fetch site.translationLanguages left join fetch site.userLanguages " +
-            			  " left join fetch site.countries";
+                          " left join fetch site.translationLanguages left join fetch site.userLanguages " +
+                          " left join fetch site.countries";
             
             Iterator<SiteDomain> iter = session.createQuery(queryString).list().iterator();
             while (iter.hasNext()) {
@@ -494,30 +494,30 @@ public class SiteCache implements Runnable {
      */
     public static Site lookupById(Long siteId)
     {
-    	if (siteId == null)
-    		return SiteUtils.getDefaultSite();
-    	if (siteId == 0)
-    		return SiteUtils.getGlobalSite(); // global site
-    	Site result = getInstance().getSite(siteId);
-    	if (result == null)
-    	{
-    		logger.error("could not find site by id: " + siteId, new RuntimeException());
-    		return null;
-    	}
-    	return result;
+        if (siteId == null)
+            return SiteUtils.getDefaultSite();
+        if (siteId == 0)
+            return SiteUtils.getGlobalSite(); // global site
+        Site result = getInstance().getSite(siteId);
+        if (result == null)
+        {
+            logger.error("could not find site by id: " + siteId, new RuntimeException());
+            return null;
+        }
+        return result;
     }
 
     public static Site lookupByName(String siteName)
     {
-    	if (siteName == null)
-    		return null;
-    	Site result = getInstance().getSiteByName(siteName);
-    	if (result == null)
-    	{
-    		logger.error("could not find site by name: " + siteName, new RuntimeException());
-    		return null;
-    	}
-    	return result;
+        if (siteName == null)
+            return null;
+        Site result = getInstance().getSiteByName(siteName);
+        if (result == null)
+        {
+            logger.error("could not find site by name: " + siteName, new RuntimeException());
+            return null;
+        }
+        return result;
     }
     
     private synchronized HashMap<String, SortedMap<String, SiteDomain>> getSiteDomains() {

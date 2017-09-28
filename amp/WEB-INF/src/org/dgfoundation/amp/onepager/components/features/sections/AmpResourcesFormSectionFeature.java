@@ -21,25 +21,25 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
  * @since Apr 11, 2011 
  */
 public class AmpResourcesFormSectionFeature extends AmpFormSectionFeaturePanel {
-	
-	public static Logger logger = Logger.getLogger(AmpResourcesFormSectionFeature.class);
-	
-	public AmpResourcesFormSectionFeature(String id, String fmName,
-			final IModel<AmpActivityVersion> am) throws Exception {
-		super(id, fmName, am);
-		this.fmType = AmpFMTypes.MODULE;
-		
-		if (am.getObject().getDocuments() == null)
-			am.getObject().setDocuments(new HashSet());
-		if (getSession().getMetaData(OnePagerConst.RESOURCES_NEW_ITEMS) == null)
-			getSession().setMetaData(OnePagerConst.RESOURCES_NEW_ITEMS, new HashSet());
-		if (getSession().getMetaData(OnePagerConst.RESOURCES_DELETED_ITEMS) == null)
-			getSession().setMetaData(OnePagerConst.RESOURCES_DELETED_ITEMS, new HashSet());
-		
+    
+    public static Logger logger = Logger.getLogger(AmpResourcesFormSectionFeature.class);
+    
+    public AmpResourcesFormSectionFeature(String id, String fmName,
+            final IModel<AmpActivityVersion> am) throws Exception {
+        super(id, fmName, am);
+        this.fmType = AmpFMTypes.MODULE;
+        
+        if (am.getObject().getDocuments() == null)
+            am.getObject().setDocuments(new HashSet());
+        if (getSession().getMetaData(OnePagerConst.RESOURCES_NEW_ITEMS) == null)
+            getSession().setMetaData(OnePagerConst.RESOURCES_NEW_ITEMS, new HashSet());
+        if (getSession().getMetaData(OnePagerConst.RESOURCES_DELETED_ITEMS) == null)
+            getSession().setMetaData(OnePagerConst.RESOURCES_DELETED_ITEMS, new HashSet());
+        
 
-		final AmpResourcesFormTableFeature resourcesList = new AmpResourcesFormTableFeature("resourcesList", "Resource List", am);
-		resourcesList.setOutputMarkupId(true);
-		add(resourcesList);
+        final AmpResourcesFormTableFeature resourcesList = new AmpResourcesFormTableFeature("resourcesList", "Resource List", am);
+        resourcesList.setOutputMarkupId(true);
+        add(resourcesList);
 
         final AmpNewResourceFieldPanel newDoc = new AmpNewResourceFieldPanel("addNewDocument", am, "Add New Document", resourcesList, false);
         newDoc.setOutputMarkupId(true);
@@ -52,6 +52,6 @@ public class AmpResourcesFormSectionFeature extends AmpFormSectionFeaturePanel {
         AmpExistingDocumentFieldPanel searchDocs = new AmpExistingDocumentFieldPanel("addExisting", am, "Search Resources", resourcesList);
         searchDocs.setOutputMarkupId(true);
         add(searchDocs);
-	}
+    }
 
 }

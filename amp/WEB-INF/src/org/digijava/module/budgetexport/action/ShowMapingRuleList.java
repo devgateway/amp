@@ -36,7 +36,7 @@ public class ShowMapingRuleList extends Action {
         
         beMappingForm.setRules(projectRules);
         
-        AmpBudgetExportProject proj	= DbUtil.getProjectById(beMappingForm.getId());
+        AmpBudgetExportProject proj = DbUtil.getProjectById(beMappingForm.getId());
         beMappingForm.setAmpReportId(proj.getAmpReportId() );
         
         return mapping.findForward("forward");

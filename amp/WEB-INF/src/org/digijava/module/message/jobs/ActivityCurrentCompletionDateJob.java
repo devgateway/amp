@@ -17,8 +17,8 @@ import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
 
 public class ActivityCurrentCompletionDateJob extends ConnectionCleaningJob implements StatefulJob {
-	
-	
+    
+    
     @Override public void executeInternal(JobExecutionContext context) throws JobExecutionException{
 
         Date curDate=new Date();
@@ -38,7 +38,7 @@ public class ActivityCurrentCompletionDateJob extends ConnectionCleaningJob impl
 
         List<AmpActivityVersion> actList = ActivityUtil.getActivitiesWhichMatchDate("actualCompletionDate", dateAfterDays);
         for (AmpActivityVersion act : actList) {
-        	new ActivityCurrentCompletionDateTrigger(act);
+            new ActivityCurrentCompletionDateTrigger(act);
         }
     }
 }

@@ -23,28 +23,28 @@ import org.junit.Test;
  *
  */
 public class OffDbNiReportSortingTests extends SortingSanityChecks {
-	
-	static Logger log = Logger.getLogger(OffDbNiReportSortingTests.class);
-	
-	HardcodedReportsTestSchema schema = new HardcodedReportsTestSchema();
-	public OffDbNiReportSortingTests() {
-		super("NiReportsSorting tests");
-		nrRunReports = 0;
-	}
-	
-//	@Override
-//	public<K> K buildNiReportDigest(ReportSpecification spec, List<String> activityNames, NiReportOutputBuilder<K> outputBuilder) {
-//		NiReportExecutor executor = getExecutor(activityNames);
-//		return executor.executeReport(spec, outputBuilder);
-//	}	
-	
-	@Override
-	protected NiReportExecutor getNiExecutor(List<String> activityNames) {
-		return getOfflineExecutor(activityNames);
-	}
-	
-	@Override
-	public void tearDown() {
-		//System.err.format("Sanity checks %s have run %d reports\n", this.getName(), nrRunReports);
-	}
+    
+    static Logger log = Logger.getLogger(OffDbNiReportSortingTests.class);
+    
+    HardcodedReportsTestSchema schema = new HardcodedReportsTestSchema();
+    public OffDbNiReportSortingTests() {
+        super("NiReportsSorting tests");
+        nrRunReports = 0;
+    }
+    
+//  @Override
+//  public<K> K buildNiReportDigest(ReportSpecification spec, List<String> activityNames, NiReportOutputBuilder<K> outputBuilder) {
+//      NiReportExecutor executor = getExecutor(activityNames);
+//      return executor.executeReport(spec, outputBuilder);
+//  }   
+    
+    @Override
+    protected NiReportExecutor getNiExecutor(List<String> activityNames) {
+        return getOfflineExecutor(activityNames);
+    }
+    
+    @Override
+    public void tearDown() {
+        //System.err.format("Sanity checks %s have run %d reports\n", this.getName(), nrRunReports);
+    }
 }

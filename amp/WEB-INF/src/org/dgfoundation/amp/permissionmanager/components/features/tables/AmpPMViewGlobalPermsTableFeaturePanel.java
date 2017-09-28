@@ -33,94 +33,94 @@ import org.hibernate.HibernateException;
  */
 public class AmpPMViewGlobalPermsTableFeaturePanel extends AmpFormTableFeaturePanel {
 
-	//boolean editPermVisible = false;
-	
-	/**
-	 * @param id
-	 * @param model
-	 * @param fmName
-	 * @throws Exception
-	 */
-	public AmpPMViewGlobalPermsTableFeaturePanel(String id, IModel model, String fmName) throws Exception {
-		super(id, model, fmName);
-		// TODO Auto-generated constructor stub
-	}
+    //boolean editPermVisible = false;
+    
+    /**
+     * @param id
+     * @param model
+     * @param fmName
+     * @throws Exception
+     */
+    public AmpPMViewGlobalPermsTableFeaturePanel(String id, IModel model, String fmName) throws Exception {
+        super(id, model, fmName);
+        // TODO Auto-generated constructor stub
+    }
 
-	/**
-	 * @param id
-	 * @param model
-	 * @param fmName
-	 * @param hideLeadingNewLine
-	 * @throws Exception
-	 */
-	public AmpPMViewGlobalPermsTableFeaturePanel(String id,final IModel<Set<Permission>> permissionsSetModel, String fmName, boolean hideLeadingNewLine) throws Exception {
-		super(id, permissionsSetModel, fmName, hideLeadingNewLine);
-		// TODO Auto-generated constructor stub
-		AbstractReadOnlyModel<List<Permission>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(permissionsSetModel);
-		
-		list = new PageableListView<Permission>("globalPermsList", listModel, 5) {
-			private static final long serialVersionUID = 7218457979728871528L;
-			@Override
-			protected void populateItem(final ListItem<Permission> item) {
-				
-				final MarkupContainer listParent=this.getParent();
-				
-				item.add(new Label("globalPermName", item.getModelObject().getName()));
-				
-				IModel<CompositePermission> cpModel = new Model(new CompositePermission());
-				final AmpPMAddPermissionFormFeaturePanel editPermTable = new AmpPMAddPermissionFormFeaturePanel("editGlobalPerm", cpModel, "Edit Permission Form", "Edit Permission", true);
-				editPermTable.setOutputMarkupId(true);
-				editPermTable.setVisible(false);
-				item.add(editPermTable);
-				
-				AmpEditLinkField editLink = new AmpEditLinkField("editGlobalPermLink", "Edit Global Permission Link", true, true) {
-					@Override
-					protected void onClick(AjaxRequestTarget target) {
-						editPermTable.setVisible(!editPermTable.isVisible());
-						target.add(listParent);
-					}
-				};
-				item.add(editLink);
-				
-				AmpDeleteLinkField deleteLink = new AmpDeleteLinkField("deleteGlobalPermLink", "Delete Global Permission Link") {
-					
-					@Override
-					protected void onClick(AjaxRequestTarget target) {
-						permissionsSetModel.getObject().remove(item.getModelObject());
-						try {
-							if(item.getModelObject() instanceof GatePermission)
-								PermissionUtil.deletePermission(item.getModelObject().getId());
-							else if(item.getModelObject() instanceof CompositePermission)
-								{
-									for (Permission perm : ((CompositePermission)item.getModelObject()).getPermissions()) {
-										PermissionUtil.deletePermission(perm.getId());
-									}
-									PermissionUtil.deletePermission(item.getModelObject().getId());
-								}
-						} catch (HibernateException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (SQLException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (DgException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						target.add(AmpPMViewGlobalPermsTableFeaturePanel.this.getParent());
-						list.removeAll();
-					}
-				};
-				item.add(deleteLink);
-				
-				
-				
-			}
-		};
-		list.setOutputMarkupId(true);
-		list.setReuseItems(true);
-		add(list);
-		
-	}
+    /**
+     * @param id
+     * @param model
+     * @param fmName
+     * @param hideLeadingNewLine
+     * @throws Exception
+     */
+    public AmpPMViewGlobalPermsTableFeaturePanel(String id,final IModel<Set<Permission>> permissionsSetModel, String fmName, boolean hideLeadingNewLine) throws Exception {
+        super(id, permissionsSetModel, fmName, hideLeadingNewLine);
+        // TODO Auto-generated constructor stub
+        AbstractReadOnlyModel<List<Permission>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(permissionsSetModel);
+        
+        list = new PageableListView<Permission>("globalPermsList", listModel, 5) {
+            private static final long serialVersionUID = 7218457979728871528L;
+            @Override
+            protected void populateItem(final ListItem<Permission> item) {
+                
+                final MarkupContainer listParent=this.getParent();
+                
+                item.add(new Label("globalPermName", item.getModelObject().getName()));
+                
+                IModel<CompositePermission> cpModel = new Model(new CompositePermission());
+                final AmpPMAddPermissionFormFeaturePanel editPermTable = new AmpPMAddPermissionFormFeaturePanel("editGlobalPerm", cpModel, "Edit Permission Form", "Edit Permission", true);
+                editPermTable.setOutputMarkupId(true);
+                editPermTable.setVisible(false);
+                item.add(editPermTable);
+                
+                AmpEditLinkField editLink = new AmpEditLinkField("editGlobalPermLink", "Edit Global Permission Link", true, true) {
+                    @Override
+                    protected void onClick(AjaxRequestTarget target) {
+                        editPermTable.setVisible(!editPermTable.isVisible());
+                        target.add(listParent);
+                    }
+                };
+                item.add(editLink);
+                
+                AmpDeleteLinkField deleteLink = new AmpDeleteLinkField("deleteGlobalPermLink", "Delete Global Permission Link") {
+                    
+                    @Override
+                    protected void onClick(AjaxRequestTarget target) {
+                        permissionsSetModel.getObject().remove(item.getModelObject());
+                        try {
+                            if(item.getModelObject() instanceof GatePermission)
+                                PermissionUtil.deletePermission(item.getModelObject().getId());
+                            else if(item.getModelObject() instanceof CompositePermission)
+                                {
+                                    for (Permission perm : ((CompositePermission)item.getModelObject()).getPermissions()) {
+                                        PermissionUtil.deletePermission(perm.getId());
+                                    }
+                                    PermissionUtil.deletePermission(item.getModelObject().getId());
+                                }
+                        } catch (HibernateException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        } catch (SQLException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        } catch (DgException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+                        target.add(AmpPMViewGlobalPermsTableFeaturePanel.this.getParent());
+                        list.removeAll();
+                    }
+                };
+                item.add(deleteLink);
+                
+                
+                
+            }
+        };
+        list.setOutputMarkupId(true);
+        list.setReuseItems(true);
+        add(list);
+        
+    }
 
 }

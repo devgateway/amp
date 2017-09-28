@@ -16,11 +16,11 @@ package org.digijava.kernel.ampapi.helpers.geojson;
  */
 public class LinkedCRSPropertiesGeoJSON implements Validation
 {
-	public String href;
-	public String type;
+    public String href;
+    public String type;
 
-	public boolean isValid(PositionValidator validator)
-	{
-		return href!=null;
-	}
+    public boolean isValid(PositionValidator validator)
+    {
+        return href!=null;
+    }
 }

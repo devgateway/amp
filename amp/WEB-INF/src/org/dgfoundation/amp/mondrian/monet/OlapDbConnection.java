@@ -26,14 +26,14 @@ public abstract class OlapDbConnection implements AutoCloseable {
     public final DbColumnTypesMapper mapper;
 
     protected OlapDbConnection(Connection olapConn, DbColumnTypesMapper mapper) {
-    	try {
-    		this.mapper = mapper;
-    		this.conn = olapConn;
-    		this.conn.setAutoCommit(false);
-    	}
-    	catch(Exception e) {
-    		throw AlgoUtils.translateException(e);
-    	}
+        try {
+            this.mapper = mapper;
+            this.conn = olapConn;
+            this.conn.setAutoCommit(false);
+        }
+        catch(Exception e) {
+            throw AlgoUtils.translateException(e);
+        }
     }
 
     //public abstract String getJdbcUrl();
@@ -86,11 +86,11 @@ public abstract class OlapDbConnection implements AutoCloseable {
     }
 
     public boolean dropTable(String tableName) {
-    	return dropTableOrView(tableName, "TABLE");
+        return dropTableOrView(tableName, "TABLE");
     }
     
     public boolean dropView(String viewName) {
-    	return dropTableOrView(viewName, "VIEW");
+        return dropTableOrView(viewName, "VIEW");
     }
     
     protected boolean dropTableOrView(String entityName, String type) {

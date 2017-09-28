@@ -12,17 +12,17 @@ import java.util.List;
  */
 public class MultiPointGeoJSON extends GeometryGeoJSON
 {
-	public List<List<Double>> coordinates;
-	
-	public boolean isValid( PositionValidator validator )
-	{
-		if (coordinates==null) return false;
-		if (coordinates.size()<1) return false;
+    public List<List<Double>> coordinates;
+    
+    public boolean isValid( PositionValidator validator )
+    {
+        if (coordinates==null) return false;
+        if (coordinates.size()<1) return false;
 
-		for ( List<Double> position : coordinates )
-		{
-			if ( !validator.isValid(position) ) return false;
-		}
-		return super.isValid(validator);
-	}
+        for ( List<Double> position : coordinates )
+        {
+            if ( !validator.isValid(position) ) return false;
+        }
+        return super.isValid(validator);
+    }
 }

@@ -9,29 +9,29 @@ import java.util.Map;
  *
  */
 public interface ReportArea {
-	
-	/**
-	 * returns the <strong>localized</strong> owner. For a row, it is the activity/pledge/whatever which owns the row. For a report subregion, it is the "splitter cell"
-	 * @return
-	 */
-	public AreaOwner getOwner();
-	
-	/**
-	 * for a region, holds aggregates (trail cells). For a row, holds the values
-	 * Since order matters, should (probably) be a LinkedHashMap
-	 * @return
-	 */
-	public Map<ReportOutputColumn, ReportCell> getContents();
-	
-	/**
-	 * returns the subareas, if any. Returns NULL if there are none (for example, a row)
-	 * @return
-	 */
-	public List<ReportArea> getChildren();
-	
-	/**
-	 * the number of distinct entityIds (e.g. activityIds in AMP) in the subtree
-	 * @return
-	 */
-	public int getNrEntities();
+    
+    /**
+     * returns the <strong>localized</strong> owner. For a row, it is the activity/pledge/whatever which owns the row. For a report subregion, it is the "splitter cell"
+     * @return
+     */
+    public AreaOwner getOwner();
+    
+    /**
+     * for a region, holds aggregates (trail cells). For a row, holds the values
+     * Since order matters, should (probably) be a LinkedHashMap
+     * @return
+     */
+    public Map<ReportOutputColumn, ReportCell> getContents();
+    
+    /**
+     * returns the subareas, if any. Returns NULL if there are none (for example, a row)
+     * @return
+     */
+    public List<ReportArea> getChildren();
+    
+    /**
+     * the number of distinct entityIds (e.g. activityIds in AMP) in the subtree
+     * @return
+     */
+    public int getNrEntities();
 }

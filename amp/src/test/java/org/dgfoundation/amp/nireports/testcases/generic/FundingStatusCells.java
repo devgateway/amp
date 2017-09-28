@@ -10,13 +10,13 @@ import org.dgfoundation.amp.nireports.TextCell;
 
 public class FundingStatusCells extends HardcodedCells<TextCell>{
 
-	public FundingStatusCells(Map<String, Long> activityNames, Map<String, Long> entityNames, LevelColumn lc) {
-		super(activityNames, entityNames, lc);
-	}
+    public FundingStatusCells(Map<String, Long> activityNames, Map<String, Long> entityNames, LevelColumn lc) {
+        super(activityNames, entityNames, lc);
+    }
 
-	@Override
-	protected List<TextCell> populateCells() {
-		return 	Arrays.asList();
-	}
+    @Override
+    protected List<TextCell> populateCells() {
+        return  Arrays.asList();
+    }
 
 }

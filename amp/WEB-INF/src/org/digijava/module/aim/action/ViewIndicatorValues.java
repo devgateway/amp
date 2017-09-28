@@ -27,33 +27,33 @@ import org.digijava.module.aim.util.IndicatorUtil;
 
 public class ViewIndicatorValues extends TilesAction {
 
-	private static Logger logger = Logger.getLogger(ViewIndicatorValues.class);
+    private static Logger logger = Logger.getLogger(ViewIndicatorValues.class);
 
-	public ActionForward execute(ComponentContext ctx,ActionMapping mapping,
-			ActionForm form,HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
+    public ActionForward execute(ComponentContext ctx,ActionMapping mapping,
+            ActionForm form,HttpServletRequest request,
+            HttpServletResponse response) throws Exception {
 
-		ViewIndicatorForm viForm = (ViewIndicatorForm) form;
-		viForm.setIndicators(new ArrayList<ActivityIndicator>());
-		String indParam = request.getParameter("ind");
-		Long ind = indParam != null ? Long.parseLong(indParam) : null;
-		String risk = request.getParameter("risk");
-		AmpActivityVersion  activity = ActivityUtil.loadActivity(viForm.getAmpActivityId());
-		Collection<IndicatorActivity> indicators=activity.getIndicators();
-		if (indicators!=null){
-			for (IndicatorActivity connection : indicators) {
-				if (ind != null){
-					if (connection.getIndicator().getIndicatorId().equals(ind)){
-						// :( because have no time to change JSP let's use old helper bean.
-						ActivityIndicator bean = IndicatorUtil.createIndicatorHelperBean(connection);
+        ViewIndicatorForm viForm = (ViewIndicatorForm) form;
+        viForm.setIndicators(new ArrayList<ActivityIndicator>());
+        String indParam = request.getParameter("ind");
+        Long ind = indParam != null ? Long.parseLong(indParam) : null;
+        String risk = request.getParameter("risk");
+        AmpActivityVersion  activity = ActivityUtil.loadActivity(viForm.getAmpActivityId());
+        Collection<IndicatorActivity> indicators=activity.getIndicators();
+        if (indicators!=null){
+            for (IndicatorActivity connection : indicators) {
+                if (ind != null){
+                    if (connection.getIndicator().getIndicatorId().equals(ind)){
+                        // :( because have no time to change JSP let's use old helper bean.
+                        ActivityIndicator bean = IndicatorUtil.createIndicatorHelperBean(connection);
 
-						//add indicator helper bean to form
-						viForm.getIndicators().add(bean);
-					}
-				}else if (risk!=null){
-					AmpIndicatorRiskRatings riskValue=IndicatorUtil.getRisk(connection);
+                        //add indicator helper bean to form
+                        viForm.getIndicators().add(bean);
+                    }
+                }else if (risk!=null){
+                    AmpIndicatorRiskRatings riskValue=IndicatorUtil.getRisk(connection);
 
-					if (riskValue != null) {
+                    if (riskValue != null) {
                         if (riskValue.getRatingName().equalsIgnoreCase(risk)) {
                             ActivityIndicator bean = IndicatorUtil.createIndicatorHelperBean(connection);
                             viForm.getIndicators().add(bean);
@@ -61,12 +61,12 @@ public class ViewIndicatorValues extends TilesAction {
                         }
 
                     }
-				}
-			}
+                }
+            }
 
-		}
+        }
 
-		return null;
-	}
+        return null;
+    }
 
 }

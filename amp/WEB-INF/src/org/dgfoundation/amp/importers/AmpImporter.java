@@ -23,62 +23,62 @@ import org.digijava.kernel.persistence.PersistenceManager;
  */
 public abstract class AmpImporter {
 
-	private static Logger logger = Logger.getLogger(AmpImporter.class);
+    private static Logger logger = Logger.getLogger(AmpImporter.class);
 
-	protected String importFileName;
-	protected String[] columnNames;
+    protected String importFileName;
+    protected String[] columnNames;
 
-	protected abstract Class[] getImportedTypes();
+    protected abstract Class[] getImportedTypes();
 
-	protected abstract Map<String, String> parseNextLine() throws IOException;
+    protected abstract Map<String, String> parseNextLine() throws IOException;
 
-	protected abstract void saveToDB(Map<String, String> o) throws HibernateException;
+    protected abstract void saveToDB(Map<String, String> o) throws HibernateException;
 
-	protected abstract void initializeReader(Reader source);
+    protected abstract void initializeReader(Reader source);
 
-	protected Session session;
+    protected Session session;
 
-	
-	
-	protected Reader reader;
+    
+    
+    protected Reader reader;
 
-	public void performImport() {
+    public void performImport() {
 
-		FileReader fr = null;
-		try {
-			fr = new FileReader(importFileName);
-			initializeReader(fr);
-		} catch (FileNotFoundException e) {
-			logger.error(e);
-			//e.printStackTrace();
-		}
-		
-		session = PersistenceManager.getSession(); // ensure a clean Session exists
-		try {
-			while (true) {			
-				Map<String, String> o = parseNextLine();
-				if (o == null) break;
-				saveToDB(o);
-			};
-		} catch (Exception e) {
-			logger.error("error while running import on " + this.getClass().getName(), e);
-		}
-		PersistenceManager.closeQuietly(fr);
-		PersistenceManager.endSessionLifecycle();
-	}
+        FileReader fr = null;
+        try {
+            fr = new FileReader(importFileName);
+            initializeReader(fr);
+        } catch (FileNotFoundException e) {
+            logger.error(e);
+            //e.printStackTrace();
+        }
+        
+        session = PersistenceManager.getSession(); // ensure a clean Session exists
+        try {
+            while (true) {          
+                Map<String, String> o = parseNextLine();
+                if (o == null) break;
+                saveToDB(o);
+            };
+        } catch (Exception e) {
+            logger.error("error while running import on " + this.getClass().getName(), e);
+        }
+        PersistenceManager.closeQuietly(fr);
+        PersistenceManager.endSessionLifecycle();
+    }
 
-	protected abstract String getFileType();
+    protected abstract String getFileType();
 
-	public AmpImporter(String importFileName, String[] columnNames2) {
-		this.importFileName = importFileName;
-		this.columnNames = columnNames2;
-	}
+    public AmpImporter(String importFileName, String[] columnNames2) {
+        this.importFileName = importFileName;
+        this.columnNames = columnNames2;
+    }
 
-	public String getImportFileName() {
-		return importFileName;
-	}
+    public String getImportFileName() {
+        return importFileName;
+    }
 
-	public void setImportFileName(String importFileName) {
-		this.importFileName = importFileName;
-	}
+    public void setImportFileName(String importFileName) {
+        this.importFileName = importFileName;
+    }
 }

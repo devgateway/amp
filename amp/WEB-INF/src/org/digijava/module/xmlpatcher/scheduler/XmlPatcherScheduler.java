@@ -37,29 +37,29 @@ import org.digijava.module.xmlpatcher.dbentity.AmpXmlPatch;
  *         by {@link #getScheduledPatchCollection()}.
  */
 public abstract class XmlPatcherScheduler {
-	List<AmpXmlPatch> patches;
-	Map<String, Object> properties;
+    List<AmpXmlPatch> patches;
+    Map<String, Object> properties;
 
-	/**
-	 * Builds a new scheduler based on the list of patches coming from the
-	 * database.
-	 * 
-	 * @param patches
-	 * @param properties
-	 *            the properties map read by the patcher service. Useful so that
-	 *            schedulers may receive properties from the digi.xml file
-	 */
-	public XmlPatcherScheduler(Map<String, Object> properties,
-			List<AmpXmlPatch> patches) {
-		this.patches = patches;
-		this.properties = properties;
-	}
+    /**
+     * Builds a new scheduler based on the list of patches coming from the
+     * database.
+     * 
+     * @param patches
+     * @param properties
+     *            the properties map read by the patcher service. Useful so that
+     *            schedulers may receive properties from the digi.xml file
+     */
+    public XmlPatcherScheduler(Map<String, Object> properties,
+            List<AmpXmlPatch> patches) {
+        this.patches = patches;
+        this.properties = properties;
+    }
 
-	/**
-	 * Override this with a method that would schedule the patches desirably.
-	 * The iterator of the returned collection will provide the schedule
-	 * 
-	 * @return the scheduled patch collection
-	 */
-	public abstract Collection<AmpXmlPatch> getScheduledPatchCollection();
+    /**
+     * Override this with a method that would schedule the patches desirably.
+     * The iterator of the returned collection will provide the schedule
+     * 
+     * @return the scheduled patch collection
+     */
+    public abstract Collection<AmpXmlPatch> getScheduledPatchCollection();
 }

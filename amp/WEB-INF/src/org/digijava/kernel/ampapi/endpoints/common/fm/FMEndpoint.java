@@ -34,8 +34,8 @@ public class FMEndpoint {
      * <h5>Additions:</h5>
      * <b>detail-flat</b> <dd>true (default)/false - if to detail as a flat list or in a tree form</dd>
      * <b>full-enabled-paths</b> <dd>true (default)/false - if only fully enabled paths to detail</dd>
-	 * <b>fm-paths</b> <dd>by default no filtering - an array of FM paths that are required,
-	 * applies only to tree structures</dd>
+     * <b>fm-paths</b> <dd>by default no filtering - an array of FM paths that are required,
+     * applies only to tree structures</dd>
      * </br>
      * <h3>Sample Request:</h3><pre>
      * {
@@ -76,13 +76,13 @@ public class FMEndpoint {
      * @param config a JSON object with requested options (see the provided example) 
      * @return list of FM settings as a JSON Object
      */
-	@POST
-	@Path("/fm")
-	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui=false, name="fm", id="")
-	public JsonBean getFMSettings(JsonBean config) {
-		return FMService.getFMSettings(config);
-	}
+    @POST
+    @Path("/fm")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiMethod(ui=false, name="fm", id="")
+    public JsonBean getFMSettings(JsonBean config) {
+        return FMService.getFMSettings(config);
+    }
 }
 
-	
+    

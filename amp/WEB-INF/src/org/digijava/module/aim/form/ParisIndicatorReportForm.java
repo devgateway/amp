@@ -20,7 +20,7 @@ public class ParisIndicatorReportForm extends ActionForm {
     private String indicatorId = null;
     private String indicatorCode = null;
     private String indicatorName = null;
-    private String numColsCalculated = null;	// number of columns in one donor-row
+    private String numColsCalculated = null;    // number of columns in one donor-row
 
     private String targetValue = null;
     private String calcResult = null;
@@ -38,7 +38,7 @@ public class ParisIndicatorReportForm extends ActionForm {
 
     private Long status = null;
 
-    private String termAssist = null;			// defunct
+    private String termAssist = null;           // defunct
     private Long financingInstrument = null;
     private String calendar = null;
     private String donor = null;
@@ -60,14 +60,14 @@ public class ParisIndicatorReportForm extends ActionForm {
     private String print2;
 
     public String getPrint2() {
-		return print2;
-	}
+        return print2;
+    }
 
-	public void setPrint2(String print2) {
-		this.print2 = print2;
-	}
+    public void setPrint2(String print2) {
+        this.print2 = print2;
+    }
 
-	public void reset(ActionMapping mapping, HttpServletRequest request) {
+    public void reset(ActionMapping mapping, HttpServletRequest request) {
         if (reset.booleanValue()) {
             startYear = null;
             closeYear = null;
@@ -429,11 +429,11 @@ public class ParisIndicatorReportForm extends ActionForm {
         this.calcResult = calcResult;
     }
 
-	public String getPrint() {
-		return print;
-	}
+    public String getPrint() {
+        return print;
+    }
 
-	public void setPrint(String print) {
-		this.print = print;
-	}
+    public void setPrint(String print) {
+        this.print = print;
+    }
 }

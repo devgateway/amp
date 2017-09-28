@@ -8,5 +8,5 @@ import java.util.Set;
  *
  */
 public interface IdsGeneratorSource {
-	public Set<Long> getIds();
+    public Set<Long> getIds();
 }

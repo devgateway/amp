@@ -24,92 +24,92 @@ import java.util.Queue;
  */
 public class RegularTeamActivityGate extends Gate {
 
-	public static final MetaInfo[] SCOPE_KEYS = new MetaInfo[] { GatePermConst.ScopeKeys.CURRENT_MEMBER };
+    public static final MetaInfo[] SCOPE_KEYS = new MetaInfo[] { GatePermConst.ScopeKeys.CURRENT_MEMBER };
 
-	public static final MetaInfo[] PARAM_INFO = new MetaInfo[] {};
-	
-	private static final String DESCRIPTION = "This gate allows access on activities that have their workspace same as the current member workspace";
+    public static final MetaInfo[] PARAM_INFO = new MetaInfo[] {};
+    
+    private static final String DESCRIPTION = "This gate allows access on activities that have their workspace same as the current member workspace";
 
-	/**
-	 * @param scope
-	 * @param parameters
-	 */
-	public RegularTeamActivityGate(Map scope, Queue<String> parameters) {
-		super(scope, parameters);
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * @param scope
+     * @param parameters
+     */
+    public RegularTeamActivityGate(Map scope, Queue<String> parameters) {
+        super(scope, parameters);
+        // TODO Auto-generated constructor stub
+    }
 
-	/**
-	 * 
-	 */
-	public RegularTeamActivityGate() {
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * 
+     */
+    public RegularTeamActivityGate() {
+        // TODO Auto-generated constructor stub
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.digijava.module.gateperm.core.Gate#logic()
-	 */
-	@Override
-	public boolean logic() throws Exception {
-		
-		AmpActivityVersion ampa = null;
-		Object o = scope.get(GatePermConst.ScopeKeys.PERMISSIBLE);
-		if (o instanceof AmpActivityVersion)
-		    ampa = (AmpActivityVersion) o;
-		
-		Object oo = scope.get(GatePermConst.ScopeKeys.ACTIVITY);
-		if (oo instanceof AmpActivityVersion)
-			ampa =  (AmpActivityVersion) oo;		
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.digijava.module.gateperm.core.Gate#logic()
+     */
+    @Override
+    public boolean logic() throws Exception {
+        
+        AmpActivityVersion ampa = null;
+        Object o = scope.get(GatePermConst.ScopeKeys.PERMISSIBLE);
+        if (o instanceof AmpActivityVersion)
+            ampa = (AmpActivityVersion) o;
+        
+        Object oo = scope.get(GatePermConst.ScopeKeys.ACTIVITY);
+        if (oo instanceof AmpActivityVersion)
+            ampa =  (AmpActivityVersion) oo;        
 
-		
-		TeamMember tm = (TeamMember) scope.get(GatePermConst.ScopeKeys.CURRENT_MEMBER);
-		
-		if (tm == null || tm.getTeamId() == null) {
-			/* no teammember or currentTeam is admin -> anonymous access (not logged in) -> gatekeeper says no */
-			return false;
-		}
-		
-		AmpTeam currentTeam = TeamUtil.getAmpTeam(tm.getTeamId());
-		AmpTeam activityTeam=ampa.getTeam();
-		
-		//current team same as activity team=>always access
-		if (activityTeam != null && currentTeam.getAmpTeamId().equals(activityTeam.getAmpTeamId()))
-				return true;
-			
-		
-		return false;
-	}
+        
+        TeamMember tm = (TeamMember) scope.get(GatePermConst.ScopeKeys.CURRENT_MEMBER);
+        
+        if (tm == null || tm.getTeamId() == null) {
+            /* no teammember or currentTeam is admin -> anonymous access (not logged in) -> gatekeeper says no */
+            return false;
+        }
+        
+        AmpTeam currentTeam = TeamUtil.getAmpTeam(tm.getTeamId());
+        AmpTeam activityTeam=ampa.getTeam();
+        
+        //current team same as activity team=>always access
+        if (activityTeam != null && currentTeam.getAmpTeamId().equals(activityTeam.getAmpTeamId()))
+                return true;
+            
+        
+        return false;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.digijava.module.gateperm.core.Gate#parameterInfo()
-	 */
-	@Override
-	public MetaInfo[] parameterInfo() {
-		return null;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.digijava.module.gateperm.core.Gate#parameterInfo()
+     */
+    @Override
+    public MetaInfo[] parameterInfo() {
+        return null;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.digijava.module.gateperm.core.Gate#mandatoryScopeKeys()
-	 */
-	@Override
-	public MetaInfo[] mandatoryScopeKeys() {
-		return SCOPE_KEYS;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.digijava.module.gateperm.core.Gate#mandatoryScopeKeys()
+     */
+    @Override
+    public MetaInfo[] mandatoryScopeKeys() {
+        return SCOPE_KEYS;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.digijava.module.gateperm.core.Gate#description()
-	 */
-	@Override
-	public String description() {
-		return DESCRIPTION;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.digijava.module.gateperm.core.Gate#description()
+     */
+    @Override
+    public String description() {
+        return DESCRIPTION;
+    }
 
 }

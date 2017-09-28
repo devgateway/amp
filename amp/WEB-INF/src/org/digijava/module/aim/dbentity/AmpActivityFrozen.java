@@ -10,10 +10,10 @@ import java.io.Serializable;
 public class AmpActivityFrozen implements Serializable{
     
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = 4970281121028892306L;
-	private Long  ampActivityFrozenid;    
+     * 
+     */
+    private static final long serialVersionUID = 4970281121028892306L;
+    private Long  ampActivityFrozenid;    
     private AmpActivityGroup activityGroup;
     private AmpDataFreezeSettings dataFreezeEvent;
     // the frozen field is to be able to freeze and unfreeze and activity 
@@ -21,37 +21,37 @@ public class AmpActivityFrozen implements Serializable{
     private Boolean frozen;
     private Boolean deleted;
     public AmpActivityFrozen(){
-    	
+        
     }
-	public Long getAmpActivityFrozenid() {
-		return ampActivityFrozenid;
-	}
-	public void setAmpActivityFrozenid(Long ampActivityFrozenid) {
-		this.ampActivityFrozenid = ampActivityFrozenid;
-	}
-	public AmpActivityGroup getActivityGroup() {
-		return activityGroup;
-	}
-	public void setActivityGroup(AmpActivityGroup activityGroup) {
-		this.activityGroup = activityGroup;
-	}
-	public AmpDataFreezeSettings getDataFreezeEvent() {
-		return dataFreezeEvent;
-	}
-	public void setDataFreezeEvent(AmpDataFreezeSettings dataFreezeEvent) {
-		this.dataFreezeEvent = dataFreezeEvent;
-	}
-	public Boolean getFrozen() {
-		return frozen;
-	}
-	public void setFrozen(Boolean frozen) {
-		this.frozen = frozen;
-	}
-	public Boolean getDeleted() {
-		return deleted;
-	}
-	public void setDeleted(Boolean deleted) {
-		this.deleted = deleted;
-	}
+    public Long getAmpActivityFrozenid() {
+        return ampActivityFrozenid;
+    }
+    public void setAmpActivityFrozenid(Long ampActivityFrozenid) {
+        this.ampActivityFrozenid = ampActivityFrozenid;
+    }
+    public AmpActivityGroup getActivityGroup() {
+        return activityGroup;
+    }
+    public void setActivityGroup(AmpActivityGroup activityGroup) {
+        this.activityGroup = activityGroup;
+    }
+    public AmpDataFreezeSettings getDataFreezeEvent() {
+        return dataFreezeEvent;
+    }
+    public void setDataFreezeEvent(AmpDataFreezeSettings dataFreezeEvent) {
+        this.dataFreezeEvent = dataFreezeEvent;
+    }
+    public Boolean getFrozen() {
+        return frozen;
+    }
+    public void setFrozen(Boolean frozen) {
+        this.frozen = frozen;
+    }
+    public Boolean getDeleted() {
+        return deleted;
+    }
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
+    }
     
 }

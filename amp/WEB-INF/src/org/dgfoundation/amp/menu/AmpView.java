@@ -10,7 +10,7 @@ import java.io.Serializable;
  *
  */
 public enum AmpView implements Serializable {
-	PUBLIC,
-	ADMIN,
-	TEAM;
+    PUBLIC,
+    ADMIN,
+    TEAM;
 }

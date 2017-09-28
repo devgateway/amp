@@ -25,31 +25,31 @@ import org.apache.struts.tiles.actions.TilesAction;
 
 public class Logout extends TilesAction {
 
-	private static Logger logger = Logger.getLogger(Logout.class);
+    private static Logger logger = Logger.getLogger(Logout.class);
 
-	public ActionForward execute(ComponentContext context,
-			ActionMapping mapping, ActionForm form, HttpServletRequest request,
-			HttpServletResponse response) throws IOException, ServletException {
+    public ActionForward execute(ComponentContext context,
+            ActionMapping mapping, ActionForm form, HttpServletRequest request,
+            HttpServletResponse response) throws IOException, ServletException {
         // Code was moved to org.digijava.module.aim.auth.AmpLogoutHandler
 /*
-		logger.debug("logout");
+        logger.debug("logout");
 
-		HttpSession session = request.getSession();
+        HttpSession session = request.getSession();
 
-		if (session.getAttribute("currentMember") != null) {
-			session.removeAttribute("currentMember");
-		}
+        if (session.getAttribute("currentMember") != null) {
+            session.removeAttribute("currentMember");
+        }
 
-		if (session.getAttribute("teamLeadFlag") != null) {
-			session.removeAttribute("teamLeadFlag");
-		}
+        if (session.getAttribute("teamLeadFlag") != null) {
+            session.removeAttribute("teamLeadFlag");
+        }
 
-		if (session.getAttribute("ampAdmin") != null) {
-			session.removeAttribute("ampAdmin");
-		}
+        if (session.getAttribute("ampAdmin") != null) {
+            session.removeAttribute("ampAdmin");
+        }
 
-		HttpLoginManager.logout(request, response);
+        HttpLoginManager.logout(request, response);
 */
-		return null;
-	}
+        return null;
+    }
 }

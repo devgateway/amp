@@ -24,25 +24,25 @@ import org.dgfoundation.amp.nireports.schema.NiDimension;
  * @param <T> the type of the key
  */
 public abstract class AmpCachedColumn<K extends Cell, T> extends AmpSqlSourcedColumn<K> {
-	
-	public final KeyBuilder<T> cacheKeyBuilder;
-	public final ExpiringCacher<T, NiReportsEngine, List<K>> cacher;
-	
-	public AmpCachedColumn(String columnName, NiDimension.LevelColumn levelColumn, String viewName, KeyBuilder<T> cacheKeyBuilder, Behaviour<?> behaviour) {
-		super(columnName, levelColumn, viewName, behaviour);
-		this.cacheKeyBuilder = cacheKeyBuilder;
-		this.cacher = new ExpiringCacher<>(String.format("column %s cacher", columnName), this::origFetch, new DatabaseChangedDetector(), 3 * 60 * 1000);
-	}
-	
-	@Override
-	public final List<K> fetch(NiReportsEngine engine) {
-		List<K> res = cacher.buildOrGetValue(cacheKeyBuilder.buildKey(engine, this), engine);
-		return res;
-	}
-	
-	protected List<K> origFetch(T key, NiReportsEngine engine) {
-		return super.fetch(engine);
-	}
-	
-	protected abstract K extractCell(NiReportsEngine engine, ResultSet rs) throws SQLException;
+    
+    public final KeyBuilder<T> cacheKeyBuilder;
+    public final ExpiringCacher<T, NiReportsEngine, List<K>> cacher;
+    
+    public AmpCachedColumn(String columnName, NiDimension.LevelColumn levelColumn, String viewName, KeyBuilder<T> cacheKeyBuilder, Behaviour<?> behaviour) {
+        super(columnName, levelColumn, viewName, behaviour);
+        this.cacheKeyBuilder = cacheKeyBuilder;
+        this.cacher = new ExpiringCacher<>(String.format("column %s cacher", columnName), this::origFetch, new DatabaseChangedDetector(), 3 * 60 * 1000);
+    }
+    
+    @Override
+    public final List<K> fetch(NiReportsEngine engine) {
+        List<K> res = cacher.buildOrGetValue(cacheKeyBuilder.buildKey(engine, this), engine);
+        return res;
+    }
+    
+    protected List<K> origFetch(T key, NiReportsEngine engine) {
+        return super.fetch(engine);
+    }
+    
+    protected abstract K extractCell(NiReportsEngine engine, ResultSet rs) throws SQLException;
 }

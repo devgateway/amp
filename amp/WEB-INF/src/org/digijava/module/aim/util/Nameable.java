@@ -8,8 +8,8 @@ package org.digijava.module.aim.util;
  * Objects that have a name 
  */
 public interface Nameable {
-	
-	public String getName();
-	
-	public void setName(String name);
+    
+    public String getName();
+    
+    public void setName(String name);
 }

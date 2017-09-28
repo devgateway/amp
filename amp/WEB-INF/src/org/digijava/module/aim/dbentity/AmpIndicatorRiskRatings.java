@@ -5,48 +5,48 @@ import java.io.Serializable;
 import org.digijava.module.aim.util.Identifiable;
 
 public class AmpIndicatorRiskRatings implements Identifiable, Serializable {
-	//IATI-check: to be ignored
-	
-//	@Interchangeable(fieldTitle="Indicator Risk Ratings ID", id = true)
-	private Long ampIndRiskRatingsId;
-//	@Interchangeable(fieldTitle="Rating Name", value = true)
-	private String ratingName;
-//	@Interchangeable(fieldTitle="Translated Rating Name")
-	private String translatedRatingName;
-//	@Interchangeable(fieldTitle="Rating Value")
-	private int ratingValue;
-	
-	public Long getAmpIndRiskRatingsId() {
-		return ampIndRiskRatingsId;
-	}
-	public void setAmpIndRiskRatingsId(Long ampIndRiskRatingsId) {
-		this.ampIndRiskRatingsId = ampIndRiskRatingsId;
-	}
-	public String getRatingName() {
-		return ratingName;
-	}
-	public void setRatingName(String ratingName) {
-		this.ratingName = ratingName;
-	}
-	public int getRatingValue() {
-		return ratingValue;
-	}
-	public void setRatingValue(int ratingValue) {
-		this.ratingValue = ratingValue;
-	}
-	public Object getIdentifier() {
-		return ampIndRiskRatingsId;
-	}
+    //IATI-check: to be ignored
+    
+//  @Interchangeable(fieldTitle="Indicator Risk Ratings ID", id = true)
+    private Long ampIndRiskRatingsId;
+//  @Interchangeable(fieldTitle="Rating Name", value = true)
+    private String ratingName;
+//  @Interchangeable(fieldTitle="Translated Rating Name")
+    private String translatedRatingName;
+//  @Interchangeable(fieldTitle="Rating Value")
+    private int ratingValue;
+    
+    public Long getAmpIndRiskRatingsId() {
+        return ampIndRiskRatingsId;
+    }
+    public void setAmpIndRiskRatingsId(Long ampIndRiskRatingsId) {
+        this.ampIndRiskRatingsId = ampIndRiskRatingsId;
+    }
+    public String getRatingName() {
+        return ratingName;
+    }
+    public void setRatingName(String ratingName) {
+        this.ratingName = ratingName;
+    }
+    public int getRatingValue() {
+        return ratingValue;
+    }
+    public void setRatingValue(int ratingValue) {
+        this.ratingValue = ratingValue;
+    }
+    public Object getIdentifier() {
+        return ampIndRiskRatingsId;
+    }
 
-	public String toString() {
-		return ratingName;
-	}
-	public String getTranslatedRatingName() {
-		return translatedRatingName;
-	}
-	public void setTranslatedRatingName(String translatedRatingName) {
-		this.translatedRatingName = translatedRatingName;
-	}
+    public String toString() {
+        return ratingName;
+    }
+    public String getTranslatedRatingName() {
+        return translatedRatingName;
+    }
+    public void setTranslatedRatingName(String translatedRatingName) {
+        this.translatedRatingName = translatedRatingName;
+    }
 
         @Override
         public int hashCode() {
@@ -57,12 +57,12 @@ public class AmpIndicatorRiskRatings implements Identifiable, Serializable {
 
     
         @Override
-	public boolean equals (Object o) {
-		if(!(o instanceof AmpIndicatorRiskRatings)) return false;
-		AmpIndicatorRiskRatings a = (AmpIndicatorRiskRatings) o;
-		if ( a == null )
-			return false;
-		return this.ampIndRiskRatingsId.equals( a.getAmpIndRiskRatingsId() );
-	}
+    public boolean equals (Object o) {
+        if(!(o instanceof AmpIndicatorRiskRatings)) return false;
+        AmpIndicatorRiskRatings a = (AmpIndicatorRiskRatings) o;
+        if ( a == null )
+            return false;
+        return this.ampIndRiskRatingsId.equals( a.getAmpIndRiskRatingsId() );
+    }
 
 }

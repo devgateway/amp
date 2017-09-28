@@ -5,6 +5,6 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface EntityFetcher<K> {
-	public K fetch(ResultSet row) throws SQLException;
-	public String[] getNeededColumnNames();
+    public K fetch(ResultSet row) throws SQLException;
+    public String[] getNeededColumnNames();
 }

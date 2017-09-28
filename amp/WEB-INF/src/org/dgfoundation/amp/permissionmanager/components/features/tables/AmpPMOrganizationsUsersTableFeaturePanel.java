@@ -31,49 +31,49 @@ public class AmpPMOrganizationsUsersTableFeaturePanel extends AmpFormTableFeatur
 
 
 
-	public AmpPMOrganizationsUsersTableFeaturePanel(String id, final IModel<User> userModel, String fmName, boolean hideLeadingNewLine) throws Exception {
-		super(id, userModel, fmName, hideLeadingNewLine);
-		final PropertyModel<Set<AmpOrganisation>> setModel=new PropertyModel<Set<AmpOrganisation>>(userModel,"assignedOrgs");
-		
-		final AbstractReadOnlyModel<List<AmpOrganisation>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(setModel);
-		
-		list = new PageableListView<AmpOrganisation>("orgsList", listModel, 5) {
-			private static final long serialVersionUID = 7218457979728871528L;
-			@Override
-			protected void populateItem(final ListItem<AmpOrganisation> item) {
-				final MarkupContainer listParent=this.getParent();
-				item.add(new Label("orgName", item.getModelObject().getName()));
-				item.add(new Label("orgAcronym", item.getModelObject().getAcronym()));
-				
+    public AmpPMOrganizationsUsersTableFeaturePanel(String id, final IModel<User> userModel, String fmName, boolean hideLeadingNewLine) throws Exception {
+        super(id, userModel, fmName, hideLeadingNewLine);
+        final PropertyModel<Set<AmpOrganisation>> setModel=new PropertyModel<Set<AmpOrganisation>>(userModel,"assignedOrgs");
+        
+        final AbstractReadOnlyModel<List<AmpOrganisation>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(setModel);
+        
+        list = new PageableListView<AmpOrganisation>("orgsList", listModel, 5) {
+            private static final long serialVersionUID = 7218457979728871528L;
+            @Override
+            protected void populateItem(final ListItem<AmpOrganisation> item) {
+                final MarkupContainer listParent=this.getParent();
+                item.add(new Label("orgName", item.getModelObject().getName()));
+                item.add(new Label("orgAcronym", item.getModelObject().getAcronym()));
+                
                 final AmpDeleteLinkField propertyDeleteLink = new AmpDeleteLinkField("removeVerifiedOrganization", "Remove Verified Organization Link") {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
                         setModel.getObject().remove(item.getModelObject());
                         try {
-							DbUtil.updateUser(userModel.getObject());
-						} catch (AdminException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+                            DbUtil.updateUser(userModel.getObject());
+                        } catch (AdminException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
                         list.removeAll();
                         target.add(AmpPMOrganizationsUsersTableFeaturePanel.this.getParent());
                     }
                 };
                 item.add(propertyDeleteLink);
-				
-				
-			}
-		};
-		list.setReuseItems(true);
-		add(list);
-	}
+                
+                
+            }
+        };
+        list.setReuseItems(true);
+        add(list);
+    }
 
-	public AmpPMOrganizationsUsersTableFeaturePanel(String id, IModel<User> model, String fmName) throws Exception {
-		super(id, model, fmName);
-		
-	}
+    public AmpPMOrganizationsUsersTableFeaturePanel(String id, IModel<User> model, String fmName) throws Exception {
+        super(id, model, fmName);
+        
+    }
 
-	
+    
 
 }

@@ -8,16 +8,16 @@ package org.digijava.module.gateperm.gates;
  */
 
 public class NotVerifiedRegionGate extends VerifiedRegionGate {
-	
-	public static final String DESCRIPTION = "Negates the VerifiedRegionGate";
-	
-	@Override
-	public boolean logic() throws Exception {
-		return !super.logic();
-	}
+    
+    public static final String DESCRIPTION = "Negates the VerifiedRegionGate";
+    
+    @Override
+    public boolean logic() throws Exception {
+        return !super.logic();
+    }
 
-	@Override
-	public String description() {
-		return DESCRIPTION;
-	}
+    @Override
+    public String description() {
+        return DESCRIPTION;
+    }
 }

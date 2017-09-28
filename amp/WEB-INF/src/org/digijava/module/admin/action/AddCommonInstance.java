@@ -36,21 +36,21 @@ public class AddCommonInstance
       extends Action {
 
     public ActionForward execute(ActionMapping mapping,
-				 ActionForm form,
-				 javax.servlet.http.HttpServletRequest request,
-				 javax.servlet.http.HttpServletResponse
-				 response) throws java.lang.Exception {
+                 ActionForm form,
+                 javax.servlet.http.HttpServletRequest request,
+                 javax.servlet.http.HttpServletResponse
+                 response) throws java.lang.Exception {
 
-	if (!DgUtil.isModuleInstanceAdministrator(request)) {
-	    return new ActionForward("/admin/index", true);
-	}
+    if (!DgUtil.isModuleInstanceAdministrator(request)) {
+        return new ActionForward("/admin/index", true);
+    }
 
-	CommonInstancesForm formBean = (CommonInstancesForm) form;
+    CommonInstancesForm formBean = (CommonInstancesForm) form;
 
-	CommonInstancesForm.CommonInstanceInfo info = new CommonInstancesForm.
-	      CommonInstanceInfo();
-	formBean.getCommonInstances().add(info);
-	return mapping.findForward("forward");
+    CommonInstancesForm.CommonInstanceInfo info = new CommonInstancesForm.
+          CommonInstanceInfo();
+    formBean.getCommonInstances().add(info);
+    return mapping.findForward("forward");
     }
 
 }

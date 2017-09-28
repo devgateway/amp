@@ -20,41 +20,41 @@ import org.digijava.module.xmlpatcher.util.XmlPatcherUtil;
  */
 public class XmlPatcherNativeLangWorker extends XmlPatcherSQLLangWorker {
 
-	/**
-	 * @param entity
-	 * @param log
-	 */
-	public XmlPatcherNativeLangWorker(Lang entity, Script parentEntity, AmpXmlPatchLog log) {
-		super(entity, parentEntity,log);
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * @param entity
+     * @param log
+     */
+    public XmlPatcherNativeLangWorker(Lang entity, Script parentEntity, AmpXmlPatchLog log) {
+        super(entity, parentEntity,log);
+        // TODO Auto-generated constructor stub
+    }
 
-	/**
-	 * Check if this native
-	 * 
-	 * @see org.digijava.module.xmlpatcher.worker.XmlPatcherWorker#runTimeCheck()
-	 */
-	@Override
-	protected boolean runTimeCheck() throws XmlPatcherWorkerException {
-		// check if the language type is supported by the xmlpatcher
-		if (!super.runTimeCheck())
-			return false;
-		boolean langFound = false;
-		for (int i = 0; i < XmlPatcherConstants.ScriptLangs.natives.length; i++) {
-			if (XmlPatcherConstants.ScriptLangs.natives[i].equals(getEntity()
-					.getType().value()))
-			langFound = true;
-		}
-		if (!langFound)
-			throw new XmlPatcherLangWorkerException(
-					"Unsupported native language " + getEntity().getType());
+    /**
+     * Check if this native
+     * 
+     * @see org.digijava.module.xmlpatcher.worker.XmlPatcherWorker#runTimeCheck()
+     */
+    @Override
+    protected boolean runTimeCheck() throws XmlPatcherWorkerException {
+        // check if the language type is supported by the xmlpatcher
+        if (!super.runTimeCheck())
+            return false;
+        boolean langFound = false;
+        for (int i = 0; i < XmlPatcherConstants.ScriptLangs.natives.length; i++) {
+            if (XmlPatcherConstants.ScriptLangs.natives[i].equals(getEntity()
+                    .getType().value()))
+            langFound = true;
+        }
+        if (!langFound)
+            throw new XmlPatcherLangWorkerException(
+                    "Unsupported native language " + getEntity().getType());
 
-		// checks if the SQL is compatible with the server
-		if (!XmlPatcherUtil.isSQLCompatible(getEntity().getType().value()))
-			return false;
+        // checks if the SQL is compatible with the server
+        if (!XmlPatcherUtil.isSQLCompatible(getEntity().getType().value()))
+            return false;
 
-		return true;
+        return true;
 
-	}
+    }
 
 }

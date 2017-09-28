@@ -35,29 +35,29 @@ public class AddNewIndicator
             newIndForm.reset();
             newIndForm.setActivitySectors(null);
         }
-        	
+            
         if(action!=null && action.equalsIgnoreCase("add") && newIndForm.getName() != null &&  
              newIndForm.getCode() != null){
-        	
-//        	if(newIndForm.getIndicatorType() == 0 || newIndForm.getIndType() == 2){
-        		 AmpPrgIndicator newInd = new AmpPrgIndicator();
+            
+//          if(newIndForm.getIndicatorType() == 0 || newIndForm.getIndType() == 2){
+                 AmpPrgIndicator newInd = new AmpPrgIndicator();
                  newInd.setCategory(newIndForm.getCategory());
                  newInd.setCode(newIndForm.getCode());
                  newInd.setCreationDate(newIndForm.getDate());
                  newInd.setDescription(newIndForm.getDescription());
-                 newInd.setName(newIndForm.getName());               	
+                 newInd.setName(newIndForm.getName());                  
                            
                  newInd.setSector(newIndForm.getSelActivitySector());
                  
                  newInd.setIndSectores(newIndForm.getActivitySectors());
-	                
+                    
                  if(newIndForm.getSelectedActivityId() == null && 
-	                	newIndForm.getActivitySectors() == null ){
-	                	   newInd.setDefaultInd(true);
-	                	   newInd.setType("global");
-	                      }
-	                 
-	                 
+                        newIndForm.getActivitySectors() == null ){
+                           newInd.setDefaultInd(true);
+                           newInd.setType("global");
+                          }
+                     
+                     
                  newInd.setSelectedActivity(newIndForm.getSelectedActivities());
                  //TODO INDIC IndicatorUtil.saveIndicators(newInd);
 //               ProgramUtil.saveThemeIndicators(newInd, newIndForm.getSelectedProgramId());
@@ -71,18 +71,18 @@ public class AddNewIndicator
                  indicator.setCode(newIndForm.getCode());
                  indicator.setType(newIndForm.getType());
                  if (newIndForm.getActivitySectors()!=null && newIndForm.getActivitySectors().size()>0){
-                	 indicator.setSectors(new HashSet<AmpSector>());
-                	 for (Iterator sectorIt = newIndForm.getActivitySectors().iterator(); sectorIt.hasNext();) {
-                		 //This is awful! why is here AmpActivitySector???!!
-						ActivitySector actSector = (ActivitySector) sectorIt.next();
-						AmpSector sector=SectorUtil.getAmpSector(actSector.getSectorId());
-						sector.setAmpSectorId(actSector.getSectorId());
-						indicator.getSectors().add(sector);
-					}
+                     indicator.setSectors(new HashSet<AmpSector>());
+                     for (Iterator sectorIt = newIndForm.getActivitySectors().iterator(); sectorIt.hasNext();) {
+                         //This is awful! why is here AmpActivitySector???!!
+                        ActivitySector actSector = (ActivitySector) sectorIt.next();
+                        AmpSector sector=SectorUtil.getAmpSector(actSector.getSectorId());
+                        sector.setAmpSectorId(actSector.getSectorId());
+                        indicator.getSectors().add(sector);
+                    }
                  }
                  
                  if (indicator.getSectors() == null
-					|| indicator.getSectors() != null && indicator.getSectors().size() == 0) {
+                    || indicator.getSectors() != null && indicator.getSectors().size() == 0) {
                      ActionMessages errors=new ActionMessages();
                      errors.add("noSector", new ActionMessage("error.aim.addIndicator.noSector"));
                      saveErrors(request, errors);
@@ -100,22 +100,22 @@ public class AddNewIndicator
                     return mapping.findForward("forward");
                 }                
                  
-        	}
-        	
+            }
+            
         // AMP-2828 by mouhamad
         String dateFormat = FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBALSETTINGS_DATEFORMAT);
         SimpleDateFormat sdf = null;
         //temporary workaround
         if (dateFormat!=null){
-        	//?????
+            //?????
             dateFormat = dateFormat.replace("m", "M");
             sdf = new SimpleDateFormat(dateFormat);
         }else{
-        	sdf= new SimpleDateFormat();
+            sdf= new SimpleDateFormat();
         }
-		
+        
         newIndForm.setDate(sdf.format(new Date()).toString());
       
-	    return mapping.findForward("forward");
+        return mapping.findForward("forward");
     }
 }

@@ -23,72 +23,72 @@ import org.dgfoundation.amp.ar.MetaInfoSet;
  */
 public abstract class CategCell extends Cell implements Categorizable {
 
-	public CategCell() {
-		super();
-		metaData = new MetaInfoSet();
-	}
-	
-	protected MetaInfoSet metaData;
-	
-	/**
-	 * @deprecated
-	 * @param categoryName
-	 * @return
-	 */
-	public boolean applyCategorization(String categoryName) {
-/*		Iterator i=metaData.iterator();
-		while (i.hasNext()) {
-			MetaInfo element = (MetaInfo) i.next();
-			if (element.getCategory().equals(categoryName)) {
-				categorizedBy=element;
-				return true;
-			} 	
-		}
-		categorizedBy=null;
+    public CategCell() {
+        super();
+        metaData = new MetaInfoSet();
+    }
+    
+    protected MetaInfoSet metaData;
+    
+    /**
+     * @deprecated
+     * @param categoryName
+     * @return
+     */
+    public boolean applyCategorization(String categoryName) {
+/*      Iterator i=metaData.iterator();
+        while (i.hasNext()) {
+            MetaInfo element = (MetaInfo) i.next();
+            if (element.getCategory().equals(categoryName)) {
+                categorizedBy=element;
+                return true;
+            }   
+        }
+        categorizedBy=null;
 */
-		return false;
-		
-	}
-	
+        return false;
+        
+    }
+    
 
-	public MetaInfo getMetaInfo(String category) {
-		return metaData.getMetaInfo(category);
-	}
-	
-	/**
-	 * @param ownerId
-	 * @param name
-	 * @param value
-	 */
-	public CategCell(Long id) {
-		super(id);
-		metaData = new MetaInfoSet();
-	}
+    public MetaInfo getMetaInfo(String category) {
+        return metaData.getMetaInfo(category);
+    }
+    
+    /**
+     * @param ownerId
+     * @param name
+     * @param value
+     */
+    public CategCell(Long id) {
+        super(id);
+        metaData = new MetaInfoSet();
+    }
 
-	/* (non-Javadoc)
-	 * @see org.dgfoundation.amp.ar.Cell#toString()
-	 */
-	public String toString() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    /* (non-Javadoc)
+     * @see org.dgfoundation.amp.ar.Cell#toString()
+     */
+    public String toString() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	/**
-	 * @return Returns the metaData.
-	 */
-	public MetaInfoSet getMetaData() {
-		return metaData;
-	}
+    /**
+     * @return Returns the metaData.
+     */
+    public MetaInfoSet getMetaData() {
+        return metaData;
+    }
 
-	/**
-	 * cleans all metadata which is safe to be deleted after the report has been generated and is only used for viewing
-	 * @param cell
-	 * @return
-	 */
-	public int clearMetaData()
-	{
-		int sz = metaData.size();
-		metaData.clear();
-		return sz;
-	}
+    /**
+     * cleans all metadata which is safe to be deleted after the report has been generated and is only used for viewing
+     * @param cell
+     * @return
+     */
+    public int clearMetaData()
+    {
+        int sz = metaData.size();
+        metaData.clear();
+        return sz;
+    }
 }

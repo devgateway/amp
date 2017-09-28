@@ -37,65 +37,65 @@ import org.digijava.kernel.entity.Message;
 
 public class TranslatorBean implements java.io.Serializable{
 
-	private static final long serialVersionUID = 1L;
-	Message srcMsg = new Message();
-	Message tragetMsg = null;
-	boolean needsUpdate = false;
+    private static final long serialVersionUID = 1L;
+    Message srcMsg = new Message();
+    Message tragetMsg = null;
+    boolean needsUpdate = false;
 
-	/**
-	 *
-	 */
-	public TranslatorBean() {
-		super();
+    /**
+     *
+     */
+    public TranslatorBean() {
+        super();
 
-	}
+    }
 
-	public TranslatorBean(Message srcMsg, Message tarMsg) {
+    public TranslatorBean(Message srcMsg, Message tarMsg) {
 
-			this.srcMsg = srcMsg;
-			this.tragetMsg = tarMsg;
-		}
+            this.srcMsg = srcMsg;
+            this.tragetMsg = tarMsg;
+        }
 
-	public TranslatorBean(Message srcMsg, Message tarMsg, boolean needsUpdate) {
+    public TranslatorBean(Message srcMsg, Message tarMsg, boolean needsUpdate) {
 
-			this.srcMsg = srcMsg;
-			this.tragetMsg = tarMsg;
-			this.needsUpdate = needsUpdate;
-		}
+            this.srcMsg = srcMsg;
+            this.tragetMsg = tarMsg;
+            this.needsUpdate = needsUpdate;
+        }
 
-	/**
-	 * @return
-	 */
-	public Message getSrcMsg() {
-		return this.srcMsg;
-	}
+    /**
+     * @return
+     */
+    public Message getSrcMsg() {
+        return this.srcMsg;
+    }
 
-	/**
-	 * @return
-	 */
-	public Message getTragetMsg() {
-		return this.tragetMsg;
-	}
+    /**
+     * @return
+     */
+    public Message getTragetMsg() {
+        return this.tragetMsg;
+    }
 
-	/* * @param message
-	 */
-	public void setSrcMsg(Message message) {
-		srcMsg = message;
-	}
+    /* * @param message
+     */
+    public void setSrcMsg(Message message) {
+        srcMsg = message;
+    }
 
-	/**
-	 * @param message
-	 */
-	public void setTragetMsg(Message message) {
-		tragetMsg = message;
-	}
+    /**
+     * @param message
+     */
+    public void setTragetMsg(Message message) {
+        tragetMsg = message;
+    }
 
-	public boolean isNeedsUpdate(){
-		return needsUpdate;
-	}
+    public boolean isNeedsUpdate(){
+        return needsUpdate;
+    }
 
-	public void setNeedsUpdate(boolean value){
-		this.needsUpdate = value;
-	}
+    public void setNeedsUpdate(boolean value){
+        this.needsUpdate = value;
+    }
 
 }

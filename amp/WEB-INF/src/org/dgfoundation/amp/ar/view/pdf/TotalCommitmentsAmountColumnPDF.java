@@ -14,24 +14,24 @@ import com.lowagie.text.pdf.PdfPTable;
  */
 public class TotalCommitmentsAmountColumnPDF extends TotalAmountColumnPDF {
 
-	/**
-	 * @param parent
-	 * @param item
-	 */
-	public TotalCommitmentsAmountColumnPDF(Exporter parent, Viewable item) {
-		super(parent, item);
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * @param parent
+     * @param item
+     */
+    public TotalCommitmentsAmountColumnPDF(Exporter parent, Viewable item) {
+        super(parent, item);
+        // TODO Auto-generated constructor stub
+    }
 
-	/**
-	 * @param table
-	 * @param item
-	 * @param ownerId
-	 */
-	public TotalCommitmentsAmountColumnPDF(PdfPTable table, Viewable item,
-			Long ownerId) {
-		super(table, item, ownerId);
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * @param table
+     * @param item
+     * @param ownerId
+     */
+    public TotalCommitmentsAmountColumnPDF(PdfPTable table, Viewable item,
+            Long ownerId) {
+        super(table, item, ownerId);
+        // TODO Auto-generated constructor stub
+    }
 
 }

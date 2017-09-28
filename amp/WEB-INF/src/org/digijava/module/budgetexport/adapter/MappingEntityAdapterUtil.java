@@ -18,7 +18,7 @@ import java.util.Set;
  * To change this template use File | Settings | File Templates.
  */
 public class MappingEntityAdapterUtil {
-    private static Logger logger	= Logger.getLogger(MappingEntityAdapterUtil.class);
+    private static Logger logger    = Logger.getLogger(MappingEntityAdapterUtil.class);
     private static Properties adapterProperties = null;
 
     private static String getEntityAdapterClassName (String extractorView) {

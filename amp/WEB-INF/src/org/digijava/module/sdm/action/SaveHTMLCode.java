@@ -56,7 +56,7 @@ public class SaveHTMLCode
             sdmItem.setRealType(SdmItem.TYPE_HTML);
 
             sdmItem.setContentText(formBean.getContentTitle());
-	    sdmItem.setContent(sdmItem.getContentText().getBytes());
+        sdmItem.setContent(sdmItem.getContentText().getBytes());
 
             DbUtil.addUpdateItem(formBean.getSdmDocument(), sdmItem);
 

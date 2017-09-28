@@ -25,7 +25,7 @@ public class PreviewCalendarEvent
                                  HttpServletResponse response) throws Exception {
 
 
-    	CalendarEventForm calendarEventForm = (CalendarEventForm) form;
+        CalendarEventForm calendarEventForm = (CalendarEventForm) form;
         try {
 
         } catch(Exception ex) {

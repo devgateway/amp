@@ -63,7 +63,7 @@ public class NewAddLocationForm extends ActivityForm {
 
     public boolean getCategoryLevelCountry() {
         return CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getValueKey().equals( 
-        		 CategoryManagerUtil.getAmpCategoryValueFromDb(parentCatValId).getValue() );
+                 CategoryManagerUtil.getAmpCategoryValueFromDb(parentCatValId).getValue() );
     }
 
 
@@ -182,28 +182,28 @@ public class NewAddLocationForm extends ActivityForm {
 
 
 
-	public Collection<AmpLocationIndicatorValue> getLocationIndicatorValues() {
-		return locationIndicatorValues;
-	}
+    public Collection<AmpLocationIndicatorValue> getLocationIndicatorValues() {
+        return locationIndicatorValues;
+    }
 
 
 
-	public void setLocationIndicatorValues(Collection<AmpLocationIndicatorValue> locationIndicatorValues) {
-		this.locationIndicatorValues = locationIndicatorValues;
-	}
+    public void setLocationIndicatorValues(Collection<AmpLocationIndicatorValue> locationIndicatorValues) {
+        this.locationIndicatorValues = locationIndicatorValues;
+    }
 
 
 
-	public Long getLocationId() {
-		return locationId;
-	}
+    public Long getLocationId() {
+        return locationId;
+    }
 
 
 
-	public void setLocationId(Long locationId) {
-		this.locationId = locationId;
-	}
+    public void setLocationId(Long locationId) {
+        this.locationId = locationId;
+    }
 
-	
+    
    
 }

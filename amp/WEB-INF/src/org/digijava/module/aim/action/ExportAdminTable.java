@@ -31,7 +31,7 @@ public class ExportAdminTable extends Action {
 
     private static final String BULLET = "\u2022";
 
-	@Override
+    @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws Exception {
@@ -139,17 +139,17 @@ public class ExportAdminTable extends Action {
                         bulletCell.setCellValue(text);
                         
                     } else {
-                    	bulletCell =  row.createCell(cellIndex++);
+                        bulletCell =  row.createCell(cellIndex++);
                     }
                     if (i == 0) { //title cells
                         bulletCell.setCellStyle(titleCS);
                     } else {
-                    	if(j==maxMerge-1){ // last cell from merged cells
-                    		bulletCell.setCellStyle(csLastCell);
-                    	}
-                    	else{
-                    		bulletCell.setCellStyle(cs);
-                    	}
+                        if(j==maxMerge-1){ // last cell from merged cells
+                            bulletCell.setCellStyle(csLastCell);
+                        }
+                        else{
+                            bulletCell.setCellStyle(cs);
+                        }
                        
                     }
 

@@ -18,99 +18,99 @@ import org.hibernate.annotations.Index;
 
 public class AmpReportColumn implements Serializable, Comparable<AmpReportColumn>
 {
-//	@Identificator
-//	private Long id;
-	
-	private static Logger logger = Logger.getLogger(AmpReportColumn.class);
-	@ColumnLike
-	private AmpColumns column;
-	@Order
-	private Long  orderId;
-	@Level
-	private AmpCategoryValue level;
-	
-	/**
-	 * whether this column was artificially added by the filter (not a part of the report specification)
-	 */
-	private boolean addedByFilter;
-	
-//	private boolean generated;
-	
-	private static AmpCategoryValue defaultLevel = null;
-	
-	public AmpReportColumn() {
-		
-		try {
-//			Session dbSession = PersistenceManager.getRequestDBSession();
-			if ( defaultLevel==null )
-				defaultLevel=CategoryManagerUtil.getAmpCategoryValueFromDb(CategoryConstants.ACTIVITY_LEVEL_KEY, (long)0);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			logger.error(e);
-		}
-		
-		
-		level	= defaultLevel;
-	}
+//  @Identificator
+//  private Long id;
+    
+    private static Logger logger = Logger.getLogger(AmpReportColumn.class);
+    @ColumnLike
+    private AmpColumns column;
+    @Order
+    private Long  orderId;
+    @Level
+    private AmpCategoryValue level;
+    
+    /**
+     * whether this column was artificially added by the filter (not a part of the report specification)
+     */
+    private boolean addedByFilter;
+    
+//  private boolean generated;
+    
+    private static AmpCategoryValue defaultLevel = null;
+    
+    public AmpReportColumn() {
+        
+        try {
+//          Session dbSession = PersistenceManager.getRequestDBSession();
+            if ( defaultLevel==null )
+                defaultLevel=CategoryManagerUtil.getAmpCategoryValueFromDb(CategoryConstants.ACTIVITY_LEVEL_KEY, (long)0);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            logger.error(e);
+        }
+        
+        
+        level   = defaultLevel;
+    }
 
-	public AmpColumns getColumn() {
-		return column;
-	}
-	public void setColumn(AmpColumns column) {
-		this.column = column;
-	}
-	public Long  getOrderId() {
-		return orderId;
-	}
-	public void setOrderId(Long orderId) {
-		this.orderId = orderId;
-	}
-	public AmpCategoryValue getLevel() {
-		return level;
-	}
-	public void setLevel(AmpCategoryValue level) {
-		this.level = level;
-	}
-	
-	@Override
-	public int compareTo(AmpReportColumn o) {
-		int delta = this.getOrderId().compareTo(o.getOrderId());
-		if (delta != 0) return delta;
-		return this.getColumn().compareTo(o.getColumn());
-	}
+    public AmpColumns getColumn() {
+        return column;
+    }
+    public void setColumn(AmpColumns column) {
+        this.column = column;
+    }
+    public Long  getOrderId() {
+        return orderId;
+    }
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
+    }
+    public AmpCategoryValue getLevel() {
+        return level;
+    }
+    public void setLevel(AmpCategoryValue level) {
+        this.level = level;
+    }
+    
+    @Override
+    public int compareTo(AmpReportColumn o) {
+        int delta = this.getOrderId().compareTo(o.getOrderId());
+        if (delta != 0) return delta;
+        return this.getColumn().compareTo(o.getColumn());
+    }
 
-	@Override
-	public boolean equals(Object arg0) {
-		AmpReportColumn other = (AmpReportColumn) arg0;
-		int delta = this.compareTo(other);
-		return delta == 0;
-	}
-	
-	@Override
-	public int hashCode() {
-	    if (orderId != null) {
-	        return orderId.hashCode();
-	    } else {
-	        return super.hashCode();
-	    }
-	}
+    @Override
+    public boolean equals(Object arg0) {
+        AmpReportColumn other = (AmpReportColumn) arg0;
+        int delta = this.compareTo(other);
+        return delta == 0;
+    }
+    
+    @Override
+    public int hashCode() {
+        if (orderId != null) {
+            return orderId.hashCode();
+        } else {
+            return super.hashCode();
+        }
+    }
 
-	@Override
-	public String toString()
-	{
-		if (column == null)
-			return "AmpReportColumn [null]";
-		return "ARC: " + column.toString() + "";
-	}
-	
-	public boolean isAddedByFilter(){
-		return addedByFilter;
-	}
-	
-	public void setAddedByFilter(boolean addedByFilter){
-		this.addedByFilter = addedByFilter;
-	}
+    @Override
+    public String toString()
+    {
+        if (column == null)
+            return "AmpReportColumn [null]";
+        return "ARC: " + column.toString() + "";
+    }
+    
+    public boolean isAddedByFilter(){
+        return addedByFilter;
+    }
+    
+    public void setAddedByFilter(boolean addedByFilter){
+        this.addedByFilter = addedByFilter;
+    }
 
-	
+    
 }

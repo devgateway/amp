@@ -111,13 +111,13 @@ public class AmpAidEffectivenessIndicator implements Serializable {
     }
     
     public String getFmName() {
-    	String fmName = ampIndicatorName;
-    	
-    	 if(ContentTranslationUtil.multilingualIsEnabled() && ampIndicatorId != null) {
-         	String baseLanguage = ContentTranslationUtil.getBaseLanguage();
-         	fmName = ContentTranslationUtil.loadFieldTranslationInLocale(AmpAidEffectivenessIndicator.class.getName(), ampIndicatorId, "ampIndicatorName", baseLanguage);
+        String fmName = ampIndicatorName;
+        
+         if(ContentTranslationUtil.multilingualIsEnabled() && ampIndicatorId != null) {
+            String baseLanguage = ContentTranslationUtil.getBaseLanguage();
+            fmName = ContentTranslationUtil.loadFieldTranslationInLocale(AmpAidEffectivenessIndicator.class.getName(), ampIndicatorId, "ampIndicatorName", baseLanguage);
          }
-    	
-    	return fmName;
+        
+        return fmName;
     }
 }

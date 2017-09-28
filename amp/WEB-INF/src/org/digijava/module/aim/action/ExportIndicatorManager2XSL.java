@@ -26,22 +26,22 @@ import org.digijava.module.aim.helper.IndicatorsBean;
 import org.digijava.module.aim.util.AdminXSLExportUtil;
 
 public class ExportIndicatorManager2XSL extends Action {
-	private static Logger logger = Logger
-	.getLogger(ExportIndicatorManager2XSL.class);
+    private static Logger logger = Logger
+    .getLogger(ExportIndicatorManager2XSL.class);
 
 
 public ActionForward execute(ActionMapping mapping, ActionForm form,
-	javax.servlet.http.HttpServletRequest request,
-	javax.servlet.http.HttpServletResponse response)
-	throws java.lang.Exception {
+    javax.servlet.http.HttpServletRequest request,
+    javax.servlet.http.HttpServletResponse response)
+    throws java.lang.Exception {
 HttpSession session = request.getSession();
 if (session.getAttribute("ampAdmin") == null) {
-	return mapping.findForward("index");
+    return mapping.findForward("index");
 } else {
-	String str = (String) session.getAttribute("ampAdmin");
-	if (str.equals("no")) {
-		return mapping.findForward("index");
-	}
+    String str = (String) session.getAttribute("ampAdmin");
+    if (str.equals("no")) {
+        return mapping.findForward("index");
+    }
 }
 response.setContentType("application/vnd.ms-excel");
 response.setHeader("Content-disposition", "inline; filename=Export.xls");
@@ -67,37 +67,37 @@ HSSFRow titleRow = sheet.createRow(rowIndex++);
 
 HSSFCell titleCell = titleRow.createCell(cellIndex++);
 HSSFRichTextString title = new HSSFRichTextString(
-		TranslatorWorker.translateText("Indicator Name", locale, siteId));
+        TranslatorWorker.translateText("Indicator Name", locale, siteId));
 titleCell.setCellValue(title);
 titleCell.setCellStyle(titleCS);
 
 HSSFCell cellSector = titleRow.createCell(cellIndex++);
 HSSFRichTextString sector= new HSSFRichTextString(
-		TranslatorWorker.translateText("Sector", locale, siteId));
+        TranslatorWorker.translateText("Sector", locale, siteId));
 cellSector.setCellValue(sector);
 cellSector.setCellStyle(titleCS);
 
 Collection<IndicatorsBean> indicators = allIndForm.getAllIndicators();
 
 if (indicators != null) {
-	for (IndicatorsBean indicator : indicators) {
-		cellIndex = 0;
-		HSSFRow row = sheet.createRow(rowIndex++);
-		HSSFCell cell=row.createCell(cellIndex++);
-		cell.setCellStyle(cs);
-		cell.setCellValue(indicator.getName());
-		cell = row.createCell(cellIndex++);
-		String currentRecord = "";
-		if (indicator.getSectorNames() != null) {
-			Collection<String> names=indicator.getSectorNames();
-			for (String name : names) {
-				currentRecord += AdminXSLExportUtil.BULLETCHAR
-						+ name + AdminXSLExportUtil.NEWLINECHAR;
-			}
-			cell.setCellValue( currentRecord);
-			cell.setCellStyle(cs);
-		} 
-	}
+    for (IndicatorsBean indicator : indicators) {
+        cellIndex = 0;
+        HSSFRow row = sheet.createRow(rowIndex++);
+        HSSFCell cell=row.createCell(cellIndex++);
+        cell.setCellStyle(cs);
+        cell.setCellValue(indicator.getName());
+        cell = row.createCell(cellIndex++);
+        String currentRecord = "";
+        if (indicator.getSectorNames() != null) {
+            Collection<String> names=indicator.getSectorNames();
+            for (String name : names) {
+                currentRecord += AdminXSLExportUtil.BULLETCHAR
+                        + name + AdminXSLExportUtil.NEWLINECHAR;
+            }
+            cell.setCellValue( currentRecord);
+            cell.setCellStyle(cs);
+        } 
+    }
 }
 sheet.autoSizeColumn(0); 
 sheet.autoSizeColumn(1);

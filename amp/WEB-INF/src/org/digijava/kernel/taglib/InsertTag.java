@@ -53,9 +53,9 @@ import org.digijava.kernel.viewmanager.ViewConfigFactory;
 public class InsertTag
     extends org.apache.struts.tiles.taglib.InsertTag {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private static Logger logger = I18NHelper.getKernelLogger(InsertTag.class);
+    private static Logger logger = I18NHelper.getKernelLogger(InsertTag.class);
 
     private static final String COMP_ID_KEY = "org.digijava.kernel.taglib.insert.component_key";
 

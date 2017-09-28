@@ -9,8 +9,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface OrganizationReportColumn {
-	public String columnName();
-	public PropertyType propertyType() default PropertyType.PLAIN;
-	public Class<?> returnedClass() default Object.class;
+    public String columnName();
+    public PropertyType propertyType() default PropertyType.PLAIN;
+    public Class<?> returnedClass() default Object.class;
 }
 

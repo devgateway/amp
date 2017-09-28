@@ -251,7 +251,7 @@ public class ActivityUtil {
         }
 
         saveAgreements(a, session, isActivityForm);
-        saveContacts(a, session,(draft != draftChange));       
+        saveContacts(a, session, (draft != draftChange));       
         updateComponentFunding(a, session);
         saveAnnualProjectBudgets(a, session);
         saveProjectCosts(a, session);

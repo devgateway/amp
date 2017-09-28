@@ -18,26 +18,26 @@ import org.digijava.module.gateperm.core.PermissionMap;
  */
 public class AmpPMViewFieldPermissionPanel extends AmpComponentPanel {
 
-	public AmpPMViewFieldPermissionPanel(String id, IModel<Set<AmpPMFieldPermissionViewer>> permsModel, String fmName) throws Exception {
-		super(id, permsModel, fmName, AmpFMTypes.MODULE);
-		super.setOutputMarkupId(true);
+    public AmpPMViewFieldPermissionPanel(String id, IModel<Set<AmpPMFieldPermissionViewer>> permsModel, String fmName) throws Exception {
+        super(id, permsModel, fmName, AmpFMTypes.MODULE);
+        super.setOutputMarkupId(true);
 
-		AmpPMViewFieldPermissionComponentPanel assignFieldPerm = new AmpPMViewFieldPermissionComponentPanel("viewFieldPermission", permsModel,"View Assign Field Permission");
-		assignFieldPerm.setOutputMarkupId(true);
-		add(assignFieldPerm);
-		
-	}
+        AmpPMViewFieldPermissionComponentPanel assignFieldPerm = new AmpPMViewFieldPermissionComponentPanel("viewFieldPermission", permsModel,"View Assign Field Permission");
+        assignFieldPerm.setOutputMarkupId(true);
+        add(assignFieldPerm);
+        
+    }
 
-	public AmpPMViewFieldPermissionPanel(String id, IModel model, String fmName, AmpFMTypes fmBehavior) {
-		super(id, model, fmName, fmBehavior);
-	}
+    public AmpPMViewFieldPermissionPanel(String id, IModel model, String fmName, AmpFMTypes fmBehavior) {
+        super(id, model, fmName, fmBehavior);
+    }
 
-	public AmpPMViewFieldPermissionPanel(String id, String fmName, AmpFMTypes fmType) {
-		super(id, fmName, fmType);
-	}
+    public AmpPMViewFieldPermissionPanel(String id, String fmName, AmpFMTypes fmType) {
+        super(id, fmName, fmType);
+    }
 
-	public AmpPMViewFieldPermissionPanel(String id, String fmName) {
-		super(id, fmName);
-	}
+    public AmpPMViewFieldPermissionPanel(String id, String fmName) {
+        super(id, fmName);
+    }
 
 }

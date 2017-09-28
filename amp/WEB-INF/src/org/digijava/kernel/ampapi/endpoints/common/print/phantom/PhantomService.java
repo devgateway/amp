@@ -34,10 +34,10 @@ public class PhantomService {
         try {
             if(!initialized) {
                 LOGGER.info("Initializing the phantom service");
-				executor = new PhantomJSFileExecutor(
-						PhantomJSReference.create()
-						.addCommandLineOptions("--ssl-protocol=any").build(),
-						new ExecutionTimeout(TIMEOUT, TimeUnit.SECONDS));
+                executor = new PhantomJSFileExecutor(
+                        PhantomJSReference.create()
+                        .addCommandLineOptions("--ssl-protocol=any").build(),
+                        new ExecutionTimeout(TIMEOUT, TimeUnit.SECONDS));
                 scriptFile = new File(PhantomService.class.getResource(PHANTOM_SCRIPT_FILE).getFile());
                 initialized = true;
             }

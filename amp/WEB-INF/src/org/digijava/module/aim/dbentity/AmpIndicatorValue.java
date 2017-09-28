@@ -15,7 +15,7 @@ import org.digijava.module.common.util.DateTimeUtil;
  *
  */
 public class AmpIndicatorValue implements Serializable, Cloneable{
-	private static final Logger logger = Logger.getLogger(AmpIndicatorValue.class);
+    private static final Logger logger = Logger.getLogger(AmpIndicatorValue.class);
     /*
      * NOTICE
      * 
@@ -24,30 +24,30 @@ public class AmpIndicatorValue implements Serializable, Cloneable{
      * 
      * Thanks!
      */
-	public static final int TARGET=0;
-	public static final int ACTUAL=1;
-	public static final int BASE=2;
-	public static final int REVISED=3;
-	
+    public static final int TARGET=0;
+    public static final int ACTUAL=1;
+    public static final int BASE=2;
+    public static final int REVISED=3;
+    
 
 
-	private static final long serialVersionUID = 1L;
-	private Long indValId;
-	private String comment;
-	private Date valueDate;
+    private static final long serialVersionUID = 1L;
+    private Long indValId;
+    private String comment;
+    private Date valueDate;
 
     private Date dataIntervalStart;
     private Date dataIntervalEnd;
 
-	private Double value;
-	private int valueType;
-	private AmpCategoryValue logFrame;
-	private AmpIndicatorRiskRatings risk;
-	private Boolean defaultInd;
-	private IndicatorConnection indicatorConnection;
-	private AmpLocation location;
-	
-	private AmpCategoryValue indicatorSource;
+    private Double value;
+    private int valueType;
+    private AmpCategoryValue logFrame;
+    private AmpIndicatorRiskRatings risk;
+    private Boolean defaultInd;
+    private IndicatorConnection indicatorConnection;
+    private AmpLocation location;
+    
+    private AmpCategoryValue indicatorSource;
     private AmpIndicatorSubgroup subgroup;
     /*
      * NOTICE
@@ -62,7 +62,7 @@ public class AmpIndicatorValue implements Serializable, Cloneable{
         }
         
         public AmpIndicatorValue(int valueType) {
-        	this.valueType = valueType;
+            this.valueType = valueType;
         }
 
         /*these  helper methods are used
@@ -81,63 +81,63 @@ public class AmpIndicatorValue implements Serializable, Cloneable{
             }
         }
 
-	public Long getIndValId() {
-		return indValId;
-	}
-	public void setIndValId(Long indValId) {
-		this.indValId = indValId;
-	}
-	public String getComment() {
-		return comment;
-	}
-	public void setComment(String comment) {
-		this.comment = comment;
-	}
-	public Date getValueDate() {
-		return valueDate;
-	}
-	public void setValueDate(Date valueDate) {
-		this.valueDate = valueDate;
-	}
-	public Double getValue() {
-		return value;
-	}
-	public void setValue(Double value) {
-		this.value = value;
-	}
-	public int getValueType() {
-		return valueType;
-	}
-	public void setValueType(int valueType) {
-		this.valueType = valueType;
-	}
-	public AmpCategoryValue getLogFrame() {
-		return logFrame;
-	}
-	public void setLogFrame(AmpCategoryValue logFrame) {
-		this.logFrame = logFrame;
-	}
-	public AmpIndicatorRiskRatings getRisk() {
-		return risk;
-	}
-	public void setRisk(AmpIndicatorRiskRatings risk) {
-		this.risk = risk;
-	}
-	public IndicatorConnection getIndicatorConnection() {
-		return indicatorConnection;
-	}
-	public void setIndicatorConnection(IndicatorConnection indicatorConnection) {
-		this.indicatorConnection = indicatorConnection;
-	}
-	public Boolean getDefaultInd() {
-		return defaultInd;
-	}
-	public void setDefaultInd(Boolean defaultInd) {
-		this.defaultInd = defaultInd;
-	}
-	public AmpLocation getLocation() {
-		return location;
-	}
+    public Long getIndValId() {
+        return indValId;
+    }
+    public void setIndValId(Long indValId) {
+        this.indValId = indValId;
+    }
+    public String getComment() {
+        return comment;
+    }
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+    public Date getValueDate() {
+        return valueDate;
+    }
+    public void setValueDate(Date valueDate) {
+        this.valueDate = valueDate;
+    }
+    public Double getValue() {
+        return value;
+    }
+    public void setValue(Double value) {
+        this.value = value;
+    }
+    public int getValueType() {
+        return valueType;
+    }
+    public void setValueType(int valueType) {
+        this.valueType = valueType;
+    }
+    public AmpCategoryValue getLogFrame() {
+        return logFrame;
+    }
+    public void setLogFrame(AmpCategoryValue logFrame) {
+        this.logFrame = logFrame;
+    }
+    public AmpIndicatorRiskRatings getRisk() {
+        return risk;
+    }
+    public void setRisk(AmpIndicatorRiskRatings risk) {
+        this.risk = risk;
+    }
+    public IndicatorConnection getIndicatorConnection() {
+        return indicatorConnection;
+    }
+    public void setIndicatorConnection(IndicatorConnection indicatorConnection) {
+        this.indicatorConnection = indicatorConnection;
+    }
+    public Boolean getDefaultInd() {
+        return defaultInd;
+    }
+    public void setDefaultInd(Boolean defaultInd) {
+        this.defaultInd = defaultInd;
+    }
+    public AmpLocation getLocation() {
+        return location;
+    }
 
     public AmpIndicatorSubgroup getSubgroup() {
         return subgroup;
@@ -152,8 +152,8 @@ public class AmpIndicatorValue implements Serializable, Cloneable{
     }
 
     public void setLocation(AmpLocation location) {
-		this.location = location;
-	}
+        this.location = location;
+    }
 
     public void setSubgroup(AmpIndicatorSubgroup subgroup) {
         this.subgroup = subgroup;
@@ -168,7 +168,7 @@ public class AmpIndicatorValue implements Serializable, Cloneable{
     }
 
 
-		public AmpCategoryValue getIndicatorSource() {
+        public AmpCategoryValue getIndicatorSource() {
             return indicatorSource;
     }
 
@@ -187,51 +187,51 @@ public class AmpIndicatorValue implements Serializable, Cloneable{
     
     @Override
     public Object clone() {
-    	try {
-			return super.clone();
-		} catch (CloneNotSupportedException e) {
-			logger.error("Clone not supported!", e);
-			return null;
-		}
+        try {
+            return super.clone();
+        } catch (CloneNotSupportedException e) {
+            logger.error("Clone not supported!", e);
+            return null;
+        }
     }
     /*
     @Override
     public AmpIndicatorValue clone() {
-    	AmpIndicatorValue r = new AmpIndicatorValue();
-    	
-    	r.setValue(value);
-    	r.setValueDate(valueDate);
-    	r.setComment(comment);
-    	r.setIndValId(indValId);
-    	r.setDataIntervalStart(dataIntervalStart);
-    	r.setDataIntervalEnd(dataIntervalEnd);
-    	r.setValueType(valueType);
-    	r.setLogFrame(logFrame);
-    	r.setRisk(risk);
-    	r.setDefaultInd(defaultInd);
-    	r.setIndicatorConnection(indicatorConnection);
-    	r.setLocation(location);
-    	r.setIndicatorSource(indicatorSource);
-    	r.setSubgroup(subgroup);
+        AmpIndicatorValue r = new AmpIndicatorValue();
+        
+        r.setValue(value);
+        r.setValueDate(valueDate);
+        r.setComment(comment);
+        r.setIndValId(indValId);
+        r.setDataIntervalStart(dataIntervalStart);
+        r.setDataIntervalEnd(dataIntervalEnd);
+        r.setValueType(valueType);
+        r.setLogFrame(logFrame);
+        r.setRisk(risk);
+        r.setDefaultInd(defaultInd);
+        r.setIndicatorConnection(indicatorConnection);
+        r.setLocation(location);
+        r.setIndicatorSource(indicatorSource);
+        r.setSubgroup(subgroup);
 
-    	return r;
+        return r;
     }
-	*/
+    */
     public void copyValuesTo(AmpIndicatorValue r) {
-    	r.setValue(value);
-    	r.setValueDate(valueDate);
-    	r.setComment(comment);
-    	r.setIndValId(indValId);
-    	r.setDataIntervalStart(dataIntervalStart);
-    	r.setDataIntervalEnd(dataIntervalEnd);
-    	r.setValueType(valueType);
-    	//r.setLogFrame(logFrame);
-    	//r.setRisk(risk);
-    	//r.setIndicatorConnection(indicatorConnection);
-    	r.setDefaultInd(defaultInd);
-    	//r.setLocation(location);
-    	//r.setIndicatorSource(indicatorSource);
-    	//r.setSubgroup(subgroup);
+        r.setValue(value);
+        r.setValueDate(valueDate);
+        r.setComment(comment);
+        r.setIndValId(indValId);
+        r.setDataIntervalStart(dataIntervalStart);
+        r.setDataIntervalEnd(dataIntervalEnd);
+        r.setValueType(valueType);
+        //r.setLogFrame(logFrame);
+        //r.setRisk(risk);
+        //r.setIndicatorConnection(indicatorConnection);
+        r.setDefaultInd(defaultInd);
+        //r.setLocation(location);
+        //r.setIndicatorSource(indicatorSource);
+        //r.setSubgroup(subgroup);
     }
 
 }

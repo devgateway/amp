@@ -15,41 +15,41 @@ import org.dgfoundation.amp.algo.ValueWrapper;
  * 
  */
 public class IntWrapper extends ValueWrapper<Integer> {
-	public static final int DEFAULT_VALUE = 0;
+    public static final int DEFAULT_VALUE = 0;
 
-	public IntWrapper() {
-		super(DEFAULT_VALUE);
-	}
+    public IntWrapper() {
+        super(DEFAULT_VALUE);
+    }
 
-	public IntWrapper inc() {
-		value++;
-		return this;
-	}
+    public IntWrapper inc() {
+        value++;
+        return this;
+    }
 
-	public IntWrapper inc(int amount) {
-		value += amount;
-		return this;
-	}
+    public IntWrapper inc(int amount) {
+        value += amount;
+        return this;
+    }
 
-	public IntWrapper dec() {
-		value--;
-		return this;
-	}
+    public IntWrapper dec() {
+        value--;
+        return this;
+    }
 
-	public IntWrapper dec(int amount) {
-		value -= amount;
-		return this;
-	}
+    public IntWrapper dec(int amount) {
+        value -= amount;
+        return this;
+    }
 
-	public short shortValue() {
-		return value.shortValue();
-	}
+    public short shortValue() {
+        return value.shortValue();
+    }
 
-	public int intValue() {
-		return value;
-	}
+    public int intValue() {
+        return value;
+    }
 
-	public void reset() {
-		value = DEFAULT_VALUE;
-	}
+    public void reset() {
+        value = DEFAULT_VALUE;
+    }
 }

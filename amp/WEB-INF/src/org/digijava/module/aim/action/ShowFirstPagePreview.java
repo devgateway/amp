@@ -17,31 +17,31 @@ import org.digijava.module.aim.form.WelcomePageForm;
 import org.digijava.module.aim.util.FeaturesUtil;
 
 public class ShowFirstPagePreview extends Action {
-	private static Logger logger = Logger.getLogger(ShowFirstPagePreview.class);
+    private static Logger logger = Logger.getLogger(ShowFirstPagePreview.class);
 
-	public ActionForward execute(ActionMapping mapping,ActionForm form,
-			HttpServletRequest request,HttpServletResponse response) throws Exception {
+    public ActionForward execute(ActionMapping mapping,ActionForm form,
+            HttpServletRequest request,HttpServletResponse response) throws Exception {
 
-		WelcomePageForm wpForm = (WelcomePageForm) form;
-		
-		AmpHomeThumbnail homeThumbnail1 = null;
-		AmpHomeThumbnail homeThumbnail2 = null;
-		homeThumbnail1 = FeaturesUtil.getAmpHomeThumbnail(1);
-		homeThumbnail2 = FeaturesUtil.getAmpHomeThumbnail(2);
-		wpForm.setThumbnailPlace1(homeThumbnail1);	
-		wpForm.setThumbnailPlace2(homeThumbnail2);	
-		
-//		HttpSession session = request.getSession();
-//		if (!RequestUtils.isAdmin(response, session, request)) {
-//			return null;
-//		}
-//		
-//		FlagUploaderForm fuForm = (FlagUploaderForm) form;
-//		fuForm.setCntryFlags(FeaturesUtil.getAllCountryFlags());
+        WelcomePageForm wpForm = (WelcomePageForm) form;
+        
+        AmpHomeThumbnail homeThumbnail1 = null;
+        AmpHomeThumbnail homeThumbnail2 = null;
+        homeThumbnail1 = FeaturesUtil.getAmpHomeThumbnail(1);
+        homeThumbnail2 = FeaturesUtil.getAmpHomeThumbnail(2);
+        wpForm.setThumbnailPlace1(homeThumbnail1);  
+        wpForm.setThumbnailPlace2(homeThumbnail2);  
+        
+//      HttpSession session = request.getSession();
+//      if (!RequestUtils.isAdmin(response, session, request)) {
+//          return null;
+//      }
+//      
+//      FlagUploaderForm fuForm = (FlagUploaderForm) form;
+//      fuForm.setCntryFlags(FeaturesUtil.getAllCountryFlags());
 //        Collection<CountryBean> countries = org.digijava.module.aim.util.DbUtil.getTranlatedCountries(request);
 //
-//		fuForm.setCountries(countries);
+//      fuForm.setCountries(countries);
 
-		return mapping.findForward("forward");
-	}
+        return mapping.findForward("forward");
+    }
 }

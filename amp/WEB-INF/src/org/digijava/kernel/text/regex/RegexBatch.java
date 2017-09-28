@@ -21,70 +21,70 @@ import java.util.regex.Pattern;
  */
 public class RegexBatch {
 
-	private final String[] REGEXPS;
-	private final List<Pattern> PATTERNS;
-	private final RegexBatch[] NASTED_BATCHES;
-	
-	/**
-	 * Creates batch in normal mode for specified regex array and flags.
-	 * When processing texts regexs will be use din same order as specified here. 
-	 * @param regularExpressions
-	 * @param flags
-	 */
-	public RegexBatch(String[] regularExpressions, int flags){
-		REGEXPS = regularExpressions;
-		PATTERNS = new ArrayList<Pattern>(regularExpressions.length);
-		NASTED_BATCHES = null;
-		for (String regex : REGEXPS) {
-			Pattern pattern = Pattern.compile(regex);
-			PATTERNS.add(Pattern.compile(regex, flags));
-			PATTERNS.add(pattern);
-		}
-	}
+    private final String[] REGEXPS;
+    private final List<Pattern> PATTERNS;
+    private final RegexBatch[] NASTED_BATCHES;
+    
+    /**
+     * Creates batch in normal mode for specified regex array and flags.
+     * When processing texts regexs will be use din same order as specified here. 
+     * @param regularExpressions
+     * @param flags
+     */
+    public RegexBatch(String[] regularExpressions, int flags){
+        REGEXPS = regularExpressions;
+        PATTERNS = new ArrayList<Pattern>(regularExpressions.length);
+        NASTED_BATCHES = null;
+        for (String regex : REGEXPS) {
+            Pattern pattern = Pattern.compile(regex);
+            PATTERNS.add(Pattern.compile(regex, flags));
+            PATTERNS.add(pattern);
+        }
+    }
 
-	/**
-	 * Creates batch in parent mode for specified children batches.
-	 * This allows to build trees of batches.
-	 * @param regexBatches
-	 */
-	public RegexBatch(RegexBatch[] regexBatches){
-		REGEXPS = null;
-		PATTERNS = null;
-		NASTED_BATCHES = regexBatches;
-	}
-	
-	/**
-	 * Replace all matching 
-	 * @param text
-	 * @param replacemant
-	 * @return
-	 */
-	public String replaceAll(String text, String replacemant){
-		if (NASTED_BATCHES == null) {
-			return doLocal(text, replacemant);
-		}
-		return doNastedGroups(text, replacemant);
-	}
-	
-	private String doLocal(String text, String replacemant){
-		for (Pattern pattern : PATTERNS) {
-			text = pattern.matcher(text).replaceAll(replacemant); 
-		}
-		return text;
-	}
-	
-	private String doNastedGroups(String text, String replacemant){
-		for (RegexBatch batch : NASTED_BATCHES) {
-			text = batch.replaceAll(text, replacemant);
-		}
-		return text;
-	}
+    /**
+     * Creates batch in parent mode for specified children batches.
+     * This allows to build trees of batches.
+     * @param regexBatches
+     */
+    public RegexBatch(RegexBatch[] regexBatches){
+        REGEXPS = null;
+        PATTERNS = null;
+        NASTED_BATCHES = regexBatches;
+    }
+    
+    /**
+     * Replace all matching 
+     * @param text
+     * @param replacemant
+     * @return
+     */
+    public String replaceAll(String text, String replacemant){
+        if (NASTED_BATCHES == null) {
+            return doLocal(text, replacemant);
+        }
+        return doNastedGroups(text, replacemant);
+    }
+    
+    private String doLocal(String text, String replacemant){
+        for (Pattern pattern : PATTERNS) {
+            text = pattern.matcher(text).replaceAll(replacemant); 
+        }
+        return text;
+    }
+    
+    private String doNastedGroups(String text, String replacemant){
+        for (RegexBatch batch : NASTED_BATCHES) {
+            text = batch.replaceAll(text, replacemant);
+        }
+        return text;
+    }
 
-	/**
-	 * Return regular expressions of the batch.
-	 * @return null if in parent mode.
-	 */
-	public String[] getRegexArray() {
-		return REGEXPS;
-	}
+    /**
+     * Return regular expressions of the batch.
+     * @return null if in parent mode.
+     */
+    public String[] getRegexArray() {
+        return REGEXPS;
+    }
 }

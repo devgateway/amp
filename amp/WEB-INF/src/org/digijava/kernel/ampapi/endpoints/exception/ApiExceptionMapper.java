@@ -25,10 +25,10 @@ public class ApiExceptionMapper implements ExceptionMapper<Exception> {
     private static final Logger logger = Logger.getLogger(ApiExceptionMapper.class);
     private static final int MAX_EXCEPTION_NESTED = 2;
     public static final ApiErrorMessage INTERNAL_ERROR = new ApiErrorMessage(ApiError.GENERIC_UNHANDLED_ERROR_CODE, 
-    		ApiErrorResponse.INTERNAL_ERROR);
+            ApiErrorResponse.INTERNAL_ERROR);
     
     @Context
-	private HttpServletRequest httpRequest;
+    private HttpServletRequest httpRequest;
     
     @Override
     public Response toResponse(Exception e) {
@@ -37,11 +37,11 @@ public class ApiExceptionMapper implements ExceptionMapper<Exception> {
         logger.error(e.getMessage(), e);
         
         if (e instanceof ApiRuntimeException) {
-    		ApiRuntimeException apiException = (ApiRuntimeException) e;
-    		
-    		return ApiErrorResponse.buildGenericError(apiException.getResponseStatus(), apiException.getError(), 
-    		        mediaType);
-    	}
+            ApiRuntimeException apiException = (ApiRuntimeException) e;
+            
+            return ApiErrorResponse.buildGenericError(apiException.getResponseStatus(), apiException.getError(), 
+                    mediaType);
+        }
         
         ApiErrorMessage apiErrorMessage = getApiErrorMessageFromException(e);
        
@@ -54,8 +54,8 @@ public class ApiExceptionMapper implements ExceptionMapper<Exception> {
      * @return custom API error message
      */
     public ApiErrorMessage getApiErrorMessageFromException(Throwable e) {
-    	String message = extractMessageFromException(e);
-    	return INTERNAL_ERROR.withDetails(message);
+        String message = extractMessageFromException(e);
+        return INTERNAL_ERROR.withDetails(message);
     }
 
     private String extractMessageFromException(Throwable e) {
@@ -67,7 +67,7 @@ public class ApiExceptionMapper implements ExceptionMapper<Exception> {
     }
     
     private String extractMessageFromException(Throwable e, int rootCauseNest, StringBuilder accumulatedMessage) {
-    	// collect deeper cause
+        // collect deeper cause
         if (e.getCause() != null
                 && e.getCause().getMessage() != null
                 && rootCauseNest < MAX_EXCEPTION_NESTED) {

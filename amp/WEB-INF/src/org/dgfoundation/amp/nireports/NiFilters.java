@@ -17,44 +17,44 @@ import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
  *
  */
 public interface NiFilters {
-	
-	/**
-	 * the IDs of the entities (activities / pledges) which are selected by the workspace filter
-	 * @return
-	 */
-	public Set<Long> getWorkspaceActivityIds();
-	
-	/**
-	 * the IDs of the entities (activities/pledges) which should be taken into this report (taking filtering into account)
-	 * call it after having populated the columns with data
-	 * @return
-	 */
-	public Set<Long> getFilteredActivityIds();
-	
-	/**
-	 * returns the Predicate-filters to impose on all the cells which come out of fetchers IF they have the given {@link NiDimensionUsage}.
-	 * Cells which do not respond to a given NiDimension are unaffected by a given predicate
-	 * @param engine
-	 * @return
-	 */
-	public Map<NiDimensionUsage, Predicate<NiDimension.Coordinate>> getProcessedFilters();
-	
-	/**
-	 * returns the predicate-filters to impose on all the raw cells which come out of fetchers on a given column.
-	 * @return
-	 */
-	public Map<String, Predicate<Cell>> getCellPredicates();
-	
-	/**
-	 * returns a set of columns which should be fetched-and-filtered; then, only the activityIds which have survived filtering in these columns should be kept in the rest of the report 
-	 * @return
-	 */
-	public Set<String> getFilteringColumns();
+    
+    /**
+     * the IDs of the entities (activities / pledges) which are selected by the workspace filter
+     * @return
+     */
+    public Set<Long> getWorkspaceActivityIds();
+    
+    /**
+     * the IDs of the entities (activities/pledges) which should be taken into this report (taking filtering into account)
+     * call it after having populated the columns with data
+     * @return
+     */
+    public Set<Long> getFilteredActivityIds();
+    
+    /**
+     * returns the Predicate-filters to impose on all the cells which come out of fetchers IF they have the given {@link NiDimensionUsage}.
+     * Cells which do not respond to a given NiDimension are unaffected by a given predicate
+     * @param engine
+     * @return
+     */
+    public Map<NiDimensionUsage, Predicate<NiDimension.Coordinate>> getProcessedFilters();
+    
+    /**
+     * returns the predicate-filters to impose on all the raw cells which come out of fetchers on a given column.
+     * @return
+     */
+    public Map<String, Predicate<Cell>> getCellPredicates();
+    
+    /**
+     * returns a set of columns which should be fetched-and-filtered; then, only the activityIds which have survived filtering in these columns should be kept in the rest of the report 
+     * @return
+     */
+    public Set<String> getFilteringColumns();
 
-	/**
-	 * returns a list of hierarchies which should be mandatorily part of the report. In case the ReportSpec does not mandate any of them, the hierarchy will be added artificially and then removed via collapsing
-	 * @return
-	 */
-	public Set<String> getMandatoryHiers();
-	//public Map<NiDimensionUsage, Predicate<NiDimension.Coordinate>> getTransformedFilters();
+    /**
+     * returns a list of hierarchies which should be mandatorily part of the report. In case the ReportSpec does not mandate any of them, the hierarchy will be added artificially and then removed via collapsing
+     * @return
+     */
+    public Set<String> getMandatoryHiers();
+    //public Map<NiDimensionUsage, Predicate<NiDimension.Coordinate>> getTransformedFilters();
 }

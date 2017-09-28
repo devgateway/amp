@@ -16,33 +16,33 @@ import org.apache.struts.upload.FormFile;
  *
  */
 public class ExchangePermissionForm extends ActionForm {
-	private Long[] permissions;
-	private FormFile fileUploaded;
+    private Long[] permissions;
+    private FormFile fileUploaded;
 
-	@Override
-	public void reset(ActionMapping arg0, HttpServletRequest arg1) {
-		// TODO Auto-generated method stub
-		super.reset(arg0, arg1);
-		fileUploaded=null;
-		permissions=null;
+    @Override
+    public void reset(ActionMapping arg0, HttpServletRequest arg1) {
+        // TODO Auto-generated method stub
+        super.reset(arg0, arg1);
+        fileUploaded=null;
+        permissions=null;
 
-	}
+    }
 
-	public Long[] getPermissions() {
-		return permissions;
-	}
+    public Long[] getPermissions() {
+        return permissions;
+    }
 
-	public void setPermissions(Long[] permissions) {
-		this.permissions = permissions;
-	}
+    public void setPermissions(Long[] permissions) {
+        this.permissions = permissions;
+    }
 
-	public FormFile getFileUploaded() {
-		return fileUploaded;
-	}
+    public FormFile getFileUploaded() {
+        return fileUploaded;
+    }
 
-	public void setFileUploaded(FormFile fileUploaded) {
-		this.fileUploaded = fileUploaded;
-	}
+    public void setFileUploaded(FormFile fileUploaded) {
+        this.fileUploaded = fileUploaded;
+    }
 
 
 }

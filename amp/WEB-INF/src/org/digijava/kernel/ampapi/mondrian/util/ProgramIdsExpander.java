@@ -7,15 +7,15 @@ import java.util.Set;
 import org.digijava.module.aim.util.ProgramUtil;
 
 public class ProgramIdsExpander extends IdsExpander {
-	
-	public ProgramIdsExpander(String factColumnName) {
-		super(factColumnName);
-	}
-	
-	@Override public Set<Long> expandIds(List<Long> values) {
-		Set<Long> res = new HashSet<>();
-		res.addAll(ProgramUtil.getRecursiveChildrenOfPrograms(values));
-		//res.addAll(ProgramUtil.getRecursiveAscendantsOfPrograms(values));
-		return res;
-	}
+    
+    public ProgramIdsExpander(String factColumnName) {
+        super(factColumnName);
+    }
+    
+    @Override public Set<Long> expandIds(List<Long> values) {
+        Set<Long> res = new HashSet<>();
+        res.addAll(ProgramUtil.getRecursiveChildrenOfPrograms(values));
+        //res.addAll(ProgramUtil.getRecursiveAscendantsOfPrograms(values));
+        return res;
+    }
 }

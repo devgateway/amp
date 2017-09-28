@@ -18,55 +18,55 @@ import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCateg
  * @author Nadejda Mandrescu
  */
 public class GisConstants {
-	
-	/*
-	public static final String COMMITMENTS = "Commitments";  
-	public static final String DISBURSEMENTS = "Disbursements";
-	public static final String EXPENDITURES = "Expenditures";
-	*/
-	public static final String USE_ICONS_FOR_SECTORS_IN_PROJECT_LIST =  "Use icons for Sectors in Project List";
-	public static final String PROJECT_SITES = "Project sites";
-	public static final String DOWNLOAD_MAP_SELECTOR = "Download Map selector";
-	
-	public static final String ADM0 = "adm-0";
-	public static final String ADM1 = "adm-1";
-	public static final String ADM2 = "adm-2";
-	public static final String ADM3 = "adm-3";
-	
-	public static final String GIS_STRUCTURE_POLYGON = "Polygon";
-	public static final String GIS_STRUCTURE_POINT = "Point";
-	public static final String GIS_STRUCTURE_POLYLINE = "Polyline";
-	
-	/**
-	 * The order is important - this is the priority order between measures, 
-	 * that is used to convert the report config to gis funding type option   
-	 */
-	/* 
-	public static final Map<String, String> MEASURE_TO_NAME_MAP = new LinkedHashMap<String, String>() {{
-		put(MeasureConstants.ACTUAL_COMMITMENTS, COMMITMENTS);
-		put(MeasureConstants.ACTUAL_DISBURSEMENTS, DISBURSEMENTS);
-		put(MeasureConstants.ACTUAL_EXPENDITURES, EXPENDITURES);
-	}};
-	*/
-	
-	/**
-	 * Set of measures that can be used in GIS module as funding type options.
-	 * The priority doesn't matter anymore, but still adding some order via LinkedHashSet just for display.
-	 */
-	public static final Set<String> FUNDING_TYPES = new LinkedHashSet<String>() {{
-		add(MeasureConstants.ACTUAL_COMMITMENTS);
-		add(MeasureConstants.ACTUAL_DISBURSEMENTS);
-		add(MeasureConstants.ACTUAL_EXPENDITURES);
-		add(MeasureConstants.PLANNED_COMMITMENTS);
-		add(MeasureConstants.PLANNED_DISBURSEMENTS);
-		add(MeasureConstants.PLANNED_EXPENDITURES);
-		add(MeasureConstants.BILATERAL_SSC_COMMITMENTS);
-		add(MeasureConstants.BILATERAL_SSC_DISBURSEMENTS);
-		add(MeasureConstants.TRIANGULAR_SSC_COMMITMENTS);
-		add(MeasureConstants.TRIANGULAR_SSC_DISBURSEMENTS);
-	}};
-	
-	public static final Map<String, HardCodedCategoryValue> ADM_TO_IMPL_CATEGORY_VALUE = new HashMap<String, HardCodedCategoryValue>() {{
+    
+    /*
+    public static final String COMMITMENTS = "Commitments";  
+    public static final String DISBURSEMENTS = "Disbursements";
+    public static final String EXPENDITURES = "Expenditures";
+    */
+    public static final String USE_ICONS_FOR_SECTORS_IN_PROJECT_LIST =  "Use icons for Sectors in Project List";
+    public static final String PROJECT_SITES = "Project sites";
+    public static final String DOWNLOAD_MAP_SELECTOR = "Download Map selector";
+    
+    public static final String ADM0 = "adm-0";
+    public static final String ADM1 = "adm-1";
+    public static final String ADM2 = "adm-2";
+    public static final String ADM3 = "adm-3";
+    
+    public static final String GIS_STRUCTURE_POLYGON = "Polygon";
+    public static final String GIS_STRUCTURE_POINT = "Point";
+    public static final String GIS_STRUCTURE_POLYLINE = "Polyline";
+    
+    /**
+     * The order is important - this is the priority order between measures, 
+     * that is used to convert the report config to gis funding type option   
+     */
+    /* 
+    public static final Map<String, String> MEASURE_TO_NAME_MAP = new LinkedHashMap<String, String>() {{
+        put(MeasureConstants.ACTUAL_COMMITMENTS, COMMITMENTS);
+        put(MeasureConstants.ACTUAL_DISBURSEMENTS, DISBURSEMENTS);
+        put(MeasureConstants.ACTUAL_EXPENDITURES, EXPENDITURES);
+    }};
+    */
+    
+    /**
+     * Set of measures that can be used in GIS module as funding type options.
+     * The priority doesn't matter anymore, but still adding some order via LinkedHashSet just for display.
+     */
+    public static final Set<String> FUNDING_TYPES = new LinkedHashSet<String>() {{
+        add(MeasureConstants.ACTUAL_COMMITMENTS);
+        add(MeasureConstants.ACTUAL_DISBURSEMENTS);
+        add(MeasureConstants.ACTUAL_EXPENDITURES);
+        add(MeasureConstants.PLANNED_COMMITMENTS);
+        add(MeasureConstants.PLANNED_DISBURSEMENTS);
+        add(MeasureConstants.PLANNED_EXPENDITURES);
+        add(MeasureConstants.BILATERAL_SSC_COMMITMENTS);
+        add(MeasureConstants.BILATERAL_SSC_DISBURSEMENTS);
+        add(MeasureConstants.TRIANGULAR_SSC_COMMITMENTS);
+        add(MeasureConstants.TRIANGULAR_SSC_DISBURSEMENTS);
+    }};
+    
+    public static final Map<String, HardCodedCategoryValue> ADM_TO_IMPL_CATEGORY_VALUE = new HashMap<String, HardCodedCategoryValue>() {{
        put(ADM0, CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY); 
        put(ADM1, CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
        put(ADM2, CategoryConstants.IMPLEMENTATION_LOCATION_ZONE);

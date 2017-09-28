@@ -69,13 +69,13 @@ public class ViewListEvents
         CalendarSettings setting = DbUtil.getCalendarSettings(request);
 
         // set number of items in page
-	Long nOfItems = setting.getNumberOfItemsPerPage();
-	if (nOfItems != null && nOfItems.longValue() != 0) {
-	  length = nOfItems.intValue();
-	}
-	else { //set default value
-	  length = 5;
-	}
+    Long nOfItems = setting.getNumberOfItemsPerPage();
+    if (nOfItems != null && nOfItems.longValue() != 0) {
+      length = nOfItems.intValue();
+    }
+    else { //set default value
+      length = 5;
+    }
 
         // Pagination
         doStartPagination(calendForm, length);

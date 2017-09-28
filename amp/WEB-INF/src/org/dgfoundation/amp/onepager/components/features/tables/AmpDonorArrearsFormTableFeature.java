@@ -36,44 +36,44 @@ import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
  */
 @SuppressWarnings("serial")
 public class AmpDonorArrearsFormTableFeature extends
-		AmpDonorFormTableFeaturePanel {
+        AmpDonorFormTableFeaturePanel {
 
-//	private boolean alertIfDisbursmentBiggerCommitments = false;
-	/**
-	 * @param id
-	 * @param model
-	 * @param fmName
-	 * @throws Exception
-	 */
-	@SuppressWarnings("serial")
-	public AmpDonorArrearsFormTableFeature(String id,
-			final IModel<AmpFunding> model, String fmName, final int transactionType) throws Exception {
-		super(id, model, fmName, Constants.ARREARS, 7);
+//  private boolean alertIfDisbursmentBiggerCommitments = false;
+    /**
+     * @param id
+     * @param model
+     * @param fmName
+     * @throws Exception
+     */
+    @SuppressWarnings("serial")
+    public AmpDonorArrearsFormTableFeature(String id,
+            final IModel<AmpFunding> model, String fmName, final int transactionType) throws Exception {
+        super(id, model, fmName, Constants.ARREARS, 7);
 
-		list = new ListEditor<AmpFundingDetail>("listArrears", setModel, FundingDetailComparator
-				.getFundingDetailComparator()) {
-			@Override
-			protected void onPopulateItem(
-					ListItem<AmpFundingDetail> item) {
-				item.add(getAdjustmentTypeComponent(item.getModel(), transactionType));
+        list = new ListEditor<AmpFundingDetail>("listArrears", setModel, FundingDetailComparator
+                .getFundingDetailComparator()) {
+            @Override
+            protected void onPopulateItem(
+                    ListItem<AmpFundingDetail> item) {
+                item.add(getAdjustmentTypeComponent(item.getModel(), transactionType));
 
-				AmpFundingAmountComponent amountComponent = getFundingAmountComponent(item.getModel());
-				item.add(amountComponent);
-				appendFixedExchangeRateToItem(item); 
-				item.add(new ListEditorRemoveButton("delArrears", "Delete Arrears Transaction"){
-					protected void onClick(org.apache.wicket.ajax.AjaxRequestTarget target) {
-						AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
-						super.onClick(target);
-						parent.getFundingInfo().checkChoicesRequired(list.getCount());
-						target.add(parent.getFundingInfo());
-						target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
-						target.appendJavaScript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));
-					};
-				});
-				//we create the role selector for recipient organization for commitments
-				item.add(OnePagerUtil.getFundingFlowRoleSelector(model, item.getModel()));
-			}
-		};
-		add(list);
-	}
+                AmpFundingAmountComponent amountComponent = getFundingAmountComponent(item.getModel());
+                item.add(amountComponent);
+                appendFixedExchangeRateToItem(item); 
+                item.add(new ListEditorRemoveButton("delArrears", "Delete Arrears Transaction"){
+                    protected void onClick(org.apache.wicket.ajax.AjaxRequestTarget target) {
+                        AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
+                        super.onClick(target);
+                        parent.getFundingInfo().checkChoicesRequired(list.getCount());
+                        target.add(parent.getFundingInfo());
+                        target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
+                        target.appendJavaScript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));
+                    };
+                });
+                //we create the role selector for recipient organization for commitments
+                item.add(OnePagerUtil.getFundingFlowRoleSelector(model, item.getModel()));
+            }
+        };
+        add(list);
+    }
 }

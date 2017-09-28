@@ -48,7 +48,7 @@ public class UrlFetcher {
 
         URL url = new URL(urlString);
         URLConnection urlConnection = url.openConnection();
-	urlConnection.setRequestProperty("User-Agent","org.digijava.kernel.startup.UrlFetcher");
+    urlConnection.setRequestProperty("User-Agent","org.digijava.kernel.startup.UrlFetcher");
         urlConnection.connect();
         InputStream is = urlConnection.getInputStream();
         while ( (c = is.read()) != -1) buf.append( (char) c);

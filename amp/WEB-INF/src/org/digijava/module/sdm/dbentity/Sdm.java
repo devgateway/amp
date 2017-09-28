@@ -85,7 +85,7 @@ public class Sdm {
         this.siteId = siteId;
     }
     public SdmItem getItemByIndex(Long index) {
-    	Set<SdmItem> sdmItems = this.getItems();
+        Set<SdmItem> sdmItems = this.getItems();
         SdmItem  result = null;
 
         Iterator<SdmItem> iter = sdmItems.iterator();

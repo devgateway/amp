@@ -9,10 +9,10 @@ import java.math.BigDecimal;
  *
  */
 public interface NiPrecisionSetting {
-	public BigDecimal adjustPrecision(BigDecimal src);
-	
-	/**
-	 * the NOP precision setting - not recommended for production schemas unless speed is not an issue
-	 */
-	public final static NiPrecisionSetting IDENTITY_PRECISION_SETTING = (z -> z); 
+    public BigDecimal adjustPrecision(BigDecimal src);
+    
+    /**
+     * the NOP precision setting - not recommended for production schemas unless speed is not an issue
+     */
+    public final static NiPrecisionSetting IDENTITY_PRECISION_SETTING = (z -> z); 
 }

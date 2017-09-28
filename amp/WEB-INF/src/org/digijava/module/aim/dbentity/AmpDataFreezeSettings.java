@@ -48,14 +48,14 @@ public class AmpDataFreezeSettings implements Serializable {
     }
 
     public Boolean getExecuted() {
-		return executed;
-	}
+        return executed;
+    }
 
-	public void setExecuted(Boolean executed) {
-		this.executed = executed;
-	}
+    public void setExecuted(Boolean executed) {
+        this.executed = executed;
+    }
 
-	public Integer getGracePeriod() {
+    public Integer getGracePeriod() {
         return gracePeriod;
     }
 

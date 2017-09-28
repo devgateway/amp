@@ -33,7 +33,7 @@ public class GatePermission extends Permission {
 
     protected Set<String>     actions;
 
-    protected String	  gateTypeName;
+    protected String      gateTypeName;
 
     /**
      * Checks if the specified parameter is present in the gate parameter list
@@ -41,12 +41,12 @@ public class GatePermission extends Permission {
      * @return true if the parameter is present
      */
     public boolean hasParameter(String parameter) {
-	Iterator i=gateParameters.iterator();
-	while (i.hasNext()) {
-	    String element = (String) i.next();
-	    if(element.equals(parameter)) return true;
-	}
-	return false;
+    Iterator i=gateParameters.iterator();
+    while (i.hasNext()) {
+        String element = (String) i.next();
+        if(element.equals(parameter)) return true;
+    }
+    return false;
     }
     
     /**
@@ -55,40 +55,40 @@ public class GatePermission extends Permission {
      * @return true if the action is present. This does NOT mean the action can be executed!
      */
     public boolean hasAction(String action) {
-	Iterator i=actions.iterator();
-	while (i.hasNext()) {
-	    String element = (String) i.next();
-	    if(element.equals(action)) return true;
-	}
-	return false;
+    Iterator i=actions.iterator();
+    while (i.hasNext()) {
+        String element = (String) i.next();
+        if(element.equals(action)) return true;
+    }
+    return false;
     }
     
     public GatePermission() {
-	gateParameters = new ArrayList<String>();
-	actions = new TreeSet<String>();
-	dedicated=false;
+    gateParameters = new ArrayList<String>();
+    actions = new TreeSet<String>();
+    dedicated=false;
     }
     
     public GatePermission(boolean dedicated) {
-	super(dedicated);
-	gateParameters = new ArrayList<String>();
-	actions = new TreeSet<String>();
+    super(dedicated);
+    gateParameters = new ArrayList<String>();
+    actions = new TreeSet<String>();
     }
 
     public Set<String> getActions() {
-	return actions;
+    return actions;
     }
 
     public void setActions(Set<String> actions) {
-	this.actions = actions;
+    this.actions = actions;
     }
 
     public List<String> getGateParameters() {
-	return gateParameters;
+    return gateParameters;
     }
 
     public void setGateParameters(List<String> gateParameters) {
-	this.gateParameters = gateParameters;
+    this.gateParameters = gateParameters;
     }
 
     /**
@@ -96,33 +96,33 @@ public class GatePermission extends Permission {
          */
     @Override
     public Set<String> getAllowedActions(Map scope) {
-	Queue<String> gateParametersQ =null;
-	if(gateParameters.size()>0) gateParametersQ=new ArrayBlockingQueue<String>(gateParameters.size(), true, gateParameters);
-	Gate gate = Gate.instantiateGate(scope, gateParametersQ, gateTypeName);
-	try {
-	    if (gate.isOpen())
-	        return actions;
-	} catch (NotBoundGateInputException e) {
-	    logger.error(e);
-	    throw new RuntimeException( "NotBoundGateInputException Exception encountered", e);
-	}
-	return null;
+    Queue<String> gateParametersQ =null;
+    if(gateParameters.size()>0) gateParametersQ=new ArrayBlockingQueue<String>(gateParameters.size(), true, gateParameters);
+    Gate gate = Gate.instantiateGate(scope, gateParametersQ, gateTypeName);
+    try {
+        if (gate.isOpen())
+            return actions;
+    } catch (NotBoundGateInputException e) {
+        logger.error(e);
+        throw new RuntimeException( "NotBoundGateInputException Exception encountered", e);
+    }
+    return null;
     }
 
     public String getGateTypeName() {
-	return gateTypeName;
+    return gateTypeName;
     }
     
     public String getGateSimpleName() {
-    	return gateTypeName.substring(gateTypeName.lastIndexOf('.')+1);
+        return gateTypeName.substring(gateTypeName.lastIndexOf('.')+1);
     }
     
     public void setGateTypeName(String gateTypeName) {
-	this.gateTypeName = gateTypeName;
+    this.gateTypeName = gateTypeName;
     }
 
     public String toString() {
-    	return "{"+getGateSimpleName()+"("+gateParameters+")"+actions+"}";
+        return "{"+getGateSimpleName()+"("+gateParameters+")"+actions+"}";
         }
 
 

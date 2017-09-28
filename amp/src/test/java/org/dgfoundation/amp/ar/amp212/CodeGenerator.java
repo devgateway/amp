@@ -39,99 +39,99 @@ import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
  *
  */
 public class CodeGenerator  {
-		
-	static Logger log = Logger.getLogger(OffDbNiReportEngineTests.class);
-		
-//	HardcodedReportsTestSchema schema = new HardcodedReportsTestSchema();
+        
+    static Logger log = Logger.getLogger(OffDbNiReportEngineTests.class);
+        
+//  HardcodedReportsTestSchema schema = new HardcodedReportsTestSchema();
 
-	public ReportSpecificationImpl buildSpecification(String reportName, List<String> columns, List<String> measures, List<String> hierarchies, GroupingCriteria groupingCriteria) {
-		return ReportSpecificationImpl.buildFor(reportName, columns, measures, hierarchies, groupingCriteria);
-	}
-	
-	protected void generateColumns() throws FileNotFoundException, UnsupportedEncodingException {
-		List<ColumnGenerator> gens = Arrays.asList(
-				 new NiPercentageTextColumnGenerator(ColumnConstants.PRIMARY_SECTOR),
-				 new NiPercentageTextColumnGenerator(ColumnConstants.SECONDARY_SECTOR),
-				 new NiPercentageTextColumnGenerator(ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR),
-				 new NiPercentageTextColumnGenerator(ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR),
-				 new NiPercentageTextColumnGenerator(ColumnConstants.COUNTRY),
-				 new NiPercentageTextColumnGenerator(ColumnConstants.REGION),
-				 new NiPercentageTextColumnGenerator(ColumnConstants.ZONE),
-				 new NiPercentageTextColumnGenerator(ColumnConstants.DISTRICT),
-				 //new NiPercentageTextColumnGenerator(ColumnConstants.PRIMARY_PROGRAM),
-				 new NiPercentageTextColumnGenerator(ColumnConstants.PRIMARY_PROGRAM_LEVEL_1),
-				 new NiPercentageTextColumnGenerator(ColumnConstants.PRIMARY_PROGRAM_LEVEL_2),
-				 
-				 new NiPercentageTextColumnGenerator(ColumnConstants.SECONDARY_PROGRAM_LEVEL_1),
-				 new NiPercentageTextColumnGenerator(ColumnConstants.SECONDARY_PROGRAM_LEVEL_2),
-				 
-				 new NiPercentageTextColumnGenerator(ColumnConstants.IMPLEMENTING_AGENCY),
-				 new NiPercentageTextColumnGenerator(ColumnConstants.IMPLEMENTING_AGENCY_GROUPS),
-				 new NiPercentageTextColumnGenerator(ColumnConstants.IMPLEMENTING_AGENCY_TYPE),
-				 
-				 new NiTextColumnGenerator(ColumnConstants.PROJECT_TITLE),
-				 new NiTextColumnGenerator(ColumnConstants.STATUS),
-				 new NiTextColumnGenerator(ColumnConstants.IMPLEMENTATION_LEVEL),
-				 new NiTextColumnGenerator(ColumnConstants.MODE_OF_PAYMENT),
-				 new NiTextColumnGenerator(ColumnConstants.FUNDING_STATUS),
-				 new NiTextColumnGenerator(ColumnConstants.TYPE_OF_ASSISTANCE),
-				 new NiTextColumnGenerator(ColumnConstants.FINANCING_INSTRUMENT),
-				 new NiTextColumnGenerator(ColumnConstants.DONOR_AGENCY),
-				 new NiTextColumnGenerator(ColumnConstants.DONOR_GROUP),
-				 new NiTextColumnGenerator(ColumnConstants.DONOR_TYPE),
-				 new NiDateColumnGenerator(ColumnConstants.ACTIVITY_CREATED_ON),
-				 new NiDateColumnGenerator(ColumnConstants.ACTIVITY_UPDATED_ON)
-				 
-				);
-		for (ColumnGenerator gen : gens)
-			gen.generateToFile();
-	}
-	
-	protected void generateFunding() throws IOException {
-		 FundingColumnGenerator gen = new FundingColumnGenerator();
-		 gen.generateToFile();
-		 gen.binaryDump();
-		 //System.out.println(gen.generate());
-	}
-	
+    public ReportSpecificationImpl buildSpecification(String reportName, List<String> columns, List<String> measures, List<String> hierarchies, GroupingCriteria groupingCriteria) {
+        return ReportSpecificationImpl.buildFor(reportName, columns, measures, hierarchies, groupingCriteria);
+    }
+    
+    protected void generateColumns() throws FileNotFoundException, UnsupportedEncodingException {
+        List<ColumnGenerator> gens = Arrays.asList(
+                 new NiPercentageTextColumnGenerator(ColumnConstants.PRIMARY_SECTOR),
+                 new NiPercentageTextColumnGenerator(ColumnConstants.SECONDARY_SECTOR),
+                 new NiPercentageTextColumnGenerator(ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR),
+                 new NiPercentageTextColumnGenerator(ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR),
+                 new NiPercentageTextColumnGenerator(ColumnConstants.COUNTRY),
+                 new NiPercentageTextColumnGenerator(ColumnConstants.REGION),
+                 new NiPercentageTextColumnGenerator(ColumnConstants.ZONE),
+                 new NiPercentageTextColumnGenerator(ColumnConstants.DISTRICT),
+                 //new NiPercentageTextColumnGenerator(ColumnConstants.PRIMARY_PROGRAM),
+                 new NiPercentageTextColumnGenerator(ColumnConstants.PRIMARY_PROGRAM_LEVEL_1),
+                 new NiPercentageTextColumnGenerator(ColumnConstants.PRIMARY_PROGRAM_LEVEL_2),
+                 
+                 new NiPercentageTextColumnGenerator(ColumnConstants.SECONDARY_PROGRAM_LEVEL_1),
+                 new NiPercentageTextColumnGenerator(ColumnConstants.SECONDARY_PROGRAM_LEVEL_2),
+                 
+                 new NiPercentageTextColumnGenerator(ColumnConstants.IMPLEMENTING_AGENCY),
+                 new NiPercentageTextColumnGenerator(ColumnConstants.IMPLEMENTING_AGENCY_GROUPS),
+                 new NiPercentageTextColumnGenerator(ColumnConstants.IMPLEMENTING_AGENCY_TYPE),
+                 
+                 new NiTextColumnGenerator(ColumnConstants.PROJECT_TITLE),
+                 new NiTextColumnGenerator(ColumnConstants.STATUS),
+                 new NiTextColumnGenerator(ColumnConstants.IMPLEMENTATION_LEVEL),
+                 new NiTextColumnGenerator(ColumnConstants.MODE_OF_PAYMENT),
+                 new NiTextColumnGenerator(ColumnConstants.FUNDING_STATUS),
+                 new NiTextColumnGenerator(ColumnConstants.TYPE_OF_ASSISTANCE),
+                 new NiTextColumnGenerator(ColumnConstants.FINANCING_INSTRUMENT),
+                 new NiTextColumnGenerator(ColumnConstants.DONOR_AGENCY),
+                 new NiTextColumnGenerator(ColumnConstants.DONOR_GROUP),
+                 new NiTextColumnGenerator(ColumnConstants.DONOR_TYPE),
+                 new NiDateColumnGenerator(ColumnConstants.ACTIVITY_CREATED_ON),
+                 new NiDateColumnGenerator(ColumnConstants.ACTIVITY_UPDATED_ON)
+                 
+                );
+        for (ColumnGenerator gen : gens)
+            gen.generateToFile();
+    }
+    
+    protected void generateFunding() throws IOException {
+         FundingColumnGenerator gen = new FundingColumnGenerator();
+         gen.generateToFile();
+         gen.binaryDump();
+         //System.out.println(gen.generate());
+    }
+    
     protected void generateFundingTypesNames() throws IOException {
-	 	 FundingTypesGenerator gen = new FundingTypesGenerator(new FundingIdsMapper().getAllParams());
-	 	 gen.generateToFile();
-	 	 //System.out.println(gen.generate());
+         FundingTypesGenerator gen = new FundingTypesGenerator(new FundingIdsMapper().getAllParams());
+         gen.generateToFile();
+         //System.out.println(gen.generate());
     }
     
     protected void generateActivityNames() throws IOException {
-		ActivityTitlesGenerator gen = new ActivityTitlesGenerator();
-		gen.generateToFile();
-	}
-	
+        ActivityTitlesGenerator gen = new ActivityTitlesGenerator();
+        gen.generateToFile();
+    }
+    
 
-	public void generateDimensions() throws IOException {
-		NiDimensionGenerator programGen = new NiDimensionGenerator(new NaturalTreeGenerator("amp_theme", "amp_theme_id", "parent_theme_id", "name").getRoots(), "ProgramsTestDimension", "progs", 4);
-		NiDimensionGenerator sectorsGen = new NiDimensionGenerator(new NaturalTreeGenerator("amp_sector", "amp_sector_id", "parent_sector_id", "name").getRoots(), "SectorsTestDimension", "sectors", 3);
-		NiDimensionGenerator locationsGen = new NiDimensionGenerator(new NaturalTreeGenerator("amp_category_value_location", "id", "parent_location", "location_name").getRoots(), "LocationsTestDimension", "locs", 4);
-		NiDimensionGenerator orgGen = new NiDimensionGenerator(new OrganizationsTreeGenerator().getRoots(), "OrganizationsTestDimension", "orgs", 3);
-		NiDimensionGenerator catGen = new NiDimensionGenerator(new CategoriesTreeGenerator().getRoots(), "CategoriesTestDimension", "cats", 2);
+    public void generateDimensions() throws IOException {
+        NiDimensionGenerator programGen = new NiDimensionGenerator(new NaturalTreeGenerator("amp_theme", "amp_theme_id", "parent_theme_id", "name").getRoots(), "ProgramsTestDimension", "progs", 4);
+        NiDimensionGenerator sectorsGen = new NiDimensionGenerator(new NaturalTreeGenerator("amp_sector", "amp_sector_id", "parent_sector_id", "name").getRoots(), "SectorsTestDimension", "sectors", 3);
+        NiDimensionGenerator locationsGen = new NiDimensionGenerator(new NaturalTreeGenerator("amp_category_value_location", "id", "parent_location", "location_name").getRoots(), "LocationsTestDimension", "locs", 4);
+        NiDimensionGenerator orgGen = new NiDimensionGenerator(new OrganizationsTreeGenerator().getRoots(), "OrganizationsTestDimension", "orgs", 3);
+        NiDimensionGenerator catGen = new NiDimensionGenerator(new CategoriesTreeGenerator().getRoots(), "CategoriesTestDimension", "cats", 2);
 
-		locationsGen.generateToFile();
-		programGen.generateToFile();
-		sectorsGen.generateToFile();
-		orgGen.generateToFile();
-		catGen.generateToFile();
-	}
-	
-	public void generateCode() throws IOException  {
-		generateFunding();
-		generateActivityNames();
-		generateFundingTypesNames();
-		generateDimensions();
-		generateColumns();
-	}
-	
-	/**
-	 * Prior to startup one must make sure than organization names are unique. This is true in the testcases database.
-	 * 
-	 * 
+        locationsGen.generateToFile();
+        programGen.generateToFile();
+        sectorsGen.generateToFile();
+        orgGen.generateToFile();
+        catGen.generateToFile();
+    }
+    
+    public void generateCode() throws IOException  {
+        generateFunding();
+        generateActivityNames();
+        generateFundingTypesNames();
+        generateDimensions();
+        generateColumns();
+    }
+    
+    /**
+     * Prior to startup one must make sure than organization names are unique. This is true in the testcases database.
+     * 
+     * 
 ------------------------------------------------------------------------------------ 
 For real production databases used for benchmarking, one may just prune the duplicate DBs. The SQL queries to do it are, in order:
 
@@ -184,14 +184,14 @@ TRUNCATE amp_audit_logger;
 delete from amp_activity_sector where amp_activity_id NOT IN (select amp_activity_id from amp_activity);
 delete from amp_activities_categoryvalues where amp_activity_id NOT IN (select amp_activity_id from amp_activity);
 
-	 * 
-	 * @param args
-	 * @throws AMPException
-	 * @throws IOException
-	 */
-	public static void main(String[] args)  throws AMPException, IOException {
-		AllTests_amp212.configureLog4j();
-		AllTests_amp212.setUp();
-		new CodeGenerator().generateCode();
-	}
+     * 
+     * @param args
+     * @throws AMPException
+     * @throws IOException
+     */
+    public static void main(String[] args)  throws AMPException, IOException {
+        AllTests_amp212.configureLog4j();
+        AllTests_amp212.setUp();
+        new CodeGenerator().generateCode();
+    }
 }

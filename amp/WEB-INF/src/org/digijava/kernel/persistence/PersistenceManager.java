@@ -137,11 +137,11 @@ public class PersistenceManager {
      * No other check is being done.
      */
     public static void removeClosedSessionsFromMap() {
-        int count	= 0;
+        int count   = 0;
         synchronized (sessionStackTraceMap) {
             Iterator<Entry<Session, Object[]>> iterator = PersistenceManager.sessionStackTraceMap.entrySet().iterator();
             while (iterator.hasNext()) {
-                Session sess	= iterator.next().getKey();
+                Session sess    = iterator.next().getKey();
                 if ( !sess.isOpen() ) {
                     iterator.remove();
                     count++;
@@ -675,15 +675,15 @@ public class PersistenceManager {
     }
 
     public final static Boolean getBoolean(Object obj) {
-    	if (obj == null)
-    		return null;
-    	if (obj instanceof Boolean)
-    		return (Boolean) obj;
-    	if (obj.toString().equals("true") || obj.toString().equals("yes"))
-    		return true;
-       	if (obj.toString().equals("false") || obj.toString().equals("no"))
-    		return false;
-       	throw new RuntimeException("cannot convert object " + obj + " to boolean");
+        if (obj == null)
+            return null;
+        if (obj instanceof Boolean)
+            return (Boolean) obj;
+        if (obj.toString().equals("true") || obj.toString().equals("yes"))
+            return true;
+        if (obj.toString().equals("false") || obj.toString().equals("no"))
+            return false;
+        throw new RuntimeException("cannot convert object " + obj + " to boolean");
     }
     
     public static StatelessSession openNewStatelessSession() {
@@ -704,22 +704,22 @@ public class PersistenceManager {
         Transaction transaction = session.getTransaction();
         if (transaction != null) {
             try{if (transaction.isActive()) session.flush();}catch(Exception e){logger.error("error while flushing HSession", e);};
-			try {
-				if (transaction.isActive())
-					transaction.commit();
-			} catch(Exception e) {
-				//System.out.println("error committing transaction");
-				//e.printStackTrace();
-			}
-		}
-		try {
-			if (session.isOpen())
-				session.close();
-		} catch(Exception e) {
-//			System.out.println("error closing the session");
-//			e.printStackTrace();
-		}
-	}
+            try {
+                if (transaction.isActive())
+                    transaction.commit();
+            } catch(Exception e) {
+                //System.out.println("error committing transaction");
+                //e.printStackTrace();
+            }
+        }
+        try {
+            if (session.isOpen())
+                session.close();
+        } catch(Exception e) {
+//          System.out.println("error closing the session");
+//          e.printStackTrace();
+        }
+    }
 
     /**
      * <strong>This is a lifecycle management function</strong><br />

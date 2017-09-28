@@ -10,5 +10,5 @@ import org.dgfoundation.amp.nireports.schema.NiReportColumn;
  * @param <K> the type of the built key
  */
 public interface KeyBuilder<K> {
-	public K buildKey(NiReportsEngine engine, NiReportColumn<?> col);
+    public K buildKey(NiReportsEngine engine, NiReportColumn<?> col);
 }

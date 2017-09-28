@@ -63,13 +63,13 @@ public class ChartUtil {
 
     // set the background color for the chart...
     chart.setBackgroundPaint(Color.WHITE);
-//	Calendar year = Calendar.getInstance();
-//	int ser=0;
-//	while(year.get(Calendar.YEAR) != ProgramUtil.YAERS_LIST_START){
-//		renderer.setSeriesPaint(ser++,color);
-//		color = getNextColor(color);
-//		year.roll(Calendar.YEAR,false);
-//	}
+//  Calendar year = Calendar.getInstance();
+//  int ser=0;
+//  while(year.get(Calendar.YEAR) != ProgramUtil.YAERS_LIST_START){
+//      renderer.setSeriesPaint(ser++,color);
+//      color = getNextColor(color);
+//      year.roll(Calendar.YEAR,false);
+//  }
 
     // get a reference to the plot for further customisation...
     CategoryPlot plot = chart.getCategoryPlot();
@@ -86,19 +86,19 @@ public class ChartUtil {
     //renderer.setItemLabelsVisible(false);
 
     // set up gradient paints for series...
-	renderer.setSeriesPaint(0,new Color(0,0,255));									
-	renderer.setSeriesPaint(1,new Color(0,204,255));
-	renderer.setSeriesPaint(2,new Color(204,255,255));
-	renderer.setItemMargin(0);	
+    renderer.setSeriesPaint(0,new Color(0,0,255));                                  
+    renderer.setSeriesPaint(1,new Color(0,204,255));
+    renderer.setSeriesPaint(2,new Color(204,255,255));
+    renderer.setItemMargin(0);  
 
-//	Color color=COLOR_BLUE_START;
-//	Calendar year = Calendar.getInstance();
-//	int ser=0;
-//	while(year.get(Calendar.YEAR) != ProgramUtil.YAERS_LIST_START){
-//		renderer.setSeriesPaint(ser++,color);
-//		color = getNextColor(color);
-//		year.roll(Calendar.YEAR,false);
-//	}
+//  Color color=COLOR_BLUE_START;
+//  Calendar year = Calendar.getInstance();
+//  int ser=0;
+//  while(year.get(Calendar.YEAR) != ProgramUtil.YAERS_LIST_START){
+//      renderer.setSeriesPaint(ser++,color);
+//      color = getNextColor(color);
+//      year.roll(Calendar.YEAR,false);
+//  }
 
 //    GradientPaint gp0 = new GradientPaint(0.0f, 0.0f, Color.blue,0.0f, 0.0f, new Color(0, 0, 64));
 //    GradientPaint gp1 = new GradientPaint(0.0f, 0.0f, Color.green,0.0f, 0.0f, new Color(0, 64, 0));
@@ -111,13 +111,13 @@ public class ChartUtil {
     domainAxis.setCategoryLabelPositions(
         CategoryLabelPositions.createUpRotationLabelPositions(
             Math.PI / 6.0));
-		if (dataset != null) {
-			for (int i = 0; i < dataset.getColumnCount(); i++) {
-				String categoryName = (String) dataset.getColumnKey(i);
-				domainAxis.addCategoryLabelToolTip(categoryName, categoryName);
-			}
+        if (dataset != null) {
+            for (int i = 0; i < dataset.getColumnCount(); i++) {
+                String categoryName = (String) dataset.getColumnKey(i);
+                domainAxis.addCategoryLabelToolTip(categoryName, categoryName);
+            }
 
-		}
+        }
  
     // OPTIONAL CUSTOMISATION COMPLETED.
 
@@ -158,8 +158,8 @@ public class ChartUtil {
     renderer.setDrawBarOutline(false);
 
     // set up Simple paints for series...
-	renderer.setSeriesPaint(0,Constants.TARGET_VAL_CLR);									
-	renderer.setSeriesPaint(1,Constants.ACTUAL_VAL_CLR);
+    renderer.setSeriesPaint(0,Constants.TARGET_VAL_CLR);                                    
+    renderer.setSeriesPaint(1,Constants.ACTUAL_VAL_CLR);
 //    renderer.setSeriesPaint(0, Color.blue);
 //    renderer.setSeriesPaint(1, Color.green);
 //    renderer.setSeriesPaint(2, Color.red);
@@ -177,80 +177,80 @@ public class ChartUtil {
  
   private static JFreeChart createStackedPercentBarChart(CategoryDataset dataset) {
 
-	    // create the chart...
-	    JFreeChart chart = ChartFactory.createStackedBarChart(
-	        null, // chart title
-	        null, // domain axis label
-	        null, // range axis label
-	        dataset, // data
-	        PlotOrientation.VERTICAL, // orientation
-	        true, // include legend
-	        false, // tooltips?
-	        false // URLs?
-	        );
+        // create the chart...
+        JFreeChart chart = ChartFactory.createStackedBarChart(
+            null, // chart title
+            null, // domain axis label
+            null, // range axis label
+            dataset, // data
+            PlotOrientation.VERTICAL, // orientation
+            true, // include legend
+            false, // tooltips?
+            false // URLs?
+            );
 
-	    // NOW DO SOME OPTIONAL CUSTOMISATION OF THE CHART...
+        // NOW DO SOME OPTIONAL CUSTOMISATION OF THE CHART...
 
-	    // set the background color for the chart...
-	    chart.setBackgroundPaint(Color.WHITE);
+        // set the background color for the chart...
+        chart.setBackgroundPaint(Color.WHITE);
 
-	    // get a reference to the plot for further customisation...
-	    CategoryPlot plot = chart.getCategoryPlot();
+        // get a reference to the plot for further customisation...
+        CategoryPlot plot = chart.getCategoryPlot();
 
-	    // set the range axis to display integers only...
-//	    final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
-//	    rangeAxis.setRange(0D, 1D);
-//	    rangeAxis.setNumberFormatOverride(new DecimalFormat("###%"));
+        // set the range axis to display integers only...
+//      final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
+//      rangeAxis.setRange(0D, 1D);
+//      rangeAxis.setNumberFormatOverride(new DecimalFormat("###%"));
 
-	    StackedBarRenderer3D renderer = new StackedBarRenderer3D();//(StackedBarRenderer) plot.getRenderer();
+        StackedBarRenderer3D renderer = new StackedBarRenderer3D();//(StackedBarRenderer) plot.getRenderer();
 
-		renderer.setSeriesPaint(1,Constants.TARGET_VAL_CLR);									
-		renderer.setSeriesPaint(0,Constants.ACTUAL_VAL_CLR);
-	    
-	    renderer.setDrawBarOutline(false);
+        renderer.setSeriesPaint(1,Constants.TARGET_VAL_CLR);                                    
+        renderer.setSeriesPaint(0,Constants.ACTUAL_VAL_CLR);
+        
+        renderer.setDrawBarOutline(false);
 
-	    plot.setRenderer(renderer);
-	    
+        plot.setRenderer(renderer);
+        
 
-	    CategoryAxis domainAxis = plot.getDomainAxis();
-	    domainAxis.setCategoryLabelPositions(
-	        CategoryLabelPositions.createUpRotationLabelPositions(
-	            Math.PI / 6.0));
-	    
-		NumberAxis numAxis = (NumberAxis) plot.getRangeAxis();
-		numAxis.setRange(0D,1D);
-		numAxis.setNumberFormatOverride(new DecimalFormat("###%"));
-	    
+        CategoryAxis domainAxis = plot.getDomainAxis();
+        domainAxis.setCategoryLabelPositions(
+            CategoryLabelPositions.createUpRotationLabelPositions(
+                Math.PI / 6.0));
+        
+        NumberAxis numAxis = (NumberAxis) plot.getRangeAxis();
+        numAxis.setRange(0D,1D);
+        numAxis.setNumberFormatOverride(new DecimalFormat("###%"));
+        
 
-	    return chart;
+        return chart;
 
-//	    return setupChart(chart, dataset);
-	  }
+//      return setupChart(chart, dataset);
+      }
   
   public static Color getNextColor(Color oldColor){
-	  Color result = new Color(oldColor.getRed() + COLOR_RED_DELTA,
-			  oldColor.getGreen()+COLOR_GREEN_DELTA,
-			  oldColor.getBlue()+COLOR_BLUE_DELTA);
-	  return result;
+      Color result = new Color(oldColor.getRed() + COLOR_RED_DELTA,
+              oldColor.getGreen()+COLOR_GREEN_DELTA,
+              oldColor.getBlue()+COLOR_BLUE_DELTA);
+      return result;
   }
   
   public static JFreeChart createChart(CategoryDataset dataset, int chartType) {
     switch (chartType) {
       case CHART_TYPE_BAR:
-    	  return createBarChart(dataset);
+          return createBarChart(dataset);
       case CHART_TYPE_STACKED_BARS:
-    	  return createStackedBarChart(dataset);
+          return createStackedBarChart(dataset);
       case CHRAT_TYPE_STACKED_BARS_PERCENTAGE:
-    	  return createStackedPercentBarChart(dataset);
+          return createStackedPercentBarChart(dataset);
       default:
-    	  return createBarChart(dataset);
+          return createBarChart(dataset);
     }
 
   }
 
-	public static class GraphMapRecord{
-		public Long timestamp;
-		public String map;
+    public static class GraphMapRecord{
+        public Long timestamp;
+        public String map;
 
         public String getMap() {
             return map;
@@ -259,38 +259,38 @@ public class ChartUtil {
         public void setMap(String map) {
             this.map = map;
         }
-	}
+    }
 
-	/**
-	 * Save map in Http Session.
-	 * @param map http map tag definition
-	 * @param timestamp timestamp of ajax request from client side
-	 * @param session http session bean
-	 */
-	public static void saveMap(String map, Long timestamp, HttpSession session) {
-		ChartUtil.GraphMapRecord rec = null;
-		synchronized (session) {
-			rec = (ChartUtil.GraphMapRecord) session.getAttribute(LATEST_GRAPH_MAP);
-		}
-		// TODO rec can also be accessed from multiple request (thrads) so access to rec also should be synchronized
-		if (rec != null && map != null && timestamp != null
-				&& rec.timestamp != null && rec.map != null) {
-			if (timestamp.compareTo(rec.timestamp) > 0) {
-				rec.timestamp = timestamp;
-				rec.map = map;
-				synchronized (session) {
-					session.setAttribute(LATEST_GRAPH_MAP, rec);
-				}
-			}
-		} else {
-			rec = new ChartUtil.GraphMapRecord();
-			rec.timestamp = timestamp;
-			rec.map = map;
-			synchronized (session) {
-				session.setAttribute(LATEST_GRAPH_MAP, rec);
-			}
-		}
-	}
+    /**
+     * Save map in Http Session.
+     * @param map http map tag definition
+     * @param timestamp timestamp of ajax request from client side
+     * @param session http session bean
+     */
+    public static void saveMap(String map, Long timestamp, HttpSession session) {
+        ChartUtil.GraphMapRecord rec = null;
+        synchronized (session) {
+            rec = (ChartUtil.GraphMapRecord) session.getAttribute(LATEST_GRAPH_MAP);
+        }
+        // TODO rec can also be accessed from multiple request (thrads) so access to rec also should be synchronized
+        if (rec != null && map != null && timestamp != null
+                && rec.timestamp != null && rec.map != null) {
+            if (timestamp.compareTo(rec.timestamp) > 0) {
+                rec.timestamp = timestamp;
+                rec.map = map;
+                synchronized (session) {
+                    session.setAttribute(LATEST_GRAPH_MAP, rec);
+                }
+            }
+        } else {
+            rec = new ChartUtil.GraphMapRecord();
+            rec.timestamp = timestamp;
+            rec.map = map;
+            synchronized (session) {
+                session.setAttribute(LATEST_GRAPH_MAP, rec);
+            }
+        }
+    }
 
   
 }

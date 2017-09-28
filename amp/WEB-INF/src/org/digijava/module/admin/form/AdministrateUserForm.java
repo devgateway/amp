@@ -33,9 +33,9 @@ import org.apache.struts.action.ActionMapping;
 
 public class AdministrateUserForm extends ActionForm {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private Long selectedUserId;
+    private Long selectedUserId;
 
     private String firstNames;
     private String lastName;
@@ -149,12 +149,12 @@ public class AdministrateUserForm extends ActionForm {
         this.globalAdmin = globalAdmin;
     }
 
-	public void setEmailVerified(boolean emailVerified) {
-		this.emailVerified = emailVerified;
-	}
+    public void setEmailVerified(boolean emailVerified) {
+        this.emailVerified = emailVerified;
+    }
 
-	public boolean isEmailVerified() {
-		return emailVerified;
-	}
+    public boolean isEmailVerified() {
+        return emailVerified;
+    }
 
 }

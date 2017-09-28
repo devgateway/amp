@@ -13,5 +13,5 @@ package org.dgfoundation.amp.ar;
  *
  */
 public interface Computable {
-	public Double computeTotal();
+    public Double computeTotal();
 }

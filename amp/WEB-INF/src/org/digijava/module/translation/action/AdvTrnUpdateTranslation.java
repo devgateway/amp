@@ -17,28 +17,28 @@ import org.digijava.module.translation.util.ListChangesBuffer;
 
 public class AdvTrnUpdateTranslation extends Action {
 
-	@Override
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
-		NewAdvancedTrnForm trnForm = (NewAdvancedTrnForm) form;
-		String key = trnForm.getUpdateKey();
-		String newText = trnForm.getUpdateMessage();
-		String locale = trnForm.getUpdateLocale();
-		Long siteId = RequestUtils.getSite(request).getId();
-		ListChangesBuffer<String, Message> buffer = TrnUtil.getBuffer(request
-				.getSession());
-		Message original = TranslatorWorker.getInstance(key).getByKey(key,locale, siteId);
+    @Override
+    public ActionForward execute(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
+        NewAdvancedTrnForm trnForm = (NewAdvancedTrnForm) form;
+        String key = trnForm.getUpdateKey();
+        String newText = trnForm.getUpdateMessage();
+        String locale = trnForm.getUpdateLocale();
+        Long siteId = RequestUtils.getSite(request).getId();
+        ListChangesBuffer<String, Message> buffer = TrnUtil.getBuffer(request
+                .getSession());
+        Message original = TranslatorWorker.getInstance(key).getByKey(key,locale, siteId);
 
-		// if found and text seems to be changed
-		if (original != null && !original.getMessage().equals(newText)) {
-			Message editedMessage = new Message();
-			editedMessage.setKey(key);
-			editedMessage.setLocale(locale);
-			editedMessage.setMessage(newText);
-			buffer.operationUpdate(editedMessage);
-		}
+        // if found and text seems to be changed
+        if (original != null && !original.getMessage().equals(newText)) {
+            Message editedMessage = new Message();
+            editedMessage.setKey(key);
+            editedMessage.setLocale(locale);
+            editedMessage.setMessage(newText);
+            buffer.operationUpdate(editedMessage);
+        }
 
-		return null;
-	}
+        return null;
+    }
 }

@@ -24,90 +24,90 @@ import org.digijava.module.contentrepository.util.DocToOrgDAO;
  *
  */
 public class FilterValues {
-	public List<String> possibleOwners;
-	public List<KeyValue> possibleTeams;
-	public List<KeyValue> possibleFileTypes;
-	public List<KeyValue> possibleOrganisations;
-	
-	public FilterValues(HttpServletRequest request) {
-		
-		Collection<User> allUsers	= TeamMemberUtil.getAllTeamMemberUsers();
-		if (allUsers != null) {
-			possibleOwners		= new ArrayList<String>();
-			
-			for ( User u: allUsers ) {
-				if (!possibleOwners.contains( u.getEmail() ))
-					possibleOwners.add( u.getEmail() );
-			}
-		}
-		Collections.sort(possibleOwners );
-		
-		Collection<AmpTeam> allTeams	= TeamUtil.getAllTeams();
-		if ( allTeams != null ) {
-			possibleTeams		= new ArrayList<KeyValue>();
-			for (AmpTeam team: allTeams ) {
-				KeyValue kv		= new KeyValue(team.getAmpTeamId().toString() , team.getName() );
-				possibleTeams.add(kv);
-			}
-		}
-		
-		List<AmpOrganisation> allOrganisations = DocToOrgDAO.getAllUsedOrganisations();
-		possibleOrganisations = new ArrayList<KeyValue>();
-		if (allOrganisations != null)
-		{
-			java.util.SortedSet<KeyValue> orgs = new java.util.TreeSet<KeyValue>(KeyValue.valueComparator);
-			for(AmpOrganisation org:allOrganisations)
-				orgs.add(new KeyValue(org.getAmpOrgId().toString(), org.getAcronymAndName()));
-			possibleOrganisations.addAll(orgs);
-		}
-		
-//		Site site = RequestUtils.getSite(request);
-// 	 	String siteId = site.getId().toString();
-// 	 	String locale = RequestUtils.getNavigationLanguage(request).getCode();
- 	 	
-		possibleFileTypes = new ArrayList<KeyValue>();
+    public List<String> possibleOwners;
+    public List<KeyValue> possibleTeams;
+    public List<KeyValue> possibleFileTypes;
+    public List<KeyValue> possibleOrganisations;
+    
+    public FilterValues(HttpServletRequest request) {
+        
+        Collection<User> allUsers   = TeamMemberUtil.getAllTeamMemberUsers();
+        if (allUsers != null) {
+            possibleOwners      = new ArrayList<String>();
+            
+            for ( User u: allUsers ) {
+                if (!possibleOwners.contains( u.getEmail() ))
+                    possibleOwners.add( u.getEmail() );
+            }
+        }
+        Collections.sort(possibleOwners );
+        
+        Collection<AmpTeam> allTeams    = TeamUtil.getAllTeams();
+        if ( allTeams != null ) {
+            possibleTeams       = new ArrayList<KeyValue>();
+            for (AmpTeam team: allTeams ) {
+                KeyValue kv     = new KeyValue(team.getAmpTeamId().toString() , team.getName() );
+                possibleTeams.add(kv);
+            }
+        }
+        
+        List<AmpOrganisation> allOrganisations = DocToOrgDAO.getAllUsedOrganisations();
+        possibleOrganisations = new ArrayList<KeyValue>();
+        if (allOrganisations != null)
+        {
+            java.util.SortedSet<KeyValue> orgs = new java.util.TreeSet<KeyValue>(KeyValue.valueComparator);
+            for(AmpOrganisation org:allOrganisations)
+                orgs.add(new KeyValue(org.getAmpOrgId().toString(), org.getAcronymAndName()));
+            possibleOrganisations.addAll(orgs);
+        }
+        
+//      Site site = RequestUtils.getSite(request);
+//      String siteId = site.getId().toString();
+//      String locale = RequestUtils.getNavigationLanguage(request).getCode();
+        
+        possibleFileTypes = new ArrayList<KeyValue>();
 
-		possibleFileTypes.add( new KeyValue("application/pdf", TranslatorWorker.translateText("PDF Document")));
-		possibleFileTypes.add( new KeyValue("application/msword",TranslatorWorker.translateText("Word Document")));
-		possibleFileTypes.add( new KeyValue("application/vnd.ms-excel",TranslatorWorker.translateText("Excel Spreadsheet")));
-		possibleFileTypes.add( new KeyValue("text/plain",TranslatorWorker.translateText("Text")));
-		possibleFileTypes.add( new KeyValue("application/zip",TranslatorWorker.translateText("Zip file")));
-		possibleFileTypes.add( new KeyValue("image/",TranslatorWorker.translateText("Images")));			
-		
-	}
+        possibleFileTypes.add( new KeyValue("application/pdf", TranslatorWorker.translateText("PDF Document")));
+        possibleFileTypes.add( new KeyValue("application/msword",TranslatorWorker.translateText("Word Document")));
+        possibleFileTypes.add( new KeyValue("application/vnd.ms-excel",TranslatorWorker.translateText("Excel Spreadsheet")));
+        possibleFileTypes.add( new KeyValue("text/plain",TranslatorWorker.translateText("Text")));
+        possibleFileTypes.add( new KeyValue("application/zip",TranslatorWorker.translateText("Zip file")));
+        possibleFileTypes.add( new KeyValue("image/",TranslatorWorker.translateText("Images")));            
+        
+    }
 
-	public List<String> getPossibleOwners() {
-		return possibleOwners;
-	}
+    public List<String> getPossibleOwners() {
+        return possibleOwners;
+    }
 
-	public void setPossibleOwners(List<String> possibleOwners) {
-		this.possibleOwners = possibleOwners;
-	}
+    public void setPossibleOwners(List<String> possibleOwners) {
+        this.possibleOwners = possibleOwners;
+    }
 
-	public List<KeyValue> getPossibleTeams() {
-		return possibleTeams;
-	}
+    public List<KeyValue> getPossibleTeams() {
+        return possibleTeams;
+    }
 
-	public void setPossibleTeams(List<KeyValue> possibleTeams) {
-		this.possibleTeams = possibleTeams;
-	}
+    public void setPossibleTeams(List<KeyValue> possibleTeams) {
+        this.possibleTeams = possibleTeams;
+    }
 
-	public List<KeyValue> getPossibleFileTypes() {
-		return possibleFileTypes;
-	}
+    public List<KeyValue> getPossibleFileTypes() {
+        return possibleFileTypes;
+    }
 
-	public void setPossibleFileTypes(List<KeyValue> possibleFileTypes) {
-		this.possibleFileTypes = possibleFileTypes;
-	}
-	
-	public List<KeyValue> getPossibleOrganisations()
-	{
-		return possibleOrganisations;
-	}
-	
-	public void setPossibleOrganisations(List<KeyValue> possibleOrganisations)
-	{
-		this.possibleOrganisations = possibleOrganisations;
-	}
-	
+    public void setPossibleFileTypes(List<KeyValue> possibleFileTypes) {
+        this.possibleFileTypes = possibleFileTypes;
+    }
+    
+    public List<KeyValue> getPossibleOrganisations()
+    {
+        return possibleOrganisations;
+    }
+    
+    public void setPossibleOrganisations(List<KeyValue> possibleOrganisations)
+    {
+        this.possibleOrganisations = possibleOrganisations;
+    }
+    
 }

@@ -20,39 +20,39 @@ import org.digijava.module.aim.util.TeamUtil;
 
 public class AddReports extends Action {
 
-	private static Logger logger = Logger.getLogger(AddReports.class);
+    private static Logger logger = Logger.getLogger(AddReports.class);
 
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws java.lang.Exception {
+    public ActionForward execute(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response)
+            throws java.lang.Exception {
 
-		HttpSession session = request.getSession();
-		if (session.getAttribute("ampAdmin") == null) {
-			return mapping.findForward("index");
-		} else {
-			String str = (String) session.getAttribute("ampAdmin");
-			if (str.equals("no")) {
-				return mapping.findForward("index");
-			}
-		}
+        HttpSession session = request.getSession();
+        if (session.getAttribute("ampAdmin") == null) {
+            return mapping.findForward("index");
+        } else {
+            String str = (String) session.getAttribute("ampAdmin");
+            if (str.equals("no")) {
+                return mapping.findForward("index");
+            }
+        }
 
-		ReportsForm repForm = (ReportsForm) form;
+        ReportsForm repForm = (ReportsForm) form;
 
-		logger.debug("In add reports");
-		
-		if (repForm.getName() != null) {
-			AmpReports ampReport = new AmpReports();
-			ampReport.setName(repForm.getName());
-			ampReport.setDescription(repForm.getDescription());
-			TeamMember teamMember=(TeamMember)session.getAttribute("currentMember");
-			AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(teamMember.getMemberId());
-			ampReport.setOwnerId(ampTeamMember);
-			ampReport.setUpdatedDate(new Date(System.currentTimeMillis()));
-			DbUtil.add(ampReport);
-			logger.debug("reports added");
+        logger.debug("In add reports");
+        
+        if (repForm.getName() != null) {
+            AmpReports ampReport = new AmpReports();
+            ampReport.setName(repForm.getName());
+            ampReport.setDescription(repForm.getDescription());
+            TeamMember teamMember=(TeamMember)session.getAttribute("currentMember");
+            AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(teamMember.getMemberId());
+            ampReport.setOwnerId(ampTeamMember);
+            ampReport.setUpdatedDate(new Date(System.currentTimeMillis()));
+            DbUtil.add(ampReport);
+            logger.debug("reports added");
 
-			return mapping.findForward("added");
-		}
-		return mapping.findForward("forward");
-	}
+            return mapping.findForward("added");
+        }
+        return mapping.findForward("forward");
+    }
 }

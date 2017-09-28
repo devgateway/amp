@@ -11,10 +11,10 @@ package org.digijava.kernel.ampapi.helpers.geojson;
  */
 public class NamedCRSPropertiesGeoJSON implements Validation
 {
-	public String name;
+    public String name;
 
-	public boolean isValid(PositionValidator validator)
-	{
-		return name!=null;
-	}
+    public boolean isValid(PositionValidator validator)
+    {
+        return name!=null;
+    }
 }

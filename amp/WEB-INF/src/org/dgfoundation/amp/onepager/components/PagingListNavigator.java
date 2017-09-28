@@ -85,7 +85,7 @@ public class PagingListNavigator<T> extends Panel {
     }
     
     public boolean isVisible() {
-    	return model.getObject().size() > 1;
+        return model.getObject().size() > 1;
     }
 
 

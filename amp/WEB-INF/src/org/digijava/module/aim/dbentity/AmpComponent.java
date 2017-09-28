@@ -24,273 +24,273 @@ import org.digijava.module.aim.util.Output;
  */
 @TranslatableClass (displayName = "Component")
 public class AmpComponent implements Serializable,Comparable<AmpComponent>, Versionable, Cloneable {
-	
-	//IATI-check: to be ignored
-	
-	private static Logger logger = Logger.getLogger(AmpComponent.class);
-//	@Interchangeable(fieldTitle="ID", id = true)
-	private Long ampComponentId;
-//	@Interchangeable(fieldTitle="Title",fmPath="/Activity Form/Components/Component/Component Information/Component Title", value = true)
-	@TranslatableField
-	private String title;
-//	@Interchangeable(fieldTitle="Description",fmPath="/Activity Form/Components/Component/Component Information/Description")
-	@TranslatableField
-	private String description;
-//	@Interchangeable(fieldTitle="") //I gladly would export this, if I could
-	private java.sql.Timestamp creationdate;
-//	@Interchangeable(fieldTitle="Code")
-	private String code;
-	
-	private Set<AmpComponentFunding> fundings;
-	
-	public static class AmpComponentComparator implements Comparator<AmpComponent>{
-		@Override
-		public int compare(AmpComponent o1, AmpComponent o2) {
-			return staticCompare(o1, o2);
-		}
-		
-		public static int staticCompare(AmpComponent o1, AmpComponent o2) {
-			if (o1 == null)
-				return 1;
-			if (o2 == null)
-				return -1;
-			if (o2.getTitle() == null)
-				return -1;
-			if (o1.getTitle() == null)
-				return 1;
-			int ret = o1.getTitle().compareTo(o2.getTitle());
-			return ret;
-		}
-	}
-	
-	//private String type;
-	private AmpComponentType type;
-	
-	private Set activities;
-	private String Url;
-	
-	public Set getActivities() {
-		return activities;
-	}
-	public void setActivities(Set activities) {
-		this.activities = activities;
-	}
-	public Long getAmpComponentId() {
-		return ampComponentId;
-	}
-	public void setAmpComponentId(Long ampComponentId) {
-		this.ampComponentId = ampComponentId;
-	}
-	public String getCode() {
-		return code;
-	}
-	public void setCode(String code) {
-		this.code = code;
-	}
-	public String getDescription() {
-		return description;
-	}
-	public void setDescription(String description) {
-		this.description = description;
-	}
-	public String getTitle() {
-		return title;
-	}
-	public void setTitle(String title) {
-		this.title = title;
-	}
-	
-	public AmpComponentType getType() {
-		return type;
-	}
-	public void setType(AmpComponentType type) {
-		this.type = type;
-	}
-	
-	public void setUrl(String url) {
-		Url = url;
-	}
-	public String getUrl() {
-		return Url;
-	}
-	
-	/**
-	 * A simple string comparison to sort components by title
-	 */
-	public int compareTo(AmpComponent o) {
-		return AmpComponentComparator.staticCompare(this, o);
-	}
+    
+    //IATI-check: to be ignored
+    
+    private static Logger logger = Logger.getLogger(AmpComponent.class);
+//  @Interchangeable(fieldTitle="ID", id = true)
+    private Long ampComponentId;
+//  @Interchangeable(fieldTitle="Title",fmPath="/Activity Form/Components/Component/Component Information/Component Title", value = true)
+    @TranslatableField
+    private String title;
+//  @Interchangeable(fieldTitle="Description",fmPath="/Activity Form/Components/Component/Component Information/Description")
+    @TranslatableField
+    private String description;
+//  @Interchangeable(fieldTitle="") //I gladly would export this, if I could
+    private java.sql.Timestamp creationdate;
+//  @Interchangeable(fieldTitle="Code")
+    private String code;
+    
+    private Set<AmpComponentFunding> fundings;
+    
+    public static class AmpComponentComparator implements Comparator<AmpComponent>{
+        @Override
+        public int compare(AmpComponent o1, AmpComponent o2) {
+            return staticCompare(o1, o2);
+        }
+        
+        public static int staticCompare(AmpComponent o1, AmpComponent o2) {
+            if (o1 == null)
+                return 1;
+            if (o2 == null)
+                return -1;
+            if (o2.getTitle() == null)
+                return -1;
+            if (o1.getTitle() == null)
+                return 1;
+            int ret = o1.getTitle().compareTo(o2.getTitle());
+            return ret;
+        }
+    }
+    
+    //private String type;
+    private AmpComponentType type;
+    
+    private Set activities;
+    private String Url;
+    
+    public Set getActivities() {
+        return activities;
+    }
+    public void setActivities(Set activities) {
+        this.activities = activities;
+    }
+    public Long getAmpComponentId() {
+        return ampComponentId;
+    }
+    public void setAmpComponentId(Long ampComponentId) {
+        this.ampComponentId = ampComponentId;
+    }
+    public String getCode() {
+        return code;
+    }
+    public void setCode(String code) {
+        this.code = code;
+    }
+    public String getDescription() {
+        return description;
+    }
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    public String getTitle() {
+        return title;
+    }
+    public void setTitle(String title) {
+        this.title = title;
+    }
+    
+    public AmpComponentType getType() {
+        return type;
+    }
+    public void setType(AmpComponentType type) {
+        this.type = type;
+    }
+    
+    public void setUrl(String url) {
+        Url = url;
+    }
+    public String getUrl() {
+        return Url;
+    }
+    
+    /**
+     * A simple string comparison to sort components by title
+     */
+    public int compareTo(AmpComponent o) {
+        return AmpComponentComparator.staticCompare(this, o);
+    }
     /**
      * If overriding is really needed please fully comment on the reason!
      *
-	@Override
-	public boolean equals(Object obj) {
+    @Override
+    public boolean equals(Object obj) {
         if (!(obj instanceof AmpComponent))
             return false;
 
-		AmpComponent target=(AmpComponent) obj;
-		if (this.ampComponentId == null)
-			return super.equals(obj);
-		
-		if (target!=null && this.ampComponentId!=null){
-			return (this.getAmpComponentId().equals(target.getAmpComponentId()));
-		}
-		return false;
-	}
-	@Override
-	public int hashCode() {
-		if( this.ampComponentId ==null) return 0;
-		return this.ampComponentId.hashCode();
-	}
-	 */
-	
-	public java.sql.Timestamp getCreationdate() {
-		return creationdate;
-	}
-	public void setCreationdate(java.sql.Timestamp creationdate) {
-		this.creationdate = creationdate;
-	}
-	
-	public Set<AmpComponentFunding> getFundings() {
-		return fundings;
-	}
-	
-	public void setFundings(Set<AmpComponentFunding> fundings) {
-		this.fundings = fundings;
-	}
-	
-	@Override
-	public boolean equalsForVersioning(Object obj) {
-		AmpComponent aux = (AmpComponent) obj;
-		return this.getValue().equals(aux.getValue());
-	}
-	
-	private transient Comparator<AmpComponentFunding> componentFundingComparator = new Comparator<AmpComponentFunding>() {
-		public int compare(AmpComponentFunding o1, AmpComponentFunding o2) {
-			AmpComponentFunding aux1 = (AmpComponentFunding) o1;
-			AmpComponentFunding aux2 = (AmpComponentFunding) o2;
-			
-			if (aux1.getTransactionType().equals(aux2.getTransactionType())) {
-				if (aux1.getTransactionAmount().equals(aux2.getTransactionAmount())) {
-					return aux1.getTransactionDate().compareTo(aux2.getTransactionDate());
-				} else {
-					return aux1.getTransactionAmount().compareTo(aux2.getTransactionAmount());
-				}
-			} else {
-				return aux1.getTransactionType().compareTo(aux2.getTransactionType());
-			}
-		}
-	};
+        AmpComponent target=(AmpComponent) obj;
+        if (this.ampComponentId == null)
+            return super.equals(obj);
+        
+        if (target!=null && this.ampComponentId!=null){
+            return (this.getAmpComponentId().equals(target.getAmpComponentId()));
+        }
+        return false;
+    }
+    @Override
+    public int hashCode() {
+        if( this.ampComponentId ==null) return 0;
+        return this.ampComponentId.hashCode();
+    }
+     */
+    
+    public java.sql.Timestamp getCreationdate() {
+        return creationdate;
+    }
+    public void setCreationdate(java.sql.Timestamp creationdate) {
+        this.creationdate = creationdate;
+    }
+    
+    public Set<AmpComponentFunding> getFundings() {
+        return fundings;
+    }
+    
+    public void setFundings(Set<AmpComponentFunding> fundings) {
+        this.fundings = fundings;
+    }
+    
+    @Override
+    public boolean equalsForVersioning(Object obj) {
+        AmpComponent aux = (AmpComponent) obj;
+        return this.getValue().equals(aux.getValue());
+    }
+    
+    private transient Comparator<AmpComponentFunding> componentFundingComparator = new Comparator<AmpComponentFunding>() {
+        public int compare(AmpComponentFunding o1, AmpComponentFunding o2) {
+            AmpComponentFunding aux1 = (AmpComponentFunding) o1;
+            AmpComponentFunding aux2 = (AmpComponentFunding) o2;
+            
+            if (aux1.getTransactionType().equals(aux2.getTransactionType())) {
+                if (aux1.getTransactionAmount().equals(aux2.getTransactionAmount())) {
+                    return aux1.getTransactionDate().compareTo(aux2.getTransactionDate());
+                } else {
+                    return aux1.getTransactionAmount().compareTo(aux2.getTransactionAmount());
+                }
+            } else {
+                return aux1.getTransactionType().compareTo(aux2.getTransactionType());
+            }
+        }
+    };
 
-	@Override
-	public Output getOutput() {
-		Output out = new Output();
-		out.setOutputs(new ArrayList<Output>());
-		
-		out.getOutputs().add(
-				new Output(null, new String[] { "Title" }, new Object[] { this.title != null ? this.title
-						: "Empty Title" }));
-		if (this.description != null && !this.description.trim().equals("")) {
-			out.getOutputs()
-					.add(new Output(null, new String[] { "Description" }, new Object[] { this.description }));
-		}
-		if (this.code != null && !this.code.trim().equals("")) {
-			out.getOutputs().add(new Output(null, new String[] { "Code" }, new Object[] { this.code }));
-		}
-		if (this.creationdate != null) {
-			out.getOutputs().add(
-					new Output(null, new String[] { "Creation Date" }, new Object[] { this.creationdate }));
-		}
-		if (this.Url != null && !this.Url.trim().equals("")) {
-			out.getOutputs().add(new Output(null, new String[] { "URL" }, new Object[] { this.Url }));
-		}
-		
-		List<AmpComponentFunding> auxFundings = new ArrayList<AmpComponentFunding>(this.fundings); 
-		auxFundings.sort(componentFundingComparator);
-		Iterator<AmpComponentFunding> iter = auxFundings.iterator();
-		
-		while(iter.hasNext()) {
-			AmpComponentFunding funding = iter.next();
-			String transactionType = "";
-			
-			switch (funding.getTransactionType().intValue()) {
-				case 0:
-					transactionType = "Commitments";
-					break;
-				case 1:
-					transactionType = "Disbursements";
-					break;
-				case 2:
-					transactionType = "Expenditures";
-					break;
-				case 3:
-					transactionType = "Disbursement Orders";
-					break;
-				case 4:
-					transactionType = "MTEF Projection";
-					break;
-			}
-			
-			out.getOutputs().add(new Output(null, new String[] { "Trn" }, new Object[] { transactionType }));
-			out.getOutputs().add(new Output(null, new String[] { "Value" }, new Object[] {
-							 " " + funding.getAdjustmentType().getValue() + " - " , funding.getTransactionAmount(),
-							" ", funding.getCurrency(), " - ", funding.getTransactionDate()}));
-		}
-		
-		
-		return out;
-	}
-	
-	@Override
-	public Object getValue() {
-		StringBuffer ret = new StringBuffer();
-		ret.append("-" + this.code+ "-" + this.description + "-" + this.Url + "-" + this.creationdate);
-		
-		List<AmpComponentFunding> auxFundings = new ArrayList<AmpComponentFunding>(this.fundings); 
-		auxFundings.sort(componentFundingComparator);
-		Iterator<AmpComponentFunding> iter = auxFundings.iterator();
-		
-		while(iter.hasNext()) {
-			AmpComponentFunding funding = iter.next();
-			ret.append(funding.getTransactionType() + "-" + funding.getTransactionAmount() + "-" + funding.getCurrency() + "-" + funding.getTransactionDate());
-		}
-		
-		return ret.toString();
-	}
-	
-	@Override
-	public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
-		AmpComponent auxComponent = (AmpComponent) clone();
-		auxComponent.setActivities(new HashSet<AmpActivityVersion>());
-		auxComponent.getActivities().add(newActivity);
-		auxComponent.setAmpComponentId(null);
-		
-		if (auxComponent.getFundings() != null && auxComponent.getFundings().size() > 0) {
-			Set<AmpComponentFunding> auxSetFundings = new HashSet<AmpComponentFunding>();
-			Iterator<AmpComponentFunding> it = auxComponent.getFundings().iterator();
-			while (it.hasNext()) {
-				AmpComponentFunding auxComponentFunding = it.next();
-				AmpComponentFunding newComponentFunding = (AmpComponentFunding) auxComponentFunding.clone();
-				newComponentFunding.setAmpComponentFundingId(null);
-				newComponentFunding.setComponent(auxComponent);
-				auxSetFundings.add(newComponentFunding);
-			}
-			auxComponent.setFundings(auxSetFundings);
-		} else {
-			auxComponent.setFundings(null);
-		}
-		
-		return auxComponent;
-	}
+    @Override
+    public Output getOutput() {
+        Output out = new Output();
+        out.setOutputs(new ArrayList<Output>());
+        
+        out.getOutputs().add(
+                new Output(null, new String[] { "Title" }, new Object[] { this.title != null ? this.title
+                        : "Empty Title" }));
+        if (this.description != null && !this.description.trim().equals("")) {
+            out.getOutputs()
+                    .add(new Output(null, new String[] { "Description" }, new Object[] { this.description }));
+        }
+        if (this.code != null && !this.code.trim().equals("")) {
+            out.getOutputs().add(new Output(null, new String[] { "Code" }, new Object[] { this.code }));
+        }
+        if (this.creationdate != null) {
+            out.getOutputs().add(
+                    new Output(null, new String[] { "Creation Date" }, new Object[] { this.creationdate }));
+        }
+        if (this.Url != null && !this.Url.trim().equals("")) {
+            out.getOutputs().add(new Output(null, new String[] { "URL" }, new Object[] { this.Url }));
+        }
+        
+        List<AmpComponentFunding> auxFundings = new ArrayList<AmpComponentFunding>(this.fundings); 
+        auxFundings.sort(componentFundingComparator);
+        Iterator<AmpComponentFunding> iter = auxFundings.iterator();
+        
+        while(iter.hasNext()) {
+            AmpComponentFunding funding = iter.next();
+            String transactionType = "";
+            
+            switch (funding.getTransactionType().intValue()) {
+                case 0:
+                    transactionType = "Commitments";
+                    break;
+                case 1:
+                    transactionType = "Disbursements";
+                    break;
+                case 2:
+                    transactionType = "Expenditures";
+                    break;
+                case 3:
+                    transactionType = "Disbursement Orders";
+                    break;
+                case 4:
+                    transactionType = "MTEF Projection";
+                    break;
+            }
+            
+            out.getOutputs().add(new Output(null, new String[] { "Trn" }, new Object[] { transactionType }));
+            out.getOutputs().add(new Output(null, new String[] { "Value" }, new Object[] {
+                             " " + funding.getAdjustmentType().getValue() + " - " , funding.getTransactionAmount(),
+                            " ", funding.getCurrency(), " - ", funding.getTransactionDate()}));
+        }
+        
+        
+        return out;
+    }
+    
+    @Override
+    public Object getValue() {
+        StringBuffer ret = new StringBuffer();
+        ret.append("-" + this.code+ "-" + this.description + "-" + this.Url + "-" + this.creationdate);
+        
+        List<AmpComponentFunding> auxFundings = new ArrayList<AmpComponentFunding>(this.fundings); 
+        auxFundings.sort(componentFundingComparator);
+        Iterator<AmpComponentFunding> iter = auxFundings.iterator();
+        
+        while(iter.hasNext()) {
+            AmpComponentFunding funding = iter.next();
+            ret.append(funding.getTransactionType() + "-" + funding.getTransactionAmount() + "-" + funding.getCurrency() + "-" + funding.getTransactionDate());
+        }
+        
+        return ret.toString();
+    }
+    
+    @Override
+    public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
+        AmpComponent auxComponent = (AmpComponent) clone();
+        auxComponent.setActivities(new HashSet<AmpActivityVersion>());
+        auxComponent.getActivities().add(newActivity);
+        auxComponent.setAmpComponentId(null);
+        
+        if (auxComponent.getFundings() != null && auxComponent.getFundings().size() > 0) {
+            Set<AmpComponentFunding> auxSetFundings = new HashSet<AmpComponentFunding>();
+            Iterator<AmpComponentFunding> it = auxComponent.getFundings().iterator();
+            while (it.hasNext()) {
+                AmpComponentFunding auxComponentFunding = it.next();
+                AmpComponentFunding newComponentFunding = (AmpComponentFunding) auxComponentFunding.clone();
+                newComponentFunding.setAmpComponentFundingId(null);
+                newComponentFunding.setComponent(auxComponent);
+                auxSetFundings.add(newComponentFunding);
+            }
+            auxComponent.setFundings(auxSetFundings);
+        } else {
+            auxComponent.setFundings(null);
+        }
+        
+        return auxComponent;
+    }
 
-	@Override
-	public Object clone() throws CloneNotSupportedException {
-		// TODO Auto-generated method stub
-		return super.clone();
-	}
-	
-	@Override
-	public String toString() {
-		return title;
-	}
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        // TODO Auto-generated method stub
+        return super.clone();
+    }
+    
+    @Override
+    public String toString() {
+        return title;
+    }
 }

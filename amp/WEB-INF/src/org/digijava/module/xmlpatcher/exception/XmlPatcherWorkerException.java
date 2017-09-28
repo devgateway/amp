@@ -11,37 +11,37 @@ package org.digijava.module.xmlpatcher.exception;
  */
 public abstract class XmlPatcherWorkerException extends Exception {
 
-	/**
-	 * 
-	 */
-	public XmlPatcherWorkerException() {
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * 
+     */
+    public XmlPatcherWorkerException() {
+        // TODO Auto-generated constructor stub
+    }
 
 
-	/**
-	 * @param arg0
-	 */
-	public XmlPatcherWorkerException(String arg0) {
-		super(arg0);
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * @param arg0
+     */
+    public XmlPatcherWorkerException(String arg0) {
+        super(arg0);
+        // TODO Auto-generated constructor stub
+    }
 
-	/**
-	 * @param arg0
-	 */
-	public XmlPatcherWorkerException(Throwable arg0) {
-		super(arg0);
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * @param arg0
+     */
+    public XmlPatcherWorkerException(Throwable arg0) {
+        super(arg0);
+        // TODO Auto-generated constructor stub
+    }
 
-	/**
-	 * @param arg0
-	 * @param arg1
-	 */
-	public XmlPatcherWorkerException(String arg0, Throwable arg1) {
-		super(arg0, arg1);
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * @param arg0
+     * @param arg1
+     */
+    public XmlPatcherWorkerException(String arg0, Throwable arg1) {
+        super(arg0, arg1);
+        // TODO Auto-generated constructor stub
+    }
 
 }

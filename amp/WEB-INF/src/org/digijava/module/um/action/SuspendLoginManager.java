@@ -120,7 +120,7 @@ public class SuspendLoginManager extends DispatchAction {
                                HttpServletRequest request, HttpServletResponse response) throws DgException {
         SuspendLoginManagerForm slmf = (SuspendLoginManagerForm) form;
         if (slmf.getObjId()==null){
-        	return view(mapping, form, request, response);
+            return view(mapping, form, request, response);
         }
         SuspendLogin sl = DbUtil.getSuspendedLoginObjById(slmf.getObjId());
         List<User> users = DbUtil.getAllUsers();

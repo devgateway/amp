@@ -5,39 +5,39 @@ import java.util.List;
 
 public class ClusteredPoints {
 
-	private List<Long> activityids;
-	private String lat;
-	private String lon;
-	private String admin;
-	
-	public ClusteredPoints(){
-	    activityids= new ArrayList<Long>();
-	}
+    private List<Long> activityids;
+    private String lat;
+    private String lon;
+    private String admin;
+    
+    public ClusteredPoints(){
+        activityids= new ArrayList<Long>();
+    }
 
-	
-	public List<Long> getActivityids() {
-		return activityids;
-	}
+    
+    public List<Long> getActivityids() {
+        return activityids;
+    }
 
-	public void setActivityids(List<Long> activityids) {
-		this.activityids = activityids;
-	}
+    public void setActivityids(List<Long> activityids) {
+        this.activityids = activityids;
+    }
 
-	public String getLat() {
-		return lat;
-	}
+    public String getLat() {
+        return lat;
+    }
 
-	public void setLat(String lat) {
-		this.lat = lat;
-	}
+    public void setLat(String lat) {
+        this.lat = lat;
+    }
 
-	public String getLon() {
-		return lon;
-	}
+    public String getLon() {
+        return lon;
+    }
 
-	public void setLon(String lon) {
-		this.lon = lon;
-	}
+    public void setLon(String lon) {
+        this.lon = lon;
+    }
 
 
     public String getAdmin() {
@@ -48,5 +48,5 @@ public class ClusteredPoints {
     public void setAdmin(String admin) {
         this.admin = admin;
     }
-	
+    
 }

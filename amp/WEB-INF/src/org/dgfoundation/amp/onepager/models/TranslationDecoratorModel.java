@@ -38,7 +38,7 @@ public class TranslationDecoratorModel extends LocaleAwareProxyModel<String> {
                     return model.getObject();
                 }
            else if (model instanceof ResourceTranslationModel) {
-                	return model.getObject();
+                    return model.getObject();
                 }
                 else{
                     throw new AssertionError("Extend code to use other types of models");
@@ -62,7 +62,7 @@ public class TranslationDecoratorModel extends LocaleAwareProxyModel<String> {
                     model.setObject(object);
                 }
             else if (model instanceof ResourceTranslationModel) {
-                	model.setObject(object);
+                    model.setObject(object);
                 }
                 else{
                         throw new AssertionError("Extend code to use other types of models");

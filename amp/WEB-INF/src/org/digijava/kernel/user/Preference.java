@@ -25,28 +25,28 @@ package org.digijava.kernel.user;
 
 public class Preference {
 
-	private String name;
-	private String value;
+    private String name;
+    private String value;
 
-	public Preference(String name, String value) {
-		this.name = name;
-		this.value = value;
-	}
+    public Preference(String name, String value) {
+        this.name = name;
+        this.value = value;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getValue() {
-		return value;
-	}
+    public String getValue() {
+        return value;
+    }
 
-	public void setValue(String value) {
-		this.value = value;
-	}
+    public void setValue(String value) {
+        this.value = value;
+    }
 
 }

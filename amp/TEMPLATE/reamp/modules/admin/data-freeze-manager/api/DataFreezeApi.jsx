@@ -11,6 +11,16 @@ class DataFreezeApi {
         });
     }
 
+     static getFrozenActivities() {
+          const url = '/rest/data-freeze/event/list-frozen-activities';
+          return new Promise((resolve, reject) => {
+               fetchJson(url).then((response) => {
+                    resolve(response)
+               }).catch((error) => {
+                    reject(error);
+               });
+          });
+     }
     static save( data ) {
         delete data.isEditing
         return new Promise(( resolve, reject ) => {

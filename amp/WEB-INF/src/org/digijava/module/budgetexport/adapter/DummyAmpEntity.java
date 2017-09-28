@@ -53,15 +53,15 @@ public class DummyAmpEntity implements HierarchyListable {
         this.id = id;
     }
 
-	@Override
-	public boolean getTranslateable() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    @Override
+    public boolean getTranslateable() {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
-	@Override
-	public void setTranslateable(boolean translateable) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void setTranslateable(boolean translateable) {
+        // TODO Auto-generated method stub
+        
+    }
 }

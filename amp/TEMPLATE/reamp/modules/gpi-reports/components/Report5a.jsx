@@ -12,16 +12,18 @@ import RemarksPopup from './RemarksPopup';
 import ToolBar from './ToolBar';
 import { Modal } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
+import HeaderToolTip from './HeaderToolTip';
+import Loading from './Loading';
 export default class Report5a extends Component {
     constructor( props, context ) {
         super( props, context );
-        this.state = { recordsPerPage: 150, hierarchy: 'donor-agency', selectedYear: null, selectedDonor: "", remarksUrl:null, showRemarks: false};
+        this.state = { recordsPerPage: 150, hierarchy: 'donor-agency', selectedYear: null, selectedDonor: "", remarksUrl:null, showRemarks: false, waiting:true};
         this.showFilters = this.showFilters.bind( this );
         this.showSettings = this.showSettings.bind( this );        
         this.onDonorFilterChange = this.onDonorFilterChange.bind( this );
         this.toggleHierarchy = this.toggleHierarchy.bind( this );  
         this.downloadExcelFile = this.downloadExcelFile.bind(this);
-        this.downloadPdfFile = this.downloadPdfFile.bind(this);
+        this.downloadPdfFile = this.downloadPdfFile.bind(this);        
       }
 
     componentDidMount() {
@@ -90,7 +92,10 @@ export default class Report5a extends Component {
 
     fetchReportData( data ) {
         let requestData = data || this.getRequestData();
-        this.props.actions.fetchReportData( requestData, '5a' );
+        this.setState({waiting: true});
+        this.props.actions.fetchReportData( requestData, '5a' ).then(function(){
+            this.setState({waiting: false});  
+        }.bind(this));
     }
     
     onDonorFilterChange( e ) {
@@ -191,13 +196,18 @@ export default class Report5a extends Component {
     downloadPdfFile(){
         this.props.actions.downloadPdfFile(this.getRequestData(), '5a');
     }
-    
-    render() {
-        if ( this.props.mainReport && this.props.mainReport.page ) {
+     
+    render() {        
             let addedGroups = [];
-            let years = this.props.years.slice();
+            var years = Utils.getYears(this.settingsWidget, this.props.years);
             return (
-                <div>
+                  <div>                   
+                    {this.state.waiting &&                      
+                        <Loading/>                
+                    } 
+                    
+                    {this.props.mainReport && this.props.mainReport.page && this.settingsWidget && this.settingsWidget.definitions &&
+                     <div>                    
                     <div id="filter-popup" ref="filterPopup"> </div>
                     <div id="amp-settings" ref="settingsPopup"> </div>
                     <ToolBar showFilters={this.showFilters} showSettings={this.showSettings} downloadPdfFile={this.downloadPdfFile}  downloadExcelFile={this.downloadExcelFile} />
@@ -222,7 +232,7 @@ export default class Report5a extends Component {
                         </div>
                       </div>                        
                     }
-                    <YearsFilterSection onYearClick={this.onYearClick.bind(this)} years={this.props.years} selectedYear={this.state.selectedYear} mainReport={this.props.mainReport} filter={this.filter} dateField="date" />                    
+                    <YearsFilterSection onYearClick={this.onYearClick.bind(this)} years={years} selectedYear={this.state.selectedYear} mainReport={this.props.mainReport} filter={this.filter} dateField="date" />                    
                     <div className="container-fluid no-padding">
                         <div className="dropdown">
                             <select name="donorAgency" className="form-control donor-dropdown" value={this.state.selectedDonor} onChange={this.onDonorFilterChange}>
@@ -232,7 +242,11 @@ export default class Report5a extends Component {
                                 )}
                             </select>
                         </div>
-                        <div className="pull-right"><h4>{this.props.translations['amp.gpi-reports:currency']} {this.props.mainReport.settings['currency-code']}</h4></div>
+                        <div className="pull-right"><h4>{this.props.translations['amp.gpi-reports:currency']} {this.props.mainReport.settings['currency-code']}
+                        {(this.props.settings['number-divider'] != 1) &&
+                            <span className="amount-units"> ({this.props.translations['amp-gpi-reports:amount-in-' + this.props.settings['number-divider']]})</span>                    
+                        }
+                        </h4></div>
                     </div>                                       
                     <div className="section-divider"></div>     
                         {this.state.showRemarks &&
@@ -246,13 +260,12 @@ export default class Report5a extends Component {
                           <img src="images/blue_radio_on.png" className={this.state.hierarchy === 'donor-agency' ? 'donor-toggle' : 'donor-toggle donor-toggle-unselected'} onClick={this.toggleHierarchy} data-hierarchy="donor-agency" /><span className="donor-header-text" onClick={this.toggleHierarchy} data-hierarchy="donor-agency">{this.props.translations['amp.gpi-reports:donor-agency']}</span><br />
                           <img src="images/blue_radio_on.png" className={this.state.hierarchy === 'donor-group' ? 'donor-toggle' : 'donor-toggle donor-toggle-unselected'} onClick={this.toggleHierarchy} data-hierarchy="donor-group" /><span className="donor-header-text" onClick={this.toggleHierarchy} data-hierarchy="donor-group">{this.props.translations['amp.gpi-reports:donor-group']}</span>
                           </th>
-                          <th>{this.getLocalizedColumnName(Constants.TOTAL_ACTUAL_DISBURSEMENTS)}<span className="light-weight">(Q1)</span></th>
-                          <th className="col-md-1">{this.getLocalizedColumnName(Constants.CONCESSIONAL)}? <span className="light-weight">(Yes=1/ No=0)</span></th>
-                          <th>{this.getLocalizedColumnName(Constants.ACTUAL_DISBURSEMENTS)} <span className="light-weight">(Q2)</span></th>
-                          <th>{this.getLocalizedColumnName(Constants.PLANNED_DISBURSEMENTS)}<span className="light-weight">(Q3)</span></th>
-                          <th>{this.getLocalizedColumnName(Constants.DISBURSEMENTS_THROUGH_OTHER_PROVIDERS)}</th>
-                          <th>{this.getLocalizedColumnName(Constants.DISBURSEMENTS_AS_SCHEDULED)}</th>
-                          <th>{this.getLocalizedColumnName(Constants.OVER_DISBURSED)}</th>
+                          <th>{this.getLocalizedColumnName(Constants.TOTAL_ACTUAL_DISBURSEMENTS)}<span className="light-weight"></span></th>
+                          <th className="col-md-2"><HeaderToolTip column={Constants.CONCESSIONAL} headers={this.props.mainReport.page.headers}/>{this.getLocalizedColumnName(Constants.CONCESSIONAL)}?</th>
+                          <th>{this.getLocalizedColumnName(Constants.ACTUAL_DISBURSEMENTS)} <span className="light-weight"></span></th>
+                          <th>{this.getLocalizedColumnName(Constants.PLANNED_DISBURSEMENTS)}<span className="light-weight"></span></th>
+                          <th className="col-md-2"><HeaderToolTip column={Constants.DISBURSEMENTS_AS_SCHEDULED} headers={this.props.mainReport.page.headers}/>{this.getLocalizedColumnName(Constants.DISBURSEMENTS_AS_SCHEDULED)}</th>
+                          <th className="col-md-2"><HeaderToolTip column={Constants.OVER_DISBURSED} headers={this.props.mainReport.page.headers}/>{this.getLocalizedColumnName(Constants.OVER_DISBURSED)}</th>
                           <th>
                             <div className="popup">
                               <a data-container="body" data-toggle="popover" data-placement="top" data-content={this.getLocalizedColumnName(Constants.REMARK)} data-original-title="" title="">
@@ -271,7 +284,6 @@ export default class Report5a extends Component {
                               <td className="number-column">{row[Constants.CONCESSIONAL]}</td>
                               <td className="number-column">{row[Constants.ACTUAL_DISBURSEMENTS]}</td>
                               <td className="number-column">{row[Constants.PLANNED_DISBURSEMENTS]}</td>
-                              <td className="number-column">{row[Constants.DISBURSEMENTS_THROUGH_OTHER_PROVIDERS]}</td>
                               <td className="number-column">{row[Constants.DISBURSEMENTS_AS_SCHEDULED]}</td>
                               <td className="number-column">{row[Constants.OVER_DISBURSED]}</td>
                               <td className="number-column"><img className="table-icon" src="images/remarks-icon.svg" data-url={row[Constants.REMARK]} onClick={this.showRemarksModal.bind(this)}/></td>
@@ -283,10 +295,10 @@ export default class Report5a extends Component {
                          <PagingSection mainReport={this.props.mainReport} goToPage={this.goToPage.bind(this)} updateRecordsPerPage={this.updateRecordsPerPage.bind(this)}/>
                     </div>
                 </div>
-            );
-        }
-
-        return ( <div></div> );
+                }
+               </div>
+                          
+            );            
     }
 
 }

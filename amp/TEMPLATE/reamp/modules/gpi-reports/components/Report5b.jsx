@@ -1,14 +1,16 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import Utils from '../common/Utils';
 import * as reportsActions from '../actions/ReportsActions';
 import * as commonListsActions from '../actions/CommonListsActions';
 import * as startUp from '../actions/StartUpAction.jsx';
 import * as Constants from '../common/Constants';
+import Loading from './Loading';
 export default class Report5b extends Component {
     constructor( props, context ) {
         super( props, context );
-        this.state = { recordsPerPage: 150, hierarchy: 'donor-agency', selectedYear: new Date().getFullYear(), selectedDonor: "" };
+        this.state = { recordsPerPage: 150, hierarchy: 'donor-agency', selectedYear: new Date().getFullYear(), selectedDonor: "", waiting: true};
         this.showFilters = this.showFilters.bind( this );
         this.showSettings = this.showSettings.bind( this );
         this.goToClickedPage = this.goToClickedPage.bind( this );
@@ -27,56 +29,50 @@ export default class Report5b extends Component {
     }
 
     initializeFiltersAndSettings() {
-        this.filter = new ampFilter( {
-            draggable: true,
-            caller: 'REPORTS'
+        this.filter = new ampFilter({
+             draggable: true,
+             caller: 'GPI_REPORTS'
         });
-
-        this.settingsWidget = new AMPSettings.SettingsWidget( {
-            draggable: true,
-            caller: 'REPORTS',
-            isPopup: true,
-            definitionUrl: '/rest/settings-definitions/gpi-reports'
-        });        
-              
+        this.settingsWidget = Utils.initializeSettingsWidget();
         this.props.actions.getYears();
         this.props.actions.getOrgList(false);
-        this.fetchReportData();        
-        
-    }
+        this.fetchReportData();
+        this.props.actions.getSettings();
 
-    showFilters() {
-        this.filter.setElement( this.refs.filterPopup );
+   }
+
+   showFilters() {
+        this.filter.setElement(this.refs.filterPopup);
         this.filter.showFilters();
-        $( this.refs.filterPopup ).show();
+        $(this.refs.filterPopup).show();
 
-        this.filter.on( 'cancel', function() {
-            $( this.refs.filterPopup ).hide();
-        }.bind( this ) );
+        this.filter.on('cancel', function () {
+             $(this.refs.filterPopup).hide();
+        }.bind(this));
 
-        this.filter.on( 'apply', function() {
-            this.resetQuickFilters();
-            this.fetchReportData();
-            $( this.refs.filterPopup ).hide();
-        }.bind( this ) );
-    }
+        this.filter.on('apply', function () {
+             this.resetQuickFilters();
+             this.fetchReportData();
+             $(this.refs.filterPopup).hide();
+        }.bind(this));
+   }
 
-    showSettings() {
-        this.settingsWidget.setElement( this.refs.settingsPopup );
-        this.settingsWidget.definitions.loaded.done( function() {
-            this.settingsWidget.show();
-        }.bind( this ) );
+   showSettings() {
+        this.settingsWidget.setElement(this.refs.settingsPopup);
+        this.settingsWidget.definitions.loaded.done(function () {
+             this.settingsWidget.show();
+        }.bind(this));
 
-        $( this.refs.settingsPopup ).show();
-        this.settingsWidget.on( 'close', function() {
-            $( this.refs.settingsPopup ).hide();
-        }.bind( this ) );
+        $(this.refs.settingsPopup).show();
+        this.settingsWidget.on('close', function () {
+             $(this.refs.settingsPopup).hide();
+        }.bind(this));
 
-        this.settingsWidget.on( 'applySettings', function() {
-            this.fetchReportData();
-            $( this.refs.settingsPopup ).hide();
-        }.bind( this ) );
-    }
+        this.settingsWidget.on('applySettings', function () {
+             this.fetchReportData();
+             $(this.refs.settingsPopup).hide();
+        }.bind(this));
+   }
 
     getRequestData() {
         var requestData = {
@@ -123,7 +119,10 @@ export default class Report5b extends Component {
 
     fetchReportData( requestData ) {
         var requestData = requestData || this.getRequestData();
-        this.props.actions.fetchReportData( requestData, '5b' );
+        this.setState({waiting:true});
+        this.props.actions.fetchReportData( requestData, '5b' ).then(function(){
+            this.setState({waiting: false});  
+        }.bind(this));
     }
 
 
@@ -280,14 +279,18 @@ export default class Report5b extends Component {
     downloadPdfFile(){
         this.props.actions.downloadPdfFile(this.getRequestData(), '5b');
     } 
-    
+       
     render() {         
-        if ( this.props.mainReport && this.props.mainReport.page ) {            
-            var MTEFYears =  this.getMTEFYears();
-            var addedGroups = [];
-            var years = this.props.years.slice();
-            return (
+        var years = Utils.getYears(this.settingsWidget, this.props.years);                   
+        var MTEFYears =  this.getMTEFYears();
+        var addedGroups = [];            
+        return (
                 <div>
+                    {this.state.waiting &&                      
+                        <Loading/>                
+                    } 
+                    {this.props.mainReport && this.props.mainReport.page && this.settingsWidget && this.settingsWidget.definitions &&
+                     <div>                    
                     <div id="filter-popup" ref="filterPopup"> </div>
                     <div id="amp-settings" ref="settingsPopup"> </div>
                     <div className="container-fluid indicator-nav no-padding">
@@ -331,7 +334,7 @@ export default class Report5b extends Component {
                                         {this.props.translations['amp.gpi-reports:other-years']}
                                         <span className="caret"></span></a>
                                     <ul className="dropdown-menu dropdown-years" role="menu">
-                                        {years.length > 3 && years.reverse().map( year =>
+                                        {years.reverse().map( year =>
                                             <li role="presentation" className={this.state.selectedYear == year ? 'active' : ''} key={year}><a data-year={year} onClick={this.onYearClick}>{year}</a></li>
                                         )}
 
@@ -341,7 +344,7 @@ export default class Report5b extends Component {
                         </ul>
                     </div>
                     <div className="selection-legend">
-                        <div className="pull-right">{this.showSelectedDates()}</div>
+                        <div className="pull-right">{this.showSelectedDates().length > 0 ? this.props.translations['amp-gpi-reports:selected'] : ''} {this.showSelectedDates()}</div>
                     </div>
                     <div className="container-fluid no-padding">
                         <div className="dropdown">
@@ -351,8 +354,7 @@ export default class Report5b extends Component {
                                     <option value={org.id} key={org.id} >{org.name}</option>
                                 )}
                             </select>
-                        </div>
-                        <div className="pull-right"><h4>{this.props.translations['amp.gpi-reports:currency']} {this.props.mainReport.settings['currency-code']}</h4></div>
+                        </div>                        
                     </div>
                     <div className="section-divider"></div>
                         { this.props.mainReport.empty == false  &&
@@ -375,7 +377,7 @@ export default class Report5b extends Component {
                                   {MTEFYears.map(( year, i ) =>
                                   <td className="number-column">{row[year]}</td>
                                   )}
-                                  <td>{row[Constants.INDICATOR_5B]}</td>                                    
+                                  <td className="number-column">{row[Constants.INDICATOR_5B]}</td>                                    
                               </tr>
                           )}                     
                           </tbody>
@@ -415,12 +417,11 @@ export default class Report5b extends Component {
                       }
                     </div>
                         
-
-
+                 </div>
+                 }
                 </div>
-            );
-        }
-        return ( <div></div> );
+            );           
+        
     }
 
 }
@@ -431,6 +432,7 @@ function mapStateToProps( state, ownProps ) {
         orgList: state.commonLists.orgList,
         years: state.commonLists.years,
         translations: state.startUp.translations,
+        settings: state.commonLists.settings,
         translate: state.startUp.translate
     }
 }

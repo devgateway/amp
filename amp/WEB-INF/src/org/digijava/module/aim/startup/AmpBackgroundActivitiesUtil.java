@@ -191,29 +191,35 @@ public class AmpBackgroundActivitiesUtil
      * @return
      * @throws Exception
      */
-    public static AmpTeamMember createActivityTeamMemberIfNeeded(AmpTeam team, User u) throws Exception
-    {
+    public static AmpTeamMember createActivityTeamMemberIfNeeded(AmpTeam team, User u) throws Exception {
         User user = createActivityUserIfNeeded(u);
 
         AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMemberByUserByTeam(user, team);
-        if (teamMember != null)
+        if (teamMember != null && !teamMember.isSoftDeleted()) {
             return teamMember;
+        }
 
         AmpTeamMemberRoles role = TeamMemberUtil.getWorkspaceMemberTeamMemberRole();
-        AmpTeamMember newMember = new AmpTeamMember();
-        newMember.setUser(user);
-        newMember.setAmpTeam(team);
-        newMember.setAmpMemberRole(role);
+        if (teamMember == null) {
 
-        newMember.setPublishDocPermission(false);
+            AmpTeamMember newMember = new AmpTeamMember();
+            newMember.setUser(user);
+            newMember.setAmpTeam(team);
+            newMember.setAmpMemberRole(role);
 
-        TeamUtil.addTeamMember(newMember, SiteUtils.getDefaultSite());
-        teamMember = TeamMemberUtil.getAmpTeamMemberByUserByTeam(user, team);
+            newMember.setPublishDocPermission(false);
 
-        if (teamMember == null)
+            TeamUtil.addTeamMember(newMember, SiteUtils.getDefaultSite());
+
             return newMember;
+        } else {
+            teamMember.setDeleted(false);
+            teamMember.setAmpMemberRole(role);
+            TeamMemberUtil.updateMember(teamMember);
 
-        return teamMember;
+            return teamMember;
+        }
+
     }
 
 }

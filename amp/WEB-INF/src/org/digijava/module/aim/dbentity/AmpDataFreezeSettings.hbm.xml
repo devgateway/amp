@@ -10,6 +10,7 @@
 		</id>
 
 		<property name="enabled" column="enabled" type="java.lang.Boolean" />
+		<property name="executed" column="executed" type="java.lang.Boolean" />
 		<property name="gracePeriod" column="grace_period" type="java.lang.Integer" />
 		<property name="freezingDate" column="freezing_date" type="java.util.Date" />
 	    <property name="openPeriodStart" column="open_period_start" type="java.util.Date" />

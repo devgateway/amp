@@ -33,64 +33,64 @@ public class TranslationAdminForm
       extends ActionForm {
 
     public static class GroupInfo {
-	private Long id;
-	private String name;
+    private Long id;
+    private String name;
 
-	public Long getId() {
-	    return id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setId(Long id) {
-	    this.id = id;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public String getName() {
-	    return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-	    this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
     }
 
     public static class UserInfo {
 
-	private Long id;
-	private String firstNames;
-	private String lastName;
-	private String email;
+    private Long id;
+    private String firstNames;
+    private String lastName;
+    private String email;
 
-	public Long getId() {
-	    return id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setId(Long id) {
-	    this.id = id;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public String getFirstNames() {
-	    return firstNames;
-	}
+    public String getFirstNames() {
+        return firstNames;
+    }
 
-	public void setFirstNames(String firstNames) {
-	    this.firstNames = firstNames;
-	}
+    public void setFirstNames(String firstNames) {
+        this.firstNames = firstNames;
+    }
 
-	public String getLastName() {
-	    return lastName;
-	}
+    public String getLastName() {
+        return lastName;
+    }
 
-	public void setLastName(String lastName) {
-	    this.lastName = lastName;
-	}
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
-	public String getEmail() {
-	    return email;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	public void setEmail(String email) {
-	    this.email = email;
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
     }
 
     private List groups;
@@ -104,69 +104,69 @@ public class TranslationAdminForm
     private String siteName;
 
     public Long getGroupId() {
-	return groupId;
+    return groupId;
     }
 
     public void setGroupId(Long groupId) {
-	this.groupId = groupId;
+    this.groupId = groupId;
     }
 
     public String getGroupName() {
-	return groupName;
+    return groupName;
     }
 
     public void setGroupName(String groupName) {
-	this.groupName = groupName;
+    this.groupName = groupName;
     }
 
     public List getGroups() {
-	return groups;
+    return groups;
     }
 
     public void setGroups(List groups) {
-	this.groups = groups;
+    this.groups = groups;
     }
 
     public void reset(ActionMapping mapping, HttpServletRequest request) {
-	groupId = null;
-	groupName = null;
+    groupId = null;
+    groupName = null;
 
-	siteName = null;
-	userId = null;
+    siteName = null;
+    userId = null;
 
-	//searchUserInfo = null;
+    //searchUserInfo = null;
     }
 
     public String getSiteName() {
-	return siteName;
+    return siteName;
     }
 
     public void setSiteName(String siteName) {
-	this.siteName = siteName;
+    this.siteName = siteName;
     }
 
     public Long getUserId() {
-	return userId;
+    return userId;
     }
 
     public void setUserId(Long userId) {
-	this.userId = userId;
+    this.userId = userId;
     }
 
     public String getSearchUserInfo() {
-	return searchUserInfo;
+    return searchUserInfo;
     }
 
     public void setSearchUserInfo(String searchUserInfo) {
-	this.searchUserInfo = searchUserInfo;
+    this.searchUserInfo = searchUserInfo;
     }
 
     public List getUsers() {
-	return users;
+    return users;
     }
 
     public void setUsers(List users) {
-	this.users = users;
+    this.users = users;
     }
 
 }

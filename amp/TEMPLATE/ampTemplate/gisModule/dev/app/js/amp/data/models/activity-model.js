@@ -35,8 +35,11 @@ module.exports = Backbone.Model.extend({
     	if (allFilters.filters && matchesFilters) {
     		_.each(matchesFilters, function(v, k) {
     			if (k == 'Primary Sector') {
-    				_.each(matchesFilters[k], function(sector, index) {
-    					matchesFilters[k][index] = new Backbone.Model(sector);                   
+    				_.each(matchesFilters[k], function(sector, index) {    					
+    				   if (!(sector instanceof Backbone.Model)) {    					
+    					   matchesFilters[k][index] = new Backbone.Model(sector);  
+    				   }
+    					                   
     				});        	   
     			} else {
     				//make sure it's a valid filter
@@ -70,35 +73,22 @@ module.exports = Backbone.Model.extend({
   // Use to hook in before template calls.
   toJSON: function() {
     var json = _.clone(this.attributes);
-
-    json.donorNames = this._getDonorNames();
-    json.sectorNames = this._getSectorNames();
-
+    json.donorNames = this._getNames('Donor Agency');
+    json.executingNames = this._getNames('Executing Agency');
+    json.sectorNames = this._getNames('Primary Sector');
     return json;
   },
 
-  _getDonorNames: function() {
-    var matchesFilters = this.attributes.matchesFilters;
-    if (matchesFilters && matchesFilters['Donor Agency']) {
-      if (matchesFilters['Donor Agency'].length > 1) {
+  _getNames: function(name) {
+	var matchesFilters = this.attributes.matchesFilters;
+    if (matchesFilters && matchesFilters[name]) {
+      if (matchesFilters[name].length > 1) {
         return 'Multiple';
-      } else if (matchesFilters['Donor Agency'][0] && matchesFilters['Donor Agency'][0].attributes) {
-        return matchesFilters['Donor Agency'][0].get('name');
-      }
-    }
-    return '';
-  },
-
-
-  _getSectorNames: function() {
-    var matchesFilters = this.attributes.matchesFilters;
-    if (matchesFilters && matchesFilters['Primary Sector']) {
-      if (matchesFilters['Primary Sector'].length > 1) {
-        return 'Multiple';
-      } else if (matchesFilters['Primary Sector'][0] && matchesFilters['Primary Sector'][0].attributes) {
-        return matchesFilters['Primary Sector'][0].get('name');
+      } else if (matchesFilters[name][0] && matchesFilters[name][0].attributes) {    	 
+        return matchesFilters[name][0].get('name');
       }
     }
     return '';
   }
+
 });

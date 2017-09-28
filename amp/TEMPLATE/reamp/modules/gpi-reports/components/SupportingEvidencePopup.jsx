@@ -10,7 +10,12 @@ export default class SupportingEvidencePopup extends Component {
     }
     componentDidMount() {
         this.props.actions.clearSupportingEvidence(this.props.code);
-        this.props.actions.fetchSupportingEvidence(this.props.code, this.props.requestData);        
+        let data = [];
+        if(this.props.rowData && this.props.rowData[Constants.DONOR_ID] && this.props.rowData[Constants.ACTIVITY_ID]) {
+            data.push({donorId: this.props.rowData[Constants.DONOR_ID], activityId: this.props.rowData[Constants.ACTIVITY_ID]});
+            this.props.actions.fetchSupportingEvidence(this.props.code, data);    
+        }        
+            
     }    
     
     openDocument(event) {
@@ -28,7 +33,7 @@ export default class SupportingEvidencePopup extends Component {
                   <div className="row document-row" key={i}> 
                      <div className="document">
                       <span className= {document.type === 'link' ? 'glyphicon glyphicon-link document-icon' : 'glyphicon glyphicon-file document-icon'}> </span>
-                       <span > <a data-url={document.url} onClick={this.openDocument}>{document.title}</a></span>
+                       <span > <a data-url={document.url} onClick={this.openDocument} title={document.description}>{document.title}</a></span>
                       </div>                    
                       <div className="row-divider"></div>
                    </div>

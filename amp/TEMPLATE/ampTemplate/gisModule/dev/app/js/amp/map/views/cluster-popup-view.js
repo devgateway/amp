@@ -57,7 +57,12 @@ module.exports = Backbone.View.extend({
 
   _generateCharts: function() {
     this._generateSectorChart();
-    this._generateDonorChart();
+    var selected = self.app.data.settingsWidget.definitions.getSelectedOrDefaultFundingTypeId();
+      if (selected.toLowerCase().indexOf('ssc') >= 0) {
+          this._generateExecutingChart();
+      } else {
+          this._generateDonorChart();
+    }
   },
 
   _generateSectorChart: function() {
@@ -71,6 +76,14 @@ module.exports = Backbone.View.extend({
   _generateDonorChart: function() {
     var self = this;
     this._getTops('do').then(function(data) {
+      self.tempDOM.find('#charts-pane-donor .loading').remove();
+      self._generateBaseChart(data, '#charts-pane-donor .amp-chart svg');
+    });
+  },
+
+  _generateExecutingChart: function() {
+    var self = this;
+    this._getTops('ea').then(function(data) {
       self.tempDOM.find('#charts-pane-donor .loading').remove();
       self._generateBaseChart(data, '#charts-pane-donor .amp-chart svg');
     });
@@ -162,8 +175,16 @@ module.exports = Backbone.View.extend({
   // otherwise show actual values.
   _updatePlannedActualUI: function() {
 	  var self = this;       
-	  var selected = self.app.data.settingsWidget.definitions.getSelectedOrDefaultFundingTypeId();      
-	  if (selected.toLowerCase().indexOf('planned') >= 0) {
+	  var selected = self.app.data.settingsWidget.definitions.getSelectedOrDefaultFundingTypeId();
+      self.tempDOM.find('.setting-scc').hide();
+      self.tempDOM.find('.setting-executings').hide();
+	  if (selected.toLowerCase().indexOf('ssc') >= 0) {
+          self.tempDOM.find('.setting-actual').hide();
+          self.tempDOM.find('.setting-planned').hide();
+          self.tempDOM.find('.setting-donors').hide();
+          self.tempDOM.find('.setting-executings').show();
+          self.tempDOM.find('.setting-scc').show();
+      } else if (selected.toLowerCase().indexOf('planned') >= 0) {
 		  self.tempDOM.find('.setting-actual').hide();
 		  self.tempDOM.find('.setting-planned').show();
 	  } else {
@@ -190,8 +211,8 @@ module.exports = Backbone.View.extend({
 
 	  return this.app.data.activities.getActivities(activityIDs).then(function(activityCollection) {        
 		  self.tempDOM.find('#projects-pane .loading').remove();
-		  /* Format the numerical columns */               
-		  var ampFormatter = new util.DecimalFormat(self.app.data.generalSettings.get('number-format'));        
+		  /* Format the numerical columns */
+		  var ampFormatter = new util.DecimalFormat(self.app.data.generalSettings.get('number-format'));
 		  var currencyCode = self.app.data.settingsWidget.definitions.getSelectedOrDefaultCurrencyId();
 		  var fundingType = 'Actual';
 		  var selected = self.app.data.settingsWidget.definitions.getSelectedOrDefaultFundingTypeId();
@@ -199,14 +220,24 @@ module.exports = Backbone.View.extend({
 			  fundingType = 'Planned';
 		  }
 
+          var columnName1, columnName2;
+
+          if (selected.toLowerCase().indexOf('ssc') >= 0) {
+			  columnName1 = 'Bilateral SSC Commitments';
+              columnName2 = 'Triangular SSC Commitments';
+		  } else {
+              columnName1 = fundingType + ' Commitments';
+              columnName2 = fundingType + ' Disbursements';
+          }
+
 		  var activityFormatted = _.map(activityCollection, function(activity) {
 
-			  var formattedCommitments = ampFormatter.format(activity.get(fundingType + ' Commitments'));
-			  var formattedDisbursements = ampFormatter.format(activity.get(fundingType + ' Disbursements'));
+			  var formattedColumnName1 = ampFormatter.format(activity.get(columnName1));
+			  var formattedColumnName2 = ampFormatter.format(activity.get(columnName2));
 
 			  //TODO: should be done elsewhere, for example in toJSON or parse.
-			  activity.set('formattedActualCommitments', [formattedCommitments ? formattedCommitments : 0, ' ', currencyCode].join(''));
-			  activity.set('formattedActualDisbursements', [formattedDisbursements ? formattedDisbursements : 0, ' ', currencyCode].join(''));
+			  activity.set('formattedColumnName1', [formattedColumnName1 ? formattedColumnName1 : 0, ' ', currencyCode].join(''));
+			  activity.set('formattedColumnName2', [formattedColumnName2 ? formattedColumnName2 : 0, ' ', currencyCode].join(''));
 			  return activity;
 		  });
 

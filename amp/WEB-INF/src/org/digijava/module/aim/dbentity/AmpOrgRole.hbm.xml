@@ -24,9 +24,11 @@
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpOrgRoleBudget" />
 		</set>
 		
-		<many-to-one name="gpiNiSurvey" class="org.digijava.module.aim.dbentity.AmpGPINiSurvey" cascade="all"
-		unique="true"/>
-		
+		<set name="gpiNiSurveys" cascade="all-delete-orphan" inverse="true">
+			<cache usage="read-write" />
+			<key column="amp_org_role_id" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpGPINiSurvey" />
+		</set>		
 	</class>
 </hibernate-mapping>
 

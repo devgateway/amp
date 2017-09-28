@@ -37,139 +37,139 @@ import org.springframework.security.core.context.SecurityContextHolder;
  * @since Jan 3, 2011
  */
 public class AmpAuthWebSession extends AuthenticatedWebSession {
-	private static final long serialVersionUID = 1L;
-	private static Logger logger = Logger.getLogger(AmpAuthWebSession.class);
+    private static final long serialVersionUID = 1L;
+    private static Logger logger = Logger.getLogger(AmpAuthWebSession.class);
 
-	private boolean translatorMode;
-	private boolean fmMode;
-	private TeamMember currentMember;
-	private AmpTeamMember ampCurrentMember;
-	private HttpSession httpSession;
-	//private HttpServletRequest httpRequest;
-	private Site site;
-	private String isAdmin;
+    private boolean translatorMode;
+    private boolean fmMode;
+    private TeamMember currentMember;
+    private AmpTeamMember ampCurrentMember;
+    private HttpSession httpSession;
+    //private HttpServletRequest httpRequest;
+    private Site site;
+    private String isAdmin;
     private Long formType;
-	
-	FMFormCache formCache	= null;
-	
-	public String getIsAdmin() {
-		if (isAdmin == null){
-			isAdmin = (String)httpSession.getAttribute("ampAdmin");
-		}
-		return isAdmin;
-	}
+    
+    FMFormCache formCache   = null;
+    
+    public String getIsAdmin() {
+        if (isAdmin == null){
+            isAdmin = (String)httpSession.getAttribute("ampAdmin");
+        }
+        return isAdmin;
+    }
 
-	public void setIsAdmin(String isAdmin) {
-		this.isAdmin = isAdmin;
-	}
+    public void setIsAdmin(String isAdmin) {
+        this.isAdmin = isAdmin;
+    }
 
     public AmpAuthWebSession(final Request request) {
-		super(request);
-		fmMode = false;
-		translatorMode = false;
-		HttpServletRequest wRequest = (HttpServletRequest) request.getContainerRequest();
-		httpSession = wRequest.getSession();		
-		currentMember = (TeamMember)httpSession.getAttribute("currentMember");
-		isAdmin = (String)httpSession.getAttribute("ampAdmin");
-		if (currentMember != null)
-			ampCurrentMember = TeamMemberUtil.getAmpTeamMemberCached(currentMember.getMemberId());
-		else
-			ampCurrentMember = null;
-		
-		SiteDomain siteDomain = SiteCache.getInstance().getSiteDomain(wRequest.getServerName(), null);
-		site = siteDomain.getSite();
-	}
+        super(request);
+        fmMode = false;
+        translatorMode = false;
+        HttpServletRequest wRequest = (HttpServletRequest) request.getContainerRequest();
+        httpSession = wRequest.getSession();        
+        currentMember = (TeamMember)httpSession.getAttribute("currentMember");
+        isAdmin = (String)httpSession.getAttribute("ampAdmin");
+        if (currentMember != null)
+            ampCurrentMember = TeamMemberUtil.getAmpTeamMemberCached(currentMember.getMemberId());
+        else
+            ampCurrentMember = null;
+        
+        SiteDomain siteDomain = SiteCache.getInstance().getSiteDomain(wRequest.getServerName(), null);
+        site = siteDomain.getSite();
+    }
 
-	public void reset(){
+    public void reset(){
         formType = ActivityUtil.ACTIVITY_TYPE_PROJECT;
-		currentMember = (TeamMember)httpSession.getAttribute("currentMember");
-		isAdmin = (String)httpSession.getAttribute("ampAdmin");
-		if (currentMember != null)
-			ampCurrentMember = TeamMemberUtil.getAmpTeamMemberCached(currentMember.getMemberId());
-		else
-			ampCurrentMember = null;
-		dirty();
-	}
-	
-	
-	public Site getSite() {
-		return site;
-	}
+        currentMember = (TeamMember)httpSession.getAttribute("currentMember");
+        isAdmin = (String)httpSession.getAttribute("ampAdmin");
+        if (currentMember != null)
+            ampCurrentMember = TeamMemberUtil.getAmpTeamMemberCached(currentMember.getMemberId());
+        else
+            ampCurrentMember = null;
+        dirty();
+    }
+    
+    
+    public Site getSite() {
+        return site;
+    }
 
-	public void setSite(Site site) {
-		this.site = site;
-	}
+    public void setSite(Site site) {
+        this.site = site;
+    }
 
-	public AmpTeamMember getAmpCurrentMember() {
-		if (ampCurrentMember == null){
-			getCurrentMember(); //may initialize currentMember if it's needed
-			if (currentMember != null)
-				ampCurrentMember = TeamMemberUtil.getAmpTeamMemberCached(currentMember.getMemberId());
-		}
-		return ampCurrentMember;
-	}
-	public void setAmpCurrentMember(AmpTeamMember ampCurrentMember) {
-		this.ampCurrentMember = ampCurrentMember;
-	}
+    public AmpTeamMember getAmpCurrentMember() {
+        if (ampCurrentMember == null){
+            getCurrentMember(); //may initialize currentMember if it's needed
+            if (currentMember != null)
+                ampCurrentMember = TeamMemberUtil.getAmpTeamMemberCached(currentMember.getMemberId());
+        }
+        return ampCurrentMember;
+    }
+    public void setAmpCurrentMember(AmpTeamMember ampCurrentMember) {
+        this.ampCurrentMember = ampCurrentMember;
+    }
 
-	public TeamMember getCurrentMember() {
-		if (currentMember == null){
-			currentMember = (TeamMember)httpSession.getAttribute("currentMember");
-		}
-		return currentMember;
-	}
-	public void setCurrentMember(TeamMember currentMember) {
-		this.currentMember = currentMember;
-	}
+    public TeamMember getCurrentMember() {
+        if (currentMember == null){
+            currentMember = (TeamMember)httpSession.getAttribute("currentMember");
+        }
+        return currentMember;
+    }
+    public void setCurrentMember(TeamMember currentMember) {
+        this.currentMember = currentMember;
+    }
 
-	public HttpSession getHttpSession() {
-		return httpSession;
-	}
-//	public void setHttpSession(HttpSession httpSession) {
-//		this.httpSession = httpSession;
-//	}
-	
-//	public HttpServletRequest getHttpRequest()
-//	{
-//		return httpRequest;
-//	}
-	/*
-	public AmpAuthWebSession(final AuthenticatedWebApplication application, final Request request) {
-		super(application, request);
-	}
-	*/
-	public boolean isTranslatorMode() {
-		return translatorMode;
-	}
+    public HttpSession getHttpSession() {
+        return httpSession;
+    }
+//  public void setHttpSession(HttpSession httpSession) {
+//      this.httpSession = httpSession;
+//  }
+    
+//  public HttpServletRequest getHttpRequest()
+//  {
+//      return httpRequest;
+//  }
+    /*
+    public AmpAuthWebSession(final AuthenticatedWebApplication application, final Request request) {
+        super(application, request);
+    }
+    */
+    public boolean isTranslatorMode() {
+        return translatorMode;
+    }
 
-	public void setTranslatorMode(boolean translatorMode) {
-		this.translatorMode = translatorMode;
-	}
-	
-	public void switchTranslatorMode(){
-		this.translatorMode = !translatorMode;
-	}
+    public void setTranslatorMode(boolean translatorMode) {
+        this.translatorMode = translatorMode;
+    }
+    
+    public void switchTranslatorMode(){
+        this.translatorMode = !translatorMode;
+    }
 
-	public boolean isFmMode() {
-		return fmMode;
-	}
+    public boolean isFmMode() {
+        return fmMode;
+    }
 
-	public void setFmMode(boolean fmMode) {
-		this.fmMode = fmMode;
-	}
+    public void setFmMode(boolean fmMode) {
+        this.fmMode = fmMode;
+    }
 
-	public void switchFMMode(){
-		this.fmMode = !fmMode;
-	}
-	
+    public void switchFMMode(){
+        this.fmMode = !fmMode;
+    }
+    
 
-	public FMFormCache getFormCache() {
-		return formCache;
-	}
+    public FMFormCache getFormCache() {
+        return formCache;
+    }
 
-	public void setFormCache(FMFormCache formCache) {
-		this.formCache = formCache;
-	}
+    public void setFormCache(FMFormCache formCache) {
+        this.formCache = formCache;
+    }
 
     public Long getFormType() {
         return formType;
@@ -203,17 +203,17 @@ public class AmpAuthWebSession extends AuthenticatedWebSession {
             return true;
 
         } catch (BadCredentialsException e) {
-        	logger.info("Failed login by user '" + username + "'.");
+            logger.info("Failed login by user '" + username + "'.");
             setAuthentication(null);
             return false;
 
         } catch (AuthenticationException e) {
-        	logger.error("Could not authenticate a user", e);
+            logger.error("Could not authenticate a user", e);
             setAuthentication(null);
             throw e;
 
         } catch (RuntimeException e) {
-        	logger.error("Unexpected exception while authenticating a user", e);
+            logger.error("Unexpected exception while authenticating a user", e);
             setAuthentication(null);
             throw e;
         }
@@ -223,8 +223,8 @@ public class AmpAuthWebSession extends AuthenticatedWebSession {
      * @return the currently logged in user, or null when no user is logged in
      */
     public /*YourAppUserDetails*/ Object getUser() {
-    	//TODO:Check amp user bean and switch return type
-    	//TODO:
+        //TODO:Check amp user bean and switch return type
+        //TODO:
         /*YourAppUserDetails*/Object user = null;
         if (isSignedIn2()) {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -245,7 +245,7 @@ public class AmpAuthWebSession extends AuthenticatedWebSession {
             Collection<? extends GrantedAuthority> authorities = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
             for (GrantedAuthority grantedAuthority : authorities) {
                  roles.add(grantedAuthority.getAuthority());
-			}
+            }
          
             return roles;
         }
@@ -256,10 +256,10 @@ public class AmpAuthWebSession extends AuthenticatedWebSession {
      * Signout, invalidates the session. After a signout, you should redirect the browser to the home page.
      */
     public void signout() {
-    	/*   	
+        /*      
         YourAppUserDetails user = getUser();
         if (user != null) {
-        	logger.info("Logout by user '" + user.getUsername() + "'.");
+            logger.info("Logout by user '" + user.getUsername() + "'.");
         }
         */
         setAuthentication(null);
@@ -282,11 +282,11 @@ public class AmpAuthWebSession extends AuthenticatedWebSession {
     }
     
     public boolean isSignedIn2(){
-    	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    	if (auth == null)
-    		return false;
-    	else 
-    		return auth.isAuthenticated();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null)
+            return false;
+        else 
+            return auth.isAuthenticated();
     }
 
 }

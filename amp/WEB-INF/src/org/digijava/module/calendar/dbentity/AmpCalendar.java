@@ -9,7 +9,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 public class AmpCalendar implements Serializable {   
 
-	private AmpCalendarPK calendarPK;
+    private AmpCalendarPK calendarPK;
     private AmpTeamMember member;
     private Set<AmpOrganisation> organisations;
     private Set attendees;
@@ -66,11 +66,11 @@ public class AmpCalendar implements Serializable {
         this.attendees = attendees;
     }
     
-	public AmpCategoryValue getEventsType() {
-		return eventsType;
-	}
+    public AmpCategoryValue getEventsType() {
+        return eventsType;
+    }
 
-	public void setEventsType(AmpCategoryValue eventsType) {
-		this.eventsType = eventsType;
-	}
+    public void setEventsType(AmpCategoryValue eventsType) {
+        this.eventsType = eventsType;
+    }
 }

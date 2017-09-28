@@ -37,58 +37,58 @@ import org.apache.struts.action.ActionMapping;
  */
 
 public final class TranslatorNavForm extends ActionForm {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private Collection navigation = null;
+    private Collection navigation = null;
 
-	private String strSelectedData = null;
+    private String strSelectedData = null;
 
-	/**
-	* Default Constructor
-	*
-	*/
-	public TranslatorNavForm() {
-	}
-	public Collection getLocales() {
-		return navigation;
-	}
+    /**
+    * Default Constructor
+    *
+    */
+    public TranslatorNavForm() {
+    }
+    public Collection getLocales() {
+        return navigation;
+    }
 
-	public void setLocales(Collection col) {
-		this.navigation = col;
-	}
+    public void setLocales(Collection col) {
+        this.navigation = col;
+    }
 
-	public String getLocalesSelected() {
-		return strSelectedData;
-	}
+    public String getLocalesSelected() {
+        return strSelectedData;
+    }
 
-	public void setLocalesSelected(String strSelectedData) {
-		this.strSelectedData = strSelectedData;
-	}
+    public void setLocalesSelected(String strSelectedData) {
+        this.strSelectedData = strSelectedData;
+    }
 
-	/**
-	* Reset all properties to their default values.
-	*
-	* @param mapping The mapping used to select this instance
-	* @param request The servlet request we are processing
-	*/
+    /**
+    * Reset all properties to their default values.
+    *
+    * @param mapping The mapping used to select this instance
+    * @param request The servlet request we are processing
+    */
 
-	public void reset(ActionMapping mapping, HttpServletRequest request) {
+    public void reset(ActionMapping mapping, HttpServletRequest request) {
 
-	}
+    }
 
-	/**
-	* Validate inputs
-	*
-	* @param mapping
-	* @param request
-	* @return
-	*/
+    /**
+    * Validate inputs
+    *
+    * @param mapping
+    * @param request
+    * @return
+    */
 
-	public ActionErrors validate(
-		ActionMapping mapping,
-		HttpServletRequest request) {
-		return null;
+    public ActionErrors validate(
+        ActionMapping mapping,
+        HttpServletRequest request) {
+        return null;
 
-	}
+    }
 
 }

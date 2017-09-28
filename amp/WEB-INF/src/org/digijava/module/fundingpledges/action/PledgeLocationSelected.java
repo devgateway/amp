@@ -21,14 +21,14 @@ import org.digijava.module.fundingpledges.form.PledgeForm;
  *
  */
 public class PledgeLocationSelected extends Action {
-	private static Logger logger = Logger.getLogger(PledgeLocationSelected.class);
+    private static Logger logger = Logger.getLogger(PledgeLocationSelected.class);
 
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			javax.servlet.http.HttpServletRequest request,
-			javax.servlet.http.HttpServletResponse response) throws Exception {
-		
-		// TODO: DELETE, NOT USED ANYMORE
+    public ActionForward execute(ActionMapping mapping, ActionForm form,
+            javax.servlet.http.HttpServletRequest request,
+            javax.servlet.http.HttpServletResponse response) throws Exception {
+        
+        // TODO: DELETE, NOT USED ANYMORE
 
-		return mapping.findForward("forward");
-	}
+        return mapping.findForward("forward");
+    }
 }

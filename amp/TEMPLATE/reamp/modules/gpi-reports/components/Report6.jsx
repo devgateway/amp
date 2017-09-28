@@ -4,11 +4,14 @@ import { bindActionCreators } from 'redux';
 import * as reportsActions from '../actions/ReportsActions';
 import * as commonListsActions from '../actions/CommonListsActions';
 import * as startUp from '../actions/StartUpAction.jsx';
+import Utils from '../common/Utils';
 import * as Constants from '../common/Constants';
+import HeaderToolTip from './HeaderToolTip';
+import Loading from './Loading';
 export default class Report6 extends Component {
     constructor( props, context ) {
         super( props, context );
-        this.state = { recordsPerPage: 150, hierarchy: 'donor-agency', selectedYear: null, selectedDonor: "" };
+        this.state = { recordsPerPage: 150, hierarchy: 'donor-agency', selectedYear: null, selectedDonor: "", waiting: true};
         this.showFilters = this.showFilters.bind( this );
         this.showSettings = this.showSettings.bind( this );
         this.goToClickedPage = this.goToClickedPage.bind( this );
@@ -29,20 +32,13 @@ export default class Report6 extends Component {
     initializeFiltersAndSettings() {
         this.filter = new ampFilter( {
             draggable: true,
-            caller: 'REPORTS'
+            caller: 'GPI_REPORTS'
         });
-
-        this.settingsWidget = new AMPSettings.SettingsWidget( {
-            draggable: true,
-            caller: 'REPORTS',
-            isPopup: true,
-            definitionUrl: '/rest/settings-definitions/gpi-reports'
-        });        
-              
-
+        this.settingsWidget = Utils.initializeSettingsWidget();
         this.props.actions.getYears()
         this.props.actions.getOrgList(false);
         this.fetchReportData();
+        this.props.actions.getSettings();
         
     }
 
@@ -118,7 +114,10 @@ export default class Report6 extends Component {
 
     fetchReportData( requestData ) {
         var requestData = requestData || this.getRequestData();
-        this.props.actions.fetchReportData( requestData, '6' );
+        this.setState({waiting: true});
+        this.props.actions.fetchReportData( requestData, '6' ).then(function(){
+            this.setState({waiting: false});  
+        }.bind(this));    
     }
 
     onDonorFilterChange( e ) {
@@ -268,11 +267,15 @@ export default class Report6 extends Component {
     } 
     
     render() {
-        if ( this.props.mainReport && this.props.mainReport.page ) {
-            var addedGroups = [];
-            var years = this.props.years.slice();
+        var years = Utils.getYears(this.settingsWidget, this.props.years);
+        var addedGroups = [];           
             return (
                 <div>
+                    {this.state.waiting &&                      
+                        <Loading/>                
+                    } 
+                    {this.props.mainReport && this.props.mainReport.page && this.settingsWidget && this.settingsWidget.definitions &&                      
+                    <div>
                     <div id="filter-popup" ref="filterPopup"> </div>
                     <div id="amp-settings" ref="settingsPopup"> </div>
                     <div className="container-fluid indicator-nav no-padding">
@@ -331,7 +334,7 @@ export default class Report6 extends Component {
                                         {this.props.translations['amp.gpi-reports:other-years']}
                                         <span className="caret"></span></a>
                                     <ul className="dropdown-menu dropdown-years" role="menu">
-                                        {years.length > 3 && years.reverse().map( year =>
+                                        {years.reverse().map( year =>
                                             <li role="presentation" className={this.state.selectedYear == year ? 'active' : ''} key={year}><a data-year={year} onClick={this.onYearClick}>{year}</a></li>
                                         )}
 
@@ -341,7 +344,7 @@ export default class Report6 extends Component {
                         </ul>
                     </div>
                     <div className="selection-legend">
-                        <div className="pull-right">{this.showSelectedDates()}</div>
+                        <div className="pull-right">{this.showSelectedDates().length > 0 ? this.props.translations['amp-gpi-reports:selected'] : ''} {this.showSelectedDates()}</div>
                     </div>
                     <div className="container-fluid no-padding">
                         <div className="dropdown">
@@ -352,7 +355,11 @@ export default class Report6 extends Component {
                                 )}
                             </select>
                         </div>
-                        <div className="pull-right"><h4>{this.props.translations['amp.gpi-reports:currency']} {this.props.mainReport.settings['currency-code']}</h4></div>
+                        <div className="pull-right"><h4>{this.props.translations['amp.gpi-reports:currency']} {this.props.mainReport.settings['currency-code']} 
+                        {(this.props.settings['number-divider'] != 1) &&
+                            <span className="amount-units"> ({this.props.translations['amp-gpi-reports:amount-in-' + this.props.settings['number-divider']]})</span>                    
+                        }
+                        </h4></div>
 
                     </div>
 
@@ -365,9 +372,14 @@ export default class Report6 extends Component {
                                     <img src="images/blue_radio_on.png" className={this.state.hierarchy === 'donor-agency' ? 'donor-toggle' : 'donor-toggle donor-toggle-unselected'} onClick={this.toggleHierarchy} data-hierarchy="donor-agency" /><span className="donor-header-text" onClick={this.toggleHierarchy} data-hierarchy="donor-agency">{this.props.translations['amp.gpi-reports:donor-agency']}</span><br />
                                     <img src="images/blue_radio_on.png" className={this.state.hierarchy === 'donor-group' ? 'donor-toggle' : 'donor-toggle donor-toggle-unselected'} onClick={this.toggleHierarchy} data-hierarchy="donor-group" /><span className="donor-header-text" onClick={this.toggleHierarchy} data-hierarchy="donor-group">{this.props.translations['amp.gpi-reports:donor-group']}</span>
                                 </th>
-                                <th className="col-md-2">{this.getLocalizedColumnName( Constants.ANNUAL_GOVERNMENT_BUDGET )}</th>
+                                <th className="col-md-2"><HeaderToolTip
+                                    column={Constants.ANNUAL_GOVERNMENT_BUDGET}
+                                    headers={this.props.mainReport.page.headers}/>
+                                     {this.getLocalizedColumnName( Constants.ANNUAL_GOVERNMENT_BUDGET )}</th>
                                 <th className="col-md-2">{this.getLocalizedColumnName( Constants.PLANNED_DISBURSEMENTS )}</th>
-                                <th className="col-md-2">{this.getLocalizedColumnName( Constants.PERCENTAGE_OF_PLANNED_ON_BUDGET )}</th>                                
+                                <th className="col-md-2"><HeaderToolTip
+                                    column={Constants.PERCENTAGE_OF_PLANNED_ON_BUDGET}
+                                    headers={this.props.mainReport.page.headers}/>{this.getLocalizedColumnName( Constants.PERCENTAGE_OF_PLANNED_ON_BUDGET )}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -408,13 +420,11 @@ export default class Report6 extends Component {
                             </div>
                         </div>
                     </div>
-
-
+                 </div>
+                }
                 </div>
             );
-        }
-
-        return ( <div></div> );
+                
     }
 
 }
@@ -425,7 +435,8 @@ function mapStateToProps( state, ownProps ) {
         orgList: state.commonLists.orgList,
         years: state.commonLists.years,
         translations: state.startUp.translations,
-        translate: state.startUp.translate
+        translate: state.startUp.translate,
+        settings: state.commonLists.settings
     }
 }
 

@@ -37,11 +37,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import javax.security.auth.Subject;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.digijava.kernel.ampapi.endpoints.dto.Language;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
@@ -646,8 +648,8 @@ public class TranslationManager {
     
     
     public static List<String[]> getLocale(Session session) {
-    	String righPart = getRightPart(RequestUtils.getSite(TLSUtils.getRequest()), DgUtil.isLocalTranslatorForSite(TLSUtils.getRequest()));
-    	return getLocale(session,righPart);
+        String righPart = getRightPart(RequestUtils.getSite(TLSUtils.getRequest()), DgUtil.isLocalTranslatorForSite(TLSUtils.getRequest()));
+        return getLocale(session,righPart);
     }
     
     /**
@@ -656,18 +658,38 @@ public class TranslationManager {
      * @param rightPart
      * @return List[locale.code, locale.name]
      */
-	public static List<String[]> getLocale(Session session, String rightPart) {
-		String queryString = localeQuery + rightPart;
-		logger.debug(queryString);
+    public static List<String[]> getLocale(Session session, String rightPart) {
+        String queryString = localeQuery + rightPart;
+        logger.debug(queryString);
 
-		Query query = session.createQuery(queryString);
-		query.setCacheable(true);
+        Query query = session.createQuery(queryString);
+        query.setCacheable(true);
 
-		List<Object[]> locales = query.list();
-		List<String[]> res = new ArrayList<>();
-		for(Object[] entry:locales)
-			res.add(new String[] {(String) entry[0], (String) entry[1]});
-		
-		return res;
-	}
+        List<Object[]> locales = query.list();
+        List<String[]> res = new ArrayList<>();
+        for(Object[] entry:locales)
+            res.add(new String[] {(String) entry[0], (String) entry[1]});
+        
+        return res;
+    }
+    
+    public static List<Language> getAmpLanguages() {
+        Session session = PersistenceManager.getSession();
+        
+        String rightPart = getRightPart(RequestUtils.getSite(TLSUtils.getRequest()),
+                DgUtil.isLocalTranslatorForSite(TLSUtils.getRequest()));
+        
+        String localeQuery = "FROM " + Locale.class.getName() + " l WHERE l.available = true" + rightPart;
+        
+        Query query = session.createQuery(localeQuery);
+        query.setCacheable(true);
+        List<Locale> locales = query.list();
+        
+        List<Language> languages = locales.stream()
+                .map(l -> new Language(l.getCode(), l.getName(), l.getLeftToRight()))
+                .collect(Collectors.toList());
+        
+        return languages;
+    }
+    
 }

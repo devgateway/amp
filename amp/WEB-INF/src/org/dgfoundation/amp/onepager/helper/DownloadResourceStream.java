@@ -22,129 +22,129 @@ import org.digijava.module.contentrepository.helper.ObjectReferringDocument;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 
 public class DownloadResourceStream<T extends ObjectReferringDocument> implements IResourceStream {
-	private static final Logger logger = Logger.getLogger(DownloadResourceStream.class);
-	
-	private String contentType;
-	private transient Locale locale;
-	private FileUpload file;
-	private boolean newResource;
-	private IModel<T> doc;
-	private String fileName;
-	private transient InputStream fileData;
-	private Bytes fileSize;
-	
-	public DownloadResourceStream(FileUpload f) {
-		this.file = f;
-		this.newResource = true;
-	}
-	
-	public DownloadResourceStream(IModel<T> doc) {
-		this.doc = doc;
-		this.newResource = false;
-	}
-	
-	private synchronized void initHelperFields(){
-		//Singleton
-		if (true || contentType == null){
-			if (newResource){
-				contentType = file.getContentType();
-				fileSize = Bytes.bytes(file.getSize());
-				fileName = file.getClientFileName();
-				try {
-					fileData = file.getInputStream();
-				} catch (IOException e) {
-					logger.error(e);
-				}
-			}
-			else{
-				AmpAuthWebSession s =  (AmpAuthWebSession) org.apache.wicket.Session.get();
-				Node node = DocumentManagerUtil.getWriteNode(doc.getObject().getUuid(), SessionUtil.getCurrentServletRequest());
-				NodeWrapper nw = new NodeWrapper(node);
-				
-				contentType = nw.getContentType();
-				fileName = nw.getName();
-				try {
-					Property data = nw.getNode().getProperty(CrConstants.PROPERTY_DATA);
-					fileData = data.getStream();
-					
-					Property size = nw.getNode().getProperty(CrConstants.PROPERTY_FILE_SIZE);
-					fileSize = Bytes.bytes(size.getLong());
-					DocumentManagerUtil.logoutJcrSessions(SessionUtil.getCurrentServletRequest());
-				} catch (RepositoryException e) {
-					logger.error("Error while getting data stream from JCR:", e);
-				}
-			}
-		}
-	}
-	
-	@Override
-	public Time lastModifiedTime() {
-		return null;
-	}
+    private static final Logger logger = Logger.getLogger(DownloadResourceStream.class);
+    
+    private String contentType;
+    private transient Locale locale;
+    private FileUpload file;
+    private boolean newResource;
+    private IModel<T> doc;
+    private String fileName;
+    private transient InputStream fileData;
+    private Bytes fileSize;
+    
+    public DownloadResourceStream(FileUpload f) {
+        this.file = f;
+        this.newResource = true;
+    }
+    
+    public DownloadResourceStream(IModel<T> doc) {
+        this.doc = doc;
+        this.newResource = false;
+    }
+    
+    private synchronized void initHelperFields(){
+        //Singleton
+        if (true || contentType == null){
+            if (newResource){
+                contentType = file.getContentType();
+                fileSize = Bytes.bytes(file.getSize());
+                fileName = file.getClientFileName();
+                try {
+                    fileData = file.getInputStream();
+                } catch (IOException e) {
+                    logger.error(e);
+                }
+            }
+            else{
+                AmpAuthWebSession s =  (AmpAuthWebSession) org.apache.wicket.Session.get();
+                Node node = DocumentManagerUtil.getWriteNode(doc.getObject().getUuid(), SessionUtil.getCurrentServletRequest());
+                NodeWrapper nw = new NodeWrapper(node);
+                
+                contentType = nw.getContentType();
+                fileName = nw.getName();
+                try {
+                    Property data = nw.getNode().getProperty(CrConstants.PROPERTY_DATA);
+                    fileData = data.getStream();
+                    
+                    Property size = nw.getNode().getProperty(CrConstants.PROPERTY_FILE_SIZE);
+                    fileSize = Bytes.bytes(size.getLong());
+                    DocumentManagerUtil.logoutJcrSessions(SessionUtil.getCurrentServletRequest());
+                } catch (RepositoryException e) {
+                    logger.error("Error while getting data stream from JCR:", e);
+                }
+            }
+        }
+    }
+    
+    @Override
+    public Time lastModifiedTime() {
+        return null;
+    }
 
-	@Override
-	public void close() throws IOException {
-	}
+    @Override
+    public void close() throws IOException {
+    }
 
-	@Override
-	public String getContentType() {
-		initHelperFields();
-		return contentType;
-	}
+    @Override
+    public String getContentType() {
+        initHelperFields();
+        return contentType;
+    }
 
-	@Override
-	public InputStream getInputStream() throws ResourceStreamNotFoundException {
-		initHelperFields();
-		return fileData;
-	}
+    @Override
+    public InputStream getInputStream() throws ResourceStreamNotFoundException {
+        initHelperFields();
+        return fileData;
+    }
 
-	@Override
-	public Locale getLocale() {
-		return locale;
-	}
+    @Override
+    public Locale getLocale() {
+        return locale;
+    }
 
-	@Override
-	public Bytes length() {
-		initHelperFields();
-		return fileSize;
-	}
+    @Override
+    public Bytes length() {
+        initHelperFields();
+        return fileSize;
+    }
 
-	@Override
-	public void setLocale(Locale arg0) {
-		this.locale = arg0;
-	}
+    @Override
+    public void setLocale(Locale arg0) {
+        this.locale = arg0;
+    }
 
-	public String getFileName() {
-		return fileName;
-	}
+    public String getFileName() {
+        return fileName;
+    }
 
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
-	}
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
 
-	@Override
-	public String getStyle() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public String getStyle() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public void setStyle(String style) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void setStyle(String style) {
+        // TODO Auto-generated method stub
+        
+    }
 
-	@Override
-	public String getVariation() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public String getVariation() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public void setVariation(String variation) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void setVariation(String variation) {
+        // TODO Auto-generated method stub
+        
+    }
 
-	
+    
 }

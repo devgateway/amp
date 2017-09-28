@@ -27,35 +27,35 @@ import org.digijava.kernel.util.resource.ResourceStreamHandlerFactory;
  */
 public class ActivityEraser {
 
-	SessionFactory sessionFactory;
+    SessionFactory sessionFactory;
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
 
-		ResourceStreamHandlerFactory.installIfNeeded();
-		try {
-			DigiConfigManager
-					.initialize("/home/mihai/workspace/amp/repository");
-			PersistenceManager.initialize(false);
-		} catch (DgException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        ResourceStreamHandlerFactory.installIfNeeded();
+        try {
+            DigiConfigManager
+                    .initialize("/home/mihai/workspace/amp/repository");
+            PersistenceManager.initialize(false);
+        } catch (DgException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
-		// get a Report:
-		Session session;
-		try {
-			session = PersistenceManager.getSession();
-			
+        // get a Report:
+        Session session;
+        try {
+            session = PersistenceManager.getSession();
+            
 //beginTransaction();
-			session.createQuery("delete from AmpActivity").executeUpdate();
-			//tx.commit();
+            session.createQuery("delete from AmpActivity").executeUpdate();
+            //tx.commit();
 //beginTransaction();
-			session.createQuery("select from AmpReports").executeUpdate();
-			//tx.commit();
-		} catch (HibernateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
-	}
+            session.createQuery("select from AmpReports").executeUpdate();
+            //tx.commit();
+        } catch (HibernateException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } 
+    }
 
 }

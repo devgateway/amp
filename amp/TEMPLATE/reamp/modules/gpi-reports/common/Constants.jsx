@@ -9,6 +9,8 @@ export const NATIONAL_PROCUREMENT_EXECUTION_PROCEDURES = 'National Procurement E
 export const YEAR = 'Year';
 export const DONOR_GROUP = 'Donor Group';
 export const DONOR_AGENCY = 'Donor Agency';
+export const ACTIVITY_ID = 'Activity Id';
+export const DONOR_ID = 'Donor Id';
 export const PLANNED_DISBURSEMENTS = 'Planned Disbursements';
 export const ANNUAL_GOVERNMENT_BUDGET = 'Annual Government Budget';
 export const PERCENTAGE_OF_PLANNED_ON_BUDGET = '% of planned on budget';
@@ -19,6 +21,7 @@ export const ACTUAL_DISBURSEMENTS = 'Actual Disbursements';
 export const DISBURSEMENTS_THROUGH_OTHER_PROVIDERS = 'Disbursements through other providers';
 export const DISBURSEMENTS_AS_SCHEDULED = 'Disbursed as Scheduled';
 export const OVER_DISBURSED = 'Over Disbursed';
+export const USE_OF_COUNTRY_SYSTEMS = 'Use of country systems';
 export const REMARK = 'Remark';
 export const INDICATOR_1_CODE = '1';
 export const INDICATOR_1_1_CODE = '1_1';
@@ -57,3 +60,8 @@ export const DELIMETER = '###';
 export const XLS = 'xls';
 export const PDF = 'pdf';
 
+export const IMG_INFO = 'IMG_INFO';
+export const IMG_VALUE = 'IMG_INFO';
+
+export const OPTION_YES = 'Yes';
+export const OPTION_NO = 'No';

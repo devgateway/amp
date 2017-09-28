@@ -10,14 +10,14 @@ import org.digijava.module.aim.dbentity.AmpRole;
 
 public class AmpFundingFlowsOrgRoleSelector extends AmpComponentPanel{
 
-	public AmpFundingFlowsOrgRoleSelector(String id, IModel<AmpFunding> model,IModel itemModel, String fmName) {
-		super(id, model, fmName);
+    public AmpFundingFlowsOrgRoleSelector(String id, IModel<AmpFunding> model,IModel itemModel, String fmName) {
+        super(id, model, fmName);
 
-		AmpOrgRoleSelectorComponent orgRoleSelector=new AmpOrgRoleSelectorComponent("fundingFlowsOrgRoleSelector", 
-				new PropertyModel<AmpActivityVersion>(model,"ampActivityId"), new PropertyModel<AmpRole>(itemModel,"recipientRole"),
+        AmpOrgRoleSelectorComponent orgRoleSelector=new AmpOrgRoleSelectorComponent("fundingFlowsOrgRoleSelector", 
+                new PropertyModel<AmpActivityVersion>(model,"ampActivityId"), new PropertyModel<AmpRole>(itemModel,"recipientRole"),
                 new PropertyModel<AmpOrganisation>(itemModel,"recipientOrg"),
                 true, AmpDonorFundingFormSectionFeature.FUNDING_FLOW_ROLE_FILTER, true);
-		add(orgRoleSelector);
-	}
+        add(orgRoleSelector);
+    }
 
 }

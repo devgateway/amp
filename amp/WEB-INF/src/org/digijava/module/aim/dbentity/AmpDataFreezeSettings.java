@@ -16,6 +16,7 @@ public class AmpDataFreezeSettings implements Serializable {
      * if true feature enabled
      */
     private Boolean enabled = Boolean.FALSE;
+    private Boolean executed=Boolean.FALSE;
     private Integer gracePeriod;
     private Date freezingDate;
     private Date openPeriodStart;
@@ -44,6 +45,14 @@ public class AmpDataFreezeSettings implements Serializable {
 
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public Boolean getExecuted() {
+        return executed;
+    }
+
+    public void setExecuted(Boolean executed) {
+        this.executed = executed;
     }
 
     public Integer getGracePeriod() {

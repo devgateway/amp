@@ -18,34 +18,34 @@ import org.dgfoundation.amp.nireports.schema.TimeRange;
  *
  */
 public class VarianceMeasureBehaviour extends AbstractComputedBehaviour<NiAmountCell> {
-	public final static VarianceMeasureBehaviour instance = new VarianceMeasureBehaviour(TimeRange.MONTH);
-	
-	protected VarianceMeasureBehaviour(TimeRange timeRange) {
-		super(timeRange);
-	}
-	
-	@Override
-	public NiAmountCell getZeroCell() {
-		return NiAmountCell.ZERO;
-	}
-	
-	@Override
-	public NiAmountCell doHorizontalReduce(List<NiCell> cells) {
-		BigDecimal max = null, min = null;
-		for(NiCell cell:cells) {
-			BigDecimal value = cell.getAmount();
-			if (max == null || max.compareTo(value) < 0) max = value;
-			if (min == null || min.compareTo(value) > 0) min = value;
-		}
-		if (max == null)
-			return null;
-		
-		NiPrecisionSetting precision = ((NumberedCell) cells.get(0).getCell()).getPrecision();
-		return new NiAmountCell(max.subtract(min), precision);
-	}
-	
-	@Override
-	public NiOutCell doVerticalReduce(Collection<NiAmountCell> cells) {
-		return NiTextCell.EMPTY;
-	}
+    public final static VarianceMeasureBehaviour instance = new VarianceMeasureBehaviour(TimeRange.MONTH);
+    
+    protected VarianceMeasureBehaviour(TimeRange timeRange) {
+        super(timeRange);
+    }
+    
+    @Override
+    public NiAmountCell getZeroCell() {
+        return NiAmountCell.ZERO;
+    }
+    
+    @Override
+    public NiAmountCell doHorizontalReduce(List<NiCell> cells) {
+        BigDecimal max = null, min = null;
+        for(NiCell cell:cells) {
+            BigDecimal value = cell.getAmount();
+            if (max == null || max.compareTo(value) < 0) max = value;
+            if (min == null || min.compareTo(value) > 0) min = value;
+        }
+        if (max == null)
+            return null;
+        
+        NiPrecisionSetting precision = ((NumberedCell) cells.get(0).getCell()).getPrecision();
+        return new NiAmountCell(max.subtract(min), precision);
+    }
+    
+    @Override
+    public NiOutCell doVerticalReduce(Collection<NiAmountCell> cells) {
+        return NiTextCell.EMPTY;
+    }
 }

@@ -15,24 +15,24 @@ import org.digijava.module.digifeed.core.GenericFeedRequest;
  *
  */
 public class FeedRequest extends GenericFeedRequest {
-	protected String idList;
+    protected String idList;
 
-	
-	public String getIdList() {
-		return idList;
-	}
-
-
-	public void setIdList(String idList) {
-		this.idList = idList;
-	}
+    
+    public String getIdList() {
+        return idList;
+    }
 
 
-	public FeedRequest() {
-		idList=null;
-	}
+    public void setIdList(String idList) {
+        this.idList = idList;
+    }
 
-	
 
-	
+    public FeedRequest() {
+        idList=null;
+    }
+
+    
+
+    
 }

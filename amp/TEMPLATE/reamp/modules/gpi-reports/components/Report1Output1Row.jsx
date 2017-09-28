@@ -47,7 +47,7 @@ export default class Report1Output1Row extends Component {
         this.setState({descriptionsExpanded: descriptionToggleState})
     }
     
-    toggleSupportingEvidence(event) {        
+    toggleSupportingEvidence(event) {  
         this.setState({showSupportingEvidence: !this.state.showSupportingEvidence}) 
     }
     
@@ -55,7 +55,7 @@ export default class Report1Output1Row extends Component {
              return (
                     <tr >
                     <td>{this.props.rowData[Constants.PROJECT_TITLE]}</td>
-                    <td>{this.props.rowData[Constants.Q1]}</td>
+                    <td className="number-column">{this.props.rowData[Constants.Q1]}</td>
                     <td>{this.props.rowData[Constants.Q2]}</td>
                     <td>
                       <ul>
@@ -74,27 +74,32 @@ export default class Report1Output1Row extends Component {
                       </ul>
                       </ul>
                     </td>
-                    <td>{this.props.rowData[Constants.Q6]}
-                      <span className="glyphicon glyphicon-chevron-down" onClick={this.toggleDescription} data-question="Q6"></span>                       
-                        {this.state.descriptionsExpanded[Constants.Q6] &&
+                    <td >{this.props.rowData[Constants.Q6]}
+                        {this.props.rowData[Constants.Q6] == Constants.OPTION_YES &&
+                           <span className="glyphicon glyphicon-chevron-down" onClick={this.toggleDescription} data-question="Q6"></span> 
+                        }
+                                             
+                        {this.props.rowData[Constants.Q6] == Constants.OPTION_YES && this.state.descriptionsExpanded[Constants.Q6] &&
                             <div>{this.props.rowData[Constants.Q6_DESCRIPTION]}</div>
                         }                      
                     </td>
-                    <td>{this.props.rowData[Constants.Q7]}</td>
-                    <td>{this.props.rowData[Constants.Q8]}</td>
-                    <td>{this.props.rowData[Constants.Q9]}</td>
-                    <td>{this.props.rowData[Constants.Q10]}
-                    <span className="glyphicon glyphicon-chevron-down" onClick={this.toggleDescription} data-question="Q10"></span>
-                    {this.state.descriptionsExpanded[Constants.Q10] &&
+                    <td className="number-column">{this.props.rowData[Constants.Q7]}</td>
+                    <td className="number-column">{this.props.rowData[Constants.Q8]}</td>
+                    <td className="number-column">{this.props.rowData[Constants.Q9]}</td>
+                    <td >{this.props.rowData[Constants.Q10]}
+                    {this.props.rowData[Constants.Q10] == Constants.OPTION_YES &&
+                        <span className="glyphicon glyphicon-chevron-down" onClick={this.toggleDescription} data-question="Q10"></span>
+                    }                    
+                    {this.props.rowData[Constants.Q10] == Constants.OPTION_YES && this.state.descriptionsExpanded[Constants.Q10] &&
                        <div>{this.props.rowData[Constants.Q10_DESCRIPTION]}</div>
                     }
                     </td>
-                    <td>{this.props.rowData[Constants.RESULT]}</td>
-                    <td>{this.props.rowData[Constants.M_E]}</td>
+                    <td className="number-column">{this.props.rowData[Constants.RESULT]}</td>
+                    <td className="number-column">{this.props.rowData[Constants.M_E]}</td>
                     <td>                   
                     <div style={{ position: 'relative' }}>
                         {this.state.showSupportingEvidence &&
-                           <SupportingEvidencePopup code="1" requestData={{}} toggleSupportingEvidence={this.toggleSupportingEvidence}/> 
+                           <SupportingEvidencePopup code="1" requestData={{}} toggleSupportingEvidence={this.toggleSupportingEvidence} rowData={this.props.rowData}/> 
                         }
                         <img className="table-icon" ref="showSupportingEvidenceToggle" src="images/icon-download-blue.svg" onClick={this.toggleSupportingEvidence}/>
                     </div>                                          

@@ -23,48 +23,48 @@ import org.hibernate.criterion.Restrictions;
  * @since Mar 31, 2011
  */
 public class AmpPIOrganisationSearchModel extends
-		AbstractAmpAutoCompleteModel<AmpOrganisation> {
+        AbstractAmpAutoCompleteModel<AmpOrganisation> {
 
-	public AmpPIOrganisationSearchModel(String input,String language,
-			Map<AmpAutoCompleteModelParam, Object> params) {
-		super(input, language, params);
-	}
+    public AmpPIOrganisationSearchModel(String input,String language,
+            Map<AmpAutoCompleteModelParam, Object> params) {
+        super(input, language, params);
+    }
 
-	private static final long serialVersionUID = 8211300754918658812L;
-	private Session session;
+    private static final long serialVersionUID = 8211300754918658812L;
+    private Session session;
 
-	@Override
-	protected Collection<AmpOrganisation> load() {
-		List<AmpOrganisation> ret = null;
-		try {
-			session = PersistenceManager.getSession();
-			Integer maxResults = (Integer) getParams().get(PARAM.MAX_RESULTS);
-			Criteria crit = session.createCriteria(AmpOrganisation.class);
-			crit.setCacheable(true);
+    @Override
+    protected Collection<AmpOrganisation> load() {
+        List<AmpOrganisation> ret = null;
+        try {
+            session = PersistenceManager.getSession();
+            Integer maxResults = (Integer) getParams().get(PARAM.MAX_RESULTS);
+            Criteria crit = session.createCriteria(AmpOrganisation.class);
+            crit.setCacheable(true);
 
-			Junction junction = Restrictions
-					.conjunction()
-					.add(Restrictions.disjunction()
-							.add(getTextCriterion("name", input))
-							.add(getTextCriterion("acronym", input)))
-					.add(Restrictions
-							.disjunction()
-							.add(Restrictions.like(
-									"orgGrpId.orgType.orgTypeCode", "BIL"))
-							.add(Restrictions.like(
-									"orgGrpId.orgType.orgTypeCode", "MUL")));
+            Junction junction = Restrictions
+                    .conjunction()
+                    .add(Restrictions.disjunction()
+                            .add(getTextCriterion("name", input))
+                            .add(getTextCriterion("acronym", input)))
+                    .add(Restrictions
+                            .disjunction()
+                            .add(Restrictions.like(
+                                    "orgGrpId.orgType.orgTypeCode", "BIL"))
+                            .add(Restrictions.like(
+                                    "orgGrpId.orgType.orgTypeCode", "MUL")));
 
-			crit.add(junction);
-			if (maxResults != null)
-				crit.setMaxResults(maxResults);
+            crit.add(junction);
+            if (maxResults != null)
+                crit.setMaxResults(maxResults);
 
-			ret = crit.list();
+            ret = crit.list();
 
-		} 
-		catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-		return ret;
-	}
+        } 
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return ret;
+    }
 
 }

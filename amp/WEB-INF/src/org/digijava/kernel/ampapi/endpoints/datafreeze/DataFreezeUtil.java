@@ -1,21 +1,27 @@
 package org.digijava.kernel.ampapi.endpoints.datafreeze;
 
-import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.user.User;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpDataFreezeExclusion;
-import org.digijava.module.aim.dbentity.AmpDataFreezeSettings;
-import org.digijava.module.aim.util.ActivityUtil;
-import org.digijava.module.aim.util.AmpDateUtils;
-import org.hibernate.Query;
-import org.hibernate.Session;
-
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.algo.ValueWrapper;
+import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
+import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.user.User;
+import org.digijava.module.aim.dbentity.AmpActivityFrozen;
+import org.digijava.module.aim.dbentity.AmpDataFreezeExclusion;
+import org.digijava.module.aim.dbentity.AmpDataFreezeSettings;
+import org.digijava.module.aim.util.AmpDateUtils;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.jdbc.Work;
 
 public final class DataFreezeUtil {
     private static Logger logger = Logger.getLogger(DataFreezeUtil.class);
@@ -55,6 +61,31 @@ public final class DataFreezeUtil {
         return (Integer) query.uniqueResult();
     }
 
+    public static AmpDataFreezeSettings getLatestFreezingConfiguration() {
+        String queryString = " select ampDataFreezeSettings from " + AmpDataFreezeSettings.class.getName()
+                + " ampDataFreezeSettings where ampDataFreezeSettings.freezingDate = ("
+                + "select max(s.freezingDate) from " + AmpDataFreezeSettings.class.getName() + " s ) "
+                + "and ampDataFreezeSettings.executed = true ";
+        Query q = createHibernateQuery(queryString);
+        return (AmpDataFreezeSettings) q.uniqueResult();
+    }
+
+    public static AmpActivityFrozen getAmpActivityFrozenForActivity(Long ampActivityId) {
+        String queryString = "select ampActivityFrozen from " + AmpActivityFrozen.class.getName()
+                + " ampActivityFrozen "
+                + " where ampActivityFrozen.activityGroup.ampActivityLastVersion.ampActivityId=:ampActivityId "
+                + " and ampActivityFrozen.frozen=true and "
+                + " (ampActivityFrozen.deleted = false or ampActivityFrozen.deleted = null)";
+        Query query = createHibernateQuery(queryString);
+        query.setLong("ampActivityId", ampActivityId);
+        return (AmpActivityFrozen) query.uniqueResult();
+    }
+
+    private static Query createHibernateQuery(String queryString) {
+        Session dbSession = PersistenceManager.getSession();
+        return dbSession.createQuery(queryString);
+    }
+
     public static List<AmpDataFreezeSettings> getDataFreeEventsList(Integer offset, Integer count, String orderBy,
             String sort, Integer total) {
         Integer maxResults = count == null ? DataFreezeConstants.DEFAULT_RECORDS_PER_PAGE : count;
@@ -72,14 +103,101 @@ public final class DataFreezeUtil {
         return query.list();
     }
 
+    /**
+     * we mark all frozen activities as deleted since we can have only on set of
+     * frozen activities
+     */
+    public static void disablePreviousFrozenActivities() {
+
+        PersistenceManager.getSession().doWork(new Work() {
+            public void execute(Connection conn) throws SQLException {
+                SQLUtils.executeQuery(conn, String.format("UPDATE AMP_ACTIVITY_FROZEN SET DELETED = %s", "TRUE"));
+            }
+        });
+
+    }
+
+    public static Set<Long> getFrozenActivities() {
+        final Set<Long> frozenActivities = new LinkedHashSet<>();
+
+        PersistenceManager.getSession().doWork(new Work() {
+            public void execute(Connection conn) throws SQLException {
+                String query = "select ag.amp_activity_last_version_id from amp_activity_frozen af,amp_activity_group ag where "
+                        + " ag.amp_activity_group_id=af.amp_activity_group_id and af.frozen=true and af.deleted=false";
+                frozenActivities.addAll(SQLUtils.fetchLongs(conn, query));
+            }
+        });
+        return frozenActivities;
+    }
+
+    public static void freezeActivitiesForFreezingDate(AmpDataFreezeSettings currentFreezingEvent,
+            Set<Long> activitiesId) {
+        SimpleDateFormat fullDateNoHourFormatter = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat yearFormatter = new SimpleDateFormat("yyyy");
+        final String fullDate = fullDateNoHourFormatter.format(currentFreezingEvent.getFreezingDate()) + " 23:59:59";
+        final Integer year = Integer.parseInt(yearFormatter.format(currentFreezingEvent.getFreezingDate()));
+        final Long freezingId = currentFreezingEvent.getAmpDataFreezeSettingsId();
+        PersistenceManager.getSession().doWork(new Work() {
+            public void execute(Connection conn) throws SQLException {
+                String query = "INSERT INTO AMP_ACTIVITY_FROZEN SELECT nextval('AMP_ACTIVITY_FROZEN_SEQ'), "
+                        + " amp_activity_group_id, %s,true,false FROM amp_activity_group ag "
+                        + " WHERE ag.amp_activity_last_version_id IN (SELECT amp_activity_id "
+                        + " FROM amp_funding f WHERE exists (SELECT * FROM amp_funding_detail fd "
+                        + " WHERE fd.transaction_date <= '%s' "
+                        + " AND fd.amp_funding_id=f.amp_funding_id) OR exists (SELECT 1 "
+                        + " FROM AMP_FUNDING_MTEF_PROJECTION fp "
+                        + " WHERE date_part('year', fp.projection_date) <= %s "
+                        + " AND fp.amp_funding_id=f.amp_funding_id) ) and" + " ag.amp_activity_last_version_id in (%s)";
+
+                SQLUtils.executeQuery(conn,
+                        String.format(query, freezingId, fullDate, year, Util.toCSStringForIN(activitiesId)));
+            }
+        });
+        currentFreezingEvent.setExecuted(true);
+        DataFreezeUtil.saveDataFreezeEvent(currentFreezingEvent);
+    }
+
     public static void unfreezeAll() {
         try {
             Session dbSession = PersistenceManager.getSession();
-            String queryString = "update " + AmpDataFreezeSettings.class.getName() + " d set d.enabled = false";
+            String queryString = "update " + AmpActivityFrozen.class.getName() + " af set af.frozen = false";
             dbSession.createQuery(queryString).executeUpdate();
         } catch (Exception e) {
             logger.error("Exception from unfreezeAll: " + e.getMessage());
         }
+    }
+
+    /**
+     * Return a freezing event if today is the freezing date
+     * 
+     * @return
+     */
+    public static AmpDataFreezeSettings getCurrentFreezingEvent() {
+        Long ampDataFreezeSettingsId = getTodaysFreezingEvent();
+        if (ampDataFreezeSettingsId.equals(0L)) {
+            return null;
+        } else {
+            return getDataFreezeEventById(ampDataFreezeSettingsId);
+        }
+    }
+
+    private static Long getTodaysFreezingEvent() {
+        final ValueWrapper<Long> freezingEventId = new ValueWrapper<Long>(0L);
+
+        PersistenceManager.getSession().doWork(new Work() {
+            public void execute(Connection conn) throws SQLException {
+                String todaysFreezingEventQuery = "select id from amp_data_freeze_settings "
+                        + " where (freezing_date::date  + coalesce(grace_period, 0) )= current_date "
+                        + " and executed = false and enabled = true";
+                RsInfo rsi = SQLUtils.rawRunQuery(conn, todaysFreezingEventQuery, null);
+                if (rsi.rs.next()) {
+                    freezingEventId.value = rsi.rs.getLong(1);
+
+                }
+                rsi.close();
+            }
+        });
+        return freezingEventId.value;
     }
 
     public static List<AmpDataFreezeSettings> getEnabledDataFreezeEvents(
@@ -131,23 +249,17 @@ public final class DataFreezeUtil {
         return query.list();
     }
 
-    public static void unfreezeActivities(Map<Long, Set<Long>> activityIdEventsIdsMap) {
-        try {
-            Session dbSession = PersistenceManager.getSession();
-            for (Map.Entry<Long, Set<Long>> event : activityIdEventsIdsMap.entrySet()) {
-                for (Long eventId : event.getValue()) {
-                    AmpDataFreezeExclusion ampDataFreezeExclusion = findDataFreezeExclusion(event.getKey(), eventId);
-                    if (ampDataFreezeExclusion == null) {
-                        ampDataFreezeExclusion = new AmpDataFreezeExclusion();
-                        ampDataFreezeExclusion.setActivity(ActivityUtil.loadAmpActivity(event.getKey()));
-                        ampDataFreezeExclusion.setDataFreezeEvent(getDataFreezeEventById(eventId));
-                        dbSession.saveOrUpdate(ampDataFreezeExclusion);
-                    }
-                }
+    public static void unfreezeActivities(Set<Long> activitiesIdToUnFreeze) {
+        Session dbSession = PersistenceManager.getSession();
+        PersistenceManager.getSession().doWork(new Work() {
+            public void execute(Connection conn) throws SQLException {
+                String query = " update amp_activity_frozen set frozen = false "
+                        + " where deleted = false and amp_activity_group_id "
+                        + " in (select amp_activity_group_id from amp_activity_group "
+                        + " where amp_activity_last_version_id in (%s)) ";
+                SQLUtils.executeQuery(conn, String.format(query, Util.toCSStringForIN(activitiesIdToUnFreeze)));
             }
-        } catch (Exception e) {
-            logger.error("Exception from unfreezeActivities: " + e.getMessage());
-        }
+        });
 
     }
 
@@ -159,5 +271,39 @@ public final class DataFreezeUtil {
             freezingDate = event.getFreezingDate();
         }
         return freezingDate;
+    }
+
+    public static boolean freezeDateExists(Long ampDataFreezeSettingsId, Date freezingDate) {
+        Session dbSession = PersistenceManager.getSession();
+        String queryString = "select event from " + AmpDataFreezeSettings.class.getName()
+                + " event where event.freezingDate = :freezingDate ";
+        if (ampDataFreezeSettingsId != null) {
+            queryString += " and event.ampDataFreezeSettingsId != :ampDataFreezeSettingsId ";
+        }
+
+        Query query = dbSession.createQuery(queryString);
+        query.setParameter("freezingDate", freezingDate);
+        if (ampDataFreezeSettingsId != null) {
+            query.setParameter("ampDataFreezeSettingsId", ampDataFreezeSettingsId);
+        }
+        return query.list().size() > 0;
+
+    }
+
+    public static boolean openPeriodOverlaps(Long ampDataFreezeSettingsId, Date openPeriodStart, Date openPeriodEnd) {
+        Session dbSession = PersistenceManager.getSession();
+        String queryString = "select event from " + AmpDataFreezeSettings.class.getName()
+                + " event where event.openPeriodStart <= :openPeriodEnd and event.openPeriodEnd >= :openPeriodStart ";
+        if (ampDataFreezeSettingsId != null) {
+            queryString += " and event.ampDataFreezeSettingsId != :ampDataFreezeSettingsId ";
+        }
+
+        Query query = dbSession.createQuery(queryString);
+        query.setParameter("openPeriodStart", openPeriodStart);
+        query.setParameter("openPeriodEnd", openPeriodEnd);
+        if (ampDataFreezeSettingsId != null) {
+            query.setParameter("ampDataFreezeSettingsId", ampDataFreezeSettingsId);
+        }
+        return query.list().size() > 0;
     }
 }

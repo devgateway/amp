@@ -120,7 +120,7 @@ function getJenksBreaks(dataList, numClass) {
     if (kclass[0] > 0) {
         kclass[0] = 0;
     }
-    return kclass;
+    return Array.from(new Set(kclass));
 }
 
 function sum(arr) {

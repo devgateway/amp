@@ -12,37 +12,37 @@ import org.dgfoundation.amp.nireports.schema.SchemaSpecificScratchpad;
 
 public class ReportsTestScratchpad implements SchemaSpecificScratchpad {
 
-	protected final NiPrecisionSetting precisionSetting = new AmpPrecisionSetting();
-	protected final NiReportsEngine engine;
-	
-	public ReportsTestScratchpad(NiReportsEngine engine) {
-		this.engine = engine;
-	}
+    protected final NiPrecisionSetting precisionSetting = new AmpPrecisionSetting();
+    protected final NiReportsEngine engine;
+    
+    public ReportsTestScratchpad(NiReportsEngine engine) {
+        this.engine = engine;
+    }
 
-	@Override
-	public void close() throws Exception {
-	}
+    @Override
+    public void close() throws Exception {
+    }
 
-	@Override
-	public NiPrecisionSetting getPrecisionSetting() {
-		return precisionSetting;
-	}
+    @Override
+    public NiPrecisionSetting getPrecisionSetting() {
+        return precisionSetting;
+    }
 
-	@Override
-	public CalendarConverter getDefaultCalendar() {
-		return new TestCalendar();
-		
-	}
+    @Override
+    public CalendarConverter getDefaultCalendar() {
+        return new TestCalendar();
+        
+    }
 
-	@Override
-	public CachingCalendarConverter buildCalendarConverter() {
-		CalendarConverter cc = this.buildUnderlyingCalendarConverter(engine.spec);
-		return new CachingCalendarConverter(cc, cc.getDefaultFiscalYearPrefix(), Function.identity());
-	}
+    @Override
+    public CachingCalendarConverter buildCalendarConverter() {
+        CalendarConverter cc = this.buildUnderlyingCalendarConverter(engine.spec);
+        return new CachingCalendarConverter(cc, cc.getDefaultFiscalYearPrefix(), Function.identity());
+    }
 
-	@Override
-	public String getTimeRangeSubTotalColumnName(ReportSpecification reportSpecification) {
-		Boolean subTotals = reportSpecification.isDisplayTimeRangeSubTotals();
-		return subTotals != null && subTotals ? "Total" : null;
-	}
+    @Override
+    public String getTimeRangeSubTotalColumnName(ReportSpecification reportSpecification) {
+        Boolean subTotals = reportSpecification.isDisplayTimeRangeSubTotals();
+        return subTotals != null && subTotals ? "Total" : null;
+    }
 }

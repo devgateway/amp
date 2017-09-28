@@ -22,57 +22,57 @@ import org.dgfoundation.amp.onepager.util.AmpFMTypes;
  */
 public class AmpActivityBudgetField extends AmpFieldPanel {
 
-	private final Panel budgetExtras;
-	private final AmpBudgetClassificationField budgetClassification;
+    private final Panel budgetExtras;
+    private final AmpBudgetClassificationField budgetClassification;
 
-	private void toggleExtraFields(boolean b){
-		budgetExtras.setVisible(b);
-		budgetClassification.toggleActivityBudgetVisibility(b);
-	}
-	
-	private void updateExtraFields(AjaxRequestTarget target){
-		target.add(budgetExtras.getParent());
-		budgetClassification.addToTargetActivityBudget(target);
-	}
-	
-	public AmpActivityBudgetField(String id, final IModel model, String fmName, final Panel budgetExtras, final AmpBudgetClassificationField budgetClassification) {
-		super(id, model, fmName);
-		this.fmType = AmpFMTypes.MODULE;
-		
-		this.budgetExtras = budgetExtras;
-		this.budgetClassification = budgetClassification;
+    private void toggleExtraFields(boolean b){
+        budgetExtras.setVisible(b);
+        budgetClassification.toggleActivityBudgetVisibility(b);
+    }
+    
+    private void updateExtraFields(AjaxRequestTarget target){
+        target.add(budgetExtras.getParent());
+        budgetClassification.addToTargetActivityBudget(target);
+    }
+    
+    public AmpActivityBudgetField(String id, final IModel model, String fmName, final Panel budgetExtras, final AmpBudgetClassificationField budgetClassification) {
+        super(id, model, fmName);
+        this.fmType = AmpFMTypes.MODULE;
+        
+        this.budgetExtras = budgetExtras;
+        this.budgetClassification = budgetClassification;
 
-		Integer currentSelection = (Integer) model.getObject();
-		if (currentSelection == null){
-			currentSelection = new Integer(-1);
-			model.setObject(currentSelection);
-		}
-		if (currentSelection == 1) //"On" is selected
-			toggleExtraFields(true);
-		else
-			toggleExtraFields(false);
+        Integer currentSelection = (Integer) model.getObject();
+        if (currentSelection == null){
+            currentSelection = new Integer(-1);
+            model.setObject(currentSelection);
+        }
+        if (currentSelection == 1) //"On" is selected
+            toggleExtraFields(true);
+        else
+            toggleExtraFields(false);
 
-		final String[] budgetElements = new String[] {"No answer", "Off", "On", "Treasury"};
-		DropDownChoice budgetDD = new DropDownChoice("choice", new ActivityBudgetModel(model, budgetElements), Arrays.asList(budgetElements), new TranslatedChoiceRenderer<String>()); 
-		budgetDD.add(new AjaxFormComponentUpdatingBehavior("onchange") {
-			@Override
-			protected void onUpdate(AjaxRequestTarget target) {
-				Integer obj = (Integer) model.getObject();
-				boolean previousValue = budgetExtras.isVisible();
-				if (obj == 1) // "On" was selected
-					toggleExtraFields(true);
-				else
-					toggleExtraFields(false);
-				updateExtraFields(target);
-			}
-		});
-		
-		add(budgetDD);
-	}
+        final String[] budgetElements = new String[] {"No answer", "Off", "On", "Treasury"};
+        DropDownChoice budgetDD = new DropDownChoice("choice", new ActivityBudgetModel(model, budgetElements), Arrays.asList(budgetElements), new TranslatedChoiceRenderer<String>()); 
+        budgetDD.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                Integer obj = (Integer) model.getObject();
+                boolean previousValue = budgetExtras.isVisible();
+                if (obj == 1) // "On" was selected
+                    toggleExtraFields(true);
+                else
+                    toggleExtraFields(false);
+                updateExtraFields(target);
+            }
+        });
+        
+        add(budgetDD);
+    }
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
 
 }

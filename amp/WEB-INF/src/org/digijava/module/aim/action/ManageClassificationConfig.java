@@ -55,12 +55,12 @@ public class ManageClassificationConfig extends Action {
                 String configDescription = configForm.getConfigDescription();
                 //check for duplication
                 int calCount = SectorUtil.getClassificationConfigCount(configName, configId);
-			 	if(calCount>0){
-			 		ActionMessages errors= new ActionMessages();
-					errors.add("classification config not unique", new ActionMessage("admin.clasConfig.calExists",TranslatorWorker.translateText("Classification Config with the given email already exists") ));
-					saveErrors(request, errors);
-					return mapping.findForward("edit");
-			 	}
+                if(calCount>0){
+                    ActionMessages errors= new ActionMessages();
+                    errors.add("classification config not unique", new ActionMessage("admin.clasConfig.calExists",TranslatorWorker.translateText("Classification Config with the given email already exists") ));
+                    saveErrors(request, errors);
+                    return mapping.findForward("edit");
+                }
                 
                 
                 boolean multiSector = false;
@@ -79,7 +79,7 @@ public class ManageClassificationConfig extends Action {
 
             }
         if (event != null && event.equals("delete")) {
-        	SectorUtil.deleteClassification(configForm.getId());
+            SectorUtil.deleteClassification(configForm.getId());
         }
 
         return mapping.findForward("manageClassifications");

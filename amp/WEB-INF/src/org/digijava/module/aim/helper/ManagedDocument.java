@@ -49,11 +49,11 @@ public class ManagedDocument {
         this.id = id;
     }
 
-	public String getDocType() {
-		return docType;
-	}
+    public String getDocType() {
+        return docType;
+    }
 
-	public void setDocType(String docType) {
-		this.docType = docType;
-	}
+    public void setDocType(String docType) {
+        this.docType = docType;
+    }
 }

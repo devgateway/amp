@@ -13,27 +13,27 @@ public class ActivityDisbursementDateTrigger extends Trigger {
 
     public static final String [] parameterNames=new String[]{PARAM_NAME,PARAM_TEAM_ID,PARAM_TRIGGER_SENDER,PARAM_URL};
 
-	public ActivityDisbursementDateTrigger(Object source) {
-		if(! (source instanceof AmpActivityVersion)) throw new RuntimeException("Incompatible object. Source must be an activity version!");
-		this.source=source;
-		forwardEvent();
-	}
+    public ActivityDisbursementDateTrigger(Object source) {
+        if(! (source instanceof AmpActivityVersion)) throw new RuntimeException("Incompatible object. Source must be an activity version!");
+        this.source=source;
+        forwardEvent();
+    }
 
-	@Override
-	protected Event generateEvent() {
-		Event e=new Event(ActivityDisbursementDateTrigger.class);
-		AmpActivityVersion activity=(AmpActivityVersion) source;
-		e.getParameters().put(PARAM_NAME,activity.getName());
-		e.getParameters().put(PARAM_TRIGGER_SENDER,MessageConstants.SENDER_TYPE_SYSTEM);
-		e.getParameters().put(PARAM_URL, "aim/selectActivityTabs.do~ampActivityId="+activity.getAmpActivityId());
-		e.getParameters().put(PARAM_CREATED_BY, activity.getActivityCreator());
-		e.getParameters().put(PARAM_TEAM_ID, activity.getTeam().getAmpTeamId());
-		return e;
-	}
+    @Override
+    protected Event generateEvent() {
+        Event e=new Event(ActivityDisbursementDateTrigger.class);
+        AmpActivityVersion activity=(AmpActivityVersion) source;
+        e.getParameters().put(PARAM_NAME,activity.getName());
+        e.getParameters().put(PARAM_TRIGGER_SENDER,MessageConstants.SENDER_TYPE_SYSTEM);
+        e.getParameters().put(PARAM_URL, "aim/selectActivityTabs.do~ampActivityId="+activity.getAmpActivityId());
+        e.getParameters().put(PARAM_CREATED_BY, activity.getActivityCreator());
+        e.getParameters().put(PARAM_TEAM_ID, activity.getTeam().getAmpTeamId());
+        return e;
+    }
 
-	@Override
-	public String[] getParameterNames() {
-		return parameterNames;
-	}
+    @Override
+    public String[] getParameterNames() {
+        return parameterNames;
+    }
 
 }

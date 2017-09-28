@@ -7,5 +7,5 @@ package org.dgfoundation.amp.algo;
  * @param <K>
  */
 public interface ExceptionRunnable<K extends Exception>{
-	public void run() throws K;
+    public void run() throws K;
 }

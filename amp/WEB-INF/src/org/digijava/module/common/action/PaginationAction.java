@@ -1,8 +1,8 @@
 /*
  *   PaginationAction.java
  *   @Author Lasha Dolidze lasha@digijava.org
- * 	 Created: Nov 17, 2003
-     * 	 CVS-ID: $Id$
+ *   Created: Nov 17, 2003
+     *   CVS-ID: $Id$
  *
  *   This file is part of DiGi project (www.digijava.org).
  *   DiGi is a multi-site portal system written in Java/J2EE.

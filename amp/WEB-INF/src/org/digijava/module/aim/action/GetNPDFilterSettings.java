@@ -25,8 +25,8 @@ import org.digijava.kernel.translator.TranslatorWorker;
 public class GetNPDFilterSettings extends Action{
 
     public ActionForward execute(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
+            HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
         response.setContentType("text/xml");
         String rootTag = "Settings";
         ActivitiesForm actForm = (ActivitiesForm) form;
@@ -76,18 +76,18 @@ public class GetNPDFilterSettings extends Action{
        
 
         OutputStreamWriter outputStream = new OutputStreamWriter( response.getOutputStream(),"UTF-8");
-		PrintWriter out = new PrintWriter(outputStream, true);
+        PrintWriter out = new PrintWriter(outputStream, true);
         String result = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-		result += "<" + rootTag;
+        result += "<" + rootTag;
         result += " status=\"" +DbUtil.filter(statuses) + "\" ";
-		result += " donor=\"" +DbUtil.filter(donorNames)+ "\" ";
-		result += " startYear=\"" + startYear + "\" ";
-		result += " endYear=\""+endYear+"\" ";
-		result += "/>";
+        result += " donor=\"" +DbUtil.filter(donorNames)+ "\" ";
+        result += " startYear=\"" + startYear + "\" ";
+        result += " endYear=\""+endYear+"\" ";
+        result += "/>";
         out.println(result);
-		out.close();
+        out.close();
         outputStream.close();
-		return null;
+        return null;
 
     }
 

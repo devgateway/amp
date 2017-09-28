@@ -13,31 +13,31 @@ import org.dgfoundation.amp.ar.workers.CategAmountColWorker;
 
 /**
  * @author Alex Gartner
- *	this class has a per-column insider and they are recalculated (cached in BudgetExportMapper)!
+ *  this class has a per-column insider and they are recalculated (cached in BudgetExportMapper)!
  */
 public class BudgetCategAmountColWorker extends CategAmountColWorker {
 
-	HttpSession session;
-	
-	/**
-	 * @param condition
-	 * @param viewName
-	 * @param columnName
-	 * @param generator
-	 */
-	public BudgetCategAmountColWorker(String condition, String viewName,
-			String columnName, ReportGenerator generator) {
-		super(condition, viewName, columnName, generator);	
-	}
+    HttpSession session;
+    
+    /**
+     * @param condition
+     * @param viewName
+     * @param columnName
+     * @param generator
+     */
+    public BudgetCategAmountColWorker(String condition, String viewName,
+            String columnName, ReportGenerator generator) {
+        super(condition, viewName, columnName, generator);  
+    }
 
-	@Override
-	protected String retrieveValueFromRS ( ResultSet rs, String tableColumnName ) throws SQLException {
-		ColWorkerInsider insider = ColWorkerInsider.getOrBuildInsider(this.getViewName(), tableColumnName, this.session);
-		return insider.encoder.encode( rs.getString(tableColumnName) );
-	}
-	
-	@Override
-	public void setSession(HttpSession session) {
-		this.session = session;
-	}
+    @Override
+    protected String retrieveValueFromRS ( ResultSet rs, String tableColumnName ) throws SQLException {
+        ColWorkerInsider insider = ColWorkerInsider.getOrBuildInsider(this.getViewName(), tableColumnName, this.session);
+        return insider.encoder.encode( rs.getString(tableColumnName) );
+    }
+    
+    @Override
+    public void setSession(HttpSession session) {
+        this.session = session;
+    }
 }

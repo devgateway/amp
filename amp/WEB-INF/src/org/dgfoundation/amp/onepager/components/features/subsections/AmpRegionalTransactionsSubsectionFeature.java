@@ -23,45 +23,45 @@ import org.digijava.module.aim.util.CurrencyUtil;
  * @author mpostelnicu@dgateway.org since Nov 8, 2010
  */
 public class AmpRegionalTransactionsSubsectionFeature extends
-		AmpSubsectionFeaturePanel<Set<AmpRegionalFunding>> {
+        AmpSubsectionFeaturePanel<Set<AmpRegionalFunding>> {
 
-	protected AmpRegionalTransactionsFormTableFeature transactionsTableFeature;
+    protected AmpRegionalTransactionsFormTableFeature transactionsTableFeature;
 
-	/**
-	 * @param id
-	 * @param am 
-	 * @param fmName
-	 * @param model
-	 * @param cvLocationModel 
-	 * @param cvlocationModel 
-	 * @throws Exception
-	 */
-	public AmpRegionalTransactionsSubsectionFeature(String id,
-			final IModel<AmpActivityVersion> am, final IModel<Set<AmpRegionalFunding>> model, String fmName,
-			final int transactionType, final IModel<AmpCategoryValueLocations> cvLocationModel) throws Exception {
-		super(id, fmName, model);
-		transactionsTableFeature = new AmpRegionalTransactionsFormTableFeature(
-				"transactionsTableFeature", model, fmName + " Table",
-				transactionType,cvLocationModel);
-		add(transactionsTableFeature);
+    /**
+     * @param id
+     * @param am 
+     * @param fmName
+     * @param model
+     * @param cvLocationModel 
+     * @param cvlocationModel 
+     * @throws Exception
+     */
+    public AmpRegionalTransactionsSubsectionFeature(String id,
+            final IModel<AmpActivityVersion> am, final IModel<Set<AmpRegionalFunding>> model, String fmName,
+            final int transactionType, final IModel<AmpCategoryValueLocations> cvLocationModel) throws Exception {
+        super(id, fmName, model);
+        transactionsTableFeature = new AmpRegionalTransactionsFormTableFeature(
+                "transactionsTableFeature", model, fmName + " Table",
+                transactionType,cvLocationModel);
+        add(transactionsTableFeature);
 
-		AmpAjaxLinkField addCommit = new AmpAjaxLinkField("addTransaction",
-				"Add Transaction", "Add Transaction") {
-			@Override
-			public void onClick(AjaxRequestTarget target) {
-				AmpRegionalFunding fd = new AmpRegionalFunding();
-				//fd.setTransactionAmount(0d);
-				//fd.setAdjustmentType(Constants.ACTUAL);
-				//fd.setTransactionDate(new Date(System.currentTimeMillis()));
-				fd.setTransactionType(transactionType);
-				fd.setRegionLocation(cvLocationModel.getObject());
-				fd.setActivity(am.getObject());
-				fd.setCurrency(CurrencyUtil.getWicketWorkspaceCurrency());
-				transactionsTableFeature.getListEditor().addItem(fd);
-				target.add(transactionsTableFeature);
-			}
-		};
-		add(addCommit);
-	}
+        AmpAjaxLinkField addCommit = new AmpAjaxLinkField("addTransaction",
+                "Add Transaction", "Add Transaction") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                AmpRegionalFunding fd = new AmpRegionalFunding();
+                //fd.setTransactionAmount(0d);
+                //fd.setAdjustmentType(Constants.ACTUAL);
+                //fd.setTransactionDate(new Date(System.currentTimeMillis()));
+                fd.setTransactionType(transactionType);
+                fd.setRegionLocation(cvLocationModel.getObject());
+                fd.setActivity(am.getObject());
+                fd.setCurrency(CurrencyUtil.getWicketWorkspaceCurrency());
+                transactionsTableFeature.getListEditor().addItem(fd);
+                target.add(transactionsTableFeature);
+            }
+        };
+        add(addCommit);
+    }
 
 }

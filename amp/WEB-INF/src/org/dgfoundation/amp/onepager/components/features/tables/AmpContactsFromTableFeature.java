@@ -66,7 +66,7 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
     public AmpContactsFromTableFeature(String id, String fmName, final IModel<AmpActivityVersion> am, final String contactType) throws Exception {
         //super(id, contactModel, fmName, true);
         super(id, am, fmName);
-    	final IModel<Set<AmpActivityContact>> setModel = new PropertyModel<Set<AmpActivityContact>>(am, "activityContacts");
+        final IModel<Set<AmpActivityContact>> setModel = new PropertyModel<Set<AmpActivityContact>>(am, "activityContacts");
         final String specificType = contactType;
 
         if (setModel.getObject() == null) {
@@ -81,13 +81,13 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
                 Set<AmpActivityContact> allContacts = setModel.getObject();
                 Set<AmpActivityContact> specificContacts = new TreeSet<AmpActivityContact>();
                 if (allContacts != null){
-                	Iterator<AmpActivityContact> it = allContacts.iterator();
-                	while (it.hasNext()) {
-                		AmpActivityContact ampActContact = (AmpActivityContact) it.next();
-                		if (specificType.compareTo(ampActContact.getContactType()) == 0) {
-                			specificContacts.add(ampActContact);
-                		}
-                	}
+                    Iterator<AmpActivityContact> it = allContacts.iterator();
+                    while (it.hasNext()) {
+                        AmpActivityContact ampActContact = (AmpActivityContact) it.next();
+                        if (specificType.compareTo(ampActContact.getContactType()) == 0) {
+                            specificContacts.add(ampActContact);
+                        }
+                    }
                 }
                 return new ArrayList<AmpActivityContact>(specificContacts);
             }
@@ -106,43 +106,43 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
 
                     AmpContact contactModel = actContact.getContact();
                     item.add(new Label("contactName", contactModel.getNameAndLastName()));
-					final AjaxCheckBox primary = new AjaxCheckBox(
-							"primaryContact", new PropertyModel<Boolean>(
-									item.getModel(), "primaryContact")) {
-						private static final long serialVersionUID = 1L;
+                    final AjaxCheckBox primary = new AjaxCheckBox(
+                            "primaryContact", new PropertyModel<Boolean>(
+                                    item.getModel(), "primaryContact")) {
+                        private static final long serialVersionUID = 1L;
 
-						@Override
-						protected void onUpdate(AjaxRequestTarget target) {
-							if (getModelObject()) {
-								if (primaryContact != null) {
-									primaryContact.clearInput();
-									primaryContact.setModelObject(Boolean.FALSE);
-									target.add(primaryContact);
-								}
-								primaryContact = this;
-							} else {
-								primaryContact = null;
-							}
-						}
-					};
-					final Boolean isPrimaryContact=primary.getModelObject();
-					if(isPrimaryContact!=null&&isPrimaryContact){
-						primaryContact=primary;
-					}
+                        @Override
+                        protected void onUpdate(AjaxRequestTarget target) {
+                            if (getModelObject()) {
+                                if (primaryContact != null) {
+                                    primaryContact.clearInput();
+                                    primaryContact.setModelObject(Boolean.FALSE);
+                                    target.add(primaryContact);
+                                }
+                                primaryContact = this;
+                            } else {
+                                primaryContact = null;
+                            }
+                        }
+                    };
+                    final Boolean isPrimaryContact=primary.getModelObject();
+                    if(isPrimaryContact!=null&&isPrimaryContact){
+                        primaryContact=primary;
+                    }
                     primary.setOutputMarkupId(true);
                     item.add(primary);
-					AmpDeleteLinkField delContact = new AmpDeleteLinkField("delContact", "Delete Contact") {
-						@Override
-						public void onClick(AjaxRequestTarget target) {
-							setModel.getObject().remove(item.getModelObject());
-							target.add(listParent);
-							list.removeAll();
-							if (primaryContact != null && primaryContact.equals(primary)) {
-								primaryContact = null;
-							}
+                    AmpDeleteLinkField delContact = new AmpDeleteLinkField("delContact", "Delete Contact") {
+                        @Override
+                        public void onClick(AjaxRequestTarget target) {
+                            setModel.getObject().remove(item.getModelObject());
+                            target.add(listParent);
+                            list.removeAll();
+                            if (primaryContact != null && primaryContact.equals(primary)) {
+                                primaryContact = null;
+                            }
 
-						}
-					};
+                        }
+                    };
                     item.add(delContact);
                     
 
@@ -152,25 +152,25 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
                                     new PropertyModel<AmpCategoryValue>(contactModel, "title"),
                                     CategoryConstants.CONTACT_TITLE_NAME, true, true, false);
                     contactTitle.getChoiceContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
-						@Override
-						protected void onUpdate(AjaxRequestTarget target) {
-							send(getPage(), Broadcast.BREADTH,
-									new ContactChangedEvent(target));
-							
-						}
-					});
+                        @Override
+                        protected void onUpdate(AjaxRequestTarget target) {
+                            send(getPage(), Broadcast.BREADTH,
+                                    new ContactChangedEvent(target));
+                            
+                        }
+                    });
                     item.add(contactTitle);
                     
                     
                     final AmpTextFieldPanel<String> name=new AmpTextFieldPanel<String>("name",new PropertyModel<String>(actContact.getContact(),"name"),"contact first name",false,true);
-                	name.getTextContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
-						@Override
-						protected void onUpdate(AjaxRequestTarget target) {
-							send(getPage(), Broadcast.BREADTH,
-									new ContactChangedEvent(target));
-						}
-					});
-            	
+                    name.getTextContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
+                        @Override
+                        protected void onUpdate(AjaxRequestTarget target) {
+                            send(getPage(), Broadcast.BREADTH,
+                                    new ContactChangedEvent(target));
+                        }
+                    });
+                
                     name.getTextContainer().setRequired(true);
                     name.getTextContainer().add(new AttributeModifier("size", "50"));
                     name.setTextContainerDefaultMaxSize();
@@ -180,12 +180,12 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
                     lastname.getTextContainer().add(new AttributeModifier("size", "50"));
                     lastname.setTextContainerDefaultMaxSize();
                     lastname.getTextContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
-						@Override
-						protected void onUpdate(AjaxRequestTarget target) {
-							send(getPage(), Broadcast.BREADTH,
-									new ContactChangedEvent(target));
-						}
-					});
+                        @Override
+                        protected void onUpdate(AjaxRequestTarget target) {
+                            send(getPage(), Broadcast.BREADTH,
+                                    new ContactChangedEvent(target));
+                        }
+                    });
                     item.add(lastname);
                     
                     IModel<AmpContact> contactReadOnlyModel = new AmpReadOnlyModel(actContact.getContact());
@@ -196,24 +196,24 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
                     function.setTextContainerDefaultMaxSize();
                     function.getTextContainer().add(new AttributeModifier("size", "50"));
                     function.getTextContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
-						@Override
-						protected void onUpdate(AjaxRequestTarget target) {
-							send(getPage(), Broadcast.BREADTH,
-									new ContactChangedEvent(target));
-						}
-					});
+                        @Override
+                        protected void onUpdate(AjaxRequestTarget target) {
+                            send(getPage(), Broadcast.BREADTH,
+                                    new ContactChangedEvent(target));
+                        }
+                    });
                     item.add(function);
                     
                     final AmpTextFieldPanel<String> organisationName=new  AmpTextFieldPanel<String>("organisationName",new PropertyModel<String>(contactModel,"organisationName"),"organisationName",false);
                     organisationName.setTextContainerDefaultMaxSize();
                     organisationName.getTextContainer().add(new AttributeModifier("size", "50"));
                     organisationName.getTextContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
-						@Override
-						protected void onUpdate(AjaxRequestTarget target) {
-							send(getPage(), Broadcast.BREADTH,
-									new ContactChangedEvent(target));
-						}
-					});
+                        @Override
+                        protected void onUpdate(AjaxRequestTarget target) {
+                            send(getPage(), Broadcast.BREADTH,
+                                    new ContactChangedEvent(target));
+                        }
+                    });
                     
                     item.add(organisationName);
                     
@@ -229,12 +229,12 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
                   
                     final AmpTextAreaFieldPanel office = new AmpTextAreaFieldPanel("officeaddress",new PropertyModel<String>(contactModel,"officeaddress"),"contact office address",false, false, true);
                     office.getTextAreaContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
-						@Override
-						protected void onUpdate(AjaxRequestTarget target) {
-							send(getPage(), Broadcast.BREADTH,
-									new ContactChangedEvent(target));
-						}
-					});
+                        @Override
+                        protected void onUpdate(AjaxRequestTarget target) {
+                            send(getPage(), Broadcast.BREADTH,
+                                    new ContactChangedEvent(target));
+                        }
+                    });
                     item.add(office);
                 } catch (Exception ex) {
 
@@ -248,43 +248,43 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
 
         final AmpAutocompleteFieldPanel<AmpContact> searchContacts = new AmpContactAutocompleteFieldPanel("searchContact", "Search Contact",false, AmpContactSearchModel.class,id,true) {
 
-			private static final long serialVersionUID = 1L;
+            private static final long serialVersionUID = 1L;
 
-			@Override
+            @Override
             public void onSelect(AjaxRequestTarget target, AmpContact choice) {
-				boolean contactExists = false;
-				if (setModel.getObject() == null){
-					setModel.setObject(new HashSet<AmpActivityContact>());
-				}
-				
-				Set<AmpActivityContact> actContacts = setModel.getObject();
-				if(choice.getId()!=null){
-					for (AmpActivityContact actCont : actContacts) {
-						if(actCont.getContact().getId()!=null && actCont.getContact().getId().equals(choice.getId()) 
-								&& contactType.equals(actCont.getContactType())){
-							contactExists = true;
-							break;
-						}
-					}
-				}
-				
-				if(!contactExists){
-					AmpActivityContact activityContact = new AmpActivityContact();
-					activityContact.setContact(choice);			
-					activityContact.setActivity(am.getObject());
-					activityContact.setContactType(contactType);
-					activityContact.setPrimaryContact(false);
+                boolean contactExists = false;
+                if (setModel.getObject() == null){
+                    setModel.setObject(new HashSet<AmpActivityContact>());
+                }
+                
+                Set<AmpActivityContact> actContacts = setModel.getObject();
+                if(choice.getId()!=null){
+                    for (AmpActivityContact actCont : actContacts) {
+                        if(actCont.getContact().getId()!=null && actCont.getContact().getId().equals(choice.getId()) 
+                                && contactType.equals(actCont.getContactType())){
+                            contactExists = true;
+                            break;
+                        }
+                    }
+                }
+                
+                if(!contactExists){
+                    AmpActivityContact activityContact = new AmpActivityContact();
+                    activityContact.setContact(choice);         
+                    activityContact.setActivity(am.getObject());
+                    activityContact.setContactType(contactType);
+                    activityContact.setPrimaryContact(false);
                     Hibernate.initialize(choice.getActivityContacts()); //lazy init:)
                     if(choice.getActivityContacts() == null) {
-                    	choice.setActivityContacts(new TreeSet<AmpActivityContact>());
+                        choice.setActivityContacts(new TreeSet<AmpActivityContact>());
                     }
                     choice.getActivityContacts().add(activityContact);
-					
-					setModel.getObject().add(activityContact);
-				}
-				
-				list.removeAll();
-				target.add(list.getParent());
+                    
+                    setModel.getObject().add(activityContact);
+                }
+                
+                list.removeAll();
+                target.add(list.getParent());
             }
 
         };

@@ -15,10 +15,10 @@ import java.util.HashSet;
  *
  */
 public interface Categorizable {
-	public MetaInfoSet getMetaData();
-	
-	public boolean hasMetaInfo(MetaInfo m);
-	
-	public boolean isShow();
-	//public boolean isRenderizable();
+    public MetaInfoSet getMetaData();
+    
+    public boolean hasMetaInfo(MetaInfo m);
+    
+    public boolean isShow();
+    //public boolean isRenderizable();
 }

@@ -32,23 +32,23 @@ public class AddPermission
       extends Action {
 
     public ActionForward execute(ActionMapping mapping,
-				 ActionForm form,
-				 javax.servlet.http.HttpServletRequest request,
-				 javax.servlet.http.HttpServletResponse
-				 response) throws java.lang.Exception {
+                 ActionForm form,
+                 javax.servlet.http.HttpServletRequest request,
+                 javax.servlet.http.HttpServletResponse
+                 response) throws java.lang.Exception {
 
-	TranslationPermissionsForm formBean = (TranslationPermissionsForm) form;
-//	Site currentSite = RequestUtils.getSite(request);
-	TranslationPermissionsForm.PermissionInfo pi = new TranslationPermissionsForm.
-	      PermissionInfo();
+    TranslationPermissionsForm formBean = (TranslationPermissionsForm) form;
+//  Site currentSite = RequestUtils.getSite(request);
+    TranslationPermissionsForm.PermissionInfo pi = new TranslationPermissionsForm.
+          PermissionInfo();
 
-	formBean.getPermissions().add(pi);
+    formBean.getPermissions().add(pi);
 
-	if (formBean.isUserMode()) {
-	    return mapping.findForward("forwardUser");
-	} else {
-	    return mapping.findForward("forwardGroup");
-	}
+    if (formBean.isUserMode()) {
+        return mapping.findForward("forwardUser");
+    } else {
+        return mapping.findForward("forwardGroup");
+    }
 
     }
 

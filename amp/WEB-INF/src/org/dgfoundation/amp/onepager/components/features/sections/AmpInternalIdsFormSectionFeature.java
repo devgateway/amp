@@ -15,18 +15,18 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
  * @author mpostelnicu@dgateway.org since Sep 28, 2010
  */
 public class AmpInternalIdsFormSectionFeature extends
-		AmpFormSectionFeaturePanel {
+        AmpFormSectionFeaturePanel {
 
-	private static final long serialVersionUID = -6654390083784446344L;
+    private static final long serialVersionUID = -6654390083784446344L;
 
-	public AmpInternalIdsFormSectionFeature(String id, String fmName,
-			final IModel<AmpActivityVersion> am) throws Exception {
-		super(id, fmName, am);
-		this.fmType = AmpFMTypes.MODULE;
+    public AmpInternalIdsFormSectionFeature(String id, String fmName,
+            final IModel<AmpActivityVersion> am) throws Exception {
+        super(id, fmName, am);
+        this.fmType = AmpFMTypes.MODULE;
 
-		AmpInternalIdsFormTableFeature internalIdsTable = new AmpInternalIdsFormTableFeature(
-				"internalIdsTable", "Internal IDs", am);
-		add(internalIdsTable);
-	}
+        AmpInternalIdsFormTableFeature internalIdsTable = new AmpInternalIdsFormTableFeature(
+                "internalIdsTable", "Internal IDs", am);
+        add(internalIdsTable);
+    }
 
 }

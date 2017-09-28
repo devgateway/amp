@@ -28,23 +28,23 @@ public class AddContactComponentForm extends ActionForm {
     private String temporaryId; //contact's temporary id
     
     private ContactPropertyHelper[] emails;
-	private ContactPropertyHelper[] phones;
-	private ContactPropertyHelper[] faxes;
-	private int phonesSize;
-	private int emailsSize;
-	private int faxesSize;
-	
-	private String[] contEmail;
-	private String[] contPhoneType;
+    private ContactPropertyHelper[] phones;
+    private ContactPropertyHelper[] faxes;
+    private int phonesSize;
+    private int emailsSize;
+    private int faxesSize;
+    
+    private String[] contEmail;
+    private String[] contPhoneType;
 
     private String[] contPhoneTypeIds;
 
-	private String[] contPhoneNumber;
-	private String[] contFaxes;
-	
+    private String[] contPhoneNumber;
+    private String[] contFaxes;
+    
 
-	
-	private String actOrOrgTempId;
+    
+    private String actOrOrgTempId;
 
 
 
@@ -84,14 +84,14 @@ public class AddContactComponentForm extends ActionForm {
   
 
     public String getFirstName() {
-		return firstName;
-	}
+        return firstName;
+    }
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-	public String getAction() {
+    public String getAction() {
         return action;
     }
 
@@ -175,101 +175,101 @@ public class AddContactComponentForm extends ActionForm {
     }
     
     public String getFunction() {
-		return function;
-	}
+        return function;
+    }
 
-	public void setFunction(String function) {
-		this.function = function;
-	}
-	public String getOfficeaddress() {
-		return officeaddress;
-	}
+    public void setFunction(String function) {
+        this.function = function;
+    }
+    public String getOfficeaddress() {
+        return officeaddress;
+    }
 
-	public void setOfficeaddress(String officeaddress) {
-		this.officeaddress = officeaddress;
-	}
-	
-	public ContactPropertyHelper[] getEmails() {
-		return emails;
-	}
-	public void setEmails(ContactPropertyHelper[] emails) {
-		this.emails = emails;
-	}
-	public ContactPropertyHelper[] getPhones() {
-		return phones;
-	}
-	public void setPhones(ContactPropertyHelper[] phones) {
-		this.phones = phones;
-	}
-	public ContactPropertyHelper[] getFaxes() {
-		return faxes;
-	}
-	public void setFaxes(ContactPropertyHelper[] faxes) {
-		this.faxes = faxes;
-	}
-	public int getPhonesSize() {
-		return phonesSize;
-	}
-	public void setPhonesSize(int phonesSize) {
-		this.phonesSize = phonesSize;
-	}
-	public int getEmailsSize() {
-		return emailsSize;
-	}
-	public void setEmailsSize(int emailsSize) {
-		this.emailsSize = emailsSize;
-	}
-	public int getFaxesSize() {
-		return faxesSize;
-	}
-	public void setFaxesSize(int faxesSize) {
-		this.faxesSize = faxesSize;
-	}
-	public String[] getContEmail() {
-		return contEmail;
-	}
-	public void setContEmail(String[] contEmail) {
-		this.contEmail = contEmail;
-	}
-	public String[] getContPhoneType() {
-		return contPhoneType;
-	}
-	public void setContPhoneType(String[] contPhoneType) {
-		this.contPhoneType = contPhoneType;
-	}
-	public String[] getContPhoneNumber() {
-		return contPhoneNumber;
-	}
-	public void setContPhoneNumber(String[] contPhoneNumber) {
-		this.contPhoneNumber = contPhoneNumber;
-	}
-	public String[] getContFaxes() {
-		return contFaxes;
-	}
-	public void setContFaxes(String[] contFaxes) {
-		this.contFaxes = contFaxes;
-	}
-	public ContactPropertyHelper getEmails(int index) {
+    public void setOfficeaddress(String officeaddress) {
+        this.officeaddress = officeaddress;
+    }
+    
+    public ContactPropertyHelper[] getEmails() {
+        return emails;
+    }
+    public void setEmails(ContactPropertyHelper[] emails) {
+        this.emails = emails;
+    }
+    public ContactPropertyHelper[] getPhones() {
+        return phones;
+    }
+    public void setPhones(ContactPropertyHelper[] phones) {
+        this.phones = phones;
+    }
+    public ContactPropertyHelper[] getFaxes() {
+        return faxes;
+    }
+    public void setFaxes(ContactPropertyHelper[] faxes) {
+        this.faxes = faxes;
+    }
+    public int getPhonesSize() {
+        return phonesSize;
+    }
+    public void setPhonesSize(int phonesSize) {
+        this.phonesSize = phonesSize;
+    }
+    public int getEmailsSize() {
+        return emailsSize;
+    }
+    public void setEmailsSize(int emailsSize) {
+        this.emailsSize = emailsSize;
+    }
+    public int getFaxesSize() {
+        return faxesSize;
+    }
+    public void setFaxesSize(int faxesSize) {
+        this.faxesSize = faxesSize;
+    }
+    public String[] getContEmail() {
+        return contEmail;
+    }
+    public void setContEmail(String[] contEmail) {
+        this.contEmail = contEmail;
+    }
+    public String[] getContPhoneType() {
+        return contPhoneType;
+    }
+    public void setContPhoneType(String[] contPhoneType) {
+        this.contPhoneType = contPhoneType;
+    }
+    public String[] getContPhoneNumber() {
+        return contPhoneNumber;
+    }
+    public void setContPhoneNumber(String[] contPhoneNumber) {
+        this.contPhoneNumber = contPhoneNumber;
+    }
+    public String[] getContFaxes() {
+        return contFaxes;
+    }
+    public void setContFaxes(String[] contFaxes) {
+        this.contFaxes = contFaxes;
+    }
+    public ContactPropertyHelper getEmails(int index) {
         return emails[index];
     }
-	
-	public ContactPropertyHelper getFaxes(int index) {
+    
+    public ContactPropertyHelper getFaxes(int index) {
         return faxes[index];
     }
-	public ContactPropertyHelper getPhones(int index) {
+    public ContactPropertyHelper getPhones(int index) {
         return phones[index];
     }
 
 
 
-	public String getActOrOrgTempId() {
-		return actOrOrgTempId;
-	}
+    public String getActOrOrgTempId() {
+        return actOrOrgTempId;
+    }
 
-	public void setActOrOrgTempId(String actOrOrgTempId) {
-		this.actOrOrgTempId = actOrOrgTempId;
-	}
+    public void setActOrOrgTempId(String actOrOrgTempId) {
+        this.actOrOrgTempId = actOrOrgTempId;
+    }
 
-	
-	
+    
+    
 }

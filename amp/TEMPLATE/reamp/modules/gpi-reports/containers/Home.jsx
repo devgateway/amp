@@ -86,7 +86,7 @@ export default class App extends Component {
                    </ul>
                    </div>
                 }               
-                {this.getReport(indicatorCode, currentReport)}
+                <div className="report" >{this.getReport(indicatorCode, currentReport)}</div>
                 </div>
                 )}
              </div>

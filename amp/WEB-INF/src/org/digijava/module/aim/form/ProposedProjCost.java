@@ -44,7 +44,7 @@ public class ProposedProjCost extends ActionForm implements Comparable<ProposedP
     }
 
     public void setFunAmount(String funAmount) {
-    	this.funAmount = funAmount;
+        this.funAmount = funAmount;
     }
 
     public void setFunAmountAsDouble(Double funAmount) {
@@ -55,44 +55,44 @@ public class ProposedProjCost extends ActionForm implements Comparable<ProposedP
         this.currencyCode = currencyCode;
     }
 
-	/**
-	 * @return the funAmountFormated
-	 */
-	public String getFunAmountFormated() {
-		return FormatHelper.formatNumber(getFunAmountAsDouble());
-	}
+    /**
+     * @return the funAmountFormated
+     */
+    public String getFunAmountFormated() {
+        return FormatHelper.formatNumber(getFunAmountAsDouble());
+    }
 
-	/**
-	 * @param funAmountFormated the funAmountFormated to set
-	 */
-	public void setFunAmountFormated(String funAmountFormated) {
-		this.funAmountFormated = FormatHelper.formatNumber(getFunAmountAsDouble());;
-	}
+    /**
+     * @param funAmountFormated the funAmountFormated to set
+     */
+    public void setFunAmountFormated(String funAmountFormated) {
+        this.funAmountFormated = FormatHelper.formatNumber(getFunAmountAsDouble());;
+    }
 
-	@Override
-	public int compareTo(ProposedProjCost o) {
-			if (this == o)
-			return 0;
+    @Override
+    public int compareTo(ProposedProjCost o) {
+            if (this == o)
+            return 0;
 
-		if (this.funDate == null)
-			return -1;
-		if (o.funDate == null)
-			return 1;
+        if (this.funDate == null)
+            return -1;
+        if (o.funDate == null)
+            return 1;
 
-		if (Long.parseLong(this.funDate) < Long.parseLong(o.funDate))
-			return -1;
-		else
-			return 1;
+        if (Long.parseLong(this.funDate) < Long.parseLong(o.funDate))
+            return -1;
+        else
+            return 1;
 
-	}
+    }
 
-	public void setCurrencyName(String currencyName) {
-		this.currencyName = currencyName;
-		
-	}
-	
-	public String getCurrencyName () {
-		return this.currencyName;
-	}
+    public void setCurrencyName(String currencyName) {
+        this.currencyName = currencyName;
+        
+    }
+    
+    public String getCurrencyName () {
+        return this.currencyName;
+    }
 
 }

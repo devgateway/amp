@@ -6,7 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-
+<div class="admin-content">
 <digi:errors/>
 <digi:instance property="aimSectorsForm" />
 <digi:context name="digiContext" property="context" />
@@ -273,6 +273,6 @@
 	</td>
 	</tr>
 </table>
-
+</div>
 
 

@@ -91,6 +91,7 @@
 		setHoveredTable("dataTable", true);
 		setHoveredRow("rowHighlight");
 		monitorCheckbox();
+        checkVersions();
 	}	 
 	function setVersion(activityId)
 	{
@@ -115,6 +116,12 @@
 			document.aimCompareActivityVersionsForm.submit();
 		}
 	}
+
+	function submitChangeSummary() {
+        document.aimViewActivityHistoryForm.actionMethod.value = "changesSummary";
+		document.aimViewActivityHistoryForm.submit();
+	}
+
 	function monitorCheckbox(){
 		var checkboxes = document.getElementsByName("compareCheckboxes");
 		var counter = 0;
@@ -123,16 +130,40 @@
 		}
 		if (counter != 2)
 		{
-			document.getElementById("SubmitButton").disabled = true;
-			document.getElementById("SubmitButton").style.color = "#CECECE";
+		    if (document.getElementById("SubmitButton")) {
+				document.getElementById("SubmitButton").disabled = true;
+				document.getElementById("SubmitButton").style.color = "#CECECE";
+            }
 		}
 		else
 		{
-			document.getElementById("SubmitButton").disabled = false;
-			document.getElementById("SubmitButton").style.color = "Black";
+            if (document.getElementById("SubmitButton")) {
+                document.getElementById("SubmitButton").disabled = false;
+                document.getElementById("SubmitButton").style.color = "Black";
+            }
 		}
 	}
-	
+
+    function checkVersions(){
+        var ids = document.getElementsByName("summaryChangesIds");
+        var counter = 0;
+        for(var i = 0; i < ids.length; i++) {
+            counter++;
+        }
+        if (counter > 1)
+        {
+            if (document.getElementById("SubmitSummaryButton")) {
+                document.getElementById("SubmitSummaryButton").disabled = false;
+                document.getElementById("SubmitSummaryButton").style.color = "Black";
+			}
+        } else {
+            if (document.getElementById("SubmitSummaryButton")) {
+                document.getElementById("SubmitSummaryButton").disabled = true;
+                document.getElementById("SubmitSummaryButton").style.color = "#CECECE";
+            }
+		}
+    }
+
 	var responseFailureHistory = function(o){ 
 	// Access the response object's properties in the 
 	// same manner as listed in responseSuccess( ). 

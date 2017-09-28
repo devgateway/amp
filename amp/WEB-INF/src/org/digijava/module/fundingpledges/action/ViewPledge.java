@@ -12,12 +12,12 @@ import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
 import org.digijava.module.fundingpledges.form.PledgeForm;
 
 public class ViewPledge extends Action {
-	
-	public ActionForward execute(ActionMapping mapping,
+    
+    public ActionForward execute(ActionMapping mapping,
             ActionForm form,
             HttpServletRequest request,
             HttpServletResponse response) throws java.lang.Exception {
-        	
-		return new ViewPledgeData().execute(mapping, form, request, response);
-	}
+            
+        return new ViewPledgeData().execute(mapping, form, request, response);
+    }
 }

@@ -1,23 +1,17 @@
 <wicket:extend>
 <span wicket:id="featureLabel"/>
 	<div style="height: 50px; width: 100%;">
-		<div style="float: left; width: 100%;">
+		<div style="float:auto; width: 100%;">
 			<a href="#" onclick="$(this).parent().parent().siblings('div:first').slideToggle();return false;">
-			<span wicket:id="itemNumberLabel"/> 
-			<span wicket:id="itemNumber"/></a>
-			<div>
-				<span wicket:id="fundingSumary"/>
-			</div>
+			<span wicket:id="itemNumberLabel"/> <span wicket:id="itemNumber"/></a>
+			<div><span wicket:id="fundingSumary"/></div>
 			<div wicket:id="labelContainer">
-				<span wicket:id="donorOrg"/>
-				<span><wicket:trn>From</wicket:trn>&nbsp;</span>
-				<span wicket:id="sourceOrg"/>&nbsp;
-				<span><wicket:trn>as the</wicket:trn>&nbsp;</span>
-				<span style="font-weight: bold" wicket:id="sourceRoleLabel"/>
-			 </div>
+			<span wicket:id="donorOrg"/>			
+			<wicket:trn>From</wicket:trn>&nbsp;<span wicket:id="sourceOrg"/>&nbsp;<wicket:trn>as the</wicket:trn>&nbsp; <b><span wicket:id="sourceRoleLabel"/></b>
+			 </div>	
 		</div>
 
-		<div wicket:id="delFunding" style="float: right;position:relative;top:-15px;"/>
+		<div wicket:id="delFunding" class="del-funding" />
 		
 	</div>
 		<div class="collapsable"  wicket:id="fundingContainer" ><!-- the display none should only be added if we are in tabs mode -->

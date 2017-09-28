@@ -13,19 +13,19 @@ import org.dgfoundation.amp.algo.ExceptionRunnable;
  *
  */
 public class ReadWriteLockHolder {
-	public final ReentrantReadWriteLock lock;
-	public final String name;
-	
-	public ReadWriteLockHolder(String name) {
-		this.name = name;
-		this.lock = new ReentrantReadWriteLock();
-	}
-	
-	public void runUnderReadLock(ExceptionRunnable<?> r) {
-		LockHolder.runUnderLock(lock.readLock(), r);
-	}
-	
-	public void runUnderWriteLock(ExceptionRunnable<?> r) {
-		LockHolder.runUnderLock(lock.writeLock(), r);
-	}
+    public final ReentrantReadWriteLock lock;
+    public final String name;
+    
+    public ReadWriteLockHolder(String name) {
+        this.name = name;
+        this.lock = new ReentrantReadWriteLock();
+    }
+    
+    public void runUnderReadLock(ExceptionRunnable<?> r) {
+        LockHolder.runUnderLock(lock.readLock(), r);
+    }
+    
+    public void runUnderWriteLock(ExceptionRunnable<?> r) {
+        LockHolder.runUnderLock(lock.writeLock(), r);
+    }
 }

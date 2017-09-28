@@ -4,7 +4,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 
 public class ContactChangedEvent extends AbstractAjaxUpdateEvent {
     
-	public ContactChangedEvent(AjaxRequestTarget target) {
+    public ContactChangedEvent(AjaxRequestTarget target) {
         super(target);
     }
 

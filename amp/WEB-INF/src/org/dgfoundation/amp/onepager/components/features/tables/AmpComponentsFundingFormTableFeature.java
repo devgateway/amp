@@ -35,18 +35,18 @@ import java.util.*;
  * @since Nov 25, 2010
  */
 public class AmpComponentsFundingFormTableFeature extends
-		AmpFormTableFeaturePanel {
+        AmpFormTableFeaturePanel {
     private final ListEditor<AmpComponentFunding> editorList;
 
     /**
-	 */
-	public AmpComponentsFundingFormTableFeature(String id,
-			final IModel<AmpComponent> componentModel,
-			final IModel<Set<AmpComponentFunding>> compFundsModel, 
-			final IModel<AmpActivityVersion> activityModel, String fmName,
-			final int transactionType) throws Exception {
-		super(id, activityModel, fmName);
-		setTitleHeaderColSpan(6);
+     */
+    public AmpComponentsFundingFormTableFeature(String id,
+            final IModel<AmpComponent> componentModel,
+            final IModel<Set<AmpComponentFunding>> compFundsModel, 
+            final IModel<AmpActivityVersion> activityModel, String fmName,
+            final int transactionType) throws Exception {
+        super(id, activityModel, fmName);
+        setTitleHeaderColSpan(6);
 
         AbstractMixedSetModel<AmpComponentFunding> listModel = new AbstractMixedSetModel<AmpComponentFunding>(compFundsModel) {
             @Override
@@ -87,7 +87,7 @@ public class AmpComponentsFundingFormTableFeature extends
 
                 // selector for second related orgs
                 AmpSelectFieldPanel<AmpOrganisation> secondOrgSelect = buildSelectFieldPanel("secondOrgSelect",
-                        "Second Reporting Organisation", "secondReportingOrganisation",
+                        "Component Second Responsible Organization", "componentSecondResponsibleOrganization",
                         model, orgsList);
                 item.add(secondOrgSelect);
 
@@ -104,9 +104,9 @@ public class AmpComponentsFundingFormTableFeature extends
             }
         };
 
-		add(editorList);
+        add(editorList);
 
-	}
+    }
 
     private AmpSelectFieldPanel<AmpOrganisation> buildSelectFieldPanel(String id, String fmName, String expression,
                                                                        IModel<AmpComponentFunding> model,
@@ -125,30 +125,30 @@ public class AmpComponentsFundingFormTableFeature extends
     }
 
     private AbstractReadOnlyModel<List<AmpComponentFunding>> getSubsetModel( final IModel<Set<AmpComponentFunding>> compFundsModel , final int transactionType)
-	{
-		
-		
-		return new AbstractReadOnlyModel<List<AmpComponentFunding>>() {
-			private static final long serialVersionUID = 370618487459839210L;
+    {
+        
+        
+        return new AbstractReadOnlyModel<List<AmpComponentFunding>>() {
+            private static final long serialVersionUID = 370618487459839210L;
 
-			@Override
-			public List<AmpComponentFunding> getObject() {
-				List<AmpComponentFunding> result = new ArrayList<AmpComponentFunding>();
-				Set<AmpComponentFunding> allComp = compFundsModel.getObject();
-				if (allComp != null){
-					Iterator<AmpComponentFunding> iterator = allComp.iterator();
-					while (iterator.hasNext()) {
-						AmpComponentFunding comp = (AmpComponentFunding) iterator
-						.next();
-						if (comp.getTransactionType() == transactionType)
-							//if (comp.getComponent().hashCode() == componentModel.getObject().hashCode())
-								result.add(comp);
-					}
-				}
-				
-				return result;
-			}
-		};
-	}
+            @Override
+            public List<AmpComponentFunding> getObject() {
+                List<AmpComponentFunding> result = new ArrayList<AmpComponentFunding>();
+                Set<AmpComponentFunding> allComp = compFundsModel.getObject();
+                if (allComp != null){
+                    Iterator<AmpComponentFunding> iterator = allComp.iterator();
+                    while (iterator.hasNext()) {
+                        AmpComponentFunding comp = (AmpComponentFunding) iterator
+                        .next();
+                        if (comp.getTransactionType() == transactionType)
+                            //if (comp.getComponent().hashCode() == componentModel.getObject().hashCode())
+                                result.add(comp);
+                    }
+                }
+                
+                return result;
+            }
+        };
+    }
 
 }

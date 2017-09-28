@@ -171,8 +171,9 @@ nv.models.heatMapChart = function() {
         	var legendSectionHeight = 20;
         	var height = topSectionHeight + (cubeSize * data[0].values.y.length) + legendSectionHeight;
         	var legendElementHeight = 22;
+        	const undefinedColor = '#666';
         	const noColor = '#FFFFFF';
-        	var categories = getCategoriesByThreshold(noColor, data[0].values.model);
+        	var categories = getCategoriesByThreshold(undefinedColor, noColor, data[0].values.model);
         	
         	$(container[0]).css('height', height + 'px').attr('class', 'dash-chart nvd3-svg heatmap-chart');
         	
@@ -312,15 +313,16 @@ nv.models.heatMapChart = function() {
         return chart;
     }
     
-    function getCategoriesByThreshold(noColor, model) {
+    function getCategoriesByThreshold(undefinedColor, noColor, model) {
     	var categories = new Array();
+    	categories.push({min: -99, max: -1, color: undefinedColor});
     	categories.push({min: -1, max: 0, color: noColor});
     	var colors = model.get('heatmap_config').models[0].get('amountColors');
-    	var i = 1;
+    	var i = 2;
     	for (var property in colors) {
     	    if (colors.hasOwnProperty(property)) {
     	    	categories.push({min: parseInt(property), color: colors[property], max: null});
-    	    	if (i > 1) {
+    	    	if (i > 2) {
     	    		categories[i - 1].max = parseInt(property);
     	    	}
     	    	i++;
@@ -335,12 +337,12 @@ nv.models.heatMapChart = function() {
 			.append("g")
 			.attr("transform", "translate(0, " + (((data[0].values.y.length + 1) * cubeSize) + 10) + ")")
 			.attr("class", "heatmap-legends-container");
-    	var legendsPool = [app.translator.translateSync("amp.dashboard:chart-heatmap-legend-less-than") + " " + categories[1].max + "%",
-    	                   app.translator.translateSync("amp.dashboard:chart-heatmap-legend-between") + " " + categories[2].min + "% " + app.translator.translateSync("amp.dashboard:chart-heatmap-legend-and") + " <" + categories[2].max + "% ",
+    	var legendsPool = [app.translator.translateSync("amp.dashboard:chart-heatmap-legend-less-than") + " " + categories[2].max + "%",
     	                   app.translator.translateSync("amp.dashboard:chart-heatmap-legend-between") + " " + categories[3].min + "% " + app.translator.translateSync("amp.dashboard:chart-heatmap-legend-and") + " <" + categories[3].max + "% ",
     	                   app.translator.translateSync("amp.dashboard:chart-heatmap-legend-between") + " " + categories[4].min + "% " + app.translator.translateSync("amp.dashboard:chart-heatmap-legend-and") + " <" + categories[4].max + "% ",
     	                   app.translator.translateSync("amp.dashboard:chart-heatmap-legend-between") + " " + categories[5].min + "% " + app.translator.translateSync("amp.dashboard:chart-heatmap-legend-and") + " <" + categories[5].max + "% ",
-    	                   app.translator.translateSync("amp.dashboard:chart-heatmap-legend-more-than") + " " + categories[6].min + "%"];
+    	                   app.translator.translateSync("amp.dashboard:chart-heatmap-legend-between") + " " + categories[6].min + "% " + app.translator.translateSync("amp.dashboard:chart-heatmap-legend-and") + " <" + categories[6].max + "% ",
+    	                   app.translator.translateSync("amp.dashboard:chart-heatmap-legend-more-than") + " " + categories[7].min + "%"];
     	var maxLegendTextWidth = 0;
     	for (var i = 0; i < legendsPool.length; i++) {
     		var auxWidth = calculateTextWidth(legendsPool[i]);
@@ -358,7 +360,7 @@ nv.models.heatMapChart = function() {
 				.attr("width", maxLegendTextWidth)
 				.attr("height", legendElementHeight)
 				.attr("class", "bordered")
-				.style("fill", categories[i + 1].color);
+				.style("fill", categories[i + 2].color);
 		
 			var text = legendsContainer.append("text"); 
 			text.attr('font-family', 'Arial')
@@ -427,7 +429,11 @@ nv.models.heatMapChart = function() {
 						return auxVal + '%';
 					}
 				} else {
-					return '';
+                    if (auxVal == -1) {
+                        return '';
+                    } else {
+                        return app.translator.translateSync("amp.dashboard:chart-heatmap-legend-n-a");
+					}
 				}
 			})
 			.on("click", function(obj) {				

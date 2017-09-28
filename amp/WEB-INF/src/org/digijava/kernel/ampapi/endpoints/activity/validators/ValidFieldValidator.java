@@ -17,19 +17,19 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
  */
 public class ValidFieldValidator extends InputValidator {
 
-	@Override
-	public ApiErrorMessage getErrorMessage() {
-		return ActivityErrors.FIELD_INVALID;
-	}
+    @Override
+    public ApiErrorMessage getErrorMessage() {
+        return ActivityErrors.FIELD_INVALID;
+    }
 
-	@Override
-	public boolean isValid(ActivityImporter importer, Map<String, Object> newFieldParent, 
-			Map<String, Object> oldFieldParent, JsonBean fieldDescription, String fieldPath) {
-		boolean isValid = true;
-		if (fieldDescription == null) {
-			isValid = false;
-		}
-		return isValid;
-	}
+    @Override
+    public boolean isValid(ActivityImporter importer, Map<String, Object> newFieldParent, 
+            Map<String, Object> oldFieldParent, JsonBean fieldDescription, String fieldPath) {
+        boolean isValid = true;
+        if (fieldDescription == null) {
+            isValid = false;
+        }
+        return isValid;
+    }
 
 }

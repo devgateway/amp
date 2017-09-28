@@ -13,22 +13,22 @@ import org.digijava.kernel.persistence.PersistenceManager;
  *
  */
 public class RsInfo implements AutoCloseable {
-	public final ResultSet rs;
-	public final Statement statement;
-	
-	public RsInfo(ResultSet rs, Statement statement) {
-		this.rs = rs;
-		this.statement = statement;
-	}
-	
-	public void forEach(Consumer<ResultSet> c) throws SQLException {
-		while (rs.next()) {
-			c.accept(rs);
-		}
-	}
-	
-	@Override public void close() throws SQLException {
-		PersistenceManager.closeQuietly(this.statement);
-		PersistenceManager.closeQuietly(this.rs);
-	}
+    public final ResultSet rs;
+    public final Statement statement;
+    
+    public RsInfo(ResultSet rs, Statement statement) {
+        this.rs = rs;
+        this.statement = statement;
+    }
+    
+    public void forEach(Consumer<ResultSet> c) throws SQLException {
+        while (rs.next()) {
+            c.accept(rs);
+        }
+    }
+    
+    @Override public void close() throws SQLException {
+        PersistenceManager.closeQuietly(this.statement);
+        PersistenceManager.closeQuietly(this.rs);
+    }
 }

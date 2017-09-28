@@ -31,23 +31,23 @@ public class SingleServerJob {
     private String className;
 
     public SingleServerJob() {
-	jobHosts = new ArrayList();
+    jobHosts = new ArrayList();
     }
 
     public List getJobHosts() {
-	return jobHosts;
+    return jobHosts;
     }
 
     public void addJobHost(String jobHost) {
-	jobHosts.add(jobHost);
+    jobHosts.add(jobHost);
     }
 
     public String getClassName() {
-	return className;
+    return className;
     }
 
     public void setClassName(String className) {
-	this.className = className;
+    this.className = className;
     }
 
 }

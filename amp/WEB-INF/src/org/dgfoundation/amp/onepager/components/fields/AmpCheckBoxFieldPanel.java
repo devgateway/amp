@@ -14,70 +14,70 @@ import org.apache.wicket.model.IModel;
  */
 public class AmpCheckBoxFieldPanel extends AmpFieldPanel<Boolean> {
 
-	protected CheckBox checkBox;
+    protected CheckBox checkBox;
 
-	/**
-	 * @param id
-	 * @param fmName
-	 * @param hideLabel
-	 */
-	public AmpCheckBoxFieldPanel(String id, String fmName, boolean hideLabel) {
-		this(id, null, fmName, hideLabel);
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * @param id
+     * @param fmName
+     * @param hideLabel
+     */
+    public AmpCheckBoxFieldPanel(String id, String fmName, boolean hideLabel) {
+        this(id, null, fmName, hideLabel);
+        // TODO Auto-generated constructor stub
+    }
 
-	public CheckBox getCheckBox() {
-		return checkBox;
-	}
+    public CheckBox getCheckBox() {
+        return checkBox;
+    }
 
-	/**
-	 * @param id
-	 * @param fmName
-	 * @param model
-	 */
-	public AmpCheckBoxFieldPanel(String id, String fmName, IModel<Boolean> model) {
-		this(id, model, fmName, false);
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * @param id
+     * @param fmName
+     * @param model
+     */
+    public AmpCheckBoxFieldPanel(String id, String fmName, IModel<Boolean> model) {
+        this(id, model, fmName, false);
+        // TODO Auto-generated constructor stub
+    }
 
     public AmpCheckBoxFieldPanel(String id, IModel<Boolean> model, String fmName, boolean hideLabel) {
         this(id, model, fmName, hideLabel, false);
     }
 
-	/**
-	 * @param id
-	 * @param model
-	 * @param fmName
-	 * @param hideLabel
-	 */
-	public AmpCheckBoxFieldPanel(String id, IModel<Boolean> model, String fmName, boolean hideLabel, boolean hideNewLine) {
-		super(id, model, fmName, hideLabel);
-		newLine.setVisible(!hideNewLine);
-		checkBox = new AjaxCheckBox("checkbox", model){
-			@Override
-			protected void onUpdate(AjaxRequestTarget arg0) {
+    /**
+     * @param id
+     * @param model
+     * @param fmName
+     * @param hideLabel
+     */
+    public AmpCheckBoxFieldPanel(String id, IModel<Boolean> model, String fmName, boolean hideLabel, boolean hideNewLine) {
+        super(id, model, fmName, hideLabel);
+        newLine.setVisible(!hideNewLine);
+        checkBox = new AjaxCheckBox("checkbox", model){
+            @Override
+            protected void onUpdate(AjaxRequestTarget arg0) {
                 onAjaxOnUpdate(arg0);
-			}
-		};
-		add(checkBox);
-	}
+            }
+        };
+        add(checkBox);
+    }
 
-	/**
-	 * @param id
-	 * @param fmName
-	 */
-	public AmpCheckBoxFieldPanel(String id, String fmName) {
-		this(id, null, fmName, false);
-	}
+    /**
+     * @param id
+     * @param fmName
+     */
+    public AmpCheckBoxFieldPanel(String id, String fmName) {
+        this(id, null, fmName, false);
+    }
 
-	/**
-	 * @param id
-	 * @param model
-	 * @param fmName
-	 */
-	public AmpCheckBoxFieldPanel(String id, IModel<Boolean> model, String fmName) {
-		this(id, model, fmName, false);
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * @param id
+     * @param model
+     * @param fmName
+     */
+    public AmpCheckBoxFieldPanel(String id, IModel<Boolean> model, String fmName) {
+        this(id, model, fmName, false);
+        // TODO Auto-generated constructor stub
+    }
 
 }

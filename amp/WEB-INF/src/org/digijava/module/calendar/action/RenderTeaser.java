@@ -56,74 +56,74 @@ public class RenderTeaser
     private static Logger logger = Logger.getLogger(RenderTeaser.class);
 
     public ActionForward execute(ComponentContext context,
-				 ActionMapping mapping,
-				 ActionForm form,
-				 HttpServletRequest request,
-				 HttpServletResponse response) throws
-	 IOException,
-	 ServletException {
+                 ActionMapping mapping,
+                 ActionForm form,
+                 HttpServletRequest request,
+                 HttpServletResponse response) throws
+     IOException,
+     ServletException {
 
-	CalendarForm calendForm = (CalendarForm) form;
+    CalendarForm calendForm = (CalendarForm) form;
 
-	ArrayList eventsList = new ArrayList();
-	ArrayList eventsListToday = new ArrayList();
-	List dbEventsList = null;
-	List dbEventsListToday = null;
-	CalendarSettings setting = null;
+    ArrayList eventsList = new ArrayList();
+    ArrayList eventsListToday = new ArrayList();
+    List dbEventsList = null;
+    List dbEventsListToday = null;
+    CalendarSettings setting = null;
 
-	int numOfItemsInTeaser = 0;
-	int numOfCharsInTitle = 0;
+    int numOfItemsInTeaser = 0;
+    int numOfCharsInTitle = 0;
 
-	User user = RequestUtils.getUser(request);
+    User user = RequestUtils.getUser(request);
 
-	try {
+    try {
 
-	    ModuleInstance moduleInstance = RequestUtils.getRealModuleInstance(
-		 request);
+        ModuleInstance moduleInstance = RequestUtils.getRealModuleInstance(
+         request);
 
-	    // set number of items in page
-	    numOfItemsInTeaser = moduleInstance.getNumberOfItemsInTeaser().
-		 intValue();
+        // set number of items in page
+        numOfItemsInTeaser = moduleInstance.getNumberOfItemsInTeaser().
+         intValue();
 
-	    // Get Current events
-	    dbEventsList = DbUtil.getCalendarEvents(ItemStatus.PUBLISHED,
-		 request, 0, numOfItemsInTeaser, false);
+        // Get Current events
+        dbEventsList = DbUtil.getCalendarEvents(ItemStatus.PUBLISHED,
+         request, 0, numOfItemsInTeaser, false);
 
-	    // Get Current events including future events
-	    dbEventsListToday = DbUtil.getCalendarEvents(ItemStatus.PUBLISHED,
-		 request, 0, numOfItemsInTeaser, true);
+        // Get Current events including future events
+        dbEventsListToday = DbUtil.getCalendarEvents(ItemStatus.PUBLISHED,
+         request, 0, numOfItemsInTeaser, true);
 
-	    // get Setting
-	    numOfCharsInTitle = DbUtil.getNumberOfCharsInTitle(moduleInstance.
-		 getSite().getSiteId(),
-		 moduleInstance.getInstanceName());
+        // get Setting
+        numOfCharsInTitle = DbUtil.getNumberOfCharsInTitle(moduleInstance.
+         getSite().getSiteId(),
+         moduleInstance.getInstanceName());
 
-	    if (dbEventsList != null) {
-		Iterator it = dbEventsList.iterator();
-		while (it.hasNext()) {
-		    CalendarTeaserItem item = (CalendarTeaserItem) it.next();
-		    item.setNumOfCharsInTitle(numOfCharsInTitle);
-		}
-	    }
-	    //
-	    if (dbEventsListToday != null) {
-		Iterator it = dbEventsListToday.iterator();
-		while (it.hasNext()) {
-		    CalendarTeaserItem item = (CalendarTeaserItem) it.next();
-		    item.setNumOfCharsInTitle(numOfCharsInTitle);
-		}
-	    }
+        if (dbEventsList != null) {
+        Iterator it = dbEventsList.iterator();
+        while (it.hasNext()) {
+            CalendarTeaserItem item = (CalendarTeaserItem) it.next();
+            item.setNumOfCharsInTitle(numOfCharsInTitle);
+        }
+        }
+        //
+        if (dbEventsListToday != null) {
+        Iterator it = dbEventsListToday.iterator();
+        while (it.hasNext()) {
+            CalendarTeaserItem item = (CalendarTeaserItem) it.next();
+            item.setNumOfCharsInTitle(numOfCharsInTitle);
+        }
+        }
 
-	}
-	catch (CalendarException ex) {
-	    logger.debug("Unable to get information from database ", ex);
-	    throw new ServletException(ex.getMessage(), ex);
-	}
+    }
+    catch (CalendarException ex) {
+        logger.debug("Unable to get information from database ", ex);
+        throw new ServletException(ex.getMessage(), ex);
+    }
 
-	calendForm.setNumOfItemsInTeaser(numOfItemsInTeaser);
-	calendForm.setEventsList(dbEventsList);
-	calendForm.setEventsListToday(dbEventsListToday);
+    calendForm.setNumOfItemsInTeaser(numOfItemsInTeaser);
+    calendForm.setEventsList(dbEventsList);
+    calendForm.setEventsListToday(dbEventsListToday);
 
-	return null;
+    return null;
     }
 }

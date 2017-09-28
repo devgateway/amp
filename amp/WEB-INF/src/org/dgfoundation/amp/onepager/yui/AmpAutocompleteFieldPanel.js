@@ -1,4 +1,4 @@
-YAHOO.widget.WicketAutoComplete = function(inputId, callbackUrl, containerId, toggleButtonId,indicatorId, useCache, isDisabled) {
+YAHOO.widget.WicketAutoComplete = function(inputId, callbackUrl, containerId, toggleButtonId,indicatorId, useCache, isDisabled, isRtl) {
     this.dataSource = new YAHOO.widget.WicketDataSource(callbackUrl);
     if(useCache) {
     	this.dataSource.maxCacheEntries = 100;
@@ -13,8 +13,20 @@ YAHOO.widget.WicketAutoComplete = function(inputId, callbackUrl, containerId, to
     this.autoComplete.animSpeed=0.5;
     this.autoComplete.minQueryLength=0;
     this.autoComplete.queryDelay=1;
-    //this.autoComplete.forceSelection=true;
     this.autoComplete.maxResultsDisplayed = 1000;
+    // if not RTL autocomplete by default snaps container to bottom-left corner of input element
+    if (isRtl) {
+		this.autoComplete.snapContainer = function() {
+			var oTextbox = this._elTextbox,
+			pos = YAHOO.util.Dom.getXY(oTextbox);
+
+            pos[0] = pos[0] - (this._elContainer.offsetWidth - oTextbox.offsetWidth);
+
+			pos[1] += YAHOO.util.Dom.get(oTextbox).offsetHeight + 2;
+			YAHOO.util.Dom.setXY(this._elContainer,pos);
+		};
+    }
+
     this.autoComplete.containerPopulateEvent.subscribe(function(sType, aArgs) {document.getElementById(inputId).focus();});
     this.autoComplete.formatEscapedResult = function(pResultData, pQuery, pResultMatch) {
     	var formatedResult;

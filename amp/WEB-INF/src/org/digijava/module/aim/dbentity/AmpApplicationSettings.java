@@ -8,7 +8,11 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.digijava.kernel.ampapi.endpoints.security.serializers.AmpApplicationSettingsSerializer;
+
 @SuppressWarnings("serial")
+@JsonSerialize(using = AmpApplicationSettingsSerializer.class)
 public class AmpApplicationSettings implements Serializable {
 
     private Long ampAppSettingsId;
@@ -16,11 +20,11 @@ public class AmpApplicationSettings implements Serializable {
     private AmpTeam team;
 
     private Integer defaultRecordsPerPage;
-    
+
     private Integer reportStartYear;
-    
+
     private Integer reportEndYear;
-    
+
     private AmpCurrency currency;
 
     private AmpFiscalCalendar fiscalCalendar;
@@ -34,13 +38,13 @@ public class AmpApplicationSettings implements Serializable {
     private AmpReports defaultTeamReport;
 
     private Integer defaultReportsPerPage;
-        
+
     private Integer allowAddTeamRes;
-    
+
     private Integer allowShareTeamRes; //across the workspaces
-    
+
     private Integer allowPublishingResources;
-    
+
     private Integer numberOfPagesToDisplay;
     
     public Boolean getShowAllCountries() {

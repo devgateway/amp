@@ -62,6 +62,8 @@ public class SiteUtils {
 
     private static Logger logger = Logger.getLogger(SiteUtils.class);
 
+    public static final long DEFAULT_SITE_ID = 3;
+
     /**
      * Returns Set of module names, which can be used on the site.
      * <b>Does not</b> include modules with only shared instances (for example,

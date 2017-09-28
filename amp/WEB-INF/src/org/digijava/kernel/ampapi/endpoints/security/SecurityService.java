@@ -11,11 +11,13 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
 import org.dgfoundation.amp.menu.MenuConstants;
 import org.dgfoundation.amp.menu.MenuItem;
 import org.dgfoundation.amp.menu.MenuUtils;
+import org.digijava.kernel.services.AmpVersionInfo;
+import org.digijava.kernel.services.AmpVersionService;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
+import org.digijava.kernel.util.SpringUtil;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.SecurityUtil;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -25,7 +27,9 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
-import org.w3c.dom.Document;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Security Endpoint related services like menu, footer, user
@@ -34,7 +38,6 @@ import org.w3c.dom.Document;
  */
 public class SecurityService {
 
-    private static final Logger logger = Logger.getLogger(SecurityService.class);
     private static String ampVersion;
     private static String releaseDate;
     
@@ -97,9 +100,9 @@ public class SecurityService {
      * @param isAdmin
      * @return
      */
-    public static JsonBean getFooter(String xmlFilePath, String siteUrl, boolean isAdmin) {
+    public static JsonBean getFooter(String siteUrl, boolean isAdmin) {
         JsonBean jsonItem = new JsonBean();
-        populateBuildValues(xmlFilePath);
+        populateBuildValues();
         Boolean trackingEnabled = FeaturesUtil
                 .getGlobalSettingValueBoolean(GlobalSettingsConstants.ENABLE_SITE_TRACKING);
         String siteId = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.TRACKING_SITE_ID);
@@ -129,33 +132,23 @@ public class SecurityService {
      * @param filePath the path to the xml file containing 'buildDate' and
      * 'ampVersion' values
      */
-    private static void populateBuildValues(String filePath) {
+    private static void populateBuildValues() {
         if (releaseDate == null || ampVersion == null) {
-            try {
-                DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-                DocumentBuilder builder = docFactory.newDocumentBuilder();
-                Document doc;
-                doc = builder.parse(filePath);
-                
-                ampVersion = doc.getDoctype().getEntities().getNamedItem("ampVersion").getTextContent();
-                releaseDate = doc.getDoctype().getEntities().getNamedItem("releaseDate").getTextContent();
-                
-                String buildSource = doc.getDoctype().getEntities().getNamedItem("buildSource").getTextContent();
-                String buildDate = doc.getDoctype().getEntities().getNamedItem("buildDate").getTextContent();
-                
-                // if buildSource is empty it shouldn't be added to the footer. 
-                // if buildDate is empty it shouldn't replace the release date.
-                // In PROD and STG this props should be empty
-                if (StringUtils.isNotEmpty(buildSource)) {
-                    ampVersion += buildSource;
-                }
-                
-                if (StringUtils.isNotEmpty(buildDate)) {
-                    releaseDate = buildDate;
-                }
-                
-            } catch (Exception e) {
-                logger.error("Couldn't parse xml file " + filePath, e);
+            AmpVersionService ampVersionService = SpringUtil.getBean(AmpVersionService.class);
+            AmpVersionInfo versionInfo = ampVersionService.getVersionInfo();
+
+            ampVersion = versionInfo.getAmpVersion();
+            releaseDate = versionInfo.getReleaseDate();
+
+            // if buildSource is empty it shouldn't be added to the footer.
+            // if buildDate is empty it shouldn't replace the release date.
+            // In PROD and STG this props should be empty
+            if (StringUtils.isNotEmpty(versionInfo.getBuildSource())) {
+                ampVersion += versionInfo.getBuildSource();
+            }
+
+            if (StringUtils.isNotEmpty(versionInfo.getBuildDate())) {
+                releaseDate = versionInfo.getBuildDate();
             }
         }
     }

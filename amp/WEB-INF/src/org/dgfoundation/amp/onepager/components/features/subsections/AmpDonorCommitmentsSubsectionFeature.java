@@ -36,8 +36,8 @@ public class AmpDonorCommitmentsSubsectionFeature extends AmpSubsectionFeatureFu
      * @throws Exception
      */
     public AmpDonorCommitmentsSubsectionFeature(String id,
-            final IModel<AmpFunding> model, String fmName, int transactionType) throws Exception {
-        super(id, fmName, model,Constants.COMMITMENT);
+            final IModel<AmpFunding> model, int transactionType) throws Exception {
+        super(id, AmpFundingItemFeaturePanel.FM_NAME_BY_TRANSACTION_TYPE.get(transactionType), model, transactionType);
         commitsTableFeature = new AmpDonorCommitmentsFormTableFeature("commitsTableFeature", model, "Commitments Table", transactionType);
         add(commitsTableFeature);
         

@@ -67,7 +67,6 @@ import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.dbentity.FundingInformationItem;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
-import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.ActivityVersionUtil;
@@ -75,7 +74,6 @@ import org.digijava.module.aim.util.ContactInfoUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.LuceneUtil;
-import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.contentrepository.exception.JCRSessionException;
 import org.digijava.module.contentrepository.helper.CrConstants;
@@ -88,8 +86,12 @@ import org.digijava.module.editor.util.DbUtil;
 import org.digijava.module.message.triggers.ActivityValidationWorkflowTrigger;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.Hibernate;
+import org.hibernate.LockMode;
+import org.hibernate.LockOptions;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 
 /**
  * Util class used to manipulate an activity
@@ -124,7 +126,7 @@ public class ActivityUtil {
 
         AmpActivityVersion oldA = am.getObject();
 
-        AmpActivityVersion newA = saveActivity(oldA, am.getTranslationHashMap().values(), ampCurrentMember, wicketSession.getSite(), wicketSession.getLocale(), sc.getRealPath("/"), draft, rejected, true);
+        AmpActivityVersion newA = saveActivity(oldA, am.getTranslationHashMap().values(), ampCurrentMember, wicketSession.getSite(), wicketSession.getLocale(), sc.getRealPath("/"), draft, SaveContext.activityForm(rejected));
 
         am.setObject(newA);
 
@@ -145,9 +147,9 @@ public class ActivityUtil {
      * @param draft
      * @param rejected
      */
-    public static AmpActivityVersion saveActivity(AmpActivityVersion oldA, Collection<AmpContentTranslation> values, AmpTeamMember ampCurrentMember, Site site, Locale locale, String rootRealPath, boolean draft, boolean rejected, boolean isActivityForm){
+    public static AmpActivityVersion saveActivity(AmpActivityVersion oldA, Collection<AmpContentTranslation> values, AmpTeamMember ampCurrentMember, Site site, Locale locale, String rootRealPath, boolean draft, SaveContext saveContext) {
         Session session;
-        if (isActivityForm) {
+        if (saveContext.getSource() == ActivitySource.ACTIVITY_FORM) {
             session = AmpActivityModel.getHibernateSession();
         } else {
             session = PersistenceManager.getSession();
@@ -155,11 +157,8 @@ public class ActivityUtil {
 
         boolean newActivity = oldA.getAmpActivityId() == null;
         AmpActivityVersion a=null;
-        try
-        {
-            a = saveActivityNewVersion(oldA, values,
-                    ampCurrentMember, draft, session, rejected, isActivityForm);
-
+        try {
+            a = saveActivityNewVersion(oldA, values, ampCurrentMember, draft, session, saveContext);
         } catch (Exception exception) {
             logger.error("Error saving activity:", exception); // Log the exception
             throw new RuntimeException("Can't save activity:", exception);
@@ -183,14 +182,14 @@ public class ActivityUtil {
      * saves a new version of an activity
      * returns newActivity
      */
-    public static AmpActivityVersion saveActivityNewVersion(AmpActivityVersion a, Collection<AmpContentTranslation> translations, 
-            AmpTeamMember ampCurrentMember, boolean draft, Session session, boolean rejected, boolean isActivityForm) throws Exception
+    public static AmpActivityVersion saveActivityNewVersion(AmpActivityVersion a,
+            Collection<AmpContentTranslation> translations, AmpTeamMember ampCurrentMember, boolean draft,
+            Session session, SaveContext context) throws Exception
     {
         //saveFundingOrganizationRole(a);
         AmpActivityVersion oldA = a;
         boolean newActivity = false;
-        boolean isImporter = ChangeType.IMPORT.name().equals(a.getChangeType());
-        
+
         if (a.getAmpActivityId() == null){
             a.setActivityCreator(ampCurrentMember);
             a.setActivityCreator(ampCurrentMember);
@@ -232,10 +231,11 @@ public class ActivityUtil {
 
         //is versioning activated?
         boolean createNewVersion = (draft == draftChange) && ActivityVersionUtil.isVersioningEnabled();
+        boolean isActivityForm = context.getSource() == ActivitySource.ACTIVITY_FORM;
         if (createNewVersion){
             try {
                 AmpActivityGroup tmpGroup = a.getAmpActivityGroup();
-                
+
                 a = ActivityVersionUtil.cloneActivity(a, ampCurrentMember);
                 //keeping session.clear() only for acitivity form as it was before
                 if (isActivityForm)
@@ -276,6 +276,9 @@ public class ActivityUtil {
         if (!newActivity){
             //existing activity
             //previousVersion for current activity
+            if (group.getAmpActivityLastVersion().getAmpActivityId().equals(a.getAmpActivityId())) {
+                forceVersionIncrement(session, group);
+            }
             group.setAmpActivityLastVersion(a);
             session.update(group);
         }
@@ -287,8 +290,8 @@ public class ActivityUtil {
         a.setModifiedDate(updatedDate);
         a.setModifiedBy(ampCurrentMember);
         
-        if (isActivityForm || isImporter) {
-            setActivityStatus(ampCurrentMember, draft, a, oldA, newActivity,rejected);
+        if (context.isUpdateActivityStatus()) {
+            setActivityStatus(ampCurrentMember, draft, a, oldA, newActivity, context.isRejected());
         }
         
         if (isActivityForm) {
@@ -341,6 +344,35 @@ public class ActivityUtil {
     }
 
     /**
+    /**
+     * Since none of the AmpActivityGroup properties are changed hibernate does not automatically increment the
+     * version. Yet activity can change and AmpActivityGroup would remains the same, thus forcing version
+     * increment explicitly.
+     */
+    private static void forceVersionIncrement(Session session, AmpActivityGroup group) {
+        session.buildLockRequest(new LockOptions(LockMode.OPTIMISTIC_FORCE_INCREMENT)).lock(group);
+    }
+
+    /**
+     * Checks if the activity is stale just by looking at ampActivityId. Used only for the case when new activity
+     * versions are created.
+     */
+    public static boolean isActivityStale(Long ampActivityId) {
+        Number activityCount = (Number) PersistenceManager.getSession().createCriteria(AmpActivityVersion.class)
+                .add(Restrictions.eq("ampActivityId", ampActivityId))
+                .setProjection(Projections.count("ampActivityId"))
+                .uniqueResult();
+
+        Number latestActivityCount = (Number) PersistenceManager.getSession().createCriteria(AmpActivityGroup.class)
+                .createAlias("ampActivityLastVersion", "a")
+                .add(Restrictions.eq("a.ampActivityId", ampActivityId))
+                .setProjection(Projections.count("a.ampActivityId"))
+                .uniqueResult();
+
+        return activityCount.longValue() == 1 && latestActivityCount.longValue() == 0;
+    }
+
+    /**
      * Remove funding items with null amount (that means that the form is missconfigured)
      * set updateDate for modified records
      * @param ampFundingDetailsIterator
@@ -375,12 +407,7 @@ public class ActivityUtil {
 
     private static void setActivityStatus(AmpTeamMember ampCurrentMember, boolean draft, AmpActivityFields a, AmpActivityVersion oldA, boolean newActivity,boolean rejected) {
         Long teamMemberTeamId=ampCurrentMember.getAmpTeam().getAmpTeamId();
-        ApplicationSettings appSettings = null;
-        if (TeamUtil.getCurrentMember() != null) {
-            appSettings = TeamUtil.getCurrentMember().getAppSettings();
-        }
-        String validation = appSettings != null ? appSettings.getValidation() : 
-            org.digijava.module.aim.util.DbUtil.getValidationFromTeamAppSettings(teamMemberTeamId);
+        String validation = org.digijava.module.aim.util.DbUtil.getValidationFromTeamAppSettings(teamMemberTeamId);
         
         //setting activity status....
         AmpTeamMemberRoles role = ampCurrentMember.getAmpMemberRole();
@@ -526,11 +553,11 @@ public class ActivityUtil {
 
     private static void updateComponentFunding(AmpActivityVersion a, Session session) {
         Set<AmpComponent> components = a.getComponents();
-        
+
         if (components == null) {
             return;
         }
-        
+
         Iterator<AmpComponent> componentIterator = components.iterator();
         while (componentIterator.hasNext()) {
             AmpComponent ampComponent = componentIterator.next();

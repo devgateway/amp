@@ -2644,7 +2644,7 @@ public class DEImportBuilder {
                         prop.setName(org.digijava.module.aim.helper.Constants.CONTACT_PROPERTY_NAME_EMAIL);
                         prop.setValue(email);
                         if (cont.getProperties() == null) {
-                            cont.setProperties(new HashSet<AmpContactProperty>());
+                            cont.setProperties(new TreeSet<>());
                         }
                         cont.getProperties().add(prop);
                     }

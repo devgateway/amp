@@ -65,8 +65,8 @@ public class AmpDonorDisbursementsSubsectionFeature extends
      * @throws Exception
      */
     public AmpDonorDisbursementsSubsectionFeature(String id,
-            final IModel<AmpFunding> model, String fmName, int transactionType) throws Exception {
-        super(id, fmName, model,Constants.DISBURSEMENT);
+            final IModel<AmpFunding> model, int transactionType) throws Exception {
+        super(id, AmpFundingItemFeaturePanel.FM_NAME_BY_TRANSACTION_TYPE.get(transactionType), model, transactionType);
         disbursementsTableFeature = new AmpDonorDisbursementsFormTableFeature("disbursementsTableFeature", model, "Disbursements Table", transactionType);
         add(disbursementsTableFeature);
         fundingOrgModel = new PropertyModel<AmpOrganisation>(model,"ampDonorOrgId");

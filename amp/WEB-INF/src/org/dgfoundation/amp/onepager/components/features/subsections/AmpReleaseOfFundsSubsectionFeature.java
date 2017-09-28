@@ -65,8 +65,8 @@ public class AmpReleaseOfFundsSubsectionFeature extends
      * @throws Exception
      */
     public AmpReleaseOfFundsSubsectionFeature(String id,
-            final IModel<AmpFunding> model, String fmName, int transactionType) throws Exception {
-        super(id, fmName, model);
+            final IModel<AmpFunding> model, int transactionType) throws Exception {
+        super(id, AmpFundingItemFeaturePanel.FM_NAME_BY_TRANSACTION_TYPE.get(transactionType), model);
         
         disbursementsTableFeature = new AmpReleaseOfFundsFormTableFeature("disbursementsTableFeature", model, "Release of Funds Table", transactionType);
         add(disbursementsTableFeature);

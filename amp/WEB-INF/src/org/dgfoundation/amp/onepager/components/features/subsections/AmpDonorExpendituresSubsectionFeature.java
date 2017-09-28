@@ -39,8 +39,8 @@ public class AmpDonorExpendituresSubsectionFeature extends
      * @throws Exception
      */
     public AmpDonorExpendituresSubsectionFeature(String id,
-            final IModel<AmpFunding> model, String fmName, int transactionType) throws Exception {
-        super(id, fmName, model,Constants.EXPENDITURE);
+            final IModel<AmpFunding> model, int transactionType) throws Exception {
+        super(id, AmpFundingItemFeaturePanel.FM_NAME_BY_TRANSACTION_TYPE.get(transactionType), model, transactionType);
         expTableFeature = new AmpDonorExpendituresFormTableFeature("expTableFeature", model, "Expenditures Table", transactionType);
         add(expTableFeature);
         

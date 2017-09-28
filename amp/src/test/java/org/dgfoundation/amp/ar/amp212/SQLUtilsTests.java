@@ -1,7 +1,5 @@
 package org.dgfoundation.amp.ar.amp212;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Set;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
@@ -15,10 +13,7 @@ import org.junit.Test;
  *
  */
 public class SQLUtilsTests extends AmpTestCase {
-    public SQLUtilsTests(String name) {
-        super(name);
-    }
-        
+
     /**
      * tests that SQLUtils fetches column types in the correct order and with the correct column types
      */

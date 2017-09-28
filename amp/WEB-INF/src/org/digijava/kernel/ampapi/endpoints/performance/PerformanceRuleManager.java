@@ -3,6 +3,7 @@ package org.digijava.kernel.ampapi.endpoints.performance;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -364,10 +365,16 @@ public final class PerformanceRuleManager {
     }
 
     public Set<AmpCategoryValue> getPerformanceIssuesFromActivity(AmpActivityVersion a) {
-        return a.getCategories().stream().filter(
-                acv -> acv.getAmpCategoryClass().getKeyName().equals(CategoryConstants.PERFORMANCE_ALERT_LEVEL_KEY))
-                .sorted()
-                .collect(Collectors.toSet());
+        Set<AmpCategoryValue> issues = new HashSet<>();
+        
+        if (a.getCategories() != null) {
+            issues = a.getCategories().stream().filter(
+                    acv -> acv.getAmpCategoryClass().getKeyName().equals(CategoryConstants.PERFORMANCE_ALERT_LEVEL_KEY))
+                    .sorted()
+                    .collect(Collectors.toSet());
+        }
+        
+        return issues;
     }
 
     public void updatePerformanceIssuesInActivity(AmpActivityVersion a, Set<AmpCategoryValue> from, 

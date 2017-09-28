@@ -19,7 +19,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -28,7 +27,6 @@ import javax.jcr.RepositoryException;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
@@ -257,7 +255,7 @@ public class ActivityUtil {
         updateComponentFunding(a, session);
         saveAnnualProjectBudgets(a, session);
         saveProjectCosts(a, session);
-        updatePerformanceIssue(a);
+        updatePerformanceIssues(a);
     
         if (createNewVersion){
             //a.setAmpActivityId(null); //hibernate will save as a new version

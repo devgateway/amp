@@ -38,6 +38,7 @@ public class InputValidatorProcessor {
             add(new PrimaryContactValidator());
             add(new AgreementCodeValidator());
             add(new AgreementTitleValidator());
+            add(new FundingOrgRolesValidator());
             }};
     
     /**

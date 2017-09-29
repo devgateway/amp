@@ -19,11 +19,14 @@ import org.apache.wicket.validation.validator.RangeValidator;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
 import org.dgfoundation.amp.onepager.components.AmpOrgRoleSelectorComponent;
+import org.dgfoundation.amp.onepager.components.FundingListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
+import org.dgfoundation.amp.onepager.events.FreezingUpdateEvent;
+import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
@@ -62,7 +65,7 @@ public class AmpReleaseOfFundsFormTableFeature extends
             }
         };      
         
-        list = new ListEditor<AmpFundingDetail>("listDisbursements", setModel, FundingDetailComparator
+        list = new FundingListEditor<AmpFundingDetail>("listDisbursements", setModel, FundingDetailComparator
                 .getFundingDetailComparator()) {
 
             @Override
@@ -71,7 +74,8 @@ public class AmpReleaseOfFundsFormTableFeature extends
                 item.add(getAdjustmentTypeComponent(item.getModel(), transactionType));
                 AmpFundingAmountComponent amountComponent = getFundingAmountComponent(item.getModel());
                 item.add(amountComponent);
-
+                addFreezingvalidator(item);
+                item.add(UpdateEventBehavior.of(FreezingUpdateEvent.class));
                 AmpTextFieldPanel<Float> capitalSpendingPercentage = new AmpTextFieldPanel<Float>(
                                         "capitalSpendingPercentage",
                                         new PropertyModel<Float>(item.getModel(), "capitalSpendingPercentage"), "Capital Spending Percentage", false, false);

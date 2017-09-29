@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -26,12 +27,15 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessages;
 import org.apache.wicket.util.lang.Bytes;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
+import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponseDocument;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.DocumentUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.RepairDbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
@@ -469,8 +473,8 @@ public class DocumentManager extends Action {
         HashMap<String,CrDocumentNodeAttributes> uuidMapOrg     = CrDocumentNodeAttributes.getPublicDocumentsMap(false);
         HashMap<String,CrDocumentNodeAttributes> uuidMapVer     = CrDocumentNodeAttributes.getPublicDocumentsMap(true);
         
-        Collection<String> PledgeDocumentsUuids = FundingPledges.getPledgeDocumentUuids();
-        
+        Collection<String> pledgeDocumentsUuids = FundingPledges.getPledgeDocumentUuids();
+        List<String> gpiSupportiveDocuments = DocumentUtil.getAllSupportiveDocumentsUUID();
         
         Boolean hasMakePublicRights     = DocumentManagerRights.hasMakePublicRights(request);
         
@@ -480,6 +484,20 @@ public class DocumentManager extends Action {
                 Node baseNode=documentNode; //in case document node last version should be hidden and another should be shown
                 String documentNodeBaseVersionUUID=documentNode.getUUID();
                 
+                System.out.println(documentNodeBaseVersionUUID);
+                /*
+                 
+                pledge documents aren't workspace-bound and therefore can only be added or removed from the pledge itself
+                this sounds a bit underdesigned, though, and in my honest opinion should be revised with the whole 
+                document management concept
+                
+                gpi survey documents shouldn't be visible as well
+                
+                */
+                if (gpiSupportiveDocuments.contains(documentNodeBaseVersionUUID)
+                        || pledgeDocumentsUuids.contains(documentNodeBaseVersionUUID)) {
+                    continue;
+                }
                 
                 /**
                  * If this version of node is pending to be approved, then it should be visible only to the creator of the node or the TL
@@ -540,20 +558,6 @@ public class DocumentManager extends Action {
                 
                 String uuid                     = documentNode.getUUID();
                 boolean isPublicVersion     = uuidMapVer.containsKey(uuid);
-                
-                /*
-                 
-                pledge documents aren't workspace-bound and therefore can only be added or removed from the pledge itself
-                this sounds a bit underdesigned, though, and in my honest opinion should be revised with the whole 
-                document management concept
-                
-                */
-                if (PledgeDocumentsUuids.contains(uuid))
-                    continue;
-                
-                
-                
-                
                 
                 if ( isPublicVersion ) { // This document is public and exactly this version is the public one
                         hasViewRights           = true;

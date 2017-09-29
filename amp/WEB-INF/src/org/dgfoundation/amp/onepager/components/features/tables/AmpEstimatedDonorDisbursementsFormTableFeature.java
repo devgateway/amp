@@ -19,11 +19,14 @@ import org.apache.wicket.validation.validator.RangeValidator;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
 import org.dgfoundation.amp.onepager.components.AmpOrgRoleSelectorComponent;
+import org.dgfoundation.amp.onepager.components.FundingListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
+import org.dgfoundation.amp.onepager.events.FreezingUpdateEvent;
+import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
@@ -62,21 +65,24 @@ public class AmpEstimatedDonorDisbursementsFormTableFeature extends
             }
         };      
         
-        list = new ListEditor<AmpFundingDetail>("listDisbursements", setModel, FundingDetailComparator
+        list = new FundingListEditor<AmpFundingDetail>("listDisbursements", setModel, FundingDetailComparator
                 .getFundingDetailComparator()) {
 
             @Override
             protected void onPopulateItem(
                     org.dgfoundation.amp.onepager.components.ListItem<AmpFundingDetail> item) {
                 item.add(getAdjustmentTypeComponent(item.getModel(), transactionType));
+                addFreezingvalidator(item);
                 AmpFundingAmountComponent amountComponent = getFundingAmountComponent(item.getModel());
                 item.add(amountComponent);
-
+                addFreezingvalidator(item);
+                item.add(UpdateEventBehavior.of(FreezingUpdateEvent.class));                
                 AmpTextFieldPanel<Float> capitalSpendingPercentage = new AmpTextFieldPanel<Float>(
                                         "capitalSpendingPercentage",
                                         new PropertyModel<Float>(item.getModel(), "capitalSpendingPercentage"), "Capital Spending Percentage", false, false);
                 capitalSpendingPercentage.getTextContainer().add(new RangeValidator<Float>(0f, 100f));
                 capitalSpendingPercentage.getTextContainer().add(new AttributeModifier("size", new Model<String>("5")));
+                capitalSpendingPercentage.setAffectedByFreezing(false);
                 item.add(capitalSpendingPercentage);
 
                 AmpSelectFieldPanel<String> disbOrdIdSelector = new AmpSelectFieldPanel<String>("disbOrderId",
@@ -100,6 +106,7 @@ public class AmpEstimatedDonorDisbursementsFormTableFeature extends
                         "Contract", false, true, null, false);
                 
                 contractSelector.getChoiceContainer().add(new AttributeAppender("style", new Model<String>("width: "+SELECTOR_SIZE+"px")));
+                contractSelector.setAffectedByFreezing(false);
                 item.add(contractSelector);
                 
                 IModel<List<FundingPledges>> pledgesModel = new LoadableDetachableModel<List<FundingPledges>>() {
@@ -120,6 +127,7 @@ public class AmpEstimatedDonorDisbursementsFormTableFeature extends
                             }
                         }, false);
                 pledgeSelector.getChoiceContainer().add(new AttributeAppender("style", new Model<String>("width: "+SELECTOR_SIZE+"px")));
+                pledgeSelector.setAffectedByFreezing(false);
                 item.add(pledgeSelector);
                 item.add(new ListEditorRemoveButton("delDisbursement", "Delete Disbursement"){
                     protected void onClick(final org.apache.wicket.ajax.AjaxRequestTarget target) {

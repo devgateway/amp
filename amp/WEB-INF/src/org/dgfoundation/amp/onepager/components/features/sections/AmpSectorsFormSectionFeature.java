@@ -4,6 +4,8 @@
 */
 package org.dgfoundation.amp.onepager.components.features.sections;
 
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 import org.apache.wicket.markup.repeater.RepeatingView;
@@ -38,7 +40,9 @@ public class AmpSectorsFormSectionFeature extends AmpFormSectionFeaturePanel {
         RepeatingView view = new RepeatingView("allSectorsTables");
         view.setOutputMarkupId(true);
         add(view);
-        List<AmpClassificationConfiguration> allClassificationConfigs = SectorUtil.getAllClassificationConfigs();
+
+        List<AmpClassificationConfiguration> allClassificationConfigs = SectorUtil.getAllClassificationConfigsOrdered();
+
         for (AmpClassificationConfiguration sectorConf : allClassificationConfigs) {
             AmpSectorsFormTableFeature sectorsTable=new AmpSectorsFormTableFeature(view.newChildId(), sectorConf.getName()+" Sectors", am,sectorConf);
             view.add(sectorsTable); 

@@ -40,6 +40,7 @@ import org.dgfoundation.amp.onepager.components.features.items.AmpFundingGroupFe
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpOverviewSection;
 import org.dgfoundation.amp.onepager.events.DonorFundingRolesEvent;
+import org.dgfoundation.amp.onepager.events.GPINiSurveyListUpdateEvent;
 import org.dgfoundation.amp.onepager.events.OrganisationUpdateEvent;
 import org.dgfoundation.amp.onepager.models.AmpFundingGroupModel;
 import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
@@ -218,7 +219,9 @@ public class AmpDonorFundingFormSectionFeature extends
                     break;
                 }
             }
+            
             send(getPage(), Broadcast.BREADTH, new OrganisationUpdateEvent(target));
+            send(getPage(), Broadcast.BREADTH, new GPINiSurveyListUpdateEvent(target));
         }
     }
 

@@ -124,4 +124,11 @@ public class Quarter {
         return calendar.getTime();
     }
 
+    public String getYearCode() {
+        return yearCode;
+    }
+
+    public void setYearCode(String yearCode) {
+        this.yearCode = yearCode;
+    }
 }

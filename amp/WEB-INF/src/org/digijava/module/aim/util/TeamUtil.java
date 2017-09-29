@@ -481,7 +481,7 @@ public class TeamUtil {
                                              .getAmpTeamId());
                 qryStr = "select count(*) from "
                     + AmpTeamMember.class.getName() + " t "
-                    + "where (t.ampTeam=:teamId)";
+                    + "where (t.deleted is null or t.deleted = false) and (t.ampTeam=:teamId)";
                 qry = session.createQuery(qryStr);
                 qry.setParameter("teamId", team.getAmpTeamId(), LongType.INSTANCE);
                 Iterator itr1 = qry.list().iterator();
@@ -634,7 +634,7 @@ public class TeamUtil {
         return teamExist;
     }
 
-    public static boolean membersExist(Long teamId) {
+    public static boolean membersExist(Long teamId, boolean justRemoved) {
         boolean memExist = false;
         Session session = null;
         String qryStr = null;
@@ -642,20 +642,24 @@ public class TeamUtil {
 
         try {
             session = PersistenceManager.getSession();
-            qryStr = "select count(*) from " + AmpTeamMember.class.getName()
-                + " tm" + " where (tm.ampTeam=:teamId)";
+            qryStr = "select count(*) from " + AmpTeamMember.class.getName() + " tm where ";
+            if (justRemoved) {
+                qryStr += " (tm.deleted = true) and ";
+            }
+            qryStr += " (tm.ampTeam=:teamId)";
             qry = session.createQuery(qryStr);
             qry.setParameter("teamId", teamId, LongType.INSTANCE);
 
             Iterator itr = qry.list().iterator();
-            if(itr.hasNext()) {
+            if (itr.hasNext()) {
                 Integer cnt = (Integer) itr.next();
                 logger.info("cnt.intValue = " + cnt.intValue());
-                if(cnt.intValue() > 0)
+                if (cnt.intValue() > 0) {
                     memExist = true;
+                }
             }
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
         return memExist;
@@ -911,18 +915,19 @@ public class TeamUtil {
 
         try {
             session = PersistenceManager.getRequestDBSession();
-            qryStr ="select tm  from "
-                    + AmpTeamMember.class.getName() 
-                    + " tm inner join tm.ampTeam t "+
-                    " inner join tm.user u where u.email=:email and t.ampTeamId=:teamId";
-         
+            qryStr = "select tm  from "
+                    + AmpTeamMember.class.getName()
+                    + " tm inner join tm.ampTeam t "
+                    + " inner join tm.user u where (tm.deleted is null or tm.deleted = false) and u.email=:email "
+                    +" and t.ampTeamId=:teamId";
+
             qry = session.createQuery(qryStr);
             qry.setString("email", email);
             qry.setLong("teamId", teamId);
-            if(qry.list()==null||qry.list().size()==0){
-               memberExist=false;
+            if (qry.list() == null || qry.list().size() == 0) {
+                memberExist = false;
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
         return memberExist;
@@ -1903,7 +1908,11 @@ public class TeamUtil {
      * @return
      */
     public static TeamMember getCurrentMember(){
-        return (TeamMember) TLSUtils.getRequest().getSession().getAttribute("currentMember");
+        if (TLSUtils.getRequest() != null) {
+            return (TeamMember) TLSUtils.getRequest().getSession().getAttribute("currentMember");
+        } else {
+            return null;
+        }
     }
     
     /**

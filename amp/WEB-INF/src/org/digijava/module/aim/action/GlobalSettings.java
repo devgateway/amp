@@ -2,11 +2,9 @@ package org.digijava.module.aim.action;
 /*
 * @ author Govind G Dalwani
 */
-
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,11 +41,7 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.services.auditcleaner.AuditCleaner;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.currencyrates.CurrencyRatesService;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 public class GlobalSettings extends Action {
     private static Logger logger                = Logger.getLogger(GlobalSettings.class);
@@ -324,7 +318,7 @@ public class GlobalSettings extends Action {
 
     private List<KeyValue> getPossibleValues(String tableName) {
         List<KeyValue> ret = new ArrayList<>();
-        
+
         if (tableName == null || tableName.length() == 0)
             return ret;
 

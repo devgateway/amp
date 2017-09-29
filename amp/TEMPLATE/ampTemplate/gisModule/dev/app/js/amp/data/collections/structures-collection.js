@@ -53,6 +53,8 @@ module.exports = Backbone.Collection
       _.extend(payload, this.appData.filter.serialize());
     }
 
+    payload['performanceIssues'] = !this.appData.performanceToggleModel.get('isPerformanceToggleSelected');
+    
     /* get "settings" */
     // TODO: re-enable?? check for listener....?
     /*if (this.appData.settings) {
@@ -137,13 +139,13 @@ module.exports = Backbone.Collection
       .value();
   },
 
-  toGeoJSON: function() {
-    var featureList = this.map(function(model) {
+  toGeoJSON: function() {	
+    var featureList = this.map(function(model) {    	
       return {
         type: 'Feature',
         geometry: {
-          type: 'Point',
-          coordinates: [model.get('lng'), model.get('lat')]
+          type: model.get('geometryType'),
+          coordinates: model.get('coordinates'),
         },
         properties: model.attributes  // not toJSON() for performance
       };

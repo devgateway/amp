@@ -11,47 +11,47 @@ import org.digijava.module.contentrepository.helper.ObjectReferringDocument;
  *
  */
 public class CrDocumentsToOrganisations extends ObjectReferringDocument {
-	
-	private Long id;
-	private AmpOrganisation ampOrganisation;
-	
-	public CrDocumentsToOrganisations(){
-		;
-	}
+    
+    private Long id;
+    private AmpOrganisation ampOrganisation;
+    
+    public CrDocumentsToOrganisations(){
+        ;
+    }
 
-	public CrDocumentsToOrganisations(String uuid,
-			AmpOrganisation ampOrganisation) {
-		super(uuid);
-		this.ampOrganisation = ampOrganisation;
-	}
+    public CrDocumentsToOrganisations(String uuid,
+            AmpOrganisation ampOrganisation) {
+        super(uuid);
+        this.ampOrganisation = ampOrganisation;
+    }
 
-	/**
-	 * @return the ampOrganisation
-	 */
-	public AmpOrganisation getAmpOrganisation() {
-		return ampOrganisation;
-	}
+    /**
+     * @return the ampOrganisation
+     */
+    public AmpOrganisation getAmpOrganisation() {
+        return ampOrganisation;
+    }
 
-	/**
-	 * @param ampOrganisation the ampOrganisation to set
-	 */
-	public void setAmpOrganisation(AmpOrganisation ampOrganisation) {
-		this.ampOrganisation = ampOrganisation;
-	}
+    /**
+     * @param ampOrganisation the ampOrganisation to set
+     */
+    public void setAmpOrganisation(AmpOrganisation ampOrganisation) {
+        this.ampOrganisation = ampOrganisation;
+    }
 
-	/**
-	 * @return the id
-	 */
-	public Long getId() {
-		return id;
-	}
+    /**
+     * @return the id
+     */
+    public Long getId() {
+        return id;
+    }
 
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(Long id) {
-		this.id = id;
-	}
-	
-	
+    /**
+     * @param id the id to set
+     */
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
+    
 }

@@ -31,14 +31,14 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
  */
 public class AddNewLocation extends Action {
 
-	private static final Logger logger = Logger.getLogger(AddNewLocation.class);
+    private static final Logger logger = Logger.getLogger(AddNewLocation.class);
     public ActionForward execute(ActionMapping mapping,
             ActionForm form,
             HttpServletRequest request,
             HttpServletResponse response) throws java.lang.Exception {
         
-    	ActionMessages errors = new ActionMessages();
-    	
+        ActionMessages errors = new ActionMessages();
+        
         NewAddLocationForm addRegForm = (NewAddLocationForm) form;
 
         String event = addRegForm.getEvent();
@@ -167,18 +167,18 @@ public class AddNewLocation extends Action {
     }
     
     private Collection <AmpLocationIndicatorValue> getIndicatorValuesListForCategory (Long id,AmpCategoryValueLocations location) {
-    	 List <AmpIndicatorLayer> indicatorLayerList = DynLocationManagerUtil.getIndicatorByCategoryValueId (location.getParentCategoryValue().getId());
-    	 List <AmpLocationIndicatorValue> values = DynLocationManagerUtil.getLocationIndicatorValueByLocation (location);
-    	 Map <Long,AmpLocationIndicatorValue> indicatorValueMap = new HashMap<Long,AmpLocationIndicatorValue>(); 
-    	 for (AmpIndicatorLayer indicator:indicatorLayerList) {
-         	AmpLocationIndicatorValue value = new AmpLocationIndicatorValue();
-         	value.setLocation(location);
-         	value.setIndicator(indicator);
-         	indicatorValueMap.put(indicator.getId(),value);
+         List <AmpIndicatorLayer> indicatorLayerList = DynLocationManagerUtil.getIndicatorByCategoryValueId (location.getParentCategoryValue().getId());
+         List <AmpLocationIndicatorValue> values = DynLocationManagerUtil.getLocationIndicatorValueByLocation (location);
+         Map <Long,AmpLocationIndicatorValue> indicatorValueMap = new HashMap<Long,AmpLocationIndicatorValue>(); 
+         for (AmpIndicatorLayer indicator:indicatorLayerList) {
+            AmpLocationIndicatorValue value = new AmpLocationIndicatorValue();
+            value.setLocation(location);
+            value.setIndicator(indicator);
+            indicatorValueMap.put(indicator.getId(),value);
          }
-    	 for (AmpLocationIndicatorValue value: values) {
-    		 indicatorValueMap.put(value.getIndicator().getId(), value);
-    	 }
-    	 return indicatorValueMap.values();
+         for (AmpLocationIndicatorValue value: values) {
+             indicatorValueMap.put(value.getIndicator().getId(), value);
+         }
+         return indicatorValueMap.values();
     }
 }

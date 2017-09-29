@@ -78,29 +78,29 @@ public class DataFreezeEndPoints implements ErrorReportingEndpoint {
      *            - data freeze event object
      * @return
      */
-	@POST
-	@Path("event")
-	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = false, id = "saveDataFreezeEvent", authTypes = { AuthRule.IN_ADMIN })
-	public JsonBean saveDataFreezeEvent(DataFreezeEvent dataFreezeEvent) {
-		return DataFreezeService.saveDataFreezeEvent(dataFreezeEvent);
-	}
+    @POST
+    @Path("event")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = false, id = "saveDataFreezeEvent", authTypes = { AuthRule.IN_ADMIN })
+    public JsonBean saveDataFreezeEvent(DataFreezeEvent dataFreezeEvent) {
+        return DataFreezeService.saveDataFreezeEvent(dataFreezeEvent);
+    }
 
-	/**
+    /**
      * Deletes an data freeze event
      * @param id unique identifier used to find the data freeze event in the database
      */
-	@DELETE
-	@Path("event/{id}")
-	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = false, id = "deleteDataFreezeEvent", authTypes = { AuthRule.IN_ADMIN })
-	public void deleteDataFreezeEvent(@PathParam("id") long id) {
-		DataFreezeService.deleteDataFreezeEvent(id);
-	}
+    @DELETE
+    @Path("event/{id}")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = false, id = "deleteDataFreezeEvent", authTypes = { AuthRule.IN_ADMIN })
+    public void deleteDataFreezeEvent(@PathParam("id") long id) {
+        DataFreezeService.deleteDataFreezeEvent(id);
+    }
 
-	/**
-	 * Retrieves a data freeze event object
-	 *<h3>Sample Output:</h3>
+    /**
+     * Retrieves a data freeze event object
+     *<h3>Sample Output:</h3>
      * <pre>
      * {
      *      "ampDataFreezeSettingsId" : 31,
@@ -116,20 +116,20 @@ public class DataFreezeEndPoints implements ErrorReportingEndpoint {
      *      "filters" : null
      * }
      * </pre>
-	 * @param id unique identifier used to find the data freeze event in the database
-	 * @return
-	 */
-	@GET
-	@Path("event/{id}")
-	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = false, id = "fetchDataFreezeEvent", authTypes = { AuthRule.IN_ADMIN })
-	public AmpDataFreezeSettings fetchDataFreezeEvent(@PathParam("id") long id) {
-		return DataFreezeService.fetchOneDataFreezeEvent(id);
-	}
+     * @param id unique identifier used to find the data freeze event in the database
+     * @return
+     */
+    @GET
+    @Path("event/{id}")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = false, id = "fetchDataFreezeEvent", authTypes = { AuthRule.IN_ADMIN })
+    public AmpDataFreezeSettings fetchDataFreezeEvent(@PathParam("id") long id) {
+        return DataFreezeService.fetchOneDataFreezeEvent(id);
+    }
 
-	/**
-	 * Retrieves a list of data freeze event objects
-	 * <h3>Sample Output:</h3>
+    /**
+     * Retrieves a list of data freeze event objects
+     * <h3>Sample Output:</h3>
      * <pre>
      * {
      *     "totalRecords" : 2,
@@ -165,59 +165,59 @@ public class DataFreezeEndPoints implements ErrorReportingEndpoint {
      *               ]
      *  }
      * </pre>
-	 * @param offset first element in list
-	 * @param count maximum number of records to return
-	 * @param orderBy field that will be used for sorting
-	 * @param sort asc or desc order
-	 * @return
-	 */
-	@GET
-	@Path("event/list")
-	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = false, id = "fetchDataFreezeEventList", authTypes = { AuthRule.IN_ADMIN })
-	public Page<DataFreezeEvent> fetchDataFreezeEventList(@QueryParam("offset") Integer offset,
-			@QueryParam("count") Integer count, @QueryParam("orderby") String orderBy,
-			@QueryParam("sort") String sort) {
-		return DataFreezeService.fetchDataFreezeEventList(offset, count, orderBy, sort);
-	}
-	
-	/**
-	 * Gets an object containing the freeze date of the latest freeze event 
-	 * and number of activities affected the event.
-	 * <h3>Sample Output:</h3>
+     * @param offset first element in list
+     * @param count maximum number of records to return
+     * @param orderBy field that will be used for sorting
+     * @param sort asc or desc order
+     * @return
+     */
+    @GET
+    @Path("event/list")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = false, id = "fetchDataFreezeEventList", authTypes = { AuthRule.IN_ADMIN })
+    public Page<DataFreezeEvent> fetchDataFreezeEventList(@QueryParam("offset") Integer offset,
+            @QueryParam("count") Integer count, @QueryParam("orderby") String orderBy,
+            @QueryParam("sort") String sort) {
+        return DataFreezeService.fetchDataFreezeEventList(offset, count, orderBy, sort);
+    }
+    
+    /**
+     * Gets an object containing the freeze date of the latest freeze event 
+     * and number of activities affected the event.
+     * <h3>Sample Output:</h3>
      * <pre>
-	 *  {
+     *  {
      *      "freezingDate" : 2017-08-30,
      *      "freezingCount" : 345
      *  }
-	 * </pre>
-	 * @return
-	 */
-	@GET
-	@Path("event/list-frozen-activities")
-	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = false, id = "fetchFrozenActivities", authTypes = { AuthRule.IN_ADMIN })
-	public JsonBean fetchFrozenActivities() {
-		return DataFreezeService.getFronzeActivitiesInformation();
-	}
+     * </pre>
+     * @return
+     */
+    @GET
+    @Path("event/list-frozen-activities")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = false, id = "fetchFrozenActivities", authTypes = { AuthRule.IN_ADMIN })
+    public JsonBean fetchFrozenActivities() {
+        return DataFreezeService.getFronzeActivitiesInformation();
+    }
    
-	/**
+    /**
     * Disables all freeze events 
     */
-	@POST
-	@Path("event/unfreeze-all")
-	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = false, id = "unfreezeAll", authTypes = { AuthRule.IN_ADMIN })
-	public void unfreezeAll(JsonBean data) {
-		DataFreezeService.unfreezeAll();
-	}
+    @POST
+    @Path("event/unfreeze-all")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = false, id = "unfreezeAll", authTypes = { AuthRule.IN_ADMIN })
+    public void unfreezeAll(JsonBean data) {
+        DataFreezeService.unfreezeAll();
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Class getErrorsClass() {
-		return DataFreezeEndPoints.class;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Class getErrorsClass() {
+        return DataFreezeEndPoints.class;
+    }
 
 }

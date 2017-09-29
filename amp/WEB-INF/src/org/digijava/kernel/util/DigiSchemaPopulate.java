@@ -187,14 +187,14 @@ class DigiInitUtil {
     }
 
     static boolean process(String path) {
-    	StringBuffer szFInput=new StringBuffer();
+        StringBuffer szFInput=new StringBuffer();
         String s;
         String[] commands;
 
         try {
             BufferedReader in = new BufferedReader(new FileReader(path));
             while ( (s = in.readLine()) != null) {
-            	
+                
                 szFInput.append(s).append('\n');
             }
             in.close();

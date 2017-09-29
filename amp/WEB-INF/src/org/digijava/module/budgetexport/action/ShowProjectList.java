@@ -19,7 +19,7 @@ import java.util.List;
  * Time: 3:05 PM
  */
 public class ShowProjectList extends Action {
-    private static Logger logger	= Logger.getLogger(ShowProjectList.class);
+    private static Logger logger    = Logger.getLogger(ShowProjectList.class);
 
     public ActionForward execute(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {

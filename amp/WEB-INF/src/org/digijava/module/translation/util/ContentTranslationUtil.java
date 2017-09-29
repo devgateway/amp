@@ -62,7 +62,7 @@ public class ContentTranslationUtil {
      * @return true if the entity state was modified
      */
     public static boolean translateObject(Object obj, Serializable id, Object[] state, String[] propertyNames){
-    	boolean stateModified = false;
+        boolean stateModified = false;
         String currentLocale = TLSUtils.getEffectiveLangCode(); // TODO-CONSTANTIN, Arty, please review this change: effectiveLangCode is NEVER null
         if (currentLocale == null)
             return stateModified;
@@ -75,20 +75,20 @@ public class ContentTranslationUtil {
             InternationalizedModelDescription entityDescription = InternationalizedModelDescription.getForClass(obj.getClass());
             for(int i = 0; i < propertyNames.length; i++)
             {
-            	String fieldName = propertyNames[i];
-            	InternationalizedPropertyDescription prop = entityDescription.properties.get(fieldName);
-            	if (prop == null)
-            		continue; //this field is not internationalized
+                String fieldName = propertyNames[i];
+                InternationalizedPropertyDescription prop = entityDescription.properties.get(fieldName);
+                if (prop == null)
+                    continue; //this field is not internationalized
                 
-            	// get translations for current field
-            	String trnLocale = loadFieldTranslationInLocale(objClass, (Long)id, fieldName, currentLocale);
-            	if (trnLocale != null)
-            	{
-            		logger.debug("translate field from: " + state[i] + " to: " + trnLocale);
-            		//replace the value of the field with the translation in the current locale
-            		state[i] = trnLocale;
-            		stateModified = true;
-            	}
+                // get translations for current field
+                String trnLocale = loadFieldTranslationInLocale(objClass, (Long)id, fieldName, currentLocale);
+                if (trnLocale != null)
+                {
+                    logger.debug("translate field from: " + state[i] + " to: " + trnLocale);
+                    //replace the value of the field with the translation in the current locale
+                    state[i] = trnLocale;
+                    stateModified = true;
+                }
             }
         } catch (Exception e){
             logger.error("Can't translate object", e);
@@ -158,18 +158,18 @@ public class ContentTranslationUtil {
      * @param propertyName
      * @return
      */
-	public static Object getProperty(Object obj, String propertyName)
-	{
-		try{
-			Method methGetField = obj.getClass().getMethod("get" + Strings.capitalize(propertyName));
-			Object fieldValue = methGetField.invoke(obj);
-			return fieldValue;
-		}
-		catch(Exception e){
-			throw new RuntimeException(e);
-		}
-	}
-	
+    public static Object getProperty(Object obj, String propertyName)
+    {
+        try{
+            Method methGetField = obj.getClass().getMethod("get" + Strings.capitalize(propertyName));
+            Object fieldValue = methGetField.invoke(obj);
+            return fieldValue;
+        }
+        catch(Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+    
     /**
      * set a property of an object
      * @param obj
@@ -177,22 +177,22 @@ public class ContentTranslationUtil {
      * @param propertyValue
      * @return
      */
-	public static void setProperty(Object obj, String propertyName, Object propertyValue)
-	{
-		try{
-			Method methGetField = obj.getClass().getMethod("set" + Strings.capitalize(propertyName), propertyValue.getClass());
-			methGetField.invoke(obj, propertyValue);			
-		}
-		catch(Exception e){
-			throw new RuntimeException(e);
-		}
-	}
-	
-	public static boolean multilingualIsEnabled()
-	{
-		return "true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.MULTILINGUAL));
-	}
-	
+    public static void setProperty(Object obj, String propertyName, Object propertyValue)
+    {
+        try{
+            Method methGetField = obj.getClass().getMethod("set" + Strings.capitalize(propertyName), propertyValue.getClass());
+            methGetField.invoke(obj, propertyValue);            
+        }
+        catch(Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+    
+    public static boolean multilingualIsEnabled()
+    {
+        return "true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.MULTILINGUAL));
+    }
+    
     /**
      * Method that will clone the translations for all the translatable fields
      * in the current object; see [// item #00000001] for the place where the id's are used
@@ -205,7 +205,7 @@ public class ContentTranslationUtil {
     {
         //check if multilingual is enabled
         if (!multilingualIsEnabled())
-        	return;
+            return;
         cloneTranslations(obj, formTranslations, new HashSet<String>());
     }
     
@@ -219,7 +219,7 @@ public class ContentTranslationUtil {
      * and it should be empty at the first function call
      */
     private static void cloneTranslations(Object obj, Collection<AmpContentTranslation> formTranslations, Set<String> processed){
-    	Hibernate.initialize(obj);
+        Hibernate.initialize(obj);
         String objClass = getObjectClassName(obj);
         Long objId = getObjectId(obj);
         
@@ -270,37 +270,37 @@ public class ContentTranslationUtil {
                     Method methGetField = null;
                     try
                     {
-                    	methGetField = clazz.getMethod("get" + Strings.capitalize(fieldName));
+                        methGetField = clazz.getMethod("get" + Strings.capitalize(fieldName));
                     }
                     catch(NoSuchMethodException e)
                     {
-                    	// do nothing -> we won't process this field and that's it
+                        // do nothing -> we won't process this field and that's it
                     }
                     if (methGetField != null)
                     {
-                    	// no method -> no getter -> no need to clone translations
-                    	Collection collection = (Collection) methGetField.invoke(obj);
-                    	if (collection != null) {
-                    		for (Object o : collection) {
-                    			if (o.getClass().isAnnotationPresent(TranslatableClass.class) &&
+                        // no method -> no getter -> no need to clone translations
+                        Collection collection = (Collection) methGetField.invoke(obj);
+                        if (collection != null) {
+                            for (Object o : collection) {
+                                if (o.getClass().isAnnotationPresent(TranslatableClass.class) &&
                                     !o.getClass().isAssignableFrom(AmpActivityVersion.class) //not supported
                                     )
                                 cloneTranslations(o, formTranslations, processed);
-                    			else {
-                    				//we don't have mixed collections, no point in iterating forward through the collection
-                    				break;
-                    			}
-                    		}
-                    	}
+                                else {
+                                    //we don't have mixed collections, no point in iterating forward through the collection
+                                    break;
+                                }
+                            }
+                        }
                     }
                 }else if( field.getType().isAnnotationPresent(TranslatableClass.class) && Versionable.class.isAssignableFrom(field.getType())) { //scan deeper levels
-                	String fieldName = field.getName();
+                    String fieldName = field.getName();
                     Method methGetField = clazz.getMethod("get" + Strings.capitalize(fieldName));
                     Object o = methGetField.invoke(obj);
                      
-                	if(o!=null) {
-                		cloneTranslations(o, formTranslations, processed);
-                	}
+                    if(o!=null) {
+                        cloneTranslations(o, formTranslations, processed);
+                    }
                 }
             }
         } catch (Exception e){
@@ -323,10 +323,10 @@ public class ContentTranslationUtil {
      * @return true if we altered the object state in any way
      */
     public static boolean prepareTranslations(Object obj, Serializable id, Object[] previousState, Object[] currentState,
-    		String[] propertyNames){
-    	boolean stateModified = false;
+            String[] propertyNames){
+        boolean stateModified = false;
         boolean isVersionable = obj instanceof Versionable;
-    	//get new object id - hibernate already updated it
+        //get new object id - hibernate already updated it
         Long objectId = (Long)id;
         Class clazz = Hibernate.getClass(obj);
         String objectClass = clazz.getName();
@@ -337,40 +337,40 @@ public class ContentTranslationUtil {
                 translation and prepare for save all the FieldTranslationPack's in the database with the
                 new object id
              */
-        	InternationalizedModelDescription entityDescription = InternationalizedModelDescription.getForClass(clazz);
-            for (int i = 0; i < propertyNames.length; i++){            	
-            	String fieldName = propertyNames[i];
-            	InternationalizedPropertyDescription propertyDescription = entityDescription.properties.get(fieldName);
-            	if (propertyDescription == null)
-            		continue; // field not translated -> nothing to do
-            	Field field = propertyDescription.field;
-            	
-            	// all translateable fields are of type String, so comparing currentState[i].previousState[i] is ok  (they are both String instances)  
+            InternationalizedModelDescription entityDescription = InternationalizedModelDescription.getForClass(clazz);
+            for (int i = 0; i < propertyNames.length; i++){             
+                String fieldName = propertyNames[i];
+                InternationalizedPropertyDescription propertyDescription = entityDescription.properties.get(fieldName);
+                if (propertyDescription == null)
+                    continue; // field not translated -> nothing to do
+                Field field = propertyDescription.field;
+                
+                // all translateable fields are of type String, so comparing currentState[i].previousState[i] is ok  (they are both String instances)  
                 if ((previousState == null || (StringUtils.isNotBlank((String)currentState[i]) && !currentState[i].equals(previousState[i])))){
-                	// "field.getAnnotation(TranslatableField.class) != null" deleted from "if", as InternationalizedModelDescription only contains translateable fields
-                	FieldTranslationPack ftp;
+                    // "field.getAnnotation(TranslatableField.class) != null" deleted from "if", as InternationalizedModelDescription only contains translateable fields
+                    FieldTranslationPack ftp;
                     Long ftpId;
-                	if (isVersionable){ //if versionable we already cloned the translations
-                		//FTP already generated, just prepare it for save
-                		ftpId = Long.parseLong((String)currentState[i]); // item #00000001
-                	}
-                	else{ //not versionable entity => we don't alter the other translations
-                		//create FTP
-                		String value = (String)currentState[i];
+                    if (isVersionable){ //if versionable we already cloned the translations
+                        //FTP already generated, just prepare it for save
+                        ftpId = Long.parseLong((String)currentState[i]); // item #00000001
+                    }
+                    else{ //not versionable entity => we don't alter the other translations
+                        //create FTP
+                        String value = (String)currentState[i];
                         //insert a FieldTranslationPack with just one entry
                         FieldTranslationPack trnPack = new FieldTranslationPack(objectClass, fieldName);
                         trnPack.add(currentLocale, value);
                         ftpId = TranslationStore.insert(trnPack);
-                	}
+                    }
                     //retrieve the FieldTranslationPack from the store
                     ftp = TranslationStore.prepareForSave(ftpId, objectClass, objectId);
                     if (ftp == null)
-                    	throw new AssertionError("Can't get the field translation pack ... should be in the cache!");
+                        throw new AssertionError("Can't get the field translation pack ... should be in the cache!");
                     //restore the base translation to the current object
                     String baseTranslation = null;
                     if (isVersionable)
-                    	//base translation should be in the FTP
-                    	baseTranslation = ftp.getNonNullBaseTrn(getBaseLanguage(), currentLocale);
+                        //base translation should be in the FTP
+                        baseTranslation = ftp.getNonNullBaseTrn(getBaseLanguage(), currentLocale);
                     else
                         if (notInBaseLanguage()){
                             //for non-versionable entities just load the base translation from the db
@@ -378,7 +378,7 @@ public class ContentTranslationUtil {
                         }
 
                     if (baseTranslation == null){
-                    	logger.debug("Object without base translation");
+                        logger.debug("Object without base translation");
                         //create base translation for object
                         if (notInBaseLanguage()) //if we're in the base language we don't load the field
                             baseTranslation = (String) loadFieldFromDb(clazz, objectId, fieldName);
@@ -394,25 +394,25 @@ public class ContentTranslationUtil {
                     logger.debug("Updated base translation with: " + baseTranslation + " (currentlocale =" + TLSUtils.getLangCode() + ")");
                     if (previousState != null && previousState[i] != null){
                         //since we changed the object on load, we need to change the previous state to the db state
-                    	/**
-                    	 * AMP-17055: the Hibernate javadoc for onFlushDirty() says: It is strongly recommended that the interceptor not modify the previousState.
-                    	 * on the other hand, the commit for AMP-16296 specifically introduces these lines of code. 
-                    	 * The value written to previousState[] is, at some point in time, written by Hibernate to the database and then overwritten with a fresh value
-                    	 * AMP-17055 is happening because, when creating a new translateable entity from scratch inside a transaction:
-                    	 *  - a null value is written by this code into previousState[]
-                    	 *  - Hibernate fails to write the said null value to the database, but it fails because of a NotNull constraint on the column
-                    	 *  - it doesn't matter that Hibernate intends to overwrite the null value with a correct one afterwards - the INSERT fails, 
-                    	 *  so the whole transaction fails
-                    	 *  
-                    	 *  The Hibernate documentation is very fishy regarding why previousState[] shouldn't be modified; also I wasn't able to find any specification regarding the valid cases when it should
-                    	 *  fixing through a half-baked hack: will only write values IF THEY ALREADY EXIST IN THE DATABASE in the understanding/hope that:
-                    	 *   > they will be overwritten anyway
-                    	 *   > they will obey to any kind of constraints the column might have (probably not-null-only, as only strings are translateable and I can't imagine strings being used as FK's)
-                    	 *   > not writing a simple "if null" hack because other constraints might theorethically be used in the future (MAX-LENGTH etc)
-                    	 */
+                        /**
+                         * AMP-17055: the Hibernate javadoc for onFlushDirty() says: It is strongly recommended that the interceptor not modify the previousState.
+                         * on the other hand, the commit for AMP-16296 specifically introduces these lines of code. 
+                         * The value written to previousState[] is, at some point in time, written by Hibernate to the database and then overwritten with a fresh value
+                         * AMP-17055 is happening because, when creating a new translateable entity from scratch inside a transaction:
+                         *  - a null value is written by this code into previousState[]
+                         *  - Hibernate fails to write the said null value to the database, but it fails because of a NotNull constraint on the column
+                         *  - it doesn't matter that Hibernate intends to overwrite the null value with a correct one afterwards - the INSERT fails, 
+                         *  so the whole transaction fails
+                         *  
+                         *  The Hibernate documentation is very fishy regarding why previousState[] shouldn't be modified; also I wasn't able to find any specification regarding the valid cases when it should
+                         *  fixing through a half-baked hack: will only write values IF THEY ALREADY EXIST IN THE DATABASE in the understanding/hope that:
+                         *   > they will be overwritten anyway
+                         *   > they will obey to any kind of constraints the column might have (probably not-null-only, as only strings are translateable and I can't imagine strings being used as FK's)
+                         *   > not writing a simple "if null" hack because other constraints might theorethically be used in the future (MAX-LENGTH etc)
+                         */
                         List<Object> prevState = loadFieldFromDbList(clazz, objectId, fieldName);
                         if ((prevState != null) && (prevState.size() == 1))
-                        	previousState[i] = prevState.get(0); // AMP-17055: only overwrite value if it really existed in the database
+                            previousState[i] = prevState.get(0); // AMP-17055: only overwrite value if it really existed in the database
                     }
 
                 }
@@ -578,10 +578,10 @@ public class ContentTranslationUtil {
         if (clazz == null || id == null || fieldName == null)
             return null;
 
-    	List<Object> results = loadFieldFromDbList(clazz, id, fieldName);
-    	if (results != null && (results.size() == 1))
-    		return results.get(0);
-    	
+        List<Object> results = loadFieldFromDbList(clazz, id, fieldName);
+        if (results != null && (results.size() == 1))
+            return results.get(0);
+        
         return null;
     }
 
@@ -600,20 +600,20 @@ public class ContentTranslationUtil {
         if (clazz == null || id == null || fieldName == null)
             return null;
 
-    	StatelessSession session = null;
-    	try{        
-        	session =PersistenceManager.openNewStatelessSession(); //this does the trick, doesn't work when entity contains collections
-        	StringBuilder query = new StringBuilder();
-			query.append("select c.");
+        StatelessSession session = null;
+        try{        
+            session =PersistenceManager.openNewStatelessSession(); //this does the trick, doesn't work when entity contains collections
+            StringBuilder query = new StringBuilder();
+            query.append("select c.");
             query.append(fieldName);
             query.append(" from ");
-			query.append(clazz.getName());
-			String objIdField = getObjectIdField(clazz, PersistenceManager.sf());
-			query.append(" c where c.");
+            query.append(clazz.getName());
+            String objIdField = getObjectIdField(clazz, PersistenceManager.sf());
+            query.append(" c where c.");
             query.append(objIdField);
             query.append("=:id");
-			Query qry = session.createQuery(query.toString());
-			qry.setLong("id", id);
+            Query qry = session.createQuery(query.toString());
+            qry.setLong("id", id);
             return qry.list();
         } catch (Exception e) {
             logger.error("can't load object from database", e);
@@ -656,17 +656,17 @@ public class ContentTranslationUtil {
     public static void saveFieldTranslations(final Long newId,
             final FieldTranslationPack ftp) {
         PersistenceManager.getCurrentSession().doWork(
-        	new org.hibernate.jdbc.Work() {
-        		public void execute(Connection conn) throws SQLException {
-        			Session newSession = null;
-        			try {
-        				newSession = PersistenceManager.sf().withOptions().connection(conn).openSession();
+            new org.hibernate.jdbc.Work() {
+                public void execute(Connection conn) throws SQLException {
+                    Session newSession = null;
+                    try {
+                        newSession = PersistenceManager.sf().withOptions().connection(conn).openSession();
 
-        				String objClass = ftp.getObjClass();
-        				String fieldName = ftp.getFieldName();
+                        String objClass = ftp.getObjClass();
+                        String fieldName = ftp.getFieldName();
 
-        				// load the translations from db, not cache
-        				List<AmpContentTranslation> oldTrns = loadTranslations(newSession, objClass, newId, fieldName);
+                        // load the translations from db, not cache
+                        List<AmpContentTranslation> oldTrns = loadTranslations(newSession, objClass, newId, fieldName);
 
                         // first, delete all translations
                         for (AmpContentTranslation oldTrn : oldTrns) {
@@ -683,18 +683,18 @@ public class ContentTranslationUtil {
                             newSession.save(act);
                         }
 
-        				newSession.flush();
-        			} 
-        			catch (Exception e) {
-        				logger.error("can't save field translations", e);
-        				if (e.getCause() != null && e.getCause() instanceof SQLException && ((SQLException) e.getCause()).getNextException() != null)
-        					logger.error("Next exception: "+ ((SQLException) e.getCause()).getNextException());
-        			}
-        			finally {
-        				newSession.close();
-        			}
-        		}
-        	});
+                        newSession.flush();
+                    } 
+                    catch (Exception e) {
+                        logger.error("can't save field translations", e);
+                        if (e.getCause() != null && e.getCause() instanceof SQLException && ((SQLException) e.getCause()).getNextException() != null)
+                            logger.error("Next exception: "+ ((SQLException) e.getCause()).getNextException());
+                    }
+                    finally {
+                        newSession.close();
+                    }
+                }
+            });
     }
 
     public static AmpContentTranslation getByTypeObjidFieldLocale (List<AmpContentTranslation> allTrns,
@@ -756,7 +756,7 @@ public class ContentTranslationUtil {
         StringBuilder qs = new StringBuilder("from ").append(AmpContentTranslation.class.getName()).append(" ct");
 
         if (typesWhereClause != null) {
-        	qs.append(" where ct.objectClass in (").append(typesWhereClause).append(")");
+            qs.append(" where ct.objectClass in (").append(typesWhereClause).append(")");
         }
         qs.append(" order by ct.objectId");
 
@@ -764,10 +764,10 @@ public class ContentTranslationUtil {
     }
 
     public static List<String[]> getContentTrnUniqueTypesAndLangs() {
-    	StringBuilder qs = new StringBuilder("select distinct ct.objectClass, ct.locale from ").
-    			append(AmpContentTranslation.class.getName()).
-    			append(" ct");
-    	return (List<String[]>) PersistenceManager.getSession().createQuery(qs.toString()).list();
+        StringBuilder qs = new StringBuilder("select distinct ct.objectClass, ct.locale from ").
+                append(AmpContentTranslation.class.getName()).
+                append(" ct");
+        return (List<String[]>) PersistenceManager.getSession().createQuery(qs.toString()).list();
     }
 
     public static Collection<ContentTrnObjectType> getContentTranslationUniques() {
@@ -823,7 +823,7 @@ public class ContentTranslationUtil {
     }
 
     private static String getObjectIdField(Class clazz, SessionFactory sf){
-    	return sf.getClassMetadata(clazz).getIdentifierPropertyName();
+        return sf.getClassMetadata(clazz).getIdentifierPropertyName();
     }
 
     public static Long getObjectId(Object obj){
@@ -839,8 +839,8 @@ public class ContentTranslationUtil {
     }
 
     public static Class getObjectClass(Object obj) {
-    	return Hibernate.getClass(obj);
-    	//return obj.getClass();
+        return Hibernate.getClass(obj);
+        //return obj.getClass();
     }
     
     public static String getObjectClassName(Object obj){
@@ -868,7 +868,7 @@ public class ContentTranslationUtil {
 //    private static Field getFieldByName(Class<?> type, String name){
 //        for (Field field: type.getDeclaredFields()) {
 //            if (field.getName().equals(name))
-//            	return field;
+//              return field;
 //        }
 //
 //        if (type.getSuperclass() != null) {
@@ -883,7 +883,7 @@ public class ContentTranslationUtil {
                 DbUtil.saveOrUpdateObject(trn);
                 //update default entry in BaseLanguage - needed when multilingual is disabled 
                 if( getBaseLanguage().equalsIgnoreCase(trn.getLocale()) ){
-                	DbUtil.updateField(trn.getObjectClass(), trn.getObjectId(),trn.getFieldName(), trn.getTranslation() );
+                    DbUtil.updateField(trn.getObjectClass(), trn.getObjectId(),trn.getFieldName(), trn.getTranslation() );
                 }
             }
         } catch (Exception e) {

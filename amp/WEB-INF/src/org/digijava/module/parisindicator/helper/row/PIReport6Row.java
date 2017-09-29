@@ -9,22 +9,22 @@ import org.digijava.module.aim.dbentity.AmpOrgGroup;
  */
 public class PIReport6Row extends PIReportAbstractRow {
 
-	private AmpOrgGroup donorGroup;
-	private int[] years;
+    private AmpOrgGroup donorGroup;
+    private int[] years;
 
-	public AmpOrgGroup getDonorGroup() {
-		return donorGroup;
-	}
+    public AmpOrgGroup getDonorGroup() {
+        return donorGroup;
+    }
 
-	public void setDonorGroup(AmpOrgGroup donorGroup) {
-		this.donorGroup = donorGroup;
-	}
+    public void setDonorGroup(AmpOrgGroup donorGroup) {
+        this.donorGroup = donorGroup;
+    }
 
-	public int[] getYears() {
-		return years;
-	}
+    public int[] getYears() {
+        return years;
+    }
 
-	public void setYears(int[] year) {
-		this.years = year;
-	}
+    public void setYears(int[] year) {
+        this.years = year;
+    }
 }

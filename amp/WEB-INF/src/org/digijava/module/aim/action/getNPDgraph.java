@@ -86,19 +86,19 @@ public class getNPDgraph extends Action {
 
             response.setContentType("image/png");            
            
-    		Long teamId=TeamUtil.getCurrentTeam(request).getAmpTeamId();
-    		NpdSettings npdSettings=NpdUtil.getCurrentSettings(teamId);            
+            Long teamId=TeamUtil.getCurrentTeam(request).getAmpTeamId();
+            NpdSettings npdSettings=NpdUtil.getCurrentSettings(teamId);            
             Double angle=null;
             
             if(npdSettings.getAngle()!=null){
-        		CategoryPlot categoryplot = (CategoryPlot)chart.getPlot();
+                CategoryPlot categoryplot = (CategoryPlot)chart.getPlot();
                 CategoryAxis categoryaxis = categoryplot.getDomainAxis();
-            	angle=npdSettings.getAngle().intValue()*3.1415926535897931D/180D;
+                angle=npdSettings.getAngle().intValue()*3.1415926535897931D/180D;
                 categoryaxis.setCategoryLabelPositions(CategoryLabelPositions.createUpRotationLabelPositions(angle));
             }
             
-    		ChartUtilities.writeChartAsPNG(response.getOutputStream(), chart, npdSettings.getWidth().intValue(),
-            		npdSettings.getHeight().intValue(), info);
+            ChartUtilities.writeChartAsPNG(response.getOutputStream(), chart, npdSettings.getWidth().intValue(),
+                    npdSettings.getHeight().intValue(), info);
          
             //NpdGraphTooltipGenerator ttGen = new NpdGraphTooltipGenerator();
 
@@ -140,8 +140,8 @@ public class getNPDgraph extends Action {
                 int pos = Arrays.binarySearch(selectedIndicators, indicator.getIndicatorId().longValue());
 
                 if (pos >= 0) {
-                	//String key="aim:NPD:"+indicator.getName();
-                	String displayLabel = indicator.getName();
+                    //String key="aim:NPD:"+indicator.getName();
+                    String displayLabel = indicator.getName();
                     
                     
                     try {
@@ -248,7 +248,7 @@ public class getNPDgraph extends Action {
                                                        actualValue = new Double(0);
                                                        targetYear=year;
                                                    } else {
-                                                	   actualValue = actValue.getValue();
+                                                       actualValue = actValue.getValue();
                                                        if (value.getValueDate().after(actValue.getValueDate()) || value.getValueDate().equals(actValue.getValueDate())) {
                                                            targValue = value;
                                                            //actualValue = actValue.getValue();
@@ -312,7 +312,7 @@ public class getNPDgraph extends Action {
                                     dataset.addValue(realActual.doubleValue(), selectedYear, displayLabel);
 
                                }
-                        	   
+                               
                            }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -346,7 +346,7 @@ public class getNPDgraph extends Action {
 
     public String formatActualDate(AmpIndicatorValue val) {
         if (val != null) {
-        	return DateTimeUtil.formatDate(val.getValueDate());
+            return DateTimeUtil.formatDate(val.getValueDate());
         }
         return "";
     }
@@ -410,8 +410,8 @@ public class getNPDgraph extends Action {
     private static boolean isInSelectedYears(AmpIndicatorValue value, String[] selYars) {
         String sYear = extractYearString(value.getValueDate());
         if (sYear != null && selYars!=null) {
-        	//we can use this method because selYears are sorted by sort() method of Arrays class
-        	return Arrays.binarySearch(selYars, sYear) >= 0;
+            //we can use this method because selYears are sorted by sort() method of Arrays class
+            return Arrays.binarySearch(selYars, sYear) >= 0;
 //            for (int i = 0; i < selYars.length; i++) {
 //                if (selYars[i].equals(sYear)) {
 //                    return true;

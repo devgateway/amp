@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 public class PostgisUtil {
-	protected static final Logger logger = Logger.getLogger(PostgisUtil.class);
+    protected static final Logger logger = Logger.getLogger(PostgisUtil.class);
 
     public static FeatureGeoJSON getLocation(Double lat, Double lon, String name, double score) {
         FeatureGeoJSON fgj = new FeatureGeoJSON();

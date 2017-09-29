@@ -28,43 +28,43 @@ import org.digijava.module.aim.util.CurrencyUtil;
  */
 public class PPCColumn extends PsqlSourcedColumn<CategAmountCell> {
 
-	public PPCColumn(String columnName, String extractorViewName) {
-		super(columnName, null, extractorViewName, NumericalColumnBehaviour.getInstance());
-	}
-		
-	@Override
-	public List<CategAmountCell> fetch(NiReportsEngine engine) throws Exception {
-		AmpReportsScratchpad scratchpad = AmpReportsScratchpad.get(engine);
-		
-		AmpReportsSchema schema = (AmpReportsSchema) engine.schema;
-		AmpCurrency usedCurrency = scratchpad.getUsedCurrency();
-		VivificatingMap<String, AmpCurrency> currencies = new VivificatingMap<String, AmpCurrency>(new HashMap<>(), CurrencyUtil::getAmpcurrency);
-		
-		String query = buildQuery(engine);
-		
-		List<CategAmountCell> cells = new ArrayList<>();
-		try(RsInfo rs = SQLUtils.rawRunQuery(scratchpad.connection, query, null)) {
-			while (rs.rs.next()) {
-				long ampActivityId = rs.rs.getLong(this.mainColumn);
-				
-				java.sql.Date transactionMoment = rs.rs.getDate("transaction_date");
-				LocalDate transactionDate = transactionMoment.toLocalDate();
-				BigDecimal transactionAmount = rs.rs.getBigDecimal("transaction_amount");
-				
-				String currencyCode = rs.rs.getString("currency_code");
-				AmpCurrency srcCurrency = currencies.getOrCreate(currencyCode);
-				
-				BigDecimal usedExchangeRate = BigDecimal.valueOf(schema.currencyConvertor.getExchangeRate(srcCurrency.getCurrencyCode(), usedCurrency.getCurrencyCode(), null, transactionDate));
-				MonetaryAmount amount = new MonetaryAmount(transactionAmount.multiply(usedExchangeRate), transactionAmount, srcCurrency, transactionDate, scratchpad.getPrecisionSetting());
-				CategAmountCell cell = new CategAmountCell(ampActivityId, amount, MetaInfoSet.empty(), Collections.emptyMap(), engine.calendar.translate(transactionMoment));
-				cells.add(cell);
-			}
-		}
-		return cells;
-	}
+    public PPCColumn(String columnName, String extractorViewName) {
+        super(columnName, null, extractorViewName, NumericalColumnBehaviour.getInstance());
+    }
+        
+    @Override
+    public List<CategAmountCell> fetch(NiReportsEngine engine) throws Exception {
+        AmpReportsScratchpad scratchpad = AmpReportsScratchpad.get(engine);
+        
+        AmpReportsSchema schema = (AmpReportsSchema) engine.schema;
+        AmpCurrency usedCurrency = scratchpad.getUsedCurrency();
+        VivificatingMap<String, AmpCurrency> currencies = new VivificatingMap<String, AmpCurrency>(new HashMap<>(), CurrencyUtil::getAmpcurrency);
+        
+        String query = buildQuery(engine);
+        
+        List<CategAmountCell> cells = new ArrayList<>();
+        try(RsInfo rs = SQLUtils.rawRunQuery(scratchpad.connection, query, null)) {
+            while (rs.rs.next()) {
+                long ampActivityId = rs.rs.getLong(this.mainColumn);
+                
+                java.sql.Date transactionMoment = rs.rs.getDate("transaction_date");
+                LocalDate transactionDate = transactionMoment.toLocalDate();
+                BigDecimal transactionAmount = rs.rs.getBigDecimal("transaction_amount");
+                
+                String currencyCode = rs.rs.getString("currency_code");
+                AmpCurrency srcCurrency = currencies.getOrCreate(currencyCode);
+                
+                BigDecimal usedExchangeRate = BigDecimal.valueOf(schema.currencyConvertor.getExchangeRate(srcCurrency.getCurrencyCode(), usedCurrency.getCurrencyCode(), null, transactionDate));
+                MonetaryAmount amount = new MonetaryAmount(transactionAmount.multiply(usedExchangeRate), transactionAmount, srcCurrency, transactionDate, scratchpad.getPrecisionSetting());
+                CategAmountCell cell = new CategAmountCell(ampActivityId, amount, MetaInfoSet.empty(), Collections.emptyMap(), engine.calendar.translate(transactionMoment));
+                cells.add(cell);
+            }
+        }
+        return cells;
+    }
 
-	@Override
-	public List<ReportRenderWarning> performCheck() {
-		return null;
-	}
+    @Override
+    public List<ReportRenderWarning> performCheck() {
+        return null;
+    }
 }

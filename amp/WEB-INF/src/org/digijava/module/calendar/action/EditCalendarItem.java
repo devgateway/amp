@@ -58,11 +58,11 @@ public class EditCalendarItem
             calendarItem.setDescription(calendForm.getDescription());
             calendarItem.setLanguage(calendForm.getSelectedLanguage());
 
-	    if (calendForm.getCountry().equals(Calendar.noneCountryIso)){
-	      event.setCountry(null);
-	    } else {
-	      event.setCountry(calendForm.getCountry());
-	    }
+        if (calendForm.getCountry().equals(Calendar.noneCountryIso)){
+          event.setCountry(null);
+        } else {
+          event.setCountry(calendForm.getCountry());
+        }
             event.setLocation(calendForm.getLocation());
 
             event.setSourceName(calendForm.getSourceName());

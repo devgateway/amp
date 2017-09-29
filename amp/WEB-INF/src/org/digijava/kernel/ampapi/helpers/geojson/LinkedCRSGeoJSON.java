@@ -12,10 +12,10 @@ package org.digijava.kernel.ampapi.helpers.geojson;
  */
 public class LinkedCRSGeoJSON extends CRSGeoJSON
 {
-	public LinkedCRSPropertiesGeoJSON properties;
+    public LinkedCRSPropertiesGeoJSON properties;
 
-	public boolean isValid( PositionValidator validator )
-	{
-		return properties.isValid(validator);
-	}
+    public boolean isValid( PositionValidator validator )
+    {
+        return properties.isValid(validator);
+    }
 }

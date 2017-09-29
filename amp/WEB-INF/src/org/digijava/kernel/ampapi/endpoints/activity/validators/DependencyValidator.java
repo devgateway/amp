@@ -19,44 +19,44 @@ import clover.com.google.common.base.Joiner;
  */
 public class DependencyValidator extends InputValidator {
 
-	@Override
-	public boolean isValid(ActivityImporter importer,
-			Map<String, Object> newFieldParent,
-			Map<String, Object> oldFieldParent, JsonBean fieldDescription,
-			String fieldPath) {
-		Object value = newFieldParent.get(fieldDescription.get(ActivityEPConstants.FIELD_NAME));
-		if (value == null)
-			return true;
-		List<String> deps =  (List<String>) fieldDescription.get(ActivityEPConstants.DEPENDENCIES);
-		if (deps != null)
-		{
-			boolean result = true;
-			for (String dep : deps) {
-				switch(InterchangeDependencyResolver.checkDependency(value, importer.getNewJson(), dep, newFieldParent)) {
-				case INVALID_REQUIRED:
-					importer.setSaveAsDraft(true);
-					break;
-				case INVALID_NOT_CONFIGURABLE:
-					result = false;
-					errors.add(dep);
-					break;
-				case VALID: 
-					break;
-					
-//					result = false;
-//					errors.add(dep);
-				}
-			}
-			return result;
-		}
-		return true;
-	}
+    @Override
+    public boolean isValid(ActivityImporter importer,
+            Map<String, Object> newFieldParent,
+            Map<String, Object> oldFieldParent, JsonBean fieldDescription,
+            String fieldPath) {
+        Object value = newFieldParent.get(fieldDescription.get(ActivityEPConstants.FIELD_NAME));
+        if (value == null)
+            return true;
+        List<String> deps =  (List<String>) fieldDescription.get(ActivityEPConstants.DEPENDENCIES);
+        if (deps != null)
+        {
+            boolean result = true;
+            for (String dep : deps) {
+                switch(InterchangeDependencyResolver.checkDependency(value, importer.getNewJson(), dep, newFieldParent)) {
+                case INVALID_REQUIRED:
+                    importer.setSaveAsDraft(true);
+                    break;
+                case INVALID_NOT_CONFIGURABLE:
+                    result = false;
+                    errors.add(dep);
+                    break;
+                case VALID: 
+                    break;
+                    
+//                  result = false;
+//                  errors.add(dep);
+                }
+            }
+            return result;
+        }
+        return true;
+    }
 
-	private ArrayList<String> errors = new ArrayList<String>();
-	
-	@Override
-	public ApiErrorMessage getErrorMessage() {
-		return ActivityErrors.DEPENDENCY_NOT_MET.withDetails(errors);
-	}
+    private ArrayList<String> errors = new ArrayList<String>();
+    
+    @Override
+    public ApiErrorMessage getErrorMessage() {
+        return ActivityErrors.DEPENDENCY_NOT_MET.withDetails(errors);
+    }
 
 }

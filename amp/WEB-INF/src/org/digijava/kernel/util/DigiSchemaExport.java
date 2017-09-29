@@ -41,14 +41,14 @@ public class DigiSchemaExport {
     private static Logger logger = Logger.getLogger(DigiSchemaExport.class);
 
     public static void main(String[] args) throws Exception {
-    	//StandaloneJndiAMPInitializer.initAMPUnifiedJndiAlias();
-    	
-    	
-    	/**
-    	 * Change hibernate configuration file
-    	 */
-    	HibernateClassLoader.HIBERNATE_CFG_XML = "/standAloneAmpHibernate.cfg.xml";
-    	
+        //StandaloneJndiAMPInitializer.initAMPUnifiedJndiAlias();
+        
+        
+        /**
+         * Change hibernate configuration file
+         */
+        HibernateClassLoader.HIBERNATE_CFG_XML = "/standAloneAmpHibernate.cfg.xml";
+        
         ResourceStreamHandlerFactory.installIfNeeded();
 
         Map commandLineParams = getCommandLineParameters(args);

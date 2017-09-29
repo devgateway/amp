@@ -20,11 +20,11 @@ import org.digijava.module.aim.helper.Constants;
 
 public class CalendarEventForm
     extends ActionForm {
-	
+    
 
 
 
-	private Long ampCalendarId;
+    private Long ampCalendarId;
     private String eventTitle;
     private String method;
     private String searchOrgKey;
@@ -68,75 +68,75 @@ public class CalendarEventForm
 //    private Collection selectedEventOrganisationsCol;
 
     public Long getCalendarTypeId() {
-		return calendarTypeId;
-	}
+        return calendarTypeId;
+    }
 
-	public void setCalendarTypeId(Long calendarTypeId) {
-		this.calendarTypeId = calendarTypeId;
-	}
+    public void setCalendarTypeId(Long calendarTypeId) {
+        this.calendarTypeId = calendarTypeId;
+    }
 
 
-	private Collection attendees;
+    private Collection attendees;
     private String[] selectedAtts;
     private Collection<LabelValueBean> selectedAttsCol;
     private int approve;
     private Long selOrganizations[];
-	private Collection<AmpOrganisation> organizations;
-	private String description;
-	private Long eventCreatorId;
-	private String eventCreator;
-	private Boolean actionButtonsVisible;
-	
+    private Collection<AmpOrganisation> organizations;
+    private String description;
+    private Long eventCreatorId;
+    private String eventCreator;
+    private Boolean actionButtonsVisible;
+    
 
-	
+    
 
 
-	public String getRecurrSelectedStartTime() {
-		return recurrSelectedStartTime;
-	}
+    public String getRecurrSelectedStartTime() {
+        return recurrSelectedStartTime;
+    }
 
-	public void setRecurrSelectedStartTime(String recurrSelectedStartTime) {
-		this.recurrSelectedStartTime = recurrSelectedStartTime;
-	}
+    public void setRecurrSelectedStartTime(String recurrSelectedStartTime) {
+        this.recurrSelectedStartTime = recurrSelectedStartTime;
+    }
 
-	public String getRecurrSelectedEndTime() {
-		return recurrSelectedEndTime;
-	}
+    public String getRecurrSelectedEndTime() {
+        return recurrSelectedEndTime;
+    }
 
-	public void setRecurrSelectedEndTime(String recurrSelectedEndTime) {
-		this.recurrSelectedEndTime = recurrSelectedEndTime;
-	}
-	
-	public Long[] getSelOrganizations() {
-		return selOrganizations;
-	}
+    public void setRecurrSelectedEndTime(String recurrSelectedEndTime) {
+        this.recurrSelectedEndTime = recurrSelectedEndTime;
+    }
+    
+    public Long[] getSelOrganizations() {
+        return selOrganizations;
+    }
 
-	public int getApprove() {
-		return approve;
-	}
-	
-	public void setApprove(int approve) {
-		this.approve = approve;
-	}
-		
-	public void setSelOrganizations(Long[] selOrganizations) {
-		this.selOrganizations = selOrganizations;
-	}
+    public int getApprove() {
+        return approve;
+    }
+    
+    public void setApprove(int approve) {
+        this.approve = approve;
+    }
+        
+    public void setSelOrganizations(Long[] selOrganizations) {
+        this.selOrganizations = selOrganizations;
+    }
 
-	public Collection<AmpOrganisation> getOrganizations() {
-		return organizations;
-	}
+    public Collection<AmpOrganisation> getOrganizations() {
+        return organizations;
+    }
 
-	public void setOrganizations(Collection<AmpOrganisation> organizations) {
-		this.organizations = organizations;
-	}
+    public void setOrganizations(Collection<AmpOrganisation> organizations) {
+        this.organizations = organizations;
+    }
 
-	
+    
     private boolean resetForm;
 
     public Collection<Team> getTeamMapValues(){
         return (Collection<Team>)teamsMap.values();
-	}
+    }
 
     public Long getAmpCalendarId() {
         return ampCalendarId;
@@ -379,7 +379,7 @@ public class CalendarEventForm
     }
 
     public void reset(ActionMapping mapping, HttpServletRequest request) {
-    	ampCalendarId=null;
+        ampCalendarId=null;
         eventTitle=null;
         //method=null;
         searchOrgKey=null;
@@ -404,10 +404,10 @@ public class CalendarEventForm
 //        selOrganizations = null;
         
        String dtformat = FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
-	if (dtformat == null){
-		dtformat = "dd/mm/yyyy";
+    if (dtformat == null){
+        dtformat = "dd/mm/yyyy";
         }
-	
+    
 
         SimpleDateFormat sdf = new SimpleDateFormat(dtformat);
 
@@ -432,53 +432,53 @@ public class CalendarEventForm
       
     }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public String getSelectedStartMonth() {
-		return selectedStartMonth;
-	}
+    public String getSelectedStartMonth() {
+        return selectedStartMonth;
+    }
 
-	public void setSelectedStartMonth(String selectedStartMonth) {
-		this.selectedStartMonth = selectedStartMonth;
-	}
+    public void setSelectedStartMonth(String selectedStartMonth) {
+        this.selectedStartMonth = selectedStartMonth;
+    }
 
-	public Long getRecurrPeriod() {
-		return recurrPeriod;
-	}
+    public Long getRecurrPeriod() {
+        return recurrPeriod;
+    }
 
-	public void setRecurrPeriod(Long recurrPeriod) {
-		this.recurrPeriod = recurrPeriod;
-	}
+    public void setRecurrPeriod(Long recurrPeriod) {
+        this.recurrPeriod = recurrPeriod;
+    }
 
-	public String getTypeofOccurrence() {
-		return typeofOccurrence;
-	}
+    public String getTypeofOccurrence() {
+        return typeofOccurrence;
+    }
 
-	public void setTypeofOccurrence(String typeofOccurrence) {
-		this.typeofOccurrence = typeofOccurrence;
-	}
+    public void setTypeofOccurrence(String typeofOccurrence) {
+        this.typeofOccurrence = typeofOccurrence;
+    }
 
-	public String getOccurrWeekDays() {
-		return occurrWeekDays;
-	}
+    public String getOccurrWeekDays() {
+        return occurrWeekDays;
+    }
 
-	public void setOccurrWeekDays(String occurrWeekDays) {
-		this.occurrWeekDays = occurrWeekDays;
-	}
+    public void setOccurrWeekDays(String occurrWeekDays) {
+        this.occurrWeekDays = occurrWeekDays;
+    }
 
-	public Collection getMonths() {
-		return months;
-	}
+    public Collection getMonths() {
+        return months;
+    }
 
-	public void setMonths(Collection months) {
-		this.months = months;
-	}
+    public void setMonths(Collection months) {
+        this.months = months;
+    }
 
     public String getRecurrStartDate() {
         return recurrStartDate;
@@ -497,44 +497,44 @@ public class CalendarEventForm
     }
     
     public String getSelectedStartYear() {
-		return selectedStartYear;
-	}
+        return selectedStartYear;
+    }
 
-	public void setSelectedStartYear(String selectedStartYear) {
-		this.selectedStartYear = selectedStartYear;
-	}
+    public void setSelectedStartYear(String selectedStartYear) {
+        this.selectedStartYear = selectedStartYear;
+    }
 
-	public String getWeekDays() {
-		return weekDays;
-	}
+    public String getWeekDays() {
+        return weekDays;
+    }
 
-	public void setWeekDays(String weekDays) {
-		this.weekDays = weekDays;
-	}
+    public void setWeekDays(String weekDays) {
+        this.weekDays = weekDays;
+    }
 
 
-	public Long getEventCreatorId() {
-		return eventCreatorId;
-	}
+    public Long getEventCreatorId() {
+        return eventCreatorId;
+    }
 
-	public void setEventCreatorId(Long eventCreatorId) {
-		this.eventCreatorId = eventCreatorId;
-	}
-	
-	public String getEventCreator() {
-		return eventCreator;
-	}
+    public void setEventCreatorId(Long eventCreatorId) {
+        this.eventCreatorId = eventCreatorId;
+    }
+    
+    public String getEventCreator() {
+        return eventCreator;
+    }
 
-	public void setEventCreator(String eventCreator) {
-		this.eventCreator = eventCreator;
-	}
+    public void setEventCreator(String eventCreator) {
+        this.eventCreator = eventCreator;
+    }
 
-	public Boolean getActionButtonsVisible() {
-		return actionButtonsVisible;
-	}
+    public Boolean getActionButtonsVisible() {
+        return actionButtonsVisible;
+    }
 
-	public void setActionButtonsVisible(Boolean actionButtonsVisible) {
-		this.actionButtonsVisible = actionButtonsVisible;
-	}
+    public void setActionButtonsVisible(Boolean actionButtonsVisible) {
+        this.actionButtonsVisible = actionButtonsVisible;
+    }
 
 }

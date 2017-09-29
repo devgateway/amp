@@ -22,144 +22,144 @@ import java.util.Date;
 public class AmpXmlPatchLog implements Serializable {
 
 
-	protected Long id;
+    protected Long id;
 
-	/**
-	 * The patch reference to this log
-	 */
-	protected AmpXmlPatch patch;
+    /**
+     * The patch reference to this log
+     */
+    protected AmpXmlPatch patch;
 
-	/**
-	 * The log text
-	 */
-	protected StringBuffer log;
+    /**
+     * The log text
+     */
+    protected StringBuffer log;
 
-	/**
-	 * The execution date/entry date log
-	 */
-	protected Date date;
+    /**
+     * The execution date/entry date log
+     */
+    protected Date date;
 
-	/**
-	 * True if the execution has encountered errors
-	 */
-	protected Boolean error;
+    /**
+     * True if the execution has encountered errors
+     */
+    protected Boolean error;
 
-	/**
-	 * The MD5 checksum of the patch file. May be used to find if the patch file
-	 * has been changed from one execution to the other.
-	 */
-	protected String fileChecksum;
+    /**
+     * The MD5 checksum of the patch file. May be used to find if the patch file
+     * has been changed from one execution to the other.
+     */
+    protected String fileChecksum;
 
-	/**
-	 * The amount of time in milliseconds that the patch execution lasted
-	 */
-	protected Long elapsed;
+    /**
+     * The amount of time in milliseconds that the patch execution lasted
+     */
+    protected Long elapsed;
 
-	/**
-	 * Appends a string to the log stringbuffer
-	 * 
-	 * @param s
-	 *            the string
-	 */
-	public void appendToLog(String s) {
-		error=true;
-		log.append(s);
-	}
+    /**
+     * Appends a string to the log stringbuffer
+     * 
+     * @param s
+     *            the string
+     */
+    public void appendToLog(String s) {
+        error=true;
+        log.append(s);
+    }
 
-	/**
-	 * Appends an exception stacktrace to the log
-	 * 
-	 * @param e
-	 *            the exception
-	 */
-	public void appendToLog(Exception e) {
-		error=true;
-		Writer writer = new StringWriter();
-		PrintWriter printWriter = new PrintWriter(writer);
-		e.printStackTrace(printWriter);
-		log.append(writer.toString());
-	}
+    /**
+     * Appends an exception stacktrace to the log
+     * 
+     * @param e
+     *            the exception
+     */
+    public void appendToLog(Exception e) {
+        error=true;
+        Writer writer = new StringWriter();
+        PrintWriter printWriter = new PrintWriter(writer);
+        e.printStackTrace(printWriter);
+        log.append(writer.toString());
+    }
 
 
-	public AmpXmlPatchLog() {
-	}
+    public AmpXmlPatchLog() {
+    }
 
-	
-	
-	public AmpXmlPatchLog(AmpXmlPatch p) {
-		this.log = new StringBuffer();
-		this.patch = p;
-		error=false;
-		this.date=new Date(System.currentTimeMillis());
-	}
+    
+    
+    public AmpXmlPatchLog(AmpXmlPatch p) {
+        this.log = new StringBuffer();
+        this.patch = p;
+        error=false;
+        this.date=new Date(System.currentTimeMillis());
+    }
 
-	public AmpXmlPatch getPatch() {
-		return patch;
-	}
+    public AmpXmlPatch getPatch() {
+        return patch;
+    }
 
-	public void setPatch(AmpXmlPatch patch) {
-		this.patch = patch;
-	}
+    public void setPatch(AmpXmlPatch patch) {
+        this.patch = patch;
+    }
 
-	public String getLog() {
-		return log.toString();
-	}
-	
-	public String getLogLabel() {
-		String ls=log.toString();
-		if(ls.indexOf(':')!=-1)
-		return ls.substring(0,ls.indexOf(':'));
-		else return ls;
-	}
+    public String getLog() {
+        return log.toString();
+    }
+    
+    public String getLogLabel() {
+        String ls=log.toString();
+        if(ls.indexOf(':')!=-1)
+        return ls.substring(0,ls.indexOf(':'));
+        else return ls;
+    }
 
-	public void setLog(String log) {
-		this.log = new StringBuffer(log);
-	}
+    public void setLog(String log) {
+        this.log = new StringBuffer(log);
+    }
 
-	public Date getDate() {
-		return date;
-	}
+    public Date getDate() {
+        return date;
+    }
 
-	public void setDate(Date date) {
-		this.date = date;
-	}
+    public void setDate(Date date) {
+        this.date = date;
+    }
 
-	public String getFileChecksum() {
-		return fileChecksum;
-	}
+    public String getFileChecksum() {
+        return fileChecksum;
+    }
 
-	public void setFileChecksum(String fileChecksum) {
-		this.fileChecksum = fileChecksum;
-	}
+    public void setFileChecksum(String fileChecksum) {
+        this.fileChecksum = fileChecksum;
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public Long getElapsed() {
-		return elapsed;
-	}
+    public Long getElapsed() {
+        return elapsed;
+    }
 
-	public void setElapsed(Long elapsed) {
-		this.elapsed = elapsed;
-	}
+    public void setElapsed(Long elapsed) {
+        this.elapsed = elapsed;
+    }
 
-	/**
-	 * @return the error
-	 */
-	public Boolean getError() {
-		return error;
-	}
+    /**
+     * @return the error
+     */
+    public Boolean getError() {
+        return error;
+    }
 
-	/**
-	 * @param error the error to set
-	 */
-	public void setError(Boolean error) {
-		this.error = error;
-	}
+    /**
+     * @param error the error to set
+     */
+    public void setError(Boolean error) {
+        this.error = error;
+    }
 
 }

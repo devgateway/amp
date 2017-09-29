@@ -44,16 +44,16 @@ public class AmpPIItemFeaturePanel extends AmpFeaturePanel<AmpAhsurvey> {
         }
     }
 
-	public AmpPIItemFeaturePanel(String id, String fmName, final IModel<AmpAhsurvey> survey,
+    public AmpPIItemFeaturePanel(String id, String fmName, final IModel<AmpAhsurvey> survey,
                                  final IModel<AmpOrganisation> surveyOrg, final IModel<AmpActivityVersion> am){
-		super(id, survey, fmName, true);
-		if (survey.getObject().getResponses() == null)
-			survey.getObject().setResponses(new HashSet<AmpAhsurveyResponse>());
+        super(id, survey, fmName, true);
+        if (survey.getObject().getResponses() == null)
+            survey.getObject().setResponses(new HashSet<AmpAhsurveyResponse>());
 
-		if (survey.getObject().getPointOfDeliveryDonor() == null)
-			survey.getObject().setPointOfDeliveryDonor(survey.getObject().getAmpDonorOrgId());
-		Label indicatorNameLabel = new Label("orgName", surveyOrg);
-		add(indicatorNameLabel);
+        if (survey.getObject().getPointOfDeliveryDonor() == null)
+            survey.getObject().setPointOfDeliveryDonor(survey.getObject().getAmpDonorOrgId());
+        Label indicatorNameLabel = new Label("orgName", surveyOrg);
+        add(indicatorNameLabel);
 
         PropertyModel<Date> surveyPropertyModel = new PropertyModel<Date>(survey, "surveyDate");
         AmpSelectFieldPanel<String> yearSelector = new AmpSelectFieldPanel<String>("yearSelect",
@@ -96,89 +96,89 @@ public class AmpPIItemFeaturePanel extends AmpFeaturePanel<AmpAhsurvey> {
         };
         add(deleteItem);
 
-		final Label pod = new Label("PoD", new PropertyModel<String>(survey, "pointOfDeliveryDonor.name"));
-		pod.setOutputMarkupId(true);
-		add(pod);
-		final AmpAutocompleteFieldPanel<AmpOrganisation> searchOrgs=new AmpAutocompleteFieldPanel<AmpOrganisation>("searchAutocomplete","Search Organizations",true,true,AmpOrganisationSearchModel.class,id) {			
-			@Override
-			protected String getChoiceValue(AmpOrganisation choice) {
-				return DbUtil.filter(choice.getName());
-			}
-			
-			@Override
-			protected boolean showAcronyms() {
-				return true;
-			}
-			
-			@Override
-			protected String getAcronym(AmpOrganisation choice) {
-				return choice.getAcronym();
-			}
+        final Label pod = new Label("PoD", new PropertyModel<String>(survey, "pointOfDeliveryDonor.name"));
+        pod.setOutputMarkupId(true);
+        add(pod);
+        final AmpAutocompleteFieldPanel<AmpOrganisation> searchOrgs=new AmpAutocompleteFieldPanel<AmpOrganisation>("searchAutocomplete","Search Organizations",true,true,AmpOrganisationSearchModel.class,id) {         
+            @Override
+            protected String getChoiceValue(AmpOrganisation choice) {
+                return DbUtil.filter(choice.getName());
+            }
+            
+            @Override
+            protected boolean showAcronyms() {
+                return true;
+            }
+            
+            @Override
+            protected String getAcronym(AmpOrganisation choice) {
+                return choice.getAcronym();
+            }
 
-			@Override
-			public void onSelect(AjaxRequestTarget target, AmpOrganisation choice) {
-				survey.getObject().setPointOfDeliveryDonor(choice);
-				target.add(pod);
-			}
+            @Override
+            public void onSelect(AjaxRequestTarget target, AmpOrganisation choice) {
+                survey.getObject().setPointOfDeliveryDonor(choice);
+                target.add(pod);
+            }
 
-			@Override
-			public Integer getChoiceLevel(AmpOrganisation choice) {
-				return null;
-			}
-		};
-		AmpSearchOrganizationComponent<String> searchOrganization = new AmpSearchOrganizationComponent<String>("orgSearch", new Model<String> (),
-				"Search Organizations", searchOrgs, null);
-		add(searchOrganization);
+            @Override
+            public Integer getChoiceLevel(AmpOrganisation choice) {
+                return null;
+            }
+        };
+        AmpSearchOrganizationComponent<String> searchOrganization = new AmpSearchOrganizationComponent<String>("orgSearch", new Model<String> (),
+                "Search Organizations", searchOrgs, null);
+        add(searchOrganization);
 
-		
-		final AbstractReadOnlyModel<List<AmpAhsurveyIndicator>> listModel = new AbstractReadOnlyModel<List<AmpAhsurveyIndicator>>() {
-			private static final long serialVersionUID = 3706184421459839210L;
-			@Override
-			public List<AmpAhsurveyIndicator> getObject() {
-				ArrayList<AmpAhsurveyIndicator> list = new ArrayList<AmpAhsurveyIndicator>(DbUtil.getAllAhSurveyIndicators());
-				Collections.sort(list, new AmpAhsurveyIndicator.AhsurveyIndicatorComparator());
-				return list;
-			}
-		};
+        
+        final AbstractReadOnlyModel<List<AmpAhsurveyIndicator>> listModel = new AbstractReadOnlyModel<List<AmpAhsurveyIndicator>>() {
+            private static final long serialVersionUID = 3706184421459839210L;
+            @Override
+            public List<AmpAhsurveyIndicator> getObject() {
+                ArrayList<AmpAhsurveyIndicator> list = new ArrayList<AmpAhsurveyIndicator>(DbUtil.getAllAhSurveyIndicators());
+                Collections.sort(list, new AmpAhsurveyIndicator.AhsurveyIndicatorComparator());
+                return list;
+            }
+        };
 
-		ListView<AmpAhsurveyIndicator> list = new ListView<AmpAhsurveyIndicator>("list", listModel) {
-			@Override
-			protected void populateItem(final ListItem<AmpAhsurveyIndicator> item) {
-				AmpAhsurveyIndicator sv = item.getModelObject();
-				
-				Label indCode = new Label("indCode", new PropertyModel<String>(sv, "indicatorCode"));
-				item.add(indCode);
-				Label indName = new TrnLabel("indName", new PropertyModel<String>(sv, "name"));
-				item.add(indName);
+        ListView<AmpAhsurveyIndicator> list = new ListView<AmpAhsurveyIndicator>("list", listModel) {
+            @Override
+            protected void populateItem(final ListItem<AmpAhsurveyIndicator> item) {
+                AmpAhsurveyIndicator sv = item.getModelObject();
+                
+                Label indCode = new Label("indCode", new PropertyModel<String>(sv, "indicatorCode"));
+                item.add(indCode);
+                Label indName = new TrnLabel("indName", new PropertyModel<String>(sv, "name"));
+                item.add(indName);
 
-				String code = sv.getIndicatorCode();
-				if (code.compareTo("7") == 0){
-					String msg = "No question here. This indicator is calculated by the system based on information entered for disbursements for this project/programme";
-					Label l = new TrnLabel("qList", new Model<String>(msg));
-					item.add(l);
-				} else 
-					if (code.compareTo("10a") == 0){
-						String msg = "No question at the activity level; this indicator is calculated using the Calendar Module";
-						Label l = new TrnLabel("qList", new Model<String>(msg));
-						item.add(l);
-					} else 
-						if (code.compareTo("10b") == 0){
-							String msg = "No question at the activity level; this indicator is calculated using the Document Management Module";
-							Label l = new TrnLabel("qList", new Model<String>(msg));
-							item.add(l);
-						} else 
-							if (code.compareTo("10b") == 0){
-								String msg = "No question at the activity level; this indicator is calculated using the Document Management Module";
-								Label l = new TrnLabel("qList", new Model<String>(msg));
-								item.add(l);
-							} else {
-								AmpPIQuestionItemFeaturePanel q = new AmpPIQuestionItemFeaturePanel("qList", "PI Questions List", PersistentObjectModel.getModel(sv), survey);
-								item.add(q);
-							}
-			}
-		};
-		list.setReuseItems(true);
-		add(list);
-	}
+                String code = sv.getIndicatorCode();
+                if (code.compareTo("7") == 0){
+                    String msg = "No question here. This indicator is calculated by the system based on information entered for disbursements for this project/programme";
+                    Label l = new TrnLabel("qList", new Model<String>(msg));
+                    item.add(l);
+                } else 
+                    if (code.compareTo("10a") == 0){
+                        String msg = "No question at the activity level; this indicator is calculated using the Calendar Module";
+                        Label l = new TrnLabel("qList", new Model<String>(msg));
+                        item.add(l);
+                    } else 
+                        if (code.compareTo("10b") == 0){
+                            String msg = "No question at the activity level; this indicator is calculated using the Document Management Module";
+                            Label l = new TrnLabel("qList", new Model<String>(msg));
+                            item.add(l);
+                        } else 
+                            if (code.compareTo("10b") == 0){
+                                String msg = "No question at the activity level; this indicator is calculated using the Document Management Module";
+                                Label l = new TrnLabel("qList", new Model<String>(msg));
+                                item.add(l);
+                            } else {
+                                AmpPIQuestionItemFeaturePanel q = new AmpPIQuestionItemFeaturePanel("qList", "PI Questions List", PersistentObjectModel.getModel(sv), survey);
+                                item.add(q);
+                            }
+            }
+        };
+        list.setReuseItems(true);
+        add(list);
+    }
 
 }

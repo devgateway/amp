@@ -25,65 +25,65 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
  * @author mpostelnicu@dgateway.org since Nov 5, 2010
  */
 public class AmpMTEFProjectionFormTableFeature extends
-		AmpFundingFormTableFeaturePanel<AmpFunding,AmpFundingMTEFProjection> {
+        AmpFundingFormTableFeaturePanel<AmpFunding,AmpFundingMTEFProjection> {
 
-	/**
-	 * @param id
-	 * @param fmName
-	 * @param model
-	 * @throws Exception
-	 */
-	public AmpMTEFProjectionFormTableFeature(String id, String fmName,
-			final IModel<AmpFunding> model) throws Exception {
-		super(id, model, fmName);
-		
-		getTableId().add(new AttributeModifier("width", "620"));
-		
-		final IModel<Set<AmpFundingMTEFProjection>> setModel = new PropertyModel<Set<AmpFundingMTEFProjection>>(
-				model, "mtefProjections");
-		if (setModel.getObject() == null)
-			setModel.setObject(new TreeSet<AmpFundingMTEFProjection>());
-		setTitleHeaderColSpan(5);
-		list = new FundingListEditor<AmpFundingMTEFProjection>("listMTEF",
-				setModel, new AmpFundingMTEFProjection.FundingMTEFProjectionComparator()) {
-			@Override
-			protected void onPopulateItem(
-					org.dgfoundation.amp.onepager.components.ListItem<AmpFundingMTEFProjection> item) {
-			super.onPopulateItem(item);
-				AmpCategorySelectFieldPanel projected;
-				try {
-					projected = new AmpCategorySelectFieldPanel("projected",
-							CategoryConstants.MTEF_PROJECTION_KEY,
-							new PropertyModel<AmpCategoryValue>(
-									item.getModel(), "projected"),
-							CategoryConstants.MTEF_PROJECTION_NAME, true,
-							false, false, null, false);
-					projected.getChoiceContainer().setRequired(true);
-					item.add(projected);
-				} catch (Exception e) {
-					throw new RuntimeException(e);
-				}
+    /**
+     * @param id
+     * @param fmName
+     * @param model
+     * @throws Exception
+     */
+    public AmpMTEFProjectionFormTableFeature(String id, String fmName,
+            final IModel<AmpFunding> model) throws Exception {
+        super(id, model, fmName);
+        
+        getTableId().add(new AttributeModifier("width", "620"));
+        
+        final IModel<Set<AmpFundingMTEFProjection>> setModel = new PropertyModel<Set<AmpFundingMTEFProjection>>(
+                model, "mtefProjections");
+        if (setModel.getObject() == null)
+            setModel.setObject(new TreeSet<AmpFundingMTEFProjection>());
+        setTitleHeaderColSpan(5);
+        list = new FundingListEditor<AmpFundingMTEFProjection>("listMTEF",
+                setModel, new AmpFundingMTEFProjection.FundingMTEFProjectionComparator()) {
+            @Override
+            protected void onPopulateItem(
+                    org.dgfoundation.amp.onepager.components.ListItem<AmpFundingMTEFProjection> item) {
+            super.onPopulateItem(item);
+                AmpCategorySelectFieldPanel projected;
+                try {
+                    projected = new AmpCategorySelectFieldPanel("projected",
+                            CategoryConstants.MTEF_PROJECTION_KEY,
+                            new PropertyModel<AmpCategoryValue>(
+                                    item.getModel(), "projected"),
+                            CategoryConstants.MTEF_PROJECTION_NAME, true,
+                            false, false, null, false);
+                    projected.getChoiceContainer().setRequired(true);
+                    item.add(projected);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
 
-                AmpFundingAmountComponent<AmpFundingMTEFProjection> fundingAmount	 = new AmpFundingAmountComponent<AmpFundingMTEFProjection>(
+                AmpFundingAmountComponent<AmpFundingMTEFProjection> fundingAmount    = new AmpFundingAmountComponent<AmpFundingMTEFProjection>(
                         "fundingAmount", item.getModel(), "Amount", "displayedAmount",
                         "Currency", "ampCurrency", "Projection Date", "projectionDate", true);
                 item.add(fundingAmount);
 
-				item.add(new ListEditorRemoveButton("delMtef", "Delete MTEF Projection"){
-					protected void onClick(org.apache.wicket.ajax.AjaxRequestTarget target) {
-						AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
-						super.onClick(target);
-						parent.getFundingInfo().checkChoicesRequired(list.getCount());
-						target.add(parent.getFundingInfo());
-						target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
-						target.appendJavaScript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));
-					};
-				});
-				//we create the role selector for recipient organization for commitments
- 	 	 	 	item.add(OnePagerUtil.getFundingFlowRoleSelector(model, item.getModel()));
-			}
-		};
-		add(list);
-	}
+                item.add(new ListEditorRemoveButton("delMtef", "Delete MTEF Projection"){
+                    protected void onClick(org.apache.wicket.ajax.AjaxRequestTarget target) {
+                        AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
+                        super.onClick(target);
+                        parent.getFundingInfo().checkChoicesRequired(list.getCount());
+                        target.add(parent.getFundingInfo());
+                        target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
+                        target.appendJavaScript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));
+                    };
+                });
+                //we create the role selector for recipient organization for commitments
+                item.add(OnePagerUtil.getFundingFlowRoleSelector(model, item.getModel()));
+            }
+        };
+        add(list);
+    }
 
 }

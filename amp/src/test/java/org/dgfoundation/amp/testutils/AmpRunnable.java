@@ -6,5 +6,5 @@ package org.dgfoundation.amp.testutils;
  *
  */
 public interface AmpRunnable {
-	public void run() throws Exception;
+    public void run() throws Exception;
 }

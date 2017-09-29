@@ -24,52 +24,52 @@ import org.hibernate.criterion.Restrictions;
  */
 public class AmpPMWorkspaceSearchModel extends AbstractAmpAutoCompleteModel<AmpTeam> {
 
-	private Session session;
-	
-	/**
-	 * @param input
-	 * @param params
-	 */
-	public AmpPMWorkspaceSearchModel(String input, String language, Map params) {
-		super(input, language, params);
-		// TODO Auto-generated constructor stub
-	}
+    private Session session;
+    
+    /**
+     * @param input
+     * @param params
+     */
+    public AmpPMWorkspaceSearchModel(String input, String language, Map params) {
+        super(input, language, params);
+        // TODO Auto-generated constructor stub
+    }
 
-	/* (non-Javadoc)
-	 * @see org.apache.wicket.model.LoadableDetachableModel#load()
-	 */
+    /* (non-Javadoc)
+     * @see org.apache.wicket.model.LoadableDetachableModel#load()
+     */
 
-	@Override
-	protected Collection<AmpTeam> load() {
-		List<AmpTeam> ret = null;
-		try {
-			
-			session = PersistenceManager.getSession();
-			Criteria crit = session.createCriteria(AmpTeam.class);
-			crit.setCacheable(true);
-				
-			if(input.trim().length()>0){
-					crit.add(Restrictions.disjunction()
-							.add(getTextCriterion("name", input)))
-							//.add(Restrictions.ilike("name", "%" + input + "%")))
-							.addOrder(Order.asc("name"));
-		
-					if (params != null) {
-						Integer maxResults = (Integer) getParams().get(
-								PARAM.MAX_RESULTS);
-						if (maxResults != null && maxResults.intValue() != 0)
-							crit.setMaxResults(maxResults);
-					}
-			}
-			 ret = crit.list();
-			
-		} catch (HibernateException e) {
-			throw new RuntimeException(e);
-		}
-		
-		return ret;
-	}
-	
-	
-	
+    @Override
+    protected Collection<AmpTeam> load() {
+        List<AmpTeam> ret = null;
+        try {
+            
+            session = PersistenceManager.getSession();
+            Criteria crit = session.createCriteria(AmpTeam.class);
+            crit.setCacheable(true);
+                
+            if(input.trim().length()>0){
+                    crit.add(Restrictions.disjunction()
+                            .add(getTextCriterion("name", input)))
+                            //.add(Restrictions.ilike("name", "%" + input + "%")))
+                            .addOrder(Order.asc("name"));
+        
+                    if (params != null) {
+                        Integer maxResults = (Integer) getParams().get(
+                                PARAM.MAX_RESULTS);
+                        if (maxResults != null && maxResults.intValue() != 0)
+                            crit.setMaxResults(maxResults);
+                    }
+            }
+             ret = crit.list();
+            
+        } catch (HibernateException e) {
+            throw new RuntimeException(e);
+        }
+        
+        return ret;
+    }
+    
+    
+    
 }

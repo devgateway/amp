@@ -97,7 +97,7 @@ public class DelegResultSet implements ResultSet {
     }
 
     protected void handleException(SQLException e) throws SQLException {
-    	throw e;
+        throw e;
     }
 
     public boolean next() throws SQLException 
@@ -976,24 +976,24 @@ public class DelegResultSet implements ResultSet {
         }
     }
 
-	public <T> T getObject(int columnIndex, Class<T> type) throws SQLException {
-		throw new UnsupportedOperationException("not implemented!");
-		//return _res.getObject(columnIndex, type);
-	}
+    public <T> T getObject(int columnIndex, Class<T> type) throws SQLException {
+        throw new UnsupportedOperationException("not implemented!");
+        //return _res.getObject(columnIndex, type);
+    }
 
-	public <T> T getObject(String columnLabel, Class<T> type) throws SQLException {		
-		throw new UnsupportedOperationException("not implemented!");
-	}
+    public <T> T getObject(String columnLabel, Class<T> type) throws SQLException {     
+        throw new UnsupportedOperationException("not implemented!");
+    }
 
-	@Override
-	public Statement getStatement() throws SQLException {
-		return _res.getStatement();
-	}
-	
-	@Override
-	public String toString()
-	{
-		return "DelegResultSet delegating to " + _res.toString();
-	}
+    @Override
+    public Statement getStatement() throws SQLException {
+        return _res.getStatement();
+    }
+    
+    @Override
+    public String toString()
+    {
+        return "DelegResultSet delegating to " + _res.toString();
+    }
 }
 

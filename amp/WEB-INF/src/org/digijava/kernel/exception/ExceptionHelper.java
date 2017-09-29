@@ -85,20 +85,20 @@ public class ExceptionHelper {
             exceptionInfo.setUserMessage(cause.getMessage());
             
             if (cause instanceof AMPTaggedExceptions){ //we have AMP errors either checked or unchecked
-            	AMPTaggedExceptions taggedEx = ((AMPTaggedExceptions)cause);
-            	if (taggedEx.getMainCause() != null){
-            		String msg = taggedEx.getMainCause().getMessage();
-            		if (msg != null)
-            			taggedEx.getMainCause().getMessage();
-            		exceptionInfo.setUserMessage(msg);
-            		
-            	}
-            		
-            	LinkedList<String> tags = (taggedEx).getTags();
-            	if (tags != null && tags.size() > 0){
-            		exceptionInfo.setMainTag(tags.get(0));
-            	}
-            	exceptionInfo.setTags(tags);
+                AMPTaggedExceptions taggedEx = ((AMPTaggedExceptions)cause);
+                if (taggedEx.getMainCause() != null){
+                    String msg = taggedEx.getMainCause().getMessage();
+                    if (msg != null)
+                        taggedEx.getMainCause().getMessage();
+                    exceptionInfo.setUserMessage(msg);
+                    
+                }
+                    
+                LinkedList<String> tags = (taggedEx).getTags();
+                if (tags != null && tags.size() > 0){
+                    exceptionInfo.setMainTag(tags.get(0));
+                }
+                exceptionInfo.setTags(tags);
             }
 
             CharArrayWriter cw = new CharArrayWriter();
@@ -169,20 +169,20 @@ public class ExceptionHelper {
      */
     public static boolean getExceptionDepth(int maxAllowed)
     {
-    	int res = 0;
-    	StackTraceElement[] stackTrace = new RuntimeException().getStackTrace();
-    	for (StackTraceElement elem:stackTrace)
-    	{
-    		boolean thisIsIt = elem.getClassName().contains("org.digijava.kernel.request.RequestProcessor") &&
-    				elem.getMethodName().equals("processForwardConfig");
-    		if (thisIsIt)
-    			res ++;
-    	}
-    	boolean ret = (res > maxAllowed) ||
-    			stackTrace.length >= 1020; // Java only keeps 1024 of them anyway
-    	//if (ret)
-    		//System.out.println("res = " + res + ", stackDepth = " + stackTrace.length + ", dying");
-    	return ret;
+        int res = 0;
+        StackTraceElement[] stackTrace = new RuntimeException().getStackTrace();
+        for (StackTraceElement elem:stackTrace)
+        {
+            boolean thisIsIt = elem.getClassName().contains("org.digijava.kernel.request.RequestProcessor") &&
+                    elem.getMethodName().equals("processForwardConfig");
+            if (thisIsIt)
+                res ++;
+        }
+        boolean ret = (res > maxAllowed) ||
+                stackTrace.length >= 1020; // Java only keeps 1024 of them anyway
+        //if (ret)
+            //System.out.println("res = " + res + ", stackDepth = " + stackTrace.length + ", dying");
+        return ret;
     }
     
     /**
@@ -191,40 +191,40 @@ public class ExceptionHelper {
      */
     public static void printReducedStacktrace(org.apache.log4j.Logger logger)
     {
-    	StringBuilder bld = new StringBuilder();
-    	StackTraceElement[] stackTrace = new RuntimeException().getStackTrace();
-    	for(int i = 0; i < Math.min(10, stackTrace.length); i++)
-    		bld.append("\t" + stackTrace[i] + "\n");
-    	logger.error(bld.toString());
+        StringBuilder bld = new StringBuilder();
+        StackTraceElement[] stackTrace = new RuntimeException().getStackTrace();
+        for(int i = 0; i < Math.min(10, stackTrace.length); i++)
+            bld.append("\t" + stackTrace[i] + "\n");
+        logger.error(bld.toString());
     }
     
     protected static void printReducedStacktrace(HttpServletResponse response, String message)
     {
-    	try
-    	{
-        	PrintWriter writer = response.getWriter();
-    		writer.write(message);
-    		////System.out.println(message);
-    		logger.error(message);
-    		StackTraceElement[] stackTrace = new RuntimeException().getStackTrace();
-    		for(int i = 0; i < 200; i++)
-    		{    		
-    			writer.write(stackTrace[i].toString() + "\n");
-    			logger.error(stackTrace[i].toString());
-    		}
-    		writer.write("\n....\n");
-    		//System.out.println("\n....\n");
-    		for(int i = stackTrace.length - 200; i < stackTrace.length; i++)
-    		{
-    			writer.write(stackTrace[i].toString() + "\n");
-    			logger.error(stackTrace[i].toString());
-    		}
-    		writer.close();
-    	}
-    	catch(Exception e)
-    	{
-    		// swallow
-    	}
+        try
+        {
+            PrintWriter writer = response.getWriter();
+            writer.write(message);
+            ////System.out.println(message);
+            logger.error(message);
+            StackTraceElement[] stackTrace = new RuntimeException().getStackTrace();
+            for(int i = 0; i < 200; i++)
+            {           
+                writer.write(stackTrace[i].toString() + "\n");
+                logger.error(stackTrace[i].toString());
+            }
+            writer.write("\n....\n");
+            //System.out.println("\n....\n");
+            for(int i = stackTrace.length - 200; i < stackTrace.length; i++)
+            {
+                writer.write(stackTrace[i].toString() + "\n");
+                logger.error(stackTrace[i].toString());
+            }
+            writer.close();
+        }
+        catch(Exception e)
+        {
+            // swallow
+        }
     }
 
     /**
@@ -247,23 +247,23 @@ public class ExceptionHelper {
      */
     public static boolean isRenderingAnException(HttpServletRequest request)
     {
-    	String DOUBLE_EXCEPTION_MARKER_ATTR = "###doubleExceptionMarker###";
-    	Object b = request.getAttribute(DOUBLE_EXCEPTION_MARKER_ATTR);
-    	if (b != null)
-    	{
-    		return true;
-    	}
-    	request.setAttribute(DOUBLE_EXCEPTION_MARKER_ATTR, new Object());
-    	return false;
+        String DOUBLE_EXCEPTION_MARKER_ATTR = "###doubleExceptionMarker###";
+        Object b = request.getAttribute(DOUBLE_EXCEPTION_MARKER_ATTR);
+        if (b != null)
+        {
+            return true;
+        }
+        request.setAttribute(DOUBLE_EXCEPTION_MARKER_ATTR, new Object());
+        return false;
     }
     
     public static String getFullRequestURI(HttpServletRequest request){
-    	String uri = request.getScheme() + "://" +
+        String uri = request.getScheme() + "://" +
                 request.getServerName() + 
                 ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) +
                 request.getRequestURI() +
                (request.getQueryString() != null ? "?" + request.getQueryString() : "");
-    	return uri;
+        return uri;
     }
     /**
      * called when an exception is on its way of being processed
@@ -278,14 +278,14 @@ public class ExceptionHelper {
         boolean isDoubleException = isRenderingAnException(request);
         if (isDoubleException)
         {
-    		printReducedStacktrace(response, "an exception was caught; moreover, an exception was generated while trying to generate the error page. Stopping. The webpage was: " + getFullRequestURI(request) + "\n");
-        	return null;
+            printReducedStacktrace(response, "an exception was caught; moreover, an exception was generated while trying to generate the error page. Stopping. The webpage was: " + getFullRequestURI(request) + "\n");
+            return null;
         }
         
         if (checkForInfiniteRecursion(request, response))
         {
-        	printReducedStacktrace(response, "looks like AMP went into an infinite jsp:include loop. The webpage was: " + getFullRequestURI(request));
-        	return null;
+            printReducedStacktrace(response, "looks like AMP went into an infinite jsp:include loop. The webpage was: " + getFullRequestURI(request));
+            return null;
         }
         
         if (context == null) {

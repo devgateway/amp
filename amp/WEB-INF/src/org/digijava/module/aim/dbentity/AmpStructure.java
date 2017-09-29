@@ -41,7 +41,7 @@ public class AmpStructure implements Serializable,Comparable, Versionable, Clone
 //  @Interchangeable(fieldTitle="")
     private Set<AmpActivityVersion> activities;
     private Set<AmpStructureImg> images;
-    private Set<AmpStructureCoordinate> coordinates;    
+    private Set<AmpStructureCoordinate> coordinates;
     private String coords;
     
     public Set getActivities() {
@@ -56,7 +56,6 @@ public class AmpStructure implements Serializable,Comparable, Versionable, Clone
     public void setAmpStructureId(Long ampStructureId) {
         this.ampStructureId = ampStructureId;
     }
-
     public String getDescription() {
         return description;
     }
@@ -155,6 +154,43 @@ public class AmpStructure implements Serializable,Comparable, Versionable, Clone
         }
         return false;
     }
+
+    @Override
+    public Output getOutput() {
+        Output out = new Output();
+        out.setOutputs(new ArrayList<Output>());
+        out.getOutputs().add(
+                new Output(null, new String[] { "Title" }, new Object[] { this.title != null ? this.title
+                        : "Empty Title" }));
+        if (this.description != null && !this.description.trim().equals("")) {
+            out.getOutputs()
+                    .add(new Output(null, new String[] { "Description" }, new Object[] { this.description }));
+        }
+        if (this.creationdate != null) {
+            out.getOutputs().add(
+                    new Output(null, new String[] { "Creation Date" }, new Object[] { this.creationdate }));
+        }
+        return out;
+    }
+    @Override
+    public Object getValue() {
+        String value = " " + this.creationdate + this.description /*+ this.activity*/;
+        return value;
+    }
+    
+    @Override
+    public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
+        AmpStructure aux = (AmpStructure) clone();
+        aux.activities = new HashSet();
+        aux.images = new HashSet();
+        if (this.images != null){
+            for(AmpStructureImg img : this.images){
+                AmpStructureImg auxImg =(AmpStructureImg) img.clone();
+                auxImg.setId(null);
+                auxImg.setStructure(aux);
+                aux.images.add(auxImg);
+            }
+        }
 
     @Override
     public Output getOutput() {

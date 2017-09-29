@@ -20,6 +20,8 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.algo.timing.RunNode;
+import org.dgfoundation.amp.nireports.output.NiReportFilterResult;
 import org.digijava.kernel.translator.LocalizableLabel;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.AmpCollections;
@@ -217,26 +219,59 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
         this.spec = reportSpec;
         this.yearRangeSettingsPredicate = spec.getSettings() == null ? (z -> true) : spec.getSettings().buildYearSettingsPredicate();
     }
-     
-    public NiReportRunResult execute() {
-        if (spec.getMeasures().isEmpty() && spec.getHierarchies().isEmpty() && spec.isSummaryReport()) {
-            throw new RuntimeException("Summary reports without hierarchies and measures are not supported.");
-        }
-        try(SchemaSpecificScratchpad pad = schema.generateScratchpad(this)) {
+
+    public NiReportFilterResult executeFilter() {
+        try (SchemaSpecificScratchpad pad = schema.generateScratchpad(this)) {
             this.schemaSpecificScratchpad = pad;
             this.timer = new InclusiveTimer("Report " + spec.getReportName());
             this.calendar = pad.buildCalendarConverter();
 
             timer.run("converting filters", () -> this.filters = schema.convertFilters(this));
-            timer.run("workspaceFilter", () -> this.mainIds = Collections.unmodifiableSet(this.filters.getWorkspaceActivityIds()));
+            timer.run("fetch activity ids",
+                    () -> this.mainIds = Collections.unmodifiableSet(this.filters.getActivityIds()));
+            timer.run("apply column filters", this::applyFilters);
+
+            if (filters.getCellPredicates().containsKey(FUNDING_COLUMN_NAME)) {
+                timer.run("apply funding filters", this::applyFundingFilters);
+            }
+
+            logger.info(String.format("it took %d millies to filter, the breakdown is:\n%s",
+                    timer.getWallclockTime(), timer.getCurrentState().asUserString(RunNode.DEFAULT_INDENT)));
+
+            return new NiReportFilterResult(mainIds, timer.getCurrentState(), timer.getWallclockTime(), reportWarnings);
+        } catch (Exception e) {
+            throw AlgoUtils.translateException(e);
+        }
+    }
+
+    /**
+     * Filter activities by funding.
+     */
+    private void applyFundingFilters() throws Exception {
+        fetchFunding();
+        mainIds.retainAll(funding.stream().map(c -> c.activityId).collect(Collectors.toSet()));
+    }
+
+    public NiReportRunResult execute() {
+        if (spec.getMeasures().isEmpty() && spec.getHierarchies().isEmpty() && spec.isSummaryReport()) {
+            throw new RuntimeException("Summary reports without hierarchies and measures are not supported.");
+        }
+        try (SchemaSpecificScratchpad pad = schema.generateScratchpad(this)) {
+            this.schemaSpecificScratchpad = pad;
+            this.timer = new InclusiveTimer("Report " + spec.getReportName());
+            this.calendar = pad.buildCalendarConverter();
+
+            timer.run("converting filters", () -> this.filters = schema.convertFilters(this));
+            timer.run("workspaceFilter",
+                    () -> this.mainIds = Collections.unmodifiableSet(this.filters.getActivityIds()));
             timer.run("exec", this::runReportAndCleanup);
             //printReportWarnings();
             NiReportRunResult runResult = new NiReportRunResult(this.reportOutput, timer.getCurrentState(), timer.getWallclockTime(), this.headers, reportWarnings);
 //          logger.warn("JsonBean structure of RunNode:" + timingInfo.asJsonBean());
-            logger.warn(String.format("it took %d millies to generate report, the breakdown is:\n%s", runResult.wallclockTime, runResult.timings.asUserString(3)));
+            logger.warn(String.format("it took %d millies to generate report, the breakdown is:\n%s",
+                    runResult.wallclockTime, runResult.timings.asUserString(RunNode.DEFAULT_INDENT)));
             return runResult; 
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             throw AlgoUtils.translateException(e);
         }
     }
@@ -391,14 +426,18 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
                 if (cc != null)
                     fetchedColumns.put(colToFetch.name, cc);
             });
-        };
+        }
+        fetchFunding();
+    }
+
+    private void fetchFunding() {
         timer.run("Funding", () -> {
             unfilteredFunding = schema.fetchEntity(this, schema.getFundingFetcher(this)).stream().filter(z -> this.mainIds.contains(z.activityId)).collect(Collectors.toList());
             funding = selectRelevant(unfilteredFunding, buildCellFilterForColumn(FUNDING_COLUMN_NAME, true));
             timer.putMetaInNode("cells", funding.size());
-            });
+        });
     }
-    
+
     /**
      * returns true IFF in this report we should exclude non-transactions-containing activities from the output
      * @return

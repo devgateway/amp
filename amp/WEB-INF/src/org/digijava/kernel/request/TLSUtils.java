@@ -3,6 +3,7 @@ package org.digijava.kernel.request;
 import java.nio.file.Paths;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Supplier;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
@@ -33,6 +34,7 @@ public class TLSUtils {
     public Site site;
     public HttpServletRequest request;
     private static String forcedLangCode = null;
+    private boolean filterGlobally;
     
     public static String getLangCode() {
         if (TLSUtils.forcedLangCode != null)
@@ -127,7 +129,7 @@ public class TLSUtils {
         TLSUtils instance = getThreadLocalInstance();
         return instance.request;
     }
-    
+
     public static TLSUtils getThreadLocalInstance()
     {
         TLSUtils res = threadLocalInstance.get();
@@ -231,5 +233,19 @@ public class TLSUtils {
         });
         return s;
     }
-         
+
+    public static boolean isFilterGlobally() {
+        return getThreadLocalInstance().filterGlobally;
+    }
+
+    public static <K> K inGlobalFilterContext(Supplier<K> supplier) {
+        TLSUtils tls = getThreadLocalInstance();
+        boolean oldFilterGlobally = tls.filterGlobally;
+        try {
+            tls.filterGlobally = true;
+            return supplier.get();
+        } finally {
+            tls.filterGlobally = oldFilterGlobally;
+        }
+    }
 }

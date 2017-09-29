@@ -105,7 +105,7 @@ import clover.org.apache.commons.lang.StringUtils;
 public class ActivityUtil {
 
   private static Logger logger = Logger.getLogger(ActivityUtil.class);
-
+   
   public static List<AmpComponent> getComponents(Long actId) {
     Session session = null;
     List<AmpComponent> col = new ArrayList<AmpComponent>();
@@ -939,16 +939,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
      * @param session
      */
     public static Set<Long> getAllLegalAmpActivityIds() {
-        return getAllLegalAmpActivityIds(true);
-    }
-
-    public static Set<Long> getAllLegalAmpActivityIds(boolean inclideDrafts)
-    {
-        String usedQuery = WorkspaceFilter.getWorkspaceFilterQuery(TLSUtils.getRequest().getSession());
-        if (!inclideDrafts) {
-            usedQuery += " and draft=false";
-        }
-        return fetchLongs(usedQuery);
+        return fetchLongs(WorkspaceFilter.getWorkspaceFilterQuery(TLSUtils.getRequest().getSession()));
     }
     
     public static List<AmpActivityFake> getLastUpdatedActivities() {
@@ -1620,29 +1611,29 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
             if (isSearchByName) {
                 //this query is stupid and should be rewritten!
                 nameSearchQuery = " (f.ampActivityId IN (SELECT t.objectId FROM " + AmpContentTranslation.class.getName() + " t WHERE t.objectClass = '" + AmpActivityVersion.class.getName() + "' AND upper(t.translation) like upper(:searchTerm)))" +
-            "OR f.ampActivityId IN (SELECT f2.ampActivityId from " + AmpActivity.class.getName() + " f2 WHERE upper(f2.name) LIKE upper(:searchTerm) OR upper(f2.ampId) LIKE upper(:searchTerm) ) " +
+            "OR f.ampActivityId IN (SELECT f2.ampActivityId from " + AmpActivity.class.getName() + " f2 WHERE upper(f2.name) LIKE upper(:searchTerm) OR upper(f2.ampId) LIKE upper(:searchTerm) ) " + 
             " AND "; 
             } else {
                 nameSearchQuery = "";
             }   
-
+            
             String dataFreezeQuery = "";
             if(frozenActivityIds!=null && frozenActivityIds.size()>0){
-                if(ActivityForm.DataFreezeFilter.FROZEN.equals(dataFreezeFilter)) {
+                if(ActivityForm.DataFreezeFilter.FROZEN.equals(dataFreezeFilter)) {               
                     dataFreezeQuery = " and f.ampActivityId in (:frozenActivityIds) ";
                 } else if(ActivityForm.DataFreezeFilter.UNFROZEN.equals(dataFreezeFilter)) {
                     dataFreezeQuery = " and f.ampActivityId not in (:frozenActivityIds) ";
                 }
             }
-
-            String queryString = "select f.ampActivityId, f.ampId, " + activityName + ", ampTeam , ampGroup FROM " + AmpActivity.class.getName() +
+                
+            String queryString = "select f.ampActivityId, f.ampId, " + activityName + ", ampTeam , ampGroup FROM " + AmpActivity.class.getName() +  
                 " as f left join f.team as ampTeam left join f.ampActivityGroup as ampGroup WHERE " + nameSearchQuery + " ((f.deleted = false) or (f.deleted is null))" + dataFreezeQuery;
             
             Query qry = session.createQuery(queryString);
             if(isSearchByName) {
                 qry.setString("searchTerm", "%" + searchTerm + "%");
             }
-
+            
             if (frozenActivityIds != null && frozenActivityIds.size() > 0
                     && (ActivityForm.DataFreezeFilter.FROZEN.equals(dataFreezeFilter)
                             || ActivityForm.DataFreezeFilter.UNFROZEN.equals(dataFreezeFilter))) {

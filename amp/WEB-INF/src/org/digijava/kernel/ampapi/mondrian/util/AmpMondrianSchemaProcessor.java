@@ -579,7 +579,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
             ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
             return ReportEnvironment.buildFor(sra.getRequest());
         }
-        return new ReportEnvironment("en", new CompleteWorkspaceFilter(null, null), "EUR");
+        return new ReportEnvironment("en", new CompleteWorkspaceFilter(null), "EUR");
     }
     
 }

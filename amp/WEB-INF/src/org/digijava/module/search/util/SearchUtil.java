@@ -17,8 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.ar.ActivityFilter;
 import org.dgfoundation.amp.ar.AmpARFilter;
-import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.admin.helper.AmpActivityFake;
@@ -247,8 +247,6 @@ public class SearchUtil {
 
         StopWatch.reset("Search");
 
-        String workspaceQuery = WorkspaceFilter.generateWorkspaceFilterQuery(tm);
-
         AmpARFilter filter = new AmpARFilter();
 
         /**
@@ -261,8 +259,11 @@ public class SearchUtil {
                                                                                 // other
                                                                                 // auxiliary
                                                                                 // info
+
+        if (request.getParameter("searchMode") != null) {
+            filter.setSearchMode(request.getParameter("searchMode"));
+        }
         filter.setIndexText(keyword);
-        filter.generateFilterQuery(request, false, true);
 
         // String hsqlQuery = filter.getGeneratedFilterQuery().replaceAll(
         // "FROM amp_activity", "FROM " + AmpActivity.class.getName());
@@ -274,13 +275,14 @@ public class SearchUtil {
 
         session = PersistenceManager.getSession();
 
+        Set<Long> ids = ActivityFilter.getInstance().filter(filter);
+
         // not a very nice solution, but I kept the old code and idea and just
         // added some speed
         String newQueryString = "SELECT f.amp_activity_id, f.amp_id, "
                 + AmpActivityVersion.sqlStringForName("f.amp_activity_id")
                 + " AS name, f.approval_status, f.draft FROM amp_activity f WHERE f.amp_activity_id in ("
-                + filter.getGeneratedFilterQuery() + ""
-                /* + "INTERSECT "+ workspaceQuery */+ ")";
+                + Util.toCSString(ids) + ")";
         SQLQuery newQuery = session.createSQLQuery(newQueryString).addScalar("amp_activity_id", LongType.INSTANCE);
         newQuery = newQuery.addScalar("amp_id", org.hibernate.type.StandardBasicTypes.STRING);
         newQuery = newQuery.addScalar("name", org.hibernate.type.StandardBasicTypes.STRING);
@@ -288,7 +290,7 @@ public class SearchUtil {
         newQuery = newQuery.addScalar("draft", org.hibernate.type.StandardBasicTypes.BOOLEAN);
 
         LinkedHashMap<Long, LoggerIdentifiable> sortingActivities = new LinkedHashMap<>();
-        for (Long i : filter.getAmpActivityIdOrder()) {
+        for (Long i : ids) {
             sortingActivities.put(i,null);
         }
 

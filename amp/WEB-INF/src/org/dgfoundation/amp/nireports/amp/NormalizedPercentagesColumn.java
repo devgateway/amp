@@ -15,11 +15,9 @@ import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.ViewFetcher;
 import org.dgfoundation.amp.newreports.ReportRenderWarning;
-import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.PercentageTextCell;
 import org.dgfoundation.amp.nireports.amp.PercentagesCorrector.Snapshot;
-import org.dgfoundation.amp.nireports.amp.diff.DifferentialCache;
 import org.dgfoundation.amp.nireports.amp.diff.TextColumnKeyBuilder;
 import org.dgfoundation.amp.nireports.behaviours.PercentageTokenBehaviour;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
@@ -43,20 +41,15 @@ public class NormalizedPercentagesColumn extends AmpDifferentialColumn<Percentag
         super(columnName, levelColumn, viewName, TextColumnKeyBuilder.instance, PercentageTokenBehaviour.instance);
         this.percentagesCorrector = percentagesCorrector;
     }
-    
-    @Override
-    public final synchronized List<PercentageTextCell> fetch(NiReportsEngine engine) {
-        ImmutablePair<Set<Long>, DifferentialCache<PercentageTextCell>> pair = differentiallyImportCells(engine, ids -> fetchIds(engine, ids));
-        return pair.v.getCells(engine.schemaSpecificScratchpad.getMainIds(engine, this));
-    }
-    
+
     /**
      * fetches the entries corresponding to a given set of ownerIds, corrects the percentages and then returns the result cells
      * @param engine the context of the request
      * @param ids the ownerIds to fetch
      * @return
      */
-    protected synchronized List<PercentageTextCell> fetchIds(NiReportsEngine engine, Set<Long> ids) {
+    @Override
+    public synchronized List<PercentageTextCell> fetch(NiReportsEngine engine, Set<Long> ids) {
         if (ids.isEmpty())
             return Collections.emptyList();
         String locale = TLSUtils.getEffectiveLangCode();

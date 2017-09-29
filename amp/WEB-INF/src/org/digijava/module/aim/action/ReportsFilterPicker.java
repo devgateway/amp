@@ -1043,7 +1043,7 @@ public class ReportsFilterPicker extends Action {
         
         //Finance date filter
         addDateFilter(null, "", "Date Filter", filterForm.getDynamicDateFilter(), "filter_date_div", filterForm.getOtherCriteriaElements());
-
+        
         if (FeaturesUtil.isVisibleField(ColumnConstants.PERFORMANCE_ALERT_LEVEL)) {
             Collection<AmpCategoryValue> categoryValues = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(
                     CategoryConstants.PERFORMANCE_ALERT_LEVEL_KEY, true);
@@ -1053,7 +1053,7 @@ public class ReportsFilterPicker extends Action {
                             tree, "selectedPerformanceAlertLevels");
             filterForm.getOtherCriteriaElements().add(groupingElement);
         }
-
+        
         Collection<AmpIndicatorRiskRatings> meRisks = MEIndicatorsUtil.getAllIndicatorRisks();
         for (AmpIndicatorRiskRatings element:meRisks) {
             String value = element.getRatingName();
@@ -1515,7 +1515,7 @@ public class ReportsFilterPicker extends Action {
         arf.setStatuses(pumpCategoryValueSetFromForm(filterForm.getSelectedStatuses()));
         
         arf.setExpenditureClass(pumpCategoryValueSetFromForm(filterForm.getSelectedExpenditureClasses()));
-
+        
         arf.setPerformanceAlertLevel(pumpCategoryValueSetFromForm(filterForm.getSelectedPerformanceAlertLevels()));
 
         if (filterForm.getSelectedWorkspaces() != null && filterForm.getSelectedWorkspaces().length > 0)
@@ -1615,7 +1615,7 @@ public class ReportsFilterPicker extends Action {
         /*THIS IS USED FOR PLEDGES IN ORDER TO SHOW ONLY PLEDGES ASSOCIATED TO THE ACTIVITIES THAT BELONG TO THE WORKSPACE
          PLEASE DON'T DELETE IT AGAIN*/
         if(arf.isWorkspaceonly()){
-            arf.setAmpTeamsforpledges(WorkspaceFilter.getAmpTeamsSet(arf.getTeamMemberId(), arf.getAccessType(), true, true));
+            arf.setAmpTeamsforpledges(WorkspaceFilter.getAmpTeamsSet(arf.getTeamMemberId(), arf.getAccessType()));
         }else{
             arf.setAmpTeamsforpledges(null);
         }

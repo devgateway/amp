@@ -28,8 +28,6 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
-import org.dgfoundation.amp.ar.AmpARFilter;
-import org.dgfoundation.amp.ar.AmpARFilterParams;
 import org.digijava.kernel.ampapi.endpoints.activity.AmpFieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.FieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
@@ -46,7 +44,6 @@ import org.digijava.kernel.services.sync.model.ListDiff;
 import org.digijava.kernel.services.sync.model.SystemDiff;
 import org.digijava.kernel.services.sync.model.Translation;
 import org.digijava.kernel.util.SiteUtils;
-import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.ContactInfoUtil;
@@ -272,7 +269,7 @@ public class SyncService implements InitializingBean {
             return emptyList();
         }
 
-        String wsFilter = getCompleteWorkspaceFilter(teamMembers);
+        String wsFilter = getWorkspaceActivitiesSql(teamMembers);
         String sql = String.format("select amp_id ampId, modified_date modifiedDate, deleted "
                 + "from amp_activity "
                 + "where amp_activity_id in (%s)", wsFilter);
@@ -291,23 +288,10 @@ public class SyncService implements InitializingBean {
         return jdbcTemplate.query(sql, singletonMap("lastSyncTime", lastSyncTime), ACTIVITY_CHANGE_ROW_MAPPER);
     }
 
-    private String getCompleteWorkspaceFilter(List<AmpTeamMember> teamMembers) {
-        StringJoiner completeSql = new StringJoiner(" UNION ");
-        completeSql.add(getArFilterActivityIds(teamMembers));
-        completeSql.add(WorkspaceFilter.getViewableActivitiesIdByTeams(teamMembers));
-        return completeSql.toString();
-    }
-
-    private String getArFilterActivityIds(List<AmpTeamMember> teamMembers) {
+    private String getWorkspaceActivitiesSql(List<AmpTeamMember> teamMembers) {
         StringJoiner sql = new StringJoiner(" UNION ");
         for (AmpTeamMember teamMember : teamMembers) {
-
-            AmpARFilter computedWsFilter = FilterUtil.buildFilterFromSource(teamMember.getAmpTeam());
-
-            AmpARFilterParams params = AmpARFilterParams.getParamsForWorkspaceFilter(teamMember.toTeamMember(), null);
-            computedWsFilter.generateFilterQuery(params);
-
-            sql.add(computedWsFilter.getGeneratedFilterQuery());
+            sql.add(WorkspaceFilter.generateWorkspaceFilterQuery(teamMember.toTeamMember()));
         }
         return sql.toString();
     }
@@ -395,18 +379,18 @@ public class SyncService implements InitializingBean {
     }
 
     private ListDiff<Long> toListDiffWithLongs(List<AmpOfflineChangelog> changeLogs, SystemDiff systemDiff) {
-        List<Long> removed = new ArrayList<>();
-        List<Long> saved = new ArrayList<>();
+            List<Long> removed = new ArrayList<>();
+            List<Long> saved = new ArrayList<>();
 
         for (AmpOfflineChangelog changelog : changeLogs) {
-            if (changelog.getOperationName().equals(DELETED)) {
-                removed.add(changelog.getEntityIdAsLong());
+                if (changelog.getOperationName().equals(DELETED)) {
+                    removed.add(changelog.getEntityIdAsLong());
+                }
+                if (changelog.getOperationName().equals(UPDATED)) {
+                    saved.add(changelog.getEntityIdAsLong());
+                }
+                systemDiff.updateTimestamp(changelog.getOperationTime());
             }
-            if (changelog.getOperationName().equals(UPDATED)) {
-                saved.add(changelog.getEntityIdAsLong());
-            }
-            systemDiff.updateTimestamp(changelog.getOperationTime());
-        }
 
         return new ListDiff<>(removed, saved);
     }

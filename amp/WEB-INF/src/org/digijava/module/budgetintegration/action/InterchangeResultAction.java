@@ -23,7 +23,8 @@ public class InterchangeResultAction extends Action {
     private static final Logger LOGGER = Logger.getLogger(InterchangeResultAction.class);
 
     @Override
-    public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+            HttpServletResponse response) throws Exception {
         LOGGER.info("interchange result");
         if (form instanceof InterchangeResultForm) {
             InterchangeResultForm interchangeResultForm = (InterchangeResultForm) form;
@@ -45,12 +46,15 @@ public class InterchangeResultAction extends Action {
                 }
             }
             String strFilterDate = interchangeResultForm.getFilterDate();
-            Date filterDate = StringUtils.isNotBlank(strFilterDate)? new Date(DateTimeUtil.parseDate(strFilterDate).getTime()): null;
+            Date filterDate = StringUtils.isNotBlank(strFilterDate) 
+                    ? new Date(DateTimeUtil.parseDate(strFilterDate).getTime()) : null;
             Integer offset = interchangeResultForm.getOffset();
             Integer pageSize = interchangeResultForm.getPageSize();
-            List<AmpInterchangeableResult> result = BudgetIntegrationUtil.getInterchangeResult(filterDate, offset, pageSize, order);
+            List<AmpInterchangeableResult> result = 
+                    BudgetIntegrationUtil.getInterchangeResult(filterDate, offset, pageSize, order);
             Integer totalResults = BudgetIntegrationUtil.getInterchangeResultCount(filterDate);
-            Integer lastPage = interchangeResultForm.getPageSize() == -1 ? 1 : Math.floorDiv(totalResults, interchangeResultForm.getPageSize()) + 1;
+            Integer lastPage = interchangeResultForm.getPageSize() == -1 
+                    ? 1 : Math.floorDiv(totalResults, interchangeResultForm.getPageSize()) + 1;
             Integer currentPage = interchangeResultForm.getCurrentPage();
             int numberOfPages = Integer.min(lastPage, interchangeResultForm.getPagesToShow());
             if(currentPage > interchangeResultForm.getPagesToShow()) {

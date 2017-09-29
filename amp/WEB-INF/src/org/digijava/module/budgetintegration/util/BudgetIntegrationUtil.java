@@ -8,7 +8,9 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpInterchangeableResult;
 import org.hibernate.Query;
 
-public class BudgetIntegrationUtil {
+public final class BudgetIntegrationUtil {
+    
+    private BudgetIntegrationUtil() { }
 
     public static List<AmpInterchangeableResult> getInterchangeResult(Date date, Integer offset, Integer pageSize,
             String order) {

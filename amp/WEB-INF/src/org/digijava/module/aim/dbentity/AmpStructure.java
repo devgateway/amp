@@ -41,9 +41,9 @@ public class AmpStructure implements Serializable,Comparable, Versionable, Clone
 //  @Interchangeable(fieldTitle="")
     private Set<AmpActivityVersion> activities;
     private Set<AmpStructureImg> images;
-    private Set<AmpStructureCoordinate> coordinates;    
+    private Set<AmpStructureCoordinate> coordinates;
     private String coords;
-    
+
     public Set getActivities() {
         return activities;
     }
@@ -192,7 +192,7 @@ public class AmpStructure implements Serializable,Comparable, Versionable, Clone
                 aux.images.add(auxImg);
             }
         }
-        
+
         aux.coordinates = new LinkedHashSet<>();
         if (this.coordinates != null) {
             for (AmpStructureCoordinate coord : this.coordinates) {
@@ -202,7 +202,7 @@ public class AmpStructure implements Serializable,Comparable, Versionable, Clone
                 aux.coordinates.add(auxCoord);
             }
         }
-        
+
         //aux.activities.add(newActivity);
         aux.ampStructureId = null;
         return aux;

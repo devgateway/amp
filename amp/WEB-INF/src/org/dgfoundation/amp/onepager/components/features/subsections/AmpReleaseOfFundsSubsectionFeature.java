@@ -15,6 +15,8 @@ import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFea
 import org.dgfoundation.amp.onepager.components.features.tables.AmpEstimatedDonorDisbursementsFormTableFeature;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpReleaseOfFundsFormTableFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
+import org.dgfoundation.amp.onepager.events.FreezingUpdateEvent;
+import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -70,7 +72,7 @@ public class AmpReleaseOfFundsSubsectionFeature extends
         
         disbursementsTableFeature = new AmpReleaseOfFundsFormTableFeature("disbursementsTableFeature", model, "Release of Funds Table", transactionType);
         add(disbursementsTableFeature);
-        fundingOrgModel = new PropertyModel<AmpOrganisation>(model,"ampDonorOrgId");
+        fundingOrgModel = new PropertyModel<AmpOrganisation>(model, "ampDonorOrgId");
         
         AmpAjaxLinkField addReleaseOfFunds=new AmpAjaxLinkField("addDisbursement","Add RoF","Add RoF") {
             @Override

@@ -246,17 +246,12 @@ public final class DataFreezeService {
      * @return
      */
     public static boolean isEditable(AmpActivityFrozen ampActivityFrozen, AmpTeamMember atm) {
-        boolean result = true;
-        // check if user is exempt for data freezing
-        if (Boolean.TRUE.equals(atm.getUser().getExemptFromDataFreezing())) {
-            return result;
-        }
-        if (ampActivityFrozen == null || ampActivityFrozen.getDataFreezeEvent()
-                .getFreezeOption() == AmpDataFreezeSettings.FreezeOptions.FUNDING) {
-            return true;
-        } else {
-            return false;
-        }
+        return !isActivityAffectedByFreezing(ampActivityFrozen, atm) || ampActivityFrozen.getDataFreezeEvent()
+                .getFreezeOption() == AmpDataFreezeSettings.FreezeOptions.FUNDING;
+    }
+
+    public static boolean isActivityAffectedByFreezing(AmpActivityFrozen ampActivityFrozen, AmpTeamMember atm) {
+        return !(Boolean.TRUE.equals(atm.getUser().getExemptFromDataFreezing()) || ampActivityFrozen == null);
     }
 
     public static void processFreezingEvent() {

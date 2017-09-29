@@ -57,7 +57,8 @@ public final class OnePagerConst {
     
     public static final MetaDataKey<AmpActivityFrozen> FUNDING_FREEZING_CONFIGURATION = new MetaDataKey<AmpActivityFrozen>(){};
     public static final MetaDataKey<Boolean> ACTIVITY_FREEZING_CONFIGURATION = new MetaDataKey<Boolean>(){};
-
+    public static final MetaDataKey<Boolean> ACTIVITY_IS_AFFECTED_BY_FREEZING = new MetaDataKey<Boolean>() {
+    };
     /**
      * {@linkplain http://community.jboss.org/wiki/OpenSessionInView}
      * manual session-per-conversation model

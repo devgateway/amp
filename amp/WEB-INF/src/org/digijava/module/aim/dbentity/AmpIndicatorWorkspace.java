@@ -4,16 +4,16 @@ import java.io.Serializable;
 
 public class AmpIndicatorWorkspace implements Serializable{
 
-	private AmpTeam workspace;
-	private AmpIndicatorLayer indicatorLayer;
+    private AmpTeam workspace;
+    private AmpIndicatorLayer indicatorLayer;
     private Long indicatorWorkspaceId;
 
-	public AmpIndicatorLayer getIndicatorLayer() {
-		return indicatorLayer;
-	}
-	public void setIndicatorLayer(AmpIndicatorLayer indicatorLayer) {
-		this.indicatorLayer = indicatorLayer;
-	}
+    public AmpIndicatorLayer getIndicatorLayer() {
+        return indicatorLayer;
+    }
+    public void setIndicatorLayer(AmpIndicatorLayer indicatorLayer) {
+        this.indicatorLayer = indicatorLayer;
+    }
 
     public Long getIndicatorWorkspaceId() {
         return indicatorWorkspaceId;

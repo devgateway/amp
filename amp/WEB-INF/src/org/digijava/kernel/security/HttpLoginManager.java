@@ -1272,17 +1272,17 @@ public final class HttpLoginManager {
     }
 
     public static LoginInfo getLoginInfo(String sessionId) {
-    	AbstractCache sessionCache = DigiCacheManager.getInstance().getCache(LOGIN_CACHE_REGION_ROOT);
-    	return (LoginInfo) sessionCache.get(sessionId);
+        AbstractCache sessionCache = DigiCacheManager.getInstance().getCache(LOGIN_CACHE_REGION_ROOT);
+        return (LoginInfo) sessionCache.get(sessionId);
     }
 
     private static void saveLoginInfo(String sessionId, LoginInfo loginInfo) {
-    	AbstractCache sessionCache = DigiCacheManager.getInstance().getCache(LOGIN_CACHE_REGION_ROOT);
-    	sessionCache.put(sessionId, loginInfo);
+        AbstractCache sessionCache = DigiCacheManager.getInstance().getCache(LOGIN_CACHE_REGION_ROOT);
+        sessionCache.put(sessionId, loginInfo);
     }
 
     private static void clearLoginInfo(String sessionId) {
-    	AbstractCache sessionCache = DigiCacheManager.getInstance().getCache(LOGIN_CACHE_REGION_ROOT);
+        AbstractCache sessionCache = DigiCacheManager.getInstance().getCache(LOGIN_CACHE_REGION_ROOT);
         sessionCache.evict(sessionId);
     }
 

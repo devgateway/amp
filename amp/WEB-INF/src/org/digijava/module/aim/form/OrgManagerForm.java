@@ -46,7 +46,7 @@ private String keyword;
   private String[] alphaPages = null;
 
     public boolean isAdminSide() {
-	    return adminSide;
+        return adminSide;
     }
 
     public void setAdminSide(boolean adminSide) {
@@ -149,14 +149,14 @@ private String keyword;
    * @return
    */
   public int getAlphaPosition(String Alpha){
-	  int alphaPosition=1;
-	  for (int i = 0; i < alphaPages.length; i++) {
-		if(alphaPages[i].equalsIgnoreCase(alpha)){
-			alphaPosition = i;
-			break;
-		}
-	  }
-	  return alphaPosition;
+      int alphaPosition=1;
+      for (int i = 0; i < alphaPages.length; i++) {
+        if(alphaPages[i].equalsIgnoreCase(alpha)){
+            alphaPosition = i;
+            break;
+        }
+      }
+      return alphaPosition;
   }
 
   /**
@@ -244,19 +244,19 @@ private String keyword;
   }
 
   public void setPages(Collection pages) {
-	  this.pages = pages;
-	  if(pages!=null)
-	  {    
-		  this.pagesSize=pages.size();
-	  }
+      this.pages = pages;
+      if(pages!=null)
+      {    
+          this.pagesSize=pages.size();
+      }
   }
   
   public int getPagesSize() {
-	return pagesSize;
+    return pagesSize;
 }
 
 public void setPagesSize(int pagesSize) {
-	this.pagesSize = pagesSize;
+    this.pagesSize = pagesSize;
 }
 
   /**
@@ -382,41 +382,41 @@ public void setPagesSize(int pagesSize) {
   }
 
 public int getPagesToShow() {
-	return pagesToShow;
+    return pagesToShow;
 }
 
 public void setPagesToShow(int pagesToShow) {
-	this.pagesToShow = pagesToShow;
+    this.pagesToShow = pagesToShow;
 }
 
 public int getOffset() {
-	int value;
-	if (getCurrentPage()> (this.getPagesToShow()/2)){
-		value = (this.getCurrentPage() - (this.getPagesToShow()/2))-1;
-	}
-	else {
-		value = 0;
-	}
-	setOffset(value);
-	return offset;
+    int value;
+    if (getCurrentPage()> (this.getPagesToShow()/2)){
+        value = (this.getCurrentPage() - (this.getPagesToShow()/2))-1;
+    }
+    else {
+        value = 0;
+    }
+    setOffset(value);
+    return offset;
 }
 
 public void setOffset(int offset) {
-	this.offset = offset;
+    this.offset = offset;
 }
 public String getOldOrgType() {
-	return oldOrgType;
+    return oldOrgType;
 }
 
 public void setOldOrgType(String oldOrgType) {
-	this.oldOrgType = oldOrgType;
+    this.oldOrgType = oldOrgType;
 }
 public Long getOldAmpOrgTypeId() {
-	return oldAmpOrgTypeId;
+    return oldAmpOrgTypeId;
 }
 
 public void setOldAmpOrgTypeId(Long oldAmpOrgTypeId) {
-	this.oldAmpOrgTypeId = oldAmpOrgTypeId;
+    this.oldAmpOrgTypeId = oldAmpOrgTypeId;
 }
 
 public void setDigitPages(String[] digitPages) {

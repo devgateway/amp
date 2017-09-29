@@ -16,7 +16,7 @@ public class StructuresUtil {
     private static Logger logger = Logger.getLogger(ComponentsUtil.class);
 
     @SuppressWarnings("unchecked")
-	public static Collection<AmpStructureType> getAmpStructureTypes() {
+    public static Collection<AmpStructureType> getAmpStructureTypes() {
         Collection<AmpStructureType> col = null;
         String queryString = null;
         Session session = null;

@@ -31,54 +31,54 @@ import org.digijava.module.aim.util.TeamMemberUtil;
  */
 public class AmpPMViewUsersTableFeaturePanel extends AmpFormTableFeaturePanel {
 
-	/**
-	 * @param id
-	 * @param model
-	 * @param fmName
-	 * @throws Exception
-	 */
-	public AmpPMViewUsersTableFeaturePanel(String id, IModel model, String fmName) throws Exception {
-		super(id, model, fmName);
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * @param id
+     * @param model
+     * @param fmName
+     * @throws Exception
+     */
+    public AmpPMViewUsersTableFeaturePanel(String id, IModel model, String fmName) throws Exception {
+        super(id, model, fmName);
+        // TODO Auto-generated constructor stub
+    }
 
-	/**
-	 * @param id
-	 * @param model
-	 * @param fmName
-	 * @param hideLeadingNewLine
-	 * @throws Exception
-	 */
-	public AmpPMViewUsersTableFeaturePanel(String id, IModel<AmpTeam> model, String fmName, boolean hideLeadingNewLine) throws Exception {
-		super(id, model, fmName, hideLeadingNewLine);
+    /**
+     * @param id
+     * @param model
+     * @param fmName
+     * @param hideLeadingNewLine
+     * @throws Exception
+     */
+    public AmpPMViewUsersTableFeaturePanel(String id, IModel<AmpTeam> model, String fmName, boolean hideLeadingNewLine) throws Exception {
+        super(id, model, fmName, hideLeadingNewLine);
 
-		Set<TeamMember> col = new TreeSet<TeamMember>(); 
-		col.addAll(TeamMemberUtil.getAllTeamMembers(model.getObject().getAmpTeamId()));
-		final IModel<Set<TeamMember>> setModel = new Model((Serializable) col);
-		AbstractReadOnlyModel<List<TeamMember>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(setModel);
-		
-		list = new PageableListView<TeamMember>("usersListWorkspace", listModel, 5) {
-			private static final long serialVersionUID = 7218457979728871528L;
-			@Override
-			protected void populateItem(final ListItem<TeamMember> item) {
-				final MarkupContainer listParent=this.getParent();
-				TransparentWebMarkupContainer userImgSrc = new TransparentWebMarkupContainer("userImgSrc");
-				userImgSrc.setOutputMarkupId(true);
-				AttributeModifier srcModifier = null;
-				TeamMember t = item.getModelObject();
-				if(item.getModelObject().getTeamHead()) 
-					userImgSrc.add(new AttributeModifier("src",new Model(PMUtil.WORKSPACE_MANAGER_IMG_SRC)));
-				else userImgSrc.add(new AttributeModifier("src",new Model(PMUtil.WORKSPACE_MEMBER_IMG_SRC)));
-				item.add(userImgSrc);
-				item.add(new Label("userLabel", item.getModelObject().getMemberName()));
-				item.add(new Label("userEmailLabel", item.getModelObject().getEmail()));
-				item.add(new Label("userRole", item.getModelObject().getRoleName()));
-			}
-		};
-		list.setReuseItems(true);
-		add(list);
-		
-	
-	}
+        Set<TeamMember> col = new TreeSet<TeamMember>(); 
+        col.addAll(TeamMemberUtil.getAllTeamMembers(model.getObject().getAmpTeamId()));
+        final IModel<Set<TeamMember>> setModel = new Model((Serializable) col);
+        AbstractReadOnlyModel<List<TeamMember>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(setModel);
+        
+        list = new PageableListView<TeamMember>("usersListWorkspace", listModel, 5) {
+            private static final long serialVersionUID = 7218457979728871528L;
+            @Override
+            protected void populateItem(final ListItem<TeamMember> item) {
+                final MarkupContainer listParent=this.getParent();
+                TransparentWebMarkupContainer userImgSrc = new TransparentWebMarkupContainer("userImgSrc");
+                userImgSrc.setOutputMarkupId(true);
+                AttributeModifier srcModifier = null;
+                TeamMember t = item.getModelObject();
+                if(item.getModelObject().getTeamHead()) 
+                    userImgSrc.add(new AttributeModifier("src",new Model(PMUtil.WORKSPACE_MANAGER_IMG_SRC)));
+                else userImgSrc.add(new AttributeModifier("src",new Model(PMUtil.WORKSPACE_MEMBER_IMG_SRC)));
+                item.add(userImgSrc);
+                item.add(new Label("userLabel", item.getModelObject().getMemberName()));
+                item.add(new Label("userEmailLabel", item.getModelObject().getEmail()));
+                item.add(new Label("userRole", item.getModelObject().getRoleName()));
+            }
+        };
+        list.setReuseItems(true);
+        add(list);
+        
+    
+    }
 
 }

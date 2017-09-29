@@ -6,16 +6,16 @@ package org.dgfoundation.amp.newreports;
  *
  */
 public class ReportMeasure extends NamedTypedEntity {
-	
-	/**
-	 * 
-	 * @param measureName - the name of the measure
-	 */
-	public ReportMeasure(String measureName) {
-		super(measureName);
-	}
-		
-	public String getMeasureName() {
-		return this.entityName;
-	}
+    
+    /**
+     * 
+     * @param measureName - the name of the measure
+     */
+    public ReportMeasure(String measureName) {
+        super(measureName);
+    }
+        
+    public String getMeasureName() {
+        return this.entityName;
+    }
 }

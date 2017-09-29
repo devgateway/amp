@@ -13,6 +13,6 @@ import org.apache.wicket.markup.html.form.FormComponent;
  */
 public interface AmpRequiredComponentContainer {
 
-	
-	public List<FormComponent<?>> getRequiredFormComponents ();
+    
+    public List<FormComponent<?>> getRequiredFormComponents ();
 }

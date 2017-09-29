@@ -49,14 +49,14 @@ public class SectorClassConfigForm extends ActionForm {
     }
     
     public String getConfigDescription() {
-		return configDescription;
-	}
+        return configDescription;
+    }
 
-	public void setConfigDescription(String configDescription) {
-		this.configDescription = configDescription;
-	}
+    public void setConfigDescription(String configDescription) {
+        this.configDescription = configDescription;
+    }
 
-	public List getClassifications() {
+    public List getClassifications() {
         return classifications;
     }
 

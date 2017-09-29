@@ -18,9 +18,9 @@ import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
 
 public class CalendarEventJob extends ConnectionCleaningJob implements StatefulJob { 
-	
-	@Override 
-	public void executeInternal(JobExecutionContext context) throws JobExecutionException {		
+    
+    @Override 
+    public void executeInternal(JobExecutionContext context) throws JobExecutionException {     
 
         Date curDate=new Date();
         Date dateAfterDays;

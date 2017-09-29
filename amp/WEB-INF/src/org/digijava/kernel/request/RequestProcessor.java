@@ -101,10 +101,10 @@ public class RequestProcessor
     private WebApplicationContext springContext;
     
     private static  final String  httpsScheme = "https";
-	private static final String httpScheme = "http";
-	
-	private static String httpPort = null;
-	private static String httpsPort = null;
+    private static final String httpScheme = "http";
+    
+    private static String httpPort = null;
+    private static String httpsPort = null;
 
     private static Set<String> bypassRefererCheckActions = null;
     static {
@@ -263,9 +263,9 @@ public class RequestProcessor
     }
 
     private boolean checkForIdInQuery(String url){
-    	if (url.indexOf('~') > -1 || url.indexOf("id=") > -1 || url.indexOf("Id=") > -1)
-    		return true;
-    	return false;
+        if (url.indexOf('~') > -1 || url.indexOf("id=") > -1 || url.indexOf("Id=") > -1)
+            return true;
+        return false;
     }
     
     public void process(HttpServletRequest request,
@@ -280,14 +280,14 @@ public class RequestProcessor
         //AMP Security Issues - AMP-12638
         if (false)
         {
-        	String commonURL = new String(request.getRequestURL());
-        	String headCommonURL = commonURL.substring(0, commonURL.indexOf("://") + 3);
-        	commonURL = commonURL.substring(commonURL.indexOf("://") + 3);
-        	int idx = commonURL.indexOf('/');
-        	if (idx > -1){
-        		commonURL = commonURL.substring(0, idx);
-        	}
-        	String oldCommonURL = new String(commonURL);
+            String commonURL = new String(request.getRequestURL());
+            String headCommonURL = commonURL.substring(0, commonURL.indexOf("://") + 3);
+            commonURL = commonURL.substring(commonURL.indexOf("://") + 3);
+            int idx = commonURL.indexOf('/');
+            if (idx > -1){
+                commonURL = commonURL.substring(0, idx);
+            }
+            String oldCommonURL = new String(commonURL);
 
 
             String actionPath = request.getRequestURL().substring(request.getRequestURL().indexOf("/", request.getRequestURL().indexOf("://") + 3));
@@ -297,84 +297,84 @@ public class RequestProcessor
                 bypassRefererCheck = true;
             }
 
-        	if (referrer != null){
-        		String commonREF = new String(referrer);
-        		commonREF = commonREF.substring(commonREF.indexOf("://") + 3);
-        		idx = commonREF.indexOf('/');
-        		if (idx > -1){
-        			commonREF = commonREF.substring(0, idx);
-        		}
-        		
-        		if (commonREF.compareTo(commonURL) != 0 ){
-        			commonURL = new String(request.getRequestURL());
-            		if (request.getQueryString() != null)
-            			commonURL += "?" + request.getQueryString();
-            		if (checkForIdInQuery(commonURL)){
-            			if (!bypassRefererCheck) {
+            if (referrer != null){
+                String commonREF = new String(referrer);
+                commonREF = commonREF.substring(commonREF.indexOf("://") + 3);
+                idx = commonREF.indexOf('/');
+                if (idx > -1){
+                    commonREF = commonREF.substring(0, idx);
+                }
+                
+                if (commonREF.compareTo(commonURL) != 0 ){
+                    commonURL = new String(request.getRequestURL());
+                    if (request.getQueryString() != null)
+                        commonURL += "?" + request.getQueryString();
+                    if (checkForIdInQuery(commonURL)){
+                        if (!bypassRefererCheck) {
                             throw new RuntimeException("Access denied for url: " + request.getRequestURL());
                         }
-            		}
-        		}
-        	}
-        	else{
-        		commonURL = new String(request.getRequestURL());
-        		if (request.getQueryString() != null)
-        			commonURL += "?" + request.getQueryString();
-        		if (!bypassRefererCheck && checkForIdInQuery(commonURL)){
-        			throw new RuntimeException("Access denied for url: " + request.getRequestURL());
-        			//response.sendRedirect(response.encodeRedirectURL(headCommonURL + oldCommonURL));
-        		}
-        	}
+                    }
+                }
+            }
+            else{
+                commonURL = new String(request.getRequestURL());
+                if (request.getQueryString() != null)
+                    commonURL += "?" + request.getQueryString();
+                if (!bypassRefererCheck && checkForIdInQuery(commonURL)){
+                    throw new RuntimeException("Access denied for url: " + request.getRequestURL());
+                    //response.sendRedirect(response.encodeRedirectURL(headCommonURL + oldCommonURL));
+                }
+            }
         }
         
         
 
         if (secure != null && ("login-only".compareToIgnoreCase(secure) == 0 || "everything".compareToIgnoreCase(secure) == 0)){
-        	if (httpPort == null || httpsPort == null){
-        		Integer regularPort = DigiConfigManager.getConfig().getHttpPort();
-        		if (regularPort != null && regularPort.intValue() > 0)
-        			httpPort = String.valueOf(regularPort);
-        		Integer securePort = DigiConfigManager.getConfig().getHttpsPort();
-        		if (securePort != null && securePort.intValue() > 0)
-        			httpsPort = String.valueOf(securePort);
-        	}
-        	if (httpPort != null && httpsPort !=null && uri != null){
-        		if ("/index.do".compareTo(uri) == 0){
-        			String usingScheme = request.getScheme();
-        			if ( !httpsScheme.equals(usingScheme) ) {
-        				StringBuffer url = HttpUtils.getRequestURL(request);
-        				url.replace(0, usingScheme.length(), httpsScheme );
-        				int httpPosition = url.indexOf(httpPort);
-        				if (httpPosition != -1)
-        					url.replace(httpPosition, httpPosition + 4, httpsPort);
-        				else{
-        					int pos = url.indexOf("/", 8);
-        					url.insert(pos, ":"+httpsPort);
-        				}
-        				response.sendRedirect(response.encodeRedirectURL(url.toString()));
-        				return;
-        			}
-        		}
-        		if ("login-only".compareToIgnoreCase(secure) == 0){
-	        		if ("/admin.do".compareTo(uri) == 0 || "/aim/showDesktop.do".compareTo(uri) == 0 || "/showDesktop.do".compareTo(uri) == 0 || "/aim/default/showDesktop.do".compareTo(uri) == 0){
-	        			String usingScheme = request.getScheme();
-	        			if ( !httpScheme.equals(usingScheme) ) {
-	        				StringBuffer url = HttpUtils.getRequestURL(request);
-	        				url.replace(0, usingScheme.length(), httpScheme );
-	        				int httpsPosition = url.indexOf(httpsPort);
-	        				if (httpsPosition != -1)
-	        					url.replace(httpsPosition, httpsPosition + 4, httpPort);
-	        				else{
-	        					int pos = url.indexOf("/", 9);
-	        					url.insert(pos, ":"+httpPort);
-	        				}
-	        				response.sendRedirect(response.encodeRedirectURL(url.toString()));
-	        				return;
-	        			}
-	        		}
-        		}
+            if (httpPort == null || httpsPort == null){
+                Integer regularPort = DigiConfigManager.getConfig().getHttpPort();
+                if (regularPort != null && regularPort.intValue() > 0)
+                    httpPort = String.valueOf(regularPort);
+                Integer securePort = DigiConfigManager.getConfig().getHttpsPort();
+                if (securePort != null && securePort.intValue() > 0)
+                    httpsPort = String.valueOf(securePort);
+            }
+            if (httpPort != null && httpsPort !=null && uri != null){
+                if ("/index.do".compareTo(uri) == 0){
+                    String usingScheme = request.getScheme();
+                    if ( !httpsScheme.equals(usingScheme) ) {
+                        StringBuffer url = HttpUtils.getRequestURL(request);
+                        url.replace(0, usingScheme.length(), httpsScheme );
+                        int httpPosition = url.indexOf(httpPort);
+                        if (httpPosition != -1)
+                            url.replace(httpPosition, httpPosition + 4, httpsPort);
+                        else{
+                            int pos = url.indexOf("/", 8);
+                            url.insert(pos, ":"+httpsPort);
+                        }
+                        response.sendRedirect(response.encodeRedirectURL(url.toString()));
+                        return;
+                    }
+                }
+                if ("login-only".compareToIgnoreCase(secure) == 0){
+                    if ("/admin.do".compareTo(uri) == 0 || "/aim/showDesktop.do".compareTo(uri) == 0 || "/showDesktop.do".compareTo(uri) == 0 || "/aim/default/showDesktop.do".compareTo(uri) == 0){
+                        String usingScheme = request.getScheme();
+                        if ( !httpScheme.equals(usingScheme) ) {
+                            StringBuffer url = HttpUtils.getRequestURL(request);
+                            url.replace(0, usingScheme.length(), httpScheme );
+                            int httpsPosition = url.indexOf(httpsPort);
+                            if (httpsPosition != -1)
+                                url.replace(httpsPosition, httpsPosition + 4, httpPort);
+                            else{
+                                int pos = url.indexOf("/", 9);
+                                url.insert(pos, ":"+httpPort);
+                            }
+                            response.sendRedirect(response.encodeRedirectURL(url.toString()));
+                            return;
+                        }
+                    }
+                }
 
-        	}
+            }
         }
         
         super.process(request, response);
@@ -384,11 +384,11 @@ public class RequestProcessor
     @Override
     public boolean processPreprocess(HttpServletRequest request, HttpServletResponse response)
     {
-    	TLSUtils.populate(request);
-    	DocumentManagerUtil.initJCRSessions(request);
-    	TranslatorUtil.insertAvailableLanguages(request);
-    	request.setAttribute("currentLocale", TLSUtils.getEffectiveLangCode());
-    	return true;
+        TLSUtils.populate(request);
+        DocumentManagerUtil.initJCRSessions(request);
+        TranslatorUtil.insertAvailableLanguages(request);
+        request.setAttribute("currentLocale", TLSUtils.getEffectiveLangCode());
+        return true;
     }
         
     /**
@@ -961,7 +961,7 @@ public class RequestProcessor
         }
 
         if (ExceptionHelper.checkForInfiniteRecursion(request, response))
-        	return;
+            return;
 
         super.processForwardConfig(request, response, newForwardConfig); //namnamu
 
@@ -987,12 +987,12 @@ public class RequestProcessor
             Constants.ORIGINAL_MAPPING);
 
         try {
-			return super.processValidate(request, response, form, originalMapping);
-		} catch (InvalidCancelException e) {
-			logger.error(e);
-			e.printStackTrace();
-			return false;
-		}
+            return super.processValidate(request, response, form, originalMapping);
+        } catch (InvalidCancelException e) {
+            logger.error(e);
+            e.printStackTrace();
+            return false;
+        }
     }
 
     /**

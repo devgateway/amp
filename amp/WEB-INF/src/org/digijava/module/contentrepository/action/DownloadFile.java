@@ -24,53 +24,53 @@ import org.digijava.module.contentrepository.util.DocumentManagerUtil;
  *
  */
 public class DownloadFile extends Action {
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			javax.servlet.http.HttpServletRequest request,
-			javax.servlet.http.HttpServletResponse response)
-			throws java.lang.Exception {
+    public ActionForward execute(ActionMapping mapping, ActionForm form,
+            javax.servlet.http.HttpServletRequest request,
+            javax.servlet.http.HttpServletResponse response)
+            throws java.lang.Exception {
 
-		String nodeUUID	= request.getParameter("uuid");
-		
-		if (nodeUUID != null) {
-			Node node = DocumentManagerUtil.getReadNode(nodeUUID, request);
-			if (node == null) {
+        String nodeUUID = request.getParameter("uuid");
+        
+        if (nodeUUID != null) {
+            Node node = DocumentManagerUtil.getReadNode(nodeUUID, request);
+            if (node == null) {
                 throw new RuntimeException("node with uuid = " + nodeUUID + " not found!");
             }
 
-			Property contentType = node.getProperty(CrConstants.PROPERTY_CONTENT_TYPE);
-			Property name = node.getProperty(CrConstants.PROPERTY_NAME);
-			Property data = node.getProperty(CrConstants.PROPERTY_DATA);
-			
-			if (request.getSession().getAttribute(Constants.MOST_RECENT_RESOURCES) == null) {
-				Comparator<DocumentData> documentDataComparator = new Comparator<DocumentData>()
-				{
-					public int compare(DocumentData a, DocumentData b)
-					{
-						return a.getUuid().compareTo(b.getUuid());
-					}
-				};
-				
-				request.getSession().setAttribute(Constants.MOST_RECENT_RESOURCES, new BoundedList<DocumentData>(5, documentDataComparator));
-			}
-			
-			NodeWrapper nodeWrapper = new NodeWrapper(node);
-			DocumentData documentData = DocumentData.buildFromNodeWrapper(nodeWrapper, nodeWrapper.getName(), null, null);
+            Property contentType = node.getProperty(CrConstants.PROPERTY_CONTENT_TYPE);
+            Property name = node.getProperty(CrConstants.PROPERTY_NAME);
+            Property data = node.getProperty(CrConstants.PROPERTY_DATA);
+            
+            if (request.getSession().getAttribute(Constants.MOST_RECENT_RESOURCES) == null) {
+                Comparator<DocumentData> documentDataComparator = new Comparator<DocumentData>()
+                {
+                    public int compare(DocumentData a, DocumentData b)
+                    {
+                        return a.getUuid().compareTo(b.getUuid());
+                    }
+                };
+                
+                request.getSession().setAttribute(Constants.MOST_RECENT_RESOURCES, new BoundedList<DocumentData>(5, documentDataComparator));
+            }
+            
+            NodeWrapper nodeWrapper = new NodeWrapper(node);
+            DocumentData documentData = DocumentData.buildFromNodeWrapper(nodeWrapper, nodeWrapper.getName(), null, null);
 
             /**
              * We do not save this date to the document repository node
              * Just refresh it for display purposes, indicating that document has just been accessed
              */
             documentData.setDate(Calendar.getInstance().getTime());
-			BoundedList<DocumentData> recentUUIDs = (BoundedList<DocumentData>)(request.getSession().getAttribute(Constants.MOST_RECENT_RESOURCES));
-			recentUUIDs.add(documentData);
-			
-			if (contentType != null && name != null && data != null) {
-				ResponseUtil.writeFile(request, response, contentType.getString(), name.getString(), data.getStream());
-			}
-		}
+            BoundedList<DocumentData> recentUUIDs = (BoundedList<DocumentData>)(request.getSession().getAttribute(Constants.MOST_RECENT_RESOURCES));
+            recentUUIDs.add(documentData);
+            
+            if (contentType != null && name != null && data != null) {
+                ResponseUtil.writeFile(request, response, contentType.getString(), name.getString(), data.getStream());
+            }
+        }
 
-		DocumentManagerUtil.logoutJcrSessions(request);
-		
-		return null;
-	}
+        DocumentManagerUtil.logoutJcrSessions(request);
+        
+        return null;
+    }
 }

@@ -20,28 +20,28 @@ import org.digijava.module.xmlpatcher.dbentity.AmpXmlPatch;
  */
 public class NaturalOrderXmlPatcherScheduler extends XmlPatcherScheduler {
 
-	/**
-	 * @param properties
-	 * @param patches
-	 */
-	public NaturalOrderXmlPatcherScheduler(Map<String, Object> properties,
-			List<AmpXmlPatch> patches) {
-		super(properties, patches);
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * @param properties
+     * @param patches
+     */
+    public NaturalOrderXmlPatcherScheduler(Map<String, Object> properties,
+            List<AmpXmlPatch> patches) {
+        super(properties, patches);
+        // TODO Auto-generated constructor stub
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @seeorg.digijava.module.xmlpatcher.scheduler.XmlPatcherScheduler#
-	 * getScheduledPatchCollection()
-	 */
-	@Override
-	public Collection<AmpXmlPatch> getScheduledPatchCollection() {
-		// TODO Auto-generated method stub
-		Set<AmpXmlPatch> naturalSet = new TreeSet<AmpXmlPatch>();
-		naturalSet.addAll(patches);
-		return naturalSet;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @seeorg.digijava.module.xmlpatcher.scheduler.XmlPatcherScheduler#
+     * getScheduledPatchCollection()
+     */
+    @Override
+    public Collection<AmpXmlPatch> getScheduledPatchCollection() {
+        // TODO Auto-generated method stub
+        Set<AmpXmlPatch> naturalSet = new TreeSet<AmpXmlPatch>();
+        naturalSet.addAll(patches);
+        return naturalSet;
+    }
 
 }

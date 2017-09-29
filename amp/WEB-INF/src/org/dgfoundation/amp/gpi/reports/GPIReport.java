@@ -15,71 +15,71 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
  */
 public class GPIReport {
 
-	/**
-	 * Report Page 
-	 */
-	protected GPIReportPage page;
-	
-	/**
-	 * A map containing the information regarding summary numbers (totals)
-	 */
-	protected Map<GPIReportOutputColumn, String> summary;
+    /**
+     * Report Page 
+     */
+    protected GPIReportPage page;
+    
+    /**
+     * A map containing the information regarding summary numbers (totals)
+     */
+    protected Map<GPIReportOutputColumn, String> summary;
 
-	protected Settings settings;
-	
-	protected boolean isEmpty;
-	
-	@JsonIgnore
-	private ReportSpecification spec;
-	
-	@JsonIgnore
-	private JsonBean originalFormParams;
+    protected Settings settings;
+    
+    protected boolean isEmpty;
+    
+    @JsonIgnore
+    private ReportSpecification spec;
+    
+    @JsonIgnore
+    private JsonBean originalFormParams;
 
-	public GPIReportPage getPage() {
-		return page;
-	}
+    public GPIReportPage getPage() {
+        return page;
+    }
 
-	public void setPage(GPIReportPage page) {
-		this.page = page;
-	}
+    public void setPage(GPIReportPage page) {
+        this.page = page;
+    }
 
-	public Settings getSettings() {
-		return settings;
-	}
+    public Settings getSettings() {
+        return settings;
+    }
 
-	public void setSettings(Settings settings) {
-		this.settings = settings;
-	}
+    public void setSettings(Settings settings) {
+        this.settings = settings;
+    }
 
-	public Map<GPIReportOutputColumn, String> getSummary() {
-		return summary;
-	}
+    public Map<GPIReportOutputColumn, String> getSummary() {
+        return summary;
+    }
 
-	public void setSummary(Map<GPIReportOutputColumn, String> summary) {
-		this.summary = summary;
-	}
+    public void setSummary(Map<GPIReportOutputColumn, String> summary) {
+        this.summary = summary;
+    }
 
-	public boolean isEmpty() {
-		if (this.page != null) {
-			return this.page.getContents().isEmpty();
-		}
-		
-		return true;
-	}
+    public boolean isEmpty() {
+        if (this.page != null) {
+            return this.page.getContents().isEmpty();
+        }
+        
+        return true;
+    }
 
-	public ReportSpecification getSpec() {
-		return spec;
-	}
+    public ReportSpecification getSpec() {
+        return spec;
+    }
 
-	public void setSpec(ReportSpecification spec) {
-		this.spec = spec;
-	}
+    public void setSpec(ReportSpecification spec) {
+        this.spec = spec;
+    }
 
-	public JsonBean getOriginalFormParams() {
-		return originalFormParams;
-	}
+    public JsonBean getOriginalFormParams() {
+        return originalFormParams;
+    }
 
-	public void setOriginalFormParams(JsonBean originalFormParams) {
-		this.originalFormParams = originalFormParams;
-	}
+    public void setOriginalFormParams(JsonBean originalFormParams) {
+        this.originalFormParams = originalFormParams;
+    }
 }

@@ -28,50 +28,50 @@ import org.digijava.module.aim.util.FeaturesUtil;
  */
 public class AmpDonorCommitmentsSubsectionFeature extends AmpSubsectionFeatureFundingPanel<AmpFunding> {
 
-	protected AmpDonorCommitmentsFormTableFeature commitsTableFeature;
-	
-	/**
-	 * @param id
-	 * @param fmName
-	 * @param model
-	 * @param ampFundingItemFeaturePanel 
-	 * @throws Exception
-	 */
-	public AmpDonorCommitmentsSubsectionFeature(String id,
-			final IModel<AmpFunding> model, String fmName, int transactionType) throws Exception {
-		super(id, fmName, model,Constants.COMMITMENT);
-		commitsTableFeature = new AmpDonorCommitmentsFormTableFeature("commitsTableFeature", model, "Commitments Table", transactionType);
-		add(commitsTableFeature);
-		
-		AmpAjaxLinkField addCommit=new AmpAjaxLinkField("addCommit","Add Commitment","Add Commitment") {
-			@Override
-			public void onClick(AjaxRequestTarget target) {
-				AmpFundingDetail fd= new AmpFundingDetail();
-//				fd.setTransactionAmount(0d);
-				fd.setReportingDate(new Date(System.currentTimeMillis()));
-				fd.setUpdatedDate(new Date(System.currentTimeMillis()));
-				//fd.setAdjustmentType(Constants.ACTUAL);
-//				fd.setTransactionDate(new Date(System.currentTimeMillis()));
-				fd.setAmpFundingId(model.getObject());
-				fd.setTransactionType(Constants.COMMITMENT);
-				
-				fd.setAmpCurrencyId(CurrencyUtil.getWicketWorkspaceCurrency());
-				
-				//model.getObject().getFundingDetails().add(fd);
-				//commitsTableFeature.getList().removeAll();
-				commitsTableFeature.getEditorList().addItem(fd);
-				target.add(commitsTableFeature);
-				
-				AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
-				parent.getFundingInfo().checkChoicesRequired(commitsTableFeature.getEditorList().getCount());
-				target.add(parent.getFundingInfo());
-				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
-				target.appendJavaScript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));
-				target.appendJavaScript(QuarterInformationPanel.getJSUpdate(getSession()));
-			}
-		};
-		addCommit.setAffectedByFreezing(false);
-		add(addCommit);
-	}
+    protected AmpDonorCommitmentsFormTableFeature commitsTableFeature;
+    
+    /**
+     * @param id
+     * @param fmName
+     * @param model
+     * @param ampFundingItemFeaturePanel 
+     * @throws Exception
+     */
+    public AmpDonorCommitmentsSubsectionFeature(String id,
+            final IModel<AmpFunding> model, String fmName, int transactionType) throws Exception {
+        super(id, fmName, model,Constants.COMMITMENT);
+        commitsTableFeature = new AmpDonorCommitmentsFormTableFeature("commitsTableFeature", model, "Commitments Table", transactionType);
+        add(commitsTableFeature);
+        
+        AmpAjaxLinkField addCommit=new AmpAjaxLinkField("addCommit","Add Commitment","Add Commitment") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                AmpFundingDetail fd= new AmpFundingDetail();
+//              fd.setTransactionAmount(0d);
+                fd.setReportingDate(new Date(System.currentTimeMillis()));
+                fd.setUpdatedDate(new Date(System.currentTimeMillis()));
+                //fd.setAdjustmentType(Constants.ACTUAL);
+//              fd.setTransactionDate(new Date(System.currentTimeMillis()));
+                fd.setAmpFundingId(model.getObject());
+                fd.setTransactionType(Constants.COMMITMENT);
+                
+                fd.setAmpCurrencyId(CurrencyUtil.getWicketWorkspaceCurrency());
+                
+                //model.getObject().getFundingDetails().add(fd);
+                //commitsTableFeature.getList().removeAll();
+                commitsTableFeature.getEditorList().addItem(fd);
+                target.add(commitsTableFeature);
+                
+                AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
+                parent.getFundingInfo().checkChoicesRequired(commitsTableFeature.getEditorList().getCount());
+                target.add(parent.getFundingInfo());
+                target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
+                target.appendJavaScript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));
+                target.appendJavaScript(QuarterInformationPanel.getJSUpdate(getSession()));
+            }
+        };
+        addCommit.setAffectedByFreezing(false);
+        add(addCommit);
+    }
 
 }

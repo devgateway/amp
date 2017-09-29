@@ -18,29 +18,29 @@ import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
 
 public class SendEmailsJob extends ConnectionCleaningJob implements StatefulJob { 
-	
-	private static Logger logger = Logger.getLogger(SendEmailsJob.class);
-	
-	@Override 
-	public void executeInternal(JobExecutionContext context) throws JobExecutionException{		
-		List<Long> receiversIds = AmpMessageUtil.loadReceiversIdsToGetEmails();
-		for (Long rec : receiversIds) {
-			try {
-				sendEmailToReceiver(rec);
-			}
-			catch (Exception e) {
-				logger.error("cound not send an email to receiver " + rec, e);
-			}
-		}
-		logger.info("Finished changing messages status in database");
+    
+    private static Logger logger = Logger.getLogger(SendEmailsJob.class);
+    
+    @Override 
+    public void executeInternal(JobExecutionContext context) throws JobExecutionException{      
+        List<Long> receiversIds = AmpMessageUtil.loadReceiversIdsToGetEmails();
+        for (Long rec : receiversIds) {
+            try {
+                sendEmailToReceiver(rec);
+            }
+            catch (Exception e) {
+                logger.error("cound not send an email to receiver " + rec, e);
+            }
+        }
+        logger.info("Finished changing messages status in database");
     }
 
-	/**
-	 * sends the email configured by the AmpEmailReceiver instance with an id of receiverId
-	 * @param receiverId
-	 * @throws Exception
-	 */
-	protected void sendEmailToReceiver(long receiverId) throws Exception {
+    /**
+     * sends the email configured by the AmpEmailReceiver instance with an id of receiverId
+     * @param receiverId
+     * @throws Exception
+     */
+    protected void sendEmailToReceiver(long receiverId) throws Exception {
         Session session = PersistenceManager.getSession();
         AmpEmailReceiver receiver = AmpMessageUtil.getAmpEmailReceiver(receiverId);
         InternetAddress[] ito = new InternetAddress[] { new InternetAddress(receiver.getAddress())};
@@ -54,5 +54,5 @@ public class SendEmailsJob extends ConnectionCleaningJob implements StatefulJob 
         //update receiver status state to sent
         receiver.setStatus(MessageConstants.SENT_STATUS);
         session.update(receiver);
-	}
+    }
 }

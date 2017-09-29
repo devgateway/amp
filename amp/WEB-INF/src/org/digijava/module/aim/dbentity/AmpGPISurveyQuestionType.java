@@ -4,32 +4,32 @@ import java.io.Serializable;
 
 public class AmpGPISurveyQuestionType implements Serializable {
 
-	private Long ampTypeId;
-	private String name; // 'yes-no', 'calculated'
-	private String desc;
+    private Long ampTypeId;
+    private String name; // 'yes-no', 'calculated'
+    private String desc;
 
-	public String getDesc() {
-		return desc;
-	}
+    public String getDesc() {
+        return desc;
+    }
 
-	public void setDesc(String desc) {
-		this.desc = desc;
-	}
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public Long getAmpTypeId() {
-		return ampTypeId;
-	}
+    public Long getAmpTypeId() {
+        return ampTypeId;
+    }
 
-	public void setAmpTypeId(Long ampTypeId) {
-		this.ampTypeId = ampTypeId;
-	}
+    public void setAmpTypeId(Long ampTypeId) {
+        this.ampTypeId = ampTypeId;
+    }
 
 }

@@ -6,50 +6,50 @@ import java.util.Set;
 import org.digijava.module.aim.util.Identifiable;
 
 public class AmpActivityGroup implements Serializable, Identifiable{
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private Long ampActivityGroupId;
-	private AmpActivityVersion ampActivityLastVersion;
+    private Long ampActivityGroupId;
+    private AmpActivityVersion ampActivityLastVersion;
 
-	private boolean autoClosedOnExpiration = false;
-	
-	private Set<AmpActivityVersion> activities;
+    private boolean autoClosedOnExpiration = false;
+    
+    private Set<AmpActivityVersion> activities;
 
-	public Long getAmpActivityGroupId() {
-		return ampActivityGroupId;
-	}
+    public Long getAmpActivityGroupId() {
+        return ampActivityGroupId;
+    }
 
-	public void setAmpActivityGroupId(Long ampActivityGroupId) {
-		this.ampActivityGroupId = ampActivityGroupId;
-	}
+    public void setAmpActivityGroupId(Long ampActivityGroupId) {
+        this.ampActivityGroupId = ampActivityGroupId;
+    }
 
-	public AmpActivityVersion getAmpActivityLastVersion() {
-		return ampActivityLastVersion;
-	}
+    public AmpActivityVersion getAmpActivityLastVersion() {
+        return ampActivityLastVersion;
+    }
 
-	public void setAmpActivityLastVersion(AmpActivityVersion ampActivityLastVersion) {
-		this.ampActivityLastVersion = ampActivityLastVersion;
-	}
+    public void setAmpActivityLastVersion(AmpActivityVersion ampActivityLastVersion) {
+        this.ampActivityLastVersion = ampActivityLastVersion;
+    }
 
-	public Set<AmpActivityVersion> getActivities() {
-		return activities;
-	}
+    public Set<AmpActivityVersion> getActivities() {
+        return activities;
+    }
 
-	public void setActivities(Set<AmpActivityVersion> activities) {
-		this.activities = activities;
-	}
-	
-	public void setAutoClosedOnExpiration(boolean autoClosedOnExpiration)
-	{
-		this.autoClosedOnExpiration = autoClosedOnExpiration;
-	}
-	
-	public boolean getAutoClosedOnExpiration()
-	{
-		return autoClosedOnExpiration;
-	}
-	
-	@Override public Object getIdentifier() {
-		return this.getAmpActivityGroupId();
-	}
+    public void setActivities(Set<AmpActivityVersion> activities) {
+        this.activities = activities;
+    }
+    
+    public void setAutoClosedOnExpiration(boolean autoClosedOnExpiration)
+    {
+        this.autoClosedOnExpiration = autoClosedOnExpiration;
+    }
+    
+    public boolean getAutoClosedOnExpiration()
+    {
+        return autoClosedOnExpiration;
+    }
+    
+    @Override public Object getIdentifier() {
+        return this.getAmpActivityGroupId();
+    }
 }

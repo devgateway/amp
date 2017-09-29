@@ -13,10 +13,10 @@ import org.apache.struts.action.ActionMapping;
  *
  */
 public class SaveActivity extends Action {
-	
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
-		throw new RuntimeException("SaveActivity::execute: not implemented!");
-	}
+    
+    public ActionForward execute(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
+        throw new RuntimeException("SaveActivity::execute: not implemented!");
+    }
 }

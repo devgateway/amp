@@ -31,18 +31,18 @@ import org.joda.time.DateTime;
  */
 public class FundingListEditor<T> extends ListEditor<T> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
 
-	public FundingListEditor(String id, IModel<Set<T>> model) {
-		super(id, model);
-	}
+    public FundingListEditor(String id, IModel<Set<T>> model) {
+        super(id, model);
+    }
 
-	public FundingListEditor(String id, IModel<Set<T>> model, Comparator<T> comparator) {
-		super(id, model, comparator);
-	}
+    public FundingListEditor(String id, IModel<Set<T>> model, Comparator<T> comparator) {
+        super(id, model, comparator);
+    }
 
     @Override
     protected void onPopulateItem(ListItem<T> item) {

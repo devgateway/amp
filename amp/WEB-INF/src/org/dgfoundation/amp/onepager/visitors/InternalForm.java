@@ -6,9 +6,9 @@ import org.apache.wicket.markup.html.form.IFormVisitorParticipant;
 import org.apache.wicket.model.IModel;
 
 public class InternalForm<T> extends Form<T> implements IFormVisitorParticipant {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public InternalForm(String name) {
+    public InternalForm(String name) {
         super(name);
     }
 

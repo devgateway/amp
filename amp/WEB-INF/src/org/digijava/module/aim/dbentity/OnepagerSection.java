@@ -3,7 +3,7 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 
 public class OnepagerSection implements Serializable{
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     //persisted fields
     private String className;
@@ -12,27 +12,27 @@ public class OnepagerSection implements Serializable{
 
     //non persisted fields
     private String name;
-	private Boolean dependent;
-	private String dependentClassName;
+    private Boolean dependent;
+    private String dependentClassName;
 
     public OnepagerSection(){
     }
 
-	public OnepagerSection(String name, String className, int position,
-			boolean folded, boolean dependent, String dependentClassName) {
-		super();
-		this.name = name;
-		this.className = className;
-		this.position = position;
-		this.folded = folded;
-		this.dependent = dependent;
-		this.dependentClassName = dependentClassName;
-	}
+    public OnepagerSection(String name, String className, int position,
+            boolean folded, boolean dependent, String dependentClassName) {
+        super();
+        this.name = name;
+        this.className = className;
+        this.position = position;
+        this.folded = folded;
+        this.dependent = dependent;
+        this.dependentClassName = dependentClassName;
+    }
 
-	public OnepagerSection(String name, String className, int position,
-			boolean folded) {
-		this(name, className, position, folded, false, null);
-	}
+    public OnepagerSection(String name, String className, int position,
+            boolean folded) {
+        this(name, className, position, folded, false, null);
+    }
 
     //set the transient fields from another object
     public void load(OnepagerSection os){

@@ -56,16 +56,16 @@ public class AmpOrgRecipient implements Serializable,OrgProfileValue {
     }
     @Override
     public List<ValueTranslatabePair> getValuesForOrgReport(){
-    	List<ValueTranslatabePair> values=new ArrayList<ValueTranslatabePair>();
-    	values.add(new ValueTranslatabePair(Arrays.asList(new String[]{getOrganization().getName()}),false));
-    	values.add(new ValueTranslatabePair(Arrays.asList(new String[]{(getDescription()==null)?"":getDescription()}),false));
-    	return values;
+        List<ValueTranslatabePair> values=new ArrayList<ValueTranslatabePair>();
+        values.add(new ValueTranslatabePair(Arrays.asList(new String[]{getOrganization().getName()}),false));
+        values.add(new ValueTranslatabePair(Arrays.asList(new String[]{(getDescription()==null)?"":getDescription()}),false));
+        return values;
     }
 
-	@Override
-	public String[] getSubHeaders() {
-		String[] subHeaders = { "Name", "Description" };
-		return subHeaders;
-	}
+    @Override
+    public String[] getSubHeaders() {
+        String[] subHeaders = { "Name", "Description" };
+        return subHeaders;
+    }
 
 }

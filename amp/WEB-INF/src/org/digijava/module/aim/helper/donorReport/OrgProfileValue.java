@@ -4,7 +4,7 @@ import java.util.List;
 
 
 public interface OrgProfileValue {
-	public List<ValueTranslatabePair> getValuesForOrgReport();
-	public String[] getSubHeaders();
+    public List<ValueTranslatabePair> getValuesForOrgReport();
+    public String[] getSubHeaders();
 
 }

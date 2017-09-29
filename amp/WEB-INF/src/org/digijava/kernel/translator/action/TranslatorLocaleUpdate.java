@@ -41,32 +41,32 @@ import org.digijava.kernel.util.DgUtil;
 
 public final class TranslatorLocaleUpdate extends Action {
 
-	/* This method overrides the Action classes execute method. This is the function called by the
-	 * controller servlet
-	 * @param mapping
-	 * @param form
-	 * @param request
-	 * @param response
-	 * @return ActionForward
-	 */
-	public ActionForward execute(
-		ActionMapping mapping,
-		ActionForm form,
-		HttpServletRequest request,
-		HttpServletResponse response)
-		throws IOException, ServletException {
+    /* This method overrides the Action classes execute method. This is the function called by the
+     * controller servlet
+     * @param mapping
+     * @param form
+     * @param request
+     * @param response
+     * @return ActionForward
+     */
+    public ActionForward execute(
+        ActionMapping mapping,
+        ActionForm form,
+        HttpServletRequest request,
+        HttpServletResponse response)
+        throws IOException, ServletException {
 
-		TranslatorNavForm nav = (TranslatorNavForm) form;
+        TranslatorNavForm nav = (TranslatorNavForm) form;
 
-		//Set locale
-		org.digijava.kernel.entity.Locale locale = new org.digijava.kernel.entity.Locale();
-		locale.setCode(nav.getLocalesSelected());
+        //Set locale
+        org.digijava.kernel.entity.Locale locale = new org.digijava.kernel.entity.Locale();
+        locale.setCode(nav.getLocalesSelected());
 
 
-		DgUtil.switchLanguage(locale,request,response);
-		//System.out.println("Switch locale completed " + nav.getLocalesSelected());
+        DgUtil.switchLanguage(locale,request,response);
+        //System.out.println("Switch locale completed " + nav.getLocalesSelected());
 
-		return new ActionForward(request.getParameter("back_url"),true);
+        return new ActionForward(request.getParameter("back_url"),true);
 
-	}
+    }
 }

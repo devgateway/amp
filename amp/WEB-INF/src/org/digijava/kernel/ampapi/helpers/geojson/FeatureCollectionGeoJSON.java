@@ -14,23 +14,23 @@ import java.util.List;
  */
 public class FeatureCollectionGeoJSON extends GeoJSON
 {
-	public List<FeatureGeoJSON> features;
-	
-	public FeatureCollectionGeoJSON() {
-		super();
-		this.features = new ArrayList<>();
-	}
+    public List<FeatureGeoJSON> features;
+    
+    public FeatureCollectionGeoJSON() {
+        super();
+        this.features = new ArrayList<>();
+    }
 
-	public boolean isValid( PositionValidator validator )
-	{
-		if ( features==null ) return false;
-		if ( features.size()==0 ) return false;
+    public boolean isValid( PositionValidator validator )
+    {
+        if ( features==null ) return false;
+        if ( features.size()==0 ) return false;
 
-		for ( FeatureGeoJSON feature : features )
-		{
-			if ( !feature.isValid(validator) ) return false;
-		}
+        for ( FeatureGeoJSON feature : features )
+        {
+            if ( !feature.isValid(validator) ) return false;
+        }
 
-		return super.isValid(validator);
-	}
+        return super.isValid(validator);
+    }
 }

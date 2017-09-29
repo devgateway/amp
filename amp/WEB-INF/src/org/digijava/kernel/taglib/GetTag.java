@@ -38,133 +38,133 @@ import org.digijava.kernel.util.RequestUtils;
 
 public class GetTag extends BodyTagSupport {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
 
-	private String locale;
-	private String key;
-	private String type;
+    private String locale;
+    private String key;
+    private String type;
 
-	/**
-	 *
-	 * @exception JspException if a JSP exception has occurred
-	 * @return
-	 */
-	public int doAfterBody() {
+    /**
+     *
+     * @exception JspException if a JSP exception has occurred
+     * @return
+     */
+    public int doAfterBody() {
 
-		HttpServletRequest request =
-			(HttpServletRequest) pageContext.getRequest();
+        HttpServletRequest request =
+            (HttpServletRequest) pageContext.getRequest();
 
-		BodyContent body = getBodyContent();
+        BodyContent body = getBodyContent();
 
-		String output = "";
+        String output = "";
 
-		if (getKey() != null && getType() != null) { //commented
+        if (getKey() != null && getType() != null) { //commented
 //        if (getKey() != null) {
 
-			Long siteId;
+            Long siteId;
 
-			if(this.getKey().trim().startsWith("cn") || this.getKey().trim().startsWith("ln")){
+            if(this.getKey().trim().startsWith("cn") || this.getKey().trim().startsWith("ln")){
 
-				siteId = 0L;
+                siteId = 0L;
 
 
-			}else{
-				if (getType().equalsIgnoreCase("local")) {
+            }else{
+                if (getType().equalsIgnoreCase("local")) {
 
-					siteId =
-						RequestUtils.getSiteDomain(request).getSite().getId();
+                    siteId =
+                        RequestUtils.getSiteDomain(request).getSite().getId();
 
-				} else {
-					siteId =
-						DgUtil
-							.getRootSite(RequestUtils.getSiteDomain(request).getSite()).getId();
+                } else {
+                    siteId =
+                        DgUtil
+                            .getRootSite(RequestUtils.getSiteDomain(request).getSite()).getId();
 
-				}
-			}
+                }
+            }
 
-			Message msg =
-					new TranslatorWorker().getByKey(getKey(), getLocale(), siteId);
+            Message msg =
+                    new TranslatorWorker().getByKey(getKey(), getLocale(), siteId);
 
-			if (msg != null) {
-				if (msg.getMessage() != null) {
-					output = msg.getMessage();
+            if (msg != null) {
+                if (msg.getMessage() != null) {
+                    output = msg.getMessage();
 
-				}else{
-					output="key:" + getKey();
-				}
-			}else{
-				output="key:" + getKey();
-			}
-		}
+                }else{
+                    output="key:" + getKey();
+                }
+            }else{
+                output="key:" + getKey();
+            }
+        }
 
-		writeData(output, body);
-		return SKIP_BODY;
+        writeData(output, body);
+        return SKIP_BODY;
 
-	}
+    }
 
-	/**
-	 * Writes given string to the browser
-	 * @param localizedMsg
-	 * @param body
-	 */
-	private void writeData(String localizedMsg, BodyContent body) {
+    /**
+     * Writes given string to the browser
+     * @param localizedMsg
+     * @param body
+     */
+    private void writeData(String localizedMsg, BodyContent body) {
 
-		try {
+        try {
 
-			JspWriter out = body.getEnclosingWriter();
+            JspWriter out = body.getEnclosingWriter();
 
-			out.print(localizedMsg);
+            out.print(localizedMsg);
 
-		} catch (IOException ioexception) {
-			ioexception.printStackTrace();
-		}
+        } catch (IOException ioexception) {
+            ioexception.printStackTrace();
+        }
 
-	}
+    }
 
-	/**
-	 * @return
-	 */
-	public String getLocale() {
-		return locale;
-	}
+    /**
+     * @return
+     */
+    public String getLocale() {
+        return locale;
+    }
 
-	/**
-	 * @param locale
-	 */
-	public void setLocale(String locale) {
-		this.locale = locale;
-	}
+    /**
+     * @param locale
+     */
+    public void setLocale(String locale) {
+        this.locale = locale;
+    }
 
-	/**
-	 * @return
-	 */
-	public String getKey() {
-		return key;
-	}
+    /**
+     * @return
+     */
+    public String getKey() {
+        return key;
+    }
 
-	/**
-	 * @param key
-	 */
-	public void setKey(String key) {
-		this.key = key;
-	}
-	/**
-	 * @return
-	 */
-	public String getType() {
+    /**
+     * @param key
+     */
+    public void setKey(String key) {
+        this.key = key;
+    }
+    /**
+     * @return
+     */
+    public String getType() {
 
-		if (this.type == null) {
+        if (this.type == null) {
 
-			type = "group";
-		}
-		return type;
-	}
+            type = "group";
+        }
+        return type;
+    }
 
-	/**
-	 * @param type
-	 */
-	public void setType(String type) {
-		this.type = type;
-	}
+    /**
+     * @param type
+     */
+    public void setType(String type) {
+        this.type = type;
+    }
 }

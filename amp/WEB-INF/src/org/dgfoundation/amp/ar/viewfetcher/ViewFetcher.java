@@ -14,14 +14,14 @@ import org.dgfoundation.amp.ar.FilterParam;
  *
  */
 public interface ViewFetcher {
-	public RsInfo fetch(ArrayList<FilterParam> params);
-	
-	public default void forEach(Consumer<ResultSet> c) {
-		try(RsInfo rsInfo = fetch(null)) {
-			rsInfo.forEach(c);
-		}
-		catch(SQLException e) {
-			throw AlgoUtils.translateException(e);
-		}
-	}
+    public RsInfo fetch(ArrayList<FilterParam> params);
+    
+    public default void forEach(Consumer<ResultSet> c) {
+        try(RsInfo rsInfo = fetch(null)) {
+            rsInfo.forEach(c);
+        }
+        catch(SQLException e) {
+            throw AlgoUtils.translateException(e);
+        }
+    }
 }

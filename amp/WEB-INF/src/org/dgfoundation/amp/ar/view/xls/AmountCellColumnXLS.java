@@ -20,27 +20,27 @@ import org.dgfoundation.amp.ar.Viewable;
  */
 public class AmountCellColumnXLS extends CellColumnXLS {
 
-	/**
-	 * @param parent
-	 * @param item
-	 */
-	public AmountCellColumnXLS(Exporter parent, Viewable item) {
-		super(parent, item);
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * @param parent
+     * @param item
+     */
+    public AmountCellColumnXLS(Exporter parent, Viewable item) {
+        super(parent, item);
+        // TODO Auto-generated constructor stub
+    }
 
-	/**
-	 * @param sheet
-	 * @param row
-	 * @param rowId
-	 * @param colId
-	 * @param ownerId
-	 * @param item
-	 */
-	public AmountCellColumnXLS(HSSFWorkbook wb,HSSFSheet sheet, HSSFRow row, IntWrapper rowId,
-			IntWrapper colId, Long ownerId, Viewable item) {
-		super(wb,sheet, row, rowId, colId, ownerId, item);
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * @param sheet
+     * @param row
+     * @param rowId
+     * @param colId
+     * @param ownerId
+     * @param item
+     */
+    public AmountCellColumnXLS(HSSFWorkbook wb,HSSFSheet sheet, HSSFRow row, IntWrapper rowId,
+            IntWrapper colId, Long ownerId, Viewable item) {
+        super(wb,sheet, row, rowId, colId, ownerId, item);
+        // TODO Auto-generated constructor stub
+    }
 
 }

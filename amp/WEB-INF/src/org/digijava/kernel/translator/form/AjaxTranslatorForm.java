@@ -4,14 +4,14 @@ import org.apache.struts.action.ActionForm;
 
 public class AjaxTranslatorForm extends ActionForm {
 
-	private String originalText;
+    private String originalText;
 
-	public String getOriginalText() {
-		return originalText;
-	}
+    public String getOriginalText() {
+        return originalText;
+    }
 
-	public void setOriginalText(String originalText) {
-		this.originalText = originalText;
-	}
+    public void setOriginalText(String originalText) {
+        this.originalText = originalText;
+    }
 
 }

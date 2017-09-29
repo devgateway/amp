@@ -27,40 +27,40 @@ import org.digijava.module.gateperm.core.Permission;
  */
 public class AmpPMViewFieldPermissionTableFeaturePanel extends AmpFormTableFeaturePanel implements IHeaderContributor{
 
-	
-	public AmpPMViewFieldPermissionTableFeaturePanel(String id, IModel<Set<Permission>> model, String fmName, boolean hideLeadingNewLine) throws Exception {
-		super(id, model, fmName, hideLeadingNewLine);
-		// TODO Auto-generated constructor stub
-	}
+    
+    public AmpPMViewFieldPermissionTableFeaturePanel(String id, IModel<Set<Permission>> model, String fmName, boolean hideLeadingNewLine) throws Exception {
+        super(id, model, fmName, hideLeadingNewLine);
+        // TODO Auto-generated constructor stub
+    }
 
-	public AmpPMViewFieldPermissionTableFeaturePanel(String id, IModel<Set<AmpPMFieldPermissionViewer>> permsModel, String fmName) throws Exception {
-		super(id, permsModel, fmName);
+    public AmpPMViewFieldPermissionTableFeaturePanel(String id, IModel<Set<AmpPMFieldPermissionViewer>> permsModel, String fmName) throws Exception {
+        super(id, permsModel, fmName);
 
-		//AbstractReadOnlyModel<List<Permission>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(model);
-		
-		AbstractReadOnlyModel<List<AmpPMFieldPermissionViewer>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(permsModel);
+        //AbstractReadOnlyModel<List<Permission>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(model);
+        
+        AbstractReadOnlyModel<List<AmpPMFieldPermissionViewer>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(permsModel);
 
-		list = new PageableListView<AmpPMFieldPermissionViewer>("permList", listModel, 10) {
-			
-			@Override
-			protected void populateItem(final ListItem<AmpPMFieldPermissionViewer> item) {
-				AmpPMFieldPermissionViewer p = item.getModel().getObject();
-				////System.out.println(p.getName());
-				item.add(new Label("name", p.getName()));
-				item.add(new Label("path", p.getPath()));
-				item.add(new Label("strategy", p.getStrategy()));
-				final IModel<Set<AmpPMPermContentBean>> permMapModel = new Model((Serializable)p.getAssignedPerms());
-				AmpPMViewAssignedPermissionTable content = new AmpPMViewAssignedPermissionTable("description", permMapModel, "Permission Content Table");
-				item.add(content);
-			}
-		};
-		list.setReuseItems(true);
-		add(list);
-		
-		AmpPMAjaxPagingNavigator pager = new AmpPMAjaxPagingNavigator("navigatorList", (PageableListView)list);
-		add(pager);
-		
-	}
-	
+        list = new PageableListView<AmpPMFieldPermissionViewer>("permList", listModel, 10) {
+            
+            @Override
+            protected void populateItem(final ListItem<AmpPMFieldPermissionViewer> item) {
+                AmpPMFieldPermissionViewer p = item.getModel().getObject();
+                ////System.out.println(p.getName());
+                item.add(new Label("name", p.getName()));
+                item.add(new Label("path", p.getPath()));
+                item.add(new Label("strategy", p.getStrategy()));
+                final IModel<Set<AmpPMPermContentBean>> permMapModel = new Model((Serializable)p.getAssignedPerms());
+                AmpPMViewAssignedPermissionTable content = new AmpPMViewAssignedPermissionTable("description", permMapModel, "Permission Content Table");
+                item.add(content);
+            }
+        };
+        list.setReuseItems(true);
+        add(list);
+        
+        AmpPMAjaxPagingNavigator pager = new AmpPMAjaxPagingNavigator("navigatorList", (PageableListView)list);
+        add(pager);
+        
+    }
+    
 
 }

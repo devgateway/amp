@@ -18,20 +18,20 @@ import org.digijava.module.common.util.DateTimeUtil;
  *
  */
 public class IPAContractDisbursement implements Serializable, Cloneable {
-	private static final long serialVersionUID = -4688757182074104911L;
-	
-	//IATI-check: to be ignored
-//	@Interchangeable(fieldTitle="ID")
-	private Long id;
-//	@Interchangeable(fieldTitle="Adjustment Type",fmPath="/Activity Form/Contracts/Contract Item/Contract Disbursements/Adjustment Type", importable = true)
-	private AmpCategoryValue adjustmentType;
-//	@Interchangeable(fieldTitle="Amount",fmPath="/Activity Form/Contracts/Contract Item/Contract Disbursements/Amount", importable = true)
-	private Double amount;
-//	@Interchangeable(fieldTitle="Currency",fmPath="/Activity Form/Contracts/Contract Item/Contract Disbursements/Currency", importable = true)
-	private AmpCurrency currency;
-//	@Interchangeable(fieldTitle="Date",fmPath="/Activity Form/Contracts/Contract Item/Contract Disbursements/Transaction Date", importable = true)
-	private Date date;
-//	@Interchangeable(fieldTitle="Contract", pickIdOnly=true, importable = true)
+    private static final long serialVersionUID = -4688757182074104911L;
+    
+    //IATI-check: to be ignored
+//  @Interchangeable(fieldTitle="ID")
+    private Long id;
+//  @Interchangeable(fieldTitle="Adjustment Type",fmPath="/Activity Form/Contracts/Contract Item/Contract Disbursements/Adjustment Type", importable = true)
+    private AmpCategoryValue adjustmentType;
+//  @Interchangeable(fieldTitle="Amount",fmPath="/Activity Form/Contracts/Contract Item/Contract Disbursements/Amount", importable = true)
+    private Double amount;
+//  @Interchangeable(fieldTitle="Currency",fmPath="/Activity Form/Contracts/Contract Item/Contract Disbursements/Currency", importable = true)
+    private AmpCurrency currency;
+//  @Interchangeable(fieldTitle="Date",fmPath="/Activity Form/Contracts/Contract Item/Contract Disbursements/Transaction Date", importable = true)
+    private Date date;
+//  @Interchangeable(fieldTitle="Contract", pickIdOnly=true, importable = true)
         private IPAContract contract;
 
         public IPAContract getContract() {
@@ -44,9 +44,9 @@ public class IPAContractDisbursement implements Serializable, Cloneable {
         
         public String getDisbDate() {
         String disbDate = "";
-		if (date != null) {
-			disbDate = DateTimeUtil.formatDateForPicker2(date, null);
-		}
+        if (date != null) {
+            disbDate = DateTimeUtil.formatDateForPicker2(date, null);
+        }
         return disbDate;
     }
         
@@ -69,40 +69,40 @@ public class IPAContractDisbursement implements Serializable, Cloneable {
         public void setCurrCode(String currCode) {
            currency= CurrencyUtil.getCurrencyByCode(currCode);
         }
-	public AmpCategoryValue getAdjustmentType() {
-		return adjustmentType;
-	}
-	public void setAdjustmentType(AmpCategoryValue adjustmentType) {
-		this.adjustmentType = adjustmentType;
-	}
-	public Double getAmount() {
-		return FeaturesUtil.applyThousandsForVisibility(amount);
-	}
-	public void setAmount(Double amount) {
-		this.amount = FeaturesUtil.applyThousandsForEntry(amount);
-	}
-	public AmpCurrency getCurrency() {
-		return currency;
-	}
-	public void setCurrency(AmpCurrency currency) {
-		this.currency = currency;
-	}
-	public Date getDate() {
-		return date;
-	}
-	public void setDate(Date date) {
-		this.date = date;
-	}
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public AmpCategoryValue getAdjustmentType() {
+        return adjustmentType;
+    }
+    public void setAdjustmentType(AmpCategoryValue adjustmentType) {
+        this.adjustmentType = adjustmentType;
+    }
+    public Double getAmount() {
+        return FeaturesUtil.applyThousandsForVisibility(amount);
+    }
+    public void setAmount(Double amount) {
+        this.amount = FeaturesUtil.applyThousandsForEntry(amount);
+    }
+    public AmpCurrency getCurrency() {
+        return currency;
+    }
+    public void setCurrency(AmpCurrency currency) {
+        this.currency = currency;
+    }
+    public Date getDate() {
+        return date;
+    }
+    public void setDate(Date date) {
+        this.date = date;
+    }
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	@Override
-	protected Object clone() throws CloneNotSupportedException {
-		// TODO Auto-generated method stub
-		return super.clone();
-	}
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        // TODO Auto-generated method stub
+        return super.clone();
+    }
 }

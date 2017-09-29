@@ -6,38 +6,38 @@ import org.digijava.module.parisindicator.helper.row.PIReportAbstractRow;
 
 public abstract class PIAbstractReport implements PIOperations {
 
-	/*
-	 * This field is changed by each report.
-	 */
-	private final String reportCode = "";
+    /*
+     * This field is changed by each report.
+     */
+    private final String reportCode = "";
 
-	/*
-	 * This collection has all the rows to generate the report.
-	 */
-	private Collection<PIReportAbstractRow> reportRows;
+    /*
+     * This collection has all the rows to generate the report.
+     */
+    private Collection<PIReportAbstractRow> reportRows;
 
-	/*
-	 * Mini tables for reports 5a and 5b.
-	 */
-	private int[][] miniTable;
+    /*
+     * Mini tables for reports 5a and 5b.
+     */
+    private int[][] miniTable;
 
-	public String getReportCode() {
-		return reportCode;
-	}
+    public String getReportCode() {
+        return reportCode;
+    }
 
-	public Collection<PIReportAbstractRow> getReportRows() {
-		return reportRows;
-	}
+    public Collection<PIReportAbstractRow> getReportRows() {
+        return reportRows;
+    }
 
-	public void setReportRows(Collection<PIReportAbstractRow> reportRows) {
-		this.reportRows = reportRows;
-	}
+    public void setReportRows(Collection<PIReportAbstractRow> reportRows) {
+        this.reportRows = reportRows;
+    }
 
-	public int[][] getMiniTable() {
-		return miniTable;
-	}
+    public int[][] getMiniTable() {
+        return miniTable;
+    }
 
-	public void setMiniTable(int[][] miniTable) {
-		this.miniTable = miniTable;
-	}
+    public void setMiniTable(int[][] miniTable) {
+        this.miniTable = miniTable;
+    }
 }

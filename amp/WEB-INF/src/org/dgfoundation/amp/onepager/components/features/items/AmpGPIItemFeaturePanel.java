@@ -34,38 +34,38 @@ import java.util.Collections;
  */
 public class AmpGPIItemFeaturePanel extends AmpFeaturePanel<AmpGPISurvey> {
 
-	public AmpGPIItemFeaturePanel(String id, String fmName, final IModel<AmpGPISurvey> survey, final IModel<AmpActivityVersion> am) {
-		super(id, survey, fmName, true);
-		if (survey.getObject().getResponses() == null) {
-			survey.getObject().setResponses(new HashSet<AmpGPISurveyResponse>());
-		}
+    public AmpGPIItemFeaturePanel(String id, String fmName, final IModel<AmpGPISurvey> survey, final IModel<AmpActivityVersion> am) {
+        super(id, survey, fmName, true);
+        if (survey.getObject().getResponses() == null) {
+            survey.getObject().setResponses(new HashSet<AmpGPISurveyResponse>());
+        }
 
-		final AbstractReadOnlyModel<List<AmpGPISurveyIndicator>> listModel = new AbstractReadOnlyModel<List<AmpGPISurveyIndicator>>() {
-			private static final long serialVersionUID = 3706182421429839210L;
+        final AbstractReadOnlyModel<List<AmpGPISurveyIndicator>> listModel = new AbstractReadOnlyModel<List<AmpGPISurveyIndicator>>() {
+            private static final long serialVersionUID = 3706182421429839210L;
 
-			@Override
-			public List<AmpGPISurveyIndicator> getObject() {
-				ArrayList<AmpGPISurveyIndicator> list = new ArrayList<AmpGPISurveyIndicator>(DbUtil.getAllGPISurveyIndicators(true));
-				Collections.sort(list, new AmpGPISurveyIndicator.GPISurveyIndicatorComparator());
-				return list;
-			}
-		};
+            @Override
+            public List<AmpGPISurveyIndicator> getObject() {
+                ArrayList<AmpGPISurveyIndicator> list = new ArrayList<AmpGPISurveyIndicator>(DbUtil.getAllGPISurveyIndicators(true));
+                Collections.sort(list, new AmpGPISurveyIndicator.GPISurveyIndicatorComparator());
+                return list;
+            }
+        };
 
-		ListView<AmpGPISurveyIndicator> list = new ListView<AmpGPISurveyIndicator>("list", listModel) {
-			@Override
-			protected void populateItem(final ListItem<AmpGPISurveyIndicator> item) {
-				AmpGPISurveyIndicator sv = item.getModelObject();
+        ListView<AmpGPISurveyIndicator> list = new ListView<AmpGPISurveyIndicator>("list", listModel) {
+            @Override
+            protected void populateItem(final ListItem<AmpGPISurveyIndicator> item) {
+                AmpGPISurveyIndicator sv = item.getModelObject();
 
-				Label indName = new TrnLabel("indName", new PropertyModel<String>(sv, "name"));
-				item.add(indName);
+                Label indName = new TrnLabel("indName", new PropertyModel<String>(sv, "name"));
+                item.add(indName);
 
-				AmpGPIQuestionItemFeaturePanel q = new AmpGPIQuestionItemFeaturePanel("qList", "GPI Questions List", PersistentObjectModel.getModel(sv), survey);
-				item.add(q);
+                AmpGPIQuestionItemFeaturePanel q = new AmpGPIQuestionItemFeaturePanel("qList", "GPI Questions List", PersistentObjectModel.getModel(sv), survey);
+                item.add(q);
 
-			}
-		};
-		list.setReuseItems(true);
-		add(list);
-	}
+            }
+        };
+        list.setReuseItems(true);
+        add(list);
+    }
 
 }

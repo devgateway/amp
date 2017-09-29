@@ -12,11 +12,11 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
  */
 public abstract class  AmpAddLinkField extends AmpLinkField {
 
-	/**
-	 * @param id
-	 * @param fmName
-	 */
-	public AmpAddLinkField(String id, String fmName) {
-		super(id, fmName);
-	}
+    /**
+     * @param id
+     * @param fmName
+     */
+    public AmpAddLinkField(String id, String fmName) {
+        super(id, fmName);
+    }
 }

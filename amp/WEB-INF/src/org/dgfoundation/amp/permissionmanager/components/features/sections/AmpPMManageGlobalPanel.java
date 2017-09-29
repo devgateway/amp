@@ -28,40 +28,40 @@ import org.digijava.module.um.exception.UMException;
  */
 
 public class AmpPMManageGlobalPanel extends AmpComponentPanel {
-	
-	
-	
-	public AmpPMManageGlobalPanel(String id,  IModel<Set<Permission>> globalPermissionsModel, String fmName, boolean hideLabel) throws Exception {
-		super(id, fmName);
-		super.setOutputMarkupId(true);
-		
-		Set<AmpTeam> w = new TreeSet<AmpTeam>();
-		List<AmpTeam> teams = new ArrayList<AmpTeam>();
-		try {
-			teams = org.digijava.module.um.util.DbUtil.getList(AmpTeam.class.getName(),"name");
-		} catch (UMException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		w.addAll(teams);
-		final IModel<Set<AmpTeam>> teamsModel = new Model((Serializable)w);
-		
-		AmpPMAssignGlobalPermissionComponentPanel assignGlobalPerm = new AmpPMAssignGlobalPermissionComponentPanel("assignGlobalPermission", globalPermissionsModel, teamsModel, "Assign Global Permission");
-		assignGlobalPerm.setOutputMarkupId(true);
-		add(assignGlobalPerm);
-		
-		AmpPMViewGlobalPermsTableFeaturePanel globalPermsTable = new AmpPMViewGlobalPermsTableFeaturePanel("viewGlobalPerms", globalPermissionsModel, "View Existing Global Permissions", true);
-		globalPermsTable.setOutputMarkupId(true);
-		add(globalPermsTable);
-		AjaxPagingNavigator pager = new AjaxPagingNavigator("globalPermsNavigator", (PageableListView)globalPermsTable.getList()) {
-			@Override
-			protected void onAjaxEvent(AjaxRequestTarget target) {
-				target.add(AmpPMManageGlobalPanel.this);
-				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(AmpPMManageGlobalPanel.this));
-			}
-		};
-		add(pager);
-		
-	}
+    
+    
+    
+    public AmpPMManageGlobalPanel(String id,  IModel<Set<Permission>> globalPermissionsModel, String fmName, boolean hideLabel) throws Exception {
+        super(id, fmName);
+        super.setOutputMarkupId(true);
+        
+        Set<AmpTeam> w = new TreeSet<AmpTeam>();
+        List<AmpTeam> teams = new ArrayList<AmpTeam>();
+        try {
+            teams = org.digijava.module.um.util.DbUtil.getList(AmpTeam.class.getName(),"name");
+        } catch (UMException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        w.addAll(teams);
+        final IModel<Set<AmpTeam>> teamsModel = new Model((Serializable)w);
+        
+        AmpPMAssignGlobalPermissionComponentPanel assignGlobalPerm = new AmpPMAssignGlobalPermissionComponentPanel("assignGlobalPermission", globalPermissionsModel, teamsModel, "Assign Global Permission");
+        assignGlobalPerm.setOutputMarkupId(true);
+        add(assignGlobalPerm);
+        
+        AmpPMViewGlobalPermsTableFeaturePanel globalPermsTable = new AmpPMViewGlobalPermsTableFeaturePanel("viewGlobalPerms", globalPermissionsModel, "View Existing Global Permissions", true);
+        globalPermsTable.setOutputMarkupId(true);
+        add(globalPermsTable);
+        AjaxPagingNavigator pager = new AjaxPagingNavigator("globalPermsNavigator", (PageableListView)globalPermsTable.getList()) {
+            @Override
+            protected void onAjaxEvent(AjaxRequestTarget target) {
+                target.add(AmpPMManageGlobalPanel.this);
+                target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(AmpPMManageGlobalPanel.this));
+            }
+        };
+        add(pager);
+        
+    }
 
 }

@@ -16,16 +16,16 @@ import com.lowagie.text.pdf.PdfPTable;
 
 public class ComputedAmountCellPDF extends CategAmountCellPDF {
 
-	public ComputedAmountCellPDF(Exporter parent, Viewable item) {
-		super(parent, item);
-	}
+    public ComputedAmountCellPDF(Exporter parent, Viewable item) {
+        super(parent, item);
+    }
 
-	/**
-	 * @param table
-	 * @param item
-	 */
-	public ComputedAmountCellPDF(PdfPTable table, Viewable item, Long ownerId) {
-		super(table, item, ownerId);
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * @param table
+     * @param item
+     */
+    public ComputedAmountCellPDF(PdfPTable table, Viewable item, Long ownerId) {
+        super(table, item, ownerId);
+        // TODO Auto-generated constructor stub
+    }
 }

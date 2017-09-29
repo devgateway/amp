@@ -16,159 +16,159 @@ import org.digijava.module.aim.util.Identifiable;
  * @author Nadejda Mandrescu
  */
 public class AmpInflationSource implements Serializable, Identifiable {
-	
-	private static final long serialVersionUID = -6422564054049848996L;
-	
-	private Long id;
-	
-	/**
-	 * Data Source name, translatable
-	 */
-	@NotNull
-	private String name;
-	
-	/**
-	 * Data Source description, translatable
-	 */
-	private String description;
-	
-	/**
-	 * Flags if the current data source was chosen to provide inflation rates
-	 */
-	@NotNull
-	private Boolean selected;
-	
-	/**
-	 * Inflation Rates frequency selected to be provided via current data source
-	 */
-	private IRFrequency frequency;
-	
-	/**
-	 * The currency for which this Data Source provides inflation rates
-	 */
-	@NotNull
-	private AmpCurrency currency;
-	
-	/**
-	 * Other non-standard settings available for the current data source 
-	 */
-	//DEFLATOR: once we have Settings V2, store any custom settings per data source there, how explicitly
-	private String apiToken;
+    
+    private static final long serialVersionUID = -6422564054049848996L;
+    
+    private Long id;
+    
+    /**
+     * Data Source name, translatable
+     */
+    @NotNull
+    private String name;
+    
+    /**
+     * Data Source description, translatable
+     */
+    private String description;
+    
+    /**
+     * Flags if the current data source was chosen to provide inflation rates
+     */
+    @NotNull
+    private Boolean selected;
+    
+    /**
+     * Inflation Rates frequency selected to be provided via current data source
+     */
+    private IRFrequency frequency;
+    
+    /**
+     * The currency for which this Data Source provides inflation rates
+     */
+    @NotNull
+    private AmpCurrency currency;
+    
+    /**
+     * Other non-standard settings available for the current data source 
+     */
+    //DEFLATOR: once we have Settings V2, store any custom settings per data source there, how explicitly
+    private String apiToken;
 
-	/**
-	 * @return the id
-	 */
-	public Long getId() {
-		return id;
-	}
-
-
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(Long id) {
-		this.id = id;
-	}
+    /**
+     * @return the id
+     */
+    public Long getId() {
+        return id;
+    }
 
 
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
+    /**
+     * @param id the id to set
+     */
+    public void setId(Long id) {
+        this.id = id;
+    }
 
 
-	/**
-	 * @param name the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
+    /**
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
 
 
-	/**
-	 * @return the description
-	 */
-	public String getDescription() {
-		return description;
-	}
+    /**
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
 
 
-	/**
-	 * @param description the description to set
-	 */
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    /**
+     * @return the description
+     */
+    public String getDescription() {
+        return description;
+    }
 
 
-	/**
-	 * @return the selected
-	 */
-	public Boolean getSelected() {
-		return selected;
-	}
+    /**
+     * @param description the description to set
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
 
-	/**
-	 * @param selected the selected to set
-	 */
-	public void setSelected(Boolean selected) {
-		this.selected = selected;
-	}
+    /**
+     * @return the selected
+     */
+    public Boolean getSelected() {
+        return selected;
+    }
 
 
-	/**
-	 * @return the frequency
-	 */
-	public IRFrequency getFrequency() {
-		return frequency;
-	}
+    /**
+     * @param selected the selected to set
+     */
+    public void setSelected(Boolean selected) {
+        this.selected = selected;
+    }
 
 
-	/**
-	 * @param frequency the frequency to set
-	 */
-	public void setFrequency(IRFrequency frequency) {
-		this.frequency = frequency;
-	}
+    /**
+     * @return the frequency
+     */
+    public IRFrequency getFrequency() {
+        return frequency;
+    }
 
 
-	/**
-	 * @return the currency
-	 */
-	public AmpCurrency getCurrency() {
-		return currency;
-	}
+    /**
+     * @param frequency the frequency to set
+     */
+    public void setFrequency(IRFrequency frequency) {
+        this.frequency = frequency;
+    }
 
 
-	/**
-	 * @param currency the currency to set
-	 */
-	public void setCurrency(AmpCurrency currency) {
-		this.currency = currency;
-	}
-
-	/**
-	 * @return the apiToken
-	 */
-	public String getApiToken() {
-		return apiToken;
-	}
+    /**
+     * @return the currency
+     */
+    public AmpCurrency getCurrency() {
+        return currency;
+    }
 
 
-	/**
-	 * @param apiToken the apiToken to set
-	 */
-	public void setApiToken(String apiToken) {
-		this.apiToken = apiToken;
-	}
+    /**
+     * @param currency the currency to set
+     */
+    public void setCurrency(AmpCurrency currency) {
+        this.currency = currency;
+    }
+
+    /**
+     * @return the apiToken
+     */
+    public String getApiToken() {
+        return apiToken;
+    }
 
 
-	@Override
-	public Object getIdentifier() {
-		return id;
-	}
+    /**
+     * @param apiToken the apiToken to set
+     */
+    public void setApiToken(String apiToken) {
+        this.apiToken = apiToken;
+    }
+
+
+    @Override
+    public Object getIdentifier() {
+        return id;
+    }
 
 }

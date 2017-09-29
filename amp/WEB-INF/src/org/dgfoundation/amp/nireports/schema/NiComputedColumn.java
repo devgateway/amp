@@ -19,18 +19,18 @@ import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
  */
 public class NiComputedColumn<K extends Cell, V extends NiOutCell> extends NiReportColumn<K> {
 
-	public NiComputedColumn(String name, LevelColumn levelColumn, GeneratedColumnBehaviour<K, V> behaviour, String description) {
-		super(name, levelColumn, behaviour, description);
-	}
+    public NiComputedColumn(String name, LevelColumn levelColumn, GeneratedColumnBehaviour<K, V> behaviour, String description) {
+        super(name, levelColumn, behaviour, description);
+    }
 
-	@Override
-	public List<K> fetch(NiReportsEngine engine) throws Exception {
-		return Collections.emptyList();
-	}
+    @Override
+    public List<K> fetch(NiReportsEngine engine) throws Exception {
+        return Collections.emptyList();
+    }
 
-	@Override
-	public List<ReportRenderWarning> performCheck() {
-		return null;
-	}
+    @Override
+    public List<ReportRenderWarning> performCheck() {
+        return null;
+    }
 
 }

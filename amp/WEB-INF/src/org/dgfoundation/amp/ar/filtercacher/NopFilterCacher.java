@@ -10,14 +10,14 @@ import org.dgfoundation.amp.ar.AmpARFilter;
  *
  */
 public class NopFilterCacher extends FilterCacher {
-	public NopFilterCacher(AmpARFilter filter)
-	{
-		super(filter);
-	}
-	
-	@Override
-	protected String customRewriteFilterQuery(String inQuery)
-	{
-		return inQuery;
-	}
+    public NopFilterCacher(AmpARFilter filter)
+    {
+        super(filter);
+    }
+    
+    @Override
+    protected String customRewriteFilterQuery(String inQuery)
+    {
+        return inQuery;
+    }
 }

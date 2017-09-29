@@ -9,11 +9,11 @@ import org.dgfoundation.amp.newreports.ReportSpecification;
  * @param <K>
  */
 public interface NiReportDataVisitor<K> extends NiReportOutputBuilder<K> {
-	public K visit(NiColumnReportData crd);
-	public K visit(NiGroupReportData grd);
-	
-	@Override
-	public default K buildOutput(ReportSpecification spec, NiReportRunResult reportRun) {
-		return reportRun.reportOut.accept(this);
-	}
+    public K visit(NiColumnReportData crd);
+    public K visit(NiGroupReportData grd);
+    
+    @Override
+    public default K buildOutput(ReportSpecification spec, NiReportRunResult reportRun) {
+        return reportRun.reportOut.accept(this);
+    }
 }

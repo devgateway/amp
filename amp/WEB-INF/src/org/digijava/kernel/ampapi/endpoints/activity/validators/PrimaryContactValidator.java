@@ -22,50 +22,50 @@ import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
  * @author Viorel Chihai
  */
 public class PrimaryContactValidator extends InputValidator {
-	
-	public static Set<String> CONTACT_TYPE_FIELDS = new HashSet<String>() {{
-		add(InterchangeUtils.underscorify(ActivityFieldsConstants.DONOR_CONTACT));
-		add(InterchangeUtils.underscorify(ActivityFieldsConstants.PROJECT_COORDINATOR_CONTACT));
-		add(InterchangeUtils.underscorify(ActivityFieldsConstants.SECTOR_MINISTRY_CONTACT));
-		add(InterchangeUtils.underscorify(ActivityFieldsConstants.MOFED_CONTACT));
-		add(InterchangeUtils.underscorify(ActivityFieldsConstants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT));
-	}};
-	
-	public PrimaryContactValidator() {
-	}
+    
+    public static Set<String> CONTACT_TYPE_FIELDS = new HashSet<String>() {{
+        add(InterchangeUtils.underscorify(ActivityFieldsConstants.DONOR_CONTACT));
+        add(InterchangeUtils.underscorify(ActivityFieldsConstants.PROJECT_COORDINATOR_CONTACT));
+        add(InterchangeUtils.underscorify(ActivityFieldsConstants.SECTOR_MINISTRY_CONTACT));
+        add(InterchangeUtils.underscorify(ActivityFieldsConstants.MOFED_CONTACT));
+        add(InterchangeUtils.underscorify(ActivityFieldsConstants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT));
+    }};
+    
+    public PrimaryContactValidator() {
+    }
 
-	@Override
-	public ApiErrorMessage getErrorMessage() {
-		return ActivityErrors.UNIQUE_PRIMARY_CONTACT;
-	}
+    @Override
+    public ApiErrorMessage getErrorMessage() {
+        return ActivityErrors.UNIQUE_PRIMARY_CONTACT;
+    }
 
-	@Override
-	public boolean isValid(ActivityImporter importer, Map<String, Object> newFieldParent, 
-			Map<String, Object> oldFieldParent, JsonBean fieldDescription, String fieldPath) {
-		
-		boolean isValid = true;
-		String fieldName = (String) fieldDescription.get(ActivityEPConstants.FIELD_NAME);
-		
-		if (CONTACT_TYPE_FIELDS.contains(fieldName)) {
-			Collection<Map<String, Object>> fieldValues = (Collection<Map<String, Object>>) newFieldParent.get(fieldName);
+    @Override
+    public boolean isValid(ActivityImporter importer, Map<String, Object> newFieldParent, 
+            Map<String, Object> oldFieldParent, JsonBean fieldDescription, String fieldPath) {
+        
+        boolean isValid = true;
+        String fieldName = (String) fieldDescription.get(ActivityEPConstants.FIELD_NAME);
+        
+        if (CONTACT_TYPE_FIELDS.contains(fieldName)) {
+            Collection<Map<String, Object>> fieldValues = (Collection<Map<String, Object>>) newFieldParent.get(fieldName);
 
-			if (fieldValues != null && fieldValues.size() > 1) {
-				String primaryContactFieldName = InterchangeUtils.underscorify(ActivityFieldsConstants.PRIMARY_CONTACT);
-				int primaryContactCnt = 0;
-				
-				for (Map<String, Object> child : fieldValues) {
-					String childInput = String.valueOf(child.get(primaryContactFieldName));
-					
-					if (Boolean.valueOf(childInput)) {
-						primaryContactCnt++;
-					}
-				}
-				if (primaryContactCnt > 1) {
-					isValid = false;
-				}
-			}
-		}
+            if (fieldValues != null && fieldValues.size() > 1) {
+                String primaryContactFieldName = InterchangeUtils.underscorify(ActivityFieldsConstants.PRIMARY_CONTACT);
+                int primaryContactCnt = 0;
+                
+                for (Map<String, Object> child : fieldValues) {
+                    String childInput = String.valueOf(child.get(primaryContactFieldName));
+                    
+                    if (Boolean.valueOf(childInput)) {
+                        primaryContactCnt++;
+                    }
+                }
+                if (primaryContactCnt > 1) {
+                    isValid = false;
+                }
+            }
+        }
 
-		return isValid;
-	}
+        return isValid;
+    }
 }

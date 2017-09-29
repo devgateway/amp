@@ -697,8 +697,7 @@ div.adminicon{float:right;}
 .admin_landing_page_tbl {margin-top:10px;}
 .yui-panel {
     border-collapse: separate;
-    font-family:arial;
-	font-size:12px !important;
+    font-family:arial;	
 	table-layout:fixed;
 }
 /**-----IE FIXES-----**/
@@ -775,7 +774,7 @@ html.ie .field_text_big {width:200px;}
 table#jobmanagertable td{border-bottom:1px solid #cccccc;padding:3px;color:#000;}
 td#jobcpanel a {font-weight:bold; padding:2px;}
 ul#jobquicklinks li a, ul#jobquicklinks li{font-size:11px;letter-spacing:normal;font-weight:normal;}
-#identificationdiv {line-height:18px;font-family:arial;}
+#identificationdiv {line-height:18px;}
 #identificationdiv p {margin:0; padding:0;}
 #relateorgdiv ul {margin:0;}
 #donor_fund a {color:#000000; font-weight:bold;}
@@ -845,7 +844,7 @@ border-top: 1px;
 border-left: 1px;
 border-bottom: 1px;}
 legend.admtoolsttl{position:absolute;top:-10px;left:10px;}
-#customDecimalSymbol{margin:0px 2px 0px 2px;width:64px;}
+#customDecimalSymbol{width:64px;}
 span.geostyle{background:#f1f1f1;padding:3px;border:1px solid #e0e0e0;color:#5d5d5b;font-size:11px;font-weight:normal;}
 
 .funding_group_feature_box {background-color:#FBFBFB; border:1px solid #EBEBEB; padding-left:5px;  margin-bottom:10px;}
@@ -1180,4 +1179,94 @@ div.footer {
 
 .img-padding {
     padding-right: 5px;
+}
+
+
+.label-column{
+   text-align: right;
+   width: 30%;  
+   padding: 5px; 
+}
+
+.data-column{
+  text-align: left;
+  width: 70%;
+}
+
+.buttons-section{
+	text-align: center;
+}
+
+.button-section-padding {
+	padding-top: 10px;
+}
+
+.org-type-fieldset {
+ padding-left:200px;
+ border:1px solid #CCCCCC; 
+ background-color:#FFFFFF; 
+ text-align: left;
+}
+
+.org-type-fieldset>input{
+	margin: 4px;
+}
+ 
+.header-corner {
+  background: url(../images/corner-r.gif) no-repeat;
+}
+
+.right_menu_empty {
+    color: #376091;
+}
+
+.right_menu_empty {
+    color: #376091;
+}
+.frozen{
+	width:15px;
+	height:15px;
+	background-color:red;
+	float: left;
+	margin-right:5px;
+}
+
+.unfrozen{
+	width:15px;
+	height:15px;
+	background-color:green;
+	float: left;
+	margin-right:5px;
+}
+
+.legend-item {
+	float:left;width:20%;
+	margin-top:10px;
+	clear:both;
+}
+
+.summary-change-container {
+    border: 1px solid rgb(208, 208, 208);
+    padding: 10px;
+    font-size: 12px;
+    height: 100%;
+}
+
+.filter-item-label {
+    font-family: Arial;
+    font-size: 12px;
+    padding: 0px 0px 0px 5px;
+}
+
+.setting-label {
+    font-size: 11px;
+    white-space:nowrap;
+    text-align: right;
+    padding: 0px 5px 0px 0px;
+}
+
+.setting-option {
+    font-size: 11px;
+    white-space:nowrap;
+    padding: 0px 0px 0px 5px;
 }

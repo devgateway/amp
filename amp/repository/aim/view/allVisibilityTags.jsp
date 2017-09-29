@@ -328,6 +328,7 @@
 <field:display feature="Funding Information" name="Expenditure Class"></field:display>
 <field:display feature="Funding Information" name="Effective Funding Date"></field:display>
 <field:display feature="Funding Information" name="Funding Closing Date"></field:display>
+<field:display feature="Funding Information" name="Concessionality Level"></field:display>
 <field:display feature="Government Contact Information" name="Government Email"></field:display> 
 <field:display feature="Government Contact Information" name="Government First Name"></field:display> 
 <field:display feature="Identification" name="AMP ID"></field:display> 
@@ -1083,6 +1084,7 @@ deleted 6 fields, do not reinsert
 <module:display name="Activity Preview" parentModule="PUBLIC VIEW"></module:display>
 <feature:display name="Contacts" module="Activity Preview"></feature:display>
 <feature:display name="Version History" module="Activity Preview"></feature:display>
+<field:display name="Show Change Summary" feature="Version History"></field:display>
 
 <module:display name="Show Editable Export Formats" parentModule="PUBLIC VIEW"></module:display>
 <module:display name="Public Reports and Tabs" parentModule="PUBLIC VIEW"></module:display>
@@ -1117,3 +1119,16 @@ deleted 6 fields, do not reinsert
 <field:display name="Mandatory Budget Organization Code" feature="Organization Form"></field:display>
 <field:display name="Mandatory Organization Code" feature="Organization Form"></field:display>
 
+  <!-- GPI  -->
+<module:display name="GPI Reports" parentModule="REPORTING"></module:display>
+<module:display name="GPI" parentModule="GPI Reports"></module:display>
+<module:display name="GPI 2014" parentModule="GPI Reports"></module:display>
+<feature:display name="GPI 2014 - Indicator 1" module="GPI 2014"></feature:display>
+<feature:display name="GPI 2014 - Indicator 5a" module="GPI 2014"></feature:display>
+<feature:display name="GPI 2014 - Indicator 6" module="GPI 2014"></feature:display>
+<feature:display name="GPI 2014 - Indicator 9b" module="GPI 2014"></feature:display>
+<feature:display name="Indicator 1" module="GPI"></feature:display>
+<feature:display name="Indicator 5a" module="GPI"></feature:display>
+<feature:display name="Indicator 5b" module="GPI"></feature:display>
+<feature:display name="Indicator 6" module="GPI"></feature:display>
+<feature:display name="Indicator 9b" module="GPI"></feature:display>

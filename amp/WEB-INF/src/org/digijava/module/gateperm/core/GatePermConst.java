@@ -64,6 +64,8 @@ public final class GatePermConst {
         public static final MetaInfo CURRENT_MEMBER= new MetaInfo("currentMember","TeamMember object for the currently logged in user");
         public static final MetaInfo CURRENT_ORG= new MetaInfo("currentOrg","Current displayed organisation");
         public static final MetaInfo CURRENT_ORG_ROLE= new MetaInfo("currentOrgRole","Current displayed organisation role as string");
+        public static final MetaInfo CURRENT_DONOR_ORGANISATION = new MetaInfo("currentDonorOrganisation",
+                "Current donor organisation as LONG");
         public static final MetaInfo FUNDING_DETAIL= new MetaInfo("currentFundingDetail","The org.digijava.module.aim.helper.FundingDetail currently " +
                 "in iteration in the funding popup");
         public static final MetaInfo CURRENT_REGION = new MetaInfo("currentRegion", "Current displayed region");

@@ -1,22 +1,24 @@
 package org.digijava.module.aim.util;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.newreports.CalendarConverter;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
 import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 import org.hibernate.Session;
 import org.joda.time.Chronology;
 import org.joda.time.DateTime;
 import org.joda.time.chrono.GregorianChronology;
-
-import java.text.SimpleDateFormat;
 
 public class FiscalCalendarUtil {
     
@@ -141,6 +143,18 @@ public class FiscalCalendarUtil {
         return fisCal;
     }
     
+    public static List<AmpFiscalCalendar> getAllAmpFiscalCalendars(){
+        Session session = null;
+        List<AmpFiscalCalendar> list = null;        
+        try {
+            session = PersistenceManager.getSession();
+            list = session.createQuery("from " + AmpFiscalCalendar.class.getName()).list();            
+        } catch (Exception e) {
+            logger.error("Exception from getAllAmpFiscalCalendars() :" + e.getMessage());            
+        }
+        return list;
+    }
+    
     public static AmpFiscalCalendar getAmpFiscalCalendar(String calendarName) {
         try {
             return (AmpFiscalCalendar) PersistenceManager.getSession().createQuery("select o from " + AmpFiscalCalendar.class.getName() 
@@ -263,6 +277,21 @@ public class FiscalCalendarUtil {
     }
     
     /**
+     * A method to convert a Gregorian date into toCalendar date
+     * 
+     * @param gregorianDate
+     * @param toCalendar
+     * @return
+     */
+    public static DateTime convertFromGregorianDate(Date gregorianDate, AmpFiscalCalendar toCalendar) {
+        
+        ICalendarWorker toCalWorker = toCalendar.getworker();
+        toCalWorker.setTime(gregorianDate);
+        
+        return toCalWorker.getCalendarDate();
+    }
+    
+    /**
      * 
      * Note: Since no general solution existed so far for so many years, agreed on this quick solution to reduce 
      * conversion bugs and it will be redesign as part of migration to Java8 and new Reports Engine (after Mondrian era)  
@@ -346,6 +375,15 @@ public class FiscalCalendarUtil {
             startYearDate.plusDays(daysOffset);
             return startYearDate;
         }
+    }
+    
+    public static boolean isEthiopianCalendar(CalendarConverter calendarConverter) {
+        if (calendarConverter != null && calendarConverter instanceof AmpFiscalCalendar) {
+            AmpFiscalCalendar calendar = (AmpFiscalCalendar) calendarConverter;
+            return calendar.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.getValue());
+        }
+        
+        return false;
     }
     
     public static AmpFiscalCalendar getGSCalendar() {

@@ -3178,5 +3178,24 @@ public class DbUtil {
 
         return agreements;
     }
-
+    
+    public static boolean hasDonorRole(Long id){
+        Session session = null;
+        Query query = null;
+        boolean result = false;
+        try {
+            session = PersistenceManager.getRequestDBSession();         
+            String queryString = "select count(*) from "    + AmpOrgRole.class.getName()
+                    + " r where (r.organisation.id = :orgId) and r.role.roleCode = :code";
+            query = session.createQuery(queryString);
+            query.setLong("orgId", id); 
+            query.setString("code", Constants.FUNDING_AGENCY);
+            Integer count = (Integer) query.uniqueResult();         
+            result = count > 0;         
+        } catch (Exception e) {
+            logger.error("Exception from hasDonorRole()", e);
+        }
+        
+        return result;  
+    }
 }

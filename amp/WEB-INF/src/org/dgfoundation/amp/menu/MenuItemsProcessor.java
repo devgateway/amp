@@ -68,6 +68,8 @@ public class MenuItemsProcessor {
         this.referer = TLSUtils.getRequest().getHeader("referer");
     }
     
+     
+    
     protected List<MenuItem> process(List<MenuItem> items, Set<String> visibleMenuEntries) {
         List<MenuItem> newList = new ArrayList<MenuItem>();
         for (MenuItem item : items) {
@@ -103,6 +105,10 @@ public class MenuItemsProcessor {
         case MenuConstants.IATI_IMPORTER:
         case MenuConstants.ADD_SSC_ACTIVITY:
             visible = tm != null && Boolean.TRUE.equals(tm.getAddActivity());
+            break;
+        case MenuConstants.GPI_DATA:
+            AmpTeamMember atm = TeamMemberUtil.getAmpTeamMember(tm.getMemberId()); 
+            visible = atm.getUser().hasNationalCoordinatorGroup() || atm.getUser().hasVerifiedDonor();
             break;
         }
         // if requestURL (the actual referrer) filter is specified, then display this menu item only for a referrer that matches it

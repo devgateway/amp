@@ -11,6 +11,6 @@
 		</id>
 		<property column="latitude" name="latitude" type="text" />
 		<property column="longitude" name="longitude" type="text" />
-		<many-to-one name="structure" column="amp_structure_id" class="org.digijava.module.aim.dbentity.AmpStructure" cascade="none" not-null="true"/>	
+		<many-to-one name="structure" column="amp_structure_id" class="org.digijava.module.aim.dbentity.AmpStructure" index="idx_amp_structure_coordinate_id"/>
 	</class>
 </hibernate-mapping>

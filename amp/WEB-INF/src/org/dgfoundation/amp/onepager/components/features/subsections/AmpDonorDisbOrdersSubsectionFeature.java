@@ -104,7 +104,7 @@ public class AmpDonorDisbOrdersSubsectionFeature extends
                 "disbOrdersTableFeature", model, "Disbursement Orders Table", transactionType);
         add(disbOrdersTableFeature);
 
-        AmpAjaxLinkField addCommit = new AmpAjaxLinkField("addDisbOrder",
+        AmpAjaxLinkField addDisbOrder = new AmpAjaxLinkField("addDisbOrder",
                 "Add Disbursement Order", "Add Disbursement Order") {
             @Override
             public void onClick(AjaxRequestTarget target) {
@@ -129,7 +129,8 @@ public class AmpDonorDisbOrdersSubsectionFeature extends
                 target.appendJavaScript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));
             }
         };
-        add(addCommit);
+        addDisbOrder.setAffectedByFreezing(false);
+        add(addDisbOrder);
     }
 
 }

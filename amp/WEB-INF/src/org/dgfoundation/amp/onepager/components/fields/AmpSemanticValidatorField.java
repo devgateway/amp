@@ -18,6 +18,7 @@ public abstract class AmpSemanticValidatorField <H> extends AmpHiddenFieldPanel 
     private AjaxIndicatorAppender indicatorAppender = new AjaxIndicatorAppender();
     protected AmpSemanticValidator<H> semanticValidator;
 
+    protected boolean shouldValidateDrafts = false;
     public AmpSemanticValidator getSemanticValidator() {
         return semanticValidator;
     }
@@ -42,4 +43,13 @@ public abstract class AmpSemanticValidatorField <H> extends AmpHiddenFieldPanel 
     public void setIndicatorAppender(AjaxIndicatorAppender i){
         this.indicatorAppender = i;
     }
+
+    public boolean isShouldValidateDrafts() {
+        return shouldValidateDrafts;
+    }
+
+    public void setShouldValidateDrafts(boolean shouldValidateDrafts) {
+        this.shouldValidateDrafts = shouldValidateDrafts;
+    }
+    
 }

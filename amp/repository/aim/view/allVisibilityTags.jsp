@@ -1122,6 +1122,7 @@ deleted 6 fields, do not reinsert
   <!-- GPI  -->
 <module:display name="GPI Reports" parentModule="REPORTING"></module:display>
 <module:display name="GPI" parentModule="GPI Reports"></module:display>
+<module:display name="Global Partnership Reports" parentModule="GPI Reports"></module:display>
 <module:display name="GPI 2014" parentModule="GPI Reports"></module:display>
 <feature:display name="GPI 2014 - Indicator 1" module="GPI 2014"></feature:display>
 <feature:display name="GPI 2014 - Indicator 5a" module="GPI 2014"></feature:display>

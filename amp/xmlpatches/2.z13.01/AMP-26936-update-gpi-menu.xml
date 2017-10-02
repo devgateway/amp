@@ -12,10 +12,6 @@
 				update amp_menu_entry set name = 'Global Partnership Reports', title = 'Global Partnership Reports'
 				where url = '/TEMPLATE/reamp/modules/gpi-reports/index.html';
 
-				INSERT INTO amp_modules_visibility values (nextval('amp_modules_visibility_seq'),
-				'Global Partnership Reports', null, true, (select id from amp_modules_visibility
-				where name like 'GPI Reports'));
-
 				INSERT INTO amp_visibility_rule(SELECT nextval('amp_visibility_rule_seq'), null, 1);
 
 				UPDATE amp_menu_entry_view SET rule_id=(SELECT currval('amp_visibility_rule_seq'))
@@ -23,7 +19,7 @@
 
 				INSERT INTO amp_visibility_rule_amp_modules_visibility(
 				SELECT currval('amp_visibility_rule_seq'), (SELECT id FROM amp_modules_visibility
-				WHERE name = 'Global Partnership Reports'
+				WHERE name = 'GPI'
 				AND parent IN (SELECT id FROM amp_modules_visibility WHERE name = 'GPI Reports')));
 			</lang>
 		</script>

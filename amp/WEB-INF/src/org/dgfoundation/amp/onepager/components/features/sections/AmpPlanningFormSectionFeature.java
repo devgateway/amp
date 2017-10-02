@@ -74,7 +74,7 @@ public class AmpPlanningFormSectionFeature extends AmpFormSectionFeaturePanel im
                         "actualApprovalDate"), proposedApprovalDate,
                 "Actual Approval Date");
         
-        add(getRequiredDateValidator(actualApprovalDate,"actualApprovalDate","Actual Approval Date"));
+        add(getRequiredDateValidator(actualApprovalDate, "actualApprovalDate", "Actual Approval Date"));
         add(actualApprovalDate);
         
         proposedApprovalDate.setDuplicateFieldOnChange(actualApprovalDate);
@@ -82,7 +82,7 @@ public class AmpPlanningFormSectionFeature extends AmpFormSectionFeaturePanel im
         final AmpDatePickerFieldPanel proposedStartDate = new AmpDatePickerFieldPanel(
                 "proposedStartDate", new PropertyModel<Date>(actModel,
                         "proposedStartDate"), null, "Proposed Start Date");
-        add(getRequiredDateValidator(proposedStartDate,"proposedStartDateRequired","Proposed Start Date"));         
+        add(getRequiredDateValidator(proposedStartDate, "proposedStartDateRequired", "Proposed Start Date"));
         add(proposedStartDate);
         
 
@@ -113,7 +113,7 @@ public class AmpPlanningFormSectionFeature extends AmpFormSectionFeaturePanel im
         final AmpDatePickerFieldPanel dateOfPlannedCompletion = new AmpDatePickerFieldPanel(
                 "originalCompDate", new PropertyModel<Date>(actModel,
                         "originalCompDate"), null, "Original Completion Date");
-        add(getRequiredDateValidator(dateOfPlannedCompletion,"originalCompDateRequired","Original Completion Date"));
+        add(getRequiredDateValidator(dateOfPlannedCompletion, "originalCompDateRequired", "Original Completion Date"));
         add(dateOfPlannedCompletion);
         
         AmpCommentSimpleWrapper acsw2 = new AmpCommentSimpleWrapper("revisedComplDateTabs", "current completion date", actModel);
@@ -131,15 +131,16 @@ public class AmpPlanningFormSectionFeature extends AmpFormSectionFeaturePanel im
         add(proposedProjectLife);
     }
 
-    private AmpComponentPanel getRequiredDateValidator(AmpDatePickerFieldPanel dateObjectToValidate,String wicketId,String fmName) {
-        return new AmpComponentPanel(wicketId,"Required Validator for "+ fmName) {
+    private AmpComponentPanel getRequiredDateValidator(AmpDatePickerFieldPanel dateObjectToValidate, String wicketId,
+            String fmName) {
+        return new AmpComponentPanel(wicketId, "Required Validator for " + fmName) {
             @Override
             protected void onConfigure() {
                 super.onConfigure();
-                if (this.isVisible()){
+                if (this.isVisible()) {
                     dateObjectToValidate.getDate().setRequired(true);
                     requiredFormComponents.add(dateObjectToValidate.getDate());
-                    
+
                 }
             }
         };

@@ -74,7 +74,7 @@ public class AmpPlanningFormSectionFeature extends AmpFormSectionFeaturePanel im
                         "actualApprovalDate"), proposedApprovalDate,
                 "Actual Approval Date");
         
-        add(getRequiredDateValidator(actualApprovalDate, "actualApprovalDate", "Actual Approval Date"));
+        add(getRequiredDateValidator(actualApprovalDate, "actualApprovalDateRequired", "Actual Approval Date"));
         add(actualApprovalDate);
         
         proposedApprovalDate.setDuplicateFieldOnChange(actualApprovalDate);

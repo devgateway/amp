@@ -38,7 +38,7 @@
 										<c:set var="disableFundingType">true</c:set>
 										</c:if>
 											<legend><span class="legend_label"><digi:trn>Funding Grouping</digi:trn></span></legend>
-											<div id="reportGroupDiv" class="inputx" style="text-align: left;">
+											<div id="reportGroupDiv" class="inputx text-align">
 										<c:set var="pledges_type_const"><%=ArConstants.PLEDGES_TYPE%></c:set>
 										<c:set var="donor_type_const"><%=ArConstants.DONOR_TYPE%></c:set>
 										<c:choose>
@@ -97,7 +97,7 @@
 										<td valign="top">
 									    	<fieldset class="main_side_cont">
 												<legend><span class="legend_label"><digi:trn>Totals Grouping</digi:trn></span></legend>
-												<div id="totalsGroupingDiv" class="inputx" style="text-align: left;">
+												<div id="totalsGroupingDiv" class="inputx text-align">
 													
 													<nested:checkbox property="hideActivities" value="true" onchange="repManager.checkSteps();createPreview();">
 														${summary}
@@ -133,7 +133,7 @@
 											<c:set var="spanUseFiltersVisibility">visibility: visible</c:set>
 											<c:set var="spanUseFiltersDisabled">enabled</c:set>
 										</c:if>
-										<fieldset class="main_side_cont" style="text-align: left;">
+										<fieldset class="main_side_cont text-align">
 											<legend><span class="legend_label"><digi:trn key="rep:wizard:subtitle:selectedFilters">Selected Filters</digi:trn></span></legend>
 											<div id="listFiltersDiv" style="height:85px; overflow-y:auto; overflow-x:hidden; margin-bottom: 5px; text-align: left;" class="inputx">
 												<c:choose>
@@ -152,7 +152,7 @@
 					  			<c:if test="${ (!myForm.desktopTab) || (member.teamHead==true && member.teamAccessType=='Management')}">
 									<tr>
 										<td valign="top" colspan="3">
-									    	<fieldset class="main_side_cont" style="text-align: left;">
+									    	<fieldset class="main_side_cont text-align">
 												<legend><span class="legend_label"><digi:trn>Options</digi:trn></span></legend>
 												<div id="optionsDiv" class="inputx">
 													<feature:display  name="Public View Checkbox" module="Report and Tab Options">

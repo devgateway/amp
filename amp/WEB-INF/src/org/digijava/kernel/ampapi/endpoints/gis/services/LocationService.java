@@ -431,9 +431,9 @@ public class LocationService {
     
     private static PointGeoJSON buildPoint(AmpStructure structure) {
         PointGeoJSON pg = new PointGeoJSON();
-        pg.coordinates
-                .add(parseDouble(structure.getLongitude()));
         pg.coordinates.add(parseDouble(structure.getLatitude()));
+        pg.coordinates
+                .add(parseDouble(structure.getLongitude()));        
         return pg;
     }
     

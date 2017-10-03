@@ -47,9 +47,7 @@ public class FieldsEnumerator {
      */
     public static final Set<String> OFFLINE_REQUIRED_FIELDS = new ImmutableSet.Builder<String>()
             .add(ActivityFieldsConstants.IS_DRAFT)
-            .add(ActivityFieldsConstants.APPROVED_BY)
             .add(ActivityFieldsConstants.APPROVAL_STATUS)
-            .add(ActivityFieldsConstants.APPROVAL_DATE)
             .build();
 
     private boolean internalUse = false;

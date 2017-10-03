@@ -67,11 +67,12 @@ public final class SummaryChangesService {
      * @param activities activities list.
      * @return list of approvers and activities.
      */
-    public static Map<String, Collection<AmpActivityVersion>> getValidators(LinkedHashMap<Long, Long> activities) {
+    public static Map<String, Collection<AmpActivityVersion>> getValidators(LinkedHashMap<Long,
+            Collection<SummaryChange>> activities) {
 
         Map<String, Collection<AmpActivityVersion>> results = new LinkedHashMap<>();
 
-        for (Long activityId : new HashSet<Long>(activities.values())) {
+        for (Long activityId : new HashSet<Long>(activities.keySet())) {
             AmpActivityVersion currentActivity = ActivityUtil.loadAmpActivity(activityId);
 
             List<AmpTeamMember> teamHeadAndAndApprovers = TeamMemberUtil.getTeamHeadAndApprovers(currentActivity

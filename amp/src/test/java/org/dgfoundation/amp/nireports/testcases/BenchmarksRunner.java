@@ -108,7 +108,9 @@ public class BenchmarksRunner {
         DecimalFormatSymbols decSymbols = new DecimalFormatSymbols();
         decSymbols.setDecimalSeparator('.');
         decSymbols.setGroupingSeparator(',');
-        final CellFormatter cellFormatter = new CellFormatter(spec.getSettings(), new DecimalFormat("###,###,###.##", decSymbols), "dd/MM/yyyy", z -> z, new OutputSettings(null));
+        final CellFormatter cellFormatter = new CellFormatter(spec.getSettings(), 
+                new DecimalFormat("###,###,###.##", decSymbols), "dd/MM/yyyy", z -> z, 
+                new OutputSettings(null), reportRes.calendar);
         final NiReportsFormatter formatter = new NiReportsFormatter(spec, reportRes, cellFormatter);
         return reportRes.reportOut.accept(formatter);       
     }

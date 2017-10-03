@@ -20,74 +20,74 @@ import org.xml.sax.XMLReader;
  * @see <a href="http://home.ccil.org/~cowan/XML/tagsoup/">TagSoup</a>
  */
 public class Html2Text implements ContentHandler {
-	private StringBuffer sb;
+    private StringBuffer sb;
 
-	public Html2Text() {
-	}
+    public Html2Text() {
+    }
 
-	public void parse(String str) throws IOException, SAXException {
-		XMLReader reader = new Parser();
-		reader.setContentHandler(this);
-		sb = new StringBuffer();
-		reader.parse(new InputSource(new StringReader(str)));
-	}
+    public void parse(String str) throws IOException, SAXException {
+        XMLReader reader = new Parser();
+        reader.setContentHandler(this);
+        sb = new StringBuffer();
+        reader.parse(new InputSource(new StringReader(str)));
+    }
 
-	public String getText() {
-		return sb.toString();
-	}
+    public String getText() {
+        return sb.toString();
+    }
 
-	@Override
-	public void characters(char[] ch, int start, int length)
-			throws SAXException {
-		for (int idx = 0; idx < length; idx++) {
-			sb.append(ch[idx + start]);
-		}
-	}
+    @Override
+    public void characters(char[] ch, int start, int length)
+            throws SAXException {
+        for (int idx = 0; idx < length; idx++) {
+            sb.append(ch[idx + start]);
+        }
+    }
 
-	@Override
-	public void ignorableWhitespace(char[] ch, int start, int length)
-			throws SAXException {
-		sb.append(ch);
-	}
+    @Override
+    public void ignorableWhitespace(char[] ch, int start, int length)
+            throws SAXException {
+        sb.append(ch);
+    }
 
-	// The methods below do not contribute to the text
-	@Override
-	public void endDocument() throws SAXException {
-	}
+    // The methods below do not contribute to the text
+    @Override
+    public void endDocument() throws SAXException {
+    }
 
-	@Override
-	public void endElement(String uri, String localName, String qName)
-			throws SAXException {
-	}
+    @Override
+    public void endElement(String uri, String localName, String qName)
+            throws SAXException {
+    }
 
-	@Override
-	public void endPrefixMapping(String prefix) throws SAXException {
-	}
+    @Override
+    public void endPrefixMapping(String prefix) throws SAXException {
+    }
 
-	@Override
-	public void processingInstruction(String target, String data)
-			throws SAXException {
-	}
+    @Override
+    public void processingInstruction(String target, String data)
+            throws SAXException {
+    }
 
-	@Override
-	public void setDocumentLocator(Locator locator) {
-	}
+    @Override
+    public void setDocumentLocator(Locator locator) {
+    }
 
-	@Override
-	public void skippedEntity(String name) throws SAXException {
-	}
+    @Override
+    public void skippedEntity(String name) throws SAXException {
+    }
 
-	@Override
-	public void startDocument() throws SAXException {
-	}
+    @Override
+    public void startDocument() throws SAXException {
+    }
 
-	@Override
-	public void startElement(String uri, String localName, String qName,
-			Attributes atts) throws SAXException {
-	}
+    @Override
+    public void startElement(String uri, String localName, String qName,
+            Attributes atts) throws SAXException {
+    }
 
-	@Override
-	public void startPrefixMapping(String prefix, String uri)
-			throws SAXException {
-	}
+    @Override
+    public void startPrefixMapping(String prefix, String uri)
+            throws SAXException {
+    }
 }

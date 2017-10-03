@@ -12,32 +12,32 @@ import org.digijava.module.aim.form.ThemeForm;
 
 public class AssignThemeIndicator extends Action {
 
-	//private static Logger logger = Logger.getLogger(AssignThemeIndicator.class);
+    //private static Logger logger = Logger.getLogger(AssignThemeIndicator.class);
 
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws java.lang.Exception 
-	{
-		HttpSession session = request.getSession();
-		if (session.getAttribute("ampAdmin") == null) 
-		{
-			return mapping.findForward("index");
-		} 
-		else 
-		{
-			String str = (String) session.getAttribute("ampAdmin");
-			if (str.equals("no")) 
-			{
-				return mapping.findForward("index");
-			}
-		}
-		
-		ThemeForm themeForm = (ThemeForm) form;
-		Long id = new Long(Long.parseLong(request.getParameter("indicatorId")));
-		
-		// comment by pcsing due to some doubt about indicators default values
-		//ProgramUtil.assignThemeInd(id,themeForm.getSelectTheme());
-		   
-		return mapping.findForward("forward");
-	}
+    public ActionForward execute(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response)
+            throws java.lang.Exception 
+    {
+        HttpSession session = request.getSession();
+        if (session.getAttribute("ampAdmin") == null) 
+        {
+            return mapping.findForward("index");
+        } 
+        else 
+        {
+            String str = (String) session.getAttribute("ampAdmin");
+            if (str.equals("no")) 
+            {
+                return mapping.findForward("index");
+            }
+        }
+        
+        ThemeForm themeForm = (ThemeForm) form;
+        Long id = new Long(Long.parseLong(request.getParameter("indicatorId")));
+        
+        // comment by pcsing due to some doubt about indicators default values
+        //ProgramUtil.assignThemeInd(id,themeForm.getSelectTheme());
+           
+        return mapping.findForward("forward");
+    }
 }

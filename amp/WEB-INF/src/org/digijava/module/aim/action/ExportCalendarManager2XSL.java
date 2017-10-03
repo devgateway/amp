@@ -24,42 +24,42 @@ import org.digijava.module.aim.form.FiscalCalendarForm;
 import org.digijava.module.aim.util.AdminXSLExportUtil;
 
 public class ExportCalendarManager2XSL extends Action {
-	 private static Logger logger = Logger.getLogger(ExportCalendarManager2XSL.class);
-	 
-	 private final String[] MONTHES = {"January", "February",
-			  "March", "April", "May", "June", "July",
-			  "August", "September", "October", "November",
-			  "December"
-			  };
+     private static Logger logger = Logger.getLogger(ExportCalendarManager2XSL.class);
+     
+     private final String[] MONTHES = {"January", "February",
+              "March", "April", "May", "June", "July",
+              "August", "September", "October", "November",
+              "December"
+              };
 
-	  public ActionForward execute(ActionMapping mapping, ActionForm form,
-	                               javax.servlet.http.HttpServletRequest request,
-	                               javax.servlet.http.HttpServletResponse response) throws
-	      java.lang.Exception {
-		HttpSession session = request.getSession();
-		if (session.getAttribute("ampAdmin") == null) {
-			return mapping.findForward("index");
-		} else {
-			String str = (String) session.getAttribute("ampAdmin");
-			if (str.equals("no")) {
-				return mapping.findForward("index");
-			}
-		}
-		response.setContentType("application/vnd.ms-excel");
-		response.setHeader("Content-disposition", "inline; filename=Export.xls");
-		FiscalCalendarForm fcForm = (FiscalCalendarForm) form;
-		Site site = RequestUtils.getSite(request);
-		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
-		Long siteId = site.getId();
-		String locale = navigationLanguage.getCode();
+      public ActionForward execute(ActionMapping mapping, ActionForm form,
+                                   javax.servlet.http.HttpServletRequest request,
+                                   javax.servlet.http.HttpServletResponse response) throws
+          java.lang.Exception {
+        HttpSession session = request.getSession();
+        if (session.getAttribute("ampAdmin") == null) {
+            return mapping.findForward("index");
+        } else {
+            String str = (String) session.getAttribute("ampAdmin");
+            if (str.equals("no")) {
+                return mapping.findForward("index");
+            }
+        }
+        response.setContentType("application/vnd.ms-excel");
+        response.setHeader("Content-disposition", "inline; filename=Export.xls");
+        FiscalCalendarForm fcForm = (FiscalCalendarForm) form;
+        Site site = RequestUtils.getSite(request);
+        Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
+        Long siteId = site.getId();
+        String locale = navigationLanguage.getCode();
 
-		HSSFWorkbook wb = new HSSFWorkbook();
-		HSSFSheet sheet = wb.createSheet("export");
-		// title cells
-		HSSFCellStyle titleCS =AdminXSLExportUtil.createTitleStyle(wb);
-		 //ordinary cell style
-		HSSFCellStyle  cs = AdminXSLExportUtil.createOrdinaryStyle(wb);
-	   
+        HSSFWorkbook wb = new HSSFWorkbook();
+        HSSFSheet sheet = wb.createSheet("export");
+        // title cells
+        HSSFCellStyle titleCS =AdminXSLExportUtil.createTitleStyle(wb);
+         //ordinary cell style
+        HSSFCellStyle  cs = AdminXSLExportUtil.createOrdinaryStyle(wb);
+       
      
       int rowIndex = 0;
       int cellIndex = 0;
@@ -105,44 +105,44 @@ public class ExportCalendarManager2XSL extends Action {
 
       Collection<AmpFiscalCalendar> calendars = (Collection<AmpFiscalCalendar>)session.getAttribute("ampFisCal");
 
-		if(calendars!=null){
-			for(AmpFiscalCalendar calendar:calendars){
-				cellIndex=0;
-				  HSSFRow row = sheet.createRow(rowIndex++);
-				  
-				  HSSFCell cell=row.createCell(cellIndex++);
-				  cell.setCellStyle(cs);
-				  cell.setCellValue(calendar.getName());
-				  
-				  cell=row.createCell(cellIndex++);
-				  cell.setCellStyle(cs);
-				  cell.setCellValue(calendar.getBaseCal());
-				  
-				  cell=row.createCell(cellIndex++);
-				  cell.setCellStyle(cs);
-				  cell.setCellValue((calendar.getIsFiscal()) ? yes : no);
-				  
-				  cell=row.createCell(cellIndex++);
-				  cell.setCellStyle(cs);
-				  cell.setCellValue(TranslatorWorker.translateText(MONTHES[calendar.getStartMonthNum()-1],locale,siteId));
-				  
-				  cell=row.createCell(cellIndex++);
-				  cell.setCellStyle(cs);
-				  cell.setCellValue(calendar.getStartDayNum());
-				  
-				  cell=row.createCell(cellIndex++);
-				  cell.setCellStyle(cs);
-				  cell.setCellValue(calendar.getYearOffset());
-				  
-				
-			}
-		}
-		for(int i=0;i<6;i++){
-			sheet.autoSizeColumn(i);
-		}
+        if(calendars!=null){
+            for(AmpFiscalCalendar calendar:calendars){
+                cellIndex=0;
+                  HSSFRow row = sheet.createRow(rowIndex++);
+                  
+                  HSSFCell cell=row.createCell(cellIndex++);
+                  cell.setCellStyle(cs);
+                  cell.setCellValue(calendar.getName());
+                  
+                  cell=row.createCell(cellIndex++);
+                  cell.setCellStyle(cs);
+                  cell.setCellValue(calendar.getBaseCal());
+                  
+                  cell=row.createCell(cellIndex++);
+                  cell.setCellStyle(cs);
+                  cell.setCellValue((calendar.getIsFiscal()) ? yes : no);
+                  
+                  cell=row.createCell(cellIndex++);
+                  cell.setCellStyle(cs);
+                  cell.setCellValue(TranslatorWorker.translateText(MONTHES[calendar.getStartMonthNum()-1],locale,siteId));
+                  
+                  cell=row.createCell(cellIndex++);
+                  cell.setCellStyle(cs);
+                  cell.setCellValue(calendar.getStartDayNum());
+                  
+                  cell=row.createCell(cellIndex++);
+                  cell.setCellStyle(cs);
+                  cell.setCellValue(calendar.getYearOffset());
+                  
+                
+            }
+        }
+        for(int i=0;i<6;i++){
+            sheet.autoSizeColumn(i);
+        }
       wb.write(response.getOutputStream());
-		return null;
+        return null;
 
-	  }
+      }
 
 }

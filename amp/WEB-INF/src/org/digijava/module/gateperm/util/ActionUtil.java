@@ -19,30 +19,30 @@ import org.digijava.module.gateperm.core.GatePermConst;
  * @since 05.09.2007
  */
 public final class ActionUtil {
-	private static Logger logger = Logger.getLogger(ActionUtil.class);
+    private static Logger logger = Logger.getLogger(ActionUtil.class);
 
-	/**
-	 * Reads the available actions from the inner GateConstants.Action class.
-	 * This final static inner class is for grouping purposes only, its members
-	 * should be only string static
-	 * @return
-	 */
-	public static Set<String> getAvailableActions() {
-		TreeSet<String> al=new TreeSet<String>();
-		Field[] fields = GatePermConst.Actions.class.getFields();
-		for (int i = 0; i < fields.length; i++) {
-			try {
-				al.add((String) fields[i].get(null));
-			} catch (IllegalArgumentException e) {
-				logger.error(e);
-				throw new RuntimeException( "IllegalArgumentException Exception encountered", e);
-			} catch (IllegalAccessException e) {
-				logger.error(e);
-				throw new RuntimeException( "IllegalAccessException Exception encountered", e);
-			}
-		}
-		return al;
-	}
-	
+    /**
+     * Reads the available actions from the inner GateConstants.Action class.
+     * This final static inner class is for grouping purposes only, its members
+     * should be only string static
+     * @return
+     */
+    public static Set<String> getAvailableActions() {
+        TreeSet<String> al=new TreeSet<String>();
+        Field[] fields = GatePermConst.Actions.class.getFields();
+        for (int i = 0; i < fields.length; i++) {
+            try {
+                al.add((String) fields[i].get(null));
+            } catch (IllegalArgumentException e) {
+                logger.error(e);
+                throw new RuntimeException( "IllegalArgumentException Exception encountered", e);
+            } catch (IllegalAccessException e) {
+                logger.error(e);
+                throw new RuntimeException( "IllegalAccessException Exception encountered", e);
+            }
+        }
+        return al;
+    }
+    
 
 }

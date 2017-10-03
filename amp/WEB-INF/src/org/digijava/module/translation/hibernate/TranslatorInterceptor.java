@@ -40,22 +40,22 @@ public class TranslatorInterceptor extends EmptyInterceptor{
 
         //existing entities
         if (entity.getClass().getAnnotation(TranslatableClass.class) != null){
-//        	printEntityData("onFlushDirty, previousState, before stuff", entity, id, previousState, propertyNames);
-//        	printEntityData("onFlushDirty, currentState, before stuff", entity, id, currentState, propertyNames);
-//        	Object[] oldPreviousState = previousState.clone();
-        	logger.debug("Current language in TLS Util:" + TLSUtils.getEffectiveLangCode());
+//          printEntityData("onFlushDirty, previousState, before stuff", entity, id, previousState, propertyNames);
+//          printEntityData("onFlushDirty, currentState, before stuff", entity, id, currentState, propertyNames);
+//          Object[] oldPreviousState = previousState.clone();
+            logger.debug("Current language in TLS Util:" + TLSUtils.getEffectiveLangCode());
             logger.debug("flushDirty versionable: " + entity);
             boolean ret = ContentTranslationUtil.prepareTranslations(entity, id, previousState, currentState, propertyNames);
 //            if (entity instanceof AmpStructure)
 //            {
-//            	logger.info("\tOVERRIDING EVERYTHING");
-//            	for(int i = 0; i < oldPreviousState.length; i++)
-//            		previousState[i] = oldPreviousState[i];
+//              logger.info("\tOVERRIDING EVERYTHING");
+//              for(int i = 0; i < oldPreviousState.length; i++)
+//                  previousState[i] = oldPreviousState[i];
 //            }
             ContentTranslationUtil.evictEntityFromCache(entity);
             logger.debug("flushDirty returning: " + ret);
-//        	printEntityData("onFlushDirty, previousState, after stuff", entity, id, previousState, propertyNames);
-//        	printEntityData("onFlushDirty, currentState, after stuff", entity, id, currentState, propertyNames);
+//          printEntityData("onFlushDirty, previousState, after stuff", entity, id, previousState, propertyNames);
+//          printEntityData("onFlushDirty, currentState, after stuff", entity, id, currentState, propertyNames);
             return ret;
         }
         
@@ -72,8 +72,8 @@ public class TranslatorInterceptor extends EmptyInterceptor{
             return false;
 
         if (entity.getClass().getAnnotation(TranslatableClass.class) != null){
-        	logger.debug("Current language in TLS Util:" + TLSUtils.getEffectiveLangCode());
-        	logger.debug("onLoad: " + entity);
+            logger.debug("Current language in TLS Util:" + TLSUtils.getEffectiveLangCode());
+            logger.debug("onLoad: " + entity);
             //change the state to use the translations
             return ContentTranslationUtil.translateObject(entity, id, state, propertyNames);
         }
@@ -89,24 +89,24 @@ public class TranslatorInterceptor extends EmptyInterceptor{
         if (!ContentTranslationUtil.multilingualIsEnabled())
             return;
 
-    	// try here to update the translations
-    	while (entities.hasNext()) {
-			Object entity = entities.next();
-			if (entity.getClass().getAnnotation(TranslatableClass.class) != null){
-				Long objectId = ContentTranslationUtil.getObjectId(entity);
+        // try here to update the translations
+        while (entities.hasNext()) {
+            Object entity = entities.next();
+            if (entity.getClass().getAnnotation(TranslatableClass.class) != null){
+                Long objectId = ContentTranslationUtil.getObjectId(entity);
 
                 //see if current entity has translations that need saving
-				List<FieldTranslationPack> list = TranslationStore.saveAndRemove(entity.getClass().getName(), objectId);
-				if (list != null){
-					//iterate all translations for all the current object
+                List<FieldTranslationPack> list = TranslationStore.saveAndRemove(entity.getClass().getName(), objectId);
+                if (list != null){
+                    //iterate all translations for all the current object
                     for (FieldTranslationPack ftp : list) {
                         //store translations
                         ContentTranslationUtil.saveFieldTranslations(objectId, ftp);
                     }
-				}
+                }
                 ContentTranslationUtil.evictEntityFromCache(entity);
-			}
-		}
+            }
+        }
     }
 
     /**
@@ -145,7 +145,7 @@ public class TranslatorInterceptor extends EmptyInterceptor{
             return false;
 
         if (entity.getClass().getAnnotation(TranslatableClass.class) != null){
-//        	printEntityData("onSave,  before stuff", entity, id, state, propertyNames);
+//          printEntityData("onSave,  before stuff", entity, id, state, propertyNames);
             boolean ret = ContentTranslationUtil.prepareTranslations(entity, id, null, state, propertyNames);
             ContentTranslationUtil.evictEntityFromCache(entity);
 //            printEntityData("onSave,  after stuff", entity, id, state, propertyNames);
@@ -156,21 +156,21 @@ public class TranslatorInterceptor extends EmptyInterceptor{
     
     void printEntityData(String prefix, Object entity, Serializable id, Object[] state, String[] propertyNames)
     {
-    	Class clazz = Hibernate.getClass(entity);
-    	InternationalizedModelDescription entityDescription = InternationalizedModelDescription.getForClass(clazz);
-    	StringBuilder bld = new StringBuilder();
-    	bld.append(prefix + ": type <" + AmpContentTranslation.compressClassName(entity.getClass().getName()) + ">, id = " + id);
-    	int i = -1;
-    	for(String propertyName:propertyNames)
-    	{
-    		i ++;
-        	InternationalizedPropertyDescription propertyDescription = entityDescription.properties.get(propertyName);
-        	if (propertyDescription == null)
-        		continue; // field not translated -> nothing to do
-        	String propValue = (String) state[i];
-        	bld.append("\n\tproperty " + propertyName + " has value " + propValue);
-    	}
-    	logger.error(bld.toString());
+        Class clazz = Hibernate.getClass(entity);
+        InternationalizedModelDescription entityDescription = InternationalizedModelDescription.getForClass(clazz);
+        StringBuilder bld = new StringBuilder();
+        bld.append(prefix + ": type <" + AmpContentTranslation.compressClassName(entity.getClass().getName()) + ">, id = " + id);
+        int i = -1;
+        for(String propertyName:propertyNames)
+        {
+            i ++;
+            InternationalizedPropertyDescription propertyDescription = entityDescription.properties.get(propertyName);
+            if (propertyDescription == null)
+                continue; // field not translated -> nothing to do
+            String propValue = (String) state[i];
+            bld.append("\n\tproperty " + propertyName + " has value " + propValue);
+        }
+        logger.error(bld.toString());
     }
 }
 

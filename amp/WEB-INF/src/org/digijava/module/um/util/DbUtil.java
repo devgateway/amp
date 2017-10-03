@@ -1,8 +1,8 @@
 /*
  *   DbUtil.java
  *   @Author Lasha Dolidze lasha@digijava.org
- * 	 Created:
- * 	 CVS-ID: $Id$
+ *   Created:
+ *   CVS-ID: $Id$
  *
  *   This file is part of DiGi project (www.digijava.org).
  *   DiGi is a multi-site portal system written in Java/J2EE.
@@ -176,7 +176,7 @@ public class DbUtil {
      */
     public static boolean ResetPassword(String email, String code, String newPassword) throws
         UMException {
-    	
+        
         Transaction tx = null;
         Session session = null;
         try {
@@ -420,7 +420,7 @@ public class DbUtil {
                 UserUtils.saveUserLangPreferences(user.getUserLangPreferences());
             }
         } catch(Exception ex) {
-        	ex.printStackTrace();
+            ex.printStackTrace();
             logger.debug("Unable to update user information into database", ex);
 
             throw new UMException(
@@ -496,27 +496,27 @@ public class DbUtil {
     }
     
     public static boolean registerUser(String id) throws UMException {
-    	Session session = null;
+        Session session = null;
         boolean verified = false;
         Transaction tx = null;
         BigInteger iduser;
         try {
-        	session = PersistenceManager.getSession();
-            //"from " + User.class.getName() + " rs where sha1(concat(cast(rs.email as byte),rs.id))=:hash and rs.emailVerified=false";	
+            session = PersistenceManager.getSession();
+            //"from " + User.class.getName() + " rs where sha1(concat(cast(rs.email as byte),rs.id))=:hash and rs.emailVerified=false"; 
             String queryString = "select ID from DG_USER where sha1((cast(EMAIL as bytea) || cast(cast(ID as text)as bytea)))=:hash and EMAIL_VERIFIED=false";
             Query query = session.createSQLQuery(queryString);
             query.setString("hash", id);
             iduser = (BigInteger) query.uniqueResult();
             if (iduser!= null){
-	            User user = (User) session.load(User.class, iduser.longValue());
-	            user.setActivate(true);
-	            user.setBanned(false);
-	            user.setEmailVerified(true);
+                User user = (User) session.load(User.class, iduser.longValue());
+                user.setActivate(true);
+                user.setBanned(false);
+                user.setEmailVerified(true);
                 user.updateLastModified();
-	            session.update(user);
-	            verified = true;
+                session.update(user);
+                verified = true;
             }else{
-            	verified = false;
+                verified = false;
             }
         } catch (Exception ex0) {
             logger.debug("isRegisteredEmail() failed", ex0);
@@ -564,14 +564,14 @@ public class DbUtil {
             iscorrect = true;
         }
         for (Iterator iterator = query.list().iterator(); iterator.hasNext();) {
-			User user = (User) iterator.next();
-			if (user.getId().compareTo(id)==0){
-				iscorrect = true;
-			}else{
-				iscorrect =false;
-				break;
-			}
-		}
+            User user = (User) iterator.next();
+            if (user.getId().compareTo(id)==0){
+                iscorrect = true;
+            }else{
+                iscorrect =false;
+                break;
+            }
+        }
         
     } catch(Exception ex0) {
         logger.debug("isRegisteredEmail() failed", ex0);
@@ -732,7 +732,7 @@ public class DbUtil {
         List userList;
 
         try {
-        	userList = UserUtils.searchUsers(criteria, new String[] {"firstNames", "lastName", "email"});
+            userList = UserUtils.searchUsers(criteria, new String[] {"firstNames", "lastName", "email"});
         } catch(Exception ex) {
             logger.debug("Unable to get username list from database ", ex);
             throw new UMException(
@@ -814,7 +814,7 @@ public class DbUtil {
         try {
 
             String queryString = "from " + Group.class.getName() +
-            					 " g where g.site.id = :siteId";
+                                 " g where g.site.id = :siteId";
             Query query = session.createQuery(queryString);
             query.setLong("siteId", siteId);
             
@@ -941,47 +941,47 @@ public class DbUtil {
     }
 
     public static List<SuspendLogin> getSuspendedLoginObjs() {
-    	StringBuilder qs = new StringBuilder("From ").append(SuspendLogin.class.getName());
-    	return PersistenceManager.getSession().createQuery(qs.toString()).list();
+        StringBuilder qs = new StringBuilder("From ").append(SuspendLogin.class.getName());
+        return PersistenceManager.getSession().createQuery(qs.toString()).list();
     }
 
     public static void saveSuspendedLoginObj(SuspendLogin sl) {
-    	if (sl.getActive() == null) sl.setActive(false);
-    	if (sl.getExpires() == null) sl.setExpires(false);
+        if (sl.getActive() == null) sl.setActive(false);
+        if (sl.getExpires() == null) sl.setExpires(false);
 
-    	Session sess = PersistenceManager.getSession();
-    	sess.saveOrUpdate(sl);
+        Session sess = PersistenceManager.getSession();
+        sess.saveOrUpdate(sl);
     }
 
     public static void deleteSuspendedLoginObj(SuspendLogin sl) {
-    	PersistenceManager.getSession().delete(sl);
+        PersistenceManager.getSession().delete(sl);
     }
 
     public static SuspendLogin getSuspendedLoginObjById(Long id) {
-    	return (SuspendLogin) PersistenceManager.getSession().get(SuspendLogin.class, id);
+        return (SuspendLogin) PersistenceManager.getSession().get(SuspendLogin.class, id);
     }
 
     public static SuspendLogin getSuspendedLoginObjByName(String name) {
-    	StringBuilder qs = new StringBuilder("From ").
-    			append(SuspendLogin.class.getName()).
-    			append(" sl where sl.name = :NAME");
-    	return (SuspendLogin) PersistenceManager.getSession().createQuery(qs.toString()).setString("NAME", name).uniqueResult();
+        StringBuilder qs = new StringBuilder("From ").
+                append(SuspendLogin.class.getName()).
+                append(" sl where sl.name = :NAME");
+        return (SuspendLogin) PersistenceManager.getSession().createQuery(qs.toString()).setString("NAME", name).uniqueResult();
     }
 
     public static List<User> getAllUsers() {
-    	StringBuilder qs = new StringBuilder("From ").
-    		append(User.class.getName()).
-    		append(" u order by u.firstNames");
-    	return PersistenceManager.getSession().createQuery(qs.toString()).list();
+        StringBuilder qs = new StringBuilder("From ").
+            append(User.class.getName()).
+            append(" u order by u.firstNames");
+        return PersistenceManager.getSession().createQuery(qs.toString()).list();
     }
 
     public static List<SuspendLogin> getUserSuspendReasonsFromDB (User user) {
-    	StringBuilder qs = new StringBuilder("From ")
-    		.append(SuspendLogin.class.getName())
-    		.append(" sl where :USER_ID in elements(sl.users)")
-    		.append(" and sl.active = true and (sl.expires=false or")
-    		.append(" (sl.expires=true and sl.suspendTil > current_date()))");
-    	return PersistenceManager.getSession()
+        StringBuilder qs = new StringBuilder("From ")
+            .append(SuspendLogin.class.getName())
+            .append(" sl where :USER_ID in elements(sl.users)")
+            .append(" and sl.active = true and (sl.expires=false or")
+            .append(" (sl.expires=true and sl.suspendTil > current_date()))");
+        return PersistenceManager.getSession()
                 .createQuery(qs.toString())
                 .setLong("USER_ID", user.getId())
                 .setCacheable(true)

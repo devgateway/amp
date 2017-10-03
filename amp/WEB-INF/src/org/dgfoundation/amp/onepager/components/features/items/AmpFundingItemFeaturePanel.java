@@ -62,277 +62,277 @@ import org.digijava.module.aim.util.FeaturesUtil;
  * @author mpostelnicu@dgateway.org since Nov 3, 2010
  */
 public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public static final Map<Integer, String> FM_NAME_BY_TRANSACTION_TYPE = new ImmutableMap.Builder<Integer, String>()
-			.put(Constants.COMMITMENT, "Commitments")
-			.put(Constants.DISBURSEMENT, "Disbursements")
-			.put(Constants.ARREARS, "Arrears")
-			.put(Constants.DISBURSEMENT_ORDER, "Disbursement Orders")
-			.put(Constants.ESTIMATED_DONOR_DISBURSEMENT, "Estimated Disbursements")
-			.put(Constants.RELEASE_OF_FUNDS, "Release of Funds")
-			.put(Constants.EXPENDITURE, "Expenditures")
-			.put(Constants.MTEFPROJECTION, "MTEF Projections")
-			.build();
+    public static final Map<Integer, String> FM_NAME_BY_TRANSACTION_TYPE = new ImmutableMap.Builder<Integer, String>()
+            .put(Constants.COMMITMENT, "Commitments")
+            .put(Constants.DISBURSEMENT, "Disbursements")
+            .put(Constants.ARREARS, "Arrears")
+            .put(Constants.DISBURSEMENT_ORDER, "Disbursement Orders")
+            .put(Constants.ESTIMATED_DONOR_DISBURSEMENT, "Estimated Disbursements")
+            .put(Constants.RELEASE_OF_FUNDS, "Release of Funds")
+            .put(Constants.EXPENDITURE, "Expenditures")
+            .put(Constants.MTEFPROJECTION, "MTEF Projections")
+            .build();
 
-	private AmpDonorFundingInfoSubsectionFeature fundingInfo;
-	private AmpDonorDisbursementsSubsectionFeature disbursements;
-	private Integer item;
-	public AmpFundingItemFeaturePanel(String id, String fmName,
-			final IModel<AmpFunding> fundingModel,final IModel<AmpActivityVersion> am, final AmpDonorFundingFormSectionFeature parent,Integer item) throws Exception {
-		super(id, fundingModel, fmName, true);
-		this.item=item;
-		final Boolean isTabView=FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.ACTIVITY_FORM_FUNDING_SECTION_DESIGN);
-		if (fundingModel.getObject().getFundingDetails() == null)
-			fundingModel.getObject().setFundingDetails(new TreeSet<AmpFundingDetail>());
-		//this should be changed to a propertyModel
-		Label itemNumber=new Label("itemNumber", new Model(item + 1));
-		add(itemNumber);
-		Label itemNumberLabel=new TrnLabel("itemNumberLabel", new Model<String>("Funding Item"));
-		add(itemNumberLabel);
-		AmpFundingSummaryPanel fundingSummary = new AmpFundingSummaryPanel(
-				"fundingSumary", "Funding Section Summary", fundingModel);
-		
-		fundingSummary.add(UpdateEventBehavior.of(FundingSectionSummaryEvent.class));
-		fundingSummary.setOutputMarkupId(true);
-		
-		final WebMarkupContainer wmc = new WebMarkupContainer("fundingContainer");
-		
-		wmc.setOutputMarkupId(true);
-		
-		add(wmc);
-		
-		if (isTabView) {
-			wmc.add(new AttributePrepender("style", new Model<String>("display: none;"), ""));
-		} 
+    private AmpDonorFundingInfoSubsectionFeature fundingInfo;
+    private AmpDonorDisbursementsSubsectionFeature disbursements;
+    private Integer item;
+    public AmpFundingItemFeaturePanel(String id, String fmName,
+            final IModel<AmpFunding> fundingModel,final IModel<AmpActivityVersion> am, final AmpDonorFundingFormSectionFeature parent,Integer item) throws Exception {
+        super(id, fundingModel, fmName, true);
+        this.item=item;
+        final Boolean isTabView=FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.ACTIVITY_FORM_FUNDING_SECTION_DESIGN);
+        if (fundingModel.getObject().getFundingDetails() == null)
+            fundingModel.getObject().setFundingDetails(new TreeSet<AmpFundingDetail>());
+        //this should be changed to a propertyModel
+        Label itemNumber=new Label("itemNumber", new Model(item + 1));
+        add(itemNumber);
+        Label itemNumberLabel=new TrnLabel("itemNumberLabel", new Model<String>("Funding Item"));
+        add(itemNumberLabel);
+        AmpFundingSummaryPanel fundingSummary = new AmpFundingSummaryPanel(
+                "fundingSumary", "Funding Section Summary", fundingModel);
+        
+        fundingSummary.add(UpdateEventBehavior.of(FundingSectionSummaryEvent.class));
+        fundingSummary.setOutputMarkupId(true);
+        
+        final WebMarkupContainer wmc = new WebMarkupContainer("fundingContainer");
+        
+        wmc.setOutputMarkupId(true);
+        
+        add(wmc);
+        
+        if (isTabView) {
+            wmc.add(new AttributePrepender("style", new Model<String>("display: none;"), ""));
+        } 
 
-		add(fundingSummary);
+        add(fundingSummary);
 
-		
-		final WebMarkupContainer wmcLabelContainer = new WebMarkupContainer("labelContainer");
-		wmcLabelContainer.setOutputMarkupId(true);
-		
-		Label orgLabel = new Label("donorOrg", new PropertyModel<AmpOrganisation>(fundingModel, "groupVersionedFunding"));
-		orgLabel.add(new AttributePrepender("style", new Model<String>("font-weight: bold;"), ""));
+        
+        final WebMarkupContainer wmcLabelContainer = new WebMarkupContainer("labelContainer");
+        wmcLabelContainer.setOutputMarkupId(true);
+        
+        Label orgLabel = new Label("donorOrg", new PropertyModel<AmpOrganisation>(fundingModel, "groupVersionedFunding"));
+        orgLabel.add(new AttributePrepender("style", new Model<String>("font-weight: bold;"), ""));
         orgLabel.setVisible("true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SHOW_FUNDING_GROUP_ID)));
-		orgLabel.setOutputMarkupId(true);
-		wmcLabelContainer.add(orgLabel);
-		
-		AmpLabelFieldPanel<AmpOrganisation> sourceOrg = new AmpLabelFieldPanel<AmpOrganisation>(
-				"sourceOrg", new PropertyModel<AmpOrganisation>(fundingModel, "ampDonorOrgId"), "Source Organisation", true);
-		sourceOrg.add(new AttributeModifier("style", "display:inline-block"));
-		
-		wmcLabelContainer.add(sourceOrg);
+        orgLabel.setOutputMarkupId(true);
+        wmcLabelContainer.add(orgLabel);
+        
+        AmpLabelFieldPanel<AmpOrganisation> sourceOrg = new AmpLabelFieldPanel<AmpOrganisation>(
+                "sourceOrg", new PropertyModel<AmpOrganisation>(fundingModel, "ampDonorOrgId"), "Source Organisation", true);
+        sourceOrg.add(new AttributeModifier("style", "display:inline-block"));
+        
+        wmcLabelContainer.add(sourceOrg);
 
-		AmpLabelFieldPanel<AmpRole> sourceRoleLabel = new AmpLabelFieldPanel<AmpRole>(
-				"sourceRoleLabel", new PropertyModel<AmpRole>(fundingModel, "sourceRole"), "Source Role", true);
-		sourceRoleLabel.add(new AttributeModifier("style", "display:inline-block"));
-		wmcLabelContainer.add(sourceRoleLabel);
-		//this will be moved
-		wmcLabelContainer.setVisible(!isTabView);
-		add(wmcLabelContainer);
-		String translatedMessage = TranslatorUtil.getTranslation("Do you really want to delete this funding item?");
-		
-		add(new ListEditorRemoveButton("delFunding", "Delete Funding Item", translatedMessage){
-			private static final long serialVersionUID = 1L;
+        AmpLabelFieldPanel<AmpRole> sourceRoleLabel = new AmpLabelFieldPanel<AmpRole>(
+                "sourceRoleLabel", new PropertyModel<AmpRole>(fundingModel, "sourceRole"), "Source Role", true);
+        sourceRoleLabel.add(new AttributeModifier("style", "display:inline-block"));
+        wmcLabelContainer.add(sourceRoleLabel);
+        //this will be moved
+        wmcLabelContainer.setVisible(!isTabView);
+        add(wmcLabelContainer);
+        String translatedMessage = TranslatorUtil.getTranslation("Do you really want to delete this funding item?");
+        
+        add(new ListEditorRemoveButton("delFunding", "Delete Funding Item", translatedMessage){
+            private static final long serialVersionUID = 1L;
 
-			@Override
-			protected void onClick(AjaxRequestTarget target) {
-				AmpOrganisation org = fundingModel.getObject().getAmpDonorOrgId();
-				AmpRole role = fundingModel.getObject().getSourceRole();
-				super.onClick(target);
-				parent.updateFundingGroups(parent.findAmpOrgRole(org, role), target);
-				target.add(parent);
-				if(isTabView){
-					target.appendJavaScript("switchTabs();");
-				}
-				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent));
-			}
-		});
-		
-		
-		AmpTextAreaFieldPanel donorObjective = new AmpTextAreaFieldPanel("donorObjective", new PropertyModel<String>(fundingModel,"donorObjective"), "Donor Objective", false);
-		wmc.add(donorObjective);
+            @Override
+            protected void onClick(AjaxRequestTarget target) {
+                AmpOrganisation org = fundingModel.getObject().getAmpDonorOrgId();
+                AmpRole role = fundingModel.getObject().getSourceRole();
+                super.onClick(target);
+                parent.updateFundingGroups(parent.findAmpOrgRole(org, role), target);
+                target.add(parent);
+                if(isTabView){
+                    target.appendJavaScript("switchTabs();");
+                }
+                target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent));
+            }
+        });
+        
+        
+        AmpTextAreaFieldPanel donorObjective = new AmpTextAreaFieldPanel("donorObjective", new PropertyModel<String>(fundingModel,"donorObjective"), "Donor Objective", false);
+        wmc.add(donorObjective);
         
         AmpTextAreaFieldPanel conditions = new AmpTextAreaFieldPanel("conditions", new PropertyModel<String>(fundingModel,"conditions"), "Conditions", false);
         wmc.add(conditions);
-		
-//		final AmpAutocompleteFieldPanel<AmpOrganisation> newOrgSelect=new AmpAutocompleteFieldPanel<AmpOrganisation>("searchAutocomplete", "Search Organizations", true, AmpOrganisationSearchModel.class) {			
-//			private static final long serialVersionUID = 1L;
-//			@Override
-//			protected String getChoiceValue(AmpOrganisation choice) {
-//				return DbUtil.filter(choice.getName());
-//			}
-//			
-//			@Override
-//			protected boolean showAcronyms() {
-//				return true;
-//			}
-//			
-//			@Override
-//			protected String getAcronym(AmpOrganisation choice) {
-//				return choice.getAcronym();
-//			}
+        
+//      final AmpAutocompleteFieldPanel<AmpOrganisation> newOrgSelect=new AmpAutocompleteFieldPanel<AmpOrganisation>("searchAutocomplete", "Search Organizations", true, AmpOrganisationSearchModel.class) {            
+//          private static final long serialVersionUID = 1L;
+//          @Override
+//          protected String getChoiceValue(AmpOrganisation choice) {
+//              return DbUtil.filter(choice.getName());
+//          }
+//          
+//          @Override
+//          protected boolean showAcronyms() {
+//              return true;
+//          }
+//          
+//          @Override
+//          protected String getAcronym(AmpOrganisation choice) {
+//              return choice.getAcronym();
+//          }
 //
-//			@Override
-//			public void onSelect(AjaxRequestTarget target,
-//					AmpOrganisation choice) {
-//				this.getParent().setVisible(false);
-//				
-//				ListItem listItem = findParent(ListItem.class);
-//				AmpDonorFundingFormSectionFeature fundingSection = findParent(AmpDonorFundingFormSectionFeature.class);
-//				AmpFunding funding = fundingModel.getObject();
-//				AmpOrganisation oldOrg = funding.getAmpDonorOrgId();
-//				fundingSection.switchOrg(listItem, funding, choice, target);
-//				fundingSection.updateFundingGroups(oldOrg, target);
-//			}
-//			@Override
-//			public Integer getChoiceLevel(AmpOrganisation choice) {
-//				return null;
-//			}
-//		};
-//		newOrgSelect.setIgnoreFmVisibility(true);
-//		newOrgSelect.setVisible(false);
-//		newOrgSelect.setOutputMarkupId(true);
-		
-		
-//		final AmpSearchOrganizationComponent searchOrganization = new AmpSearchOrganizationComponent("searchFundingOrgs", new Model<String> (),
-//				"Replace Funding Organizations", newOrgSelect);
-//		searchOrganization.setIgnoreFmVisibility(true);
-//		searchOrganization.setVisible(false);
-//		searchOrganization.setOutputMarkupId(true);
-//		add(searchOrganization);
-	
-		
-		final AmpOrgRoleSelectorComponent orgRoleSelector = new AmpOrgRoleSelectorComponent("orgRoleSelector", am, 
-				parent.getRoleFilter());
-		wmc.add(orgRoleSelector);
-		
-		// button used to add funding based on the selected organization and role
-		final AmpAjaxLinkField changeOrg = new AmpAjaxLinkField("changeOrg", "Change Org", "Change Org") {
-			private static final long serialVersionUID = 1L;
+//          @Override
+//          public void onSelect(AjaxRequestTarget target,
+//                  AmpOrganisation choice) {
+//              this.getParent().setVisible(false);
+//              
+//              ListItem listItem = findParent(ListItem.class);
+//              AmpDonorFundingFormSectionFeature fundingSection = findParent(AmpDonorFundingFormSectionFeature.class);
+//              AmpFunding funding = fundingModel.getObject();
+//              AmpOrganisation oldOrg = funding.getAmpDonorOrgId();
+//              fundingSection.switchOrg(listItem, funding, choice, target);
+//              fundingSection.updateFundingGroups(oldOrg, target);
+//          }
+//          @Override
+//          public Integer getChoiceLevel(AmpOrganisation choice) {
+//              return null;
+//          }
+//      };
+//      newOrgSelect.setIgnoreFmVisibility(true);
+//      newOrgSelect.setVisible(false);
+//      newOrgSelect.setOutputMarkupId(true);
+        
+        
+//      final AmpSearchOrganizationComponent searchOrganization = new AmpSearchOrganizationComponent("searchFundingOrgs", new Model<String> (),
+//              "Replace Funding Organizations", newOrgSelect);
+//      searchOrganization.setIgnoreFmVisibility(true);
+//      searchOrganization.setVisible(false);
+//      searchOrganization.setOutputMarkupId(true);
+//      add(searchOrganization);
+    
+        
+        final AmpOrgRoleSelectorComponent orgRoleSelector = new AmpOrgRoleSelectorComponent("orgRoleSelector", am, 
+                parent.getRoleFilter());
+        wmc.add(orgRoleSelector);
+        
+        // button used to add funding based on the selected organization and role
+        final AmpAjaxLinkField changeOrg = new AmpAjaxLinkField("changeOrg", "Change Org", "Change Org") {
+            private static final long serialVersionUID = 1L;
 
-			@Override
-			protected void onClick(AjaxRequestTarget target) {
-				
-				ListItem listItem = findParent(ListItem.class);
-				AmpDonorFundingFormSectionFeature fundingSection = findParent(AmpDonorFundingFormSectionFeature.class);
-				AmpFunding funding = fundingModel.getObject();
-				AmpOrganisation oldOrg = funding.getAmpDonorOrgId();
-				AmpOrganisation newOrg = (AmpOrganisation) orgRoleSelector.getOrgSelect().getChoiceContainer().getModelObject();
-				AmpRole oldRole = funding.getSourceRole();
-				parent.addToOrganisationSection(newOrg);//need to see if its not already present
+            @Override
+            protected void onClick(AjaxRequestTarget target) {
+                
+                ListItem listItem = findParent(ListItem.class);
+                AmpDonorFundingFormSectionFeature fundingSection = findParent(AmpDonorFundingFormSectionFeature.class);
+                AmpFunding funding = fundingModel.getObject();
+                AmpOrganisation oldOrg = funding.getAmpDonorOrgId();
+                AmpOrganisation newOrg = (AmpOrganisation) orgRoleSelector.getOrgSelect().getChoiceContainer().getModelObject();
+                AmpRole oldRole = funding.getSourceRole();
+                parent.addToOrganisationSection(newOrg);//need to see if its not already present
 
-				AmpRole newRole = (AmpRole) orgRoleSelector.getRoleSelect().getChoiceContainer().getModelObject();
-				if(newRole == null){
-					//if new role is null then the role dropdown is off. 
-					newRole = DbUtil.getAmpRole(Constants.FUNDING_AGENCY);
-				}
-				fundingSection.switchOrg(listItem, funding,newOrg,
-						newRole, target);
-				fundingSection.updateFundingGroups(fundingSection.findAmpOrgRole(oldOrg, oldRole), target);
-				
-						
-			}
-		};
+                AmpRole newRole = (AmpRole) orgRoleSelector.getRoleSelect().getChoiceContainer().getModelObject();
+                if(newRole == null){
+                    //if new role is null then the role dropdown is off. 
+                    newRole = DbUtil.getAmpRole(Constants.FUNDING_AGENCY);
+                }
+                fundingSection.switchOrg(listItem, funding,newOrg,
+                        newRole, target);
+                fundingSection.updateFundingGroups(fundingSection.findAmpOrgRole(oldOrg, oldRole), target);
+                
+                        
+            }
+        };
 
-		// by default this button is disabled, when the form first loads
-		changeOrg.getButton().setEnabled(false);
-		wmc.add(changeOrg);
+        // by default this button is disabled, when the form first loads
+        changeOrg.getButton().setEnabled(false);
+        wmc.add(changeOrg);
 
-		
-		orgRoleSelector.getOrgSelect().getChoiceContainer().add(
-				new AjaxFormComponentUpdatingBehavior("onchange") {
-					private static final long serialVersionUID = 2964092433905217073L;
-					@Override
-					protected void onUpdate(AjaxRequestTarget target) {
-						if (orgRoleSelector.getOrgSelect().getChoiceContainer().getModelObject() == null)
-							changeOrg.getButton().setEnabled(false);
-							else
-								changeOrg.getButton().setEnabled(true);
-						target.add(changeOrg);
-					}
-				});
+        
+        orgRoleSelector.getOrgSelect().getChoiceContainer().add(
+                new AjaxFormComponentUpdatingBehavior("onchange") {
+                    private static final long serialVersionUID = 2964092433905217073L;
+                    @Override
+                    protected void onUpdate(AjaxRequestTarget target) {
+                        if (orgRoleSelector.getOrgSelect().getChoiceContainer().getModelObject() == null)
+                            changeOrg.getButton().setEnabled(false);
+                            else
+                                changeOrg.getButton().setEnabled(true);
+                        target.add(changeOrg);
+                    }
+                });
 
 
-		
-//		AmpAjaxLinkField changeFundingOrg= new AmpAjaxLinkField("newOrgButton","Change Funding Organisation","Change Funding Organisation") {			
-//			private static final long serialVersionUID = 1L;
-//			@Override
-//			protected void onClick(AjaxRequestTarget target) {
-//				orgRoleSelector.setVisible(true);
-//				MarkupContainer tmpParent = orgRoleSelector.getParent();
-//				target.add(tmpParent);
-//				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(tmpParent));
-//			}
-//		};
-//		add(changeFundingOrg);
-		
+        
+//      AmpAjaxLinkField changeFundingOrg= new AmpAjaxLinkField("newOrgButton","Change Funding Organisation","Change Funding Organisation") {           
+//          private static final long serialVersionUID = 1L;
+//          @Override
+//          protected void onClick(AjaxRequestTarget target) {
+//              orgRoleSelector.setVisible(true);
+//              MarkupContainer tmpParent = orgRoleSelector.getParent();
+//              target.add(tmpParent);
+//              target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(tmpParent));
+//          }
+//      };
+//      add(changeFundingOrg);
+        
 
-		
-		AmpCheckBoxFieldPanel active = new AmpCheckBoxFieldPanel("active",
-				new PropertyModel<Boolean>(fundingModel, "active"), "Active");
-		wmc.add(active);
-		AmpCheckBoxFieldPanel delegatedCooperation = new AmpCheckBoxFieldPanel(
-				"delegatedCooperation", new PropertyModel<Boolean>(
-						fundingModel, "delegatedCooperation"),
-				"Delegated Cooperation");
-		wmc.add(delegatedCooperation);
-		AmpCheckBoxFieldPanel delegatedPartner = new AmpCheckBoxFieldPanel(
-				"delegatedPartner", new PropertyModel<Boolean>(fundingModel,
-						"delegatedPartner"), "Delegated Partner");
-		wmc.add(delegatedPartner);
+        
+        AmpCheckBoxFieldPanel active = new AmpCheckBoxFieldPanel("active",
+                new PropertyModel<Boolean>(fundingModel, "active"), "Active");
+        wmc.add(active);
+        AmpCheckBoxFieldPanel delegatedCooperation = new AmpCheckBoxFieldPanel(
+                "delegatedCooperation", new PropertyModel<Boolean>(
+                        fundingModel, "delegatedCooperation"),
+                "Delegated Cooperation");
+        wmc.add(delegatedCooperation);
+        AmpCheckBoxFieldPanel delegatedPartner = new AmpCheckBoxFieldPanel(
+                "delegatedPartner", new PropertyModel<Boolean>(fundingModel,
+                        "delegatedPartner"), "Delegated Partner");
+        wmc.add(delegatedPartner);
 
-		fundingInfo = new AmpDonorFundingInfoSubsectionFeature(
-				"fundingInfoSubsection", fundingModel,"Funding Classification",fundingSummary);
-		wmc.add(fundingInfo);
-		
-		AmpMTEFProjectionSubsectionFeature mtefProjections = new AmpMTEFProjectionSubsectionFeature(
-				"mtefProjectionsSubsection", fundingModel);
-		wmc.add(mtefProjections);
-		
-		AmpDonorCommitmentsSubsectionFeature commitments = new AmpDonorCommitmentsSubsectionFeature(
-				"commitments", fundingModel, Constants.COMMITMENT);
-		wmc.add(commitments);
-		
-		
-		disbursements = new AmpDonorDisbursementsSubsectionFeature(
-				"disbursements", fundingModel, Constants.DISBURSEMENT);
-		wmc.add(disbursements);
+        fundingInfo = new AmpDonorFundingInfoSubsectionFeature(
+                "fundingInfoSubsection", fundingModel,"Funding Classification",fundingSummary);
+        wmc.add(fundingInfo);
+        
+        AmpMTEFProjectionSubsectionFeature mtefProjections = new AmpMTEFProjectionSubsectionFeature(
+                "mtefProjectionsSubsection", fundingModel);
+        wmc.add(mtefProjections);
+        
+        AmpDonorCommitmentsSubsectionFeature commitments = new AmpDonorCommitmentsSubsectionFeature(
+                "commitments", fundingModel, Constants.COMMITMENT);
+        wmc.add(commitments);
+        
+        
+        disbursements = new AmpDonorDisbursementsSubsectionFeature(
+                "disbursements", fundingModel, Constants.DISBURSEMENT);
+        wmc.add(disbursements);
 
-		AmpDonorArrearsSubsectionFeature arrears = new AmpDonorArrearsSubsectionFeature(
-				"arrears", fundingModel, Constants.ARREARS);
-		wmc.add(arrears);
-		
-		
-		
-		AmpDonorDisbOrdersSubsectionFeature disbOrders = new AmpDonorDisbOrdersSubsectionFeature(
-				"disbOrders", fundingModel, Constants.DISBURSEMENT_ORDER);
-		disbOrders.setDisbursements(disbursements);
-		wmc.add(disbOrders);
-		
-		AmpEstimatedDonorDisbursementsSubsectionFeature edd = new AmpEstimatedDonorDisbursementsSubsectionFeature(
-					"estimatedDisbursements", fundingModel, Constants.ESTIMATED_DONOR_DISBURSEMENT);
-			wmc.add(edd);
-		
-		AmpReleaseOfFundsSubsectionFeature rof = new AmpReleaseOfFundsSubsectionFeature(
-					"releaseOfFunds", fundingModel, Constants.RELEASE_OF_FUNDS);
-			wmc.add(rof);
-		
-			
-		AmpDonorExpendituresSubsectionFeature expenditures = new AmpDonorExpendituresSubsectionFeature(
-				"expenditures", fundingModel, Constants.EXPENDITURE);
-		wmc.add(expenditures);
+        AmpDonorArrearsSubsectionFeature arrears = new AmpDonorArrearsSubsectionFeature(
+                "arrears", fundingModel, Constants.ARREARS);
+        wmc.add(arrears);
+        
+        
+        
+        AmpDonorDisbOrdersSubsectionFeature disbOrders = new AmpDonorDisbOrdersSubsectionFeature(
+                "disbOrders", fundingModel, Constants.DISBURSEMENT_ORDER);
+        disbOrders.setDisbursements(disbursements);
+        wmc.add(disbOrders);
+        
+        AmpEstimatedDonorDisbursementsSubsectionFeature edd = new AmpEstimatedDonorDisbursementsSubsectionFeature(
+                    "estimatedDisbursements", fundingModel, Constants.ESTIMATED_DONOR_DISBURSEMENT);
+            wmc.add(edd);
+        
+        AmpReleaseOfFundsSubsectionFeature rof = new AmpReleaseOfFundsSubsectionFeature(
+                    "releaseOfFunds", fundingModel, Constants.RELEASE_OF_FUNDS);
+            wmc.add(rof);
+        
+            
+        AmpDonorExpendituresSubsectionFeature expenditures = new AmpDonorExpendituresSubsectionFeature(
+                "expenditures", fundingModel, Constants.EXPENDITURE);
+        wmc.add(expenditures);
 
-		
-	}
+        
+    }
 
-	public AmpDonorFundingInfoSubsectionFeature getFundingInfo() {
-		return fundingInfo;
-	}
+    public AmpDonorFundingInfoSubsectionFeature getFundingInfo() {
+        return fundingInfo;
+    }
 
-	public AmpDonorDisbursementsSubsectionFeature getDisbursements() {
-		return disbursements;
-	}	
-		
+    public AmpDonorDisbursementsSubsectionFeature getDisbursements() {
+        return disbursements;
+    }   
+        
 }

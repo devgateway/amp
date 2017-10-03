@@ -21,67 +21,67 @@ import clover.org.apache.commons.lang.StringEscapeUtils;
  */
 public abstract class AmpLinkField extends AmpFieldPanel<Void> {
 
-	private static final long serialVersionUID = 3042844165981373890L;
-	protected IndicatingAjaxLink<String> link;
+    private static final long serialVersionUID = 3042844165981373890L;
+    protected IndicatingAjaxLink<String> link;
 
-	public IndicatingAjaxLink<String> getLink() {
-		return link;
-	}
+    public IndicatingAjaxLink<String> getLink() {
+        return link;
+    }
 
-	/**
-	 * Escalated method invoker for wrapped
-	 * {@link IndicatingAjaxLink#onClick(AjaxRequestTarget)}
-	 * 
-	 * @param target
-	 */
-	protected abstract void onClick(AjaxRequestTarget target);
+    /**
+     * Escalated method invoker for wrapped
+     * {@link IndicatingAjaxLink#onClick(AjaxRequestTarget)}
+     * 
+     * @param target
+     */
+    protected abstract void onClick(AjaxRequestTarget target);
 
-	public AmpLinkField(String id, String fmName) {
-		this(id,fmName,null);
-	}
-	
-	/**
-	 * Constructs a new wrapped {@link IndicatingAjaxLink} with optional confirmation question. The question string is fetched by qModel param 
-	 * @param id
-	 * @param fmName
-	 * @param qModel the string Model of the confirmation question, if any. Use Null otherwise
-	 */
-	public AmpLinkField(String id, String fmName,final IModel<String> qModel) {
-		this(id, fmName, qModel, true, true);
-	}
-	
-	public AmpLinkField(String id, String fmName, boolean hideLabel, boolean hideNewLine) {
-		this(id,fmName,null, hideLabel, hideNewLine);
-	}
-	
-	public AmpLinkField(String id, String fmName,final IModel<String> qModel, boolean hideLabel, boolean hideNewLine) {
-		super(id, fmName, hideLabel, hideNewLine);
-		link = new IndicatingAjaxLink<String>(
-				"fieldLink", new Model<String>(fmName))  {
-			private static final long serialVersionUID = -5699378405978605979L;
+    public AmpLinkField(String id, String fmName) {
+        this(id,fmName,null);
+    }
+    
+    /**
+     * Constructs a new wrapped {@link IndicatingAjaxLink} with optional confirmation question. The question string is fetched by qModel param 
+     * @param id
+     * @param fmName
+     * @param qModel the string Model of the confirmation question, if any. Use Null otherwise
+     */
+    public AmpLinkField(String id, String fmName,final IModel<String> qModel) {
+        this(id, fmName, qModel, true, true);
+    }
+    
+    public AmpLinkField(String id, String fmName, boolean hideLabel, boolean hideNewLine) {
+        this(id,fmName,null, hideLabel, hideNewLine);
+    }
+    
+    public AmpLinkField(String id, String fmName,final IModel<String> qModel, boolean hideLabel, boolean hideNewLine) {
+        super(id, fmName, hideLabel, hideNewLine);
+        link = new IndicatingAjaxLink<String>(
+                "fieldLink", new Model<String>(fmName))  {
+            private static final long serialVersionUID = -5699378405978605979L;
 
-			@Override
-			public void onClick(AjaxRequestTarget target) {
-				AmpLinkField.this.onClick(target);
-			}
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                AmpLinkField.this.onClick(target);
+            }
 
-			@Override
-			protected void updateAjaxAttributes(
-					AjaxRequestAttributes attributes) {
-				super.updateAjaxAttributes(attributes);
-				AjaxCallListener myAjaxCallListener = new AjaxCallListener() {
-					@Override
-					public CharSequence getPrecondition(Component component) {
-						if(qModel==null) return null; 
-						else {
-							return "if(!confirm('"+ StringEscapeUtils.escapeJavaScript(qModel.getObject())+"')) return false;";
-						}
-					}
-				};
-				attributes.getAjaxCallListeners().add(myAjaxCallListener);
-			}
-		};
-		add(link);
-	}
+            @Override
+            protected void updateAjaxAttributes(
+                    AjaxRequestAttributes attributes) {
+                super.updateAjaxAttributes(attributes);
+                AjaxCallListener myAjaxCallListener = new AjaxCallListener() {
+                    @Override
+                    public CharSequence getPrecondition(Component component) {
+                        if(qModel==null) return null; 
+                        else {
+                            return "if(!confirm('"+ StringEscapeUtils.escapeJavaScript(qModel.getObject())+"')) return false;";
+                        }
+                    }
+                };
+                attributes.getAjaxCallListeners().add(myAjaxCallListener);
+            }
+        };
+        add(link);
+    }
 
 }

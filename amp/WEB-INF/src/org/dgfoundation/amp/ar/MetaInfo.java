@@ -22,54 +22,54 @@ import java.util.Set;
  */
 public class MetaInfo<T> implements Serializable, Cloneable  {
 
-	/**
-	 * somewhat of an ugly hack, but null-valued metadata is only used as boolean anyway (or as a bug, in which case we want a crash)
-	 */
-	public final static Boolean NULL_PLACEHOLDER_VALUE = new Boolean(true);
-	
-	protected final String category;
+    /**
+     * somewhat of an ugly hack, but null-valued metadata is only used as boolean anyway (or as a bug, in which case we want a crash)
+     */
+    public final static Boolean NULL_PLACEHOLDER_VALUE = new Boolean(true);
+    
+    protected final String category;
 
-	protected final T value;
+    protected final T value;
 
-	/**
-	 * @return Returns the category.
-	 */
-	public String getCategory() {
-		return category;
-	}
+    /**
+     * @return Returns the category.
+     */
+    public String getCategory() {
+        return category;
+    }
 
-	/**
-	 * @return Returns the value.
-	 */
-	public T getValue() {
-		return value;
-	}
+    /**
+     * @return Returns the value.
+     */
+    public T getValue() {
+        return value;
+    }
 
-	public MetaInfo(String category, T value) {
-		this.category = category;
-		if (value == null)
-			value = (T) NULL_PLACEHOLDER_VALUE;
-		this.value = value;
-	}
-	
-	public String toString() {
-		return category + ": " + value;
-	}	
-	
-	@Override
-	public boolean equals(Object obj)
-	{
-		if (obj instanceof MetaInfo)
-		{
-			MetaInfo<?> theObj = (MetaInfo<?>) obj;
-			return this.category.equals(theObj.category) && this.value.equals(theObj.value);			
-		}
-		return false;
-	}
+    public MetaInfo(String category, T value) {
+        this.category = category;
+        if (value == null)
+            value = (T) NULL_PLACEHOLDER_VALUE;
+        this.value = value;
+    }
+    
+    public String toString() {
+        return category + ": " + value;
+    }   
+    
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (obj instanceof MetaInfo)
+        {
+            MetaInfo<?> theObj = (MetaInfo<?>) obj;
+            return this.category.equals(theObj.category) && this.value.equals(theObj.value);            
+        }
+        return false;
+    }
 
-	@Override
-	public int hashCode() {		
-		return this.category.hashCode() ^ (19 * this.value.hashCode());
-	}
+    @Override
+    public int hashCode() {     
+        return this.category.hashCode() ^ (19 * this.value.hashCode());
+    }
 
 }

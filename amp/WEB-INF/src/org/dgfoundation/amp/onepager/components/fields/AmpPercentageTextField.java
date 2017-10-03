@@ -28,48 +28,48 @@ import org.digijava.module.aim.helper.FormatHelper;
  */
 public class AmpPercentageTextField extends AmpTextFieldPanel<Double> {
 
-	private AmpPercentageCollectionValidatorField<?> validationHiddenField;
-	
-	/**
-	 * @param id
-	 * @param model
-	 * @param fmName
-	 */
-	public AmpPercentageTextField(String id, IModel<Double> model,
-			String fmName,
-			AmpPercentageCollectionValidatorField<?> validationHiddenField) {
-		super(id, model, fmName, true, true, false, true);
-		this.validationHiddenField = validationHiddenField;
-		textContainer.setType(Double.class);
-		textContainer.setRequired(true);
-		textContainer.add(new RangeValidator<Double>(0.1d, null));
-		textContainer.add(new AttributeModifier("style", "width: 40px;"));
-	}
-	
-	//constructor added so we can include 0 value in range validator
-	public AmpPercentageTextField(String id, IModel<Double> model,
-			String fmName,
-			AmpPercentageCollectionValidatorField<?> validationHiddenField,boolean required) {
-		super(id, model, fmName, true, true, false, true);
-		this.validationHiddenField = validationHiddenField;
-		textContainer.setType(Double.class);
-		textContainer.setRequired(required);
-		textContainer.add(new RangeValidator<Double>(0.0d, null));
-		textContainer.add(new AttributeModifier("style", "width: 40px;"));
-	}
-	
-	@Override
-	protected void onAjaxOnUpdate(AjaxRequestTarget target) {
-		validationHiddenField.reloadValidationField(target);
-	}
-	
-	public IConverter getInternalConverter(java.lang.Class<?> type) {
-		DoubleConverter converter = (DoubleConverter) DoubleConverter.INSTANCE;
-		NumberFormat formatter = FormatHelper.getPercentageDefaultFormat(true);
-		
-//		formatter.setMinimumFractionDigits(0);
-		converter.setNumberFormat(getLocale(), formatter);
-		return converter; 
-	}
+    private AmpPercentageCollectionValidatorField<?> validationHiddenField;
+    
+    /**
+     * @param id
+     * @param model
+     * @param fmName
+     */
+    public AmpPercentageTextField(String id, IModel<Double> model,
+            String fmName,
+            AmpPercentageCollectionValidatorField<?> validationHiddenField) {
+        super(id, model, fmName, true, true, false, true);
+        this.validationHiddenField = validationHiddenField;
+        textContainer.setType(Double.class);
+        textContainer.setRequired(true);
+        textContainer.add(new RangeValidator<Double>(0.1d, null));
+        textContainer.add(new AttributeModifier("style", "width: 40px;"));
+    }
+    
+    //constructor added so we can include 0 value in range validator
+    public AmpPercentageTextField(String id, IModel<Double> model,
+            String fmName,
+            AmpPercentageCollectionValidatorField<?> validationHiddenField,boolean required) {
+        super(id, model, fmName, true, true, false, true);
+        this.validationHiddenField = validationHiddenField;
+        textContainer.setType(Double.class);
+        textContainer.setRequired(required);
+        textContainer.add(new RangeValidator<Double>(0.0d, null));
+        textContainer.add(new AttributeModifier("style", "width: 40px;"));
+    }
+    
+    @Override
+    protected void onAjaxOnUpdate(AjaxRequestTarget target) {
+        validationHiddenField.reloadValidationField(target);
+    }
+    
+    public IConverter getInternalConverter(java.lang.Class<?> type) {
+        DoubleConverter converter = (DoubleConverter) DoubleConverter.INSTANCE;
+        NumberFormat formatter = FormatHelper.getPercentageDefaultFormat(true);
+        
+//      formatter.setMinimumFractionDigits(0);
+        converter.setNumberFormat(getLocale(), formatter);
+        return converter; 
+    }
 
 }

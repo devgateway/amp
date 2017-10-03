@@ -45,7 +45,7 @@ public class FxtopServicesLocator extends org.apache.axis.client.Service impleme
         FxtopServicesPortWSDDServiceName = name;
     }
     public org.digijava.module.currencyrates.fxtop.FxtopServicesPortType getFxtopServicesPort() throws javax.xml.rpc.ServiceException {
-    	return getFxtopServicesPort(null);
+        return getFxtopServicesPort(null);
     }
     public org.digijava.module.currencyrates.fxtop.FxtopServicesPortType getFxtopServicesPort(Integer minute) throws javax.xml.rpc.ServiceException {
        java.net.URL endpoint;
@@ -63,8 +63,8 @@ public class FxtopServicesLocator extends org.apache.axis.client.Service impleme
             org.digijava.module.currencyrates.fxtop.FxtopServicesBindingStub _stub = new org.digijava.module.currencyrates.fxtop.FxtopServicesBindingStub(portAddress, this);
             _stub.setPortName(getFxtopServicesPortWSDDServiceName());
             if(minute!=null){
-            	//we are receiving minutes and we are expceting millisecconds so we multiply by 1000
-            	_stub.setTimeout(minute*1000);
+                //we are receiving minutes and we are expceting millisecconds so we multiply by 1000
+                _stub.setTimeout(minute*1000);
             }
             return _stub;
         }

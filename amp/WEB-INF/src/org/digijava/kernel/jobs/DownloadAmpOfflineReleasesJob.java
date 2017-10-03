@@ -1,5 +1,7 @@
 package org.digijava.kernel.jobs;
 
+import static java.util.stream.Collectors.toSet;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
@@ -38,6 +40,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * Downloads new AMP Offline releases. Will keep only releases that are compatible with this AMP.
+ * Also will remove any inconsistent AmpOfflineRelease entry which does not have a corresponding file on file system.
+ *
  * @author Octavian Ciubotaru
  */
 public class DownloadAmpOfflineReleasesJob extends ConnectionCleaningJob {
@@ -56,23 +61,44 @@ public class DownloadAmpOfflineReleasesJob extends ConnectionCleaningJob {
         try {
             initialize(context);
 
-            String url = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMP_OFFLINE_RELEASES_URL);
+            removeInvalidAmpOfflineReleases();
 
-            List<AmpOfflineRelease> releases = client
-                    .resource(url)
-                    .accept(MediaType.APPLICATION_JSON_TYPE)
-                    .get(releasesType());
+            downloadNewReleases();
 
-            releases.forEach(this::processNewRelease);
-
-            existingReleases.stream()
-                    .filter(r -> !ampVersionService.isAmpOfflineCompatible(r.getVersion()))
-                    .forEach(r -> ampOfflineService.deleteRelease(r));
+            removeIncompatibleReleases();
         } finally {
             client.destroy();
         }
     }
 
+    /**
+     * Download all new and compatible AMPOfflineReleases.
+     */
+    private void downloadNewReleases() {
+        String url = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMP_OFFLINE_RELEASES_URL);
+
+        List<AmpOfflineRelease> releases = client
+                .resource(url)
+                .accept(MediaType.APPLICATION_JSON_TYPE)
+                .get(releasesType());
+
+        releases.stream()
+                .filter(this::isNewAndCompatibleRelease)
+                .forEach(this::persistRelease);
+    }
+
+    /**
+     * Removes AMPOfflineReleases which are no longer compatible with this AMP release.
+     */
+    private void removeIncompatibleReleases() {
+        existingReleases.stream()
+                .filter(r -> !ampVersionService.isAmpOfflineCompatible(r.getVersion()))
+                .forEach(r -> ampOfflineService.deleteRelease(r));
+    }
+
+    /**
+     * Init services, jersey client, existing releases.
+     */
     private void initialize(JobExecutionContext context) throws JobExecutionException {
         try {
             ServletContext sc = (ServletContext) context.getScheduler().getContext().get(Constants.AMP_SERVLET_CONTEXT);
@@ -90,15 +116,41 @@ public class DownloadAmpOfflineReleasesJob extends ConnectionCleaningJob {
         existingReleases = new HashSet<>(ampOfflineService.getReleases());
     }
 
-    private void processNewRelease(AmpOfflineRelease release) {
-        if (!existingReleases.contains(release) && ampVersionService.isAmpOfflineCompatible(release.getVersion())) {
-            try {
-                ampOfflineService.addRelease(release, () -> client.resource(release.getUrl()).get(InputStream.class));
+    /**
+     * Remove existing AmpOfflineReleases which don't have a corresponding release file.
+     */
+    private void removeInvalidAmpOfflineReleases() {
+        Set<AmpOfflineRelease> invalidReleases = existingReleases.stream()
+                .filter(this::withoutReleaseFile)
+                .collect(toSet());
+        invalidReleases.forEach(r -> ampOfflineService.deleteRelease(r));
+        existingReleases.removeAll(invalidReleases);
+    }
 
-                existingReleases.add(release);
-            } catch (IOException | UniformInterfaceException e) {
-                logger.warn(e.getClass().getSimpleName() + ": " + e.getMessage());
-            }
+    /**
+     * Returns true if release file is missing for a specific AmpOfflineRelease.
+     */
+    private boolean withoutReleaseFile(AmpOfflineRelease ampOfflineRelease) {
+        return !ampOfflineService.getReleaseFile(ampOfflineRelease).exists();
+    }
+
+    /**
+     * Returns true if release is new and compatible with this AMP release.
+     */
+    private boolean isNewAndCompatibleRelease(AmpOfflineRelease release) {
+        return !existingReleases.contains(release) && ampVersionService.isAmpOfflineCompatible(release.getVersion());
+    }
+
+    /**
+     * Persist release in the system.
+     */
+    private void persistRelease(AmpOfflineRelease release) {
+        try {
+            ampOfflineService.addRelease(release, () -> client.resource(release.getUrl()).get(InputStream.class));
+
+            existingReleases.add(release);
+        } catch (IOException | UniformInterfaceException e) {
+            logger.warn(e.getClass().getSimpleName() + ": " + e.getMessage());
         }
     }
 

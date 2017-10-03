@@ -60,7 +60,7 @@ public class ComponentsUtil {
 
     public static Collection<AmpComponent> getAmpComponentsByType(Long id) {
         logger.debug(" starting to get all the components....");
-        Collection col = null;	
+        Collection col = null;  
         String queryString = null;
         Session session = null;
         Query qry = null;
@@ -79,7 +79,7 @@ public class ComponentsUtil {
 
   
     @SuppressWarnings("unchecked")
-	public static List<AmpComponentType> getAmpComponentTypes(Boolean... onlyEnabled) {
+    public static List<AmpComponentType> getAmpComponentTypes(Boolean... onlyEnabled) {
         List<AmpComponentType> componentTypes = null;
         String queryString = null;
         Session session = null;
@@ -87,9 +87,9 @@ public class ComponentsUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
             if(onlyEnabled.length >= 1 && onlyEnabled[0] == true)
-               	queryString = "select co from " + AmpComponentType.class.getName() + " co where enable = true ";
+                queryString = "select co from " + AmpComponentType.class.getName() + " co where enable = true ";
             else
-            	queryString = "select co from " + AmpComponentType.class.getName() + " co ";
+                queryString = "select co from " + AmpComponentType.class.getName() + " co ";
             qry = session.createQuery(queryString);
             componentTypes = qry.list();
         } catch (Exception ex) {
@@ -98,7 +98,7 @@ public class ComponentsUtil {
         return componentTypes;
     }
     
-	public static AmpComponentType getAmpComponentTypeByName(String name) {
+    public static AmpComponentType getAmpComponentTypeByName(String name) {
         Collection col = null;
         String queryString = null;
         Session session = null;
@@ -110,7 +110,7 @@ public class ComponentsUtil {
             qry.setParameter("name",name.trim(),StringType.INSTANCE);
             col = qry.list();
             if (col.size() > 0){
-            	return new ArrayList<AmpComponentType>(col).get(0);
+                return new ArrayList<AmpComponentType>(col).get(0);
             }
         } catch (Exception ex) {
             logger.error("Unable to get AmpComponentType  from database " + ex.getMessage());
@@ -130,7 +130,7 @@ public class ComponentsUtil {
 
             col = qry.list();
             if (col.size() > 0){
-            	return new ArrayList<AmpComponentType>(col).get(0);
+                return new ArrayList<AmpComponentType>(col).get(0);
             }
         } catch (Exception ex) {
             logger.error("Unable to get Component for editing from database " + ex.getMessage());
@@ -180,63 +180,63 @@ public class ComponentsUtil {
      */
     public static void deleteComponentType(Long compId) {
 
-		Session session = null;
-		Transaction tx = null;
-		try {
-			session = PersistenceManager.getRequestDBSession();
+        Session session = null;
+        Transaction tx = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
 //beginTransaction();
 
-			// Now delete AmpComponent
-			AmpComponentType type = (AmpComponentType) session.load(AmpComponentType.class, compId);
-			session.delete(type);
-			//tx.commit();
-		} catch (Exception e) {
-			logger.error("Exception from deleteComponentType() : " + e);
-			if (tx != null) {
-				try {
-					tx.rollback();
-				} catch (Exception trbf) {
-					logger.error("Transaction roll back failed ");
-				}
-			}
-			e.printStackTrace();
-		}
-	}
+            // Now delete AmpComponent
+            AmpComponentType type = (AmpComponentType) session.load(AmpComponentType.class, compId);
+            session.delete(type);
+            //tx.commit();
+        } catch (Exception e) {
+            logger.error("Exception from deleteComponentType() : " + e);
+            if (tx != null) {
+                try {
+                    tx.rollback();
+                } catch (Exception trbf) {
+                    logger.error("Transaction roll back failed ");
+                }
+            }
+            e.printStackTrace();
+        }
+    }
     
     
     /*
-	 * update component details
-	 */
+     * update component details
+     */
     public static void updateComponents(AmpComponent ampComp) {
-		Session session = null;
-		Transaction tx = null;
-		try {
-			session = PersistenceManager.getRequestDBSession();
+        Session session = null;
+        Transaction tx = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
 //beginTransaction();
-			AmpComponent oldCompo=(AmpComponent) session.load(AmpComponent.class,ampComp.getAmpComponentId());
+            AmpComponent oldCompo=(AmpComponent) session.load(AmpComponent.class,ampComp.getAmpComponentId());
 
-			oldCompo.setCode(ampComp.getCode());
-			oldCompo.setDescription(ampComp.getDescription());
-			oldCompo.setTitle(ampComp.getTitle());
-			oldCompo.setType(ampComp.getType());
-			session.update(oldCompo);
-			//tx.commit();
-		} catch (Exception e) {
-			logger.error("Exception from deleteComponentType() : " + e);
-			if (tx != null) {
-				try {
-					tx.rollback();
-				} catch (Exception trbf) {
-					logger.error("Transaction roll back failed ");
-				}
-			}
-			e.printStackTrace();
-		}
+            oldCompo.setCode(ampComp.getCode());
+            oldCompo.setDescription(ampComp.getDescription());
+            oldCompo.setTitle(ampComp.getTitle());
+            oldCompo.setType(ampComp.getType());
+            session.update(oldCompo);
+            //tx.commit();
+        } catch (Exception e) {
+            logger.error("Exception from deleteComponentType() : " + e);
+            if (tx != null) {
+                try {
+                    tx.rollback();
+                } catch (Exception trbf) {
+                    logger.error("Transaction roll back failed ");
+                }
+            }
+            e.printStackTrace();
+        }
     }
 
     /*
-	 * add a new Component
-	 */
+     * add a new Component
+     */
     public static void addNewComponent(AmpComponent ampComp) {
         DbUtil.add(ampComp);
 
@@ -290,7 +290,7 @@ public class ComponentsUtil {
 
     
     public static AmpComponentFunding getComponentFundingById(Long id) {
-    	AmpComponentFunding ret = null;
+        AmpComponentFunding ret = null;
         Session session = null;
         try {
             session = PersistenceManager.getRequestDBSession();
@@ -333,7 +333,7 @@ public class ComponentsUtil {
             AmpComponent comp = (AmpComponent) session.get(AmpComponent.class, id);
             return comp;
         } catch (Exception ex) {
-        	logger.error("Unable to get Component:", ex);
+            logger.error("Unable to get Component:", ex);
         }
         return null;
     }
@@ -364,7 +364,7 @@ public class ComponentsUtil {
      * this is to check whether a component with the same name already exists in the AMP Components Table.returns true if present and false if not present
      */
     public static boolean checkComponentNameExists(String title) {
-    	return checkComponentNameExists(title, null);
+        return checkComponentNameExists(title, null);
     }
     
     public static boolean checkComponentNameExists(String title, Long excludeId) {
@@ -378,17 +378,17 @@ public class ComponentsUtil {
             session = PersistenceManager.getRequestDBSession();
             String componentTitle = InternationalizedModelDescription.getForProperty(AmpComponent.class, "title").getSQLFunctionCall("co.ampComponentId");
             queryString = "select " + componentTitle + " from "+AmpActivity.class.getName() +  " a, " +   AmpComponent.class.getName()+
-            		" co  where co  in elements(a.components)  and " +
-            		componentTitle + "=:title";
+                    " co  where co  in elements(a.components)  and " +
+                    componentTitle + "=:title";
 
             if (excludeId != null)
-            	queryString += " and not co.ampComponentId=:excludeId";
+                queryString += " and not co.ampComponentId=:excludeId";
             qry = session.createQuery(queryString);
             
            
             qry.setParameter("title", title, StringType.INSTANCE);
             if (excludeId != null)
-            	qry.setLong("excludeId", excludeId);
+                qry.setLong("excludeId", excludeId);
            
             col = qry.list();
         } catch (Exception ex) {
@@ -406,12 +406,12 @@ public class ComponentsUtil {
      * this is to check whether a component with the same name already exists in the AMP Components Table.returns true if present and false if not present for the activity group
      */
     public static boolean checkComponentNameExistsExcludingGroup(String title, AmpActivityGroup g) {
-    	logger.info(" in the checking for components existence through title ");
+        logger.info(" in the checking for components existence through title ");
         Collection col = null;
         if (g == null) //If the group is null, then it's a new activity, check the old way
-    	{
-        	return checkComponentNameExists(title);
-    	}
+        {
+            return checkComponentNameExists(title);
+        }
         else
         {
             String queryString = null;
@@ -435,8 +435,8 @@ public class ComponentsUtil {
                 return false;
             } else
                 return true;
-        }        	
-    	
+        }           
+        
     }
 
     /*
@@ -626,7 +626,7 @@ public class ComponentsUtil {
      * Compare components by Tittle
      */
     public static class HelperComponetTitleComparator implements Comparator<AmpComponent> {
-    	Locale locale;
+        Locale locale;
         Collator collator;
 
         public HelperComponetTitleComparator(){
@@ -637,13 +637,13 @@ public class ComponentsUtil {
             this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
         }
 
-		public int compare(AmpComponent o1, AmpComponent o2) {
-			collator = Collator.getInstance(locale);
+        public int compare(AmpComponent o1, AmpComponent o2) {
+            collator = Collator.getInstance(locale);
             collator.setStrength(Collator.TERTIARY);
             
             int result = (o1.getTitle()==null || o2.getTitle()==null)?0:collator.compare(o1.getTitle().toLowerCase(), o2.getTitle().toLowerCase());
             return result;
-		}
+        }
     }
     
     /**
@@ -651,7 +651,7 @@ public class ComponentsUtil {
      * Compare components by code
      */
     public static class HelperComponetCodeComparator implements Comparator<AmpComponent> {
-    	Locale locale;
+        Locale locale;
         Collator collator;
 
         public HelperComponetCodeComparator(){
@@ -662,13 +662,13 @@ public class ComponentsUtil {
             this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
         }
 
-		public int compare(AmpComponent o1, AmpComponent o2) {
-			collator = Collator.getInstance(locale);
+        public int compare(AmpComponent o1, AmpComponent o2) {
+            collator = Collator.getInstance(locale);
             collator.setStrength(Collator.TERTIARY);
             
             int result = (o1.getCode()==null || o2.getCode()==null)?0:collator.compare(o1.getCode().toLowerCase(), o2.getCode().toLowerCase());
             return result;
-		}
+        }
     }
     
     /**
@@ -676,7 +676,7 @@ public class ComponentsUtil {
      * Compare components by type
      */
     public static class HelperComponetTypeComparator implements Comparator<AmpComponent> {
-    	Locale locale;
+        Locale locale;
         Collator collator;
 
         public HelperComponetTypeComparator(){
@@ -687,13 +687,13 @@ public class ComponentsUtil {
             this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
         }
 
-		public int compare(AmpComponent o1, AmpComponent o2) {
-			collator = Collator.getInstance(locale);
+        public int compare(AmpComponent o1, AmpComponent o2) {
+            collator = Collator.getInstance(locale);
             collator.setStrength(Collator.TERTIARY);
             
             int result = (o1.getType().getName()==null || o2.getType().getName()==null)?0:collator.compare(o1.getType().getName(), o2.getType().getName());
             return result;
-		}
+        }
     }
     
     /**
@@ -701,9 +701,9 @@ public class ComponentsUtil {
      * Compare components by date 
      */
     public static class HelperComponetDateComparator implements Comparator<AmpComponent> {
-		public int compare(AmpComponent o1, AmpComponent o2) {
-			int result = (o1.getCreationdate()==null || o2.getCreationdate()==null)?0:o1.getCreationdate().compareTo(o2.getCreationdate());
+        public int compare(AmpComponent o1, AmpComponent o2) {
+            int result = (o1.getCreationdate()==null || o2.getCreationdate()==null)?0:o1.getCreationdate().compareTo(o2.getCreationdate());
             return result;
-		}
+        }
     }
 }

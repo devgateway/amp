@@ -14,21 +14,21 @@ import org.digijava.module.aim.form.EditActivityForm;
  */
 public class InvalidDataListsForm extends ActionForm{
 
-	private static final long serialVersionUID = 1L;
-	private List<InvalidDataUtil.ActivitySectorPercentages> invalidSectorpercentages;
-	private Long actId;
-	
-	public void setInvalidSectorpercentages(List<InvalidDataUtil.ActivitySectorPercentages> invalidSectorpercentages) {
-		this.invalidSectorpercentages = invalidSectorpercentages;
-	}
-	public List<InvalidDataUtil.ActivitySectorPercentages> getInvalidSectorpercentages() {
-		return invalidSectorpercentages;
-	}	
-	public Long getActId() {
-		return actId;
-	}
-	public void setActId(Long actId) {
-		this.actId = actId;
-	}	
-	
+    private static final long serialVersionUID = 1L;
+    private List<InvalidDataUtil.ActivitySectorPercentages> invalidSectorpercentages;
+    private Long actId;
+    
+    public void setInvalidSectorpercentages(List<InvalidDataUtil.ActivitySectorPercentages> invalidSectorpercentages) {
+        this.invalidSectorpercentages = invalidSectorpercentages;
+    }
+    public List<InvalidDataUtil.ActivitySectorPercentages> getInvalidSectorpercentages() {
+        return invalidSectorpercentages;
+    }   
+    public Long getActId() {
+        return actId;
+    }
+    public void setActId(Long actId) {
+        this.actId = actId;
+    }   
+    
 }

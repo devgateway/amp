@@ -43,7 +43,7 @@ import java.util.*;
  */
 
 public class ContentTrnImportExport extends DispatchAction {
-    private static Logger logger	= Logger.getLogger(ContentTrnImportExport.class);
+    private static Logger logger    = Logger.getLogger(ContentTrnImportExport.class);
     private static String[] PERMAMENT_HEADER_ITEMS = {"Object Class", "Object ID", "Field Name"};
 
 
@@ -243,10 +243,10 @@ public class ContentTrnImportExport extends DispatchAction {
                     AmpContentTranslation trnItem = ContentTranslationUtil.getByTypeObjidFieldLocale(allTrns, objectClass, objectId, fieldName, locale);
                     locale = locale.trim();
                     if (!allowedLocales.contains(locale))
-                    	throw new RuntimeException("disallowed locale: " + locale);
+                        throw new RuntimeException("disallowed locale: " + locale);
                     //If new item
                     if (trnItem == null) {
-                    	if( isValidEntry(rowIdx+1, objectClass, fieldName, objectId, locale, trn) ) {
+                        if( isValidEntry(rowIdx+1, objectClass, fieldName, objectId, locale, trn) ) {
                         trnItem = new AmpContentTranslation();
                         trnItem.setObjectClass(objectClass);
                         trnItem.setObjectId(objectId);
@@ -254,7 +254,7 @@ public class ContentTrnImportExport extends DispatchAction {
                         trnItem.setLocale(locale);
                         trnItem.setTranslation(trn);
                         objectsForDb.add(trnItem);
-                    	}
+                        }
                     } else if (!trnItem.getTranslation().equals(trn)){ //If needs to be updated
                         trnItem.setTranslation(trn);
                         objectsForDb.add(trnItem);
@@ -271,30 +271,30 @@ public class ContentTrnImportExport extends DispatchAction {
     }
     
     private boolean isValidEntry(int rowIdx, String objectClass, String fieldName, Long objectId, String locale, String trn) throws DgException{
-    	String strErr = null; 
-    	boolean isCritical = false;
-    	try {
-    		Class<?> clazz = Class.forName(objectClass);
-    		InternationalizedPropertyDescription property = InternationalizedModelDescription.getForProperty(clazz, fieldName);
-    		if( property == null ){
-    			strErr = String.format("Cause: Field \"%s\" not found in \"%s\" class.",  fieldName, objectClass);
-    			isCritical = true;
-    		}else if (DbUtil.getObject(clazz, objectId) == null ){
-    			strErr = String.format("Cause: No record found for \"%s\" class with id=\"%d\"", objectClass, objectId);
-    		}else if (!property.field.isAnnotationPresent(TranslatableField.class)) {
-    			strErr = String.format("Cause: the field \"%s\" from class \"%s\" is not translatable", fieldName, objectClass);
-    		}// else "No content was predefined to translate, but it seems that we should allow new fields (without any content, even in "en") to be defined in the import
-    	} catch(ClassNotFoundException ex) {
-    		strErr = String.format("Cause: Class \"%s\" not found.", objectClass);
-    		isCritical = true;
-    		logger.debug(ex.getMessage());
-    	}
-    	if( strErr!=null ) {
-    		strErr = String.format("Ignoring invalid entry at row %d: (%s, %s, %d, %s, %s). %s", rowIdx, objectClass, fieldName, objectId, locale, trn, strErr);
-    		logger.warn(strErr);
-    		if (isCritical) 
-    			throw new DgException(strErr);
-    	}
-    	return strErr==null;
+        String strErr = null; 
+        boolean isCritical = false;
+        try {
+            Class<?> clazz = Class.forName(objectClass);
+            InternationalizedPropertyDescription property = InternationalizedModelDescription.getForProperty(clazz, fieldName);
+            if( property == null ){
+                strErr = String.format("Cause: Field \"%s\" not found in \"%s\" class.",  fieldName, objectClass);
+                isCritical = true;
+            }else if (DbUtil.getObject(clazz, objectId) == null ){
+                strErr = String.format("Cause: No record found for \"%s\" class with id=\"%d\"", objectClass, objectId);
+            }else if (!property.field.isAnnotationPresent(TranslatableField.class)) {
+                strErr = String.format("Cause: the field \"%s\" from class \"%s\" is not translatable", fieldName, objectClass);
+            }// else "No content was predefined to translate, but it seems that we should allow new fields (without any content, even in "en") to be defined in the import
+        } catch(ClassNotFoundException ex) {
+            strErr = String.format("Cause: Class \"%s\" not found.", objectClass);
+            isCritical = true;
+            logger.debug(ex.getMessage());
+        }
+        if( strErr!=null ) {
+            strErr = String.format("Ignoring invalid entry at row %d: (%s, %s, %d, %s, %s). %s", rowIdx, objectClass, fieldName, objectId, locale, trn, strErr);
+            logger.warn(strErr);
+            if (isCritical) 
+                throw new DgException(strErr);
+        }
+        return strErr==null;
     }
 }

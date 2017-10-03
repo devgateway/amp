@@ -13,29 +13,29 @@ package org.dgfoundation.amp.ar;
  * Implements customized ordering for sortable Collections like TreeSetS.
  */
 public abstract class SortedString implements Comparable<SortedString> {
-	protected String string;
-	
-	public SortedString(String string) {
-		this.string=string;
-	}
-	
-	/* (non-Javadoc)
-	 * @see java.lang.Comparable#compareTo(java.lang.Object)
-	 */
-	public int compareTo(SortedString o) {	
-		return this.getOrder()-o.getOrder();
-	}
+    protected String string;
+    
+    public SortedString(String string) {
+        this.string=string;
+    }
+    
+    /* (non-Javadoc)
+     * @see java.lang.Comparable#compareTo(java.lang.Object)
+     */
+    public int compareTo(SortedString o) {  
+        return this.getOrder()-o.getOrder();
+    }
 
-	public abstract int getOrder();
-	
-	public String toString() {
-		return string;
-	}
+    public abstract int getOrder();
+    
+    public String toString() {
+        return string;
+    }
 
-	public boolean equals(Object obj) {	
-		if(obj instanceof SortedString)
-			return this.string.equals(((SortedString)obj).string);
-		return false;
-	}
-	
+    public boolean equals(Object obj) { 
+        if(obj instanceof SortedString)
+            return this.string.equals(((SortedString)obj).string);
+        return false;
+    }
+    
 }

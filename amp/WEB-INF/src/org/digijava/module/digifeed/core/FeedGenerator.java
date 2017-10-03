@@ -22,20 +22,20 @@ import javax.xml.bind.Marshaller;
  */
 public class FeedGenerator 
 {
-	protected Object tree;
-	protected FeedInfo feedInfo;
-	public FeedGenerator(FeedInfo feedInfo) {
-		this.feedInfo=feedInfo;
-	}
-	
-	public void generateXML(Object tree,OutputStream ret) throws JAXBException  {
-		JAXBContext jx = JAXBContext.newInstance(feedInfo.getJaxbPackage());
-		Marshaller m=jx.createMarshaller();
-		m.setProperty(Marshaller.JAXB_ENCODING,feedInfo.getEncoding());
-		m.marshal(tree,new BufferedOutputStream(ret));
-	}
-	
-	public void generateDBObjects(InputStream s) throws JAXBException {
-		
-	}
+    protected Object tree;
+    protected FeedInfo feedInfo;
+    public FeedGenerator(FeedInfo feedInfo) {
+        this.feedInfo=feedInfo;
+    }
+    
+    public void generateXML(Object tree,OutputStream ret) throws JAXBException  {
+        JAXBContext jx = JAXBContext.newInstance(feedInfo.getJaxbPackage());
+        Marshaller m=jx.createMarshaller();
+        m.setProperty(Marshaller.JAXB_ENCODING,feedInfo.getEncoding());
+        m.marshal(tree,new BufferedOutputStream(ret));
+    }
+    
+    public void generateDBObjects(InputStream s) throws JAXBException {
+        
+    }
 }

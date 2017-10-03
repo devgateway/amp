@@ -338,8 +338,8 @@
 <field:display feature="Identification" name="Project Description"></field:display>
 <field:display feature="Identification" name="Contracting Arrangements"></field:display>
 <field:display name="Project Impact" feature="Identification"></field:display> 
-<field:display feature="Identification" name="Project Comments"></field:display> 
-<field:display feature="Identification" name="Objective Assumption"></field:display> 
+<field:display feature="Identification" name="Project Comments"></field:display>
+<field:display feature="Identification" name="Objective Assumption"></field:display>
 <field:display feature="Identification" name="Objective Comments"></field:display> 
 <field:display feature="Identification" name="Objective Objectively Verifiable Indicators"></field:display> 
 <field:display feature="Identification" name="Objective Verification"></field:display> 
@@ -966,6 +966,7 @@ deleted 6 fields, do not reinsert
 <field:display name="Add Donor Button" feature="Donors"></field:display>
 <field:display name="Remove Donor Button" feature="Donors"></field:display>
 <feature:display name="Computed Fields"  module="Report Generator"></feature:display>
+<feature:display name="Performance Monitoring"  module="Report Generator"></feature:display>
 <feature:display name="Save and Open Button"  module="Report Generator"></feature:display>
 <feature:display name="Also show pledges checkbox" module="Report and Tab Options"></feature:display>
 <feature:display name="Public View Checkbox" module="Report and Tab Options"></feature:display>
@@ -985,6 +986,7 @@ deleted 6 fields, do not reinsert
 <field:display name="Percentage of Disbursement" feature="Computed Fields"></field:display>
 <field:display name="Commitment Gap" feature="Computed Fields"></field:display>
 <field:display name="Calculated Project Life" feature="Computed Fields"></field:display>
+<field:display name="Performance Alert Level" feature="Performance Monitoring"></field:display>
 
 <field:display name="Beneficiary Agency Groups" feature="Beneficiary Agency"></field:display> 
 <field:display name="Beneficiary Agency  Department/Division"  feature="Beneficiary Agency"></field:display>
@@ -1083,6 +1085,7 @@ deleted 6 fields, do not reinsert
 <module:display name="Activity Preview" parentModule="PUBLIC VIEW"></module:display>
 <feature:display name="Contacts" module="Activity Preview"></feature:display>
 <feature:display name="Version History" module="Activity Preview"></feature:display>
+<field:display name="Show Change Summary" feature="Version History"></field:display>
 
 <module:display name="Show Editable Export Formats" parentModule="PUBLIC VIEW"></module:display>
 <module:display name="Public Reports and Tabs" parentModule="PUBLIC VIEW"></module:display>

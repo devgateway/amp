@@ -14,42 +14,42 @@ import org.digijava.module.aim.annotations.interchange.Interchangeable;
 
 public class AmpAhsurveyIndicator implements Serializable {
 
-	//IATI-check: to be ignored
-	
-//	@Interchangeable(fieldTitle="ID")
+    //IATI-check: to be ignored
+    
+//  @Interchangeable(fieldTitle="ID")
     private Long ampIndicatorId;
-//	@Interchangeable(fieldTitle="Name", importable = true)
+//  @Interchangeable(fieldTitle="Name", importable = true)
     private String name;
-//	@Interchangeable(fieldTitle="Total Questions", importable = true)
+//  @Interchangeable(fieldTitle="Total Questions", importable = true)
     private Integer totalQuestions;
-//	@Interchangeable(fieldTitle="Indicator Number", importable = true)
+//  @Interchangeable(fieldTitle="Indicator Number", importable = true)
     private Integer indicatorNumber;
-//	@Interchangeable(fieldTitle="Indicator Code", importable = true)
+//  @Interchangeable(fieldTitle="Indicator Code", importable = true)
     private String indicatorCode;
-//	@Interchangeable(fieldTitle="Status", importable = true)
+//  @Interchangeable(fieldTitle="Status", importable = true)
     private String status;
-//	@Interchangeable(fieldTitle="Questions", pickIdOnly=true, importable = true)
+//  @Interchangeable(fieldTitle="Questions", pickIdOnly=true, importable = true)
     private Set<AmpAhsurveyQuestion> questions;
-//	@Interchangeable(fieldTitle="Calc Formulas", importable = true)
+//  @Interchangeable(fieldTitle="Calc Formulas", importable = true)
     private Set<AmpAhsurveyIndicatorCalcFormula> calcFormulas;
 
     
     public static class AhsurveyIndicatorComparator implements Comparator<AmpAhsurveyIndicator>, Serializable {
 
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 1L;
 
-		@Override
-		public int compare(AmpAhsurveyIndicator arg0, AmpAhsurveyIndicator arg1) {
-			if (arg0.getIndicatorNumber() != null && arg1.getIndicatorNumber() != null){
-				return arg0.getIndicatorNumber().compareTo(arg1.getIndicatorNumber());
-			}
-			return arg0.hashCode()-arg1.hashCode();
-		}
-		
-	}
+        @Override
+        public int compare(AmpAhsurveyIndicator arg0, AmpAhsurveyIndicator arg1) {
+            if (arg0.getIndicatorNumber() != null && arg1.getIndicatorNumber() != null){
+                return arg0.getIndicatorNumber().compareTo(arg1.getIndicatorNumber());
+            }
+            return arg0.hashCode()-arg1.hashCode();
+        }
+        
+    }
     
     
     /**

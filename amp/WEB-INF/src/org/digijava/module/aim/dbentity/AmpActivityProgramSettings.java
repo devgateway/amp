@@ -58,7 +58,7 @@ public class AmpActivityProgramSettings implements Serializable, Identifiable {
 
         public void setDefaultHierarchyId(Long id) {
                 if (id != null && id != new Long( -1)) {
-                        this.defaultHierarchy = ProgramUtil.getThemeById(id);						
+                        this.defaultHierarchy = ProgramUtil.getThemeById(id);                       
                 }
                 else {
                         this.defaultHierarchy = null;
@@ -73,10 +73,10 @@ public class AmpActivityProgramSettings implements Serializable, Identifiable {
                 this.defaultHierarchy = null;
         }
 
-		@Override
-		public Object getIdentifier() {
-			return ampProgramSettingsId;
-//			return null;
-		}
+        @Override
+        public Object getIdentifier() {
+            return ampProgramSettingsId;
+//          return null;
+        }
 
 }

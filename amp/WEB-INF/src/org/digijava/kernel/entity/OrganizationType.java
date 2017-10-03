@@ -26,7 +26,7 @@ package org.digijava.kernel.entity;
 public class OrganizationType {
 
     private String id;
-	private String type;
+    private String type;
 
     public OrganizationType() {}
 
@@ -39,20 +39,20 @@ public class OrganizationType {
         this.id = id;
     }
 
-	public String getType() {
-		return type;
-	}
+    public String getType() {
+        return type;
+    }
 
-	public void setType(String type) {
-		this.type = type;
-	}
+    public void setType(String type) {
+        this.type = type;
+    }
 
-	public String getId() {
-		return id;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
 }

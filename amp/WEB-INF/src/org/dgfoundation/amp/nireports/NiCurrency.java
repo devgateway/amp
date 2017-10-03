@@ -6,7 +6,7 @@ package org.dgfoundation.amp.nireports;
  *
  */
 public interface NiCurrency {
-	public long getId();
-	public String getCurrencyName();
-	public String getCurrencyCode();
+    public long getId();
+    public String getCurrencyName();
+    public String getCurrencyCode();
 }

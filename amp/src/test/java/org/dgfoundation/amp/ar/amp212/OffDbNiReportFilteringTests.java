@@ -14,20 +14,20 @@ import org.junit.BeforeClass;
  *
  */
 public class OffDbNiReportFilteringTests extends FilteringSanityChecks {
-	
-	HardcodedReportsTestSchema schema = new HardcodedReportsTestSchema();
-	public OffDbNiReportFilteringTests() {
-		nrRunReports = 0;
-	}
-	
-	
-	@Override
-	protected NiReportExecutor getNiExecutor(List<String> activityNames) {
-		return getOfflineExecutor(activityNames);
-	}
+    
+    HardcodedReportsTestSchema schema = new HardcodedReportsTestSchema();
+    public OffDbNiReportFilteringTests() {
+        nrRunReports = 0;
+    }
+    
+    
+    @Override
+    protected NiReportExecutor getNiExecutor(List<String> activityNames) {
+        return getOfflineExecutor(activityNames);
+    }
 
-	@BeforeClass
-	public static void setUp() {
-		// this empty method is used as a shadow for org.dgfoundation.amp.mondrian.ReportingTestCase.setUp()
-	}
+    @BeforeClass
+    public static void setUp() {
+        // this empty method is used as a shadow for org.dgfoundation.amp.mondrian.ReportingTestCase.setUp()
+    }
 }

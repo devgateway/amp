@@ -98,15 +98,15 @@ public class ShowCalendarItemDetails
             }
             calendForm.setSourceUrl(event.getSourceUrl());
 
-	    if (event.getCountry() != null) {
-	      calendForm.setCountry(event.getCountry());
-	      calendForm.setCountryName(event.getCountry());
-	      calendForm.setCountryKey((String)("cn:"+event.getCountry()));
-	    } else {
-	      calendForm.setCountry(Calendar.noneCountryIso);
-	      calendForm.setCountryName(Calendar.noneCountryName);
-	      calendForm.setCountryKey((String)("cn:"+Calendar.noneCountryIso));
-	    }
+        if (event.getCountry() != null) {
+          calendForm.setCountry(event.getCountry());
+          calendForm.setCountryName(event.getCountry());
+          calendForm.setCountryKey((String)("cn:"+event.getCountry()));
+        } else {
+          calendForm.setCountry(Calendar.noneCountryIso);
+          calendForm.setCountryName(Calendar.noneCountryName);
+          calendForm.setCountryKey((String)("cn:"+Calendar.noneCountryIso));
+        }
 
 
             calendForm.setLocation(event.getLocation());

@@ -10,17 +10,17 @@ import org.digijava.module.aim.util.Output;
 
 public class AmpActivitySector implements Versionable, Serializable, Cloneable {
 
-	private Long ampActivitySectorId;
-	
-	@Interchangeable(fieldTitle="Activity ID", pickIdOnly = true)
-	private AmpActivityVersion activityId;
-	
-	@Interchangeable(fieldTitle="Sector ID", importable = true , pickIdOnly = true, uniqueConstraint = true, required = ActivityEPConstants.REQUIRED_ALWAYS)
-	private AmpSector sectorId;
-	
-	@Interchangeable(fieldTitle="Sector Percentage", importable = true, percentageConstraint = true, 
-			fmPath = FMVisibility.PARENT_FM + "/sectorPercentage")
-	private Float sectorPercentage;
+    private Long ampActivitySectorId;
+    
+    @Interchangeable(fieldTitle="Activity ID", pickIdOnly = true)
+    private AmpActivityVersion activityId;
+    
+    @Interchangeable(fieldTitle="Sector ID", importable = true , pickIdOnly = true, uniqueConstraint = true, required = ActivityEPConstants.REQUIRED_ALWAYS)
+    private AmpSector sectorId;
+    
+    @Interchangeable(fieldTitle="Sector Percentage", importable = true, percentageConstraint = true, 
+            fmPath = FMVisibility.PARENT_FM + "/sectorPercentage")
+    private Float sectorPercentage;
         
     private AmpClassificationConfiguration classificationConfig;
 
@@ -32,94 +32,94 @@ public class AmpActivitySector implements Versionable, Serializable, Cloneable {
         this.classificationConfig = classificationConfig;
     }
 
-	public Long getAmpActivitySectorId() {
-		return ampActivitySectorId;
-	}
+    public Long getAmpActivitySectorId() {
+        return ampActivitySectorId;
+    }
 
-	public void setAmpActivitySectorId(Long ampActivitySectorId) {
-		this.ampActivitySectorId = ampActivitySectorId;
-	}
+    public void setAmpActivitySectorId(Long ampActivitySectorId) {
+        this.ampActivitySectorId = ampActivitySectorId;
+    }
 
-	public AmpActivityVersion getActivityId() {
-		return activityId;
-	}
+    public AmpActivityVersion getActivityId() {
+        return activityId;
+    }
 
-	public void setActivityId(AmpActivityVersion activityId) {
-		this.activityId = activityId;
-	}
+    public void setActivityId(AmpActivityVersion activityId) {
+        this.activityId = activityId;
+    }
 
-	public AmpSector getSectorId() {
-		return sectorId;
-	}
+    public AmpSector getSectorId() {
+        return sectorId;
+    }
 
-	public void setSectorId(AmpSector sectorId) {
-		this.sectorId = sectorId;
-	}
+    public void setSectorId(AmpSector sectorId) {
+        this.sectorId = sectorId;
+    }
 
-	public Float getSectorPercentage() {
-		return sectorPercentage;
-	}
+    public Float getSectorPercentage() {
+        return sectorPercentage;
+    }
 
-	public void setSectorPercentage(Float sectorPercentage) {
-		this.sectorPercentage = sectorPercentage;
-	}
-	
-	public String toString() {
-		return sectorId!=null?sectorId.getName():"";
-	}
+    public void setSectorPercentage(Float sectorPercentage) {
+        this.sectorPercentage = sectorPercentage;
+    }
+    
+    public String toString() {
+        return sectorId!=null?sectorId.getName():"";
+    }
 
-	@Override
-	public boolean equalsForVersioning(Object obj) {
-		AmpActivitySector aux = (AmpActivitySector) obj;
-		if (this.classificationConfig.equals(aux.getClassificationConfig())
-				&& this.sectorId.getAmpSectorId().equals(aux.getSectorId().getAmpSectorId())) {
-			return true;
-		}
-		return false;
-	}
-	
-	public Object getValue() {
-		return this.sectorPercentage;
-	}
+    @Override
+    public boolean equalsForVersioning(Object obj) {
+        AmpActivitySector aux = (AmpActivitySector) obj;
+        if (this.classificationConfig.equals(aux.getClassificationConfig())
+                && this.sectorId.getAmpSectorId().equals(aux.getSectorId().getAmpSectorId())) {
+            return true;
+        }
+        return false;
+    }
+    
+    public Object getValue() {
+        return this.sectorPercentage;
+    }
 
-	@Override
-	public Output getOutput() {
-		Output out = new Output();
-		out.setOutputs(new ArrayList<Output>());
-		String scheme = "[" + this.classificationConfig.getClassification().getSecSchemeName() + "]";
-		String name = "";
-		if (this.sectorId.getParentSectorId() != null) {
-			name = " - " + "[" + this.sectorId.getParentSectorId().toString() + "]";
-			if (this.sectorId.getParentSectorId().getParentSectorId() != null) {
-				name = " - " + "[" + this.sectorId.getParentSectorId().getParentSectorId().toString() + "]" + name;
-				if (this.sectorId.getParentSectorId().getParentSectorId().getParentSectorId() != null) {
-					name = " - " + "["
-							+ this.sectorId.getParentSectorId().getParentSectorId().getParentSectorId().toString()
-							+ "]" + name;
-				}
-			} else {
-				name += " - [" + this.sectorId.getName() + "]";
-			}
-		} else {
-			name += " - [" + this.sectorId.getName() + "]";
-		}
-		out.getOutputs().add(new Output(null, new String[] { scheme + name + " - Percentage: "}, new Object[] { this.sectorPercentage }));
-		return out;
-	}
-	
-	@Override
-	public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
-		AmpActivitySector aux = (AmpActivitySector) clone();
-		aux.activityId = newActivity;
-		aux.ampActivitySectorId = null;
-		//aux.sectorId = (AmpSector) aux.sectorId.clone();
-		//this.sectorId.setAmpSectorId(null);
-		return aux;
-	}
+    @Override
+    public Output getOutput() {
+        Output out = new Output();
+        out.setOutputs(new ArrayList<Output>());
+        String scheme = "[" + this.classificationConfig.getClassification().getSecSchemeName() + "]";
+        String name = "";
+        if (this.sectorId.getParentSectorId() != null) {
+            name = " - " + "[" + this.sectorId.getParentSectorId().toString() + "]";
+            if (this.sectorId.getParentSectorId().getParentSectorId() != null) {
+                name = " - " + "[" + this.sectorId.getParentSectorId().getParentSectorId().toString() + "]" + name;
+                if (this.sectorId.getParentSectorId().getParentSectorId().getParentSectorId() != null) {
+                    name = " - " + "["
+                            + this.sectorId.getParentSectorId().getParentSectorId().getParentSectorId().toString()
+                            + "]" + name;
+                }
+            } else {
+                name += " - [" + this.sectorId.getName() + "]";
+            }
+        } else {
+            name += " - [" + this.sectorId.getName() + "]";
+        }
+        out.getOutputs().add(new Output(null, new String[] { scheme + name + " - Percentage: "}, new Object[] { this.sectorPercentage }));
+        return out;
+    }
+    
+    @Override
+    public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
+        AmpActivitySector aux = (AmpActivitySector) clone();
+        aux.activityId = newActivity;
+        aux.ampActivitySectorId = null;
+        //aux.sectorId = (AmpSector) aux.sectorId.clone();
+        //this.sectorId.setAmpSectorId(null);
+        return aux;
+    }
 
-	@Override
-	public Object clone() throws CloneNotSupportedException {
-		// TODO Auto-generated method stub
-		return super.clone();
-	}
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        // TODO Auto-generated method stub
+        return super.clone();
+    }
 }

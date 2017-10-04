@@ -35,70 +35,70 @@ import org.digijava.module.aim.util.ComponentsUtil;
  * since Oct 28, 2010
  */
 public class AmpComponentIdentificationFormTableFeature extends AmpSubsectionFeaturePanel {
-	private boolean titleSelected;
-	private boolean typeSelected;
-	private WebMarkupContainer feedbackContainer;
-	private Label feedbackLabel;
+    private boolean titleSelected;
+    private boolean typeSelected;
+    private WebMarkupContainer feedbackContainer;
+    private Label feedbackLabel;
 
-	/**
-	 * @param id
-	 * @param componentsFundingsSetModel 
-	 * @param componentFundingSection 
-	 * @param fmName
-	 * @param contractNameLabel 
-	 * @param am
-	 * @throws Exception
-	 */
-	public AmpComponentIdentificationFormTableFeature(String id, IModel<AmpActivityVersion> activityModel, 
-			final IModel<AmpComponent> componentModel, final PropertyModel<Set<AmpComponentFunding>> componentsFundingsSetModel, String fmName, final Label componentNameLabel) throws Exception{
-		super(id, fmName, activityModel, false, true);
-		
-		final IModel<Set<AmpComponent>> setModel = new PropertyModel<Set<AmpComponent>>(activityModel, "components");
+    /**
+     * @param id
+     * @param componentsFundingsSetModel 
+     * @param componentFundingSection 
+     * @param fmName
+     * @param contractNameLabel 
+     * @param am
+     * @throws Exception
+     */
+    public AmpComponentIdentificationFormTableFeature(String id, IModel<AmpActivityVersion> activityModel, 
+            final IModel<AmpComponent> componentModel, final PropertyModel<Set<AmpComponentFunding>> componentsFundingsSetModel, String fmName, final Label componentNameLabel) throws Exception{
+        super(id, fmName, activityModel, false, true);
+        
+        final IModel<Set<AmpComponent>> setModel = new PropertyModel<Set<AmpComponent>>(activityModel, "components");
 
 
-		AmpSelectFieldPanel<AmpComponentType> compTypes = new AmpSelectFieldPanel<AmpComponentType>("type", new PropertyModel<AmpComponentType>(componentModel, "type"),
-					new LoadableDetachableModel<List<AmpComponentType>>() {
-						@Override
-						protected List<AmpComponentType> load() {
-							return new ArrayList(ComponentsUtil.getAmpComponentTypes(true));
-						}
-					}, "Component Type", false, false, new ChoiceRenderer<AmpComponentType>("name")){
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
-			@Override
-			public boolean dropDownChoiceIsDisabled(
-					AmpComponentType object,
-					int index,
-					String selected) {
-				if (object.getSelectable())
-					return false;
-				else
-					return true;
-			}
-		};
-		compTypes.setOutputMarkupId(true);
-		compTypes.getChoiceContainer().setRequired(true);
-		compTypes.getChoiceContainer().add(new AttributeAppender("style", true, new Model("max-width: 300px"), ";"));
-		add(compTypes);
-		
-		final AmpTextFieldPanel<String> name = new AmpTextFieldPanel<String>("name", new PropertyModel<String>(componentModel, "title"), "Component Title");
-		name.setTextContainerDefaultMaxSize();
-		name.setOutputMarkupId(true);
-		name.getTextContainer().setRequired(true);
-		name.getTextContainer().add(new AjaxFormComponentUpdatingBehavior("onblur"){
-			@Override
-			protected void onUpdate(AjaxRequestTarget target) {
-				target.add(componentNameLabel);
-			}
-		});
-		name.getTextContainer().add(new AmpUniqueComponentTitleValidator(new PropertyModel<AmpActivityGroup>(activityModel, "ampActivityGroup")));
-		add(name);
+        AmpSelectFieldPanel<AmpComponentType> compTypes = new AmpSelectFieldPanel<AmpComponentType>("type", new PropertyModel<AmpComponentType>(componentModel, "type"),
+                    new LoadableDetachableModel<List<AmpComponentType>>() {
+                        @Override
+                        protected List<AmpComponentType> load() {
+                            return new ArrayList(ComponentsUtil.getAmpComponentTypes(true));
+                        }
+                    }, "Component Type", false, false, new ChoiceRenderer<AmpComponentType>("name")){
+            /**
+             * 
+             */
+            private static final long serialVersionUID = 1L;
+            @Override
+            public boolean dropDownChoiceIsDisabled(
+                    AmpComponentType object,
+                    int index,
+                    String selected) {
+                if (object.getSelectable())
+                    return false;
+                else
+                    return true;
+            }
+        };
+        compTypes.setOutputMarkupId(true);
+        compTypes.getChoiceContainer().setRequired(true);
+        compTypes.getChoiceContainer().add(new AttributeAppender("style", true, new Model("max-width: 300px"), ";"));
+        add(compTypes);
+        
+        final AmpTextFieldPanel<String> name = new AmpTextFieldPanel<String>("name", new PropertyModel<String>(componentModel, "title"), "Component Title");
+        name.setTextContainerDefaultMaxSize();
+        name.setOutputMarkupId(true);
+        name.getTextContainer().setRequired(true);
+        name.getTextContainer().add(new AjaxFormComponentUpdatingBehavior("onblur"){
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                target.add(componentNameLabel);
+            }
+        });
+        name.getTextContainer().add(new AmpUniqueComponentTitleValidator(new PropertyModel<AmpActivityGroup>(activityModel, "ampActivityGroup")));
+        add(name);
 
-		AmpTextAreaFieldPanel description = new AmpTextAreaFieldPanel("description", new PropertyModel(componentModel, "description"), "Description", false, false, false);
-		add(description);
+        AmpTextAreaFieldPanel description = new AmpTextAreaFieldPanel("description", new PropertyModel(componentModel, "description"), "Description", false, false, false);
+        add(description);
 
-	}
+    }
 
 }

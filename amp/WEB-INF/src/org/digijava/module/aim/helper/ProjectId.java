@@ -2,13 +2,13 @@ package org.digijava.module.aim.helper;
 
 public class ProjectId {
 
-		  private String projectId;
+          private String projectId;
 
-		  public void setProjectId(String id) {
-					 projectId = id;
-		  }
+          public void setProjectId(String id) {
+                     projectId = id;
+          }
 
-		  public String getProjectId() {
-					 return projectId;
-		  }
+          public String getProjectId() {
+                     return projectId;
+          }
 }

@@ -99,7 +99,7 @@ public class SaveText
         if (exists) {
             PersistenceManager.getSession().update(editor);
         } else {
-        	PersistenceManager.getSession().save(editor);
+            PersistenceManager.getSession().save(editor);
         }
 
         return new ActionForward((formBean.getReturnUrl() == null ? "/" : formBean.getReturnUrl()), true);

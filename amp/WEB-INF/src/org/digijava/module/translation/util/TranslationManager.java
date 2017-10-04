@@ -646,8 +646,8 @@ public class TranslationManager {
     
     
     public static List<String[]> getLocale(Session session) {
-    	String righPart = getRightPart(RequestUtils.getSite(TLSUtils.getRequest()), DgUtil.isLocalTranslatorForSite(TLSUtils.getRequest()));
-    	return getLocale(session,righPart);
+        String righPart = getRightPart(RequestUtils.getSite(TLSUtils.getRequest()), DgUtil.isLocalTranslatorForSite(TLSUtils.getRequest()));
+        return getLocale(session,righPart);
     }
     
     /**
@@ -656,18 +656,18 @@ public class TranslationManager {
      * @param rightPart
      * @return List[locale.code, locale.name]
      */
-	public static List<String[]> getLocale(Session session, String rightPart) {
-		String queryString = localeQuery + rightPart;
-		logger.debug(queryString);
+    public static List<String[]> getLocale(Session session, String rightPart) {
+        String queryString = localeQuery + rightPart;
+        logger.debug(queryString);
 
-		Query query = session.createQuery(queryString);
-		query.setCacheable(true);
+        Query query = session.createQuery(queryString);
+        query.setCacheable(true);
 
-		List<Object[]> locales = query.list();
-		List<String[]> res = new ArrayList<>();
-		for(Object[] entry:locales)
-			res.add(new String[] {(String) entry[0], (String) entry[1]});
-		
-		return res;
-	}
+        List<Object[]> locales = query.list();
+        List<String[]> res = new ArrayList<>();
+        for(Object[] entry:locales)
+            res.add(new String[] {(String) entry[0], (String) entry[1]});
+        
+        return res;
+    }
 }

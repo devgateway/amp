@@ -6,15 +6,15 @@ package org.dgfoundation.amp.newreports;
  *
  */
 public enum GroupingCriteria {
-	
-	GROUPING_YEARLY,
-	
-	GROUPING_QUARTERLY,
-	
-	GROUPING_MONTHLY,
-	
-	/**
-	 * only show totals
-	 */
-	GROUPING_TOTALS_ONLY
+    
+    GROUPING_YEARLY,
+    
+    GROUPING_QUARTERLY,
+    
+    GROUPING_MONTHLY,
+    
+    /**
+     * only show totals
+     */
+    GROUPING_TOTALS_ONLY
 }

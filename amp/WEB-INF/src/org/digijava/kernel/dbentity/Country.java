@@ -38,25 +38,25 @@ public class Country
     implements Serializable {
 
     /** identifier field */
-	@Interchangeable(fieldTitle="ISO")
+    @Interchangeable(fieldTitle="ISO")
     private String iso;
 
     /** persistent fields */
-	@Interchangeable(fieldTitle="Country ID")
+    @Interchangeable(fieldTitle="Country ID")
     private Long countryId;
-	@Interchangeable(fieldTitle="Country Name")
+    @Interchangeable(fieldTitle="Country Name")
     private String countryName;
-	@Interchangeable(fieldTitle="ISO3")
+    @Interchangeable(fieldTitle="ISO3")
     private String iso3;
-	@Interchangeable(fieldTitle="Stat")
+    @Interchangeable(fieldTitle="Stat")
     private String stat;
-	@Interchangeable(fieldTitle="Show Country")
+    @Interchangeable(fieldTitle="Show Country")
     private String showCtry;
-	@Interchangeable(fieldTitle="Dec Contry Flag")
+    @Interchangeable(fieldTitle="Dec Contry Flag")
     private String decCtryFlag;
-	@Interchangeable(fieldTitle="Message Language Key")
+    @Interchangeable(fieldTitle="Message Language Key")
     private String messageLangKey;
-	@Interchangeable(fieldTitle="Available")
+    @Interchangeable(fieldTitle="Available")
     private boolean available;
 
     /** full constructor */

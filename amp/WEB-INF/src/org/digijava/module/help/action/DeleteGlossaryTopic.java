@@ -25,26 +25,26 @@ import org.digijava.module.help.util.GlossaryUtil;
  */
 public class DeleteGlossaryTopic extends Action {
 
-	@Override
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
+    @Override
+    public ActionForward execute(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
 
-		HelpForm hform = (HelpForm) form;
-		//get topic by received ID
-		HelpTopic topic = GlossaryUtil.getGlosaryTopic(hform.getHelpTopicId());
-		//save key and siteId
-		String editorKey = topic.getBodyEditKey();
-		//delete topic
-		GlossaryUtil.deleteGlossaryTopic(topic);
-		//if no errors thrown, delete all editors for deleted topic.
-		List<Editor> editors = DbUtil.getEditorList(editorKey, topic.getSite());
-		if (editors!=null && editors.size()>0){
-			for (Editor editor : editors) {
-				DbUtil.deleteEditor(editor);
-			}
-		}
-		return null;
-	}
+        HelpForm hform = (HelpForm) form;
+        //get topic by received ID
+        HelpTopic topic = GlossaryUtil.getGlosaryTopic(hform.getHelpTopicId());
+        //save key and siteId
+        String editorKey = topic.getBodyEditKey();
+        //delete topic
+        GlossaryUtil.deleteGlossaryTopic(topic);
+        //if no errors thrown, delete all editors for deleted topic.
+        List<Editor> editors = DbUtil.getEditorList(editorKey, topic.getSite());
+        if (editors!=null && editors.size()>0){
+            for (Editor editor : editors) {
+                DbUtil.deleteEditor(editor);
+            }
+        }
+        return null;
+    }
 
 }

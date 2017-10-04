@@ -10,16 +10,16 @@ import org.dgfoundation.amp.nireports.ImmutablePair;
  * 
  */
 public class MetaInfo extends ImmutablePair<String, Object> {
-	
-	public MetaInfo(String category, Object value) {
-		super(category, value);
-	}
-	
-	public String getCategory() {
-		return this.k;
-	}
-	
-	public Object getValue() {
-		return this.v;
-	}
+    
+    public MetaInfo(String category, Object value) {
+        super(category, value);
+    }
+    
+    public String getCategory() {
+        return this.k;
+    }
+    
+    public Object getValue() {
+        return this.v;
+    }
 }

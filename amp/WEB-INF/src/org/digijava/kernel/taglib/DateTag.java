@@ -48,9 +48,9 @@ import org.digijava.kernel.util.RequestUtils;
 public class DateTag
     extends TagSupport {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private static Logger logger = Logger.getLogger(DateTag.class);
+    private static Logger logger = Logger.getLogger(DateTag.class);
 
     private String format;
     private String formatKey;
@@ -70,7 +70,7 @@ public class DateTag
         }
         // Look up the requested property value
         Object value =
-        	TagUtils.getInstance().lookup(pageContext, name,
+            TagUtils.getInstance().lookup(pageContext, name,
             property, scope);
         if (value == null) {
             logger.debug("No value defined for bean name: " + name + " property: " + property + " scope: " + scope);

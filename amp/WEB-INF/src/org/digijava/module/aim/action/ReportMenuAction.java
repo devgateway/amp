@@ -31,85 +31,85 @@ import org.digijava.module.gateperm.core.GatePermConst;
 import org.hibernate.Session;
 
 public class ReportMenuAction extends DispatchAction {
-	private static Logger logger = Logger.getLogger(ReportMenuAction.class);
+    private static Logger logger = Logger.getLogger(ReportMenuAction.class);
 
-	public ActionForward getOptions(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
+    public ActionForward getOptions(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
 
-		try {
+        try {
 
-			HashMap<String, String> options = new HashMap<String, String>();
+            HashMap<String, String> options = new HashMap<String, String>();
 
-			HttpSession session = request.getSession();
+            HttpSession session = request.getSession();
 
-			Long activityId = Long.parseLong(request.getParameter("id"));
+            Long activityId = Long.parseLong(request.getParameter("id"));
 
-			TeamMember teamMember = (TeamMember) session.getAttribute("currentMember");
-			AmpTeam currentTeam = null;
-			if (teamMember != null)
-				currentTeam = TeamUtil.getAmpTeam(teamMember.getTeamId());
+            TeamMember teamMember = (TeamMember) session.getAttribute("currentMember");
+            AmpTeam currentTeam = null;
+            if (teamMember != null)
+                currentTeam = TeamUtil.getAmpTeam(teamMember.getTeamId());
 
-			Session hsession = null;
+            Session hsession = null;
 
-			hsession = PersistenceManager.getSession();
-			AmpActivityVersion activity = null;
-			boolean gatePermEditAllowed = false;
-			boolean isDraft, needsApproval, isUserTeamLead;
-			isDraft = needsApproval = isUserTeamLead = false;
-			if (activityId != null) {
-				activity = (AmpActivityVersion) hsession.load(AmpActivityVersion.class, activityId);
-				if (activity != null) {
-					boolean hasTeamLead = true;
-					if (currentTeam != null) {
-						AmpTeamMember teamHead = TeamMemberUtil.getTeamHead(currentTeam.getAmpTeamId());
-						isUserTeamLead = (teamHead.getAmpTeamMemId().compareTo(teamMember.getMemberId()) == 0) ;
-					}
-					if (activity.getDraft() != null && activity.getDraft()) {
-						isDraft = true;
-						// It's Draft Activity
-					} else {
-						// It's not draft activity
-						if (Constants.ACTIVITY_NEEDS_APPROVAL_STATUS
-								.contains(activity.getApprovalStatus())) {
-							// Needs Approval
-							needsApproval = true;
-						}
-					}
-				}
-			}
-			options.put(TranslatorWorker.translateText("Details"), "/aim/viewActivityPreview.do~public=true~pageId=2~activityId=");
-			if (needsApproval && !isDraft && isUserTeamLead) {
-				options.put(TranslatorWorker.translateText("Validate"), "/wicket/onepager/activity/");
-			} else {
-				options.put(TranslatorWorker.translateText("Edit"),	"/wicket/onepager/activity/");
-			}
+            hsession = PersistenceManager.getSession();
+            AmpActivityVersion activity = null;
+            boolean gatePermEditAllowed = false;
+            boolean isDraft, needsApproval, isUserTeamLead;
+            isDraft = needsApproval = isUserTeamLead = false;
+            if (activityId != null) {
+                activity = (AmpActivityVersion) hsession.load(AmpActivityVersion.class, activityId);
+                if (activity != null) {
+                    boolean hasTeamLead = true;
+                    if (currentTeam != null) {
+                        AmpTeamMember teamHead = TeamMemberUtil.getTeamHead(currentTeam.getAmpTeamId());
+                        isUserTeamLead = (teamHead.getAmpTeamMemId().compareTo(teamMember.getMemberId()) == 0) ;
+                    }
+                    if (activity.getDraft() != null && activity.getDraft()) {
+                        isDraft = true;
+                        // It's Draft Activity
+                    } else {
+                        // It's not draft activity
+                        if (Constants.ACTIVITY_NEEDS_APPROVAL_STATUS
+                                .contains(activity.getApprovalStatus())) {
+                            // Needs Approval
+                            needsApproval = true;
+                        }
+                    }
+                }
+            }
+            options.put(TranslatorWorker.translateText("Details"), "/aim/viewActivityPreview.do~public=true~pageId=2~activityId=");
+            if (needsApproval && !isDraft && isUserTeamLead) {
+                options.put(TranslatorWorker.translateText("Validate"), "/wicket/onepager/activity/");
+            } else {
+                options.put(TranslatorWorker.translateText("Edit"), "/wicket/onepager/activity/");
+            }
 
-			StringBuffer output = new StringBuffer();
-			output.append("<options>");
-			Set<String> key = options.keySet();
-			for (String theKey : key) {
-				output.append("<option url='");
-				output.append(options.get(theKey));
-				output.append("'>");
+            StringBuffer output = new StringBuffer();
+            output.append("<options>");
+            Set<String> key = options.keySet();
+            for (String theKey : key) {
+                output.append("<option url='");
+                output.append(options.get(theKey));
+                output.append("'>");
 
-				output.append(theKey);
-				output.append("</option>");
-			}
+                output.append(theKey);
+                output.append("</option>");
+            }
 
-			response.setContentType("text/xml");
-			OutputStreamWriter outputStream = new OutputStreamWriter(
-					response.getOutputStream());
-			PrintWriter out = new PrintWriter(outputStream, true);
+            response.setContentType("text/xml");
+            OutputStreamWriter outputStream = new OutputStreamWriter(
+                    response.getOutputStream());
+            PrintWriter out = new PrintWriter(outputStream, true);
 
-			output.append("</options>");
-			out.print(output.toString());
-			outputStream.close();
-			return null;
+            output.append("</options>");
+            out.print(output.toString());
+            outputStream.close();
+            return null;
 
-		} catch (Exception e) {
-			logger.debug("Exception " + e.getMessage());
-		}
-		return null;
-	}
+        } catch (Exception e) {
+            logger.debug("Exception " + e.getMessage());
+        }
+        return null;
+    }
 }

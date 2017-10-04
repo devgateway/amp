@@ -33,133 +33,133 @@ import org.digijava.module.gateperm.util.PermissionUtil;
  * @author aartimon@dginternational.org since Jul 4, 2012
  */
 public class AmpFundingGroupFeaturePanel extends AmpFeaturePanel<AmpOrganisation> {
-	private static final long serialVersionUID = 1L;
-	private ListEditor<AmpFunding> list;
-	private IModel<AmpOrganisation> fundingOrgModel;
-	private IModel<AmpRole> fundingRoleModel;
-	private Integer tabIndex;
+    private static final long serialVersionUID = 1L;
+    private ListEditor<AmpFunding> list;
+    private IModel<AmpOrganisation> fundingOrgModel;
+    private IModel<AmpRole> fundingRoleModel;
+    private Integer tabIndex;
 
-	
-	public ListEditor<AmpFunding> getList() {
-		return list;
-	}
-	
-	public Integer getMaxFundingItemIndexFromList() {
-		Integer max = null;
-		for (AmpFunding af : list.items) {
-			if (max == null)
-				max = af.getIndex();
-			if (max < af.getIndex()) 
-				max = af.getIndex();
-		}
-		return max;
-	}
-	
+    
+    public ListEditor<AmpFunding> getList() {
+        return list;
+    }
+    
+    public Integer getMaxFundingItemIndexFromList() {
+        Integer max = null;
+        for (AmpFunding af : list.items) {
+            if (max == null)
+                max = af.getIndex();
+            if (max < af.getIndex()) 
+                max = af.getIndex();
+        }
+        return max;
+    }
+    
 
-	@Override
-	protected void onConfigure() {
-		AmpAuthWebSession session = (AmpAuthWebSession) getSession();
-		if (fundingOrgModel != null && fundingOrgModel.getObject() != null){
-			FundingOrganization fo = new FundingOrganization();
-			fo.setAmpOrgId(fundingOrgModel.getObject().getAmpOrgId());                                                     
-			PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG, fo);
-			PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG_ROLE, Constants.FUNDING_AGENCY);
-		}
-		super.onConfigure();
-		if (fundingOrgModel != null && fundingOrgModel.getObject() != null){
-			PermissionUtil.removeFromScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG);
-			PermissionUtil.removeFromScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG_ROLE);
-		}
-	}
+    @Override
+    protected void onConfigure() {
+        AmpAuthWebSession session = (AmpAuthWebSession) getSession();
+        if (fundingOrgModel != null && fundingOrgModel.getObject() != null){
+            FundingOrganization fo = new FundingOrganization();
+            fo.setAmpOrgId(fundingOrgModel.getObject().getAmpOrgId());                                                     
+            PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG, fo);
+            PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG_ROLE, Constants.FUNDING_AGENCY);
+        }
+        super.onConfigure();
+        if (fundingOrgModel != null && fundingOrgModel.getObject() != null){
+            PermissionUtil.removeFromScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG);
+            PermissionUtil.removeFromScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG_ROLE);
+        }
+    }
 
-	public AmpFundingGroupFeaturePanel(String id, String fmName, final IModel<AmpRole> role, 
-			IModel<Set<AmpFunding>> fundsModel, final IModel<AmpOrganisation> model,final IModel<AmpActivityVersion> am, final AmpDonorFundingFormSectionFeature parent) {
-		super(id, model, fmName, true);
-		fundingOrgModel = model;
-		fundingRoleModel = role;
-		String translatedRole = TranslatorWorker.translateText(role.getObject().getName());
-		String suffix = role.getObject() == null ? "" : " (" + translatedRole + ")";
-		add(new Label("donorOrg", model.getObject().getName() + suffix));
-		
-//		AmpLabelFieldPanel<AmpOrganisation> sourceOrg = new AmpLabelFieldPanel<AmpOrganisation>(
-//		"sourceOrg", new PropertyModel<AmpOrganisation>(fundsModel, "ampDonorOrgId"), "Source Organisation", true);
-//		sourceOrg.add(new AttributeModifier("style", "display:inline-block"));
-//		add(sourceOrg);
+    public AmpFundingGroupFeaturePanel(String id, String fmName, final IModel<AmpRole> role, 
+            IModel<Set<AmpFunding>> fundsModel, final IModel<AmpOrganisation> model,final IModel<AmpActivityVersion> am, final AmpDonorFundingFormSectionFeature parent) {
+        super(id, model, fmName, true);
+        fundingOrgModel = model;
+        fundingRoleModel = role;
+        String translatedRole = TranslatorWorker.translateText(role.getObject().getName());
+        String suffix = role.getObject() == null ? "" : " (" + translatedRole + ")";
+        add(new Label("donorOrg", model.getObject().getName() + suffix));
+        
+//      AmpLabelFieldPanel<AmpOrganisation> sourceOrg = new AmpLabelFieldPanel<AmpOrganisation>(
+//      "sourceOrg", new PropertyModel<AmpOrganisation>(fundsModel, "ampDonorOrgId"), "Source Organisation", true);
+//      sourceOrg.add(new AttributeModifier("style", "display:inline-block"));
+//      add(sourceOrg);
 //
-//		
-//		AmpLabelFieldPanel<AmpRole> sourceRoleLabel = new AmpLabelFieldPanel<AmpRole>(
-//				"sourceRoleLabel", new PropertyModel<AmpRole>(fundsModel, "sourceRole"), "Source Role", true);
-//		sourceRoleLabel.add(new AttributeModifier("style", "display:inline-block"));
-//		add(sourceRoleLabel);		
-//		
-//		
-		
+//      
+//      AmpLabelFieldPanel<AmpRole> sourceRoleLabel = new AmpLabelFieldPanel<AmpRole>(
+//              "sourceRoleLabel", new PropertyModel<AmpRole>(fundsModel, "sourceRole"), "Source Role", true);
+//      sourceRoleLabel.add(new AttributeModifier("style", "display:inline-block"));
+//      add(sourceRoleLabel);       
+//      
+//      
+        
         AbstractMixedSetModel<AmpFunding> setModel = new AbstractMixedSetModel<AmpFunding>(fundsModel) {
             @Override
             public boolean condition(AmpFunding item) {
                 return item.getAmpDonorOrgId().getAmpOrgId().equals(model.getObject().getAmpOrgId())
-                		&& item.getSourceRole().getAmpRoleId().equals(role.getObject().getAmpRoleId());
+                        && item.getSourceRole().getAmpRoleId().equals(role.getObject().getAmpRoleId());
             }
         };
-		
-		list = new ListEditor<AmpFunding>("listFunding", setModel) {
-			@Override
-			protected void onPopulateItem(
-					org.dgfoundation.amp.onepager.components.ListItem<AmpFunding> item) {
-				AmpFundingItemFeaturePanel fundingItemFeature;
-				try {
-					
-					fundingItemFeature = new AmpFundingItemFeaturePanel(
-							"fundingItem", "Funding Item",
-							item.getModel(), am, parent,item.getIndex());
-				} catch (Exception e) {
-					throw new RuntimeException(e);
-				}
-				item.add(fundingItemFeature);
-			}
-		};
-		add(list);
-		
-		final Boolean isTabView=FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.ACTIVITY_FORM_FUNDING_SECTION_DESIGN);
-		
-		AmpAjaxLinkField addNewFunding= new AmpAjaxLinkField("addAnotherFunding","New Funding Item","New Funding Item") {			
-			private static final long serialVersionUID = 1L;
+        
+        list = new ListEditor<AmpFunding>("listFunding", setModel) {
+            @Override
+            protected void onPopulateItem(
+                    org.dgfoundation.amp.onepager.components.ListItem<AmpFunding> item) {
+                AmpFundingItemFeaturePanel fundingItemFeature;
+                try {
+                    
+                    fundingItemFeature = new AmpFundingItemFeaturePanel(
+                            "fundingItem", "Funding Item",
+                            item.getModel(), am, parent,item.getIndex());
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+                item.add(fundingItemFeature);
+            }
+        };
+        add(list);
+        
+        final Boolean isTabView=FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.ACTIVITY_FORM_FUNDING_SECTION_DESIGN);
+        
+        AmpAjaxLinkField addNewFunding= new AmpAjaxLinkField("addAnotherFunding","New Funding Item","New Funding Item") {           
+            private static final long serialVersionUID = 1L;
 
-			@Override
-			protected void onClick(AjaxRequestTarget target) {
-				if (fundsModel.getObject().size() > 0) {
-					AmpFunding funding = new AmpFunding();
-					funding.setAmpDonorOrgId(model.getObject());
-					funding.setSourceRole(role.getObject());
-					
-					parent.addFundingItem(funding);
-					target.add(parent);
-					target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent));
-					if (isTabView) {
-						//when adding a new funding search for the correct index
-						//parent.getTabsList()
-						int index = parent.calculateTabIndex(funding.getAmpDonorOrgId(),
-								funding.getSourceRole());
-						
-						target.appendJavaScript("switchTabs("+ index +");");
-					}
-				}
-			}
-		};
-		
-		add(addNewFunding);
-	}
-	
-	public IModel<AmpRole> getRole() {
-		return fundingRoleModel;
-	}
+            @Override
+            protected void onClick(AjaxRequestTarget target) {
+                if (fundsModel.getObject().size() > 0) {
+                    AmpFunding funding = new AmpFunding();
+                    funding.setAmpDonorOrgId(model.getObject());
+                    funding.setSourceRole(role.getObject());
+                    
+                    parent.addFundingItem(funding);
+                    target.add(parent);
+                    target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent));
+                    if (isTabView) {
+                        //when adding a new funding search for the correct index
+                        //parent.getTabsList()
+                        int index = parent.calculateTabIndex(funding.getAmpDonorOrgId(),
+                                funding.getSourceRole());
+                        
+                        target.appendJavaScript("switchTabs("+ index +");");
+                    }
+                }
+            }
+        };
+        
+        add(addNewFunding);
+    }
+    
+    public IModel<AmpRole> getRole() {
+        return fundingRoleModel;
+    }
 
-	public void setTabIndex(Integer index) {
-		this.tabIndex = index;
-	}
+    public void setTabIndex(Integer index) {
+        this.tabIndex = index;
+    }
 
-	public Integer getTabIndex() {
-		return tabIndex;
-	}
-	
+    public Integer getTabIndex() {
+        return tabIndex;
+    }
+    
 }

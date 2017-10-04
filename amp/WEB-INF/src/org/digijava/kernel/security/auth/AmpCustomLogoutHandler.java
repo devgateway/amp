@@ -14,15 +14,15 @@ import org.springframework.security.web.authentication.logout.LogoutHandler;
  */
 public class AmpCustomLogoutHandler implements LogoutHandler {
 
-	@Override
-	public void logout(HttpServletRequest request,
-			HttpServletResponse response,
-			org.springframework.security.core.Authentication authentication) {
+    @Override
+    public void logout(HttpServletRequest request,
+            HttpServletResponse response,
+            org.springframework.security.core.Authentication authentication) {
 
-		AmpApiToken ampApiToken = (AmpApiToken) request.getSession().getAttribute(SecurityUtil.USER_TOKEN);
-		
-		if (ampApiToken != null) {
-			SecurityUtil.removeTokenFromContext(request.getServletContext(), ampApiToken.getToken());
-		}
-	}
+        AmpApiToken ampApiToken = (AmpApiToken) request.getSession().getAttribute(SecurityUtil.USER_TOKEN);
+        
+        if (ampApiToken != null) {
+            SecurityUtil.removeTokenFromContext(request.getServletContext(), ampApiToken.getToken());
+        }
+    }
 }

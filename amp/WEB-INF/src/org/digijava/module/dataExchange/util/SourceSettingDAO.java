@@ -13,36 +13,36 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 public class SourceSettingDAO {
-	private static Logger logger = Logger.getLogger(SourceSettingDAO.class);
-	protected Session hbSession	;
-	
-	public SourceSettingDAO () throws HibernateException, SQLException {
-		this.hbSession	= PersistenceManager.getSession();
-	}
-		
-	public List<DESourceSetting> getAllAmpSourceSettingsObjects() {
+    private static Logger logger = Logger.getLogger(SourceSettingDAO.class);
+    protected Session hbSession ;
+    
+    public SourceSettingDAO () throws HibernateException, SQLException {
+        this.hbSession  = PersistenceManager.getSession();
+    }
+        
+    public List<DESourceSetting> getAllAmpSourceSettingsObjects() {
 
-			String queryString 	= "select ss from "	+ DESourceSetting.class.getName() + " ss";
-			Query query			= hbSession.createQuery(queryString);
-			List<DESourceSetting> resultList	=  query.list();
-			return resultList;
-	}
-	
-	public int getAllAmpSourceSettingsObjectsCount() {
-			String queryString 	= "select count(*) from "	+ DESourceSetting.class.getName() + " ss where ss.attachedFile is null ";
-			Query query			= hbSession.createQuery(queryString);
-			int resultList	=  (Integer)query.uniqueResult();
-			return resultList;
-	}
-	
-	public List<DESourceSetting> getPagedAmpSourceSettingsObjects(int fromIndex, String sortBy) {
-		return getAmpSourceSettingsObjects(fromIndex, sortBy, true);
-	}
-	
-	public List<DESourceSetting> getAmpSourceSettingsObjects(int fromIndex, String sortBy, boolean isPaged) {
-			String queryString 	= "select ss from "	+ DESourceSetting.class.getName() + " ss where ss.attachedFile is null ";
-			//sort
-			if(sortBy != null) {
+            String queryString  = "select ss from " + DESourceSetting.class.getName() + " ss";
+            Query query         = hbSession.createQuery(queryString);
+            List<DESourceSetting> resultList    =  query.list();
+            return resultList;
+    }
+    
+    public int getAllAmpSourceSettingsObjectsCount() {
+            String queryString  = "select count(*) from "   + DESourceSetting.class.getName() + " ss where ss.attachedFile is null ";
+            Query query         = hbSession.createQuery(queryString);
+            int resultList  =  (Integer)query.uniqueResult();
+            return resultList;
+    }
+    
+    public List<DESourceSetting> getPagedAmpSourceSettingsObjects(int fromIndex, String sortBy) {
+        return getAmpSourceSettingsObjects(fromIndex, sortBy, true);
+    }
+    
+    public List<DESourceSetting> getAmpSourceSettingsObjects(int fromIndex, String sortBy, boolean isPaged) {
+            String queryString  = "select ss from " + DESourceSetting.class.getName() + " ss where ss.attachedFile is null ";
+            //sort
+            if(sortBy != null) {
                 switch (sortBy) {
                     case "name":
                         queryString += " order by ss.name ";
@@ -63,64 +63,64 @@ public class SourceSettingDAO {
                         queryString += " order by ss.importWorkspace.name desc ";
                         break;
                 }
-			} else {
-				queryString += " order by ss.name " ;
-			}
-			Query query	= hbSession.createQuery(queryString);
-			query.setFirstResult(fromIndex);
-			if(isPaged)
-				query.setMaxResults(DEConstants.RECORDS_AMOUNT_PER_PAGE);
-//			if(resultNum!=-1){
-//				query.setMaxResults(resultNum);
-//			}
-			List<DESourceSetting> resultList	=  query.list();
-			return resultList;
-	}
-	
-	public DESourceSetting getSourceSettingById(Long id) {
-			DESourceSetting ret	= (DESourceSetting)hbSession.load(DESourceSetting.class, id);
-			return ret;
-	}
-	
-	public static DESourceSetting getSourceSettingByName(String name){
-		  Session session = null;
-	      Query qry = null;
-	      DESourceSetting result=null;
-		try{
-			session = PersistenceManager.getSession();
-			String queryString 	= "select ss from "	+ DESourceSetting.class.getName() + " ss where ss.name=:name";
-			qry = session.createQuery(queryString);
-			qry.setString("name", name);
-			result = (DESourceSetting)qry.uniqueResult();
-		}catch (Exception e) {
+            } else {
+                queryString += " order by ss.name " ;
+            }
+            Query query = hbSession.createQuery(queryString);
+            query.setFirstResult(fromIndex);
+            if(isPaged)
+                query.setMaxResults(DEConstants.RECORDS_AMOUNT_PER_PAGE);
+//          if(resultNum!=-1){
+//              query.setMaxResults(resultNum);
+//          }
+            List<DESourceSetting> resultList    =  query.list();
+            return resultList;
+    }
+    
+    public DESourceSetting getSourceSettingById(Long id) {
+            DESourceSetting ret = (DESourceSetting)hbSession.load(DESourceSetting.class, id);
+            return ret;
+    }
+    
+    public static DESourceSetting getSourceSettingByName(String name){
+          Session session = null;
+          Query qry = null;
+          DESourceSetting result=null;
+        try{
+            session = PersistenceManager.getSession();
+            String queryString  = "select ss from " + DESourceSetting.class.getName() + " ss where ss.name=:name";
+            qry = session.createQuery(queryString);
+            qry.setString("name", name);
+            result = (DESourceSetting)qry.uniqueResult();
+        }catch (Exception e) {
             e.printStackTrace();
         }
         return result;
-	}
-	
-	public void deleteObject(Long id) {
-		try{
+    }
+    
+    public void deleteObject(Long id) {
+        try{
 //beginTransaction();
-			Object obj		= this.hbSession.load(DESourceSetting.class, id);
-			this.hbSession.delete(obj);
-			//rx.commit();
+            Object obj      = this.hbSession.load(DESourceSetting.class, id);
+            this.hbSession.delete(obj);
+            //rx.commit();
 //session.flush();
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public void saveObject(Object object) {
-		try{
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void saveObject(Object object) {
+        try{
 //beginTransaction();
-			this.hbSession.saveOrUpdate(object);
-			//rx.commit();
+            this.hbSession.saveOrUpdate(object);
+            //rx.commit();
 //session.flush();
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
 }

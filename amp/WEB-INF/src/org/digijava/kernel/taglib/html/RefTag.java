@@ -40,9 +40,9 @@ import org.digijava.kernel.util.DgUtil;
 public class RefTag
     extends org.apache.struts.taglib.html.BaseHandlerTag {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
+    /**
      * The body content of this tag (if any).
      */
     protected String text = null;

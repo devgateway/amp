@@ -33,33 +33,33 @@ public class UnclosedSessionsForm
       extends ActionForm {
 
     public static class UnclosedSessionInfo {
-	private Session key;
-	private String value;
-	private boolean closed;
+    private Session key;
+    private String value;
+    private boolean closed;
 
-	public void setKey(Session key) {
-	    this.key = key;
-	}
+    public void setKey(Session key) {
+        this.key = key;
+    }
 
-	public Session getKey() {
-	    return key;
-	}
+    public Session getKey() {
+        return key;
+    }
 
-	public void setValue(String value) {
-	    this.value = value;
-	}
+    public void setValue(String value) {
+        this.value = value;
+    }
 
-	public String getValue() {
-	    return value;
-	}
+    public String getValue() {
+        return value;
+    }
 
-	public void setClosed(boolean closed) {
-	    this.closed = closed;
-	}
+    public void setClosed(boolean closed) {
+        this.closed = closed;
+    }
 
-	public boolean isClosed() {
-	    return closed;
-	}
+    public boolean isClosed() {
+        return closed;
+    }
     }
 
     private List unclosedSeesions;
@@ -72,57 +72,57 @@ public class UnclosedSessionsForm
     private boolean showAll;
 
     public long getTotalCount() {
-	return totalCount;
+    return totalCount;
     }
 
     public void setTotalCount(long totalCount) {
-	this.totalCount = totalCount;
+    this.totalCount = totalCount;
     }
 
     public List getUnclosedSeesions() {
-	return unclosedSeesions;
+    return unclosedSeesions;
     }
 
     public void setUnclosedSeesions(List unclosedSeesions) {
-	this.unclosedSeesions = unclosedSeesions;
+    this.unclosedSeesions = unclosedSeesions;
     }
 
     public int getIndex() {
-	return index;
+    return index;
     }
 
     public void setIndex(int index) {
-	this.index = index;
+    this.index = index;
     }
 
     public boolean isShowAll() {
-	return showAll;
+    return showAll;
     }
 
     public void setShowAll(boolean showAll) {
-	this.showAll = showAll;
+    this.showAll = showAll;
     }
 
     public long getTotalClosed() {
-	return totalClosed;
+    return totalClosed;
     }
 
     public void setTotalClosed(long totalClosed) {
-	this.totalClosed = totalClosed;
+    this.totalClosed = totalClosed;
     }
 
     public long getTotalOpened() {
-	return totalOpened;
+    return totalOpened;
     }
 
     public void setTotalOpened(long totalOpened) {
-	this.totalOpened = totalOpened;
+    this.totalOpened = totalOpened;
     }
 
     public void reset(ActionMapping mapping, HttpServletRequest request) {
-	index = -1;
-	totalCount = 0;
-	totalOpened = 0;
-	totalClosed = 0;
+    index = -1;
+    totalCount = 0;
+    totalOpened = 0;
+    totalClosed = 0;
     }
 }

@@ -13,22 +13,22 @@ import org.digijava.kernel.util.SiteUtils;
 public class ShowAdminHome extends Action {
 
     public ActionForward execute(ActionMapping mapping,
-						  ActionForm form,
-						  javax.servlet.http.HttpServletRequest request,
-						  javax.servlet.http.HttpServletResponse response) throws java.lang.Exception {
-		
-		HttpSession session = request.getSession();
-		String str = (String) session.getAttribute("ampAdmin");
-		if (str == null || str.equals("no")) {
-				  SiteDomain currentDomain = RequestUtils.getSiteDomain(request);
-				  String url = SiteUtils.getSiteURL(currentDomain, request
-										.getScheme(), request.getServerPort(), request
-										.getContextPath());
-				  url += "/aim/index.do";
-				  response.sendRedirect(url);
-				  return null;
-		} else {
-				  return mapping.findForward("forward");
-		}
+                          ActionForm form,
+                          javax.servlet.http.HttpServletRequest request,
+                          javax.servlet.http.HttpServletResponse response) throws java.lang.Exception {
+        
+        HttpSession session = request.getSession();
+        String str = (String) session.getAttribute("ampAdmin");
+        if (str == null || str.equals("no")) {
+                  SiteDomain currentDomain = RequestUtils.getSiteDomain(request);
+                  String url = SiteUtils.getSiteURL(currentDomain, request
+                                        .getScheme(), request.getServerPort(), request
+                                        .getContextPath());
+                  url += "/aim/index.do";
+                  response.sendRedirect(url);
+                  return null;
+        } else {
+                  return mapping.findForward("forward");
+        }
     }
 }

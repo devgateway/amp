@@ -1,13 +1,11 @@
 package org.digijava.module.aim.helper ;
 
 import java.awt.Color;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
+public final class Constants {
 
-public class Constants
-{
+    private Constants() {
+    }
 
     public static class GlobalSettings {
         public static final String YEAR_RANGE_START         = "Year Range Start";

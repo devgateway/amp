@@ -191,7 +191,7 @@ public class AmpStructuresFormSectionFeature extends
                         target.add(latitude);
                         target.add(longitude);
                         target.add(viewCoords);
-                        target.appendJavaScript("gisPopup($('#"+this.getMarkupId()+"')[0]); return false;");
+                        target.appendJavaScript("gisPopup($('#" + this.getMarkupId() + "')[0]); return false;");
                 }
                 };
                 item.add(openMapPopup); 

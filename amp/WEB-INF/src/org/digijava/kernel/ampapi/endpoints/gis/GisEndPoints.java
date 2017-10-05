@@ -116,7 +116,7 @@ public class GisEndPoints implements ErrorReportingEndpoint {
             result.features.add(getPoint(new Double(clusteredPoints.getLon()),
                     new Double(clusteredPoints.getLat()),
                     clusteredPoints.getActivityids(),
-                    clusteredPoints.getAdmin()));
+                    clusteredPoints.getAdmin(), clusteredPoints.getAdmId()));
             }
         }
 
@@ -277,15 +277,14 @@ public class GisEndPoints implements ErrorReportingEndpoint {
     
     
     private FeatureGeoJSON getPoint(Double lat, Double lon,
-            List<Long> activityid, String adm) {
+            List<Long> activityid, String adm, Long admId) {
         FeatureGeoJSON fgj = new FeatureGeoJSON();
         PointGeoJSON pg = new PointGeoJSON();
         pg.coordinates.add(lat);
         pg.coordinates.add(lon);
-
         fgj.properties.put("activityid", new POJONode(activityid));
         fgj.properties.put("admName", new TextNode(adm));
-
+        fgj.properties.put("admId", new POJONode(admId));
         fgj.geometry = pg;
         return fgj;
     }

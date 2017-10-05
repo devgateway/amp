@@ -15,7 +15,6 @@ var AMPOfflineDownload = React.createClass( {
     componentDidMount: function() {
         let toTranslate = new AMP.Model( translations ).toJS();
         loadTranslations( translations ).then( trns => this.updateTranslations( trns ) );
-        console.log( this.state.translations );
     },
 
     render: function() {

@@ -32,6 +32,7 @@ import org.dgfoundation.amp.mondrian.MondrianUtils;
 import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.job.cachedtables.PublicViewColumnsUtil;
+import org.digijava.kernel.jobs.RegisterWithAmpRegistryJob;
 import org.digijava.kernel.lucene.LuceneModules;
 import org.digijava.kernel.lucene.LuceneWorker;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -338,6 +339,8 @@ public class AMPStartupListener extends HttpServlet implements
             initNiReports();
             importGazeteer();
             registerEhCacheMBeans();
+
+            QuartzJobUtils.runJobIfNotPaused(RegisterWithAmpRegistryJob.NAME);
         } catch (Throwable e) {
             logger.error("Exception while initialising AMP :" + e.getMessage(), e);
             throw new Error(e);

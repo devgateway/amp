@@ -18,6 +18,8 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
  */
 public class ValueValidator extends InputValidator {
 
+    private static final double MAXIMUM_PERCENTAGE = 100;
+
     private boolean isValidLength = true;
     private boolean isValidPercentage = true;
 
@@ -107,7 +109,8 @@ public class ValueValidator extends InputValidator {
 
         //attempt to get the number out of this one
         Double val = InterchangeUtils.getDoubleFromJsonNumber(newFieldParent.get(fieldDescription.getFieldName()));
-        if (val == null || val < ActivityEPConstants.EPSILON || val - 100.0 > ActivityEPConstants.EPSILON) {
+        if (val != null
+                && (val < ActivityEPConstants.EPSILON || val - MAXIMUM_PERCENTAGE > ActivityEPConstants.EPSILON)) {
             this.isValidPercentage = false;
             return false;
         }

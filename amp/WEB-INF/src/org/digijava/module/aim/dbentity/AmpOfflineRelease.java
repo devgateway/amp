@@ -112,7 +112,7 @@ public class AmpOfflineRelease implements Comparable<AmpOfflineRelease>, Cloneab
 
     public String toFileName() {
         String criticalSuffix = critical ? "-critical" : "";
-        return "amp-client-" + version + criticalSuffix + "-" + arch + "." + OS_TO_EXT.get(os);
+        return "amp-offline-" + version + criticalSuffix + "-" + arch + "." + OS_TO_EXT.get(os);
     }
 
     public static AmpOfflineRelease fromUserAgent(String userAgent) {

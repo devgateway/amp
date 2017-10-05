@@ -15,7 +15,7 @@
 				WHERE settingsname = 'AMP Offline releases URL';
 
 				INSERT INTO public.amp_global_settings (id, settingsname, settingsvalue, possiblevalues, description, section, value_translatable)
-				VALUES (nextval('amp_global_settings_seq'), 'AMP Offline Enabled', 'false', 't_Boolean', 'Allow AMP Offline clients to connect', null, null);
+				VALUES (nextval('amp_global_settings_seq'), 'AMP Offline Enabled', 'false', 't_Boolean', 'Allow AMP Offline clients to connect', 'general', null);
 
 			]]></lang>
 		</script>

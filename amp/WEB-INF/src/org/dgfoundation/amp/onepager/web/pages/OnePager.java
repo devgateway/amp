@@ -177,13 +177,13 @@ public class OnePager extends AmpHeaderFooter {
         final ValueWrapper<Boolean>newActivity= new ValueWrapper<Boolean>(false);
 
         long currentUserId = ((AmpAuthWebSession) getSession()).getCurrentMember().getMemberId();
-		if (ActivityGatekeeper.isEditionLocked()) {
-			StringValue isCloseEdition = parameters.get("close");
-			if (isCloseEdition != null && isCloseEdition.toBoolean()) {
-				ActivityGatekeeper.pageModeChange(activityId);
-			}
-			throw new RedirectToUrlException(ActivityGatekeeper.buildRedirectLink(activityId, currentUserId));
-		}
+        if (ActivityGatekeeper.isEditionLocked()) {
+            StringValue isCloseEdition = parameters.get("close");
+            if (isCloseEdition != null && isCloseEdition.toBoolean()) {
+                ActivityGatekeeper.pageModeChange(activityId);
+            }
+            throw new RedirectToUrlException(ActivityGatekeeper.buildRedirectLink(activityId, currentUserId));
+        }
 
         if ((activityId == null) || (activityId.compareTo("new") == 0)) {
             am = new AmpActivityModel();
@@ -228,11 +228,14 @@ public class OnePager extends AmpHeaderFooter {
 
             // -----> TODO-CONSTANTIN: comment lines below if you want to disable Permissions checking   <-----
             boolean canDo = am.getObject().canDo(GatePermConst.Actions.EDIT, PermissionUtil.getScope(session.getHttpSession()));
-            if(!canDo)  throw new RedirectToUrlException(ActivityGatekeeper.buildPermissionRedirectLink(activityId));
+            if (!canDo) {
+                throw new RedirectToUrlException(ActivityGatekeeper.buildPermissionRedirectLink(activityId));
+            }
         }
 
-        if (!am.getObject().getActivityType().equals(session.getFormType()))
+        if (!am.getObject().getActivityType().equals(session.getFormType())) {
             throw new AssertionError("Form type is not compatible with activity type!");
+        }
 
         try {
             initializeFormComponents(am);
@@ -411,17 +414,18 @@ public class OnePager extends AmpHeaderFooter {
                 Constructor constructor = null;
                 try {
                     if (os.getDependent())
-                        constructor = clazz.getConstructor(String.class, String.class, IModel.class, AmpComponentPanel.class);
+                        constructor = clazz.getConstructor(String.class, String.class, IModel.class,
+                                AmpComponentPanel.class);
                     else
                         constructor = clazz.getConstructor(String.class, String.class, IModel.class);
 
                     AmpComponentPanel feature = null;
-                    if (os.getDependent())
+                    if (os.getDependent()) {
                         feature = (AmpComponentPanel) constructor.newInstance("featureItem", os.getName(), am, dep);
-                    else
+                    } else {
                         feature = (AmpComponentPanel) constructor.newInstance("featureItem", os.getName(), am);
-
-                    if (AmpFormSectionFeaturePanel.class.isAssignableFrom(feature.getClass())){
+                    }
+                    if (AmpFormSectionFeaturePanel.class.isAssignableFrom(feature.getClass())) {
                         AmpFormSectionFeaturePanel fsfp = (AmpFormSectionFeaturePanel) feature;
                         fsfp.setFolded(os.getFolded());
                     }
@@ -436,7 +440,7 @@ public class OnePager extends AmpHeaderFooter {
 
             }
 
-            public List<AmpComponentPanel> initObjects(){
+            public List<AmpComponentPanel> initObjects() {
                 Iterator<OnepagerSection> it = sectionsList.iterator();
                 LinkedList<AmpComponentPanel> ret = new LinkedList<AmpComponentPanel>();
                 HashMap<String, AmpComponentPanel> temp = new HashMap<String, AmpComponentPanel>();

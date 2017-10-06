@@ -141,6 +141,7 @@ public class ColumnConstants {
     public static final String ISSUE_DATE = "Issue Date";
     public static final String ISSUES___MEASURES___ACTORS = "Issues / Measures / Actors";
     public static final String JOINT_CRITERIA = "Joint Criteria";
+    public static final String LINE_MINISTRY_RANK = "Line Ministry Rank";
     public static final String MATURITY = "Loan Maturity Date";
     public static final String MEASURES_TAKEN = "Measures Taken";
     public static final String MINISTRY_CODE = "Ministry Code";

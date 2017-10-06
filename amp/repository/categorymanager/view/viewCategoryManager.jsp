@@ -8,6 +8,8 @@
 <%@ page import="java.util.List"%>
  
 <%@page import="org.digijava.module.categorymanager.util.CategoryManagerUtil"%>
+<%@ page import="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" %>
+<%@ page import="java.util.Collection" %>
 <digi:instance property="cmCategoryManagerForm" />
 <bean:define id="myForm" name="cmCategoryManagerForm" toScope="page" type="org.digijava.module.categorymanager.form.CategoryManagerForm" />
 
@@ -99,7 +101,11 @@ function exportXSL(){
 							</td>
 							<td align="left" class="inside">
 								<ul>
-								<logic:iterate name="category" property="possibleValues" id="categoryValue" type="org.digijava.module.categorymanager.dbentity.AmpCategoryValue">
+								<%
+									Collection<AmpCategoryValue> orderedPossibleValues = CategoryManagerUtil.getOrderedPossibleValues(category);
+								%>
+								<c:set var="orderedPossibleValues" value="<%=orderedPossibleValues%>" scope="page" />
+								<logic:iterate name="orderedPossibleValues" id="categoryValue" type="org.digijava.module.categorymanager.dbentity.AmpCategoryValue">
 								<logic:notEmpty name="categoryValue">
 								<%  String keyForValue	= CategoryManagerUtil.getTranslationKeyForCategoryValue(categoryValue);
 									String deletedStyle = "";

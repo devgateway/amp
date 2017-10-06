@@ -43,13 +43,13 @@ public abstract class Trigger {
      * is used here as a stub example. We need to implement it
      */
     protected void forwardEvent() {
-		Event e=generateEvent();
-		try {
-			AmpMessageWorker.processEvent(e);
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+        Event e=generateEvent();
+        try {
+            AmpMessageWorker.processEvent(e);
+        } catch (Exception e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
     }
 
 }

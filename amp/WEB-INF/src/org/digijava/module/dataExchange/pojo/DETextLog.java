@@ -10,15 +10,15 @@ import org.digijava.module.dataExchange.util.DataExchangeConstants;
  *
  */
 public class DETextLog extends DELog{
-	private final String logType = DataExchangeConstants.TEXT;
-	
-	public DETextLog() {
-		// TODO Auto-generated constructor stub
-	}
+    private final String logType = DataExchangeConstants.TEXT;
+    
+    public DETextLog() {
+        // TODO Auto-generated constructor stub
+    }
 
-	public String getLogType() {
-		return logType;
-	}
+    public String getLogType() {
+        return logType;
+    }
 
 
 }

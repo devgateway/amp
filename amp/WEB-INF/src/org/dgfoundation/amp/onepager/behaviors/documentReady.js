@@ -1,9 +1,21 @@
 enableComputateVisibleSections = false;
 onepagerMode = ${onepagerMode};
 isTabView = ${isTabView};
+var isRtl = ${isRtl};
+
+//the distance between the content body and the menu should be 40px
+const DISTANCE_BETWEEN_CONTENT_AND_MENU = 40;
+const INIT_RTL_DISTANCE_BETWEEN_CONTENT_AND_MENU = 68;
 
 function getFile(){
     $("#upfile").click();
+}
+
+function setOpentip(){
+    if (typeof isRtl !== 'undefined' && isRtl) {
+		Opentip.styles.standard.tipJoint = "top right";
+    }
+    Opentip.findElements();
 }
 
 function setLabel(obj){
@@ -41,20 +53,16 @@ function computateVisibleSections(){
 
 // Manage the position of the right menu in AF after scrolling
 function adjustQuickLinks(){
-	var contentMarginLeft = $('#stepHead').offset().left;
 	var contentMarginTop = $('#stepHead').offset().top;
-	var contentHeight = $('#stepHead').height() + $('#mainContent').height() + 55; 
-	var contentWidth = $('#stepHead').width() + 40;
+	var contentHeight = $('#stepHead').height() + $('#mainContent').height() + 55;
 	var rightMenuHeight = $('#rightMenu').height();
-	var rightMenuWidth = $('#rightMenu').width();
 	
 	// the initial position of the right menu should be below the next menu
 	if (contentMarginTop < 130) {
 		contentMarginTop = 130;
 	}
 	
-	var currentScrollLeft = $(window).scrollLeft();
-	rightMenuMargin = contentMarginLeft + contentWidth - currentScrollLeft;
+	var leftPositionOfRightMenu = 0;
 	
 	if ((($(window).scrollTop() + rightMenuHeight) > contentHeight)) {
 		var menuTop = contentHeight + contentMarginTop - rightMenuHeight;
@@ -67,21 +75,45 @@ function adjustQuickLinks(){
 		
 		$('#rightMenu').css('position', 'absolute');
 		$('#rightMenu').css('top', menuTop + "px");
-		if ($(window).width() < (contentWidth + rightMenuWidth)) {
-			$('#rightMenu').css('left', contentWidth + "px");
-		} else {
-			$('#rightMenu').css('left', rightMenuMargin + "px");
-		}
+		leftPositionOfRightMenu = getLeftPositionOfRightMenu(true);
 	} else {
 		$('#rightMenu').css('position', 'fixed')
 		$('#rightMenu').css('top', contentMarginTop + "px");
-		$('#rightMenu').css('left', rightMenuMargin + "px");
+		leftPositionOfRightMenu = getLeftPositionOfRightMenu(false);
 	}
-	
+
+	$('#rightMenu').css('left', leftPositionOfRightMenu + "px");
+
 	if (onepagerMode) {
 		computateVisibleSections();
 	}
 }
+
+//Manage the position of the right menu in AF on initialization
+function initQuickLinksInRtlMode(){
+
+	var contentMarginTop = $('#stepHead').offset().top;
+	var contentHeight = $('#stepHead').height() + $('#mainContent').height() + 55;
+	var rightMenuHeight = $('#rightMenu').height();
+	var contentWidth = $('#stepHead').width() + DISTANCE_BETWEEN_CONTENT_AND_MENU;
+	var rightMenuWidth = $('#rightMenu').width();
+
+	// the initial position of the right menu should be below the next menu
+	if (contentMarginTop < 130) {
+		contentMarginTop = 130;
+	}
+
+	var rightMenuLeftPosition = (window.outerWidth - $('#stepHead').outerWidth()) / 2 + INIT_RTL_DISTANCE_BETWEEN_CONTENT_AND_MENU - $('#rightMenu').width();
+
+	if ($(window).width() < (contentWidth + rightMenuWidth + DISTANCE_BETWEEN_CONTENT_AND_MENU)) {
+		rightMenuLeftPosition = $('#stepHead').offset().left - $('#rightMenu').width() - INIT_RTL_DISTANCE_BETWEEN_CONTENT_AND_MENU;
+	}
+
+	$('#rightMenu').css('position', 'fixed')
+	$('#rightMenu').css('top', contentMarginTop + "px");
+	$('#rightMenu').css('left', rightMenuLeftPosition + "px");
+}
+
 
 
 function highlightQItem(currentItem){
@@ -142,13 +174,6 @@ function rightMenuEnable(){
 		}
 	}
 
-	var mainContentTop = $('#stepHead').offset().top;
-	// the distance between the content body and the menu should be 40px
-	var mainContentLeft = $('#stepHead').offset().left + $('#stepHead').width() + 40;
-	$('#rightMenu').css('top', mainContentTop + "px");
-	$('#rightMenu').css('left', mainContentLeft + "px");
-
-	adjustQuickLinks();
 	$('#rightMenu').css('display', 'block');
 	enableComputateVisibleSections = true;
 	if (onepagerMode)
@@ -156,6 +181,7 @@ function rightMenuEnable(){
 	else
 		highlightQItem($("#qListItems").find('a:first'));
 }
+
 function pageLeaveConfirmationEnabler(){
 	window.onbeforeunload = function (e) {
 		  e = e || window.event;
@@ -180,6 +206,7 @@ function pageLeaveConfirmationEnabler(){
 		return oldAjaxCallProcessAjaxResponse.call(this, data, textStatus, jqXHR, context);
 	}
 }
+
 function switchTabs(lastIndex) {
 	if (isTabView) {
 		$('div[data-is_tab=true]').each(function(index) {
@@ -214,6 +241,42 @@ function switchTabs(lastIndex) {
 		loader.insert();
 	}
 }
+
+function getLeftPositionOfRightMenu(isAbsolutePosition) {
+	var contentMarginLeft = $('#stepHead').offset().left;
+	var contentWidth = $('#stepHead').width() + DISTANCE_BETWEEN_CONTENT_AND_MENU;
+	var rightMenuWidth = $('#rightMenu').width();
+	var currentScrollLeft = $(window).scrollLeft();
+
+	if (isAbsolutePosition) {
+		return getAbsoluteLeftPositionOfRightMenu(contentMarginLeft, contentWidth, rightMenuWidth, currentScrollLeft);
+	}
+
+	return getFixedLeftPositionOfRightMenu(contentMarginLeft, contentWidth, rightMenuWidth, currentScrollLeft);
+}
+
+function getFixedLeftPositionOfRightMenu(contentMarginLeft, contentWidth, rightMenuWidth, currentScrollLeft) {
+
+	if (isRtl) {
+		return contentMarginLeft - rightMenuWidth - DISTANCE_BETWEEN_CONTENT_AND_MENU - currentScrollLeft;
+	}
+
+	return contentMarginLeft + contentWidth - currentScrollLeft;
+}
+
+function getAbsoluteLeftPositionOfRightMenu(contentMarginLeft, contentWidth, rightMenuWidth, currentScrollLeft) {
+
+	if (isRtl) {
+		return contentMarginLeft - rightMenuWidth - DISTANCE_BETWEEN_CONTENT_AND_MENU;
+	}
+
+	if ($(window).width() < (contentWidth + rightMenuWidth)) {
+		return contentWidth;
+	} else {
+		return contentMarginLeft + contentWidth - currentScrollLeft;
+	}
+}
+
 $(document).ready(function(){
 	translationsEnable();
 	subSectionsSliderEnable();
@@ -222,7 +285,8 @@ $(document).ready(function(){
 	if(isTabView){
 		switchTabs();
 	}
-	
+
+  setOpentip();
 	
 	// change the min-height of the main content div when the height of the right menu is greater than DEFAULT_MAIN_BODY_MIN_HEIGHT
 	// the 20px value is used to make the distance between the lower point of the menu and the footer to be minimal
@@ -232,6 +296,13 @@ $(document).ready(function(){
 		
 	    return $('#rightMenu').height() > DEFAULT_MAIN_BODY_MIN_HEIGHT ? ($('#rightMenu').height() - 20) : DEFAULT_MAIN_BODY_MIN_HEIGHT;
 	});
+
+	// in RTL Mode the initial position of menu should be calculated in a different way
+	if (isRtl) {
+		initQuickLinksInRtlMode();
+	} else {
+		adjustQuickLinks();
+	}
     wireUpEvents();
 });
 

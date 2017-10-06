@@ -45,23 +45,23 @@ public class AmpDbUtil {
   }
 
   public static AmpCalendar getAmpCalendar(Long ampCalendarId) {
-	  AmpCalendar ampCalendar=null;
-	  Calendar calendar=null;
-	  if (ampCalendarId != null){
-		  Session session = PersistenceManager.getSession();
-	      //Calendar calendar = (Calendar) session.load(Calendar.class,ampCalendarId);
-		  Query query=session.createQuery("from "+ Calendar.class.getName() + " c where c.id= :calendarId");
-		  query.setParameter("calendarId", ampCalendarId);
-		  calendar=(Calendar)query.uniqueResult();
-		  if (calendar != null) {
-			  AmpCalendarPK ampCalendarPK = new AmpCalendarPK(calendar);
-			  query=session.createQuery("from "+ AmpCalendar.class.getName() + " c where c.calendarPK= :calendarPK");
-			  query.setParameter("calendarPK", ampCalendarPK);
-			  ampCalendar=(AmpCalendar)query.uniqueResult();
-				//ampCalendar = (AmpCalendar) session.load(AmpCalendar.class,ampCalendarPK);
-			}
-	  }
-	  return ampCalendar;
+      AmpCalendar ampCalendar=null;
+      Calendar calendar=null;
+      if (ampCalendarId != null){
+          Session session = PersistenceManager.getSession();
+          //Calendar calendar = (Calendar) session.load(Calendar.class,ampCalendarId);
+          Query query=session.createQuery("from "+ Calendar.class.getName() + " c where c.id= :calendarId");
+          query.setParameter("calendarId", ampCalendarId);
+          calendar=(Calendar)query.uniqueResult();
+          if (calendar != null) {
+              AmpCalendarPK ampCalendarPK = new AmpCalendarPK(calendar);
+              query=session.createQuery("from "+ AmpCalendar.class.getName() + " c where c.calendarPK= :calendarPK");
+              query.setParameter("calendarPK", ampCalendarPK);
+              ampCalendar=(AmpCalendar)query.uniqueResult();
+                //ampCalendar = (AmpCalendar) session.load(AmpCalendar.class,ampCalendarPK);
+            }
+      }
+      return ampCalendar;
   }
 
   public static List<AmpCalendar> getAmpCalendarsByStartDate(Date startDate) {
@@ -196,25 +196,25 @@ public class AmpDbUtil {
     }
   }
   public static void deleteAmpCalendarAttendee(AmpCalendarAttendee attendee) throws  CalendarException {
-		Transaction tx = null;
-		try {
-		  Session session = PersistenceManager.getRequestDBSession();
+        Transaction tx = null;
+        try {
+          Session session = PersistenceManager.getRequestDBSession();
 //beginTransaction();  
-		  session.delete(attendee);
-		  //tx.commit();
-		}
-		catch (Exception ex) {
-		  if (tx != null) {
-		    try {
-		      tx.rollback();
-		    }
-		    catch (Exception ex1) {
-		      throw new CalendarException(
-		          "Cannot rollback delete AMPCalendar", ex1);
-		    }
-		  }
-		  throw new CalendarException("Canot delete AMPCalendar", ex);
-		}
+          session.delete(attendee);
+          //tx.commit();
+        }
+        catch (Exception ex) {
+          if (tx != null) {
+            try {
+              tx.rollback();
+            }
+            catch (Exception ex1) {
+              throw new CalendarException(
+                  "Cannot rollback delete AMPCalendar", ex1);
+            }
+          }
+          throw new CalendarException("Canot delete AMPCalendar", ex);
+        }
   }
 
   public static void deleteAmpCalendar(Long ampCalendarId) throws
@@ -245,15 +245,15 @@ public class AmpDbUtil {
   
  
   public static void updateAmpCalendarAttendee(AmpCalendarAttendee attendee) throws CalendarException{
-	  Transaction tx = null;
-	  try {
-		  Session session = PersistenceManager.getRequestDBSession();
+      Transaction tx = null;
+      try {
+          Session session = PersistenceManager.getRequestDBSession();
 //beginTransaction();
-	      session.update(attendee);
-	      //tx.commit();
-	} catch (Exception e) {
-		throw new CalendarException("Unable to update AmpCalendarAttendee object", e);
-	}
+          session.update(attendee);
+          //tx.commit();
+    } catch (Exception e) {
+        throw new CalendarException("Unable to update AmpCalendarAttendee object", e);
+    }
   }
 
   public static void updateAmpCalendar(AmpCalendar ampCalendar) throws
@@ -311,270 +311,270 @@ public class AmpDbUtil {
   }
 
   public static Collection<AmpCalendar> getAmpCalendarEventsPublic(
-		  Integer showPublicEvents, 
-		  String[] selectedeventTypeIds,
-		  String instanceId, 
-		  String siteId)
-		  throws CalendarException {
+          Integer showPublicEvents, 
+          String[] selectedeventTypeIds,
+          String instanceId, 
+          String siteId)
+          throws CalendarException {
 
-	  try {
-		  Hashtable<Long, AmpCalendar> retEvents=new Hashtable<Long,AmpCalendar>();
-		
-			List events = getAmpCalendarEvents(selectedeventTypeIds, null, showPublicEvents, instanceId, siteId);
-			if (events != null) {
-				for (Iterator eventItr = events.iterator(); eventItr.hasNext(); ) {
-					AmpCalendar ampCal = (AmpCalendar) eventItr.next();
-					if (ampCal.getMember() != null) {
-						retEvents.put(ampCal.getCalendarPK().getCalendar().getId(), ampCal);
-					}
-				}
-			}
-			return retEvents.values();
-		} catch (Exception ex) {
-			throw new RuntimeException(ex);
-		}
+      try {
+          Hashtable<Long, AmpCalendar> retEvents=new Hashtable<Long,AmpCalendar>();
+        
+            List events = getAmpCalendarEvents(selectedeventTypeIds, null, showPublicEvents, instanceId, siteId);
+            if (events != null) {
+                for (Iterator eventItr = events.iterator(); eventItr.hasNext(); ) {
+                    AmpCalendar ampCal = (AmpCalendar) eventItr.next();
+                    if (ampCal.getMember() != null) {
+                        retEvents.put(ampCal.getCalendarPK().getCalendar().getId(), ampCal);
+                    }
+                }
+            }
+            return retEvents.values();
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
   }
   
   public static Collection<AmpCalendar> getAmpCalendarEventsByMember(AmpTeamMember curMember,
-		  Integer showPublicEvents, 
-		  String[] selectedeventTypeIds,
-		  String instanceId, 
-		  String siteId)
-		  throws CalendarException {
+          Integer showPublicEvents, 
+          String[] selectedeventTypeIds,
+          String instanceId, 
+          String siteId)
+          throws CalendarException {
 
-	  try{
-
-
-		  Hashtable<Long, AmpCalendar> retEvents=new Hashtable<Long,AmpCalendar>();
-		
-	List events = getAmpCalendarEvents(selectedeventTypeIds, curMember.getUser().getId(), showPublicEvents, instanceId, siteId);
-	if (events != null) {
-		for (Iterator eventItr = events.iterator(); eventItr.hasNext(); ) {
-			AmpCalendar ampCal = (AmpCalendar) eventItr.next();
-			if (ampCal.getMember() != null) {
-
-				if(ampCal.getMember().getAmpTeamMemId().equals(curMember.getAmpTeamMemId())){
-					retEvents.put(ampCal.getCalendarPK().getCalendar().getId(), ampCal);
-				}
+      try{
 
 
-				boolean isCurrentMemberEventAttendee=false;
-					if(ampCal.getAttendees()!=null && ampCal.getAttendees().size()>0){
-						for (Object attendee : ampCal.getAttendees()) {
-							AmpCalendarAttendee att=(AmpCalendarAttendee)attendee;
-							if(att.getMember()!=null && att.getMember().getAmpTeamMemId().equals(curMember.getAmpTeamMemId())){
-								isCurrentMemberEventAttendee=true;
-								break;
-							}
-						}
-					}
+          Hashtable<Long, AmpCalendar> retEvents=new Hashtable<Long,AmpCalendar>();
+        
+    List events = getAmpCalendarEvents(selectedeventTypeIds, curMember.getUser().getId(), showPublicEvents, instanceId, siteId);
+    if (events != null) {
+        for (Iterator eventItr = events.iterator(); eventItr.hasNext(); ) {
+            AmpCalendar ampCal = (AmpCalendar) eventItr.next();
+            if (ampCal.getMember() != null) {
 
-				if(!ampCal.isPrivateEvent() && (showPublicEvents==0 || showPublicEvents==2)){
-					retEvents.put(ampCal.getCalendarPK().getCalendar().getId(), ampCal);
-					continue;
-				}
-				if(ampCal.isPrivateEvent() && (showPublicEvents==0 || showPublicEvents==1)){
-					if(isCurrentMemberEventAttendee){
-						retEvents.put(ampCal.getCalendarPK().getCalendar().getId(), ampCal);
-						continue;
-					}
-				}
-			}
-		}
-	}
-		return retEvents.values();
-	  	} catch (Exception ex) {
-	  		throw new RuntimeException(ex);
-	  	}
+                if(ampCal.getMember().getAmpTeamMemId().equals(curMember.getAmpTeamMemId())){
+                    retEvents.put(ampCal.getCalendarPK().getCalendar().getId(), ampCal);
+                }
+
+
+                boolean isCurrentMemberEventAttendee=false;
+                    if(ampCal.getAttendees()!=null && ampCal.getAttendees().size()>0){
+                        for (Object attendee : ampCal.getAttendees()) {
+                            AmpCalendarAttendee att=(AmpCalendarAttendee)attendee;
+                            if(att.getMember()!=null && att.getMember().getAmpTeamMemId().equals(curMember.getAmpTeamMemId())){
+                                isCurrentMemberEventAttendee=true;
+                                break;
+                            }
+                        }
+                    }
+
+                if(!ampCal.isPrivateEvent() && (showPublicEvents==0 || showPublicEvents==2)){
+                    retEvents.put(ampCal.getCalendarPK().getCalendar().getId(), ampCal);
+                    continue;
+                }
+                if(ampCal.isPrivateEvent() && (showPublicEvents==0 || showPublicEvents==1)){
+                    if(isCurrentMemberEventAttendee){
+                        retEvents.put(ampCal.getCalendarPK().getCalendar().getId(), ampCal);
+                        continue;
+                    }
+                }
+            }
+        }
+    }
+        return retEvents.values();
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
   }
   
   public static List getAmpCalendarEvents(String[] selectedEventTypeIds,
-		  Long userId,Integer showPublicEvents,String instanceId, String siteId) throws CalendarException {
-	  try {
-		  Session session = PersistenceManager.getRequestDBSession();
+          Long userId,Integer showPublicEvents,String instanceId, String siteId) throws CalendarException {
+      try {
+          Session session = PersistenceManager.getRequestDBSession();
 
-		  StringBuffer queryString = new StringBuffer();
-		  	queryString.append("select ac from ").append(AmpCalendar.class.getName());
-		  	queryString.append(" ac left join ac.organisations org, ").append(Calendar.class.getName()).append(" c ");
+          StringBuffer queryString = new StringBuffer();
+            queryString.append("select ac from ").append(AmpCalendar.class.getName());
+            queryString.append(" ac left join ac.organisations org, ").append(Calendar.class.getName()).append(" c ");
 
-			queryString.append(" where c.id=ac.calendarPK.calendar.id ");
+            queryString.append(" where c.id=ac.calendarPK.calendar.id ");
 
 
-			if(showPublicEvents == 2){
-	        	  queryString.append(" and ac.privateEvent=false");
-	        }
-			if(showPublicEvents == 1){
-	        	  queryString.append(" and ac.privateEvent=true");
-	        }
-			
-			
-			if ( (selectedEventTypeIds != null) && (selectedEventTypeIds.length > 0) ) {
-	        	  queryString.append(" and ac.eventsType.id in (:selectedEventTypes)");
-	          }else{
-	        	  queryString.append(" and 0 = 1");
-	          }
-			
-			if (instanceId != null) {
-				queryString.append(" and c.instanceId = :instanceId");
-			}
-			if (siteId != null) {
-				queryString.append(" and c.siteId = :siteId");
-			}
-			Query query = session.createQuery(queryString.toString());
-						
-			if ( (selectedEventTypeIds != null) && (selectedEventTypeIds.length > 0) ) {
-	        	  List <Long> selectedEventType = new ArrayList<Long>();
-	        	  for(int index = 0; index < selectedEventTypeIds.length; index++) {
-	        		  selectedEventType.add(Long.parseLong(selectedEventTypeIds[index]));
-	        	  }
-	              query.setParameterList("selectedEventTypes", selectedEventType);
-	          }
-			
-			if (instanceId != null) {
-				query.setString("instanceId", instanceId);
-			}
-			if (siteId != null) {
-				query.setString("siteId", siteId);
-			}
-			
-				return query.list();
-			} catch (Exception ex) {
-				logger.debug("Unable to get amp calendar events", ex);
-			throw new CalendarException("Unable to get amp calendar events", ex);
-	}
+            if(showPublicEvents == 2){
+                  queryString.append(" and ac.privateEvent=false");
+            }
+            if(showPublicEvents == 1){
+                  queryString.append(" and ac.privateEvent=true");
+            }
+            
+            
+            if ( (selectedEventTypeIds != null) && (selectedEventTypeIds.length > 0) ) {
+                  queryString.append(" and ac.eventsType.id in (:selectedEventTypes)");
+              }else{
+                  queryString.append(" and 0 = 1");
+              }
+            
+            if (instanceId != null) {
+                queryString.append(" and c.instanceId = :instanceId");
+            }
+            if (siteId != null) {
+                queryString.append(" and c.siteId = :siteId");
+            }
+            Query query = session.createQuery(queryString.toString());
+                        
+            if ( (selectedEventTypeIds != null) && (selectedEventTypeIds.length > 0) ) {
+                  List <Long> selectedEventType = new ArrayList<Long>();
+                  for(int index = 0; index < selectedEventTypeIds.length; index++) {
+                      selectedEventType.add(Long.parseLong(selectedEventTypeIds[index]));
+                  }
+                  query.setParameterList("selectedEventTypes", selectedEventType);
+              }
+            
+            if (instanceId != null) {
+                query.setString("instanceId", instanceId);
+            }
+            if (siteId != null) {
+                query.setString("siteId", siteId);
+            }
+            
+                return query.list();
+            } catch (Exception ex) {
+                logger.debug("Unable to get amp calendar events", ex);
+            throw new CalendarException("Unable to get amp calendar events", ex);
+    }
 }
 
   
   public static List getAmpCalendarEventsType() throws CalendarException {
-		List events = null;
-		Session session = null;
-	try {
-		session = PersistenceManager.getRequestDBSession();
+        List events = null;
+        Session session = null;
+    try {
+        session = PersistenceManager.getRequestDBSession();
 
-		 String queryString = "from " + AmpEventType.class.getName();
-	     Query q = session.createQuery(queryString);
-		 events = q.list();
-		 
-	}
-	catch (Exception ex) {
-		logger.debug("Unable to get event list from database", ex);
-		throw new CalendarException(
-				"Unable to get event list from database", ex);
-	}
+         String queryString = "from " + AmpEventType.class.getName();
+         Query q = session.createQuery(queryString);
+         events = q.list();
+         
+    }
+    catch (Exception ex) {
+        logger.debug("Unable to get event list from database", ex);
+        throw new CalendarException(
+                "Unable to get event list from database", ex);
+    }
 
-	return events;
+    return events;
 }
 
-	  public static List getAmpEventTypeIdByCalendarID(Long calendarId) throws CalendarException {
-			List id = null;
-			Session session = null;
-		try {
-			session = PersistenceManager.getRequestDBSession();
+      public static List getAmpEventTypeIdByCalendarID(Long calendarId) throws CalendarException {
+            List id = null;
+            Session session = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
 
-			Query q = session.createQuery("select c from " +
-		     AmpCalendar.class.getName() +
-			 " c where (c.id=:calendarId)");
-	
-			q.setParameter("calendarId", calendarId, LongType.INSTANCE);
-			//q.setParameter("userId", userId, LongType.INSTANCE);
-			id = q.list();
+            Query q = session.createQuery("select c from " +
+             AmpCalendar.class.getName() +
+             " c where (c.id=:calendarId)");
+    
+            q.setParameter("calendarId", calendarId, LongType.INSTANCE);
+            //q.setParameter("userId", userId, LongType.INSTANCE);
+            id = q.list();
 
-		}
-		catch (Exception ex) {
-			logger.debug("Unable to get event list from database", ex);
-			throw new CalendarException(
-					"Unable to get event list from database", ex);
-		}
+        }
+        catch (Exception ex) {
+            logger.debug("Unable to get event list from database", ex);
+            throw new CalendarException(
+                    "Unable to get event list from database", ex);
+        }
 
-		return id;
-	}
-	  
-	  public static long getComponentFMIdfromName(String name){
-		  Session session = null;
-			Query qry = null;
-			AmpModulesVisibility ampModule = null;
+        return id;
+    }
+      
+      public static long getComponentFMIdfromName(String name){
+          Session session = null;
+            Query qry = null;
+            AmpModulesVisibility ampModule = null;
 
-			try {
-				session = PersistenceManager.getSession();
-				String queryString = "select m from " + AmpModulesVisibility.class.getName()
-						+ " m where (m.name=:name)";
-				qry = session.createQuery(queryString);
-				qry.setParameter("name", name, StringType.INSTANCE);
-				Iterator itr = qry.list().iterator();
-				if (itr.hasNext()) {
-					ampModule = (AmpModulesVisibility) itr.next();
-				}
-			} catch (Exception e) {
-				logger.error("Unable to get currency");
-				logger.debug("Exceptiion " + e);
-			}
-			return ampModule!= null ? ampModule.getId() : 0l;
-	  }
-	  
-	  public static AmpModulesVisibility getComponentFMfromName(String name){
-		  Session session = null;
-			Query qry = null;
-			AmpModulesVisibility ampModule = null;
+            try {
+                session = PersistenceManager.getSession();
+                String queryString = "select m from " + AmpModulesVisibility.class.getName()
+                        + " m where (m.name=:name)";
+                qry = session.createQuery(queryString);
+                qry.setParameter("name", name, StringType.INSTANCE);
+                Iterator itr = qry.list().iterator();
+                if (itr.hasNext()) {
+                    ampModule = (AmpModulesVisibility) itr.next();
+                }
+            } catch (Exception e) {
+                logger.error("Unable to get currency");
+                logger.debug("Exceptiion " + e);
+            }
+            return ampModule!= null ? ampModule.getId() : 0l;
+      }
+      
+      public static AmpModulesVisibility getComponentFMfromName(String name){
+          Session session = null;
+            Query qry = null;
+            AmpModulesVisibility ampModule = null;
 
-			try {
-				session = PersistenceManager.getSession();
-				String queryString = "select m from " + AmpModulesVisibility.class.getName()
-						+ " m where (m.name=:name)";
-				qry = session.createQuery(queryString);
-				qry.setParameter("name", name, StringType.INSTANCE);
-				Iterator itr = qry.list().iterator();
-				if (itr.hasNext()) {
-					ampModule = (AmpModulesVisibility) itr.next();
-				}
-			} catch (Exception e) {
-				logger.error("Unable to get currency");
-				logger.debug("Exceptiion " + e);
-			}
-			return ampModule;
-	  }
-	  
-	  public static List getComponentsId(List<String> components){
-		  List<Long> ids = new ArrayList<Long>();
-		  Iterator<String> it = components.iterator();
-		  while(it.hasNext()){
-			  ids.add(getComponentFMIdfromName(it.next()));
-		  }
-		  return ids;
-	  }
-	  
-	  public static boolean getComponentState(String componentName){
-		  AmpModulesVisibility amv = getComponentFMfromName(componentName);
-		  return getComponentVisibility(amv);
-	  }
-	  
-	  public static List<Boolean> getStateComponents(List<String> componentsName){
-		  List<Boolean> result = new ArrayList<Boolean>();
-		  Iterator<String> it = componentsName.iterator();
-		  while(it.hasNext()){
-			  AmpModulesVisibility amv = getComponentFMfromName(it.next());
-			  //result.add(Boolean.valueOf(amv.getVisible()));
-			  result.add(getComponentVisibility(amv));
-		  }
-		  return result;
-	  }
-	  
-	  public static Boolean getComponentVisibility(AmpModulesVisibility amv){
-		  Session session = null;
-			Query qry = null;
-			try {
-				session = PersistenceManager.getSession();
-				String queryString = "select m.module from amp_modules_templates m where m.module=" + amv.getId();
-				qry = session.createSQLQuery(queryString);
-				Iterator itr = qry.list().iterator();
-				if (itr.hasNext()) {
-					return true;
-				}
-			} catch (Exception e) {
-				logger.error("Unable to get currency");
-				logger.debug("Exceptiion " + e);
-			}
-			return false;
-	  }
+            try {
+                session = PersistenceManager.getSession();
+                String queryString = "select m from " + AmpModulesVisibility.class.getName()
+                        + " m where (m.name=:name)";
+                qry = session.createQuery(queryString);
+                qry.setParameter("name", name, StringType.INSTANCE);
+                Iterator itr = qry.list().iterator();
+                if (itr.hasNext()) {
+                    ampModule = (AmpModulesVisibility) itr.next();
+                }
+            } catch (Exception e) {
+                logger.error("Unable to get currency");
+                logger.debug("Exceptiion " + e);
+            }
+            return ampModule;
+      }
+      
+      public static List getComponentsId(List<String> components){
+          List<Long> ids = new ArrayList<Long>();
+          Iterator<String> it = components.iterator();
+          while(it.hasNext()){
+              ids.add(getComponentFMIdfromName(it.next()));
+          }
+          return ids;
+      }
+      
+      public static boolean getComponentState(String componentName){
+          AmpModulesVisibility amv = getComponentFMfromName(componentName);
+          return getComponentVisibility(amv);
+      }
+      
+      public static List<Boolean> getStateComponents(List<String> componentsName){
+          List<Boolean> result = new ArrayList<Boolean>();
+          Iterator<String> it = componentsName.iterator();
+          while(it.hasNext()){
+              AmpModulesVisibility amv = getComponentFMfromName(it.next());
+              //result.add(Boolean.valueOf(amv.getVisible()));
+              result.add(getComponentVisibility(amv));
+          }
+          return result;
+      }
+      
+      public static Boolean getComponentVisibility(AmpModulesVisibility amv){
+          Session session = null;
+            Query qry = null;
+            try {
+                session = PersistenceManager.getSession();
+                String queryString = "select m.module from amp_modules_templates m where m.module=" + amv.getId();
+                qry = session.createSQLQuery(queryString);
+                Iterator itr = qry.list().iterator();
+                if (itr.hasNext()) {
+                    return true;
+                }
+            } catch (Exception e) {
+                logger.error("Unable to get currency");
+                logger.debug("Exceptiion " + e);
+            }
+            return false;
+      }
   }
   
 

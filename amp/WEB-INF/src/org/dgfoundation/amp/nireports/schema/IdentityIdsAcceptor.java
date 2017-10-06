@@ -11,21 +11,21 @@ import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
  *
  */
 public class IdentityIdsAcceptor implements IdsAcceptor {
-	
-	final Map<Integer, Set<Long>> splitterCells;
-	
-	public IdentityIdsAcceptor(Map<Integer, Set<Long>> splitterCells) {
-		this.splitterCells = splitterCells;
-	}
-	
-	@Override
-	public boolean isAcceptable(Coordinate cellCoos) {
-		return splitterCells.containsKey(cellCoos.level) && splitterCells.get(cellCoos.level).contains(cellCoos.id);
-	}
-	
-	@Override
-	public String toString() {
-		return String.format("(cells = %s)", this.splitterCells);
-	}
+    
+    final Map<Integer, Set<Long>> splitterCells;
+    
+    public IdentityIdsAcceptor(Map<Integer, Set<Long>> splitterCells) {
+        this.splitterCells = splitterCells;
+    }
+    
+    @Override
+    public boolean isAcceptable(Coordinate cellCoos) {
+        return splitterCells.containsKey(cellCoos.level) && splitterCells.get(cellCoos.level).contains(cellCoos.id);
+    }
+    
+    @Override
+    public String toString() {
+        return String.format("(cells = %s)", this.splitterCells);
+    }
 
 }

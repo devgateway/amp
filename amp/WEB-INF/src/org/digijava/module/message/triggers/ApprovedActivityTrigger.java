@@ -41,10 +41,10 @@ public class ApprovedActivityTrigger extends Trigger {
             e.getParameters().put(PARAM_SAVED_BY,act.getActivityCreator());
         } 
         if(act.getModifiedBy()==null){
-        	e.getParameters().put(PARAM_APPROVED_BY,act.getActivityCreator());
+            e.getParameters().put(PARAM_APPROVED_BY,act.getActivityCreator());
         }
         else{
-        	e.getParameters().put(PARAM_APPROVED_BY,act.getModifiedBy());
+            e.getParameters().put(PARAM_APPROVED_BY,act.getModifiedBy());
         }
         e.getParameters().put(PARAM_ACTIVIY_CREATOR_TEAM, act.getTeam().getAmpTeamId());
         e.getParameters().put(PARAM_SAVE_DATE, new Date());

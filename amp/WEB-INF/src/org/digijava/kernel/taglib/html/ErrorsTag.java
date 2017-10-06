@@ -59,9 +59,9 @@ import org.digijava.kernel.util.RequestUtils;
 
 public class ErrorsTag extends org.apache.struts.taglib.html.ErrorsTag {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private static Logger logger = Logger.getLogger(ErrorsTag.class);
+    private static Logger logger = Logger.getLogger(ErrorsTag.class);
     
     private static ResourceBundle bundleApplication = ResourceBundle.getBundle("java.resources.application");
 
@@ -157,7 +157,7 @@ public class ErrorsTag extends org.apache.struts.taglib.html.ErrorsTag {
      * @return
      * @throws JspException
      */
-	public void doErrors() throws JspException {
+    public void doErrors() throws JspException {
 
         HttpServletRequest request = (HttpServletRequest) pageContext.
             getRequest();
@@ -189,52 +189,52 @@ public class ErrorsTag extends org.apache.struts.taglib.html.ErrorsTag {
                 
                 //Add the new string id if needed.
                 try {
-					String body = bundleApplication.getString(item.getKey());
-					
-					/**
-					 * Constantin: atrocious hack - do not translate html tags from application.properties
-					 */
-					String eliminatedPrefix = "";
-					String eliminatedSuffix = "";
-					if (body.toLowerCase().startsWith("<font"))
-					{
-						eliminatedPrefix += body.substring(0, body.indexOf(">") + 1);
-						eliminatedSuffix = "</font>" + eliminatedSuffix;
-						body = body.substring(eliminatedPrefix.length()); // delete prefix
-						body = body.substring(0, body.length() - eliminatedSuffix.length()); // delete suffix
-						body = body.trim();
-					}
-					/**
-					 * Constantin: copy paste all day long!
-					 */
-					if (body.toLowerCase().startsWith("<li"))
-					{
-						eliminatedPrefix += body.substring(0, body.indexOf(">") + 1);
-						eliminatedSuffix = "</li>" + eliminatedSuffix;
-						body = body.substring(eliminatedPrefix.length()); // delete prefix
-						body = body.substring(0, body.length() - eliminatedSuffix.length()); // delete suffix
-						body = body.trim();
-					}
-					
-					String translatedBody = body;
-					// translate all parts and only afterwards format with additional arguments
-					for (String bodyPart : body.split("\\{[0-9]+\\}")) {
-						bodyPart = bodyPart.trim();
+                    String body = bundleApplication.getString(item.getKey());
+                    
+                    /**
+                     * Constantin: atrocious hack - do not translate html tags from application.properties
+                     */
+                    String eliminatedPrefix = "";
+                    String eliminatedSuffix = "";
+                    if (body.toLowerCase().startsWith("<font"))
+                    {
+                        eliminatedPrefix += body.substring(0, body.indexOf(">") + 1);
+                        eliminatedSuffix = "</font>" + eliminatedSuffix;
+                        body = body.substring(eliminatedPrefix.length()); // delete prefix
+                        body = body.substring(0, body.length() - eliminatedSuffix.length()); // delete suffix
+                        body = body.trim();
+                    }
+                    /**
+                     * Constantin: copy paste all day long!
+                     */
+                    if (body.toLowerCase().startsWith("<li"))
+                    {
+                        eliminatedPrefix += body.substring(0, body.indexOf(">") + 1);
+                        eliminatedSuffix = "</li>" + eliminatedSuffix;
+                        body = body.substring(eliminatedPrefix.length()); // delete prefix
+                        body = body.substring(0, body.length() - eliminatedSuffix.length()); // delete suffix
+                        body = body.trim();
+                    }
+                    
+                    String translatedBody = body;
+                    // translate all parts and only afterwards format with additional arguments
+                    for (String bodyPart : body.split("\\{[0-9]+\\}")) {
+                        bodyPart = bodyPart.trim();
                         bodyPart = StringEscapeUtils.escapeHtml(bodyPart);
-						translatedBody = translatedBody.replace(bodyPart, TranslatorWorker.translateText(bodyPart));
-					}
-					
-					// formatting with custom arguments
-					if (item.getValues() != null) {
-						MessageFormat format = new MessageFormat(translatedBody);
-						translatedBody = format.format(item.getValues());
-					}
-					translatedBody = translatedBody.trim();
+                        translatedBody = translatedBody.replace(bodyPart, TranslatorWorker.translateText(bodyPart));
+                    }
+                    
+                    // formatting with custom arguments
+                    if (item.getValues() != null) {
+                        MessageFormat format = new MessageFormat(translatedBody);
+                        translatedBody = format.format(item.getValues());
+                    }
+                    translatedBody = translatedBody.trim();
 
-					String errorMsg = eliminatedPrefix + translatedBody + eliminatedSuffix;
+                    String errorMsg = eliminatedPrefix + translatedBody + eliminatedSuffix;
                     newErrors.add((property == null) ? Globals.MESSAGE_KEY : property, new ActionMessage(errorMsg, false));
                 } catch (Exception e) {
-                	logger.error(e);
+                    logger.error(e);
                 }
             }
 

@@ -49,8 +49,8 @@ import org.digijava.kernel.util.SiteUtils;
 public class FormTag
     extends org.apache.struts.taglib.html.FormTag {
 
-	private static final long serialVersionUID = 1L;
-	private String oldAction;
+    private static final long serialVersionUID = 1L;
+    private String oldAction;
     private String site;
     private String referrer;
     private String moduleName;
@@ -61,22 +61,22 @@ public class FormTag
         if(name==null){
             this.name=beanName;
         }
-		return name;
-	}
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getType() {
-		return beanType;
-	}
+    public String getType() {
+        return beanType;
+    }
 
-	public void setType(String type) {
-		this.beanType = type;
-	}
+    public void setType(String type) {
+        this.beanType = type;
+    }
 
-	private String context = "context/module/moduleinstance";
+    private String context = "context/module/moduleinstance";
 
     public String getContextPath() {
         if (moduleName == null) {
@@ -200,7 +200,7 @@ public class FormTag
 
             if( !SiteConfigUtils.getLogonSiteId().equalsIgnoreCase(getSite()) ) {
 
-            	Site site = SiteCache.lookupByName(getSite());
+                Site site = SiteCache.lookupByName(getSite());
                 siteURL = SiteUtils.getSiteURL(SiteUtils.getDefaultSiteDomain(site), request.getScheme(), request.getServerPort(), request.getContextPath());
             } else {
                 StringBuffer tmpSiteURL =  new StringBuffer( HttpLoginManager.getLoginSiteURL(request) );

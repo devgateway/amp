@@ -71,8 +71,8 @@ import org.hibernate.Session;
  */
 public class TranslatorWorker {
 
-	public static boolean FREEZE_TIMESTAMP_UPDATING = false;
-	
+    public static boolean FREEZE_TIMESTAMP_UPDATING = false;
+    
     private static Logger logger =
         Logger.getLogger(TranslatorWorker.class);
 
@@ -123,7 +123,7 @@ public class TranslatorWorker {
     }
 
     public TranslatorWorker() {
-    	caseSensitiveKeys=DigiConfigManager.getConfig().isCaseSensitiveTranslatioKeys();//DGP-318
+        caseSensitiveKeys=DigiConfigManager.getConfig().isCaseSensitiveTranslatioKeys();//DGP-318
         setUpAlerts();
     }
 
@@ -140,7 +140,7 @@ public class TranslatorWorker {
     
     //TODO may be bad idea!
     public void refresh(Message message) throws WorkerException {
-    	// DO Nothing
+        // DO Nothing
     }
 
     /**
@@ -149,7 +149,7 @@ public class TranslatorWorker {
      * @return
      */
     public static String getDefaultLocalCode(){
-    	return "en";
+        return "en";
     }
     
     
@@ -189,11 +189,11 @@ public class TranslatorWorker {
      * @throws WorkerException
      */
     public static String translateText(String text, String locale, Long siteId){
-    	return translateText(text, null, locale, siteId);
+        return translateText(text, null, locale, siteId);
     }
     
     public static String translateText(String text, String locale, Site site){
-    	return translateText(text, null, locale, site == null ? null : Site.getIdOf(site));
+        return translateText(text, null, locale, site == null ? null : Site.getIdOf(site));
     }
     
     /**
@@ -204,15 +204,15 @@ public class TranslatorWorker {
      */
     public static String translateText(String text)
     {
-    	try
-    	{
-    		return translateText(text, null, TLSUtils.getEffectiveLangCode(), TLSUtils.getSiteId());
-    	}
-    	catch(Exception e)
-    	{
-    		logger.error("cannot translate text " + text, e);
-    		return text;
-    	}
+        try
+        {
+            return translateText(text, null, TLSUtils.getEffectiveLangCode(), TLSUtils.getSiteId());
+        }
+        catch(Exception e)
+        {
+            logger.error("cannot translate text " + text, e);
+            return text;
+        }
     }
     
     /**
@@ -273,13 +273,13 @@ public class TranslatorWorker {
         //Try to find translation
         Message msg = worker.getByBody(text, keyWords, locale, siteId);
         if (msg != null)
-        	return msg;
+            return msg;
               
         // Then try to find in default language
-    	msg = worker.getByBody(text, keyWords, getDefaultLocalCode(), siteId);
-    	if (msg != null)
-    		return msg;
-    	  	
+        msg = worker.getByBody(text, keyWords, getDefaultLocalCode(), siteId);
+        if (msg != null)
+            return msg;
+            
         // no translations found => create a default entry
         msg = new Message();
         msg.setSite(SiteCache.lookupById(siteId));
@@ -343,7 +343,7 @@ public class TranslatorWorker {
         WorkerException {
 
         if (siteId == null) {
-        	Long defaultSideId = getDefaultSite().getId();
+            Long defaultSideId = getDefaultSite().getId();
             return getByKey(key, locale, defaultSideId);
         } else {
             Site site = SiteCache.getInstance().getSite(siteId);
@@ -447,20 +447,20 @@ public class TranslatorWorker {
      * @throws WorkerException
      */
     public Message getByBody(String originalText, String local, Long siteId) {
-    	return getByBody(originalText, null, local, siteId);
+        return getByBody(originalText, null, local, siteId);
     }
 
     public Message getByBody(String originalText, String keyWords, String local, Long siteId) {
-    	String hashCode = generateTrnKey(originalText);
-    	return getByKey(hashCode,originalText, keyWords,local,siteId);
+        String hashCode = generateTrnKey(originalText);
+        return getByKey(hashCode,originalText, keyWords,local,siteId);
     }
     
     public Message getByKey(String key, String locale, Long siteId) {
-    	return getByKey(key, "", null, locale, siteId);
+        return getByKey(key, "", null, locale, siteId);
     }
     
     public Message getByKey(String key, String locale, Site site) {
-    	return getByKey(key, "", null, locale, Site.getIdOf(site));
+        return getByKey(key, "", null, locale, Site.getIdOf(site));
     }    
 
     /**
@@ -542,7 +542,7 @@ public class TranslatorWorker {
 
             session = PersistenceManager.getSession();
             Query q = session.createQuery(query);
-			return (List<String>) q.list();
+            return (List<String>) q.list();
         }
         catch (HibernateException he) {
             String errKey = "TranslatorWorker.HibExLoadingMessage.err";
@@ -973,16 +973,16 @@ public class TranslatorWorker {
      * @param message
      */
     public void processKeyCase(Message message) {
-    	//commented out for speed. We do not need this with hash code keys
+        //commented out for speed. We do not need this with hash code keys
        // if (!isCaseSensitiveKeys()){
-       // 	message.setKey(processKeyCase(message.getKey()));
+       //   message.setKey(processKeyCase(message.getKey()));
        // }
     }
     
     public String processKeyCase(String key) {
-    	//commented out for speed. We do not need this with hash code keys
+        //commented out for speed. We do not need this with hash code keys
         //if (!isCaseSensitiveKeys()){
-        //	return key.toLowerCase();
+        //  return key.toLowerCase();
         //}
         return key;
     }
@@ -993,7 +993,7 @@ public class TranslatorWorker {
      * @param message
      */
     protected void processBodyChars(Message message){
-    	message.setMessage(processSpecialChars(message.getMessage()));
+        message.setMessage(processSpecialChars(message.getMessage()));
     }
 
     /**
@@ -1007,13 +1007,13 @@ public class TranslatorWorker {
      * @param message
      */
     protected void processOriginalMessage(Message message){
-    	//Temporary solution for AMP-6663 to not write patch which runs more then 5 min.
-    	if (message.getOriginalMessage()==null || "".equals(message.getOriginalMessage().trim())){
-    		//if hash generated from text is same as key then this is the original text from which key was generated.
-    		if (generateTrnKey(message.getMessage()).equals(message.getKey())){
-    			message.setOriginalMessage(message.getMessage());
-    		}
-    	}
+        //Temporary solution for AMP-6663 to not write patch which runs more then 5 min.
+        if (message.getOriginalMessage()==null || "".equals(message.getOriginalMessage().trim())){
+            //if hash generated from text is same as key then this is the original text from which key was generated.
+            if (generateTrnKey(message.getMessage()).equals(message.getKey())){
+                message.setOriginalMessage(message.getMessage());
+            }
+        }
     }
     /**
      * Processes special characters for translations to make it compatible with translations rules.
@@ -1022,8 +1022,8 @@ public class TranslatorWorker {
      * @return
      */
     public static String processSpecialChars(String text){
-    	if (text == null) return null;
-    	return text.replace("\r", "").replace("\n", "");    
+        if (text == null) return null;
+        return text.replace("\r", "").replace("\n", "");    
     }
     
     /**
@@ -1033,8 +1033,8 @@ public class TranslatorWorker {
      * @return
      */
     public static String makeTextJSFriendly(String text){
-    	if (text == null) return null;
-    	return text.replaceAll("'","\\\\'").replace("\"", "\\\"");    
+        if (text == null) return null;
+        return text.replaceAll("'","\\\\'").replace("\"", "\\\"");    
     }
     /**
      * Generates hash code from message body and sets it as key.
@@ -1043,8 +1043,8 @@ public class TranslatorWorker {
      * @param message translation entity to update
      */
     protected void setHash(Message message){
-    	String hash = generateTrnKey(message.getMessage());
-    	message.setKey(hash);
+        String hash = generateTrnKey(message.getMessage());
+        message.setKey(hash);
     }
     
     /**
@@ -1053,15 +1053,15 @@ public class TranslatorWorker {
      * @param text any text that but usually this should be body for trn tag or default translation text.
      * @return key for translation, actually it is hash code of the text.
      */
-	public static String generateTrnKey(String text) {
+    public static String generateTrnKey(String text) {
 
-		if (text != null) {
-			String trnPrefix = TrnUtil.getTrnPrefix();
-			return Integer.toString(((trnPrefix != null ? trnPrefix : "") + text).trim().toLowerCase().hashCode());
-		} else {
-			return "";
-		}
-	}
+        if (text != null) {
+            String trnPrefix = TrnUtil.getTrnPrefix();
+            return Integer.toString(((trnPrefix != null ? trnPrefix : "") + text).trim().toLowerCase().hashCode());
+        } else {
+            return "";
+        }
+    }
     
     /**
      * Puts message in update queue.
@@ -1072,10 +1072,10 @@ public class TranslatorWorker {
      * @see TrnAccessUpdateQueue
      * @see TrnAccesTimeSaver
      */
-	protected void updateTimeStamp(Message message) {
-		if (!FREEZE_TIMESTAMP_UPDATING)
-			timeStampQueue.put(message);
-	}
+    protected void updateTimeStamp(Message message) {
+        if (!FREEZE_TIMESTAMP_UPDATING)
+            timeStampQueue.put(message);
+    }
     
     /**
      * Saves message in db.
@@ -1089,7 +1089,7 @@ public class TranslatorWorker {
         Session ses = null;
 
         try {
-        	message.setKey(message.getKey().trim());
+            message.setKey(message.getKey().trim());
             ses = PersistenceManager.getSession();
 //beginTransaction();
             //TODO if we add hash codes as keys, then we do not need key case correction method on next line
@@ -1118,18 +1118,18 @@ public class TranslatorWorker {
             
         } 
         catch (HibernateException e) {
-        	logger.warn("saveOrUpdate() failed for Message with siteId=" + message.getSiteId() + ", key = " + message.getKey() + ",locale=" + message.getLocale(), e);
-        	try {
-        		ses.save(message);
+            logger.warn("saveOrUpdate() failed for Message with siteId=" + message.getSiteId() + ", key = " + message.getKey() + ",locale=" + message.getLocale(), e);
+            try {
+                ses.save(message);
                 //tx.commit();
-        	} catch (Exception e1) {
-        		logger.error("Error saving translation. siteId="
+            } catch (Exception e1) {
+                logger.error("Error saving translation. siteId="
                         + message.getSiteId() + ", key = " + message.getKey() +
                         ",locale=" + message.getLocale(), e1);
-        		//
+                //
                    throw new RuntimeException("TranslatorWorker.HibExSaveMessage.err", e); 
-			}
-       	        
+            }
+                
         }
     }
   
@@ -1159,8 +1159,8 @@ public class TranslatorWorker {
 
         try {
             //TODO if we add hash codes as keys, then we do not need key case correction method on next line
-        	processBodyChars(message);
-        	processOriginalMessage(message);
+            processBodyChars(message);
+            processOriginalMessage(message);
             ses = PersistenceManager.getSession();
 //beginTransaction();
             if (!isKeyExpired(message.getKey())) {
@@ -1177,7 +1177,7 @@ public class TranslatorWorker {
             logger.error("Error updating translation. siteId="
                          + message.getSiteId() + ", key = " + message.getKey() +
                          ",locale=" + message.getLocale(), e);
-//        	//System.out.println("Error updating translation. msg="+message.getMessage()+" siteId="
+//          //System.out.println("Error updating translation. msg="+message.getMessage()+" siteId="
 //                  + message.getSiteId() + ", key = " + message.getKey() +
 //                  ",locale=" + message.getLocale());
             throw new RuntimeException("TranslatorWorker.HibExUpdateMessage.err", e);
@@ -1200,13 +1200,13 @@ public class TranslatorWorker {
             ses = PersistenceManager.getSession();
 //beginTransaction();
             ses.createQuery("delete from " +Message.class.getName()+"  msg "+
-            		" where  msg.key=:key" +
-            		" and  msg.locale=:locale " +
-            		" and  msg.siteId=:siteId")
-            		.setString("key",message.getKey())
-            		.setString("locale",message.getLocale())
-            		.setString("siteId",message.getSiteId())
-            		.executeUpdate(); 
+                    " where  msg.key=:key" +
+                    " and  msg.locale=:locale " +
+                    " and  msg.siteId=:siteId")
+                    .setString("key",message.getKey())
+                    .setString("locale",message.getLocale())
+                    .setString("siteId",message.getSiteId())
+                    .executeUpdate(); 
 
             //Remove from queue too.
             //timeStampQueue.remove(message);
@@ -1366,18 +1366,18 @@ public class TranslatorWorker {
      * @throws WorkerException
      */
     @SuppressWarnings("unchecked")
-	public static List<String> getAllUsedLanguages() throws WorkerException{
-    	List<String> result = null;
-    	String oql = "select m.locale from "+Message.class.getName()+" as m group by m.locale";
-    	Session session = null;
-    	try {
-			session = PersistenceManager.getSession();
-			Query query = session.createQuery(oql);
-			result = query.list();
-		} catch (Exception e) {
-			throw new WorkerException(e);
-		}
-    	return result;
+    public static List<String> getAllUsedLanguages() throws WorkerException{
+        List<String> result = null;
+        String oql = "select m.locale from "+Message.class.getName()+" as m group by m.locale";
+        Session session = null;
+        try {
+            session = PersistenceManager.getSession();
+            Query query = session.createQuery(oql);
+            result = query.list();
+        } catch (Exception e) {
+            throw new WorkerException(e);
+        }
+        return result;
     }
 
     /**
@@ -1432,10 +1432,10 @@ public class TranslatorWorker {
      * @return
      * @throws WorkerException
      */
-	public static Collection<Message> getAllTranslationOfBody(String text, Long siteId) throws WorkerException {
-		String hashKey = generateTrnKey(text);
-		return getAllTranslationsOfKey(hashKey, siteId);
-	}
+    public static Collection<Message> getAllTranslationOfBody(String text, Long siteId) throws WorkerException {
+        String hashKey = generateTrnKey(text);
+        return getAllTranslationsOfKey(hashKey, siteId);
+    }
 
     /**
      * Returns all translations for specified key on specified site.
@@ -1450,37 +1450,37 @@ public class TranslatorWorker {
     }
 
     @SuppressWarnings("unchecked")
-	public Collection<Message> getAllTranslationsOfKeyInternal(String key, Long siteId) throws WorkerException {
-    	Session session = null;
-    	List<Message> result = null;
-		try {
-			session = PersistenceManager.getSession();
-			String oql = "from "+Message.class.getName()+" as m where m.key = :key and m.siteId = :SiteId";
-			Query query = session.createQuery(oql);
-			query.setString("key", key);
-			query.setString("SiteId", siteId.toString());
-			result = query.list();
-		} catch (Exception e) {
-			throw new WorkerException(e);
-		}
-    	return result;
+    public Collection<Message> getAllTranslationsOfKeyInternal(String key, Long siteId) throws WorkerException {
+        Session session = null;
+        List<Message> result = null;
+        try {
+            session = PersistenceManager.getSession();
+            String oql = "from "+Message.class.getName()+" as m where m.key = :key and m.siteId = :SiteId";
+            Query query = session.createQuery(oql);
+            query.setString("key", key);
+            query.setString("SiteId", siteId.toString());
+            result = query.list();
+        } catch (Exception e) {
+            throw new WorkerException(e);
+        }
+        return result;
     }
  
     
     @SuppressWarnings("unchecked")
-	public static List<String> getAllTranslationsKeys(Long siteId) throws WorkerException{
-    	Session session = null;
-    	List<String> keys = null;
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			String oql = "select distinct m.key from "+Message.class.getName()+" as m where m.siteId = :siteId order by  m.key";
-			Query query =session.createQuery(oql);
-			query.setString("siteId", siteId.toString());
-			keys = query.list();
-		} catch (Exception e) {
-			throw new WorkerException(e);
-		}
-    	return keys;
+    public static List<String> getAllTranslationsKeys(Long siteId) throws WorkerException{
+        Session session = null;
+        List<String> keys = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String oql = "select distinct m.key from "+Message.class.getName()+" as m where m.siteId = :siteId order by  m.key";
+            Query query =session.createQuery(oql);
+            query.setString("siteId", siteId.toString());
+            keys = query.list();
+        } catch (Exception e) {
+            throw new WorkerException(e);
+        }
+        return keys;
     }
    
    /**
@@ -1490,25 +1490,25 @@ public class TranslatorWorker {
     * @return
     * @throws WorkerException
     */
-	@SuppressWarnings("unchecked")
-	public static List<Message> getOnlyLanguageTranslationsKeys(Site site,
-			String locale) throws WorkerException {
-		Session session = null;
-		List<Message> messages =null;
-		try {
-			session = PersistenceManager.getRequestDBSession();
-				String oql = " from " + Message.class.getName()
-				+ " as m where m.key in (select m1.key from " + Message.class.getName()
-					+ " as m1 group by m1.key having count(m1.key)=1) and  m.siteId =:siteId and m.locale=:locale order by  m.key ";
-				Query query = session.createQuery(oql);
-				query.setString("siteId",  Site.getIdOf(site).toString());
-				query.setString("locale", locale);
-				messages=query.list();
-		} catch (Exception e) {
-			throw new WorkerException(e);
-		}
-		return messages;
-	}
+    @SuppressWarnings("unchecked")
+    public static List<Message> getOnlyLanguageTranslationsKeys(Site site,
+            String locale) throws WorkerException {
+        Session session = null;
+        List<Message> messages =null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+                String oql = " from " + Message.class.getName()
+                + " as m where m.key in (select m1.key from " + Message.class.getName()
+                    + " as m1 group by m1.key having count(m1.key)=1) and  m.siteId =:siteId and m.locale=:locale order by  m.key ";
+                Query query = session.createQuery(oql);
+                query.setString("siteId",  Site.getIdOf(site).toString());
+                query.setString("locale", locale);
+                messages=query.list();
+        } catch (Exception e) {
+            throw new WorkerException(e);
+        }
+        return messages;
+    }
 
     /**
      * Sets on-site translation mode on/off
@@ -1532,33 +1532,33 @@ public class TranslatorWorker {
      * @throws WorkerException
      */
 
-	public String translateFromTree(String key, Site site, String langCode,
-			String defaultTrn, int translationType, String keyWords)
-			throws WorkerException {
-		ServletContext context = WebApplication.get().getServletContext();
-		return translateFromTree(key, site, new String[] { langCode },
-				defaultTrn, langCode, translationType, keyWords, context);
-	}
-	/**
-	 * Should be called from none wicket part to avoid WicketRuntimeException:
-	 * There is no application attached to current thread
-	 * @param key
-	 * @param siteId
-	 * @param langCode
-	 * @param defaultTrn
-	 * @param translationType
-	 * @param keyWords
-	 * @param context
-	 * @return
-	 * @throws WorkerException
-	 */
+    public String translateFromTree(String key, Site site, String langCode,
+            String defaultTrn, int translationType, String keyWords)
+            throws WorkerException {
+        ServletContext context = WebApplication.get().getServletContext();
+        return translateFromTree(key, site, new String[] { langCode },
+                defaultTrn, langCode, translationType, keyWords, context);
+    }
+    /**
+     * Should be called from none wicket part to avoid WicketRuntimeException:
+     * There is no application attached to current thread
+     * @param key
+     * @param siteId
+     * @param langCode
+     * @param defaultTrn
+     * @param translationType
+     * @param keyWords
+     * @param context
+     * @return
+     * @throws WorkerException
+     */
 
-	public String translateFromTree(String key, Site site, String langCode,
-			String defaultTrn, int translationType, String keyWords,
-			ServletContext context) throws WorkerException {
-		return translateFromTree(key, site, new String[] { langCode },
-				defaultTrn, langCode, translationType, keyWords, context);
-	}
+    public String translateFromTree(String key, Site site, String langCode,
+            String defaultTrn, int translationType, String keyWords,
+            ServletContext context) throws WorkerException {
+        return translateFromTree(key, site, new String[] { langCode },
+                defaultTrn, langCode, translationType, keyWords, context);
+    }
 
 
     public String translateFromTree(String key, Site site, String[] langCodes,
@@ -1631,12 +1631,12 @@ public class TranslatorWorker {
                     
                     save(message);
                     if(context!=null){
-                    	  String suffix =  message.getLocale();
-      					try {
-      						LuceneWorker.addItemToIndex(message, context,suffix);
-      					} catch (DgException e) {
-      						logger.debug("unable to add translation to lucene");
-      					}
+                          String suffix =  message.getLocale();
+                        try {
+                            LuceneWorker.addItemToIndex(message, context,suffix);
+                        } catch (DgException e) {
+                            logger.debug("unable to add translation to lucene");
+                        }
                     }
                   
                 }
@@ -1645,7 +1645,7 @@ public class TranslatorWorker {
         return defaultTrn;
     }
 
-	
+    
 
     protected void setUpAlerts() {
         Object configBean = DigiConfigManager.getConfigBean("translateAlert");
@@ -1694,52 +1694,52 @@ public class TranslatorWorker {
         }
     }
 
-	public boolean isCaseSensitiveKeys() {
-		return caseSensitiveKeys;
-	}
-	
-	/**
-	 * TODO Review and move to better class.
-	 * Note, this will return AMP site.
-	 * @return
-	 * @throws WorkerException
-	 */
-	public Site getDefaultSite(){
-		return SiteUtils.getDefaultSite();
-	}
-	
-	/**
-	 * Converts an Unicode string into UTF-8 string.
-	 * @param original
-	 * @return
-	 * @throws UnsupportedEncodingException
-	 */
-	public static String unicodeToUTF8(String original) throws UnsupportedEncodingException{
-		String newString = null;
-		byte[] tempBytes = original.getBytes("UTF8");
-		newString = new String(tempBytes);
-		return newString;
-	}
-	
-	
-	public boolean deleteMessages(Date date) throws WorkerException {
+    public boolean isCaseSensitiveKeys() {
+        return caseSensitiveKeys;
+    }
+    
+    /**
+     * TODO Review and move to better class.
+     * Note, this will return AMP site.
+     * @return
+     * @throws WorkerException
+     */
+    public Site getDefaultSite(){
+        return SiteUtils.getDefaultSite();
+    }
+    
+    /**
+     * Converts an Unicode string into UTF-8 string.
+     * @param original
+     * @return
+     * @throws UnsupportedEncodingException
+     */
+    public static String unicodeToUTF8(String original) throws UnsupportedEncodingException{
+        String newString = null;
+        byte[] tempBytes = original.getBytes("UTF8");
+        newString = new String(tempBytes);
+        return newString;
+    }
+    
+    
+    public boolean deleteMessages(Date date) throws WorkerException {
 
-		Session ses = null;
-		String queryString = "delete Message msg where msg.lastAccessed is null or msg.lastAccessed <=:stamp";
-		boolean recreateLuceneIndex = false;
+        Session ses = null;
+        String queryString = "delete Message msg where msg.lastAccessed is null or msg.lastAccessed <=:stamp";
+        boolean recreateLuceneIndex = false;
 
-		ses = PersistenceManager.getSession();
-		int deletedEntities = ses.createQuery(queryString).setTimestamp("stamp", new Timestamp(date.getTime())).executeUpdate();
-		if (deletedEntities > 0) {
-			recreateLuceneIndex = true;
-		}
-		return recreateLuceneIndex;
-	}
-	
-	
-	public void cleanTimeStampQueue()
-	{
-		this.timeStampQueue.clear();
-	}
+        ses = PersistenceManager.getSession();
+        int deletedEntities = ses.createQuery(queryString).setTimestamp("stamp", new Timestamp(date.getTime())).executeUpdate();
+        if (deletedEntities > 0) {
+            recreateLuceneIndex = true;
+        }
+        return recreateLuceneIndex;
+    }
+    
+    
+    public void cleanTimeStampQueue()
+    {
+        this.timeStampQueue.clear();
+    }
 
 }

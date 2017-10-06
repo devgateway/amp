@@ -18,7 +18,7 @@ import org.quartz.StatefulJob;
 
 public class ActivityFinalDateForContractingJob extends ConnectionCleaningJob implements StatefulJob {
     
-	@Override public void executeInternal(JobExecutionContext context) throws JobExecutionException{
+    @Override public void executeInternal(JobExecutionContext context) throws JobExecutionException{
 
         Date curDate=new Date();
         Date dateAfterDays=null;
@@ -37,7 +37,7 @@ public class ActivityFinalDateForContractingJob extends ConnectionCleaningJob im
 
         List<AmpActivityVersion> actList = ActivityUtil.getActivitiesWhichMatchDate("contractingDate", dateAfterDays);
         for (AmpActivityVersion act : actList) {
-        	new ActivityFinalDateForContractingTrigger(act);
+            new ActivityFinalDateForContractingTrigger(act);
         }
     }
 }

@@ -13,62 +13,62 @@ import java.util.Set;
 
 @TranslatableClass (displayName = "IndicatorLayer")
 public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicatorLayer>, LoggerIdentifiable {
-	
-	private Long id;
+    
+    private Long id;
     @TranslatableField
-	private String name;
+    private String name;
     @VersionableFieldTextEditor
     private String description;
-	private Set <AmpIndicatorColor> colorRamp;
-	private Long numberOfClasses;
-	private AmpCategoryValue admLevel;
-	private Set <AmpLocationIndicatorValue> indicatorValues;
+    private Set <AmpIndicatorColor> colorRamp;
+    private Long numberOfClasses;
+    private AmpCategoryValue admLevel;
+    private Set <AmpLocationIndicatorValue> indicatorValues;
     private Set <AmpIndicatorWorkspace> sharedWorkspaces;
     @TranslatableField
     private String unit;
-	private AmpCategoryValue indicatorType;
-	private Boolean population;
-	private IndicatorAccessType accessType;
-	private Date createdOn;
-	private Date updatedOn;
-	private AmpTeamMember createdBy;
+    private AmpCategoryValue indicatorType;
+    private Boolean population;
+    private IndicatorAccessType accessType;
+    private Date createdOn;
+    private Date updatedOn;
+    private AmpTeamMember createdBy;
 
-	public Long getId() {
-		return id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	public Long getNumberOfClasses() {
-		return numberOfClasses;
-	}
+    public Long getNumberOfClasses() {
+        return numberOfClasses;
+    }
 
-	public void setNumberOfClasses(Long numberOfClasses) {
-		this.numberOfClasses = numberOfClasses;
-	}
-	
-	@Override
-	public int compareTo(AmpIndicatorLayer o) {
-		return id.compareTo(o.getId());
-	}
+    public void setNumberOfClasses(Long numberOfClasses) {
+        this.numberOfClasses = numberOfClasses;
+    }
+    
+    @Override
+    public int compareTo(AmpIndicatorLayer o) {
+        return id.compareTo(o.getId());
+    }
 
     public Object getObjectType() {
         return this.getClass().getName();
@@ -86,48 +86,48 @@ public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicator
         return this.getId()+" "+this.getName();
     }
 
-	public AmpCategoryValue getAdmLevel() {
-		return admLevel;
-	}
+    public AmpCategoryValue getAdmLevel() {
+        return admLevel;
+    }
 
-	public void setAdmLevel(AmpCategoryValue admLevel) {
-		this.admLevel = admLevel;
-	}
+    public void setAdmLevel(AmpCategoryValue admLevel) {
+        this.admLevel = admLevel;
+    }
 
-	public Set<AmpIndicatorColor> getColorRamp() {
-		return colorRamp;
-	}
+    public Set<AmpIndicatorColor> getColorRamp() {
+        return colorRamp;
+    }
 
-	public void setColorRamp(Set<AmpIndicatorColor> colorRamp) {
+    public void setColorRamp(Set<AmpIndicatorColor> colorRamp) {
         if (this.colorRamp == null) {
             this.colorRamp = colorRamp;
         } else {
             this.colorRamp.retainAll(colorRamp);
             this.colorRamp.addAll(colorRamp);
         }
-	}
+    }
 
-	public Set<AmpLocationIndicatorValue> getIndicatorValues() {
-		return indicatorValues;
-	}
+    public Set<AmpLocationIndicatorValue> getIndicatorValues() {
+        return indicatorValues;
+    }
 
 
-	public void setIndicatorValues(Set<AmpLocationIndicatorValue> indicatorValues) {
+    public void setIndicatorValues(Set<AmpLocationIndicatorValue> indicatorValues) {
         if (this.indicatorValues == null) {
             this.indicatorValues = indicatorValues;
         } else {
             this.indicatorValues.retainAll(indicatorValues);
             this.indicatorValues.addAll(indicatorValues);
         }
-	}
+    }
 
-	public String getUnit() {
-		return unit;
-	}
+    public String getUnit() {
+        return unit;
+    }
 
-	public void setUnit(String unit) {
-		this.unit = unit;
-	}
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
 
     public IndicatorAccessType getAccessType() {
         return accessType;

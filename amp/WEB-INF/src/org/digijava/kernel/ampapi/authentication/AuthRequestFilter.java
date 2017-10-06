@@ -33,15 +33,15 @@ import com.sun.jersey.spi.container.ContainerRequestFilter;
  */
 public class AuthRequestFilter implements ContainerRequestFilter {
 
-	// Inject request into the filter
-	@Context
-	private HttpServletRequest httpRequest;
-	
-	private static final Logger logger = Logger.getLogger(AuthRequestFilter.class);
+    // Inject request into the filter
+    @Context
+    private HttpServletRequest httpRequest;
+    
+    private static final Logger logger = Logger.getLogger(AuthRequestFilter.class);
 
-	@Override
-	public ContainerRequest filter(ContainerRequest containerReq) {
-		SiteDomain siteDomain = null;
+    @Override
+    public ContainerRequest filter(ContainerRequest containerReq) {
+        SiteDomain siteDomain = null;
         //yet to strip the mainPath dynamically, committed hardcoded for testing purposes
         String mainPath="/rest";
         siteDomain = SiteCache.getInstance().getSiteDomain(httpRequest.getServerName(), mainPath);
@@ -57,66 +57,66 @@ public class AuthRequestFilter implements ContainerRequestFilter {
         
         addDefaultTreeVisibility();
 
-		String token = containerReq.getHeaderValue("X-Auth-Token");
-		if (token != null) {
-			SecurityUtil.validateTokenAndRestoreSession(token);
-		}
+        String token = containerReq.getHeaderValue("X-Auth-Token");
+        if (token != null) {
+            SecurityUtil.validateTokenAndRestoreSession(token);
+        }
 
-		Security.authorize(containerReq);
+        Security.authorize(containerReq);
 
         return containerReq;
-	}
-	
-	private void addLanguage(SiteDomain siteDomain) {
+    }
+    
+    private void addLanguage(SiteDomain siteDomain) {
         if (httpRequest.getParameter(EPConstants.LANGUAGE) != null) {
-        	String lang = httpRequest.getParameter(EPConstants.LANGUAGE).toLowerCase();
-        	if (SiteUtils.getUserLanguagesCodes(siteDomain.getSite()).contains(lang)) {
-	        	Locale locale = new Locale();
-	        	locale.setCode(lang);
-	        	httpRequest.setAttribute(org.digijava.kernel.Constants.NAVIGATION_LANGUAGE, locale);
-        	}
+            String lang = httpRequest.getParameter(EPConstants.LANGUAGE).toLowerCase();
+            if (SiteUtils.getUserLanguagesCodes(siteDomain.getSite()).contains(lang)) {
+                Locale locale = new Locale();
+                locale.setCode(lang);
+                httpRequest.setAttribute(org.digijava.kernel.Constants.NAVIGATION_LANGUAGE, locale);
+            }
         }
-	}
-	
-	private void addTranslations(SiteDomain siteDomain) {
-		Locale defaultLocale = SiteUtils.getDefaultLanguages(SiteUtils.getDefaultSite());
-		String defaultLocaleCode = defaultLocale != null ? defaultLocale.getCode() : null;
-		Locale currentLocale = (Locale) httpRequest.getAttribute(org.digijava.kernel.Constants.NAVIGATION_LANGUAGE);
-		String currentLocaleCode = currentLocale != null ? currentLocale.getCode() : defaultLocaleCode;
-		
-		Set<String> translations = new HashSet<String>();
-		translations.add(defaultLocaleCode);
-		translations.add(currentLocaleCode);
-		
-		if (httpRequest.getParameter(EPConstants.TRANSLATIONS) != null) {
-	    	String translationsParam = httpRequest.getParameter(EPConstants.TRANSLATIONS).toLowerCase();
-			
-			if (StringUtils.isNotEmpty(translationsParam)) {
-				List<String> requestedTranslations = Arrays.asList(translationsParam.split("\\|")); 
-			
-				for (String translation : requestedTranslations) {
-					if (SiteUtils.getUserLanguagesCodes(siteDomain.getSite()).contains(translation)) {
-						translations.add(translation);
-					} else {
-						logger.warn("Translation " + translation + " does not exist in amp system");
-					}
-				}
-			}
-		}
-		
-		TranslationSettings translationBean = new TranslationSettings(currentLocaleCode, translations);
+    }
+    
+    private void addTranslations(SiteDomain siteDomain) {
+        Locale defaultLocale = SiteUtils.getDefaultLanguages(SiteUtils.getDefaultSite());
+        String defaultLocaleCode = defaultLocale != null ? defaultLocale.getCode() : null;
+        Locale currentLocale = (Locale) httpRequest.getAttribute(org.digijava.kernel.Constants.NAVIGATION_LANGUAGE);
+        String currentLocaleCode = currentLocale != null ? currentLocale.getCode() : defaultLocaleCode;
         
-		httpRequest.setAttribute(EPConstants.TRANSLATIONS, translationBean);
-	}
-	
-	private void addDefaultTreeVisibility() {
-		if (httpRequest.getAttribute(Constants.TEAM_ID) == null
-				&& httpRequest.getSession().getAttribute("ampTreeVisibility") == null) {
-			//old visibility tree will be refreshed later on, thus no need to always recrate it 
-			AmpTreeVisibility ampTreeVisibility = new AmpTreeVisibility();
+        Set<String> translations = new HashSet<String>();
+        translations.add(defaultLocaleCode);
+        translations.add(currentLocaleCode);
+        
+        if (httpRequest.getParameter(EPConstants.TRANSLATIONS) != null) {
+            String translationsParam = httpRequest.getParameter(EPConstants.TRANSLATIONS).toLowerCase();
+            
+            if (StringUtils.isNotEmpty(translationsParam)) {
+                List<String> requestedTranslations = Arrays.asList(translationsParam.split("\\|")); 
+            
+                for (String translation : requestedTranslations) {
+                    if (SiteUtils.getUserLanguagesCodes(siteDomain.getSite()).contains(translation)) {
+                        translations.add(translation);
+                    } else {
+                        logger.warn("Translation " + translation + " does not exist in amp system");
+                    }
+                }
+            }
+        }
+        
+        TranslationSettings translationBean = new TranslationSettings(currentLocaleCode, translations);
+        
+        httpRequest.setAttribute(EPConstants.TRANSLATIONS, translationBean);
+    }
+    
+    private void addDefaultTreeVisibility() {
+        if (httpRequest.getAttribute(Constants.TEAM_ID) == null
+                && httpRequest.getSession().getAttribute("ampTreeVisibility") == null) {
+            //old visibility tree will be refreshed later on, thus no need to always recrate it 
+            AmpTreeVisibility ampTreeVisibility = new AmpTreeVisibility();
             ampTreeVisibility.buildAmpTreeVisibility(FeaturesUtil.getCurrentTemplate());
             FeaturesUtil.setAmpTreeVisibility(httpRequest.getServletContext(), httpRequest.getSession(), ampTreeVisibility);
-		}
-	}
-	
+        }
+    }
+    
 }

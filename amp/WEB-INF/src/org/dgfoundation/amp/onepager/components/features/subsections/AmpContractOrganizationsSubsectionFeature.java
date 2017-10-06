@@ -50,108 +50,108 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
  * @since Feb 8, 2011
  */
 public class AmpContractOrganizationsSubsectionFeature extends
-		AmpSubsectionFeaturePanel<IPAContract> {
-	
-	private static Logger logger = Logger.getLogger(AmpContractOrganizationsSubsectionFeature.class);
+        AmpSubsectionFeaturePanel<IPAContract> {
+    
+    private static Logger logger = Logger.getLogger(AmpContractOrganizationsSubsectionFeature.class);
 
-	/**
-	 * @param id
-	 * @param fmName
-	 * @param model
-	 * @throws Exception
-	 */
-	public AmpContractOrganizationsSubsectionFeature(String id,
-			IModel<IPAContract> model, String fmName){
-		super(id, fmName, model, false, true);
+    /**
+     * @param id
+     * @param fmName
+     * @param model
+     * @throws Exception
+     */
+    public AmpContractOrganizationsSubsectionFeature(String id,
+            IModel<IPAContract> model, String fmName){
+        super(id, fmName, model, false, true);
 
-		final IModel<Set<AmpOrganisation>> orgs = new PropertyModel<Set<AmpOrganisation>>(model, "organizations");
-		
-		if (orgs.getObject() == null)
-			orgs.setObject(new HashSet<AmpOrganisation>());
-		
-		AbstractReadOnlyModel<List<AmpOrganisation>> listModel = OnePagerUtil
-				.getReadOnlyListModelFromSetModel(orgs);
+        final IModel<Set<AmpOrganisation>> orgs = new PropertyModel<Set<AmpOrganisation>>(model, "organizations");
+        
+        if (orgs.getObject() == null)
+            orgs.setObject(new HashSet<AmpOrganisation>());
+        
+        AbstractReadOnlyModel<List<AmpOrganisation>> listModel = OnePagerUtil
+                .getReadOnlyListModelFromSetModel(orgs);
 
-		final ListView<AmpOrganisation> list = new ListView<AmpOrganisation>("list", listModel) {
-				@Override
-				protected void populateItem(final ListItem<AmpOrganisation> item) {
-					AmpOrganisation org = item.getModelObject();
-					
-					Label orgName = new Label("name", org.getAcronymAndName());
-					item.add(orgName);
-					
-					AmpDeleteLinkField delete = new AmpDeleteLinkField(
-							"delete", "Delete Organisation") {
-						@Override
-						public void onClick(AjaxRequestTarget target) {
-							orgs.getObject().remove(item.getModelObject());
-							target.add(AmpContractOrganizationsSubsectionFeature.this);
-							target.appendJavaScript(OnePagerUtil.getToggleJS(AmpContractOrganizationsSubsectionFeature.this.getSlider()));
-							target.appendJavaScript(OnePagerUtil.getClickToggleJS(AmpContractOrganizationsSubsectionFeature.this.getSlider()));
-						}
-					};
-					item.add(delete);
-				}
-		};
-		list.setReuseItems(true);
-		add(list);
+        final ListView<AmpOrganisation> list = new ListView<AmpOrganisation>("list", listModel) {
+                @Override
+                protected void populateItem(final ListItem<AmpOrganisation> item) {
+                    AmpOrganisation org = item.getModelObject();
+                    
+                    Label orgName = new Label("name", org.getAcronymAndName());
+                    item.add(orgName);
+                    
+                    AmpDeleteLinkField delete = new AmpDeleteLinkField(
+                            "delete", "Delete Organisation") {
+                        @Override
+                        public void onClick(AjaxRequestTarget target) {
+                            orgs.getObject().remove(item.getModelObject());
+                            target.add(AmpContractOrganizationsSubsectionFeature.this);
+                            target.appendJavaScript(OnePagerUtil.getToggleJS(AmpContractOrganizationsSubsectionFeature.this.getSlider()));
+                            target.appendJavaScript(OnePagerUtil.getClickToggleJS(AmpContractOrganizationsSubsectionFeature.this.getSlider()));
+                        }
+                    };
+                    item.add(delete);
+                }
+        };
+        list.setReuseItems(true);
+        add(list);
 
-		
-		WebMarkupContainer wmc = new WebMarkupContainer("ajaxIndicator");
-		add(wmc);
-		AjaxIndicatorAppender iValidator = new AjaxIndicatorAppender();
-		wmc.add(iValidator);
-		
-		final AmpUniqueCollectionValidatorField<AmpOrganisation> uniqueCollectionValidationField = new AmpUniqueCollectionValidatorField<AmpOrganisation>(
-				"uniqueOrgsValidator", listModel, "Unique Orgs Validator") {
-			@Override
-			public Object getIdentifier(AmpOrganisation t) {
-				return t.getAcronymAndName();
-			}
-		};
-		uniqueCollectionValidationField.setIndicatorAppender(iValidator);
-		add(uniqueCollectionValidationField);
-		
-		
-		
-		
-		final AmpAutocompleteFieldPanel<AmpOrganisation> searchOrgs=new AmpAutocompleteFieldPanel<AmpOrganisation>("searchAutocomplete","Search Funding Organizations",true,true,AmpOrganisationSearchModel.class,id) {			
-			private static final long serialVersionUID = 1227775244079125152L;
+        
+        WebMarkupContainer wmc = new WebMarkupContainer("ajaxIndicator");
+        add(wmc);
+        AjaxIndicatorAppender iValidator = new AjaxIndicatorAppender();
+        wmc.add(iValidator);
+        
+        final AmpUniqueCollectionValidatorField<AmpOrganisation> uniqueCollectionValidationField = new AmpUniqueCollectionValidatorField<AmpOrganisation>(
+                "uniqueOrgsValidator", listModel, "Unique Orgs Validator") {
+            @Override
+            public Object getIdentifier(AmpOrganisation t) {
+                return t.getAcronymAndName();
+            }
+        };
+        uniqueCollectionValidationField.setIndicatorAppender(iValidator);
+        add(uniqueCollectionValidationField);
+        
+        
+        
+        
+        final AmpAutocompleteFieldPanel<AmpOrganisation> searchOrgs=new AmpAutocompleteFieldPanel<AmpOrganisation>("searchAutocomplete","Search Funding Organizations",true,true,AmpOrganisationSearchModel.class,id) {         
+            private static final long serialVersionUID = 1227775244079125152L;
 
-			@Override
-			protected String getChoiceValue(AmpOrganisation choice) {
-				return DbUtil.filter(choice.getName());
-			}
-			
-			@Override
-			protected boolean showAcronyms() {
-				return true;
-			}
-			
-			@Override
-			protected String getAcronym(AmpOrganisation choice) {
-				return choice.getAcronym();
-			}
+            @Override
+            protected String getChoiceValue(AmpOrganisation choice) {
+                return DbUtil.filter(choice.getName());
+            }
+            
+            @Override
+            protected boolean showAcronyms() {
+                return true;
+            }
+            
+            @Override
+            protected String getAcronym(AmpOrganisation choice) {
+                return choice.getAcronym();
+            }
 
-			@Override
-			public void onSelect(AjaxRequestTarget target,
-					AmpOrganisation choice) {
-				orgs.getObject().add(choice);
-				list.removeAll();
-				target.add(AmpContractOrganizationsSubsectionFeature.this);
-				target.appendJavaScript(OnePagerUtil.getToggleJS(AmpContractOrganizationsSubsectionFeature.this.getSlider()));
-				target.appendJavaScript(OnePagerUtil.getClickToggleJS(AmpContractOrganizationsSubsectionFeature.this.getSlider()));
-				uniqueCollectionValidationField.reloadValidationField(target);
-			}
+            @Override
+            public void onSelect(AjaxRequestTarget target,
+                    AmpOrganisation choice) {
+                orgs.getObject().add(choice);
+                list.removeAll();
+                target.add(AmpContractOrganizationsSubsectionFeature.this);
+                target.appendJavaScript(OnePagerUtil.getToggleJS(AmpContractOrganizationsSubsectionFeature.this.getSlider()));
+                target.appendJavaScript(OnePagerUtil.getClickToggleJS(AmpContractOrganizationsSubsectionFeature.this.getSlider()));
+                uniqueCollectionValidationField.reloadValidationField(target);
+            }
 
-			@Override
-			public Integer getChoiceLevel(AmpOrganisation choice) {
-				return null;
-			}
-		};
-		AmpSearchOrganizationComponent searchOrganization = new AmpSearchOrganizationComponent("search", new Model<String> (),
-				"Search Funding Organizations", searchOrgs, null);
-		add(searchOrganization);
-	}
+            @Override
+            public Integer getChoiceLevel(AmpOrganisation choice) {
+                return null;
+            }
+        };
+        AmpSearchOrganizationComponent searchOrganization = new AmpSearchOrganizationComponent("search", new Model<String> (),
+                "Search Funding Organizations", searchOrgs, null);
+        add(searchOrganization);
+    }
 
 }

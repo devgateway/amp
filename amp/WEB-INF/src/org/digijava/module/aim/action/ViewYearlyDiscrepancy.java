@@ -15,16 +15,16 @@ import org.apache.struts.tiles.actions.TilesAction;
 
 
 @Deprecated
-public class ViewYearlyDiscrepancy extends TilesAction	{
-	private static Logger logger = Logger.getLogger(ViewYearlyDiscrepancy.class);
-	
-	public ActionForward execute(ComponentContext context,
-								 ActionMapping mapping,
-								 ActionForm form,
-								 HttpServletRequest request,
-								 HttpServletResponse response)	
-								 throws IOException,ServletException 	{
-								 	
-		return null;					 	
-	}
-}	
+public class ViewYearlyDiscrepancy extends TilesAction  {
+    private static Logger logger = Logger.getLogger(ViewYearlyDiscrepancy.class);
+    
+    public ActionForward execute(ComponentContext context,
+                                 ActionMapping mapping,
+                                 ActionForm form,
+                                 HttpServletRequest request,
+                                 HttpServletResponse response)  
+                                 throws IOException,ServletException    {
+                                    
+        return null;                        
+    }
+}   

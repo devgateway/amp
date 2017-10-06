@@ -31,44 +31,44 @@ import org.digijava.module.um.exception.UMException;
  */
 public class PermissionManager extends AmpPMHeaderFooter {
 
-	/**
-	 * 
-	 */
-	public PermissionManager() throws Exception{
-		// TODO Auto-generated constructor stub
-		super();
-		
-		
-		
-		HttpSession session = this.getHttpSession();
-		if (session.getAttribute("ampAdmin") == null) {
-			throw new RedirectToUrlException("/");
+    /**
+     * 
+     */
+    public PermissionManager() throws Exception{
+        // TODO Auto-generated constructor stub
+        super();
+        
+        
+        
+        HttpSession session = this.getHttpSession();
+        if (session.getAttribute("ampAdmin") == null) {
+            throw new RedirectToUrlException("/");
 
-		} else {
-			String str = (String)session.getAttribute("ampAdmin");
-			if (str.equals("no")) {
-				throw new RedirectToUrlException("/");
-			}
-		}
-		
-		
-		//managing workspaces
-		Set<AmpTeam> w = new TreeSet<AmpTeam>();
-		List<AmpTeam> teams = new ArrayList<AmpTeam>();
-		try {
-			teams = org.digijava.module.um.util.DbUtil.getList(AmpTeam.class.getName(),"name");
-		} catch (UMException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		w.addAll(teams);
-		final IModel<Set<AmpTeam>> teamsModel = new Model((Serializable)w);
-		
-		
-		Set<AmpPMFieldPermissionViewer> permMaps = PermissionUtil.getAllAmpPMFieldPermissionViewers(AmpModulesVisibility.class);
-		final IModel<Set<AmpPMFieldPermissionViewer>> permsModel = new Model((Serializable)permMaps);
+        } else {
+            String str = (String)session.getAttribute("ampAdmin");
+            if (str.equals("no")) {
+                throw new RedirectToUrlException("/");
+            }
+        }
+        
+        
+        //managing workspaces
+        Set<AmpTeam> w = new TreeSet<AmpTeam>();
+        List<AmpTeam> teams = new ArrayList<AmpTeam>();
+        try {
+            teams = org.digijava.module.um.util.DbUtil.getList(AmpTeam.class.getName(),"name");
+        } catch (UMException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        w.addAll(teams);
+        final IModel<Set<AmpTeam>> teamsModel = new Model((Serializable)w);
+        
+        
+        Set<AmpPMFieldPermissionViewer> permMaps = PermissionUtil.getAllAmpPMFieldPermissionViewers(AmpModulesVisibility.class);
+        final IModel<Set<AmpPMFieldPermissionViewer>> permsModel = new Model((Serializable)permMaps);
 
-		add(new PermissionManagerFormFeature("permission", teamsModel, permsModel, "Permission Manager"));
-	}
+        add(new PermissionManagerFormFeature("permission", teamsModel, permsModel, "Permission Manager"));
+    }
 
 }

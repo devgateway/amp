@@ -22,7 +22,7 @@ import org.digijava.module.aim.multistepwizard.exception.ClassNotAllowedForCheck
  * One should do the following in order to use it:
  * 1) Each jsp-form should contain a hidden property called "stepInWizard" who's value should be the 
  * number of the step.
- * 	Ex. <html:hidden property="stepInWizard" value="4" />
+ *  Ex. <html:hidden property="stepInWizard" value="4" />
  * 
  * 2) Your ActionForm class should extend this class (MultiStepActionForm) instead of ActionForm
  * 
@@ -32,7 +32,7 @@ import org.digijava.module.aim.multistepwizard.exception.ClassNotAllowedForCheck
  *  private boolean publicReport = false;
  *  step - the step in the wizard at which this checkbox appears in (corresponding to the 'stepInWizard' property)
  *  resetValue - String represenation of the value that the property in the ActionForm (in our example: publicReport) 
- *  		should have if the checkbox is deselected
+ *          should have if the checkbox is deselected
  *  
  * 4) If you need to overwrite the function reset(ActionMapping mapping, HttpServletRequest request) please don't forget to call the
  * function reset from the super class as the first command in your function. 
@@ -42,124 +42,124 @@ import org.digijava.module.aim.multistepwizard.exception.ClassNotAllowedForCheck
  *
  */
 public abstract class MultiStepActionForm extends ActionForm {
-	private static String[] allowedClasses	= {
-		"int",
-		"long",
-		"float",
-		"double",
-		"boolean",
-		"java.lang.Integer",
-		"java.lang.Long",
-		"java.lang.Float",
-		"java.lang.Double",
-		"java.lang.Boolean"
-	};
-	
-	private int stepInWizard;
+    private static String[] allowedClasses  = {
+        "int",
+        "long",
+        "float",
+        "double",
+        "boolean",
+        "java.lang.Integer",
+        "java.lang.Long",
+        "java.lang.Float",
+        "java.lang.Double",
+        "java.lang.Boolean"
+    };
+    
+    private int stepInWizard;
 
-	public int getStepInWizard() {
-		return stepInWizard;
-	}
+    public int getStepInWizard() {
+        return stepInWizard;
+    }
 
-	public void setStepInWizard(int stepInWizard) {
-		this.stepInWizard = stepInWizard;
-	}
-	
-	
-	public void reset(ActionMapping mapping, HttpServletRequest request) {
-		try {
-			String stepStr	= request.getParameter("stepInWizard");
-			if ( stepStr!=null ) {
-				int step 		= Integer.parseInt(stepStr);
-				clearCheckboxes(step);
-			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	private void clearCheckboxes (int stepInWizard) throws Exception {
-		Class myClass		= this.getClass();
-		Field[] fields		= myClass.getDeclaredFields();
-		
-		for (int i=0; i<fields.length; i++) {
-			Checkbox checkboxAnn	= fields[i].getAnnotation( Checkbox.class );
-			if ( checkboxAnn != null) {
-				PropertyDescriptor beanProperty	= new PropertyDescriptor(fields[i].getName(), myClass);
-				Class propertyClass				= beanProperty.getPropertyType();
-				if ( !checkAllowedClass(propertyClass) ) {
-					throw new ClassNotAllowedForCheckbox(propertyClass + " not allowed");
-				}
-				if ( stepInWizard == checkboxAnn.step() ) { // we are at the right step for a reset
-					if ( propertyClass.isArray() ) {
-						Object[] params		= new Object[1];
-						params[0]			= null;
-						beanProperty.getWriteMethod().invoke(this, params );
-						continue;
-					}
-					
-					if ( propertyClass.isPrimitive() ) {
-						String primitive	= propertyClass.getName();
-						String methodName	= "parse";
-						methodName			+= primitive.substring(0, 1).toUpperCase();
-						methodName			+= primitive.substring(1);
-						Class[] paramTypes	= new Class[1];
-						paramTypes[0]		= String.class;
-						
-						Class nonPrimitiveClass	= findClassForPrimitive(propertyClass);
-						Method parseMethod		= nonPrimitiveClass.getDeclaredMethod(methodName, paramTypes);
-						
-						Object[] parseParams	= new Object[1];
-						parseParams[0]			= checkboxAnn.resetValue();
-						
-						Object[] params			= new Object[1];
-						params[0]				= parseMethod.invoke(null, parseParams);
-						
-						beanProperty.getWriteMethod().invoke(this, params);
-						continue;
-					}
-					
-					/* If it is a normal allowed Class....not primitive nor array */
-					Class[] constructorParamTypes		= new Class[1];
-					constructorParamTypes[0]			= String.class;
-					Constructor constructor				= propertyClass.getConstructor(constructorParamTypes);
-					
-					Object[] constructorParams 			= new Object[1];
-					constructorParams[0]				= checkboxAnn.resetValue();
-					
-					Object[] params						= new Object[1];
-					params[0]							= constructor.newInstance( constructorParams );
-					
-					beanProperty.getWriteMethod().invoke(this, params);
-				}				
-			}
-		}
-		
-	}
-	
-	private boolean checkAllowedClass(Class classObject) {
-		String className	= classObject.getName();
-		if ( classObject.isArray() )
-				return true;
-		
-		for (int i=0; i<allowedClasses.length; i++) {
-			if ( className.equals(allowedClasses[i]) ) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	private static Class findClassForPrimitive(Class primitiveClass) throws Exception {
-		String primitiveClassName	= primitiveClass.getName();
-		if (primitiveClassName.equals("int")) {
-			return Class.forName( "java.lang.Integer" );
-		}
-		else {
-			String className		= "java.lang.";
-			className				+= primitiveClassName.substring(0,1).toUpperCase();
-			className				+= primitiveClassName.substring(1);
-			return Class.forName(className);
-		}
-	}
+    public void setStepInWizard(int stepInWizard) {
+        this.stepInWizard = stepInWizard;
+    }
+    
+    
+    public void reset(ActionMapping mapping, HttpServletRequest request) {
+        try {
+            String stepStr  = request.getParameter("stepInWizard");
+            if ( stepStr!=null ) {
+                int step        = Integer.parseInt(stepStr);
+                clearCheckboxes(step);
+            }
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+    private void clearCheckboxes (int stepInWizard) throws Exception {
+        Class myClass       = this.getClass();
+        Field[] fields      = myClass.getDeclaredFields();
+        
+        for (int i=0; i<fields.length; i++) {
+            Checkbox checkboxAnn    = fields[i].getAnnotation( Checkbox.class );
+            if ( checkboxAnn != null) {
+                PropertyDescriptor beanProperty = new PropertyDescriptor(fields[i].getName(), myClass);
+                Class propertyClass             = beanProperty.getPropertyType();
+                if ( !checkAllowedClass(propertyClass) ) {
+                    throw new ClassNotAllowedForCheckbox(propertyClass + " not allowed");
+                }
+                if ( stepInWizard == checkboxAnn.step() ) { // we are at the right step for a reset
+                    if ( propertyClass.isArray() ) {
+                        Object[] params     = new Object[1];
+                        params[0]           = null;
+                        beanProperty.getWriteMethod().invoke(this, params );
+                        continue;
+                    }
+                    
+                    if ( propertyClass.isPrimitive() ) {
+                        String primitive    = propertyClass.getName();
+                        String methodName   = "parse";
+                        methodName          += primitive.substring(0, 1).toUpperCase();
+                        methodName          += primitive.substring(1);
+                        Class[] paramTypes  = new Class[1];
+                        paramTypes[0]       = String.class;
+                        
+                        Class nonPrimitiveClass = findClassForPrimitive(propertyClass);
+                        Method parseMethod      = nonPrimitiveClass.getDeclaredMethod(methodName, paramTypes);
+                        
+                        Object[] parseParams    = new Object[1];
+                        parseParams[0]          = checkboxAnn.resetValue();
+                        
+                        Object[] params         = new Object[1];
+                        params[0]               = parseMethod.invoke(null, parseParams);
+                        
+                        beanProperty.getWriteMethod().invoke(this, params);
+                        continue;
+                    }
+                    
+                    /* If it is a normal allowed Class....not primitive nor array */
+                    Class[] constructorParamTypes       = new Class[1];
+                    constructorParamTypes[0]            = String.class;
+                    Constructor constructor             = propertyClass.getConstructor(constructorParamTypes);
+                    
+                    Object[] constructorParams          = new Object[1];
+                    constructorParams[0]                = checkboxAnn.resetValue();
+                    
+                    Object[] params                     = new Object[1];
+                    params[0]                           = constructor.newInstance( constructorParams );
+                    
+                    beanProperty.getWriteMethod().invoke(this, params);
+                }               
+            }
+        }
+        
+    }
+    
+    private boolean checkAllowedClass(Class classObject) {
+        String className    = classObject.getName();
+        if ( classObject.isArray() )
+                return true;
+        
+        for (int i=0; i<allowedClasses.length; i++) {
+            if ( className.equals(allowedClasses[i]) ) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    private static Class findClassForPrimitive(Class primitiveClass) throws Exception {
+        String primitiveClassName   = primitiveClass.getName();
+        if (primitiveClassName.equals("int")) {
+            return Class.forName( "java.lang.Integer" );
+        }
+        else {
+            String className        = "java.lang.";
+            className               += primitiveClassName.substring(0,1).toUpperCase();
+            className               += primitiveClassName.substring(1);
+            return Class.forName(className);
+        }
+    }
 }

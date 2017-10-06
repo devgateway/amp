@@ -17,7 +17,7 @@ import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
 
 public class ActivityActualStartDateJob extends ConnectionCleaningJob implements StatefulJob {
-	
+    
     @Override 
     public void executeInternal(JobExecutionContext context) throws JobExecutionException {
         Date curDate = new Date();
@@ -38,7 +38,7 @@ public class ActivityActualStartDateJob extends ConnectionCleaningJob implements
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         List<AmpActivityVersion> actList = ActivityUtil.getActivitiesWhichMatchDate("actualStartDate", dateAfterDays);
         for (AmpActivityVersion act : actList) {
-        	new ActivityActualStartDateTrigger(act);
+            new ActivityActualStartDateTrigger(act);
         }
     }
 }

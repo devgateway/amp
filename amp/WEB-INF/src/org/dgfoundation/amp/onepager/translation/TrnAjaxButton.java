@@ -21,36 +21,36 @@ import org.apache.wicket.model.Model;
  */
 public abstract class TrnAjaxButton extends AjaxButton {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
 
 
-	public TrnAjaxButton(String id, IModel<String> model, Form<?> form, String key) {
-		super(id, model, form);
-		trnAjaxButton(key);
-	}
+    public TrnAjaxButton(String id, IModel<String> model, Form<?> form, String key) {
+        super(id, model, form);
+        trnAjaxButton(key);
+    }
 
-	public TrnAjaxButton(String id, IModel<String> model, String key) {
-		super(id, model);
-		trnAjaxButton(key);
-	}
+    public TrnAjaxButton(String id, IModel<String> model, String key) {
+        super(id, model);
+        trnAjaxButton(key);
+    }
 
-	public TrnAjaxButton(String id, Form<?> form, String key) {
-		super(id, form);
-		trnAjaxButton(key);
-	}
-	
-	/**
-	 * Add js behaviour that will switch the button to an edit box on hover 
-	 */
-	private void trnAjaxButton(String key){
-		if (TranslatorUtil.isTranslatorMode(getSession())){
-			super.setOutputMarkupId(true);
-			super.add(new AttributeModifier("onmouseover", "spawnEditBox(this.id);"));
-			super.add(new AttributeModifier("key", key));
-			super.add(new AttributeAppender("style", new Model("text-decoration: underline; color: #6CE66C;"), ""));
-		}
-	}
+    public TrnAjaxButton(String id, Form<?> form, String key) {
+        super(id, form);
+        trnAjaxButton(key);
+    }
+    
+    /**
+     * Add js behaviour that will switch the button to an edit box on hover 
+     */
+    private void trnAjaxButton(String key){
+        if (TranslatorUtil.isTranslatorMode(getSession())){
+            super.setOutputMarkupId(true);
+            super.add(new AttributeModifier("onmouseover", "spawnEditBox(this.id);"));
+            super.add(new AttributeModifier("key", key));
+            super.add(new AttributeAppender("style", new Model("text-decoration: underline; color: #6CE66C;"), ""));
+        }
+    }
 }

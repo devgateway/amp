@@ -11,20 +11,20 @@ import org.apache.wicket.validation.ValidationError;
  */
 public class AmpGPINiIndicatorValidator extends AmpSemanticValidator<String> {
 
-	private static final long serialVersionUID = -4876421729351708085L;
+    private static final long serialVersionUID = -4876421729351708085L;
 
-	public AmpGPINiIndicatorValidator() {
+    public AmpGPINiIndicatorValidator() {
 
-	}
+    }
 
-	@Override
-	public void semanticValidate(IValidatable<String> validatable) {
-		String value = validatable.getValue();
-		if (value.length() > 0) {
-			ValidationError error = new ValidationError();
-			error.addKey("AmpGPINiIndicatorValidator");
-			error.setVariable("label", value);
-			validatable.error(error);
-		}
-	}
+    @Override
+    public void semanticValidate(IValidatable<String> validatable) {
+        String value = validatable.getValue();
+        if (value.length() > 0) {
+            ValidationError error = new ValidationError();
+            error.addKey("AmpGPINiIndicatorValidator");
+            error.setVariable("label", value);
+            validatable.error(error);
+        }
+    }
 }

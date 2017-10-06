@@ -22,24 +22,24 @@ import org.digijava.module.aim.util.InvalidDataUtil;
  */
 public class InvalidSectorPercentages extends Action{
 
-	@Override
-	public ActionForward execute(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)throws Exception {
-		InvalidDataListsForm listsForm = (InvalidDataListsForm)form;
-		List<InvalidDataUtil.ActivitySectorPercentages> result = null;
-		
-		if(request.getParameter("saveDraft")!=null && request.getParameter("saveDraft").equals("true")){
-			makeActivityDraft(listsForm.getActId());
-		}else{
-			result = InvalidDataUtil.getActivitiesWithIncorrectSectorPersentage(null);
-			Collections.sort(result, new InvalidDataUtil.ActivitySectorPercentagesComparator());
-			listsForm.setInvalidSectorpercentages(result);
-		}
-		return mapping.findForward("forward");
-	}
+    @Override
+    public ActionForward execute(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)throws Exception {
+        InvalidDataListsForm listsForm = (InvalidDataListsForm)form;
+        List<InvalidDataUtil.ActivitySectorPercentages> result = null;
+        
+        if(request.getParameter("saveDraft")!=null && request.getParameter("saveDraft").equals("true")){
+            makeActivityDraft(listsForm.getActId());
+        }else{
+            result = InvalidDataUtil.getActivitiesWithIncorrectSectorPersentage(null);
+            Collections.sort(result, new InvalidDataUtil.ActivitySectorPercentagesComparator());
+            listsForm.setInvalidSectorpercentages(result);
+        }
+        return mapping.findForward("forward");
+    }
 
-	private void makeActivityDraft(Long actId) throws Exception{
-		AmpActivityVersion activity = ActivityUtil.loadActivity(actId);
-		activity.setDraft(true);
-		PersistenceManager.getSession().update(activity);
-	}
+    private void makeActivityDraft(Long actId) throws Exception{
+        AmpActivityVersion activity = ActivityUtil.loadActivity(actId);
+        activity.setDraft(true);
+        PersistenceManager.getSession().update(activity);
+    }
 }

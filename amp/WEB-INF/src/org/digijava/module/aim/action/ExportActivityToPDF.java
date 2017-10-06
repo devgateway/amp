@@ -131,6 +131,12 @@ import clover.org.apache.commons.lang.StringUtils;
  */
 public class ExportActivityToPDF extends Action {
 
+    public static final int COLUMNS_3 = 3;
+    public static final int COLUMNS_4 = 4;
+    public static final int INDENTATION_LEFT = 5;
+    public static final Color BACKGROUND_COLOR = new Color(244, 244, 242);
+    public static final Color BACKGROUND_COLOR_WHITE = new Color(255, 255, 255);
+    public static final Color BORDER_COLOR = new Color(201, 201, 199);
     private static Logger logger = Logger.getLogger(ExportActivityToPDF.class);
 
     /**
@@ -234,9 +240,9 @@ public class ExportActivityToPDF extends Action {
         document.open();
         PdfPTable mainLayout = getTable(2);
         if (SiteUtils.isEffectiveLangRTL()) {
-            mainLayout.setWidths(new float[]{2f,1f});
+            mainLayout.setWidths(new float[]{2f, 1f});
         } else {
-            mainLayout.setWidths(new float[]{1f,2f});
+            mainLayout.setWidths(new float[]{1f, 2f});
         }
         mainLayout.setWidthPercentage(100);
         PdfPTableEvents event = new PdfPTableEvents();
@@ -373,7 +379,7 @@ public class ExportActivityToPDF extends Action {
 
             if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Objective Comments")) {
 
-                PdfPTable objTable= getTable(2);
+                PdfPTable objTable = getTable(2);
                 objTable.getDefaultCell().setBorder(0);
                 for (Object commentKey : allComments.keySet()) {
                     String key=(String)commentKey;
@@ -465,7 +471,7 @@ public class ExportActivityToPDF extends Action {
                 purposeCommentsCell1.setBorder(0);
                 mainLayout.addCell(purposeCommentsCell1);
 
-                PdfPTable purposeTable= getTable(2);
+                PdfPTable purposeTable = getTable(2);
                 purposeTable.getDefaultCell().setBorder(0);
 
                 boolean visiblePurposeAssumtion = FeaturesUtil.isVisibleModule("/Activity Form/Identification/Purpose Comments/Purpose Assumption");
@@ -510,7 +516,7 @@ public class ExportActivityToPDF extends Action {
              */
 
             if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Results Comments")){
-                PdfPTable resultsCommentsTable= getTable(2);
+                PdfPTable resultsCommentsTable = getTable(2);
                 resultsCommentsTable.getDefaultCell().setBorder(0);
 
                 boolean visibleResultsAssumption = FeaturesUtil.isVisibleModule("/Activity Form/Identification/Results Comments/Results Assumption");
@@ -1487,7 +1493,7 @@ public class ExportActivityToPDF extends Action {
                     String sectorsLabel = TranslatorWorker.translateText("Sectors");
 
                     for (IndicatorActivity indicator : myForm.getIndicators()) {
-                        PdfPTable headerTable = getTable(4);
+                        PdfPTable headerTable = getTable(COLUMNS_4);
                         headerTable.setWidths(new int[]{ 3, 1, 1, 2 });
                         headerTable.setTotalWidth(100);
                         headerTable.getDefaultCell().setBorder(Rectangle.NO_BORDER);
@@ -1900,7 +1906,7 @@ public class ExportActivityToPDF extends Action {
             costingCell2.setBorder(1);
             costingCell2.setBorderColor(new Color(201,201,199));
 
-            PdfPTable costingInnerTable= getTable(fmVisibleFieldsCounter); //table with 3 cells
+            PdfPTable costingInnerTable = getTable(fmVisibleFieldsCounter); //table with 3 cells
             BigDecimal grandCost = new BigDecimal(0);
             BigDecimal grandContribution = new BigDecimal(0);
             if(FeaturesUtil.isVisibleField("Costing Activity Name")){
@@ -2110,7 +2116,7 @@ public class ExportActivityToPDF extends Action {
             PdfPCell ipaContracting2=new PdfPCell();
             ipaContracting2.setBorder(1);
             //inner table with two cells
-            PdfPTable ipaInnerTable= getTable(2);
+            PdfPTable ipaInnerTable = getTable(2);
             if(myForm.getContracts().getContracts()!=null){
                 for (IPAContract contract : (List<IPAContract>)myForm.getContracts().getContracts()) {
                     //name
@@ -2314,13 +2320,14 @@ public class ExportActivityToPDF extends Action {
                             //Disbursements
                             PdfPCell disbs1=new PdfPCell();
                             disbs1.setBorder(0);
-                            Paragraph disbsP=new Paragraph(postprocessText(TranslatorWorker.translateText("Disbursements"))+":",titleFont);
+                            Paragraph disbsP = new Paragraph(postprocessText(
+                                    TranslatorWorker.translateText("Disbursements")) + ":", titleFont);
                             disbs1.addElement(disbsP);
                             ipaInnerTable.addCell(disbs1);
 
                             PdfPCell disbs2=new PdfPCell();
                             disbs2.setBorder(0);
-                            PdfPTable disbursmentsInnerTable= getTable(disbFieldsCount - 1);
+                            PdfPTable disbursmentsInnerTable = getTable(disbFieldsCount - 1);
                             if(contract.getDisbursements()!=null){
                                 for (IPAContractDisbursement ipaDisb : (Set<IPAContractDisbursement>)contract.getDisbursements()) {
                                     if (FeaturesUtil.isVisibleModule("/Activity Form/Contracts/Contract Item/Contract Disbursements/Adjustment Type")){
@@ -2357,13 +2364,14 @@ public class ExportActivityToPDF extends Action {
                             //Funding Disbursements
                             PdfPCell fundingDisbs1=new PdfPCell();
                             fundingDisbs1.setBorder(0);
-                            Paragraph fundDisbsP=new Paragraph(postprocessText(TranslatorWorker.translateText("Funding Disbursements"))+":",titleFont);
+                            Paragraph fundDisbsP = new Paragraph(postprocessText(
+                                    TranslatorWorker.translateText("Funding Disbursements")) + ":", titleFont);
                             fundingDisbs1.addElement(fundDisbsP);
                             ipaInnerTable.addCell(fundingDisbs1);
 
                             PdfPCell fundingDisbs2=new PdfPCell();
                             fundingDisbs2.setBorder(0);
-                            PdfPTable fundDisbursmentsInnerTable= getTable(disbFieldsCount);
+                            PdfPTable fundDisbursmentsInnerTable = getTable(disbFieldsCount);
 
                             if(myForm.getFunding()!=null){
                                 if (FeaturesUtil.isVisibleModule("/Activity Form/Contracts/Contract Item/Contract Disbursements/Adjustment Type")){
@@ -2441,7 +2449,7 @@ public class ExportActivityToPDF extends Action {
         PdfPCell relDocCell1=new PdfPCell();
         relDocCell1.setBackgroundColor(new Color(244,244,242));
         relDocCell1.setBorder(0);
-        p1=new Paragraph(postprocessText(TranslatorWorker.translateText("Related Documents")),titleFont);
+        p1 = new Paragraph(postprocessText(TranslatorWorker.translateText("Related Documents")), titleFont);
         p1.setAlignment(Element.ALIGN_RIGHT);
         relDocCell1.addElement(p1);
         mainLayout.addCell(relDocCell1);
@@ -2449,7 +2457,7 @@ public class ExportActivityToPDF extends Action {
         PdfPCell relDocCell2=new PdfPCell();
         relDocCell2.setBackgroundColor(new Color(255,255,255));
         relDocCell2.setBorder(0);
-        PdfPTable relatedDocnested= getTable(2);
+        PdfPTable relatedDocnested = getTable(2);
         relatedDocnested.setTableEvent(event);
         //documents
         if(myForm.getDocuments().getCrDocuments()!=null && myForm.getDocuments().getCrDocuments().size()>0 || myForm.getDocuments().getDocuments() != null && myForm.getDocuments().getDocuments().size()>0)
@@ -2893,15 +2901,15 @@ public class ExportActivityToPDF extends Action {
 
     private void buildFundingInformationPart(EditActivityForm myForm,PdfPTable mainLayout,ServletContext ampContext,HttpSession session) throws WorkerException, DocumentException {
         Paragraph p1;
-        PdfPCell fundingCell1=new PdfPCell();
-        p1=new Paragraph(postprocessText(TranslatorWorker.translateText("Donor Funding")),titleFont);
+        PdfPCell fundingCell1 = new PdfPCell();
+        p1 = new Paragraph(postprocessText(TranslatorWorker.translateText("Donor Funding")), titleFont);
         p1.setAlignment(Element.ALIGN_RIGHT);
         fundingCell1.addElement(p1);
         fundingCell1.setBackgroundColor(new Color(244,244,242));
         fundingCell1.setBorder(0);
         mainLayout.addCell(fundingCell1);
 
-        PdfPTable fundingTable = getTable(4);
+        PdfPTable fundingTable = getTable(COLUMNS_4);
         fundingTable.setWidths(new float[]{2f, 1.5f, 2f, 2f});
         boolean drawTotals=false; //draw total planned commitment,total actual commitments e.t.c.
         if(myForm.getFunding().getFundingOrganizations()!=null){
@@ -3386,7 +3394,7 @@ public class ExportActivityToPDF extends Action {
         Paragraph p1=new Paragraph(postprocessText(columnName),titleFont);
         p1.setAlignment(Element.ALIGN_RIGHT);
         cell1.addElement(p1);
-        cell1.setBackgroundColor(new Color(244,244,242));
+        cell1.setBackgroundColor(BACKGROUND_COLOR);
         cell1.setBorder(0);
         mainLayout.addCell(cell1);
 
@@ -3407,7 +3415,7 @@ public class ExportActivityToPDF extends Action {
             Paragraph p1 = new Paragraph(TranslatorWorker.translateText("Annual Proposed Project Budget"), titleFont);
             p1.setAlignment(Element.ALIGN_RIGHT);
             innerCell.addElement(p1);
-            innerCell.setBackgroundColor(new Color(244, 244, 242));
+            innerCell.setBackgroundColor(BACKGROUND_COLOR);
             mainLayout.addCell(innerCell);
             PdfPCell dataCell = new PdfPCell();
             PdfPTable dataTable = getTable(2);
@@ -3625,26 +3633,31 @@ public class ExportActivityToPDF extends Action {
     /**
      * builds all related organizations Info that should be exported to PDF
      */
-    private void buildRelatedOrganisationsOutput(PdfPTable relatedOrgsTable, String orgType , Collection<AmpOrganisation> orgs, Collection<FundingOrganization> fundingOrgs, HashMap<String, String> percentages, ServletContext ampContext) throws WorkerException{
-        if((orgs!=null && !orgs.isEmpty() ) || (fundingOrgs!=null && !fundingOrgs.isEmpty() )){
-            Paragraph paragraph=new Paragraph(new Paragraph(new Phrase(postprocessText(TranslatorWorker.translateText(orgType))+":",titleFont)));
+    private void buildRelatedOrganisationsOutput(PdfPTable relatedOrgsTable, String orgType,
+                                                 Collection<AmpOrganisation> orgs,
+                                                 Collection<FundingOrganization> fundingOrgs,
+                                                 HashMap<String, String> percentages, ServletContext ampContext)
+            throws WorkerException {
+        if ((orgs != null && !orgs.isEmpty()) || (fundingOrgs != null && !fundingOrgs.isEmpty())) {
+            Paragraph paragraph = new Paragraph(new Paragraph(new Phrase(postprocessText(TranslatorWorker
+                    .translateText(orgType)) + ":", titleFont)));
             PdfPCell orgTypeCell=new PdfPCell(paragraph);
             orgTypeCell.setBorder(0);
-            orgTypeCell.setBackgroundColor(new Color(255,255,255));
+            orgTypeCell.setBackgroundColor(BACKGROUND_COLOR_WHITE);
             relatedOrgsTable.addCell(orgTypeCell);
             PdfPCell respOrgCell=new PdfPCell();
 
             respOrgCell.setBorder(1);
-            respOrgCell.setBorderColor(new Color(201,201,199));
+            respOrgCell.setBorderColor(BORDER_COLOR);
             com.lowagie.text.List orgList=new com.lowagie.text.List(false); //not numbered list
             orgList.setListSymbol(new Chunk("\u2022"));
             orgList.setAlignindent(true);
-            orgList.setIndentationLeft(5);
+            orgList.setIndentationLeft(INDENTATION_LEFT);
             if (fundingOrgs!=null && fundingOrgs.size()>0){
                 for (FundingOrganization org : fundingOrgs) {
                     ListItem item=new ListItem(postprocessText(org.getOrgName()), plainFont);
                     orgList.add(item);
-                };
+                }
                 respOrgCell.addElement(orgList);
                 relatedOrgsTable.addCell(respOrgCell);
             } else if(orgs!=null && orgs.size()>0){
@@ -3773,12 +3786,12 @@ public class ExportActivityToPDF extends Action {
     }
 
     private PdfPTable buildRegionalFundingInfoOutput(String elementName, String regionLocation, List<FundingDetail> listToIterate,ServletContext ampContext) throws Exception{
-        PdfPTable regFundTable= getTable(2);
+        PdfPTable regFundTable = getTable(2);
         regFundTable.getDefaultCell().setBorder(0);
         regFundTable.setWidths(new float[] {1f,3f});
 
         //commitment,disbursement,expenditure
-        PdfPCell cell=new PdfPCell();
+        PdfPCell cell = new PdfPCell();
         cell.setBorder(0);
         Paragraph paragraph=new Paragraph(postprocessText(elementName),plainFont);
         paragraph.setAlignment(Element.ALIGN_LEFT);
@@ -3787,7 +3800,7 @@ public class ExportActivityToPDF extends Action {
         regFundTable.addCell(cell);
 
         //second cell for actual/planned
-        PdfPTable fdTable= getTable(3);
+        PdfPTable fdTable = getTable(COLUMNS_3);
         fdTable.getDefaultCell().setBorder(0);
         for (FundingDetail fd : listToIterate) {
 

@@ -305,7 +305,7 @@ public class ActivityUtil {
             saveActivityResources(a, session);
             saveActivityGPINiResources(a, session);
             saveEditors(session, createNewVersion);
-            saveComments(a, session,draft);
+            saveComments(a, session, draft);
         }
 
         saveAgreements(a, session, isActivityForm);

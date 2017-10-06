@@ -54,6 +54,7 @@ public class FiltersConstants {
     public static final String IMPLEMENTING_AGENCY = "implementing-agency";
     public static final String JOINT_CRITERIA = "joint-criteria";
     public static final String LOCATION = "location";
+    public static final String LINE_MINISTRY_RANK = "line-ministry-rank";
     public static final String MODE_OF_PAYMENT = "mode-of-payment";
     public static final String NATIONAL_PLANNING_OBJECTIVES = "national-planning-objectives";
     public static final String NATIONAL_PLANNING_OBJECTIVES_LEVEL_1 = "national-planning-objectives-level-1";

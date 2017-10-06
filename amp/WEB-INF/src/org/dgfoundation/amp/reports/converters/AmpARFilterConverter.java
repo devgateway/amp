@@ -3,14 +3,18 @@
  */
 package org.dgfoundation.amp.reports.converters;
 
+import static java.util.stream.Collectors.toList;
+
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -90,6 +94,7 @@ public class AmpARFilterConverter {
         if (arFilter.isPledgeFilter()) return;
         addCategoryValueNamesFilter(arFilter.getStatuses(), ColumnConstants.STATUS);
         addFilter(arFilter.getWorkspaces(), ColumnConstants.TEAM);
+        addFilter(NameableIdentifiableInt.wrap(arFilter.getLineMinRank()), ColumnConstants.LINE_MINISTRY_RANK);
         addApprovalStatus();
         addBooleansFilter(arFilter.getHumanitarianAid(), ColumnConstants.HUMANITARIAN_AID);
         addBooleansFilter(arFilter.getDisasterResponse(), ColumnConstants.DISASTER_RESPONSE_MARKER);
@@ -100,7 +105,7 @@ public class AmpARFilterConverter {
         addCategoryValueNamesFilter(arFilter.getActivityPledgesTitle(), ColumnConstants.PLEDGES_TITLES);
         addCategoryValueNamesFilter(arFilter.getPerformanceAlertLevel(), ColumnConstants.PERFORMANCE_ALERT_LEVEL);
     }
-    
+
     /**
      * builds a multiple-choices boolean filter
      * @param vals
@@ -428,5 +433,38 @@ public class AmpARFilterConverter {
      */
     public void setArFilter(AmpARFilter arFilter) {
         this.arFilter = arFilter;
+    }
+
+    private static class NameableIdentifiableInt implements NameableOrIdentifiable {
+
+        private final Integer value;
+
+        NameableIdentifiableInt(Integer value) {
+            this.value = Objects.requireNonNull(value);
+        }
+
+        @Override
+        public Object getIdentifier() {
+            return value;
+        }
+
+        @Override
+        public String getName() {
+            return value.toString();
+        }
+
+        @Override
+        public void setName(String name) {
+        }
+
+        private static Collection<NameableOrIdentifiable> wrap(Collection<Integer> collection) {
+            if (collection == null) {
+                return null;
+            }
+            if (collection.isEmpty()) {
+                return Collections.emptyList();
+            }
+            return collection.stream().map(NameableIdentifiableInt::new).collect(toList());
+        }
     }
 }

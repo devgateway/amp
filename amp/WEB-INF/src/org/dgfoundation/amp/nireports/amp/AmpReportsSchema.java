@@ -488,6 +488,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         no_entity(ColumnConstants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT_TITLE, "v_impl_ex_cont_title");
         degenerate_dimension(ColumnConstants.JOINT_CRITERIA, "v_yes_no_joint_criteria", boolDimension);
         degenerate_dimension(ColumnConstants.GOVERNMENT_APPROVAL_PROCEDURES, "v_yes_no_government_approval_proc", boolDimension);
+        no_dimension(ColumnConstants.LINE_MINISTRY_RANK, "v_line_min_rank");
         no_entity(ColumnConstants.MINISTRY_CODE, "v_minsitry_code");
         no_entity(ColumnConstants.MINISTRY_OF_FINANCE_CONTACT_EMAIL, "v_mofed_cont_email");
         no_entity(ColumnConstants.MINISTRY_OF_FINANCE_CONTACT_FAX, "v_mofed_cont_fax");

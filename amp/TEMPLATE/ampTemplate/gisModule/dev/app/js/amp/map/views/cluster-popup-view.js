@@ -147,27 +147,29 @@ module.exports = Backbone.View.extend({
     _.extend(payload, {settings: settings});
 
     //API wants these in the url, but other params go in post, strange but it's the way it is...
-    tmpModel.url += '?limit=' + payload.limit;
-
-   
+    tmpModel.url += '?limit=' + payload.limit;   
     payload['Activity Id'] = this.cluster.properties.activityid;
-
+    
+    if (this.cluster.properties.admLevel) {
+       payload.filters[this.cluster.properties.admLevel.toLowerCase()] = [this.cluster.properties.admId]
+    }
+    
     return tmpModel.fetch({type:'POST', data:JSON.stringify(payload)});
   },
 
 
-  _generateProjectList: function() {
+  _generateProjectList: function(popup, cluster) {
     var self = this;
     this._currentPage = 0;
 
     this.tempDOM.find('.load-more').click(function() {
       self._currentPage++;
-      self._loadMoreProjects();
+      self._loadMoreProjects(cluster);
     });
 
     this._updatePlannedActualUI();
 
-    return this._loadMoreProjects();
+    return this._loadMoreProjects(cluster);
   },
 
   // If any of the 'planned' funding types are selected then the
@@ -196,7 +198,7 @@ module.exports = Backbone.View.extend({
 
 
   //TODO: should be done in data.adm cluster..then we can cache for if someone closes and reopens
-  _loadMoreProjects: function() {
+  _loadMoreProjects: function(cluster) {
 	  var self = this;
 	  var startIndex = this._currentPage * this.PAGE_SIZE;
 	  var activityIDs = this.cluster.properties.activityid.slice(startIndex, startIndex + this.PAGE_SIZE);
@@ -208,8 +210,8 @@ module.exports = Backbone.View.extend({
 		  this.tempDOM.find('.load-more').html('<span data-i18n="amp.gis:popup-loadmore">load more</span> ' +
 				  (startIndex + this.PAGE_SIZE) + '/' + this.cluster.properties.activityid.length);
 	  }
-
-	  return this.app.data.activities.getActivities(activityIDs).then(function(activityCollection) {        
+      
+	  return this.app.data.activities.getActivitiesforLocation(activityIDs, cluster.properties.admLevel, cluster.properties.admId).then(function(activityCollection) {        
 		  self.tempDOM.find('#projects-pane .loading').remove();
 		  /* Format the numerical columns */
 		  var ampFormatter = new util.DecimalFormat(self.app.data.generalSettings.get('number-format'));
@@ -230,8 +232,7 @@ module.exports = Backbone.View.extend({
               columnName2 = fundingType + ' Disbursements';
           }
 
-		  var activityFormatted = _.map(activityCollection, function(activity) {
-
+		  var activityFormatted = _.map(activityCollection, function(activity) {             
 			  var formattedColumnName1 = ampFormatter.format(activity.get(columnName1));
 			  var formattedColumnName2 = ampFormatter.format(activity.get(columnName2));
 

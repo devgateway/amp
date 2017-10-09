@@ -11,6 +11,7 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 
@@ -80,13 +81,26 @@ public class SummaryChangeHtmlRenderer {
 
         res.append(renderHeaderRow("Activity Title", activity.getName()));
         res.append(renderHeaderRow("Activity updated on", FormatHelper.formatDate(activity.getUpdatedDate())));
-        res.append(renderHeaderRow("Activity last updated by", activity.getModifiedBy().getUser().getFirstNames()
-                + " " + activity.getModifiedBy().getUser().getLastName()
-                + " - " + activity.getModifiedBy().getUser().getEmail()));
-
+        res.append(renderHeaderRow("Activity last updated by", getModifiedByInfo(activity)));
         res.append(renderHeaderRow("Changes to financial information", null));
         res.append("</thead>");
         return res;
+    }
+
+    private String getModifiedByInfo(AmpActivityVersion activity) {
+        StringBuilder res = new StringBuilder();
+        ActivityHistory auditHistory = null;
+
+        if (activity.getModifiedBy() == null || (activity.getUpdatedDate() == null
+                && activity.getModifiedDate() == null)) {
+            auditHistory = ActivityUtil.getModifiedByInfoFromAuditLogger(activity.getAmpActivityId());
+            res.append(ActivityUtil.getModifiedByUserName(activity, auditHistory));
+        } else {
+            res.append(activity.getModifiedBy().getUser().getFirstNames()
+                    + " " + activity.getModifiedBy().getUser().getLastName()
+                    + " - " + activity.getModifiedBy().getUser().getEmail());
+        }
+        return res.toString();
     }
 
     private String renderHeaderRow(String title, String value) {

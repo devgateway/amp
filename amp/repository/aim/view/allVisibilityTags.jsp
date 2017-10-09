@@ -91,6 +91,7 @@
 <module:display name="Resource Label Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Template Documents Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Donor Profile Report" parentModule="REPORTING"></module:display>
+<module:display name="Saiku" parentModule="REPORTING"></module:display>
 <module:display name="Multi-dimensional Reports" parentModule="REPORTING"></module:display>
 <module:display name="Pledge Reports" parentModule="REPORTING"></module:display>
 <feature:display name="Pledges Default Reports" module="Pledge Reports"></feature:display>
@@ -592,7 +593,6 @@ deleted 6 fields, do not reinsert
 <field:display name="Currency Expenditure" feature="Expenditures"></field:display> 
 <field:display name="Currency Expenditures" feature="Regional Funding"></field:display> 
 <field:display name="Currency of Disbursement Order" feature="Disbursement Orders"></field:display> 
-<field:display name="Current Completion Date" feature="Planning"></field:display> 
 <field:display name="Data Source" feature="Identification"></field:display>
 <field:display name="Data Team Leader" feature="Identification"></field:display> 
 <field:display name="Date Commitment" feature="Commitments"></field:display>

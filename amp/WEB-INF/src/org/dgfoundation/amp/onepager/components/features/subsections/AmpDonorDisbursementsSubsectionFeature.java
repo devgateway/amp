@@ -15,6 +15,8 @@ import org.dgfoundation.amp.onepager.components.QuarterInformationPanel;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpDonorDisbursementsFormTableFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
+import org.dgfoundation.amp.onepager.events.FreezingUpdateEvent;
+import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -69,8 +71,7 @@ public class AmpDonorDisbursementsSubsectionFeature extends
         super(id, fmName, model,Constants.DISBURSEMENT);
         disbursementsTableFeature = new AmpDonorDisbursementsFormTableFeature("disbursementsTableFeature", model, "Disbursements Table", transactionType);
         add(disbursementsTableFeature);
-        fundingOrgModel = new PropertyModel<AmpOrganisation>(model,"ampDonorOrgId");
-        
+        fundingOrgModel = new PropertyModel<AmpOrganisation>(model, "ampDonorOrgId");              
         AmpAjaxLinkField addDisbursement=new AmpAjaxLinkField("addDisbursement","Add Disbursement","Add Disbursement") {
             @Override
             public void onClick(AjaxRequestTarget target) {

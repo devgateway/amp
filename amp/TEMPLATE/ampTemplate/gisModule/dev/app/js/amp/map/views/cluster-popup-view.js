@@ -148,10 +148,7 @@ module.exports = Backbone.View.extend({
 
     //API wants these in the url, but other params go in post, strange but it's the way it is...
     tmpModel.url += '?limit=' + payload.limit;
-
-   
-    payload['Activity Id'] = this.cluster.properties.activityid;
-
+    payload.filters['activity-id'] = this.cluster.properties.activityid;
     return tmpModel.fetch({type:'POST', data:JSON.stringify(payload)});
   },
 

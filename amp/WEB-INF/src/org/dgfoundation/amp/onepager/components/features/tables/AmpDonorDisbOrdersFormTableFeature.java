@@ -19,6 +19,8 @@ import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFea
 import org.dgfoundation.amp.onepager.components.fields.AmpCheckBoxFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
+import org.dgfoundation.amp.onepager.events.FreezingUpdateEvent;
+import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.IPAContract;
@@ -47,8 +49,9 @@ public class AmpDonorDisbOrdersFormTableFeature extends
             protected void onPopulateItem(
                     org.dgfoundation.amp.onepager.components.ListItem<AmpFundingDetail> item) {
                 item.add(getAdjustmentTypeComponent(item.getModel(), transactionType));
+                addFreezingvalidator(item);
                 item.add(getFundingAmountComponent(item.getModel()));
-
+                item.add(UpdateEventBehavior.of(FreezingUpdateEvent.class));
                 AmpTextFieldPanel<String> disbOrderId = new AmpTextFieldPanel<String>(
                         "disbOrderId", new PropertyModel<String>(
                                 item.getModel(), "disbOrderId"),

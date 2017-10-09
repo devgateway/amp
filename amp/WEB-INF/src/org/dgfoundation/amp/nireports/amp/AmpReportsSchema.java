@@ -645,7 +645,6 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         date_column(ColumnConstants.ACTUAL_APPROVAL_DATE, "v_actual_approval_date");
         date_column(ColumnConstants.ACTUAL_COMPLETION_DATE, "v_actual_completion_date");
         date_column(ColumnConstants.ACTUAL_START_DATE, "v_actual_start_date");
-        date_column(ColumnConstants.CURRENT_COMPLETION_DATE, "v_actual_completion_date");
         date_column(ColumnConstants.DONOR_COMMITMENT_DATE, "v_donor_commitment_date");
         date_column(ColumnConstants.FINAL_DATE_FOR_CONTRACTING, "v_contracting_date");
         date_column(ColumnConstants.FINAL_DATE_FOR_DISBURSEMENTS, "v_disbursements_date");

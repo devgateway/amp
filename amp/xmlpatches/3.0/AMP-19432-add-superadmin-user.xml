@@ -17,7 +17,7 @@
                                     email_bouncing, no_alerts_until, password, salt, pass_question, pass_answer, url, active, banned, referral, 
                                     organization_type_other, address, country_iso, image_id, organization_type_id, registration_language, 
                                     global_admin, registered_through, pledger, region_id, user_ext_id, password_changed_at, exempt_from_data_freezing)
-                    SELECT nextval('amp_global_settings_seq'), localtimestamp, creation_ip, localtimestamp, modifying_ip, 'AMP', 'Super Admin', 'superadmin@amp.org', email_verified, 
+                    SELECT nextval('dg_user_seq'), localtimestamp, creation_ip, localtimestamp, modifying_ip, 'AMP', 'Super Admin', 'superadmin@amp.org', email_verified, 
 									email_bouncing, no_alerts_until, password, salt, pass_question, pass_answer, url, active, banned, referral, 
 									organization_type_other, address, country_iso, image_id, organization_type_id, registration_language, 
 									global_admin, registered_through, pledger, region_id, user_ext_id, password_changed_at, exempt_from_data_freezing 

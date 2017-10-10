@@ -32,7 +32,7 @@ import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 
 /**
- * A utility class to transform a GeneratedReport to GPI Report 6
+ * A utility class to transform a GeneratedReport to GPI Report 5a
  * 
  * @author Viorel Chihai
  *
@@ -47,14 +47,19 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
         addColumn(new GPIReportOutputColumn(ColumnConstants.DONOR_AGENCY));
         addColumn(new GPIReportOutputColumn(ColumnConstants.DONOR_GROUP));
         addColumn(new GPIReportOutputColumn(GPIReportConstants.COLUMN_YEAR));
-        addColumn(new GPIReportOutputColumn(GPIReportConstants.COLUMN_TOTAL_ACTUAL_DISBURSEMENTS));
+        addColumn(new GPIReportOutputColumn(getColumnLabel(GPIReportConstants.COLUMN_TOTAL_ACTUAL_DISBURSEMENTS),
+                GPIReportConstants.COLUMN_TOTAL_ACTUAL_DISBURSEMENTS, null));
         addColumn(new GPIReportOutputColumn(GPIReportConstants.COLUMN_CONCESSIONAL,
-                GPIReportConstants.REPORT_5A_TOOLTIP.get(GPIReportConstants.COLUMN_CONCESSIONAL)));     
-        addColumn(new GPIReportOutputColumn(MeasureConstants.ACTUAL_DISBURSEMENTS));
-        addColumn(new GPIReportOutputColumn(MeasureConstants.PLANNED_DISBURSEMENTS));
-        addColumn(new GPIReportOutputColumn(MeasureConstants.DISBURSED_AS_SCHEDULED,
+                GPIReportConstants.REPORT_5A_TOOLTIP.get(GPIReportConstants.COLUMN_CONCESSIONAL)));
+        addColumn(new GPIReportOutputColumn(getColumnLabel(MeasureConstants.ACTUAL_DISBURSEMENTS), 
+                MeasureConstants.ACTUAL_DISBURSEMENTS, null));
+        addColumn(new GPIReportOutputColumn(getColumnLabel(MeasureConstants.PLANNED_DISBURSEMENTS), 
+                MeasureConstants.PLANNED_DISBURSEMENTS, null));
+        addColumn(new GPIReportOutputColumn(getColumnLabel(MeasureConstants.DISBURSED_AS_SCHEDULED), 
+                MeasureConstants.DISBURSED_AS_SCHEDULED,
                 GPIReportConstants.REPORT_5A_TOOLTIP.get(MeasureConstants.DISBURSED_AS_SCHEDULED)));
-        addColumn(new GPIReportOutputColumn(MeasureConstants.OVER_DISBURSED,
+        addColumn(new GPIReportOutputColumn(getColumnLabel(MeasureConstants.OVER_DISBURSED),
+                MeasureConstants.OVER_DISBURSED,
                 GPIReportConstants.REPORT_5A_TOOLTIP.get(MeasureConstants.OVER_DISBURSED)));
         addColumn(new GPIReportOutputColumn(GPIReportConstants.COLUMN_REMARK));
     }
@@ -354,6 +359,10 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 
         return actual.subtract(planned).divide(actual, NiFormula.DIVISION_MC)
                 .multiply(new BigDecimal(PERCENTAGE_MULTIPLIER)).setScale(0, RoundingMode.HALF_UP);
+    }
+    
+    public String getColumnLabel(String columnName) {
+        return getColumnLabel(GPIReportConstants.INDICATOR_5A_COLUMN_LABELS, columnName);
     }
 
 }

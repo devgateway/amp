@@ -7,6 +7,8 @@ import * as commonListsActions from '../actions/CommonListsActions';
 import * as startUp from '../actions/StartUpAction.jsx';
 import * as Constants from '../common/Constants';
 import Loading from './Loading';
+import { IMG_VALUE,INDICATOR_5B} from '../common/Constants';
+import HeaderToolTip from './HeaderToolTip';
 export default class Report5b extends Component {
     constructor( props, context ) {
         super( props, context );
@@ -283,144 +285,148 @@ export default class Report5b extends Component {
     render() {         
         var years = Utils.getYears(this.settingsWidget, this.props.years);                   
         var MTEFYears =  this.getMTEFYears();
-        var addedGroups = [];            
-        return (
-                <div>
-                    {this.state.waiting &&                      
-                        <Loading/>                
-                    } 
-                    {this.props.mainReport && this.props.mainReport.page && this.settingsWidget && this.settingsWidget.definitions &&
-                     <div>                    
-                    <div id="filter-popup" ref="filterPopup"> </div>
-                    <div id="amp-settings" ref="settingsPopup"> </div>
-                    <div className="container-fluid indicator-nav no-padding">
-                        <div className="col-md-5b no-padding">
-                        </div>
-                        <div className="col-md-5b no-padding">
-                            <ul className="export-nav">
-                                <li>
-                                     <a onClick={this.downloadPdfFile}><img src="images/export-pdf.svg" /></a>
-                                </li>
-                                <li>
-                                     <a onClick={this.downloadExcelFile}><img src="images/export-excel.svg" /></a>
-                                </li>
-                            </ul>
-                            <div className="btn-action-nav">
-                                <button type="button" className="btn btn-action" onClick={this.showFilters}>{this.props.translations['amp.gpi-reports:filter-button']}</button>
-                                <button type="button" className="btn btn-action" onClick={this.showSettings}>{this.props.translations['amp.gpi-reports:settings-button']}</button>
+        var addedGroups = [];
+         return (
+             <div>
+                  {this.state.waiting &&
+                  <Loading/>
+                  }
+                  {this.props.mainReport && this.props.mainReport.page && this.settingsWidget && this.settingsWidget.definitions &&
+                  <div>
+                       <div id="filter-popup" ref="filterPopup"> </div>
+                       <div id="amp-settings" ref="settingsPopup"> </div>
+                       <div className="container-fluid indicator-nav no-padding">
+                            <div className="col-md-5b no-padding">
                             </div>
-                        </div>
-                    </div>
+                            <div className="col-md-5b no-padding">
+                                 <ul className="export-nav">
+                                      <li>
+                                           <a onClick={this.downloadPdfFile}><img src="images/export-pdf.svg" /></a>
+                                      </li>
+                                      <li>
+                                           <a onClick={this.downloadExcelFile}><img src="images/export-excel.svg" /></a>
+                                      </li>
+                                 </ul>
+                                 <div className="btn-action-nav">
+                                      <button type="button" className="btn btn-action" onClick={this.showFilters}>{this.props.translations['amp.gpi-reports:filter-button']}</button>
+                                      <button type="button" className="btn btn-action" onClick={this.showSettings}>{this.props.translations['amp.gpi-reports:settings-button']}</button>
+                                 </div>
+                            </div>
+                       </div>
 
-                    <div className="section-divider"></div>
-                    {this.props.mainReport && this.props.mainReport.summary &&
-                        <div className="container-fluid indicator-stats no-padding">
+                       <div className="section-divider"></div>
+                       {this.props.mainReport && this.props.mainReport.summary &&
+                       <div className="container-fluid indicator-stats no-padding">
                             <div className="col-md-3">
-                                <div className="indicator-stat-wrapper">
-                                    <div className="stat-value">{this.props.mainReport.summary[Constants.INDICATOR_5B]}</div>
-                                    <div className="stat-label">{this.getLocalizedColumnName( Constants.INDICATOR_5B )}</div>
-                                </div>
-                            </div>                           
-                        </div>
-                    }
-                    <div className="container-fluid no-padding">
-                        <ul className="year-nav">                            
-                            {( ( years.length > 3 ) ? years.splice( years.length - 3, 3 ).reverse() : years.reverse() ).map( year =>
-                                <li className={this.state.selectedYear == year ? 'active' : ''} key={year}><a data-year={year} onClick={this.onYearClick}>{year}</a></li>
-                            )}
-                            <li >
-                                <div className="dropdown">
-                                    <a className={years.includes( this.state.selectedYear ) ? 'btn dropdown-toggle btn-years btn-years-active' : 'btn dropdown-toggle btn-years'} type="button" id="years" data-toggle="dropdown">
-                                        {this.props.translations['amp.gpi-reports:other-years']}
-                                        <span className="caret"></span></a>
-                                    <ul className="dropdown-menu dropdown-years" role="menu">
-                                        {years.reverse().map( year =>
-                                            <li role="presentation" className={this.state.selectedYear == year ? 'active' : ''} key={year}><a data-year={year} onClick={this.onYearClick}>{year}</a></li>
-                                        )}
+                                 <div className="indicator-stat-wrapper">
+                                      <div className="stat-value">{this.props.mainReport.summary[Constants.INDICATOR_5B]}</div>
+                                      <div className="stat-label">{this.getLocalizedColumnName( Constants.INDICATOR_5B )}</div>
+                                 </div>
+                            </div>
+                       </div>
+                       }
+                       <div className="container-fluid no-padding">
+                            <ul className="year-nav">
+                                 {( ( years.length > 3 ) ? years.splice( years.length - 3, 3 ).reverse() : years.reverse() ).map( year =>
+                                     <li className={this.state.selectedYear == year ? 'active' : ''} key={year}><a data-year={year} onClick={this.onYearClick}>{year}</a></li>
+                                 )}
+                                 <li >
+                                      <div className="dropdown">
+                                           <a className={years.includes( this.state.selectedYear ) ? 'btn dropdown-toggle btn-years btn-years-active' : 'btn dropdown-toggle btn-years'} type="button" id="years" data-toggle="dropdown">
+                                                {this.props.translations['amp.gpi-reports:other-years']}
+                                                <span className="caret"></span></a>
+                                           <ul className="dropdown-menu dropdown-years" role="menu">
+                                                {years.reverse().map( year =>
+                                                    <li role="presentation" className={this.state.selectedYear == year ? 'active' : ''} key={year}><a data-year={year} onClick={this.onYearClick}>{year}</a></li>
+                                                )}
 
-                                    </ul>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div className="selection-legend">
-                        <div className="pull-right">{this.showSelectedDates().length > 0 ? this.props.translations['amp-gpi-reports:selected'] : ''} {this.showSelectedDates()}</div>
-                    </div>
-                    <div className="container-fluid no-padding">
-                        <div className="dropdown">
-                            <select name="donorAgency" className="form-control donor-dropdown" value={this.state.selectedDonor} onChange={this.onDonorFilterChange}>
-                                <option value="">{this.props.translations['amp.gpi-reports:all-donors']}</option>
-                                {this.props.orgList.map( org =>
-                                    <option value={org.id} key={org.id} >{org.name}</option>
-                                )}
-                            </select>
-                        </div>                        
-                    </div>
-                    <div className="section-divider"></div>
-                        { this.props.mainReport.empty == false  &&
-                            <table className="table table-bordered table-striped indicator-table">
+                                           </ul>
+                                      </div>
+                                 </li>
+                            </ul>
+                       </div>
+                       <div className="selection-legend">
+                            <div className="pull-right">{this.showSelectedDates().length > 0 ? this.props.translations['amp-gpi-reports:selected'] : ''} {this.showSelectedDates()}</div>
+                       </div>
+                       <div className="container-fluid no-padding">
+                            <div className="dropdown">
+                                 <select name="donorAgency" className="form-control donor-dropdown" value={this.state.selectedDonor} onChange={this.onDonorFilterChange}>
+                                      <option value="">{this.props.translations['amp.gpi-reports:all-donors']}</option>
+                                      {this.props.orgList.map( org =>
+                                          <option value={org.id} key={org.id} >{org.name}</option>
+                                      )}
+                                 </select>
+                            </div>
+                       </div>
+                       <div className="section-divider"></div>
+                       { this.props.mainReport.empty == false  &&
+                       <table className="table table-bordered table-striped indicator-table">
                             <thead>
                             <tr>
-                              <th className="col-md-4">
-                              <img src="images/blue_radio_on.png" className={this.state.hierarchy === 'donor-agency' ? 'donor-toggle' : 'donor-toggle donor-toggle-unselected'} onClick={this.toggleHierarchy} data-hierarchy="donor-agency" /><span className="donor-header-text" onClick={this.toggleHierarchy} data-hierarchy="donor-agency">{this.props.translations['amp.gpi-reports:donor-agency']}</span><br />                                                          <img src="images/blue_radio_on.png" className={this.state.hierarchy === 'donor-group' ? 'donor-toggle' : 'donor-toggle donor-toggle-unselected'} onClick={this.toggleHierarchy} data-hierarchy="donor-group" /><span className="donor-header-text" onClick={this.toggleHierarchy} data-hierarchy="donor-group">{this.props.translations['amp.gpi-reports:donor-group']}</span>
-                              </th>
-                              {MTEFYears.map(( year, i ) =>
-                                <th className="col-md-2" key = {i}><img className="table-icon" src="images/icon-information.svg"/>{year}</th>
-                              )}                          
-                              <th className="col-md-2"><img className="table-icon" src="images/icon-value.svg"/>{this.props.translations['amp-gpi-reports:indicator-5b']}</th>
+                                 <th className="col-md-4">
+                                      <img src="images/blue_radio_on.png" className={this.state.hierarchy === 'donor-agency' ? 'donor-toggle' : 'donor-toggle donor-toggle-unselected'} onClick={this.toggleHierarchy} data-hierarchy="donor-agency" /><span className="donor-header-text" onClick={this.toggleHierarchy} data-hierarchy="donor-agency">{this.props.translations['amp.gpi-reports:donor-agency']}</span><br />                                                          <img src="images/blue_radio_on.png" className={this.state.hierarchy === 'donor-group' ? 'donor-toggle' : 'donor-toggle donor-toggle-unselected'} onClick={this.toggleHierarchy} data-hierarchy="donor-group" /><span className="donor-header-text" onClick={this.toggleHierarchy} data-hierarchy="donor-group">{this.props.translations['amp.gpi-reports:donor-group']}</span>
+                                 </th>
+                                 {MTEFYears.map(( year, i ) =>
+                                     <th className="col-md-2" key = {i}>
+                                          <HeaderToolTip column={year} headers={this.props.mainReport.page.headers}/>
+                                          {year}</th>
+                                 )}
+                                 <th className="col-md-2"><HeaderToolTip column={INDICATOR_5B} imgType={IMG_VALUE}
+                                                                         headers={this.props.mainReport.page.headers}/>
+                                      {this.props.translations['amp-gpi-reports:indicator-5b']}</th>
                             </tr>
-                          </thead>
-                          <tbody>                     
-                              {this.props.mainReport && this.props.mainReport.page && this.props.mainReport.page.contents.map(( row, i ) =>
-                              <tr key={i} >
-                                  <td>{row[Constants.DONOR_AGENCY] || row[Constants.DONOR_GROUP]}</td>
-                                  {MTEFYears.map(( year, i ) =>
-                                  <td className="number-column">{row[year]}</td>
-                                  )}
-                                  <td className="number-column">{row[Constants.INDICATOR_5B]}</td>                                    
-                              </tr>
-                          )}                     
-                          </tbody>
-                          </table>     
-                        }
-                        
-                                         
-                      <div>
-                        { this.props.mainReport.empty == false  &&
-                        <div className="row">
-                            <div className="col-md-8 pull-right pagination-wrapper">
-                                {this.props.mainReport &&
-                                    <div className="col-md-4">
-                                        <ul className="pagination">
-                                            {this.generatePaginationLinks()}
-                                            <li className="next"><a onClick={this.goToNextPage}><span aria-hidden="true">&rarr;</span></a></li>
-                                            <li className="page-item"><a onClick={this.goToLastPage} className="page-link">&raquo;</a></li>
-                                        </ul>
-                                    </div>
-                                }
-                                <div className="col-md-3">
-                                </div>
-                                <div className="col-md-2">
-                                    <div className="input-group pull-right">
+                            </thead>
+                            <tbody>
+                            {this.props.mainReport && this.props.mainReport.page && this.props.mainReport.page.contents.map(( row, i ) =>
+                                <tr key={i} >
+                                     <td>{row[Constants.DONOR_AGENCY] || row[Constants.DONOR_GROUP]}</td>
+                                     {MTEFYears.map(( year, i ) =>
+                                         <td className="number-column">{row[year]}</td>
+                                     )}
+                                     <td className="number-column">{row[Constants.INDICATOR_5B]}</td>
+                                </tr>
+                            )}
+                            </tbody>
+                       </table>
+                       }
+
+
+                       <div>
+                            { this.props.mainReport.empty == false  &&
+                            <div className="row">
+                                 <div className="col-md-8 pull-right pagination-wrapper">
+                                      {this.props.mainReport &&
+                                      <div className="col-md-4">
+                                           <ul className="pagination">
+                                                {this.generatePaginationLinks()}
+                                                <li className="next"><a onClick={this.goToNextPage}><span aria-hidden="true">&rarr;</span></a></li>
+                                                <li className="page-item"><a onClick={this.goToLastPage} className="page-link">&raquo;</a></li>
+                                           </ul>
+                                      </div>
+                                      }
+                                      <div className="col-md-3">
+                                      </div>
+                                      <div className="col-md-2">
+                                           <div className="input-group pull-right">
                                         <span className="input-group-addon" id="basic-addon1">
                                             <span className="glyphicon glyphicon-arrow-right" onClick={this.updateRecordsPerPage}></span>
                                         </span>
-                                        <input type="text" className="form-control" ref="recordsPerPage" placeholder="" defaultValue={this.state.recordsPerPage} />
-                                    </div>
-                                </div>
-                                {this.displayPagingInfo()}
+                                                <input type="text" className="form-control" ref="recordsPerPage" placeholder="" defaultValue={this.state.recordsPerPage} />
+                                           </div>
+                                      </div>
+                                      {this.displayPagingInfo()}
+                                 </div>
                             </div>
-                        </div>
-                      }
-                      { this.props.mainReport.empty &&
-                         <div className="text-center">{this.props.translations['amp-gpi-reports:no-data']}</div> 
-                      }
-                    </div>
-                        
-                 </div>
-                 }
-                </div>
-            );           
+                            }
+                            { this.props.mainReport.empty &&
+                            <div className="text-center">{this.props.translations['amp-gpi-reports:no-data']}</div>
+                            }
+                       </div>
+
+                  </div>
+                  }
+             </div>
+         );
         
     }
 

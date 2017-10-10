@@ -21,6 +21,7 @@
 
 <jsp:include page="activityHistoryUtil.jsp" flush="true" />
 <%@page import="java.math.BigDecimal"%>
+<%@ page import="org.digijava.module.aim.util.TeamUtil" %>
 <style type="text/css">
 	.legend_label a.trnClass { color:yellow;}
 </style>
@@ -268,18 +269,24 @@ function collapseAll() {
 	
 
 <!-- MAIN CONTENT PART START -->
-<logic:present scope="request" parameter="editError">
+<logic:present scope="request" parameter="editingUserId">
 	<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center style="margin-top:15px;">
 	     <tr>
 		     <td align="center">
 		        <font color="red" size="3">
-		                <digi:trn key="aim:activityIsBeeingEdited">Current activity is being edited by:</digi:trn> <%= TeamMemberUtil.getTeamMember(Long.valueOf(request.getParameter("editError"))).getMemberName() %>
+					<%
+					if (request.getParameter("editingUserId").equals(TeamUtil.getCurrentMember().getMemberId().toString())) {
+					%>
+					<digi:trn key="aim:activityEditLocked">You may only edit one activity at a time.</digi:trn>
+					<%} else {%>
+					<digi:trn key="aim:activityIsBeeingEdited">Current activity is being edited by:</digi:trn> <%= TeamMemberUtil.getTeamMember(Long.valueOf(request.getParameter("editingUserId"))).getMemberName() %>
+					<%}%>
 		        </font>
 		     </td>
-	     </tr>           
+	     </tr>
 	     <tr>
 	         <td>&nbsp;
-	             
+
 	         </td>
 	     </tr>
 	</table>
@@ -319,7 +326,7 @@ function collapseAll() {
 	</table>
 </logic:present>
 
-<c:if test="${aimEditActivityForm.activityExists=='no'}">
+<c:if test="${aimEditActivityForm.activityExists=='no' && aimEditActivityForm.activityId > 0}">
 	<div class="activity_preview_header" style="font-size: 12px;text-align: center;color:red">
 		<ul style="padding-top: 5px;font-size: 12px">
 			<li><digi:trn>Couldn't find activity! It may have been deleted from the system</digi:trn></li>

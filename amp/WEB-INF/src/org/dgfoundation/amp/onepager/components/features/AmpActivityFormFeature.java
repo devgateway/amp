@@ -842,7 +842,9 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                         target.appendJavaScript("alert('" + TranslatorUtil.getTranslatedText("You need to save this activity before being able to preview it!") + "');");
                     }
                     else{
-                        target.appendJavaScript("window.location.replace(\"/aim/viewActivityPreview.do~pageId=2~activityId=" + am.getObject().getAmpActivityId() + "~isPreview=1\");");
+                        target.appendJavaScript(
+                                "window.location.replace(\"/aim/viewActivityPreview.do~activityId="
+                                        + am.getObject().getAmpActivityId() + "~isPreview=1\");");
                     }
             }
             
@@ -1368,7 +1370,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         message.setRelatedActivityId(activityId);
         
         /*String fullModuleURL=RequestUtils.getFullModuleUrl(request);*/
-        String objUrl="/aim/viewActivityPreview.do~public=true~pageId=2~activityId="+activityId;
+        String objUrl = "/aim/viewActivityPreview.do~activityId=" + activityId;
         message.setObjectURL(objUrl);
         
         

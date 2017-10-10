@@ -172,7 +172,7 @@ public final class DataFreezeUtil {
      * @return
      */
     public static AmpDataFreezeSettings getCurrentFreezingEvent() {
-        Long ampDataFreezeSettingsId = getTodaysFreezingEvent();
+        Long ampDataFreezeSettingsId = getLastNonExecutedFreezingEvent();
         if (ampDataFreezeSettingsId.equals(0L)) {
             return null;
         } else {
@@ -180,14 +180,24 @@ public final class DataFreezeUtil {
         }
     }
 
-    private static Long getTodaysFreezingEvent() {
+    /**
+     * It returns the last non executed freezing event. If it finds two that
+     * didn't execute it returns the last one, i.e the one with the newest
+     * freezing date + grace period
+     * 
+     * @return
+     */
+    private static Long getLastNonExecutedFreezingEvent() {
         final ValueWrapper<Long> freezingEventId = new ValueWrapper<Long>(0L);
 
         PersistenceManager.getSession().doWork(new Work() {
             public void execute(Connection conn) throws SQLException {
-                String todaysFreezingEventQuery = "select id from amp_data_freeze_settings "
-                        + " where (freezing_date::date  + coalesce(grace_period, 0) )= current_date "
-                        + " and executed = false and enabled = true";
+                String todaysFreezingEventQuery = "SELECT id FROM amp_data_freeze_settings "
+                        + " WHERE CURRENT_DATE >=(freezing_date::date + coalesce(grace_period, 0)) "
+                        + " AND executed = FALSE  AND enabled = TRUE "
+                        + " AND (freezing_date::date + coalesce(grace_period, 0)) = "
+                        + " (SELECT max((freezing_date::date + coalesce(grace_period, 0))) "
+                        + " FROM amp_data_freeze_settings  WHERE executed = FALSE AND enabled = TRUE)";
                 RsInfo rsi = SQLUtils.rawRunQuery(conn, todaysFreezingEventQuery, null);
                 if (rsi.rs.next()) {
                     freezingEventId.value = rsi.rs.getLong(1);

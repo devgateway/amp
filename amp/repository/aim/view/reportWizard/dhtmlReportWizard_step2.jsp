@@ -23,10 +23,8 @@
 	<br />
 	<table align="center" cellpadding="0" cellspacing="0" style="width: 735px;" border=0>
 		<tr>
-			<td width="55%" align="left">
+			<td width="55%">
 				<div id="searchBox" style="margin-top:10px; font-size:12px;">
-					<!-- 										<form name="searchBoxForm" onsubmit="searchFunction();return false;"> -->
-
 					<b><digi:trn key="fm:search:searchTitle">Search</digi:trn></b>
 					<c:set var="no_match_message">
 						<digi:trn>No match</digi:trn>
@@ -37,7 +35,6 @@
 
 					<input type="button" id="prevSearchButton" class="buttonx" onclick="prevResult()" value="<<" disabled="true" style="display:none;"/>
 					<input type="button" id="nextSearchButton" class="buttonx" onclick="nextResult()" value=">>" disabled="true"  style="display:none;"/>
-					<!-- </form> -->
 					<span id="spanSearchMessage" style="color:red;font-weight:bold;"></span>
 				</div>
 			</td>

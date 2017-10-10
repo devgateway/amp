@@ -460,7 +460,7 @@ function submitForm(action){
 
 																						<a href="${reportLink}"
 						                                								onclick="return popup(this,'');" style="padding-right: 5px;" title="<digi:trn>Click here to view the report</digi:trn>">
-						                                								<img src= "/TEMPLATE/ampTemplate/saikuui_nireports/images/saiku.png" border="0" /></a>
+						                                								<img src= "/TEMPLATE/ampTemplate/saikuui_reports/images/saiku.png" border="0" /></a>
 																						
 																						<c:set var="showExportExcelSetting" scope="page" value="true"/>
 																						<%if(!FeaturesUtil.isVisibleModule("Show Editable Export Formats")){ %> 

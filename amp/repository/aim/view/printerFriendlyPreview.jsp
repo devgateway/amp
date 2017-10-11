@@ -102,7 +102,7 @@ body {background:none;}
                         <td width="100%">
 							<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top" align="left">
                             <tr>
-                              <div align="center" vAlign="top">
+                              <td align="center" vAlign="top">
 								<table width="98%" cellspacing="0" class="prnt_tbl" cellpadding=4 style="border-collapse: collapse; border-color:#CCCCCC;" border="1">
 									<!-- here starts identification -->
 									<tr bgcolor="#f4f4f2">
@@ -3579,7 +3579,7 @@ body {background:none;}
 	<hr>
 	</logic:iterate>
 	</td> </tr> </logic:notEmpty> </table>
-</div>
+</td>
 </c:if>
 <c:if test="${aimEditActivityForm==null}">
 		Invalid activity id

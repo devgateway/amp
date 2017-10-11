@@ -15,13 +15,13 @@
 
 <c:if test="${not empty funding.undisbursementbalance}">
 	<tr>
-		<td colspan="2" bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase">
+		<td colspan="2" class="preview-funding-total">
 			<digi:trn key="aim:undisbursedBalance">Undisbursed Balance</digi:trn>:
 		</td>
-		<td colspan="2" nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">
+		<td colspan="2" nowrap="nowrap" class="preview-align preview-funding-total">
 			<b>${funding.undisbursementbalance} ${aimEditActivityForm.currCode}</b>
 			&nbsp;
 		</td>
-		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
+		<td class="preview-funding-total">&nbsp;</td>
 	</tr>
 </c:if> 

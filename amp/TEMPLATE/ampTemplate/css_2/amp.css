@@ -1270,3 +1270,21 @@ div.footer {
     white-space:nowrap;
     padding: 0px 0px 0px 5px;
 }
+
+.preview-align {
+    text-align: right;
+}
+
+.preview-funding-total {
+    border-top: 1px solid #000000;
+    background-color: #eeeeee;
+    text-transform: uppercase;
+}
+
+.preview-align-inverse {
+    text-align: left;
+}
+
+.preview-buttons-align {
+    float: right;
+}

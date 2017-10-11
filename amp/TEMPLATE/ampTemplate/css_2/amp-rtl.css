@@ -126,7 +126,16 @@ div.trnpanel div.trn-row ul {
     color: #376091;
 }
 
-.right_menu_empty {
-    text-align: right;
-    color: #376091;
+.preview-align {
+    text-align: left !important;
 }
+
+.preview-align-inverse {
+    text-align: right;
+}
+
+.preview-buttons-align {
+    float: left !important;
+}
+
+

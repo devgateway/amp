@@ -73,6 +73,24 @@ public class XmlReportUtil {
                 reportConfig.set(EPConstants.GROUPING_OPTION, reportParameter.getGroupingOption().value());
             }
         }
+        
+        if (reportParameter.getFilters() != null) {
+            Map<String, Object> filters = new HashMap<>();
+            
+            for (Filter f : reportParameter.getFilters().getFilter()) {
+                if (f.getStart() != null || f.getEnd() != null) {
+                    Map<String, Object> dateObject = new HashMap<>();
+                    dateObject.put("start", f.getStart());
+                    dateObject.put("end", f.getEnd());
+                    
+                    filters.put(f.getName(), dateObject);
+                } else if (f.getValues() != null && f.getValues().getValue() != null) {
+                    filters.put(f.getName(), f.getValues().getValue());
+                }
+            }
+            
+            reportConfig.set(EPConstants.FILTERS, filters);
+        }
 
         return reportConfig;
     }

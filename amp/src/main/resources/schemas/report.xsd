@@ -15,6 +15,7 @@
       <xs:element type="measures" name="measures" minOccurs="0" />
       <xs:element type="hierarchies" name="hierarchies" minOccurs="0" />
       <xs:element type="settings" name="settings" minOccurs="0" />
+      <xs:element type="filters" name="filters"/>
       <xs:element type="groupingOption" name="groupingOption" minOccurs="0" />
       <xs:element type="xs:boolean" name="summary" minOccurs="0" />
     </xs:sequence>
@@ -189,6 +190,8 @@
     <xs:sequence>
       <xs:element type="xs:string" name="name"/>
       <xs:element type="values" name="values"/>
+      <xs:element type="xs:string" name="start" minOccurs="0"/>
+      <xs:element type="xs:string" name="end" minOccurs="0"/>
     </xs:sequence>
   </xs:complexType>
   

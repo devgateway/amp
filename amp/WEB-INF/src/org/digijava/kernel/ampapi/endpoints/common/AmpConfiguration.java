@@ -1,6 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.common;
 
 import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -15,6 +17,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.google.common.hash.Hashing;
+import com.google.common.io.Files;
 import com.google.common.net.HttpHeaders;
 import com.sun.jersey.core.header.ContentDisposition;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
@@ -34,6 +38,8 @@ import org.digijava.kernel.services.AmpVersionService;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpOfflineCompatibleVersionRange;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class should have all end point related to the configuration of amp
@@ -43,6 +49,8 @@ import org.digijava.module.aim.util.FeaturesUtil;
 
 @Path("amp")
 public class AmpConfiguration implements ErrorReportingEndpoint {
+
+    private Logger logger = LoggerFactory.getLogger(AmpConfiguration.class);
 
     private AmpVersionService ampVersionService = SpringUtil.getBean(AmpVersionService.class);
 
@@ -186,30 +194,6 @@ public class AmpConfiguration implements ErrorReportingEndpoint {
     }
 
     /**
-     * Returns the AMP Offline release binary.
-     *
-     * @param id of the binary
-     * @return the binary
-     */
-    @GET
-    @Path("/amp-offline-release/{id}")
-    @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    public Response getAmpOfflineReleaseFile(@PathParam("id") Long id) {
-        File file = ampOfflineService.getReleaseFile(id);
-
-        ContentDisposition contentDisposition = ContentDisposition.type("attachment")
-                .fileName(file.getName())
-                .size(file.length())
-                .build();
-
-        String mimeType = MimeUtil.detectMimeType(file, MediaType.APPLICATION_OCTET_STREAM);
-
-        return Response.ok(file, mimeType)
-                .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
-                .build();
-    }
-
-    /**
      * Returns all AMP Global Settings.
      * <p>Response is a map containing all global settings where key is setting name and value is setting value.
      * <h3>Sample Output:</h3>
@@ -336,6 +320,111 @@ public class AmpConfiguration implements ErrorReportingEndpoint {
     @ApiMethod(id = "deleteCompatibleVersionRange", ui = false, authTypes = AuthRule.IN_ADMIN)
     public AmpOfflineCompatibleVersionRange deleteCompatibleVersionRange(@PathParam("id") Long id) {
         return ampVersionService.deleteCompatibleVersionRange(id);
+    }
+
+    /**
+     * Returns info about latest AMP Offline release for macOS.
+     *
+     * @param arch required architecture, 32 or 64
+     * @return release info in yml format
+     */
+    @GET
+    @Path("offline/{arch}/latest-mac.yml")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response getOfflineLatestMac(@PathParam("arch") String arch) {
+        return getOfflineReleaseYml(arch, AmpOfflineRelease.MAC_OS, "zip");
+    }
+
+    /**
+     * Returns info about latest AMP Offline release for Windows.
+     *
+     * @param arch required architecture, 32 or 64
+     * @return release info in yml format
+     */
+    @GET
+    @Path("offline/{arch}/latest.yml")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response getOfflineLatestWin(@PathParam("arch") String arch) {
+        return getOfflineReleaseYml(arch, AmpOfflineRelease.WINDOWS, "exe");
+    }
+
+    private Response getOfflineReleaseYml(String arch, String os, String extension) {
+        requireValidArch(arch);
+
+        AmpOfflineRelease release = ampOfflineService.getLatestCompatibleReleases()
+                .stream()
+                .filter(r -> r.getOs().equals(os) && r.getArch().equals(arch))
+                .findFirst()
+                .orElse(null);
+
+        if (release != null) {
+            try {
+                SimpleDateFormat df = new SimpleDateFormat(EPConstants.ISO8601_DATE_AND_TIME_FORMAT);
+                File file = ampOfflineService.getReleaseFile(release);
+                String hash = Files.hash(file, Hashing.sha512()).toString();
+                String yml = String.format("version: %s\nreleaseDate: '%s'\npath: %d.%s\nsha512: %s\n",
+                        release.getVersion(), df.format(release.getDate()), release.getId(), extension, hash);
+                return Response.ok(yml).build();
+            } catch (IOException e) {
+                logger.error("Failed to compute hash for release file.", e);
+                JsonBean error = ApiError.toError("Failed to compute hash for release file.");
+                throw new ApiRuntimeException(Response.Status.INTERNAL_SERVER_ERROR, error);
+            }
+        } else {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+    }
+
+    /**
+     * Returns the AMP Offline release binary for Windows.
+     *
+     * @param arch required architecture, 32 or 64
+     * @param id of the binary
+     * @return the binary
+     */
+    @GET
+    @Path("offline/{arch}/{id}.exe")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public Response getWinReleaseFile(@PathParam("arch") String arch, @PathParam("id") Long id) {
+        requireValidArch(arch);
+        return getAmpOfflineReleaseFile(id);
+    }
+
+    /**
+     * Returns the AMP Offline release binary for macOS.
+     *
+     * @param arch required architecture, 32 or 64
+     * @param id of the binary
+     * @return the binary
+     */
+    @GET
+    @Path("offline/{arch}/{id}.zip")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public Response getMacReleaseFile(@PathParam("arch") String arch, @PathParam("id") Long id) {
+        requireValidArch(arch);
+        return getAmpOfflineReleaseFile(id);
+    }
+
+    private void requireValidArch(String arch) {
+        if (!"32".equals(arch) && !"64".equals(arch)) {
+            JsonBean error = ApiError.toError(AmpConfigurationErrors.INVALID_INPUT.withDetails("Invalid architecture"));
+            throw new ApiRuntimeException(Response.Status.BAD_REQUEST, error);
+        }
+    }
+
+    private Response getAmpOfflineReleaseFile(Long id) {
+        File file = ampOfflineService.getReleaseFile(id);
+
+        ContentDisposition contentDisposition = ContentDisposition.type("attachment")
+                .fileName(file.getName())
+                .size(file.length())
+                .build();
+
+        String mimeType = MimeUtil.detectMimeType(file, MediaType.APPLICATION_OCTET_STREAM);
+
+        return Response.ok(file, mimeType)
+                .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
+                .build();
     }
 
     @Override

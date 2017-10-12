@@ -19,8 +19,11 @@ import org.digijava.kernel.ampapi.endpoints.util.ISO8601DateSerializer;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class AmpOfflineRelease implements Comparable<AmpOfflineRelease>, Cloneable {
 
+    public static final String WINDOWS = "windows";
+    public static final String MAC_OS = "osx";
+
     private static final String VER_REGEX = "(?<ver>\\d+\\.\\d+\\.\\d+(?:-\\w+)?)";
-    private static final String OS_REGEX = "(?<os>windows|redhat|debian|osx)";
+    private static final String OS_REGEX = "(?<os>" + WINDOWS + "|redhat|debian|" + MAC_OS + ")";
     private static final String ARCH_REGEX = "(?<arch>32|64)";
     private static final String UA_REGEX = "AMPOffline/" + VER_REGEX + " \\(" + OS_REGEX + "; " + ARCH_REGEX + "\\).*";
     private static final Pattern UA_PATTERN = Pattern.compile(UA_REGEX);
@@ -30,10 +33,10 @@ public class AmpOfflineRelease implements Comparable<AmpOfflineRelease>, Cloneab
             .thenComparing(AmpOfflineRelease::getArch);
 
     private static final Map<String, String> OS_TO_EXT = new ImmutableMap.Builder<String, String>()
-            .put("windows", "exe")
+            .put(WINDOWS, "exe")
             .put("redhat", "rpm")
             .put("debian", "deb")
-            .put("osx", "dmg")
+            .put(MAC_OS, "zip")
             .build();
 
     private Long id;

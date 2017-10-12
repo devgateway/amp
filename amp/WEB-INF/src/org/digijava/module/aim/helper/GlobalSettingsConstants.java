@@ -202,7 +202,9 @@ public class GlobalSettingsConstants {
 
     public static final String REORDER_FUNDING_ITEMS = "Reorder funding items";
 
-    public static final String AMP_OFFLINE_RELEASES_URL = "AMP Offline releases URL";
+    public static final String AMP_REGISTRY_URL = "AMP Registry URL";
+
+    public static final String AMP_OFFLINE_ENABLED = "AMP Offline Enabled";
 
     /**
      * fields which, although existing in the database, should be rendered with a display: none on the GlobalSettings form so that the user never has a chance of changing their value

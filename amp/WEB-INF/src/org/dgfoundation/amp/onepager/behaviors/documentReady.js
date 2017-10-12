@@ -316,15 +316,15 @@ $(window).scroll(function() {
 
 var validNavigation = false;
 function wireUpEvents() {
-    window.onbeforeunload = function() {
-        if (!validNavigation) {
+    window.onunload  = function() {
+    	if (!validNavigation) {
             $.ajax({
                 type: 'get',
                 async: false,
                 url: '/wicket/onepager/activity/${activityId}/close/true',
                 success:function(data)
                 {
-                    console.log(data);
+                    return;
                 }
             });
         }

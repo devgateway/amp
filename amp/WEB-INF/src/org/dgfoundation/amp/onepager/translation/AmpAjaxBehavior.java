@@ -122,7 +122,7 @@ public class AmpAjaxBehavior extends AbstractDefaultAjaxBehavior{
         
         String id = request.getRequestParameters().getParameterValue("activity").toString();
         ActivityGatekeeper.pageModeChange(id);
-        target.appendJavaScript("var newLoc=window.location.href;newLoc=newLoc.substr(0,newLoc.lastIndexOf('?'));window.location.replace(newLoc);");
+        target.appendJavaScript("validNavigation = true; var newLoc=window.location.href;newLoc=newLoc.substr(0,newLoc.lastIndexOf('?'));window.location.replace(newLoc);");
     }
 
     private void switchFMMode(Request request, AjaxRequestTarget target){
@@ -130,7 +130,7 @@ public class AmpAjaxBehavior extends AbstractDefaultAjaxBehavior{
         
         String id = request.getRequestParameters().getParameterValue("activity").toString();
         ActivityGatekeeper.pageModeChange(id);
-        target.appendJavaScript("var newLoc=window.location.href;newLoc=newLoc.substr(0,newLoc.lastIndexOf('?'));window.location.replace(newLoc);");
+        target.appendJavaScript("validNavigation = true;var newLoc=window.location.href;newLoc=newLoc.substr(0,newLoc.lastIndexOf('?'));window.location.replace(newLoc);");
     }
     
     @Override

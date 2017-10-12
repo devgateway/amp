@@ -3,24 +3,16 @@ package org.digijava.kernel.jobs;
 import static java.util.stream.Collectors.toSet;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.servlet.ServletContext;
-import javax.ws.rs.core.MediaType;
 
-import com.google.common.reflect.TypeToken;
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.api.client.UniformInterfaceException;
-import com.sun.jersey.api.client.config.ClientConfig;
-import com.sun.jersey.api.client.config.DefaultClientConfig;
-import com.sun.jersey.api.json.JSONConfiguration;
+import org.digijava.kernel.ampregistry.AmpRegistryClient;
 import org.digijava.module.aim.dbentity.AmpOfflineRelease;
 import org.digijava.kernel.services.AmpOfflineService;
 import org.digijava.kernel.services.AmpVersionService;
@@ -49,16 +41,18 @@ public class DownloadAmpOfflineReleasesJob extends ConnectionCleaningJob {
 
     private final Logger logger = LoggerFactory.getLogger(DownloadAmpOfflineReleasesJob.class);
 
-    private Client client;
+    public static final String NAME = "Download AMP Offline releases";
 
     private Set<AmpOfflineRelease> existingReleases;
 
     private AmpVersionService ampVersionService;
     private AmpOfflineService ampOfflineService;
 
+    private AmpRegistryClient ampRegistryClient = new AmpRegistryClient();
+
     @Override
     public void executeInternal(JobExecutionContext context) throws JobExecutionException {
-        try {
+        if (isAmpOfflineEnabled()) {
             initialize(context);
 
             removeInvalidAmpOfflineReleases();
@@ -66,23 +60,19 @@ public class DownloadAmpOfflineReleasesJob extends ConnectionCleaningJob {
             downloadNewReleases();
 
             removeIncompatibleReleases();
-        } finally {
-            client.destroy();
         }
+    }
+
+    private boolean isAmpOfflineEnabled() {
+        return FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.AMP_OFFLINE_ENABLED);
     }
 
     /**
      * Download all new and compatible AMPOfflineReleases.
      */
     private void downloadNewReleases() {
-        String url = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMP_OFFLINE_RELEASES_URL);
-
-        List<AmpOfflineRelease> releases = client
-                .resource(url)
-                .accept(MediaType.APPLICATION_JSON_TYPE)
-                .get(releasesType());
-
-        releases.stream()
+        ampRegistryClient.getReleases()
+                .stream()
                 .filter(this::isNewAndCompatibleRelease)
                 .forEach(this::persistRelease);
     }
@@ -107,11 +97,6 @@ public class DownloadAmpOfflineReleasesJob extends ConnectionCleaningJob {
         } catch (SchedulerException e) {
             throw new JobExecutionException("Failed to initialize job.", e);
         }
-
-        ClientConfig clientConfig = new DefaultClientConfig();
-        clientConfig.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, Boolean.TRUE);
-
-        client = Client.create(clientConfig);
 
         existingReleases = new HashSet<>(ampOfflineService.getReleases());
     }
@@ -146,7 +131,7 @@ public class DownloadAmpOfflineReleasesJob extends ConnectionCleaningJob {
      */
     private void persistRelease(AmpOfflineRelease release) {
         try {
-            ampOfflineService.addRelease(release, () -> client.resource(release.getUrl()).get(InputStream.class));
+            ampOfflineService.addRelease(release, ampRegistryClient.releaseFileSupplier(release));
 
             existingReleases.add(release);
         } catch (IOException | UniformInterfaceException e) {
@@ -154,15 +139,11 @@ public class DownloadAmpOfflineReleasesJob extends ConnectionCleaningJob {
         }
     }
 
-    private GenericType<List<AmpOfflineRelease>> releasesType() {
-        TypeToken<List<AmpOfflineRelease>> listTypeToken = new TypeToken<List<AmpOfflineRelease>>() { };
-        return new GenericType<>(listTypeToken.getType());
-    }
-
+    @SuppressWarnings("unused")
     public static void registerJob() throws Exception {
         AmpQuartzJobClass jobClass = new AmpQuartzJobClass();
         jobClass.setClassFullname(DownloadAmpOfflineReleasesJob.class.getName());
-        jobClass.setName("Download AMP Offline releases");
+        jobClass.setName(NAME);
         QuartzJobClassUtils.addJobClasses(jobClass);
 
         QuartzJobForm jobForm = new QuartzJobForm();

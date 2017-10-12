@@ -60,7 +60,6 @@ import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.SiteCache;
 import org.digijava.kernel.viewmanager.ViewConfigFactory;
-import org.digijava.module.translation.util.HashKeyPatch;
 import org.digijava.module.xmlpatcher.core.SimpleSQLPatcher;
 
 /**
@@ -159,7 +158,6 @@ public class ConfigLoaderListener
             ViewConfigFactory.initialize(sce.getServletContext());
             
             // patches translations to hash code keys if this is not already done. 
-            HashKeyPatch.patchTranslationsIfNecessary();
             tats = new TrnAccesTimeSaver();
             exec = Executors.newSingleThreadExecutor();
             exec.execute(tats);

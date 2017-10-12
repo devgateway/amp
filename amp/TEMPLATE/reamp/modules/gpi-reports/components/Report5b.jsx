@@ -318,7 +318,7 @@ export default class Report5b extends Component {
                             <div className="col-md-3">
                                 <div className="indicator-stat-wrapper">
                                     <div className="stat-value">{this.props.mainReport.summary[Constants.INDICATOR_5B]}</div>
-                                    <div className="stat-label">{this.getLocalizedColumnName( Constants.INDICATOR_5B )}</div>
+                                    <div className="stat-label">{this.props.translations['amp-gpi-reports:5b-stat-label']}</div>
                                 </div>
                             </div>                           
                         </div>

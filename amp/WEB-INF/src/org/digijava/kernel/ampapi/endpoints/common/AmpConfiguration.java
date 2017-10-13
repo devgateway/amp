@@ -194,6 +194,30 @@ public class AmpConfiguration implements ErrorReportingEndpoint {
     }
 
     /**
+     * Returns the AMP Offline release binary.
+     *
+     * @param id of the binary
+     * @return the binary
+     */
+    @GET
+    @Path("/amp-offline-release/{id}")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public Response getAmpOfflineReleaseFile(@PathParam("id") Long id) {
+        File file = ampOfflineService.getReleaseFile(id);
+
+        ContentDisposition contentDisposition = ContentDisposition.type("attachment")
+                .fileName(file.getName())
+                .size(file.length())
+                .build();
+
+        String mimeType = MimeUtil.detectMimeType(file, MediaType.APPLICATION_OCTET_STREAM);
+
+        return Response.ok(file, mimeType)
+                .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
+                .build();
+    }
+
+    /**
      * Returns all AMP Global Settings.
      * <p>Response is a map containing all global settings where key is setting name and value is setting value.
      * <h3>Sample Output:</h3>
@@ -410,21 +434,6 @@ public class AmpConfiguration implements ErrorReportingEndpoint {
             JsonBean error = ApiError.toError(AmpConfigurationErrors.INVALID_INPUT.withDetails("Invalid architecture"));
             throw new ApiRuntimeException(Response.Status.BAD_REQUEST, error);
         }
-    }
-
-    private Response getAmpOfflineReleaseFile(Long id) {
-        File file = ampOfflineService.getReleaseFile(id);
-
-        ContentDisposition contentDisposition = ContentDisposition.type("attachment")
-                .fileName(file.getName())
-                .size(file.length())
-                .build();
-
-        String mimeType = MimeUtil.detectMimeType(file, MediaType.APPLICATION_OCTET_STREAM);
-
-        return Response.ok(file, mimeType)
-                .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
-                .build();
     }
 
     @Override

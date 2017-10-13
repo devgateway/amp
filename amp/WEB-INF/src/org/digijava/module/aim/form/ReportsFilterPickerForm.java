@@ -72,6 +72,7 @@ public class ReportsFilterPickerForm extends ActionForm {
     private Object[] selectedAidModalities;
     private Long[] selectedTypeOfAssistance;
     private Long[] selectedModeOfPayment;
+    private Long[] selectedConcensionalityLevel;
     private Object[] selectedDonorTypes; // ids of AmpOrgType
     private Object[] selectedDonorGroups; //
     private Object[] selectedContractingAgencyGroups; //
@@ -1428,22 +1429,6 @@ public class ReportsFilterPickerForm extends ActionForm {
         this.toFundingClosingDate = toFundingClosingDate;
     }
 
-    public Object[] getSelectedComponentSecondResponsibleOrg() {
-        return selectedComponentSecondResponsibleOrg;
-    }
-
-    public void setSelectedComponentSecondResponsibleOrg(Object[] selectedComponentSecondResponsibleOrg) {
-        this.selectedComponentSecondResponsibleOrg = selectedComponentSecondResponsibleOrg;
-    }
-
-    public Object[] getSelectedComponentFundingOrg() {
-        return selectedComponentFundingOrg;
-    }
-
-    public void setSelectedComponentFundingOrg(Object[] selectedComponentFundingOrg) {
-        this.selectedComponentFundingOrg = selectedComponentFundingOrg;
-    }
-
     public DynamicDateFilter getDynamicIssueFilter() {
         return dynamicIssueFilter;
     }
@@ -1467,6 +1452,13 @@ public class ReportsFilterPickerForm extends ActionForm {
     public void setToIssueDate(String toIssueDate) {
         this.toIssueDate = toIssueDate;
     }
+    public Long[] getSelectedConcensionalityLevel() {
+        return selectedConcensionalityLevel;
+    }
+
+    public void setSelectedConcensionalityLevel(Long[] selectedConcensionalityLevel) {
+        this.selectedConcensionalityLevel = selectedConcensionalityLevel;
+    }
 
     public Object[] getSelectedQuaternarySectors() {
         return selectedQuaternarySectors;
@@ -1482,5 +1474,21 @@ public class ReportsFilterPickerForm extends ActionForm {
 
     public void setSelectedQuinarySectors(final Object[] selectedQuinarySectors) {
         this.selectedQuinarySectors = selectedQuinarySectors;
+    }
+
+    public Object[] getSelectedComponentSecondResponsibleOrg() {
+        return selectedComponentSecondResponsibleOrg;
+    }
+
+    public void setSelectedComponentSecondResponsibleOrg(Object[] selectedComponentSecondResponsibleOrg) {
+        this.selectedComponentSecondResponsibleOrg = selectedComponentSecondResponsibleOrg;
+    }
+
+    public Object[] getSelectedComponentFundingOrg() {
+        return selectedComponentFundingOrg;
+    }
+
+    public void setSelectedComponentFundingOrg(Object[] selectedComponentFundingOrg) {
+        this.selectedComponentFundingOrg = selectedComponentFundingOrg;
     }
 }

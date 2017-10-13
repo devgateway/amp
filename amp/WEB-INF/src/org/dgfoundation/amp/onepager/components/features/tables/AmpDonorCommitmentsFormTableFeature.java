@@ -16,6 +16,7 @@ import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
+import org.dgfoundation.amp.onepager.components.FundingListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.ListItem;
@@ -24,7 +25,9 @@ import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFea
 import org.dgfoundation.amp.onepager.components.fields.AmpBooleanChoiceField;
 import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpCollectionValidatorField;
+import org.dgfoundation.amp.onepager.events.FreezingUpdateEvent;
 import org.dgfoundation.amp.onepager.events.OverallFundingTotalsEvents;
+import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.helper.Constants;
@@ -52,16 +55,18 @@ public class AmpDonorCommitmentsFormTableFeature extends
             final IModel<AmpFunding> model, String fmName, final int transactionType) throws Exception {
         super(id, model, fmName, Constants.COMMITMENT, 7);
 
-        list = new ListEditor<AmpFundingDetail>("listCommitments", setModel, FundingDetailComparator
+        list = new FundingListEditor<AmpFundingDetail>("listCommitments", setModel, FundingDetailComparator
                 .getFundingDetailComparator()) {
             @Override
             protected void onPopulateItem(
                     ListItem<AmpFundingDetail> item) {
+                super.onPopulateItem(item);
                 item.add(getAdjustmentTypeComponent(item.getModel(), transactionType));
 
                 AmpFundingAmountComponent amountComponent = getFundingAmountComponent(item.getModel());
                 item.add(amountComponent);
-
+                item.add(UpdateEventBehavior.of(FreezingUpdateEvent.class));                
+                addFreezingvalidator(item);
                 IModel<List<FundingPledges>> pledgesModel = new LoadableDetachableModel<List<FundingPledges>>() {
                     protected java.util.List<FundingPledges> load() {
                         return PledgesEntityHelper
@@ -71,8 +76,7 @@ public class AmpDonorCommitmentsFormTableFeature extends
                 };
 
                 appendFixedExchangeRateToItem(item);
-
-                item.add(new AmpSelectFieldPanel<FundingPledges>("pledge",
+                AmpSelectFieldPanel pledgeAmpSelectFieldPanel=new AmpSelectFieldPanel<FundingPledges>("pledge",
                         new PropertyModel<FundingPledges>(item.getModel(),
                                 "pledgeid"), pledgesModel,
                                 "Pledges", false, true, new ChoiceRenderer<FundingPledges>() {
@@ -80,7 +84,10 @@ public class AmpDonorCommitmentsFormTableFeature extends
                     public Object getDisplayValue(FundingPledges arg0) {
                         return arg0.getEffectiveName();
                     }
-                }, false));
+                }, false);
+                // we need to find a generic way of doing this
+                pledgeAmpSelectFieldPanel.setAffectedByFreezing(false);
+                item.add(pledgeAmpSelectFieldPanel);
                 item.add(new ListEditorRemoveButton("delCommitment", "Delete Commitment"){
                     protected void onClick(org.apache.wicket.ajax.AjaxRequestTarget target) {
                         AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
@@ -127,7 +134,7 @@ public class AmpDonorCommitmentsFormTableFeature extends
                 visit.dontGoDeeper();
             }
         });
-
+        
         send(getPage(), Broadcast.BREADTH, new OverallFundingTotalsEvents(target));
     }
 }

@@ -1,0 +1,88 @@
+body {
+	margin-right: 10px;
+	margin-left: 10px;
+	padding-top: 10px;
+	overflow: auto;
+	font-size: 10px;
+}
+
+table {
+	margin-bottom: 0;
+	table-layout: auto;
+	border-collapse: collapse;
+	border-spacing: 0;
+	width: 100%;
+}
+
+th, td {
+	vertical-align: center;
+	font-size: 9px;
+}
+
+td.text {
+	vertical-align: center;
+	font-size: 9px;
+	padding-bottom: 5px;
+	padding-left: 5px;
+	padding-right: 5px;
+	border: 1px solid #D5D5D5;
+	border: 1px solid #D5D5D5;
+}
+
+th {
+	margin-bottom: 0px;
+	text-align: center;
+	font-size: 10px;
+}
+
+th.all_null {
+	border: 0px none;
+	padding: 0;
+}
+
+th.col {
+	border: 1px solid #D5D5D5;
+	background: #B4C0C6 none repeat scroll 0% 0%;
+	text-align: center;
+}
+
+th.col div {
+	text-align: center !important;
+}
+
+th.row {
+	background: #F9F9F9 none repeat scroll 0% 0%;
+}
+
+th.row_total {
+	border-left: 1px none #D5D5D5;
+	border-top: 1px solid #D5D5D5;
+	background: #C7C7C7 none repeat scroll 0% 0%;
+}
+
+td.data {
+	text-align: left;
+}
+
+
+td.measure {
+	border-left: 1px solid #D5D5D5;
+	border-top: 1px solid #D5D5D5;
+	text-align: right;
+	/*This is the magic for showing the numbers correctly AND align right for totals.*/
+}
+
+td.total {
+	background: #C7C7C7 none repeat scroll 0% 0%;
+	font-weight: bold;
+	text-align: right;
+	white-space: nowrap;
+}
+
+.total {
+	white-space: normal;
+	text-align: right;
+	/*width: 100%;*/
+	/*padding: 0px !important;
+	margin: 0px !important;*/
+}

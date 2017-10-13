@@ -1054,7 +1054,7 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
             GroupingCriteria.GROUPING_TOTALS_ONLY);
         
         runNiTestCase(spec, "en", Arrays.asList("ptc activity 1", "mtef activity 1", "mtef activity 2", "ptc activity 2"), cor);
-    }   
+    }
     
     @Test
     public void testHierByModeOfPayment() {
@@ -1679,6 +1679,7 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
         
         runNiTestCase(spec, "en", acts, cor);
     }
+
 
     @Test
     public void testUnfilteredMeasuresInUnfilteredReport() {

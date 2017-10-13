@@ -12,5 +12,6 @@ public enum FilterType {
     DASHBOARD,
     REPORTS,
     GIS,
-    TAB
+    TAB,
+    GPI_REPORTS
 };

@@ -80,20 +80,6 @@ public class AmpFundingGroupFeaturePanel extends AmpFeaturePanel<AmpOrganisation
         String translatedRole = TranslatorWorker.translateText(role.getObject().getName());
         String suffix = role.getObject() == null ? "" : " (" + translatedRole + ")";
         add(new Label("donorOrg", model.getObject().getName() + suffix));
-        
-//      AmpLabelFieldPanel<AmpOrganisation> sourceOrg = new AmpLabelFieldPanel<AmpOrganisation>(
-//      "sourceOrg", new PropertyModel<AmpOrganisation>(fundsModel, "ampDonorOrgId"), "Source Organisation", true);
-//      sourceOrg.add(new AttributeModifier("style", "display:inline-block"));
-//      add(sourceOrg);
-//
-//      
-//      AmpLabelFieldPanel<AmpRole> sourceRoleLabel = new AmpLabelFieldPanel<AmpRole>(
-//              "sourceRoleLabel", new PropertyModel<AmpRole>(fundsModel, "sourceRole"), "Source Role", true);
-//      sourceRoleLabel.add(new AttributeModifier("style", "display:inline-block"));
-//      add(sourceRoleLabel);       
-//      
-//      
-        
         AbstractMixedSetModel<AmpFunding> setModel = new AbstractMixedSetModel<AmpFunding>(fundsModel) {
             @Override
             public boolean condition(AmpFunding item) {
@@ -136,8 +122,6 @@ public class AmpFundingGroupFeaturePanel extends AmpFeaturePanel<AmpOrganisation
                     target.add(parent);
                     target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent));
                     if (isTabView) {
-                        //when adding a new funding search for the correct index
-                        //parent.getTabsList()
                         int index = parent.calculateTabIndex(funding.getAmpDonorOrgId(),
                                 funding.getSourceRole());
                         

@@ -1,8 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.gis;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,10 +8,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Set;
 import java.util.StringTokenizer;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
@@ -61,7 +57,6 @@ import org.digijava.kernel.ampapi.helpers.geojson.PointGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.PolygonGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.objects.ClusteredPoints;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpIndicatorColor;
 import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
 import org.digijava.module.aim.dbentity.AmpStructure;
@@ -121,7 +116,7 @@ public class GisEndPoints implements ErrorReportingEndpoint {
             result.features.add(getPoint(new Double(clusteredPoints.getLon()),
                     new Double(clusteredPoints.getLat()),
                     clusteredPoints.getActivityids(),
-                    clusteredPoints.getAdmin()));
+                    clusteredPoints.getAdmin(), clusteredPoints.getAdmId()));
             }
         }
 
@@ -282,15 +277,14 @@ public class GisEndPoints implements ErrorReportingEndpoint {
     
     
     private FeatureGeoJSON getPoint(Double lat, Double lon,
-            List<Long> activityid, String adm) {
+            List<Long> activityid, String adm, Long admId) {
         FeatureGeoJSON fgj = new FeatureGeoJSON();
         PointGeoJSON pg = new PointGeoJSON();
         pg.coordinates.add(lat);
         pg.coordinates.add(lon);
-
         fgj.properties.put("activityid", new POJONode(activityid));
         fgj.properties.put("admName", new TextNode(adm));
-
+        fgj.properties.put("admId", new POJONode(admId));
         fgj.geometry = pg;
         return fgj;
     }

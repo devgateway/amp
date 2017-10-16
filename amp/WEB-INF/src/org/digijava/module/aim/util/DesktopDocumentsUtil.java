@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.dgfoundation.amp.utils.BoundedList;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponseDocument;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.contentrepository.dbentity.CrDocumentNodeAttributes;
@@ -122,10 +124,18 @@ public class DesktopDocumentsUtil {
         HashMap<String, CrDocumentNodeAttributes> uuidMapOrg = CrDocumentNodeAttributes.getPublicDocumentsMap(false);
         HashMap<String, CrDocumentNodeAttributes> uuidMapVer = CrDocumentNodeAttributes.getPublicDocumentsMap(true);
         Boolean hasMakePublicRights = DocumentManagerRights.hasMakePublicRights(request);
+        
+        List<String> gpiSupportiveDocuments = DocumentUtil.getAllSupportiveDocumentsUUID();
 
         try {
             while (nodeIterator.hasNext()) {
                 Node documentNode = (Node) nodeIterator.next();
+                
+                // hide gpi supportive documents
+                if (gpiSupportiveDocuments.contains(documentNode.getIdentifier())) {
+                    continue;
+                }
+                
                 NodeWrapper nodeWrapper = new NodeWrapper(documentNode);
                 Boolean hasViewRights = false;
                 Boolean hasShowVersionsRights = false;
@@ -210,4 +220,5 @@ public class DesktopDocumentsUtil {
 
         return documents;
     }
+    
 }

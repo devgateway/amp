@@ -10,7 +10,7 @@ import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSettings;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
-import org.dgfoundation.amp.reports.saiku.export.SaikuExportFilterUtils;
+import org.dgfoundation.amp.reports.saiku.export.ExportFilterUtils;
 import org.dgfoundation.amp.reports.xml.AmountFormat;
 import org.dgfoundation.amp.reports.xml.Cell;
 import org.dgfoundation.amp.reports.xml.Children;
@@ -206,7 +206,7 @@ public class GeneratedReportToXmlConverter {
     private Filters getReportFilters() {
         Filters filters = new Filters();
 
-        Map<String, List<String>> extractedFilters = SaikuExportFilterUtils
+        Map<String, List<String>> extractedFilters = ExportFilterUtils
                 .getFilterValuesForIds(generatedReport.spec.getFilters());
 
         for (Map.Entry<String, List<String>> filter : extractedFilters.entrySet()) {

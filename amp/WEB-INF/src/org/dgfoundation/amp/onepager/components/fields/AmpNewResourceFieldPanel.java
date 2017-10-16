@@ -35,6 +35,7 @@ import org.dgfoundation.amp.onepager.components.features.tables.AmpResourcesForm
 import org.dgfoundation.amp.onepager.components.upload.FileUploadPanel;
 import org.dgfoundation.amp.onepager.helper.ResourceTranslation;
 import org.dgfoundation.amp.onepager.helper.ResourceTranslationStore;
+import org.dgfoundation.amp.onepager.helper.TemporaryActivityDocument;
 import org.dgfoundation.amp.onepager.helper.TemporaryDocument;
 import org.dgfoundation.amp.onepager.models.ResourceTranslationModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
@@ -55,42 +56,44 @@ import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 /**
  * @author aartimon@dginternational.org since Feb 4, 2011
  */
-public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
+public class AmpNewResourceFieldPanel<T> extends AmpFeaturePanel {
     
+    private static final long serialVersionUID = 1L;
+
     final String EXPRESSION = "^((https?|ftp|file|)://)?[a-zA-Z0-9\\-\\./=?,&#_-]+$";
     
-    private WebMarkupContainer webLinkFeedbackContainer;
-    private Label webLinkFeedbackLabel;
+    protected WebMarkupContainer webLinkFeedbackContainer;
+    protected Label webLinkFeedbackLabel;
     boolean resourceIsURL = false;
-    private boolean pathSelected;
-    private boolean urlSelected;
-    private boolean urlFormatValid;
-    private boolean contentValid;
+    protected boolean pathSelected;
+    protected boolean urlSelected;
+    protected boolean urlFormatValid;
+    protected boolean contentValid;
     
-    final private String DEFAULT_MESSAGE = "*" + TranslatorUtil.getTranslatedText("Please enter title");
-    final private String URL_NOT_SELECTED = "*" + TranslatorUtil.getTranslatedText("URL not selected");
-    final private String FILE_PATH_NOT_SELECTED = "*" + TranslatorUtil.getTranslatedText("File not submited or upload has not finished");
-    final private String WRONG_URL_FORMAT = "*" + TranslatorUtil.getTranslatedText("Wrong url format. Please enter valid url");
-    final private String CONTENT_TYPE_NOT_ALLOWED = "*" + TranslatorUtil.getTranslatedText("Content type not allowed:");
-    final private String CONTENT_TYPE_EXTENSION_MISMATCH = "*" + TranslatorUtil.getTranslatedText("File extension does not match the actual file format:");
-    final private String CONTENT_TYPE_INTERNAL_ERROR = "*" + TranslatorUtil.getTranslatedText("Internal error during the content validation");
-
+    final protected String DEFAULT_MESSAGE = "*" + TranslatorUtil.getTranslatedText("Please enter title");
+    final protected String URL_NOT_SELECTED = "*" + TranslatorUtil.getTranslatedText("URL not selected");
+    final protected String FILE_PATH_NOT_SELECTED = "*" + TranslatorUtil.getTranslatedText("File not submited or upload has not finished");
+    final protected String WRONG_URL_FORMAT = "*" + TranslatorUtil.getTranslatedText("Wrong url format. Please enter valid url");
+    final protected String CONTENT_TYPE_NOT_ALLOWED = "*" + TranslatorUtil.getTranslatedText("Content type not allowed:");
+    final protected String CONTENT_TYPE_EXTENSION_MISMATCH = "*" + TranslatorUtil.getTranslatedText("File extension does not match the actual file format:");
+    final protected String CONTENT_TYPE_INTERNAL_ERROR = "*" + TranslatorUtil.getTranslatedText("Internal error during the content validation");
 
     boolean webLinkFormatCorrect;
-    private  Model<String> newResourceIdModel = new Model <String> ();
+    protected  Model<String> newResourceIdModel = new Model<String>();
 
-    
     public AmpNewResourceFieldPanel(final String id,
                                     final IModel<AmpActivityVersion> model,
                                     final String fmName,
                                     final AmpResourcesFormTableFeature resourcesList,
                                     boolean newResourceIsWebLink) throws Exception {
+        
         super(id, model, fmName, true);
-        TemporaryDocument tmpDoc= new TemporaryDocument ();
+        
+        TemporaryActivityDocument tmpDoc = new TemporaryActivityDocument ();
         String docId =generateResourceKey("newResource");
         newResourceIdModel.setObject(docId);
         tmpDoc.setNewTemporaryDocumentId(docId);
-        final IModel<TemporaryDocument> td = new Model<TemporaryDocument>(tmpDoc);
+        final IModel<TemporaryActivityDocument> td = new Model<TemporaryActivityDocument>(tmpDoc);
         final ResourceTranslationModel titleModel = new ResourceTranslationModel(new PropertyModel<String>(td, "title"),newResourceIdModel);
         final AmpTextFieldPanel<String> name = new AmpTextFieldPanel<String>("docTitle",titleModel , "Title",AmpFMTypes.MODULE,Boolean.TRUE);
         name.setTextContainerDefaultMaxSize();
@@ -134,13 +137,11 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
              */
             @Override
             protected void onSubmit() {
-                TemporaryDocument tmp = td.getObject();
+                TemporaryActivityDocument tmp = td.getObject();
                 if (fileItemModel.getObject() != null)
                     tmp.setFile(new FileUpload(fileItemModel.getObject()));
-//              if (tmp.getFile() == null && tmp.getWebLink() == null)
-//                  return;
-//              
-                if (updateVisibility(td, resourceIsURL)) {
+
+                if (updateVisibility(td.getObject(), resourceIsURL)) {
                     if (tmp.getFile() != null){
                         double fSize = tmp.getFile().getSize()*100/(1024*1024);
                         fSize = fSize/100;
@@ -156,9 +157,9 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
                     
                     tmp.setDate(Calendar.getInstance());
                     tmp.setYear(String.valueOf((tmp.getDate()).get(Calendar.YEAR)));
-                    HashSet<TemporaryDocument> newItemsSet = getSession().getMetaData(OnePagerConst.RESOURCES_NEW_ITEMS);
+                    HashSet<TemporaryActivityDocument> newItemsSet = getSession().getMetaData(OnePagerConst.RESOURCES_NEW_ITEMS);
                     if (newItemsSet == null) {
-                        newItemsSet = new HashSet<TemporaryDocument>();
+                        newItemsSet = new HashSet<TemporaryActivityDocument>();
                         getSession().setMetaData(OnePagerConst.RESOURCES_NEW_ITEMS, newItemsSet);
                     }
 
@@ -166,45 +167,25 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
                     tmp.setTranslatedTitleList(getTranslationsForField(tmp.getNewTemporaryDocumentId(),"title"));
                     tmp.setTranslatedNoteList(getTranslationsForField(tmp.getNewTemporaryDocumentId(),"description"));
                     newItemsSet.add(tmp);
-                    TemporaryDocument tmpDoc = new TemporaryDocument ();
+                    TemporaryActivityDocument tmpDoc = new TemporaryActivityDocument();
                     String docId = generateResourceKey("newResource");
                     newResourceIdModel.setObject(docId);
                     tmpDoc.setNewTemporaryDocumentId(docId);
                     td.setObject(tmpDoc);
                     fileItemModel.setObject(null);
                 }
-                
-                //panel.setVisibilityAllowed(false);
-            }
-            
-        };
-
-        final String newDocumentGenKey = TranslatorWorker.generateTrnKey(fmName);
-        final AjaxLink addNewLink = new AjaxLink("panelLink"){
-            public void onClick(AjaxRequestTarget target) {
-                target.prependJavaScript(OnePagerUtil.getToggleChildrenJS(this));
-            }
-
-            @Override
-            protected void onConfigure() {
-                super.onConfigure();
-                configureTranslationMode(this, newDocumentGenKey, id + "H");
             }
         };
-        addNewLink.add(new Label("linkText", TranslatorWorker.translateText(fmName)));
 
-        add(addNewLink);
+        add(createAddNewLink(fmName));
 
         WebMarkupContainer rc = new WebMarkupContainer("resourcePanel");
-        rc.setOutputMarkupId(true);
-        add(rc);
-        rc.add(new AttributeModifier("id", "id_" + this.getId()));
-
-        //form.setMaxSize(Bytes.megabytes(1));
-        //add(form);
+        rc.add(new AttributeModifier("id", getToggleId()));
         rc.add(form);
         rc.add(name);
         rc.add(fileUpload);
+        rc.setOutputMarkupId(true);
+        add(rc);
 
         if (newResourceIsWebLink){
             fileUpload.setVisible(false);
@@ -216,7 +197,6 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
         form.add(note);
         form.add(type);
         form.add(fileUpload);
-        //form.add(new UploadProgressBar("progressBar", form, file));
         form.add(resourceLabel);
         form.add(webLink);
         
@@ -234,42 +214,66 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
                 target.add(webLink);
                 target.add(resourcesList);
                 target.add(webLinkFeedbackContainer);
-                if (updateVisibility(td, resourceIsURL)){
-                    target.appendJavaScript("$('#" + id + "H').hide();");
-                    target.appendJavaScript("$('#" + id + "H').find('[role=fileUploadedMsg]').html('');");
+                if (updateVisibility(td.getObject(), resourceIsURL)){
+                    target.appendJavaScript("$('#" + getToggleId() + "').hide();");
+                    target.appendJavaScript("$('#" + getToggleId() + "').find('[role=fileUploadedMsg]').html('');");
                     target.appendJavaScript("$('#uploadLabel').text('" + TranslatorWorker.translateText("No file chosen") + "');");
                     
                 }
-//                target.add(form);
-//                AmpNewResourceFieldPanel panel = this.findParent(AmpNewResourceFieldPanel.class);
-//                target.add(panel.getParent());
             }
         };
+        
         form.add(submit);
+        form.add(createCancelButton());
+        
+        createWebLinkFeedbackContainer();
+        form.add(webLinkFeedbackContainer);
+    }
+
+    protected AjaxLink createAddNewLink(final String fmName) {
+        final String newDocumentGenKey = TranslatorWorker.generateTrnKey(fmName);
+        final AjaxLink addNewLink = new AjaxLink("panelLink"){
+            public void onClick(AjaxRequestTarget target) {
+                target.prependJavaScript(OnePagerUtil.getToggleChildrenJS(this));
+            }
+
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                configureTranslationMode(this, newDocumentGenKey);
+            }
+        };
+        addNewLink.add(new Label("linkText", TranslatorWorker.translateText(fmName)));
+        
+        return addNewLink;
+    }
+
+    protected AmpAjaxLinkField createCancelButton() {
         AmpAjaxLinkField cancel = new AmpAjaxLinkField("cancel", "Cancel", "Cancel") {
             @Override
             protected void onClick(AjaxRequestTarget target) {
-                target.appendJavaScript("$('#" + id + "H').hide();");
-                target.appendJavaScript("$('#" + id + "H').find('[role=fileUploadedMsg]').html('');");
+                target.appendJavaScript("$('#" + getToggleId() + "').hide();");
+                target.appendJavaScript("$('#" + getToggleId() + "').find('[role=fileUploadedMsg]').html('');");
                 target.appendJavaScript("$('#uploadLabel').text('" + TranslatorWorker.translateText("No file chosen") + "');");
                 webLinkFeedbackContainer.setVisible(false);
             }
         };
-        form.add(cancel);
         
+        return cancel;
+    }
+    
+    protected void createWebLinkFeedbackContainer() {
         webLinkFeedbackContainer = new WebMarkupContainer("webLinkFeedbackContainer");
-        webLinkFeedbackLabel = new Label("webLinkFeedbackLabel", new Model<String>(DEFAULT_MESSAGE));
         webLinkFeedbackContainer.setOutputMarkupId(true);
         webLinkFeedbackContainer.setOutputMarkupPlaceholderTag(true);
         webLinkFeedbackContainer.setVisible(false);
+        
+        webLinkFeedbackLabel = new Label("webLinkFeedbackLabel", new Model<String>(DEFAULT_MESSAGE));
         webLinkFeedbackContainer.add(webLinkFeedbackLabel);
-        form.add(webLinkFeedbackContainer);
     }
-
     
-    protected boolean updateVisibility(IModel<TemporaryDocument> tempDocModel,boolean newResourceIsWebLink){
+    protected boolean updateVisibility(TemporaryDocument resource, boolean newResourceIsWebLink) {
         boolean noErrors = true;
-        TemporaryDocument resource = tempDocModel.getObject();
         boolean titleSelected = !(resource.getTitle() == null || resource.getTitle().length() == 0);
         
         String conentValidationMessage = "";
@@ -347,18 +351,15 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
         return noErrors;
     }
 
-
-    /**
-     * 
-     */
     private boolean isEnabledMimeTypeValidation() {
         return FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.LIMIT_FILE_TYPE_FOR_UPLOAD);
     }
     
-    private String generateResourceKey(String id) {
+    protected String generateResourceKey(String id) {
         AmpAuthWebSession session = ((AmpAuthWebSession)Session.get());
         String eKey = id + "-" + session.getCurrentMember().getMemberId() + "-";
         eKey = eKey + System.currentTimeMillis();
+        
         return eKey;
     }
     
@@ -376,20 +377,30 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
         return null;
     }
 
-    private void configureTranslationMode (AjaxLink link, String key, String id) {
+    protected void configureTranslationMode(AjaxLink link, String key) {
         if (TranslatorUtil.isTranslatorMode(getSession())){
             link.setOutputMarkupId(true);
             link.add(new AttributeAppender("style", new Model<String>("text-decoration: underline; color: #0CAD0C;"), ""));
             link.add(new AttributeModifier("key", key));
-            link.add(new AttributeModifier("onclick", "$('#"+id+"').slideToggle();spawnEditBox(this.id)"));
-        }
-        else{
+            link.add(new AttributeModifier("onclick", "$('#" + getToggleId() + "').slideToggle();spawnEditBox(this.id)"));
+        } else {
             link.add(AttributeModifier.remove("key"));
             link.add(AttributeModifier.remove("style"));
             link.add(AttributeModifier.remove("onclick"));
-            link.add(new AttributeModifier("onclick", "$('#id_" + this.getId() + "').slideToggle();"));
-
+            link.add(new AttributeModifier("onclick", "$('#" + getToggleId()  + "').slideToggle();"));
         }
+    }
+    
+    protected String getToggleId() {
+        if (TranslatorUtil.isTranslatorMode(getSession())) {
+            return getTranlationToggleId();
+        }
+        
+        return "id_" + getId();
+    }
+    
+    protected String getTranlationToggleId() {
+        return getId() + "H";
     }
     
 }

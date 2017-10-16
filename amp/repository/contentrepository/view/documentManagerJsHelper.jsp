@@ -1464,9 +1464,9 @@ function validateAddDocument() {
 		}
 	}
 
-	if (document.forms['crDocumentManagerForm'].fileData.files[0].size > ${uploadMaxFileSize}) {
-		msg = msg + showFailedTooBigMsg('${translation_upload_failed_too_big}', ${maxFileSizeGS}) + '<br>';
-	}
+    if (document.forms['crDocumentManagerForm'].fileData.files[0].size > ${uploadMaxFileSize}) {
+        msg = msg + showFailedTooBigMsg('${translation_upload_failed_too_big}', ${maxFileSizeGS}) + '<br>';
+    }
 
 	document.getElementById('addDocumentErrorHolderDiv').innerHTML	= msg;
 	if (msg.length == 0) {

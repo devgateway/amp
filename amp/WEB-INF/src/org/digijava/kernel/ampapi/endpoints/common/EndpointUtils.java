@@ -120,7 +120,24 @@ public class EndpointUtils {
         if(appSettings != null && appSettings.getReportStartYear()!=null && appSettings.getReportStartYear() > 0)
             return String.valueOf(appSettings.getReportStartYear());
         return FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.START_YEAR_DEFAULT_VALUE);
-    } 
+    }
+
+    /**
+     * @return range START year
+     */
+    public static String getRangeStartYear() {
+        return FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.YEAR_RANGE_START);
+    }
+
+    /**
+     * @return range END year
+     */
+    public static String getRangeEndYear() {
+        Long yearFrom = Long.parseLong(getRangeStartYear());
+        Long countYear = Long.parseLong(FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.NUMBER_OF_YEARS_IN_RANGE));
+        Long yearTo = yearFrom + countYear;
+        return yearTo.toString();
+    }
     
     /**
      * @return report default END year selection

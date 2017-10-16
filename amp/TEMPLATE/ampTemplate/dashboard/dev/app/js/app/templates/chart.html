@@ -36,7 +36,7 @@
 
         <div class="btn-group">
           <% _(views).each(function(view) { %>
-            <button type="button" data-view="<%= view %>"
+            <button data-i18n="amp.dashboard:chart-tooltip-<%= view %>-chart[title]" data-toggle="tooltip" title="View data in <%= view %> chart" type="button" data-view="<%= view %>"
                 class="chart-view btn btn-sm btn-<%= (view === model.get('view')) ? 'primary' : 'default' %>">
               <span class="glyphicon glyphicon-<%= {
                 bar: 'signal',
@@ -50,13 +50,13 @@
         </div>
 
         <div class="btn-group">
-          <a
+          <a data-i18n="amp.dashboard:chart-tooltip-download-chart[title]" data-toggle="tooltip" title="Download image or table"
             class="btn btn-sm btn-default download"
             download="AMP <%= model.get('title') %> - <%= (new Date()).toISOString().split('T')[0] %>.png"
             target="_blank">
             <span class="glyphicon glyphicon-cloud-download"></span>
           </a>
-          <button type="button" class="btn btn-sm btn-<%= model.get('big') ? 'primary' : 'default' %> expand hidden-xs hidden-sm" <%= model.get('disableResize') ? 'disabled' : ''%>>
+          <button data-i18n="<%= model.get('big') ? 'amp.dashboard:chart-tooltip-collapse-chart[title]' : 'amp.dashboard:chart-tooltip-expand-chart[title]' %>" data-toggle="tooltip" title="<%= model.get('big') ? 'Collapse chart' : 'Expand chart' %>" type="button" class="btn btn-sm btn-<%= model.get('big') ? 'primary' : 'default' %> expand hidden-xs hidden-sm" <%= model.get('disableResize') ? 'disabled' : ''%>>
             <span class="glyphicon glyphicon-fullscreen"></span>
           </button>
         </div>

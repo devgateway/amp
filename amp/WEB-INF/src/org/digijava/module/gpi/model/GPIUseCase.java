@@ -218,14 +218,22 @@ public class GPIUseCase {
      * report code.
      */
     public AmpGPISurveyIndicator getGPIReport(String code) {
+        
         AmpGPISurveyIndicator ret = null;
         Collection<AmpGPISurveyIndicator> list = this.setupAvailableGPIReports();
         Iterator<AmpGPISurveyIndicator> iter = list.iterator();
         while (iter.hasNext()) {
             AmpGPISurveyIndicator aux = iter.next();
-            if (aux.getIndicatorCode().equals(code)) {
-                ret = aux;
+            if(FeaturesUtil.isVisibleFeature(GPIConstants.GPI_GFM_INDICATOR_PREFIX + code)){
+                if (aux.getIndicatorCode().equals(code)) {
+                    ret = aux;
+                }
+            } else {
+                 if(FeaturesUtil.isVisibleFeature(GPIConstants.GPI_GFM_INDICATOR_PREFIX + aux.getIndicatorCode()) && ret == null){
+                     ret = aux;
+                 }
             }
+            
         }
         return ret;
     }

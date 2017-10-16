@@ -13,10 +13,11 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 public class TransactionTypeDiscriminator extends FieldsDiscriminator {
     
     @Override
-    public Map<String, Object> getPossibleValues() {
-        Map<String, Object> valuesMap = new HashMap<String, Object>();
+    public Map<Object, Object> getPossibleValues() {
+        Map<Object, Object> valuesMap = new HashMap<>();
         for (Map.Entry<String, Integer> entry : getTransactionTypeMap().entrySet()) {
-            valuesMap.put(entry.getValue().toString(), entry.getKey());
+            Long id = entry.getValue().longValue();
+            valuesMap.put(id, entry.getKey());
         }
         
         return valuesMap;

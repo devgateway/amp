@@ -20,7 +20,6 @@ export const initialTranslations = {
         'amp.gpi-reports:records-displayed': '__fromRecord__ - __toRecord__ of __totalRecords__ records',      
         'amp.gpi-reports:page-info': '(p __currentPageNumber__/__totalPageCount__)',
         'amp-gpi-reports:indicator-5b': 'Indicator 5b',
-        'amp-gpi-reports:no-data': 'No data meets the applied filter criteria',
         'amp-gpi-reports:remarks': 'Remarks',
         'amp-gpi-reports:close': 'Close',
         'amp-gpi-reports:question': 'Question',
@@ -42,5 +41,6 @@ export const initialTranslations = {
         'amp-gpi-reports:amount-in-1000000': 'In Millions',
         'amp-gpi-reports:selected': 'Selected: ',
         'amp-gpi-reports:loading-message': 'Loading...',
-        'amp-gpi-reports:remarks': 'Remarks'
+        'amp-gpi-reports:remarks': 'Remarks',
+        'amp-gpi-reports:no-data': 'The specified filtered report does not hold any data. Either pick a different filter criteria or use another report.'
 };

@@ -313,7 +313,7 @@ export default class Report5b extends Component {
                     </div>
 
                     <div className="section-divider"></div>
-                    {this.props.mainReport && this.props.mainReport.summary &&
+                    {this.props.mainReport && this.props.mainReport.summary && this.props.mainReport.empty == false  &&
                         <div className="container-fluid indicator-stats no-padding">
                             <div className="col-md-3">
                                 <div className="indicator-stat-wrapper">
@@ -357,6 +357,9 @@ export default class Report5b extends Component {
                         </div>                        
                     </div>
                     <div className="section-divider"></div>
+                        { this.props.mainReport.empty &&
+                            <div className="text-center">{this.props.translations['amp-gpi-reports:no-data']}</div> 
+                        }   
                         { this.props.mainReport.empty == false  &&
                             <table className="table table-bordered table-striped indicator-table">
                             <thead>
@@ -412,9 +415,7 @@ export default class Report5b extends Component {
                             </div>
                         </div>
                       }
-                      { this.props.mainReport.empty &&
-                         <div className="text-center">{this.props.translations['amp-gpi-reports:no-data']}</div> 
-                      }
+                      
                     </div>
                         
                  </div>

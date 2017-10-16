@@ -79,6 +79,7 @@ public class InterchangeUtils {
     /**map from discriminator title (i.e. "Primary Sectors") to actual field name (i.e. "Sectors")
      */
     private static Map<String, String> discriminatorMap = new HashMap<String, String> ();
+    public static Map<String, List<String>> discriminatedFieldsByFieldTitle = new HashMap<>();
     static {
         addUnderscoredTitlesToMap(AmpActivityFields.class);
     }
@@ -149,6 +150,9 @@ public class InterchangeUtils {
                         underscoreToTitleMap.put(underscorify(ants.fieldTitle()), ants.fieldTitle());
                         titleToUnderscoreMap.put(ants.fieldTitle(), underscorify(ants.fieldTitle()));
                         discriminatorMap.put(ants.fieldTitle(), ant.fieldTitle());
+                        discriminatedFieldsByFieldTitle
+                                .computeIfAbsent(ant.fieldTitle(), z -> new ArrayList())
+                                .add(underscorify(ants.fieldTitle()));
                     }
                 }
                 if (!isSimpleType(getClassOfField(field)) && !ant.pickIdOnly())

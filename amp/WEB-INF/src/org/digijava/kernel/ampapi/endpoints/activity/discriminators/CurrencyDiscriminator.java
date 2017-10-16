@@ -10,9 +10,9 @@ import org.digijava.module.aim.util.CurrencyUtil;
 public class CurrencyDiscriminator extends FieldsDiscriminator {
     
     @Override
-    public Map<String, Object> getPossibleValues() {
+    public Map<Object, Object> getPossibleValues() {
         List<AmpCurrency> currencies = CurrencyUtil.getActiveAmpCurrencyByCode();
-        Map<String, Object> valuesMap = new HashMap<String, Object>();
+        Map<Object, Object> valuesMap = new HashMap<>();
         for (AmpCurrency currency : currencies)
             valuesMap.put(currency.getCurrencyCode(), currency.getCurrencyCode());
         return valuesMap;

@@ -37,19 +37,23 @@ public class AmpResourcesFormSectionFeature extends AmpFormSectionFeaturePanel {
             getSession().setMetaData(OnePagerConst.RESOURCES_DELETED_ITEMS, new HashSet());
         
 
-        final AmpResourcesFormTableFeature resourcesList = new AmpResourcesFormTableFeature("resourcesList", "Resource List", am);
+        final AmpResourcesFormTableFeature resourcesList = 
+                new AmpResourcesFormTableFeature("resourcesList", "Resource List", am);
         resourcesList.setOutputMarkupId(true);
         add(resourcesList);
 
-        final AmpNewResourceFieldPanel newDoc = new AmpNewResourceFieldPanel("addNewDocument", am, "Add New Document", resourcesList, false);
+        final AmpNewResourceFieldPanel<AmpActivityVersion> newDoc = 
+                new AmpNewResourceFieldPanel<AmpActivityVersion>("addNewDocument", am, "Add New Document", resourcesList, false);
         newDoc.setOutputMarkupId(true);
         add(newDoc);
 
-        final AmpNewResourceFieldPanel newLink = new AmpNewResourceFieldPanel("addNewWebLink", am, "Add New Web Link", resourcesList, true);
+        final AmpNewResourceFieldPanel<AmpActivityVersion> newLink = 
+                new AmpNewResourceFieldPanel<AmpActivityVersion>("addNewWebLink", am, "Add New Web Link", resourcesList, true);
         newLink.setOutputMarkupId(true);
         add(newLink);
 
-        AmpExistingDocumentFieldPanel searchDocs = new AmpExistingDocumentFieldPanel("addExisting", am, "Search Resources", resourcesList);
+        AmpExistingDocumentFieldPanel searchDocs = 
+                new AmpExistingDocumentFieldPanel("addExisting", am, "Search Resources", resourcesList);
         searchDocs.setOutputMarkupId(true);
         add(searchDocs);
     }

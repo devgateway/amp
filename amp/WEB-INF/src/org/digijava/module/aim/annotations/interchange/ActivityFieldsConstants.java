@@ -29,4 +29,5 @@ public class ActivityFieldsConstants {
     public static final String IMPLEMENTING_EXECUTING_AGENCY_CONTACT = "Implementing Executing Agency Contact";
     public static final String PRIMARY_CONTACT = "Primary Contact";
     public static final String TRANSACTION_TYPE = "Transaction Type";
+    public static final String ORG_ROLE = "Org. Role";
 }

@@ -4,7 +4,12 @@
  */
 package org.dgfoundation.amp.onepager.models;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.apache.wicket.model.IModel;
@@ -12,10 +17,15 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.util.ActivityUtil;
+import org.digijava.kernel.ampapi.endpoints.datafreeze.DataFreezeService;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.startup.AmpSessionListener;
+import org.digijava.module.aim.dbentity.AmpActivityFrozen;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
+import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
 import org.hibernate.FlushMode;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -60,7 +70,11 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
             AmpAuthWebSession s =  (AmpAuthWebSession) org.apache.wicket.Session.get();
             s.setMetaData(OnePagerConst.RESOURCES_NEW_ITEMS, null);
             s.setMetaData(OnePagerConst.RESOURCES_DELETED_ITEMS, null);
+            s.setMetaData(OnePagerConst.GPI_RESOURCES_NEW_ITEMS, null);
+            s.setMetaData(OnePagerConst.GPI_RESOURCES_DELETED_ITEMS, null);
             s.setMetaData(OnePagerConst.EDITOR_ITEMS, null);
+            s.setMetaData(OnePagerConst.FUNDING_FREEZING_CONFIGURATION, null);
+            s.setMetaData(OnePagerConst.ACTIVITY_FREEZING_CONFIGURATION, null);
             s.setMetaData(OnePagerConst.AGREEMENT_ITEMS, null);
             s.setMetaData(OnePagerConst.COMMENTS_ITEMS, null);
             s.setMetaData(OnePagerConst.COMMENTS_DELETED_ITEMS, null);
@@ -113,10 +127,32 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
         AmpActivityVersion ret = ActivityUtil.load(this, id);
         if (ret.getActivityType() == null) //set default type for previously saved activities
             ret.setActivityType(ActivityUtil.ACTIVITY_TYPE_PROJECT);
-
+        if (id != null) {
+            loadFreezingConfiguration(ret);
+        }
         return ret;
     }
 
+    private void loadFreezingConfiguration(AmpActivityVersion a) {
+
+        AmpAuthWebSession s = (AmpAuthWebSession) org.apache.wicket.Session.get();
+        s.setMetaData(OnePagerConst.FUNDING_FREEZING_CONFIGURATION, null);
+        s.setMetaData(OnePagerConst.ACTIVITY_FREEZING_CONFIGURATION, null);
+        s.setMetaData(OnePagerConst.ACTIVITY_IS_AFFECTED_BY_FREEZING, null);
+        // we get activity freezing configuration
+        AmpActivityFrozen ampActivityFrozen = DataFreezeService.getActivityFrozenForActivity(a.getAmpActivityId());
+        // even tough we can compute this further since its done once per field
+        // we store it already computed
+        Boolean isActivityEditable = DataFreezeService.isEditable(ampActivityFrozen, s.getAmpCurrentMember());
+
+        Boolean isAffectedByFunding = DataFreezeService.isActivityAffectedByFreezing(ampActivityFrozen,
+                s.getAmpCurrentMember());
+        org.apache.wicket.Session.get().setMetaData(OnePagerConst.ACTIVITY_IS_AFFECTED_BY_FREEZING,
+                isAffectedByFunding);
+        org.apache.wicket.Session.get().setMetaData(OnePagerConst.ACTIVITY_FREEZING_CONFIGURATION, isActivityEditable);
+        org.apache.wicket.Session.get().setMetaData(OnePagerConst.FUNDING_FREEZING_CONFIGURATION, ampActivityFrozen);
+    }
+    
     @Override   
     public void setObject(AmpActivityVersion arg0) {
         a = arg0;

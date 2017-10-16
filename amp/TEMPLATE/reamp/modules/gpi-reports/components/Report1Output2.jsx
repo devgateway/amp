@@ -215,7 +215,11 @@ export default class Report1Output2 extends Component {
                          <h4>{this.props.translations['amp.gpi-reports:indicator1-description']}</h4>
                         </div>
                     </div>
-                    <div className="section-divider"></div>                                                
+                    <div className="section-divider"></div> 
+                         {this.props.output2.empty == true  &&
+                             <div className="text-center">{this.props.translations['amp-gpi-reports:no-data']}</div>
+                         }                         
+                         { this.props.output2.empty == false  &&
                         <table className="table table-bordered table-striped indicator-table">
                         <thead>
                         <tr>
@@ -227,7 +231,8 @@ export default class Report1Output2 extends Component {
                       <tbody>
                           {this.createRows()}                
                       </tbody>
-                      </table>                             
+                      </table>    
+                        }
                     <div>                 
                          <PagingSection output2={this.props.output2} goToPage={this.goToPage.bind(this)} updateRecordsPerPage={this.updateRecordsPerPage.bind(this)}/>
                     </div>

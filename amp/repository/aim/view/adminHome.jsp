@@ -112,10 +112,11 @@
                             <td class="admin_box_label">
                               <c:set var="trnDataFreezeManager">
                                 <digi:trn invisibleLinks="true">Click here to access Data Freeze Manager</digi:trn>
-                              </c:set>
-                              <digi:link href="/dataFreezeManager.do" title="${trnDataFreezeManager}" >
+                              </c:set>                             
+                              <a href="/TEMPLATE/reamp/modules/admin/data-freeze-manager/index.html"
+                                 title="${trnDataFreezeManager}">
                                 <digi:trn>Data Freeze Manager</digi:trn>
-                              </digi:link>
+                              </a>
                             </td>
                           </tr>
                         </module:display>                        

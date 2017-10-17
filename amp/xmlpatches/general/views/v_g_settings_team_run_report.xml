@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="false" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-27002</jira>
+	<keyword>Views</keyword>
+	<author>jdeanquin</author>
+	<description>List of teams that has at least one team member</description>
+	<trigger type="all">
+		<condition type="custom">
+			<script returnVar="val">
+				<lang type="sql">
+					SELECT settingsvalue FROM amp_global_settings where
+					settingsname='Recreate the views on the next server restart';
+				</lang>
+			</script>
+			<test>val.equalsIgnoreCase("true")</test>
+		</condition>
+	</trigger>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				CREATE OR REPLACE VIEW v_g_settings_team_run_report AS
+					select amp_team_id as id,name as value from amp_team where amp_team_id in
+				(select amp_team_id from amp_team_member ) order by name asc
+			</lang>
+		</script>
+	</apply>
+</tns:patch>
+	

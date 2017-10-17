@@ -19,6 +19,7 @@ import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.translator.LocalizableLabel;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
@@ -95,6 +96,7 @@ import org.digijava.module.aim.util.EUActivityUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil.HelperLocationAncestorLocationNamesAsc;
 import org.digijava.module.aim.util.ProgramUtil;
+import org.digijava.module.aim.util.QuartzJobUtils;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
@@ -291,13 +293,22 @@ public class EditActivity extends Action {
             }
 
             if (activity.getDraft() != null && activity.getDraft()) {
-                eaForm.getWarningMessges().add("This is a draft activity");
+                eaForm.getWarningMessges().add(TranslatorWorker.translateText("This is a draft activity"));
             } else {
                 if (Constants.ACTIVITY_NEEDS_APPROVAL_STATUS.contains(activity.getApprovalStatus())) {
                     if (hasTeamLeadOrValidator) {
-                        eaForm.getWarningMessges().add("The activity is awaiting approval.");
+                        if (isAutomaticValidationEnabled()) {
+                            LocalizableLabel label = new LocalizableLabel("The activity is awaiting approval and "
+                                    + "will be "
+                                    + "automatically approved within {0} days.", daysToValidation(activity.getUpdatedDate()));
+                            eaForm.getWarningMessges().add(label.toString());
+                        } else {
+                            eaForm.getWarningMessges().add(TranslatorWorker.translateText("The activity is awaiting "
+                                    + "approval."));
+                        }
                     } else {
-                        eaForm.getWarningMessges().add("This activity cannot be validated because there is no Workspace Manager.");
+                        eaForm.getWarningMessges().add(TranslatorWorker.translateText("This activity cannot be "
+                                + "validated because there is no Workspace Manager."));
                     }
                 }
             }
@@ -782,6 +793,8 @@ public class EditActivity extends Action {
             }
         }
         
+
+        
         //AMP-17127
         //for modalities that is a SSC category we have to add the SSC prefix
           List<AmpCategoryValue> modalities = CategoryManagerUtil.getAmpCategoryValuesFromListByKey(
@@ -1193,9 +1206,10 @@ public class EditActivity extends Action {
           eaForm.getDocuments().setReferenceDocs(null);
 
           eaForm=setSectorsToForm(eaForm, activity);
-          if(isPreview){
+            if (isPreview) {
                 //we load classificationConfigs for been displayed in preview and printer friendly for issue AMP-16421
-                List<AmpClassificationConfiguration> classificationConfigs=SectorUtil.getAllClassificationConfigs();
+                List<AmpClassificationConfiguration> classificationConfigs = SectorUtil
+                        .getAllClassificationConfigsOrdered();
                 eaForm.getSectors().setClassificationConfigs(classificationConfigs);
             }    
           
@@ -1764,7 +1778,8 @@ public class EditActivity extends Action {
   private Long getCorrectActivityVersionIdToUse(Long activityId, EditActivityForm form) {
       Long lastVersionId    = ActivityVersionUtil.getLastVersionForVersion(activityId);
       if ( lastVersionId != null && !lastVersionId.equals(activityId) ) {
-          form.getWarningMessges().add("Requested activity version was not the latest version. Preview switched to showing the last version!");
+          form.getWarningMessges().add(TranslatorWorker.translateText("Requested activity version was not the latest "
+                  + "version. Preview switched to showing the last version!"));
           return lastVersionId;
       }
       return activityId;
@@ -2007,4 +2022,19 @@ private void setLineMinistryObservationsToForm(AmpActivityVersion activity, Edit
         logger.error(e.getMessage(), e);
     }
 
+     private int daysBetween(Date d1, Date d2) {
+         return (int) ((d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
+     }
+
+     private int daysToValidation(Date updatedDate) {
+         int result;
+         int daysBetween = daysBetween(updatedDate, new Date());
+         String daysBeforeValidation = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_OF_DAYS_BEFORE_AUTOMATIC_VALIDATION);
+         result = (Integer.parseInt(daysBeforeValidation) - daysBetween);
+         return result <= 0 ? 1 : result;
+     }
+
+     private boolean isAutomaticValidationEnabled() {
+         return (QuartzJobUtils.getJobByClassFullname(Constants.AUTOMATIC_VALIDATION_JOB_CLASS_NAME) == null ? false : true);
+     }
 }

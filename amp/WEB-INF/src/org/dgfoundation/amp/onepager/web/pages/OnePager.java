@@ -45,6 +45,7 @@ import org.dgfoundation.amp.onepager.components.features.sections.AmpCrossCuttin
 import org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpFormSectionFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpGPIFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpGPINiFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpIdentificationFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpInternalIdsFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpIssuesFormSectionFeature;
@@ -118,7 +119,8 @@ public class OnePager extends AmpHeaderFooter {
         new OnepagerSection("Line Ministry Observations", AmpLineMinistryObservationsFormSectionFeature.class.getName(), 20, false),
         new OnepagerSection("Budget Structure", AmpBudgetStructureFormSectionFeature.class.getName(), 21, false),
         new OnepagerSection("GPI", AmpGPIFormSectionFeature.class.getName(), 22, false),
-        new OnepagerSection("Aid Effectivenes", AmpAidEffectivenessFormSectionFeature.class.getName(), 23, false)
+        new OnepagerSection("GPI 2017", AmpGPINiFormSectionFeature.class.getName(), 23, false),
+        new OnepagerSection("Aid Effectivenes", AmpAidEffectivenessFormSectionFeature.class.getName(), 24, false)
         
         };
     public static final AtomicBoolean savedSections = new AtomicBoolean(false);

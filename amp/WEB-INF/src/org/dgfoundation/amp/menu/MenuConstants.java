@@ -89,4 +89,5 @@ public class MenuConstants {
     public static final String PUBLIC_LANGUAGE_ITEM = "Public Language Item";
     public static final String LANGUAGE_ITEM = "Language Item";
     public static final String WORKSPACE_ITEM = "Workspace Item";
+    public static final String GPI_DATA = "GPI Data";
 }

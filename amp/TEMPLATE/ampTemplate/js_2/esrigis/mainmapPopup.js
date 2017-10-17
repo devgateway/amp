@@ -92,10 +92,10 @@ function loadBaseMap() {
 	basemaps.on('change', function() {
 		setBasemap(this.value);
 	});
-	
+
 	var drawnItems = L.featureGroup().addTo(map);
 	addDrawControls(drawnItems);
-	
+
 	
 }
 
@@ -123,30 +123,30 @@ function onMapClick (e) {
 	
 }
 
-function selectLocationCallerShape(selectedGraphic){	
+function selectLocationCallerShape(selectedGraphic){
 	var callerButton = window.opener.callerGisObject;
 	//Lat
-	var latitudeInput = callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[1];	
-	latitudeInput.value = "";	
+	var latitudeInput = callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[1];
+	latitudeInput.value = "";
 	//Long
 	var longitudeInput = callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[2];
 	longitudeInput.value = "";
-	
+
 	var coordsInput = callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[5];
 	coordsInput.value = "";
-	
+
 	var shapeInput = callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[6];
 	shapeInput.value = "";
-	
+
     if(selectedPointEvent.target instanceof L.Marker || selectedGraphic.target instanceof L.CircleMarker) {
     	latitudeInput.value = selectedGraphic.latlng.lat;
-    	longitudeInput.value =  selectedGraphic.latlng.lng; 
+    	longitudeInput.value =  selectedGraphic.latlng.lng;
     	shapeInput.value = MapConstants.SHAPE.POINT;
     	window.opener.postvaluesy(latitudeInput);
-        window.opener.postvaluesx(longitudeInput);  
-        window.opener.postvaluesx(shapeInput);         
-        coordsInput.value =  JSON.stringify({'coordinates': []});		
-	    window.opener.postvaluesx(coordsInput);	    
+        window.opener.postvaluesx(longitudeInput);
+        window.opener.postvaluesx(shapeInput);
+        coordsInput.value =  JSON.stringify({'coordinates': []});
+	    window.opener.postvaluesx(coordsInput);
 	} else {
 		var latLngs = selectedGraphic.target.getLatLngs();
 		var data = []
@@ -155,17 +155,17 @@ function selectLocationCallerShape(selectedGraphic){
 			obj.latitude = latLngs[i].lat;
 			obj.longitude = latLngs[i].lng;
 			data.push(obj)
-		}		
-		coordsInput.value =  JSON.stringify({'coordinates': data});		
-	    window.opener.postvaluesx(coordsInput);    
+		}
+		coordsInput.value =  JSON.stringify({'coordinates': data});
+	    window.opener.postvaluesx(coordsInput);
 	    if( selectedPointEvent.target instanceof L.Polyline) {
 	    	if (selectedPointEvent.target instanceof L.Polygon) {
 	    		shapeInput.value = MapConstants.SHAPE.POLYGON;
 	    	} else {
 	    		shapeInput.value = MapConstants.SHAPE.POLYLINE;
-	    	}	    	
-	    }	    
-	    window.opener.postvaluesx(shapeInput);	    
+	    	}
+	    }
+	    window.opener.postvaluesx(shapeInput);
 	}
     if ("createEvent" in document) {
         var evt = document.createEvent("HTMLEvents");
@@ -182,7 +182,7 @@ function selectLocationCallerShape(selectedGraphic){
         latitudeInput.fireEvent("onchange");
         longitudeInput.fireEvent("onchange");
     }
- 
+
 	window.close();
 }
 
@@ -286,11 +286,12 @@ function addDrawControls(drawnItems) {
 	            polygon: {
 	                allowIntersection: false,
 	                showArea: true
-	            }
+	            },
+	            circle : false
 	        }
 	    }));
-	 
-	 
+
+
 	 map.on(L.Draw.Event.CREATED, function (event) {
 	        var layer = event.layer;
 	        layer.on('contextmenu', function(e) {
@@ -300,7 +301,7 @@ function addDrawControls(drawnItems) {
        	        var y = e.originalEvent.clientY;
        	        var x = e.originalEvent.clientX;
        		    showMenu (y,x);
-            	
+
             });
 	        drawnItems.addLayer(layer);
 	    });

@@ -820,6 +820,13 @@ public class ReportsFilterPicker extends Action {
         }else{
             removeElementByName(filterForm.getFinancingLocationElements(), "Mode of Payment");
         }
+        if (FeaturesUtil.isVisibleField("Concessionality Level")) {
+            addFinancingLocationElement(filterForm, "Concessionality Level", "All Concessionality Level Values", 
+                    CategoryConstants.CONCESSIONALITY_LEVEL_KEY, "Concessionality Level", 
+                    "filter_concessionality_level_div", "selectedConcensionalityLevel");
+        } else{
+            removeElementByName(filterForm.getFinancingLocationElements(), "Concessionality Level");
+        }
         if (FeaturesUtil.isVisibleField("Project Category")) {
             addFinancingLocationElement(filterForm, "Project Category", "All Project Category Values", CategoryConstants.PROJECT_CATEGORY_KEY, "Project Category", "filter_project_category_div", "selectedProjectCategory");
         }
@@ -1025,8 +1032,9 @@ public class ReportsFilterPicker extends Action {
                 filterForm.getDynamicIssueFilter(), "filter_issue_date_div", filterForm
                         .getOtherCriteriaElements());
 
-        addDateFilter("Current Completion Date", "ActivityActualCompletion",
-                "Current Completion Date", filterForm.getDynamicActivityActualCompletionFilter(), "filter_activity_actual_completion_date_div", filterForm.getOtherCriteriaElements());
+        addDateFilter("Actual Completion Date", "ActivityActualCompletion",
+                "Actual Completion Date", filterForm.getDynamicActivityActualCompletionFilter(), 
+                "filter_activity_actual_completion_date_div", filterForm.getOtherCriteriaElements());
         
         addDateFilter("Final Date for Contracting", "ActivityFinalContracting",
                 "Final Date for Contracting", filterForm.getDynamicActivityFinalContractingFilter(), "filter_activity_final_contracting_date_div", filterForm.getOtherCriteriaElements());

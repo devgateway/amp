@@ -91,11 +91,9 @@
 <module:display name="Resource Label Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Template Documents Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Donor Profile Report" parentModule="REPORTING"></module:display>
-<module:display name="Multi-dimensional Reports" parentModule="REPORTING"></module:display>
+<module:display name="Saiku" parentModule="REPORTING"></module:display>
 <module:display name="Pledge Reports" parentModule="REPORTING"></module:display>
 <feature:display name="Pledges Default Reports" module="Pledge Reports"></feature:display>
-<feature:display name="Default Reports" module="Multi-dimensional Reports"></feature:display>
-<module:display name="Multi-dimensional Reports Public View" parentModule="REPORTING"></module:display>  
 <module:display name="Report and Tab Options" parentModule="REPORTING"></module:display>
 <module:display name="Report Types" parentModule="REPORTING"></module:display>
 <module:display name="Filter Section" parentModule="REPORTING"></module:display> 
@@ -328,6 +326,7 @@
 <field:display feature="Funding Information" name="Expenditure Class"></field:display>
 <field:display feature="Funding Information" name="Effective Funding Date"></field:display>
 <field:display feature="Funding Information" name="Funding Closing Date"></field:display>
+<field:display feature="Funding Information" name="Concessionality Level"></field:display>
 <field:display feature="Government Contact Information" name="Government Email"></field:display> 
 <field:display feature="Government Contact Information" name="Government First Name"></field:display> 
 <field:display feature="Identification" name="AMP ID"></field:display> 
@@ -591,7 +590,6 @@ deleted 6 fields, do not reinsert
 <field:display name="Currency Expenditure" feature="Expenditures"></field:display> 
 <field:display name="Currency Expenditures" feature="Regional Funding"></field:display> 
 <field:display name="Currency of Disbursement Order" feature="Disbursement Orders"></field:display> 
-<field:display name="Current Completion Date" feature="Planning"></field:display> 
 <field:display name="Data Source" feature="Identification"></field:display>
 <field:display name="Data Team Leader" feature="Identification"></field:display> 
 <field:display name="Date Commitment" feature="Commitments"></field:display>
@@ -1083,6 +1081,7 @@ deleted 6 fields, do not reinsert
 <module:display name="Activity Preview" parentModule="PUBLIC VIEW"></module:display>
 <feature:display name="Contacts" module="Activity Preview"></feature:display>
 <feature:display name="Version History" module="Activity Preview"></feature:display>
+<field:display name="Show Change Summary" feature="Version History"></field:display>
 
 <module:display name="Show Editable Export Formats" parentModule="PUBLIC VIEW"></module:display>
 <module:display name="Public Reports and Tabs" parentModule="PUBLIC VIEW"></module:display>
@@ -1117,3 +1116,16 @@ deleted 6 fields, do not reinsert
 <field:display name="Mandatory Budget Organization Code" feature="Organization Form"></field:display>
 <field:display name="Mandatory Organization Code" feature="Organization Form"></field:display>
 
+  <!-- GPI  -->
+<module:display name="GPI Reports" parentModule="REPORTING"></module:display>
+<module:display name="GPI" parentModule="GPI Reports"></module:display>
+<module:display name="GPI 2014" parentModule="GPI Reports"></module:display>
+<feature:display name="GPI 2014 - Indicator 1" module="GPI 2014"></feature:display>
+<feature:display name="GPI 2014 - Indicator 5a" module="GPI 2014"></feature:display>
+<feature:display name="GPI 2014 - Indicator 6" module="GPI 2014"></feature:display>
+<feature:display name="GPI 2014 - Indicator 9b" module="GPI 2014"></feature:display>
+<feature:display name="Indicator 1" module="GPI"></feature:display>
+<feature:display name="Indicator 5a" module="GPI"></feature:display>
+<feature:display name="Indicator 5b" module="GPI"></feature:display>
+<feature:display name="Indicator 6" module="GPI"></feature:display>
+<feature:display name="Indicator 9b" module="GPI"></feature:display>

@@ -427,6 +427,13 @@ div.trnpanel div.trn-row a:hover {
 .paris_question {background-color:#FFFFFF; border:1px solid #CCCCCC; font-weight:bold; padding-left:7px; margin-top:10px; margin-bottom:2px;}
 .paris_answer {background-color:#FFFFFF; border:1px solid #E0E5EB; padding:3px; margin-bottom:5px; line-height:18px;}
 
+.gpi_ni_indicator {background-color:#FFFFFF; border:1px solid #CCCCCC; font-weight:bold; padding-left:7px; margin-top:10px; margin-bottom:2px; font-size: 15px}
+.gpi_ni_question {background-color:#FFFFFF; border:1px solid #CCCCCC; font-weight:bold; padding-left:7px; margin-bottom:2px;}
+.gpi_ni_answer {background-color:#FFFFFF; padding:3px; margin: 0 5px 10px 10px;}
+.gpi_ni_answer label {cursor: pointer; margin: 0 0px 0px 20px; display: block; line-height: 25px;}
+.gpi_ni_answer input[type="radio"] {float:left; display: block; margin: 5px 0 0;}
+.gpi_ni_indicator_error {font-weight:bold; font-size: 11px}
+
 .sideMenuButtons {background-color:#5E8AD1; border-top: 1px solid #99BAF1; border-left:1px solid #99BAF1; border-right:1px solid #225099; border-bottom:1px solid #225099; font-size:10px; color:#FFFFFF; font-weight:bold; padding-left:5px; padding-right:5px; padding-top:3px; padding-bottom:3px; width:155px !important; overflow:hidden;}
 
 .quickListHighlight {background-color: #F2F2F2; border-bottom: 1px solid lightgray !important; border-right: 1px solid lightgray !important; color: white;}
@@ -642,6 +649,26 @@ tr.wicketFundingRowItem:nth-child(odd) {background: #FFFFFF}
 }
 input[disabled], select[disabled]{
 	color: #D3D3D3;
+}
+
+.resourceButtonPosition {
+	float: left;
+}
+
+.close-link {
+    text-align: right;
+    float: right;
+    margin-right: 28px;
+}
+
+.inside-header {
+    text-align: left;
+}
+
+.del-funding {
+    float: right;
+    position: relative;
+    top: -15px;
 }
 
 .ui-dialog-titlebar-close:after { content: 'X'; font-weight:bold; }

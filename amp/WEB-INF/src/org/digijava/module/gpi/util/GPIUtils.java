@@ -2,21 +2,20 @@ package org.digijava.module.gpi.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import org.dgfoundation.amp.ar.cell.AmountCell;
+import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpActivityGroup;
+import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
-import org.digijava.module.aim.dbentity.AmpGPISurvey;
-import org.digijava.module.aim.dbentity.AmpGPISurveyIndicator;
+import org.digijava.module.aim.dbentity.AmpAhsurveyIndicator;
+import org.digijava.module.aim.dbentity.AmpGPINiIndicator;
+import org.digijava.module.aim.dbentity.AmpGPINiQuestion;
 import org.digijava.module.aim.dbentity.AmpGPISurveyQuestion;
-import org.digijava.module.aim.dbentity.AmpGPISurveyResponse;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -28,11 +27,12 @@ import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.common.util.DateTimeUtil;
-import org.digijava.module.gpi.helper.row.GPIReportAbstractRow;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
 public class GPIUtils {
+    
+    private static Logger logger = Logger.getLogger(GPIUtils.class);
 
     /**
      * Converts a textual representation of boolean to numeric 1 for yes/true, 0
@@ -341,5 +341,28 @@ public class GPIUtils {
                 .addEntity(AmpGPISurveyQuestion.class).setString(0, code);
         //List<AmpGPISurveyQuestion> list = new ArrayList<AmpGPISurveyQuestion>();
         return query.list();
+    }
+    
+    public static Collection<AmpGPINiIndicator> getActivityFormGPINiIndicators() {
+        Collection<AmpGPINiIndicator> responses = new ArrayList<AmpGPINiIndicator>();
+        Session session = null;
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String qry = "SELECT indc FROM "
+                    + AmpGPINiIndicator.class.getName() + " indc " 
+                    + "WHERE indc.ampGPINiIndicatorId IN (" 
+                    + "SELECT DISTINCT q.ampGPINiIndicator FROM "
+                    + AmpGPINiQuestion.class.getName() + " q " 
+                    + "WHERE q.requiresDataEntry = TRUE) "
+                    + "ORDER BY indc.code ASC";
+            
+            responses = session.createQuery(qry).list();
+
+        } catch (Exception ex) {
+            logger.error("Unable to get gpi ni indicators : ", ex);
+        }
+        
+        return responses;
     }
 }

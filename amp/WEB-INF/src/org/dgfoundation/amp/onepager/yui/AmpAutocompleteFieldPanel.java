@@ -45,6 +45,7 @@ import org.dgfoundation.amp.onepager.models.AmpAutoCompleteModelParam;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.proxy.HibernateProxyHelper;
@@ -292,11 +293,12 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
                 if (textField.getParent().isEnabled())
                     disableControl = "false";
                 response.render(OnDomReadyHeaderItem.forScript("$(document).ready(function() {"+getJsVarName()
-                        + " = new YAHOO.widget."+ autoCompeleteVar+"('"
+                        + " = new YAHOO.widget." + autoCompeleteVar + "('"
                         + textField.getMarkupId() + "', '" + getCallbackUrl()
                         + "', '" + container.getMarkupId() + "', '"
                         + toggleButton.getMarkupId() + "', '"
-                        + indicator.getMarkupId() + "', " +useCache+ ", " + disableControl + ");" 
+                        + indicator.getMarkupId() + "', " + useCache + ", " + disableControl + ", "
+                        + SiteUtils.isEffectiveLangRTL() + ");"
                         + "});"));
             }
         });

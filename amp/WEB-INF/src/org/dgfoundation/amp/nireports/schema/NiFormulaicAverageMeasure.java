@@ -29,13 +29,17 @@ public class NiFormulaicAverageMeasure extends NiReportMeasure<CategAmountCell> 
     public final boolean displayIndividualValues;
     
     public NiFormulaicAverageMeasure(String measName, String description, Map<String, NiReportMeasure<CategAmountCell>> depMeas, NiFormula formula, boolean displayIndividualValues, boolean isScalableByUnits) {
-        super(measName, buildBehaviour(formula, displayIndividualValues, isScalableByUnits), description);
+        this(measName, description, depMeas, formula, displayIndividualValues, isScalableByUnits, TimeRange.NONE);
+    }
+    
+    public NiFormulaicAverageMeasure(String measName, String description, Map<String, NiReportMeasure<CategAmountCell>> depMeas, NiFormula formula, boolean displayIndividualValues, boolean isScalableByUnits, TimeRange timeRange) {
+        super(measName, buildBehaviour(formula, displayIndividualValues, isScalableByUnits, timeRange), description);
         this.depMeas = Collections.unmodifiableMap(new HashMap<>(depMeas));
         this.displayIndividualValues = displayIndividualValues;
     }
     
-    static FormulaAverageBehaviour buildBehaviour(NiFormula formula, boolean displayIndividualValues, boolean isScalableByUnits) {
-        return new FormulaAverageBehaviour(TimeRange.NONE, 
+    static FormulaAverageBehaviour buildBehaviour(NiFormula formula, boolean displayIndividualValues, boolean isScalableByUnits, TimeRange timeRange) {
+        return new FormulaAverageBehaviour(timeRange, 
             formula.getDependencies().stream().collect(Collectors.toMap(z -> z, z -> FormulaicAmountBehaviour::REDUCE_SUM)),
             displayIndividualValues,
             formula,

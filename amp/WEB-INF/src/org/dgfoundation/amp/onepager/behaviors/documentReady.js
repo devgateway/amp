@@ -183,7 +183,7 @@ function rightMenuEnable(){
 }
 
 function pageLeaveConfirmationEnabler(){
-	/*window.onbeforeunload = function (e) {
+	window.onbeforeunload = function (e) {
 		  e = e || window.event;
 		  
 		  // For IE and Firefox prior to version 4
@@ -194,7 +194,7 @@ function pageLeaveConfirmationEnabler(){
 				  e.returnValue = ' ';
 			  }
 		  }
-	}*/
+	}
 	oldAjaxCallProcessAjaxResponse = Wicket.Ajax.Call.prototype.processAjaxResponse;
 	Wicket.Ajax.Call.prototype.processAjaxResponse = function (data, textStatus, jqXHR, context){
 		if (jqXHR != null && jqXHR.readyState == 4){

@@ -636,7 +636,7 @@ public class DbUtil {
             session = PersistenceManager.getRequestDBSession();
             String queryString = "select u from " + User.class.getName() + " u where (u.email=:email)";
             qry = session.createQuery(queryString);
-            qry.setParameter("email", email, StringType.INSTANCE);
+            qry.setParameter("email", StringUtils.lowerCase(email), StringType.INSTANCE);
             Iterator itr = qry.list().iterator();
             if (itr.hasNext()) {
                 user = (User) itr.next();
@@ -3178,5 +3178,24 @@ public class DbUtil {
 
         return agreements;
     }
-
+    
+    public static boolean hasDonorRole(Long id){
+        Session session = null;
+        Query query = null;
+        boolean result = false;
+        try {
+            session = PersistenceManager.getRequestDBSession();         
+            String queryString = "select count(*) from "    + AmpOrgRole.class.getName()
+                    + " r where (r.organisation.id = :orgId) and r.role.roleCode = :code";
+            query = session.createQuery(queryString);
+            query.setLong("orgId", id); 
+            query.setString("code", Constants.FUNDING_AGENCY);
+            Integer count = (Integer) query.uniqueResult();         
+            result = count > 0;         
+        } catch (Exception e) {
+            logger.error("Exception from hasDonorRole()", e);
+        }
+        
+        return result;  
+    }
 }

@@ -357,7 +357,7 @@ public class ReportsUtil {
         
         return spec;
     }
-    
+
     private static void addColumns(ReportSpecification spec, JsonBean formParams) {
         //adding new columns if not present
         if (formParams.get(EPConstants.ADD_COLUMNS) != null) {
@@ -729,7 +729,7 @@ public class ReportsUtil {
      * Exports current report configuration to the map
      * 
      * @param config
-     * @param exportId
+     * @param reportId
      * @return
      */
     public static String exportToMap(final JsonBean config, final Long reportId) {

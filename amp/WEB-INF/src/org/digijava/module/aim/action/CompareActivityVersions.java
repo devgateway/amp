@@ -516,7 +516,8 @@ public class CompareActivityVersions extends DispatchAction {
             newOutput.setFieldOutput(auxOutput.getFieldOutput());
             newOutput.setMandatoryForSingleChangeOutput(auxOutput.getMandatoryForSingleChangeOutput());
             if (vForm.getMergedValues()[i].equals("L")) {
-                newOutput.setOriginalValueOutput(new Object[] { auxOutput.getOriginalValueOutput()[1], auxOutput.getOriginalValueOutput()[0] }); //add the left value, remove the one from the right
+                newOutput.setOriginalValueOutput(new Object[] { auxOutput.getOriginalValueOutput()[1],
+                        auxOutput.getOriginalValueOutput()[0] }); //add the left value, remove the one from the right
             } else if (vForm.getMergedValues()[i].equals("R")) {
                 newOutput.setOriginalValueOutput(new Object[] { null, null }); //value is in place
             } else {

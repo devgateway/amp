@@ -175,7 +175,33 @@ public class DbUtil {
         }
         return group;
     }
-
+    /**
+     * returns the group that matches the key
+     * @param key - group key e.g MEM, TRN, the keys are defined as static fields in Group.java
+     * @return group
+     * @throws AdminException
+     */
+    public static Group getGroupByKey(String key) throws
+    AdminException {
+        Group group = null;
+        Session session = null;
+        try {
+            session = PersistenceManager.getSession();
+            Iterator iter = null;
+            String queryString = "select g from " + Group.class.getName() + " g where g.key=:key";
+            Query query = session.createQuery(queryString);
+            query.setString("key", key);
+            iter = query.iterate();
+            while (iter.hasNext()) {
+                group = (Group) iter.next();
+                break;
+            }
+        } catch (Exception ex) {
+            logger.debug("Unable to get group from database ", ex);
+            throw new AdminException("Unable to get group from database ", ex);
+        }
+        return group;   
+    }
     public static void editGroup(Group group) throws AdminException {
         Session sess = null;
         try {

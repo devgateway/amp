@@ -139,7 +139,7 @@ LoggerIdentifiable, Cloneable {
     protected String documentSpace;
 
     @Interchangeable(fieldTitle = ActivityFieldsConstants.IS_DRAFT, required="_ALWAYS_", importable=false)
-    @VersionableFieldSimple(fieldTitle = "Is Draft?")
+    @VersionableFieldSimple(fieldTitle = "Is Draft?", blockSingleChange = true)
     protected Boolean draft;
 
     @VersionableFieldSimple(fieldTitle = ActivityFieldsConstants.CHANGE_TYPE)
@@ -208,7 +208,7 @@ LoggerIdentifiable, Cloneable {
     @VersionableCollection(fieldTitle = "Locations")
     protected Set<AmpActivityLocation> locations ;
     
-    @Interchangeable(fieldTitle = "Org. Role", importable = true, fmPath = "/Activity Form/Organizations")
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.ORG_ROLE, importable = true, fmPath = "/Activity Form/Organizations")
     @VersionableCollection(fieldTitle = "Org. Role")
     @InterchangeableDiscriminator(discriminatorField = "orgRoleConfig.name", settings = {
             @Interchangeable(fieldTitle = "Donor Organization", importable=true, discriminatorOption = Constants.FUNDING_AGENCY, fmPath = FMVisibility.ANY_FM + "/Activity Form/Organizations/Donor Organization|/Activity Form/Funding/Search Funding Organizations/Search Organizations",

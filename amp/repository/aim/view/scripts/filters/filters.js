@@ -68,6 +68,8 @@ function resetFilter(){
  		resetElement(aimReportsFilterPickerForm.selectedComponentFundingOrg);
  		resetElement(aimReportsFilterPickerForm.selectedComponentSecondResponsibleOrg);
 
+ 		resetElement(aimReportsFilterPickerForm.selectedConcensionalityLevel);
+
  		resetElement(aimReportsFilterPickerForm.disbursementOrders);
  		resetElement(aimReportsFilterPickerForm.selectedBudgets);
  		resetElement(aimReportsFilterPickerForm.lineMinRanks);

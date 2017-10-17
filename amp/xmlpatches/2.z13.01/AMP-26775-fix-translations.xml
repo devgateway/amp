@@ -9,90 +9,56 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres"><![CDATA[
-				delete from dg_message where message_key = '1717341293';
-				delete from dg_message where message_key = '-1557164945';
-				delete from dg_message where message_key = '-865500523';
+ 				delete from dg_message where message_key = '1717341293';
+ 				delete from dg_message where message_key = '-1557164945';
+ 				delete from dg_message where message_key = '-865500523';
 
-				delete from dg_message where message_key = '1161649181';
-				delete from dg_message where message_key = '-1488284173';
+ 				delete from dg_message where message_key = '1161649181';
+ 				delete from dg_message where message_key = '-1488284173';
 
-				delete from dg_message where message_key = '94185230';
-				delete from dg_message where message_key = '1262372724';
-				delete from dg_message where message_key = '1048199224';
-				delete from dg_message where message_key = '-803532066';
+ 				delete from dg_message where message_key = '94185230';
+ 				delete from dg_message where message_key = '1262372724';
+ 				delete from dg_message where message_key = '1048199224';
+ 				delete from dg_message where message_key = '-803532066';
 
-				delete from dg_message where message_key = '-1963222834';
-				delete from dg_message where message_key = '-1358963668';
-				delete from dg_message where message_key = '-1260390705';
-				delete from dg_message where message_key = '1242913565';
+ 				delete from dg_message where message_key = '-1358963668';
+ 				delete from dg_message where message_key = '-1260390705';
+ 				delete from dg_message where message_key = '1242913565';
 
-				delete from dg_message where message_key = '1355668861';
+ 				delete from dg_message where message_key = '1355668861';
 
-				delete from dg_message where message_key = '-364446313';
-				delete from dg_message where message_key = '857555912';
+ 				delete from dg_message where message_key = '-364446313';
+ 				delete from dg_message where message_key = '857555912';
 
-				update dg_message set message_utf8 = 'SSC' where message_key = '3539644' and lang_iso = 'en';
+ 				update dg_message set message_utf8 = 'Related organization additional info' where message_key = '-1850397248' and lang_iso = 'en';
+ 				update dg_message set message_utf8 = 'Related organization percentage total' where message_key = '-2069313057' and lang_iso = 'en';
+ 				update dg_message set message_utf8 = 'Add release of Funds' where message_key = '-1150122550' and lang_iso = 'en';
 
-				update amp_category_value set category_value = 'Workshop or Training' where category_value = 'Atelier ou Formation';
-				update amp_category_value set category_value = 'Conference or Forum' where category_value = 'Conférence ou Forum';
-				update amp_category_value set category_value = 'Period of Unavailability' where category_value = 'Période d''Indisponibilité';
-				update amp_category_value set category_value = 'Construction work' where category_value = 'Travaux construction';
-				update amp_category_value set category_value = 'Rehabilitation work' where category_value = 'Travaux réhabilitation';
+ 				update dg_message set message_utf8 = 'Use donor''s own structure' where message_key = '1611885249' and lang_iso = 'en';
+ 				update dg_message set message_utf8 = 'Use donor''s own system' where message_key = '434759585' and lang_iso = 'en';
+ 				update dg_message set message_utf8 = 'Joint implementation through gov''t and non-gov''t entity' where message_key = '-1071863669' and lang_iso = 'en';
+ 				update dg_message set message_utf8 = 'Rely on other donor''s institutions' where message_key = '140749611' and lang_iso = 'en';
+ 				update dg_message set message_utf8 = 'Rely on other donor''s system' where message_key = '1384177567' and lang_iso = 'en';
+ 				update dg_message set message_utf8 = 'National implementation throug gov''t entity' where message_key = '-2076443594' and lang_iso = 'en';
+ 				update dg_message set message_utf8 = 'Direct implementation through non-gov''t entity' where message_key = '-1953041045' and lang_iso = 'en';
 
-				update dg_message set message_key = '-1322975648', orig_message = 'Rehabilitation work',message_utf8 = 'Rehabilitation work' where message_key = '1278913348' and lang_iso = 'en';
-				update dg_message set message_key = '-1876852480', orig_message = 'Construction work', message_utf8 = 'Construction work' where message_key = '-139218464' and lang_iso = 'en';
-				update dg_message set message_key = '1508447582', orig_message = 'Workshop or Training', message_utf8 = 'Workshop or Training' where message_key = '1073544219' and lang_iso = 'en';
-				update dg_message set message_key = '287970088', orig_message = 'Conference or Forum', message_utf8 = 'Conference or Forum' where message_key = '83857007' and lang_iso = 'en';
-				update dg_message set message_key = '862790462', orig_message = 'Period of Unavailability', message_utf8 = 'Period of Unavailability' where message_key = '995387001' and lang_iso = 'en';
+ 				update dg_message set message_utf8 = '(Only valid when feature is enabled) The status corresponding to the ''''Activity has ended'''' state' where message_key = '-1044116490' and lang_iso = 'en';
+ 				update dg_message set message_utf8 = 'Add & Edit Activity' where message_key = '-1995983965' and lang_iso = 'en';
+ 				update dg_message set message_utf8 = 'Default number format for all funding items.Here you have to use the '''','''' character for the grouping separator and the ''''.'''' character for the decimal separator(example format: ###,###.##).' where message_key = '-1195611650' and lang_iso = 'en';
+ 				update dg_message set message_utf8 = 'Whether the Excel Export menu should have the ''''Rich Export'''' enabled by default' where message_key = '-1469047951' and lang_iso = 'en';
+ 				update dg_message set message_utf8 = 'Automatically change the status of activities which have passed their Actual End Date to a preset one (usually ''''Closed'''')' where message_key = '-721047659' and lang_iso = 'en';
+ 				update dg_message set message_utf8 = 'In Activity form''s organizations step, set the default value of Responsible Organization Group' where message_key = '944839999' and lang_iso = 'en';
 
-				update dg_message set message_key = '-1322975648', orig_message = 'Rehabilitation work' where message_key = '1278913348' and lang_iso <> 'en';
-				update dg_message set message_key = '-1876852480', orig_message = 'Construction work' where message_key = '-139218464' and lang_iso <> 'en';
-				update dg_message set message_key = '1508447582', orig_message = 'Workshop or Training' where message_key = '1073544219' and lang_iso <> 'en';
-				update dg_message set message_key = '287970088', orig_message = 'Conference or Forum' where message_key = '83857007' and lang_iso <> 'en';
-				update dg_message set message_key = '862790462', orig_message = 'Period of Unavailability' where message_key = '995387001' and lang_iso <> 'en';
+ 				update amp_menu_entry set title = 'DASHBOARDS' where title = 'NEW DASHBOARD (BETA)';
+ 				delete from dg_message where message_key = '936655517';
 
-				update dg_message set message_utf8 = 'Related organization additional info' where message_key = '-1850397248' and lang_iso = 'en';
-				update dg_message set message_utf8 = 'Related organization percentage total' where message_key = '-2069313057' and lang_iso = 'en';
-				update dg_message set message_utf8 = 'Add release of Funds' where message_key = '-1150122550' and lang_iso = 'en';
+ 				delete from dg_message where message_key = '-795002540';
+ 				update amp_fields_visibility set name='Capital Expenditure', description='Capital Expenditure' where name='Capital - Expenditure' and parent=(select id from amp_features_visibility where name='Funding Information');
 
-				update dg_message set message_utf8 = 'Use donor''s own structure' where message_key = '1611885249' and lang_iso = 'en';
-				update dg_message set message_utf8 = 'Use donor''s own system' where message_key = '434759585' and lang_iso = 'en';
-				update dg_message set message_utf8 = 'Joint implementation through gov''t and non-gov''t entity' where message_key = '-1071863669' and lang_iso = 'en';
-				update dg_message set message_utf8 = 'Rely on other donor''s institutions' where message_key = '140749611' and lang_iso = 'en';
-				update dg_message set message_utf8 = 'Rely on other donor''s system' where message_key = '1384177567' and lang_iso = 'en';
-				update dg_message set message_utf8 = 'National implementation throug gov''t entity' where message_key = '-2076443594' and lang_iso = 'en';
-				update dg_message set message_utf8 = 'Direct implementation through non-gov''t entity' where message_key = '-1953041045' and lang_iso = 'en';
-				update dg_message set message_utf8 = 'Istisna''a' where message_key = '2112118096' and lang_iso = 'en';
+				update dg_message set message_utf8 = 'Actual Commitments for pledges and activities reports' where message_key = '-364446313';
 
-				update dg_message set message_utf8 = '(Only valid when feature is enabled) The status corresponding to the ''''Activity has ended'''' state' where message_key = '-1044116490' and lang_iso = 'en';
-				update dg_message set message_utf8 = 'Add & Edit Activity' where message_key = '-1995983965' and lang_iso = 'en';
-				update dg_message set message_utf8 = 'Default number format for all funding items.Here you have to use the '''','''' character for the grouping separator and the ''''.'''' character for the decimal separator(example format: ###,###.##).' where message_key = '-1195611650' and lang_iso = 'en';
-				update dg_message set message_utf8 = 'Whether the Excel Export menu should have the ''''Rich Export'''' enabled by default' where message_key = '-1469047951' and lang_iso = 'en';
-				update dg_message set message_utf8 = 'Automatically change the status of activities which have passed their Actual End Date to a preset one (usually ''''Closed'''')' where message_key = '-721047659' and lang_iso = 'en';
-				update dg_message set message_utf8 = 'In Activity form''s organizations step, set the default value of Responsible Organization Group' where message_key = '944839999' and lang_iso = 'en';
-
-				update amp_menu_entry set title = 'DASHBOARDS' where title = 'NEW DASHBOARD (BETA)';
-				delete from dg_message where message_key = '936655517';
-
-				update dg_message set message_utf8 = 'source de financement du gouvernement',
-				orig_message = 'source de financement du gouvernement' where message_key = '-237071400' and lang_iso = 'en'
-				and not exists (
-				select * from dg_message
-				where message_key = '-237071400'
-				);
-				update dg_message set message_utf8 = '-237071400' where message_key = '857555912' and lang_iso <> 'en';
-
-				update dg_message set message_utf8 = 'Documents de référence de l''activité',
-				orig_message = 'Documents de référence de l''activité' where message_key = '-1963222834' and lang_iso = 'en'
-				and not exists (
-				select * from dg_message
-				where message_key = '-1963222834'
-				);
-				update dg_message set message_key = '-29169290' where message_key = '-1963222834' and lang_iso <> 'en';
-
-				delete from dg_message where message_key = '-795002540';
-				update amp_fields_visibility set name='Capital Expenditure', description='Capital Expenditure' where name='Capital - Expenditure' and parent=(select id from amp_features_visibility where name='Funding Information');
-
+				update dg_message set message_utf8 = 'Search M&e' where message_key = '1161649181' and lang_iso = 'en';
+				update dg_message set message_utf8 = 'Search Sectors For M&e' where message_key = '-1488284173' and lang_iso = 'en';
 			]]></lang>
 		</script>
 	</apply>

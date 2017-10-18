@@ -3,6 +3,7 @@ import Link from "react-router";
 import ReactDOM from "react-dom";
 import platform from "platform";
 import { fetchJson } from "amp/tools";
+require('./style.less');
 
 const WINDOWS = 'windows';
 const MAC = 'mac';
@@ -29,7 +30,7 @@ var DownloadLinks = React.createClass( {
                 links.push( <a href={`${this.props.url}/${i.id}`} >{this._getInstallerName( i.os, i.arch )}</a> );
             } );
             return ( <ul>
-                {links.map( l => ( <li>{l}</li> ) )}
+                {links.map( (l, j) => ( <li key={j}>{l}</li> ) )}
             </ul> );
         } else {
             return null;
@@ -70,8 +71,8 @@ var DownloadLinks = React.createClass( {
         if ( installer.length > 0 ) {
             const message = this.props.translations['amp.offline:best-version-message'];
             const installerName = this._getInstallerName( installer[0].os, installer[0].arch );
-            const link = <div><a href={`${this.props.url}/${installer[0].id}`} >{this.props.translations['amp.offline:download']} {installer[0].version} - {installerName}</a></div>;
-            return ( <div className="alert alert-info" role="alert"><span>{message}</span>{link}</div> );
+            const link = <div className="link"><a href={`${this.props.url}/${installer[0].id}`} >{this.props.translations['amp.offline:download']} {installer[0].version} - {installerName}</a></div>;
+            return ( <div className="alert alert-info" role="alert"><span className="info-text">{message}</span>{link}</div> );
         }
     },
 

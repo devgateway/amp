@@ -5,6 +5,18 @@
 	<jira>AMP-26998</jira>
 	<author>ociubotaru</author>
 	<description>Fixed component funding.</description>
+	<trigger type="all">
+		<condition type="custom">
+			<script returnVar="count">
+				<lang type="sql">
+					SELECT count(column_name)
+					FROM information_schema.columns
+					WHERE table_name = 'amp_component_funding' AND column_name = 'second_rep_organisation_id';
+				</lang>
+			</script>
+			<test>count > 0</test>
+		</condition>
+	</trigger>
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres"><![CDATA[

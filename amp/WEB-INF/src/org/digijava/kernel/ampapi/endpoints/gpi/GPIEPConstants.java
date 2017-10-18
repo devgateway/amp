@@ -32,7 +32,7 @@ public class GPIEPConstants {
     public static final String ORDER_DESC = "desc"; 
     public static final String DEFAULT_DONOR_NOTES_SORT_COLUMN = "notesDate";
     public static final Integer DEFAULT_HTTPS_PORT = 443;
-    public static final Integer DEFAULT_HTTP_PORT = 80; 
+    public static final Integer DEFAULT_HTTP_PORT = 80;
     
     public static final Map<String, String> SORT_FIELDS = Collections.unmodifiableMap(new HashMap<String, String>() {{
             put(FIELD_AMOUNT, "amount");

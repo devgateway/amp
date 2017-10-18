@@ -52,6 +52,7 @@ public class FilterUtils {
         mapDateColumn(FiltersConstants.PROPOSED_COMPLETION_DATE, ColumnConstants.PROPOSED_COMPLETION_DATE);
         mapDateColumn(FiltersConstants.PROPOSED_START_DATE, ColumnConstants.PROPOSED_START_DATE);
 
+        mapSimpleColumn(FiltersConstants.ACTIVITY_ID, ColumnConstants.ACTIVITY_ID);
         mapSimpleColumn(FiltersConstants.APPROVAL_STATUS, ColumnConstants.APPROVAL_STATUS);
         mapSimpleColumn(FiltersConstants.ARCHIVED, ColumnConstants.ARCHIVED);
         mapSimpleColumn(FiltersConstants.BENEFICIARY_AGENCY, ColumnConstants.BENEFICIARY_AGENCY);

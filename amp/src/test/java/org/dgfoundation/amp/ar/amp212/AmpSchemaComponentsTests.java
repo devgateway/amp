@@ -79,7 +79,7 @@ public class AmpSchemaComponentsTests extends ReportingTestCase {
         );
 
     private static final List<String> HIERARCHIES_TO_TRY = new ImmutableList.Builder<String>()
-            .addAll(BasicSanityChecks.hierarchiesToTry)
+            .addAll(BasicSanityChecks.HIERARCHIES_TO_TRY)
             .add(ColumnConstants.COMPONENT_TYPE)
             .add(ColumnConstants.COMPONENT_NAME)
             .add(ColumnConstants.COMPONENT_FUNDING_ORGANIZATION)
@@ -182,7 +182,7 @@ public class AmpSchemaComponentsTests extends ReportingTestCase {
         ReportSpecificationImpl spec = buildComponentReport("testComponentReportByComponentType", 
                 Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.COMPONENT_TYPE),
                 Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
-                Arrays.asList(ColumnConstants.COMPONENT_TYPE), 
+                Arrays.asList(ColumnConstants.COMPONENT_TYPE),
                 GroupingCriteria.GROUPING_YEARLY);
         
         runNiTestCase(spec, "en", acts, cor);
@@ -192,7 +192,7 @@ public class AmpSchemaComponentsTests extends ReportingTestCase {
     public void testHierarchiesDoNotChangeTotals() throws Exception {
         
         ReportSpecificationImpl initSpec = buildComponentReport("initSpec", 
-                Arrays.asList(ColumnConstants.PROJECT_TITLE), 
+                Arrays.asList(ColumnConstants.PROJECT_TITLE),
                 Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
                 null, 
                 GroupingCriteria.GROUPING_YEARLY);
@@ -203,7 +203,7 @@ public class AmpSchemaComponentsTests extends ReportingTestCase {
         for (boolean isSummary : Arrays.asList(true, false)) {
             for (String hierName : HIERARCHIES_TO_TRY) {
                 ReportSpecificationImpl spec = buildComponentReport(String.format("%s summary: %b", hierName, isSummary), 
-                        Arrays.asList(ColumnConstants.PROJECT_TITLE, hierName), 
+                        Arrays.asList(ColumnConstants.PROJECT_TITLE, hierName),
                         Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
                         Arrays.asList(hierName), 
                         GroupingCriteria.GROUPING_YEARLY);

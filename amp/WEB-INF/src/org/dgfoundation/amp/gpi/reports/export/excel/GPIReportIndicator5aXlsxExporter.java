@@ -1,12 +1,8 @@
 package org.dgfoundation.amp.gpi.reports.export.excel;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -15,15 +11,11 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
-import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.gpi.reports.GPIRemark;
 import org.dgfoundation.amp.gpi.reports.GPIReport;
 import org.dgfoundation.amp.gpi.reports.GPIReportConstants;
 import org.dgfoundation.amp.gpi.reports.GPIReportOutputColumn;
 import org.dgfoundation.amp.gpi.reports.GPIReportUtils;
-import org.digijava.kernel.ampapi.endpoints.gpi.GPIDataService;
-import org.digijava.module.common.util.DateTimeUtil;
 
 /**
  * @author Viorel Chihai
@@ -161,7 +153,7 @@ public class GPIReportIndicator5aXlsxExporter extends GPIReportXlsxExporter {
     }
 
     private String getColumnHeaderLabel(String columnName) {
-        return INDICATOR_5A_COLUMN_LABELS.containsKey(columnName) ? INDICATOR_5A_COLUMN_LABELS.get(columnName)
-                : columnName;
+        return getColumnHeaderLabel(GPIReportConstants.INDICATOR_5A_COLUMN_LABELS, columnName);
     }
+    
 }

@@ -46,15 +46,15 @@
 			<li style="margin-left: -20px; ">
 				<table>
 					<tr>
-						<td valign="top"><input onclick="toggleCheckChildren(this);if(typeof buildLabels == 'function') buildLabels();" type="checkbox" value="${entity.uniqueId}" name="${selectedEntityIds}"  ${parentId}  ${checked}/></td>
+						<td width="10px" valign="top"><input onclick="toggleCheckChildren(this);if(typeof buildLabels ==
+						'function') buildLabels();" type="checkbox" value="${entity.uniqueId}" name="${selectedEntityIds}"  ${parentId}  ${checked}/></td>
 						<td>
-							<span style="font-family: Arial; font-size: 12px;">
+							<span class="filter-item-label">
 								<c:if test="${entity.translateable}">
 									<digi:trn><c:out value="${entity.label}"/></digi:trn> 
 								</c:if>
 								<c:if test="${!entity.translateable}">
 									<c:out value="${entity.label}"/> 
-									
 								</c:if>
 							</span>
 							<div style="display:none" class="additionalSearchStringMarker">

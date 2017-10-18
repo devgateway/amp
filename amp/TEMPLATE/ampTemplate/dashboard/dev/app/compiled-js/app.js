@@ -106,7 +106,7 @@ _.extend(App.prototype, BackboneDash.Events, {
           }
       }
 
-      var dashboardTranslateKeys = JSON.parse("{\r\n\"amp.common:footer\": \"Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and DGF\",\r\n\r\n\"amp.common:title\": \"AMP\",\r\n\"amp.common:title-desktop\": \"Desktop\",\r\n\"amp.common:subtitle-my-desktop\": \"My Desktop\",\r\n\"amp.common:subtitle-add-tab\": \"Add Tab\",\r\n\"amp.common:subtitle-tab-manager\": \"Tab Manager\",\r\n\"amp.common:title-reports\": \"Reports\",\r\n\"amp.common:subtitle-all-reports\": \"All Reports\",\r\n\"amp.common:subtitle-fav-reports\": \"Favourite Reports\",\r\n\"amp.common:subtitle-report-generator\": \"Report Generator\",\r\n\"amp.common:subtitle-saiku\": \"Saiku\",\r\n\"amp.common:title-documents\": \"Documents\",\r\n\"amp.common:title-dashboards\": \"Dashboards\",\r\n\"amp.common:subtitle-gis\": \"New GIS (BETA)\",\r\n\"amp.common:subtitle-dashboards\": \"New Dashboard (BETA)\",\r\n\"amp.common:subtitle-dashboard-generator\": \"Dashboard Generator\",\r\n\"amp.common:subtitle-donor-profile\": \"Donor Profile\",\r\n\"amp.common:subtitle-region-profile\": \"Region Profile\",\r\n\"amp.common:subtitle-sector-profile\": \"Sector Profile\",\r\n\"amp.common:subtitle-executing-profile\": \"Executing Agency Profile\",\r\n\"amp.common:subtitle-beneficiary-profile\": \"Beneficiary Ministry Profile\",\r\n\"amp.common:title-tools\": \"Tools\",\r\n\"amp.common:subtitle-workspace-setup\": \"Workspace Setup\",\r\n\"amp.common:subtitle-advanced-mode\": \"Advanced Mode\",\r\n\"amp.common:subtitle-search\": \"Search\",\r\n\"amp.common:subtitle-addressbook\": \"Address Book\",\r\n\"amp.common:title-help\": \"Help\",\r\n\"amp.common:subtitle-amp-help\": \"AMP Help\",\r\n\"amp.common:subtitle-glossary\": \"Glossary\",\r\n\"amp.common:subtitle-email-support-team\": \"Email Support Team\",\r\n\"amp.common:title-logout\": \"Logout\",\r\n\"amp.common:filters-loading\": \"Loading...\",\r\n\"amp.dashboard:page-title\":\"AMP Dashboards\",\r\n\"amp.dashboard:loading\": \"Loading...\",\r\n\"amp.dashboard:title-projectdata\": \"Project Data\",\r\n\"amp.dashboard:sub-title-projectdata\": \"View where projects are being implemented throughout the country.\",\r\n\"amp.dashboard:title-Country\": \"Country\",\r\n\"amp.dashboard:title-Region\": \"Region\",\r\n\"amp.dashboard:title-Zone\": \"Zone\",\r\n\"amp.dashboard:title-District\": \"District\",\r\n\"amp.dashboard:chart-reset\": \"reset others\",\r\n\"amp.dashboard:chart-radioui-commitments\": \"Commitments\",\r\n\"amp.dashboard:chart-radioui-disbursements\": \"Disbursements\",\r\n\"amp.dashboard:filters-none-applied\": \"No filters applied\",\r\n\"amp.dashboard:close\": \"Close\",\r\n\"amp.dashboard:modal-sorry\": \"Sorry for any inconvenience\",\r\n\"amp.dashboard:share-dashboard-top\": \"Share dashboard\",\r\n\"amp.dashboard:share-dashboard\": \"Share this dashboard view\",\r\n\"amp.dashboard:share-link\": \"Link\",\r\n\"amp.dashboard:of\": \"of\",\r\n\"amp.dashboard:tooltip-predict-otherseries\": \"TRANSLATEME\",\r\n\"amp.dashboard:total\": \"total\",\r\n\"amp.common:title\": \"AMP Toolbar\",\r\n\"amp.common:title-filters\": \"Filters\",\r\n\"amp.dashboard:chart-TopDonorAgencies\": \"Top Donor Agencies\",\r\n\"amp.dashboard:chart-TopDonorGroups\": \"Top Donor Groups\",\r\n\"amp.dashboard:chart-TopRegions\": \"Top Regions\",\r\n\"amp.dashboard:chart-TopSectors\": \"Top Sectors\",\r\n\"amp.dashboard:chart-AidPredictability\": \"Aid Predictability\",\r\n\"amp.dashboard:chart-FundingType\": \"Funding Type\",\r\n\"amp.dashboard:chart-ResponsibleOrganizations\": \"Responsible Organizations\",\r\n\"amp.dashboard:chart-BeneficiaryAgencies\": \"Beneficiary Agencies\",\r\n\"amp.dashboard:chart-ExecutingAgencies\": \"Executing Agencies\",\r\n\"amp.dashboard:chart-ImplementingAgencies\": \"Implementing Agencies\",\r\n\"amp.dashboard:chart-Peace-buildingandState-buildingGoals\": \"Peace-building and State-building Goals\",\r\n\"amp.dashboard:predictability-planned\": \"Planned\",\r\n\"amp.dashboard:predictability-actual\": \"Actual\",\r\n\"amp.dashboard:chart-FundingType-Grant\": \"Grant\",\r\n\"amp.dashboard:chart-FundingType-Loan\": \"Loan\",\r\n\"amp.dashboard:chart-FundingType-others\": \"Others\",\r\n\"amp.dashboard:chart-TopRegions-DistrictUndefined\": \"District: U\",\r\n\"amp.dashboard:chart-TopRegions-others\": \"Others\",\r\n\"amp.dashboard:chart-TopSectors-others\": \"Others\",\r\n\"amp.dashboard:chart-TopDonorAgencies-others\": \"Others\",\r\n\"amp.dashboard:chart-TopDonorGroups-others\": \"Others\",\r\n\"amp.dashboard:chart-ResponsibleOrganizations-others\": \"Others\",\r\n\"amp.dashboard:chart-BeneficiaryAgencies-others\": \"Others\",\r\n\"amp.dashboard:chart-ExecutingAgencies-others\": \"Others\",\r\n\"amp.dashboard:chart-ImplementingAgencies-others\": \"Others\",\r\n\"amp.dashboard:chart-Peace-buildingandState-buildingGoals-others\":\"Others\",\r\n\"amp.dashboard:filters-edit\":\"edit filters\",\r\n\"amp.dashboard:dashboard-settings\":\"Settings\",\r\n\"amp.dashboard:settings-edit\":\"edit settings\",\r\n\"amp.dashboard:download-amount\":\"Amount\",\r\n\"amp.dashboard:download-preview\":\"Preview:\",\r\n\"amp.dashboard:download-rendering\":\"Rendering...\",\r\n\"amp.dashboard:download-download-chart\":\"Download chart\",\r\n\"amp.dashboard:download-download-data\":\"Download data\",\r\n\"amp.dashboard:chart-no-data-available\":\"No Data Available\",\r\n\"amp.dashboard:chart-loading-saved-settings\":\"Loading saved settings...\",\r\n\"amp.dashboard:filters-show-settings\":\"Show filter settings\",\r\n\"amp.dashboard:filters-chart-legends-Grouped\":\"Grouped\",\r\n\"amp.dashboard:filters-chart-legends-Stacked\":\"Stacked\",\r\n\"amp.dashboard:of-total\": \"of total\",\r\n\"amp.dashboard:aid-predictability-actual-disbursements\": \"Actual Disbursements\",\r\n\"amp.dashboard:aid-predictability-planned-disbursements\": \"Planned Disbursements\",\r\n\"amp.dashboard:filters-hide-details\": \"Hide filter details\",\r\n\"amp.dashboard:saving-state\": \"Saving dashboard state, please wait...\",\r\n\"amp.dashboard:date-range\": \"Date Range\",\r\n\"amp.dashboard:currency\" : \"Currency\",\r\n\"amp.dashboard:type\" : \"Type\",\r\n\"amp.dashboard:year\" : \"Year\",\r\n\"amp.dashboard:ftype-actual-commitment\": \"Actual Commitments\",\r\n\"amp.dashboard:ftype-actual-disbursement\": \"Actual Disbursements\",\r\n\"amp.dashboard:ftype-actual-expenditure\": \"Actual Expenditures\",\r\n\"amp.dashboard:ftype-planned-commitment\": \"Planned Commitments\" ,\r\n\"amp.dashboard:ftype-planned-disbursement\":\t\"Planned Disbursements\" ,\r\n\"amp.dashboard:ftype-planned-expenditures\":\t\"Planned Expenditures\",\r\n\"amp.dashboard:chart-tops-table-projecttitle\": \"Project Title\",\r\n\"amp.dashboard:chart-tops-table-amount\": \"Amount\",\r\n\"amp.dashboard:chart-tops-table-loadmore\": \"load more\",\r\n\"amp.dashboard:chart-tops-inunits\": \"In units\",\r\n\"amp.dashboard:chart-tops-inthousands\": \"In thousands\",\r\n\"amp.dashboard:chart-tops-inmillions\": \"In millions\",\r\n\"amp.dashboard:chart-tops-detail-inthousands\": \"Amounts in Thousands (000)\",\r\n\"amp.dashboard:chart-tops-detail-inmillions\": \"Amounts in Millions (000 000)\",\r\n\"amp.dashboard:chart-tops-detail-inbillions\": \"Amounts in Billions (000 000 000)\",\r\n\"amp.dashboard:chart-thousand\": \"k\",\r\n\"amp.dashboard:chart-million\": \"M\",\r\n\"amp.dashboard:chart-billion\": \"B\",\r\n\"amp.dashboard:chart-trillion\": \"T\",\r\n\"amp.dashboard:chart-peta\": \"P\",\r\n\"amp.dashboard:chart-exa\": \"E\",\r\n\"amp.dashboard:chart-swap-axes\": \"Swap Axes\",\r\n\"amp.dashboard:chart-HeatMapbySectorandDonorGroup\":\"Sector Fragmentation\",\r\n\"amp.dashboard:chart-HeatMapbyLocationandDonorGroup\":\"Location Fragmentation\",\r\n\"amp.dashboard:chart-HeatMapbyProgramandDonorGroup\":\"Program Fragmentation\",\r\n\"amp.dashboard:chart-heatmap-reset-others\":\"Reset Others\",\r\n\"amp.dashboard:negatives-values\":\"Negative values are not represented in this chart.\",\r\n\"amp.dashboard:negatives-values-parag\":\"Please switch to bar chart or table view to view all values.\",\r\n\"amp.dashboard:chart-heatmap-legends\":\"LEGENDS\",\r\n\"amp.dashboard:chart-heatmap-totals\":\"TOTALS\",\r\n\"amp.dashboard:chart-heatmap-legend-less-than\":\"Less than\",\r\n\"amp.dashboard:chart-heatmap-legend-between\":\"Between\",\r\n\"amp.dashboard:chart-heatmap-legend-and\":\"and\",\r\n\"amp.dashboard:chart-heatmap-legend-more-than\":\"More than\",\r\n\"amp.dashboard:chart-heatmap-others\":\"Others\",\r\n\"amp.dashboard:percentage\": \"Percentage\",\r\n\"amp.dashboard:chart-heatmap-help-text-location\":\"Each cell represents an intersection between a donor group and a location and represents how much that funder contributes to the total funding received by that location.\",\r\n\"amp.dashboard:chart-heatmap-help-text-sector\":\"Each cell represents an intersection between a donor group and a sector and represents how much that funder contributes to the total funding received by that sector.\",\r\n\"amp.dashboard:chart-heatmap-help-text-program\":\"Each cell represents an intersection between a donor group and a program and represents how much that funder contributes to the total funding received by that program.\",\r\n\"amp.dashboard:chart-tooltip-pie-chart[title]\":\"View data in pie chart\",\r\n\"amp.dashboard:chart-tooltip-bar-chart[title]\":\"View data in bar chart\",\r\n\"amp.dashboard:chart-tooltip-table-chart[title]\":\"View data in table format\",\r\n\"amp.dashboard:chart-tooltip-multibar-chart[title]\":\"View data in multibar chart\",\r\n\"amp.dashboard:chart-tooltip-download-chart[title]\":\"Download image or table\",\r\n\"amp.dashboard:chart-tooltip-expand-chart[title]\":\"Expand chart\",\r\n\"amp.dashboard:chart-tooltip-collapse-chart[title]\":\"Collapse chart\",\r\n\"amp.dashboard:chart-tooltip-heatmap-chart[title]\":\"View heat map\"\r\n}");
+      var dashboardTranslateKeys = JSON.parse("{\n\"amp.common:footer\": \"Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and DG\",\n\n\"amp.common:title\": \"AMP\",\n\"amp.common:title-desktop\": \"Desktop\",\n\"amp.common:subtitle-my-desktop\": \"My Desktop\",\n\"amp.common:subtitle-add-tab\": \"Add Tab\",\n\"amp.common:subtitle-tab-manager\": \"Tab Manager\",\n\"amp.common:title-reports\": \"Reports\",\n\"amp.common:subtitle-all-reports\": \"All Reports\",\n\"amp.common:subtitle-fav-reports\": \"Favourite Reports\",\n\"amp.common:subtitle-report-generator\": \"Report Generator\",\n\"amp.common:subtitle-saiku\": \"Saiku\",\n\"amp.common:title-documents\": \"Documents\",\n\"amp.common:title-dashboards\": \"Dashboards\",\n\"amp.common:subtitle-gis\": \"New GIS (BETA)\",\n\"amp.common:subtitle-dashboards\": \"New Dashboard (BETA)\",\n\"amp.common:subtitle-dashboard-generator\": \"Dashboard Generator\",\n\"amp.common:subtitle-donor-profile\": \"Donor Profile\",\n\"amp.common:subtitle-region-profile\": \"Region Profile\",\n\"amp.common:subtitle-sector-profile\": \"Sector Profile\",\n\"amp.common:subtitle-executing-profile\": \"Executing Agency Profile\",\n\"amp.common:subtitle-beneficiary-profile\": \"Beneficiary Ministry Profile\",\n\"amp.common:title-tools\": \"Tools\",\n\"amp.common:subtitle-workspace-setup\": \"Workspace Setup\",\n\"amp.common:subtitle-advanced-mode\": \"Advanced Mode\",\n\"amp.common:subtitle-search\": \"Search\",\n\"amp.common:subtitle-addressbook\": \"Address Book\",\n\"amp.common:title-help\": \"Help\",\n\"amp.common:subtitle-amp-help\": \"AMP Help\",\n\"amp.common:subtitle-glossary\": \"Glossary\",\n\"amp.common:subtitle-email-support-team\": \"Email Support Team\",\n\"amp.common:title-logout\": \"Logout\",\n\"amp.common:filters-loading\": \"Loading...\",\n\"amp.dashboard:page-title\":\"AMP Dashboards\",\n\"amp.dashboard:loading\": \"Loading...\",\n\"amp.dashboard:title-projectdata\": \"Project Data\",\n\"amp.dashboard:sub-title-projectdata\": \"View where projects are being implemented throughout the country.\",\n\"amp.dashboard:title-Country\": \"Country\",\n\"amp.dashboard:title-Region\": \"Region\",\n\"amp.dashboard:title-Zone\": \"Zone\",\n\"amp.dashboard:title-District\": \"District\",\n\"amp.dashboard:chart-reset\": \"reset others\",\n\"amp.dashboard:chart-radioui-commitments\": \"Commitments\",\n\"amp.dashboard:chart-radioui-disbursements\": \"Disbursements\",\n\"amp.dashboard:filters-none-applied\": \"No filters applied\",\n\"amp.dashboard:close\": \"Close\",\n\"amp.dashboard:modal-sorry\": \"Sorry for any inconvenience\",\n\"amp.dashboard:share-dashboard-top\": \"Share dashboard\",\n\"amp.dashboard:share-dashboard\": \"Share this dashboard view\",\n\"amp.dashboard:share-link\": \"Link\",\n\"amp.dashboard:of\": \"of\",\n\"amp.dashboard:tooltip-predict-otherseries\": \"TRANSLATEME\",\n\"amp.dashboard:total\": \"total\",\n\"amp.common:title\": \"AMP Toolbar\",\n\"amp.common:title-filters\": \"Filters\",\n\"amp.dashboard:chart-TopDonorAgencies\": \"Top Donor Agencies\",\n\"amp.dashboard:chart-TopDonorGroups\": \"Top Donor Groups\",\n\"amp.dashboard:chart-TopRegions\": \"Top Regions\",\n\"amp.dashboard:chart-TopSectors\": \"Top Sectors\",\n\"amp.dashboard:chart-AidPredictability\": \"Aid Predictability\",\n\"amp.dashboard:chart-FundingType\": \"Funding Type\",\n\"amp.dashboard:chart-ResponsibleOrganizations\": \"Responsible Organizations\",\n\"amp.dashboard:chart-BeneficiaryAgencies\": \"Beneficiary Agencies\",\n\"amp.dashboard:chart-ExecutingAgencies\": \"Executing Agencies\",\n\"amp.dashboard:chart-ImplementingAgencies\": \"Implementing Agencies\",\n\"amp.dashboard:chart-Peace-buildingandState-buildingGoals\": \"Peace-building and State-building Goals\",\n\"amp.dashboard:predictability-planned\": \"Planned\",\n\"amp.dashboard:predictability-actual\": \"Actual\",\n\"amp.dashboard:chart-FundingType-Grant\": \"Grant\",\n\"amp.dashboard:chart-FundingType-Loan\": \"Loan\",\n\"amp.dashboard:chart-FundingType-others\": \"Others\",\n\"amp.dashboard:chart-TopRegions-DistrictUndefined\": \"District: U\",\n\"amp.dashboard:chart-TopRegions-others\": \"Others\",\n\"amp.dashboard:chart-TopSectors-others\": \"Others\",\n\"amp.dashboard:chart-TopDonorAgencies-others\": \"Others\",\n\"amp.dashboard:chart-TopDonorGroups-others\": \"Others\",\n\"amp.dashboard:chart-ResponsibleOrganizations-others\": \"Others\",\n\"amp.dashboard:chart-BeneficiaryAgencies-others\": \"Others\",\n\"amp.dashboard:chart-ExecutingAgencies-others\": \"Others\",\n\"amp.dashboard:chart-ImplementingAgencies-others\": \"Others\",\n\"amp.dashboard:chart-Peace-buildingandState-buildingGoals-others\":\"Others\",\n\"amp.dashboard:filters-edit\":\"edit filters\",\n\"amp.dashboard:dashboard-settings\":\"Settings\",\n\"amp.dashboard:settings-edit\":\"edit settings\",\n\"amp.dashboard:download-amount\":\"Amount\",\n\"amp.dashboard:download-preview\":\"Preview:\",\n\"amp.dashboard:download-rendering\":\"Rendering...\",\n\"amp.dashboard:download-download-chart\":\"Download chart\",\n\"amp.dashboard:download-download-data\":\"Download data\",\n\"amp.dashboard:chart-no-data-available\":\"No Data Available\",\n\"amp.dashboard:chart-loading-saved-settings\":\"Loading saved settings...\",\n\"amp.dashboard:filters-show-settings\":\"Show filter settings\",\n\"amp.dashboard:filters-chart-legends-Grouped\":\"Grouped\",\n\"amp.dashboard:filters-chart-legends-Stacked\":\"Stacked\",\n\"amp.dashboard:of-total\": \"of total\",\n\"amp.dashboard:aid-predictability-actual-disbursements\": \"Actual Disbursements\",\n\"amp.dashboard:aid-predictability-planned-disbursements\": \"Planned Disbursements\",\n\"amp.dashboard:filters-hide-details\": \"Hide filter details\",\n\"amp.dashboard:saving-state\": \"Saving dashboard state, please wait...\",\n\"amp.dashboard:date-range\": \"Date Range\",\n\"amp.dashboard:currency\" : \"Currency\",\n\"amp.dashboard:type\" : \"Type\",\n\"amp.dashboard:year\" : \"Year\",\n\"amp.dashboard:ftype-actual-commitment\": \"Actual Commitments\",\n\"amp.dashboard:ftype-actual-disbursement\": \"Actual Disbursements\",\n\"amp.dashboard:ftype-actual-expenditure\": \"Actual Expenditures\",\n\"amp.dashboard:ftype-planned-commitment\": \"Planned Commitments\" ,\n\"amp.dashboard:ftype-planned-disbursement\":\t\"Planned Disbursements\" ,\n\"amp.dashboard:ftype-planned-expenditures\":\t\"Planned Expenditures\",\n\"amp.dashboard:chart-tops-table-projecttitle\": \"Project Title\",\n\"amp.dashboard:chart-tops-table-amount\": \"Amount\",\n\"amp.dashboard:chart-tops-table-loadmore\": \"load more\",\n\"amp.dashboard:chart-tops-inunits\": \"In units\",\n\"amp.dashboard:chart-tops-inthousands\": \"In thousands\",\n\"amp.dashboard:chart-tops-inmillions\": \"In millions\",\n\"amp.dashboard:chart-tops-detail-inthousands\": \"Amounts in Thousands (000)\",\n\"amp.dashboard:chart-tops-detail-inmillions\": \"Amounts in Millions (000 000)\",\n\"amp.dashboard:chart-tops-detail-inbillions\": \"Amounts in Billions (000 000 000)\",\n\"amp.dashboard:chart-thousand\": \"k\",\n\"amp.dashboard:chart-million\": \"M\",\n\"amp.dashboard:chart-billion\": \"B\",\n\"amp.dashboard:chart-trillion\": \"T\",\n\"amp.dashboard:chart-peta\": \"P\",\n\"amp.dashboard:chart-exa\": \"E\",\n\"amp.dashboard:chart-swap-axes\": \"Swap Axes\",\n\"amp.dashboard:chart-HeatMapbySectorandDonorGroup\":\"Sector Fragmentation\",\n\"amp.dashboard:chart-HeatMapbyLocationandDonorGroup\":\"Location Fragmentation\",\n\"amp.dashboard:chart-HeatMapbyProgramandDonorGroup\":\"Program Fragmentation\",\n\"amp.dashboard:chart-heatmap-reset-others\":\"Reset Others\",\n\"amp.dashboard:negatives-values\":\"Negative values are not represented in this chart.\",\n\"amp.dashboard:negatives-values-parag\":\"Please switch to bar chart or table view to view all values.\",\n\"amp.dashboard:chart-heatmap-legends\":\"LEGENDS\",\n\"amp.dashboard:chart-heatmap-totals\":\"TOTALS\",\n\"amp.dashboard:chart-heatmap-legend-less-than\":\"Less than\",\n\"amp.dashboard:chart-heatmap-legend-between\":\"Between\",\n\"amp.dashboard:chart-heatmap-legend-and\":\"and\",\n\"amp.dashboard:chart-heatmap-legend-more-than\":\"More than\",\n\"amp.dashboard:chart-heatmap-others\":\"Others\",\n\"amp.dashboard:percentage\": \"Percentage\",\n\"amp.dashboard:chart-heatmap-legend-n-a\": \"N/A\",\n\"amp.dashboard:chart-heatmap-help-text-location\":\"Each cell represents an intersection between a donor group and a location and represents how much that funder contributes to the total funding received by that location.\",\n\"amp.dashboard:chart-heatmap-help-text-sector\":\"Each cell represents an intersection between a donor group and a sector and represents how much that funder contributes to the total funding received by that sector.\",\n\"amp.dashboard:chart-heatmap-help-text-program\":\"Each cell represents an intersection between a donor group and a program and represents how much that funder contributes to the total funding received by that program.\",\n\"amp.dashboard:chart-tooltip-pie-chart[title]\":\"View data in pie chart\",\n\"amp.dashboard:chart-tooltip-bar-chart[title]\":\"View data in bar chart\",\n\"amp.dashboard:chart-tooltip-table-chart[title]\":\"View data in table format\",\n\"amp.dashboard:chart-tooltip-multibar-chart[title]\":\"View data in multibar chart\",\n\"amp.dashboard:chart-tooltip-download-chart[title]\":\"Download image or table\",\n\"amp.dashboard:chart-tooltip-expand-chart[title]\":\"Expand chart\",\n\"amp.dashboard:chart-tooltip-collapse-chart[title]\":\"Collapse chart\",\n\"amp.dashboard:chart-tooltip-heatmap-chart[title]\":\"View heat map\"\n}");
       this.translator = new Translator({
         defaultKeys: dashboardTranslateKeys,
         ajax: BackboneDash.wrappedAjax
@@ -211,7 +211,7 @@ _.extend(App.prototype, BackboneDash.Events, {
 
 module.exports = App;
 
-},{"./backbone-dash":3,"./check-support":14,"./models/amp-user.js":15,"./models/saved-dashes-collection.js":25,"./views/fail":35,"./views/main":37,"amp-filter/src/main":67,"amp-settings/src/index":91,"amp-state/index":95,"amp-translate":96,"amp-url/index":97,"jquery":"jquery","underscore":"underscore"}],3:[function(require,module,exports){
+},{"./backbone-dash":3,"./check-support":14,"./models/amp-user.js":15,"./models/saved-dashes-collection.js":25,"./views/fail":35,"./views/main":37,"amp-filter/src/main":69,"amp-settings/src/index":93,"amp-state/index":97,"amp-translate":98,"amp-url/index":99,"jquery":"jquery","underscore":"underscore"}],3:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 
@@ -389,7 +389,7 @@ module.exports = {
   chart: chart
 };
 
-},{"../../../../../../../reamp/tools/log":98,"../../ugly/util":44,"d3":"d3"}],5:[function(require,module,exports){
+},{"../../../../../../../reamp/tools/log":100,"../../ugly/util":44,"d3":"d3"}],5:[function(require,module,exports){
 /*
  * Drawing a bar chart in AMP? Please use ./chart.js instead.
  */
@@ -439,7 +439,7 @@ module.exports = {
   chart: chart
 };
 
-},{"../../../../../../../reamp/tools/log":98,"../../ugly/util":44,"./customized/heatMapChart":11,"d3":"d3","underscore":"underscore"}],6:[function(require,module,exports){
+},{"../../../../../../../reamp/tools/log":100,"../../ugly/util":44,"./customized/heatMapChart":11,"d3":"d3","underscore":"underscore"}],6:[function(require,module,exports){
 /*
  * Drawing a multibar chart in AMP? Please use ./chart.js instead.
  */
@@ -500,7 +500,7 @@ module.exports = {
   chart: chart
 };
 
-},{"../../../../../../../reamp/tools/log":98,"./customized/multiBarChart.js":12}],7:[function(require,module,exports){
+},{"../../../../../../../reamp/tools/log":100,"./customized/multiBarChart.js":12}],7:[function(require,module,exports){
 /*
  * Drawing a pie chart in AMP? Please use ./chart.js instead.
  */
@@ -1174,8 +1174,9 @@ nv.models.heatMapChart = function() {
         	var legendSectionHeight = 20;
         	var height = topSectionHeight + (cubeSize * data[0].values.y.length) + legendSectionHeight;
         	var legendElementHeight = 22;
+        	const undefinedColor = '#666';
         	const noColor = '#FFFFFF';
-        	var categories = getCategoriesByThreshold(noColor, data[0].values.model);
+        	var categories = getCategoriesByThreshold(undefinedColor, noColor, data[0].values.model);
         	
         	$(container[0]).css('height', height + 'px').attr('class', 'dash-chart nvd3-svg heatmap-chart');
         	
@@ -1315,15 +1316,16 @@ nv.models.heatMapChart = function() {
         return chart;
     }
     
-    function getCategoriesByThreshold(noColor, model) {
+    function getCategoriesByThreshold(undefinedColor, noColor, model) {
     	var categories = new Array();
+    	categories.push({min: -99, max: -1, color: undefinedColor});
     	categories.push({min: -1, max: 0, color: noColor});
     	var colors = model.get('heatmap_config').models[0].get('amountColors');
-    	var i = 1;
+    	var i = 2;
     	for (var property in colors) {
     	    if (colors.hasOwnProperty(property)) {
     	    	categories.push({min: parseInt(property), color: colors[property], max: null});
-    	    	if (i > 1) {
+    	    	if (i > 2) {
     	    		categories[i - 1].max = parseInt(property);
     	    	}
     	    	i++;
@@ -1338,12 +1340,12 @@ nv.models.heatMapChart = function() {
 			.append("g")
 			.attr("transform", "translate(0, " + (((data[0].values.y.length + 1) * cubeSize) + 10) + ")")
 			.attr("class", "heatmap-legends-container");
-    	var legendsPool = [app.translator.translateSync("amp.dashboard:chart-heatmap-legend-less-than") + " " + categories[1].max + "%",
-    	                   app.translator.translateSync("amp.dashboard:chart-heatmap-legend-between") + " " + categories[2].min + "% " + app.translator.translateSync("amp.dashboard:chart-heatmap-legend-and") + " <" + categories[2].max + "% ",
+    	var legendsPool = [app.translator.translateSync("amp.dashboard:chart-heatmap-legend-less-than") + " " + categories[2].max + "%",
     	                   app.translator.translateSync("amp.dashboard:chart-heatmap-legend-between") + " " + categories[3].min + "% " + app.translator.translateSync("amp.dashboard:chart-heatmap-legend-and") + " <" + categories[3].max + "% ",
     	                   app.translator.translateSync("amp.dashboard:chart-heatmap-legend-between") + " " + categories[4].min + "% " + app.translator.translateSync("amp.dashboard:chart-heatmap-legend-and") + " <" + categories[4].max + "% ",
     	                   app.translator.translateSync("amp.dashboard:chart-heatmap-legend-between") + " " + categories[5].min + "% " + app.translator.translateSync("amp.dashboard:chart-heatmap-legend-and") + " <" + categories[5].max + "% ",
-    	                   app.translator.translateSync("amp.dashboard:chart-heatmap-legend-more-than") + " " + categories[6].min + "%"];
+    	                   app.translator.translateSync("amp.dashboard:chart-heatmap-legend-between") + " " + categories[6].min + "% " + app.translator.translateSync("amp.dashboard:chart-heatmap-legend-and") + " <" + categories[6].max + "% ",
+    	                   app.translator.translateSync("amp.dashboard:chart-heatmap-legend-more-than") + " " + categories[7].min + "%"];
     	var maxLegendTextWidth = 0;
     	for (var i = 0; i < legendsPool.length; i++) {
     		var auxWidth = calculateTextWidth(legendsPool[i]);
@@ -1361,7 +1363,7 @@ nv.models.heatMapChart = function() {
 				.attr("width", maxLegendTextWidth)
 				.attr("height", legendElementHeight)
 				.attr("class", "bordered")
-				.style("fill", categories[i + 1].color);
+				.style("fill", categories[i + 2].color);
 		
 			var text = legendsContainer.append("text"); 
 			text.attr('font-family', 'Arial')
@@ -1434,7 +1436,11 @@ nv.models.heatMapChart = function() {
 						return auxVal + '%';
 					}
 				} else {
-					return '';
+                    if (auxVal == -1) {
+                        return '';
+                    } else {
+                        return app.translator.translateSync("amp.dashboard:chart-heatmap-legend-n-a");
+					}
 				}
 			})
 			.on("click", function(obj) {				
@@ -2782,11 +2788,14 @@ module.exports = ChartModel.extend({
 				if (auxValue > 0 && auxValue < 1) {
 					//Do nothing;
 				} else {
-					if (values[i].value !== undefined) {
-						values[i].value = Math.floor(auxValue);
-					} else {
-						values[i] = Math.floor(auxValue);
-					}
+                    if (auxValue == null) {
+                        auxValue = -99;
+                    }
+                    if (values[i].value !== undefined) {
+                        values[i].value = Math.floor(auxValue);
+                    } else {
+                        values[i] = Math.floor(auxValue);
+                    }
 				}
 			}
 		}
@@ -3271,7 +3280,7 @@ module.exports = ChartViewBase.extend({
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
 var util = require('../../ugly/util');
-var template = _.template("<div>\r\n\t<span class=\"number-divider-detail\"></span>\r\n</div>\r\n<div class=\"panel-default\">\r\n\t<div class=\"chart-tops-info-container\">\r\n\t\t<div class=\"chart-tops-info-content\">\r\n\t\t\t<% if(error) { %>\r\n\t\t\t\t<div class=\"alert alert-danger\" role=\"alert\">\r\n\t\t\t\t\t<strong><span data-i18n=\"amp.dashboard:error\">Error</span></strong>\r\n\t\t\t\t\t<span data-i18n=\"amp.dashboard:error-detail\">The Aid Management Platform has temporarily encountered an issue. We apologize for any inconvenience.</span>\r\n\t\t\t\t</div>\r\n\t\t\t<% } else if(values === undefined) { %>\r\n\t\t\t\t<img alt=\"\" src=\"/TEMPLATE/ampTemplate/dashboard/build/img/loading-icon.gif\">\r\n\t\t\t\t<span data-i18n=\"amp.dashboard:download-rendering\">Rendering...</span>\r\n\t\t\t<% } else { %>\r\n\t\t\t\t<% var rowClass = ''; %>\r\n\t\t\t\t<table class=\"table table-striped\">\r\n\t\t\t\t\t<thead>\r\n\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t<th class=\"header-row\"><span data-i18n=\"amp.dashboard:chart-tops-table-projecttitle\">Project Title</span></th>\r\n\t\t\t\t\t\t<th class=\"header-row\"><span class=\"funding-type-title-column\"></span> (<%=\r\n\t\t\t\t\t\t\tmodel.get('currency') %>)</th>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t\t</thead>\r\n\t\t\t\t\t<tbody>\r\n\t\t\t\t<% _(values).each(function(row, i) { %>\r\n\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t<td scope=\"row\">\r\n\t\t\t\t\t\t\t<a class=\"title-column\" target=\"_blank\"\r\n\t\t\t\t\t\t\t   href=\"/aim/viewActivityPreview.do~activityId=<%=row.id%>\" title=\"<%=row.name%>\">\r\n\t\t\t\t\t\t\t\t<%=row.name%>\r\n\t\t\t\t\t\t\t</a>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t<td class=\"amount-column\"><%=row.formattedAmount%></td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t<% }) %>\r\n\t\t\t\t\t</tbody>\r\n\t\t\t\t</table>\r\n\t\t\t<% } %>\r\n\t\t\t<div class=\"btn btn-success load-more\" style=\"display: none\"><span\r\n\t\t\t\t\tdata-i18n=\"amp.dashboard:chart-tops-table-loadmore\">load\r\n\t\t\t\tmore</span>...</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n");
+var template = _.template("<div>\n\t<span class=\"number-divider-detail\"></span>\n</div>\n<div class=\"panel-default\">\n\t<div class=\"chart-tops-info-container\">\n\t\t<div class=\"chart-tops-info-content\">\n\t\t\t<% if(error) { %>\n\t\t\t\t<div class=\"alert alert-danger\" role=\"alert\">\n\t\t\t\t\t<strong><span data-i18n=\"amp.dashboard:error\">Error</span></strong>\n\t\t\t\t\t<span data-i18n=\"amp.dashboard:error-detail\">The Aid Management Platform has temporarily encountered an issue. We apologize for any inconvenience.</span>\n\t\t\t\t</div>\n\t\t\t<% } else if(values === undefined) { %>\n\t\t\t\t<img alt=\"\" src=\"/TEMPLATE/ampTemplate/dashboard/build/img/loading-icon.gif\">\n\t\t\t\t<span data-i18n=\"amp.dashboard:download-rendering\">Rendering...</span>\n\t\t\t<% } else { %>\n\t\t\t\t<% var rowClass = ''; %>\n\t\t\t\t<table class=\"table table-striped\">\n\t\t\t\t\t<thead>\n\t\t\t\t\t<tr>\n\t\t\t\t\t\t<th class=\"header-row\"><span data-i18n=\"amp.dashboard:chart-tops-table-projecttitle\">Project Title</span></th>\n\t\t\t\t\t\t<th class=\"header-row\"><span class=\"funding-type-title-column\"></span> (<%=\n\t\t\t\t\t\t\tmodel.get('currency') %>)</th>\n\t\t\t\t\t</tr>\n\t\t\t\t\t</thead>\n\t\t\t\t\t<tbody>\n\t\t\t\t<% _(values).each(function(row, i) { %>\n\t\t\t\t\t<tr>\n\t\t\t\t\t\t<td scope=\"row\">\n\t\t\t\t\t\t\t<a class=\"title-column\" target=\"_blank\"\n\t\t\t\t\t\t\t   href=\"/aim/viewActivityPreview.do~activityId=<%=row.id%>\" title=\"<%=row.name%>\">\n\t\t\t\t\t\t\t\t<%=row.name%>\n\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t</td>\n\t\t\t\t\t\t<td class=\"amount-column\"><%=row.formattedAmount%></td>\n\t\t\t\t\t</tr>\n\t\t\t\t<% }) %>\n\t\t\t\t\t</tbody>\n\t\t\t\t</table>\n\t\t\t<% } %>\n\t\t\t<div class=\"btn btn-success load-more\" style=\"display: none\"><span\n\t\t\t\t\tdata-i18n=\"amp.dashboard:chart-tops-table-loadmore\">load\n\t\t\t\tmore</span>...</div>\n\t\t</div>\n\t</div>\n</div>\n");
 
 module.exports = BackboneDash.View.extend({
     _currentPage: 0,
@@ -3621,7 +3630,7 @@ var getChart = require('../charts/chart');
 var util = require('../../ugly/util');
 var DownloadView = require('./download');
 var ProjectsListModalView = require('./chart-detail-info-modal');
-var template = _.template("<div class=\"col-xs-12 <% if (!model.get('big')) { %>col-md-6<% } else { %> big-chart-<%= model.get('bigN')%> <% } %>\">\r\n\r\n  <div class=\"panel panel-chart\">\r\n    <div class=\"panel-heading fix-title-height\">\r\n      <% if (model.get('showTotal') === true) { %>\r\n\t      <div class=\"pull-right big-number\">\r\n\t        <b class=\"chart-total\"></b>\r\n\t        <span class=\"chart-currency\"></span>\r\n\t      </div>\r\n      <% } %>\r\n      <div class=\"chart-title\">\r\n\t      <h2 data-i18n=\"amp.dashboard:chart-<%= model.get('name').replace(/ /g,'') %>\"><%= model.get('title') %></h2>\r\n\t      <% if (model.get('chartType') === 'fragmentation') { %>\r\n\t      \t<% var help_icon_text = app.translator.translateSync('amp.dashboard:chart-heatmap-help-text-' + model.get('heatmap_type'));%>\r\n\t      \t<img src=\"/TEMPLATE/ampTemplate/dashboard/build/img/questionmark1.png\" class=\"question_mark nv-series\" data-title=\"<%= help_icon_text %>\">\r\n\t      <% } %>\r\n      </div>\r\n    </div>\r\n\t\r\n    <div class=\"panel-body\">\r\n      <div class=\"chart-container\">\r\n        <h3 class=\"dash-chart-diagnostic text-center\"></h3>\r\n        <div class=\"dash-chart-wrap <%= (model.get('alternativeContainerClass') !== undefined ? model.get('alternativeContainerClass') : '')%>\">\r\n        </div>\r\n        <button type=\"button\" class=\"btn btn-link btn-xs pull-right reset\" style=\"display:none\" data-i18n=\"amp.dashboard:chart-reset\">reset others</button>\r\n      </div>\r\n      <div class=\"alert alert-warning negative-values-message\" role=\"alert\">\r\n          <strong data-i18n=\"amp.dashboard:negatives-values\">Negative values are not represented in this chart.</strong><br>\r\n          <span data-i18n=\"amp.dashboard:negatives-values-parag\">Please switch to bar chart or table view to view all values.</span>\r\n      </div>\r\n    </div>\r\n\r\n    <div class=\"panel-footer clearfix\">\r\n\r\n      <div class=\"pull-right\">\r\n\r\n        <div class=\"btn-group\">\r\n          <% _(views).each(function(view) { %>\r\n            <button data-i18n=\"amp.dashboard:chart-tooltip-<%= view %>-chart[title]\" data-toggle=\"tooltip\" title=\"View data in <%= view %> chart\" type=\"button\" data-view=\"<%= view %>\"\r\n                class=\"chart-view btn btn-sm btn-<%= (view === model.get('view')) ? 'primary' : 'default' %>\">\r\n              <span class=\"glyphicon glyphicon-<%= {\r\n                bar: 'signal',\r\n                multibar: 'signal',\r\n                heatmap: 'stats',\r\n                pie: 'adjust',\r\n                table: 'th-list'\r\n              }[view] %>\"></span>\r\n            </button>\r\n          <% }) %>\r\n        </div>\r\n\r\n        <div class=\"btn-group\">\r\n          <a data-i18n=\"amp.dashboard:chart-tooltip-download-chart[title]\" data-toggle=\"tooltip\" title=\"Download image or table\"\r\n            class=\"btn btn-sm btn-default download\"\r\n            download=\"AMP <%= model.get('title') %> - <%= (new Date()).toISOString().split('T')[0] %>.png\"\r\n            target=\"_blank\">\r\n            <span class=\"glyphicon glyphicon-cloud-download\"></span>\r\n          </a>\r\n          <button data-i18n=\"<%= model.get('big') ? 'amp.dashboard:chart-tooltip-collapse-chart[title]' : 'amp.dashboard:chart-tooltip-expand-chart[title]' %>\" data-toggle=\"tooltip\" title=\"<%= model.get('big') ? 'Collapse chart' : 'Expand chart' %>\" type=\"button\" class=\"btn btn-sm btn-<%= model.get('big') ? 'primary' : 'default' %> expand hidden-xs hidden-sm\" <%= model.get('disableResize') ? 'disabled' : ''%>>\r\n            <span class=\"glyphicon glyphicon-fullscreen\"></span>\r\n          </button>\r\n        </div>\r\n\r\n      </div><!-- buttons in .pull-right -->\r\n\r\n      <% if (model.get('adjtype') && model.get('showMeasuresSelector') === true) { %>\r\n        <form class=\"form-inline dash-form dash-adj-type\" role=\"form\">\r\n          <select class=\"form-control like-btn-sm ftype-options\">\r\n            <option>...</option>\r\n            <!-- gets populated after settings load -->\r\n          </select>\r\n          <span class=\"cheat-lineheight\"></span>\r\n        </form>\r\n      <% } %>\r\n      \r\n      <% if (model.get('chartType') === 'fragmentation') { %>\r\n\t\t<form class=\"form-inline dash-form dash-xaxis-options\" role=\"form\">\r\n        \t<select class=\"form-control like-btn-sm xaxis-options\">\r\n            \t<option>...</option>\r\n            \t<!-- gets populated after settings load -->\r\n          \t</select>\r\n          \t<span class=\"cheat-lineheight\"></span>\r\n        </form>\r\n        <button type=\"button\" class=\"btn btn-sm btn-default heatmap-switch\">\r\n            <span data-i18n=\"amp.dashboard:chart-swap-axes\">Swap Axes</span>\r\n        </button>\r\n\t <% } %>\r\n\r\n    </div>\r\n  </div>\r\n\r\n  <div class=\"export-modal\"></div>\r\n</div>");
+var template = _.template("<div class=\"col-xs-12 <% if (!model.get('big')) { %>col-md-6<% } else { %> big-chart-<%= model.get('bigN')%> <% } %>\">\n\n  <div class=\"panel panel-chart\">\n    <div class=\"panel-heading fix-title-height\">\n      <% if (model.get('showTotal') === true) { %>\n\t      <div class=\"pull-right big-number\">\n\t        <b class=\"chart-total\"></b>\n\t        <span class=\"chart-currency\"></span>\n\t      </div>\n      <% } %>\n      <div class=\"chart-title\">\n\t      <h2 data-i18n=\"amp.dashboard:chart-<%= model.get('name').replace(/ /g,'') %>\"><%= model.get('title') %></h2>\n\t      <% if (model.get('chartType') === 'fragmentation') { %>\n\t      \t<% var help_icon_text = app.translator.translateSync('amp.dashboard:chart-heatmap-help-text-' + model.get('heatmap_type'));%>\n\t      \t<img src=\"/TEMPLATE/ampTemplate/dashboard/build/img/questionmark1.png\" class=\"question_mark nv-series\" data-title=\"<%= help_icon_text %>\">\n\t      <% } %>\n      </div>\n    </div>\n\t\n    <div class=\"panel-body\">\n      <div class=\"chart-container\">\n        <h3 class=\"dash-chart-diagnostic text-center\"></h3>\n        <div class=\"dash-chart-wrap <%= (model.get('alternativeContainerClass') !== undefined ? model.get('alternativeContainerClass') : '')%>\">\n        </div>\n        <button type=\"button\" class=\"btn btn-link btn-xs pull-right reset\" style=\"display:none\" data-i18n=\"amp.dashboard:chart-reset\">reset others</button>\n      </div>\n      <div class=\"alert alert-warning negative-values-message\" role=\"alert\">\n          <strong data-i18n=\"amp.dashboard:negatives-values\">Negative values are not represented in this chart.</strong><br>\n          <span data-i18n=\"amp.dashboard:negatives-values-parag\">Please switch to bar chart or table view to view all values.</span>\n      </div>\n    </div>\n\n    <div class=\"panel-footer clearfix\">\n\n      <div class=\"pull-right\">\n\n        <div class=\"btn-group\">\n          <% _(views).each(function(view) { %>\n            <button data-i18n=\"amp.dashboard:chart-tooltip-<%= view %>-chart[title]\" data-toggle=\"tooltip\" title=\"View data in <%= view %> chart\" type=\"button\" data-view=\"<%= view %>\"\n                class=\"chart-view btn btn-sm btn-<%= (view === model.get('view')) ? 'primary' : 'default' %>\">\n              <span class=\"glyphicon glyphicon-<%= {\n                bar: 'signal',\n                multibar: 'signal',\n                heatmap: 'stats',\n                pie: 'adjust',\n                table: 'th-list'\n              }[view] %>\"></span>\n            </button>\n          <% }) %>\n        </div>\n\n        <div class=\"btn-group\">\n          <a data-i18n=\"amp.dashboard:chart-tooltip-download-chart[title]\" data-toggle=\"tooltip\" title=\"Download image or table\"\n            class=\"btn btn-sm btn-default download\"\n            download=\"AMP <%= model.get('title') %> - <%= (new Date()).toISOString().split('T')[0] %>.png\"\n            target=\"_blank\">\n            <span class=\"glyphicon glyphicon-cloud-download\"></span>\n          </a>\n          <button data-i18n=\"<%= model.get('big') ? 'amp.dashboard:chart-tooltip-collapse-chart[title]' : 'amp.dashboard:chart-tooltip-expand-chart[title]' %>\" data-toggle=\"tooltip\" title=\"<%= model.get('big') ? 'Collapse chart' : 'Expand chart' %>\" type=\"button\" class=\"btn btn-sm btn-<%= model.get('big') ? 'primary' : 'default' %> expand hidden-xs hidden-sm\" <%= model.get('disableResize') ? 'disabled' : ''%>>\n            <span class=\"glyphicon glyphicon-fullscreen\"></span>\n          </button>\n        </div>\n\n      </div><!-- buttons in .pull-right -->\n\n      <% if (model.get('adjtype') && model.get('showMeasuresSelector') === true) { %>\n        <form class=\"form-inline dash-form dash-adj-type\" role=\"form\">\n          <select class=\"form-control like-btn-sm ftype-options\">\n            <option>...</option>\n            <!-- gets populated after settings load -->\n          </select>\n          <span class=\"cheat-lineheight\"></span>\n        </form>\n      <% } %>\n      \n      <% if (model.get('chartType') === 'fragmentation') { %>\n\t\t<form class=\"form-inline dash-form dash-xaxis-options\" role=\"form\">\n        \t<select class=\"form-control like-btn-sm xaxis-options\">\n            \t<option>...</option>\n            \t<!-- gets populated after settings load -->\n          \t</select>\n          \t<span class=\"cheat-lineheight\"></span>\n        </form>\n        <button type=\"button\" class=\"btn btn-sm btn-default heatmap-switch\">\n            <span data-i18n=\"amp.dashboard:chart-swap-axes\">Swap Axes</span>\n        </button>\n\t <% } %>\n\n    </div>\n  </div>\n\n  <div class=\"export-modal\"></div>\n</div>");
 
 
 var adjOptTemplate = _.template('<option value="<%=opt.id%>" ' +
@@ -4729,7 +4738,7 @@ module.exports = BackboneDash.View.extend({
   }
 });
 
-},{"../../../../../../../reamp/tools/log":98,"../backbone-dash":3,"underscore":"underscore"}],37:[function(require,module,exports){
+},{"../../../../../../../reamp/tools/log":100,"../backbone-dash":3,"underscore":"underscore"}],37:[function(require,module,exports){
 
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
@@ -4746,7 +4755,7 @@ var PredictabilityChart = require('../models/chart-aid-predictability');
 var FundingTypeChart = require('../models/chart-funding-type');
 
 var template = _.template("<div class=\"container\">\n</div>\n");
-var modalTemplate = _.template("<div class=\"modal fade\" data-keyboard=\"false\" data-backdrop=\"static\" id=\"<%= m.id %>\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">\r\n  <div class=\"modal-dialog <%= m.specialClass %>\">\r\n    <div class=\"modal-content\">\r\n      <div class=\"modal-header\">\r\n        <button type=\"button\" class=\"close\" data-dismiss=\"modal\"><span aria-hidden=\"true\">&times;</span><span data-i18n=\"amp.dashboard:close\" class=\"sr-only\">Close</span></button>\r\n        <h4 class=\"modal-title text-<%= m.tone %>\" data-i18n=\"<%= m.i18nTitle %>\"><%= m.title %></h4>\r\n      </div>\r\n      <div class=\"modal-body\">\r\n        <% if (m.content) { %>\r\n          <%= m.content %>\r\n        <% } %>\r\n        <% if (m.messages) { %>\r\n          <% _(m.messages).each(function(message) { %>\r\n            <p><%= message %></p>\r\n          <% }) %>\r\n        <% } %>\r\n      </div>      \r\n    </div>\r\n  </div>\r\n</div>\r\n");
+var modalTemplate = _.template("<div class=\"modal fade\" data-keyboard=\"false\" data-backdrop=\"static\" id=\"<%= m.id %>\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">\n  <div class=\"modal-dialog <%= m.specialClass %>\">\n    <div class=\"modal-content\">\n      <div class=\"modal-header\">\n        <button type=\"button\" class=\"close\" data-dismiss=\"modal\"><span aria-hidden=\"true\">&times;</span><span data-i18n=\"amp.dashboard:close\" class=\"sr-only\">Close</span></button>\n        <h4 class=\"modal-title text-<%= m.tone %>\" data-i18n=\"<%= m.i18nTitle %>\"><%= m.title %></h4>\n      </div>\n      <div class=\"modal-body\">\n        <% if (m.content) { %>\n          <%= m.content %>\n        <% } %>\n        <% if (m.messages) { %>\n          <% _(m.messages).each(function(message) { %>\n            <p><%= message %></p>\n          <% }) %>\n        <% } %>\n      </div>      \n    </div>\n  </div>\n</div>\n");
 
 var EnabledChartsCollection = require('../models/enabled-charts-collection');
 var HeatmapsConfigCollection = require('../models/heatmaps-config-collection');
@@ -4881,11 +4890,11 @@ module.exports = BackboneDash.View.extend({
 
 });
 
-},{"../backbone-dash":3,"../models/chart-aid-predictability":16,"../models/chart-funding-type":17,"../models/chart-heatmaps":18,"../models/chart-tops":20,"../models/charts-collection":21,"../models/enabled-charts-collection":22,"../models/heatmaps-config-collection":23,"./charts":32,"./controls":33,"amp-boilerplate":48,"amp-state/index":95,"underscore":"underscore"}],38:[function(require,module,exports){
+},{"../backbone-dash":3,"../models/chart-aid-predictability":16,"../models/chart-funding-type":17,"../models/chart-heatmaps":18,"../models/chart-tops":20,"../models/charts-collection":21,"../models/enabled-charts-collection":22,"../models/heatmaps-config-collection":23,"./charts":32,"./controls":33,"amp-boilerplate":48,"amp-state/index":97,"underscore":"underscore"}],38:[function(require,module,exports){
 
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
-var template = _.template("<div class=\"col-xs-12 col-sm-6 col-md-3\">\r\n  <div class=\"panel\">\r\n    <div class=\"panel-body\">\r\n      <h3 data-i18n=\"amp.dashboard:dashboard-settings\" class=\"inline-heading\" style=\"max-width: 50px;overflow-x: visible\">Settings</h3>\r\n      <button type=\"button\" class=\"btn btn-sm btn-default pull-right dash-settings-button\">\r\n        <span class=\"glyphicon glyphicon-edit\"></span>\r\n        <span data-i18n=\"amp.dashboard:settings-edit\">edit settings</span>\r\n      </button>\r\n    </div>\r\n  </div>\r\n</div>\r\n<div id=\"amp-settings\" style=\"display:none;\"></div>\r\n");
+var template = _.template("<div class=\"col-xs-12 col-sm-6 col-md-3\">\n  <div class=\"panel\">\n    <div class=\"panel-body\">\n      <h3 data-i18n=\"amp.dashboard:dashboard-settings\" class=\"inline-heading\" style=\"max-width: 50px;overflow-x: visible\">Settings</h3>\n      <button type=\"button\" class=\"btn btn-sm btn-default pull-right dash-settings-button\">\n        <span class=\"glyphicon glyphicon-edit\"></span>\n        <span data-i18n=\"amp.dashboard:settings-edit\">edit settings</span>\n      </button>\n    </div>\n  </div>\n</div>\n<div id=\"amp-settings\" style=\"display:none;\"></div>\n");
 module.exports = BackboneDash.View.extend({
   events: {
     'click .dash-settings-button': 'editSettings'
@@ -21283,7 +21292,7 @@ _.extend(Widget.prototype, Backbone.Events, {
 		 _.bindAll(this, 'createTranslator', 'createViews','bubbleViewEvents','onMenuRendered');
 	},
 	createTranslator : function() {
-		var defaultKeys = JSON.parse("{\n\"amp.common:footer\": \"Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and DGF\",\n\"amp.common:title\": \"AMP Toolbar\",\n\"amp.common:title-help\": \"Help\",\n\"amp.common:subtitle-amp-help\": \"AMP Help\",\n\"amp.common:subtitle-glossary\": \"Glossary\",\n\"amp.common:subtitle-email-support-team\": \"Email Support Team\",\n\"amp.common:title-logout\": \"Log Out\",\n\"amp.common:platform\": \"Aid Management Platform (AMP)\",\n\"[title]amp.common:platform\": \"Aid Management Platform\",\n\"amp.common:platform-short\": \"AMP\",\n\"amp.common:title-login\": \"Login\",\n\"amp.dashboard:close\": \"Close\",\n\"amp.about:modal.title\": \"About AMP\",\n\"amp.about:credits\": \"Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and Development Gateway Foundation.\",\n\"amp.about:trademark\": \"The Development Gateway and the The Development Gateway logo are trademarks for The Development Gateway Foundation\",\n\"amp.about:rights\": \"All Rights Reserved\",\n\"amp.about:version\": \"Version\"\n}\n\n");
+		var defaultKeys = JSON.parse("{\n\"amp.common:footer\": \"Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and DG\",\n\"amp.common:title\": \"AMP Toolbar\",\n\"amp.common:title-help\": \"Help\",\n\"amp.common:subtitle-amp-help\": \"AMP Help\",\n\"amp.common:subtitle-glossary\": \"Glossary\",\n\"amp.common:subtitle-email-support-team\": \"Email Support Team\",\n\"amp.common:title-logout\": \"Log Out\",\n\"amp.common:platform\": \"Aid Management Platform (AMP)\",\n\"[title]amp.common:platform\": \"Aid Management Platform\",\n\"amp.common:platform-short\": \"AMP\",\n\"amp.common:title-login\": \"Login\",\n\"amp.dashboard:close\": \"Close\",\n\"amp.about:modal.title\": \"About AMP\",\n\"amp.about:credits\": \"Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and Development Gateway Foundation.\",\n\"amp.about:trademark\": \"The Development Gateway and the The Development Gateway logo are trademarks for The Development Gateway Foundation\",\n\"amp.about:rights\": \"All Rights Reserved\",\n\"amp.about:version\": \"Version\"\n}\n\n");
 		this.translator = new Translator({
 			defaultKeys : defaultKeys
 		});
@@ -21330,7 +21339,7 @@ module.exports = {
 };
 window.boilerplate = Widget;
 
-},{"./src/models/amp-layout-model.js":51,"./src/views/footer-view.js":54,"./src/views/header-view.js":55,"amp-translate":96,"backbone":"backbone","bootstrap/dist/js/bootstrap":49,"jquery":"jquery","underscore":"underscore"}],49:[function(require,module,exports){
+},{"./src/models/amp-layout-model.js":52,"./src/views/footer-view.js":56,"./src/views/header-view.js":57,"amp-translate":98,"backbone":"backbone","bootstrap/dist/js/bootstrap":49,"jquery":"jquery","underscore":"underscore"}],49:[function(require,module,exports){
 /*!
  * Bootstrap v3.3.0 (http://getbootstrap.com)
  * Copyright 2011-2014 Twitter, Inc.
@@ -23624,7 +23633,14 @@ module.exports = Backbone.Collection.extend({
 
 });
 
-},{"../models/amp-menus-model.js":52,"backbone":"backbone"}],51:[function(require,module,exports){
+},{"../models/amp-menus-model.js":53,"backbone":"backbone"}],51:[function(require,module,exports){
+var Backbone = require('backbone');
+module.exports  = Backbone.Collection.extend({
+	url: function() {
+		return '/rest/translations/languages'
+	}
+});
+},{"backbone":"backbone"}],52:[function(require,module,exports){
 var Backbone = require('backbone');
 
 module.exports = Backbone.Model.extend({
@@ -23641,7 +23657,7 @@ module.exports = Backbone.Model.extend({
 
 });
 
-},{"backbone":"backbone"}],52:[function(require,module,exports){
+},{"backbone":"backbone"}],53:[function(require,module,exports){
 var Backbone = require('backbone');
 
 module.exports = Backbone.Model.extend({
@@ -23659,7 +23675,13 @@ module.exports = Backbone.Model.extend({
 
 });
 
-},{"backbone":"backbone"}],53:[function(require,module,exports){
+},{"backbone":"backbone"}],54:[function(require,module,exports){
+var _ = require('underscore');
+var Backbone = require('backbone');
+module.exports = Backbone.Model.extend({
+	url: '/rest/amp/settings'
+});
+},{"backbone":"backbone","underscore":"underscore"}],55:[function(require,module,exports){
 
 var $ = require('jquery');
 var Backbone = require('backbone');
@@ -23688,13 +23710,13 @@ module.exports = Backbone.View.extend({
 });
 
 
-},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],54:[function(require,module,exports){
+},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],56:[function(require,module,exports){
 
 var Backbone = require('backbone');
 var _ = require('underscore');
 require('bootstrap/dist/js/bootstrap');
 
-var Template = "<style>\r\n    .footerText {\r\n    padding: 0;\r\n    font-family: arial;\r\n    font-size: 11px;\r\n    border: 0px;\r\n    }\r\n    .footer {\r\n    background-color: #8B8B8B;\r\n    color: #FFF;\r\n    margin-top: 0;\r\n    padding-bottom: 10px;\r\n    padding-top: 10px;\r\n    text-align: center;\r\n    }\r\n    .dgf_footer {\r\n    color: #8B8B8B;\r\n    line-height: 18px;\r\n    text-align: center;\r\n    background-color:white;\r\n    padding-top:10px;\r\n    }\r\n    .dgf_footer img {\r\n    line-height: 18px;\r\n    margin-bottom: 5px;\r\n    }\r\n    .loading{   \r\n      margin: 10px 20px 10px 20px;\r\n    }\r\n    \r\n</style>\r\n\r\n<div class=\"footer footerText\">\r\n    AMP <b><%=  properties.ampVersion %></b> build <b><%=  properties.buildDate %></b> - <%= properties.footerText %>\r\n    <% if(showAdminLinks == true  && properties.adminLinks != undefined) { %>\r\n    <a href='<%=  properties.adminLinks[0].url %>'><%=  properties.adminLinks[0].name %></a>\r\n    <% } %>\r\n</div>\r\n<% if(showDGFooter == true)  { %>\r\n<div class=\"dgf_footer footerText\">\r\n    <img src=\"/TEMPLATE/ampTemplate/img_2/dgf_logo_bottom.gif\" class=\"dgf_logo_footer\">\r\n    <br/>\r\n    Development Gateway\r\n    <br/>\r\n    1110 Vermont Ave, NW, Suite 500\r\n    <br/>\r\n    Washington, DC 20005 USA\r\n    <br/>\r\n    info@developmentgateway.org, Tel: +1.202.572.9200, Fax: +1 202.572.9290\r\n</div>\r\n<% } %>\r\n\r\n<% if(properties.trackingEnabled === true) { %>\r\n<!-- Piwik\r\nSite id can be checked here: http://stats.ampsite.net/index.php?module=SitesManager&action=index&idSite=1&period=range&date=last30\r\nAlso,the wiki for piwik: https://wiki.dgfoundation.org/display/AMPDOC/Integrating+AMP+with+Piwik\r\n-->\r\n<script type=\"text/javascript\">\r\n\t  var _paq = _paq || [];\r\n    if (window.PiwikAlreadyFetched === undefined ) {\r\n      _paq.push(['setUserId', \"<%= properties.email %>\"]);\r\n      _paq.push(['setCustomVariable',\r\n          1,\r\n          \"Workspace|WID\",\r\n          \"<%= properties.workspace %>|<%= properties.workspaceId %>\",\r\n          \"page\"]);\r\n  \t  _paq.push([\"trackPageView\"]);\r\n  \t  _paq.push([\"enableLinkTracking\"]);\r\n\r\n      /* TDK: keep track of whether we put the script DOM node on the page already\r\n       *   in case the page reparses this javascript on another modification.\r\n       */\r\n      window.PiwikAlreadyFetched = true;\r\n\r\n      /* Stock Piwik code: */\r\n  \t  (function() {\r\n  \t    var u=\"<%=  properties.trackingUrl %>\";\r\n  \t    _paq.push([\"setTrackerUrl\", u+\"piwik.php\"]);\r\n  \t    _paq.push([\"setSiteId\", \"<%=properties.siteId %>\"]);\r\n  \t    var d=document, g=d.createElement(\"script\"), s=d.getElementsByTagName(\"script\")[0]; g.type=\"text/javascript\";\r\n  \t    g.defer=true; g.async=true; g.src=u+\"piwik.js\"; s.parentNode.insertBefore(g,s);\r\n  \t  })();\r\n    }\r\n\t</script>\r\n<!-- End Piwik Code -->\r\n<% } %>\r\n";
+var Template = "<style>\r\n    .footerText {\r\n    padding: 0;\r\n    font-family: arial;\r\n    font-size: 11px;\r\n    border: 0px;\r\n    }\r\n    .footer {\r\n    background-color: #8B8B8B;\r\n    color: #FFF;\r\n    margin-top: 0;\r\n    padding-bottom: 10px;\r\n    padding-top: 10px;\r\n    text-align: center;\r\n    }\r\n    .dgf_footer {\r\n    color: #8B8B8B;\r\n    line-height: 18px;\r\n    text-align: center;\r\n    background-color:white;\r\n    padding-top:10px;\r\n    }\r\n    .dgf_footer img {\r\n    line-height: 18px;\r\n    margin-bottom: 5px;\r\n    }\r\n    .loading{   \r\n      margin: 10px 20px 10px 20px;\r\n    }\r\n    \r\n</style>\r\n\r\n<div class=\"footer footerText\">\r\n    AMP <b><%=  properties.ampVersion %></b> build <b><%=  properties.buildDate %></b> - <%= properties.footerText %>\r\n    <% if(showAdminLinks == true  && properties.adminLinks != undefined) { %>\r\n    <a href='<%=  properties.adminLinks[0].url %>'><%=  properties.adminLinks[0].name %></a>\r\n    <% } %>\r\n</div>\r\n<% if(showDGFooter == true)  { %>\r\n<div class=\"dgf_footer footerText\">\r\n    <img src=\"/TEMPLATE/ampTemplate/img_2/dgf_logo_bottom.gif\" class=\"dgf_logo_footer\">\r\n    <br/>\r\n    Development Gateway\r\n    <br/>\r\n    1110 Vermont Ave, NW, Suite 500\r\n    <br/>\r\n    Washington, DC 20005 USA\r\n    <br/>\r\n    info@developmentgateway.org, Tel: +1.202.572.9200\r\n</div>\r\n<% } %>\r\n\r\n<% if(properties.trackingEnabled === true) { %>\r\n<!-- Piwik\r\nSite id can be checked here: http://stats.ampsite.net/index.php?module=SitesManager&action=index&idSite=1&period=range&date=last30\r\nAlso,the wiki for piwik: https://wiki.dgfoundation.org/display/AMPDOC/Integrating+AMP+with+Piwik\r\n-->\r\n<script type=\"text/javascript\">\r\n\t  var _paq = _paq || [];\r\n    if (window.PiwikAlreadyFetched === undefined ) {\r\n      _paq.push(['setUserId', \"<%= properties.email %>\"]);\r\n      _paq.push(['setCustomVariable',\r\n          1,\r\n          \"Workspace|WID\",\r\n          \"<%= properties.workspace %>|<%= properties.workspaceId %>\",\r\n          \"page\"]);\r\n  \t  _paq.push([\"trackPageView\"]);\r\n  \t  _paq.push([\"enableLinkTracking\"]);\r\n\r\n      /* TDK: keep track of whether we put the script DOM node on the page already\r\n       *   in case the page reparses this javascript on another modification.\r\n       */\r\n      window.PiwikAlreadyFetched = true;\r\n\r\n      /* Stock Piwik code: */\r\n  \t  (function() {\r\n  \t    var u=\"<%=  properties.trackingUrl %>\";\r\n  \t    _paq.push([\"setTrackerUrl\", u+\"piwik.php\"]);\r\n  \t    _paq.push([\"setSiteId\", \"<%=properties.siteId %>\"]);\r\n  \t    var d=document, g=d.createElement(\"script\"), s=d.getElementsByTagName(\"script\")[0]; g.type=\"text/javascript\";\r\n  \t    g.defer=true; g.async=true; g.src=u+\"piwik.js\"; s.parentNode.insertBefore(g,s);\r\n  \t  })();\r\n    }\r\n\t</script>\r\n<!-- End Piwik Code -->\r\n<% } %>\r\n";
 var LayoutModel = require('../models/amp-layout-model.js');
 
 module.exports = Backbone.View.extend({
@@ -23725,23 +23747,25 @@ module.exports = Backbone.View.extend({
 
 });
 
-},{"../models/amp-layout-model.js":51,"backbone":"backbone","bootstrap/dist/js/bootstrap":49,"underscore":"underscore"}],55:[function(require,module,exports){
+},{"../models/amp-layout-model.js":52,"backbone":"backbone","bootstrap/dist/js/bootstrap":49,"underscore":"underscore"}],57:[function(require,module,exports){
 
 var Backbone = require('backbone');
 require('bootstrap/dist/js/bootstrap');
 var _ = require('underscore');
-var Template = "<!-- inline styles used so we can relocate amp-boilerplate module-->\r\n<style>\r\n  /* This directory and then Dashboard & GIS need\r\n   * to be rebuilt with their respective browserify-processes to see\r\n   * changes from this filter-popup due to brfs, see readme.md\r\n   */\r\n  #amp-header {\r\n    font-family: \"Open Sans\",\"Helvetica Neue\",Helvetica,Arial,sans-serif;\r\n  }\r\n  #amp-header .navbar-header>button.navbar-toggle {\r\n    /* fix contracted menu icon to not block map*/\r\n    padding: 2px;\r\n    margin: 4px;\r\n  }\r\n\r\n  #amp-header .container-fluid.ampUserLoggedIn ul.ampPublic,\r\n  #amp-header .container.ampUserLoggedIn ul.ampPublic {\r\n    display: none !important;\r\n  }\r\n\r\n  #amp-header .container-fluid.ampUserLoggedIn ul.ampUserLoggedIn,\r\n  #amp-header .container.ampUserLoggedIn ul.ampUserLoggedIn {\r\n    display: inherit !important;\r\n  }\r\n\r\n  #amp-header .container-fluid ul.ampPublic,\r\n  #amp-header .container ul.ampPublic {\r\n    display: inherit !important;\r\n  }\r\n\r\n  #amp-header .container-fluid ul.ampUserLoggedIn,\r\n  #amp-header .container ul.ampUserLoggedIn {\r\n    display: none !important;\r\n  }\r\n\r\n\r\n  div#amp-header nav div.container,\r\n  div#amp-header nav div.navbar-collapse a,\r\n  div#amp-header nav div.container-fluid,\r\n  div#amp-header nav div.navbar-collapse a {\r\n    font-size: 12px;\r\n  }\r\n\r\n  div#amp-header .navbar-brand {\r\n    font-size: 16px !important;\r\n    color: #E69923;\r\n    text-shadow: 1px 1px 5px #CCC;\r\n    white-space: nowrap;\r\n    padding-bottom: 8px;\r\n  }\r\n\r\n  div#amp-header .double-row .navbar-brand {\r\n    padding-top: 8px;\r\n    height: 41px;\r\n  }\r\n\r\n  /* Several places in AMP include things that will set this\r\n   * back to gigantic margins.\r\n   * 8px feels like generous padding\r\n   * 5px is slightly tight.\r\n   *\r\n   */\r\n  div#amp-header .single-row .nav > li > a {\r\n    padding-right: 6px;\r\n    padding-left: 6px;\r\n  }\r\n  div#amp-header .double-row .nav > li > a{\r\n    padding-right: 10px;\r\n    padding-left: 10px;\r\n    padding-bottom: 8px;\r\n    padding-top: 9px;\r\n  }\r\n\r\n  div#amp-header .double-row #AmpMenus.nav > li:nth-child(1) > a {\r\n    /* For first element, eliminate padding to ensure is flush. */\r\n    padding-left: 0;\r\n  }\r\n\r\n    div#amp-header .workspace-name {\r\n    white-space: nowrap;\r\n    overflow: hidden;\r\n    text-overflow: ellipsis;\r\n  }\r\n    div#amp-header .user-url {\r\n    white-space: nowrap;\r\n    overflow: hidden;\r\n    text-overflow: ellipsis;\r\n  }\r\n\r\n  /* limit size of top level menu to prevent translations that are too long\r\n   * Apply to a span so that that caret doesn't get chopped off.\r\n   */\r\n  /* max-width:\r\n   * 141px is generous, fits ÉTUDES ET DOCUMENTS\r\n   * 124px is minimum to include 3 words (Ministry of ??...)\r\n   * 117px fits TABLEAUX DE BORD\r\n   *\r\n   * div.ampUserLoggedIn in selector makes this effective ONLY when logged in\r\n   * single-row selector only when using that mode\r\n   */\r\n  #amp-header div.ampUserLoggedIn .single-row ul#AmpMenus > .dropdown > a > span.dropdown-text {\r\n    max-width: 141px;\r\n  }\r\n\r\n  #amp-header ul#AmpMenus > .dropdown > a > span.dropdown-text {\r\n    display: inline-block;\r\n    white-space: nowrap;\r\n    overflow: hidden;\r\n    text-overflow: ellipsis;\r\n    color: #3E6C94;\r\n    text-rendering: optimizeLegibility;\r\n  }\r\n\r\n\r\n  #amp-header ul#AmpMenus > .dropdown > a > span.caret {\r\n    /* bump up caret to the height of the truncate-able inline-block next to it */\r\n    padding-bottom: 11px;\r\n    color: rgb(11, 12, 26);\r\n  }\r\n\r\n\r\n  #amp-header .container-fluid.no-gutters,\r\n  #amp-header .container.no-gutters {\r\n    padding-right: 0;\r\n    padding-left: 0;\r\n  }\r\n\r\n  /* No gutters creates space for 1 gridsquare logo.\r\n   * http://julienmelissas.com/no-gutter-column-trick-for-bootstrap/\r\n   */\r\n  #amp-header .container-fluid .row.no-gutters,\r\n  #amp-header .container .row.no-gutters {\r\n    margin-right: 0;\r\n    margin-left: 0;\r\n  }\r\n  #amp-header .container-fluid .row.no-gutters > [class^=\"col-\"],\r\n  #amp-header .container-fluid .row.no-gutters > [class*=\" col-\"],\r\n  #amp-header .container .row.no-gutters > [class^=\"col-\"],\r\n  #amp-header .container .row.no-gutters > [class*=\"col-\"] {\r\n    padding-right: 0;\r\n    padding-left: 0;\r\n  }\r\n\r\n  #amp-header nav > .container-fluid > div.row:nth-child(1),\r\n  #amp-header nav > .container > div.row:nth-child(1) {\r\n    background-color: #FFF;\r\n  }\r\n\r\n  #amp-header nav > .container > div.row:nth-child(2),\r\n  #amp-header nav > .container-fluid > div.row:nth-child(2) {\r\n    border-top: 1px solid #EDEDED;\r\n    background-color: #F7F7F7;\r\n  }\r\n\r\n  #amp-header .container-fluid,\r\n  #amp-header .container {\r\n    background-color: #FFF; /* Fixes gray area in gutter of single-row */\r\n  }\r\n\r\n\r\n/* There is a second set of gutters on the navbar itself. */\r\n  div#amp-header .navbar-collapse.no-gutters{\r\n    padding-right: 0;\r\n    padding-left: 0;\r\n  }\r\n\r\n  /* These four styles avoids setting hard max-widths on these items */\r\n  #amp-header .ampLoggedInMenus {\r\n    width: 95%; /* account for scrollbar */\r\n    text-shadow: 1px 1px 1px #AAA;\r\n  }\r\n\r\n  /* give a bit of extra width to workspace */\r\n  #amp-header ul.nav.navbar-nav.ampLoggedInMenus li:nth-child(1) {\r\n      text-align: right;\r\n  }\r\n  /* user name */\r\n  #amp-header ul.nav.navbar-nav.ampLoggedInMenus li:nth-child(2) {\r\n      text-align: center;\r\n  }\r\n  /* Logout */\r\n  #amp-header ul.nav.navbar-nav.ampLoggedInMenus li:nth-child(3) {\r\n      white-space: nowrap; /* prevent translations of logout from wrapping */\r\n  }\r\n\r\n  div#amp-header div#logincontainer {\r\n    padding-left: 140px; /* IE9 fix that works everywhere: make room for green login button */\r\n  }\r\n\r\n  div#amp-header .login_here {\r\n    margin-top: 3px !important; /* override 7 other specs in amp-wicket, and various copies of amp.css */\r\n  }\r\n\r\n  html.ie9 div#amp-header .login_here {\r\n    margin-top: -11px !important; /* override 7 other specs in amp-wicket, and various copies of amp.css */\r\n  }\r\n\r\n  /******/\r\n  .scrollable-menu {\r\n    height: auto;\r\n    max-height: 400px;\r\n    overflow-x: hidden;\r\n  }\r\n\r\n  .dropdown-submenu {\r\n    position: relative;\r\n  }\r\n\r\n  .dropdown-submenu>.dropdown-menu {\r\n    top: 0;\r\n    left: 100%;\r\n    margin-top: -6px;\r\n    margin-left: -1px;\r\n    -webkit-border-radius: 0 6px 6px 6px;\r\n    -moz-border-radius: 0 6px 6px 6px;\r\n    border-radius: 0 6px 6px 6px;\r\n  }\r\n\r\n  .dropdown-submenu:hover>.dropdown-menu {\r\n    display: block;\r\n  }\r\n\r\n  .dropdown-submenu>a:after {\r\n    display: block;\r\n    content: \" \";\r\n    float: right;\r\n    width: 0;\r\n    height: 0;\r\n    border-color: transparent;\r\n    border-style: solid;\r\n    border-width: 5px 0 5px 5px;\r\n    border-left-color: #cccccc;\r\n    margin-top: 5px;\r\n    margin-right: -10px;\r\n  }\r\n\r\n  .dropdown-submenu:hover>a:after {\r\n    border-left-color: #ffffff;\r\n  }\r\n\r\n  .dropdown-submenu.pull-left {\r\n    float: none;\r\n  }\r\n\r\n  .dropdown-submenu.pull-left>.dropdown-menu {\r\n    left: -100%;\r\n    margin-left: 10px;\r\n    -webkit-border-radius: 6px 0 6px 6px;\r\n    -moz-border-radius: 6px 0 6px 6px;\r\n    border-radius: 6px 0 6px 6px;\r\n  }\r\n\r\n</style>\r\n<script type=\"text/javascript\">\r\n  function switchTranslation (url) {\r\n    $('#backUrl').val(document.location.href);\r\n    document.modeSwitchForm.action = url;\r\n    document.modeSwitchForm.submit();\r\n  }\r\n</script>\r\n<form name=\"modeSwitchForm\" method=\"post\" action=\"/translation/switchMode.do\" style=\"display:none;\">\r\n  <input type=\"hidden\" name=\"backUrl\" id=\"backUrl\" value=\"\">\r\n</form>\r\n<%\r\n/***\r\n * Single Row Header Design (used when optionally requested: on GIS)\r\n * Useful for fixed height apps.\r\n *\r\n * Container-fluid structure:\r\n * row\r\n *  column navbar-brand (logo)\r\n *  column navbar-collapse\r\n *    nested row:\r\n *      columns AmpMenus (public or internal menus shown as provided by API)\r\n *      nested row ampUserLoggedInMenus (shown when logged in, incl: workspace, user, logout):\r\n *        3 columns\r\n *  login_here (ignores bootstrap container structure; shown when logged out)\r\n *  div#logincontainer: inserted by jQuery + rendered by JSP\r\n ***/\r\n\r\n  if (useSingleRowHeader) {\r\n %>\r\n<nav class=\"navbar navbar-default single-row\" role=\"navigation\">\r\n  <div class=\"container-fluid <%= properties.logged === true ? 'ampUserLoggedIn' : '' %>\">\r\n    <div class=\"row no-gutters\">\r\n      <!-- .ampUserLoggedIn hides public version-->\r\n\r\n      <!-- Brand and toggle get grouped for better mobile display -->\r\n      <div class=\"navbar-header col-sm-1\">\r\n        <button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\"#bs-example-navbar-collapse-1\">\r\n          <span class=\"sr-only\">Toggle navigation</span>\r\n          <span class=\"icon-bar\"></span>\r\n          <span class=\"icon-bar\"></span>\r\n          <span class=\"icon-bar\"></span>\r\n        </button>\r\n          <a id=\"headerUrl\" class=\"navbar-brand\" href=\"<%= properties.logged === true ? '/aim' : '/' %>\" data-i18n=\"[title]amp.common:platform\">\r\n          <span>\r\n            <img class=\"flag\" src=\"/aim/default/displayFlag.do\" height=\"20\" width=\"30\">\r\n          </span>\r\n          <span data-i18n=\"amp.common:platform-short\">AMP</span></a>\r\n      </div>\r\n\r\n      <div class=\"col-sm-11\">\r\n        <div class=\"collapse navbar-collapse row no-gutters\" id=\"bs-example-navbar-collapse-1\">\r\n          <div class=\"col-md-8 col-sm-10\">\r\n            <ul id=\"AmpMenus\" class=\"nav navbar-nav menus\">\r\n\r\n              <!-- File -->\r\n\r\n            </ul>\r\n            <div class=\"clearfix\"></div>\r\n          </div>\r\n          <div class=\"col-md-4 col-sm-2\">\r\n              <ul class=\"row no-gutters nav navbar-nav ampUserLoggedIn ampLoggedInMenus\">\r\n                <li id=\"header-workspace-li\" class=\"col-sm-9 col-md-6\"><a title=\"Workspace\" class=\"workspace-name\" id=\"header-workspace\" title=\"<%= properties.workspace ? properties.workspace : '' %>\"><%= properties.workspace ? properties.workspace : \" \" %></a></li>\r\n                <li id=\"header-name\" class=\"hidden-xs hidden-sm col-md-4\">\r\n                  <a class=\"user-url\">\r\n                    <span id=\"header-first-name\"><%= properties.firstName ? properties.firstName : \" \"  %></span>&nbsp;<span id=\"header-last-name\"><%= properties.lastName ? properties.lastName : \" \" %></span>\r\n                  </a>\r\n                </li>\r\n                <li id=\"header-logout\" class=\"col-sm-2\"><a data-i18n=\"amp.common:title-logout\" href=\"/aim/j_spring_logout\" >Logout</a></li>\r\n              </ul>\r\n              <% if(showLogin) { %>\r\n                <% if(loginDropdown){ %>\r\n                  <div class=\"login_here\" id=\"show_login_pop\">\r\n                    <div class=\"login_here_cont\">\r\n                      <a data-i18n=\"amp.common:title-login\" href=\"javascript:void(0)\">Login</a>\r\n                    </div>\r\n                  </div>\r\n                <% } else { %>\r\n                  <ul class=\"nav navbar-nav ampPublic navbar-right\">\r\n                    <li id=\"header-login\"><a data-i18n=\"amp.common:title-login\" href=\"/login.do\" >Login</a></li>\r\n                  </ul>\r\n                <% } %>\r\n              <% } %>\r\n              <!-- div#logincontainer with anchors gets appended here -->\r\n          </div>\r\n        </div>\r\n      </div>\r\n\r\n    </div>\r\n    <!-- Collect the nav links, forms, and other content for toggling -->\r\n  </div><!-- /.container-fluid -->\r\n</nav>\r\n <% } else { %>\r\n\r\n<% /***\r\n * Double Row Header Design (used by default)\r\n *\r\n * Container-Fluid structure:\r\n * row\r\n *  column navbar-brand (logo)\r\n *  column navbar-collapse\r\n *    nested row:\r\n *        nested row ampUserLoggedInMenus (shown when logged in, incl: workspace, user, logout):\r\n            3 columns\r\n * row\r\n *    columns AmpMenus (public or internal menus shown as provided by API)\r\n *  login_here (ignores bootstrap container structure, shown when logged out)\r\n *  div#logincontainer: inserted by jQuery + rendered by JSP\r\n ***/ %>\r\n<nav class=\"navbar navbar-default double-row\" role=\"navigation\">\r\n  <div class=\"container-fluid no-gutters <%= properties.logged === true ? 'ampUserLoggedIn' : '' %>\">\r\n    <div class=\"row no-gutters\">\r\n      <!-- .ampUserLoggedIn hides public version-->\r\n\r\n      <!-- Brand and toggle get grouped for better mobile display -->\r\n      <div class=\"navbar-header col-sm-1 col-sm-offset-1\">\r\n        <button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\"#bs-example-navbar-collapse-1\">\r\n          <span class=\"sr-only\">Toggle navigation</span>\r\n          <span class=\"icon-bar\"></span>\r\n          <span class=\"icon-bar\"></span>\r\n          <span class=\"icon-bar\"></span>\r\n        </button>\r\n          <a id=\"headerUrl\" class=\"navbar-brand\" href=\"<%= properties.logged === true ? '/aim' : '/' %>\" data-i18n=\"[title]amp.common:platform\">\r\n          <span>\r\n            <img class=\"flag\" src=\"/aim/default/displayFlag.do\" height=\"20\" width=\"30\">\r\n          </span>\r\n          <span data-i18n=\"amp.common:platform-short\">AMP</span></a>\r\n      </div>\r\n\r\n      <div class=\"col-sm-9\">\r\n        <div class=\"collapse navbar-collapse row no-gutters\" id=\"bs-example-navbar-collapse-1\">\r\n          <!-- To change workspace/user truncation length, edit the offset and grid number below:-->\r\n          <div class=\"col-sm-offset-5 col-sm-7\">\r\n            <ul class=\"row no-gutters nav navbar-nav ampUserLoggedIn ampLoggedInMenus\">\r\n              <li id=\"header-workspace-li\" class=\"col-sm-9 col-md-6\"><a title=\"Workspace\" class=\"workspace-name\" id=\"header-workspace\" title=\"<%= properties.workspace ? properties.workspace : '' %>\"><%= properties.workspace ? properties.workspace : \" \" %></a></li>\r\n              <li id=\"header-name\" class=\"hidden-xs hidden-sm col-md-4\">\r\n                <a class=\"user-url\">\r\n                  <span id=\"header-first-name\"><%= properties.firstName ? properties.firstName : \" \"  %></span>&nbsp;<span id=\"header-last-name\"><%= properties.lastName ? properties.lastName : \" \" %></span>\r\n                </a>\r\n              </li>\r\n              <li id=\"header-logout\" class=\"col-sm-2\"><a data-i18n=\"amp.common:title-logout\" href=\"/aim/j_spring_logout\" >Logout</a></li>\r\n            </ul>\r\n            <% if(showLogin) { %>\r\n              <% if(loginDropdown){ %>\r\n                <div class=\"login_here\" id=\"show_login_pop\">\r\n                  <div class=\"login_here_cont\">\r\n                    <a data-i18n=\"amp.common:title-login\" href=\"javascript:void(0)\">Login</a>\r\n                  </div>\r\n                </div>\r\n              <% } else { %>\r\n                <ul class=\"nav navbar-nav ampPublic navbar-right\">\r\n                  <li id=\"header-login\"><a data-i18n=\"amp.common:title-login\" href=\"/login.do\" >Login</a></li>\r\n                </ul>\r\n              <% } %>\r\n            <% } %>\r\n            <!-- div#logincontainer with anchors gets appended here -->\r\n          </div>\r\n        </div>\r\n      </div>\r\n\r\n    </div>\r\n\r\n    <div class=\"row no-gutters\">\r\n      <div class=\"col-sm-11 col-sm-offset-1\">\r\n        <ul id=\"AmpMenus\" class=\"nav navbar-nav menus\">\r\n\r\n          <!-- File -->\r\n\r\n        </ul>\r\n        <div class=\"clearfix\"></div>\r\n      </div>\r\n    </div>\r\n    <!-- Collect the nav links, forms, and other content for toggling -->\r\n  </div><!-- /.container-fluid -->\r\n</nav>\r\n\r\n<%\r\n  } %>\r\n";
+var Template = "<link rel=\"stylesheet\" href=\"/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/src/css/main.css\">\n<% if(currentLanguage.get(\"ltr-direction\") === false) { %>\n  <link rel=\"stylesheet\" href=\"/TEMPLATE/ampTemplate/css_2/amp-rtl.css\">\n  <link rel=\"stylesheet\" href=\"/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/src/css/boilerplate-rtl.css\">\n<% } %>\n<script type=\"text/javascript\">\n  function switchTranslation (url) {\n    $('#backUrl').val(document.location.href);\n    document.modeSwitchForm.action = url;\n    document.modeSwitchForm.submit();\n  }\n</script>\n<form name=\"modeSwitchForm\" method=\"post\" action=\"/translation/switchMode.do\" style=\"display:none;\">\n  <input type=\"hidden\" name=\"backUrl\" id=\"backUrl\" value=\"\">\n</form>\n<%\n/***\n * Single Row Header Design (used when optionally requested: on GIS)\n * Useful for fixed height apps.\n *\n * Container-fluid structure:\n * row\n *  column navbar-brand (logo)\n *  column navbar-collapse\n *    nested row:\n *      columns AmpMenus (public or internal menus shown as provided by API)\n *      nested row ampUserLoggedInMenus (shown when logged in, incl: workspace, user, logout):\n *        3 columns\n *  login_here (ignores bootstrap container structure; shown when logged out)\n *  div#logincontainer: inserted by jQuery + rendered by JSP\n ***/\n\n  if (useSingleRowHeader) {\n %>\n<nav class=\"navbar navbar-default single-row\" role=\"navigation\">\n  <div class=\"container-fluid <%= properties.logged === true ? 'ampUserLoggedIn' : '' %>\">\n    <div class=\"row no-gutters\">\n      <!-- .ampUserLoggedIn hides public version-->\n\n      <!-- Brand and toggle get grouped for better mobile display -->\n      <div class=\"navbar-header col-sm-1\">\n        <button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\"#bs-example-navbar-collapse-1\">\n          <span class=\"sr-only\">Toggle navigation</span>\n          <span class=\"icon-bar\"></span>\n          <span class=\"icon-bar\"></span>\n          <span class=\"icon-bar\"></span>\n        </button>\n          <a id=\"headerUrl\" class=\"navbar-brand\" href=\"<%= properties.logged === true ? '/aim' : '/' %>\" data-i18n=\"[title]amp.common:platform\">\n          <span>\n            <img class=\"flag\" src=\"/aim/default/displayFlag.do\" height=\"20\" width=\"30\">\n          </span>\n          <span data-i18n=\"amp.common:platform-short\">AMP</span></a>\n      </div>\n\n      <div class=\"col-sm-11\">\n        <div class=\"collapse navbar-collapse row no-gutters\" id=\"bs-example-navbar-collapse-1\">\n          <div class=\"col-md-8 col-sm-10\">\n            <ul id=\"AmpMenus\" class=\"nav navbar-nav menus\">\n\n              <!-- File -->\n\n            </ul>\n            <div class=\"clearfix\"></div>\n          </div>\n          <div class=\"col-md-4 col-sm-2\">\n              <ul class=\"row no-gutters nav navbar-nav ampUserLoggedIn ampLoggedInMenus\">\n                <li id=\"header-workspace-li\" class=\"col-sm-9 col-md-6\"><a title=\"Workspace\" class=\"workspace-name\" id=\"header-workspace\" title=\"<%= properties.workspace ? properties.workspace : '' %>\"><%= properties.workspace ? properties.workspace : \" \" %></a></li>\n                <li id=\"header-name\" class=\"hidden-xs hidden-sm col-md-4\">\n                  <a class=\"user-url\">\n                    <span id=\"header-first-name\"><%= properties.firstName ? properties.firstName : \" \"  %></span>&nbsp;<span id=\"header-last-name\"><%= properties.lastName ? properties.lastName : \" \" %></span>\n                  </a>\n                </li>\n                <li id=\"header-logout\" class=\"col-sm-2\"><a data-i18n=\"amp.common:title-logout\" href=\"/aim/j_spring_logout\" >Logout</a></li>\n              </ul>\n              <% if(showLogin) { %>\n                <% if(loginDropdown){ %>\n                  <div class=\"login_here\" id=\"show_login_pop\">\n                    <div class=\"login_here_cont\">\n                      <a data-i18n=\"amp.common:title-login\" href=\"javascript:void(0)\">Login</a>\n                    </div>\n                  </div>\n                <% } else { %>\n                  <ul class=\"nav navbar-nav ampPublic navbar-right\">\n                    <li id=\"header-login\"><a data-i18n=\"amp.common:title-login\" href=\"/login.do\" >Login</a></li>\n                  </ul>\n                <% } %>\n              <% } %>\n              <!-- div#logincontainer with anchors gets appended here -->\n          </div>\n        </div>\n      </div>\n\n    </div>\n    <!-- Collect the nav links, forms, and other content for toggling -->\n  </div><!-- /.container-fluid -->\n</nav>\n <% } else { %>\n\n<% /***\n * Double Row Header Design (used by default)\n *\n * Container-Fluid structure:\n * row\n *  column navbar-brand (logo)\n *  column navbar-collapse\n *    nested row:\n *        nested row ampUserLoggedInMenus (shown when logged in, incl: workspace, user, logout):\n            3 columns\n * row\n *    columns AmpMenus (public or internal menus shown as provided by API)\n *  login_here (ignores bootstrap container structure, shown when logged out)\n *  div#logincontainer: inserted by jQuery + rendered by JSP\n ***/ %>\n<nav class=\"navbar navbar-default double-row\" role=\"navigation\">\n  <div class=\"container-fluid no-gutters <%= properties.logged === true ? 'ampUserLoggedIn' : '' %>\">\n    <div class=\"row no-gutters\">\n      <!-- .ampUserLoggedIn hides public version-->\n\n      <!-- Brand and toggle get grouped for better mobile display -->\n      <div class=\"navbar-header col-sm-1 col-sm-offset-1\">\n        <button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\"#bs-example-navbar-collapse-1\">\n          <span class=\"sr-only\">Toggle navigation</span>\n          <span class=\"icon-bar\"></span>\n          <span class=\"icon-bar\"></span>\n          <span class=\"icon-bar\"></span>\n        </button>\n          <a id=\"headerUrl\" class=\"navbar-brand\" href=\"<%= properties.logged === true ? '/aim' : '/' %>\" data-i18n=\"[title]amp.common:platform\">\n          <span>\n            <img class=\"flag\" src=\"/aim/default/displayFlag.do\" height=\"20\" width=\"30\">\n          </span>\n          <span data-i18n=\"amp.common:platform-short\">AMP</span></a>\n      </div>\n\n      <div class=\"col-sm-9\">\n        <div class=\"collapse navbar-collapse row no-gutters\" id=\"bs-example-navbar-collapse-1\">\n          <!-- To change workspace/user truncation length, edit the offset and grid number below:-->\n          <div class=\"col-sm-offset-5 col-sm-7\">\n            <ul class=\"row no-gutters nav navbar-nav ampUserLoggedIn ampLoggedInMenus\">\n              <li id=\"header-workspace-li\" class=\"col-sm-9 col-md-6\"><a title=\"Workspace\" class=\"workspace-name\" id=\"header-workspace\" title=\"<%= properties.workspace ? properties.workspace : '' %>\"><%= properties.workspace ? properties.workspace : \" \" %></a></li>\n              <li id=\"header-name\" class=\"hidden-xs hidden-sm col-md-4\">\n                <a class=\"user-url\">\n                  <span id=\"header-first-name\"><%= properties.firstName ? properties.firstName : \" \"  %></span>&nbsp;<span id=\"header-last-name\"><%= properties.lastName ? properties.lastName : \" \" %></span>\n                </a>\n              </li>\n              <li id=\"header-logout\" class=\"col-sm-2\"><a data-i18n=\"amp.common:title-logout\" href=\"/aim/j_spring_logout\" >Logout</a></li>\n            </ul>\n            <% if(showLogin) { %>\n              <% if(loginDropdown){ %>\n                <div class=\"login_here\" id=\"show_login_pop\">\n                  <div class=\"login_here_cont\">\n                    <a data-i18n=\"amp.common:title-login\" href=\"javascript:void(0)\">Login</a>\n                  </div>\n                </div>\n              <% } else { %>\n                <ul class=\"nav navbar-nav ampPublic navbar-right\">\n                  <li id=\"header-login\"><a data-i18n=\"amp.common:title-login\" href=\"/login.do\" >Login</a></li>\n                </ul>\n              <% } %>\n            <% } %>\n            <!-- div#logincontainer with anchors gets appended here -->\n          </div>\n        </div>\n      </div>\n\n    </div>\n\n    <div class=\"row no-gutters\">\n      <div class=\"col-sm-11 col-sm-offset-1\">\n        <ul id=\"AmpMenus\" class=\"nav navbar-nav menus\">\n\n          <!-- File -->\n\n        </ul>\n        <div class=\"clearfix\"></div>\n      </div>\n    </div>\n    <!-- Collect the nav links, forms, and other content for toggling -->\n  </div><!-- /.container-fluid -->\n</nav>\n\n<%\n  } %>\n";
 var MenuCollection = require('../collections/amp-menus-collection.js');
 var MenuModel = require('../models/amp-menus-model.js');
 var SubmenuView = require('./submenu-compositeview.js');
 var AboutView = require('./about-view.js');
 var UserProfileView = require('./user-profile-view.js');
+var Settings = require('../models/settings');
+var Languages = require('../collections/language-collection');
 
 module.exports = Backbone.View.extend({
   el: '#amp-header',
   appendEl: '#AmpMenus',
   template: _.template(Template),
-  menuRendered: new $.Deferred(),
+  menuRendered: new $.Deferred(),  
   events: {
     'click #show_login_pop': 'openLoginBox',
     'click .user-url' : 'showUserProfile'
@@ -23754,10 +23778,13 @@ module.exports = Backbone.View.extend({
     this.useSingleRowHeader = options.useSingleRowHeader;
     this.loginDropdown = !!options.loginDropdown;
     this.model = options.model;
-    var self = this;
-    this.collection.fetch().then(function() {
-      self.render();
+    this.settings = new Settings();
+    this.languages = new Languages();
+    var self = this;     
+    $.when.apply($, [this.settings.fetch(), this.collection.fetch(), this.languages.fetch()]).then(function () {
+    	self.render();
     });
+    
     this.firstRender = true;
     this.about = new AboutView(options);
     this.userProfile = new UserProfileView(options);
@@ -23794,12 +23821,14 @@ module.exports = Backbone.View.extend({
 
   render: function() {
     var self = this;
+    var currentLanguage = this.languages.findWhere({"id": this.settings.get('language')});
     if (this.firstRender) {
       this.$el.html(this.template({
         showLogin: self.showLogin,
         loginDropdown: self.loginDropdown,
         useSingleRowHeader: self.useSingleRowHeader,
-        properties: this.model
+        properties: this.model,
+        currentLanguage: currentLanguage
       }));
       this.addAll();
       this.firstRender = false;
@@ -23839,7 +23868,7 @@ module.exports = Backbone.View.extend({
 }
 });
 
-},{"../collections/amp-menus-collection.js":50,"../models/amp-menus-model.js":52,"./about-view.js":53,"./submenu-compositeview.js":56,"./user-profile-view.js":57,"backbone":"backbone","bootstrap/dist/js/bootstrap":49,"underscore":"underscore"}],56:[function(require,module,exports){
+},{"../collections/amp-menus-collection.js":50,"../collections/language-collection":51,"../models/amp-menus-model.js":53,"../models/settings":54,"./about-view.js":55,"./submenu-compositeview.js":58,"./user-profile-view.js":59,"backbone":"backbone","bootstrap/dist/js/bootstrap":49,"underscore":"underscore"}],58:[function(require,module,exports){
 
 var Backbone = require('backbone');
 var _ = require('underscore');
@@ -23905,7 +23934,7 @@ module.exports = Backbone.View.extend({
 });
 
 
-},{"backbone":"backbone","underscore":"underscore"}],57:[function(require,module,exports){
+},{"backbone":"backbone","underscore":"underscore"}],59:[function(require,module,exports){
 
 var Backbone = require('backbone');
 var _ = require('underscore');
@@ -23948,9 +23977,9 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"backbone":"backbone","bootstrap/dist/js/bootstrap":49,"underscore":"underscore"}],58:[function(require,module,exports){
+},{"backbone":"backbone","bootstrap/dist/js/bootstrap":49,"underscore":"underscore"}],60:[function(require,module,exports){
 module.exports=require(49)
-},{"D:\\Desarrollo\\Proyectos\\amp\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":49}],59:[function(require,module,exports){
+},{"/Users/octavian/IdeaProjects/amp/amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/node_modules/bootstrap/dist/js/bootstrap.js":49}],61:[function(require,module,exports){
 var jQuery = require('jquery');
 
 /*!
@@ -24274,7 +24303,7 @@ $.extend( $.ui, {
 
 })( jQuery );
 
-},{"jquery":"jquery"}],60:[function(require,module,exports){
+},{"jquery":"jquery"}],62:[function(require,module,exports){
 var jQuery = require('jquery');
 require('./core');
 
@@ -26317,7 +26346,7 @@ $.datepicker.version = "1.10.4";
 
 })(jQuery);
 
-},{"./core":59,"jquery":"jquery"}],61:[function(require,module,exports){
+},{"./core":61,"jquery":"jquery"}],63:[function(require,module,exports){
 var jQuery = require('jquery');
 require('./core');
 require('./mouse');
@@ -27282,7 +27311,7 @@ $.ui.plugin.add("draggable", "zIndex", {
 
 })(jQuery);
 
-},{"./core":59,"./mouse":62,"./widget":63,"jquery":"jquery"}],62:[function(require,module,exports){
+},{"./core":61,"./mouse":64,"./widget":65,"jquery":"jquery"}],64:[function(require,module,exports){
 var jQuery = require('jquery');
 require('./widget');
 
@@ -27456,7 +27485,7 @@ $.widget("ui.mouse", {
 
 })(jQuery);
 
-},{"./widget":63,"jquery":"jquery"}],63:[function(require,module,exports){
+},{"./widget":65,"jquery":"jquery"}],65:[function(require,module,exports){
 var jQuery = require('jquery');
 
 /*!
@@ -27981,7 +28010,7 @@ $.each( { show: "fadeIn", hide: "fadeOut" }, function( method, defaultEffect ) {
 
 })( jQuery );
 
-},{"jquery":"jquery"}],64:[function(require,module,exports){
+},{"jquery":"jquery"}],66:[function(require,module,exports){
 var Backbone = require('backbone');
 var _ = require('underscore');
 var $ = require('jquery');
@@ -28330,7 +28359,7 @@ module.exports = Backbone.Collection.extend({
 	}
 });
 
-},{"../models/generic-filter-model":70,"../models/org-role-filter-model":71,"../models/years-filter-model":72,"../models/years-only-filter-model":73,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],65:[function(require,module,exports){
+},{"../models/generic-filter-model":72,"../models/org-role-filter-model":73,"../models/years-filter-model":74,"../models/years-only-filter-model":75,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],67:[function(require,module,exports){
 /*! jQuery UI - v1.10.4 - 2014-01-17
 * http://jqueryui.com
 * Includes: jquery.ui.datepicker-af.js, jquery.ui.datepicker-ar-DZ.js, jquery.ui.datepicker-ar.js, jquery.ui.datepicker-az.js, jquery.ui.datepicker-be.js, jquery.ui.datepicker-bg.js, jquery.ui.datepicker-bs.js, jquery.ui.datepicker-ca.js, jquery.ui.datepicker-cs.js, jquery.ui.datepicker-cy-GB.js, jquery.ui.datepicker-da.js, jquery.ui.datepicker-de.js, jquery.ui.datepicker-el.js, jquery.ui.datepicker-en-AU.js, jquery.ui.datepicker-en-GB.js, jquery.ui.datepicker-en-NZ.js, jquery.ui.datepicker-eo.js, jquery.ui.datepicker-es.js, jquery.ui.datepicker-et.js, jquery.ui.datepicker-eu.js, jquery.ui.datepicker-fa.js, jquery.ui.datepicker-fi.js, jquery.ui.datepicker-fo.js, jquery.ui.datepicker-fr-CA.js, jquery.ui.datepicker-fr-CH.js, jquery.ui.datepicker-fr.js, jquery.ui.datepicker-gl.js, jquery.ui.datepicker-he.js, jquery.ui.datepicker-hi.js, jquery.ui.datepicker-hr.js, jquery.ui.datepicker-hu.js, jquery.ui.datepicker-hy.js, jquery.ui.datepicker-id.js, jquery.ui.datepicker-is.js, jquery.ui.datepicker-it.js, jquery.ui.datepicker-ja.js, jquery.ui.datepicker-ka.js, jquery.ui.datepicker-kk.js, jquery.ui.datepicker-km.js, jquery.ui.datepicker-ko.js, jquery.ui.datepicker-ky.js, jquery.ui.datepicker-lb.js, jquery.ui.datepicker-lt.js, jquery.ui.datepicker-lv.js, jquery.ui.datepicker-mk.js, jquery.ui.datepicker-ml.js, jquery.ui.datepicker-ms.js, jquery.ui.datepicker-nb.js, jquery.ui.datepicker-nl-BE.js, jquery.ui.datepicker-nl.js, jquery.ui.datepicker-nn.js, jquery.ui.datepicker-no.js, jquery.ui.datepicker-pl.js, jquery.ui.datepicker-pt-BR.js, jquery.ui.datepicker-pt.js, jquery.ui.datepicker-rm.js, jquery.ui.datepicker-ro.js, jquery.ui.datepicker-ru.js, jquery.ui.datepicker-sk.js, jquery.ui.datepicker-sl.js, jquery.ui.datepicker-sq.js, jquery.ui.datepicker-sr-SR.js, jquery.ui.datepicker-sr.js, jquery.ui.datepicker-sv.js, jquery.ui.datepicker-ta.js, jquery.ui.datepicker-th.js, jquery.ui.datepicker-tj.js, jquery.ui.datepicker-tr.js, jquery.ui.datepicker-uk.js, jquery.ui.datepicker-vi.js, jquery.ui.datepicker-zh-CN.js, jquery.ui.datepicker-zh-HK.js, jquery.ui.datepicker-zh-TW.js
@@ -30174,7 +30203,7 @@ jQuery(function($){
 		yearSuffix: ''};
 	$.datepicker.setDefaults($.datepicker.regional['en-GB']);
 });
-},{}],66:[function(require,module,exports){
+},{}],68:[function(require,module,exports){
 /*
 
 $.Link (part of noUiSlider) - WTFPL */
@@ -30207,7 +30236,7 @@ b,a)})}function X(a){return this.each(function(){var b=c(this).val(),d=this.dest
 end:"mouseup touchend"},f="noUi-target noUi-base noUi-origin noUi-handle noUi-horizontal noUi-vertical noUi-background noUi-connect noUi-ltr noUi-rtl noUi-dragable  noUi-state-drag  noUi-state-tap noUi-active noUi-extended noUi-stacking".split(" ");c.fn.val=function(){var a=arguments,b=c(this[0]);return arguments.length?this.each(function(){(c(this).hasClass(f[0])?B:C).apply(c(this),a)}):(b.hasClass(f[0])?B:C).call(b)};c.noUiSlider={Link:c.Link};c.fn.noUiSlider=function(a,b){return(b?X:W).call(this,
 a)}})(window.jQuery||window.Zepto);
 
-},{}],67:[function(require,module,exports){
+},{}],69:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 
@@ -30334,7 +30363,7 @@ _.extend(Widget.prototype, Backbone.Events, {
 });
 
 module.exports = Widget;
-},{"./lib/jquery-ui-i18n":65,"./views/filters-view":78,"backbone":"backbone","bootstrap/dist/js/bootstrap":58,"jquery":"jquery","jquery-ui/draggable":61,"underscore":"underscore"}],68:[function(require,module,exports){
+},{"./lib/jquery-ui-i18n":67,"./views/filters-view":80,"backbone":"backbone","bootstrap/dist/js/bootstrap":60,"jquery":"jquery","jquery-ui/draggable":63,"underscore":"underscore"}],70:[function(require,module,exports){
 var Backbone = require('backbone');
 
   // Parent model for filters.
@@ -30359,13 +30388,9 @@ module.exports = Backbone.Model.extend({
 
 });
 
-},{"backbone":"backbone"}],69:[function(require,module,exports){
-var _ = require('underscore');
-var Backbone = require('backbone');
-module.exports = Backbone.Model.extend({
-	url: '/rest/amp/settings'
-});
-},{"backbone":"backbone","underscore":"underscore"}],70:[function(require,module,exports){
+},{"backbone":"backbone"}],71:[function(require,module,exports){
+module.exports=require(54)
+},{"/Users/octavian/IdeaProjects/amp/amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/src/models/settings.js":54,"backbone":"backbone","underscore":"underscore"}],72:[function(require,module,exports){
 var _ = require('underscore');
 
 var BaseFilterModel = require('../models/base-filter-model');
@@ -30519,7 +30544,7 @@ module.exports = BaseFilterModel.extend({
 });
 
 
-},{"../models/base-filter-model":68,"../tree/tree-node-model":74,"underscore":"underscore"}],71:[function(require,module,exports){
+},{"../models/base-filter-model":70,"../tree/tree-node-model":76,"underscore":"underscore"}],73:[function(require,module,exports){
 var $ = require('jquery');
 
 var GenericFilterModel = require('../models/generic-filter-model');
@@ -30574,7 +30599,7 @@ module.exports = GenericFilterModel.extend({
 });
 
 
-},{"../models/generic-filter-model":70,"../tree/tree-node-model":74,"jquery":"jquery"}],72:[function(require,module,exports){
+},{"../models/generic-filter-model":72,"../tree/tree-node-model":76,"jquery":"jquery"}],74:[function(require,module,exports){
 var $ = require('jquery');
 var _ = require('underscore');
 var BaseFilterModel = require('../models/base-filter-model');
@@ -30713,7 +30738,7 @@ module.exports = BaseFilterModel.extend({
 
 });
 
-},{"../models/base-filter-model":68,"jquery":"jquery","underscore":"underscore"}],73:[function(require,module,exports){
+},{"../models/base-filter-model":70,"jquery":"jquery","underscore":"underscore"}],75:[function(require,module,exports){
 var $ = require('jquery');
 var _ = require('underscore');
 var BaseFilterModel = require('../models/base-filter-model');
@@ -30778,7 +30803,7 @@ module.exports = BaseFilterModel.extend({
 
 });
 
-},{"../models/base-filter-model":68,"jquery":"jquery","underscore":"underscore"}],74:[function(require,module,exports){
+},{"../models/base-filter-model":70,"jquery":"jquery","underscore":"underscore"}],76:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 var TreeNodeModel; // declare here to help with ref loop of collection and model
@@ -31029,7 +31054,7 @@ _serializeChildren: function(tmpSerialized, children, options){
 
 module.exports = TreeNodeModel;
 
-},{"backbone":"backbone","underscore":"underscore"}],75:[function(require,module,exports){
+},{"backbone":"backbone","underscore":"underscore"}],77:[function(require,module,exports){
 
 var _ = require('underscore');
 var Backbone = require('backbone');
@@ -31224,7 +31249,7 @@ var TreeNodeView = Backbone.View.extend({
 
 module.exports = TreeNodeView;
 
-},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],76:[function(require,module,exports){
+},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],78:[function(require,module,exports){
 var _ = require('underscore');
 
 var extractDates = function(settings, filtersOut, minName, maxName) {
@@ -31250,7 +31275,7 @@ module.exports = {
 		extractDates: extractDates
 }
 
-},{"underscore":"underscore"}],77:[function(require,module,exports){
+},{"underscore":"underscore"}],79:[function(require,module,exports){
 
 var _ = require('underscore');
 var $ = require('jquery');
@@ -31292,7 +31317,7 @@ module.exports = Backbone.View.extend({
 
 });
 
-},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],78:[function(require,module,exports){
+},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],80:[function(require,module,exports){
 /**
  * this is the view which renders the big Filter contents (the tabs)
  */
@@ -31437,7 +31462,7 @@ module.exports = Backbone.View.extend({
 
   createTranslator: function(force) {
     var self = this;
-    var filterTranslateKeys = JSON.parse("{\r\n  \"amp.gis:title-Country\": \"Country\",\r\n  \"amp.gis:title-Region\": \"Region\",\r\n  \"amp.gis:title-Zone\": \"Zone\",\r\n  \"amp.gis:title-District\": \"District\",\r\n  \"amp.gis:title-filters\": \"Filter\",\r\n  \"amp.gis:pane-filters-search\": \"Go\",\r\n  \"amp.gis:pane-filters-select\": \"select all\",\r\n  \"amp.gis:pane-filters-deselect\": \"deselect all\",\r\n  \"[placeholder]amp.gis:pane-filters-search-placeholder\": \"Search...\",\r\n  \"amp.gis:pane-filters-FundingOrganizations\": \"Funding Organizations\",\r\n  \"amp.gis:pane-filters-Sector\": \"Sector\",\r\n  \"amp.gis:pane-filters-Sectors\": \"Sectors\",\r\n  \"amp.gis:pane-filters-Programs\": \"Programs\",\r\n  \"amp.gis:pane-filters-Activity\": \"Activity\",\r\n  \"amp.gis:pane-filters-AllAgencies\": \"All Agencies\",\r\n  \"amp.gis:pane-filters-Financial\": \"Financial\",\r\n  \"amp.gis:pane-filters-Location\": \"Location\",\r\n  \"amp.gis:pane-filters-Other\": \"Other\",\r\n  \"amp.gis:pane-subfilters-Donor\": \"Donor\",\r\n  \"amp.gis:pane-subfilters-Primary\": \"Primary\",\r\n  \"amp.gis:pane-subfilters-Secondary\": \"Secondary\",\r\n  \"amp.gis:pane-subfilters-NationalPlanObjective\": \"National Plan Objective\",\r\n  \"amp.gis:pane-subfilters-ActivityStatus\": \"Activity Status\",\r\n  \"amp.gis:pane-subfilters-ApprovalStatus\": \"Approval Status\",\r\n  \"amp.gis:pane-subfilters-ImplementingAgency\": \"Implementing Agency\",\r\n  \"amp.gis:pane-subfilters-ExecutingAgency\": \"Executing Agency\",\r\n  \"amp.gis:pane-subfilters-BeneficiaryAgency\": \"Beneficiary Agency\",\r\n  \"amp.gis:pane-subfilters-ContractingAgency\": \"Contracting Agency\",\r\n  \"amp.gis:pane-subfilters-AidModality\": \"Aid Modality\",\r\n  \"amp.gis:pane-subfilters-TypeOfAssistance\": \"Type Of Assistance\",\r\n  \"amp.gis:pane-subfilters-ResponsibleOrganization\": \"Responsible Organization\",\r\n  \"amp.gis:pane-subfilters-ComponentFundingOrganization\": \"Component Funding Organization\",\r\n  \"amp.gis:pane-subfilters-ComponentSecondResponsibleOrganization\": \"Component Second Responsible Organization\",\r\n  \"amp.gis:pane-subfilters-Dates\": \"Dates\",\r\n  \"amp.gis:pane-subfilters-RegionalGroup\": \"Regional Group\",\r\n  \"amp.gis:pane-subfilters-SectorGroup\": \"Sector Group\",\r\n  \"amp.gis:pane-subfilters-TertiarySectors\": \"Tertiary Sectors\",\r\n  \"amp.gis:pane-subfilters-FinancingInstruments\": \"Financing Instruments\",\r\n  \"amp.gis:pane-filters-all\": \"all\",\r\n  \"amp.gis:button-reset\": \"Reset\",\r\n  \"amp.gis:button-cancel\": \"Cancel\",\r\n  \"amp.gis:button-apply\": \"Apply\",\r\n  \"amp.gis:pane-subfilters-startdate\": \"Start Date:\",\r\n  \"amp.gis:pane-subfilters-enddate\": \"End Date:\",\r\n  \"amp.gis:pane-subfilters-empty\": \"No data for this filter\",\r\n  \"amp.gis:date-from\": \"From\",\r\n  \"amp.gis:date-until\": \"Until\"\r\n}\r\n");
+    var filterTranslateKeys = JSON.parse("{\n  \"amp.gis:title-Country\": \"Country\",\n  \"amp.gis:title-Region\": \"Region\",\n  \"amp.gis:title-Zone\": \"Zone\",\n  \"amp.gis:title-District\": \"District\",\n  \"amp.gis:title-filters\": \"Filter\",\n  \"amp.gis:pane-filters-search\": \"Go\",\n  \"amp.gis:pane-filters-select\": \"select all\",\n  \"amp.gis:pane-filters-deselect\": \"deselect all\",\n  \"[placeholder]amp.gis:pane-filters-search-placeholder\": \"Search...\",\n  \"amp.gis:pane-filters-FundingOrganizations\": \"Funding Organizations\",\n  \"amp.gis:pane-filters-Sector\": \"Sector\",\n  \"amp.gis:pane-filters-Sectors\": \"Sectors\",\n  \"amp.gis:pane-filters-Programs\": \"Programs\",\n  \"amp.gis:pane-filters-Activity\": \"Activity\",\n  \"amp.gis:pane-filters-AllAgencies\": \"All Agencies\",\n  \"amp.gis:pane-filters-Financial\": \"Financial\",\n  \"amp.gis:pane-filters-Location\": \"Location\",\n  \"amp.gis:pane-filters-Other\": \"Other\",\n  \"amp.gis:pane-subfilters-Donor\": \"Donor\",\n  \"amp.gis:pane-subfilters-Primary\": \"Primary\",\n  \"amp.gis:pane-subfilters-Secondary\": \"Secondary\",\n  \"amp.gis:pane-subfilters-NationalPlanObjective\": \"National Plan Objective\",\n  \"amp.gis:pane-subfilters-ActivityStatus\": \"Activity Status\",\n  \"amp.gis:pane-subfilters-ApprovalStatus\": \"Approval Status\",\n  \"amp.gis:pane-subfilters-ImplementingAgency\": \"Implementing Agency\",\n  \"amp.gis:pane-subfilters-ExecutingAgency\": \"Executing Agency\",\n  \"amp.gis:pane-subfilters-BeneficiaryAgency\": \"Beneficiary Agency\",\n  \"amp.gis:pane-subfilters-ContractingAgency\": \"Contracting Agency\",\n  \"amp.gis:pane-subfilters-AidModality\": \"Aid Modality\",\n  \"amp.gis:pane-subfilters-TypeOfAssistance\": \"Type Of Assistance\",\n  \"amp.gis:pane-subfilters-ResponsibleOrganization\": \"Responsible Organization\",\n  \"amp.gis:pane-subfilters-ComponentFundingOrganization\": \"Component Funding Organization\",\n  \"amp.gis:pane-subfilters-ComponentSecondResponsibleOrganization\": \"Component Second Responsible Organization\",\n  \"amp.gis:pane-subfilters-Dates\": \"Dates\",\n  \"amp.gis:pane-subfilters-RegionalGroup\": \"Regional Group\",\n  \"amp.gis:pane-subfilters-SectorGroup\": \"Sector Group\",\n  \"amp.gis:pane-subfilters-TertiarySectors\": \"Tertiary Sectors\",\n  \"amp.gis:pane-subfilters-FinancingInstruments\": \"Financing Instruments\",\n  \"amp.gis:pane-filters-all\": \"all\",\n  \"amp.gis:button-reset\": \"Reset\",\n  \"amp.gis:button-cancel\": \"Cancel\",\n  \"amp.gis:button-apply\": \"Apply\",\n  \"amp.gis:pane-subfilters-startdate\": \"Start Date:\",\n  \"amp.gis:pane-subfilters-enddate\": \"End Date:\",\n  \"amp.gis:pane-subfilters-empty\": \"No data for this filter\",\n  \"amp.gis:date-from\": \"From\",\n  \"amp.gis:date-until\": \"Until\"\n}\n");
     // setup any popovers as needed...
     self.popovers = self.$('[data-toggle="popover"]');
     self.popovers.popover();
@@ -31518,6 +31543,7 @@ module.exports = Backbone.View.extend({
         this.filterViewsInstances.financials.filterCollection.add(tmpModel);
         break;
       case 'status':
+      case 'performance-alert-level':
       case 'approval-status':
         this.filterViewsInstances.activity.filterCollection.add(tmpModel);
         break;
@@ -31715,7 +31741,7 @@ module.exports = Backbone.View.extend({
 });
 
 
-},{"../../../../../reamp/tools/log":98,"../collections/all-filters-collection":64,"../models/general-settings":69,"../utils/date-utils":76,"../views/top-level-filter-view":80,"amp-translate":96,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],79:[function(require,module,exports){
+},{"../../../../../reamp/tools/log":100,"../collections/all-filters-collection":66,"../models/general-settings":71,"../utils/date-utils":78,"../views/top-level-filter-view":82,"amp-translate":98,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],81:[function(require,module,exports){
 
 var _ = require('underscore');
 
@@ -31836,7 +31862,7 @@ module.exports = BaseFilterView.extend({
 });
 
 
-},{"../tree/tree-node-view":75,"../views/base-filter-view":77,"underscore":"underscore"}],80:[function(require,module,exports){
+},{"../tree/tree-node-view":77,"../views/base-filter-view":79,"underscore":"underscore"}],82:[function(require,module,exports){
 
 var _ = require('underscore');
 var $ = require('jquery');
@@ -31966,7 +31992,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"../../../../../reamp/tools/log":98,"../models/years-filter-model":72,"../models/years-only-filter-model":73,"../views/generic-filter-view":79,"../views/years-filter-view":81,"../views/years-only-filter-view":82,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],81:[function(require,module,exports){
+},{"../../../../../reamp/tools/log":100,"../models/years-filter-model":74,"../models/years-only-filter-model":75,"../views/generic-filter-view":81,"../views/years-filter-view":83,"../views/years-only-filter-view":84,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],83:[function(require,module,exports){
 
 var _ = require('underscore');
 var BaseFilterView = require('../views/base-filter-view');
@@ -32125,7 +32151,7 @@ module.exports = BaseFilterView.extend({
 
 });
 
-},{"../lib/jquery.nouislider.min.js":66,"../views/base-filter-view":77,"jquery-ui/datepicker":60,"underscore":"underscore"}],82:[function(require,module,exports){
+},{"../lib/jquery.nouislider.min.js":68,"../views/base-filter-view":79,"jquery-ui/datepicker":62,"underscore":"underscore"}],84:[function(require,module,exports){
 
 var _ = require('underscore');
 var BaseFilterView = require('../views/base-filter-view');
@@ -32184,17 +32210,17 @@ module.exports = BaseFilterView.extend({
 
 });
 
-},{"../views/base-filter-view":77,"underscore":"underscore"}],83:[function(require,module,exports){
+},{"../views/base-filter-view":79,"underscore":"underscore"}],85:[function(require,module,exports){
 module.exports=require(49)
-},{"D:\\Desarrollo\\Proyectos\\amp\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":49}],84:[function(require,module,exports){
-module.exports=require(59)
-},{"D:\\Desarrollo\\Proyectos\\amp\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\core.js":59,"jquery":"jquery"}],85:[function(require,module,exports){
+},{"/Users/octavian/IdeaProjects/amp/amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/node_modules/bootstrap/dist/js/bootstrap.js":49}],86:[function(require,module,exports){
 module.exports=require(61)
-},{"./core":84,"./mouse":86,"./widget":87,"D:\\Desarrollo\\Proyectos\\amp\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\draggable.js":61,"jquery":"jquery"}],86:[function(require,module,exports){
-module.exports=require(62)
-},{"./widget":87,"D:\\Desarrollo\\Proyectos\\amp\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\mouse.js":62,"jquery":"jquery"}],87:[function(require,module,exports){
+},{"/Users/octavian/IdeaProjects/amp/amp/TEMPLATE/ampTemplate/node_modules/amp-filter/node_modules/jquery-ui/core.js":61,"jquery":"jquery"}],87:[function(require,module,exports){
 module.exports=require(63)
-},{"D:\\Desarrollo\\Proyectos\\amp\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-filter\\node_modules\\jquery-ui\\widget.js":63,"jquery":"jquery"}],88:[function(require,module,exports){
+},{"./core":86,"./mouse":88,"./widget":89,"/Users/octavian/IdeaProjects/amp/amp/TEMPLATE/ampTemplate/node_modules/amp-filter/node_modules/jquery-ui/draggable.js":63,"jquery":"jquery"}],88:[function(require,module,exports){
+module.exports=require(64)
+},{"./widget":89,"/Users/octavian/IdeaProjects/amp/amp/TEMPLATE/ampTemplate/node_modules/amp-filter/node_modules/jquery-ui/mouse.js":64,"jquery":"jquery"}],89:[function(require,module,exports){
+module.exports=require(65)
+},{"/Users/octavian/IdeaProjects/amp/amp/TEMPLATE/ampTemplate/node_modules/amp-filter/node_modules/jquery-ui/widget.js":65,"jquery":"jquery"}],90:[function(require,module,exports){
 var Deferred = require('jquery').Deferred;
 var _ = require('underscore');
 var Backbone = require('backbone');
@@ -32281,12 +32307,12 @@ module.exports  = Backbone.Collection.extend({
 });
 
 
-},{"../common/config":89,"../common/constants":90,"../models/settings-definitions":93,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],89:[function(require,module,exports){
+},{"../common/config":91,"../common/constants":92,"../models/settings-definitions":95,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],91:[function(require,module,exports){
 module.exports = {
 	IS_POPUP : true
 };
 
-},{}],90:[function(require,module,exports){
+},{}],92:[function(require,module,exports){
 module.exports = {
 	YEAR_RANGE_ID : 'year-range',
 	CALENDAR_ID : 'calendar-id',
@@ -32306,7 +32332,7 @@ module.exports = {
 		TABS : 'TABS'
 	}
 }
-},{}],91:[function(require,module,exports){
+},{}],93:[function(require,module,exports){
 
 var jQuery = require('jquery');
 var _ = require('underscore');
@@ -32372,7 +32398,7 @@ _.extend(Widget.prototype, Backbone.Events, {
 });
 module.exports = {SettingsWidget: Widget, GeneralSettings: GeneralSettings}
 window.AMPSettings = {SettingsWidget: Widget, GeneralSettings: GeneralSettings};
-},{"./collections/settings-definitions-collection":88,"./common/config":89,"./common/constants":90,"./models/general-settings":92,"./views/settings-view":94,"backbone":"backbone","bootstrap/dist/js/bootstrap":83,"jquery":"jquery","jquery-ui/draggable":85,"underscore":"underscore"}],92:[function(require,module,exports){
+},{"./collections/settings-definitions-collection":90,"./common/config":91,"./common/constants":92,"./models/general-settings":94,"./views/settings-view":96,"backbone":"backbone","bootstrap/dist/js/bootstrap":85,"jquery":"jquery","jquery-ui/draggable":87,"underscore":"underscore"}],94:[function(require,module,exports){
 var Deferred = require('jquery').Deferred;
 var _ = require('underscore');
 var Backbone = require('backbone');
@@ -32401,20 +32427,20 @@ module.exports = Backbone.Model.extend({
 		return this.loaded.promise();
 	}
 });
-},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],93:[function(require,module,exports){
+},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],95:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 module.exports = Backbone.Model.extend({	
 });
-},{"backbone":"backbone","underscore":"underscore"}],94:[function(require,module,exports){
+},{"backbone":"backbone","underscore":"underscore"}],96:[function(require,module,exports){
 
 var $ = require('jquery');
 var _ = require('underscore');
 var Backbone = require('backbone');
 var Translator = require('amp-translate');
 var Template = "<% if(obj.isPopup) {%>\r\n<div class=\"panel-heading\">\r\n\t\t\t<button type=\"button\" class=\"close cancel\" aria-hidden=\"true\">x</button>\r\n\t\t\t<h3 class=\"panel-title\" data-i18n=\"amp.settings:title\">Settings</h3>\r\n</div>\r\n<%}%>\r\n<div class=\"panel-body\">\t\t\r\n<div class=\"container-fluid\">\r\n  <div class=\"settings\">\r\n    Loading...\r\n  </div>\r\n  <% if(!obj.isPopup) {%>\r\n  <div class=\"form-group\">\r\n  \t<button type=\"button\" class=\"btn btn-success apply-btn\" data-i18n=\"amp.settings:apply-button\">Apply</button>\r\n  </div>\r\n  <%}%>\r\n</div>\r\n</div>\r\n<% if(obj.isPopup) {%>\r\n<div class=\"panel-footer setting-dialog-footer\">\r\n    <button type=\"button\" class=\"btn btn-warning cancel-btn cancel\" data-i18n=\"amp.settings:cancel-button\">Cancel</button>\r\n  \t<button type=\"button\" class=\"btn btn-success apply-btn\" data-i18n=\"amp.settings:apply-button\">Apply</button>\r\n </div>\r\n <%}%>\r\n \r\n \r\n";
-var SelectTemplate = "<div class=\"form-group\">\r\n  <label class=\"control-label\" data-i18n=\"amp.settings:label-<%= obj.setting.id %>\"><%= obj.setting.name %></label>\r\n  <select class=\"form-control\" id=\"<%= obj.setting.id %>\">\r\n  <% _.each(obj.setting.value.options, function(option){ %>\r\n  <% var selected = obj.settingsSelections[obj.setting.id] || obj.appliedSettings[obj.setting.id];%>\r\n    <option value=\"<%= option.id %>\"  <% if(selected == option.id){ %> selected <% } %> >\r\n      <%= option.name %>\r\n    </option>\r\n  <%}); %>\r\n  </select>\r\n</div>\r\n";
-var SelectAmountUnitTemplate = "<div class=\"form-group\">\r\n  <label class=\"control-label\" data-i18n=\"amp.settings:label-<%= obj.setting.id %>\"><%= obj.setting.name %></label>\r\n  <select class=\"form-control\" id=\"<%= obj.setting.id %>\">\r\n  <% _.each(obj.setting.value.options, function(option){ %>\r\n  <% var selected = obj.settingsSelections[obj.setting.id] || obj.appliedSettings['amount-format'][obj.setting.id];%>\r\n    <option value=\"<%= option.value %>\"  <% if(selected == option.value){ %> selected <% } %> >\r\n      <%= option.name %>\r\n    </option>\r\n  <%}); %>\r\n  </select>\r\n</div>\r\n";
+var SelectTemplate = "<div class=\"form-group\">\n  <label class=\"control-label\" data-i18n=\"amp.settings:label-<%= obj.setting.id %>\"><%= obj.setting.name %></label>\n  <select class=\"form-control\" id=\"<%= obj.setting.id %>\">\n  <% _.each(obj.setting.value.options, function(option){ %>\n  <% var selected = obj.settingsSelections[obj.setting.id] || obj.appliedSettings[obj.setting.id];%>\n    <option value=\"<%= option.id %>\"  <% if(selected == option.id){ %> selected <% } %> >\n      <%= option.name %>\n    </option>\n  <%}); %>\n  </select>\n</div>\n";
+var SelectAmountUnitTemplate = "<div class=\"form-group\">\n  <label class=\"control-label\" data-i18n=\"amp.settings:label-<%= obj.setting.id %>\"><%= obj.setting.name %></label>\n  <select class=\"form-control\" id=\"<%= obj.setting.id %>\">\n  <% _.each(obj.setting.value.options, function(option){ %>\n  <% var selected = obj.settingsSelections[obj.setting.id] || obj.appliedSettings['amount-format'][obj.setting.id];%>\n    <option value=\"<%= option.value %>\"  <% if(selected == option.value){ %> selected <% } %> >\n      <%= option.name %>\n    </option>\n  <%}); %>\n  </select>\n</div>\n";
 var YearRangeTemplate = "<div class=\"form-group\"> \r\n<label data-i18n=\"amp.settings:label-<%= obj.id %>\"><%= obj.name %></label> \r\n <div class=\"row year-range \"> \r\n \r\n </div>  \r\n</div>";
 var YearSelectTemplate = "<div class=\"col-xs-2\">\r\n   <label data-i18n=\"amp.settings:label-<%= obj.setting.id %>\" ><%= obj.setting.name %></label>\r\n </div>\r\n  <div class=\"col-xs-4\">\r\n  <select class=\"form-control\" id=\"<%= obj.setting.id %>\">\r\n    <%\r\n      var applied = obj.appliedSettings['year-range'] ? obj.appliedSettings['year-range'][obj.setting.id] : null;\r\n      var selected = obj.settingsSelections[obj.setting.id];\r\n    %>\r\n    <option data-i18n=\"amp.settings:all\" value=\"-1\"<% if((selected || applied) == -1){ %> selected <% } %>>All</option>\r\n    <% for (i = obj.setting.rangeFrom; i <= obj.setting.rangeTo; i++) { %>\r\n      <option value=\"<%= i %>\"<% if((selected || applied) == i){ %> selected <% } %>>\r\n      <%= i %>\r\n      </option>\r\n    <% } %>\r\n  </select>\r\n  </div>";
 var Constants = require('../common/constants');
@@ -32660,7 +32686,7 @@ module.exports = Backbone.View.extend({
 	}
 
 });
-},{"../common/constants":90,"amp-translate":96,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],95:[function(require,module,exports){
+},{"../common/constants":92,"amp-translate":98,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],97:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 
@@ -32870,7 +32896,7 @@ _.extend(State.prototype, Backbone.Events, {
 State.StateLoadError = StateLoadError;
 module.exports = State;
 
-},{"backbone":"backbone","underscore":"underscore"}],96:[function(require,module,exports){
+},{"backbone":"backbone","underscore":"underscore"}],98:[function(require,module,exports){
 // TODO: move this up a dir, and instantiate and attach to the app
 
 
@@ -33086,7 +33112,7 @@ function Translator(options) {
 
 module.exports = Translator;
 
-},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],97:[function(require,module,exports){
+},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],99:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 
@@ -33137,7 +33163,7 @@ _.extend(URL.prototype, Backbone.Events, {
 
 module.exports = URL;
 
-},{"backbone":"backbone","underscore":"underscore"}],98:[function(require,module,exports){
+},{"backbone":"backbone","underscore":"underscore"}],100:[function(require,module,exports){
 module.exports =
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache

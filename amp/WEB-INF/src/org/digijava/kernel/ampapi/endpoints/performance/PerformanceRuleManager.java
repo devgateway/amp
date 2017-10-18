@@ -3,6 +3,7 @@ package org.digijava.kernel.ampapi.endpoints.performance;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -257,18 +258,6 @@ public final class PerformanceRuleManager {
         return attribute.getValue();
     }
 
-    public AmpCategoryValue getHigherLevel(AmpCategoryValue level1, AmpCategoryValue level2) {
-        if (level1 == null) {
-            return level2;
-        } else if (level2 == null) {
-            return level1;
-        } else if (level1.getIndex() > level2.getIndex()) {
-            return level1;
-        }
-
-        return level2;
-    }
-
     public int getCalendarTimeUnit(String timeUnit) {
         switch (timeUnit) {
         case PerformanceRuleConstants.TIME_UNIT_DAY:
@@ -299,6 +288,10 @@ public final class PerformanceRuleManager {
         
         //TODO get the url correctly
         String url = getBaseUrl();
+        
+        if (activitiesByPerformanceRuleMatcher.isEmpty()) {
+            sb.append("<br/>No activities with performance issues have been found.<br/>");
+        }
         
         activitiesByPerformanceRuleMatcher.entrySet().forEach(e -> {
             sb.append("<br/>");
@@ -359,7 +352,6 @@ public final class PerformanceRuleManager {
     }
     
     public String getTranslatedLabel(AmpPerformanceRuleAttribute attribute) {
-        System.out.println(attribute.getName());
         PerformanceRuleAttributeOption performanceRuleAttributeOption = PerformanceRuleMatcherPossibleValuesSupplier
                 .getDefaultPerformanceRuleAttributePossibleValues(attribute.getType())
                 .stream().filter(option -> option.getName().equals(attribute.getValue()))
@@ -372,19 +364,28 @@ public final class PerformanceRuleManager {
         return performanceRuleAttributeOption.getTranslatedLabel();
     }
 
-    public AmpCategoryValue getPerformanceIssueFromActivity(AmpActivityVersion a) {
-        return a.getCategories().stream().filter(
-                acv -> acv.getAmpCategoryClass().getKeyName().equals(CategoryConstants.PERFORMANCE_ALERT_LEVEL_KEY))
-                .findAny().orElse(null);
+    public Set<AmpCategoryValue> getPerformanceIssuesFromActivity(AmpActivityVersion a) {
+        Set<AmpCategoryValue> issues = new HashSet<>();
+        
+        if (a.getCategories() != null) {
+            issues = a.getCategories().stream().filter(
+                    acv -> acv.getAmpCategoryClass().getKeyName().equals(CategoryConstants.PERFORMANCE_ALERT_LEVEL_KEY))
+                    .sorted()
+                    .collect(Collectors.toSet());
+        }
+        
+        return issues;
     }
 
-    public void updatePerformanceIssueInActivity(AmpActivityVersion a, AmpCategoryValue from, AmpCategoryValue to) {
-        if (from != null) {
-            a.getCategories().remove(from);
+    public void updatePerformanceIssuesInActivity(AmpActivityVersion a, Set<AmpCategoryValue> from, 
+            Set<AmpCategoryValue> to) {
+        
+        if (from != null && !from.isEmpty()) {
+            a.getCategories().removeAll(from);
         }
 
-        if (to != null) {
-            a.getCategories().add(to);
+        if (to != null && !to.isEmpty()) {
+            a.getCategories().addAll(to);
         }
     }
 
@@ -393,12 +394,29 @@ public final class PerformanceRuleManager {
                 && AmpARFilter.validatedActivityStatus.contains(a.getApprovalStatus());
     }
 
-    public AmpCategoryValue getHigherLevelFromMatchers(List<PerformanceRuleMatcher> matchers) {
-        AmpCategoryValue level = null;
-        for (PerformanceRuleMatcher matcher : matchers) {
-            level = getHigherLevel(level, matcher.getRule().getLevel());
-        }
-            
-        return level;
+    public Set<AmpCategoryValue> getPerformanceLevelsFromMatchers(List<PerformanceRuleMatcher> matchers) {
+        return matchers.stream()
+                .map(prm -> prm.getRule().getLevel())
+                .sorted()
+                .collect(Collectors.toSet());
     }
+
+    /**
+     * 
+     * @param col1 - the first collection, must not be null
+     * @param col2 - the second collection, must not be null
+     * 
+     * @return true if the collections contain the same performance levels
+     */
+    public boolean isEqualPerformanceLevelCollection(Set<AmpCategoryValue> col1, Set<AmpCategoryValue> col2) {
+        if (col1.size() != col2.size()) {
+            return false;
+        }
+        
+        Set<Long> colId1 = col1.stream().map(AmpCategoryValue::getId).collect(Collectors.toSet());
+        Set<Long> colId2 = col2.stream().map(AmpCategoryValue::getId).collect(Collectors.toSet());
+        
+        return colId1.equals(colId2);
+    }
+    
 }

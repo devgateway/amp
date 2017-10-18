@@ -202,6 +202,68 @@ module.exports = Backbone.Collection
     this.url = '/rest/gis/activities';  // reset url, inside deferred fails
 
     return deferred;
-  }
+  },
+  
+    //Gets the activities with the ids in the aryOfIDs array. 
+	// Location percentage is applied to the funding amounts.
+	// Does not cache the activities.
+   getActivitiesforLocation : function(aryOfIDs, admLevel, admId) {
+		var self = this;
+		var deferred = $.Deferred();
+		var matches = [];
+		if (!_.isEmpty(aryOfIDs)) {
+			var payload = {};
+			if (this.appData.filter) {
+				_.extend(payload, this.appData.filter.serialize());
+			}
+
+			if (this.appData.settingsWidget && !_.isEmpty(this.appData.settingsWidget.toAPIFormat())) {
+				payload.settings = this.appData.settingsWidget.toAPIFormat();
+			}
+
+			if (this.appData.performanceToggleModel.get('isPerformanceToggleSelected') != null) {
+				payload['performanceIssues'] = !this.appData.performanceToggleModel.get('isPerformanceToggleSelected');
+			}
+
+			if (admId != null && admLevel != null) {
+				payload.filters[admLevel.toLowerCase()] = [ admId ];
+			}
+
+			var TempActivityCollection = Backbone.Collection.extend({
+				model : Activity,
+				initialize : function(models, options) {
+					this.appData = options.appData;
+				},
+				parse : function(apiData) {
+					this.totalCount = apiData.count;
+					return apiData.activities;
+				}
+			});
+
+			var activities = new TempActivityCollection([], {
+				appData : this.appData
+			});
+			activities.url = '/rest/gis/activities/' + aryOfIDs.join(',');
+			activities.fetch({
+				remove : false,
+				data : JSON.stringify(payload),
+				type : 'POST'
+			}).then(function() {
+				activities.each(function(activity) {
+					matches.push(activity); // add activity to array           
+				});
+
+				deferred.resolve(matches);
+			}).fail(function(err) {
+				console.error('failed to get ' + this.url, err);
+				deferred.resolve(matches);
+			});
+		} else {
+			deferred.resolve(matches);
+		}
+
+		return deferred;
+
+	}
 
 });

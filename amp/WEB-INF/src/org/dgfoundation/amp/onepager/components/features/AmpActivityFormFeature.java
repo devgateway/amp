@@ -85,6 +85,7 @@ import org.dgfoundation.amp.onepager.components.fields.AmpOverviewSection;
 import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
 import org.dgfoundation.amp.onepager.components.fields.AmpProjectCost;
 import org.dgfoundation.amp.onepager.components.fields.AmpSemanticValidatorField;
+import org.dgfoundation.amp.onepager.components.fields.AmpSimpleValidatorField;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.dgfoundation.amp.onepager.models.TranslationDecoratorModel;
@@ -195,7 +196,10 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                     @Override
                     public void component(AmpSemanticValidatorField<?> ifs,
                             IVisit<Void> visit) {
-                        ifs.getSemanticValidator().setEnabled(enabled);
+                         //do not toggle if we should validate drafts too
+                        if (!ifs.isShouldValidateDrafts()) {
+                            ifs.getSemanticValidator().setEnabled(enabled);
+                        }
                         if (ifs.isVisibleInHierarchy())
                             target.add(ifs);
                         visit.dontGoDeeper();
@@ -863,9 +867,11 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         //disable on click preview
         preview.getButton().add(new AttributeModifier("class", new Model("sideMenuButtons")));
         preview.getButton().add(new AttributePrepender("onclick", new Model<String>( " disableButton();"), ""));
-        if (am.getObject().getAmpActivityId() == null)
+        if (am.getObject().getAmpActivityId() == null) {
             preview.setVisible(false);
+        }
         preview.getButton().add(isSubmit);
+        preview.setAffectedByFreezing(false);
         activityForm.add(preview);
         
         featureList = new ListView<AmpComponentPanel>("featureList", listModel) {
@@ -1118,44 +1124,56 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         // visit form children and add to the ajax request the invalid ones
         
         
-        form.visitChildren(FormComponent.class,
-                new IVisitor<FormComponent, Void>() {
-                    @Override
-                    public void component(FormComponent component,
-                            IVisit<Void> visit) {
-                        if (!component.isValid()) {
-                            target.appendJavaScript("$('#"+ component.getMarkupId() +"').parents().show();");
-                            target.appendJavaScript("$(window).scrollTop($('#"+component.getParent().getMarkupId()+"').position().top)");
-                            if (component.getLabel() != null) {
-                                logger.error("Component is invalid, adding to target: " + component.getLabel().getObject());
-                            }
-                            
-                            target.add(component);
-                            
-                            //some of the fields that need to show errors are HiddenFieldS. These are cumulative error fields, that show error for groups of other fields
-                            //like for example a list of sectors with percentages
-                            //when these AmpCollectionValidatorFieldS are detected, their validation is revisited
-                            if (component instanceof HiddenField) {                                 
-                                if(component.getParent() instanceof AmpCollectionValidatorField<?, ?>) 
-                                    ((AmpCollectionValidatorField)component.getParent()).reloadValidationField(target);                                 
-                            } else {
-                                target.focusComponent(component);
-                                String js = null;
-                                
-                                //we simulate onClick over AmpGroupFieldS because radiochoices are treated differently they can't receive onChange.
-                                //For the rest of the components we use onChange
-                                if(component instanceof RadioChoice<?> || component instanceof CheckBoxMultipleChoice
-                                        || component  instanceof RadioGroup<?> || component instanceof CheckGroup) 
-                                    js=String.format("$('#%s').click();",component.getMarkupId());                                      
-                                else                                            
-                                    js=String.format("$('#%s').change();",component.getMarkupId());
-                                
-                                target.appendJavaScript(js);
-                                target.add(component);
+        form.visitChildren(FormComponent.class, new IVisitor<FormComponent, Void>() {
+            @Override
+            public void component(FormComponent component, IVisit<Void> visit) {
+                if (!component.isValid()) {
+                    target.appendJavaScript("$('#" + component.getMarkupId() + "').parents().show();");
+                    target.appendJavaScript(
+                            "$(window).scrollTop($('#" + component.getParent().getMarkupId() + "').position().top)");
+                    if (component.getLabel() != null) {
+                        logger.error("Component is invalid, adding to target: " + component.getLabel().getObject());
+                    }
+
+                    target.add(component);
+
+                    // some of the fields that need to show errors are
+                    // HiddenFieldS. These are cumulative error fields,
+                    // that show error for groups of other fields
+                    // like for example a list of sectors with
+                    // percentages
+                    // when these AmpCollectionValidatorFieldS are
+                    // detected, their validation is revisited
+                    if (component instanceof HiddenField) {
+                        if (component.getParent() instanceof AmpCollectionValidatorField<?, ?>) {
+                            ((AmpCollectionValidatorField<?, ?>) component.getParent()).reloadValidationField(target);
+                        } else {
+                            if (component.getParent() instanceof AmpSimpleValidatorField<?, ?>) {
+                                ((AmpSimpleValidatorField<?, ?>) component.getParent()).reloadValidationField(target);
                             }
                         }
+                    } else {
+                        target.focusComponent(component);
+                        String js = null;
+
+                        // we simulate onClick over AmpGroupFieldS
+                        // because radiochoices are treated
+                        // differently they can't receive onChange.
+                        // For the rest of the components we use
+                        // onChange
+                        if (component instanceof RadioChoice<?> || component instanceof CheckBoxMultipleChoice
+                                || component instanceof RadioGroup<?> || component instanceof CheckGroup) {
+                            js = String.format("$('#%s').click();", component.getMarkupId());
+                        } else {
+                            js = String.format("$('#%s').change();", component.getMarkupId());
+                        }
+                        target.appendJavaScript(js);
+                        target.add(component);
                     }
-                });
+                }
+
+            }
+        });
         target.add(feedbackPanel);
     }
 

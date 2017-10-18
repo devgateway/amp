@@ -38,7 +38,10 @@ public class ReportModelGenerator implements NiReportOutputBuilder<NiReportModel
         DecimalFormatSymbols decSymbols = new DecimalFormatSymbols();
         decSymbols.setDecimalSeparator(',');
         decSymbols.setGroupingSeparator(',');
-        CellFormatter cellFormatter = new CellFormatter(spec.getSettings(), new DecimalFormat("###,###,###.##", decSymbols), "dd/MM/yyyy", z -> z, new OutputSettings(null));
+        CellFormatter cellFormatter = new CellFormatter(spec.getSettings(), 
+                new DecimalFormat("###,###,###.##", decSymbols), "dd/MM/yyyy", z -> z, 
+                new OutputSettings(null), reportRun.calendar);
+        
         NiReportsFormatter formatter = new NiReportsFormatter(spec, reportRun, cellFormatter);
         
         return new NiReportModel(spec.getReportName())

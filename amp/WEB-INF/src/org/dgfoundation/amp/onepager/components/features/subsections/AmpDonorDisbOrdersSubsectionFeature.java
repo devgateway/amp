@@ -22,6 +22,8 @@ import org.dgfoundation.amp.onepager.components.features.tables.AmpDonorDisburse
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
 import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
+import org.dgfoundation.amp.onepager.events.FreezingUpdateEvent;
+import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.helper.Constants;
@@ -103,7 +105,7 @@ public class AmpDonorDisbOrdersSubsectionFeature extends
         disbOrdersTableFeature = new AmpDonorDisbOrdersFormTableFeature(
                 "disbOrdersTableFeature", model, "Disbursement Orders Table", transactionType);
         add(disbOrdersTableFeature);
-
+        
         AmpAjaxLinkField addDisbOrder = new AmpAjaxLinkField("addDisbOrder",
                 "Add Disbursement Order", "Add Disbursement Order") {
             @Override

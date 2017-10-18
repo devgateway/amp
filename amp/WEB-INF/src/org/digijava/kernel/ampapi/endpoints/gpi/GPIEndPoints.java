@@ -669,6 +669,15 @@ public class GPIEndPoints implements ErrorReportingEndpoint {
     public List<JsonBean> getYears() {       
          return GPIDataService.getYears();
     }
+
+    @GET
+    @Path("/report/donors/")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = { AuthRule.IN_WORKSPACE }, id = "getDonors", ui = false)
+    public List<JsonBean> getDonors() {       
+        return GPIDataService.getDonors(); 
+
+    }
     
     /**
      * {@inheritDoc}

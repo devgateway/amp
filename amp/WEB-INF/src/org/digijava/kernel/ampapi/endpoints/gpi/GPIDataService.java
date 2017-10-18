@@ -621,4 +621,9 @@ public class GPIDataService {
 
         return 0;
     }
+    
+    public static List<JsonBean> getDonors() {
+        return GPIUtils.getDonors();
+
+    }
 }

@@ -460,8 +460,8 @@ public class AmpARFilter extends PropertyListable {
     private String dynIssueFilterOperator;
     private String dynIssueFilterXPeriod;
 
-    private String fromActivityActualCompletionDate; // view: v_actual_completion_date, column name: Current Completion Date
-    private String toActivityActualCompletionDate;  // view: v_actual_completion_date, column name: Current Completion Date
+    private String fromActivityActualCompletionDate;
+    private String toActivityActualCompletionDate;
     private String dynActivityActualCompletionFilterCurrentPeriod;
     private Integer dynActivityActualCompletionFilterAmount;
     private String dynActivityActualCompletionFilterOperator;

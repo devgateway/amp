@@ -2,10 +2,12 @@ package org.digijava.module.message.jobs;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
+import java.util.Set;
+import java.util.StringJoiner;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
@@ -51,9 +53,7 @@ public class PerformanceRulesAlertJob extends ConnectionCleaningJob implements S
             List<Long> actIds = org.digijava.module.aim.util.ActivityUtil.getValidatedActivityIds();
             
             Map<AmpActivityVersion, List<PerformanceRuleMatcher>> actsWithPerfIssues = processActivities(actIds);
-            if (!actsWithPerfIssues.isEmpty()) {
-                new PerformanceRuleAlertTrigger(actsWithPerfIssues);
-            }
+            new PerformanceRuleAlertTrigger(actsWithPerfIssues);
         } else {
             logger.info("Performance rule module is not enabled...");
         }
@@ -90,21 +90,27 @@ public class PerformanceRulesAlertJob extends ConnectionCleaningJob implements S
                 if (lockKey != null) {
                     AmpActivityVersion a = org.digijava.module.aim.util.ActivityUtil.loadActivity(actId);
                     
-                    AmpCategoryValue activityLevel = ruleManager.getPerformanceIssueFromActivity(a);
-                    AmpCategoryValue matchedLevel = null;
+                    Set<AmpCategoryValue> activityLevels = ruleManager.getPerformanceIssuesFromActivity(a);
+                    Set<AmpCategoryValue> matchedLevels = new HashSet<>();
                     
                     if (!noMatcherFound) {
                         failedRuleMatchers = ruleManager.matchActivity(a);
-                        matchedLevel = ruleManager.getHigherLevelFromMatchers(failedRuleMatchers);
+                        matchedLevels = ruleManager.getPerformanceLevelsFromMatchers(failedRuleMatchers);
                     }
                    
-                    if (!Objects.equals(activityLevel, matchedLevel)) {
+                    if (!ruleManager.isEqualPerformanceLevelCollection(matchedLevels, activityLevels)) {
                         AmpActivityVersion updActivity = updateActivity(a);
                         a = updActivity;
                         
+                        final StringJoiner actLabelJoiner = new StringJoiner(",");
+                        activityLevels.stream().forEach(s -> actLabelJoiner.add(s.getLabel()));
+                        
+                        final StringJoiner matchedLabelJoiner = new StringJoiner(",");
+                        matchedLevels.stream().forEach(s -> matchedLabelJoiner.add(s.getLabel()));
+                        
                         logger.info(String.format("\tactivity %d, updated performance alert level from <%s> to <%s>...",
-                                actId, activityLevel == null ? null : activityLevel.getLabel(),
-                                        matchedLevel == null ? null : matchedLevel.getLabel()));
+                                actId, activityLevels.isEmpty() ? null : actLabelJoiner.toString(),
+                                        matchedLevels.isEmpty() ? null : matchedLabelJoiner.toString()));
                         
                         logger.info(String.format("... done, new amp_activity_id=%d\n", 
                                 updActivity.getAmpActivityId()));

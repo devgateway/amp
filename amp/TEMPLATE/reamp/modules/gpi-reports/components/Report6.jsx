@@ -309,7 +309,7 @@ export default class Report6 extends Component {
                             <div className="col-md-3">
                                 <div className="indicator-stat-wrapper">
                                     <div className="stat-value">{this.props.mainReport.summary[Constants.PLANNED_DISBURSEMENTS]}</div>
-                                    <div className="stat-label">{this.getLocalizedColumnName( Constants.PLANNED_DISBURSEMENTS )}</div>
+                                    <div className="stat-label">{this.props.translations['amp-gpi-reports:annual-planned-disbursements']}</div>
                                 </div>
                             </div>
                             <div className="col-md-3">
@@ -376,7 +376,7 @@ export default class Report6 extends Component {
                                     column={Constants.ANNUAL_GOVERNMENT_BUDGET}
                                     headers={this.props.mainReport.page.headers}/>
                                      {this.getLocalizedColumnName( Constants.ANNUAL_GOVERNMENT_BUDGET )}</th>
-                                <th className="col-md-2">{this.getLocalizedColumnName( Constants.PLANNED_DISBURSEMENTS )}</th>
+                                <th className="col-md-2">{this.props.translations['amp-gpi-reports:annual-planned-disbursements']}</th>
                                 <th className="col-md-2"><HeaderToolTip
                                     column={Constants.PERCENTAGE_OF_PLANNED_ON_BUDGET}
                                     headers={this.props.mainReport.page.headers}/>{this.getLocalizedColumnName( Constants.PERCENTAGE_OF_PLANNED_ON_BUDGET )}</th>

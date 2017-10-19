@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.onepager.util.SaveContext;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
@@ -960,7 +961,7 @@ public class DataExchangeUtils {
         try {
             ampActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(
                     ampActivity, translations, team.getTeamLead(),
-                    false, PersistenceManager.getRequestDBSession(), false, false);
+                    false, PersistenceManager.getRequestDBSession(), SaveContext.job());
         } catch (Exception e) {
             e.printStackTrace();
             logger.error(e.getMessage());

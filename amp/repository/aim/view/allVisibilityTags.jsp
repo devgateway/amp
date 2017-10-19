@@ -42,6 +42,7 @@
 <module:display name="Document" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Funding" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Pledges" parentModule="PROJECT MANAGEMENT"/>
+<module:display name="AMP Offline" parentModule="PROJECT MANAGEMENT"/>
 <module:display name="/GIS"></module:display>
 
 <module:display  name="/Dashboards"></module:display>
@@ -590,7 +591,6 @@ deleted 6 fields, do not reinsert
 <field:display name="Currency Expenditure" feature="Expenditures"></field:display> 
 <field:display name="Currency Expenditures" feature="Regional Funding"></field:display> 
 <field:display name="Currency of Disbursement Order" feature="Disbursement Orders"></field:display> 
-<field:display name="Current Completion Date" feature="Planning"></field:display> 
 <field:display name="Data Source" feature="Identification"></field:display>
 <field:display name="Data Team Leader" feature="Identification"></field:display> 
 <field:display name="Date Commitment" feature="Commitments"></field:display>
@@ -1099,6 +1099,8 @@ deleted 6 fields, do not reinsert
 <module:display name="Home Page Menu Entry" parentModule="PUBLIC VIEW"></module:display>
 
 <feature:display name="Show Printer Friendly option" module="Public Reports"></feature:display>
+
+<module:display name="Public AMP Offline" parentModule="PUBLIC VIEW"></module:display>
 <!--  -->
 
 <field:display name="Donor Contract Fundin" feature="Contracting"></field:display> 

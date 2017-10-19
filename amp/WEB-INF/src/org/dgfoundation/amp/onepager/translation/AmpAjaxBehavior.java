@@ -102,7 +102,7 @@ public class AmpAjaxBehavior extends AbstractDefaultAjaxBehavior{
                 newMsg.setLocale(locale.getLanguage());
                 translatorWorker.save(newMsg);
             }
-        } catch (WorkerException e1) {
+        } catch (Exception e1) {
             logger.error("Can't save translation: ", e1);
             message = message + "(not saved due to error!)";
         }

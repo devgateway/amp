@@ -546,7 +546,7 @@ public class IatiActivityWorker {
     }
 
     private void setAmpContactDetails(ContactInfo contactInfo, AmpContact ampContact) {
-        Set<AmpContactProperty> contactProperties = new TreeSet<AmpContactProperty>();
+        TreeSet<AmpContactProperty> contactProperties = new TreeSet<>();
 
         // getOrganisationOrPersonNameOrTelephone method was renamed in 1_03
         for (Object contentItem : contactInfo.getOrganisationOrPersonNameOrJobTitle()) {

@@ -30,11 +30,9 @@ import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.formulas.NiFormula;
 import org.digijava.kernel.ampapi.endpoints.gpi.GPIUtils;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
-import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpGPINiDonorNotes;
 import org.digijava.module.common.util.DateTimeUtil;
-import org.hibernate.Query;
-import org.hibernate.Session;
+
 
 /**
  * A utility class to transform a GeneratedReport to GPI Report 5a
@@ -225,7 +223,8 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
                     });
                     row.put(new GPIReportOutputColumn(GPIReportConstants.COLUMN_REMARK),
                             getRemarkEndpointURL(k, reportArea.getOwner().id));
-                    row.put(new GPIReportOutputColumn(GPIReportConstants.COLUMN_REMARKS_COUNT), String.valueOf(getNumberOfRemarks(k, reportArea.getOwner().id, donorNotes)));
+                    row.put(new GPIReportOutputColumn(GPIReportConstants.COLUMN_REMARKS_COUNT),
+                            String.valueOf(getNumberOfRemarks(k, reportArea.getOwner().id, donorNotes)));
                     row.put(new GPIReportOutputColumn(ColumnConstants.DONOR_ID),
                             String.valueOf(reportArea.getOwner().id));
 
@@ -262,8 +261,7 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 
         return String.format(remarkEndpoint, GPIReportConstants.REPORT_5a, id, donorType, min, max);
     }
-    
-    
+        
     private Integer getNumberOfRemarks(String year, long id, List<AmpGPINiDonorNotes> donorNotes) {
         String donorType = isDonorAgency ? GPIReportConstants.HIERARCHY_DONOR_AGENCY
                 : GPIReportConstants.HIERARCHY_DONOR_GROUP;
@@ -272,9 +270,10 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
         Integer to = DateTimeUtil.toJulianDayNumber(LocalDate.ofYearDay(y + 1, 1));
         List<Long> donorIds = new ArrayList<>();
         donorIds.add(id);
-        List<AmpGPINiDonorNotes> filteredNotes = GPIUtils.filterNotes(donorNotes, donorIds, donorType, from.longValue(), to.longValue());
+        List<AmpGPINiDonorNotes> filteredNotes = GPIUtils.filterNotes(donorNotes, donorIds, donorType, from.longValue(),
+                to.longValue());
         return filteredNotes.size();
-    }    
+    }   
 
     private Map<String, ReportCell> getEmptyGPIRow(ReportSpecification spec) {
 

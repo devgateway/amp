@@ -188,33 +188,30 @@ public class GPIUtils {
      */
     public static List<AmpGPINiDonorNotes> filterNotes(List<AmpGPINiDonorNotes> donorNotes, List<Long> donorIds,
             String donorType, Long from, Long to) {
-        
-        List<AmpGPINiDonorNotes> filteredNotes = new ArrayList<>();
-        
-        Predicate<AmpGPINiDonorNotes> fromDatePredicate = note -> from == null || from == 0 ? true : 
-            DateTimeUtil.toJulianDayNumber(note.getNotesDate()) >= from;
-            
-        Predicate<AmpGPINiDonorNotes> toDatePredicate = note -> to == null || to == 0 ? true : 
-            DateTimeUtil.toJulianDayNumber(note.getNotesDate()) <= to;
-        
-        Predicate<AmpGPINiDonorNotes> donorPredicate = note -> donorIds == null || donorIds.isEmpty()
-                || (donorIds.size() == 1 && donorIds.get(0) == null) 
-                ? true : donorType == null || GPIReportConstants.HIERARCHY_DONOR_AGENCY.equals(donorType)   
-                ? donorIds.contains(note.getDonor().getAmpOrgId()) 
-                : GPIReportConstants.HIERARCHY_DONOR_GROUP.equals(donorType) 
-                ? donorIds.contains(note.getDonor().getOrgGrpId().getAmpOrgGrpId()) : false;
 
-        filteredNotes = donorNotes.stream()
-                .filter(fromDatePredicate)
-                .filter(toDatePredicate)
-                .filter(donorPredicate)
-                .sorted((n1, n2) -> n2.getNotesDate().compareTo(n1.getNotesDate()))
-                .collect(Collectors.toList());
-        
+        List<AmpGPINiDonorNotes> filteredNotes = new ArrayList<>();
+
+        Predicate<AmpGPINiDonorNotes> fromDatePredicate = note -> from == null || from == 0 ? true
+                : DateTimeUtil.toJulianDayNumber(note.getNotesDate()) >= from;
+
+        Predicate<AmpGPINiDonorNotes> toDatePredicate = note -> to == null || to == 0 ? true
+                : DateTimeUtil.toJulianDayNumber(note.getNotesDate()) <= to;
+
+        Predicate<AmpGPINiDonorNotes> donorPredicate = note -> donorIds == null || donorIds.isEmpty()
+                || (donorIds.size() == 1 && donorIds.get(0) == null)
+                        ? true
+                        : donorType == null || GPIReportConstants.HIERARCHY_DONOR_AGENCY.equals(donorType)
+                                ? donorIds.contains(note.getDonor().getAmpOrgId())
+                                : GPIReportConstants.HIERARCHY_DONOR_GROUP.equals(donorType)
+                                        ? donorIds.contains(note.getDonor().getOrgGrpId().getAmpOrgGrpId()) : false;
+
+        filteredNotes = donorNotes.stream().filter(fromDatePredicate).filter(toDatePredicate).filter(donorPredicate)
+                .sorted((n1, n2) -> n2.getNotesDate().compareTo(n1.getNotesDate())).collect(Collectors.toList());
+
         return filteredNotes;
     }
-    
-    public static Set<Long> getVerifiedOrgsList(){
+
+    public static Set<Long> getVerifiedOrgsList() {
         TeamMember tm = TeamUtil.getCurrentMember();
         AmpTeamMember atm = TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
         Set<Long> orgs = new HashSet<>();

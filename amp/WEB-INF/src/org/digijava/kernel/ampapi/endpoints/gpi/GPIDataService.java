@@ -379,8 +379,8 @@ public class GPIDataService {
         List<GPIRemark> remarks = new ArrayList<>();
 
         AmpDateFormatter dateFormatter = AmpDateFormatterFactory.getLocalizedFormatter(DateTimeUtil.getGlobalPattern());
-        List<AmpGPINiDonorNotes> donorNotes =  GPIUtils.getNotesByCode(indicatorCode);        
-        List<AmpGPINiDonorNotes> filteredNotes = GPIUtils.filterNotes(donorNotes, donorIds, donorType, from, to);        
+        List<AmpGPINiDonorNotes> donorNotes = GPIUtils.getNotesByCode(indicatorCode);
+        List<AmpGPINiDonorNotes> filteredNotes = GPIUtils.filterNotes(donorNotes, donorIds, donorType, from, to);
         filteredNotes.forEach(n -> {
             remarks.add(new GPIRemark(n.getDonor().getName(), dateFormatter.format(n.getNotesDate()), n.getNotes()));
         });

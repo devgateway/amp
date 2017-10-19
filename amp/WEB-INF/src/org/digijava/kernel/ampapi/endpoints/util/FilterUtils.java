@@ -56,6 +56,7 @@ public class FilterUtils {
         mapSimpleColumn(FiltersConstants.APPROVAL_STATUS, ColumnConstants.APPROVAL_STATUS);
         mapSimpleColumn(FiltersConstants.ARCHIVED, ColumnConstants.ARCHIVED);
         mapSimpleColumn(FiltersConstants.BENEFICIARY_AGENCY, ColumnConstants.BENEFICIARY_AGENCY);
+        mapSimpleColumn(FiltersConstants.BENEFICIARY_AGENCY_GROUP, ColumnConstants.BENEFICIARY_AGENCY_GROUPS);
         mapSimpleColumn(FiltersConstants.COMPONENT_FUNDING_ORGANIZATION,
                 ColumnConstants.COMPONENT_FUNDING_ORGANIZATION);
         mapSimpleColumn(FiltersConstants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION,
@@ -63,7 +64,7 @@ public class FilterUtils {
         mapSimpleColumn(FiltersConstants.COMPUTED_YEAR, ColumnConstants.COMPUTED_YEAR);
         mapSimpleColumn(FiltersConstants.CONCESSIONALITY_LEVEL, ColumnConstants.CONCESSIONALITY_LEVEL);
         mapSimpleColumn(FiltersConstants.CONTRACTING_AGENCY, ColumnConstants.CONTRACTING_AGENCY);
-        mapSimpleColumn(FiltersConstants.CONTRACTING_AGENCY_GROUPS, ColumnConstants.CONTRACTING_AGENCY_GROUPS);
+        mapSimpleColumn(FiltersConstants.CONTRACTING_AGENCY_GROUP, ColumnConstants.CONTRACTING_AGENCY_GROUPS);
         mapSimpleColumn(FiltersConstants.COUNTRY, ColumnConstants.COUNTRY);
         mapSimpleColumn(FiltersConstants.DISASTER_RESPONSE_MARKER, ColumnConstants.DISASTER_RESPONSE_MARKER);
         mapSimpleColumn(FiltersConstants.DISTRICT, ColumnConstants.DISTRICT);
@@ -71,12 +72,16 @@ public class FilterUtils {
         mapSimpleColumn(FiltersConstants.DONOR_GROUP, ColumnConstants.DONOR_GROUP);
         mapSimpleColumn(FiltersConstants.DONOR_TYPE, ColumnConstants.DONOR_TYPE);
         mapSimpleColumn(FiltersConstants.EXECUTING_AGENCY, ColumnConstants.EXECUTING_AGENCY);
+        mapSimpleColumn(FiltersConstants.EXECUTING_AGENCY_GROUP, ColumnConstants.EXECUTING_AGENCY_GROUPS);
+        mapSimpleColumn(FiltersConstants.EXECUTING_AGENCY_TYPE, ColumnConstants.EXECUTING_AGENCY_TYPE);
         mapSimpleColumn(FiltersConstants.EXPENDITURE_CLASS, ColumnConstants.EXPENDITURE_CLASS);
         mapSimpleColumn(FiltersConstants.FINANCING_INSTRUMENT, ColumnConstants.FINANCING_INSTRUMENT);
         mapSimpleColumn(FiltersConstants.FUNDING_STATUS, ColumnConstants.FUNDING_STATUS);
         mapSimpleColumn(FiltersConstants.GOVERNMENT_APPROVAL_PROCEDURES, ColumnConstants.GOVERNMENT_APPROVAL_PROCEDURES);
         mapSimpleColumn(FiltersConstants.HUMANITARIAN_AID, ColumnConstants.HUMANITARIAN_AID);
         mapSimpleColumn(FiltersConstants.IMPLEMENTING_AGENCY, ColumnConstants.IMPLEMENTING_AGENCY);
+        mapSimpleColumn(FiltersConstants.IMPLEMENTING_AGENCY_GROUP, ColumnConstants.IMPLEMENTING_AGENCY_GROUPS);
+        mapSimpleColumn(FiltersConstants.IMPLEMENTING_AGENCY_TYPE, ColumnConstants.IMPLEMENTING_AGENCY_TYPE);
         mapSimpleColumn(FiltersConstants.JOINT_CRITERIA, ColumnConstants.JOINT_CRITERIA);
         mapSimpleColumn(FiltersConstants.LOCATION, ColumnConstants.LOCATION);
         mapSimpleColumn(FiltersConstants.MODE_OF_PAYMENT, ColumnConstants.MODE_OF_PAYMENT);
@@ -118,6 +123,8 @@ public class FilterUtils {
         mapSimpleColumn(FiltersConstants.PROJECT_IMPLEMENTING_UNIT, ColumnConstants.PROJECT_IMPLEMENTING_UNIT);
         mapSimpleColumn(FiltersConstants.REGION, ColumnConstants.REGION);
         mapSimpleColumn(FiltersConstants.RESPONSIBLE_ORGANIZATION, ColumnConstants.RESPONSIBLE_ORGANIZATION);
+        mapSimpleColumn(FiltersConstants.RESPONSIBLE_ORGANIZATION_GROUP, 
+                ColumnConstants.RESPONSIBLE_ORGANIZATION_GROUPS);
         mapSimpleColumn(FiltersConstants.SECONDARY_PROGRAM, ColumnConstants.SECONDARY_PROGRAM);
         mapSimpleColumn(FiltersConstants.SECONDARY_PROGRAM_LEVEL_1, ColumnConstants.SECONDARY_PROGRAM_LEVEL_1);
         mapSimpleColumn(FiltersConstants.SECONDARY_PROGRAM_LEVEL_2, ColumnConstants.SECONDARY_PROGRAM_LEVEL_2);

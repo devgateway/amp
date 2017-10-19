@@ -61,6 +61,9 @@ export default class Report6 extends Component {
     showSettings() {
         this.settingsWidget.setElement( this.refs.settingsPopup );
         this.settingsWidget.definitions.loaded.done( function() {
+            const settings  = this.settingsWidget.toAPIFormat();
+            const calendarId = settings && settings['calendar-id'] ?  settings['calendar-id'] : this.settingsWidget.definitions.getDefaultCalendarId();
+            this.setState( { calendarId: calendarId });
             this.settingsWidget.show();
         }.bind( this ) );
 
@@ -70,7 +73,14 @@ export default class Report6 extends Component {
         }.bind( this ) );
 
         this.settingsWidget.on( 'applySettings', function() {
-            this.fetchReportData();
+            const settings  = this.settingsWidget.toAPIFormat();
+            const currentCalendarId = settings && settings['calendar-id'] ?  settings['calendar-id'] : this.settingsWidget.definitions.getDefaultCalendarId();        
+            //if calendar has changed reset year filter
+            if (currentCalendarId !== this.state.calendarId) {            
+                this.onYearChange(null);            
+            } else {
+                this.fetchReportData(); 
+            } 
             $( this.refs.settingsPopup ).hide();
         }.bind( this ) );
     }
@@ -131,22 +141,23 @@ export default class Report6 extends Component {
         }.bind( this ) );
     }
 
-    onYearClick( event ) {
-        this.setState( { selectedYear: $( event.target ).data( "year" ) }, function() {                      
-            var filters = this.filter.serialize().filters;
-            filters.date = {};
-            if (this.state.selectedYear) {
-                filters.date = {
-                        'start': this.state.selectedYear + '-01-01',
-                        'end': this.state.selectedYear + '-12-31'
-                    };  
-            }           
-            this.filter.deserialize({filters: filters}, {silent : true});           
-            this.fetchReportData();
-        }.bind( this ) );
+    onYearClick(event) {
+        const year =  $( event.target ).data( "year" );
+        this.onYearChange(year);
+     }
 
-    }
-
+     onYearChange(year) {
+          this.setState( { selectedYear: year}, function() {                      
+              var filters = this.filter.serialize().filters;
+              filters.date = {};
+              if (this.state.selectedYear) {
+                  filters.date = Utils.getStartEndDates(this.settingsWidget.toAPIFormat(), this.props.calendars, this.state.selectedYear);
+              }           
+              this.filter.deserialize({filters: filters}, {silent : true});           
+              this.fetchReportData();
+          }.bind( this ) );
+     }
+      
     resetQuickFilters() {
         var filters = this.filter.serialize().filters;
         if ( filters.date ) {
@@ -439,7 +450,8 @@ function mapStateToProps( state, ownProps ) {
         years: state.commonLists.years,
         translations: state.startUp.translations,
         translate: state.startUp.translate,
-        settings: state.commonLists.settings
+        settings: state.commonLists.settings,
+        calendars: state.commonLists.calendars
     }
 }
 

@@ -54,6 +54,9 @@ export default class Report1Output1 extends Component {
     }
 
     showSettings() {
+       const settings  = this.settingsWidget.toAPIFormat();
+       const calendarId = settings && settings['calendar-id'] ?  settings['calendar-id'] : this.settingsWidget.definitions.getDefaultCalendarId();
+       this.setState( { calendarId: calendarId });
        Utils.showSettings(this.refs.settingsPopup, this.settingsWidget, this.onSettingsApply.bind(this), this.onSettingsCancel.bind(this));
     }
 
@@ -61,8 +64,15 @@ export default class Report1Output1 extends Component {
         $( this.refs.settingsPopup ).hide();
     }
 
-    onSettingsApply(){
-        this.fetchReportData();
+    onSettingsApply(){        
+        const settings  = this.settingsWidget.toAPIFormat();
+        const currentCalendarId = settings && settings['calendar-id'] ?  settings['calendar-id'] : this.settingsWidget.definitions.getDefaultCalendarId();        
+        //if calendar has changed reset year filter
+        if (currentCalendarId !== this.state.calendarId) {            
+            this.onYearClick(null);            
+        } else {
+            this.fetchReportData(); 
+        }       
         $( this.refs.settingsPopup ).hide();
     }
 
@@ -112,10 +122,7 @@ export default class Report1Output1 extends Component {
             const filters = this.filter.serialize().filters;            
             filters['actual-approval-date'] = {};
             if (this.state.selectedYear) {
-                filters['actual-approval-date'] = {
-                        'start': this.state.selectedYear + '-01-01',
-                        'end': this.state.selectedYear + '-12-31'
-                    };
+                filters['actual-approval-date'] = Utils.getStartEndDates(this.settingsWidget.toAPIFormat(), this.props.calendars, this.state.selectedYear);                
             }
             this.filter.deserialize({filters: filters}, {silent : true});
             this.fetchReportData();
@@ -324,6 +331,7 @@ function mapStateToProps( state, ownProps ) {
         mainReport: state.reports['1'].output1,
         orgList: state.commonLists.orgList,
         years: state.commonLists.years,
+        calendars: state.commonLists.calendars,
         settings: state.commonLists.settings,
         translations: state.startUp.translations,
         translate: state.startUp.translate

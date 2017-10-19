@@ -223,24 +223,24 @@ export default class Report5b extends Component {
 
     showSelectedDates() {
         var displayDates = '';
-        if ( this.filter ) {
-            var filters = this.filter.serialize().filters;
-            filters.date = filters.date || {};
-            filters.date.start = filters.date.start || this.state.selectedYear + '-01-01'  || '';
-            filters.date.end = filters.date.end ||  this.state.selectedYear + '-12-31' || '';
-            var startDatePrefix = ( filters.date.start.length > 0 && filters.date.end.length === 0 ) ? this.props.translations['amp.gpi-reports:from'] : '';
-            var endDatePrefix = ( filters.date.start.length === 0 && filters.date.end.length > 0 ) ? this.props.translations['amp.gpi-reports:until'] : '';
-            if ( filters.date.start.length > 0 ) {
-                displayDates = startDatePrefix + " " + this.filter.formatDate( filters.date.start );
-            }
-
-            if ( filters.date.end.length > 0 ) {
+        if(this.filter){
+            var filters = this.filter.serialize().filters;            
+            if ( filters.date ) {
+                filters.date.start = filters.date.start || '';
+                filters.date.end = filters.date.end || '';
+                var startDatePrefix = ( filters.date.start.length > 0 && filters.date.end.length === 0 ) ? this.props.translations['amp.gpi-reports:from'] : '';
+                var endDatePrefix = ( filters.date.start.length === 0 && filters.date.end.length > 0 ) ? this.props.translations['amp.gpi-reports:until'] : '';
                 if ( filters.date.start.length > 0 ) {
-                    displayDates += " - ";
+                    displayDates = startDatePrefix + " " + this.filter.formatDate( filters.date.start );
                 }
-                displayDates += endDatePrefix + " " + this.filter.formatDate( filters.date.end );
-            }
 
+                if ( filters.date.end.length > 0 ) {
+                    if ( filters.date.start.length > 0 ) {
+                        displayDates += " - ";
+                    }
+                    displayDates += endDatePrefix + " " + this.filter.formatDate( filters.date.end );
+                }
+            } 
         }
         return displayDates;
     }
@@ -279,7 +279,13 @@ export default class Report5b extends Component {
     downloadPdfFile(){
         this.props.actions.downloadPdfFile(this.getRequestData(), '5b');
     } 
-       
+    
+    getYears() {
+        let settings  = this.settingsWidget.toAPIFormat()
+        let calendar = this.props.years.filter(calendar => calendar.calendarId == this.settingsWidget.definitions.getDefaultCalendarId())[0];
+        return calendar.years.slice();      
+    }
+    
     render() {         
         var years = Utils.getYears(this.settingsWidget, this.props.years);                   
         var MTEFYears =  this.getMTEFYears();

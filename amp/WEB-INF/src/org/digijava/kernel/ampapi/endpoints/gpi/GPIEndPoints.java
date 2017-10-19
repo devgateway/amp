@@ -24,6 +24,8 @@ import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+import org.digijava.module.aim.util.FiscalCalendarUtil;
 
 
 @Path("gpi")
@@ -668,6 +670,14 @@ public class GPIEndPoints implements ErrorReportingEndpoint {
     @ApiMethod(authTypes = { AuthRule.IN_WORKSPACE }, id = "getYears", ui = false)
     public List<JsonBean> getYears() {       
          return GPIDataService.getYears();
+    }
+    
+    @GET
+    @Path("/report/calendars/")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = { AuthRule.IN_WORKSPACE }, id = "getCalendars", ui = false)
+    public List<AmpFiscalCalendar> getCalendars() {       
+         return FiscalCalendarUtil.getAllAmpFiscalCalendars();
     }
     
     /**

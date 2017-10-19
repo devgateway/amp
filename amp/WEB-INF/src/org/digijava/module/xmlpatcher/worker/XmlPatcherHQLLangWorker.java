@@ -27,44 +27,44 @@ import org.hibernate.Session;
  */
 public class XmlPatcherHQLLangWorker extends XmlPatcherLangWorker {
 
-	/**
-	 * @param entity
-	 * @param log
-	 */
-	public XmlPatcherHQLLangWorker(Lang entity, Script parentEntity,
-			AmpXmlPatchLog log) {
-		super(entity, parentEntity, log);
-	}
+    /**
+     * @param entity
+     * @param log
+     */
+    public XmlPatcherHQLLangWorker(Lang entity, Script parentEntity,
+            AmpXmlPatchLog log) {
+        super(entity, parentEntity, log);
+    }
 
-	
+    
 
-	@Override
-	protected boolean processSelectStatement()
-			throws XmlPatcherLangWorkerException {
-		try {
-			Session session = PersistenceManager.getSession();
-			Query query = session.createQuery(entity.getValue());
-			List<?> list = query.list();
-			returnValue = list.get(0);
-			return true;
-		} catch (HibernateException e) {
-			throw new XmlPatcherLangWorkerException(e);
-		}
-	}
+    @Override
+    protected boolean processSelectStatement()
+            throws XmlPatcherLangWorkerException {
+        try {
+            Session session = PersistenceManager.getSession();
+            Query query = session.createQuery(entity.getValue());
+            List<?> list = query.list();
+            returnValue = list.get(0);
+            return true;
+        } catch (HibernateException e) {
+            throw new XmlPatcherLangWorkerException(e);
+        }
+    }
 
-	@Override
-	protected boolean processUpdateStatement()
-			throws XmlPatcherLangWorkerException {
-		Session session = XmlPatcherUtil.getHibernateSession();
-		try {
-			Query query = session.createQuery(entity.getValue());
-			query.executeUpdate();
-			return true;
-		} catch (HibernateException e) {
-			throw new XmlPatcherLangWorkerException(e);
-		} finally {
-			XmlPatcherUtil.closeHibernateSession(session);
-		}
-	}
+    @Override
+    protected boolean processUpdateStatement()
+            throws XmlPatcherLangWorkerException {
+        Session session = XmlPatcherUtil.getHibernateSession();
+        try {
+            Query query = session.createQuery(entity.getValue());
+            query.executeUpdate();
+            return true;
+        } catch (HibernateException e) {
+            throw new XmlPatcherLangWorkerException(e);
+        } finally {
+            XmlPatcherUtil.closeHibernateSession(session);
+        }
+    }
 
 }

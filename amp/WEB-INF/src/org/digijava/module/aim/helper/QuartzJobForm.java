@@ -28,64 +28,64 @@ public class QuartzJobForm {
     private String exeTimeS;
     
     public String getExeTimeS() {
-		return exeTimeS;
-	}
+        return exeTimeS;
+    }
 
-	public void setExeTimeS(String exeTimeS) {
-		this.exeTimeS = exeTimeS;
-	}
+    public void setExeTimeS(String exeTimeS) {
+        this.exeTimeS = exeTimeS;
+    }
 
-	public String getExeTimeH() {
-		return exeTimeH;
-	}
+    public String getExeTimeH() {
+        return exeTimeH;
+    }
 
-	public void setExeTimeH(String exeTimeH) {
-		this.exeTimeH = exeTimeH;
-	}
+    public void setExeTimeH(String exeTimeH) {
+        this.exeTimeH = exeTimeH;
+    }
 
-	public String getExeTimeM() {
-		return exeTimeM;
-	}
+    public String getExeTimeM() {
+        return exeTimeM;
+    }
 
-	public void setExeTimeM(String exeTimeM) {
-		this.exeTimeM = exeTimeM;
-	}
+    public void setExeTimeM(String exeTimeM) {
+        this.exeTimeM = exeTimeM;
+    }
 
-	public String getStartH() {
-		return startH;
-	}
+    public String getStartH() {
+        return startH;
+    }
 
-	public void setStartH(String startH) {
-		this.startH = startH;
-	}
+    public void setStartH(String startH) {
+        this.startH = startH;
+    }
 
-	public String getStartM() {
-		return startM;
-	}
+    public String getStartM() {
+        return startM;
+    }
 
-	public void setStartM(String startM) {
-		this.startM = startM;
-	}
+    public void setStartM(String startM) {
+        this.startM = startM;
+    }
 
 
-	public String getEndH() {
-		return endH;
-	}
+    public String getEndH() {
+        return endH;
+    }
 
-	public void setEndH(String endH) {
-		this.endH = endH;
-	}
+    public void setEndH(String endH) {
+        this.endH = endH;
+    }
 
-	public String getEndM() {
-		return endM;
-	}
+    public String getEndM() {
+        return endM;
+    }
 
-	public void setEndM(String endM) {
-		this.endM = endM;
-	}
+    public void setEndM(String endM) {
+        this.endM = endM;
+    }
 
-	
-	public boolean isManualJob() {
+    
+    public boolean isManualJob() {
         return manualJob;
     }
 

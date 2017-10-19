@@ -46,18 +46,18 @@ public class AmpUtil {
     }
 
     public static String SimpleEthipianToGregorian(String date, CalendarConversor convert){
-    	
-    	Integer ethday = Integer.parseInt(date.substring(0,2)); 
-    	Integer ethmonth = Integer.parseInt(date.substring(3,5));
-    	Integer ethyear = Integer.parseInt(date.substring(6,10));
-    	String ethtime = date.substring(11,16);
-    	Integer gregorianday =  convert.toGregorian(ethmonth,ethday,ethyear).getGregorianDate();
-    	Integer gregorianmonth =  convert.toGregorian(ethmonth,ethday,ethyear).getGregorianMonth();
-    	Integer gregorianyear =  convert.toGregorian(ethmonth,ethday,ethyear).getGregorianYear();
-    	
-    	String result = gregorianday.toString() + "/" + gregorianmonth.toString() + "/" + gregorianyear.toString()+ " " + ethtime;
-		return result;
-    	
+        
+        Integer ethday = Integer.parseInt(date.substring(0,2)); 
+        Integer ethmonth = Integer.parseInt(date.substring(3,5));
+        Integer ethyear = Integer.parseInt(date.substring(6,10));
+        String ethtime = date.substring(11,16);
+        Integer gregorianday =  convert.toGregorian(ethmonth,ethday,ethyear).getGregorianDate();
+        Integer gregorianmonth =  convert.toGregorian(ethmonth,ethday,ethyear).getGregorianMonth();
+        Integer gregorianyear =  convert.toGregorian(ethmonth,ethday,ethyear).getGregorianYear();
+        
+        String result = gregorianday.toString() + "/" + gregorianmonth.toString() + "/" + gregorianyear.toString()+ " " + ethtime;
+        return result;
+        
     }
     /***
      * 
@@ -66,47 +66,47 @@ public class AmpUtil {
      * @return
      */
 public static Long SimpleGregorianToEthiopian(String date, CalendarConversor convert){
-    	
-    	Integer greday = Integer.parseInt(date.substring(8,10)); 
-    	Integer gremonth = Integer.parseInt(date.substring(5,7));
-    	Integer greyear = Integer.parseInt(date.substring(0,4));
-    	String gretime = date.substring(11,16);
-    	Integer ethiopianday =  convert.toEthiopian(gremonth,greday,greyear).getDate();
-    	Integer ethiopianmonth = convert.toEthiopian(gremonth,greday,greyear).getMonth();
-    	Integer ethiopianyear =  convert.toEthiopian(gremonth,greday,greyear).getYear();
-    	String dtformat = "dd/MM/yyyy HH:mm";
-    	SimpleDateFormat sdf = new SimpleDateFormat(dtformat);
-    	
-    	String result = ethiopianday.toString() + "/" + ethiopianmonth.toString() + "/" + ethiopianyear.toString()+ " " + gretime;
-		try {
-			return sdf.parse(result).getTime();
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		return null;
+        
+        Integer greday = Integer.parseInt(date.substring(8,10)); 
+        Integer gremonth = Integer.parseInt(date.substring(5,7));
+        Integer greyear = Integer.parseInt(date.substring(0,4));
+        String gretime = date.substring(11,16);
+        Integer ethiopianday =  convert.toEthiopian(gremonth,greday,greyear).getDate();
+        Integer ethiopianmonth = convert.toEthiopian(gremonth,greday,greyear).getMonth();
+        Integer ethiopianyear =  convert.toEthiopian(gremonth,greday,greyear).getYear();
+        String dtformat = "dd/MM/yyyy HH:mm";
+        SimpleDateFormat sdf = new SimpleDateFormat(dtformat);
+        
+        String result = ethiopianday.toString() + "/" + ethiopianmonth.toString() + "/" + ethiopianyear.toString()+ " " + gretime;
+        try {
+            return sdf.parse(result).getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 public static Date SimpleDateGregorianToEthiopian(String date, CalendarConversor convert){
-	
-	Integer greday = Integer.parseInt(date.substring(0,2)); 
-	Integer gremonth = Integer.parseInt(date.substring(3,5));
-	Integer greyear = Integer.parseInt(date.substring(6,10));
-	String gretime = date.substring(11,16);
-	Integer ethiopianday =  convert.toEthiopian(gremonth,greday,greyear).getDate();
-	Integer ethiopianmonth = convert.toEthiopian(gremonth,greday,greyear).getMonth();
-	Integer ethiopianyear =  convert.toEthiopian(gremonth,greday,greyear).getYear();
-	String dtformat = "dd/MM/yyyy HH:mm";
-	SimpleDateFormat sdf = new SimpleDateFormat(dtformat);
-	
-	String result = ethiopianday.toString() + "/" + ethiopianmonth.toString() + "/" + ethiopianyear.toString()+ " " + gretime;
-	
-	try {
-		return sdf.parse(result);
-	} catch (ParseException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-	return null;
+    
+    Integer greday = Integer.parseInt(date.substring(0,2)); 
+    Integer gremonth = Integer.parseInt(date.substring(3,5));
+    Integer greyear = Integer.parseInt(date.substring(6,10));
+    String gretime = date.substring(11,16);
+    Integer ethiopianday =  convert.toEthiopian(gremonth,greday,greyear).getDate();
+    Integer ethiopianmonth = convert.toEthiopian(gremonth,greday,greyear).getMonth();
+    Integer ethiopianyear =  convert.toEthiopian(gremonth,greday,greyear).getYear();
+    String dtformat = "dd/MM/yyyy HH:mm";
+    SimpleDateFormat sdf = new SimpleDateFormat(dtformat);
+    
+    String result = ethiopianday.toString() + "/" + ethiopianmonth.toString() + "/" + ethiopianyear.toString()+ " " + gretime;
+    
+    try {
+        return sdf.parse(result);
+    } catch (ParseException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+    }
+    return null;
 }
     public static Set getSelectedItems(Collection collection, String[] ids,
                                        BeanIdResolver resolver) {
@@ -273,30 +273,30 @@ public static Date SimpleDateGregorianToEthiopian(String date, CalendarConversor
         AmpCalendarGraph ampCalendarGraph = new AmpCalendarGraph(ampCalendar);
         Calendar calendar = ampCalendar.getCalendarPK().getCalendar();
         int calendarStartTimestamp=0;
-    	int calendarEndTimestamp=0;
-    	
-    	 String dtformat = "dd/MM/yyyy HH:mm";
+        int calendarEndTimestamp=0;
+        
+         String dtformat = "dd/MM/yyyy HH:mm";
          SimpleDateFormat sdf = new SimpleDateFormat(dtformat);
-    	
+        
          if (calendartype == CalendarOptions.CALENDAR_TYPE_GREGORIAN){
-        	 calendarStartTimestamp = (int) (calendar.getStartDate().getTime() /1000);
-        	 calendarEndTimestamp = (int) (calendar.getEndDate().getTime() /1000);
+             calendarStartTimestamp = (int) (calendar.getStartDate().getTime() /1000);
+             calendarEndTimestamp = (int) (calendar.getEndDate().getTime() /1000);
         }else{
-        	CalendarConversor convert = new CalendarConversor(Integer.parseInt(calendar.getStartDate().toString().substring(0,4)));
-        	calendar.setStartDate(AmpUtil.SimpleDateGregorianToEthiopian(sdf.format(calendar.getStartDate()).toString(), convert));
-        	calendar.setEndDate(AmpUtil.SimpleDateGregorianToEthiopian(sdf.format(calendar.getEndDate()).toString(), convert));
-		 }
+            CalendarConversor convert = new CalendarConversor(Integer.parseInt(calendar.getStartDate().toString().substring(0,4)));
+            calendar.setStartDate(AmpUtil.SimpleDateGregorianToEthiopian(sdf.format(calendar.getStartDate()).toString(), convert));
+            calendar.setEndDate(AmpUtil.SimpleDateGregorianToEthiopian(sdf.format(calendar.getEndDate()).toString(), convert));
+         }
         Iterator it = navigatorItems.iterator();
         while(it.hasNext()) {
             DateNavigatorItem navigatorItem = (DateNavigatorItem) it.next();
-            int	itemStartTimestamp = getNavigatorItemLeftTimestamp(navigatorItem.getDateBreakDown(), view);
+            int itemStartTimestamp = getNavigatorItemLeftTimestamp(navigatorItem.getDateBreakDown(), view);
             int itemEndTimestamp = getNavigatorItemRightTimestamp(navigatorItem.getDateBreakDown(), view);
             String  eventTypeName=null;
-        	if(ampCalendar.getEventsType()!=null){
-            	AmpCategoryValue ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromDb(ampCalendar.getEventsType().getId());
-            	if (ampCategoryValue != null){
-            		eventTypeName=ampCategoryValue.getValue();
-            	}
+            if(ampCalendar.getEventsType()!=null){
+                AmpCategoryValue ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromDb(ampCalendar.getEventsType().getId());
+                if (ampCategoryValue != null){
+                    eventTypeName=ampCategoryValue.getValue();
+                }
             }
             ampCalendarGraph.getGraphItems().add(getAmpCalendarGraphItem(eventTypeName, calendarStartTimestamp,
                 calendarEndTimestamp, itemStartTimestamp, itemEndTimestamp));
@@ -315,25 +315,25 @@ public static Date SimpleDateGregorianToEthiopian(String date, CalendarConversor
         
         String dtformat = "dd/MM/yyyy HH:mm";
         SimpleDateFormat sdf = new SimpleDateFormat(dtformat);
-   	
+    
         if (calendartype == CalendarOptions.CALENDAR_TYPE_GREGORIAN){
-       	 calendarStartTimestamp = (int) (calendar.getStartDate().getTime() /1000);
-       	 calendarEndTimestamp = (int) (calendar.getEndDate().getTime() /1000);
+         calendarStartTimestamp = (int) (calendar.getStartDate().getTime() /1000);
+         calendarEndTimestamp = (int) (calendar.getEndDate().getTime() /1000);
        }else{
-       	CalendarConversor convert = new CalendarConversor(Integer.parseInt(calendar.getStartDate().toString().substring(0,4)));
-       	calendar.setStartDate(AmpUtil.SimpleDateGregorianToEthiopian(sdf.format(calendar.getStartDate()).toString(), convert));
-       	calendar.setEndDate(AmpUtil.SimpleDateGregorianToEthiopian(sdf.format(calendar.getEndDate()).toString(), convert));
-		 }
+        CalendarConversor convert = new CalendarConversor(Integer.parseInt(calendar.getStartDate().toString().substring(0,4)));
+        calendar.setStartDate(AmpUtil.SimpleDateGregorianToEthiopian(sdf.format(calendar.getStartDate()).toString(), convert));
+        calendar.setEndDate(AmpUtil.SimpleDateGregorianToEthiopian(sdf.format(calendar.getEndDate()).toString(), convert));
+         }
         
         for(int i = 0; i < subItemLeftTimestamps.length; i++) {
-        	String  eventTypeName=null;
-        	if(ampCalendar.getEventsType()!=null){
-            	AmpCategoryValue ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromDb(ampCalendar.getEventsType().getId());
-            	if (ampCategoryValue != null){
-            		eventTypeName=ampCategoryValue.getValue();
-            	}
+            String  eventTypeName=null;
+            if(ampCalendar.getEventsType()!=null){
+                AmpCategoryValue ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromDb(ampCalendar.getEventsType().getId());
+                if (ampCategoryValue != null){
+                    eventTypeName=ampCategoryValue.getValue();
+                }
             }
-        	
+            
             ampCalendarGraph.getGraphItems().add(getAmpCalendarGraphItem(eventTypeName, calendarStartTimestamp,calendarEndTimestamp, subItemLeftTimestamps[i],
                 subItemRightTimestamp[i]));
         }

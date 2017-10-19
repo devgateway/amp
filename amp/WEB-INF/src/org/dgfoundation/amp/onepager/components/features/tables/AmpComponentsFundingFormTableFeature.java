@@ -35,18 +35,18 @@ import java.util.*;
  * @since Nov 25, 2010
  */
 public class AmpComponentsFundingFormTableFeature extends
-		AmpFormTableFeaturePanel {
+        AmpFormTableFeaturePanel {
     private final ListEditor<AmpComponentFunding> editorList;
 
     /**
-	 */
-	public AmpComponentsFundingFormTableFeature(String id,
-			final IModel<AmpComponent> componentModel,
-			final IModel<Set<AmpComponentFunding>> compFundsModel, 
-			final IModel<AmpActivityVersion> activityModel, String fmName,
-			final int transactionType) throws Exception {
-		super(id, activityModel, fmName);
-		setTitleHeaderColSpan(6);
+     */
+    public AmpComponentsFundingFormTableFeature(String id,
+            final IModel<AmpComponent> componentModel,
+            final IModel<Set<AmpComponentFunding>> compFundsModel, 
+            final IModel<AmpActivityVersion> activityModel, String fmName,
+            final int transactionType) throws Exception {
+        super(id, activityModel, fmName);
+        setTitleHeaderColSpan(6);
 
         AbstractMixedSetModel<AmpComponentFunding> listModel = new AbstractMixedSetModel<AmpComponentFunding>(compFundsModel) {
             @Override
@@ -80,11 +80,16 @@ public class AmpComponentsFundingFormTableFeature extends
 
 
                 // selector for related orgs
-                AmpSelectFieldPanel<AmpOrganisation> orgSelect = new AmpSelectFieldPanel<AmpOrganisation>("orgSelect",
-                        new PropertyModel<AmpOrganisation>(model, "reportingOrganization"), orgsList, "Component Organization", false, true, null, false);
-                orgSelect.add(UpdateEventBehavior.of(FundingOrgListUpdateEvent.class));
-                orgSelect.getChoiceContainer().add(new AttributeModifier("style", "width: 100px;"));
+                AmpSelectFieldPanel<AmpOrganisation> orgSelect = buildSelectFieldPanel("orgSelect",
+                        "Component Organization", "reportingOrganization",
+                        model, orgsList);
                 item.add(orgSelect);
+
+                // selector for second related orgs
+                AmpSelectFieldPanel<AmpOrganisation> secondOrgSelect = buildSelectFieldPanel("secondOrgSelect",
+                        "Component Second Responsible Organization", "componentSecondResponsibleOrganization",
+                        model, orgsList);
+                item.add(secondOrgSelect);
 
                 AmpFundingAmountComponent amountComponent = new AmpFundingAmountComponent<AmpComponentFunding>("fundingAmount",
                         model, "Amount", "transactionAmount", "Currency",
@@ -99,39 +104,51 @@ public class AmpComponentsFundingFormTableFeature extends
             }
         };
 
-		add(editorList);
+        add(editorList);
 
-	}
+    }
+
+    private AmpSelectFieldPanel<AmpOrganisation> buildSelectFieldPanel(String id, String fmName, String expression,
+                                                                       IModel<AmpComponentFunding> model,
+                                                                       AbstractReadOnlyModel<List<AmpOrganisation>>
+                                                                               orgsList) {
+        AmpSelectFieldPanel<AmpOrganisation> selectField = new AmpSelectFieldPanel<AmpOrganisation>(id,
+                new PropertyModel<AmpOrganisation>(model, expression), orgsList, fmName
+                , false, true, null, false);
+        selectField.add(UpdateEventBehavior.of(FundingOrgListUpdateEvent.class));
+        selectField.getChoiceContainer().add(new AttributeModifier("style", "width: 100px;"));
+        return selectField;
+    }
 
     public ListEditor<AmpComponentFunding> getEditorList() {
         return editorList;
     }
 
     private AbstractReadOnlyModel<List<AmpComponentFunding>> getSubsetModel( final IModel<Set<AmpComponentFunding>> compFundsModel , final int transactionType)
-	{
-		
-		
-		return new AbstractReadOnlyModel<List<AmpComponentFunding>>() {
-			private static final long serialVersionUID = 370618487459839210L;
+    {
+        
+        
+        return new AbstractReadOnlyModel<List<AmpComponentFunding>>() {
+            private static final long serialVersionUID = 370618487459839210L;
 
-			@Override
-			public List<AmpComponentFunding> getObject() {
-				List<AmpComponentFunding> result = new ArrayList<AmpComponentFunding>();
-				Set<AmpComponentFunding> allComp = compFundsModel.getObject();
-				if (allComp != null){
-					Iterator<AmpComponentFunding> iterator = allComp.iterator();
-					while (iterator.hasNext()) {
-						AmpComponentFunding comp = (AmpComponentFunding) iterator
-						.next();
-						if (comp.getTransactionType() == transactionType)
-							//if (comp.getComponent().hashCode() == componentModel.getObject().hashCode())
-								result.add(comp);
-					}
-				}
-				
-				return result;
-			}
-		};
-	}
+            @Override
+            public List<AmpComponentFunding> getObject() {
+                List<AmpComponentFunding> result = new ArrayList<AmpComponentFunding>();
+                Set<AmpComponentFunding> allComp = compFundsModel.getObject();
+                if (allComp != null){
+                    Iterator<AmpComponentFunding> iterator = allComp.iterator();
+                    while (iterator.hasNext()) {
+                        AmpComponentFunding comp = (AmpComponentFunding) iterator
+                        .next();
+                        if (comp.getTransactionType() == transactionType)
+                            //if (comp.getComponent().hashCode() == componentModel.getObject().hashCode())
+                                result.add(comp);
+                    }
+                }
+                
+                return result;
+            }
+        };
+    }
 
 }

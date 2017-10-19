@@ -54,5 +54,6 @@
 			<key column="receiver_id" />
 			<one-to-many class="org.digijava.module.message.dbentity.AmpMessageState" />
 		</set>
+		<property name="deleted" column="deleted" type="java.lang.Boolean" />
 	</class>
 </hibernate-mapping>

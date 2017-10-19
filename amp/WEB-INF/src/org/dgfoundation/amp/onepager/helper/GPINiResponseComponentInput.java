@@ -10,22 +10,22 @@ import org.dgfoundation.amp.onepager.components.fields.AmpGPINiIndicatorValidato
  */
 public class GPINiResponseComponentInput {
 
-	private String questionCode;
-	private String value;
+    private String questionCode;
+    private String value;
 
-	public String getQuestionCode() {
-		return questionCode;
-	}
+    public String getQuestionCode() {
+        return questionCode;
+    }
 
-	public void setQuestionCode(String question) {
-		this.questionCode = question;
-	}
+    public void setQuestionCode(String question) {
+        this.questionCode = question;
+    }
 
-	public String getValue() {
-		return value;
-	}
+    public String getValue() {
+        return value;
+    }
 
-	public void setValue(String value) {
-		this.value = value;
-	}
+    public void setValue(String value) {
+        this.value = value;
+    }
 }

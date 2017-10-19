@@ -21,12 +21,12 @@ public class IndicatorsBean {
     private String sectorName;
     
     private Long ampThemeIndId;
-	private Date creationDate;
-	private boolean npIndicator;
-	private Set themes;
-	private Set indicatorValues;
-	private Set sectors;
-	private boolean flag;
+    private Date creationDate;
+    private boolean npIndicator;
+    private Set themes;
+    private Set indicatorValues;
+    private Set sectors;
+    private boolean flag;
     
     
     
@@ -56,7 +56,7 @@ public class IndicatorsBean {
 
     @Deprecated
     public IndicatorsBean(AmpThemeIndicators ind) {
-    	this.id=ind.getAmpThemeIndId();
+        this.id=ind.getAmpThemeIndId();
         this.name=ind.getName();
         this.category=Integer.valueOf(ind.getCategory());
         this.code=ind.getCode();
@@ -65,7 +65,7 @@ public class IndicatorsBean {
     }
 
     public IndicatorsBean(AmpIndicator ind) {
-    	this.id=ind.getIndicatorId();
+        this.id=ind.getIndicatorId();
         this.name=ind.getName();
         this.category=Integer.valueOf(ind.getCategory());
         this.code=ind.getCode();
@@ -138,84 +138,84 @@ public class IndicatorsBean {
         this.description = description;
     }
 
-	public Collection getSector() {
-		return sector;
-	}
+    public Collection getSector() {
+        return sector;
+    }
 
-	public void setSector(Collection sector) {
-		this.sector = sector;
-	}
+    public void setSector(Collection sector) {
+        this.sector = sector;
+    }
 
-	public String getSectorName() {
-		return sectorName;
-	}
+    public String getSectorName() {
+        return sectorName;
+    }
 
-	public void setSectorName(String sectorName) {
-		this.sectorName = sectorName;
-	}
+    public void setSectorName(String sectorName) {
+        this.sectorName = sectorName;
+    }
 
-	public Long getAmpThemeIndId() {
-		return ampThemeIndId;
-	}
+    public Long getAmpThemeIndId() {
+        return ampThemeIndId;
+    }
 
-	public void setAmpThemeIndId(Long ampThemeIndId) {
-		this.ampThemeIndId = ampThemeIndId;
-	}
+    public void setAmpThemeIndId(Long ampThemeIndId) {
+        this.ampThemeIndId = ampThemeIndId;
+    }
 
-	public Date getCreationDate() {
-		return creationDate;
-	}
+    public Date getCreationDate() {
+        return creationDate;
+    }
 
-	public void setCreationDate(Date creationDate) {
-		this.creationDate = creationDate;
-	}
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
 
-	public boolean isNpIndicator() {
-		return npIndicator;
-	}
+    public boolean isNpIndicator() {
+        return npIndicator;
+    }
 
-	public void setNpIndicator(boolean npIndicator) {
-		this.npIndicator = npIndicator;
-	}
+    public void setNpIndicator(boolean npIndicator) {
+        this.npIndicator = npIndicator;
+    }
 
-	public Set getThemes() {
-		return themes;
-	}
+    public Set getThemes() {
+        return themes;
+    }
 
-	public void setThemes(Set themes) {
-		this.themes = themes;
-	}
+    public void setThemes(Set themes) {
+        this.themes = themes;
+    }
 
-	public Set getIndicatorValues() {
-		return indicatorValues;
-	}
+    public Set getIndicatorValues() {
+        return indicatorValues;
+    }
 
-	public void setIndicatorValues(Set indicatorValues) {
-		this.indicatorValues = indicatorValues;
-	}
+    public void setIndicatorValues(Set indicatorValues) {
+        this.indicatorValues = indicatorValues;
+    }
 
-	public Set getSectors() {
-		return sectors;
-	}
+    public Set getSectors() {
+        return sectors;
+    }
 
-	public void setSectors(Set sectors) {
-		this.sectors = sectors;
-	}
+    public void setSectors(Set sectors) {
+        this.sectors = sectors;
+    }
 
-	public boolean isFlag() {
-		return flag;
-	}
+    public boolean isFlag() {
+        return flag;
+    }
 
-	public void setFlag(boolean flag) {
-		this.flag = flag;
-	}
-	public Collection getSectorNames() {
-		return sectorNames;
-	}
+    public void setFlag(boolean flag) {
+        this.flag = flag;
+    }
+    public Collection getSectorNames() {
+        return sectorNames;
+    }
 
-	public void setSectorNames(Collection sectorNames) {
-		this.sectorNames = sectorNames;
-	}
+    public void setSectorNames(Collection sectorNames) {
+        this.sectorNames = sectorNames;
+    }
 
 
 }

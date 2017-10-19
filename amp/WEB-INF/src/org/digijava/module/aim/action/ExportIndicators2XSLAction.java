@@ -45,27 +45,27 @@ import org.jfree.data.category.CategoryDataset;
  */
 public class ExportIndicators2XSLAction extends Action {
 
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
-		NpdForm npdForm = (NpdForm) form;
-		 
-		response.setContentType("application/vnd.ms-excel");
-		response.setHeader("Content-disposition", "inline; filename=AMPIndicatorsExport.xls");
+    public ActionForward execute(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
+        NpdForm npdForm = (NpdForm) form;
+         
+        response.setContentType("application/vnd.ms-excel");
+        response.setHeader("Content-disposition", "inline; filename=AMPIndicatorsExport.xls");
 
-		AmpTheme mainProg = ProgramUtil.getThemeById(npdForm.getProgramId());
-		Collection<IndicatorGridRow> rows = getGridRows(mainProg, npdForm.getRecursive(), npdForm
-				.getSelYears(), npdForm.getSelIndicators());
+        AmpTheme mainProg = ProgramUtil.getThemeById(npdForm.getProgramId());
+        Collection<IndicatorGridRow> rows = getGridRows(mainProg, npdForm.getRecursive(), npdForm
+                .getSelYears(), npdForm.getSelIndicators());
 
-		//XLSExporter.resetStyles();
+        //XLSExporter.resetStyles();
 
-		HSSFWorkbook wb = new HSSFWorkbook();
+        HSSFWorkbook wb = new HSSFWorkbook();
 
         int pictureIndex = wb.addPicture(getGraphBytes(request, npdForm), HSSFWorkbook.PICTURE_TYPE_PNG);
 
-		String sheetName = mainProg.getName();
-		if (sheetName.length() > 31){
-			sheetName = sheetName.substring(0, 31);
+        String sheetName = mainProg.getName();
+        if (sheetName.length() > 31){
+            sheetName = sheetName.substring(0, 31);
                 }
                 else {
                 if (sheetName.length() == 0) {
@@ -83,113 +83,113 @@ public class ExportIndicators2XSLAction extends Action {
                 sheetName=sheetName.replace("]", ")");
                 sheetName =sheetName.replace(":", "-");
           
-		HSSFSheet sheet = wb.createSheet(sheetName);
+        HSSFSheet sheet = wb.createSheet(sheetName);
 
-		
-		HSSFCellStyle csHeader = wb.createCellStyle();
-		csHeader.setFillBackgroundColor(HSSFColor.BROWN.index);
-		HSSFFont font = wb.createFont();
-		font.setFontName(HSSFFont.FONT_ARIAL);
-		font.setFontHeightInPoints((short)12);			
-		font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
-		csHeader.setFont(font);				
+        
+        HSSFCellStyle csHeader = wb.createCellStyle();
+        csHeader.setFillBackgroundColor(HSSFColor.BROWN.index);
+        HSSFFont font = wb.createFont();
+        font.setFontName(HSSFFont.FONT_ARIAL);
+        font.setFontHeightInPoints((short)12);          
+        font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+        csHeader.setFont(font);             
 
-		HSSFCellStyle csSubHeader = wb.createCellStyle();
-		csSubHeader.setFillBackgroundColor(HSSFColor.BROWN.index);
-		HSSFFont fontSubHeader = wb.createFont();
-		fontSubHeader.setFontName(HSSFFont.FONT_ARIAL);
-		//fontSubHeader.setFontHeightInPoints((short)12);			
-		fontSubHeader.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
-		csSubHeader.setFont(fontSubHeader);				
+        HSSFCellStyle csSubHeader = wb.createCellStyle();
+        csSubHeader.setFillBackgroundColor(HSSFColor.BROWN.index);
+        HSSFFont fontSubHeader = wb.createFont();
+        fontSubHeader.setFontName(HSSFFont.FONT_ARIAL);
+        //fontSubHeader.setFontHeightInPoints((short)12);           
+        fontSubHeader.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+        csSubHeader.setFont(fontSubHeader);             
 
-		
-		short rowNum = 0;
-		short cellNum = 0;
+        
+        short rowNum = 0;
+        short cellNum = 0;
 
-		HSSFRow row = sheet.createRow(rowNum++);
+        HSSFRow row = sheet.createRow(rowNum++);
 
-		HSSFCell cell = row.createCell(cellNum);
+        HSSFCell cell = row.createCell(cellNum);
                 String hierarchyName=ProgramUtil.getHierarchyName(mainProg);
                 String header=TranslatorWorker.translateText("Indicators for");
 
-		cell.setCellValue(header+"  "+hierarchyName);
-		cell.setCellStyle(csHeader);
+        cell.setCellValue(header+"  "+hierarchyName);
+        cell.setCellStyle(csHeader);
 
 
-		if (npdForm.getSelYears() != null && npdForm.getSelYears().length > 0) {
+        if (npdForm.getSelYears() != null && npdForm.getSelYears().length > 0) {
 
-			// table header 1
-			row = sheet.createRow(rowNum++);
-			cell = row.createCell(cellNum++);
-			cell.setCellValue(" ");
-			
-			cell = row.createCell(cellNum++);
-			cell.setCellValue(" ");
-			
-			cell = row.createCell(cellNum++);
-			cell.setCellValue(" ");
-			
-			for (int i = 0; i < npdForm.getSelYears().length; i++) {
-				cell = row.createCell(cellNum++);
-				cellNum++;
-				cellNum++;
-				cell.setCellValue(npdForm.getSelYears()[i]);
-				cell.setCellStyle(csSubHeader);
-			}
+            // table header 1
+            row = sheet.createRow(rowNum++);
+            cell = row.createCell(cellNum++);
+            cell.setCellValue(" ");
+            
+            cell = row.createCell(cellNum++);
+            cell.setCellValue(" ");
+            
+            cell = row.createCell(cellNum++);
+            cell.setCellValue(" ");
+            
+            for (int i = 0; i < npdForm.getSelYears().length; i++) {
+                cell = row.createCell(cellNum++);
+                cellNum++;
+                cellNum++;
+                cell.setCellValue(npdForm.getSelYears()[i]);
+                cell.setCellStyle(csSubHeader);
+            }
 
-			// table header 2
-			cellNum = 0;
-			row = sheet.createRow(rowNum++);
-			
-			cell = row.createCell(cellNum++);
-			cell.setCellValue(TranslatorWorker.translateText("indicator Name"));			
-			cell.setCellStyle(csSubHeader);			
-			
-			cell=row.createCell(cellNum++);
-			cell.setCellValue(TranslatorWorker.translateText("indicator Description"));			
-			cell.setCellStyle(csSubHeader);
+            // table header 2
+            cellNum = 0;
+            row = sheet.createRow(rowNum++);
+            
+            cell = row.createCell(cellNum++);
+            cell.setCellValue(TranslatorWorker.translateText("indicator Name"));            
+            cell.setCellStyle(csSubHeader);         
+            
+            cell=row.createCell(cellNum++);
+            cell.setCellValue(TranslatorWorker.translateText("indicator Description"));         
+            cell.setCellStyle(csSubHeader);
 
-			for (int i = 0; i < npdForm.getSelYears().length; i++) {
+            for (int i = 0; i < npdForm.getSelYears().length; i++) {
                                 cell = row.createCell(cellNum++);
-				cell.setCellValue(TranslatorWorker.translateText("Base"));
-				cell.setCellStyle(csSubHeader);
-				cell = row.createCell(cellNum++);
-				cell.setCellValue(TranslatorWorker.translateText("Actual"));
-				cell.setCellStyle(csSubHeader);
-				cell = row.createCell(cellNum++);
-				cell.setCellValue(TranslatorWorker.translateText("Target"));
-				cell.setCellStyle(csSubHeader);
-			}
+                cell.setCellValue(TranslatorWorker.translateText("Base"));
+                cell.setCellStyle(csSubHeader);
+                cell = row.createCell(cellNum++);
+                cell.setCellValue(TranslatorWorker.translateText("Actual"));
+                cell.setCellStyle(csSubHeader);
+                cell = row.createCell(cellNum++);
+                cell.setCellValue(TranslatorWorker.translateText("Target"));
+                cell.setCellStyle(csSubHeader);
+            }
 
-			// rows
-			if (rows != null && rows.size() > 0) {
-				for (IndicatorGridRow indic : rows) {
-					cellNum = 0;
+            // rows
+            if (rows != null && rows.size() > 0) {
+                for (IndicatorGridRow indic : rows) {
+                    cellNum = 0;
 
-					row = sheet.createRow(rowNum++);
-					
-					cell = row.createCell(cellNum++);
-					cell.setCellValue(indic.getName());
-					
-					
-					cell = row.createCell(cellNum++);
-					cell.setCellValue(indic.getDescription());
-					
-					
-					List<IndicatorGridItem> values = indic.getValues();
-					if (values!=null){
-						for (IndicatorGridItem item: values) {
+                    row = sheet.createRow(rowNum++);
+                    
+                    cell = row.createCell(cellNum++);
+                    cell.setCellValue(indic.getName());
+                    
+                    
+                    cell = row.createCell(cellNum++);
+                    cell.setCellValue(indic.getDescription());
+                    
+                    
+                    List<IndicatorGridItem> values = indic.getValues();
+                    if (values!=null){
+                        for (IndicatorGridItem item: values) {
                             cell = row.createCell(cellNum++);
-							cell.setCellValue(item.getBaseValue());
-							cell = row.createCell(cellNum++);
-							cell.setCellValue(item.getActualValue());
-							cell = row.createCell(cellNum++);
-							cell.setCellValue(item.getTargetValue());
-						}
-					}
-				}
-			}
-		}
+                            cell.setCellValue(item.getBaseValue());
+                            cell = row.createCell(cellNum++);
+                            cell.setCellValue(item.getActualValue());
+                            cell = row.createCell(cellNum++);
+                            cell.setCellValue(item.getTargetValue());
+                        }
+                    }
+                }
+            }
+        }
 
 
 
@@ -202,10 +202,10 @@ public class ExportIndicators2XSLAction extends Action {
 
         pic1.resize();
 
-		wb.write(response.getOutputStream());
+        wb.write(response.getOutputStream());
 
-		return null;
-	}
+        return null;
+    }
 
     private byte[] getGraphBytes (HttpServletRequest request, NpdForm npdForm) {
         byte[] retVal = null;
@@ -233,21 +233,21 @@ public class ExportIndicators2XSLAction extends Action {
             JFreeChart chart = ChartUtil.createChart(dataset, ChartUtil.CHART_TYPE_BAR);
             ChartRenderingInfo info = new ChartRenderingInfo();
 
-    		Long teamId= TeamUtil.getCurrentTeam(request).getAmpTeamId();
-    		NpdSettings npdSettings= NpdUtil.getCurrentSettings(teamId);
+            Long teamId= TeamUtil.getCurrentTeam(request).getAmpTeamId();
+            NpdSettings npdSettings= NpdUtil.getCurrentSettings(teamId);
             Double angle=null;
 
             if(npdSettings.getAngle()!=null){
-        		CategoryPlot categoryplot = (CategoryPlot)chart.getPlot();
+                CategoryPlot categoryplot = (CategoryPlot)chart.getPlot();
                 CategoryAxis categoryaxis = categoryplot.getDomainAxis();
-            	angle=npdSettings.getAngle().intValue()*3.1415926535897931D/180D;
+                angle=npdSettings.getAngle().intValue()*3.1415926535897931D/180D;
                 categoryaxis.setCategoryLabelPositions(CategoryLabelPositions.createUpRotationLabelPositions(angle));
             }
 
             ByteArrayOutputStream ostr = new ByteArrayOutputStream();
 
-    		ChartUtilities.writeChartAsPNG(ostr, chart, npdSettings.getWidth().intValue(),
-            		npdSettings.getHeight().intValue(), info);
+            ChartUtilities.writeChartAsPNG(ostr, chart, npdSettings.getWidth().intValue(),
+                    npdSettings.getHeight().intValue(), info);
 
             retVal =  ostr.toByteArray();
 
@@ -262,21 +262,21 @@ public class ExportIndicators2XSLAction extends Action {
     }
 
 
-	private Collection<IndicatorGridRow> getGridRows(AmpTheme prog, boolean recursive,String[] years, long[] inds) throws DgException{
-		List<IndicatorGridRow> result = null;
-		if (prog != null && prog.getAmpThemeId() != null) {
-			//get all indicators and if recursive=true then all sub indicators too 
-			Set<IndicatorTheme> indicators = IndicatorUtil.getIndicators(prog, recursive);
-			if (indicators != null && indicators.size() > 0) {
-				//convert to list
-				List<IndicatorTheme> indicatorsList = new ArrayList<IndicatorTheme>(indicators);
-				//sort
-				Collections.sort(indicatorsList,new IndicatorUtil.IndThemeIndciatorNameComparator());
-				result = new ArrayList<IndicatorGridRow>(indicatorsList.size());
-				//create row object for each indicator connection
-				for (IndicatorTheme connection : indicatorsList) {
-					IndicatorGridRow row = new IndicatorGridRow(connection,years);
-					if (inds != null) {
+    private Collection<IndicatorGridRow> getGridRows(AmpTheme prog, boolean recursive,String[] years, long[] inds) throws DgException{
+        List<IndicatorGridRow> result = null;
+        if (prog != null && prog.getAmpThemeId() != null) {
+            //get all indicators and if recursive=true then all sub indicators too 
+            Set<IndicatorTheme> indicators = IndicatorUtil.getIndicators(prog, recursive);
+            if (indicators != null && indicators.size() > 0) {
+                //convert to list
+                List<IndicatorTheme> indicatorsList = new ArrayList<IndicatorTheme>(indicators);
+                //sort
+                Collections.sort(indicatorsList,new IndicatorUtil.IndThemeIndciatorNameComparator());
+                result = new ArrayList<IndicatorGridRow>(indicatorsList.size());
+                //create row object for each indicator connection
+                for (IndicatorTheme connection : indicatorsList) {
+                    IndicatorGridRow row = new IndicatorGridRow(connection,years);
+                    if (inds != null) {
                         for (long selIndId : inds){
                             if (selIndId == row.getId().longValue()) {
                                 result.add(row);
@@ -284,31 +284,31 @@ public class ExportIndicators2XSLAction extends Action {
                             }
                         }
                     }
-				}
-			}
-		}
-		return result;
-	}
+                }
+            }
+        }
+        return result;
+    }
 
 
-	public static class IndicatorsByyear2XLS extends XLSExporter {
+    public static class IndicatorsByyear2XLS extends XLSExporter {
 
-		public IndicatorsByyear2XLS(Exporter parent, Viewable item) {
-			super(parent, item);
-		}
+        public IndicatorsByyear2XLS(Exporter parent, Viewable item) {
+            super(parent, item);
+        }
 
-		public IndicatorsByyear2XLS(HSSFWorkbook wb, HSSFSheet sheet,
-				HSSFRow row, IntWrapper rowId, IntWrapper colId, Long ownerId,
-				Viewable item) {
-			super(wb, sheet, row, rowId, colId, ownerId, item);
-		}
+        public IndicatorsByyear2XLS(HSSFWorkbook wb, HSSFSheet sheet,
+                HSSFRow row, IntWrapper rowId, IntWrapper colId, Long ownerId,
+                Viewable item) {
+            super(wb, sheet, row, rowId, colId, ownerId, item);
+        }
 
-		public void generate() {
+        public void generate() {
 
-			// TODO Auto-generated method stub
+            // TODO Auto-generated method stub
 
-		}
+        }
 
-	}
+    }
 
 }

@@ -14,36 +14,36 @@ package org.digijava.module.digifeed.exception;
  */
 public class UnknownBindingSourceException extends Exception {
 
-	/**
-	 * 
-	 UnknownBindingSourceException	 */
-	public UnknownBindingSourceException() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * 
+     UnknownBindingSourceException   */
+    public UnknownBindingSourceException() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
 
-	/**
-	 * @param message
-	 */
-	public UnknownBindingSourceException(String message) {
-		super(message);
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * @param message
+     */
+    public UnknownBindingSourceException(String message) {
+        super(message);
+        // TODO Auto-generated constructor stub
+    }
 
-	/**
-	 * 	 * @param cause
-	 */
-	public UnknownBindingSourceException(String message, Throwable cause) {
-		super(message, cause);
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     *   * @param cause
+     */
+    public UnknownBindingSourceException(String message, Throwable cause) {
+        super(message, cause);
+        // TODO Auto-generated constructor stub
+    }
 
-	/**
-	 * @param cause
-	 */
-	public UnknownBindingSourceException(Throwable cause) {
-		super(cause);
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * @param cause
+     */
+    public UnknownBindingSourceException(Throwable cause) {
+        super(cause);
+        // TODO Auto-generated constructor stub
+    }
 
 }

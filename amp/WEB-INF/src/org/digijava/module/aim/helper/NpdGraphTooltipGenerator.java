@@ -4,14 +4,14 @@ import org.jfree.chart.imagemap.ToolTipTagFragmentGenerator;
 
 public class NpdGraphTooltipGenerator implements ToolTipTagFragmentGenerator {
 
-	
-	
-	public NpdGraphTooltipGenerator() {
-		
-	}
+    
+    
+    public NpdGraphTooltipGenerator() {
+        
+    }
 
-	public String generateToolTipFragment(String toolTipText) {
-		return " title=\"" + toolTipText + "\" alt=\"\"";
-	}
+    public String generateToolTipFragment(String toolTipText) {
+        return " title=\"" + toolTipText + "\" alt=\"\"";
+    }
 
 }

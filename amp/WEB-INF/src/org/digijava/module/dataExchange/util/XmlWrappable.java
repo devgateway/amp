@@ -8,5 +8,5 @@ package org.digijava.module.dataExchange.util;
  *
  */
 public interface XmlWrappable {
-	public XmlWrapper getXmlWrapperInstance();
+    public XmlWrapper getXmlWrapperInstance();
 }

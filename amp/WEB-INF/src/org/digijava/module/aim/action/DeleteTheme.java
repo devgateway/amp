@@ -21,36 +21,36 @@ import org.digijava.module.aim.util.ProgramUtil;
 
 public class DeleteTheme extends Action {
 
-	private static Logger logger = Logger.getLogger(DeleteTheme.class);
+    private static Logger logger = Logger.getLogger(DeleteTheme.class);
 
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws java.lang.Exception {
+    public ActionForward execute(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response)
+            throws java.lang.Exception {
 
-		HttpSession session = request.getSession();
-		if (session.getAttribute("ampAdmin") == null) {
-			return mapping.findForward("index");
-		} else {
-			String str = (String) session.getAttribute("ampAdmin");
-			if (str.equals("no")) {
-				return mapping.findForward("index");
-			}
-		}
-		AddThemeForm deleteThemeForm = (AddThemeForm) form;
+        HttpSession session = request.getSession();
+        if (session.getAttribute("ampAdmin") == null) {
+            return mapping.findForward("index");
+        } else {
+            String str = (String) session.getAttribute("ampAdmin");
+            if (str.equals("no")) {
+                return mapping.findForward("index");
+            }
+        }
+        AddThemeForm deleteThemeForm = (AddThemeForm) form;
 
-		logger.debug("In delete theme");
+        logger.debug("In delete theme");
 
-		if (deleteThemeForm.getThemeId() != null) {
-			if (session.getAttribute("ampThemes") != null) {
-				session.removeAttribute("ampThemes");
-			}
+        if (deleteThemeForm.getThemeId() != null) {
+            if (session.getAttribute("ampThemes") != null) {
+                session.removeAttribute("ampThemes");
+            }
 
-			AmpTheme ampTheme = ProgramUtil
-					.getThemeById(deleteThemeForm.getThemeId());
-			DbUtil.delete(ampTheme);
-			deleteThemeForm.setThemeId(null);
-			logger.debug("Theme deleted");
-		}
-		return mapping.findForward("forward");
-	}
+            AmpTheme ampTheme = ProgramUtil
+                    .getThemeById(deleteThemeForm.getThemeId());
+            DbUtil.delete(ampTheme);
+            deleteThemeForm.setThemeId(null);
+            logger.debug("Theme deleted");
+        }
+        return mapping.findForward("forward");
+    }
 }

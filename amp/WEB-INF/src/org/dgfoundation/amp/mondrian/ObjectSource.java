@@ -7,5 +7,5 @@ package org.dgfoundation.amp.mondrian;
  * @param <K>
  */
 public interface ObjectSource<K> {
-	public K getObject();
+    public K getObject();
 }

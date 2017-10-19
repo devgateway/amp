@@ -19,31 +19,31 @@ import org.digijava.module.aim.util.DesktopUtil;
 
 public class GetDesktopTasks extends TilesAction {
 
-	private static Logger logger = Logger.getLogger(GetDesktopTasks.class);
+    private static Logger logger = Logger.getLogger(GetDesktopTasks.class);
 
-	public ActionForward execute(ComponentContext context,
-			ActionMapping mapping,ActionForm form,
-			HttpServletRequest request,HttpServletResponse response) throws Exception {
+    public ActionForward execute(ComponentContext context,
+            ActionMapping mapping,ActionForm form,
+            HttpServletRequest request,HttpServletResponse response) throws Exception {
 
-		HttpSession session = request.getSession();
+        HttpSession session = request.getSession();
 
-		if (session.getAttribute(Constants.MY_TASKS) == null) {
-			TeamMember tm = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
-			if (tm != null && tm.getTeamHead() == true) {
-		 		Collection myTaskColl = DbUtil.getCreatedOrEditedActivities(tm.getTeamId());
-				session.setAttribute(Constants.MY_TASKS,myTaskColl);				
-			}
-		}
-		
-		if(session.getAttribute(Constants.MY_MESSAGES) == null)
-		{
-			TeamMember tm = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
-			if(tm != null && tm.getTeamHead() == true)
-			{
-				Collection myMessagesCol = DesktopUtil.getActivitiesTobeClosed(tm.getTeamId());
-				session.setAttribute(Constants.MY_MESSAGES,myMessagesCol);
-			}
-		}
-		return null;
-	}
+        if (session.getAttribute(Constants.MY_TASKS) == null) {
+            TeamMember tm = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
+            if (tm != null && tm.getTeamHead() == true) {
+                Collection myTaskColl = DbUtil.getCreatedOrEditedActivities(tm.getTeamId());
+                session.setAttribute(Constants.MY_TASKS,myTaskColl);                
+            }
+        }
+        
+        if(session.getAttribute(Constants.MY_MESSAGES) == null)
+        {
+            TeamMember tm = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
+            if(tm != null && tm.getTeamHead() == true)
+            {
+                Collection myMessagesCol = DesktopUtil.getActivitiesTobeClosed(tm.getTeamId());
+                session.setAttribute(Constants.MY_MESSAGES,myMessagesCol);
+            }
+        }
+        return null;
+    }
 }

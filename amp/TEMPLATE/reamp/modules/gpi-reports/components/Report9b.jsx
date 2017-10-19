@@ -423,6 +423,7 @@ export default class Report9b extends Component {
                             )}
                         </tbody>
                     </table>
+                    {this.props.mainReport.page.totalPageCount > 1 &&
                     <div >
                         <div className="row">
                             <div className="col-md-8 pull-right pagination-wrapper">
@@ -449,7 +450,7 @@ export default class Report9b extends Component {
                             </div>
                         </div>
                     </div>
-
+                    }
                   </div>
                   }
                 </div>

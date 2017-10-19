@@ -19,7 +19,6 @@ import org.digijava.module.aim.util.TeamUtil;
 public class ActivityGatekeeper {
     private static HashMap<String, String> timestamp = new HashMap<String, String>();
     private static HashMap<String, String> keycode = new HashMap<String, String>();
-    private static HashMap<String, String> sessionLock = new HashMap<String, String>();
     private static HashMap<String, Long> userEditing = new HashMap<String, Long>();
     private static Boolean lock = false;
     private static final long LOCK_TIMEOUT = 15000; //ms
@@ -39,7 +38,6 @@ public class ActivityGatekeeper {
             timestamp.remove(id);
             keycode.remove(id);
             userEditing.remove(id);
-            sessionLock.remove(id);
         }
     }
     
@@ -65,7 +63,6 @@ public class ActivityGatekeeper {
             String hash = ShaCrypt.crypt(id + currentTime);
             keycode.put(id, hash);
             userEditing.put(id, userId);
-            sessionLock.put(id, getUserSession());
             return hash;
         }
     }
@@ -105,11 +102,6 @@ public class ActivityGatekeeper {
     
     private static Long getUserEditing(String id){
         return userEditing.get(id);
-    }
-
-    public static boolean isEditionLocked() {
-        return sessionLock.entrySet().stream().filter(e -> e.getValue().equals(getUserSession())).findAny()
-                .orElse(null) != null;
     }
 
     public static String buildRedirectLink(String id, long currentUserId) {

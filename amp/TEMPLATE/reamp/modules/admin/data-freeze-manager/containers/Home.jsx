@@ -33,13 +33,13 @@ export default class App extends Component {
     render() {
         return (
             <div>
-                <div className="data-freeze-container">
+                <div >
                 <div className="container title-container" >
                 <h2 >{this.props.translations['amp.data-freezing:data-freeze-manager']}</h2>
                 </div>
                 <div className="container">                                
                 </div>                  
-                  <div className="container" style={{width:'90%'}}>
+                  <div className="container" >
                   <ul className="nav nav-tabs indicator-tabs" data-tabs="tabs">
                     <li role="presentation" className={this.state.currentTab == 'data-freezing' ? 'active' : ''}><a data-tab="data-freezing" role="tab" data-toggle="tab" onClick={this.tabChanged}>{this.props.translations['amp.data-freezing:add-freezing-event']}</a>
                     </li>

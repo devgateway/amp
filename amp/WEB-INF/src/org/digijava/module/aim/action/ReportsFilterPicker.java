@@ -1032,8 +1032,9 @@ public class ReportsFilterPicker extends Action {
                 filterForm.getDynamicIssueFilter(), "filter_issue_date_div", filterForm
                         .getOtherCriteriaElements());
 
-        addDateFilter("Current Completion Date", "ActivityActualCompletion",
-                "Current Completion Date", filterForm.getDynamicActivityActualCompletionFilter(), "filter_activity_actual_completion_date_div", filterForm.getOtherCriteriaElements());
+        addDateFilter("Actual Completion Date", "ActivityActualCompletion",
+                "Actual Completion Date", filterForm.getDynamicActivityActualCompletionFilter(), 
+                "filter_activity_actual_completion_date_div", filterForm.getOtherCriteriaElements());
         
         addDateFilter("Final Date for Contracting", "ActivityFinalContracting",
                 "Final Date for Contracting", filterForm.getDynamicActivityFinalContractingFilter(), "filter_activity_final_contracting_date_div", filterForm.getOtherCriteriaElements());

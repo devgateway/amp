@@ -1568,11 +1568,7 @@ public class IatiActivityWorker {
                 ed.setLastModDate(new Date());
                 ed.setGroupName(org.digijava.module.editor.util.Constants.GROUP_OTHER);
                 ed.setBody(value);
-                try {
-                    org.digijava.module.editor.util.DbUtil.saveEditor(ed);
-                } catch (EditorException e) {
-                    e.printStackTrace();
-                }
+                org.digijava.module.editor.util.DbUtil.saveEditor(ed);
                 return key;
             }
             

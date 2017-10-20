@@ -1482,12 +1482,7 @@ public class DEImportBuilder {
                 ed.setLastModDate(new Date());
                 ed.setGroupName(org.digijava.module.editor.util.Constants.GROUP_OTHER);
                 ed.setBody(obj.getValue());
-                try {
-                    org.digijava.module.editor.util.DbUtil.saveEditor(ed);
-                } catch (EditorException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
+                org.digijava.module.editor.util.DbUtil.saveEditor(ed);
                 return key;//activity.setDescription(key);
             }
             
@@ -2374,12 +2369,7 @@ public class DEImportBuilder {
                     ed.setLastModDate(curDate);
                     ed.setGroupName(Constants.GROUP_OTHER);
                     ed.setBody("");
-                    try {
-                        org.digijava.module.editor.util.DbUtil.saveEditor(ed);
-                    } catch (EditorException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
+                    org.digijava.module.editor.util.DbUtil.saveEditor(ed);
                     Class[] param = new Class[1];
                     param[0] = String.class;
                     String setter = new StringBuilder("set").append(fld).toString();

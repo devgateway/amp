@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.digijava.kernel.ampapi.endpoints.activity.discriminators.TransactionTypeDiscriminator;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -44,7 +43,6 @@ public class InterchangeDependencyResolver {
      * Dependency codes section
      */
     public final static String ON_BUDGET_KEY = "on_budget";
-    public final static String PROJECT_CODE_ON_BUDGET_KEY = "project_code_on_budget";
     public final static String IMPLEMENTATION_LEVEL_PRESENT_KEY = "implementation_level_present";
     public final static String IMPLEMENTATION_LOCATION_PRESENT_KEY = "implementation_location_present";
     public final static String IMPLEMENTATION_LEVEL_VALID_KEY = "implementation_level_valid";
@@ -115,8 +113,6 @@ public class InterchangeDependencyResolver {
         boolean activityIsOnBudget = referenceOnBudgetValue.equals(onOffBudgetValue);
         if (checkedValue == null && activityIsOnBudget)
             return DependencyCheckResult.INVALID_REQUIRED;
-        if (checkedValue != null && !activityIsOnBudget)
-            return DependencyCheckResult.INVALID_NOT_CONFIGURABLE;
         return DependencyCheckResult.VALID;
 //      return (checkedValue != null) ^ (activityIsOnBudget);
         /**
@@ -126,39 +122,12 @@ public class InterchangeDependencyResolver {
          *    |     true      not fine(*2)   fine (*3)
          *    V
          *    (*0) not on budget, and the value isn't there, it's ok
-         *    (*1) not on budget, but there's a value -> shouldn't be accessible, not ok
+         *    (*1) not on budget, but there's a value, it's ok
          *    (*2) on budget, but there's no value -> fields are required, not ok
          *    (*3) on budget, and there's a value -> awesome
          */
     }
 
-    
-    /**
-     * Checks the dependency validity of project code. 
-     * If the external value is "on_budget", and no value is supplied -> false;
-     *  
-     * @param incomingActivity The full JsonBean describing the activity to be imported
-     * @return true if it's valid, false if it isn't
-     */
-    private static DependencyCheckResult checkProjectCodeOnBudget(Object checkedValue, JsonBean incomingActivity) {
-        DependencyCheckResult res = checkOnBudget(checkedValue, incomingActivity);
-        if (res.equals(DependencyCheckResult.INVALID_NOT_CONFIGURABLE))
-            res = DependencyCheckResult.VALID;
-        return res;
-        /**
-         * checked value ->      0              1
-         * on budget
-         *    |       0        fine(*0)       fine(*1)
-         *    |       1        not fine(*2)   fine (*3)
-         *    V
-         *    (*0) not on budget, and the value isn't there, it's ok
-         *    (*1) not on budget, but there's a value -> it's fine, means it's from the optional field
-         *    (*2) on budget, but there's no value -> field is required, not ok
-         *    (*3) on budget, and there's a value -> awesome
-         */
-    
-    }
-    
     /**
      * checks whether the field described is present in the full activity
      * @param incomingActivity
@@ -229,7 +198,6 @@ public class InterchangeDependencyResolver {
             Map<String, Object> fieldParent) {
         switch (code) {
         case ON_BUDGET_KEY: return checkOnBudget(value, incomingActivity);
-        case PROJECT_CODE_ON_BUDGET_KEY : return checkProjectCodeOnBudget(value, incomingActivity);
         case IMPLEMENTATION_LEVEL_PRESENT_KEY: return checkFieldPresent(incomingActivity, IMPLEMENTATION_LEVEL_PATH);
         case IMPLEMENTATION_LOCATION_PRESENT_KEY: return checkFieldPresent(incomingActivity, IMPLEMENTATION_LOCATION_PATH);
         case AGREEMENT_CODE_PRESENT_KEY : return checkFieldValuePresent(value, AGREEMENT_CODE_PATH);

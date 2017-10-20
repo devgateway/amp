@@ -45,7 +45,6 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
-import org.digijava.module.dataExchange.utils.DataExchangeUtils;
 import org.digijava.module.message.dbentity.AmpAlert;
 import org.digijava.module.message.dbentity.AmpMessage;
 import org.digijava.module.message.dbentity.AmpMessageSettings;
@@ -149,53 +148,6 @@ public class AmpMessageActions extends DispatchAction {
         sos.close();        
     }
         
-    public ActionForward searchActivitiesStatus(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception 
-    {       
-        String srchStr = request.getParameter("srchStr");
-        List<String> srcResArray = DataExchangeUtils.getAllActivitiesStatus(srchStr);
-        writeListToOutput(srchStr, srcResArray, response);
-        return null;
-    }
-    
-    public ActionForward searchActivitiesName (ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception 
-    {       
-        String srchStr = request.getParameter("srchStr");
-        List<String> srcResArray = DataExchangeUtils.getAllActivitiesName(srchStr);
-        writeListToOutput(srchStr, srcResArray, response);
-        return null;
-    }
-    
-    public ActionForward searchActivitiesOrganization(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception 
-    {       
-        String srchStr = request.getParameter("srchStr");
-        List<String> srcResArray = DataExchangeUtils.getAllActivitiesOrganizations(srchStr);
-        writeListToOutput(srchStr, srcResArray, response);
-        return null;
-    }
-
-    public ActionForward searchActivitiesOrganizationType(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception 
-    {       
-        String srchStr = request.getParameter("srchStr");
-        List<String> srcResArray = DataExchangeUtils.getAllActivitiesOrganizationsType(srchStr);
-        writeListToOutput(srchStr, srcResArray, response);
-        return null;
-    }
-
-    public ActionForward searchSectors(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception 
-    {       
-        String srchStr = request.getParameter("srchStr");
-        List<String> srcResArray = DataExchangeUtils.getAllSectorNameCodeScheme(srchStr);
-        writeListToOutput(srchStr, srcResArray, response);
-        return null;
-    }
-
-    public ActionForward searchSectorSchemes(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception 
-    {       
-        String srchStr = request.getParameter("srchStr");
-        List<String> srcResArray = DataExchangeUtils.getAllSectorSchemes(srchStr);
-        writeListToOutput(srchStr, srcResArray, response);
-        return null;
-    }
 
     public ActionForward searchExternalContacts (ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
         AmpMessageForm messageForm=(AmpMessageForm)form;

@@ -27,8 +27,6 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.DigiConfigManager;
-import org.digijava.kernel.util.SiteUtils;
-import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
@@ -55,7 +53,6 @@ import org.digijava.module.message.triggers.ActivityCurrentCompletionDateTrigger
 import org.digijava.module.message.triggers.ActivityDisbursementDateTrigger;
 import org.digijava.module.message.triggers.ActivityFinalDateForContractingTrigger;
 import org.digijava.module.message.triggers.ActivityFinalDateForDisbursementsTrigger;
-import org.digijava.module.message.triggers.ActivityLevelNotificationTrigger;
 import org.digijava.module.message.triggers.ActivityMeassureComparisonTrigger;
 import org.digijava.module.message.triggers.ActivityProposedApprovalDateTrigger;
 import org.digijava.module.message.triggers.ActivityProposedCompletionDateTrigger;
@@ -835,7 +832,6 @@ public class AmpMessageWorker {
     
     private static void defineReceiversForPerformanceRuleAlert(AmpMessage newMsg, Event e, TemplateAlert template)
             throws Exception {
-        
         AmpTeamMember msgSender = TeamMemberUtil.getAmpTeamMember(newMsg.getSenderId());
         
         HashMap<String, String> params = new HashMap<String, String>();
@@ -854,11 +850,11 @@ public class AmpMessageWorker {
         if (receiversAddresses.size() > 0) {
             for (String emailAddr : receiversAddresses) {
                 String senderEmail = (msgSender == null) ? SYSTEM_DEFAULT_SENDER_MAIL : msgSender.getUser().getEmail();
-                String translatedName = TranslatorWorker.translateText(newMsg.getName());
-                String translatedDescription = TranslatorWorker.translateText(newMsg.getDescription());
                 
-                AmpEmail ampEmail = new AmpEmail(senderEmail, DgUtil.fillPattern(translatedName, params),
-                        DgUtil.fillPattern(translatedDescription, params));
+				String translatedName = TranslatorWorker.translateText(newMsg.getName());
+
+				AmpEmail ampEmail = new AmpEmail(senderEmail, DgUtil.fillPattern(translatedName, params),
+                        DgUtil.fillPattern(newMsg.getDescription(), params));
                 DbUtil.saveOrUpdateObject(ampEmail);
                 
                 AmpEmailReceiver emailReceiver = new AmpEmailReceiver(emailAddr, ampEmail,

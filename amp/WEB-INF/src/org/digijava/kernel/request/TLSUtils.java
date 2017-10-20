@@ -10,10 +10,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.bouncycastle.crypto.tls.TlsUtils;
 import org.digijava.kernel.Constants;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.SiteCache;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -35,8 +37,16 @@ public class TLSUtils {
     private static String forcedLangCode = null;
     
     public static String getLangCode() {
-        if (TLSUtils.forcedLangCode != null)
-            return TLSUtils.forcedLangCode;
+		if (TLSUtils.forcedLangCode != null) {
+			return TLSUtils.forcedLangCode;
+		} else {
+			// we force the langcode for this request, to be used by JOBS where we use mock
+			// request
+			if (TLSUtils.getThreadLocalInstance().request != null
+					&& TLSUtils.getThreadLocalInstance().request.getAttribute(Constants.FORCED_LANGUAGE) != null) {
+				return TLSUtils.getThreadLocalInstance().request.getAttribute(Constants.FORCED_LANGUAGE).toString();
+			}
+		}
         try
         {
             ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
@@ -194,9 +204,15 @@ public class TLSUtils {
         });
         schemaStubber.when(mockServletContext).getRealPath(Mockito.anyString());
         
-        TLSUtils.getThreadLocalInstance().request = mockRequest;
+        populateMockSiteDomain(mockRequest,"/") ;
+        populate(mockRequest);
+        
     }
+	private static void populateMockSiteDomain(HttpServletRequest httpRequest,String mainPath) {
+        SiteDomain siteDomain = SiteCache.getInstance().getSiteDomain("localhost", mainPath);
+        httpRequest.setAttribute(org.digijava.kernel.Constants.CURRENT_SITE, siteDomain);
 
+	}
     private static Stubber getMockGetter(final Map<String, Object> sessionAttributes) {
         Stubber s=
         Mockito.doAnswer(new Answer<Object>() {
@@ -223,5 +239,13 @@ public class TLSUtils {
         });
         return s;
     }
+
+	public static void forceLangCodeToSiteLangCode() {
+		if (TLSUtils.getThreadLocalInstance().request != null) {
+			TLSUtils.getThreadLocalInstance().request.setAttribute(Constants.FORCED_LANGUAGE,
+					TLSUtils.getThreadLocalInstance().site.getDefaultLanguage().getCode());
+		}
+
+	}
          
 }

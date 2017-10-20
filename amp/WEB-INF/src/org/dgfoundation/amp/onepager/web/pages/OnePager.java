@@ -177,19 +177,11 @@ public class OnePager extends AmpHeaderFooter {
         final ValueWrapper<Boolean>newActivity= new ValueWrapper<Boolean>(false);
 
         long currentUserId = ((AmpAuthWebSession) getSession()).getCurrentMember().getMemberId();
-        if (ActivityGatekeeper.isEditionLocked()) {
-            StringValue isCloseEdition = parameters.get("close");
-            if (isCloseEdition != null && isCloseEdition.toBoolean()) {
-                ActivityGatekeeper.pageModeChange(activityId);
-            }
-            throw new RedirectToUrlException(ActivityGatekeeper.buildRedirectLink(activityId, currentUserId));
-        }
 
         if ((activityId == null) || (activityId.compareTo("new") == 0)) {
             am = new AmpActivityModel();
 
             newActivity.value = true;
-            ActivityGatekeeper.lockActivity(activityId, currentUserId);
 
             PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_MEMBER, session.getCurrentMember());
             PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.ACTIVITY, am.getObject());

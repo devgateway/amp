@@ -614,7 +614,7 @@ LoggerIdentifiable, Cloneable {
 
     @Interchangeable(fieldTitle = ActivityFieldsConstants.PROJECT_CODE, importable = true,
             required = ActivityEPConstants.BUDGET_EXTRAS_PROJECT_CODE_FM_PATH,
-            dependencies = InterchangeDependencyResolver.PROJECT_CODE_ON_BUDGET_KEY,
+            dependencies = InterchangeDependencyResolver.ON_BUDGET_KEY,
             fmPath = FMVisibility.ANY_FM + ActivityEPConstants.DONOR_PROJECT_CODE_FM_PATH
                     + "|" + ActivityEPConstants.BUDGET_EXTRAS_PROJECT_CODE_FM_PATH)
     @VersionableFieldSimple(fieldTitle = "Project Code")

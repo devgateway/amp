@@ -68,7 +68,7 @@ body {background:none;}
 </style>
 <digi:instance property="aimEditActivityForm" />
 <c:if test="${aimEditActivityForm!=null}">
-<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="650" vAlign="top" align="left" border="0">
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="1000" vAlign="top" align="left" border="0">
 	<tr>
 		<td align=left valign="top">
 			<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top" align="left" border="0">
@@ -99,7 +99,11 @@ body {background:none;}
 							<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top" align="left">
                             <tr>
                               <td align="center" vAlign="top">
-								<table width="98%" cellspacing="0" class="prnt_tbl" cellpadding=4 style="border-collapse: collapse; border-color:#CCCCCC;" border="1">
+								<table width="98%" cellspacing="0" class="prnt_tbl fixed-layout" cellpadding=4 style="border-collapse: collapse; border-color:#CCCCCC;" border="1" >
+								    
+								    <!-- columns widths -->
+								    <tr><td width="30%"></td><td width="70%"></td></tr>
+									
 									<!-- here starts identification -->
 									<tr bgcolor="#f4f4f2">
 										<td  align="center" colspan="2" bgcolor=#C7D4DB>
@@ -109,7 +113,7 @@ body {background:none;}
 								<feature:display name="Identification" module="Project ID and Planning">   
 									<field:display name="AMP ID" feature="Identification">
 									<tr>
-										<td class="field_name" >
+										<td class="field_name">
 											<b>
 												<digi:trn key="aim:ampId">AMP ID</digi:trn>		
 									  		</b>
@@ -126,7 +130,7 @@ body {background:none;}
 										
                                     <module:display name="/Activity Form/Identification/Activity Status" parentModule="/Activity Form/Identification">
                                         <tr>
-                                              <td class="field_name" >
+                                              <td class="field_name">
                                                   <b><digi:trn key="aim:status">Status</digi:trn></b>
                                               </td>
                                               <td bgcolor="#FFFFFF">

@@ -26,7 +26,7 @@ public class GPIReportConstants {
 
     public static final String COLUMN_YEAR = "Year";
     public static final String COLUMN_REMARK = "Remark";
-    public static final String COLUMN_ANNUAL_GOV_BUDGET = "Annual Government Budget";
+    public static final String COLUMN_ANNUAL_GOV_BUDGET = "Funds Recorded in Government Annual Budget";
     public static final String COLUMN_PLANNED_ON_BUDGET = "% of planned on budget";
     public static final String COLUMN_INDICATOR_5B = "Indicator 5b";
     public static final String COLUMN_TOTAL_ACTUAL_DISBURSEMENTS = "Total Actual Disbursements";

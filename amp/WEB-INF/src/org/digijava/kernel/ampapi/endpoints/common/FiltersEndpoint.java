@@ -16,7 +16,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
@@ -25,9 +24,12 @@ import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.digijava.kernel.ampapi.endpoints.dto.SimpleJsonBean;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
+import org.digijava.kernel.ampapi.endpoints.filters.FilterList;
+import org.digijava.kernel.ampapi.endpoints.filters.FilterTreeDefinition;
+import org.digijava.kernel.ampapi.endpoints.filters.FilterTreeNode;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersBuilder;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
+import org.digijava.kernel.ampapi.endpoints.filters.FiltersManager;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingField;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
@@ -427,7 +429,23 @@ public class FiltersEndpoint {
     public List<JsonBean> getOrgs() { 
         List <JsonBean> orgs = QueryUtil.getOrgs();
         return orderByName(orgs);
-    }   
+    }
+    
+    @GET
+    @Path("/organizations")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = true, id = "Organizations", name = "orgsList", tab = EPConstants.TAB_ORGANIZATIONS)
+    public FilterList getOrganizations() {
+        
+        FiltersManager filtersManager = FiltersManager.getInstance();
+        
+        List<FilterTreeDefinition> orgTreeDefinitions = filtersManager.getOrgTreeDefinitions();
+        List<FilterTreeNode> orgTreeItems = filtersManager.getOrgTreeItems();
+        
+        return new FilterList(orgTreeDefinitions, orgTreeItems);
+    }
+
+
 
     /**
      * List all available orgs roles

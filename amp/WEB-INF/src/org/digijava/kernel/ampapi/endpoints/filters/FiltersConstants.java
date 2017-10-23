@@ -1,7 +1,9 @@
 package org.digijava.kernel.ampapi.endpoints.filters;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.digijava.module.aim.helper.Constants;
@@ -135,6 +137,11 @@ public class FiltersConstants {
     public static final String TYPE_OF_ASSISTANCE = "type-of-assistance";
     public static final String WORKSPACES = "workspaces";
     public static final String ZONE = "zone";
+    
+    public static final String LIST_DISPLAY_NAME = "display-name";
+    public static final String LIST_FILTER_IDS = "filter-ids";
+    public static final String LIST_TREE_DEFINITIONS = "tree-definitions";
+    public static final String LIST_TREE_DEFINITION_IDS = "tree-definition-ids";
 
     /** filters IDs to Name mapping */
     public static final Map<String, String> ID_NAME_MAP = Collections.unmodifiableMap(new HashMap<String, String>() {{
@@ -162,5 +169,20 @@ public class FiltersConstants {
         put(Constants.RESPONSIBLE_ORGANISATION, RESPONSIBLE_ORGANIZATION);
         put(Constants.COMPONENT_FUNDING_ORGANIZATION, COMPONENT_FUNDING_ORGANIZATION);
         put(Constants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION, COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION);
+    }});
+    
+    public static final Map<String, List<String>> ORG_ROLE_CODE_TO_FILTER_TREE_IDS = 
+            Collections.unmodifiableMap(new HashMap<String, List<String>>() {{
+        put(Constants.FUNDING_AGENCY, Arrays.asList(DONOR_TYPE, DONOR_GROUP, DONOR_AGENCY));
+        put(Constants.IMPLEMENTING_AGENCY, Arrays.asList(IMPLEMENTING_AGENCY_TYPE, IMPLEMENTING_AGENCY_GROUP, 
+                IMPLEMENTING_AGENCY));
+        put(Constants.EXECUTING_AGENCY, Arrays.asList(EXECUTING_AGENCY_TYPE, EXECUTING_AGENCY_GROUP, EXECUTING_AGENCY));
+        put(Constants.BENEFICIARY_AGENCY, Arrays.asList(BENEFICIARY_AGENCY_GROUP, BENEFICIARY_AGENCY));
+        put(Constants.CONTRACTING_AGENCY, Arrays.asList(CONTRACTING_AGENCY_GROUP, CONTRACTING_AGENCY));
+        put(Constants.RESPONSIBLE_ORGANISATION, Arrays.asList(RESPONSIBLE_ORGANIZATION_GROUP, 
+                RESPONSIBLE_ORGANIZATION));
+        put(Constants.COMPONENT_FUNDING_ORGANIZATION, Arrays.asList(COMPONENT_FUNDING_ORGANIZATION));
+        put(Constants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION, 
+                Arrays.asList(COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION));
     }});
 }

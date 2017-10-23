@@ -3,8 +3,13 @@ package org.digijava.module.aim.action;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,12 +20,15 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.ampapi.endpoints.datafreeze.DataFreezeService;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.admin.helper.AmpActivityFake;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.form.ActivityForm;
+import org.digijava.module.aim.form.ActivityForm.DataFreezeFilter;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.AuditLoggerUtil;
+
 
 public class ActivityManager extends Action {
     private static Logger logger = Logger.getLogger(ActivityManager.class);
@@ -45,17 +53,21 @@ public class ActivityManager extends Action {
         if ((action != null) && (action.equals("search")) && (actForm.getKeyword() != null) && (actForm.getLastKeyword() != null) && (!actForm.getKeyword().equals(actForm.getLastKeyword())) && ("".equals(actForm.getKeyword().replaceAll(" ", "")))){
             action="reset";
         }
+        actForm.setFrozenActivityIds(DataFreezeService.getFronzeActivities());
 
         if (action == null) {
             reset(actForm, request);
         } else if (action.equals("delete")) {
             deleteActivity(actForm, request);
-        } else if (action.equals("search")) {
+        } else if (action.equals("search")) {            
             actForm.setLastKeyword(actForm.getKeyword());
             searchActivities(actForm, request);
         } else if (action.equals("reset")) {
             reset(actForm, request);
+        } else if (action.equals("unfreeze")) {
+            unfreezeActivities(actForm, request);
         }
+            
         sortActivities(actForm, request);
         int page = 0;
         if (request.getParameter("page") == null) {
@@ -72,12 +84,13 @@ public class ActivityManager extends Action {
     }
 
     private void reset(ActivityForm actForm, HttpServletRequest request) {
-        actForm.setAllActivityList(ActivityUtil.getAllActivitiesAdmin(null));
-        actForm.setKeyword(null);
-        actForm.setLastKeyword(null);
+        actForm.setAllActivityList(ActivityUtil.getAllActivitiesAdmin(null, null, ActivityForm.DataFreezeFilter.ALL));
+        actForm.setKeyword("");
+        actForm.setLastKeyword("");
         actForm.setSortByColumn(null);
         actForm.setPage(0);
         actForm.setTempNumResults(-1);
+        actForm.setDataFreezeFilter(ActivityForm.DataFreezeFilter.ALL.toString());
     }
 
     private void doPagination(ActivityForm actForm, HttpServletRequest request) {
@@ -125,15 +138,16 @@ public class ActivityManager extends Action {
     }
 
     private void searchActivities(ActivityForm actForm, HttpServletRequest request) {
-        List<AmpActivityFake> activities = ActivityUtil.getAllActivitiesAdmin(actForm.getKeyword().trim());
+        List<AmpActivityFake> activities = ActivityUtil.getAllActivitiesAdmin(null, null, ActivityForm.DataFreezeFilter.ALL);
         actForm.setAllActivityList(activities);
         sortActivities(actForm,request);
     }
     
     private void sortActivities(ActivityForm actForm, HttpServletRequest request) {
         List<AmpActivityFake> activities = null;
-        if (actForm.getKeyword()!=null && actForm.getKeyword().trim().length()>0){
-            activities = ActivityUtil.getAllActivitiesAdmin(actForm.getKeyword().trim());
+        
+        if ((actForm.getKeyword() != null && actForm.getKeyword().trim().length()>0) || ActivityForm.DataFreezeFilter.FROZEN.equals(actForm.getDataFreezeFilterEnum()) || ActivityForm.DataFreezeFilter.UNFROZEN.equals(actForm.getDataFreezeFilterEnum())){
+            activities = ActivityUtil.getAllActivitiesAdmin(actForm.getKeyword().trim(), actForm.getFrozenActivityIds(), actForm.getDataFreezeFilterEnum());
         } else {
             activities = actForm.getAllActivityList();
         }
@@ -281,7 +295,14 @@ public class ActivityManager extends Action {
             });
             break;
         }
-        actForm.setAllActivityList(activities);
+        
+        
+            
+      for(AmpActivityFake activity : activities) {
+          activity.setFrozen(actForm.getFrozenActivityIds().contains(activity.getAmpActivityId()));     
+      }
+      
+      actForm.setAllActivityList(activities);
     }
 
     /**
@@ -305,7 +326,7 @@ public class ActivityManager extends Action {
             else
                 ActivityUtil.archiveAmpActivityWithVersions(ampActId);
         }
-        actForm.setAllActivityList(ActivityUtil.getAllActivitiesAdmin(null));       
+        actForm.setAllActivityList(ActivityUtil.getAllActivitiesAdmin(null, null, ActivityForm.DataFreezeFilter.ALL));      
     }
     private List<Long> getActsIds(String ids){
         List<Long> actsIds=new ArrayList<Long>();
@@ -316,6 +337,14 @@ public class ActivityManager extends Action {
         }
         actsIds.add(new Long(ids.trim()));
         return actsIds;
+    }
+    
+    
+    private void unfreezeActivities(ActivityForm actForm, HttpServletRequest request) {
+        String activityIdsParam = request.getParameter("activityIds");
+        Set<Long> activityIds = new LinkedHashSet<>(getActsIds(activityIdsParam.trim()));
+        DataFreezeService.unfreezeActivities(activityIds);
+        actForm.setFrozenActivityIds(DataFreezeService.getFronzeActivities());
     }
     
 }

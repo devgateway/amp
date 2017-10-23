@@ -45,7 +45,7 @@ public class UpdateWorkspace extends Action {
 
         ReportContextData.createWithId(request.getSession(), ReportContextData.REPORT_ID_WORKSPACE_EDITOR, false);
         request.setAttribute(ReportContextData.BACKUP_REPORT_ID_KEY, ReportContextData.REPORT_ID_WORKSPACE_EDITOR);
-        
+
         boolean permitted = false;
         HttpSession session = request.getSession();
         if (session.getAttribute("ampAdmin") != null) {
@@ -96,31 +96,31 @@ public class UpdateWorkspace extends Action {
             // See details in AMP-17132
             newTeam.setPermissionStrategy(PMUtil.PERM_FULL_ACCESS);
             newTeam.setName(uwForm.getTeamName());
-            
+
             newTeam.setAccessType(uwForm.getWorkspaceType());
             newTeam.setComputation(uwForm.getComputation());
             newTeam.setCrossteamvalidation(uwForm.getCrossteamvalidation());
             newTeam.setIsolated(uwForm.getIsolated());
                     newTeam.setAddActivity(uwForm.getAddActivity());
-    
+
             if (!newTeam.getIsolated()) {
                 newTeam.setAddActivity(uwForm.getAddActivity());
                 newTeam.setUseFilter(uwForm.getUseFilter());
                 newTeam.setHideDraftActivities(uwForm.getHideDraftActivities());
-                
+
                 if(uwForm.getUseFilter() == null || !uwForm.getUseFilter()) {
                     if (uwForm.getOrganizations() != null) {
                         TreeSet s = new TreeSet();
                         s.addAll(uwForm.getOrganizations());
                         newTeam.setOrganizations(s);
                     }
-                } 
+                }
             } else {
                 TeamUtil.unlinkParentWorkspace(uwForm.getTeamId());
             }
-            
+
             newTeam.setWorkspaceGroup(CategoryManagerUtil.getAmpCategoryValueFromDb(uwForm.getWorkspaceGroup()));
-            
+
             if (null == uwForm.getRelatedTeam()
                     || "-1".equals(uwForm.getRelatedTeam().toString().trim()))
                 newTeam.setRelatedTeamId(null);
@@ -166,7 +166,7 @@ public class UpdateWorkspace extends Action {
                 uwForm.getDeletedChildWorkspaces().clear();
             }
             uwForm.setFmTemplate(null);
-            
+
             return mapping.findForward("admin");
         } else if (event != null && event.trim().equalsIgnoreCase("add")) {
             uwForm.setActionEvent("add");
@@ -180,7 +180,7 @@ public class UpdateWorkspace extends Action {
                     //here we must reload the child workspaces
                     Workspace workspace = TeamUtil.getWorkspace(uwForm.getTeamId());
                     if (workspace != null) {
-                        uwForm.setChildWorkspaces(workspace.getChildWorkspaces());                  
+                        uwForm.setChildWorkspaces(workspace.getChildWorkspaces());
                     }
                     saveErrors(request, errors);
                     logger.debug("error.aim.updateWorkspace.noManagementChildSelected !!!!!");
@@ -209,7 +209,7 @@ public class UpdateWorkspace extends Action {
                             AmpTeamFilterData.deleteOldFilterData(newTeam.getAmpTeamId());
                         }
                     }
-                
+
 
                 boolean teamExist = TeamUtil.createTeam(newTeam,
                         uwForm.getChildWorkspaces());
@@ -266,7 +266,7 @@ public class UpdateWorkspace extends Action {
                         }
                     } else {//uses filter
                         newTeam.setOrganizations(null);
-    
+
                         AmpARFilter filter = ReportContextData.getFromRequest().getFilter();
                         if ( filter != null) {
                             if ( newTeam.getAmpTeamId()!=null )
@@ -283,11 +283,11 @@ public class UpdateWorkspace extends Action {
                         }
                     }
                 }
-                    
+
                 if (uwForm.getWorkspaceGroup() != null) {
                     newTeam.setWorkspaceGroup(CategoryManagerUtil.getAmpCategoryValueFromDb(uwForm.getWorkspaceGroup()));
                 }
-                
+
                 boolean teamExist = TeamUtil.updateTeam(newTeam, uwForm.getChildWorkspaces());
                 if (teamExist) {
                     errors.add(
@@ -314,13 +314,19 @@ public class UpdateWorkspace extends Action {
         } else if (event != null && event.trim().equalsIgnoreCase("delete")) {
             String tId = request.getParameter("tId");
             Long teamId = Long.parseLong(tId);
-            boolean memExist = TeamUtil.membersExist(teamId);
+            boolean memExist = TeamUtil.membersExist(teamId, false);
             boolean actExist = TeamUtil.teamHasActivities(teamId);
 
             if (memExist) {
                 errors = new ActionMessages();
-                errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
-                        "error.aim.membersExistForTeam"));
+                if (TeamUtil.membersExist(teamId, true)) {
+                    errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
+                            "error.aim.membersRemovedExistForTeam"));
+                }else{
+                    errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
+                            "error.aim.membersExistForTeam"));
+                }
+
                 saveErrors(request, errors);
 
                 return mapping.findForward("forward");
@@ -333,7 +339,7 @@ public class UpdateWorkspace extends Action {
 
                 return mapping.findForward("forward");
             }
-            
+
             TeamUtil.removeTeam(teamId);
         }
         uwForm.setReset(true);

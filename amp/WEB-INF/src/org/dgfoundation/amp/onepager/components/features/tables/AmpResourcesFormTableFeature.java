@@ -34,6 +34,7 @@ import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpLabelFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.helper.DownloadResourceStream;
+import org.dgfoundation.amp.onepager.helper.TemporaryActivityDocument;
 import org.dgfoundation.amp.onepager.helper.TemporaryDocument;
 import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
 import org.dgfoundation.amp.onepager.models.ResourceTranslationModel;
@@ -52,10 +53,7 @@ import org.digijava.module.translation.util.ContentTranslationUtil;
  * @author aartimon@dginternational.org
  * @since Apr 13, 2011
  */
-public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpActivityVersion,TemporaryDocument> {
-
-    
-
+public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpActivityVersion, TemporaryActivityDocument> {
 
     boolean refreshExistingDocs = false;
     
@@ -78,14 +76,14 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
         if (am.getObject().getActivityDocuments() == null)
             am.getObject().setActivityDocuments(new HashSet<AmpActivityDocument>());
         
-        IModel<List<TemporaryDocument>> listModel  = new AbstractReadOnlyModel<List<TemporaryDocument>>() {
+        IModel<List<TemporaryActivityDocument>> listModel  = new AbstractReadOnlyModel<List<TemporaryActivityDocument>>() {
 
-            private transient List<TemporaryDocument> existingTmpDocs = getExistingObject();
+            private transient List<TemporaryActivityDocument> existingTmpDocs = getExistingObject();
             
-            private List<TemporaryDocument> getExistingObject() {
+            private List<TemporaryActivityDocument> getExistingObject() {
                  Iterator<AmpActivityDocument> it = setModel.getObject().iterator();
-                List<TemporaryDocument> ret = new ArrayList<TemporaryDocument>();
-                HashSet <TemporaryDocument> existingDocTitles = new HashSet<TemporaryDocument>();
+                List<TemporaryActivityDocument> ret = new ArrayList<TemporaryActivityDocument>();
+                HashSet <TemporaryActivityDocument> existingDocTitles = new HashSet<TemporaryActivityDocument>();
 
                 while (it.hasNext()) {
                     AmpActivityDocument d = (AmpActivityDocument) it
@@ -101,7 +99,7 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
                     /**
                      * Code to add TempDoc to list
                      */
-                    TemporaryDocument td = new TemporaryDocument();
+                    TemporaryActivityDocument td = new TemporaryActivityDocument();
                     td.setExisting(true);
                     td.setExistingDocument(d);
                     td.setDate(nw.getCalendarDate());
@@ -116,7 +114,7 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
                     td.setFileName(nw.getName());
                     td.setLabels(nw.getLabels());
                     td.setContentType(nw.getContentType());
-                    TemporaryDocument titleHolder = new TemporaryDocument();
+                    TemporaryActivityDocument titleHolder = new TemporaryActivityDocument();
                     titleHolder.setTitle(td.getTitle());
                     titleHolder.setExistingDocument(d);
                     existingDocTitles.add(titleHolder);
@@ -130,14 +128,14 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
             }
 
             @Override
-            public List<TemporaryDocument> getObject() {
-                HashSet<TemporaryDocument> newItems = getSession().getMetaData(OnePagerConst.RESOURCES_NEW_ITEMS);
+            public List<TemporaryActivityDocument> getObject() {
+                HashSet<TemporaryActivityDocument> newItems = getSession().getMetaData(OnePagerConst.RESOURCES_NEW_ITEMS);
                 if(newItems == null)
-                    newItems = new HashSet<TemporaryDocument>();
+                    newItems = new HashSet<TemporaryActivityDocument>();
                 HashSet<AmpActivityDocument> delItems = getSession().getMetaData(OnePagerConst.RESOURCES_DELETED_ITEMS);
                 if(delItems == null)
                     delItems = new HashSet<AmpActivityDocument>();
-                List<TemporaryDocument> ret = new ArrayList<TemporaryDocument>();
+                List<TemporaryActivityDocument> ret = new ArrayList<TemporaryActivityDocument>();
                
                 if(refreshExistingDocs)     
                     existingTmpDocs = getExistingObject();
@@ -167,7 +165,7 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
         };
 
         
-        list = new ListView<TemporaryDocument>("list", listModel) {
+        list = new ListView<TemporaryActivityDocument>("list", listModel) {
             private static final long serialVersionUID = 7218457979728871528L;
             
             @Override
@@ -177,7 +175,7 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
             }
             
             @Override
-            protected void populateItem(final ListItem<TemporaryDocument> item) {
+            protected void populateItem(final ListItem<TemporaryActivityDocument> item) {
                 if (item.getModel() == null && item.getModelObject() == null){
                     logger.error("ola");
                     return;
@@ -278,7 +276,7 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
                             delItems.add(item.getModelObject().getExistingDocument());
                         }
                         else{
-                            HashSet<TemporaryDocument> newItems = getSession().getMetaData(OnePagerConst.RESOURCES_NEW_ITEMS);
+                            HashSet<TemporaryActivityDocument> newItems = getSession().getMetaData(OnePagerConst.RESOURCES_NEW_ITEMS);
                             newItems.remove(item.getModelObject());
                         }
                         target.add(list.getParent());

@@ -132,8 +132,9 @@ module.exports = BackboneDash.View.extend({
 	    if (self._stateWait.state() !== 'pending') {
 	    	self.updateData();
 	    }
-	
-	    self.app.translator.translateDOM(this.el);
+
+	    self.app.translator.translateDOM(self.$el);
+        self.$el.find('[data-toggle="tooltip"]').tooltip();
 	    self.renderedPromise.resolve();
     });
     return this;

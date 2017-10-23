@@ -33,7 +33,7 @@ module.exports = Backbone.View.extend({
 
 
   showLayer: function(admLayer) {
-    var self = this;
+	var self = this;
     var leafletLayerGroup = this.leafletLayerMap[admLayer.cid];
 
     // if it's not loaded yet, we need to load it.
@@ -117,7 +117,10 @@ module.exports = Backbone.View.extend({
         });
         return L.marker(latlng, {icon: myIcon});//L.circleMarker(latlng, geojsonMarkerOptions);
       },
-      onEachFeature: self._onEachFeature
+      onEachFeature: function (feature, layer) {    	  
+    	  self._onEachFeature(feature, layer, admLayer);
+      }
+    	  
     });
   },
 
@@ -151,10 +154,11 @@ module.exports = Backbone.View.extend({
 
 
   // Create pop-ups
-  _onEachFeature: function(feature, layer) {
+  _onEachFeature: function(feature, layer, admLayer) {
     if (feature.properties) {
       var activities = feature.properties.activityid;
       layer._clusterId = feature.properties.admName;
+      feature.properties.admLevel = admLayer.get('title');
       // temp. will be template.
       layer.bindPopup(feature.properties.admName +
         ' has ' +  activities.length +

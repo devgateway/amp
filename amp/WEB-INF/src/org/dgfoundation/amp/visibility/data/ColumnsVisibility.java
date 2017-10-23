@@ -177,6 +177,7 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
         put("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Type of Assistence", ColumnConstants.TYPE_OF_ASSISTANCE);
         put("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Effective Funding Date", ColumnConstants.EFFECTIVE_FUNDING_DATE);
         put("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Closing Date", ColumnConstants.FUNDING_CLOSING_DATE);
+        put("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Concessionality Level", ColumnConstants.CONCESSIONALITY_LEVEL);
         put("/Activity Form/Funding/Modalities", ColumnConstants.PLEDGES_AID_MODALITY);
         put("/Activity Form/Funding/Overview Section/Proposed Project Cost", ColumnConstants.PROPOSED_PROJECT_AMOUNT);
         put("/Activity Form/Funding/Overview Section/Revised Project Cost", ColumnConstants.REVISED_PROJECT_AMOUNT);

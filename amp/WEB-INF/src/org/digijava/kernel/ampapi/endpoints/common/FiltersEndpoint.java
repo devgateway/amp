@@ -318,7 +318,7 @@ public class FiltersEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, name = ColumnConstants.ACTUAL_APPROVAL_DATE, columns = ColumnConstants.ACTUAL_APPROVAL_DATE,
             id = FiltersConstants.ACTUAL_APPROVAL_DATE, filterType = {
-            FilterType.REPORTS, FilterType.TAB }, tab = EPConstants.TAB_OTHER)
+            FilterType.REPORTS, FilterType.TAB, FilterType.GPI_REPORTS }, tab = EPConstants.TAB_OTHER)
     public JsonBean getActualApprovalDate() {
         return new JsonBean();
     }   
@@ -569,6 +569,20 @@ public class FiltersEndpoint {
             name="Expenditure Class", tab=EPConstants.TAB_FINANCIALS)
     public JsonBean getExpenditureClass() {
         return getCategoryValue(CategoryConstants.EXPENDITURE_CLASS_KEY, ColumnConstants.EXPENDITURE_CLASS);
+    }
+    
+    /**
+     * Funding concessionality level information
+     * 
+     * @return
+     */
+    @GET
+    @Path("/concessionalityLevel/")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = true, id = FiltersConstants.CONCESSIONALITY_LEVEL, columns = ColumnConstants.CONCESSIONALITY_LEVEL,
+            name="Concessionality Level", tab=EPConstants.TAB_FINANCIALS)
+    public JsonBean getConcessionalityLevel() {
+        return getCategoryValue(CategoryConstants.CONCESSIONALITY_LEVEL_KEY, ColumnConstants.CONCESSIONALITY_LEVEL);
     }
 
     /**

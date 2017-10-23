@@ -44,6 +44,7 @@ implements AmpRequiredComponentContainer{
     private List<FormComponent<?>> requiredFormComponents = new ArrayList<FormComponent<?>>();
     private AmpCategorySelectFieldPanel financingInstrument;
     private AmpCategorySelectFieldPanel typeOfAssistance;
+    private AmpCategorySelectFieldPanel concessionalityLevel;
     private AmpTextAreaFieldPanel loanTerms;
     private AmpTextFieldPanel<Float> interestRate;
     private AmpTextFieldPanel<Integer> gracePeriod;
@@ -86,9 +87,27 @@ implements AmpRequiredComponentContainer{
         //for issue AMP-16434 both selects where made smaller 
         financingInstrument.getChoiceContainer().add(new AttributeModifier("style", "max-width: 210px!important;"));
         typeOfAssistance.getChoiceContainer().add(new AttributeModifier("style", "max-width: 210px!important;"));
-    
-         financingInstrument.getChoiceContainer().add(new AttributeModifier("style", "max-width: 210px!important;"));
-         typeOfAssistance.getChoiceContainer().add(new AttributeModifier("style", "max-width: 210px!important;"));
+        
+        concessionalityLevel = new AmpCategorySelectFieldPanel(
+                "concessionalityLevel", CategoryConstants.CONCESSIONALITY_LEVEL_KEY,
+                new PropertyModel<AmpCategoryValue>(model, "concessionalityLevel"),
+                CategoryConstants.CONCESSIONALITY_LEVEL_NAME, true, false);
+        concessionalityLevel.getChoiceContainer().setRequired(false);
+        concessionalityLevel.getChoiceContainer().add(new AttributeModifier("style", "max-width: 210px!important;"));
+        add(concessionalityLevel);
+        
+        add(new AmpComponentPanel("concessionalityLevelRequired", "Required Validator for " + CategoryConstants.CONCESSIONALITY_LEVEL_NAME) {
+            
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                if (this.isVisible()) {
+                    concessionalityLevel.getChoiceContainer().setRequired(true);
+                    requiredFormComponents.add(concessionalityLevel.getChoiceContainer());
+                }
+            }
+        });
+            
         loanTerms =  new AmpTextAreaFieldPanel("loanTerms", 
                           new PropertyModel<String>(model, "loanTerms"), 
                           "Loan Terms", false, false, false);

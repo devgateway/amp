@@ -246,7 +246,7 @@ public class AmpUserUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
             queryString="select u from " +User.class.getName() +" u where u.banned=:banned and u.id not in (select tm.user.id from "+AmpTeamMember.class.getName()+
-            " tm where tm.ampTeam.ampTeamId=:teamId ) ";
+            " tm where (tm.deleted is null or tm.deleted = false) and tm.ampTeam.ampTeamId=:teamId ) ";
                         if(keyword!=null&&keyword.length()>0){
                             queryString+=" and concat(u.firstNames,' ',u.lastName)=:keyword";
                         }
@@ -264,20 +264,23 @@ public class AmpUserUtil {
         }
         return retVal;
     }
-       public static List<String> searchUsesers(String searchStr, Long teamId) throws Exception {
+
+    public static List<String> searchUsesers(String searchStr, Long teamId) throws Exception {
         Session session = null;
         String queryString = null;
         Query query = null;
         List<String> users = null;
         try {
             session = PersistenceManager.getRequestDBSession();
-            queryString = "select distinct concat(u.firstNames,' ',u.lastName) from " + User.class.getName() + 
-                    " u where  lower(concat(u.firstNames,' ',u.lastName)) like lower(:searchStr) and u.id not in (select tm.user.id from "+AmpTeamMember.class.getName()+
-            " tm where tm.ampTeam.ampTeamId=:teamId) and u.banned=:banned order by concat(u.firstNames,' ',u.lastName)";
+            queryString = "select distinct concat(u.firstNames,' ',u.lastName) from " + User.class.getName()
+                    + " u where  lower(concat(u.firstNames,' ',u.lastName)) like lower(:searchStr) and u.id not in "
+                    + " (select tm.user.id from " + AmpTeamMember.class.getName()
+                    + " tm where (tm.deleted is null or tm.deleted = false) and tm.ampTeam.ampTeamId=:teamId) "
+                    + " and u.banned=:banned order by concat(u.firstNames,' ',u.lastName)";
             query = session.createQuery(queryString);
             query.setString("searchStr", searchStr + "%");
             query.setLong("teamId", teamId);
-            query.setBoolean("banned", false);  
+            query.setBoolean("banned", false);
             users = query.list();
         } catch (Exception ex) {
             logger.error("couldn't load user " + ex.getMessage(), ex);

@@ -15,6 +15,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.log4j.Logger;
+import org.digijava.kernel.ampapi.endpoints.dto.Language;
 import org.digijava.kernel.ampapi.endpoints.dto.SimpleJsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
@@ -72,14 +73,8 @@ public class TranslationsEndPoints {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "languages")
-    public List<SimpleJsonBean> getLanguages(){
-        List<SimpleJsonBean> languages=new  ArrayList<SimpleJsonBean>();
-        List<String[]> locales = TranslationManager.getLocale(PersistenceManager.getSession());
-        for(String[] localeInfo:locales) {                
-            languages.add(new SimpleJsonBean(localeInfo[0], localeInfo[1]));
-        }           
-//       languages.add(new SimpleJsonBean("lang", "))
-         return languages;
+    public List<Language> getLanguages() {
+        return TranslationManager.getAmpLanguages();
     }
     
     @GET

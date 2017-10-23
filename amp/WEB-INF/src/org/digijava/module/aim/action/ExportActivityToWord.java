@@ -99,6 +99,7 @@ import org.digijava.module.aim.util.ExportActivityToPdfUtil;
 import org.digijava.module.aim.util.ExportUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
+import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.budget.dbentity.AmpBudgetSector;
 import org.digijava.module.budget.dbentity.AmpDepartments;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -394,7 +395,9 @@ public class ExportActivityToWord extends Action {
                     sectorsTbl.addCell(sectTitleCell);
 
                     if(sectors.getClassificationConfigs() != null){
-                        for (AmpClassificationConfiguration config : (List<AmpClassificationConfiguration>)sectors.getClassificationConfigs()) {
+                        List<AmpClassificationConfiguration> classificationConfigs = SectorUtil
+                                .getAllClassificationConfigsOrdered();
+                        for (AmpClassificationConfiguration config : classificationConfigs) {
                             //if(FeaturesUtil.isVisibleModule("/Activity Form/Sectors/"+config.getName()+" Sectors", ampContext,session)){
                             boolean hasSectors=false;
                             if (sectors.getActivitySectors() != null) {
@@ -2588,8 +2591,8 @@ public class ExportActivityToWord extends Action {
                                 eshDonorInfo, "Mode of Payment", funding.getModeOfPayment(), true);
                         addFundingRowData("/Activity Form/Funding/Funding Group/Funding Item/Donor Objective",
                                 eshDonorInfo, "Donor Objective", funding.getDonorObjective(), true);
-                        addFundingRowData("/Activity Form/Funding/Funding Group/Funding Item/Conditions", eshDonorInfo,
-                                "Conditions", funding.getConditions(), true);
+                        addFundingRowData("/Activity Form/Funding/Funding Group/Funding Item/Conditions",
+                                eshDonorInfo, "Conditions", funding.getConditions(), true);
                         addFundingRowData(
                                 "/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement",
                                 eshDonorInfo, "Agreement Title", funding.getTitle(), true);
@@ -2718,6 +2721,11 @@ public class ExportActivityToWord extends Action {
                     eshDonorInfo.addRowData((new ExportSectionHelperRowData("Mode of Payment", null, null, true))
                             .addRowData(modeOfPayment));
                 }
+                    if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Concessionality Level")) {
+                        String concessionalityLevel = fnd.getConcessionalityLevel() != null ? fnd.getConcessionalityLevel().getValue() : " ";
+                        eshDonorInfo.addRowData((new ExportSectionHelperRowData("Concessionality Level", null, null, true))
+                                .addRowData(concessionalityLevel));
+                 }
 
                 if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Donor Objective")
                         && (fnd.getDonorObjective() != null)) {

@@ -97,8 +97,7 @@ public class Constants
   public static final String NAVIGATION_LANGUAGE =
       "org.digijava.kernel.navigation_language";
 
-  public static final String FORCED_LANGUAGE =
-	      "org.digijava.kernel.request_forced_language";
+    public static final String FORCED_LANGUAGE = "org.digijava.kernel.request_forced_language";
   
   public static final String ACTION_ROLES_PROCESS_RESULT =
       "org.digijava.kernel.action_roles_process_result";

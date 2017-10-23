@@ -851,9 +851,9 @@ public class AmpMessageWorker {
             for (String emailAddr : receiversAddresses) {
                 String senderEmail = (msgSender == null) ? SYSTEM_DEFAULT_SENDER_MAIL : msgSender.getUser().getEmail();
                 
-				String translatedName = TranslatorWorker.translateText(newMsg.getName());
+                String translatedName = TranslatorWorker.translateText(newMsg.getName());
 
-				AmpEmail ampEmail = new AmpEmail(senderEmail, DgUtil.fillPattern(translatedName, params),
+                AmpEmail ampEmail = new AmpEmail(senderEmail, DgUtil.fillPattern(translatedName, params),
                         DgUtil.fillPattern(newMsg.getDescription(), params));
                 DbUtil.saveOrUpdateObject(ampEmail);
                 

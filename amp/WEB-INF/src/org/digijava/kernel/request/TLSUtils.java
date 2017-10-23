@@ -37,16 +37,16 @@ public class TLSUtils {
     private static String forcedLangCode = null;
     
     public static String getLangCode() {
-		if (TLSUtils.forcedLangCode != null) {
-			return TLSUtils.forcedLangCode;
-		} else {
-			// we force the langcode for this request, to be used by JOBS where we use mock
-			// request
-			if (TLSUtils.getThreadLocalInstance().request != null
-					&& TLSUtils.getThreadLocalInstance().request.getAttribute(Constants.FORCED_LANGUAGE) != null) {
-				return TLSUtils.getThreadLocalInstance().request.getAttribute(Constants.FORCED_LANGUAGE).toString();
-			}
-		}
+        if (TLSUtils.forcedLangCode != null) {
+            return TLSUtils.forcedLangCode;
+        } else {
+            // we force the langcode for this request, to be used by JOBS where we use mock
+            // request
+            if (TLSUtils.getThreadLocalInstance().request != null
+                    && TLSUtils.getThreadLocalInstance().request.getAttribute(Constants.FORCED_LANGUAGE) != null) {
+                return TLSUtils.getThreadLocalInstance().request.getAttribute(Constants.FORCED_LANGUAGE).toString();
+            }
+        }
         try
         {
             ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
@@ -204,11 +204,13 @@ public class TLSUtils {
         });
         schemaStubber.when(mockServletContext).getRealPath(Mockito.anyString());
         
-        populateMockSiteDomain(mockRequest,"/") ;
+        populateMockSiteDomain(mockRequest, "/");
         populate(mockRequest);
         
     }
-	private static void populateMockSiteDomain(HttpServletRequest httpRequest,String mainPath) {
+
+    private static void populateMockSiteDomain(HttpServletRequest httpRequest, String mainPath) {
+        // we use localhost since at this point we don't have access to the real hosts
         SiteDomain siteDomain = SiteCache.getInstance().getSiteDomain("localhost", mainPath);
         httpRequest.setAttribute(org.digijava.kernel.Constants.CURRENT_SITE, siteDomain);
 

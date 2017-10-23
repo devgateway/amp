@@ -99,6 +99,7 @@ module.exports = Backbone.Model
     111: 'Education.svg',
     112: 'Education.svg',
     113: 'Education.svg',
+    114: 'Education.svg',
     120: 'Health.svg',
     121: 'Health.svg',
     122: 'Health.svg',

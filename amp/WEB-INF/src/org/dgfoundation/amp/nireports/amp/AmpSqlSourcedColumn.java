@@ -17,6 +17,8 @@ import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.TeamUtil;
 
 
 /**
@@ -27,8 +29,12 @@ import org.digijava.kernel.request.TLSUtils;
  */
 public abstract class AmpSqlSourcedColumn<K extends Cell> extends PsqlSourcedColumn<K> {
 
-    public AmpSqlSourcedColumn(String columnName, NiDimension.LevelColumn levelColumn, String viewName, Behaviour<?> behaviour) {
+    private boolean sscEnabledColumn;
+
+    public AmpSqlSourcedColumn(String columnName, NiDimension.LevelColumn levelColumn, String viewName,
+            Behaviour<?> behaviour, boolean sscEnabledColumn) {
         super(columnName, levelColumn, viewName, behaviour);
+        this.sscEnabledColumn = sscEnabledColumn;
     }
     
     @Override
@@ -40,6 +46,10 @@ public abstract class AmpSqlSourcedColumn<K extends Cell> extends PsqlSourcedCol
         if (mainIds.isEmpty())
             return Collections.emptyList();
         String locale = TLSUtils.getEffectiveLangCode();
+        String viewName = this.viewName;
+        if (sscEnabledColumn && inSSCWorkspace()) {
+            viewName = viewName.replace("v_", "v_ssc_");
+        }
         String queryCondition = String.format("WHERE (%s IN (%s))", mainColumn, Util.toCSStringForIN(mainIds));
         ViewFetcher fetcher = DatabaseViewFetcher.getFetcherForView(viewName, queryCondition, locale, AmpReportsScratchpad.get(engine).columnCachers, AmpReportsScratchpad.get(engine).connection, this.viewColumns.toArray(new String[0]));
         List<K> res = new ArrayList<>();
@@ -55,7 +65,11 @@ public abstract class AmpSqlSourcedColumn<K extends Cell> extends PsqlSourcedCol
         }
         return res;
     }
-    
+
+    public boolean inSSCWorkspace() {
+        return TLSUtils.getThreadLocalInstance().inSSCWorkspace();
+    }
+
     /**
      * extracts a cell from the current row of an SQL {@link ResultSet}
      * @param engine the context

@@ -285,18 +285,19 @@ public final class PerformanceRuleManager {
                 activitiesByPerformanceRuleMatcher.get(m).add(act);
             }
         });
-		String ampIdLabel = TranslatorWorker.translateText(TranslatorWorker.translateText("AMP ID"));
-		String titleLabel = TranslatorWorker.translateText(TranslatorWorker.translateText("Title"));
-        
+        String ampIdLabel = TranslatorWorker.translateText("AMP ID");
+        String titleLabel = TranslatorWorker.translateText("Title");
+
         //TODO get the url correctly
         String url = getBaseUrl();
         
-		if (activitiesByPerformanceRuleMatcher.isEmpty()) {
-			String noActivityWithRule = TranslatorWorker.translateText("No activities with performance issues have been found");
-			sb.append("<br/>" + noActivityWithRule + ".<br/>");
-		}
+        if (activitiesByPerformanceRuleMatcher.isEmpty()) {
+            String noActivityWithRule = TranslatorWorker
+                    .translateText("No activities with performance issues have been found");
+            sb.append("<br/>" + noActivityWithRule + ".<br/>");
+        }
         
-        activitiesByPerformanceRuleMatcher.entrySet().forEach(e -> {
+            activitiesByPerformanceRuleMatcher.entrySet().forEach(e -> {
             sb.append("<br/>");
             PerformanceRuleMatcher matcher = e.getKey();
             sb.append(String.format("<b>%s (%s)</b>", 

@@ -140,6 +140,15 @@ div.trnpanel div.trn-row ul {
     left: 35px;
 }
 
+.sub-filters-titles {
+    float: right;
+}
+
+.sub-filters-content {
+    border-right: solid 1px #ADD2F1;
+    border-left: 0px;
+}
+
 .form-group {
     text-align: right;
 }

@@ -9,7 +9,7 @@ import org.digijava.kernel.request.TLSUtils;
  * @author Dolghier Constantin
  *
  */
-public class TextColumnKeyBuilder implements KeyBuilder<String> {
+public class TextColumnKeyBuilder implements KeyBuilder {
 
     @Override
     public String buildKey(NiReportsEngine engine, NiReportColumn<?> col) {

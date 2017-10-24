@@ -130,3 +130,352 @@ div.trnpanel div.trn-row ul {
     text-align: right;
     color: #376091;
 }
+
+.content-direction {
+    direction: rtl;
+}
+
+#amp_info_filters {
+    float: left;
+    left: 35px;
+}
+
+.form-group {
+    text-align: right;
+}
+
+.panel-title {
+    text-align: right;
+}
+
+.close {
+     float: left;
+ }
+
+.setting-dialog-footer {
+    text-align: left;
+}
+
+#filter-popup li a {
+    text-align: right;
+}
+
+.pull-right {
+    float: left!important;
+}
+
+.nav-tabs>li {
+    float: right;
+}
+
+.nav {
+    padding-right: 0px;
+}
+
+.toggle-all, .tree-container {
+    text-align: right
+}
+
+.tree .selectable {
+    float: right;
+    margin-left:5px;
+}
+
+.workspace_results {
+    overflow: unset
+}
+.lalign {
+    text-align: right;
+}
+
+#toolbar {
+    background: -webkit-gradient(linear, right top, right bottom, from(#EEEEEE), to(#DDDDDD));
+}
+
+#toolbar ul li {
+    float: right;
+    padding-right: 6px;
+}
+#toolbar ul li.separator {
+    border-right: 1px solid #CCC;
+}
+.tabs {
+    text-align: right;
+}
+.tabs ul li {
+    float: right;
+    padding-right: 4px;
+    border-right: 1px solid #DDD;
+}
+.tabs ul li.selected {
+    border-left: 1px solid rgb(204, 204, 204);
+    background: -webkit-gradient(linear, right top, right bottom, from(#FFFFFF), to(#F0F0F0));
+}
+.sidebar {
+    float: right;
+}
+
+#query_info {
+    padding-right: 0;
+}
+
+.dimension_tree ul li,
+.measure_tree ul li {
+    padding-right: 0;
+}
+
+.measure_tree ul li ul li a {
+    padding-right: 10px;
+}
+
+.dimension_tree .hierarchy {
+    padding-right: 0px;
+}
+.dimension_tree .hierarchy a {
+    padding-right: 20px;
+}
+.workspace {
+    float: right;
+    margin-right: 0px;
+    text-align: right;
+}
+.workspace_inner {
+    margin-right: 0px;
+}
+.ui-dialog.ui-draggable-dragging {
+    text-align: right !important;
+}
+
+.ui-dialog.ui-draggable-dragging .form_button {
+    background: -webkit-gradient(linear, right top, right bottom, from(#FFFFFF), to(#F0F0F0)) !important;
+}
+.datatable .str {
+    text-align: right;
+}
+
+.ui-dialog-titlebar {
+    background: -webkit-gradient(linear, right top, right bottom, from(#FFFFFF), to(#F0F0F0));
+}
+
+.ui-dialog-titlebar .ui-dialog-title {
+    float: right;
+}
+.dialog_icon {
+    float: right;
+}
+
+
+.dialog_selections .dialog_body .available_selections {
+    padding-right: 5px;
+    float: right;
+}
+.dialog_selections .dialog_body .selection_buttons {
+    float: right;
+    padding-right: 25px;
+}
+
+.dialog_selections .header_selections input {
+    margin-right: 5px;
+}
+
+.dialog_selections .dialog_body .used_selections {
+    padding-right: 25px;
+    float: right;
+}
+
+.dialog_selections .dialog_body .updown_buttons {
+    float: right;
+    padding-right: 25px;
+}
+
+.dialog_selections .dialog_body .selection_options ul {
+    padding-right: 3px;
+}
+
+.dialog_selections .options, .dialog_selections .hint, .dialog_selections .info {
+    float: right;
+    text-align: right;
+}
+
+.ui-menu {
+    float: right;
+}
+.ui-menu .ui-menu-item {
+    float: right;
+    clear: right;
+}
+
+.dialog_footer .form_button {
+    margin-right: 5px;
+}
+
+.workspace_editor {
+    padding-right: 5px;
+}
+
+.parameter_input {
+    padding-right: 5px;
+}
+.processing_container, .blockOverlay {
+    right: 0;
+}
+
+.processing, .blockElement {
+    right: 40%;
+}
+
+.workspace_toolbar ul li {
+    float: right;
+    padding-right: 5px;
+}
+
+.workspace_toolbar ul li.seperator {
+    border-right: 1px solid #D5D5D5;
+    margin-right: 5px;
+}
+
+.query_toolbar_vertical {
+    border-right: 1px solid #CCC;
+    float: right;
+}
+
+.query_toolbar_horizontal {
+    border-right: 1px solid #CCC;
+}
+
+
+.query_toolbar ul.renderer {
+    padding-right: 3px;
+}
+.query_toolbar ul.renderer li {
+    padding-right: 1px;
+}
+
+.query_toolbar ul li {
+    float: right;
+    padding-right: 5px;
+}
+
+.query_toolbar ul li.seperator {
+    border-right: 1px solid #D5D5D5;
+    margin-right: 5px;
+}
+
+.form_button {
+    background: -webkit-gradient(linear, right top, right bottom, from(#FFFFFF), to(#F0F0F0));
+}
+
+.bucket_items ul li {
+    float: right;
+    padding-right: 5px;
+}
+.bucket_items ul li.seperator {
+    border-right: 1px solid #D5D5D5;
+    margin-right: 5px;
+}
+
+.filter_items ul li {
+    float: right;
+    padding-right: 5px;
+}
+.filter_items ul li.seperator {
+    border-right: 1px solid #D5D5D5;
+    margin-right: 5px;
+}
+
+.tipsy-n .tipsy-arrow {
+    right: 50%;
+    margin-right: -4px;
+}
+
+.tipsy-nw .tipsy-arrow {
+    right: 10px;
+}
+
+.tipsy-ne .tipsy-arrow {
+    right: 10px;
+}
+
+.tipsy-s .tipsy-arrow {
+    right: 50%;
+    margin-right: -4px;
+    background-position: bottom right;
+}
+
+.tipsy-sw .tipsy-arrow {
+    right: 10px;
+    background-position: bottom right;
+}
+
+.tipsy-se .tipsy-arrow {
+    right: 10px;
+    background-position: bottom right;
+}
+
+.tipsy-e .tipsy-arrow {
+    right: 0;
+    background-position: top right;
+}
+
+.tipsy-w .tipsy-arrow {
+    right: 0;
+}
+
+input.search_file {
+    margin-right:10px;
+}
+span.cancel_search {
+    float: left;
+    right: 175px;
+}
+
+.RepositoryObjects li.query {
+    margin-right: 16px;
+}
+
+.RepositoryObjects ul.folder_content {
+    margin-right: 13px;
+    padding-right: 0px;
+}
+.chart_toolbar {
+    right: 3px;
+}
+.chart_toolbar ul li {
+    float: right;
+    padding-right: 5px;
+}
+.chart_toolbar ul li.seperator {
+    border-right: 1px solid #D5D5D5;
+    margin-right: 5px;
+}
+
+.chartworkspace_inner {
+    margin-right: 400px;
+}
+
+.dialog_response {
+    text-align: right;
+}
+
+#navlist table
+{
+    float:right;
+}
+
+#deflated-currencies-container{
+    right: 50%;
+    margin-right: -200px;
+}
+
+a.first_page {
+    background-position: -125px 4px;
+}
+a.prev_page {
+    background-position: -85px 4px;
+}
+a.next_page {
+    background-position: -43px 4px;
+}
+a.last_page {
+    background-position: -3px 4px;
+}

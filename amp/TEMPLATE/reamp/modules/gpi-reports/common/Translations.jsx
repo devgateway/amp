@@ -42,5 +42,9 @@ export const initialTranslations = {
         'amp-gpi-reports:amount-in-1000000': 'In Millions',
         'amp-gpi-reports:selected': 'Selected: ',
         'amp-gpi-reports:loading-message': 'Loading...',
-        'amp-gpi-reports:remarks': 'Remarks'
+        'amp-gpi-reports:remarks': 'Remarks',
+        'amp-gpi-reports:5b-column-legend':'(Yes = 1 / No = 0)',
+        'amp-gpi-reports:5b-stat-label':'indicator 5b % at country level',
+        'amp-gpi-reports:annual-planned-disbursements': 'Actual Planned Disbursements'
+        
 };

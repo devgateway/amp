@@ -10,12 +10,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
-import org.bouncycastle.crypto.tls.TlsUtils;
 import org.digijava.kernel.Constants;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteCache;
+import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.TeamUtil;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -35,6 +36,7 @@ public class TLSUtils {
     public Site site;
     public HttpServletRequest request;
     private static String forcedLangCode = null;
+    private Boolean forcedSSCWorkspace;
     
     public static String getLangCode() {
         if (TLSUtils.forcedLangCode != null) {
@@ -75,7 +77,20 @@ public class TLSUtils {
             return "en";
         }
     }
-    
+
+    public void setForcedSSCWorkspace(Boolean forcedSSCWorkspace) {
+        this.forcedSSCWorkspace = forcedSSCWorkspace;
+    }
+
+    public boolean inSSCWorkspace() {
+        if (forcedSSCWorkspace != null) {
+            return forcedSSCWorkspace;
+        } else {
+            TeamMember member = TeamUtil.getCurrentMember();
+            return member.getWorkspacePrefix() != null;
+        }
+    }
+
     public final static boolean equalValues(Object a, Object b)
     {
         if (a == null)

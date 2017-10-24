@@ -300,8 +300,8 @@ public final class PerformanceRuleManager {
             activitiesByPerformanceRuleMatcher.entrySet().forEach(e -> {
             sb.append("<br/>");
             PerformanceRuleMatcher matcher = e.getKey();
-            sb.append(String.format("<b>%s (%s)</b>", 
-                    getPerformanceRuleMatcherMessage(matcher), matcher.getRule().getLevel().getLabel()));
+            sb.append(String.format("<b>%s (%s)</b>", getPerformanceRuleMatcherMessage(matcher),
+                    TranslatorWorker.translateText(matcher.getRule().getLevel().getLabel())));
             sb.append("<br/>");
             
             sb.append("<table border=1 cellpadding=5 cellspacing=0>");

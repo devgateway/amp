@@ -260,12 +260,12 @@ public class TLSUtils {
         return s;
     }
 
-	public static void forceLangCodeToSiteLangCode() {
-		if (TLSUtils.getThreadLocalInstance().request != null && TLSUtils.getThreadLocalInstance().site!=null) {
-			TLSUtils.getThreadLocalInstance().request.setAttribute(Constants.FORCED_LANGUAGE,
-					TLSUtils.getThreadLocalInstance().site.getDefaultLanguage().getCode());
-		}
+    public static void forceLangCodeToSiteLangCode() {
+        if (TLSUtils.getThreadLocalInstance().request != null && TLSUtils.getThreadLocalInstance().site != null) {
+            TLSUtils.getThreadLocalInstance().request.setAttribute(Constants.FORCED_LANGUAGE,
+                    TLSUtils.getThreadLocalInstance().site.getDefaultLanguage().getCode());
+        }
 
-	}
+    }
          
 }

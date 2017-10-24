@@ -21,15 +21,15 @@ import org.dgfoundation.amp.nireports.schema.NiDimension;
  * @author Dolghier Constantin
  *
  * @param <K> the type of the generated cells
- * @param <T> the type of the key
  */
-public abstract class AmpCachedColumn<K extends Cell, T> extends AmpSqlSourcedColumn<K> {
+public abstract class AmpCachedColumn<K extends Cell> extends AmpSqlSourcedColumn<K> {
     
-    public final KeyBuilder<T> cacheKeyBuilder;
-    public final ExpiringCacher<T, NiReportsEngine, List<K>> cacher;
+    private final KeyBuilder cacheKeyBuilder;
+    private final ExpiringCacher<String, NiReportsEngine, List<K>> cacher;
     
-    public AmpCachedColumn(String columnName, NiDimension.LevelColumn levelColumn, String viewName, KeyBuilder<T> cacheKeyBuilder, Behaviour<?> behaviour) {
-        super(columnName, levelColumn, viewName, behaviour);
+    public AmpCachedColumn(String columnName, NiDimension.LevelColumn levelColumn, String viewName,
+            KeyBuilder cacheKeyBuilder, Behaviour<?> behaviour) {
+        super(columnName, levelColumn, viewName, behaviour, false);
         this.cacheKeyBuilder = cacheKeyBuilder;
         this.cacher = new ExpiringCacher<>(String.format("column %s cacher", columnName), this::origFetch, new DatabaseChangedDetector(), 3 * 60 * 1000);
     }
@@ -40,7 +40,7 @@ public abstract class AmpCachedColumn<K extends Cell, T> extends AmpSqlSourcedCo
         return res;
     }
     
-    protected List<K> origFetch(T key, NiReportsEngine engine) {
+    protected List<K> origFetch(String key, NiReportsEngine engine) {
         return super.fetch(engine);
     }
     

@@ -65,7 +65,7 @@ export default class PagingSection extends Component {
     }
 
     render() {
-        if ( this.props.mainReport && this.props.mainReport.page ) {
+        if ( this.props.mainReport && this.props.mainReport.page && this.props.mainReport.page.totalPageCount > 1) {
                    return (               
                         <div className="row">
                             <div className="col-md-8 pull-right pagination-wrapper">

@@ -45,8 +45,6 @@ public class PerformanceRulesAlertJob extends ConnectionCleaningJob implements S
         // we populate mockrequest to be able to translate
         AmpJobsUtil.populateRequest();
         TLSUtils.forceLangCodeToSiteLangCode();
-        org.digijava.kernel.entity.Locale defaultLocale = TLSUtils.getSite().getDefaultLanguage();
-
         logger.info("Running the performance rule alert job...");
 
         if (isPerformanceAlertIssuesEnabled()) {

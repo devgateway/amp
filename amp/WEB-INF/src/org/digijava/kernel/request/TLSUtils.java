@@ -212,9 +212,12 @@ public class TLSUtils {
     private static void populateMockSiteDomain(HttpServletRequest httpRequest, String mainPath) {
         // we use localhost since at this point we don't have access to the real hosts
         SiteDomain siteDomain = SiteCache.getInstance().getSiteDomain("localhost", mainPath);
-        httpRequest.setAttribute(org.digijava.kernel.Constants.CURRENT_SITE, siteDomain);
-
-	}
+        if (siteDomain != null) {
+            httpRequest.setAttribute(org.digijava.kernel.Constants.CURRENT_SITE, siteDomain);
+        } else {
+            logger.error("Site domain for localhost not configured");
+        }
+    }
     private static Stubber getMockGetter(final Map<String, Object> sessionAttributes) {
         Stubber s=
         Mockito.doAnswer(new Answer<Object>() {
@@ -243,7 +246,7 @@ public class TLSUtils {
     }
 
 	public static void forceLangCodeToSiteLangCode() {
-		if (TLSUtils.getThreadLocalInstance().request != null) {
+		if (TLSUtils.getThreadLocalInstance().request != null && TLSUtils.getThreadLocalInstance().site!=null) {
 			TLSUtils.getThreadLocalInstance().request.setAttribute(Constants.FORCED_LANGUAGE,
 					TLSUtils.getThreadLocalInstance().site.getDefaultLanguage().getCode());
 		}

@@ -17,8 +17,6 @@ import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.TeamUtil;
 
 
 /**

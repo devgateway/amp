@@ -44,7 +44,7 @@ class Utils {
         if ( message ) {
             errors.push( message );
         }
-        //errors.push( ...this.validateFreezingDate( dataFreezeEvent ) );
+        errors.push( ...this.validateFreezingDate( dataFreezeEvent ) );
         errors.push( ...this.validateStartAndEndDate( dataFreezeEvent ) );
         errors.push( ...this.validateGracePeriod( dataFreezeEvent ) );
         return errors

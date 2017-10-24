@@ -271,6 +271,7 @@ public class InternationalizedViewsRepository {
                 addSimpleTranslatedView(this, "v_funding_status", "funding_status_name", "funding_status_code");
                 addSimpleTranslatedView(this, "v_implementation_level", "name", "level_code");
                 addSimpleTranslatedView(this, "v_ac_chapters", "name", "val_id");
+                addSimpleTranslatedView(this,"v_performance_alert_level","name","level_code");
 
                 addViewDef(this, new I18nViewDescription("v_implementing_agency").
                         addColumnDef(new I18nViewColumnDescription("org_name", "org_id", AmpOrganisation.class, "name")));

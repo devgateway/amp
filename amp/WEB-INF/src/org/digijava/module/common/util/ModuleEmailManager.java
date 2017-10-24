@@ -2,7 +2,7 @@
  *   ModuleEmailManager.java
  *   @Author Maka Kharalashvili maka@digijava.org
  *   Created: Apr 21, 2004
- * 	CVS-ID: $Id$
+ *  CVS-ID: $Id$
  *
  *   This file is part of DiGi project (www.digijava.org).
  *   DiGi is a multi-site portal system written in Java/J2EE.

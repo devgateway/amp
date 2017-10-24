@@ -66,6 +66,7 @@
 	-->
 
 </script>
+<div class="admin-content">
 <digi:secure actions="ADMIN">
 <h1 class="admintitle"><digi:trn>Organization manager</digi:trn></h1>
 </digi:secure>
@@ -373,7 +374,7 @@
 															<tr>
 																<td colspan="4" align=center>
 																	<hr /> <digi:trn key="aim:organizationPages">
-																	Pages:</digi:trn> <c:if test="${aimOrgManagerForm.currentPage > 1}">
+													Pages :</digi:trn> <c:if test="${aimOrgManagerForm.currentPage > 1}">
 																		<jsp:useBean id="urlParamsFirst" type="java.util.Map"
 																			class="java.util.HashMap" />
 																		<c:set target="${urlParamsFirst}" property="page"
@@ -566,3 +567,4 @@
 				<c:if test="${!aimOrgManagerForm.adminSide}"></table></div></td></tr></c:if></table>
 					</td>
 					</tr></table> </digi:form>
+</div>

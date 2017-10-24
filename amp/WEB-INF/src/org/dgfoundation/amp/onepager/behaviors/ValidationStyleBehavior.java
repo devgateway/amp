@@ -15,20 +15,20 @@ import org.apache.wicket.markup.html.form.FormComponent;
 public class ValidationStyleBehavior extends Behavior {
 
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7695692087436307207L;
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -7695692087436307207L;
 
-	// Check if the component is valid and add the corresponding CSS style
-	// attribute
-	@Override
-	public void onComponentTag(final Component component, final ComponentTag tag) {
-		FormComponent comp = (FormComponent) component;
-		if (comp.isValid() && comp.getConvertedInput() != null) {
-			tag.getAttributes().put("class", "inputx");
-		} else if (!comp.isValid()) {
-			tag.getAttributes().put("class", "inputxInvalid");
-		}
-	}
+    // Check if the component is valid and add the corresponding CSS style
+    // attribute
+    @Override
+    public void onComponentTag(final Component component, final ComponentTag tag) {
+        FormComponent comp = (FormComponent) component;
+        if (comp.isValid() && comp.getConvertedInput() != null) {
+            tag.getAttributes().put("class", "inputx");
+        } else if (!comp.isValid()) {
+            tag.getAttributes().put("class", "inputxInvalid");
+        }
+    }
 }

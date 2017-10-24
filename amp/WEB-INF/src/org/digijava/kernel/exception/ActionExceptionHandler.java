@@ -70,7 +70,7 @@ public final class ActionExceptionHandler
         ActionForm formInstance,
         HttpServletRequest request,
         HttpServletResponse response) throws ServletException {
-    	// namnamu
+        // namnamu
         //Special processing for security exceptions
         if (ex instanceof SecurityException) {
             throw new ServletException(ex);

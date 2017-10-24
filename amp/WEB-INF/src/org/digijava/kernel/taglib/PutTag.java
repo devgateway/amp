@@ -30,6 +30,6 @@ package org.digijava.kernel.taglib;
  */
 public class PutTag extends org.apache.struts.tiles.taglib.PutTag {
 
-	private static final long serialVersionUID = 1L;
-	//TODO check if we can delete this class.
+    private static final long serialVersionUID = 1L;
+    //TODO check if we can delete this class.
 }

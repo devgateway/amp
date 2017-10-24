@@ -7,13 +7,13 @@ import com.lowagie.text.pdf.PdfPTable;
 
 public class TrnTextCellPDF extends TextCellPDF {
 
-	public TrnTextCellPDF(Exporter parent, Viewable item) {
-		super(parent, item);
-		// TODO Auto-generated constructor stub
-	}
+    public TrnTextCellPDF(Exporter parent, Viewable item) {
+        super(parent, item);
+        // TODO Auto-generated constructor stub
+    }
 
-	public TrnTextCellPDF(PdfPTable table, Viewable item, Long ownerId) {
-		super(table, item, ownerId);
-		// TODO Auto-generated constructor stub
-	}
+    public TrnTextCellPDF(PdfPTable table, Viewable item, Long ownerId) {
+        super(table, item, ownerId);
+        // TODO Auto-generated constructor stub
+    }
 }

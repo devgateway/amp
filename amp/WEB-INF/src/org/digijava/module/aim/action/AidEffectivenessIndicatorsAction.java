@@ -107,7 +107,7 @@ public class AidEffectivenessIndicatorsAction extends Action {
                             }
 
                             handleLocalException(request, null, "error.admin.aidEffectivenessIndicator.option.hasRelatedActivities",
-                            		DgUtil.dehtmlize(option.getAmpIndicatorOptionName()));
+                                    DgUtil.dehtmlize(option.getAmpIndicatorOptionName()));
                             executeSearch(request, indicatorForm);
                             return mapping.findForward("error");
                         }
@@ -129,7 +129,7 @@ public class AidEffectivenessIndicatorsAction extends Action {
                 return mapping.findForward("edit");
             case "save":
                 if (validateData(indicatorForm, request).size() > 0) {
-                	
+                    
                     return mapping.findForward("error");
                 }
                 // update
@@ -145,22 +145,22 @@ public class AidEffectivenessIndicatorsAction extends Action {
                 }
                 
                 if(ContentTranslationUtil.multilingualIsEnabled()) {
-                	indicator.setTooltipText(indicatorForm.getTooltipText());  
-                	indicator.setAmpIndicatorName(indicatorForm.getAmpIndicatorName());  
-	          	} else {
-	          		String tooltipText = MultilingualInputFieldValues.readParameter("AmpAidEffectivenessIndicator_tooltipText_" + TLSUtils.getSite().getDefaultLanguage().getCode(), "AmpAidEffectivenessIndicator_tooltipText", request).right;
-	          		indicator.setTooltipText(tooltipText);
-	          		
-	          		String indicatorName = MultilingualInputFieldValues.readParameter("AmpAidEffectivenessIndicator_ampIndicatorName_" + TLSUtils.getSite().getDefaultLanguage().getCode(), "AmpAidEffectivenessIndicator_ampIndicatorName", request).right;
-	          		indicator.setAmpIndicatorName(indicatorName);
-	          	}
+                    indicator.setTooltipText(indicatorForm.getTooltipText());  
+                    indicator.setAmpIndicatorName(indicatorForm.getAmpIndicatorName());  
+                } else {
+                    String tooltipText = MultilingualInputFieldValues.readParameter("AmpAidEffectivenessIndicator_tooltipText_" + TLSUtils.getSite().getDefaultLanguage().getCode(), "AmpAidEffectivenessIndicator_tooltipText", request).right;
+                    indicator.setTooltipText(tooltipText);
+                    
+                    String indicatorName = MultilingualInputFieldValues.readParameter("AmpAidEffectivenessIndicator_ampIndicatorName_" + TLSUtils.getSite().getDefaultLanguage().getCode(), "AmpAidEffectivenessIndicator_ampIndicatorName", request).right;
+                    indicator.setAmpIndicatorName(indicatorName);
+                }
                 
                 AidEffectivenessIndicatorUtil.saveIndicator(indicator);
                 
                 if (ContentTranslationUtil.multilingualIsEnabled()) {
-                	MultilingualInputFieldValues.serialize(indicator, "tooltipText", null, null, request);
-                	MultilingualInputFieldValues.serialize(indicator, "ampIndicatorName", null, null, request);
-          	    }
+                    MultilingualInputFieldValues.serialize(indicator, "tooltipText", null, null, request);
+                    MultilingualInputFieldValues.serialize(indicator, "ampIndicatorName", null, null, request);
+                }
                 
                 if (indicatorForm.getOldAmpIndicatorName() != null && ! "".equals(indicatorForm.getOldAmpIndicatorName())) {
                     AidEffectivenessIndicatorUtil.updateModulesVisibility(indicator, indicatorForm.getOldAmpIndicatorName());
@@ -194,7 +194,7 @@ public class AidEffectivenessIndicatorsAction extends Action {
                     AidEffectivenessIndicatorUtil.deleteIndicator(indicatorId);
                 }  else {
                     handleLocalException(request, null, "error.admin.aidEffectivenessIndicator.hasRelatedActivities",
-                    		DgUtil.dehtmlize(indicator.getAmpIndicatorName()));
+                            DgUtil.dehtmlize(indicator.getAmpIndicatorName()));
                     executeSearch(request, indicatorForm);
                     return mapping.findForward("search");
                 }

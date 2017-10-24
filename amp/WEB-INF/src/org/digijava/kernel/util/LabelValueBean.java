@@ -30,42 +30,42 @@ import java.io.Serializable;
  *
  */
 public class LabelValueBean implements Serializable {
-	private String Label;
-	private String Value;
+    private String Label;
+    private String Value;
 
-	/**
-	 * @param strLabel
-	 * @param strValue
-	 */
-	public LabelValueBean(String strLabel, String strValue) {
+    /**
+     * @param strLabel
+     * @param strValue
+     */
+    public LabelValueBean(String strLabel, String strValue) {
 
-		this.Label = strLabel;
-		this.Value = strValue;
+        this.Label = strLabel;
+        this.Value = strValue;
 
-	}
+    }
 
-	/**
-	 * @return
-	 */
-	public String getLabel() {
-		return this.Label;
-	}
-	/**
-	 * @return
-	 */
-	public String getValue() {
-		return this.Value;
-	}
-	/**
-	 * @param strLabel
-	 */
-	public void setLabel(String strLabel) {
-		this.Label = strLabel;
-	}
-	/**
-	 * @param strValue
-	 */
-	public void setValue(String strValue) {
-		this.Value = strValue;
-	}
+    /**
+     * @return
+     */
+    public String getLabel() {
+        return this.Label;
+    }
+    /**
+     * @return
+     */
+    public String getValue() {
+        return this.Value;
+    }
+    /**
+     * @param strLabel
+     */
+    public void setLabel(String strLabel) {
+        this.Label = strLabel;
+    }
+    /**
+     * @param strValue
+     */
+    public void setValue(String strValue) {
+        this.Value = strValue;
+    }
 }

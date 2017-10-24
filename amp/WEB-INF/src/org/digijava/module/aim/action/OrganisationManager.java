@@ -1,4 +1,4 @@
-	package org.digijava.module.aim.action;
+    package org.digijava.module.aim.action;
 
 import java.text.Collator;
 import java.util.*;
@@ -32,19 +32,19 @@ import org.digijava.module.calendar.util.AmpUtil;
     boolean isAdmin=false;
     boolean plainTeamMember = tm==null||!tm.getTeamHead();
     if (session.getAttribute("ampAdmin") == null) {
-		if(plainTeamMember){
-    		 return mapping.findForward("index");
-    	}
+        if(plainTeamMember){
+             return mapping.findForward("index");
+        }
     }
     else {
       String str = (String) session.getAttribute("ampAdmin");
       if (str.equals("no")) {
-    	  if(plainTeamMember){
-    		  return mapping.findForward("index");
-    	  }
+          if(plainTeamMember){
+              return mapping.findForward("index");
+          }
       }
       else{
-    	  isAdmin=true;
+          isAdmin=true;
       }
     }
 
@@ -78,14 +78,14 @@ import org.digijava.module.calendar.util.AmpUtil;
     
     //AMP-5453
     if ((eaForm.getAmpOrgTypeId() != null) && (!eaForm.getAmpOrgTypeId().equals(eaForm.getOldAmpOrgTypeId()))){
-    	if (eaForm.getOldAmpOrgTypeId() != null)
-    		eaForm.setAlpha("viewAll");
-    	eaForm.setOldAmpOrgTypeId(eaForm.getAmpOrgTypeId());
+        if (eaForm.getOldAmpOrgTypeId() != null)
+            eaForm.setAlpha("viewAll");
+        eaForm.setOldAmpOrgTypeId(eaForm.getAmpOrgTypeId());
     }
     
     String alpha = eaForm.getAlpha(); //request.getParameter("alpha");
     if (StringUtils.isBlank(alpha)) {
-    	eaForm.setOrgTypes(DbUtil.getAllOrgTypes()); 
+        eaForm.setOrgTypes(DbUtil.getAllOrgTypes()); 
     }
     eaForm.setNumResults(eaForm.getTempNumResults());
     col = new ArrayList<AmpOrganisation>();
@@ -114,32 +114,32 @@ import org.digijava.module.calendar.util.AmpUtil;
       }
       //aq unda chavamato sortBy !!!!!!!!!!!!!!!!!!!!!!!!!!!
       if(request.getParameter("sortBy")!=null) {
-    	  eaForm.setSortBy(request.getParameter("sortBy"));  
+          eaForm.setSortBy(request.getParameter("sortBy"));  
       }      
       if(eaForm.getSortBy()!=null){
-    	  if(eaForm.getSortBy().equalsIgnoreCase("nameAscending")){
-    		  Collections.sort((List)col, new DbUtil.HelperAmpOrganisationNameComparator()) ;
-    	  }else if (eaForm.getSortBy().equalsIgnoreCase("nameDescending")){ 
-    		  Collections.sort((List)col, new DbUtil.HelperAmpOrganisationNameComparator()) ;
-    		  Collections.reverse((List)col);
-    	  }else if(eaForm.getSortBy().equalsIgnoreCase("acronymAscending")) {
-    		  Collections.sort((List)col, new DbUtil.HelperAmpOrganisatonAcronymComparator()) ;
-    	  }else if(eaForm.getSortBy().equalsIgnoreCase("acronymDescending")){
-    		  Collections.sort((List)col, new DbUtil.HelperAmpOrganisatonAcronymComparator()) ;
-    		  Collections.reverse((List)col);
-    	  }  else if (eaForm.getSortBy().equalsIgnoreCase("typeAscending")) {
-    		  Collections.sort((List)col, new DbUtil.HelperAmpOrganisationTypeComparator()) ;
-    	  }else if(eaForm.getSortBy().equalsIgnoreCase("typeDescending")){
-    		  Collections.sort((List)col, new DbUtil.HelperAmpOrganisationTypeComparator()) ;
-    		  Collections.reverse((List)col);
-    	  }  else if(eaForm.getSortBy().equalsIgnoreCase("groupAscending")) {
-    		  Collections.sort((List)col, new DbUtil.HelperAmpOrganisationGroupComparator()) ;
-    	  }else if (eaForm.getSortBy().equalsIgnoreCase("groupDescending")) {
-    		  Collections.sort((List)col, new DbUtil.HelperAmpOrganisationGroupComparator()) ;
-    		  Collections.reverse((List)col);
-    	  }
+          if(eaForm.getSortBy().equalsIgnoreCase("nameAscending")){
+              Collections.sort((List)col, new DbUtil.HelperAmpOrganisationNameComparator()) ;
+          }else if (eaForm.getSortBy().equalsIgnoreCase("nameDescending")){ 
+              Collections.sort((List)col, new DbUtil.HelperAmpOrganisationNameComparator()) ;
+              Collections.reverse((List)col);
+          }else if(eaForm.getSortBy().equalsIgnoreCase("acronymAscending")) {
+              Collections.sort((List)col, new DbUtil.HelperAmpOrganisatonAcronymComparator()) ;
+          }else if(eaForm.getSortBy().equalsIgnoreCase("acronymDescending")){
+              Collections.sort((List)col, new DbUtil.HelperAmpOrganisatonAcronymComparator()) ;
+              Collections.reverse((List)col);
+          }  else if (eaForm.getSortBy().equalsIgnoreCase("typeAscending")) {
+              Collections.sort((List)col, new DbUtil.HelperAmpOrganisationTypeComparator()) ;
+          }else if(eaForm.getSortBy().equalsIgnoreCase("typeDescending")){
+              Collections.sort((List)col, new DbUtil.HelperAmpOrganisationTypeComparator()) ;
+              Collections.reverse((List)col);
+          }  else if(eaForm.getSortBy().equalsIgnoreCase("groupAscending")) {
+              Collections.sort((List)col, new DbUtil.HelperAmpOrganisationGroupComparator()) ;
+          }else if (eaForm.getSortBy().equalsIgnoreCase("groupDescending")) {
+              Collections.sort((List)col, new DbUtil.HelperAmpOrganisationGroupComparator()) ;
+              Collections.reverse((List)col);
+          }
       } else {
-    	  Collections.sort((List)col, new DbUtil.HelperAmpOrganisationNameComparator()) ;  //by default sort by name
+          Collections.sort((List)col, new DbUtil.HelperAmpOrganisationNameComparator()) ;  //by default sort by name
       }
       
       
@@ -149,11 +149,11 @@ import org.digijava.module.calendar.util.AmpUtil;
 //          col = (Collection) temp;
 
           if(alpha == null || alpha.trim().length() == 0){
-        	  if (eaForm.getCurrentAlpha() != null) {
+              if (eaForm.getCurrentAlpha() != null) {
                   eaForm.setCurrentAlpha(null);
                 } 
           }else {
-        	  eaForm.setCurrentAlpha(alpha);
+              eaForm.setCurrentAlpha(alpha);
           }
           
           eaForm.setStartAlphaFlag(true);
@@ -227,7 +227,7 @@ import org.digijava.module.calendar.util.AmpUtil;
     eaForm.setPagedCol(tempCol);
     eaForm.setPages(pages);
     eaForm.setCurrentPage(new Integer(1));
-	return mapping.findForward("forward");
+    return mapping.findForward("forward");
 
   }
 

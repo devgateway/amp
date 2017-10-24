@@ -42,27 +42,27 @@ public class ManagePermissionMap extends MultiAction {
          */
     @Override
     public ActionForward modePrepare(ActionMapping mapping, ActionForm form, HttpServletRequest request,
-	    HttpServletResponse response) throws Exception {
+        HttpServletResponse response) throws Exception {
 
-	PermissionMapForm pf = (PermissionMapForm) form;
+    PermissionMapForm pf = (PermissionMapForm) form;
 
-	if (pf.getPermissionMaps() == null)
-	    pf.clear();
+    if (pf.getPermissionMaps() == null)
+        pf.clear();
 
-	List<Permission> allPermissions = PermissionUtil.getAllUnDedicatedPermissions();
-	pf.set_availablePermissions(allPermissions);
+    List<Permission> allPermissions = PermissionUtil.getAllUnDedicatedPermissions();
+    pf.set_availablePermissions(allPermissions);
 
-	List<Class> availablePermissibleCategories = Arrays.asList(GatePermConst.availablePermissibles);
-	Map<String, Class> permissibleCategoriesMap = new HashMap<String, Class>();
-	Iterator i = availablePermissibleCategories.iterator();
-	while (i.hasNext()) {
-	    Class element = (Class) i.next();
-	    permissibleCategoriesMap.put(element.getSimpleName(), element);
-	}
-	pf.set_permissibleCategoriesMap(permissibleCategoriesMap);
-	pf.set_availablePermissibleCategories(availablePermissibleCategories);
+    List<Class> availablePermissibleCategories = Arrays.asList(GatePermConst.availablePermissibles);
+    Map<String, Class> permissibleCategoriesMap = new HashMap<String, Class>();
+    Iterator i = availablePermissibleCategories.iterator();
+    while (i.hasNext()) {
+        Class element = (Class) i.next();
+        permissibleCategoriesMap.put(element.getSimpleName(), element);
+    }
+    pf.set_permissibleCategoriesMap(permissibleCategoriesMap);
+    pf.set_availablePermissibleCategories(availablePermissibleCategories);
 
-	return modeSelect(mapping, form, request, response);
+    return modeSelect(mapping, form, request, response);
     }
 
     /**
@@ -72,78 +72,78 @@ public class ManagePermissionMap extends MultiAction {
          */
     @Override
     public ActionForward modeSelect(ActionMapping mapping, ActionForm form, HttpServletRequest request,
-	    HttpServletResponse response) throws Exception {
-	PermissionMapForm pf = (PermissionMapForm) form;
-	String mode = pf.getMode();
-	pf.setMode(null);
+        HttpServletResponse response) throws Exception {
+    PermissionMapForm pf = (PermissionMapForm) form;
+    String mode = pf.getMode();
+    pf.setMode(null);
 
-	if (request.getParameter("reset") != null)
-	    return modeReset(mapping, pf, request, response);
+    if (request.getParameter("reset") != null)
+        return modeReset(mapping, pf, request, response);
 
-	if ("saveDetailed".equals(mode))
-	    return modeSaveDetailed(mapping, pf, request, response);
-	if ("saveGlobal".equals(mode))
-	    return modeSaveGlobalPermission(mapping, pf, request, response);
+    if ("saveDetailed".equals(mode))
+        return modeSaveDetailed(mapping, pf, request, response);
+    if ("saveGlobal".equals(mode))
+        return modeSaveGlobalPermission(mapping, pf, request, response);
 
-	if ("permissiblePicked".equals(mode))
-	    return modePermissiblePicked(mapping, pf, request, response);
-	if ("permissibleCategoryPicked".equals(mode))
-	    return modePermissibleCategoryPicked(mapping, pf, request, response);
+    if ("permissiblePicked".equals(mode))
+        return modePermissiblePicked(mapping, pf, request, response);
+    if ("permissibleCategoryPicked".equals(mode))
+        return modePermissibleCategoryPicked(mapping, pf, request, response);
 
-	return mapping.getInputForward();
+    return mapping.getInputForward();
     }
 
     private ActionForward modeSaveGlobalPermission(ActionMapping mapping, PermissionMapForm pf,
-	    HttpServletRequest request, HttpServletResponse response) throws Exception {
-	Class permCatClass = pf.get_permissibleCategoriesMap().get(pf.getPermissibleCategory());
-	if(permCatClass==null) 	return mapping.getInputForward(); 
-	PermissionUtil.cleanGlobalPermissionMapForPermissibleClass(permCatClass);
-	Session hs= PermissionUtil.saveGlobalPermission(permCatClass,pf.getPermissionId(), pf.getPermissibleCategory());
-	if(hs!=null){
-		pf.setPermissionId(new Long(0));
-	}
-	return mapping.getInputForward();
+        HttpServletRequest request, HttpServletResponse response) throws Exception {
+    Class permCatClass = pf.get_permissibleCategoriesMap().get(pf.getPermissibleCategory());
+    if(permCatClass==null)  return mapping.getInputForward(); 
+    PermissionUtil.cleanGlobalPermissionMapForPermissibleClass(permCatClass);
+    Session hs= PermissionUtil.saveGlobalPermission(permCatClass,pf.getPermissionId(), pf.getPermissibleCategory());
+    if(hs!=null){
+        pf.setPermissionId(new Long(0));
+    }
+    return mapping.getInputForward();
     }
 
     private ActionForward modeSaveDetailed(ActionMapping mapping, PermissionMapForm pf, HttpServletRequest request,
-	    HttpServletResponse response) throws Exception {
-	Session hs = PersistenceManager.getRequestDBSession();
-	Iterator i = pf.getPermissionMaps().iterator();
-	while (i.hasNext()) {
-	    PermissionMap element = (PermissionMap) i.next();
-	    if(element.getId()!=null) {
-	    	Long elementId=element.getId();
-	    	Long permissionId = element.getPermissionId();
-	    	element=(PermissionMap) hs.get(PermissionMap.class, elementId);
-	    	element.setPermissionId(permissionId);
-	    }
-	    
-	    // we ignore unpersisted unselected permission maps
-	    if (element.getId() == null && element.getPermissionId() == 0)
-		continue;
+        HttpServletResponse response) throws Exception {
+    Session hs = PersistenceManager.getRequestDBSession();
+    Iterator i = pf.getPermissionMaps().iterator();
+    while (i.hasNext()) {
+        PermissionMap element = (PermissionMap) i.next();
+        if(element.getId()!=null) {
+            Long elementId=element.getId();
+            Long permissionId = element.getPermissionId();
+            element=(PermissionMap) hs.get(PermissionMap.class, elementId);
+            element.setPermissionId(permissionId);
+        }
+        
+        // we ignore unpersisted unselected permission maps
+        if (element.getId() == null && element.getPermissionId() == 0)
+        continue;
 //beginTransaction();
-	    // we delete previously persisted but unselected permissions
-	    if (element.getId() != null && element.getPermissionId() == 0) {
-		hs.delete(element);
-		//transaction.commit();
-		continue;
-	    }
-	    // we save/update anything else
-	    Permission p = (Permission) hs.get(Permission.class, element.getPermissionId());
-	    element.setPermission(p);
-	    hs.saveOrUpdate(element);
-	    //transaction.commit();
-	}
-	hs.flush();
-	
-	return modePermissibleCategoryPicked(mapping, pf, request, response);	
+        // we delete previously persisted but unselected permissions
+        if (element.getId() != null && element.getPermissionId() == 0) {
+        hs.delete(element);
+        //transaction.commit();
+        continue;
+        }
+        // we save/update anything else
+        Permission p = (Permission) hs.get(Permission.class, element.getPermissionId());
+        element.setPermission(p);
+        hs.saveOrUpdate(element);
+        //transaction.commit();
+    }
+    hs.flush();
+    
+    return modePermissibleCategoryPicked(mapping, pf, request, response);   
     }
 
     private ActionForward modeReset(ActionMapping mapping, PermissionMapForm form, HttpServletRequest request,
-	    HttpServletResponse response) throws Exception {
-	form.clear();
+        HttpServletResponse response) throws Exception {
+    form.clear();
 
-	return mapping.getInputForward();
+    return mapping.getInputForward();
     }
 
     /**
@@ -158,59 +158,59 @@ public class ManagePermissionMap extends MultiAction {
          * @throws Exception
          */
     private ActionForward modePermissibleCategoryPicked(ActionMapping mapping, PermissionMapForm form,
-	    HttpServletRequest request, HttpServletResponse response) throws Exception {
+        HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-	if (form.getPermissibleCategory().equals("select"))
-	    return modeReset(mapping, form, request, response);
-	
-	//load the global permission value:
-	Class permCatClass = form.get_permissibleCategoriesMap().get(form.getPermissibleCategory());
-	
-	Permission globalPermissionForPermissibleClass = PermissionUtil
-	.getGlobalPermissionForPermissibleClass(permCatClass);
-	if(globalPermissionForPermissibleClass!=null) form.setPermissionId(globalPermissionForPermissibleClass.getId());
-	
+    if (form.getPermissibleCategory().equals("select"))
+        return modeReset(mapping, form, request, response);
+    
+    //load the global permission value:
+    Class permCatClass = form.get_permissibleCategoriesMap().get(form.getPermissibleCategory());
+    
+    Permission globalPermissionForPermissibleClass = PermissionUtil
+    .getGlobalPermissionForPermissibleClass(permCatClass);
+    if(globalPermissionForPermissibleClass!=null) form.setPermissionId(globalPermissionForPermissibleClass.getId());
+    
 
-	Session hs = PersistenceManager.getRequestDBSession();
-	Map<Long, String> objectLabels = PermissionUtil.getAllPermissibleObjectLabelsForPermissibleClass(permCatClass);
+    Session hs = PersistenceManager.getRequestDBSession();
+    Map<Long, String> objectLabels = PermissionUtil.getAllPermissibleObjectLabelsForPermissibleClass(permCatClass);
 
-	Map<Long, PermissionMap> permissionMapsForPermissibleClass = PermissionUtil
-		.getAllPermissionMapsForPermissibleClass(permCatClass);
+    Map<Long, PermissionMap> permissionMapsForPermissibleClass = PermissionUtil
+        .getAllPermissionMapsForPermissibleClass(permCatClass);
 
-	// iterate all permissibles and set the label for the mappings
-	Iterator<Long> i = objectLabels.keySet().iterator();
-	while (i.hasNext()) {
-	    Long elementId = (Long) i.next();
-	    PermissionMap pm = permissionMapsForPermissibleClass.get(elementId);
-	    if (pm != null) {
-		pm.setObjectLabel(objectLabels.get(elementId));
-		if (pm.getPermission() != null)
-		    pm.setPermissionId(pm.getPermission().getId());
-	    } else {
-		// no previous mapping found, create a new permissionmap for this permission. if the user sets a
+    // iterate all permissibles and set the label for the mappings
+    Iterator<Long> i = objectLabels.keySet().iterator();
+    while (i.hasNext()) {
+        Long elementId = (Long) i.next();
+        PermissionMap pm = permissionMapsForPermissibleClass.get(elementId);
+        if (pm != null) {
+        pm.setObjectLabel(objectLabels.get(elementId));
+        if (pm.getPermission() != null)
+            pm.setPermissionId(pm.getPermission().getId());
+        } else {
+        // no previous mapping found, create a new permissionmap for this permission. if the user sets a
                 // permission in the interface
-		// this will be persisted, otherwise it will be discarded
-		PermissionMap newpm = new PermissionMap();
-		newpm.setPermissibleCategory(permCatClass.getSimpleName());
-		newpm.setObjectIdentifier(elementId);
-		newpm.setObjectLabel(objectLabels.get(elementId));
-		permissionMapsForPermissibleClass.put(newpm.getObjectIdentifier(), newpm);
-	    }
-	}
+        // this will be persisted, otherwise it will be discarded
+        PermissionMap newpm = new PermissionMap();
+        newpm.setPermissibleCategory(permCatClass.getSimpleName());
+        newpm.setObjectIdentifier(elementId);
+        newpm.setObjectLabel(objectLabels.get(elementId));
+        permissionMapsForPermissibleClass.put(newpm.getObjectIdentifier(), newpm);
+        }
+    }
 
-	// we put all the permission maps in the form list
-	form.getPermissionMaps().clear();
-	HashSet<PermissionMap> ts = new HashSet<PermissionMap>(permissionMapsForPermissibleClass.values());
-	form.getPermissionMaps().addAll(ts);
+    // we put all the permission maps in the form list
+    form.getPermissionMaps().clear();
+    HashSet<PermissionMap> ts = new HashSet<PermissionMap>(permissionMapsForPermissibleClass.values());
+    form.getPermissionMaps().addAll(ts);
 
 
-	return mapping.getInputForward();
+    return mapping.getInputForward();
     }
 
     private ActionForward modePermissiblePicked(ActionMapping mapping, PermissionMapForm form,
-	    HttpServletRequest request, HttpServletResponse response) throws Exception {
+        HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-	return mapping.getInputForward();
+    return mapping.getInputForward();
     }
 
 }

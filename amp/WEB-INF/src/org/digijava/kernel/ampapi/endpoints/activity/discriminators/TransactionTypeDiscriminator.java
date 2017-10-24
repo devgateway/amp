@@ -11,29 +11,29 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 public class TransactionTypeDiscriminator extends FieldsDiscriminator {
-	
-	@Override
-	public Map<Object, Object> getPossibleValues() {
-		Map<Object, Object> valuesMap = new HashMap<>();
-		for (Map.Entry<String, Integer> entry : getTransactionTypeMap().entrySet()) {
-			Long id = entry.getValue().longValue();
-			valuesMap.put(id, entry.getKey());
-		}
-		
-		return valuesMap;
-	}
-	
-	@Override
-	public Object toJsonOutput(Object obj) {
-		Integer intValue = (Integer) obj;
-		for (Map.Entry<String, Integer> entry : getTransactionTypeMap().entrySet()) {
-			if (entry.getValue().equals(intValue)) {
-				return entry.getKey();
-			}
-		}
-		
-		return null;
-	}
+    
+    @Override
+    public Map<Object, Object> getPossibleValues() {
+        Map<Object, Object> valuesMap = new HashMap<>();
+        for (Map.Entry<String, Integer> entry : getTransactionTypeMap().entrySet()) {
+            Long id = entry.getValue().longValue();
+            valuesMap.put(id, entry.getKey());
+        }
+        
+        return valuesMap;
+    }
+    
+    @Override
+    public Object toJsonOutput(Object obj) {
+        Integer intValue = (Integer) obj;
+        for (Map.Entry<String, Integer> entry : getTransactionTypeMap().entrySet()) {
+            if (entry.getValue().equals(intValue)) {
+                return entry.getKey();
+            }
+        }
+        
+        return null;
+    }
 
     private Map<String, Integer> getTransactionTypeMap() {
         Map<String, Integer> valuesMap = new HashMap<String, Integer>();
@@ -54,14 +54,14 @@ public class TransactionTypeDiscriminator extends FieldsDiscriminator {
         return valuesMap;
     }
 
-	@Override
-	public Long getIdOf(Object value) {
-		return Long.decode(value.toString());
-	}
+    @Override
+    public Long getIdOf(Object value) {
+        return Long.decode(value.toString());
+    }
 
-	@Override
-	public Object toAmpFormat(Object obj) {
-		return obj;
-	}
+    @Override
+    public Object toAmpFormat(Object obj) {
+        return obj;
+    }
 
 }

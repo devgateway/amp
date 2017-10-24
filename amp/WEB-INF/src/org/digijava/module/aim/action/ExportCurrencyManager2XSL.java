@@ -26,36 +26,36 @@ import org.digijava.module.aim.form.CurrencyForm;
 import org.digijava.module.aim.util.AdminXSLExportUtil;
 
 public class ExportCurrencyManager2XSL extends Action {
-	 private static Logger logger = Logger.getLogger(ExportCurrencyManager2XSL.class);
+     private static Logger logger = Logger.getLogger(ExportCurrencyManager2XSL.class);
 
-	  public ActionForward execute(ActionMapping mapping, ActionForm form,
-	                               javax.servlet.http.HttpServletRequest request,
-	                               javax.servlet.http.HttpServletResponse response) throws
-	      java.lang.Exception {
-		HttpSession session = request.getSession();
-		if (session.getAttribute("ampAdmin") == null) {
-			return mapping.findForward("index");
-		} else {
-			String str = (String) session.getAttribute("ampAdmin");
-			if (str.equals("no")) {
-				return mapping.findForward("index");
-			}
-		}
-		response.setContentType("application/vnd.ms-excel");
-		response.setHeader("Content-disposition", "inline; filename=Export.xls");
-		CurrencyForm crForm = (CurrencyForm) form;
-		Site site = RequestUtils.getSite(request);
-		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
-		Long siteId = site.getId();
-		String locale = navigationLanguage.getCode();
+      public ActionForward execute(ActionMapping mapping, ActionForm form,
+                                   javax.servlet.http.HttpServletRequest request,
+                                   javax.servlet.http.HttpServletResponse response) throws
+          java.lang.Exception {
+        HttpSession session = request.getSession();
+        if (session.getAttribute("ampAdmin") == null) {
+            return mapping.findForward("index");
+        } else {
+            String str = (String) session.getAttribute("ampAdmin");
+            if (str.equals("no")) {
+                return mapping.findForward("index");
+            }
+        }
+        response.setContentType("application/vnd.ms-excel");
+        response.setHeader("Content-disposition", "inline; filename=Export.xls");
+        CurrencyForm crForm = (CurrencyForm) form;
+        Site site = RequestUtils.getSite(request);
+        Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
+        Long siteId = site.getId();
+        String locale = navigationLanguage.getCode();
 
-		HSSFWorkbook wb = new HSSFWorkbook();
-		HSSFSheet sheet = wb.createSheet("export");
-		// title cells
-		HSSFCellStyle titleCS =AdminXSLExportUtil.createTitleStyle(wb);
-		 //ordinary cell style
-		HSSFCellStyle  cs = AdminXSLExportUtil.createOrdinaryStyle(wb);
-	   
+        HSSFWorkbook wb = new HSSFWorkbook();
+        HSSFSheet sheet = wb.createSheet("export");
+        // title cells
+        HSSFCellStyle titleCS =AdminXSLExportUtil.createTitleStyle(wb);
+         //ordinary cell style
+        HSSFCellStyle  cs = AdminXSLExportUtil.createOrdinaryStyle(wb);
+       
       
        int rowIndex = 0;
        int cellIndex = 0;
@@ -86,41 +86,41 @@ public class ExportCurrencyManager2XSL extends Action {
        
       
 
-		Collection<AmpCurrency> currencies = (crForm.getFilterByCurrency() != null && crForm
-				.getFilterByCurrency().trim().length() > 0) ? crForm
-				.getCurrency() : crForm.getAllCurrencies();
+        Collection<AmpCurrency> currencies = (crForm.getFilterByCurrency() != null && crForm
+                .getFilterByCurrency().trim().length() > 0) ? crForm
+                .getCurrency() : crForm.getAllCurrencies();
 
-		if(currencies!=null){
-			for(AmpCurrency currency:currencies){
-				cellIndex=0;
-				  HSSFRow row = sheet.createRow(rowIndex++);
-				  
-				  HSSFCell cell=row.createCell(cellIndex++);
-				  cell.setCellStyle(cs);
-				  cell.setCellValue((currency.getActiveFlag()==0)?inactive:active);
-				  
-				  cell=row.createCell(cellIndex++);
-				  cell.setCellStyle(cs);
-				  cell.setCellValue(currency.getCurrencyCode());
-				  
-				  cell=row.createCell(cellIndex++);
-				  cell.setCellStyle(cs);
-				  cell.setCellValue(currency.getCurrencyName());
-				  
-				  cell=row.createCell(cellIndex++);
-				  cell.setCellStyle(cs);
-				  cell.setCellValue((currency.getCountryLocation()!=null)?currency.getCountryLocation().getName():"");
-				  
-				
-			}
-		}
-		sheet.autoSizeColumn(0); //adjust width of the first column
+        if(currencies!=null){
+            for(AmpCurrency currency:currencies){
+                cellIndex=0;
+                  HSSFRow row = sheet.createRow(rowIndex++);
+                  
+                  HSSFCell cell=row.createCell(cellIndex++);
+                  cell.setCellStyle(cs);
+                  cell.setCellValue((currency.getActiveFlag()==0)?inactive:active);
+                  
+                  cell=row.createCell(cellIndex++);
+                  cell.setCellStyle(cs);
+                  cell.setCellValue(currency.getCurrencyCode());
+                  
+                  cell=row.createCell(cellIndex++);
+                  cell.setCellStyle(cs);
+                  cell.setCellValue(currency.getCurrencyName());
+                  
+                  cell=row.createCell(cellIndex++);
+                  cell.setCellStyle(cs);
+                  cell.setCellValue((currency.getCountryLocation()!=null)?currency.getCountryLocation().getName():"");
+                  
+                
+            }
+        }
+        sheet.autoSizeColumn(0); //adjust width of the first column
        sheet.autoSizeColumn(1);
        sheet.autoSizeColumn(2);
        sheet.autoSizeColumn(3);
        wb.write(response.getOutputStream());
-		return null;
+        return null;
 
-	  }
+      }
 
 }

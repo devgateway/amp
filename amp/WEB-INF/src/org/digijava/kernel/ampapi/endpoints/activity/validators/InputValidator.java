@@ -15,54 +15,54 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
  * @author Nadejda Mandrescu
  */
 public abstract class InputValidator {
-	protected boolean continueOnError = false;
-	// REFACTOR: seems to not be actually needed
-	protected boolean continueOnSuccess = true;
-	
-	/**
-	 * Validates new field value configuration
-	 * @param importer or null if none existed
-	 * @param newFieldParent parent input JSON definition of the field
-	 * @param oldFieldParent existing parent JSON definition of the field (can be null if not present)
-	 * @param fieldDescription description of the current field (type, required, edit rights, etc)
-	 * @param fieldPath full field path
-	 * @param update true if this is an update request
-	 * @return true if chain validation passed
-	 */
-	public abstract boolean isValid(ActivityImporter importer, Map<String, Object> newFieldParent, 
-			Map<String, Object> oldFieldParent, JsonBean fieldDescription, String fieldPath);
-	
-	/**
-	 * @return this validator specific Error message
-	 */
-	public abstract ApiErrorMessage getErrorMessage();
-	
-	
-	/**
-	 * @return the continueOnError
-	 */
-	public boolean isContinueOnError() {
-		return continueOnError;
-	}
+    protected boolean continueOnError = false;
+    // REFACTOR: seems to not be actually needed
+    protected boolean continueOnSuccess = true;
+    
+    /**
+     * Validates new field value configuration
+     * @param importer or null if none existed
+     * @param newFieldParent parent input JSON definition of the field
+     * @param oldFieldParent existing parent JSON definition of the field (can be null if not present)
+     * @param fieldDescription description of the current field (type, required, edit rights, etc)
+     * @param fieldPath full field path
+     * @param update true if this is an update request
+     * @return true if chain validation passed
+     */
+    public abstract boolean isValid(ActivityImporter importer, Map<String, Object> newFieldParent, 
+            Map<String, Object> oldFieldParent, JsonBean fieldDescription, String fieldPath);
+    
+    /**
+     * @return this validator specific Error message
+     */
+    public abstract ApiErrorMessage getErrorMessage();
+    
+    
+    /**
+     * @return the continueOnError
+     */
+    public boolean isContinueOnError() {
+        return continueOnError;
+    }
 
-	/**
-	 * @param continueOnError the continueOnError to set
-	 */
-	public void setContinueOnError(boolean continueOnError) {
-		this.continueOnError = continueOnError;
-	}
+    /**
+     * @param continueOnError the continueOnError to set
+     */
+    public void setContinueOnError(boolean continueOnError) {
+        this.continueOnError = continueOnError;
+    }
 
-	/**
-	 * @return the continueOnSuccess
-	 */
-	public boolean isContinueOnSuccess() {
-		return continueOnSuccess;
-	}
+    /**
+     * @return the continueOnSuccess
+     */
+    public boolean isContinueOnSuccess() {
+        return continueOnSuccess;
+    }
 
-	/**
-	 * @param continueOnSuccess the continueOnSuccess to set
-	 */
-	public void setContinueOnSuccess(boolean continueOnSuccess) {
-		this.continueOnSuccess = continueOnSuccess;
-	}
+    /**
+     * @param continueOnSuccess the continueOnSuccess to set
+     */
+    public void setContinueOnSuccess(boolean continueOnSuccess) {
+        this.continueOnSuccess = continueOnSuccess;
+    }
 }

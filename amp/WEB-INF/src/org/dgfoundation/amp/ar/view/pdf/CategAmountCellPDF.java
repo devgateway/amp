@@ -19,18 +19,18 @@ import com.lowagie.text.pdf.PdfPTable;
  */
 public class CategAmountCellPDF extends AmountCellPDF {
 
-	public CategAmountCellPDF(Exporter parent, Viewable item) {
-		super(parent, item);
-	}
-	
-	
-	/**
-	 * @param table
-	 * @param item
-	 */
-	public CategAmountCellPDF(PdfPTable table, Viewable item,Long ownerId) {
-		super(table, item,ownerId);
-		// TODO Auto-generated constructor stub
-	}
+    public CategAmountCellPDF(Exporter parent, Viewable item) {
+        super(parent, item);
+    }
+    
+    
+    /**
+     * @param table
+     * @param item
+     */
+    public CategAmountCellPDF(PdfPTable table, Viewable item,Long ownerId) {
+        super(table, item,ownerId);
+        // TODO Auto-generated constructor stub
+    }
 
 }

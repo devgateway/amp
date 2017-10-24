@@ -10,20 +10,20 @@ import java.util.HashMap;
  * @author aartimon@developmentgateway.org
  */
 public class EditorStore implements Serializable{
-	//map between new editor key and old editor key, in order to be able to copy values in other languages
-	private HashMap<String, String> oldKey;
-	//map between new editor key and editor body from the form
-	private HashMap<String, HashMap<String, String>> values;
-	
-	public EditorStore() {
-		oldKey = new HashMap<String, String>();
-		values = new HashMap<String, HashMap<String, String>>();
-	}
+    //map between new editor key and old editor key, in order to be able to copy values in other languages
+    private HashMap<String, String> oldKey;
+    //map between new editor key and editor body from the form
+    private HashMap<String, HashMap<String, String>> values;
+    
+    public EditorStore() {
+        oldKey = new HashMap<String, String>();
+        values = new HashMap<String, HashMap<String, String>>();
+    }
 
-	public HashMap<String, String> getOldKey() {
-		return oldKey;
-	}
-	public HashMap<String, HashMap<String, String>> getValues() {
-		return values;
-	}
+    public HashMap<String, String> getOldKey() {
+        return oldKey;
+    }
+    public HashMap<String, HashMap<String, String>> getValues() {
+        return values;
+    }
 }

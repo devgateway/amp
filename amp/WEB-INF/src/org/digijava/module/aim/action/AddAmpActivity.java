@@ -30,26 +30,26 @@ public class AddAmpActivity extends Action {
                                HttpServletResponse response) throws java.lang.
       Exception {
 
-	  HttpSession session = request.getSession();
-	  request.setAttribute(GatePermConst.ACTION_MODE, GatePermConst.Actions.EDIT);
-	  session.removeAttribute("returnSearch");
-	  TeamMember teamMember = (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
-	  PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, teamMember);
-	  
-	  Long idForOriginalActivity = null; // AMP-9633
-	  EditActivityForm eaForm = (EditActivityForm) form;
-	  if(request.getSession().getAttribute("idForOriginalActivity")!=null)
-	  {
-		  idForOriginalActivity = (Long) request.getSession().getAttribute("idForOriginalActivity") ;
-		  request.getSession().removeAttribute("idForOriginalActivity");
-		  if(idForOriginalActivity.equals(new Long(-1))){ //create case
-			  eaForm.setActivityId(null);
-		  }else{ //edit case
-			  eaForm.setActivityId(idForOriginalActivity);
-		  }
-	  }
-	  request.setAttribute("actId", eaForm.getActivityId());
-	  
-	  return mapping.findForward("preview");
+      HttpSession session = request.getSession();
+      request.setAttribute(GatePermConst.ACTION_MODE, GatePermConst.Actions.EDIT);
+      session.removeAttribute("returnSearch");
+      TeamMember teamMember = (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
+      PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, teamMember);
+      
+      Long idForOriginalActivity = null; // AMP-9633
+      EditActivityForm eaForm = (EditActivityForm) form;
+      if(request.getSession().getAttribute("idForOriginalActivity")!=null)
+      {
+          idForOriginalActivity = (Long) request.getSession().getAttribute("idForOriginalActivity") ;
+          request.getSession().removeAttribute("idForOriginalActivity");
+          if(idForOriginalActivity.equals(new Long(-1))){ //create case
+              eaForm.setActivityId(null);
+          }else{ //edit case
+              eaForm.setActivityId(idForOriginalActivity);
+          }
+      }
+      request.setAttribute("actId", eaForm.getActivityId());
+      
+      return mapping.findForward("preview");
   }  
 }

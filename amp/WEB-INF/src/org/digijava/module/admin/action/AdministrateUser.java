@@ -99,8 +99,8 @@ public class AdministrateUser
             
             // Set/clear email verified
             if (selectedUser.isEmailVerified() != userForm.isEmailVerified()){
-            	selectedUser.setEmailVerified(userForm.isEmailVerified());
-            	changed = true;
+                selectedUser.setEmailVerified(userForm.isEmailVerified());
+                changed = true;
             }
         }
 

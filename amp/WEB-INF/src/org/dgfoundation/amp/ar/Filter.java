@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
  * @deprecated
  */
 public interface Filter {
-	public void generateFilterQuery(HttpServletRequest request);
-	
-	public String getGeneratedFilterQuery();
+    public void generateFilterQuery(HttpServletRequest request);
+    
+    public String getGeneratedFilterQuery();
 }

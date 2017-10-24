@@ -113,7 +113,7 @@ div.fakefile2 input {
 		return submit;
 	}
 </script>
-
+<div  class="admin-content">
 <digi:instance property="aimDynLocationManagerForm" />
 <digi:context name="digiContext" property="context" />
 <!--  AMP Admin Logo -->
@@ -178,7 +178,7 @@ div.fakefile2 input {
 									</html:select></td>
 								</tr>
 								<tr>
-									<td><c:set var="translation">
+									<td class="button-section-padding"><c:set var="translation">
 											<digi:trn>Import</digi:trn>
 										</c:set> <html:submit style="dr-menu" value="${translation}"
 											property="import" /></td>
@@ -201,7 +201,7 @@ div.fakefile2 input {
 													Other links
 													</digi:trn>
 											</b></td>
-											<td background="module/aim/images/corner-r.gif" height="17"
+											<td class="header-corner" height="17"
 												width=17></td>
 										</tr>
 									</table>
@@ -243,7 +243,7 @@ div.fakefile2 input {
 <script type="text/javascript">
 	initFileUploads('<digi:trn jsFriendly="true" key="aim:browse">Browse...</digi:trn>');
 </script>
-
+</div>
 
 
 

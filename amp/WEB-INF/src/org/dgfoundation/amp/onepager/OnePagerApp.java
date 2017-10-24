@@ -46,8 +46,8 @@ import java.net.SocketException;
  * @author mihai
  */
 public class OnePagerApp extends AuthenticatedWebApplication {
-	
-	public static boolean IS_DEVELOPMENT_MODE = false;
+    
+    public static boolean IS_DEVELOPMENT_MODE = false;
 
     private static Logger logger = Logger.getLogger(OnePagerApp.class);
 
@@ -84,47 +84,47 @@ public class OnePagerApp extends AuthenticatedWebApplication {
         //TODO:1.5
         //TODO:
          /*
-		  * 
-		 if (true) {		
-			 ResourceMount.mountWicketResources("script", this);
+          * 
+         if (true) {        
+             ResourceMount.mountWicketResources("script", this);
 
-			 ResourceMount mount = new ResourceMount();
-			 //.setResourceVersionProvider(new RevisionVersionProvider());
-			 
-			 
-			 LinkedList<ResourceSpec> csslist = new LinkedList<ResourceSpec>();
-			 //csslist.add(new ResourceSpec(YuiLib.class, "calendar/assets/skins/sam/calendar.css"));
-			 //csslist.add(new ResourceSpec(new ResourceReference("TEMPLATE/ampTemplate/css_2/amp-wicket.css")));
-			 
-			 
-			 LinkedList<ResourceSpec> jslist = new LinkedList<ResourceSpec>();
-			 jslist.add(new ResourceSpec(JQueryBehavior.class, JQueryBehavior.JQUERY_FILE_NAME));
-			 //jslist.add(new ResourceSpec(AutoCompleteBehavior.class, "wicket-autocomplete.js"));
-			 jslist.add(new ResourceSpec(AbstractDefaultAjaxBehavior.class, "wicket-ajax.js"));
-			 jslist.add(new ResourceSpec(IHeaderContributor.class, "wicket-event.js"));
-			 jslist.add(new ResourceSpec(AmpSubsectionFeaturePanel.class, "subsectionSlideToggle.js"));
-			 jslist.add(new ResourceSpec(AmpStructuresFormSectionFeature.class, "gisPopup.js"));
-//			 jslist.add(new ResourceSpec(YuiLib.class, "yahoo/yahoo-min.js"));			 
-//			 jslist.add(new ResourceSpec(YuiLib.class, "yahoodomevent/yahoo-dom-event.js"));			 
-//			 jslist.add(new ResourceSpec(YuiLib.class, "yuiloader.js")); //can't use the min version, because the normal one will be included too
-//			 jslist.add(new ResourceSpec(YuiLib.class, "calendar/calendar-min.js"));
-//			 jslist.add(new ResourceSpec(DatePicker.class, "wicket-date.js"));
-			 jslist.add(new ResourceSpec(AbstractDefaultAjaxBehavior.class, "wicket-ajax-debug.js"));
-			 jslist.add(new ResourceSpec(AmpAjaxBehavior.class, "translationsOnDocumentReady.js"));
-			 jslist.add(new ResourceSpec(AmpActivityFormFeature.class, "previewLogframe.js"));
-			 jslist.add(new ResourceSpec(AmpActivityFormFeature.class, "saveNavigationPanel.js"));
-			 
-			 mount.clone()
-			 	.setPath("/style/all-23.css")
-			 	.addResourceSpecs(csslist)
-			 	.mount(this);
-			 
-			 mount.clone()
-			 .setPath("/style/all-2.js")
-			 .addResourceSpecs(jslist)
-			 .mount(this);
-		 }
-		  */
+             ResourceMount mount = new ResourceMount();
+             //.setResourceVersionProvider(new RevisionVersionProvider());
+             
+             
+             LinkedList<ResourceSpec> csslist = new LinkedList<ResourceSpec>();
+             //csslist.add(new ResourceSpec(YuiLib.class, "calendar/assets/skins/sam/calendar.css"));
+             //csslist.add(new ResourceSpec(new ResourceReference("TEMPLATE/ampTemplate/css_2/amp-wicket.css")));
+             
+             
+             LinkedList<ResourceSpec> jslist = new LinkedList<ResourceSpec>();
+             jslist.add(new ResourceSpec(JQueryBehavior.class, JQueryBehavior.JQUERY_FILE_NAME));
+             //jslist.add(new ResourceSpec(AutoCompleteBehavior.class, "wicket-autocomplete.js"));
+             jslist.add(new ResourceSpec(AbstractDefaultAjaxBehavior.class, "wicket-ajax.js"));
+             jslist.add(new ResourceSpec(IHeaderContributor.class, "wicket-event.js"));
+             jslist.add(new ResourceSpec(AmpSubsectionFeaturePanel.class, "subsectionSlideToggle.js"));
+             jslist.add(new ResourceSpec(AmpStructuresFormSectionFeature.class, "gisPopup.js"));
+//           jslist.add(new ResourceSpec(YuiLib.class, "yahoo/yahoo-min.js"));           
+//           jslist.add(new ResourceSpec(YuiLib.class, "yahoodomevent/yahoo-dom-event.js"));             
+//           jslist.add(new ResourceSpec(YuiLib.class, "yuiloader.js")); //can't use the min version, because the normal one will be included too
+//           jslist.add(new ResourceSpec(YuiLib.class, "calendar/calendar-min.js"));
+//           jslist.add(new ResourceSpec(DatePicker.class, "wicket-date.js"));
+             jslist.add(new ResourceSpec(AbstractDefaultAjaxBehavior.class, "wicket-ajax-debug.js"));
+             jslist.add(new ResourceSpec(AmpAjaxBehavior.class, "translationsOnDocumentReady.js"));
+             jslist.add(new ResourceSpec(AmpActivityFormFeature.class, "previewLogframe.js"));
+             jslist.add(new ResourceSpec(AmpActivityFormFeature.class, "saveNavigationPanel.js"));
+             
+             mount.clone()
+                .setPath("/style/all-23.css")
+                .addResourceSpecs(csslist)
+                .mount(this);
+             
+             mount.clone()
+             .setPath("/style/all-2.js")
+             .addResourceSpecs(jslist)
+             .mount(this);
+         }
+          */
 
         /**
          *
@@ -154,14 +154,14 @@ public class OnePagerApp extends AuthenticatedWebApplication {
         mountPage(OnePagerConst.ONEPAGER_URL_PREFIX, OnePager.class);
         mountPage("permmanager", PermissionManager.class);
 
-//		 ServletContext servletContext = getServletContext();
-//		 Resource resource = new FileSystemResource(servletContext.getRealPath("spring-config.xml"));
-//		 BeanFactory factory = new XmlBeanFactory(resource);
-//		 sessionFactory=(SessionFactory) factory.getBean("sessionFactory");
+//       ServletContext servletContext = getServletContext();
+//       Resource resource = new FileSystemResource(servletContext.getRealPath("spring-config.xml"));
+//       BeanFactory factory = new XmlBeanFactory(resource);
+//       sessionFactory=(SessionFactory) factory.getBean("sessionFactory");
 
         /**
          * Added through recurring patch now
-         *	Check if One Pager FM root exists, if not try to add it
+         *  Check if One Pager FM root exists, if not try to add it
          *
          FMUtil.checkFmRoot(FMUtil.fmRootActivityForm);
          FMUtil.checkFmRoot(FMUtil.fmRootPermissionManager);
@@ -200,15 +200,15 @@ public class OnePagerApp extends AuthenticatedWebApplication {
 
         // Error handling
          /*
-		 getRequestCycleListeners().add(new AbstractRequestCycleListener() {
+         getRequestCycleListeners().add(new AbstractRequestCycleListener() {
 
-			 @Override  
-	          public IRequestHandler onException(RequestCycle cycle, Exception e) {  
-				 logger.error("", e);
-	              return new RenderPageRequestHandler(new PageProvider(new AmpExceptionPage(e)));  
-					}
-				});
-		  */
+             @Override  
+              public IRequestHandler onException(RequestCycle cycle, Exception e) {  
+                 logger.error("", e);
+                  return new RenderPageRequestHandler(new PageProvider(new AmpExceptionPage(e)));  
+                    }
+                });
+          */
 
 
         getRequestCycleListeners().add(
@@ -225,7 +225,7 @@ public class OnePagerApp extends AuthenticatedWebApplication {
                         HttpServletRequest containerRequest = (HttpServletRequest)cycle.getRequest().getContainerRequest();
                         DocumentManagerUtil.closeJCRSessions(containerRequest);
                         TLSUtils.clean();
-                    }                	
+                    }                   
                 }
             }
         );

@@ -53,19 +53,20 @@ import org.hibernate.Session;
  */
 public class GPIDataService {
     public static JsonBean getAidOnBudgetById(Long id) {
-        if (hasGPIDataRights() == false) {
+        if (Boolean.FALSE.equals(hasGPIDataRights())) {
             ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
         }
 
         AmpGPINiAidOnBudget aidOnBudget = GPIUtils.getAidOnBudgetById(id);
-        if (aidOnBudget != null)
+        if (aidOnBudget != null) {
             return modelToJsonBean(aidOnBudget);
-        else
+        } else {
             return null;
+        }
     }
 
     public static JsonBean getAidOnBudgetList(Integer offset, Integer count, String orderBy, String sort) {
-        if (hasGPIDataRights() == false) {
+        if (Boolean.FALSE.equals(hasGPIDataRights())) {
             ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
         }
 
@@ -83,7 +84,7 @@ public class GPIDataService {
     }
 
     private static JsonBean modelToJsonBean(AmpGPINiAidOnBudget aidOnBudget) {
-        if (hasGPIDataRights() == false) {
+        if (Boolean.FALSE.equals(hasGPIDataRights())) {
             ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
         }
         
@@ -98,7 +99,7 @@ public class GPIDataService {
     }
 
     private static AmpGPINiAidOnBudget getAidOnBudget(JsonBean data) {
-        if (hasGPIDataRights() == false) {
+        if (Boolean.FALSE.equals(hasGPIDataRights())) {
             ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
         }
         
@@ -114,8 +115,8 @@ public class GPIDataService {
         
         return aidOnBudget;
     }
-    
-    private static AmpGPINiAidOnBudget updateModel(AmpGPINiAidOnBudget aidOnBudget, JsonBean data){
+
+    private static AmpGPINiAidOnBudget updateModel(AmpGPINiAidOnBudget aidOnBudget, JsonBean data) {
         if (data.get(GPIEPConstants.FIELD_CURRENCY_CODE) != null) {
             String currencyCode = data.getString((GPIEPConstants.FIELD_CURRENCY_CODE));
             aidOnBudget.setCurrency(CurrencyUtil.getAmpcurrency(currencyCode));
@@ -139,7 +140,7 @@ public class GPIDataService {
     }
 
     public static JsonBean saveAidOnBudget(JsonBean data) {
-        if (hasGPIDataRights() == false) {
+        if (Boolean.FALSE.equals(hasGPIDataRights())) {
             ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
         }
 
@@ -165,7 +166,7 @@ public class GPIDataService {
     }
     
     public static List<JsonBean> saveAidOnBudget(List<JsonBean> aidOnBudgetList) {
-        if (hasGPIDataRights() == false) {
+        if (Boolean.FALSE.equals(hasGPIDataRights())) {
             ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
         }
 
@@ -197,7 +198,7 @@ public class GPIDataService {
     }
 
     public static JsonBean deleteAidOnBudgetById(Long id) {
-        if (hasGPIDataRights() == false) {
+        if (Boolean.FALSE.equals(hasGPIDataRights())) {
             ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
         }
 
@@ -208,15 +209,15 @@ public class GPIDataService {
     }
 
     public static JsonBean saveDonorNotes(JsonBean data) {
-        if (hasGPIDataRights() == false) {
+        if (Boolean.FALSE.equals(hasGPIDataRights())) {
             ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
         }
-        
+
         JsonBean result = new JsonBean();
         List<JsonBean> validationErrors = validateDonorNotes(data);
 
-        if (validationErrors.isEmpty()) {           
-            AmpGPINiDonorNotes donorNotes = getOrCreateDonorNotes(data);            
+        if (validationErrors.isEmpty()) {
+            AmpGPINiDonorNotes donorNotes = getOrCreateDonorNotes(data);
             GPIUtils.saveDonorNotes(donorNotes);
             JsonBean saved = modelToJsonBean(donorNotes);
             result.set(GPIEPConstants.DATA, saved);
@@ -233,22 +234,22 @@ public class GPIDataService {
         }
         return result;
     }
-    
+
     public static List<JsonBean> saveDonorNotes(List<JsonBean> donorNotesList) {
-        if (hasGPIDataRights() == false) {
+        if (Boolean.FALSE.equals(hasGPIDataRights())) {
             ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
         }
-        
+
         List<JsonBean> results = new ArrayList<>();
         for (JsonBean donorNotes : donorNotesList) {
             results.add(saveDonorNotes(donorNotes));
         }
         return results;
     }
-    
-    private static AmpGPINiDonorNotes getOrCreateDonorNotes(JsonBean data){
+
+    private static AmpGPINiDonorNotes getOrCreateDonorNotes(JsonBean data) {
         Long id;
-        AmpGPINiDonorNotes donorNotes; 
+        AmpGPINiDonorNotes donorNotes;
         if (data.getString(GPIEPConstants.FIELD_ID) != null
                 && NumberUtils.isNumber(data.getString(GPIEPConstants.FIELD_ID))) {
             id = Long.parseLong(String.valueOf(data.get(GPIEPConstants.FIELD_ID)));
@@ -280,7 +281,8 @@ public class GPIDataService {
         data.set(GPIEPConstants.FIELD_DONOR_ID, donorNotes.getDonor().getAmpOrgId());
         data.set(GPIEPConstants.FIELD_NOTES, donorNotes.getNotes());
         data.set(GPIEPConstants.FIELD_INDICATOR_CODE, donorNotes.getIndicatorCode());
-        data.set(GPIEPConstants.FIELD_NOTES_DATE, DateTimeUtil.formatDate(donorNotes.getNotesDate(), GPIEPConstants.DATE_FORMAT));
+        data.set(GPIEPConstants.FIELD_NOTES_DATE,
+                DateTimeUtil.formatDate(donorNotes.getNotesDate(), GPIEPConstants.DATE_FORMAT));
         return data;
     }
 
@@ -303,13 +305,15 @@ public class GPIDataService {
         return validationErrors;
     }
 
-    public static JsonBean getDonorNotesList(Integer offset, Integer count, String orderBy, String sort, String indicatorCode) {
-        if (hasGPIDataRights() == false) {
+    public static JsonBean getDonorNotesList(Integer offset, Integer count, String orderBy, String sort,
+            String indicatorCode) {
+        if (Boolean.FALSE.equals(hasGPIDataRights())) {
             ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
         }
         
         Integer total = GPIUtils.getDonorNotesCount(indicatorCode);
-        List<AmpGPINiDonorNotes>  notesList = GPIUtils.getDonorNotesList(offset, count, orderBy, sort, total, indicatorCode);
+        List<AmpGPINiDonorNotes> notesList = GPIUtils.getDonorNotesList(offset, count, orderBy, sort, total,
+                indicatorCode);
         JsonBean data = new JsonBean();
         List<JsonBean> lst = new ArrayList<>();
         
@@ -323,7 +327,7 @@ public class GPIDataService {
     }
     
     public static JsonBean deleteDonorNotesById(Long id) {
-        if (hasGPIDataRights() == false) {
+        if (Boolean.FALSE.equals(hasGPIDataRights())) {
             ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
         }
         
@@ -340,7 +344,7 @@ public class GPIDataService {
     }
     
     public static List<JsonBean> getUsersVerifiedOrganizations() {
-        if (hasGPIDataRights() == false) {
+        if (Boolean.FALSE.equals(hasGPIDataRights())) {
             ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
         }
         
@@ -524,7 +528,7 @@ public class GPIDataService {
         StringBuilder downloadUrl = new StringBuilder();
         downloadUrl.append(scheme).append("://").append(serverName);
 
-        if (serverPort != 80 && serverPort != 443) {
+        if (serverPort != GPIEPConstants.DEFAULT_HTTP_PORT && serverPort != GPIEPConstants.DEFAULT_HTTPS_PORT) {
             downloadUrl.append(":").append(serverPort);
         }
 
@@ -543,34 +547,40 @@ public class GPIDataService {
             }
         };
     }
-    
-    public static List<JsonBean> getYears() {      
+
+    public static List<JsonBean> getYears() {
         List<AmpFiscalCalendar> calendars = FiscalCalendarUtil.getAllAmpFiscalCalendars();
-        List<JsonBean> result = new ArrayList<>();  
-        int numberOfYears =  getNumberOfYears(calendars);
-        for(AmpFiscalCalendar calendar : calendars){
+        List<JsonBean> result = new ArrayList<>();
+        int numberOfYears = getNumberOfYears(calendars);
+        for (AmpFiscalCalendar calendar : calendars) {
             JsonBean yearRange = new JsonBean();
             yearRange.set("calendarId", calendar.getAmpFiscalCalId());
             int startYear = AmpARFilter.getDefaultYear(AmpARFilter.getEffectiveSettings(), calendar, true);
-            int endYear = startYear + numberOfYears;                     
+            int endYear = startYear + numberOfYears;
             List<Integer> years = new ArrayList<>();
-            for(int i = startYear;i <= endYear; i++) {                              
-                years.add(i);               
+            for (int i = startYear; i <= endYear; i++) {
+                years.add(i);
             }
-            yearRange.set("years", years);           
-            result.add(yearRange);          
-        }       
-        return result;     
-   }
+            yearRange.set("years", years);
+            result.add(yearRange);
+        }
+        return result;
+    }
+
+    private static Integer getNumberOfYears(List<AmpFiscalCalendar> calendars) {
+        for (AmpFiscalCalendar calendar : calendars) {
+            if (calendar.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_GREGORIAN.getValue())) {
+                int currentYear = FiscalCalendarUtil.getCurrentYear();
+                int startYear = AmpARFilter.getDefaultYear(AmpARFilter.getEffectiveSettings(), calendar, true);
+                return currentYear - startYear;
+            }
+        }
+
+        return 0;
+    }
     
-  private static Integer getNumberOfYears(List<AmpFiscalCalendar> calendars) {     
-      for(AmpFiscalCalendar calendar : calendars){
-          if(calendar.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_GREGORIAN.getValue())){
-              int currentYear =  FiscalCalendarUtil.getCurrentYear();
-              int startYear = AmpARFilter.getDefaultYear(AmpARFilter.getEffectiveSettings(), calendar, true);
-              return currentYear - startYear;
-          } 
-      }
-      return 0;
-  }
+    public static List<JsonBean> getDonors() {
+        return GPIUtils.getDonors();
+
+    }
 }

@@ -894,7 +894,7 @@ public class AmpMessageWorker {
 
         if (receiversAddresses.size() > 0) {
             for (String emailAddr : receiversAddresses) {
-                String senderEmail = (msgSender == null) ? SYSTEM_DEFAULT_SENDER_MAIL : msgSender.getUser().getEmail();
+                String senderEmail = (msgSender == null) ? DEFAULT_EMAIL_SENDER : msgSender.getUser().getEmail();
                 
                 String translatedName = TranslatorWorker.translateText(newMsg.getName());
 

@@ -196,7 +196,7 @@ export default class Report5a extends Component {
     downloadPdfFile(){
         this.props.actions.downloadPdfFile(this.getRequestData(), '5a');
     }
-     
+    
     render() {        
             let addedGroups = [];
             var years = Utils.getYears(this.settingsWidget, this.props.years);
@@ -284,7 +284,11 @@ export default class Report5a extends Component {
                               <td className="number-column">{row[Constants.PLANNED_DISBURSEMENTS]}</td>
                               <td className="number-column">{row[Constants.DISBURSEMENTS_AS_SCHEDULED]}</td>
                               <td className="number-column">{row[Constants.OVER_DISBURSED]}</td>
-                              <td className="number-column"><img className="table-icon" src="images/remarks-icon.svg" data-url={row[Constants.REMARK]} onClick={this.showRemarksModal.bind(this)}/></td>
+                              <td className="number-column">
+                              { parseInt(row[Constants.NUMBER_OF_REMARKS]) > 0 &&
+                                  <img className="table-icon" src="images/remarks-icon.svg" data-url={row[Constants.REMARK]} onClick={this.showRemarksModal.bind(this)}/> 
+                              }
+                              </td>
                           </tr>
                       )}                      
                       </tbody>

@@ -7,18 +7,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
-
 import javax.jcr.Node;
 import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang.math.NumberUtils;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.gpi.reports.GPIDocument;
 import org.dgfoundation.amp.gpi.reports.GPIDonorActivityDocument;
 import org.dgfoundation.amp.gpi.reports.GPIRemark;
-import org.dgfoundation.amp.gpi.reports.GPIReportConstants;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -379,16 +375,8 @@ public class GPIDataService {
         List<GPIRemark> remarks = new ArrayList<>();
 
         AmpDateFormatter dateFormatter = AmpDateFormatterFactory.getLocalizedFormatter(DateTimeUtil.getGlobalPattern());
-
-        Session dbSession = PersistenceManager.getSession();
-        String queryString = "SELECT donorNotes FROM " + AmpGPINiDonorNotes.class.getName() + " donorNotes "
-                + "WHERE indicatorCode = :indicatorCode ";
-        Query query = dbSession.createQuery(queryString);
-        query.setString("indicatorCode", indicatorCode);
-        List<AmpGPINiDonorNotes> donorNotes = query.list();
-
-        List<AmpGPINiDonorNotes> filteredNotes = filterNotes(donorNotes, donorIds, donorType, from, to);
-
+        List<AmpGPINiDonorNotes> donorNotes = GPIUtils.getNotesByCode(indicatorCode);
+        List<AmpGPINiDonorNotes> filteredNotes = GPIUtils.filterNotes(donorNotes, donorIds, donorType, from, to);
         filteredNotes.forEach(n -> {
             remarks.add(new GPIRemark(n.getDonor().getName(), dateFormatter.format(n.getNotesDate()), n.getNotes()));
         });
@@ -432,41 +420,7 @@ public class GPIDataService {
         return getGPIDocuments(donorActList);
     }
 
-    /**
-     * Filter a donorNotes by donor-type, donorId, from and to dates
-     * 
-     * @param donorNotes
-     * @param donorIds
-     * @param donorType
-     * @param from
-     * @param to
-     * @return
-     */
-    private static List<AmpGPINiDonorNotes> filterNotes(List<AmpGPINiDonorNotes> donorNotes, List<Long> donorIds,
-            String donorType, Long from, Long to) {
-
-        List<AmpGPINiDonorNotes> filteredNotes = new ArrayList<>();
-        Predicate<AmpGPINiDonorNotes> fromDatePredicate = note -> from == null || from == 0 ? true
-                : DateTimeUtil.toJulianDayNumber(note.getNotesDate()) >= from;
-
-        Predicate<AmpGPINiDonorNotes> toDatePredicate = note -> to == null || to == 0 ? true
-                : DateTimeUtil.toJulianDayNumber(note.getNotesDate()) <= to;
-
-        Predicate<AmpGPINiDonorNotes> donorPredicate = note -> donorIds == null || donorIds.isEmpty()
-                || (donorIds.size() == 1 && donorIds.get(0) == null)
-                        ? true
-                        : donorType == null || GPIReportConstants.HIERARCHY_DONOR_AGENCY.equals(donorType)
-                                ? donorIds.contains(note.getDonor().getAmpOrgId())
-                                : GPIReportConstants.HIERARCHY_DONOR_GROUP.equals(donorType)
-                                        ? donorIds.contains(note.getDonor().getOrgGrpId().getAmpOrgGrpId()) : false;
-
-        filteredNotes = donorNotes.stream().filter(fromDatePredicate).filter(toDatePredicate).filter(donorPredicate)
-                .sorted((n1, n2) -> n2.getNotesDate().compareTo(n1.getNotesDate())).collect(Collectors.toList());
-
-        return filteredNotes;
-    }
-
-    /**
+      /**
      * Get filtered documents for specific donors and activities
      * 
      * @param documents

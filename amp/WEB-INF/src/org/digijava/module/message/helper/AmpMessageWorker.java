@@ -877,7 +877,7 @@ public class AmpMessageWorker {
 
     private static void defineReceiversForPerformanceRuleAlert(AmpMessage newMsg, Event e, TemplateAlert template)
             throws Exception {
-
+        
         AmpTeamMember msgSender = TeamMemberUtil.getAmpTeamMember(newMsg.getSenderId());
 
         HashMap<String, String> params = new HashMap<String, String>();
@@ -896,11 +896,12 @@ public class AmpMessageWorker {
         if (receiversAddresses.size() > 0) {
             for (String emailAddr : receiversAddresses) {
                 String senderEmail = (msgSender == null) ? DEFAULT_EMAIL_SENDER : msgSender.getUser().getEmail();
+                
                 String translatedName = TranslatorWorker.translateText(newMsg.getName());
-                String translatedDescription = TranslatorWorker.translateText(newMsg.getDescription());
 
+                
                 AmpEmail ampEmail = new AmpEmail(senderEmail, DgUtil.fillPattern(translatedName, params),
-                        DgUtil.fillPattern(translatedDescription, params));
+                        DgUtil.fillPattern(newMsg.getDescription(), params));
                 DbUtil.saveOrUpdateObject(ampEmail);
 
                 AmpEmailReceiver emailReceiver = new AmpEmailReceiver(emailAddr, ampEmail,

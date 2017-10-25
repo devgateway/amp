@@ -28,7 +28,6 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.DigiConfigManager;
-import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
@@ -895,14 +894,14 @@ public class AmpMessageWorker {
 
         if (receiversAddresses.size() > 0) {
             for (String emailAddr : receiversAddresses) {
-                String senderEmail = (msgSender == null) ? DEFAULT_EMAIL_SENDER : msgSender.getUser().getEmail();
+                String senderEmail = (msgSender == null) ? SYSTEM_DEFAULT_SENDER_MAIL : msgSender.getUser().getEmail();
+                
                 String translatedName = TranslatorWorker.translateText(newMsg.getName());
-                String translatedDescription = TranslatorWorker.translateText(newMsg.getDescription());
 
                 AmpEmail ampEmail = new AmpEmail(senderEmail, DgUtil.fillPattern(translatedName, params),
-                        DgUtil.fillPattern(translatedDescription, params));
+                        DgUtil.fillPattern(newMsg.getDescription(), params));
                 DbUtil.saveOrUpdateObject(ampEmail);
-
+                
                 AmpEmailReceiver emailReceiver = new AmpEmailReceiver(emailAddr, ampEmail,
                         MessageConstants.UNSENT_STATUS);
                 DbUtil.saveOrUpdateObject(emailReceiver);

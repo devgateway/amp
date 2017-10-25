@@ -521,7 +521,8 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
         
         renderSummaryLine(summarySheet, currLine, TranslatorWorker.translateText("Currency"), currency);
         renderSummaryLine(summarySheet, currLine, TranslatorWorker.translateText("Calendar"), calendar);
-        renderSummaryLine(summarySheet, currLine, TranslatorWorker.translateText("Units"), units);
+        renderSummaryLine(summarySheet, currLine, TranslatorWorker.translateText("Units"),
+                TranslatorWorker.translateText(units));
     }
 
 

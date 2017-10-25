@@ -548,4 +548,18 @@ public class SiteUtils {
 
         return siteIdentityService.getSiteId(service, site);
     }
+    public static String getBaseUrl() {
+        String url = "";
+        Set<SiteDomain> siteDomains = SiteUtils.getDefaultSite().getSiteDomains();
+        SiteDomain principalSiteDomain = siteDomains.stream()
+                .filter(SiteDomain::isDefaultDomain)
+                .findFirst()
+                .orElse(null);
+        
+        if (principalSiteDomain != null) {
+            url = principalSiteDomain.getSiteDomain();
+        }
+        
+        return url;
+    }    
 }

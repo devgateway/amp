@@ -130,3 +130,9 @@ div.trnpanel div.trn-row ul {
     text-align: right;
     color: #376091;
 }
+
+.workspacelist{
+    background: url(../images/arrow-014E86-rtl.gif) no-repeat center right #F2F2F2!important;
+    padding: 3px 3px 3px 10px!important;
+    background-position: right!important;
+}

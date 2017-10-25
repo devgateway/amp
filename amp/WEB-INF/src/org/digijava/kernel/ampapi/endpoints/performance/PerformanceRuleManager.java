@@ -286,7 +286,7 @@ public final class PerformanceRuleManager {
         String titleLabel = TranslatorWorker.translateText("Title");
 
         //TODO get the url correctly
-        String url = getBaseUrl();
+        String url = SiteUtils.getBaseUrl();
         
         if (activitiesByPerformanceRuleMatcher.isEmpty()) {
             String noActivityWithRule = TranslatorWorker
@@ -318,21 +318,6 @@ public final class PerformanceRuleManager {
         return sb.toString();
     }
     
-    private String getBaseUrl() {
-        String url = "";
-        Set<SiteDomain> siteDomains = SiteUtils.getDefaultSite().getSiteDomains();
-        SiteDomain principalSiteDomain = siteDomains.stream()
-                .filter(SiteDomain::isDefaultDomain)
-                .findFirst()
-                .orElse(null);
-        
-        if (principalSiteDomain != null) {
-            url = principalSiteDomain.getSiteDomain();
-        }
-        
-        return url;
-    }
-
     public String getPerformanceRuleMatcherMessage(PerformanceRuleMatcher matcher) {
         String message = TranslatorWorker.translateText(matcher.getDefinition().getMessage());
         for (AmpPerformanceRuleAttribute attr : matcher.getRule().getAttributes()) {

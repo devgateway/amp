@@ -16,7 +16,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -302,13 +301,12 @@ public class ActivityUtil {
         }
 
         saveAgreements(a, session, isActivityForm);
-        saveContacts(a, session,(draft != draftChange));
-        
+        saveContacts(a, session, (draft != draftChange));       
         updateComponentFunding(a, session);
         saveAnnualProjectBudgets(a, session);
         saveProjectCosts(a, session);
-        updatePerformanceIssue(a);
-
+        updatePerformanceIssues(a);
+    
         if (createNewVersion){
             //a.setAmpActivityId(null); //hibernate will save as a new version
             session.save(a);
@@ -325,18 +323,19 @@ public class ActivityUtil {
         return a;
     }
 
-    private static void updatePerformanceIssue(AmpActivityVersion a) {
+    private static void updatePerformanceIssues(AmpActivityVersion a) {
         PerformanceRuleManager ruleManager = PerformanceRuleManager.getInstance();
 
-        AmpCategoryValue matchedLevel = null;
+        Set<AmpCategoryValue> matchedLevels = new HashSet<>();
 
         if (ruleManager.canActivityContainPerformanceIssues(a)) {
-            matchedLevel = ruleManager.getHigherLevelFromMatchers(ruleManager.matchActivity(a));
+            matchedLevels = ruleManager.getPerformanceLevelsFromMatchers(ruleManager.matchActivity(a));
         }
-
-        AmpCategoryValue activityLevel = ruleManager.getPerformanceIssueFromActivity(a);
-        if (!Objects.equals(activityLevel, matchedLevel)) {
-            ruleManager.updatePerformanceIssueInActivity(a, activityLevel, matchedLevel);
+        
+        Set<AmpCategoryValue> activityLevels = ruleManager.getPerformanceIssuesFromActivity(a);
+        
+        if (!ruleManager.isEqualPerformanceLevelCollection(matchedLevels, activityLevels)) {
+            ruleManager.updatePerformanceIssuesInActivity(a, activityLevels, matchedLevels);
         }
     }
 

@@ -217,13 +217,13 @@ export default class Report5a extends Component {
                         <div className="col-md-3 reduced-padding">
                           <div className="indicator-stat-wrapper">
                             <div className="stat-value">{this.props.mainReport.summary[Constants.DISBURSEMENTS_AS_SCHEDULED]}</div>
-                            <div className="stat-label">{this.getLocalizedColumnName( Constants.DISBURSEMENTS_AS_SCHEDULED )}</div>
+                            <div className="stat-label">{TranslationManager.getTranslated(Constants.DISBURSEMENTS_AS_SCHEDULED + ' ' + Constants.NATIONAL_LEVEL )}</div>
                           </div>
                         </div>
                         <div className="col-md-3 reduced-padding">
                           <div className="indicator-stat-wrapper">
                             <div className="stat-value">{this.props.mainReport.summary[Constants.OVER_DISBURSED]}</div>
-                            <div className="stat-label">{this.getLocalizedColumnName(Constants.OVER_DISBURSED)}</div>
+                            <div className="stat-label">{TranslationManager.getTranslated(Constants.OVER_DISBURSED + ' ' + Constants.NATIONAL_LEVEL)}</div>
                           </div>
                         </div>
                         <div className="col-md-3 reduced-padding">
@@ -242,11 +242,11 @@ export default class Report5a extends Component {
                                 )}
                             </select>
                         </div>
-                        <div className="pull-right"><h4>{this.props.translations['amp.gpi-reports:currency']} {this.props.mainReport.settings['currency-code']}
+                        <div className="pull-right currency-label">{this.props.translations['amp.gpi-reports:currency']} {this.props.mainReport.settings['currency-code']}
                         {(this.props.settings['number-divider'] != 1) &&
                             <span className="amount-units"> ({this.props.translations['amp-gpi-reports:amount-in-' + this.props.settings['number-divider']]})</span>                    
                         }
-                        </h4></div>
+                        </div>
                     </div>                                       
                     <div className="section-divider"></div>     
                         {this.state.showRemarks &&
@@ -268,9 +268,7 @@ export default class Report5a extends Component {
                           <th className="col-md-2"><HeaderToolTip column={Constants.OVER_DISBURSED} headers={this.props.mainReport.page.headers}/>{this.getLocalizedColumnName(Constants.OVER_DISBURSED)}</th>
                           <th>
                             <div className="popup">
-                              <a data-container="body" data-toggle="popover" data-placement="top" data-content={this.getLocalizedColumnName(Constants.REMARK)} data-original-title="" title="">
-                                <img className="table-icon" src="images/remarks-heading-icon.svg"/>
-                              </a>
+                             <HeaderToolTip column={Constants.REMARK} headers={this.props.mainReport.page.headers} imgSrc="images/remarks-heading-icon.svg" tooltip={this.props.translations['amp-gpi-reports:remarks']}/>               
                             </div>
                           </th>
                         </tr>

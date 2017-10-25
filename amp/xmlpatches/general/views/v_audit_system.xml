@@ -20,6 +20,7 @@
 		<script>
 			<lang delimiter=";" type="postgres">
 			    	CREATE OR REPLACE VIEW v_audit_system AS SELECT acc.amp_activity_id, acv.category_value AS name FROM amp_activities_categoryvalues acc, amp_category_value acv, amp_category_class ac WHERE (((acv.id = acc.amp_categoryvalue_id) AND (ac.id = acv.amp_category_class_id)) AND ((ac.keyname)::text = 'audit_system'::text));;;
+			    	CREATE OR REPLACE VIEW v_ssc_audit_system AS SELECT acc.amp_activity_id, acv.category_value AS name FROM amp_activities_categoryvalues acc, amp_category_value acv, amp_category_class ac WHERE (((acv.id = acc.amp_categoryvalue_id) AND (ac.id = acv.amp_category_class_id)) AND ((ac.keyname)::text = 'SSC_audit_system'::text));;;
         		</lang>
 		</script>
 	</apply>

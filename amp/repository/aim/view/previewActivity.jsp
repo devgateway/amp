@@ -377,7 +377,7 @@ function collapseAll() {
 	</table>
 	</div>
 	
-	<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center style="margin-top:15px;">
+	<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center class="fixed-layout" style="margin-top:15px;">
   <tr>
     <td width=215 bgcolor="#F4F4F4" valign=top>
 	<div class="dash_left">

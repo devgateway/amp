@@ -9,6 +9,7 @@ public class ClusteredPoints {
     private String lat;
     private String lon;
     private String admin;
+    private Long admId;
     
     public ClusteredPoints(){
         activityids= new ArrayList<Long>();
@@ -39,14 +40,19 @@ public class ClusteredPoints {
         this.lon = lon;
     }
 
-
     public String getAdmin() {
         return admin;
     }
 
-
     public void setAdmin(String admin) {
         this.admin = admin;
     }
-    
+
+    public Long getAdmId() {
+        return admId;
+    }
+
+    public void setAdmId(Long admId) {
+        this.admId = admId;
+    }
 }

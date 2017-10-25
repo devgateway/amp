@@ -11,6 +11,7 @@ import {
 require('../styles/less/main.less');
 import * as startUp from '../actions/StartUpAction';
 import * as performanceRuleActions from '../actions/PerformanceRuleActions';
+import * as Constants from '../common/Constants';
 export default class PerformanceRuleRow extends Component {
     constructor(props, context) {
         super(props, context);
@@ -40,17 +41,22 @@ export default class PerformanceRuleRow extends Component {
         }        
     }
     
-    getTypeDescription(name){
+    getTypeDescription(name) {
         const ruleType = this.props.typeList.filter(ruleType => ruleType.name === name)[0];
-        return ruleType ? ruleType.description : ''; 
+        return ruleType ? ruleType[ruleType.name + Constants.TRANSLATED_DESCRIPTION] : '';         
     }
     
-    render() {
+    getLevelName(id) {
+        const level = this.props.levelList.filter(level => level.id === id)[0];  
+        return level.name;
+    }
+    
+    render() {           
         return (
             <tr>
                 <td>{this.props.performanceRule.name}</td>
                 <td>{this.getTypeDescription(this.props.performanceRule['type-class-name'])}</td>
-                <td>{this.props.performanceRule.level.value}</td>
+                <td>{this.getLevelName(this.props.performanceRule.level.id)}</td>
                 <td>{this.props.performanceRule.enabled ? this.props.translations['amp.performance-rule:enabled-yes'] : this.props.translations['amp.performance-rule:enabled-no']}</td>
                 <td>
                 <span className="glyphicon glyphicon-custom glyphicon-pencil" onClick={this.edit}></span> <span className="glyphicon glyphicon-custom glyphicon-trash" onClick={this.deletePerformanceRule}></span>
@@ -65,6 +71,7 @@ function mapStateToProps(state, ownProps) {
         translations: state.startUp.translations,
         translate: state.startUp.translate,
         typeList: state.performanceRule.typeList,
+        levelList: state.performanceRule.levelList,
         paging: state.performanceRule.paging
     }
 }

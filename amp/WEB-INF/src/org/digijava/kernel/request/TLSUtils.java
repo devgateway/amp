@@ -15,6 +15,7 @@ import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteCache;
+import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamUtil;
 import org.mockito.Mockito;
@@ -234,7 +235,8 @@ public class TLSUtils {
 
     private static void populateMockSiteDomain(HttpServletRequest httpRequest, String mainPath) {
         // we use localhost since at this point we don't have access to the real hosts
-        SiteDomain siteDomain = SiteCache.getInstance().getSiteDomain("localhost", mainPath);
+        String defaultUrl = SiteUtils.getBaseUrl();
+        SiteDomain siteDomain = SiteCache.getInstance().getSiteDomain(defaultUrl, mainPath);
         if (siteDomain != null) {
             httpRequest.setAttribute(org.digijava.kernel.Constants.CURRENT_SITE, siteDomain);
         } else {

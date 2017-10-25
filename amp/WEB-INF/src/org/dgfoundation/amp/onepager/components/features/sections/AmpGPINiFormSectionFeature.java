@@ -29,55 +29,55 @@ import org.digijava.module.aim.dbentity.AmpOrgRole;
  * @since Mar 01, 2017
  */
 public class AmpGPINiFormSectionFeature extends AmpFormSectionFeaturePanel {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public AmpGPINiFormSectionFeature(String id, String fmName, final IModel<AmpActivityVersion> am) throws Exception {
-		super(id, fmName, am);
+    public AmpGPINiFormSectionFeature(String id, String fmName, final IModel<AmpActivityVersion> am) throws Exception {
+        super(id, fmName, am);
 
-		PropertyModel<Set<AmpOrgRole>> orgRoles = new PropertyModel<Set<AmpOrgRole>>(am, "orgrole");
-		AbstractReadOnlyModel<List<AmpOrgRole>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(
-				orgRoles, 
-				AmpOrgRole.BY_ACRONYM_AND_NAME_COMPARATOR, 
-				AmpGPINiFormSectionFeature::hasDonorFundings);
+        PropertyModel<Set<AmpOrgRole>> orgRoles = new PropertyModel<Set<AmpOrgRole>>(am, "orgrole");
+        AbstractReadOnlyModel<List<AmpOrgRole>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(
+                orgRoles, 
+                AmpOrgRole.BY_ACRONYM_AND_NAME_COMPARATOR, 
+                AmpGPINiFormSectionFeature::hasDonorFundings);
 
-		final ListView<AmpOrgRole> list = new ListView<AmpOrgRole>("list", listModel) {
-			private static final long serialVersionUID = 1L;
+        final ListView<AmpOrgRole> list = new ListView<AmpOrgRole>("list", listModel) {
+            private static final long serialVersionUID = 1L;
 
-			@Override
-			protected void populateItem(ListItem<AmpOrgRole> item) {
-				try {
-					AmpGPINiOrgRoleItemFeaturePanel orgRoleItem = new AmpGPINiOrgRoleItemFeaturePanel("item", 
-							"GPI NI Survey", item.getModel(), am, AmpGPINiFormSectionFeature.this);
-					item.add(orgRoleItem);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		};
-		
-		list.setOutputMarkupId(true);
-		setOutputMarkupId(true);
-		add(list);
-		
-		add(UpdateEventBehavior.of(FundingOrgListUpdateEvent.class));
-		add(UpdateEventBehavior.of(GPINiSurveyListUpdateEvent.class));
-	}
-	
-	private static boolean hasDonorFundings(AmpOrgRole donor) {
-		AmpActivityVersion activity = donor.getActivity();
-		
-		for (AmpFunding f : activity.getFunding()) {
-			int orgCompareResult = ComparatorUtils.nullLowComparator(null)
-					.compare(f.getAmpDonorOrgId(), donor.getOrganisation());
-			
-			int roleCompareResult = ComparatorUtils.nullLowComparator(null)
-					.compare(f.getSourceRole(), donor.getRole());
-			
-			if (orgCompareResult == 0 && roleCompareResult == 0) {
-				return true;
-			}
-		}
-		
-		return false;
-	}
+            @Override
+            protected void populateItem(ListItem<AmpOrgRole> item) {
+                try {
+                    AmpGPINiOrgRoleItemFeaturePanel orgRoleItem = new AmpGPINiOrgRoleItemFeaturePanel("item", 
+                            "GPI NI Survey", item.getModel(), am, AmpGPINiFormSectionFeature.this);
+                    item.add(orgRoleItem);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        
+        list.setOutputMarkupId(true);
+        setOutputMarkupId(true);
+        add(list);
+        
+        add(UpdateEventBehavior.of(FundingOrgListUpdateEvent.class));
+        add(UpdateEventBehavior.of(GPINiSurveyListUpdateEvent.class));
+    }
+    
+    private static boolean hasDonorFundings(AmpOrgRole donor) {
+        AmpActivityVersion activity = donor.getActivity();
+        
+        for (AmpFunding f : activity.getFunding()) {
+            int orgCompareResult = ComparatorUtils.nullLowComparator(null)
+                    .compare(f.getAmpDonorOrgId(), donor.getOrganisation());
+            
+            int roleCompareResult = ComparatorUtils.nullLowComparator(null)
+                    .compare(f.getSourceRole(), donor.getRole());
+            
+            if (orgCompareResult == 0 && roleCompareResult == 0) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
 }

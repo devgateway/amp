@@ -8,9 +8,9 @@ public class ApprovedResourceShareTrigger extends AbstractResourceShare {
        super(source);
     }
 
-	@Override
-	protected Event getEvent() {
-		return new Event(ApprovedResourceShareTrigger.class);
-	}
+    @Override
+    protected Event getEvent() {
+        return new Event(ApprovedResourceShareTrigger.class);
+    }
 
 }

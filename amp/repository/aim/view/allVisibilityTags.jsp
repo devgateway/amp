@@ -91,11 +91,9 @@
 <module:display name="Resource Label Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Template Documents Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Donor Profile Report" parentModule="REPORTING"></module:display>
-<module:display name="Multi-dimensional Reports" parentModule="REPORTING"></module:display>
+<module:display name="Saiku" parentModule="REPORTING"></module:display>
 <module:display name="Pledge Reports" parentModule="REPORTING"></module:display>
 <feature:display name="Pledges Default Reports" module="Pledge Reports"></feature:display>
-<feature:display name="Default Reports" module="Multi-dimensional Reports"></feature:display>
-<module:display name="Multi-dimensional Reports Public View" parentModule="REPORTING"></module:display>  
 <module:display name="Report and Tab Options" parentModule="REPORTING"></module:display>
 <module:display name="Report Types" parentModule="REPORTING"></module:display>
 <module:display name="Filter Section" parentModule="REPORTING"></module:display> 
@@ -337,8 +335,8 @@
 <field:display feature="Identification" name="Project Description"></field:display>
 <field:display feature="Identification" name="Contracting Arrangements"></field:display>
 <field:display name="Project Impact" feature="Identification"></field:display> 
-<field:display feature="Identification" name="Project Comments"></field:display> 
-<field:display feature="Identification" name="Objective Assumption"></field:display> 
+<field:display feature="Identification" name="Project Comments"></field:display>
+<field:display feature="Identification" name="Objective Assumption"></field:display>
 <field:display feature="Identification" name="Objective Comments"></field:display> 
 <field:display feature="Identification" name="Objective Objectively Verifiable Indicators"></field:display> 
 <field:display feature="Identification" name="Objective Verification"></field:display> 
@@ -465,7 +463,8 @@
 <field:display name="Component description" feature="Activity - Component Step"></field:display>
 <field:display name="Description of Component Funding" feature="Activity - Component Step"></field:display>
 <field:display name="Component Funding Organization" feature="Activity - Component Step"></field:display> 
-<field:display name="Componente" feature="Planning"></field:display> 
+<field:display name="Component Second Responsible Organization" feature="Activity - Component Step"></field:display>
+<field:display name="Componente" feature="Planning"></field:display>
 <field:display name="Components Actual/Planned Commitments" feature="Activity - Component Step"></field:display> 
 <field:display name="Components Actual/Planned Disbursements" feature="Activity - Component Step"></field:display> 
 <field:display name="Components Actual/Planned Expenditures" feature="Activity - Component Step"></field:display> 
@@ -871,6 +870,12 @@ deleted 6 fields, do not reinsert
 <field:display name="Tertiary Sector Sub-Sector" feature="Sectors"></field:display>
 <field:display name="Tertiary Sector Sub-Sub-Sector" feature="Sectors"></field:display>
 <field:display name="Tertiary Sector" feature="Sectors"></field:display>
+<field:display name="Quaternary Sector" feature="Sectors"></field:display>
+<field:display name="Quaternary Sector Sub-Sector" feature="Sectors"></field:display>
+<field:display name="Quaternary Sector Sub-Sub-Sector" feature="Sectors"></field:display>
+<field:display name="Quinary Sector" feature="Sectors"></field:display>
+<field:display name="Quinary Sector Sub-Sector" feature="Sectors"></field:display>
+<field:display name="Quinary Sector Sub-Sub-Sector" feature="Sectors"></field:display>
 <field:display name="Sector Tag Sub-Sector" feature="Sectors"></field:display>
 <field:display name="Sector Tag Sub-Sub-Sector" feature="Sectors"></field:display>
 <field:display name="Sector Tag" feature="Sectors"></field:display>
@@ -958,6 +963,7 @@ deleted 6 fields, do not reinsert
 <field:display name="Add Donor Button" feature="Donors"></field:display>
 <field:display name="Remove Donor Button" feature="Donors"></field:display>
 <feature:display name="Computed Fields"  module="Report Generator"></feature:display>
+<feature:display name="Performance Monitoring"  module="Report Generator"></feature:display>
 <feature:display name="Save and Open Button"  module="Report Generator"></feature:display>
 <feature:display name="Also show pledges checkbox" module="Report and Tab Options"></feature:display>
 <feature:display name="Public View Checkbox" module="Report and Tab Options"></feature:display>
@@ -977,6 +983,7 @@ deleted 6 fields, do not reinsert
 <field:display name="Percentage of Disbursement" feature="Computed Fields"></field:display>
 <field:display name="Commitment Gap" feature="Computed Fields"></field:display>
 <field:display name="Calculated Project Life" feature="Computed Fields"></field:display>
+<field:display name="Performance Alert Level" feature="Performance Monitoring"></field:display>
 
 <field:display name="Beneficiary Agency Groups" feature="Beneficiary Agency"></field:display> 
 <field:display name="Beneficiary Agency  Department/Division"  feature="Beneficiary Agency"></field:display>
@@ -1011,6 +1018,8 @@ deleted 6 fields, do not reinsert
 <field:display feature="Pledges Columns" name="Pledges Sectors"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Secondary Sectors"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Tertiary Sectors"></field:display>
+<field:display feature="Pledges Columns" name="Pledges Quaternary Sectors"></field:display>
+<field:display feature="Pledges Columns" name="Pledges Quinary Sectors"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Type Of Assistance"></field:display>
 <field:display feature="Pledges Columns" name="Related Projects"></field:display>
 <field:display feature="Pledges Columns" name="Alternate Contact"></field:display>
@@ -1073,6 +1082,7 @@ deleted 6 fields, do not reinsert
 <module:display name="Activity Preview" parentModule="PUBLIC VIEW"></module:display>
 <feature:display name="Contacts" module="Activity Preview"></feature:display>
 <feature:display name="Version History" module="Activity Preview"></feature:display>
+<field:display name="Show Change Summary" feature="Version History"></field:display>
 
 <module:display name="Show Editable Export Formats" parentModule="PUBLIC VIEW"></module:display>
 <module:display name="Public Reports and Tabs" parentModule="PUBLIC VIEW"></module:display>

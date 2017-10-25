@@ -87,7 +87,7 @@ public class RequestUtils {
      * @return
      */
     @SuppressWarnings("unchecked")
-	public static <E> E getDigiContextAttributeEx(HttpServletRequest request, String attribute) {
+    public static <E> E getDigiContextAttributeEx(HttpServletRequest request, String attribute) {
         ComponentContext context = ComponentContext.getContext(request);
         E contextObject = null;
 
@@ -159,8 +159,8 @@ public class RequestUtils {
      * @return current SiteDomain object
      */
     public static SiteDomain getSiteDomain(HttpServletRequest request) {
-    	if (request == null)
-    		return null;
+        if (request == null)
+            return null;
         return (SiteDomain) request.getAttribute(Constants.CURRENT_SITE);
     }
 
@@ -204,13 +204,13 @@ public class RequestUtils {
      * @return ModuleInstance object
      */
     public static ModuleInstance getRealModuleInstance(HttpServletRequest
-	 request) {
-	ModuleInstance moduleInstance = getModuleInstance(request);
-	if ( (moduleInstance != null) && (moduleInstance.getRealInstance() != null)) {
-	    moduleInstance = moduleInstance.getRealInstance();
-	}
+     request) {
+    ModuleInstance moduleInstance = getModuleInstance(request);
+    if ( (moduleInstance != null) && (moduleInstance.getRealInstance() != null)) {
+        moduleInstance = moduleInstance.getRealInstance();
+    }
 
-	return moduleInstance;
+    return moduleInstance;
     }
 
     /**
@@ -233,10 +233,10 @@ public class RequestUtils {
         Locale res = (Locale) request.getAttribute(Constants.NAVIGATION_LANGUAGE);
         if (res == null)
         {
-        	res = new Locale("en", "");
-        	String errMsg = "request does not have a locale, returned dummy 'en'. FIX THIS ERROR!";
-        	logger.error(errMsg);
-        	ExceptionHelper.printReducedStacktrace(logger);
+            res = new Locale("en", "");
+            String errMsg = "request does not have a locale, returned dummy 'en'. FIX THIS ERROR!";
+            logger.error(errMsg);
+            ExceptionHelper.printReducedStacktrace(logger);
         }
         return res;
     }
@@ -559,42 +559,42 @@ public class RequestUtils {
     }
     
     /**
-	 * Check if the current user is an Admin, if not then the response is
-	 * redirected to the index page and the method returns false.
-	 * 
-	 * @param response
-	 * @param session
-	 * @param request
-	 * @return
-	 * @throws IOException
-	 */
-	public static boolean isAdmin(HttpServletResponse response, HttpSession session, HttpServletRequest request)
-			throws IOException {
-		boolean ret = true;
-		String str = (String) session.getAttribute("ampAdmin");
-		if (str == null || str.equalsIgnoreCase("no")) {
-			SiteDomain currentDomain = RequestUtils.getSiteDomain(request);
-			String url = SiteUtils.getSiteURL(currentDomain, request.getScheme(), request.getServerPort(), request
-					.getContextPath());
-			url += "/aim/index.do";
-			response.sendRedirect(url);
-			ret = false;
-		}
-		return ret;
-	}
+     * Check if the current user is an Admin, if not then the response is
+     * redirected to the index page and the method returns false.
+     * 
+     * @param response
+     * @param session
+     * @param request
+     * @return
+     * @throws IOException
+     */
+    public static boolean isAdmin(HttpServletResponse response, HttpSession session, HttpServletRequest request)
+            throws IOException {
+        boolean ret = true;
+        String str = (String) session.getAttribute("ampAdmin");
+        if (str == null || str.equalsIgnoreCase("no")) {
+            SiteDomain currentDomain = RequestUtils.getSiteDomain(request);
+            String url = SiteUtils.getSiteURL(currentDomain, request.getScheme(), request.getServerPort(), request
+                    .getContextPath());
+            url += "/aim/index.do";
+            response.sendRedirect(url);
+            ret = false;
+        }
+        return ret;
+    }
     
     public static boolean isLoggued(HttpServletResponse response, HttpSession session, HttpServletRequest request)
-			throws IOException {
-		boolean ret = true;
-		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
-		if (tm == null) {
-			SiteDomain currentDomain = RequestUtils.getSiteDomain(request);
-			String url = SiteUtils.getSiteURL(currentDomain, request.getScheme(), request.getServerPort(), request
-					.getContextPath());
-			url += "/aim/index.do";
-			response.sendRedirect(url);
-			ret = false;
-		}
-		return ret;
-	}
+            throws IOException {
+        boolean ret = true;
+        TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+        if (tm == null) {
+            SiteDomain currentDomain = RequestUtils.getSiteDomain(request);
+            String url = SiteUtils.getSiteURL(currentDomain, request.getScheme(), request.getServerPort(), request
+                    .getContextPath());
+            url += "/aim/index.do";
+            response.sendRedirect(url);
+            ret = false;
+        }
+        return ret;
+    }
 }

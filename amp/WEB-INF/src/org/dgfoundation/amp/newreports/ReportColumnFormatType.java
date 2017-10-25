@@ -8,26 +8,26 @@ package org.dgfoundation.amp.newreports;
  *
  */
 public enum ReportColumnFormatType {
-	TEXT("text"), 
-	DATE("date"),
-	NUMBER("number");
+    TEXT("text"), 
+    DATE("date"),
+    NUMBER("number");
 
-	private final String text;
+    private final String text;
 
-	/**
-	 * @param text
-	 */
-	private ReportColumnFormatType(final String text) {
-		this.text = text;
-	}
+    /**
+     * @param text
+     */
+    private ReportColumnFormatType(final String text) {
+        this.text = text;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Enum#toString()
-	 */
-	@Override
-	public String toString() {
-		return text;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Enum#toString()
+     */
+    @Override
+    public String toString() {
+        return text;
+    }
 }

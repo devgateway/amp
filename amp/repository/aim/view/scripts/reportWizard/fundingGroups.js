@@ -106,13 +106,19 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
                 , 'Risk'
                 , 'Indicator Sector'
                 , 'Indicator Type'
+                , 'Quaternary Sector'
+                , 'Quaternary Sector Sub-Sector'
+                , 'Quaternary Sector Sub-Sub-Sector'
+                , 'Quinary Sector'
+                , 'Quinary Sector Sub-Sector'
+                , 'Quinary Sector Sub-Sub-Sector'
 			);
 
 YAHOO.amp.reportwizard.fundingGroups["regional"]		= new Array(
-				'Region','Status','Primary Sector','Primary Sector Sub-Sector','National Planning Objectives','District','Zone'
+				'Status','Primary Sector','Primary Sector Sub-Sector','National Planning Objectives','Regional Region'
 			);
 YAHOO.amp.reportwizard.fundingGroups["component"]		= new Array(
-				 'Component Type','Region','Status','Primary Sector','National Planning Objectives','District','Zone','Component Name','Project Title'
+				 'Component Type','Region','Status','Primary Sector','National Planning Objectives','District','Zone','Component Name','Project Title','Component Funding Organization','Component Second Responsible Organization'
 			);
 YAHOO.amp.reportwizard.fundingGroups["contribution"]	= new Array(
 				'Costing Donor','Parent National Planning Objectives', 'National Planning Objectives', 'Primary Program', 
@@ -126,7 +132,7 @@ YAHOO.amp.reportwizard.fundingGroups["contribution"]	= new Array(
 YAHOO.amp.reportwizard.fundingGroups["pledge"]= new Array(
 		'Related Projects', 'Pledges Donor Group', 'Pledges Regions', 'Pledges Aid Modality',
 		'Pledges Type Of Assistance',
-		'Pledges Titles', 'Pledges sectors', 'Pledges Secondary Sectors', 'Pledges Tertiary Sectors', 
+		'Pledges Titles', 'Pledges sectors', 'Pledges Secondary Sectors', 'Pledges Tertiary Sectors', 'Pledges Quaternary Sectors', 'Pledges Quinary Sectors',
 		'Pledges Programs', 'Pledges Secondary Programs', 'Pledges Tertiary Programs', 
 		'Pledges Regions', 'Pledges Zones', 'Pledge Status'
 	);
@@ -289,4 +295,18 @@ function isAmountColumn(colName) {
 
 function colIdToName(id) {
 	return YAHOO.amp.reportwizard.colIdToName[id];
+}
+
+function updateColumnVisibility(reportType) {
+    if (reportType === 'regional') {
+        ColumnsDragAndDropObject.showObjsByDbId('source_col_div', [colNameToId('Regional Region')]);
+        ColumnsDragAndDropObject.hideObjsByDbId('source_col_div', [colNameToId('Region')]);
+    } else {
+        ColumnsDragAndDropObject.showObjsByDbId('source_col_div', [colNameToId('Region')]);
+        ColumnsDragAndDropObject.hideObjsByDbId('source_col_div', [colNameToId('Regional Region')]);
+    }
+}
+
+function colNameToId(name) {
+	return YAHOO.amp.reportwizard.colIdToName.indexOf(name);
 }

@@ -19,35 +19,35 @@ import org.digijava.module.aim.util.FeaturesUtil;
  * 
  */
 public class AmpDatePickerRegular extends DateTextField {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public static AmpDatePickerRegular newDatePicker(String id, IModel<Date> model){
-		String pattern = FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
-		pattern = pattern.replace('m', 'M');
-		return new AmpDatePickerRegular(id, model, pattern);
-	}
-	
+    public static AmpDatePickerRegular newDatePicker(String id, IModel<Date> model){
+        String pattern = FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
+        pattern = pattern.replace('m', 'M');
+        return new AmpDatePickerRegular(id, model, pattern);
+    }
+    
     @Override
-	public <C> IConverter<C> getConverter(final Class<C> type)
-	{
+    public <C> IConverter<C> getConverter(final Class<C> type)
+    {
 //    public IConverter getConverter(Class<?> type) {
         return (IConverter<C>) new StrictPatternDateConverter();
     }
-	
-	private AmpDatePickerRegular(String id, IModel<Date> model, String pattern) {
-		super(id, model, pattern);
-		this.setOutputMarkupId(true);
-		DatePicker dp = new DatePicker() {
-			private static final long serialVersionUID = 1L;
-	
-			
-			@Override
-			protected boolean enableMonthYearSelection() {
-				return true;
-			}
-		};
-		dp.setShowOnFieldClick(true);
-		dp.setAutoHide(true);
-		this.add(dp);
-	}
+    
+    private AmpDatePickerRegular(String id, IModel<Date> model, String pattern) {
+        super(id, model, pattern);
+        this.setOutputMarkupId(true);
+        DatePicker dp = new DatePicker() {
+            private static final long serialVersionUID = 1L;
+    
+            
+            @Override
+            protected boolean enableMonthYearSelection() {
+                return true;
+            }
+        };
+        dp.setShowOnFieldClick(true);
+        dp.setAutoHide(true);
+        this.add(dp);
+    }
 }

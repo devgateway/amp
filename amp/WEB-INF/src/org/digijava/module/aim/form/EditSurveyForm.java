@@ -12,12 +12,12 @@ import org.apache.struts.action.ActionForm;
 
 public class EditSurveyForm extends ActionForm {
 
-    private List indicators = null; 	 // holds collection of Indicator helper objects
-    private Collection pages = null;	 // total number of survey pages
+    private List indicators = null;      // holds collection of Indicator helper objects
+    private Collection pages = null;     // total number of survey pages
     private Integer currentPage = null;
-    private Integer offset = null;		 // starting record for iteartion over indicator collection on each page
+    private Integer offset = null;       // starting record for iteartion over indicator collection on each page
 
-    private String fundingOrg = null;	 // acronym of funding organisation
+    private String fundingOrg = null;    // acronym of funding organisation
     private String deliveryDonor = null;
 
     private Long ampSurveyId = null;

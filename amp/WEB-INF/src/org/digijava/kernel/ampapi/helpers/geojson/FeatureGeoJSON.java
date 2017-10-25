@@ -31,19 +31,19 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 public class FeatureGeoJSON extends GeoJSON
 {
-	public GeoJSON geometry;
-	public Map<String,JsonNode> properties;
-	
-	public String id;
-	public FeatureGeoJSON(){
-	    this.properties =  new HashMap<String, JsonNode>();
-	}
+    public GeoJSON geometry;
+    public Map<String,JsonNode> properties;
+    
+    public String id;
+    public FeatureGeoJSON(){
+        this.properties =  new HashMap<String, JsonNode>();
+    }
 
-	public boolean isValid( PositionValidator validator )
-	{
-		if (geometry==null ) return false;
-		if ( !geometry.isValid(validator) ) return false;
+    public boolean isValid( PositionValidator validator )
+    {
+        if (geometry==null ) return false;
+        if ( !geometry.isValid(validator) ) return false;
 
-		return super.isValid(validator);
-	}
+        return super.isValid(validator);
+    }
 }

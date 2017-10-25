@@ -35,29 +35,29 @@ public class DeleteKey
       extends Action {
 
     public ActionForward execute(ActionMapping mapping,
-				 ActionForm form,
-				 javax.servlet.http.HttpServletRequest request,
-				 javax.servlet.http.HttpServletResponse
-				 response) throws java.lang.Exception {
+                 ActionForm form,
+                 javax.servlet.http.HttpServletRequest request,
+                 javax.servlet.http.HttpServletResponse
+                 response) throws java.lang.Exception {
 
-	AdvancedTranslationForm formBean = (AdvancedTranslationForm) form;
+    AdvancedTranslationForm formBean = (AdvancedTranslationForm) form;
 
-	boolean permitted = true;
+    boolean permitted = true;
 
-	if (!DgUtil.isLocalTranslatorForSite(request)) {
-	    permitted = TranslateSecurityManager.isTranslationPermittedForSite(
-		  request, formBean.getSiteId(),
-		  formBean.getSelectedLangSource());
-	}
+    if (!DgUtil.isLocalTranslatorForSite(request)) {
+        permitted = TranslateSecurityManager.isTranslationPermittedForSite(
+          request, formBean.getSiteId(),
+          formBean.getSelectedLangSource());
+    }
 
-	if (permitted) {
-	    if (formBean.getKey() != null) {
-		String decoded = DgUtil.decodeString(formBean.getKey());
-		DbUtil.deleteMessage(decoded, formBean.getSelectedLangSource(),
-				     formBean.getSiteId());
-	    }
-	}
+    if (permitted) {
+        if (formBean.getKey() != null) {
+        String decoded = DgUtil.decodeString(formBean.getKey());
+        DbUtil.deleteMessage(decoded, formBean.getSelectedLangSource(),
+                     formBean.getSiteId());
+        }
+    }
 
-	return mapping.findForward("forward");
+    return mapping.findForward("forward");
     }
 }

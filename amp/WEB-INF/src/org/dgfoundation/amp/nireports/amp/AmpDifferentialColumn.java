@@ -12,6 +12,7 @@ import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.amp.diff.DifferentialCache;
 import org.dgfoundation.amp.nireports.amp.diff.KeyBuilder;
+import org.dgfoundation.amp.nireports.amp.diff.SSCKeyBuilder;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
 
@@ -27,66 +28,79 @@ import org.dgfoundation.amp.nireports.schema.NiDimension;
  * @author Dolghier Constantin
  *
  * @param <K> the type of the generated cells
- * @param <T> the type of the key
  */
-public abstract class AmpDifferentialColumn<K extends Cell, T> extends AmpSqlSourcedColumn<K> {
-	
-	public final static Logger logger = Logger.getLogger(AmpDifferentialColumn.class);
-	
-	/**
-	 * the unconditional timeout of the level 1 cache. This is technically not needed - it is a safeguard against some missing postgresql-side trigger
-	 */
-	public final static int CACHE_TTL_SECONDS = 10 * 60;
-	
-	/**
-	 * the key builder for the level 1 cache
-	 */
-	protected final KeyBuilder<T> cacheKeyBuilder;
-	
-	/**
-	 * the level 1 cache, having as its entries the individual level 2 caches (which are {@link DifferentialCache} instances)
-	 */
-	protected final ExpiringCacher<T, NiReportsEngine, DifferentialCache<K>> cacher;
-	
-	/**
-	 * the level 1 cache invalidator. Also used as a storage of the "last fetched etl event id" that is used to drive {@link DifferentialCache}
-	 */
-	protected final ActivityInvalidationDetector invalidationDetector;
-	
-	public AmpDifferentialColumn(String columnName, NiDimension.LevelColumn levelColumn, String viewName, KeyBuilder<T> cacheKeyBuilder, Behaviour<?> behaviour) {
-		super(columnName, levelColumn, viewName, behaviour);
-		this.cacheKeyBuilder = cacheKeyBuilder;
-		this.invalidationDetector = new ActivityInvalidationDetector();
-		this.cacher = new ExpiringCacher<>(String.format("column %s cacher", columnName), this::origFetch, this.invalidationDetector, CACHE_TTL_SECONDS * 1000);
-	}
-	
-	/**
-	 * (re)fetches the needed cells from the database, populates the relevant level-1 and level-2 cache entries and returns the level-2 cache
-	 * @return the 2-tuple (fetched ids, level-2 cache)
-	 */
-	protected ImmutablePair<Set<Long>, DifferentialCache<K>> differentiallyImportCells(NiReportsEngine engine, Function<Set<Long>, List<K>> fetcher) {
-		DifferentialCache<K> cache = cacher.buildOrGetValue(cacheKeyBuilder.buildKey(engine, this), engine);
-		return new ImmutablePair<>(AmpReportsScratchpad.get(engine).differentiallyImportCells(engine.timer, mainColumn, cache, fetcher), cache);
-	}
-	
-	@Override
-	public synchronized List<K> fetch(NiReportsEngine engine) {
-		if (((AmpReportsSchema) engine.schema).ENABLE_CACHING) {
-			DifferentialCache<K> cache = differentiallyImportCells(engine, idsToReplace -> super.fetch(engine, idsToReplace)).v;
-			return cache.getCells(engine.schemaSpecificScratchpad.getMainIds(engine, this));
-		}
-		else
-			return super.fetch(engine);
-	}
-	
-	/**
-	 * builds an empty level2 cache entry. 
-	 * @param key
-	 * @param engine
-	 * @return
-	 */
-	protected synchronized DifferentialCache<K> origFetch(T key, NiReportsEngine engine) {
-		engine.timer.putMetaInNode("resetCache", true);
-		return new DifferentialCache<K>(invalidationDetector.getLastProcessedFullEtl());
-	}
+public abstract class AmpDifferentialColumn<K extends Cell> extends AmpSqlSourcedColumn<K> {
+    
+    public final static Logger logger = Logger.getLogger(AmpDifferentialColumn.class);
+    
+    /**
+     * the unconditional timeout of the level 1 cache. This is technically not needed - it is a safeguard against some missing postgresql-side trigger
+     */
+    public final static int CACHE_TTL_SECONDS = 10 * 60;
+    
+    /**
+     * the key builder for the level 1 cache
+     */
+    protected final KeyBuilder cacheKeyBuilder;
+    
+    /**
+     * the level 1 cache, having as its entries the individual level 2 caches (which are {@link DifferentialCache} instances)
+     */
+    protected final ExpiringCacher<String, NiReportsEngine, DifferentialCache<K>> cacher;
+    
+    /**
+     * the level 1 cache invalidator. Also used as a storage of the "last fetched etl event id" that is used to drive {@link DifferentialCache}
+     */
+    protected final ActivityInvalidationDetector invalidationDetector;
+
+    public AmpDifferentialColumn(String columnName, NiDimension.LevelColumn levelColumn, String viewName,
+            KeyBuilder cacheKeyBuilder, Behaviour<?> behaviour) {
+        this(columnName, levelColumn, viewName, cacheKeyBuilder, behaviour, false);
+    }
+
+    public AmpDifferentialColumn(String columnName, NiDimension.LevelColumn levelColumn, String viewName,
+            KeyBuilder cacheKeyBuilder, Behaviour<?> behaviour, boolean sscEnabledColumn) {
+        super(columnName, levelColumn, viewName, behaviour, sscEnabledColumn);
+        this.cacheKeyBuilder = keyBuilder(cacheKeyBuilder, sscEnabledColumn);
+        this.invalidationDetector = new ActivityInvalidationDetector();
+        this.cacher = new ExpiringCacher<>(String.format("column %s cacher", columnName), this::origFetch, this.invalidationDetector, CACHE_TTL_SECONDS * 1000);
+    }
+
+    private KeyBuilder keyBuilder(KeyBuilder cacheKeyBuilder, boolean sscEnabledColumn) {
+        if (sscEnabledColumn) {
+            return new SSCKeyBuilder(this, cacheKeyBuilder);
+        } else {
+            return cacheKeyBuilder;
+        }
+    }
+    
+    /**
+     * (re)fetches the needed cells from the database, populates the relevant level-1 and level-2 cache entries and returns the level-2 cache
+     * @return the 2-tuple (fetched ids, level-2 cache)
+     */
+    protected ImmutablePair<Set<Long>, DifferentialCache<K>> differentiallyImportCells(NiReportsEngine engine, Function<Set<Long>, List<K>> fetcher) {
+        DifferentialCache<K> cache = cacher.buildOrGetValue(cacheKeyBuilder.buildKey(engine, this), engine);
+        return new ImmutablePair<>(AmpReportsScratchpad.get(engine).differentiallyImportCells(engine.timer, mainColumn, cache, fetcher), cache);
+    }
+    
+    @Override
+    public synchronized List<K> fetch(NiReportsEngine engine) {
+        if (((AmpReportsSchema) engine.schema).ENABLE_CACHING) {
+            DifferentialCache<K> cache = differentiallyImportCells(engine, idsToReplace -> super.fetch(engine, idsToReplace)).v;
+            return cache.getCells(engine.schemaSpecificScratchpad.getMainIds(engine, this));
+        }
+        else
+            return super.fetch(engine);
+    }
+    
+    /**
+     * builds an empty level2 cache entry. 
+     * @param key
+     * @param engine
+     * @return
+     */
+    protected synchronized DifferentialCache<K> origFetch(String key, NiReportsEngine engine) {
+        engine.timer.putMetaInNode("resetCache", true);
+        return new DifferentialCache<K>(invalidationDetector.getLastProcessedFullEtl());
+    }
 }

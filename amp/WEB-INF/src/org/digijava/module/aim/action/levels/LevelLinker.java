@@ -25,18 +25,18 @@ public class LevelLinker extends MultiAction {
      */
     @Override
     public ActionForward modePrepare(ActionMapping mapping, ActionForm form, HttpServletRequest request,
-	    HttpServletResponse response) throws Exception {
-	// TODO Auto-generated method stub
-	return null;
+        HttpServletResponse response) throws Exception {
+    // TODO Auto-generated method stub
+    return null;
     }
 
     /** @see org.dgfoundation.amp.utils.MultiAction#modeSelect(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
      */
     @Override
     public ActionForward modeSelect(ActionMapping mapping, ActionForm form, HttpServletRequest request,
-	    HttpServletResponse response) throws Exception {
-	// TODO Auto-generated method stub
-	return null;
+        HttpServletResponse response) throws Exception {
+    // TODO Auto-generated method stub
+    return null;
     }
 
 }

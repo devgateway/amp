@@ -21,92 +21,88 @@ import com.lowagie.text.pdf.PdfPTable;
  */
 public class GPIReportIndicator5aPdfExporter extends GPIReportPdfExporter {
 
-	public GPIReportIndicator5aPdfExporter() {
-		relativeWidths = new float[] { 4f, 20f, 10f, 10f, 8f, 8f, 8f, 8f, 8f, 16f };
-		reportTitle = "Indicator 5a";
-	}
+    public GPIReportIndicator5aPdfExporter() {
+        relativeWidths = new float[] { 4f, 20f, 10f, 10f, 8f, 8f, 8f, 8f, 8f, 16f };
+        reportTitle = "Indicator 5a";
+    }
 
-	public void renderReportTableSummary(GPIReport report, Paragraph body) {
-		PdfPTable table = new PdfPTable(report.getSummary().size());
+    public void renderReportTableSummary(GPIReport report, Paragraph body) {
+        PdfPTable table = new PdfPTable(report.getSummary().size());
 
-		// set table width a percentage of the page width
-		table.setWidthPercentage(50f);
-		table.setHorizontalAlignment(0);
+        // set table width a percentage of the page width
+        table.setWidthPercentage(50f);
+        table.setHorizontalAlignment(0);
 
-		Font bfBold14 = new Font(Font.HELVETICA, 12, Font.BOLD, new Color(0, 0, 0));
-		Color bkgColor = Color.ORANGE;
+        Font bfBold14 = new Font(Font.HELVETICA, 12, Font.BOLD, new Color(0, 0, 0));
+        Color bkgColor = Color.ORANGE;
 
-		for (int i = 0; i < report.getPage().getHeaders().size(); i++) {
-			GPIReportOutputColumn column = report.getPage().getHeaders().get(i);
-			if (report.getSummary().containsKey(column)) {
-				String cellValue = String.format("%s\n%s", report.getSummary().get(column), column.columnName);
+        for (int i = 0; i < report.getPage().getHeaders().size(); i++) {
+            GPIReportOutputColumn column = report.getPage().getHeaders().get(i);
+            if (report.getSummary().containsKey(column)) {
+                String cellValue = String.format("%s\n%s", report.getSummary().get(column), column.columnName);
 
-				Phrase summaryPhrase = new Phrase(cellValue, bfBold14);
-				PdfPCell summaryCell = generatePdfCell(summaryPhrase, Element.ALIGN_LEFT, Element.ALIGN_MIDDLE, 1, 1,
-						bkgColor);
-				insertCell(table, summaryCell, SUMMARY_ROW_HEIGHT);
-			}
-		}
+                Phrase summaryPhrase = new Phrase(cellValue, bfBold14);
+                PdfPCell summaryCell = generatePdfCell(summaryPhrase, Element.ALIGN_LEFT, Element.ALIGN_MIDDLE, 1, 1,
+                        bkgColor);
+                insertCell(table, summaryCell, SUMMARY_ROW_HEIGHT);
+            }
+        }
 
-		body.add(table);
-		body.add(new Paragraph());
-	}
+        body.add(table);
+        body.add(new Paragraph());
+    }
 
-	public void renderReportTableHeader(GPIReport report, PdfPTable table) {
-		Font bfBold11 = new Font(Font.HELVETICA, 9, Font.BOLD, new Color(0, 0, 0));
-		Color bkgColor = Color.LIGHT_GRAY;
+    public void renderReportTableHeader(GPIReport report, PdfPTable table) {
+        Font bfBold11 = new Font(Font.HELVETICA, 9, Font.BOLD, new Color(0, 0, 0));
+        Color bkgColor = Color.LIGHT_GRAY;
 
-		report.getPage().getHeaders().stream().forEach(
-				column -> insertCell(table, getHeaderColumnName(column), Element.ALIGN_CENTER, 1, bfBold11, bkgColor));
+        report.getPage().getHeaders().stream().forEach(
+                column -> insertCell(table, getHeaderColumnName(column), Element.ALIGN_CENTER, 1, bfBold11, bkgColor));
 
-		table.setHeaderRows(1);
+        table.setHeaderRows(1);
 
-	}
+    }
 
-	@Override
-	protected void renderReportTableData(GPIReport report, PdfPTable table) {
-		Font bf11 = new Font(Font.HELVETICA, 9);
-		Color bkgColor = Color.WHITE;
+    @Override
+    protected void renderReportTableData(GPIReport report, PdfPTable table) {
+        Font bf11 = new Font(Font.HELVETICA, 9);
+        Color bkgColor = Color.WHITE;
 
-		report.getPage().getContents().forEach(row -> {
-			report.getPage().getHeaders().forEach(col -> {
-				if (!isRemarkColumn(col.originalColumnName)) {
-					insertCell(table, row.get(col), getCellAlignment(col.originalColumnName), 1, bf11, bkgColor);
-				} else {
-					insertCell(table, GPIReportUtils.getRemarksForIndicator5a(row), getCellAlignment(col.originalColumnName),
-							1, bf11, bkgColor);
-				}
-			});
-		});
-	}
+        report.getPage().getContents().forEach(row -> {
+            report.getPage().getHeaders().forEach(col -> {
+                if (!isRemarkColumn(col.originalColumnName)) {
+                    insertCell(table, row.get(col), getCellAlignment(col.originalColumnName), 1, bf11, bkgColor);
+                } else {
+                    insertCell(table, GPIReportUtils.getRemarksForIndicator5a(row), getCellAlignment(col.originalColumnName),
+                            1, bf11, bkgColor);
+                }
+            });
+        });
+    }
 
-	@Override
-	public int getCellAlignment(String columnName) {
-		switch (columnName) {
-		case ColumnConstants.DONOR_AGENCY:
-		case ColumnConstants.DONOR_GROUP:
-			return Element.ALIGN_LEFT;
-		case GPIReportConstants.COLUMN_CONCESSIONAL:
-		case GPIReportConstants.COLUMN_YEAR:
-			return Element.ALIGN_CENTER;
-		case GPIReportConstants.COLUMN_REMARK:
-			return Element.ALIGN_LEFT;
-		default:
-			return Element.ALIGN_RIGHT;
-		}
-	}
+    @Override
+    public int getCellAlignment(String columnName) {
+        switch (columnName) {
+        case ColumnConstants.DONOR_AGENCY:
+        case ColumnConstants.DONOR_GROUP:
+            return Element.ALIGN_LEFT;
+        case GPIReportConstants.COLUMN_CONCESSIONAL:
+        case GPIReportConstants.COLUMN_YEAR:
+            return Element.ALIGN_CENTER;
+        case GPIReportConstants.COLUMN_REMARK:
+            return Element.ALIGN_LEFT;
+        default:
+            return Element.ALIGN_RIGHT;
+        }
+    }
 
-	protected boolean isRemarkColumn(String columnName) {
-		return columnName.equals(GPIReportConstants.COLUMN_REMARK);
-	}
+    protected boolean isRemarkColumn(String columnName) {
+        return columnName.equals(GPIReportConstants.COLUMN_REMARK);
+    }
 
-	@Override
-	protected String getHeaderColumnName(GPIReportOutputColumn column) {
-		return getColumnHeaderLabel(column.originalColumnName);
-	}
+    @Override
+    protected String getHeaderColumnName(GPIReportOutputColumn column) {
+        return getColumnHeaderLabel(GPIReportConstants.INDICATOR_5A_COLUMN_LABELS, column.originalColumnName);
+    }
 
-	private String getColumnHeaderLabel(String columnName) {
-		return INDICATOR_5A_COLUMN_LABELS.containsKey(columnName) ? INDICATOR_5A_COLUMN_LABELS.get(columnName)
-				: columnName;
-	}
 }

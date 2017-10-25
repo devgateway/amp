@@ -27,61 +27,61 @@ import org.digijava.module.aim.util.CurrencyUtil;
  */
 public class AmpMTEFProjectionSubsectionFeature extends AmpSubsectionFeatureFundingPanel<AmpFunding> {
 
-	protected AmpMTEFProjectionFormTableFeature mtefTableFeature;
+    protected AmpMTEFProjectionFormTableFeature mtefTableFeature;
 
-	/**
-	 * @param id
-	 * @param fmName
-	 * @param model
-	 * @throws Exception
-	 */
-	public AmpMTEFProjectionSubsectionFeature(String id, final IModel<AmpFunding> model, String fmName) throws Exception {
-		super(id, fmName, model, Constants.MTEFPROJECTION);
-		
-		mtefTableFeature = new AmpMTEFProjectionFormTableFeature("mtefTableFeature", "MTEF Projections Table", model);
-		add(mtefTableFeature);
-		
-		final IModel<Set<AmpFundingMTEFProjection>> setModel = new PropertyModel<Set<AmpFundingMTEFProjection>>(model, "mtefProjections");
-		
-		AmpAjaxLinkField addMTEF=new AmpAjaxLinkField("addMTEF","Add Projection","Add Projection") {
-			@Override
-			protected void onClick(AjaxRequestTarget target) {
-				AmpFundingMTEFProjection projection= new AmpFundingMTEFProjection();
-				projection.setAmpFunding(model.getObject());
-				//projection.setAmount(0d);
-//				projection.setProjectionDate(new Date(System.currentTimeMillis()));
+    /**
+     * @param id
+     * @param fmName
+     * @param model
+     * @throws Exception
+     */
+    public AmpMTEFProjectionSubsectionFeature(String id, final IModel<AmpFunding> model, String fmName) throws Exception {
+        super(id, fmName, model, Constants.MTEFPROJECTION);
+        
+        mtefTableFeature = new AmpMTEFProjectionFormTableFeature("mtefTableFeature", "MTEF Projections Table", model);
+        add(mtefTableFeature);
+        
+        final IModel<Set<AmpFundingMTEFProjection>> setModel = new PropertyModel<Set<AmpFundingMTEFProjection>>(model, "mtefProjections");
+        
+        AmpAjaxLinkField addMTEF=new AmpAjaxLinkField("addMTEF","Add Projection","Add Projection") {
+            @Override
+            protected void onClick(AjaxRequestTarget target) {
+                AmpFundingMTEFProjection projection= new AmpFundingMTEFProjection();
+                projection.setAmpFunding(model.getObject());
+                //projection.setAmount(0d);
+//              projection.setProjectionDate(new Date(System.currentTimeMillis()));
 
                 Calendar calendar = Calendar.getInstance();
 
                 int currentYear = Util.getCurrentFiscalYear();
 
-				Set<AmpFundingMTEFProjection> mtefSet = setModel.getObject();
+                Set<AmpFundingMTEFProjection> mtefSet = setModel.getObject();
                 if (mtefSet != null) {
-					for(AmpFundingMTEFProjection mtefItem : mtefSet) {
-						calendar.setTime(mtefItem.getProjectionDate());
-						int mtefItemYear = calendar.get(Calendar.YEAR);
-						if (mtefItemYear + 1 > currentYear)
-							currentYear = mtefItemYear + 1;
-					}
-				}
-				calendar.set(Calendar.DAY_OF_YEAR, 1);
-				calendar.set(Calendar.YEAR, currentYear);
-				projection.setProjectionDate(calendar.getTime());
-				projection.setReportingDate(new Date(System.currentTimeMillis()));
-				projection.setAmpCurrency(CurrencyUtil.getWicketWorkspaceCurrency());
-				mtefTableFeature.getEditorList().addItem(projection);
-				target.add(mtefTableFeature);
-				AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
-				parent.getFundingInfo().checkChoicesRequired(mtefTableFeature.getEditorList().getCount());
-				target.add(parent.getFundingInfo());
-				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
-				target.appendJavaScript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));
-				target.appendJavaScript(QuarterInformationPanel.getJSUpdate(getSession()));
-			}
-		};
-		addMTEF.setAffectedByFreezing(false);
-		add(addMTEF);
-		
-	}
+                    for(AmpFundingMTEFProjection mtefItem : mtefSet) {
+                        calendar.setTime(mtefItem.getProjectionDate());
+                        int mtefItemYear = calendar.get(Calendar.YEAR);
+                        if (mtefItemYear + 1 > currentYear)
+                            currentYear = mtefItemYear + 1;
+                    }
+                }
+                calendar.set(Calendar.DAY_OF_YEAR, 1);
+                calendar.set(Calendar.YEAR, currentYear);
+                projection.setProjectionDate(calendar.getTime());
+                projection.setReportingDate(new Date(System.currentTimeMillis()));
+                projection.setAmpCurrency(CurrencyUtil.getWicketWorkspaceCurrency());
+                mtefTableFeature.getEditorList().addItem(projection);
+                target.add(mtefTableFeature);
+                AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
+                parent.getFundingInfo().checkChoicesRequired(mtefTableFeature.getEditorList().getCount());
+                target.add(parent.getFundingInfo());
+                target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
+                target.appendJavaScript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));
+                target.appendJavaScript(QuarterInformationPanel.getJSUpdate(getSession()));
+            }
+        };
+        addMTEF.setAffectedByFreezing(false);
+        add(addMTEF);
+        
+    }
 
 }

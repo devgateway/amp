@@ -7,10 +7,11 @@ import * as startUp from '../actions/StartUpAction.jsx';
 import Utils from '../common/Utils';
 import * as Constants from '../common/Constants';
 import HeaderToolTip from './HeaderToolTip';
+import Loading from './Loading';
 export default class Report6 extends Component {
     constructor( props, context ) {
         super( props, context );
-        this.state = { recordsPerPage: 150, hierarchy: 'donor-agency', selectedYear: null, selectedDonor: "" };
+        this.state = { recordsPerPage: 150, hierarchy: 'donor-agency', selectedYear: null, selectedDonor: "", waiting: true};
         this.showFilters = this.showFilters.bind( this );
         this.showSettings = this.showSettings.bind( this );
         this.goToClickedPage = this.goToClickedPage.bind( this );
@@ -113,7 +114,10 @@ export default class Report6 extends Component {
 
     fetchReportData( requestData ) {
         var requestData = requestData || this.getRequestData();
-        this.props.actions.fetchReportData( requestData, '6' );
+        this.setState({waiting: true});
+        this.props.actions.fetchReportData( requestData, '6' ).then(function(){
+            this.setState({waiting: false});  
+        }.bind(this));    
     }
 
     onDonorFilterChange( e ) {
@@ -262,19 +266,16 @@ export default class Report6 extends Component {
         this.props.actions.downloadPdfFile(this.getRequestData(), '6');
     } 
     
-    getYears() {
-        let settings  = this.settingsWidget.toAPIFormat()
-        let calendarId = settings && settings['calendar-id'] ?  settings['calendar-id'] : this.settingsWidget.definitions.getDefaultCalendarId();
-        let calendar = this.props.years.filter(calendar => calendar.calendarId == calendarId)[0];
-        return calendar.years.slice();       
-    }
-    
     render() {
-        if ( this.props.mainReport && this.props.mainReport.page && this.settingsWidget && this.settingsWidget.definitions) {
-            var addedGroups = [];
-            var years = this.getYears();
+        var years = Utils.getYears(this.settingsWidget, this.props.years);
+        var addedGroups = [];           
             return (
                 <div>
+                    {this.state.waiting &&                      
+                        <Loading/>                
+                    } 
+                    {this.props.mainReport && this.props.mainReport.page && this.settingsWidget && this.settingsWidget.definitions &&                      
+                    <div>
                     <div id="filter-popup" ref="filterPopup"> </div>
                     <div id="amp-settings" ref="settingsPopup"> </div>
                     <div className="container-fluid indicator-nav no-padding">
@@ -308,7 +309,7 @@ export default class Report6 extends Component {
                             <div className="col-md-3">
                                 <div className="indicator-stat-wrapper">
                                     <div className="stat-value">{this.props.mainReport.summary[Constants.PLANNED_DISBURSEMENTS]}</div>
-                                    <div className="stat-label">{this.getLocalizedColumnName( Constants.PLANNED_DISBURSEMENTS )}</div>
+                                    <div className="stat-label">{this.props.translations['amp-gpi-reports:annual-planned-disbursements']}</div>
                                 </div>
                             </div>
                             <div className="col-md-3">
@@ -343,7 +344,7 @@ export default class Report6 extends Component {
                         </ul>
                     </div>
                     <div className="selection-legend">
-                        <div className="pull-right">{this.showSelectedDates()}</div>
+                        <div className="pull-right">{this.showSelectedDates().length > 0 ? this.props.translations['amp-gpi-reports:selected'] : ''} {this.showSelectedDates()}</div>
                     </div>
                     <div className="container-fluid no-padding">
                         <div className="dropdown">
@@ -354,11 +355,11 @@ export default class Report6 extends Component {
                                 )}
                             </select>
                         </div>
-                        <div className="pull-right"><h4>{this.props.translations['amp.gpi-reports:currency']} {this.props.mainReport.settings['currency-code']} 
+                        <div className="pull-right currency-label">{this.props.translations['amp.gpi-reports:currency']} {this.props.mainReport.settings['currency-code']} 
                         {(this.props.settings['number-divider'] != 1) &&
                             <span className="amount-units"> ({this.props.translations['amp-gpi-reports:amount-in-' + this.props.settings['number-divider']]})</span>                    
                         }
-                        </h4></div>
+                       </div>
 
                     </div>
 
@@ -375,7 +376,7 @@ export default class Report6 extends Component {
                                     column={Constants.ANNUAL_GOVERNMENT_BUDGET}
                                     headers={this.props.mainReport.page.headers}/>
                                      {this.getLocalizedColumnName( Constants.ANNUAL_GOVERNMENT_BUDGET )}</th>
-                                <th className="col-md-2">{this.getLocalizedColumnName( Constants.PLANNED_DISBURSEMENTS )}</th>
+                                <th className="col-md-2">{this.props.translations['amp-gpi-reports:annual-planned-disbursements']}</th>
                                 <th className="col-md-2"><HeaderToolTip
                                     column={Constants.PERCENTAGE_OF_PLANNED_ON_BUDGET}
                                     headers={this.props.mainReport.page.headers}/>{this.getLocalizedColumnName( Constants.PERCENTAGE_OF_PLANNED_ON_BUDGET )}</th>
@@ -393,6 +394,7 @@ export default class Report6 extends Component {
                             )}
                         </tbody>
                     </table>
+                    {this.props.mainReport.page.totalPageCount > 1 &&
                     <div >
                         <div className="row">
                             <div className="col-md-8 pull-right pagination-wrapper">
@@ -418,14 +420,14 @@ export default class Report6 extends Component {
                                 {this.displayPagingInfo()}
                             </div>
                         </div>
-                    </div>
-
-
+                    
+                      </div>
+                    }
+                 </div>
+                }
                 </div>
             );
-        }
-
-        return ( <div></div> );
+                
     }
 
 }

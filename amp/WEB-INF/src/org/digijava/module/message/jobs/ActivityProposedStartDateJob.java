@@ -19,9 +19,9 @@ import org.quartz.StatefulJob;
 import java.text.SimpleDateFormat;
 
 public class ActivityProposedStartDateJob extends ConnectionCleaningJob implements StatefulJob { 
-	
-	@Override 
-	public void executeInternal(JobExecutionContext context) throws JobExecutionException{		
+    
+    @Override 
+    public void executeInternal(JobExecutionContext context) throws JobExecutionException{      
 
         Date curDate=new Date();
         Date dateAfterDays=null;
@@ -40,7 +40,7 @@ public class ActivityProposedStartDateJob extends ConnectionCleaningJob implemen
 
         List<AmpActivityVersion> actList = ActivityUtil.getActivitiesWhichMatchDate("proposedStartDate", dateAfterDays);
         for (AmpActivityVersion act : actList) {
-        	new ActivityProposedStartDateTrigger(act);
+            new ActivityProposedStartDateTrigger(act);
         }
     }
 }

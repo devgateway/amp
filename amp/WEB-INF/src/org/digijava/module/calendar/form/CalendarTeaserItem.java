@@ -49,117 +49,117 @@ public class CalendarTeaserItem {
     private String endDate;
 
     public CalendarTeaserItem(Long id, String title, Date creationDate,
-			      String sourceUrl, String sourceName,
-			      Date itemStartDate, Date itemEndDate,
+                  String sourceUrl, String sourceName,
+                  Date itemStartDate, Date itemEndDate,
 String description) {
 
-	this.releaseDate = releaseDate;
-	this.sourceUrl = sourceUrl;
-	this.sourceName = sourceName;
-	this.title = title;
-	this.description = description;
-	this.itemStartDate = itemStartDate;
-	this.itemEndDate = itemEndDate;
-	this.id = id;
+    this.releaseDate = releaseDate;
+    this.sourceUrl = sourceUrl;
+    this.sourceName = sourceName;
+    this.title = title;
+    this.description = description;
+    this.itemStartDate = itemStartDate;
+    this.itemEndDate = itemEndDate;
+    this.id = id;
 
-	this.startDate = DgUtil.formatDateShortly(this.itemStartDate);
-	this.endDate = DgUtil.formatDateShortly(this.itemEndDate);
+    this.startDate = DgUtil.formatDateShortly(this.itemStartDate);
+    this.endDate = DgUtil.formatDateShortly(this.itemEndDate);
     }
 
     public String getDescription() {
-	return description;
+    return description;
     }
 
     public void setDescription(String description) {
-	this.description = description;
+    this.description = description;
     }
 
     public Long getId() {
-	return id;
+    return id;
     }
 
     public void setId(Long id) {
-	this.id = id;
+    this.id = id;
     }
 
     public String getSourceName() {
-	return sourceName;
+    return sourceName;
     }
 
     public void setSourceName(String sourceName) {
-	this.sourceName = sourceName;
+    this.sourceName = sourceName;
     }
 
     public String getSourceUrl() {
-	return sourceUrl;
+    return sourceUrl;
     }
 
     public void setSourceUrl(String sourceUrl) {
-	this.sourceUrl = sourceUrl;
+    this.sourceUrl = sourceUrl;
     }
 
     public String getTitle() {
-	String retVal = null;
-	if (title != null) {
-	    if (title.length() > numOfCharsInTitle) {
-		retVal = title.substring(0, numOfCharsInTitle);
-	    }
-	    else {
-		retVal = title;
-	    }
-	}
-	return retVal;
+    String retVal = null;
+    if (title != null) {
+        if (title.length() > numOfCharsInTitle) {
+        retVal = title.substring(0, numOfCharsInTitle);
+        }
+        else {
+        retVal = title;
+        }
+    }
+    return retVal;
     }
 
     public void setTitle(String title) {
-	this.title = title;
+    this.title = title;
     }
 
     public int getNumOfCharsInTitle() {
-	return numOfCharsInTitle;
+    return numOfCharsInTitle;
     }
 
     public void setNumOfCharsInTitle(int numOfCharsInTitle) {
-	this.numOfCharsInTitle = numOfCharsInTitle;
+    this.numOfCharsInTitle = numOfCharsInTitle;
     }
 
     public String getEndDate() {
-	return endDate;
+    return endDate;
     }
 
     public void setEndDate(String endDate) {
-	this.endDate = endDate;
+    this.endDate = endDate;
     }
 
     public Date getItemEndDate() {
-	return itemEndDate;
+    return itemEndDate;
     }
 
     public void setItemEndDate(Date itemEndDate) {
-	this.itemEndDate = itemEndDate;
+    this.itemEndDate = itemEndDate;
     }
 
     public Date getItemStartDate() {
-	return itemStartDate;
+    return itemStartDate;
     }
 
     public void setItemStartDate(Date itemStartDate) {
-	this.itemStartDate = itemStartDate;
+    this.itemStartDate = itemStartDate;
     }
 
     public Date getReleaseDate() {
-	return releaseDate;
+    return releaseDate;
     }
 
     public void setReleaseDate(Date releaseDate) {
-	this.releaseDate = releaseDate;
+    this.releaseDate = releaseDate;
     }
 
     public String getStartDate() {
-	return startDate;
+    return startDate;
     }
 
     public void setStartDate(String startDate) {
-	this.startDate = startDate;
+    this.startDate = startDate;
     }
 }

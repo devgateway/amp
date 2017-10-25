@@ -13,16 +13,16 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
 
-public class YearlyDiscrepancyFilter extends TilesAction	{
-	private static Logger logger = Logger.getLogger(YearlyDiscrepancyFilter.class);
-	
-	public ActionForward execute(ComponentContext context,
-								 ActionMapping mapping,
-								 ActionForm form,
-								 HttpServletRequest request,
-								 HttpServletResponse response)	
-								 throws IOException,ServletException 	{
-								 	
-		return null;					 	
-	}
-}	
+public class YearlyDiscrepancyFilter extends TilesAction    {
+    private static Logger logger = Logger.getLogger(YearlyDiscrepancyFilter.class);
+    
+    public ActionForward execute(ComponentContext context,
+                                 ActionMapping mapping,
+                                 ActionForm form,
+                                 HttpServletRequest request,
+                                 HttpServletResponse response)  
+                                 throws IOException,ServletException    {
+                                    
+        return null;                        
+    }
+}   

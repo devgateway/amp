@@ -17,23 +17,23 @@ import org.dgfoundation.amp.reports.xml.Report;
  *
  */
 public class SaikuReportXmlExporter implements SaikuReportExporter {
-	
-	@Override
-	public byte[] exportReport(GeneratedReport report, GeneratedReport dualReport) throws Exception {
-		// Convert the report into xml document
-		GeneratedReportToXmlConverter xmlConverter = new GeneratedReportToXmlConverter(report);
-		Report xmlReport = xmlConverter.convert();
-		JAXBContext jc = JAXBContext.newInstance(Report.class);
-		
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		
-		Marshaller m = jc.createMarshaller();
-		ObjectFactory xmlReportObjFactory = new ObjectFactory();
-		m.marshal(xmlReportObjFactory.createReport(xmlReport), baos);
-		
-		baos.flush();
-		baos.close();
-		
-		return baos.toByteArray();
-	}
+    
+    @Override
+    public byte[] exportReport(GeneratedReport report, GeneratedReport dualReport) throws Exception {
+        // Convert the report into xml document
+        GeneratedReportToXmlConverter xmlConverter = new GeneratedReportToXmlConverter(report);
+        Report xmlReport = xmlConverter.convert();
+        JAXBContext jc = JAXBContext.newInstance(Report.class);
+        
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        
+        Marshaller m = jc.createMarshaller();
+        ObjectFactory xmlReportObjFactory = new ObjectFactory();
+        m.marshal(xmlReportObjFactory.createReport(xmlReport), baos);
+        
+        baos.flush();
+        baos.close();
+        
+        return baos.toByteArray();
+    }
 }

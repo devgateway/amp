@@ -7,9 +7,9 @@
  * thus {@link org.dgfoundation.amp.nireports.schema.NiReportedEntity#getBehaviour()} governs it all. <br />
  * Being aggregated cells, {@link org.dgfoundation.amp.nireports.output.nicells.NiOutCell} and descendants lack many of the attributes of an ordinary disaggregated {@link org.dgfoundation.amp.nireports.output.nicells.CellVisitor}: 
  * <ul>
- * 	<li>they lack coordinates</li>
- * 	<li>they lack metadata</li>
- * 	<li>they lack ownerIds</li>
+ *  <li>they lack coordinates</li>
+ *  <li>they lack metadata</li>
+ *  <li>they lack ownerIds</li>
  * </ul>   
  */
 package org.dgfoundation.amp.nireports.output.nicells;

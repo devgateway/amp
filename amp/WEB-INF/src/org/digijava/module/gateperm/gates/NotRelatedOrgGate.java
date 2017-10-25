@@ -8,16 +8,16 @@ package org.digijava.module.gateperm.gates;
 
 public class NotRelatedOrgGate extends RelatedOrgGate {
 
-	public static final String DESCRIPTION = "Negates the RelatedOrgGate";
-	
-	@Override
-	public boolean logic() throws Exception {
-		return !super.logic();
-	}
-	
-	@Override
-	public String description() {
-		return DESCRIPTION;
-	}
+    public static final String DESCRIPTION = "Negates the RelatedOrgGate";
+    
+    @Override
+    public boolean logic() throws Exception {
+        return !super.logic();
+    }
+    
+    @Override
+    public String description() {
+        return DESCRIPTION;
+    }
 
 }

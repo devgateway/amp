@@ -14,21 +14,21 @@ import org.dgfoundation.amp.ar.FilterParam;
  */
 public class RawDatabaseViewFetcher extends DatabaseViewFetcher
 {
-	public RawDatabaseViewFetcher(String viewName, String condition, Connection connection, String... rawColumnNames)
-	{
-		super(viewName, condition, connection, rawColumnNames);
-	}
-	
-	@Override
-	public RsInfo fetchRows(ArrayList<FilterParam> params) throws SQLException
-	{
-		StringBuilder columns = new StringBuilder();
-		for(String columnName:columnNames){
-			if (columns.length() > 0)
-				columns.append(", ");
-			columns.append("\"" + columnName + "\"");
-		}
-		String query = "SELECT " + columns.toString() + " FROM " + this.viewName + " " + this.condition;
-		return SQLUtils.rawRunQuery(connection, query, params);
-	}
+    public RawDatabaseViewFetcher(String viewName, String condition, Connection connection, String... rawColumnNames)
+    {
+        super(viewName, condition, connection, rawColumnNames);
+    }
+    
+    @Override
+    public RsInfo fetchRows(ArrayList<FilterParam> params) throws SQLException
+    {
+        StringBuilder columns = new StringBuilder();
+        for(String columnName:columnNames){
+            if (columns.length() > 0)
+                columns.append(", ");
+            columns.append("\"" + columnName + "\"");
+        }
+        String query = "SELECT " + columns.toString() + " FROM " + this.viewName + " " + this.condition;
+        return SQLUtils.rawRunQuery(connection, query, params);
+    }
 }

@@ -13,19 +13,19 @@ import org.dgfoundation.amp.mondrian.MondrianETL;
  *
  */
 public class BooleanExpander extends IdsExpander {
-	
-	public BooleanExpander(String factColumnName) {
-		super(factColumnName);
-	}
-	
-	@Override public Set<Long> expandIds(List<Long> values) {
-		final Set<Long> res = new HashSet<>();
-		for(Long value:values) {
-			if (value == 1 || value == 2)
-				res.add(value);
-			else
-				res.add(MondrianETL.MONDRIAN_DUMMY_ID_FOR_ETL);
-		}
-		return res;
-	}
+    
+    public BooleanExpander(String factColumnName) {
+        super(factColumnName);
+    }
+    
+    @Override public Set<Long> expandIds(List<Long> values) {
+        final Set<Long> res = new HashSet<>();
+        for(Long value:values) {
+            if (value == 1 || value == 2)
+                res.add(value);
+            else
+                res.add(MondrianETL.MONDRIAN_DUMMY_ID_FOR_ETL);
+        }
+        return res;
+    }
 }

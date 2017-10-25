@@ -43,39 +43,39 @@ public class SaveCommonInstances
     private static Logger logger = Logger.getLogger(SaveCommonInstances.class);
 
     public ActionForward execute(ActionMapping mapping,
-				 ActionForm form,
-				 javax.servlet.http.HttpServletRequest request,
-				 javax.servlet.http.HttpServletResponse
-				 response) throws java.lang.Exception {
+                 ActionForm form,
+                 javax.servlet.http.HttpServletRequest request,
+                 javax.servlet.http.HttpServletResponse
+                 response) throws java.lang.Exception {
 
-	if (!DgUtil.isModuleInstanceAdministrator(request)) {
-	    return new ActionForward("/admin/index", true);
-	}
+    if (!DgUtil.isModuleInstanceAdministrator(request)) {
+        return new ActionForward("/admin/index", true);
+    }
 
-	CommonInstancesForm formBean = (CommonInstancesForm) form;
-	List commonInstances = new ArrayList();
+    CommonInstancesForm formBean = (CommonInstancesForm) form;
+    List commonInstances = new ArrayList();
 
-	Iterator iter = formBean.getCommonInstances().iterator();
-	while (iter.hasNext()) {
-	    CommonInstancesForm.CommonInstanceInfo info = (CommonInstancesForm.
-		  CommonInstanceInfo) iter.next();
+    Iterator iter = formBean.getCommonInstances().iterator();
+    while (iter.hasNext()) {
+        CommonInstancesForm.CommonInstanceInfo info = (CommonInstancesForm.
+          CommonInstanceInfo) iter.next();
 
-	    ModuleInstance moduleInstance = new ModuleInstance();
+        ModuleInstance moduleInstance = new ModuleInstance();
 
-	    moduleInstance.setSite(null);
-	    moduleInstance.setPermitted(true);
+        moduleInstance.setSite(null);
+        moduleInstance.setPermitted(true);
 
-	    moduleInstance.setInstanceName(info.getInstance());
-	    moduleInstance.setModuleInstanceId(info.getId());
-	    moduleInstance.setModuleName(info.getModule());
-	    moduleInstance.setNumberOfItemsInTeaser(info.getSelectedNumOfItemsInTeaser());
+        moduleInstance.setInstanceName(info.getInstance());
+        moduleInstance.setModuleInstanceId(info.getId());
+        moduleInstance.setModuleName(info.getModule());
+        moduleInstance.setNumberOfItemsInTeaser(info.getSelectedNumOfItemsInTeaser());
 
-	    commonInstances.add(moduleInstance);
-	}
+        commonInstances.add(moduleInstance);
+    }
 
-	DbUtil.editCommonInstances(commonInstances);
-	SiteCache.getInstance().load();
+    DbUtil.editCommonInstances(commonInstances);
+    SiteCache.getInstance().load();
 
-	return mapping.findForward("forward");
+    return mapping.findForward("forward");
     }
 }

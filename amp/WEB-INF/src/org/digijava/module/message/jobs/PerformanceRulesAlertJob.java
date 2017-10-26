@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.StringJoiner;
 
 import org.apache.log4j.Logger;
+import org.bouncycastle.crypto.tls.TlsUtils;
 import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
 import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
@@ -17,6 +18,8 @@ import org.dgfoundation.amp.onepager.util.FMUtil;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.PerformanceRuleMatcher;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
@@ -39,8 +42,11 @@ public class PerformanceRulesAlertJob extends ConnectionCleaningJob implements S
 
     @Override
     public void executeInternal(JobExecutionContext context) throws JobExecutionException {
+        // we populate mockrequest to be able to translate
+        AmpJobsUtil.populateRequest();
+        TLSUtils.forceLangCodeToSiteLangCode();
         logger.info("Running the performance rule alert job...");
-        
+
         if (isPerformanceAlertIssuesEnabled()) {
             List<Long> actIds = org.digijava.module.aim.util.ActivityUtil.getValidatedActivityIds();
             

@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
+import org.bouncycastle.crypto.tls.TlsUtils;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.PerformanceRuleMatcher;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.DisbursementsAfterActivityDateMatcherDefinition;
@@ -19,8 +20,10 @@ import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.NoUpd
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleAttributeOption;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleMatcherDefinition;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleMatcherPossibleValuesSupplier;
+import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.SiteDomain;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -282,22 +285,23 @@ public final class PerformanceRuleManager {
                 activitiesByPerformanceRuleMatcher.get(m).add(act);
             }
         });
-        
         String ampIdLabel = TranslatorWorker.translateText("AMP ID");
         String titleLabel = TranslatorWorker.translateText("Title");
-        
+
         //TODO get the url correctly
-        String url = getBaseUrl();
+        String url = SiteUtils.getBaseUrl();
         
         if (activitiesByPerformanceRuleMatcher.isEmpty()) {
-            sb.append("<br/>No activities with performance issues have been found.<br/>");
+            String noActivityWithRule = TranslatorWorker
+                    .translateText("No activities with performance issues have been found");
+            sb.append("<br/>" + noActivityWithRule + ".<br/>");
         }
         
-        activitiesByPerformanceRuleMatcher.entrySet().forEach(e -> {
+            activitiesByPerformanceRuleMatcher.entrySet().forEach(e -> {
             sb.append("<br/>");
             PerformanceRuleMatcher matcher = e.getKey();
-            sb.append(String.format("<b>%s (%s)</b>", 
-                    getPerformanceRuleMatcherMessage(matcher), matcher.getRule().getLevel().getLabel()));
+            sb.append(String.format("<b>%s (%s)</b>", getPerformanceRuleMatcherMessage(matcher),
+                    TranslatorWorker.translateText(matcher.getRule().getLevel().getLabel())));
             sb.append("<br/>");
             
             sb.append("<table border=1 cellpadding=5 cellspacing=0>");
@@ -317,21 +321,6 @@ public final class PerformanceRuleManager {
         return sb.toString();
     }
     
-    private String getBaseUrl() {
-        String url = "";
-        Set<SiteDomain> siteDomains = SiteUtils.getDefaultSite().getSiteDomains();
-        SiteDomain principalSiteDomain = siteDomains.stream()
-                .filter(SiteDomain::isDefaultDomain)
-                .findFirst()
-                .orElse(null);
-        
-        if (principalSiteDomain != null) {
-            url = principalSiteDomain.getSiteDomain();
-        }
-        
-        return url;
-    }
-
     public String getPerformanceRuleMatcherMessage(PerformanceRuleMatcher matcher) {
         String message = TranslatorWorker.translateText(matcher.getDefinition().getMessage());
         for (AmpPerformanceRuleAttribute attr : matcher.getRule().getAttributes()) {

@@ -420,7 +420,7 @@ public class GPIDataService {
         return getGPIDocuments(donorActList);
     }
 
-      /**
+    /**
      * Get filtered documents for specific donors and activities
      * 
      * @param documents

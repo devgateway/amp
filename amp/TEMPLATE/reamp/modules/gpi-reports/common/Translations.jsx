@@ -46,7 +46,7 @@ export const initialTranslations = {
         'amp.gpi-reports:indicator5a-description': 'Development co-operation is more predictable (annual predictability)',
         'amp.gpi-reports:indicator5b-description': 'Development co-operation is more predictable (medium-term predictability )',
         'amp.gpi-reports:indicator6-description': 'Aid is on budgets which are subject to parliamentary scrutiny',
-        'amp.gpi-reports:indicator9b-description': 'Effective institutions - developing countries’ systems  are strengthened and used (Use of developing country PFM and procurement systems)'     
+        'amp.gpi-reports:indicator9b-description': 'Effective institutions - developing countries’ systems  are strengthened and used (Use of developing country PFM and procurement systems)',
         'amp-gpi-reports:5b-column-legend':'(Yes = 1 / No = 0)',
         'amp-gpi-reports:5b-stat-label':'indicator 5b % at country level',
         'amp-gpi-reports:annual-planned-disbursements': 'Actual Planned Disbursements'

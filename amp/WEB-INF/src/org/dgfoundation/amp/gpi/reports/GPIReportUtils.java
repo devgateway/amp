@@ -14,6 +14,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
@@ -35,11 +36,15 @@ import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.gpi.GPIDataService;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
+import org.digijava.kernel.ampapi.endpoints.util.DateFilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
 import org.digijava.module.common.util.DateTimeUtil;
+import org.joda.time.DateTime;
 
 public class GPIReportUtils {
 
@@ -125,6 +130,7 @@ public class GPIReportUtils {
         applyAppovalStatusFilter(formParams, spec);
         removeDonorAgencyFilterRule(spec);
         applySettings(formParams, spec);
+        updateApprovalDateFilter(spec);
         clearYearRangeSettings(spec);
 
         GeneratedReport generatedReport = EndpointUtils.runReport(spec, ReportAreaImpl.class, null);
@@ -169,6 +175,7 @@ public class GPIReportUtils {
         
         applyAppovalStatusFilter(formParams, spec);
         applySettings(formParams, spec);
+        updateApprovalDateFilter(spec);
         clearYearRangeSettings(spec);
 
         GeneratedReport generatedReport = EndpointUtils.runReport(spec, ReportAreaImpl.class, null);
@@ -398,6 +405,52 @@ public class GPIReportUtils {
     }
     
     /**
+     * AMP-26444 When switching to ETH-CALENDAR, the selected year for approval
+     * date should be updated. Since filters are not working with other calendar
+     * than gregorian, we have to update explicitly the dates. E.g.: If in GPI
+     * was selected 2009 in ETH-Calendar, we have to update the approval date
+     * filter in Gregorian CAL 2009: "01/01/2009 to 31/12/2009" in ETH Calendar
+     * equals to "11/09/2016 to 10/09/2017" in GREG
+     * 
+     * @param formParams
+     * @param spec
+     */
+    public static void updateApprovalDateFilter(ReportSpecificationImpl spec) {
+        AmpReportFilters filters = (AmpReportFilters) spec.getFilters();
+
+        CalendarConverter calendarConverter = (spec.getSettings() != null && spec.getSettings().getCalendar() != null)
+                ? spec.getSettings().getCalendar() : AmpARFilter.getDefaultCalendar();
+
+        if (filters.getDateFilterRules() != null && FiscalCalendarUtil.isEthiopianCalendar(calendarConverter)) {
+            AmpFiscalCalendar ethCalendar = (AmpFiscalCalendar) calendarConverter;
+            Optional<ReportColumn> optApprovalColumn = filters.getDateFilterRules().keySet().stream()
+                    .filter(rc -> rc.getColumnName().equals(ColumnConstants.ACTUAL_APPROVAL_DATE)).findAny();
+            ReportColumn approvalColumn = optApprovalColumn.isPresent() ? optApprovalColumn.get()
+                    : new ReportColumn(ColumnConstants.ACTUAL_APPROVAL_DATE);
+            FilterRule gregFilterRule = filters.getDateFilterRules().get(approvalColumn);
+
+            if (gregFilterRule != null) {
+                Date gregStart = gregFilterRule.min == null ? null
+                        : DateTimeUtil.fromJulianNumberToDate(gregFilterRule.min);
+                Date gregEnd = gregFilterRule.max == null ? null
+                        : DateTimeUtil.fromJulianNumberToDate(gregFilterRule.max);
+
+                Date start = FiscalCalendarUtil.toGregorianDate(gregStart, ethCalendar);
+                Date end = FiscalCalendarUtil.toGregorianDate(gregEnd, ethCalendar);
+
+                try {
+                    FilterRule ethFilterRule = DateFilterUtils.getDatesRangeFilterRule(ElementType.DATE,
+                            DateTimeUtil.toJulianDayNumber(start), DateTimeUtil.toJulianDayNumber(end),
+                            DateTimeUtil.formatDateOrNull(start), DateTimeUtil.formatDateOrNull(end), false);
+                    filters.getDateFilterRules().put(approvalColumn, ethFilterRule);
+                } catch (AmpApiException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+    }
+
+    /**
      * Apply settings on report specifications
      * 
      * @param formParams
@@ -506,6 +559,30 @@ public class GPIReportUtils {
     }
     
     /**
+     * Get the converted year of the julidanDateNumber using the calendar from the report spec
+     * 
+     * @param spec
+     * @param julianDateNumber
+     * @return
+     */
+    public static int getYearOfCustomCalendar(ReportSpecification spec, long julianDateNumber) {
+        Date date = DateTimeUtil.fromJulianNumberToDate(Long.toString(julianDateNumber));
+        CalendarConverter calendarConverter = spec.getSettings().getCalendar();
+        if (calendarConverter != null && calendarConverter instanceof AmpFiscalCalendar) {
+            AmpFiscalCalendar calendar = (AmpFiscalCalendar) calendarConverter;
+            DateTime convDate = FiscalCalendarUtil.convertFromGregorianDate(date, calendar);
+            
+            return convDate.getYear();
+        }
+        
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        
+        return calendar.get(Calendar.YEAR);
+        
+    }
+    
+    /**
      * Get GPI Remarks for indicator 5a exports (pdf and xlsx)
      * 
      * @param report
@@ -568,6 +645,7 @@ public class GPIReportUtils {
         Long max = aprDateRule == null ? 0L : aprDateRule.max != null ? Long.parseLong(aprDateRule.max) : 0L;
         
         List<GPIRemark> remarks = GPIDataService.getGPIRemarks(GPIReportConstants.REPORT_1, ids, donorType, min, max);
+        
         return remarks;
     }
     

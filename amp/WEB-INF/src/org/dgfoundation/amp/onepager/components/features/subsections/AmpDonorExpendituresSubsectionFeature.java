@@ -16,6 +16,8 @@ import org.dgfoundation.amp.onepager.components.features.tables.AmpDonorCommitme
 import org.dgfoundation.amp.onepager.components.features.tables.AmpDonorExpendituresFormTableFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
+import org.dgfoundation.amp.onepager.events.FreezingUpdateEvent;
+import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.helper.Constants;
@@ -39,12 +41,12 @@ public class AmpDonorExpendituresSubsectionFeature extends
      * @throws Exception
      */
     public AmpDonorExpendituresSubsectionFeature(String id,
-            final IModel<AmpFunding> model, String fmName, int transactionType) throws Exception {
-        super(id, fmName, model,Constants.EXPENDITURE);
+            final IModel<AmpFunding> model, int transactionType) throws Exception {
+        super(id, AmpFundingItemFeaturePanel.FM_NAME_BY_TRANSACTION_TYPE.get(transactionType), model, transactionType);
         expTableFeature = new AmpDonorExpendituresFormTableFeature("expTableFeature", model, "Expenditures Table", transactionType);
         add(expTableFeature);
-        
-        AmpAjaxLinkField addCommit=new AmpAjaxLinkField("addExp","Add Expenditure","Add Expenditure") {
+
+        AmpAjaxLinkField addExp=new AmpAjaxLinkField("addExp","Add Expenditure","Add Expenditure") {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 AmpFundingDetail fd= new AmpFundingDetail();
@@ -63,7 +65,8 @@ public class AmpDonorExpendituresSubsectionFeature extends
                 target.appendJavaScript(QuarterInformationPanel.getJSUpdate(getSession()));
             }
         };
-        add(addCommit);
+        addExp.setAffectedByFreezing(false);
+        add(addExp);
     }
 
 }

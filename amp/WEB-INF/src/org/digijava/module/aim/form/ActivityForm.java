@@ -2,9 +2,13 @@ package org.digijava.module.aim.form;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.struts.action.ActionForm;
+import org.digijava.kernel.ampapi.endpoints.datafreeze.DataFreezeService;
 import org.digijava.module.admin.helper.AmpActivityFake;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 
@@ -18,8 +22,8 @@ public class ActivityForm extends ActionForm implements Serializable {
 
     private String sortByColumn;
 
-    private String keyword;
-    private String lastKeyword;
+    private String keyword = "";
+    private String lastKeyword = "";
     
     private int tempNumResults = 10;
     
@@ -37,6 +41,9 @@ public class ActivityForm extends ActionForm implements Serializable {
     private String sort;
     private String sortOrder;
     
+    private DataFreezeFilter dataFreezeFilter = DataFreezeFilter.ALL;
+    
+    private Set<Long> frozenActivityIds;
     /**
      * @return Returns the activityList.
      */
@@ -193,6 +200,29 @@ public class ActivityForm extends ActionForm implements Serializable {
     public void setSortOrder(String sortOrder) {
         this.sortOrder = sortOrder;
     }
+    
+    public String getDataFreezeFilter() {
+        return dataFreezeFilter.toString();
+    }
+    
+    public DataFreezeFilter getDataFreezeFilterEnum() {
+        return dataFreezeFilter;
+    }
 
+    public void setDataFreezeFilter(String dataFreezeFilter) {
+        this.dataFreezeFilter = DataFreezeFilter.valueOf(dataFreezeFilter);                
+    }
+
+    public Set<Long> getFrozenActivityIds() {
+        return frozenActivityIds;
+    }
+
+    public void setFrozenActivityIds(Set<Long> frozenActivityIds) {
+        this.frozenActivityIds = frozenActivityIds;
+    }
+
+    public enum DataFreezeFilter {
+          ALL, FROZEN, UNFROZEN
+      };
 
 }

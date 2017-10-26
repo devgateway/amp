@@ -46,7 +46,7 @@
 </script>
 
 
-
+<div class="admin-content">
 <!--  AMP Admin Logo -->
 <jsp:include page="teamPagesHeader.jsp"  />
 <!-- End of Logo -->
@@ -309,7 +309,7 @@
 														</digi:trn>
 													</b>
 												</td>
-												<td background="module/aim/images/corner-r.gif" height="17" width=17></td>
+												<td class="header-corner" height="17" width=17></td>
 											</tr>
 										</table>
 									</td>
@@ -319,21 +319,21 @@
 										<table cellPadding=5 cellspacing="1" width="100%" class="inside">
 											<tr>
 												<td class="inside">
-													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
+													<digi:img src="module/aim/images/arrow-014E86.gif" 	styleClass="list-item-image" width="15" height="10"/>
 														<digi:link href="/editOrgGroup.do?action=create" >
 															<digi:trn key="aim:addNewOrgGroup">Add Group</digi:trn></digi:link>
 												</td>
 											</tr>
 											<tr>
 												<td class="inside">
-													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
+													<digi:img src="module/aim/images/arrow-014E86.gif" 	styleClass="list-item-image" width="15" height="10"/>
 														<digi:link href="/organisationManager.do" >
 															<digi:trn key="aim:organizationManager">Organization Manager</digi:trn></digi:link>
 												</td>
 											</tr>
 											<tr>
 												<td class="inside">
-													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
+													<digi:img src="module/aim/images/arrow-014E86.gif" styleClass="list-item-image" 	width="15" height="10"/>
 													<digi:link href="/admin.do">
 													<digi:trn key="aim:AmpAdminHome">
 													Admin Home
@@ -356,3 +356,4 @@
 	</tr>
 </table>
 </digi:form>
+</div>

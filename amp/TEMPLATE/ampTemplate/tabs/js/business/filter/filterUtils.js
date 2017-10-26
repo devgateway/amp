@@ -106,24 +106,26 @@ define([ 'models/filter', 'collections/filters', 'translationManager', 'jquery' 
 			if (auxProperty.modelType === 'DATE-RANGE-VALUES') {
 				auxProperty.start =  auxProperty.start || "" ;
 				auxProperty.end =  auxProperty.end || "" ;	
-
-				var startDatePrefix = (auxProperty.start.length > 0 && auxProperty.end.length === 0) ? "from " : "";
-				var endDatePrefix = (auxProperty.start.length === 0 && auxProperty.end.length > 0) ? "until " : "";
+				var startDatePrefix = (auxProperty.start.length > 0 && auxProperty.end.length === 0) ? "From" : "";
+				var endDatePrefix = (auxProperty.start.length === 0 && auxProperty.end.length > 0) ? "Until" : "";
+				var trnName = "";
+				
 				if(auxProperty.start.length > 0){
-					filterObject.values.push({
-						id : auxProperty.start,
-						name : auxProperty.start,
-						trnName : TranslationManager.getTranslated(startDatePrefix) + app.TabsApp.filtersWidget.formatDate(auxProperty.start)
-					});
-				}
+					trnName = TranslationManager.getTranslated(startDatePrefix) + " " + app.TabsApp.filtersWidget.formatDate(auxProperty.start);					
+				}				
+				
 				if(auxProperty.end.length > 0){
-					filterObject.values.push({
-						id : auxProperty.end,
-						name : auxProperty.end,
-						trnName : TranslationManager.getTranslated(endDatePrefix) + app.TabsApp.filtersWidget.formatDate(auxProperty.end)
-
-					});	
-				}															 
+					if (auxProperty.start.length > 0) {
+						trnName += " - ";
+					}
+					trnName += TranslationManager.getTranslated(endDatePrefix) + " " + app.TabsApp.filtersWidget.formatDate(auxProperty.end);				
+				}
+				
+				filterObject.values.push({
+					id : auxProperty.start + auxProperty.end ,
+					name : auxProperty.start + auxProperty.end,
+					trnName : trnName
+				});
 			} else if (auxProperty.modelType === 'YEAR-SINGLE-VALUE') {
 				auxProperty.year = auxProperty.year || '';
 				filterObject.values.push({

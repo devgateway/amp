@@ -112,10 +112,11 @@
                             <td class="admin_box_label">
                               <c:set var="trnDataFreezeManager">
                                 <digi:trn invisibleLinks="true">Click here to access Data Freeze Manager</digi:trn>
-                              </c:set>
-                              <digi:link href="/dataFreezeManager.do" title="${trnDataFreezeManager}" >
+                              </c:set>                             
+                              <a href="/TEMPLATE/reamp/modules/admin/data-freeze-manager/index.html"
+                                 title="${trnDataFreezeManager}">
                                 <digi:trn>Data Freeze Manager</digi:trn>
-                              </digi:link>
+                              </a>
                             </td>
                           </tr>
                         </module:display>                        
@@ -418,52 +419,6 @@
                     <div class="admin_landing_page_box_cont">
                       <div class="admin_landing_page_box_title"><digi:trn>Import and export of data</digi:trn></div>
                       <table border="0" cellspacing="2" cellpadding="2">
-                        <module:display name="Code Chapitre Importer" parentModule="ADMINISTRATIVE SECTION">
-                          <tr>
-                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
-                            <td class="admin_box_label">
-                              <digi:link module="dataExchange" href="/importChapters.do" title="Import Chapters" >
-                                <digi:trn>Code Chapitre Importer</digi:trn>
-                              </digi:link>
-                            </td>
-                          </tr>
-                        </module:display>
-                        <module:display name="Budget Codes Exporter" parentModule="ADMINISTRATIVE SECTION">
-                          <tr>
-                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
-                            <td class="admin_box_label">
-                              <digi:link href="/export.do" title="" >
-                                <digi:trn>Budget Code Exporter</digi:trn>
-                              </digi:link>
-                            </td>
-                          </tr>
-                        </module:display>
-                        <module:display name="Activity Import Manager" parentModule="ADMINISTRATIVE SECTION">
-                          <tr>
-                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
-                            <td class="admin_box_label">
-                              <c:set var="trnDataExchangeExportTitle">
-                                <digi:trn invisibleLinks="true">Click here to view Data Import Manager</digi:trn>
-                              </c:set>
-                              <digi:link module="dataExchange"  href="/manageSource.do" title="${trnDataExchangeExportTitle}" >
-                                <digi:trn>Data Import Manager</digi:trn>
-                              </digi:link>
-                            </td>
-                          </tr>
-                        </module:display>
-                        <module:display name="Activity Export Manager" parentModule="ADMINISTRATIVE SECTION">
-                          <tr>
-                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
-                            <td class="admin_box_label">
-                              <c:set var="trnDataExchangeExportTitle">
-                                <digi:trn invisibleLinks="true">Click here to view Data Export Manager</digi:trn>
-                              </c:set>
-                              <digi:link module="dataExchange"  href="/exportWizard.do?method=prepear" title="${trnDataExchangeExportTitle}" >
-                                <digi:trn>Data Export Manager</digi:trn>
-                              </digi:link>
-                            </td>
-                          </tr>
-                        </module:display>
                         <module:display name="Structures Importer" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
                             <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
@@ -484,7 +439,7 @@
                             <c:set var="translation">
                               <digi:trn key="aim:clickToViewInterchangeResult" invisibleLinks="true">Click here to view Interchange Result</digi:trn>
                             </c:set>
-                            <digi:link module="dataExchange" href="/interchangeResult.do" title="${translation}">
+                            <digi:link href="/interchangeResult.do" title="${translation}">
                               <digi:trn key="aim:interchangeResult">Data Import Manager Results</digi:trn>
                             </digi:link>
                           </td>

@@ -25,7 +25,6 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 public class AmpFunding implements Serializable, Versionable, Cloneable {
     //IATI-check: not ignored!
     private static final long serialVersionUID = 1L;
-    @Interchangeable(fieldTitle="AMP Funding ID")
     private Long ampFundingId;
     @Interchangeable(fieldTitle="Donor Organization ID", pickIdOnly=true, importable=true)
     private AmpOrganisation ampDonorOrgId;
@@ -107,6 +106,10 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
                      discriminatorOption = CategoryConstants.MODE_OF_PAYMENT_KEY, importable=true, pickIdOnly=true)
     private AmpCategoryValue modeOfPayment;
     
+    @Interchangeable(fieldTitle="Concessionality Level", fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Concessionality Level", 
+             discriminatorOption = CategoryConstants.CONCESSIONALITY_LEVEL_KEY, importable=true, pickIdOnly=true)
+    private AmpCategoryValue concessionalityLevel;
+    
     @Interchangeable(fieldTitle="Loan Terms",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Loan Terms", importable=true)
     private String loanTerms;
     @Interchangeable(fieldTitle="Group Versioned Funding", importable=true)
@@ -162,6 +165,7 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
         ret.append("-Delegated Cooperation:" + this.delegatedCooperation);
         ret.append("-Delegated Partner:" + this.delegatedPartner);
         ret.append("-Mode Of Payment:" + (this.modeOfPayment != null ? this.modeOfPayment.getEncodedValue() : ""));
+        ret.append("-Concessionality Level:" + (this.concessionalityLevel != null ? this.concessionalityLevel.getEncodedValue() : ""));
         ret.append("-Funding Status:" + (this.fundingStatus != null ? this.fundingStatus.getEncodedValue() : ""));
         ret.append("-Funding Status:" + (this.financingId != null ? this.financingId : ""));
         if (this.agreement != null)
@@ -179,6 +183,18 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
             ret.append("-" + auxDetail.getExpCategory());
             ret.append("-" + auxDetail.getDisbursementOrderRejected());
             if (auxDetail.getRecipientOrg() != null) ret.append("- recipient " + auxDetail.getRecipientOrg().getAmpOrgId() + " with role of " + auxDetail.getRecipientRole().getAmpRoleId());
+        }
+
+        // Compare fields from AmpFundingMTEFProjection.
+        List<AmpFundingMTEFProjection> auxMTEFProjection = new ArrayList<AmpFundingMTEFProjection>(this
+                .mtefProjections);
+        Collections.sort(auxMTEFProjection, fundingMTEFProjectionComparator);
+        for (AmpFundingMTEFProjection projection : auxMTEFProjection) {
+            ret.append(projection.getTransactionType() + "-" + projection.getAmount() + "-"
+                    + projection.getAmpCurrencyId() + "-" + projection.getProjectionDate());
+            if (projection.getAdjustmentType() != null) {
+                ret.append("-" + projection.getAdjustmentType().getId());
+            }
         }
         return ret.toString();
     }
@@ -201,7 +217,12 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
             }
         }
     };
-    
+
+    private transient Comparator fundingMTEFProjectionComparator = Comparator.comparing(
+            AmpFundingMTEFProjection::getTransactionType)
+            .thenComparing(AmpFundingMTEFProjection::getAmount)
+            .thenComparing(AmpFundingMTEFProjection::getProjectionDate);
+
     @Override
     public Output getOutput() {
         Output out = new Output();
@@ -230,6 +251,9 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
         }
         if (this.modeOfPayment != null) {
             out.getOutputs().add(new Output(null, new String[]{"Mode of Payment"}, new Object[]{this.modeOfPayment.getValue()}));
+        }
+        if (this.concessionalityLevel != null) {
+            out.getOutputs().add(new Output(null, new String[]{"Concessionality Level"}, new Object[]{this.concessionalityLevel.getValue()}));
         }
         if (this.fundingStatus != null) {
             out.getOutputs().add(new Output(null, new String[]{"Funding Status"}, new Object[]{this.fundingStatus.getValue()}));
@@ -840,5 +864,13 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 
     public void setIndex(Integer index) {
         this.index = index;
+    }
+    
+    public void setConcessionalityLevel(AmpCategoryValue concessionalityLevel) {
+        this.concessionalityLevel = concessionalityLevel;
+    }
+    
+    public AmpCategoryValue getConcessionalityLevel() {
+        return this.concessionalityLevel;
     }
 }

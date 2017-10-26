@@ -24,6 +24,7 @@ public class UserLevelGate extends Gate {
     public static final String PARAM_EVERYONE = "everyone";
     public static final String PARAM_GUEST = "guest";
     public static final String PARAM_OWNER = "owner";
+    public static final String PARAM_EVERYONE_LOGGED_IN = "everyone_logged_in";
     public static final String PARAM_WORKSPACE_MANAGER = "worskpacemanager";
 
     public static final MetaInfo[] SCOPE_KEYS = new MetaInfo[] { GatePermConst.ScopeKeys.CURRENT_MEMBER };
@@ -82,8 +83,9 @@ public class UserLevelGate extends Gate {
         }
 
         Permissible permissible = (Permissible) scope.get(GatePermConst.ScopeKeys.PERMISSIBLE);
-        if (act == null && permissible instanceof AmpActivityVersion)
+        if (act == null && permissible instanceof AmpActivityVersion) {
             act = (AmpActivityVersion) scope.get(GatePermConst.ScopeKeys.PERMISSIBLE);
+        }
         boolean owner = false;
         logger.debug("Object is:" + permissible.toString());
         if (act != null && act.getActivityCreator() == null) {
@@ -96,15 +98,18 @@ public class UserLevelGate extends Gate {
             }
         }
         // if im the owner and this gate checks for ownership....
-        if (owner && PARAM_OWNER.equals(param))
+        if (owner && PARAM_OWNER.equals(param)) {
             return true;
+        }
 
         // if im not even a team member
         if (tm == null) {
-            if (PARAM_EVERYONE.equals(param)) {
+            return PARAM_EVERYONE.equals(param);
+        } else {
+            // if the user is a team member and its logged in we check for param
+            // logged in
+            if (PARAM_EVERYONE_LOGGED_IN.equals(param)) {
                 return true;
-            } else {
-                return false;
             }
         }
 
@@ -118,7 +123,7 @@ public class UserLevelGate extends Gate {
         // object i will have guest access
         if (!owner && !relatedOrgGate.logic() && PARAM_GUEST.equals(param)) {
             return true;
-        }   
+        }
 
         return false;
 

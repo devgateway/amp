@@ -153,6 +153,18 @@ public class QuartzJobUtils {
         }
     }
 
+    public static QuartzJobForm getJobByClassFullname(String classFullname) {
+        ArrayList<QuartzJobForm> jobsCol = getAllJobs();
+        if (jobsCol != null) {
+            for (QuartzJobForm job : jobsCol) {
+                if (classFullname.equals(job.getClassFullname())) {
+                    return job;
+                }
+            }
+        }
+        return null;
+    }
+
     public static QuartzJobForm getJobByName(String name) {
         ArrayList<QuartzJobForm> jobsCol = getAllJobs();
         if (jobsCol != null) {
@@ -250,6 +262,13 @@ public class QuartzJobUtils {
             sched.pauseTrigger(job.getTriggerGroupName(), job.getTriggerGroupName());
         } catch (Exception ex) {
             throw new RuntimeException(ex);
+        }
+    }
+
+    public static void runJobIfNotPaused(String name) {
+        QuartzJobForm job = getJobByName(name);
+        if (!job.isPaused()) {
+            runJob(job);
         }
     }
 

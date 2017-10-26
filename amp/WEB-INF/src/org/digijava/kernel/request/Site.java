@@ -52,8 +52,8 @@ extends Entity implements Serializable {
     private HashSet applInstances;
     private Set groups;
     private Locale defaultLanguage;
-    private Set siteDomains;
-    private java.util.Set userLanguages;
+    private Set<SiteDomain> siteDomains;
+    private java.util.Set<Locale> userLanguages;
     private java.util.Set countries;
     private java.util.Set translationLanguages;
     private Set moduleInstances;
@@ -175,11 +175,11 @@ extends Entity implements Serializable {
          this.groups = groups;
      }
 
-     public Set getSiteDomains() {
+     public Set<SiteDomain> getSiteDomains() {
          return siteDomains;
      }
 
-     public void setSiteDomains(Set siteDomains) {
+     public void setSiteDomains(Set<SiteDomain> siteDomains) {
          this.siteDomains = siteDomains;
      }
 
@@ -276,5 +276,17 @@ extends Entity implements Serializable {
              return 0L;
          return site.getId();
      }
+
+    /**
+     * returns the Locale from userLanguages set or default language
+     * @param locale The locale code to search.
+     * @return
+     */
+    public Locale getLocale(String locale) {
+        return this.userLanguages.stream()
+                .filter(x -> locale.equalsIgnoreCase(x.getCode()))
+                .findAny()
+                .orElse(this.defaultLanguage);
+    }
     
 }

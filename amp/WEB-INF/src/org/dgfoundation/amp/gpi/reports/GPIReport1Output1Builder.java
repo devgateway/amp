@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -17,7 +16,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.newreports.FilterRule;
@@ -191,7 +189,8 @@ public class GPIReport1Output1Builder extends GPIReportOutputBuilder {
 
         Map<GPIReportOutputColumn, String> row = new HashMap<>();
 
-        row.put(getColumns().get(GPIReportConstants.COLUMN_YEAR), gpiElement.getApprovalYear());
+        row.put(getColumns().get(GPIReportConstants.COLUMN_YEAR), String.valueOf(
+                        GPIReportUtils.getYearOfCustomCalendar(generatedReport.spec, gpiElement.getApprovalDate())));
         row.put(getColumns().get(ColumnConstants.DONOR_AGENCY), gpiElement.getDonorAgency());
         row.put(getColumns().get(ColumnConstants.PROJECT_TITLE), gpiElement.getProjectTitle());
         row.put(getColumns().get(GPIReportConstants.GPI_1_Q1),

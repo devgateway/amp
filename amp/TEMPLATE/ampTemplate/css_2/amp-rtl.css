@@ -83,6 +83,7 @@ div.trnpanel div.trn-row ul {
 
 .tri {
     -webkit-transform:scale(-1,1);
+    display: table-cell;
 }
 
 .tri b {
@@ -94,7 +95,7 @@ div.trnpanel div.trn-row ul {
 
 .triText {
     text-align: right;
-    display: table-cell;
+    display: block;
     -webkit-transform:scale(-1,1);
     width: inherit;
 }
@@ -158,4 +159,8 @@ div.trnpanel div.trn-row ul {
 
 .search-results {
     padding-top: 10px;
+}
+
+.tri-desktop {
+    background: url(/TEMPLATE/ampTemplate/img_2/ico_tri.gif) no-repeat 4px 1px!important;
 }

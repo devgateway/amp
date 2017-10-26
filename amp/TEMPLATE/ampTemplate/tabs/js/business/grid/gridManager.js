@@ -17,6 +17,15 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 		}
 	}
 
+	function getDirection() {
+        var rtlDirection = app.TabsApp.generalSettings.get('rtl-direction');
+        var direction = 'ltr';
+        if (rtlDirection) {
+            direction = 'rtl';
+        }
+        return direction;
+	}
+
 	function getURL(id) {
 		return '/rest/data/report/' + id + '/result/jqGrid';
 	}
@@ -98,6 +107,7 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 			var na = TranslationManager.getTranslated('N/A');
 			jQuery(grid).jqGrid(
 					{
+                        direction: getDirection(),
 						caption : false,
 						/* url : '/rest/data/report/' + id + '/result/', */
 						url : getURL(id),

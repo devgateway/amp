@@ -130,3 +130,24 @@ div.trnpanel div.trn-row ul {
     text-align: right;
     color: #376091;
 }
+
+.content-direction {
+    direction: rtl;
+}
+
+.legends-container {
+    float: left;
+}
+
+.ui-tabs .ui-tabs-nav li {
+    float: right;
+}
+
+.ui-pg-table {
+    direction: rtl;
+}
+
+.ui-paging-info {
+    direction: rtl!important;
+    text-align: left!important;
+}

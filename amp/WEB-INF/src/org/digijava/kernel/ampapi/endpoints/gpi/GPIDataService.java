@@ -370,7 +370,8 @@ public class GPIDataService {
      * @return
      */
     public static List<GPIRemark> getGPIRemarks(String indicatorCode, List<Long> donorIds, String donorType, Long from,
-            Long to) {        
+            Long to) {
+
         List<GPIRemark> remarks = new ArrayList<>();
         AmpDateFormatter dateFormatter = AmpDateFormatterFactory.getLocalizedFormatter(DateTimeUtil.getGlobalPattern());
         List<AmpGPINiDonorNotes> donorNotes = GPIUtils.getNotesByCode(indicatorCode);
@@ -418,6 +419,19 @@ public class GPIDataService {
         return getGPIDocuments(donorActList);
     }
 
+
+        
+        Predicate<AmpGPINiDonorNotes> fromDatePredicate = note -> from == null || from == 0 ? true : 
+            DateTimeUtil.toJulianDayNumber(note.getNotesDate()) >= from;
+            
+        Predicate<AmpGPINiDonorNotes> toDatePredicate = note -> to == null || to == 0 ? true : 
+            DateTimeUtil.toJulianDayNumber(note.getNotesDate()) <= to;
+        
+                        ? true
+                ? true : donorType == null || GPIReportConstants.HIERARCHY_DONOR_AGENCY.equals(donorType)   
+        filteredNotes = donorNotes.stream()
+                .sorted((n1, n2) -> n2.getNotesDate().compareTo(n1.getNotesDate()))
+    
     /**
      * Get filtered documents for specific donors and activities
      * 
@@ -457,8 +471,8 @@ public class GPIDataService {
             List<AmpGPINiSurveyResponseDocument> filteredDocuments) {
 
         List<GPIDonorActivityDocument> donorActivityDocuments = new ArrayList<>();
-        Map<Long, Map<Long, List<AmpGPINiSurveyResponseDocument>>> grouppedDocuments = new HashMap<Long, Map<Long, 
-                List<AmpGPINiSurveyResponseDocument>>>();
+        Map<Long, Map<Long, List<AmpGPINiSurveyResponseDocument>>> grouppedDocuments = 
+                new HashMap<Long, Map<Long, List<AmpGPINiSurveyResponseDocument>>>();
 
         filteredDocuments.forEach(doc -> {
             AmpOrgRole orgRole = doc.getSurveyResponse().getAmpGPINiSurvey().getAmpOrgRole();
@@ -574,9 +588,9 @@ public class GPIDataService {
 
         return 0;
     }
-    
     public static List<JsonBean> getDonors() {
         return GPIUtils.getDonors();
 
     }
+
 }

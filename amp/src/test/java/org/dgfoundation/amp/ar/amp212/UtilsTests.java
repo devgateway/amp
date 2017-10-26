@@ -1,13 +1,13 @@
 package org.dgfoundation.amp.ar.amp212;
 
+import static org.junit.Assert.assertEquals;
+
 import java.time.LocalDate;
 
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.nireports.amp.SelectedYearBlock;
-import org.dgfoundation.amp.testutils.AmpTestCase;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.junit.Test;
-
 
 /**
  * 
@@ -15,12 +15,8 @@ import org.junit.Test;
  * @author Constantin Dolghier
  *
  */
-public class UtilsTests extends AmpTestCase {
-    
-    public UtilsTests() {
-        super("utils tests");
-    }
-    
+public class UtilsTests {
+
     @Test
     public void testPreviousMonthMidYear() {
         SelectedYearBlock block = SelectedYearBlock.buildFor(2014, LocalDate.of(2015, 6, 3)); // 3rd of June 2015
@@ -42,10 +38,11 @@ public class UtilsTests extends AmpTestCase {
 
     @Test
     public void testKeepNDecimals() {
-        assertEquals(0.001, AlgoUtils.keepNDecimals(0.001, 3));
-        assertEquals(0.001, AlgoUtils.keepNDecimals(0.0013, 3));
-        assertEquals(0.001, AlgoUtils.keepNDecimals(0.0008, 3));
-        assertEquals(0.001, AlgoUtils.keepNDecimals(0.0000001, 3));
-        assertEquals(0.0001, AlgoUtils.keepNDecimals(0.0000001, 4));
+        double delta = 0.000001;
+        assertEquals(0.001, AlgoUtils.keepNDecimals(0.001, 3), delta);
+        assertEquals(0.001, AlgoUtils.keepNDecimals(0.0013, 3), delta);
+        assertEquals(0.001, AlgoUtils.keepNDecimals(0.0008, 3), delta);
+        assertEquals(0.001, AlgoUtils.keepNDecimals(0.0000001, 3), delta);
+        assertEquals(0.0001, AlgoUtils.keepNDecimals(0.0000001, 4), delta);
     }   
 }

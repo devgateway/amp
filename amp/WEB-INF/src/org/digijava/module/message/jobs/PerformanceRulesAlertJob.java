@@ -18,6 +18,7 @@ import org.dgfoundation.amp.onepager.util.SaveContext;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.PerformanceRuleMatcher;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -33,11 +34,11 @@ import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
 
 public class PerformanceRulesAlertJob extends ConnectionCleaningJob implements StatefulJob {
-
+    
     private static final String AMP_MODIFIER_USER_EMAIL = "amp_modifier@amp.org";
     private static final String AMP_MODIFIER_FIRST_NAME = "AMP";
     private static final String AMP_MODIFIER_LAST_NAME = "Activities Modifier";
-
+    
     private static Logger logger = Logger.getLogger(PerformanceRulesAlertJob.class);
     
     public static final String PERFORMANCE_RULE_FM_PATH = "Project Performance Alerts Manager";
@@ -47,8 +48,11 @@ public class PerformanceRulesAlertJob extends ConnectionCleaningJob implements S
 
     @Override
     public void executeInternal(JobExecutionContext context) throws JobExecutionException {
+        // we populate mockrequest to be able to translate
+        AmpJobsUtil.populateRequest();
+        TLSUtils.forceLangCodeToSiteLangCode();
         logger.info("Running the performance rule alert job...");
-        
+
         if (isPerformanceAlertIssuesEnabled()) {
             List<Long> actIds = org.digijava.module.aim.util.ActivityUtil.getValidatedActivityIds();
             
@@ -148,7 +152,6 @@ public class PerformanceRulesAlertJob extends ConnectionCleaningJob implements S
         
         AmpTeamMember modifyingMember = AmpBackgroundActivitiesUtil
                 .createActivityTeamMemberIfNeeded(oldActivity.getTeam(), user);
-        
         updatedActivity = ActivityUtil.saveActivityNewVersion(oldActivity, null, modifyingMember,
                 oldActivity.getDraft(), session, SaveContext.job());
             

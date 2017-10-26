@@ -7,18 +7,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
-
 import javax.jcr.Node;
 import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang.math.NumberUtils;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.gpi.reports.GPIDocument;
 import org.dgfoundation.amp.gpi.reports.GPIDonorActivityDocument;
 import org.dgfoundation.amp.gpi.reports.GPIRemark;
-import org.dgfoundation.amp.gpi.reports.GPIReportConstants;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;

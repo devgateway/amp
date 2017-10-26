@@ -318,7 +318,7 @@ export default class Report5b extends Component {
                             <div className="col-md-3">
                                 <div className="indicator-stat-wrapper">
                                     <div className="stat-value">{this.props.mainReport.summary[Constants.INDICATOR_5B]}</div>
-                                    <div className="stat-label">{this.getLocalizedColumnName( Constants.INDICATOR_5B )}</div>
+                                    <div className="stat-label">{this.props.translations['amp-gpi-reports:5b-stat-label']}</div>
                                 </div>
                             </div>                           
                         </div>
@@ -371,7 +371,7 @@ export default class Report5b extends Component {
                               <img src="images/blue_radio_on.png" className={this.state.hierarchy === 'donor-agency' ? 'donor-toggle' : 'donor-toggle donor-toggle-unselected'} onClick={this.toggleHierarchy} data-hierarchy="donor-agency" /><span className="donor-header-text" onClick={this.toggleHierarchy} data-hierarchy="donor-agency">{this.props.translations['amp.gpi-reports:donor-agency']}</span><br />                                                          <img src="images/blue_radio_on.png" className={this.state.hierarchy === 'donor-group' ? 'donor-toggle' : 'donor-toggle donor-toggle-unselected'} onClick={this.toggleHierarchy} data-hierarchy="donor-group" /><span className="donor-header-text" onClick={this.toggleHierarchy} data-hierarchy="donor-group">{this.props.translations['amp.gpi-reports:donor-group']}</span>
                               </th>
                               {MTEFYears.map(( year, i ) =>
-                                <th className="col-md-2" key = {i}><img className="table-icon" src="images/icon-information.svg"/>{year}</th>
+                                <th className="col-md-2" key = {i}><img className="table-icon" src="images/icon-information.svg"/>{year} <br/> {this.props.translations['amp-gpi-reports:5b-column-legend']}</th>
                               )}                          
                               <th className="col-md-2"><img className="table-icon" src="images/icon-value.svg"/>{this.props.translations['amp-gpi-reports:indicator-5b']}</th>
                             </tr>
@@ -392,7 +392,7 @@ export default class Report5b extends Component {
                         
                                          
                       <div>
-                        { this.props.mainReport.empty == false  &&
+                        { this.props.mainReport.empty == false  && this.props.mainReport.page.totalPageCount > 1 &&
                         <div className="row">
                             <div className="col-md-8 pull-right pagination-wrapper">
                                 {this.props.mainReport &&

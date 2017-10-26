@@ -379,7 +379,7 @@ public class ActivityUtil {
         Set<AmpCategoryValue> matchedLevels = new HashSet<>();
 
         if (ruleManager.canActivityContainPerformanceIssues(a)) {
-            matchedLevels = ruleManager.getPerformanceLevelsFromMatchers(ruleManager.matchActivity(a));
+            matchedLevels = ruleManager.getPerformanceLevelsFromIssues(ruleManager.findPerformanceIssues(a));
         }
 
         Set<AmpCategoryValue> activityLevels = ruleManager.getPerformanceIssuesFromActivity(a);

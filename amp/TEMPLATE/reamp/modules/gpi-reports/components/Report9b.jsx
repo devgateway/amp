@@ -372,7 +372,13 @@ export default class Report9b extends Component {
 
                     </div>
 
-                    <div className="section-divider"></div>
+                    
+                        <div className="container-fluid">
+                        <div className="row">
+                          <h4>{this.props.translations['amp.gpi-reports:indicator9b-description']}</h4>
+                        </div>
+                      </div>
+                     <div className="section-divider"></div>
                     <table className="table table-bordered table-striped indicator-table">
                         <thead>
                         <tr>

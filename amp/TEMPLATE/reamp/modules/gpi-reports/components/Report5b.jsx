@@ -7,6 +7,8 @@ import * as commonListsActions from '../actions/CommonListsActions';
 import * as startUp from '../actions/StartUpAction.jsx';
 import * as Constants from '../common/Constants';
 import Loading from './Loading';
+import { IMG_VALUE,INDICATOR_5B} from '../common/Constants';
+import HeaderToolTip from './HeaderToolTip';
 export default class Report5b extends Component {
     constructor( props, context ) {
         super( props, context );
@@ -365,9 +367,13 @@ export default class Report5b extends Component {
                               <img src="images/blue_radio_on.png" className={this.state.hierarchy === 'donor-agency' ? 'donor-toggle' : 'donor-toggle donor-toggle-unselected'} onClick={this.toggleHierarchy} data-hierarchy="donor-agency" /><span className="donor-header-text" onClick={this.toggleHierarchy} data-hierarchy="donor-agency">{this.props.translations['amp.gpi-reports:donor-agency']}</span><br />                                                          <img src="images/blue_radio_on.png" className={this.state.hierarchy === 'donor-group' ? 'donor-toggle' : 'donor-toggle donor-toggle-unselected'} onClick={this.toggleHierarchy} data-hierarchy="donor-group" /><span className="donor-header-text" onClick={this.toggleHierarchy} data-hierarchy="donor-group">{this.props.translations['amp.gpi-reports:donor-group']}</span>
                               </th>
                               {MTEFYears.map(( year, i ) =>
-                                <th className="col-md-2" key = {i}><img className="table-icon" src="images/icon-information.svg"/>{year} <br/> {this.props.translations['amp-gpi-reports:5b-column-legend']}</th>
+                                <th className="col-md-2" key = {i}>
+                                <HeaderToolTip column={year} headers={this.props.mainReport.page.headers}/>{year} <br/> {this.props.translations['amp-gpi-reports:5b-column-legend']}
+                                </th>
                               )}                          
-                              <th className="col-md-2"><img className="table-icon" src="images/icon-value.svg"/>{this.props.translations['amp-gpi-reports:indicator-5b']}</th>
+                              <th className="col-md-2">
+                              <HeaderToolTip column={INDICATOR_5B} imgType={IMG_VALUE} headers={this.props.mainReport.page.headers}/>
+                              {this.props.translations['amp-gpi-reports:indicator-5b']}</th>
                             </tr>
                           </thead>
                           <tbody>                     

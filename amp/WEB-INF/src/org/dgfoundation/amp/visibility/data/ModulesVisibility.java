@@ -31,6 +31,11 @@ public class ModulesVisibility extends DataVisibility implements FMSettings {
     }
 
     @Override
+    public Set<String> getSettings() {
+        return getAllData();
+    }
+
+    @Override
     protected List<String> getVisibleByDefault() {
         return noDataList;
     }

@@ -1,16 +1,11 @@
 package org.dgfoundation.amp.reports.xml;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.json.JSONObject;
-import org.json.XML;
 
 public class XmlReportUtil {
 
@@ -68,6 +63,33 @@ public class XmlReportUtil {
             }
     
             reportConfig.set(EPConstants.SETTINGS, settings);
+        }
+        
+        if (reportParameter.isSummary() != null) {
+            reportConfig.set(EPConstants.SUMMARY, reportParameter.isSummary());
+            reportConfig.set(EPConstants.GROUPING_OPTION, "");
+            
+            if (reportParameter.getGroupingOption() != null) {
+                reportConfig.set(EPConstants.GROUPING_OPTION, reportParameter.getGroupingOption().value());
+            }
+        }
+        
+        if (reportParameter.getFilters() != null) {
+            Map<String, Object> filters = new HashMap<>();
+            
+            for (Filter f : reportParameter.getFilters().getFilter()) {
+                if (f.getStart() != null || f.getEnd() != null) {
+                    Map<String, Object> dateObject = new HashMap<>();
+                    dateObject.put("start", f.getStart());
+                    dateObject.put("end", f.getEnd());
+                    
+                    filters.put(f.getName(), dateObject);
+                } else if (f.getValues() != null && f.getValues().getValue() != null) {
+                    filters.put(f.getName(), f.getValues().getValue());
+                }
+            }
+            
+            reportConfig.set(EPConstants.FILTERS, filters);
         }
 
         return reportConfig;

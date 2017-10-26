@@ -85,60 +85,60 @@ L.drawLocal = {
 			// #TODO: this should be reorganized where actions are nested in actions
 			// ex: actions.undo  or actions.cancel
 			actions: {
-				title: 'Cancel drawing',
-				text: 'Cancel'
+				title: TranslationManager.getTranslated('Cancel drawing'),
+				text: TranslationManager.getTranslated('Cancel')
 			},
 			finish: {
-				title: 'Finish drawing',
-				text: 'Finish'
+				title: TranslationManager.getTranslated('Finish drawing'),
+				text: TranslationManager.getTranslated('Finish')
 			},
 			undo: {
-				title: 'Delete last point drawn',
-				text: 'Delete last point'
+				title: TranslationManager.getTranslated('Delete last point drawn'),
+				text: TranslationManager.getTranslated('Delete last point')
 			},
 			buttons: {
-				polyline: 'Draw a polyline',
-				polygon: 'Draw a polygon',
-				rectangle: 'Draw a rectangle',
-				circle: 'Draw a circle',
-				marker: 'Draw a marker'
+				polyline: TranslationManager.getTranslated('Draw a polyline'),
+				polygon: TranslationManager.getTranslated('Draw a polygon'),
+				rectangle: TranslationManager.getTranslated('Draw a rectangle'),
+				circle: TranslationManager.getTranslated('Draw a circle'),
+				marker: TranslationManager.getTranslated('Draw a marker')
 			}
 		},
 		handlers: {
 			circle: {
 				tooltip: {
-					start: 'Click and drag to draw circle.'
+					start: TranslationManager.getTranslated('Click and drag to draw circle.')
 				},
-				radius: 'Radius'
+				radius: TranslationManager.getTranslated('Radius')
 			},
 			marker: {
 				tooltip: {
-					start: 'Click map to place marker.'
+					start: TranslationManager.getTranslated('Click map to place marker.')
 				}
 			},
 			polygon: {
 				tooltip: {
-					start: 'Click to start drawing shape.',
-					cont: 'Click to continue drawing shape.',
-					end: 'Click first point to close this shape.'
+					start: TranslationManager.getTranslated('Click to start drawing shape.'),
+					cont: TranslationManager.getTranslated('Click to continue drawing shape.'),
+					end: TranslationManager.getTranslated('Click first point to close this shape.')
 				}
 			},
 			polyline: {
-				error: '<strong>Error:</strong> shape edges cannot cross!',
+				error: '<strong>Error:</strong>' + TranslationManager.getTranslated('shape edges cannot cross!'),
 				tooltip: {
-					start: 'Click to start drawing line.',
-					cont: 'Click to continue drawing line.',
-					end: 'Click last point to finish line.'
+					start: TranslationManager.getTranslated('Click to start drawing line.'),
+					cont: TranslationManager.getTranslated('Click to continue drawing line.'),
+					end: TranslationManager.getTranslated('Click last point to finish line.')
 				}
 			},
 			rectangle: {
 				tooltip: {
-					start: 'Click and drag to draw rectangle.'
+					start: TranslationManager.getTranslated('Click and drag to draw rectangle.')
 				}
 			},
 			simpleshape: {
 				tooltip: {
-					end: 'Release mouse to finish drawing.'
+					end: TranslationManager.getTranslated('Release mouse to finish drawing.')
 				}
 			}
 		}
@@ -147,35 +147,35 @@ L.drawLocal = {
 		toolbar: {
 			actions: {
 				save: {
-					title: 'Save changes.',
-					text: 'Save'
+					title: TranslationManager.getTranslated('Save changes.'),
+					text: TranslationManager.getTranslated('Save')
 				},
 				cancel: {
-					title: 'Cancel editing, discards all changes.',
-					text: 'Cancel'
+					title: TranslationManager.getTranslated('Cancel editing, discards all changes.'),
+					text: TranslationManager.getTranslated('Cancel')
 				},
 				clearAll:{
-					title: 'clear all layers.',
-					text: 'Clear All'
+					title: TranslationManager.getTranslated('clear all layers.'),
+					text: TranslationManager.getTranslated('Clear All')
 				}
 			},
 			buttons: {
-				edit: 'Edit layers.',
-				editDisabled: 'No layers to edit.',
-				remove: 'Delete layers.',
-				removeDisabled: 'No layers to delete.'
+				edit: TranslationManager.getTranslated('Edit layers.'),
+				editDisabled: TranslationManager.getTranslated('No layers to edit.'),
+				remove: TranslationManager.getTranslated('Delete layers.'),
+				removeDisabled: TranslationManager.getTranslated('No layers to delete.')
 			}
 		},
 		handlers: {
 			edit: {
 				tooltip: {
-					text: 'Drag handles, or marker to edit feature.',
-					subtext: 'Click cancel to undo changes.'
+					text: TranslationManager.getTranslated('Drag handles, or marker to edit feature.'),
+					subtext: TranslationManager.getTranslated('Click cancel to undo changes.')
 				}
 			},
 			remove: {
 				tooltip: {
-					text: 'Click on a feature to remove'
+					text: TranslationManager.getTranslated('Click on a feature to remove')
 				}
 			}
 		}

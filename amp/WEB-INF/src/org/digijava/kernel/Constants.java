@@ -22,6 +22,8 @@
 
 package org.digijava.kernel;
 
+import java.io.File;
+
 /**
  * Digi Constant class
  * @author Mikheil Kapanadze
@@ -97,6 +99,8 @@ public class Constants
   public static final String NAVIGATION_LANGUAGE =
       "org.digijava.kernel.navigation_language";
 
+    public static final String FORCED_LANGUAGE = "org.digijava.kernel.request_forced_language";
+  
   public static final String ACTION_ROLES_PROCESS_RESULT =
       "org.digijava.kernel.action_roles_process_result";
 
@@ -154,4 +158,18 @@ public class Constants
 
   public static final String ACTION_INFORMATION = "org.digijava.kernel.action_information";
 
+    private static final String AMP_HOME_ENV_VAR = "AMP_HOME";
+    public static final String AMP_HOME = determineAmpHome();
+
+    public static final File AMP_OFFLINE_RELEASES = new File(AMP_HOME, "amp-offline-releases");
+
+    private static String determineAmpHome() {
+        if (System.getProperties().contains(AMP_HOME_ENV_VAR)) {
+            return System.getProperty(AMP_HOME_ENV_VAR);
+        }
+        if (System.getenv(AMP_HOME_ENV_VAR) != null) {
+            return System.getenv(AMP_HOME_ENV_VAR);
+        }
+        return new File(System.getProperty("user.home"), ".amp").getAbsolutePath();
+    }
 }

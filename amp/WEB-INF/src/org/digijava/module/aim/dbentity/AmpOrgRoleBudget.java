@@ -10,7 +10,6 @@ public class AmpOrgRoleBudget implements Serializable,Comparable<AmpOrgRoleBudge
     private Long ampOrgRoleBudgetId ;
     @Interchangeable(fieldTitle="Budget code")
     private String budgetCode ;
-    @Interchangeable(fieldTitle="AMP Organization Role", pickIdOnly=true)
     private AmpOrgRole ampOrgRole;
     
     public Long getAmpOrgRoleBudgetId() {

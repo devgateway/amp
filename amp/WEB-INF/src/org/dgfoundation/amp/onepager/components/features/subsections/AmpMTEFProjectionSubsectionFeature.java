@@ -35,8 +35,9 @@ public class AmpMTEFProjectionSubsectionFeature extends AmpSubsectionFeatureFund
      * @param model
      * @throws Exception
      */
-    public AmpMTEFProjectionSubsectionFeature(String id, final IModel<AmpFunding> model, String fmName) throws Exception {
-        super(id, fmName, model, Constants.MTEFPROJECTION);
+    public AmpMTEFProjectionSubsectionFeature(String id, final IModel<AmpFunding> model) throws Exception {
+        super(id, AmpFundingItemFeaturePanel.FM_NAME_BY_TRANSACTION_TYPE.get(Constants.MTEFPROJECTION), model,
+                Constants.MTEFPROJECTION);
         
         mtefTableFeature = new AmpMTEFProjectionFormTableFeature("mtefTableFeature", "MTEF Projections Table", model);
         add(mtefTableFeature);

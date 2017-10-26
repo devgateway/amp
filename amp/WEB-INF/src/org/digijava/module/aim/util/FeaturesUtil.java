@@ -631,11 +631,6 @@ public class FeaturesUtil {
         }
     }
 
-    public static int getEsriMapsRegionsHighlightSelectedColourScheme()
-    {
-        return Integer.valueOf(getGlobalSettingValue(GlobalSettingsConstants.ESRI_REGIONS_HIGHLIGHT_COLOUR_SCHEME));
-    }
-    
     public static AmpGlobalSettings getGlobalSetting(String globalSettingName) {
         
         AmpGlobalSettings ampGlobalSettings = null;

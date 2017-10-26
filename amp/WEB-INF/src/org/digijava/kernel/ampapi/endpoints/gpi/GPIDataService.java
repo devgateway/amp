@@ -370,10 +370,8 @@ public class GPIDataService {
      * @return
      */
     public static List<GPIRemark> getGPIRemarks(String indicatorCode, List<Long> donorIds, String donorType, Long from,
-            Long to) {
-
+            Long to) {        
         List<GPIRemark> remarks = new ArrayList<>();
-
         AmpDateFormatter dateFormatter = AmpDateFormatterFactory.getLocalizedFormatter(DateTimeUtil.getGlobalPattern());
         List<AmpGPINiDonorNotes> donorNotes = GPIUtils.getNotesByCode(indicatorCode);
         List<AmpGPINiDonorNotes> filteredNotes = GPIUtils.filterNotes(donorNotes, donorIds, donorType, from, to);
@@ -420,7 +418,7 @@ public class GPIDataService {
         return getGPIDocuments(donorActList);
     }
 
-      /**
+    /**
      * Get filtered documents for specific donors and activities
      * 
      * @param documents

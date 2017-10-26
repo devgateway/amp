@@ -151,3 +151,11 @@ div.trnpanel div.trn-row ul {
     direction: rtl!important;
     text-align: left!important;
 }
+
+.search_results_header {
+    float: right;
+}
+
+.search-results {
+    padding-top: 10px;
+}

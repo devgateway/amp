@@ -23,7 +23,6 @@ public class ColumnConstants {
     public static final String ACTORS = "Actors";
     public static final String ACTUAL_APPROVAL_DATE = "Actual Approval Date";
     public static final String ACTUAL_COMPLETION_DATE = "Actual Completion Date";
-    public static final String CURRENT_COMPLETION_DATE = "Current Completion Date";
     public static final String ACTUAL_START_DATE = "Actual Start Date";
     public static final String AGE_OF_PROJECT_MONTHS = "Age of Project (Months)";
     public static final String AGREEMENT_CLOSE_DATE = "Agreement Close Date";
@@ -62,6 +61,7 @@ public class ColumnConstants {
     public static final String COMPONENT_NAME = "Component Name";
     public static final String COMPONENT_TYPE = "Component Type";
     public static final String COMPUTED_YEAR = "Computed Year";
+    public static final String CONCESSIONALITY_LEVEL = "Concessionality Level";
     public static final String CONTRACTING_AGENCY = "Contracting Agency";
     public static final String CONTRACTING_AGENCY_ACRONYM = "Contracting Agency Acronym";
     public static final String CONTRACTING_AGENCY_DEPARTMENT_DIVISION = "Contracting Agency Department/Division";
@@ -110,9 +110,17 @@ public class ColumnConstants {
     public static final String FY = "FY";
     public static final String GOVERNMENT_AGREEMENT_NUMBER = "Government Agreement Number";
     public static final String GOVERNMENT_APPROVAL_PROCEDURES = "Government Approval Procedures";
+    public static final String GPI_1_Q6 = "Q6";
+    public static final String GPI_1_Q6_DESCRIPTION = "Q6 Description";
+    public static final String GPI_1_Q7 = "Q7";
+    public static final String GPI_1_Q8 = "Q8";
+    public static final String GPI_1_Q9 = "Q9";
+    public static final String GPI_1_Q10 = "Q10";
+    public static final String GPI_1_Q10_DESCRIPTION = "Q10 Description";
 
     public static final String GRAND_TOTAL_COST = "Grand Total Cost";
     public static final String GRACE_PERIOD = "Loan Grace Period";
+    public static final String HAS_EXECUTING_AGENCY = "Has Executing Agency";
     public static final String IMPLEMENTATION_LEVEL = "Implementation Level";
     public static final String IMPLEMENTATION_LOCATION = "Implementation Location";
     public static final String IMPLEMENTING_AGENCY = "Implementing Agency";

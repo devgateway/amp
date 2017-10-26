@@ -20,6 +20,7 @@ import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
@@ -65,6 +66,7 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.AmpARFilterHelper;
 import org.digijava.module.aim.logic.Logic;
+import org.digijava.module.aim.startup.AMPStartupListener;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
@@ -107,12 +109,25 @@ public class AmpARFilter extends PropertyListable {
     public final static String SDF_OUT_FORMAT_STRING = "yyyy-MM-dd";
     public final static String SDF_IN_FORMAT_STRING = "dd/MM/yyyy";
     
+    public static final Set<String> DATE_PROPERTIES = new HashSet<>(Arrays.asList("fromDate", "toDate", 
+            "fromActivityActualCompletionDate", "toActivityActualCompletionDate",
+            "fromActivityFinalContractingDate", "toActivityFinalContractingDate",
+            "fromActivityStartDate", "toActivityStartDate",
+            "fromProposedStartDate", "toProposedStartDate",
+            "fromEffectiveFundingDate", "toEffectiveFundingDate",
+            "fromFundingClosingDate", "toFundingClosingDate",
+            "fromProposedApprovalDate", "toProposedApprovalDate"));
+    
     public final static Long TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES = -997L;
     
     /**
      * holding my nose while writing this. This id should behave like "a pledge report without any filters whatsoever"
      */
     public final static long DUMMY_SUPPLEMENTARY_PLEDGE_FETCHING_REPORT_ID = -996L;
+    
+    public static final Set<String> SETTINGS_PROPERTIES = new HashSet<>(Arrays.asList("amountinthousand", "calendarType", 
+            "customusegroupings", "decimalseparator", "groupingsize", "maximumFractionDigits", "renderEndYear", 
+            "renderStartYear", "sortByAsc", "sortBy"));
     
     public final static Map<String, Integer> activityApprovalStatus = Collections.unmodifiableMap(new HashMap<String, Integer>(){{
         this.put("Existing Unvalidated", 0);
@@ -383,11 +398,12 @@ public class AmpARFilter extends PropertyListable {
     private Set<AmpCategoryValue> typeOfAssistance = null;
     private Set<AmpCategoryValue> modeOfPayment = null;
     private Set<AmpCategoryValue> activityPledgesTitle = null;
-    
+    private Set<AmpCategoryValue> concessionalityLevel = null;
+
     private Set<AmpCategoryValue> expenditureClass = null;
 
     private Set<AmpCategoryValue> performanceAlertLevel = null;
-    
+
     // private Long ampModalityId=null;
 
     private AmpCurrency currency = null;
@@ -444,8 +460,8 @@ public class AmpARFilter extends PropertyListable {
     private String dynIssueFilterOperator;
     private String dynIssueFilterXPeriod;
 
-    private String fromActivityActualCompletionDate; // view: v_actual_completion_date, column name: Current Completion Date
-    private String toActivityActualCompletionDate;  // view: v_actual_completion_date, column name: Current Completion Date
+    private String fromActivityActualCompletionDate;
+    private String toActivityActualCompletionDate;
     private String dynActivityActualCompletionFilterCurrentPeriod;
     private Integer dynActivityActualCompletionFilterAmount;
     private String dynActivityActualCompletionFilterOperator;
@@ -972,7 +988,7 @@ public class AmpARFilter extends PropertyListable {
         return getDefaultYear(getEffectiveSettings(), current, false);
     }
     
-    protected static Integer getDefaultYear(AmpApplicationSettings settings, AmpFiscalCalendar current, 
+    public static Integer getDefaultYear(AmpApplicationSettings settings, AmpFiscalCalendar current,
             boolean startYear) {
         
         // 1st default priority are Workspace Settings
@@ -1461,7 +1477,10 @@ public class AmpARFilter extends PropertyListable {
         String MODE_OF_PAYMENT_FILTER = "SELECT amp_activity_id FROM v_mode_of_payment WHERE mode_of_payment_code IN ("
             + Util.toCSString(modeOfPayment) + ")";
         
-        String ACTIVITY_PLEDGES_TITLE = "SELECT amp_activity_id FROM v_activity_pledges_title WHERE title_id IN (" 
+        String CONCESSIONALITY_LEVEL_FILTER = "SELECT amp_activity_id FROM v_concessionality_level WHERE id IN ("
+                + Util.toCSString(concessionalityLevel) + ")";
+
+        String ACTIVITY_PLEDGES_TITLE = "SELECT amp_activity_id FROM v_activity_pledges_title WHERE title_id IN ("
             + Util.toCSString(activityPledgesTitle) + ")";
 
         String PROJECT_CATEGORY_FILTER = "SELECT amp_activity_id FROM v_project_category WHERE amp_category_id IN ("
@@ -1507,7 +1526,7 @@ public class AmpARFilter extends PropertyListable {
             + Util.toCSStringForIN(responsibleorg) + ")";
 
         String COMPONENT_FUNDING_ORGANIZATION_FILTER = " SELECT v.amp_activity_id FROM v_component_funding_organization_name v  WHERE v.org_id IN ("
-                + Util.toCSStringForIN(componentFunding) + ")";
+            + Util.toCSStringForIN(componentFunding) + ")";
 
         String COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION_FILTER = " SELECT v.amp_activity_id FROM v_component_second_responsible_organization_name v  WHERE v.org_id IN ("
             + Util.toCSStringForIN(componentSecondResponsible) + ")";
@@ -1573,7 +1592,8 @@ public class AmpARFilter extends PropertyListable {
             String LUCENE_ID_LIST = "";
             searchMode = params.getLuceneSearchModeParam();
 
-            Document[] docs = LuceneUtil.search(params.getLuceneRealPath() + LuceneUtil.ACTIVITY_INDEX_DIRECTORY, "all", indexText, searchMode);
+            String index = AMPStartupListener.SERVLET_CONTEXT_ROOT_REAL_PATH + LuceneUtil.ACTIVITY_INDEX_DIRECTORY;
+            Document[] docs = LuceneUtil.search(index, "all", indexText, searchMode);
             logger.info("New lucene search !");
 
             for (Document doc : docs) {
@@ -1678,7 +1698,10 @@ public class AmpARFilter extends PropertyListable {
         if (modeOfPayment != null && modeOfPayment.size() > 0)
             queryAppend(MODE_OF_PAYMENT_FILTER);
         
-        
+        if (concessionalityLevel != null && concessionalityLevel.size() > 0) {
+            queryAppend(CONCESSIONALITY_LEVEL_FILTER);
+        }
+
         if (projectCategory != null && projectCategory.size() > 0)
             queryAppend(PROJECT_CATEGORY_FILTER);
         
@@ -1725,7 +1748,7 @@ public class AmpARFilter extends PropertyListable {
         if (componentSecondResponsible != null && componentSecondResponsible.size() > 0) {
             queryAppend(COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION_FILTER);
         }
-        
+
         if (actualAppYear!=null && actualAppYear!=-1) {
             queryAppend(ACTUAL_APPROVAL_YEAR_FILTER);
         }
@@ -2669,6 +2692,14 @@ public class AmpARFilter extends PropertyListable {
 
     public void setModeOfPayment(Set<AmpCategoryValue> modeOfPayment) {
         this.modeOfPayment = modeOfPayment;
+    }
+
+    public Set<AmpCategoryValue> getConcessionalityLevel() {
+        return concessionalityLevel;
+    }
+
+    public void setConcessionalityLevel(Set<AmpCategoryValue> concessionalityLevel) {
+        this.concessionalityLevel = concessionalityLevel;
     }
 
     public Set<AmpCategoryValue> getActivityPledgesTitle() {

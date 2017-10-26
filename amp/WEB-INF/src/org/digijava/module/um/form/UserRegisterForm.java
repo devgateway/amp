@@ -73,6 +73,7 @@ public class UserRegisterForm
     private String[] contentSelectedLanguages;
     private String organizationTypeOther;
     private Long selectedOrganizationId;
+    private boolean nationalCoordinator = false;
     private HashMap<String,String> errors=null;
 //FocusBoxes
     private String[] selectedItems = {};
@@ -84,6 +85,7 @@ public class UserRegisterForm
     private Collection topicitems;
 
     private Long siteId;
+    private boolean exemptFromDataFreezing;
     
     public String[] getSelectedItems() {
         return this.selectedItems;
@@ -494,6 +496,14 @@ public class UserRegisterForm
         this.selectedOrganizationId = selectedOrganizationId;
     }
 
+    public boolean isExemptFromDataFreezing() {
+        return exemptFromDataFreezing;
+    }
+
+    public void setExemptFromDataFreezing(boolean exemptFromDataFreezing) {
+        this.exemptFromDataFreezing = exemptFromDataFreezing;
+    }
+
     public HashMap<String, String> getErrors() {
         return errors;
     }
@@ -507,5 +517,13 @@ public class UserRegisterForm
 
     public void clearMessages(){
         this.errors.clear();
+    }
+    
+    public boolean getNationalCoordinator() {
+        return nationalCoordinator;
+    }
+
+    public void setNationalCoordinator(boolean nationalCoordinator) {
+        this.nationalCoordinator = nationalCoordinator;
     }
 }

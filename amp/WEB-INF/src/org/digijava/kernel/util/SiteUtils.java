@@ -35,6 +35,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.digijava.kernel.request.TLSUtils;
 import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -52,6 +53,7 @@ import org.digijava.kernel.security.principal.GroupPrincipal;
 import org.digijava.kernel.service.ServiceManager;
 import org.digijava.kernel.services.siteidentity.SiteIdentityService;
 import org.digijava.kernel.user.Group;
+import org.hibernate.criterion.Restrictions;
 
 /**
  * This class containts site-related utillity functions. Site must be
@@ -60,6 +62,8 @@ import org.digijava.kernel.user.Group;
 public class SiteUtils {
 
     private static Logger logger = Logger.getLogger(SiteUtils.class);
+
+    public static final long DEFAULT_SITE_ID = 3;
 
     /**
      * Returns Set of module names, which can be used on the site.
@@ -138,50 +142,21 @@ public class SiteUtils {
         return getDefaultSite();
     }
     
-    private static Site ampSite;
-    
-    public static Site getDefaultSite()
-    {
-        try
-        {
-            if (ampSite == null)
-                ampSite = getSiteByName("amp");         
-        }
-        catch(DgException ex)
-        {
-            logger.error(ex);
-        }
-        return ampSite;
+    public static Site getDefaultSite() {
+        return getSiteByName("amp");
     }
+
     /**
      * Get <code>Site</code> object for the given site id
-     * @param siteId site identity (string type)
+     * @param siteName site identity (string type)
      * @return Site if found. null - if not
-     * @throws DgException If error occurs
      */
-    private static Site getSiteByName(String siteName) throws DgException {
-        Site site = null;
-        Session session = null;
-        try {
-            session = PersistenceManager.getSession();
-            Query query = session.createQuery("from " +
-                                              Site.class.getName() +
-                                              " s where s.siteId=?");
-            query.setParameter(0, siteName);
-            query.setCacheable(true);
-            query.setCacheRegion(Constants.KERNEL_QUERY_CACHE_REGION);
-
-            Iterator iter = query.list().iterator();
-            while (iter.hasNext()) {
-                site = (Site) iter.next();
-                break;
-            }
-        }
-        catch (Exception ex) {
-            logger.debug("Unable to get site from database ", ex);
-            throw new DgException("Unable to get site from database ", ex);
-        }
-        return site;
+    private static Site getSiteByName(String siteName) {
+        return (Site) PersistenceManager.getSession().createCriteria(Site.class)
+                .add(Restrictions.eq("siteId", siteName))
+                .setCacheable(true)
+                .setCacheRegion(Constants.KERNEL_QUERY_CACHE_REGION)
+                .uniqueResult();
     }
 
     /**
@@ -547,5 +522,15 @@ public class SiteUtils {
         }
 
         return siteIdentityService.getSiteId(service, site);
+    }
+
+    /**
+     * Returns true, if effective language LeftToRight is false.
+     *
+     * @return boolean value
+     */
+    public static boolean isEffectiveLangRTL() {
+        Locale locale = getDefaultSite().getLocale(TLSUtils.getEffectiveLangCode());
+        return !locale.getLeftToRight();
     }
 }

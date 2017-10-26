@@ -175,6 +175,7 @@
     <form-bean name="aimOrgProfileReport" type="org.digijava.module.aim.form.OrgProfileReportForm"/>
     <form-bean name="emptyForm" type="org.digijava.module.aim.form.EmptyForm"/>
     <form-bean name="aidEffectivenessIndicatorsForm" type="org.digijava.module.aim.form.AidEffectivenessIndicatorForm"/>
+    <form-bean name="interchangeResultForm" type="org.digijava.module.budgetintegration.form.InterchangeResultForm"/>
 
 </form-beans>
 
@@ -1117,8 +1118,10 @@
       <forward name="accessDenyed" path="/showLayout.do?layout=editActivityDenyed" />
     </action>
     
-    <action name="aimViewActivityHistoryForm" path="/aim/viewActivityHistory" scope="session" type="org.digijava.module.aim.action.ViewActivityHistory">
+    <action name="aimViewActivityHistoryForm" path="/aim/viewActivityHistory" scope="session" type="org.digijava.module.aim.action.ViewActivityHistory" parameter="actionMethod">
     	<forward name="forward" path="/showLayout.do?layout=viewActivityHistory" />
+        <forward name="summaryChanges" path="/showLayout.do?layout=viewActivitySummaryChanges" />
+        <forward name="reload"  path="/aim/viewActivityPreview.do" />
     </action>
     <action name="aimCompareActivityVersionsForm" path="/aim/compareActivityVersions" scope="session" type="org.digijava.module.aim.action.CompareActivityVersions" parameter="method">
     	<forward name="forward" path="/showLayout.do?layout=viewActivityDifferences" />
@@ -1370,10 +1373,6 @@
       <forward name="forward" path="/showLayout.do?layout=invalidSectorPercentages" />
     </action>
      
-    <action path="/aim/export" scope="session" type="org.digijava.module.dataExchange.action.SimpleExportAction" validate="false">
-    	<forward name="forward" path="/showLayout.do?layout=export" />    	
-      	<forward name="index" path="/aim/index.do" redirect="true" />
-    </action>      
     <action name="BudgetManagerForm" scope="session" path="/aim/BudgetManager" type="org.digijava.module.budget.action.BudgetManager" validate="false">
        <forward name="forward" path="/showLayout.do?layout=BudgetManager" />
        <forward name="finalized" path="/aim/BudgetManager.do" redirect="true" />
@@ -1469,6 +1468,10 @@
     	    <forward name="forward" path="/showLayout.do?layout=aim_orgProfileReportGenerator" />
     	    <forward name="showReport" path="/showLayout.do?layout=aim_orgProfileReport" />
 
+    </action>
+    
+    <action path="/aim/interchangeResult" scope="request" type="org.digijava.module.budgetintegration.action.InterchangeResultAction" name="interchangeResultForm" validate="false" parameter="action">
+        <forward name="forward" path="/showLayout.do?layout=de_interchangeResult"/>
     </action>
 	    
   </action-mappings>

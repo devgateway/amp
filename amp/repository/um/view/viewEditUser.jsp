@@ -9,6 +9,8 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
+<jsp:include page="/repository/aim/view/strongPassword.jsp"  />
+
 <digi:instance property="umViewEditUserForm" />
 <digi:context name="digiContext" property="context" />
 
@@ -190,6 +192,7 @@ function validateUserInfo(){
 			          </digi:trn>
 			        </span>
                     <digi:errors/>
+					<jsp:include page="/repository/aim/view/strongPasswordRulesLegend.jsp"  />
 					        &nbsp;
 					        <br/>
 					        <logic:equal name="umViewEditUserForm" property="displaySuccessMessage" value="true" >
@@ -251,7 +254,8 @@ function validateUserInfo(){
 																	        <font color="red">*</font>
 																		</td>
 																		<td width="190" height="30">
-																           <html:text name="umViewEditUserForm" property="email"  style="background-color: #FFFFFF;border: 1px solid #D0D0D0;color: #767676;font-size: 11px;margin: 5px;padding: 2px; width:180px;" styleId="userMail"/>
+																           <html:text name="umViewEditUserForm"
+																					  property="email" styleClass="pwd_username" style="background-color: #FFFFFF;border: 1px solid #D0D0D0;color: #767676;font-size: 11px;margin: 5px;padding: 2px; width:180px;" styleId="userMail"/>
 																		</td>
 																	</tr>
 																	<tr>
@@ -456,7 +460,15 @@ function validateUserInfo(){
           																	<html:checkbox property="pledger" styleClass="inp-text"/>
 																		</td>
 																	</tr>
-																	</module:display>
+																	</module:display>																	
+																		<tr>
+																		<td width="169" align="right" height="30"style="font-size: 11px;font-weight: bold; color:#000;">
+                                                                     		 <digi:trn key="um:nationalCoordinator">National Coordinator</digi:trn>
+																		</td>
+																	    <td width="380" height="30" colspan="2">
+          																	<html:checkbox property="nationalCoordinator" styleClass="inp-text"/>
+																		</td>
+																	</tr>																	
 																		<tr>
 																			<td align="right"  class="formCheckContainer">
 																				<digi:trn>Assign to Workspace</digi:trn>
@@ -470,6 +482,14 @@ function validateUserInfo(){
 																				</c:if>
 																			</td>
 																		</tr>
+																		<tr>
+																		<td width="169" align="right" height="30"style="font-size: 11px;font-weight: bold; color:#000;">
+                                                                     		 <digi:trn key="um:exemptFromDataFreezing">Exempt from activity freezing</digi:trn>
+																		</td>
+																	    <td width="380" height="30" colspan="2">
+          																	<html:checkbox property="exemptFromDataFreezing" styleClass="inp-text"/>
+																		</td>
+																	 </tr>
 																	<tr>
 															            <td>&nbsp;</td>
 															          </tr>
@@ -498,12 +518,23 @@ function validateUserInfo(){
 																		<c:set var="translation">
 															              <digi:trn key="aim:viewEditUser:changePasswordButton">Change password</digi:trn>
 															            </c:set>
-																		<td width="169" align="right" height="30"style="font-size: 11px;
+																		<td width="169" valign="top" align="right"
+																			height="30" style="font-size: 11px;
     font-weight: bold; color:#000;">
+																			<div style="margin-top: 10px;">
                                                                    			<digi:trn key="aim:viewEditUser:password">Password:</digi:trn>
+																			</div>
 																		</td>
-																	    <td width="380" height="30" colspan="2" class="inputcontainer">
-                                                                    		<html:password name="umViewEditUserForm" property="newPassword" redisplay="false"/>
+																	    <td width="380" valign="top" height="30" colspan="2" class="inputcontainer">
+                                                                    		<html:password name="umViewEditUserForm"
+																						   property="newPassword"
+																						   redisplay="false"/>
+																			<div style="padding-left: 2px; margin: 5px">
+																				<div style="display: none" class="pwd_container" id="pwd_container">
+																					<span class="pwstrength_viewport_verdict">&nbsp;</span>
+																					<span class="pwstrength_viewport_progress"></span>
+																				</div>
+																			</div>
                                                                			</td>
 																	</tr>
 																	<tr>
@@ -531,6 +562,7 @@ function validateUserInfo(){
                                                               				<input type="button" value="${translation}" onclick="resetPasswordFields()" style="font-family:verdana;font-size:11px;"/></td>
 																		</td>
 																	</tr>
+																			
 																</table>
                                                                 <br/>
 															</td>

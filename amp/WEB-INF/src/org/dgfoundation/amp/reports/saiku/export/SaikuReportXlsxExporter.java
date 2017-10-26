@@ -465,7 +465,7 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
     private void renderSummaryFilters(Sheet summarySheet, ReportSpecification reportSpec, IntWrapper currLine) {
         // the report specification contains only IDs in filter rules. 
         // we need to export in the summary sheet the names instead of ids
-        Map<String, List<String>> extractedFilters = SaikuExportFilterUtils.getFilterValuesForIds(reportSpec.getFilters());
+        Map<String, List<String>> extractedFilters = ExportFilterUtils.getFilterValuesForIds(reportSpec.getFilters());
         
         // Create header row for filters.
         int group = 0;
@@ -521,7 +521,8 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
         
         renderSummaryLine(summarySheet, currLine, TranslatorWorker.translateText("Currency"), currency);
         renderSummaryLine(summarySheet, currLine, TranslatorWorker.translateText("Calendar"), calendar);
-        renderSummaryLine(summarySheet, currLine, TranslatorWorker.translateText("Units"), units);
+        renderSummaryLine(summarySheet, currLine, TranslatorWorker.translateText("Units"),
+                TranslatorWorker.translateText(units));
     }
 
 

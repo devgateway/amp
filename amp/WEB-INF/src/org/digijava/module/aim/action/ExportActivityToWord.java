@@ -99,6 +99,7 @@ import org.digijava.module.aim.util.ExportActivityToPdfUtil;
 import org.digijava.module.aim.util.ExportUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
+import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.budget.dbentity.AmpBudgetSector;
 import org.digijava.module.budget.dbentity.AmpDepartments;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -394,7 +395,9 @@ public class ExportActivityToWord extends Action {
                     sectorsTbl.addCell(sectTitleCell);
 
                     if(sectors.getClassificationConfigs() != null){
-                        for (AmpClassificationConfiguration config : (List<AmpClassificationConfiguration>)sectors.getClassificationConfigs()) {
+                        List<AmpClassificationConfiguration> classificationConfigs = SectorUtil
+                                .getAllClassificationConfigsOrdered();
+                        for (AmpClassificationConfiguration config : classificationConfigs) {
                             //if(FeaturesUtil.isVisibleModule("/Activity Form/Sectors/"+config.getName()+" Sectors", ampContext,session)){
                             boolean hasSectors=false;
                             if (sectors.getActivitySectors() != null) {
@@ -919,7 +922,7 @@ public class ExportActivityToWord extends Action {
         /**
          * Activity updated on
          */
-        if (FeaturesUtil.isVisibleField("Activity Updated On")) {
+        if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Activity Updated On")) {
             ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(
                     "Updated On", null, null, true).addRowData(identification
                     .getUpdatedDate());
@@ -929,7 +932,7 @@ public class ExportActivityToWord extends Action {
         /**
          * Activity updated by
          */
-        if (FeaturesUtil.isVisibleField("Activity Updated By")) {
+        if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Activity Last Updated by")) {
             String output = "";
             if (identification.getModifiedBy() != null) {
                 User user = identification.getModifiedBy().getUser();
@@ -2588,8 +2591,8 @@ public class ExportActivityToWord extends Action {
                                 eshDonorInfo, "Mode of Payment", funding.getModeOfPayment(), true);
                         addFundingRowData("/Activity Form/Funding/Funding Group/Funding Item/Donor Objective",
                                 eshDonorInfo, "Donor Objective", funding.getDonorObjective(), true);
-                        addFundingRowData("/Activity Form/Funding/Funding Group/Funding Item/Conditions", eshDonorInfo,
-                                "Conditions", funding.getConditions(), true);
+                        addFundingRowData("/Activity Form/Funding/Funding Group/Funding Item/Conditions",
+                                eshDonorInfo, "Conditions", funding.getConditions(), true);
                         addFundingRowData(
                                 "/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement",
                                 eshDonorInfo, "Agreement Title", funding.getTitle(), true);
@@ -2718,6 +2721,11 @@ public class ExportActivityToWord extends Action {
                     eshDonorInfo.addRowData((new ExportSectionHelperRowData("Mode of Payment", null, null, true))
                             .addRowData(modeOfPayment));
                 }
+                    if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Concessionality Level")) {
+                        String concessionalityLevel = fnd.getConcessionalityLevel() != null ? fnd.getConcessionalityLevel().getValue() : " ";
+                        eshDonorInfo.addRowData((new ExportSectionHelperRowData("Concessionality Level", null, null, true))
+                                .addRowData(concessionalityLevel));
+                 }
 
                 if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Donor Objective")
                         && (fnd.getDonorObjective() != null)) {
@@ -3922,7 +3930,7 @@ public class ExportActivityToWord extends Action {
 
         //3rd cell is for currency
         /*
-        RtfCell currencyInfoCell=new RtfCell();             
+        RtfCell currencyInfoCell=new RtfCell();
         currencyInfoCell.setBorder(0);
         Table currencyInfoSubTable = new Table(1);
         currencyInfoSubTable.setWidth(100);
@@ -3932,8 +3940,8 @@ public class ExportActivityToWord extends Action {
         mycell.setBackgroundColor(CELLCOLORGRAY);
         mycell.setRowspan(rowAmountForCell1>rowAmountForCell2?rowAmountForCell1:rowAmountForCell2);
         currencyInfoSubTable.addCell(mycell);
-        
-        currencyInfoCell.add(currencyInfoSubTable);             
+
+        currencyInfoCell.add(currencyInfoSubTable);
         overAllTable.addCell(currencyInfoCell); */
         return overAllTable;
     }

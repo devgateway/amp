@@ -3,7 +3,10 @@ package org.digijava.module.um.util;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
@@ -24,6 +27,7 @@ import org.digijava.module.aim.dbentity.AmpUserExtension;
 import org.digijava.module.aim.dbentity.AmpUserExtensionPK;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.hibernate.criterion.Restrictions;
 
 /**
  * Methods for working with User related tasks.
@@ -162,6 +166,22 @@ public class AmpUserUtil {
         return result;
         
     }
+
+    /**
+     * Bulk version of user extensions retrieval.
+     */
+    public static Map<Long, AmpUserExtension> getAmpUserExtensions(List<User> users) {
+        List<Long> usersIds = users.stream().map(User::getId).collect(Collectors.toList());
+        Session session = PersistenceManager.getRequestDBSession();
+        List<AmpUserExtension> extensions = session
+                .createCriteria(AmpUserExtension.class)
+                .add(Restrictions.in("ampUserExtId.user.id", usersIds))
+                .list();
+
+        Map<Long, AmpUserExtension> result = new HashMap<>();
+        extensions.forEach(e -> result.put(e.getAmpUserExtId().getUser().getId(), e));
+        return result;
+    }
     
     /**
      * Retrieves user extension .
@@ -246,7 +266,7 @@ public class AmpUserUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
             queryString="select u from " +User.class.getName() +" u where u.banned=:banned and u.id not in (select tm.user.id from "+AmpTeamMember.class.getName()+
-            " tm where tm.ampTeam.ampTeamId=:teamId ) ";
+            " tm where (tm.deleted is null or tm.deleted = false) and tm.ampTeam.ampTeamId=:teamId ) ";
                         if(keyword!=null&&keyword.length()>0){
                             queryString+=" and concat(u.firstNames,' ',u.lastName)=:keyword";
                         }
@@ -264,20 +284,23 @@ public class AmpUserUtil {
         }
         return retVal;
     }
-       public static List<String> searchUsesers(String searchStr, Long teamId) throws Exception {
+
+    public static List<String> searchUsesers(String searchStr, Long teamId) throws Exception {
         Session session = null;
         String queryString = null;
         Query query = null;
         List<String> users = null;
         try {
             session = PersistenceManager.getRequestDBSession();
-            queryString = "select distinct concat(u.firstNames,' ',u.lastName) from " + User.class.getName() + 
-                    " u where  lower(concat(u.firstNames,' ',u.lastName)) like lower(:searchStr) and u.id not in (select tm.user.id from "+AmpTeamMember.class.getName()+
-            " tm where tm.ampTeam.ampTeamId=:teamId) and u.banned=:banned order by concat(u.firstNames,' ',u.lastName)";
+            queryString = "select distinct concat(u.firstNames,' ',u.lastName) from " + User.class.getName()
+                    + " u where  lower(concat(u.firstNames,' ',u.lastName)) like lower(:searchStr) and u.id not in "
+                    + " (select tm.user.id from " + AmpTeamMember.class.getName()
+                    + " tm where (tm.deleted is null or tm.deleted = false) and tm.ampTeam.ampTeamId=:teamId) "
+                    + " and u.banned=:banned order by concat(u.firstNames,' ',u.lastName)";
             query = session.createQuery(queryString);
             query.setString("searchStr", searchStr + "%");
             query.setLong("teamId", teamId);
-            query.setBoolean("banned", false);  
+            query.setBoolean("banned", false);
             users = query.list();
         } catch (Exception ex) {
             logger.error("couldn't load user " + ex.getMessage(), ex);

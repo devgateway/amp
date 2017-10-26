@@ -286,7 +286,8 @@ public class Constants
     public static final String GLOBAL_SETTINGS = "globalSettings";
 
     // Session attributes names
-    
+
+    public static final String CURRENT_USER = "currentUser";
     public static final String CURRENT_MEMBER = "currentMember";
     public static final String FILTER_PARAMS = "filterParams";
 
@@ -361,6 +362,7 @@ public class Constants
     public static final String GLOBAL_PUBLIC_VIEW = "Public View";
     public static final String GLOBAL_DEFAULT_COUNTRY = "Default Country";
     public static final String GLOBAL_SHOW_COMPONENT_FUNDING_BY_YEAR = "Show Component Funding by Year";
+    public static final String STRONG_PASSWORD = "Strong password";
 
 
     public static final String GLOBAL_DEFAULT_SECTOR_SCHEME="Default Sector Scheme";
@@ -446,4 +448,6 @@ public class Constants
     public static final String COMPARATOR_REPORTING_DATE_DESC = "3";
     public static final String COMPARATOR_REPORTING_DATE_ASC = "4";
 
+
+    public static final String AUTOMATIC_VALIDATION_JOB_CLASS_NAME = "org.digijava.module.message.jobs.ActivityAutomaticValidationJob" ;
 }

@@ -4,12 +4,15 @@
  */
 package org.dgfoundation.amp.onepager;
 
+import java.io.Serializable;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
@@ -92,13 +95,19 @@ public final class OnePagerUtil {
      * @return the returned model
      */
     public final static <T> AbstractReadOnlyModel<List<T>> getReadOnlyListModelFromSetModel(final IModel<Set<T>> setModel, final Comparator<T> c) {
+        return getReadOnlyListModelFromSetModel(setModel, c, o -> true);
+    }
+    
+    public final static <T> AbstractReadOnlyModel<List<T>> getReadOnlyListModelFromSetModel(final IModel<Set<T>> setModel, final Comparator<T> c, SerializablePredicate<T> filterPredicate) {
         return new AbstractReadOnlyModel<List<T>>() {
             private static final long serialVersionUID = 3706184421459839210L;
 
             @Override
             public List<T> getObject() {
-                TreeSet<T> ts=new TreeSet<T>(c);
-                ts.addAll(setModel.getObject());
+                TreeSet<T> ts = new TreeSet<T>(c);
+                Set<T> filteredSet = setModel.getObject().stream().filter(filterPredicate).collect(Collectors.toSet());
+                ts.addAll(filteredSet);
+                
                 return new ArrayList<T>(ts);
             }
         };
@@ -208,29 +217,16 @@ public final class OnePagerUtil {
         return String.format(OnePagerConst.clickToggle2JS, c.getMarkupId());
     }
     
-    
-    /**
-     * Gets the {@link AmpOrganisation} {@link AmpRole}S from DB
-     * @return a {@link List} of {@link AmpRole}S
-     */
-    public static List<AmpRole> getOrgRoles() {
-        Session session = null;
-        List<AmpRole> list=null;
-        ArrayList<AmpRole> currency = new ArrayList<AmpRole>();
-        try {
-                session = PersistenceManager.getRequestDBSession();
-                Criteria criteria = session.createCriteria(AmpRole.class);
-                 list = criteria.list();                    
-        } catch (Exception ex) {
-            logger.error("Unable to get roles " + ex);
-        }
-        return list;    
-    }
-
     public static AmpFundingFlowsOrgRoleSelector getFundingFlowRoleSelector(final IModel<AmpFunding> model,
             IModel itemModel) {
         AmpFundingFlowsOrgRoleSelector orgRoleSelector=
         new AmpFundingFlowsOrgRoleSelector("orgRoleSelector",model, itemModel,"Funding Flows OrgRole Selector");
+        orgRoleSelector.setAffectedByFreezing(false);
         return orgRoleSelector;
     }
+    
+    public interface SerializablePredicate<T> extends Predicate<T>, Serializable {
+        
+    }
+
 }

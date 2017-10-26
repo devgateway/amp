@@ -178,6 +178,7 @@
 	
 	<page name="viewActivityHistory" page="viewActivityHistory" title=" - View Activity History"/>
 	<page name="viewActivityDifferences" page="viewActivityDifferences" title=" - View Activity Differences"/>
+	<page name="viewActivitySummaryChanges" page="viewActivitySummaryChanges" title="Show Change Summary"/>
 
 	<!-- global settings-->
 	<page name="viewGlobalSettings"  title ="- Global Settings " />
@@ -409,6 +410,7 @@
 	<page page="importIndicatorValues" name="importIndicatorValuesLayout" title="Import Indicators" />
 	<page page="orgProfileReportGenerator" name="aim_orgProfileReportGenerator" title="Donor Report Generator" />
 	<page page="orgProfileReport" name="aim_orgProfileReport" title="Donor Report Generator" />
+	<page name="de_interchangeResult" page="interchangeableResultList" title="Data Import Manager Results" />
 </secondary-pages>
 <module>
 

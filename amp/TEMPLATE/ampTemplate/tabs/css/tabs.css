@@ -85,6 +85,7 @@
 	background: #ffffff;
 	margin-bottom: 3px;
 	float: left;
+	font-size: 10px;
 }
 
 .round-filter-group {
@@ -565,4 +566,9 @@ margin-right: 2px;
 line-height: 1.42857143;
 border: 1px solid transparent;
 border-radius: 4px 4px 0 0;
+}
+
+a.preview-cell {
+	color: inherit !important;
+	text-decoration: none;
 }

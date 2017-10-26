@@ -31,6 +31,7 @@ public class Funding implements Serializable {
     private AmpCategoryValue financingInstrument;
     private AmpCategoryValue fundingStatus;
     private AmpCategoryValue modeOfPayment;
+    private AmpCategoryValue concessionalityLevel;
     private String orgFundingId;
     private String sourceRole;
     private String signatureDate;
@@ -285,6 +286,7 @@ public class Funding implements Serializable {
         this.setFinancingInstrument(ampFunding.getFinancingInstrument());
         this.setFundingStatus(ampFunding.getFundingStatus());
         this.setModeOfPayment(ampFunding.getModeOfPayment());
+        this.setConcessionalityLevel(ampFunding.getConcessionalityLevel());
         this.setActStartDate(DateConversion.convertDateToLocalizedString(ampFunding.getActualStartDate()));
         this.setActCloseDate(DateConversion.convertDateToLocalizedString(ampFunding.getActualCompletionDate()));
         this.setFundingId(ampFunding.getAmpFundingId().longValue());
@@ -952,6 +954,14 @@ public class Funding implements Serializable {
 
     public void setFundingClosingDate(String fundingClosingDate) {
         this.fundingClosingDate = fundingClosingDate;
+    }
+    
+    public AmpCategoryValue getConcessionalityLevel() {
+        return concessionalityLevel;
+    }
+    
+    public void setConcessionalityLevel(AmpCategoryValue concessionalityLevel) {
+        this.concessionalityLevel = concessionalityLevel;
     }
 
     @java.lang.Override

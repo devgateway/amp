@@ -14,6 +14,8 @@ import org.digijava.kernel.Constants;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.TeamUtil;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -33,6 +35,7 @@ public class TLSUtils {
     public Site site;
     public HttpServletRequest request;
     private static String forcedLangCode = null;
+    private Boolean forcedSSCWorkspace;
     
     public static String getLangCode() {
         if (TLSUtils.forcedLangCode != null)
@@ -65,7 +68,20 @@ public class TLSUtils {
             return "en";
         }
     }
-    
+
+    public void setForcedSSCWorkspace(Boolean forcedSSCWorkspace) {
+        this.forcedSSCWorkspace = forcedSSCWorkspace;
+    }
+
+    public boolean inSSCWorkspace() {
+        if (forcedSSCWorkspace != null) {
+            return forcedSSCWorkspace;
+        } else {
+            TeamMember member = TeamUtil.getCurrentMember();
+            return member.getWorkspacePrefix() != null;
+        }
+    }
+
     public final static boolean equalValues(Object a, Object b)
     {
         if (a == null)
@@ -140,7 +156,15 @@ public class TLSUtils {
     }
     
     public static void populate(HttpServletRequest request){
-        SiteDomain siteDomain = RequestUtils.getSiteDomain(request);
+        populate(request, null);
+    }
+    
+    public static void populate(HttpServletRequest request, SiteDomain siteDomain) {
+        if (siteDomain == null) {
+            siteDomain = RequestUtils.getSiteDomain(request);
+        } else {
+            RequestUtils.setSiteDomain(request, siteDomain);
+        }
         TLSUtils.getThreadLocalInstance().request = request;
         TLSUtils.getThreadLocalInstance().site = siteDomain == null ? null : siteDomain.getSite();
     }

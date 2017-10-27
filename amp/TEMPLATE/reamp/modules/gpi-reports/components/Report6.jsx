@@ -360,6 +360,13 @@ export default class Report6 extends Component {
                         }
                        </div>
 
+                    </div>                    
+                     <div className="container-fluid">
+                        <div className="row">
+                          <h4>{this.props.translations['amp.gpi-reports:indicator6-description']}</h4>
+                        </div>
+                      </div>
+                     <div className="section-divider"></div>
                     </div>
                     <div className="section-divider"></div>
                     {this.props.mainReport.empty == true  &&

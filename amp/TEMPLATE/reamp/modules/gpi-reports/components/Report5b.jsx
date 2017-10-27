@@ -325,6 +325,9 @@ export default class Report5b extends Component {
                             </div>                           
                         </div>
                     }
+                    {this.props.mainReport.empty == true  &&
+                        <div className="text-center">{this.props.translations['amp-gpi-reports:no-data']}</div>
+                    }
                     <div className="container-fluid no-padding">
                         <ul className="year-nav">                            
                             {( ( years.length > 3 ) ? years.splice( years.length - 3, 3 ).reverse() : years.reverse() ).map( year =>

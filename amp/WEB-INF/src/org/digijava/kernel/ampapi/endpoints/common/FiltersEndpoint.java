@@ -434,7 +434,7 @@ public class FiltersEndpoint {
     @GET
     @Path("/organizations")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, id = "Organizations", name = "orgsList", tab = EPConstants.TAB_ORGANIZATIONS)
+    @ApiMethod(ui = true, id = "Orgs", name = "Orgs", tab = EPConstants.TAB_ORGANIZATIONS)
     public FilterList getOrganizations() {
         
         FiltersManager filtersManager = FiltersManager.getInstance();

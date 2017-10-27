@@ -2,7 +2,6 @@ package org.digijava.kernel.ampapi.endpoints.filters;
 
 import java.util.List;
 
-import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
@@ -12,10 +11,8 @@ public class FilterTreeDefinition {
     
     private String name;
     
-    @JsonProperty(FiltersConstants.LIST_DISPLAY_NAME)
     private String displayName;
     
-    @JsonProperty(FiltersConstants.LIST_FILTER_IDS)
     private List<String> filterIds;
     
     public Long getId() {

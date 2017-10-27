@@ -2,11 +2,8 @@ package org.digijava.kernel.ampapi.endpoints.filters;
 
 import java.util.List;
 
-import org.codehaus.jackson.annotate.JsonProperty;
-
 public class FilterList {
     
-    @JsonProperty(FiltersConstants.LIST_TREE_DEFINITIONS)
     private List<FilterTreeDefinition> treeDefinitions; 
     
     private List<FilterTreeNode> items;

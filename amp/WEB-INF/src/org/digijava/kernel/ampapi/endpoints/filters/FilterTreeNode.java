@@ -3,7 +3,6 @@ package org.digijava.kernel.ampapi.endpoints.filters;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
@@ -14,16 +13,11 @@ public class FilterTreeNode {
     private String acronym;
     private String code;
     
-    @JsonProperty(FiltersConstants.LIST_TREE_DEFINITION_IDS)
     private List<Long> treeIds;
     
-    private List<FilterTreeNode> children;
+    private List<FilterTreeNode> children = new ArrayList<>();
 
     public void addChild(FilterTreeNode child) {
-        if (children == null) {
-            children = new ArrayList<>();
-        }
-        
         children.add(child);
     }
 

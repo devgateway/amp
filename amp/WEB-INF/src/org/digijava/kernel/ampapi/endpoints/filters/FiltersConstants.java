@@ -138,11 +138,6 @@ public class FiltersConstants {
     public static final String WORKSPACES = "workspaces";
     public static final String ZONE = "zone";
     
-    public static final String LIST_DISPLAY_NAME = "display-name";
-    public static final String LIST_FILTER_IDS = "filter-ids";
-    public static final String LIST_TREE_DEFINITIONS = "tree-definitions";
-    public static final String LIST_TREE_DEFINITION_IDS = "tree-definition-ids";
-
     /** filters IDs to Name mapping */
     public static final Map<String, String> ID_NAME_MAP = Collections.unmodifiableMap(new HashMap<String, String>() {{
         put(COMPUTED_YEAR, "Computed Year");

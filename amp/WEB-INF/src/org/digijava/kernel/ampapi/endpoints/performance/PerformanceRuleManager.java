@@ -329,10 +329,8 @@ public final class PerformanceRuleManager {
                 PerformanceRuleMatcher matcher = e.getKey();
                 String ruleMsg = TranslatorWorker.translateText(getPerformanceRuleMatcherMessage(matcher));
                 String ruleLabel = TranslatorWorker.translateText(matcher.getRule().getLevel().getLabel());
-                sb.append(String.format("<td colspan=2><b>%s (%s)</b></td>", 
+                sb.append(String.format("<td colspan=2><b>%s (%s)</b></td></tr>", 
                         HtmlUtils.htmlEscape(ruleMsg), HtmlUtils.htmlEscape(ruleLabel)));
-                sb.append("</td>");
-                sb.append("</tr>");
                 
                 sb.append(String.format("<tr><td width='150px'><b>%s</b></td><td><b>%s</b></td></tr>", 
                         ampIdLabel, titleLabel));

@@ -15,6 +15,7 @@ import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
 import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.util.FMUtil;
+import org.digijava.kernel.ampapi.endpoints.performance.PerformanceIssue;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.PerformanceRuleMatcher;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -50,7 +51,7 @@ public class PerformanceRulesAlertJob extends ConnectionCleaningJob implements S
         if (isPerformanceAlertIssuesEnabled()) {
             List<Long> actIds = org.digijava.module.aim.util.ActivityUtil.getValidatedActivityIds();
             
-            Map<AmpActivityVersion, List<PerformanceRuleMatcher>> actsWithPerfIssues = processActivities(actIds);
+            Map<AmpActivityVersion, List<PerformanceIssue>> actsWithPerfIssues = processActivities(actIds);
             new PerformanceRuleAlertTrigger(actsWithPerfIssues);
         } else {
             logger.info("Performance rule module is not enabled...");
@@ -69,9 +70,9 @@ public class PerformanceRulesAlertJob extends ConnectionCleaningJob implements S
      * 
      * @param actIds
      */
-    private Map<AmpActivityVersion, List<PerformanceRuleMatcher>> processActivities(List<Long> actIds) {
+    private Map<AmpActivityVersion, List<PerformanceIssue>> processActivities(List<Long> actIds) {
         
-        Map<AmpActivityVersion, List<PerformanceRuleMatcher>> activitiesWithPerformanceIssues = new HashMap<>();
+        Map<AmpActivityVersion, List<PerformanceIssue>> activitiesWithPerformanceIssues = new HashMap<>();
         PerformanceRuleManager ruleManager = PerformanceRuleManager.getInstance();
         
         boolean noMatcherFound = ruleManager.getPerformanceRuleMatchers().isEmpty();
@@ -82,7 +83,7 @@ public class PerformanceRulesAlertJob extends ConnectionCleaningJob implements S
         
         for (Long actId : actIds) {
             String lockKey = null;
-            List<PerformanceRuleMatcher> failedRuleMatchers = new ArrayList<>();
+            List<PerformanceIssue> failedIssues = new ArrayList<>();
             try {
                 lockKey = ActivityGatekeeper.lockActivity(Long.toString(actId), 0L);
                 if (lockKey != null) {
@@ -92,8 +93,8 @@ public class PerformanceRulesAlertJob extends ConnectionCleaningJob implements S
                     Set<AmpCategoryValue> matchedLevels = new HashSet<>();
                     
                     if (!noMatcherFound) {
-                        failedRuleMatchers = ruleManager.matchActivity(a);
-                        matchedLevels = ruleManager.getPerformanceLevelsFromMatchers(failedRuleMatchers);
+                        failedIssues = ruleManager.findPerformanceIssues(a);
+                        matchedLevels = ruleManager.getPerformanceLevelsFromIssues(failedIssues);
                     }
                    
                     if (!ruleManager.isEqualPerformanceLevelCollection(matchedLevels, activityLevels)) {
@@ -114,8 +115,8 @@ public class PerformanceRulesAlertJob extends ConnectionCleaningJob implements S
                                 updActivity.getAmpActivityId()));
                     }
                     
-                    if (!failedRuleMatchers.isEmpty()) {
-                        activitiesWithPerformanceIssues.put(a, failedRuleMatchers);
+                    if (!failedIssues.isEmpty()) {
+                        activitiesWithPerformanceIssues.put(a, failedIssues);
                     }
                 } else {
                     logger.error(String.format("Activity is locked, amp_activity_id=%d", actId));

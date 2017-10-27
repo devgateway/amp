@@ -245,7 +245,7 @@ body {background:none;}
 										</c:if>
 									</module:display>
 
-                                 <module:display name="/Activity Form/Identification/Objective" parentModule="/Activity Form/Identification">
+                                 <module:display name="/Activity Form/Identification/Objective" parentModule="/Activity Form/Identification">   	
                                     <tr>
 										<td class="field_name">
 											<b>
@@ -3113,7 +3113,7 @@ body {background:none;}
 									<module:display name="M & E" parentModule="MONITORING AND EVALUATING">
 										<tr>
 											<td class="field_name" >
-												<b><digi:trn>M &amp; E</digi:trn></b>
+												<b><digi:trn>M&E</digi:trn></b>
 											</td>
 											<td>
                                                 <bean:define id="aimEditActivityForm" name="aimEditActivityForm" scope="page" toScope="request"/>
@@ -3541,20 +3541,20 @@ body {background:none;}
 					name="/Activity Form/Structures/Structure Latitude"
 					parentModule="/Activity Form/Structures">
 					<c:if test="${not empty structure.latitude}">
-						<tr bgcolor="#f0f0f0">
-							<td align="right"><digi:trn key="trn:latitude">Latitude</digi:trn></td>
-							<td align="left"> <b> ${structure.latitude} </b></td>
-						</tr>
+					<tr bgcolor="#f0f0f0">
+						<td align="right"><digi:trn key="trn:latitude">Latitude</digi:trn></td>
+						<td align="left"> <b> ${structure.latitude} </b></td>
+					</tr>
 					</c:if>
 				</module:display>
 				<module:display
 					name="/Activity Form/Structures/Structure Longitude"
 					parentModule="/Activity Form/Structures">
 					<c:if test="${not empty structure.longitude}">
-						<tr bgcolor="#f0f0f0">
-							<td align="right"><digi:trn key="trn:longitude">Longitude</digi:trn></td>
-							<td align="left"><b> ${structure.longitude} </b></td>
-						</tr>
+					<tr bgcolor="#f0f0f0">
+						<td align="right"><digi:trn key="trn:longitude">Longitude</digi:trn></td>
+						<td align="left"><b> ${structure.longitude} </b></td>
+					</tr>
 					</c:if>
 				</module:display>
 				<c:if test="${not empty structure.coordinates}">
@@ -3573,7 +3573,7 @@ body {background:none;}
 						</td>
 					</tr>
 				</c:if>
-
+			
 	</table>
 	<br />
 	<hr>

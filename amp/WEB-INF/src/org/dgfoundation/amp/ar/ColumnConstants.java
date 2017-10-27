@@ -54,7 +54,7 @@ public class ColumnConstants {
     public static final String BUDGET_SECTOR = "Budget Sector";
     public static final String BUDGET_STRUCTURE = "Budget Structure";
     public static final String CALCULATED_PROJECT_LIFE = "Calculated Project Life";
-    public static final String CAPITAL___EXPENDITURE = "Capital - Expenditure";
+    public static final String CAPITAL_EXPENDITURE = "Capital Expenditure";
     public static final String COMPONENT_DESCRIPTION = "Component description";
     public static final String COMPONENT_FUNDING_ORGANIZATION = "Component Funding Organization";
     public static final String COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION = "Component Second Responsible Organization";

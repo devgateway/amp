@@ -196,7 +196,7 @@ export default class Report5a extends Component {
     downloadPdfFile(){
         this.props.actions.downloadPdfFile(this.getRequestData(), '5a');
     }
-     
+    
     render() {        
             let addedGroups = [];
             var years = Utils.getYears(this.settingsWidget, this.props.years);
@@ -242,11 +242,11 @@ export default class Report5a extends Component {
                                 )}
                             </select>
                         </div>
-                        <div className="pull-right"><h4>{this.props.translations['amp.gpi-reports:currency']} {this.props.mainReport.settings['currency-code']}
+                        <div className="pull-right currency-label">{this.props.translations['amp.gpi-reports:currency']} {this.props.mainReport.settings['currency-code']}
                         {(this.props.settings['number-divider'] != 1) &&
                             <span className="amount-units"> ({this.props.translations['amp-gpi-reports:amount-in-' + this.props.settings['number-divider']]})</span>                    
                         }
-                        </h4></div>
+                        </div>
                     </div>                                       
                     <div className="section-divider"></div>     
                         {this.state.showRemarks &&
@@ -288,7 +288,11 @@ export default class Report5a extends Component {
                               <td className="number-column">{row[Constants.PLANNED_DISBURSEMENTS]}</td>
                               <td className="number-column">{row[Constants.DISBURSEMENTS_AS_SCHEDULED]}</td>
                               <td className="number-column">{row[Constants.OVER_DISBURSED]}</td>
-                              <td className="number-column"><img className="table-icon" src="images/remarks-icon.svg" data-url={row[Constants.REMARK]} onClick={this.showRemarksModal.bind(this)}/></td>
+                              <td className="number-column">
+                              { parseInt(row[Constants.NUMBER_OF_REMARKS]) > 0 &&
+                                  <img className="table-icon" src="images/remarks-icon.svg" data-url={row[Constants.REMARK]} onClick={this.showRemarksModal.bind(this)}/> 
+                              }
+                              </td>
                           </tr>
                       )}                      
                       </tbody>

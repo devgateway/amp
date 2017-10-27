@@ -42,5 +42,9 @@ export const initialTranslations = {
         'amp-gpi-reports:selected': 'Selected: ',
         'amp-gpi-reports:loading-message': 'Loading...',
         'amp-gpi-reports:remarks': 'Remarks',
-        'amp-gpi-reports:no-data': 'The specified filtered report does not hold any data. Either pick a different filter criteria or use another report.'
+        'amp-gpi-reports:no-data': 'The specified filtered report does not hold any data. Either pick a different filter criteria or use another report.',
+        'amp-gpi-reports:5b-column-legend':'(Yes = 1 / No = 0)',
+        'amp-gpi-reports:5b-stat-label':'indicator 5b % at country level',
+        'amp-gpi-reports:annual-planned-disbursements': 'Actual Planned Disbursements'
+        
 };

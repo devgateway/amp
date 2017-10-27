@@ -303,25 +303,25 @@ export default class Report9b extends Component {
                                     <div className="stat-label">{this.getLocalizedColumnName( Constants.NATIONAL_BUDGET_EXECUTION_PROCEDURES )}</div>
                                 </div>
                             </div>
-                            <div className="col-md-3">
+                            <div className="col-md-2 col-md-2-9b">
                                 <div className="indicator-stat-wrapper">
                                     <div className="stat-value">{this.props.mainReport.summary[Constants.NATIONAL_FINANCIAL_REPORTING_PROCEDURES]}</div>
                                     <div className="stat-label">{this.getLocalizedColumnName( Constants.NATIONAL_FINANCIAL_REPORTING_PROCEDURES )}</div>
                                 </div>
                             </div>
-                            <div className="col-md-2">
+                            <div className="col-md-2 col-md-2-9b">
                                 <div className="indicator-stat-wrapper">
                                     <div className="stat-value">{this.props.mainReport.summary[Constants.NATIONAL_AUDITING_PROCEDURES]}</div>
                                     <div className="stat-label">{this.getLocalizedColumnName( Constants.NATIONAL_AUDITING_PROCEDURES )}</div>
                                 </div>
                             </div>
-                            <div className="col-md-2">
+                            <div className="col-md-2 col-md-2-9b">
                                 <div className="indicator-stat-wrapper">
                                     <div className="stat-value">{this.props.mainReport.summary[Constants.NATIONAL_PROCUREMENT_EXECUTION_PROCEDURES]}</div>
                                     <div className="stat-label">{this.getLocalizedColumnName( Constants.NATIONAL_PROCUREMENT_EXECUTION_PROCEDURES )}</div>
                                 </div>
                             </div>
-                            <div className="col-md-2">
+                            <div className="col-md-2 col-md-2-9b">
                                    <div className="indicator-stat-wrapper">
                                         <div className="stat-value">{this.props.mainReport.summary[Constants.USE_OF_COUNTRY_SYSTEMS]}</div>
                                         <div className="stat-label">{this.getLocalizedColumnName( Constants.USE_OF_COUNTRY_SYSTEMS )}</div>
@@ -364,11 +364,11 @@ export default class Report9b extends Component {
                                 )}
                             </select>
                         </div>
-                        <div className="pull-right"><h4>{this.props.translations['amp.gpi-reports:currency']} {this.props.mainReport.settings['currency-code']}
+                        <div className="pull-right currency-label">{this.props.translations['amp.gpi-reports:currency']} {this.props.mainReport.settings['currency-code']}
                         {(this.props.settings['number-divider'] != 1) &&
                             <span className="amount-units"> ({this.props.translations['amp-gpi-reports:amount-in-' + this.props.settings['number-divider']]})</span>                    
                         }
-                        </h4></div>
+                        </div>
 
                     </div>
 
@@ -427,7 +427,7 @@ export default class Report9b extends Component {
                             )}
                         </tbody>
                     </table>
-                    }
+                    {this.props.mainReport.page.totalPageCount > 1 &&
                     <div >
                         <div className="row">
                             <div className="col-md-8 pull-right pagination-wrapper">
@@ -454,7 +454,7 @@ export default class Report9b extends Component {
                             </div>
                         </div>
                     </div>
-
+                    }
                   </div>
                   }
                 </div>

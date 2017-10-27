@@ -164,3 +164,20 @@ div.trnpanel div.trn-row ul {
 .tri-desktop {
     background: url(/TEMPLATE/ampTemplate/img_2/ico_tri.gif) no-repeat 4px 1px!important;
 }
+
+.ui-widget-content {
+    direction: rtl;
+}
+
+.ui-dialog .ui-dialog-title {
+    float: right;
+}
+
+.ui-dialog-titlebar-close {
+    right: unset!important;
+    left: .3em;
+}
+
+.nav > li.tab {
+    float: right;
+}

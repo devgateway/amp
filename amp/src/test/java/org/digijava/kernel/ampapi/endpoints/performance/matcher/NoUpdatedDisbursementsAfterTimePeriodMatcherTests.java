@@ -1,11 +1,12 @@
 package org.digijava.kernel.ampapi.endpoints.performance.matcher;
 
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNull;
 
 import org.dgfoundation.amp.activity.builder.ActivityBuilder;
 import org.dgfoundation.amp.activity.builder.FundingBuilder;
+import org.dgfoundation.amp.activity.builder.OrganisationBuilder;
 import org.dgfoundation.amp.activity.builder.TransactionBuilder;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleConstants;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.NoUpdatedDisbursementsAfterTimePeriodMatcherDefinition;
@@ -52,10 +53,13 @@ public class NoUpdatedDisbursementsAfterTimePeriodMatcherTests extends Performan
                                         .withTransactionType(Constants.DISBURSEMENT)
                                         .withTransactionDate(new LocalDate(2015, 12, 12).toDate())
                                         .getTransaction())
+                                .withDonor(new OrganisationBuilder()
+                                        .withOrganisationName("Donor1")
+                                        .getOrganisation())
                                 .getFunding())
                 .getActivity();
         
-        assertTrue(match(rule, a));
+        assertEquals(findPerformanceIssue(rule, a).getDonors().size(), 1);
     }
     
     @Test
@@ -70,10 +74,13 @@ public class NoUpdatedDisbursementsAfterTimePeriodMatcherTests extends Performan
                                         .withTransactionType(Constants.COMMITMENT)
                                         .withTransactionDate(new LocalDate(2017, 7, 12).toDate())
                                         .getTransaction())
+                                .withDonor(new OrganisationBuilder()
+                                        .withOrganisationName("Donor1")
+                                        .getOrganisation())
                                 .getFunding())
                 .getActivity();
         
-        assertTrue(match(rule, a));
+        assertEquals(findPerformanceIssue(rule, a).getDonors().size(), 1);
     }
     
     @Test
@@ -92,16 +99,21 @@ public class NoUpdatedDisbursementsAfterTimePeriodMatcherTests extends Performan
                                         .withTransactionType(Constants.DISBURSEMENT)
                                         .withTransactionDate(new LocalDate(2017, 7, 12).toDate())
                                         .getTransaction())
+                                .withDonor(new OrganisationBuilder()
+                                        .withOrganisationName("Donor1")
+                                        .getOrganisation())
                                 .getFunding())
                 .getActivity();
         
-        assertFalse(match(rule, a));
+        assertNull(findPerformanceIssue(rule, a));
     }
     
     @Test
     public void testTwoFundingsLastPeriod() {
        
         AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_YEAR, "1", getCriticalLevel());
+        
+        OrganisationBuilder orgBuilder = new OrganisationBuilder().withOrganisationName("Donor1");
         
         AmpActivityVersion a = new ActivityBuilder()
                 .addFunding(
@@ -114,6 +126,7 @@ public class NoUpdatedDisbursementsAfterTimePeriodMatcherTests extends Performan
                                         .withTransactionType(Constants.DISBURSEMENT)
                                         .withTransactionDate(new LocalDate(2015, 12, 12).toDate())
                                         .getTransaction())
+                                .withDonor(orgBuilder.getOrganisation())
                                 .getFunding())
                 .addFunding(
                         new FundingBuilder()
@@ -125,10 +138,11 @@ public class NoUpdatedDisbursementsAfterTimePeriodMatcherTests extends Performan
                                         .withTransactionType(Constants.COMMITMENT)
                                         .withTransactionDate(new LocalDate(2013, 12, 12).toDate())
                                         .getTransaction())
+                                .withDonor(orgBuilder.getOrganisation())
                                 .getFunding())
                 .getActivity();
         
-        assertTrue(match(rule, a));
+        assertEquals(findPerformanceIssue(rule, a).getDonors().size(), 1);
     }
 
     /**

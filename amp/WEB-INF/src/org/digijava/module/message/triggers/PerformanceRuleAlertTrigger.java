@@ -3,8 +3,8 @@ package org.digijava.module.message.triggers;
 import java.util.List;
 import java.util.Map;
 
+import org.digijava.kernel.ampapi.endpoints.performance.PerformanceIssue;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
-import org.digijava.kernel.ampapi.endpoints.performance.matcher.PerformanceRuleMatcher;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.message.helper.Event;
 import org.digijava.module.message.helper.MessageConstants;
@@ -28,8 +28,8 @@ public class PerformanceRuleAlertTrigger extends Trigger {
     @Override
     protected Event generateEvent() {
         Event e = new Event(PerformanceRuleAlertTrigger.class);
-        Map<AmpActivityVersion, List<PerformanceRuleMatcher>> activitiesWithPerfIssues = 
-                (Map<AmpActivityVersion, List<PerformanceRuleMatcher>>) source;
+        Map<AmpActivityVersion, List<PerformanceIssue>> activitiesWithPerfIssues = 
+                (Map<AmpActivityVersion, List<PerformanceIssue>>) source;
         
         PerformanceRuleManager manager = PerformanceRuleManager.getInstance();
         String performanceIssues = manager.buildPerformanceIssuesMessage(activitiesWithPerfIssues);

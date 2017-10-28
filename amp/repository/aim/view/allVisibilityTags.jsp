@@ -91,11 +91,9 @@
 <module:display name="Resource Label Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Template Documents Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Donor Profile Report" parentModule="REPORTING"></module:display>
-<module:display name="Multi-dimensional Reports" parentModule="REPORTING"></module:display>
+<module:display name="Saiku" parentModule="REPORTING"></module:display>
 <module:display name="Pledge Reports" parentModule="REPORTING"></module:display>
 <feature:display name="Pledges Default Reports" module="Pledge Reports"></feature:display>
-<feature:display name="Default Reports" module="Multi-dimensional Reports"></feature:display>
-<module:display name="Multi-dimensional Reports Public View" parentModule="REPORTING"></module:display>  
 <module:display name="Report and Tab Options" parentModule="REPORTING"></module:display>
 <module:display name="Report Types" parentModule="REPORTING"></module:display>
 <module:display name="Filter Section" parentModule="REPORTING"></module:display> 

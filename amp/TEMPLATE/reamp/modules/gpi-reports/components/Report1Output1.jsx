@@ -258,14 +258,13 @@ export default class Report1Output1 extends Component {
                                 )}
                             </select>
                         </div>
-                        <div className="pull-right"><h4>{this.props.translations['amp.gpi-reports:currency']} {this.props.mainReport.settings['currency-code']}
+                        <div className="pull-right currency-label">{this.props.translations['amp.gpi-reports:currency']} {this.props.mainReport.settings['currency-code']}
                         {(this.props.settings['number-divider'] != 1) &&
                             <span className="amount-units"> ({this.props.translations['amp-gpi-reports:amount-in-' + this.props.settings['number-divider']]})</span>                    
                         }
-                        </h4></div>
+                        </div>
                     </div>
-                    <div className="section-divider"></div>
-
+                   
                         <div className="container-fluid">
                           <div className="row">
                             <h4>{this.props.translations['amp.gpi-reports:indicator1-description']}</h4>
@@ -277,7 +276,7 @@ export default class Report1Output1 extends Component {
                         <div className="section-divider"></div>
                         <span className="pull-left">{this.getOrgName(this.state.selectedDonor) || this.props.translations['amp.gpi-reports:all-donors']}</span><span className="remarks pull-left"><img className="table-icon popup-icon" src="images/icon-bubble.svg" onClick={this.showRemarksModal}/><a onClick={this.showRemarksModal} > Remarks</a></span>
                         <div className="spacer30"></div>
-                        <table className="table table-bordered table-striped indicator-table complex-table">
+                        <table className="table indicator1-table table-bordered table-striped indicator-table complex-table">
                         <thead>
                         <tr>
                           <th className="col-md-2">{this.getLocalizedColumnName(Constants.PROJECT_TITLE)}</th>

@@ -320,7 +320,7 @@ export default class Report6 extends Component {
                             <div className="col-md-3">
                                 <div className="indicator-stat-wrapper">
                                     <div className="stat-value">{this.props.mainReport.summary[Constants.PLANNED_DISBURSEMENTS]}</div>
-                                    <div className="stat-label">{this.getLocalizedColumnName( Constants.PLANNED_DISBURSEMENTS )}</div>
+                                    <div className="stat-label">{this.props.translations['amp-gpi-reports:annual-planned-disbursements']}</div>
                                 </div>
                             </div>
                             <div className="col-md-3">
@@ -366,15 +366,19 @@ export default class Report6 extends Component {
                                 )}
                             </select>
                         </div>
-                        <div className="pull-right"><h4>{this.props.translations['amp.gpi-reports:currency']} {this.props.mainReport.settings['currency-code']} 
+                        <div className="pull-right currency-label">{this.props.translations['amp.gpi-reports:currency']} {this.props.mainReport.settings['currency-code']} 
                         {(this.props.settings['number-divider'] != 1) &&
                             <span className="amount-units"> ({this.props.translations['amp-gpi-reports:amount-in-' + this.props.settings['number-divider']]})</span>                    
                         }
-                        </h4></div>
+                       </div>
 
-                    </div>
-
-                    <div className="section-divider"></div>
+                    </div>                    
+                     <div className="container-fluid">
+                        <div className="row">
+                          <h4>{this.props.translations['amp.gpi-reports:indicator6-description']}</h4>
+                        </div>
+                      </div>
+                     <div className="section-divider"></div>
                     <table className="table table-bordered table-striped indicator-table">
                         <thead>
                             <tr>
@@ -387,7 +391,7 @@ export default class Report6 extends Component {
                                     column={Constants.ANNUAL_GOVERNMENT_BUDGET}
                                     headers={this.props.mainReport.page.headers}/>
                                      {this.getLocalizedColumnName( Constants.ANNUAL_GOVERNMENT_BUDGET )}</th>
-                                <th className="col-md-2">{this.getLocalizedColumnName( Constants.PLANNED_DISBURSEMENTS )}</th>
+                                <th className="col-md-2">{this.props.translations['amp-gpi-reports:annual-planned-disbursements']}</th>
                                 <th className="col-md-2"><HeaderToolTip
                                     column={Constants.PERCENTAGE_OF_PLANNED_ON_BUDGET}
                                     headers={this.props.mainReport.page.headers}/>{this.getLocalizedColumnName( Constants.PERCENTAGE_OF_PLANNED_ON_BUDGET )}</th>
@@ -405,6 +409,7 @@ export default class Report6 extends Component {
                             )}
                         </tbody>
                     </table>
+                    {this.props.mainReport.page.totalPageCount > 1 &&
                     <div >
                         <div className="row">
                             <div className="col-md-8 pull-right pagination-wrapper">
@@ -430,7 +435,9 @@ export default class Report6 extends Component {
                                 {this.displayPagingInfo()}
                             </div>
                         </div>
-                    </div>
+                    
+                      </div>
+                    }
                  </div>
                 }
                 </div>

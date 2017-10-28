@@ -1,5 +1,7 @@
 package org.dgfoundation.amp.gpi.reports;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -24,7 +26,7 @@ public class GPIReportConstants {
 
     public static final String COLUMN_YEAR = "Year";
     public static final String COLUMN_REMARK = "Remark";
-    public static final String COLUMN_ANNUAL_GOV_BUDGET = "Annual Government Budget";
+    public static final String COLUMN_ANNUAL_GOV_BUDGET = "Funds Recorded in Government Annual Budget";
     public static final String COLUMN_PLANNED_ON_BUDGET = "% of planned on budget";
     public static final String COLUMN_INDICATOR_5B = "Indicator 5b";
     public static final String COLUMN_TOTAL_ACTUAL_DISBURSEMENTS = "Total Actual Disbursements";
@@ -33,6 +35,7 @@ public class GPIReportConstants {
     public static final String COLUMN_EXTENT_OF_USE_OF_COUNTRY_RESULT = "Result";
     public static final String COLUMN_EXTENT_OF_USE_OF_GOV_SOURCES = "M&E";
     public static final String COLUMN_USE_OF_COUNTRY_SYSTEMS = "Use of country systems";
+    public static final String COLUMN_REMARKS_COUNT = "Number of Remarks";
     
     public static final String HIERARCHY_PARAMETER = "hierarchy";
     public static final String SUMMARY_PARAMETER = "summary";
@@ -151,4 +154,83 @@ public class GPIReportConstants {
                     + "for the government sector used national procurement systems?");
         }
     };
+    
+    public static final Map<String, String> INDICATOR_1_1_COLUMN_LABELS = 
+            Collections.unmodifiableMap(new HashMap<String, String>() {
+        private static final long serialVersionUID = 1L;
+        {
+            put(GPIReportConstants.COLUMN_YEAR, "Year");
+            put(ColumnConstants.DONOR_AGENCY, "Provider Name");
+            put(ColumnConstants.PROJECT_TITLE, "Project Title");
+            put(GPIReportConstants.GPI_1_Q1, String.format("%s\n%s", GPIReportConstants.GPI_1_Q1, "Project Amount"));
+            put(GPIReportConstants.GPI_1_Q2, String.format("%s\n%s", 
+                    GPIReportConstants.GPI_1_Q2, "Approval date, (month/year)"));
+            put(GPIReportConstants.GPI_1_Q3, String.format("%s\n%s", 
+                    GPIReportConstants.GPI_1_Q3, "Type of Intervention"));
+            put(GPIReportConstants.GPI_1_Q4, String.format("%s\n%s", 
+                    GPIReportConstants.GPI_1_Q4, "Implementing Entity"));
+            put(GPIReportConstants.GPI_1_Q5, String.format("%s\n%s", 
+                    GPIReportConstants.GPI_1_Q5, "What is the sector that the intervention targets?"));
+            put(ColumnConstants.GPI_1_Q6, String.format("%s\n%s", ColumnConstants.GPI_1_Q6, 
+                    "The objective is drawn from government result frame work's or other splanning document"
+                    + "\nYes=1, N0=0"));
+            put(ColumnConstants.GPI_1_Q6_DESCRIPTION, String.format("%s\n%s", ColumnConstants.GPI_1_Q6, 
+                    "The objective is drawn from government result frame work's or other planning document"));
+            put(ColumnConstants.GPI_1_Q7, String.format("%s\n%s", ColumnConstants.GPI_1_Q7, 
+                    "Total number of outcome indicators included in the projects result framework"));
+            put(ColumnConstants.GPI_1_Q8, String.format("%s\n%s", ColumnConstants.GPI_1_Q8, 
+                    "Number of outcome indicators drawn from existing Gov’s result framework "
+                    + "and/or other planning documents"));
+            put(ColumnConstants.GPI_1_Q9, String.format("%s\n%s", ColumnConstants.GPI_1_Q9, 
+                    "Number of outcome indication to be tracked using Gov’t ongoing statistical data source "
+                    + "or M&E system"));
+            put(ColumnConstants.GPI_1_Q10, String.format("%s\n%s", ColumnConstants.GPI_1_Q10, 
+                    "The project plans a final evaluative\nYes=1, N0=0"));
+            put(ColumnConstants.GPI_1_Q10_DESCRIPTION, String.format("%s\n%s", ColumnConstants.GPI_1_Q10, 
+                    "To what extent will the Gov't participate in carrying out the final evaluation?"
+                    + "\n(if there is one planned)"));
+            put(GPIReportConstants.COLUMN_EXTENT_OF_USE_OF_COUNTRY_RESULT, "Extent of use of country owned result "
+                    + "framework or similar planning document\nCalculation = Q8/Q7");
+                    put(GPIReportConstants.COLUMN_EXTENT_OF_USE_OF_GOV_SOURCES,
+                            "Extent of use of Gov’t sources and M&E systems"
+                            + " to track project progress\nCalculation = Q9/Q7");
+            put(GPIReportConstants.GPI_1_Q11, "Supportive Documents");
+            put(GPIReportConstants.GPI_1_Q11a, "Electronic link to project document");
+            put(GPIReportConstants.GPI_1_Q11b, "Electronic link to gov. planning doc. or results framework "
+                    + "used for project design");
+            put(GPIReportConstants.GPI_1_Q11c, "Electronic link to gov. existing data source, statistical database "
+                    + "or M&E system that will be used to track project progress");
+            
+        }
+    });
+    
+    public static final Map<String, String> INDICATOR_1_1_SUMMARY_LABELS = 
+            Collections.unmodifiableMap(new HashMap<String, String>() {
+        private static final long serialVersionUID = 1L;
+        {
+            put(GPIReportConstants.GPI_1_Q1, "Overall extent of use existing CRFs");
+            put(GPIReportConstants.GPI_1_Q2, "Overall use of country owned Results Frameworks");
+            put(GPIReportConstants.GPI_1_Q3, "Overall use of country lead Results Monitoring Frameworks");
+            put(GPIReportConstants.GPI_1_Q4, "Overall existence of ex post (final Evaluations)");
+
+        }
+    });
+    
+    public static final Map<String, String> INDICATOR_5A_COLUMN_LABELS = 
+            Collections.unmodifiableMap(new HashMap<String, String>() {
+        private static final long serialVersionUID = 1L;
+        {
+            put(GPIReportConstants.COLUMN_TOTAL_ACTUAL_DISBURSEMENTS,
+                    String.format("%s %s", "Total Disbursements", "(Q1)"));
+            put(GPIReportConstants.COLUMN_CONCESSIONAL,
+                    String.format("%s?\n%s", GPIReportConstants.COLUMN_CONCESSIONAL, "(Yes=1 / No=0)"));
+            put(MeasureConstants.ACTUAL_DISBURSEMENTS,
+                    String.format("%s %s", "Actual Disbursements for government sector", "(Q2)"));
+            put(MeasureConstants.PLANNED_DISBURSEMENTS,
+                    String.format("%s %s", "Scheduled Disbursements for government sector", "(Q3)"));
+            put(MeasureConstants.DISBURSED_AS_SCHEDULED, "% " + MeasureConstants.DISBURSED_AS_SCHEDULED);
+            put(MeasureConstants.OVER_DISBURSED, "% " + MeasureConstants.OVER_DISBURSED);
+        }
+    });
+    
 }

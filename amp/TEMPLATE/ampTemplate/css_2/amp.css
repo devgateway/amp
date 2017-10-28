@@ -20,9 +20,10 @@ h1 {text-transform:uppercase;}
 html.ie .l_big_b {font-size:12px; font-weight:bold;padding:0px 0px 5px 0px;text-align:left;float:left;padding:0px 15px 0px px;}
 span.docTitle619{border:1px solid red;text-align:left;}
 
-.word_break {word-wrap: break-word; word-break:break-all;}
+.word_break {word-wrap: break-word;}
 .bold {font-weight: bold;}
 .italic {font-style: italic;}
+table.fixed-layout {table-layout:fixed; width: 100%;}
 
 .se {color:#FF6000; font-size:12px;}
 .sel_sm {color:#FF6000; font-size:11px;}

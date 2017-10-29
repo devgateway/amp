@@ -30,7 +30,6 @@ import org.hibernate.Query;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
@@ -284,25 +283,30 @@ public class GPIUtils {
         return donors;
     }
     
-    public static Date getYearStartDate(AmpFiscalCalendar calendar, int year) {        
+    public static Date getYearStartDate(AmpFiscalCalendar calendar, int year) {
         int month = Calendar.JANUARY;
-        int day = 1;
-       /* if (calendar.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.getValue())) {
-            month = Calendar.SEPTEMBER;
-            day = isLeapYear(year + 1) ? GPIEPConstants.ETH_YEAR_START_DAY_YEAR_LEAP : GPIEPConstants.ETH_YEAR_START_DAY_NON_LEAP_YEAR;                        
-        }*/
-        
+        int day = GPIEPConstants.GREGORIAN_YEAR_START_DAY;
+        /*
+         * if
+         * (calendar.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.
+         * getValue())) { month = Calendar.SEPTEMBER; day = isLeapYear(year + 1)
+         * ? GPIEPConstants.ETH_YEAR_START_DAY_YEAR_LEAP :
+         * GPIEPConstants.ETH_YEAR_START_DAY_NON_LEAP_YEAR; }
+         */
+
         return new GregorianCalendar(year, month, day).getTime();
     }
-    
-    public static Date getYearEndDate(AmpFiscalCalendar calendar, int year) {        
+
+    public static Date getYearEndDate(AmpFiscalCalendar calendar, int year) {
         int month = Calendar.DECEMBER;
-        int day = 31;
-        /*if (calendar.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.getValue())) {
-            month = Calendar.SEPTEMBER;
-            day = GPIEPConstants.ETH_YEAR_END_DAY;                        
-        }*/
-        
+        int day = GPIEPConstants.GREGORIAN_YEAR_END_DAY;
+        /*
+         * if
+         * (calendar.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.
+         * getValue())) { month = Calendar.SEPTEMBER; day =
+         * GPIEPConstants.ETH_YEAR_END_DAY; }
+         */
+
         return new GregorianCalendar(year, month, day).getTime();
     }
     

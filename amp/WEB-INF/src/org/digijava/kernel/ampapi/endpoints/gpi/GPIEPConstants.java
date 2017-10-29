@@ -36,7 +36,8 @@ public class GPIEPConstants {
     public static final int ETH_YEAR_START_DAY_YEAR_LEAP = 12;
     public static final int ETH_YEAR_START_DAY_NON_LEAP_YEAR = 11;
     public static final int ETH_YEAR_END_DAY = 10;
-    
+    public static final int GREGORIAN_YEAR_START_DAY = 1;
+    public static final int GREGORIAN_YEAR_END_DAY = 31;    
     
     public static final Map<String, String> SORT_FIELDS = Collections.unmodifiableMap(new HashMap<String, String>() {{
             put(FIELD_AMOUNT, "amount");

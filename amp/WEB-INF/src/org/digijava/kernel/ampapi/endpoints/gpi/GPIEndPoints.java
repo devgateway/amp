@@ -560,21 +560,21 @@ public class GPIEndPoints implements ErrorReportingEndpoint {
     }
     
     @GET
-
     @Path("/report/calendars/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = { AuthRule.IN_WORKSPACE }, id = "getCalendars", ui = false)
-    public List<AmpFiscalCalendar> getCalendars() {       
-         return FiscalCalendarUtil.getAllAmpFiscalCalendars();
+    public List<AmpFiscalCalendar> getCalendars() {
+        return FiscalCalendarUtil.getAllAmpFiscalCalendars();
     }
-    
+
+    @GET
     @Path("/report/donors/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = { AuthRule.IN_WORKSPACE }, id = "getDonors", ui = false)
     public List<JsonBean> getDonors() {
         return GPIDataService.getDonors();
     }
-    
+
     /**
      * Retrieves a converted date between two calendars </br>
      * <dl>

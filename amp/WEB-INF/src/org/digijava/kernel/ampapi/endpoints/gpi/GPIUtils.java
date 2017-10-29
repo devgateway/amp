@@ -4,7 +4,9 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -19,6 +21,7 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
 import org.dgfoundation.amp.gpi.reports.GPIReportConstants;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpGPINiAidOnBudget;
 import org.digijava.module.aim.dbentity.AmpGPINiDonorNotes;
 import org.hibernate.Session;
@@ -27,6 +30,7 @@ import org.hibernate.Query;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
@@ -279,4 +283,32 @@ public class GPIUtils {
         });
         return donors;
     }
+    
+    public static Date getYearStartDate(AmpFiscalCalendar calendar, int year) {        
+        int month = Calendar.JANUARY;
+        int day = 1;
+       /* if (calendar.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.getValue())) {
+            month = Calendar.SEPTEMBER;
+            day = isLeapYear(year + 1) ? GPIEPConstants.ETH_YEAR_START_DAY_YEAR_LEAP : GPIEPConstants.ETH_YEAR_START_DAY_NON_LEAP_YEAR;                        
+        }*/
+        
+        return new GregorianCalendar(year, month, day).getTime();
+    }
+    
+    public static Date getYearEndDate(AmpFiscalCalendar calendar, int year) {        
+        int month = Calendar.DECEMBER;
+        int day = 31;
+        /*if (calendar.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.getValue())) {
+            month = Calendar.SEPTEMBER;
+            day = GPIEPConstants.ETH_YEAR_END_DAY;                        
+        }*/
+        
+        return new GregorianCalendar(year, month, day).getTime();
+    }
+    
+    public static boolean isLeapYear(int year) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, year);
+        return cal.getActualMaximum(Calendar.DAY_OF_YEAR) > 365;
+     }
 }

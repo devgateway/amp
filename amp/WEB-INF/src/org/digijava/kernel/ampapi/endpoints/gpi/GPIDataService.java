@@ -1,8 +1,10 @@
 package org.digijava.kernel.ampapi.endpoints.gpi;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +21,7 @@ import org.dgfoundation.amp.gpi.reports.GPIRemark;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
+import org.digijava.kernel.ampapi.endpoints.util.CalendarUtil;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -39,6 +42,7 @@ import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
+import org.digijava.module.gpi.util.GPIConstants;
 import org.digijava.module.translation.exotic.AmpDateFormatter;
 import org.digijava.module.translation.exotic.AmpDateFormatterFactory;
 import org.hibernate.Query;
@@ -558,17 +562,31 @@ public class GPIDataService {
             yearRange.set("calendarId", calendar.getAmpFiscalCalId());
             int startYear = AmpARFilter.getDefaultYear(AmpARFilter.getEffectiveSettings(), calendar, true);
             int endYear = startYear + numberOfYears;
-            List<Integer> years = new ArrayList<>();
+            List<JsonBean> years = new ArrayList<>();
             for (int i = startYear; i <= endYear; i++) {
-                years.add(i);
+                JsonBean yearObject = new JsonBean();
+                yearObject.set("year", i);
+
+                Date start = GPIUtils.getYearStartDate(calendar, i);
+                Date end = GPIUtils.getYearEndDate(calendar, i);
+
+                yearObject.set("start", DateTimeUtil.formatDate(start, GPIEPConstants.DATE_FORMAT));
+                yearObject.set("end", DateTimeUtil.formatDate(end, GPIEPConstants.DATE_FORMAT));
+
+                // start and end dates converted to Gregorian Calendar Dates
+                yearObject.set("convertedStart", DateTimeUtil
+                        .formatDate(FiscalCalendarUtil.toGregorianDate(start, calendar), GPIEPConstants.DATE_FORMAT));
+                yearObject.set("convertedEnd", DateTimeUtil
+                        .formatDate(FiscalCalendarUtil.toGregorianDate(end, calendar), GPIEPConstants.DATE_FORMAT));
+                years.add(yearObject);
             }
             yearRange.set("years", years);
             result.add(yearRange);
         }
         return result;
     }
-
-    private static Integer getNumberOfYears(List<AmpFiscalCalendar> calendars) {
+    
+   private static Integer getNumberOfYears(List<AmpFiscalCalendar> calendars) {
         for (AmpFiscalCalendar calendar : calendars) {
             if (calendar.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_GREGORIAN.getValue())) {
                 int currentYear = FiscalCalendarUtil.getCurrentYear();

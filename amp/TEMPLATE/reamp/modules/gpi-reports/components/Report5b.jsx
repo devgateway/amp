@@ -9,6 +9,7 @@ import * as Constants from '../common/Constants';
 import Loading from './Loading';
 import { IMG_VALUE,INDICATOR_5B} from '../common/Constants';
 import HeaderToolTip from './HeaderToolTip';
+import YearsFilterSection from './YearsFilterSection';
 export default class Report5b extends Component {
     constructor( props, context ) {
         super( props, context );
@@ -37,9 +38,11 @@ export default class Report5b extends Component {
         });
         this.settingsWidget = Utils.initializeSettingsWidget();
         this.props.actions.getYears();
-        this.props.actions.getOrgList(false);
-        this.fetchReportData();
+        this.props.actions.getOrgList(false);        
         this.props.actions.getSettings();
+        this.settingsWidget.definitions.loaded.done( function() {
+            this.fetchReportData();
+        }.bind(this));
 
    }
 
@@ -71,7 +74,17 @@ export default class Report5b extends Component {
         }.bind(this));
 
         this.settingsWidget.on('applySettings', function () {
-             this.fetchReportData();
+            const settings  = this.settingsWidget.toAPIFormat();
+            const currentCalendarId = settings && settings['calendar-id'] ?  settings['calendar-id'] : this.settingsWidget.definitions.getDefaultCalendarId();        
+            //if calendar has changed reset year filter
+            if (currentCalendarId !== this.state.calendarId) {  
+                const years = Utils.getYears(this.settingsWidget, this.props.years);
+                const lastYear = years[years.length - 1];                            
+                this.onYearClick(lastYear);            
+            } else {
+                this.fetchReportData(); 
+            }             
+             
              $(this.refs.settingsPopup).hide();
         }.bind(this));
    }
@@ -86,10 +99,7 @@ export default class Report5b extends Component {
         requestData.filters = this.filter.serialize().filters;        
         requestData.settings = this.settingsWidget.toAPIFormat();      
         if ( this.state.selectedYear ) {
-            requestData.filters.date = {
-                'start': this.state.selectedYear + '-01-01',
-                'end': this.state.selectedYear + '-12-31'
-            }
+            requestData.filters.date = Utils.getStartEndDates(this.settingsWidget, this.props.calendars, this.state.selectedYear, this.props.years, true);
         }
         
         if(this.state.hierarchy === 'donor-agency'){
@@ -127,8 +137,6 @@ export default class Report5b extends Component {
         }.bind(this));
     }
 
-
-
     onDonorFilterChange( e ) {
         this.setState( { selectedDonor: parseInt( e.target.value ) }, function() {
             var filters = this.filter.serialize().filters;
@@ -140,22 +148,19 @@ export default class Report5b extends Component {
         }.bind( this ) );
     }
 
-    onYearClick(event) {
-        this.setState( { selectedYear: $( event.target ).data( "year" ) }, function() {                      
-            var filters = this.filter.serialize().filters;
+   onYearClick( selectedYear ) {
+        this.setState( { selectedYear: selectedYear }, function() {                      
+            let filters = this.filter.serialize().filters;
             filters.date = {};
             if (this.state.selectedYear) {
-                filters.date = {
-                        'start': this.state.selectedYear + '-01-01',
-                        'end': this.state.selectedYear + '-12-31'
-                    };  
+                filters.date = Utils.getStartEndDates(this.settingsWidget, this.props.calendars, this.state.selectedYear, this.props.years, true);
             }           
-            this.filter.deserialize({filters: filters}, {silent : true});           
+            this.filter.deserialize({filters: filters}, {silent : true});          
             this.fetchReportData();
         }.bind( this ) );
 
-    }
-
+    }   
+    
     resetQuickFilters() {
         var filters = this.filter.serialize().filters;
         if ( filters.date ) {
@@ -201,8 +206,7 @@ export default class Report5b extends Component {
         requestData.page = pageNumber;
         this.props.actions.fetchReportData( requestData, '5b' );
     }
-
-
+    
     generatePaginationLinks() {
         var paginationLinks = [];
         for ( var i = 1; i <= this.props.mainReport.page.totalPageCount; i++ ) {
@@ -223,31 +227,7 @@ export default class Report5b extends Component {
         return name;
     }
 
-    showSelectedDates() {
-        var displayDates = '';
-        if(this.filter){
-            var filters = this.filter.serialize().filters;            
-            if ( filters.date ) {
-                filters.date.start = filters.date.start || '';
-                filters.date.end = filters.date.end || '';
-                var startDatePrefix = ( filters.date.start.length > 0 && filters.date.end.length === 0 ) ? this.props.translations['amp.gpi-reports:from'] : '';
-                var endDatePrefix = ( filters.date.start.length === 0 && filters.date.end.length > 0 ) ? this.props.translations['amp.gpi-reports:until'] : '';
-                if ( filters.date.start.length > 0 ) {
-                    displayDates = startDatePrefix + " " + this.filter.formatDate( filters.date.start );
-                }
-
-                if ( filters.date.end.length > 0 ) {
-                    if ( filters.date.start.length > 0 ) {
-                        displayDates += " - ";
-                    }
-                    displayDates += endDatePrefix + " " + this.filter.formatDate( filters.date.end );
-                }
-            } 
-        }
-        return displayDates;
-    }
-
-    displayPagingInfo() {
+   displayPagingInfo() {
         var transParams = {};
         transParams.fromRecord = ( ( this.props.mainReport.page.currentPageNumber - 1 ) * this.props.mainReport.page.recordsPerPage ) + 1;
         transParams.toRecord = Math.min(( this.props.mainReport.page.currentPageNumber * this.props.mainReport.page.recordsPerPage ), this.props.mainReport.page.totalRecords );
@@ -282,14 +262,7 @@ export default class Report5b extends Component {
         this.props.actions.downloadPdfFile(this.getRequestData(), '5b');
     } 
     
-    getYears() {
-        let settings  = this.settingsWidget.toAPIFormat()
-        let calendar = this.props.years.filter(calendar => calendar.calendarId == this.settingsWidget.definitions.getDefaultCalendarId())[0];
-        return calendar.years.slice();      
-    }
-    
-    render() {         
-        var years = Utils.getYears(this.settingsWidget, this.props.years);                   
+    render() { 
         var MTEFYears =  this.getMTEFYears();
         var addedGroups = [];            
         return (
@@ -331,29 +304,7 @@ export default class Report5b extends Component {
                             </div>                           
                         </div>
                     }
-                    <div className="container-fluid no-padding">
-                        <ul className="year-nav">                            
-                            {( ( years.length > 3 ) ? years.splice( years.length - 3, 3 ).reverse() : years.reverse() ).map( year =>
-                                <li className={this.state.selectedYear == year ? 'active' : ''} key={year}><a data-year={year} onClick={this.onYearClick}>{year}</a></li>
-                            )}
-                            <li >
-                                <div className="dropdown">
-                                    <a className={years.includes( this.state.selectedYear ) ? 'btn dropdown-toggle btn-years btn-years-active' : 'btn dropdown-toggle btn-years'} type="button" id="years" data-toggle="dropdown">
-                                        {this.props.translations['amp.gpi-reports:other-years']}
-                                        <span className="caret"></span></a>
-                                    <ul className="dropdown-menu dropdown-years" role="menu">
-                                        {years.reverse().map( year =>
-                                            <li role="presentation" className={this.state.selectedYear == year ? 'active' : ''} key={year}><a data-year={year} onClick={this.onYearClick}>{year}</a></li>
-                                        )}
-
-                                    </ul>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div className="selection-legend">
-                        <div className="pull-right">{this.showSelectedDates().length > 0 ? this.props.translations['amp-gpi-reports:selected'] : ''} {this.showSelectedDates()}</div>
-                    </div>
+                    <YearsFilterSection onYearClick={this.onYearClick.bind(this)} selectedYear={this.state.selectedYear} mainReport={this.props.mainReport} filter={this.filter} dateField="date" settingsWidget={this.settingsWidget} />                    
                     <div className="container-fluid no-padding">
                         <div className="dropdown">
                             <select name="donorAgency" className="form-control donor-dropdown" value={this.state.selectedDonor} onChange={this.onDonorFilterChange}>

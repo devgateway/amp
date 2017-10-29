@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as startUp from '../actions/StartUpAction';
 import * as commonListsActions from '../actions/CommonListsActions';
+import Utils from '../common/Utils';
 export default class YearsFilterSection extends Component {
     constructor( props, context ) {
         super( props, context );        
@@ -19,8 +20,12 @@ export default class YearsFilterSection extends Component {
     
     showSelectedDates() {
         var displayDates = '';
-        if(this.props.filter){           
-            var filters = this.props.filter.serialize().filters;            
+        if (this.props.filter) {           
+            var filters = this.props.filter.serialize().filters;
+            if (this.props.selectedYear) {
+                filters[this.props.dateField] = Utils.getStartEndDates(this.props.settingsWidget, this.props.calendars, this.props.selectedYear, this.props.years, false);
+            }
+                        
             if (filters[this.props.dateField]) {
                 filters[this.props.dateField].start = filters[this.props.dateField].start || '';
                 filters[this.props.dateField].end = filters[this.props.dateField].end || '';
@@ -43,7 +48,7 @@ export default class YearsFilterSection extends Component {
 
     render() {
         if ( this.props.mainReport && this.props.mainReport.page ) {
-                var years = this.props.years.slice();               
+                var years = Utils.getYears(this.props.settingsWidget, this.props.years);               
                 return (
                            <div>
                            <div className="container-fluid no-padding">
@@ -84,13 +89,18 @@ export default class YearsFilterSection extends Component {
 
 function mapStateToProps( state, ownProps ) {
     return {
+        orgList: state.commonLists.orgList,
+        years: state.commonLists.years,
+        settings: state.commonLists.settings,
         translations: state.startUp.translations,
-        translate: state.startUp.translate        
+        translate: state.startUp.translate,
+        calendars: state.commonLists.calendars
     }
 }
 
 function mapDispatchToProps( dispatch ) {
-    return {actions: bindActionCreators(Object.assign( {}, commonListsActions ), dispatch)}
+    return { actions: bindActionCreators( Object.assign( {}, commonListsActions ), dispatch ) }
 }
+
 
 export default connect( mapStateToProps, mapDispatchToProps )( YearsFilterSection );

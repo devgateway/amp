@@ -125,7 +125,7 @@ export default class Report5a extends Component {
             let filters = this.filter.serialize().filters;
             filters.date = {};
             if (this.state.selectedYear) {
-                filters.date = Utils.getStartEndDates(this.settingsWidget.toAPIFormat(), this.props.calendars, this.state.selectedYear);
+                filters.date = Utils.getStartEndDates(this.settingsWidget, this.props.calendars, this.state.selectedYear, this.props.years, true);
             }           
             this.filter.deserialize({filters: filters}, {silent : true});          
             this.fetchReportData();
@@ -205,8 +205,7 @@ export default class Report5a extends Component {
     }
     
     render() {        
-            let addedGroups = [];
-            var years = Utils.getYears(this.settingsWidget, this.props.years);
+            let addedGroups = [];           
             return (
                   <div>                   
                     {this.state.waiting &&                      
@@ -239,7 +238,7 @@ export default class Report5a extends Component {
                         </div>
                       </div>                        
                     }
-                    <YearsFilterSection onYearClick={this.onYearClick.bind(this)} years={years} selectedYear={this.state.selectedYear} mainReport={this.props.mainReport} filter={this.filter} dateField="date" />                    
+                    <YearsFilterSection onYearClick={this.onYearClick.bind(this)} selectedYear={this.state.selectedYear} mainReport={this.props.mainReport} filter={this.filter} dateField="date" settingsWidget={this.settingsWidget} />                    
                     <div className="container-fluid no-padding">
                         <div className="dropdown">
                             <select name="donorAgency" className="form-control donor-dropdown" value={this.state.selectedDonor} onChange={this.onDonorFilterChange}>

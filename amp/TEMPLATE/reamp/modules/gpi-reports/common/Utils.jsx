@@ -44,30 +44,27 @@ class Utils {
         return str;        
     }   
     
-    static getStartEndDates(settings, calendars, year) {
-        const dates = {};
-        const calendarId = settings[Constants.CALENDAR_SETTING];
-        const calendar = calendars.filter(cal => cal.ampFiscalCalId == calendarId)[0];
-        if(calendar && calendar.baseCal === Constants.ETH_BASE_CALENDAR) {
-           if (this.isLeapYear(year + 1)) {
-               dates.start = year + '-09-12';
-               dates.end = (year + 1) + '-09-10'; 
-           } else {
-               dates.start = year + '-09-11';
-               dates.end = (year + 1) + '-09-10';
-           }            
-        } else{
-            dates.start = year + '-01-01';
-            dates.end = year + '-12-31';
+    /**
+     * Get the start date and end of an year
+     * If the dates are to be used in a request to reports EP it returns the converted (gregorian dates)
+     */
+    static getStartEndDates(settingsWidget, calendars, year, years, converted) {        
+        const settings = settingsWidget.toAPIFormat();
+        const calendarId = settings && settings['calendar-id'] ? settings['calendar-id'] : settingsWidget.definitions.getDefaultCalendarId();
+        const calendar = years.filter( calendar => calendar.calendarId == calendarId )[0];
+        const yearObject = calendar.years.filter(yearObject => yearObject.year == year)[0];
+        const dates = {};        
+        if (converted) {
+            dates.start = yearObject.convertedStart;
+            dates.end = yearObject.convertedEnd;
+        } else {
+            dates.start = yearObject.start;
+            dates.end = yearObject.end;
         }
         
         return dates;
     }
-    
-    static isLeapYear(year) {
-        return new Date(year, 1, 29).getMonth() == 1;
-    }
-
+        
     static getYears( settingsWidget, years ) {
         let result = [];
         if ( settingsWidget && settingsWidget.definitions ) {
@@ -76,7 +73,9 @@ class Utils {
                 const calendarId = settings && settings['calendar-id'] ? settings['calendar-id'] : settingsWidget.definitions.getDefaultCalendarId();
                 const calendar = years.filter( calendar => calendar.calendarId == calendarId )[0];
                 if ( calendar ) {
-                    result = calendar.years.slice();
+                    for (let yearObject of calendar.years) {
+                        result.push(yearObject.year);
+                     }                    
                 }
             });
         }

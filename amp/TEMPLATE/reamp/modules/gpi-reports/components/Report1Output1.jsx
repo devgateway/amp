@@ -122,7 +122,7 @@ export default class Report1Output1 extends Component {
             const filters = this.filter.serialize().filters;            
             filters['actual-approval-date'] = {};
             if (this.state.selectedYear) {
-                filters['actual-approval-date'] = Utils.getStartEndDates(this.settingsWidget.toAPIFormat(), this.props.calendars, this.state.selectedYear);                
+                filters['actual-approval-date'] = Utils.getStartEndDates(this.settingsWidget, this.props.calendars, this.state.selectedYear, this.props.years);                
             }
             this.filter.deserialize({filters: filters}, {silent : true});
             this.fetchReportData();
@@ -193,18 +193,6 @@ export default class Report1Output1 extends Component {
         this.props.actions.downloadPdfFile(this.getRequestData(), '1');
     }
 
-    getYears() {
-        let result = [];
-        if(this.settingsWidget) {
-            let settings  = this.settingsWidget.toAPIFormat()
-            let calendarId = settings && settings['calendar-id'] ?  settings['calendar-id'] : this.settingsWidget.definitions.getDefaultCalendarId();
-            let calendar = this.props.years.filter(calendar => calendar.calendarId == calendarId)[0];
-            result = calendar.years.slice();  
-        }
-        return result;
-               
-    }
-
     render() {        
             let addedGroups = [];                       
             var years = Utils.getYears(this.settingsWidget, this.props.years);            
@@ -247,8 +235,8 @@ export default class Report1Output1 extends Component {
                               </div>
                             </div>
 
-                    }
-                    <YearsFilterSection onYearClick={this.onYearClick.bind(this)} years={years} selectedYear={this.state.selectedYear} mainReport={this.props.mainReport} filter={this.filter} dateField="actual-approval-date" /> 
+                    }                    
+                    <YearsFilterSection onYearClick={this.onYearClick.bind(this)} selectedYear={this.state.selectedYear} mainReport={this.props.mainReport} filter={this.filter} dateField="actual-approval-date" settingsWidget={this.settingsWidget} />                    
                     <div className="container-fluid no-padding">
                         <div className="dropdown">
                             <select name="donorAgency" className="form-control donor-dropdown" value={this.state.selectedDonor} onChange={this.onDonorFilterChange}>

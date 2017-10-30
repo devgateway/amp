@@ -562,18 +562,10 @@ public class GPIDataService {
             for (int i = startYear; i <= endYear; i++) {
                 JsonBean yearObject = new JsonBean();
                 yearObject.set("year", i);
-
                 Date start = GPIUtils.getYearStartDate(calendar, i);
                 Date end = GPIUtils.getYearEndDate(calendar, i);
-
                 yearObject.set("start", DateTimeUtil.formatDate(start, GPIEPConstants.DATE_FORMAT));
                 yearObject.set("end", DateTimeUtil.formatDate(end, GPIEPConstants.DATE_FORMAT));
-
-                // start and end dates converted to Gregorian Calendar Dates
-                yearObject.set("convertedStart", DateTimeUtil
-                        .formatDate(FiscalCalendarUtil.toGregorianDate(start, calendar), GPIEPConstants.DATE_FORMAT));
-                yearObject.set("convertedEnd", DateTimeUtil
-                        .formatDate(FiscalCalendarUtil.toGregorianDate(end, calendar), GPIEPConstants.DATE_FORMAT));
                 years.add(yearObject);
             }
             yearRange.set("years", years);

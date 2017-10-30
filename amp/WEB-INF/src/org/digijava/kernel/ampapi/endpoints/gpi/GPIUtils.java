@@ -286,33 +286,12 @@ public class GPIUtils {
     public static Date getYearStartDate(AmpFiscalCalendar calendar, int year) {
         int month = Calendar.JANUARY;
         int day = GPIEPConstants.GREGORIAN_YEAR_START_DAY;
-        /*
-         * if
-         * (calendar.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.
-         * getValue())) { month = Calendar.SEPTEMBER; day = isLeapYear(year + 1)
-         * ? GPIEPConstants.ETH_YEAR_START_DAY_YEAR_LEAP :
-         * GPIEPConstants.ETH_YEAR_START_DAY_NON_LEAP_YEAR; }
-         */
-
         return new GregorianCalendar(year, month, day).getTime();
     }
 
     public static Date getYearEndDate(AmpFiscalCalendar calendar, int year) {
-        int month = Calendar.DECEMBER;
-        int day = GPIEPConstants.GREGORIAN_YEAR_END_DAY;
-        /*
-         * if
-         * (calendar.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.
-         * getValue())) { month = Calendar.SEPTEMBER; day =
-         * GPIEPConstants.ETH_YEAR_END_DAY; }
-         */
-
-        return new GregorianCalendar(year, month, day).getTime();
+        int month = Calendar.JANUARY;
+        int day = GPIEPConstants.GREGORIAN_YEAR_START_DAY;
+        return new GregorianCalendar(year + 1, month, day).getTime();
     }
-    
-    public static boolean isLeapYear(int year) {
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.YEAR, year);
-        return cal.getActualMaximum(Calendar.DAY_OF_YEAR) > 365;
-     }
 }

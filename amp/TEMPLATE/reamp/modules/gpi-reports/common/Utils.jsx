@@ -46,7 +46,6 @@ class Utils {
     
     /**
      * Get the start date and end of an year
-     * If the dates are to be used in a request to reports EP it returns the converted (gregorian dates)
      */
     static getStartEndDates(settingsWidget, calendars, year, years, converted) {        
         const settings = settingsWidget.toAPIFormat();
@@ -54,14 +53,8 @@ class Utils {
         const calendar = years.filter( calendar => calendar.calendarId == calendarId )[0];
         const yearObject = calendar.years.filter(yearObject => yearObject.year == year)[0];
         const dates = {};        
-        if (converted) {
-            dates.start = yearObject.convertedStart;
-            dates.end = yearObject.convertedEnd;
-        } else {
-            dates.start = yearObject.start;
-            dates.end = yearObject.end;
-        }
-        
+        dates.start = yearObject.start;
+        dates.end = yearObject.end;        
         return dates;
     }
         

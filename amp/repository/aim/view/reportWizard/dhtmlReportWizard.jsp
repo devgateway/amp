@@ -197,7 +197,7 @@ body {
 	<div id="savingReportDiv" style="color: red; text-align: center;<c:if test='${not param.isOnePager}'>visibility: hidden</c:if> ">
 	</div>
 	
-	<div id="wizard_container" class="yui-navset-right" style="padding-right: 0em;" >
+	<div id="wizard_container" class="content-direction yui-navset-right" style="padding-right: 0em;" >
 		<table width="1000" border="0" cellspacing="0" cellpadding="0" >
 			<tr>
 				<c:if test="${param.isOnePager}">
@@ -271,8 +271,7 @@ body {
 					<div class="hd" style="font-size: 8pt">
 						${plsEnterTitle}
 					</div>
-					<div class="bd" id="titlePanelBody">
-						<%--<jsp:param name="onkeypress" value="return saveReportEngine.checkEnter(event);" />  --%>						
+					<div class="bd content-direction" id="titlePanelBody">
 						<jsp:include page="/repository/aim/view/multilingual/multilingualFieldEntry.jsp">
 							<jsp:param name="attr_name" value="multilingual_report_title" />
 						</jsp:include>
@@ -286,7 +285,7 @@ body {
 							</c:if>
 						</feature:display>
 					</div>
-					<div class="ft" align="right">
+					<div class="ft wizard-panel-buttons">
 						<button id="last_save_button" type="button" class="buttonx yui-button" onclick="saveReportEngine.saveReport();">
 							${saveBtn}
 						</button>
@@ -309,7 +308,7 @@ body {
 	</c:if>
 </digi:form>
 <!-- MAIN CONTENT PART END -->
-<div id="customFormat" style="display:none; height: 372px;width: auto;">
+<div id="customFormat" class="content-direction" style="display:none; height: 372px;width: auto;">
 	<jsp:include page="/repository/aim/view/ar/customFormatPicker.jsp" />
 </div>
 

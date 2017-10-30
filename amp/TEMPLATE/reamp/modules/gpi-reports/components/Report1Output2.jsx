@@ -120,7 +120,7 @@ export default class Report1Output2 extends Component {
             const filters = this.filter.serialize().filters;            
             filters['actual-approval-date'] = {};
             if (this.state.selectedYear) {
-                filters['actual-approval-date'] = Utils.getStartEndDates(this.settingsWidget, this.props.calendars, this.state.selectedYear, this.props.years, true);              
+                filters['actual-approval-date'] = Utils.getStartEndDates(this.settingsWidget, this.props.calendars, this.state.selectedYear, this.props.years);              
             }
             this.filter.deserialize({filters: filters}, {silent : true});
             this.fetchReportData();            

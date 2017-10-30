@@ -7,7 +7,7 @@ import * as commonListsActions from '../actions/CommonListsActions';
 import * as startUp from '../actions/StartUpAction.jsx';
 import * as Constants from '../common/Constants';
 import Loading from './Loading';
-import { IMG_VALUE,INDICATOR_5B} from '../common/Constants';
+import { IMG_VALUE, INDICATOR_5B, INDICATOR_5B_CODE, GREG_BASE_CALENDAR} from '../common/Constants';
 import HeaderToolTip from './HeaderToolTip';
 import YearsFilterSection from './YearsFilterSection';
 export default class Report5b extends Component {
@@ -73,19 +73,9 @@ export default class Report5b extends Component {
              $(this.refs.settingsPopup).hide();
         }.bind(this));
 
-        this.settingsWidget.on('applySettings', function () {
-            const settings  = this.settingsWidget.toAPIFormat();
-            const currentCalendarId = settings && settings['calendar-id'] ?  settings['calendar-id'] : this.settingsWidget.definitions.getDefaultCalendarId();        
-            //if calendar has changed reset year filter
-            if (currentCalendarId !== this.state.calendarId) {  
-                const years = Utils.getYears(this.settingsWidget, this.props.years);
-                const lastYear = years[years.length - 1];                            
-                this.onYearClick(lastYear);            
-            } else {
-                this.fetchReportData(); 
-            }             
-             
-             $(this.refs.settingsPopup).hide();
+        this.settingsWidget.on('applySettings', function () {           
+            this.fetchReportData();             
+            $(this.refs.settingsPopup).hide();
         }.bind(this));
    }
 
@@ -99,7 +89,7 @@ export default class Report5b extends Component {
         requestData.filters = this.filter.serialize().filters;        
         requestData.settings = this.settingsWidget.toAPIFormat();      
         if ( this.state.selectedYear ) {
-            requestData.filters.date = Utils.getStartEndDates(this.settingsWidget, this.props.calendars, this.state.selectedYear, this.props.years, true);
+            requestData.filters.date = this.getStartEndDates();
         }
         
         if(this.state.hierarchy === 'donor-agency'){
@@ -118,6 +108,11 @@ export default class Report5b extends Component {
         }
         
         return requestData
+    }
+    
+    getStartEndDates() {
+        const defaultCalendar = this.props.calendars.filter(cal => cal.baseCal == GREG_BASE_CALENDAR)[0];
+        return Utils.getStartEndDates(this.settingsWidget, this.props.calendars, this.state.selectedYear, this.props.years, defaultCalendar.ampFiscalCalId);        
     }
     
    updateRecordsPerPage() {
@@ -153,7 +148,7 @@ export default class Report5b extends Component {
             let filters = this.filter.serialize().filters;
             filters.date = {};
             if (this.state.selectedYear) {
-                filters.date = Utils.getStartEndDates(this.settingsWidget, this.props.calendars, this.state.selectedYear, this.props.years, true);
+                filters.date = this.getStartEndDates();
             }           
             this.filter.deserialize({filters: filters}, {silent : true});          
             this.fetchReportData();
@@ -304,7 +299,7 @@ export default class Report5b extends Component {
                             </div>                           
                         </div>
                     }
-                    <YearsFilterSection onYearClick={this.onYearClick.bind(this)} selectedYear={this.state.selectedYear} mainReport={this.props.mainReport} filter={this.filter} dateField="date" settingsWidget={this.settingsWidget} />                    
+                    <YearsFilterSection onYearClick={this.onYearClick.bind(this)} selectedYear={this.state.selectedYear} mainReport={this.props.mainReport} filter={this.filter} dateField="date" settingsWidget={this.settingsWidget} report={INDICATOR_5B_CODE} />                    
                     <div className="container-fluid no-padding">
                         <div className="dropdown">
                             <select name="donorAgency" className="form-control donor-dropdown" value={this.state.selectedDonor} onChange={this.onDonorFilterChange}>
@@ -402,7 +397,8 @@ function mapStateToProps( state, ownProps ) {
         years: state.commonLists.years,
         translations: state.startUp.translations,
         settings: state.commonLists.settings,
-        translate: state.startUp.translate
+        translate: state.startUp.translate,
+        calendars: state.commonLists.calendars
     }
 }
 

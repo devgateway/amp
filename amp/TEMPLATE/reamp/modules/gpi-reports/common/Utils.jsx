@@ -1,79 +1,96 @@
 const CONTEXT = 'GPI_REPORTS';
 const SETTINGS_DEFINITIONS_EP = '/rest/settings-definitions/gpi-reports';
 import * as Constants from '../common/Constants';
-class Utils {     
-    static initializeFilterWidget() {               
-          return new ampFilter( {
-               draggable: true,
-               caller: CONTEXT
-           });    
+class Utils {
+    static initializeFilterWidget() {
+        return new ampFilter( {
+            draggable: true,
+            caller: CONTEXT
+        });
     }
-    
-    static initializeSettingsWidget() {               
+
+    static initializeSettingsWidget() {
         return new AMPSettings.SettingsWidget( {
             draggable: true,
             caller: CONTEXT,
             isPopup: true,
             definitionUrl: SETTINGS_DEFINITIONS_EP
-        });     
+        });
     }
-    
-    static showFilters(element, filter, onFilterApply, onFilterCancel) {        
-        filter.setElement( element);
+
+    static showFilters( element, filter, onFilterApply, onFilterCancel ) {
+        filter.setElement( element );
         filter.showFilters();
-        $(element).show();
-        filter.on( 'cancel', onFilterCancel);
-        filter.on( 'apply', onFilterApply);
+        $( element ).show();
+        filter.on( 'cancel', onFilterCancel );
+        filter.on( 'apply', onFilterApply );
     }
-    
-    static showSettings(element, settingsWidget, onSettingsApply, onSettingsCancel) {
-        settingsWidget.setElement(element);
+
+    static showSettings( element, settingsWidget, onSettingsApply, onSettingsCancel ) {
+        settingsWidget.setElement( element );
         settingsWidget.definitions.loaded.done( function() {
             settingsWidget.show();
         });
-        $(element).show();
-        settingsWidget.on( 'close', onSettingsCancel);
-        settingsWidget.on( 'applySettings', onSettingsApply);
-    }  
-    
-    static capitalizeFirst(str) {               
-        if (str) {
-            return str.charAt(0).toUpperCase() + str.substr(1).toLowerCase();             
-        } 
-        
-        return str;        
-    }   
-    
+        $( element ).show();
+        settingsWidget.on( 'close', onSettingsCancel );
+        settingsWidget.on( 'applySettings', onSettingsApply );
+    }
+
+    static capitalizeFirst( str ) {
+        if ( str ) {
+            return str.charAt( 0 ).toUpperCase() + str.substr( 1 ).toLowerCase();
+        }
+
+        return str;
+    }
+
     /**
      * Get the start date and end of an year
      */
-    static getStartEndDates(settingsWidget, calendars, year, years, converted) {        
+    static getStartEndDates( settingsWidget, calendars, year, years, fromCalendarId) {
         const settings = settingsWidget.toAPIFormat();
-        const calendarId = settings && settings['calendar-id'] ? settings['calendar-id'] : settingsWidget.definitions.getDefaultCalendarId();
-        const calendar = years.filter( calendar => calendar.calendarId == calendarId )[0];
-        const yearObject = calendar.years.filter(yearObject => yearObject.year == year)[0];
-        const dates = {};        
-        dates.start = yearObject.start;
-        dates.end = yearObject.end;        
-        return dates;
-    }
+        let calendarId;
+        if (fromCalendarId) {
+            calendarId = fromCalendarId;
+        } else {
+            calendarId = settings && settings['calendar-id'] ? settings['calendar-id'] : settingsWidget.definitions.getDefaultCalendarId(); 
+        }
         
-    static getYears( settingsWidget, years ) {
+        const calendar = years.filter( calendar => calendar.calendarId == calendarId )[0];
+        const yearObject = calendar.years.filter( yearObject => yearObject.year == year )[0];
+        return {start: yearObject.start, end: yearObject.end};
+    }
+
+    static getYears(settingsWidget, years, fromCalendarId) {
         let result = [];
         if ( settingsWidget && settingsWidget.definitions ) {
             settingsWidget.definitions.loaded.done( function() {
-                const settings = settingsWidget.toAPIFormat()
-                const calendarId = settings && settings['calendar-id'] ? settings['calendar-id'] : settingsWidget.definitions.getDefaultCalendarId();
-                const calendar = years.filter( calendar => calendar.calendarId == calendarId )[0];
-                if ( calendar ) {
-                    for (let yearObject of calendar.years) {
-                        result.push(yearObject.year);
-                     }                    
+                let calendarId;
+                if (fromCalendarId) {
+                    calendarId = fromCalendarId; 
+                } else {
+                    const settings = settingsWidget.toAPIFormat()
+                    calendarId = settings && settings['calendar-id'] ? settings['calendar-id'] : settingsWidget.definitions.getDefaultCalendarId();  
                 }
-            });
+                
+                result = this.getCalendarYears( years, calendarId );
+            }.bind(this));
         }
+
         return result;
-    }        
+    }
+
+    static getCalendarYears( years, calendarId ) {
+        let result = []
+        const calendar = years.filter( calendar => calendar.calendarId == calendarId )[0];
+        if ( calendar ) {
+            for ( let yearObject of calendar.years ) {
+                result.push( yearObject.year );
+            }
+        }
+
+        return result;
+    }
 
 }
 

@@ -125,7 +125,7 @@ export default class Report5a extends Component {
             let filters = this.filter.serialize().filters;
             filters.date = {};
             if (this.state.selectedYear) {
-                filters.date = Utils.getStartEndDates(this.settingsWidget, this.props.calendars, this.state.selectedYear, this.props.years, true);
+                filters.date = Utils.getStartEndDates(this.settingsWidget, this.props.calendars, this.state.selectedYear, this.props.years);
             }           
             this.filter.deserialize({filters: filters}, {silent : true});          
             this.fetchReportData();

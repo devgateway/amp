@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import * as startUp from '../actions/StartUpAction';
 import * as commonListsActions from '../actions/CommonListsActions';
 import Utils from '../common/Utils';
+import { INDICATOR_5B_CODE, GREG_BASE_CALENDAR} from '../common/Constants';
 export default class YearsFilterSection extends Component {
     constructor( props, context ) {
         super( props, context );        
@@ -22,10 +23,7 @@ export default class YearsFilterSection extends Component {
         var displayDates = '';
         if (this.props.filter) {           
             var filters = this.props.filter.serialize().filters;
-            if (this.props.selectedYear) {
-                filters[this.props.dateField] = Utils.getStartEndDates(this.props.settingsWidget, this.props.calendars, this.props.selectedYear, this.props.years, false);
-            }
-                        
+                              
             if (filters[this.props.dateField]) {
                 filters[this.props.dateField].start = filters[this.props.dateField].start || '';
                 filters[this.props.dateField].end = filters[this.props.dateField].end || '';
@@ -48,7 +46,14 @@ export default class YearsFilterSection extends Component {
 
     render() {
         if ( this.props.mainReport && this.props.mainReport.page ) {
-                var years = Utils.getYears(this.props.settingsWidget, this.props.years);               
+                var years = [];                
+                if (this.props.report === INDICATOR_5B_CODE) {
+                    const calendar = this.props.calendars.filter(cal => cal.baseCal == GREG_BASE_CALENDAR)[0];                    
+                    years = Utils.getYears(this.props.settingsWidget, this.props.years, calendar.ampFiscalCalId);
+                } else {
+                    years = Utils.getYears(this.props.settingsWidget, this.props.years);
+                }
+                                   
                 return (
                            <div>
                            <div className="container-fluid no-padding">

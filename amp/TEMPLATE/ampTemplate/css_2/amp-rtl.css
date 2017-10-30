@@ -30,6 +30,10 @@ div.trnpanel div.trn-row ul {
     float: right;
 }
 
+.content-dir {
+    direction: rtl;
+}
+
 .onepager-pic-icon {
 	right: -3px;
 	float: left;

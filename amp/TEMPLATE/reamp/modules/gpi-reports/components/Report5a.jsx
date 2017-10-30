@@ -55,6 +55,9 @@ export default class Report5a extends Component {
     }
 
     showSettings() {
+       const settings  = this.settingsWidget.toAPIFormat();
+       const calendarId = settings && settings['calendar-id'] ?  settings['calendar-id'] : this.settingsWidget.definitions.getDefaultCalendarId();
+       this.setState( { calendarId: calendarId });
        Utils.showSettings(this.refs.settingsPopup, this.settingsWidget, this.onSettingsApply.bind(this), this.onSettingsCancel.bind(this));       
     }
     
@@ -63,7 +66,14 @@ export default class Report5a extends Component {
     }
 
     onSettingsApply(){
-        this.fetchReportData();
+        const settings  = this.settingsWidget.toAPIFormat();
+        const currentCalendarId = settings && settings['calendar-id'] ?  settings['calendar-id'] : this.settingsWidget.definitions.getDefaultCalendarId();        
+        //if calendar has changed reset year filter
+        if (currentCalendarId !== this.state.calendarId) {            
+            this.onYearClick(null);            
+        } else {
+            this.fetchReportData(); 
+        }  
         $( this.refs.settingsPopup ).hide();
     }
     
@@ -115,10 +125,7 @@ export default class Report5a extends Component {
             let filters = this.filter.serialize().filters;
             filters.date = {};
             if (this.state.selectedYear) {
-                filters.date = {
-                        'start': this.state.selectedYear + '-01-01',
-                        'end': this.state.selectedYear + '-12-31'
-                    };  
+                filters.date = Utils.getStartEndDates(this.settingsWidget, this.props.calendars, this.state.selectedYear, this.props.years);
             }           
             this.filter.deserialize({filters: filters}, {silent : true});          
             this.fetchReportData();
@@ -198,8 +205,7 @@ export default class Report5a extends Component {
     }
     
     render() {        
-            let addedGroups = [];
-            var years = Utils.getYears(this.settingsWidget, this.props.years);
+            let addedGroups = [];           
             return (
                   <div>                   
                     {this.state.waiting &&                      
@@ -232,7 +238,7 @@ export default class Report5a extends Component {
                         </div>
                       </div>                        
                     }
-                    <YearsFilterSection onYearClick={this.onYearClick.bind(this)} years={years} selectedYear={this.state.selectedYear} mainReport={this.props.mainReport} filter={this.filter} dateField="date" />                    
+                    <YearsFilterSection onYearClick={this.onYearClick.bind(this)} selectedYear={this.state.selectedYear} mainReport={this.props.mainReport} filter={this.filter} dateField="date" settingsWidget={this.settingsWidget} />                    
                     <div className="container-fluid no-padding">
                         <div className="dropdown">
                             <select name="donorAgency" className="form-control donor-dropdown" value={this.state.selectedDonor} onChange={this.onDonorFilterChange}>
@@ -318,7 +324,8 @@ function mapStateToProps( state, ownProps ) {
         years: state.commonLists.years,
         settings: state.commonLists.settings,
         translations: state.startUp.translations,
-        translate: state.startUp.translate
+        translate: state.startUp.translate,
+        calendars: state.commonLists.calendars
     }
 }
 

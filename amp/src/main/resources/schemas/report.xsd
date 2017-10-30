@@ -15,6 +15,9 @@
       <xs:element type="measures" name="measures" minOccurs="0" />
       <xs:element type="hierarchies" name="hierarchies" minOccurs="0" />
       <xs:element type="settings" name="settings" minOccurs="0" />
+      <xs:element type="filters" name="filters"/>
+      <xs:element type="groupingOption" name="groupingOption" minOccurs="0" />
+      <xs:element type="xs:boolean" name="summary" minOccurs="0" />
     </xs:sequence>
   </xs:complexType>
 
@@ -45,6 +48,14 @@
     </xs:sequence>
   </xs:complexType>
   
+  <xs:simpleType name="groupingOption">
+    <xs:restriction base="xs:string">
+	  <xs:enumeration value="A" />
+	  <xs:enumeration value="Q" />
+      <xs:enumeration value="M" />
+	</xs:restriction>
+  </xs:simpleType>
+  
   <xs:element name="report" type="report" />
   
   <xs:complexType name="report">
@@ -66,6 +77,8 @@
       <xs:element type="sorting" name="sorting"/>
       <xs:element type="filters" name="filters"/>
       <xs:element type="settings" name="settings"/>
+      <xs:element type="groupingOption" name="groupingOption" minOccurs="0" />
+      <xs:element type="xs:boolean" name="summary" minOccurs="0" />
     </xs:sequence>
   </xs:complexType>
   
@@ -177,6 +190,8 @@
     <xs:sequence>
       <xs:element type="xs:string" name="name"/>
       <xs:element type="values" name="values"/>
+      <xs:element type="xs:string" name="start" minOccurs="0"/>
+      <xs:element type="xs:string" name="end" minOccurs="0"/>
     </xs:sequence>
   </xs:complexType>
   

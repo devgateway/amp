@@ -1,5 +1,6 @@
 <%@ page pageEncoding="UTF-8"
 	import="org.digijava.module.aim.dbentity.AmpOrganisation,java.util.*"%>
+<%@page import="org.digijava.kernel.util.SiteUtils"%>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles"%>
@@ -10,6 +11,10 @@
 
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
+
+<% if(SiteUtils.isEffectiveLangRTL()) { %>
+  <link rel="stylesheet" href="/TEMPLATE/ampTemplate/css_2/amp-rtl.css">
+<% } %>
 
 <script language="JavaScript">
 
@@ -248,7 +253,7 @@
 
 
 
-	<table width="100%" cellSpacing="5" cellPadding="5" vAlign="top" border="0">
+	<table width="100%" cellSpacing="5" cellPadding="5" vAlign="top" border="0" class="content-dir">
 		<tr>
 			<td vAlign="top">
 			<table bgcolor="#f4f4f2" cellPadding="5" cellSpacing="5" width="100%" class="box-border-nopadding">

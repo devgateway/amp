@@ -43,7 +43,7 @@ public class RenderFormSubsectionTag extends BodyTagSupport {
         try {
             JspWriter out = pageContext.getOut();
             StringBuffer html = new StringBuffer();
-            html.append(String.format("<div %s class='fields_group %s'>\n", this.getStyleId().isEmpty() ? "" : "id = '" + getStyleId() + "'",
+            html.append(String.format("<div %s class='fields_group content-dir %s'>\n", this.getStyleId().isEmpty() ? "" : "id = '" + getStyleId() + "'",
                     this.getStyleClass()));
             html.append(String.format("<div class='fields_group_title'>%s</div>\n", TranslatorWorker.translateText(this.getTitle())));
             html.append("<div class='fields_group_contents'>\n");

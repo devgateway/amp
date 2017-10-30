@@ -198,25 +198,32 @@ public class GeneratedReportToXmlConverter {
         ReportSettings settings = generatedReport.spec.getSettings();
 
         xmlSettings.setCurrencyCode(settings.getCurrencyCode());
-        xmlSettings.setCalendarId(settings.getCalendar().getIdentifier().intValue());
+        if (settings.getCalendar() != null && settings.getCalendar().getIdentifier() != null) {
+            xmlSettings.setCalendarId(settings.getCalendar().getIdentifier().intValue());
+        }
 
         YearRange yearRange = new YearRange();
-        if (settings.getYearRangeFilter().min != null)
+        if (settings.getYearRangeFilter() != null && settings.getYearRangeFilter().min != null) {
             yearRange.setFrom(Integer.parseInt(settings.getYearRangeFilter().min));
-        if (settings.getYearRangeFilter().max != null)
+        }
+        
+        if (settings.getYearRangeFilter() != null && settings.getYearRangeFilter().max != null) {
             yearRange.setTo(Integer.parseInt(settings.getYearRangeFilter().max));
+        }
 
         xmlSettings.setYearRange(yearRange);
 
         AmountFormat xmlAmountFormat = new AmountFormat();
         DecimalFormat amountFormat = settings.getCurrencyFormat();
-        DecimalFormatSymbols ds = amountFormat.getDecimalFormatSymbols();
-        xmlAmountFormat.setNumberDivider(settings.getUnitsOption().divider);
-        xmlAmountFormat.setMaxFracDigits(amountFormat.getMaximumFractionDigits());
-        xmlAmountFormat.setDecimalSymbol(String.valueOf(ds.getDecimalSeparator()));
-        xmlAmountFormat.setGroupSeparator(String.valueOf(ds.getGroupingSeparator()));
-        xmlAmountFormat.setUseGrouping(amountFormat.isGroupingUsed());
-        xmlAmountFormat.setGroupSize(amountFormat.getGroupingSize());
+        if (amountFormat != null) {
+            DecimalFormatSymbols ds = amountFormat.getDecimalFormatSymbols();
+            xmlAmountFormat.setNumberDivider(settings.getUnitsOption().divider);
+            xmlAmountFormat.setMaxFracDigits(amountFormat.getMaximumFractionDigits());
+            xmlAmountFormat.setDecimalSymbol(String.valueOf(ds.getDecimalSeparator()));
+            xmlAmountFormat.setGroupSeparator(String.valueOf(ds.getGroupingSeparator()));
+            xmlAmountFormat.setUseGrouping(amountFormat.isGroupingUsed());
+            xmlAmountFormat.setGroupSize(amountFormat.getGroupingSize());
+        }
 
         xmlSettings.setAmountFormat(xmlAmountFormat);
 

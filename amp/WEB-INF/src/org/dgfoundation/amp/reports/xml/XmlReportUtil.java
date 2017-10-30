@@ -33,31 +33,59 @@ public class XmlReportUtil {
 
         if (reportParameter.getSettings() != null) {
             Map<String, Object> settings = new HashMap<>();
-            settings.put(SettingsConstants.CURRENCY_ID, reportParameter.getSettings().getCurrencyCode());
-            settings.put(SettingsConstants.CALENDAR_TYPE_ID, reportParameter.getSettings().getCalendarId());
+            if (reportParameter.getSettings().getCurrencyCode() != null) {
+                settings.put(SettingsConstants.CURRENCY_ID, reportParameter.getSettings().getCurrencyCode());
+            }
+            
+            if (reportParameter.getSettings().getCalendarId() != null) {
+                settings.put(SettingsConstants.CALENDAR_TYPE_ID, reportParameter.getSettings().getCalendarId());
+            }
     
             if (reportParameter.getSettings().getYearRange() != null) {
                 Map<String, Object> yearRange = new HashMap<>();
-                yearRange.put(SettingsConstants.YEAR_FROM,
-                        String.valueOf(reportParameter.getSettings().getYearRange().getFrom()));
-                yearRange.put(SettingsConstants.YEAR_TO, String.valueOf(reportParameter.getSettings().getYearRange().getTo()));
+                if (reportParameter.getSettings().getYearRange().getFrom() != null) {
+                    yearRange.put(SettingsConstants.YEAR_FROM,
+                            String.valueOf(reportParameter.getSettings().getYearRange().getFrom()));
+                }
+                
+                if (reportParameter.getSettings().getYearRange().getTo() != null) {
+                    yearRange.put(SettingsConstants.YEAR_TO, 
+                            String.valueOf(reportParameter.getSettings().getYearRange().getTo()));
+                }
+                
                 settings.put(SettingsConstants.YEAR_RANGE_ID, yearRange);
             }
     
             if (reportParameter.getSettings().getAmountFormat() != null) {
                 Map<String, Object> amountFormat = new HashMap<>();
-                amountFormat.put(SettingsConstants.AMOUNT_UNITS,
-                        reportParameter.getSettings().getAmountFormat().getNumberDivider());
-                amountFormat.put(SettingsConstants.MAX_FRACT_DIGITS,
-                        reportParameter.getSettings().getAmountFormat().getMaxFracDigits());
-                amountFormat.put(SettingsConstants.DECIMAL_SYMBOL,
-                        reportParameter.getSettings().getAmountFormat().getDecimalSymbol());
+                
+                if (reportParameter.getSettings().getAmountFormat().getNumberDivider() != null) {
+                    amountFormat.put(SettingsConstants.AMOUNT_UNITS,
+                            reportParameter.getSettings().getAmountFormat().getNumberDivider());
+                }
+                
+                if (reportParameter.getSettings().getAmountFormat().getMaxFracDigits() != null) {
+                    amountFormat.put(SettingsConstants.MAX_FRACT_DIGITS,
+                            reportParameter.getSettings().getAmountFormat().getMaxFracDigits());
+                }
+                
+                if (reportParameter.getSettings().getAmountFormat().getDecimalSymbol() != null) {
+                    amountFormat.put(SettingsConstants.DECIMAL_SYMBOL,
+                            reportParameter.getSettings().getAmountFormat().getDecimalSymbol());
+                }
+                
+                if (reportParameter.getSettings().getAmountFormat().getGroupSeparator() != null) {
+                    amountFormat.put(SettingsConstants.GROUP_SEPARATOR,
+                            reportParameter.getSettings().getAmountFormat().getGroupSeparator());
+                }
+                
+                if (reportParameter.getSettings().getAmountFormat().getGroupSize() != null) {
+                    amountFormat.put(SettingsConstants.GROUP_SIZE, 
+                            reportParameter.getSettings().getAmountFormat().getGroupSize());
+                }
+                
                 amountFormat.put(SettingsConstants.USE_GROUPING,
                         reportParameter.getSettings().getAmountFormat().isUseGrouping());
-                amountFormat.put(SettingsConstants.GROUP_SEPARATOR,
-                        reportParameter.getSettings().getAmountFormat().getGroupSeparator());
-                amountFormat.put(SettingsConstants.GROUP_SIZE, 
-                        reportParameter.getSettings().getAmountFormat().getGroupSize());
     
                 settings.put(SettingsConstants.AMOUNT_FORMAT_ID, amountFormat);
             }

@@ -1,6 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.gpi;
 
-import java.util.ArrayList;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;

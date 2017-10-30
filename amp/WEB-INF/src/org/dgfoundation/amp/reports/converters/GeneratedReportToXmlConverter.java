@@ -198,15 +198,18 @@ public class GeneratedReportToXmlConverter {
         ReportSettings settings = generatedReport.spec.getSettings();
 
         xmlSettings.setCurrencyCode(settings.getCurrencyCode());
-        if(settings.getCalendar() != null && settings.getCalendar().getIdentifier() != null) {
+        if (settings.getCalendar() != null && settings.getCalendar().getIdentifier() != null) {
             xmlSettings.setCalendarId(settings.getCalendar().getIdentifier().intValue());
         }
 
         YearRange yearRange = new YearRange();
-        if (settings.getYearRangeFilter() != null && settings.getYearRangeFilter().min != null)
+        if (settings.getYearRangeFilter() != null && settings.getYearRangeFilter().min != null) {
             yearRange.setFrom(Integer.parseInt(settings.getYearRangeFilter().min));
-        if (settings.getYearRangeFilter() != null && settings.getYearRangeFilter().max != null)
+        }
+        
+        if (settings.getYearRangeFilter() != null && settings.getYearRangeFilter().max != null) {
             yearRange.setTo(Integer.parseInt(settings.getYearRangeFilter().max));
+        }
 
         xmlSettings.setYearRange(yearRange);
 

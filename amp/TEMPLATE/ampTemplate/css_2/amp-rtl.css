@@ -181,3 +181,16 @@ div.trnpanel div.trn-row ul {
 .nav > li.tab {
     float: right;
 }
+
+.round-filter, .round-filter-group, .round-filter-group {
+    float: right!important;
+}
+
+.ui-accordion-header-icon {
+    left: unset!important;
+    right:.5em!important;
+}
+
+.ui-accordion-icons {
+    padding-right: 2.2em!important;
+}

@@ -58,9 +58,12 @@ export default class YearsFilterSection extends Component {
                            <div>
                            <div className="container-fluid no-padding">
                            <ul className="year-nav">
-                               <li className={this.props.selectedYear ? '' : 'active'}>
-                                   <a onClick={this.onYearClick}>{this.props.translations['amp.gpi-reports:all-years']}</a>
-                               </li>
+                              {this.props.report !== INDICATOR_5B_CODE &&
+                                  <li className={this.props.selectedYear ? '' : 'active'}>
+                                    <a onClick={this.onYearClick}>{this.props.translations['amp.gpi-reports:all-years']}</a>
+                                   </li> 
+                              }
+                               
                                {( ( years.length > 3 ) ? years.splice( years.length - 3, 3 ).reverse() : years.reverse() ).map( year =>
                                    <li className={this.props.selectedYear == year ? 'active' : ''} key={year}><a data-year={year} onClick={this.onYearClick}>{year}</a></li>
                                )}

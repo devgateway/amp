@@ -558,17 +558,23 @@ public class GPIDataService {
             yearRange.set("calendarId", calendar.getAmpFiscalCalId());
             int startYear = AmpARFilter.getDefaultYear(AmpARFilter.getEffectiveSettings(), calendar, true);
             int endYear = startYear + numberOfYears;
-            List<Integer> years = new ArrayList<>();
+            List<JsonBean> years = new ArrayList<>();
             for (int i = startYear; i <= endYear; i++) {
-                years.add(i);
+                JsonBean yearObject = new JsonBean();
+                yearObject.set("year", i);
+                Date start = GPIUtils.getYearStartDate(calendar, i);
+                Date end = GPIUtils.getYearEndDate(calendar, i);
+                yearObject.set("start", DateTimeUtil.formatDate(start, GPIEPConstants.DATE_FORMAT));
+                yearObject.set("end", DateTimeUtil.formatDate(end, GPIEPConstants.DATE_FORMAT));
+                years.add(yearObject);
             }
             yearRange.set("years", years);
             result.add(yearRange);
         }
         return result;
     }
-
-    private static Integer getNumberOfYears(List<AmpFiscalCalendar> calendars) {
+    
+   private static Integer getNumberOfYears(List<AmpFiscalCalendar> calendars) {
         for (AmpFiscalCalendar calendar : calendars) {
             if (calendar.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_GREGORIAN.getValue())) {
                 int currentYear = FiscalCalendarUtil.getCurrentYear();

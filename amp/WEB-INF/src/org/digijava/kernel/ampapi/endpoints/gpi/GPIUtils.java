@@ -4,7 +4,9 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -19,6 +21,7 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
 import org.dgfoundation.amp.gpi.reports.GPIReportConstants;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpGPINiAidOnBudget;
 import org.digijava.module.aim.dbentity.AmpGPINiDonorNotes;
 import org.hibernate.Session;
@@ -278,5 +281,17 @@ public class GPIUtils {
             }
         });
         return donors;
+    }
+    
+    public static Date getYearStartDate(AmpFiscalCalendar calendar, int year) {
+        int month = Calendar.JANUARY;
+        int day = GPIEPConstants.GREGORIAN_YEAR_START_DAY;
+        return new GregorianCalendar(year, month, day).getTime();
+    }
+
+    public static Date getYearEndDate(AmpFiscalCalendar calendar, int year) {
+        int month = Calendar.JANUARY;
+        int day = GPIEPConstants.GREGORIAN_YEAR_START_DAY;
+        return new GregorianCalendar(year + 1, month, day).getTime();
     }
 }

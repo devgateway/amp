@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
-import org.dgfoundation.amp.ar.AllTests_amp212;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
@@ -13,11 +12,9 @@ import org.dgfoundation.amp.mondrian.ReportingTestCase;
 import org.dgfoundation.amp.newreports.AreaOwner;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
-import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportFiltersImpl;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
-import org.dgfoundation.amp.nireports.GrandTotalsDigest;
 import org.dgfoundation.amp.nireports.output.NiReportExecutor;
 import org.dgfoundation.amp.nireports.testcases.NiReportModel;
 import org.junit.Test;
@@ -30,10 +27,6 @@ import org.junit.Test;
  *
  */
 public class AmpSchemaComponentsTests extends ReportingTestCase {
-    
-    public AmpSchemaComponentsTests() {
-        super("AmpSchemaComponentsTests");
-    }
     
     private static final String correctTotals = "{RAW / Funding / 2014 / Actual Commitments=2150, RAW / Funding / 2014 / Actual Disbursements=850, RAW / Funding / 2017 / Actual Commitments=1100, RAW / Funding / 2017 / Actual Disbursements=0, RAW / Totals / Actual Commitments=3250, RAW / Totals / Actual Disbursements=850}";
 
@@ -86,13 +79,13 @@ public class AmpSchemaComponentsTests extends ReportingTestCase {
         );
 
     private static final List<String> HIERARCHIES_TO_TRY = new ImmutableList.Builder<String>()
-            .addAll(BasicSanityChecks.hierarchiesToTry)
+            .addAll(BasicSanityChecks.HIERARCHIES_TO_TRY)
             .add(ColumnConstants.COMPONENT_TYPE)
             .add(ColumnConstants.COMPONENT_NAME)
             .add(ColumnConstants.COMPONENT_FUNDING_ORGANIZATION)
             .add(ColumnConstants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION)
             .build();
-    
+
     @Override
     protected NiReportExecutor getNiExecutor(List<String> activityNames) {
         return getDbExecutor(activityNames);
@@ -189,7 +182,7 @@ public class AmpSchemaComponentsTests extends ReportingTestCase {
         ReportSpecificationImpl spec = buildComponentReport("testComponentReportByComponentType", 
                 Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.COMPONENT_TYPE),
                 Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
-                Arrays.asList(ColumnConstants.COMPONENT_TYPE), 
+                Arrays.asList(ColumnConstants.COMPONENT_TYPE),
                 GroupingCriteria.GROUPING_YEARLY);
         
         runNiTestCase(spec, "en", acts, cor);
@@ -199,7 +192,7 @@ public class AmpSchemaComponentsTests extends ReportingTestCase {
     public void testHierarchiesDoNotChangeTotals() throws Exception {
         
         ReportSpecificationImpl initSpec = buildComponentReport("initSpec", 
-                Arrays.asList(ColumnConstants.PROJECT_TITLE), 
+                Arrays.asList(ColumnConstants.PROJECT_TITLE),
                 Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
                 null, 
                 GroupingCriteria.GROUPING_YEARLY);
@@ -210,7 +203,7 @@ public class AmpSchemaComponentsTests extends ReportingTestCase {
         for (boolean isSummary : Arrays.asList(true, false)) {
             for (String hierName : HIERARCHIES_TO_TRY) {
                 ReportSpecificationImpl spec = buildComponentReport(String.format("%s summary: %b", hierName, isSummary), 
-                        Arrays.asList(ColumnConstants.PROJECT_TITLE, hierName), 
+                        Arrays.asList(ColumnConstants.PROJECT_TITLE, hierName),
                         Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
                         Arrays.asList(hierName), 
                         GroupingCriteria.GROUPING_YEARLY);
@@ -279,10 +272,5 @@ public class AmpSchemaComponentsTests extends ReportingTestCase {
                 GroupingCriteria.GROUPING_YEARLY);
 
         runNiTestCase(spec, "en", acts, cor);
-    }
-    
-    @Override
-    public void setUp() {
-        AllTests_amp212.setUp();
     }
 }

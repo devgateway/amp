@@ -1,13 +1,14 @@
 package org.digijava.kernel.ampapi.endpoints.performance.matcher;
 
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNull;
 
 import org.dgfoundation.amp.activity.builder.ActivityBuilder;
 import org.dgfoundation.amp.activity.builder.CategoryClassBuilder;
 import org.dgfoundation.amp.activity.builder.CategoryValueBuilder;
 import org.dgfoundation.amp.activity.builder.FundingBuilder;
+import org.dgfoundation.amp.activity.builder.OrganisationBuilder;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleConstants;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.NoUpdatedStatusAfterFundingDateMatcherDefinition;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -54,10 +55,16 @@ public class NoUpdatedStatusAfterFundingDateMatcherTests extends PerformanceRule
                 .addFunding(
                         new FundingBuilder()
                                 .withClassificationDate(new LocalDate(2016, 12, 12).toDate())
+                                .withDonor(new OrganisationBuilder()
+                                        .withOrganisationName("Donor1")
+                                        .getOrganisation())
                                 .getFunding())
                 .addFunding(
                         new FundingBuilder()
-                                .withClassificationDate(new LocalDate(2017, 5, 12).toDate())
+                                .withClassificationDate(new LocalDate(2019, 5, 12).toDate())
+                                .withDonor(new OrganisationBuilder()
+                                        .withOrganisationName("Donor2")
+                                        .getOrganisation())
                                 .getFunding())
                 .addCategoryValue(
                         new CategoryValueBuilder()
@@ -69,7 +76,7 @@ public class NoUpdatedStatusAfterFundingDateMatcherTests extends PerformanceRule
                                 .getCategoryValue())
                 .getActivity();
         
-        assertTrue(match(rule, a));
+        assertEquals(findPerformanceIssue(rule, a).getDonors().size(), 1);
     }
     
     @Test
@@ -82,6 +89,9 @@ public class NoUpdatedStatusAfterFundingDateMatcherTests extends PerformanceRule
                 .addFunding(
                         new FundingBuilder()
                                 .withClassificationDate(new LocalDate(2015, 10, 12).toDate())
+                                .withDonor(new OrganisationBuilder()
+                                        .withOrganisationName("Donor1")
+                                        .getOrganisation())
                                 .getFunding())
                 .addCategoryValue(
                         new CategoryValueBuilder()
@@ -93,7 +103,7 @@ public class NoUpdatedStatusAfterFundingDateMatcherTests extends PerformanceRule
                                 .getCategoryValue())
                 .getActivity();
         
-        assertFalse(match(rule, a));
+        assertNull(findPerformanceIssue(rule, a));
     }
     
     @Test
@@ -106,6 +116,9 @@ public class NoUpdatedStatusAfterFundingDateMatcherTests extends PerformanceRule
                 .addFunding(
                         new FundingBuilder()
                                 .withClassificationDate(new LocalDate(2017, 3, 13).toDate())
+                                .withDonor(new OrganisationBuilder()
+                                        .withOrganisationName("Donor1")
+                                        .getOrganisation())
                                 .getFunding())
                 .addCategoryValue(
                         new CategoryValueBuilder()
@@ -117,7 +130,7 @@ public class NoUpdatedStatusAfterFundingDateMatcherTests extends PerformanceRule
                                 .getCategoryValue())
                 .getActivity();
         
-        assertTrue(match(rule, a));
+        assertEquals(findPerformanceIssue(rule, a).getDonors().size(), 1);
     }
     
     @Test
@@ -130,6 +143,9 @@ public class NoUpdatedStatusAfterFundingDateMatcherTests extends PerformanceRule
                 .addFunding(
                         new FundingBuilder()
                                 .withClassificationDate(new LocalDate(2017, 7, 13).toDate())
+                                .withDonor(new OrganisationBuilder()
+                                        .withOrganisationName("Donor2")
+                                        .getOrganisation())
                                 .getFunding())
                 .addCategoryValue(
                         new CategoryValueBuilder()
@@ -141,7 +157,7 @@ public class NoUpdatedStatusAfterFundingDateMatcherTests extends PerformanceRule
                                 .getCategoryValue())
                 .getActivity();
         
-        assertFalse(match(rule, a));
+        assertNull(findPerformanceIssue(rule, a));
     }
 
     /**

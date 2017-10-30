@@ -1,11 +1,12 @@
 package org.digijava.kernel.ampapi.endpoints.performance.matcher;
 
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNull;
 
 import org.dgfoundation.amp.activity.builder.ActivityBuilder;
 import org.dgfoundation.amp.activity.builder.FundingBuilder;
+import org.dgfoundation.amp.activity.builder.OrganisationBuilder;
 import org.dgfoundation.amp.activity.builder.TransactionBuilder;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleConstants;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.NoDisbursementsAfterFundingDateMatcherDefinition;
@@ -54,10 +55,13 @@ public class NoDisbursementsAfterFundingDateMatcherTests extends PerformanceRule
                                         .withTransactionType(Constants.DISBURSEMENT)
                                         .withTransactionDate(new LocalDate(2015, 12, 12).toDate())
                                         .getTransaction())
+                                .withDonor(new OrganisationBuilder()
+                                        .withOrganisationName("Donor2")
+                                        .getOrganisation())
                                 .getFunding())
                 .getActivity();
         
-        assertFalse(match(rule, a));
+        assertNull(findPerformanceIssue(rule, a));
     }
 
     @Test
@@ -74,10 +78,13 @@ public class NoDisbursementsAfterFundingDateMatcherTests extends PerformanceRule
                                         .withTransactionType(Constants.DISBURSEMENT)
                                         .withTransactionDate(new LocalDate(2015, 12, 12).toDate())
                                         .getTransaction())
+                                .withDonor(new OrganisationBuilder()
+                                        .withOrganisationName("Donor1")
+                                        .getOrganisation())
                                 .getFunding())
                 .getActivity();
         
-        assertFalse(match(rule, a));
+        assertNull(findPerformanceIssue(rule, a));
     }
     
     @Test
@@ -90,10 +97,13 @@ public class NoDisbursementsAfterFundingDateMatcherTests extends PerformanceRule
                 .addFunding(
                         new FundingBuilder()
                                 .withClassificationDate(new LocalDate(2016, 12, 12).toDate())
+                                .withDonor(new OrganisationBuilder()
+                                        .withOrganisationName("Donor1")
+                                        .getOrganisation())
                                 .getFunding())
                 .getActivity();
         
-        assertFalse(match(rule, a));
+        assertNull(findPerformanceIssue(rule, a));
     }
     
     @Test
@@ -105,7 +115,7 @@ public class NoDisbursementsAfterFundingDateMatcherTests extends PerformanceRule
         AmpActivityVersion a = new ActivityBuilder()
                 .addFunding(
                         new FundingBuilder()
-                                .withClassificationDate(new LocalDate(2016, 10, 12).toDate())
+                                .withClassificationDate(new LocalDate(2017, 10, 12).toDate())
                                 .addTransaction(new TransactionBuilder()
                                         .withTransactionType(Constants.DISBURSEMENT)
                                         .withTransactionDate(new LocalDate(2018, 12, 12).toDate())
@@ -114,10 +124,13 @@ public class NoDisbursementsAfterFundingDateMatcherTests extends PerformanceRule
                                         .withTransactionType(Constants.DISBURSEMENT)
                                         .withTransactionDate(new LocalDate(2014, 12, 12).toDate())
                                         .getTransaction())
+                                .withDonor(new OrganisationBuilder()
+                                        .withOrganisationName("Donor1")
+                                        .getOrganisation())
                                 .getFunding())
                 .getActivity();
         
-        assertFalse(match(rule, a));
+        assertNull(findPerformanceIssue(rule, a));
     }
     
     @Test
@@ -138,10 +151,13 @@ public class NoDisbursementsAfterFundingDateMatcherTests extends PerformanceRule
                                         .withTransactionType(Constants.COMMITMENT)
                                         .withTransactionDate(new LocalDate(2014, 12, 12).toDate())
                                         .getTransaction())
+                                .withDonor(new OrganisationBuilder()
+                                        .withOrganisationName("Donor1")
+                                        .getOrganisation())
                                 .getFunding())
                 .getActivity();
         
-        assertFalse(match(rule, a));
+        assertNull(findPerformanceIssue(rule, a));
     }
     
     @Test
@@ -162,6 +178,9 @@ public class NoDisbursementsAfterFundingDateMatcherTests extends PerformanceRule
                                         .withTransactionType(Constants.DISBURSEMENT)
                                         .withTransactionDate(new LocalDate(2015, 12, 12).toDate())
                                         .getTransaction())
+                                .withDonor(new OrganisationBuilder()
+                                        .withOrganisationName("Donor1")
+                                        .getOrganisation())
                                 .getFunding())
                 .addFunding(
                         new FundingBuilder()
@@ -174,10 +193,13 @@ public class NoDisbursementsAfterFundingDateMatcherTests extends PerformanceRule
                                         .withTransactionType(Constants.COMMITMENT)
                                         .withTransactionDate(new LocalDate(2013, 12, 12).toDate())
                                         .getTransaction())
+                                .withDonor(new OrganisationBuilder()
+                                        .withOrganisationName("Donor2")
+                                        .getOrganisation())
                                 .getFunding())
                 .getActivity();
         
-        assertTrue(match(rule, a));
+        assertEquals(findPerformanceIssue(rule, a).getDonors().size(), 1);
     }
     
     public void testTwoFundingsBeforeFundingEffectiveDate() {
@@ -197,6 +219,9 @@ public class NoDisbursementsAfterFundingDateMatcherTests extends PerformanceRule
                                         .withTransactionType(Constants.DISBURSEMENT)
                                         .withTransactionDate(new LocalDate(2017, 12, 31).toDate())
                                         .getTransaction())
+                                .withDonor(new OrganisationBuilder()
+                                        .withOrganisationName("Donor1")
+                                        .getOrganisation())
                                 .getFunding())
                 .addFunding(
                         new FundingBuilder()
@@ -209,10 +234,13 @@ public class NoDisbursementsAfterFundingDateMatcherTests extends PerformanceRule
                                         .withTransactionType(Constants.COMMITMENT)
                                         .withTransactionDate(new LocalDate(2017, 6, 30).toDate())
                                         .getTransaction())
+                                .withDonor(new OrganisationBuilder()
+                                        .withOrganisationName("Donor2")
+                                        .getOrganisation())
                                 .getFunding())
                 .getActivity();
         
-        assertFalse(match(rule, a));
+        assertNull(findPerformanceIssue(rule, a));
     }
 
     /**

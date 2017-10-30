@@ -41,8 +41,8 @@ import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
-import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
+import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.joda.time.DateTime;
 
@@ -130,7 +130,7 @@ public class GPIReportUtils {
         applyAppovalStatusFilter(formParams, spec);
         removeDonorAgencyFilterRule(spec);
         applySettings(formParams, spec);
-        updateApprovalDateFilter(spec);
+        updateAllDateFilters(spec);
         clearYearRangeSettings(spec);
 
         GeneratedReport generatedReport = EndpointUtils.runReport(spec, ReportAreaImpl.class, null);
@@ -175,7 +175,7 @@ public class GPIReportUtils {
         
         applyAppovalStatusFilter(formParams, spec);
         applySettings(formParams, spec);
-        updateApprovalDateFilter(spec);
+        updateAllDateFilters(spec);
         clearYearRangeSettings(spec);
 
         GeneratedReport generatedReport = EndpointUtils.runReport(spec, ReportAreaImpl.class, null);
@@ -217,6 +217,7 @@ public class GPIReportUtils {
 
         applyAppovalStatusFilter(formParams, spec);
         applySettings(formParams, spec);
+        updateAllDateFilters(spec);
         clearYearRangeSettings(spec);
 
         GeneratedReport generatedReport = EndpointUtils.runReport(spec, ReportAreaImpl.class, null);
@@ -325,6 +326,7 @@ public class GPIReportUtils {
 
         applyAppovalStatusFilter(formParams, spec);
         applySettings(formParams, spec);
+        updateAllDateFilters(spec);
         clearYearRangeSettings(spec);
         
         GeneratedReport generatedReport = EndpointUtils.runReport(spec, ReportAreaImpl.class, null);
@@ -359,6 +361,7 @@ public class GPIReportUtils {
 
         applyAppovalStatusFilter(formParams, spec);
         applySettings(formParams, spec);
+        updateAllDateFilters(spec);
         clearYearRangeSettings(spec);
 
         GeneratedReport generatedReport = EndpointUtils.runReport(spec, ReportAreaImpl.class, null);
@@ -405,49 +408,74 @@ public class GPIReportUtils {
     }
     
     /**
-     * AMP-26444 When switching to ETH-CALENDAR, the selected year for approval
+     * AMP-26444 When switching to ETH-CALENDAR, the selected year for
      * date should be updated. Since filters are not working with other calendar
      * than gregorian, we have to update explicitly the dates. E.g.: If in GPI
-     * was selected 2009 in ETH-Calendar, we have to update the approval date
+     * was selected 2009 in ETH-Calendar, we have to update the date
      * filter in Gregorian CAL 2009: "01/01/2009 to 31/12/2009" in ETH Calendar
      * equals to "11/09/2016 to 10/09/2017" in GREG
      * 
      * @param formParams
      * @param spec
      */
-    public static void updateApprovalDateFilter(ReportSpecificationImpl spec) {
+    public static void updateAllDateFilters(ReportSpecificationImpl spec) {
         AmpReportFilters filters = (AmpReportFilters) spec.getFilters();
 
         CalendarConverter calendarConverter = (spec.getSettings() != null && spec.getSettings().getCalendar() != null)
                 ? spec.getSettings().getCalendar() : AmpARFilter.getDefaultCalendar();
-
-        if (filters.getDateFilterRules() != null && FiscalCalendarUtil.isEthiopianCalendar(calendarConverter)) {
+        
+        if (FiscalCalendarUtil.isEthiopianCalendar(calendarConverter)) {
             AmpFiscalCalendar ethCalendar = (AmpFiscalCalendar) calendarConverter;
-            Optional<ReportColumn> optApprovalColumn = filters.getDateFilterRules().keySet().stream()
-                    .filter(rc -> rc.getColumnName().equals(ColumnConstants.ACTUAL_APPROVAL_DATE)).findAny();
-            ReportColumn approvalColumn = optApprovalColumn.isPresent() ? optApprovalColumn.get()
-                    : new ReportColumn(ColumnConstants.ACTUAL_APPROVAL_DATE);
-            FilterRule gregFilterRule = filters.getDateFilterRules().get(approvalColumn);
-
-            if (gregFilterRule != null) {
-                Date gregStart = gregFilterRule.min == null ? null
-                        : DateTimeUtil.fromJulianNumberToDate(gregFilterRule.min);
-                Date gregEnd = gregFilterRule.max == null ? null
-                        : DateTimeUtil.fromJulianNumberToDate(gregFilterRule.max);
-
-                Date start = FiscalCalendarUtil.toGregorianDate(gregStart, ethCalendar);
-                Date end = FiscalCalendarUtil.toGregorianDate(gregEnd, ethCalendar);
-
-                try {
-                    FilterRule ethFilterRule = DateFilterUtils.getDatesRangeFilterRule(ElementType.DATE,
-                            DateTimeUtil.toJulianDayNumber(start), DateTimeUtil.toJulianDayNumber(end),
-                            DateTimeUtil.formatDateOrNull(start), DateTimeUtil.formatDateOrNull(end), false);
-                    filters.getDateFilterRules().put(approvalColumn, ethFilterRule);
-                } catch (AmpApiException e) {
-                    throw new RuntimeException(e);
-                }
+            
+            // update all date filter columns
+            if (filters.getDateFilterRules() != null && !filters.getDateFilterRules().isEmpty()) {
+                filters.getDateFilterRules().entrySet().forEach(entry -> {
+                    if (entry.getValue() != null) {
+                        FilterRule gregFilterRule = entry.getValue();
+                        FilterRule ethFilterRule = convertToEthDateFilterRule(ethCalendar, gregFilterRule);
+                        entry.setValue(ethFilterRule);
+                    }
+                });
+            }
+            
+            // update date filter
+            Optional<Entry<ReportElement, FilterRule>> dateRuleEntry = spec.getFilters()
+                    .getFilterRules().entrySet().stream()
+                    .filter(entry -> entry.getKey().type.equals(ElementType.DATE))
+                    .filter(entry -> entry.getKey().entity == null)
+                    .findAny();
+            
+            if (dateRuleEntry.isPresent() && dateRuleEntry.get().getValue() != null) {
+                FilterRule dateFilterRule = dateRuleEntry.get().getValue();
+                FilterRule ethDateFilterRule = convertToEthDateFilterRule(ethCalendar, dateFilterRule);
+                dateRuleEntry.get().setValue(ethDateFilterRule);
             }
         }
+    }
+
+    /**
+     * @param ethCalendar
+     * @param gregFilterRule
+     * @return
+     */
+    private static FilterRule convertToEthDateFilterRule(AmpFiscalCalendar ethCalendar, FilterRule gregFilterRule) {
+        FilterRule ethFilterRule = null;
+
+        Date gregStart = gregFilterRule.min == null ? null : DateTimeUtil.fromJulianNumberToDate(gregFilterRule.min);
+        Date gregEnd = gregFilterRule.max == null ? null : DateTimeUtil.fromJulianNumberToDate(gregFilterRule.max);
+
+        Date start = FiscalCalendarUtil.toGregorianDate(gregStart, ethCalendar);
+        Date end = FiscalCalendarUtil.toGregorianDate(gregEnd, ethCalendar);
+
+        try {
+            ethFilterRule = DateFilterUtils.getDatesRangeFilterRule(ElementType.DATE,
+                    DateTimeUtil.toJulianDayNumber(start), DateTimeUtil.toJulianDayNumber(end),
+                    DateTimeUtil.formatDateOrNull(start), DateTimeUtil.formatDateOrNull(end), false);
+        } catch (AmpApiException e) {
+            throw new RuntimeException(e);
+        }
+
+        return ethFilterRule;
     }
 
     /**

@@ -86,7 +86,7 @@ public class GPIDataService {
         if (Boolean.FALSE.equals(hasGPIDataRights())) {
             ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
         }
-        
+
         JsonBean data = new JsonBean();
         data.set(GPIEPConstants.FIELD_ID, aidOnBudget.getAmpGPINiAidOnBudgetId());
         data.set(GPIEPConstants.FIELD_DONOR_ID, aidOnBudget.getDonor().getAmpOrgId());
@@ -101,7 +101,7 @@ public class GPIDataService {
         if (Boolean.FALSE.equals(hasGPIDataRights())) {
             ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
         }
-        
+
         Long id;
         AmpGPINiAidOnBudget aidOnBudget = null;
         if (data.getString(GPIEPConstants.FIELD_ID) != null
@@ -111,7 +111,7 @@ public class GPIDataService {
         } else {
             aidOnBudget = new AmpGPINiAidOnBudget();
         }
-        
+
         return aidOnBudget;
     }
 
@@ -134,7 +134,7 @@ public class GPIDataService {
             Date date = DateTimeUtil.parseDate(data.getString(GPIEPConstants.FIELD_DATE), GPIEPConstants.DATE_FORMAT);
             aidOnBudget.setIndicatorDate(date);
         }
-        
+
         return aidOnBudget;
     }
 
@@ -163,7 +163,7 @@ public class GPIDataService {
 
         return result;
     }
-    
+
     public static List<JsonBean> saveAidOnBudget(List<JsonBean> aidOnBudgetList) {
         if (Boolean.FALSE.equals(hasGPIDataRights())) {
             ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
@@ -268,14 +268,14 @@ public class GPIDataService {
             Long donorId = Long.parseLong(String.valueOf(data.get(GPIEPConstants.FIELD_DONOR_ID)));
             donorNotes.setDonor(GPIUtils.getOrganisation(donorId));
         }
-        
+
         donorNotes.setIndicatorCode(data.getString(GPIEPConstants.FIELD_INDICATOR_CODE));
-        
+
         return donorNotes;
     }
-    
+
     private static JsonBean modelToJsonBean(AmpGPINiDonorNotes donorNotes) {
-        JsonBean data = new JsonBean();     
+        JsonBean data = new JsonBean();
         data.set(GPIEPConstants.FIELD_ID, donorNotes.getAmpGPINiDonorNotesId());
         data.set(GPIEPConstants.FIELD_DONOR_ID, donorNotes.getDonor().getAmpOrgId());
         data.set(GPIEPConstants.FIELD_NOTES, donorNotes.getNotes());
@@ -309,56 +309,56 @@ public class GPIDataService {
         if (Boolean.FALSE.equals(hasGPIDataRights())) {
             ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
         }
-        
+
         Integer total = GPIUtils.getDonorNotesCount(indicatorCode);
         List<AmpGPINiDonorNotes> notesList = GPIUtils.getDonorNotesList(offset, count, orderBy, sort, total,
                 indicatorCode);
         JsonBean data = new JsonBean();
         List<JsonBean> lst = new ArrayList<>();
-        
+
         for (AmpGPINiDonorNotes notes : notesList) {
             lst.add(modelToJsonBean(notes));
         }
-        
+
         data.set("data", lst);
         data.set(GPIEPConstants.TOTAL_RECORDS, total);
         return data;
     }
-    
+
     public static JsonBean deleteDonorNotesById(Long id) {
         if (Boolean.FALSE.equals(hasGPIDataRights())) {
             ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
         }
-        
+
         JsonBean result = new JsonBean();
         GPIUtils.deleteDonorNotes(id);
         result.set(GPIEPConstants.RESULT, GPIEPConstants.DELETED);
         return result;
-    }   
-    
-    private static boolean hasGPIDataRights() {     
-         TeamMember tm = TeamUtil.getCurrentMember(); AmpTeamMember atm =
-         TeamMemberUtil.getAmpTeamMember(tm.getMemberId()); 
-         return atm.getUser().hasNationalCoordinatorGroup() || atm.getUser().hasVerifiedDonor();         
     }
-    
+
+    private static boolean hasGPIDataRights() {
+        TeamMember tm = TeamUtil.getCurrentMember();
+        AmpTeamMember atm = TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
+        return atm.getUser().hasNationalCoordinatorGroup() || atm.getUser().hasVerifiedDonor();
+    }
+
     public static List<JsonBean> getUsersVerifiedOrganizations() {
         if (Boolean.FALSE.equals(hasGPIDataRights())) {
             ApiErrorResponse.reportForbiddenAccess(GPIErrors.UNAUTHORIZED_OPERATION);
         }
-        
+
         TeamMember tm = TeamUtil.getCurrentMember();
         AmpTeamMember atm = TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
         Set<AmpOrganisation> verifiedOrgs = atm.getUser().getAssignedOrgs();
         List<JsonBean> orgs = new ArrayList<>();
-        
-        for (AmpOrganisation verifiedOrg : verifiedOrgs) {          
-                JsonBean org = new JsonBean();
-                org.set("id", verifiedOrg.getAmpOrgId());
-                org.set("name", verifiedOrg.getName());
-                orgs.add(org);          
+
+        for (AmpOrganisation verifiedOrg : verifiedOrgs) {
+            JsonBean org = new JsonBean();
+            org.set("id", verifiedOrg.getAmpOrgId());
+            org.set("name", verifiedOrg.getName());
+            orgs.add(org);
         }
-        
+
         return orgs;
     }
 
@@ -394,20 +394,20 @@ public class GPIDataService {
     public static List<GPIDonorActivityDocument> getGPIDocuments(List<GPIDonorActivityDocument> activityDonors) {
         List<GPIDonorActivityDocument> gpiDocuments = new ArrayList<>();
         List<AmpGPINiSurveyResponseDocument> surveyDocuments = new ArrayList<>();
-        
+
         if (activityDonors != null) {
             Session dbSession = PersistenceManager.getSession();
-            String queryString = "SELECT surveyDocuments FROM " + AmpGPINiSurveyResponseDocument.class.getName() 
+            String queryString = "SELECT surveyDocuments FROM " + AmpGPINiSurveyResponseDocument.class.getName()
                     + " surveyDocuments";
             Query query = dbSession.createQuery(queryString);
             surveyDocuments = query.list();
         }
-        
+
         gpiDocuments = filterDocuments(surveyDocuments, activityDonors);
-        
+
         return gpiDocuments;
     }
-    
+
     /**
      * 
      * @param donorId
@@ -418,7 +418,7 @@ public class GPIDataService {
         List<GPIDonorActivityDocument> donorActList = new ArrayList<>();
         GPIDonorActivityDocument actDonorDocument = new GPIDonorActivityDocument(donorId, activityId);
         donorActList.add(actDonorDocument);
-        
+
         return getGPIDocuments(donorActList);
     }
 
@@ -429,36 +429,37 @@ public class GPIDataService {
      * @param activityDonors
      * @return
      */
-    private static List<GPIDonorActivityDocument> filterDocuments(List<AmpGPINiSurveyResponseDocument> documents, 
+    private static List<GPIDonorActivityDocument> filterDocuments(List<AmpGPINiSurveyResponseDocument> documents,
             List<GPIDonorActivityDocument> activityDonors) {
-        
+
         Set<Long> donorIds = activityDonors.stream().map(ad -> Long.valueOf(ad.getDonorId()))
                 .collect(Collectors.toSet());
-        
+
         Set<Long> activityIds = activityDonors.stream().map(ad -> Long.valueOf(ad.getActivityId()))
                 .collect(Collectors.toSet());
-        
+
         List<AmpGPINiSurveyResponseDocument> filteredDocuments = documents.stream()
                 .filter(doc -> donorIds.contains(
                         doc.getSurveyResponse().getAmpGPINiSurvey().getAmpOrgRole().getOrganisation().getAmpOrgId()))
                 .filter(doc -> activityIds.contains(
                         doc.getSurveyResponse().getAmpGPINiSurvey().getAmpOrgRole().getActivity().getAmpActivityId()))
                 .collect(Collectors.toList());
-        
+
         List<GPIDonorActivityDocument> donorActivityDocuments = getGrouppedDocuments(filteredDocuments);
         donorActivityDocuments.sort(getGPIDocumentComparator());
-        
+
         return donorActivityDocuments;
     }
 
     /**
-     * Transform the list of AmpGPINiSurveyResponseDocument in a list of GPIDonorActivityDocument
+     * Transform the list of AmpGPINiSurveyResponseDocument in a list of
+     * GPIDonorActivityDocument
      * 
      * @param filteredDocuments
      */
     private static List<GPIDonorActivityDocument> getGrouppedDocuments(
             List<AmpGPINiSurveyResponseDocument> filteredDocuments) {
-        
+
         List<GPIDonorActivityDocument> donorActivityDocuments = new ArrayList<>();
         Map<Long, Map<Long, List<AmpGPINiSurveyResponseDocument>>> grouppedDocuments = 
                 new HashMap<Long, Map<Long, List<AmpGPINiSurveyResponseDocument>>>();
@@ -513,6 +514,7 @@ public class GPIDataService {
 
     /**
      * Get the URL for downloading the document
+     * 
      * @param req
      * @param uuid
      * @return
@@ -535,7 +537,7 @@ public class GPIDataService {
 
         return downloadUrl.toString();
     }
-    
+
     private static Comparator<GPIDonorActivityDocument> getGPIDocumentComparator() {
         return (GPIDonorActivityDocument ad1, GPIDonorActivityDocument ad2) -> {
             if (ad1.getDonorId().compareTo(ad2.getDonorId()) == 0) {
@@ -582,7 +584,6 @@ public class GPIDataService {
 
         return 0;
     }
-    
     public static String getConvertedDate(Long fromCalId, Long toCalId, String dateAsString) {
         
         if (fromCalId == toCalId) {
@@ -619,4 +620,5 @@ public class GPIDataService {
         return GPIUtils.getDonors();
 
     }
+
 }

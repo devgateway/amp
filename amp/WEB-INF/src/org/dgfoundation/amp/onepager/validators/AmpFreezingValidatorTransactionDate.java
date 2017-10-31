@@ -43,27 +43,29 @@ public class AmpFreezingValidatorTransactionDate extends AmpSemanticValidator<St
         }        
         AmpActivityFrozen ampActivityFrozen = org.apache.wicket.Session.get()
                 .getMetaData(OnePagerConst.FUNDING_FREEZING_CONFIGURATION);
-        if (ampActivityFrozen.getDataFreezeEvent().getOpenPeriodStart() == null
-                && ampActivityFrozen.getDataFreezeEvent().getOpenPeriodEnd() == null) {
-            validatable.error(getValidationError("AmpFreezingEventTransactionDateValidatorNoOpenPeriod", null, null,
-                    dateFormatter));
+        if (ampActivityFrozen != null) {
+            if (ampActivityFrozen.getDataFreezeEvent().getOpenPeriodStart() == null
+                    && ampActivityFrozen.getDataFreezeEvent().getOpenPeriodEnd() == null) {
+                validatable.error(getValidationError("AmpFreezingEventTransactionDateValidatorNoOpenPeriod", null, null,
+                        dateFormatter));
 
-        } else {
-            if (ampActivityFrozen.getDataFreezeEvent().getOpenPeriodEnd() == null) {
-                if (transactionDate.compareTo(ampActivityFrozen.getDataFreezeEvent().getOpenPeriodStart()) < 0) {
-                    validatable.error(getValidationError("AmpFreezingEventTransactionDateValidatorNoEnd",
-                            ampActivityFrozen.getDataFreezeEvent().getOpenPeriodStart(), null, dateFormatter));
-                }
             } else {
-                if (transactionDate.compareTo(ampActivityFrozen.getDataFreezeEvent().getOpenPeriodStart()) < 0
-                        || transactionDate.compareTo(ampActivityFrozen.getDataFreezeEvent().getOpenPeriodEnd()) > 0) {
-                    validatable.error(getValidationError("AmpFreezingEventTransactionDateValidator",
-                            ampActivityFrozen.getDataFreezeEvent().getOpenPeriodStart(),
-                            ampActivityFrozen.getDataFreezeEvent().getOpenPeriodEnd(), dateFormatter));
+                if (ampActivityFrozen.getDataFreezeEvent().getOpenPeriodEnd() == null) {
+                    if (transactionDate.compareTo(ampActivityFrozen.getDataFreezeEvent().getOpenPeriodStart()) < 0) {
+                        validatable.error(getValidationError("AmpFreezingEventTransactionDateValidatorNoEnd",
+                                ampActivityFrozen.getDataFreezeEvent().getOpenPeriodStart(), null, dateFormatter));
+                    }
+                } else {
+                    if (transactionDate.compareTo(ampActivityFrozen.getDataFreezeEvent().getOpenPeriodStart()) < 0
+                            || transactionDate
+                                    .compareTo(ampActivityFrozen.getDataFreezeEvent().getOpenPeriodEnd()) > 0) {
+                        validatable.error(getValidationError("AmpFreezingEventTransactionDateValidator",
+                                ampActivityFrozen.getDataFreezeEvent().getOpenPeriodStart(),
+                                ampActivityFrozen.getDataFreezeEvent().getOpenPeriodEnd(), dateFormatter));
+                    }
                 }
             }
         }
-
     }
 
     private ValidationError getValidationError(String key, Date start, Date end, SimpleDateFormat dateFormatter) {

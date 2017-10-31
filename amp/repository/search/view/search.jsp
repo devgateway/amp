@@ -78,7 +78,7 @@
 </div>
 </div>
 <!-- BREADCRUMP END -->
-<div id="mainBodyContent">
+<div class="content-dir">
 <table cellspacing="0" cellpadding="0" border="0" align="center"
 	width="1000">
 	<tr>

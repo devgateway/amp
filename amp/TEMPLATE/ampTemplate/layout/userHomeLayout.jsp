@@ -88,7 +88,7 @@
 	<digi:insert attribute="headerMiddle"/>
 	<div class="breadcrump_1">
 	</div>
-	<div id="mainBodyContent">
+	<div class="content-dir">
 	<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center" id="main-desktop-container">
 		<tbody>
 			<tr>

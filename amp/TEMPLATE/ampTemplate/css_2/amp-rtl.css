@@ -149,8 +149,8 @@ div.trnpanel div.trn-row ul {
 }
 
 .ui-paging-info {
-    direction: rtl!important;
-    text-align: left!important;
+    direction: rtl !important;
+    text-align: left !important;
 }
 
 .search_results_header {
@@ -162,7 +162,7 @@ div.trnpanel div.trn-row ul {
 }
 
 .tri-desktop {
-    background: url(/TEMPLATE/ampTemplate/img_2/ico_tri.gif) no-repeat 4px 1px!important;
+    background: url(/TEMPLATE/ampTemplate/img_2/ico_tri.gif) no-repeat 4px 1px !important;
 }
 
 .ui-widget-content {
@@ -174,7 +174,7 @@ div.trnpanel div.trn-row ul {
 }
 
 .ui-dialog-titlebar-close {
-    right: unset!important;
+    right: unset !important;
     left: .3em;
 }
 
@@ -183,14 +183,18 @@ div.trnpanel div.trn-row ul {
 }
 
 .round-filter, .round-filter-group, .round-filter-group {
-    float: right!important;
+    float: right !important;
 }
 
 .ui-accordion-header-icon {
-    left: unset!important;
-    right:.5em!important;
+    left: unset !important;
+    right:.5em !important;
 }
 
 .ui-accordion-icons {
-    padding-right: 2.2em!important;
+    padding-right: 2.2em !important;
+}
+
+.content-dir {
+    direction: rtl;
 }

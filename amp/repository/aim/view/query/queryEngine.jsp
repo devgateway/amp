@@ -169,7 +169,7 @@ function validateSubmitQuery () {
 		<jsp:include page="/aim/reportsFilterPicker.do" />
 	</div>
 	<br />
-<div id="mainBodyContent">
+<div class="content-dir">
 	<fieldset class="main_side_cont" style="width: 900px; margin-left: auto; margin-right: auto;">
 		<legend><digi:trn>Selected Filters</digi:trn></legend>
 		<div id="queryLabelsDiv"><digi:trn>No filters selected so far</digi:trn></div>

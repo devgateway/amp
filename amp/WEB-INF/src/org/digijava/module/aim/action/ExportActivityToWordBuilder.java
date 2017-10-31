@@ -1,6 +1,7 @@
 package org.digijava.module.aim.action;
 
 import clover.com.google.common.base.Strings;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.util.Units;
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
@@ -130,8 +131,7 @@ public class ExportActivityToWordBuilder {
     public static final int COLUMNS_4 = 4;
     public static final int TABLE_WIDTH = 10500;
     public static final int ADDITIONAL_INFORMATION_ROWS = 5;
-    public static final String TABLE_SEPARATOR =
-            "_____________________________________________________________________________________";
+    public static final int TABLE_SEPARATOR_LENGTH = 85;
     private static Logger logger = Logger.getLogger(ExportActivityToWordBuilder.class);
 
     public static final String CELLCOLORGRAY = "F2F2F2";
@@ -3815,7 +3815,7 @@ public class ExportActivityToWordBuilder {
                 spanCellsAcrossRow(dataRow, 0, maxCols);
                 dataRow
                         .getCell(0)
-                        .setText(TABLE_SEPARATOR);
+                        .setText(StringUtils.repeat("_", TABLE_SEPARATOR_LENGTH));
             }
 
             int rowCounter = 1;

@@ -15,6 +15,8 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
+<jsp:include page="/repository/aim/view/strongPassword.jsp"  />
+
 <style  type="text/css">
 <!--
 
@@ -298,6 +300,7 @@
 													</ul>
 													</font>
 												</logic:notEmpty>
+													<jsp:include page="/repository/aim/view/strongPasswordRulesLegend.jsp"  />
 												</td>
 											</tr>
                                             <tr>
@@ -336,7 +339,8 @@
 													<FONT color=red>*</FONT>
 													<digi:trn key="um:emailAddress">E-mail Address</digi:trn></td>
 												<td align="left">
-													<html:text  styleId="userEmail" property="email" size="20" styleClass="inp-text" />
+													<html:text  styleId="userEmail" property="email" size="20"
+																styleClass="inp-text pwd_username" />
 												</td>
 											</tr>
 											<tr>
@@ -350,11 +354,21 @@
 											</tr>
 											<tr>
 												<td width="3%">&nbsp;</td>
-												<td align=right class=f-names noWrap>
+												<td valign="top" align=right class=f-names noWrap>
+													<div style="margin-top: 10px;">
 													<FONT color=red>*</FONT>
-													<digi:trn key="um:password">Password</digi:trn></td>
+													<digi:trn key="um:password">Password</digi:trn>
+													</div>
+												</td>
 												<td align="left">
-													<html:password styleId="userPassword" property="password" size="20" />
+													<html:password styleId="userPassword"
+																   property="password" size="20" />
+													<div style="padding-left: 2px; margin: 5px">
+														<div style="display: none" class="pwd_container" id="pwd_container">
+															<span class="pwstrength_viewport_verdict">&nbsp;</span>
+															<span class="pwstrength_viewport_progress"></span>
+														</div>
+													</div>
 												</td>
 											</tr>
 										
@@ -464,14 +478,27 @@
 												<c:if test="${!umAddUserForm.registrationByEmail}">
 													<html:checkbox property="sendEmail"	styleClass="inp-text" disabled="true" >
 													</html:checkbox></td>
-												</c:if>
-													
+												</c:if>													
+											</tr>
+											<tr>
+												<td width="3%">&nbsp;</td>
+												<td align="right"  class="formCheckContainer"><digi:trn key="um:nationalCoordinator">National Coordinator</digi:trn></td>
+												<td class=f-names align="left">
+													<html:checkbox property="nationalCoordinator" styleClass="inp-text">
+													</html:checkbox></td>
 											</tr>
 											<tr>
 												<td width="3%">&nbsp;</td>
 												<td align="right"  class="formCheckContainer"><digi:trn key="um:assignToWorkspace">Assign to Workspace</digi:trn></td>
 												<td class=f-names align="left">
 													<html:checkbox property="addWorkspace" styleClass="inp-text">
+													</html:checkbox></td>
+											</tr>
+											 <tr>
+												<td width="3%">&nbsp;</td>
+												<td align="right"  class="formCheckContainer"><digi:trn key="um:exemptFromDataFreezing">Exempt from activity freezing</digi:trn></td>
+												<td class=f-names align="left">
+													<html:checkbox property="exemptFromDataFreezing" styleClass="inp-text">
 													</html:checkbox></td>
 											</tr>
 											<tr>

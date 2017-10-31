@@ -11,6 +11,8 @@ public class SettingRange {
     public final Type type;
     private String from;
     private String to;
+    private String rangeFrom;
+    private String rangeTo;
 
     public String getFrom() {
         return from;
@@ -26,6 +28,22 @@ public class SettingRange {
 
     public void setTo(String to) {
         this.to = to;
+    }
+
+    public String getRangeFrom() {
+        return rangeFrom;
+    }
+
+    public void setRangeFrom(String rangeFrom) {
+        this.rangeFrom = rangeFrom;
+    }
+
+    public String getRangeTo() {
+        return rangeTo;
+    }
+
+    public void setRangeTo(String rangeTo) {
+        this.rangeTo = rangeTo;
     }
 
     public SettingRange(Type type) {

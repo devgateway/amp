@@ -1,5 +1,10 @@
 package org.digijava.module.translation.util;
 
+import static org.hibernate.criterion.Projections.distinct;
+import static org.hibernate.criterion.Projections.property;
+import static org.hibernate.criterion.Restrictions.eq;
+import static org.hibernate.criterion.Restrictions.in;
+
 import java.io.File;
 import java.io.InputStream;
 import java.sql.Timestamp;
@@ -50,6 +55,7 @@ import org.digijava.module.translation.jaxb.Language;
 import org.digijava.module.translation.jaxb.Translations;
 import org.digijava.module.translation.jaxb.Trn;
 import org.h2.util.StringUtils;
+import org.hibernate.Criteria;
 import org.hibernate.FlushMode;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -420,8 +426,9 @@ public class ImportExportUtil {
      * @param languagesToExport set of language codes. If null then all languages are loaded and exported.
      * @throws Exception
      */
-    public static void exportTranslations(Translations translations, Set<String> languagesToExport) throws Exception{
-        List<MessageGroup> groups = loadMessageGroups(languagesToExport);
+    public static void exportTranslations(Translations translations, Set<String> languagesToExport,
+            boolean exportAmpOfflineTranslationsOnly) throws Exception {
+        List<MessageGroup> groups = loadMessageGroups(languagesToExport, exportAmpOfflineTranslationsOnly);
         if (groups != null){
             for (MessageGroup group : groups) {
                 //Creates JAXB Trn instance which represents group
@@ -439,26 +446,35 @@ public class ImportExportUtil {
      * @throws AimException
      */
     @SuppressWarnings("unchecked")
-    public static List<MessageGroup> loadMessageGroups(Set<String> languagesToLoad) throws AimException{
-        List<MessageGroup> result = null;
+    public static List<MessageGroup> loadMessageGroups(Set<String> languagesToLoad,
+            boolean exportAmpOfflineTranslationsOnly) throws AimException {
         try {
             Session session = PersistenceManager.getRequestDBSession();
-            String oql = "from "+Message.class.getName();
+            Criteria criteria = session.createCriteria(Message.class);
             if (languagesToLoad!=null){
-                oql += " as m where m.locale in (:LANG_CODES)";
+                criteria.add(in("locale", languagesToLoad));
             }
-            Query query = session.createQuery(oql);
-            if (languagesToLoad != null){
-                query.setParameterList("LANG_CODES", languagesToLoad);
+            if (exportAmpOfflineTranslationsOnly) {
+                criteria.add(in("key", getAmpOfflineMessageKeys()));
             }
-            List<Message> messages = (List<Message>) query.list();
+            List<Message> messages = (List<Message>) criteria.list();
             Collection<MessageGroup> groups = TrnUtil.groupByKey(messages);
-            result = new ArrayList<MessageGroup>(groups);
+            return new ArrayList<>(groups);
         } catch (Exception e) {
             logger.error(e);
             throw new AimException("Cannot load messages for expot.",e);
         }
-        return result;
+    }
+
+    /**
+     * Returns all message keys used by AMP Offline.
+     */
+    @SuppressWarnings("unchecked")
+    private static List<String> getAmpOfflineMessageKeys() {
+        return PersistenceManager.getRequestDBSession().createCriteria(Message.class)
+                .setProjection(distinct(property("key")))
+                .add(eq("ampOffline", true))
+                .list();
     }
 
     /**
@@ -518,9 +534,8 @@ public class ImportExportUtil {
             
             for (int i = 1; i < physicalNumberOfRows; i++) {
                 Row hssfRow = hssfSheet.getRow(i);
-                String key = (hssfRow.getCell(0).getCellType() == HSSFCell.CELL_TYPE_NUMERIC) ? hssfRow
-                        .getCell(0).getNumericCellValue() + ""
-                        : hssfRow.getCell(0).getStringCellValue();
+                hssfRow.getCell(0).setCellType(HSSFCell.CELL_TYPE_STRING);
+                String key = hssfRow.getCell(0).getStringCellValue();
                 // We need to discard those keys that are not numbers or the whole process will fail when trying to make insert
                 // in table amp_etl_changelog(entity_name, entity_id).
                 try {
@@ -530,7 +545,8 @@ public class ImportExportUtil {
                     errors.add(TranslatorWorker.translateText("Can not import key: " + key));
                     continue;
                 }
-                
+
+                hssfRow.getCell(1).setCellType(HSSFCell.CELL_TYPE_STRING);
                 String englishText = (hssfRow.getCell(1) == null) ? ""
                         : hssfRow.getCell(1).getStringCellValue();
                 //for AMP-16681 when the cell content is #N/A on third column you are getting an erro if getStringCellValue is called

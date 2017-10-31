@@ -7,15 +7,17 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.onepager.util.SaveContext;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.startup.AMPStartupListener;
-import org.digijava.module.aim.startup.AmpBackgroundActivitiesCloser;
+import org.digijava.module.aim.startup.AmpBackgroundActivitiesUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -29,9 +31,13 @@ import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
 
 public class CloseExpiredActivitiesJob extends ConnectionCleaningJob implements StatefulJob {
-    
+
+    public final static String AMP_MODIFIER_USER_EMAIL = "amp_modifier@amp.org";
+    public final static String AMP_MODIFIER_FIRST_NAME = "AMP";
+    public final static String AMP_MODIFIER_LAST_NAME = "Activities Modifier";
+
     private static Logger logger = Logger.getLogger(CloseExpiredActivitiesJob.class);
-    
+    private static User user = new User(AMP_MODIFIER_USER_EMAIL, AMP_MODIFIER_FIRST_NAME, AMP_MODIFIER_LAST_NAME);
 
     /**
      * clones activity, sets modifying member, modification date, etc
@@ -55,7 +61,7 @@ public class CloseExpiredActivitiesJob extends ConnectionCleaningJob implements 
         AmpActivityVersion auxActivity = null;
         try {
             auxActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(oldActivity, null, 
-                    member, oldActivity.getDraft(), session, false, false);
+                    member, oldActivity.getDraft(), session, SaveContext.job());
         } catch (Exception e) {
             logger.error(e.getMessage());
             throw new RuntimeException(e);
@@ -82,8 +88,8 @@ public class CloseExpiredActivitiesJob extends ConnectionCleaningJob implements 
             TLSUtils.getThreadLocalInstance().site = SiteUtils.getDefaultSite();
             
             Session session = PersistenceManager.getSession();
-            
-            AmpBackgroundActivitiesCloser.createActivityCloserUserIfNeeded();
+
+            AmpBackgroundActivitiesUtil.createActivityUserIfNeeded(user);
             PersistenceManager.cleanupSession(session); // commit user in case it was created
             session = PersistenceManager.getSession();
         
@@ -119,7 +125,7 @@ public class CloseExpiredActivitiesJob extends ConnectionCleaningJob implements 
                         ver.getAmpActivityId(), oldActivityStatus == null ?  "<null>" : Long.toString(oldActivityStatus.getId()), closedCategoryValue, 
                         ver.getApprovalStatus(), newStatus));
                 
-                AmpTeamMember ampClosingMember = AmpBackgroundActivitiesCloser.createActivityCloserTeamMemberIfNeeded(ver.getTeam());
+                AmpTeamMember ampClosingMember = AmpBackgroundActivitiesUtil.createActivityTeamMemberIfNeeded(ver.getTeam(), user);
                                 
                 AmpActivityVersion newVer = cloneActivity(session, ampClosingMember, ver, newStatus/*, projectStatusCategoryClass.getId()*/, closedCategoryValue);
 

@@ -16,7 +16,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
-import org.digijava.kernel.Constants;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.UserLangPreferences;
 import org.digijava.kernel.exception.DgException;
@@ -34,6 +33,7 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpUserExtension;
 import org.digijava.module.aim.dbentity.AmpUserExtensionPK;
+import org.digijava.kernel.Constants;
 import org.digijava.module.aim.helper.CountryBean;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.LocationUtil;
@@ -43,6 +43,8 @@ import org.digijava.module.um.form.ViewEditUserForm;
 import org.digijava.module.um.util.AmpUserUtil;
 import org.digijava.module.um.util.DbUtil;
 import org.digijava.module.um.util.UmUtil;
+import org.digijava.kernel.user.Group;
+import org.digijava.kernel.security.PasswordPolicyValidator;
 
 public class ViewEditUser extends Action {
 
@@ -184,6 +186,8 @@ public class ViewEditUser extends Action {
             uForm.setDisplaySuccessMessage(null);
             uForm.setAddWorkspace(false);
             uForm.setEmailerror(false);
+            uForm.setExemptFromDataFreezing(false);
+            uForm.setNationalCoordinator(false);
             if (user != null) {
                 uForm.setMailingAddress(user.getAddress());
                 AmpUserExtension userExt = AmpUserUtil.getAmpUserExtension(user);
@@ -202,18 +206,10 @@ public class ViewEditUser extends Action {
                 uForm.setLastName(user.getLastName());
                 uForm.setName(user.getName());
                 uForm.setUrl(user.getUrl());
-                uForm.setAssignedOrgId(user.getAssignedOrgId());
                 uForm.getAssignedOrgs().addAll(user.getAssignedOrgs());
                 uForm.setPledger(user.getPledger());
-                if(user.getAssignedOrgId()!=null && user.getAssignedOrgId() > 0) {
-                    uForm.setOrgs(new ArrayList<AmpOrganisation>());
-                    AmpOrganisation organization = org.digijava.module.aim.util.DbUtil.getOrganisation(user.getAssignedOrgId());
-                    if(organization != null){
-                        uForm.getOrgs().add(organization);
-                    }
-                }
                 uForm.setBanReadOnly(user.isBanned());
-
+                uForm.setExemptFromDataFreezing(user.getExemptFromDataFreezing());
 
                 Locale language = null;
                 if (langPref == null) {
@@ -281,6 +277,9 @@ public class ViewEditUser extends Action {
                         uForm.setWorkspaces(TeamUtil.getAllTeams());
                     }
                     uForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
+
+                    uForm.setNationalCoordinator(user.hasNationalCoordinatorGroup());
+
 //                }
             }
         } else {            
@@ -323,8 +322,6 @@ public class ViewEditUser extends Action {
                     user.getAssignedOrgs().clear();
                     user.getAssignedOrgs().addAll(uForm.getAssignedOrgs());
                     
-                    user.setAssignedOrgId(uForm.getAssignedOrgId());
-
                     user.setUrl(uForm.getUrl());
 
                     SiteDomain siteDomain = (SiteDomain) request.getAttribute(Constants.CURRENT_SITE);
@@ -338,6 +335,13 @@ public class ViewEditUser extends Action {
 
                     user.setUserLangPreferences(userLangPreferences);
                     user.setPledger(uForm.getPledger());
+                    user.setExemptFromDataFreezing(uForm.getExemptFromDataFreezing());
+
+                    if (uForm.getNationalCoordinator()) {
+                        user.getGroups().add(org.digijava.module.admin.util.DbUtil.getGroupByKey(Group.NATIONAL_COORDINATORS));
+                    } else {
+                        user.getGroups().remove(org.digijava.module.admin.util.DbUtil.getGroupByKey(Group.NATIONAL_COORDINATORS));
+                    }
                     DbUtil.updateUser(user);
                     //assign workspace place
                     if(uForm.isAddWorkspace()){
@@ -401,6 +405,13 @@ public class ViewEditUser extends Action {
                 return mapping.findForward("assignWorkspace");
             }else {
                 if (uForm.getEvent().equalsIgnoreCase("changePassword")) {
+                    if (!PasswordPolicyValidator.isValid(uForm.getNewPassword(), uForm.getEmail())) {
+                        errors.add(ActionMessages.GLOBAL_MESSAGE,
+                                new ActionMessage("error.strong.validation"));
+                        saveErrors(request, errors);
+                        request.setAttribute(PasswordPolicyValidator.SHOW_PASSWORD_POLICY_RULES, true);
+                        return mapping.findForward("forward");
+                    }
 
                     String newPassword = uForm.getNewPassword();
                     String confirmNewPassword = uForm.getConfirmNewPassword();

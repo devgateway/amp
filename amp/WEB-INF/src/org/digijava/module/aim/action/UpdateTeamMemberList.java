@@ -9,8 +9,6 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.request.Site;
-import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.form.TeamMemberForm;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamMemberUtil;
@@ -38,7 +36,6 @@ public class UpdateTeamMemberList extends Action {
             } else if (tmForm.getRemoveMember() != null) {
                 logger.debug("in remove members");
                 Long selMembers[] = tmForm.getSelMembers();
-                Site site = RequestUtils.getSite(request);
                 TeamMemberUtil.removeTeamMembers(selMembers);
                 return mapping.findForward("forward");
             } else {

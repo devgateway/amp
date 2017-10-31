@@ -45,6 +45,7 @@ import org.dgfoundation.amp.onepager.components.features.sections.AmpCrossCuttin
 import org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpFormSectionFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpGPIFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpGPINiFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpIdentificationFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpInternalIdsFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpIssuesFormSectionFeature;
@@ -83,7 +84,7 @@ import org.hibernate.jdbc.Work;
  * @author mpostelnicu@dgateway.org since Sep 22, 2010
  */
 public class OnePager extends AmpHeaderFooter {
-    
+
     private static final long serialVersionUID = 1L;
     private static Logger logger = Logger.getLogger(OnePager.class);
     //for test purposes, it will be removed !!
@@ -118,8 +119,9 @@ public class OnePager extends AmpHeaderFooter {
         new OnepagerSection("Line Ministry Observations", AmpLineMinistryObservationsFormSectionFeature.class.getName(), 20, false),
         new OnepagerSection("Budget Structure", AmpBudgetStructureFormSectionFeature.class.getName(), 21, false),
         new OnepagerSection("GPI", AmpGPIFormSectionFeature.class.getName(), 22, false),
-        new OnepagerSection("Aid Effectivenes", AmpAidEffectivenessFormSectionFeature.class.getName(), 23, false)
-        
+        new OnepagerSection("GPI 2017", AmpGPINiFormSectionFeature.class.getName(), 23, false),
+        new OnepagerSection("Aid Effectivenes", AmpAidEffectivenessFormSectionFeature.class.getName(), 24, false)
+
         };
     public static final AtomicBoolean savedSections = new AtomicBoolean(false);
     public static final List<OnepagerSection> sectionsList = Collections.synchronizedList(loadPositions());
@@ -129,7 +131,7 @@ public class OnePager extends AmpHeaderFooter {
     public Component getEditLockRefresher() {
         return editLockRefresher;
     }
-    
+
 
     public AbstractAjaxTimerBehavior getTimer() {
         return timer;
@@ -145,7 +147,7 @@ public class OnePager extends AmpHeaderFooter {
         }
         return null;
     }
-    
+
     public static OnepagerSection findByPosition(int pos){
         Iterator<OnepagerSection> it = sectionsList.iterator();
         while (it.hasNext()) {
@@ -155,7 +157,7 @@ public class OnePager extends AmpHeaderFooter {
         }
         return null;
     }
-        
+
     public OnePager() {
         super();
         PageParameters parameters = decodePageParameters(getRequest());
@@ -173,31 +175,33 @@ public class OnePager extends AmpHeaderFooter {
 
         String activityId = activityParam.toString();
         final ValueWrapper<Boolean>newActivity= new ValueWrapper<Boolean>(false);
-        if ((activityId == null) || (activityId.compareTo("new") == 0)){
+
+        long currentUserId = ((AmpAuthWebSession) getSession()).getCurrentMember().getMemberId();
+
+        if ((activityId == null) || (activityId.compareTo("new") == 0)) {
             am = new AmpActivityModel();
 
             newActivity.value = true;
-            
+
             PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_MEMBER, session.getCurrentMember());
             PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.ACTIVITY, am.getObject());
 
-            
+
             am.getObject().setActivityCreator(session.getAmpCurrentMember());
             am.getObject().setTeam(session.getAmpCurrentMember().getAmpTeam());
             am.getObject().setActivityType(session.getFormType());
-            
+
             if(parameters.get("lat") != null && parameters.get("lat") != null && parameters.get("geoId") != null && parameters.get("name") != null){
                 String activityName = parameters.get("name").toString();
                 String latitude = parameters.get("lat").toString();
                 String longitude = parameters.get("lon").toString();
                 String geoId = parameters.get("geoId").toString();
-                
+
                 initializeActivity(am.getObject(), activityName, latitude, longitude, geoId);
             }
 
         }
         else{
-            long currentUserId = ((AmpAuthWebSession)getSession()).getCurrentMember().getMemberId();
             //try to acquire lock for activity editing
             String key = ActivityGatekeeper.lockActivity(activityId, currentUserId);
             if (key == null){ //lock not acquired
@@ -207,21 +211,24 @@ public class OnePager extends AmpHeaderFooter {
             }
             if (!ActivityGatekeeper.allowedToEditActivity(activityId))
                 throw new RedirectToUrlException(ActivityGatekeeper.buildPermissionRedirectLink(activityId));
-            
+
             am = new AmpActivityModel(Long.valueOf(activityId), key);
-            
-            //check the permissions                 
+
+            //check the permissions
             PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_MEMBER, session.getCurrentMember());
             PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.ACTIVITY, am.getObject());
 
             // -----> TODO-CONSTANTIN: comment lines below if you want to disable Permissions checking   <-----
             boolean canDo = am.getObject().canDo(GatePermConst.Actions.EDIT, PermissionUtil.getScope(session.getHttpSession()));
-            if(!canDo)  throw new RedirectToUrlException(ActivityGatekeeper.buildPermissionRedirectLink(activityId));           
+            if (!canDo) {
+                throw new RedirectToUrlException(ActivityGatekeeper.buildPermissionRedirectLink(activityId));
+            }
         }
 
-        if (!am.getObject().getActivityType().equals(session.getFormType()))
+        if (!am.getObject().getActivityType().equals(session.getFormType())) {
             throw new AssertionError("Form type is not compatible with activity type!");
-        
+        }
+
         try {
             initializeFormComponents(am);
             AmpActivityFormFeature formFeature= new AmpActivityFormFeature("activityFormFeature", am, "Activity Form", newActivity.value, listModel);
@@ -230,7 +237,7 @@ public class OnePager extends AmpHeaderFooter {
             logger.error(e);
             throw new RuntimeException(e);
         }
-        
+
         if (DEBUG_ACTIVITY_LOCK) {
             editLockRefresher = new Label("editLockRefresher", "Locked [" + am.getEditingKey() + "] at:"
                     + System.currentTimeMillis());
@@ -269,7 +276,7 @@ public class OnePager extends AmpHeaderFooter {
                     }
                 }
                 // AMP-19698
-                // keep alive jdbc connection 
+                // keep alive jdbc connection
                 AmpActivityModel.getHibernateSession().doWork(new Work() {
                     @Override
                     public void execute(Connection connection) throws SQLException {
@@ -281,7 +288,7 @@ public class OnePager extends AmpHeaderFooter {
                             rs.close();
                             stm.close();
                         } catch (Exception e) {
-                            //this is a ajax triger and the connectionas has already been closed. so its good to 
+                            //this is a ajax triger and the connectionas has already been closed. so its good to
                             //ignore the exception
                             logger.error(e);
                         }
@@ -292,7 +299,7 @@ public class OnePager extends AmpHeaderFooter {
         editLockRefresher.add(timer);
         add(editLockRefresher);
     }
-    
+
     /**
      * Decodes a URL in the form:
      * 
@@ -349,7 +356,7 @@ public class OnePager extends AmpHeaderFooter {
             locations.add(actLoc);
             activity.setLocations(locations);
         }
-        
+
         //we set the default value for activity budget if configured as a global setting
         Integer defaultActivityBudgetId = FeaturesUtil
                 .getGlobalSettingValueInteger(GlobalSettingsConstants.DEFAULT_VALUE_FOR_ACTIVITY_BUDGET);
@@ -365,7 +372,7 @@ public class OnePager extends AmpHeaderFooter {
         }
 
     }
-    
+
     public void initializeFormComponents(final IModel<AmpActivityVersion> am) throws Exception {
         listModel = new AbstractReadOnlyModel<List<AmpComponentPanel>>() {
             private static final long serialVersionUID = 1L;
@@ -374,7 +381,7 @@ public class OnePager extends AmpHeaderFooter {
                 AmpComponentPanel existing = temp.get(os.getClassName());
                 if (existing != null)
                     return existing;
-                
+
                 AmpComponentPanel dep = null;
                 if (os.getDependent()){
                     Iterator<OnepagerSection> it = features.iterator();
@@ -389,7 +396,7 @@ public class OnePager extends AmpHeaderFooter {
                     }
                     dep = initObject(depOs, features, temp);
                 }
-                
+
                 Class clazz = null;
                 try {
                     clazz = Class.forName(os.getClassName());
@@ -399,21 +406,22 @@ public class OnePager extends AmpHeaderFooter {
                 Constructor constructor = null;
                 try {
                     if (os.getDependent())
-                        constructor = clazz.getConstructor(String.class, String.class, IModel.class, AmpComponentPanel.class);
+                        constructor = clazz.getConstructor(String.class, String.class, IModel.class,
+                                AmpComponentPanel.class);
                     else
                         constructor = clazz.getConstructor(String.class, String.class, IModel.class);
-                    
+
                     AmpComponentPanel feature = null;
-                    if (os.getDependent())
+                    if (os.getDependent()) {
                         feature = (AmpComponentPanel) constructor.newInstance("featureItem", os.getName(), am, dep);
-                    else
+                    } else {
                         feature = (AmpComponentPanel) constructor.newInstance("featureItem", os.getName(), am);
-                    
-                    if (AmpFormSectionFeaturePanel.class.isAssignableFrom(feature.getClass())){
+                    }
+                    if (AmpFormSectionFeaturePanel.class.isAssignableFrom(feature.getClass())) {
                         AmpFormSectionFeaturePanel fsfp = (AmpFormSectionFeaturePanel) feature;
                         fsfp.setFolded(os.getFolded());
                     }
-                    
+
                     temp.put(os.getClassName(), feature);
                     feature.setOutputMarkupId(true);
                     return feature;
@@ -421,10 +429,10 @@ public class OnePager extends AmpHeaderFooter {
                     logger.error("Can't init constructor for section:" + os.getName(), e);
                     return null;
                 }
-                
+
             }
-            
-            public List<AmpComponentPanel> initObjects(){
+
+            public List<AmpComponentPanel> initObjects() {
                 Iterator<OnepagerSection> it = sectionsList.iterator();
                 LinkedList<AmpComponentPanel> ret = new LinkedList<AmpComponentPanel>();
                 HashMap<String, AmpComponentPanel> temp = new HashMap<String, AmpComponentPanel>();
@@ -436,12 +444,12 @@ public class OnePager extends AmpHeaderFooter {
                 }
                 return ret;
             }
-            
+
             @Override
             public List<AmpComponentPanel> getObject() {
                 if (list == null)
                     list = initObjects();
-                
+
                 return list;
             }
         };

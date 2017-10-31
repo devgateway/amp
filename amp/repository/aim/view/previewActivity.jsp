@@ -21,6 +21,7 @@
 
 <jsp:include page="activityHistoryUtil.jsp" flush="true" />
 <%@page import="java.math.BigDecimal"%>
+<%@ page import="org.digijava.module.aim.util.TeamUtil" %>
 <style type="text/css">
 	.legend_label a.trnClass { color:yellow;}
 </style>
@@ -268,18 +269,24 @@ function collapseAll() {
 	
 
 <!-- MAIN CONTENT PART START -->
-<logic:present scope="request" parameter="editError">
+<logic:present scope="request" parameter="editingUserId">
 	<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center style="margin-top:15px;">
 	     <tr>
 		     <td align="center">
 		        <font color="red" size="3">
-		                <digi:trn key="aim:activityIsBeeingEdited">Current activity is being edited by:</digi:trn> <%= TeamMemberUtil.getTeamMember(Long.valueOf(request.getParameter("editError"))).getMemberName() %>
+					<%
+					if (request.getParameter("editingUserId").equals(TeamUtil.getCurrentMember().getMemberId().toString())) {
+					%>
+					<digi:trn key="aim:activityEditLocked">You may only edit one activity at a time.</digi:trn>
+					<%} else {%>
+					<digi:trn key="aim:activityIsBeeingEdited">Current activity is being edited by:</digi:trn> <%= TeamMemberUtil.getTeamMember(Long.valueOf(request.getParameter("editingUserId"))).getMemberName() %>
+					<%}%>
 		        </font>
 		     </td>
-	     </tr>           
+	     </tr>
 	     <tr>
 	         <td>&nbsp;
-	             
+
 	         </td>
 	     </tr>
 	</table>
@@ -319,7 +326,7 @@ function collapseAll() {
 	</table>
 </logic:present>
 
-<c:if test="${aimEditActivityForm.activityExists=='no'}">
+<c:if test="${aimEditActivityForm.activityExists=='no' && aimEditActivityForm.activityId > 0}">
 	<div class="activity_preview_header" style="font-size: 12px;text-align: center;color:red">
 		<ul style="padding-top: 5px;font-size: 12px">
 			<li><digi:trn>Couldn't find activity! It may have been deleted from the system</digi:trn></li>
@@ -377,7 +384,7 @@ function collapseAll() {
 	</table>
 	</div>
 	
-	<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center style="margin-top:15px;">
+	<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center class="fixed-layout" style="margin-top:15px;">
   <tr>
     <td width=215 bgcolor="#F4F4F4" valign=top>
 	<div class="dash_left">
@@ -540,50 +547,62 @@ function collapseAll() {
 	<legend>
 		<span class=legend_label><digi:trn>Additional info</digi:trn></span>	</legend>
 	<div class="field_text_big word_break">
-	<digi:trn>Activity created by</digi:trn>: <br/>
-		<b> 
-			<c:out value="${aimEditActivityForm.identification.actAthFirstName}"/> 
-			<c:out value="${aimEditActivityForm.identification.actAthLastName}"/> 
+		<digi:trn>Activity created by</digi:trn>: <br/>
+		<b>
+			<c:out value="${aimEditActivityForm.identification.actAthFirstName}"/>
+			<c:out value="${aimEditActivityForm.identification.actAthLastName}"/>
 		</b>
 		<hr/>
-	<digi:trn>Created in workspace</digi:trn>: <br />
-	<c:if test="${aimEditActivityForm.identification.team !=null}">
-		<b>
-			<c:out value="${aimEditActivityForm.identification.team.name}"/> -
-			<digi:trn>
-				<c:out value="${aimEditActivityForm.identification.team.accessType}"/>
-			</digi:trn>
-		</b>
-	</c:if>
-	<hr />
- 	<digi:trn>Computation</digi:trn>: <br/>
-	<b>
-		<c:if test="${aimEditActivityForm.identification.team.computation == 'true'}">
-			<digi:trn key="aim:yes">Yes</digi:trn>
-		</c:if> 
-		<c:if test="${aimEditActivityForm.identification.team.computation == 'false'}">
-			<digi:trn key="aim:no">No</digi:trn>
+		<digi:trn>Activity created on</digi:trn>:<br/>
+		<b><c:out value="${aimEditActivityForm.identification.createdDate}"/></b>
+		<hr/>
+		<module:display name="/Activity Form/Identification/Activity Last Updated by" parentModule="/Activity Form/Identification">
+			<logic:notEmpty name="aimEditActivityForm" property="identification.modifiedBy">
+				<digi:trn>Activity last updated by</digi:trn>: <br/>
+				<b>
+					<c:out value="${aimEditActivityForm.identification.modifiedBy.user.firstNames}"/>
+					<c:out value="${aimEditActivityForm.identification.modifiedBy.user.lastName}"/>
+				</b>
+			</logic:notEmpty>
+		</module:display>
+		<hr/>
+		<module:display name="/Activity Form/Identification/Activity Updated On" parentModule="/Activity Form/Identification">
+			<logic:notEmpty name="aimEditActivityForm" property="identification.updatedDate">
+				<digi:trn>Activity updated on</digi:trn>: <br/>
+				<b><c:out value="${aimEditActivityForm.identification.updatedDate}"/></b>
+			</logic:notEmpty>
+		</module:display>
+		<hr/>
+
+		<digi:trn>Created in workspace</digi:trn>: <br/>
+		<c:if test="${aimEditActivityForm.identification.team !=null}">
+			<b>
+				<c:out value="${aimEditActivityForm.identification.team.name}"/> -
+				<digi:trn>
+					<c:out value="${aimEditActivityForm.identification.team.accessType}"/>
+				</digi:trn>
+			</b>
 		</c:if>
-	</b>
-	<hr/>
-	<digi:trn>Activity created on</digi:trn>:<br/>
-	<b><c:out value="${aimEditActivityForm.identification.createdDate}"/></b>
-	<hr />
-	<field:display name="Activity Updated On" feature="Identification">
-		<logic:notEmpty name="aimEditActivityForm" property="identification.updatedDate">
-			<digi:trn>Activity updated on</digi:trn>: <br />
-			<b><c:out value="${aimEditActivityForm.identification.updatedDate}"/></b>
-		</logic:notEmpty>
-	</field:display>
-	<hr />
-	<field:display name="Data Team Leader" feature="Identification">
-		<digi:trn>Data Team Leader</digi:trn>: <br />
+		<hr/>
+		<field:display name="Data Team Leader" feature="Identification">
+			<digi:trn>Workspace manager</digi:trn>: <br/>
+			<b>
+				<c:out value="${aimEditActivityForm.identification.team.teamLead.user.firstNames}"/>
+				<c:out value="${aimEditActivityForm.identification.team.teamLead.user.lastName}"/> -
+				<c:out value="${aimEditActivityForm.identification.team.teamLead.user.email}"/>
+			</b>
+		</field:display>
+
+		<hr/>
+		<digi:trn>Computation</digi:trn>: <br/>
 		<b>
-			<c:out value="${aimEditActivityForm.identification.team.teamLead.user.firstNames}"/> 
-			<c:out value="${aimEditActivityForm.identification.team.teamLead.user.lastName}"/>
-			<c:out value="${aimEditActivityForm.identification.team.teamLead.user.email}"/>
-		</b>	
-	</field:display>
+			<c:if test="${aimEditActivityForm.identification.team.computation == 'true'}">
+				<digi:trn key="aim:yes">Yes</digi:trn>
+			</c:if>
+			<c:if test="${aimEditActivityForm.identification.team.computation == 'false'}">
+				<digi:trn key="aim:no">No</digi:trn>
+			</c:if>
+		</b>
 	
 	</div>
 </fieldset>	
@@ -689,7 +708,7 @@ function collapseAll() {
 				</c:if>
 			</module:display>
 
-			
+
 			<module:display name="/Activity Form/Identification/Objective" parentModule="/Activity Form/Identification">
 				<digi:trn key="aim:objectives">Objectives</digi:trn>:&nbsp;<br />
 				<c:if test="${aimEditActivityForm.identification.objectives!=null}">
@@ -1023,7 +1042,7 @@ function collapseAll() {
 					<hr />
 				</c:if>
 			</module:display>
-						 
+
 			<!-- MISSING FIELD IN THE NEW FM STRUCTURE -->
 			<module:display name="/Activity Form/Identification/Government Agreement Number" parentModule="/Activity Form/Identification">
 				<c:if test="${not empty aimEditActivityForm.identification.govAgreementNumber}">
@@ -2096,7 +2115,7 @@ function collapseAll() {
 																</td>
 															</tr>
 														</module:display>
-														</table> 
+														</table>
 														<hr />
 													</c:forEach>
 												</td>
@@ -2905,7 +2924,7 @@ function collapseAll() {
 <!-- END CONTACT INFORMATION -->
 
 <!-- COSTING -->
-<feature:display name="Costing" module="Activity Costing">
+<module:display name="Activity Costing" parentModule="PROJECT MANAGEMENT">
 <fieldset>
 	<legend>
 		<span class=legend_label id="costinglink" style="cursor: pointer;">
@@ -2922,7 +2941,7 @@ function collapseAll() {
 		</table>
 	</div>
 </fieldset>
-</feature:display>
+</module:display>
 <!-- END COSTING -->
 <!-- IPA Contracting -->
 <feature:display name="Contracting" module="Contracting">

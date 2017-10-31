@@ -32,7 +32,7 @@
 		<many-to-one name="reportingOrgId" column="reporting_org_id"
 			class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none" />
 
-		<many-to-one name="pledgeid" column="pledge_id" class="org.digijava.module.fundingpledges.dbentity.FundingPledges" cascade="none" not-null="false" index="idx_amp_funding_detail_pledge_id" />
+		<many-to-one name="pledgeid" column="pledge_id" class="org.digijava.module.fundingpledges.dbentity.FundingPledges" cascade="none" not-null="false" index="idx_amp_funding_detail_pledge_id" lazy="false" fetch="join" />
 		<many-to-one name="ampCurrencyId" column="amp_currency_id" class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" />
 		<many-to-one name="ampFundingId" column="amp_funding_id" class="org.digijava.module.aim.dbentity.AmpFunding" index="idx_amp_funding_detail_funding_id" />
 		<many-to-one name="contract" column="ipa_contract_id" class="org.digijava.module.aim.dbentity.IPAContract" cascade="none" lazy="false" />

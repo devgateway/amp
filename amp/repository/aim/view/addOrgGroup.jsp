@@ -1,3 +1,4 @@
+<%@page import="org.digijava.kernel.util.SiteUtils"%>
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
@@ -6,7 +7,9 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
-
+<% if(SiteUtils.isEffectiveLangRTL()) { %>
+  <link rel="stylesheet" href="/TEMPLATE/ampTemplate/css_2/amp-rtl.css">
+<% } %>
 <script language="JavaScript">
     function check() {
 		var str = document.aimAddOrgGroupForm.orgGrpName.value;
@@ -59,7 +62,7 @@
         window.close();
     </c:if>
 </script>
-
+<div class="admin-content">
 <digi:context name="digiContext" property="context"/>
 <bean:write name="aimAddOrgGroupForm" property="flag"/>
 <%-- Add vertical spacing. It will look much better in this way
@@ -127,4 +130,5 @@
 
     </digi:form>
 
+</div>
 </div>

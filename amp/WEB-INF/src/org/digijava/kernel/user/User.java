@@ -40,12 +40,16 @@ import org.digijava.kernel.entity.UserLangPreferences;
 import org.digijava.kernel.entity.UserPreferences;
 import org.digijava.kernel.request.Site;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValue;
+import org.digijava.kernel.ampapi.endpoints.common.valueproviders.UserValueProvider;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpUserExtension;
+import org.digijava.module.aim.util.Identifiable;
 
+@InterchangeableValue(UserValueProvider.class)
 public class User
-    extends Entity implements Serializable, Comparable{
+    extends Entity implements Serializable, Comparable, Identifiable {
 
     private Subject subject;
     private String firstNames;
@@ -83,20 +87,10 @@ public class User
     private boolean globalAdmin;
     private String organizationTypeOther;
     private Set contacts;
-    private Long assignedOrgId;
     private AmpUserExtension userExtension;
-
+    private Boolean exemptFromDataFreezing;
     private Set<AmpOrganisation> assignedOrgs;
-    
-
-
-    public Long getAssignedOrgId() {
-        return assignedOrgId;
-    }
-
-    public void setAssignedOrgId(Long assignedOrgId) {
-        this.assignedOrgId = assignedOrgId;
-    }
+    private Date passwordChangedAt;
 
     public User() {}
 
@@ -119,6 +113,11 @@ public class User
         this.active = false;
         //this.registeredThrough = Session.site;
 
+    }
+
+    @Override
+    public Object getIdentifier() {
+        return id;
     }
 
     /**
@@ -459,9 +458,7 @@ public class User
     }
     
     public boolean hasVerifiedOrganizationId(Long ampOrgId) {
-        //First, check if the user has the Funding Organization in the property this.getAssignedOrgId()
         if(ampOrgId == null) return false;
-        if(this.assignedOrgId != null && this.assignedOrgId.equals(ampOrgId)) return true;
         //If it's not there, check in the Set<AmpOrganisation> assignedOrgs
         Iterator<AmpOrganisation> it = this.assignedOrgs.iterator();
         while(it.hasNext()){
@@ -472,6 +469,34 @@ public class User
         return false;
     }
 
+    /**
+     * Checks if user has a verified org and the org is role donor
+     * @return
+     */
+    public boolean hasVerifiedDonor(){
+        if (this.assignedOrgs.size() == 0) {
+            return false;
+        }
+
+        Iterator<AmpOrganisation> it = this.assignedOrgs.iterator();
+        while (it.hasNext()) {
+            AmpOrganisation currentOrganization = it.next();
+            if (org.digijava.module.aim.util.DbUtil.hasDonorRole(currentOrganization.getAmpOrgId()))
+                return true;
+        }
+        return false;
+    }
+    public boolean hasNationalCoordinatorGroup(){
+        boolean result = false;
+        Set<Group> groups = this.groups;
+        for (Group group : groups) {
+            if (group.isNationalCoordinatorGroup()) {
+                result = true;
+                break;
+            }
+        }
+        return result;
+    }
     public AmpCategoryValueLocations getRegion() {
         return region;
     }
@@ -479,5 +504,31 @@ public class User
     public void setRegion(AmpCategoryValueLocations region) {
         this.region = region;
     }
-    
+
+    /**
+     * @return the passwordChangedAt
+     */
+    public Date getPasswordChangedAt() {
+        return passwordChangedAt;
+    }
+
+    /**
+     * @param passwordChangedAt the passwordChangedAt to set
+     */
+    public void setPasswordChangedAt(Date passwordChangedAt) {
+        this.passwordChangedAt = passwordChangedAt;
+    }
+
+    public void updateLastModified() {
+        setLastModified(new Date());
+    }
+
+    public Boolean getExemptFromDataFreezing() {
+        return exemptFromDataFreezing;
+    }
+
+    public void setExemptFromDataFreezing(Boolean exemptFromDataFreezing) {
+        this.exemptFromDataFreezing = exemptFromDataFreezing;
+    }
+
 }

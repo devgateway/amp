@@ -12,16 +12,36 @@ module.exports = {
        'webpack/hot/only-dev-server',
        './modules/admin/dashboard/script.es6'
     ],
-      "admin/resource-manager-admin/script": [
+    "gpi-data/script": [
+        'webpack-dev-server/client?http://localhost:3000',
+        'webpack/hot/only-dev-server',
+        './modules/gpi-data/script.es6'
+     ],
+     "gpi-reports/script": [
+         'webpack-dev-server/client?http://localhost:3000',
+         'webpack/hot/only-dev-server',
+         './modules/gpi-reports/script.es6'
+      ],
+     "admin/resource-manager-admin/script": [
           'webpack-dev-server/client?http://localhost:3000',
           'webpack/hot/only-dev-server',
           './modules/admin/resource-manager-admin/script.es6'
+      ],
+      "admin/data-freeze-manager/script": [
+          'webpack-dev-server/client?http://localhost:3000',
+          'webpack/hot/only-dev-server',
+          './modules/admin/data-freeze-manager/script.es6'
       ],
       "admin/performance-alert-manager/script": [
           'webpack-dev-server/client?http://localhost:3000',
           'webpack/hot/only-dev-server',
           './modules/admin/performance-alert-manager/script.es6'
-      ]
+      ],
+      "ampoffline/download/script": [
+          'webpack-dev-server/client?http://localhost:3000',
+          'webpack/hot/only-dev-server',
+          './modules/ampoffline/download/script.es6'
+       ]
     //"filters/script": [
     //  'webpack-dev-server/client?http://localhost:3000',
     //  'webpack/hot/only-dev-server',

@@ -26,17 +26,25 @@ public class SaikuReportHtmlRenderer {
     public SaikuReportHtmlRenderer(GeneratedReport report) {
         this.report = report;
     }
-    
-    public StringBuilder renderReportAsHtml() {
+
+    public StringBuilder renderFullHtml() {
         StringBuilder reportHtml = new StringBuilder();
-        
+
         reportHtml.append("<!DOCTYPE html><html><head><title></title></head><body>");
         renderReportBody(reportHtml);
         reportHtml.append("</body></html>");
-        
+
         return reportHtml;
     }
-    
+
+    public StringBuilder renderTable() {
+        StringBuilder reportHtml = new StringBuilder();
+
+        renderReportTable(reportHtml);
+
+        return reportHtml;
+    }
+
     /** Renders the body of the Report HTML
      * @param res
      */

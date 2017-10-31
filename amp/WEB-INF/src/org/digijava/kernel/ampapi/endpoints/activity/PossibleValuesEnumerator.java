@@ -1,36 +1,56 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
+import static java.util.stream.Collectors.toList;
+
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
+import javax.ws.rs.core.Response;
+
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.ListMultimap;
+import com.google.common.collect.Multimap;
+import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
-import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.digijava.kernel.ampapi.endpoints.common.AMPTranslatorService;
+import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
+import org.digijava.kernel.ampapi.endpoints.common.valueproviders.GenericInterchangeableValueProvider;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
+import org.digijava.kernel.services.sync.model.SyncConstants.Entities;
+import org.digijava.kernel.user.User;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValueProvider;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
-import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
-import org.digijava.module.aim.dbentity.AmpFundingAmount;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValue;
+import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
+import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
+import org.digijava.module.aim.dbentity.AmpComponentType;
+import org.digijava.module.aim.dbentity.AmpContact;
+import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpLocation;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.hibernate.jdbc.Work;
-import org.hibernate.proxy.HibernateProxyHelper;
-
-import clover.org.apache.commons.lang.StringUtils;
-
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 /**
  * AMP Activity Endpoint for Possible Values -- /activity/fields/:fieldName
@@ -41,7 +61,118 @@ import clover.org.apache.commons.lang.StringUtils;
 public class PossibleValuesEnumerator {
     
     public static final Logger LOGGER = Logger.getLogger(PossibleValuesEnumerator.class);
-    
+
+    public static final PossibleValuesEnumerator INSTANCE = new PossibleValuesEnumerator(new AmpPossibleValuesDAO(),
+            AMPTranslatorService.INSTANCE);
+
+    private static final Multimap<Class<?>, String> ENTITY_CLASS_TO_SYNC_ENTITIES =
+            new ImmutableMultimap.Builder<Class<?>, String>()
+                .putAll(AmpCategoryValue.class, Entities.CATEGORY_VALUE, Entities.CATEGORY_CLASS)
+                .putAll(AmpLocation.class, Entities.LOCATION, Entities.CATEGORY_VALUE_LOCATION,
+                        Entities.CATEGORY_VALUE, Entities.CATEGORY_CLASS)
+                .putAll(AmpSector.class, Entities.SECTOR, Entities.SECTOR_SCHEME, Entities.CLASSIFICATION_CONFIG)
+                .putAll(AmpTheme.class, Entities.THEME, Entities.ACTIVITY_PROGRAM_SETTINGS)
+                .putAll(AmpOrganisation.class, Entities.ORGANISATION)
+                .putAll(AmpRole.class, Entities.ROLE)
+                .putAll(AmpCurrency.class, Entities.CURRENCY)
+                .putAll(AmpContact.class, Entities.CONTACT)
+                .putAll(AmpActivityProgramSettings.class, Entities.ACTIVITY_PROGRAM_SETTINGS)
+                .putAll(AmpTeamMember.class, Entities.WORKSPACE_MEMBER, Entities.USER)
+                .putAll(AmpTeam.class, Entities.WORKSPACES)
+                .putAll(User.class, Entities.USER)
+                .putAll(AmpComponentType.class, Entities.COMPONENT_TYPE)
+                .build();
+
+    private PossibleValuesDAO possibleValuesDAO;
+    private TranslatorService translatorService;
+
+    public PossibleValuesEnumerator(PossibleValuesDAO possibleValuesDAO, TranslatorService translatorService) {
+        this.possibleValuesDAO = possibleValuesDAO;
+        this.translatorService = translatorService;
+    }
+
+    /**
+     * Returns all sync entities that need to be monitored for possible value changes.
+     * @return a list of sync entities
+     */
+    public Set<String> getAllSyncEntities() {
+        return new HashSet<>(PossibleValuesEnumerator.ENTITY_CLASS_TO_SYNC_ENTITIES.values());
+    }
+
+    /**
+     * Returns a predicate that matches all fields that have possible values.
+     * @return a predicate
+     */
+    public Predicate<Field> fieldsWithPossibleValues() {
+        List<Class<?>> entityClasses = getEntityClasses(getAllSyncEntities());
+        return classOfFieldIs(assignableFromAny(entityClasses))
+                .or(fieldHasPossibleValuesProvider());
+    }
+
+    /**
+     * Returns a predicate that matches all fields that have a possible values provider.
+     * @return a predicate.
+     */
+    private Predicate<Field> fieldHasPossibleValuesProvider() {
+        return field -> InterchangeUtils.getPossibleValuesProvider(field) != null;
+    }
+
+    /**
+     * Returns a predicate that matches fields that depend on specific changelog entities.
+     * @param syncEntities sync entities that have changed
+     * @return field filter
+     */
+    public Predicate<Field> fieldsDependingOn(Set<String> syncEntities) {
+        List<Class<?>> targetClasses = getEntityClasses(syncEntities);
+        return classOfFieldIs(assignableFromAny(targetClasses))
+                .or(classOfPossibleValuesIs(assignableFromAny(targetClasses)));
+    }
+
+    /**
+     * Return a list of hibernate entity classes that are associated with the requested changelog entities.
+     * @param syncEntities changelog entities
+     * @return a list of hibernate entity types
+     */
+    private List<Class<?>> getEntityClasses(Set<String> syncEntities) {
+        List<Class<?>> targetClasses = new ArrayList<>();
+        PossibleValuesEnumerator.ENTITY_CLASS_TO_SYNC_ENTITIES.asMap().forEach((k, v) -> {
+            if (v.stream().anyMatch(syncEntities::contains)) {
+                targetClasses.add(k);
+            }
+        });
+        return targetClasses;
+    }
+
+    /**
+     * Predicate that filters fields by the properties of possible values class.
+     * @param classPredicate predicate for possible values class
+     * @return a predicate
+     */
+    private Predicate<Field> classOfPossibleValuesIs(Predicate<Class<?>> classPredicate) {
+        return field -> {
+            Class<?> entityClass = InterchangeUtils.getPossibleValuesClass(field);
+            return entityClass != null && classPredicate.test(entityClass);
+        };
+    }
+
+    /**
+     * Wrapper for a predicate that tests field's class.
+     * @param p field's class predicate
+     * @return field predicate
+     */
+    private Predicate<Field> classOfFieldIs(Predicate<Class<?>> p) {
+        return field -> p.test(InterchangeUtils.getClassOfField(field));
+    }
+
+    /**
+     * Returns true if predicate's class is assignable from any of the classes specified as parameter.
+     * @param classes classes to test against
+     * @return a predicate
+     */
+    private Predicate<Class<?>> assignableFromAny(List<Class<?>> classes) {
+        return clazz -> classes.stream().anyMatch(clazz::isAssignableFrom);
+    }
+
     /**
      * recursive method that gets possible values that can be held by a field
      * @param longFieldName underscorified field name 
@@ -49,7 +180,7 @@ public class PossibleValuesEnumerator {
      * @param discriminatorOption recursive option to be passed down if there was a discriminator option higher up
      * @return JSON object containing the possible values that can be held by the field
      */
-    public static List<JsonBean> getPossibleValuesForField(String longFieldName, Class<?> clazz, String discriminatorOption) {
+    public List<PossibleValue> getPossibleValuesForField(String longFieldName, Class<?> clazz, String discriminatorOption) {
 
         String fieldName = "";
         if (longFieldName.contains("~")) {
@@ -60,9 +191,7 @@ public class PossibleValuesEnumerator {
             fieldName = longFieldName.substring(0, longFieldName.indexOf('~') );
             Field field = InterchangeUtils.getPotentiallyDiscriminatedField(clazz, fieldName);
             if (field == null) {
-                List<JsonBean> result = new ArrayList<JsonBean>();
-                result.add(ApiError.toError(ActivityErrors.FIELD_INVALID.withDetails(fieldName)));
-                return result;
+                throw newBadRequestException(ActivityErrors.FIELD_INVALID.withDetails(fieldName));
             }
             
             String configString = discriminatorOption == null? null : discriminatorOption;
@@ -70,7 +199,7 @@ public class PossibleValuesEnumerator {
                 configString =  InterchangeUtils.getConfigValue(fieldName, field);
             }
             
-            return getPossibleValuesForField(longFieldName.substring(longFieldName.indexOf('~') + 1), 
+            return getPossibleValuesForField(longFieldName.substring(longFieldName.indexOf('~') + 1),
                     InterchangeUtils.getClassOfField(field), configString);
         } else {
             /*
@@ -80,29 +209,23 @@ public class PossibleValuesEnumerator {
              * */
             Field finalField =  InterchangeUtils.getPotentiallyDiscriminatedField(clazz, longFieldName);
             if (finalField == null) {
-                List<JsonBean> result = new ArrayList<JsonBean>();
-                result.add(ApiError.toError(ActivityErrors.FIELD_INVALID.withDetails(longFieldName)));
-                return result;
+                throw newBadRequestException(ActivityErrors.FIELD_INVALID.withDetails(longFieldName));
             } else {
                 String configString = discriminatorOption == null? null : discriminatorOption;
                 if (InterchangeUtils.isCompositeField(finalField)) {
-                    configString =  InterchangeUtils.getConfigValue(longFieldName, finalField); 
+                    configString =  InterchangeUtils.getConfigValue(longFieldName, finalField);
                 }
 
                 try {
-                    Class<? extends FieldsDiscriminator> discClass = InterchangeUtils.getDiscriminatorClass(finalField);
-                    if (discClass != null)
-                        return getPossibleValuesDirectly(discClass);
-                } catch(ClassNotFoundException exc) {
-                    List<JsonBean> result = new ArrayList<JsonBean>();
-                    result.add(ApiError.toError(ActivityErrors.DISCRIMINATOR_CLASS_NOT_FOUND.withDetails(exc.getMessage())));
-                    return result;
-                } catch (InvocationTargetException | IllegalArgumentException | IllegalAccessException 
-                        | SecurityException  | NoSuchMethodException | InstantiationException e) {
-                    List<JsonBean> result = new ArrayList<JsonBean>();
-                    result.add(ApiError.toError(ActivityErrors.DISCRIMINATOR_CLASS_METHOD_ERROR.withDetails(e.getMessage())));
-                    return result;
-                }               
+                    Class<? extends PossibleValuesProvider> providerClass =
+                            InterchangeUtils.getPossibleValuesProvider(finalField);
+                    if (providerClass != null) {
+                        return getPossibleValuesDirectly(providerClass);
+                    }
+                } catch (Exception e) {
+                    throw newBadRequestException(ActivityErrors.DISCRIMINATOR_CLASS_METHOD_ERROR
+                            .withDetails(Objects.toString(e.getMessage())));
+                }
                 if (InterchangeUtils.isCompositeField(finalField) || configString != null) {
                     return getPossibleValuesForComplexField(finalField, configString);
                 }
@@ -111,34 +234,26 @@ public class PossibleValuesEnumerator {
             }
         }
     }
-    
+
+    private ApiRuntimeException newBadRequestException(ApiErrorMessage message) {
+        return new ApiRuntimeException(Response.Status.BAD_REQUEST, ApiError.toError(message));
+    }
+
     /**
      * method employed for the scenario that possible values are to be obtained from
-     * a FieldsDiscriminator-derived class, instead of the usual database queries
-     * @param discClass
+     * a PossibleValuesProvider-derived class, instead of the usual database queries
+     * @param possibleValuesProviderClass
      * @return
-     * @throws NoSuchMethodException
-     * @throws SecurityException
      * @throws IllegalAccessException
-     * @throws IllegalArgumentException
-     * @throws InvocationTargetException
      * @throws InstantiationException
+     * @throws SecurityException
+     * @throws ExceptionInInitializerError
      */
-    private static List<JsonBean> getPossibleValuesDirectly(Class<? extends FieldsDiscriminator> discClass) 
-            throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, 
-            InvocationTargetException, InstantiationException {
-        Method m = discClass.getMethod("getPossibleValues");
-        FieldsDiscriminator discObj = discClass.newInstance();
-        Map<String, Object> vals = (Map<String, Object>) m.invoke(discObj);
-        List<JsonBean> result = new ArrayList<JsonBean>();
-        for (Map.Entry<String, Object> entry : vals.entrySet()) {
-            JsonBean bean = new JsonBean();
-            bean.set("id", entry.getKey());
-            bean.set("value", entry.getValue());
-            result.add(bean);
-        }
-        return result;
-        
+    private List<PossibleValue> getPossibleValuesDirectly(
+            Class<? extends PossibleValuesProvider> possibleValuesProviderClass)
+            throws IllegalAccessException, InstantiationException {
+        PossibleValuesProvider provider = possibleValuesProviderClass.newInstance();
+        return provider.getPossibleValues(translatorService);
     }
     
     /**
@@ -148,71 +263,24 @@ public class PossibleValuesEnumerator {
      * @param configValue
      * @return
      */
-    private static List<JsonBean> getPossibleValuesForComplexField(Field field, String configValue) {
-        List<JsonBean> result = new ArrayList<JsonBean>();
-        if (configValue == null) {
-            return getPossibleValuesForField(field);
-        }
+    private List<PossibleValue> getPossibleValuesForComplexField(Field field, String configValue) {
         /*AmpActivitySector || AmpComponentFunding || AmpActivityProgram*/
         List<Object[]> items;
         Class<?> clazz = InterchangeUtils.getClassOfField(field);
         if (clazz.equals(AmpSector.class)) {
-            items = getSpecialCaseObjectList(configValue, "all_sectors_with_levels",
-                     "ampSectorId", "name", "sector_config_name", "amp_sector_id", AmpSector.class);
+            items = possibleValuesDAO.getSectors(configValue);
         } else if (clazz.equals(AmpTheme.class)) {
-            items = getSpecialCaseObjectList(configValue, "all_programs_with_levels",
-                     "ampThemeId", "name", "program_setting_name", "amp_theme_id", AmpTheme.class);
+            items = possibleValuesDAO.getThemes(configValue);
         } else if (clazz.equals(AmpCategoryValue.class)){
             return getPossibleCategoryValues(field, configValue);
-        } else if (clazz.equals(AmpFundingAmount.class)){
-            return new ArrayList<JsonBean>();
+        } else if (clazz.equals(AmpClassificationConfiguration.class)) {
+            return getPossibleValuesGenericCase(clazz,
+                    () -> Collections.singletonList(possibleValuesDAO.getAmpClassificationConfiguration(configValue)));
         } else {
             //not a complex field, after all
             return getPossibleValuesForField(field);
         }
-        result = setProperties(items, result, false);
-        return result;
-    }
-    
-    /**
-     * Method that wraps generic approaches for the programs, sector and org. role entities
-     * @param configType
-     * @param configTableName
-     * @param entityIdColumnName
-     * @param conditionColumnName
-     * @param idColumnName
-     * @param clazz
-     * @return
-     */
-    private static List<Object[]> getSpecialCaseObjectList(final String configType, final String configTableName, 
-                     String entityIdColumnName, String entityValueColumnName, final String conditionColumnName, 
-                     final String idColumnName,  Class<?> clazz) {
-        final List<Long> itemIds = new ArrayList<Long>();
-        PersistenceManager.getSession().doWork(new Work() {
-            public void execute(Connection conn) throws SQLException {
-                String allSectorsQuery = "SELECT "+ idColumnName +" FROM "+ configTableName+" WHERE "+ conditionColumnName + 
-                                         "='" + configType +"'" +
-                                         " ORDER BY " + idColumnName;
-                try (RsInfo rsi = SQLUtils.rawRunQuery(conn, allSectorsQuery, null)) {
-                    ResultSet rs = rsi.rs;
-                    while (rs.next()) 
-                        itemIds.add(rs.getLong(idColumnName));
-                    rs.close();
-                }
-            }
-        });     
-        
-        if (itemIds.size() == 0) {
-            return new ArrayList<Object[]>();
-        }
-        
-        String ids = StringUtils.join(itemIds, ",");
-        String queryString = "select cls." + entityIdColumnName + ", " +
-                "cls." + entityValueColumnName + " " +
-                " from " + clazz.getName() + " cls where cls."+ entityIdColumnName + " in (" + ids + ")";
-        
-        List<Object[]> objectList = InterchangeUtils.getSessionWithPendingChanges().createQuery(queryString).list();
-        return objectList;
+        return setProperties(items, false);
     }
     
     /**
@@ -220,90 +288,128 @@ public class PossibleValuesEnumerator {
      * @param field
      * @return
      */
-    
-    @SuppressWarnings("unchecked")
-    private static List<JsonBean> getPossibleValuesForField(Field field) {
+
+    private List<PossibleValue> getPossibleValuesForField(Field field) {
         if (!InterchangeUtils.isFieldEnumerable(field))
-            return new ArrayList<JsonBean>();
-        List<JsonBean> result = new ArrayList<JsonBean>();
+            return new ArrayList<>();
         Class<?> clazz = InterchangeUtils.getClassOfField(field);
-        
+
         if (clazz.isAssignableFrom(AmpCategoryValue.class))
             return getPossibleCategoryValues(field, null);
         if (clazz.isAssignableFrom(AmpLocation.class))
-            return getPossibleLocations(field);
-        Field[] fields = InterchangeUtils.getClassOfField(field).getDeclaredFields();
+            return getPossibleLocations();
+        if (clazz.isAssignableFrom(AmpComponentType.class))
+            return getComponentTypes();
+        return getPossibleValuesGenericCase(clazz, () -> possibleValuesDAO.getGenericValues(clazz));
+    }
+
+    private List<PossibleValue> getComponentTypes() {
+        return possibleValuesDAO.getComponentTypes().stream()
+                .map(this::toPossibleValue)
+                .collect(toList());
+    }
+
+    private PossibleValue toPossibleValue(AmpComponentType type) {
+        return new PossibleValue(type.getType_id(), type.getName(), translatorService.translateLabel(type.getName()));
+    }
+
+    private <T> List<PossibleValue> getPossibleValuesGenericCase(Class<T> clazz,
+            Supplier<List> possibleValuesSupplier) {
+        Field[] fields = FieldUtils.getFieldsWithAnnotation(clazz, Interchangeable.class);
         String idFieldName = null;
         String valueFieldName = null;
         for (Field passField : fields) {
             Interchangeable ant = passField.getAnnotation(Interchangeable.class);
-            if (ant != null) {
-                if (ant.id())
-                    idFieldName = passField.getName();
-                if (ant.value())
-                    valueFieldName = passField.getName();
+            if (ant.id()) {
+                idFieldName = passField.getName();
+            }
+            if (ant.value()) {
+                valueFieldName = passField.getName();
             }
         }
-        if (idFieldName == null || valueFieldName == null) {
-            String err = "Cannot provide possible values for " + clazz.getName() + 
-                    " since we need both 'id' and 'value' fields configured";
+        InterchangeableValueProvider<T> valueProvider = null;
+        if (clazz.isAnnotationPresent(InterchangeableValue.class)) {
+            valueProvider = getInterchangeableValueProvider(clazz);
+        }
+        if (valueProvider == null && valueFieldName != null) {
+            valueProvider = new GenericInterchangeableValueProvider<>(clazz, valueFieldName);
+        }
+        if (idFieldName == null || valueProvider == null) {
+            String err = "Cannot provide possible values for " + clazz.getName()
+                    + " since we need both 'id' and 'value' fields configured";
             LOGGER.error(err);
-            return result;
+            return Collections.emptyList();
         }
-        String queryString = "SELECT cls."+idFieldName +
-                            ", cls." + valueFieldName +
-                            " FROM " + clazz.getName() + " cls "+ 
-                            "ORDER BY " + idFieldName;
-        List<Object[]> objectList = InterchangeUtils.getSessionWithPendingChanges().createQuery(queryString).list();
-        result = setProperties(objectList, result, false);
-//      for (Object obj : objectList) {
-//          JsonBean item = null;
-//          try {
-//              item = setProperties(obj);
-//          } catch (Exception exc) {
-//              LOGGER.error(exc.getMessage());
-//              throw new RuntimeException(exc);
-//          }
-//          if (item != null)
-//              result.add(item);
-//      }
-        return result;
+        List<T> objectList = possibleValuesSupplier.get();
+        String finalIdFieldName = idFieldName;
+        InterchangeableValueProvider<T> finalValueProvider = valueProvider;
+        return objectList.stream()
+                .map(o -> getGenericPossibleValue(o, finalIdFieldName, finalValueProvider))
+                .collect(toList());
     }
-    
-    private static List<JsonBean> getPossibleLocations(Field field) {
-        List <JsonBean> result = new ArrayList<JsonBean>();
-        Interchangeable ant = field.getAnnotation(Interchangeable.class);
-        String queryString = "SELECT loc.id, acvl.name, parentLoc.id, parentLoc.name" +
-                " ,parentCat.id, parentCat.value" +
-                    " from "+ AmpLocation.class.getName() + " loc " +
-                    " LEFT JOIN loc.location as acvl" +
-                    " LEFT JOIN acvl.parentLocation as parentLoc" +
-                    " LEFT JOIN acvl.parentCategoryValue as parentCat" +
-                    " ORDER BY loc.id";
-        @SuppressWarnings("unchecked")
-        List<Object[]> objColList = (List<Object[]>) InterchangeUtils
-                .getSessionWithPendingChanges().createQuery(queryString).list();
 
-        for (Object[] item : objColList){
-            Long id = ((Number)(item[0])).longValue();
-            String value = ((String)(item[1]));
-            Long parentLocationId = item[2] == null? null : ((Number)(item[2])).longValue();
-            String parentLocationName = item[3] == null? null : ((String)(item[3]));
-            Long categoryValueId = item[4] == null? null : ((Number)(item[4])).longValue();
-            String categoryValueName = item[5] == null? null : ((String)(item[5]));
-            
-            JsonBean bean = new JsonBean();
-            bean.set("id", id);
-            bean.set("value", value);
-            JsonBean extraInfo = new JsonBean();
-            extraInfo.set("parent_location_id", parentLocationId);
-            extraInfo.set("parent_location_name", parentLocationName);
-            extraInfo.set("implementation_level_id", categoryValueId);
-            extraInfo.set("implementation_location_name", categoryValueName);
-            bean.set("extra_info", extraInfo);
-            result.add(bean);
+    private <T> InterchangeableValueProvider<T> getInterchangeableValueProvider(Class<T> clazz) {
+        InterchangeableValue annotation = clazz.getAnnotation(InterchangeableValue.class);
+        try {
+            return annotation.value().newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            throw new RuntimeException("Failed to instantiate value provider for " + clazz, e);
         }
-        return result;      
+    }
+
+    private <T> PossibleValue getGenericPossibleValue(T object, String idProperty,
+            InterchangeableValueProvider<T> valueProvider) {
+        try {
+            Long id = (Long) PropertyUtils.getProperty(object, idProperty);
+            String value = valueProvider.getValue(object);
+            Map<String, String> translatedValue = ImmutableMap.of();
+            if (valueProvider.isTranslatable()) {
+                translatedValue = translatorService.translateLabel(value);
+            }
+            Object extraInfo = valueProvider.getExtraInfo(object);
+            return new PossibleValue(id, value, translatedValue, extraInfo);
+        } catch (ReflectiveOperationException e) {
+            throw new RuntimeException("Failed to extract possible value object from " + object, e);
+        }
+    }
+
+    private List<PossibleValue> getPossibleLocations() {
+        ListMultimap<Long, PossibleValue> groupedValues = ArrayListMultimap.create();
+
+        Map<Long, Long> locCatToLocId = new HashMap<>();
+
+        List<Object[]> possibleLocations = possibleValuesDAO.getPossibleLocations();
+        for (Object[] item : possibleLocations) {
+            Long locId = ((Number)(item[0])).longValue();
+            Long locCatId = item[1] == null ? null : ((Number)(item[1])).longValue(); // FIXME should be non-null AMP-25735
+            if (locCatId != null) {
+                locCatToLocId.put(locCatId, locId);
+            }
+        }
+
+        for (Object[] item : possibleLocations) {
+            Long locId = ((Number)(item[0])).longValue();
+            String locCatName = ((String)(item[2]));
+            Long parentLocCatId = item[3] == null? null : ((Number)(item[3])).longValue();
+            String parentLocCatName = item[4] == null? null : ((String)(item[4]));
+            Long categoryValueId = item[5] == null? null : ((Number)(item[5])).longValue();
+            String categoryValueName = item[6] == null? null : ((String)(item[6]));
+
+            // FIXME remove this filter during AMP-25735
+            if (locCatName == null && parentLocCatId == null && parentLocCatName == null
+                    && categoryValueId == null && categoryValueName == null) {
+                continue;
+            }
+
+            Long parentLocId = locCatToLocId.get(parentLocCatId);
+
+            LocationExtraInfo extraInfo = new LocationExtraInfo(parentLocId, parentLocCatName,
+                    categoryValueId, categoryValueName);
+
+            Map<String, String> translatedValues = translatorService.translateLabel(locCatName);
+            groupedValues.put(parentLocId, new PossibleValue(locId, locCatName, translatedValues, extraInfo));
+        }
+        return convertToHierarchical(groupedValues);
     }
 
     /**
@@ -313,45 +419,77 @@ public class PossibleValuesEnumerator {
      * @return
      */
     @SuppressWarnings("unchecked")
-    private static List<JsonBean> getPossibleCategoryValues(Field field, String discriminatorOption) {
-        List <JsonBean> result = new ArrayList<JsonBean>();
+    private List<PossibleValue> getPossibleCategoryValues(Field field, String discriminatorOption) {
         Interchangeable ant = field.getAnnotation(Interchangeable.class);
         if (StringUtils.isBlank(discriminatorOption)) {
             discriminatorOption = ant.discriminatorOption();
         }
         if (StringUtils.isNotBlank(discriminatorOption)) {
-            String queryString = "SELECT acv.id, acv.value, acv.deleted from " + AmpCategoryValue.class.getName() + " acv "
-                    + "WHERE acv.ampCategoryClass.keyName ='" + discriminatorOption + "' ORDER BY acv.id";
-            @SuppressWarnings("unchecked")
-            List<Object[]> objColList = (List<Object[]>) InterchangeUtils
-                    .getSessionWithPendingChanges().createQuery(queryString).list();
-
-            result = setProperties(objColList, result, true);
-            return result;
+            if (discriminatorOption.equals(CategoryConstants.IMPLEMENTATION_LOCATION_KEY)) {
+                return getImplementationLocationValues();
+            } else {
+                List<Object[]> objColList = possibleValuesDAO.getCategoryValues(discriminatorOption);
+                return setProperties(objColList, true);
+            }
         } else {
             LOGGER.error("discriminatorOption is not configured for CategoryValue [" + field.getName() + "]");
         }
         
-        return result; 
+        return Collections.emptyList();
     }
-    
-    private static List<JsonBean> setProperties(List<Object[]> objColList, List<JsonBean> result, boolean checkDeleted) {
-        
+
+    private List<PossibleValue> getImplementationLocationValues() {
+        String key = CategoryConstants.IMPLEMENTATION_LOCATION_KEY;
+        List<AmpCategoryValue> collectionByKey = CategoryManagerUtil.getAllAcceptableValuesForACVClass(key, null);
+        return collectionByKey.stream()
+                .filter(AmpCategoryValue::isVisible)
+                .map(this::getImplementationLocationValue)
+                .collect(toList());
+    }
+
+    private PossibleValue getImplementationLocationValue(AmpCategoryValue locCategory) {
+        Long id = locCategory.getId();
+        String value = locCategory.getValue();
+        Map<String, String> translatedValues = translatorService.translateLabel(value);
+
+        List<Long> implementationLevels = locCategory.getUsedValues().stream()
+                .map(AmpCategoryValue::getId)
+                .collect(toList());
+        ImplementationLocationExtraInfo extraInfo = new ImplementationLocationExtraInfo(implementationLevels);
+
+        return new PossibleValue(id, value, translatedValues, extraInfo);
+    }
+
+    private List<PossibleValue> setProperties(List<Object[]> objColList, boolean checkDeleted) {
+        ListMultimap<Long, PossibleValue> groupedValues = ArrayListMultimap.create();
         for (Object[] item : objColList){
             Long id = ((Number)(item[0])).longValue();
             String value = ((String)(item[1]));
-            boolean itemGood = !checkDeleted || Boolean.FALSE.equals((Boolean)(item[2])); 
+            boolean itemGood = !checkDeleted || Boolean.FALSE.equals((Boolean)(item[2]));
+            Long parentId = (!checkDeleted && item.length > 2) ? (Long) item[2] : null;
 //          Boolean deleted = ((Boolean)(item[2]));
             if (itemGood) {
-                JsonBean bean = new JsonBean();
-                bean.set("id", id);
-                bean.set("value", value);
-                result.add(bean);
+                Map<String, String> translatedValues = translatorService.translateLabel(value);
+                PossibleValue possibleValue = new PossibleValue(id, value, translatedValues);
+                groupedValues.put(parentId, possibleValue);
             }
-            
         }
-        return result;
+
+        return convertToHierarchical(groupedValues);
     }
 
+    private List<PossibleValue> convertToHierarchical(ListMultimap<Long, PossibleValue> groupedValues) {
+        return convertToHierarchical(groupedValues.get(null), groupedValues);
+    }
 
+    private List<PossibleValue> convertToHierarchical(List<PossibleValue> flatValues,
+            ListMultimap<Long, PossibleValue> groupedValues) {
+        List<PossibleValue> hierarchicalValues = new ArrayList<>();
+        for (PossibleValue possibleValue : flatValues) {
+            Long id = (Long) possibleValue.getId();
+            List<PossibleValue> children = convertToHierarchical(groupedValues.get(id), groupedValues);
+            hierarchicalValues.add(possibleValue.withChildren(children));
+        }
+        return hierarchicalValues;
+    }
 }

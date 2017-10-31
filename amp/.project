@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>amp-2.13-release</name>
-	<comment>amp-2.13-release</comment>
+	<name>amp-3.00-release</name>
+	<comment>amp-3.00-release</comment>
 	<projects>
-		<project>amp-2.13-release</project>
+		<project>amp-3.00-release</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
@@ -61,6 +61,11 @@
 			<arguments>
 			</arguments>
 		</buildCommand>
+		<buildCommand>
+			<name>org.zeroturnaround.eclipse.rebelXmlBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
 	</buildSpec>
 	<natures>
 		<nature>org.eclipse.vjet.core.nature</nature>
@@ -72,6 +77,7 @@
 		<nature>org.eclipse.jem.workbench.JavaEMFNature</nature>
 		<nature>qwickie.qwickieNature</nature>
 		<nature>org.eclipse.wst.common.project.facet.core.nature</nature>
+		<nature>org.zeroturnaround.eclipse.jrebelNature</nature>
 	</natures>
 	<filteredResources>
 		<filter>

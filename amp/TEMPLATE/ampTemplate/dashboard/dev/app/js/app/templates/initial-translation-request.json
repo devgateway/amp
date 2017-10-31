@@ -1,5 +1,5 @@
 {
-"amp.common:footer": "Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and DGF",
+"amp.common:footer": "Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and DG",
 
 "amp.common:title": "AMP",
 "amp.common:title-desktop": "Desktop",
@@ -107,12 +107,16 @@
 "amp.dashboard:ftype-actual-expenditure": "Actual Expenditures",
 "amp.dashboard:ftype-planned-commitment": "Planned Commitments" ,
 "amp.dashboard:ftype-planned-disbursement":	"Planned Disbursements" ,
-"amp.dashboard:ftype-planned-expenditures":	"Planned Expenditures",  			
-"amp.dashboard:dashboard-chart-tops-info-modal": "Category Detail",
+"amp.dashboard:ftype-planned-expenditures":	"Planned Expenditures",
 "amp.dashboard:chart-tops-table-projecttitle": "Project Title",
+"amp.dashboard:chart-tops-table-amount": "Amount",
+"amp.dashboard:chart-tops-table-loadmore": "load more",
 "amp.dashboard:chart-tops-inunits": "In units",
 "amp.dashboard:chart-tops-inthousands": "In thousands",
 "amp.dashboard:chart-tops-inmillions": "In millions",
+"amp.dashboard:chart-tops-detail-inthousands": "Amounts in Thousands (000)",
+"amp.dashboard:chart-tops-detail-inmillions": "Amounts in Millions (000 000)",
+"amp.dashboard:chart-tops-detail-inbillions": "Amounts in Billions (000 000 000)",
 "amp.dashboard:chart-thousand": "k",
 "amp.dashboard:chart-million": "M",
 "amp.dashboard:chart-billion": "B",
@@ -137,5 +141,13 @@
 "amp.dashboard:chart-heatmap-legend-n-a": "N/A",
 "amp.dashboard:chart-heatmap-help-text-location":"Each cell represents an intersection between a donor group and a location and represents how much that funder contributes to the total funding received by that location.",
 "amp.dashboard:chart-heatmap-help-text-sector":"Each cell represents an intersection between a donor group and a sector and represents how much that funder contributes to the total funding received by that sector.",
-"amp.dashboard:chart-heatmap-help-text-program":"Each cell represents an intersection between a donor group and a program and represents how much that funder contributes to the total funding received by that program."
+"amp.dashboard:chart-heatmap-help-text-program":"Each cell represents an intersection between a donor group and a program and represents how much that funder contributes to the total funding received by that program.",
+"amp.dashboard:chart-tooltip-pie-chart[title]":"View data in pie chart",
+"amp.dashboard:chart-tooltip-bar-chart[title]":"View data in bar chart",
+"amp.dashboard:chart-tooltip-table-chart[title]":"View data in table format",
+"amp.dashboard:chart-tooltip-multibar-chart[title]":"View data in multibar chart",
+"amp.dashboard:chart-tooltip-download-chart[title]":"Download image or table",
+"amp.dashboard:chart-tooltip-expand-chart[title]":"Expand chart",
+"amp.dashboard:chart-tooltip-collapse-chart[title]":"Collapse chart",
+"amp.dashboard:chart-tooltip-heatmap-chart[title]":"View heat map"
 }

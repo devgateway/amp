@@ -8,14 +8,14 @@ function createPreview () {
 	var fakeDivEl	= document.getElementById("fakePreviewSectionDiv");
 	divEl.innerHTML	= "";
 	
-	var colArray		= getSelectedFieldsNames("dest_col_ul");
-	var hierArray		= getSelectedFieldsNames("dest_hierarchies_ul");
+	var colArray		= getSelectedFieldsRealNames("dest_col_ul", false);
+	var hierArray		= getSelectedFieldsRealNames("dest_hierarchies_ul", false);
 	var summary			= getHideActivities();
-	
+
 	if ( (colArray.length != 0 && !summary) || hierArray.length != 0 ) {
 		divElWrapper.style.display		= "";
 		fakeDivEl.style.display		= "";
-		new ReportPreviewEngine(populateRPS(new ReportPreviewSettings())).renderTable('previewBodySectionDiv');		
+		new ReportPreviewEngine(populateRPS(new ReportPreviewSettings()));
 	}
 	else {
 		fakeDivEl.style.display		= "none";
@@ -24,9 +24,9 @@ function createPreview () {
 }
 
 function populateRPS(rpSettings) {
-	var colArray		= getSelectedFieldsNames("dest_col_ul");
-	var hierArray		= getSelectedFieldsNames("dest_hierarchies_ul");
-	var measArray		= getSelectedFieldsNames("dest_measures_ul");
+	var colArray		= getSelectedFieldsRealNames("dest_col_ul", false);
+	var hierArray		= getSelectedFieldsRealNames("dest_hierarchies_ul", false);
+	var measArray		= getSelectedFieldsRealNames("dest_measures_ul", true);
 	for ( var i=0; i<hierArray.length; i++ ) {
 		var hier	= hierArray[i];
 		for (var j = 0; j < colArray.length; j++) {
@@ -37,11 +37,9 @@ function populateRPS(rpSettings) {
 			}
 		}
 	}
-	if ( measArray == null || measArray.length == 0 ) {
-		measArray.push(repManagerParams.previewUnselectedMeasureTrn);
-	}
 	
 	var period			= getReportPeriod();
+	rpSettings.reportPeriod		= period;
 	if (  period == "M" ) {
 		rpSettings.months		= true;
 	}
@@ -289,16 +287,18 @@ NormalReportManager.prototype.disableToolbarButton	= function (btn) {
 };
 
 NormalReportManager.prototype.checkSteps	= function () {
-	createPreview();
-	toggleSplitByFundingCheckbox();
-	if ( this.checkReportDetails() )
-		if ( this.checkColumns() )
-			if ( this.checkHierarchies() )
-				if ( this.checkMeasures() ) {
-						this.checkReportName() ;
-						return;
-				}
-	
+    toggleSplitByFundingCheckbox();
+	if ( this.checkReportDetails() ) {
+    	if (this.checkColumns()) {
+        	if (this.checkHierarchies()) {
+          		createPreview();
+          		if (this.checkMeasures()) {
+            		this.checkReportName();
+            		return;
+          		}
+        	}
+      	}
+    }
 	// If any of the checks above fails the save should be disabled
 	this.disableSave();
 };

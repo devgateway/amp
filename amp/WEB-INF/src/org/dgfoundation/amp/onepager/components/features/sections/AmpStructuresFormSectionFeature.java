@@ -6,8 +6,6 @@ package org.dgfoundation.amp.onepager.components.features.sections;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +28,6 @@ import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.PagingListEditor;
 import org.dgfoundation.amp.onepager.components.PagingListNavigator;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
-import org.dgfoundation.amp.onepager.components.fields.AmpHiddenFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -82,7 +79,6 @@ public class AmpStructuresFormSectionFeature extends
             protected void onPopulateItem(
                     org.dgfoundation.amp.onepager.components.ListItem<AmpStructure> item) {
                 IModel<AmpStructure> structureModel = item.getModel();
-
                 final AmpTextFieldPanel<String> name = new AmpTextFieldPanel<String>("name", new PropertyModel<String>(structureModel, "title"), "Structure Title",true, true);
                 name.setOutputMarkupId(true);
                 name.getTextContainer().add(new AttributeAppender("size", new Model("10px"), ";"));
@@ -159,7 +155,7 @@ public class AmpStructuresFormSectionFeature extends
                     
                 };
                 item.add(delbutton);
-
+                
                 final AmpAjaxLinkField viewCoords = new AmpAjaxLinkField("viewCoords", "Map", "View") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
@@ -196,9 +192,9 @@ public class AmpStructuresFormSectionFeature extends
                         target.add(longitude);
                         target.add(viewCoords);
                         target.appendJavaScript("gisPopup($('#" + this.getMarkupId() + "')[0]); return false;");
-                    }
+                }
                 };
-                item.add(openMapPopup);
+                item.add(openMapPopup); 
 
                 final TextField<String> coords = new TextField<String>("coords",
                         new PropertyModel<String>(structureModel, "coords"));
@@ -248,13 +244,8 @@ public class AmpStructuresFormSectionFeature extends
             @Override
             public void onClick(AjaxRequestTarget target) {
                 AmpStructure stru = new AmpStructure();
-                if(FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.DEFAULT_STRUCTURE_TYPE)!=-1){
-                    AmpStructureType s=(AmpStructureType)PersistenceManager.getSession().load(AmpStructureType.class, 
-                            FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.DEFAULT_STRUCTURE_TYPE));
-                    stru.setType(s);    
-                }
-                
                 list.addItem(stru);
+
                 target.add(this.getParent());
                 target.add(containter);
                 target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(this.getParent()));
@@ -267,11 +258,11 @@ public class AmpStructuresFormSectionFeature extends
         
         
     }
-
+    
     private boolean hasCoordinates(IModel<AmpStructure> structureModel) {
         return structureModel.getObject().getCoordinates() != null && structureModel.getObject().
                 getCoordinates().size() > 0;
     }
-
+    
 
 }

@@ -7,16 +7,81 @@ import java.util.Date;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
+import org.digijava.kernel.ampapi.endpoints.activity.discriminators.TransactionTypePossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
-import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
+import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 
 public class AmpFundingDetail implements Serializable, Cloneable, FundingInformationItem {
+
+    public static class FundingDetailComparatorByTransactionDateAsc implements Comparator<AmpFundingDetail>, Serializable {
+
+        @Override
+        public int compare(AmpFundingDetail arg0, AmpFundingDetail arg1) {
+            if (arg0.getTransactionDate() != null && arg1.getTransactionDate() != null){
+                return arg0.getTransactionDate().compareTo(arg1.getTransactionDate());
+            }else{
+                if(arg0.getTransactionDate()==null){
+                    return 1;
+                }else{
+                    return -1;
+                }
+            }
+        }
+    }
+
+    public static class FundingDetailComparatorByTransactionDateDesc implements Comparator<AmpFundingDetail>, Serializable {
+
+        @Override
+        public int compare(AmpFundingDetail arg0, AmpFundingDetail arg1) {
+            if (arg0.getTransactionDate() != null && arg1.getTransactionDate() != null){
+                return arg1.getTransactionDate().compareTo(arg0.getTransactionDate());
+            }else{
+                if(arg0.getTransactionDate()==null){
+                    return -1;
+                }else{
+                    return 1;
+                }
+            }
+        }
+    }
+
+    public static class FundingDetailComparatorByFundingItemIdAsc implements Comparator<AmpFundingDetail>, Serializable {
+
+        @Override
+        public int compare(AmpFundingDetail arg0, AmpFundingDetail arg1) {
+            if (arg0.getAmpFundDetailId() != null && arg1.getAmpFundDetailId() != null){
+                return arg0.getAmpFundDetailId().compareTo(arg1.getAmpFundDetailId());
+            }else{
+                if(arg0.getAmpFundDetailId()==null){
+                    return 1;
+                }else{
+                    return -1;
+                }
+            }
+        }
+    }
+
+    public static class FundingDetailComparatorByFundingItemIdDesc implements Comparator<AmpFundingDetail>, Serializable {
+
+        @Override
+        public int compare(AmpFundingDetail arg0, AmpFundingDetail arg1) {
+            if (arg0.getAmpFundDetailId() != null && arg1.getAmpFundDetailId() != null){
+                return arg1.getAmpFundDetailId().compareTo(arg0.getAmpFundDetailId());
+            }else{
+                if(arg0.getAmpFundDetailId()==null){
+                    return -1;
+                }else{
+                    return 1;
+                }
+            }
+        }
+    }
 
     //IATI-check: not to be ignored!
     public static class FundingDetailComparator implements Comparator<AmpFundingDetail>, Serializable {
@@ -56,8 +121,6 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
             return arg0.hashCode() - arg1.hashCode();
         }
     }
-
-    @Interchangeable(fieldTitle = "ID")
     private Long ampFundDetailId;
     @Interchangeable(fieldTitle = "Fiscal Year", importable = true)
     private Integer fiscalYear;
@@ -75,9 +138,7 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
      */
 
     @Interchangeable(fieldTitle = ActivityFieldsConstants.TRANSACTION_TYPE, importable = true, pickIdOnly = true)
-    @InterchangeableDiscriminator(discriminatorField = "transactionType",
-            discriminatorClass = "org.digijava.kernel.ampapi.endpoints.activity.discriminators"
-                    + ".TransactionTypeDiscriminator")
+    @PossibleValues(TransactionTypePossibleValuesProvider.class)
     private Integer transactionType;
 
     @Interchangeable(fieldTitle = "Adjustment Type", importable = true, pickIdOnly = true,
@@ -129,7 +190,11 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
     private AmpCurrency fixedRateBaseCurrency;
     @Interchangeable(fieldTitle = "Disbursement Order Rejected", importable = true)
     private Boolean disbursementOrderRejected;
-    @Interchangeable(fieldTitle = "Pledge", importable = true)
+    @Interchangeable(fieldTitle = "Pledge", importable = true, fmPath =
+            FMVisibility.ANY_FM + ActivityEPConstants.COMMITMENTS_PLEDGES_FM_PATH
+                    + "|" + ActivityEPConstants.DISBURSEMENTS_PLEDGES_FM_PATH
+                    + "|" + ActivityEPConstants.ESTIMATED_DISBURSEMENTS_PLEDGES_FM_PATH
+                    + "|" + ActivityEPConstants.RELEASE_OF_FUNDS_PLEDGES_FM_PATH)
     private FundingPledges pledgeid;
     @Interchangeable(fieldTitle = "Capital Spending Percentage", importable = true)
     private Float capitalSpendingPercentage;

@@ -1,15 +1,24 @@
 package org.dgfoundation.amp.ar.amp212;
 
+import static org.dgfoundation.amp.nireports.formulas.NiFormula.ADD;
+import static org.dgfoundation.amp.nireports.formulas.NiFormula.CONSTANT;
+import static org.dgfoundation.amp.nireports.formulas.NiFormula.DIVIDE;
+import static org.dgfoundation.amp.nireports.formulas.NiFormula.DIVIDEIFLOWER;
+import static org.dgfoundation.amp.nireports.formulas.NiFormula.MULTIPLY;
+import static org.dgfoundation.amp.nireports.formulas.NiFormula.PERCENTAGE;
+import static org.dgfoundation.amp.nireports.formulas.NiFormula.PERCENTAGEIFLOWER;
+import static org.dgfoundation.amp.nireports.formulas.NiFormula.SUBTRACT;
+import static org.dgfoundation.amp.nireports.formulas.NiFormula.SUBTRACTIFGREATER;
+import static org.dgfoundation.amp.nireports.formulas.NiFormula.VARIABLE;
+
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.dgfoundation.amp.nireports.formulas.NiFormula;
 import org.dgfoundation.amp.nireports.output.nicells.NiFormulaicAmountCell;
-
-import static org.dgfoundation.amp.nireports.formulas.NiFormula.*;
-
 import org.dgfoundation.amp.testutils.AmpTestCase;
 import org.junit.Test;
-import java.util.Map;
-import java.util.HashMap;
-import java.math.BigDecimal;
 
 
 /**
@@ -19,10 +28,6 @@ import java.math.BigDecimal;
  *
  */
 public class ExpressionTreeTestcases extends AmpTestCase {
-    
-    public ExpressionTreeTestcases() {
-        super("expression tree testcases");
-    }
     
     Map<String, BigDecimal> vars = new HashMap<String, BigDecimal>() {{
         put("one", BigDecimal.ONE);
@@ -104,6 +109,9 @@ public class ExpressionTreeTestcases extends AmpTestCase {
         testVal("11", ADD(VARIABLE("one"), VARIABLE("ten")));
         testVal("21", MULTIPLY(CONSTANT(3), CONSTANT(7)));
         testVal("4", DIVIDE(ADD(CONSTANT(95), CONSTANT(5)), SUBTRACT(CONSTANT(27), CONSTANT(2))));
+        testVal("1", SUBTRACTIFGREATER(CONSTANT(2), CONSTANT(1)));
+        testVal("0", SUBTRACTIFGREATER(CONSTANT(1), CONSTANT(3)));
+        testVal("0", SUBTRACTIFGREATER(CONSTANT(0), CONSTANT(0)));
     }
     
     @Test
@@ -124,6 +132,25 @@ public class ExpressionTreeTestcases extends AmpTestCase {
     public void testDivision() {
         NiFormula oneByThree = DIVIDE(VARIABLE("one"), CONSTANT(3));
         testVal("0.3333333333333333333", oneByThree);
+        testVal("1", DIVIDEIFLOWER(CONSTANT(3), CONSTANT(3)));
+        testVal("1", DIVIDEIFLOWER(CONSTANT(4), CONSTANT(3)));
+        testVal("0.3333333333333333333", DIVIDEIFLOWER(CONSTANT(1), CONSTANT(3)));
+        testVal("1", DIVIDEIFLOWER(CONSTANT(0), CONSTANT(0)));
+        testVal("0", DIVIDEIFLOWER(CONSTANT(0), CONSTANT(5)));
+        testVal("0", DIVIDEIFLOWER(CONSTANT(5), CONSTANT(0)));
+    }
+    
+    @Test
+    public void testPercentage() {
+        testVal("200", PERCENTAGE(SUBTRACTIFGREATER(CONSTANT(9), CONSTANT(3)), CONSTANT(3)));
+        testVal("50", PERCENTAGE(SUBTRACTIFGREATER(CONSTANT(6), CONSTANT(4)), CONSTANT(4)));
+        testVal("0", PERCENTAGE(SUBTRACTIFGREATER(CONSTANT(3), CONSTANT(3)), CONSTANT(3)));
+        testVal("0", PERCENTAGE(SUBTRACTIFGREATER(CONSTANT(1), CONSTANT(3)), CONSTANT(3)));
+        testVal("100", PERCENTAGEIFLOWER(CONSTANT(4), CONSTANT(3)));
+        testVal("100", PERCENTAGEIFLOWER(CONSTANT(3), CONSTANT(3)));
+        testVal("25", PERCENTAGEIFLOWER(CONSTANT(1), CONSTANT(4)));
+        testVal("0", PERCENTAGEIFLOWER(CONSTANT(1), CONSTANT(0)));
+        testVal("100", PERCENTAGEIFLOWER(CONSTANT(0), CONSTANT(0)));
     }
     
 }

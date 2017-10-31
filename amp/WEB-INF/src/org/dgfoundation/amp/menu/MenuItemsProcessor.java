@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.dgfoundation.amp.menu.dynamic.DynamicMenu;
 import org.dgfoundation.amp.menu.dynamic.EmailMenu;
 import org.dgfoundation.amp.menu.dynamic.LanguageMenu;
@@ -68,6 +69,8 @@ public class MenuItemsProcessor {
         this.referer = TLSUtils.getRequest().getHeader("referer");
     }
     
+     
+    
     protected List<MenuItem> process(List<MenuItem> items, Set<String> visibleMenuEntries) {
         List<MenuItem> newList = new ArrayList<MenuItem>();
         for (MenuItem item : items) {
@@ -104,6 +107,10 @@ public class MenuItemsProcessor {
         case MenuConstants.ADD_SSC_ACTIVITY:
             visible = tm != null && Boolean.TRUE.equals(tm.getAddActivity());
             break;
+        case MenuConstants.GPI_DATA:
+            AmpTeamMember atm = TeamMemberUtil.getAmpTeamMember(tm.getMemberId()); 
+            visible = atm.getUser().hasNationalCoordinatorGroup() || atm.getUser().hasVerifiedDonor();
+            break;
         }
         // if requestURL (the actual referrer) filter is specified, then display this menu item only for a referrer that matches it
         visible = visible && (item.requestUrl == null || referer != null && referer.matches(item.requestUrl));
@@ -113,7 +120,7 @@ public class MenuItemsProcessor {
     
     private boolean isAllowedUserGroup(MenuItem mi) {
         if (mi.groupKeys == null || mi.groupKeys.size() == 0 
-                || AmpView.ADMIN == view && mi.groupKeys.contains(Group.ADMINISTRATORS)) {
+                || AmpView.ADMIN == view && CollectionUtils.containsAny(mi.groupKeys, Group.ADMIN_GROUPS)) {
             return true;
         }
         

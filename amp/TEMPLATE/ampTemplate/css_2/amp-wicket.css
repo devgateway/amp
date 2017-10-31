@@ -644,6 +644,26 @@ input[disabled], select[disabled]{
 	color: #D3D3D3;
 }
 
+.resourceButtonPosition {
+	float: left;
+}
+
+.close-link {
+    text-align: right;
+    float: right;
+    margin-right: 28px;
+}
+
+.inside-header {
+    text-align: left;
+}
+
+.del-funding {
+    float: right;
+    position: relative;
+    top: -15px;
+}
+
 .ui-dialog-titlebar-close:after { content: 'X'; font-weight:bold; }
 
 .coordinates-container{
@@ -654,3 +674,4 @@ input[disabled], select[disabled]{
 	color: #2d5379 !important;
     background: #ededed;
 }
+

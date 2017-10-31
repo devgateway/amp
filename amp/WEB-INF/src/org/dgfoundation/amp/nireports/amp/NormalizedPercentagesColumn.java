@@ -32,7 +32,7 @@ import org.digijava.kernel.request.TLSUtils;
  * @author Dolghier Constantin
  *
  */
-public class NormalizedPercentagesColumn extends AmpDifferentialColumn<PercentageTextCell, String> {
+public class NormalizedPercentagesColumn extends AmpDifferentialColumn<PercentageTextCell> {
 
     final PercentagesCorrector percentagesCorrector;
     PercentagesCorrector.Snapshot percentagesSnapshot;

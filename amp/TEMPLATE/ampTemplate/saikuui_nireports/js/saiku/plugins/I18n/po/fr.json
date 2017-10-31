@@ -110,5 +110,7 @@
    "Donor Funding":"Financement Donateur",
    "Table Mode":"Mode Tableau",
    "Chart Mode":"Mode Graphique",
-   "Revert filters to state when opened.":"Rétablir les filtres à l'état initial."
+   "Revert filters to state when opened.":"Rétablir les filtres à l'état initial.",
+   "Amounts are in millions (000 000)" : "Les montants sont en millions (000 000)",
+   "Amounts are in thousands (000)":"Les montants sont en milliers (000)"
 }

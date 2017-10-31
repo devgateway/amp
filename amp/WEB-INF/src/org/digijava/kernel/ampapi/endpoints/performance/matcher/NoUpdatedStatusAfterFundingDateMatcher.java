@@ -1,13 +1,18 @@
 package org.digijava.kernel.ampapi.endpoints.performance.matcher;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
-import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
+import org.digijava.kernel.ampapi.endpoints.performance.PerformanceIssue;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleConstants;
+import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleMatcherDefinition;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpPerformanceRule;
 import org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -45,30 +50,32 @@ public class NoUpdatedStatusAfterFundingDateMatcher extends PerformanceRuleMatch
     }
 
     @Override
-    public boolean match(AmpActivityVersion a) {
+    public PerformanceIssue findPerformanceIssue(AmpActivityVersion a) {
         AmpCategoryValue activityStatus = CategoryManagerUtil
                 .getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_STATUS_KEY, a.getCategories());
         
-        if (activityStatus == null) {
-            return true;
-        }
+        Set<AmpOrganisation> donorsWithIssues = new HashSet<>();
+        
         Date currentDate = new Date();
         
-        Date tmpDeadlineDate = new Date(0);
-        boolean tmpDeadlineUpdated = false;
         for (AmpFunding f : a.getFunding()) {
             Date fundingSelectedDate = getFundingDate(f, selectedDate);
             if (fundingSelectedDate != null && StringUtils.isNotBlank(selectedStatus)) {
-                Date deadline = getDeadline(fundingSelectedDate, timeUnit, timeAmount);
+                Date fundingDeadline = getDeadline(fundingSelectedDate, timeUnit, timeAmount);
                 
-                if (deadline.after(tmpDeadlineDate) && deadline.before(currentDate)) {
-                    tmpDeadlineDate = deadline;
-                    tmpDeadlineUpdated = true;
+                if (fundingDeadline.before(currentDate)) {
+                    donorsWithIssues.add(f.getAmpDonorOrgId());
                 }
             }
         }
         
-        return tmpDeadlineUpdated && !selectedStatus.equals(activityStatus.getLabel());
+        if (!donorsWithIssues.isEmpty()) {
+            if (activityStatus == null || !selectedStatus.equals(activityStatus.getLabel())) {
+                return new PerformanceIssue(this, new ArrayList<>(donorsWithIssues));
+            }
+        }
+        
+        return null; 
     }
     
     @Override
@@ -89,5 +96,5 @@ public class NoUpdatedStatusAfterFundingDateMatcher extends PerformanceRuleMatch
         
         return true;
     }
-    
+
 }

@@ -530,6 +530,18 @@ public class ImportExportUtil {
                     continue;
                 }
 
+                if (option.getTypeByLanguage().get(targetLanguage) != null
+                        && !option.getTypeByLanguage().get(targetLanguage).equals(ImportType.ONLY_NEW)) {
+                    Message existingMessage = option.getSearcher().get(key, "en", site.getId());
+                    if (existingMessage == null) {
+                        errors.add(TranslatorWorker.translateText(
+                                "Key \"{key}\" not found in the system. Please modify the import file and try again.")
+                                .replace("{key}", key));
+                        continue;
+                    }
+                }
+
+
                 hssfRow.getCell(1).setCellType(HSSFCell.CELL_TYPE_STRING);
                 String englishText = (hssfRow.getCell(1) == null) ? ""
                         : hssfRow.getCell(1).getStringCellValue();

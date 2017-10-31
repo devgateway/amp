@@ -102,7 +102,7 @@ body {background:none;}
                         <td width="100%">
 							<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top" align="left">
                             <tr>
-                              <td align="center" vAlign="top">
+                              <div align="center" vAlign="top">
 								<table width="98%" cellspacing="0" class="prnt_tbl fixed-layout" cellpadding=4 style="border-collapse: collapse; border-color:#CCCCCC;" border="1" >
 
 								    <!-- columns widths -->
@@ -3583,7 +3583,7 @@ body {background:none;}
 	<hr>
 	</logic:iterate>
 	</td> </tr> </logic:notEmpty> </table>
-</td>
+</div>
 </c:if>
 <c:if test="${aimEditActivityForm==null}">
 		Invalid activity id

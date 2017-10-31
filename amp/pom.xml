@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.devgateway</groupId>
     <artifactId>amp</artifactId>
-    <version>${buildVersion}</version>
+    <version>2.13.1-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>Aid Management Platform</name>
     <properties>
@@ -12,13 +12,12 @@
         <springSecurityVersion>3.1.4.RELEASE</springSecurityVersion>
         <springVersion>3.0.7.RELEASE</springVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <buildVersion>2.13-SNAPSHOT</buildVersion>
-        <buildSource></buildSource>
-        <buildDate></buildDate>
         <jersey.version>1.19</jersey.version>
         <saiku.version>3.0-RC2</saiku.version>
         <saiku3.version>3.0-RC2-DG</saiku3.version>
         <apidocs>false</apidocs>
+        <buildSource></buildSource>
+        <buildDate></buildDate>
     </properties>
     <repositories>
         <repository>
@@ -988,6 +987,8 @@
 
         <outputDirectory>${project.basedir}/WEB-INF/classes</outputDirectory>
 
+        <finalName>${project.artifactId}</finalName>
+
         <resources>
             <resource>
                 <directory>WEB-INF/src</directory>
@@ -1011,8 +1012,6 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.3</version>
                 <configuration>
-                    <warName>${project.version}</warName>
-
                     <recompressZippedFiles>false</recompressZippedFiles>
                     <archive>
                         <manifestEntries>
@@ -1022,31 +1021,37 @@
                         </manifestEntries>
                     </archive>
                     <webResources>
+                        <!-- Intellij Idea cannot handle correctly two resources with the same source directory. -->
                         <resource>
-                            <directory>.</directory>
+                            <directory>${project.basedir}/TEMPLATE/ampTemplate</directory>
                             <includes>
-                                <include>TEMPLATE/ampTemplate/site-config.xml</include>
+                                <include>site-config.xml</include>
                             </includes>
-                           <filtering>true</filtering>
+                            <filtering>true</filtering>
+                            <targetPath>TEMPLATE/ampTemplate</targetPath>
                         </resource>
                         <resource>
-                            <directory>.</directory>
+                            <directory>${project.basedir}</directory>
                             <includes>
                                 <include>**/*</include>
                             </includes>
                             <excludes>
-                                <exclude>META-INF/context.xml</exclude>
                                 <exclude>WEB-INF/src/**</exclude>
                                 <exclude>.settings/**</exclude>
                                 <exclude>.externalToolBuilders/**</exclude>
                                 <exclude>TEMPLATE/ampTemplate/site-config.xml</exclude>
                                 <exclude>TEMPLATE/ampTemplate/gisModule/dev/node/**</exclude>
                                 <exclude>TEMPLATE/ampTemplate/gisModule/dev/node_modules/**</exclude>
+                                <exclude>TEMPLATE/ampTemplate/dashboard/dev/node_modules/**</exclude>
                                 <exclude>TEMPLATE/ampTemplate/node_modules/amp-boilerplate/node/**</exclude>
                                 <exclude>TEMPLATE/ampTemplate/node_modules/amp-boilerplate/node_modules/**</exclude>
                                 <exclude>TEMPLATE/ampTemplate/node_modules/gis-layers-manager/node/**</exclude>
                                 <exclude>TEMPLATE/ampTemplate/node_modules/gis-layers-manager/node_modules/**</exclude>
                                 <exclude>TEMPLATE/ampTemplate/node_modules/amp-filter/node_modules/**</exclude>
+                                <exclude>TEMPLATE/ampTemplate/node_modules/amp-settings/node/**</exclude>
+                                <exclude>TEMPLATE/ampTemplate/node_modules/amp-settings/node_modules/**</exclude>
+                                <exclude>TEMPLATE/reamp/node/**</exclude>
+                                <exclude>TEMPLATE/reamp/node_modules/**</exclude>
                                 <exclude>src/**</exclude>
                                 <exclude>target/**</exclude>
                             </excludes>

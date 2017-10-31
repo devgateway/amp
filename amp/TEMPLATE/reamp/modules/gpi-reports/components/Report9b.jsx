@@ -328,8 +328,8 @@ export default class Report9b extends Component {
                             <span className="amount-units"> ({this.props.translations['amp-gpi-reports:amount-in-' + this.props.settings['number-divider']]})</span>                    
                         }
                         </div>
-                    </div> 
-                      <div className="container-fluid">
+                    </div>                    
+                    <div className="container-fluid">
                         <div className="row">
                           <h4>{this.props.translations['amp.gpi-reports:indicator9b-description']}</h4>
                         </div>

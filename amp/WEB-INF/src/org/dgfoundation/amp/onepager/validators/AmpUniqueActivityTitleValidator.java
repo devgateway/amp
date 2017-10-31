@@ -78,7 +78,7 @@ public class AmpUniqueActivityTitleValidator implements IValidator<String> {
                     error.setVariable("workspace", shim.getValue());
                 else 
                     error.setVariable("workspace", " ");
-//              error.setVariable("link", "<a href=\"aim/viewActivityPreview.do~public=true~pageId=2~activityId=" + shim.getId() + "\">text</a>");
+
                 setFlag(validatable);
                 if (AmpTextAreaFieldPanel.class.isAssignableFrom(validatable.getClass())) {
                     ((AmpTextAreaFieldPanel)validatable).setUniqueTitleValidatorError(true);

@@ -46,7 +46,7 @@
   	</logic:present>
 				
 <logic:notPresent name="PNOTIFY_ERROR_MESSAGE" scope="request">
- 	<div id="pledge_form_big_div"> 
+ 	<div id="pledge_form_big_div" class="content-dir"> 
 		<aim:renderFormSubsection title="Pledge Identification">
 			<jsp:include page="pledgeIdentification.jsp"></jsp:include>
 		</aim:renderFormSubsection>	

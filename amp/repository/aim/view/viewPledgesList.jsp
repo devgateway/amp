@@ -174,7 +174,7 @@ function setHoveredRow(rowId) {
 				<logic:notEmpty name="viewPledgesForm" property="allFundingPledges">
 				<tr>
 					<td>
-					<div class="report">
+					<div class="report content-dir">
 					<table width="100%" cellspacing="0" cellpadding="0" id="dataTable" class="inside dataTable" style="margin-top:15px;">
 					<tr style="background-color: #C7D4DB; color: #000000; fnt-size:12px;" align="center">
 							<td width="25%" align="center" class="inside">

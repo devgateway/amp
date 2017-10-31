@@ -19,7 +19,7 @@ export function obj2arr(obj){
 export var identity = whatever => whatever
 
 export function fetchJson(url) {
-  return fetch(url, {credentials: 'same-origin'}).then(callFunc('json'))
+  return fetch(url, {credentials: 'same-origin', cache: 'no-store', headers: {'Content-Type': 'application/json'}}).then(callFunc('json'))
 }
 
 export function postJson(endpoint, payload){
@@ -63,6 +63,7 @@ export function fetchJsonDev(url) {
   url = 'http://localhost:8080' + url; 
   return fetch(url, {
   	credentials: 'no-cors',
+  	cache: 'no-store',
   	headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',

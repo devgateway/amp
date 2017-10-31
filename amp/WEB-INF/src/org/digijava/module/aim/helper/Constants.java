@@ -446,4 +446,6 @@ public class Constants
     public static final String COMPARATOR_REPORTING_DATE_DESC = "3";
     public static final String COMPARATOR_REPORTING_DATE_ASC = "4";
 
+
+    public static final String AUTOMATIC_VALIDATION_JOB_CLASS_NAME = "org.digijava.module.message.jobs.ActivityAutomaticValidationJob" ;
 }

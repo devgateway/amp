@@ -383,11 +383,12 @@ public class AmpARFilter extends PropertyListable {
     private Set<AmpCategoryValue> typeOfAssistance = null;
     private Set<AmpCategoryValue> modeOfPayment = null;
     private Set<AmpCategoryValue> activityPledgesTitle = null;
-    
+    private Set<AmpCategoryValue> concessionalityLevel = null;
+
     private Set<AmpCategoryValue> expenditureClass = null;
 
     private Set<AmpCategoryValue> performanceAlertLevel = null;
-    
+
     // private Long ampModalityId=null;
 
     private AmpCurrency currency = null;
@@ -972,7 +973,7 @@ public class AmpARFilter extends PropertyListable {
         return getDefaultYear(getEffectiveSettings(), current, false);
     }
     
-    protected static Integer getDefaultYear(AmpApplicationSettings settings, AmpFiscalCalendar current, 
+    public static Integer getDefaultYear(AmpApplicationSettings settings, AmpFiscalCalendar current,
             boolean startYear) {
         
         // 1st default priority are Workspace Settings
@@ -1461,7 +1462,10 @@ public class AmpARFilter extends PropertyListable {
         String MODE_OF_PAYMENT_FILTER = "SELECT amp_activity_id FROM v_mode_of_payment WHERE mode_of_payment_code IN ("
             + Util.toCSString(modeOfPayment) + ")";
         
-        String ACTIVITY_PLEDGES_TITLE = "SELECT amp_activity_id FROM v_activity_pledges_title WHERE title_id IN (" 
+        String CONCESSIONALITY_LEVEL_FILTER = "SELECT amp_activity_id FROM v_concessionality_level WHERE id IN ("
+                + Util.toCSString(concessionalityLevel) + ")";
+
+        String ACTIVITY_PLEDGES_TITLE = "SELECT amp_activity_id FROM v_activity_pledges_title WHERE title_id IN ("
             + Util.toCSString(activityPledgesTitle) + ")";
 
         String PROJECT_CATEGORY_FILTER = "SELECT amp_activity_id FROM v_project_category WHERE amp_category_id IN ("
@@ -1507,7 +1511,7 @@ public class AmpARFilter extends PropertyListable {
             + Util.toCSStringForIN(responsibleorg) + ")";
 
         String COMPONENT_FUNDING_ORGANIZATION_FILTER = " SELECT v.amp_activity_id FROM v_component_funding_organization_name v  WHERE v.org_id IN ("
-                + Util.toCSStringForIN(componentFunding) + ")";
+            + Util.toCSStringForIN(componentFunding) + ")";
 
         String COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION_FILTER = " SELECT v.amp_activity_id FROM v_component_second_responsible_organization_name v  WHERE v.org_id IN ("
             + Util.toCSStringForIN(componentSecondResponsible) + ")";
@@ -1678,7 +1682,10 @@ public class AmpARFilter extends PropertyListable {
         if (modeOfPayment != null && modeOfPayment.size() > 0)
             queryAppend(MODE_OF_PAYMENT_FILTER);
         
-        
+        if (concessionalityLevel != null && concessionalityLevel.size() > 0) {
+            queryAppend(CONCESSIONALITY_LEVEL_FILTER);
+        }
+
         if (projectCategory != null && projectCategory.size() > 0)
             queryAppend(PROJECT_CATEGORY_FILTER);
         
@@ -1725,7 +1732,7 @@ public class AmpARFilter extends PropertyListable {
         if (componentSecondResponsible != null && componentSecondResponsible.size() > 0) {
             queryAppend(COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION_FILTER);
         }
-        
+
         if (actualAppYear!=null && actualAppYear!=-1) {
             queryAppend(ACTUAL_APPROVAL_YEAR_FILTER);
         }
@@ -2669,6 +2676,14 @@ public class AmpARFilter extends PropertyListable {
 
     public void setModeOfPayment(Set<AmpCategoryValue> modeOfPayment) {
         this.modeOfPayment = modeOfPayment;
+    }
+
+    public Set<AmpCategoryValue> getConcessionalityLevel() {
+        return concessionalityLevel;
+    }
+
+    public void setConcessionalityLevel(Set<AmpCategoryValue> concessionalityLevel) {
+        this.concessionalityLevel = concessionalityLevel;
     }
 
     public Set<AmpCategoryValue> getActivityPledgesTitle() {

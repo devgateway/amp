@@ -52,6 +52,10 @@ public class MeasureConstants {
     public static final String PLANNED_CLASSIFIED_EXPENDITURES  = "Planned Classified Expenditures";
     public static final String UNCOMMITTED_CUMULATIVE_BALANCE = "Uncommitted Cumulative Balance";
     public static final String UNDISBURSED_CUMULATIVE_BALANCE = "Undisbursed Cumulative Balance";
+    public static final String NATIONAL_BUDGET_EXECUTION_PROCEDURES = "National Budget Execution Procedures";
+    public static final String NATIONAL_FINANCIAL_REPORTING_PROCEDURES = "National Financial Reporting Procedures";
+    public static final String NATIONAL_AUDITING_PROCEDURES = "National Auditing Procedures";
+    public static final String NATIONAL_PROCUREMENT_EXECUTION_PROCEDURES = "National Procurement Systems";
     
      
     //type = D (?)
@@ -84,6 +88,8 @@ public class MeasureConstants {
     //type unset
     public static final String EXECUTION_RATE = "Execution Rate";
     public static final String PREDICTABILITY_OF_FUNDING = "Predictability of Funding";
+    public static final String DISBURSED_AS_SCHEDULED = "Disbursed as Scheduled";
+    public static final String OVER_DISBURSED = "Over Disbursed";
     public static final String CUMULATIVE_EXECUTION_RATE = "Cumulative Execution Rate";
     public static final String AVERAGE_DISBURSEMENT_RATE = "Average Disbursement Rate";
     

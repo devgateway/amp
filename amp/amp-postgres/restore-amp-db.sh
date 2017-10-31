@@ -7,3 +7,4 @@ createdb -U amp amp
 ! pg_restore -U amp -O -d amp /backups/amp_database.pgsql
 psql -U amp -c "UPDATE dg_site_domain SET site_domain='$AMP_SITE_DOMAIN';"
 psql -U amp -c "TRUNCATE amp_email_receiver;"
+psql -U amp -c "UPDATE dg_user SET password='a9993e364706816aba3e25717850c26c9cd0d89d';"

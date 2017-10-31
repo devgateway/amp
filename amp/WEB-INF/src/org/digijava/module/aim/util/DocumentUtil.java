@@ -16,11 +16,13 @@ import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.version.VersionException;
 
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.service.ServiceManager;
 import org.digijava.kernel.services.JCRRepositoryService;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponseDocument;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.ManagedDocument;
 
@@ -228,7 +230,17 @@ public class DocumentUtil {
 
         return contentItem;
     }
-
-
+    
+    /**
+     * Get all uuid of supportive documents (from gpi ni indicators)
+     * 
+     * @return List<String> list of all supportive documents
+     */
+    public static List<String> getAllSupportiveDocumentsUUID() {
+        List<String> supportiveDocumentsUUID = PersistenceManager.getSession().createQuery("SELECT d.uuid FROM "
+                + AmpGPINiSurveyResponseDocument.class.getName() + " d").list();
+        
+        return supportiveDocumentsUUID;
+    }
 
 }

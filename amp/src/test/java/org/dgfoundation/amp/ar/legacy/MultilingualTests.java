@@ -20,6 +20,7 @@ import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.form.ActivityForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
@@ -222,7 +223,7 @@ public class MultilingualTests extends TestCase
     public void testActivitiesSearching()
     {
         TLSUtils.getThreadLocalInstance().setForcedLangCode("en");
-        Set<String> actiesEn = collectNames(ActivityUtil.getAllActivitiesAdmin(null));
+        Set<String> actiesEn = collectNames(ActivityUtil.getAllActivitiesAdmin(null, null, ActivityForm.DataFreezeFilter.ALL));
         assertTrue(actiesEn.contains("Eth Water"));
         assertTrue(actiesEn.contains("Proposed Project Cost 1 - USD"));
         assertTrue(actiesEn.contains("mtef activity 2"));
@@ -232,7 +233,7 @@ public class MultilingualTests extends TestCase
 
         
         TLSUtils.getThreadLocalInstance().setForcedLangCode("ru");
-        Set<String> actiesRu = collectNames(ActivityUtil.getAllActivitiesAdmin(null));
+        Set<String> actiesRu = collectNames(ActivityUtil.getAllActivitiesAdmin(null, null, ActivityForm.DataFreezeFilter.ALL));
         assertTrue(actiesRu.contains("Вода Eth"));
         assertTrue(actiesRu.contains("Предполагаемая стоймость проекта 1 - USD"));
         assertTrue(actiesRu.contains("Проект МТЕФ 2")); 
@@ -242,7 +243,7 @@ public class MultilingualTests extends TestCase
         
         
         TLSUtils.getThreadLocalInstance().setForcedLangCode("en");
-        actiesEn = collectNames(ActivityUtil.getAllActivitiesAdmin("mtef"));
+        actiesEn = collectNames(ActivityUtil.getAllActivitiesAdmin("mtef", null, ActivityForm.DataFreezeFilter.ALL));
         assertTrue(actiesEn.contains("mtef activity 2"));
         assertTrue(actiesEn.contains("mtef activity 1"));
         assertTrue(actiesEn.contains("Pure MTEF Project"));
@@ -254,7 +255,7 @@ public class MultilingualTests extends TestCase
 
         
         TLSUtils.getThreadLocalInstance().setForcedLangCode("ru");
-        actiesRu = collectNames(ActivityUtil.getAllActivitiesAdmin("МТЕФ"));
+        actiesRu = collectNames(ActivityUtil.getAllActivitiesAdmin("МТЕФ", null, ActivityForm.DataFreezeFilter.ALL));
         assertTrue(actiesRu.contains("Проект МТЕФ 2"));
         assertTrue(actiesRu.contains("Проект МТЕФ 1")); 
         assertTrue(actiesRu.contains("Тест направленных МТЕФ"));    

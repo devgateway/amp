@@ -61,10 +61,10 @@ public class SettingsUtils {
     /**
      * @return general currency settings
      */
-    private static SettingOptions getCurrencySettings() {
+    private static SettingOptions getCurrencySettings(boolean includeVirtual) {
         // build currency options
         List<SettingOptions.Option> options = new ArrayList<>();
-        for (AmpCurrency ampCurrency : CurrencyUtil.getActiveAmpCurrencyByName(true)) {
+        for (AmpCurrency ampCurrency : CurrencyUtil.getActiveAmpCurrencyByName(includeVirtual)) {
             String ccValue = ampCurrency.isVirtual()
                     ? ConstantCurrency.retrieveCCCurrencyCodeWithoutCalendar(ampCurrency.getCurrencyCode())
                     : ampCurrency.getCurrencyCode();
@@ -217,6 +217,8 @@ public class SettingsUtils {
             yearRange = new SettingRange(SettingRange.Type.INT_VALUE);
             yearRange.setFrom(getReportYear(spec.getSettings().getYearRangeFilter().min));
             yearRange.setTo(getReportYear(spec.getSettings().getYearRangeFilter().max));
+            yearRange.setRangeFrom(EndpointUtils.getRangeStartYear());
+            yearRange.setRangeTo(EndpointUtils.getRangeEndYear());
         }
 
         return yearRange;
@@ -230,8 +232,8 @@ public class SettingsUtils {
         return getSettingFieldForOptions(SettingsConstants.CALENDAR_TYPE_ID, getCalendarSettings());
     }
 
-    static SettingField getCurrencyField() {
-        return getSettingFieldForOptions(SettingsConstants.CURRENCY_ID, getCurrencySettings());
+    static SettingField getCurrencyField(boolean includeVirtual) {
+        return getSettingFieldForOptions(SettingsConstants.CURRENCY_ID, getCurrencySettings(includeVirtual));
     }
 
     static SettingField getFundingTypeField() {
@@ -339,6 +341,8 @@ public class SettingsUtils {
             range = new SettingRange(SettingRange.Type.INT_VALUE);
             range.setFrom(EndpointUtils.getDefaultReportStartYear());
             range.setTo(EndpointUtils.getDefaultReportEndYear());
+            range.setRangeFrom(EndpointUtils.getRangeStartYear());
+            range.setRangeTo(EndpointUtils.getRangeEndYear());
         }
 
         return new SettingField(SettingsConstants.YEAR_RANGE_ID, null,

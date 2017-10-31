@@ -108,6 +108,10 @@ public abstract class AbstractReportsSchema implements NiReportsSchema {
         return addFormulaComputedMeasure(compMeasureName, description, formula, average, false);
     }
     
+    public AbstractReportsSchema addFormulaComputedMeasure(String compMeasureName, String description, NiFormula formula, boolean average, TimeRange timeRange) {
+        return addFormulaComputedMeasure(compMeasureName, description, formula, average, false, timeRange);
+    }
+    
     /**
      * constructs a measure based off a formula and then adds it to the schema by using {@link #addMeasure(NiReportMeasure)}. The measure would be of one of {@link NiFormulaicMeasure} or {@link NiFormulaicAverageMeasure}
      * @param compMeasureName the name of the measure to construct
@@ -117,7 +121,7 @@ public abstract class AbstractReportsSchema implements NiReportsSchema {
      * @param isScalableByUnits are cells created by this measure to be scaled or not
      * @return
      */
-    public AbstractReportsSchema addFormulaComputedMeasure(String compMeasureName, String description, NiFormula formula, boolean average, boolean isScalableByUnits) {
+    public AbstractReportsSchema addFormulaComputedMeasure(String compMeasureName, String description, NiFormula formula, boolean average, boolean isScalableByUnits, TimeRange timeRange) {
         Map<String, NiReportMeasure<CategAmountCell>> depMeas = new HashMap<>();
         for(String measName:formula.getDependencies()) {
             NiReportMeasure<CategAmountCell> meas = (NiReportMeasure) measures.get(measName);
@@ -126,11 +130,15 @@ public abstract class AbstractReportsSchema implements NiReportsSchema {
         }
         NiReportMeasure<CategAmountCell> res;
         if (average)
-            res = new NiFormulaicAverageMeasure(compMeasureName, description, depMeas, formula, true, isScalableByUnits);
+            res = new NiFormulaicAverageMeasure(compMeasureName, description, depMeas, formula, true, isScalableByUnits, timeRange);
         else
-            res = new NiFormulaicMeasure(compMeasureName, description, depMeas, formula, isScalableByUnits);
+            res = new NiFormulaicMeasure(compMeasureName, description, depMeas, formula, isScalableByUnits, timeRange);
         return addMeasure(res);
         //return addMeasure(meas)
+    }
+    
+    public AbstractReportsSchema addFormulaComputedMeasure(String compMeasureName, String description, NiFormula formula, boolean average, boolean isScalableByUnits) {
+        return addFormulaComputedMeasure(compMeasureName, description, formula, average, isScalableByUnits, TimeRange.NONE);
     }
     
     /**

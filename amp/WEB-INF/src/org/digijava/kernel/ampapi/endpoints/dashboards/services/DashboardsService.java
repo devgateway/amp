@@ -595,7 +595,7 @@ public class DashboardsService {
     private static void setCustomSettings(JsonBean config, ReportSpecificationImpl spec) {
         LinkedHashMap<String, Object> userSettings = (LinkedHashMap<String, Object>) config.get("settings");
         ReportSettingsImpl defaultSettings = MondrianReportUtils.getCurrentUserDefaultSettings();
-        defaultSettings.setUnitsOption(AmountsUnits.AMOUNTS_OPTION_UNITS);
+        defaultSettings.setUnitsOption(AmountsUnits.getDefaultValue());
         if (userSettings.get(SettingsConstants.CURRENCY_ID) != null) {
             defaultSettings.setCurrencyCode(userSettings.get(SettingsConstants.CURRENCY_ID).toString());
         }
@@ -606,7 +606,7 @@ public class DashboardsService {
         }
         spec.setSettings(defaultSettings);
     }
-    
+
     /**
      * Generate a smaller version of any number (big or small) by adding a suffix kMBT.
      * @param total

@@ -103,7 +103,9 @@ stage('Build') {
                             " amp/TEMPLATE/ampTemplate/node_modules/amp-settings/node" +
                             " amp/TEMPLATE/ampTemplate/node_modules/amp-settings/node_modules" +
                             " amp/TEMPLATE/ampTemplate/gisModule/dev/node" +
-                            " amp/TEMPLATE/ampTemplate/gisModule/dev/node_modules"
+                            " amp/TEMPLATE/ampTemplate/gisModule/dev/node_modules" +
+                            " amp/TEMPLATE/reamp/node" +
+                            " amp/TEMPLATE/reamp/node_modules"
                 }
             }
         }

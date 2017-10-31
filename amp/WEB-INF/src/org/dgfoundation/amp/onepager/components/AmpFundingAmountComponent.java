@@ -27,9 +27,14 @@ import org.dgfoundation.amp.onepager.components.features.items.AmpRegionalFundin
 import org.dgfoundation.amp.onepager.components.features.tables.AmpComponentFormTableAnnualBudget;
 import org.dgfoundation.amp.onepager.components.fields.*;
 import org.dgfoundation.amp.onepager.converters.CustomDoubleConverter;
+import org.dgfoundation.amp.onepager.events.FreezingUpdateEvent;
 import org.dgfoundation.amp.onepager.events.FundingSectionSummaryEvent;
+import org.dgfoundation.amp.onepager.events.GPINiQuestionUpdateEvent;
 import org.dgfoundation.amp.onepager.events.OverallFundingTotalsEvents;
 import org.dgfoundation.amp.onepager.models.MTEFYearsModel;
+import org.dgfoundation.amp.onepager.validators.AmpFreezingValidatorTransactionDate;
+import org.dgfoundation.amp.onepager.validators.AmpUniqueActivityTitleValidator;
+import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.helper.FormatHelper;
@@ -160,6 +165,17 @@ public class AmpFundingAmountComponent<T> extends Panel {
                 @Override
                 protected void onAjaxOnUpdate(AjaxRequestTarget target) {
                     onFundingDetailChanged(target);
+
+                    FundingListEditor parentPanel = findParent(FundingListEditor.class);
+                    parentPanel.visitChildren(AmpSimpleValidatorField.class,
+                            new IVisitor<AmpSimpleValidatorField, Void>() {
+                                @Override
+                                public void component(AmpSimpleValidatorField component, IVisit<Void> visit) {
+                                    component.reloadValidationField(target);
+                                    visit.dontGoDeeper();
+                                }
+                            });
+                    send(getPage(), Broadcast.BREADTH, new FreezingUpdateEvent(target));
                 }
             };
             datetmp.getDate().setRequired(true);

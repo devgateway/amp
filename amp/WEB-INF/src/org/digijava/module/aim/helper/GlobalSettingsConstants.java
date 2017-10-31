@@ -194,7 +194,7 @@ public class GlobalSettingsConstants {
     
     public static final String FUNDING_GAP_NOTIFICATION_THRESHOLD ="Funding gap notification threshold";
     
-    public static final String WORKSPACE_TO_RUN_REPORT_FUNDING_GAP_NOTIFICATION ="Workspace Team to run report for funding gap notification";
+    public static final String WORKSPACE_TO_RUN_REPORT_FROM_JOB = "Workspace Team to run reports from jobs";
     
     public static final String  MEASURE_A_FOR_FUNDING_GAP_NOTIFICATION ="Measure A for Funding gap notification";
     
@@ -209,6 +209,8 @@ public class GlobalSettingsConstants {
     public static final String  IATI_IDENTIFIER_AMP_FIELD = "IATI Identifier AMP field";
     
     public static final String  LIMIT_FILE_TYPE_FOR_UPLOAD = "Limit upload of file types";
+
+    public static final String  NUMBER_OF_DAYS_BEFORE_AUTOMATIC_VALIDATION = "Number of days before automatic validation";
 
     public static final String REORDER_FUNDING_ITEMS = "Reorder funding items";
 

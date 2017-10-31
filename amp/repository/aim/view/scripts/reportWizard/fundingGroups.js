@@ -1,5 +1,6 @@
 YAHOO.namespace("YAHOO.amp.reportwizard");
 YAHOO.amp.reportwizard.colIdToName		= new Array();
+YAHOO.amp.reportwizard.measureIdToName	= new Array();
 YAHOO.amp.reportwizard.fundingGroups	= new Array();
 YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
 				 'A.C. Chapter'
@@ -98,6 +99,7 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
                 , 'Budget Structure'
                 , 'Indirect On Budget'
                 , 'Humanitarian Aid'
+                , 'Concessionality Level'
                 , 'Disaster Response Marker'
                 , 'Indicator Name'
                 , 'Logframe Category'
@@ -149,6 +151,11 @@ YAHOO.amp.reportwizard.fundingGroups["measureless_only_hierarchies"]= new Array(
 function insertColInfo (id, name) {
 		YAHOO.amp.reportwizard.colIdToName[id]=name;
 }
+
+function insertMeasureInfo (id, name) {
+		YAHOO.amp.reportwizard.measureIdToName[id]=name;
+}
+
 
 function checkIfColIsHierarchy(id) {
 	var reportGroupDivEl		= document.getElementById("reportGroupDiv") ;

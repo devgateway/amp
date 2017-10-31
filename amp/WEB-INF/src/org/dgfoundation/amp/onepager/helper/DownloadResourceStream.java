@@ -18,16 +18,17 @@ import org.dgfoundation.amp.onepager.util.SessionUtil;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
+import org.digijava.module.contentrepository.helper.ObjectReferringDocument;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 
-public class DownloadResourceStream implements IResourceStream {
+public class DownloadResourceStream<T extends ObjectReferringDocument> implements IResourceStream {
     private static final Logger logger = Logger.getLogger(DownloadResourceStream.class);
     
     private String contentType;
     private transient Locale locale;
     private FileUpload file;
     private boolean newResource;
-    private IModel<AmpActivityDocument> doc;
+    private IModel<T> doc;
     private String fileName;
     private transient InputStream fileData;
     private Bytes fileSize;
@@ -37,7 +38,7 @@ public class DownloadResourceStream implements IResourceStream {
         this.newResource = true;
     }
     
-    public DownloadResourceStream(IModel<AmpActivityDocument> doc) {
+    public DownloadResourceStream(IModel<T> doc) {
         this.doc = doc;
         this.newResource = false;
     }

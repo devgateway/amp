@@ -8,7 +8,7 @@ import java.util.Map;
  * @author Dolghier Constantin
  *
  */
-public interface ReportArea {
+public interface ReportArea extends ReportVisitable {
     
     /**
      * returns the <strong>localized</strong> owner. For a row, it is the activity/pledge/whatever which owns the row. For a report subregion, it is the "splitter cell"
@@ -34,4 +34,19 @@ public interface ReportArea {
      * @return
      */
     public int getNrEntities();
+    
+    /**
+     * accept a Report Visitor
+     * 
+     * @param visitor
+     */
+    public default void accept(ReportVisitor visitor) {
+
+        if (getChildren() != null) {
+            getChildren().forEach(area -> area.accept(visitor));
+        }
+
+        visitor.visit(getContents());
+        visitor.visit(this);
+    }
 }

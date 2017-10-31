@@ -129,9 +129,9 @@ public class PossibleValuesEnumerator {
             InvocationTargetException, InstantiationException {
         Method m = discClass.getMethod("getPossibleValues");
         FieldsDiscriminator discObj = discClass.newInstance();
-        Map<String, Object> vals = (Map<String, Object>) m.invoke(discObj);
+        Map<Object, Object> vals = (Map<Object, Object>) m.invoke(discObj);
         List<JsonBean> result = new ArrayList<JsonBean>();
-        for (Map.Entry<String, Object> entry : vals.entrySet()) {
+        for (Map.Entry entry : vals.entrySet()) {
             JsonBean bean = new JsonBean();
             bean.set("id", entry.getKey());
             bean.set("value", entry.getValue());

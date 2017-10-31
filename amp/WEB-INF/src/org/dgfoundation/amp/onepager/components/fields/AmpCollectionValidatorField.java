@@ -34,11 +34,7 @@ public abstract class AmpCollectionValidatorField<T,H> extends
      * @param target
      */
     public void reloadValidationField(AjaxRequestTarget target) {
-        if (this.isVisible()){
-            target.add(this);
-            this.getHiddenContainer().clearInput();
-            target.prependJavaScript(String.format("$('#%s').blur();", this.getHiddenContainer().getMarkupId()));
-        }
+        reloadValidationField(target, true);
     }
     
     /**
@@ -53,9 +49,24 @@ public abstract class AmpCollectionValidatorField<T,H> extends
         super(id, fmName,semanticValidator);
         
         hiddenContainer.setModel(getHiddenContainerModel(collectionModel));
-        
-        
-        
+    }
+    
+    /**
+     * Reloads {@link This} component through {@link AjaxRequestTarget}.
+     * This method clears the component input, so it is re-validated,
+     * It also simulates an 'onChange' event using jQuery if the prependJS param is set to true
+     * @param target
+     * @param prependJS
+     */
+    public void reloadValidationField(AjaxRequestTarget target, boolean prependJS) {
+        if (this.isVisible()) {
+            target.add(this);
+            this.getHiddenContainer().clearInput();
+            
+            if (prependJS) {
+                target.prependJavaScript(String.format("$('#%s').blur();", this.getHiddenContainer().getMarkupId()));
+            }
+        }
     }
     
     public abstract IModel getHiddenContainerModel(IModel<? extends Collection<T>> collectionModel);

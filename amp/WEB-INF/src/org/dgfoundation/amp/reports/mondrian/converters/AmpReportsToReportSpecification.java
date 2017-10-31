@@ -32,7 +32,7 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
- * Converter for {@link AmpReport} to {@link ReportSpecification} 
+ * Converter for {@link AmpReports} to {@link ReportSpecification}
  * @author Nadejda Mandrescu
  */
 public class AmpReportsToReportSpecification {

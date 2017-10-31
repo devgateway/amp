@@ -68,7 +68,7 @@ body {background:none;}
 </style>
 <digi:instance property="aimEditActivityForm" />
 <c:if test="${aimEditActivityForm!=null}">
-<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="650" vAlign="top" align="left" border="0">
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="1000" vAlign="top" align="left" border="0">
 	<tr>
 		<td align=left valign="top">
 			<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top" align="left" border="0">
@@ -99,7 +99,11 @@ body {background:none;}
 							<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top" align="left">
                             <tr>
                               <td align="center" vAlign="top">
-								<table width="98%" cellspacing="0" class="prnt_tbl" cellpadding=4 style="border-collapse: collapse; border-color:#CCCCCC;" border="1">
+								<table width="98%" cellspacing="0" class="prnt_tbl fixed-layout" cellpadding=4 style="border-collapse: collapse; border-color:#CCCCCC;" border="1" >
+								    
+								    <!-- columns widths -->
+								    <tr><td width="30%"></td><td width="70%"></td></tr>
+									
 									<!-- here starts identification -->
 									<tr bgcolor="#f4f4f2">
 										<td  align="center" colspan="2" bgcolor=#C7D4DB>
@@ -109,7 +113,7 @@ body {background:none;}
 								<feature:display name="Identification" module="Project ID and Planning">   
 									<field:display name="AMP ID" feature="Identification">
 									<tr>
-										<td class="field_name" >
+										<td class="field_name">
 											<b>
 												<digi:trn key="aim:ampId">AMP ID</digi:trn>		
 									  		</b>
@@ -126,7 +130,7 @@ body {background:none;}
 										
                                     <module:display name="/Activity Form/Identification/Activity Status" parentModule="/Activity Form/Identification">
                                         <tr>
-                                              <td class="field_name" >
+                                              <td class="field_name">
                                                   <b><digi:trn key="aim:status">Status</digi:trn></b>
                                               </td>
                                               <td bgcolor="#FFFFFF">
@@ -241,7 +245,7 @@ body {background:none;}
 										</c:if>
 									</module:display>
 
-                                 <module:display name="/Activity Form/Identification/Objective" parentModule="/Activity Form/Identification">   	
+                                 <module:display name="/Activity Form/Identification/Objective" parentModule="/Activity Form/Identification">
                                     <tr>
 										<td class="field_name">
 											<b>
@@ -1581,6 +1585,19 @@ body {background:none;}
                                                                                 		<td width="10">:</td>
                                                                                 		<td align="left">
                                                                                     		<digi:trn><bean:write name="funding" property="modeOfPayment.value"/></digi:trn>
+																						</td>
+																					</tr>
+                                                                                  </logic:notEmpty>
+																			</field:display>
+																			<field:display name="Concessionality Level" feature="Funding Information">
+																				<logic:notEmpty name="funding" property="concessionalityLevel">
+                                                                              		<tr>
+                                                                                		<td align="left" width="339">
+                                                                                  			<a><digi:trn>Concessionality Level</digi:trn></a>
+																				 		</td>
+                                                                                		<td width="10">:</td>
+                                                                                		<td align="left">
+                                                                                    		<digi:trn><bean:write name="funding" property="concessionalityLevel.value"/></digi:trn>
 																						</td>
 																					</tr>
                                                                                   </logic:notEmpty>
@@ -3289,7 +3306,7 @@ body {background:none;}
 
 
                                  <logic:present name="currentMember" scope="session">
-									<feature:display name="Costing" module="Activity Costing">
+									 <module:display name="Activity Costing" parentModule="PROJECT MANAGEMENT">
 										<tr>
 										<td class="field_name" >
 												<b>
@@ -3306,7 +3323,7 @@ body {background:none;}
                                             </table>
                                             </td>
                                       </tr>
-									</feature:display>
+									</module:display>
 								  </logic:present>
 
 									<!-- GPI -->
@@ -3362,7 +3379,7 @@ body {background:none;}
 									<!-- END GPI -->
 
 
-<field:display name="Activity Created By" feature="Identification">
+									<field:display name="Activity Created By" feature="Identification">
 									<tr>
 										<td class="field_name" >
 											<b>
@@ -3372,85 +3389,108 @@ body {background:none;}
 										</td>
 										<td bgcolor="#ffffff">
 											<c:out value="${aimEditActivityForm.identification.actAthFirstName}"/>
-											<c:out value="${aimEditActivityForm.identification.actAthLastName}"/> -
-											<c:out value="${aimEditActivityForm.identification.actAthEmail}"/>
+											<c:out value="${aimEditActivityForm.identification.actAthLastName}"/>
 										</td>
 									</tr>
-									</field:display>
-									<field:display name="Activity Updated On" feature="Identification">
-									<logic:notEmpty name="aimEditActivityForm" property="identification.updatedDate">
-									<tr>
-										<td class="field_name" >
-											<b>
-											<digi:trn key="aim:activityUpdatedOn">Activity updated on</digi:trn>
-											</b>
-										</td>
-<td bgcolor="#ffffff">
-											<c:out value="${aimEditActivityForm.identification.updatedDate}"/>
-										</td>
-									</tr>
-									</logic:notEmpty>
-									</field:display>
-									<field:display name="Activity Updated By" feature="Identification">
-									<logic:notEmpty name="aimEditActivityForm" property="identification.modifiedBy">
-									<tr>
-										<td class="field_name" >
-											<b>
-											<digi:trn key="aim:activityUpdatedBy">
-										    Activity updated by</digi:trn>
-											</b>
-										</td>
-										<td bgcolor="#ffffff">
-											<span class="word_break">
-												<c:out value="${aimEditActivityForm.identification.modifiedBy.user.firstNames}"/>
-											</span>
-											<span class="word_break">
-												<c:out value="${aimEditActivityForm.identification.modifiedBy.user.lastName}"/>	-
-											</span>
-											<span class="word_break">
-												<c:out value="${aimEditActivityForm.identification.modifiedBy.user.email}"/>
-											</span>
-											</td>
-									</tr>
-									</logic:notEmpty>
-									</field:display>
-									<field:display name="Activity Created On" feature="Identification">
-									<logic:notEmpty name="aimEditActivityForm" property="identification.createdDate">
-									<tr>
-										<td class="field_name" >
-											<b>
-											<digi:trn key="aim:activityCreatedOn">
-										    Activity created on</digi:trn>
-											</b>								</td>
-<td bgcolor="#ffffff">
-											<c:out value="${aimEditActivityForm.identification.createdDate}"/>										</td>
-									</tr>
-									</logic:notEmpty>
-									</field:display>
-									<logic:notEmpty name="aimEditActivityForm" property="identification.team">
-									<field:display name="Data Team Leader" feature="Identification">
-									<tr>
-										<td class="field_name" >
-											<b>
-											<digi:trn key="aim:activityTeamLeader">
-										    Data Team Leader</digi:trn>
-											</b>
-										</td>
+										<field:display name="Activity Created On" feature="Identification">
+											<logic:notEmpty name="aimEditActivityForm" property="identification.createdDate">
+												<tr>
+													<td class="field_name" >
+														<b>
+															<digi:trn key="aim:activityCreatedOn">
+																Activity created on</digi:trn>
+														</b>								</td>
+													<td bgcolor="#ffffff">
+														<c:out value="${aimEditActivityForm.identification.createdDate}"/>										</td>
+												</tr>
+											</logic:notEmpty>
+										</field:display>
 
+										<field:display name="Activity Last Updated by" feature="Identification">
+											<logic:notEmpty name="aimEditActivityForm" property="identification.modifiedBy">
+												<tr>
+													<td class="field_name" >
+														<b>
+															<digi:trn key="aim:activityLastUpdatedBy">Activity Last Updated by</digi:trn>
+														</b>
+													</td>
+													<td bgcolor="#ffffff">
+														<c:out value="${aimEditActivityForm.identification.modifiedBy.user.firstNames}"/>
+														<c:out value="${aimEditActivityForm.identification.modifiedBy.user.lastName}"/>
+													</td>
+												</tr>
+											</logic:notEmpty>
+										</field:display>
+
+										<field:display name="Activity Updated On" feature="Identification">
+											<logic:notEmpty name="aimEditActivityForm" property="identification.updatedDate">
+												<tr>
+													<td class="field_name" >
+														<b>
+															<digi:trn key="aim:activityUpdatedOn">Activity updated on</digi:trn>
+														</b>
+													</td>
+													<td bgcolor="#ffffff">
+														<c:out value="${aimEditActivityForm.identification.updatedDate}"/>
+													</td>
+												</tr>
+											</logic:notEmpty>
+										</field:display>
+									<tr>
+										<td class="field_name" >
+											<b>
+											<digi:trn key="aim:createdInWorkspace">Created in workspace</digi:trn>
+											</b>
+										</td>
 										<td bgcolor="#ffffff">
+											<c:if test="${aimEditActivityForm.identification.team !=null}">
+												<c:out value="${aimEditActivityForm.identification.team.name}"/> -
+												<digi:trn>
+													<c:out value="${aimEditActivityForm.identification.team.accessType}"/>
+												</digi:trn>
+											</c:if>
+										</td>
+									</tr>
+										<logic:notEmpty name="aimEditActivityForm" property="identification.team">
+											<field:display name="Data Team Leader" feature="Identification">
+												<tr>
+													<td class="field_name" >
+														<b>
+															<digi:trn key="aim:workspaceManager">
+																Workspace manager</digi:trn>
+														</b>
+													</td>
+
+													<td bgcolor="#ffffff">
 											<span class="word_break">
 												<c:out value="${aimEditActivityForm.identification.team.teamLead.user.firstNames}"/>
 											</span>
-											<span class="word_break">
-												<c:out value="${aimEditActivityForm.identification.team.teamLead.user.lastName}"/>	-
+														<span class="word_break">
+												<c:out value="${aimEditActivityForm.identification.team.teamLead.user.lastName}"/> -
 											</span>
-											<span class="word_break">
+														<span class="word_break">
 												<c:out value="${aimEditActivityForm.identification.team.teamLead.user.email}"/>
 											</span>
+													</td>
+												</tr>
+											</field:display>
+										</logic:notEmpty>
+									<tr>
+										<td class="field_name" >
+											<b>
+											<digi:trn key="aim:computation">Computation</digi:trn>
+											</b>
+										</td>
+										<td bgcolor="#ffffff">
+											<c:if test="${aimEditActivityForm.identification.team.computation == 'true'}">
+												<digi:trn key="aim:yes">Yes</digi:trn>
+											</c:if>
+											<c:if test="${aimEditActivityForm.identification.team.computation == 'false'}">
+												<digi:trn key="aim:no">No</digi:trn>
+											</c:if>
 										</td>
 									</tr>
 									</field:display>
-									</logic:notEmpty>
 
 									<logic:notEmpty name="aimEditActivityForm" property="structures">
 
@@ -3533,7 +3573,7 @@ body {background:none;}
 						</td>
 					</tr>
 				</c:if>
-			
+
 	</table>
 	<br />
 	<hr>

@@ -1287,19 +1287,42 @@ div.footer {
     float: right;
 }
 
-.reports-tab-name-container {
-    background-color: #F2F2F2;
-    padding: 5px;
-    border: 1px solid rgb(208, 208, 208);
+.wizard-toolbar-steps {
+    float:left;
+    margin-top:10px;
 }
 
-.reports-tab-name-public-container {
-    margin-top: -1px;
-    padding: 5px;
-    border: 1px solid rgb(208, 208, 208);
-}
-.reportFloatRight {
-    float: right;
+.wizard-toolbar-buttons {
+    float:right;
+    z-index: 3000;
+    margin-top:10px;
+    margin-right:10px;
 }
 
+.wizard-columns {
+    white-space: nowrap;
+    background-color: #E1E1E1;
+    border: 1px solid #CECECE;
+    margin-bottom: 5px !important;
+    margin-top: 5px !important;
+    padding: 1px;
+    text-align: left;
+    font-size: 11px;
+    vertical-align: middle;
+}
 
+.wizard-panel-buttons {
+    text-align: right;
+}
+
+.panel-one {
+    float:left;
+}
+
+.panel-two {
+    float:right;
+}
+
+.hierarchy-list-margin {
+    margin-left: -20px;
+}

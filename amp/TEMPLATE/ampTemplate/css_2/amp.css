@@ -1282,11 +1282,10 @@ div.footer {
     padding: 5px;
     border: 1px solid rgb(208, 208, 208);
 }
+
 .reportFloatRight {
     float: right;
 }
-
-
 
 .reports-tab-name-container {
     background-color: #F2F2F2;

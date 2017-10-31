@@ -71,7 +71,7 @@ body {background:none;}
 </style>
 <digi:instance property="aimEditActivityForm" />
 <c:if test="${aimEditActivityForm!=null}">
-<div id="mainBodyContent">
+<div class="content-dir">
 <table bgColor=#ffffff cellpadding="0" cellspacing="0" width="1000" vAlign="top" align="left" border="0">
 	<tr>
 		<td align=left valign="top">

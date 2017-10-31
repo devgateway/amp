@@ -138,4 +138,7 @@ div.trnpanel div.trn-row ul {
     float: left !important;
 }
 
+.content-dir {
+    direction: rtl;
+}
 

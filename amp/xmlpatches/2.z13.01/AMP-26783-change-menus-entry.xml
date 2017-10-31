@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+		   xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		   xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-26783</jira>
+	<keyword>menu entry Gis Dashboard</keyword>
+	<author>apicca</author>
+	<description>Change menu entry for Gis and Dashboard</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				update amp_menu_entry set name = 'Dashboards Menu', title = 'Dashboards' where name = 'New Dashboards';
+				update amp_menu_entry set name = 'Map', title = 'Map' where name = 'New GIS';
+
+				update dg_message set orig_message = 'Map' where message_key = '1843656017' and orig_message = 'NEW GIS'
+				and not exists ( select * from dg_message where message_key = '107868' );
+				update dg_message set message_utf8 = 'Map' where message_key = '1843656017' and message_utf8 = 'NEW GIS';
+				update dg_message set message_key = '107868', message_utf8 = dgm.message_utf8
+				from dg_message dgm
+				where dgm.message_key = '1843656017'
+				and dgm.lang_iso = dg_message.lang_iso and dgm.message_key = dg_message.message_key
+				and not exists ( select * from dg_message where message_key = '107868' and dgm.lang_iso = lang_iso);
+
+				update dg_message set orig_message = 'Dashboard' where message_key = '936655517' and orig_message = 'NEW DASHBOARD (BETA)'
+				and not exists ( select * from dg_message where message_key = '-1047860588' );
+				update dg_message set message_utf8 = 'Dashboard' where message_key = '936655517' and message_utf8 = 'NEW DASHBOARD (BETA)';
+				update dg_message set message_key = '-1047860588', message_utf8 = dgm.message_utf8
+				from dg_message dgm
+				where dgm.message_key = '936655517'
+				and dgm.lang_iso = dg_message.lang_iso and dgm.message_key = dg_message.message_key
+				and not exists ( select * from dg_message where message_key = '-1047860588' and dgm.lang_iso = lang_iso);
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

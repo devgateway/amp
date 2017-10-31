@@ -135,7 +135,7 @@ public class AmpStructuresFormSectionFeature extends
                 
                 shape.getTextContainer().add(new AttributeAppender("size", new Model("7px"), ";"));
                 item.add(shape);
-
+                
                 ListEditorRemoveButton delbutton = new ListEditorRemoveButton("deleteStructure", "Delete Structure"){
 
                     @Override
@@ -155,7 +155,7 @@ public class AmpStructuresFormSectionFeature extends
                     
                 };
                 item.add(delbutton);
-
+                
                 final AmpAjaxLinkField viewCoords = new AmpAjaxLinkField("viewCoords", "Map", "View") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
@@ -192,9 +192,9 @@ public class AmpStructuresFormSectionFeature extends
                         target.add(longitude);
                         target.add(viewCoords);
                         target.appendJavaScript("gisPopup($('#" + this.getMarkupId() + "')[0]); return false;");
-                    }
+                }
                 };
-                item.add(openMapPopup);
+                item.add(openMapPopup); 
 
                 final TextField<String> coords = new TextField<String>("coords",
                         new PropertyModel<String>(structureModel, "coords"));
@@ -244,13 +244,8 @@ public class AmpStructuresFormSectionFeature extends
             @Override
             public void onClick(AjaxRequestTarget target) {
                 AmpStructure stru = new AmpStructure();
-                if(FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.DEFAULT_STRUCTURE_TYPE)!=-1){
-                    AmpStructureType s=(AmpStructureType)PersistenceManager.getSession().load(AmpStructureType.class, 
-                            FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.DEFAULT_STRUCTURE_TYPE));
-                    stru.setType(s);    
-                }
-                
                 list.addItem(stru);
+
                 target.add(this.getParent());
                 target.add(containter);
                 target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(this.getParent()));
@@ -263,11 +258,11 @@ public class AmpStructuresFormSectionFeature extends
         
         
     }
-
+    
     private boolean hasCoordinates(IModel<AmpStructure> structureModel) {
         return structureModel.getObject().getCoordinates() != null && structureModel.getObject().
                 getCoordinates().size() > 0;
     }
-
+    
 
 }

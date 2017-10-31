@@ -1,5 +1,8 @@
 export const DEFAULT_UI_DATE_FORMAT = 'DD/MMM/YYYY';
 export const DATE_FORMAT_SETTING = 'default-date-format';
+export const CALENDAR_SETTING = 'calendar-id';
+export const ETH_BASE_CALENDAR = 'ETH-CAL';
+export const GREG_BASE_CALENDAR = 'GREG-CAL';
 export const EP_DATE_FORMAT =  'YYYY-MM-DD';
 
 export const NATIONAL_BUDGET_EXECUTION_PROCEDURES = 'National Budget Execution Procedures';

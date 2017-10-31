@@ -5,20 +5,26 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.gpi.reports.GPIReportConstants;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
-import org.dgfoundation.amp.gpi.reports.GPIReportConstants;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpGPINiAidOnBudget;
 import org.digijava.module.aim.dbentity.AmpGPINiDonorNotes;
 import org.hibernate.Session;
@@ -29,8 +35,8 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
-import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.digijava.module.common.util.DateTimeUtil;
+import org.digijava.module.translation.util.ContentTranslationUtil;
 
 public class GPIUtils {
     private static Logger logger = Logger.getLogger(GPIUtils.class);
@@ -278,5 +284,17 @@ public class GPIUtils {
             }
         });
         return donors;
+    }
+    
+    public static Date getYearStartDate(AmpFiscalCalendar calendar, int year) {
+        int month = Calendar.JANUARY;
+        int day = GPIEPConstants.GREGORIAN_YEAR_START_DAY;
+        return new GregorianCalendar(year, month, day).getTime();
+    }
+
+    public static Date getYearEndDate(AmpFiscalCalendar calendar, int year) {
+        int month = Calendar.JANUARY;
+        int day = GPIEPConstants.GREGORIAN_YEAR_START_DAY;
+        return new GregorianCalendar(year + 1, month, day).getTime();
     }
 }

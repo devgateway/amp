@@ -376,7 +376,6 @@ public class GPIDataService {
             Long to) {
 
         List<GPIRemark> remarks = new ArrayList<>();
-
         AmpDateFormatter dateFormatter = AmpDateFormatterFactory.getLocalizedFormatter(DateTimeUtil.getGlobalPattern());
         List<AmpGPINiDonorNotes> donorNotes = GPIUtils.getNotesByCode(indicatorCode);
         List<AmpGPINiDonorNotes> filteredNotes = GPIUtils.filterNotes(donorNotes, donorIds, donorType, from, to);
@@ -462,8 +461,8 @@ public class GPIDataService {
             List<AmpGPINiSurveyResponseDocument> filteredDocuments) {
 
         List<GPIDonorActivityDocument> donorActivityDocuments = new ArrayList<>();
-        Map<Long, Map<Long, List<AmpGPINiSurveyResponseDocument>>> grouppedDocuments = new HashMap<Long, Map<Long, 
-                List<AmpGPINiSurveyResponseDocument>>>();
+        Map<Long, Map<Long, List<AmpGPINiSurveyResponseDocument>>> grouppedDocuments = 
+                new HashMap<Long, Map<Long, List<AmpGPINiSurveyResponseDocument>>>();
 
         filteredDocuments.forEach(doc -> {
             AmpOrgRole orgRole = doc.getSurveyResponse().getAmpGPINiSurvey().getAmpOrgRole();
@@ -558,17 +557,23 @@ public class GPIDataService {
             yearRange.set("calendarId", calendar.getAmpFiscalCalId());
             int startYear = AmpARFilter.getDefaultYear(AmpARFilter.getEffectiveSettings(), calendar, true);
             int endYear = startYear + numberOfYears;
-            List<Integer> years = new ArrayList<>();
+            List<JsonBean> years = new ArrayList<>();
             for (int i = startYear; i <= endYear; i++) {
-                years.add(i);
+                JsonBean yearObject = new JsonBean();
+                yearObject.set("year", i);
+                Date start = GPIUtils.getYearStartDate(calendar, i);
+                Date end = GPIUtils.getYearEndDate(calendar, i);
+                yearObject.set("start", DateTimeUtil.formatDate(start, GPIEPConstants.DATE_FORMAT));
+                yearObject.set("end", DateTimeUtil.formatDate(end, GPIEPConstants.DATE_FORMAT));
+                years.add(yearObject);
             }
             yearRange.set("years", years);
             result.add(yearRange);
         }
         return result;
     }
-
-    private static Integer getNumberOfYears(List<AmpFiscalCalendar> calendars) {
+    
+   private static Integer getNumberOfYears(List<AmpFiscalCalendar> calendars) {
         for (AmpFiscalCalendar calendar : calendars) {
             if (calendar.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_GREGORIAN.getValue())) {
                 int currentYear = FiscalCalendarUtil.getCurrentYear();
@@ -579,7 +584,6 @@ public class GPIDataService {
 
         return 0;
     }
-    
     public static String getConvertedDate(Long fromCalId, Long toCalId, String dateAsString) {
         
         if (fromCalId == toCalId) {
@@ -616,4 +620,5 @@ public class GPIDataService {
         return GPIUtils.getDonors();
 
     }
+
 }

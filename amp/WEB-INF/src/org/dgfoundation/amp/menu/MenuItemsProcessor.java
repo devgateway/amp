@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.dgfoundation.amp.menu.dynamic.DynamicMenu;
 import org.dgfoundation.amp.menu.dynamic.EmailMenu;
 import org.dgfoundation.amp.menu.dynamic.LanguageMenu;
@@ -119,7 +120,7 @@ public class MenuItemsProcessor {
     
     private boolean isAllowedUserGroup(MenuItem mi) {
         if (mi.groupKeys == null || mi.groupKeys.size() == 0 
-                || AmpView.ADMIN == view && mi.groupKeys.contains(Group.ADMINISTRATORS)) {
+                || AmpView.ADMIN == view && CollectionUtils.containsAny(mi.groupKeys, Group.ADMIN_GROUPS)) {
             return true;
         }
         

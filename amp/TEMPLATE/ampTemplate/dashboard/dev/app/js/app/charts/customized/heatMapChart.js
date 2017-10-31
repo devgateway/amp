@@ -393,6 +393,8 @@ nv.models.heatMapChart = function() {
 			.attr("height", cubeSize)
 			.style("fill", noColor)
 			.attr("data-x", data.x - 1)
+			.attr("xid", data.xid)
+			.attr("yid", data.yid)
 			.attr("data-y", data.y - 1);
 		
 		cube.transition()
@@ -403,7 +405,9 @@ nv.models.heatMapChart = function() {
 		text.attr('font-family', 'Arial')
 			.attr('font-size', '11px')
 			.attr("x", ((data.y - 1) * cubeSize))
+			.attr("xid", data.xid)
 			.attr("y", ((data.y - 1) * cubeSize) + 19)
+			.attr("yid", data.yid)
 			.attr("class", "heatmap-cell")
 			.attr("x", function() {
 				// The "offsets" we add on each return call are tied to the current font family and size, so if we change them we might need to change the offsets too.
@@ -445,7 +449,7 @@ nv.models.heatMapChart = function() {
 				// Highlight this cell.
 				$($(cubesContainer[0]).find("[data-y='"+ (selfData.y - 1) + "']" + "[data-x='"+ (selfData.x - 1) + "']")).removeAttr("filter");
 			});
-		
+
 		if (data.tooltip) {
 			text.attr('data-title', data.tooltip)
 				.attr("class", "nv-series heatmap-cell");

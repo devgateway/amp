@@ -220,11 +220,14 @@ public class AmpAgreementItemPanel extends AmpFieldPanel<AmpFunding>{
         return agItems;
     }
 
-    public void validateIsNewAgreementFormClosed(AjaxRequestTarget target){
-        if(this.isFormOpen){
-            //if the form is still open we reject validation
-            error(TranslatorUtil
-                    .getTranslation("Warning: The agreement form should be confirmed or cancelled."));
+    public void validateIsNewAgreementFormClosed(AjaxRequestTarget target) {
+        if (this.isFormOpen) {
+            // if the form is still open we reject validation
+            error(TranslatorUtil.getTranslation("Warning: The agreement form should be confirmed or cancelled."));
+            
+            target.appendJavaScript("$('#" + this.getMarkupId() + "').parents().show();");
+            target.appendJavaScript("$(window).scrollTop($('#" + this.getMarkupId() + "').position().top)");
+            
             target.add(this);
         }
     }

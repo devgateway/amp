@@ -37,13 +37,14 @@ public class SummaryChangeNotificationJob extends ConnectionCleaningJob implemen
 
                 Date date = new Date();
                 LinkedHashMap<Long, Long> activitiesIds = SummaryChangesService.getActivities(date);
-                Map<String, Collection<AmpActivityVersion>> reminderUsers = SummaryChangesService
-                        .getValidators(activitiesIds);
 
                 if (activitiesIds.size() > 0) {
 
                     LinkedHashMap<Long, Collection<SummaryChange>> activityList = SummaryChangesService
                             .processActivity(activitiesIds);
+
+                    Map<String, Collection<AmpActivityVersion>> reminderUsers = SummaryChangesService
+                            .getValidators(activityList);
 
                     try {
 

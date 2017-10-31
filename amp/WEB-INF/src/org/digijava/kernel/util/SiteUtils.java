@@ -35,7 +35,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.hibernate.Hibernate;
+import org.digijava.kernel.request.TLSUtils;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.apache.log4j.Logger;
@@ -548,6 +548,17 @@ public class SiteUtils {
 
         return siteIdentityService.getSiteId(service, site);
     }
+
+    /**
+     * Returns true, if effective language LeftToRight is false.
+     *
+     * @return boolean value
+     */
+    public static boolean isEffectiveLangRTL() {
+        Locale locale = getDefaultSite().getLocale(TLSUtils.getEffectiveLangCode());
+        return !locale.getLeftToRight();
+    }
+
     public static String getBaseUrl() {
         String url = "";
         Set<SiteDomain> siteDomains = SiteUtils.getDefaultSite().getSiteDomains();

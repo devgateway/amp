@@ -59,7 +59,7 @@ public class SaikuReportPdfExporter implements SaikuReportExporter {
     public void populateReportWithData(Document doc, PdfWriter writer) throws Exception {
         SaikuReportHtmlRenderer htmlRenederer = new SaikuReportHtmlRenderer(report);
         
-        InputStream contentIs = new ByteArrayInputStream(htmlRenederer.renderReportAsHtml().toString().getBytes("UTF-8"));
+        InputStream contentIs = new ByteArrayInputStream(htmlRenederer.renderFullHtml().toString().getBytes("UTF-8"));
         
         // CSS
         CSSResolver cssResolver = new StyleAttrCSSResolver();

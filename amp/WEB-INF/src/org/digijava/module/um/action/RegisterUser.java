@@ -88,6 +88,7 @@ public class RegisterUser extends Action {
             user.setOrganizationName(userRegisterForm.getOrganizationName());
 
             user.setPledger(userRegisterForm.getPledger());
+            user.setExemptFromDataFreezing(userRegisterForm.getExemptFromDataFreezing());
             
             user.setOrganizationTypeOther(new String(" "));
             
@@ -182,6 +183,12 @@ public class RegisterUser extends Action {
                 Long uid[] = new Long[1];
                 uid[0] = user.getId();
                 org.digijava.module.admin.util.DbUtil.addUsersToGroup(memberGroup.getId(),uid);
+                
+
+                if (userRegisterForm.getNationalCoordinator()) {
+                    Group nationalCoordGroup = org.digijava.module.admin.util.DbUtil.getGroupByKey(Group.NATIONAL_COORDINATORS);
+                    org.digijava.module.admin.util.DbUtil.addUsersToGroup(nationalCoordGroup.getId(),uid);                                          
+                } 
 
                 //save amp user extensions;
                 AmpUserExtensionPK extPK=new AmpUserExtensionPK(user);

@@ -29,12 +29,14 @@ public class FiltersConstants {
     public static final String PROPOSED_COMPLETION_DATE = "proposed-completion-date";
     public static final String PROPOSED_START_DATE = "proposed-start-date";
 
+    public static final String ACTIVITY_ID = "activity-id";
     public static final String APPROVAL_STATUS = "approval-status";
     public static final String ARCHIVED = "archived";
     public static final String BENEFICIARY_AGENCY = "beneficiary-agency";
     public static final String COMPONENT_FUNDING_ORGANIZATION = "component-funding-organization";
     public static final String COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION = "component-second-responsible-organization";
     public static final String COMPUTED_YEAR = "computed-year";
+    public static final String CONCESSIONALITY_LEVEL = "concessionality-level";
     public static final String CONTRACTING_AGENCY = "contracting-agency";
     public static final String CONTRACTING_AGENCY_GROUPS = "contracting-agency-groups";
     public static final String COUNTRY = "country";

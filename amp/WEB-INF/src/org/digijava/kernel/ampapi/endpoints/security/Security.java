@@ -90,6 +90,7 @@ public class Security implements ErrorReportingEndpoint {
         String username = null;
         String teamName = null;
         boolean addActivity = false;
+        boolean isNationalCoordinator = false;
         //if the user is admin the he doesn't have a workspace assigned
  
         if (tm != null) {
@@ -98,6 +99,7 @@ public class Security implements ErrorReportingEndpoint {
                 AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(tm.getMemberId());
                 AmpTeam team = ampTeamMember.getAmpTeam();
                 teamName = team.getName();
+                isNationalCoordinator = ampTeamMember.getUser().hasNationalCoordinatorGroup();
                 // if the user is logged in without a token, we generate one
                 if (apiToken == null) {
                     // if no token is present in session we generate one
@@ -109,7 +111,7 @@ public class Security implements ErrorReportingEndpoint {
 
         }
         
-        return createResponse(isAdmin, apiToken, username, teamName, addActivity);
+        return createResponse(isAdmin, apiToken, username, teamName, addActivity, isNationalCoordinator);
     }
 
     @NotNull
@@ -122,7 +124,7 @@ public class Security implements ErrorReportingEndpoint {
         return port;
     }
 
-    private JsonBean createResponse(boolean isAdmin, AmpApiToken apiToken, String username, String team, boolean addActivity) {
+    private JsonBean createResponse(boolean isAdmin, AmpApiToken apiToken, String username, String team, boolean addActivity, boolean isNationalCoordinator) {
         String port = getPort();
         final JsonBean authenticationResult = new JsonBean();
         authenticationResult.set("token", apiToken != null && apiToken.getToken() != null ? apiToken.getToken() : null);
@@ -133,6 +135,7 @@ public class Security implements ErrorReportingEndpoint {
         authenticationResult.set("is-admin", isAdmin);
         authenticationResult.set("add-activity", addActivity); //to check if the user can add activity in the selected ws
         authenticationResult.set("view-activity", !isAdmin); ///at this stage the user can view activities only if you are not admin
+        authenticationResult.set("national-coordinator", isNationalCoordinator); //role that allows user to enter gpi indicator 6 data
         return authenticationResult;
     }
 
@@ -174,8 +177,8 @@ public class Security implements ErrorReportingEndpoint {
             storeInSession(username, password, teamMember, user);
 
             final AmpApiToken ampApiToken = SecurityUtil.generateToken();
-
-            return createResponse(user.isGlobalAdmin(), ampApiToken, username, ampTeam.getName(), true);
+            boolean isNationalCoordinator = teamMember.getUser() == null ? false : teamMember.getUser().hasNationalCoordinatorGroup();                  
+            return createResponse(user.isGlobalAdmin(), ampApiToken, username, ampTeam.getName(), true, isNationalCoordinator);
         } catch (final Exception e) {
             logger.error("Error trying to login the user", e);
             ApiErrorResponse.reportError(INTERNAL_SERVER_ERROR, SecurityErrors.INVALID_REQUEST);

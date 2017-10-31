@@ -96,6 +96,8 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpScorecardSettings</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpScorecardOrganisation</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpDataFreezeSettings</hibernate-class>
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpDataFreezeExclusion</hibernate-class>
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivityFrozen</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpFieldsVisibility</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpFundingDetail</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpFundingMTEFProjection</hibernate-class>
@@ -149,7 +151,15 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpGPISurveyIndicator</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpGPISurveyQuestion</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpGPISurveyResponse</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpGPISurveyQuestionType</hibernate-class>
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpGPISurveyQuestionType</hibernate-class>		
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpGPINiAidOnBudget</hibernate-class>
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpGPINiIndicator</hibernate-class>
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpGPINiQuestion</hibernate-class>
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpGPINiQuestionOption</hibernate-class>
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpGPINiSurvey</hibernate-class>
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpGPINiSurveyResponse</hibernate-class>
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpGPINiSurveyResponseDocument</hibernate-class>		
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpGPINiDonorNotes</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpFeature</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpSiteFlag</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpHomeThumbnail</hibernate-class>
@@ -230,6 +240,8 @@
         <!-- Aid Effectiveness Indicators -->
         <hibernate-class>org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicator</hibernate-class>
         <hibernate-class>org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicatorOption</hibernate-class>
+        
+        <hibernate-class>org.digijava.module.aim.dbentity.AmpInterchangeableResult</hibernate-class>
         
         <!-- Menu -->
         <hibernate-class>org.digijava.module.aim.dbentity.AmpMenuEntry</hibernate-class>

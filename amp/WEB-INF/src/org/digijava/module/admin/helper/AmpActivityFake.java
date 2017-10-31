@@ -24,6 +24,7 @@ public class AmpActivityFake implements LoggerIdentifiable{
     private Long ampActivityId;
     private String status;
     private boolean draft;
+    private boolean frozen = false;
     
     public AmpActivityFake(String name, String ampId, Long ampActivityId) {
         super();
@@ -131,6 +132,14 @@ public class AmpActivityFake implements LoggerIdentifiable{
 
         public void setDraft(boolean draft) {
             this.draft = draft;
+        }
+
+        public boolean getFrozen() {
+            return frozen;
+        }
+
+        public void setFrozen(boolean isFrozen) {
+            this.frozen = isFrozen;
         }
 
 

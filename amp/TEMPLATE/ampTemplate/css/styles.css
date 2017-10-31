@@ -1184,3 +1184,7 @@ div.addOrgBox ul li {list-style:none;clear:both;}
 div.addOrgBox ul li label {display:block;float:left;width:120px;}
 div.addOrgBox div.buttons{clear:both;text-align:center;color:#fff;}
 div.addOrgBox div.buttons input{color:#fff;}
+
+.contact-form td {
+	padding: 5px 10px 5px 10px;	
+}

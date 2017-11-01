@@ -40,15 +40,14 @@
         </logic:iterate>
 	</c:if>
 	<tr>
-		<td colspan="2" bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase">
+		<td colspan="2" class="preview-funding-total">
 			<digi:trn>Subtotal MTEFs Pipeline</digi:trn>:
 		</td>
-		<td colspan="2" nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">
+		<td colspan="2" nowrap="nowrap" class="preview-align preview-funding-total">
 			<c:if test="${not empty funding.subtotalMTEFsPipeline}">
  				<b>${funding.subtotalMTEFsPipeline} ${aimEditActivityForm.currCode}</b>
  			</c:if> &nbsp;
            </td>
-		<%-- <td bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td> --%>
 	</tr>
 
 	<c:if test="${!empty funding.fundingDetails}">
@@ -63,15 +62,14 @@
         </logic:iterate>
 	</c:if>
 	<tr>
-		<td colspan="2" bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase">
+		<td colspan="2" class="preview-funding-total">
 			<digi:trn>Subtotal MTEFs Projection</digi:trn>:
 		</td>
-		<td colspan="2" nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">
+		<td colspan="2" nowrap="nowrap" class="preview-align preview-funding-total">
 			<c:if test="${not empty funding.subtotalMTEFsProjection}">
  				<b>${funding.subtotalMTEFsProjection} ${aimEditActivityForm.currCode}</b>
  			</c:if> &nbsp;
            </td>
-		<%-- <td bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td> --%>
 	</tr>
 </c:if> 
 <%--	</c:if>--%>

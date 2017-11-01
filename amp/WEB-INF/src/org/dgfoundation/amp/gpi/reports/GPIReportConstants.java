@@ -35,6 +35,7 @@ public class GPIReportConstants {
     public static final String COLUMN_EXTENT_OF_USE_OF_COUNTRY_RESULT = "Result";
     public static final String COLUMN_EXTENT_OF_USE_OF_GOV_SOURCES = "M&E";
     public static final String COLUMN_USE_OF_COUNTRY_SYSTEMS = "Use of country systems";
+    public static final String COLUMN_REMARKS_COUNT = "Number of Remarks";
     
     public static final String HIERARCHY_PARAMETER = "hierarchy";
     public static final String SUMMARY_PARAMETER = "summary";

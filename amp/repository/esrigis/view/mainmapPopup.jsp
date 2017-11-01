@@ -22,7 +22,9 @@
  
     <digi:ref href="/TEMPLATE/ampTemplate/css_2/leaflet.css" type="text/css" rel="stylesheet" />
     <digi:ref href="/TEMPLATE/ampTemplate/css_2/mappopupstyles.css" type="text/css" rel="stylesheet" />
-  
+    <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
+    <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/script/common/TranslationManager.js"/>"></script>
+    
    	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/leaflet/leaflet.js"/>"></script>
     <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/leaflet/esri-leaflet.js"/>"></script>    
      

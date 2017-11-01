@@ -30,6 +30,10 @@ div.trnpanel div.trn-row ul {
     float: right;
 }
 
+.content-dir {
+    direction: rtl;
+}
+
 .onepager-pic-icon {
 	right: -3px;
 	float: left;
@@ -126,9 +130,12 @@ div.trnpanel div.trn-row ul {
     color: #376091;
 }
 
-.right_menu_empty {
+.preview-align {
+    text-align: left !important;
+}
+
+.preview-align-inverse {
     text-align: right;
-    color: #376091;
 }
 
 .workspacelist{
@@ -137,6 +144,6 @@ div.trnpanel div.trn-row ul {
     background-position: right !important;
 }
 
-.content-dir {
-    direction: rtl;
+.preview-buttons-align {
+    float: left !important;
 }

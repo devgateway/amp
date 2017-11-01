@@ -31,6 +31,7 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpTeam;
@@ -399,6 +400,8 @@ public class SettingsUtils {
         settings.set("number-divider", AmountsUnits.getDefaultValue().divider);
 
         settings.set("language", TLSUtils.getEffectiveLangCode());
+
+        settings.set("rtl-direction", SiteUtils.isEffectiveLangRTL());
 
         settings.set("default-language", TLSUtils.getSite().getDefaultLanguage().getCode());
 

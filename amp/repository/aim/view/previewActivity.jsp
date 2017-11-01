@@ -268,6 +268,7 @@ function collapseAll() {
 	
 
 <!-- MAIN CONTENT PART START -->
+<div class="content-dir">
 <logic:present scope="request" parameter="editError">
 	<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center style="margin-top:15px;">
 	     <tr>
@@ -346,38 +347,45 @@ function collapseAll() {
 	    </td>
 		
 	    
-	    <td align=right width=40%>
-	    	<c:set var="trn">
-				<digi:trn>Export To PDF</digi:trn>
-			</c:set> 
-			<a onclick="javascript:exportToPdf(${actId})" class="l_sm" style="cursor: pointer; color:#376091;" title="${trn}">
-				<img src="img_2/ico_pdf.gif" />${trn}
-			</a>
-
-			<c:set var="showWordSetting" scope="page" value="false"/>
-			
-			<%if(FeaturesUtil.isVisibleModule("Show Editable Export Formats")){ %> 
-				<c:set var="showWordSetting" scope="page" value="true"/>
-			<%}%>
-			
-			<c:if test="${(sessionScope.currentMember != null) || (showWordSetting)}">
-				<a onclick="javascript:exportToWord(${actId})" class="l_sm" style="cursor: pointer; color:#376091;">
-					<img src="img_2/ico_word.gif" />
-						<digi:trn>Export to Word</digi:trn>
-				</a>
-			</c:if>
-			<logic:present name="currentMember" scope="session">
-	    	<a onclick="window.open('/showPrinterFriendlyPage.do?edit=true', '_blank', '');" class="l_sm" style="cursor: pointer; color:#376091;" title="<digi:trn key="aim:print">Print</digi:trn>">
-	    		<img src="img_2/ico_print.gif" width="15" height="18" />
-	    		<digi:trn key="aim:print">Print</digi:trn>
-	    	</a>
-	    	</logic:present>
+	    <td class="preview-align" width=40%>
+			<table width="100%" cellspacing="2" cellpadding="2" border="0" class="preview-buttons-align">
+				<tr>
+					<td>
+						<c:set var="trn">
+							<digi:trn>Export To PDF</digi:trn>
+						</c:set>
+						<a onclick="javascript:exportToPdf(${actId})" class="l_sm" style="cursor: pointer; color:#376091;" title="${trn}">
+							<img hspace="2" src="img_2/ico_pdf.gif" />${trn}
+						</a>
+					</td>
+					<td>
+						<c:set var="showWordSetting" scope="page" value="false"/>
+						<%if(FeaturesUtil.isVisibleModule("Show Editable Export Formats")){ %>
+							<c:set var="showWordSetting" scope="page" value="true"/>
+						<%}%>
+						<c:if test="${(sessionScope.currentMember != null) || (showWordSetting)}">
+							<a onclick="javascript:exportToWord(${actId})" class="l_sm" style="cursor: pointer; color:#376091;">
+								<img hspace="2" src="img_2/ico_word.gif" />
+									<digi:trn>Export to Word</digi:trn>
+							</a>
+						</c:if>
+					</td>
+					<td>
+						<logic:present name="currentMember" scope="session">
+						<a onclick="window.open('/showPrinterFriendlyPage.do?edit=true', '_blank', '');" class="l_sm" style="cursor: pointer; color:#376091;" title="<digi:trn key="aim:print">Print</digi:trn>">
+							<img hspace="2" src="img_2/ico_print.gif" width="15" height="18" />
+							<digi:trn key="aim:print">Print</digi:trn>
+						</a>
+						</logic:present>
+					</td>
+				</tr>
+			</table>
 	    </td>
 	  </tr>
 	</table>
 	</div>
 	
-	<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center style="margin-top:15px;">
+	<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center class="fixed-layout" style="margin-top:15px;">
   <tr>
     <td width=215 bgcolor="#F4F4F4" valign=top>
 	<div class="dash_left">
@@ -2489,7 +2497,7 @@ function collapseAll() {
 							<td>
 								<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
 									<tr>
-										<td vAlign="center" align="left">&nbsp;
+										<td vAlign="center">&nbsp;
 											<span class="word_break bold"><c:out value="${docs.title}"/></span>&nbsp;&nbsp;-&nbsp;&nbsp;<i>
 											<c:out value="${docs.fileName}"/></i> 
 											<logic:notEqual name="docs" property="docDescription" value=" ">
@@ -2522,7 +2530,7 @@ function collapseAll() {
 						<logic:iterate name="aimEditActivityForm" property="documents.crDocuments" id="crDoc">
 						<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
 								<tr>
-									<td vAlign="center" align="left">
+									<td vAlign="center">
 										&nbsp;<b><c:out value="${crDoc.title}"/></b>&nbsp;&nbsp;-&nbsp;&nbsp;
 										<i><c:out value="${crDoc.name}"/></i>
 										<c:set var="translation">
@@ -3475,6 +3483,7 @@ function collapseAll() {
   </tr>
 </table>
 </c:if>
+</div>
 <module:display name="/Activity Form/Map Options/Show Map In Activity Preview" parentModule="/Activity Form/Map Options">
  <div id="locationPopupMap" style="visibility:hidden;width:4px; height:3px;position:relative;"></div>
 </module:display>

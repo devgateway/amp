@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.digijava.kernel.ampapi.endpoints.performance.PerformanceIssue;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleConstants;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleAttributeOption;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleMatcherDefinition;
@@ -35,7 +36,7 @@ public abstract class PerformanceRuleMatcher {
         return rule;
     }
 
-    public abstract boolean match(AmpActivityVersion a);
+    public abstract PerformanceIssue findPerformanceIssue(AmpActivityVersion a);
     
     protected abstract boolean validate();
     

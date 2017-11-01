@@ -126,11 +126,6 @@ div.trnpanel div.trn-row ul {
     color: #376091;
 }
 
-.right_menu_empty {
-    text-align: right;
-    color: #376091;
-}
-
 .content-direction {
     direction: rtl;
 }
@@ -487,4 +482,77 @@ a.next_page {
 }
 a.last_page {
     background-position: -3px 4px;
+}
+.reportFloatRight {
+    float: left !important;
+}
+
+#demo .yui-nav li a {
+    margin-right: 0px !important;
+}
+
+.text-align {
+    text-align: right !important;
+}
+
+.wizard-toolbar-steps {
+    float:right;
+    margin-top:10px;
+}
+
+.wizard-toolbar-buttons {
+    float:left;
+    z-index: 3000;
+    margin-top:10px;
+    margin-left:10px;
+}
+
+#wizard_container div.tab {
+    border-left: 1px solid #BEBDB6 !important;
+    border-right: 0px solid #BEBDB6 !important;
+}
+
+.draglist {
+    text-align: right !important;
+}
+
+.wizard-columns {
+    text-align: right !important;
+}
+
+.wizard-column-padding {
+    padding-right: 0px;
+}
+
+.wizard-columns-list {
+    padding-right: 13px;
+}
+
+.wizard-panel-buttons {
+    text-align: left !important;
+}
+
+.container-close{
+    right: 0px;
+    left: 4px !important;
+}
+
+.hd {
+    text-align:right !important;
+}
+
+.panel-one {
+    float:right !important;
+}
+
+.panel-two {
+    float:left !important;
+}
+
+.hierarchy-list-margin {
+    margin-right: -20px;
+}
+
+.filter-item-label {
+    padding: 0px 5px 0px 0px !important;
 }

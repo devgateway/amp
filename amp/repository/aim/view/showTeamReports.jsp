@@ -1,5 +1,6 @@
 <%@page import="org.digijava.module.aim.helper.GlobalSettingsConstants"%>
 <%@page import="org.digijava.module.aim.util.FeaturesUtil"%>
+<%@page import="org.digijava.kernel.util.SiteUtils"%>
 <%@ page pageEncoding="UTF-8" %>
 <%@page trimDirectiveWhitespaces="true"%>
 <%@ page import="org.digijava.module.aim.form.ReportsForm"%>
@@ -258,7 +259,11 @@ $(document).ready(function() {
 		document.aimTeamReportsForm.submit();
 		
 	}
-
+<% if(SiteUtils.isEffectiveLangRTL()) { %>
+	//[6] - TitleTextAlign
+	Style[0][6] = 'right'; //0 - used by Columns
+	Style[1][6] = 'right'; //1 - used by Measures
+<% } %>
 </SCRIPT>
 
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
@@ -277,14 +282,16 @@ $(document).ready(function() {
 			        	</a>
 					</li>
 				</ul>
-				<div id="Tab_Name" class="ui-tabs-panel ui-widget-content ui-corner-bottom" style="background-color: #F2F2F2; padding: 5px; border: 1px solid rgb(208, 208, 208);">
+				<div id="Tab_Name"
+	class="ui-tabs-panel ui-widget-content ui-corner-bottom reports-tab-name-container content-direction">
 					<table align="center">
 						<tr>
 						    <td>
 						    	<table>
 					        		<tr>
 					          			<td>
-					            			<table bgcolor="#FFFFFF" style="width: 970px; border-left: 1px solid #CCCCCC; border-top: 1px solid #CCCCCC; border-bottom: 1px solid #CCCCCC; border-right: 2px solid #CCCCCC;">
+					            			<table bgcolor="#FFFFFF" style="width: 970px; border-left: 1px solid
+					            			#CCCCCC; border-top: 1px solid #CCCCCC; border-bottom: 1px solid #CCCCCC; border-right: 1px solid #CCCCCC;">
 					              				<tr>
          	<td>
           	<table cellpadding="6" cellspacing="6">
@@ -317,19 +324,33 @@ $(document).ready(function() {
 			<c:if test="${reportNumber != 0}">
 				<logic:present name="isUserLogged" scope="session">
 					<c:if test="${!aimTeamReportsForm.showTabs}">
-						<div class="filtered"style="float: right; font-size: 11px;">
-							<span><img src= "/TEMPLATE/ampTemplate/images/bullet_grey_sq.gif" border="0" style="vertical-align: baseline;" /></span>
-							<span>
-								<digi:trn>Not filtered Report</digi:trn>&nbsp;
-								<img src= "/TEMPLATE/ampTemplate/images/bullet_green_sq.gif" border="0" style="vertical-align: baseline; margin-left: 8px;" />
-							</span>
-							<span><digi:trn>Filtered Report</digi:trn>&nbsp;
-								<img src= "/repository/message/view/images/edit.gif" border="0" style="vertical-align: bottom; margin-left: 8px;" />
-							</span>
-							<span><digi:trn>Edit Report</digi:trn>&nbsp;
-								<img src= "/repository/message/view/images/trash_12.gif" border="0" style="vertical-align: bottom; margin-left: 8px;" />
-							</span>
-							<span><digi:trn>Delete Report</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+						<div class="filtered reportFloatRight">
+							<table border="0" cellpadding="6" cellspacing="6">
+								<tr>
+									<td>
+										<span><img src= "/TEMPLATE/ampTemplate/images/bullet_grey_sq.gif" border="0" style="vertical-align: baseline;" /></span>
+									</td>
+									<td>
+										<span>
+											<digi:trn>Not filtered Report</digi:trn>&nbsp;
+											<img src= "/TEMPLATE/ampTemplate/images/bullet_green_sq.gif" border="0" style="vertical-align: baseline; margin-left: 8px;" />
+										</span>
+									</td>
+									<td>
+										<span><digi:trn>Filtered Report</digi:trn>&nbsp;
+											<img src= "/repository/message/view/images/edit.gif" border="0" style="vertical-align: bottom; margin-left: 8px;" />
+										</span>
+									</td>
+									<td>
+										<span><digi:trn>Edit Report</digi:trn>&nbsp;
+											<img src= "/repository/message/view/images/trash_12.gif" border="0" style="vertical-align: bottom; margin-left: 8px;" />
+										</span>
+									</td>
+									<td>
+										<span><digi:trn>Delete Report</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+									</td>
+								</tr>
+							</table>
 						</div>
 					</c:if>
 					<c:if test="${aimTeamReportsForm.showTabs}">
@@ -585,7 +606,7 @@ $(document).ready(function() {
 							<%if (tm != null) {%>
 								<td width="200" class="inside" style="padding-right: 5px; padding-left: 5px; font-size: 11px; width: 150px;" align="center" bgcolor="<%=color%>">  
 									<div style='position:relative;display:none;' id='report-<bean:write name="report" property="ampReportId"/>'>
-										<ul> 
+										<ul class="content-direction">
 									<logic:iterate name="report" property="columns" id="column" indexId="index">
 										<%if (index.intValue()%2==0){ %>
 											<li>
@@ -598,9 +619,10 @@ $(document).ready(function() {
 	 								</logic:iterate>
 	 							</ul>
 							</div>
-							<span align="center" style="text-transform: capitalize;" onMouseOver="stm(['<digi:trn jsFriendly="true">Columns</digi:trn>',document.getElementById('report-<bean:write name="report" property="ampReportId"/>').innerHTML],Style[0])" onMouseOut="htm()">[ <u style="text-transform:capitalize;" ><digi:trn>Columns</digi:trn></u> ]&nbsp;</span>                               
-							<div style='position:relative;display:none;' id='measure-<bean:write name="report" property="ampReportId"/>'>
-								<ul> 
+							<span align="center" style="text-transform: capitalize;" onMouseOver="stm(['<digi:trn jsFriendly="true">Columns</digi:trn>',document.getElementById('report-<bean:write name="report" property="ampReportId"/>').innerHTML],Style[0])" onMouseOut="htm()">[ <u style="text-transform:capitalize;" ><digi:trn>Columns</digi:trn></u> ]&nbsp;</span>
+							<div style='position:relative;display:none;' id='measure-<bean:write name="report"
+							property="ampReportId"/>'>
+								<ul class="content-direction">
 									<logic:iterate name="report" property="measures" id="measure" indexId="index"  >
 									<li>
 										<digi:trn key="aim:reportBuilder:${measure.measure.aliasName}">${measure.measure.aliasName}</digi:trn>

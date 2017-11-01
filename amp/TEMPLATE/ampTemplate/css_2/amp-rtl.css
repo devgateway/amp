@@ -126,13 +126,16 @@ div.trnpanel div.trn-row ul {
     color: #376091;
 }
 
-.right_menu_empty {
-    text-align: right;
-    color: #376091;
-}
-
 .content-direction {
     direction: rtl;
+}
+
+.reportFloatRight {
+    float: left !important;
+}
+
+#demo .yui-nav li a {
+    margin-right: 0px !important;
 }
 
 .text-align {

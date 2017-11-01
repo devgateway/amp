@@ -1271,6 +1271,22 @@ div.footer {
     padding: 0px 0px 0px 5px;
 }
 
+.reports-tab-name-container {
+    background-color: #F2F2F2;
+    padding: 5px;
+    border: 1px solid rgb(208, 208, 208);
+}
+
+.reports-tab-name-public-container {
+    margin-top: -1px;
+    padding: 5px;
+    border: 1px solid rgb(208, 208, 208);
+}
+
+.reportFloatRight {
+    float: right;
+}
+
 .wizard-toolbar-steps {
     float:left;
     margin-top:10px;

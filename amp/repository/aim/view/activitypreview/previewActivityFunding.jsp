@@ -20,7 +20,7 @@
 	<table width="95%" cellspacing="1" cellpadding="0" border="0" align="center">
 				<tr>
 					<td>
-					<table width="100%" border="0" align="right" cellpadding="0" cellSpacing=8 class="">
+					<table width="100%" border="0" cellpadding="0" cellSpacing=8 class="">
 						<logic:notEmpty name="aimEditActivityForm" property="funding.fundingOrganizations">
 							<logic:iterate name="aimEditActivityForm" property="funding.fundingOrganizations" id="fundingOrganization" type="org.digijava.module.aim.helper.FundingOrganization">
 
@@ -42,13 +42,13 @@
 
 																<logic:notEmpty name="funding" property="orgFundingId">
 																	<tr>
-																		<td align="left" width="150">
+																		<td width="150">
 																			<a title='<digi:trn key="aim:FundOrgId" jsFriendly="true">This ID is specific to the financial operation. This item may be useful when one project has two or more different financial instruments. If the project has a unique financial operation, the ID can be the same as the project ID</digi:trn>'>
 																				<digi:trn>Funding Organization Id</digi:trn>
 																			</a>																		
 																		</td>
 																		<td width="1">:</td>
-																		<td align="left">
+																		<td>
 																			<b><bean:write name="funding" property="orgFundingId"/></b>
 																		</td>
 																	</tr>
@@ -57,25 +57,25 @@
 																<%-- <module:display name="/Activity Form/Funding/Funding Group/Funding Item/Donor Organisation" 
 																	parentModule="/Activity Form/Funding/Funding Group/Funding Item"> --%>
 																<tr>
-																	<td align="left" width="150">
+																	<td width="150">
 																		<a title='<digi:trn key="aim:fundOrgName" jsFriendly="true">Funding Organization Name</digi:trn>'>
 																			<digi:trn key="aim:OrgName">Organization Name</digi:trn>
 																		</a>
 																	</td>
 																	<td width="1">:</td>
-																	<td align="left">
+																	<td>
 																		<b>${fundingOrganization.orgName}</b>
 																	</td>
 																</tr>
 																<logic:present name="funding" property="sourceRole">
 																<tr>
-																	<td align="left" width="150">
+																	<td width="150">
 																		<a title='<digi:trn key="aim:orgRole" jsFriendly="true">Organization Role</digi:trn>'>
 																			<digi:trn key="aim:OrgRole">Organization Role</digi:trn>
 																		</a>
 																	</td>
 																	<td width="1">:</td>
-																	<td align="left">
+																	<td>
 																			<b><digi:trn><bean:write name="funding" property="sourceRole"/></digi:trn></b>
 																	</td>
 																</tr>
@@ -86,12 +86,12 @@
 																<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Type of Assistence"
 																	    parentModule="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification">
 																	<tr>
-																		<td align="left" width="150"><a
+																		<td width="150"><a
 																			title='<digi:trn key="aim:AssitanceType" jsFriendly="true">Specify whether the project was financed through a grant, a loan or in kind</digi:trn>'>
 																		<digi:trn key="aim:typeOfAssist">Type of Assistance</digi:trn>
 																		</a></td>
 																		<td width="1">:</td>
-																		<td align="left">
+																		<td>
 																		<logic:notEmpty name="funding" property="typeOfAssistance">
 																			<b><digi:trn><bean:write name="funding" property="typeOfAssistance.value"/></digi:trn></b>
 																		</logic:notEmpty></td>
@@ -102,12 +102,12 @@
 																	parentModule="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification">
 																	<logic:notEmpty name="funding" property="financingInstrument">
 																	<tr>
-																		<td align="left" width="150"><a
+																		<td width="150"><a
 																			title='<digi:trn key="aim:financialInst" jsFriendly="true">Financing Instrument</digi:trn>'>
 																		<digi:trn key="aim:financialInst">Financing Instrument</digi:trn>
 																		</a></td>
 																		<td width="1">:</td>
-																		<td align="left">
+																		<td>
 																		
 																			<b><digi:trn><bean:write name="funding" property="financingInstrument.value"/></digi:trn></b>
 																		</td>
@@ -117,12 +117,12 @@
 																<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Status"
 																	parentModule="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification">
 																	<tr>
-																		<td align="left" width="150"><a
+																		<td width="150"><a
 																			title='<digi:trn jsFriendly="true">Funding Status</digi:trn>'>
 																		<digi:trn>Funding Status</digi:trn>
 																		</a></td>
 																		<td width="1">:</td>
-																		<td align="left">
+																		<td>
 																			<logic:notEmpty name="funding" property="fundingStatus">
 																				<b><digi:trn><bean:write name="funding" property="fundingStatus.value" /></digi:trn></b>
 																			</logic:notEmpty>
@@ -131,12 +131,12 @@
 																</module:display>
 																<logic:notEmpty name="funding" property="modeOfPayment">
 																	<tr>
-																		<td align="left" width="150"><a
+																		<td width="150"><a
 																			title='<digi:trn jsFriendly="true">Mode of Payment</digi:trn>'>
 																		<digi:trn>Mode of Payment</digi:trn>
 																		</a></td>
 																		<td width="1">:</td>
-																		<td align="left">
+																		<td>
 																			<logic:notEmpty name="funding" property="modeOfPayment">
 																				<b><digi:trn><bean:write name="funding" property="modeOfPayment.value"/></digi:trn></b>
 																			</logic:notEmpty>
@@ -146,12 +146,12 @@
 																
 																<logic:notEmpty name="funding" property="concessionalityLevel">
 																	<tr>
-																		<td align="left" width="150"><a
+																		<td width="150"><a
 																			title='<digi:trn jsFriendly="true">Concessionality Leve</digi:trn>'>
 																		<digi:trn>Concessionality Level</digi:trn>
 																		</a></td>
 																		<td width="1">:</td>
-																		<td align="left">
+																		<td>
 																			<logic:notEmpty name="funding" property="concessionalityLevel">
 																				<b><digi:trn><bean:write name="funding" property="concessionalityLevel.value"/></digi:trn></b>
 																			</logic:notEmpty>
@@ -161,52 +161,52 @@
 																
 																<logic:notEmpty name="funding" property="ratificationDate">
 																<tr>
-																	<td align="left" width="150">
+																	<td width="150">
 																		<a title='<digi:trn jsFriendly="true">Ratification Date</digi:trn>'>
 																			<digi:trn>Ratification Date</digi:trn>
 																		</a>
 																	</td>
 																	<td width="1">:</td>
-																	<td align="left">
+																	<td>
 																			<b><bean:write name="funding" property="ratificationDate"/></b>
 																	</td>
 																</tr>
 																</logic:notEmpty>
 																<logic:notEmpty name="funding" property="maturity">
 																<tr>
-																	<td align="left" width="150">
+																	<td width="150">
 																		<a title='<digi:trn jsFriendly="true">Maturity</digi:trn>'>
 																			<digi:trn>Maturity</digi:trn>
 																		</a>
 																	</td>
 																	<td width="1">:</td>
-																	<td align="left">
+																	<td>
 																			<b><bean:write name="funding" property="maturity"/></b>
 																	</td>
 																</tr>
 																</logic:notEmpty>
 																<logic:notEmpty name="funding" property="interestRate">
 																<tr>
-																	<td align="left" width="150">
+																	<td width="150">
 																		<a title='<digi:trn jsFriendly="true">Interest Rate</digi:trn>'>
 																			<digi:trn>Interest Rate</digi:trn>
 																		</a>
 																	</td>
 																	<td width="1">:</td>
-																	<td align="left">
+																	<td>
 																			<b><bean:write name="funding" property="interestRate"/></b>
 																	</td>
 																</tr>
 																</logic:notEmpty>
 																<logic:notEmpty name="funding" property="gracePeriod">
 																<tr>
-																	<td align="left" width="150">
+																	<td width="150">
 																		<a title='<digi:trn jsFriendly="true">Grace Period</digi:trn>'>
 																			<digi:trn>Grace Period</digi:trn>
 																		</a>
 																	</td>
 																	<td width="1">:</td>
-																	<td align="left">
+																	<td>
 																			<b><bean:write name="funding" property="gracePeriod"/></b>
 																	</td>
 																</tr>
@@ -216,12 +216,12 @@
 																<logic:notEmpty name="funding" property="donorObjective">
 																<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Donor Objective" parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 																	<tr>
-																		<td align="left" width="150"><a
+																		<td width="150"><a
 																			title='<digi:trn jsFriendly="true" key="aim:donorobjective">Donor Objective</digi:trn>'>
 																		<digi:trn key="aim:donorobjective">Donor Objective</digi:trn>
 																		</a></td>
 																		<td width="1">:</td>
-																		<td align="left">
+																		<td>
 																			<span class="word_break bold"><bean:write name="funding" property="donorObjective" /></span>
 																		</td>
 																	</tr>
@@ -230,12 +230,12 @@
                                                              <logic:notEmpty name="funding" property="conditions">
                                                                 <module:display name="/Activity Form/Funding/Funding Group/Funding Item/Conditions" parentModule="/Activity Form/Funding/Funding Group/Funding Item">
                                                                     <tr>
-                                                                        <td align="left" width="150"><a
+                                                                        <td width="150"><a
                                                                                 title='<digi:trn jsFriendly="true" key="aim:donorobjective">Conditions</digi:trn>'>
                                                                             <digi:trn key="aim:donorobjective">Conditions</digi:trn>
                                                                         </a></td>
                                                                         <td width="1">:</td>
-                                                                        <td align="left">
+                                                                        <td>
                                                                             <span class="word_break bold"><bean:write name="funding" property="conditions" /></span>
                                                                         </td>
                                                                     </tr>
@@ -244,37 +244,37 @@
                                                                 <module:display name="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement"
 																	parentModule="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification">
 																	<tr>
-																		<td align="left" width="150">
+																		<td width="150">
 																			<a title='<digi:trn jsFriendly="true">Agreement Title</digi:trn>'>
 																				<digi:trn>Agreement Title</digi:trn>
 																			</a>
 																		</td>
 																		<td width="1">:</td>
-																		<td align="left">
+																		<td>
 																			<b>${funding.title}</b>
 																		</td>
 																	</tr>
 																	<tr>
-																		<td align="left" width="150">
+																		<td width="150">
 																			<a title='<digi:trn jsFriendly="true">Agreement Code</digi:trn>'>
 																				<digi:trn>Agreement Code</digi:trn>
 																			</a>
 																		</td>
 																		<td width="1">:</td>
-																		<td align="left">
+																		<td>
 																			<b>${funding.code}</b>
 																		</td>
 																	</tr>
 																</module:display>
 																<logic:notEmpty name="funding" property="fundingClassificationDate">
 																<tr>
-																	<td align="left" width="150">
+																	<td width="150">
 																		<a title='<digi:trn jsFriendly="true">Funding Classification Date</digi:trn>'>
 																			<digi:trn>Funding Classification Date</digi:trn>
 																		</a>
 																	</td>
 																	<td width="1">:</td>
-																	<td align="left">
+																	<td>
 																			<b><bean:write name="funding" property="fundingClassificationDate"/></b>
 																	</td>
 																</tr>
@@ -283,13 +283,13 @@
 																	parentModule="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification">
 																<logic:notEmpty name="funding" property="effectiveFundingDate">
 																	<tr>
-																		<td align="left" width="150">
+																		<td width="150">
 																			<a title='<digi:trn jsFriendly="true">Effective Funding Date</digi:trn>'>
 																				<digi:trn>Effective Funding Date</digi:trn>
 																			</a>
 																		</td>
 																		<td width="1">:</td>
-																		<td align="left">
+																		<td>
 																			<b><bean:write name="funding" property="effectiveFundingDate"/></b>
 																		</td>
 																	</tr>
@@ -299,13 +299,13 @@
 																		parentModule="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification">
 																<logic:notEmpty name="funding" property="fundingClosingDate">
 																	<tr>
-																		<td align="left" width="150">
+																		<td width="150">
 																			<a title='<digi:trn jsFriendly="true">Funding Closing Date</digi:trn>'>
 																				<digi:trn>Funding Closing Date</digi:trn>
 																			</a>
 																		</td>
 																		<td width="1">:</td>
-																		<td align="left">
+																		<td>
 																			<b><bean:write name="funding" property="fundingClosingDate"/></b>
 																		</td>
 																	</tr>
@@ -545,13 +545,13 @@
                         
 	                     	<c:if test="${not empty aimEditActivityForm.funding.deliveryRate}">
                          		<tr>
-                            		<td bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB; text-transform: uppercase">
+                            		<td class="preview-align preview-funding-total">
                                 		<digi:trn>Delivery Rate</digi:trn>:
                                 	</td>
-                            		<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB; font-weight: bold">
+                            		<td nowrap="nowrap" class="preview-align preview-funding-total bold">
                             			${aimEditActivityForm.funding.deliveryRate}&nbsp;
                             		</td>
-                            		<td bgcolor="#eeeeee">&nbsp;</td>
+                            		<td class="preview-funding-total">&nbsp;</td>
                         		</tr>
 							</c:if>
                         </table>

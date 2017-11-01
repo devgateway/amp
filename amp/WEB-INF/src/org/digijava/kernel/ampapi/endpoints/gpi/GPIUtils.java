@@ -4,17 +4,28 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import org.apache.log4j.Logger;
+import org.dgfoundation.amp.gpi.reports.GPIReportConstants;
 import java.util.Map;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
+import org.dgfoundation.amp.gpi.reports.GPIReportConstants;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpGPINiAidOnBudget;
 import org.digijava.module.aim.dbentity.AmpGPINiDonorNotes;
 import org.hibernate.Session;
@@ -25,7 +36,10 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
+import org.digijava.module.common.util.DateTimeUtil;
+
 
 public class GPIUtils {
     private static Logger logger = Logger.getLogger(GPIUtils.class);
@@ -163,7 +177,51 @@ public class GPIUtils {
         return query.list();
     }   
 
-    public static Set<Long> getVerifiedOrgsList(){
+    public static List<AmpGPINiDonorNotes> getNotesByCode(String code) {
+        Session dbSession = PersistenceManager.getSession();
+        String queryString = "SELECT donorNotes FROM " + AmpGPINiDonorNotes.class.getName() + " donorNotes "
+                + "WHERE indicatorCode = :indicatorCode ";
+        Query query = dbSession.createQuery(queryString);
+        query.setString("indicatorCode", code);
+        return query.list();
+    }
+    
+    /**
+     * Filter a donorNotes by donor-type, donorId, from and to dates
+     * 
+     * @param donorNotes
+     * @param donorIds
+     * @param donorType
+     * @param from
+     * @param to
+     * @return
+     */
+    public static List<AmpGPINiDonorNotes> filterNotes(List<AmpGPINiDonorNotes> donorNotes, List<Long> donorIds,
+            String donorType, Long from, Long to) {
+
+        List<AmpGPINiDonorNotes> filteredNotes = new ArrayList<>();
+
+        Predicate<AmpGPINiDonorNotes> fromDatePredicate = note -> from == null || from == 0 ? true
+                : DateTimeUtil.toJulianDayNumber(note.getNotesDate()) >= from;
+
+        Predicate<AmpGPINiDonorNotes> toDatePredicate = note -> to == null || to == 0 ? true
+                : DateTimeUtil.toJulianDayNumber(note.getNotesDate()) <= to;
+
+        Predicate<AmpGPINiDonorNotes> donorPredicate = note -> donorIds == null || donorIds.isEmpty()
+                || (donorIds.size() == 1 && donorIds.get(0) == null)
+                        ? true
+                        : donorType == null || GPIReportConstants.HIERARCHY_DONOR_AGENCY.equals(donorType)
+                                ? donorIds.contains(note.getDonor().getAmpOrgId())
+                                : GPIReportConstants.HIERARCHY_DONOR_GROUP.equals(donorType)
+                                        ? donorIds.contains(note.getDonor().getOrgGrpId().getAmpOrgGrpId()) : false;
+
+        filteredNotes = donorNotes.stream().filter(fromDatePredicate).filter(toDatePredicate).filter(donorPredicate)
+                .sorted((n1, n2) -> n2.getNotesDate().compareTo(n1.getNotesDate())).collect(Collectors.toList());
+
+        return filteredNotes;
+    }
+
+    public static Set<Long> getVerifiedOrgsList() {
         TeamMember tm = TeamUtil.getCurrentMember();
         AmpTeamMember atm = TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
         Set<Long> orgs = new HashSet<>();
@@ -229,5 +287,17 @@ public class GPIUtils {
             }
         });
         return donors;
+    }
+    
+    public static Date getYearStartDate(AmpFiscalCalendar calendar, int year) {
+        int month = Calendar.JANUARY;
+        int day = GPIEPConstants.GREGORIAN_YEAR_START_DAY;
+        return new GregorianCalendar(year, month, day).getTime();
+    }
+
+    public static Date getYearEndDate(AmpFiscalCalendar calendar, int year) {
+        int month = Calendar.JANUARY;
+        int day = GPIEPConstants.GREGORIAN_YEAR_START_DAY;
+        return new GregorianCalendar(year + 1, month, day).getTime();
     }
 }

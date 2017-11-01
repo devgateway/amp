@@ -40,8 +40,7 @@
 		</logic:iterate>
 	</c:if>
 	<tr>
-		<td colspan="2" bgcolor="#eeeeee"
-			style="border-top: 1px solid #000000; text-transform: uppercase;">
+		<td colspan="2" class="preview-funding-total">
             	<a
 			title='<digi:trn jsFriendly="true" key="aim:FundRelease"> Release of funds to,
 			or the purchase of goods or services for a recipient; by
@@ -50,14 +49,12 @@
 			services valued at the cost to the donor</digi:trn>'>
 	  <digi:trn>Subtotal Actual Disbursment Orders</digi:trn> </a>
 	</td>
-	  <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
-			style="border-top: 1px solid #000000; text-transform: uppercase;">
+	  <td nowrap="nowrap" class="preview-align preview-funding-total">
 			<c:if test="${not empty funding.subtotalActualDisbursementsOrders}">
            			${funding.subtotalActualDisbursementsOrders} ${aimEditActivityForm.currCode}
             </c:if> &nbsp;
            </td>
-	  <TD align="right" bgcolor="#eeeeee"
-			style="border-top: 1px solid #000000; text-transform: uppercase;">&nbsp;</TD>
+	  <TD align="right" class="preview-funding-total">&nbsp;</TD>
   </tr>
 
 

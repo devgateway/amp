@@ -87,6 +87,7 @@ div.trnpanel div.trn-row ul {
 
 .tri {
     -webkit-transform:scale(-1,1);
+    display: table-cell;
 }
 
 .tri b {
@@ -98,7 +99,7 @@ div.trnpanel div.trn-row ul {
 
 .triText {
     text-align: right;
-    display: table-cell;
+    display: block;
     -webkit-transform:scale(-1,1);
     width: inherit;
 }
@@ -138,11 +139,69 @@ div.trnpanel div.trn-row ul {
     text-align: right;
 }
 
-.preview-buttons-align {
-    float: left !important;
-}
-
-.content-dir {
+.content-direction {
     direction: rtl;
 }
 
+.legends-container {
+    float: left;
+}
+
+.ui-tabs .ui-tabs-nav li {
+    float: right;
+}
+
+.ui-pg-table {
+    direction: rtl;
+}
+
+.ui-paging-info {
+    direction: rtl !important;
+    text-align: left !important;
+}
+
+.search_results_header {
+    float: right;
+}
+
+.search-results {
+    padding-top: 10px;
+}
+
+.tri-desktop {
+    background: url(/TEMPLATE/ampTemplate/img_2/ico_tri.gif) no-repeat 4px 1px !important;
+}
+
+.ui-widget-content {
+    direction: rtl;
+}
+
+.ui-dialog .ui-dialog-title {
+    float: right;
+}
+
+.ui-dialog-titlebar-close {
+    right: unset !important;
+    left: .3em;
+}
+
+.nav > li.tab {
+    float: right;
+}
+
+.round-filter, .round-filter-group, .round-filter-group {
+    float: right !important;
+}
+
+.ui-accordion-header-icon {
+    left: unset !important;
+    right:.5em !important;
+}
+
+.ui-accordion-icons {
+    padding-right: 2.2em !important;
+}
+
+.preview-buttons-align {
+    float: left !important;
+}

@@ -719,3 +719,23 @@ th {
     margin-right: 19px;
     float: right;
 }
+
+.leaflet-control {
+    margin-left: 10px;
+    float: left;
+}
+
+.leaflet-right {
+    margin-left: 10px;
+    float: left;
+    left: 0;
+    right: auto;
+}
+
+.leaflet-popup-content-wrapper {
+    text-align: right !important;
+}
+
+.panel-body, .panel-footer {
+    text-align: right !important;
+}

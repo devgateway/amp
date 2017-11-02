@@ -682,3 +682,12 @@ a.last_page {
 .navbar-brand {
     float: right;
 }
+
+.datasources {
+    left: 270px;
+    right: auto;
+}
+
+th {
+    text-align: right !important;
+}

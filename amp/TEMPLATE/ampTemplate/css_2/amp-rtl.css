@@ -638,3 +638,20 @@ a.last_page {
 .filter-item-label {
     padding: 0px 5px 0px 0px !important;
 }
+
+#gis-plugin {
+    direction: rtl;
+}
+
+.radio label {
+    padding-right: 20px;
+}
+
+.glyphicon-chevron-left:before {
+    content: "\e080";
+}
+
+.glyphicon-chevron-right:before {
+    content: "\e079";
+}
+

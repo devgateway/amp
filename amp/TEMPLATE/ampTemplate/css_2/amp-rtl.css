@@ -670,3 +670,15 @@ a.last_page {
     right: 300px;
     left: 0;
 }
+
+.navbar-nav.navbar-right:last-child {
+    margin-left: -15px;
+}
+
+.navbar-right {
+    float: left !important;
+}
+
+.navbar-brand {
+    float: right;
+}

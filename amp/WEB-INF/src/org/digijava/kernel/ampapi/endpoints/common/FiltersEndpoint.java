@@ -25,8 +25,6 @@ import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.digijava.kernel.ampapi.endpoints.dto.SimpleJsonBean;
 import org.digijava.kernel.ampapi.endpoints.filters.FilterList;
-import org.digijava.kernel.ampapi.endpoints.filters.FilterTreeDefinition;
-import org.digijava.kernel.ampapi.endpoints.filters.FilterTreeNode;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersBuilder;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersManager;
@@ -431,18 +429,17 @@ public class FiltersEndpoint {
         return orderByName(orgs);
     }
     
+    /**
+     * List the organization filter types and the organization tree
+     * 
+     * @return tree definitions (filter types) and the tree structure of the organizations
+     */
     @GET
     @Path("/organizations")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, id = "Orgs", name = "Orgs", tab = EPConstants.TAB_ORGANIZATIONS)
     public FilterList getOrganizations() {
-        
-        FiltersManager filtersManager = FiltersManager.getInstance();
-        
-        List<FilterTreeDefinition> orgTreeDefinitions = filtersManager.getOrgTreeDefinitions();
-        List<FilterTreeNode> orgTreeItems = filtersManager.getOrgTreeItems();
-        
-        return new FilterList(orgTreeDefinitions, orgTreeItems);
+        return FiltersManager.getInstance().getOrganizationFilterList();
     }
 
 

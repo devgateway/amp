@@ -638,3 +638,104 @@ a.last_page {
 .filter-item-label {
     padding: 0px 5px 0px 0px !important;
 }
+
+#gis-plugin {
+    direction: rtl;
+}
+
+.radio label {
+    padding-right: 20px;
+}
+
+.glyphicon-chevron-left:before {
+    content: "\e080";
+}
+
+.glyphicon-chevron-right:before {
+    content: "\e079";
+}
+
+
+#sidebar .sidebar-icons-only-button {
+    text-align: left;
+    padding-left: 11px;
+}
+
+#sidebar {
+    right: 0;
+    left: auto;
+}
+
+#map-container #map-header {
+    right: 300px;
+    left: 0;
+}
+
+.navbar-nav.navbar-right:last-child {
+    margin-left: -15px;
+}
+
+.navbar-right {
+    float: left !important;
+}
+
+.navbar-brand {
+    float: right;
+}
+
+.datasources {
+    left: 270px;
+    right: auto;
+}
+
+th {
+    text-align: right !important;
+}
+
+.dropdown-menu {
+    right: auto !important;
+    left: 0 !important;
+}
+
+.legend {
+    left: 5px;
+    right: auto;
+}
+
+.legend-sample.map-adm-icon {
+    float: right;
+}
+
+.legend-item-label {
+    float: right;
+}
+
+.map-circle {
+    margin-right: 19px;
+}
+
+.color-block-indicator-join {
+    margin-left: 5px;
+    margin-right: 19px;
+    float: right;
+}
+
+.leaflet-control {
+    margin-left: 10px;
+    float: left;
+}
+
+.leaflet-right {
+    margin-left: 10px;
+    float: left;
+    left: 0;
+    right: auto;
+}
+
+.leaflet-popup-content-wrapper {
+    text-align: right !important;
+}
+
+.panel-body, .panel-footer {
+    text-align: right !important;
+}

@@ -638,3 +638,7 @@ a.last_page {
 .filter-item-label {
     padding: 0px 5px 0px 0px !important;
 }
+
+.applied-filters li:before {
+    margin: 3px -22px 0 5px;
+}

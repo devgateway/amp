@@ -4,9 +4,11 @@
  */
 package org.dgfoundation.amp.onepager.components.features.items;
 
+import java.util.Map;
 import java.util.TreeSet;
 
 
+import com.google.common.collect.ImmutableMap;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -61,6 +63,17 @@ import org.digijava.module.aim.util.FeaturesUtil;
  */
 public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
     private static final long serialVersionUID = 1L;
+
+    public static final Map<Integer, String> FM_NAME_BY_TRANSACTION_TYPE = new ImmutableMap.Builder<Integer, String>()
+            .put(Constants.COMMITMENT, "Commitments")
+            .put(Constants.DISBURSEMENT, "Disbursements")
+            .put(Constants.ARREARS, "Arrears")
+            .put(Constants.DISBURSEMENT_ORDER, "Disbursement Orders")
+            .put(Constants.ESTIMATED_DONOR_DISBURSEMENT, "Estimated Disbursements")
+            .put(Constants.RELEASE_OF_FUNDS, "Release of Funds")
+            .put(Constants.EXPENDITURE, "Expenditures")
+            .put(Constants.MTEFPROJECTION, "MTEF Projections")
+            .build();
 
     private AmpDonorFundingInfoSubsectionFeature fundingInfo;
     private AmpDonorDisbursementsSubsectionFeature disbursements;
@@ -275,40 +288,40 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
         wmc.add(fundingInfo);
         
         AmpMTEFProjectionSubsectionFeature mtefProjections = new AmpMTEFProjectionSubsectionFeature(
-                "mtefProjectionsSubsection", fundingModel,"MTEF Projections");
+                "mtefProjectionsSubsection", fundingModel);
         wmc.add(mtefProjections);
         
         AmpDonorCommitmentsSubsectionFeature commitments = new AmpDonorCommitmentsSubsectionFeature(
-                "commitments", fundingModel,"Commitments",Constants.COMMITMENT);
+                "commitments", fundingModel, Constants.COMMITMENT);
         wmc.add(commitments);
         
         
         disbursements = new AmpDonorDisbursementsSubsectionFeature(
-                "disbursements", fundingModel,"Disbursements",Constants.DISBURSEMENT);
+                "disbursements", fundingModel, Constants.DISBURSEMENT);
         wmc.add(disbursements);
 
         AmpDonorArrearsSubsectionFeature arrears = new AmpDonorArrearsSubsectionFeature(
-                "arrears", fundingModel,"Arrears",Constants.ARREARS);
+                "arrears", fundingModel, Constants.ARREARS);
         wmc.add(arrears);
         
         
         
         AmpDonorDisbOrdersSubsectionFeature disbOrders = new AmpDonorDisbOrdersSubsectionFeature(
-                "disbOrders", fundingModel,"Disbursement Orders",Constants.DISBURSEMENT_ORDER);
+                "disbOrders", fundingModel, Constants.DISBURSEMENT_ORDER);
         disbOrders.setDisbursements(disbursements);
         wmc.add(disbOrders);
         
         AmpEstimatedDonorDisbursementsSubsectionFeature edd = new AmpEstimatedDonorDisbursementsSubsectionFeature(
-                    "estimatedDisbursements", fundingModel,"Estimated Disbursements",Constants.ESTIMATED_DONOR_DISBURSEMENT);
+                    "estimatedDisbursements", fundingModel, Constants.ESTIMATED_DONOR_DISBURSEMENT);
             wmc.add(edd);
         
         AmpReleaseOfFundsSubsectionFeature rof = new AmpReleaseOfFundsSubsectionFeature(
-                    "releaseOfFunds", fundingModel,"Release of Funds",Constants.RELEASE_OF_FUNDS);
+                    "releaseOfFunds", fundingModel, Constants.RELEASE_OF_FUNDS);
             wmc.add(rof);
         
             
         AmpDonorExpendituresSubsectionFeature expenditures = new AmpDonorExpendituresSubsectionFeature(
-                "expenditures", fundingModel,"Expenditures",Constants.EXPENDITURE);
+                "expenditures", fundingModel, Constants.EXPENDITURE);
         wmc.add(expenditures);
 
         

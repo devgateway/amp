@@ -21,6 +21,10 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 		return '/rest/data/report/' + id + '/result/jqGrid';
 	}
 
+	function getPreviewPageURL(id) {
+		return '/aim/viewActivityPreview.do~activityId=' + id;
+	}
+
 	GridManager.prototype = {
 		constructor : GridManager
 	};
@@ -337,8 +341,8 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 										colIndex = i;
 									}
 								});
-								var newContent = "<span style='cursor: pointer;' onclick = \x22openPreviewPage(" + id + ")\x22>"
-										+ jQuery(row.cells[colIndex]).html() + "</span>";
+                                var newContent = "<a class='preview-cell' href='" + getPreviewPageURL(id) + "'>"
+									+ jQuery(row.cells[colIndex]).html() + "</a>";
 								jQuery(row.cells[colIndex]).html(newContent);
 							}
 							

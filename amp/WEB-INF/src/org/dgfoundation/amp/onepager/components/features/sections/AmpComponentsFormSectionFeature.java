@@ -73,8 +73,6 @@ public class AmpComponentsFormSectionFeature extends
                 }
 
                 comp.setType(defaultType);
-                comp.setActivities(new HashSet());
-                comp.getActivities().add(am.getObject());
                 target.add(this.getParent());
                 target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(this.getParent()));
             }

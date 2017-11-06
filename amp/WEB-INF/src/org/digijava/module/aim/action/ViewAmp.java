@@ -72,6 +72,8 @@ public class ViewAmp
         
         Collection members = TeamMemberUtil.getTeamMembers(user.getEmail());
         session.setAttribute(Constants.USER_WORKSPACES, members);
+
+        session.setAttribute(Constants.CURRENT_USER, user);
         
         if (tm != null && tm.getTeamId() != null &&
             tm.getTeamId().longValue() > 0) {
@@ -93,7 +95,6 @@ public class ViewAmp
         // No menber info means that we could not set it automatically
         LoginForm lForm = (LoginForm) form; // login form instance
        
-        session.setAttribute("currentUser", user);
         lForm.setMembers(members);
 
         Collection<AmpCategoryValue> workspaceGroups = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.WORKSPACE_GROUP_KEY);

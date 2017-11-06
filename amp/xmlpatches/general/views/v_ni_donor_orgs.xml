@@ -23,19 +23,20 @@
 		  - containing amp_funding_details with an adjustment_type::category_class:key of "SSC_adjustment_type"   
 		   -->
 			<lang delimiter=";" type="postgres"><![CDATA[
-				DROP VIEW IF EXISTS v_ni_donor_orgs CASCADE;
 				CREATE OR REPLACE VIEW v_ni_donor_orgs AS
-				  SELECT f.amp_activity_id, org.name AS org_name, f.amp_donor_org_id AS org_id,
+				  SELECT r.activity as amp_activity_id, org.name AS org_name, r.organisation as org_id,
 					f.type_of_assistance_category_va as terms_assist_id,
 					f.financing_instr_category_value as financing_instrument_id,
-					f.amp_donor_org_id as donor_org_id,
+					r.organisation as donor_org_id,
 					f.mode_of_payment_category_va as mode_of_payment_id,
 					f.funding_status_category_va as funding_status_id,
 					f.agreement as agreement_id,
 					f.amp_funding_id as funding_id
-				  FROM amp_funding f JOIN amp_organisation org ON org.amp_org_id = f.amp_donor_org_id
+				  FROM amp_org_role r
+					JOIN amp_organisation org ON org.amp_org_id = r.organisation
+					LEFT JOIN amp_funding f ON f.amp_activity_id = r.activity and f.amp_donor_org_id = r.organisation and f.source_role_id=r.role
 				  WHERE
-					(f.source_role_id = (SELECT amp_role.amp_role_id FROM amp_role WHERE amp_role.role_code = 'DN'))
+					(r.role = (SELECT amp_role.amp_role_id FROM amp_role WHERE amp_role.role_code = 'DN'))
 					OR
 					(f.amp_funding_id IN (
 					  SELECT DISTINCT(amp_funding_id) FROM amp_funding_detail det	WHERE det.adjustment_type IN (SELECT id from amp_category_value

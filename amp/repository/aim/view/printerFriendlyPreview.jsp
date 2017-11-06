@@ -3359,12 +3359,20 @@ body {background:none;}
 																	<td width=85%>
 																		<c:set var="questionText"
 																			   value="${gpiresponse.ampQuestionId.questionText}"/>
+																		<c:set var="ampTypeName"
+																			   value="${gpiresponse.ampQuestionId.ampTypeId.name}"/>
 																		<span class="word_break bold">${questionText}</span>
 																		<c:set var="responseText"
 																			   value="${gpiresponse.response}"/>
 																		<lu>
 																			<li>
-																				<span class="word_break bold">${responseText}</span>
+																				<c:if test='${"yes-no".equals(ampTypeName) &&
+																						!"".equals(responseText) && responseText != null}'>
+																					<span class="word_break bold"><digi:trn>${responseText}</digi:trn></span>
+																				</c:if>
+																				<c:if test='${!"yes-no".equals(ampTypeName)}'>
+																					<span class="word_break bold">${responseText}</span>
+																				</c:if>
 																			</li>
 																		</lu>
 																	</td>
@@ -3406,7 +3414,7 @@ body {background:none;}
 											</logic:notEmpty>
 										</field:display>
 
-										<field:display name="Activity Last Updated by" feature="Identification">
+										<module:display name="/Activity Form/Identification/Activity Last Updated by" parentModule="/Activity Form/Identification">
 											<logic:notEmpty name="aimEditActivityForm" property="identification.modifiedBy">
 												<tr>
 													<td class="field_name" >
@@ -3420,9 +3428,9 @@ body {background:none;}
 													</td>
 												</tr>
 											</logic:notEmpty>
-										</field:display>
+										</module:display>
 
-										<field:display name="Activity Updated On" feature="Identification">
+										<module:display name="/Activity Form/Identification/Activity Updated On" parentModule="/Activity Form/Identification">
 											<logic:notEmpty name="aimEditActivityForm" property="identification.updatedDate">
 												<tr>
 													<td class="field_name" >
@@ -3435,7 +3443,7 @@ body {background:none;}
 													</td>
 												</tr>
 											</logic:notEmpty>
-										</field:display>
+										</module:display>
 									<tr>
 										<td class="field_name" >
 											<b>

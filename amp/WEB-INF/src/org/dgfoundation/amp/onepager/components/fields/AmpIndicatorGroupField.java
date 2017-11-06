@@ -7,6 +7,8 @@ package org.dgfoundation.amp.onepager.components.fields;
 import java.util.Date;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.util.convert.IConverter;
+import org.dgfoundation.amp.onepager.converters.CustomDoubleConverter;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 
@@ -35,8 +37,15 @@ public class AmpIndicatorGroupField extends AmpFieldPanel<AmpIndicatorValue>{
     
     public AmpIndicatorGroupField(String id, IModel<AmpIndicatorValue> model, String fmName, String fieldPrefix) {
         super(id, model, fmName, true);
-        
-        value = new AmpTextFieldPanel<Double>("value", new PropertyModel<Double>(model, "value"), fieldPrefix + " Value");
+
+        value = new AmpTextFieldPanel<Double>("value", new PropertyModel<Double>(model, "value"), fieldPrefix + " "
+                + "Value") {
+
+
+            public IConverter getInternalConverter(java.lang.Class<?> type) {
+                return CustomDoubleConverter.INSTANCE;
+            }
+        };
         value.getTextContainer().setRequired(true);
         add(value);
         
@@ -53,7 +62,13 @@ public class AmpIndicatorGroupField extends AmpFieldPanel<AmpIndicatorValue>{
         super(id, fmName, true);
         this.fmType = AmpFMTypes.MODULE;
         
-        value = new AmpTextFieldPanel<Double>("value", val, fieldPrefix + " Value", false, false);
+        value = new AmpTextFieldPanel<Double>("value", val, fieldPrefix + " Value", false, false) {
+
+
+            public IConverter getInternalConverter(java.lang.Class<?> type) {
+                return CustomDoubleConverter.INSTANCE;
+            }
+        };
         value.getTextContainer().setRequired(isRequired);
         value.getTextContainer().setType(Double.class);
         add(value);

@@ -224,6 +224,20 @@ public class FiltersEndpoint {
         }
         return sector;
     }
+    
+    /**
+     * List the sector schemas and the sector tree
+     * 
+     * @return tree definitions (filter types) and the tree structure of the organizations
+     */
+    @GET
+    @Path("/sectorlist")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = true, id = "SectorList", name = "SectorList", tab = EPConstants.TAB_SECTORS)
+    public FilterList getSectorList() {
+        return FiltersManager.getInstance().getSectorFilterList();
+    }
+    
     /**
      * Return the year range configure for GIS
      * @return

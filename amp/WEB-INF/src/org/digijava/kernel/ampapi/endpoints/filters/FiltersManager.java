@@ -32,4 +32,8 @@ public final class FiltersManager {
         return OrganizationFilterListManager.getInstance().getFilterList();
     }
 
+    public FilterList getSectorFilterList() {
+        return SectorFilterListManager.getInstance().getFilterList();
+    }
+
 }

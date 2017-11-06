@@ -227,30 +227,6 @@ export default class Report6 extends Component {
         }
     }
 
-    showSelectedDates() {
-        var displayDates = '';
-        if(this.filter){
-            var filters = this.filter.serialize().filters;            
-            if ( filters.date ) {
-                filters.date.start = filters.date.start || '';
-                filters.date.end = filters.date.end || '';
-                var startDatePrefix = ( filters.date.start.length > 0 && filters.date.end.length === 0 ) ? this.props.translations['amp.gpi-reports:from'] : '';
-                var endDatePrefix = ( filters.date.start.length === 0 && filters.date.end.length > 0 ) ? this.props.translations['amp.gpi-reports:until'] : '';
-                if ( filters.date.start.length > 0 ) {
-                    displayDates = startDatePrefix + " " + this.filter.formatDate( filters.date.start );
-                }
-
-                if ( filters.date.end.length > 0 ) {
-                    if ( filters.date.start.length > 0 ) {
-                        displayDates += " - ";
-                    }
-                    displayDates += endDatePrefix + " " + this.filter.formatDate( filters.date.end );
-                }
-            } 
-        }
-        return displayDates;
-    }
-
     displayPagingInfo() {
         var transParams = {};
         transParams.fromRecord = ( ( this.props.mainReport.page.currentPageNumber - 1 ) * this.props.mainReport.page.recordsPerPage ) + 1;

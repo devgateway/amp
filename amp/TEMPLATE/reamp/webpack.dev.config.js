@@ -36,7 +36,12 @@ module.exports = {
           'webpack-dev-server/client?http://localhost:3000',
           'webpack/hot/only-dev-server',
           './modules/admin/performance-alert-manager/script.es6'
-      ]
+      ],
+      "ampoffline/download/script": [
+          'webpack-dev-server/client?http://localhost:3000',
+          'webpack/hot/only-dev-server',
+          './modules/ampoffline/download/script.es6'
+       ]
     //"filters/script": [
     //  'webpack-dev-server/client?http://localhost:3000',
     //  'webpack/hot/only-dev-server',

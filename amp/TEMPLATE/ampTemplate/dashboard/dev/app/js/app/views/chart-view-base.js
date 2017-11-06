@@ -5,6 +5,7 @@ var BackboneDash = require('../backbone-dash');
 var getChart = require('../charts/chart');
 var util = require('../../ugly/util');
 var DownloadView = require('./download');
+var ProjectsListModalView = require('./chart-detail-info-modal');
 var template = _.template(fs.readFileSync(
   __dirname + '/../templates/chart.html', 'UTF-8'));
 
@@ -217,9 +218,46 @@ module.exports = BackboneDash.View.extend({
         
     this.showChartPromise.resolve();
   },
-  
+
+    getCellContext: function (e, data) {
+
+        var t = e.target,
+            x = t.getAttribute('xid'),
+            y = t.getAttribute('yid'),
+            labelx = data.x[data.xid.indexOf(parseInt(t.getAttribute('xid'), 10))],
+            labely = data.y[data.yid.indexOf(parseInt(t.getAttribute('yid'), 10))];
+
+        if (x == undefined || y == undefined) {
+            return null;
+        }
+        return {
+            data: data,
+            series: {},
+            x: {
+                raw: labelx,
+                fmt: labelx,
+                index: x
+            },
+            y: {
+                raw: labely,
+                fmt: labely,
+                index: y
+            }
+        };
+    },
+
   handleHeatmapClicks: function() {
 	  var self = this;
+	  var cell = this.$(".heatmap-cell");
+      if (cell) {
+          $(cell).on('click', function(e) {
+              var context = self.getCellContext(e, self.model.values);
+              if (context) {
+                  self.modalView = new ProjectsListModalView({app: app, context: context, model: self.model});
+                  self.openInfoWindow((context.x.fmt || context.x.raw) + ' - ' + (context.y.fmt || context.y.raw));
+              }
+          });
+      }
 	  var others = this.$(".legend-others");
 	  if (others) {
 		  $(others).on('click', function(evt) {
@@ -440,6 +478,16 @@ module.exports = BackboneDash.View.extend({
 		  }else if(this.app.generalSettings.numberDivider === 1000000000) {
 			  this.app.generalSettings.numberDividerDescription = 'amp.dashboard:chart-tops-inbillions';
 		  }
-	  }
+	  },
+
+    openInfoWindow: function(title) {
+        var specialClass = 'dash-settings-modal';
+        this.app.modal(title, {
+            specialClass: specialClass,
+            bodyEl: this.modalView.render().el
+        });
+        // Translate modal popup.
+        app.translator.translateDOM($("." + specialClass));
+    }
 
 });

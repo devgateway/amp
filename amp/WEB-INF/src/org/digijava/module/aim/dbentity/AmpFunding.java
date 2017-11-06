@@ -25,7 +25,6 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 public class AmpFunding implements Serializable, Versionable, Cloneable {
     //IATI-check: not ignored!
     private static final long serialVersionUID = 1L;
-    @Interchangeable(fieldTitle="AMP Funding ID")
     private Long ampFundingId;
     @Interchangeable(fieldTitle="Donor Organization ID", pickIdOnly=true, importable=true)
     private AmpOrganisation ampDonorOrgId;

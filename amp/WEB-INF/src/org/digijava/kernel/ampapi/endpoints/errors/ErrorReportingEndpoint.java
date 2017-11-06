@@ -24,7 +24,7 @@ public interface ErrorReportingEndpoint {
     @GET
     @Path("errors")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(authTypes = AuthRule.NONE, id = "errors", ui = false)
+    @ApiMethod(id = "errors", ui = false)
     default JsonBean getErrors() {
         JsonBean jsonBean = ApiError.toError(errorCollector.collect(getErrorsClass()));
         EndpointUtils.setResponseStatusMarker(HttpServletResponse.SC_OK);

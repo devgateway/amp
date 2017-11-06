@@ -22,7 +22,6 @@
 
 package org.digijava.kernel.persistence;
 
-import java.io.Closeable;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -32,6 +31,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -41,7 +42,6 @@ import org.digijava.kernel.config.HibernateClass;
 import org.digijava.kernel.config.HibernateClasses;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
-import org.digijava.kernel.startup.HibernateSessionRequestFilter;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.kernel.util.DigiConfigManager;
@@ -56,6 +56,8 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.engine.spi.SessionImplementor;
+import org.hibernate.jdbc.ReturningWork;
+import org.hibernate.jdbc.Work;
 import org.hibernate.mapping.PersistentClass;
 import org.hibernate.metadata.ClassMetadata;
 
@@ -74,7 +76,7 @@ public class PersistenceManager {
      */
     public static final long MAX_HIBERNATE_SESSION_LIFE_MILLIS=60*60*1000;
 
-    public static HashMap<Session,Object[]> sessionStackTraceMap= new HashMap<Session,Object[]>();
+    private static final HashMap<Session,Object[]> sessionStackTraceMap = new HashMap<>();
 
     /**
      * Invoked at the end of each request. Iterates and removes Hibernate closed sessions from the trace map.
@@ -136,7 +138,7 @@ public class PersistenceManager {
      * Removes only the closed sessions from the map that tracks opened sessions.
      * No other check is being done.
      */
-    public static void removeClosedSessionsFromMap() {
+    private static void removeClosedSessionsFromMap() {
         int count   = 0;
         synchronized (sessionStackTraceMap) {
             Iterator<Entry<Session, Object[]>> iterator = PersistenceManager.sessionStackTraceMap.entrySet().iterator();
@@ -515,17 +517,11 @@ public class PersistenceManager {
      *
      */
     public static void rollbackCurrentSessionTx() {
-        try {
-            if (sf.getCurrentSession().getTransaction().isActive()
-                    && sf.getCurrentSession().isOpen()
-                    && sf.getCurrentSession().isConnected()) {
-                logger.info("Trying to rollback database transaction after exception");
-                sf.getCurrentSession().getTransaction().rollback();
-            }
-
-        } catch (Throwable rbEx) {
-            logger.error("Could not rollback transaction after exception!",
-                    rbEx);
+        if (sf.getCurrentSession().getTransaction().isActive()
+                && sf.getCurrentSession().isOpen()
+                && sf.getCurrentSession().isConnected()) {
+            logger.info("Trying to rollback database transaction after exception");
+            sf.getCurrentSession().getTransaction().rollback();
         }
     }
 
@@ -699,25 +695,41 @@ public class PersistenceManager {
      * ONLY USE IT FOR CONNECTIONS CREATED WITH {@link #openNewSession()}
      * @param session
      */
-    public final static void closeSession(Session session) {
+    public static void closeSession(Session session) {
         if (session == null) return;
-        Transaction transaction = session.getTransaction();
-        if (transaction != null) {
-            try{if (transaction.isActive()) session.flush();}catch(Exception e){logger.error("error while flushing HSession", e);};
-            try {
-                if (transaction.isActive())
-                    transaction.commit();
-            } catch(Exception e) {
-                //System.out.println("error committing transaction");
-                //e.printStackTrace();
+        try {
+            flushAndCommit(session);
+        } catch (HibernateException e) {
+            // logging the error since finally may throw another exception and this one will be lost
+            logger.error("Failed to commit.", e);
+            throw e;
+        } finally {
+            if (session.isOpen()) {
+                session.close();
             }
         }
-        try {
-            if (session.isOpen())
-                session.close();
-        } catch(Exception e) {
-//          System.out.println("error closing the session");
-//          e.printStackTrace();
+    }
+
+    /**
+     * Flushes the session and commits the transaction. It will not close the session and allows to rollback if an
+     * exception is raised here (as opposed to {@link #closeSession(Session)} which does not allow rollback).
+     */
+    public static void flushAndCommit(Session session) {
+        Transaction transaction = session.getTransaction();
+        if (transaction != null) {
+            if (transaction.isActive()) {
+                try {
+                    // note: flushing is needed only if session uses FlushMode.MANUAL
+                    session.flush();
+                } catch (HibernateException e) {
+                    // logging the error since finally may throw another exception and this one will be lost
+                    logger.error("Failed to flush the session.", e);
+                    throw e;
+                } finally {
+                    // do we really want to attempt commit if flushing fails?
+                    transaction.commit();
+                }
+            }
         }
     }
 
@@ -727,7 +739,7 @@ public class PersistenceManager {
      * UNDER NO CIRCUMSTANCES CALL IT IN A "USER" (non-framework, non-job) ENVIRONMENT
      * @see #cleanupSession(Session)
      */
-    public final static void endSessionLifecycle() {
+    public static void endSessionLifecycle() {
         cleanupSession(getSession());
     }
 
@@ -739,22 +751,83 @@ public class PersistenceManager {
      * @see PersistenceManager#endSessionLifecycle()
      * @param session
      */
-    public final static void cleanupSession(Session session)
-    {
-        closeSession(session);
-        try{PersistenceManager.removeClosedSessionsFromMap();}catch(Exception e){};
-        try{
-            synchronized(PersistenceManager.sessionStackTraceMap)
-            {
-                if (PersistenceManager.sessionStackTraceMap.containsKey(session)) {
-                    //logger.error(String.format("Thread #%d: removing Session %d", Thread.currentThread().getId(), System.identityHashCode(session)));
-                    PersistenceManager.sessionStackTraceMap.remove(session);
-                } else {
-                    //logger.error(String.format("Thread #%d: trying to cleanup nonexisting Session %d", Thread.currentThread().getId(), System.identityHashCode(session)));
-                }
+    public static void cleanupSession(Session session) {
+        try {
+            closeSession(session);
+        } finally {
+            try {
+                removeClosedSessionsFromMap();
+            } catch (Exception e) {
+                // ignore exceptions
+            }
+            try {
+                removeSessionFromMap(session);
+            } catch (Exception e) {
+                // ignore exceptions
             }
         }
-        catch(Exception e){};
     }
 
+    private static void removeSessionFromMap(Session session) {
+        synchronized (sessionStackTraceMap) {
+            if (sessionStackTraceMap.containsKey(session)) {
+                //logger.error(String.format("Thread #%d: removing Session %d", Thread.currentThread().getId(), System.identityHashCode(session)));
+                sessionStackTraceMap.remove(session);
+            } else {
+                //logger.error(String.format("Thread #%d: trying to cleanup nonexisting Session %d", Thread.currentThread().getId(), System.identityHashCode(session)));
+            }
+        }
+    }
+
+    /**
+     * Execute Work in a new session and wrapped by a transaction.
+     * Useful for accessing db outside of http request.
+     * @param work work to be executed
+     */
+    public static void doWorkInTransaction(Work work) {
+        doInTransaction(session -> {
+            session.doWork(work);
+            return Void.class;
+        });
+    }
+
+    /**
+     * Execute ReturningWork in a new session and wrapped by a transaction.
+     * Useful for accessing db outside of http request.
+     * @param returningWork returning work to be executed
+     */
+    public static <T> T doReturningWorkInTransaction(ReturningWork<T> returningWork) {
+        return doInTransaction(session -> {
+            return session.doReturningWork(returningWork);
+        });
+    }
+
+    /**
+     * Execute a block of code in new session.
+     */
+    public static void doInTransaction(Consumer<Session> consumer) {
+        doInTransaction(s -> {
+            consumer.accept(s);
+            return Void.class;
+        });
+    }
+
+    /**
+     * Execute a function inside a transaction.
+     * @param fn takes as input hibernate session
+     * @param <R> return type
+     * @return result of the function
+     */
+    public static <R> R doInTransaction(Function<Session, R> fn) {
+        Session session = PersistenceManager.openNewSession();
+        Transaction tx = session.beginTransaction();
+        try {
+            return fn.apply(session);
+        } catch (Throwable e) {
+            tx.rollback();
+            throw e;
+        } finally {
+            PersistenceManager.closeSession(session);
+        }
+    }
 }

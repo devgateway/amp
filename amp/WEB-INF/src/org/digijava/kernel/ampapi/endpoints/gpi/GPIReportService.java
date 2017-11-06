@@ -55,7 +55,6 @@ public final class GPIReportService {
      *  "filters"       : //see filters                                             <br/>
      *  "settings"      : //see {@link EndpointUtils#applySettings}                 <br/>
      *  "hierarchy"     : "donor-agency"                                            <br/>
-     *  "summary"       : true                                                      <br/>
      * }                                                                            <br/>
      * 
      * where: <br>
@@ -67,8 +66,7 @@ public final class GPIReportService {
      *                              to get the unlimited records, that will provide all records.</dd>
      *   <dt>settings</dt>      <dd>Report settings</dd>
      *   <dt>filters</dt>       <dd>Report filters</dd>
-     *   <dt>hierarchy</dt>     <dd>The hierarchy used. Donor Agency or Donor Group</dd>
-     *   <dt>summary</dt>       <dd>Specify if its a summary report used for retrieving summary numbers</dd>
+     *   <dt>hierarchy</dt>     <dd>The hierarchy used. Donor Agency or Donor Group (donor-agency|donor-group)</dd>
      *   
      * </dl>
      * @return GPIReport result for the requested page and pagination information

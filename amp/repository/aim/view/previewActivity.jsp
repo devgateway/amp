@@ -3436,11 +3436,19 @@ function collapseAll() {
 										<td>
 											<c:set var="questionText"
 												   value="${gpiresponse.ampQuestionId.questionText}"/>
+											<c:set var="ampTypeName"
+												   value="${gpiresponse.ampQuestionId.ampTypeId.name}"/>
 											<span class="word_break bold">${questionText}</span>
 											<c:set var="responseText" value="${gpiresponse.response}"/>
 											<lu>
 												<li>
-													<span class="word_break bold">${responseText}</span>
+													<c:if test='${"yes-no".equals(ampTypeName) &&
+													!"".equals(responseText) && responseText != null}'>
+														<span class="word_break bold"><digi:trn>${responseText}</digi:trn></span>
+													</c:if>
+													<c:if test='${!"yes-no".equals(ampTypeName)}'>
+														<span class="word_break bold">${responseText}</span>
+													</c:if>
 												</li>
 											</lu>
 										</td>

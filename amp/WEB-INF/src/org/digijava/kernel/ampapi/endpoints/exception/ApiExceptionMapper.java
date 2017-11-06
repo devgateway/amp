@@ -3,6 +3,7 @@ package org.digijava.kernel.ampapi.endpoints.exception;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -32,17 +33,21 @@ public class ApiExceptionMapper implements ExceptionMapper<Exception> {
     
     @Override
     public Response toResponse(Exception e) {
+        if (e instanceof WebApplicationException) {
+            return ((WebApplicationException) e).getResponse();
+        }
+
         String mediaType = Optional.ofNullable(httpRequest.getContentType()).orElse(MediaType.APPLICATION_JSON);
-        
-        logger.error(e.getMessage(), e);
-        
+
+        logger.error("ApiExceptionMapper: ", e);
+
         if (e instanceof ApiRuntimeException) {
             ApiRuntimeException apiException = (ApiRuntimeException) e;
-            
-            return ApiErrorResponse.buildGenericError(apiException.getResponseStatus(), apiException.getError(), 
+
+            return ApiErrorResponse.buildGenericError(apiException.getResponseStatus(), apiException.getError(),
                     mediaType);
         }
-        
+
         ApiErrorMessage apiErrorMessage = getApiErrorMessageFromException(e);
        
         return ApiErrorResponse.buildGenericError(Response.Status.INTERNAL_SERVER_ERROR, apiErrorMessage, mediaType);
@@ -61,7 +66,7 @@ public class ApiExceptionMapper implements ExceptionMapper<Exception> {
     private String extractMessageFromException(Throwable e) {
         StringBuilder accumulatedMessage = new StringBuilder(e.getMessage() == null ? "" : e.getMessage());
         String message = extractMessageFromException(e, 0, accumulatedMessage);
-        message = StringUtils.isBlank(message) ? ApiErrorResponse.UNKOWN_ERROR : message;
+        message = StringUtils.isBlank(message) ? ApiErrorResponse.UNKNOWN_ERROR : message;
         
         return message;
     }

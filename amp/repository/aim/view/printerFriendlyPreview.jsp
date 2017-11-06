@@ -3406,7 +3406,7 @@ body {background:none;}
 											</logic:notEmpty>
 										</field:display>
 
-										<field:display name="Activity Last Updated by" feature="Identification">
+										<module:display name="/Activity Form/Identification/Activity Last Updated by" parentModule="/Activity Form/Identification">
 											<logic:notEmpty name="aimEditActivityForm" property="identification.modifiedBy">
 												<tr>
 													<td class="field_name" >
@@ -3420,9 +3420,9 @@ body {background:none;}
 													</td>
 												</tr>
 											</logic:notEmpty>
-										</field:display>
+										</module:display>
 
-										<field:display name="Activity Updated On" feature="Identification">
+										<module:display name="/Activity Form/Identification/Activity Updated On" parentModule="/Activity Form/Identification">
 											<logic:notEmpty name="aimEditActivityForm" property="identification.updatedDate">
 												<tr>
 													<td class="field_name" >
@@ -3435,7 +3435,7 @@ body {background:none;}
 													</td>
 												</tr>
 											</logic:notEmpty>
-										</field:display>
+										</module:display>
 									<tr>
 										<td class="field_name" >
 											<b>

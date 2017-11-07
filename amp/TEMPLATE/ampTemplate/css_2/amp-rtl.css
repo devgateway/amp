@@ -655,7 +655,6 @@ a.last_page {
     content: "\e079";
 }
 
-
 #sidebar .sidebar-icons-only-button {
     text-align: left;
     padding-left: 11px;
@@ -738,6 +737,6 @@ th {
     text-align: right !important;
 }
 
-.panel-body, .panel-footer {
+.panel-body, .panel-footer, .panel-heading {
     text-align: right !important;
 }

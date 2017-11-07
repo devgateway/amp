@@ -708,6 +708,7 @@ th {
 
 .legend-item-label {
     float: right;
+    position: relative;
 }
 
 .map-circle {
@@ -716,8 +717,9 @@ th {
 
 .color-block-indicator-join {
     margin-left: 5px;
-    margin-right: 19px;
+    margin-right: 5px;
     float: right;
+    position: relative;
 }
 
 .leaflet-control {

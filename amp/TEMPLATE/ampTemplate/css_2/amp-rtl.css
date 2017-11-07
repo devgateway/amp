@@ -740,3 +740,7 @@ th {
 .panel-body, .panel-footer, .panel-heading {
     text-align: right !important;
 }
+
+.gis-tool .glyphicon {
+    display: initial;
+}

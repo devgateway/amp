@@ -752,3 +752,9 @@ th {
 .legend-admcluster {
     text-align: right;
 }
+
+#map-container.sidebar-icons-only #map-header {
+    left: 0px;
+    right: 80px;
+    width: auto;
+}

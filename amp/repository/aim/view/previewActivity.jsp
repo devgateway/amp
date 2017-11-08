@@ -3428,7 +3428,7 @@ function collapseAll() {
 											<td bgcolor="#eeeeee" style="text-transform: uppercase;">
 												<c:set var="indicatorName"
 													   value="${gpiresponse.ampQuestionId.ampIndicatorId.name}"/>
-												<span class="word_break bold">${indicatorName}</span>
+												<span class="word_break bold"><digi:trn>${indicatorName}</digi:trn></span>
 											</td>
 										</tr>
 									</c:if>
@@ -3438,7 +3438,7 @@ function collapseAll() {
 												   value="${gpiresponse.ampQuestionId.questionText}"/>
 											<c:set var="ampTypeName"
 												   value="${gpiresponse.ampQuestionId.ampTypeId.name}"/>
-											<span class="word_break bold">${questionText}</span>
+											<span class="word_break bold"><digi:trn>${questionText}</digi:trn></span>
 											<c:set var="responseText" value="${gpiresponse.response}"/>
 											<lu>
 												<li>

@@ -744,3 +744,11 @@ th {
 .gis-tool .glyphicon {
     display: initial;
 }
+
+.legend-content h3 {
+    text-align: right;
+}
+
+.legend-admcluster {
+    text-align: right;
+}

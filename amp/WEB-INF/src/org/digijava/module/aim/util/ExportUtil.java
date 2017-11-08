@@ -31,6 +31,7 @@ public class ExportUtil {
     public static final int COMPONENT_FM_FIELD_ORGANISATION = 4;
     public static final int COMPONENT_FM_FIELD_SECOND_REPORTING = 5;
     public static final int COMPONENT_FM_FIELD_DESCRIPTION = 6;
+    public static final String GPI_TYPE_YES_NO = "yes-no";
 
     public static String buildInternalId(Set<AmpActivityInternalId> internalIds) {
         String result = "";

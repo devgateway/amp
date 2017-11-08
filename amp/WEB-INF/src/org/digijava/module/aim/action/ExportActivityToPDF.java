@@ -3592,7 +3592,13 @@ public class ExportActivityToPDF extends Action {
                         gpiTable.addCell(indicatorNameCell);
                     }
                     String responseText = (response.getResponse() != null ? response.getResponse() : "");
-                    Paragraph paragraph = new Paragraph(new Paragraph(new Phrase(postprocessText(response.getAmpQuestionId().getQuestionText()) + "  " + responseText, plainFont)));
+                    if (ExportUtil.GPI_TYPE_YES_NO.equalsIgnoreCase(response.getAmpQuestionId().getAmpTypeId()
+                            .getName())) {
+                        responseText = TranslatorWorker.translateText(responseText);
+                    }
+                    Paragraph paragraph = new Paragraph(new Paragraph(new Phrase(postprocessText(
+                            TranslatorWorker.translateText(response.getAmpQuestionId().getQuestionText()))
+                            + "  " + responseText, plainFont)));
                     PdfPCell questionCell = new PdfPCell(paragraph);
                     questionCell.setBorder(0);
                     questionCell.setBackgroundColor(new Color(255, 255, 255));

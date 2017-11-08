@@ -75,12 +75,12 @@ public class ApiErrorMessage {
      * Configures an {@link #ApiErrorMessage(Integer, String, String)} with more details
      * @param values details, see {@link #values}
      */
-    public ApiErrorMessage withDetails(List<String> values) {
+    public ApiErrorMessage withDetails(List<String> details) {
         List<String> newValues = new ArrayList<>();
         if (values != null) {
             newValues.addAll(values);
         }
-        newValues.addAll(values);
+        newValues.addAll(details);
         return new ApiErrorMessage(id, description, prefix, newValues);
     }
     

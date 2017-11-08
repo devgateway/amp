@@ -208,7 +208,7 @@ LoggerIdentifiable, Cloneable {
     //TTIL
     @Interchangeable(fieldTitle = "Locations", importable = true, fmPath = "/Activity Form/Location", required = "/Activity Form/Location/Locations/Location required validator",
                     validators = @Validators (unique = "/Activity Form/Location/Locations/uniqueLocationsValidator", treeCollection = "/Activity Form/Location/Locations/Tree Validator"))
-    @VersionableCollection(fieldTitle = "Locations")
+    @VersionableCollection(fieldTitle = ActivityFieldsConstants.LOCATIONS)
     protected Set<AmpActivityLocation> locations ;
     
     @Interchangeable(fieldTitle = ActivityFieldsConstants.ORG_ROLE, importable = true, fmPath = "/Activity Form/Organizations")

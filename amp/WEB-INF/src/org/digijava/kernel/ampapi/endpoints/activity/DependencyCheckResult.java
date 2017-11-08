@@ -10,7 +10,11 @@ public enum DependencyCheckResult {
      * Defines the state when a dependency isn't valid because the field attempting to be validated is 
      * required, but no value is supplied. Implies a shift to draft import mode in DependencyValidator.
      */
-    INVALID_REQUIRED, 
+    INVALID_REQUIRED,
+    /**
+     * The field has no value and is always required when some dependency is met, even on save as draft.
+     */
+    INVALID_ALWAYS_REQUIRED,
     /**
      * Defines the state when a dependency isn't valid because the field the import (and validation) is performed into 
      * isn't available. Example: one cannot import a location if no implementation level is selected, since in AF
@@ -32,5 +36,12 @@ public enum DependencyCheckResult {
         if (booleanValue)
             return VALID;
         else return INVALID_NOT_CONFIGURABLE;
+    }
+    
+    public static DependencyCheckResult convertToAlwaysRequired(boolean booleanValue) {
+        if (booleanValue) {
+            return VALID;
+        }
+        return INVALID_ALWAYS_REQUIRED;
     }
 }

@@ -135,7 +135,7 @@
 										</c:if>
 										<fieldset class="main_side_cont text-align">
 											<legend><span class="legend_label"><digi:trn key="rep:wizard:subtitle:selectedFilters">Selected Filters</digi:trn></span></legend>
-											<div id="listFiltersDiv" style="height:85px; overflow-y:auto; overflow-x:hidden; margin-bottom: 5px; text-align: left;" class="inputx">
+											<div id="listFiltersDiv" class="inputx wizard-filters-div">
 												<c:choose>
 													<c:when test="${myForm.useFilters!=null && myForm.useFilters}">
 														<jsp:include page="showSelectedFilters.jsp" />				

@@ -1352,3 +1352,12 @@ div.footer {
 .wizard-visible-button {
     display: block;
 }
+
+.wizard-filters-div {
+    height: 85px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin-bottom: 5px;
+    text-align: left;
+    max-width: 423px;
+}

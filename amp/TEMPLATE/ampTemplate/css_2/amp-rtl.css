@@ -739,3 +739,11 @@ th {
 .panel-body, .panel-footer {
     text-align: right !important;
 }
+
+.wizard-invisible-button {
+    display: block !important;
+}
+
+.wizard-visible-button {
+    display: none !important;
+}

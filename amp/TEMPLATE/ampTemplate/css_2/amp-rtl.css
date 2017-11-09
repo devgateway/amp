@@ -692,11 +692,6 @@ th {
     text-align: right !important;
 }
 
-.dropdown-menu {
-    right: auto !important;
-    left: 0 !important;
-}
-
 .legend {
     left: 5px;
     right: auto;
@@ -738,4 +733,10 @@ th {
 
 .panel-body, .panel-footer {
     text-align: right !important;
+}
+
+@media (min-width: 768px) {
+    .col-sm-offset-1 {
+        margin-right: 8.33333333%;
+    }
 }

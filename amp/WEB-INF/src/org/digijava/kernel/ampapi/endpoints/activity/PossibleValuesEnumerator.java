@@ -11,16 +11,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import javax.ws.rs.core.Response;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.ListMultimap;
-import com.google.common.collect.Multimap;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -33,9 +29,9 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.services.sync.model.SyncConstants.Entities;
 import org.digijava.kernel.user.User;
-import org.digijava.module.aim.annotations.interchange.InterchangeableValueProvider;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValue;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValueProvider;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpComponentType;
@@ -51,6 +47,12 @@ import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.ListMultimap;
+import com.google.common.collect.Multimap;
 
 /**
  * AMP Activity Endpoint for Possible Values -- /activity/fields/:fieldName
@@ -280,7 +282,7 @@ public class PossibleValuesEnumerator {
             //not a complex field, after all
             return getPossibleValuesForField(field);
         }
-        return setProperties(items, false);
+        return setProperties(items, false, null);
     }
     
     /**
@@ -429,7 +431,7 @@ public class PossibleValuesEnumerator {
                 return getImplementationLocationValues();
             } else {
                 List<Object[]> objColList = possibleValuesDAO.getCategoryValues(discriminatorOption);
-                return setProperties(objColList, true);
+                return setProperties(objColList, true, this::getCategoryValueExtraInfo);
             }
         } else {
             LOGGER.error("discriminatorOption is not configured for CategoryValue [" + field.getName() + "]");
@@ -455,22 +457,25 @@ public class PossibleValuesEnumerator {
         List<Long> implementationLevels = locCategory.getUsedValues().stream()
                 .map(AmpCategoryValue::getId)
                 .collect(toList());
-        ImplementationLocationExtraInfo extraInfo = new ImplementationLocationExtraInfo(implementationLevels);
+        ImplementationLocationExtraInfo extraInfo = new ImplementationLocationExtraInfo(locCategory.getIndex(),
+                implementationLevels);
 
         return new PossibleValue(id, value, translatedValues, extraInfo);
     }
 
-    private List<PossibleValue> setProperties(List<Object[]> objColList, boolean checkDeleted) {
+    private List<PossibleValue> setProperties(List<Object[]> objColList, boolean checkDeleted,
+            Function<Object[], Object> extraInfoFunc) {
         ListMultimap<Long, PossibleValue> groupedValues = ArrayListMultimap.create();
         for (Object[] item : objColList){
             Long id = ((Number)(item[0])).longValue();
             String value = ((String)(item[1]));
             boolean itemGood = !checkDeleted || Boolean.FALSE.equals((Boolean)(item[2]));
             Long parentId = (!checkDeleted && item.length > 2) ? (Long) item[2] : null;
+            Object extraInfo = extraInfoFunc != null ? extraInfoFunc.apply(item) : null;
 //          Boolean deleted = ((Boolean)(item[2]));
             if (itemGood) {
                 Map<String, String> translatedValues = translatorService.translateLabel(value);
-                PossibleValue possibleValue = new PossibleValue(id, value, translatedValues);
+                PossibleValue possibleValue = new PossibleValue(id, value, translatedValues, extraInfo);
                 groupedValues.put(parentId, possibleValue);
             }
         }
@@ -491,5 +496,10 @@ public class PossibleValuesEnumerator {
             hierarchicalValues.add(possibleValue.withChildren(children));
         }
         return hierarchicalValues;
+    }
+    
+    private Object getCategoryValueExtraInfo(Object[] item) {
+        Integer index = ((Number) (item[CategoryValueExtraInfo.EXTRA_INFO_START_INDEX])).intValue();
+        return new CategoryValueExtraInfo(index);
     }
 }

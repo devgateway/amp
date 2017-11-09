@@ -52,11 +52,13 @@
 			</td>
 			<td valign="middle" align="center">
 				<button type="button" onClick="ColumnsDragAndDropObject.selectObjs('source_col_div', 'dest_col_ul')" style="border: none;">
-					<img src="/TEMPLATE/ampTemplate/img_2/ico_arr_right.gif"/>
+					<img src="/TEMPLATE/ampTemplate/img_2/ico_arr_right.gif" class="wizard-visible-button" />
+					<img src="/TEMPLATE/ampTemplate/img_2/ico_arr_left.gif" class="wizard-invisible-button" />
 				</button>
 				<br/> <br />
 				<button type="button" onClick="ColumnsDragAndDropObject.deselectObjs('dest_col_ul')" style="border: none;">
-					<img src="/TEMPLATE/ampTemplate/img_2/ico_arr_left.gif"/>
+					<img src="/TEMPLATE/ampTemplate/img_2/ico_arr_left.gif" class="wizard-visible-button" />
+					<img src="/TEMPLATE/ampTemplate/img_2/ico_arr_right.gif" class="wizard-invisible-button" />
 				</button>
 			</td>
 			<td width="340px" align="center">

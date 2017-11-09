@@ -740,6 +740,11 @@ th {
     text-align: right !important;
 }
 
+.setting-label {
+    text-align: left !important;
+    padding: 0px 0px 0px 5px !important;
+}
+
 .wizard-invisible-button {
     display: block !important;
 }

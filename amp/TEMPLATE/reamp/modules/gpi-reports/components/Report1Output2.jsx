@@ -234,7 +234,7 @@ export default class Report1Output2 extends Component {
                       </tbody>
                       </table>                             
                     <div>                 
-                         <PagingSection output2={this.props.output2} goToPage={this.goToPage.bind(this)} updateRecordsPerPage={this.updateRecordsPerPage.bind(this)}/>
+                         <PagingSection mainReport={this.props.output2} goToPage={this.goToPage.bind(this)} updateRecordsPerPage={this.updateRecordsPerPage.bind(this)}/>
                     </div>
                 </div>
                 }

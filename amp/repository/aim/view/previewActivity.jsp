@@ -1471,7 +1471,7 @@ function collapseAll() {
 						<td width="15%" align="right" valign=top>
 							<field:display name="Regional Percentage" feature="Location">
 								<c:if test="${selectedLocs.showPercent}">
-									<b><c:out value="${selectedLocs.percent}"/>%</b>
+									<b><c:out value="${selectedLocs.percent}"/> %</b>
 								</c:if>
 							</field:display>
 						</td>
@@ -1634,9 +1634,10 @@ function collapseAll() {
 									</c:if>
 								</td>
 							<td width=15% align=right valign=top>
-								<c:if test="${sectors.sectorPercentage!='' && sectors.sectorPercentage!='0'}">
-									<span class="word_break bold">(<c:out value="${sectors.sectorPercentage}"/>)%</span>
-								</c:if>
+                                <c:if test="${sectors.sectorPercentage!='' && sectors.sectorPercentage!='0'}">
+									<span class="word_break bold">(<c:out value="${sectors.sectorPercentage}"/>)
+                                        %</span>
+                                </c:if>
 							</td>
 							</tr>
 							</table>
@@ -1653,7 +1654,7 @@ function collapseAll() {
 			<c:forEach var="compo" items="${aimEditActivityForm.components.activityComponentes}">
 			<tr>
 				<td width="100%"><span class="word_break">${compo.sectorName}</span></td>
-				<td align="right"><span class="word_break">${compo.sectorPercentage}%</span></td>
+				<td align="right"><span class="word_break">${compo.sectorPercentage} %</span></td>
 			</tr>
 			</c:forEach>
 		</table>

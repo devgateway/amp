@@ -758,3 +758,17 @@ th {
     right: 80px;
     width: auto;
 }
+
+.leaflet-popup {
+    width: max-content;
+}
+
+.leaflet-popup-content-label {
+    position: relative;
+    float: right;
+}
+
+.leaflet-popup-content-value {
+    position: relative;
+    float: right;
+}

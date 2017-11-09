@@ -633,6 +633,7 @@ a.last_page {
 
 .hierarchy-list-margin {
     margin-right: -20px;
+    margin-left: 0px !important;
 }
 
 .filter-item-label {
@@ -738,4 +739,12 @@ th {
 
 .panel-body, .panel-footer {
     text-align: right !important;
+}
+
+.grouping_selector_wrapper {
+    float: right !important;
+}
+
+.member_selector_wrapper {
+    float: right !important;
 }

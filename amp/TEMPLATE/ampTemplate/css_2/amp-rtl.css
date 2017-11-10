@@ -578,15 +578,15 @@ a.last_page {
 }
 
 .wizard-toolbar-steps {
-    float:right;
-    margin-top:10px;
+    float:right !important;
+    margin-top:10px !important;
 }
 
 .wizard-toolbar-buttons {
-    float:left;
-    z-index: 3000;
-    margin-top:10px;
-    margin-left:10px;
+    float:left !important;
+    z-index: 3000 !important;
+    margin-top:10px !important;
+    margin-left:10px !important;
 }
 
 #wizard_container div.tab {
@@ -771,4 +771,20 @@ th {
 .leaflet-popup-content-value {
     position: relative;
     float: right;
+}
+
+.wizard-invisible-button {
+    display: block !important;
+}
+
+.wizard-visible-button {
+    display: none !important;
+}
+
+.tree ul {
+    margin-left: 0px !important;
+}
+
+.parent_li {
+    margin: 0px 0px 0px 0px !important;
 }

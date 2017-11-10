@@ -748,6 +748,12 @@ th {
     display: none !important;
 }
 
+.search-panel-title {
+    padding: 10px 5px;
+    text-align: right;
+}
+
+
 .tree ul {
     margin-left: 0px !important;
 }

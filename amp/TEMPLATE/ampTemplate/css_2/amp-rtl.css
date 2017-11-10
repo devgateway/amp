@@ -735,6 +735,11 @@ th {
     text-align: right !important;
 }
 
+.setting-label {
+    text-align: left !important;
+    padding: 0px 0px 0px 5px !important;
+}
+
 .wizard-invisible-button {
     display: block !important;
 }
@@ -742,6 +747,15 @@ th {
 .wizard-visible-button {
     display: none !important;
 }
+
+.tree ul {
+    margin-left: 0px !important;
+}
+
+.parent_li {
+    margin: 0px 0px 0px 0px !important;
+}
+
 
 @media (min-width: 768px) {
     .col-sm-offset-1 {

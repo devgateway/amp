@@ -136,7 +136,7 @@
 <hr>
 	<table width="400" align="center" cellpadding="2" cellspacing="2" style="font-size:11px;">
 		<tr>
-			<td width="40%" style="text-align: right;font-size: 11px">
+			<td width="40%" class="setting-label">
 				<digi:trn>Currency</digi:trn>&nbsp;</td>
 			<td>
 				<html:select property="currency" style="width: 200px" styleClass="dropdwn_sm">
@@ -145,7 +145,7 @@
 			</td>
 		</tr>
 		<tr>
-			<td width="40%" style="text-align: right;font-size: 11px">
+			<td width="40%" class="setting-label">
 				<digi:trn>Calendar</digi:trn>&nbsp;
 			</td>
 			<td>
@@ -157,7 +157,7 @@
 		
 	<logic:notEqual name="widget" value="true" scope="request">
 		<tr>
-			<td width="40%" style="text-align: right">
+			<td width="40%" class="setting-label">
 				<digi:trn>Year Range</digi:trn> <b>*</b>
 			</td>
 			<td>

@@ -747,3 +747,11 @@ th {
 .wizard-visible-button {
     display: none !important;
 }
+
+.tree ul {
+    margin-left: 0px !important;
+}
+
+.parent_li {
+    margin: 0px 0px 0px 0px !important;
+}

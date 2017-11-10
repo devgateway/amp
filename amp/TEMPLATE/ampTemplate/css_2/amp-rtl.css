@@ -692,7 +692,12 @@ th {
     text-align: right !important;
 }
 
-.dropdown-menu {
+.ui-pnotify {
+    left: 25px !important;
+    right: 0px !important;
+} 
+
+.dropdown-menu ul {
     right: auto !important;
     left: 0 !important;
 }

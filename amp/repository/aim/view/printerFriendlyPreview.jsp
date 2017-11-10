@@ -1124,14 +1124,14 @@ body {background:none;}
 												<table width="100%" cellSpacing="2" cellPadding="1">
 												<c:forEach var="selectedLocs" items="${aimEditActivityForm.location.selectedLocs}">
 													<tr>
-													<td>
+													<td width="85%">
 														<c:forEach var="ancestorLoc" items="${selectedLocs.ancestorLocationNames}">
 														<span class="word_break bold">
 															[${ancestorLoc}]
 														</span>
 	                                                    </c:forEach>
 													</td>
-													<td class="preview-align">
+													<td width="15%">
 														<!-- <c:out value="${locations.percent}"/>% -->
 														<field:display name="Regional Percentage" feature="Location">
 														<c:if test="${selectedLocs.showPercent}">
@@ -1335,7 +1335,7 @@ body {background:none;}
                                                                         <module:display name="/Activity Form/Sectors"
                                                                                         parentModule="/Activity Form">
                                                                             <tr>
-                                                                                <td>
+                                                                                <td width="85%">
                                                                                     <c:if test="${!empty sectors.sectorName}">
                                                                                         <span class="word_break">
                                                                                             <c:out value="${sectors.sectorName}"/>
@@ -1353,6 +1353,8 @@ body {background:none;}
                                                                                                 value="${sectors.subsectorLevel2Name}"/>]
                                                                                         </span>
                                                                                     </c:if>
+																				</td>
+																				<td width="15%">
                                                                                     <c:if test="${sectors.sectorPercentage!=''}">
                                                                                         <c:if test="${sectors.sectorPercentage!='0'}">
                                                                                             (<c:out

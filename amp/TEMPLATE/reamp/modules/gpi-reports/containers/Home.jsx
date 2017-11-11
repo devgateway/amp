@@ -21,8 +21,9 @@ export default class App extends Component {
         this.outputChanged = this.outputChanged.bind(this);
     }
 
-    componentDidMount() {
+    componentWillMount() {
         this.props.actions.fetchReportVisibilityConfiguration();
+        this.props.actions.getCalendars();
     }
 
     tabChanged( event ) {

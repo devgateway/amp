@@ -1,9 +1,9 @@
 import { postJson, delay, fetchJson } from 'amp/tools';
 class CommonListsApi {    
    static getOrgList(group) {  
-         var url = group ? '/rest/filters/org-groups' : '/rest/filters/orgs';
+       var url = group ? '/rest/filters/org-groups' : '/rest/gpi/report/donors/';
          return new Promise((resolve, reject) => {
-            fetchJson(url).then((orgList) => {
+            fetchJson(url).then((orgList) => {                
                 resolve(orgList)
             }).catch((error) => {
                 reject(error);
@@ -28,6 +28,16 @@ class CommonListsApi {
                resolve(conf )
            }).catch(( error ) => {
                reject( error );
+           });
+       });
+   }
+   
+   static getCalendars(){
+       return new Promise((resolve, reject) => {
+           fetchJson('/rest/gpi/report/calendars/').then((response) => {                            
+               resolve(response);
+           }).catch((error) => {
+               reject(error);
            });
        });
    }

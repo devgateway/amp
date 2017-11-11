@@ -922,7 +922,7 @@ public class ExportActivityToWord extends Action {
         /**
          * Activity updated on
          */
-        if (FeaturesUtil.isVisibleField("Activity Updated On")) {
+        if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Activity Updated On")) {
             ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(
                     "Updated On", null, null, true).addRowData(identification
                     .getUpdatedDate());
@@ -932,7 +932,7 @@ public class ExportActivityToWord extends Action {
         /**
          * Activity updated by
          */
-        if (FeaturesUtil.isVisibleField("Activity Updated By")) {
+        if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Activity Last Updated by")) {
             String output = "";
             if (identification.getModifiedBy() != null) {
                 User user = identification.getModifiedBy().getUser();
@@ -1476,8 +1476,13 @@ public class ExportActivityToWord extends Action {
                         sectionHelper.addRowData(rowData);
                     }
                     String responseText = (response.getResponse() != null ? response.getResponse() : "");
+                    if (ExportUtil.GPI_TYPE_YES_NO.equalsIgnoreCase(response.getAmpQuestionId().getAmpTypeId()
+                            .getName())) {
+                        responseText = TranslatorWorker.translateText(responseText);
+                    }
                     ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(
-                            response.getAmpQuestionId().getQuestionText(), null, null, true).addRowData(responseText);
+                            response.getAmpQuestionId().getQuestionText(), null, null, true)
+                            .addRowData(responseText);
                     sectionHelper.addRowData(rowData);
                 }
             }
@@ -3930,7 +3935,7 @@ public class ExportActivityToWord extends Action {
 
         //3rd cell is for currency
         /*
-        RtfCell currencyInfoCell=new RtfCell();             
+        RtfCell currencyInfoCell=new RtfCell();
         currencyInfoCell.setBorder(0);
         Table currencyInfoSubTable = new Table(1);
         currencyInfoSubTable.setWidth(100);
@@ -3940,8 +3945,8 @@ public class ExportActivityToWord extends Action {
         mycell.setBackgroundColor(CELLCOLORGRAY);
         mycell.setRowspan(rowAmountForCell1>rowAmountForCell2?rowAmountForCell1:rowAmountForCell2);
         currencyInfoSubTable.addCell(mycell);
-        
-        currencyInfoCell.add(currencyInfoSubTable);             
+
+        currencyInfoCell.add(currencyInfoSubTable);
         overAllTable.addCell(currencyInfoCell); */
         return overAllTable;
     }

@@ -521,7 +521,7 @@ a.last_page {
 }
 
 .search_results_header {
-    float: right;
+    float: right !important;
 }
 
 .search-results {
@@ -771,4 +771,9 @@ th {
 
 .parent_li {
     margin: 0px 0px 0px 0px !important;
+}
+
+.search_results_header_keyword {
+    float: left;
+    padding-right: 2px;
 }

@@ -152,6 +152,7 @@ div.trnpanel div.trn-row ul {
 #amp_info_filters {
     float: left;
     left: 35px;
+    right: auto;
 }
 
 .sub-filters-titles {

@@ -878,67 +878,77 @@ public class ExportActivityToPDF extends Action {
             if(FeaturesUtil.isVisibleModule("/Activity Form/Planning")){
                 String outputValue="";
 
-                if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Line Ministry Rank")){
-                    outputValue=TranslatorWorker.translateText("Line Ministry Rank")+ "\t: ";
-                    if(activity.getLineMinRank()!=null && activity.getLineMinRank().intValue()>0){
-                        outputValue+=(activity.getLineMinRank())+"\n";
-
-
-                    }else{
-                        outputValue+="\n";
+                if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Line Ministry Rank")) {
+                    outputValue = TranslatorWorker.translateText("Line Ministry Rank") + "\t:\t";
+                    if (activity.getLineMinRank() != null && activity.getLineMinRank().intValue() > 0) {
+                        outputValue += (activity.getLineMinRank()) + "\n";
+                    } else {
+                        outputValue += "\n";
                     }
                 }
 
-                if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Approval Date")){
-                    outputValue+=TranslatorWorker.translateText("Proposed Approval Date ")+ "\t: " + myForm.getPlanning().getOriginalAppDate()+"\n";
+                if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Approval Date")) {
+                    outputValue += TranslatorWorker.translateText("Proposed Approval Date ") + "\t:\t" + myForm
+                            .getPlanning().getOriginalAppDate() + "\n";
                 }
 
-                if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Approval Date")){
-                    outputValue+=TranslatorWorker.translateText("Actual Approval Date ")+ "\t: " + myForm.getPlanning().getRevisedAppDate()+"\n";
+                if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Approval Date")) {
+                    outputValue += TranslatorWorker.translateText("Actual Approval Date ") + "\t:\t" + myForm
+                            .getPlanning().getRevisedAppDate() + "\n";
                 }
 
-                if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Start Date")){
-                    outputValue+=TranslatorWorker.translateText("Proposed Start Date")+ "\t: " + myForm.getPlanning().getOriginalStartDate()+"\n";
+                if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Start Date")) {
+                    outputValue += TranslatorWorker.translateText("Proposed Start Date") + "\t:\t" + myForm
+                            .getPlanning().getOriginalStartDate() + "\n";
                 }
 
-                if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Start Date")){
-                    outputValue+=TranslatorWorker.translateText("Actual Start Date ")+ "\t: " +myForm.getPlanning().getRevisedStartDate() +"\n";
+                if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Start Date")) {
+                    outputValue += TranslatorWorker.translateText("Actual Start Date ") + "\t:\t" + myForm.getPlanning()
+                            .getRevisedStartDate() + "\n";
                 }
 
-                if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Original Completion Date")){
-                    outputValue+=TranslatorWorker.translateText("Original Completion Date", locale, siteId)+ "\t: " + myForm.getPlanning().getOriginalCompDate() +"\n";
+                if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Original Completion Date")) {
+                    outputValue += TranslatorWorker.translateText("Original Completion Date", locale, siteId)
+                            + "\t:\t" + myForm.getPlanning().getOriginalCompDate() + "\n";
                 }
 
-                if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Completion Date")){
-                    outputValue+=TranslatorWorker.translateText("Proposed Completion Date ", locale, siteId)+ "\t: " + myForm.getPlanning().getProposedCompDate() +"\n";
+                if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Completion Date")) {
+                    outputValue += TranslatorWorker.translateText("Proposed Completion Date ", locale, siteId)
+                            + "\t:\t" + myForm.getPlanning().getProposedCompDate() + "\n";
                 }
 
-                if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Completion Date")){
-                    outputValue+=TranslatorWorker.translateText("Actual Completion Date", locale, siteId)+ "\t: " + myForm.getPlanning().getCurrentCompDate() +"\n";
+                if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Completion Date")) {
+                    outputValue += TranslatorWorker.translateText("Actual Completion Date", locale, siteId) + "\t:\t"
+                            + myForm.getPlanning().getCurrentCompDate() + "\n";
                 }
-                
+
                 if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Project Implementation Delay")) {
-                    outputValue += TranslatorWorker.translateText("Project Implementation Delay", locale, siteId) + "\t: " + myForm.getPlanning().getProjectImplementationDelay() + "\n";
+                    outputValue += TranslatorWorker.translateText("Project Implementation Delay", locale, siteId)
+                            + "\t:\t" + myForm.getPlanning().getProjectImplementationDelay() + "\n";
                 }
 
-                if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Final Date for Contracting")){
-                    outputValue+=TranslatorWorker.translateText("Final Date for Contracting ")+ "\t: " + myForm.getPlanning().getContractingDate()+"\n";
+                if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Final Date for Contracting")) {
+                    outputValue += TranslatorWorker.translateText("Final Date for Contracting ") + "\t:\t" + myForm
+                            .getPlanning().getContractingDate() + "\n";
                 }
 
-                if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Final Date for Disbursements")){
-                    outputValue+=TranslatorWorker.translateText("Final Date for Disbursements ")+ "\t: " + myForm.getPlanning().getDisbursementsDate()+"\n";
+                if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Final Date for Disbursements")) {
+                    outputValue += TranslatorWorker.translateText("Final Date for Disbursements ") + "\t:\t" + myForm
+                            .getPlanning().getDisbursementsDate() + "\n";
                 }
 
                 if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Project Life")) {
                     Integer life = myForm.getPlanning().getProposedProjectLife();
-                    outputValue += TranslatorWorker.translateText("Proposed Project Life")+ "\t: " + (life == null ? "" : life) + "\n";
+                    outputValue += TranslatorWorker.translateText("Proposed Project Life") + "\t:\t" + (life == null
+                            ? "" : life) + "\n";
                 }
 
                 if(FeaturesUtil.isVisibleField("Duration of Project")){
                     outputValue+=TranslatorWorker.translateText("Duration of Project");
                     BigDecimal duration = myForm.getPlanning().getProjectPeriod();
                     if (duration != null) {
-                        outputValue += "\t: " + duration.toString() + " " + TranslatorWorker.translateText("Months") + "\n";
+                        outputValue += "\t:\t" + duration.toString() + " " + TranslatorWorker.translateText("Months")
+                                + "\n";
                     }
                 }
 //              String commColumnName = "Final Date for Disbursements Comments";

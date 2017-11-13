@@ -667,15 +667,53 @@ a.last_page {
     text-align: right;
 }
 
-/*
-.nv-bar.positive text {
-    -moz-transform: scale(-1, 1)  !important;
-    -webkit-transform: scale(-1, 1) !important;
-    -o-transform: scale(-1, 1) !important;
-    -ms-transform: scale(-1, 1)  !important;
-    transform: scale(-1, 1) !important;
+.col-xs-12.col-md-6 g[transform="translate(10,31)"] {
+    -moz-transform: scale(-1, 1) translate(-535px, 31px) !important;
+    -webkit-transform: scale(-1, 1) translate(-535px, 31px) !important;
+    -o-transform: scale(-1, 1) translate(-535px, 31px) !important;
+    -ms-transform: scale(-1, 1) translate(-535px, 31px) !important;
+    transform: scale(-1, 1) translate(-535px, 31px) !important;
 }
-*/
+
+.col-xs-12.col-md-6 g[transform="translate(10,42)"] {
+    -moz-transform: scale(-1, 1) translate(-535px, 42px) !important;
+    -webkit-transform: scale(-1, 1) translate(-535px, 42px) !important;
+    -o-transform: scale(-1, 1) translate(-535px, 42px) !important;
+    -ms-transform: scale(-1, 1) translate(-535px, 42px) !important;
+    transform: scale(-1, 1) translate(-535px, 42px) !important;
+}
+
+.col-xs-12.col-md-6 g[transform="translate(10,62)"] {
+    -moz-transform: scale(-1, 1) translate(-535px, 62px) !important;
+    -webkit-transform: scale(-1, 1) translate(-535px, 62px) !important;
+    -o-transform: scale(-1, 1) translate(-535px, 62px) !important;
+    -ms-transform: scale(-1, 1) translate(-535px, 62px) !important;
+    transform: scale(-1, 1) translate(-535px, 62px) !important;
+}
+
+.col-xs-12.big-chart-0 g[transform="translate(10,31)"] {
+    -moz-transform: scale(-1, 1) translate(-1120px, 31px) !important;
+    -webkit-transform: scale(-1, 1) translate(-1120px, 31px) !important;
+    -o-transform: scale(-1, 1) translate(-1120px, 31px) !important;
+    -ms-transform: scale(-1, 1) translate(-1120px, 31px) !important;
+    transform: scale(-1, 1) translate(-1120px, 31px) !important;
+} 
+
+.col-xs-12.big-chart-0 g[transform="translate(10,42)"] {
+    -moz-transform: scale(-1, 1) translate(-1120px, 42px) !important;
+    -webkit-transform: scale(-1, 1) translate(-1120px, 42px) !important;
+    -o-transform: scale(-1, 1) translate(-1120px, 42px) !important;
+    -ms-transform: scale(-1, 1) translate(-1120px, 42px) !important;
+    transform: scale(-1, 1) translate(-1120px, 42px) !important;
+}
+
+.col-xs-12.big-chart-0 g[transform="translate(10,62)"] {
+    -moz-transform: scale(-1, 1) translate(-1120px, 62px) !important;
+    -webkit-transform: scale(-1, 1) translate(-1120px, 62px) !important;
+    -o-transform: scale(-1, 1) translate(-1120px, 62px) !important;
+    -ms-transform: scale(-1, 1) translate(-1120px, 62px) !important;
+    transform: scale(-1, 1) translate(-1120px, 62px) !important;
+}
 
 .nv-label text {
     direction: rtl;
@@ -712,7 +750,6 @@ a.last_page {
     -ms-transform: scale(-1, 1) !important;;
     transform: scale(-1, 1) !important;
 }
-
 
 #gis-plugin {
     direction: rtl;

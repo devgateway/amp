@@ -1,12 +1,17 @@
 package org.digijava.kernel.ampapi.endpoints.performance.matcher;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
+import org.digijava.kernel.ampapi.endpoints.performance.PerformanceIssue;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleConstants;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleMatcherDefinition;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpPerformanceRule;
 import org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute;
 import org.digijava.module.aim.helper.Constants;
@@ -38,8 +43,9 @@ public class NoDisbursementsAfterFundingDateMatcher extends PerformanceRuleMatch
     }
 
     @Override
-    public boolean match(AmpActivityVersion a) {
+    public PerformanceIssue findPerformanceIssue(AmpActivityVersion a) {
         Date currentDate = new Date();
+        Set<AmpOrganisation> donorsWithIssues = new HashSet<>();
         
         for (AmpFunding f : a.getFunding()) {
             Date fundingSelectedDate = getFundingDate(f, selectedFundingDate);
@@ -47,22 +53,26 @@ public class NoDisbursementsAfterFundingDateMatcher extends PerformanceRuleMatch
                 Date deadline = getDeadline(fundingSelectedDate, timeUnit, timeAmount);
                 if (deadline.before(currentDate)) {
                     if (f.getFundingDetails() == null || f.getFundingDetails().isEmpty()) {
-                        return true;
-                    }
-                    
-                    boolean hasDisbursmentsAfterDeadline = f.getFundingDetails().stream()
-                            .filter(t -> t.getTransactionType() == Constants.DISBURSEMENT)
-                            .filter(t ->  t.getTransactionDate().before(currentDate))
-                            .anyMatch(t -> t.getTransactionDate().after(fundingSelectedDate));
-                    
-                    if (!hasDisbursmentsAfterDeadline) {
-                            return true;
+                        donorsWithIssues.add(f.getAmpDonorOrgId());
+                    } else {
+                        boolean hasDisbursmentsAfterDeadline = f.getFundingDetails().stream()
+                                .filter(t -> t.getTransactionType() == Constants.DISBURSEMENT)
+                                .filter(t ->  t.getTransactionDate().before(currentDate))
+                                .anyMatch(t -> t.getTransactionDate().after(fundingSelectedDate));
+                        
+                        if (!hasDisbursmentsAfterDeadline) {
+                            donorsWithIssues.add(f.getAmpDonorOrgId());
+                        }
                     }
                 }
             }
         }
         
-        return false;
+        if (donorsWithIssues.isEmpty()) {
+            return null;
+        }
+        
+        return new PerformanceIssue(this, new ArrayList<>(donorsWithIssues));
     }
 
     @Override
@@ -86,5 +96,5 @@ public class NoDisbursementsAfterFundingDateMatcher extends PerformanceRuleMatch
         
         return true;
     }
-    
+
 }

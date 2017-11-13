@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.jcr.Node;
@@ -17,6 +18,7 @@ import org.dgfoundation.amp.gpi.reports.GPIDonorActivityDocument;
 import org.dgfoundation.amp.gpi.reports.GPIRemark;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -41,6 +43,7 @@ import org.digijava.module.translation.exotic.AmpDateFormatter;
 import org.digijava.module.translation.exotic.AmpDateFormatterFactory;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.joda.time.DateTime;
 
 /**
  * 
@@ -555,17 +558,23 @@ public class GPIDataService {
             yearRange.set("calendarId", calendar.getAmpFiscalCalId());
             int startYear = AmpARFilter.getDefaultYear(AmpARFilter.getEffectiveSettings(), calendar, true);
             int endYear = startYear + numberOfYears;
-            List<Integer> years = new ArrayList<>();
+            List<JsonBean> years = new ArrayList<>();
             for (int i = startYear; i <= endYear; i++) {
-                years.add(i);
+                JsonBean yearObject = new JsonBean();
+                yearObject.set("year", i);
+                Date start = GPIUtils.getYearStartDate(calendar, i);
+                Date end = GPIUtils.getYearEndDate(calendar, i);
+                yearObject.set("start", DateTimeUtil.formatDate(start, GPIEPConstants.DATE_FORMAT));
+                yearObject.set("end", DateTimeUtil.formatDate(end, GPIEPConstants.DATE_FORMAT));
+                years.add(yearObject);
             }
             yearRange.set("years", years);
             result.add(yearRange);
         }
         return result;
     }
-
-    private static Integer getNumberOfYears(List<AmpFiscalCalendar> calendars) {
+    
+   private static Integer getNumberOfYears(List<AmpFiscalCalendar> calendars) {
         for (AmpFiscalCalendar calendar : calendars) {
             if (calendar.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_GREGORIAN.getValue())) {
                 int currentYear = FiscalCalendarUtil.getCurrentYear();
@@ -575,6 +584,38 @@ public class GPIDataService {
         }
 
         return 0;
+    }
+    
+    public static String getConvertedDate(Long fromCalId, Long toCalId, String dateAsString) {
+        
+        if (fromCalId == toCalId) {
+            return dateAsString;
+        }
+        
+        AmpFiscalCalendar fromCalendar = FiscalCalendarUtil.getAmpFiscalCalendar(fromCalId);
+        AmpFiscalCalendar toCalendar = FiscalCalendarUtil.getAmpFiscalCalendar(toCalId);
+        
+        if (fromCalendar == null) {
+            throw new ApiRuntimeException(ApiError.toError("Invalid fromCalId [" + fromCalId + "]"));
+        }
+        
+        if (toCalendar == null) {
+            throw new ApiRuntimeException(ApiError.toError("Invalid toCalId [" + toCalId + "]"));
+        }
+        
+        DateTime dateTime = new DateTime();
+        Scanner scanner = new Scanner(dateAsString).useDelimiter("[^\\d]+");
+        try {
+            dateTime = dateTime.withDate(scanner.nextInt(), scanner.nextInt(), scanner.nextInt());
+        } catch (Exception e) {
+            throw new ApiRuntimeException(ApiError.toError("Error creating the date [" + dateAsString + "]. "
+                    + "It should have the format yyyy-MM-dd"));
+        }
+        
+        DateTime convertedDate = FiscalCalendarUtil.convertDate(fromCalendar, dateTime.toDate(), toCalendar);
+
+        return String.format("%d-%02d-%02d", 
+                convertedDate.getYear(), convertedDate.getMonthOfYear(), convertedDate.getDayOfMonth());
     }
     
     public static List<JsonBean> getDonors() {

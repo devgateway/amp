@@ -8,6 +8,7 @@ import Utils from '../common/Utils';
 import * as Constants from '../common/Constants';
 import HeaderToolTip from './HeaderToolTip';
 import Loading from './Loading';
+import YearsFilterSection from './YearsFilterSection';
 export default class Report6 extends Component {
     constructor( props, context ) {
         super( props, context );
@@ -20,7 +21,6 @@ export default class Report6 extends Component {
         this.updateRecordsPerPage = this.updateRecordsPerPage.bind( this );
         this.onDonorFilterChange = this.onDonorFilterChange.bind( this );
         this.toggleHierarchy = this.toggleHierarchy.bind( this );
-        this.onYearClick = this.onYearClick.bind( this );
         this.downloadExcelFile = this.downloadExcelFile.bind(this);
         this.downloadPdfFile = this.downloadPdfFile.bind(this);
     }
@@ -61,6 +61,9 @@ export default class Report6 extends Component {
     showSettings() {
         this.settingsWidget.setElement( this.refs.settingsPopup );
         this.settingsWidget.definitions.loaded.done( function() {
+            const settings  = this.settingsWidget.toAPIFormat();
+            const calendarId = settings && settings['calendar-id'] ?  settings['calendar-id'] : this.settingsWidget.definitions.getDefaultCalendarId();
+            this.setState( { calendarId: calendarId });
             this.settingsWidget.show();
         }.bind( this ) );
 
@@ -70,7 +73,14 @@ export default class Report6 extends Component {
         }.bind( this ) );
 
         this.settingsWidget.on( 'applySettings', function() {
-            this.fetchReportData();
+            const settings  = this.settingsWidget.toAPIFormat();
+            const currentCalendarId = settings && settings['calendar-id'] ?  settings['calendar-id'] : this.settingsWidget.definitions.getDefaultCalendarId();        
+            //if calendar has changed reset year filter
+            if (currentCalendarId !== this.state.calendarId) {            
+                this.onYearClick(null);            
+            } else {
+                this.fetchReportData(); 
+            } 
             $( this.refs.settingsPopup ).hide();
         }.bind( this ) );
     }
@@ -131,22 +141,18 @@ export default class Report6 extends Component {
         }.bind( this ) );
     }
 
-    onYearClick( event ) {
-        this.setState( { selectedYear: $( event.target ).data( "year" ) }, function() {                      
-            var filters = this.filter.serialize().filters;
-            filters.date = {};
-            if (this.state.selectedYear) {
-                filters.date = {
-                        'start': this.state.selectedYear + '-01-01',
-                        'end': this.state.selectedYear + '-12-31'
-                    };  
-            }           
-            this.filter.deserialize({filters: filters}, {silent : true});           
-            this.fetchReportData();
-        }.bind( this ) );
-
-    }
-
+    onYearClick(year) {
+          this.setState( { selectedYear: year}, function() {                      
+              var filters = this.filter.serialize().filters;
+              filters.date = {};
+              if (this.state.selectedYear) {
+                  filters.date = Utils.getStartEndDates(this.settingsWidget, this.props.calendars, this.state.selectedYear, this.props.years);
+              }           
+              this.filter.deserialize({filters: filters}, {silent : true});           
+              this.fetchReportData();
+          }.bind( this ) );
+     }
+      
     resetQuickFilters() {
         var filters = this.filter.serialize().filters;
         if ( filters.date ) {
@@ -319,32 +325,7 @@ export default class Report6 extends Component {
                             </div>                            
                         </div>
                     }
-                    <div className="container-fluid no-padding">
-                        <ul className="year-nav">
-                            <li className={this.state.selectedYear ? '' : 'active'}>
-                                <a onClick={this.onYearClick}>{this.props.translations['amp.gpi-reports:all-years']}</a>
-                            </li>
-                            {( ( years.length > 3 ) ? years.splice( years.length - 3, 3 ).reverse() : years.reverse() ).map( year =>
-                                <li className={this.state.selectedYear == year ? 'active' : ''} key={year}><a data-year={year} onClick={this.onYearClick}>{year}</a></li>
-                            )}
-                            <li >
-                                <div className="dropdown">
-                                    <a className={years.includes( this.state.selectedYear ) ? 'btn dropdown-toggle btn-years btn-years-active' : 'btn dropdown-toggle btn-years'} type="button" id="years" data-toggle="dropdown">
-                                        {this.props.translations['amp.gpi-reports:other-years']}
-                                        <span className="caret"></span></a>
-                                    <ul className="dropdown-menu dropdown-years" role="menu">
-                                        {years.reverse().map( year =>
-                                            <li role="presentation" className={this.state.selectedYear == year ? 'active' : ''} key={year}><a data-year={year} onClick={this.onYearClick}>{year}</a></li>
-                                        )}
-
-                                    </ul>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div className="selection-legend">
-                        <div className="pull-right">{this.showSelectedDates().length > 0 ? this.props.translations['amp-gpi-reports:selected'] : ''} {this.showSelectedDates()}</div>
-                    </div>
+                    <YearsFilterSection onYearClick={this.onYearClick.bind(this)} selectedYear={this.state.selectedYear} mainReport={this.props.mainReport} filter={this.filter} dateField="date" settingsWidget={this.settingsWidget} />
                     <div className="container-fluid no-padding">
                         <div className="dropdown">
                             <select name="donorAgency" className="form-control donor-dropdown" value={this.state.selectedDonor} onChange={this.onDonorFilterChange}>
@@ -448,7 +429,8 @@ function mapStateToProps( state, ownProps ) {
         years: state.commonLists.years,
         translations: state.startUp.translations,
         translate: state.startUp.translate,
-        settings: state.commonLists.settings
+        settings: state.commonLists.settings,
+        calendars: state.commonLists.calendars
     }
 }
 

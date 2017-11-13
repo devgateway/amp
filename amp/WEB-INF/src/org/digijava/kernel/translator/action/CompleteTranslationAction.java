@@ -372,7 +372,7 @@ public class CompleteTranslationAction extends DispatchAction
         try{
 
             updateMsg(request,key,textMessage,new Locale(locale1),getSiteId(request));
-        }catch(WorkerException we){
+        }catch(Exception we){
             Object[] param = { "CompleteTranslationAction" };
             logger.l7dlog(Level.ERROR, "ActionClass.Exception.err", param, we);
             //handle the same
@@ -517,7 +517,7 @@ public class CompleteTranslationAction extends DispatchAction
 
         try{
             updateMsg(request,mykeys,message,new Locale(request.getParameter("radio_locale2")),getSiteId(request));
-        }catch(WorkerException we){
+        }catch(Exception we){
             Object[] param = { "CompleteTranslationAction" };
             logger.l7dlog(Level.ERROR, "ActionClass.Exception.err", param, we);
         }
@@ -569,7 +569,7 @@ public class CompleteTranslationAction extends DispatchAction
 
                     try{
                         updateMsg(request,mykeys,message,new Locale(request.getParameter("radio_locale2")),getSiteId(request));
-                    }catch(WorkerException we){
+                    }catch(Exception we){
                         Object[] param = { "CompleteTranslationAction" };
                         logger.l7dlog(Level.ERROR, "ActionClass.Exception.err", param, we);
                     }
@@ -857,8 +857,7 @@ public class CompleteTranslationAction extends DispatchAction
      * @param siteId
      * @throws WorkerException
      */
-    private void updateMsg(HttpServletRequest request, String key,String strMessage, Locale locale, Long siteId)
-        throws WorkerException {
+    private void updateMsg(HttpServletRequest request, String key,String strMessage, Locale locale, Long siteId) {
 
         if (logger.isDebugEnabled()) {
             Object[] param = { "CompleteTranslationAction", "updateMsg()" };

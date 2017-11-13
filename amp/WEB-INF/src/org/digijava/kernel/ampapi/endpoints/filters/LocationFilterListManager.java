@@ -89,8 +89,8 @@ public final class LocationFilterListManager implements FilterListManager {
     private long getDefaultCountryLocationId() {
         long parentLocationId = PersistenceManager.getLong(PersistenceManager.getSession()
                 .createSQLQuery("SELECT acvl.id FROM amp_category_value_location acvl "
-                        + "WHERE acvl.parent_location IS NULL AND location_name = (" + 
-                        "SELECT country_name FROM dg_countries WHERE iso = '" 
+                        + "WHERE acvl.parent_location IS NULL AND location_name = (" 
+                        + "SELECT country_name FROM dg_countries WHERE iso = '" 
                         + FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_COUNTRY) + "')")
                         .list().get(0));
         

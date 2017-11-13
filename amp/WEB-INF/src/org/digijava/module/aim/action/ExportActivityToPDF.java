@@ -908,13 +908,13 @@ public class ExportActivityToPDF extends Action {
                 }
 
                 if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Original Completion Date")) {
-                    outputValue += TranslatorWorker.translateText("Original Completion Date", locale, siteId) +
-                            "\t:\t" + myForm.getPlanning().getOriginalCompDate() + "\n";
+                    outputValue += TranslatorWorker.translateText("Original Completion Date", locale, siteId)
+                            + "\t:\t" + myForm.getPlanning().getOriginalCompDate() + "\n";
                 }
 
                 if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Completion Date")) {
-                    outputValue += TranslatorWorker.translateText("Proposed Completion Date ", locale, siteId) +
-                            "\t:\t" + myForm.getPlanning().getProposedCompDate() + "\n";
+                    outputValue += TranslatorWorker.translateText("Proposed Completion Date ", locale, siteId)
+                            + "\t:\t" + myForm.getPlanning().getProposedCompDate() + "\n";
                 }
 
                 if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Completion Date")) {

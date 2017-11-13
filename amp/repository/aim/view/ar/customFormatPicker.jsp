@@ -30,12 +30,12 @@
 	</b>
 </center>
 <hr>
-	<table width="100%"  border="0" align="center" cellpadding="2" cellspacing="0" style="font-size:11px;"> 
+	<table width="100%"  border="0" align="center" cellpadding="2" cellspacing="0" style="font-size:11px;">
 		<tr>
-			<td width="40%" height="18" align="right" nowrap="nowrap" style="font-size: 11px">
-				<digi:trn key="aim:formatPicket:decimalSymbol">Decimal Separator</digi:trn>&nbsp;
+			<td width="40%" height="18" class="setting-label">
+				<digi:trn key="aim:formatPicket:decimalSymbol">Decimal Separator</digi:trn>
 			</td>
-        	<td width="20%" height="18" nowrap="nowrap">
+        	<td width="60%" colspan="2" height="18" class="setting-option">
         		<html:select styleClass="dropdwn_sm"
 					onchange="initFormatPopup();" property="customDecimalSymbol"
 					styleId="customDecimalSymbol">
@@ -48,16 +48,15 @@
 					<html:option value="CUSTOM">
 						<digi:trn>Custom</digi:trn>
 					</html:option>
-				</html:select> 
+				</html:select>
 				<html:text styleClass="inputx" disabled="true" size="5" maxlength="1" property="customDecimalSymbolTxt"  onchange="initFormatPopup()"/>
            </td>
       	</tr>
 		<tr>
-			<td width="40%" height="18" align="right" nowrap="nowrap" style="font-size: 11px">
+			<td width="40%" height="18" class="setting-label">
 				<digi:trn key="aim:formatPicket:maxFracDigits">Maximum Fraction Digits</digi:trn>
-		    	&nbsp;
 		    </td>
-    		<td width="60%">
+    		<td width="60%" colspan="2" class="setting-option">
 	    		<html:select styleClass="dropdwn_sm" property="customDecimalPlaces" styleId="customDecimalPlaces" onchange="initFormatPopup();">
 		              <html:option value="-1">
 		              		<digi:trn key="aim:formatPicket:NoLimit">No Limit</digi:trn>
@@ -72,22 +71,22 @@
 		                <digi:trn key="aim:formatPicket:custom">Custom</digi:trn>
 		              </html:option>
 	            </html:select>
-            	<html:text styleClass="inputx" disabled="true" size="5" maxlength="2" property="customDecimalPlacesTxt" onchange="initFormatPopup()" />
+				<html:text styleClass="inputx" disabled="true" size="5" maxlength="2" property="customDecimalPlacesTxt" onchange="initFormatPopup()" />
             </td>
       </tr>
 		<tr>
-			<td width="40%" height="18" align="right" nowrap="nowrap" style="font-size: 11px">
-				<digi:trn key="aim:formatPicket:UseGrouping">Use Grouping Separator</digi:trn>&nbsp;
+			<td width="40%" height="18" class="setting-label">
+				<digi:trn key="aim:formatPicket:UseGrouping">Use Grouping Separator</digi:trn>
 			</td>
-	      	<td width="20%" height="18" nowrap="nowrap"><html:checkbox property="customUseGrouping"
+	      	<td width="40%" height="18" class="setting-option"><html:checkbox property="customUseGrouping"
 				styleId="customUseGrouping"  onchange ="initFormatPopup();" /></td>
-	      	<td width="20%" height="18" align="left" nowrap="nowrap">&nbsp;</td>
+	      	<td width="20%" height="18" align="left" class="setting-option">&nbsp;</td>
 	  	</tr>
 		<tr>
-			<td width="40%" height="18" align="right" nowrap="nowrap" style="font-size: 11px">
-				<digi:trn key="aim:formatPicket:GroupingSeparator">Grouping Separator</digi:trn>&nbsp;
+			<td width="40%" height="18" class="setting-label">
+				<digi:trn key="aim:formatPicket:GroupingSeparator">Grouping Separator</digi:trn>
 			</td>
-	    	<td width="20%" height="18" nowrap="nowrap" style="font-size: 11px">
+	    	<td width="60%" colspan="2" height="18" class="setting-option">
 	    		<html:select styleClass="dropdwn_sm" property="customGroupCharacter" styleId="customGroupCharacter" onchange="initFormatPopup();">
 	    			<c:forEach var="customGroupChar" items="${aimReportsFilterPickerForm.allgroupingseparators}">
 	    				<html:option value="${customGroupChar}"><c:out value="${customGroupChar}"/></html:option>
@@ -98,17 +97,17 @@
             </td>
       	</tr>
 		<tr>
-		  <td height="18" align="right" nowrap="nowrap" style="font-size: 11px">
+		  <td width="40%" height="18" class="setting-label">
 		  	<digi:trn key="aim:formatPicket:GroupSize">Group Size</digi:trn>&nbsp;
 		  </td>
-		  <td height="18" colspan="2" nowrap="nowrap">
+		  <td width="60%" height="18" colspan="2" class="setting-option">
 		  	<html:text styleClass="inputx" disabled="true" property="customGroupSize" size="2" maxlength="1" onchange="initFormatPopup();"/></td>
 	  </tr>
 	  <tr>
-		<td height="18" align="right" nowrap="nowrap" style="font-size: 11px">
-			<digi:trn>Amounts units</digi:trn> &nbsp;
+		<td width="40%" height="18" class="setting-label">
+			<digi:trn>Amounts units</digi:trn>
 		</td>
-		<td height="18" colspan="2" nowrap="nowrap">
+		<td width="60%" height="18" colspan="2" class="setting-option">
 		 	<%-- <html:checkbox property="amountinthousands" styleId="customAmountinThousands"  onchange ="initFormatPopup();" />  --%>
 		 	<html:select property="amountinthousands" styleClass="dropdwn_sm" styleId="customAmountinThousands" onchange="initFormatPopup();" >
 		 		<html:option value="0"><digi:trn>Amounts in Units</digi:trn></html:option>
@@ -118,10 +117,10 @@
 		</td>
 	  </tr>
 	<tr>
-		<td width="40%" height="18" align="right" nowrap="nowrap" style="font-size: 11px">
-			<digi:trn key="aim:formatPicket:Example">Example</digi:trn>&nbsp;
+		<td width="40%" height="18" class="setting-label">
+			<digi:trn key="aim:formatPicket:Example">Example</digi:trn>
 		</td>
-	    <td height="18" colspan="2" nowrap="nowrap"  style="font-weight:bold;font-size:11px">
+	    <td width="60%" height="18" colspan="2" class="setting-option bold">
 		      <div id="number" style="margin-left: 3px">
 		  	  <aim:formatNumber value="123456789.928" />
 	          </div></td>

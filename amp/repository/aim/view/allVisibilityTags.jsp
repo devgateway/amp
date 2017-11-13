@@ -16,14 +16,9 @@
 <module:display name="ADMINISTRATIVE SECTION"></module:display> 
 <module:display name="Activity Approval Process" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Activity Costing" parentModule="PROJECT MANAGEMENT"></module:display> 
-<module:display name="Activity Export Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Structures Importer" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Applied Patches" parentModule="ADMINISTRATIVE SECTION"></module:display>
-<module:display name="Activity Import Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
-<module:display name="Activity Partial Import Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
-<module:display name="Budget Codes Exporter" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Budget Integration" parentModule="ADMINISTRATIVE SECTION"></module:display>
-<module:display name="Code Chapitre Importer" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Currency deflator" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Dashboards Manager" parentModule="ADMINISTRATIVE SECTION"/>
 <module:display name="Add & Edit Activity" parentModule="PARIS INDICATORS"></module:display> 
@@ -91,11 +86,9 @@
 <module:display name="Resource Label Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Template Documents Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Donor Profile Report" parentModule="REPORTING"></module:display>
-<module:display name="Multi-dimensional Reports" parentModule="REPORTING"></module:display>
+<module:display name="Saiku" parentModule="REPORTING"></module:display>
 <module:display name="Pledge Reports" parentModule="REPORTING"></module:display>
 <feature:display name="Pledges Default Reports" module="Pledge Reports"></feature:display>
-<feature:display name="Default Reports" module="Multi-dimensional Reports"></feature:display>
-<module:display name="Multi-dimensional Reports Public View" parentModule="REPORTING"></module:display>  
 <module:display name="Report and Tab Options" parentModule="REPORTING"></module:display>
 <module:display name="Report Types" parentModule="REPORTING"></module:display>
 <module:display name="Filter Section" parentModule="REPORTING"></module:display> 
@@ -133,8 +126,6 @@
 
 <module:display name="Map configuration" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Aid Effectiveness Indicators Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
-
-<feature:display name="Synergy Client" module="Activity Import Manager"></feature:display>
 
 <feature:display name="My Resources" module="Content Repository"></feature:display> 
 <feature:display name="Team Resources" module="Content Repository"></feature:display>
@@ -592,7 +583,6 @@ deleted 6 fields, do not reinsert
 <field:display name="Currency Expenditure" feature="Expenditures"></field:display> 
 <field:display name="Currency Expenditures" feature="Regional Funding"></field:display> 
 <field:display name="Currency of Disbursement Order" feature="Disbursement Orders"></field:display> 
-<field:display name="Current Completion Date" feature="Planning"></field:display> 
 <field:display name="Data Source" feature="Identification"></field:display>
 <field:display name="Data Team Leader" feature="Identification"></field:display> 
 <field:display name="Date Commitment" feature="Commitments"></field:display>

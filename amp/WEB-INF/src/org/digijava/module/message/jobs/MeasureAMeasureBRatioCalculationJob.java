@@ -60,7 +60,7 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 
         AmpJobsUtil.populateRequest();
         Long ampTeamId = FeaturesUtil
-                .getGlobalSettingValueLong(GlobalSettingsConstants.WORKSPACE_TO_RUN_REPORT_FUNDING_GAP_NOTIFICATION);
+                .getGlobalSettingValueLong(GlobalSettingsConstants.WORKSPACE_TO_RUN_REPORT_FROM_JOB);
         // default percentage is 1
         String measureA = MeasureConstants.ACTUAL_DISBURSEMENTS;
         String measureB = MeasureConstants.PLANNED_DISBURSEMENTS;
@@ -231,7 +231,7 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
             }
         } else {
             logger.error(this.getClass() + " could not run because the team is not correctly configured for setting "
-                    + GlobalSettingsConstants.WORKSPACE_TO_RUN_REPORT_FUNDING_GAP_NOTIFICATION);
+                    + GlobalSettingsConstants.WORKSPACE_TO_RUN_REPORT_FROM_JOB);
         }
     }
 

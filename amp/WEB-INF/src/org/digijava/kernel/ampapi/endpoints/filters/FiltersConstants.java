@@ -29,6 +29,7 @@ public class FiltersConstants {
     public static final String PROPOSED_COMPLETION_DATE = "proposed-completion-date";
     public static final String PROPOSED_START_DATE = "proposed-start-date";
 
+    public static final String ACTIVITY_ID = "activity-id";
     public static final String APPROVAL_STATUS = "approval-status";
     public static final String ARCHIVED = "archived";
     public static final String BENEFICIARY_AGENCY = "beneficiary-agency";

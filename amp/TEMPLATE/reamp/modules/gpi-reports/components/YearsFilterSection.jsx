@@ -1,7 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as startUp from '../actions/StartUpAction.jsx';
+import * as startUp from '../actions/StartUpAction';
+import * as commonListsActions from '../actions/CommonListsActions';
+import Utils from '../common/Utils';
+import { INDICATOR_5B_CODE, GREG_BASE_CALENDAR} from '../common/Constants';
 export default class YearsFilterSection extends Component {
     constructor( props, context ) {
         super( props, context );        
@@ -18,8 +21,9 @@ export default class YearsFilterSection extends Component {
     
     showSelectedDates() {
         var displayDates = '';
-        if(this.props.filter){           
-            var filters = this.props.filter.serialize().filters;            
+        if (this.props.filter) {           
+            var filters = this.props.filter.serialize().filters;
+                              
             if (filters[this.props.dateField]) {
                 filters[this.props.dateField].start = filters[this.props.dateField].start || '';
                 filters[this.props.dateField].end = filters[this.props.dateField].end || '';
@@ -42,14 +46,24 @@ export default class YearsFilterSection extends Component {
 
     render() {
         if ( this.props.mainReport && this.props.mainReport.page ) {
-                var years = this.props.years.slice();               
+                var years = [];                
+                if (this.props.report === INDICATOR_5B_CODE) {
+                    const calendar = this.props.calendars.filter(cal => cal.baseCal == GREG_BASE_CALENDAR)[0];                    
+                    years = Utils.getYears(this.props.settingsWidget, this.props.years, calendar.ampFiscalCalId);
+                } else {
+                    years = Utils.getYears(this.props.settingsWidget, this.props.years);
+                }
+                                   
                 return (
                            <div>
                            <div className="container-fluid no-padding">
                            <ul className="year-nav">
-                               <li className={this.props.selectedYear ? '' : 'active'}>
-                                   <a onClick={this.onYearClick}>{this.props.translations['amp.gpi-reports:all-years']}</a>
-                               </li>
+                              {this.props.report !== INDICATOR_5B_CODE &&
+                                  <li className={this.props.selectedYear ? '' : 'active'}>
+                                    <a onClick={this.onYearClick}>{this.props.translations['amp.gpi-reports:all-years']}</a>
+                                   </li> 
+                              }
+                               
                                {( ( years.length > 3 ) ? years.splice( years.length - 3, 3 ).reverse() : years.reverse() ).map( year =>
                                    <li className={this.props.selectedYear == year ? 'active' : ''} key={year}><a data-year={year} onClick={this.onYearClick}>{year}</a></li>
                                )}
@@ -83,13 +97,18 @@ export default class YearsFilterSection extends Component {
 
 function mapStateToProps( state, ownProps ) {
     return {
+        orgList: state.commonLists.orgList,
+        years: state.commonLists.years,
+        settings: state.commonLists.settings,
         translations: state.startUp.translations,
-        translate: state.startUp.translate
+        translate: state.startUp.translate,
+        calendars: state.commonLists.calendars
     }
 }
 
 function mapDispatchToProps( dispatch ) {
-    return {actions: bindActionCreators({}, dispatch)}
+    return { actions: bindActionCreators( Object.assign( {}, commonListsActions ), dispatch ) }
 }
+
 
 export default connect( mapStateToProps, mapDispatchToProps )( YearsFilterSection );

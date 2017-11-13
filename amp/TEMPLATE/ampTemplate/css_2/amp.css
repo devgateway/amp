@@ -20,9 +20,10 @@ h1 {text-transform:uppercase;}
 html.ie .l_big_b {font-size:12px; font-weight:bold;padding:0px 0px 5px 0px;text-align:left;float:left;padding:0px 15px 0px px;}
 span.docTitle619{border:1px solid red;text-align:left;}
 
-.word_break {word-wrap: break-word; word-break:break-all;}
+.word_break {word-wrap: break-word;}
 .bold {font-weight: bold;}
 .italic {font-style: italic;}
+table.fixed-layout {table-layout:fixed; width: 100%;}
 
 .se {color:#FF6000; font-size:12px;}
 .sel_sm {color:#FF6000; font-size:11px;}
@@ -844,7 +845,7 @@ border-top: 1px;
 border-left: 1px;
 border-bottom: 1px;}
 legend.admtoolsttl{position:absolute;top:-10px;left:10px;}
-#customDecimalSymbol{margin:0px 2px 0px 2px;width:64px;}
+#customDecimalSymbol{width:64px;}
 span.geostyle{background:#f1f1f1;padding:3px;border:1px solid #e0e0e0;color:#5d5d5b;font-size:11px;font-weight:normal;}
 
 .funding_group_feature_box {background-color:#FBFBFB; border:1px solid #EBEBEB; padding-left:5px;  margin-bottom:10px;}
@@ -1250,4 +1251,23 @@ div.footer {
     padding: 10px;
     font-size: 12px;
     height: 100%;
+}
+
+.filter-item-label {
+    font-family: Arial;
+    font-size: 12px;
+    padding: 0px 0px 0px 5px;
+}
+
+.setting-label {
+    font-size: 11px;
+    white-space:nowrap;
+    text-align: right;
+    padding: 0px 5px 0px 0px;
+}
+
+.setting-option {
+    font-size: 11px;
+    white-space:nowrap;
+    padding: 0px 0px 0px 5px;
 }

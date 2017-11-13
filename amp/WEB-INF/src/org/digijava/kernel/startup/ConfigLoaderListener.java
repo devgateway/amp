@@ -321,7 +321,9 @@ public class ConfigLoaderListener
     public void contextDestroyed(ServletContextEvent sce) {     
         
         //shut down translation thread
-        tats.shutdown();         
+        if (tats != null) {
+            tats.shutdown();
+        }
         
         ServiceManager.getInstance().shutdown(1);
         try {
@@ -351,7 +353,9 @@ public class ConfigLoaderListener
             PersistenceManager.cleanup();
             // Custom cache manager must be shut after all other cleanup stuff
             DigiCacheManager.shutdown();
-            exec.shutdownNow();
+            if (exec != null) {
+                exec.shutdownNow();
+            }
             ServiceManager.getInstance().shutdown(0);
         }
     }

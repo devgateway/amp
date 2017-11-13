@@ -1,31 +1,32 @@
 package org.digijava.kernel.ampapi.endpoints.filters;
 
 import java.util.List;
+import java.util.Map;
 
 public class FilterList {
     
-    private List<FilterTreeDefinition> treeDefinitions; 
+    private List<FilterListDefinition> listDefinitions; 
     
-    private List<FilterTreeNode> items;
+    private Map<String, List<FilterListTreeNode>> items;
 
-    public FilterList(List<FilterTreeDefinition> treeDefinitions, List<FilterTreeNode> items) {
-        this.treeDefinitions = treeDefinitions;
+    public FilterList(List<FilterListDefinition> listDefinitions, Map<String, List<FilterListTreeNode>> items) {
+        this.listDefinitions = listDefinitions;
         this.items = items;
     }
 
-    public List<FilterTreeDefinition> getTreeDefinitions() {
-        return treeDefinitions;
+    public List<FilterListDefinition> getListDefinitions() {
+        return listDefinitions;
     }
 
-    public void setTreeDefinitions(List<FilterTreeDefinition> treeDefinitions) {
-        this.treeDefinitions = treeDefinitions;
+    public void setListDefinitions(List<FilterListDefinition> listDefinitions) {
+        this.listDefinitions = listDefinitions;
     }
 
-    public List<FilterTreeNode> getItems() {
+    public Map<String, List<FilterListTreeNode>> getItems() {
         return items;
     }
 
-    public void setItems(List<FilterTreeNode> items) {
+    public void setItems(Map<String, List<FilterListTreeNode>> items) {
         this.items = items;
     } 
     

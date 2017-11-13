@@ -36,4 +36,8 @@ public final class FiltersManager {
         return SectorFilterListManager.getInstance().getFilterList();
     }
 
+    public FilterList getLocationFilterList() {
+        return LocationFilterListManager.getInstance().getFilterList();
+    }
+
 }

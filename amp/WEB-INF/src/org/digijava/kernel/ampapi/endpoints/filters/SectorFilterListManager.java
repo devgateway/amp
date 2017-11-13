@@ -1,7 +1,9 @@
 package org.digijava.kernel.ampapi.endpoints.filters;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -36,14 +38,14 @@ public final class SectorFilterListManager implements FilterListManager {
 
     @Override
     public FilterList getFilterList() {
-        List<FilterTreeDefinition> sectorTreeDefinitions = getSectorTreeDefinitions();
-        List<FilterTreeNode> sectorTreeItems = getSectorTreeItems();
+        List<FilterListDefinition> sectorListDefinitions = getSectorListDefinitions();
+        Map<String, List<FilterListTreeNode>> sectorListItems = getSectorListItems();
         
-        return new FilterList(sectorTreeDefinitions, sectorTreeItems);
+        return new FilterList(sectorListDefinitions, sectorListItems);
     }
     
-    private List<FilterTreeDefinition> getSectorTreeDefinitions() {
-        List<FilterTreeDefinition> treeDefinitions = new ArrayList<>();
+    private List<FilterListDefinition> getSectorListDefinitions() {
+        List<FilterListDefinition> listDefinitions = new ArrayList<>();
         List<AmpClassificationConfiguration> sectorConfigs = getSectorConfigs();
        
         for (AmpClassificationConfiguration sc : sectorConfigs) {
@@ -52,29 +54,31 @@ public final class SectorFilterListManager implements FilterListManager {
                     .map(col -> FilterUtils.INSTANCE.idFromColumnName(col))
                     .collect(Collectors.toList());
             
-            FilterTreeDefinition treeDefinition = new FilterTreeDefinition();
-            treeDefinition.setId(sc.getId());
-            treeDefinition.setName(sc.getName() + SECTORS_SUFFIX);
-            treeDefinition.setDisplayName(TranslatorWorker.translateText(sc.getName() + SECTORS_SUFFIX));
-            treeDefinition.setFilterIds(filterIds);
-            treeDefinitions.add(treeDefinition);
+            FilterListDefinition listDefinition = new FilterListDefinition();
+            listDefinition.setId(sc.getId());
+            listDefinition.setName(sc.getName() + SECTORS_SUFFIX);
+            listDefinition.setDisplayName(TranslatorWorker.translateText(sc.getName() + SECTORS_SUFFIX));
+            listDefinition.setFiltered(true);
+            listDefinition.setFilterIds(filterIds);
+            listDefinition.setItems(sc.getName().toLowerCase());
+            listDefinitions.add(listDefinition);
         }
         
-        return treeDefinitions;
+        return listDefinitions;
     }
     
-    private List<FilterTreeNode> getSectorTreeItems() {
-        List<FilterTreeNode> items = new ArrayList<>();
+    private Map<String, List<FilterListTreeNode>> getSectorListItems() {
         List<AmpClassificationConfiguration> sectorConfigs = getSectorConfigs();
-        
+        Map<String, List<FilterListTreeNode>> items = new HashMap<>();
         for (AmpClassificationConfiguration sc : sectorConfigs) {
+            List<FilterListTreeNode> sectorItems = new ArrayList<>();
             String sectorConfigName = sc.getName();
             List<AmpSector> sectors = SectorUtil.getAmpSectorsAndSubSectorsHierarchy(sectorConfigName);
-            List<Long> treeIds = new ArrayList<>();
-            treeIds.add(sc.getId());
             for (AmpSector as : sectors) {
-                items.add(getSectors(as, treeIds));
+                sectorItems.add(getSectors(as));
             }
+            
+            items.put(sectorConfigName.toLowerCase(), sectorItems);
         }
 
         return items;
@@ -89,18 +93,14 @@ public final class SectorFilterListManager implements FilterListManager {
         return sectorConfigs;
     }
     
-    private FilterTreeNode getSectors(AmpSector as, List<Long> treeIds) {
-        FilterTreeNode node = new FilterTreeNode();
+    private FilterListTreeNode getSectors(AmpSector as) {
+        FilterListTreeNode node = new FilterListTreeNode();
         node.setId(as.getAmpSectorId());
         node.setCode(as.getSectorCodeOfficial());
         node.setName(as.getName());
         
-        if (as.getSectors().isEmpty()) {
-            node.setTreeIds(treeIds);
-        }
-        
         for (AmpSector ampSectorChild : as.getSectors()) {
-            node.addChild(getSectors(ampSectorChild, treeIds));
+            node.addChild(getSectors(ampSectorChild));
         }
         
         return node;

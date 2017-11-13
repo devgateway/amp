@@ -2,6 +2,7 @@ package org.digijava.kernel.ampapi.endpoints.filters;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -33,6 +34,8 @@ public final class OrganizationFilterListManager implements FilterListManager {
     private static final int COL_ORG_GRP_POS = 3;
     private static final int COL_ORG_ROLES_POS = 4;
     
+    private static final String ORGANIZATIONS_ITEMS_NAME = "organizations";
+    
     private static OrganizationFilterListManager organizationFilterListManager;
     
     /**
@@ -51,8 +54,8 @@ public final class OrganizationFilterListManager implements FilterListManager {
 
     @Override
     public FilterList getFilterList() {
-        List<FilterTreeDefinition> orgTreeDefinitions = getOrgTreeDefinitions();
-        List<FilterTreeNode> orgTreeItems = getOrgTreeItems();
+        List<FilterListDefinition> orgTreeDefinitions = getOrgListDefinitions();
+        Map<String, List<FilterListTreeNode>> orgTreeItems = getOrgListItems();
         
         return new FilterList(orgTreeDefinitions, orgTreeItems);
     }
@@ -60,23 +63,24 @@ public final class OrganizationFilterListManager implements FilterListManager {
     /**
      * @return List<FilterTreeNode>
      */
-    public List<FilterTreeNode> getOrgTreeItems() {
-        List<FilterTreeNode> items = new ArrayList<>();
+    public Map<String, List<FilterListTreeNode>> getOrgListItems() {
+        Map<String, List<FilterListTreeNode>> items = new HashMap<>();
+        List<FilterListTreeNode> orgItems = new ArrayList<>();
 
         List<OrganizationSkeleton> orgsWithRoles = getAllOrganizationsWithRoles();
-        Map<Long, List<FilterTreeNode>> orgFilterNodes = orgsWithRoles.stream()
+        Map<Long, List<FilterListTreeNode>> orgFilterNodes = orgsWithRoles.stream()
                 .collect(Collectors.groupingBy(OrganizationSkeleton::getOrgGrpId,
                         Collectors.mapping(os -> getFilterNodeFromOrgSkeleton(os), Collectors.toList())));
 
         List<AmpOrgType> orgTypes = getOrgTypes();
         for (AmpOrgType orgType : orgTypes) {
-            FilterTreeNode typeNode = new FilterTreeNode();
+            FilterListTreeNode typeNode = new FilterListTreeNode();
             typeNode.setId(orgType.getAmpOrgTypeId());
             typeNode.setName(orgType.getName());
 
             for (AmpOrgGroup orgGroup : orgType.getOrgGroups()) {
                 if (orgFilterNodes.containsKey(orgGroup.getAmpOrgGrpId())) {
-                    FilterTreeNode groupNode = new FilterTreeNode();
+                    FilterListTreeNode groupNode = new FilterListTreeNode();
                     groupNode.setId(orgGroup.getAmpOrgGrpId());
                     groupNode.setName(orgGroup.getName());
 
@@ -86,8 +90,10 @@ public final class OrganizationFilterListManager implements FilterListManager {
                 }
             }
 
-            items.add(typeNode);
+            orgItems.add(typeNode);
         }
+        
+        items.put(ORGANIZATIONS_ITEMS_NAME, orgItems);
 
         return items;
     }
@@ -95,29 +101,31 @@ public final class OrganizationFilterListManager implements FilterListManager {
     /**
      * @param treeDefinitions
      */
-    public List<FilterTreeDefinition> getOrgTreeDefinitions() {
-        List<FilterTreeDefinition> treeDefinitions = new ArrayList<>();
+    public List<FilterListDefinition> getOrgListDefinitions() {
+        List<FilterListDefinition> listDefinitions = new ArrayList<>();
         List<AmpRole> visibleRoles = getVisibleRoles();
 
         for (AmpRole role : visibleRoles) {
-            FilterTreeDefinition treeDefinition = new FilterTreeDefinition();
-            treeDefinition.setId(role.getAmpRoleId());
-            treeDefinition.setName(role.getName());
-            treeDefinition.setDisplayName(TranslatorWorker.translateText(role.getName()));
-            treeDefinition.setFilterIds(FiltersConstants.ORG_ROLE_CODE_TO_FILTER_TREE_IDS.get(role.getRoleCode()));
-            treeDefinitions.add(treeDefinition);
+            FilterListDefinition listDefinition = new FilterListDefinition();
+            listDefinition.setId(role.getAmpRoleId());
+            listDefinition.setName(role.getName());
+            listDefinition.setDisplayName(TranslatorWorker.translateText(role.getName()));
+            listDefinition.setFilterIds(FiltersConstants.ORG_ROLE_CODE_TO_FILTER_LIST_IDS.get(role.getRoleCode()));
+            listDefinition.setFiltered(false);
+            listDefinition.setItems(ORGANIZATIONS_ITEMS_NAME);
+            listDefinitions.add(listDefinition);
         }
 
-        return treeDefinitions;
+        return listDefinitions;
     }
 
-    private FilterTreeNode getFilterNodeFromOrgSkeleton(OrganizationSkeleton os) {
-        FilterTreeNode orgNode = new FilterTreeNode();
+    private FilterListTreeNode getFilterNodeFromOrgSkeleton(OrganizationSkeleton os) {
+        FilterListTreeNode orgNode = new FilterListTreeNode();
 
         orgNode.setId(os.getAmpOrgId());
         orgNode.setName(os.getName());
         orgNode.setAcronym(os.getAcronym());
-        orgNode.setTreeIds(os.getRoleIds());
+        orgNode.setListDefinitionIds(os.getRoleIds());
 
         return orgNode;
     }

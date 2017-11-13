@@ -5,7 +5,7 @@ import java.util.List;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-public class FilterTreeDefinition {
+public class FilterListDefinition {
 
     private Long id;
     
@@ -14,6 +14,10 @@ public class FilterTreeDefinition {
     private String displayName;
     
     private List<String> filterIds;
+    
+    private boolean filtered;
+    
+    private String items;
     
     public Long getId() {
         return id;
@@ -45,6 +49,22 @@ public class FilterTreeDefinition {
 
     public void setFilterIds(List<String> filterIds) {
         this.filterIds = filterIds;
+    }
+
+    public boolean isFiltered() {
+        return filtered;
+    }
+
+    public void setFiltered(boolean filtered) {
+        this.filtered = filtered;
+    }
+
+    public String getItems() {
+        return items;
+    }
+
+    public void setItems(String items) {
+        this.items = items;
     }
 
 }

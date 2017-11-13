@@ -675,6 +675,19 @@ public class FiltersEndpoint {
         return QueryUtil.getLocationsForFilter();
     }
     
+    /**
+     * List the locations tree
+     * 
+     * @return tree definitions (filter types) and the tree structure of the locations
+     */
+    @GET
+    @Path("/locationlist")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = true, id = "LocationList", name = "LocationList", tab = EPConstants.TAB_LOCATIONS)
+    public FilterList getLocationsList() {
+        return FiltersManager.getInstance().getLocationFilterList();
+    }
+    
     @GET
     @Path("/humanitarianAid/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")

@@ -372,6 +372,19 @@ public class FiltersEndpoint {
     }
     
     /**
+     * List the program settings and the program items
+     * 
+     * @return tree definitions (filter types) and the list of the programs
+     */
+    @GET
+    @Path("/programlist")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = true, id = "ProgramList", name = "ProgramList", tab = EPConstants.TAB_PROGRAMS)
+    public FilterList getProgramList() {
+        return FiltersManager.getInstance().getProgramFilterList();
+    }
+    
+    /**
      * Return org types with its orgs groups
      * 
      * @return

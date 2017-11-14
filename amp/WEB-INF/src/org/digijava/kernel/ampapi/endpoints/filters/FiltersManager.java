@@ -40,4 +40,8 @@ public final class FiltersManager {
         return LocationFilterListManager.getInstance().getFilterList();
     }
 
+    public FilterList getProgramFilterList() {
+        return ProgramFilterListManager.getInstance().getFilterList();
+    }
+
 }

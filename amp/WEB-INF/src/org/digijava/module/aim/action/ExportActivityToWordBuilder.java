@@ -3820,6 +3820,7 @@ public class ExportActivityToWordBuilder {
 
             int rowCounter = 1;
             int idx = 0;
+            int cellIndex = 1;
             for (String rowData : rd.getValues()) {
                 String visKey = null;
                 if (rd.getFieldOrderedList() != null) {
@@ -3830,7 +3831,7 @@ public class ExportActivityToWordBuilder {
                 if (visKey == null || (visKey != null && FeaturesUtil.isVisibleField(visKey))) {
                     boolean shouldTranslate = Boolean.TRUE.equals(rd.getTranslateValues().get(rowData));
                     String trnVal = shouldTranslate ? TranslatorWorker.translateText(rowData) : rowData;
-                    XWPFTableCell cell = dataRow.getCell(idx);
+                    XWPFTableCell cell = dataRow.getCell(cellIndex++);
                     XWPFParagraph dataParagraph = cell.getParagraphs().get(0);
                     setOrientation(dataParagraph);
                     setRun(dataParagraph.createRun(), FONT_FAMILY, FONT_SIZE_NORMAL, null, trnVal != null

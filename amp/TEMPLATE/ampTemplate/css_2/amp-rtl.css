@@ -152,6 +152,7 @@ div.trnpanel div.trn-row ul {
 #amp_info_filters {
     float: left;
     left: 35px;
+    right: auto;
 }
 
 .sub-filters-titles {
@@ -520,7 +521,7 @@ a.last_page {
 }
 
 .search_results_header {
-    float: right;
+    float: right !important;
 }
 
 .search-results {
@@ -692,6 +693,16 @@ th {
     text-align: right !important;
 }
 
+.ui-pnotify {
+    left: 25px !important;
+    right: 0px !important;
+}
+
+.dropdown-menu ul {
+    right: auto !important;
+    left: 0 !important;
+}
+
 .legend {
     left: 5px;
     right: auto;
@@ -748,6 +759,12 @@ th {
     display: none !important;
 }
 
+.search-panel-title {
+    padding: 10px 5px;
+    text-align: right;
+}
+
+
 .tree ul {
     margin-left: 0px !important;
 }
@@ -756,6 +773,10 @@ th {
     margin: 0px 0px 0px 0px !important;
 }
 
+.search_results_header_keyword {
+    float: left;
+    padding-right: 2px;
+}
 
 @media (min-width: 768px) {
     .col-sm-offset-1 {

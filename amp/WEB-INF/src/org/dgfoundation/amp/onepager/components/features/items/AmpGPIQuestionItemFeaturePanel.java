@@ -111,15 +111,15 @@ public class AmpGPIQuestionItemFeaturePanel extends AmpFeaturePanel<AmpGPISurvey
                 
                 IChoiceRenderer renderer = new IChoiceRenderer() {
                     public Object getDisplayValue(Object object) {
-                        return object;
+                        return object != null ? TranslatorWorker.translateText(object.toString()) : "";
                     }
                     
                     public String getIdValue(Object object, int index) {
                         return object != null ? object.toString() : "";
                     }
                 };
-                final String[] elements = new String[] { TranslatorWorker.translateText("Yes"), TranslatorWorker.translateText("No") };
-                AmpGroupFieldPanel<String> yesNoField = new AmpGroupFieldPanel<String>("answer", 
+                final String[] elements = new String[] { "Yes", "No" };
+                AmpGroupFieldPanel<String> yesNoField = new AmpGroupFieldPanel<String>("answer",
                         new GPIYesNoAnswerModel(new PropertyModel<String>(PersistentObjectModel.getModel(response), "response")), 
                         Arrays.asList(elements), 
                         new PropertyModel<String>(item.getModelObject(), "questionText").getObject(), 

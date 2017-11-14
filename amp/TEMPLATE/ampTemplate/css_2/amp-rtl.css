@@ -696,7 +696,7 @@ th {
 .ui-pnotify {
     left: 25px !important;
     right: 0px !important;
-} 
+}
 
 .dropdown-menu ul {
     right: auto !important;
@@ -776,4 +776,10 @@ th {
 .search_results_header_keyword {
     float: left;
     padding-right: 2px;
+}
+
+@media (min-width: 768px) {
+    .col-sm-offset-1 {
+        margin-right: 8.33333333%;
+    }
 }

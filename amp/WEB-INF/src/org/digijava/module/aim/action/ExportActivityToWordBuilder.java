@@ -403,12 +403,12 @@ public class ExportActivityToWordBuilder {
         }
     }
 
-    private void getSectorsTables() {
+    private void getSectorsTables() throws Exception  {
         String columnVal;
         if (FeaturesUtil.isVisibleModule("/Activity Form/Sectors")) {
             addSectionTitle(TranslatorWorker.translateText("Sectors").toUpperCase());
 
-            XWPFTable sectorsTbl = buildXwpfTable(1);
+            XWPFTable sectorsTbl = buildXwpfTable(2);
             sectorsTbl.setWidth(WIDTH);
 
             if (sectors.getClassificationConfigs() != null) {
@@ -424,9 +424,12 @@ public class ExportActivityToWordBuilder {
                         }
                     }
                     if (hasSectors) {
+                        String sector = TranslatorWorker.translateText(config.getName()) + " Sector";
                         XWPFTableRow sectorsTblTitleRow = sectorsTbl.createRow();
-                        sectorsTblTitleRow.getCell(0).setText(TranslatorWorker.translateText(config.getName() + ""
-                                + " Sector").toUpperCase());
+                        XWPFParagraph sectorTitleParagraphs = sectorsTblTitleRow.getCell(0).getParagraphs().get(0);
+                        setOrientation(sectorTitleParagraphs);
+                        setRun(sectorTitleParagraphs.createRun(), FONT_FAMILY, FONT_SIZE_NORMAL, null,
+                                sector.toUpperCase(), false, false);
                     }
                     if (sectors.getActivitySectors() != null) {
                         for (ActivitySector actSect : sectors.getActivitySectors()) {
@@ -441,9 +444,8 @@ public class ExportActivityToWordBuilder {
                                 if (actSect.getSubsectorLevel2Name() != null) {
                                     columnVal += " - " + actSect.getSubsectorLevel2Name();
                                 }
-                                columnVal += " " + actSect.getSectorPercentage() + " %";
-                                XWPFTableRow sectorsTblRow = sectorsTbl.createRow();
-                                sectorsTblRow.getCell(0).setText(columnVal);
+                                generateOverAllTableRows(sectorsTbl, columnVal, actSect.getSectorPercentage() + " %",
+                                        null);
                             }
                         }
                     }
@@ -461,22 +463,20 @@ public class ExportActivityToWordBuilder {
         XWPFTable locationSubTable1 = buildXwpfTable(2);
 
         if (FeaturesUtil.isVisibleModule("/Activity Form/Location/Implementation Location")) {
-            columnVal = "";
+
             if (location.getSelectedLocs() != null) {
                 for (Location loc : location.getSelectedLocs()) {
+                    columnVal = "";
+                    String columnPercentage = "";
                     for (String val : loc.getAncestorLocationNames()) {
                         columnVal += "[" + val + "]";
                     }
                     if (FeaturesUtil.isVisibleField("Regional Percentage")) {
-                        columnVal += "\t\t" + loc.getPercent() + " %\n";
+                        columnPercentage = loc.getPercent() + " %";
                     }
+                    generateOverAllTableRows(locationSubTable1, columnVal, columnPercentage, null);
                 }
             }
-
-            XWPFTableCell cell = locationSubTable1.getRow(0).getCell(0);
-            setRun(cell.getParagraphs().get(0).createRun(), FONT_FAMILY, FONT_SIZE_NORMAL, null,
-                    columnVal, true, false);
-
         }
 
         if (FeaturesUtil.isVisibleModule("/Activity Form/Location/Implementation Level")) {

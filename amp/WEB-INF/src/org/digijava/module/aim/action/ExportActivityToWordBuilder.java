@@ -132,6 +132,7 @@ public class ExportActivityToWordBuilder {
     public static final int TABLE_WIDTH = 10500;
     public static final int ADDITIONAL_INFORMATION_ROWS = 5;
     public static final int TABLE_SEPARATOR_LENGTH = 85;
+    public static final int COLUMNS_2 = 2;
     private static Logger logger = Logger.getLogger(ExportActivityToWordBuilder.class);
 
     public static final String CELLCOLORGRAY = "F2F2F2";
@@ -408,7 +409,7 @@ public class ExportActivityToWordBuilder {
         if (FeaturesUtil.isVisibleModule("/Activity Form/Sectors")) {
             addSectionTitle(TranslatorWorker.translateText("Sectors").toUpperCase());
 
-            XWPFTable sectorsTbl = buildXwpfTable(2);
+            XWPFTable sectorsTbl = buildXwpfTable(COLUMNS_2);
             sectorsTbl.setWidth(WIDTH);
 
             if (sectors.getClassificationConfigs() != null) {

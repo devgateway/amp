@@ -677,6 +677,11 @@ th {
     margin: 0px 0px 0px 0px !important;
 }
 
+.tree li::before, .tree li::after {
+    left: auto;
+    right: -5px;
+}
+
 .search_results_header_keyword {
     float: left;
     padding-right: 2px;

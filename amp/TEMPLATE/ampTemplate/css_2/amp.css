@@ -1361,3 +1361,12 @@ div.footer {
     text-align: left;
     max-width: 423px;
 }
+
+.search_results_header_keyword {
+    float: right;
+    padding-left: 2px;
+}
+
+.button_green_group {
+    display: inline-block;
+}

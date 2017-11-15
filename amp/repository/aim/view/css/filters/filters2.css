@@ -72,3 +72,7 @@ input.memberSelectorTextbox {
     border-collapse: separate;
 	font-size:12px !important;
 }
+
+.search-panel-title {
+	padding: 10px 5px;
+}

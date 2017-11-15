@@ -31,7 +31,8 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
 
     @Override
     public List<Object[]> getCategoryValues(String discriminatorOption) {
-        String queryString = "SELECT acv.id, acv.value, acv.deleted from " + AmpCategoryValue.class.getName() + " acv "
+        String queryString = "SELECT acv.id, acv.value, acv.deleted, acv.index from "
+                + AmpCategoryValue.class.getName() + " acv "
                 + "WHERE acv.ampCategoryClass.keyName ='" + discriminatorOption + "' ORDER BY acv.id";
         return query(queryString);
     }

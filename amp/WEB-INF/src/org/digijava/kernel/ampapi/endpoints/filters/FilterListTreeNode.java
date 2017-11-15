@@ -6,18 +6,18 @@ import java.util.List;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-public class FilterTreeNode {
+public class FilterListTreeNode {
 
     private Long id;
     private String name;
     private String acronym;
     private String code;
     
-    private List<Long> treeIds;
+    private List<Long> listDefinitionIds;
     
-    private List<FilterTreeNode> children = new ArrayList<>();
+    private List<FilterListTreeNode> children = new ArrayList<>();
 
-    public void addChild(FilterTreeNode child) {
+    public void addChild(FilterListTreeNode child) {
         children.add(child);
     }
 
@@ -37,11 +37,11 @@ public class FilterTreeNode {
         this.id = id;
     }
 
-    public List<FilterTreeNode> getChildren() {
+    public List<FilterListTreeNode> getChildren() {
         return children;
     }
 
-    public void setChildren(List<FilterTreeNode> children) {
+    public void setChildren(List<FilterListTreeNode> children) {
         this.children = children;
     }
     
@@ -53,12 +53,12 @@ public class FilterTreeNode {
         this.acronym = acronym;
     }
 
-    public List<Long> getTreeIds() {
-        return treeIds;
+    public List<Long> getListDefinitionIds() {
+        return listDefinitionIds;
     }
 
-    public void setTreeIds(List<Long> treeIds) {
-        this.treeIds = treeIds;
+    public void setListDefinitionIds(List<Long> listDefinitionIds) {
+        this.listDefinitionIds = listDefinitionIds;
     }
 
     public String getCode() {

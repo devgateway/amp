@@ -89,7 +89,6 @@ div.trnpanel div.trn-row ul {
 
 .tri {
     -webkit-transform:scale(-1,1);
-    display: table-cell;
 }
 
 .tri b {

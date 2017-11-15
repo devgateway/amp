@@ -88,7 +88,7 @@ public class TLSUtils {
             return forcedSSCWorkspace;
         } else {
             TeamMember member = TeamUtil.getCurrentMember();
-            return member.getWorkspacePrefix() != null;
+            return member != null && member.getWorkspacePrefix() != null;
         }
     }
 

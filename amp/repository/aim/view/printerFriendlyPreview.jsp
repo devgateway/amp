@@ -1124,14 +1124,14 @@ body {background:none;}
 												<table width="100%" cellSpacing="2" cellPadding="1">
 												<c:forEach var="selectedLocs" items="${aimEditActivityForm.location.selectedLocs}">
 													<tr>
-													<td>
+													<td width="85%">
 														<c:forEach var="ancestorLoc" items="${selectedLocs.ancestorLocationNames}">
 														<span class="word_break bold">
 															[${ancestorLoc}]
 														</span>
 	                                                    </c:forEach>
 													</td>
-													<td class="preview-align">
+													<td width="15%">
 														<!-- <c:out value="${locations.percent}"/>% -->
 														<field:display name="Regional Percentage" feature="Location">
 														<c:if test="${selectedLocs.showPercent}">
@@ -1339,7 +1339,7 @@ body {background:none;}
                                                                         <module:display name="/Activity Form/Sectors"
                                                                                         parentModule="/Activity Form">
                                                                             <tr>
-                                                                                <td>
+                                                                                <td width="85%">
                                                                                     <c:if test="${!empty sectors.sectorName}">
                                                                                         <span class="word_break">
                                                                                             <c:out value="${sectors.sectorName}"/>
@@ -1357,6 +1357,8 @@ body {background:none;}
                                                                                                 value="${sectors.subsectorLevel2Name}"/>]
                                                                                         </span>
                                                                                     </c:if>
+																				</td>
+																				<td width="15%">
                                                                                     <c:if test="${sectors.sectorPercentage!=''}">
                                                                                         <c:if test="${sectors.sectorPercentage!='0'}">
                                                                                             (<c:out
@@ -3360,7 +3362,7 @@ body {background:none;}
 																			style="text-transform: uppercase;">
 																			<c:set var="indicatorName"
 																				   value="${gpiresponse.ampQuestionId.ampIndicatorId.name}"/>
-																			<span class="word_break bold">${indicatorName}</span>
+																			<span class="word_break bold"><digi:trn>${indicatorName}</digi:trn></span>
 																		</td>
 																	</tr>
 																</c:if>
@@ -3368,12 +3370,20 @@ body {background:none;}
 																	<td width=85%>
 																		<c:set var="questionText"
 																			   value="${gpiresponse.ampQuestionId.questionText}"/>
-																		<span class="word_break bold">${questionText}</span>
+																		<c:set var="ampTypeName"
+																			   value="${gpiresponse.ampQuestionId.ampTypeId.name}"/>
+																		<span class="word_break bold"><digi:trn>${questionText}</digi:trn></span>
 																		<c:set var="responseText"
 																			   value="${gpiresponse.response}"/>
 																		<lu>
 																			<li>
-																				<span class="word_break bold">${responseText}</span>
+																				<c:if test='${"yes-no".equals(ampTypeName) &&
+																						!"".equals(responseText) && responseText != null}'>
+																					<span class="word_break bold"><digi:trn>${responseText}</digi:trn></span>
+																				</c:if>
+																				<c:if test='${!"yes-no".equals(ampTypeName)}'>
+																					<span class="word_break bold">${responseText}</span>
+																				</c:if>
 																			</li>
 																		</lu>
 																	</td>

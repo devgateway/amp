@@ -132,6 +132,7 @@ public class ExportActivityToWordBuilder {
     public static final int TABLE_WIDTH = 10500;
     public static final int ADDITIONAL_INFORMATION_ROWS = 5;
     public static final int TABLE_SEPARATOR_LENGTH = 85;
+    public static final int COLUMNS_2 = 2;
     private static Logger logger = Logger.getLogger(ExportActivityToWordBuilder.class);
 
     public static final String CELLCOLORGRAY = "F2F2F2";
@@ -403,12 +404,12 @@ public class ExportActivityToWordBuilder {
         }
     }
 
-    private void getSectorsTables() {
+    private void getSectorsTables() throws Exception  {
         String columnVal;
         if (FeaturesUtil.isVisibleModule("/Activity Form/Sectors")) {
             addSectionTitle(TranslatorWorker.translateText("Sectors").toUpperCase());
 
-            XWPFTable sectorsTbl = buildXwpfTable(1);
+            XWPFTable sectorsTbl = buildXwpfTable(COLUMNS_2);
             sectorsTbl.setWidth(WIDTH);
 
             if (sectors.getClassificationConfigs() != null) {
@@ -424,9 +425,12 @@ public class ExportActivityToWordBuilder {
                         }
                     }
                     if (hasSectors) {
+                        String sector = TranslatorWorker.translateText(config.getName()) + " Sector";
                         XWPFTableRow sectorsTblTitleRow = sectorsTbl.createRow();
-                        sectorsTblTitleRow.getCell(0).setText(TranslatorWorker.translateText(config.getName() + ""
-                                + " Sector").toUpperCase());
+                        XWPFParagraph sectorTitleParagraphs = sectorsTblTitleRow.getCell(0).getParagraphs().get(0);
+                        setOrientation(sectorTitleParagraphs);
+                        setRun(sectorTitleParagraphs.createRun(), FONT_FAMILY, FONT_SIZE_NORMAL, null,
+                                sector.toUpperCase(), false, false);
                     }
                     if (sectors.getActivitySectors() != null) {
                         for (ActivitySector actSect : sectors.getActivitySectors()) {
@@ -441,9 +445,8 @@ public class ExportActivityToWordBuilder {
                                 if (actSect.getSubsectorLevel2Name() != null) {
                                     columnVal += " - " + actSect.getSubsectorLevel2Name();
                                 }
-                                columnVal += " " + actSect.getSectorPercentage() + " %";
-                                XWPFTableRow sectorsTblRow = sectorsTbl.createRow();
-                                sectorsTblRow.getCell(0).setText(columnVal);
+                                generateOverAllTableRows(sectorsTbl, columnVal, actSect.getSectorPercentage() + " %",
+                                        null);
                             }
                         }
                     }
@@ -461,22 +464,20 @@ public class ExportActivityToWordBuilder {
         XWPFTable locationSubTable1 = buildXwpfTable(2);
 
         if (FeaturesUtil.isVisibleModule("/Activity Form/Location/Implementation Location")) {
-            columnVal = "";
+
             if (location.getSelectedLocs() != null) {
                 for (Location loc : location.getSelectedLocs()) {
+                    columnVal = "";
+                    String columnPercentage = "";
                     for (String val : loc.getAncestorLocationNames()) {
                         columnVal += "[" + val + "]";
                     }
                     if (FeaturesUtil.isVisibleField("Regional Percentage")) {
-                        columnVal += "\t\t" + loc.getPercent() + " %\n";
+                        columnPercentage = loc.getPercent() + " %";
                     }
+                    generateOverAllTableRows(locationSubTable1, columnVal, columnPercentage, null);
                 }
             }
-
-            XWPFTableCell cell = locationSubTable1.getRow(0).getCell(0);
-            setRun(cell.getParagraphs().get(0).createRun(), FONT_FAMILY, FONT_SIZE_NORMAL, null,
-                    columnVal, true, false);
-
         }
 
         if (FeaturesUtil.isVisibleModule("/Activity Form/Location/Implementation Level")) {
@@ -3820,6 +3821,7 @@ public class ExportActivityToWordBuilder {
 
             int rowCounter = 1;
             int idx = 0;
+            int cellIndex = 1;
             for (String rowData : rd.getValues()) {
                 String visKey = null;
                 if (rd.getFieldOrderedList() != null) {
@@ -3830,7 +3832,7 @@ public class ExportActivityToWordBuilder {
                 if (visKey == null || (visKey != null && FeaturesUtil.isVisibleField(visKey))) {
                     boolean shouldTranslate = Boolean.TRUE.equals(rd.getTranslateValues().get(rowData));
                     String trnVal = shouldTranslate ? TranslatorWorker.translateText(rowData) : rowData;
-                    XWPFTableCell cell = dataRow.getCell(idx);
+                    XWPFTableCell cell = dataRow.getCell(cellIndex++);
                     XWPFParagraph dataParagraph = cell.getParagraphs().get(0);
                     setOrientation(dataParagraph);
                     setRun(dataParagraph.createRun(), FONT_FAMILY, FONT_SIZE_NORMAL, null, trnVal != null

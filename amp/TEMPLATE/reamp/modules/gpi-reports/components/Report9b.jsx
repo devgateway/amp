@@ -11,7 +11,7 @@ import YearsFilterSection from './YearsFilterSection';
 export default class Report9b extends Component {
     constructor( props, context ) {
         super( props, context );
-        this.state = { recordsPerPage: 150, hierarchy: 'donor-agency', selectedYear: null, selectedDonor: "", waiting: true };
+        this.state = { recordsPerPage: Constants.RECORDS_PER_PAGE, hierarchy: 'donor-agency', selectedYear: null, selectedDonor: "", waiting: true };
         this.showFilters = this.showFilters.bind( this );
         this.showSettings = this.showSettings.bind( this );
         this.goToClickedPage = this.goToClickedPage.bind( this );

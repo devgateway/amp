@@ -333,8 +333,7 @@ export default class Report9b extends Component {
                         <div className="row">
                           <h4>{this.props.translations['amp.gpi-reports:indicator9b-description']}</h4>
                         </div>
-                      </div>
-                     <div className="section-divider"></div>
+                      </div>                     
                     <div className="section-divider"></div>
                     {this.props.mainReport.empty == true  &&
                             <div className="text-center">{this.props.translations['amp-gpi-reports:no-data']}</div>
@@ -390,6 +389,7 @@ export default class Report9b extends Component {
                             )}
                         </tbody>
                     </table>
+                    }        
                     {this.props.mainReport.page.totalPageCount > 1 &&
                     <div >
                         <div className="row">

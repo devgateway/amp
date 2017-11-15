@@ -16,7 +16,7 @@ import Loading from './Loading';
 export default class Report1Output2 extends Component {
     constructor( props, context ) {
         super( props, context );
-        this.state = { recordsPerPage: 150, selectedYear: null, selectedDonor: "", waiting:true};
+        this.state = { recordsPerPage: Constants.RECORDS_PER_PAGE, selectedYear: null, selectedDonor: "", waiting:true};
         this.showFilters = this.showFilters.bind( this );
         this.showSettings = this.showSettings.bind( this );        
         this.onDonorFilterChange = this.onDonorFilterChange.bind( this );     

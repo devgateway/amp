@@ -30,9 +30,9 @@ public class AmpStructure implements Serializable,Comparable, Versionable, Clone
     @Interchangeable(fieldTitle="Description",fmPath="/Activity Form/Structures/Structure Description")
     private String description;
     @Interchangeable(fieldTitle="Latitude",fmPath="/Activity Form/Structures/Structure Latitude")
-    private String latitude;
+    private Double latitude;
     @Interchangeable(fieldTitle="Longitude",fmPath="/Activity Form/Structures/Structure Longitude")
-    private String longitude;
+    private Double longitude;
     @Interchangeable(fieldTitle="Shape",fmPath="/Activity Form/Structures/Structure Shape")
     private String shape;
     private java.sql.Timestamp creationdate;
@@ -69,36 +69,14 @@ public class AmpStructure implements Serializable,Comparable, Versionable, Clone
     public void setTitle(String title) {
         this.title = title;
     }
-    
+
     public AmpStructureType getType() {
         return type;
     }
     public void setType(AmpStructureType type) {
         this.type = type;
     }
-    
-    /**
-     * A simple string comparison to sort components by title
-     */
 
-//  public int compareTo(AmpStructure o) {
-//      try {
-//          if(o.title == null && this.title == null) return 0;
-//          if(o.title == null) return 1;
-//          if(this.title == null) return -1;
-//          if (this.title.compareToIgnoreCase(o.title) > 0) {
-//              return 1;
-//          } else if (this.title.compareToIgnoreCase(o.title) == 0) {
-//              return -0;
-//          }
-//      } catch (Exception e) {
-//          logger.error("Error", e);
-//          return -1;
-//      }
-//      return -1;
-//  }   
-    
-    
     public int compareTo(Object obj) {
         
         if (!(obj instanceof AmpStructure)) 
@@ -121,23 +99,6 @@ public class AmpStructure implements Serializable,Comparable, Versionable, Clone
             }           
         }
     }
-    
-    //Do not override equals unless REALLY NEEDED!
-    /*
-     * 
-    @Override
-    public boolean equals(Object obj) {
-        AmpStructure target=(AmpStructure) obj;
-        if (this.ampStructureId == null)
-            return super.equals(obj);
-        
-        if (target!=null && this.ampStructureId!=null){
-            return (target.getAmpStructureId().doubleValue()==this.getAmpStructureId().doubleValue());
-        }
-        return false;
-        
-    }
-    */
     public java.sql.Timestamp getCreationdate() {
         return creationdate;
     }
@@ -213,16 +174,16 @@ public class AmpStructure implements Serializable,Comparable, Versionable, Clone
         // TODO Auto-generated method stub
         return super.clone();
     }
-    public void setLatitude(String latitude) {
+    public void setLatitude(Double latitude) {
         this.latitude = latitude;
     }
-    public String getLatitude() {
+    public Double getLatitude() {
         return latitude;
     }
-    public void setLongitude(String longitude) {
+    public void setLongitude(Double longitude) {
         this.longitude = longitude;
     }
-    public String getLongitude() {
+    public Double getLongitude() {
         return longitude;
     }
     public void setShape(String shape) {

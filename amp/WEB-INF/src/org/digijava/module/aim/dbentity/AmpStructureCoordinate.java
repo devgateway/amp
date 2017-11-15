@@ -6,8 +6,8 @@ public class AmpStructureCoordinate  implements Serializable,  Cloneable {
  
     private static final long serialVersionUID = -6217182726089147778L;
     private Long ampStructureCoordinateId;     
-    private String latitude;   
-    private String longitude;    
+    private Double latitude;
+    private Double longitude;
     private AmpStructure structure;
     
     public Long getAmpStructureCoordinateId() {
@@ -16,16 +16,16 @@ public class AmpStructureCoordinate  implements Serializable,  Cloneable {
     public void setAmpStructureCoordinateId(Long ampStructureCoordinateId) {
         this.ampStructureCoordinateId = ampStructureCoordinateId;
     }     
-    public String getLatitude() {
+    public Double getLatitude() {
         return latitude;
     }
-    public void setLatitude(String latitude) {
+    public void setLatitude(Double latitude) {
         this.latitude = latitude;
     }
-    public String getLongitude() {
+    public Double getLongitude() {
         return longitude;
     }
-    public void setLongitude(String longitude) {
+    public void setLongitude(Double longitude) {
         this.longitude = longitude;
     }
     public AmpStructure getStructure() {

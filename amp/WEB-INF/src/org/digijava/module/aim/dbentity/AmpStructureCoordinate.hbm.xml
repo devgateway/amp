@@ -9,8 +9,8 @@
 				<param name="sequence">AMP_STRUCTURE_COORDINATE_seq</param>
 			</generator>
 		</id>
-		<property column="latitude" name="latitude" type="text" />
-		<property column="longitude" name="longitude" type="text" />
+		<property column="latitude" name="latitude" type="Double" />
+		<property column="longitude" name="longitude" type="Double" />
 		<many-to-one name="structure" column="amp_structure_id" class="org.digijava.module.aim.dbentity.AmpStructure" index="idx_amp_structure_coordinate_id"/>
 	</class>
 </hibernate-mapping>

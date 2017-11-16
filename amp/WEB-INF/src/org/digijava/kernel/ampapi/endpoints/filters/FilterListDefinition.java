@@ -3,6 +3,7 @@ package org.digijava.kernel.ampapi.endpoints.filters;
 import java.util.List;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class FilterListDefinition {
@@ -18,6 +19,8 @@ public class FilterListDefinition {
     private boolean filtered;
     
     private String items;
+    
+    private String tab = EPConstants.TAB_UNASSIGNED;
     
     public Long getId() {
         return id;
@@ -67,4 +70,11 @@ public class FilterListDefinition {
         this.items = items;
     }
 
+    public String getTab() {
+        return tab;
+    }
+
+    public void setTab(String tab) {
+        this.tab = tab;
+    }
 }

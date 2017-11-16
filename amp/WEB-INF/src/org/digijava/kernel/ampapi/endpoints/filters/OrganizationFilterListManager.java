@@ -10,15 +10,19 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
+import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpRole;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.OrganisationUtil;
 import org.digijava.module.aim.util.OrganizationSkeleton;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
+
+import com.google.common.collect.ImmutableMap;
 
 /**
  * This class generates the filter list (tree) object for organizations
@@ -35,6 +39,20 @@ public final class OrganizationFilterListManager implements FilterListManager {
     private static final int COL_ORG_ROLES_POS = 4;
     
     private static final String ORGANIZATIONS_ITEMS_NAME = "organizations";
+    
+    private static final Map<String, String> ORG_ROLE_CODE_TO_TAB =
+            new ImmutableMap.Builder<String, String>()
+                    .put(Constants.ROLE_CODE_DONOR, EPConstants.TAB_ORGANIZATIONS)
+                    .put(Constants.ROLE_CODE_IMPLEMENTING_AGENCY, EPConstants.TAB_ALL_AGENCIES)
+                    .put(Constants.ROLE_CODE_BENEFICIARY_AGENCY, EPConstants.TAB_ALL_AGENCIES)
+                    .put(Constants.ROLE_CODE_EXECUTING_AGENCY, EPConstants.TAB_ALL_AGENCIES)
+                    .put(Constants.ROLE_CODE_RESPONSIBLE_ORG, EPConstants.TAB_ALL_AGENCIES)
+                    .put(Constants.ROLE_CODE_CONTRACTING_AGENCY, EPConstants.TAB_ALL_AGENCIES)
+                    .put(Constants.ROLE_CODE_REGIONAL_GROUP, EPConstants.TAB_ALL_AGENCIES)
+                    .put(Constants.ROLE_CODE_SECTOR_GROUP, EPConstants.TAB_ALL_AGENCIES)
+                    .put(Constants.ROLE_CODE_COMPONENT_FUNDING_ORGANIZATION, EPConstants.TAB_ALL_AGENCIES)
+                    .put(Constants.ROLE_CODE_COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION, EPConstants.TAB_ORGANIZATIONS)
+                    .build();
     
     private static OrganizationFilterListManager organizationFilterListManager;
     
@@ -113,6 +131,7 @@ public final class OrganizationFilterListManager implements FilterListManager {
             listDefinition.setFilterIds(FiltersConstants.ORG_ROLE_CODE_TO_FILTER_LIST_IDS.get(role.getRoleCode()));
             listDefinition.setFiltered(false);
             listDefinition.setItems(ORGANIZATIONS_ITEMS_NAME);
+            listDefinition.setTab(ORG_ROLE_CODE_TO_TAB.get(role.getRoleCode()));
             listDefinitions.add(listDefinition);
         }
 

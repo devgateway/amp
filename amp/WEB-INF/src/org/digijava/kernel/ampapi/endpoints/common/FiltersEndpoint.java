@@ -233,7 +233,7 @@ public class FiltersEndpoint {
     @GET
     @Path("/sectorlist")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, id = "SectorList", name = "SectorList", tab = EPConstants.TAB_SECTORS)
+    @ApiMethod(ui = true, id = "SectorList", name = "SectorList", tab = EPConstants.TAB_SECTORS, list = true)
     public FilterList getSectorList() {
         return FiltersManager.getInstance().getSectorFilterList();
     }
@@ -379,7 +379,7 @@ public class FiltersEndpoint {
     @GET
     @Path("/programlist")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, id = "ProgramList", name = "ProgramList", tab = EPConstants.TAB_PROGRAMS)
+    @ApiMethod(ui = true, id = "ProgramList", name = "ProgramList", tab = EPConstants.TAB_PROGRAMS, list = true)
     public FilterList getProgramList() {
         return FiltersManager.getInstance().getProgramFilterList();
     }
@@ -464,7 +464,7 @@ public class FiltersEndpoint {
     @GET
     @Path("/organizations")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, id = "Orgs", name = "Orgs", tab = EPConstants.TAB_ORGANIZATIONS)
+    @ApiMethod(ui = true, id = "Orgs", name = "Orgs", tab = EPConstants.TAB_ORGANIZATIONS, list = true)
     public FilterList getOrganizations() {
         return FiltersManager.getInstance().getOrganizationFilterList();
     }
@@ -696,7 +696,7 @@ public class FiltersEndpoint {
     @GET
     @Path("/locationlist")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, id = "LocationList", name = "LocationList", tab = EPConstants.TAB_LOCATIONS)
+    @ApiMethod(ui = true, id = "LocationList", name = "LocationList", tab = EPConstants.TAB_LOCATIONS, list = true)
     public FilterList getLocationsList() {
         return FiltersManager.getInstance().getLocationFilterList();
     }

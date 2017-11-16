@@ -760,3 +760,7 @@ th {
 .parent_li {
     margin: 0px 0px 0px 0px !important;
 }
+
+.ui-jqgrid .ui-jqgrid-hbox-rtl {
+    float: unset;
+}

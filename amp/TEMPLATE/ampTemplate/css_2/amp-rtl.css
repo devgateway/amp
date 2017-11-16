@@ -636,6 +636,7 @@ a.last_page {
 
 .hierarchy-list-margin {
     margin-right: -20px;
+    margin-left: 0px !important;
 }
 
 .filter-item-label {
@@ -691,4 +692,12 @@ th {
     .col-sm-offset-1 {
         margin-right: 8.33333333%;
     }
+}
+
+.grouping_selector_wrapper {
+    float: right !important;
+}
+
+.member_selector_wrapper {
+    float: right !important;
 }

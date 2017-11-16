@@ -103,7 +103,7 @@ public class AmpStructuresFormSectionFeature extends
                 item.add(description);      
 
                 final AmpTextFieldPanel<Double> longitude = new AmpTextFieldPanel<Double>("longitude",
-                        new PropertyModel<Double>(structureModel, "longitude"),"Structure Longitude",
+                        new PropertyModel<Double>(structureModel, "longitude"), "Structure Longitude",
                         true, true);
                 longitude.setOutputMarkupId(true);
 

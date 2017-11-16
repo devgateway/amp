@@ -1,6 +1,6 @@
 package org.digijava.module.aim.action;
 
-import static  org.digijava.kernel.util.SiteUtils.*;
+import static  org.digijava.kernel.util.SiteUtils.getDefaultLanguages;
 
 import static org.digijava.module.aim.helper.Constants.CURRENT_MEMBER;
 
@@ -8,7 +8,6 @@ import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -3991,11 +3990,13 @@ public class ExportActivityToWord extends Action {
         table.addCell(cell);
     }
 
-    private String  getEditTagValue(HttpServletRequest request,String editKey) throws Exception{
+    private String getEditTagValue(HttpServletRequest request, String editKey) throws Exception {
         Site site = RequestUtils.getSite(request);
-        String editorBody = org.digijava.module.editor.util.DbUtil.getEditorBody(site,editKey,RequestUtils.getNavigationLanguage(request).getCode());
+        String editorBody = org.digijava.module.editor.util.DbUtil.getEditorBody(site, editKey,
+                RequestUtils.getNavigationLanguage(request).getCode());
         if (editorBody == null) {
-            editorBody = org.digijava.module.editor.util.DbUtil.getEditorBody(site,editKey, getDefaultLanguages(site).getCode());
+            editorBody = org.digijava.module.editor.util.DbUtil.getEditorBody(site, editKey,
+                    getDefaultLanguages(site).getCode());
         }
         return editorBody;
     }

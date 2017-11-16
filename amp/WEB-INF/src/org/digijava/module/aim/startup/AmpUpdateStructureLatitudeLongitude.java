@@ -21,10 +21,11 @@ public class AmpUpdateStructureLatitudeLongitude {
 
     protected Logger logger = LoggerFactory.getLogger(AmpUpdateStructureLatitudeLongitude.class);
 
-    private DateFormat oldFormat = new SimpleDateFormat(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT));
+    private DateFormat oldFormat = new SimpleDateFormat(FeaturesUtil.getGlobalSettingValue(
+            GlobalSettingsConstants.DEFAULT_DATE_FORMAT));
     private SimpleDateFormat newFormat = new SimpleDateFormat(AmpARFilter.SDF_IN_FORMAT_STRING);
 
-    public void AmpUpdateStructureLatitudeLongitude() {
+    public AmpUpdateStructureLatitudeLongitude() {
 
     }
 
@@ -38,15 +39,15 @@ public class AmpUpdateStructureLatitudeLongitude {
     private void updateTable(Connection connection, String tableName) throws SQLException {
         RsInfo structuresToChange = null;
         try {
-            String fetchWrongData = " select true from (" +
-                    " select 1 from %s where latitude !~ '^[-]?[0-9]*.?[0-9]*$' " +
-                    " or longitude !~ '^[-]?[0-9]*.?[0-9]*$' " +
-                    " or latitude::numeric > %s or latitude::numeric< -%<s " +
-                    "or longitude::numeric> %s or longitude::numeric< -%<s limit 1" +
-                    " ) as t";
+            String fetchWrongData = " select true from ("
+                    + " select 1 from %s where latitude !~ '^[-]?[0-9]*.?[0-9]*$' "
+                    + " or longitude !~ '^[-]?[0-9]*.?[0-9]*$' "
+                    + " or latitude::numeric > %s or latitude::numeric< -%<s "
+                    + "or longitude::numeric> %s or longitude::numeric< -%<s limit 1 ) as t";
 
             String addColumn = "ALTER TABLE %s ADD COLUMN %s_to_fix text";
-            String updateColumn = "update %s set %s_to_fix = %<s where %<s !~ '^[-]?[0-9]*.?[0-9]*$' or  %<s::numeric not between -%s and %<s";
+            String updateColumn = "update %s set %s_to_fix = %<s where %<s !~ '^[-]?[0-9]*.?[0-9]*$' or "
+                    + "  %<s::numeric not between -%s and %<s";
             String makeNullOriginal = "update %s set %s = null where %<s !~ '^[-]?[0-9]*.?[0-9]*$'";
 
             structuresToChange = SQLUtils.rawRunQuery(connection,

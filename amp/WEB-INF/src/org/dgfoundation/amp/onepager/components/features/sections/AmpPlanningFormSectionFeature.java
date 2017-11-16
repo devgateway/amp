@@ -51,11 +51,13 @@ public class AmpPlanningFormSectionFeature extends AmpFormSectionFeaturePanel im
         
                 
         
-        AmpDatePickerFieldPanel dateOfActualCompletion = new AmpDatePickerFieldPanel(
+        AmpDatePickerFieldPanel actualCompletionDate = new AmpDatePickerFieldPanel(
                 "actualCompletionDate", new PropertyModel<Date>(actModel,
                         "actualCompletionDate"), null,
                 "Actual Completion Date");
-        add(dateOfActualCompletion);
+        add(getRequiredDateValidator(actualCompletionDate, "actualCompletionDateRequired", "Actual Completion Date"));
+        add(actualCompletionDate);
+        
 
         AmpDatePickerFieldPanel proposedCompletionDate = new AmpDatePickerFieldPanel(
                 "proposedCompletionDate", new PropertyModel<Date>(actModel,

@@ -701,3 +701,6 @@ th {
 .member_selector_wrapper {
     float: right !important;
 }
+.ui-jqgrid .ui-jqgrid-hbox-rtl {
+    float: unset;
+}

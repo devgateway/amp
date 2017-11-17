@@ -89,7 +89,6 @@ div.trnpanel div.trn-row ul {
 
 .tri {
     -webkit-transform:scale(-1,1);
-    display: table-cell;
 }
 
 .tri b {
@@ -650,6 +649,17 @@ th {
 .ui-pnotify {
     left: 25px !important;
     right: 0px !important;
+    direction: rtl !important;;
+}
+
+.ui-pnotify-icon, .ui-pnotify-icon span {
+    float: right !important;;
+    margin-left: .2em !important;;
+}
+
+.ui-pnotify-closer, .ui-pnotify-sticker {
+    float: left !important;;
+    margin-right: .2em !important;;
 }
 
 .dropdown-menu ul {
@@ -700,6 +710,9 @@ th {
 
 .member_selector_wrapper {
     float: right !important;
+}
+.ui-jqgrid .ui-jqgrid-hbox-rtl {
+    float: unset;
 }
 
 .ui-jqgrid tr.ui-row-rtl td {

@@ -714,3 +714,9 @@ th {
 .ui-jqgrid .ui-jqgrid-hbox-rtl {
     float: unset;
 }
+
+.ui-jqgrid tr.ui-row-rtl td {
+    border-color: lightgrey;
+    border-left: 1px solid #fff;
+    border-right: 1px solid #fff;
+}

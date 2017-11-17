@@ -24,6 +24,9 @@ public class WorkspaceMember {
     
     @JsonProperty(SecurityConstants.ROLE_ID)
     private Long roleId;
+    
+    @JsonProperty(SecurityConstants.DELETED)
+    private Boolean deleted;
 
     /**
      * @return the id
@@ -79,6 +82,20 @@ public class WorkspaceMember {
      */
     public void setRoleId(Long roleId) {
         this.roleId = roleId;
+    }
+
+    /**
+     * @return the deleted
+     */
+    public Boolean getDeleted() {
+        return deleted;
+    }
+
+    /**
+     * @param deleted the deleted to set
+     */
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
     }
 
 }

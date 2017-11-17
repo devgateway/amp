@@ -12,6 +12,7 @@ public class SecurityConstants {
     public static final String USER_ID = "user-id";
     public static final String WORKSPACE_ID = "workspace-id";
     public static final String ROLE_ID = "role-id";
+    public static final String DELETED = "deleted";
     public static final String FIRST_NAME = "first-name"; 
     public static final String LAST_NAME = "last-name";
     public static final String EMAIL = "email";

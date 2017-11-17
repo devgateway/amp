@@ -40,6 +40,8 @@ public class ActivityFieldsConstants {
     public static final String IMPLEMENTING_EXECUTING_AGENCY_CONTACT = "Implementing Executing Agency Contact";
     public static final String PRIMARY_CONTACT = "Primary Contact";
     public static final String TRANSACTION_TYPE = "Transaction Type";
+    public static final String FUNDING_DETAILS = "Funding Details";
+    public static final String LOCATIONS = "Locations";
     public static final String ORG_ROLE = "Org. Role";
     public static final String COMPONENTS = "Components";
     public static final String COMPONENT_TITLE = "Component Title";

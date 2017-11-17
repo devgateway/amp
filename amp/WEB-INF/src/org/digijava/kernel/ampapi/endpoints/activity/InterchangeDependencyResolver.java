@@ -54,7 +54,7 @@ public class InterchangeDependencyResolver {
     public final static String DSIBURSEMENTS_DISASTER_RESPONSE_REQUIRED = "disbursements_disaster_response_required";
     public final static String AGREEMENT_CODE_PRESENT_KEY = "agreement_code_required";
     public final static String AGREEMENT_TITLE_PRESENT_KEY = "agreement_title_required";
-    
+    public static final String TRANSACTION_PRESENT_KEY = "transaction_present";
     
     
     /*
@@ -218,6 +218,9 @@ public class InterchangeDependencyResolver {
         case DSIBURSEMENTS_DISASTER_RESPONSE_REQUIRED:
             boolean isDisbursement = checkTransactionType(value, incomingActivity, fieldParent, Constants.DISBURSEMENT);
             return DependencyCheckResult.convertToUnavailable(!isDisbursement || isDisbursement && value != null);
+        case TRANSACTION_PRESENT_KEY:
+            int transactionsCount = getCollectionSize(fieldParent, ActivityFieldsConstants.FUNDING_DETAILS);
+            return DependencyCheckResult.convertToAlwaysRequired(value != null || transactionsCount == 0);
         
         default: throw new RuntimeException("Interchange Dependency Mapper: no dependency found for code " + code);
         }
@@ -233,6 +236,15 @@ public class InterchangeDependencyResolver {
     private static DependencyCheckResult checkImplementationLocation(Object e, JsonBean incomingActivity) {
         //this object should be a Number (Long or Integer)
         Object externalValue = InterchangeUtils.getFieldValuesFromJsonActivity(incomingActivity, IMPLEMENTATION_LEVEL_PATH);
+        if (e == null) {
+            if (externalValue == null) {
+                return DependencyCheckResult.VALID;
+            }
+            int locationsCount = getCollectionSize(incomingActivity.any(), ActivityFieldsConstants.LOCATIONS);
+            if (locationsCount == 0) {
+                return DependencyCheckResult.VALID;
+            }
+        }
         
         if (externalValue == null || !Number.class.isAssignableFrom(externalValue.getClass()))
             return DependencyCheckResult.INVALID_NOT_CONFIGURABLE;
@@ -272,6 +284,14 @@ public class InterchangeDependencyResolver {
     
     private static Object getTransactionType(Object e, JsonBean incomingActivity, Map<String, Object> fieldParent) {
         return fieldParent.get(InterchangeUtils.underscorify(ActivityFieldsConstants.TRANSACTION_TYPE));
+    }
+    
+    private static int getCollectionSize(Map<String, Object> fieldParent, String fieldName) {
+        Object collection = fieldParent.get(InterchangeUtils.underscorify(fieldName));
+        if (collection != null && Collection.class.isAssignableFrom(collection.getClass())) {
+            return ((Collection<?>) collection).size();
+        }
+        return 0;
     }
     
     /**

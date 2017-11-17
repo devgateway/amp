@@ -1288,53 +1288,55 @@ function collapseAll() {
 	<div id="planningdiv" class="toggleDiv">
 		<module:display name="/Activity Form/Planning/Line Ministry Rank" parentModule="/Activity Form/Planning">
 			<br>
-			<digi:trn>Line Ministry Rank</digi:trn>:&nbsp;
+			<div class="planning-line"><digi:trn>Line Ministry Rank</digi:trn>:&nbsp;</div>
 				<c:if test="${aimEditActivityForm.planning.lineMinRank == -1}"></c:if> 
 				<c:if test="${aimEditActivityForm.planning.lineMinRank != -1}">
-					<b>${aimEditActivityForm.planning.lineMinRank}</b>				</c:if>
+					<div class="planning-line"><b>${aimEditActivityForm.planning.lineMinRank}</b></div>				</c:if>
 		</module:display>
 		
 		
 		<module:display name="/Activity Form/Planning/Proposed Approval Date" parentModule="/Activity Form/Planning">
 			<hr>
-			<digi:trn>Proposed Approval Date</digi:trn>:&nbsp;
-			<b>${aimEditActivityForm.planning.originalAppDate}</b>		</module:display>
+			<div class="planning-line"><digi:trn>Proposed Approval Date</digi:trn>:&nbsp;</div>
+			<div class="planning-line"><b>${aimEditActivityForm.planning.originalAppDate}</b></div>
+		</module:display>
 		
 		<!-- MISSING FIELD IN THE NEW FM STRUCTURE -->
 		<module:display name="/Activity Form/Planning/Actual Approval Date" parentModule="/Activity Form/Planning">
 			<hr>
-				<digi:trn>Actual Approval Date</digi:trn>:&nbsp;
-				<b>${aimEditActivityForm.planning.revisedAppDate}</b>
+			<div class="planning-line"><digi:trn>Actual Approval Date</digi:trn>:&nbsp;</div>
+			<div class="planning-line"><b>${aimEditActivityForm.planning.revisedAppDate}</b></div>
 		</module:display>
 
 		<module:display name="/Activity Form/Planning/Proposed Start Date" parentModule="/Activity Form/Planning">
 			<hr>
-			<digi:trn>Proposed Start Date</digi:trn>:&nbsp;
-			<b>${aimEditActivityForm.planning.originalStartDate}</b>
+			<div class="planning-line"><digi:trn>Proposed Start Date</digi:trn>:&nbsp;</div>
+			<div class="planning-line"><b>${aimEditActivityForm.planning.originalStartDate}</b></div>
 		</module:display>
 							
 		<module:display name="/Activity Form/Planning/Actual Start Date" parentModule="/Activity Form/Planning">
 			<hr>
-			<digi:trn>Actual Start Date </digi:trn>:&nbsp;
-			<b>${aimEditActivityForm.planning.revisedStartDate}</b>
+			<div class="planning-line"><digi:trn>Actual Start Date </digi:trn>:&nbsp;</div>
+			<div class="planning-line"><b>${aimEditActivityForm.planning.revisedStartDate}</b></div>
 		</module:display>
 		
 		<module:display name="/Activity Form/Planning/Original Completion Date" parentModule="/Activity Form/Planning">
 			<hr>
-			<digi:trn>Original Completion Date</digi:trn>:&nbsp;
-			<b>${aimEditActivityForm.planning.originalCompDate}</b>
+			<div class="planning-line"><digi:trn>Original Completion Date</digi:trn>:&nbsp;</div>
+			<div class="planning-line"><b>${aimEditActivityForm.planning.originalCompDate}</b></div>
 		</module:display>
 		
 		<module:display name="/Activity Form/Planning/Proposed Completion Date" parentModule="/Activity Form/Planning">
 			<hr>
-			<digi:trn>Proposed Completion Date</digi:trn>:&nbsp;
-			<b>${aimEditActivityForm.planning.proposedCompDate}</b>
+			<div class="planning-line"><digi:trn>Proposed Completion Date</digi:trn>:&nbsp;</div>
+			<div class="planning-line"><b>${aimEditActivityForm.planning.proposedCompDate}</b></div>
 		</module:display>
 		<module:display name="Project ID and Planning" parentModule="PROJECT MANAGEMENT">
 			<feature:display name="Planning" module="Project ID and Planning">
 				<field:display name="Final Date for Disbursements Comments" feature="Planning">
-					<hr> 																   
-					<digi:trn>Final Date for Disbursements comments</digi:trn>:&nbsp;
+					<hr>
+					<div class="planning-line"><digi:trn>Final Date for Disbursements comments</digi:trn>:&nbsp;</div>
+					<div class="planning-line">
 					<ul>
 						<logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
 								<logic:equal name="comments" property="key" value="Final Date for Disbursements">
@@ -1349,21 +1351,23 @@ function collapseAll() {
 								</logic:equal>
 						</logic:iterate>
 					</ul>
+					</div>
 				</field:display>
 			</feature:display>
 		</module:display>
 		
 		<module:display name="/Activity Form/Planning/Actual Completion Date" parentModule="/Activity Form/Planning">
 			<hr>
-			<digi:trn>Actual Completion Date</digi:trn>:&nbsp;
-			<b><c:out value="${aimEditActivityForm.planning.currentCompDate}"/></b>		
+			<div class="planning-line"><digi:trn>Actual Completion Date</digi:trn>:&nbsp;</div>
+			<div class="planning-line"><b><c:out value="${aimEditActivityForm.planning.currentCompDate}"/></b></div>
 		</module:display> 
 							
 		<module:display name="Project ID and Planning" parentModule="PROJECT MANAGEMENT">
 			<feature:display name="Planning" module="Project ID and Planning">
 				<field:display name="Current Completion Date Comments" feature="Planning">
-					<hr> 																   
-					<digi:trn>Current Completion Date comments</digi:trn>:&nbsp;
+					<hr>
+					<div class="planning-line"><digi:trn>Current Completion Date comments</digi:trn>:&nbsp;</div>
+					<div class="planning-line">
 					<ul>
 						<logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
 								<logic:equal name="comments" property="key" value="current completion date">
@@ -1377,40 +1381,43 @@ function collapseAll() {
 									</logic:iterate>
 								</logic:equal>
 						</logic:iterate>
-					</ul>		
+					</ul>
+					</div>
 				</field:display>
 			</feature:display>
 		</module:display>
 		
 		<module:display name="/Activity Form/Planning/Project Implementation Delay" parentModule="/Activity Form/Planning">
 			<hr>
-			<digi:trn>Project Implementation Delay</digi:trn>:&nbsp;
-			<b>${aimEditActivityForm.planning.projectImplementationDelay}</b>
+			<div class="planning-line"><digi:trn>Project Implementation Delay</digi:trn>:&nbsp;</div>
+			<div class="planning-line"><b>${aimEditActivityForm.planning.projectImplementationDelay}</b></div>
 		</module:display>
 							
 		<module:display name="/Activity Form/Planning/Final Date for Contracting" parentModule="/Activity Form/Planning">
 			<hr>
-			<digi:trn>Final Date for Contracting</digi:trn>:&nbsp;
-			<b><c:out value="${aimEditActivityForm.planning.contractingDate}"/></b>
+			<div class="planning-line"><digi:trn>Final Date for Contracting</digi:trn>:&nbsp;</div>
+			<div class="planning-line"><b><c:out value="${aimEditActivityForm.planning.contractingDate}"/></b></div>
 		</module:display>
 					
 		<module:display name="/Activity Form/Planning/Final Date for Disbursements" parentModule="/Activity Form/Planning">
 			<hr>
-			<digi:trn>Final Date for Disbursements</digi:trn>:&nbsp;
-			<b><c:out value="${aimEditActivityForm.planning.disbursementsDate}"/></b>
+			<div class="planning-line"><digi:trn>Final Date for Disbursements</digi:trn>:&nbsp;</div>
+			<div class="planning-line"><b><c:out value="${aimEditActivityForm.planning.disbursementsDate}"/></b></div>
 		</module:display>
 
 		<module:display name="/Activity Form/Planning/Proposed Project Life" parentModule="/Activity Form/Planning">
 			<hr>
-			<digi:trn>Proposed Project Life</digi:trn>:&nbsp;
-			<b>${aimEditActivityForm.planning.proposedProjectLife}</b>
+			<div class="planning-line"><digi:trn>Proposed Project Life</digi:trn>:&nbsp;</div>
+			<div class="planning-line"><b>${aimEditActivityForm.planning.proposedProjectLife}</b></div>
 		</module:display>
 
 		<field:display name="Duration of Project" feature="Planning">
 			<hr>
-			<digi:trn>Duration of project</digi:trn>:&nbsp;
+			<div class="planning-line"><digi:trn>Duration of project</digi:trn>:&nbsp;</div>
 			<c:if test="${not empty aimEditActivityForm.planning.projectPeriod}">
-			    <b>${aimEditActivityForm.planning.projectPeriod}</b>&nbsp;<digi:trn>Months</digi:trn>
+				<div class="planning-line">
+					<b>${aimEditActivityForm.planning.projectPeriod}</b>&nbsp;<digi:trn>Months</digi:trn>
+				</div>
 			</c:if>
 		</field:display>
 		</div>
@@ -1464,7 +1471,7 @@ function collapseAll() {
 						<td width="15%" align="right" valign=top>
 							<field:display name="Regional Percentage" feature="Location">
 								<c:if test="${selectedLocs.showPercent}">
-									<b><c:out value="${selectedLocs.percent}"/>%</b>
+									<b><c:out value="${selectedLocs.percent}"/> %</b>
 								</c:if>
 							</field:display>
 						</td>
@@ -1627,9 +1634,10 @@ function collapseAll() {
 									</c:if>
 								</td>
 							<td width=15% align=right valign=top>
-								<c:if test="${sectors.sectorPercentage!='' && sectors.sectorPercentage!='0'}">
-									<span class="word_break bold">(<c:out value="${sectors.sectorPercentage}"/>)%</span>
-								</c:if>
+                                <c:if test="${sectors.sectorPercentage!='' && sectors.sectorPercentage!='0'}">
+									<span class="word_break bold">(<c:out value="${sectors.sectorPercentage}"/>)
+                                        %</span>
+                                </c:if>
 							</td>
 							</tr>
 							</table>
@@ -1646,7 +1654,7 @@ function collapseAll() {
 			<c:forEach var="compo" items="${aimEditActivityForm.components.activityComponentes}">
 			<tr>
 				<td width="100%"><span class="word_break">${compo.sectorName}</span></td>
-				<td align="right"><span class="word_break">${compo.sectorPercentage}%</span></td>
+				<td align="right"><span class="word_break">${compo.sectorPercentage} %</span></td>
 			</tr>
 			</c:forEach>
 		</table>

@@ -544,6 +544,17 @@ public class ExportActivityToWordBuilder {
 
     }
 
+    private static void setRunOrientation(XWPFRun run) {
+        if (SiteUtils.isEffectiveLangRTL()) {
+            if (run.getCTR().getRPr() == null) {
+                run.getCTR().addNewRPr().addNewRtl();
+            }
+            if (run.getCTR().addNewRPr().getRtl() == null) {
+                run.getCTR().addNewRPr().addNewRtl();
+            }
+            run.getCTR().addNewRPr().addNewRtl().setVal(STOnOff.TRUE);
+        }
+    }
 
     private void addTitle(String title) {
         XWPFParagraph titleParagraph = doc.createParagraph();
@@ -3851,6 +3862,7 @@ public class ExportActivityToWordBuilder {
 
     private static void setRun(XWPFRun run, String fontFamily, int fontSize, String colorRGB, String text, boolean
             bold, boolean addBreak) {
+        setRunOrientation(run);
         run.setFontFamily(fontFamily);
         run.setFontSize(fontSize);
         if (colorRGB != null) {

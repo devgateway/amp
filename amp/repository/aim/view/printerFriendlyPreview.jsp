@@ -1135,7 +1135,7 @@ body {background:none;}
 														<!-- <c:out value="${locations.percent}"/>% -->
 														<field:display name="Regional Percentage" feature="Location">
 														<c:if test="${selectedLocs.showPercent}">
-															<c:out value="${selectedLocs.percent}"/>%
+															<c:out value="${selectedLocs.percent}"/> %
 														</c:if>
 														</field:display>
 													</td>
@@ -1204,7 +1204,8 @@ body {background:none;}
 																<span class="word_break bold">${nationalPlanObjectivePrograms.hierarchyNames}</span>
 															</td>
 															<td width=15% align=right valign=top>
-																<span class="word_break bold">${nationalPlanObjectivePrograms.programPercentage}%</span>
+																<span class="word_break
+																bold">${nationalPlanObjectivePrograms.programPercentage} %</span>
 															</td>
 														</tr>
 													</table>
@@ -1225,7 +1226,8 @@ body {background:none;}
 <TD bgcolor="#ffffff">
 											<c:forEach var="program" items="${aimEditActivityForm.programs.nationalPlanObjectivePrograms}">
 											<span class="word_break">
-                                                 <c:out value="${program.hierarchyNames}" />&nbsp; <c:out value="${program.programPercentage}"/>%<br/>
+                                                 <c:out value="${program.hierarchyNames}" />&nbsp; <c:out
+													value="${program.programPercentage}"/> %<br/>
                                             </span>
                                              </c:forEach>
                                       </TD>
@@ -1244,7 +1246,8 @@ body {background:none;}
 
 						<td bgcolor="#ffffff">
 								<c:forEach var="program" items="${aimEditActivityForm.programs.primaryPrograms}">
-                                	<c:out value="${program.hierarchyNames}" />&nbsp; <c:out value="${program.programPercentage}"/>%s<br/>
+                                	<c:out value="${program.hierarchyNames}" />&nbsp; <c:out
+										value="${program.programPercentage}"/> %<br/>
                                 </c:forEach>
                    		</td>
 						</tr>
@@ -1260,7 +1263,7 @@ body {background:none;}
 											<td bgcolor="#ffffff">
                                                       <c:forEach var="program" items="${aimEditActivityForm.programs.secondaryPrograms}">
 	                                                      <span class="word_break"><c:out value="${program.hierarchyNames}" /></span>&nbsp; 
-	                                                      <c:out value="${program.programPercentage}"/>%<br/>
+	                                                      <c:out value="${program.programPercentage}"/> %<br/>
                                                       </c:forEach>
                                         		</td>
 											</tr>
@@ -1277,7 +1280,8 @@ body {background:none;}
                                                       <c:forEach var="program" items="${aimEditActivityForm.programs.tertiaryPrograms}">
 	                                                      <span class="word_break">
 	                                                      <c:out value="${program.hierarchyNames}" />
-	                                                      </span>&nbsp; <c:out value="${program.programPercentage}"/>%<br/>
+	                                                      </span>&nbsp; <c:out value="${program.programPercentage}"/>
+														  %<br/>
                                                       </c:forEach>
                                         		</td>
 											</tr>
@@ -1390,7 +1394,7 @@ body {background:none;}
 														</span>
 														</td>
 														<td align="right">
-															${compo.sectorPercentage}%
+															${compo.sectorPercentage} %
 														</td>
 													</tr>
 													</c:forEach>
@@ -3301,7 +3305,8 @@ body {background:none;}
 																	<span class="word_break bold">${budgetStructure.budgetStructureName}</span>
 																</td>
 																<td bgcolor="#FFFFFF" align="left" width="150">
-																	<span class="word_break bold">${budgetStructure.budgetStructurePercentage}%</span>
+																	<span class="word_break
+																	bold">${budgetStructure.budgetStructurePercentage} %</span>
 																</td>
 															</tr>
 														</c:forEach>

@@ -8,4 +8,4 @@ ReactDOM.render(
   document.getElementById('ampoffline-client-download')
 );
 
-new boilerplate.layout({showLogin: false});
+new boilerplate.layout({});

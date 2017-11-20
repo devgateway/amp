@@ -29,9 +29,6 @@ public class AmpComponentFunding implements Cloneable, Serializable {
 
     private Long ampComponentFundingId;
 
-    // @Interchangeable(fieldTitle="Activity")
-    // private AmpActivityVersion activity;
-
     @Interchangeable(fieldTitle = COMPONENT_FUNDING_TRANSACTION_TYPE, importable = true, pickIdOnly = true, required = REQUIRED_ALWAYS)
     @PossibleValues(ComponentTransactionTypePossibleValuesProvider.class)
     private Integer transactionType;
@@ -49,7 +46,7 @@ public class AmpComponentFunding implements Cloneable, Serializable {
     @Interchangeable(fieldTitle = COMPONENT_FUNDING_AMOUNT, importable = true, required = REQUIRED_ALWAYS)
     private Double transactionAmount;
 
-    // reusing field to store the organisation related to the current component
+    // what/??
     @Interchangeable(fieldTitle = COMPONENT_ORGANIZATION, importable = true, pickIdOnly = true)
     private AmpOrganisation reportingOrganization;
 
@@ -59,7 +56,7 @@ public class AmpComponentFunding implements Cloneable, Serializable {
     @Interchangeable(fieldTitle = COMPONENT_FUNDING_CURRENCY, importable = true, pickIdOnly = true, required = REQUIRED_ALWAYS)
     private AmpCurrency currency;
 
-    @Interchangeable(fieldTitle = COMPONENT_FUNDING_DESCRIPTION)
+    @Interchangeable(fieldTitle = COMPONENT_FUNDING_DESCRIPTION, importable = true)
     private String description;
 
     // @Interchangeable(fieldTitle="Component")

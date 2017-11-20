@@ -119,6 +119,13 @@ public class DynLocationManagerUtil {
             loc.setDeleted(true);
             dbSession.save(loc);
             
+            AmpLocation ampLocation = LocationUtil.getAmpLocationByCVLocation(loc.getId());
+            if (ampLocation != null && ampLocation.getActivities().isEmpty()) {
+                if (LocationUtil.getIndicatorValuesCountByAmpLocation(ampLocation) == 0) {
+                    dbSession.delete(ampLocation);
+                }
+            }
+            
             for (AmpCategoryValueLocations l : loc.getChildLocations()) {
                 deleteLocation(l.getId(), errors);
             }

@@ -38,7 +38,6 @@ export const initialTranslations = {
         'amp-gpi-reports:amount-in-1': 'Amounts in Units',
         'amp-gpi-reports:amount-in-1000': 'In Thousands',
         'amp-gpi-reports:amount-in-1000000': 'In Millions',
-        'amp-gpi-reports:selected': 'Selected: ',
         'amp-gpi-reports:loading-message': 'Loading...',
         'amp-gpi-reports:remarks': 'Remarks',
         'amp.gpi-reports:indicator5a-description': 'Development co-operation is more predictable (annual predictability)',

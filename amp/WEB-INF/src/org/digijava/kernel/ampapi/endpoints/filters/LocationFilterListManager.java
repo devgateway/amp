@@ -24,7 +24,7 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
  */
 public final class LocationFilterListManager implements FilterListManager {
     
-    private static final String LOCATIONS_NAME = "Locations";
+    private static final String LOCATION_NAME = "Locations";
     private static final String LOCATIONS_ITEMS_NAME = "locations";
     private static LocationFilterListManager locationFilterListManager;
 
@@ -54,12 +54,12 @@ public final class LocationFilterListManager implements FilterListManager {
                 .getAmpCategoryValueCollectionByKeyExcludeDeleted(CategoryConstants.IMPLEMENTATION_LOCATION_KEY)
                 .stream()
                 .sorted(Comparator.comparingInt(AmpCategoryValue::getIndex))
-                .map(AmpCategoryValue::getValue)
+                .map(acv -> acv.getValue().toLowerCase())
                 .collect(Collectors.toList());
         
         listDefinition.setId(null);
-        listDefinition.setName(LOCATIONS_NAME);
-        listDefinition.setDisplayName(TranslatorWorker.translateText(LOCATIONS_NAME));
+        listDefinition.setName(LOCATION_NAME);
+        listDefinition.setDisplayName(TranslatorWorker.translateText(LOCATION_NAME));
         listDefinition.setFilterIds(filterIds);
         listDefinition.setFiltered(true);
         listDefinition.setItems(LOCATIONS_ITEMS_NAME);

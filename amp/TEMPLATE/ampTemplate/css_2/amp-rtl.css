@@ -621,6 +621,19 @@ a.last_page {
     text-align: left !important;
 }
 
+.wizard-filters-div strong {
+    float: right !important;
+}
+
+.wizard-settings-List {
+    float: right !important;
+}
+
+.wizard-settings-List-div {
+    float: right !important;
+    padding-right: 5px !important;
+}
+
 .container-close{
     right: 0px;
     left: 4px !important;

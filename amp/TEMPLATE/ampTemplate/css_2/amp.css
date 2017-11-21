@@ -1324,6 +1324,23 @@ div.footer {
     text-align: right;
 }
 
+.wizard-filters-div strong {
+    float: left;
+}
+
+.wizard-settings-List {
+    float: left;
+}
+
+.wizard-settings-List i {
+    display: inline-block;
+}
+
+.wizard-settings-List-div {
+    float: left;
+    padding-left: 5px;
+}
+
 .panel-one {
     float:left;
 }

@@ -15,5 +15,9 @@
 		<property name="globalSettingsDescription" column="description" type="text" />
 		<property name="section" column="section" type="java.lang.String" />
 		<property name="valueTranslatable" column="value_translatable" type="java.lang.Boolean" />
+		
+		<property name="internal" type="java.lang.Boolean" not-null="true">
+		      <column name="internal" default="false"></column>
+		</property>
 	</class>
 </hibernate-mapping>

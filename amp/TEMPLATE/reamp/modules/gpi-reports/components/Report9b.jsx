@@ -279,7 +279,7 @@ export default class Report9b extends Component {
                     </div>
 
                     <div className="section-divider"></div>
-                    {this.props.mainReport && this.props.mainReport.summary &&
+                    {this.props.mainReport && this.props.mainReport.summary && this.props.mainReport.empty == false  &&
                         <div className="container-fluid indicator-stats no-padding">
                             <div className="col-md-2 col-md-2-9b">
                                 <div className="indicator-stat-wrapper">
@@ -328,13 +328,17 @@ export default class Report9b extends Component {
                             <span className="amount-units"> ({this.props.translations['amp-gpi-reports:amount-in-' + this.props.settings['number-divider']]})</span>                    
                         }
                         </div>
-                    </div>                    
+                    </div> 
                     <div className="container-fluid">
                         <div className="row">
                           <h4>{this.props.translations['amp.gpi-reports:indicator9b-description']}</h4>
                         </div>
                       </div>
-                     <div className="section-divider"></div>
+                    <div className="section-divider"></div>
+                    {this.props.mainReport.empty == true  &&
+                            <div className="text-center">{this.props.translations['amp-gpi-reports:no-data']}</div>
+                    }
+                    { this.props.mainReport.empty == false  &&
                     <table className="table table-bordered table-striped indicator-table">
                         <thead>
                         <tr>
@@ -385,6 +389,7 @@ export default class Report9b extends Component {
                             )}
                         </tbody>
                     </table>
+                    }
                     {this.props.mainReport.page.totalPageCount > 1 &&
                     <div >
                         <div className="row">

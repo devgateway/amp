@@ -261,7 +261,7 @@ public class TopsChartService {
         if (report != null && report.reportContents != null && report.reportContents.getContents() != null
                 && report.reportContents.getContents().size() > 0) {
             totals = (ReportCell) report.reportContents.getContents().get(valueCol);
-            rawTotal = ((BigDecimal) totals.value).doubleValue() * unitsOption.divider; // Save total in units.
+            rawTotal = ((BigDecimal) totals.value).doubleValue();
             DashboardsService.postProcess(this.report, this.spec, outSettings, this.type);
         } else {
             rawTotal = new Double("0");
@@ -275,7 +275,7 @@ public class TopsChartService {
         for (ReportArea reportArea : report.reportContents.getChildren()) {
             Map<ReportOutputColumn, ReportCell> content = reportArea.getContents();
             AmountCell ac = (AmountCell) content.get(valueCol);
-            double amount = ((BigDecimal) ac.value).doubleValue() * unitsOption.divider;
+            double amount = ((BigDecimal) ac.value).doubleValue();
             if (values.size() < this.limit) {
                 JsonBean row = new JsonBean();
                 row.set("name", content.get(criteriaCol).displayedValue);

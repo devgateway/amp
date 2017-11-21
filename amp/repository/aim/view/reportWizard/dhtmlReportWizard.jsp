@@ -210,7 +210,9 @@ body {
 				<c:if test="${not param.isOnePager}">
 					<td width="768">
 						<div class="step_head_lng">
-							<div id="rgTitle" class="step_head_cont">${pageTitle}: ${aimReportWizardForm.reportTitle}</div>
+							<div id="rgTitle" class="step_head_cont">${pageTitle}:
+								<div class="step_head_cont_name">${aimReportWizardForm.reportTitle}</div>
+							</div>
 						</div>
 					</td>
 					<td width="232">&nbsp;</td>

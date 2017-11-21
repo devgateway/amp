@@ -1,8 +1,4 @@
 
-#gis-plugin {
-    direction: rtl;
-}
-
 .radio label {
     padding-right: 20px;
 }
@@ -21,11 +17,13 @@
 }
 
 #sidebar {
+    direction: rtl;
     right: 0;
     left: auto;
 }
 
 #map-container #map-header {
+    direction: rtl;
     right: 300px;
     left: 0;
 }
@@ -43,11 +41,13 @@
 }
 
 .datasources {
+    direction: rtl;
     left: 270px;
     right: auto;
 }
 
 .legend {
+    direction: rtl;
     left: 5px;
     right: auto;
 }
@@ -70,6 +70,11 @@
     margin-right: 5px;
     float: right;
     position: relative;
+}
+
+.leaflet-container a.leaflet-popup-close-button {
+    left: 0px;
+    right: auto;
 }
 
 .leaflet-control {
@@ -116,6 +121,7 @@
 }
 
 .leaflet-popup {
+    direction: rtl;
     width: max-content;
 }
 
@@ -127,4 +133,9 @@
 .leaflet-popup-content-value {
     position: relative;
     float: right;
+}
+
+#basemap-gallery .dropdown-menu {
+    right: auto;
+    left: 0px
 }

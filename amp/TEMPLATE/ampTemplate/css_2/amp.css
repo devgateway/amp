@@ -1374,3 +1374,7 @@ div.footer {
 .planning-line {
     display: inline-block;
 }
+
+.text-align {
+    text-align: left;
+}

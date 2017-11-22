@@ -206,9 +206,6 @@ div.trnpanel div.trn-row ul {
     margin-left:5px;
 }
 
-.workspace_results {
-    overflow: unset
-}
 .lalign {
     text-align: right;
 }
@@ -600,16 +597,16 @@ a.last_page {
     text-align: right !important;
 }
 
-.wizard-columns {
-    text-align: right !important;
-}
-
 .wizard-column-padding {
     padding-right: 0px;
 }
 
 .wizard-columns-list {
     padding-right: 13px;
+}
+
+.wizard-columns-list li {
+    text-align: right !important;
 }
 
 .wizard-panel-buttons {
@@ -641,6 +638,139 @@ a.last_page {
 .filter-item-label {
     padding: 0px 5px 0px 0px !important;
 }
+
+.applied-filters li:before {
+    margin: 3px -22px 0 5px;
+}
+
+.btn-group>.btn {
+    float: right;
+}
+
+.nvd3 text {
+  font: inherit;
+}
+
+.modal-content {
+    direction: rtl;
+}
+
+.panel.panel-chart .panel-heading h2 {
+    float: right;
+}
+
+.panel {
+    direction: rtl;
+}
+
+.nvtooltip {
+    text-align: right;
+}
+
+.col-xs-12.col-md-6 g[transform="translate(10,31)"] {
+    -moz-transform: scale(-1, 1) translate(-535px, 31px) !important;
+    -webkit-transform: scale(-1, 1) translate(-535px, 31px) !important;
+    -o-transform: scale(-1, 1) translate(-535px, 31px) !important;
+    -ms-transform: scale(-1, 1) translate(-535px, 31px) !important;
+    transform: scale(-1, 1) translate(-535px, 31px) !important;
+}
+
+.col-xs-12.col-md-6 g[transform="translate(10,42)"] {
+    -moz-transform: scale(-1, 1) translate(-535px, 42px) !important;
+    -webkit-transform: scale(-1, 1) translate(-535px, 42px) !important;
+    -o-transform: scale(-1, 1) translate(-535px, 42px) !important;
+    -ms-transform: scale(-1, 1) translate(-535px, 42px) !important;
+    transform: scale(-1, 1) translate(-535px, 42px) !important;
+}
+
+.col-xs-12.col-md-6 g[transform="translate(10,62)"] {
+    -moz-transform: scale(-1, 1) translate(-535px, 62px) !important;
+    -webkit-transform: scale(-1, 1) translate(-535px, 62px) !important;
+    -o-transform: scale(-1, 1) translate(-535px, 62px) !important;
+    -ms-transform: scale(-1, 1) translate(-535px, 62px) !important;
+    transform: scale(-1, 1) translate(-535px, 62px) !important;
+}
+
+.col-xs-12.big-chart-0 g[transform="translate(10,31)"] {
+    -moz-transform: scale(-1, 1) translate(-1120px, 31px) !important;
+    -webkit-transform: scale(-1, 1) translate(-1120px, 31px) !important;
+    -o-transform: scale(-1, 1) translate(-1120px, 31px) !important;
+    -ms-transform: scale(-1, 1) translate(-1120px, 31px) !important;
+    transform: scale(-1, 1) translate(-1120px, 31px) !important;
+}
+
+.col-xs-12.big-chart-0 g[transform="translate(10,42)"] {
+    -moz-transform: scale(-1, 1) translate(-1120px, 42px) !important;
+    -webkit-transform: scale(-1, 1) translate(-1120px, 42px) !important;
+    -o-transform: scale(-1, 1) translate(-1120px, 42px) !important;
+    -ms-transform: scale(-1, 1) translate(-1120px, 42px) !important;
+    transform: scale(-1, 1) translate(-1120px, 42px) !important;
+}
+
+.col-xs-12.big-chart-0 g[transform="translate(10,62)"] {
+    -moz-transform: scale(-1, 1) translate(-1120px, 62px) !important;
+    -webkit-transform: scale(-1, 1) translate(-1120px, 62px) !important;
+    -o-transform: scale(-1, 1) translate(-1120px, 62px) !important;
+    -ms-transform: scale(-1, 1) translate(-1120px, 62px) !important;
+    transform: scale(-1, 1) translate(-1120px, 62px) !important;
+}
+
+.nv-label text {
+    direction: rtl;
+    -moz-transform: scale(-1, 1) !important;
+    -webkit-transform: scale(-1, 1) !important;;
+    -o-transform: scale(-1, 1) !important;;
+    -ms-transform: scale(-1, 1) !important;;
+    transform: scale(-1, 1) !important;
+}
+
+.tick text {
+    direction: rtl;
+    -moz-transform: scale(-1, 1) translate(6px) !important;
+    -webkit-transform: scale(-1, 1) translate(6px) !important;;
+    -o-transform: scale(-1, 1) translate(6px) !important;;
+    -ms-transform: scale(-1, 1) translate(6px) !important;;
+    transform: scale(-1, 1) translate(6px) !important;
+}
+
+.nv-legend-text {
+    direction: rtl;
+    -moz-transform: scale(-1, 1) translate(-16px,0px) !important;
+    -webkit-transform: scale(-1, 1) translate(-16px,0px) !important;;
+    -o-transform: scale(-1, 1) translate(-16px,0px) !important;;
+    -ms-transform: scale(-1, 1) translate(-16px,0px) !important;;
+    transform: scale(-1, 1) translate(-16px,0px) !important;
+}
+
+.dash-chart {
+    direction: ltr;
+    -moz-transform: scale(-1, 1) !important;
+    -webkit-transform: scale(-1, 1) !important;;
+    -o-transform: scale(-1, 1) !important;;
+    -ms-transform: scale(-1, 1) !important;;
+    transform: scale(-1, 1) !important;
+}
+
+#gis-plugin {
+    direction: rtl;
+}
+
+.radio label {
+    padding-right: 20px;
+}
+
+.glyphicon-chevron-left:before {
+    content: "\e080";
+}
+
+.glyphicon-chevron-right:before {
+    content: "\e079";
+}
+
+
+#sidebar .sidebar-icons-only-button {
+    text-align: left;
+    padding-left: 11px;
 
 th {
     text-align: right !important;
@@ -694,8 +824,8 @@ th {
 }
 
 .search_results_header_keyword {
-    float: left;
-    padding-right: 2px;
+    float: left !important;
+    padding-right: 2px !important;
 }
 
 @media (min-width: 768px) {
@@ -719,6 +849,10 @@ th {
     border-color: lightgrey;
     border-left: 1px solid #fff;
     border-right: 1px solid #fff;
+}
+
+.panel-body, .panel-footer {
+    text-align: right !important;
 }
 
 .red, .blue, .green {

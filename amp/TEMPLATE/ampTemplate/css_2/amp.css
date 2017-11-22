@@ -1399,3 +1399,7 @@ div.footer {
 .planning-line {
     display: inline-block;
 }
+
+.tabs-grid-pager-info {
+    display: inline-block;
+}

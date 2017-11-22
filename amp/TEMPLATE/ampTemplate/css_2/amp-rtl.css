@@ -597,16 +597,16 @@ a.last_page {
     text-align: right !important;
 }
 
-.wizard-columns {
-    text-align: right !important;
-}
-
 .wizard-column-padding {
     padding-right: 0px;
 }
 
 .wizard-columns-list {
     padding-right: 13px;
+}
+
+.wizard-columns-list li {
+    text-align: right !important;
 }
 
 .wizard-panel-buttons {

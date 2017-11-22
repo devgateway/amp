@@ -60,7 +60,7 @@
 								</a>
 								<ul name="dhtmltreeArray" class="wizard-columns-list">
 									<logic:iterate name="columnCollection" id="ampColumnFromTree" type="org.digijava.module.aim.dbentity.AmpColumns">
-										<li class="wizard-columns" draggable="true">
+										<li class="" draggable="true">
 											<input type="checkbox" style='line-height:15px; margin-top:6px;' id="fieldVis:<bean:write name="ampColumnFromTree" property="columnId"/>" name="selectedColumns" value="<bean:write name="ampColumnFromTree" property="columnId"/>"/>
 											<a id="field:<bean:write name="ampColumnFromTree" property="columnId"/>" style="font-size: 11px;text-decoration:none"></a>
 											<span style="font-size: 11px; text-decoration:none">

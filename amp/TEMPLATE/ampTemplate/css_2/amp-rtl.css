@@ -697,7 +697,7 @@ a.last_page {
     -o-transform: scale(-1, 1) translate(-1120px, 31px) !important;
     -ms-transform: scale(-1, 1) translate(-1120px, 31px) !important;
     transform: scale(-1, 1) translate(-1120px, 31px) !important;
-} 
+}
 
 .col-xs-12.big-chart-0 g[transform="translate(10,42)"] {
     -moz-transform: scale(-1, 1) translate(-1120px, 42px) !important;
@@ -853,4 +853,8 @@ th {
 
 .panel-body, .panel-footer {
     text-align: right !important;
+}
+
+.red, .blue, .green {
+    float: right;
 }

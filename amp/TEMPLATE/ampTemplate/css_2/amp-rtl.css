@@ -1,5 +1,7 @@
 @import url("./amp-admin-rtl.css");
 
+@import url("./amp-gis-rtl.css");
+
 @import url("../fonts/droidarabicnaskh.css");
 
 #mainBodyContent {
@@ -87,7 +89,6 @@ div.trnpanel div.trn-row ul {
 
 .tri {
     -webkit-transform:scale(-1,1);
-    display: table-cell;
 }
 
 .tri b {
@@ -152,6 +153,7 @@ div.trnpanel div.trn-row ul {
 #amp_info_filters {
     float: left;
     left: 35px;
+    right: auto;
 }
 
 .sub-filters-titles {
@@ -204,9 +206,6 @@ div.trnpanel div.trn-row ul {
     margin-left:5px;
 }
 
-.workspace_results {
-    overflow: unset
-}
 .lalign {
     text-align: right;
 }
@@ -520,7 +519,7 @@ a.last_page {
 }
 
 .search_results_header {
-    float: right;
+    float: right !important;
 }
 
 .search-results {
@@ -578,15 +577,15 @@ a.last_page {
 }
 
 .wizard-toolbar-steps {
-    float:right;
-    margin-top:10px;
+    float:right !important;
+    margin-top:10px !important;
 }
 
 .wizard-toolbar-buttons {
-    float:left;
-    z-index: 3000;
-    margin-top:10px;
-    margin-left:10px;
+    float:left !important;
+    z-index: 3000 !important;
+    margin-top:10px !important;
+    margin-left:10px !important;
 }
 
 #wizard_container div.tab {
@@ -598,16 +597,16 @@ a.last_page {
     text-align: right !important;
 }
 
-.wizard-columns {
-    text-align: right !important;
-}
-
 .wizard-column-padding {
     padding-right: 0px;
 }
 
 .wizard-columns-list {
     padding-right: 13px;
+}
+
+.wizard-columns-list li {
+    text-align: right !important;
 }
 
 .wizard-panel-buttons {
@@ -633,6 +632,7 @@ a.last_page {
 
 .hierarchy-list-margin {
     margin-right: -20px;
+    margin-left: 0px !important;
 }
 
 .filter-item-label {
@@ -771,84 +771,86 @@ a.last_page {
 #sidebar .sidebar-icons-only-button {
     text-align: left;
     padding-left: 11px;
-}
-
-#sidebar {
-    right: 0;
-    left: auto;
-}
-
-#map-container #map-header {
-    right: 300px;
-    left: 0;
-}
-
-.navbar-nav.navbar-right:last-child {
-    margin-left: -15px;
-}
-
-.navbar-right {
-    float: left !important;
-}
-
-.navbar-brand {
-    float: right;
-}
-
-.datasources {
-    left: 270px;
-    right: auto;
-}
 
 th {
     text-align: right !important;
 }
 
-.dropdown-menu {
+.ui-pnotify {
+    left: 25px !important;
+    right: 0px !important;
+    direction: rtl !important;;
+}
+
+.ui-pnotify-icon, .ui-pnotify-icon span {
+    float: right !important;;
+    margin-left: .2em !important;;
+}
+
+.ui-pnotify-closer, .ui-pnotify-sticker {
+    float: left !important;;
+    margin-right: .2em !important;;
+}
+
+.dropdown-menu ul {
     right: auto !important;
     left: 0 !important;
 }
 
-.legend {
-    left: 5px;
-    right: auto;
+.wizard-invisible-button {
+    display: block !important;
 }
 
-.legend-sample.map-adm-icon {
-    float: right;
+.wizard-visible-button {
+    display: none !important;
 }
 
-.legend-item-label {
-    float: right;
+.search-panel-title {
+    padding: 10px 5px;
+    text-align: right;
 }
 
-.map-circle {
-    margin-right: 19px;
+.tree ul {
+    margin-left: 0px !important;
 }
 
-.color-block-indicator-join {
-    margin-left: 5px;
-    margin-right: 19px;
-    float: right;
+.parent_li {
+    margin: 0px 0px 0px 0px !important;
 }
 
-.leaflet-control {
-    margin-left: 10px;
-    float: left;
+.tree li::before, .tree li::after {
+    left: auto;
+    right: -5px;
 }
 
-.leaflet-right {
-    margin-left: 10px;
-    float: left;
-    left: 0;
-    right: auto;
+.search_results_header_keyword {
+    float: left !important;
+    padding-right: 2px !important;
 }
 
-.leaflet-popup-content-wrapper {
-    text-align: right !important;
+@media (min-width: 768px) {
+    .col-sm-offset-1 {
+        margin-right: 8.33333333%;
+    }
+}
+
+.grouping_selector_wrapper {
+    float: right !important;
+}
+
+.member_selector_wrapper {
+    float: right !important;
+}
+.ui-jqgrid .ui-jqgrid-hbox-rtl {
+    float: unset;
+}
+
+.ui-jqgrid tr.ui-row-rtl td {
+    border-color: lightgrey;
+    border-left: 1px solid #fff;
+    border-right: 1px solid #fff;
 }
 
 .panel-body, .panel-footer {
     text-align: right !important;
 }
-

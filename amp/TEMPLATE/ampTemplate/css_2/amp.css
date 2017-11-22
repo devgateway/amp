@@ -1272,6 +1272,10 @@ div.footer {
     padding: 0px 0px 0px 5px;
 }
 
+.setting-year-range {
+    display: inline-block;
+}
+
 .reports-tab-name-container {
     background-color: #F2F2F2;
     padding: 5px;
@@ -1300,7 +1304,7 @@ div.footer {
     margin-right:10px;
 }
 
-.wizard-columns {
+.wizard-columns-list li {
     white-space: nowrap;
     background-color: #E1E1E1;
     border: 1px solid #CECECE;
@@ -1343,4 +1347,38 @@ div.footer {
 
 .preview-buttons-align {
     float: right;
+}
+
+.wizard-invisible-button {
+    display: none;
+}
+
+.wizard-visible-button {
+    display: block;
+}
+
+.wizard-filters-div {
+    height: 85px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin-bottom: 5px;
+    text-align: left;
+    max-width: 423px;
+}
+
+.search_results_header_keyword {
+    float: right;
+    padding-left: 2px;
+}
+
+.button_green_group {
+    display: inline-block;
+}
+
+.planning-line {
+    display: inline-block;
+}
+
+.text-align {
+    text-align: left;
 }

@@ -89,8 +89,11 @@
 			</c:set>
 		
 			<c:if test="${!empty searchform.keyword}">
-				<div class="search_results_header"><digi:trn>Search results for</digi:trn> "<span
-					class="green_text"><c:out value="${searchform.keyword}"></c:out></span>"</div>
+				<div class="search_results_header"><digi:trn>Search results for</digi:trn>
+					<div class="search_results_header_keyword">
+						 "<span class="green_text"><c:out value="${searchform.keyword}"></c:out></span>"
+					</div>
+				</div>
 			<c:set var="keywordClasses">
 				help_search txt_sm_b
 			</c:set>
@@ -195,7 +198,10 @@
 							<c:if test="${searchform.queryType==-1||searchform.queryType==0}">
 								<div class="${search_results_block_class}"><span
 									class="button_green default_cursor">${fn:length(resultActivities)}</span>
-								 ${resultFound} <span class="button_green default_cursor"><digi:trn>Activities</digi:trn></span>
+								 ${resultFound}
+									<div class="button_green_group">
+									<span class="button_green default_cursor"><digi:trn>Activities</digi:trn></span>
+									</div>
 									<ul class="search-results">
 										<c:forEach items="${resultActivities}" var="activity">
 											<li>
@@ -230,7 +236,10 @@
 							
 							<c:if test="${searchform.queryType==-1||searchform.queryType==2}">
 								<div class="${search_results_block_class}"><span
-									class="button_green default_cursor">${fn:length(resultTabs)}</span> ${resultFound} <span class="button_green default_cursor"><digi:trn>Tabs</digi:trn></span>
+									class="button_green default_cursor">${fn:length(resultTabs)}</span> ${resultFound}
+									<div class="button_green_group">
+										<span class="button_green default_cursor"><digi:trn>Tabs</digi:trn></span>
+									</div>
 								<ul class="search-results">
 									<c:forEach items="${resultTabs}" var="tab">
 										<li><a
@@ -245,8 +254,10 @@
 								<c:if test="${searchform.queryType==-1||searchform.queryType==7}">
 									<div class="${search_results_block_class}">
 										<span class="button_green default_cursor">${fn:length(resultPledges)}</span> 
-										${resultFound} 
-										<span class="button_green default_cursor"><digi:trn>Pledges</digi:trn></span>
+										${resultFound}
+										<div class="button_green_group">
+											<span class="button_green default_cursor"><digi:trn>Pledges</digi:trn></span>
+										</div>
 									<ul class="search-results">
 										<c:forEach items="${resultPledges}" var="pledge">
 											<li><a
@@ -260,7 +271,10 @@
 							
 							<c:if test="${searchform.queryType==-1||searchform.queryType==1}">
 								<div class="${search_results_block_class}"><span
-									class="button_green default_cursor">${fn:length(resultReports)}</span> ${resultFound} <span class="button_green default_cursor"><digi:trn>Reports</digi:trn></span>
+									class="button_green default_cursor">${fn:length(resultReports)}</span> ${resultFound}
+									<div class="button_green_group">
+										<span class="button_green default_cursor"><digi:trn>Reports</digi:trn></span>
+									</div>
 									<ul class="search-results">
 										<c:forEach items="${resultReports}" var="report">
 											<li><a title="<digi:trn>Click here to view the report</digi:trn>"
@@ -277,7 +291,10 @@
 							<c:if test="${searchform.queryType==-1||searchform.queryType==3}">
 								<div class="search_results_block_last"><span
 									class="button_green default_cursor">${fn:length(resultResources)}</span>
-								${resultFound} <span class="button_green default_cursor"><digi:trn>Resources</digi:trn></span>
+								${resultFound}
+									<div class="button_green_group">
+										<span class="button_green default_cursor"><digi:trn>Resources</digi:trn></span>
+									</div>
 									<ul class="search-results">
 										<c:forEach items="${resultResources}" var="resource">
 											<li><c:choose>

@@ -135,7 +135,7 @@
 										</c:if>
 										<fieldset class="main_side_cont text-align">
 											<legend><span class="legend_label"><digi:trn key="rep:wizard:subtitle:selectedFilters">Selected Filters</digi:trn></span></legend>
-											<div id="listFiltersDiv" style="height:85px; overflow-y:auto; overflow-x:hidden; margin-bottom: 5px; text-align: left;" class="inputx">
+											<div id="listFiltersDiv" class="inputx wizard-filters-div">
 												<c:choose>
 													<c:when test="${myForm.useFilters!=null && myForm.useFilters}">
 														<jsp:include page="showSelectedFilters.jsp" />				
@@ -169,17 +169,21 @@
 			                                    	</feature:display>
 													<feature:display  name="Also show pledges checkbox" module="Report and Tab Options">
 														<c:if test="${(!myForm.desktopTab) and (param.type==null || param.type==donor_type_const)}">
-															<c:set var="alsoShowPledgesExplanation">
-																<digi:trn>Checking this box will lead to pledges being included in this report, with their commitment gap being displayed as Actual Commitments</digi:trn>
-															</c:set>
-															<nested:checkbox property="alsoShowPledges" title="${alsoShowPledgesExplanation}" onclick="javascript:if (this.checked) {selectMeasure('Actual Commitments');}; repManager.checkSteps();" />
-															<digi:trn key="aim:alsoShowPledges">Also show pledges</digi:trn> <br />
+															<div>
+																<c:set var="alsoShowPledgesExplanation">
+																	<digi:trn>Checking this box will lead to pledges being included in this report, with their commitment gap being displayed as Actual Commitments</digi:trn>
+																</c:set>
+																<nested:checkbox property="alsoShowPledges" title="${alsoShowPledgesExplanation}" onclick="javascript:if (this.checked) {selectMeasure('Actual Commitments');}; repManager.checkSteps();" />
+																<digi:trn key="aim:alsoShowPledges">Also show pledges</digi:trn> <br />
+															</div>
 														</c:if>
 			                                    	</feature:display>
 			                                    	<c:if test="${!myForm.desktopTab}">
-			                                    		<nested:checkbox property="allowEmptyFundingColumns"/>
-					                                    <digi:trn key="rep:wizard:allowEmptyFundingCols">Allow empty funding columns for year, quarter and month</digi:trn>
+														<div>
+															<nested:checkbox property="allowEmptyFundingColumns"/>
+															<digi:trn key="rep:wizard:allowEmptyFundingCols">Allow empty funding columns for year, quarter and month</digi:trn>
 			                                    		<br />
+														</div>
 			                                    	</c:if>
 													<div id="splitByFundingDiv">
 														<nested:checkbox property="splitByFunding"/>

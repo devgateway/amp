@@ -1308,7 +1308,7 @@ div.footer {
     margin-right:10px;
 }
 
-.wizard-columns {
+.wizard-columns-list li {
     white-space: nowrap;
     background-color: #E1E1E1;
     border: 1px solid #CECECE;
@@ -1398,6 +1398,10 @@ div.footer {
 
 .planning-line {
     display: inline-block;
+}
+
+.text-align {
+    text-align: left;
 }
 
 .tabs-grid-pager-info {

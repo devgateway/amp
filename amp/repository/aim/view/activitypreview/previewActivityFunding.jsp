@@ -545,7 +545,7 @@
                         
 	                     	<c:if test="${not empty aimEditActivityForm.funding.deliveryRate}">
                          		<tr>
-                            		<td class="preview-align preview-funding-total">
+                            		<td class="preview-funding-total">
                                 		<digi:trn>Delivery Rate</digi:trn>:
                                 	</td>
                             		<td nowrap="nowrap" class="preview-align preview-funding-total bold">

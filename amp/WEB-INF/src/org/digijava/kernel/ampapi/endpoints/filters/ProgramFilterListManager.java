@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -64,10 +65,12 @@ public final class ProgramFilterListManager implements FilterListManager {
         List<AmpActivityProgramSettings> progarmSettings = getProgramSettings();
        
         for (AmpActivityProgramSettings setting : progarmSettings) {
+            String programName = setting.getName().equals(ProgramUtil.NATIONAL_PLAN_OBJECTIVE) 
+                    ? ColumnConstants.NATIONAL_PLANNING_OBJECTIVES : setting.getName();
             FilterListDefinition listDefinition = new FilterListDefinition();
             listDefinition.setId(setting.getAmpProgramSettingsId());
-            listDefinition.setName(setting.getName());
-            listDefinition.setDisplayName(TranslatorWorker.translateText(setting.getName()));
+            listDefinition.setName(programName);
+            listDefinition.setDisplayName(TranslatorWorker.translateText(programName));
             listDefinition.setFiltered(true);
             listDefinition.setFilterIds(getProgramFilterIds(setting));
             listDefinition.setItems(PROGRAM_NAME_TO_ITEMS_NAME.get(setting.getName()));

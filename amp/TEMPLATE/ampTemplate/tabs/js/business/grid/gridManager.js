@@ -155,6 +155,10 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 						forceFit : false,
 						viewrecords : true,
 						loadtext : "<span data-i18n='tabs.common:loading'>Loading...</span>",
+                        recordtext: "<div class='tabs-grid-pager-info'><span data-i18n='tabs.common:view'>View</span></div> {0} - {1}" +
+						" <div class='tabs-grid-pager-info'><span data-i18n='tabs.common:of'>of</span></div> {2}",
+                        pgtext : "<div class='tabs-grid-pager-info'><span" +
+						" data-i18n='tabs.common:page'>Page</span></div> {0} <div class='tabs-grid-pager-info'><span data-i18n='tabs.common:of'>of</span></div> {1}",
 						headertitles : true,
 						gridview : true,
 						rownumbers : false,

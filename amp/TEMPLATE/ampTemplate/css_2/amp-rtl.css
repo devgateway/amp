@@ -83,6 +83,11 @@ div.trnpanel div.trn-row ul {
     padding-right: 10px;
 }
 
+.step_head_cont_name {
+    float: left !important;
+    padding-right: 2px !important;
+}
+
 .inside-header {
     text-align: right;
 }
@@ -611,6 +616,19 @@ a.last_page {
 
 .wizard-panel-buttons {
     text-align: left !important;
+}
+
+.wizard-filters-div strong {
+    float: right !important;
+}
+
+.wizard-settings-List {
+    float: right !important;
+}
+
+.wizard-settings-List-div {
+    float: right !important;
+    padding-right: 5px !important;
 }
 
 .container-close{

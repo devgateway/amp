@@ -751,6 +751,34 @@ a.last_page {
     transform: scale(-1, 1) !important;
 }
 
+.heatmap-chart g text {
+    direction: ltr;
+}
+
+.chart-currency {
+    float: left !important;
+    padding-right: 10px;
+}
+
+g text {
+    direction: rtl;
+}
+
+.dollaz b {
+    direction: ltr;
+    unicode-bidi: embed;
+    float: right;
+    padding-left: 5px;
+}
+
+.table.table-striped.table-condensed th {
+    text-align: right;
+}
+
+.table.table-striped.table-condensed td {
+    direction: ltr;
+}
+
 #gis-plugin {
     direction: rtl;
 }

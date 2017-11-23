@@ -1382,3 +1382,10 @@ div.footer {
 .text-align {
     text-align: left;
 }
+
+.inside-type {
+    padding-right: 8px;
+    padding-left: 8px;
+    font-size: 11px;
+    width: 15%;
+}

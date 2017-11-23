@@ -553,7 +553,7 @@ $(document).ready(function() {
 								</p>
 							</td>
 							<c:if test="${!aimTeamReportsForm.tabs}">
-								<td class="inside" style="padding-right: 8px; padding-left: 8px; font-size: 11px;" bgcolor="<%=color%>">
+								<td class="inside inside-type" bgcolor="<%=color%>">
 									<div style="white-space: nowrap">
 										<ul> 
 											<li>

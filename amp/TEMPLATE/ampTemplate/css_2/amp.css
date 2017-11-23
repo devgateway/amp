@@ -1404,6 +1404,13 @@ div.footer {
     text-align: left;
 }
 
+.inside-type {
+    padding-right: 8px;
+    padding-left: 8px;
+    font-size: 11px;
+    width: 15%;
+}
+
 .tabs-grid-pager-info {
     display: inline-block;
 }

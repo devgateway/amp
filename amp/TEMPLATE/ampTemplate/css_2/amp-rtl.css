@@ -789,6 +789,7 @@ a.last_page {
 #sidebar .sidebar-icons-only-button {
     text-align: left;
     padding-left: 11px;
+}
 
 th {
     text-align: right !important;
@@ -875,4 +876,8 @@ th {
 
 .red, .blue, .green {
     float: right;
+}
+
+td.inside ul {
+    padding-right: 1.3em;
 }

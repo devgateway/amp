@@ -11,6 +11,7 @@ public class AvailableMethod {
     private String method;
     private String id;
     private String tab;
+    private Boolean list;
     private String []columns;
     private FilterType [] filterType;
 
@@ -77,6 +78,13 @@ public class AvailableMethod {
     public void setTab(String tab) {
         this.tab = tab;
     }
-    
+
+    public Boolean getList() {
+        return list;
+    }
+
+    public void setList(Boolean list) {
+        this.list = list;
+    }
 
 }

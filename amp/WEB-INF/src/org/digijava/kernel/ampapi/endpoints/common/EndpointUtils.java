@@ -367,6 +367,7 @@ public class EndpointUtils {
                         filter.setId(apiAnnotation.id());
                         filter.setTab(apiAnnotation.tab());
                         filter.setFilterType(apiAnnotation.filterType());
+                        filter.setList(apiAnnotation.list());
                         if (includeColumn) {
                             filter.setColumns(apiAnnotation.columns());
                         }

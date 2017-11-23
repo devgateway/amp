@@ -147,7 +147,8 @@ import org.digijava.module.aim.util.LocationUtil;
 
                 }
                 
-                AmpLocation ampLoc = LocationUtil.getAmpLocationByCVLocation(id);
+                AmpLocation ampLoc = DynLocationManagerUtil.getOrCreateAmpLocationByCVLId(id);
+                
                 indValue.setLocation(ampLoc);
                 themeForm.setLocationLevelIndex(-1);
                 themeForm.setParentIndex(null);

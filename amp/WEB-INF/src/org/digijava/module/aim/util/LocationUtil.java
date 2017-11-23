@@ -193,14 +193,7 @@ public final class LocationUtil {
             throw new DgException(e);
         }
         
-        AmpLocation ampLocation = LocationUtil.getAmpLocationByCVLocation(loc.getId());
-        if (ampLocation == null) {
-            ampLocation = new AmpLocation();
-            ampLocation.setName(loc.getName());
-            ampLocation.setRegionLocation(loc);
-            ampLocation.setLocation(loc);
-            LocationUtil.saveAmpLocation(ampLocation);
-        }
+        DynLocationManagerUtil.getOrCreateAmpLocationByCVL(loc);
     }
        
     /**

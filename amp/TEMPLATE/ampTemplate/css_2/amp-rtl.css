@@ -685,6 +685,14 @@ a.last_page {
     text-align: right;
 }
 
+.col-xs-12.col-md-6 g[transform="translate(10,29)"] {
+    -moz-transform: scale(-1, 1) translate(-535px, 31px) !important;
+    -webkit-transform: scale(-1, 1) translate(-535px, 31px) !important;
+    -o-transform: scale(-1, 1) translate(-535px, 31px) !important;
+    -ms-transform: scale(-1, 1) translate(-535px, 31px) !important;
+    transform: scale(-1, 1) translate(-535px, 31px) !important;
+}
+
 .col-xs-12.col-md-6 g[transform="translate(10,31)"] {
     -moz-transform: scale(-1, 1) translate(-535px, 31px) !important;
     -webkit-transform: scale(-1, 1) translate(-535px, 31px) !important;
@@ -707,6 +715,14 @@ a.last_page {
     -o-transform: scale(-1, 1) translate(-535px, 62px) !important;
     -ms-transform: scale(-1, 1) translate(-535px, 62px) !important;
     transform: scale(-1, 1) translate(-535px, 62px) !important;
+}
+
+.col-xs-12.big-chart-0 g[transform="translate(10,29)"] {
+    -moz-transform: scale(-1, 1) translate(-1120px, 31px) !important;
+    -webkit-transform: scale(-1, 1) translate(-1120px, 31px) !important;
+    -o-transform: scale(-1, 1) translate(-1120px, 31px) !important;
+    -ms-transform: scale(-1, 1) translate(-1120px, 31px) !important;
+    transform: scale(-1, 1) translate(-1120px, 31px) !important;
 }
 
 .col-xs-12.big-chart-0 g[transform="translate(10,31)"] {

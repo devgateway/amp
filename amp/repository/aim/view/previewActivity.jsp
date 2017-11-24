@@ -403,7 +403,7 @@ function collapseAll() {
 			<digi:trn>Total Actual Commitments</digi:trn>:<br/> 
 				<c:if test="${not empty aimEditActivityForm.funding.totalCommitments}">
 					<b>
-		                 <bean:write name="aimEditActivityForm" property="funding.totalCommitments" /> 
+		                 <span dir="ltr"><bean:write name="aimEditActivityForm" property="funding.totalCommitments" /></span> 
 		                 ${aimEditActivityForm.currCode}
 					</b>
 		         </c:if>
@@ -419,7 +419,7 @@ function collapseAll() {
 			<digi:trn>Total Planned Commitment</digi:trn>:<br/>
 				<c:if test="${not empty aimEditActivityForm.funding.totalPlannedCommitments}">
 					<b>
-					 <bean:write name="aimEditActivityForm" property="funding.totalPlannedCommitments" /> 
+					 <span dir="ltr"><bean:write name="aimEditActivityForm" property="funding.totalPlannedCommitments" /></span> 
                      ${aimEditActivityForm.currCode}
 	     	      	</b>
                 </c:if>
@@ -439,7 +439,7 @@ function collapseAll() {
 			<digi:trn>Total Actual Disbursements</digi:trn>:<br/>
 				<c:if test="${not empty aimEditActivityForm.funding.totalDisbursements}">
 	                <b>
-	                 <bean:write name="aimEditActivityForm" property="funding.totalDisbursements" /> 
+	                 <span dir="ltr"><bean:write name="aimEditActivityForm" property="funding.totalDisbursements" /></span> 
                       ${aimEditActivityForm.currCode}
 	           
 	                </b>		          
@@ -456,7 +456,7 @@ function collapseAll() {
 			<digi:trn>Total Planned Disbursements</digi:trn>:<br/>
 				<c:if test="${not empty aimEditActivityForm.funding.totalPlannedDisbursements}">
 	                <b>
-	                 <bean:write name="aimEditActivityForm" property="funding.totalPlannedDisbursements" /> 
+	                 <span dir="ltr"><bean:write name="aimEditActivityForm" property="funding.totalPlannedDisbursements" /></span> 
 	                 ${aimEditActivityForm.currCode}
 	                </b>		          
 		         </c:if>
@@ -475,7 +475,7 @@ function collapseAll() {
 			<digi:trn>Total Expenditures</digi:trn>:<br/>
 			<c:if test="${not empty aimEditActivityForm.funding.totalExpenditures}">
 				<b>
-				<bean:write name="aimEditActivityForm" property="funding.totalExpenditures" /> 
+				<span dir="ltr"><bean:write name="aimEditActivityForm" property="funding.totalExpenditures" /></span> 
 					${aimEditActivityForm.currCode}
 				</b>
 			</c:if>
@@ -491,7 +491,7 @@ function collapseAll() {
 			<digi:trn>Unallocated Disbursements</digi:trn>:<br/>
 				<c:if test="${not empty aimEditActivityForm.funding.unDisbursementsBalance}">
 	                <b>
-	                 <bean:write name="aimEditActivityForm" property="funding.unDisbursementsBalance" /> 
+	                 <span dir="ltr"><bean:write name="aimEditActivityForm" property="funding.unDisbursementsBalance" /></span> 
 	                 ${aimEditActivityForm.currCode}
 	                </b>
 		         </c:if>
@@ -507,7 +507,7 @@ function collapseAll() {
 			<digi:trn>Total Planned Expenditures</digi:trn>:<br/>
 				<c:if test="${not empty aimEditActivityForm.funding.totalPlannedExpenditures}">
 	                <b>
-	                 <bean:write name="aimEditActivityForm" property="funding.totalPlannedExpenditures" /> 
+	                 <span dir="ltr"><bean:write name="aimEditActivityForm" property="funding.totalPlannedExpenditures" /></span> 
 	                 ${aimEditActivityForm.currCode}
 	                </b>		          
 		         </c:if>
@@ -523,7 +523,7 @@ function collapseAll() {
 			<c:if test="${not empty aimEditActivityForm.funding.totalMtefProjections}">
 					<digi:trn>Total MTEF Projections</digi:trn>:<br/>
 					<b>
-		                 <bean:write name="aimEditActivityForm" property="funding.totalMtefProjections" /> 
+		                 <span dir="ltr"><bean:write name="aimEditActivityForm" property="funding.totalMtefProjections" /></span> 
 		                 ${aimEditActivityForm.currCode}
 	            	</b>	
 				<hr/>

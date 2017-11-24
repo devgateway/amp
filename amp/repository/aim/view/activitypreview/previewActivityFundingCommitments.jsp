@@ -54,7 +54,7 @@
 		</td>
 		<td colspan="2" nowrap="nowrap" class="preview-align preview-funding-total">
 				<c:if test="${not empty funding.subtotalPlannedCommitments}">
-                	<b>${funding.subtotalPlannedCommitments} ${aimEditActivityForm.currCode}</b>
+                	<b><span dir="ltr">${funding.subtotalPlannedCommitments}</span> ${aimEditActivityForm.currCode}</b>
                 </c:if>&nbsp;
             </td>
  	<td align="right" class="preview-funding-total">&nbsp;</td>
@@ -91,7 +91,7 @@
 		</td>
 		<td colspan="2" nowrap="nowrap" class="preview-align preview-funding-total">
 			<c:if test="${not empty funding.subtotalActualCommitments}">
-           		<b>${funding.subtotalActualCommitments} ${aimEditActivityForm.currCode}</b>
+           		<b><span dir="ltr">${funding.subtotalActualCommitments}</span> ${aimEditActivityForm.currCode}</b>
             </c:if>&nbsp;
         </td>    
 		<td class="preview-align preview-funding-total">&nbsp;</td>
@@ -128,7 +128,7 @@
 			</td>
 			<td colspan="2" nowrap="nowrap" class="preview-align preview-funding-total">
 				<c:if test="${not empty funding.subtotalPipelineCommitments}">
-					<b>${funding.subtotalPipelineCommitments} ${aimEditActivityForm.currCode}</b>
+					<b><span dir="ltr">${funding.subtotalPipelineCommitments}</span> ${aimEditActivityForm.currCode}</b>
 				</c:if>&nbsp;
 			</td>    
 			<td class="preview-funding-total">&nbsp;</td>
@@ -165,7 +165,7 @@
 			</td>
 			<td colspan="2" nowrap="nowrap" class="preview-align preview-funding-total">
 				<c:if test="${not empty funding.subtotalOfficialDevelopmentAidCommitments}">
-					<b>${funding.subtotalOfficialDevelopmentAidCommitments} ${aimEditActivityForm.currCode}</b>
+					<b><span dir="ltr">${funding.subtotalOfficialDevelopmentAidCommitments}</span> ${aimEditActivityForm.currCode}</b>
 				</c:if>&nbsp;
 			</td>    
 			<td>&nbsp;</td>
@@ -202,7 +202,7 @@
 			</td>
 			<td colspan="2" nowrap="nowrap" class="preview-align preview-funding-total">
 				<c:if test="${not empty funding.subtotalBilateralSscCommitments}">
-					<b>${funding.subtotalBilateralSscCommitments} ${aimEditActivityForm.currCode}</b>
+					<b><span dir="ltr">${funding.subtotalBilateralSscCommitments}</span> ${aimEditActivityForm.currCode}</b>
 				</c:if>&nbsp;
 			</td>    
 			<td class="preview-funding-total">&nbsp;</td>
@@ -238,7 +238,7 @@
 			</td>
 			<td colspan="2" nowrap="nowrap" class="preview-align preview-funding-total">
 				<c:if test="${not empty funding.subtotalTriangularSscCommitments}">
-					<b>${funding.subtotalTriangularSscCommitments} ${aimEditActivityForm.currCode}</b>
+					<b><span dir="ltr">${funding.subtotalTriangularSscCommitments}</span> ${aimEditActivityForm.currCode}</b>
 				</c:if>&nbsp;
 			</td>    
 			<td class="preview-align preview-funding-total">&nbsp;</td>

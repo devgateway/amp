@@ -839,6 +839,22 @@ th {
     text-align: right !important;
 }
 
+td[role=gridcell] {
+    direction: ltr;
+}
+
+.nireport_header th, th.col {
+    text-align: center !important;
+}
+
+td.data, td.measure {
+    direction: ltr !important;
+}
+
+.ltr-input {
+    text-align: right !important;
+}
+
 .ui-pnotify {
     left: 25px !important;
     right: 0px !important;

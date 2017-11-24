@@ -31620,7 +31620,7 @@ var _ = require('underscore');
 // var GenericFilterModel = require('../models/generic-filter-model');
 var TreeNodeView = require('../tree/tree-node-view');
 var BaseFilterView = require('../views/base-filter-view');
-var Template = "<% if (!empty) { %>\r\n\t<div class=\"search-form\">\r\n\t  <div class=\"input-group form-group\">\r\n\t    <input type=\"text\" data-i18n=\"[placeholder]amp.gis:pane-filters-search-placeholder\" class=\"form-control search-text\" placeholder=\"Search...\">\r\n\t    <span class=\"input-group-btn\">\r\n\t      <button data-i18n=\"amp.gis:pane-filters-search\" class=\"btn btn-success\">Go</button>\r\n\t    </span>\r\n\t  </div><!-- /input-group -->\r\n\t</div>\r\n\t<div class=\"toggle-all\">\r\n\t  <em>\r\n\t    <a href=\"#\" data-i18n=\"amp.gis:pane-filters-select\" class=\"select-all\" >select all</a> /\r\n\t    <a href=\"#\"  data-i18n=\"amp.gis:pane-filters-deselect\" class=\"select-none\" >deselect all</a>\r\n\t  </em>\r\n\t</div>\r\n\t\r\n\t<div class=\"tree tree-container\" style=\"\"></div><!--display:none;-->\r\n<% } else { %>\r\n\t<span data-i18n='amp.gis:pane-subfilters-empty'></span>\r\n<% } %>\r\n";
+var Template = "<% if (!empty) { %>\r\n\t<div class=\"search-form\">\r\n\t  <div class=\"input-group form-group\">\r\n\t    <input type=\"text\" data-i18n=\"[placeholder]amp.gis:pane-filters-search-placeholder\" class=\"form-control search-text\" placeholder=\"Search...\">\r\n\t    <span class=\"input-group-btn\">\r\n\t      <button data-i18n=\"amp.gis:pane-filters-search\" class=\"btn btn-success\">Go</button>\r\n\t    </span>\r\n\t  </div><!-- /input-group -->\r\n\t</div>\r\n\t<div class=\"toggle-all\">\r\n\t  <em>\r\n\t    <div class=\"toggle-all-div\"><a href=\"#\" data-i18n=\"amp.gis:pane-filters-select\" class=\"select-all\" >select\r\n\t\t\tall</a></div> /\r\n\t\t<div class=\"toggle-all-div\"><a href=\"#\"  data-i18n=\"amp.gis:pane-filters-deselect\" class=\"select-none\" >deselect all</a></div>\r\n\t  </em>\r\n\t</div>\r\n\t\r\n\t<div class=\"tree tree-container\" style=\"\"></div><!--display:none;-->\r\n<% } else { %>\r\n\t<span data-i18n='amp.gis:pane-subfilters-empty'></span>\r\n<% } %>\r\n";
 
 
 // This is a generic model for filters. It assumes a tree structure.
@@ -31985,12 +31985,12 @@ module.exports = BaseFilterView.extend({
 	if(selectedStart.length > 0 && selectedEnd.length > 0){
 		dates = selectedStart + ' - ' +  selectedEnd;		
 	}else if(selectedStart.length > 0 && selectedEnd.length == 0){
-		dates = this.translator.translateSync('amp.gis:date-from', 'From') + ' ' + selectedStart;				
+		dates = '<div class="filter-count-div">' + this.translator.translateSync('amp.gis:date-from', 'From') + '</div> ' + selectedStart;
 	}else if(selectedStart.length == 0 && selectedEnd.length > 0){
-		dates = this.translator.translateSync('amp.gis:date-until', 'Until') + ' ' + selectedEnd;			
+		dates = '<div class="filter-count-div">' + this.translator.translateSync('amp.gis:date-until', 'Until') + '</div> ' + selectedEnd;
 	}
-	this.$titleEl.find('.filter-count').text(dates);
-	this.$('.dates').text(dates);	
+	this.$titleEl.find('.filter-count').html(dates);
+	this.$('.dates').html(dates);
   },
 
   _renderSlider: function() {

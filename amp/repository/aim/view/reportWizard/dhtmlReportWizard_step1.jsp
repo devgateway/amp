@@ -102,21 +102,21 @@
 													<nested:checkbox property="hideActivities" value="true" onchange="repManager.checkSteps();createPreview();">
 														${summary}
 													</nested:checkbox>
-													<br />
+													<br />&rlm;
 													<nested:radio property="reportPeriod" value="A" onchange="createPreview();">
 														<digi:trn key="aim:AnnualReport">Annual Report</digi:trn>
 													</nested:radio>
-													<br />
+													<br />&rlm;
 													<c:if test="${param.type==null || param.type!=pledges_type_const}">
 													<nested:radio property="reportPeriod" value="Q" onchange="createPreview();">
 														<digi:trn key="aim:QuarterlyReport">Quarterly Report</digi:trn>
 													</nested:radio>
-													<br />
+													<br />&rlm;
 													<nested:radio property="reportPeriod" value="M" onchange="createPreview();">
 														<digi:trn key="aim:MonthlyReport">Monthly Report</digi:trn>
 													</nested:radio>
 													</c:if>
-													<br />
+													<br />&rlm;
 													<nested:radio property="reportPeriod" value="N" onchange="createPreview();">
 														<digi:trn>Totals Only</digi:trn>
 													</nested:radio>

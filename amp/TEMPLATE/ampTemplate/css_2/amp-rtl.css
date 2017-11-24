@@ -813,6 +813,10 @@ g text {
     direction: ltr;
 }
 
+.dash-chart-wrap .table.table-striped.table-condensed td {
+    direction: rtl;
+}
+
 #gis-plugin {
     direction: rtl;
 }

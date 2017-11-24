@@ -855,6 +855,11 @@ td.data, td.measure {
     text-align: right !important;
 }
 
+.ui-jqgrid tr.jqgroup span b {
+    direction: ltr;
+    unicode-bidi: bidi-override;
+}
+
 .ui-pnotify {
     left: 25px !important;
     right: 0px !important;

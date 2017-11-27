@@ -51,7 +51,7 @@
 	</td>
 	  <td nowrap="nowrap" class="preview-align preview-funding-total">
 			<c:if test="${not empty funding.subtotalActualDisbursementsOrders}">
-           			${funding.subtotalActualDisbursementsOrders} ${aimEditActivityForm.currCode}
+           			<span dir="ltr">${funding.subtotalActualDisbursementsOrders}</span> ${aimEditActivityForm.currCode}
             </c:if> &nbsp;
            </td>
 	  <TD align="right" class="preview-funding-total">&nbsp;</TD>

@@ -813,10 +813,6 @@ g text {
     direction: ltr;
 }
 
-#gis-plugin {
-    direction: rtl;
-}
-
 .radio label {
     padding-right: 20px;
 }

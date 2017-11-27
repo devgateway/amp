@@ -3,8 +3,10 @@ package org.digijava.kernel.ampapi.endpoints.activity;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -55,6 +57,7 @@ public class InterchangeDependencyResolver {
     public final static String AGREEMENT_CODE_PRESENT_KEY = "agreement_code_required";
     public final static String AGREEMENT_TITLE_PRESENT_KEY = "agreement_title_required";
     public static final String TRANSACTION_PRESENT_KEY = "transaction_present";
+    public static final String COMPONENT_FUNDING_ORGANIZATION_VALID_KEY = "component_funding_organization_valid";
     
     
     /*
@@ -67,6 +70,7 @@ public class InterchangeDependencyResolver {
     private final static String IMPLEMENTATION_LOCATION_PATH = "implementation_location";
     private final static String AGREEMENT_CODE_PATH = "code";
     private final static String AGREEMENT_TITLE_PATH = "title";
+    private static final String ORG_ROLE_ORG_PATH = "organization";
     
     /**
      * static constructor to init paths and values
@@ -221,6 +225,8 @@ public class InterchangeDependencyResolver {
         case TRANSACTION_PRESENT_KEY:
             int transactionsCount = getCollectionSize(fieldParent, ActivityFieldsConstants.FUNDING_DETAILS);
             return DependencyCheckResult.convertToAlwaysRequired(value != null || transactionsCount == 0);
+        case COMPONENT_FUNDING_ORGANIZATION_VALID_KEY: 
+            return checkComponentFundingOrg(value, incomingActivity);
         
         default: throw new RuntimeException("Interchange Dependency Mapper: no dependency found for code " + code);
         }
@@ -335,7 +341,49 @@ public class InterchangeDependencyResolver {
     }
     
     /**
-     * Verifies each configures dependency for any additional checks and builds up the final (actual) list of dependencies
+     * Performs a check on component funding org id corresponding to AmpOrganization objects -- 
+     * whether those are included in the related organizations
+     * @param e
+     * @param incomingActivity
+     * @return
+     */
+    private static DependencyCheckResult checkComponentFundingOrg(Object e, JsonBean incomingActivity) {
+        
+        if (e == null) {
+            return DependencyCheckResult.VALID; 
+        }
+        
+        Set<Long> orgIds = new HashSet<>();
+        List<String> orgRoleFields = InterchangeUtils.discriminatedFieldsByFieldTitle
+                .get(ActivityFieldsConstants.ORG_ROLE);
+
+        for (String field : orgRoleFields) {
+            Object orgRolesObj = InterchangeUtils.getFieldValuesFromJsonActivity(incomingActivity, field);
+            if (orgRolesObj != null && orgRolesObj instanceof Collection) {
+                Collection<?> orgRolesColl = (Collection<?>) orgRolesObj;
+                for (Object orgRoleObj : orgRolesColl) {
+                    if (orgRoleObj != null && orgRoleObj instanceof Map) {
+                        Map<String, Long> orgRoleMap = (Map) orgRoleObj;
+                        Long orgId = getLong(orgRoleMap.get(ORG_ROLE_ORG_PATH));
+                        
+                        if (orgId != null) {
+                            orgIds.add(orgId);
+                        }
+                    }
+                }
+            }
+        }
+        
+        if (orgIds.contains(getLong(e))) {
+            return DependencyCheckResult.VALID; 
+        }
+        
+        return DependencyCheckResult.INVALID_NOT_CONFIGURABLE;
+    }
+    
+    /**
+     * Verifies each configures dependency for any additional checks 
+     * and builds up the final (actual) list of dependencies
      * @param dependecies
      * @return actual dependencies list or null if no dependency
      */
@@ -350,5 +398,9 @@ public class InterchangeDependencyResolver {
             }
         }
         return actualDependecies.size() > 0 ? actualDependecies : null;
+    }
+    
+    private static Long getLong(Object o) {
+        return o instanceof Number ? ((Number) o).longValue() : null;
     }
 }

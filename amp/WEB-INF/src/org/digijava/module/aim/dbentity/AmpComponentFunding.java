@@ -17,6 +17,7 @@ import static org.digijava.module.aim.annotations.interchange.ActivityFieldsCons
 import java.io.Serializable;
 import java.util.Date;
 
+import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
 import org.digijava.kernel.ampapi.endpoints.activity.discriminators.ComponentTransactionTypePossibleValuesProvider;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
@@ -49,8 +50,8 @@ public class AmpComponentFunding implements Cloneable, Serializable {
     @Interchangeable(fieldTitle = COMPONENT_FUNDING_AMOUNT, importable = true, required = REQUIRED_ALWAYS)
     private Double transactionAmount;
 
-    // reusing field to store the organisation related to the current component
-    @Interchangeable(fieldTitle = COMPONENT_ORGANIZATION, importable = true, pickIdOnly = true)
+    @Interchangeable(fieldTitle = COMPONENT_ORGANIZATION, importable = true, pickIdOnly = true,
+            dependencies = {InterchangeDependencyResolver.COMPONENT_FUNDING_ORGANIZATION_VALID_KEY})
     private AmpOrganisation reportingOrganization;
 
     //@Interchangeable(fieldTitle = COMPONENT_SECOND_REPORTING_ORGANIZATION, importable = true, pickIdOnly = true)

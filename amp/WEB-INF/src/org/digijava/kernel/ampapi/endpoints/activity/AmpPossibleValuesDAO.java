@@ -1,7 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import static java.util.stream.Collectors.toList;
-
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -103,8 +101,6 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
 
     @Override
     public List<Object[]> getPossibleLocations() {
-        // FIXME location once added in admin is saved only in AmpCategoryValueLocations
-        // FIXME who is responsible for creating missing entries in AmpLocation?
         String queryString = "SELECT loc.id, acvl.id, acvl.name, acvlParent.id, acvlParent.name, "
                 + "parentCat.id, parentCat.value "
                 + " FROM " + AmpLocation.class.getName() + " loc "

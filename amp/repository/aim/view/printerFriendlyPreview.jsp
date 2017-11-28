@@ -3351,7 +3351,7 @@ body {background:none;}
 																			style="text-transform: uppercase;">
 																			<c:set var="indicatorName"
 																				   value="${gpiresponse.ampQuestionId.ampIndicatorId.name}"/>
-																			<span class="word_break bold">${indicatorName}</span>
+																			<span class="word_break bold"><digi:trn>${indicatorName}</digi:trn></span>
 																		</td>
 																	</tr>
 																</c:if>
@@ -3359,12 +3359,20 @@ body {background:none;}
 																	<td width=85%>
 																		<c:set var="questionText"
 																			   value="${gpiresponse.ampQuestionId.questionText}"/>
-																		<span class="word_break bold">${questionText}</span>
+																		<c:set var="ampTypeName"
+																			   value="${gpiresponse.ampQuestionId.ampTypeId.name}"/>
+																		<span class="word_break bold"><digi:trn>${questionText}</digi:trn></span>
 																		<c:set var="responseText"
 																			   value="${gpiresponse.response}"/>
 																		<lu>
 																			<li>
-																				<span class="word_break bold">${responseText}</span>
+																				<c:if test='${"yes-no".equals(ampTypeName) &&
+																						!"".equals(responseText) && responseText != null}'>
+																					<span class="word_break bold"><digi:trn>${responseText}</digi:trn></span>
+																				</c:if>
+																				<c:if test='${!"yes-no".equals(ampTypeName)}'>
+																					<span class="word_break bold">${responseText}</span>
+																				</c:if>
 																			</li>
 																		</lu>
 																	</td>

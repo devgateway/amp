@@ -17,22 +17,22 @@ import org.digijava.module.aim.util.SerializableComparator;
 public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Versionable, Cloneable
 {
     //IATI-check: not to be ignored
-    @Interchangeable(fieldTitle="AMP Organization Role ID")
     private Long ampOrgRoleId;
     @Interchangeable(fieldTitle="Activity", pickIdOnly = true, importable = false)
     private AmpActivityVersion activity;
     @Interchangeable(fieldTitle="Organization", importable=true, pickIdOnly=true, uniqueConstraint=true, required = ActivityEPConstants.REQUIRED_ALWAYS)
     private AmpOrganisation organisation;
-    @Interchangeable(fieldTitle="Role"/*, descend=true*/, importable=true, pickIdOnly=true, required = ActivityEPConstants.REQUIRED_ALWAYS)
     private AmpRole role;
-    @Interchangeable(fieldTitle="Percentage", importable=true, percentageConstraint = true, fmPath = FMVisibility.PARENT_FM + "/percentage")
+    @Interchangeable(fieldTitle = "Percentage", importable = true, percentageConstraint = true,
+            fmPath = FMVisibility.PARENT_FM + "/percentage", required = ActivityEPConstants.REQUIRED_ALWAYS)
     private Float   percentage;
-    @Interchangeable(fieldTitle="Budgets", importable=true)
+    @Interchangeable(fieldTitle = "Budgets", importable = true, fmPath = FMVisibility.PARENT_FM + "/Budget Code")
     private Set <AmpOrgRoleBudget> budgets;
-    @Interchangeable(fieldTitle="Additional Info", importable=true)
+    @Interchangeable(fieldTitle = "Additional Info", importable = true,
+            fmPath = FMVisibility.PARENT_FM + "/relOrgadditionalInfo")
     private String additionalInfo;
 
-    @Interchangeable(fieldTitle = "GPI Ni Survey")
+    @Interchangeable(fieldTitle = "GPI Ni Survey", fmPath = "/Activity Form/GPI 2017/GPI NI Survey")
     private Set<AmpGPINiSurvey> gpiNiSurveys;       
     
     public Float getPercentage() {

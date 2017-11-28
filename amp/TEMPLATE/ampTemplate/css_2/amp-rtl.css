@@ -93,20 +93,32 @@ div.trnpanel div.trn-row ul {
 }
 
 .tri {
-    -webkit-transform:scale(-1,1);
+    -moz-transform: scale(-1, 1);
+    -webkit-transform: scale(-1, 1);
+    -o-transform: scale(-1, 1);
+    -ms-transform: scale(-1, 1);
+    transform: scale(-1, 1);
 }
 
 .tri b {
     text-align: right;
     display: table-cell;
-    -webkit-transform:scale(-1,1);
+    -moz-transform: scale(-1, 1);
+    -webkit-transform: scale(-1, 1);
+    -o-transform: scale(-1, 1);
+    -ms-transform: scale(-1, 1);
+    transform: scale(-1, 1);
     width: inherit;
 }
 
 .triText {
     text-align: right;
     display: block;
-    -webkit-transform:scale(-1,1);
+    -moz-transform: scale(-1, 1);
+    -webkit-transform: scale(-1, 1);
+    -o-transform: scale(-1, 1);
+    -ms-transform: scale(-1, 1);
+    transform: scale(-1, 1);
     width: inherit;
 }
 
@@ -544,7 +556,7 @@ a.last_page {
 }
 
 .ui-dialog-titlebar-close {
-    right: unset !important;
+    right: auto !important;
     left: .3em;
 }
 
@@ -563,6 +575,34 @@ a.last_page {
 
 .ui-accordion-icons {
     padding-right: 2.2em !important;
+}
+
+.ui-icon-triangle-1-e {
+    background-position: -96px -16px;
+}
+
+.ui-button-text-icon-primary .ui-button-icon-primary, .ui-button-text-icons .ui-button-icon-primary, .ui-button-icons-only .ui-button-icon-primary {
+    right: .5em;
+}
+
+.ui-button-text-icon-primary .ui-button-text {
+    padding:.4em 2.1em .4em 1em;
+}
+
+.ui-jqgrid .ui-pg-input {
+    height: 14px !important;
+}
+
+.ui-dialog-titlebar.ui-widget-header {
+    background: #ededed !important;
+}
+
+#closepanel {
+    -moz-transform: scale(-1, 1) !important;
+    -webkit-transform: scale(-1, 1) !important;;
+    -o-transform: scale(-1, 1) !important;;
+    -ms-transform: scale(-1, 1) !important;;
+    transform: scale(-1, 1) !important;
 }
 
 .preview-buttons-align {

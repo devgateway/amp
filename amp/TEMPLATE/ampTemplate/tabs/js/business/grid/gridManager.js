@@ -390,7 +390,7 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 							// (not natively supported by jqgrid).
 							jQuery("#grand_total_row_" + id).empty();
 							jQuery("#grand_total_row_" + id).remove();
-							var pageFooterRow = jQuery("#main-dynamic-content-region_" + id + " .ui-jqgrid-ftable .footrow-ltr");
+							var pageFooterRow = jQuery("#main-dynamic-content-region_" + id + " .ui-jqgrid-ftable .footrow-" + getDirection());
 							var grandTotalFooterRow = jQuery(pageFooterRow).clone();
 							jQuery(grandTotalFooterRow).find("[aria-describedby^='tab_grid_" + id + "']").text("").attr("title", "");
 							jQuery(grandTotalFooterRow).attr("id", "grand_total_row_" + id);

@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.digijava.kernel.ampapi.endpoints.security;
 
 import java.lang.reflect.Method;
@@ -54,13 +51,13 @@ public class ApiAuthorization {
         for (Method m : apiMethods) {
             ApiMethod apiMethod = m.getAnnotation(ApiMethod.class);
             // no need to remember methods we don't need to authorize
-            if (apiMethod.authTypes().length == 0 || 
-                    apiMethod.authTypes().length == 1 && AuthRule.NONE.equals(apiMethod.authTypes()[0])) {
+            if (apiMethod.authTypes().length == 0) {
                 continue;
             }
             Class<?> clazz = m.getDeclaringClass();
             String classPath = clazz.isAnnotationPresent(Path.class) ? clazz.getAnnotation(Path.class).value() : "";
-            String currentPath = m.getAnnotation(Path.class).value();
+            Path pathAnnotation = m.getAnnotation(Path.class);
+            String currentPath = pathAnnotation != null ? pathAnnotation.value() : "";
             // detect URL reference of the method in a special format, like GET/activity/fields
             String methodRef = getMethodReference(getMethodType(m), classPath, currentPath);
             // store the regex for parameterized queries

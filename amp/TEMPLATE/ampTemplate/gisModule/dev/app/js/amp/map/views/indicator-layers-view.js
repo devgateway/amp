@@ -176,11 +176,13 @@ module.exports = Backbone.View.extend({
 
 		  var fundingPopupTemplate; 		  
 		  if (_.isUndefined(feature.properties.value) || _.isNull(feature.properties.value)) {
-			  fundingPopupTemplate =  ['<strong>', feature.properties.name, '</strong>', '<br/>', self.app.translator.translateSync("amp.gis:popup-no-data","No Data")].join('');
+			  fundingPopupTemplate =  ['<strong>', feature.properties.name, '</strong>', '<br/>', '<div class="leaflet-popup-content-group">',
+                  self.app.translator.translateSync("amp.gis:popup-no-data","No Data"), '</div>'].join('');
 	      } else {	    	  
 	    	  fundingPopupTemplate = ['<strong>', feature.properties.name, '</strong>', '<br/>',
-              '<div class="leaflet-popup-content-label">', formattedTitleString, '</div>',
-              '<div class="leaflet-popup-content-value">', value, ' ', unit, '</div>', '<br/>'].join('');
+                  '<div class="leaflet-popup-content-group">',
+                  '<div class="leaflet-popup-content-label">', formattedTitleString, '</div>',
+              '<div class="leaflet-popup-content-value">', value, ' ', unit, '</div>', '<br/>', '</div>'].join('');
 	      }
 
 		  layer.bindPopup(fundingPopupTemplate, {

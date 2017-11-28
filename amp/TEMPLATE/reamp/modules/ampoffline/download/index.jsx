@@ -27,7 +27,7 @@ var AMPOfflineDownload = React.createClass( {
                 <div className='col-md-7'>
                     <div className='main_text'>
                         <h2>{this.state.translations['amp.offline:download-title']}</h2>
-                        <span>{this.state.translations['amp.offline:text-1']} {this.state.translations['amp.offline:text-2']} {this.state.translations['amp.offline:text-3']} {this.state.translations['amp.offline:text-4']}</span>
+                        <span>{this.state.translations['amp.offline:text']}</span>
                     </div>
                     <div>
                         <DownloadLinks url={OFFLINE_INSTALLERS} translations={this.state.translations} />
@@ -46,10 +46,7 @@ var translations = {
     ...DownloadLinks.translations,
     "amp.offline:page-title": "Aid Management Platform - Download Offline Client",
     "amp.offline:download-title": "Download the Offline Client",
-    "amp.offline:text-1": "The AMP Offline application allows you to edit and add activity information to the AMP without having an active internet connection.",
-    "amp.offline:text-2": "In order to use the application, you must download and install the compatible version of AMP Offline application from the list of the latest AMP Offline installers.",
-    "amp.offline:text-3": "When you run the application for the first time, you must have an active internet connection in order to sync your user data, activity data, and other critical data to the application.",
-    "amp.offline:text-4": "After that, you may work offline and sync your data periodically."
+    "amp.offline:text": "The AMP Offline application allows you to edit and add activity information to the AMP without having an active internet connection. In order to use the application, you must download and install the compatible version of AMP Offline application from the list of the latest AMP Offline installers. When you run the application for the first time, you must have an active internet connection in order to sync your user data, activity data, and other critical data to the application. After that, you may work offline and sync your data periodically."
 }
 
 module.exports = AMPOfflineDownload;

@@ -373,8 +373,4 @@ public class InterchangeDependencyResolver {
         }
         return actualDependecies.size() > 0 ? actualDependecies : null;
     }
-    
-    private static Long getLong(Object o) {
-        return o instanceof Number ? ((Number) o).longValue() : null;
-    }
 }

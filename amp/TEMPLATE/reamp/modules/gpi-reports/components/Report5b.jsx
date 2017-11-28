@@ -318,8 +318,8 @@ export default class Report5b extends Component {
                       <div className="section-divider"></div>
                       { this.props.mainReport.empty &&
                           <div className="text-center">{this.props.translations['amp-gpi-reports:no-data']}</div> 
-                       }
-                       { this.props.mainReport.empty == false  &&
+                      }  
+                        { this.props.mainReport.empty == false  &&
                             <table className="table table-bordered table-striped indicator-table">
                             <thead>
                             <tr>

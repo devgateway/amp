@@ -41,8 +41,7 @@ public class InputValidatorProcessor {
                 new PrimaryContactValidator(),
                 new AgreementCodeValidator(),
                 new AgreementTitleValidator(),
-                new FundingOrgRolesValidator(),
-                new ComponentFundingOrgsValidator());
+                new FundingOrgRolesValidator());
     }
 
     public static List<InputValidator> getContactValidators() {

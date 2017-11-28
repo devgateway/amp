@@ -51,7 +51,7 @@ public class AmpComponentFunding implements Cloneable, Serializable {
     private Double transactionAmount;
 
     @Interchangeable(fieldTitle = COMPONENT_ORGANIZATION, importable = true, pickIdOnly = true,
-            dependencies = {InterchangeDependencyResolver.COMPONENT_FUNDING_ORGANIZATION_VALID_KEY})
+            dependencies = {InterchangeDependencyResolver.ORGANIZATION_PRESENT_KEY})
     private AmpOrganisation reportingOrganization;
 
     //@Interchangeable(fieldTitle = COMPONENT_SECOND_REPORTING_ORGANIZATION, importable = true, pickIdOnly = true)

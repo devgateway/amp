@@ -210,7 +210,7 @@ function setHoveredRow(rowId) {
 									<bean:write name="allFundingPledges" property="organizationGroup.orgGrpName" />
 								</td>
 								<td width="24%" align="center" class="inside">
-									<aim:formatNumber value="${allFundingPledges.getTotalPledgedAmount(usedCurrency)}" />
+									<span dir="ltr"><aim:formatNumber value="${allFundingPledges.getTotalPledgedAmount(usedCurrency)}" /></span>
 								</td>
 								<td width="19%" align="left" class="inside">
 									<c:forEach var="year" items="${allFundingPledges.yearsList}" varStatus="index">

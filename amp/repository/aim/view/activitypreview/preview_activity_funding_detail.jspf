@@ -2,7 +2,7 @@
 	<td class="preview-funding-total">
 		<c:out value="${activity_funding_text}" />:</td>
 		<td nowrap="nowrap" class="preview-align preview-funding-total">
-			<b>${activity_funding_amount} ${aimEditActivityForm.currCode}</b> &nbsp;
+			<b><span dir="ltr">${activity_funding_amount}</span> ${aimEditActivityForm.currCode}</b> &nbsp;
 		</td>
 		<td class="preview-funding-total">&nbsp;</td>
 </tr>

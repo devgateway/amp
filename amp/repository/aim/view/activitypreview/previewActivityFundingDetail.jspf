@@ -58,7 +58,7 @@ other rows (if any): capital spending percent / classification / attached pledge
 	<c:choose>
 		<c:when test="${aimEditActivityForm.funding.fixerate}">
 			<td height="18" class="preview-align" nowrap="nowrap">
-				<b><bean:write name="fundingDetail" property="transactionAmount" /> <bean:write name="fundingDetail" property="currencyCode" /></b>
+				<b><span dir="ltr"><bean:write name="fundingDetail" property="transactionAmount" /></span> <bean:write name="fundingDetail" property="currencyCode" /></b>
 				&nbsp;
 			</td>
 			<td class="preview-align">
@@ -67,7 +67,7 @@ other rows (if any): capital spending percent / classification / attached pledge
 		</c:when>
 		<c:otherwise>
 			<td height="18" class="preview-align" colspan="2">
-				<b><bean:write name="fundingDetail" property="transactionAmount" /> <bean:write name="fundingDetail" property="currencyCode" /></b>
+				<b><span dir="ltr"><bean:write name="fundingDetail" property="transactionAmount" /></span> <bean:write name="fundingDetail" property="currencyCode" /></b>
 				&nbsp;
 			</td>
 		</c:otherwise>
@@ -77,7 +77,7 @@ other rows (if any): capital spending percent / classification / attached pledge
 	<tr>
 		<td colspan="1">&nbsp;</td>
 		<td colspan="3" class="preview-align">
-			<digi:trn>Capital spending percentage</digi:trn>:&nbsp;<b><bean:write name="fundingDetail" property="capitalPercent" /></b>%&nbsp;			
+			<digi:trn>Capital spending percentage</digi:trn>:&nbsp;<b><bean:write name="fundingDetail" property="capitalPercent" /></b> %&nbsp;			
 		</td>
 	</tr>
 </logic:present>

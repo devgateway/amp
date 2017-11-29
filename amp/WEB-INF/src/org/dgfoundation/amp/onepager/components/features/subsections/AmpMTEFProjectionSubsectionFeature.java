@@ -73,7 +73,7 @@ public class AmpMTEFProjectionSubsectionFeature extends AmpSubsectionFeatureFund
                 mtefTableFeature.getEditorList().addItem(projection);
                 target.add(mtefTableFeature);
                 AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
-                parent.getFundingInfo().checkChoicesRequired(mtefTableFeature.getEditorList().getCount());
+                parent.getFundingInfo().configureRequiredFields();
                 target.add(parent.getFundingInfo());
                 target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
                 target.appendJavaScript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));

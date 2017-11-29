@@ -54,7 +54,7 @@ public class AmpDonorArrearsSubsectionFeature extends AmpSubsectionFeatureFundin
                 target.add(arrearsTableFeature);
                 
                 AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
-                parent.getFundingInfo().checkChoicesRequired(arrearsTableFeature.getEditorList().getCount());
+                parent.getFundingInfo().configureRequiredFields();
                 target.add(parent.getFundingInfo());
                 target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
                 target.appendJavaScript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));

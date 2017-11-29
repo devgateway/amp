@@ -2,6 +2,7 @@ package org.digijava.module.esrigis.action;
 
 import java.io.InputStreamReader;
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -40,7 +41,10 @@ public class StructuresImporter extends Action {
     public ActionForward execute(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception {
         StructuresImporterForm sform  = (StructuresImporterForm) form;
-        
+        DecimalFormat df = new DecimalFormat("###.######");
+        int latitudePosition = 2;
+        int longitudePosition = 3;
+
         if (request.getParameter("importPerform") != null && sform.getUploadedFile()!=null && sform.getUploadedFile().getFileSize()>0) {
             String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
             String locale = RequestUtils.getNavigationLanguage(request).getCode();
@@ -57,8 +61,9 @@ public class StructuresImporter extends Action {
                                         .translateText("The file to import must be an text/csv file.")));
                 saveErrors(request, errors);
             }else{
-                try{
+                try {
                     InputStreamReader isr = new InputStreamReader(sform.getUploadedFile().getInputStream());
+
                     CSVReader reader = new CSVReader(isr);
                     String [] nextLine;
                     Boolean firstLine = true;
@@ -70,8 +75,8 @@ public class StructuresImporter extends Action {
                             sform.setErrors(errors2);
                             AmpStructure st = new AmpStructure();
                             st.setTitle(nextLine[1]);
-                            st.setLatitude(nextLine[2]);
-                            st.setLongitude(nextLine[3]);
+                            st.setLatitude(df.parse(nextLine[latitudePosition]).doubleValue());
+                            st.setLongitude(df.parse(nextLine[longitudePosition]).doubleValue());
                             st.setType(DbHelper.getStructureTypesByName(nextLine[4].trim()));
                             st.setActivities(DbHelper.getActivityByAmpId(nextLine[0].trim()));
                             st.setDescription(nextLine[5].trim());

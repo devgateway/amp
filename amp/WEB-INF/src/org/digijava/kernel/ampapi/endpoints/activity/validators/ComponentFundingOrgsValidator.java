@@ -29,14 +29,19 @@ public class ComponentFundingOrgsValidator extends InputValidator {
             Map<String, Object> oldFieldParent, APIField fieldDescription, String fieldPath) {
 
         if (fieldPath.equals(COMP_FUND_ORGANIZATION)) {
-            if (orgIds == null) {
-                orgIds = getOrgIds(importer.getNewJson());
-            }
-            Long orgId = getLong(newFieldParent.get(fieldDescription.getFieldName()));
-            return orgId == null || orgIds.contains(orgId);
+            return isValid(importer.getNewJson(), newFieldParent.get(fieldDescription.getFieldName()));
         }
 
         return true;
+    }
+
+    public boolean isValid(JsonBean activityJson, Object value) {
+        if (orgIds == null) {
+            orgIds = getOrgIds(activityJson);
+        }
+        Long orgId = getLong(value);
+        
+        return orgId == null || orgIds.contains(orgId);
     }
 
     /**

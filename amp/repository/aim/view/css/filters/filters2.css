@@ -76,3 +76,11 @@ input.memberSelectorTextbox {
 .search-panel-title {
 	padding: 10px 5px;
 }
+
+.filter-just-search {
+	display: block;
+	overflow: hidden;
+	width: 40%;
+	float: left;
+	font-size: 12px
+}

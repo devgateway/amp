@@ -783,6 +783,10 @@ td[role=gridcell] {
     direction: ltr;
 }
 
+td[role=gridcell].wrap-cell {
+    direction: rtl;
+}
+
 .nireport_header th, th.col {
     text-align: center !important;
 }
@@ -873,6 +877,7 @@ td.data, td.measure {
     border-color: lightgrey;
     border-left: 1px solid #fff;
     border-right: 1px solid #fff;
+    text-align: right;
 }
 
 .panel-body, .panel-footer {
@@ -914,4 +919,7 @@ td.inside ul {
 }
 .nvd3 .nv-discretebar .nv-groups text{
     direction:rtl;
+}
+.filter-just-search {
+    float: right !important;
 }

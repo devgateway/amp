@@ -208,7 +208,7 @@ height: 80%; padding-bottom: 0px;margin-top: 15px;margin-left: 5px;margin-right:
 			
 	</div>
 </logic:notEqual>
-<div style="display: block; overflow:hidden;width:40%; float:left; font-size: 12px">
+<div class="filter-just-search">
 	<html:checkbox property="justSearch" value="true" />&nbsp;
 	<digi:trn>Use filter as advanced search</digi:trn>
 </div>

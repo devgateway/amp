@@ -67,8 +67,8 @@ module.exports = ChartViewBase.extend({
     if (otherHere.y > 0) {
       line2Amount = context.y.raw / otherHere.y;
     }
-    var line2 = '<b>' + d3.format('%')(line2Amount) +
-        '</b>&nbsp<span>' + of + '</span>&nbsp' + context.x.raw +
+    var line2 = '<b>' + d3.format('f')(line2Amount * 100) +
+        ' %</b>&nbsp<span>' + of + '</span>&nbsp' + context.x.raw +
         '&nbsp<span>' + total + '</span>';
     var self = this;
     var currencyName = app.settingsWidget.definitions.findCurrencyById(self.model.get('currency')).value; 

@@ -36,7 +36,7 @@ module.exports = ChartViewBase.extend({
     var self = this;
     var currencyName =  app.settingsWidget.definitions.findCurrencyById(self.model.get('currency')).value;
     var percentage = context.y.raw > 0 ?
-        d3.format('%')(context.y.raw / this.model.get('totalPositive')) + '</b>&nbsp<span>' + ofTotal:
+        d3.format('f')(context.y.raw / this.model.get('totalPositive') * 100) + ' %</b>&nbsp<span>' + ofTotal:
         "";
     return {tt: {
       heading: context.x.raw,

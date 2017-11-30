@@ -725,106 +725,6 @@ a.last_page {
     text-align: right;
 }
 
-.col-xs-12.col-md-6 g[transform="translate(10,29)"] {
-    -moz-transform: scale(-1, 1) translate(-535px, 31px) !important;
-    -webkit-transform: scale(-1, 1) translate(-535px, 31px) !important;
-    -o-transform: scale(-1, 1) translate(-535px, 31px) !important;
-    -ms-transform: scale(-1, 1) translate(-535px, 31px) !important;
-    transform: scale(-1, 1) translate(-535px, 31px) !important;
-}
-
-.col-xs-12.col-md-6 g[transform="translate(10,31)"] {
-    -moz-transform: scale(-1, 1) translate(-535px, 31px) !important;
-    -webkit-transform: scale(-1, 1) translate(-535px, 31px) !important;
-    -o-transform: scale(-1, 1) translate(-535px, 31px) !important;
-    -ms-transform: scale(-1, 1) translate(-535px, 31px) !important;
-    transform: scale(-1, 1) translate(-535px, 31px) !important;
-}
-
-.col-xs-12.col-md-6 g[transform="translate(10,42)"] {
-    -moz-transform: scale(-1, 1) translate(-535px, 42px) !important;
-    -webkit-transform: scale(-1, 1) translate(-535px, 42px) !important;
-    -o-transform: scale(-1, 1) translate(-535px, 42px) !important;
-    -ms-transform: scale(-1, 1) translate(-535px, 42px) !important;
-    transform: scale(-1, 1) translate(-535px, 42px) !important;
-}
-
-.col-xs-12.col-md-6 g[transform="translate(10,62)"] {
-    -moz-transform: scale(-1, 1) translate(-535px, 62px) !important;
-    -webkit-transform: scale(-1, 1) translate(-535px, 62px) !important;
-    -o-transform: scale(-1, 1) translate(-535px, 62px) !important;
-    -ms-transform: scale(-1, 1) translate(-535px, 62px) !important;
-    transform: scale(-1, 1) translate(-535px, 62px) !important;
-}
-
-.col-xs-12.big-chart-0 g[transform="translate(10,29)"] {
-    -moz-transform: scale(-1, 1) translate(-1120px, 31px) !important;
-    -webkit-transform: scale(-1, 1) translate(-1120px, 31px) !important;
-    -o-transform: scale(-1, 1) translate(-1120px, 31px) !important;
-    -ms-transform: scale(-1, 1) translate(-1120px, 31px) !important;
-    transform: scale(-1, 1) translate(-1120px, 31px) !important;
-}
-
-.col-xs-12.big-chart-0 g[transform="translate(10,31)"] {
-    -moz-transform: scale(-1, 1) translate(-1120px, 31px) !important;
-    -webkit-transform: scale(-1, 1) translate(-1120px, 31px) !important;
-    -o-transform: scale(-1, 1) translate(-1120px, 31px) !important;
-    -ms-transform: scale(-1, 1) translate(-1120px, 31px) !important;
-    transform: scale(-1, 1) translate(-1120px, 31px) !important;
-}
-
-.col-xs-12.big-chart-0 g[transform="translate(10,42)"] {
-    -moz-transform: scale(-1, 1) translate(-1120px, 42px) !important;
-    -webkit-transform: scale(-1, 1) translate(-1120px, 42px) !important;
-    -o-transform: scale(-1, 1) translate(-1120px, 42px) !important;
-    -ms-transform: scale(-1, 1) translate(-1120px, 42px) !important;
-    transform: scale(-1, 1) translate(-1120px, 42px) !important;
-}
-
-.col-xs-12.big-chart-0 g[transform="translate(10,62)"] {
-    -moz-transform: scale(-1, 1) translate(-1120px, 62px) !important;
-    -webkit-transform: scale(-1, 1) translate(-1120px, 62px) !important;
-    -o-transform: scale(-1, 1) translate(-1120px, 62px) !important;
-    -ms-transform: scale(-1, 1) translate(-1120px, 62px) !important;
-    transform: scale(-1, 1) translate(-1120px, 62px) !important;
-}
-
-.nv-label text {
-    direction: rtl;
-    -moz-transform: scale(-1, 1) !important;
-    -webkit-transform: scale(-1, 1) !important;;
-    -o-transform: scale(-1, 1) !important;;
-    -ms-transform: scale(-1, 1) !important;;
-    transform: scale(-1, 1) !important;
-}
-
-.tick text {
-    direction: rtl;
-    -moz-transform: scale(-1, 1) translate(6px) !important;
-    -webkit-transform: scale(-1, 1) translate(6px) !important;;
-    -o-transform: scale(-1, 1) translate(6px) !important;;
-    -ms-transform: scale(-1, 1) translate(6px) !important;;
-    transform: scale(-1, 1) translate(6px) !important;
-}
-
-.nv-legend-text {
-    direction: rtl;
-    -moz-transform: scale(-1, 1) translate(-16px,0px) !important;
-    -webkit-transform: scale(-1, 1) translate(-16px,0px) !important;;
-    -o-transform: scale(-1, 1) translate(-16px,0px) !important;;
-    -ms-transform: scale(-1, 1) translate(-16px,0px) !important;;
-    transform: scale(-1, 1) translate(-16px,0px) !important;
-}
-
-.dash-chart {
-    direction: ltr;
-    -moz-transform: scale(-1, 1) !important;
-    -webkit-transform: scale(-1, 1) !important;;
-    -o-transform: scale(-1, 1) !important;;
-    -ms-transform: scale(-1, 1) !important;;
-    transform: scale(-1, 1) !important;
-}
-
 .heatmap-chart g text {
     direction: ltr;
 }
@@ -832,10 +732,6 @@ a.last_page {
 .chart-currency {
     float: left !important;
     padding-right: 10px;
-}
-
-g text {
-    direction: rtl;
 }
 
 .dollaz b {
@@ -853,8 +749,8 @@ g text {
     direction: ltr;
 }
 
-.dash-chart-wrap .table.table-striped.table-condensed td {
-    direction: rtl;
+.dash-chart-wrap {
+    direction: ltr !important;
 }
 
 #gis-plugin {
@@ -1010,6 +906,20 @@ td.inside ul {
     border-bottom-right-radius: 4px;
 }
 
+.legend g{
+    direction: ltr!important;
+    left: 5px;
+    right: auto;
+}
+.dash-chart-wrap .table-responsive{
+    direction: rtl;
+}
+.dash-chart-wrap .table-responsive .table.table-striped.table-condensed td {
+    direction:rtl;
+}
+.nvd3 .nv-discretebar .nv-groups text{
+    direction:rtl;
+}
 .filter-just-search {
     float: right !important;
 }

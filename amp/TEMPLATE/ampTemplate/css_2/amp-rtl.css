@@ -753,7 +753,11 @@ a.last_page {
     direction: ltr !important;
 }
 
-#gis-plugin {
+.datasourcesTable .table.table-striped.table-condensed td {
+    direction: rtl;
+}
+
+.scroll-container .table.table-striped.table-condensed td {
     direction: rtl;
 }
 

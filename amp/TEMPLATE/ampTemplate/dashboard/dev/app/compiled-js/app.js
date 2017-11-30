@@ -11,7 +11,7 @@ window.app = app;  // for debugging convenience
 app.state.saved.load();
 //app.render();
 
-},{"./app/app-class":2,"./app/models/amp-user.js":15,"./ugly/lib-load-hacks":40,"jquery":"jquery","underscore":"underscore"}],2:[function(require,module,exports){
+},{"./app/app-class":2,"./app/models/amp-user.js":16,"./ugly/lib-load-hacks":41,"jquery":"jquery","underscore":"underscore"}],2:[function(require,module,exports){
 var _ = require('underscore');
 var Deferred = require('jquery').Deferred;
 var BackboneDash = require('./backbone-dash');
@@ -211,7 +211,7 @@ _.extend(App.prototype, BackboneDash.Events, {
 
 module.exports = App;
 
-},{"./backbone-dash":3,"./check-support":14,"./models/amp-user.js":15,"./models/saved-dashes-collection.js":25,"./views/fail":35,"./views/main":37,"amp-filter/src/main":69,"amp-settings/src/index":93,"amp-state/index":97,"amp-translate":98,"amp-url/index":99,"jquery":"jquery","underscore":"underscore"}],3:[function(require,module,exports){
+},{"./backbone-dash":3,"./check-support":15,"./models/amp-user.js":16,"./models/saved-dashes-collection.js":26,"./views/fail":36,"./views/main":38,"amp-filter/src/main":70,"amp-settings/src/index":94,"amp-state/index":98,"amp-translate":99,"amp-url/index":100,"jquery":"jquery","underscore":"underscore"}],3:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 
@@ -316,7 +316,7 @@ module.exports = _({}).extend(Backbone, {
 });
 
 },{"backbone":"backbone","underscore":"underscore"}],4:[function(require,module,exports){
-  /*
+/*
  * Drawing a bar chart in AMP? Please use ./chart.js instead.
  */
 
@@ -326,6 +326,7 @@ var nv = window.nv;  // nvd3 is a pain
 var d3 = require('d3');
 var util = require('../../ugly/util');
 
+var customizedLegend = require('./customized/customizedLegend');
 
 function dataToNv(data) {
   return data;
@@ -361,11 +362,12 @@ function chart(options, data) {
 
 function addLegend(svg, chart, nvData, trimLabels, width) {
   var legendHeight;
-  debugger;
-  var legend = nv.models.legend()
+  var isRtl = app.generalSettings.attributes['rtl-direction'];
+  var legend = nv.models.customizedLegend()
     .width(width || svg.clientWidth)
     .margin({left: 20, right: 20})
-    .rightAlign(false)
+    .rightAlign(isRtl)
+    .rtl(isRtl)
     .color(util.categoryColours(nvData[0].values.length))
     .key(function(d) { return trimLabels ? util.formatShortText(12)(d.x) : util.formatShortText(85)(d.x); });
 
@@ -389,7 +391,7 @@ module.exports = {
   chart: chart
 };
 
-},{"../../../../../../../reamp/tools/log":100,"../../ugly/util":44,"d3":"d3"}],5:[function(require,module,exports){
+},{"../../../../../../../reamp/tools/log":101,"../../ugly/util":45,"./customized/customizedLegend":11,"d3":"d3"}],5:[function(require,module,exports){
 /*
  * Drawing a bar chart in AMP? Please use ./chart.js instead.
  */
@@ -439,7 +441,7 @@ module.exports = {
   chart: chart
 };
 
-},{"../../../../../../../reamp/tools/log":100,"../../ugly/util":44,"./customized/heatMapChart":11,"d3":"d3","underscore":"underscore"}],6:[function(require,module,exports){
+},{"../../../../../../../reamp/tools/log":101,"../../ugly/util":45,"./customized/heatMapChart":12,"d3":"d3","underscore":"underscore"}],6:[function(require,module,exports){
 /*
  * Drawing a multibar chart in AMP? Please use ./chart.js instead.
  */
@@ -500,7 +502,7 @@ module.exports = {
   chart: chart
 };
 
-},{"../../../../../../../reamp/tools/log":100,"./customized/multiBarChart.js":12}],7:[function(require,module,exports){
+},{"../../../../../../../reamp/tools/log":101,"./customized/multiBarChart.js":13}],7:[function(require,module,exports){
 /*
  * Drawing a pie chart in AMP? Please use ./chart.js instead.
  */
@@ -512,6 +514,7 @@ var _ = require('underscore');
 var common = require('./common');
 var util = require('../../ugly/util');
 var customizedPieChart = require('./customized/pieChart.js');
+var customizedLegend = require('./customized/customizedLegend');
 
 
 function dataToNv(data) {
@@ -556,11 +559,12 @@ function chart(options, data) {
 
 function addLegend(svg, chart, nvData, trimLabels, width) {
 	  var legendHeight;
-
-	  var legend = nv.models.legend()
+      var isRtl = app.generalSettings.attributes['rtl-direction'];
+	  var legend = nv.models.customizedLegend()
 	    .width(width || svg.clientWidth)
 	    .margin({left: 20, right: 20})
-	    .rightAlign(false)
+	    .rightAlign(isRtl)
+         .rtl(isRtl)
 	    .color(util.categoryColours(nvData.length))
 	    .key(function(d) { return trimLabels ? util.formatShortText(12)(d.x) : util.formatShortText(85)(d.x); });
 
@@ -597,7 +601,7 @@ module.exports = {
   chart: chart
 };
 
-},{"../../ugly/util":44,"./common":10,"./customized/pieChart.js":13,"underscore":"underscore"}],8:[function(require,module,exports){
+},{"../../ugly/util":45,"./common":10,"./customized/customizedLegend":11,"./customized/pieChart.js":14,"underscore":"underscore"}],8:[function(require,module,exports){
 
 var _ = require('underscore');
 var util = require('../../ugly/util');
@@ -711,7 +715,7 @@ function heatmapCharter(data, options) {
 module.exports = {
   charter: charter
 };
-},{"../../ugly/util":44,"./common":10,"underscore":"underscore"}],9:[function(require,module,exports){
+},{"../../ugly/util":45,"./common":10,"underscore":"underscore"}],9:[function(require,module,exports){
 
 var _ = require('underscore');
 var d3 = require('d3');
@@ -767,7 +771,7 @@ function chart(type, data, options) {
 
 module.exports = chart;
 
-},{"../../ugly/util":44,"./_bar":4,"./_heatmap":5,"./_multibar":6,"./_pie":7,"./_table":8,"./common":10,"d3":"d3","underscore":"underscore"}],10:[function(require,module,exports){
+},{"../../ugly/util":45,"./_bar":4,"./_heatmap":5,"./_multibar":6,"./_pie":7,"./_table":8,"./common":10,"d3":"d3","underscore":"underscore"}],10:[function(require,module,exports){
 var nv = window.nv;  // nvd3 is a pain
 var d3 = require('d3');
 var util = require('../../ugly/util');
@@ -1000,7 +1004,245 @@ module.exports = {
   formatNumber: formatNumber
 };
 
-},{"../../ugly/util":44,"d3":"d3","numeral":46,"underscore":"underscore"}],11:[function(require,module,exports){
+},{"../../ugly/util":45,"d3":"d3","numeral":47,"underscore":"underscore"}],11:[function(require,module,exports){
+
+nv.models.customizedLegend = function() {
+    "use strict";
+
+    //============================================================
+    // Public Variables with Default Settings
+    //------------------------------------------------------------
+
+    var margin = {top: 5, right: 0, bottom: 5, left: 0}
+        , width = 400
+        , height = 20
+        , getKey = function(d) { return d.key }
+        , color = nv.utils.defaultColor()
+        , align = true
+        , rightAlign = true
+        , rtl = false
+        , updateState = true   //If true, legend will update data.disabled and trigger a 'stateChange' dispatch.
+        , radioButtonMode = false   //If true, clicking legend items will cause it to behave like a radio button. (only one can be selected at a time)
+        , dispatch = d3.dispatch('legendClick', 'legendDblclick', 'legendMouseover', 'legendMouseout', 'stateChange')
+    ;
+
+    function chart(selection) {
+        selection.each(function(data) {
+            var availableWidth = width - margin.left - margin.right,
+                container = d3.select(this);
+            nv.utils.initSVG(container);
+
+            // Setup containers and skeleton of chart
+            var wrap = container.selectAll('g.nv-legend').data([data]);
+            var gEnter = wrap.enter().append('g').attr('class', 'nvd3 nv-legend').append('g');
+            var g = wrap.select('g');
+
+            wrap.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+            var series = g.selectAll('.nv-series')
+                .data(function(d) { return d });
+            var seriesEnter = series.enter().append('g').attr('class', 'nv-series')
+                .on('mouseover', function(d,i) {
+                    dispatch.legendMouseover(d,i);  //TODO: Make consistent with other event objects
+                })
+                .on('mouseout', function(d,i) {
+                    dispatch.legendMouseout(d,i);
+                })
+                .on('click', function(d,i) {
+                    dispatch.legendClick(d,i);
+                    if (updateState) {
+                        if (radioButtonMode) {
+                            //Radio button mode: set every series to disabled,
+                            //  and enable the clicked series.
+                            data.forEach(function(series) { series.disabled = true});
+                            d.disabled = false;
+                        }
+                        else {
+                            d.disabled = !d.disabled;
+                            if (data.every(function(series) { return series.disabled})) {
+                                //the default behavior of NVD3 legends is, if every single series
+                                // is disabled, turn all series' back on.
+                                data.forEach(function(series) { series.disabled = false});
+                            }
+                        }
+                        dispatch.stateChange({
+                            disabled: data.map(function(d) { return !!d.disabled })
+                        });
+                    }
+                })
+                .on('dblclick', function(d,i) {
+                    dispatch.legendDblclick(d,i);
+                    if (updateState) {
+                        //the default behavior of NVD3 legends, when double clicking one,
+                        // is to set all other series' to false, and make the double clicked series enabled.
+                        data.forEach(function(series) {
+                            series.disabled = true;
+                        });
+                        d.disabled = false;
+                        dispatch.stateChange({
+                            disabled: data.map(function(d) { return !!d.disabled })
+                        });
+                    }
+                });
+            debugger;
+            var cxForText = '8';
+            if (rtl) {
+                cxForText = '0';
+            }
+            seriesEnter.append('circle')
+                .style('stroke-width', 2)
+                .attr('class','nv-legend-symbol')
+                .attr('r', 5);
+            seriesEnter.append('text')
+                .attr('text-anchor', 'start')
+                .attr('class','nv-legend-text')
+                .attr('dy', '.32em')
+            .attr('dx', cxForText);
+            series.classed('nv-disabled', function(d) { return d.disabled });
+            series.exit().remove();
+            series.select('circle')
+                .style('fill', function(d,i) { return d.color || color(d,i)})
+                .style('stroke', function(d,i) { return d.color || color(d, i) });
+            series.select('text').text(getKey);
+
+            //TODO: implement fixed-width and max-width options (max-width is especially useful with the align option)
+            // NEW ALIGNING CODE, TODO: clean up
+            if (align) {
+
+                var seriesWidths = [];
+                series.each(function(d,i) {
+                    debugger;
+                    var legendText = d3.select(this).select('text');
+                    var nodeTextLength;
+                    try {
+                        nodeTextLength = legendText.node().getComputedTextLength();
+                        // If the legendText is display:none'd (nodeTextLength == 0), simulate an error so we approximate, instead
+                        if(nodeTextLength <= 0) throw Error();
+                    }
+                    catch(e) {
+                        nodeTextLength = nv.utils.calcApproxTextWidth(legendText);
+                    }
+
+                    seriesWidths.push(nodeTextLength + 28); // 28 is ~ the width of the circle plus some padding
+                    //we compute the cx for the circle to make it rtl
+                    if (rtl) {
+                        var legendCircle = d3.select(this).select('circle');
+                        legendCircle.attr('cx', nodeTextLength + 7.5);
+                    }
+                });
+
+                var seriesPerRow = 0;
+                var legendWidth = 0;
+                var columnWidths = [];
+
+                while ( legendWidth < availableWidth && seriesPerRow < seriesWidths.length) {
+                    columnWidths[seriesPerRow] = seriesWidths[seriesPerRow];
+                    legendWidth += seriesWidths[seriesPerRow++];
+                }
+                if (seriesPerRow === 0) seriesPerRow = 1; //minimum of one series per row
+
+                while ( legendWidth > availableWidth && seriesPerRow > 1 ) {
+                    columnWidths = [];
+                    seriesPerRow--;
+
+                    for (var k = 0; k < seriesWidths.length; k++) {
+                        if (seriesWidths[k] > (columnWidths[k % seriesPerRow] || 0) )
+                            columnWidths[k % seriesPerRow] = seriesWidths[k];
+                    }
+
+                    legendWidth = columnWidths.reduce(function(prev, cur, index, array) {
+                        return prev + cur;
+                    });
+                }
+
+                var xPositions = [];
+                for (var i = 0, curX = 0; i < seriesPerRow; i++) {
+                    xPositions[i] = curX;
+                    curX += columnWidths[i];
+                }
+
+                series
+                    .attr('transform', function(d, i) {
+                        return 'translate(' + xPositions[i % seriesPerRow] + ',' + (5 + Math.floor(i / seriesPerRow) * 20) + ')';
+                    });
+
+                //position legend as far right as possible within the total width
+                if (rightAlign) {
+                    g.attr('transform', 'translate(' + (width - margin.right - legendWidth) + ',' + margin.top + ')');
+                }
+                else {
+                    g.attr('transform', 'translate(0' + ',' + margin.top + ')');
+                }
+
+                height = margin.top + margin.bottom + (Math.ceil(seriesWidths.length / seriesPerRow) * 20);
+
+            } else {
+
+                var ypos = 5,
+                    newxpos = 5,
+                    maxwidth = 0,
+                    xpos;
+                series
+                    .attr('transform', function(d, i) {
+                        var length = d3.select(this).select('text').node().getComputedTextLength() + 28;
+                        xpos = newxpos;
+
+                        if (width < margin.left + margin.right + xpos + length) {
+                            newxpos = xpos = 5;
+                            ypos += 20;
+                        }
+
+                        newxpos += length;
+                        if (newxpos > maxwidth) maxwidth = newxpos;
+
+                        return 'translate(' + xpos + ',' + ypos + ')';
+                    });
+
+                //position legend as far right as possible within the total width
+                g.attr('transform', 'translate(' + (width - margin.right - maxwidth) + ',' + margin.top + ')');
+
+                height = margin.top + margin.bottom + ypos + 15;
+            }
+        });
+
+        return chart;
+    }
+
+    //============================================================
+    // Expose Public Variables
+    //------------------------------------------------------------
+
+    chart.dispatch = dispatch;
+    chart.options = nv.utils.optionsFunc.bind(chart);
+
+    chart._options = Object.create({}, {
+        // simple options, just get/set the necessary values
+        width:      {get: function(){return width;}, set: function(_){width=_;}},
+        height:     {get: function(){return height;}, set: function(_){height=_;}},
+        key: {get: function(){return getKey;}, set: function(_){getKey=_;}},
+        align:      {get: function(){return align;}, set: function(_){align=_;}},
+        rightAlign:    {get: function(){return rightAlign;}, set: function(_){rightAlign=_;}},
+        rtl:    {get: function(){return rtl;}, set: function(_){rtl=_;}},
+        updateState:    {get: function(){return updateState;}, set: function(_){updateState=_;}},
+        radioButtonMode:    {get: function(){return radioButtonMode;}, set: function(_){radioButtonMode=_;}},
+
+        // options that require extra logic in the setter
+        margin: {get: function(){return margin;}, set: function(_){
+            margin.top    = _.top    !== undefined ? _.top    : margin.top;
+            margin.right  = _.right  !== undefined ? _.right  : margin.right;
+            margin.bottom = _.bottom !== undefined ? _.bottom : margin.bottom;
+            margin.left   = _.left   !== undefined ? _.left   : margin.left;
+        }},
+        color:  {get: function(){return color;}, set: function(_){
+            color = nv.utils.getColor(_);
+        }}
+    });
+
+    nv.utils.initOptions(chart);
+
+    return chart;
+};
+},{}],12:[function(require,module,exports){
 nv.models.heatmap = function() {
     "use strict";
 
@@ -1516,7 +1758,7 @@ nv.models.heatMapChart = function() {
     nv.utils.initOptions(chart);
     return chart;
 };
-},{"underscore":"underscore"}],12:[function(require,module,exports){
+},{"underscore":"underscore"}],13:[function(require,module,exports){
 
 nv.models.customizedMultiBarChart = function() {
   "use strict";
@@ -2061,7 +2303,7 @@ nv.models.customizedMultiBarChart = function() {
 
   return chart;
 }
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 
 nv.models.customizedPieChart = function() {
     "use strict";
@@ -2303,7 +2545,7 @@ nv.models.customizedPieChart = function() {
     nv.utils.initOptions(chart);
     return chart;
 };
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 function queryselector() {
   return !!document.querySelector;  // fails on oooooooooold IE
 }
@@ -2413,7 +2655,7 @@ module.exports = function() {
   return missingFeatures;
 };
 
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 var Backbone = require('backbone');
 
 module.exports = Backbone.Model.extend({
@@ -2435,7 +2677,7 @@ module.exports = Backbone.Model.extend({
 
 });
 
-},{"backbone":"backbone"}],16:[function(require,module,exports){
+},{"backbone":"backbone"}],17:[function(require,module,exports){
 var _ = require('underscore');
 var ChartModel = require('./chart-model-base');
 
@@ -2503,7 +2745,7 @@ module.exports = ChartModel.extend({
 
 });
 
-},{"./chart-model-base":19,"underscore":"underscore"}],17:[function(require,module,exports){
+},{"./chart-model-base":20,"underscore":"underscore"}],18:[function(require,module,exports){
 var _ = require('underscore');
 var ChartModel = require('./chart-model-base');
 var common = require('../charts/common');
@@ -2670,7 +2912,7 @@ module.exports = ChartModel.extend({
 
 });
 
-},{"../charts/common":10,"./chart-model-base":19,"underscore":"underscore"}],18:[function(require,module,exports){
+},{"../charts/common":10,"./chart-model-base":20,"underscore":"underscore"}],19:[function(require,module,exports){
 var param = require('jquery').param;
 var _ = require('underscore');
 var ChartModel = require('./chart-model-base');
@@ -2813,7 +3055,7 @@ module.exports = ChartModel.extend({
 		return ChartModel.prototype.fetch.call(this, options);
 	}
 });
-},{"../charts/common":10,"./chart-model-base":19,"jquery":"jquery","underscore":"underscore"}],19:[function(require,module,exports){
+},{"../charts/common":10,"./chart-model-base":20,"jquery":"jquery","underscore":"underscore"}],20:[function(require,module,exports){
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
 
@@ -2853,7 +3095,7 @@ module.exports = BackboneDash.Model.extend({
 
 });
 
-},{"../backbone-dash":3,"underscore":"underscore"}],20:[function(require,module,exports){
+},{"../backbone-dash":3,"underscore":"underscore"}],21:[function(require,module,exports){
 var param = require('jquery').param;
 var _ = require('underscore');
 var ChartModel = require('./chart-model-base');
@@ -2960,7 +3202,7 @@ module.exports = ChartModel.extend({
 
 });
 
-},{"../charts/common":10,"./chart-model-base":19,"jquery":"jquery","underscore":"underscore"}],21:[function(require,module,exports){
+},{"../charts/common":10,"./chart-model-base":20,"jquery":"jquery","underscore":"underscore"}],22:[function(require,module,exports){
 var BackboneDash = require('../backbone-dash');
 
 
@@ -2970,7 +3212,7 @@ module.exports = BackboneDash.Collection.extend({
   }
 });
 
-},{"../backbone-dash":3}],22:[function(require,module,exports){
+},{"../backbone-dash":3}],23:[function(require,module,exports){
 var Backbone = require('backbone');
 var _ = require('underscore');
 
@@ -3009,7 +3251,7 @@ var EnabledChartsCollection = Backbone.Collection.extend({
 });
 
 module.exports = EnabledChartsCollection;
-},{"backbone":"backbone","underscore":"underscore"}],23:[function(require,module,exports){
+},{"backbone":"backbone","underscore":"underscore"}],24:[function(require,module,exports){
 var Backbone = require('backbone');
 var _ = require('underscore');
 
@@ -3045,7 +3287,7 @@ var HeatmapsConfigCollection = Backbone.Collection.extend({
 });
 
 module.exports = HeatmapsConfigCollection;
-},{"backbone":"backbone","underscore":"underscore"}],24:[function(require,module,exports){
+},{"backbone":"backbone","underscore":"underscore"}],25:[function(require,module,exports){
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
 
@@ -3090,7 +3332,7 @@ module.exports = BackboneDash.Model.extend({
   }
 });
 
-},{"../backbone-dash":3,"underscore":"underscore"}],25:[function(require,module,exports){
+},{"../backbone-dash":3,"underscore":"underscore"}],26:[function(require,module,exports){
 var _ = require('underscore');
 var Deferred = require('jquery').Deferred;
 var BackboneDash = require('../backbone-dash');
@@ -3149,7 +3391,7 @@ module.exports = BackboneDash.Collection.extend({
     return deferred.promise();
    }
 });
-},{"../backbone-dash":3,"./saved-dash":24,"jquery":"jquery","underscore":"underscore"}],26:[function(require,module,exports){
+},{"../backbone-dash":3,"./saved-dash":25,"jquery":"jquery","underscore":"underscore"}],27:[function(require,module,exports){
 var d3 = require('d3');
 var ChartViewBase = require('./chart-view-base');
 var _ = require('underscore');
@@ -3233,7 +3475,7 @@ module.exports = ChartViewBase.extend({
 
 });
 
-},{"./chart-view-base":31,"d3":"d3","underscore":"underscore"}],27:[function(require,module,exports){
+},{"./chart-view-base":32,"d3":"d3","underscore":"underscore"}],28:[function(require,module,exports){
 var d3 = require('d3');
 var ChartViewBase = require('./chart-view-base');
 var _ = require('underscore');
@@ -3319,7 +3561,7 @@ module.exports = ChartViewBase.extend({
 
 });
 
-},{"./chart-view-base":31,"d3":"d3","underscore":"underscore"}],28:[function(require,module,exports){
+},{"./chart-view-base":32,"d3":"d3","underscore":"underscore"}],29:[function(require,module,exports){
 var d3 = require('d3');
 var ChartViewBase = require('./chart-view-base');
 var ModalView = require('./chart-tops-info-modal');
@@ -3356,7 +3598,7 @@ module.exports = ChartViewBase.extend({
   }
 
 });
-},{"./chart-tops-info-modal":29,"./chart-view-base":31,"d3":"d3","underscore":"underscore"}],29:[function(require,module,exports){
+},{"./chart-tops-info-modal":30,"./chart-view-base":32,"d3":"d3","underscore":"underscore"}],30:[function(require,module,exports){
 
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
@@ -3418,7 +3660,7 @@ module.exports = BackboneDash.View.extend({
 	},
 
 });
-},{"../backbone-dash":3,"underscore":"underscore"}],30:[function(require,module,exports){
+},{"../backbone-dash":3,"underscore":"underscore"}],31:[function(require,module,exports){
 var d3 = require('d3');
 var ChartViewBase = require('./chart-view-base');
 var ModalView = require('./chart-tops-info-modal');
@@ -3491,7 +3733,7 @@ module.exports = ChartViewBase.extend({
 
 });
 
-},{"./chart-tops-info-modal":29,"./chart-view-base":31,"d3":"d3","underscore":"underscore"}],31:[function(require,module,exports){
+},{"./chart-tops-info-modal":30,"./chart-view-base":32,"d3":"d3","underscore":"underscore"}],32:[function(require,module,exports){
 
 var Deferred = require('jquery').Deferred;
 var _ = require('underscore');
@@ -3937,7 +4179,7 @@ module.exports = BackboneDash.View.extend({
 
 });
 
-},{"../../ugly/util":44,"../backbone-dash":3,"../charts/chart":9,"./download":34,"jquery":"jquery","underscore":"underscore"}],32:[function(require,module,exports){
+},{"../../ugly/util":45,"../backbone-dash":3,"../charts/chart":9,"./download":35,"jquery":"jquery","underscore":"underscore"}],33:[function(require,module,exports){
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
 
@@ -4010,7 +4252,7 @@ module.exports = BackboneDash.View.extend({
 
 });
 
-},{"../backbone-dash":3,"../models/chart-aid-predictability":16,"../models/chart-funding-type":17,"../models/chart-heatmaps":18,"../models/chart-tops":20,"./chart-aid-predictability":26,"./chart-funding-type":27,"./chart-heatmaps":28,"./chart-tops":30,"underscore":"underscore"}],33:[function(require,module,exports){
+},{"../backbone-dash":3,"../models/chart-aid-predictability":17,"../models/chart-funding-type":18,"../models/chart-heatmaps":19,"../models/chart-tops":21,"./chart-aid-predictability":27,"./chart-funding-type":28,"./chart-heatmaps":29,"./chart-tops":31,"underscore":"underscore"}],34:[function(require,module,exports){
 var BackboneDash = require('../backbone-dash');
 var Filters = require('./filters');
 var Settings = require('./settings');
@@ -4039,7 +4281,7 @@ module.exports = BackboneDash.View.extend({
 
 });
 
-},{"../backbone-dash":3,"./filters":36,"./settings":38,"./share":39}],34:[function(require,module,exports){
+},{"../backbone-dash":3,"./filters":37,"./settings":39,"./share":40}],35:[function(require,module,exports){
 var _ = require('underscore');
 var baby = require('babyparse');
 var canvg = require('../../ugly/lib-load-hacks').canvg;
@@ -4458,7 +4700,7 @@ module.exports = BackboneDash.View.extend({
 
 });
 
-},{"../../ugly/lib-load-hacks":40,"../../ugly/util":44,"../backbone-dash":3,"../charts/chart":9,"babyparse":45,"underscore":"underscore"}],35:[function(require,module,exports){
+},{"../../ugly/lib-load-hacks":41,"../../ugly/util":45,"../backbone-dash":3,"../charts/chart":9,"babyparse":46,"underscore":"underscore"}],36:[function(require,module,exports){
 
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
@@ -4480,7 +4722,7 @@ module.exports = BackboneDash.View.extend({
 });
 
 
-},{"../backbone-dash":3,"underscore":"underscore"}],36:[function(require,module,exports){
+},{"../backbone-dash":3,"underscore":"underscore"}],37:[function(require,module,exports){
 
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
@@ -4610,7 +4852,7 @@ module.exports = BackboneDash.View.extend({
   }
 });
 
-},{"../../../../../../../reamp/tools/log":100,"../backbone-dash":3,"underscore":"underscore"}],37:[function(require,module,exports){
+},{"../../../../../../../reamp/tools/log":101,"../backbone-dash":3,"underscore":"underscore"}],38:[function(require,module,exports){
 
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
@@ -4762,7 +5004,7 @@ module.exports = BackboneDash.View.extend({
 
 });
 
-},{"../backbone-dash":3,"../models/chart-aid-predictability":16,"../models/chart-funding-type":17,"../models/chart-heatmaps":18,"../models/chart-tops":20,"../models/charts-collection":21,"../models/enabled-charts-collection":22,"../models/heatmaps-config-collection":23,"./charts":32,"./controls":33,"amp-boilerplate":48,"amp-state/index":97,"underscore":"underscore"}],38:[function(require,module,exports){
+},{"../backbone-dash":3,"../models/chart-aid-predictability":17,"../models/chart-funding-type":18,"../models/chart-heatmaps":19,"../models/chart-tops":21,"../models/charts-collection":22,"../models/enabled-charts-collection":23,"../models/heatmaps-config-collection":24,"./charts":33,"./controls":34,"amp-boilerplate":49,"amp-state/index":98,"underscore":"underscore"}],39:[function(require,module,exports){
 
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
@@ -4800,7 +5042,7 @@ module.exports = BackboneDash.View.extend({
 
 });
 
-},{"../backbone-dash":3,"underscore":"underscore"}],39:[function(require,module,exports){
+},{"../backbone-dash":3,"underscore":"underscore"}],40:[function(require,module,exports){
 
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
@@ -4857,7 +5099,7 @@ module.exports = BackboneDash.View.extend({
 
 });
 
-},{"../backbone-dash":3,"underscore":"underscore"}],40:[function(require,module,exports){
+},{"../backbone-dash":3,"underscore":"underscore"}],41:[function(require,module,exports){
 // nvd3 goes global sigh... make sure d3 is already global
 /* TODO: in this version of nvd3 v1.7.1, main is not specified in package.json,
  if we ever upgrade to 1.8+, change this back to just require(nvd3) */
@@ -4875,7 +5117,7 @@ module.exports = {
   canvg: window.canvg
 };
 
-},{"../../../node_modules/nvd3/build/nv.d3":47,"./lib-src/canvg":41,"./lib-src/rgbcolor":42,"./underscore-transpose":43}],41:[function(require,module,exports){
+},{"../../../node_modules/nvd3/build/nv.d3":48,"./lib-src/canvg":42,"./lib-src/rgbcolor":43,"./underscore-transpose":44}],42:[function(require,module,exports){
 /*
  * canvg.js - Javascript SVG parser and renderer on Canvas
  * MIT Licensed 
@@ -7834,7 +8076,7 @@ if (typeof(CanvasRenderingContext2D) != 'undefined') {
     }
 }
 
-},{}],42:[function(require,module,exports){
+},{}],43:[function(require,module,exports){
 // dependency for canvg
 /**
  * A class to parse color values
@@ -8127,7 +8369,7 @@ function RGBColor(color_string)
 
 module.exports = RGBColor;
 
-},{}],43:[function(require,module,exports){
+},{}],44:[function(require,module,exports){
 var _ = require('underscore');
 
 _.mixin({
@@ -8136,7 +8378,7 @@ _.mixin({
   }
 });
 
-},{"underscore":"underscore"}],44:[function(require,module,exports){
+},{"underscore":"underscore"}],45:[function(require,module,exports){
 // hopefully not that ugly, but seemed as good a place as any for this stuff...
 
 var d3 = require('d3');
@@ -8316,7 +8558,7 @@ module.exports = {
   calculateChartHeight: calculateChartHeight
 };
 
-},{"d3":"d3"}],45:[function(require,module,exports){
+},{"d3":"d3"}],46:[function(require,module,exports){
 /*
 	Baby Parse
 	v0.2.1
@@ -9072,7 +9314,7 @@ module.exports = {
 
 }( typeof window !== 'undefined' ? window : this ));
 
-},{}],46:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 /*!
  * numeral.js
  * version : 1.5.3
@@ -9753,7 +9995,7 @@ module.exports = {
     }
 }).call(this);
 
-},{}],47:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 /* nvd3 version 1.7.1(https://github.com/novus/nvd3) 2015-02-05 */
 (function(){
 
@@ -21111,7 +21353,7 @@ nv.models.stackedAreaChart = function() {
 
 nv.version = "1.7.1";
 })();
-},{}],48:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 
 var _ = require('underscore');
 var Backbone = require('backbone');
@@ -21211,7 +21453,7 @@ module.exports = {
 };
 window.boilerplate = Widget;
 
-},{"./src/models/amp-layout-model.js":52,"./src/views/footer-view.js":56,"./src/views/header-view.js":57,"amp-translate":98,"backbone":"backbone","bootstrap/dist/js/bootstrap":49,"jquery":"jquery","underscore":"underscore"}],49:[function(require,module,exports){
+},{"./src/models/amp-layout-model.js":53,"./src/views/footer-view.js":57,"./src/views/header-view.js":58,"amp-translate":99,"backbone":"backbone","bootstrap/dist/js/bootstrap":50,"jquery":"jquery","underscore":"underscore"}],50:[function(require,module,exports){
 /*!
  * Bootstrap v3.3.0 (http://getbootstrap.com)
  * Copyright 2011-2014 Twitter, Inc.
@@ -23489,7 +23731,7 @@ if (typeof jQuery === 'undefined') {
 
 }(jQuery);
 
-},{}],50:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 var Backbone = require('backbone');
 var MenuModel = require('../models/amp-menus-model.js');
 
@@ -23505,14 +23747,14 @@ module.exports = Backbone.Collection.extend({
 
 });
 
-},{"../models/amp-menus-model.js":53,"backbone":"backbone"}],51:[function(require,module,exports){
+},{"../models/amp-menus-model.js":54,"backbone":"backbone"}],52:[function(require,module,exports){
 var Backbone = require('backbone');
 module.exports  = Backbone.Collection.extend({
 	url: function() {
 		return '/rest/translations/languages'
 	}
 });
-},{"backbone":"backbone"}],52:[function(require,module,exports){
+},{"backbone":"backbone"}],53:[function(require,module,exports){
 var Backbone = require('backbone');
 
 module.exports = Backbone.Model.extend({
@@ -23529,7 +23771,7 @@ module.exports = Backbone.Model.extend({
 
 });
 
-},{"backbone":"backbone"}],53:[function(require,module,exports){
+},{"backbone":"backbone"}],54:[function(require,module,exports){
 var Backbone = require('backbone');
 
 module.exports = Backbone.Model.extend({
@@ -23547,13 +23789,13 @@ module.exports = Backbone.Model.extend({
 
 });
 
-},{"backbone":"backbone"}],54:[function(require,module,exports){
+},{"backbone":"backbone"}],55:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 module.exports = Backbone.Model.extend({
 	url: '/rest/amp/settings'
 });
-},{"backbone":"backbone","underscore":"underscore"}],55:[function(require,module,exports){
+},{"backbone":"backbone","underscore":"underscore"}],56:[function(require,module,exports){
 
 var $ = require('jquery');
 var Backbone = require('backbone');
@@ -23582,7 +23824,7 @@ module.exports = Backbone.View.extend({
 });
 
 
-},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],56:[function(require,module,exports){
+},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],57:[function(require,module,exports){
 
 var Backbone = require('backbone');
 var _ = require('underscore');
@@ -23619,7 +23861,7 @@ module.exports = Backbone.View.extend({
 
 });
 
-},{"../models/amp-layout-model.js":52,"backbone":"backbone","bootstrap/dist/js/bootstrap":49,"underscore":"underscore"}],57:[function(require,module,exports){
+},{"../models/amp-layout-model.js":53,"backbone":"backbone","bootstrap/dist/js/bootstrap":50,"underscore":"underscore"}],58:[function(require,module,exports){
 
 var Backbone = require('backbone');
 require('bootstrap/dist/js/bootstrap');
@@ -23740,7 +23982,7 @@ module.exports = Backbone.View.extend({
 }
 });
 
-},{"../collections/amp-menus-collection.js":50,"../collections/language-collection":51,"../models/amp-menus-model.js":53,"../models/settings":54,"./about-view.js":55,"./submenu-compositeview.js":58,"./user-profile-view.js":59,"backbone":"backbone","bootstrap/dist/js/bootstrap":49,"underscore":"underscore"}],58:[function(require,module,exports){
+},{"../collections/amp-menus-collection.js":51,"../collections/language-collection":52,"../models/amp-menus-model.js":54,"../models/settings":55,"./about-view.js":56,"./submenu-compositeview.js":59,"./user-profile-view.js":60,"backbone":"backbone","bootstrap/dist/js/bootstrap":50,"underscore":"underscore"}],59:[function(require,module,exports){
 
 var Backbone = require('backbone');
 var _ = require('underscore');
@@ -23806,7 +24048,7 @@ module.exports = Backbone.View.extend({
 });
 
 
-},{"backbone":"backbone","underscore":"underscore"}],59:[function(require,module,exports){
+},{"backbone":"backbone","underscore":"underscore"}],60:[function(require,module,exports){
 
 var Backbone = require('backbone');
 var _ = require('underscore');
@@ -23849,9 +24091,9 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"backbone":"backbone","bootstrap/dist/js/bootstrap":49,"underscore":"underscore"}],60:[function(require,module,exports){
-module.exports=require(49)
-},{"C:\\Desarrollo\\AmpIntelliJ\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":49}],61:[function(require,module,exports){
+},{"backbone":"backbone","bootstrap/dist/js/bootstrap":50,"underscore":"underscore"}],61:[function(require,module,exports){
+module.exports=require(50)
+},{"C:\\Desarrollo\\AmpIntelliJ\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":50}],62:[function(require,module,exports){
 var jQuery = require('jquery');
 
 /*!
@@ -24175,7 +24417,7 @@ $.extend( $.ui, {
 
 })( jQuery );
 
-},{"jquery":"jquery"}],62:[function(require,module,exports){
+},{"jquery":"jquery"}],63:[function(require,module,exports){
 var jQuery = require('jquery');
 require('./core');
 
@@ -26218,7 +26460,7 @@ $.datepicker.version = "1.10.4";
 
 })(jQuery);
 
-},{"./core":61,"jquery":"jquery"}],63:[function(require,module,exports){
+},{"./core":62,"jquery":"jquery"}],64:[function(require,module,exports){
 var jQuery = require('jquery');
 require('./core');
 require('./mouse');
@@ -27183,7 +27425,7 @@ $.ui.plugin.add("draggable", "zIndex", {
 
 })(jQuery);
 
-},{"./core":61,"./mouse":64,"./widget":65,"jquery":"jquery"}],64:[function(require,module,exports){
+},{"./core":62,"./mouse":65,"./widget":66,"jquery":"jquery"}],65:[function(require,module,exports){
 var jQuery = require('jquery');
 require('./widget');
 
@@ -27357,7 +27599,7 @@ $.widget("ui.mouse", {
 
 })(jQuery);
 
-},{"./widget":65,"jquery":"jquery"}],65:[function(require,module,exports){
+},{"./widget":66,"jquery":"jquery"}],66:[function(require,module,exports){
 var jQuery = require('jquery');
 
 /*!
@@ -27882,7 +28124,7 @@ $.each( { show: "fadeIn", hide: "fadeOut" }, function( method, defaultEffect ) {
 
 })( jQuery );
 
-},{"jquery":"jquery"}],66:[function(require,module,exports){
+},{"jquery":"jquery"}],67:[function(require,module,exports){
 var Backbone = require('backbone');
 var _ = require('underscore');
 var $ = require('jquery');
@@ -28231,7 +28473,7 @@ module.exports = Backbone.Collection.extend({
 	}
 });
 
-},{"../models/generic-filter-model":72,"../models/org-role-filter-model":73,"../models/years-filter-model":74,"../models/years-only-filter-model":75,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],67:[function(require,module,exports){
+},{"../models/generic-filter-model":73,"../models/org-role-filter-model":74,"../models/years-filter-model":75,"../models/years-only-filter-model":76,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],68:[function(require,module,exports){
 /*! jQuery UI - v1.10.4 - 2014-01-17
 * http://jqueryui.com
 * Includes: jquery.ui.datepicker-af.js, jquery.ui.datepicker-ar-DZ.js, jquery.ui.datepicker-ar.js, jquery.ui.datepicker-az.js, jquery.ui.datepicker-be.js, jquery.ui.datepicker-bg.js, jquery.ui.datepicker-bs.js, jquery.ui.datepicker-ca.js, jquery.ui.datepicker-cs.js, jquery.ui.datepicker-cy-GB.js, jquery.ui.datepicker-da.js, jquery.ui.datepicker-de.js, jquery.ui.datepicker-el.js, jquery.ui.datepicker-en-AU.js, jquery.ui.datepicker-en-GB.js, jquery.ui.datepicker-en-NZ.js, jquery.ui.datepicker-eo.js, jquery.ui.datepicker-es.js, jquery.ui.datepicker-et.js, jquery.ui.datepicker-eu.js, jquery.ui.datepicker-fa.js, jquery.ui.datepicker-fi.js, jquery.ui.datepicker-fo.js, jquery.ui.datepicker-fr-CA.js, jquery.ui.datepicker-fr-CH.js, jquery.ui.datepicker-fr.js, jquery.ui.datepicker-gl.js, jquery.ui.datepicker-he.js, jquery.ui.datepicker-hi.js, jquery.ui.datepicker-hr.js, jquery.ui.datepicker-hu.js, jquery.ui.datepicker-hy.js, jquery.ui.datepicker-id.js, jquery.ui.datepicker-is.js, jquery.ui.datepicker-it.js, jquery.ui.datepicker-ja.js, jquery.ui.datepicker-ka.js, jquery.ui.datepicker-kk.js, jquery.ui.datepicker-km.js, jquery.ui.datepicker-ko.js, jquery.ui.datepicker-ky.js, jquery.ui.datepicker-lb.js, jquery.ui.datepicker-lt.js, jquery.ui.datepicker-lv.js, jquery.ui.datepicker-mk.js, jquery.ui.datepicker-ml.js, jquery.ui.datepicker-ms.js, jquery.ui.datepicker-nb.js, jquery.ui.datepicker-nl-BE.js, jquery.ui.datepicker-nl.js, jquery.ui.datepicker-nn.js, jquery.ui.datepicker-no.js, jquery.ui.datepicker-pl.js, jquery.ui.datepicker-pt-BR.js, jquery.ui.datepicker-pt.js, jquery.ui.datepicker-rm.js, jquery.ui.datepicker-ro.js, jquery.ui.datepicker-ru.js, jquery.ui.datepicker-sk.js, jquery.ui.datepicker-sl.js, jquery.ui.datepicker-sq.js, jquery.ui.datepicker-sr-SR.js, jquery.ui.datepicker-sr.js, jquery.ui.datepicker-sv.js, jquery.ui.datepicker-ta.js, jquery.ui.datepicker-th.js, jquery.ui.datepicker-tj.js, jquery.ui.datepicker-tr.js, jquery.ui.datepicker-uk.js, jquery.ui.datepicker-vi.js, jquery.ui.datepicker-zh-CN.js, jquery.ui.datepicker-zh-HK.js, jquery.ui.datepicker-zh-TW.js
@@ -30075,7 +30317,7 @@ jQuery(function($){
 		yearSuffix: ''};
 	$.datepicker.setDefaults($.datepicker.regional['en-GB']);
 });
-},{}],68:[function(require,module,exports){
+},{}],69:[function(require,module,exports){
 /*
 
 $.Link (part of noUiSlider) - WTFPL */
@@ -30108,7 +30350,7 @@ b,a)})}function X(a){return this.each(function(){var b=c(this).val(),d=this.dest
 end:"mouseup touchend"},f="noUi-target noUi-base noUi-origin noUi-handle noUi-horizontal noUi-vertical noUi-background noUi-connect noUi-ltr noUi-rtl noUi-dragable  noUi-state-drag  noUi-state-tap noUi-active noUi-extended noUi-stacking".split(" ");c.fn.val=function(){var a=arguments,b=c(this[0]);return arguments.length?this.each(function(){(c(this).hasClass(f[0])?B:C).apply(c(this),a)}):(b.hasClass(f[0])?B:C).call(b)};c.noUiSlider={Link:c.Link};c.fn.noUiSlider=function(a,b){return(b?X:W).call(this,
 a)}})(window.jQuery||window.Zepto);
 
-},{}],69:[function(require,module,exports){
+},{}],70:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 
@@ -30235,7 +30477,7 @@ _.extend(Widget.prototype, Backbone.Events, {
 });
 
 module.exports = Widget;
-},{"./lib/jquery-ui-i18n":67,"./views/filters-view":80,"backbone":"backbone","bootstrap/dist/js/bootstrap":60,"jquery":"jquery","jquery-ui/draggable":63,"underscore":"underscore"}],70:[function(require,module,exports){
+},{"./lib/jquery-ui-i18n":68,"./views/filters-view":81,"backbone":"backbone","bootstrap/dist/js/bootstrap":61,"jquery":"jquery","jquery-ui/draggable":64,"underscore":"underscore"}],71:[function(require,module,exports){
 var Backbone = require('backbone');
 
   // Parent model for filters.
@@ -30260,9 +30502,9 @@ module.exports = Backbone.Model.extend({
 
 });
 
-},{"backbone":"backbone"}],71:[function(require,module,exports){
-module.exports=require(54)
-},{"C:\\Desarrollo\\AmpIntelliJ\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\src\\models\\settings.js":54,"backbone":"backbone","underscore":"underscore"}],72:[function(require,module,exports){
+},{"backbone":"backbone"}],72:[function(require,module,exports){
+module.exports=require(55)
+},{"C:\\Desarrollo\\AmpIntelliJ\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\src\\models\\settings.js":55,"backbone":"backbone","underscore":"underscore"}],73:[function(require,module,exports){
 var _ = require('underscore');
 
 var BaseFilterModel = require('../models/base-filter-model');
@@ -30416,7 +30658,7 @@ module.exports = BaseFilterModel.extend({
 });
 
 
-},{"../models/base-filter-model":70,"../tree/tree-node-model":76,"underscore":"underscore"}],73:[function(require,module,exports){
+},{"../models/base-filter-model":71,"../tree/tree-node-model":77,"underscore":"underscore"}],74:[function(require,module,exports){
 var $ = require('jquery');
 
 var GenericFilterModel = require('../models/generic-filter-model');
@@ -30471,7 +30713,7 @@ module.exports = GenericFilterModel.extend({
 });
 
 
-},{"../models/generic-filter-model":72,"../tree/tree-node-model":76,"jquery":"jquery"}],74:[function(require,module,exports){
+},{"../models/generic-filter-model":73,"../tree/tree-node-model":77,"jquery":"jquery"}],75:[function(require,module,exports){
 var $ = require('jquery');
 var _ = require('underscore');
 var BaseFilterModel = require('../models/base-filter-model');
@@ -30610,7 +30852,7 @@ module.exports = BaseFilterModel.extend({
 
 });
 
-},{"../models/base-filter-model":70,"jquery":"jquery","underscore":"underscore"}],75:[function(require,module,exports){
+},{"../models/base-filter-model":71,"jquery":"jquery","underscore":"underscore"}],76:[function(require,module,exports){
 var $ = require('jquery');
 var _ = require('underscore');
 var BaseFilterModel = require('../models/base-filter-model');
@@ -30675,7 +30917,7 @@ module.exports = BaseFilterModel.extend({
 
 });
 
-},{"../models/base-filter-model":70,"jquery":"jquery","underscore":"underscore"}],76:[function(require,module,exports){
+},{"../models/base-filter-model":71,"jquery":"jquery","underscore":"underscore"}],77:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 var TreeNodeModel; // declare here to help with ref loop of collection and model
@@ -30926,7 +31168,7 @@ _serializeChildren: function(tmpSerialized, children, options){
 
 module.exports = TreeNodeModel;
 
-},{"backbone":"backbone","underscore":"underscore"}],77:[function(require,module,exports){
+},{"backbone":"backbone","underscore":"underscore"}],78:[function(require,module,exports){
 
 var _ = require('underscore');
 var Backbone = require('backbone');
@@ -31121,7 +31363,7 @@ var TreeNodeView = Backbone.View.extend({
 
 module.exports = TreeNodeView;
 
-},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],78:[function(require,module,exports){
+},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],79:[function(require,module,exports){
 var _ = require('underscore');
 
 var extractDates = function(settings, filtersOut, minName, maxName) {
@@ -31147,7 +31389,7 @@ module.exports = {
 		extractDates: extractDates
 }
 
-},{"underscore":"underscore"}],79:[function(require,module,exports){
+},{"underscore":"underscore"}],80:[function(require,module,exports){
 
 var _ = require('underscore');
 var $ = require('jquery');
@@ -31189,7 +31431,7 @@ module.exports = Backbone.View.extend({
 
 });
 
-},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],80:[function(require,module,exports){
+},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],81:[function(require,module,exports){
 /**
  * this is the view which renders the big Filter contents (the tabs)
  */
@@ -31613,7 +31855,7 @@ module.exports = Backbone.View.extend({
 });
 
 
-},{"../../../../../reamp/tools/log":100,"../collections/all-filters-collection":66,"../models/general-settings":71,"../utils/date-utils":78,"../views/top-level-filter-view":82,"amp-translate":98,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],81:[function(require,module,exports){
+},{"../../../../../reamp/tools/log":101,"../collections/all-filters-collection":67,"../models/general-settings":72,"../utils/date-utils":79,"../views/top-level-filter-view":83,"amp-translate":99,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],82:[function(require,module,exports){
 
 var _ = require('underscore');
 
@@ -31734,7 +31976,7 @@ module.exports = BaseFilterView.extend({
 });
 
 
-},{"../tree/tree-node-view":77,"../views/base-filter-view":79,"underscore":"underscore"}],82:[function(require,module,exports){
+},{"../tree/tree-node-view":78,"../views/base-filter-view":80,"underscore":"underscore"}],83:[function(require,module,exports){
 
 var _ = require('underscore');
 var $ = require('jquery');
@@ -31864,7 +32106,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"../../../../../reamp/tools/log":100,"../models/years-filter-model":74,"../models/years-only-filter-model":75,"../views/generic-filter-view":81,"../views/years-filter-view":83,"../views/years-only-filter-view":84,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],83:[function(require,module,exports){
+},{"../../../../../reamp/tools/log":101,"../models/years-filter-model":75,"../models/years-only-filter-model":76,"../views/generic-filter-view":82,"../views/years-filter-view":84,"../views/years-only-filter-view":85,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],84:[function(require,module,exports){
 
 var _ = require('underscore');
 var BaseFilterView = require('../views/base-filter-view');
@@ -32033,7 +32275,7 @@ module.exports = BaseFilterView.extend({
 
 });
 
-},{"../lib/jquery.nouislider.min.js":68,"../views/base-filter-view":79,"jquery-ui/datepicker":62,"underscore":"underscore"}],84:[function(require,module,exports){
+},{"../lib/jquery.nouislider.min.js":69,"../views/base-filter-view":80,"jquery-ui/datepicker":63,"underscore":"underscore"}],85:[function(require,module,exports){
 
 var _ = require('underscore');
 var BaseFilterView = require('../views/base-filter-view');
@@ -32092,9 +32334,9 @@ module.exports = BaseFilterView.extend({
 
 });
 
-},{"../views/base-filter-view":79,"underscore":"underscore"}],85:[function(require,module,exports){
-module.exports=require(49)
-},{"C:\\Desarrollo\\AmpIntelliJ\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":49}],86:[function(require,module,exports){
+},{"../views/base-filter-view":80,"underscore":"underscore"}],86:[function(require,module,exports){
+module.exports=require(50)
+},{"C:\\Desarrollo\\AmpIntelliJ\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":50}],87:[function(require,module,exports){
 var jQuery = require('jquery');
 
 /*!
@@ -32418,7 +32660,7 @@ $.extend( $.ui, {
 
 })( jQuery );
 
-},{"jquery":"jquery"}],87:[function(require,module,exports){
+},{"jquery":"jquery"}],88:[function(require,module,exports){
 var jQuery = require('jquery');
 require('./core');
 require('./mouse');
@@ -33383,7 +33625,7 @@ $.ui.plugin.add("draggable", "zIndex", {
 
 })(jQuery);
 
-},{"./core":86,"./mouse":88,"./widget":89,"jquery":"jquery"}],88:[function(require,module,exports){
+},{"./core":87,"./mouse":89,"./widget":90,"jquery":"jquery"}],89:[function(require,module,exports){
 var jQuery = require('jquery');
 require('./widget');
 
@@ -33557,7 +33799,7 @@ $.widget("ui.mouse", {
 
 })(jQuery);
 
-},{"./widget":89,"jquery":"jquery"}],89:[function(require,module,exports){
+},{"./widget":90,"jquery":"jquery"}],90:[function(require,module,exports){
 var jQuery = require('jquery');
 
 /*!
@@ -34082,7 +34324,7 @@ $.each( { show: "fadeIn", hide: "fadeOut" }, function( method, defaultEffect ) {
 
 })( jQuery );
 
-},{"jquery":"jquery"}],90:[function(require,module,exports){
+},{"jquery":"jquery"}],91:[function(require,module,exports){
 var Deferred = require('jquery').Deferred;
 var _ = require('underscore');
 var Backbone = require('backbone');
@@ -34169,12 +34411,12 @@ module.exports  = Backbone.Collection.extend({
 });
 
 
-},{"../common/config":91,"../common/constants":92,"../models/settings-definitions":95,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],91:[function(require,module,exports){
+},{"../common/config":92,"../common/constants":93,"../models/settings-definitions":96,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],92:[function(require,module,exports){
 module.exports = {
 	IS_POPUP : true
 };
 
-},{}],92:[function(require,module,exports){
+},{}],93:[function(require,module,exports){
 module.exports = {
 	YEAR_RANGE_ID : 'year-range',
 	CALENDAR_ID : 'calendar-id',
@@ -34194,7 +34436,7 @@ module.exports = {
 		TABS : 'TABS'
 	}
 }
-},{}],93:[function(require,module,exports){
+},{}],94:[function(require,module,exports){
 
 var jQuery = require('jquery');
 var _ = require('underscore');
@@ -34260,7 +34502,7 @@ _.extend(Widget.prototype, Backbone.Events, {
 });
 module.exports = {SettingsWidget: Widget, GeneralSettings: GeneralSettings}
 window.AMPSettings = {SettingsWidget: Widget, GeneralSettings: GeneralSettings};
-},{"./collections/settings-definitions-collection":90,"./common/config":91,"./common/constants":92,"./models/general-settings":94,"./views/settings-view":96,"backbone":"backbone","bootstrap/dist/js/bootstrap":85,"jquery":"jquery","jquery-ui/draggable":87,"underscore":"underscore"}],94:[function(require,module,exports){
+},{"./collections/settings-definitions-collection":91,"./common/config":92,"./common/constants":93,"./models/general-settings":95,"./views/settings-view":97,"backbone":"backbone","bootstrap/dist/js/bootstrap":86,"jquery":"jquery","jquery-ui/draggable":88,"underscore":"underscore"}],95:[function(require,module,exports){
 var Deferred = require('jquery').Deferred;
 var _ = require('underscore');
 var Backbone = require('backbone');
@@ -34289,12 +34531,12 @@ module.exports = Backbone.Model.extend({
 		return this.loaded.promise();
 	}
 });
-},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],95:[function(require,module,exports){
+},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],96:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 module.exports = Backbone.Model.extend({	
 });
-},{"backbone":"backbone","underscore":"underscore"}],96:[function(require,module,exports){
+},{"backbone":"backbone","underscore":"underscore"}],97:[function(require,module,exports){
 
 var $ = require('jquery');
 var _ = require('underscore');
@@ -34548,7 +34790,7 @@ module.exports = Backbone.View.extend({
 	}
 
 });
-},{"../common/constants":92,"amp-translate":98,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],97:[function(require,module,exports){
+},{"../common/constants":93,"amp-translate":99,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],98:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 
@@ -34758,7 +35000,7 @@ _.extend(State.prototype, Backbone.Events, {
 State.StateLoadError = StateLoadError;
 module.exports = State;
 
-},{"backbone":"backbone","underscore":"underscore"}],98:[function(require,module,exports){
+},{"backbone":"backbone","underscore":"underscore"}],99:[function(require,module,exports){
 // TODO: move this up a dir, and instantiate and attach to the app
 
 
@@ -34974,7 +35216,7 @@ function Translator(options) {
 
 module.exports = Translator;
 
-},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],99:[function(require,module,exports){
+},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],100:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 
@@ -35025,7 +35267,7 @@ _.extend(URL.prototype, Backbone.Events, {
 
 module.exports = URL;
 
-},{"backbone":"backbone","underscore":"underscore"}],100:[function(require,module,exports){
+},{"backbone":"backbone","underscore":"underscore"}],101:[function(require,module,exports){
 module.exports =
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache

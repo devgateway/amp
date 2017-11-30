@@ -479,6 +479,7 @@ function submitForm(action){
 																							</a>
 																						</c:if>
 																						&nbsp;
+																						<!--
 																						<c:set var="translation">
 																							<digi:trn>Get report in PDF format</digi:trn>&nbsp;
 																						</c:set>
@@ -490,6 +491,7 @@ function submitForm(action){
 																								src="/TEMPLATE/ampTemplate/images/icons/pdf.gif"
 																								border="0" />
 																						</a>
+																						-->
 																						<!-- Show Printer Friendly icon removed with AMP-22055 -->
 																						<!--  
 																						<feature:display

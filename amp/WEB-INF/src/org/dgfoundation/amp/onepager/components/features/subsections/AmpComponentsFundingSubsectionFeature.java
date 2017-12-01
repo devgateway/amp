@@ -10,6 +10,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpComponentsFundingFormTableFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
+import org.dgfoundation.amp.onepager.components.fields.AmpComponentField;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
@@ -35,8 +36,8 @@ public class AmpComponentsFundingSubsectionFeature extends
     public AmpComponentsFundingSubsectionFeature(String id, 
             final IModel<AmpActivityVersion> activityModel, final IModel<AmpComponent> componentModel,
             final IModel<Set<AmpComponentFunding>> compFundsModel,
-            String fmName, final int transactionType) throws Exception {
-        super(id, fmName);
+            final int transactionType) throws Exception {
+        super(id, AmpComponentField.FM_NAME_BY_TRANSACTION_TYPE.get(transactionType));
 
         String transactionTypeName;
         switch (transactionType) {

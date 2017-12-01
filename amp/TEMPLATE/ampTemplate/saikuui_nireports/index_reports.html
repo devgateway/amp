@@ -42,6 +42,8 @@
 
 </head>
 <body>
+<div class="content-dir">
+
 <div id="header" class="hide" style="display:none"></div>
 
 <div class="processing_container"></div>
@@ -131,6 +133,10 @@ $.noConflict(true);
 <script type="text/javascript" src="js/saiku/models/Repository.js"></script>
 <script type="text/javascript" src="js/saiku/models/Result.js"></script>
 <script type="text/javascript" src="js/saiku/plugins/AMPFilters/FilterUtils.js"></script>
+<script type="text/javascript" src="js/saiku/plugins/AMPDirection/plugin.js"></script>
+<script type="text/javascript">
+    AMPDirection.checkRtlDirection()
+</script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/common/lib/object_hash.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/common/CommonFilterUtils.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/common/TranslationManager.js"></script>
@@ -190,8 +196,8 @@ $.noConflict(true);
                 </div>
                 <div id="query_processing" class="query_processing" style="display:none;"><span class="processing_image">&nbsp;&nbsp;</span> <span class="i18n">Running query...</span>  [&nbsp;<a class="cancel i18n" href="#cancel">Cancel</a>&nbsp;]</div>
 
-                <div class="workspace_results_info" align="right" />
-                <div class="workspace_results">
+                <div class="workspace_results_info content-direction" align="right" />
+                <div class="workspace_results content-direction">
 
                 </div>
             </div>
@@ -360,5 +366,6 @@ $.noConflict(true);
             </div>
         </div>
     </div>
+</div>
 </body>
 </html>

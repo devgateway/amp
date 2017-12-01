@@ -83,7 +83,7 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
                 ,'Joint Criteria'
                 , 'On/Off/Treasury Budget'
                 , 'Multi Donor'
-                , 'Capital - Expenditure'  
+                , 'Capital Expenditure'
                 , 'Sector Tag'
                 , 'Sector Tag Sub-Sector'
                 , 'Sector Tag Sub-Sub-Sector'

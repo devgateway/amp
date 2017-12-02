@@ -922,7 +922,7 @@ td.inside ul {
     direction:rtl;
 }
 .nvd3 .nv-discretebar .nv-groups text{
-    direction:rtl;
+    direction: rtl; unicode-bidi: bidi-override;
 }
 .filter-just-search {
     float: right !important;

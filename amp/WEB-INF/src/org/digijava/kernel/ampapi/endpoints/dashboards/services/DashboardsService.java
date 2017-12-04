@@ -234,7 +234,7 @@ public class DashboardsService {
         if (report != null && report.reportContents != null && report.reportContents.getContents() != null
                 && report.reportContents.getContents().size() > 0) {
             totals = (ReportCell) report.reportContents.getContents().get(valueCol);
-            rawTotal = ((BigDecimal) totals.value).doubleValue() * unitsOption.divider; // Save total in units.
+            rawTotal = ((BigDecimal) totals.value).doubleValue();
             postProcess(report, spec, outSettings, type);
         } else {
             rawTotal = new Double("0");
@@ -248,7 +248,7 @@ public class DashboardsService {
         for (ReportArea reportArea: report.reportContents.getChildren()) {
             Map<ReportOutputColumn, ReportCell> content = reportArea.getContents();
             AmountCell ac = (AmountCell) content.get(valueCol);
-            double amount = ((BigDecimal) ac.value).doubleValue() * unitsOption.divider;
+            double amount = ((BigDecimal) ac.value).doubleValue();
             if (values.size() < n) {
                 JsonBean row = new JsonBean();
                 row.set("name", content.get(criteriaCol).displayedValue);

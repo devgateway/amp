@@ -1220,8 +1220,13 @@ public class ExportActivityToWordBuilder {
                         sectionHelper.addRowData(rowData);
                     }
                     String responseText = (response.getResponse() != null ? response.getResponse() : "");
+                    if (ExportUtil.GPI_TYPE_YES_NO.equalsIgnoreCase(response.getAmpQuestionId().getAmpTypeId()
+                            .getName())) {
+                        responseText = TranslatorWorker.translateText(responseText);
+                    }
                     ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(
-                            response.getAmpQuestionId().getQuestionText(), null, null, true).addRowData(responseText);
+                            response.getAmpQuestionId().getQuestionText(), null, null, true)
+                            .addRowData(responseText);
                     sectionHelper.addRowData(rowData);
                 }
             }

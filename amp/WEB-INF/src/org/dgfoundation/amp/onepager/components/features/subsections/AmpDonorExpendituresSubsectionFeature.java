@@ -58,7 +58,7 @@ public class AmpDonorExpendituresSubsectionFeature extends
                 expTableFeature.getEditorList().addItem(fd);
                 target.add(expTableFeature);
                 AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
-                parent.getFundingInfo().checkChoicesRequired(expTableFeature.getEditorList().getCount());
+                parent.getFundingInfo().configureRequiredFields();
                 target.add(parent.getFundingInfo());
                 target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
                 target.appendJavaScript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));

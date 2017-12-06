@@ -40,7 +40,8 @@
 
 <html:hidden property="text"/>
 <html:hidden property="sourceIsReportWizard"/>
-<div id="tabview_container" class="yui-navset" style="display: block; overflow: hidden; height: 80%; padding-bottom: 0px;margin-top: 15px;margin-left: 5px;margin-right: 5px">
+<div id="tabview_container" class="content-direction yui-navset" style="display: block; overflow: hidden;
+height: 80%; padding-bottom: 0px;margin-top: 15px;margin-left: 5px;margin-right: 5px">
 	<ul class="yui-nav" style="border-bottom: 1px solid #CCCCCC">
 		<li class="selected"><a href="#donorsTab"><div><digi:trn>Donor Agencies</digi:trn></div></a></li>
 		<logic:notEqual name="aimReportsFilterPickerForm" property="pledgeReport" value="true">
@@ -178,9 +179,9 @@
 		</div>
 	</div>
 </div>
-<div class="clrfix" style="height: 15%;">
+<div class="clrfix content-direction" style="height: 15%;">
 <logic:notEqual name="aimReportsFilterPickerForm" property="pledgeReport" value="true">
-	<div style="width:60%; float:left; font-size: 12px;text-align: center;">
+	<div class="panel-one" style="width:60%; font-size: 12px;text-align: center;">
 		<c:set var="tooltip_translation">
 			<digi:trn>Specify keywords to look for in the project data.</digi:trn>
 		</c:set>
@@ -207,7 +208,7 @@
 			
 	</div>
 </logic:notEqual>
-<div style="display: block; overflow:hidden;width:40%; float:left; font-size: 12px">
+<div class="filter-just-search">
 	<html:checkbox property="justSearch" value="true" />&nbsp;
 	<digi:trn>Use filter as advanced search</digi:trn>
 </div>

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE page [
-<!ENTITY ampVersion "2.13.1.1">
-<!ENTITY releaseDate "15.11.2017">
+<!ENTITY ampVersion "${project.version}">
+<!ENTITY releaseDate "06.12.2017">
 <!ENTITY buildDate "${buildDate}">
 <!ENTITY buildSource "${buildSource}">
 ]>
@@ -706,7 +706,7 @@
 				<page>tempFieldPreDefinedValues</page>
 				<page>docFromTemplate</page>
 			</module>
-			<module name="dataExchange">
+			<module name="budgetintegration">
 				<page>de_showLog</page>
 			</module>
 			<module name="help">
@@ -739,7 +739,7 @@
                 <page>largestProjectsPrinterFriendly</page>
                 <page>exportOptions</page>
 			</module>
-			<module name="dataExchange">
+			<module name="budgetintegration">
 				<page>de_showSourceDetails</page>
 				<page>de_showLogItemDetails</page>
             </module>

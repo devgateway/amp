@@ -45,6 +45,7 @@ import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -203,7 +204,7 @@ public class DashboardsService {
         spec.getHierarchies().addAll(spec.getColumns());
         // applies settings, including funding type as a measure
         SettingsUtils.applyExtendedSettings(spec, config);
-        spec.addSorter(new SortingInfo(spec.getMeasures().iterator().next(), false));
+        spec.addSorter(new SortingInfo(spec.getMeasures().iterator().next(), SiteUtils.isEffectiveLangRTL()));
 
         AmpReportFilters filterRules = FilterUtils.getFilterRules(filters, null);
         if (filterRules != null) {
@@ -233,7 +234,7 @@ public class DashboardsService {
         if (report != null && report.reportContents != null && report.reportContents.getContents() != null
                 && report.reportContents.getContents().size() > 0) {
             totals = (ReportCell) report.reportContents.getContents().get(valueCol);
-            rawTotal = ((BigDecimal) totals.value).doubleValue() * unitsOption.divider; // Save total in units.
+            rawTotal = ((BigDecimal) totals.value).doubleValue();
             postProcess(report, spec, outSettings, type);
         } else {
             rawTotal = new Double("0");
@@ -247,7 +248,7 @@ public class DashboardsService {
         for (ReportArea reportArea: report.reportContents.getChildren()) {
             Map<ReportOutputColumn, ReportCell> content = reportArea.getContents();
             AmountCell ac = (AmountCell) content.get(valueCol);
-            double amount = ((BigDecimal) ac.value).doubleValue() * unitsOption.divider;
+            double amount = ((BigDecimal) ac.value).doubleValue();
             if (values.size() < n) {
                 JsonBean row = new JsonBean();
                 row.set("name", content.get(criteriaCol).displayedValue);
@@ -461,7 +462,7 @@ public class DashboardsService {
         // also configures funding type
         SettingsUtils.applyExtendedSettings(spec, filter);
         
-        spec.addSorter(new SortingInfo(spec.getMeasures().iterator().next(), false));
+        spec.addSorter(new SortingInfo(spec.getMeasures().iterator().next(), SiteUtils.isEffectiveLangRTL()));
                 
         if (filter != null) {
             LinkedHashMap<String, Object> filters = (LinkedHashMap<String, Object>) filter.get(EPConstants.FILTERS);
@@ -531,7 +532,7 @@ public class DashboardsService {
         OutputSettings outSettings = new OutputSettings(new HashSet<String>(){{add(ColumnConstants.PROJECT_TITLE);}});
         // applies settings, including funding type as a measure
         SettingsUtils.applyExtendedSettings(spec, config);
-        spec.addSorter(new SortingInfo(spec.getMeasures().iterator().next(), false));
+        spec.addSorter(new SortingInfo(spec.getMeasures().iterator().next(), SiteUtils.isEffectiveLangRTL()));
         
         LinkedHashMap<String, Object> filters = null;
         if (config != null) {

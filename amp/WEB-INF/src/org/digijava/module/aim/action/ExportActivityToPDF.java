@@ -3610,7 +3610,7 @@ public class ExportActivityToPDF extends Action {
         }
         
         PdfPCell roleCell = getRoleOrgForFundingFlows(fd, ActivityUtil.getFmForFundingFlows(fd.getTransactionType()));
-        roleCell.setColspan(4);
+        roleCell.setColspan(COLUMNS_4);
         infoTable.addCell(roleCell);
         
         if (fd.getAttachedPledgeName() != null) {

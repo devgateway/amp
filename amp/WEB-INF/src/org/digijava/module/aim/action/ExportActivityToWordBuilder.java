@@ -1,6 +1,25 @@
 package org.digijava.module.aim.action;
 
-import clover.com.google.common.base.Strings;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.math.BigInteger;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.StringJoiner;
+import java.util.TreeSet;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.util.Units;
@@ -97,24 +116,7 @@ import org.openxmlformats.schemas.wordprocessingml.x2006.main.STMerge;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.STOnOff;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.STTblWidth;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.math.BigInteger;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.StringJoiner;
-import java.util.TreeSet;
+import clover.com.google.common.base.Strings;
 
 /**
  * Created by apicca.
@@ -131,8 +133,9 @@ public class ExportActivityToWordBuilder {
     public static final int COLUMNS_4 = 4;
     public static final int TABLE_WIDTH = 10500;
     public static final int ADDITIONAL_INFORMATION_ROWS = 5;
-    public static final int TABLE_SEPARATOR_LENGTH = 85;
+    public static final int TABLE_SEPARATOR_LENGTH = 100;
     public static final int COLUMNS_2 = 2;
+    private static final int CELL_LEFT_INDENT_SPACE = 50;
     private static Logger logger = Logger.getLogger(ExportActivityToWordBuilder.class);
 
     public static final String CELLCOLORGRAY = "F2F2F2";
@@ -284,31 +287,27 @@ public class ExportActivityToWordBuilder {
                     headerRow = headerTable.createRow();
 
                     if (FeaturesUtil.isVisibleModule("/Activity Form/M&E/Name")) {
-                        setRun(headerRow.getCell(cellIndex++).getParagraphs().get(0).createRun(), FONT_FAMILY,
-                                FONT_SIZE_NORMAL, null,
-                                indicator.getIndicator().getName(), true,
-                                false);
+                        setRun(headerRow.getCell(cellIndex++).getParagraphs().get(0).createRun(), 
+                                new RunStyle(FONT_FAMILY, FONT_SIZE_NORMAL, null, true),
+                                indicator.getIndicator().getName(), false);
                     }
                     if (FeaturesUtil.isVisibleModule("/Activity Form/M&E/Code")) {
-                        setRun(headerRow.getCell(cellIndex++).getParagraphs().get(0).createRun(), FONT_FAMILY,
-                                FONT_SIZE_NORMAL, null,
-                                indicator.getIndicator().getCode(), true,
-                                false);
+                        setRun(headerRow.getCell(cellIndex++).getParagraphs().get(0).createRun(), 
+                                new RunStyle(FONT_FAMILY, FONT_SIZE_NORMAL, null, true),
+                                indicator.getIndicator().getCode(), false);
                     }
                     if (FeaturesUtil.isVisibleModule("/Activity Form/M&E/ME Item/Logframe Category")) {
                         if (indicator.getValues() != null && indicator.getValues().size() > 0) {
                             setRun(headerRow.getCell(cellIndex++).getParagraphs().get(0).createRun(),
-                                    FONT_FAMILY, FONT_SIZE_NORMAL, null,
-                                    indicator.getLogFrame() + "\n", false,
-                                    false);
+                                    new RunStyle(FONT_FAMILY, FONT_SIZE_NORMAL, null, false),
+                                    indicator.getLogFrame() + "\n", false);
                         }
                     }
 
                     if (indicator.getIndicator().getSectors() != null) {
-                        setRun(headerRow.getCell(cellIndex++).getParagraphs().get(0).createRun(), FONT_FAMILY,
-                                FONT_SIZE_NORMAL, null,
-                                ExportUtil.getIndicatorSectors(indicator) + "\n", false,
-                                false);
+                        setRun(headerRow.getCell(cellIndex++).getParagraphs().get(0).createRun(), 
+                                new RunStyle(FONT_FAMILY, FONT_SIZE_NORMAL, null, false),
+                                ExportUtil.getIndicatorSectors(indicator) + "\n", false);
                     }
 
                     //XWPFTableRow newRow = meTbl.createRow();
@@ -322,9 +321,8 @@ public class ExportActivityToWordBuilder {
                         String fieldName = ExportUtil.getIndicatorValueType(value);
                         columnVal = TranslatorWorker.translateText(ExportUtil.INDICATOR_VALUE_NAME.get(value
                                 .getValueType()));
-                        setRun(valueRow.getCell(cellIndex++).getParagraphs().get(0).createRun(), FONT_FAMILY,
-                                FONT_SIZE_NORMAL, null,
-                                columnVal, true, false);
+                        setRun(valueRow.getCell(cellIndex++).getParagraphs().get(0).createRun(), 
+                                new RunStyle(FONT_FAMILY, FONT_SIZE_NORMAL, null, true), columnVal, false);
 
                         if (FeaturesUtil.isVisibleModule("/Activity Form/M&E/ME Item/" + fieldName + " Value/"
                                 + fieldName + " Value")) {
@@ -429,8 +427,8 @@ public class ExportActivityToWordBuilder {
                         XWPFTableRow sectorsTblTitleRow = sectorsTbl.createRow();
                         XWPFParagraph sectorTitleParagraphs = sectorsTblTitleRow.getCell(0).getParagraphs().get(0);
                         setOrientation(sectorTitleParagraphs);
-                        setRun(sectorTitleParagraphs.createRun(), FONT_FAMILY, FONT_SIZE_NORMAL, null,
-                                sector.toUpperCase(), false, false);
+                        setRun(sectorTitleParagraphs.createRun(), 
+                                new RunStyle(FONT_FAMILY, FONT_SIZE_NORMAL, null, false), sector.toUpperCase(), false);
                     }
                     if (sectors.getActivitySectors() != null) {
                         for (ActivitySector actSect : sectors.getActivitySectors()) {
@@ -520,8 +518,8 @@ public class ExportActivityToWordBuilder {
                 columnVal = ExportUtil.buildInternalId(activityForm.getInternalIds());
             }
             XWPFTableCell cell = internalTbl.getRow(0).getCell(0);
-            setRun(cell.getParagraphs().get(0).createRun(), FONT_FAMILY, FONT_SIZE_NORMAL, null,
-                    columnVal, false, false);
+            setRun(cell.getParagraphs().get(0).createRun(), new RunStyle(FONT_FAMILY, FONT_SIZE_NORMAL, null, false),
+                    columnVal, false);
         }
     }
 
@@ -529,22 +527,33 @@ public class ExportActivityToWordBuilder {
         return col != null && !col.isEmpty();
     }
 
-
     private static void setOrientation(XWPFParagraph par) {
-        if (SiteUtils.isEffectiveLangRTL()) {
+        setOrientation(par, false);
+    }
 
+    private static void setOrientation(XWPFParagraph par, boolean isNumber) {
+        if (SiteUtils.isEffectiveLangRTL()) {
             if (par.getCTP().getPPr() == null) {
                 par.getCTP().addNewPPr();
             }
             if (par.getCTP().getPPr().getBidi() == null) {
                 par.getCTP().getPPr().addNewBidi();
             }
-            par.getCTP().getPPr().getBidi().setVal(STOnOff.ON);
+            
+            if (isNumber) {
+                par.getCTP().getPPr().getBidi().setVal(STOnOff.OFF);
+                par.setIndentFromLeft(CELL_LEFT_INDENT_SPACE);
+                par.setAlignment(ParagraphAlignment.LEFT);
+            } else {
+                par.getCTP().getPPr().getBidi().setVal(STOnOff.ON);
+            }
+        } else if (isNumber) {
+            par.setIndentFromRight(CELL_LEFT_INDENT_SPACE);
+            par.setAlignment(ParagraphAlignment.RIGHT);
         }
-
     }
-
-    private static void setRunOrientation(XWPFRun run) {
+    
+    private static void setRunOrientation(XWPFRun run, boolean isNumber) {
         if (SiteUtils.isEffectiveLangRTL()) {
             if (run.getCTR().getRPr() == null) {
                 run.getCTR().addNewRPr().addNewRtl();
@@ -552,15 +561,16 @@ public class ExportActivityToWordBuilder {
             if (run.getCTR().addNewRPr().getRtl() == null) {
                 run.getCTR().addNewRPr().addNewRtl();
             }
-            run.getCTR().addNewRPr().addNewRtl().setVal(STOnOff.TRUE);
+            
+            STOnOff.Enum st = isNumber ? STOnOff.FALSE : STOnOff.TRUE;
+            run.getCTR().addNewRPr().addNewRtl().setVal(st);
         }
     }
 
     private void addTitle(String title) {
         XWPFParagraph titleParagraph = doc.createParagraph();
         titleParagraph.setAlignment(ParagraphAlignment.CENTER);
-        setRun(titleParagraph.createRun(), FONT_FAMILY, FONT_SIZE_TITLE, null,
-                title, true, false);
+        setRun(titleParagraph.createRun(), new RunStyle(FONT_FAMILY, FONT_SIZE_TITLE, null, true), title, false);
     }
 
     private void addSectionTitle(String title) {
@@ -572,8 +582,7 @@ public class ExportActivityToWordBuilder {
         XWPFParagraph sectionTitle = cell.getParagraphs().get(0);
         setOrientation(sectionTitle);
         sectionTitle.setAlignment(ParagraphAlignment.LEFT);
-        setRun(sectionTitle.createRun(), FONT_FAMILY, FONT_SIZE_SECTION_TITLE, null,
-                title, true, false);
+        setRun(sectionTitle.createRun(), new RunStyle(FONT_FAMILY, FONT_SIZE_SECTION_TITLE, null, true), title, false);
     }
 
     private XWPFTable buildXwpfTable(int columns) {
@@ -1125,28 +1134,28 @@ public class ExportActivityToWordBuilder {
                     .isVisibleModule(
                             "/Activity Form/Contracts/Contract Item/Contract "
                                     + "Disbursements/Adjustment Type")) {
-                rowData.addRowData("Adj. Type Disb.", true);
+                rowData.addRowSimpleData("Adj. Type Disb.", true);
             }
 
             if (FeaturesUtil
                     .isVisibleModule(
                             "/Activity Form/Contracts/Contract Item/Contract "
                                     + "Disbursements/Amount")) {
-                rowData.addRowData("Amount Disb.", true);
+                rowData.addRowSimpleData("Amount Disb.", true);
             }
 
             if (FeaturesUtil
                     .isVisibleModule(
                             "/Activity Form/Contracts/Contract Item/Contract "
                                     + "Disbursements/Currency")) {
-                rowData.addRowData("Currency Disb.", true);
+                rowData.addRowSimpleData("Currency Disb.", true);
             }
 
             if (FeaturesUtil
                     .isVisibleModule(
                             "/Activity Form/Contracts/Contract Item/Contract "
                                     + "Disbursements/Transaction Date")) {
-                rowData.addRowData("Date Disb.", true);
+                rowData.addRowSimpleData("Date Disb.", true);
             }
             sectionHelper.addRowData(rowData);
 
@@ -1449,16 +1458,13 @@ public class ExportActivityToWordBuilder {
             XWPFTableRow row = table.createRow();
 
             XWPFTableCell cell = row.getCell(0);
-            setRun(cell.getParagraphs().get(0).createRun(), FONT_FAMILY, FONT_SIZE_NORMAL, null,
-                    TranslatorWorker.translateText(columnName) + " " + (i + 1), false, false);
+            setRun(cell.getParagraphs().get(0).createRun(), new RunStyle(FONT_FAMILY, FONT_SIZE_NORMAL, null, false),
+                    TranslatorWorker.translateText(columnName) + " " + (i + 1), false);
 
             XWPFTableCell cellValue = row.getCell(1);
-            setRun(cellValue.getParagraphs().get(0).createRun(), FONT_FAMILY, FONT_SIZE_NORMAL, null,
-                    outList.get(i), true, false);
-
+            setRun(cellValue.getParagraphs().get(0).createRun(), 
+                    new RunStyle(FONT_FAMILY, FONT_SIZE_NORMAL, null, true), outList.get(i), false);
         }
-
-
     }
 
     /*
@@ -2011,7 +2017,7 @@ public class ExportActivityToWordBuilder {
                     FundingCalculationsHelper.getTransactionTypeLabel(compFnd.getTransactionType()),
                     null, null, true);
             if (FeaturesUtil.isVisibleModule(componentFMfields[ExportUtil.COMPONENT_FM_FIELD_TYPE])) {
-                sectionHelper.addRowData(
+                sectionHelper.addRowSimpleData(
                         compFnd.getAdjustmentTypeNameTrimmed(), true);
             }
             if (FeaturesUtil.isVisibleModule(componentFMfields[ExportUtil.COMPONENT_FM_FIELD_AMOUNT])) {
@@ -2098,7 +2104,7 @@ public class ExportActivityToWordBuilder {
                         .getTransactionTypeLabel(regFnd
                                 .getTransactionType()), null, null, true))
                                 .addRowData(regFnd.getRegionLocation().getName())
-                                .addRowData(regFnd.getAdjustmentType().getLabel(), true)
+                                .addRowSimpleData(regFnd.getAdjustmentType().getLabel(), true)
                                 .addRowData(DateConversion.convertDateToLocalizedString(regFnd.getTransactionDate()))
                                 .addRowData(regFnd.getTransactionAmount().toString() + " " + regFnd.getCurrency()
                                 .getCurrencyCode()));
@@ -2115,7 +2121,7 @@ public class ExportActivityToWordBuilder {
                         .getTransactionTypeLabel(regFnd
                                 .getTransactionType()), null, null, true))
                                 .addRowData(regFnd.getRegionLocation().getName())
-                                .addRowData(regFnd.getAdjustmentType().getLabel(), true)
+                                .addRowSimpleData(regFnd.getAdjustmentType().getLabel(), true)
                                 .addRowData(DateConversion.convertDateToLocalizedString(regFnd.getTransactionDate()))
                                 .addRowData(regFnd.getTransactionAmount().toString() + " " + regFnd.getCurrency()
                                 .getCurrencyCode()));
@@ -2132,7 +2138,7 @@ public class ExportActivityToWordBuilder {
                         .getTransactionTypeLabel(regFnd
                                 .getTransactionType()), null, null, true))
                                 .addRowData(regFnd.getRegionLocation().getName())
-                                .addRowData(regFnd.getAdjustmentType().getLabel(), true)
+                                .addRowSimpleData(regFnd.getAdjustmentType().getLabel(), true)
                                 .addRowData(DateConversion.convertDateToString(regFnd.getTransactionDate()))
                                 .addRowData(regFnd.getTransactionAmount().toString() + " " + regFnd.getCurrency()
                                 .getCurrencyCode()));
@@ -2271,7 +2277,7 @@ public class ExportActivityToWordBuilder {
             if (activityForm.getFunding().getDeliveryRate() != null
                     && activityForm.getFunding().getDeliveryRate().length() > 0) {
                 addTotalsOutput(fundingTotalsDetails, "Delivery Rate",
-                        activityForm.getFunding().getDeliveryRate(), null);
+                        activityForm.getFunding().getDeliveryRate().replace("%", ""), "%");
             }
 
             createSectionTable(fundingTotalsDetails);
@@ -2368,7 +2374,11 @@ public class ExportActivityToWordBuilder {
         }
 
         eshDonorFundingDetails.addRowData(new ExportSectionHelperRowData(subTotal)
-                .addRowData(subTotalValue + " " + toCurrCode));
+                .addEmptyData()
+                .addEmptyData()
+                .addEmptyData()
+                .addRowNumberData(subTotalValue)
+                .addRowData(toCurrCode));
     }
 
     private void buildFundingDetail(ExportSectionHelper eshDonorFundingDetails, FundingDetail fndDet) {
@@ -2381,10 +2391,10 @@ public class ExportActivityToWordBuilder {
         }
 
         ExportSectionHelperRowData currentRowData = sectionHelperRowData.
-                addRowData(fndDet.getAdjustmentTypeName().getLabel(), true).
+                addRowSimpleData(fndDet.getAdjustmentTypeName().getLabel(), true).
                 addRowData(disasterResponse).
                 addRowData(fndDet.getTransactionDate()).
-                addRowData(fndDet.getTransactionAmount()).
+                addRowNumberData(fndDet.getTransactionAmount()).
                 addRowData(fndDet.getCurrencyCode());
 
         if (fndDet.getFixedExchangeRate() != null) {
@@ -2642,12 +2652,15 @@ public class ExportActivityToWordBuilder {
             String transactionAmount = fd == null ? formatNumber(projection.getAmount()) : fd.getTransactionAmount();
             String transactionCurrencyCode = fd == null ? projection.getAmpCurrency().getCurrencyCode() : fd
             .getCurrencyCode();
+            String transactionYear = DateConversion.convertDateToFiscalYearString(projection.getProjectionDate());
 
             sectionHelperRowData = new ExportSectionHelperRowData(TranslatorWorker.translateText(projectedType),
             null, null, true);
-            sectionHelperRowData.addRowData(DateConversion.convertDateToFiscalYearString(
-                    projection.getProjectionDate()));
-            sectionHelperRowData.addRowData(transactionAmount + " " + transactionCurrencyCode);
+            
+            sectionHelperRowData.addRowData(transactionYear)
+                    .addRowNumberData(transactionAmount)
+                    .addRowData(transactionCurrencyCode);
+            
             String roleAndOrgForFundingFlows = getRoleAndOrgForFundingFlows(
                     projection.getRecipientOrg(), projection.getRecipientRole(),
                     "/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections/MTEF Projections "
@@ -2691,7 +2704,10 @@ public class ExportActivityToWordBuilder {
         String totalValue = formatNumber(totalAmount);
 
         mtefProjections.addRowData(new ExportSectionHelperRowData(null).setSeparator(true));
-        mtefProjections.addRowData(new ExportSectionHelperRowData(total).addRowData(totalValue + " " + currencyCode));
+        mtefProjections.addRowData(new ExportSectionHelperRowData(total)
+                .addEmptyData()
+                .addRowNumberData(totalValue)
+                .addRowData(currencyCode));
         mtefProjections.addRowData(new ExportSectionHelperRowData(null).setSeparator(true));
     }
 
@@ -2785,8 +2801,8 @@ public class ExportActivityToWordBuilder {
                     XWPFTableRow newRow = identificationSubTable1.createRow();
                     XWPFTableCell cell = newRow.getCell(0);
                     XWPFParagraph p1 = cell.getParagraphs().get(0);
-                    setRun(p1.createRun(), FONT_FAMILY, FONT_SIZE_NORMAL, null, budgOrg.getBudgetOrgCode() + " - "
-                            + budgOrg.getName(), true, false);
+                    setRun(p1.createRun(), new RunStyle(FONT_FAMILY, FONT_SIZE_NORMAL, null, true), 
+                            budgOrg.getBudgetOrgCode() + " - " + budgOrg.getName(), false);
                 }
             }
 
@@ -2795,8 +2811,8 @@ public class ExportActivityToWordBuilder {
                     XWPFTableRow newRow = identificationSubTable1.createRow();
                     XWPFTableCell cell = newRow.getCell(0);
                     XWPFParagraph p1 = cell.getParagraphs().get(0);
-                    setRun(p1.createRun(), FONT_FAMILY, FONT_SIZE_NORMAL, null, budgDept.getCode() + " - "
-                            + budgDept.getName(), true, false);
+                    setRun(p1.createRun(), new RunStyle(FONT_FAMILY, FONT_SIZE_NORMAL, null, true), 
+                            budgDept.getCode() + " - " + budgDept.getName(), false);
                 }
             }
 
@@ -2805,8 +2821,8 @@ public class ExportActivityToWordBuilder {
                     XWPFTableRow newRow = identificationSubTable1.createRow();
                     XWPFTableCell cell = newRow.getCell(0);
                     XWPFParagraph p1 = cell.getParagraphs().get(0);
-                    setRun(p1.createRun(), FONT_FAMILY, FONT_SIZE_NORMAL, null, budgprog.getThemeCode() + " - "
-                            + budgprog.getName(), true, false);
+                    setRun(p1.createRun(), new RunStyle(FONT_FAMILY, FONT_SIZE_NORMAL, null, true), 
+                            budgprog.getThemeCode() + " - " + budgprog.getName(), false);
                 }
             }
 
@@ -2816,15 +2832,16 @@ public class ExportActivityToWordBuilder {
 
             XWPFTableRow row = identificationSubTable1.createRow();
             XWPFTableCell cell = row.getCell(0);
-            setRun(cell.getParagraphs().get(0).createRun(), FONT_FAMILY, FONT_SIZE_NORMAL, null,
-                    TranslatorWorker.translateText("Organizations and Project ID") + ": ", false, false);
+            setRun(cell.getParagraphs().get(0).createRun(), new RunStyle(FONT_FAMILY, FONT_SIZE_NORMAL, null, false),
+                    TranslatorWorker.translateText("Organizations and Project ID") + ": ", false);
 
             if (identification.getSelectedOrganizations() != null) {
                 for (OrgProjectId selectedOrgForPopup : identification.getSelectedOrganizations()) {
                     if (selectedOrgForPopup != null && selectedOrgForPopup.getOrganisation() != null) {
                         XWPFTableCell cell2 = row.getCell(0);
-                        setRun(cell2.getParagraphs().get(0).createRun(), FONT_FAMILY, FONT_SIZE_NORMAL, null,
-                                "[" + selectedOrgForPopup.getOrganisation().getName() + "]", false, false);
+                        setRun(cell2.getParagraphs().get(0).createRun(), 
+                                new RunStyle(FONT_FAMILY, FONT_SIZE_NORMAL, null, false),
+                                "[" + selectedOrgForPopup.getOrganisation().getName() + "]", false);
                     }
                 }
             }
@@ -2928,20 +2945,24 @@ public class ExportActivityToWordBuilder {
 
             XWPFTableRow row = identificationSubTable1.createRow();
             if (identification.getChapterForPreview() != null) {
-                setRun(row.getCell(0).addParagraph().createRun(), FONT_FAMILY, FONT_SIZE_NORMAL, null,
-                        TranslatorWorker.translateText("Code Chapitre") + ": ", false, false);
+                setRun(row.getCell(0).addParagraph().createRun(), 
+                        new RunStyle(FONT_FAMILY, FONT_SIZE_NORMAL, null, false),
+                        TranslatorWorker.translateText("Code Chapitre") + ": ", false);
 
-                setRun(row.getCell(0).addParagraph().createRun(), FONT_FAMILY, FONT_SIZE_NORMAL, null,
+                setRun(row.getCell(0).addParagraph().createRun(), 
+                        new RunStyle(FONT_FAMILY, FONT_SIZE_NORMAL, null, true),
                         identification.getChapterForPreview().getCode() + " - "
-                                + identification.getChapterForPreview().getDescription(), true, false);
+                                + identification.getChapterForPreview().getDescription(), false);
 
-                setRun(row.getCell(0).addParagraph().createRun(), FONT_FAMILY, FONT_SIZE_NORMAL, null,
-                        TranslatorWorker.translateText("Imputations") + ": ", false, false);
+                setRun(row.getCell(0).addParagraph().createRun(), 
+                        new RunStyle(FONT_FAMILY, FONT_SIZE_NORMAL, null, false),
+                        TranslatorWorker.translateText("Imputations") + ": ", false);
 
                 for (AmpImputation imputation : identification.getChapterForPreview().getImputations()) {
-                    setRun(row.getCell(0).addParagraph().createRun(), FONT_FAMILY, FONT_SIZE_NORMAL, null,
+                    setRun(row.getCell(0).addParagraph().createRun(), 
+                            new RunStyle(FONT_FAMILY, FONT_SIZE_NORMAL, null, true),
                             identification.getChapterForPreview().getYear() + " - "
-                                    + imputation.getCode() + " - " + imputation.getDescription(), true, false);
+                                    + imputation.getCode() + " - " + imputation.getDescription(), false);
                 }
             }
 
@@ -3515,7 +3536,7 @@ public class ExportActivityToWordBuilder {
         XWPFTableCell cell = newRow.getCell(0);
         XWPFParagraph p1 = cell.getParagraphs().get(0);
         setOrientation(p1);
-        setRun(p1.createRun(), FONT_FAMILY, FONT_SIZE_NORMAL, null, fieldName, false, false);
+        setRun(p1.createRun(), new RunStyle(FONT_FAMILY, FONT_SIZE_NORMAL, null, false), fieldName, false);
         cell.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.TOP);
         if (bgColor != null) {
             cell.setColor(bgColor);
@@ -3524,7 +3545,7 @@ public class ExportActivityToWordBuilder {
         cell = newRow.getCell(1);
         p1 = cell.getParagraphs().get(0);
         setOrientation(p1);
-        setRun(p1.createRun(), FONT_FAMILY, FONT_SIZE_NORMAL, null, fieldValue, true, false);
+        setRun(p1.createRun(), new RunStyle(FONT_FAMILY, FONT_SIZE_NORMAL, null, true), fieldValue, false);
         cell.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.TOP);
         if (bgColor != null) {
             cell.setColor(bgColor);
@@ -3536,7 +3557,7 @@ public class ExportActivityToWordBuilder {
         XWPFTableRow newRow = table.createRow();
         XWPFTableCell cell = newRow.getCell(0);
         XWPFParagraph p1 = cell.getParagraphs().get(0);
-        setRun(p1.createRun(), FONT_FAMILY, FONT_SIZE_NORMAL, bgColor, fieldName, false, false);
+        setRun(p1.createRun(), new RunStyle(FONT_FAMILY, FONT_SIZE_NORMAL, bgColor, false), fieldName, false);
         cell.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.TOP);
 
         cell = newRow.getCell(1);
@@ -3684,18 +3705,15 @@ public class ExportActivityToWordBuilder {
         private boolean translateTitle;
         private List<String> fieldOrderedList;
         private Map<String, String> fldVisibilityKeyMap;
-        private List<String> values;
+        private List<SectionItem> items;
         private boolean separator;
-        private Map<String, Boolean> translateValues;
-
 
         ExportSectionHelperRowData(String title, List<String> fields, List<String> visibilityKeys, boolean
         translateTitle, boolean separator) {
             this.title = title;
             this.translateTitle = translateTitle;
             this.separator = separator;
-            values = new ArrayList<String>();
-            translateValues = new HashMap<String, Boolean>();
+            items = new ArrayList<SectionItem>();
             fldVisibilityKeyMap = new HashMap<String, String>();
             fieldOrderedList = fields;
             if (fields != null && !fields.isEmpty() && visibilityKeys != null && !visibilityKeys.isEmpty()) {
@@ -3716,14 +3734,30 @@ public class ExportActivityToWordBuilder {
             this(title, null, null, false);
         }
 
-        public ExportSectionHelperRowData addRowData(String data, Boolean translate) {
-            values.add(data);
-            translateValues.put(data, translate);
+        public ExportSectionHelperRowData addRowSimpleData(String value, boolean translated) {
+            SectionItem item = new SectionItem();
+            item.setValue(value);
+            item.setTranslated(translated);
+            items.add(item);
+            
             return this;
         }
+        
+        public ExportSectionHelperRowData addRowNumberData(String value) {
+            SectionItem item = new SectionItem();
+            item.setValue(value);
+            item.setNumber(true);
+            items.add(item);
+            
+            return this;
+        }
+        
+        public ExportSectionHelperRowData addEmptyData() {
+            return addRowData("");
+        }
 
-        public ExportSectionHelperRowData addRowData(String data) {
-            return addRowData(data, false);
+        public ExportSectionHelperRowData addRowData(String value) {
+            return addRowSimpleData(value, false);
         }
 
         public String getTitle() {
@@ -3734,8 +3768,8 @@ public class ExportActivityToWordBuilder {
             return translateTitle;
         }
 
-        public List<String> getValues() {
-            return values;
+        public List<SectionItem> getItems() {
+            return items;
         }
 
         public boolean isSeparator() {
@@ -3747,10 +3781,6 @@ public class ExportActivityToWordBuilder {
             return this;
         }
 
-        public Map<String, Boolean> getTranslateValues() {
-            return translateValues;
-        }
-
         public Map<String, String> getFldVisibilityKeyMap() {
             return fldVisibilityKeyMap;
         }
@@ -3760,6 +3790,45 @@ public class ExportActivityToWordBuilder {
         }
 
     }
+    
+    private class SectionItem {
+
+        private String value;
+        private boolean number = false;
+        private boolean translated = false;
+
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
+        }
+        
+        public String getTranslatedValue() {
+            if (translated) {
+                return TranslatorWorker.translateText(value);
+            }
+            
+            return value;
+        }
+
+        public boolean isNumber() {
+            return number;
+        }
+
+        public void setNumber(boolean number) {
+            this.number = number;
+        }
+
+        public boolean isTranslated() {
+            return translated;
+        }
+
+        public void setTranslated(boolean translated) {
+            this.translated = translated;
+        }
+    }
 
     private void createSectionTable(ExportSectionHelper esh) throws WorkerException {
         XWPFTable retVal;
@@ -3768,7 +3837,7 @@ public class ExportActivityToWordBuilder {
         for (ExportSectionHelperRowData rd : esh.getRowData()) {
             //Calculate visible row count
             int visibleRowCount = 0;
-            if (rd.getValues() != null && !rd.getValues().isEmpty()) {
+            if (rd.getItems() != null && !rd.getItems().isEmpty()) {
                 if (rd.getFieldOrderedList() != null) {
                     for (String fldTitle : rd.getFieldOrderedList()) {
                         String visKey = rd.getFldVisibilityKeyMap().get(fldTitle);
@@ -3777,12 +3846,12 @@ public class ExportActivityToWordBuilder {
                         }
                     }
                 } else {  //If no visibility keys
-                    visibleRowCount = rd.getValues().size();
+                    visibleRowCount = rd.getItems().size();
                 }
             }
 
             if (visibleRowCount > maxCols) {
-                maxCols = rd.getValues().size();
+                maxCols = rd.getItems().size();
             }
         }
 
@@ -3799,15 +3868,13 @@ public class ExportActivityToWordBuilder {
             XWPFTableCell titleCell = titleRow.getCell(0);
             XWPFParagraph titleParagraph = titleCell.getParagraphs().get(0);
             setOrientation(titleParagraph);
-            setRun(titleParagraph.createRun(), FONT_FAMILY, FONT_SIZE_SECTION_TITLE, null, secTitle, true,
-                    false);
+            setRun(titleParagraph.createRun(), new RunStyle(FONT_FAMILY, FONT_SIZE_SECTION_TITLE, null, true), 
+                    secTitle, false);
             titleCell.setColor(CELLCOLORGRAY);
             spanCellsAcrossRow(titleRow, 0, maxCols);
         }
 
-        int cellPos = 1;
         for (ExportSectionHelperRowData rd : esh.getRowData()) {
-
             XWPFTableRow dataRow = retVal.createRow();
             if (!rd.isSeparator()) {
                 String title = (rd.translateTitle && rd.title != null)
@@ -3817,10 +3884,10 @@ public class ExportActivityToWordBuilder {
                 cell.setColor(CELLCOLORGRAY);
                 XWPFParagraph dataParagraph = cell.getParagraphs().get(0);
                 setOrientation(dataParagraph);
-                setRun(dataParagraph.createRun(), FONT_FAMILY, FONT_SIZE_NORMAL, null, title, true,
-                        false);
+                setRun(dataParagraph.createRun(), new RunStyle(FONT_FAMILY, FONT_SIZE_NORMAL, null, true), 
+                        title, false);
 
-                if ((rd.getValues() == null || rd.getValues().isEmpty()) && maxCols > 1) {
+                if ((rd.getItems() == null || rd.getItems().isEmpty()) && maxCols > 1) {
                     spanCellsAcrossRow(dataRow, 0, maxCols);
                 }
             } else {
@@ -3833,7 +3900,7 @@ public class ExportActivityToWordBuilder {
             int rowCounter = 1;
             int idx = 0;
             int cellIndex = 1;
-            for (String rowData : rd.getValues()) {
+            for (SectionItem rowData : rd.getItems()) {
                 String visKey = null;
                 if (rd.getFieldOrderedList() != null) {
                     String colTitle = rd.getFieldOrderedList().get(idx);
@@ -3841,38 +3908,42 @@ public class ExportActivityToWordBuilder {
                 }
 
                 if (visKey == null || (visKey != null && FeaturesUtil.isVisibleField(visKey))) {
-                    boolean shouldTranslate = Boolean.TRUE.equals(rd.getTranslateValues().get(rowData));
-                    String trnVal = shouldTranslate ? TranslatorWorker.translateText(rowData) : rowData;
-                    XWPFTableCell cell = dataRow.getCell(cellIndex++);
+                    String trnVal = rowData.getTranslatedValue();
+                    XWPFTableCell cell = dataRow.getCell(cellIndex);
                     XWPFParagraph dataParagraph = cell.getParagraphs().get(0);
-                    setOrientation(dataParagraph);
-                    setRun(dataParagraph.createRun(), FONT_FAMILY, FONT_SIZE_NORMAL, null, trnVal != null
-                            ? trnVal : "-", false, false);
-                    if (rd.getValues().size() < (maxCols - 1) && rowCounter == rd.getValues().size()) {
+                    setOrientation(dataParagraph, rowData.isNumber());
+                    setRun(dataParagraph.createRun(), new RunStyle(FONT_FAMILY, FONT_SIZE_NORMAL, null, false),
+                            trnVal != null ? trnVal : "-", false, rowData.isNumber());
+                    if (rd.getItems().size() < (maxCols - 1) && rowCounter == rd.getItems().size()) {
                         spanCellsAcrossRow(dataRow, 0, maxCols - rowCounter);
                     }
                     rowCounter++;
                 }
                 idx++;
+                cellIndex++;
             }
-
         }
-
     }
-
-    private static void setRun(XWPFRun run, String fontFamily, int fontSize, String colorRGB, String text, boolean
-            bold, boolean addBreak) {
-        setRunOrientation(run);
-        run.setFontFamily(fontFamily);
-        run.setFontSize(fontSize);
-        if (colorRGB != null) {
-            run.setColor(colorRGB);
+    
+    private static void setRun(XWPFRun run, RunStyle runStyle, String text, boolean addBreak, boolean isNumber) {
+        
+        setRunOrientation(run, isNumber);
+       
+        run.setFontFamily(runStyle.getFontFamily());
+        run.setFontSize(runStyle.getFontSize());
+        run.setBold(runStyle.isBold());
+        if (runStyle.getColorRGB() != null) {
+            run.setColor(runStyle.getColorRGB());
         }
+        
         run.setText(text);
-        run.setBold(bold);
         if (addBreak) {
             run.addBreak();
         }
+    }
+
+    private static void setRun(XWPFRun run, RunStyle runStyle, String text, boolean addBreak) {
+        setRun(run, runStyle, text, addBreak, false);
     }
 
     public void setTableAlignment(XWPFTable table, STJc.Enum justification) {
@@ -3919,20 +3990,64 @@ public class ExportActivityToWordBuilder {
         return retVal;
     }
 
-    private void addTotalsOutput(ExportSectionHelper fundingTotalsDetails, String title, String value,
-                                 String currencyCode) {
+    private void addTotalsOutput(ExportSectionHelper fundingTotalsDetails, String title, String value, 
+            String currencyCode) {
+        
         if (value == null || value.isEmpty()) {
             return;
         }
+        
         String totalAmountType = TranslatorWorker.translateText(title) + ":";
-        String output = value;
-        if (currencyCode != null && !currencyCode.isEmpty()) {
-            output += " " + currencyCode;
+        fundingTotalsDetails.addRowData(new ExportSectionHelperRowData(totalAmountType)
+                .addRowNumberData(value)
+                .addRowData(currencyCode));
+    }
+    
+    private class RunStyle {
+
+        private String fontFamily;
+        private int fontSize;
+        private String colorRGB;
+        private boolean bold;
+        
+        RunStyle(String fontFamily, int fontSize, String colorRGB, boolean bold) {
+            super();
+            this.fontFamily = fontFamily;
+            this.fontSize = fontSize;
+            this.colorRGB = colorRGB;
+            this.bold = bold;
         }
 
-        fundingTotalsDetails.addRowData(new ExportSectionHelperRowData(
-                totalAmountType).addRowData(output));
+        public String getFontFamily() {
+            return fontFamily;
+        }
+
+        public void setFontFamily(String fontFamily) {
+            this.fontFamily = fontFamily;
+        }
+
+        public int getFontSize() {
+            return fontSize;
+        }
+
+        public void setFontSize(int fontSize) {
+            this.fontSize = fontSize;
+        }
+
+        public String getColorRGB() {
+            return colorRGB;
+        }
+
+        public void setColorRGB(String colorRGB) {
+            this.colorRGB = colorRGB;
+        }
+
+        public boolean isBold() {
+            return bold;
+        }
+
+        public void setBold(boolean bold) {
+            this.bold = bold;
+        }
     }
-
-
 }

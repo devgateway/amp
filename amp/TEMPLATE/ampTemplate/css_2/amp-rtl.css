@@ -8,6 +8,16 @@
     direction: rtl;
 }
 
+.flag {
+    float: right !important;
+    margin-right: -4px !important;
+    margin-left: 4px;
+}
+
+div#amp-header .double-row .nav > li > a {
+    padding-left: 10px !important;
+}
+
 body, div, p {
     font-family: Droid Arabic Naskh, Arial !important;
 }

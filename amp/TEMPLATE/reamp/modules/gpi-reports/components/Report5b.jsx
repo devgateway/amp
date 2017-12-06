@@ -299,6 +299,9 @@ export default class Report5b extends Component {
                             </div>                           
                         </div>
                     }
+                    {this.props.mainReport.empty == true  &&
+                        <div className="text-center">{this.props.translations['amp-gpi-reports:no-data']}</div>
+                    }
                     <YearsFilterSection onYearClick={this.onYearClick.bind(this)} selectedYear={this.state.selectedYear} mainReport={this.props.mainReport} filter={this.filter} dateField="date" settingsWidget={this.settingsWidget} report={INDICATOR_5B_CODE} />                    
                     <div className="container-fluid no-padding">
                         <div className="dropdown">

@@ -6,7 +6,7 @@ import { fetchJson } from "amp/tools";
 require('./style.less');
 
 const WINDOWS = 'windows';
-const MAC = 'mac';
+const MAC = 'osx';
 const DEBIAN_LINUX = 'debian';
 const MACINTOSH = 'macintosh';
 const LINUX = 'linux';

@@ -32,6 +32,9 @@ import au.com.bytecode.opencsv.CSVReader;
 
 public class StructuresImporter extends Action {
 
+    private static final int LATITUDE_COLUMN_POSITION = 2;
+    private static final int LONGITUDE_COLUMN_POSITION = 3;
+    
     public static Logger logger = Logger.getLogger(StructuresImporter.class);
     @SuppressWarnings("unchecked")
     public static final List<String> CSV_CONTENT_TYPES  = Collections.unmodifiableList(
@@ -42,8 +45,8 @@ public class StructuresImporter extends Action {
             HttpServletRequest request, HttpServletResponse response) throws Exception {
         StructuresImporterForm sform  = (StructuresImporterForm) form;
         DecimalFormat df = new DecimalFormat("###.######");
-        int latitudePosition = 2;
-        int longitudePosition = 3;
+        int latitudePosition = LATITUDE_COLUMN_POSITION;
+        int longitudePosition = LONGITUDE_COLUMN_POSITION;
 
         if (request.getParameter("importPerform") != null && sform.getUploadedFile()!=null && sform.getUploadedFile().getFileSize()>0) {
             String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
@@ -60,7 +63,7 @@ public class StructuresImporter extends Action {
                                 TranslatorWorker
                                         .translateText("The file to import must be an text/csv file.")));
                 saveErrors(request, errors);
-            }else{
+            } else {
                 try {
                     InputStreamReader isr = new InputStreamReader(sform.getUploadedFile().getInputStream());
 

@@ -39,19 +39,18 @@ public class AmpUpdateStructureLatitudeLongitude {
     private void updateTable(Connection connection, String tableName) throws SQLException {
         RsInfo structuresToChange = null;
         try {
-            String fetchWrongData = " select true from ("
-                    + " select 1 from %s where latitude !~ '^[-]?[0-9]*.?[0-9]*$' "
-                    + " or longitude !~ '^[-]?[0-9]*.?[0-9]*$' "
-                    + " or latitude::numeric > %s or latitude::numeric< -%<s "
-                    + "or longitude::numeric> %s or longitude::numeric< -%<s limit 1 ) as t";
+            String fetchWrongData = " SELECT true FROM ("
+                    + " SELECT 1 FROM %s WHERE latitude !~ '^[-]?[0-9]*.?[0-9]*$' "
+                    + " OR longitude !~ '^[-]?[0-9]*.?[0-9]*$' "
+                    + " OR latitude::numeric > %s OR latitude::numeric< -%<s "
+                    + " OR longitude::numeric> %s OR longitude::numeric< -%<s LIMIT 1 ) AS t";
 
             String addColumn = "ALTER TABLE %s ADD COLUMN %s_to_fix text";
-            String updateColumn = "update %s set %s_to_fix = %<s where %<s !~ '^[-]?[0-9]*.?[0-9]*$' or "
-                    + "  %<s::numeric not between -%s and %<s";
-            String makeNullOriginal = "update %s set %s = null where %<s !~ '^[-]?[0-9]*.?[0-9]*$'";
+            String updateColumn = "UPDATE %s SET %s_to_fix = %<s WHERE %<s !~ '^[-]?[0-9]*.?[0-9]*$' OR "
+                    + "  %<s::numeric NOT BETWEEN -%s AND %<s";
+            String makeNullOriginal = "UPDATE %s SET %s = null WHERE %<s !~ '^[-]?[0-9]*.?[0-9]*$'";
 
-            structuresToChange = SQLUtils.rawRunQuery(connection,
-
+            structuresToChange = SQLUtils.rawRunQuery(connection, 
                     String.format(fetchWrongData, tableName, "90", "180"), null);
 
             if (structuresToChange.rs.next()) {
@@ -63,9 +62,18 @@ public class AmpUpdateStructureLatitudeLongitude {
                 SQLUtils.executeQuery(connection, String.format(makeNullOriginal, tableName, "longitude"));
                 logger.error("!!!!!!!!!!!!!YOU NEED TO FIX LATITUDE AND LONGITUDE IN " + tableName + " TABLE");
             }
-            String alterColumn = "alter table %s alter column %s type numeric(9,6) USING %<s::numeric(9,6)";
+            
+            String alterColumn = "ALTER TABLE %s ALTER COLUMN %s type numeric(9,6) USING %<s::numeric(9,6)";
             SQLUtils.executeQuery(connection, String.format(alterColumn, tableName, "latitude"));
             SQLUtils.executeQuery(connection, String.format(alterColumn, tableName, "longitude"));
+            
+            String addData = "UPDATE %s SET %s = %s";
+            SQLUtils.executeQuery(connection, String.format(addData, tableName, "coord_lat", "latitude"));
+            SQLUtils.executeQuery(connection, String.format(addData, tableName, "coord_long", "longitude"));
+            
+            String dropColumn = "ALTER TABLE %s DROP column %s";
+            SQLUtils.executeQuery(connection, String.format(dropColumn, tableName, "latitude"));
+            SQLUtils.executeQuery(connection, String.format(dropColumn, tableName, "longitude"));
         } catch (Exception e) {
             logger.error("cannot udpdate structures", e);
             throw e;

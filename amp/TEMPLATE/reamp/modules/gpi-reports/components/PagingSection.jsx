@@ -3,10 +3,11 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as startUp from '../actions/StartUpAction';
 import * as commonListsActions from '../actions/CommonListsActions';
+import * as Constants from '../common/Constants';
 export default class PagingSection extends Component {
     constructor( props, context ) {
         super( props, context );     
-        this.state = { recordsPerPage: 150};
+        this.state = { recordsPerPage: Constants.RECORDS_PER_PAGE};
         this.goToClickedPage = this.goToClickedPage.bind( this );
         this.goToNextPage = this.goToNextPage.bind( this );
         this.goToLastPage = this.goToLastPage.bind( this );

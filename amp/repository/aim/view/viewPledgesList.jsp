@@ -77,14 +77,16 @@ function removePledge(id,used){
 
 function setStripsTable(tableId, classOdd, classEven) {
 	var tableElement = document.getElementById(tableId);
-	rows = tableElement.getElementsByTagName('tr');
-	for(var i = 0, n = rows.length; i < n; ++i) {
-		if(i%2 == 0)
-			rows[i].className = classEven;
-		else
-			rows[i].className = classOdd;
+	if (tableElement) {
+		rows = tableElement.getElementsByTagName('tr');
+		for(var i = 0, n = rows.length; i < n; ++i) {
+			if(i%2 == 0)
+				rows[i].className = classEven;
+			else
+				rows[i].className = classOdd;
+		}
+		rows = null;
 	}
-	rows = null;
 }
 function setHoveredTable(tableId, hasHeaders) {
 
@@ -249,11 +251,9 @@ function setHoveredRow(rowId) {
 
 <feature:display name="Add Pledge Button" module="Pledges">
 	<div style="text-align:center;padding:10px;">
-		<a href="/addPledge.do?reset=true">
 			<html:button styleClass="buttonx" property="submitButton" onclick="window.location.assign('/addPledge.do?reset=true')">
 	    		<digi:trn key="btn:AddPlegde">Add Pledge</digi:trn>
 			</html:button>
-		</a>
 	</div>
 </feature:display>
 	

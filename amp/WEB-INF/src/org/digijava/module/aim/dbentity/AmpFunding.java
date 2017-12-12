@@ -13,6 +13,7 @@ import java.util.Set;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
+import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
@@ -25,7 +26,6 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 public class AmpFunding implements Serializable, Versionable, Cloneable {
     //IATI-check: not ignored!
     private static final long serialVersionUID = 1L;
-    @Interchangeable(fieldTitle="AMP Funding ID")
     private Long ampFundingId;
     @Interchangeable(fieldTitle="Donor Organization ID", pickIdOnly=true, importable=true)
     private AmpOrganisation ampDonorOrgId;
@@ -69,7 +69,7 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
     private String comments;
     @Interchangeable(fieldTitle="Signature Date", importable=true)
     private Date signatureDate;
-    @Interchangeable(fieldTitle="Funding Details", importable=true)
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.FUNDING_DETAILS, importable = true)
     private Set<AmpFundingDetail> fundingDetails;
 
     
@@ -92,11 +92,13 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
     // private AmpModality modalityId;
     
     @Interchangeable(fieldTitle="Type of Assistance", fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Type of Assistence", 
-                     discriminatorOption = CategoryConstants.TYPE_OF_ASSISTENCE_KEY, importable=true, pickIdOnly=true)
+                     discriminatorOption = CategoryConstants.TYPE_OF_ASSISTENCE_KEY, importable = true,
+                     pickIdOnly = true, dependencies = {InterchangeDependencyResolver.TRANSACTION_PRESENT_KEY})
     private AmpCategoryValue typeOfAssistance;
     
     @Interchangeable(fieldTitle="Financing Instrument",  
-                     discriminatorOption = CategoryConstants.FINANCING_INSTRUMENT_KEY, importable=true, pickIdOnly=true)
+                     discriminatorOption = CategoryConstants.FINANCING_INSTRUMENT_KEY, importable = true,
+                     pickIdOnly = true, dependencies = {InterchangeDependencyResolver.TRANSACTION_PRESENT_KEY})
     private AmpCategoryValue financingInstrument;
     
     @Interchangeable(fieldTitle="Funding Status", fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Status", 

@@ -256,6 +256,10 @@
         <!-- Allowed MimeTypes -->
         <hibernate-class>org.digijava.module.aim.dbentity.AmpFileType</hibernate-class>
 
+        <hibernate-class>org.digijava.module.aim.dbentity.AmpOfflineCompatibleVersionRange</hibernate-class>
+
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpOfflineRelease</hibernate-class>
+
 	</hibernate-classes>
 	<!-- AIM classes End-->
 

@@ -38,7 +38,7 @@
 										<c:set var="disableFundingType">true</c:set>
 										</c:if>
 											<legend><span class="legend_label"><digi:trn>Funding Grouping</digi:trn></span></legend>
-											<div id="reportGroupDiv" class="inputx" style="text-align: left;">
+											<div id="reportGroupDiv" class="inputx text-align">
 										<c:set var="pledges_type_const"><%=ArConstants.PLEDGES_TYPE%></c:set>
 										<c:set var="donor_type_const"><%=ArConstants.DONOR_TYPE%></c:set>
 										<c:choose>
@@ -97,26 +97,26 @@
 										<td valign="top">
 									    	<fieldset class="main_side_cont">
 												<legend><span class="legend_label"><digi:trn>Totals Grouping</digi:trn></span></legend>
-												<div id="totalsGroupingDiv" class="inputx" style="text-align: left;">
+												<div id="totalsGroupingDiv" class="inputx text-align">
 													
 													<nested:checkbox property="hideActivities" value="true" onchange="repManager.checkSteps();createPreview();">
 														${summary}
 													</nested:checkbox>
-													<br />
+													<br />&rlm;
 													<nested:radio property="reportPeriod" value="A" onchange="createPreview();">
 														<digi:trn key="aim:AnnualReport">Annual Report</digi:trn>
 													</nested:radio>
-													<br />
+													<br />&rlm;
 													<c:if test="${param.type==null || param.type!=pledges_type_const}">
 													<nested:radio property="reportPeriod" value="Q" onchange="createPreview();">
 														<digi:trn key="aim:QuarterlyReport">Quarterly Report</digi:trn>
 													</nested:radio>
-													<br />
+													<br />&rlm;
 													<nested:radio property="reportPeriod" value="M" onchange="createPreview();">
 														<digi:trn key="aim:MonthlyReport">Monthly Report</digi:trn>
 													</nested:radio>
 													</c:if>
-													<br />
+													<br />&rlm;
 													<nested:radio property="reportPeriod" value="N" onchange="createPreview();">
 														<digi:trn>Totals Only</digi:trn>
 													</nested:radio>
@@ -133,9 +133,9 @@
 											<c:set var="spanUseFiltersVisibility">visibility: visible</c:set>
 											<c:set var="spanUseFiltersDisabled">enabled</c:set>
 										</c:if>
-										<fieldset class="main_side_cont" style="text-align: left;">
+										<fieldset class="main_side_cont text-align">
 											<legend><span class="legend_label"><digi:trn key="rep:wizard:subtitle:selectedFilters">Selected Filters</digi:trn></span></legend>
-											<div id="listFiltersDiv" style="height:85px; overflow-y:auto; overflow-x:hidden; margin-bottom: 5px; text-align: left;" class="inputx">
+											<div id="listFiltersDiv" class="inputx wizard-filters-div">
 												<c:choose>
 													<c:when test="${myForm.useFilters!=null && myForm.useFilters}">
 														<jsp:include page="showSelectedFilters.jsp" />				
@@ -152,7 +152,7 @@
 					  			<c:if test="${ (!myForm.desktopTab) || (member.teamHead==true && member.teamAccessType=='Management')}">
 									<tr>
 										<td valign="top" colspan="3">
-									    	<fieldset class="main_side_cont" style="text-align: left;">
+									    	<fieldset class="main_side_cont text-align">
 												<legend><span class="legend_label"><digi:trn>Options</digi:trn></span></legend>
 												<div id="optionsDiv" class="inputx">
 													<feature:display  name="Public View Checkbox" module="Report and Tab Options">
@@ -169,17 +169,21 @@
 			                                    	</feature:display>
 													<feature:display  name="Also show pledges checkbox" module="Report and Tab Options">
 														<c:if test="${(!myForm.desktopTab) and (param.type==null || param.type==donor_type_const)}">
-															<c:set var="alsoShowPledgesExplanation">
-																<digi:trn>Checking this box will lead to pledges being included in this report, with their commitment gap being displayed as Actual Commitments</digi:trn>
-															</c:set>
-															<nested:checkbox property="alsoShowPledges" title="${alsoShowPledgesExplanation}" onclick="javascript:if (this.checked) {selectMeasure('Actual Commitments');}; repManager.checkSteps();" />
-															<digi:trn key="aim:alsoShowPledges">Also show pledges</digi:trn> <br />
+															<div>
+																<c:set var="alsoShowPledgesExplanation">
+																	<digi:trn>Checking this box will lead to pledges being included in this report, with their commitment gap being displayed as Actual Commitments</digi:trn>
+																</c:set>
+																<nested:checkbox property="alsoShowPledges" title="${alsoShowPledgesExplanation}" onclick="javascript:if (this.checked) {selectMeasure('Actual Commitments');}; repManager.checkSteps();" />
+																<digi:trn key="aim:alsoShowPledges">Also show pledges</digi:trn> <br />
+															</div>
 														</c:if>
 			                                    	</feature:display>
 			                                    	<c:if test="${!myForm.desktopTab}">
-			                                    		<nested:checkbox property="allowEmptyFundingColumns"/>
-					                                    <digi:trn key="rep:wizard:allowEmptyFundingCols">Allow empty funding columns for year, quarter and month</digi:trn>
+														<div>
+															<nested:checkbox property="allowEmptyFundingColumns"/>
+															<digi:trn key="rep:wizard:allowEmptyFundingCols">Allow empty funding columns for year, quarter and month</digi:trn>
 			                                    		<br />
+														</div>
 			                                    	</c:if>
 													<div id="splitByFundingDiv">
 														<nested:checkbox property="splitByFunding"/>

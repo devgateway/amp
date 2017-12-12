@@ -105,6 +105,7 @@ public class AllTests_amp212
             PersistenceManager.initialize(false, null);
 //          Configuration cfg = HibernateClassLoader.getConfiguration();
             //System.out.println("AMP started up!");
+            TLSUtils.getThreadLocalInstance().setForcedSSCWorkspace(false);
             TLSUtils.getThreadLocalInstance().setForcedLangCode(SiteUtils.getDefaultSite().getDefaultLanguage().getCode());
             InternationalizedViewsRepository.i18Models.size(); // force init outside of testcases
             org.apache.struts.mock.MockHttpServletRequest mockRequest = new org.apache.struts.mock.MockHttpServletRequest(new org.apache.struts.mock.MockHttpSession());

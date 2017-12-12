@@ -28,11 +28,14 @@ import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.TextCell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.formulas.NiFormula;
+import org.digijava.kernel.ampapi.endpoints.gpi.GPIUtils;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
+import org.digijava.module.aim.dbentity.AmpGPINiDonorNotes;
 import org.digijava.module.common.util.DateTimeUtil;
 
+
 /**
- * A utility class to transform a GeneratedReport to GPI Report 6
+ * A utility class to transform a GeneratedReport to GPI Report 5a
  * 
  * @author Viorel Chihai
  *
@@ -47,14 +50,19 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
         addColumn(new GPIReportOutputColumn(ColumnConstants.DONOR_AGENCY));
         addColumn(new GPIReportOutputColumn(ColumnConstants.DONOR_GROUP));
         addColumn(new GPIReportOutputColumn(GPIReportConstants.COLUMN_YEAR));
-        addColumn(new GPIReportOutputColumn(GPIReportConstants.COLUMN_TOTAL_ACTUAL_DISBURSEMENTS));
+        addColumn(new GPIReportOutputColumn(getColumnLabel(GPIReportConstants.COLUMN_TOTAL_ACTUAL_DISBURSEMENTS),
+                GPIReportConstants.COLUMN_TOTAL_ACTUAL_DISBURSEMENTS, null));
         addColumn(new GPIReportOutputColumn(GPIReportConstants.COLUMN_CONCESSIONAL,
-                GPIReportConstants.REPORT_5A_TOOLTIP.get(GPIReportConstants.COLUMN_CONCESSIONAL)));     
-        addColumn(new GPIReportOutputColumn(MeasureConstants.ACTUAL_DISBURSEMENTS));
-        addColumn(new GPIReportOutputColumn(MeasureConstants.PLANNED_DISBURSEMENTS));
-        addColumn(new GPIReportOutputColumn(MeasureConstants.DISBURSED_AS_SCHEDULED,
+                GPIReportConstants.REPORT_5A_TOOLTIP.get(GPIReportConstants.COLUMN_CONCESSIONAL)));
+        addColumn(new GPIReportOutputColumn(getColumnLabel(MeasureConstants.ACTUAL_DISBURSEMENTS), 
+                MeasureConstants.ACTUAL_DISBURSEMENTS, null));
+        addColumn(new GPIReportOutputColumn(getColumnLabel(MeasureConstants.PLANNED_DISBURSEMENTS), 
+                MeasureConstants.PLANNED_DISBURSEMENTS, null));
+        addColumn(new GPIReportOutputColumn(getColumnLabel(MeasureConstants.DISBURSED_AS_SCHEDULED), 
+                MeasureConstants.DISBURSED_AS_SCHEDULED,
                 GPIReportConstants.REPORT_5A_TOOLTIP.get(MeasureConstants.DISBURSED_AS_SCHEDULED)));
-        addColumn(new GPIReportOutputColumn(MeasureConstants.OVER_DISBURSED,
+        addColumn(new GPIReportOutputColumn(getColumnLabel(MeasureConstants.OVER_DISBURSED),
+                MeasureConstants.OVER_DISBURSED,
                 GPIReportConstants.REPORT_5A_TOOLTIP.get(MeasureConstants.OVER_DISBURSED)));
         addColumn(new GPIReportOutputColumn(GPIReportConstants.COLUMN_REMARK));
     }
@@ -117,6 +125,7 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
      */
     @Override
     protected List<Map<GPIReportOutputColumn, String>> getReportContents(GeneratedReport generatedReport) {
+        List<AmpGPINiDonorNotes> donorNotes =  GPIUtils.getNotesByCode(GPIReportConstants.REPORT_5a);
         List<Map<GPIReportOutputColumn, String>> contents = new ArrayList<>();
         GPIReportOutputColumn yearColumn = getColumns().get(GPIReportConstants.COLUMN_YEAR);
         if (generatedReport.reportContents.getChildren() != null) {
@@ -214,7 +223,8 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
                     });
                     row.put(new GPIReportOutputColumn(GPIReportConstants.COLUMN_REMARK),
                             getRemarkEndpointURL(k, reportArea.getOwner().id));
-
+                    row.put(new GPIReportOutputColumn(GPIReportConstants.COLUMN_REMARKS_COUNT),
+                            String.valueOf(getNumberOfRemarks(k, reportArea.getOwner().id, donorNotes)));
                     row.put(new GPIReportOutputColumn(ColumnConstants.DONOR_ID),
                             String.valueOf(reportArea.getOwner().id));
 
@@ -251,6 +261,19 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 
         return String.format(remarkEndpoint, GPIReportConstants.REPORT_5a, id, donorType, min, max);
     }
+        
+    private Integer getNumberOfRemarks(String year, long id, List<AmpGPINiDonorNotes> donorNotes) {
+        String donorType = isDonorAgency ? GPIReportConstants.HIERARCHY_DONOR_AGENCY
+                : GPIReportConstants.HIERARCHY_DONOR_GROUP;
+        int y = Integer.parseInt(year);
+        Integer from = DateTimeUtil.toJulianDayNumber(LocalDate.ofYearDay(y, 1));
+        Integer to = DateTimeUtil.toJulianDayNumber(LocalDate.ofYearDay(y + 1, 1));
+        List<Long> donorIds = new ArrayList<>();
+        donorIds.add(id);
+        List<AmpGPINiDonorNotes> filteredNotes = GPIUtils.filterNotes(donorNotes, donorIds, donorType, from.longValue(),
+                to.longValue());
+        return filteredNotes.size();
+    }   
 
     private Map<String, ReportCell> getEmptyGPIRow(ReportSpecification spec) {
 
@@ -263,6 +286,8 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
         return initMap;
     }
 
+   
+    
     /**
      * build the contents of the report
      * 
@@ -354,6 +379,10 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
 
         return actual.subtract(planned).divide(actual, NiFormula.DIVISION_MC)
                 .multiply(new BigDecimal(PERCENTAGE_MULTIPLIER)).setScale(0, RoundingMode.HALF_UP);
+    }
+    
+    public String getColumnLabel(String columnName) {
+        return getColumnLabel(GPIReportConstants.INDICATOR_5A_COLUMN_LABELS, columnName);
     }
 
 }

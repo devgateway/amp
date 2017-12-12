@@ -42,6 +42,8 @@
 
 </head>
 <body>
+<div class="content-dir">
+
 <div id="header" class="hide" style="display:none"></div>
 
 <div class="processing_container"></div>
@@ -60,8 +62,10 @@
 <script src="/TEMPLATE/ampTemplate/saikuui_reports/js/jquery/jquery.min.js" type="text/javascript"></script>
 <script src="/TEMPLATE/ampTemplate/saikuui_reports/js/jquery/jquery-ui.min.js" type="text/javascript"></script>
 <script src="/TEMPLATE/ampTemplate/node_modules/amp-filter/dist/amp-filter.js" type="text/javascript"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/common/commonIE.js"></script>
 <script type="text/javascript">
 $.noConflict(true);
+setNoCacheForIExlorer();
 </script>
 <script src="/TEMPLATE/ampTemplate/node_modules/amp-settings/dist/amp-settings.js" type="text/javascript"></script>
 
@@ -131,6 +135,10 @@ $.noConflict(true);
 <script type="text/javascript" src="js/saiku/models/Repository.js"></script>
 <script type="text/javascript" src="js/saiku/models/Result.js"></script>
 <script type="text/javascript" src="js/saiku/plugins/AMPFilters/FilterUtils.js"></script>
+<script type="text/javascript" src="js/saiku/plugins/AMPDirection/plugin.js"></script>
+<script type="text/javascript">
+    AMPDirection.checkRtlDirection()
+</script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/common/lib/object_hash.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/common/CommonFilterUtils.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/common/TranslationManager.js"></script>
@@ -190,8 +198,8 @@ $.noConflict(true);
                 </div>
                 <div id="query_processing" class="query_processing" style="display:none;"><span class="processing_image">&nbsp;&nbsp;</span> <span class="i18n">Running query...</span>  [&nbsp;<a class="cancel i18n" href="#cancel">Cancel</a>&nbsp;]</div>
 
-                <div class="workspace_results_info" align="right" />
-                <div class="workspace_results">
+                <div class="workspace_results_info content-direction" align="right" />
+                <div class="workspace_results content-direction">
 
                 </div>
             </div>
@@ -233,9 +241,11 @@ $.noConflict(true);
             <li><a href="#export_amp_csv"
                 class="i18n export_csv button disabled_toolbar sprite"
                 title="Export CSV"></a></li>
+            <!--
             <li><a href="#export_amp_pdf"
                 class="i18n export_pdf button disabled_toolbar sprite"
                 title="Export PDF"></a></li>
+             -->
 			<li><a href="#export_amp_xml"
                 class="i18n export_xml button disabled_toolbar sprite"
                 title="Export XML"></a></li>
@@ -358,5 +368,6 @@ $.noConflict(true);
             </div>
         </div>
     </div>
+</div>
 </body>
 </html>

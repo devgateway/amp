@@ -50,6 +50,9 @@
 	}
 %>
 <link href="/TEMPLATE/ampTemplate/css_2/amp.css" rel="stylesheet" type="text/css"></link>
+<% if(org.digijava.kernel.util.SiteUtils.isEffectiveLangRTL() == true) {%>
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css_2/amp-rtl.css">
+<% } %>
 <style>
 html {background:none;}
 body {background:none;}
@@ -68,7 +71,8 @@ body {background:none;}
 </style>
 <digi:instance property="aimEditActivityForm" />
 <c:if test="${aimEditActivityForm!=null}">
-<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="650" vAlign="top" align="left" border="0">
+<div class="content-dir">
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="1000" vAlign="top" align="left" border="0">
 	<tr>
 		<td align=left valign="top">
 			<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top" align="left" border="0">
@@ -98,8 +102,12 @@ body {background:none;}
                         <td width="100%">
 							<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top" align="left">
                             <tr>
-                              <td align="center" vAlign="top">
-								<table width="98%" cellspacing="0" class="prnt_tbl" cellpadding=4 style="border-collapse: collapse; border-color:#CCCCCC;" border="1">
+                              <div align="center" vAlign="top">
+								<table width="98%" cellspacing="0" class="prnt_tbl fixed-layout" cellpadding=4 style="border-collapse: collapse; border-color:#CCCCCC;" border="1" >
+
+								    <!-- columns widths -->
+								    <tr><td width="30%"></td><td width="70%"></td></tr>
+
 									<!-- here starts identification -->
 									<tr bgcolor="#f4f4f2">
 										<td  align="center" colspan="2" bgcolor=#C7D4DB>
@@ -109,7 +117,7 @@ body {background:none;}
 								<feature:display name="Identification" module="Project ID and Planning">   
 									<field:display name="AMP ID" feature="Identification">
 									<tr>
-										<td class="field_name" >
+										<td class="field_name">
 											<b>
 												<digi:trn key="aim:ampId">AMP ID</digi:trn>		
 									  		</b>
@@ -126,7 +134,7 @@ body {background:none;}
 										
                                     <module:display name="/Activity Form/Identification/Activity Status" parentModule="/Activity Form/Identification">
                                         <tr>
-                                              <td class="field_name" >
+                                              <td class="field_name">
                                                   <b><digi:trn key="aim:status">Status</digi:trn></b>
                                               </td>
                                               <td bgcolor="#FFFFFF">
@@ -863,7 +871,7 @@ body {background:none;}
 													<td width="32%"><digi:trn key="aim:lineMinRank">
 													Line Ministry Rank</digi:trn></td>
 													<td width="1">:</td>
-													<td align="left">
+													<td class="preview-align-inverse">
 														<c:if test="${aimEditActivityForm.planning.lineMinRank != -1}">
 															<span class="word_break">${aimEditActivityForm.planning.lineMinRank}</span>
 														</c:if>
@@ -877,7 +885,7 @@ body {background:none;}
 														<digi:trn key="aim:proposedApprovalDate">Proposed Approval Date</digi:trn>
 													</td>
 													<td width="1">:</td>
-													<td align="left">
+													<td class="preview-align-inverse">
 														${aimEditActivityForm.planning.originalAppDate}
 													</td>
 												</tr>
@@ -887,7 +895,7 @@ body {background:none;}
 												<tr>
 													<td width="32%"><digi:trn key="aim:actualapprovaldate">Actual Approval Date</digi:trn></td>
 													<td width="1">:</td>
-													<td align="left">
+													<td class="preview-align-inverse">
 														${aimEditActivityForm.planning.revisedAppDate}
 													</td>
 												</tr>
@@ -899,7 +907,7 @@ body {background:none;}
 														<digi:trn>Proposed Start Date</digi:trn>
 													</td>
 													<td width="1">:</td>
-													<td align="left">
+													<td class="preview-align-inverse">
 														${aimEditActivityForm.planning.originalStartDate}
 													</td>
 												</tr>
@@ -909,7 +917,7 @@ body {background:none;}
 												<tr>
 													<td width="32%"><digi:trn>Actual Start Date</digi:trn></td>
 													<td width="1">:</td>
-													<td align="left">
+													<td class="preview-align-inverse">
 														${aimEditActivityForm.planning.revisedStartDate}
 													</td>
 												</tr>
@@ -919,7 +927,7 @@ body {background:none;}
 												<tr>
 													<td width="32%"><digi:trn>Original Completion Date</digi:trn></td>
 													<td width="1">:</td>
-													<td align="left">
+													<td class="preview-align-inverse">
 														${aimEditActivityForm.planning.originalCompDate}
 													</td>
 												</tr>
@@ -931,7 +939,7 @@ body {background:none;}
 													<td width="32%"><digi:trn key="aim:proposedCompletionDate">
 													Proposed Completion Date</digi:trn></td>
 													<td width="1">:</td>
-													<td align="left">
+													<td class="preview-align-inverse">
 														${aimEditActivityForm.planning.proposedCompDate}
 													</td>
 												</tr>
@@ -942,7 +950,7 @@ body {background:none;}
 													<td width="32%">
 													<digi:trn>Actual Completion Date</digi:trn></td>
 													<td width="1">:</td>
-													<td align="left">
+													<td class="preview-align-inverse">
 														<c:out value="${aimEditActivityForm.planning.currentCompDate}"/>
 													</td>
 												</tr>
@@ -953,7 +961,7 @@ body {background:none;}
 													<td width="32%">
 													<digi:trn>Project Implementation Delay</digi:trn></td>
 													<td width="1">:</td>
-													<td align="left">
+													<td class="preview-align-inverse">
 														<c:out value="${aimEditActivityForm.planning.projectImplementationDelay}"/>
 													</td>
 												</tr>
@@ -1116,18 +1124,18 @@ body {background:none;}
 												<table width="100%" cellSpacing="2" cellPadding="1">
 												<c:forEach var="selectedLocs" items="${aimEditActivityForm.location.selectedLocs}">
 													<tr>
-													<td>
+													<td width="85%">
 														<c:forEach var="ancestorLoc" items="${selectedLocs.ancestorLocationNames}">
 														<span class="word_break bold">
 															[${ancestorLoc}]
 														</span>
 	                                                    </c:forEach>
 													</td>
-													<td align="right">
+													<td width="15%">
 														<!-- <c:out value="${locations.percent}"/>% -->
 														<field:display name="Regional Percentage" feature="Location">
 														<c:if test="${selectedLocs.showPercent}">
-															<c:out value="${selectedLocs.percent}"/>%
+															<c:out value="${selectedLocs.percent}"/> %
 														</c:if>
 														</field:display>
 													</td>
@@ -1196,7 +1204,8 @@ body {background:none;}
 																<span class="word_break bold">${nationalPlanObjectivePrograms.hierarchyNames}</span>
 															</td>
 															<td width=15% align=right valign=top>
-																<span class="word_break bold">${nationalPlanObjectivePrograms.programPercentage}%</span>
+																<span class="word_break
+																bold">${nationalPlanObjectivePrograms.programPercentage} %</span>
 															</td>
 														</tr>
 													</table>
@@ -1217,7 +1226,8 @@ body {background:none;}
 <TD bgcolor="#ffffff">
 											<c:forEach var="program" items="${aimEditActivityForm.programs.nationalPlanObjectivePrograms}">
 											<span class="word_break">
-                                                 <c:out value="${program.hierarchyNames}" />&nbsp; <c:out value="${program.programPercentage}"/>%<br/>
+                                                 <c:out value="${program.hierarchyNames}" />&nbsp; <c:out
+													value="${program.programPercentage}"/> %<br/>
                                             </span>
                                              </c:forEach>
                                       </TD>
@@ -1236,7 +1246,8 @@ body {background:none;}
 
 						<td bgcolor="#ffffff">
 								<c:forEach var="program" items="${aimEditActivityForm.programs.primaryPrograms}">
-                                	<c:out value="${program.hierarchyNames}" />&nbsp; <c:out value="${program.programPercentage}"/>%s<br/>
+                                	<c:out value="${program.hierarchyNames}" />&nbsp; <c:out
+										value="${program.programPercentage}"/> %<br/>
                                 </c:forEach>
                    		</td>
 						</tr>
@@ -1252,7 +1263,7 @@ body {background:none;}
 											<td bgcolor="#ffffff">
                                                       <c:forEach var="program" items="${aimEditActivityForm.programs.secondaryPrograms}">
 	                                                      <span class="word_break"><c:out value="${program.hierarchyNames}" /></span>&nbsp; 
-	                                                      <c:out value="${program.programPercentage}"/>%<br/>
+	                                                      <c:out value="${program.programPercentage}"/> %<br/>
                                                       </c:forEach>
                                         		</td>
 											</tr>
@@ -1269,7 +1280,8 @@ body {background:none;}
                                                       <c:forEach var="program" items="${aimEditActivityForm.programs.tertiaryPrograms}">
 	                                                      <span class="word_break">
 	                                                      <c:out value="${program.hierarchyNames}" />
-	                                                      </span>&nbsp; <c:out value="${program.programPercentage}"/>%<br/>
+	                                                      </span>&nbsp; <c:out value="${program.programPercentage}"/>
+														  %<br/>
                                                       </c:forEach>
                                         		</td>
 											</tr>
@@ -1327,7 +1339,7 @@ body {background:none;}
                                                                         <module:display name="/Activity Form/Sectors"
                                                                                         parentModule="/Activity Form">
                                                                             <tr>
-                                                                                <td>
+                                                                                <td width="85%">
                                                                                     <c:if test="${!empty sectors.sectorName}">
                                                                                         <span class="word_break">
                                                                                             <c:out value="${sectors.sectorName}"/>
@@ -1345,6 +1357,8 @@ body {background:none;}
                                                                                                 value="${sectors.subsectorLevel2Name}"/>]
                                                                                         </span>
                                                                                     </c:if>
+																				</td>
+																				<td width="15%">
                                                                                     <c:if test="${sectors.sectorPercentage!=''}">
                                                                                         <c:if test="${sectors.sectorPercentage!='0'}">
                                                                                             (<c:out
@@ -1380,7 +1394,7 @@ body {background:none;}
 														</span>
 														</td>
 														<td align="right">
-															${compo.sectorPercentage}%
+															${compo.sectorPercentage} %
 														</td>
 													</tr>
 													</c:forEach>
@@ -1415,13 +1429,13 @@ body {background:none;}
                                                                             <logic:notEmpty name="funding" property="orgFundingId">
                                                                             	<field:display name="Funding Organization Id" feature="Funding Information">
                                                                               		<tr>
-                                                                                		<td align="left" width="339">
+                                                                                		<td width="339">
                                                                                   			<a title="<digi:trn key="aim:FundOrgId">This ID is specific to the financial operation. This item may be useful when one project has two or more different financial instruments. If the project has a unique financial operation, the ID can be the same as the project ID</digi:trn>">
                                                                                   				<digi:trn key="aim:fundingOrgId">Funding Organization Id</digi:trn>
                                                                                     		</a>
                                                                                     	</td>
                                                                                 		<td width="10">:</td>
-                                                                                		<td width="454" align="left">
+                                                                                		<td width="454">
                                                                                 			<bean:write name="funding"	property="orgFundingId"/>
                                                                                 		</td>
                                                                               		</tr>
@@ -1429,14 +1443,14 @@ body {background:none;}
                                                                              </logic:notEmpty>
                                                                              <field:display name="Funding Organization Name" feature="Funding Information">
                                                                               <tr>
-                                                                                <td align="left" width="339">
+                                                                                <td width="339">
 
                                                                                   <a title="<digi:trn key="aim:fundOrgName">Funding Organization Name</digi:trn>">
                                                                                	  <digi:trn key="aim:fundOrgName">Funding Organization Name</digi:trn>
                                                                                   </a>
                                                                                   </td>
                                                                                 <td width="10">:</td>
-                                                                                <td align="left" width="454">
+                                                                                <td width="454">
                                                                                 <span class="word_break">
                                                                                   ${fundingOrganization.orgName}
                                                                                   </span>
@@ -1445,13 +1459,13 @@ body {background:none;}
                                                                              </field:display>
 																		<logic:present name="funding" property="sourceRole">
 																			<tr>
-																				<td align="left" width="150">
+																				<td width="150">
 																					<a title='<digi:trn jsFriendly="true" key="aim:orgRole">Organization Role</digi:trn>'>
 																						<digi:trn key="aim:OrgRole">Organization Role</digi:trn>
 																					</a>
 																				</td>
 																				<td width="1">:</td>
-																				<td align="left">
+																				<td>
 																					<b><digi:trn><bean:write name="funding" property="sourceRole"/></digi:trn></b>
 																				</td>
 																			</tr>
@@ -1460,13 +1474,13 @@ body {background:none;}
 																		<field:display name="Type Of Assistance" feature="Funding Information">
 																			<logic:notEmpty name="funding" property="typeOfAssistance">
 																				<tr>
-                                                                                	<td align="left" width="339">
+                                                                                	<td width="339">
                                                                                   		<a title="<digi:trn key="aim:AssitanceType">Specify whether the project was financed through a grant, a loan or in kind</digi:trn>">
                                                                                   			<digi:trn key="aim:typeOfAssist">Type of Assistance </digi:trn>
 																				  		</a>
 																					</td>
                                                                                 	<td width="10">:</td>
-                                                                                	<td align="left">
+                                                                                	<td>
                                                                                 		<digi:trn><bean:write name="funding" property="typeOfAssistance.value"/></digi:trn>
 																					</td>
                                                                               	</tr>
@@ -1475,65 +1489,65 @@ body {background:none;}
 																		<field:display name="Financing Instrument" feature="Funding Information">
 																			<logic:notEmpty name="funding" property="financingInstrument">
 																				<tr>
-                                                                                	<td align="left" width="339">
+                                                                                	<td width="339">
                                                                                   		<a title="<digi:trn key="aim:financialInst">Financing Instrument</digi:trn>">
                                                                                	  		<digi:trn key="aim:financialInst">Financing Instrument</digi:trn>
 																				  		</a>
 																				  	</td>
                                                                                 	<td width="10">:</td>
-                                                                                	<td align="left">
+                                                                                	<td>
                                                                                 		<digi:trn><bean:write name="funding" property="financingInstrument.value"/></digi:trn>
                                                                                 	</td>
                                                                               	</tr>
                                                                               </logic:notEmpty>
                                                                             <logic:notEmpty name="funding" property="ratificationDate">
 																<tr>
-																	<td align="left" width="150">
+																	<td width="150">
 																		<a title='<digi:trn jsFriendly="true">Ratification Date</digi:trn>'>
 																			<digi:trn>Ratification Date</digi:trn>
 																		</a>
 																	</td>
 																	<td width="1">:</td>
-																	<td align="left">
+																	<td>
 																			<b><bean:write name="funding" property="ratificationDate"/></b>
 																	</td>
 																</tr>
 																</logic:notEmpty>
 																<logic:notEmpty name="funding" property="maturity">
 																<tr>
-																	<td align="left" width="150">
+																	<td width="150">
 																		<a title='<digi:trn jsFriendly="true">Maturity</digi:trn>'>
 																			<digi:trn>Maturity</digi:trn>
 																		</a>
 																	</td>
 																	<td width="1">:</td>
-																	<td align="left">
+																	<td>
 																			<b><bean:write name="funding" property="maturity"/></b>
 																	</td>
 																</tr>
 																</logic:notEmpty>
 																<logic:notEmpty name="funding" property="interestRate">
 																<tr>
-																	<td align="left" width="150">
+																	<td width="150">
 																		<a title='<digi:trn jsFriendly="true">Interest Rate</digi:trn>'>
 																			<digi:trn>Interest Rate</digi:trn>
 																		</a>
 																	</td>
 																	<td width="1">:</td>
-																	<td align="left">
+																	<td>
 																			<b><bean:write name="funding" property="interestRate"/></b>
 																	</td>
 																</tr>
 																</logic:notEmpty>
 																<logic:notEmpty name="funding" property="gracePeriod">
 																<tr>
-																	<td align="left" width="150">
+																	<td width="150">
 																		<a title='<digi:trn jsFriendly="true">Grace Period</digi:trn>'>
 																			<digi:trn>Grace Period</digi:trn>
 																		</a>
 																	</td>
 																	<td width="1">:</td>
-																	<td align="left">
+																	<td>
 																			<b><bean:write name="funding" property="gracePeriod"/></b>
 																	</td>
 																</tr>
@@ -1541,13 +1555,13 @@ body {background:none;}
                                                                            <field:display name="Credit/Donation" feature="Planning">
 																				<logic:notEmpty name="funding" property="financingInstrument">
 																					<tr>
-                                                                                		<td align="left" width="339">
+                                                                                		<td width="339">
                                                                                   			<a title="<digi:trn key="aim:financialInst">Financing Instrument</digi:trn>">
                                                                                  	 			<digi:trn key="aim:credit_donation">Credit/Donation</digi:trn>
 																				  			</a>
 																				  		</td>
                                                                                 		<td width="10">:</td>
-                                                                                		<td align="left">
+                                                                                		<td>
                                                                                        		<bean:write name="funding"	property="financingInstrument.value"/>
                                                                                 		</td>
                                                                               		</tr>
@@ -1563,7 +1577,7 @@ body {background:none;}
 																				  </a>
 																				 </td>
                                                                                 <td width="10">:</td>
-                                                                                <td align="left">
+                                                                                <td>
                                                                                   <logic:notEmpty name="funding" property="fundingStatus">
                                                                                     <digi:trn>
                                                                                     	<bean:write name="funding" property="fundingStatus.value"/>
@@ -1575,11 +1589,11 @@ body {background:none;}
 																			<field:display name="Mode of Payment" feature="Funding Information">
 																				<logic:notEmpty name="funding" property="modeOfPayment">
                                                                               		<tr>
-                                                                                		<td align="left" width="339">
+                                                                                		<td width="339">
                                                                                   			<a><digi:trn>Mode of Payment</digi:trn></a>
 																				 		</td>
                                                                                 		<td width="10">:</td>
-                                                                                		<td align="left">
+                                                                                		<td>
                                                                                     		<digi:trn><bean:write name="funding" property="modeOfPayment.value"/></digi:trn>
 																						</td>
 																					</tr>
@@ -1588,11 +1602,11 @@ body {background:none;}
 																			<field:display name="Concessionality Level" feature="Funding Information">
 																				<logic:notEmpty name="funding" property="concessionalityLevel">
                                                                               		<tr>
-                                                                                		<td align="left" width="339">
+                                                                                		<td width="339">
                                                                                   			<a><digi:trn>Concessionality Level</digi:trn></a>
 																				 		</td>
                                                                                 		<td width="10">:</td>
-                                                                                		<td align="left">
+                                                                                		<td>
                                                                                     		<digi:trn><bean:write name="funding" property="concessionalityLevel.value"/></digi:trn>
 																						</td>
 																					</tr>
@@ -1600,33 +1614,33 @@ body {background:none;}
 																			</field:display>
 																				<logic:notEmpty name="funding" property="fundingClassificationDate">
                                                                               		<tr>
-                                                                                		<td align="left" width="339">
+                                                                                		<td width="339">
                                                                                   			<a><digi:trn>Funding Classification Date</digi:trn></a>
 																				 		</td>
                                                                                 		<td width="10">:</td>
-                                                                                		<td align="left">
+                                                                                		<td>
                                                                                     		<digi:trn><bean:write name="funding" property="fundingClassificationDate"/></digi:trn>
 																						</td>
 																					</tr>
                                                                                   </logic:notEmpty>
 	            																	<logic:notEmpty name="funding" property="effectiveFundingDate">
 																						<tr>
-																							<td align="left" width="339">
+																							<td width="339">
 																								<a><digi:trn>Effective Funding Date</digi:trn></a>
 																							</td>
 																							<td width="10">:</td>
-																							<td align="left">
+																							<td>
 																								<bean:write name="funding" property="effectiveFundingDate"/>
 																							</td>
 																						</tr>
 																					</logic:notEmpty>
 																					<logic:notEmpty name="funding" property="fundingClosingDate">
 																						<tr>
-																							<td align="left" width="339">
+																							<td width="339">
 																								<a><digi:trn>Funding Closing Date</digi:trn></a>
 																							</td>
 																							<td width="10">:</td>
-																							<td align="left">
+																							<td>
 																								<bean:write name="funding" property="fundingClosingDate"/>
 																							</td>
 																						</tr>
@@ -1639,7 +1653,7 @@ body {background:none;}
                                                                                   			<a><digi:trn>Conditions</digi:trn></a>
 																				 		</td>
                                                                                 		<td width="10">:</td>
-                                                                                		<td align="left">
+                                                                                		<td>
                                                                                 		<span class="word_break">
                                                                                 			<digi:trn><bean:write name="funding" property="conditions"/></digi:trn>
                                                                                 		</span>
@@ -1652,22 +1666,22 @@ body {background:none;}
 																					parentModule="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification">
 																				<logic:notEmpty name="funding" property="title">
                                                                               		<tr>
-                                                                                		<td align="left" width="339">
+                                                                                		<td width="339">
                                                                                   			<a><digi:trn>Agreement Title</digi:trn></a>
 																				 		</td>
                                                                                 		<td width="10">:</td>
-                                                                                		<td align="left">
+                                                                                		<td>
                                                                                 		<span class="word_break">
                                                                                 			<digi:trn><bean:write name="funding" property="title"/></digi:trn>
                                                                                 		</span>
                                                                                   		</td>
                                                                               		</tr>
 <tr>
-                                                                                		<td align="left" width="339">
+                                                                                		<td width="339">
                                                                                   			<a><digi:trn>Agreement Code</digi:trn></a>
 																				 		</td>
                                                                                 		<td width="10">:</td>
-                                                                                		<td align="left">
+                                                                                		<td>
                                                                                 		<span class="word_break">
                                                                                 			<digi:trn><bean:write name="funding" property="code"/></digi:trn>
 																						</span>
@@ -1736,8 +1750,8 @@ body {background:none;}
 	                            	<td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase;">
 	                            		<digi:trn key='aim:totalplannedcommittment'> TOTAL PLANNED COMMITMENTS</digi:trn>:
 	                            	</td>
-	                            	<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000; font-weight: bold;">
-										<bean:write name="aimEditActivityForm" property="funding.totalPlannedCommitments" />
+	                            	<td nowrap="nowrap" bgcolor="#eeeeee" style="border-top: 1px solid #000000; font-weight: bold;">
+										<span dir="ltr"><bean:write name="aimEditActivityForm" property="funding.totalPlannedCommitments" /></span>
 										<bean:write name="aimEditActivityForm" property="currCode" />
 		                            	 &nbsp;
 	                        		</td>
@@ -1749,8 +1763,8 @@ body {background:none;}
                             	<td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase;">
                             		<digi:trn key='aim:totalmtefprojections'> TOTAL MTEF PROJECTIONS</digi:trn>:
                             	</td>
-                            	<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000; font-weight: bold;">
-                            		<b><bean:write name="aimEditActivityForm" property="funding.totalMtefProjections" />
+                            	<td nowrap="nowrap" bgcolor="#eeeeee" style="border-top: 1px solid #000000; font-weight: bold;">
+                            		<b><span dir="ltr"><bean:write name="aimEditActivityForm" property="funding.totalMtefProjections" /></span>
 									<bean:write name="aimEditActivityForm" property="currCode" /></b>
 	                            	 &nbsp;
                         		</td>
@@ -1761,8 +1775,8 @@ body {background:none;}
                             		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase">
                             			<digi:trn key='aim:totalactualcommittment'> TOTAL ACTUAL COMMITMENTS </digi:trn>:
                             		</td>
-                            		<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000; font-weight: bold;">
-	                                	<bean:write name="aimEditActivityForm" property="funding.totalCommitments" />
+                            		<td nowrap="nowrap" bgcolor="#eeeeee" style="border-top: 1px solid #000000; font-weight: bold;">
+	                                	<span dir="ltr"><bean:write name="aimEditActivityForm" property="funding.totalCommitments" /></span>
 	                                	<bean:write name="aimEditActivityForm" property="currCode" />
 	                              		&nbsp;
 	                         		</td>
@@ -1774,8 +1788,8 @@ body {background:none;}
 	                            	<td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase">
 										<digi:trn key='aim:totalpipelinecommittment'> TOTAL PIPELINE COMMITMENTS </digi:trn>:
 									</td>
-	                            	<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000; font-weight: bold;">
-										<bean:write name="aimEditActivityForm" property="funding.totalPipelineCommitments" />
+	                            	<td nowrap="nowrap" bgcolor="#eeeeee" style="border-top: 1px solid #000000; font-weight: bold;">
+										<span dir="ltr"><bean:write name="aimEditActivityForm" property="funding.totalPipelineCommitments" /></span>
 										<bean:write name="aimEditActivityForm" property="currCode" />
 										&nbsp;
 									</td>
@@ -1786,8 +1800,8 @@ body {background:none;}
 							<logic:notEmpty name="aimEditActivityForm" property="funding.totalPlannedDisbursements">
                        			<tr>
                             		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn key='aim:totalplanneddisbursement'>TOTAL PLANNED DISBURSEMENT</digi:trn>:</td>
-                            		<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000; font-weight: bold;">
-		                                <bean:write name="aimEditActivityForm" property="funding.totalPlannedDisbursements" />
+                            		<td nowrap="nowrap" bgcolor="#eeeeee" style="border-top: 1px solid #000000; font-weight: bold;">
+		                                <span dir="ltr"><bean:write name="aimEditActivityForm" property="funding.totalPlannedDisbursements" /></span>
 		                                <bean:write name="aimEditActivityForm" property="currCode" />
 		                          		&nbsp;
                             		</td>
@@ -1796,8 +1810,8 @@ body {background:none;}
                         	<logic:notEmpty name="aimEditActivityForm" property="funding.totalDisbursements">
                         		<tr>
                             		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000"><digi:trn key='aim:totalActualdisbursement'>TOTAL ACTUAL DISBURSEMENT </digi:trn>:</td>
-                            		<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000; font-weight: bold;">
-	                                	<bean:write name="aimEditActivityForm" property="funding.totalDisbursements" />
+                            		<td nowrap="nowrap" bgcolor="#eeeeee" style="border-top: 1px solid #000000; font-weight: bold;">
+	                                	<span dir="ltr"><bean:write name="aimEditActivityForm" property="funding.totalDisbursements" /></span>
 	                                	<bean:write name="aimEditActivityForm" property="currCode" />
 		                          		&nbsp;
                            			</td>
@@ -1808,8 +1822,8 @@ body {background:none;}
 							<logic:notEmpty name="aimEditActivityForm" property="funding.totalPlannedExpenditures">
                         		<tr>
                             		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn key="aim:totalActualExpenditures">TOTAL PLANNED EXPENDITURES</digi:trn>:</td>
-                            		<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000; font-weight: bold;">
-		                                <bean:write name="aimEditActivityForm" property="funding.totalPlannedExpenditures" />
+                            		<td nowrap="nowrap" bgcolor="#eeeeee" style="border-top: 1px solid #000000; font-weight: bold;">
+		                                <span dir="ltr"><bean:write name="aimEditActivityForm" property="funding.totalPlannedExpenditures" /></span>
 		                                <bean:write name="aimEditActivityForm" property="currCode" />
 			                      		&nbsp;
                             		</td>
@@ -1818,8 +1832,8 @@ body {background:none;}
                         	<logic:notEmpty name="aimEditActivityForm" property="funding.totalExpenditures">
                         		<tr>
                             		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn key="aim:totalplannedExpenditures">TOTAL ACTUAL EXPENDITURES</digi:trn>:</td>
-                            		<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000; font-weight: bold;">
-	                                	<bean:write name="aimEditActivityForm" property="funding.totalExpenditures" />
+                            		<td nowrap="nowrap" bgcolor="#eeeeee" style="border-top: 1px solid #000000; font-weight: bold;">
+	                                	<span dir="ltr"><bean:write name="aimEditActivityForm" property="funding.totalExpenditures" /></span>
 	                                	<bean:write name="aimEditActivityForm" property="currCode" />
 		                          		&nbsp;
 		                    		</td>
@@ -1837,12 +1851,11 @@ body {background:none;}
                                 international transfer of financial resources, or of goods or
                                 services valued at the cost to the donor</digi:trn>'>TOTAL ACTUAL DISBURSMENT ORDERS </a></digi:trn>:
                         </td>
-                          <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
+                          <td nowrap="nowrap" bgcolor="#eeeeee"
                                 style="border-top: 1px solid #000000; text-transform: uppercase;">
                                  <c:if test="${not empty aimEditActivityForm.funding.totalActualDisbursementsOrders}">
-	                                <bean:write
-	                                name="aimEditActivityForm" property="funding.totalActualDisbursementsOrders" />	<bean:write
-	                                name="aimEditActivityForm" property="currCode" />
+	                                <span dir="ltr"><bean:write name="aimEditActivityForm" property="funding.totalActualDisbursementsOrders" /></span>	
+	                                <bean:write name="aimEditActivityForm" property="currCode" />
 	                             </c:if>&nbsp;
 	                       </td>
                       	</tr>
@@ -1852,8 +1865,8 @@ body {background:none;}
 							<logic:notEmpty name="aimEditActivityForm" property="funding.totalPlannedArrears">
                         		<tr>
                             		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn key="aim:totalActualArrears">TOTAL PLANNED ARREARS</digi:trn>:</td>
-                            		<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">
-		                                <bean:write name="aimEditActivityForm" property="funding.totalPlannedArrears" />
+                            		<td nowrap="nowrap" bgcolor="#eeeeee" style="border-top: 1px solid #000000">
+		                                <span dir="ltr"><bean:write name="aimEditActivityForm" property="funding.totalPlannedArrears" /></span>
 		                                <span class="word_break bold">
 		                                	<bean:write name="aimEditActivityForm" property="currName" />
 		                                </span>
@@ -1864,8 +1877,8 @@ body {background:none;}
                         	<logic:notEmpty name="aimEditActivityForm" property="funding.totalArrears">
                         		<tr>
                             		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn key="aim:totalplannedArrears">TOTAL ACTUAL ARREARS</digi:trn>:</td>
-                            		<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">
-	                                	<bean:write name="aimEditActivityForm" property="funding.totalArrears" />
+                            		<td nowrap="nowrap" bgcolor="#eeeeee" style="border-top: 1px solid #000000">
+	                                	<span dir="ltr"><bean:write name="aimEditActivityForm" property="funding.totalArrears" /></span>
 	                                	<span class="word_break bold">
 	                                		<bean:write name="aimEditActivityForm" property="currName" />
 	                                	</span>
@@ -1879,8 +1892,8 @@ body {background:none;}
                         	<logic:notEmpty name="aimEditActivityForm" property="funding.unDisbursementsBalance">
                       			<tr>
                             		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn key="aim:undisbursedBalance">UNDISBURSED BALANCE</digi:trn>:</td>
-                            		<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000; font-weight: bold;">
-		                                <bean:write name="aimEditActivityForm" property="funding.unDisbursementsBalance" />
+                            		<td nowrap="nowrap" bgcolor="#eeeeee" style="border-top: 1px solid #000000; font-weight: bold;">
+		                                <span dir="ltr"><bean:write name="aimEditActivityForm" property="funding.unDisbursementsBalance" /></span>
 		                                <bean:write name="aimEditActivityForm" property="currCode" />
 		                         		&nbsp;
 		                  			</td>
@@ -1891,7 +1904,7 @@ body {background:none;}
                         <logic:notEmpty name="aimEditActivityForm" property="funding.deliveryRate">
 							<tr>
                             	<td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn>Delivery Rate</digi:trn>: </td>
-								<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000; font-weight: bold;">
+								<td nowrap="nowrap" bgcolor="#eeeeee" style="border-top: 1px solid #000000; font-weight: bold;">
                                 	<b>${aimEditActivityForm.funding.deliveryRate}</b>
                                 	&nbsp;
                             	</td>
@@ -1912,7 +1925,7 @@ body {background:none;}
                                     <module:display name="/Activity Form/Aid Effectivenes" parentModule="/Activity Form">
                                         <logic:notEmpty name="aimEditActivityForm" property="selectedEffectivenessIndicatorOptions">
                                             <tr>
-                                                <td align="right" vAlign="top"><b><digi:trn>Aid Effectivenes</digi:trn></b></td>
+                                                <td vAlign="top"><b><digi:trn>Aid Effectivenes</digi:trn></b></td>
                                                 <td>
                                                     <logic:iterate id="option" name="aimEditActivityForm" property="selectedEffectivenessIndicatorOptions">
                                                         <module:display name="/Activity Form/Aid Effectivenes/${option.indicator.ampIndicatorName}"
@@ -1959,7 +1972,7 @@ body {background:none;}
 																										<c:out value="${fd.adjustmentTypeName.value}"/>
 																								</digi:trn>
 																																															</td>
-																							<td align="right" width="100" bgcolor="#ffffff">
+																							<td width="100" bgcolor="#ffffff">
 
 																								<c:out value="${fd.transactionAmount}"/>																							</td>
 																							<td bgcolor="#ffffff">
@@ -1991,7 +2004,7 @@ body {background:none;}
 																									<digi:trn key="aim:disbursements:${fd.adjustmentTypeNameTrimmed}">
 																										<c:out value="${fd.adjustmentTypeName.value}"/>
 																								</digi:trn>																						</td>
-																							<td align="right" width="100" bgcolor="#ffffff">
+																							<td width="100" bgcolor="#ffffff">
 
 																								<c:out value="${fd.transactionAmount}"/>																							</td>
 																							<td bgcolor="#ffffff">
@@ -2023,7 +2036,7 @@ body {background:none;}
 																										<c:out value="${fd.adjustmentTypeName.value}"/>
 																								</digi:trn>
 																							</td>
-																							<td align="right" width="100" bgcolor="#ffffff">
+																							<td width="100" bgcolor="#ffffff">
 
 																								<c:out value="${fd.transactionAmount}"/>																							</td>
 																							<td bgcolor="#ffffff">
@@ -2119,7 +2132,7 @@ body {background:none;}
 																									<module:display
 																											name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Amount"
 																											parentModule="/Activity Form/Components/Component/Components Commitments/Commitment Table">
-																										<td align="right"
+																										<td
 																											width="100"
 																											bgcolor="#ffffff">
 																											<c:out value="${fd.transactionAmount}"/>
@@ -2239,7 +2252,7 @@ body {background:none;}
 																									<module:display
 																											name="/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Amount"
 																											parentModule="/Activity Form/Components/Component/Components Disbursements/Disbursement Table">
-																										<td align="right"
+																										<td
 																											width="100"
 																											bgcolor="#ffffff">
 																											<c:out value="${fd.transactionAmount}"/></td>
@@ -2355,7 +2368,7 @@ body {background:none;}
 																									<module:display
 																											name="/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Amount"
 																											parentModule="/Activity Form/Components/Component/Components Expenditures/Expenditure Table">
-																										<td align="right">
+																										<td>
 
 																											<c:out value="${fd.transactionAmount}"/></td>
 																									</module:display>
@@ -2501,7 +2514,7 @@ body {background:none;}
 																							<td bgcolor="#ffffff">
 																								<digi:trn key="aim:preview_plannedcommitments_sum">Planned Commitments Sum</digi:trn>
 																							</td>
-																							<td align="right" width="100" bgcolor="#ffffff">
+																							<td width="100" bgcolor="#ffffff">
 																								<fmt:formatNumber type="number" pattern="0.00" value="${financeByYearInfoMap['MontoProgramado']}" />
 																							</td>
 																						</tr>
@@ -2509,7 +2522,7 @@ body {background:none;}
 																							<td bgcolor="#ffffff">
 																								<digi:trn key="aim:preview_actualcommitments_sum">Actual Commitments Sum</digi:trn>
 																							</td>
-																							<td align="right" width="100" bgcolor="#ffffff">
+																							<td width="100" bgcolor="#ffffff">
 																								<fmt:formatNumber type="number" pattern="0.00" value="${financeByYearInfoMap['MontoReprogramado']}" />
 																							</td>
 																						</tr>
@@ -2517,7 +2530,7 @@ body {background:none;}
 																							<td bgcolor="#ffffff">
 																								<digi:trn key="aim:preview_plannedexpenditures_sum">Actual Expenditures Sum</digi:trn>
 																							</td>
-																							<td align="right" width="100" bgcolor="#ffffff">
+																							<td width="100" bgcolor="#ffffff">
 																								<fmt:formatNumber type="number" pattern="0.00" value="${financeByYearInfoMap['MontoEjecutado']}" />
 																							</td>
 																						</tr>
@@ -2620,7 +2633,7 @@ body {background:none;}
 													<tr><td>
 													 <table width="100%" class="box-border-nopadding">
 													 	<tr bgcolor="#ffffff">
-															<td vAlign="center" align="left">
+															<td vAlign="center">
 																&nbsp;<b><c:out value="${docs.title}"/></b> -
 																&nbsp;&nbsp;&nbsp;<span class="word_break italic"><c:out value="${docs.fileName}"/></span>
 
@@ -2655,7 +2668,7 @@ body {background:none;}
 														<logic:iterate name="aimEditActivityForm" property="documents.crDocuments" id="crDoc">
 															<table width="100%" class="box-border-nopadding">
 															 	<tr bgcolor="#ffffff">
-																	<td vAlign="center" align="left">
+																	<td vAlign="center">
 																		&nbsp;<b><c:out value="${crDoc.title}"/></b> -
 																		&nbsp;&nbsp;&nbsp;<i><c:out value="${crDoc.name}"/></i>
 																		<c:set var="translation">
@@ -2813,7 +2826,7 @@ body {background:none;}
 																			</logic:notEmpty>
 																		</li></ul>
 																	</td>
-																	<td width="15%" align="right">
+																	<td width="15%">
 																		<module:display name="/Activity Form/Organizations/Responsible Organization/percentage" parentModule="/Activity Form/Organizations/Responsible Organization">
 																			<logic:notEmpty name="aimEditActivityForm" property="agencies.respOrgPercentage(${tempOrgId})" >
 																			  <c:out value="${aimEditActivityForm.agencies.respOrgPercentage[tempOrgId]}" /> %
@@ -2849,7 +2862,7 @@ body {background:none;}
 																			</logic:notEmpty>
 																		</li></ul>
 																	</td>
-																	<td width="15%" align="right">
+																	<td width="15%">
 																	<module:display name="/Activity Form/Organizations/Executing Agency/percentage" parentModule="/Activity Form/Organizations/Executing Agency">
 																		<logic:notEmpty name="aimEditActivityForm" property="agencies.executingOrgPercentage(${tempOrgId})" >
 																		  <c:out value="${aimEditActivityForm.agencies.executingOrgPercentage[tempOrgId]}" /> %
@@ -2885,7 +2898,7 @@ body {background:none;}
 																			</logic:notEmpty>
 																		</li></ul>
 																	</td>
-																	<td width="15%" align="right">
+																	<td width="15%">
 																		<module:display name="/Activity Form/Organizations/Implementing Agency/percentage" parentModule="/Activity Form/Organizations/Implementing Agency">
 																			<logic:notEmpty name="aimEditActivityForm" property="agencies.impOrgPercentage(${tempOrgId})" >
 																			  <c:out value="${aimEditActivityForm.agencies.impOrgPercentage[tempOrgId]}" /> %
@@ -2922,7 +2935,7 @@ body {background:none;}
 																			</logic:notEmpty>
 																			</li></ul>
 																	</td>
-																	<td width="15%" align="right">
+																	<td width="15%">
 																		<module:display name="/Activity Form/Organizations/Beneficiary Agency/percentage" parentModule="/Activity Form/Organizations/Beneficiary Agency">
 																			<logic:notEmpty name="aimEditActivityForm" property="agencies.benOrgPercentage(${tempOrgId})" >
 																			  <c:out value="${aimEditActivityForm.agencies.benOrgPercentage[tempOrgId]}" /> %
@@ -2957,7 +2970,7 @@ body {background:none;}
 																			</logic:notEmpty>
 																		</li></ul>
 																	</td>
-																	<td width="15%" align="right">
+																	<td width="15%">
 																		<module:display name="/Activity Form/Organizations/Contracting Agency/percentage" parentModule="/Activity Form/Organizations/Contracting Agency">
 																			<logic:notEmpty name="aimEditActivityForm" property="agencies.conOrgPercentage(${tempOrgId})" >
 																			  <c:out value="${aimEditActivityForm.agencies.conOrgPercentage[tempOrgId]}" /> %
@@ -2994,7 +3007,7 @@ body {background:none;}
 																					</logic:notEmpty>
 																				</li></ul>
 																			</td>
-																			<td width="15%" align="right">
+																			<td width="15%">
 																				<module:display name="/Activity Form/Organizations/Sector Group/percentage" parentModule="/Activity Form/Organizations/Sector Group">
 																					<logic:notEmpty name="aimEditActivityForm" property="agencies.sectOrgPercentage(${tempOrgId})" >
 																					  <c:out value="${aimEditActivityForm.agencies.sectOrgPercentage[tempOrgId]}" /> %
@@ -3030,7 +3043,7 @@ body {background:none;}
 																			</logic:notEmpty>
 																		</li></ul>
 																	</td>
-																	<td width="15%" align="right">
+																	<td width="15%">
 																		<module:display name="/Activity Form/Organizations/Regional Group/percentage" parentModule="/Activity Form/Organizations/Regional Group">
 																			<logic:notEmpty name="aimEditActivityForm" property="agencies.regOrgPercentage(${tempOrgId})" >
 																			  <c:out value="${aimEditActivityForm.agencies.regOrgPercentage[tempOrgId]}" /> %
@@ -3051,7 +3064,7 @@ body {background:none;}
                                     <module:display name="/Activity Form/Contacts" parentModule="/Activity Form">
 									<module:display name="/Activity Form/Contacts/Donor Contact Information" parentModule="/Activity Form/Contacts">
 											<tr>
-												<td width="30%" align="right" valign="top" nowrap="nowrap" class="t-name">
+												<td width="30%" valign="top" nowrap="nowrap" class="t-name">
 													<digi:trn>Donor funding contact information</digi:trn>
 												</td>
 												<td>
@@ -3062,7 +3075,7 @@ body {background:none;}
 											</module:display>
 											<module:display name="/Activity Form/Contacts/Mofed Contact Information" parentModule="/Activity Form/Contacts">
 											<tr>
-												<td width="30%" align="right" valign="top" nowrap="nowrap" class="t-name">
+												<td width="30%" valign="top" nowrap="nowrap" class="t-name">
 													<digi:trn>MOFED contact information</digi:trn>
 												</td>
 												<td>
@@ -3073,7 +3086,7 @@ body {background:none;}
 											</module:display>
 											<module:display name="/Activity Form/Contacts/Project Coordinator Contact Information" parentModule="/Activity Form/Contacts">
 											<tr>
-												<td width="30%" align="right" valign="top" nowrap="nowrap"class="t-name">
+												<td width="30%" valign="top" nowrap="nowrap"class="t-name">
 													<digi:trn>Project Coordinator Contact Information</digi:trn>
 												</td>
 												<td>
@@ -3084,7 +3097,7 @@ body {background:none;}
 											</module:display>
 											<module:display name="/Activity Form/Contacts/Sector Ministry Contact Information" parentModule="/Activity Form/Contacts">
 											<tr>
-												<td width="30%" align="right" valign="top" nowrap="nowrap" class="t-name">
+												<td width="30%" valign="top" nowrap="nowrap" class="t-name">
 													<digi:trn>Sector Ministry Contact Information</digi:trn>
 												</td>
 												<td>
@@ -3095,7 +3108,7 @@ body {background:none;}
 										</module:display>
 										<module:display name="/Activity Form/Contacts/Implementing Executing Agency Contact Information" parentModule="/Activity Form/Contacts">
 											<tr>
-												<td width="30%" align="right" valign="top" nowrap="nowrap" class="t-name">
+												<td width="30%" valign="top" nowrap="nowrap" class="t-name">
 													<digi:trn>Implementing/Executing Agency Contact Information</digi:trn>
 												</td>
 												<td>
@@ -3291,7 +3304,8 @@ body {background:none;}
 																	<span class="word_break bold">${budgetStructure.budgetStructureName}</span>
 																</td>
 																<td bgcolor="#FFFFFF" align="left" width="150">
-																	<span class="word_break bold">${budgetStructure.budgetStructurePercentage}%</span>
+																	<span class="word_break
+																	bold">${budgetStructure.budgetStructurePercentage} %</span>
 																</td>
 															</tr>
 														</c:forEach>
@@ -3347,7 +3361,7 @@ body {background:none;}
 																			style="text-transform: uppercase;">
 																			<c:set var="indicatorName"
 																				   value="${gpiresponse.ampQuestionId.ampIndicatorId.name}"/>
-																			<span class="word_break bold">${indicatorName}</span>
+																			<span class="word_break bold"><digi:trn>${indicatorName}</digi:trn></span>
 																		</td>
 																	</tr>
 																</c:if>
@@ -3355,12 +3369,20 @@ body {background:none;}
 																	<td width=85%>
 																		<c:set var="questionText"
 																			   value="${gpiresponse.ampQuestionId.questionText}"/>
-																		<span class="word_break bold">${questionText}</span>
+																		<c:set var="ampTypeName"
+																			   value="${gpiresponse.ampQuestionId.ampTypeId.name}"/>
+																		<span class="word_break bold"><digi:trn>${questionText}</digi:trn></span>
 																		<c:set var="responseText"
 																			   value="${gpiresponse.response}"/>
 																		<lu>
 																			<li>
-																				<span class="word_break bold">${responseText}</span>
+																				<c:if test='${"yes-no".equals(ampTypeName) &&
+																						!"".equals(responseText) && responseText != null}'>
+																					<span class="word_break bold"><digi:trn>${responseText}</digi:trn></span>
+																				</c:if>
+																				<c:if test='${!"yes-no".equals(ampTypeName)}'>
+																					<span class="word_break bold">${responseText}</span>
+																				</c:if>
 																			</li>
 																		</lu>
 																	</td>
@@ -3513,7 +3535,7 @@ body {background:none;}
 					name="/Activity Form/Structures/Structure Type"
 					parentModule="/Activity Form/Structures">
 					<tr bgcolor="#f0f0f0">
-						<td align="right" width="15%"><digi:trn key="trn:type">Type</digi:trn></td>
+						<td width="15%"><digi:trn key="trn:type">Type</digi:trn></td>
 						<td align="left"><span class="word_break bold"> ${structure.type.name} </span]></td>
 					</tr>
 				</module:display>
@@ -3521,7 +3543,7 @@ body {background:none;}
 					name="/Activity Form/Structures/Structure Title"
 					parentModule="/Activity Form/Structures">
 					<tr bgcolor="#f0f0f0">
-						<td align="right"><digi:trn key="trn:title">Title</digi:trn></td>
+						<td><digi:trn key="trn:title">Title</digi:trn></td>
 						<td align="left"> <span class="word_break bold">${structure.title} </span></td>
 					</tr>
 				</module:display>
@@ -3529,7 +3551,7 @@ body {background:none;}
 					name="/Activity Form/Structures/Structure Description"
 					parentModule="/Activity Form/Structures">
 					<tr bgcolor="#f0f0f0">
-						<td align="right"><digi:trn key="trn:description">Description</digi:trn></td>
+						<td><digi:trn key="trn:description">Description</digi:trn></td>
 						<td align="left"><span class="word_break bold">${structure.description} </span></td>
 					</tr>
 				</module:display>
@@ -3538,7 +3560,7 @@ body {background:none;}
 					parentModule="/Activity Form/Structures">
 					<c:if test="${not empty structure.latitude}">
 						<tr bgcolor="#f0f0f0">
-							<td align="right"><digi:trn key="trn:latitude">Latitude</digi:trn></td>
+							<td><digi:trn key="trn:latitude">Latitude</digi:trn></td>
 							<td align="left"> <b> ${structure.latitude} </b></td>
 						</tr>
 					</c:if>
@@ -3548,14 +3570,14 @@ body {background:none;}
 					parentModule="/Activity Form/Structures">
 					<c:if test="${not empty structure.longitude}">
 						<tr bgcolor="#f0f0f0">
-							<td align="right"><digi:trn key="trn:longitude">Longitude</digi:trn></td>
+							<td><digi:trn key="trn:longitude">Longitude</digi:trn></td>
 							<td align="left"><b> ${structure.longitude} </b></td>
 						</tr>
 					</c:if>
 				</module:display>
 				<c:if test="${not empty structure.coordinates}">
 					<tr>
-						<td align="right" bgcolor="#f0f0f0" valign="top"><digi:trn>Coordinates</digi:trn></td>
+						<td bgcolor="#f0f0f0" valign="top"><digi:trn>Coordinates</digi:trn></td>
 						<td bgcolor="#f0f0f0">
 							<table>
 								<logic:iterate id="coordinate" name="structure" property="coordinates"
@@ -3575,7 +3597,7 @@ body {background:none;}
 	<hr>
 	</logic:iterate>
 	</td> </tr> </logic:notEmpty> </table>
-
+</div>
 </c:if>
 <c:if test="${aimEditActivityForm==null}">
 		Invalid activity id

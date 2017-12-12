@@ -353,7 +353,7 @@ public abstract class AmpComponentPanel<T> extends Panel implements AmpFMConfigu
         // we should check here
         boolean fmVisible = FMUtil.isFmVisible(this);
 
-        if (isAffectedByFreezing && this.findParent(AmpFundingAmountComponent.class) == null) {
+        if (isAffectedByFreezing && this.findParent(FundingListEditor.class) == null && !fmMode) {
             // if visibility needs to be checked , this is
             // to avoid freezing "add funding item or save buttons" and if its a
             // parent of AmpFundingAmountComponent we avoid the check

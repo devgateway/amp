@@ -20,9 +20,10 @@ h1 {text-transform:uppercase;}
 html.ie .l_big_b {font-size:12px; font-weight:bold;padding:0px 0px 5px 0px;text-align:left;float:left;padding:0px 15px 0px px;}
 span.docTitle619{border:1px solid red;text-align:left;}
 
-.word_break {word-wrap: break-word; word-break:break-all;}
+.word_break {word-wrap: break-word;}
 .bold {font-weight: bold;}
 .italic {font-style: italic;}
+table.fixed-layout {table-layout:fixed; width: 100%;}
 
 .se {color:#FF6000; font-size:12px;}
 .sel_sm {color:#FF6000; font-size:11px;}
@@ -170,7 +171,11 @@ html.chrome .bd_drop{margin-top:15px;}
 .tab_cont_sel {padding-top:7px; padding-bottom:7px; padding-left:7px; font-size:14px; color:#FF6000; font-weight:bold;}
 .step_head {background-image:url(/TEMPLATE/ampTemplate/img_2/step_head.gif);}
 .step_head_lng {background-image:url(/TEMPLATE/ampTemplate/img_2/step_head_lng.gif);}
-.step_head_cont {padding-left:10px; padding-top:5px; padding-bottom:5px;color:#FFFFFF; font-size:12px; font-weight:bold;}
+.step_head_cont {padding-left:10px; padding-top:5px; padding-bottom:5px;color:#FFFFFF; font-size:12px; font-weight:bold;display: inline-block}
+.step_head_cont_name {
+    float: right;
+    padding-left: 2px;
+}
 .cont_search {background-color:#F7F7F7; border:1px solid #E0E0DC; min-height:320px;}
 .cont_search_cont {padding:10px;}
 .right_menu {margin-bottom:20px;}
@@ -844,7 +849,7 @@ border-top: 1px;
 border-left: 1px;
 border-bottom: 1px;}
 legend.admtoolsttl{position:absolute;top:-10px;left:10px;}
-#customDecimalSymbol{margin:0px 2px 0px 2px;width:64px;}
+#customDecimalSymbol{width:64px;}
 span.geostyle{background:#f1f1f1;padding:3px;border:1px solid #e0e0e0;color:#5d5d5b;font-size:11px;font-weight:normal;}
 
 .funding_group_feature_box {background-color:#FBFBFB; border:1px solid #EBEBEB; padding-left:5px;  margin-bottom:10px;}
@@ -1250,4 +1255,162 @@ div.footer {
     padding: 10px;
     font-size: 12px;
     height: 100%;
+}
+
+.filter-item-label {
+    font-family: Arial;
+    font-size: 12px;
+    padding: 0px 0px 0px 5px;
+}
+
+.setting-label {
+    font-size: 11px;
+    white-space:nowrap;
+    text-align: right;
+    padding: 0px 5px 0px 0px;
+}
+
+.setting-option {
+    font-size: 11px;
+    white-space:nowrap;
+    padding: 0px 0px 0px 5px;
+}
+
+.setting-year-range {
+    display: inline-block;
+}
+
+.reports-tab-name-container {
+    background-color: #F2F2F2;
+    padding: 5px;
+    border: 1px solid rgb(208, 208, 208);
+}
+
+.reports-tab-name-public-container {
+    margin-top: -1px;
+    padding: 5px;
+    border: 1px solid rgb(208, 208, 208);
+}
+
+.reportFloatRight {
+    float: right;
+}
+
+.wizard-toolbar-steps {
+    float:left;
+    margin-top:10px;
+}
+
+.wizard-toolbar-buttons {
+    float:right;
+    z-index: 3000;
+    margin-top:10px;
+    margin-right:10px;
+}
+
+.wizard-columns-list li {
+    white-space: nowrap;
+    background-color: #E1E1E1;
+    border: 1px solid #CECECE;
+    margin-bottom: 5px !important;
+    margin-top: 5px !important;
+    padding: 1px;
+    text-align: left;
+    font-size: 11px;
+    vertical-align: middle;
+}
+
+.wizard-panel-buttons {
+    text-align: right;
+}
+
+.wizard-filters-div strong {
+    float: left;
+}
+
+.wizard-settings-List {
+    float: left;
+}
+
+.wizard-settings-List i {
+    display: inline-block;
+}
+
+.wizard-settings-List-div {
+    float: left;
+    padding-left: 5px;
+}
+
+.panel-one {
+    float:left;
+}
+
+.panel-two {
+    float:right;
+}
+
+.hierarchy-list-margin {
+    margin-left: -20px;
+}
+.preview-align {
+    text-align: right;
+}
+
+.preview-funding-total {
+    border-top: 1px solid #000000;
+    background-color: #eeeeee;
+    text-transform: uppercase;
+}
+
+.preview-align-inverse {
+    text-align: left;
+}
+
+.preview-buttons-align {
+    float: right;
+}
+
+.wizard-invisible-button {
+    display: none;
+}
+
+.wizard-visible-button {
+    display: block;
+}
+
+.wizard-filters-div {
+    height: 85px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin-bottom: 5px;
+    text-align: left;
+    max-width: 423px;
+}
+
+.search_results_header_keyword {
+    float: right;
+    padding-left: 2px;
+}
+
+.button_green_group {
+    display: inline-block;
+}
+
+.planning-line {
+    display: inline-block;
+}
+
+.text-align {
+    text-align: left;
+}
+
+.inside-type {
+    padding-right: 8px;
+    padding-left: 8px;
+    font-size: 11px;
+    width: 15%;
+}
+
+.tabs-grid-pager-info {
+    display: inline-block;
 }

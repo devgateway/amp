@@ -63,7 +63,13 @@ export default class DataFreezeEventList extends Component {
     }
 
     addNew() {
-        this.props.actions.addNewDataFreezeEvent();
+        this.props.actions.getUserInfo().then(function() {         
+            if (this.props.user['is-admin'] == true) {              
+                this.props.actions.addNewDataFreezeEvent();
+            } else {
+                window.location.href = '/';
+            }
+          }.bind(this));      
     }
 
     goToClickedPage(event) {
@@ -341,7 +347,8 @@ function mapStateToProps(state, ownProps) {
         errors: state.dataFreeze.errors || [],
         infoMessages: state.dataFreeze.infoMessages || [],
         settings: state.commonLists.settings || {},
-        dataFreezeEventList: state.dataFreeze.dataFreezeEventList
+        dataFreezeEventList: state.dataFreeze.dataFreezeEventList,
+        user: state.commonLists.user || {}
     }
 }
 

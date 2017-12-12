@@ -111,5 +111,7 @@
    "Table Mode":"Mode Tableau",
    "Chart Mode":"Mode Graphique",
    "Revert filters to state when opened.":"Rétablir les filtres à l'état initial.",
-   "Aid Management Platform - Reports" : "Plate-forme de gestion de l'aide - Rapports"
+   "Aid Management Platform - Reports" : "Plate-forme de gestion de l'aide - Rapports",
+   "Amounts are in millions (000 000)" : "Les montants sont en millions (000 000)",
+   "Amounts are in thousands (000)":"Les montants sont en milliers (000)"
 }

@@ -251,11 +251,9 @@ function setHoveredRow(rowId) {
 
 <feature:display name="Add Pledge Button" module="Pledges">
 	<div style="text-align:center;padding:10px;">
-		<a href="/addPledge.do?reset=true">
 			<html:button styleClass="buttonx" property="submitButton" onclick="window.location.assign('/addPledge.do?reset=true')">
 	    		<digi:trn key="btn:AddPlegde">Add Pledge</digi:trn>
 			</html:button>
-		</a>
 	</div>
 </feature:display>
 	

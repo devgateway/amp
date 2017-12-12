@@ -28,7 +28,6 @@
 				}
 			};
 			MyDragAndDropObject.prototype.startDrag		= function(x, y) {
-				//alert('startDrag');
 				( new YAHOO.util.Element(this.getDragEl()) ).addClass("list1");
 				var realObj	= this.getEl();
 				var dragObj	= this.getDragEl();
@@ -198,7 +197,6 @@
 				}
 			};
 			ColumnsDragAndDropObject.prototype.startDrag	= function(x, y) {
-				//this.getDragEl().setAttribute('class','list1');
 				var dragYEl					= new YAHOO.util.Element( this.getDragEl() );
 				dragYEl.addClass("list1");
 				dragYEl.setStyle("width", this.realWidth );
@@ -215,7 +213,7 @@
 				//this.newObj.setAttribute('id', 'clone_'+this.id);
 				
 				this.newObj					= ColumnsDragAndDropObject.generateLi( 
-									"clone_"+this.id, "list1", "dup_"+this.id, inputEl.value, "selectedColumns", spanEl.innerHTML);
+									"clone_"+this.id, "list1 text-align", "dup_"+this.id, inputEl.value, "selectedColumns", spanEl.innerHTML);
 				
 				this.colObj					= realObj;
 				
@@ -324,7 +322,7 @@
 						if ( inputEls[i].id.indexOf("field") >= 0 ) {
 							var spanEl			= inputEls[i].parentNode.getElementsByTagName('span')[0];
 							var liId			= inputEls[i].parentNode.id;
-							var newObj			= ColumnsDragAndDropObject.generateLi( "clone_"+liId, "list1", "dup_"+liId, inputEls[i].value, "selectedColumns",spanEl.innerHTML);
+							var newObj			= ColumnsDragAndDropObject.generateLi( "clone_"+liId, "list1 text-align", "dup_"+liId, inputEls[i].value, "selectedColumns",spanEl.innerHTML);
 							ColumnsDragAndDropObject.selectObj(myDDObj, newObj, destEl, inputEls[i].parentNode);
 							i=i-1;
 						}
@@ -349,7 +347,7 @@
 							if ( inputEls[i].id.indexOf("field") >= 0 ) {
 								var spanEl			= inputEls[i].parentNode.getElementsByTagName('span')[0];
 								var liId			= inputEls[i].parentNode.id;
-								var newObj			= ColumnsDragAndDropObject.generateLi( "clone_"+liId, "list1", "dup_"+liId, inputEls[i].value, "selectedColumns",spanEl.innerHTML);
+								var newObj			= ColumnsDragAndDropObject.generateLi( "clone_"+liId, "list1 text-align", "dup_"+liId, inputEls[i].value, "selectedColumns",spanEl.innerHTML);
 								ColumnsDragAndDropObject.selectObj(myDDObj, newObj, destEl, inputEls[i].parentNode);
 							}
 						}

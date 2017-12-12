@@ -322,8 +322,7 @@ export default class Report6 extends Component {
                        <div className="row">
                           <h4>{this.props.translations['amp.gpi-reports:indicator6-description']}</h4>
                         </div>
-                      </div>
-                    
+                    </div>
                     <div className="section-divider"></div>
                     {this.props.mainReport.empty == true  &&
                        <div className="text-center">{this.props.translations['amp-gpi-reports:no-data']}</div>

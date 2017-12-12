@@ -2,7 +2,7 @@ package org.digijava.module.aim.action;
 
 import static org.digijava.module.aim.helper.Constants.CURRENT_MEMBER;
 
-import java.awt.*;
+import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -123,7 +123,6 @@ import com.lowagie.text.pdf.PdfWriter;
 import com.lowagie.text.pdf.draw.LineSeparator;
 
 import clover.com.google.common.base.Strings;
-import clover.org.apache.commons.lang.StringUtils;
 
 /**
  * Export Activity to PDF
@@ -131,12 +130,20 @@ import clover.org.apache.commons.lang.StringUtils;
  */
 public class ExportActivityToPDF extends Action {
 
+    
     public static final int COLUMNS_3 = 3;
     public static final int COLUMNS_4 = 4;
     public static final int INDENTATION_LEFT = 5;
     public static final Color BACKGROUND_COLOR = new Color(244, 244, 242);
     public static final Color BACKGROUND_COLOR_WHITE = new Color(255, 255, 255);
     public static final Color BORDER_COLOR = new Color(201, 201, 199);
+    public static final Color MTEF_BACKGROUND_COLOR = new Color(255, 255, 204);
+    public static final Color SUBTOTAL_BACKGROUND_COLOR = new Color(221, 221, 221);
+    private static final int CURRENCY_COLUMN_WIDTH = 13;
+    private static final int AMOUNT_COLUMN_WIDTH = 87;
+    private static final float SUBTOTAL_BORDER_TOP_WIDTH = 0.5f;
+    private static final int ARRAY_IDX_3 = 3;
+    
     private static Logger logger = Logger.getLogger(ExportActivityToPDF.class);
 
     /**
@@ -2868,23 +2875,24 @@ public class ExportActivityToPDF extends Action {
      * @param cellName
      * @param cellContents
      */
-    private void addNewInfoCell(PdfPTable fundingTable, String cellName, String cellContents)
-    {
-        if (cellContents == null || cellContents.isEmpty())
+    private void addNewInfoCell(PdfPTable fundingTable, String cellName, String cellContents) {
+        if (cellContents == null || cellContents.isEmpty()) {
             return;
+        }
 
         PdfPCell foIdCell1=new PdfPCell();
-        foIdCell1.setBackgroundColor(new Color(221,221,221));
+        foIdCell1.setBackgroundColor(SUBTOTAL_BACKGROUND_COLOR);
         foIdCell1.setBorder(0);
         foIdCell1.setColspan(2);
         Paragraph p1 = new Paragraph(postprocessText(TranslatorWorker.translateText(cellName)) + ":", plainFont);
         foIdCell1.addElement(p1);
+        p1.setAlignment(Element.ALIGN_LEFT);
         fundingTable.addCell(foIdCell1);
         //meaning
         PdfPCell foIdCell3=new PdfPCell(new Paragraph(postprocessText(cellContents), plainFont));
         foIdCell3.setBorder(0);
         foIdCell3.setColspan(2);
-        foIdCell3.setBackgroundColor(new Color(221,221,221));
+        foIdCell3.setBackgroundColor(SUBTOTAL_BACKGROUND_COLOR);
         fundingTable.addCell(foIdCell3);
     }
 
@@ -2894,19 +2902,20 @@ public class ExportActivityToPDF extends Action {
      * @param cellName
      * @param cellContents
      */
-    private void addNewInfoCell(PdfPTable fundingTable, String cellName, AmpCategoryValue cellContents)
-    {
+    private void addNewInfoCell(PdfPTable fundingTable, String cellName, AmpCategoryValue cellContents) {
         String value = cellContents == null ? null : TranslatorWorker.translateText(cellContents.getValue());
         addNewInfoCell(fundingTable, cellName, value);
     }
 
-    private void addTotalsOutput(PdfPTable fundingTable, String title, String value, String currencyCode)
-    {
-        if (value == null || value.isEmpty())
+    private void addTotalsOutput(PdfPTable fundingTable, String title, String value, String currencyCode) 
+            throws WorkerException {
+        
+        if (value == null || value.isEmpty()) {
             return;
+        }
+        
         String totalAmountType = postprocessText(TranslatorWorker.translateText(title)) + ":";
-        String output = value + " " + currencyCode;
-        addTotalAmountsCellsToFundingTable(fundingTable, totalAmountType, output);
+        addTotalAmountsCellsToFundingTable(fundingTable, totalAmountType, value, currencyCode);
     }
 
     private void buildFundingInformationPart(EditActivityForm myForm,PdfPTable mainLayout,ServletContext ampContext,HttpSession session) throws WorkerException, DocumentException {
@@ -3100,21 +3109,16 @@ public class ExportActivityToPDF extends Action {
                         }
 
                         // MTEF Projections
-                        if(visibleModuleMTEFProjections) {
+                        if (visibleModuleMTEFProjections) {
                             renderMtefSection(fundingTable, funding, currencyCode);
                         }
 
                         //UNDISBURSED BALANCE
-                        if (FeaturesUtil.isVisibleFeature("Funding","Undisbursed Balance")) {
-                            output=(funding.getUndisbursementbalance() != null && funding.getUndisbursementbalance().length() > 0)? funding.getUndisbursementbalance() + currencyCode : "";
-                            PdfPCell undisbursedBalanceCell1=new PdfPCell(new Paragraph(TranslatorWorker.translateText("UNDISBURSED BALANCE:")+" \t\t         "+ output+"\n\n",plainFont));
-                            undisbursedBalanceCell1.setBorder(0);
-                            undisbursedBalanceCell1.setBackgroundColor(new Color(255,255,204));
-                            undisbursedBalanceCell1.setColspan(4);
-                            fundingTable.addCell(undisbursedBalanceCell1);
+                        if (FeaturesUtil.isVisibleFeature("Funding", "Undisbursed Balance")) {
+                            String title = TranslatorWorker.translateText("UNDISBURSED BALANCE:");
+                            String amount = funding.getUndisbursementbalance();
+                            createSubtotalRow(fundingTable, title, amount, currencyCode);
                         }
-
-
 
                         int amountsUnitCode = Integer.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS));
 
@@ -3198,12 +3202,14 @@ public class ExportActivityToPDF extends Action {
                 }
 
                 //UNDISBURSED BALANCE
-                if (FeaturesUtil.isVisibleFeature("Funding","Undisbursed Balance")) {
-                    addTotalsOutput(fundingTable, "UNDISBURSED BALANCE", myForm.getFunding().getUnDisbursementsBalance(), currencyCode);
+                if (FeaturesUtil.isVisibleFeature("Funding", "Undisbursed Balance")) {
+                    addTotalsOutput(fundingTable, "UNDISBURSED BALANCE", 
+                            myForm.getFunding().getUnDisbursementsBalance(), currencyCode);
                 }
 
                 // do not pass the currencyCode. The measure unit for rate is percentages
-                addTotalsOutput(fundingTable, "Delivery Rate", myForm.getFunding().getDeliveryRate(), "");
+                addTotalsOutput(fundingTable, "Delivery Rate",
+                        myForm.getFunding().getDeliveryRate().replace("%", ""), "%");
 
             }
         }
@@ -3213,7 +3219,8 @@ public class ExportActivityToPDF extends Action {
         //return fundingTable;
     }
     
-    private void renderMtefSection(PdfPTable fundingTable, Funding funding, String currencyCode) {
+    private void renderMtefSection(PdfPTable fundingTable, Funding funding, String currencyCode) 
+            throws WorkerException {
         String output = TranslatorWorker.translateText("MTEF Projections") + ":";
         PdfPCell titleCell = new PdfPCell(new Paragraph(postprocessText(output), titleFont));
         titleCell.setBorder(0);
@@ -3248,12 +3255,15 @@ public class ExportActivityToPDF extends Action {
             }
         } else {
             PdfPCell innerCell = new PdfPCell(new Paragraph(TranslatorWorker.translateText("No MTEF data"), plainFont));
+            innerCell.setColspan(COLUMNS_4);
             innerCell.setBorder(0);
             fundingTable.addCell(innerCell);
         }
     }
 
-    private boolean renderMtefSubsection(ArrayList<PdfPCell> cells, List<FundingDetail> mtefList, String projectionType, String mtefSubTotal, String currencyCode) {
+    private boolean renderMtefSubsection(ArrayList<PdfPCell> cells, List<FundingDetail> mtefList, 
+            String projectionType, String mtefSubTotal, String currencyCode) throws WorkerException {
+        
         boolean addedData = false;
         for (FundingDetail mtefFunding : mtefList) {
             if (FeaturesUtil.isVisibleModule(mtefProjectionFields[0])) {
@@ -3277,20 +3287,21 @@ public class ExportActivityToPDF extends Action {
 
             if (FeaturesUtil.isVisibleModule(mtefProjectionFields[2])) {
                 addedData = true;
-                String output = "";
-                if (mtefFunding.getTransactionAmount() != null && mtefFunding.getTransactionAmount().length() > 0) {
-                    output = mtefFunding.getTransactionAmount() + " " + mtefFunding.getCurrencyCode();
-                }
+                PdfPTable mtefTable = createAmountCurrencyTable(mtefFunding.getTransactionAmount(), 
+                        mtefFunding.getCurrencyCode());
 
-                PdfPCell innerCell = new PdfPCell(new Paragraph(output, plainFont));
+                PdfPCell innerCell = new PdfPCell(mtefTable);
                 innerCell.setBorder(0);
-                innerCell.setColspan(1);
+                innerCell.setColspan(2);
                 cells.add(innerCell);
             } else {
-                cells.add(getEmptyCell());
+                cells.add(getEmptyCell(2));
             }
 
-            cells.add(getRoleOrgForFundingFlows(mtefFunding, mtefProjectionFields[4]));
+            PdfPCell roleCell = getRoleOrgForFundingFlows(mtefFunding, 
+                    ActivityUtil.getFmForFundingFlows(mtefFunding.getTransactionType()));
+            roleCell.setColspan(COLUMNS_4);
+            cells.add(roleCell);
         }
         
         if (addedData) {
@@ -3300,56 +3311,150 @@ public class ExportActivityToPDF extends Action {
         return addedData;
     }
     
-    private void renderMtefSubTotals(ArrayList<PdfPCell> cells, String titleTotal, String subtotalMTEFs,  String currencyCode) {
-        String output = "";
+    private void renderMtefSubTotals(ArrayList<PdfPCell> cells, String titleTotal, String subtotalMTEFs, 
+            String currencyCode) throws WorkerException {
         
-        if (StringUtils.isNotBlank(subtotalMTEFs)) {
-            output = subtotalMTEFs + " " + currencyCode;
+        PdfPCell subTotalTitle = new PdfPCell(new Paragraph(TranslatorWorker.translateText(titleTotal), plainFont));
+        subTotalTitle.setBackgroundColor(MTEF_BACKGROUND_COLOR);
+        subTotalTitle.setColspan(2);
+        subTotalTitle.setBorder(0);
+
+        PdfPTable subTotalAmountTable = createAmountCurrencyTable(subtotalMTEFs, currencyCode);
+        PdfPCell subTotalAmount = new PdfPCell(subTotalAmountTable);
+        subTotalAmount.setBackgroundColor(MTEF_BACKGROUND_COLOR);
+        subTotalAmount.setColspan(2);
+        subTotalAmount.setBorder(0);
+        
+        cells.add(subTotalTitle);
+        cells.add(subTotalAmount);
+    }
+
+    private void createSubtotalRow(PdfPTable fundingTable, String title, String amount, String currencyCode) 
+            throws WorkerException {
+
+        PdfPCell subTotal = new PdfPCell(new Paragraph(TranslatorWorker.translateText(title), plainFont));
+        subTotal.setBackgroundColor(SUBTOTAL_BACKGROUND_COLOR);
+        subTotal.setColspan(2);
+        subTotal.setBorderWidthBottom(0);
+        subTotal.setBorderWidthTop(SUBTOTAL_BORDER_TOP_WIDTH);
+        subTotal.setBorderWidthLeft(0);
+        subTotal.setBorderWidthRight(0);
+        fundingTable.addCell(subTotal);
+
+        PdfPTable amountValueTable = createAmountCurrencyTable(amount, currencyCode);
+        subTotal = new PdfPCell(amountValueTable);
+        subTotal.setBackgroundColor(SUBTOTAL_BACKGROUND_COLOR);
+        subTotal.setColspan(2);
+        subTotal.setBorderWidthBottom(0);
+        subTotal.setBorderWidthTop(SUBTOTAL_BORDER_TOP_WIDTH);
+        subTotal.setBorderWidthLeft(0);
+        subTotal.setBorderWidthRight(0);
+        fundingTable.addCell(subTotal);
+    }
+
+    /**
+     * @param amount
+     * @param currencyCode
+     * @return
+     * @throws WorkerException
+     */
+    private PdfPTable createAmountCurrencyTable(String amount, String currencyCode) throws WorkerException {
+        PdfPTable valueTable = new PdfPTable(new float[] {AMOUNT_COLUMN_WIDTH, CURRENCY_COLUMN_WIDTH});
+        if (SiteUtils.isEffectiveLangRTL()) {
+            try {
+                valueTable.setWidths(new float[] {CURRENCY_COLUMN_WIDTH, AMOUNT_COLUMN_WIDTH});
+            } catch (DocumentException e) {
+                throw new WorkerException(e);
+            }
         }
         
-        PdfPCell subtotalCell = new PdfPCell(new Paragraph(TranslatorWorker.translateText(titleTotal)+": \t\t         "+ output+"\n\n",plainFont));
-        subtotalCell.setBorder(0);
-        subtotalCell.setBackgroundColor(new Color(255,255,204));
-        subtotalCell.setColspan(4);
-        cells.add(subtotalCell);
+        if (amount != null && !amount.isEmpty()) {
+            if (SiteUtils.isEffectiveLangRTL()) {
+                valueTable.setRunDirection(PdfWriter.RUN_DIRECTION_RTL);
+            }
+           
+            PdfPCell amountCell = new PdfPCell(new Paragraph(amount, plainFont));
+            amountCell.setBorder(0);
+            if (SiteUtils.isEffectiveLangRTL()) {
+                amountCell.setRunDirection(PdfWriter.RUN_DIRECTION_LTR);
+                amountCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+            } else {
+                amountCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+            }
+            
+            PdfPCell currencyCell = new PdfPCell(new Paragraph(currencyCode, plainFont));
+            currencyCell.setBorder(0);
+            valueTable.addCell(amountCell);
+            valueTable.addCell(currencyCell);
+        }
+        
+        return valueTable;
+    }
+    
+    /**
+     * @param amount
+     * @param currencyCode
+     * @return
+     * @throws WorkerException
+     */
+    private PdfPTable createAmountCurrencyExchangeTable(String amount, String currencyCode, String exchangeRate, 
+            boolean isVisibleExchangeRate) throws WorkerException {
+        PdfPTable valueTable = new PdfPTable(new float[] {AMOUNT_COLUMN_WIDTH, CURRENCY_COLUMN_WIDTH});
+        if (SiteUtils.isEffectiveLangRTL()) {
+            try {
+                valueTable.setWidths(new float[] {CURRENCY_COLUMN_WIDTH, AMOUNT_COLUMN_WIDTH});
+            } catch (DocumentException e) {
+                throw new WorkerException(e);
+            }
+        }
+        
+        if (amount != null && !amount.isEmpty()) {
+            if (SiteUtils.isEffectiveLangRTL()) {
+                valueTable.setRunDirection(PdfWriter.RUN_DIRECTION_RTL);
+            }
+           
+            PdfPCell amountCell = new PdfPCell(new Paragraph(amount, plainFont));
+            amountCell.setBorder(0);
+            if (SiteUtils.isEffectiveLangRTL()) {
+                amountCell.setRunDirection(PdfWriter.RUN_DIRECTION_LTR);
+                amountCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+            } else {
+                amountCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+            }
+            
+            PdfPCell currencyCell = new PdfPCell(new Paragraph(currencyCode, plainFont));
+            currencyCell.setBorder(0);
+            valueTable.addCell(amountCell);
+            valueTable.addCell(currencyCell);
+        }
+        
+        if (exchangeRate != null && isVisibleExchangeRate) {
+            String exchange = TranslatorWorker.translateText("Exchange Rate:") + exchangeRate;
+            PdfPCell exchangeRateCell = new PdfPCell(new Phrase(exchange));
+            exchangeRateCell.setColspan(2);
+            exchangeRateCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+            valueTable.addCell(exchangeRateCell);
+        }
+        
+        return valueTable;
     }
 
-    private void createSubtotalRow(PdfPTable fundingTable, String title, String value, String currencyCode) throws WorkerException{
-
-        String output= (value != null && value.trim().length() > 0 ) ? value + " " + currencyCode : "";
-        PdfPCell subTotal=new PdfPCell(new Paragraph(TranslatorWorker.translateText(title),plainFont));
-        subTotal.setBackgroundColor(new Color(221,221,221));
-        subTotal.setColspan(2);
-        subTotal.setBorderWidthBottom(0);
-        subTotal.setBorderWidthTop(0.5f);
-        subTotal.setBorderWidthLeft(0);
-        subTotal.setBorderWidthRight(0);
-        fundingTable.addCell(subTotal);
-
-        subTotal=new PdfPCell(new Paragraph(output,plainFont));
-        subTotal.setBackgroundColor(new Color(221,221,221));
-        subTotal.setColspan(2);
-        subTotal.setBorderWidthBottom(0);
-        subTotal.setBorderWidthTop(0.5f);
-        subTotal.setBorderWidthLeft(0);
-        subTotal.setBorderWidthRight(0);
-        fundingTable.addCell(subTotal);
-    }
-
-    private void addTotalAmountsCellsToFundingTable(PdfPTable fundingTable,String totalAmountType, String totalsOutput){
+    private void addTotalAmountsCellsToFundingTable(PdfPTable fundingTable, String totalAmountType, 
+            String amount, String currencyCode) throws WorkerException {
+        
         Paragraph p1;
-        PdfPCell totalPC=new PdfPCell(new Paragraph(postprocessText(totalAmountType),plainFont));
+        PdfPCell totalPC = new PdfPCell(new Paragraph(postprocessText(totalAmountType), plainFont));
         totalPC.setColspan(2);
         totalPC.setBorder(0);
-        totalPC.setBackgroundColor(new Color(221,221,221));
+        totalPC.setBackgroundColor(SUBTOTAL_BACKGROUND_COLOR);
         fundingTable.addCell(totalPC);
-        PdfPCell totalPCAmount=new PdfPCell();
+        
+        PdfPTable amountValueTable = createAmountCurrencyTable(amount, currencyCode);
+        PdfPCell totalPCAmount = new PdfPCell(amountValueTable);
         totalPCAmount.setBorder(0);
         totalPCAmount.setColspan(2);
-        totalPCAmount.setBackgroundColor(new Color(221,221,221));
-        p1=new Paragraph(postprocessText(totalsOutput),plainFont);
-        p1.setAlignment(Element.ALIGN_RIGHT);
-        totalPCAmount.addElement(p1);
+        totalPCAmount.setBackgroundColor(SUBTOTAL_BACKGROUND_COLOR);
+        
         fundingTable.addCell(totalPCAmount);
         //empty cell
         buildEmptyCell(fundingTable);
@@ -3463,19 +3568,19 @@ public class ExportActivityToPDF extends Action {
         String disasterResponse=null;
         if (Boolean.TRUE.equals(fd.getDisasterResponse())) {
             if (FeaturesUtil.isVisibleModule(fmFields[1])) {
-                disasterResponse=TranslatorWorker.translateText("Disaster Response");
+                disasterResponse = TranslatorWorker.translateText("Disaster Response");
             }
         }
         if (FeaturesUtil.isVisibleModule(fmFields[0])) {
             innerCell.setBorder(0);
             innerCell = new PdfPCell();
             
-            Paragraph p=new Paragraph();
-
-            p.add(new Phrase( TranslatorWorker.translateText(fd.getAdjustmentTypeName().getValue()), plainFont));
+            Paragraph p = new Paragraph();
+            p.add(new Phrase(TranslatorWorker.translateText(fd.getAdjustmentTypeName().getValue()), plainFont));
             if (disasterResponse != null) {
                 p.add(new Phrase(" | " + disasterResponse, smallerFont));
             }
+            p.setAlignment(Element.ALIGN_LEFT);
             innerCell.addElement(p);
             innerCell.setBorder(0);
             infoTable.addCell(innerCell);
@@ -3491,26 +3596,23 @@ public class ExportActivityToPDF extends Action {
             addEmptyCell(infoTable);
         }
 
-        if (FeaturesUtil.isVisibleModule(fmFields[3])) {
-            String output="";
-            if (fd.getTransactionAmount() != null && fd.getTransactionAmount().length() > 0) {
-                output = fd.getTransactionAmount() + " " + fd.getCurrencyCode();
+        if (FeaturesUtil.isVisibleModule(fmFields[ARRAY_IDX_3])) {
+            boolean isVisibleExchange = FeaturesUtil.isVisibleModule(fmFields[fmFields.length - 1]);
+            PdfPTable amountExchangeTable = createAmountCurrencyExchangeTable(fd.getTransactionAmount(), 
+                    fd.getCurrencyCode(), fd.getFormattedRate(), isVisibleExchange);
 
-                if (fd.getFormattedRate() != null && FeaturesUtil.isVisibleModule(fmFields[fmFields.length-1])) {
-                    output += "\n" + TranslatorWorker.translateText("Exchange Rate: ") + fd.getFormattedRate();
-                }
-            }
-
-            innerCell = new PdfPCell(new Paragraph(output, plainFont));
+            innerCell = new PdfPCell(amountExchangeTable);
+            innerCell.setColspan(2);
             innerCell.setBorder(0);
             infoTable.addCell(innerCell);
-
         } else {
-            addEmptyCell(infoTable);
+            addEmptyCell(infoTable, 2);
         }
-
-
-        infoTable.addCell(getRoleOrgForFundingFlows( fd,ActivityUtil.getFmForFundingFlows(fd.getTransactionType())));
+        
+        PdfPCell roleCell = getRoleOrgForFundingFlows(fd, ActivityUtil.getFmForFundingFlows(fd.getTransactionType()));
+        roleCell.setColspan(COLUMNS_4);
+        infoTable.addCell(roleCell);
+        
         if (fd.getAttachedPledgeName() != null) {
 
             PdfPCell plCommCell1=new PdfPCell(new Paragraph(postprocessText(TranslatorWorker.translateText("Source Pledge") + ": " + fd.getAttachedPledgeName()), titleFont));
@@ -3549,14 +3651,23 @@ public class ExportActivityToPDF extends Action {
         PdfPCell innerCell = new PdfPCell();
         innerCell.setBorder(0);
         innerCell.setBorder(0);
+        
+        return innerCell;
+    }
+    
+    private PdfPCell getEmptyCell(int colspan) {
+        PdfPCell innerCell = getEmptyCell();
+        innerCell.setColspan(colspan);
+        
         return innerCell;
     }
 
-    private void addEmptyCell(PdfPTable infoTable){
-        PdfPCell innerCell = new PdfPCell();
-        innerCell.setBorder(0);
-        innerCell.setBorder(0);
-        infoTable.addCell(innerCell);
+    private void addEmptyCell(PdfPTable infoTable) {
+        infoTable.addCell(getEmptyCell());
+    }
+    
+    private void addEmptyCell(PdfPTable infoTable, int colspan) {
+        infoTable.addCell(getEmptyCell(colspan));
     }
 
     private String  getEditTagValue(HttpServletRequest request,String editKey) throws Exception{

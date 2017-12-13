@@ -883,91 +883,95 @@ public class ExportActivityToPDF extends Action {
 
             //Planning
             if(FeaturesUtil.isVisibleModule("/Activity Form/Planning")){
-                String outputValue="";
-
+                List<PdfPTable> valuesTable = new ArrayList<>();
                 if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Line Ministry Rank")) {
-                    outputValue = TranslatorWorker.translateText("Line Ministry Rank") + "\t:\t";
+                    String value = "";
                     if (activity.getLineMinRank() != null && activity.getLineMinRank().intValue() > 0) {
-                        outputValue += (activity.getLineMinRank()) + "\n";
-                    } else {
-                        outputValue += "\n";
+                        value += (activity.getLineMinRank());
                     }
+                    valuesTable.add(createGeneralInfoTable(
+                            TranslatorWorker.translateText("Line Ministry Rank") + ":", 
+                            value, false));
                 }
 
                 if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Approval Date")) {
-                    outputValue += TranslatorWorker.translateText("Proposed Approval Date ") + "\t:\t" + myForm
-                            .getPlanning().getOriginalAppDate() + "\n";
+                    valuesTable.add(createGeneralInfoTable(
+                            TranslatorWorker.translateText("Proposed Approval Date") + ":", 
+                            myForm.getPlanning().getOriginalAppDate(), true));
                 }
 
                 if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Approval Date")) {
-                    outputValue += TranslatorWorker.translateText("Actual Approval Date ") + "\t:\t" + myForm
-                            .getPlanning().getRevisedAppDate() + "\n";
+                    valuesTable.add(createGeneralInfoTable(
+                            TranslatorWorker.translateText("Actual Approval Date") + ":", 
+                            myForm.getPlanning().getRevisedAppDate(), true));
                 }
 
                 if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Start Date")) {
-                    outputValue += TranslatorWorker.translateText("Proposed Start Date") + "\t:\t" + myForm
-                            .getPlanning().getOriginalStartDate() + "\n";
+                    valuesTable.add(createGeneralInfoTable(
+                            TranslatorWorker.translateText("Proposed Start Date") + ":", 
+                            myForm.getPlanning().getOriginalStartDate(), true));
                 }
 
                 if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Start Date")) {
-                    outputValue += TranslatorWorker.translateText("Actual Start Date ") + "\t:\t" + myForm.getPlanning()
-                            .getRevisedStartDate() + "\n";
+                    valuesTable.add(createGeneralInfoTable(
+                            TranslatorWorker.translateText("Actual Start Date") + ":", 
+                            myForm.getPlanning().getRevisedStartDate(), true));
                 }
 
                 if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Original Completion Date")) {
-                    outputValue += TranslatorWorker.translateText("Original Completion Date", locale, siteId)
-                            + "\t:\t" + myForm.getPlanning().getOriginalCompDate() + "\n";
+                    valuesTable.add(createGeneralInfoTable(
+                            TranslatorWorker.translateText("Original Completion Date") + ":", 
+                            myForm.getPlanning().getOriginalCompDate(), true));
                 }
 
                 if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Completion Date")) {
-                    outputValue += TranslatorWorker.translateText("Proposed Completion Date ", locale, siteId)
-                            + "\t:\t" + myForm.getPlanning().getProposedCompDate() + "\n";
+                    valuesTable.add(createGeneralInfoTable(
+                            TranslatorWorker.translateText("Proposed Completion Date") + ":", 
+                            myForm.getPlanning().getProposedCompDate(), true));
                 }
 
                 if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Completion Date")) {
-                    outputValue += TranslatorWorker.translateText("Actual Completion Date", locale, siteId) + "\t:\t"
-                            + myForm.getPlanning().getCurrentCompDate() + "\n";
+                    valuesTable.add(createGeneralInfoTable(
+                            TranslatorWorker.translateText("Actual Completion Date") + ":", 
+                            myForm.getPlanning().getCurrentCompDate(), true));
                 }
 
                 if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Project Implementation Delay")) {
-                    outputValue += TranslatorWorker.translateText("Project Implementation Delay", locale, siteId)
-                            + "\t:\t" + myForm.getPlanning().getProjectImplementationDelay() + "\n";
+                    valuesTable.add(createGeneralInfoTable(
+                            TranslatorWorker.translateText("Project Implementation Delay") + ":", 
+                            myForm.getPlanning().getProjectImplementationDelay(), true));
                 }
 
                 if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Final Date for Contracting")) {
-                    outputValue += TranslatorWorker.translateText("Final Date for Contracting ") + "\t:\t" + myForm
-                            .getPlanning().getContractingDate() + "\n";
+                    valuesTable.add(createGeneralInfoTable(
+                            TranslatorWorker.translateText("Final Date for Contracting") + ":", 
+                            myForm.getPlanning().getContractingDate(), true));
                 }
 
                 if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Final Date for Disbursements")) {
-                    outputValue += TranslatorWorker.translateText("Final Date for Disbursements ") + "\t:\t" + myForm
-                            .getPlanning().getDisbursementsDate() + "\n";
+                    valuesTable.add(createGeneralInfoTable(
+                            TranslatorWorker.translateText("Final Date for Disbursements") + ":", 
+                            myForm.getPlanning().getDisbursementsDate(), true));
                 }
 
                 if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Project Life")) {
                     Integer life = myForm.getPlanning().getProposedProjectLife();
-                    outputValue += TranslatorWorker.translateText("Proposed Project Life") + "\t:\t" + (life == null
-                            ? "" : life) + "\n";
+                    valuesTable.add(createGeneralInfoTable(
+                            TranslatorWorker.translateText("Proposed Project Life") + ":", 
+                            life == null ? "" : life.toString(), true));
                 }
 
                 if(FeaturesUtil.isVisibleField("Duration of Project")){
-                    outputValue+=TranslatorWorker.translateText("Duration of Project");
                     BigDecimal duration = myForm.getPlanning().getProjectPeriod();
                     if (duration != null) {
-                        outputValue += "\t:\t" + duration.toString() + " " + TranslatorWorker.translateText("Months")
-                                + "\n";
+                        valuesTable.add(createGeneralInfoTable(
+                                TranslatorWorker.translateText("Duration of Project") + ":", 
+                                duration.toString(), true));
                     }
                 }
-//              String commColumnName = "Final Date for Disbursements Comments";
-//              if(FeaturesUtil.isVisibleField(commColumnName)){
-//                  this.buildCommentsPart("Final Date for Disbursements", commColumnName, allComments, locale, siteId, mainLayout);
-//              }
-//              commColumnName = "Current Completion Date Comments";
-//              if(FeaturesUtil.isVisibleField(commColumnName)){
-//                  this.buildCommentsPart("current completion date", commColumnName, allComments, locale, siteId, mainLayout);
-//              }               
-                columnName=TranslatorWorker.translateText("Planning");
-                createGeneralInfoRow(mainLayout,columnName,outputValue);
+             
+                columnName = TranslatorWorker.translateText("Planning");
+                createGeneralInfoRow(mainLayout, columnName, valuesTable);
 
                 //status
                 /* No Fields. Disabling temporary
@@ -1071,6 +1075,7 @@ public class ExportActivityToPDF extends Action {
                 mainLayout.addCell(sectorCell1);
 
                 String sectorsToAdd="";
+                String sectors = "";
                 List<AmpClassificationConfiguration> classificationConfigs = SectorUtil
                         .getAllClassificationConfigsOrdered();
                 for (AmpClassificationConfiguration configuration : classificationConfigs) {
@@ -1091,48 +1096,54 @@ public class ExportActivityToPDF extends Action {
                                 .toUpperCase()+":\n ";
 
                     }
+                    
                     if (myForm.getSectors().getActivitySectors() != null) {
                         for (ActivitySector actSect : myForm.getSectors().getActivitySectors()) {
                             if (actSect.getConfigId().equals(configuration.getId())) {
 
-                                columnVal = actSect.getSectorScheme();
+                                sectors += actSect.getSectorScheme();
                                 if (actSect.getSectorName() != null) {
-                                    columnVal += " - "
+                                    sectors += " - "
                                             + actSect.getSectorName();
                                 }
                                 if (actSect.getSubsectorLevel1Name() != null) {
-                                    columnVal += " - "
+                                    sectors += " - "
                                             + actSect.getSubsectorLevel1Name();
                                 }
                                 if (actSect.getSubsectorLevel2Name() != null) {
-                                    columnVal += " - "
+                                    sectors += " - "
                                             + actSect.getSubsectorLevel2Name();
                                 }
-                                columnVal += " " + actSect.getSectorPercentage() + " %";
-                                sectorsToAdd +=columnVal +"\n";
+                                sectors += " " + actSect.getSectorPercentage() + " %";
+                                sectors += "\n";
                             }
                         }
                     }
 
                 }
-                /*if(FeaturesUtil.isVisibleModule("/Activity Form/Sectors/Primary Sectors", ampContext,session)){
-                    output+=primary+"\n";
+
+                PdfPTable sectorTable = new PdfPTable(2);
+                if (SiteUtils.isEffectiveLangRTL()) {
+                    sectorTable.setRunDirection(PdfWriter.RUN_DIRECTION_RTL);
                 }
-                if(FeaturesUtil.isVisibleModule("/Activity Form/Sectors/Secondary Sectors", ampContext,session)){
-                    output+=secondary;
-                }
-                PdfPCell sectorCell2=new PdfPCell();
-                p1=new Paragraph(postprocessText(output),plainFont);
-                sectorCell2.addElement(p1);
-                sectorCell2.setBorder(0);
-                mainLayout.addCell(sectorCell2);
-                */
-                PdfPCell sectorCell2=new PdfPCell();
-                p1=new Paragraph(postprocessText(sectorsToAdd),plainFont);
+                
+                PdfPCell sectorsCell1 = new PdfPCell();
+                p1 = new Paragraph(postprocessText(sectorsToAdd), plainFont);
                 p1.setAlignment(Element.ALIGN_LEFT);
-                sectorCell2.addElement(p1);
-                sectorCell2.setBorder(0);
-                mainLayout.addCell(sectorCell2);
+                sectorsCell1.addElement(p1);
+                sectorsCell1.setBorder(0);
+                sectorTable.addCell(sectorsCell1);
+                
+                PdfPCell sectorsCell2 = new PdfPCell();
+                p1 = new Paragraph(postprocessText(sectors), plainFont);
+                p1.setAlignment(Element.ALIGN_LEFT);
+                sectorsCell2.addElement(p1);
+                sectorsCell2.setBorder(0);
+                sectorTable.addCell(sectorsCell2);
+                
+                PdfPCell cell2 = new PdfPCell(sectorTable);
+                cell2.setBorder(0);
+                mainLayout.addCell(cell2);
             }
 
             //Components
@@ -3509,9 +3520,43 @@ public class ExportActivityToPDF extends Action {
      * @param mainLayout
      * @param columnName
      * @param value
-     * @throws WorkerException 
      */
     private void createGeneralInfoRow(PdfPTable mainLayout, String columnName, String value) {
+        createGeneralInfoRow(mainLayout, columnName, "", value, false);
+    }
+    
+    private void createGeneralInfoRow(PdfPTable mainLayout, String columnName, List<PdfPTable> valuesTable) {
+        PdfPCell cell1 = new PdfPCell();
+        Paragraph p1 = new Paragraph(postprocessText(columnName), titleFont);
+        p1.setAlignment(Element.ALIGN_RIGHT);
+        cell1.addElement(p1);
+        cell1.setBackgroundColor(BACKGROUND_COLOR);
+        cell1.setBorder(0);
+        cell1.setVerticalAlignment(Element.ALIGN_TOP);
+        mainLayout.addCell(cell1);
+        
+        PdfPTable cell2Table = new PdfPTable(1);
+        for (PdfPTable table : valuesTable) {
+            PdfPCell cell = new PdfPCell(table);
+            cell.setBorder(0);
+            cell2Table.addCell(cell);
+        }
+        
+        PdfPCell cell2 = new PdfPCell(cell2Table);
+        cell2.setBorder(0);
+        mainLayout.addCell(cell2);
+    }
+    
+    /**
+     * Used to create simple two columned row
+     * @param mainLayout
+     * @param columnName
+     * @param label
+     * @param value
+     * @param isLtr
+     */
+    private void createGeneralInfoRow(PdfPTable mainLayout, String columnName, String label, String value, 
+            boolean isLtr) {
         
         if (value == null || value.isEmpty())
             return;
@@ -3524,11 +3569,7 @@ public class ExportActivityToPDF extends Action {
         cell1.setBorder(0);
         mainLayout.addCell(cell1);
         
-        PdfPCell cell2 = new PdfPCell(createGeneralInfoTable(value));
-        p1 = new Paragraph(postprocessText(value), plainFont);
-        p1.setAlignment(Element.ALIGN_LEFT);
-        cell2.addElement(p1);
-
+        PdfPCell cell2 = new PdfPCell(createGeneralInfoTable(label, value, isLtr));
         cell2.setBorder(0);
         mainLayout.addCell(cell2);
     }
@@ -3536,19 +3577,22 @@ public class ExportActivityToPDF extends Action {
     /**
      * @param value
      * @return
-     * @throws WorkerException
      */
-    private PdfPTable createGeneralInfoTable(String value) {
-        PdfPTable valueTable = new PdfPTable(1);
+    private PdfPTable createGeneralInfoTable(String label, String value, boolean isLtr) {
+        PdfPTable valueTable = new PdfPTable(2);
         
         if (value != null && !value.isEmpty()) {
             if (SiteUtils.isEffectiveLangRTL()) {
                 valueTable.setRunDirection(PdfWriter.RUN_DIRECTION_RTL);
             }
            
+            PdfPCell labelCell = new PdfPCell(new Paragraph(label, plainFont));
+            labelCell.setBorder(0);
+
             PdfPCell valueCell = new PdfPCell(new Paragraph(value, plainFont));
             valueCell.setBorder(0);
             
+            valueTable.addCell(labelCell);
             valueTable.addCell(valueCell);
         }
         

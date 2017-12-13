@@ -49,16 +49,15 @@
 	</logic:iterate>
 	</c:if>
 	<tr>
-		<td colspan="2" bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase;">
+		<td colspan="2" class="preview-funding-total">
 			<digi:trn key='aim:subtotalplannedcommittment'> Subtotal Planned Commitments</digi:trn>:
 		</td>
-		<td colspan="2" nowrap="nowrap" align="right" bgcolor="#eeeeee"
-			style="border-top: 1px solid #000000">
+		<td colspan="2" nowrap="nowrap" class="preview-align preview-funding-total">
 				<c:if test="${not empty funding.subtotalPlannedCommitments}">
-                	<b>${funding.subtotalPlannedCommitments} ${aimEditActivityForm.currCode}</b>
+                	<b><span dir="ltr">${funding.subtotalPlannedCommitments}</span> ${aimEditActivityForm.currCode}</b>
                 </c:if>&nbsp;
             </td>
- 	<td align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
+ 	<td align="right" class="preview-funding-total">&nbsp;</td>
 	</tr>
 </c:if>
 </c:if>	
@@ -87,16 +86,15 @@
 	</logic:iterate>
 	</c:if>
 	<tr>
-		<td colspan="2" bgcolor="#eeeeee"
-			style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn
+		<td colspan="2" class="preview-funding-total"><digi:trn
 			key='aim:subtotalactualcommittment'>Subtotal Actual Commitments </digi:trn>:
 		</td>
-		<td colspan="2" nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000;">
+		<td colspan="2" nowrap="nowrap" class="preview-align preview-funding-total">
 			<c:if test="${not empty funding.subtotalActualCommitments}">
-           		<b>${funding.subtotalActualCommitments} ${aimEditActivityForm.currCode}</b>
+           		<b><span dir="ltr">${funding.subtotalActualCommitments}</span> ${aimEditActivityForm.currCode}</b>
             </c:if>&nbsp;
         </td>    
-		<td align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
+		<td class="preview-align preview-funding-total">&nbsp;</td>
 	</tr>
 	</c:if>
 </c:if>	
@@ -125,15 +123,15 @@
         	</logic:iterate>
         </c:if>
         <tr>
-			<td colspan="2" bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase">
+			<td colspan="2" class="preview-funding-total">
 				<digi:trn> Subtotal Pipeline Commitments</digi:trn>: 
 			</td>
-			<td colspan="2" nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000;">
+			<td colspan="2" nowrap="nowrap" class="preview-align preview-funding-total">
 				<c:if test="${not empty funding.subtotalPipelineCommitments}">
-					<b>${funding.subtotalPipelineCommitments} ${aimEditActivityForm.currCode}</b>
+					<b><span dir="ltr">${funding.subtotalPipelineCommitments}</span> ${aimEditActivityForm.currCode}</b>
 				</c:if>&nbsp;
 			</td>    
-			<td align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
+			<td class="preview-funding-total">&nbsp;</td>
         </tr>
         </c:if>
 </c:if>	
@@ -162,15 +160,15 @@
         	</logic:iterate>
         </c:if>
         <tr>
-			<td colspan="2" bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase">
+			<td colspan="2" class="preview-funding-total">
 				<digi:trn>Subtotal ODA Commitments</digi:trn>: 
 			</td>
-			<td colspan="2" nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000;">
+			<td colspan="2" nowrap="nowrap" class="preview-align preview-funding-total">
 				<c:if test="${not empty funding.subtotalOfficialDevelopmentAidCommitments}">
-					<b>${funding.subtotalOfficialDevelopmentAidCommitments} ${aimEditActivityForm.currCode}</b>
+					<b><span dir="ltr">${funding.subtotalOfficialDevelopmentAidCommitments}</span> ${aimEditActivityForm.currCode}</b>
 				</c:if>&nbsp;
 			</td>    
-			<td align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
+			<td>&nbsp;</td>
         </tr>
         </c:if>
 </c:if>	
@@ -199,15 +197,15 @@
         	</logic:iterate>
         </c:if>
         <tr>
-			<td colspan="2" bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase">
+			<td colspan="2" class="preview-funding-total">
 				<digi:trn>Subtotal Bilateral SSC Commitments</digi:trn>: 
 			</td>
-			<td colspan="2" nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000;">
+			<td colspan="2" nowrap="nowrap" class="preview-align preview-funding-total">
 				<c:if test="${not empty funding.subtotalBilateralSscCommitments}">
-					<b>${funding.subtotalBilateralSscCommitments} ${aimEditActivityForm.currCode}</b>
+					<b><span dir="ltr">${funding.subtotalBilateralSscCommitments}</span> ${aimEditActivityForm.currCode}</b>
 				</c:if>&nbsp;
 			</td>    
-			<td align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
+			<td class="preview-funding-total">&nbsp;</td>
         </tr>
         </c:if>
 </c:if>	
@@ -235,15 +233,15 @@
         	</logic:iterate>
         </c:if>
         <tr>
-			<td colspan="2" bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase">
+			<td colspan="2" class="preview-funding-total">
 				<digi:trn>Subtotal Triangular SSC Commitments</digi:trn>: 
 			</td>
-			<td colspan="2" nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000;">
+			<td colspan="2" nowrap="nowrap" class="preview-align preview-funding-total">
 				<c:if test="${not empty funding.subtotalTriangularSscCommitments}">
-					<b>${funding.subtotalTriangularSscCommitments} ${aimEditActivityForm.currCode}</b>
+					<b><span dir="ltr">${funding.subtotalTriangularSscCommitments}</span> ${aimEditActivityForm.currCode}</b>
 				</c:if>&nbsp;
 			</td>    
-			<td align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
+			<td class="preview-align preview-funding-total">&nbsp;</td>
         </tr>
         </c:if>
 </c:if>	

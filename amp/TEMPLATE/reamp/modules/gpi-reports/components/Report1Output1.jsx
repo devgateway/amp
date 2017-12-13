@@ -15,7 +15,7 @@ import Loading from './Loading';
 export default class Report1Output1 extends Component {
     constructor( props, context ) {
         super( props, context );
-        this.state = { recordsPerPage: 150, selectedYear: null, selectedDonor: "", remarksUrl:null, showRemarks: false, waiting:true};
+        this.state = { recordsPerPage: Constants.RECORDS_PER_PAGE, selectedYear: null, selectedDonor: "", remarksUrl:null, showRemarks: false, waiting:true};
         this.showFilters = this.showFilters.bind( this );
         this.showSettings = this.showSettings.bind( this );
         this.onDonorFilterChange = this.onDonorFilterChange.bind( this );
@@ -207,7 +207,7 @@ export default class Report1Output1 extends Component {
                     <div id="amp-settings" ref="settingsPopup"> </div>
                     <ToolBar showFilters={this.showFilters} showSettings={this.showSettings}  downloadPdfFile={this.downloadPdfFile}  downloadExcelFile={this.downloadExcelFile}/>
                     <div className="section-divider"></div>
-                    {this.props.mainReport && this.props.mainReport.summary &&
+                    {this.props.mainReport && this.props.mainReport.summary && this.props.mainReport.empty == false  &&
                             <div className="container-fluid indicator-stats no-padding">
                               <div className="col-md-3">
                                 <div className="indicator-stat-wrapper">
@@ -262,8 +262,17 @@ export default class Report1Output1 extends Component {
                                 <RemarksPopup showRemarks={this.state.showRemarks} closeRemarksModal={this.closeRemarksModal.bind(this)} remarksUrl={this.state.remarksUrl} code="1" settings={this.props.settings} />
                           }
                         <div className="section-divider"></div>
-                        <span className="pull-left">{this.getOrgName(this.state.selectedDonor) || this.props.translations['amp.gpi-reports:all-donors']}</span><span className="remarks pull-left"><img className="table-icon popup-icon" src="images/icon-bubble.svg" onClick={this.showRemarksModal}/><a onClick={this.showRemarksModal} > Remarks</a></span>
+                        {this.props.mainReport.empty == false &&
+                         <div>
+                         <span className="pull-left">{this.getOrgName(this.state.selectedDonor) || this.props.translations['amp.gpi-reports:all-donors']}</span>                         
+                         <span className="remarks pull-left"><img className="table-icon popup-icon" src="images/icon-bubble.svg" onClick={this.showRemarksModal}/><a onClick={this.showRemarksModal} > Remarks</a></span>
+                         </div>
+                         }
                         <div className="spacer30"></div>
+                        {this.props.mainReport.empty == true  &&
+                            <div className="text-center">{this.props.translations['amp-gpi-reports:no-data']}</div>
+                        }
+                        { this.props.mainReport.empty == false  &&
                         <table className="table indicator1-table table-bordered table-striped indicator-table complex-table">
                         <thead>
                         <tr>
@@ -298,6 +307,7 @@ export default class Report1Output1 extends Component {
                       )}
                       </tbody>
                       </table>
+                     }                    
                     <div>
                          <PagingSection mainReport={this.props.mainReport} goToPage={this.goToPage.bind(this)} updateRecordsPerPage={this.updateRecordsPerPage.bind(this)}/>
                

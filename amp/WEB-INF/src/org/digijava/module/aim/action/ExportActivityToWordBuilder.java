@@ -553,7 +553,7 @@ public class ExportActivityToWordBuilder {
         }
     }
     
-    private static void setRunOrientation(XWPFRun run, boolean isNumber) {
+    private static void setRunOrientation(XWPFRun run, boolean isLtr) {
         if (SiteUtils.isEffectiveLangRTL()) {
             if (run.getCTR().getRPr() == null) {
                 run.getCTR().addNewRPr().addNewRtl();
@@ -562,7 +562,7 @@ public class ExportActivityToWordBuilder {
                 run.getCTR().addNewRPr().addNewRtl();
             }
             
-            STOnOff.Enum st = isNumber ? STOnOff.FALSE : STOnOff.TRUE;
+            STOnOff.Enum st = isLtr ? STOnOff.FALSE : STOnOff.TRUE;
             run.getCTR().addNewRPr().addNewRtl().setVal(st);
         }
     }
@@ -751,7 +751,7 @@ public class ExportActivityToWordBuilder {
          */
         if (FeaturesUtil.isVisibleField("Activity Updated On")) {
             ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(
-                    "Updated On", null, null, true).addRowData(identification
+                    "Updated On", null, null, true).addRowLtrData(identification
                     .getUpdatedDate());
             sectionHelper.addRowData(rowData);
         }
@@ -776,7 +776,7 @@ public class ExportActivityToWordBuilder {
          */
         if (FeaturesUtil.isVisibleField("Activity Created On")) {
             ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(
-                    "Created On", null, null, true).addRowData(identification
+                    "Created On", null, null, true).addRowLtrData(identification
                     .getCreatedDate());
         }
         createSectionTable(sectionHelper);
@@ -1114,7 +1114,7 @@ public class ExportActivityToWordBuilder {
                         .isVisibleModule(
                                 "/Activity Form/Contracts/Contract Item/Contract "
                                         + "Disbursements/Transaction Date")) {
-                    rowData.addRowData(ipaDisb
+                    rowData.addRowLtrData(ipaDisb
                             .getDisbDate());
                 }
                 sectionHelper.addRowData(rowData);
@@ -1197,7 +1197,7 @@ public class ExportActivityToWordBuilder {
                             .isVisibleModule(
                                     "/Activity Form/Contracts/Contract Item/Contract "
                                             + "Disbursements/Transaction Date")) {
-                        rowData.addRowData(fundingDetail
+                        rowData.addRowLtrData(fundingDetail
                                 .getTransactionDate());
                     }
                     sectionHelper.addRowData(rowData);
@@ -1268,7 +1268,7 @@ public class ExportActivityToWordBuilder {
                         sectionHelper.addRowData(rowData);
 
                         rowData = new ExportSectionHelperRowData("Date", null,
-                                null, true).addRowData(doc.getDate());
+                                null, true).addRowLtrData(doc.getDate());
                         sectionHelper.addRowData(rowData);
 
                         if (doc.getDocType() != null) {
@@ -1368,51 +1368,52 @@ public class ExportActivityToWordBuilder {
 
         if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Approval Date")) {
             columnName = TranslatorWorker.translateText("Proposed Approval Date") + ": ";
-            generateOverAllTableRows(planningSubTable1, columnName, planning.getOriginalAppDate(), null);
+            generateOverAllTableRows(planningSubTable1, columnName, planning.getOriginalAppDate(), null, true);
         }
 
         if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Approval Date")) {
             columnName = TranslatorWorker.translateText("Actual Approval Date") + ": ";
-            generateOverAllTableRows(planningSubTable1, columnName, planning.getRevisedAppDate(), null);
+            generateOverAllTableRows(planningSubTable1, columnName, planning.getRevisedAppDate(), null, true);
         }
 
         if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Start Date")) {
             columnName = TranslatorWorker.translateText("Proposed Start Date") + ":";
-            generateOverAllTableRows(planningSubTable1, columnName, planning.getOriginalStartDate(), null);
+            generateOverAllTableRows(planningSubTable1, columnName, planning.getOriginalStartDate(), null, true);
         }
 
         if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Start Date")) {
             columnName = TranslatorWorker.translateText("Actual Start Date") + ": ";
-            generateOverAllTableRows(planningSubTable1, columnName, planning.getRevisedStartDate(), null);
+            generateOverAllTableRows(planningSubTable1, columnName, planning.getRevisedStartDate(), null, true);
         }
 
         if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Original Completion Date")) {
             columnName = TranslatorWorker.translateText("Original Completion Date") + ": ";
-            generateOverAllTableRows(planningSubTable1, columnName, planning.getOriginalCompDate(), null);
+            generateOverAllTableRows(planningSubTable1, columnName, planning.getOriginalCompDate(), null, true);
         }
 
         if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Completion Date")) {
             columnName = TranslatorWorker.translateText("Proposed Completion Date") + ": ";
-            generateOverAllTableRows(planningSubTable1, columnName, planning.getProposedCompDate(), null);
+            generateOverAllTableRows(planningSubTable1, columnName, planning.getProposedCompDate(), null, true);
         }
 
         if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Completion Date")) {
             columnName = TranslatorWorker.translateText("Actual Completion Date") + ": ";
-            generateOverAllTableRows(planningSubTable1, columnName, planning.getCurrentCompDate(), null);
+            generateOverAllTableRows(planningSubTable1, columnName, planning.getCurrentCompDate(), null, true);
         }
 
         if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Project Implementation Delay")) {
             columnName = TranslatorWorker.translateText("Project Implementation Delay") + ": ";
-            generateOverAllTableRows(planningSubTable1, columnName, planning.getProjectImplementationDelay(), null);
+            generateOverAllTableRows(planningSubTable1, columnName, planning.getProjectImplementationDelay(), 
+                    null, true);
         }
 
         if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Final Date for Contracting")) {
             columnName = TranslatorWorker.translateText("Final Date for Contracting") + ": ";
-            generateOverAllTableRows(planningSubTable1, columnName, planning.getContractingDate(), null);
+            generateOverAllTableRows(planningSubTable1, columnName, planning.getContractingDate(), null, true);
         }
         if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Final Date for Disbursements")) {
             columnName = TranslatorWorker.translateText("Final Date for Disbursements") + ": ";
-            generateOverAllTableRows(planningSubTable1, columnName, planning.getDisbursementsDate(), null);
+            generateOverAllTableRows(planningSubTable1, columnName, planning.getDisbursementsDate(), null, true);
         }
 
         String commColumnName = "Final Date for Disbursements Comments";
@@ -1427,7 +1428,7 @@ public class ExportActivityToWordBuilder {
         if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Project Life")) {
             columnName = TranslatorWorker.translateText("Proposed Project Life") + ": ";
             generateOverAllTableRows(planningSubTable1, columnName, planning.getProposedProjectLife() == null ? ""
-                    : String.valueOf(planning.getProposedProjectLife()), null);
+                    : String.valueOf(planning.getProposedProjectLife()), null, true);
         }
 
         if (FeaturesUtil.isVisibleField("Duration of Project")) {
@@ -1546,10 +1547,10 @@ public class ExportActivityToWordBuilder {
                     setWidth(WIDTH).setAlign(STJc.LEFT);
             eshProjectCostTable.addRowData(new ExportSectionHelperRowData("Cost", null, null,
                     true).
-                    addRowData(projCost == null ? null : projCost.getFunAmount()).
+                    addRowLtrData(projCost == null ? null : projCost.getFunAmount()).
                     addRowData(currencyCode));
             eshProjectCostTable.addRowData(new ExportSectionHelperRowData("Date", null, null, true).
-                    addRowData(projCost == null ? null : projCost.getFunDate()));
+                    addRowLtrData(projCost == null ? null : projCost.getFunDate()));
 
             if ("Proposed Project Cost".equals(costName)
                     && FeaturesUtil.isVisibleModule(
@@ -1557,8 +1558,9 @@ public class ExportActivityToWordBuilder {
                 List<ProposedProjCost> proposedProjectCostList = activityForm.getFunding().getProposedAnnualBudgets();
                 for (ProposedProjCost ppc : proposedProjectCostList) {
                     eshProjectCostTable.addRowData(new ExportSectionHelperRowData(
-                            ppc.getFunDate(), null, null, true).addRowData(
-                            FormatHelper.formatNumber(ppc.getFunAmountAsDouble()) + " " + ppc.getCurrencyCode()));
+                            ppc.getFunDate(), null, null, true).addRowLtrData(
+                            FormatHelper.formatNumber(ppc.getFunAmountAsDouble()))
+                            .addRowData(ppc.getCurrencyCode()));
                 }
             }
             createSectionTable(eshProjectCostTable);
@@ -2021,14 +2023,15 @@ public class ExportActivityToWordBuilder {
                         compFnd.getAdjustmentTypeNameTrimmed(), true);
             }
             if (FeaturesUtil.isVisibleModule(componentFMfields[ExportUtil.COMPONENT_FM_FIELD_AMOUNT])) {
-                String output = compFnd.getTransactionAmount().toString();
+                sectionHelper.addRowLtrData(compFnd.getTransactionAmount());
+                String currency = "";
                 if (FeaturesUtil.isVisibleModule(componentFMfields[ExportUtil.COMPONENT_FM_FIELD_CURRENCY])) {
-                    output += compFnd.getCurrencyCode();
+                    currency = compFnd.getCurrencyCode();
                 }
-                sectionHelper.addRowData(output);
+                sectionHelper.addRowData(currency);
             }
             if (FeaturesUtil.isVisibleModule(componentFMfields[ExportUtil.COMPONENT_FM_FIELD_TRANSCTION_DATE])) {
-                sectionHelper.addRowData(compFnd.getTransactionDate());
+                sectionHelper.addRowLtrData(compFnd.getTransactionDate());
             }
 
             sectionHelper
@@ -2105,9 +2108,9 @@ public class ExportActivityToWordBuilder {
                                 .getTransactionType()), null, null, true))
                                 .addRowData(regFnd.getRegionLocation().getName())
                                 .addRowSimpleData(regFnd.getAdjustmentType().getLabel(), true)
-                                .addRowData(DateConversion.convertDateToLocalizedString(regFnd.getTransactionDate()))
-                                .addRowData(regFnd.getTransactionAmount().toString() + " " + regFnd.getCurrency()
-                                .getCurrencyCode()));
+                                .addRowLtrData(DateConversion.convertDateToString(regFnd.getTransactionDate()))
+                                .addRowLtrData(regFnd.getTransactionAmount().toString())
+                                .addRowData(regFnd.getCurrency().getCurrencyCode()));
                         createSectionTable(eshRegFundingDetails);
                     }
                 }
@@ -2122,9 +2125,9 @@ public class ExportActivityToWordBuilder {
                                 .getTransactionType()), null, null, true))
                                 .addRowData(regFnd.getRegionLocation().getName())
                                 .addRowSimpleData(regFnd.getAdjustmentType().getLabel(), true)
-                                .addRowData(DateConversion.convertDateToLocalizedString(regFnd.getTransactionDate()))
-                                .addRowData(regFnd.getTransactionAmount().toString() + " " + regFnd.getCurrency()
-                                .getCurrencyCode()));
+                                .addRowLtrData(DateConversion.convertDateToString(regFnd.getTransactionDate()))
+                                .addRowLtrData(regFnd.getTransactionAmount().toString())
+                                .addRowData(regFnd.getCurrency().getCurrencyCode()));
                         createSectionTable(eshRegFundingDetails);
                     }
                 }
@@ -2139,9 +2142,9 @@ public class ExportActivityToWordBuilder {
                                 .getTransactionType()), null, null, true))
                                 .addRowData(regFnd.getRegionLocation().getName())
                                 .addRowSimpleData(regFnd.getAdjustmentType().getLabel(), true)
-                                .addRowData(DateConversion.convertDateToString(regFnd.getTransactionDate()))
-                                .addRowData(regFnd.getTransactionAmount().toString() + " " + regFnd.getCurrency()
-                                .getCurrencyCode()));
+                                .addRowLtrData(DateConversion.convertDateToString(regFnd.getTransactionDate()))
+                                .addRowLtrData(regFnd.getTransactionAmount().toString())
+                                .addRowData(regFnd.getCurrency().getCurrencyCode()));
                         createSectionTable(eshRegFundingDetails);
                     }
                 }
@@ -2377,7 +2380,7 @@ public class ExportActivityToWordBuilder {
                 .addEmptyData()
                 .addEmptyData()
                 .addEmptyData()
-                .addRowNumberData(subTotalValue)
+                .addRowLtrData(subTotalValue)
                 .addRowData(toCurrCode));
     }
 
@@ -2393,8 +2396,8 @@ public class ExportActivityToWordBuilder {
         ExportSectionHelperRowData currentRowData = sectionHelperRowData.
                 addRowSimpleData(fndDet.getAdjustmentTypeName().getLabel(), true).
                 addRowData(disasterResponse).
-                addRowData(fndDet.getTransactionDate()).
-                addRowNumberData(fndDet.getTransactionAmount()).
+                addRowLtrData(fndDet.getTransactionDate()).
+                addRowLtrData(fndDet.getTransactionAmount()).
                 addRowData(fndDet.getCurrencyCode());
 
         if (fndDet.getFixedExchangeRate() != null) {
@@ -2504,36 +2507,36 @@ public class ExportActivityToWordBuilder {
         if (fnd.getFundingClassificationDate() != null) {
             eshDonorInfo.addRowData(new ExportSectionHelperRowData("Funding Classification Date", null, null,
                     true)
-                    .addRowData(DateConversion.convertDateToLocalizedString(fnd.getFundingClassificationDate()
+                    .addRowLtrData(DateConversion.convertDateToLocalizedString(fnd.getFundingClassificationDate()
                     )));
         }
         if (fnd.getEffectiveFundingDate() != null) {
             eshDonorInfo.addRowData(new ExportSectionHelperRowData("Effective Funding Date", null, null, true)
-                    .addRowData(DateConversion.convertDateToString(fnd.getEffectiveFundingDate())));
+                    .addRowLtrData(DateConversion.convertDateToString(fnd.getEffectiveFundingDate())));
         }
         if (fnd.getFundingClosingDate() != null) {
             eshDonorInfo.addRowData(new ExportSectionHelperRowData("Funding Closing Date", null, null, true)
-                    .addRowData(DateConversion.convertDateToString(fnd.getFundingClosingDate())));
+                    .addRowLtrData(DateConversion.convertDateToString(fnd.getFundingClosingDate())));
         }
 
         if (fnd.getRatificationDate() != null) {
             eshDonorInfo.addRowData(new ExportSectionHelperRowData("Ratification Date", null, null, true)
-                    .addRowData(DateConversion.convertDateToLocalizedString(fnd.getRatificationDate())));
+                    .addRowLtrData(DateConversion.convertDateToLocalizedString(fnd.getRatificationDate())));
         }
 
         if (fnd.getMaturity() != null) {
             eshDonorInfo.addRowData(new ExportSectionHelperRowData("Maturity", null, null, true)
-                    .addRowData(DateConversion.convertDateToLocalizedString(fnd.getMaturity())));
+                    .addRowLtrData(DateConversion.convertDateToLocalizedString(fnd.getMaturity())));
         }
 
         if (fnd.getInterestRate() != null) {
             eshDonorInfo.addRowData(new ExportSectionHelperRowData("Interest Rate", null, null, true)
-                    .addRowData(String.valueOf(fnd.getInterestRate())));
+                    .addRowLtrData(String.valueOf(fnd.getInterestRate())));
         }
 
         if (fnd.getGracePeriod() != null) {
             eshDonorInfo.addRowData(new ExportSectionHelperRowData("Grace Period", null, null, true)
-                    .addRowData(String.valueOf(fnd.getGracePeriod())));
+                    .addRowLtrData(String.valueOf(fnd.getGracePeriod())));
         }
 
         eshDonorInfo.addRowData(new ExportSectionHelperRowData(null).setSeparator(true));
@@ -2658,7 +2661,7 @@ public class ExportActivityToWordBuilder {
             null, null, true);
             
             sectionHelperRowData.addRowData(transactionYear)
-                    .addRowNumberData(transactionAmount)
+                    .addRowLtrData(transactionAmount)
                     .addRowData(transactionCurrencyCode);
             
             String roleAndOrgForFundingFlows = getRoleAndOrgForFundingFlows(
@@ -2706,7 +2709,7 @@ public class ExportActivityToWordBuilder {
         mtefProjections.addRowData(new ExportSectionHelperRowData(null).setSeparator(true));
         mtefProjections.addRowData(new ExportSectionHelperRowData(total)
                 .addEmptyData()
-                .addRowNumberData(totalValue)
+                .addRowLtrData(totalValue)
                 .addRowData(currencyCode));
         mtefProjections.addRowData(new ExportSectionHelperRowData(null).setSeparator(true));
     }
@@ -3510,7 +3513,7 @@ public class ExportActivityToWordBuilder {
             columnVal += identification.getCreatedDate();
         }
         generateOverAllTableRows(additionalInfoSubTable, TranslatorWorker.translateText("Activity created on") + ": "
-        + "", columnVal, CELLCOLORGRAY);
+        + "", columnVal, CELLCOLORGRAY, true);
 
         columnVal = "";
         if (identification.getTeam() != null
@@ -3529,9 +3532,17 @@ public class ExportActivityToWordBuilder {
             generateOverAllTableRows(additionalInfoSubTable, "", "", CELLCOLORGRAY);
         }
     }
+    
 
-    private void generateOverAllTableRows(XWPFTable table, String fieldName, String fieldValue, String bgColor) throws
-            Exception {
+    private void generateOverAllTableRows(XWPFTable table, String fieldName, String fieldValue, String bgColor) 
+            throws Exception {
+        
+        generateOverAllTableRows(table, fieldName, fieldValue, bgColor, false);
+    }
+
+    private void generateOverAllTableRows(XWPFTable table, String fieldName, String fieldValue, String bgColor, 
+            boolean isLtr) throws Exception {
+        
         XWPFTableRow newRow = table.createRow();
         XWPFTableCell cell = newRow.getCell(0);
         XWPFParagraph p1 = cell.getParagraphs().get(0);
@@ -3545,7 +3556,7 @@ public class ExportActivityToWordBuilder {
         cell = newRow.getCell(1);
         p1 = cell.getParagraphs().get(0);
         setOrientation(p1);
-        setRun(p1.createRun(), new RunStyle(FONT_FAMILY, FONT_SIZE_NORMAL, null, true), fieldValue, false);
+        setRun(p1.createRun(), new RunStyle(FONT_FAMILY, FONT_SIZE_NORMAL, null, true), fieldValue, false, isLtr);
         cell.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.TOP);
         if (bgColor != null) {
             cell.setColor(bgColor);
@@ -3743,10 +3754,10 @@ public class ExportActivityToWordBuilder {
             return this;
         }
         
-        public ExportSectionHelperRowData addRowNumberData(String value) {
+        public ExportSectionHelperRowData addRowLtrData(String value) {
             SectionItem item = new SectionItem();
             item.setValue(value);
-            item.setNumber(true);
+            item.setLtr(true);
             items.add(item);
             
             return this;
@@ -3794,7 +3805,8 @@ public class ExportActivityToWordBuilder {
     private class SectionItem {
 
         private String value;
-        private boolean number = false;
+        // ltr means left-to-right, is used in RTL languages. E.g.: numbers and dates should be displayed as ltr
+        private boolean ltr = false;
         private boolean translated = false;
 
         public String getValue() {
@@ -3813,12 +3825,12 @@ public class ExportActivityToWordBuilder {
             return value;
         }
 
-        public boolean isNumber() {
-            return number;
+        public boolean isLtr() {
+            return ltr;
         }
 
-        public void setNumber(boolean number) {
-            this.number = number;
+        public void setLtr(boolean ltr) {
+            this.ltr = ltr;
         }
 
         public boolean isTranslated() {
@@ -3911,9 +3923,9 @@ public class ExportActivityToWordBuilder {
                     String trnVal = rowData.getTranslatedValue();
                     XWPFTableCell cell = dataRow.getCell(cellIndex);
                     XWPFParagraph dataParagraph = cell.getParagraphs().get(0);
-                    setOrientation(dataParagraph, rowData.isNumber());
+                    setOrientation(dataParagraph, rowData.isLtr());
                     setRun(dataParagraph.createRun(), new RunStyle(FONT_FAMILY, FONT_SIZE_NORMAL, null, false),
-                            trnVal != null ? trnVal : "-", false, rowData.isNumber());
+                            trnVal != null ? trnVal : "-", false, rowData.isLtr());
                     if (rd.getItems().size() < (maxCols - 1) && rowCounter == rd.getItems().size()) {
                         spanCellsAcrossRow(dataRow, 0, maxCols - rowCounter);
                     }
@@ -3925,9 +3937,9 @@ public class ExportActivityToWordBuilder {
         }
     }
     
-    private static void setRun(XWPFRun run, RunStyle runStyle, String text, boolean addBreak, boolean isNumber) {
+    private static void setRun(XWPFRun run, RunStyle runStyle, String text, boolean addBreak, boolean isLtr) {
         
-        setRunOrientation(run, isNumber);
+        setRunOrientation(run, isLtr);
        
         run.setFontFamily(runStyle.getFontFamily());
         run.setFontSize(runStyle.getFontSize());
@@ -3999,7 +4011,7 @@ public class ExportActivityToWordBuilder {
         
         String totalAmountType = TranslatorWorker.translateText(title) + ":";
         fundingTotalsDetails.addRowData(new ExportSectionHelperRowData(totalAmountType)
-                .addRowNumberData(value)
+                .addRowLtrData(value)
                 .addRowData(currencyCode));
     }
     

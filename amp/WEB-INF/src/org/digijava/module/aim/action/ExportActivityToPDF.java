@@ -1664,23 +1664,28 @@ public class ExportActivityToPDF extends Action {
                 columnName=TranslatorWorker.translateText("Structures");
                 Set<AmpStructure> structures = activity.getStructures();
 
-                ArrayList<AmpStructure> res = new ArrayList<AmpStructure>();
+                String sep = "\t:\t ";
                 for (AmpStructure struc : structures) {
-                    if(struc.getTitle()!=null){
-                        costOutput+="\n"+TranslatorWorker.translateText("Title")+": "+struc.getTitle();
+                    if (struc.getTitle() != null) {
+                        costOutput += "\n" + TranslatorWorker.translateText("Title") + sep + struc.getTitle();
                     }
-                    if(struc.getType()!=null)
-                        costOutput+="\n"+TranslatorWorker.translateText("Type")+": "+struc.getType().getName();
-                    if(struc.getDescription()!=null)
-                        costOutput+="\n"+TranslatorWorker.translateText("Description")+": "+struc.getDescription();
-                    if(struc.getLatitude()!=null)
-                        costOutput+="\n"+TranslatorWorker.translateText("Latitude")+": "+struc.getLatitude();
-                    if(struc.getLongitude()!=null)
-                        costOutput+="\n"+TranslatorWorker.translateText("Longitude")+": "+struc.getLongitude();
+                    if (struc.getType() != null) {
+                        costOutput += "\n" + TranslatorWorker.translateText("Type") + sep + struc.getType().getName();
+                    }
+                    if (struc.getDescription() != null) {
+                        costOutput += "\n" + TranslatorWorker.translateText("Description") + sep 
+                                + struc.getDescription();
+                    }
+                    if (struc.getLatitude() != null) {
+                        costOutput += "\n" + TranslatorWorker.translateText("Latitude") + sep + struc.getLatitude();
+                    }
+                    if (struc.getLongitude() != null) {
+                        costOutput += "\n" + TranslatorWorker.translateText("Longitude") + sep + struc.getLongitude();
+                    }
 
                     if (struc.getCoordinates() != null && struc.getCoordinates().size() > 0) {
                         StringJoiner coordinatesOutput = new StringJoiner("\n");
-                        coordinatesOutput.add(TranslatorWorker.translateText("Coordinates") + ": ");
+                        coordinatesOutput.add(TranslatorWorker.translateText("Coordinates") + sep);
                         for (AmpStructureCoordinate coordinate : struc.getCoordinates()) {
                             coordinatesOutput.add(coordinate.getLatitude() + " " + coordinate.getLongitude());
                         }
@@ -2897,7 +2902,8 @@ public class ExportActivityToPDF extends Action {
     }
 
     /**
-     * convenience method for accessing {@link #addNewInfoCell(PdfPTable, String, String)}. Translates ACV if not null, else passes null
+     * convenience method for accessing {@link #addNewInfoCell(PdfPTable, String, String)}. 
+     * Translates ACV if not null, else passes null
      * @param fundingTable
      * @param cellName
      * @param cellContents
@@ -3207,9 +3213,10 @@ public class ExportActivityToPDF extends Action {
                             myForm.getFunding().getUnDisbursementsBalance(), currencyCode);
                 }
 
-                // do not pass the currencyCode. The measure unit for rate is percentages
-                addTotalsOutput(fundingTable, "Delivery Rate",
+                if (myForm.getFunding().getDeliveryRate() != null) {
+                    addTotalsOutput(fundingTable, "Delivery Rate",
                         myForm.getFunding().getDeliveryRate().replace("%", ""), "%");
+                }
 
             }
         }

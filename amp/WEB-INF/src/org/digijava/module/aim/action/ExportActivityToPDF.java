@@ -3503,30 +3503,56 @@ public class ExportActivityToPDF extends Action {
 
         mainLayout.addCell(effectivenessTable);
     }
+    
     /**
      * Used to create simple two columned row
      * @param mainLayout
      * @param columnName
      * @param value
+     * @throws WorkerException 
      */
-    private void createGeneralInfoRow(PdfPTable mainLayout,String columnName,String value){
+    private void createGeneralInfoRow(PdfPTable mainLayout, String columnName, String value) {
+        
         if (value == null || value.isEmpty())
             return;
-        PdfPCell cell1=new PdfPCell();
-        Paragraph p1=new Paragraph(postprocessText(columnName),titleFont);
+        
+        PdfPCell cell1 = new PdfPCell();
+        Paragraph p1 = new Paragraph(postprocessText(columnName), titleFont);
         p1.setAlignment(Element.ALIGN_RIGHT);
         cell1.addElement(p1);
         cell1.setBackgroundColor(BACKGROUND_COLOR);
         cell1.setBorder(0);
         mainLayout.addCell(cell1);
-
-        PdfPCell cell2=new PdfPCell();
-        p1=new Paragraph(postprocessText(value), plainFont);
+        
+        PdfPCell cell2 = new PdfPCell(createGeneralInfoTable(value));
+        p1 = new Paragraph(postprocessText(value), plainFont);
         p1.setAlignment(Element.ALIGN_LEFT);
         cell2.addElement(p1);
 
         cell2.setBorder(0);
         mainLayout.addCell(cell2);
+    }
+    
+    /**
+     * @param value
+     * @return
+     * @throws WorkerException
+     */
+    private PdfPTable createGeneralInfoTable(String value) {
+        PdfPTable valueTable = new PdfPTable(1);
+        
+        if (value != null && !value.isEmpty()) {
+            if (SiteUtils.isEffectiveLangRTL()) {
+                valueTable.setRunDirection(PdfWriter.RUN_DIRECTION_RTL);
+            }
+           
+            PdfPCell valueCell = new PdfPCell(new Paragraph(value, plainFont));
+            valueCell.setBorder(0);
+            
+            valueTable.addCell(valueCell);
+        }
+        
+        return valueTable;
     }
 
     private void buildAnnualProjectBudgetTable(EditActivityForm myForm, HttpServletRequest request, PdfPTable mainLayout) {

@@ -14,6 +14,7 @@ import * as startUp from '../actions/StartUpAction';
 import DataFreezeEventList from '../components/DataFreezeEventList';
 import UnfreezeAll from '../components/UnfreezeAll';
 import * as Constants from '../common/Constants';
+import * as commonListsActions from  '../actions/CommonListsActions.jsx';
 export default class App extends Component {
     constructor(props, context) {
         super(props, context);
@@ -22,9 +23,15 @@ export default class App extends Component {
         }
         this.tabChanged = this.tabChanged.bind(this);
     }
-
-    componentWillMount() {}
-
+    
+    componentWillMount() {
+        this.props.actions.getUserInfo().then(function() {         
+          if (this.props.user['is-admin'] != true) {              
+              window.location.href = '/';
+          }
+        }.bind(this));
+    }
+    
     tabChanged(event) {
         this.setState({
             currentTab: $(event.target).data("tab")
@@ -71,14 +78,13 @@ export default class App extends Component {
 function mapStateToProps(state, ownProps) {
     return {
         translations: state.startUp.translations,
-        translate: state.startUp.translate
+        translate: state.startUp.translate,
+        user: state.commonLists.user || {}
     }
 }
 
 function mapDispatchToProps(dispatch) {
-    return {
-        actions: bindActionCreators({}, dispatch)
-    }
+    return {actions: bindActionCreators(Object.assign({}, commonListsActions), dispatch)}
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

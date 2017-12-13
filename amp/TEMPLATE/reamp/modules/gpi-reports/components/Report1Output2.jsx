@@ -16,7 +16,7 @@ import Loading from './Loading';
 export default class Report1Output2 extends Component {
     constructor( props, context ) {
         super( props, context );
-        this.state = { recordsPerPage: 150, selectedYear: null, selectedDonor: "", waiting:true};
+        this.state = { recordsPerPage: Constants.RECORDS_PER_PAGE, selectedYear: null, selectedDonor: "", waiting:true};
         this.showFilters = this.showFilters.bind( this );
         this.showSettings = this.showSettings.bind( this );        
         this.onDonorFilterChange = this.onDonorFilterChange.bind( this );     
@@ -220,7 +220,11 @@ export default class Report1Output2 extends Component {
                          <h4>{this.props.translations['amp.gpi-reports:indicator1-description']}</h4>
                         </div>
                     </div>
-                    <div className="section-divider"></div>                                                
+                    <div className="section-divider"></div> 
+                         {this.props.output2.empty == true  &&
+                             <div className="text-center">{this.props.translations['amp-gpi-reports:no-data']}</div>
+                         }                         
+                         { this.props.output2.empty == false  &&
                         <table className="table table-bordered table-striped indicator-table">
                         <thead>
                         <tr>
@@ -232,9 +236,10 @@ export default class Report1Output2 extends Component {
                       <tbody>
                           {this.createRows()}                
                       </tbody>
-                      </table>                             
+                      </table>    
+                        }
                     <div>                 
-                         <PagingSection output2={this.props.output2} goToPage={this.goToPage.bind(this)} updateRecordsPerPage={this.updateRecordsPerPage.bind(this)}/>
+                         <PagingSection mainReport={this.props.output2} goToPage={this.goToPage.bind(this)} updateRecordsPerPage={this.updateRecordsPerPage.bind(this)}/>
                     </div>
                 </div>
                 }

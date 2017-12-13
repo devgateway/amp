@@ -230,6 +230,24 @@ InteractiveFormArea.prototype.addNewItem = function(elem){
 	this.submitClicked(elem, true);
 };
 
+InteractiveFormArea.prototype.dividePercentageClicked = function(elem) {
+    _self = this;
+
+    // we have data to POST -> now post it and refresh
+    var zzz = getFormData(_self.dataDivId);
+    zzz.push({name: 'extraAction', value: 'pledge_sector_divide_percentage'});
+
+    $.post(this.ajaxPage,
+        zzz,
+        function(data) {
+            if (data.trim() == 'ok'){
+                _self.refreshDataArea();
+            } else {
+                show_error_message('Error divide_percentage sectors', data);
+            }
+        });
+};
+
 InteractiveFormArea.prototype.submitClicked = function(elem, noIds) {
 	_self = this;
 	

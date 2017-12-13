@@ -25,7 +25,9 @@
 					<tr>
 						<th class="col-xs-8 text-right"><digi:trn>Sector Name</digi:trn></th>
 						<th class="col-xs-3 text-center"><digi:trn>Percentage</digi:trn></th>
-						<th class="col-xs-1 text-center"></th>
+						<th class="col-xs-1 text-center"><button type="button" onclick="sectorsController.dividePercentageClicked(this);"
+																 class="btn btn-success btn-sm"
+																 id='pledge_form_sectors_data_divide_percentage'><digi:trn>Divide Percentage</digi:trn></button></th>
 					</tr>
 				</thead>
 				<tbody>	

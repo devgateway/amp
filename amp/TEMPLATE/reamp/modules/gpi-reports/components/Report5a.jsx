@@ -17,7 +17,7 @@ import Loading from './Loading';
 export default class Report5a extends Component {
     constructor( props, context ) {
         super( props, context );
-        this.state = { recordsPerPage: 150, hierarchy: 'donor-agency', selectedYear: null, selectedDonor: "", remarksUrl:null, showRemarks: false, waiting:true};
+        this.state = { recordsPerPage: Constants.RECORDS_PER_PAGE, hierarchy: 'donor-agency', selectedYear: null, selectedDonor: "", remarksUrl:null, showRemarks: false, waiting:true};
         this.showFilters = this.showFilters.bind( this );
         this.showSettings = this.showSettings.bind( this );        
         this.onDonorFilterChange = this.onDonorFilterChange.bind( this );
@@ -218,7 +218,7 @@ export default class Report5a extends Component {
                     <div id="amp-settings" ref="settingsPopup"> </div>
                     <ToolBar showFilters={this.showFilters} showSettings={this.showSettings} downloadPdfFile={this.downloadPdfFile}  downloadExcelFile={this.downloadExcelFile} />
                     <div className="section-divider"></div>
-                    {this.props.mainReport && this.props.mainReport.summary &&
+                    {this.props.mainReport && this.props.mainReport.summary && this.props.mainReport.empty == false  &&
                         <div className="container-fluid indicator-stats no-padding">
                         <div className="col-md-3 reduced-padding">
                           <div className="indicator-stat-wrapper">
@@ -263,7 +263,11 @@ export default class Report5a extends Component {
                         <div className="section-divider"></div>
                         {this.state.showRemarks &&
                              <RemarksPopup showRemarks={this.state.showRemarks} closeRemarksModal={this.closeRemarksModal.bind(this)} remarksUrl={this.state.remarksUrl} code="5a" settings={this.props.settings} />                                                  
-                        }                        
+                        }  
+                        {this.props.mainReport.empty == true  &&
+                            <div className="text-center">{this.props.translations['amp-gpi-reports:no-data']}</div>
+                        }
+                        { this.props.mainReport.empty == false  &&
                         <table className="table table-bordered table-striped indicator-table">
                         <thead>
                         <tr>
@@ -304,7 +308,8 @@ export default class Report5a extends Component {
                           </tr>
                       )}                      
                       </tbody>
-                      </table>                             
+                      </table> 
+                     }
                     <div>                 
                          <PagingSection mainReport={this.props.mainReport} goToPage={this.goToPage.bind(this)} updateRecordsPerPage={this.updateRecordsPerPage.bind(this)}/>
                     </div>

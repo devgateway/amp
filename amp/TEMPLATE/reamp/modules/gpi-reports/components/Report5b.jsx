@@ -13,7 +13,7 @@ import YearsFilterSection from './YearsFilterSection';
 export default class Report5b extends Component {
     constructor( props, context ) {
         super( props, context );
-        this.state = { recordsPerPage: 150, hierarchy: 'donor-agency', selectedYear: new Date().getFullYear(), selectedDonor: "", waiting: true};
+        this.state = { recordsPerPage: Constants.RECORDS_PER_PAGE, hierarchy: 'donor-agency', selectedYear: new Date().getFullYear(), selectedDonor: "", waiting: true};
         this.showFilters = this.showFilters.bind( this );
         this.showSettings = this.showSettings.bind( this );
         this.goToClickedPage = this.goToClickedPage.bind( this );
@@ -289,7 +289,7 @@ export default class Report5b extends Component {
                     </div>
 
                     <div className="section-divider"></div>
-                    {this.props.mainReport && this.props.mainReport.summary &&
+                    {this.props.mainReport && this.props.mainReport.summary && this.props.mainReport.empty == false  &&
                         <div className="container-fluid indicator-stats no-padding">
                             <div className="col-md-3">
                                 <div className="indicator-stat-wrapper">
@@ -298,6 +298,9 @@ export default class Report5b extends Component {
                                 </div>
                             </div>                           
                         </div>
+                    }
+                    {this.props.mainReport.empty == true  &&
+                        <div className="text-center">{this.props.translations['amp-gpi-reports:no-data']}</div>
                     }
                     <YearsFilterSection onYearClick={this.onYearClick.bind(this)} selectedYear={this.state.selectedYear} mainReport={this.props.mainReport} filter={this.filter} dateField="date" settingsWidget={this.settingsWidget} report={INDICATOR_5B_CODE} />                    
                     <div className="container-fluid no-padding">
@@ -310,14 +313,16 @@ export default class Report5b extends Component {
                             </select>
                         </div>                        
                     </div>
-                    
-                        <div className="container-fluid">
+                       <div className="container-fluid">
                         <div className="row">
                           <h4>{this.props.translations['amp.gpi-reports:indicator5b-description']}</h4>
                         </div>
                       </div>
-                          <div className="section-divider"></div>
-                        { this.props.mainReport.empty == false  &&
+                      <div className="section-divider"></div>
+                      { this.props.mainReport.empty &&
+                          <div className="text-center">{this.props.translations['amp-gpi-reports:no-data']}</div> 
+                      }  
+                      { this.props.mainReport.empty == false  &&
                             <table className="table table-bordered table-striped indicator-table">
                             <thead>
                             <tr>
@@ -376,9 +381,7 @@ export default class Report5b extends Component {
                             </div>
                         </div>
                       }
-                      { this.props.mainReport.empty &&
-                         <div className="text-center">{this.props.translations['amp-gpi-reports:no-data']}</div> 
-                      }
+                      
                     </div>
                         
                  </div>

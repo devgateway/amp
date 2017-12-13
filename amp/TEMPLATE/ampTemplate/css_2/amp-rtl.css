@@ -156,6 +156,7 @@ div.trnpanel div.trn-row ul {
 
 .feedbackPanelERROR {
     text-align: right;
+    direction: ltr;
 }
 
 .right_menu_empty {

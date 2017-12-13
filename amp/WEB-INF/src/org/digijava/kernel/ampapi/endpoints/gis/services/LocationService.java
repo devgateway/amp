@@ -432,8 +432,8 @@ public class LocationService {
 
     private static PointGeoJSON buildPoint(AmpStructure structure) {
         PointGeoJSON pg = new PointGeoJSON();
-        pg.coordinates.add(parseDouble(structure.getLatitude()));
-        pg.coordinates.add(parseDouble(structure.getLongitude()));
+        pg.coordinates.add(structure.getLatitude());
+        pg.coordinates.add(structure.getLongitude());
         return pg;
     }
 
@@ -443,8 +443,8 @@ public class LocationService {
         if (structure.getCoordinates() != null) {
           for (AmpStructureCoordinate coord : structure.getCoordinates()) {
               List<Double> lngLat =  new ArrayList<>();
-              lngLat.add(parseDouble(coord.getLatitude()));
-              lngLat.add(parseDouble(coord.getLongitude()));
+              lngLat.add(coord.getLatitude());
+              lngLat.add(coord.getLongitude());
               line.coordinates.add(lngLat);
           }
         }
@@ -459,8 +459,8 @@ public class LocationService {
             List<List<Double>> ring = new ArrayList<>();
             for (AmpStructureCoordinate coord : structure.getCoordinates()) {
                 List<Double> lngLat = new ArrayList<>();
-                lngLat.add(parseDouble(coord.getLatitude()));
-                lngLat.add(parseDouble(coord.getLongitude()));
+                lngLat.add(coord.getLatitude());
+                lngLat.add(coord.getLongitude());
                 ring.add(lngLat);
             }
 

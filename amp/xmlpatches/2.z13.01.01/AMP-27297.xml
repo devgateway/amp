@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-27297</jira>
+    <keyword>structures</keyword>
+    <author>jdeanquin</author>
+    <description>Change latitude and logitude to double instead of text</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="bsh">
+                new org.digijava.module.aim.startup.AmpUpdateStructureLatitudeLongitude().work();
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

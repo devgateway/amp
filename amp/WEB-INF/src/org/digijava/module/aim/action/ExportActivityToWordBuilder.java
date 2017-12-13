@@ -1500,12 +1500,12 @@ public class ExportActivityToWordBuilder {
                 if (struc.getLatitude() != null) {
                     eshProjectCostTable.addRowData(new ExportSectionHelperRowData(
                             "Latitude", null, null, true).addRowData(struc
-                            .getLatitude()));
+                            .getLatitude().toString()));
                 }
                 if (struc.getLongitude() != null) {
                     eshProjectCostTable.addRowData(new ExportSectionHelperRowData(
                             "Longitude", null, null, true).addRowData(struc
-                            .getLongitude()));
+                            .getLongitude().toString()));
                 }
 
                 if (struc.getCoordinates() != null && struc.getCoordinates().size() > 0) {

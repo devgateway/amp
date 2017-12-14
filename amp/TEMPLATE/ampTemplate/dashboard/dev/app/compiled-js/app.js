@@ -4325,6 +4325,11 @@ module.exports = BackboneDash.View.extend({
   initialize: function(options) {
 	var self = this;
     this.app = options.app;
+      if (app && app.generalSettings && app.generalSettings.attributes && app.generalSettings.attributes['rtl-direction']) {
+          this.isRtl = true;
+      } else {
+          this.isRtl = false;
+      }
     var valuesLength = this.model.get('values') ? this.model.get('values').length : 0;
     var height = util.calculateChartHeight(valuesLength, true);
     this.dashChartOptions = _({}).extend(options.chartOptions, {
@@ -4442,7 +4447,7 @@ module.exports = BackboneDash.View.extend({
         if (adjType) {
             trnAdjType = this.chart.$el.find('.ftype-options option:selected').text();
         }
-        if (app.generalSettings.attributes['rtl-direction']) {
+        if (self.isRtl) {
             moneyContext = currencyName + ' ' + ( this.model.get('sumarizedTotal') !== undefined ?
                 util.translateLanguage(this.model.get('sumarizedTotal')) +' : ' +  ' ': ' ')  ;
             moneyContext = moneyContext + trnAdjType ;
@@ -4474,8 +4479,7 @@ module.exports = BackboneDash.View.extend({
         var moneyContextX = w - 10;
         var moneyContextTextAlign='right';
         var moneyContextTextAlignReset='left';
-
-        if (app.generalSettings.attributes['rtl-direction']) {
+        if (self.isRtl) {
             //for title
             titleX = w - strTitle.length;
             ctx.textAlign = 'right';
@@ -4567,13 +4571,8 @@ module.exports = BackboneDash.View.extend({
               if (adjtype) {
                   trnAdjType = self.chart.$el.find('.ftype-options option:selected').text();
               }
-              if (app.generalSettings.attributes['rtl-direction']) {
-                  row.push(trnAdjType || '');
-                  row.push(currency);
-              } else {
-                  row.push(currency || '');
-                  row.push(trnAdjType);
-              }
+               row.push(currency || '');
+               row.push(trnAdjType);
               return row;
 	      })
 	      .value();
@@ -4606,7 +4605,7 @@ module.exports = BackboneDash.View.extend({
     var yearTrn = this.app.translator.translateSync('amp.dashboard:year', 'Year');
 
 	if (this.model.url.indexOf('/tops') > -1) {
-        if (app.generalSettings.attributes['rtl-direction']) {
+        if (self.isRtl) {
             headerRow.push(typeTrn);
             headerRow.push(currencyTrn);
             headerRow.push(amountTrn);
@@ -4646,7 +4645,12 @@ module.exports = BackboneDash.View.extend({
 	    headerRow.push(currencyTrn);
 	    headerRow.push(typeTrn);
 	}
-
+    //if we are in RTL we reverse each element of the array
+      if (self.isRtl) {
+          csvTransformed.forEach(function (row) {
+              row.reverse();
+          });
+      }
     csvTransformed.unshift(headerRow);
     /* Add sep=, for automatic Excel support at the very top of the file works but breaks BOM unicode.
      * Let us use tab-delimited instead.

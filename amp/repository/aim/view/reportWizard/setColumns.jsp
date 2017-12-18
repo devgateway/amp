@@ -49,7 +49,7 @@
 			<bean:define name="aimReportWizardForm" property="ampTreeColumns" id="ampTreeColumns" type="java.util.Map"  toScope="page"/>
 			<li noDrag="true">
 				<a id="1" style="font-size: 12px;color:#0e69b3;text-decoration:none"><digi:trn key="aim:report:AMP" >AMP</digi:trn></a>
-				<ul class="nodragul" style="margin-left: 0px;" >
+				<ul class="nodragul wizard-column-padding">
 					<logic:iterate name="ampTreeColumns" id="ampTreeColumn" type="java.util.Map.Entry" >
 						<bean:define id="themeColumn" name="ampTreeColumn" property="key" type="java.lang.String" scope="page"/>
 						<bean:define id="columnCollection" name="ampTreeColumn" property="value" type="java.util.ArrayList" scope="page"/>
@@ -58,9 +58,9 @@
 								<a id="module:<bean:write name="themeColumn"/>" style="font-size: 12px;text-decoration:none">
 									<digi:trn key="aim:report:${themeColumn}"><bean:write name="themeColumn"/></digi:trn>
 								</a>
-								<ul name="dhtmltreeArray">
+								<ul name="dhtmltreeArray" class="wizard-columns-list">
 									<logic:iterate name="columnCollection" id="ampColumnFromTree" type="org.digijava.module.aim.dbentity.AmpColumns">
-										<li class="" draggable="true" style="white-space:nowrap; background-color: #E1E1E1; border:1px solid #CECECE; margin-bottom: 5px; margin-top: 5px; padding: 1px; text-align: left; font-size: 11px; vertical-align: middle;">
+										<li class="" draggable="true">
 											<input type="checkbox" style='line-height:15px; margin-top:6px;' id="fieldVis:<bean:write name="ampColumnFromTree" property="columnId"/>" name="selectedColumns" value="<bean:write name="ampColumnFromTree" property="columnId"/>"/>
 											<a id="field:<bean:write name="ampColumnFromTree" property="columnId"/>" style="font-size: 11px;text-decoration:none"></a>
 											<span style="font-size: 11px; text-decoration:none">

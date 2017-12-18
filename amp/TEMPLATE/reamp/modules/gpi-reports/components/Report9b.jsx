@@ -339,6 +339,9 @@ export default class Report9b extends Component {
                             <div className="text-center">{this.props.translations['amp-gpi-reports:no-data']}</div>
                     }
                     { this.props.mainReport.empty == false  &&
+
+                                       
+
                     <table className="table table-bordered table-striped indicator-table">
                         <thead>
                         <tr>

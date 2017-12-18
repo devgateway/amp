@@ -65,7 +65,7 @@ function popup(mylink, windowname)
 			</logic:notPresent>
 			<logic:notEmpty name="lastViewedReports" scope="session">
 			<logic:iterate name="lastViewedReports" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports" length="5">
-				<li class="tri">
+				<li class="tri tri-desktop">
 					<a title="${report.name}" href="${fn:getReportUrl(report)}" class="triText" onclick="return popup(this,'');">
 						<c:choose>
 	                    	<c:when test="${fn:length(report.name) > 50}" >

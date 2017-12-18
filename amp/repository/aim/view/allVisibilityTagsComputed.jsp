@@ -677,7 +677,8 @@
 <field:display name="Sub-Program" feature="Budget"></field:display> 
 <field:display name="Sub-Vote" feature="Budget"></field:display>
 <field:display name="Target Value" feature="Activity"></field:display> 
-<field:display name="Template Manager" feature="Message Manager"></field:display> 
+<field:display name="Template Manager" feature="Message Manager"></field:display>
+<field:display name="Delete unsent old messages" feature="Message Manager"></field:display>
 <field:display name="Title Text Box" feature="Create Message Form"></field:display> 
 <field:display name="Title" feature="Admin - Component"></field:display> 
 <field:display name="Total Amount Commitments" feature="Regional Funding"></field:display> 

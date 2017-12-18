@@ -31,11 +31,13 @@
 									</td>
 									<td valign="middle"  align="center">
 										<button style="border: none;" type="button" onClick="MyDragAndDropObject.selectObjs('source_measures_ul', 'dest_measures_ul')">
-											<img src="/TEMPLATE/ampTemplate/img_2/ico_arr_right.gif"/>
+											<img src="/TEMPLATE/ampTemplate/img_2/ico_arr_right.gif" class="wizard-visible-button" />
+											<img src="/TEMPLATE/ampTemplate/img_2/ico_arr_left.gif" class="wizard-invisible-button" />
 										</button>
 										<br/> <br />
 										<button style="border: none;" type="button" onClick="MyDragAndDropObject.deselectObjs('dest_measures_ul', 'source_measures_ul')">
-											<img src="/TEMPLATE/ampTemplate/img_2/ico_arr_left.gif"/>
+											<img src="/TEMPLATE/ampTemplate/img_2/ico_arr_left.gif" class="wizard-visible-button" />
+											<img src="/TEMPLATE/ampTemplate/img_2/ico_arr_right.gif" class="wizard-invisible-button" />
 										</button>
 									</td>
 									<td width="340px" align="center">

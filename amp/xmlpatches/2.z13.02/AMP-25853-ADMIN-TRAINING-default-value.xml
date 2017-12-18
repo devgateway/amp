@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-25853</jira>
+    <keyword>Global Settings</keyword>
+    <keyword>email</keyword>
+    <author>jdeanquin</author>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+                update amp_email_receiver set creation_date = now() where creation_date is null;
+            </lang>
+        </script>
+    </apply>
+
+</tns:patch>

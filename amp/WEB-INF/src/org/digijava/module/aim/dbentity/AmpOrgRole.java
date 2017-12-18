@@ -119,8 +119,15 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
     public Output getOutput() {
         Output out = new Output();
         out.setOutputs(new ArrayList<Output>());
-        out.getOutputs().add(
-                new Output(null, new String[] { "Organization" }, new Object[] { this.organisation.getName() }));
+        
+        String orgName = this.organisation.getName();
+        if (this.organisation != null 
+                && this.organisation.getDeleted() != null && this.organisation.getDeleted()) {
+            out.setDeletedValues(true);
+            orgName += " (" + TranslatorWorker.translateText("deleted") + ")";
+        }
+        out.getOutputs().add(new Output(null, new String[] {"Organization"}, new Object[] {orgName}));
+        
         out.getOutputs().add(new Output(null, new String[] { "Role" }, new Object[] { TranslatorWorker.translateText(this.role.getName()) }));
         if (this.percentage != null) {
             out.getOutputs().add(new Output(null, new String[] { "Percentage" }, new Object[] { this.percentage }));
@@ -136,6 +143,7 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
                 out.getOutputs().add(new Output(null, new String[] {"Budget Code"}, new Object[] {budgetCode.substring(0,budgetCode.length()-1)}));
             }
         }
+        
         return out;
     }
 

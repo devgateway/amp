@@ -13,6 +13,7 @@ import java.util.Set;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
@@ -230,7 +231,15 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
     public Output getOutput() {
         Output out = new Output();
         out.setOutputs(new ArrayList<Output>());
-        out.getOutputs().add(new Output(null, new String[]{"Organization"}, new Object[]{this.ampDonorOrgId.getName()}));
+        
+        String orgName = this.ampDonorOrgId.getName();
+        if (this.ampDonorOrgId != null 
+                && this.ampDonorOrgId.getDeleted() != null && this.ampDonorOrgId.getDeleted()) {
+            orgName += " (" + TranslatorWorker.translateText("deleted") + ")";
+            out.setDeletedValues(true);
+        }
+        out.getOutputs().add(new Output(null, new String[]{"Organization"}, new Object[]{orgName}));
+
         if (this.typeOfAssistance != null) {
             out.getOutputs().add(new Output(null, new String[]{"Type of Assistance"}, new Object[]{this.typeOfAssistance.getValue()}));
         }

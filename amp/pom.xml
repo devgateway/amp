@@ -1172,6 +1172,58 @@
                              <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/gisModule/dev</workingDirectory>
                         </configuration>
                     </execution>
+                    <!-- Installing node and npm  for amp-state-->
+                    <execution>
+                        <!-- optional: you don't really need execution ids, but it looks nice in your build log. -->
+                        <id>install node and npm for amp-state</id>
+                        <goals>
+                            <goal>install-node-and-npm</goal>
+                        </goals>
+                        <!-- optional: default phase is "generate-resources" -->
+                        <phase>process-resources</phase>
+                        <configuration>
+                             <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-state</workingDirectory>
+                        </configuration>
+                    </execution>
+                    <!-- Running npm for amp-state-->
+                    <execution>
+                        <id>npm install for amp-state</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <!-- optional: default phase is "generate-resources" -->
+                        <phase>process-resources</phase>
+                        <configuration>
+                            <arguments>install</arguments>
+               			    <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-state</workingDirectory>
+                        </configuration>
+                    </execution>
+                    <!-- Installing node and npm  for amp-translate-->
+                    <execution>
+                        <!-- optional: you don't really need execution ids, but it looks nice in your build log. -->
+                        <id>install node and npm for amp-translate</id>
+                        <goals>
+                            <goal>install-node-and-npm</goal>
+                        </goals>
+                        <!-- optional: default phase is "generate-resources" -->
+                        <phase>process-resources</phase>
+                        <configuration>
+                             <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-translate</workingDirectory>
+                        </configuration>
+                    </execution>
+                    <!-- Running npm for amp-translate-->
+                    <execution>
+                        <id>npm install for amp-translate</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <!-- optional: default phase is "generate-resources" -->
+                        <phase>process-resources</phase>
+                        <configuration>
+                            <arguments>install</arguments>
+               			    <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-translate</workingDirectory>
+                        </configuration>
+                    </execution>
                     <!-- Installing node and npm  for amp-boilerplate-->
                     <execution>
                         <!-- optional: you don't really need execution ids, but it looks nice in your build log. -->
@@ -1209,7 +1261,7 @@
                             <arguments>build</arguments>
                				<workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-boilerplate</workingDirectory>
                         </configuration>
-                    </execution>
+                    </execution>                                      
                     <!-- Installing node and npm  for amp-filter-->
                     <execution>
                         <!-- optional: you don't really need execution ids, but it looks nice in your build log. -->

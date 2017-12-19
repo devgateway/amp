@@ -36,6 +36,8 @@ public class AdvTrnUpdateTranslation extends Action {
             editedMessage.setKey(key);
             editedMessage.setLocale(locale);
             editedMessage.setMessage(newText);
+            editedMessage.setAmpOffline(original.getAmpOffline());
+            editedMessage.setOriginalMessage(original.getOriginalMessage());
             buffer.operationUpdate(editedMessage);
         }
 

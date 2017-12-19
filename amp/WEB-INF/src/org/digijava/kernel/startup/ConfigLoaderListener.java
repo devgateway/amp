@@ -126,9 +126,9 @@ public class ConfigLoaderListener
             PersistenceManager.initialize(true);
 
             checkDatabaseCompatibility( sce.getServletContext().getRealPath("/compat.properties"));
-            //BuildVersionVerifier bvv = BuildVersionVerifier.getInstance(path);
-            //bvv.writeVersionToStartupLog(STARTUP_LOGGER, STARTUP_BEGIN_MESSAGE, path);
-            //bvv.checkAmpVersionCompatibility();
+            BuildVersionVerifier bvv = BuildVersionVerifier.getInstance(path);
+            bvv.writeVersionToStartupLog(STARTUP_LOGGER, STARTUP_BEGIN_MESSAGE, path);
+            bvv.checkAmpVersionCompatibility();
 
             checkMemoryAllocation( sce.getServletContext().getRealPath("/compat.properties"));
             

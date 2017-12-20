@@ -8,7 +8,7 @@
     <entry key="not_unique">يجب أن يكون البريد الإلكتروني فريد النوع!</entry>
 	<entry key="AmpMinSizeCollectionValidator">يرجى أضافة ${minimum} بند/بنود على الاقل هنا!</entry>
     <entry key="AmpMaxSizeCollectionValidator">يرجى عدم اضافة اكثر من ${maximum} بند/بنود هنا!</entry>
-	<entry key="AmpPercentageCollectionValidator">100 مجموع جميع النسب هو ${label}، يجب أن يكون!</entry>
+	<entry key="AmpPercentageCollectionValidator">!100 مجموع جميع النسب هو ${label}، يجب أن يكون</entry>
 	<entry key="AmpUniqueCollectionValidator">تم تكرار البنود التالية مرة على الاقل: ${label}</entry>
 	<entry key="AmpTreeCollectionValidator">بند الوالدين و بند الطفل موجودة: ${label}</entry>
 	<entry key="AmpUniqueActivityTitleValidator">يوجد نشاط بهذا العنوان داخل مساحة العمل ${workspace}.</entry>

@@ -98,6 +98,9 @@ public class AddUserForm  extends ValidatorForm {
     
     private boolean nationalCoordinator = false;
     
+    private Boolean notificationEmailEnabled;
+    private String notificationEmail;
+    
     public String[] getSelectedItems() {
         return this.selectedItems;
     }
@@ -625,6 +628,22 @@ public class AddUserForm  extends ValidatorForm {
 
     public void setNationalCoordinator(boolean nationalCoordinator) {
         this.nationalCoordinator = nationalCoordinator;
+    }
+
+    public Boolean getNotificationEmailEnabled() {
+        return notificationEmailEnabled;
+    }
+
+    public void setNotificationEmailEnabled(Boolean notificationEmailEnabled) {
+        this.notificationEmailEnabled = notificationEmailEnabled;
+    }
+
+    public String getNotificationEmail() {
+        return notificationEmail;
+    }
+
+    public void setNotificationEmail(String notificationEmail) {
+        this.notificationEmail = notificationEmail;
     }
     
 }

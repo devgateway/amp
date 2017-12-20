@@ -30,16 +30,29 @@
 	}
 
 	function validateEmail(email) {
-		if(isInvalid(email) == 1) {
-			errorMsg='<digi:trn jsFriendly="true">Email Is Blank or starts with an space</digi:trn>';
-			alert(errorMsg);
-			return false;
-		} 
-		if (! EMAIL_REGEX.test(email)) {
-			var errorMsg='<digi:trn jsFriendly="true" >Please enter valid email</digi:trn>';
-			alert(errorMsg);
-			return false;
-		}
-		return true;
-	}	
+		blankMessage = '<digi:trn jsFriendly="true">Email is blank or starts with an space</digi:trn>';
+		invalidMessage ='<digi:trn jsFriendly="true">Please enter valid email</digi:trn>';
+		
+		return validateMail(email, blankMessage, invalidMessage);
+	}
+	
+	function validateNotificationEmail(email) {
+		blankMessage = '<digi:trn jsFriendly="true">Notification Email is blank or starts with an space</digi:trn>';
+        invalidMessage ='<digi:trn jsFriendly="true">Please enter a valid Notification Email</digi:trn>';
+        
+        return validateMail(email, blankMessage, invalidMessage);
+    }
+	
+	function validateMail(email, blankMessage, invalidMessage) {
+        if (isInvalid(email) == 1) {
+            alert(blankMessage);
+            return false;
+        } 
+        if (!EMAIL_REGEX.test(email)) {
+            alert(invalidMessage);
+            return false;
+        }
+        
+        return true;
+    }
 </script>	

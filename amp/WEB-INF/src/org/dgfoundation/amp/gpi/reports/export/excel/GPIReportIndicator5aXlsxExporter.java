@@ -3,6 +3,8 @@ package org.dgfoundation.amp.gpi.reports.export.excel;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -63,12 +65,16 @@ public class GPIReportIndicator5aXlsxExporter extends GPIReportXlsxExporter {
     protected void renderReportTableSummary(Workbook wb, Sheet sheet, GPIReport report) {
         Set<CellRangeAddress> mergedCells = new HashSet<CellRangeAddress>();
 
+        Map<String, GPIReportOutputColumn> columns = report.getSummary().keySet().stream()
+                .collect(Collectors.toMap(GPIReportOutputColumn::getOriginalColumnName, Function.identity()));
+        
         Row summaryRow = sheet.createRow(initSummaryRowOffset);
         for (int i = 0; i < report.getPage().getHeaders().size(); i++) {
             GPIReportOutputColumn gpiReportOutputColumn = report.getPage().getHeaders().get(i);
-            if (report.getSummary().containsKey(gpiReportOutputColumn)) {
+            if (columns.containsKey(gpiReportOutputColumn.getOriginalColumnName())) {
+                GPIReportOutputColumn summaryColumn = columns.get(gpiReportOutputColumn.getOriginalColumnName());
                 Cell cell = summaryRow.createCell(i);
-                cell.setCellValue(String.format("%s\n%s", report.getSummary().get(gpiReportOutputColumn),
+                cell.setCellValue(String.format("%s\n%s", report.getSummary().get(summaryColumn),
                         gpiReportOutputColumn.columnName));
                 setMaxColWidth(sheet, cell, i);
 

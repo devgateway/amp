@@ -73,7 +73,7 @@ public class Search extends Action {
                 if (ampActivityId != null) {
                     ActionForward forward = mapping.findForward("redirectActivity");
                     session.setAttribute("returnSearch", true);
-                    return new ActionForward(forward.getPath() + "?public=true~pageId=2~activityId=" + ampActivityId,true);
+                    return new ActionForward(forward.getPath() + "?activityId=" + ampActivityId,true);
                 }
             }*/
 

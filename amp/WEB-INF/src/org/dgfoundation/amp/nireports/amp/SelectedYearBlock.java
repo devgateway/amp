@@ -67,7 +67,7 @@ public class SelectedYearBlock {
     }
     
     public static SelectedYearBlock buildFor(ReportSpecification spec, LocalDate now) {
-        return buildFor(AmpReportFilters.getReportSelectedYear(spec), now);
+        return buildFor(AmpReportFilters.getReportSelectedYear(spec, now.getYear()), now);
     }
     
     public SelectedYearBlock(int selectedYear, long selectedYearStartJulian, long selectedYearEndJulian, 

@@ -72,7 +72,7 @@ module.exports = ChartModel.extend({
         'The chart will be shown, but it may have errors or other issues as a result.']);
     }
 
-    if (data.maxLimit > values.length) {
+    if (data.maxLimit > values.length) { 	
     	var other = {
     			x: this.localizedOthers,
     			y: data.total -  // total minus the sum of what we have
@@ -82,7 +82,13 @@ module.exports = ChartModel.extend({
         };
         //AMP-18740: We changed the EP to send raw numbers expressed in units so we need to apply the GS here.
     	other.z = common.formatNumber(other.y / app.generalSettings.numberDivider);
-        values.push(other);
+
+    	var isRtl = app.generalSettings.get("rtl-direction");
+    	if (isRtl) {
+    		values.unshift(other);
+    	} else {
+    		values.push(other);
+    	}
     }
 
     data.processed = [{values: values}];

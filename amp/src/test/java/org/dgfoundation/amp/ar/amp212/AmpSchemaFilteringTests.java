@@ -3,24 +3,12 @@ package org.dgfoundation.amp.ar.amp212;
 import java.util.Arrays;
 import java.util.List;
 
-import org.dgfoundation.amp.ar.AllTests_amp212;
 import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.mondrian.ReportAreaForTests;
 import org.dgfoundation.amp.newreports.AreaOwner;
-import org.dgfoundation.amp.newreports.FilterRule;
-import org.dgfoundation.amp.newreports.GroupingCriteria;
-import org.dgfoundation.amp.newreports.ReportColumn;
-import org.dgfoundation.amp.newreports.ReportElement;
-import org.dgfoundation.amp.newreports.ReportElement.ElementType;
-import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
-import org.dgfoundation.amp.newreports.SortingInfo;
-import org.dgfoundation.amp.nireports.GrandTotalsDigest;
 import org.dgfoundation.amp.nireports.output.NiReportExecutor;
 import org.dgfoundation.amp.nireports.testcases.NiReportModel;
-import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
-import org.dgfoundation.amp.testutils.ReportTestingUtils;
 import org.junit.Test;
 
 /**
@@ -55,10 +43,6 @@ public class AmpSchemaFilteringTests extends FilteringSanityChecks {
             "TAC_activity_2", 
             "pledged 2"
         );
-    
-    public AmpSchemaFilteringTests() {
-        super("AmpSchemaFilteringTests sanity tests");
-    }
     
     @Override
     protected NiReportExecutor getNiExecutor(List<String> activityNames) {
@@ -131,26 +115,29 @@ public class AmpSchemaFilteringTests extends FilteringSanityChecks {
     @Test
     public void testSavedDonorGroupFilter() {
         NiReportModel cor = new NiReportModel("filtered-by-donor-group")
-            .withHeaders(Arrays.asList(
-                "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 16))",
-                "(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Region: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Primary Sector: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1));(Donor Agency: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 3, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 4, colSpan: 10));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 14, colSpan: 2))",
-                "(2010: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 4, colSpan: 2));(2011: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 6, colSpan: 2));(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 8, colSpan: 2));(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 10, colSpan: 2));(2015: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 12, colSpan: 2))",
-                "(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 10, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 11, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 12, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 13, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 14, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 15, colSpan: 1))"))
-            .withWarnings(Arrays.asList())
-            .withBody(      new ReportAreaForTests(null)
-              .withContents("Project Title", "", "Region", "", "Primary Sector", "", "Donor Agency", "", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "123 321", "Funding-2011-Actual Commitments", "213 231", "Funding-2011-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "890 000", "Funding-2013-Actual Disbursements", "145 000", "Funding-2014-Actual Commitments", "82 100", "Funding-2014-Actual Disbursements", "75 200", "Funding-2015-Actual Commitments", "45 700", "Funding-2015-Actual Disbursements", "500", "Totals-Actual Commitments", "1 231 031", "Totals-Actual Disbursements", "344 021")
-              .withChildren(
-                new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Region", "Dubasari County", "Primary Sector", "112 - BASIC EDUCATION", "Donor Agency", "World Bank", "Funding-2010-Actual Disbursements", "123 321", "Funding-2011-Actual Commitments", "213 231", "Totals-Actual Commitments", "213 231", "Totals-Actual Disbursements", "123 321"),
-                new ReportAreaForTests(new AreaOwner(24), "Project Title", "Eth Water", "Region", "Anenii Noi County", "Primary Sector", "110 - EDUCATION", "Donor Agency", "Norway", "Funding-2013-Actual Disbursements", "110 000", "Totals-Actual Disbursements", "110 000"),
-                new ReportAreaForTests(new AreaOwner(25), "Project Title", "mtef activity 1", "Region", "", "Primary Sector", "110 - EDUCATION", "Donor Agency", "UNDP"),
-                new ReportAreaForTests(new AreaOwner(36), "Project Title", "Activity With Zones and Percentages", "Region", "Anenii Noi County, Balti County", "Primary Sector", "110 - EDUCATION, 120 - HEALTH", "Donor Agency", "Norway", "Funding-2013-Actual Commitments", "890 000", "Totals-Actual Commitments", "890 000"),
-                new ReportAreaForTests(new AreaOwner(43), "Project Title", "Activity with primary_tertiary_program", "Region", "", "Primary Sector", "110 - EDUCATION", "Donor Agency", "UNDP", "Funding-2014-Actual Commitments", "50 000", "Totals-Actual Commitments", "50 000"),
-                new ReportAreaForTests(new AreaOwner(44), "Project Title", "activity with primary_program", "Region", "", "Primary Sector", "110 - EDUCATION", "Donor Agency", "World Bank", "Funding-2014-Actual Commitments", "32 000", "Totals-Actual Commitments", "32 000"),
-                new ReportAreaForTests(new AreaOwner(63), "Project Title", "activity with funded components", "Region", "", "Primary Sector", "110 - EDUCATION", "Donor Agency", "UNDP", "Funding-2014-Actual Commitments", "100", "Totals-Actual Commitments", "100"),
-                new ReportAreaForTests(new AreaOwner(64), "Project Title", "Unvalidated activity", "Region", "", "Primary Sector", "110 - EDUCATION", "Donor Agency", "UNDP", "Funding-2015-Actual Commitments", "45 000", "Totals-Actual Commitments", "45 000"),
-                new ReportAreaForTests(new AreaOwner(66), "Project Title", "Activity 2 with multiple agreements", "Region", "Chisinau County", "Primary Sector", "110 - EDUCATION", "Donor Agency", "UNDP", "Funding-2015-Actual Commitments", "700", "Totals-Actual Commitments", "700"),
-                new ReportAreaForTests(new AreaOwner(69), "Project Title", "Activity with planned disbursements", "Region", "", "Primary Sector", "112 - BASIC EDUCATION", "Donor Agency", "Norway", "Funding-2014-Actual Disbursements", "200", "Funding-2015-Actual Disbursements", "500", "Totals-Actual Disbursements", "700"),
-                new ReportAreaForTests(new AreaOwner(76), "Project Title", "activity with pipeline MTEFs and act. disb", "Region", "Chisinau County", "Primary Sector", "110 - EDUCATION", "Donor Agency", "UNDP", "Funding-2013-Actual Disbursements", "35 000", "Funding-2014-Actual Disbursements", "75 000", "Totals-Actual Disbursements", "110 000")));
+                .withHeaders(Arrays.asList(
+                        "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 16))",
+                        "(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Region: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Primary Sector: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1));(Donor Agency: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 3, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 4, colSpan: 10));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 14, colSpan: 2))",
+                        "(2010: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 4, colSpan: 2));(2011: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 6, colSpan: 2));(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 8, colSpan: 2));(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 10, colSpan: 2));(2015: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 12, colSpan: 2))",
+                        "(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 10, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 11, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 12, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 13, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 14, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 15, colSpan: 1))"))
+                .withWarnings(Arrays.asList())
+                .withBody(      new ReportAreaForTests(null)
+                        .withContents("Project Title", "", "Region", "", "Primary Sector", "", "Donor Agency", "", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "123 321", "Funding-2011-Actual Commitments", "213 231", "Funding-2011-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "890 000", "Funding-2013-Actual Disbursements", "145 000", "Funding-2014-Actual Commitments", "82 100", "Funding-2014-Actual Disbursements", "75 200", "Funding-2015-Actual Commitments", "45 700", "Funding-2015-Actual Disbursements", "500", "Totals-Actual Commitments", "1 231 031", "Totals-Actual Disbursements", "344 021")
+                        .withChildren(
+                                new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Region", "Dubasari County", "Primary Sector", "112 - BASIC EDUCATION", "Donor Agency", "World Bank", "Funding-2010-Actual Disbursements", "123 321", "Funding-2011-Actual Commitments", "213 231", "Totals-Actual Commitments", "213 231", "Totals-Actual Disbursements", "123 321"),
+                                new ReportAreaForTests(new AreaOwner(24), "Project Title", "Eth Water", "Region", "Anenii Noi County", "Primary Sector", "110 - EDUCATION", "Donor Agency", "Norway", "Funding-2013-Actual Disbursements", "110 000", "Totals-Actual Disbursements", "110 000"),
+                                new ReportAreaForTests(new AreaOwner(25), "Project Title", "mtef activity 1", "Region", "", "Primary Sector", "110 - EDUCATION", "Donor Agency", "UNDP"),
+                                new ReportAreaForTests(new AreaOwner(36), "Project Title", "Activity With Zones and Percentages", "Region", "Anenii Noi County, Balti County", "Primary Sector", "110 - EDUCATION, 120 - HEALTH", "Donor Agency", "Norway", "Funding-2013-Actual Commitments", "890 000", "Totals-Actual Commitments", "890 000"),
+                                new ReportAreaForTests(new AreaOwner(43), "Project Title", "Activity with primary_tertiary_program", "Region", "", "Primary Sector", "110 - EDUCATION", "Donor Agency", "UNDP", "Funding-2014-Actual Commitments", "50 000", "Totals-Actual Commitments", "50 000"),
+                                new ReportAreaForTests(new AreaOwner(44), "Project Title", "activity with primary_program", "Region", "", "Primary Sector", "110 - EDUCATION", "Donor Agency", "World Bank", "Funding-2014-Actual Commitments", "32 000", "Totals-Actual Commitments", "32 000"),
+                                new ReportAreaForTests(new AreaOwner(63), "Project Title", "activity with funded components", "Region", "", "Primary Sector", "110 - EDUCATION", "Donor Agency", "UNDP, World Bank", "Funding-2014-Actual Commitments", "100", "Totals-Actual Commitments", "100"),
+                                new ReportAreaForTests(new AreaOwner(64), "Project Title", "Unvalidated activity", "Region", "", "Primary Sector", "110 - EDUCATION", "Donor Agency", "UNDP", "Funding-2015-Actual Commitments", "45 000", "Totals-Actual Commitments", "45 000"),
+                                new ReportAreaForTests(new AreaOwner(66), "Project Title", "Activity 2 with multiple agreements", "Region", "Chisinau County", "Primary Sector", "110 - EDUCATION", "Donor Agency", "UNDP", "Funding-2015-Actual Commitments", "700", "Totals-Actual Commitments", "700"),
+                                new ReportAreaForTests(new AreaOwner(69), "Project Title", "Activity with planned disbursements", "Region", "", "Primary Sector", "112 - BASIC EDUCATION", "Donor Agency", "Norway", "Funding-2014-Actual Disbursements", "200", "Funding-2015-Actual Disbursements", "500", "Totals-Actual Disbursements", "700"),
+                                new ReportAreaForTests(new AreaOwner(76), "Project Title", "activity with pipeline MTEFs and act. disb", "Region", "Chisinau County", "Primary Sector", "110 - EDUCATION", "Donor Agency", "Norway, UNDP", "Funding-2013-Actual Disbursements", "35 000", "Funding-2014-Actual Disbursements", "75 000", "Totals-Actual Disbursements", "110 000"),
+                                new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity", "Region", "Chisinau City, Dubasari County", "Primary Sector", "110 - EDUCATION", "Donor Agency", "UNDP"),
+                                new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs", "Region", "Drochia County", "Primary Sector", "110 - EDUCATION", "Donor Agency", "Norway"),
+                                new ReportAreaForTests(new AreaOwner(79), "Project Title", "with weird currencies", "Region", "", "Primary Sector", "110 - EDUCATION, 112 - BASIC EDUCATION", "Donor Agency", "Norway")      ));
 
         runNiTestCase(cor, spec("filtered-by-donor-group"), acts);
     }
@@ -618,10 +605,5 @@ public class AmpSchemaFilteringTests extends FilteringSanityChecks {
                 ColumnConstants.DISASTER_RESPONSE_MARKER, Arrays.asList(2l), true); // no
             
         runNiTestCase(cor, spec, acts);
-    }
-    
-    @Override
-    public void setUp() {
-        AllTests_amp212.setUp();
     }
 }

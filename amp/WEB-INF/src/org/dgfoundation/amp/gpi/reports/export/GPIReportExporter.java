@@ -1,8 +1,12 @@
 package org.dgfoundation.amp.gpi.reports.export;
 
+import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.gpi.reports.GPIReport;
+import org.dgfoundation.amp.gpi.reports.GPIReportOutputColumn;
 import org.digijava.kernel.translator.TranslatorWorker;
 
 /**
@@ -28,6 +32,18 @@ public interface GPIReportExporter {
     default String getColumnHeaderLabel(Map<String, String> indicatorLabels, String columnName) {
         return indicatorLabels.containsKey(columnName) 
                 ? TranslatorWorker.translateText(indicatorLabels.get(columnName)) : columnName;
+    }
+    
+    default Predicate<GPIReportOutputColumn> getColumnTableFilter() {
+        return column -> true;
+    }
+    
+    default List<GPIReportOutputColumn> getDataTableColumns(GPIReport report) {
+        List<GPIReportOutputColumn> columns = report.getPage().getHeaders().stream()
+                .filter(getColumnTableFilter())
+                .collect(Collectors.toList());
+        
+        return columns;
     }
     
 }

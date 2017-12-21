@@ -70,6 +70,10 @@ public interface ReportSpecification extends Cloneable {
     public boolean isDisplayEmptyFundingRows();
 
     /**
+     * @return whether rows with no funding data should be *always* displayed or not
+     */
+    public boolean isAlwaysDisplayEmptyFundingRows();
+    /**
      * @return whether rows with no funding data should be displayed when filtering by transaction hierarchy
      */
     public boolean isDisplayEmptyFundingRowsWhenFilteringByTransactionHierarchy();

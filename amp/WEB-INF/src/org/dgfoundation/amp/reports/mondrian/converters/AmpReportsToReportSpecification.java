@@ -157,6 +157,8 @@ public class AmpReportsToReportSpecification {
         else 
             spec.setDisplayEmptyFundingRows(true);
 
+        //if we are running a tab we always show empry rows
+        spec.setAlwaysDisplayEmptyFundingRows(report.getDrilldownTab());
         // AS per Vgoas we shouldn't hide empry funding if we are filtering a tab because a tab is a project list
         // and it should show even if empty
         spec.setDisplayEmptyFundingRowsWhenFilteringByTransactionHierarchy(report.getDrilldownTab());

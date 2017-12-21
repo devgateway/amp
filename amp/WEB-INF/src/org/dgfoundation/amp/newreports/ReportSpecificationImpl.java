@@ -26,6 +26,7 @@ public class ReportSpecificationImpl implements ReportSpecification {
     //private boolean summaryReport = false;
     protected boolean displayEmptyFundingColumns = false;
     protected boolean displayEmptyFundingRows = false;
+    protected boolean alwaysDisplayEmptyFundingRows = false;
     protected boolean displayEmptyFundingRowsWhenFilteringByTransactionHierarchy = false;
     protected boolean emptyOutputForUnspecifiedData = true;
     protected boolean alsoShowPledges = false;
@@ -313,5 +314,14 @@ public class ReportSpecificationImpl implements ReportSpecification {
 
     public void setDisplayTimeRangeSubtotals(Boolean displayTimeRangeSubtotals) {
         this.displayTimeRangeSubtotals = displayTimeRangeSubtotals;
+    }
+
+    @Override
+    public boolean isAlwaysDisplayEmptyFundingRows() {
+        return alwaysDisplayEmptyFundingRows;
+    }
+
+    public void setAlwaysDisplayEmptyFundingRows(boolean alwaysDisplayEmptyFundingRows) {
+        this.alwaysDisplayEmptyFundingRows = alwaysDisplayEmptyFundingRows;
     }
 }

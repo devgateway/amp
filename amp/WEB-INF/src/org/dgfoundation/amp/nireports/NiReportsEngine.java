@@ -414,7 +414,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
     private boolean isHideEmptyFundingRowsWhenFilteringByTransactionHier() {
         // hide empty rows if we have hierarchies (because filtering must be equal to hierarchies)
         // According to Vanessa Goas we should not hide an empty row while filtering
-        // a tab
+        // a tab because a tab is a list of projects
         return !actualHierarchies.isEmpty()
                 && // or we have non-hierarchical report and spec say to hide empty rows
                 !spec.isDisplayEmptyFundingRowsWhenFilteringByTransactionHierarchy();

@@ -413,8 +413,10 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 
     private boolean isHideEmptyFundingRowsWhenFilteringByTransactionHier() {
         // hide empty rows if we have hierarchies (because filtering must be equal to hierarchies)
+        // According to Vanessa Goas we should not hide an empty row while filtering
+        // a tab
         return !actualHierarchies.isEmpty()
-                || // or we have non-hierarchical report and spec say to hide empty rows
+                && // or we have non-hierarchical report and spec say to hide empty rows
                 !spec.isDisplayEmptyFundingRowsWhenFilteringByTransactionHierarchy();
     }
 
@@ -427,7 +429,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
      */
     protected void cleanColumnsAccordingToFunding() {
         //Set<Long> idsToKeep = funding.stream().map(cell -> cell.activityId).collect(Collectors.toSet());
-        Set<Long> idsToKeep = new HashSet<>();
+            Set<Long> idsToKeep = new HashSet<>();
         reportRunMeasures.stream().map(z -> fetchedMeasures.get(z).data.keySet()).forEach(ids -> idsToKeep.addAll(ids));
 
         fetchedColumns.forEach((colName, colContents) -> {

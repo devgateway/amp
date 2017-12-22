@@ -1,18 +1,15 @@
 package org.digijava.module.aim.startup;
 
-import org.dgfoundation.amp.ar.AmpARFilter;
+import java.sql.Connection;
+import java.sql.SQLException;
+
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.util.FeaturesUtil;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 
 /**
  * @author Jdeanquin
@@ -21,19 +18,24 @@ public class AmpUpdateStructureLatitudeLongitude {
 
     protected Logger logger = LoggerFactory.getLogger(AmpUpdateStructureLatitudeLongitude.class);
 
-    private DateFormat oldFormat = new SimpleDateFormat(FeaturesUtil.getGlobalSettingValue(
-            GlobalSettingsConstants.DEFAULT_DATE_FORMAT));
-    private SimpleDateFormat newFormat = new SimpleDateFormat(AmpARFilter.SDF_IN_FORMAT_STRING);
-
     public AmpUpdateStructureLatitudeLongitude() {
 
     }
 
     private void updateLatitudeAndLongitude() {
-        PersistenceManager.getSession().doWork(connection -> {
-            updateTable(connection, "amp_structure");
-            updateTable(connection, "amp_structure_coordinate");
-        });
+        Session session = PersistenceManager.openNewSession();
+        Transaction tx = session.beginTransaction();
+        try {
+            session.doWork(connection -> {
+                updateTable(connection, "amp_structure");
+                updateTable(connection, "amp_structure_coordinate");
+            });
+        } catch (Throwable e) {
+            tx.rollback();
+            throw e;
+        } finally {
+            PersistenceManager.closeSession(session);
+        }
     }
 
     private void updateTable(Connection connection, String tableName) throws SQLException {
@@ -46,8 +48,8 @@ public class AmpUpdateStructureLatitudeLongitude {
                     + " OR longitude::numeric> %s OR longitude::numeric< -%<s LIMIT 1 ) AS t";
 
             String addColumn = "ALTER TABLE %s ADD COLUMN %s_to_fix text";
-            String updateColumn = "UPDATE %s SET %s_to_fix = %<s WHERE %<s !~ '^[-]?[0-9]*.?[0-9]*$' OR "
-                    + "  %<s::numeric NOT BETWEEN -%s AND %<s";
+            String updateColumn = "UPDATE %s SET %s_to_fix = %<s WHERE %<s !~ '^[-]?[0-9]*.?[0-9]*$'"
+                    + " OR  %<s::numeric NOT BETWEEN -%s AND %<s";
             String makeNullOriginal = "UPDATE %s SET %s = null WHERE %<s !~ '^[-]?[0-9]*.?[0-9]*$'";
 
             structuresToChange = SQLUtils.rawRunQuery(connection, 
@@ -75,7 +77,7 @@ public class AmpUpdateStructureLatitudeLongitude {
             SQLUtils.executeQuery(connection, String.format(dropColumn, tableName, "latitude"));
             SQLUtils.executeQuery(connection, String.format(dropColumn, tableName, "longitude"));
         } catch (Exception e) {
-            logger.error("cannot udpdate structures", e);
+            logger.error("cannot update structures", e);
             throw e;
         } finally {
             structuresToChange.close();

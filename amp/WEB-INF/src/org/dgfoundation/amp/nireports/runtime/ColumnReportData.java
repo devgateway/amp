@@ -131,7 +131,8 @@ public class ColumnReportData extends ReportData {
         IdsAcceptorsBuilder bld = context;
         List<ColumnReportData> newChildren = new ArrayList<>();
         boolean isTransactionLevel = context.schema.isTransactionLevelHierarchy(schemaColumn, context);
-        boolean keepEmptyFundingRows = context.spec.isDisplayEmptyFundingRows() && !isTransactionLevel;
+        boolean keepEmptyFundingRows = context.spec.isAlwaysDisplayEmptyFundingRows() || context.spec
+                .isDisplayEmptyFundingRows() && !isTransactionLevel;
         boolean isMeasurelessReport = context.spec.getMeasures().isEmpty();
         
         for(long catId:orderedCatIds) {

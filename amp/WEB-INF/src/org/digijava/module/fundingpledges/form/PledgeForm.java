@@ -102,8 +102,11 @@ public class PledgeForm extends ActionForm implements Serializable {
     public static final Function<IdNamePercentage, KeyValue> BY_ROOT_DISTRIBUTION = from -> new KeyValue(from.getRootId(), from.getRootName());
     
     public static final Function<AmpCurrency, IdWithValueShim> AMP_CURRENCY_TO_ID_WITH_SHIM = curr -> new IdWithValueShim(curr.getAmpCurrencyId(), curr.getCurrencyName());
-    
+
+
+
     private static final long serialVersionUID = 1L;
+    public static final int PERCENTAGE_ONE_HUNDRED = 100;
     private Long pledgeId;
     //private FundingPledges fundingPledges;
     private Long selectedOrgId;
@@ -360,7 +363,30 @@ public class PledgeForm extends ActionForm implements Serializable {
     
     public void addSelectedSector(long sectorId) {
         AmpSector sector = SectorUtil.getAmpSector(sectorId);
-        selectedSectors.add(PLEDGE_SECTOR_EXTRACTOR.apply(sector).setPercentageChained(0.0F));
+        Float percentage = 0.0F;
+        if (selectedSectors.size() == 0) {
+            percentage = Float.valueOf(PERCENTAGE_ONE_HUNDRED);
+        }
+        selectedSectors.add(PLEDGE_SECTOR_EXTRACTOR.apply(sector).setPercentageChained(percentage));
+    }
+
+    public void dividePercentageSector() {
+
+        int size = selectedSectors.size();
+        if (size == 0) {
+            return;
+        }
+
+        int alloc = PERCENTAGE_ONE_HUNDRED / size;
+        selectedSectors.stream().forEach(sector ->
+                sector.setPercentage((float) alloc)
+        );
+
+        int dif = PERCENTAGE_ONE_HUNDRED - alloc * size;
+        float delta = 1;
+        selectedSectors.stream().limit(dif).forEach(sector ->
+                sector.setPercentage(sector.getPercentage() + delta)
+        );
     }
     
     public List<IdWithValueShim> getShimsForCategoryClass(String categoryClassKey, Long selectedValue) {

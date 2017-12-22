@@ -13,7 +13,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
-import org.digijava.module.aim.dbentity.AmpModulesVisibility;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.gateperm.util.PermissionUtil;
 
@@ -27,6 +27,7 @@ import java.util.Collections;
  * @since 29.08.2007
  */
 public abstract class Permissible implements Identifiable {
+    public static final String GLOBAL_PERMISSION_MANAGER = "Global Permission Manager";
     private static Logger logger = Logger.getLogger(Permissible.class);
 
     @Retention(RetentionPolicy.RUNTIME)
@@ -196,10 +197,13 @@ public abstract class Permissible implements Identifiable {
      * @return
      */
     public boolean canDo(String actionName, Map scope) {
-//      return true;
-//      //logger.info("Testing canDo for Permissible: "+this);
-        Collection<String> allowedActions = getAllowedActions(scope);
-        return allowedActions.contains(actionName);
+        //logger.info("Testing canDo for Permissible: " + this);
+        if (!FeaturesUtil.isVisibleModule(GLOBAL_PERMISSION_MANAGER)) {
+            return true;
+        } else {
+            Collection<String> allowedActions = getAllowedActions(scope);
+            return allowedActions.contains(actionName);
+        }
     }
 
     /**

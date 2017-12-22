@@ -1,6 +1,6 @@
 var d3 = require('d3');
 var ChartViewBase = require('./chart-view-base');
-var ModalView = require('./chart-tops-info-modal');
+var ProjectsListModalView = require('./chart-detail-info-modal');
 var _ = require('underscore');
 
 module.exports = ChartViewBase.extend({
@@ -36,7 +36,7 @@ module.exports = ChartViewBase.extend({
     var self = this;
     var currencyName =  app.settingsWidget.definitions.findCurrencyById(self.model.get('currency')).value;
     var percentage = context.y.raw > 0 ?
-        d3.format('%')(context.y.raw / this.model.get('totalPositive')) + '</b>&nbsp<span>' + ofTotal:
+        d3.format('f')(context.y.raw / this.model.get('totalPositive') * 100) + ' %</b>&nbsp<span>' + ofTotal:
         "";
     return {tt: {
       heading: context.x.raw,
@@ -49,23 +49,12 @@ module.exports = ChartViewBase.extend({
     // clicking on the "others" bar loads five more.
     if (context.data[context.series.index]
                .values[context.x.index].special === 'others') {
-      this.model.set('limit', this.model.get('limit') + 5);      
+        this.model.set('limit', this.model.get('limit') + 5);
         this.model.set('big', true);      
-    } else if (this.model.get('showCategoriesInfo') === true) {    	
-    	this.modalView = new ModalView({ app: app, context: context, model: this.model });
-    	this.openInfoWindow();    	    	
+    } else {
+    	this.modalView = new ProjectsListModalView({ app: app, context: context, model: this.model });
+    	this.openInfoWindow((context.x.fmt || context.x.raw));
     }
-  },
-  
-  openInfoWindow: function() {
-	  var specialClass = 'dash-settings-modal';
-	  this.app.modal('Category Detail', {
-		  specialClass: specialClass,
-	      bodyEl: this.modalView.render().el,
-	      i18nTitle: 'amp.dashboard:dashboard-chart-tops-info-modal'
-	  });	    
-	  // Translate modal popup.
-	  app.translator.translateDOM($("." + specialClass));
   }
 
 });

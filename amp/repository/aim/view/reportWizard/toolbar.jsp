@@ -12,7 +12,7 @@
 </c:if>
 	
 <div>
-	<div style="float:left; margin-top:10px;">
+	<div class="wizard-toolbar-steps">
 		<c:if test="${!myForm.onePager}">
 			<button type="button" class="${className}" ${disabledString} onclick="repManager.previousStep(${stepNum + 1});" id="step${stepNum}_prev_button"/>
 				<digi:trn key='btn:previous'>Previous</digi:trn>
@@ -22,7 +22,7 @@
 			</button>
 		</c:if>
 	</div>
-	<div style="float:right; z-index: 3000; margin-top:10px; margin-right:10px;" id="toolbarDivStep${stepNum}">
+	<div class="wizard-toolbar-buttons" id="toolbarDivStep${stepNum}">
 		<feature:display  name="Filter Button" module="Report and Tab Options">
 			<button type="button" value="Filetrs" class="buttonx" id="step${stepNum}_add_filters_button" style="margin-right:2px;" onclick="repFilters.showFilters('<%=ReportContextData.getCurrentReportContextId(request, true)%>')"/>
 				<digi:trn key="btn:repFilters">Filters</digi:trn>

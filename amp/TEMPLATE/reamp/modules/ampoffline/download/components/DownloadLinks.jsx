@@ -8,6 +8,7 @@ require('./style.less');
 const WINDOWS = 'windows';
 const MAC = 'osx';
 const DEBIAN_LINUX = 'debian';
+const REDHAT_LINUX = 'redhat';
 const MACINTOSH = 'macintosh';
 const LINUX = 'linux';
 
@@ -46,6 +47,9 @@ var DownloadLinks = React.createClass( {
             case DEBIAN_LINUX:
                 name = `Ubuntu Linux (.deb) - ${arch} ${this.props.translations['amp.offline:bits']}`;
                 break;
+            case REDHAT_LINUX:
+                name = `RedHat Linux (.rpm) - ${arch} ${this.props.translations['amp.offline:bits']}`;
+                break;
             case MAC:
                 name = `Mac OS - ${arch} ${this.props.translations['amp.offline:bits']}`;
                 break;
@@ -57,23 +61,23 @@ var DownloadLinks = React.createClass( {
         const os = platform.os;
         const arch = os.architecture;
         const family = os.family.toLowerCase();
-        let osName = '';
+        let osNames = null;
         if ( family.indexOf( WINDOWS ) > -1 ) {
-            osName = WINDOWS;
+            osNames = [WINDOWS];
         } else if ( family.indexOf( MACINTOSH ) > -1 ) {
-            osName = MAC;
+            osNames = [MAC];
         } else if ( family.indexOf( LINUX ) > -1 ) {
-            osName = DEBIAN_LINUX;
+            osNames = [DEBIAN_LINUX, REDHAT_LINUX];
         } else {
-            return null;
+            return [];
         }
-        const installer = this.state.data.filter( i => ( i.os === osName && i.arch === arch.toString() ) );
-        if ( installer.length > 0 ) {
-            const message = this.props.translations['amp.offline:best-version-message'];
-            const installerName = this._getInstallerName( installer[0].os, installer[0].arch );
-            const link = <div className="link"><a href={`${this.props.url}/${installer[0].id}`} >{this.props.translations['amp.offline:download']} {installer[0].version} - {installerName}</a></div>;
-            return ( <div className="alert alert-info" role="alert"><span className="info-text">{message}</span>{link}</div> );
-        }
+        const installer = this.state.data.filter( i => ( osNames.filter(os => os === i.os).length > 0 && i.arch === arch.toString() ) );        
+        const links = installer.map(i => {            
+            const installerName = this._getInstallerName( i.os, i.arch );
+            return (<div key={i.id} className="link"><a href={`${this.props.url}/${i.id}`} >{this.props.translations['amp.offline:download']} {i.version} - {installerName}</a></div>);            
+        });
+        const message = this.props.translations['amp.offline:best-version-message'];
+        return ( <div className="alert alert-info" role="alert"><span className="info-text">{message}</span>{links}</div> );
     },
 
     render: function() {

@@ -77,7 +77,6 @@ nv.models.customizedLegend = function() {
                         });
                     }
                 });
-            debugger;
             var cxForText = '8';
             if (rtl) {
                 cxForText = '0';
@@ -104,7 +103,6 @@ nv.models.customizedLegend = function() {
 
                 var seriesWidths = [];
                 series.each(function(d,i) {
-                    debugger;
                     var legendText = d3.select(this).select('text');
                     var nodeTextLength;
                     try {

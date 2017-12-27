@@ -13,17 +13,20 @@ import org.digijava.module.aim.dbentity.AmpActivityContracts;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 
 
-
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class AmpContractInformationFormSectionFeature extends AmpFormSectionFeaturePanel {
     public AmpContractInformationFormSectionFeature(String id, String fmName,
                                                     final IModel<AmpActivityVersion> am) throws Exception {
         super(id, fmName, am);
-        final PropertyModel<Set<AmpActivityContracts>> setModel=new PropertyModel<Set<AmpActivityContracts>>(am,
+        final PropertyModel<Set<AmpActivityContracts>> setModel = new PropertyModel<Set<AmpActivityContracts>>(am,
                 "activityContracts");
-        if (setModel.getObject() == null)
+        if (setModel.getObject() == null) {
             setModel.setObject(new TreeSet<AmpActivityContracts>());
+        }
         final ListEditor<AmpActivityContracts> list;
 
         IModel<List<AmpActivityContracts>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(setModel);
@@ -37,7 +40,7 @@ public class AmpContractInformationFormSectionFeature extends AmpFormSectionFeat
 
                 AmpActivityContractsField acf = new AmpActivityContractsField("activityContract", am,
                         PersistentObjectModel
-                        .getModel(comp.getModelObject()), "activityContracts");
+                                .getModel(comp.getModelObject()), "activityContracts");
                 comp.add(acf);
                 ListEditorRemoveButton delButton = new ListEditorRemoveButton("deleteContract", "Delete contract");
                 comp.add(delButton);

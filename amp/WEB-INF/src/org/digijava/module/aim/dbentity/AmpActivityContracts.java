@@ -4,41 +4,57 @@ import org.digijava.module.aim.util.Output;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
 
 public class AmpActivityContracts implements Serializable, Versionable, Cloneable, Comparable<AmpActivityContracts> {
     private Long ampContractId;
-    private String contractDescrition;
+    private String contractDescription;
     private AmpActivityVersion activity;
     private Date contractDate;
     private Double contractAmount;
+    private static final Integer HASH_CODE_CONSTANT = 31;
+
+    @Override
+    public boolean equals(Object o) {
+        return equalsForVersioning(o);
+    }
 
     @Override
     public boolean equalsForVersioning(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         AmpActivityContracts that = (AmpActivityContracts) o;
 
-        if (contractDescrition != null ? !contractDescrition.equals(that.contractDescrition) : that.contractDescrition != null)
+        if (contractDescription != null ? !contractDescription.equals(that.contractDescription) : that
+                .contractDescription != null) {
             return false;
-        if (contractDate != null ? !contractDate.equals(that.contractDate) : that.contractDate != null) return false;
+        }
+        if (contractDate != null ? !contractDate.equals(that.contractDate) : that.contractDate != null) {
+            return false;
+        }
         return contractAmount != null ? contractAmount.equals(that.contractAmount) : that.contractAmount == null;
     }
 
     @Override
     public int hashCode() {
-        int result = contractDescrition != null ? contractDescrition.hashCode() : 0;
-        result = 31 * result + (contractDate != null ? contractDate.hashCode() : 0);
-        result = 31 * result + (contractAmount != null ? contractAmount.hashCode() : 0);
+        int result = contractDescription != null ? contractDescription.hashCode() : 0;
+        result = HASH_CODE_CONSTANT * result + (contractDate != null ? contractDate.hashCode() : 0);
+        result = HASH_CODE_CONSTANT * result + (contractAmount != null ? contractAmount.hashCode() : 0);
         return result;
     }
 
     @Override
     public Object getValue() {
         String value = "";
-        if (contractDescrition != null) {
-            value += contractDescrition;
+        if (contractDescription != null) {
+            value += contractDescription;
         }
         if (contractDate != null) {
             value += contractDate;
@@ -54,8 +70,9 @@ public class AmpActivityContracts implements Serializable, Versionable, Cloneabl
         Output out = new Output();
         out.setOutputs(new ArrayList<Output>());
         out.getOutputs().add(
-                new Output(null, new String[]{"Contract description"}, new Object[]{this.contractDescrition != null ? this.contractDescrition
-                        : ""}));
+                new Output(null, new String[]{"Contract description"}, new Object[]{
+                        this.contractDescription != null ? this.contractDescription
+                                : ""}));
         if (this.contractDate != null) {
             out.getOutputs().add(new Output(null, new String[]{"Contract Date"}, new Object[]{this.contractDate}));
         }
@@ -82,11 +99,11 @@ public class AmpActivityContracts implements Serializable, Versionable, Cloneabl
     }
 
     public String getContractDescription() {
-        return contractDescrition;
+        return contractDescription;
     }
 
     public void setContractDescription(String contractDescrition) {
-        this.contractDescrition = contractDescrition;
+        this.contractDescription = contractDescrition;
     }
 
     public AmpActivityVersion getActivity() {
@@ -125,14 +142,18 @@ public class AmpActivityContracts implements Serializable, Versionable, Cloneabl
         }
 
         public static int staticCompare(AmpActivityContracts o1, AmpActivityContracts o2) {
-            if (o1 == null)
+            if (o1 == null) {
                 return 1;
-            if (o2 == null)
+            }
+            if (o2 == null) {
                 return -1;
-            if (o2.getContractDescription() == null)
+            }
+            if (o2.getContractDescription() == null) {
                 return -1;
-            if (o1.getContractDescription() == null)
+            }
+            if (o1.getContractDescription() == null) {
                 return 1;
+            }
             int ret = o1.getContractDescription().compareTo(o2.getContractDescription());
             return ret;
         }

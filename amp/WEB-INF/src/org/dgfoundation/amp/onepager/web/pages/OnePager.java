@@ -36,7 +36,32 @@ import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.features.AmpActivityFormFeature;
-import org.dgfoundation.amp.onepager.components.features.sections.*;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpAidEffectivenessFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpBudgetStructureFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpComponentsFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpContactsFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpContractInformationFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpContractingFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpCrossCuttingIssuesFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpFormSectionFeaturePanel;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpGPIFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpGPINiFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpIdentificationFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpInternalIdsFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpIssuesFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpLineMinistryObservationsFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpLocationFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpMEFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpPIFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpPlanningFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpProgramFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpRegionalFundingFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpRegionalObservationsFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpRelatedOrganizationsFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpResourcesFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpSectorsFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpStructuresFormSectionFeature;
 import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
 import org.dgfoundation.amp.onepager.util.ActivityUtil;
@@ -72,8 +97,8 @@ public class OnePager extends AmpHeaderFooter {
     protected AmpActivityModel am;
 //  protected AmpActivityModel activityModelForSave;
 
-    static OnepagerSection[] staticOnepagerSectionList = {
-        new OnepagerSection("Identification",AmpIdentificationFormSectionFeature.class.getName(), 1, false),
+    private static OnepagerSection[] staticOnepagerSectionList = {
+            new OnepagerSection("Identification", AmpIdentificationFormSectionFeature.class.getName(), 1, false),
         new OnepagerSection("Activity Internal IDs", AmpInternalIdsFormSectionFeature.class.getName(), 2, false),
         new OnepagerSection("Planning", AmpPlanningFormSectionFeature.class.getName(), 3, false),
         new OnepagerSection("Location",AmpLocationFormSectionFeature.class.getName(), 4, false, true, AmpRegionalFundingFormSectionFeature.class.getName()),

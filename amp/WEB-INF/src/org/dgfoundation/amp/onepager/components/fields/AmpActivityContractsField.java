@@ -1,6 +1,5 @@
 package org.dgfoundation.amp.onepager.components.fields;
 
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
@@ -19,10 +18,11 @@ public class AmpActivityContractsField extends AmpFeaturePanel<Boolean> {
 
 
         AmpTextAreaFieldPanel contractDescrition =
-                new AmpTextAreaFieldPanel("contractDescription", new PropertyModel<String>
-                        (ampActivityContractsModel, "contractDescription"), "activity " +
-                        "contract description",
-                        false, false, false, true, true);
+                new AmpTextAreaFieldPanel("contractDescription", new PropertyModel<String>(ampActivityContractsModel,
+                        "contractDescription"), "activity "
+                        + "contract description",
+                        false, false, false,
+                        true, true);
         add(contractDescrition);
 
         AmpDatePickerFieldPanel contractDate = new AmpDatePickerFieldPanel(

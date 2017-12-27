@@ -201,6 +201,8 @@ LoggerIdentifiable, Cloneable {
 //  @Interchangeable(fieldTitle = "Contracts", importable = true, fmPath="/Activity Form/Contracts")
     @VersionableCollection(fieldTitle = "Contracts")
     protected Set<IPAContract> contracts;
+
+    protected Set<AmpActivityContracts> activityContracts;
     
     //TTIL
     @Interchangeable(fieldTitle = "Locations", importable = true, fmPath = "/Activity Form/Location", required = "/Activity Form/Location/Locations/Location required validator",
@@ -2150,5 +2152,13 @@ LoggerIdentifiable, Cloneable {
             }
             this.costAmounts.add(costAmount);
         }
+
+    public Set<AmpActivityContracts> getActivityContracts() {
+        return activityContracts;
+    }
+
+    public void setActivityContracts(Set<AmpActivityContracts> activityContracts) {
+        this.activityContracts = activityContracts;
+    }
 }
 

@@ -1435,10 +1435,11 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         state.setSender(tmFrom.getMemberName()+";"+tmFrom.getTeamName());
         AmpMessageUtil.saveOrUpdateMessageState(state);
         try{ 
-        AmpMessageUtil.createMessageState(message, tmTo);
-        }catch(Exception e){
+            AmpMessageUtil.createMessageState(message, tmTo);
+        } catch (Exception e) {
             throw new AimException("cannot create message state",e);
         }
+        message.addMessageReceiver(tmTo);
         AmpMessageUtil.saveOrUpdateMessage(message);
 
     }

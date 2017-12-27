@@ -34,12 +34,19 @@ public class AmpMessageReceiver {
         this.message = message;
     }
     
+    public String getNotificationUserAndEmail() {
+        User u = receiver.getUser();
+        
+        return String.format("%s %s<%s>", u.getFirstNames(), u.getLastName(), u.getEmailUsedForNotification());
+    }
+    
     @Override
     public String toString() {
         User u =  receiver.getUser();
         AmpTeam t = receiver.getAmpTeam();
         
-        return String.format("%s %s<%s>;%s;", u.getFirstNames(), u.getLastName(), u.getEmail(), t.getName());
+        return String.format("%s %s<%s>;%s;", u.getFirstNames(), u.getLastName(), 
+                u.getEmailUsedForNotification(), t.getName());
     }
 
 }

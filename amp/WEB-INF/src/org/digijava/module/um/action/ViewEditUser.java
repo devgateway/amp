@@ -343,9 +343,9 @@ public class ViewEditUser extends Action {
                     user.setPledger(uForm.getPledger());
                     user.setExemptFromDataFreezing(uForm.getExemptFromDataFreezing());
                     
-                    user.setNotificationEmailEnabled(uForm.isNotificationEmailEnabled());
+                    user.setNotificationEmailEnabled(uForm.getNotificationEmailEnabled());
                     
-                    if (uForm.isNotificationEmailEnabled()) {
+                    if (uForm.getNotificationEmailEnabled()) {
                         user.setNotificationEmail(uForm.getNotificationEmail());
                     } else {
                         user.setNotificationEmail(null);

@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
@@ -44,6 +45,7 @@ import org.digijava.module.message.dbentity.AmpAlert;
 import org.digijava.module.message.dbentity.AmpEmail;
 import org.digijava.module.message.dbentity.AmpEmailReceiver;
 import org.digijava.module.message.dbentity.AmpMessage;
+import org.digijava.module.message.dbentity.AmpMessageReceiver;
 import org.digijava.module.message.dbentity.AmpMessageSettings;
 import org.digijava.module.message.dbentity.AmpMessageState;
 import org.digijava.module.message.dbentity.Approval;
@@ -171,7 +173,8 @@ public class AmpMessageWorker {
                     for (AmpAlert ampMessage : listNewMsg) {
                         List<String> receivers = new ArrayList<>();
                         AmpMessageUtil.saveOrUpdateMessage(ampMessage);
-                        receivers.add(StringUtils.split(ampMessage.getReceivers(), ";")[0]);
+                        AmpMessageReceiver msgReceiver = ampMessage.getMessageReceivers().stream().findFirst().get();
+                        receivers.add(msgReceiver.getNotificationUserAndEmail());
                         createEmailsAndReceivers(ampMessage, receivers, false);
                     }
 
@@ -256,7 +259,7 @@ public class AmpMessageWorker {
                             createMsgState(state, newMsg, false);
                             if (!msgStateMap.containsKey(state.getReceiver().getAmpTeamMemId())) {
                                 msgStateMap.put(state.getReceiver().getAmpTeamMemId(), state);
-                                emailReceivers.add(state.getReceiver().getUser().getEmail());
+                                emailReceivers.add(state.getReceiver().getUser().getEmailUsedForNotification());
                             }
                         }
                         createEmailsAndReceivers(newMsg, emailReceivers, false);
@@ -303,7 +306,7 @@ public class AmpMessageWorker {
             event.setSenderType(MessageConstants.SENDER_TYPE_USER);
             event.setSenderId(tm.getAmpTeamMemId());
             event.setSenderName(tm.getUser().getFirstNames() + " " + tm.getUser().getLastName() + "<"
-                    + tm.getUser().getEmail() + ">;" + tm.getAmpTeam().getName());
+                    + tm.getUser().getEmailUsedForNotification() + ">;" + tm.getAmpTeam().getName());
             event.setSenderEmail(tm.getUser().getEmail());
             // put event's start/end dates in map.
             myHashMap.put(MessageConstants.START_DATE,
@@ -320,25 +323,20 @@ public class AmpMessageWorker {
 
         CalendarEvent newEvent = createEventFromTemplate(template, myHashMap, event);
 
-        String receivers = new String();
-
         Long calId = new Long(e.getParameters().get(CalendarEventTrigger.PARAM_ID).toString());
         AmpCalendar ampCal = AmpDbUtil.getAmpCalendar(calId);
         Set<AmpCalendarAttendee> att = ampCal.getAttendees();
 
         if (att != null) {
-            receivers = createReceiversFieldForEvent(receivers, att);
+            addReceiversToEvent(newEvent, att);
         }
         // In case this event is created when new calendar event was added,
         // message should go to it's creator too
         // so in the receivers list we should also add it's creator (AMP-3775)
         if (saveActionWasCalled) {
-            User user = tm.getUser();
-            receivers += ", " + user.getFirstNames() + " " + user.getLastName() + "<" + user.getEmail() + ">;"
-                    + tm.getAmpTeam().getName() + ";";
+            newEvent.addMessageReceiver(tm);
         }
 
-        newEvent.setReceivers(receivers.substring(", ".length()));
         return newEvent;
     }
 
@@ -352,7 +350,7 @@ public class AmpMessageWorker {
         event.setSenderType(MessageConstants.SENDER_TYPE_USER);
         event.setSenderId(tm.getAmpTeamMemId());
         event.setSenderName(tm.getUser().getFirstNames() + " " + tm.getUser().getLastName() + "<"
-                + tm.getUser().getEmail() + ">;" + tm.getAmpTeam().getName());
+                + tm.getUser().getEmailUsedForNotification() + ">;" + tm.getAmpTeam().getName());
         event.setSenderEmail(tm.getUser().getEmail());
         // put event's start/end dates in map.
         myHashMap.put(MessageConstants.START_DATE,
@@ -362,29 +360,24 @@ public class AmpMessageWorker {
 
         CalendarEvent newEvent = createEventFromTemplate(template, myHashMap, event);
 
-        String receivers = new String();
         Set<AmpCalendarAttendee> att = (Set<AmpCalendarAttendee>) e.getParameters()
                 .get(RemoveCalendarEventTrigger.ATTENDEES);
         if (att != null) {
-            receivers = createReceiversFieldForEvent(receivers, att);
+            addReceiversToEvent(newEvent, att);
         }
         return newEvent;
     }
 
-    private static String createReceiversFieldForEvent(String receivers, Set<AmpCalendarAttendee> att) {
+    private static void addReceiversToEvent(CalendarEvent event, Set<AmpCalendarAttendee> att) {
         for (AmpCalendarAttendee ampAtt : att) {
             if (ampAtt.getMember() != null) {
-                AmpTeamMember member = ampAtt.getMember();
-                User user = member.getUser();
-                receivers += ", " + user.getFirstNames() + " " + user.getLastName() + "<" + user.getEmail() + ">;"
-                        + member.getAmpTeam().getName() + ";";
+                event.addMessageReceiver(ampAtt.getMember());
             }
-            if (ampAtt.getGuest() != null) { // guests e-mails should also be
-                                                // included in receivers list
-                receivers += ", <" + ampAtt.getGuest() + ">;";
+            if (ampAtt.getGuest() != null) { // guests e-mails should also be included in receivers list
+                String guestEmail = "<" + ampAtt.getGuest() + ">;";
+                event.setExternalReceivers(guestEmail);
             }
         }
-        return receivers;
     }
 
     /**
@@ -465,11 +458,8 @@ public class AmpMessageWorker {
         }
         myHashMap.put(MessageConstants.OBJECT_AUTHOR,
                 (String) e.getParameters().get(AbstractCalendarEventTrigger.PARAM_TEAM_MANAGER));
-        User user = creator.getUser();
-        String receivers = user.getFirstNames() + " " + user.getLastName() + "<" + user.getEmail() + ">;"
-                + user.getName() + ";";
+        approval.addMessageReceiver(creator);
 
-        approval.setReceivers(receivers);
         return createApprovalFromTemplate(template, myHashMap, approval, false, false, false, null);
     }
 
@@ -694,7 +684,7 @@ public class AmpMessageWorker {
         alert.setSenderType(MessageConstants.SENDER_TYPE_SYSTEM);
         alert.setName(template.getName());
         alert.setDescription(template.getDescription());
-        alert.setReceivers(template.getReceivers());
+        alert.copyMessageReceiversFromTemplate(template);
         alert.setDraft(false);
         Calendar cal = Calendar.getInstance();
         alert.setCreationDate(cal.getTime());
@@ -710,7 +700,7 @@ public class AmpMessageWorker {
         alert.setSenderType(MessageConstants.SENDER_TYPE_SYSTEM);
         alert.setName(template.getName());
         alert.setDescription(template.getDescription());
-        alert.setReceivers(template.getReceivers());
+        alert.copyMessageReceiversFromTemplate(template);
         alert.setDraft(false);
         Calendar cal = Calendar.getInstance();
         alert.setCreationDate(cal.getTime());
@@ -735,42 +725,33 @@ public class AmpMessageWorker {
                 teamId = approver.getAmpTeam().getAmpTeamId();
             }
         }
-        // receivers
-        String receivers = "";
         /*
-         * currently approvers only approve activity and not calendar event,
-         * resources
+         * currently approvers only approve activity and not calendar event, resources
          */
         if (activityApproval) {
             AmpTeamMember tm = TeamMemberUtil.getAmpTeamMember(newApproval.getSenderId());
-            receivers += tm.getUser().getFirstNames() + " " + tm.getUser().getLastName() + "<" + tm.getUser().getEmail()
-                    + ">;" + tm.getAmpTeam().getName() + ";";
+            newApproval.addMessageReceiver(tm);
             List<AmpTeamMember> teamHeadAndAndApprovers = TeamMemberUtil.getTeamHeadAndApprovers(teamId);
 
             for (AmpTeamMember member : teamHeadAndAndApprovers) {
                 if (approver != null && !needsApproval && member.getAmpTeamMemId().equals(approver)) {
                     continue;
                 }
-                receivers += ", " + member.getUser().getFirstNames() + " " + member.getUser().getLastName() + "<"
-                        + member.getUser().getEmail() + ">;" + member.getAmpTeam().getName() + ";";
+                newApproval.addMessageReceiver(member);
             }
         } else {
             if ((needsApproval && !sourceIsResource) || !needsApproval) {
                 AmpTeamMember tm = TeamMemberUtil.getAmpTeamMember(newApproval.getSenderId());
-                receivers += tm.getUser().getFirstNames() + " " + tm.getUser().getLastName() + "<"
-                        + tm.getUser().getEmail() + ">;" + tm.getAmpTeam().getName() + ";";
+                newApproval.addMessageReceiver(tm);
             } else {
-
                 AmpTeamMember teamHead = TeamMemberUtil.getTeamHead(teamId);
                 if (teamHead != null) {
-                    receivers += ", " + teamHead.getUser().getFirstNames() + " " + teamHead.getUser().getLastName()
-                            + "<" + teamHead.getUser().getEmail() + ">;" + teamHead.getAmpTeam().getName() + ";";
+                    newApproval.addMessageReceiver(teamHead);
                 }
             }
 
         }
 
-        newApproval.setReceivers(receivers);
         return newApproval;
     }
 
@@ -783,13 +764,13 @@ public class AmpMessageWorker {
      * created different kinds of alerts(not approvals or calendar events )
      */
     private static AmpAlert createAlertFromTemplate(TemplateAlert template, HashMap<String, String> myMap,
-            AmpAlert newAlert, String receivers) {
+            AmpAlert newAlert, AmpTeamMember receiver) {
         newAlert.setName(truncateParameterName(template.getName(), myMap));
         newAlert.setDescription(DgUtil.fillPattern(template.getDescription(), myMap));
-        if (receivers == null) {
-            newAlert.setReceivers(template.getReceivers());
+        if (receiver != null) {
+            newAlert.addMessageReceiver(receiver);
         } else {
-            newAlert.setReceivers(receivers);
+            newAlert.copyMessageReceiversFromTemplate(template);
         }
         newAlert.setDraft(false);
         Calendar cal = Calendar.getInstance();
@@ -802,8 +783,6 @@ public class AmpMessageWorker {
      */
     private static List<AmpAlert> processActivityLevelEvent(Event e, AmpAlert alert, TemplateAlert template,boolean sendAlert) {
 
-        StringBuffer teamsToNotify = new StringBuffer();
-        String[] receivers;
         HashMap<String, String> myHashMap = new HashMap<String, String>();
         List<AmpAlert> alerts = new ArrayList<AmpAlert>();
 
@@ -825,28 +804,23 @@ public class AmpMessageWorker {
                 (Long) e.getParameters().get(ActivityValidationWorkflowTrigger.PARAM_ACTIVITY_ID),
                 template.getRelatedTriggerName());
         if (listTeamsToNotify != null) {
-            for (Team ampTeam : listTeamsToNotify) {
-                teamsToNotify.append(ampTeam.getTeamName());
-                teamsToNotify.append(";");
-            }
-            receivers = StringUtils.split(template.getReceivers(), ",");
-            for (int j = 0; j < receivers.length; j++) {
-                if (teamsToNotify.toString().contains(StringUtils.split(receivers[j], ";")[1])) {
-                    if (receivers[j].indexOf("<") > 0) {
-                        myHashMap.put(MessageConstants.OBJECT_LOGIN,
-                                StringUtils.left(receivers[j], receivers[j].indexOf("<")));
-                    }
-                    AmpAlert newAlert = null;
+            List<Long> teamToNotifyNames = listTeamsToNotify.stream()
+                    .map(tm -> tm.getTeamId())
+                    .collect(Collectors.toList());
+            
+            for (AmpMessageReceiver msgReceiver : template.getMessageReceivers()) {
+                AmpTeamMember tm = msgReceiver.getReceiver();
+                if (teamToNotifyNames.contains(tm.getAmpTeam().getAmpTeamId())) {
+                    myHashMap.put(MessageConstants.OBJECT_LOGIN, tm.getUser().getName());
                     try {
-                        newAlert = (AmpAlert) BeanUtils.cloneBean(alert);
-                        alerts.add(createAlertFromTemplate(template, myHashMap, newAlert, receivers[j]));
+                        AmpAlert newAlert = (AmpAlert) BeanUtils.cloneBean(alert);
+                        alerts.add(createAlertFromTemplate(template, myHashMap, newAlert, tm));
                         AmpMessageUtil.saveOrUpdateMessage(newAlert);
                         //Ideally we should keep in the template a relationship with AmpTeamMember
                         //I will create a follow up ticket so we don't have to manipulate a 
                         //String
                         if(sendAlert){
-                            AmpTeamMember receiver=getAmpTeamMemberFromReceiver(receivers[j]);
-                            createMsgState(template, newAlert,receiver);
+                            createMsgState(template, newAlert, tm);
                         }
                     } catch (Exception ex) {
                         logger.error("Cannot clone AmpAlert", ex);
@@ -866,7 +840,7 @@ public class AmpMessageWorker {
         alert.setSenderType(MessageConstants.SENDER_TYPE_SYSTEM);
         alert.setName(template.getName());
         alert.setDescription(template.getDescription());
-        alert.setReceivers(template.getReceivers());
+        alert.copyMessageReceiversFromTemplate(template);
         alert.setDraft(false);
 
         Calendar cal = Calendar.getInstance();
@@ -886,16 +860,16 @@ public class AmpMessageWorker {
                 e.getParameters().get(PerformanceRuleAlertTrigger.PARAM_DATA_PERFORMANCE_ISSUES).toString());
 
         List<String> receiversAddresses = new ArrayList<>();
-        if (template.getReceivers() != null) {
-            String[] receivers = template.getReceivers().split(",");
-            for (String receiver : receivers) {
-                receiversAddresses.add(getEmailFromReceiver(receiver));
+        if (template.getMessageReceivers() != null) {
+            for (AmpMessageReceiver receiver : template.getMessageReceivers()) {
+                receiversAddresses.add(receiver.getReceiver().getUser().getEmailUsedForNotification());
             }
         }
 
         if (receiversAddresses.size() > 0) {
             for (String emailAddr : receiversAddresses) {
-                String senderEmail = (msgSender == null) ? DEFAULT_EMAIL_SENDER : msgSender.getUser().getEmail();
+                String senderEmail = (msgSender == null) ? DEFAULT_EMAIL_SENDER 
+                        : msgSender.getUser().getEmailUsedForNotification();
                 
                 String translatedName = TranslatorWorker.translateText(newMsg.getName());
 
@@ -966,41 +940,32 @@ public class AmpMessageWorker {
             // before
             // closing the ticket
             String teamsConfigured = null;
-            StringBuffer teamsToSearch = new StringBuffer();
             // ids of team to filter out the AmpTeamLeads query
             final List<Long> teamMemberIds = new ArrayList<Long>();
 
-            // we get the set of unique teams configured to receive alter so we
-            // can
-            // limit
+            // we get the set of unique teams configured to receive alter so we can limit
             // the count of ws in which look for the activity
             try {
-                StringBuffer bufferReceivers = new StringBuffer();
-                String[] aReceivers;
                 List<TemplateAlert> tempAlerts = AmpMessageUtil.getTemplateAlerts(relatedTrigger);
-                for (TemplateAlert templateAlert : tempAlerts) {
-                    bufferReceivers.append(templateAlert.getReceivers());
-                }
-                if (bufferReceivers.length() == 0) {
-                    // we don't have any recipient configured
+                Set<AmpMessageReceiver> receivers = tempAlerts.stream()
+                        .flatMap(t -> t.getMessageReceivers().stream())
+                        .collect(Collectors.toSet());
+                
+                if (receivers.isEmpty()) {
                     return null;
                 }
-                aReceivers = StringUtils.split(bufferReceivers.toString(), ",");
-                for (int i = 0; i < aReceivers.length; i++) {
-                    String t = StringUtils.split(aReceivers[i], ";")[1];
-                    if (!teamsToSearch.toString().contains(t)) {
-                        teamsToSearch.append("'" + t + "'" + ",");
-                    }
-                }
-                teamsConfigured = teamsToSearch.substring(0, teamsToSearch.lastIndexOf(","));
-
+                
+                teamsConfigured = receivers.stream()
+                        .map(r -> r.getReceiver().getAmpTeam().getAmpTeamId().toString())
+                        .collect(Collectors.joining(", "));
+                
             } catch (Exception e) {
                 logger.error("couldnt get teams configured", e);
             }
 
-            final String query = "select min(tm.amp_team_mem_id),tm.amp_team_id from amp_team_member tm ,amp_team  t "
-                    + " where tm.amp_member_role_id in(1,3) " + " and tm.amp_team_id=t.amp_team_id "
-                    + " and t.name in (" + teamsConfigured + ") " + " group by tm.amp_team_id";
+            final String query = "SELECT min(tm.amp_team_mem_id), tm.amp_team_id FROM amp_team_member tm "
+                    + "WHERE tm.amp_member_role_id in (1,3) AND tm.amp_team_id in (" + teamsConfigured + ") "
+                    + "GROUP BY tm.amp_team_id";
 
             PersistenceManager.getSession().doWork(new Work() {
                 public void execute(Connection conn) throws SQLException {
@@ -1071,10 +1036,11 @@ public class AmpMessageWorker {
             CalendarEvent newEvent) {
         newEvent.setName(truncateParameterName(template.getName(), myMap));
         newEvent.setDescription(DgUtil.fillPattern(template.getDescription(), myMap));
-        newEvent.setReceivers(template.getReceivers());
         newEvent.setDraft(false);
+        newEvent.copyMessageReceiversFromTemplate(template);
         Calendar cal = Calendar.getInstance();
         newEvent.setCreationDate(cal.getTime());
+        
         return newEvent;
     }
 
@@ -1102,7 +1068,7 @@ public class AmpMessageWorker {
         for (AmpTeamMember mmb : receivers) {
             AmpMessageState state = new AmpMessageState();
             state.setReceiver(mmb);
-            emailReceivers.add(email);
+            emailReceivers.add(mmb.getUser().getEmailUsedForNotification());
             createMsgState(state, newMsg, false);
         }
         createEmailsAndReceivers(newMsg, emailReceivers, false);
@@ -1123,15 +1089,20 @@ public class AmpMessageWorker {
             // create receivers list for resources
             TeamMember sharedBy = TeamMemberUtil.getTeamMember(approval.getSenderId());
             Long teamId = sharedBy.getTeamId();
-            String receivers;
             if (needsApproval) {
                 TeamMember teamLead = TeamMemberUtil.getTMTeamHead(teamId);
                 receiverTeamMembers.add(teamLead);
             } else {
                 receiverTeamMembers.add(sharedBy);
             }
-            receivers = fillTOfieldForReceivers(receiverTeamMembers, statesRelatedToTemplate);
-            approval.setReceivers(receivers);
+            
+            Set<Long> memberIds = receiverTeamMembers.stream().map(t -> t.getMemberId()).collect(Collectors.toSet());
+            
+            for (AmpMessageReceiver msgReceiver : template.getMessageReceivers()) {
+                if (memberIds.contains(msgReceiver.getReceiver().getUser().getId())) {
+                    approval.addMessageReceiver(msgReceiver.getReceiver());
+                }
+            }
 
             for (AmpMessageState state : statesRelatedToTemplate) {
                 AmpTeamMember teamMember = state.getReceiver();
@@ -1159,7 +1130,7 @@ public class AmpMessageWorker {
                     }
                     if (createNewMsgState) {
                         createMsgState(state, approval, false);
-                        emailReceivers.add(state.getReceiver().getUser().getEmail());
+                        emailReceivers.add(state.getReceiver().getUser().getEmailUsedForNotification());
                         break;
                     }
 
@@ -1180,7 +1151,7 @@ public class AmpMessageWorker {
         AmpTeamMember msgSender = TeamMemberUtil.getAmpTeamMember(approval.getSenderId());
         AmpMessageState state = new AmpMessageState();
 
-        emailReceivers.add(msgSender.getUser().getEmail());
+        emailReceivers.add(msgSender.getUser().getEmailUsedForNotification());
         state.setReceiver(msgSender);
         createMsgState(state, approval, false);
         List<AmpTeamMember> teamHeadAndAndApprovers = TeamMemberUtil.getTeamHeadAndApprovers(teamId);
@@ -1189,7 +1160,7 @@ public class AmpMessageWorker {
             if (approver != null && triggerClass.equals(ApprovedActivityTrigger.class) && member.equals(approver)) {
                 continue;
             }
-            emailReceivers.add(member.getUser().getEmail());
+            emailReceivers.add(member.getUser().getEmailUsedForNotification());
             state = new AmpMessageState();
             state.setReceiver(member);
             createMsgState(state, approval, false);
@@ -1205,7 +1176,7 @@ public class AmpMessageWorker {
         List<String> emailReceivers = new ArrayList<String>();
 
         AmpMessageState state = new AmpMessageState();
-        emailReceivers.add(msgSender.getUser().getEmail());
+        emailReceivers.add(msgSender.getUser().getEmailUsedForNotification());
         state.setReceiver(msgSender);
         createMsgState(state, approval, false);
 
@@ -1288,7 +1259,7 @@ public class AmpMessageWorker {
 
         for (AmpMessageState state : msgStateMap.values()) {
             createMsgState(state, calEvent, saveActionWasCalled);
-            emailReceivers.add(state.getReceiver().getUser().getEmail());
+            emailReceivers.add(state.getReceiver().getUser().getEmailUsedForNotification());
         }
 
         createEmailsAndReceivers(calEvent, emailReceivers, saveActionWasCalled);
@@ -1308,10 +1279,14 @@ public class AmpMessageWorker {
         if (statesRelatedToTemplate != null && statesRelatedToTemplate.size() > 0) {
             List<String> emailReceivers = new ArrayList<String>();
             // create receivers list for activity
-            String receivers;
             Collection<TeamMember> teamMembers = TeamMemberUtil.getAllTeamMembers(teamId);
-            receivers = fillTOfieldForReceivers(teamMembers, statesRelatedToTemplate);
-            alert.setReceivers(receivers);
+            Set<Long> memberIds = teamMembers.stream().map(t -> t.getMemberId()).collect(Collectors.toSet());
+            
+            for (AmpMessageReceiver msgReceiver : template.getMessageReceivers()) {
+                if (memberIds.contains(msgReceiver.getReceiver().getUser().getId())) {
+                    alert.addMessageReceiver(msgReceiver.getReceiver());
+                }
+            }
 
             for (AmpMessageState state : statesRelatedToTemplate) {
                 // get receiver Team Member.
@@ -1323,7 +1298,7 @@ public class AmpMessageWorker {
                  */
                 if (teamMember.getAmpTeam().getAmpTeamId().equals(teamId)) {
                     createMsgState(state, alert, false);
-                    emailReceivers.add(state.getReceiver().getUser().getEmail());
+                    emailReceivers.add(state.getReceiver().getUser().getEmailUsedForNotification());
                 }
             }
             createEmailsAndReceivers(alert, emailReceivers, false);
@@ -1338,17 +1313,18 @@ public class AmpMessageWorker {
 
         statesRelatedToTemplate = AmpMessageUtil.loadMessageStates(template.getId());
         if (statesRelatedToTemplate != null && statesRelatedToTemplate.size() > 0) {
-            List<String> receiversAddresses = new ArrayList<String>(); // receivers
-                                                                        // that
-                                                                        // should
-                                                                        // get
-                                                                        // emails
+            List<String> receiversAddresses = new ArrayList<String>(); // receivers that should get emails
             // create receivers list for activity
-            String receivers;
             Collection<TeamMember> teamMembers = TeamMemberUtil
                     .getAllTeamMembers(activityCreator.getAmpTeam().getAmpTeamId());
-            receivers = fillTOfieldForReceivers(teamMembers, statesRelatedToTemplate);
-            alert.setReceivers(receivers);
+            
+            Set<Long> memberIds = teamMembers.stream().map(t -> t.getMemberId()).collect(Collectors.toSet());
+            
+            for (AmpMessageReceiver msgReceiver : template.getMessageReceivers()) {
+                if (memberIds.contains(msgReceiver.getReceiver().getUser().getId())) {
+                    alert.addMessageReceiver(msgReceiver.getReceiver());
+                }
+            }
 
             // and here we define the receivers
             for (AmpMessageState state : statesRelatedToTemplate) {
@@ -1369,7 +1345,7 @@ public class AmpMessageWorker {
                 if (teamMember.getAmpTeam().getAmpTeamId().equals(activityCreator.getAmpTeam().getAmpTeamId())
                         || (ctv && teamMember.isActivityValidatableByUser(activityId))) {
                     createMsgState(state, alert, false);
-                    receiversAddresses.add(teamMember.getUser().getEmail());
+                    receiversAddresses.add(teamMember.getUser().getEmailUsedForNotification());
                 }
             }
             // Emails and Receivers
@@ -1386,7 +1362,8 @@ public class AmpMessageWorker {
         params.put(DataFreezeEmailNotificationTrigger.PARAM_DATA_FREEZE_NOTIFICATION_DAYS, String.valueOf(DataFreezeEmailNotificationTrigger.DAYS_TO_FREEZE));
         params.put(DataFreezeEmailNotificationTrigger.PARAM_DATA_FREEZING_DATE, e.getParameters().get(DataFreezeEmailNotificationTrigger.PARAM_DATA_FREEZING_DATE).toString());
         for(User user : users) {
-            String senderEmail = (msgSender == null) ? DEFAULT_EMAIL_SENDER : msgSender.getUser().getEmail();
+            String senderEmail = (msgSender == null) ? DEFAULT_EMAIL_SENDER
+                    : msgSender.getUser().getEmailUsedForNotification();
             AmpEmail ampEmail = emails.get(user.getRegisterLanguage().getCode());
             if (ampEmail == null) {
                 String translatedName = TranslatorWorker.translateText(newMsg.getName(), user.getRegisterLanguage()
@@ -1427,8 +1404,8 @@ public class AmpMessageWorker {
                 translatedDescription, params));
         DbUtil.saveOrUpdateObject(ampEmail);
 
-        AmpEmailReceiver emailReceiver = new AmpEmailReceiver(user.getEmail(), ampEmail, MessageConstants
-                .UNSENT_STATUS);
+        AmpEmailReceiver emailReceiver = new AmpEmailReceiver(user.getEmailUsedForNotification(), ampEmail, 
+                MessageConstants.UNSENT_STATUS);
         DbUtil.saveOrUpdateObject(emailReceiver);
 
     }
@@ -1470,22 +1447,6 @@ public class AmpMessageWorker {
         }
     }
 
-    /*
-     * This function is used to create receivers String, which will be shown on
-     * view message page in TO: section
-     */
-    private static String fillTOfieldForReceivers(Collection<TeamMember> teamMembers, List<AmpMessageState> states) {
-        String receivers = "";// TODO:this is potentially ridiculously slow
-        for (AmpMessageState state : states) {
-            for (TeamMember tm : teamMembers) {
-                if (state.getReceiver().getAmpTeamMemId().equals(tm.getMemberId())) {
-                    receivers += tm.getMemberName() + " " + "<" + tm.getEmail() + ">;" + tm.getTeamName() + ";" + ", ";
-                }
-            }
-        }
-        return receivers;
-    }
-
     /**
      * Create AmpEmails with receivers that Quartz Job will use to send emails
      * when called
@@ -1520,7 +1481,8 @@ public class AmpMessageWorker {
                                                     // event. if so, a bit
                                                     // different e-mail should
                                                     // be sent
-                    ampEmail = new AmpEmail(msgSender.getUser().getEmail(), message.getName(), description);
+                    ampEmail = new AmpEmail(msgSender.getUser().getEmailUsedForNotification(), 
+                            message.getName(), description);
                 } else {
                     ampEmail = new AmpEmail(DEFAULT_EMAIL_SENDER, message.getName(), description);
                 }

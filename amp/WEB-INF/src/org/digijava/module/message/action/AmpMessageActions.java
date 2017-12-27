@@ -1064,7 +1064,8 @@ public class AmpMessageActions extends DispatchAction {
         message.setSenderType(MessageConstants.SENDER_TYPE_USER);
         message.setSenderId(teamMember.getMemberId());
         User user=TeamMemberUtil.getAmpTeamMember(teamMember.getMemberId()).getUser();
-        String senderName=user.getFirstNames()+" "+user.getLastName()+"<"+user.getEmail()+">;"+teamMember.getTeamName();
+        String senderName = user.getFirstNames() + " " + user.getLastName() + "<" + user.getNotificationEmail() + ">;"
+                + teamMember.getTeamName();
         message.setSenderName(senderName);
         /**
          * this will be filled only when we are forwarding a message
@@ -1176,7 +1177,8 @@ public class AmpMessageActions extends DispatchAction {
                     message.addMessageReceiver(msgReceiver);
                     if (settings != null && settings.getEmailMsgs() != null && settings.getEmailMsgs().equals(new Long(1))) {
                         //creating internet address where the mail will be sent
-                        addrCol.add(new InternetAddress(TeamMemberUtil.getAmpTeamMember(memId).getUser().getEmail()));
+                        addrCol.add(new InternetAddress(
+                                TeamMemberUtil.getAmpTeamMember(memId).getUser().getNotificationEmail()));
                     }
                 } else if (receiver.startsWith("c")) { //contacts or people outside AMP
                     // we should send email to contacts, regardless setting value in Message Manager
@@ -1204,9 +1206,9 @@ public class AmpMessageActions extends DispatchAction {
 
             if (settings != null && settings.getEmailMsgs() != null && settings.getEmailMsgs().equals(new Long(1))) {
                 if (request.getParameter("toDo") != null && !request.getParameter("toDo").equals("draft")) {
-                    InternetAddress[] addresses=(InternetAddress[])addrCol.toArray(new InternetAddress[addrCol.size()]);                    
-                    DgEmailManager.sendMail(addresses, teamMember.getEmail(), message,doc);
-                    //DgEmailManager.sendMail(addresses, teamMember.getEmail(), message.getName(),message.getDescription());
+                    InternetAddress[] addresses = (InternetAddress[]) addrCol
+                            .toArray(new InternetAddress[addrCol.size()]);
+                    DgEmailManager.sendMail(addresses, teamMember.getNotificationEmail(), message, doc);
                 }
             }
             AmpMessageUtil.saveOrUpdateMessage(message);
@@ -1383,7 +1385,8 @@ public class AmpMessageActions extends DispatchAction {
                 }else{
                     result += " from=\"" +MessageConstants.SENDER_TYPE_SYSTEM + "\"";
                 }
-                result += " to=\"" + org.digijava.module.aim.util.DbUtil.filter(state.getMessage().getReceivers()) + "\"";
+                result += " to=\"" + org.digijava.module.aim.util.DbUtil.filter(
+                        state.getMessage().getAllMessageReceiversAsString()) + "\"";
                 result += " received=\"" + DateConversion.convertDateToString(state.getMessage().getCreationDate()) + "\"";
                 result += " priority=\"" + state.getMessage().getPriorityLevel() + "\"";
                 //attachments start
@@ -1459,7 +1462,9 @@ public class AmpMessageActions extends DispatchAction {
             result += " from=\"" + MessageConstants.SENDER_TYPE_SYSTEM + "\"";
         }
         result += " received=\"" + DateConversion.convertDateToString(forwardedOrRepliedMessage.getCreationDate()) + "\"";
-        result += " to=\"" + org.digijava.module.aim.util.DbUtil.filter(forwardedOrRepliedMessage.getReceivers()) + "\"";
+        result += " to=\""
+                + org.digijava.module.aim.util.DbUtil.filter(forwardedOrRepliedMessage.getAllMessageReceiversAsString())
+                + "\"";
         result += " priority=\"" + forwardedOrRepliedMessage.getPriorityLevel() + "\"";
         //attachments start
         if(forwardedOrRepliedMessage.getAttachedDocs()!=null){

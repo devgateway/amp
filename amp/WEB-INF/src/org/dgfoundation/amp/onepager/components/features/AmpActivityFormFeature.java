@@ -1408,7 +1408,8 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         message.setSenderType(MessageConstants.SENDER_TYPE_USER);
         message.setSenderId(tmFrom.getMemberId());
         
-        senderName=user.getFirstNames()+" "+user.getLastName()+"<"+user.getEmail()+">;"+tmFrom.getTeamName();
+        senderName = user.getFirstNames() + " " + user.getLastName() + "<" + user.getEmailUsedForNotification() + ">;"
+                    + tmFrom.getTeamName();
         message.setSenderName(senderName);
         
         message.setRelatedActivityId(activityId);

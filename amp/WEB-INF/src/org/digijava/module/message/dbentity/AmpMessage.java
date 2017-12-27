@@ -3,6 +3,7 @@ package org.digijava.module.message.dbentity;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.sdm.dbentity.Sdm;
@@ -53,8 +54,9 @@ public abstract class AmpMessage {
         
         
     /**
-     * this field holds list of receivers
+     * @deprecated this field holds list of receivers {@link #messageReceivers}
      */
+    @Deprecated
     private String receivers; // name and surnames of receivers separeted by comma
 
     private String externalReceivers; //contacts + people outside AMP
@@ -71,13 +73,21 @@ public abstract class AmpMessage {
         this.messageReceivers = messageReceivers;
     }
 
-        public String getReceivers() {
-            return receivers;
-        }
+    /**
+     * @deprecated  Replaced by {@link #getMessageReceivers()}
+     */
+    @Deprecated
+    public String getReceivers() {
+        return receivers;
+    }
 
-        public void setReceivers(String receivers) {
-            this.receivers = receivers;
-        }
+    /**
+     * @deprecated  Replaced by {@link #setMessageReceivers()}
+     */
+    @Deprecated
+    public void setReceivers(String receivers) {
+        this.receivers = receivers;
+    }
         
     
 
@@ -220,6 +230,19 @@ public abstract class AmpMessage {
         }
         
         messageReceivers.add(msgReceiver);
-    }   
+    }
+    
+    public void copyMessageReceiversFromTemplate(AmpMessage template) {
+        for (AmpMessageReceiver msgReceiver : template.getMessageReceivers()) {
+            addMessageReceiver(msgReceiver.getReceiver());
+        }
+    }
+    
+    public String getAllMessageReceiversAsString() {
+        String msgReceivers = messageReceivers.stream()
+                .map(x -> x.toString())
+                .collect(Collectors.joining(", "));
         
+        return msgReceivers;
+    }
 }

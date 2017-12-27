@@ -408,7 +408,7 @@ public class ViewEditUserForm extends ActionForm {
         this.nationalCoordinator = nationalCoordinator;
     }
 
-    public Boolean isNotificationEmailEnabled() {
+    public Boolean getNotificationEmailEnabled() {
         return notificationEmailEnabled;
     }
 

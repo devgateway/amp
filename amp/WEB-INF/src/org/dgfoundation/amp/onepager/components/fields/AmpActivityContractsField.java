@@ -28,7 +28,7 @@ public class AmpActivityContractsField extends AmpFeaturePanel<Boolean> {
         AmpDatePickerFieldPanel contractDate = new AmpDatePickerFieldPanel(
                 "contractDate", new PropertyModel<Date>(ampActivityContractsModel,
                 "contractDate"), null,
-                "Activity Contract Name");
+                "Activity Contract Date");
         add(contractDate);
 
         AmpTextFieldPanel<Double>

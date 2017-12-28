@@ -220,6 +220,8 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
         put("/Activity Form/Sectors/Quaternary Sectors", ColumnConstants.QUATERNARY_SECTOR);
         put("/Activity Form/Sectors/Quinary Sectors", ColumnConstants.QUINARY_SECTOR);
         put("/Activity Form/Structures", ColumnConstants.STRUCTURES_COLUMN);
+        put("/Activity Form/Contracts Information/Contracts Information/Activity Contract Date",
+                ColumnConstants.CONTRACT_DATE);
     }};
     
     @SuppressWarnings("serial")

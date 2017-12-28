@@ -63,6 +63,7 @@ public class ColumnConstants {
     public static final String COMPONENT_TYPE = "Component Type";
     public static final String COMPUTED_YEAR = "Computed Year";
     public static final String CONCESSIONALITY_LEVEL = "Concessionality Level";
+    public static final String CONTRACT_DATE = "Contract Date";
     public static final String CONTRACTING_AGENCY = "Contracting Agency";
     public static final String CONTRACTING_AGENCY_ACRONYM = "Contracting Agency Acronym";
     public static final String CONTRACTING_AGENCY_DEPARTMENT_DIVISION = "Contracting Agency Department/Division";

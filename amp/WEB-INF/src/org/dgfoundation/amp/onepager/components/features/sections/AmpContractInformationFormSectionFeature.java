@@ -40,7 +40,7 @@ public class AmpContractInformationFormSectionFeature extends AmpFormSectionFeat
 
                 AmpActivityContractsField acf = new AmpActivityContractsField("activityContract", am,
                         PersistentObjectModel
-                                .getModel(comp.getModelObject()), "activityContracts");
+                                .getModel(comp.getModelObject()), "Contracts Information");
                 comp.add(acf);
                 ListEditorRemoveButton delButton = new ListEditorRemoveButton("deleteContract", "Delete contract");
                 comp.add(delButton);

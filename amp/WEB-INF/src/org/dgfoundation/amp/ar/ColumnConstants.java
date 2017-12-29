@@ -89,6 +89,7 @@ public class ColumnConstants {
     public static final String DONOR_CONTACT_TITLE = "Donor Contact Title";
     public static final String DONOR_GROUP = "Donor Group";
     public static final String DONOR_TYPE = "Donor Type";
+    public static final String DONOR_BUDGET_CODE = "Donor Budget Code";
     public static final String DRAFT = "Draft";
     public static final String ENVIRONMENT = "Environment";
     public static final String EQUAL_OPPORTUNITY = "Equal Opportunity";

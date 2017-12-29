@@ -27,6 +27,11 @@
 		<many-to-one name="repliedMessage" column="replied_message_Id"	class="org.digijava.module.message.dbentity.AmpMessage" cascade="none" />
 			
 		<many-to-one name="attachedDocs" class="org.digijava.module.sdm.dbentity.Sdm" cascade="delete" column="attached_doc_id" unique="true"/>
+		
+        <set name="messageReceivers" inverse="true" cascade="all-delete-orphan" lazy="false">
+            <key column="message_id" />
+            <one-to-many class="org.digijava.module.message.dbentity.AmpMessageReceiver" />
+        </set>
 
 		<property name="receivers" column="receivers" type="text" />
 		<property name="externalReceivers" column="external_receivers" type="text" />

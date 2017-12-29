@@ -1,7 +1,10 @@
 package org.digijava.module.message.dbentity;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.sdm.dbentity.Sdm;
 
 /**
@@ -57,7 +60,17 @@ public abstract class AmpMessage {
     private String externalReceivers; //contacts + people outside AMP
         
     private Sdm attachedDocs; //for attaching files
-        
+    
+    private Set<AmpMessageReceiver> messageReceivers;
+
+    public Set<AmpMessageReceiver> getMessageReceivers() {
+        return messageReceivers;
+    }
+
+    public void setMessageReceivers(Set<AmpMessageReceiver> messageReceivers) {
+        this.messageReceivers = messageReceivers;
+    }
+
         public String getReceivers() {
             return receivers;
         }
@@ -195,6 +208,18 @@ public abstract class AmpMessage {
 
     public void setRepliedMessage(AmpMessage repliedMessage) {
         this.repliedMessage = repliedMessage;
+    }
+
+    public void addMessageReceiver(AmpTeamMember receiver) {
+        AmpMessageReceiver msgReceiver = new AmpMessageReceiver();
+        msgReceiver.setReceiver(receiver);
+        msgReceiver.setMessage(this);
+        
+        if (messageReceivers == null) {
+            messageReceivers = new HashSet<>();
+        }
+        
+        messageReceivers.add(msgReceiver);
     }   
         
 }

@@ -72,9 +72,10 @@ public class AuditCleanerMsgJob extends ConnectionCleaningJob {
                 for (AmpTeamMember tm:alllead) {
                     if (tm != null && tm.getAmpTeamMemId() != null) {
                         AmpMessageUtil.createMessageState(message, tm);
+                        message.addMessageReceiver(tm);
                     }
                 }
-               AmpMessageUtil.saveOrUpdateMessage(message);
+                AmpMessageUtil.saveOrUpdateMessage(message);
             }
         } catch (Exception e) {
             e.printStackTrace();

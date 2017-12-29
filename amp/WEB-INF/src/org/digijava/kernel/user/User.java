@@ -85,6 +85,9 @@ public class User
     private Set contacts;
     private AmpUserExtension userExtension;
     private Boolean exemptFromDataFreezing;
+    
+    private Boolean notificationEmailEnabled = false;
+    private String notificationEmail;
 
     private Set<AmpOrganisation> assignedOrgs;
     public User() {}
@@ -501,6 +504,22 @@ public class User
 
     public void setExemptFromDataFreezing(Boolean exemptFromDataFreezing) {
         this.exemptFromDataFreezing = exemptFromDataFreezing;
+    }
+
+    public Boolean isNotificationEmailEnabled() {
+        return notificationEmailEnabled;
+    }
+
+    public void setNotificationEmailEnabled(Boolean notificationEmailEnabled) {
+        this.notificationEmailEnabled = notificationEmailEnabled;
+    }
+
+    public String getNotificationEmail() {
+        return notificationEmail;
+    }
+
+    public void setNotificationEmail(String notificationEmail) {
+        this.notificationEmail = notificationEmail;
     }
     
 }

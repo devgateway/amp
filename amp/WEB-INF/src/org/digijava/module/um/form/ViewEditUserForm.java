@@ -18,7 +18,8 @@ public class ViewEditUserForm extends ActionForm {
         this.pledger = false;
         this.nationalCoordinator = false;
         this.exemptFromDataFreezing = false;
-        }
+        this.notificationEmailEnabled = false;
+    }
     
     private static final long serialVersionUID = 1L;
     private Long id;
@@ -29,6 +30,9 @@ public class ViewEditUserForm extends ActionForm {
     private String name;
     private String url;
     private String mailingAddress;
+    
+    private Boolean notificationEmailEnabled;
+    private String notificationEmail;
 
     private Long selectedOrgGroupId;
     private Collection<AmpOrgGroup> orgGroups;
@@ -403,4 +407,21 @@ public class ViewEditUserForm extends ActionForm {
     public void setNationalCoordinator(boolean nationalCoordinator) {
         this.nationalCoordinator = nationalCoordinator;
     }
+
+    public Boolean isNotificationEmailEnabled() {
+        return notificationEmailEnabled;
+    }
+
+    public void setNotificationEmailEnabled(Boolean notificationEmailEnabled) {
+        this.notificationEmailEnabled = notificationEmailEnabled;
+    }
+
+    public String getNotificationEmail() {
+        return notificationEmail;
+    }
+
+    public void setNotificationEmail(String notificationEmail) {
+        this.notificationEmail = notificationEmail;
+    }
+    
 }

@@ -26,8 +26,7 @@
 				CREATE INDEX aod_org_id ON ni_all_orgs_dimension(org_id)@@@
 				CREATE INDEX aod_org_grp_id ON ni_all_orgs_dimension(org_grp_id)@@@
 				CREATE INDEX aod_org_type_id ON ni_all_orgs_dimension(org_type_id)@@@
-				CREATE INDEX aod_budget_org_code ON ni_all_orgs_dimension(budget_org_code)@@@
-				
+
 CREATE OR REPLACE FUNCTION update_organisation_caches_internal()
 RETURNS bigint AS
 $BODY$

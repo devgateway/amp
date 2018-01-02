@@ -52,13 +52,6 @@ public abstract class AmpMessage {
      */
     private AmpMessage repliedMessage;
         
-        
-    /**
-     * @deprecated this field holds list of receivers {@link #messageReceivers}
-     */
-    @Deprecated
-    private String receivers; // name and surnames of receivers separeted by comma
-
     private String externalReceivers; //contacts + people outside AMP
         
     private Sdm attachedDocs; //for attaching files
@@ -72,24 +65,6 @@ public abstract class AmpMessage {
     public void setMessageReceivers(Set<AmpMessageReceiver> messageReceivers) {
         this.messageReceivers = messageReceivers;
     }
-
-    /**
-     * @deprecated  Replaced by {@link #getMessageReceivers()}
-     */
-    @Deprecated
-    public String getReceivers() {
-        return receivers;
-    }
-
-    /**
-     * @deprecated  Replaced by {@link #setMessageReceivers()}
-     */
-    @Deprecated
-    public void setReceivers(String receivers) {
-        this.receivers = receivers;
-    }
-        
-    
 
     /**
      * This method is used to define whether user should be able to edit message or not.

@@ -35,18 +35,8 @@ public class AuditCleanerMsgJob extends ConnectionCleaningJob {
     
     @Override
     public void executeInternal(JobExecutionContext context) throws JobExecutionException {
-
-        String strReceivers = "";
-
         try {
             Collection<AmpTeamMember> alllead = TeamMemberUtil.getMembersUsingRole(new Long("1"));
-            for(AmpTeamMember ampTeamMember:alllead) {
-                if (ampTeamMember != null) {
-                    strReceivers += ampTeamMember.getUser().getFirstNames()
-                            + " " + ampTeamMember.getUser().getLastName() + "<"
-                            + ampTeamMember.getUser().getEmail() + ">,";
-                }
-            }
             if (alllead != null) {
                 AmpMessage message = new AmpAlert();
                 message.setName(MESSAGE_TITLE);

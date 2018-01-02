@@ -33,7 +33,6 @@
             <one-to-many class="org.digijava.module.message.dbentity.AmpMessageReceiver" />
         </set>
 
-		<property name="receivers" column="receivers" type="text" />
 		<property name="externalReceivers" column="external_receivers" type="text" />
 		<property name="senderName" column="sender_name" type="text" />
 		<property name="objectURL" column="object_URL" type="java.lang.String" />

@@ -233,6 +233,7 @@ public class Login extends Action {
                     TeamMember tm = TeamUtil.setupFiltersForLoggedInUser(request, member);
                     if (usr != null) {
                         tm.setEmail(usr.getEmail());
+                        tm.setNotificationEmail(usr.getNotificationEmail());
                     }
                     
                     PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, tm);

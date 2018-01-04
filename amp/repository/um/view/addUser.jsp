@@ -228,7 +228,7 @@
 	        $('#notificationEmailRow') [this.checked ? "show" : "hide"]();
 	      });
 		
-		$('#notificationEmailRow').hide();
+		$('#notificationEmailRow')[$('#notificationEmailEnabled').is(":checked") ? "show" : "hide"]();
 	}
 	
 	YAHOOAmp.util.Event.addListener(window, "load", init) ;

@@ -419,6 +419,8 @@ public class AddUserForm  extends ValidatorForm {
         selectedOrgType=null;
         setOrgGrp(null);
         setOrgType(null);
+        setNotificationEmailEnabled(false);
+        setNotificationEmail(null);
  //       setWebSite(null);
 
         organizationTypeOther = null;

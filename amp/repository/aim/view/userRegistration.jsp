@@ -116,6 +116,12 @@
 			alert("${translation}");
         	return false;
         }
+        
+        var notificationEmail = $('#notificationEmail').val();
+        if ($('#notificationEmailEnabled').is(":checked") && !validateNotificationEmail(notificationEmail)) {
+            return false;
+        }
+        
         if(selectedOrgType=="-1"){
 			<c:set var="translation">
 			<digi:trn key="error.registration.enterorganizationother">Please enter Organization Type</digi:trn>
@@ -140,6 +146,7 @@
 
         return true;
 	}
+    
 	function validateEmail() {
 	    var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
 		var address = document.aimUserRegisterForm.email.value;
@@ -158,6 +165,14 @@
 			alert("${translation}");
         	return false;
 		}
+		
+		var notificationEmail = $('#notificationEmail').val();
+        if ($('#notificationEmailEnabled').is(":checked") && reg.test(notificationEmail) == false) {
+        	<c:set var="translation"><digi:trn>Please enter a valid Notification Email</digi:trn></c:set>
+            alert("${translation}");
+            return false;
+        }
+        
 		return true;
 	}
 	
@@ -172,11 +187,23 @@
 		document.getElementsByName("selectedOrgType")[0].selectedIndex = 0;
 		document.getElementsByName("selectedOrgGroup")[0].selectedIndex = 0;
 		document.getElementsByName("selectedOrganizationId")[0].selectedIndex = 0;
-
+		
+		$('#notificationEmailEnabled').prop('checked', false);
+		$('#notificationEmailRow').hide();
+	}
+	
+	function init() {
+		$('#notificationEmailEnabled').bind("click", function() {
+            $('#notificationEmailRow') [this.checked ? "show" : "hide"]();
+        });
+		
+		$('#notificationEmailRow')[$('#notificationEmailEnabled').is(":checked") ? "show" : "hide"]();
 	}
 
 
 	var enterBinder	= new EnterHitBinder('registerUserBtn');
+	
+	YAHOOAmp.util.Event.addListener(window, "load", init);
 
 </script>
 <center>
@@ -244,6 +271,27 @@
               <td class=f-names noWrap style="padding-bottom:10px;"><FONT color=red>*</FONT>
                 <digi:trn key="um:repPassword">Repeat Password </digi:trn>              </td>
               <td align="right" style="padding-bottom:10px;"><html:password property="passwordConfirmation" size="20" styleClass="inp-text" />              </td>
+            </tr>
+            <tr>
+              <td class=f-names noWrap style="padding-bottom:10px;">
+                <digi:trn>Use different email for email notifications</digi:trn></td>
+              <td align="center" style="padding-bottom:10px;">
+                <html:checkbox property="notificationEmailEnabled" style="width: auto" styleId="notificationEmailEnabled"/>              
+              </td>
+              <td>&nbsp;</td>
+              <td colspan=2>
+                <table width="100%">
+                    <tr id="notificationEmailRow">
+                        <td class=f-names noWrap style="padding-bottom:10px;">
+                            <FONT color=red>*</FONT>
+                            <digi:trn>Notification Email</digi:trn>
+                        </td>
+                        <td align="right" style="padding-bottom:10px;">
+                            <html:text property="notificationEmail" size="20" styleClass="inp-text" styleId="notificationEmail"/>
+                        </td>
+                    </tr>
+                </table>
+              </td>
             </tr>
             <tr>
               <td class=f-names noWrap style="padding-bottom:10px;"><FONT color=red>*</FONT>

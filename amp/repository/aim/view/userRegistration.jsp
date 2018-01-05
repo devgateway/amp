@@ -206,6 +206,14 @@
 	YAHOOAmp.util.Event.addListener(window, "load", init);
 
 </script>
+
+<c:set var="notificationHelp"><digi:trn>
+Please select this checkbox in case you want to specify a email address to receive system notifications.&#013;
+This email address will potentially be used by the system to send AMP related information.&#013;
+If you are unsure now, an AMP admin can add your Notification Email later on.&#013;
+Please do not attempt to use the Notification Email as user login.
+</digi:trn></c:set>
+
 <center>
 <div class="reg_form_container">
 <div class="home_sec_title"><digi:trn key="um:accountInfoAboutYou">Account information / about you </digi:trn></div>
@@ -274,6 +282,7 @@
             </tr>
             <tr>
               <td class=f-names noWrap style="padding-bottom:10px;">
+                <img src= "../ampTemplate/images/help.gif" border="0" title="${notificationHelp}">
                 <digi:trn>Use different email for email notifications</digi:trn></td>
               <td align="center" style="padding-bottom:10px;">
                 <html:checkbox property="notificationEmailEnabled" style="width: auto" styleId="notificationEmailEnabled"/>              

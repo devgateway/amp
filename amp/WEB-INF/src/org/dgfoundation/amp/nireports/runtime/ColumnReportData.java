@@ -131,7 +131,7 @@ public class ColumnReportData extends ReportData {
         IdsAcceptorsBuilder bld = context;
         List<ColumnReportData> newChildren = new ArrayList<>();
         boolean isTransactionLevel = context.schema.isTransactionLevelHierarchy(schemaColumn, context);
-        boolean keepEmptyFundingRows = context.spec.isDisplayEmptyFundingRows() && !isTransactionLevel;
+        boolean keepEmptyFundingRows = context.spec.isDisplayEmptyFundingRows();
         boolean isMeasurelessReport = context.spec.getMeasures().isEmpty();
         
         for(long catId:orderedCatIds) {
@@ -155,8 +155,25 @@ public class ColumnReportData extends ReportData {
                 if (cc.getBehaviour().isKeepingSubreports() || (isMeasurelessReport && (!isTransactionLevel || cc.entity == schemaColumn)))
                     entitiesWithFunding.addAll(newContents.data.keySet());
             }
-            if (!keepEmptyFundingRows)
+            
+            if (catId == UNALLOCATED_ID && isTransactionLevel) {
+                HashSet<Long> keepEntities = new HashSet<Long>(getIds());
+                keepEntities.removeAll(wholeColumn.data.keySet());
+                
+                // for transactionLevel Hierarchies, keep the entities with UNALLOCATED funding
+                if (!entitiesWithFunding.isEmpty()) {
+                    keepEntities.addAll(entitiesWithFunding);
+                }
+                
+                if (keepEmptyFundingRows) {
+                    subContents.values().forEach(cc -> cc.keepEntries(keepEntities));
+                } else {
+                    subContents.values().forEach(cc -> cc.keepEntries(entitiesWithFunding));
+                }
+            } else if (!keepEmptyFundingRows) {
                 subContents.values().forEach(cc -> cc.keepEntries(entitiesWithFunding));
+            }
+            
             if (keepEmptyFundingRows || (!entitiesWithFunding.isEmpty())) {
                 ColumnReportData sub = new ColumnReportData(context, splitCell, subContents);
                 newChildren.add(sub);

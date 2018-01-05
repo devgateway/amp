@@ -1,29 +1,15 @@
 package org.dgfoundation.amp.ar.amp212;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.TreeSet;
 
-import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
-import org.dgfoundation.amp.mondrian.MondrianETL;
-import org.dgfoundation.amp.mondrian.PercentagesDistribution;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.FilterRule.FilterType;
-import org.dgfoundation.amp.newreports.NumberedTypedEntity;
-import org.dgfoundation.amp.testutils.AmpTestCase;
-import org.dgfoundation.amp.visibility.AmpObjectVisibility;
-import org.digijava.kernel.ampapi.mondrian.util.FactTableFiltering;
-import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
-import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
-import org.digijava.module.aim.dbentity.AmpModulesVisibility;
-import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.junit.Test;
 
 /**
@@ -31,14 +17,8 @@ import org.junit.Test;
  * @author Dolghier Constantin
  *
  */
-public class FilterRuleTests extends AmpTestCase
-{
-    
-    public FilterRuleTests(String name)
-    {
-        super(name);
-    }
-    
+public class FilterRuleTests {
+
     @Test
     public void testMergingCornerCases() {
         assertNull(FilterRule.mergeRules(null));
@@ -70,12 +50,4 @@ public class FilterRuleTests extends AmpTestCase
         assertEquals(FilterType.VALUES, outRule.filterType);
         assertEquals("[1, 2, 3, 4, 5, 6]", new TreeSet<>(outRule.values).toString());   
     }   
-    
-    @Override
-    protected void setUp() throws Exception
-    {
-        //TLSUtils.getThreadLocalInstance().setForcedLangCode("en");
-        super.setUp();
-        // do nothing now                
-    }
 }

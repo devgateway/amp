@@ -120,7 +120,6 @@
 				
 
 		<set name="organizationContacts" inverse="true" cascade="delete" lazy="false">
-			<cache usage="read-write" />
 			<key column="amp_org_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpOrganisationContact" />
 		</set>

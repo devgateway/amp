@@ -69,7 +69,7 @@ function amp_validator_hasMinimumLength(vml){
 function amp_validator_check_percentage(itemsClass){
 	return function(inputItem){		
 		if (!is_valid_percentage(inputItem.value))
-			return {success: false, error_message: "Not a valid percentage", validate_class: false};
+			return {success: false, error_message: not_valid_percentage_message, validate_class: false};
 			
 		var totalValue = 0;
 		var foundError = false;
@@ -80,7 +80,7 @@ function amp_validator_check_percentage(itemsClass){
 				foundError = true;
 		});
 		if (foundError || (floatDiffers(totalValue, 0) && floatDiffers(totalValue, 100)))
-			return {success: false, error_message: "Sum of percentages should be either 0 or 100", validate_class: itemsClass};
+			return {success: false, error_message: sum_percentages_message, validate_class: itemsClass};
 			
 		return {success: true};
 	};
@@ -106,7 +106,7 @@ function amp_validator_check_year_range(itemsClass){
 		var yearStart = yearRangeStartItem.val();
 		var yearEnd = yearRangeEndItem.val();
 		if (yearEnd < yearStart)
-			return {success: false, error_message: "Start Year should be before End Year", validate_class: itemsClass};
+			return {success: false, error_message: start_year_end_year_message, validate_class: itemsClass};
 		return {success: true};			
 	};
 }
@@ -139,7 +139,7 @@ function amp_validator_check_date_range(itemsClass){
 		if (!dateEnd.isValid())
 			return {success: true};
 		if (dateEnd < dateStart)
-			return {success: false, error_message: "Start Date should be before End Date", validate_class: itemsClass};
+			return {success: false, error_message: start_date_end_date_message, validate_class: itemsClass};
 		return {success: true};			
 	};
 }

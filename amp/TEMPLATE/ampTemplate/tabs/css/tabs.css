@@ -575,4 +575,7 @@ border-radius: 4px 4px 0 0;
 .show-legend-pop-box {
 	font-family: Arial, sans-serif;
 	display: block;
+a.preview-cell {
+	color: inherit !important;
+	text-decoration: none;
 }

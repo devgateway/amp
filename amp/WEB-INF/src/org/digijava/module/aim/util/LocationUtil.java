@@ -1,7 +1,5 @@
 package org.digijava.module.aim.util;
 
-
-
 import java.text.Collator;
 import java.util.Arrays;
 import java.util.Collection;
@@ -17,17 +15,21 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpLocation;
+import org.digijava.module.aim.dbentity.AmpLocationIndicatorValue;
 import org.digijava.module.aim.exception.dynlocation.DuplicateLocationCodeException;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.categorymanager.util.CategoryConstants;
-import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 
-public class LocationUtil {
+public final class LocationUtil {
 
     private static Logger logger = Logger.getLogger(LocationUtil.class);
+    
+    private LocationUtil() { }
     
     public static final List<String> LOCATIONS_COLUMNS_NAMES = Collections.unmodifiableList( 
             Arrays.asList(ColumnConstants.COUNTRY, ColumnConstants.REGION, ColumnConstants.ZONE, 
@@ -175,71 +177,38 @@ public class LocationUtil {
             if ( tempLoc != null ) 
                 throw new DuplicateLocationCodeException("There is already a location with the same name!", "name", loc.getParentCategoryValue().getValue() );
             
-            if ( loc.getParentLocation() != null){
-                if(loc.getParentLocation().getChildLocations()==null){
+            if (loc.getParentLocation() != null) {
+                if (loc.getParentLocation().getChildLocations() == null) {
                     loc.getParentLocation().setChildLocations(new HashSet<AmpCategoryValueLocations>());
                 }
                 loc.getParentLocation().getChildLocations().add(loc);
             }
-                
         }
-        
         
         try {
-
             session = PersistenceManager.getRequestDBSession();
-//beginTransaction();
             session.saveOrUpdate(loc);
-            //tx.commit();
         } catch (Exception e) {
-
-            if (tx != null) {
-                try {
-                    tx.rollback();
-
-                } catch (HibernateException ex) {
-                     logger.error("Unable to rollback transaction  "
-                    + e.getMessage());
-                }
-            }
-            logger.error("Unable to save location into the database "
-                    + e.getMessage());
-             throw new DgException(e);
+            logger.error("Unable to save category value location into the database " + e.getMessage());
+            throw new DgException(e);
         }
-
+        
+        DynLocationManagerUtil.getOrCreateAmpLocationByCVL(loc);
     }
-        /**
-         * Saves location into the database
-         * @param AmpLocation bean
-         */
-         
-       public static void saveLocation(AmpLocation loc) throws DgException{
-        Session session = null;
-        Transaction tx = null;
-
-
+       
+    /**
+     * Saves location into the database
+     * 
+     * @param AmpLocation location
+     */
+    public static void saveAmpLocation(AmpLocation loc) throws DgException {
         try {
-
-            session = PersistenceManager.getRequestDBSession();
-//beginTransaction();
+            Session session = PersistenceManager.getRequestDBSession();
             session.saveOrUpdate(loc);
-            //tx.commit();
         } catch (Exception e) {
-
-            if (tx != null) {
-                try {
-                    tx.rollback();
-
-                } catch (HibernateException ex) {
-                     logger.error("Unable to rollback transaction  "
-                    + e.getMessage());
-                }
-            }
-            logger.error("Unable to save location into the database "
-                    + e.getMessage());
-             throw new DgException(e);
+            logger.error("Unable to save location into the database " + e.getMessage());
+            throw new DgException(e);
         }
-
     }
     
     public static class HelperLocationAncestorLocationNamesAsc implements Comparator<Location> {
@@ -277,5 +246,16 @@ public class LocationUtil {
             return collator.compare(location1FullName.toString(), location2FullName.toString());
 
         }
+    }
+
+    public static int getIndicatorValuesCountByAmpLocation(AmpLocation ampLocation) {
+        Session session = PersistenceManager.getSession();
+
+        int indicatorValuesCount = (int) session.createCriteria(AmpLocationIndicatorValue.class)
+                .add(Restrictions.eq("location", ampLocation))
+                .setProjection(Projections.rowCount())
+                .uniqueResult();
+        
+        return indicatorValuesCount;
     }
 }

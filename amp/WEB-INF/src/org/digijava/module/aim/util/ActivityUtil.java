@@ -461,6 +461,13 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         }
         return result;
     }
+
+    public static Long findActivityIdByAmpId(String ampId) {
+        Session session = PersistenceManager.getRequestDBSession();
+        return (Long) session.createQuery("select ampActivityId from AmpActivity where ampId=:ampId")
+                .setParameter("ampId", ampId)
+                .uniqueResult();
+    }
   
   public static AmpActivityVersion loadAmpActivity(Long id){
      return (AmpActivityVersion) PersistenceManager.getSession().load(AmpActivityVersion.class, id); 

@@ -1449,7 +1449,7 @@ public class ProgramUtil {
     }
 
 
-      public static List<AmpActivityProgramSettings> getAmpActivityProgramSettingsList() throws DgException {
+      public static List<AmpActivityProgramSettings> getAmpActivityProgramSettingsList() {
           String queryString = "select ap from " + AmpActivityProgramSettings.class.getName() + " ap";
           Query qry = PersistenceManager.getSession().createQuery(queryString);
           List<AmpActivityProgramSettings> programSettings = qry.list();
@@ -1460,7 +1460,7 @@ public class ProgramUtil {
     }
 
 
-    public static List createDefaultAmpActivityProgramSettingsList() throws DgException {
+    public static List createDefaultAmpActivityProgramSettingsList() {
         Session session = PersistenceManager.getSession();
 
         AmpActivityProgramSettings settingNPO=new AmpActivityProgramSettings("National Plan Objective");

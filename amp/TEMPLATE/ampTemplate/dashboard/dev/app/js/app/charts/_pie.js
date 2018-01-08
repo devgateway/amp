@@ -9,6 +9,7 @@ var _ = require('underscore');
 var common = require('./common');
 var util = require('../../ugly/util');
 var customizedPieChart = require('./customized/pieChart.js');
+var customizedLegend = require('./customized/customizedLegend');
 
 
 function dataToNv(data) {
@@ -53,11 +54,12 @@ function chart(options, data) {
 
 function addLegend(svg, chart, nvData, trimLabels, width) {
 	  var legendHeight;
-
-	  var legend = nv.models.legend()
+      var isRtl = app.generalSettings.attributes['rtl-direction'];
+	  var legend = nv.models.customizedLegend()
 	    .width(width || svg.clientWidth)
 	    .margin({left: 20, right: 20})
-	    .rightAlign(false)
+	    .rightAlign(isRtl)
+         .rtl(isRtl)
 	    .color(util.categoryColours(nvData.length))
 	    .key(function(d) { return trimLabels ? util.formatShortText(12)(d.x) : util.formatShortText(85)(d.x); });
 

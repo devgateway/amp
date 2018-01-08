@@ -156,20 +156,15 @@ public class ColumnReportData extends ReportData {
                     entitiesWithFunding.addAll(newContents.data.keySet());
             }
             
-            if (catId == UNALLOCATED_ID && isTransactionLevel) {
+            if (keepEmptyFundingRows && catId == UNALLOCATED_ID && isTransactionLevel) {
                 HashSet<Long> keepEntities = new HashSet<Long>(getIds());
+                
+                // remove the entities with funding in other hierarchies except UNALLOCATED
                 keepEntities.removeAll(wholeColumn.data.keySet());
+                // keep the entities with UNALLOCATED funding
+                keepEntities.addAll(entitiesWithFunding);
                 
-                // for transactionLevel Hierarchies, keep the entities with UNALLOCATED funding
-                if (!entitiesWithFunding.isEmpty()) {
-                    keepEntities.addAll(entitiesWithFunding);
-                }
-                
-                if (keepEmptyFundingRows) {
-                    subContents.values().forEach(cc -> cc.keepEntries(keepEntities));
-                } else {
-                    subContents.values().forEach(cc -> cc.keepEntries(entitiesWithFunding));
-                }
+                subContents.values().forEach(cc -> cc.keepEntries(keepEntities));
             } else if (!keepEmptyFundingRows) {
                 subContents.values().forEach(cc -> cc.keepEntries(entitiesWithFunding));
             }

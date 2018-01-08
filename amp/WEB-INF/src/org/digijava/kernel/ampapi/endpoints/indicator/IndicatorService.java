@@ -126,7 +126,6 @@ public class IndicatorService {
             if (indLayer.getAccessType() != IndicatorAccessType.TEMPORARY) {
                 Session sess = PersistenceManager.getSession();
                 sess.saveOrUpdate(indLayer);
-                sess.flush();
 
                 TranslationUtil.serialize(indLayer, IndicatorEPConstants.NAME, translations);
                 TranslationUtil.serialize(indLayer, IndicatorEPConstants.DESCRIPTION, translations);

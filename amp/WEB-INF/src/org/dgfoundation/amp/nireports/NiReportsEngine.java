@@ -177,7 +177,8 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
     public LinkedHashSet<String> actualMeasures;
 
     /**
-     * the measures which should be run in the report (e.g. ones requested by the spec + the ones requested by NiReportMeasure.getPrecursorMeasures[value = true])
+     * the measures which should be run in the report 
+     * (e.g. ones requested by the spec + the ones requested by NiReportMeasure.getPrecursorMeasures[value = true])
      */
     public LinkedHashSet<String> reportRunMeasures;
 
@@ -231,7 +232,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
             timer.run("workspaceFilter", () -> this.mainIds = Collections.unmodifiableSet(this.filters.getWorkspaceActivityIds()));
             timer.run("exec", this::runReportAndCleanup);
             //printReportWarnings();
-            NiReportRunResult runResult = new NiReportRunResult(this.reportOutput, timer.getCurrentState(), timer.getWallclockTime(), this.headers, reportWarnings);
+            NiReportRunResult runResult = new NiReportRunResult(this.reportOutput, timer.getCurrentState(), timer.getWallclockTime(), this.headers, reportWarnings, this.calendar);
 //          logger.warn("JsonBean structure of RunNode:" + timingInfo.asJsonBean());
             logger.warn(String.format("it took %d millies to generate report, the breakdown is:\n%s", runResult.wallclockTime, runResult.timings.asUserString(3)));
             return runResult; 

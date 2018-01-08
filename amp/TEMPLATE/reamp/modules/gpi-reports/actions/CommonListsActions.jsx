@@ -18,6 +18,10 @@ export function getSettingsSuccess(settings){
     return {type: 'LOAD_SETTINGS_SUCCESS', settings: settings}
 }
 
+export function getCalendarsSuccess(calendars){
+    return {type: 'LOAD_CALENDARS_SUCCESS', calendars: calendars}
+}
+
 export function getOrgList(group){
     return function(dispatch) {
         return commonListsApi.getOrgList(group).then(response => {                          
@@ -54,6 +58,16 @@ export function getSettings(){
     return function(dispatch) {
         return commonListsApi.getSettings().then(response => {
             dispatch(getSettingsSuccess(response));
+        }).catch(error => {
+            throw(error);
+        });
+    }
+}
+
+export function getCalendars(){
+    return function(dispatch) {
+        return commonListsApi.getCalendars().then(response => {
+            dispatch(getCalendarsSuccess(response));
         }).catch(error => {
             throw(error);
         });

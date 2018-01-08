@@ -25,7 +25,9 @@ import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFea
 import org.dgfoundation.amp.onepager.components.fields.AmpBooleanChoiceField;
 import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpCollectionValidatorField;
+import org.dgfoundation.amp.onepager.events.FreezingUpdateEvent;
 import org.dgfoundation.amp.onepager.events.OverallFundingTotalsEvents;
+import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.helper.Constants;
@@ -63,7 +65,8 @@ public class AmpDonorCommitmentsFormTableFeature extends
 
                 AmpFundingAmountComponent amountComponent = getFundingAmountComponent(item.getModel());
                 item.add(amountComponent);
-
+                item.add(UpdateEventBehavior.of(FreezingUpdateEvent.class));                
+                addFreezingvalidator(item);
                 IModel<List<FundingPledges>> pledgesModel = new LoadableDetachableModel<List<FundingPledges>>() {
                     protected java.util.List<FundingPledges> load() {
                         return PledgesEntityHelper
@@ -89,7 +92,7 @@ public class AmpDonorCommitmentsFormTableFeature extends
                     protected void onClick(org.apache.wicket.ajax.AjaxRequestTarget target) {
                         AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
                         super.onClick(target);
-                        parent.getFundingInfo().checkChoicesRequired(list.getCount());
+                        parent.getFundingInfo().configureRequiredFields();
                         target.add(parent.getFundingInfo());
                         target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
                         target.appendJavaScript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));
@@ -131,7 +134,7 @@ public class AmpDonorCommitmentsFormTableFeature extends
                 visit.dontGoDeeper();
             }
         });
-
+        
         send(getPage(), Broadcast.BREADTH, new OverallFundingTotalsEvents(target));
     }
 }

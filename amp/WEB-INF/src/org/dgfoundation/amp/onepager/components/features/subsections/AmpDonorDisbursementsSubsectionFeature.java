@@ -15,6 +15,8 @@ import org.dgfoundation.amp.onepager.components.QuarterInformationPanel;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpDonorDisbursementsFormTableFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
+import org.dgfoundation.amp.onepager.events.FreezingUpdateEvent;
+import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -65,12 +67,11 @@ public class AmpDonorDisbursementsSubsectionFeature extends
      * @throws Exception
      */
     public AmpDonorDisbursementsSubsectionFeature(String id,
-            final IModel<AmpFunding> model, String fmName, int transactionType) throws Exception {
-        super(id, fmName, model,Constants.DISBURSEMENT);
+            final IModel<AmpFunding> model, int transactionType) throws Exception {
+        super(id, AmpFundingItemFeaturePanel.FM_NAME_BY_TRANSACTION_TYPE.get(transactionType), model, transactionType);
         disbursementsTableFeature = new AmpDonorDisbursementsFormTableFeature("disbursementsTableFeature", model, "Disbursements Table", transactionType);
         add(disbursementsTableFeature);
-        fundingOrgModel = new PropertyModel<AmpOrganisation>(model,"ampDonorOrgId");
-        
+        fundingOrgModel = new PropertyModel<AmpOrganisation>(model, "ampDonorOrgId");              
         AmpAjaxLinkField addDisbursement=new AmpAjaxLinkField("addDisbursement","Add Disbursement","Add Disbursement") {
             @Override
             public void onClick(AjaxRequestTarget target) {
@@ -86,7 +87,7 @@ public class AmpDonorDisbursementsSubsectionFeature extends
                 disbursementsTableFeature.getEditorList().updateModel();
                 target.add(disbursementsTableFeature);
                 AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
-                parent.getFundingInfo().checkChoicesRequired(disbursementsTableFeature.getEditorList().getCount());
+                parent.getFundingInfo().configureRequiredFields();
                 target.add(parent.getFundingInfo());
                 target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
                 target.appendJavaScript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));

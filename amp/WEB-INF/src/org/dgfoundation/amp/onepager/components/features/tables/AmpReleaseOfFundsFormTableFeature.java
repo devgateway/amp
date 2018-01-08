@@ -25,6 +25,8 @@ import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
+import org.dgfoundation.amp.onepager.events.FreezingUpdateEvent;
+import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
@@ -72,7 +74,8 @@ public class AmpReleaseOfFundsFormTableFeature extends
                 item.add(getAdjustmentTypeComponent(item.getModel(), transactionType));
                 AmpFundingAmountComponent amountComponent = getFundingAmountComponent(item.getModel());
                 item.add(amountComponent);
-
+                addFreezingvalidator(item);
+                item.add(UpdateEventBehavior.of(FreezingUpdateEvent.class));
                 AmpTextFieldPanel<Float> capitalSpendingPercentage = new AmpTextFieldPanel<Float>(
                                         "capitalSpendingPercentage",
                                         new PropertyModel<Float>(item.getModel(), "capitalSpendingPercentage"), "Capital Spending Percentage", false, false);
@@ -126,7 +129,7 @@ public class AmpReleaseOfFundsFormTableFeature extends
                     protected void onClick(final org.apache.wicket.ajax.AjaxRequestTarget target) {
                         AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
                         super.onClick(target);
-                        parent.getFundingInfo().checkChoicesRequired(list.getCount());
+                        parent.getFundingInfo().configureRequiredFields();
                         target.add(parent.getFundingInfo());
                         target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
                         target.appendJavaScript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));

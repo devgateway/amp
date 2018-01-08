@@ -9,12 +9,12 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.validator.routines.FloatValidator;
+import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 
 /**
@@ -29,8 +29,8 @@ public class InputTypeValidator extends InputValidator {
         return ActivityErrors.FIELD_INVALID_TYPE;
     }
     
-    private boolean isStringValid(Object item, Boolean translatable, Collection<String> supportedLocaleCodes) {
-        if (Boolean.TRUE.equals(translatable)) {
+    private boolean isStringValid(Object item, boolean translatable, Collection<String> supportedLocaleCodes) {
+        if (translatable) {
             if (Map.class.isAssignableFrom(item.getClass())) {
                 return isTranslatableStringValid(item, supportedLocaleCodes);
             }
@@ -53,10 +53,10 @@ public class InputTypeValidator extends InputValidator {
     }
 
     @Override
-    public boolean isValid(ActivityImporter importer, Map<String, Object> newFieldParent, 
-            Map<String, Object> oldFieldParent, JsonBean fieldDescription, String fieldPath) {
-        String fieldType = fieldDescription.getString(ActivityEPConstants.FIELD_TYPE);
-        String fieldName = fieldDescription.getString(ActivityEPConstants.FIELD_NAME);
+    public boolean isValid(ObjectImporter importer, Map<String, Object> newFieldParent,
+                           Map<String, Object> oldFieldParent, APIField fieldDescription, String fieldPath) {
+        String fieldType = fieldDescription.getFieldType();
+        String fieldName = fieldDescription.getFieldName();
         Object item = newFieldParent.get(fieldName);
         
         if (item == null) {
@@ -64,8 +64,9 @@ public class InputTypeValidator extends InputValidator {
         }
         
         switch (fieldType) {
-        case ActivityEPConstants.FIELD_TYPE_STRING : 
-            return isStringValid(item, (Boolean) fieldDescription.get(ActivityEPConstants.TRANSLATABLE), importer.getTrnSettings().getAllowedLangCodes()); 
+        case ActivityEPConstants.FIELD_TYPE_STRING :
+            return isStringValid(item, Boolean.TRUE.equals(fieldDescription.isTranslatable()),
+                    importer.getTrnSettings().getAllowedLangCodes());
         case ActivityEPConstants.FIELD_TYPE_DATE: return isValidDate(item);
         case ActivityEPConstants.FIELD_TYPE_FLOAT: return isValidFloat(item);
         case ActivityEPConstants.FIELD_TYPE_BOOLEAN : return isValidBoolean(item);
@@ -104,7 +105,7 @@ public class InputTypeValidator extends InputValidator {
                 && InterchangeUtils.parseISO8601Date((String) value) != null;
     }
 
-    private boolean checkListFieldValidity(Object item, JsonBean fieldDescription) {
+    private boolean checkListFieldValidity(Object item, APIField fieldDescription) {
         // for simple lists OR objects with sub-fields
         if (List.class.isAssignableFrom(item.getClass()) || Map.class.isAssignableFrom(item.getClass())) 
             return true;

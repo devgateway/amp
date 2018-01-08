@@ -26,7 +26,7 @@ public class AmpFilterDateUpdateJob {
     private SimpleDateFormat newFormat = new SimpleDateFormat(AmpARFilter.SDF_IN_FORMAT_STRING);
 
     private void updateAllDates() {
-        PersistenceManager.getSession().doWork(connection -> {
+        PersistenceManager.doWorkInTransaction(connection -> {
             Map<Long, String> states = SQLUtils.collectKeyValue(connection,
                     "select id, \"value\" from amp_filter_data where property_name in (\n" +
                     "'fromDate', 'toDate',\n" +

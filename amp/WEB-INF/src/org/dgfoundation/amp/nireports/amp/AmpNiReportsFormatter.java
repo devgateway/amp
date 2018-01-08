@@ -36,7 +36,7 @@ public class AmpNiReportsFormatter extends NiReportsFormatter {
         super(spec, runResult, 
             new CellFormatter(spec.getSettings(), FormatHelper.getDefaultFormat(), DateTimeUtil.getGlobalPattern(), 
             TranslatorWorker::translateText,
-            outputSettings == null ? defaultOutputSettings(spec) : outputSettings));
+            outputSettings == null ? defaultOutputSettings(spec) : outputSettings, runResult.calendar));
     }
 
     /**

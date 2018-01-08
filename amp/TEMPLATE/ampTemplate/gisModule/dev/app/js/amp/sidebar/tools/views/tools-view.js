@@ -31,28 +31,33 @@ module.exports = BaseControlView.extend({
   },
 
   render: function() {
-	  var self = this;
-	  BaseControlView.prototype.render.apply(this);
-	  var renderedTemplate = $(this.template({title: this.title}));
+      var self = this;
+      BaseControlView.prototype.render.apply(this);
+      var renderedTemplate = $(this.template({title: this.title}));
 
-	  // needed to wait until 'el' exists before creating and rendering, or events break.
-	  self.app.data.user.load().then(function() {		   
-		  var hideEditableFormatSetting = self.app.data.generalSettings.get('hide-editable-export-formats-public-view');
-		  if(!(hideEditableFormatSetting == true && self.app.data.user.get("logged") == false)){
-			  self.exportMapToolView = new ExportMapToolView({app: self.app, el:renderedTemplate.find('.form-group')});
-			  self.exportMapToolView.render();
-		  }
-		  var showImageButton = self.app.data.generalSettings.get('download-map-selector');
-		  if(showImageButton && showImageButton == true) {
-			  self.$('.gis-tool-img').show();
-		  } else {
-			  self.$('.gis-tool-img').hide();
-		  }
-	  });
+      // needed to wait until 'el' exists before creating and rendering, or events break.
+      self.app.data.user.load().then(function () {
+          $.when(self.app.data.generalSettings.loaded).then(function () {
+              var hideEditableFormatSetting = self.app.data.generalSettings.get('hide-editable-export-formats-public-view');
+              if (!(hideEditableFormatSetting == true && self.app.data.user.get("logged") == false)) {
+                  self.exportMapToolView = new ExportMapToolView({
+                      app: self.app,
+                      el: renderedTemplate.find('.form-group')
+                  });
+                  self.exportMapToolView.render();
+              }
+              var showImageButton = self.app.data.generalSettings.get('download-map-selector');
+              if (showImageButton && showImageButton == true) {
+                  self.$('.gis-tool-img').show();
+              } else {
+                  self.$('.gis-tool-img').hide();
+              }
+          });
+      });
 
-	  this.$('.content').html(renderedTemplate);
+      this.$('.content').html(renderedTemplate);
 
-	  return this;
+      return this;
   },  
   loadSerialized: function(serializedState) {
     var stateBlob = this.savedMaps.model.deserializese(serializedState);

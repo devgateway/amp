@@ -8,6 +8,7 @@ import java.util.Set;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.form.EditActivityForm;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 public class AmpContactsWorker {
     
@@ -46,7 +47,9 @@ public class AmpContactsWorker {
                 AmpContactProperty property=new AmpContactProperty();
                 property.setName(helperProperty.getName());
                 if(helperProperty.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE)){
-                    property.setValue(helperProperty.getPhoneTypeId()+ " " + helperProperty.getValue());
+                    property.setType(
+                            CategoryManagerUtil.getAmpCategoryValueFromDb(helperProperty.getPhoneTypeId(), false));
+                    property.setValue(helperProperty.getValue());
                 }else{
                     property.setValue(helperProperty.getValue());
                 }
@@ -70,19 +73,11 @@ public class AmpContactsWorker {
             for (AmpContactProperty property : properties) {
                 ContactPropertyHelper contactProperty=new ContactPropertyHelper();
                 contactProperty.setName(property.getName());
-                if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE)){
-                    if(property.getValue().indexOf(" ")!= -1){
-                        try {
-                            contactProperty.setPhoneTypeId(new Long(property.getValue().substring(0, property.getValue().indexOf(" "))));
-                        } catch (NumberFormatException nfEx) {
-                           contactProperty.setPhoneTypeId(new Long(0)); 
-                        }
-                    }                   
-                    contactProperty.setValue(property.getValue().substring(property.getValue().indexOf(" ")+1));
-                }else{
-                    contactProperty.setValue(property.getValue());
+                if (property.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE) && property.getType() != null) {
+                    contactProperty.setPhoneTypeId(property.getType().getId());
                 }
-                
+                contactProperty.setValue(property.getValue());
+
                 if(retVal==null){
                     retVal=new ArrayList<ContactPropertyHelper>();
                 }

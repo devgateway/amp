@@ -22,7 +22,7 @@ import org.digijava.module.common.util.DateTimeUtil;
  * @author Dolghier Constantin
  *
  */
-public class DateColumn extends AmpDifferentialColumn<DateCell, Boolean> {
+public class DateColumn extends AmpDifferentialColumn<DateCell> {
 
     private boolean allowNulls;
     public DateColumn(String columnName, NiDimension.LevelColumn levelColumn, String viewName) {
@@ -30,7 +30,7 @@ public class DateColumn extends AmpDifferentialColumn<DateCell, Boolean> {
     }
 
     public DateColumn(String columnName, NiDimension.LevelColumn levelColumn, String viewName, Behaviour<?> behaviour) {
-        super(columnName, levelColumn, viewName, (engine, col) -> true, behaviour);
+        super(columnName, levelColumn, viewName, (engine, col) -> "", behaviour);
     }
 
     public DateColumn(String columnName, String viewName) {

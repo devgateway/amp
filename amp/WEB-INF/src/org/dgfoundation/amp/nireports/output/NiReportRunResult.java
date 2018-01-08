@@ -4,6 +4,7 @@ import java.util.SortedSet;
 import java.util.SortedMap;
 
 import org.dgfoundation.amp.algo.timing.RunNode;
+import org.dgfoundation.amp.newreports.CalendarConverter;
 import org.dgfoundation.amp.newreports.ReportWarning;
 import org.dgfoundation.amp.nireports.NiHeaderInfo;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
@@ -19,13 +20,15 @@ public class NiReportRunResult {
     public final NiHeaderInfo headers;
     public final long wallclockTime;
     public final SortedMap<Long, SortedSet<ReportWarning>> warnings; 
+    public final CalendarConverter calendar;
     
     public NiReportRunResult(NiReportData reportOut, RunNode timings, long wallclockTime, NiHeaderInfo headers, 
-            SortedMap<Long, SortedSet<ReportWarning>> warnings) {
+            SortedMap<Long, SortedSet<ReportWarning>> warnings, CalendarConverter calendar) {
         this.reportOut = reportOut;
         this.timings = timings;
         this.wallclockTime = wallclockTime;
         this.headers = headers;
         this.warnings = warnings;
+        this.calendar = calendar;
     }
 }

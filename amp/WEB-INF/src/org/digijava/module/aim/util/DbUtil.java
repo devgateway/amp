@@ -636,7 +636,7 @@ public class DbUtil {
             session = PersistenceManager.getRequestDBSession();
             String queryString = "select u from " + User.class.getName() + " u where (u.email=:email)";
             qry = session.createQuery(queryString);
-            qry.setParameter("email", email, StringType.INSTANCE);
+            qry.setParameter("email", StringUtils.lowerCase(email), StringType.INSTANCE);
             Iterator itr = qry.list().iterator();
             if (itr.hasNext()) {
                 user = (User) itr.next();

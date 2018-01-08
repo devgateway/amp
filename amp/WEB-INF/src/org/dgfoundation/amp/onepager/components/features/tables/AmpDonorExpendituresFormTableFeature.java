@@ -24,6 +24,8 @@ import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
+import org.dgfoundation.amp.onepager.events.FreezingUpdateEvent;
+import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.helper.Constants;
@@ -116,7 +118,8 @@ public class AmpDonorExpendituresFormTableFeature extends
                 item.add(expenditureClass);
                 final AmpFundingAmountComponent amountComponent = getFundingAmountComponent(item.getModel());
                 item.add(amountComponent);
-                
+                addFreezingvalidator(item);
+                item.add(UpdateEventBehavior.of(FreezingUpdateEvent.class));
                 AmpTextFieldPanel<String> classification = new AmpTextFieldPanel<String>(
                         "classification", new PropertyModel<String>(
                                 item.getModel(), "expCategory"),

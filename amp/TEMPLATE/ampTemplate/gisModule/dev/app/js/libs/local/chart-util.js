@@ -5,8 +5,8 @@ var DecimalFormat = require('./DecimalFormat');
 var formatKMB = function(precision) {
   var formatSI = d3.format('.' + (precision || 3) + 's');
   return function(value) {
-    return formatSI(value)
-      .replace('G', 'B');  // now just need to convert G Gigia -> B Billion
+    var value = formatSI(value).replace('G', 'B');  // now just need to convert G Gigia -> B Billion
+    return value.replace(value[value.length - 1], ' ' + value[value.length - 1]);
   };
 };
 

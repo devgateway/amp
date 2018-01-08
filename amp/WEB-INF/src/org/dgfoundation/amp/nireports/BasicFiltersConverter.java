@@ -120,8 +120,10 @@ public abstract class BasicFiltersConverter {
         if (repElem.type == ElementType.ENTITY) {
             NiUtils.failIf(!(repElem.entity instanceof ReportColumn),
                 () -> String.format("entity type %s not supported: %s", repElem.entity.getClass().getName(), repElem.entity.toString()));
-            if (repElem.entity instanceof ReportColumn)
-                processColumnElement(repElem.entity.getEntityName(), rule);
+            String columnName = repElem.entity.getEntityName();
+            if (repElem.entity instanceof ReportColumn && schema.getColumns().containsKey(columnName)) {
+                processColumnElement(columnName, rule);
+            }
         } else
             processMiscElement(repElem, rule);
     }

@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -64,7 +63,6 @@ public final class LocationFilterListManager implements FilterListManager {
         listDefinition.setFilterIds(filterIds);
         listDefinition.setFiltered(true);
         listDefinition.setItems(LOCATIONS_ITEMS_NAME);
-        listDefinition.setTab(EPConstants.TAB_LOCATIONS);
         listDefinitions.add(listDefinition);
         
         return listDefinitions;

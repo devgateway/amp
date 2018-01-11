@@ -177,6 +177,10 @@ public class FilterUtils {
     public String idFromColumnName(String columnName) {
         return columnNameToId.get(columnName);
     }
+    
+    public String simpleColumnNameFromFilterId(String filterId) {
+        return columnNameToId.get(filterId);
+    }
 
     private static AmpReportFilters getApiDateFilters(Map<String, Object> filter, AmpReportFilters filterRules) {
         for (Entry<String, String> entry : INSTANCE.idToDateColumn.entrySet()) {

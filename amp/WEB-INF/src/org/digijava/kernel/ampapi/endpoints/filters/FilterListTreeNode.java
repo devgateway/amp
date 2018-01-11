@@ -12,12 +12,17 @@ public class FilterListTreeNode {
     private String name;
     private String acronym;
     private String code;
+    private String value;
     
     private List<Long> listDefinitionIds;
     
-    private List<FilterListTreeNode> children = new ArrayList<>();
+    private List<FilterListTreeNode> children;
 
     public void addChild(FilterListTreeNode child) {
+        if (children == null) {
+            children = new ArrayList<>();
+        }
+        
         children.add(child);
     }
 
@@ -68,4 +73,13 @@ public class FilterListTreeNode {
     public void setCode(String code) {
         this.code = code;
     }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+    
 }

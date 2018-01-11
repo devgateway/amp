@@ -44,4 +44,24 @@ public final class FiltersManager {
         return ProgramFilterListManager.getInstance().getFilterList();
     }
 
+    public FilterList getApprovalStatusFilter() {
+        return ApprovalStatusFilterListManager.getInstance().getFilterList();
+    }
+    
+    public FilterList getCategoryValueFilter(String filterId) {
+        return CategoryValueFilterListManager.getInstance().getFilterList(filterId);
+    }
+    
+    public FilterList getBooleanFilter(String filterId) {
+        return BooleanFilterListManager.getInstance().getFilterList(filterId);
+    }
+    
+    public FilterList getWorkspaceFilter() {
+        return WorkspaceFilterListManager.getInstance().getFilterList();
+    }
+    
+    public FilterList getComputedYearFilter() {
+        return ComputedYearFilterListManager.getInstance().getFilterList();
+    }
+
 }

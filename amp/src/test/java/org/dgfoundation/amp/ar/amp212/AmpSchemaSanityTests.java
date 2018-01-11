@@ -1467,14 +1467,92 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                 .withContents("Project Title", "", "Totals-Actual Commitments", "50,100", "Disaster Response Marker", "Disaster Response Marker: Undefined")
                 .withChildren(
                   new ReportAreaForTests(new AreaOwner(63), "Project Title", "activity with funded components", "Totals-Actual Commitments", "100"),
-                  new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response", "Totals-Actual Commitments", "50,000")        )      ));    
+                  new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response", "Totals-Actual Commitments", "50,000"),
+                  new ReportAreaForTests(new AreaOwner(95), "Project Title", "activity 1 with indicators")        )      ));
         
-        List<String> someActs = Arrays.asList("activity_with_disaster_response", "expenditure class", "second with disaster response", "activity with funded components");
+        List<String> someActs = Arrays.asList("activity_with_disaster_response", "expenditure class", "second with disaster response", "activity with funded components", "activity 1 with indicators");
         
         ReportSpecificationImpl spec = buildSpecification("by-disaster-response",
             Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.DISASTER_RESPONSE_MARKER), 
             Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
             Arrays.asList(ColumnConstants.DISASTER_RESPONSE_MARKER), 
+            GroupingCriteria.GROUPING_TOTALS_ONLY);
+        
+        spec.setDisplayEmptyFundingRows(true);
+        runNiTestCase(cor, spec, "en", someActs);
+    }
+    
+    @Test
+    public void testShowEmptyFundingRowsDonorAgencyHierarchy() {
+        NiReportModel cor = new NiReportModel("by-donor-agency")
+        .withHeaders(Arrays.asList(
+                "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 3))",
+                "(Donor Agency: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 1, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 1))",
+                "(Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1))"))
+            .withWarnings(Arrays.asList())
+            .withBody(      new ReportAreaForTests(null)
+              .withContents("Donor Agency", "", "Project Title", "", "Totals-Actual Commitments", "578,666")
+              .withChildren(
+                new ReportAreaForTests(new AreaOwner("Donor Agency", "Finland", 21698)).withContents("Project Title", "", "Totals-Actual Commitments", "150,000", "Donor Agency", "Finland")
+                .withChildren(
+                  new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response", "Totals-Actual Commitments", "150,000")        ),
+                new ReportAreaForTests(new AreaOwner("Donor Agency", "Ministry of Economy", 21700)).withContents("Project Title", "", "Totals-Actual Commitments", "62,000", "Donor Agency", "Ministry of Economy")
+                .withChildren(
+                  new ReportAreaForTests(new AreaOwner(87), "Project Title", "expenditure class", "Totals-Actual Commitments", "62,000")        ),
+                new ReportAreaForTests(new AreaOwner("Donor Agency", "Ministry of Finance", 21699)).withContents("Project Title", "", "Totals-Actual Commitments", "0", "Donor Agency", "Ministry of Finance")
+                .withChildren(
+                  new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response")        ),
+                new ReportAreaForTests(new AreaOwner("Donor Agency", "Norway", 21694))
+                .withContents("Project Title", "", "Totals-Actual Commitments", "366,666", "Donor Agency", "Norway")
+                .withChildren(
+                  new ReportAreaForTests(new AreaOwner(87), "Project Title", "expenditure class"),
+                  new ReportAreaForTests(new AreaOwner(92), "Project Title", "second with disaster response", "Totals-Actual Commitments", "366,666")        ),
+                new ReportAreaForTests(new AreaOwner("Donor Agency", "Donor Agency: Undefined", -999999999)).withContents("Project Title", "", "Totals-Actual Commitments", "0", "Donor Agency", "Donor Agency: Undefined")
+                .withChildren(
+                  new ReportAreaForTests(new AreaOwner(95), "Project Title", "activity 1 with indicators")        )      ));   
+        
+        List<String> someActs = Arrays.asList("activity_with_disaster_response", "expenditure class", "second with disaster response", "activity 1 with indicators");
+        
+        ReportSpecificationImpl spec = buildSpecification("by-donor-agency",
+            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.DONOR_AGENCY), 
+            Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
+            Arrays.asList(ColumnConstants.DONOR_AGENCY), 
+            GroupingCriteria.GROUPING_TOTALS_ONLY);
+        
+        spec.setDisplayEmptyFundingRows(true);
+        runNiTestCase(cor, spec, "en", someActs);
+    }
+    
+    @Test
+    public void testShowEmptyFundingRowsModeOfPaymentAgencyHierarchy() {
+        NiReportModel cor = new NiReportModel("by-mode-of-payment")
+        .withHeaders(Arrays.asList(
+            "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 3))",
+            "(Mode of Payment: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 1, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 1))",
+            "(Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1))"))
+        .withWarnings(Arrays.asList())
+        .withBody(      new ReportAreaForTests(null)
+          .withContents("Mode of Payment", "", "Project Title", "", "Totals-Actual Disbursements", "253,700")
+          .withChildren(
+            new ReportAreaForTests(new AreaOwner("Mode of Payment", "Direct payment", 2094))
+            .withContents("Project Title", "", "Totals-Actual Disbursements", "0", "Mode of Payment", "Direct payment")
+            .withChildren(
+              new ReportAreaForTests(new AreaOwner(27), "Project Title", "mtef activity 2"),
+              new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response")        ),
+            new ReportAreaForTests(new AreaOwner("Mode of Payment", "Mode of Payment: Undefined", -999999999))
+            .withContents("Project Title", "", "Totals-Actual Disbursements", "253,700", "Mode of Payment", "Mode of Payment: Undefined")
+            .withChildren(
+              new ReportAreaForTests(new AreaOwner(19), "Project Title", "Pure MTEF Project"),
+              new ReportAreaForTests(new AreaOwner(87), "Project Title", "expenditure class", "Totals-Actual Disbursements", "253,700"),
+              new ReportAreaForTests(new AreaOwner(92), "Project Title", "second with disaster response"),
+              new ReportAreaForTests(new AreaOwner(95), "Project Title", "activity 1 with indicators")        )      ));
+        
+        List<String> someActs = Arrays.asList("activity_with_disaster_response", "expenditure class", "second with disaster response", "activity 1 with indicators", "mtef activity 2", "Pure MTEF Project");
+        
+        ReportSpecificationImpl spec = buildSpecification("by-mode-of-payment",
+            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.MODE_OF_PAYMENT), 
+            Arrays.asList(MeasureConstants.ACTUAL_DISBURSEMENTS),
+            Arrays.asList(ColumnConstants.MODE_OF_PAYMENT), 
             GroupingCriteria.GROUPING_TOTALS_ONLY);
         
         spec.setDisplayEmptyFundingRows(true);
@@ -2236,6 +2314,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                                 new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity", "Donor Agency", "Ministry of Finance, UNDP", "Primary Sector", "110 - EDUCATION", "Funding-2014-Planned Disbursements", "56,000", "Funding-2014-Actual Disbursements", "55,000", "Funding-2014-Disbursed as Scheduled", "98,21", "Funding-2015-Planned Disbursements", "36,000", "Funding-2015-Actual Disbursements", "35,000", "Funding-2015-Disbursed as Scheduled", "97,22", "Totals-Planned Disbursements", "92,000", "Totals-Actual Disbursements", "90,000", "Totals-Disbursed as Scheduled", "97,83"),
                                 new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs", "Donor Agency", "Finland, Norway, USAID", "Primary Sector", "110 - EDUCATION", "Funding-2015-Actual Disbursements", "80,000", "Totals-Actual Disbursements", "80,000"),
                                 new ReportAreaForTests(new AreaOwner(79), "Project Title", "with weird currencies", "Donor Agency", "Finland, Ministry of Finance, Norway", "Primary Sector", "110 - EDUCATION, 112 - BASIC EDUCATION")      ));
+
 
 
         ReportSpecificationImpl spec = buildSpecification("testOverDisbursedAsScheduledFlatReport",

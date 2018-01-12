@@ -407,7 +407,7 @@ public final class PerformanceRuleManager {
     }
 
     public boolean canActivityContainPerformanceIssues(AmpActivityVersion a) {
-        return !a.isCreatedAsDraft() && !a.getDraft() && !a.getDeleted() && a.getTeam() != null
+        return !a.isCreatedAsDraft() && !Boolean.TRUE.equals(a.getDraft()) && !a.getDeleted() && a.getTeam() != null
                 && AmpARFilter.validatedActivityStatus.contains(a.getApprovalStatus());
     }
 

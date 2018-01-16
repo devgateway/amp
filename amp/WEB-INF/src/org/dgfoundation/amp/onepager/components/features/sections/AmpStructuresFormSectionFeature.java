@@ -23,6 +23,7 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.util.convert.IConverter;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.PagingListEditor;
@@ -30,6 +31,7 @@ import org.dgfoundation.amp.onepager.components.PagingListNavigator;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
+import org.dgfoundation.amp.onepager.converters.StructureDoubleConverter;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -104,7 +106,12 @@ public class AmpStructuresFormSectionFeature extends
 
                 final AmpTextFieldPanel<Double> longitude = new AmpTextFieldPanel<Double>("longitude",
                         new PropertyModel<Double>(structureModel, "longitude"), "Structure Longitude",
-                        true, true);
+                        true, true) {
+                    
+                    public IConverter getInternalConverter(java.lang.Class<?> type) {
+                        return StructureDoubleConverter.INSTANCE;
+                    };
+                };
                 longitude.setOutputMarkupId(true);
 
                 longitude.getTextContainer().add(new AttributeAppender("size", new Model("7px"), ";"));
@@ -119,7 +126,11 @@ public class AmpStructuresFormSectionFeature extends
 
                 final AmpTextFieldPanel<Double> latitude = new AmpTextFieldPanel<Double>("latitude",
                         new PropertyModel<Double>(structureModel, "latitude"), "Structure Latitude",
-                        true, true);
+                        true, true) {
+                    public IConverter getInternalConverter(java.lang.Class<?> type) {
+                        return  StructureDoubleConverter.INSTANCE;
+                    };
+                };
                 latitude.setOutputMarkupId(true);
 
                 latitude.getTextContainer().add(new AttributeAppender("size", new Model("7px"), ";"));

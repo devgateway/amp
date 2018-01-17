@@ -4,42 +4,43 @@
  */
 package org.dgfoundation.amp.onepager.components;
 
-import java.text.NumberFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
-import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.convert.IConverter;
-import org.apache.wicket.util.convert.converter.DoubleConverter;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.items.AmpRegionalFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpComponentFormTableAnnualBudget;
-import org.dgfoundation.amp.onepager.components.fields.*;
+import org.dgfoundation.amp.onepager.components.fields.AmpCollectionValidatorField;
+import org.dgfoundation.amp.onepager.components.fields.AmpComponentField;
+import org.dgfoundation.amp.onepager.components.fields.AmpDatePickerFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpSimpleValidatorField;
+import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.converters.CustomDoubleConverter;
 import org.dgfoundation.amp.onepager.events.FreezingUpdateEvent;
-import org.dgfoundation.amp.onepager.events.FundingSectionSummaryEvent;
-import org.dgfoundation.amp.onepager.events.GPINiQuestionUpdateEvent;
 import org.dgfoundation.amp.onepager.events.OverallFundingTotalsEvents;
 import org.dgfoundation.amp.onepager.models.MTEFYearsModel;
-import org.dgfoundation.amp.onepager.validators.AmpFreezingValidatorTransactionDate;
-import org.dgfoundation.amp.onepager.validators.AmpUniqueActivityTitleValidator;
-import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.dbentity.AmpOrgGroup;
-import org.digijava.module.aim.helper.FormatHelper;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * Reusable component capturing an amount item in AMP (the tuple amount /
@@ -158,7 +159,7 @@ public class AmpFundingAmountComponent<T> extends Panel {
         currency.getChoiceContainer().setRequired(true);
         currency.getChoiceContainer().add(new AttributeModifier("class", "dropdwn_currency"));
         add(currency);
-        if (!isMTEFProjection){
+        if (!isMTEFProjection) {
             AmpDatePickerFieldPanel datetmp = new AmpDatePickerFieldPanel(
                     "date", new PropertyModel<Date>(model, propertyDate),
                     fmDate, null, hideLabel, hideNewLine) {
@@ -181,17 +182,18 @@ public class AmpFundingAmountComponent<T> extends Panel {
             datetmp.getDate().setRequired(true);
             datetmp.getDate().add(new AttributeModifier("class", "inputx_date"));
             date = datetmp;
-        }
-        else{
-
+        } else if (FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.MTEF_ANNUAL_DATE_FORMAT)) {
+            AmpDatePickerFieldPanel datetmp = new AmpDatePickerFieldPanel(
+                    "date", new PropertyModel<Date>(model, propertyDate), fmDate, null, hideLabel, hideNewLine);
+            
+            datetmp.getDate().setRequired(true);
+            datetmp.getDate().add(new AttributeModifier("class", "inputx_date"));
+            date = datetmp;
+        } else {
             MTEFYearsModel yearModel = new MTEFYearsModel(new PropertyModel<Date>(model, propertyDate));
-//          AmpTextFieldPanel<String> datetmp = new AmpTextFieldPanel<String>("date", yearModel, fmDate, true, true);
-//          datetmp.getTextContainer().setEnabled(false);
-//          datetmp.getTextContainer().add(new AttributeModifier("size", new Model<String>("10")));
-//          date = datetmp;
 
-
-            AmpSelectFieldPanel<KeyValue> datetmp = new AmpSelectFieldPanel<KeyValue>("date", yearModel, mtefYearsChoices, fmDate, true, true, new ChoiceRenderer<KeyValue>("value", "key"));
+            AmpSelectFieldPanel<KeyValue> datetmp = new AmpSelectFieldPanel<KeyValue>("date", yearModel, 
+                        mtefYearsChoices, fmDate, true, true, new ChoiceRenderer<KeyValue>("value", "key"));
             date = datetmp;
         }
         add(date);

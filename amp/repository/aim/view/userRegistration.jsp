@@ -117,11 +117,6 @@
         	return false;
         }
         
-        var notificationEmail = $('#notificationEmail').val();
-        if ($('#notificationEmailEnabled').is(":checked") && !validateNotificationEmail(notificationEmail)) {
-            return false;
-        }
-        
         if(selectedOrgType=="-1"){
 			<c:set var="translation">
 			<digi:trn key="error.registration.enterorganizationother">Please enter Organization Type</digi:trn>
@@ -167,10 +162,18 @@
 		}
 		
 		var notificationEmail = $('#notificationEmail').val();
-        if ($('#notificationEmailEnabled').is(":checked") && reg.test(notificationEmail) == false) {
-        	<c:set var="translation"><digi:trn>Please enter a valid Notification Email</digi:trn></c:set>
-            alert("${translation}");
-            return false;
+        if ($('#notificationEmailEnabled').is(":checked")) {
+	        	if(reg.test(notificationEmail) == false) {
+		        	<c:set var="translation"><digi:trn>Please enter a valid Notification Email</digi:trn></c:set>
+		            alert("${translation}");
+		            return false;
+		        }
+	        	
+	        	if(address == notificationEmail) {
+                    <c:set var="translation"><digi:trn>Email address and notification email address must be different</digi:trn></c:set>
+                    alert("${translation}");
+                    return false;
+                }
         }
         
 		return true;

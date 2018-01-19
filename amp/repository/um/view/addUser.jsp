@@ -167,8 +167,10 @@
             return false;
         
         var notificationEmail = $('#notificationEmail').val();
-        if ($('#notificationEmailEnabled').is(":checked") && !validateNotificationEmail(notificationEmail)) {
-            return false;
+        if ($('#notificationEmailEnabled').is(":checked")) {
+        	if (!validateNotificationEmail(notificationEmail) || !validateMailWithNotificationMail(address, notificationEmail)) {
+        	    return false;
+        	}
         }
         
         if (isPassVoid(password)||isPassVoid(passwordConfirmation))

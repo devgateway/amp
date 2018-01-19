@@ -24,6 +24,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.convert.IConverter;
+import org.apache.wicket.validation.validator.RangeValidator;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.PagingListEditor;
@@ -31,7 +32,7 @@ import org.dgfoundation.amp.onepager.components.PagingListNavigator;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
-import org.dgfoundation.amp.onepager.converters.StructureDoubleConverter;
+import org.dgfoundation.amp.onepager.converters.CoordinateDoubleConverter;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -109,9 +110,10 @@ public class AmpStructuresFormSectionFeature extends
                         true, true) {
                     
                     public IConverter getInternalConverter(java.lang.Class<?> type) {
-                        return StructureDoubleConverter.INSTANCE;
+                        return CoordinateDoubleConverter.INSTANCE;
                     };
                 };
+                longitude.getTextContainer().add(new RangeValidator<Double>(-180d, 180d));
                 longitude.setOutputMarkupId(true);
 
                 longitude.getTextContainer().add(new AttributeAppender("size", new Model("7px"), ";"));
@@ -128,9 +130,10 @@ public class AmpStructuresFormSectionFeature extends
                         new PropertyModel<Double>(structureModel, "latitude"), "Structure Latitude",
                         true, true) {
                     public IConverter getInternalConverter(java.lang.Class<?> type) {
-                        return  StructureDoubleConverter.INSTANCE;
+                        return  CoordinateDoubleConverter.INSTANCE;
                     };
                 };
+                latitude.getTextContainer().add(new RangeValidator<Double>(-90d, 90d));
                 latitude.setOutputMarkupId(true);
 
                 latitude.getTextContainer().add(new AttributeAppender("size", new Model("7px"), ";"));

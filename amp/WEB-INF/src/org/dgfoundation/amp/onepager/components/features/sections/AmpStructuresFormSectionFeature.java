@@ -46,6 +46,11 @@ import org.digijava.module.aim.util.StructuresUtil;
 
 public class AmpStructuresFormSectionFeature extends
         AmpFormSectionFeaturePanel {
+    
+    private static final Double LAT_MIN_VALUE = -90d;
+    private static final Double LAT_MAX_VALUE = 90d;
+    private static final Double LONG_MIN_VALUE = -180d;
+    private static final Double LONG_MAX_VALUE = 180d;
 
     private static final long serialVersionUID = -6654390083754446344L;
     
@@ -113,7 +118,7 @@ public class AmpStructuresFormSectionFeature extends
                         return CoordinateDoubleConverter.INSTANCE;
                     };
                 };
-                longitude.getTextContainer().add(new RangeValidator<Double>(-180d, 180d));
+                longitude.getTextContainer().add(new RangeValidator<Double>(LONG_MIN_VALUE, LONG_MAX_VALUE));
                 longitude.setOutputMarkupId(true);
 
                 longitude.getTextContainer().add(new AttributeAppender("size", new Model("7px"), ";"));
@@ -133,7 +138,7 @@ public class AmpStructuresFormSectionFeature extends
                         return  CoordinateDoubleConverter.INSTANCE;
                     };
                 };
-                latitude.getTextContainer().add(new RangeValidator<Double>(-90d, 90d));
+                latitude.getTextContainer().add(new RangeValidator<Double>(LAT_MIN_VALUE, LAT_MAX_VALUE));
                 latitude.setOutputMarkupId(true);
 
                 latitude.getTextContainer().add(new AttributeAppender("size", new Model("7px"), ";"));

@@ -6,7 +6,7 @@ import java.util.Locale;
 import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.convert.converter.DoubleConverter;
 
-public class StructureDoubleConverter extends DoubleConverter {
+public class CoordinateDoubleConverter extends DoubleConverter {
     
     private static final long serialVersionUID = 1L;
     
@@ -14,9 +14,9 @@ public class StructureDoubleConverter extends DoubleConverter {
      * It is enough to have 5 decimal digits for GIS numbers. 
      * See: https://en.wikipedia.org/wiki/Decimal_degrees
      */
-    public static final int DOUBLE_FRACTION_PRECISION = 5;
+    public static final int DOUBLE_FRACTION_PRECISION = 8;
     
-    public static final IConverter<Double> INSTANCE = new StructureDoubleConverter();
+    public static final IConverter<Double> INSTANCE = new CoordinateDoubleConverter();
 
     @Override
     public NumberFormat getNumberFormat(Locale locale) {

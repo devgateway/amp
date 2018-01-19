@@ -61,6 +61,8 @@ import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
 import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponse;
 import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponseDocument;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.dbentity.AmpStructureImg;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
@@ -1259,6 +1261,60 @@ public class ActivityUtil {
             }
         }
 
+    }
+    
+    /**
+     * Determine if in a activity a related organization is attached to a funding or not
+     * 
+     * @param activity
+     * @param orgRole
+     * @return
+     */
+    public static boolean hasOrgRoleFundingsInActivity(AmpActivityVersion activity, AmpOrgRole orgRole) {
+        Set<AmpFunding> fundings = activity.getFunding();
+        AmpOrganisation org = orgRole.getOrganisation();
+        AmpRole role = orgRole.getRole();
+        
+        for (AmpFunding ampFunding : fundings) {
+            if (ampFunding.getAmpDonorOrgId().getAmpOrgId().equals(org.getAmpOrgId()) 
+                    && ((ampFunding.getSourceRole() == null && role.getRoleCode().equals(Constants.FUNDING_AGENCY))
+                     || (ampFunding.getSourceRole() != null 
+                     && ampFunding.getSourceRole().getRoleCode().equals(role.getRoleCode())))) {
+                
+                return true;
+            }
+        }
+
+        
+        return false;
+    }
+    
+    /**
+     * Determine if in a activity a related organization is attached to a component funding or not
+     * 
+     * @param activity
+     * @param org
+     * @return
+     */
+    public static boolean hasOrgComponentFundingsInActivity(AmpActivityVersion activity, AmpOrganisation org) {
+        Long ampOrgId = org.getAmpOrgId();
+        Set<AmpComponentFunding> componentFundings = activity.getComponents().stream()
+                .flatMap(c -> c.getFundings().stream())
+                .filter(c -> c.getReportingOrganization() != null 
+                    || c.getComponentSecondResponsibleOrganization() != null)
+                .collect(Collectors.toSet());
+        
+        for (AmpComponentFunding acf : componentFundings) {
+            if ((acf.getReportingOrganization() != null 
+                        && acf.getReportingOrganization().getAmpOrgId().equals(ampOrgId))
+                    || (acf.getComponentSecondResponsibleOrganization() != null 
+                        && acf.getComponentSecondResponsibleOrganization().getAmpOrgId().equals(ampOrgId))) {
+                
+                return true;
+            }
+        }
+        
+        return false;
     }
 
     /**

@@ -12,7 +12,7 @@ import YearsFilterSection from './YearsFilterSection';
 export default class Report6 extends Component {
     constructor( props, context ) {
         super( props, context );
-        this.state = { recordsPerPage: Constants.RECORDS_PER_PAGE, hierarchy: 'donor-agency', selectedYear: null, selectedDonor: "", waiting: true};
+        this.state = { recordsPerPage: 150, hierarchy: 'donor-agency', selectedYear: null, selectedDonor: "", waiting: true};
         this.showFilters = this.showFilters.bind( this );
         this.showSettings = this.showSettings.bind( this );
         this.goToClickedPage = this.goToClickedPage.bind( this );
@@ -315,20 +315,17 @@ export default class Report6 extends Component {
                         {(this.props.settings['number-divider'] != 1) &&
                             <span className="amount-units"> ({this.props.translations['amp-gpi-reports:amount-in-' + this.props.settings['number-divider']]})</span>                    
                         }
-                       </div>
-                        </div>
-                     
-                     <div className="container-fluid">
-                       <div className="row">
+                       </div>                                       
+                    <div className="container-fluid">
+                        <div className="row">
                           <h4>{this.props.translations['amp.gpi-reports:indicator6-description']}</h4>
                         </div>
-                      </div>
-                    
-                    <div className="section-divider"></div>
+                    </div>                          
+                    <div className="section-divider"></div>                    
                     {this.props.mainReport.empty == true  &&
                        <div className="text-center">{this.props.translations['amp-gpi-reports:no-data']}</div>
-                    }
-                    { this.props.mainReport.empty == false  &&                     
+                    }                    
+                    { this.props.mainReport.empty == false  &&
                     <table className="table table-bordered table-striped indicator-table">
                         <thead>
                             <tr>

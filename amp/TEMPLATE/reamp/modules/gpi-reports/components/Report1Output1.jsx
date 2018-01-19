@@ -15,7 +15,7 @@ import Loading from './Loading';
 export default class Report1Output1 extends Component {
     constructor( props, context ) {
         super( props, context );
-        this.state = { recordsPerPage: Constants.RECORDS_PER_PAGE, selectedYear: null, selectedDonor: "", remarksUrl:null, showRemarks: false, waiting:true};
+        this.state = { recordsPerPage: 150, selectedYear: null, selectedDonor: "", remarksUrl:null, showRemarks: false, waiting:true};
         this.showFilters = this.showFilters.bind( this );
         this.showSettings = this.showSettings.bind( this );
         this.onDonorFilterChange = this.onDonorFilterChange.bind( this );
@@ -307,7 +307,8 @@ export default class Report1Output1 extends Component {
                       )}
                       </tbody>
                       </table>
-                     }                    
+                     }
+                    
                     <div>
                          <PagingSection mainReport={this.props.mainReport} goToPage={this.goToPage.bind(this)} updateRecordsPerPage={this.updateRecordsPerPage.bind(this)}/>
                

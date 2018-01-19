@@ -24,6 +24,7 @@ import org.dgfoundation.amp.nireports.GrandTotalsDigest;
 import org.dgfoundation.amp.nireports.TrailCellsDigest;
 import org.dgfoundation.amp.nireports.testcases.NiReportModel;
 import org.digijava.kernel.ampapi.endpoints.util.DateFilterUtils;
+import org.digijava.module.aim.util.DbUtil;
 import org.junit.Test;
 
 /**
@@ -469,6 +470,94 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
             }
         }
         //System.err.println("nr of failures: " + fails);
+        long delta = System.currentTimeMillis() - start;
+        long speed = reps * 1000 / delta;
+        double relativeSpeed = speed / 516.0;
+        System.err.format("I ran %d triple-hier reports in %d millies (%d per second, relativeSpeed: %.2f)\n", reps, delta, speed, relativeSpeed);
+    }
+    
+    @Test
+    public void testSingleHierarchiesWithEmptyRowsDoNotChangeTotals() throws Exception {
+        
+        ReportSpecificationImpl initSpec = buildSpecification("initSpec", 
+                Arrays.asList(ColumnConstants.PROJECT_TITLE), 
+                Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+                null, 
+                GroupingCriteria.GROUPING_YEARLY);
+                
+        assertEquals(correctTotals, buildDigest(initSpec, acts, fundingGrandTotalsDigester).toString());
+                
+        // single-hierarchy reports
+        for(boolean isSummary:Arrays.asList(true, false)) {
+            for (String hierName : DONOR_HIERARCHIES_TO_TRY) {
+                ReportSpecificationImpl spec = buildSpecification(String.format("%s summary: %b", hierName, isSummary), 
+                        Arrays.asList(ColumnConstants.PROJECT_TITLE, hierName), 
+                        Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+                        Arrays.asList(hierName), 
+                        GroupingCriteria.GROUPING_YEARLY);
+                spec.setSummaryReport(isSummary);
+                spec.setDisplayEmptyFundingRows(true);
+                assertEquals(spec.getReportName(), correctTotals, buildDigest(spec, acts, fundingGrandTotalsDigester).toString());
+            }
+        }
+    }
+
+    @Test
+    public void testDoubleHierarchiesWithEmptyRowsDoNotChangeTotals() {
+        long start = System.currentTimeMillis();
+        long reps = 0;
+       
+        // double-hierarchy reports
+        for(boolean isSummary:Arrays.asList(true, false)) {
+            for (String hier1Name : DONOR_HIERARCHIES_TO_TRY)
+                for (String hier2Name : DONOR_HIERARCHIES_TO_TRY)
+                    if (hier1Name != hier2Name) {
+                        reps ++;
+                        ReportSpecificationImpl spec = buildSpecification(String.format("%s, %s summary: %b", hier1Name, hier2Name, isSummary), 
+                                Arrays.asList(ColumnConstants.PROJECT_TITLE, hier1Name, hier2Name), 
+                                Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+                                Arrays.asList(hier1Name, hier2Name), 
+                                GroupingCriteria.GROUPING_YEARLY);
+                        spec.setSummaryReport(isSummary);
+                        spec.setDisplayEmptyFundingRows(true);
+                        String digest = buildDigest(spec, acts, fundingGrandTotalsDigester).toString();
+                        assertEquals(spec.getReportName(), correctTotals, digest);
+            }
+        }
+
+        long delta = System.currentTimeMillis() - start;
+        long speed = reps * 1000 / delta;
+        double relativeSpeed = speed / 349.0;
+        System.err.format("I ran %d double-hier reports in %d millies (%d per second, relativeSpeed: %.2f)\n", reps, delta, speed, relativeSpeed);
+    }
+    
+    
+    @Test
+    public void testTripleHierarchiesWithEmptyRowsDoNotChangeTotals() {
+        if (this.getClass().getSimpleName().equals("AmpSchemaSanityTests"))
+            return; // these are too slow if backed by DB
+        long start = System.currentTimeMillis();
+        long reps = 0;
+        
+        // triple-hierarchy reports
+        for(boolean isSummary:Arrays.asList(true, false)) {
+            for (String hier1Name : DONOR_HIERARCHIES_TO_TRY)
+                for (String hier2Name : DONOR_HIERARCHIES_TO_TRY)
+                    for (String hier3Name : DONOR_HIERARCHIES_TO_TRY)
+                    if (hier1Name != hier2Name && hier2Name != hier3Name && hier1Name != hier3Name) {
+                        reps ++;
+                        ReportSpecificationImpl spec = buildSpecification(String.format("%s, %s, %s summary: %b", hier1Name, hier2Name, hier3Name, isSummary), 
+                                Arrays.asList(ColumnConstants.PROJECT_TITLE, hier1Name, hier2Name, hier3Name), 
+                                Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+                                Arrays.asList(hier1Name, hier2Name, hier3Name), 
+                                GroupingCriteria.GROUPING_YEARLY);
+                        spec.setSummaryReport(isSummary);
+                        spec.setDisplayEmptyFundingRows(true);
+                        String digest = buildDigest(spec, acts, fundingGrandTotalsDigester).toString();
+                        assertEquals(spec.getReportName(), correctTotals, digest);
+            }
+        }
+
         long delta = System.currentTimeMillis() - start;
         long speed = reps * 1000 / delta;
         double relativeSpeed = speed / 516.0;
@@ -1695,7 +1784,6 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
         
         runNiTestCase(spec, "en", acts, cor);
     }
-
 
     @Test
     public void testUnfilteredMeasuresInUnfilteredReport() {

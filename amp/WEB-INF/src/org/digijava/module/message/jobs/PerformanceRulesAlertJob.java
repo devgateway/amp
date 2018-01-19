@@ -154,7 +154,7 @@ public class PerformanceRulesAlertJob extends ConnectionCleaningJob implements S
         AmpTeamMember modifyingMember = AmpBackgroundActivitiesUtil
                 .createActivityTeamMemberIfNeeded(oldActivity.getTeam(), user);
         updatedActivity = ActivityUtil.saveActivityNewVersion(oldActivity, null, modifyingMember,
-                oldActivity.getDraft(), session, SaveContext.job());
+                Boolean.TRUE.equals(oldActivity.getDraft()), session, SaveContext.job());
             
         Locale javaLocale = new Locale(DEFAULT_LOCALE_LANGUAGE);
         

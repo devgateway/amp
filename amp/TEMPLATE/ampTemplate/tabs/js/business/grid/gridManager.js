@@ -416,7 +416,7 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 								jQuery.each(groupRows, function(i, item) {
 									jQuery(item.firstChild).attr("colspan", numberOfColumns);
 									jQuery.each(tableStructure.measures.models, function(j, measure) {
-										var auxTD = jQuery(item.firstChild).clone().html("").attr("colspan", 0).css("text-align", "right");
+										var auxTD = jQuery(item.firstChild).clone().html("").attr("colspan", 1).css("text-align", "right");
 										var content = na;
 										if (partialTotals[i].contents[app.TabsApp.TOTAL_COLUMNS_NAME_SUFIX + "[" + measure.get('measureName') + "]"] !== undefined) {
 											// This check is needed for Funding Flow columns because their name is different than expected, ie: "[Totals][Real Disbursements][DN-IMPL]". 

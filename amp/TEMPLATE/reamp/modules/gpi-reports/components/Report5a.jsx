@@ -17,7 +17,7 @@ import Loading from './Loading';
 export default class Report5a extends Component {
     constructor( props, context ) {
         super( props, context );
-        this.state = { recordsPerPage: Constants.RECORDS_PER_PAGE, hierarchy: 'donor-agency', selectedYear: null, selectedDonor: "", remarksUrl:null, showRemarks: false, waiting:true};
+        this.state = { recordsPerPage: 150, hierarchy: 'donor-agency', selectedYear: null, selectedDonor: "", remarksUrl:null, showRemarks: false, waiting:true};
         this.showFilters = this.showFilters.bind( this );
         this.showSettings = this.showSettings.bind( this );        
         this.onDonorFilterChange = this.onDonorFilterChange.bind( this );

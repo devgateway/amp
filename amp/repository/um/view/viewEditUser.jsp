@@ -103,10 +103,6 @@ function validateUserInfo(){
 		return false;
 	}
 	
-	if ($('#notificationEmailEnabled').is(":checked") && !validateNotificationEmail(notificationEmail)) {
-		return false;
-	}
-	
 	if(isInvalid(firstName)==1){
 		<c:set var="translation">
 		<digi:trn key="erroruregistration.FirstNameBlank">First Name is Blank or starts with an space</digi:trn>
@@ -135,6 +131,13 @@ function validateUserInfo(){
 		alert("${translation}");
     	return false;
     }
+	
+	if ($('#notificationEmailEnabled').is(":checked")) {
+        if (!validateNotificationEmail(notificationEmail) || !validateMailWithNotificationMail(userMail, notificationEmail)) {
+            return false;
+        }
+    }
+	
 	if(country=='-1'){
 		errorMsg='<digi:trn jsFriendly="true" >Please Select Country</digi:trn>';
 		alert(errorMsg);

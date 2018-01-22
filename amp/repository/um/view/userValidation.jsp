@@ -43,6 +43,15 @@
         return validateMail(email, blankMessage, invalidMessage);
     }
 	
+	function validateMailWithNotificationMail(email, notificationEmail) {
+		if (email == notificationEmail) {
+			alert('<digi:trn jsFriendly="true">Email address and notification email address must be different</digi:trn>');
+			return false;
+		}
+		
+        return true;
+	}
+	
 	function validateMail(email, blankMessage, invalidMessage) {
         if (isInvalid(email) == 1) {
             alert(blankMessage);

@@ -46,14 +46,23 @@ public class TranslationSettings {
     private Set<String> trnLocaleCodes = new HashSet<String>();
     
     private boolean multilingual;
+
+    private static TranslationSettings defaultOverride;
     
     /**
      * @return default trn settings for the current request environment
      */
     public static TranslationSettings getDefault() {
+        if (defaultOverride != null) {
+            return defaultOverride;
+        }
         return new TranslationSettings();
     }
-    
+
+    public static void setDefaultOverride(TranslationSettings defaultOverride) {
+        TranslationSettings.defaultOverride = defaultOverride;
+    }
+
     /**
      * @return current translation settings or the default one if nothing configured
      */
@@ -65,22 +74,26 @@ public class TranslationSettings {
     }
     
     public TranslationSettings() {
-        init();
+        init(ContentTranslationUtil.multilingualIsEnabled());
         this.trnLocaleCodes.add(currentLangCode);
         this.trnLocaleCodes.add(getDefaultLangCode());
     }
-    
+
     public TranslationSettings(String currentLangCode, Set<String> trnLocaleCodes) {
-        this.currentLangCode = currentLangCode;
-        this.trnLocaleCodes = trnLocaleCodes;
-        init();
+        this(currentLangCode, trnLocaleCodes, ContentTranslationUtil.multilingualIsEnabled());
     }
     
-    private void init() {
+    public TranslationSettings(String currentLangCode, Set<String> trnLocaleCodes, boolean multilingual) {
+        this.currentLangCode = currentLangCode;
+        this.trnLocaleCodes = trnLocaleCodes;
+        init(multilingual);
+    }
+    
+    private void init(boolean multilingual) {
         if (this.currentLangCode == null) {
             this.currentLangCode = TLSUtils.getEffectiveLangCode();
         }
-        multilingual = ContentTranslationUtil.multilingualIsEnabled();
+        this.multilingual = multilingual;
     }
     
     /**

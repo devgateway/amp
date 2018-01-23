@@ -3,6 +3,7 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.util.Output;
 
@@ -10,7 +11,6 @@ public class AmpActivityInternalId implements Serializable, Versionable, Cloneab
     //IATI-check: used. 
     private static final long serialVersionUID = 469552292854192522L;
     
-    @Interchangeable(fieldTitle="ID")
     private Long id;
 
     @Interchangeable(fieldTitle="Organization", importable=true, pickIdOnly=true)
@@ -69,8 +69,15 @@ public class AmpActivityInternalId implements Serializable, Versionable, Cloneab
     public Output getOutput() {
         Output out = new Output();
         out.setOutputs(new ArrayList<Output>());
-        out.getOutputs().add(
-                new Output(null, new String[] { "Organization" }, new Object[] { this.organisation.getName() }));
+        
+        String orgName = this.organisation.getName();
+        if (this.organisation != null 
+                && this.organisation.getDeleted() != null && this.organisation.getDeleted()) {
+            out.setDeletedValues(true);
+            orgName += " (" + TranslatorWorker.translateText("deleted") + ")";
+        }
+        out.getOutputs().add(new Output(null, new String[] {"Organization"}, new Object[] {orgName}));
+        
         out.getOutputs().add(new Output(null, new String[] { "Internal Id" }, new Object[] { this.internalId }));
         return out;
     }

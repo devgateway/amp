@@ -786,6 +786,7 @@ deleted 6 fields, do not reinsert
 <field:display name="Physical progress title" feature="Physical Progress"></field:display> 
 <field:display name="Planned Disbursement Preview" feature="Disbursement"></field:display> 
 <field:display name="Primary Program" feature="NPD Programs"></field:display>
+<field:display name="Primary Sector Code Official" feature="Sectors"></field:display>
 <field:display name="Primary Sector Sub-Sector" feature="Sectors"></field:display> 
 <field:display name="Primary Sector Sub-Sub-Sector" feature="Sectors"></field:display> 
 <field:display name="Primary Sector" feature="Sectors"></field:display> 

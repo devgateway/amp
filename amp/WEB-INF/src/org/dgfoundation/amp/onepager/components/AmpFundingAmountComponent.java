@@ -182,7 +182,7 @@ public class AmpFundingAmountComponent<T> extends Panel {
             datetmp.getDate().setRequired(true);
             datetmp.getDate().add(new AttributeModifier("class", "inputx_date"));
             date = datetmp;
-        } else if (FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.MTEF_ANNUAL_DATE_FORMAT)) {
+        } else if (!FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.MTEF_ANNUAL_DATE_FORMAT)) {
             AmpDatePickerFieldPanel datetmp = new AmpDatePickerFieldPanel(
                     "date", new PropertyModel<Date>(model, propertyDate), fmDate, null, hideLabel, hideNewLine);
             

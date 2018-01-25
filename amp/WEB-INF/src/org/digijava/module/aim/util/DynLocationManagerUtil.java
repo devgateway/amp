@@ -119,6 +119,13 @@ public class DynLocationManagerUtil {
             loc.setDeleted(true);
             dbSession.save(loc);
             
+            AmpLocation ampLocation = LocationUtil.getAmpLocationByCVLocation(loc.getId());
+            if (ampLocation != null && ampLocation.getActivities().isEmpty()) {
+                if (LocationUtil.getIndicatorValuesCountByAmpLocation(ampLocation) == 0) {
+                    dbSession.delete(ampLocation);
+                }
+            }
+            
             for (AmpCategoryValueLocations l : loc.getChildLocations()) {
                 deleteLocation(l.getId(), errors);
             }
@@ -892,28 +899,41 @@ public class DynLocationManagerUtil {
      *         saved to the db.
      * @throws Exception
      */
-    public static AmpLocation getAmpLocation(
-            AmpCategoryValueLocations ampCVLocation) throws Exception {
-        if (ampCVLocation == null)
-            throw new Exception("ampCVLocations is null");
+    public static AmpLocation getOrCreateAmpLocationByCVL(AmpCategoryValueLocations ampCVLocation) {
+        if (ampCVLocation == null) {
+            throw new IllegalArgumentException("Category Value Location cannot be null");
+        }
 
-        AmpLocation ampLoc = LocationUtil
-                .getAmpLocationByCVLocation(ampCVLocation.getId());
+        AmpLocation ampLoc = LocationUtil.getAmpLocationByCVLocation(ampCVLocation.getId());
 
         if (ampLoc == null) {
             ampLoc = new AmpLocation();
-            ampLoc.setDescription(new String(" "));
-
+            ampLoc.setName(ampCVLocation.getName());
             ampLoc.setLocation(ampCVLocation);
+            
             AmpCategoryValueLocations regionLocation = DynLocationManagerUtil
-                    .getAncestorByLayer(ampCVLocation,
-                            CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
+                    .getAncestorByLayer(ampCVLocation, CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
+            
             if (regionLocation != null) {
                 ampLoc.setRegionLocation(regionLocation);
             }
+            
             DbUtil.add(ampLoc);
         }
+        
         return ampLoc;
+    }
+    
+    /** Get AmpLocation object by Category Value Location Id. If it doesn't exist, create a new one.
+     * 
+     * @param ampCVLocationId
+     * @return
+     * @throws Exception
+     */
+    public static AmpLocation getOrCreateAmpLocationByCVLId(Long ampCVLocationId) {
+        AmpCategoryValueLocations acvLocation = getLocationByIdRequestSession(ampCVLocationId);
+        
+        return getOrCreateAmpLocationByCVL(acvLocation);
     }
 
     /**

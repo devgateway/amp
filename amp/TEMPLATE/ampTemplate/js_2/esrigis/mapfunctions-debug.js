@@ -1729,7 +1729,7 @@ var structureID=1;
 			description =  structure.description.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
 			name =  structure.name.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
 			
-			var previewActivityUrl ="/aim/viewActivityPreview.do~pageId=2~isPreview=1~activityId=" + activity.ampactivityid;
+			var previewActivityUrl ="/aim/viewActivityPreview.do~isPreview=1~activityId=" + activity.ampactivityid;
 			//debugger;
 			if(structure.hasImage){
 				stinfoTemplate = new esri.InfoTemplate(
@@ -1757,7 +1757,7 @@ var structureID=1;
 				pgraphic = new esri.Graphic(transpt, sms, attr,stinfoTemplate);
 				pgraphic.setAttributes({
 						"Structure Name" : structure.name,
-						"Activity" : '<a href="/aim/viewActivityPreview.do~pageId=2~activityId='+ activity.ampactivityid
+						"Activity" : '<a href="/aim/viewActivityPreview.do~activityId='+ activity.ampactivityid
 									+ '~isPreview=1" target="_blank">'+ activity.activityname+ '</a>',
 						"Structure Type" : structure.type,
 						"Structure Description" : description,
@@ -1779,7 +1779,7 @@ var structureID=1;
 					pgraphic.setAttributes({
 						"Structure Name" : name,
 						"Structure Type" : structure.type,
-						"Activity" : '<a href="/aim/viewActivityPreview.do~pageId=2~activityId='+ activity.ampactivityid
+						"Activity" : '<a href="/aim/viewActivityPreview.do~activityId='+ activity.ampactivityid
 								+ '~isPreview=1" target="_blank">'+ activity.activityname+ '</a>',
 						"Coordinates" : pgraphic.geometry.x+ " , "+ pgraphic.geometry.y,
                         "Structure Description" : description,
@@ -1803,7 +1803,7 @@ var structureID=1;
 					pgraphic.setAttributes({
 						"Structure Name" : name,
 						"Structure Type" : structure.type,
-						"Activity" : '<a href="/aim/viewActivityPreview.do~pageId=2~activityId='
+						"Activity" : '<a href="/aim/viewActivityPreview.do~activityId='
 							+ activity.ampactivityid+ '~isPreview=1" target="_blank">'
 							+ activity.activityname+ '</a>',
 						"Coordinates" : pgraphic.geometry.x+ " , "+ pgraphic.geometry.y,
@@ -2124,7 +2124,7 @@ function getContent(graphicAttributes, baseGraphic) {
     			});
     			//debugger;
                 attr=({
-					"Activity" : '<a href="/aim/viewActivityPreview.do~pageId=2~activityId='
+					"Activity" : '<a href="/aim/viewActivityPreview.do~activityId='
 							+ attr[0].id
 							+ '~isPreview=1" target="_blank">'
 							+ attr[0].activityname

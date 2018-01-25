@@ -27,8 +27,10 @@ public class AmpActivityLocation implements Versionable,Serializable, Cloneable 
                             InterchangeDependencyResolver.IMPLEMENTATION_LOCATION_PRESENT_KEY
             })
     private AmpLocation location;
-    @Interchangeable(fieldTitle="Location Percentage", fmPath = "/Activity Form/Location/Locations/Location Item/locationPercentage", 
-            required = "/Activity Form/Location/Locations/Location required validator", percentageConstraint = true, importable = true)
+    @Interchangeable(fieldTitle = "Location Percentage",
+            fmPath = "/Activity Form/Location/Locations/Location Item/locationPercentage",
+            required = "/Activity Form/Location/Locations/Location percentage required",
+            percentageConstraint = true, importable = true)
     @Validators (percentage = "/Activity Form/Location/Locations/locationPercentageTotal" )
     private Float locationPercentage;
     @Interchangeable(fieldTitle = "Latitude", fmPath = "/Activity Form/Location/Locations/Location Item/Latitude", importable = true)

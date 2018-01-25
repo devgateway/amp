@@ -276,10 +276,13 @@ public class ActivityFundingDigest {
         }
         // calculate delivery rates
 
-        if (activityTotalCalculations.getTotActualComm() != null && activityTotalCalculations.getTotActualComm().doubleValue() != 0 && activityTotalCalculations.getTotActualDisb() != null && activityTotalCalculations.getTotActualDisb().doubleValue() != 0) {
-            double deliveryRate = activityTotalCalculations.getTotActualDisb().doubleValue() / activityTotalCalculations.getTotActualComm().doubleValue();
+        if (activityTotalCalculations.getTotActualComm() != null && activityTotalCalculations.getTotActualComm()
+                .doubleValue() != 0 && activityTotalCalculations.getTotActualDisb() != null
+                && activityTotalCalculations.getTotActualDisb().doubleValue() != 0) {
+            double deliveryRate = activityTotalCalculations.getTotActualDisb().doubleValue()
+                    / activityTotalCalculations.getTotActualComm().doubleValue();
             NumberFormat formatter = DecimalFormat.getPercentInstance();
-            this.setDeliveryRate(formatter.format(deliveryRate));
+            this.setDeliveryRate(formatter.format(deliveryRate).replace("%", " %"));
         }
     }
     

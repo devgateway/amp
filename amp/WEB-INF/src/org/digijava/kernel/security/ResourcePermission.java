@@ -38,19 +38,20 @@ import java.util.TreeMap;
 public abstract class ResourcePermission
     extends BasicPermission implements Serializable  {
 
-    public final static String READ = "READ";
-    public final static String WRITE = "WRITE";
-    public final static String CONTENT_ADMIN = "CONTENT_ADMIN";
-    public final static String ADMIN = "ADMIN";
-    public final static String TRANSLATE = "TRANSLATE";
+    public static final String READ = "READ";
+    public static final String WRITE = "WRITE";
+    public static final String CONTENT_ADMIN = "CONTENT_ADMIN";
+    public static final String ADMIN = "ADMIN";
+    public static final String SUPER_ADMIN = "SUPER_ADMIN";
+    public static final String TRANSLATE = "TRANSLATE";
 
-    public final static int INT_READ = 0x1;
-    public final static int INT_WRITE = 0x3;
+    public static final int INT_READ = 0x1;
+    public static final int INT_WRITE = 0x3;
     //public final static int INT_ADMIN = 0x7;
-    public final static int INT_CONTENT_ADMIN = 0xFF3;
-    public final static int INT_ADMIN = 0xFFF3;
-    public final static int INT_TRANSLATE = 0x8;
-
+    public static final int INT_CONTENT_ADMIN = 0xFF3;
+    public static final int INT_ADMIN = 0xFFF3;
+    public static final int INT_SUPER_ADMIN = 0xFFFF3;
+    public static final int INT_TRANSLATE = 0x8;
 
     private static final Map actionsToCodes;
     private static final SortedMap actionCodesToActions;
@@ -138,6 +139,7 @@ public abstract class ResourcePermission
         actionsToCodes.put(WRITE, new Integer(INT_WRITE));
         actionsToCodes.put(CONTENT_ADMIN, new Integer(INT_CONTENT_ADMIN));
         actionsToCodes.put(ADMIN, new Integer(INT_ADMIN));
+        actionsToCodes.put(SUPER_ADMIN, new Integer(INT_SUPER_ADMIN));
         actionsToCodes.put(TRANSLATE,
                            new Integer(INT_TRANSLATE));
 

@@ -135,25 +135,6 @@ public class TemporaryDocumentData extends DocumentData {
         return null;
     }
     
-    public NodeWrapper saveToRepositoryDataExchange (HttpServletRequest request, ActionMessages errors) {
-        HttpSession httpSession = request.getSession();
-        Session jcrWriteSession     = DocumentManagerUtil.getWriteSession(request);
-        TeamMember teamMember       = (TeamMember)httpSession.getAttribute(Constants.CURRENT_MEMBER);
-        
-        // 
-//      Node homeNode               = DocumentManagerUtil.getUserPrivateNode(jcrWriteSession, teamMember);
-        Node homeNode               = DocumentManagerUtil.getTeamNode(jcrWriteSession, teamMember.getTeamId());
-    
-        NodeWrapper nodeWrapper     = new NodeWrapper(this, request, homeNode, false, errors);
-        
-        if ( !nodeWrapper.isErrorAppeared() ) {
-            if ( nodeWrapper.saveNode(jcrWriteSession) ) {
-                
-                return nodeWrapper;
-            }
-        }
-        return null;
-    }
     
     public static ArrayList<DocumentData> retrieveTemporaryDocDataList(HttpServletRequest request) {
         HashMap<String,Object> map      = SelectDocumentDM.getContentRepositoryHashMap(request);

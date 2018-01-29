@@ -36,7 +36,11 @@
 		var please_enter_number_message = '<digi:trn jsFriendly="true">Please enter number</digi:trn>';
 		var please_enter_year_message = '<digi:trn jsFriendly="true">Please enter an year</digi:trn>';
 		var please_enter_date_message = '<digi:trn jsFriendly="true">Please enter a date</digi:trn>';
-	</script>    
+		var sum_percentages_message = '<digi:trn jsFriendly="true">Sum of percentages should be either 0 or 100</digi:trn>';
+		var not_valid_percentage_message = '<digi:trn jsFriendly="true">Not a valid percentage</digi:trn>';
+		var start_year_end_year_message = '<digi:trn jsFriendly="true">Start Year should be before End Year</digi:trn>';
+		var start_date_end_date_message = '<digi:trn jsFriendly="true">Start Date should be before End Date</digi:trn>';
+	</script>
   	<logic:present name="PNOTIFY_ERROR_MESSAGE" scope="request">
   		<script type="text/javascript">
   			$(document).ready(function(){
@@ -46,7 +50,7 @@
   	</logic:present>
 				
 <logic:notPresent name="PNOTIFY_ERROR_MESSAGE" scope="request">
- 	<div id="pledge_form_big_div"> 
+ 	<div id="pledge_form_big_div" class="content-dir"> 
 		<aim:renderFormSubsection title="Pledge Identification">
 			<jsp:include page="pledgeIdentification.jsp"></jsp:include>
 		</aim:renderFormSubsection>	

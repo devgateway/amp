@@ -22,7 +22,8 @@ import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * AMP Config Endpoints for Config save
- * 
+ *
+ * @implicitParam X-Auth-Token|string|header
  * @author apicca
  */
 @Path("config")

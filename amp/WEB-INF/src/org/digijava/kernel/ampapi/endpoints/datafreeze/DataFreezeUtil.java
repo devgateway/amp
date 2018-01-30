@@ -3,10 +3,12 @@ package org.digijava.kernel.ampapi.endpoints.datafreeze;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
@@ -18,6 +20,7 @@ import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpActivityFrozen;
 import org.digijava.module.aim.dbentity.AmpDataFreezeExclusion;
 import org.digijava.module.aim.dbentity.AmpDataFreezeSettings;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.util.AmpDateUtils;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -221,15 +224,23 @@ public final class DataFreezeUtil {
     }
 
     /**
-     * Get list of active users
+     * Get list of active users and assigned to workspaces
      * 
-     * @return
+     * @return List<User> users
      */
     public static List<User> getUsers() {
         Session session = PersistenceManager.getRequestDBSession();
-        String queryString = "from " + User.class.getName() + " user where user.banned = false and user.active = true";
-        Query query = session.createQuery(queryString);
-        return query.list();
+        String teamMembersQuery = "select team from " + AmpTeamMember.class.getName() + " team "
+                + "join team.user user "
+                + "where user.banned = false";
+        Query query = session.createQuery(teamMembersQuery);
+        List<AmpTeamMember> teamMembers = query.list();
+        
+        Set<User> users = teamMembers.stream()
+                .map(AmpTeamMember::getUser)
+                .collect(Collectors.toSet());
+        
+        return new ArrayList<User>(users);
     }
 
     public static AmpDataFreezeExclusion findDataFreezeExclusion(Long activityId, Long dataFreezeEventId) {

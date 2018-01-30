@@ -25,6 +25,7 @@ import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.util.file.File;
 import org.dgfoundation.amp.onepager.OnePagerConst;
+import org.dgfoundation.amp.onepager.components.fields.AmpCollectionValidatorField;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.helper.DownloadResourceStream;
 import org.dgfoundation.amp.onepager.helper.TemporaryGPINiDocument;
@@ -44,7 +45,9 @@ public class AmpGPINiSurveyResourcesFormTableFeature
     boolean refreshExistingDocs = false;
 
     public AmpGPINiSurveyResourcesFormTableFeature(String id, String fmName,
-            final IModel<AmpGPINiSurveyResponse> responseModel) throws Exception{
+            final IModel<AmpGPINiSurveyResponse> responseModel,
+            List<AmpCollectionValidatorField<AmpGPINiSurveyResponse, String>> responseValidationFields) 
+                    throws Exception {
         super(id, responseModel, fmName);
 
         super.setTitleHeaderColSpan(10);
@@ -213,6 +216,7 @@ public class AmpGPINiSurveyResourcesFormTableFeature
                             newItems.remove(item.getModelObject());
                         }
                         target.add(list.getParent());
+                        responseValidationFields.stream().forEach(r -> r.reloadValidationField(target, false));
                     }
                 };
                 item.add(delRelOrg);

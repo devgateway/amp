@@ -1375,7 +1375,8 @@ public class AmpMessageWorker {
                 DbUtil.saveOrUpdateObject(ampEmail);
                 emails.put(user.getRegisterLanguage().getCode(), ampEmail);
             }
-            AmpEmailReceiver emailReceiver = new AmpEmailReceiver(user.getEmail(), ampEmail, MessageConstants.UNSENT_STATUS);
+            AmpEmailReceiver emailReceiver = new AmpEmailReceiver(user.getEmailUsedForNotification(), ampEmail, 
+                    MessageConstants.UNSENT_STATUS);
             DbUtil.saveOrUpdateObject(emailReceiver);
         }
 

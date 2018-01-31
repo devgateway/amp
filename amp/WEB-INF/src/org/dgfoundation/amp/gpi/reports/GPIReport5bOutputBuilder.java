@@ -121,13 +121,13 @@ public class GPIReport5bOutputBuilder extends GPIReportOutputBuilder {
                     rc = rc != null ? rc : TextCell.EMPTY;
 
                     if (FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.MTEF_ANNUAL_DATE_FORMAT)) {
-                        if (roc.originalColumnName.equals(String.format("%s %s", MTEF_NAME, (year + 1)))) {
+                        if (roc.originalColumnName.equals(String.format("%s %s", MTEF_NAME, (year + MTEF_COLUMN_1)))) {
                             if (((AmountCell) rc).extractValue() > 0) {
                                 gpiItem.setYear1(true);
                             }
                         }
     
-                        if (roc.originalColumnName.equals(String.format("%s %s", MTEF_NAME, (year + MTEF_COLUMN_1)))) {
+                        if (roc.originalColumnName.equals(String.format("%s %s", MTEF_NAME, (year + MTEF_COLUMN_2)))) {
                             if (((AmountCell) rc).extractValue() > 0) {
                                 gpiItem.setYear2(true);
                             }

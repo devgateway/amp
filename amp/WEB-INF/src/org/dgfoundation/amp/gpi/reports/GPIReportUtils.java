@@ -596,12 +596,10 @@ public class GPIReportUtils {
     public static int getPivoteYear(ReportSpecification spec) {
         
         FilterRule dateFilterRule = getDateFilterRule(spec);
-        CalendarConverter calendarConverter = (spec.getSettings() != null && spec.getSettings().getCalendar() != null)
-                ? spec.getSettings().getCalendar() : AmpARFilter.getDefaultCalendar();
-        
         Date fromJulianNumberToDate = new Date();
+        
         if (dateFilterRule == null || StringUtils.isBlank(dateFilterRule.min)) {
-            //throw new RuntimeException("No year selected. Please specify the date filter");
+            throw new RuntimeException("No year selected. Please specify the date filter");
         }  else {
             fromJulianNumberToDate = DateTimeUtil.fromJulianNumberToDate(dateFilterRule.min);
         }

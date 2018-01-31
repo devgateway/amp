@@ -917,6 +917,7 @@ deleted 6 fields, do not reinsert
 <field:display name="Budget Organization" feature="Budget"></field:display>
 <field:display name="Budget Program" feature="Budget"></field:display>
 <field:display name="Template Manager" feature="Message Manager"></field:display>
+<field:display name="Delete unsent old messages" feature="Message Manager"></field:display>
 <field:display name="Title Text Box" feature="Create Message Form"></field:display> 
 <field:display name="Total Amount Commitments" feature="Regional Funding"></field:display> 
 <field:display name="Total Amount Disbursements" feature="Regional Funding"></field:display> 

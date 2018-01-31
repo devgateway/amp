@@ -214,6 +214,7 @@ public class GlobalSettingsConstants {
 
     public static final String REORDER_FUNDING_ITEMS = "Reorder funding items";
 
+    public static final String TIME_TO_KEEP_UNSENT_EMAILS = "Time to keep unsent emails";
     /**
      * fields which, although existing in the database, should be rendered with a display: none on the GlobalSettings form so that the user never has a chance of changing their value
      */

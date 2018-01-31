@@ -11,6 +11,7 @@
 		
 		<property name="address" column="address" type="java.lang.String" />
 		<property name="status" column="status" type="java.lang.String" />
+		<property name="creationDate" column="creation_date" type="java.util.Date" />
 
 		<many-to-one name="email" column="email_id"	class="org.digijava.module.message.dbentity.AmpEmail" cascade="none" />		
 

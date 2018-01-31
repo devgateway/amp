@@ -23,7 +23,7 @@
 <logic:notEmpty scope="request" name="reqSelectorHeaderSize">
 	<c:set var="selectorHeaderSize" scope="page" value="${reqSelectorHeaderSize}" />
 </logic:notEmpty>	
-	<div class="grouping_selector_wrapper" style="float: left; width: 40%; padding: 0px; height: 98%;">
+	<div class="grouping_selector_wrapper">
 		<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; width: 100%; padding-top:5px; height: ${selectorHeaderSize}%; border: 1px solid #CCCCCC;border-bottom: 0px;">
 			<div class="inside">
 				<b class="ins_header"><digi:trn>Grouping Selector</digi:trn></b> 
@@ -55,8 +55,8 @@
 								onMouseout="getRowSelectorInstance(this, ${propertyObj}, new DivManager('${element.htmlDivId}', ${propertyObj}), true).unmarkRow(false)">
 								<td class="inside">
 									<div class="selector_type_cont">
-										<span style="float:left;"><digi:trn>${element.name}</digi:trn></span>
-										<span style="float: right;">
+										<span class="panel-one"><digi:trn>${element.name}</digi:trn></span>
+										<span class="panel-two">
                                             <c:if test="${'Date' ne element.fieldType}">
 											    (${element.rootHierarchyListable.countDescendants-1})
                                             </c:if>
@@ -73,14 +73,14 @@
 				</table>
 		</div>
 	</div>
-	<div class="member_selector_wrapper" style="float:left; width: 60%; padding: 0px; height: 98%;background: white;" >
+	<div class="member_selector_wrapper">
 		<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; padding-top:5px; height: ${selectorHeaderSize}%; border: 1px solid #CCCCCC; border-bottom: 0px;">
-				<div class="inside" style="float: left" >&nbsp;
+				<div class="inside panel-one">&nbsp;
 					<b class="ins_header">
 						<digi:trn>Member Selector</digi:trn>
 					</b>
 				</div>
-				<div class="memberSelectorInputWrapper" style="float: right">
+				<div class="memberSelectorInputWrapper panel-two">
 					<input onkeypress="getSearchManagerInstanceByEl(this).clear()" id="${searchManagerId}" type="text" style="margin-top:0px; width: ${searchFieldWidth};" class="inputx" />&nbsp;
 					<button class="buttonx_sm" onclick="getSearchManagerInstanceById('${searchManagerId}').findPrev()" style="padding: 0px;" type="button">&lt;&lt;</button>
 					<button class="buttonx_sm" onclick="getSearchManagerInstanceById('${searchManagerId}').findNext()" style="padding: 0px;" type="button">&gt;&gt;</button>

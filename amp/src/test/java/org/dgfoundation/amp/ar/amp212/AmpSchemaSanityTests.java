@@ -168,7 +168,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                 Arrays.asList("Pure MTEF Project", "activity with directed MTEFs", "Activity with both MTEFs and Act.Comms"),
                 cor);
     }
-    
+
     /**
      * generates reports with many hierarchies and checks that, for any of them, the totals do not change
      * @throws Exception
@@ -190,7 +190,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 
         // single-hierarchy reports
         for(boolean isSummary:Arrays.asList(true, false)) {
-            for(String hierName:hierarchiesToTry) {
+            for (String hierName : DONOR_HIERARCHIES_TO_TRY) {
                 ReportSpecificationImpl spec = buildSpecification(String.format("%s summary: %b", hierName, isSummary), 
                         Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.PROPOSED_PROJECT_AMOUNT, ColumnConstants.REVISED_PROJECT_AMOUNT, hierName), 
                         Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS), 
@@ -521,17 +521,17 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
         // for running manually: http://localhost:8080/aim/viewNewAdvancedReport.do~view=reset~widget=false~resetSettings=true~ampReportId=24 or http://localhost:8080/TEMPLATE/ampTemplate/saikuui/index.html#report/open/24
         
         NiReportModel cor = new NiReportModel("AMP-18504")
-            .withHeaders(Arrays.asList(
-                "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 14))",
-                "(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Donor Agency: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 2, colSpan: 10));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 12, colSpan: 2))",
-                "(2009: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 2));(2010: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 4, colSpan: 2));(2012: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 6, colSpan: 2));(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 8, colSpan: 2));(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 10, colSpan: 2))",
-                "(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 10, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 11, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 12, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 13, colSpan: 1))"))
-            .withWarnings(Arrays.asList())
-            .withBody(      new ReportAreaForTests(null)
-              .withContents("Project Title", "", "Donor Agency", "", "Funding-2009-Actual Commitments", "100,000", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "60,000", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Funding-2013-Actual Commitments", "2,670,000", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "4,400,000", "Funding-2014-Actual Disbursements", "450,000", "Totals-Actual Commitments", "7,195,000", "Totals-Actual Disbursements", "522,000")
-              .withChildren(
-                new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity", "Donor Agency", "Ministry of Finance", "Funding-2009-Actual Commitments", "100,000", "Funding-2010-Actual Disbursements", "60,000", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Totals-Actual Commitments", "125,000", "Totals-Actual Disbursements", "72,000"),
-                new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2", "Donor Agency", "USAID", "Funding-2013-Actual Commitments", "2,670,000", "Funding-2014-Actual Commitments", "4,400,000", "Funding-2014-Actual Disbursements", "450,000", "Totals-Actual Commitments", "7,070,000", "Totals-Actual Disbursements", "450,000")      ));
+                .withHeaders(Arrays.asList(
+                        "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 14))",
+                        "(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Donor Agency: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 2, colSpan: 10));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 12, colSpan: 2))",
+                        "(2009: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 2));(2010: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 4, colSpan: 2));(2012: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 6, colSpan: 2));(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 8, colSpan: 2));(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 10, colSpan: 2))",
+                        "(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 10, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 11, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 12, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 13, colSpan: 1))"))
+                .withWarnings(Arrays.asList())
+                .withBody(      new ReportAreaForTests(null)
+                        .withContents("Project Title", "", "Donor Agency", "", "Funding-2009-Actual Commitments", "100,000", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "60,000", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Funding-2013-Actual Commitments", "2,670,000", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "4,400,000", "Funding-2014-Actual Disbursements", "450,000", "Totals-Actual Commitments", "7,195,000", "Totals-Actual Disbursements", "522,000")
+                        .withChildren(
+                                new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity", "Donor Agency", "Ministry of Finance", "Funding-2009-Actual Commitments", "100,000", "Funding-2010-Actual Disbursements", "60,000", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Totals-Actual Commitments", "125,000", "Totals-Actual Disbursements", "72,000"),
+                                new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2", "Donor Agency", "Finland, USAID", "Funding-2013-Actual Commitments", "2,670,000", "Funding-2014-Actual Commitments", "4,400,000", "Funding-2014-Actual Disbursements", "450,000", "Totals-Actual Commitments", "7,070,000", "Totals-Actual Disbursements", "450,000")      ));
         
         runNiTestCase(
             buildSpecification("AMP-18504",
@@ -1472,14 +1472,92 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                 .withContents("Project Title", "", "Totals-Actual Commitments", "50,100", "Disaster Response Marker", "Disaster Response Marker: Undefined")
                 .withChildren(
                   new ReportAreaForTests(new AreaOwner(63), "Project Title", "activity with funded components", "Totals-Actual Commitments", "100"),
-                  new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response", "Totals-Actual Commitments", "50,000")        )      ));    
+                  new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response", "Totals-Actual Commitments", "50,000"),
+                  new ReportAreaForTests(new AreaOwner(95), "Project Title", "activity 1 with indicators")        )      ));
         
-        List<String> someActs = Arrays.asList("activity_with_disaster_response", "expenditure class", "second with disaster response", "activity with funded components");
+        List<String> someActs = Arrays.asList("activity_with_disaster_response", "expenditure class", "second with disaster response", "activity with funded components", "activity 1 with indicators");
         
         ReportSpecificationImpl spec = buildSpecification("by-disaster-response",
             Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.DISASTER_RESPONSE_MARKER), 
             Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
             Arrays.asList(ColumnConstants.DISASTER_RESPONSE_MARKER), 
+            GroupingCriteria.GROUPING_TOTALS_ONLY);
+        
+        spec.setDisplayEmptyFundingRows(true);
+        runNiTestCase(cor, spec, "en", someActs);
+    }
+    
+    @Test
+    public void testShowEmptyFundingRowsDonorAgencyHierarchy() {
+        NiReportModel cor = new NiReportModel("by-donor-agency")
+        .withHeaders(Arrays.asList(
+                "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 3))",
+                "(Donor Agency: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 1, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 1))",
+                "(Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1))"))
+            .withWarnings(Arrays.asList())
+            .withBody(      new ReportAreaForTests(null)
+              .withContents("Donor Agency", "", "Project Title", "", "Totals-Actual Commitments", "578,666")
+              .withChildren(
+                new ReportAreaForTests(new AreaOwner("Donor Agency", "Finland", 21698)).withContents("Project Title", "", "Totals-Actual Commitments", "150,000", "Donor Agency", "Finland")
+                .withChildren(
+                  new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response", "Totals-Actual Commitments", "150,000")        ),
+                new ReportAreaForTests(new AreaOwner("Donor Agency", "Ministry of Economy", 21700)).withContents("Project Title", "", "Totals-Actual Commitments", "62,000", "Donor Agency", "Ministry of Economy")
+                .withChildren(
+                  new ReportAreaForTests(new AreaOwner(87), "Project Title", "expenditure class", "Totals-Actual Commitments", "62,000")        ),
+                new ReportAreaForTests(new AreaOwner("Donor Agency", "Ministry of Finance", 21699)).withContents("Project Title", "", "Totals-Actual Commitments", "0", "Donor Agency", "Ministry of Finance")
+                .withChildren(
+                  new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response")        ),
+                new ReportAreaForTests(new AreaOwner("Donor Agency", "Norway", 21694))
+                .withContents("Project Title", "", "Totals-Actual Commitments", "366,666", "Donor Agency", "Norway")
+                .withChildren(
+                  new ReportAreaForTests(new AreaOwner(87), "Project Title", "expenditure class"),
+                  new ReportAreaForTests(new AreaOwner(92), "Project Title", "second with disaster response", "Totals-Actual Commitments", "366,666")        ),
+                new ReportAreaForTests(new AreaOwner("Donor Agency", "Donor Agency: Undefined", -999999999)).withContents("Project Title", "", "Totals-Actual Commitments", "0", "Donor Agency", "Donor Agency: Undefined")
+                .withChildren(
+                  new ReportAreaForTests(new AreaOwner(95), "Project Title", "activity 1 with indicators")        )      ));   
+        
+        List<String> someActs = Arrays.asList("activity_with_disaster_response", "expenditure class", "second with disaster response", "activity 1 with indicators");
+        
+        ReportSpecificationImpl spec = buildSpecification("by-donor-agency",
+            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.DONOR_AGENCY), 
+            Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
+            Arrays.asList(ColumnConstants.DONOR_AGENCY), 
+            GroupingCriteria.GROUPING_TOTALS_ONLY);
+        
+        spec.setDisplayEmptyFundingRows(true);
+        runNiTestCase(cor, spec, "en", someActs);
+    }
+    
+    @Test
+    public void testShowEmptyFundingRowsModeOfPaymentAgencyHierarchy() {
+        NiReportModel cor = new NiReportModel("by-mode-of-payment")
+        .withHeaders(Arrays.asList(
+            "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 3))",
+            "(Mode of Payment: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 1, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 1))",
+            "(Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1))"))
+        .withWarnings(Arrays.asList())
+        .withBody(      new ReportAreaForTests(null)
+          .withContents("Mode of Payment", "", "Project Title", "", "Totals-Actual Disbursements", "253,700")
+          .withChildren(
+            new ReportAreaForTests(new AreaOwner("Mode of Payment", "Direct payment", 2094))
+            .withContents("Project Title", "", "Totals-Actual Disbursements", "0", "Mode of Payment", "Direct payment")
+            .withChildren(
+              new ReportAreaForTests(new AreaOwner(27), "Project Title", "mtef activity 2"),
+              new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response")        ),
+            new ReportAreaForTests(new AreaOwner("Mode of Payment", "Mode of Payment: Undefined", -999999999))
+            .withContents("Project Title", "", "Totals-Actual Disbursements", "253,700", "Mode of Payment", "Mode of Payment: Undefined")
+            .withChildren(
+              new ReportAreaForTests(new AreaOwner(19), "Project Title", "Pure MTEF Project"),
+              new ReportAreaForTests(new AreaOwner(87), "Project Title", "expenditure class", "Totals-Actual Disbursements", "253,700"),
+              new ReportAreaForTests(new AreaOwner(92), "Project Title", "second with disaster response"),
+              new ReportAreaForTests(new AreaOwner(95), "Project Title", "activity 1 with indicators")        )      ));
+        
+        List<String> someActs = Arrays.asList("activity_with_disaster_response", "expenditure class", "second with disaster response", "activity 1 with indicators", "mtef activity 2", "Pure MTEF Project");
+        
+        ReportSpecificationImpl spec = buildSpecification("by-mode-of-payment",
+            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.MODE_OF_PAYMENT), 
+            Arrays.asList(MeasureConstants.ACTUAL_DISBURSEMENTS),
+            Arrays.asList(ColumnConstants.MODE_OF_PAYMENT), 
             GroupingCriteria.GROUPING_TOTALS_ONLY);
         
         spec.setDisplayEmptyFundingRows(true);
@@ -2188,71 +2266,72 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
     @Test
     public void testOverDisbursedAsScheduledFlatReport() {
         NiReportModel cor = new NiReportModel("testOverDisbursedAsScheduledFlatReport")
-            .withHeaders(Arrays.asList(
-                    "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 27))",
-                    "(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Donor Agency: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Primary Sector: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 3, colSpan: 20));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 23, colSpan: 4))",
-                    "(2010: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 4));(2012: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 7, colSpan: 4));(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 11, colSpan: 4));(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 15, colSpan: 4));(2015: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 19, colSpan: 4))",
-                    "(Planned Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Disbursed as Scheduled: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Over Disbursed: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Planned Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1));(Disbursed as Scheduled: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1));(Over Disbursed: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 10, colSpan: 1));(Planned Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 11, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 12, colSpan: 1));(Disbursed as Scheduled: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 13, colSpan: 1));(Over Disbursed: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 14, colSpan: 1));(Planned Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 15, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 16, colSpan: 1));(Disbursed as Scheduled: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 17, colSpan: 1));(Over Disbursed: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 18, colSpan: 1));(Planned Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 19, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 20, colSpan: 1));(Disbursed as Scheduled: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 21, colSpan: 1));(Over Disbursed: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 22, colSpan: 1));(Planned Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 23, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 24, colSpan: 1));(Disbursed as Scheduled: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 25, colSpan: 1));(Over Disbursed: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 26, colSpan: 1))"))
+                .withHeaders(Arrays.asList(
+                        "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 27))",
+                        "(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Donor Agency: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Primary Sector: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 3, colSpan: 20));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 23, colSpan: 4))",
+                        "(2010: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 4));(2012: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 7, colSpan: 4));(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 11, colSpan: 4));(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 15, colSpan: 4));(2015: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 19, colSpan: 4))",
+                        "(Planned Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Disbursed as Scheduled: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Over Disbursed: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Planned Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1));(Disbursed as Scheduled: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1));(Over Disbursed: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 10, colSpan: 1));(Planned Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 11, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 12, colSpan: 1));(Disbursed as Scheduled: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 13, colSpan: 1));(Over Disbursed: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 14, colSpan: 1));(Planned Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 15, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 16, colSpan: 1));(Disbursed as Scheduled: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 17, colSpan: 1));(Over Disbursed: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 18, colSpan: 1));(Planned Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 19, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 20, colSpan: 1));(Disbursed as Scheduled: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 21, colSpan: 1));(Over Disbursed: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 22, colSpan: 1));(Planned Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 23, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 24, colSpan: 1));(Disbursed as Scheduled: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 25, colSpan: 1));(Over Disbursed: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 26, colSpan: 1))"))
                 .withWarnings(Arrays.asList())
                 .withBody(      new ReportAreaForTests(null)
-                  .withContents("Project Title", "", "Donor Agency", "", "Primary Sector", "", "Funding-2010-Planned Disbursements", "0", "Funding-2010-Actual Disbursements", "780,311", "Funding-2012-Planned Disbursements", "0", "Funding-2012-Actual Disbursements", "12,000", "Funding-2013-Planned Disbursements", "0", "Funding-2013-Actual Disbursements", "1,266,956", "Funding-2014-Planned Disbursements", "146,300", "Funding-2014-Actual Disbursements", "710,200", "Funding-2014-Disbursed as Scheduled", "100", "Funding-2014-Over Disbursed", "79,4", "Funding-2015-Planned Disbursements", "36,500", "Funding-2015-Actual Disbursements", "437,335", "Funding-2015-Disbursed as Scheduled", "100", "Funding-2015-Over Disbursed", "91,65", "Totals-Planned Disbursements", "182,800", "Totals-Actual Disbursements", "3,206,802", "Totals-Disbursed as Scheduled", "100", "Totals-Over Disbursed", "94,3")
-                  .withChildren(
-                    new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Donor Agency", "World Bank", "Primary Sector", "112 - BASIC EDUCATION", "Funding-2010-Actual Disbursements", "123,321", "Totals-Actual Disbursements", "123,321"),
-                    new ReportAreaForTests(new AreaOwner(13), "Project Title", "TAC_activity_2", "Donor Agency", "Water Foundation", "Primary Sector", "130 - POPULATION POLICIES/PROGRAMMES AND REPRODUCTIVE HEALTH", "Funding-2010-Actual Disbursements", "453,213", "Totals-Actual Disbursements", "453,213"),
-                    new ReportAreaForTests(new AreaOwner(15), "Project Title", "Proposed Project Cost 1 - USD", "Primary Sector", "110 - EDUCATION"),
-                    new ReportAreaForTests(new AreaOwner(17), "Project Title", "Proposed Project Cost 2 - EUR", "Primary Sector", "110 - EDUCATION"),
-                    new ReportAreaForTests(new AreaOwner(18), "Project Title", "Test MTEF directed", "Donor Agency", "Ministry of Economy", "Primary Sector", "110 - EDUCATION", "Funding-2010-Actual Disbursements", "143,777", "Totals-Actual Disbursements", "143,777"),
-                    new ReportAreaForTests(new AreaOwner(19), "Project Title", "Pure MTEF Project", "Donor Agency", "Ministry of Finance", "Primary Sector", "110 - EDUCATION"),
-                    new ReportAreaForTests(new AreaOwner(21), "Project Title", "activity with components", "Primary Sector", "110 - EDUCATION"),
-                    new ReportAreaForTests(new AreaOwner(23), "Project Title", "Project with documents", "Primary Sector", "110 - EDUCATION"),
-                    new ReportAreaForTests(new AreaOwner(24), "Project Title", "Eth Water", "Donor Agency", "Finland, Norway, USAID", "Primary Sector", "110 - EDUCATION", "Funding-2013-Actual Disbursements", "545,000", "Totals-Actual Disbursements", "545,000"),
-                    new ReportAreaForTests(new AreaOwner(25), "Project Title", "mtef activity 1", "Donor Agency", "UNDP", "Primary Sector", "110 - EDUCATION"),
-                    new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity", "Donor Agency", "Ministry of Finance", "Primary Sector", "110 - EDUCATION", "Funding-2010-Actual Disbursements", "60,000", "Funding-2012-Actual Disbursements", "12,000", "Totals-Actual Disbursements", "72,000"),
-                    new ReportAreaForTests(new AreaOwner(27), "Project Title", "mtef activity 2", "Donor Agency", "Finland", "Primary Sector", "110 - EDUCATION"),
-                    new ReportAreaForTests(new AreaOwner(28), "Project Title", "ptc activity 1", "Donor Agency", "Finland", "Primary Sector", "110 - EDUCATION"),
-                    new ReportAreaForTests(new AreaOwner(29), "Project Title", "ptc activity 2", "Donor Agency", "USAID", "Primary Sector", "110 - EDUCATION"),
-                    new ReportAreaForTests(new AreaOwner(30), "Project Title", "SSC Project 1", "Donor Agency", "Finland", "Primary Sector", "110 - EDUCATION", "Funding-2013-Actual Disbursements", "555,111", "Totals-Actual Disbursements", "555,111"),
-                    new ReportAreaForTests(new AreaOwner(31), "Project Title", "SSC Project 2", "Donor Agency", "Water Org", "Primary Sector", "112 - BASIC EDUCATION", "Funding-2013-Actual Disbursements", "131,845", "Totals-Actual Disbursements", "131,845"),
-                    new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1", "Donor Agency", "Finland", "Primary Sector", "110 - EDUCATION"),
-                    new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones", "Donor Agency", "Finland", "Primary Sector", "110 - EDUCATION"),
-                    new ReportAreaForTests(new AreaOwner(36), "Project Title", "Activity With Zones and Percentages", "Donor Agency", "Norway", "Primary Sector", "110 - EDUCATION, 120 - HEALTH"),
-                    new ReportAreaForTests(new AreaOwner(40), "Project Title", "SubNational no percentages", "Donor Agency", "Ministry of Economy", "Primary Sector", "110 - EDUCATION"),
-                    new ReportAreaForTests(new AreaOwner(41), "Project Title", "Activity Linked With Pledge", "Donor Agency", "Finland", "Primary Sector", "110 - EDUCATION"),
-                    new ReportAreaForTests(new AreaOwner(43), "Project Title", "Activity with primary_tertiary_program", "Donor Agency", "UNDP", "Primary Sector", "110 - EDUCATION"),
-                    new ReportAreaForTests(new AreaOwner(44), "Project Title", "activity with primary_program", "Donor Agency", "World Bank", "Primary Sector", "110 - EDUCATION"),
-                    new ReportAreaForTests(new AreaOwner(45), "Project Title", "activity with tertiary_program", "Donor Agency", "Ministry of Economy", "Primary Sector", "110 - EDUCATION"),
-                    new ReportAreaForTests(new AreaOwner(46), "Project Title", "pledged education activity 1", "Donor Agency", "USAID", "Primary Sector", "110 - EDUCATION"),
-                    new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2", "Donor Agency", "USAID", "Primary Sector", "113 - SECONDARY EDUCATION", "Funding-2014-Actual Disbursements", "450,000", "Totals-Actual Disbursements", "450,000"),
-                    new ReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending", "Donor Agency", "Finland", "Primary Sector", "110 - EDUCATION", "Funding-2014-Planned Disbursements", "90,000", "Funding-2014-Actual Disbursements", "80,000", "Funding-2014-Disbursed as Scheduled", "88,89", "Totals-Planned Disbursements", "90,000", "Totals-Actual Disbursements", "80,000", "Totals-Disbursed as Scheduled", "88,89"),
-                    new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency", "Donor Agency", "Finland", "Primary Sector", "110 - EDUCATION, 112 - BASIC EDUCATION, 120 - HEALTH", "Funding-2014-Actual Disbursements", "50,000", "Totals-Actual Disbursements", "50,000"),
-                    new ReportAreaForTests(new AreaOwner(53), "Project Title", "new activity with contracting", "Donor Agency", "Finland"),
-                    new ReportAreaForTests(new AreaOwner(61), "Project Title", "activity-with-unfunded-components", "Donor Agency", "Finland", "Primary Sector", "110 - EDUCATION"),
-                    new ReportAreaForTests(new AreaOwner(63), "Project Title", "activity with funded components", "Donor Agency", "UNDP", "Primary Sector", "110 - EDUCATION"),
-                    new ReportAreaForTests(new AreaOwner(64), "Project Title", "Unvalidated activity", "Donor Agency", "UNDP", "Primary Sector", "110 - EDUCATION"),
-                    new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement", "Donor Agency", "Finland", "Primary Sector", "110 - EDUCATION, 112 - BASIC EDUCATION", "Funding-2015-Actual Disbursements", "321,765", "Totals-Actual Disbursements", "321,765"),
-                    new ReportAreaForTests(new AreaOwner(66), "Project Title", "Activity 2 with multiple agreements", "Donor Agency", "UNDP, USAID", "Primary Sector", "110 - EDUCATION"),
-                    new ReportAreaForTests(new AreaOwner(67), "Project Title", "third activity with agreements", "Donor Agency", "Ministry of Finance", "Primary Sector", "110 - EDUCATION"),
-                    new ReportAreaForTests(new AreaOwner(68), "Project Title", "activity with incomplete agreement", "Donor Agency", "Finland", "Primary Sector", "110 - EDUCATION"),
-                    new ReportAreaForTests(new AreaOwner(69), "Project Title", "Activity with planned disbursements", "Donor Agency", "Norway, USAID", "Primary Sector", "112 - BASIC EDUCATION", "Funding-2014-Planned Disbursements", "300", "Funding-2014-Actual Disbursements", "200", "Funding-2014-Disbursed as Scheduled", "66,67", "Funding-2015-Planned Disbursements", "500", "Funding-2015-Actual Disbursements", "570", "Funding-2015-Disbursed as Scheduled", "100", "Funding-2015-Over Disbursed", "12,28", "Totals-Planned Disbursements", "800", "Totals-Actual Disbursements", "770", "Totals-Disbursed as Scheduled", "96,25"),
-                    new ReportAreaForTests(new AreaOwner(70), "Project Title", "Activity with both MTEFs and Act.Comms", "Donor Agency", "Finland", "Primary Sector", "110 - EDUCATION, 112 - BASIC EDUCATION"),
-                    new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response", "Donor Agency", "Finland", "Primary Sector", "110 - EDUCATION, 113 - SECONDARY EDUCATION"),
-                    new ReportAreaForTests(new AreaOwner(73), "Project Title", "activity with directed MTEFs", "Donor Agency", "Ministry of Economy", "Primary Sector", "110 - EDUCATION"),
-                    new ReportAreaForTests(new AreaOwner(76), "Project Title", "activity with pipeline MTEFs and act. disb", "Donor Agency", "UNDP", "Primary Sector", "110 - EDUCATION", "Funding-2013-Actual Disbursements", "35,000", "Funding-2014-Actual Disbursements", "75,000", "Totals-Actual Disbursements", "110,000"),
-                    new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity", "Donor Agency", "Ministry of Finance", "Primary Sector", "110 - EDUCATION", "Funding-2014-Planned Disbursements", "56,000", "Funding-2014-Actual Disbursements", "55,000", "Funding-2014-Disbursed as Scheduled", "98,21", "Funding-2015-Planned Disbursements", "36,000", "Funding-2015-Actual Disbursements", "35,000", "Funding-2015-Disbursed as Scheduled", "97,22", "Totals-Planned Disbursements", "92,000", "Totals-Actual Disbursements", "90,000", "Totals-Disbursed as Scheduled", "97,83"),
-                    new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs", "Donor Agency", "Finland, USAID", "Primary Sector", "110 - EDUCATION", "Funding-2015-Actual Disbursements", "80,000", "Totals-Actual Disbursements", "80,000"),
-                    new ReportAreaForTests(new AreaOwner(79), "Project Title", "with weird currencies", "Donor Agency", "Ministry of Finance", "Primary Sector", "110 - EDUCATION, 112 - BASIC EDUCATION")      ));
+                        .withContents("Project Title", "", "Donor Agency", "", "Primary Sector", "", "Funding-2010-Planned Disbursements", "0", "Funding-2010-Actual Disbursements", "780,311", "Funding-2012-Planned Disbursements", "0", "Funding-2012-Actual Disbursements", "12,000", "Funding-2013-Planned Disbursements", "0", "Funding-2013-Actual Disbursements", "1,266,956", "Funding-2014-Planned Disbursements", "146,300", "Funding-2014-Actual Disbursements", "710,200", "Funding-2014-Disbursed as Scheduled", "100", "Funding-2014-Over Disbursed", "79,4", "Funding-2015-Planned Disbursements", "36,500", "Funding-2015-Actual Disbursements", "437,335", "Funding-2015-Disbursed as Scheduled", "100", "Funding-2015-Over Disbursed", "91,65", "Totals-Planned Disbursements", "182,800", "Totals-Actual Disbursements", "3,206,802", "Totals-Disbursed as Scheduled", "100", "Totals-Over Disbursed", "94,3")
+                        .withChildren(
+                                new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Donor Agency", "World Bank", "Primary Sector", "112 - BASIC EDUCATION", "Funding-2010-Actual Disbursements", "123,321", "Totals-Actual Disbursements", "123,321"),
+                                new ReportAreaForTests(new AreaOwner(13), "Project Title", "TAC_activity_2", "Donor Agency", "Water Foundation", "Primary Sector", "130 - POPULATION POLICIES/PROGRAMMES AND REPRODUCTIVE HEALTH", "Funding-2010-Actual Disbursements", "453,213", "Totals-Actual Disbursements", "453,213"),
+                                new ReportAreaForTests(new AreaOwner(15), "Project Title", "Proposed Project Cost 1 - USD", "Donor Agency", "Finland", "Primary Sector", "110 - EDUCATION"),
+                                new ReportAreaForTests(new AreaOwner(17), "Project Title", "Proposed Project Cost 2 - EUR", "Donor Agency", "Ministry of Economy", "Primary Sector", "110 - EDUCATION"),
+                                new ReportAreaForTests(new AreaOwner(18), "Project Title", "Test MTEF directed", "Donor Agency", "Ministry of Economy, USAID", "Primary Sector", "110 - EDUCATION", "Funding-2010-Actual Disbursements", "143,777", "Totals-Actual Disbursements", "143,777"),
+                                new ReportAreaForTests(new AreaOwner(19), "Project Title", "Pure MTEF Project", "Donor Agency", "Ministry of Economy, Ministry of Finance", "Primary Sector", "110 - EDUCATION"),
+                                new ReportAreaForTests(new AreaOwner(21), "Project Title", "activity with components", "Donor Agency", "Finland", "Primary Sector", "110 - EDUCATION"),
+                                new ReportAreaForTests(new AreaOwner(23), "Project Title", "Project with documents", "Donor Agency", "USAID", "Primary Sector", "110 - EDUCATION"),
+                                new ReportAreaForTests(new AreaOwner(24), "Project Title", "Eth Water", "Donor Agency", "Finland, Norway, USAID", "Primary Sector", "110 - EDUCATION", "Funding-2013-Actual Disbursements", "545,000", "Totals-Actual Disbursements", "545,000"),
+                                new ReportAreaForTests(new AreaOwner(25), "Project Title", "mtef activity 1", "Donor Agency", "UNDP", "Primary Sector", "110 - EDUCATION"),
+                                new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity", "Donor Agency", "Ministry of Finance", "Primary Sector", "110 - EDUCATION", "Funding-2010-Actual Disbursements", "60,000", "Funding-2012-Actual Disbursements", "12,000", "Totals-Actual Disbursements", "72,000"),
+                                new ReportAreaForTests(new AreaOwner(27), "Project Title", "mtef activity 2", "Donor Agency", "Finland", "Primary Sector", "110 - EDUCATION"),
+                                new ReportAreaForTests(new AreaOwner(28), "Project Title", "ptc activity 1", "Donor Agency", "Finland", "Primary Sector", "110 - EDUCATION"),
+                                new ReportAreaForTests(new AreaOwner(29), "Project Title", "ptc activity 2", "Donor Agency", "USAID", "Primary Sector", "110 - EDUCATION"),
+                                new ReportAreaForTests(new AreaOwner(30), "Project Title", "SSC Project 1", "Donor Agency", "Finland", "Primary Sector", "110 - EDUCATION", "Funding-2013-Actual Disbursements", "555,111", "Totals-Actual Disbursements", "555,111"),
+                                new ReportAreaForTests(new AreaOwner(31), "Project Title", "SSC Project 2", "Donor Agency", "Water Org", "Primary Sector", "112 - BASIC EDUCATION", "Funding-2013-Actual Disbursements", "131,845", "Totals-Actual Disbursements", "131,845"),
+                                new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1", "Donor Agency", "Finland", "Primary Sector", "110 - EDUCATION"),
+                                new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones", "Donor Agency", "Finland", "Primary Sector", "110 - EDUCATION"),
+                                new ReportAreaForTests(new AreaOwner(36), "Project Title", "Activity With Zones and Percentages", "Donor Agency", "Norway", "Primary Sector", "110 - EDUCATION, 120 - HEALTH"),
+                                new ReportAreaForTests(new AreaOwner(40), "Project Title", "SubNational no percentages", "Donor Agency", "Ministry of Economy", "Primary Sector", "110 - EDUCATION"),
+                                new ReportAreaForTests(new AreaOwner(41), "Project Title", "Activity Linked With Pledge", "Donor Agency", "Finland", "Primary Sector", "110 - EDUCATION"),
+                                new ReportAreaForTests(new AreaOwner(43), "Project Title", "Activity with primary_tertiary_program", "Donor Agency", "UNDP", "Primary Sector", "110 - EDUCATION"),
+                                new ReportAreaForTests(new AreaOwner(44), "Project Title", "activity with primary_program", "Donor Agency", "World Bank", "Primary Sector", "110 - EDUCATION"),
+                                new ReportAreaForTests(new AreaOwner(45), "Project Title", "activity with tertiary_program", "Donor Agency", "Ministry of Economy", "Primary Sector", "110 - EDUCATION"),
+                                new ReportAreaForTests(new AreaOwner(46), "Project Title", "pledged education activity 1", "Donor Agency", "USAID", "Primary Sector", "110 - EDUCATION"),
+                                new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2", "Donor Agency", "Finland, USAID", "Primary Sector", "113 - SECONDARY EDUCATION", "Funding-2014-Actual Disbursements", "450,000", "Totals-Actual Disbursements", "450,000"),
+                                new ReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending", "Donor Agency", "Finland", "Primary Sector", "110 - EDUCATION", "Funding-2014-Planned Disbursements", "90,000", "Funding-2014-Actual Disbursements", "80,000", "Funding-2014-Disbursed as Scheduled", "88,89", "Totals-Planned Disbursements", "90,000", "Totals-Actual Disbursements", "80,000", "Totals-Disbursed as Scheduled", "88,89"),
+                                new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency", "Donor Agency", "Finland, Ministry of Finance", "Primary Sector", "110 - EDUCATION, 112 - BASIC EDUCATION, 120 - HEALTH", "Funding-2014-Actual Disbursements", "50,000", "Totals-Actual Disbursements", "50,000"),
+                                new ReportAreaForTests(new AreaOwner(53), "Project Title", "new activity with contracting", "Donor Agency", "Finland"),
+                                new ReportAreaForTests(new AreaOwner(61), "Project Title", "activity-with-unfunded-components", "Donor Agency", "Finland, Ministry of Economy", "Primary Sector", "110 - EDUCATION"),
+                                new ReportAreaForTests(new AreaOwner(63), "Project Title", "activity with funded components", "Donor Agency", "UNDP, Water Foundation, World Bank", "Primary Sector", "110 - EDUCATION"),
+                                new ReportAreaForTests(new AreaOwner(64), "Project Title", "Unvalidated activity", "Donor Agency", "UNDP", "Primary Sector", "110 - EDUCATION"),
+                                new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement", "Donor Agency", "Finland", "Primary Sector", "110 - EDUCATION, 112 - BASIC EDUCATION", "Funding-2015-Actual Disbursements", "321,765", "Totals-Actual Disbursements", "321,765"),
+                                new ReportAreaForTests(new AreaOwner(66), "Project Title", "Activity 2 with multiple agreements", "Donor Agency", "Ministry of Finance, UNDP, USAID", "Primary Sector", "110 - EDUCATION"),
+                                new ReportAreaForTests(new AreaOwner(67), "Project Title", "third activity with agreements", "Donor Agency", "Finland, Ministry of Finance", "Primary Sector", "110 - EDUCATION"),
+                                new ReportAreaForTests(new AreaOwner(68), "Project Title", "activity with incomplete agreement", "Donor Agency", "Finland", "Primary Sector", "110 - EDUCATION"),
+                                new ReportAreaForTests(new AreaOwner(69), "Project Title", "Activity with planned disbursements", "Donor Agency", "Norway, USAID", "Primary Sector", "112 - BASIC EDUCATION", "Funding-2014-Planned Disbursements", "300", "Funding-2014-Actual Disbursements", "200", "Funding-2014-Disbursed as Scheduled", "66,67", "Funding-2015-Planned Disbursements", "500", "Funding-2015-Actual Disbursements", "570", "Funding-2015-Disbursed as Scheduled", "100", "Funding-2015-Over Disbursed", "12,28", "Totals-Planned Disbursements", "800", "Totals-Actual Disbursements", "770", "Totals-Disbursed as Scheduled", "96,25"),
+                                new ReportAreaForTests(new AreaOwner(70), "Project Title", "Activity with both MTEFs and Act.Comms", "Donor Agency", "Finland, Ministry of Finance", "Primary Sector", "110 - EDUCATION, 112 - BASIC EDUCATION"),
+                                new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response", "Donor Agency", "Finland, Ministry of Finance", "Primary Sector", "110 - EDUCATION, 113 - SECONDARY EDUCATION"),
+                                new ReportAreaForTests(new AreaOwner(73), "Project Title", "activity with directed MTEFs", "Donor Agency", "Ministry of Economy", "Primary Sector", "110 - EDUCATION"),
+                                new ReportAreaForTests(new AreaOwner(76), "Project Title", "activity with pipeline MTEFs and act. disb", "Donor Agency", "Norway, UNDP", "Primary Sector", "110 - EDUCATION", "Funding-2013-Actual Disbursements", "35,000", "Funding-2014-Actual Disbursements", "75,000", "Totals-Actual Disbursements", "110,000"),
+                                new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity", "Donor Agency", "Ministry of Finance, UNDP", "Primary Sector", "110 - EDUCATION", "Funding-2014-Planned Disbursements", "56,000", "Funding-2014-Actual Disbursements", "55,000", "Funding-2014-Disbursed as Scheduled", "98,21", "Funding-2015-Planned Disbursements", "36,000", "Funding-2015-Actual Disbursements", "35,000", "Funding-2015-Disbursed as Scheduled", "97,22", "Totals-Planned Disbursements", "92,000", "Totals-Actual Disbursements", "90,000", "Totals-Disbursed as Scheduled", "97,83"),
+                                new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs", "Donor Agency", "Finland, Norway, USAID", "Primary Sector", "110 - EDUCATION", "Funding-2015-Actual Disbursements", "80,000", "Totals-Actual Disbursements", "80,000"),
+                                new ReportAreaForTests(new AreaOwner(79), "Project Title", "with weird currencies", "Donor Agency", "Finland, Ministry of Finance, Norway", "Primary Sector", "110 - EDUCATION, 112 - BASIC EDUCATION")      ));
 
-        
+
+
         ReportSpecificationImpl spec = buildSpecification("testOverDisbursedAsScheduledFlatReport",
             Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.DONOR_AGENCY, ColumnConstants.PRIMARY_SECTOR),
             Arrays.asList(MeasureConstants.PLANNED_DISBURSEMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.DISBURSED_AS_SCHEDULED, MeasureConstants.OVER_DISBURSED),
             null,
             GroupingCriteria.GROUPING_YEARLY
         );
-        
+
         runNiTestCase(spec, "en", acts, cor);
     }
-    
+
     @Test
     public void testOverDisbursedAsScheduledByDonor() {
         NiReportModel cor = new NiReportModel("testOverDisbursedAsScheduledByDonor")

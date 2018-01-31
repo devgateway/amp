@@ -100,7 +100,8 @@ public class AmpGPINiQuestionItemFeaturePanel extends Panel {
             add(choicesInput);
             add(hiddenMarkup(RESPONSE_NUMBER_ID), hiddenMarkup(RESPONSE_TEXT_ID), hiddenMarkup(RESPONSE_OPTIONS_ID));
         } else if (type.equals(GPINiQuestionType.LINK)) {
-            AmpGPINiResourcesFormSectionFeature resourceContainer = getResourceResponseContainer(responseModel);
+            AmpGPINiResourcesFormSectionFeature resourceContainer = getResourceResponseContainer(responseModel, 
+                    responseValidationFields);
             add(resourceContainer);
             add(hiddenMarkup(RESPONSE_NUMBER_ID), hiddenMarkup(RESPONSE_TEXT_ID), hiddenMarkup(RESPONSE_SELECT_ID));
         }
@@ -295,11 +296,12 @@ public class AmpGPINiQuestionItemFeaturePanel extends Panel {
      * @return
      */
     private AmpGPINiResourcesFormSectionFeature getResourceResponseContainer(
-            IModel<AmpGPINiSurveyResponse> responseModel) {
+            IModel<AmpGPINiSurveyResponse> responseModel, 
+            List<AmpCollectionValidatorField<AmpGPINiSurveyResponse, String>> responseValidationFields) {
         AmpGPINiResourcesFormSectionFeature resourceContainer = null;
         try {
             resourceContainer = new AmpGPINiResourcesFormSectionFeature(RESPONSE_OPTIONS_ID, "resources",
-                    responseModel);
+                    responseModel, responseValidationFields);
 
         } catch (Exception e) {
             logger.error(e);

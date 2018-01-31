@@ -281,6 +281,12 @@ export default class Report9b extends Component {
                     <div className="section-divider"></div>
                     {this.props.mainReport && this.props.mainReport.summary && this.props.mainReport.empty == false  &&
                         <div className="container-fluid indicator-stats no-padding">
+                            <div className="col-md-2 col-md-2-summary-9b">
+                                   <div className="indicator-stat-wrapper">
+                                        <div className="stat-value">{this.props.mainReport.summary[Constants.USE_OF_COUNTRY_SYSTEMS]}</div>
+                                        <div className="stat-label">{this.getLocalizedColumnName( Constants.USE_OF_COUNTRY_SYSTEMS )}</div>
+                                    </div>
+                            </div>
                             <div className="col-md-3">
                                 <div className="indicator-stat-wrapper">
                                     <div className="stat-value">{this.props.mainReport.summary[Constants.NATIONAL_BUDGET_EXECUTION_PROCEDURES]}</div>
@@ -305,12 +311,6 @@ export default class Report9b extends Component {
                                     <div className="stat-label">{this.getLocalizedColumnName( Constants.NATIONAL_PROCUREMENT_EXECUTION_PROCEDURES )}</div>
                                 </div>
                             </div>
-                            <div className="col-md-2 col-md-2-9b">
-                                   <div className="indicator-stat-wrapper">
-                                        <div className="stat-value">{this.props.mainReport.summary[Constants.USE_OF_COUNTRY_SYSTEMS]}</div>
-                                        <div className="stat-label">{this.getLocalizedColumnName( Constants.USE_OF_COUNTRY_SYSTEMS )}</div>
-                                    </div>
-                            </div>                                    
                         </div>
                     }
                     <YearsFilterSection onYearClick={this.onYearClick.bind(this)} selectedYear={this.state.selectedYear} mainReport={this.props.mainReport} filter={this.filter} dateField="date" settingsWidget={this.settingsWidget} />
@@ -339,6 +339,9 @@ export default class Report9b extends Component {
                             <div className="text-center">{this.props.translations['amp-gpi-reports:no-data']}</div>
                     }
                     { this.props.mainReport.empty == false  &&
+
+                                       
+
                     <table className="table table-bordered table-striped indicator-table">
                         <thead>
                         <tr>

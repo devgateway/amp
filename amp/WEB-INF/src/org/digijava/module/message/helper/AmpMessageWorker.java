@@ -1359,8 +1359,10 @@ public class AmpMessageWorker {
         AmpTeamMember msgSender = TeamMemberUtil.getAmpTeamMember(newMsg.getSenderId());
         HashMap<String, String> params = new HashMap<String, String>();
         HashMap<String, AmpEmail> emails = new HashMap<String, AmpEmail>();
-        params.put(DataFreezeEmailNotificationTrigger.PARAM_DATA_FREEZE_NOTIFICATION_DAYS, String.valueOf(DataFreezeEmailNotificationTrigger.DAYS_TO_FREEZE));
-        params.put(DataFreezeEmailNotificationTrigger.PARAM_DATA_FREEZING_DATE, e.getParameters().get(DataFreezeEmailNotificationTrigger.PARAM_DATA_FREEZING_DATE).toString());
+        params.put(DataFreezeEmailNotificationTrigger.PARAM_FREEZE_NOTIFICATION_DAYS, 
+                e.getParameters().get(DataFreezeEmailNotificationTrigger.PARAM_FREEZE_NOTIFICATION_DAYS).toString());
+        params.put(DataFreezeEmailNotificationTrigger.PARAM_DATA_FREEZING_DATE, 
+                e.getParameters().get(DataFreezeEmailNotificationTrigger.PARAM_DATA_FREEZING_DATE).toString());
         for(User user : users) {
             String senderEmail = (msgSender == null) ? DEFAULT_EMAIL_SENDER
                     : msgSender.getUser().getEmailUsedForNotification();

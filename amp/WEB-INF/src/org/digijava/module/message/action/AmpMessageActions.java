@@ -48,6 +48,7 @@ import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.dataExchange.utils.DataExchangeUtils;
 import org.digijava.module.message.dbentity.AmpAlert;
 import org.digijava.module.message.dbentity.AmpMessage;
+import org.digijava.module.message.dbentity.AmpMessageReceiver;
 import org.digijava.module.message.dbentity.AmpMessageSettings;
 import org.digijava.module.message.dbentity.AmpMessageState;
 import org.digijava.module.message.dbentity.Approval;
@@ -589,48 +590,30 @@ public class AmpMessageActions extends DispatchAction {
         }
         fillFormFields(message, messagesForm, id,isMessageStateId);
 
-        String name = messagesForm.getReceiver();
-
-        if (name != null) {
-            String [] temp = null;
-            temp = name.split(";");
-
-            int i=0;
-            while(i+1 < temp.length){
-                ReciverName recName = new ReciverName();
-                String tmpName = temp[i];
-                if (tmpName.startsWith(",")) {
-                    tmpName = tmpName.substring(1);
-                }
-                String tmpGroup = temp[i+1];
-                recName.setUserNeme(tmpName);
-                recName.setTeamName(tmpGroup);
-                if(messagesForm.getReceivesrsNameMail()==null){
-                    messagesForm.setReceivesrsNameMail(new ArrayList<ReciverName>());
-                }
-                messagesForm.getReceivesrsNameMail().add(recName);
-                i+=2;
-
-            }
+        
+        for (AmpMessageReceiver receiver : message.getMessageReceivers()) {
+            ReciverName recName = new ReciverName();
+            recName.setUserNeme(receiver.getReceiver().getUser().getName());
+            recName.setTeamName(receiver.getReceiver().getAmpTeam().getName());
+            messagesForm.getReceivesrsNameMail().add(recName);
+        }
 
         
-            //external people
-            if(message.getExternalReceivers()!=null && message.getExternalReceivers().length()>0){
-                String externalPeople=temp[temp.length-1];
-                String[] externalReceivers=externalPeople.split(",");
-                for(int j=0;j<externalReceivers.length;j++){
-                    ReciverName recName = new ReciverName();
-                    String receiverName=externalReceivers[j];
-                    if(j!=externalReceivers.length-1){
-                        receiverName+=",";
-                    }
-                    recName.setUserNeme(receiverName);
-                    recName.setTeamName("");
-                    if(messagesForm.getReceivesrsNameMail()==null){
-                        messagesForm.setReceivesrsNameMail(new ArrayList<ReciverName>());
-                    }
-                    messagesForm.getReceivesrsNameMail().add(recName);
+        //external people
+        if (message.getExternalReceivers() != null && message.getExternalReceivers().length() > 0) {
+            String externalPeople = message.getExternalReceivers();
+            String[] externalReceivers = externalPeople.split(",");
+            for (int j = 0; j < externalReceivers.length; j++) {
+                
+                String receiverName = externalReceivers[j];
+                if (j != externalReceivers.length - 1) {
+                    receiverName += ",";
                 }
+                
+                ReciverName recName = new ReciverName();
+                recName.setUserNeme(receiverName);
+                recName.setTeamName("");
+                messagesForm.getReceivesrsNameMail().add(recName);
             }
         }
 
@@ -1081,7 +1064,8 @@ public class AmpMessageActions extends DispatchAction {
         message.setSenderType(MessageConstants.SENDER_TYPE_USER);
         message.setSenderId(teamMember.getMemberId());
         User user=TeamMemberUtil.getAmpTeamMember(teamMember.getMemberId()).getUser();
-        String senderName=user.getFirstNames()+" "+user.getLastName()+"<"+user.getEmail()+">;"+teamMember.getTeamName();
+        String senderName = user.getFirstNames() + " " + user.getLastName() + "<" + user.getNotificationEmail() + ">;"
+                + teamMember.getTeamName();
         message.setSenderName(senderName);
         /**
          * this will be filled only when we are forwarding a message
@@ -1189,35 +1173,22 @@ public class AmpMessageActions extends DispatchAction {
                 if (receiver.startsWith("m")) {
                     Long memId = new Long(receiver.substring(2));
                     AmpTeamMember msgReceiver=TeamMemberUtil.getAmpTeamMember(memId);
-                    String teamName = msgReceiver.getAmpTeam().getName();
-                    //createMessageState(message, memId, teamMember.getMemberName(), teamName);
-                    createMessageState(message, msgReceiver, teamMember.getMemberName(), teamName);
+                    createMessageState(message, msgReceiver, teamMember.getMemberName());
+                    message.addMessageReceiver(msgReceiver);
                     if (settings != null && settings.getEmailMsgs() != null && settings.getEmailMsgs().equals(new Long(1))) {
                         //creating internet address where the mail will be sent
-                        addrCol.add(new InternetAddress(TeamMemberUtil.getAmpTeamMember(memId).getUser().getEmail()));
+                        addrCol.add(new InternetAddress(
+                                TeamMemberUtil.getAmpTeamMember(memId).getUser().getNotificationEmail()));
                     }
-
-                }
-                
-                if(receiver.startsWith("c")){ //contacts or people outside AMP
-                    receiver=receiver.substring(2); //we should send email to contacts, regardless setting value in Message Manager
-                    String email=receiver;
-                    if(receiver.indexOf("<")!=-1){
-                        email=receiver.substring(receiver.indexOf("<")+1, receiver.indexOf(">"));
+                } else if (receiver.startsWith("c")) { //contacts or people outside AMP
+                    // we should send email to contacts, regardless setting value in Message Manager
+                    receiver = receiver.substring(2); 
+                    String email = receiver;
+                    if (receiver.indexOf("<") != -1) {
+                        email = receiver.substring(receiver.indexOf("<") + 1, receiver.indexOf(">"));
                     }   
                     
-                    String receivers = message.getReceivers();
-                    if (receivers == null) {
-                        receivers = "";
-                    } else {
-                        if (receivers.length() > 0) {
-                            receivers += ", ";
-                        }
-                    }
-                    receivers+=receiver;
-                    message.setReceivers(receivers);
-                        
-                    receivers=message.getExternalReceivers();
+                    String receivers = message.getExternalReceivers();
                     if (receivers == null) {
                         receivers = "";
                     } else {
@@ -1226,7 +1197,7 @@ public class AmpMessageActions extends DispatchAction {
                         }
                     }
 
-                    receivers+=receiver;
+                    receivers += receiver;
                     message.setExternalReceivers(receivers);                        
                     
                     addrCol.add(new InternetAddress(email));
@@ -1235,9 +1206,9 @@ public class AmpMessageActions extends DispatchAction {
 
             if (settings != null && settings.getEmailMsgs() != null && settings.getEmailMsgs().equals(new Long(1))) {
                 if (request.getParameter("toDo") != null && !request.getParameter("toDo").equals("draft")) {
-                    InternetAddress[] addresses=(InternetAddress[])addrCol.toArray(new InternetAddress[addrCol.size()]);                    
-                    DgEmailManager.sendMail(addresses, teamMember.getEmail(), message,doc);
-                    //DgEmailManager.sendMail(addresses, teamMember.getEmail(), message.getName(),message.getDescription());
+                    InternetAddress[] addresses = (InternetAddress[]) addrCol
+                            .toArray(new InternetAddress[addrCol.size()]);
+                    DgEmailManager.sendMail(addresses, teamMember.getNotificationEmail(), message, doc);
                 }
             }
             AmpMessageUtil.saveOrUpdateMessage(message);
@@ -1268,23 +1239,11 @@ public class AmpMessageActions extends DispatchAction {
     }
 
 
-    private void createMessageState(AmpMessage message,AmpTeamMember receiver,String senderName,String teamName) throws Exception{
+    private void createMessageState(AmpMessage message, AmpTeamMember receiver, String senderName) throws Exception {
         AmpMessageState newMessageState=new AmpMessageState();
         newMessageState.setMessage(message);
         newMessageState.setSender(senderName);      
         newMessageState.setReceiver(receiver);
-        String receivers = message.getReceivers();
-        if (receivers == null) {
-            receivers = "";
-        } else {
-            if (receivers.length() > 0) {
-                receivers += ", ";
-            }
-        }
-        User user=receiver.getUser();
-
-        receivers+=user.getFirstNames()+" "+user.getLastName()+"<"+user.getEmail()+">;"+teamName+";";
-        message.setReceivers(receivers);
         newMessageState.setRead(false);
         //check if user's inbox is already full
         Class clazz=null;
@@ -1339,7 +1298,6 @@ public class AmpMessageActions extends DispatchAction {
          form.setPagedMessagesForTm(null);
          form.setLastPage(null);
          form.setDeleteActionWasCalled(false);
-         form.setReceiver(null);
          form.setSelectedAct(null);
          form.setInboxFull(false);
          form.setReceivesrsNameMail(null);
@@ -1360,7 +1318,6 @@ public class AmpMessageActions extends DispatchAction {
              form.setCreationDate(DateConversion.convertDateToLocalizedString(message.getCreationDate()));
              form.setClassName(message.getClassName());
              form.setObjectURL(message.getObjectURL());
-             form.setReceiver(message.getReceivers());
 
              form.setRepliedMessage(message.getRepliedMessage());
              form.setForwardedMessage(message.getForwardedMessage());
@@ -1388,6 +1345,8 @@ public class AmpMessageActions extends DispatchAction {
              if(message.getRelatedActivityId()!=null){
                  form.setSelectedAct(getRelatedActivity(message.getRelatedActivityId()));
              }
+             
+             form.setReceivesrsNameMail(new ArrayList<>());
 
              form.setSdmDocument(message.getAttachedDocs());
 
@@ -1426,7 +1385,8 @@ public class AmpMessageActions extends DispatchAction {
                 }else{
                     result += " from=\"" +MessageConstants.SENDER_TYPE_SYSTEM + "\"";
                 }
-                result += " to=\"" + org.digijava.module.aim.util.DbUtil.filter(state.getMessage().getReceivers()) + "\"";
+                result += " to=\"" + org.digijava.module.aim.util.DbUtil.filter(
+                        state.getMessage().getAllMessageReceiversAsString()) + "\"";
                 result += " received=\"" + DateConversion.convertDateToString(state.getMessage().getCreationDate()) + "\"";
                 result += " priority=\"" + state.getMessage().getPriorityLevel() + "\"";
                 //attachments start
@@ -1502,7 +1462,9 @@ public class AmpMessageActions extends DispatchAction {
             result += " from=\"" + MessageConstants.SENDER_TYPE_SYSTEM + "\"";
         }
         result += " received=\"" + DateConversion.convertDateToString(forwardedOrRepliedMessage.getCreationDate()) + "\"";
-        result += " to=\"" + org.digijava.module.aim.util.DbUtil.filter(forwardedOrRepliedMessage.getReceivers()) + "\"";
+        result += " to=\""
+                + org.digijava.module.aim.util.DbUtil.filter(forwardedOrRepliedMessage.getAllMessageReceiversAsString())
+                + "\"";
         result += " priority=\"" + forwardedOrRepliedMessage.getPriorityLevel() + "\"";
         //attachments start
         if(forwardedOrRepliedMessage.getAttachedDocs()!=null){
@@ -1558,26 +1520,23 @@ public class AmpMessageActions extends DispatchAction {
      }
      
      private static String [] getMessageRecipients(AmpMessage message) throws Exception{
-         List<AmpMessageState> msgStates=AmpMessageUtil.loadMessageStates(message.getId());
+         Set<AmpMessageReceiver> msgReceivers = message.getMessageReceivers();
          Collection<String> selAtts = new ArrayList<String> ();
          String [] retVal = null;
          //team members
-         if(msgStates!=null && msgStates.size()>0){
+         if (msgReceivers != null && msgReceivers.size() > 0) {
                 Collection<AmpTeam> teamList = new ArrayList<AmpTeam>();
                 Collection<AmpTeamMember> memberList = new ArrayList<AmpTeamMember>();
-                for (AmpMessageState state : msgStates) {
-                    if(state.getReceiver()!=null){
-                        AmpTeamMember teamMember=state.getReceiver();
-                        AmpTeam team=teamMember.getAmpTeam();
-                        if(!teamList.contains(team)){
-                            teamList.add(team);
-                        }
-                         memberList.add(teamMember);
+                for (AmpMessageReceiver msgReceiver : msgReceivers) {
+                    AmpTeamMember teamMember = msgReceiver.getReceiver();
+                    AmpTeam team = teamMember.getAmpTeam();
+                    if (!teamList.contains(team)) {
+                        teamList.add(team);
                     }
+                    memberList.add(teamMember);
                 }               
                 
                 for(AmpTeam team : teamList){
-                    //selAtts.add("t:" + team.getAmpTeamId().toString());
                     for(AmpTeamMember member : memberList){
                         if(team.getAmpTeamId().longValue()==member.getAmpTeam().getAmpTeamId().longValue()){
                             selAtts.add("m:" + member.getAmpTeamMemId().toString());
@@ -1585,9 +1544,9 @@ public class AmpMessageActions extends DispatchAction {
                     }
                 }               
                 retVal = (String[]) selAtts.toArray(new String[selAtts.size()]);    
-         }          
-         return retVal;
+         }         
          
+         return retVal;
      }
 
 
@@ -1595,22 +1554,20 @@ public class AmpMessageActions extends DispatchAction {
       * used to get message recipients, which will be shown on edit Message Page
       */
      private static List<String> getMessageReceiversNames(AmpMessage message) throws Exception{
-        List<AmpMessageState> msgStates=AmpMessageUtil.loadMessageStates(message.getId());
+        Set<AmpMessageReceiver> messageReceivers = message.getMessageReceivers();
         List<String> allReceivers=null;
         //team members
-        if(msgStates!=null && msgStates.size()>0){
+        if (messageReceivers != null && messageReceivers.size() > 0) {
             allReceivers=new ArrayList<String>();
             Collection<AmpTeam> teamList = new ArrayList<AmpTeam>();
             Collection<AmpTeamMember> memberList = new ArrayList<AmpTeamMember>();
-            for (AmpMessageState state : msgStates) {
-                if(state.getReceiver()!=null){
-                    AmpTeamMember teamMember=state.getReceiver();
-                    AmpTeam team=teamMember.getAmpTeam();
-                    if(!teamList.contains(team)){
-                        teamList.add(team);
-                    }
-                    memberList.add(teamMember);
+            for (AmpMessageReceiver messageReceiver : messageReceivers) {
+                AmpTeamMember teamMember = messageReceiver.getReceiver();
+                AmpTeam team = teamMember.getAmpTeam();
+                if (!teamList.contains(team)) {
+                    teamList.add(team);
                 }
+                memberList.add(teamMember);
             }               
             
             for(AmpTeam team : teamList){

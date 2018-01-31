@@ -38,7 +38,7 @@ define([ 'marionette', 'models/document', 'collections/documents',
             docItemTemplate = _.template(message);
         } else {
             docItemTagName = 'li';
-            docItemClassName = 'document-item tri';
+            docItemClassName = 'document-item tri tri-desktop';
             docItemTemplate = _.template(documentTemplate);
         }
         var DocumentItemView = Marionette.ItemView.extend({

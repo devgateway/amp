@@ -70,9 +70,9 @@ public class ShowUserContact extends Action {
 
           if (contactUser != null) {
               userForm.setSenderName(user.getName());
-              userForm.setSenderEmail(user.getEmail());
+              userForm.setSenderEmail(user.getEmailUsedForNotification());
               userForm.setRecipientName(contactUser.getName());
-              userForm.setRecipientEmail(contactUser.getEmail());
+              userForm.setRecipientEmail(contactUser.getEmailUsedForNotification());
           }
           else {
               ActionMessages errors = new ActionMessages();

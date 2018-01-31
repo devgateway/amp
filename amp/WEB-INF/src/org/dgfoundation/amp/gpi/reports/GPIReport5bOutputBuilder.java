@@ -21,6 +21,8 @@ import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.TextCell;
 import org.dgfoundation.amp.nireports.formulas.NiFormula;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * A utility class to transform a GeneratedReport to GPI Report 5b
@@ -32,6 +34,9 @@ public class GPIReport5bOutputBuilder extends GPIReportOutputBuilder {
 
     private static final String MTEF_FUNDINGS_YES = "1";
     private static final String MTEF_FUNDINGS_NO = "0";
+    private static final int MTEF_COLUMN_1 = 1;
+    private static final int MTEF_COLUMN_2 = 2;
+    private static final int MTEF_COLUMN_3 = 3;
 
     private static final String MTEF_NAME = "MTEF";
 
@@ -115,24 +120,44 @@ public class GPIReport5bOutputBuilder extends GPIReportOutputBuilder {
                     ReportCell rc = reportArea.getContents().get(roc);
                     rc = rc != null ? rc : TextCell.EMPTY;
 
-                    if (roc.originalColumnName.equals(String.format("%s %s", MTEF_NAME, (year + 1)))) {
-                        if (((AmountCell) rc).extractValue() > 0) {
-                            gpiItem.setYear1(true);
+                    if (FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.MTEF_ANNUAL_DATE_FORMAT)) {
+                        if (roc.originalColumnName.equals(String.format("%s %s", MTEF_NAME, (year + MTEF_COLUMN_1)))) {
+                            if (((AmountCell) rc).extractValue() > 0) {
+                                gpiItem.setYear1(true);
+                            }
+                        }
+    
+                        if (roc.originalColumnName.equals(String.format("%s %s", MTEF_NAME, (year + MTEF_COLUMN_2)))) {
+                            if (((AmountCell) rc).extractValue() > 0) {
+                                gpiItem.setYear2(true);
+                            }
+                        }
+    
+                        if (roc.originalColumnName.equals(String.format("%s %s", MTEF_NAME, (year + MTEF_COLUMN_3)))) {
+                            if (((AmountCell) rc).extractValue() > 0) {
+                                gpiItem.setYear3(true);
+                            }
+                        }
+                    } else if (roc.originalColumnName.equals(MeasureConstants.MTEF)) {
+                        if (roc.parentColumn.originalColumnName.equals(String.format("%s", year + MTEF_COLUMN_1))) {
+                            if (((AmountCell) rc).extractValue() > 0) {
+                                gpiItem.setYear1(true);
+                            }
+                        }
+                        
+                        if (roc.parentColumn.originalColumnName.equals(String.format("%s", year + MTEF_COLUMN_2))) {
+                            if (((AmountCell) rc).extractValue() > 0) {
+                                gpiItem.setYear2(true);
+                            }
+                        }
+                        
+                        if (roc.parentColumn.originalColumnName.equals(String.format("%s", year + MTEF_COLUMN_3))) {
+                            if (((AmountCell) rc).extractValue() > 0) {
+                                gpiItem.setYear3(true);
+                            }
                         }
                     }
-
-                    if (roc.originalColumnName.equals(String.format("%s %s", MTEF_NAME, (year + 2)))) {
-                        if (((AmountCell) rc).extractValue() > 0) {
-                            gpiItem.setYear2(true);
-                        }
-                    }
-
-                    if (roc.originalColumnName.equals(String.format("%s %s", MTEF_NAME, (year + 3)))) {
-                        if (((AmountCell) rc).extractValue() > 0) {
-                            gpiItem.setYear3(true);
-                        }
-                    }
-
+                    
                     if (roc.originalColumnName.equals(donorColumnName)) {
                         gpiItem.setDonorAgency(rc.displayedValue);
                     }

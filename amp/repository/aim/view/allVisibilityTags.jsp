@@ -62,7 +62,8 @@
 <feature:display name="Program Fragmentation" module="/Dashboards"/>
 
 <module:display name="HELP"></module:display> 
-<module:display name="Issues" parentModule="PROJECT MANAGEMENT"></module:display> 
+<module:display name="Issues" parentModule="PROJECT MANAGEMENT"></module:display>
+<module:display name="Contracts Information" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Regional Observations" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Line Ministries" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="M & E" parentModule="MONITORING AND EVALUATING"></module:display> 
@@ -201,7 +202,7 @@
 <feature:display name="Channel Overview" module="Channel Overview"></feature:display>
 <feature:display name="Computed Columns Filters" module="Filter Section"></feature:display> 
 <feature:display name="Component Report" module="Report Types"></feature:display> 
-<feature:display name="Components" module="Components"></feature:display> 
+<feature:display name="Components" module="Components"></feature:display>
 
 <feature:display name="Contracting" module="Contracting"></feature:display> 
 <feature:display name="Costing" module="Activity Costing"></feature:display> 
@@ -222,6 +223,7 @@
 <feature:display name="Funding Information" module="Funding"></feature:display> 
 <feature:display name="Government Contact Information" module="Contact Information"></feature:display>
 <feature:display name="Issues" module="Issues"></feature:display>
+<feature:display name="Contracts Information" module="Contracts Information"></feature:display>
 <feature:display name="Regional Observations" module="Regional Observations"></feature:display>
 <feature:display name="Line Ministries" module="Line Ministries"></feature:display>
 <feature:display name="Logframe" module="Previews"></feature:display> 
@@ -347,7 +349,8 @@
 <field:display feature="Identification" name="Only show projects related to pledges"></field:display>
 <field:display feature="Identification" name="Purpose"></field:display> 
 <field:display feature="Identification" name="Results"></field:display> 
-<field:display feature="Issues" name="Issue Date"></field:display> 
+<field:display feature="Issues" name="Issue Date"></field:display>
+<field:display feature="Contracts Information" name="Contract Date"></field:display>***
 <field:display feature="Issues" name="Measures Taken"></field:display> 
 <field:display feature="MTEF Projections" name="MTEFProjections"></field:display> 
 <field:display feature="Planning" name="Line Ministry Rank"></field:display> 

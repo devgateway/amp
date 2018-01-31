@@ -40,6 +40,7 @@ import org.dgfoundation.amp.onepager.components.features.sections.AmpAidEffectiv
 import org.dgfoundation.amp.onepager.components.features.sections.AmpBudgetStructureFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpComponentsFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpContactsFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpContractInformationFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpContractingFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpCrossCuttingIssuesFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature;
@@ -96,8 +97,8 @@ public class OnePager extends AmpHeaderFooter {
     protected AmpActivityModel am;
 //  protected AmpActivityModel activityModelForSave;
 
-    static OnepagerSection[] staticOnepagerSectionList = {
-        new OnepagerSection("Identification",AmpIdentificationFormSectionFeature.class.getName(), 1, false),
+    private static OnepagerSection[] staticOnepagerSectionList = {
+            new OnepagerSection("Identification", AmpIdentificationFormSectionFeature.class.getName(), 1, false),
         new OnepagerSection("Activity Internal IDs", AmpInternalIdsFormSectionFeature.class.getName(), 2, false),
         new OnepagerSection("Planning", AmpPlanningFormSectionFeature.class.getName(), 3, false),
         new OnepagerSection("Location",AmpLocationFormSectionFeature.class.getName(), 4, false, true, AmpRegionalFundingFormSectionFeature.class.getName()),
@@ -120,7 +121,9 @@ public class OnePager extends AmpHeaderFooter {
         new OnepagerSection("Budget Structure", AmpBudgetStructureFormSectionFeature.class.getName(), 21, false),
         new OnepagerSection("GPI", AmpGPIFormSectionFeature.class.getName(), 22, false),
         new OnepagerSection("GPI 2017", AmpGPINiFormSectionFeature.class.getName(), 23, false),
-        new OnepagerSection("Aid Effectivenes", AmpAidEffectivenessFormSectionFeature.class.getName(), 24, false)
+        new OnepagerSection("Aid Effectivenes", AmpAidEffectivenessFormSectionFeature.class.getName(), 24, false),
+            new OnepagerSection("Contracts Information", AmpContractInformationFormSectionFeature.class.getName(), 16,
+                    false)
         
         };
     public static final AtomicBoolean savedSections = new AtomicBoolean(false);

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="org.digijava.module.aim.dbentity.AmpActivityContracts" table="AMP_ACTIVITY_CONTRACTS">
+        <cache usage="read-write"/>
+        <id name="ampContractId" column="amp_activity_contract_id" type="java.lang.Long">
+            <generator class="native">
+                <param name="sequence">AMP_ACTIVITY_CONTRACTS_seq</param>
+            </generator>
+        </id>
+        <property column="contract_descrition" name="contractDescription" type="java.lang.String" length="255"/>
+
+        <property column="contract_date" name="contractDate" type="java.util.Date"/>
+        <many-to-one column="amp_activity_id" name="activity"
+                     class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none"/>
+        <property column="contract_amount" name="contractAmount"  type="java.lang.Double"/>
+    </class>
+</hibernate-mapping>

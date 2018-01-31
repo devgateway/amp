@@ -130,6 +130,7 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpColumnsOrder</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpMeasures</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpIssues</hibernate-class>
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivityContracts</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpMeasure</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpActor</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpRegionalObservation</hibernate-class>

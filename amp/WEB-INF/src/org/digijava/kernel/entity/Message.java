@@ -52,6 +52,7 @@ public class Message implements Serializable{
     private boolean hasHashCode;
     private String originalMessage;
     private String prefix;
+    private Boolean ampOffline;
     public Message(){
         hasHashCode = false;
     }
@@ -232,4 +233,11 @@ public class Message implements Serializable{
         this.prefix = prefix;
     }
 
+    public Boolean getAmpOffline() {
+        return ampOffline;
+    }
+
+    public void setAmpOffline(Boolean ampOffline) {
+        this.ampOffline = ampOffline;
+    }
 }

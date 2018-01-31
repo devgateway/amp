@@ -34,9 +34,9 @@ public class GPIReport5bOutputBuilder extends GPIReportOutputBuilder {
 
     private static final String MTEF_FUNDINGS_YES = "1";
     private static final String MTEF_FUNDINGS_NO = "0";
-    private static final int MTEF_COLUMN_3 = 0;
-    private static final int MTEF_COLUMN_2 = 0;
-    private static final int MTEF_COLUMN_1 = 0;
+    private static final int MTEF_COLUMN_1 = 1;
+    private static final int MTEF_COLUMN_2 = 2;
+    private static final int MTEF_COLUMN_3 = 3;
 
     private static final String MTEF_NAME = "MTEF";
 

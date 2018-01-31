@@ -7,8 +7,8 @@ public class ActivityValidationWorkflowTrigger extends ActivityLevelNotification
     }
 
     @Override
-    protected Class getEventClass() {
-        return ActivityLevelNotificationTrigger.class;
+    protected Class<ActivityValidationWorkflowTrigger> getEventClass() {
+        return ActivityValidationWorkflowTrigger.class;
     }
 
 }

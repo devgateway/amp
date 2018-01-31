@@ -72,5 +72,9 @@
 
 		<property name="passwordChangedAt" column="PASSWORD_CHANGED_AT" type="java.util.Date" />
 		<property name="exemptFromDataFreezing" column="EXEMPT_FROM_DATA_FREEZING" type="boolean" />
+		<property name="notificationEmail" column="notification_email" type="java.lang.String" />
+		<property name="notificationEmailEnabled" type="boolean">
+		  <column name="notification_email_enabled" not-null="false" default="null" />
+		</property>
 	</class>
 </hibernate-mapping>

@@ -249,7 +249,8 @@ public class UserTell
             "http://topics.developmentgateway.org/um/user/showUserRegister.do";
 
         InternetAddress address = new InternetAddress(toUserEmail);
-        DgEmailManager.sendMail(new Address[] {address},"\"" + siteName + "\" <" + user.getEmail() + ">",
+        DgEmailManager.sendMail(new Address[] {address},
+                "\"" + siteName + "\" <" + user.getEmailUsedForNotification() + ">",
                                 subject, text, currentLocale,true);
     }
 

@@ -1382,7 +1382,8 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         message.setSenderType(MessageConstants.SENDER_TYPE_USER);
         message.setSenderId(tmFrom.getMemberId());
         
-        senderName=user.getFirstNames()+" "+user.getLastName()+"<"+user.getEmail()+">;"+tmFrom.getTeamName();
+        senderName = user.getFirstNames() + " " + user.getLastName() + "<" + user.getEmailUsedForNotification() + ">;"
+                    + tmFrom.getTeamName();
         message.setSenderName(senderName);
         
         message.setRelatedActivityId(activityId);
@@ -1409,10 +1410,11 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         state.setSender(tmFrom.getMemberName()+";"+tmFrom.getTeamName());
         AmpMessageUtil.saveOrUpdateMessageState(state);
         try{ 
-        AmpMessageUtil.createMessageState(message, tmTo);
-        }catch(Exception e){
+            AmpMessageUtil.createMessageState(message, tmTo);
+        } catch (Exception e) {
             throw new AimException("cannot create message state",e);
         }
+        message.addMessageReceiver(tmTo);
         AmpMessageUtil.saveOrUpdateMessage(message);
 
     }

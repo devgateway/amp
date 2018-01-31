@@ -87,6 +87,9 @@ public class UserRegisterForm
     private Long siteId;
     private boolean exemptFromDataFreezing;
     
+    private Boolean notificationEmailEnabled;
+    private String notificationEmail;
+    
     public String[] getSelectedItems() {
         return this.selectedItems;
     }
@@ -398,6 +401,8 @@ public class UserRegisterForm
         setEmailConfirmation(null);
         setPassword(null);
         setPasswordConfirmation(null);
+        setNotificationEmailEnabled(false);
+        setNotificationEmail(null);
         setMailingAddress(null);
         setOrganizationName(null);
         selectedOrganizationId=null;
@@ -526,4 +531,21 @@ public class UserRegisterForm
     public void setNationalCoordinator(boolean nationalCoordinator) {
         this.nationalCoordinator = nationalCoordinator;
     }
+
+    public Boolean getNotificationEmailEnabled() {
+        return notificationEmailEnabled;
+    }
+
+    public void setNotificationEmailEnabled(Boolean notificationEmailEnabled) {
+        this.notificationEmailEnabled = notificationEmailEnabled;
+    }
+
+    public String getNotificationEmail() {
+        return notificationEmail;
+    }
+
+    public void setNotificationEmail(String notificationEmail) {
+        this.notificationEmail = notificationEmail;
+    }
+    
 }

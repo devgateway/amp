@@ -442,7 +442,7 @@ public class EndpointUtils {
                             endpoint += methodPath.value();
                         }
                         filter.setEndpoint(endpoint);
-                        filter.setUi(apiAnnotation.ui());
+                        filter.setUi(apiAnnotation.ui() || filterDefinition.ui());
                         filter.setId(apiAnnotation.id());
                         filter.setMultiple(filterDefinition.multiple());
                         filter.setFieldType(filterDefinition.fieldType());

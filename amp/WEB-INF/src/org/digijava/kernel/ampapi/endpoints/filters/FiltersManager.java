@@ -63,5 +63,9 @@ public final class FiltersManager {
     public FilterList getComputedYearFilter() {
         return ComputedYearFilterListManager.getInstance().getFilterList();
     }
+    
+    public FilterList getDateFilter() {
+        return DateFilterListManager.getInstance().getFilterList();
+    }
 
 }

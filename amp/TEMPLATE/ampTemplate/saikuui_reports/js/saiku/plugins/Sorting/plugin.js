@@ -26,7 +26,7 @@ Saiku.Sorting = {
 		var clickedColumn = event.currentTarget;
 		var id = $(clickedColumn).attr('id');
 		
-		sortNiReportColumn(id);
+		sortReportColumn(id);
 		if ($(clickedColumn).attr('sorting')) {
 			runQuery();
 		} else {
@@ -131,8 +131,8 @@ function sortColumn(id, type) {
 	return sort;
 }
 
-function sortNiReportColumn(id) {
-	Saiku.logger.log("Sorting.sortNiReportColumn");
+function sortReportColumn(id) {
+	Saiku.logger.log("Sorting.sortReportColumn");
 	var foundItem = _.find(Saiku.Sorting.currentSorting, function(item) {
 		return item.id === id;
 	});
@@ -144,7 +144,7 @@ function sortNiReportColumn(id) {
 	} else {
 		resetSorting();
 		Saiku.Sorting.currentSorting.push({
-			columns : convertNiReportIdToName(id),
+			columns : convertReportIdToName(id),
 			asc : true,
 			id : id
 		});
@@ -180,8 +180,8 @@ function updateArrowIcon(data) {
 			});
 }
 
-function convertNiReportIdToName(id) {
-	Saiku.logger.log("Sorting.convertNiReportIdToName");
+function convertReportIdToName(id) {
+	Saiku.logger.log("Sorting.convertReportIdToName");
 	var name = "";
 	name = id.replace("[Funding]", '');
 	name = name.replace("[Totals]", '');

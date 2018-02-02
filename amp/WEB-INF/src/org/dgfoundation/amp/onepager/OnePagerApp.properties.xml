@@ -12,6 +12,7 @@
 	<entry key="AmpUniqueCollectionValidator">The following items are repeated at least once: ${label}</entry>
 	<entry key="AmpTreeCollectionValidator">Both parent and child items are present: ${label}</entry>
 	<entry key="AmpUniqueActivityTitleValidator">An activity with this title exists inside workspace ${workspace}.</entry>
+	<entry key="AmpUniqueActivityTitleNoWorkspaceValidator">An activity with this title exists and is not assigned to a workspace.</entry>
 	<entry key="AmpUniqueComponentTitleValidator">A component with this title already exists.</entry>
 	<entry key="CoordinatesValidator">The coordinates are not in the correct format.</entry>
 	<entry key="AmpCommitmentsCollectionsSumComparatorValidator">Disbursements are bigger than sum of commitments</entry>

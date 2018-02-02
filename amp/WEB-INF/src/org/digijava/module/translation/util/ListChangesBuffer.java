@@ -231,7 +231,7 @@ public class ListChangesBuffer<K,E> {
      * @param fixer
      * @throws WorkerException 
      */
-    public void fixChnages(OperationFixer<E> fixer) throws WorkerException{
+    public void fixChnages(OperationFixer<E> fixer) {
         List<ChangedItem<K, E>> changes = listChanges();
         if (changes!=null && changes.size()>0){
             try {
@@ -253,14 +253,14 @@ public class ListChangesBuffer<K,E> {
                 }
                 //finalize
                 fixer.end();
-            } catch (WorkerException e) {
+            } catch (Exception e) {
                 try {
                     //process error
                     fixer.error();
                 } catch (Exception e1) {
-                    throw new WorkerException("Error when reporting erro to changes fixer.", e1);
+                    throw new RuntimeException("Error when reporting erro to changes fixer.", e1);
                 }
-                throw new WorkerException("Error when fixing changes to db", e);
+                throw new RuntimeException("Error when fixing changes to db", e);
             }
         }
     }

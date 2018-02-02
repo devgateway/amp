@@ -6,6 +6,6 @@ var PluginCollection = Backbone.Collection.extend({
 	model : Plugin,
 	url : function() {
 		Saiku.logger.log("PluginCollection.url");
-		return "/TEMPLATE/ampTemplate/saikuui_nireports/mockData/plugins.json";
+		return "/TEMPLATE/ampTemplate/saikuui_reports/mockData/plugins.json";
 	}
 });

@@ -511,7 +511,7 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 				var row = {
 					id : 0
 				};
-				// To match the changes on NiReports we iterate the headers, not obj.contents
+				// To match the changes on reports we iterate the headers, not obj.contents
 				jQuery.each(headers, function(i, column) {
 					var element = obj.contents[column.hierarchicalName];
 					if (element !== undefined) {

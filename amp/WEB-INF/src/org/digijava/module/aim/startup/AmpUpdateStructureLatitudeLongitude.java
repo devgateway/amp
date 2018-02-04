@@ -39,6 +39,11 @@ public class AmpUpdateStructureLatitudeLongitude {
     }
 
     private void updateTable(Connection connection, String tableName) throws SQLException {
+        
+        if (!shouldUpdateStructureTable(connection, tableName)) {
+            return;
+        }
+        
         RsInfo structuresToChange = null;
         try {
             String fetchWrongData = " SELECT true FROM ("
@@ -65,7 +70,7 @@ public class AmpUpdateStructureLatitudeLongitude {
                 logger.error("!!!!!!!!!!!!!YOU NEED TO FIX LATITUDE AND LONGITUDE IN " + tableName + " TABLE");
             }
             
-            String alterColumn = "ALTER TABLE %s ALTER COLUMN %s type numeric(9,6) USING %<s::numeric(9,6)";
+            String alterColumn = "ALTER TABLE %s ALTER COLUMN %s type numeric(11,8) USING %<s::numeric(11,8)";
             SQLUtils.executeQuery(connection, String.format(alterColumn, tableName, "latitude"));
             SQLUtils.executeQuery(connection, String.format(alterColumn, tableName, "longitude"));
             
@@ -81,6 +86,30 @@ public class AmpUpdateStructureLatitudeLongitude {
             throw e;
         } finally {
             structuresToChange.close();
+        }
+    }
+
+    /**
+     * Check if the table contains the longitude and latitude columns.
+     * (some DBs don't contain table with such columns, db version < 2.13)
+     * 
+     * @param tableName
+     * @return boolean if the columns exists
+     * @throws SQLException 
+     */
+    private boolean shouldUpdateStructureTable(Connection connection, String tableName) throws SQLException {
+        String query = "SELECT column_name FROM information_schema.columns "
+                + "WHERE table_name='%s' AND column_name in ('latitude', 'longitude')";
+        RsInfo existColumns = null;
+        
+        try {
+            existColumns = SQLUtils.rawRunQuery(connection, String.format(query, tableName), null);
+            return existColumns.rs.next();
+        } catch (SQLException e) {
+            logger.error("Cannot check if the columns longitude and latitude exists in the table " + tableName, e);
+            throw e;
+        } finally {
+            existColumns.close();
         }
     }
 

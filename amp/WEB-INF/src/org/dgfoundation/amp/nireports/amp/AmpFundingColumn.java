@@ -190,7 +190,13 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
     protected synchronized FundingFetcherContext resetCache(NiReportsEngine engine) {
         engine.timer.putMetaInNode("resetCache", true);
         //Map<Long, String> adjTypeValue = SQLUtils.collectKeyValue(AmpReportsScratchpad.get(engine).connection, String.format("select acv_id, acv_name from v_ni_category_values where acc_keyname IN ('%s', '%s')", CategoryConstants.ADJUSTMENT_TYPE_KEY, CategoryConstants.SSC_ADJUSTMENT_TYPE_KEY));
-        Map<Long, String> acvs = SQLUtils.collectKeyValue(AmpReportsScratchpad.get(engine).connection, String.format("select acv_id, acv_name from v_ni_category_values where acc_keyname IN('%s', '%s', '%s', '%s', '%s', '%s')", CategoryConstants.EXPENDITURE_CLASS_KEY, CategoryConstants.TYPE_OF_ASSISTENCE_KEY, CategoryConstants.MODE_OF_PAYMENT_KEY, CategoryConstants.ADJUSTMENT_TYPE_KEY, CategoryConstants.SSC_ADJUSTMENT_TYPE_KEY, CategoryConstants.CONCESSIONALITY_LEVEL_KEY));
+        Map<Long, String> acvs = SQLUtils.collectKeyValue(AmpReportsScratchpad.get(engine).connection, 
+                String.format("select acv_id, acv_name from v_ni_category_values where acc_keyname "
+                        + "IN('%s', '%s', '%s', '%s', '%s', '%s', '%s')", 
+                CategoryConstants.EXPENDITURE_CLASS_KEY, CategoryConstants.TYPE_OF_ASSISTENCE_KEY, 
+                CategoryConstants.MODE_OF_PAYMENT_KEY, CategoryConstants.ADJUSTMENT_TYPE_KEY, 
+                CategoryConstants.SSC_ADJUSTMENT_TYPE_KEY, CategoryConstants.CONCESSIONALITY_LEVEL_KEY, 
+                CategoryConstants.MTEF_PROJECTION_KEY));
         Map<Long, String> roles = SQLUtils.collectKeyValue(AmpReportsScratchpad.get(engine).connection, String.format("SELECT amp_role_id, role_code FROM amp_role", CategoryConstants.ADJUSTMENT_TYPE_KEY));
         
         return new FundingFetcherContext(new DifferentialCache<CategAmountCellProto>(invalidationDetector.getLastProcessedFullEtl()), roles, acvs);

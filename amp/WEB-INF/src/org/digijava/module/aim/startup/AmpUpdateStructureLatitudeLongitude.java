@@ -109,7 +109,9 @@ public class AmpUpdateStructureLatitudeLongitude {
             logger.error("Cannot check if the columns longitude and latitude exists in the table " + tableName, e);
             throw e;
         } finally {
-            existColumns.close();
+            if (existColumns != null) {
+                existColumns.close();
+            }
         }
     }
 

@@ -136,7 +136,7 @@
 <hr>
 	<table width="400" align="center" cellpadding="2" cellspacing="2" style="font-size:11px;">
 		<tr>
-			<td width="40%" style="text-align: right;font-size: 11px">
+			<td width="40%" class="setting-label">
 				<digi:trn>Currency</digi:trn>&nbsp;</td>
 			<td>
 				<html:select property="currency" style="width: 200px" styleClass="dropdwn_sm">
@@ -145,7 +145,7 @@
 			</td>
 		</tr>
 		<tr>
-			<td width="40%" style="text-align: right;font-size: 11px">
+			<td width="40%" class="setting-label">
 				<digi:trn>Calendar</digi:trn>&nbsp;
 			</td>
 			<td>
@@ -157,24 +157,28 @@
 		
 	<logic:notEqual name="widget" value="true" scope="request">
 		<tr>
-			<td width="40%" style="text-align: right">
+			<td width="40%" class="setting-label">
 				<digi:trn>Year Range</digi:trn> <b>*</b>
 			</td>
 			<td>
-				<digi:trn>From</digi:trn>:
+				<div class="setting-year-range">
+					<digi:trn>From</digi:trn>:
 					<html:select styleClass="dropdwn_sm" property="renderStartYear" styleId="renderStartYear">
 						<html:option value="-1">
 							<digi:trn key="rep:filer:All">All</digi:trn>
 						</html:option>
 						<html:optionsCollection property="fromYears" label="wrappedInstance" value="wrappedInstance" />
 					</html:select> &nbsp;
-					<digi:trn>To</digi:trn>: &nbsp; 
+				</div>
+				<div class="setting-year-range">
+					<digi:trn>To</digi:trn>: &nbsp;
 					<html:select property="renderEndYear" styleClass="dropdwn_sm" styleId="renderEndYear">
 						<html:option value="-1">
 							<digi:trn key="rep:filer:All">All</digi:trn>
 						</html:option>
 						<html:optionsCollection property="toYears" label="wrappedInstance" value="wrappedInstance" />
 					</html:select>
+				</div>
 			</td>
 		</tr>
 		<tr>

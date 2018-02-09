@@ -275,7 +275,7 @@ function toggleSettings(){
 <!--<span>Total Unique Rows</span>	-->
 	<logic:notEqual name="generatedReport" property="totalUniqueRows" value="0">
 	<tr>
-		<td  style="padding-left: 5px;padding-left: 5px;">
+		<td class="table-cell-padding">
 		<table style="width: 100%">
 		<tr>
 		<td>

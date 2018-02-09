@@ -2608,8 +2608,7 @@ body {background:none;}
 									</tr>
 									</module:display>
 									</module:display>
-                             <module:display name="Document" parentModule="PROJECT MANAGEMENT">
-                                   	<feature:display name="Related Documents" module="Document">
+                             <module:display name="/Activity Form/Related Documents" parentModule="/Activity Form">
 									<tr>
 										<td class="field_name">
 											<b>
@@ -2625,23 +2624,23 @@ body {background:none;}
 													 <table width="100%" class="box-border-nopadding">
 													 	<tr bgcolor="#ffffff">
 															<td vAlign="center" align="left">
-																&nbsp;<b><c:out value="${docs.title}"/></b> -
+																<b><c:out value="${docs.title}"/></b> -
 																&nbsp;&nbsp;&nbsp;<span class="word_break italic"><c:out value="${docs.fileName}"/></span>
 
 																<logic:notEqual name="docs" property="docDescription" value=" ">
-																	<br />&nbsp;
+																	<br />
 																	<b><digi:trn key="aim:description">Description</digi:trn>:</b>
 																	<span class="word_break">
 																	&nbsp;<bean:write name="docs" property="docDescription" />
 																	</span>
 																</logic:notEqual>
 																<logic:notEmpty name="docs" property="date">
-																	<br />&nbsp;
+																	<br />
 																	<b><digi:trn key="aim:date">Date</digi:trn>:</b>
 																	&nbsp;<c:out value="${docs.date}"/>
 																</logic:notEmpty>
 																<logic:notEmpty name="docs" property="docType">
-																	<br />&nbsp;
+																	<br />
 																	<b><digi:trn key="aim:documentType">Document Type</digi:trn>:</b>&nbsp;
 																	<span class="word_break">
 																	<bean:write name="docs" property="docType"/>
@@ -2660,27 +2659,22 @@ body {background:none;}
 															<table width="100%" class="box-border-nopadding">
 															 	<tr bgcolor="#ffffff">
 																	<td vAlign="center" align="left">
-																		&nbsp;<b><c:out value="${crDoc.title}"/></b> -
+																		<b><c:out value="${crDoc.title}"/></b> -
 																		&nbsp;&nbsp;&nbsp;<i><c:out value="${crDoc.name}"/></i>
 																		<c:set var="translation">
 																			<digi:trn key="contentrepository:documentManagerDownloadHint">Click here to download document</digi:trn>
 																		</c:set>
-																		<%-- <a style="cursor: pointer; text-decoration: underline; color: blue;" id="<c:out value="${crDoc.uuid}"/>"
-																			onclick="window.location='/contentrepository/downloadFile.do?uuid=<c:out value="${crDoc.uuid}"/>'" title="${translation}">
-																			<img src="/repository/contentrepository/view/images/check_out.gif" border="0">
-																		</a> --%>
 																		<a id="<c:out value="${crDoc.uuid}"/>" target="_blank" href="${crDoc.generalLink}" title="${translation}">
-																			<img src="/repository/contentrepository/view/images/check_out.gif" border="0">
-																		</a>
+																			<img src="/repository/contentrepository/view/images/check_out.gif" border="0"></a>
 																		<logic:notEmpty name="crDoc" property="description">
-																			<br />&nbsp;
+																			<br />
 																			<b><digi:trn key="aim:description">Description</digi:trn>:</b>&nbsp;
 																			<span class="word_break">
 																			<bean:write name="crDoc" property="description" />
 																			</span>
 																		</logic:notEmpty>
 																		<logic:notEmpty name="crDoc" property="calendar">
-																			<br />&nbsp;
+																			<br />
 																			<b><digi:trn key="aim:date">Date</digi:trn>:</b>
 																			&nbsp;<c:out value="${crDoc.calendar}"/>
 																		</logic:notEmpty>
@@ -2695,7 +2689,6 @@ body {background:none;}
 											</c:if>
 										</td>
 									</tr>
-									</feature:display>
                                  </module:display>
                                  <module:display name="/Activity Form/Line Ministry Observations" parentModule="/Activity Form">
                                  	<tr>

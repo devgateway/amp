@@ -1073,7 +1073,9 @@ body {background:none;}
 													Duration of project</digi:trn></td>
 													<td width="1">:</td>
 													<td align="left">
-														${aimEditActivityForm.planning.projectPeriod}
+													<c:if test="${not empty aimEditActivityForm.planning.projectPeriod}">
+													   <b>${aimEditActivityForm.planning.projectPeriod}&nbsp; </b><digi:trn>Months</digi:trn>
+													</c:if>
 													</td>
 												</tr>
 												</c:if>

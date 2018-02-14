@@ -237,7 +237,7 @@ public class ColumnConstants {
     public static final String PLEDGES_QUINARY_SUBSECTORS = "Pledges Quinary Sub-Sectors";
     public static final String PLEDGES_QUINARY_SUBSUBSECTORS = "Pledges Quinary Sub-Sub-Sectors";
 
-    public static final String PLEDGE_STATUS = "Pledge Status";
+    public static final String PLEDGE_STATUS = "Pledges Status";
     public static final String PLEDGES_TERTIARY_PROGRAMS = "Pledges Tertiary Programs";
     public static final String PLEDGES_TERTIARY_PROGRAMS_LEVEL_2 = "Pledges Tertiary Programs Level 2";
     public static final String PLEDGES_TERTIARY_PROGRAMS_LEVEL_3 = "Pledges Tertiary Programs Level 3";

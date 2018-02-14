@@ -132,6 +132,10 @@ div.trnpanel div.trn-row ul {
     width: inherit;
 }
 
+.text-right {
+    text-align: left !important;
+}
+
 .del-funding {
     float: left;
     position: relative;

@@ -103,9 +103,16 @@ public class IndicatorUpdater {
                 long payload = i + 1;
                 color.setPayload(payload);
                 color.setColor(colorRampColors[i]);
+                color.setIndicatorLayer(indicatorLayer);
                 colorRamp.add(color);
             }
-            indicatorLayer.setColorRamp(colorRamp);
+            
+            if (indicatorLayer.getColorRamp() != null) {
+                indicatorLayer.getColorRamp().clear();
+                indicatorLayer.getColorRamp().addAll(colorRamp); 
+            } else {
+                indicatorLayer.setColorRamp(colorRamp);
+            }
         }
 
         if (indicator.get(IndicatorEPConstants.SHARED_WORKSPACES)!=null) {
@@ -115,9 +122,16 @@ public class IndicatorUpdater {
                 AmpTeam team = TeamUtil.getAmpTeam(new Long(String.valueOf(indicatorTeams.get(i))));
                 AmpIndicatorWorkspace indicatorWs = new AmpIndicatorWorkspace();
                 indicatorWs.setWorkspace(team);
+                indicatorWs.setIndicatorLayer(indicatorLayer);
                 teams.add(indicatorWs);
             }
-            indicatorLayer.setSharedWorkspaces(teams);
+            
+            if (indicatorLayer.getSharedWorkspaces() != null) {
+                indicatorLayer.getSharedWorkspaces().clear();
+                indicatorLayer.getSharedWorkspaces().addAll(teams); 
+            } else {
+                indicatorLayer.setSharedWorkspaces(teams);
+            }
         }
 
         if (indicator.get(IndicatorEPConstants.VALUES)!=null) {
@@ -158,7 +172,13 @@ public class IndicatorUpdater {
                     errors.addApiErrorMessage(IndicatorErrors.LOCATION_NOT_FOUND, IndicatorEPConstants.FIELD_ID + " = " + locId);
                 }
             }
-            indicatorLayer.setIndicatorValues(locationIndicatorValues);
+            
+            if (indicatorLayer.getIndicatorValues() != null) {
+                indicatorLayer.getIndicatorValues().clear();
+                indicatorLayer.getIndicatorValues().addAll(locationIndicatorValues); 
+            } else {
+                indicatorLayer.setIndicatorValues(locationIndicatorValues);
+            }
         }
 
         return indicatorLayer;

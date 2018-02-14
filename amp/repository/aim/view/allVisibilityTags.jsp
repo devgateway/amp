@@ -37,6 +37,7 @@
 <module:display name="Document" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Funding" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Pledges" parentModule="PROJECT MANAGEMENT"/>
+<module:display name="AMP Offline" parentModule="PROJECT MANAGEMENT"/>
 <module:display name="/GIS"></module:display>
 
 <module:display  name="/Dashboards"></module:display>
@@ -624,7 +625,8 @@ deleted 6 fields, do not reinsert
 <field:display name="Donor Fax Number" feature="Donor Contact Information"></field:display> 
 <field:display name="Donor First Name" feature="Donor Contact Information"></field:display> 
 <field:display name="Donor Group" feature="Funding Information"></field:display>
-<field:display name="Donor Type" feature="Funding Information"></field:display> 
+<field:display name="Donor Type" feature="Funding Information"></field:display>
+<field:display name="Donor Budget Code" feature="Funding Information"></field:display>
 <field:display name="Donor Last Name" feature="Donor Contact Information"></field:display> 
 <field:display name="Donor Objective" feature="Funding Information"></field:display> 
 <field:display name="Donor Organization" feature="Donor Contact Information"></field:display> 
@@ -784,6 +786,7 @@ deleted 6 fields, do not reinsert
 <field:display name="Physical progress title" feature="Physical Progress"></field:display> 
 <field:display name="Planned Disbursement Preview" feature="Disbursement"></field:display> 
 <field:display name="Primary Program" feature="NPD Programs"></field:display>
+<field:display name="Primary Sector Code Official" feature="Sectors"></field:display>
 <field:display name="Primary Sector Sub-Sector" feature="Sectors"></field:display> 
 <field:display name="Primary Sector Sub-Sub-Sector" feature="Sectors"></field:display> 
 <field:display name="Primary Sector" feature="Sectors"></field:display> 
@@ -1091,6 +1094,8 @@ deleted 6 fields, do not reinsert
 <module:display name="Home Page Menu Entry" parentModule="PUBLIC VIEW"></module:display>
 
 <feature:display name="Show Printer Friendly option" module="Public Reports"></feature:display>
+
+<module:display name="Public AMP Offline" parentModule="PUBLIC VIEW"></module:display>
 <!--  -->
 
 <field:display name="Donor Contract Fundin" feature="Contracting"></field:display> 

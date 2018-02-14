@@ -202,8 +202,12 @@ public class CurrencyRatesQuartzJob extends ConnectionCleaningJob {
             Collection<User> users = (List <User>)AmpDbUtil.getUsers();
             for(User user:users){
                 if(user.isGlobalAdmin()){
-                    logger.info("An email has been sent to "+ user.getFirstNames()+" "+user.getLastName() +"-"+user.getEmail());
-                    DgEmailManager.sendMail(user.getEmail(), "Daily Currency Rates Update ERROR","Please, check your internet connection and Timeout at Admin Tools > Global Settings >Timeout Daily Currency Update.");
+                    logger.info("An email has been sent to " + user.getFirstNames() + " " + user.getLastName() + "-"
+                            + user.getEmailUsedForNotification());
+                    DgEmailManager.sendMail(user.getEmailUsedForNotification(), 
+                            "Daily Currency Rates Update ERROR",
+                            "Please, check your internet connection and Timeout at Admin Tools > Global Settings "
+                            + ">Timeout Daily Currency Update.");
                 }
             }
         } catch (Exception e) {

@@ -30,6 +30,10 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 		return '/rest/data/report/' + id + '/result/jqGrid';
 	}
 
+	function getPreviewPageURL(id) {
+		return '/aim/viewActivityPreview.do~activityId=' + id;
+	}
+
 	GridManager.prototype = {
 		constructor : GridManager
 	};
@@ -351,8 +355,8 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 										colIndex = i;
 									}
 								});
-								var newContent = "<span style='cursor: pointer;' onclick = \x22openPreviewPage(" + id + ")\x22>"
-										+ jQuery(row.cells[colIndex]).html() + "</span>";
+                                var newContent = "<a class='preview-cell' href='" + getPreviewPageURL(id) + "'>"
+									+ jQuery(row.cells[colIndex]).html() + "</a>";
 								jQuery(row.cells[colIndex]).html(newContent);
 							}
 							
@@ -412,7 +416,7 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 								jQuery.each(groupRows, function(i, item) {
 									jQuery(item.firstChild).attr("colspan", numberOfColumns);
 									jQuery.each(tableStructure.measures.models, function(j, measure) {
-										var auxTD = jQuery(item.firstChild).clone().html("").attr("colspan", 0).css("text-align", "right");
+										var auxTD = jQuery(item.firstChild).clone().html("").attr("colspan", 1).css("text-align", "right");
 										var content = na;
 										if (partialTotals[i].contents[app.TabsApp.TOTAL_COLUMNS_NAME_SUFIX + "[" + measure.get('measureName') + "]"] !== undefined) {
 											// This check is needed for Funding Flow columns because their name is different than expected, ie: "[Totals][Real Disbursements][DN-IMPL]". 
@@ -511,7 +515,7 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 				var row = {
 					id : 0
 				};
-				// To match the changes on NiReports we iterate the headers, not obj.contents
+				// To match the changes on reports we iterate the headers, not obj.contents
 				jQuery.each(headers, function(i, column) {
 					var element = obj.contents[column.hierarchicalName];
 					if (element !== undefined) {

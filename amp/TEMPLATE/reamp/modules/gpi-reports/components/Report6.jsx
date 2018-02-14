@@ -335,19 +335,21 @@ export default class Report6 extends Component {
                                 )}
                             </select>
                         </div>
-                        <div className="pull-right currency-label">{this.props.translations['amp.gpi-reports:currency']} {this.props.mainReport.settings['currency-code']} 
-                        {(this.props.settings['number-divider'] != 1) &&
-                            <span className="amount-units"> ({this.props.translations['amp-gpi-reports:amount-in-' + this.props.settings['number-divider']]})</span>                    
-                        }
-                    <div className="container-fluid">
-                        <div className="row">
-                          <h4>{this.props.translations['amp.gpi-reports:indicator6-description']}</h4>
+                        <div className="pull-right currency-label">{this.props.translations['amp.gpi-reports:currency']} {this.props.mainReport.settings['currency-code']}
+                            {(this.props.settings['number-divider'] != 1) &&
+                            <span className="amount-units"> ({this.props.translations['amp-gpi-reports:amount-in-' + this.props.settings['number-divider']]})</span>
+                            }
                         </div>
-                    </div>                          
-                    <div className="section-divider"></div>                    
+                        <div className="container-fluid">
+                            <div className="row">
+                                <h4>{this.props.translations['amp.gpi-reports:indicator6-description']}</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="section-divider"></div>
                     {this.props.mainReport.empty == true  &&
-                       <div className="text-center">{this.props.translations['amp-gpi-reports:no-data']}</div>
-                    }                    
+                    <div className="text-center">{this.props.translations['amp-gpi-reports:no-data']}</div>
+                    }
                     { this.props.mainReport.empty == false  &&
                     <table className="table table-bordered table-striped indicator-table">
                         <thead>

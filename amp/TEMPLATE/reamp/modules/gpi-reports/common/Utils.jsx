@@ -92,6 +92,12 @@ class Utils {
     static getYearByCalendarId(years, calendarId){
         return years.filter( calendar => calendar.calendarId == calendarId )[0];
     }
+    static getCalendarPrefix(settingsWidget, calendars){
+        const cal = calendars.filter( calendar => calendar.ampFiscalCalId == Utils.getCalendarId(settingsWidget) )[0];
+        return cal.isFiscal?Constants.FY + ' ' : '';
+    }
+
+
     static getCalendarYears( years, calendarId ) {
         let result = []
         const calendar = Utils.getYearByCalendarId(years,calendarId)

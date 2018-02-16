@@ -279,7 +279,8 @@ export default class Report5b extends Component {
         this.props.actions.downloadPdfFile(this.getRequestData(), '5b');
     } 
     
-    render() { 
+    render() {
+
         var MTEFYears =  this.getMTEFYears();
         var addedGroups = [];            
         return (
@@ -324,7 +325,10 @@ export default class Report5b extends Component {
                     {this.props.mainReport.empty == true  &&
                         <div className="text-center">{this.props.translations['amp-gpi-reports:no-data']}</div>
                     }
-                    <YearsFilterSection onYearClick={this.onYearClick.bind(this)} selectedYear={this.state.selectedYear} mainReport={this.props.mainReport} filter={this.filter} dateField="date" settingsWidget={this.settingsWidget} report={INDICATOR_5B_CODE} />                    
+                    <YearsFilterSection onYearClick={this.onYearClick.bind(this)}
+                                        selectedYear={this.state.selectedYear} mainReport={this.props.mainReport}
+                                        filter={this.filter} dateField="date" settingsWidget={this.settingsWidget}
+                                        report={INDICATOR_5B_CODE} prefix={Utils.getCalendarPrefix(this.settingsWidget,this.props.calendars)}/>
                     <div className="container-fluid no-padding">
                         <div className="dropdown">
                             <select name="donorAgency" className="form-control donor-dropdown" value={this.state.selectedDonor} onChange={this.onDonorFilterChange}>

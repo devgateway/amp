@@ -13,7 +13,7 @@ import YearsFilterSection from './YearsFilterSection';
 export default class Report5b extends Component {
     constructor( props, context ) {
         super( props, context );
-        this.state = { recordsPerPage: 150, hierarchy: 'donor-agency', selectedYear: new Date().getFullYear(), selectedDonor: "", waiting: true};
+        this.state = { recordsPerPage: 150, hierarchy: 'donor-agency', selectedDonor: "", waiting: true};
         this.showFilters = this.showFilters.bind( this );
         this.showSettings = this.showSettings.bind( this );
         this.goToClickedPage = this.goToClickedPage.bind( this );
@@ -79,6 +79,22 @@ export default class Report5b extends Component {
         }.bind(this));
    }
 
+    getSelectedYear()
+    {
+        let selectedYear = undefined;
+        if (this.state.selectedYear) { //if selected year is null we need to
+            // get the current year for the current Calendar
+            selectedYear = this.state.selectedYear;
+        }
+        else {
+            const settings = this.settingsWidget.toAPIFormat();
+            const calendarId = settings && settings['calendar-id'] ? settings['calendar-id'] :
+                this.settingsWidget.definitions.getDefaultCalendarId();
+            const calendarYears = Utils.getYearByCalendarId (this.props.years ,calendarId);
+            selectedYear = calendarYears.years[calendarYears.years.length - 1].year
+        }
+        return selectedYear;
+    }
     getRequestData() {
         var requestData = {
             "hierarchy": this.state.hierarchy,
@@ -88,7 +104,7 @@ export default class Report5b extends Component {
 
         requestData.filters = this.filter.serialize().filters;        
         requestData.settings = this.settingsWidget.toAPIFormat();      
-        if ( this.state.selectedYear ) {
+        if ( this.getSelectedYear() ) {
             requestData.filters.date = this.getStartEndDates();
         }
         
@@ -111,8 +127,7 @@ export default class Report5b extends Component {
     }
     
     getStartEndDates() {
-        const defaultCalendar = this.props.calendars.filter(cal => cal.baseCal == GREG_BASE_CALENDAR)[0];
-        return Utils.getStartEndDates(this.settingsWidget, this.props.calendars, this.state.selectedYear, this.props.years, defaultCalendar.ampFiscalCalId);        
+        return Utils.getStartEndDates(this.settingsWidget, this.props.calendars, this.getSelectedYear(), this.props.years);
     }
     
    updateRecordsPerPage() {

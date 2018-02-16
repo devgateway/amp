@@ -56,7 +56,7 @@ class Utils {
             calendarId = settings && settings['calendar-id'] ? settings['calendar-id'] : settingsWidget.definitions.getDefaultCalendarId(); 
         }
         
-        const calendar = years.filter( calendar => calendar.calendarId == calendarId )[0];
+        const calendar = Utils.getYearByCalendarId (years ,calendarId);
         const yearObject = calendar.years.filter( yearObject => yearObject.year == year )[0];
         return {start: yearObject.start, end: yearObject.end};
     }
@@ -79,10 +79,12 @@ class Utils {
 
         return result;
     }
-
+    static getYearByCalendarId(years, calendarId){
+        return years.filter( calendar => calendar.calendarId == calendarId )[0];
+    }
     static getCalendarYears( years, calendarId ) {
         let result = []
-        const calendar = years.filter( calendar => calendar.calendarId == calendarId )[0];
+        const calendar = Utils.getYearByCalendarId(years,calendarId)
         if ( calendar ) {
             for ( let yearObject of calendar.years ) {
                 result.push( yearObject.year );

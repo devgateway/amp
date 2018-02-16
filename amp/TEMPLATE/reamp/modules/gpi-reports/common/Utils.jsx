@@ -61,6 +61,16 @@ class Utils {
         return {start: yearObject.start, end: yearObject.end};
     }
 
+    static getCalendarId(settingsWidget){
+        const settings  = settingsWidget.toAPIFormat();
+        const calendarId = settings && settings['calendar-id'] ?  settings['calendar-id'] :
+            settingsWidget.definitions.getDefaultCalendarId();
+        return calendarId;
+    }
+
+    static hasCalendarChanged(settingsWidget, calendarId){
+        return Utils.getCalendarId(settingsWidget) !== calendarId;
+    }
     static getYears(settingsWidget, years, fromCalendarId) {
         let result = [];
         if ( settingsWidget && settingsWidget.definitions ) {

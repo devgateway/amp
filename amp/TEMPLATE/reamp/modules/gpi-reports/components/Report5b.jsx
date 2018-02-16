@@ -62,8 +62,10 @@ export default class Report5b extends Component {
         }.bind(this));
    }
 
+
    showSettings() {
-        this.settingsWidget.setElement(this.refs.settingsPopup);
+       this.setState( { calendarId: Utils.getCalendarId(this.settingsWidget) });
+       this.settingsWidget.setElement(this.refs.settingsPopup);
         this.settingsWidget.definitions.loaded.done(function () {
              this.settingsWidget.show();
         }.bind(this));
@@ -73,8 +75,13 @@ export default class Report5b extends Component {
              $(this.refs.settingsPopup).hide();
         }.bind(this));
 
-        this.settingsWidget.on('applySettings', function () {           
-            this.fetchReportData();             
+        this.settingsWidget.on('applySettings', function () {
+            //if calendar has changed reset year filter
+            if (Utils.hasCalendarChanged(this.settingsWidget,this.state.calendarId)) {
+                this.onYearClick(null);
+            }else{
+                this.fetchReportData();
+            }
             $(this.refs.settingsPopup).hide();
         }.bind(this));
    }

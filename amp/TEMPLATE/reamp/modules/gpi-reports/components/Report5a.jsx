@@ -55,9 +55,7 @@ export default class Report5a extends Component {
     }
 
     showSettings() {
-       const settings  = this.settingsWidget.toAPIFormat();
-       const calendarId = settings && settings['calendar-id'] ?  settings['calendar-id'] : this.settingsWidget.definitions.getDefaultCalendarId();
-       this.setState( { calendarId: calendarId });
+       this.setState( { calendarId: Utils.getCalendarId(this.settingsWidget) });
        Utils.showSettings(this.refs.settingsPopup, this.settingsWidget, this.onSettingsApply.bind(this), this.onSettingsCancel.bind(this));       
     }
     
@@ -66,10 +64,8 @@ export default class Report5a extends Component {
     }
 
     onSettingsApply(){
-        const settings  = this.settingsWidget.toAPIFormat();
-        const currentCalendarId = settings && settings['calendar-id'] ?  settings['calendar-id'] : this.settingsWidget.definitions.getDefaultCalendarId();        
         //if calendar has changed reset year filter
-        if (currentCalendarId !== this.state.calendarId) {            
+        if(Utils.hasCalendarChanged(this.settingsWidget, this.state.calendarId)) {
             this.onYearClick(null);            
         } else {
             this.fetchReportData(); 

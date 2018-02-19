@@ -61,6 +61,16 @@ class Utils {
         return {start: yearObject.start, end: yearObject.end};
     }
 
+    static getCalendarId(settingsWidget){
+        const settings  = settingsWidget.toAPIFormat();
+        const calendarId = settings && settings['calendar-id'] ?  settings['calendar-id'] :
+            settingsWidget.definitions.getDefaultCalendarId();
+        return calendarId;
+    }
+
+    static hasCalendarChanged(settingsWidget, calendarId){
+        return Utils.getCalendarId(settingsWidget) !== calendarId;
+    }
     static getYears(settingsWidget, years, fromCalendarId) {
         let result = [];
         if ( settingsWidget && settingsWidget.definitions ) {
@@ -82,6 +92,12 @@ class Utils {
     static getYearByCalendarId(years, calendarId){
         return years.filter( calendar => calendar.calendarId == calendarId )[0];
     }
+    static getCalendarPrefix(settingsWidget, calendars){
+        const cal = calendars.filter( calendar => calendar.ampFiscalCalId == Utils.getCalendarId(settingsWidget) )[0];
+        return cal.isFiscal?Constants.FY + ' ' : '';
+    }
+
+
     static getCalendarYears( years, calendarId ) {
         let result = []
         const calendar = Utils.getYearByCalendarId(years,calendarId)

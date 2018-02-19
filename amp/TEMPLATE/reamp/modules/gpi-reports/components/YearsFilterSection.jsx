@@ -59,7 +59,7 @@ export default class YearsFilterSection extends Component {
                               }
                                
                                {( ( years.length > 3 ) ? years.splice( years.length - 3, 3 ).reverse() : years.reverse() ).map( year =>
-                                   <li className={this.props.selectedYear == year ? 'active' : ''} key={year}><a data-year={year} onClick={this.onYearClick}>{year}</a></li>
+                                   <li className={this.props.selectedYear == year ? 'active' : ''} key={year}><a data-year={year} onClick={this.onYearClick}>{this.props.prefix + ' ' + year}</a></li>
                                )}
                                <li >
                                    <div className="dropdown">
@@ -68,7 +68,7 @@ export default class YearsFilterSection extends Component {
                                            <span className="caret"></span></a>
                                        <ul className="dropdown-menu dropdown-years" role="menu">
                                            {years.reverse().map( year =>
-                                               <li role="presentation" className={this.props.selectedYear == year ? 'active' : ''} key={year}><a data-year={year} onClick={this.onYearClick}>{year}</a></li>
+                                               <li role="presentation" className={this.props.selectedYear == year ? 'active' : ''} key={year}><a data-year={year} onClick={this.onYearClick}>{this.props.prefix + ' ' + year}</a></li>
                                            )}
 
                                        </ul>

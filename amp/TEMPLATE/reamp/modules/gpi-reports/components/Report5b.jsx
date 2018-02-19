@@ -62,8 +62,10 @@ export default class Report5b extends Component {
         }.bind(this));
    }
 
+
    showSettings() {
-        this.settingsWidget.setElement(this.refs.settingsPopup);
+       this.setState( { calendarId: Utils.getCalendarId(this.settingsWidget) });
+       this.settingsWidget.setElement(this.refs.settingsPopup);
         this.settingsWidget.definitions.loaded.done(function () {
              this.settingsWidget.show();
         }.bind(this));
@@ -73,8 +75,13 @@ export default class Report5b extends Component {
              $(this.refs.settingsPopup).hide();
         }.bind(this));
 
-        this.settingsWidget.on('applySettings', function () {           
-            this.fetchReportData();             
+        this.settingsWidget.on('applySettings', function () {
+            //if calendar has changed reset year filter
+            if (Utils.hasCalendarChanged(this.settingsWidget,this.state.calendarId)) {
+                this.onYearClick(null);
+            }else{
+                this.fetchReportData();
+            }
             $(this.refs.settingsPopup).hide();
         }.bind(this));
    }
@@ -272,7 +279,8 @@ export default class Report5b extends Component {
         this.props.actions.downloadPdfFile(this.getRequestData(), '5b');
     } 
     
-    render() { 
+    render() {
+
         var MTEFYears =  this.getMTEFYears();
         var addedGroups = [];            
         return (
@@ -317,7 +325,10 @@ export default class Report5b extends Component {
                     {this.props.mainReport.empty == true  &&
                         <div className="text-center">{this.props.translations['amp-gpi-reports:no-data']}</div>
                     }
-                    <YearsFilterSection onYearClick={this.onYearClick.bind(this)} selectedYear={this.state.selectedYear} mainReport={this.props.mainReport} filter={this.filter} dateField="date" settingsWidget={this.settingsWidget} report={INDICATOR_5B_CODE} />                    
+                    <YearsFilterSection onYearClick={this.onYearClick.bind(this)}
+                                        selectedYear={this.state.selectedYear} mainReport={this.props.mainReport}
+                                        filter={this.filter} dateField="date" settingsWidget={this.settingsWidget}
+                                        report={INDICATOR_5B_CODE} prefix={Utils.getCalendarPrefix(this.settingsWidget,this.props.calendars)}/>
                     <div className="container-fluid no-padding">
                         <div className="dropdown">
                             <select name="donorAgency" className="form-control donor-dropdown" value={this.state.selectedDonor} onChange={this.onDonorFilterChange}>

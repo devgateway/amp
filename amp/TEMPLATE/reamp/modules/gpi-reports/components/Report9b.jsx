@@ -316,7 +316,8 @@ export default class Report9b extends Component {
                     <YearsFilterSection onYearClick={this.onYearClick.bind(this)} selectedYear={this.state.selectedYear}
                                         mainReport={this.props.mainReport} filter={this.filter} dateField="date"
                                         settingsWidget={this.settingsWidget}
-                                        prefix={Utils.getCalendarPrefix(this.settingsWidget,this.props.calendars)}/>
+                                        prefix={Utils.getCalendarPrefix(this.settingsWidget,this.props.calendars,
+                                            this.props.translate('amp.gpi-reports:fy'))}/>
                     <div className="container-fluid no-padding">
                         <div className="dropdown">
                             <select name="donorAgency" className="form-control donor-dropdown" value={this.state.selectedDonor} onChange={this.onDonorFilterChange}>

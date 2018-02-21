@@ -581,9 +581,7 @@ public class GPIReportUtils {
         }
         
         Date fromJulianNumberToDate = DateTimeUtil.fromJulianNumberToDate(dateFilterRule.min);
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(fromJulianNumberToDate);
-        int year = cal.get(Calendar.YEAR);
+        int year = getYearFromDate(fromJulianNumberToDate);
 
         List<String> mtefColumns = new ArrayList<>();
         for (int i = 1; i <= 3; i++) {
@@ -603,8 +601,8 @@ public class GPIReportUtils {
         }  else {
             fromJulianNumberToDate = DateTimeUtil.fromJulianNumberToDate(dateFilterRule.min);
         }
-        
-        return getYearOfCustomCalendar(spec, DateTimeUtil.toJulianDayNumber(fromJulianNumberToDate));
+        // date is already in custom calendar no need to convert it again
+        return getYearFromDate(fromJulianNumberToDate);
     }
 
     public static FilterRule getDateFilterRule(ReportSpecification spec) {
@@ -674,14 +672,22 @@ public class GPIReportUtils {
             
             return convDate.getYear();
         }
-        
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        
-        return calendar.get(Calendar.YEAR);
+        return getYearFromDate(date);
         
     }
-    
+
+    /**
+     * Get year from date
+     * @param date
+     * @return
+     */
+    private static int getYearFromDate(Date date) {
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return calendar.get(Calendar.YEAR);
+    }
+
     /**
      * Get GPI Remarks for indicator 5a exports (pdf and xlsx)
      * 

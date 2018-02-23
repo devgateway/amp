@@ -501,7 +501,7 @@ public class GPIReportUtils {
             }
     }
 
-    private int getYearFromFilerRuleStartDate(FilterRule gregFilterRule ){
+    private int getYearFromFilerRuleStartDate(FilterRule gregFilterRule) {
 
         Date gregStart = gregFilterRule.min == null ? null : DateTimeUtil.fromJulianNumberToDate(gregFilterRule.min);
         return getYearFromDate(gregStart);
@@ -607,7 +607,7 @@ public class GPIReportUtils {
         Integer pivotYear = null;
         Map<String, Object> filters = (Map<String, Object>) formParams.get(EPConstants.FILTERS);
         if (filters != null) {
-            Map<String, Object> date =(Map<String, Object>) filters.get(FiltersConstants.DATE);
+            Map<String, Object> date = (Map<String, Object>) filters.get(FiltersConstants.DATE);
             if (date != null) {
                 String start = String.valueOf(date.get("start"));
                 SimpleDateFormat sdf = new SimpleDateFormat(MoConstants.DATE_FORMAT);
@@ -625,7 +625,7 @@ public class GPIReportUtils {
     public static int getPivoteYear(ReportSpecification spec) {
         
         FilterRule dateFilterRule = getDateFilterRule(spec);
-        Date fromJulianNumberToDate ;
+        Date fromJulianNumberToDate;
         
         if (dateFilterRule == null || StringUtils.isBlank(dateFilterRule.min)) {
             throw new RuntimeException("No year selected. Please specify the date filter");
@@ -698,7 +698,7 @@ public class GPIReportUtils {
 
         return getYearOfCustomCalendar(spec, date);
     }
-    public static int getYearOfCustomCalendar(ReportSpecification spec, Date date){
+    public static int getYearOfCustomCalendar(ReportSpecification spec, Date date) {
 
         CalendarConverter calendarConverter = spec.getSettings().getCalendar();
         if (calendarConverter != null && calendarConverter instanceof AmpFiscalCalendar) {

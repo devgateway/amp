@@ -1,12 +1,5 @@
 package org.dgfoundation.amp.gpi.reports;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.stream.Collectors;
-
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.newreports.AmountCell;
@@ -16,11 +9,20 @@ import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.TextCell;
 import org.dgfoundation.amp.nireports.formulas.NiFormula;
-import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * A utility class to transform a GeneratedReport to GPI Report 5b
@@ -65,7 +67,7 @@ public class GPIReport5bOutputBuilder extends GPIReportOutputBuilder {
         // and dates in /report/years endpoint. for instance in a leap year in eth calendar year does not start in
         // 1/1 it starts 9/1 and in leap year it starts in 9/12 AMP-27540 is the followup ticket
         pivotyear = GPIReportUtils.getPivotYearFromFormParams(this.getOriginalFormParams());
-        if(pivotyear == null){
+        if (pivotyear == null) {
             //this shouldn't be null at this point since it has already been checked but we are
             //defensive until the proper fix is introduced in AMP-27540
             pivotyear = GPIReportUtils.getPivoteYear(generatedReport.spec);
@@ -117,9 +119,9 @@ public class GPIReport5bOutputBuilder extends GPIReportOutputBuilder {
     private List<GPIIndicator5bItem> fetchGPIItemsFromReport(GeneratedReport generatedReport, String donorColumnName) {
 
         List<GPIIndicator5bItem> allGpiItems = new ArrayList<>();
-        int year = pivotyear;//GPIReportUtils.getPivoteYear(generatedReport.spec);
+        int year = pivotyear;
         String calendarPrefix = "";
-        if(generatedReport.spec.getSettings().getCalendar().getIsFiscal()){
+        if (generatedReport.spec.getSettings().getCalendar().getIsFiscal()) {
             calendarPrefix = generatedReport.spec.getSettings().getCalendar().getDefaultFiscalYearPrefix() +" ";
         }
 

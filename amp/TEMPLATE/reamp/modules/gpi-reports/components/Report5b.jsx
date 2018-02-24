@@ -355,7 +355,9 @@ export default class Report5b extends Component {
                               </th>
                               {MTEFYears.map(( year, i ) =>
                                 <th className="col-md-2" key = {i}>
-                                <HeaderToolTip column={year} headers={this.props.mainReport.page.headers}/>{year} <br/> {this.props.translations['amp-gpi-reports:5b-column-legend']}
+                                <HeaderToolTip column={year} headers={this.props.mainReport.page.headers}/>{
+                                    Utils.getCalendarPrefix(this.settingsWidget,this.props.calendars, this.props.translate('amp.gpi-reports:fy')) +
+                                    year} <br/> {this.props.translations['amp-gpi-reports:5b-column-legend']}
                                 </th>
                               )}                          
                               <th className="col-md-2">

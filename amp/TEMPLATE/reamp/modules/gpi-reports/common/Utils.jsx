@@ -89,12 +89,13 @@ class Utils {
 
         return result;
     }
-    static getYearByCalendarId(years, calendarId){
+    static getYearByCalendarId(years, calendarId, translatedFY){
         return years.filter( calendar => calendar.calendarId == calendarId )[0];
     }
-    static getCalendarPrefix(settingsWidget, calendars){
+    static getCalendarPrefix(settingsWidget, calendars, translatedFY){
+        const fiscalYear = translatedFY ? translatedFY : Constants.FY;
         const cal = calendars.filter( calendar => calendar.ampFiscalCalId == Utils.getCalendarId(settingsWidget) )[0];
-        return cal.isFiscal?Constants.FY + ' ' : '';
+        return cal.isFiscal ? fiscalYear + ' ' : '';
     }
 
 

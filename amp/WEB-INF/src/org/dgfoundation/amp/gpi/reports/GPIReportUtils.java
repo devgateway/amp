@@ -34,12 +34,14 @@ import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
 import org.digijava.kernel.ampapi.endpoints.gpi.GPIDataService;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.DateFilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
+import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
@@ -499,6 +501,11 @@ public class GPIReportUtils {
             }
     }
 
+    private int getYearFromFilerRuleStartDate(FilterRule gregFilterRule) {
+
+        Date gregStart = gregFilterRule.min == null ? null : DateTimeUtil.fromJulianNumberToDate(gregFilterRule.min);
+        return getYearFromDate(gregStart);
+    }
     /**
      * @param ethCalendar
      * @param gregFilterRule
@@ -581,9 +588,7 @@ public class GPIReportUtils {
         }
         
         Date fromJulianNumberToDate = DateTimeUtil.fromJulianNumberToDate(dateFilterRule.min);
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(fromJulianNumberToDate);
-        int year = cal.get(Calendar.YEAR);
+        int year = getYearFromDate(fromJulianNumberToDate);
 
         List<String> mtefColumns = new ArrayList<>();
         for (int i = 1; i <= 3; i++) {
@@ -592,19 +597,42 @@ public class GPIReportUtils {
 
         return mtefColumns;
     }
-    
+
+    /**
+     * we get the pivot year from filters until AMP-27540 is fixed
+     * @param formParams
+     * @return
+     */
+    public static Integer getPivotYearFromFormParams(JsonBean formParams) {
+        Integer pivotYear = null;
+        Map<String, Object> filters = (Map<String, Object>) formParams.get(EPConstants.FILTERS);
+        if (filters != null) {
+            Map<String, Object> date = (Map<String, Object>) filters.get(FiltersConstants.DATE);
+            if (date != null) {
+                String start = String.valueOf(date.get("start"));
+                SimpleDateFormat sdf = new SimpleDateFormat(MoConstants.DATE_FORMAT);
+                try {
+                    Date startDate = start == null ? null : sdf.parse(start);
+                    pivotYear = getYearFromDate(startDate);
+                } catch (java.text.ParseException ex) {
+                    throw new RuntimeException("No year selected. Please specify the date filter");
+                }
+            }
+        }
+        return pivotYear;
+    }
+
     public static int getPivoteYear(ReportSpecification spec) {
         
         FilterRule dateFilterRule = getDateFilterRule(spec);
-        Date fromJulianNumberToDate = new Date();
+        Date fromJulianNumberToDate;
         
         if (dateFilterRule == null || StringUtils.isBlank(dateFilterRule.min)) {
             throw new RuntimeException("No year selected. Please specify the date filter");
         }  else {
             fromJulianNumberToDate = DateTimeUtil.fromJulianNumberToDate(dateFilterRule.min);
         }
-        
-        return getYearOfCustomCalendar(spec, DateTimeUtil.toJulianDayNumber(fromJulianNumberToDate));
+        return getYearOfCustomCalendar(spec, fromJulianNumberToDate);
     }
 
     public static FilterRule getDateFilterRule(ReportSpecification spec) {
@@ -660,13 +688,18 @@ public class GPIReportUtils {
     
     /**
      * Get the converted year of the julidanDateNumber using the calendar from the report spec
-     * 
+     *
      * @param spec
      * @param julianDateNumber
      * @return
      */
     public static int getYearOfCustomCalendar(ReportSpecification spec, long julianDateNumber) {
         Date date = DateTimeUtil.fromJulianNumberToDate(Long.toString(julianDateNumber));
+
+        return getYearOfCustomCalendar(spec, date);
+    }
+    public static int getYearOfCustomCalendar(ReportSpecification spec, Date date) {
+
         CalendarConverter calendarConverter = spec.getSettings().getCalendar();
         if (calendarConverter != null && calendarConverter instanceof AmpFiscalCalendar) {
             AmpFiscalCalendar calendar = (AmpFiscalCalendar) calendarConverter;
@@ -674,14 +707,22 @@ public class GPIReportUtils {
             
             return convDate.getYear();
         }
-        
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        
-        return calendar.get(Calendar.YEAR);
+        return getYearFromDate(date);
         
     }
-    
+
+    /**
+     * Get year from date
+     * @param date
+     * @return
+     */
+    private static int getYearFromDate(Date date) {
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return calendar.get(Calendar.YEAR);
+    }
+
     /**
      * Get GPI Remarks for indicator 5a exports (pdf and xlsx)
      * 

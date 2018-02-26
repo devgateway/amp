@@ -203,7 +203,11 @@ export default class Report1Output2 extends Component {
                     <div id="amp-settings" ref="settingsPopup"> </div>
                     <ToolBar showFilters={this.showFilters} showSettings={this.showSettings}  downloadPdfFile={this.downloadPdfFile}  downloadExcelFile={this.downloadExcelFile}/>
                     <div className="section-divider"></div>                    
-                    <YearsFilterSection onYearClick={this.onYearClick.bind(this)} selectedYear={this.state.selectedYear} mainReport={this.props.output2} filter={this.filter} dateField="actual-approval-date" settingsWidget={this.settingsWidget} />                        
+                    <YearsFilterSection onYearClick={this.onYearClick.bind(this)} selectedYear={this.state.selectedYear}
+                                        mainReport={this.props.output2} filter={this.filter}
+                                        dateField="actual-approval-date" settingsWidget={this.settingsWidget}
+                                        prefix={Utils.getCalendarPrefix(this.settingsWidget,this.props.calendars,
+                                            this.props.translate('amp.gpi-reports:fy'))}/>
                     <div className="container-fluid no-padding">
                         <div className="dropdown">
                             <select name="donorAgency" className="form-control donor-dropdown" value={this.state.selectedDonor} onChange={this.onDonorFilterChange}>

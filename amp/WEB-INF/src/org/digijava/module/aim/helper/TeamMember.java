@@ -20,6 +20,7 @@ public class TeamMember implements Comparable, Serializable{
     private Long memberId;
     private String memberName;
     private String email;
+    private String notificationEmail;
     private Long roleId;
     private String roleName;
     private Long teamId;
@@ -80,6 +81,7 @@ public class TeamMember implements Comparable, Serializable{
             this.memberId = u.getId();
             this.memberName = u.getName();
             this.email = u.getEmail();
+            this.notificationEmail = u.getNotificationEmail();
             this.pledger = u.getPledger();
             this.translator = DbUtil.isUserTranslator(u);
         }
@@ -295,6 +297,16 @@ public class TeamMember implements Comparable, Serializable{
     public long getVisibilityTemplateId() {
         return this.visibilityTemplateId;
     }
+
+    public String getNotificationEmail() {
+        return notificationEmail;
+    }
+
+    public void setNotificationEmail(String notificationEmail) {
+        this.notificationEmail = notificationEmail;
+    }
+    
+    
     
     
 }

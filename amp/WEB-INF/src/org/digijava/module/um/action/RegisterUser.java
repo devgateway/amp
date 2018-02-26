@@ -90,6 +90,11 @@ public class RegisterUser extends Action {
             user.setPledger(userRegisterForm.getPledger());
             user.setExemptFromDataFreezing(userRegisterForm.getExemptFromDataFreezing());
             
+            user.setNotificationEmailEnabled(userRegisterForm.getNotificationEmailEnabled());
+            if (userRegisterForm.getNotificationEmailEnabled()) {
+                user.setNotificationEmail(userRegisterForm.getNotificationEmail());
+            }
+            
             user.setOrganizationTypeOther(new String(" "));
             
 

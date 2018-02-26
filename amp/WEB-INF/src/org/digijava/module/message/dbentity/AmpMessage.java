@@ -1,7 +1,11 @@
 package org.digijava.module.message.dbentity;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.sdm.dbentity.Sdm;
 
 /**
@@ -48,25 +52,19 @@ public abstract class AmpMessage {
      */
     private AmpMessage repliedMessage;
         
-        
-    /**
-     * this field holds list of receivers
-     */
-    private String receivers; // name and surnames of receivers separeted by comma
-
     private String externalReceivers; //contacts + people outside AMP
         
     private Sdm attachedDocs; //for attaching files
-        
-        public String getReceivers() {
-            return receivers;
-        }
-
-        public void setReceivers(String receivers) {
-            this.receivers = receivers;
-        }
-        
     
+    private Set<AmpMessageReceiver> messageReceivers;
+
+    public Set<AmpMessageReceiver> getMessageReceivers() {
+        return messageReceivers;
+    }
+
+    public void setMessageReceivers(Set<AmpMessageReceiver> messageReceivers) {
+        this.messageReceivers = messageReceivers;
+    }
 
     /**
      * This method is used to define whether user should be able to edit message or not.
@@ -195,6 +193,31 @@ public abstract class AmpMessage {
 
     public void setRepliedMessage(AmpMessage repliedMessage) {
         this.repliedMessage = repliedMessage;
-    }   
+    }
+
+    public void addMessageReceiver(AmpTeamMember receiver) {
+        AmpMessageReceiver msgReceiver = new AmpMessageReceiver();
+        msgReceiver.setReceiver(receiver);
+        msgReceiver.setMessage(this);
         
+        if (messageReceivers == null) {
+            messageReceivers = new HashSet<>();
+        }
+        
+        messageReceivers.add(msgReceiver);
+    }
+    
+    public void copyMessageReceiversFromTemplate(AmpMessage template) {
+        for (AmpMessageReceiver msgReceiver : template.getMessageReceivers()) {
+            addMessageReceiver(msgReceiver.getReceiver());
+        }
+    }
+    
+    public String getAllMessageReceiversAsString() {
+        String msgReceivers = messageReceivers.stream()
+                .map(x -> x.toString())
+                .collect(Collectors.joining(", "));
+        
+        return msgReceivers;
+    }
 }

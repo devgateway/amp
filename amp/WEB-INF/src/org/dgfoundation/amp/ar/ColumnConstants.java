@@ -23,7 +23,6 @@ public class ColumnConstants {
     public static final String ACTORS = "Actors";
     public static final String ACTUAL_APPROVAL_DATE = "Actual Approval Date";
     public static final String ACTUAL_COMPLETION_DATE = "Actual Completion Date";
-    public static final String CURRENT_COMPLETION_DATE = "Current Completion Date";
     public static final String ACTUAL_START_DATE = "Actual Start Date";
     public static final String AGE_OF_PROJECT_MONTHS = "Age of Project (Months)";
     public static final String AGREEMENT_CLOSE_DATE = "Agreement Close Date";
@@ -257,6 +256,7 @@ public class ColumnConstants {
     public static final String PRIMARY_PROGRAM_LEVEL_7 = "Primary Program Level 7";
     public static final String PRIMARY_PROGRAM_LEVEL_8 = "Primary Program Level 8";
     public static final String PRIMARY_SECTOR = "Primary Sector";
+    public static final String PRIMARY_SECTOR_CODE_OFFICIAL = "Primary Sector Code Official";
     public static final String PRIMARY_SECTOR_SUB_SECTOR = "Primary Sector Sub-Sector";
     public static final String PRIMARY_SECTOR_SUB_SUB_SECTOR = "Primary Sector Sub-Sub-Sector";
     public static final String PROCUREMENT_SYSTEM = "Procurement System";

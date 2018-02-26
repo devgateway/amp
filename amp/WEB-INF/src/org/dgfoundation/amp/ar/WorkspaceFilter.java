@@ -346,12 +346,13 @@ public class WorkspaceFilter
     public static Set<AmpTeam> getComputedRelatedWorkspaces() {
         String wsQuery = getWorkspaceFilterQuery(TLSUtils.getRequest().getSession());
         List<Number> res = PersistenceManager.getSession().createSQLQuery(wsQuery).list();
-        if (res != null) {
+        if (res != null && !res.isEmpty()) {
             String activitiesQuery = "select amp_team_id from amp_activity_Version where amp_activity_id IN (" +
                     Joiner.on(',').join(res) + ")";
             List<Number> teamIds = PersistenceManager.getSession().createSQLQuery(activitiesQuery).list();
             return TeamUtil.getRelatedTeamsForTeamsById(teamIds);
         }
+        
         return null;
     }
 

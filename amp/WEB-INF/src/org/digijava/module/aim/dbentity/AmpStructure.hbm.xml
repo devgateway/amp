@@ -12,8 +12,8 @@
 		</id>
 		<property column="title" name="title" type="java.lang.String" not-null="true" />
 		<property column="description" name="description" type="text" />
-		<property column="latitude" name="latitude" type="text" />
-		<property column="longitude" name="longitude" type="text" />
+		<property column="coord_lat" name="latitude" type="java.lang.Double" />
+		<property column="coord_long" name="longitude" type="java.lang.Double" />
 		<property column="shape" name="shape" type="text" />
 		<property column="creation_date" name="creationdate" type="java.sql.Timestamp"/>
 		

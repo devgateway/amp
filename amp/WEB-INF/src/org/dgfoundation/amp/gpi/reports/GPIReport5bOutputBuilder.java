@@ -73,12 +73,12 @@ public class GPIReport5bOutputBuilder extends GPIReportOutputBuilder {
             pivotyear = GPIReportUtils.getPivoteYear(generatedReport.spec);
         }
         headers.add(getColumns().get(donorColumnName));
-        headers.add(new GPIReportOutputColumn(String.valueOf(pivotyear + 1), String.valueOf(pivotyear + 1),
-                GPIReportConstants.REPORT_5B_TOOLTIP.get(GPIReportConstants.YEAR_1)));
-        headers.add(new GPIReportOutputColumn(String.valueOf(pivotyear + 2), String.valueOf(pivotyear + 2),
-                GPIReportConstants.REPORT_5B_TOOLTIP.get(GPIReportConstants.YEAR_2)));
-        headers.add(new GPIReportOutputColumn(String.valueOf(pivotyear + 3), String.valueOf(pivotyear + 3),
-                GPIReportConstants.REPORT_5B_TOOLTIP.get(GPIReportConstants.YEAR_3)));
+        headers.add(new GPIReportOutputColumn(String.valueOf(pivotyear + MTEF_COLUMN_1), String.valueOf(pivotyear
+                + MTEF_COLUMN_1), GPIReportConstants.REPORT_5B_TOOLTIP.get(GPIReportConstants.YEAR_1)));
+        headers.add(new GPIReportOutputColumn(String.valueOf(pivotyear + MTEF_COLUMN_2), String.valueOf(pivotyear
+                + MTEF_COLUMN_2), GPIReportConstants.REPORT_5B_TOOLTIP.get(GPIReportConstants.YEAR_2)));
+        headers.add(new GPIReportOutputColumn(String.valueOf(pivotyear + MTEF_COLUMN_3), String.valueOf(pivotyear
+                + MTEF_COLUMN_3),  GPIReportConstants.REPORT_5B_TOOLTIP.get(GPIReportConstants.YEAR_3)));
         headers.add(getColumns().get(GPIReportConstants.COLUMN_INDICATOR_5B));
 
         return headers;
@@ -122,7 +122,7 @@ public class GPIReport5bOutputBuilder extends GPIReportOutputBuilder {
         int year = pivotyear;
         String calendarPrefix = "";
         if (generatedReport.spec.getSettings().getCalendar().getIsFiscal()) {
-            calendarPrefix = generatedReport.spec.getSettings().getCalendar().getDefaultFiscalYearPrefix() +" ";
+            calendarPrefix = generatedReport.spec.getSettings().getCalendar().getDefaultFiscalYearPrefix() + " ";
         }
 
         if (generatedReport.reportContents.getChildren() != null) {
@@ -151,22 +151,22 @@ public class GPIReport5bOutputBuilder extends GPIReportOutputBuilder {
                             }
                         }
                     } else if (roc.originalColumnName.equals(MeasureConstants.MTEF)) {
-                        if (roc.parentColumn.originalColumnName.equals(String.format("%s", calendarPrefix + (year +
-                                MTEF_COLUMN_1)))) {
+                        if (roc.parentColumn.originalColumnName.equals(String.format("%s", calendarPrefix + (year
+                                + MTEF_COLUMN_1)))) {
                             if (((AmountCell) rc).extractValue() > 0) {
                                 gpiItem.setYear1(true);
                             }
                         }
-                        
-                        if (roc.parentColumn.originalColumnName.equals(String.format("%s", calendarPrefix + (year +
-                                MTEF_COLUMN_2)))) {
+
+                        if (roc.parentColumn.originalColumnName.equals(String.format("%s", calendarPrefix + (year
+                                + MTEF_COLUMN_2)))) {
                             if (((AmountCell) rc).extractValue() > 0) {
                                 gpiItem.setYear2(true);
                             }
                         }
                         
-                        if (roc.parentColumn.originalColumnName.equals(String.format("%s", calendarPrefix + (year +
-                                MTEF_COLUMN_3)))) {
+                        if (roc.parentColumn.originalColumnName.equals(String.format("%s", calendarPrefix + (year
+                                + MTEF_COLUMN_3)))) {
                             if (((AmountCell) rc).extractValue() > 0) {
                                 gpiItem.setYear3(true);
                             }

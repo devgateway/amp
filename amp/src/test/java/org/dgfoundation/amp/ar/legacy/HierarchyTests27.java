@@ -1,42 +1,17 @@
 package org.dgfoundation.amp.ar.legacy;
 
-import java.util.HashSet;
-import java.util.List;
-
 import org.dgfoundation.amp.nireports.testcases.ColumnReportDataModel;
 import org.dgfoundation.amp.nireports.testcases.GroupColumnModel;
 import org.dgfoundation.amp.nireports.testcases.GroupReportModel;
 import org.dgfoundation.amp.nireports.testcases.SimpleColumnModel;
 import org.dgfoundation.amp.testutils.*;
+import org.junit.Test;
 
-import static org.dgfoundation.amp.testutils.ReportTestingUtils.NULL_PLACEHOLDER;
 import static org.dgfoundation.amp.testutils.ReportTestingUtils.MUST_BE_EMPTY;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
+public class HierarchyTests27 extends ReportsTestCase {
 
-public class HierarchyTests27 extends ReportsTestCase
-{
-    public HierarchyTests27(String name) {
-        super(name);
-    }
-        
-    public static Test suite()
-    {
-        TestSuite suite = new TestSuite(HierarchyTests27.class.getName());
-        suite.addTest(new HierarchyTests27("testZonesUnderRegionsBoth"));
-        suite.addTest(new HierarchyTests27("testZonesUnderRegionsNoPercentages"));
-        suite.addTest(new HierarchyTests27("testZonesUnderRegionsWithPercentages"));
-        
-        suite.addTest(new HierarchyTests27("testSectorZonesPercentages"));
-        suite.addTest(new HierarchyTests27("testZonesSectorsPercentages"));
-                
-        suite.addTest(new HierarchyTests27("testRegionEntriesWithoutPercentagesFlat"));
-        suite.addTest(new HierarchyTests27("testRegionEntriesWithoutPercentagesByRegion"));
-        
-        return suite;
-    }
-    
+    @Test
     public void testRegionEntriesWithoutPercentagesFlat()
     {
         GroupReportModel fddr_correct = GroupReportModel.withColumnReports("AMP-17081-flat",
@@ -57,7 +32,8 @@ public class HierarchyTests27 extends ReportsTestCase
         
         runReportTest("activity with percentageless location, flat", "AMP-17081-flat", new String[] {"SubNational no percentages"}, fddr_correct);
     }
-    
+
+    @Test
     public void testRegionEntriesWithoutPercentagesByRegion()
     {
         GroupReportModel fddr_correct = GroupReportModel.withGroupReports("AMP-17081-by-region",
@@ -87,7 +63,8 @@ public class HierarchyTests27 extends ReportsTestCase
         
         runReportTest("activity with percentageless location, by region", "AMP-17081-by-region", new String[] {"SubNational no percentages"}, fddr_correct);        
     }
-    
+
+    @Test
     public void testSectorZonesPercentages()
     {
         GroupReportModel fddr_correct = 
@@ -146,7 +123,8 @@ public class HierarchyTests27 extends ReportsTestCase
         
         runReportTest("report with sectors + zones", "AMP-16695-sec-zon", new String[] {"Activity With Zones and Percentages"}, fddr_correct);      
     }
-    
+
+    @Test
     public void testZonesSectorsPercentages()
     {
         GroupReportModel fddr_correct = 
@@ -206,6 +184,7 @@ public class HierarchyTests27 extends ReportsTestCase
         runReportTest("report with zones + sectors", "AMP-16695-zon-sec", new String[] {"Activity With Zones and Percentages"}, fddr_correct);      
     }
 
+    @Test
     public void testZonesUnderRegionsBoth()
     {
         GroupReportModel fddr_correct = 
@@ -248,7 +227,8 @@ public class HierarchyTests27 extends ReportsTestCase
 
         runReportTest("report with region + zone, 2 acts", "AMP-16695-1", new String[] {"Activity with Zones", "Activity With Zones and Percentages"}, fddr_correct);
     }
-    
+
+    @Test
     public void testZonesUnderRegionsNoPercentages()
     {
         GroupReportModel fddr_correct = 
@@ -282,8 +262,9 @@ public class HierarchyTests27 extends ReportsTestCase
                         "(line 2:RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1))");
 
         runReportTest("report with region + zone, no percentages", "AMP-16695-1", new String[] {"Activity with Zones"}, fddr_correct);
-    }   
-    
+    }
+
+    @Test
     public void testZonesUnderRegionsWithPercentages()
     {
         GroupReportModel fddr_correct = 

@@ -41,10 +41,12 @@ import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.mail.DgEmailManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.I18NHelper;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.um.form.UserEmailForm;
 import org.digijava.module.um.util.DbUtil;
 import org.digijava.module.um.util.UmUtil;
@@ -87,15 +89,15 @@ public class UserEmail
 
         // First check if user alredy exits in database
         if (DbUtil.isRegisteredEmail(email)) {
-
+            User u = UserUtils.getUserByEmail(email);
             // Create and fill Reset object and update into database
-            DbUtil.saveResetPassword(DbUtil.getuserId(email), code);
+            DbUtil.saveResetPassword(u.getId(), code);
             // -----------------------------------------
 
             // send mail alert
 
             try {
-                sendEmail(email, code, request);
+                sendEmail(email, u.getEmailUsedForNotification(), code, request);
             }
             catch (Exception ex) {
                 errors.add(ActionMessages.GLOBAL_MESSAGE,
@@ -128,7 +130,7 @@ public class UserEmail
      * @param request
      * @throws java.lang.Exception
      */
-    public void sendEmail(String email, String code,
+    public void sendEmail(String email, String notificationEmail, String code,
                           javax.servlet.http.HttpServletRequest request) throws
             java.lang.Exception {
 
@@ -184,7 +186,7 @@ public class UserEmail
                         ">").getMessage();
 
 
-        InternetAddress address = new InternetAddress(email);
+        InternetAddress address = new InternetAddress(notificationEmail);
         DgEmailManager.sendMail(new Address[] {address}
                                ,emailFrom,
                                subject, body, currentLocale, true);

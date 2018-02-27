@@ -15,6 +15,8 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
+<jsp:include page="/repository/aim/view/strongPassword.jsp"  />
+
 <style  type="text/css">
 <!--
 
@@ -165,6 +167,14 @@
 		var address2 = document.umAddUserForm.emailConfirmation.value;
         if(! validateEmails(address, address2))
             return false;
+        
+        var notificationEmail = $('#notificationEmail').val();
+        if ($('#notificationEmailEnabled').is(":checked")) {
+        	if (!validateNotificationEmail(notificationEmail) || !validateMailWithNotificationMail(address, notificationEmail)) {
+        	    return false;
+        	}
+        }
+        
         if (isPassVoid(password)||isPassVoid(passwordConfirmation))
         {
 			<c:set var="translation">
@@ -218,7 +228,13 @@
 		var u = document.getElementById('userPasswordConfirmation');
 		u.setAttribute("autocomplete", "off");
 		
+		$('#notificationEmailEnabled').bind("click", function() {
+	        $('#notificationEmailRow') [this.checked ? "show" : "hide"]();
+	      });
+		
+		$('#notificationEmailRow')[$('#notificationEmailEnabled').is(":checked") ? "show" : "hide"]();
 	}
+	
 	YAHOOAmp.util.Event.addListener(window, "load", init) ;
 </script>
 <digi:instance property="umAddUserForm" />
@@ -298,6 +314,7 @@
 													</ul>
 													</font>
 												</logic:notEmpty>
+													<jsp:include page="/repository/aim/view/strongPasswordRulesLegend.jsp"  />
 												</td>
 											</tr>
                                             <tr>
@@ -336,7 +353,8 @@
 													<FONT color=red>*</FONT>
 													<digi:trn key="um:emailAddress">E-mail Address</digi:trn></td>
 												<td align="left">
-													<html:text  styleId="userEmail" property="email" size="20" styleClass="inp-text" />
+													<html:text  styleId="userEmail" property="email" size="20"
+																styleClass="inp-text pwd_username" />
 												</td>
 											</tr>
 											<tr>
@@ -350,11 +368,21 @@
 											</tr>
 											<tr>
 												<td width="3%">&nbsp;</td>
-												<td align=right class=f-names noWrap>
+												<td valign="top" align=right class=f-names noWrap>
+													<div style="margin-top: 10px;">
 													<FONT color=red>*</FONT>
-													<digi:trn key="um:password">Password</digi:trn></td>
+													<digi:trn key="um:password">Password</digi:trn>
+													</div>
+												</td>
 												<td align="left">
-													<html:password styleId="userPassword" property="password" size="20" />
+													<html:password styleId="userPassword"
+																   property="password" size="20" />
+													<div style="padding-left: 2px; margin: 5px">
+														<div style="display: none" class="pwd_container" id="pwd_container">
+															<span class="pwstrength_viewport_verdict">&nbsp;</span>
+															<span class="pwstrength_viewport_progress"></span>
+														</div>
+													</div>
 												</td>
 											</tr>
 										
@@ -367,6 +395,23 @@
 													<html:password styleId="userPasswordConfirmation" property="passwordConfirmation" size="20" />
 												</td>
 											</tr>
+											<tr>
+                                                <td  width="3%">&nbsp;</td>
+                                                <td align="right" class="formCheckContainer">
+                                                    <digi:trn>Use different email for email notifications</digi:trn>
+                                                </td>
+                                                <td class=f-names align="left">
+                                                    <html:checkbox property="notificationEmailEnabled" styleClass="inp-text" styleId="notificationEmailEnabled"/>
+                                                </td>
+                                            </tr>
+											<tr id="notificationEmailRow">
+                                                <td width="3%">&nbsp;</td>
+                                                <td align=right class=f-names noWrap>
+                                                    <font color=red>*</font>
+                                                    <digi:trn>Notification Email</digi:trn></td>
+                                                <td align="left">
+                                                    <html:text property="notificationEmail" size="20" styleClass="inp-text" styleId="notificationEmail"/></td>
+                                            </tr>
 											<tr>
 												<td width="3%">&nbsp;</td>
 												<td align=right class=f-names noWrap>

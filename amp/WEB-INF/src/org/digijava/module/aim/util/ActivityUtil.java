@@ -23,7 +23,6 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang.time.DateUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
@@ -105,7 +104,7 @@ import clover.org.apache.commons.lang.StringUtils;
 public class ActivityUtil {
 
   private static Logger logger = Logger.getLogger(ActivityUtil.class);
-
+   
   public static List<AmpComponent> getComponents(Long actId) {
     Session session = null;
     List<AmpComponent> col = new ArrayList<AmpComponent>();
@@ -462,6 +461,13 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         }
         return result;
     }
+
+    public static Long findActivityIdByAmpId(String ampId) {
+        Session session = PersistenceManager.getRequestDBSession();
+        return (Long) session.createQuery("select ampActivityId from AmpActivity where ampId=:ampId")
+                .setParameter("ampId", ampId)
+                .uniqueResult();
+    }
   
   public static AmpActivityVersion loadAmpActivity(Long id){
      return (AmpActivityVersion) PersistenceManager.getSession().load(AmpActivityVersion.class, id); 
@@ -682,23 +688,27 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
       final IdWithValueShim result = new IdWithValueShim(-1l, "");
       PersistenceManager.getSession().doWork(new Work() {
             public void execute(Connection conn) throws SQLException {
-                String groupClause = "";
-                Long groupId = null;
-                if (g != null) {
-                    groupClause = " AND object_id NOT IN (SELECT amp_activity_id FROM amp_activity_version WHERE amp_activity_group_id = ?) ";
-                    groupId = g.getAmpActivityGroupId();
-                }
-                String query = "SELECT aav.amp_activity_id, team.name FROM amp_activity_version aav "
-                        + "left outer JOIN amp_team team ON aav.amp_team_id = team.amp_team_id "
-                        + "WHERE amp_activity_id IN"
-                        + "(SELECT object_id FROM amp_content_translation WHERE object_class = 'org.digijava.module.aim.dbentity.AmpActivityVersion' AND field_name='name' "
-                        + groupClause
-                        + " AND object_id IN (SELECT amp_activity_last_version_id FROM amp_activity_group) "
-                        + " AND translation = ?) ";
                 List<FilterParam> params = new ArrayList<FilterParam>();
-                if (groupId != null)
-                    params.add(new FilterParam(groupId, java.sql.Types.BIGINT));
+                String groupClause = "";
+                
+                if (g != null) {
+                    groupClause = "AND amp_activity_id NOT IN "
+                            + "(SELECT amp_activity_id FROM amp_activity_version WHERE amp_activity_group_id = ?) ";
+                    params.add(new FilterParam(g.getAmpActivityGroupId(), java.sql.Types.BIGINT));
+                }
+                
+                String query = "SELECT aav.amp_activity_id, team.name FROM amp_activity_version aav "
+                        + "LEFT OUTER JOIN amp_team team ON aav.amp_team_id = team.amp_team_id "
+                        + "WHERE amp_activity_id IN (SELECT amp_activity_last_version_id FROM amp_activity_group) "
+                        + groupClause
+                        + "AND (amp_activity_id IN (SELECT object_id FROM amp_content_translation "
+                        + "WHERE object_class = 'org.digijava.module.aim.dbentity.AmpActivityVersion' "
+                        + "AND field_name='name' AND translation = ?) "
+                        + "OR aav.name = ?)";
+                
                 params.add(new FilterParam(name, java.sql.Types.VARCHAR));
+                params.add(new FilterParam(name, java.sql.Types.VARCHAR));
+                
                 try(RsInfo rsi = SQLUtils.rawRunQuery(conn, query, params)) {
                     while (rsi.rs.next()) {
                         Long id = rsi.rs.getLong(1);
@@ -707,7 +717,6 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                         result.setValue(teamName);
                     }
                 }
-                
             }
       });
       if (result.getId() == -1l)
@@ -1612,30 +1621,36 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
             String nameSearchQuery;
             if (isSearchByName) {
                 //this query is stupid and should be rewritten!
-                nameSearchQuery = " (f.ampActivityId IN (SELECT t.objectId FROM " + AmpContentTranslation.class.getName() + " t WHERE t.objectClass = '" + AmpActivityVersion.class.getName() + "' AND upper(t.translation) like upper(:searchTerm)))" +
-            "OR f.ampActivityId IN (SELECT f2.ampActivityId from " + AmpActivity.class.getName() + " f2 WHERE upper(f2.name) LIKE upper(:searchTerm) OR upper(f2.ampId) LIKE upper(:searchTerm) ) " +
-            " AND "; 
+                nameSearchQuery = " (f.ampActivityId IN (SELECT t.objectId "
+                        + "FROM " + AmpContentTranslation.class.getName() + " t "
+                        + "WHERE t.objectClass = '" + AmpActivityVersion.class.getName() 
+                        + "' AND upper(t.translation) like upper(:searchTerm))) " 
+                        + "OR f.ampActivityId IN (SELECT f2.ampActivityId from " + AmpActivity.class.getName() + " f2 "
+                        + "WHERE upper(f2.name) LIKE upper(:searchTerm) OR upper(f2.ampId) LIKE upper(:searchTerm) ) " 
+                        + " AND "; 
             } else {
                 nameSearchQuery = "";
             }   
-
+            
             String dataFreezeQuery = "";
-            if(frozenActivityIds!=null && frozenActivityIds.size()>0){
-                if(ActivityForm.DataFreezeFilter.FROZEN.equals(dataFreezeFilter)) {
+            if (frozenActivityIds != null && frozenActivityIds.size() > 0) {
+                if (ActivityForm.DataFreezeFilter.FROZEN.equals(dataFreezeFilter)) {               
                     dataFreezeQuery = " and f.ampActivityId in (:frozenActivityIds) ";
-                } else if(ActivityForm.DataFreezeFilter.UNFROZEN.equals(dataFreezeFilter)) {
+                } else if (ActivityForm.DataFreezeFilter.UNFROZEN.equals(dataFreezeFilter)) {
                     dataFreezeQuery = " and f.ampActivityId not in (:frozenActivityIds) ";
                 }
             }
-
-            String queryString = "select f.ampActivityId, f.ampId, " + activityName + ", ampTeam , ampGroup FROM " + AmpActivity.class.getName() +
-                " as f left join f.team as ampTeam left join f.ampActivityGroup as ampGroup WHERE " + nameSearchQuery + " ((f.deleted = false) or (f.deleted is null))" + dataFreezeQuery;
+                
+            String queryString = "select f.ampActivityId, f.ampId, " + activityName + ", ampTeam , ampGroup "
+                    + "FROM " + AmpActivity.class.getName() 
+                    +  " as f left join f.team as ampTeam left join f.ampActivityGroup as ampGroup WHERE " 
+                    + nameSearchQuery + " ((f.deleted = false) or (f.deleted is null))" + dataFreezeQuery;
             
             Query qry = session.createQuery(queryString);
             if(isSearchByName) {
                 qry.setString("searchTerm", "%" + searchTerm + "%");
             }
-
+            
             if (frozenActivityIds != null && frozenActivityIds.size() > 0
                     && (ActivityForm.DataFreezeFilter.FROZEN.equals(dataFreezeFilter)
                             || ActivityForm.DataFreezeFilter.UNFROZEN.equals(dataFreezeFilter))) {

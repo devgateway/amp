@@ -2,9 +2,11 @@ package org.digijava.kernel.ampapi.endpoints.common;
 
 import java.util.List;
 
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.dgfoundation.amp.ar.ColumnConstants;
@@ -79,8 +81,8 @@ public class NiFiltersEndpoint {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    public List<AvailableMethod> getAvailableFilters() {
-        return EndpointUtils.getAvailableFilterMethods(NiFiltersEndpoint.class.getName());
+    public List<AvailableMethod> getAvailableFilters(@DefaultValue("D") @QueryParam("report-type") String reportType) {
+        return EndpointUtils.getAvailableFilterMethods(NiFiltersEndpoint.class.getName(), reportType);
     }
     
     /**

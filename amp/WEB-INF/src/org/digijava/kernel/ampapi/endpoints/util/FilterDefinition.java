@@ -37,7 +37,7 @@ public @interface FilterDefinition {
     FilterComponentType[] componentType() default FilterComponentType.ALL;
     
     /**
-     * Specified the report type where the filter is visible (D|P|DP|R)
+     * Specified the report type where the filter is visible (D|P|ALL)
      */
     FilterReportType reportType() default FilterReportType.DONOR;
     

@@ -6,10 +6,20 @@ package org.digijava.kernel.ampapi.endpoints.util;
  * The filter is visible in
  * DONOR - Donor Reports
  * PLEDGE - Pledge Reports
- * DONOR_PLEDGE - Donor Reports + show pledges
+ * ALL - Reports with all filters
  */
 public enum FilterReportType {
-    DONOR,
-    PLEDGE,
-    DONOR_PLEDGE
+    DONOR("D"),
+    PLEDGE("P"),
+    ALL("ALL");
+    
+    private final String type;
+    
+    FilterReportType(String type) {
+        this.type = type;
+    }
+    
+    public String getType() {
+        return type;
+    }
 };

@@ -37,6 +37,11 @@ public @interface FilterDefinition {
     FilterComponentType[] componentType() default FilterComponentType.ALL;
     
     /**
+     * Specified the report type where the filter is visible (D|P|DP|R)
+     */
+    FilterReportType reportType() default FilterReportType.DONOR;
+    
+    /**
      * In which tab to display this filter.
      */
     String tab() default EPConstants.TAB_UNASSIGNED;
@@ -49,7 +54,7 @@ public @interface FilterDefinition {
     String visibilityCheck() default "";
     
     /**
-     * Specifies if multple values can be selected for a filter
+     * Specifies if multiple values can be selected for a filter
      */
     boolean multiple() default true;
     

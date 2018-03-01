@@ -19,6 +19,7 @@ import org.digijava.kernel.ampapi.endpoints.util.FilterComponentType;
 import org.digijava.kernel.ampapi.endpoints.util.FilterDataType;
 import org.digijava.kernel.ampapi.endpoints.util.FilterDefinition;
 import org.digijava.kernel.ampapi.endpoints.util.FilterFieldType;
+import org.digijava.kernel.ampapi.endpoints.util.FilterReportType;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
 
 /**
@@ -655,6 +656,152 @@ public class NiFiltersEndpoint {
     }
     
     /**
+     * List the donor types and groups.
+     * 
+     * The items object contains the values used to build the tree.
+     *
+     * @return tree definitions (filter types) and the list of pledges donor types and groups
+     */
+    @GET
+    @Path("/pledgesDonors")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "pledges-donors", name = "Pledges Donors")
+    @FilterDefinition(tab = EPConstants.TAB_ORGANIZATIONS, reportType = FilterReportType.PLEDGE)
+    public FilterList getPledgesDonros() {
+        return FiltersManager.getInstance().getPledgesDonorFilterList();
+    }
+    
+    /**
+     * List the program settings and items of 'Pledges Programs' filter.
+     * 
+     * The structure of the response is similar to /organizations endpoint.
+     * 
+     * @return tree definitions (filter types) and the list of pledges programs
+     */
+    @GET
+    @Path("/pledgesPrograms")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "pledges-programs", name = "Pledges Programs")
+    @FilterDefinition(tab = EPConstants.TAB_PROGRAMS, reportType = FilterReportType.PLEDGE)
+    public FilterList getPledgesPrograms() {
+        return FiltersManager.getInstance().getPledgesProgramFilterList();
+    }
+    
+    /**
+     * List the sector schemas and items of 'Pledges Sectors' filter.
+     * 
+     * The structure of the response is similar to /organizations endpoint.
+     * 
+     * @return tree definitions (filter types) and the tree structure of the pledges sectors
+     */
+    @GET
+    @Path("/pledgesSectors")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "pledges-sectors", name = "Pledges Sectors")
+    @FilterDefinition(tab = EPConstants.TAB_SECTORS, reportType = FilterReportType.PLEDGE)
+    public FilterList getPledgesSectors() {
+        return FiltersManager.getInstance().getPledgesSectorFilterList();
+        
+    }
+    
+    /**
+     * List the locations of the 'Pledges Locations' filter.
+     * 
+     * The structure of the response is similar to /organizations endpoint.
+     * 
+     * @return tree definitions (filter types) and the tree structure of the pledges locations
+     */
+    @GET
+    @Path("/pledgesLocations")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "pledges-locations", name = "Pledges Locations")
+    @FilterDefinition(tab = EPConstants.TAB_LOCATIONS, reportType = FilterReportType.PLEDGE)
+    public FilterList getPledgesLocations() {
+        return FiltersManager.getInstance().getPledgesLocationFilterList();
+    }
+    
+    /**
+     * List the possible values of 'Pledges Status' filter.
+     * 
+     * @return filter definition and values of 'pledge-status' filter.
+     */
+    @GET
+    @Path("/pledgesStatus/")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = FiltersConstants.STATUS, name = ColumnConstants.PLEDGE_STATUS)
+    @FilterDefinition(tab = EPConstants.TAB_PLEDGE, columns = ColumnConstants.PLEDGE_STATUS, 
+                        componentType = {FilterComponentType.REPORTS}, reportType = FilterReportType.PLEDGE)
+    public FilterList getPledgesStatus() {
+        return FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.PLEDGES_STATUS);
+    }
+    
+    /**
+     * List the possible values of 'Pledges Aid of Modality' filter.
+     * 
+     * @return filter definition and values of 'pledge-aid-of-modality' filter.
+     */
+    @GET
+    @Path("/pledgesAidOfModality/")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = FiltersConstants.PLEDGES_AID_MODALITY, name = ColumnConstants.PLEDGES_AID_MODALITY)
+    @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.PLEDGES_AID_MODALITY,
+                        componentType = {FilterComponentType.REPORTS}, reportType = FilterReportType.PLEDGE)
+    public FilterList getPledgesAidOfModality() {
+        return FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.PLEDGES_AID_MODALITY);
+    }
+    
+    /**
+     * List the possible values of 'Pledges Type of Assistance' filter.
+     * 
+     * @return filter definition and values of 'pledge-type-of-assistance' filter.
+     */
+    @GET
+    @Path("/pledgesTypeOfAssistance/")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = FiltersConstants.PLEDGES_TYPE_OF_ASSISTANCE, name = ColumnConstants.PLEDGES_TYPE_OF_ASSISTANCE)
+    @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.PLEDGES_TYPE_OF_ASSISTANCE,
+                        componentType = {FilterComponentType.REPORTS}, reportType = FilterReportType.PLEDGE)
+    public FilterList getPledgesTypeOfAssistance() {
+        return FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.PLEDGES_TYPE_OF_ASSISTANCE);
+    }
+    
+    /**
+     * Generic endpoint for 'Pledges Detail Start Date' filter.
+     * 
+     * Since the date filters doesn't have possible values, this endpoint return an empty list.
+     * 
+     * @return empty list
+     */
+    @GET
+    @Path("/pledgesDetailStartDate/")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = FiltersConstants.PLEDGES_DETAIL_START_DATE, name = ColumnConstants.PLEDGES_DETAIL_START_DATE)
+    @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.PLEDGES_DETAIL_START_DATE,
+                        fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE,
+                        componentType = {FilterComponentType.REPORTS}, reportType = FilterReportType.PLEDGE)
+    public FilterList getPledgesDetailStartDate() {
+        return new FilterList();
+    }
+    
+    /**
+     * Generic endpoint for 'Pledges Detail End Date' filter.
+     * 
+     * Since the date filters doesn't have possible values, this endpoint return an empty list.
+     * 
+     * @return empty list
+     */
+    @GET
+    @Path("/pledgesDetailEndDate/")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = FiltersConstants.PLEDGES_DETAIL_END_DATE, name = ColumnConstants.PLEDGES_DETAIL_END_DATE)
+    @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.PLEDGES_DETAIL_END_DATE,
+                        fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE,
+                        componentType = {FilterComponentType.REPORTS}, reportType = FilterReportType.PLEDGE)
+    public FilterList getPledgesDetailEndDate() {
+        return new FilterList();
+    }
+    
+    /**
      * List the possible values of 'Boundaries' filter.
      * 
      * @return filter definition and values of 'boundaries' filter.
@@ -674,6 +821,6 @@ public class NiFiltersEndpoint {
     
     public boolean hasToShowWorkspaceFilter() {
         return WorkspaceFilterListManager.getInstance().isVisible();
-     }
+    }
     
 }

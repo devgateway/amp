@@ -46,6 +46,13 @@ public final class CategoryValueFilterListManager implements FilterListManager {
                         CategoryConstants.PERFORMANCE_ALERT_LEVEL_KEY))
             .put(FiltersConstants.FINANCING_INSTRUMENT, 
                 new CategoryBean(ColumnConstants.FINANCING_INSTRUMENT, CategoryConstants.FINANCING_INSTRUMENT_KEY))
+            .put(FiltersConstants.PLEDGES_STATUS, 
+                    new CategoryBean(ColumnConstants.PLEDGE_STATUS, CategoryConstants.ACTIVITY_STATUS_KEY))
+            .put(FiltersConstants.PLEDGES_AID_MODALITY, 
+                    new CategoryBean(ColumnConstants.PLEDGES_AID_MODALITY, CategoryConstants.FINANCING_INSTRUMENT_KEY))
+            .put(FiltersConstants.PLEDGES_TYPE_OF_ASSISTANCE, 
+                    new CategoryBean(ColumnConstants.PLEDGES_TYPE_OF_ASSISTANCE, 
+                        CategoryConstants.TYPE_OF_ASSISTENCE_KEY))
             .build();
 
     public static CategoryValueFilterListManager getInstance() {

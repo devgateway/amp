@@ -22,10 +22,11 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
  * @author Viorel Chihai
  *
  */
-public final class LocationFilterListManager implements FilterListManager {
+public class LocationFilterListManager implements FilterListManager {
     
-    private static final String LOCATION_NAME = "Locations";
+    public static final String LOCATION_NAME = "Locations";
     private static final String LOCATIONS_ITEMS_NAME = "locations";
+    
     private static LocationFilterListManager locationFilterListManager;
 
     public static LocationFilterListManager getInstance() {
@@ -36,7 +37,7 @@ public final class LocationFilterListManager implements FilterListManager {
         return locationFilterListManager;
     }
     
-    private LocationFilterListManager() { }
+    protected LocationFilterListManager() { }
 
     @Override
     public FilterList getFilterList() {
@@ -46,29 +47,32 @@ public final class LocationFilterListManager implements FilterListManager {
         return new FilterList(locationTreeDefinitions, locationTreeItems);
     }
     
-    private List<FilterListDefinition> getLocationListDefinitions() {
+    protected List<FilterListDefinition> getLocationListDefinitions() {
         List<FilterListDefinition> listDefinitions = new ArrayList<>();
         FilterListDefinition listDefinition = new FilterListDefinition();
         
-        List<String> filterIds =  CategoryManagerUtil
-                .getAmpCategoryValueCollectionByKeyExcludeDeleted(CategoryConstants.IMPLEMENTATION_LOCATION_KEY)
-                .stream()
-                .sorted(Comparator.comparingInt(AmpCategoryValue::getIndex))
-                .map(acv -> acv.getValue().toLowerCase())
-                .collect(Collectors.toList());
-        
         listDefinition.setId(null);
-        listDefinition.setName(LOCATION_NAME);
-        listDefinition.setDisplayName(TranslatorWorker.translateText(LOCATION_NAME));
-        listDefinition.setFilterIds(filterIds);
+        listDefinition.setName(getFilterDefinitionName());
+        listDefinition.setDisplayName(TranslatorWorker.translateText(getFilterDefinitionName()));
+        listDefinition.setFilterIds(getFilterIds());
         listDefinition.setFiltered(true);
         listDefinition.setItems(LOCATIONS_ITEMS_NAME);
         listDefinitions.add(listDefinition);
         
         return listDefinitions;
     }
+
+    protected List<String> getFilterIds() {
+        List<String> filterIds = CategoryManagerUtil
+                .getAmpCategoryValueCollectionByKeyExcludeDeleted(CategoryConstants.IMPLEMENTATION_LOCATION_KEY)
+                .stream()
+                .sorted(Comparator.comparingInt(AmpCategoryValue::getIndex))
+                .map(acv -> acv.getValue().toLowerCase())
+                .collect(Collectors.toList());
+        return filterIds;
+    }
     
-    private Map<String, List<FilterListTreeNode>> getLocationListItems() {
+    protected Map<String, List<FilterListTreeNode>> getLocationListItems() {
         Map<String, List<FilterListTreeNode>> items = new HashMap<>();
         List<FilterListTreeNode> locationItems = new ArrayList<>();
         
@@ -86,7 +90,7 @@ public final class LocationFilterListManager implements FilterListManager {
     /**
      * @return default AMP country id
      */
-    private long getDefaultCountryLocationId() {
+    protected long getDefaultCountryLocationId() {
         long parentLocationId = PersistenceManager.getLong(PersistenceManager.getSession()
                 .createSQLQuery("SELECT acvl.id FROM amp_category_value_location acvl "
                         + "WHERE acvl.parent_location IS NULL AND location_name = (" 
@@ -97,7 +101,7 @@ public final class LocationFilterListManager implements FilterListManager {
         return parentLocationId;
     }
     
-    private FilterListTreeNode getLocations(LocationSkeleton location) {
+    protected FilterListTreeNode getLocations(LocationSkeleton location) {
         FilterListTreeNode node = new FilterListTreeNode();
         node.setId(location.getId());
         node.setCode(location.getCode());
@@ -108,6 +112,10 @@ public final class LocationFilterListManager implements FilterListManager {
         }
         
         return node;
+    }
+    
+    protected String getFilterDefinitionName() {
+        return LOCATION_NAME;
     }
 
 }

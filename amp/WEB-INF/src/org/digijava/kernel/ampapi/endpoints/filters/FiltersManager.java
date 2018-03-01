@@ -67,5 +67,21 @@ public final class FiltersManager {
     public FilterList getDateFilter() {
         return DateFilterListManager.getInstance().getFilterList();
     }
+    
+    public FilterList getPledgesDonorFilterList() {
+        return PledgesDonorFilterListManager.getInstance().getFilterList();
+    }
+
+    public FilterList getPledgesLocationFilterList() {
+        return PledgesLocationFilterListManager.getInstance().getFilterList();
+    }
+    
+    public FilterList getPledgesSectorFilterList() {
+        return PledgesSectorFilterListManager.getInstance().getFilterList();
+    }
+    
+    public FilterList getPledgesProgramFilterList() {
+        return PledgesProgramFilterListManager.getInstance().getFilterList();
+    }
 
 }

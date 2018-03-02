@@ -107,22 +107,36 @@ public class FilterUtils {
         
         mapSimpleColumn(FiltersConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES, 
                 ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES);
+        mapSimpleColumn(FiltersConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_0, 
+                ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_0);
+        mapSimpleColumn(FiltersConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_1, 
+                ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_1);
         mapSimpleColumn(FiltersConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_2, 
                 ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_2);
         mapSimpleColumn(FiltersConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_3, 
                 ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_3);
         
         mapSimpleColumn(FiltersConstants.PLEDGES_PROGRAMS, ColumnConstants.PLEDGES_PROGRAMS);
+        mapSimpleColumn(FiltersConstants.PLEDGES_PROGRAMS_LEVEL_0, ColumnConstants.PLEDGES_PROGRAMS_LEVEL_0);
+        mapSimpleColumn(FiltersConstants.PLEDGES_PROGRAMS_LEVEL_1, ColumnConstants.PLEDGES_PROGRAMS_LEVEL_1);
         mapSimpleColumn(FiltersConstants.PLEDGES_PROGRAMS_LEVEL_2, ColumnConstants.PLEDGES_PROGRAMS_LEVEL_2);
         mapSimpleColumn(FiltersConstants.PLEDGES_PROGRAMS_LEVEL_3, ColumnConstants.PLEDGES_PROGRAMS_LEVEL_3);
         
         mapSimpleColumn(FiltersConstants.PLEDGES_SECONDARY_PROGRAMS, ColumnConstants.PLEDGES_SECONDARY_PROGRAMS);
+        mapSimpleColumn(FiltersConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_0, 
+                ColumnConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_0);
+        mapSimpleColumn(FiltersConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_1, 
+                ColumnConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_1);
         mapSimpleColumn(FiltersConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_2, 
                 ColumnConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_2);
         mapSimpleColumn(FiltersConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_3, 
                 ColumnConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_3);
         
         mapSimpleColumn(FiltersConstants.PLEDGES_TERTIARY_PROGRAMS, ColumnConstants.PLEDGES_TERTIARY_PROGRAMS);
+        mapSimpleColumn(FiltersConstants.PLEDGES_TERTIARY_PROGRAMS_LEVEL_0, 
+                ColumnConstants.PLEDGES_TERTIARY_PROGRAMS_LEVEL_0);
+        mapSimpleColumn(FiltersConstants.PLEDGES_TERTIARY_PROGRAMS_LEVEL_1, 
+                ColumnConstants.PLEDGES_TERTIARY_PROGRAMS_LEVEL_1);
         mapSimpleColumn(FiltersConstants.PLEDGES_TERTIARY_PROGRAMS_LEVEL_2, 
                 ColumnConstants.PLEDGES_TERTIARY_PROGRAMS_LEVEL_2);
         mapSimpleColumn(FiltersConstants.PLEDGES_TERTIARY_PROGRAMS_LEVEL_3, 

@@ -206,18 +206,26 @@ public class ColumnConstants {
     public static final String PLEDGES_DISTRICTS = "Pledges Districts";
     
     public static final String PLEDGES_NATIONAL_PLAN_OBJECTIVES = "Pledges National Plan Objectives";
+    public static final String PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_0 = "Pledges National Plan Objectives Level 0";
+    public static final String PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_1 = "Pledges National Plan Objectives Level 1";
     public static final String PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_2 = "Pledges National Plan Objectives Level 2";
     public static final String PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_3 = "Pledges National Plan Objectives Level 3";
     
     public static final String PLEDGES_PROGRAMS = "Pledges Programs";
+    public static final String PLEDGES_PROGRAMS_LEVEL_0 = "Pledges Programs Level 0";
+    public static final String PLEDGES_PROGRAMS_LEVEL_1 = "Pledges Programs Level 1";
     public static final String PLEDGES_PROGRAMS_LEVEL_2 = "Pledges Programs Level 2";
     public static final String PLEDGES_PROGRAMS_LEVEL_3 = "Pledges Programs Level 3";
     
     public static final String PLEDGES_SECONDARY_PROGRAMS = "Pledges Secondary Programs";
+    public static final String PLEDGES_SECONDARY_PROGRAMS_LEVEL_0 = "Pledges Secondary Programs Level 0";
+    public static final String PLEDGES_SECONDARY_PROGRAMS_LEVEL_1 = "Pledges Secondary Programs Level 1";
     public static final String PLEDGES_SECONDARY_PROGRAMS_LEVEL_2 = "Pledges Secondary Programs Level 2";
     public static final String PLEDGES_SECONDARY_PROGRAMS_LEVEL_3 = "Pledges Secondary Programs Level 3";
     
     public static final String PLEDGES_TERTIARY_PROGRAMS = "Pledges Tertiary Programs";
+    public static final String PLEDGES_TERTIARY_PROGRAMS_LEVEL_0 = "Pledges Tertiary Programs Level 0";
+    public static final String PLEDGES_TERTIARY_PROGRAMS_LEVEL_1 = "Pledges Tertiary Programs Level 1";
     public static final String PLEDGES_TERTIARY_PROGRAMS_LEVEL_2 = "Pledges Tertiary Programs Level 2";
     public static final String PLEDGES_TERTIARY_PROGRAMS_LEVEL_3 = "Pledges Tertiary Programs Level 3";
     

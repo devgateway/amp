@@ -15,6 +15,7 @@ import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.dgfoundation.amp.ar.dbentity.FilterDataSetInterface;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.form.ReportsFilterPickerForm;
@@ -84,7 +85,13 @@ public class FilterUtil {
     public static AmpARFilter buildFilterFromSource(FilterDataSetInterface source) {
         AmpARFilter arf = new AmpARFilter();
         arf.fillWithDefaultsSettings();
-        arf.fillWithDefaultsFilter(null);
+        
+        if (source instanceof AmpReports && source != null) {
+            arf.fillWithDefaultsFilter(((AmpReports) source).getId());
+        } else {
+            arf.fillWithDefaultsFilter(null);
+        }
+        
         FilterUtil.populateFilter(source, arf);
         arf.postprocess();
         return arf;

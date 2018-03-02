@@ -111,6 +111,7 @@ public class ProgramFilterListManager implements FilterListManager {
         List<AmpActivityProgramSettings> allSettings = session.createCriteria(AmpActivityProgramSettings.class).list();
         List<AmpActivityProgramSettings> programSettings = allSettings.stream()
                 .filter(setting -> visibleCols.contains(ProgramUtil.NAME_TO_COLUMN_MAP.get(setting.getName())))
+                .filter(setting -> setting.getDefaultHierarchy() != null)
                 .collect(Collectors.toList());
         
         return programSettings;

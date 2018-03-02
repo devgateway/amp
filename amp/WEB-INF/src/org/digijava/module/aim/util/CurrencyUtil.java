@@ -234,7 +234,7 @@ public class CurrencyUtil {
 	}
 
     public static Collection<AmpCurrency> getAllCurrencies(int active){
-        return getAllCurrencies(active, "");
+       return getAllCurrencies(active, "");
     }
 
 	public static Collection<AmpCurrency> getAllCurrencies(int active, String sortOrder) {
@@ -244,23 +244,33 @@ public class CurrencyUtil {
 		String qryStr = null;
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			
-			if (active == CurrencyUtil.ORDER_BY_CURRENCY_CODE) {
-				qryStr = "select curr from " + AmpCurrency.class.getName() + " as curr left join fetch  curr.countryLocation dg order by curr.currencyCode "+sortOrder;
-				qry = session.createQuery(qryStr);
-			}else if(active == CurrencyUtil.ORDER_BY_CURRENCY_NAME){
-				qryStr = "select curr from " + AmpCurrency.class.getName() + " as curr left join fetch  curr.countryLocation dg order by curr.currencyName "+sortOrder;
-			qry = session.createQuery(qryStr);
-			}else if(active == CurrencyUtil.ORDER_BY_CURRENCY_COUNTRY_NAME){
-				qryStr = "select curr from " + AmpCurrency.class.getName() + " as curr left outer join curr.countryLocation dg order by dg.name "+sortOrder;
-			qry = session.createQuery(qryStr);
-			}else {
-				qryStr = "select curr from " + AmpCurrency.class.getName() + " curr " +
-					"where (curr.activeFlag=:flag) order by curr.currencyCode "+sortOrder;
-				qry = session.createQuery(qryStr);
-				qry.setParameter("flag",new Integer(active),IntegerType.INSTANCE);
+			boolean isDefault = false;
+			qryStr = "select curr from " + AmpCurrency.class.getName() + " as curr left join fetch  curr" +
+					".countryLocation dg " +
+					" where curr.virtual is false order by ";
+			switch (active) {
+				case CurrencyUtil.ORDER_BY_CURRENCY_CODE:
+					qryStr += " curr.currencyCode " + sortOrder;
+					break;
+				case CurrencyUtil.ORDER_BY_CURRENCY_NAME:
+					qryStr += " curr.currencyName " + sortOrder;
+					break;
+				case CurrencyUtil.ORDER_BY_CURRENCY_COUNTRY_NAME:
+					qryStr += " dg.name " + sortOrder;
+					break;
+				default:
+					qryStr = "select curr from " + AmpCurrency.class.getName() + " curr " +
+							"where (curr.activeFlag=:flag) and  curr.virtual is false order by curr.currencyCode " +
+							"" + sortOrder;
+					isDefault = true;
+					break;
 			}
-			col = removeVirtualCurrencies(qry.list());
+			qry = session.createQuery(qryStr);
+			if (isDefault) {
+				qry.setParameter("flag", new Integer(active), IntegerType.INSTANCE);
+			}
+
+			col = qry.list();
 		} catch (Exception e) {
 			logger.error("Exception from getAllCurrencies()", e);
 		}

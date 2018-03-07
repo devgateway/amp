@@ -35,6 +35,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
+import org.digijava.kernel.ampapi.endpoints.util.FilterDefinition;
 import org.digijava.kernel.ampapi.endpoints.util.GisUtil;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
@@ -366,8 +367,7 @@ public class EndpointUtils {
                         filter.setUi(apiAnnotation.ui());
                         filter.setId(apiAnnotation.id());
                         filter.setTab(apiAnnotation.tab());
-                        filter.setFilterType(apiAnnotation.filterType());
-                        filter.setList(apiAnnotation.list());
+                        filter.setFilterFieldType(apiAnnotation.filterType());
                         if (includeColumn) {
                             filter.setColumns(apiAnnotation.columns());
                         }
@@ -401,6 +401,84 @@ public class EndpointUtils {
             }
         }
         catch (ClassNotFoundException e) {
+            throw new RuntimeException("cannot retrieve methods list", e);
+        }
+        return availableFilters;
+    }
+    
+    public static List<AvailableMethod> getAvailableFilterMethods(String className) {
+        List<AvailableMethod> availableFilters = new ArrayList<AvailableMethod>(); 
+        try {
+            Set<String> visibleColumns = ColumnsVisibility.getVisibleColumnsWithFakeOnes();
+            Class<?> c = Class.forName(className);
+            
+            javax.ws.rs.Path p = c.getAnnotation(javax.ws.rs.Path.class);
+            Method[] methods = c.getMethods();
+            for (Method method : methods) {
+                ApiMethod apiAnnotation = method.getAnnotation(ApiMethod.class);
+                FilterDefinition filterDefinition = method.getAnnotation(FilterDefinition.class);
+                if (apiAnnotation != null && filterDefinition != null) {
+                    final String[] columns = filterDefinition.columns();
+                    
+                    boolean isVisibleColumn = false; 
+                    for (String column:columns) { 
+                        if (EPConstants.NA.equals(column) || visibleColumns.contains(column)) {
+                            isVisibleColumn = true;
+                            break;
+                        }
+                    }
+                    if (isVisibleColumn) {
+                        //then we have to add it to the filters list
+                        javax.ws.rs.Path methodPath = method.getAnnotation(javax.ws.rs.Path.class);
+                        AvailableMethod filter = new AvailableMethod();
+                        //the name should be translatable
+                        if (apiAnnotation.name() != null && !apiAnnotation.name().equals("")) {
+                            filter.setName(TranslatorWorker.translateText(apiAnnotation.name()));
+                        }
+                        
+                        String endpoint = "/rest/" + p.value();
+                        
+                        if (methodPath != null) {
+                            endpoint += methodPath.value();
+                        }
+                        filter.setEndpoint(endpoint);
+                        filter.setUi(apiAnnotation.ui());
+                        filter.setId(apiAnnotation.id());
+                        filter.setMultiple(filterDefinition.multiple());
+                        filter.setFieldType(filterDefinition.fieldType());
+                        filter.setDataType(filterDefinition.dataType());
+                        filter.setComponentType(filterDefinition.componentType());
+                        filter.setTab(filterDefinition.tab());
+                        filter.setColumns(filterDefinition.columns());
+                        //we check the method exposed
+                        filter.setMethod(getEndpointMethod(method));
+                        //special check if the method should be added
+                        boolean shouldCheck = false;
+                        boolean result = false;
+                        if (filterDefinition.visibilityCheck().length() > 0) {
+                            shouldCheck = true;
+                            try {
+                                Method shouldAddApiMethod = c.getMethod(filterDefinition.visibilityCheck(), null);
+                                shouldAddApiMethod.setAccessible(true);
+                                result = (Boolean) shouldAddApiMethod.invoke(c.newInstance(), null);
+                            } catch (NoSuchMethodException | SecurityException | IllegalAccessException
+                                    | IllegalArgumentException | InvocationTargetException e) {
+                            } catch (InstantiationException e) {
+                                logger.error(e);
+                            }
+                        }
+                        if (shouldCheck) {
+                            if (result) {
+                                availableFilters.add(filter);
+                                shouldCheck = false;
+                            }
+                        } else {
+                            availableFilters.add(filter);
+                        }
+                    }
+                }
+            }
+        } catch (ClassNotFoundException e) {
             throw new RuntimeException("cannot retrieve methods list", e);
         }
         return availableFilters;

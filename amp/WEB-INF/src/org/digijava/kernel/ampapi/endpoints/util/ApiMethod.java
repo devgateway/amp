@@ -62,13 +62,6 @@ public @interface ApiMethod {
      * <p>Note: Used in filters only.</p>
      */
     String visibilityCheck() default "";
-    
-    /**
-     * Specified whether the filter should processed as a list
-     *
-     * <p>Note: Used in filters only.</p>
-     */
-    boolean list() default false;
 
     /**
      * Authorization rules that must be applied to this method. Default is no authorization to be done.

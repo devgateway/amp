@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
-import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -75,7 +74,6 @@ public final class ProgramFilterListManager implements FilterListManager {
             listDefinition.setFiltered(true);
             listDefinition.setFilterIds(getProgramFilterIds(setting));
             listDefinition.setItems(PROGRAM_NAME_TO_ITEMS_NAME.get(setting.getName()));
-            listDefinition.setTab(EPConstants.TAB_PROGRAMS);
             listDefinitions.add(listDefinition);
         }
         

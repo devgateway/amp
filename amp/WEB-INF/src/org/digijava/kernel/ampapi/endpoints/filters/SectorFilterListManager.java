@@ -8,7 +8,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
-import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
@@ -62,7 +61,6 @@ public final class SectorFilterListManager implements FilterListManager {
             listDefinition.setFiltered(true);
             listDefinition.setFilterIds(filterIds);
             listDefinition.setItems(sc.getName().toLowerCase());
-            listDefinition.setTab(EPConstants.TAB_SECTORS);
             listDefinitions.add(listDefinition);
         }
         

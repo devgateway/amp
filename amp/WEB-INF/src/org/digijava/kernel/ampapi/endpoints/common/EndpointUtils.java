@@ -36,6 +36,7 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
 import org.digijava.kernel.ampapi.endpoints.util.FilterDefinition;
+import org.digijava.kernel.ampapi.endpoints.util.FilterReportType;
 import org.digijava.kernel.ampapi.endpoints.util.GisUtil;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
@@ -406,7 +407,7 @@ public class EndpointUtils {
         return availableFilters;
     }
     
-    public static List<AvailableMethod> getAvailableFilterMethods(String className) {
+    public static List<AvailableMethod> getAvailableFilterMethods(String className, String reportType) {
         List<AvailableMethod> availableFilters = new ArrayList<AvailableMethod>(); 
         try {
             Set<String> visibleColumns = ColumnsVisibility.getVisibleColumnsWithFakeOnes();
@@ -427,7 +428,11 @@ public class EndpointUtils {
                             break;
                         }
                     }
-                    if (isVisibleColumn) {
+                    
+                    boolean isFilterVisible = reportType.toUpperCase().equals(filterDefinition.reportType().getType()) 
+                            || reportType.toUpperCase().equals(FilterReportType.ALL.getType());
+                    
+                    if (isVisibleColumn && isFilterVisible) {
                         //then we have to add it to the filters list
                         javax.ws.rs.Path methodPath = method.getAnnotation(javax.ws.rs.Path.class);
                         AvailableMethod filter = new AvailableMethod();

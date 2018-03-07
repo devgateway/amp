@@ -140,21 +140,21 @@ public class FilterUtils {
                 ColumnConstants.PLEDGES_SECTORS_SUBSUBSECTORS);
         
         mapSimpleColumn(FiltersConstants.PLEDGES_TERTIARY_SECTORS, ColumnConstants.PLEDGES_TERTIARY_SECTORS);
-        mapSimpleColumn(FiltersConstants.PLEDGES_TERTIARY_SUB_SECTORS, 
+        mapSimpleColumn(FiltersConstants.PLEDGES_TERTIARY_SECTORS_SUB_SECTORS, 
                 ColumnConstants.PLEDGES_TERTIARY_SUBSECTORS);
-        mapSimpleColumn(FiltersConstants.PLEDGES_TERTIARY_SUB_SUB_SECTORS, 
+        mapSimpleColumn(FiltersConstants.PLEDGES_TERTIARY_SECTORS_SUB_SUB_SECTORS, 
                 ColumnConstants.PLEDGES_TERTIARY_SUBSUBSECTORS);
         
         mapSimpleColumn(FiltersConstants.PLEDGES_QUATERNARY_SECTORS, ColumnConstants.PLEDGES_QUATERNARY_SECTORS);
-        mapSimpleColumn(FiltersConstants.PLEDGES_QUATERNARY_SUB_SECTORS, 
+        mapSimpleColumn(FiltersConstants.PLEDGES_QUATERNARY_SECTORS_SUB_SECTORS, 
                 ColumnConstants.PLEDGES_QUATERNARY_SUBSECTORS);
-        mapSimpleColumn(FiltersConstants.PLEDGES_QUATERNARY_SUB_SUB_SECTORS, 
+        mapSimpleColumn(FiltersConstants.PLEDGES_QUATERNARY_SECTORS_SUB_SUB_SECTORS, 
                 ColumnConstants.PLEDGES_QUATERNARY_SUBSUBSECTORS);
         
         mapSimpleColumn(FiltersConstants.PLEDGES_QUINARY_SECTORS, ColumnConstants.PLEDGES_QUINARY_SECTORS);
-        mapSimpleColumn(FiltersConstants.PLEDGES_QUINARY_SUB_SECTORS, 
+        mapSimpleColumn(FiltersConstants.PLEDGES_QUINARY_SECTORS_SUB_SECTORS, 
                 ColumnConstants.PLEDGES_QUINARY_SUBSECTORS);
-        mapSimpleColumn(FiltersConstants.PLEDGES_QUINARY_SUB_SUB_SECTORS, 
+        mapSimpleColumn(FiltersConstants.PLEDGES_QUINARY_SECTORS_SUB_SUB_SECTORS, 
                 ColumnConstants.PLEDGES_QUINARY_SUBSUBSECTORS);
         
         mapSimpleColumn(FiltersConstants.PLEDGES_REGIONS, ColumnConstants.PLEDGES_REGIONS);

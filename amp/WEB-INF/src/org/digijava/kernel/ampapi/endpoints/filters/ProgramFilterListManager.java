@@ -25,7 +25,7 @@ import com.google.common.collect.ImmutableMap;
  * @author Viorel Chihai
  *
  */
-public final class ProgramFilterListManager implements FilterListManager {
+public class ProgramFilterListManager implements FilterListManager {
     
     public static final String NATIONAL_PLANNING_OBJECTIVES_ITEMS_NAME = "nationalPlanningObjectives";
     public static final String PRIMARY_PROGRAM_ITEMS_NAME = "primaryPrograms";
@@ -50,7 +50,7 @@ public final class ProgramFilterListManager implements FilterListManager {
         return programFilterListManager;
     }
     
-    private ProgramFilterListManager() { }
+    protected ProgramFilterListManager() { }
 
     @Override
     public FilterList getFilterList() {
@@ -60,17 +60,16 @@ public final class ProgramFilterListManager implements FilterListManager {
         return new FilterList(programListDefinitions, programListItems);
     }
     
-    private List<FilterListDefinition> getProgramListDefinitions() {
+    protected List<FilterListDefinition> getProgramListDefinitions() {
         List<FilterListDefinition> listDefinitions = new ArrayList<>();
         List<AmpActivityProgramSettings> progarmSettings = getProgramSettings();
        
         for (AmpActivityProgramSettings setting : progarmSettings) {
-            String programName = setting.getName().equals(ProgramUtil.NATIONAL_PLAN_OBJECTIVE) 
-                    ? ColumnConstants.NATIONAL_PLANNING_OBJECTIVES : setting.getName();
+            String definitionName = getFilterDefinitionName(setting.getName());
             FilterListDefinition listDefinition = new FilterListDefinition();
             listDefinition.setId(setting.getAmpProgramSettingsId());
-            listDefinition.setName(programName);
-            listDefinition.setDisplayName(TranslatorWorker.translateText(programName));
+            listDefinition.setName(definitionName);
+            listDefinition.setDisplayName(TranslatorWorker.translateText(definitionName));
             listDefinition.setFiltered(true);
             listDefinition.setFilterIds(getProgramFilterIds(setting));
             listDefinition.setItems(PROGRAM_NAME_TO_ITEMS_NAME.get(setting.getName()));
@@ -79,8 +78,8 @@ public final class ProgramFilterListManager implements FilterListManager {
         
         return listDefinitions;
     }
-    
-    private List<String> getProgramFilterIds(AmpActivityProgramSettings setting) {
+
+    protected List<String> getProgramFilterIds(AmpActivityProgramSettings setting) {
         
         List<String> filterIds = AmpActivityProgramSettings.NAME_TO_COLUMN_AND_LEVEL.get(setting.getName())
             .values().stream()
@@ -128,6 +127,15 @@ public final class ProgramFilterListManager implements FilterListManager {
         }
         
         return node;
+    }
+    
+    /**
+     * @param definitionName
+     * @return
+     */
+    protected String getFilterDefinitionName(String programConfigurationName) {
+        return programConfigurationName.equals(ProgramUtil.NATIONAL_PLAN_OBJECTIVE) 
+                ? ColumnConstants.NATIONAL_PLANNING_OBJECTIVES : programConfigurationName;
     }
 
 }

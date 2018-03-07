@@ -420,7 +420,7 @@ public class NiFiltersEndpoint {
      * @return filter definition and values of 'computed-year' filter.
      */
     @GET
-    @Path("/computed-year")
+    @Path("/computedYear")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = FiltersConstants.COMPUTED_YEAR, name = ColumnConstants.COMPUTED_YEAR)
     @FilterDefinition(tab = EPConstants.TAB_OTHER,  columns = ColumnConstants.COMPUTED_YEAR,

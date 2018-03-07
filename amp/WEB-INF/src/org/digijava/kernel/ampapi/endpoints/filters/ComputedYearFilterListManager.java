@@ -18,7 +18,6 @@ import org.digijava.kernel.translator.TranslatorWorker;
  */
 public final class ComputedYearFilterListManager implements FilterListManager {
     
-    private static final String ITEMS_NAME = "values";
     private static final int NUM_OF_YEARS = 10;
     private static ComputedYearFilterListManager computedYearFilterListManager;
     

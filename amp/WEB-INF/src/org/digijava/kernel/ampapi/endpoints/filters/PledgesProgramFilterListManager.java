@@ -24,28 +24,32 @@ public final class PledgesProgramFilterListManager extends ProgramFilterListMana
 
     private static final List<String> PLEDGES_NATIONAL_PLANNING_OBJECTIVES_COLUMNS = 
             new ImmutableList.Builder<String>()
-                .add(ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES)
+                .add(ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_0)
+                .add(ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_1)
                 .add(ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_2)
                 .add(ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_3)
             .build();
 
     private static final List<String> PLEDGES_PROGRAMS_COLUMNS = 
             new ImmutableList.Builder<String>()
-                .add(ColumnConstants.PLEDGES_PROGRAMS)
+                .add(ColumnConstants.PLEDGES_PROGRAMS_LEVEL_0)
+                .add(ColumnConstants.PLEDGES_PROGRAMS_LEVEL_1)
                 .add(ColumnConstants.PLEDGES_PROGRAMS_LEVEL_2)
                 .add(ColumnConstants.PLEDGES_PROGRAMS_LEVEL_3)
             .build();
     
     private static final List<String> PLEDGES_SECONDARY_PROGRAMS_COLUMNS = 
             new ImmutableList.Builder<String>()
-                .add(ColumnConstants.PLEDGES_SECONDARY_PROGRAMS)
+                .add(ColumnConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_0)
+                .add(ColumnConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_1)
                 .add(ColumnConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_2)
                 .add(ColumnConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_3)
             .build();
     
     private static final List<String> PLEDGES_TERTIARY_PROGRAMS_COLUMNS = 
             new ImmutableList.Builder<String>()
-                .add(ColumnConstants.PLEDGES_TERTIARY_PROGRAMS)
+                .add(ColumnConstants.PLEDGES_TERTIARY_PROGRAMS_LEVEL_0)
+                .add(ColumnConstants.PLEDGES_TERTIARY_PROGRAMS_LEVEL_1)
                 .add(ColumnConstants.PLEDGES_TERTIARY_PROGRAMS_LEVEL_2)
                 .add(ColumnConstants.PLEDGES_TERTIARY_PROGRAMS_LEVEL_3)
             .build();

@@ -1,6 +1,5 @@
 package org.dgfoundation.amp.ar.legacy;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -12,28 +11,11 @@ import org.digijava.module.aim.form.helpers.ActivityFundingDigest;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Funding;
 import org.digijava.module.aim.helper.FundingOrganization;
+import org.junit.Test;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+public class ActivityPreviewTests extends ReportsTestCase {
 
-public class ActivityPreviewTests extends ReportsTestCase 
-{
-    public ActivityPreviewTests(String name)
-    {
-        super(name);
-    }
-    
-    public static Test suite()
-    {
-        TestSuite suite = new TestSuite(ActivityPreviewTests.class.getName());
-        suite.addTest(new ActivityPreviewTests("testPureMtef"));
-        suite.addTest(new ActivityPreviewTests("testPureFunding_fails_as_of_AMP_21160"));
-        suite.addTest(new ActivityPreviewTests("testMixedActivity_fails_as_of_AMP_21160"));
-
-        return suite;
-    }
-    
+    @Test
     public void testPureMtef()
     {
         AmpActivityVersion act = ReportTestingUtils.loadActivityByName("mtef activity 1");
@@ -51,7 +33,8 @@ public class ActivityPreviewTests extends ReportsTestCase
         assertEquals("789 123", funding.getSubtotalMTEFs());
         ////System.out.println(fo.getOrgName());
     }
-    
+
+    @Test
     public void testPureFunding_fails_as_of_AMP_21160()
     {
         AmpActivityVersion act = ReportTestingUtils.loadActivityByName("Eth Water");
@@ -74,6 +57,7 @@ public class ActivityPreviewTests extends ReportsTestCase
         
     }
 
+    @Test
     public void testMixedActivity_fails_as_of_AMP_21160()
     {
         AmpActivityVersion act = ReportTestingUtils.loadActivityByName("Test MTEF directed");

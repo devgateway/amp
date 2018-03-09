@@ -321,24 +321,7 @@ public class AmpLocationFormTableFeature extends
     public void locationSelected(AmpCategoryValueLocations choice, IModel<AmpActivityVersion> am, IModel<Boolean> disablePercentagesForInternational, boolean isCountryNational){
         AmpActivityLocation activityLocation = new AmpActivityLocation();
 
-        AmpLocation ampLoc = LocationUtil
-                .getAmpLocationByCVLocation(choice.getId());
-        if (ampLoc == null) {
-            ampLoc = new AmpLocation();
-
-            ampLoc.setDescription(new String(" "));
-            ampLoc.setLocation(choice);
-            if (choice != null) {
-                AmpCategoryValueLocations regionLocation = DynLocationManagerUtil
-                        .getAncestorByLayer(
-                                choice,
-                                CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
-                if (regionLocation != null) {
-                    ampLoc.setRegionLocation(regionLocation);
-                }
-            }
-            DbUtil.add(ampLoc);
-        }
+        AmpLocation ampLoc = DynLocationManagerUtil.getOrCreateAmpLocationByCVLId(choice.getId());
         activityLocation.setLocation(ampLoc);
         if (disablePercentagesForInternational.getObject()){
             AmpCategoryValueLocations defCountry = DynLocationManagerUtil.getDefaultCountry();

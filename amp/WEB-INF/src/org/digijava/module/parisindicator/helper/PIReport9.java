@@ -4,14 +4,13 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
 
-import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
-import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.dbentity.AmpCurrency;
@@ -23,9 +22,7 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyWorker;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -33,13 +30,8 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.parisindicator.helper.row.PIReport9Row;
 import org.digijava.module.parisindicator.helper.row.PIReportAbstractRow;
-import org.digijava.module.parisindicator.model.PIUseCase;
 import org.digijava.module.parisindicator.util.PIConstants;
 import org.digijava.module.parisindicator.util.PIUtils;
-import org.hibernate.Query;
-import org.hibernate.Session;
-
-import java.util.Collections;
 
 public class PIReport9 extends PIAbstractReport {
 
@@ -155,26 +147,9 @@ public class PIReport9 extends PIAbstractReport {
                                         .getTransactionAmount(), fromExchangeRate, toExchangeRate));
 
                                 // Setup row.
-                                if (showColumn[0]
-                                        && ArrayUtils
-                                                .contains(
-                                                        FeaturesUtil
-                                                                .getGlobalSettingsStringArray(GlobalSettingsConstants.BUDGET_SUPPORT_FOR_PI9),
-                                                        auxFunding.getFinancingInstrument().getId().toString())) {
-                                    auxRow.setColumn1(amount);
-                                } else {
-                                    auxRow.setColumn1(new BigDecimal(0));
-                                }
-                                if (showColumn[1]
-                                        && !ArrayUtils
-                                                .contains(
-                                                        FeaturesUtil
-                                                                .getGlobalSettingsStringArray(GlobalSettingsConstants.BUDGET_SUPPORT_FOR_PI9),
-                                                        auxFunding.getFinancingInstrument().getId().toString())) {
-                                    auxRow.setColumn2(amount);
-                                } else {
-                                    auxRow.setColumn2(new BigDecimal(0));
-                                }
+                                auxRow.setColumn1(new BigDecimal(0));
+                                auxRow.setColumn2(amount);
+                                
                                 // Note: this check is explained in
                                 // PIUtils.getSurveyAnswers();
                                 if (showColumn[2]) {

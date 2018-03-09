@@ -339,14 +339,16 @@ export default class Report5b extends Component {
                             </select>
                         </div>                        
                     </div>
-                    
                         <div className="container-fluid">
                         <div className="row">
                           <h4>{this.props.translations['amp.gpi-reports:indicator5b-description']}</h4>
                         </div>
                       </div>
-                          <div className="section-divider"></div>
-                        { this.props.mainReport.empty == false  &&
+                      <div className="section-divider"></div>
+                      { this.props.mainReport.empty &&
+                          <div className="text-center">{this.props.translations['amp-gpi-reports:no-data']}</div> 
+                      }  
+                      { this.props.mainReport.empty == false  &&
                             <table className="table table-bordered table-striped indicator-table">
                             <thead>
                             <tr>

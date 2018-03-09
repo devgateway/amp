@@ -4,9 +4,10 @@
  */
 package org.dgfoundation.amp.onepager.components.features.items;
 
+import java.util.Map;
 import java.util.TreeSet;
 
-
+import com.google.common.collect.ImmutableMap;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -16,6 +17,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.dgfoundation.amp.onepager.OnePagerMessages;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpOrgRoleSelectorComponent;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
@@ -29,7 +31,6 @@ import org.dgfoundation.amp.onepager.components.features.subsections.AmpDonorDis
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpDonorExpendituresSubsectionFeature;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpDonorFundingInfoSubsectionFeature;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpEstimatedDonorDisbursementsSubsectionFeature;
-import org.dgfoundation.amp.onepager.components.features.subsections.AmpLoanDetailsSubsectionFeature;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpMTEFProjectionSubsectionFeature;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpReleaseOfFundsSubsectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
@@ -41,6 +42,7 @@ import org.dgfoundation.amp.onepager.events.FundingSectionSummaryEvent;
 import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.translation.TrnLabel;
+import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.dgfoundation.amp.onepager.util.AttributePrepender;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
@@ -61,6 +63,17 @@ import org.digijava.module.aim.util.FeaturesUtil;
  */
 public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
     private static final long serialVersionUID = 1L;
+
+    public static final Map<Integer, String> FM_NAME_BY_TRANSACTION_TYPE = new ImmutableMap.Builder<Integer, String>()
+            .put(Constants.COMMITMENT, "Commitments")
+            .put(Constants.DISBURSEMENT, "Disbursements")
+            .put(Constants.ARREARS, "Arrears")
+            .put(Constants.DISBURSEMENT_ORDER, "Disbursement Orders")
+            .put(Constants.ESTIMATED_DONOR_DISBURSEMENT, "Estimated Disbursements")
+            .put(Constants.RELEASE_OF_FUNDS, "Release of Funds")
+            .put(Constants.EXPENDITURE, "Expenditures")
+            .put(Constants.MTEFPROJECTION, "MTEF Projections")
+            .build();
 
     private AmpDonorFundingInfoSubsectionFeature fundingInfo;
     private AmpDonorDisbursementsSubsectionFeature disbursements;
@@ -125,12 +138,22 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 
             @Override
             protected void onClick(AjaxRequestTarget target) {
+                AmpActivityVersion activity = am.getObject();
                 AmpOrganisation org = fundingModel.getObject().getAmpDonorOrgId();
                 AmpRole role = fundingModel.getObject().getSourceRole();
+                if (getItem().getParent().size() == 1) {
+                    boolean hasComponentFundings = ActivityUtil.hasOrgComponentFundingsInActivity(activity, org);
+                    if (hasComponentFundings) {
+                        String message = TranslatorUtil.getTranslation(OnePagerMessages.HAS_COMP_FUNDINGS_ALERT_MSG);
+                        target.appendJavaScript(OnePagerUtil.createJSAlert(message));
+                        return;
+                    }
+                }
+                
                 super.onClick(target);
                 parent.updateFundingGroups(parent.findAmpOrgRole(org, role), target);
                 target.add(parent);
-                if(isTabView){
+                if (isTabView) {
                     target.appendJavaScript("switchTabs();");
                 }
                 target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent));
@@ -275,40 +298,40 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
         wmc.add(fundingInfo);
         
         AmpMTEFProjectionSubsectionFeature mtefProjections = new AmpMTEFProjectionSubsectionFeature(
-                "mtefProjectionsSubsection", fundingModel,"MTEF Projections");
+                "mtefProjectionsSubsection", fundingModel);
         wmc.add(mtefProjections);
         
         AmpDonorCommitmentsSubsectionFeature commitments = new AmpDonorCommitmentsSubsectionFeature(
-                "commitments", fundingModel,"Commitments",Constants.COMMITMENT);
+                "commitments", fundingModel, Constants.COMMITMENT);
         wmc.add(commitments);
         
         
         disbursements = new AmpDonorDisbursementsSubsectionFeature(
-                "disbursements", fundingModel,"Disbursements",Constants.DISBURSEMENT);
+                "disbursements", fundingModel, Constants.DISBURSEMENT);
         wmc.add(disbursements);
 
         AmpDonorArrearsSubsectionFeature arrears = new AmpDonorArrearsSubsectionFeature(
-                "arrears", fundingModel,"Arrears",Constants.ARREARS);
+                "arrears", fundingModel, Constants.ARREARS);
         wmc.add(arrears);
         
         
         
         AmpDonorDisbOrdersSubsectionFeature disbOrders = new AmpDonorDisbOrdersSubsectionFeature(
-                "disbOrders", fundingModel,"Disbursement Orders",Constants.DISBURSEMENT_ORDER);
+                "disbOrders", fundingModel, Constants.DISBURSEMENT_ORDER);
         disbOrders.setDisbursements(disbursements);
         wmc.add(disbOrders);
         
         AmpEstimatedDonorDisbursementsSubsectionFeature edd = new AmpEstimatedDonorDisbursementsSubsectionFeature(
-                    "estimatedDisbursements", fundingModel,"Estimated Disbursements",Constants.ESTIMATED_DONOR_DISBURSEMENT);
+                    "estimatedDisbursements", fundingModel, Constants.ESTIMATED_DONOR_DISBURSEMENT);
             wmc.add(edd);
         
         AmpReleaseOfFundsSubsectionFeature rof = new AmpReleaseOfFundsSubsectionFeature(
-                    "releaseOfFunds", fundingModel,"Release of Funds",Constants.RELEASE_OF_FUNDS);
+                    "releaseOfFunds", fundingModel, Constants.RELEASE_OF_FUNDS);
             wmc.add(rof);
         
             
         AmpDonorExpendituresSubsectionFeature expenditures = new AmpDonorExpendituresSubsectionFeature(
-                "expenditures", fundingModel,"Expenditures",Constants.EXPENDITURE);
+                "expenditures", fundingModel, Constants.EXPENDITURE);
         wmc.add(expenditures);
 
         

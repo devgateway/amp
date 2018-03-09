@@ -27,8 +27,6 @@ import org.digijava.module.aim.util.TeamUtil;
  */
 public final class WorkspaceFilterListManager implements FilterListManager {
     
-    private static final String NAME_PROPERTY = "Name";
-    private static final String ITEMS_NAME = "values";
     private static final String PRIVATE_WS_CONDITION = "WHERE (isolated is false) OR (isolated is null)";
     private static final String PARENT_WS_CONDITION = "WHERE parent_team_id = ";
     private static WorkspaceFilterListManager workspaceFilterListManager;

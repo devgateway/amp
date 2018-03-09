@@ -16,10 +16,9 @@ import org.digijava.kernel.ampapi.endpoints.filters.WorkspaceFilterListManager;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
 import org.digijava.kernel.ampapi.endpoints.util.FilterComponentType;
+import org.digijava.kernel.ampapi.endpoints.util.FilterDataType;
 import org.digijava.kernel.ampapi.endpoints.util.FilterDefinition;
 import org.digijava.kernel.ampapi.endpoints.util.FilterFieldType;
-import org.digijava.kernel.ampapi.endpoints.util.FilterType;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
 
 /**
@@ -30,9 +29,6 @@ import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
  */
 @Path("nifilters")
 public class NiFiltersEndpoint {
-
-    private static final int DATE_START_YEAR = 1985;
-    private static final int DATE_END_YEAR = 2025;
 
     public NiFiltersEndpoint() { }
 
@@ -178,7 +174,7 @@ public class NiFiltersEndpoint {
     @GET
     @Path("/organizations")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, id = "organizations", name = "Organizations")
+    @ApiMethod(id = "organizations", name = "Organizations")
     @FilterDefinition(tab = EPConstants.TAB_ORGANIZATIONS)
     public FilterList getOrganizations() {
         return FiltersManager.getInstance().getOrganizationFilterList();
@@ -194,7 +190,7 @@ public class NiFiltersEndpoint {
     @GET
     @Path("/programs")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, id = "programs", name = "Programs")
+    @ApiMethod(id = "programs", name = "Programs")
     @FilterDefinition(tab = EPConstants.TAB_PROGRAMS)
     public FilterList getPrograms() {
         return FiltersManager.getInstance().getProgramFilterList();
@@ -210,7 +206,7 @@ public class NiFiltersEndpoint {
     @GET
     @Path("/sectors")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, id = "sectors", name = "Sectors")
+    @ApiMethod(id = "sectors", name = "Sectors")
     @FilterDefinition(tab = EPConstants.TAB_SECTORS)
     public FilterList getSectors() {
         return FiltersManager.getInstance().getSectorFilterList();
@@ -226,7 +222,7 @@ public class NiFiltersEndpoint {
     @GET
     @Path("/locations")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, id = "locations", name = "Locations")
+    @ApiMethod(id = "locations", name = "Locations")
     @FilterDefinition(tab = EPConstants.TAB_LOCATIONS)
     public FilterList getLocations() {
         return FiltersManager.getInstance().getLocationFilterList();
@@ -240,7 +236,7 @@ public class NiFiltersEndpoint {
     @GET
     @Path("/activityApprovalStatus")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, id = FiltersConstants.APPROVAL_STATUS, name = ColumnConstants.APPROVAL_STATUS)
+    @ApiMethod(id = FiltersConstants.APPROVAL_STATUS, name = ColumnConstants.APPROVAL_STATUS)
     @FilterDefinition(tab = EPConstants.TAB_ACTIVITY, columns = ColumnConstants.APPROVAL_STATUS, 
                         visibilityCheck = "hasToShowActivityapprovalStatusFilter")
     public FilterList getActivityApprovalStatus() {
@@ -255,7 +251,7 @@ public class NiFiltersEndpoint {
     @GET
     @Path("/typeOfAssistance/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, id = FiltersConstants.TYPE_OF_ASSISTANCE, name = ColumnConstants.TYPE_OF_ASSISTANCE)
+    @ApiMethod(id = FiltersConstants.TYPE_OF_ASSISTANCE, name = ColumnConstants.TYPE_OF_ASSISTANCE)
     @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.TYPE_OF_ASSISTANCE)
     public FilterList getTypeOfAssistance() {
         return FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.TYPE_OF_ASSISTANCE);
@@ -269,7 +265,7 @@ public class NiFiltersEndpoint {
     @GET
     @Path("/modeOfPayment/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, id = FiltersConstants.MODE_OF_PAYMENT, name = ColumnConstants.MODE_OF_PAYMENT)
+    @ApiMethod(id = FiltersConstants.MODE_OF_PAYMENT, name = ColumnConstants.MODE_OF_PAYMENT)
     @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.MODE_OF_PAYMENT)
     public FilterList getModeOfPayment() {
         return FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.MODE_OF_PAYMENT);
@@ -283,7 +279,7 @@ public class NiFiltersEndpoint {
     @GET
     @Path("/activityStatus/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, id = FiltersConstants.STATUS, name = "Activity Status")
+    @ApiMethod(id = FiltersConstants.STATUS, name = "Activity Status")
     @FilterDefinition(tab = EPConstants.TAB_ACTIVITY, columns = ColumnConstants.STATUS)
     public FilterList getActivityStatus() {
         return FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.STATUS);
@@ -297,7 +293,7 @@ public class NiFiltersEndpoint {
     @GET
     @Path("/activityBudget/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, id = FiltersConstants.ON_OFF_TREASURY_BUDGET, name = "Activity Budget")
+    @ApiMethod(id = FiltersConstants.ON_OFF_TREASURY_BUDGET, name = "Activity Budget")
     @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.ON_OFF_TREASURY_BUDGET)
     public FilterList getActivityBudget() {
         return FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.ON_OFF_TREASURY_BUDGET);
@@ -311,7 +307,7 @@ public class NiFiltersEndpoint {
     @GET
     @Path("/fundingStatus/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, id = FiltersConstants.FUNDING_STATUS)
+    @ApiMethod(id = FiltersConstants.FUNDING_STATUS)
     @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.FUNDING_STATUS)
     public FilterList getFundingStatus() {
         return FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.FUNDING_STATUS);
@@ -325,7 +321,7 @@ public class NiFiltersEndpoint {
     @GET
     @Path("/expenditureClass/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, id = FiltersConstants.EXPENDITURE_CLASS, name = ColumnConstants.EXPENDITURE_CLASS)
+    @ApiMethod(id = FiltersConstants.EXPENDITURE_CLASS, name = ColumnConstants.EXPENDITURE_CLASS)
     @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.EXPENDITURE_CLASS)
     public FilterList getExpenditureClass() {
         return FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.EXPENDITURE_CLASS);
@@ -339,7 +335,7 @@ public class NiFiltersEndpoint {
     @GET
     @Path("/concessionalityLevel/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, id = FiltersConstants.CONCESSIONALITY_LEVEL, name = ColumnConstants.CONCESSIONALITY_LEVEL)
+    @ApiMethod(id = FiltersConstants.CONCESSIONALITY_LEVEL, name = ColumnConstants.CONCESSIONALITY_LEVEL)
     @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.CONCESSIONALITY_LEVEL)
     public FilterList getConcessionalityLevel() {
         return FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.CONCESSIONALITY_LEVEL);
@@ -353,7 +349,7 @@ public class NiFiltersEndpoint {
     @GET
     @Path("/performanceAlertLevel")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, id = FiltersConstants.PERFORMANCE_ALERT_LEVEL,
+    @ApiMethod(id = FiltersConstants.PERFORMANCE_ALERT_LEVEL,
             columns = ColumnConstants.PERFORMANCE_ALERT_LEVEL, name = ColumnConstants.PERFORMANCE_ALERT_LEVEL)
     @FilterDefinition(tab = EPConstants.TAB_ACTIVITY, columns = ColumnConstants.PERFORMANCE_ALERT_LEVEL)
     public FilterList getPerformanceAlertLevel() {
@@ -368,7 +364,7 @@ public class NiFiltersEndpoint {
     @GET
     @Path("/financingInstruments/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, id = FiltersConstants.FINANCING_INSTRUMENT, name = ColumnConstants.FINANCING_INSTRUMENT)
+    @ApiMethod(id = FiltersConstants.FINANCING_INSTRUMENT, name = ColumnConstants.FINANCING_INSTRUMENT)
     @FilterDefinition(tab = EPConstants.TAB_ACTIVITY, columns = ColumnConstants.FINANCING_INSTRUMENT)
     public FilterList getFinancingInstruments() {
         return FiltersManager.getInstance().getCategoryValueFilter(FiltersConstants.FINANCING_INSTRUMENT);
@@ -382,7 +378,7 @@ public class NiFiltersEndpoint {
     @GET
     @Path("/humanitarianAid/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, id = FiltersConstants.HUMANITARIAN_AID, name = ColumnConstants.HUMANITARIAN_AID)
+    @ApiMethod(id = FiltersConstants.HUMANITARIAN_AID, name = ColumnConstants.HUMANITARIAN_AID)
     @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.HUMANITARIAN_AID)
     public FilterList getHumanitarianAid() {
         return FiltersManager.getInstance().getBooleanFilter(FiltersConstants.HUMANITARIAN_AID);
@@ -396,7 +392,7 @@ public class NiFiltersEndpoint {
     @GET
     @Path("/disasterResponse/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, id = FiltersConstants.DISASTER_RESPONSE_MARKER, 
+    @ApiMethod(id = FiltersConstants.DISASTER_RESPONSE_MARKER, 
                     name = ColumnConstants.DISASTER_RESPONSE_MARKER)
     @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.DISASTER_RESPONSE_MARKER)
     public FilterList getDisasterResponse() {
@@ -411,7 +407,7 @@ public class NiFiltersEndpoint {
     @GET
     @Path("/workspaces")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, id = FiltersConstants.TEAM, name = "Workspaces")
+    @ApiMethod(id = FiltersConstants.TEAM, name = "Workspaces")
     @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.TEAM, 
                         visibilityCheck = "hasToShowWorkspaceFilter")
     public FilterList getWorkspaces() {
@@ -424,128 +420,238 @@ public class NiFiltersEndpoint {
      * @return filter definition and values of 'computed-year' filter.
      */
     @GET
-    @Path("/computed-year")
+    @Path("/computedYear")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, id = FiltersConstants.COMPUTED_YEAR, name = ColumnConstants.COMPUTED_YEAR)
+    @ApiMethod(id = FiltersConstants.COMPUTED_YEAR, name = ColumnConstants.COMPUTED_YEAR)
     @FilterDefinition(tab = EPConstants.TAB_OTHER,  columns = ColumnConstants.COMPUTED_YEAR,
-                      fieldType = FilterFieldType.OPTIONS, multiple = false,
-                      componentType = {FilterComponentType.REPORTS, FilterComponentType.TAB})
+                         fieldType = FilterFieldType.OPTIONS, multiple = false,
+                         componentType = {FilterComponentType.REPORTS, FilterComponentType.TAB})
     public FilterList getComputedYear() {
         return FiltersManager.getInstance().getComputedYearFilter();
     }
 
+    /**
+     * List the values of startYear and endYear of 'Date' filter.
+     * 
+     * The startYear and endYear values are taken from the items.values object.
+     * 
+     * </br>
+     * <h3>Sample Output:</h3><pre>
+     * "listDefinitions" : 
+     *  [
+     *    {
+     *     "name": "Date",
+     *     "displayName": "Date",
+     *     "filterIds": ["date"],
+     *     "items": "values",
+     *     "filtered": true
+     *    }
+     *  ], 
+     * "items" : {
+     *   "values": [
+     *      {
+     *         "id" : 1985,
+     *         "name" : "startYear",
+     *         "value" : "1985"
+     *      },
+     *      {
+     *         "id" : 2025,
+     *         "name" : "endYear",
+     *         "value" : "2025"
+     *      }
+     *   ]
+     *  }
+     * </pre>
+     * 
+     * @return filter definition and year values (star and end) of 'date' filter.
+     */
     @GET
     @Path("/date/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, name = "Date", id = "date", tab = EPConstants.TAB_OTHER)
-    public JsonBean getDates() {
-        JsonBean date = new JsonBean();
-        date.set("startYear", DATE_START_YEAR);
-        date.set("endYear", DATE_END_YEAR);
-        return date;
+    @ApiMethod(id = "date", name = "Date")
+    @FilterDefinition(tab = EPConstants.TAB_OTHER, dataType = FilterDataType.DATE)
+    public FilterList getDates() {
+        return FiltersManager.getInstance().getDateFilter();
     }
     
+    /**
+     * Generic endpoint for 'Proposed Start Date' filter.
+     * 
+     * Since the date filters doesn't have possible values, this endpoint return an empty list.
+     * 
+     * @return empty list
+     */
     @GET
     @Path("/proposedStartDate/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, name = ColumnConstants.PROPOSED_START_DATE, columns = ColumnConstants.PROPOSED_START_DATE,
-            id = FiltersConstants.PROPOSED_START_DATE, filterType = {
-            FilterType.REPORTS, FilterType.TAB }, tab = EPConstants.TAB_OTHER)
-    public JsonBean getProposedStartDate() {
-        return new JsonBean();
+    @ApiMethod(id = FiltersConstants.PROPOSED_START_DATE, name = ColumnConstants.PROPOSED_START_DATE)
+    @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.PROPOSED_START_DATE,
+                        fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE, 
+                        componentType = {FilterComponentType.REPORTS, FilterComponentType.TAB})
+    public FilterList getProposedStartDate() {
+        return new FilterList();
     }
     
+    /**
+     * Generic endpoint for 'Actual Start Date' filter.
+     * 
+     * Since the date filters doesn't have possible values, this endpoint return an empty list.
+     * 
+     * @return empty list
+     */
     @GET
     @Path("/actualStartDate/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, name = ColumnConstants.ACTUAL_START_DATE, columns = ColumnConstants.ACTUAL_START_DATE,
-            id = FiltersConstants.ACTUAL_START_DATE, filterType = {
-            FilterType.REPORTS, FilterType.TAB }, tab = EPConstants.TAB_OTHER)
-    public JsonBean getActualStartDate() {
-        return new JsonBean();
+    @ApiMethod(id = FiltersConstants.ACTUAL_START_DATE, name = ColumnConstants.ACTUAL_START_DATE)
+    @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.ACTUAL_START_DATE,
+                        fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE,
+                        componentType = {FilterComponentType.REPORTS, FilterComponentType.TAB})
+    public FilterList getActualStartDate() {
+        return new FilterList();
     }
     
+    /**
+     * Generic endpoint for 'Actual Approval Date' filter.
+     * 
+     * Since the date filters doesn't have possible values, this endpoint return an empty list.
+     * 
+     * @return empty list
+     */
     @GET
     @Path("/actualApprovalDate/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, name = ColumnConstants.ACTUAL_APPROVAL_DATE, columns = ColumnConstants.ACTUAL_APPROVAL_DATE,
-            id = FiltersConstants.ACTUAL_APPROVAL_DATE, filterType = {
-            FilterType.REPORTS, FilterType.TAB, FilterType.GPI_REPORTS }, tab = EPConstants.TAB_OTHER)
-    public JsonBean getActualApprovalDate() {
-        return new JsonBean();
+    @ApiMethod(id = FiltersConstants.ACTUAL_APPROVAL_DATE, name = ColumnConstants.ACTUAL_APPROVAL_DATE)
+    @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.ACTUAL_APPROVAL_DATE,
+                        fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE,
+                        componentType = {FilterComponentType.REPORTS, FilterComponentType.TAB})
+    public FilterList getActualApprovalDate() {
+        return new FilterList();
     }
     
+    /**
+     * Generic endpoint for 'Actual Completion Date' filter.
+     * 
+     * Since the date filters doesn't have possible values, this endpoint return an empty list.
+     * 
+     * @return empty list
+     */
     @GET
     @Path("/actualCompletionDate/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, name = ColumnConstants.ACTUAL_COMPLETION_DATE, 
-            columns = ColumnConstants.ACTUAL_COMPLETION_DATE,
-            id = FiltersConstants.ACTUAL_COMPLETION_DATE, filterType = {
-            FilterType.REPORTS, FilterType.TAB }, tab = EPConstants.TAB_OTHER)
-    public JsonBean getActualCompletionDate() {
-        return new JsonBean();
+    @ApiMethod(id = FiltersConstants.ACTUAL_COMPLETION_DATE, name = ColumnConstants.ACTUAL_COMPLETION_DATE)
+    @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.ACTUAL_COMPLETION_DATE,
+                        fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE,
+                        componentType = {FilterComponentType.REPORTS, FilterComponentType.TAB})
+    public FilterList getActualCompletionDate() {
+        return new FilterList();
     }
     
+    /**
+     * Generic endpoint for 'Effective Funding Date' filter.
+     * 
+     * Since the date filters doesn't have possible values, this endpoint return an empty list.
+     * 
+     * @return empty list
+     */
     @GET
     @Path("/effectiveFundingDate/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, name = ColumnConstants.EFFECTIVE_FUNDING_DATE, 
-            columns = ColumnConstants.EFFECTIVE_FUNDING_DATE,
-            id = FiltersConstants.EFFECTIVE_FUNDING_DATE, tab = EPConstants.TAB_FINANCIALS)
-    public JsonBean getEffectiveFundingDate() {
-        return new JsonBean();
+    @ApiMethod(id = FiltersConstants.EFFECTIVE_FUNDING_DATE, name = ColumnConstants.EFFECTIVE_FUNDING_DATE)
+    @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.EFFECTIVE_FUNDING_DATE,
+                        fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE,
+                        componentType = {FilterComponentType.REPORTS, FilterComponentType.TAB})
+    public FilterList getEffectiveFundingDate() {
+        return new FilterList();
     }
     
+    /**
+     * Generic endpoint for 'Final Date for Contracting' filter.
+     * 
+     * Since the date filters doesn't have possible values, this endpoint return an empty list.
+     * 
+     * @return empty list
+     */
     @GET
     @Path("/finalDateContracting/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, name = ColumnConstants.FINAL_DATE_FOR_CONTRACTING, 
-            columns = ColumnConstants.FINAL_DATE_FOR_CONTRACTING,
-            id = FiltersConstants.FINAL_DATE_FOR_CONTRACTING, filterType = {
-            FilterType.REPORTS, FilterType.TAB }, tab = EPConstants.TAB_OTHER)
-    public JsonBean getDateForContracting() {
-        return new JsonBean();
+    @ApiMethod(id = FiltersConstants.FINAL_DATE_FOR_CONTRACTING, name = ColumnConstants.FINAL_DATE_FOR_CONTRACTING)
+    @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.FINAL_DATE_FOR_CONTRACTING,
+                        fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE,
+                        componentType = {FilterComponentType.REPORTS, FilterComponentType.TAB})
+    public FilterList getFinalDateForContracting() {
+        return new FilterList();
     }
 
+    /**
+     * Generic endpoint for 'Funding Closing Date' filter.
+     * 
+     * Since the date filters doesn't have possible values, this endpoint return an empty list.
+     * 
+     * @return empty list
+     */
     @GET
     @Path("/fundingClosingDate/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, name = ColumnConstants.FUNDING_CLOSING_DATE, columns = ColumnConstants.FUNDING_CLOSING_DATE,
-            id = FiltersConstants.FUNDING_CLOSING_DATE, tab = EPConstants.TAB_FINANCIALS)
-    public JsonBean getFundingClosingDate() {
-        return new JsonBean();
+    @ApiMethod(id = FiltersConstants.FUNDING_CLOSING_DATE, name = ColumnConstants.FUNDING_CLOSING_DATE)
+    @FilterDefinition(tab = EPConstants.TAB_FINANCIALS, columns = ColumnConstants.FUNDING_CLOSING_DATE,
+                        fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE,
+                        componentType = {FilterComponentType.REPORTS, FilterComponentType.TAB})
+    public FilterList getFundingClosingDate() {
+        return new FilterList();
     }
 
+    /**
+     * Generic endpoint for 'Issue Date' filter.
+     * 
+     * Since the date filters doesn't have possible values, this endpoint return an empty list.
+     * 
+     * @return empty list
+     */
     @GET
     @Path("/issueDate/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, name = ColumnConstants.ISSUE_DATE, columns = ColumnConstants.ISSUE_DATE,
-            id = FiltersConstants.ISSUE_DATE, filterType = {
-            FilterType.REPORTS, FilterType.TAB }, tab = EPConstants.TAB_OTHER)
-    public JsonBean getIssueDate() {
-        return new JsonBean();
+    @ApiMethod(id = FiltersConstants.ISSUE_DATE, name = ColumnConstants.ISSUE_DATE)
+    @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.ISSUE_DATE,
+                        fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE,
+                        componentType = {FilterComponentType.REPORTS, FilterComponentType.TAB})
+    public FilterList getIssueDate() {
+        return new FilterList();
     }
     
+    /**
+     * Generic endpoint for 'Proposed Approval Date' filter.
+     * 
+     * Since the date filters doesn't have possible values, this endpoint return an empty list.
+     * 
+     * @return empty list
+     */
     @GET
     @Path("/proposedApprovalDate/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, name = ColumnConstants.PROPOSED_APPROVAL_DATE, 
-            columns = ColumnConstants.PROPOSED_APPROVAL_DATE,
-            id = FiltersConstants.PROPOSED_APPROVAL_DATE, filterType = {
-            FilterType.REPORTS, FilterType.TAB }, tab = EPConstants.TAB_OTHER)
-    public JsonBean getProposedApprovalDate() {
-        return new JsonBean();
+    @ApiMethod(id = FiltersConstants.PROPOSED_APPROVAL_DATE, name = ColumnConstants.PROPOSED_APPROVAL_DATE)
+    @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.PROPOSED_APPROVAL_DATE,
+                        fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE,
+                        componentType = {FilterComponentType.REPORTS, FilterComponentType.TAB})
+    public FilterList getProposedApprovalDate() {
+        return new FilterList();
     }  
     
+    /**
+     * Generic endpoint for 'Proposed Compledtion Date' filter.
+     * 
+     * Since the date filters doesn't have possible values, this endpoint return an empty list.
+     * 
+     * @return empty list
+     */
     @GET
     @Path("/proposedCompletionDate/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, name = ColumnConstants.PROPOSED_COMPLETION_DATE, 
-            columns = ColumnConstants.PROPOSED_COMPLETION_DATE,
-            id = FiltersConstants.PROPOSED_COMPLETION_DATE, filterType = {
-            FilterType.REPORTS, FilterType.TAB }, tab = EPConstants.TAB_OTHER)
-    public JsonBean getProposedCompletionDate() {
-        return new JsonBean();
+    @ApiMethod(id = FiltersConstants.PROPOSED_COMPLETION_DATE, name = ColumnConstants.PROPOSED_COMPLETION_DATE)
+    @FilterDefinition(tab = EPConstants.TAB_OTHER, columns = ColumnConstants.PROPOSED_COMPLETION_DATE,
+                        fieldType = FilterFieldType.DATE_RANGE, dataType = FilterDataType.DATE,
+                        componentType = {FilterComponentType.REPORTS, FilterComponentType.TAB})
+    public FilterList getProposedCompletionDate() {
+        return new FilterList();
     }
     
     /**
@@ -556,7 +662,8 @@ public class NiFiltersEndpoint {
     @GET
     @Path("/boundaries")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = false, id = "Boundaries", tab = EPConstants.TAB_LOCATIONS)
+    @ApiMethod(id = "boundaries", name = "Boundaries")
+    @FilterDefinition(ui = false, tab = EPConstants.TAB_LOCATIONS)
     public List<String> getBoundaries() {
         return QueryUtil.getImplementationLocationsInUse();
     }

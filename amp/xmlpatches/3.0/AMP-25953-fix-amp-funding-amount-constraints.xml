@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+    <jira>AMP-25953</jira>
+    <keyword>Adjust unique constraint for amp_funding_amount to allow hibernate to persist activities without violating the constraint.</keyword>
+    <author>ociubotaru</author>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres"><![CDATA[
+                ALTER TABLE amp_funding_amount DROP CONSTRAINT activitytype;
+                ALTER TABLE amp_funding_amount ADD CONSTRAINT activitytype UNIQUE (amp_activity_id, type) DEFERRABLE INITIALLY DEFERRED;
+            ]]></lang>
+        </script>
+    </apply>
+</tns:patch>

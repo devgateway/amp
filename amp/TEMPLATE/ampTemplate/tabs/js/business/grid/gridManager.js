@@ -17,6 +17,15 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 		}
 	}
 
+	function getDirection() {
+        var rtlDirection = app.TabsApp.generalSettings.get('rtl-direction');
+        var direction = 'ltr';
+        if (rtlDirection) {
+            direction = 'rtl';
+        }
+        return direction;
+	}
+
 	function getURL(id) {
 		return '/rest/data/report/' + id + '/result/jqGrid';
 	}
@@ -98,6 +107,7 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 			var na = TranslationManager.getTranslated('N/A');
 			jQuery(grid).jqGrid(
 					{
+                        direction: getDirection(),
 						caption : false,
 						/* url : '/rest/data/report/' + id + '/result/', */
 						url : getURL(id),
@@ -145,6 +155,10 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 						forceFit : false,
 						viewrecords : true,
 						loadtext : "<span data-i18n='tabs.common:loading'>Loading...</span>",
+                        recordtext: "<div class='tabs-grid-pager-info'><span data-i18n='tabs.common:view'>View</span></div> {0} - {1}" +
+						" <div class='tabs-grid-pager-info'><span data-i18n='tabs.common:of'>of</span></div> {2}",
+                        pgtext : "<div class='tabs-grid-pager-info'><span" +
+						" data-i18n='tabs.common:page'>Page</span></div> {0} <div class='tabs-grid-pager-info'><span data-i18n='tabs.common:of'>of</span></div> {1}",
 						headertitles : true,
 						gridview : true,
 						rownumbers : false,
@@ -376,7 +390,7 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 							// (not natively supported by jqgrid).
 							jQuery("#grand_total_row_" + id).empty();
 							jQuery("#grand_total_row_" + id).remove();
-							var pageFooterRow = jQuery("#main-dynamic-content-region_" + id + " .ui-jqgrid-ftable .footrow-ltr");
+							var pageFooterRow = jQuery("#main-dynamic-content-region_" + id + " .ui-jqgrid-ftable .footrow-" + getDirection());
 							var grandTotalFooterRow = jQuery(pageFooterRow).clone();
 							jQuery(grandTotalFooterRow).find("[aria-describedby^='tab_grid_" + id + "']").text("").attr("title", "");
 							jQuery(grandTotalFooterRow).attr("id", "grand_total_row_" + id);
@@ -398,7 +412,7 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 								jQuery.each(groupRows, function(i, item) {
 									jQuery(item.firstChild).attr("colspan", numberOfColumns);
 									jQuery.each(tableStructure.measures.models, function(j, measure) {
-										var auxTD = jQuery(item.firstChild).clone().html("").attr("colspan", 0).css("text-align", "right");
+										var auxTD = jQuery(item.firstChild).clone().html("").attr("colspan", 1).css("text-align", "right");
 										var content = na;
 										if (partialTotals[i].contents[app.TabsApp.TOTAL_COLUMNS_NAME_SUFIX + "[" + measure.get('measureName') + "]"] !== undefined) {
 											// This check is needed for Funding Flow columns because their name is different than expected, ie: "[Totals][Real Disbursements][DN-IMPL]". 
@@ -497,7 +511,7 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 				var row = {
 					id : 0
 				};
-				// To match the changes on NiReports we iterate the headers, not obj.contents
+				// To match the changes on reports we iterate the headers, not obj.contents
 				jQuery.each(headers, function(i, column) {
 					var element = obj.contents[column.hierarchicalName];
 					if (element !== undefined) {

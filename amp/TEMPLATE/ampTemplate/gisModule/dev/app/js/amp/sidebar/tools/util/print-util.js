@@ -2,6 +2,16 @@ var $ = require('jquery');
 var _ = require('underscore');
 
 
+function addRtlStyle(location) {
+    var isRtl = app.data.generalSettings.get("rtl-direction");
+    if (isRtl) {
+        var styleLocation = location.replace("gisModule/dist/index.html", "css_2/amp-rtl.css");
+        var styleLink = '<link rel="stylesheet" href="' + styleLocation + '">';
+        return styleLink;
+    }
+    return '';
+}
+
 function printMap(options) {
     options = options || {};
     var mapContainer = $('#map-container').clone(true, true);
@@ -57,6 +67,7 @@ function printMap(options) {
     var styleBootstrapLocation = document.location.href.replace("gisModule/dist/index.html", "tabs/css/bootstrap.css");
     var styleBootstrapThemeLocation = document.location.href.replace("gisModule/dist/index.html", "tabs/css/bootstrap-theme.css");
     var fontBaseLocation = document.location.href.replace("index.html", "fonts");
+
     var fontFace = "@font-face {" +
                     " font-family: 'Open Sans';" +
                     " src: url('" + fontBaseLocation + "/open_sans_light/OpenSans-Light-webfont.eot');"+
@@ -75,6 +86,7 @@ function printMap(options) {
                   '<link rel="stylesheet" href="' + styleLocation + '">' +
                   '<link rel="stylesheet" href="' + styleBootstrapLocation + '">' +
                   '<link rel="stylesheet" href="' + styleTabsLocation + '">' +
+                  addRtlStyle(document.location.href) +
                   '<link rel="stylesheet" href="' + styleBootstrapThemeLocation + '">' +
                   '<style>' + fontFace + '</style>';
     var html = "<html><head>" + headers + "</head><body>" + mapContainer[0].outerHTML + "</body></html>";
@@ -100,5 +112,6 @@ function printMap(options) {
 }
 
 module.exports = {
-    printMap: printMap
+    printMap: printMap,
+    addRtlStyle: addRtlStyle
 };

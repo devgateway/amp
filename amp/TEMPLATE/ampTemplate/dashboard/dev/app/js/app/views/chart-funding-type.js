@@ -62,8 +62,8 @@ module.exports = ChartViewBase.extend({
     var totalForYear = this.model.get('yearTotals') ? this.model.get('yearTotals')[context.x.raw ] : null;
     var d3FormatTotal = '', totalSpan = '';
     if(totalForYear && totalForYear != 0){
-    	d3FormatTotal = d3.format('%')(context.y.raw / totalForYear);
-        totalSpan = '&nbsp<span>' + total + '</span>';
+    	d3FormatTotal = d3.format('f')(context.y.raw / totalForYear * 100) + ' %';
+        totalSpan = ' &nbsp<span>' + total + '</span>';
     }
     var self = this;
     var currencyName =  app.settingsWidget.definitions.findCurrencyById(self.model.get('currency')).value;  

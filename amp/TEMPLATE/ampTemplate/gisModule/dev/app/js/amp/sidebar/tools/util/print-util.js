@@ -12,6 +12,9 @@ function addRtlStyle(location) {
     return '';
 }
 
+// TODO this should be split into at least two method:
+// 1- html select and transform
+// 2- post of the html
 function printMap(options) {
     options = options || {};
     var mapContainer = $('#map-container').clone(true, true);
@@ -38,7 +41,7 @@ function printMap(options) {
             }
         });
     });
-    mapContainer.find(".table").css("font-size", "0.9em");
+    mapContainer.find(".table").css("font-size", "0.9em"); // this should change for fonts
     _.each(removedEl, function (el) {
         var elem = mapContainer.find(el);
         if(!elem.hasClass('expanded')) {
@@ -67,7 +70,7 @@ function printMap(options) {
     var styleBootstrapLocation = document.location.href.replace("gisModule/dist/index.html", "tabs/css/bootstrap.css");
     var styleBootstrapThemeLocation = document.location.href.replace("gisModule/dist/index.html", "tabs/css/bootstrap-theme.css");
     var fontBaseLocation = document.location.href.replace("index.html", "fonts");
-
+    // TODO remove this does not work the font wof file should be in the phantom installation path
     var fontFace = "@font-face {" +
                     " font-family: 'Open Sans';" +
                     " src: url('" + fontBaseLocation + "/open_sans_light/OpenSans-Light-webfont.eot');"+

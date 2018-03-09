@@ -23,45 +23,45 @@ import org.digijava.module.xmlpatcher.dbentity.AmpXmlPatch;
  */
 public class DiscoveryTimeXmlPatcherScheduler extends XmlPatcherScheduler {
 
-	/**
-	 * Comparator designed to query the discovered property of AmpXmlPatch
-	 * 
-	 * @see org.digijava.module.xmlpatcher.dbentity.AmpXmlPatch#getDiscovered()
-	 * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
-	 * 
-	 */
-	public static class DiscoveryTimeXmlPatchComparator implements
-			Comparator<AmpXmlPatch> {
-		@Override
-		public int compare(AmpXmlPatch arg0, AmpXmlPatch arg1) {
-			return arg0.getDiscovered().compareTo(arg1.getDiscovered());
-		}
+    /**
+     * Comparator designed to query the discovered property of AmpXmlPatch
+     * 
+     * @see org.digijava.module.xmlpatcher.dbentity.AmpXmlPatch#getDiscovered()
+     * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
+     * 
+     */
+    public static class DiscoveryTimeXmlPatchComparator implements
+            Comparator<AmpXmlPatch> {
+        @Override
+        public int compare(AmpXmlPatch arg0, AmpXmlPatch arg1) {
+            return arg0.getDiscovered().compareTo(arg1.getDiscovered());
+        }
 
-	}
+    }
 
-	/**
-	 * @see XmlPatcherScheduler#XmlPatcherScheduler(Map, Set)
-	 * @param properties
-	 * @param patches
-	 */
-	public DiscoveryTimeXmlPatcherScheduler(Map<String, Object> properties,
-			List<AmpXmlPatch> patches) {
-		super(properties, patches);
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * @see XmlPatcherScheduler#XmlPatcherScheduler(Map, Set)
+     * @param properties
+     * @param patches
+     */
+    public DiscoveryTimeXmlPatcherScheduler(Map<String, Object> properties,
+            List<AmpXmlPatch> patches) {
+        super(properties, patches);
+        // TODO Auto-generated constructor stub
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @seeorg.digijava.module.xmlpatcher.scheduler.XmlPatcherScheduler#
-	 * getScheduledPatchCollection()
-	 */
-	@Override
-	public Collection<AmpXmlPatch> getScheduledPatchCollection() {
-		Collection<AmpXmlPatch> ret = new TreeSet<AmpXmlPatch>(
-				new DiscoveryTimeXmlPatchComparator());
-		ret.addAll(patches);
-		return ret;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @seeorg.digijava.module.xmlpatcher.scheduler.XmlPatcherScheduler#
+     * getScheduledPatchCollection()
+     */
+    @Override
+    public Collection<AmpXmlPatch> getScheduledPatchCollection() {
+        Collection<AmpXmlPatch> ret = new TreeSet<AmpXmlPatch>(
+                new DiscoveryTimeXmlPatchComparator());
+        ret.addAll(patches);
+        return ret;
+    }
 
 }

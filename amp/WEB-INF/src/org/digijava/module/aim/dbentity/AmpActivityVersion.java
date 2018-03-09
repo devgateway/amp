@@ -15,33 +15,33 @@ import java.util.Date;
  */
 @TranslatableClass (displayName = "Activity Version")
 public class AmpActivityVersion extends AmpActivityFields implements Versionable{
-	
-	/**
-	 * 
-	 * NOTE:
-	 *    All new fields should be added in {@link AmpActivityFields}
-	 *    
-	 */
-	protected String rejectMessage;
-	
+    
+    /**
+     * 
+     * NOTE:
+     *    All new fields should be added in {@link AmpActivityFields}
+     *    
+     */
+    protected String rejectMessage;
+    
 
-	public AmpActivityVersion() {
-	}
+    public AmpActivityVersion() {
+    }
 
-	public AmpActivityVersion(Long ampActivityId, String name, Date updatedDate, AmpTeamMember modifiedBy, String ampid) {
-		this.ampActivityId=ampActivityId;
-		this.name=name;
-		//this.budget=budget;
-		this.updatedDate=updatedDate;
-		this.modifiedBy = modifiedBy;
-		this.ampId=ampid;
-	}
+    public AmpActivityVersion(Long ampActivityId, String name, Date updatedDate, AmpTeamMember modifiedBy, String ampid) {
+        this.ampActivityId=ampActivityId;
+        this.name=name;
+        //this.budget=budget;
+        this.updatedDate=updatedDate;
+        this.modifiedBy = modifiedBy;
+        this.ampId=ampid;
+    }
 
-	public AmpActivityVersion(Long ampActivityId, String name, String ampid) {
-		this.ampActivityId=ampActivityId;
-		this.name=name;
-		this.ampId=ampid;
-	}
+    public AmpActivityVersion(Long ampActivityId, String name, String ampid) {
+        this.ampActivityId=ampActivityId;
+        this.name=name;
+        this.ampId=ampid;
+    }
 
     /* Note, archived should be Boolean to support null values */
     public AmpActivityVersion(Long ampActivityId, String name, String ampid, Boolean archived) {
@@ -73,19 +73,19 @@ public class AmpActivityVersion extends AmpActivityFields implements Versionable
     
     public static String sqlStringForName(String idSource)
     {
-    	return InternationalizedModelDescription.getForProperty(AmpActivityVersion.class, "name").getSQLFunctionCall(idSource);
+        return InternationalizedModelDescription.getForProperty(AmpActivityVersion.class, "name").getSQLFunctionCall(idSource);
     }
 
     public static String hqlStringForName(String idSource)
     {
-    	return InternationalizedModelDescription.getForProperty(AmpActivityVersion.class, "name").getSQLFunctionCall(idSource + ".ampActivityId");
+        return InternationalizedModelDescription.getForProperty(AmpActivityVersion.class, "name").getSQLFunctionCall(idSource + ".ampActivityId");
     }
-	public String getRejectMessage() {
-		return rejectMessage;
-	}
+    public String getRejectMessage() {
+        return rejectMessage;
+    }
 
-	public void setRejectMessage(String rejectMessage) {
-		this.rejectMessage = rejectMessage;
-	}
+    public void setRejectMessage(String rejectMessage) {
+        this.rejectMessage = rejectMessage;
+    }
     
 }

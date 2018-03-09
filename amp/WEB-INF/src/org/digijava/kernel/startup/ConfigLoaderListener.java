@@ -83,7 +83,7 @@ public class ConfigLoaderListener
 
     extends HttpServlet implements ServletContextListener {
 
-	private static final long  MB = 1024L * 1024L;
+    private static final long  MB = 1024L * 1024L;
 
     private static Logger logger = Logger.getLogger(ConfigLoaderListener.class);
 
@@ -92,31 +92,31 @@ public class ConfigLoaderListener
     private static final String  DISABLE_MEM_PARAM=". To disable checking for development purposes, add -Damp.disableMemCheck=true to the VM arguments.";
     
     
-	private static String STARTUP_BEGIN_MESSAGE = "Attempting to start up AMP";
-	private static String STARTUP_COMPLETE_MESSAGE = "AMP startup apparently successful";
-	private static String STARTUP_FAILED_MESSAGE = "AMP startup failed; exception message: ";
-	private static String STARTUP_LOGGER = "AMP startup";
+    private static String STARTUP_BEGIN_MESSAGE = "Attempting to start up AMP";
+    private static String STARTUP_COMPLETE_MESSAGE = "AMP startup apparently successful";
+    private static String STARTUP_FAILED_MESSAGE = "AMP startup failed; exception message: ";
+    private static String STARTUP_LOGGER = "AMP startup";
     
     private static String MODULE_LISTENERS = ConfigLoaderListener.class.
         getName() + ".moduleContextListeners";
     private static ExecutorService exec ;
-	private static TrnAccesTimeSaver tats;
+    private static TrnAccesTimeSaver tats;
     
     public static int parseBugFixingVersion(String completeProductVersion, String versionPrefix) {
-    		int indexOf = completeProductVersion.indexOf(versionPrefix);
-    		String bugFixingVersionString="";
-    		for(int i=indexOf+versionPrefix.length()+1;i<completeProductVersion.length();i++) {
-    			char c=completeProductVersion.charAt(i);
-    			if(c<'0' || c>'9') break;
-    			bugFixingVersionString+=c;
-    		}
-    	if(bugFixingVersionString.length()==0) return 0;
-    	return Integer.parseInt(bugFixingVersionString);
+            int indexOf = completeProductVersion.indexOf(versionPrefix);
+            String bugFixingVersionString="";
+            for(int i=indexOf+versionPrefix.length()+1;i<completeProductVersion.length();i++) {
+                char c=completeProductVersion.charAt(i);
+                if(c<'0' || c>'9') break;
+                bugFixingVersionString+=c;
+            }
+        if(bugFixingVersionString.length()==0) return 0;
+        return Integer.parseInt(bugFixingVersionString);
     }
 
     public void contextInitialized(ServletContextEvent sce) {
         //ResourceStreamHandlerFactory.installIfNeeded();
-    	String path = sce.getServletContext().getRealPath("/") + Security.getSiteConfigPath();
+        String path = sce.getServletContext().getRealPath("/") + Security.getSiteConfigPath();
         try {
             String jaasConfPath = sce.getServletContext().getRealPath("/WEB-INF/jaas.config");
             if (jaasConfPath != null) {
@@ -169,31 +169,31 @@ public class ConfigLoaderListener
             
             // patches translations to hash code keys if this is not already done. 
             HashKeyPatch.patchTranslationsIfNecessary();
-			tats = new TrnAccesTimeSaver();
-			exec = Executors.newSingleThreadExecutor();
-			exec.execute(tats);
+            tats = new TrnAccesTimeSaver();
+            exec = Executors.newSingleThreadExecutor();
+            exec.execute(tats);
           
             PersistenceManager.getSession().getTransaction().commit();
         }
         catch (Exception ex) {
             logger.debug("Unable to initialize", ex);
-        	try {
-				BuildVersionVerifier.getInstance(path).writeVersionToStartupLog(STARTUP_LOGGER, STARTUP_FAILED_MESSAGE + ex.getMessage(), path);
-			} catch (Exception e) {
-				logger.error("Failed to write error message to startup log: " + e.getMessage());
-			}
+            try {
+                BuildVersionVerifier.getInstance(path).writeVersionToStartupLog(STARTUP_LOGGER, STARTUP_FAILED_MESSAGE + ex.getMessage(), path);
+            } catch (Exception e) {
+                logger.error("Failed to write error message to startup log: " + e.getMessage());
+            }
             throw new RuntimeException("Unable to initialize", ex);
         }
 
         try {
-			BuildVersionVerifier.getInstance(path).writeVersionToStartupLog(STARTUP_LOGGER, STARTUP_COMPLETE_MESSAGE, path);
-		} catch (Exception e) {
-			logger.error("Failed to write error message to startup log: " + e.getMessage());
-			e.printStackTrace();
-		}
+            BuildVersionVerifier.getInstance(path).writeVersionToStartupLog(STARTUP_LOGGER, STARTUP_COMPLETE_MESSAGE, path);
+        } catch (Exception e) {
+            logger.error("Failed to write error message to startup log: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
-	/**
+    /**
      * Uses Memory pool MXBeans to check if AMP has the right amount of memory allocated
      * @param propertiesFileName path to the compat.properties
      * @throws FileNotFoundException
@@ -202,15 +202,15 @@ public class ConfigLoaderListener
      * @throws IncompatibleEnvironmentException
      */
     private void checkMemoryAllocation(String propertiesFileName) throws FileNotFoundException, IOException, NumberFormatException, IncompatibleEnvironmentException {
-    	Properties compat=new Properties();
-		File compatFile=new File(propertiesFileName);
-		compat.load(new FileInputStream(compatFile));
-		boolean verify=true;
-		String disableMemCheck=System.getProperty("amp.disableMemCheck");
-		if(disableMemCheck!=null && "true".equalsIgnoreCase(disableMemCheck)) {
-			verify=false;
-			logger.warn("Memory Allocation Check Disabled! THIS SHOULD ONLY BE USED IN DEVELOPMENT ENVIRONMENTS !!");
-		}
+        Properties compat=new Properties();
+        File compatFile=new File(propertiesFileName);
+        compat.load(new FileInputStream(compatFile));
+        boolean verify=true;
+        String disableMemCheck=System.getProperty("amp.disableMemCheck");
+        if(disableMemCheck!=null && "true".equalsIgnoreCase(disableMemCheck)) {
+            verify=false;
+            logger.warn("Memory Allocation Check Disabled! THIS SHOULD ONLY BE USED IN DEVELOPMENT ENVIRONMENTS !!");
+        }
              
         Iterator iter = ManagementFactory.getMemoryPoolMXBeans().iterator();  
         while(iter.hasNext()){  
@@ -228,7 +228,7 @@ public class ConfigLoaderListener
         long maxMemRequired=Long.parseLong(compat.getProperty("jvm.maxmem"));
         if(verify &&  maxMemRequired>maxMemAvaiable) throw new IncompatibleEnvironmentException("The JVM does not have enough TOTAL memory allocated; Max available="+maxMemAvaiable+"m; Max required="+maxMemRequired+"m"+DISABLE_MEM_PARAM); 
         logger.info("Memory Allocation Check OK.");
-	}
+    }
     
     /**
      * Checks if the database server to which AMP connects as well as the JDBC driver used are compatible with the testing environment that AMP is using.
@@ -238,51 +238,51 @@ public class ConfigLoaderListener
      * @throws SQLException
      * @throws IncompatibleEnvironmentException
      */
-	private void checkDatabaseCompatibility(String propertiesFileName) throws FileNotFoundException, IOException, SQLException, IncompatibleEnvironmentException {
-		Connection connection = PersistenceManager.getJdbcConnection();
-		DatabaseMetaData metaData = connection.getMetaData();
-		Properties compat=new Properties();
-		File compatFile=new File(propertiesFileName);
-		compat.load(new FileInputStream(compatFile));
-		
-		String prefix=null;
-		if(metaData.getDatabaseProductName().equals("PostgreSQL")) prefix="postgresql";else
-		prefix =(metaData.getDatabaseProductVersion().toUpperCase().indexOf(ORACLE_DB)>-1)?"oracle":"mysql";
-		
-		logger.info("AMP Running on "+metaData.getDatabaseProductName()+" "+metaData.getDatabaseProductVersion());
-		
-		int dbMajorVersion=Integer.parseInt((String)compat.get(prefix+".version.major"));
-		int dbMinorVersion=Integer.parseInt((String)compat.get(prefix+".version.minor"));
-		int dbBugfixingVersion=Integer.parseInt((String)compat.get(prefix+".version.bugfixing"));
-		
-		int jdbcMajorVersion=Integer.parseInt((String)compat.get(prefix+".jdbc.version.major"));
-		int jdbcMinorVersion=Integer.parseInt((String)compat.get(prefix+".jdbc.version.minor"));
-		int jdbcBugfixingVersion=Integer.parseInt((String)compat.get(prefix+".jdbc.version.bugfixing"));
-		
-		if(metaData.getDatabaseMajorVersion()!=dbMajorVersion || 
-				//metaData.getDatabaseMinorVersion()!=dbMinorVersion || 
-				dbBugfixingVersion>parseBugFixingVersion(metaData.getDatabaseProductVersion(), metaData.getDatabaseMajorVersion()+"."+metaData.getDatabaseMinorVersion())) 
-			throw new IncompatibleEnvironmentException("Database version ("+metaData.getDatabaseProductVersion()+") is incompatible. Database version needs to be "+dbMajorVersion+"."+dbMinorVersion+" and bugfixing version at least "+dbBugfixingVersion);
-	
-		if(metaData.getDriverMajorVersion()!=jdbcMajorVersion || 
-				// metaData.getDriverMinorVersion()!=jdbcMinorVersion || 
-				jdbcBugfixingVersion>parseBugFixingVersion(metaData.getDriverVersion(), metaData.getDriverMajorVersion()+"."+metaData.getDriverMinorVersion())) 
-			throw new IncompatibleEnvironmentException("JDBC driver version ("+metaData.getDriverVersion()+") is incompatible. JDBC version needs to be "+jdbcMajorVersion+"."+jdbcMinorVersion+" and bugfixing version at least "+jdbcBugfixingVersion);
-		
-		logger.info("Database compatibility OK.");
-		
-		PersistenceManager.closeQuietly(connection);
+    private void checkDatabaseCompatibility(String propertiesFileName) throws FileNotFoundException, IOException, SQLException, IncompatibleEnvironmentException {
+        Connection connection = PersistenceManager.getJdbcConnection();
+        DatabaseMetaData metaData = connection.getMetaData();
+        Properties compat=new Properties();
+        File compatFile=new File(propertiesFileName);
+        compat.load(new FileInputStream(compatFile));
+        
+        String prefix=null;
+        if(metaData.getDatabaseProductName().equals("PostgreSQL")) prefix="postgresql";else
+        prefix =(metaData.getDatabaseProductVersion().toUpperCase().indexOf(ORACLE_DB)>-1)?"oracle":"mysql";
+        
+        logger.info("AMP Running on "+metaData.getDatabaseProductName()+" "+metaData.getDatabaseProductVersion());
+        
+        int dbMajorVersion=Integer.parseInt((String)compat.get(prefix+".version.major"));
+        int dbMinorVersion=Integer.parseInt((String)compat.get(prefix+".version.minor"));
+        int dbBugfixingVersion=Integer.parseInt((String)compat.get(prefix+".version.bugfixing"));
+        
+        int jdbcMajorVersion=Integer.parseInt((String)compat.get(prefix+".jdbc.version.major"));
+        int jdbcMinorVersion=Integer.parseInt((String)compat.get(prefix+".jdbc.version.minor"));
+        int jdbcBugfixingVersion=Integer.parseInt((String)compat.get(prefix+".jdbc.version.bugfixing"));
+        
+        if(metaData.getDatabaseMajorVersion()!=dbMajorVersion || 
+                //metaData.getDatabaseMinorVersion()!=dbMinorVersion || 
+                dbBugfixingVersion>parseBugFixingVersion(metaData.getDatabaseProductVersion(), metaData.getDatabaseMajorVersion()+"."+metaData.getDatabaseMinorVersion())) 
+            throw new IncompatibleEnvironmentException("Database version ("+metaData.getDatabaseProductVersion()+") is incompatible. Database version needs to be "+dbMajorVersion+"."+dbMinorVersion+" and bugfixing version at least "+dbBugfixingVersion);
+    
+        if(metaData.getDriverMajorVersion()!=jdbcMajorVersion || 
+                // metaData.getDriverMinorVersion()!=jdbcMinorVersion || 
+                jdbcBugfixingVersion>parseBugFixingVersion(metaData.getDriverVersion(), metaData.getDriverMajorVersion()+"."+metaData.getDriverMinorVersion())) 
+            throw new IncompatibleEnvironmentException("JDBC driver version ("+metaData.getDriverVersion()+") is incompatible. JDBC version needs to be "+jdbcMajorVersion+"."+jdbcMinorVersion+" and bugfixing version at least "+jdbcBugfixingVersion);
+        
+        logger.info("Database compatibility OK.");
+        
+        PersistenceManager.closeQuietly(connection);
     }
     
-	/**
-	 * Checks other properties that have to be set in order for AMP to work properly
-	 * @throws IncompatibleEnvironmentException
-	 */
-	private void checkOtherVMParameters() throws IncompatibleEnvironmentException {
-		String awtHeadless=System.getProperty("java.awt.headless");
-		if(awtHeadless==null || !"true".equalsIgnoreCase(awtHeadless)) throw new IncompatibleEnvironmentException("Please add -Djava.awt.headless=true to the VM parameters. This is required in order to get the charts work properly");
-	}
-	
+    /**
+     * Checks other properties that have to be set in order for AMP to work properly
+     * @throws IncompatibleEnvironmentException
+     */
+    private void checkOtherVMParameters() throws IncompatibleEnvironmentException {
+        String awtHeadless=System.getProperty("java.awt.headless");
+        if(awtHeadless==null || !"true".equalsIgnoreCase(awtHeadless)) throw new IncompatibleEnvironmentException("Please add -Djava.awt.headless=true to the VM parameters. This is required in order to get the charts work properly");
+    }
+    
     private Map getModuleContextInitializers() throws ClassNotFoundException,
         InstantiationException, IllegalAccessException, InstantiationException,
         ClassCastException {
@@ -312,11 +312,13 @@ public class ConfigLoaderListener
      * contextDestroyed method call when ServletContextListener object destroy
      * see ServletContextListener form more details.
      */
-    public void contextDestroyed(ServletContextEvent sce) {    	
-    	
-    	//shut down translation thread
-    	tats.shutdown();         
-    	
+    public void contextDestroyed(ServletContextEvent sce) {     
+        
+        //shut down translation thread
+        if (tats != null) {
+            tats.shutdown();
+        }
+        
         ServiceManager.getInstance().shutdown(1);
         try {
             Map listeners = (Map) sce.getServletContext().getAttribute(
@@ -345,7 +347,9 @@ public class ConfigLoaderListener
             PersistenceManager.cleanup();
             // Custom cache manager must be shut after all other cleanup stuff
             DigiCacheManager.shutdown();
-			exec.shutdownNow();
+            if (exec != null) {
+                exec.shutdownNow();
+            }
             ServiceManager.getInstance().shutdown(0);
         }
     }

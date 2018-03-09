@@ -12,16 +12,16 @@ import RemarksPopup from './RemarksPopup';
 import ToolBar from './ToolBar';
 import { Modal } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
+import Loading from './Loading';
 export default class Report1Output2 extends Component {
     constructor( props, context ) {
         super( props, context );
-        this.state = { recordsPerPage: 150, selectedYear: null, selectedDonor: ""};
+        this.state = { recordsPerPage: 150, selectedYear: null, selectedDonor: "", waiting:true};
         this.showFilters = this.showFilters.bind( this );
         this.showSettings = this.showSettings.bind( this );        
         this.onDonorFilterChange = this.onDonorFilterChange.bind( this );     
         this.downloadExcelFile = this.downloadExcelFile.bind(this);
-        this.downloadPdfFile = this.downloadPdfFile.bind(this);
-        this.getYears = this.getYears.bind(this);
+        this.downloadPdfFile = this.downloadPdfFile.bind(this);        
       }
 
     componentDidMount() {
@@ -51,7 +51,10 @@ export default class Report1Output2 extends Component {
         $( this.refs.filterPopup ).hide(); 
     }
 
-    showSettings() {
+    showSettings() {   
+       const settings  = this.settingsWidget.toAPIFormat();
+       const calendarId = settings && settings['calendar-id'] ?  settings['calendar-id'] : this.settingsWidget.definitions.getDefaultCalendarId();
+       this.setState( { calendarId: calendarId });
        Utils.showSettings(this.refs.settingsPopup, this.settingsWidget, this.onSettingsApply.bind(this), this.onSettingsCancel.bind(this));       
     }
     
@@ -60,7 +63,14 @@ export default class Report1Output2 extends Component {
     }
 
     onSettingsApply(){
-        this.fetchReportData();
+        const settings  = this.settingsWidget.toAPIFormat();
+        const currentCalendarId = settings && settings['calendar-id'] ?  settings['calendar-id'] : this.settingsWidget.definitions.getDefaultCalendarId();        
+        //if calendar has changed reset year filter
+        if (currentCalendarId !== this.state.calendarId) {            
+            this.onYearClick(null);            
+        } else {
+            this.fetchReportData(); 
+        }  
         $( this.refs.settingsPopup ).hide();
     }
     
@@ -89,7 +99,10 @@ export default class Report1Output2 extends Component {
 
     fetchReportData( data ) {
         let requestData = data || this.getRequestData();
-        this.props.actions.fetchReportData(requestData, '1');
+        this.setState({waiting:true});
+        this.props.actions.fetchReportData(requestData, '1').then(function(){
+            this.setState({waiting: false});  
+        }.bind(this));
     }
     
     onDonorFilterChange( e ) {
@@ -102,15 +115,12 @@ export default class Report1Output2 extends Component {
         }.bind( this ) );
     }
 
-    onYearClick( selectedYear ) {
-        this.setState( { selectedYear: selectedYear }, function() {                      
+    onYearClick( selectedYear ) {        
+        this.setState( { selectedYear: selectedYear}, function() {                      
             const filters = this.filter.serialize().filters;            
             filters['actual-approval-date'] = {};
             if (this.state.selectedYear) {
-                filters['actual-approval-date'] = {
-                        'start': this.state.selectedYear + '-01-01',
-                        'end': this.state.selectedYear + '-12-31'
-                    };
+                filters['actual-approval-date'] = Utils.getStartEndDates(this.settingsWidget, this.props.calendars, this.state.selectedYear, this.props.years);              
             }
             this.filter.deserialize({filters: filters}, {silent : true});
             this.fetchReportData();            
@@ -178,27 +188,26 @@ export default class Report1Output2 extends Component {
    downloadPdfFile(){
        this.props.actions.downloadPdfFile(this.getRequestData(), '1');
    }
-   
-   getYears() {
-       let settings  = this.settingsWidget.toAPIFormat()
-       let calendarId = settings && settings['calendar-id'] ?  settings['calendar-id'] : this.settingsWidget.definitions.getDefaultCalendarId();
-       let calendar = this.props.years.filter(calendar => calendar.calendarId == calendarId)[0];
-       return calendar.years.slice();     
-    }
-   
-   render() {
-        if ( this.props.output2 && this.props.output2.page && this.settingsWidget && this.settingsWidget.definitions ) {           
+ 
+   render() {                   
             let addedGroups = [];
-            var years = this.getYears();
+            var years = Utils.getYears(this.settingsWidget, this.props.years);
             return (
-                <div>
+                   <div>
+                    {this.state.waiting &&                      
+                        <Loading/>                
+                    } 
+                    {this.props.output2 && this.props.output2.page && this.settingsWidget && this.settingsWidget.definitions &&
+                    <div>                    
                     <div id="filter-popup" ref="filterPopup"> </div>
                     <div id="amp-settings" ref="settingsPopup"> </div>
                     <ToolBar showFilters={this.showFilters} showSettings={this.showSettings}  downloadPdfFile={this.downloadPdfFile}  downloadExcelFile={this.downloadExcelFile}/>
-                    <div className="section-divider"></div>
-                   
-                    <YearsFilterSection onYearClick={this.onYearClick.bind(this)} years={years} selectedYear={this.state.selectedYear} mainReport={this.props.output2} filter={this.filter} dateField="actual-approval-date"/>
-                    
+                    <div className="section-divider"></div>                    
+                    <YearsFilterSection onYearClick={this.onYearClick.bind(this)} selectedYear={this.state.selectedYear}
+                                        mainReport={this.props.output2} filter={this.filter}
+                                        dateField="actual-approval-date" settingsWidget={this.settingsWidget}
+                                        prefix={Utils.getCalendarPrefix(this.settingsWidget,this.props.calendars,
+                                            this.props.translate('amp.gpi-reports:fy'))}/>
                     <div className="container-fluid no-padding">
                         <div className="dropdown">
                             <select name="donorAgency" className="form-control donor-dropdown" value={this.state.selectedDonor} onChange={this.onDonorFilterChange}>
@@ -215,7 +224,11 @@ export default class Report1Output2 extends Component {
                          <h4>{this.props.translations['amp.gpi-reports:indicator1-description']}</h4>
                         </div>
                     </div>
-                    <div className="section-divider"></div>                                                
+                    <div className="section-divider"></div> 
+                         {this.props.output2.empty == true  &&
+                             <div className="text-center">{this.props.translations['amp-gpi-reports:no-data']}</div>
+                         }                         
+                         { this.props.output2.empty == false  &&
                         <table className="table table-bordered table-striped indicator-table">
                         <thead>
                         <tr>
@@ -227,15 +240,15 @@ export default class Report1Output2 extends Component {
                       <tbody>
                           {this.createRows()}                
                       </tbody>
-                      </table>                             
+                      </table>    
+                        }
                     <div>                 
                          <PagingSection output2={this.props.output2} goToPage={this.goToPage.bind(this)} updateRecordsPerPage={this.updateRecordsPerPage.bind(this)}/>
                     </div>
                 </div>
-            );
-        }
-
-        return ( <div></div> );
+                }
+                </div>
+            );    
     }
 
 }
@@ -246,7 +259,8 @@ function mapStateToProps( state, ownProps ) {
         orgList: state.commonLists.orgList,
         years: state.commonLists.years,        
         translations: state.startUp.translations,
-        translate: state.startUp.translate
+        translate: state.startUp.translate,
+        calendars: state.commonLists.calendars
     }
 }
 

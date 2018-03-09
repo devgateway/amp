@@ -85,9 +85,12 @@ public class User
     private Set contacts;
     private AmpUserExtension userExtension;
     private Boolean exemptFromDataFreezing;
+    
+    private Boolean notificationEmailEnabled = false;
+    private String notificationEmail;
 
     private Set<AmpOrganisation> assignedOrgs;
-	public User() {}
+    public User() {}
 
     public User(String email, String firstNames, String lastName) {
         /**
@@ -409,91 +412,91 @@ public class User
         this.contacts = contacts;
     }
 
-	/**
-	 * @return the pledger
-	 */
-	public Boolean getPledger() {
-		return pledger;
-	}
+    /**
+     * @return the pledger
+     */
+    public Boolean getPledger() {
+        return pledger;
+    }
 
-	/**
-	 * @param pledger the pledger to set
-	 */
-	public void setPledger(Boolean pledger) {
-		this.pledger = pledger;
-	}
-	
-	@Override
-	public int compareTo(Object o) {
-		// TODO Auto-generated method stub
-		if(o == null || !(o instanceof User) ) return -1;
-		User aux = (User)o;
-		return this.getName().compareTo(aux.getName());
-	}
+    /**
+     * @param pledger the pledger to set
+     */
+    public void setPledger(Boolean pledger) {
+        this.pledger = pledger;
+    }
+    
+    @Override
+    public int compareTo(Object o) {
+        // TODO Auto-generated method stub
+        if(o == null || !(o instanceof User) ) return -1;
+        User aux = (User)o;
+        return this.getName().compareTo(aux.getName());
+    }
 
-   	public Set<AmpOrganisation> getAssignedOrgs() {
-   		return assignedOrgs;
-   	}
+    public Set<AmpOrganisation> getAssignedOrgs() {
+        return assignedOrgs;
+    }
      
-   	public void setAssignedOrgs(Set<AmpOrganisation> assignedOrgs) {
-   		this.assignedOrgs = assignedOrgs;
-   	}
+    public void setAssignedOrgs(Set<AmpOrganisation> assignedOrgs) {
+        this.assignedOrgs = assignedOrgs;
+    }
 
-   	public void setUserExtension(AmpUserExtension userExt) {
-   		this.userExtension = userExt;
-   	}
-   	
-   	public AmpUserExtension getUserExtension() {
-   		return this.userExtension;
-   	}
-   	
-	public boolean hasVerifiedOrganizationId(Long ampOrgId) {
-   		if(ampOrgId == null) return false;
-   		//If it's not there, check in the Set<AmpOrganisation> assignedOrgs
-   		Iterator<AmpOrganisation> it = this.assignedOrgs.iterator();
-   		while(it.hasNext()){
-   			AmpOrganisation currentOrganization = it.next();
-   			if(currentOrganization.getAmpOrgId().equals(ampOrgId))
-   				return true;
-   		}
-   		return false;
-	}
+    public void setUserExtension(AmpUserExtension userExt) {
+        this.userExtension = userExt;
+    }
+    
+    public AmpUserExtension getUserExtension() {
+        return this.userExtension;
+    }
+    
+    public boolean hasVerifiedOrganizationId(Long ampOrgId) {
+        if(ampOrgId == null) return false;
+        //If it's not there, check in the Set<AmpOrganisation> assignedOrgs
+        Iterator<AmpOrganisation> it = this.assignedOrgs.iterator();
+        while(it.hasNext()){
+            AmpOrganisation currentOrganization = it.next();
+            if(currentOrganization.getAmpOrgId().equals(ampOrgId))
+                return true;
+        }
+        return false;
+    }
   
-	/**
-	 * Checks if user has a verified org and the org is role donor
-	 * @return 
-	 */
-	public boolean hasVerifiedDonor(){
-		if (this.assignedOrgs.size() == 0) {
-			return false;
-		}
+    /**
+     * Checks if user has a verified org and the org is role donor
+     * @return 
+     */
+    public boolean hasVerifiedDonor(){
+        if (this.assignedOrgs.size() == 0) {
+            return false;
+        }
         
-		Iterator<AmpOrganisation> it = this.assignedOrgs.iterator();
-		while (it.hasNext()) {
-			AmpOrganisation currentOrganization = it.next();
-			if (org.digijava.module.aim.util.DbUtil.hasDonorRole(currentOrganization.getAmpOrgId()))
-				return true;
-		}
-		return false;	
-	}
-	public boolean hasNationalCoordinatorGroup(){
-		boolean result = false;
-		Set<Group> groups = this.groups;
-		for (Group group : groups) {
-			if (group.isNationalCoordinatorGroup()) {
-				result = true;
-				break;
-			}
-		}
-		return result;
-	}
-	public AmpCategoryValueLocations getRegion() {
-		return region;
-	}
+        Iterator<AmpOrganisation> it = this.assignedOrgs.iterator();
+        while (it.hasNext()) {
+            AmpOrganisation currentOrganization = it.next();
+            if (org.digijava.module.aim.util.DbUtil.hasDonorRole(currentOrganization.getAmpOrgId()))
+                return true;
+        }
+        return false;   
+    }
+    public boolean hasNationalCoordinatorGroup(){
+        boolean result = false;
+        Set<Group> groups = this.groups;
+        for (Group group : groups) {
+            if (group.isNationalCoordinatorGroup()) {
+                result = true;
+                break;
+            }
+        }
+        return result;
+    }
+    public AmpCategoryValueLocations getRegion() {
+        return region;
+    }
 
-	public void setRegion(AmpCategoryValueLocations region) {
-		this.region = region;
-	}
+    public void setRegion(AmpCategoryValueLocations region) {
+        this.region = region;
+    }
 
     public Boolean getExemptFromDataFreezing() {
         return exemptFromDataFreezing;
@@ -502,5 +505,36 @@ public class User
     public void setExemptFromDataFreezing(Boolean exemptFromDataFreezing) {
         this.exemptFromDataFreezing = exemptFromDataFreezing;
     }
-	
+
+    public Boolean isNotificationEmailEnabled() {
+        return notificationEmailEnabled;
+    }
+
+    public void setNotificationEmailEnabled(Boolean notificationEmailEnabled) {
+        this.notificationEmailEnabled = notificationEmailEnabled;
+    }
+
+    public String getNotificationEmail() {
+        return notificationEmail;
+    }
+
+    public void setNotificationEmail(String notificationEmail) {
+        this.notificationEmail = notificationEmail;
+    }
+    
+    /**
+     * Get the email used for notification. 
+     * If {@link #notificationEmailEnabled} is true, the {@link #notificationEmail} is returned.
+     * Else, the #{@link #email}.
+     * 
+     * @return email address used for notification
+     */
+    public String getEmailUsedForNotification() {
+        if (notificationEmailEnabled != null && notificationEmailEnabled) {
+            return notificationEmail;
+        }
+        
+        return email;
+    }
+    
 }

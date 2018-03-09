@@ -65,8 +65,8 @@ function popup(mylink, windowname)
 			</logic:notPresent>
 			<logic:notEmpty name="lastViewedReports" scope="session">
 			<logic:iterate name="lastViewedReports" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports" length="5">
-				<li class="tri">
-					<a title="${report.name}" href="${fn:getReportUrl(report)}" onclick="return popup(this,'');">
+				<li class="tri tri-desktop">
+					<a title="${report.name}" href="${fn:getReportUrl(report)}" class="triText" onclick="return popup(this,'');">
 						<c:choose>
 	                    	<c:when test="${fn:length(report.name) > 50}" >
 	                    	    <c:out value="${fn:substring(report.name, 0, 50)}"/>...
@@ -86,12 +86,12 @@ function popup(mylink, windowname)
                         </digi:link>
                     </div>
            	</logic:notEmpty>
-			<logic:present name="currentMember" scope="session">
-            	<logic:empty name="lastViewedReports" scope="session">
-                	<digi:trn key="aim:noReportHaveBeenViewed">No reports have been viewed.</digi:trn>
-                 </logic:empty>
-			</logic:present> 
             </ul>
+			<logic:present name="currentMember" scope="session">
+				<logic:empty name="lastViewedReports" scope="session">
+					<p class="right_menu_empty"><digi:trn key="aim:noReportHaveBeenViewed">No reports have been viewed.</digi:trn></p>
+				</logic:empty>
+			</logic:present>
 		</div>
 	</div>
 </div>

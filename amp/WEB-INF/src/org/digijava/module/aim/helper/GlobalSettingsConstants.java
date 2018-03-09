@@ -78,13 +78,13 @@ public class GlobalSettingsConstants {
     
     public static final String PROJECT_TITLE_HIRARCHY = "Project Title Hierarchy";
     
-	public static final String VERSION_QUEUE_SIZE = "Activity Versions Queue Size";
-	
-	public static final String ACTIVITY_LIFE = "Activity version life time in days";
-	
-	public static final String REMINDER_TIME = "Reminder email period in days";
-	
-	public static final String REPORT_GENERATOR_ONE_PAGER = "Report Generator - One Pager";
+    public static final String VERSION_QUEUE_SIZE = "Activity Versions Queue Size";
+    
+    public static final String ACTIVITY_LIFE = "Activity version life time in days";
+    
+    public static final String REMINDER_TIME = "Reminder email period in days";
+    
+    public static final String REPORT_GENERATOR_ONE_PAGER = "Report Generator - One Pager";
 
     public static final String DATE_FILTER_HIDES_PROJECTS = "Filter by date hides projects";
     
@@ -96,37 +96,37 @@ public class GlobalSettingsConstants {
     
     public static final String EXCHANGE_RATE_SEPARATOR = "Default Exchange Rate Separator";
     
-	public static final String MIXED_IMPLEMENTATION_LOCATION = "Mixed Implementation Location";
+    public static final String MIXED_IMPLEMENTATION_LOCATION = "Mixed Implementation Location";
     
-	public static final String ACTIVITY_FORM_ONE_PAGER = "Activity Form - One Pager";	
-	
-	public static final String PUBLIC_PORTAL = "Public Portal";
+    public static final String ACTIVITY_FORM_ONE_PAGER = "Activity Form - One Pager";   
+    
+    public static final String PUBLIC_PORTAL = "Public Portal";
 
-	public static final String PUBLIC_PORTAL_URL = "Public Portal URL";
+    public static final String PUBLIC_PORTAL_URL = "Public Portal URL";
 
     public static final String REPORTS_EMPTY_VALUES_AS_ZERO_XLS= "Show empty values as zero in Reports export to XLS";
-	
+    
     public static final String DEFAULT_RESOURCES_SORT_COLUMN = "Resource list sort column";
 
-	public static final String DAILY_CURRENCY_RATES_UPDATE_ENALBLED = "Daily Currency Rates Update Enabled";
-	
-	public static final String DAILY_CURRENCY_RATES_UPDATE_HOUR = "Daily Currency Rates Update Hour";
-	
-	public static final String DAILY_CURRENCY_RATES_UPDATE_TIMEOUT = "Daily Currency Rates Update Timeout";
-	
-	public static final String AUTOMATIC_AUDIT_LOGGER_CLEANUP = "Automatic Audit Logger Cleanup";
-	
-	public static final String NPD_DEFAULT_PROGRAM = "NPD Default Program";
-	
-	public static final String COMPONENT_TYPE = "Default Component Type";
-	
-	public static final String VISIBILITY_TEMPLATE = "Visibility Template";
-	
-	public static final String COMPONENTS_SORT_ORDER = "Components Sort Order";
-	
-	public static final String GIS_FUNDING_TYPE = "GIS Funding Type";
-	
-	public static final String FILTER_REPORTS_BY_MONTH = "Filter reports by month";
+    public static final String DAILY_CURRENCY_RATES_UPDATE_ENALBLED = "Daily Currency Rates Update Enabled";
+    
+    public static final String DAILY_CURRENCY_RATES_UPDATE_HOUR = "Daily Currency Rates Update Hour";
+    
+    public static final String DAILY_CURRENCY_RATES_UPDATE_TIMEOUT = "Daily Currency Rates Update Timeout";
+    
+    public static final String AUTOMATIC_AUDIT_LOGGER_CLEANUP = "Automatic Audit Logger Cleanup";
+    
+    public static final String NPD_DEFAULT_PROGRAM = "NPD Default Program";
+    
+    public static final String COMPONENT_TYPE = "Default Component Type";
+    
+    public static final String VISIBILITY_TEMPLATE = "Visibility Template";
+    
+    public static final String COMPONENTS_SORT_ORDER = "Components Sort Order";
+    
+    public static final String GIS_FUNDING_TYPE = "GIS Funding Type";
+    
+    public static final String FILTER_REPORTS_BY_MONTH = "Filter reports by month";
 
     public static final String SHOW_FUNDING_GROUP_ID = "Show funding group id";
 
@@ -147,7 +147,7 @@ public class GlobalSettingsConstants {
     public static final String UNLINKED_FUNDING_IN_PLEDGES_REPORTS = "Unlinked commitments and disburesements in pledges reports";
  
     public static final String READONLY_DATES= "Make Activity dates read only";
-	public static final String RICH_EXCEL_EXPORT_ENABLED_BY_DEFAULT = "Rich Excel Export Enabled by Default";
+    public static final String RICH_EXCEL_EXPORT_ENABLED_BY_DEFAULT = "Rich Excel Export Enabled by Default";
     public static final String MULTILINGUAL= "Multilingual";
     
     public static final String ENABLE_SITE_TRACKING= "Enable AMP usage tracking";
@@ -162,11 +162,11 @@ public class GlobalSettingsConstants {
     
     public static final String CURRENCY_WS_PASSWORD="Currency exchange rate webservice password";
 
-	public static final String CURRENCY_WS_CLASS = "Currency exchange rate webservice implementation";
-	
-	public static final String SHOW_ALL_COUNTRIES = "Show all countries";
-	
-	public static final String ORGANISATION_TYPE_FOR_BENEFICIARY_AGENCY = "Organisation type for Beneficiary Agency";
+    public static final String CURRENCY_WS_CLASS = "Currency exchange rate webservice implementation";
+    
+    public static final String SHOW_ALL_COUNTRIES = "Show all countries";
+    
+    public static final String ORGANISATION_TYPE_FOR_BENEFICIARY_AGENCY = "Organisation type for Beneficiary Agency";
 
     public static final String SUPPORT_EMAIL = "Support Email";
     public static final String ALLOW_SAME_ORG_IN_DIFF_ROLES = "Allow same organization in different roles";
@@ -176,7 +176,8 @@ public class GlobalSettingsConstants {
    
     public static final String DASHBOARD_DEFAULT_MAX_YEAR_RANGE ="Dashboards Default Max Year Filter Range";
     public static final String DASHBOARD_DEFAULT_MIN_YEAR_RANGE ="Dashboards Default Min Year Filter Range";
-   
+    
+    public static final String MTEF_ANNUAL_DATE_FORMAT = "Show annual MTEF entry date format";
     
     public static final String COUNTRY_LATITUDE ="Country Latitude";
     
@@ -194,7 +195,7 @@ public class GlobalSettingsConstants {
     
     public static final String FUNDING_GAP_NOTIFICATION_THRESHOLD ="Funding gap notification threshold";
     
-    public static final String WORKSPACE_TO_RUN_REPORT_FUNDING_GAP_NOTIFICATION ="Workspace Team to run report for funding gap notification";
+    public static final String WORKSPACE_TO_RUN_REPORT_FROM_JOB = "Workspace Team to run reports from jobs";
     
     public static final String  MEASURE_A_FOR_FUNDING_GAP_NOTIFICATION ="Measure A for Funding gap notification";
     
@@ -217,9 +218,9 @@ public class GlobalSettingsConstants {
     /**
      * fields which, although existing in the database, should be rendered with a display: none on the GlobalSettings form so that the user never has a chance of changing their value
      */
-	public final static Set<String> SETTINGS_TO_HIDE = new HashSet<>(Arrays.asList(REPORT_WIZARD_VISIBILITY_SOURCE));
-	
-	
-	
+    public final static Set<String> SETTINGS_TO_HIDE = new HashSet<>(Arrays.asList(REPORT_WIZARD_VISIBILITY_SOURCE));
+    
+    
+    
 
 }

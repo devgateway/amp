@@ -28,7 +28,7 @@ import org.hibernate.Session;
  */
 public class IndicatorService {
 
-	protected static final Logger logger = Logger.getLogger(IndicatorService.class);
+    protected static final Logger logger = Logger.getLogger(IndicatorService.class);
 
     public static JsonBean getIndicators(Integer offset, Integer count, String orderBy, String sort ) {
         ApiEMGroup errors = new ApiEMGroup();

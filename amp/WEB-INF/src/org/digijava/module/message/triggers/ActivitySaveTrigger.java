@@ -27,34 +27,34 @@ public class ActivitySaveTrigger extends Trigger {
     public static final String [] parameterNames=new String[]{PARAM_NAME,PARAM_CREATED_DATE,PARAM_CREATED_BY,PARAM_URL,PARAM_ID};
 
     public ActivitySaveTrigger(Object source) {
-	if(! (source instanceof AmpActivityVersion)) throw new RuntimeException("Incompatible object. Source must be an AmpActivity!");
-	this.source=source;
-	forwardEvent();
+    if(! (source instanceof AmpActivityVersion)) throw new RuntimeException("Incompatible object. Source must be an AmpActivity!");
+    this.source=source;
+    forwardEvent();
     }
 
     static{
-    	TriggerRegistry.getInstance().register(ActivitySaveTrigger.class,"Save Activity Event");
+        TriggerRegistry.getInstance().register(ActivitySaveTrigger.class,"Save Activity Event");
     }
 
     /** @see org.digijava.module.message.helper.Trigger#generateEvent(java.lang.Object)
      */
     @Override
     protected Event generateEvent() {
-	Event e=new Event(ActivitySaveTrigger.class);
-	AmpActivityVersion act=(AmpActivityVersion) source;
-	e.getParameters().put(PARAM_NAME,act.getName());
-	e.getParameters().put(PARAM_CREATED_DATE, act.getCreatedDate());
-	e.getParameters().put(PARAM_CREATED_BY, act.getActivityCreator());
-	e.getParameters().put(PARAM_URL,"aim/viewActivityPreview.do~public=true~pageId=2~activityId="+act.getAmpActivityId());
-	e.getParameters().put(PARAM_ID, act.getAmpActivityId());
-	return e;
+    Event e=new Event(ActivitySaveTrigger.class);
+    AmpActivityVersion act=(AmpActivityVersion) source;
+    e.getParameters().put(PARAM_NAME,act.getName());
+    e.getParameters().put(PARAM_CREATED_DATE, act.getCreatedDate());
+    e.getParameters().put(PARAM_CREATED_BY, act.getActivityCreator());
+    e.getParameters().put(PARAM_URL,"aim/viewActivityPreview.do~public=true~pageId=2~activityId="+act.getAmpActivityId());
+    e.getParameters().put(PARAM_ID, act.getAmpActivityId());
+    return e;
     }
 
     /** @see org.digijava.module.message.helper.Trigger#getParameterNames()
      */
     @Override
     public String[] getParameterNames() {
-	return parameterNames;
+    return parameterNames;
     }
 
 }

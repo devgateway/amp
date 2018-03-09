@@ -28,59 +28,50 @@ import org.quartz.JobExecutionException;
  * 
  */
 public class AuditCleanerMsgJob extends ConnectionCleaningJob {
-	public static final String FROM = "Administrator";
-	public static final String MESSAGE_TITLE = "Audit Cleanup Sevice";
-	public static final String BODY_1 = "All logs older than  ";
-	public static final String BODY_2 = " days will be deleted from the Audit Trail on ";
-	
-	@Override
-	public void executeInternal(JobExecutionContext context) throws JobExecutionException {
+    public static final String FROM = "Administrator";
+    public static final String MESSAGE_TITLE = "Audit Cleanup Sevice";
+    public static final String BODY_1 = "All logs older than  ";
+    public static final String BODY_2 = " days will be deleted from the Audit Trail on ";
+    
+    @Override
+    public void executeInternal(JobExecutionContext context) throws JobExecutionException {
+        try {
+            Collection<AmpTeamMember> alllead = TeamMemberUtil.getMembersUsingRole(new Long("1"));
+            if (alllead != null) {
+                AmpMessage message = new AmpAlert();
+                message.setName(MESSAGE_TITLE);
+                message.setSenderName("Administrator<admin@amp.org>");
+                message.setSenderType(MessageConstants.SENDER_TYPE_USER_MANAGER);
+                message.setPriorityLevel(MessageConstants.PRIORITY_LEVEL_CRITICAL);
+                
+                message.setDescription(BODY_1
+                        + FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AUTOMATIC_AUDIT_LOGGER_CLEANUP)
+                        + BODY_2 + FormatHelper.formatDate(AuditCleaner.getInstance().getNextcleanup()));
+                message.setCreationDate(new Date(System.currentTimeMillis()));
+                //message.setReceivers(strreceiveirs);
+                message.setDraft(false);
+                message.setMessageType(0L);
+                AmpMessageUtil.saveOrUpdateMessage(message);
 
-		String strReceivers = "";
-
-		try {
-			Collection<AmpTeamMember> alllead = TeamMemberUtil.getMembersUsingRole(new Long("1"));
-			for(AmpTeamMember ampTeamMember:alllead) {
-				if (ampTeamMember != null) {
-					strReceivers += ampTeamMember.getUser().getFirstNames()
-							+ " " + ampTeamMember.getUser().getLastName() + "<"
-							+ ampTeamMember.getUser().getEmail() + ">,";
-				}
-			}
-			if (alllead != null) {
-				AmpMessage message = new AmpAlert();
-				message.setName(MESSAGE_TITLE);
-				message.setSenderName("Administrator<admin@amp.org>");
-				message.setSenderType(MessageConstants.SENDER_TYPE_USER_MANAGER);
-				message.setPriorityLevel(MessageConstants.PRIORITY_LEVEL_CRITICAL);
-				
-				message.setDescription(BODY_1
-						+ FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AUTOMATIC_AUDIT_LOGGER_CLEANUP)
-						+ BODY_2 + FormatHelper.formatDate(AuditCleaner.getInstance().getNextcleanup()));
-				message.setCreationDate(new Date(System.currentTimeMillis()));
-				//message.setReceivers(strreceiveirs);
-				message.setDraft(false);
-				message.setMessageType(0L);
-				AmpMessageUtil.saveOrUpdateMessage(message);
-
-				AmpMessageState state = new AmpMessageState();
-				state.setMessage(message);
-				state.setSender("Admin");
-				AmpMessageUtil.saveOrUpdateMessageState(state);
+                AmpMessageState state = new AmpMessageState();
+                state.setMessage(message);
+                state.setSender("Admin");
+                AmpMessageUtil.saveOrUpdateMessageState(state);
                              
-				
-				for (AmpTeamMember tm:alllead) {
-					if (tm != null && tm.getAmpTeamMemId() != null) {
-						AmpMessageUtil.createMessageState(message, tm);
-					}
-				}
-               AmpMessageUtil.saveOrUpdateMessage(message);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+                
+                for (AmpTeamMember tm:alllead) {
+                    if (tm != null && tm.getAmpTeamMemId() != null) {
+                        AmpMessageUtil.createMessageState(message, tm);
+                        message.addMessageReceiver(tm);
+                    }
+                }
+                AmpMessageUtil.saveOrUpdateMessage(message);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-	}
+    }
 
 
 }

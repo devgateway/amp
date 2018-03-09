@@ -16,14 +16,9 @@
 <module:display name="ADMINISTRATIVE SECTION"></module:display> 
 <module:display name="Activity Approval Process" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Activity Costing" parentModule="PROJECT MANAGEMENT"></module:display> 
-<module:display name="Activity Export Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Structures Importer" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Applied Patches" parentModule="ADMINISTRATIVE SECTION"></module:display>
-<module:display name="Activity Import Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
-<module:display name="Activity Partial Import Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
-<module:display name="Budget Codes Exporter" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Budget Integration" parentModule="ADMINISTRATIVE SECTION"></module:display>
-<module:display name="Code Chapitre Importer" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Currency deflator" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Dashboards Manager" parentModule="ADMINISTRATIVE SECTION"/>
 <module:display name="Add & Edit Activity" parentModule="PARIS INDICATORS"></module:display> 
@@ -91,11 +86,9 @@
 <module:display name="Resource Label Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Template Documents Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Donor Profile Report" parentModule="REPORTING"></module:display>
-<module:display name="Multi-dimensional Reports" parentModule="REPORTING"></module:display>
+<module:display name="Saiku" parentModule="REPORTING"></module:display>
 <module:display name="Pledge Reports" parentModule="REPORTING"></module:display>
 <feature:display name="Pledges Default Reports" module="Pledge Reports"></feature:display>
-<feature:display name="Default Reports" module="Multi-dimensional Reports"></feature:display>
-<module:display name="Multi-dimensional Reports Public View" parentModule="REPORTING"></module:display>  
 <module:display name="Report and Tab Options" parentModule="REPORTING"></module:display>
 <module:display name="Report Types" parentModule="REPORTING"></module:display>
 <module:display name="Filter Section" parentModule="REPORTING"></module:display> 
@@ -133,8 +126,6 @@
 
 <module:display name="Map configuration" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Aid Effectiveness Indicators Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
-
-<feature:display name="Synergy Client" module="Activity Import Manager"></feature:display>
 
 <feature:display name="My Resources" module="Content Repository"></feature:display> 
 <feature:display name="Team Resources" module="Content Repository"></feature:display>
@@ -592,7 +583,6 @@ deleted 6 fields, do not reinsert
 <field:display name="Currency Expenditure" feature="Expenditures"></field:display> 
 <field:display name="Currency Expenditures" feature="Regional Funding"></field:display> 
 <field:display name="Currency of Disbursement Order" feature="Disbursement Orders"></field:display> 
-<field:display name="Current Completion Date" feature="Planning"></field:display> 
 <field:display name="Data Source" feature="Identification"></field:display>
 <field:display name="Data Team Leader" feature="Identification"></field:display> 
 <field:display name="Date Commitment" feature="Commitments"></field:display>
@@ -634,7 +624,8 @@ deleted 6 fields, do not reinsert
 <field:display name="Donor Fax Number" feature="Donor Contact Information"></field:display> 
 <field:display name="Donor First Name" feature="Donor Contact Information"></field:display> 
 <field:display name="Donor Group" feature="Funding Information"></field:display>
-<field:display name="Donor Type" feature="Funding Information"></field:display> 
+<field:display name="Donor Type" feature="Funding Information"></field:display>
+<field:display name="Donor Budget Code" feature="Funding Information"></field:display>
 <field:display name="Donor Last Name" feature="Donor Contact Information"></field:display> 
 <field:display name="Donor Objective" feature="Funding Information"></field:display> 
 <field:display name="Donor Organization" feature="Donor Contact Information"></field:display> 
@@ -794,6 +785,7 @@ deleted 6 fields, do not reinsert
 <field:display name="Physical progress title" feature="Physical Progress"></field:display> 
 <field:display name="Planned Disbursement Preview" feature="Disbursement"></field:display> 
 <field:display name="Primary Program" feature="NPD Programs"></field:display>
+<field:display name="Primary Sector Code Official" feature="Sectors"></field:display>
 <field:display name="Primary Sector Sub-Sector" feature="Sectors"></field:display> 
 <field:display name="Primary Sector Sub-Sub-Sector" feature="Sectors"></field:display> 
 <field:display name="Primary Sector" feature="Sectors"></field:display> 
@@ -965,6 +957,7 @@ deleted 6 fields, do not reinsert
 <field:display name="Add Donor Button" feature="Donors"></field:display>
 <field:display name="Remove Donor Button" feature="Donors"></field:display>
 <feature:display name="Computed Fields"  module="Report Generator"></feature:display>
+<feature:display name="Performance Monitoring"  module="Report Generator"></feature:display>
 <feature:display name="Save and Open Button"  module="Report Generator"></feature:display>
 <feature:display name="Also show pledges checkbox" module="Report and Tab Options"></feature:display>
 <feature:display name="Public View Checkbox" module="Report and Tab Options"></feature:display>
@@ -984,6 +977,7 @@ deleted 6 fields, do not reinsert
 <field:display name="Percentage of Disbursement" feature="Computed Fields"></field:display>
 <field:display name="Commitment Gap" feature="Computed Fields"></field:display>
 <field:display name="Calculated Project Life" feature="Computed Fields"></field:display>
+<field:display name="Performance Alert Level" feature="Performance Monitoring"></field:display>
 
 <field:display name="Beneficiary Agency Groups" feature="Beneficiary Agency"></field:display> 
 <field:display name="Beneficiary Agency  Department/Division"  feature="Beneficiary Agency"></field:display>

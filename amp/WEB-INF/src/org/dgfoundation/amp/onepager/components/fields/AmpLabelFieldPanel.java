@@ -17,34 +17,34 @@ import org.dgfoundation.amp.onepager.translation.TrnLabel;
  * since Nov 3, 2010
  */
 public class AmpLabelFieldPanel<T> extends AmpFieldPanel<T> {
-	protected Label valueLabel;
+    protected Label valueLabel;
 
-	public Label getValueLabel() {
-		return valueLabel;
-	}
+    public Label getValueLabel() {
+        return valueLabel;
+    }
 
-	public void setValueLabel(Label valueLabel) {
-		this.valueLabel = valueLabel;
-	}
-	
-	public AmpLabelFieldPanel(String id, IModel<T> model, String fmName) {
-		this(id,model,fmName,false);
-	}
+    public void setValueLabel(Label valueLabel) {
+        this.valueLabel = valueLabel;
+    }
+    
+    public AmpLabelFieldPanel(String id, IModel<T> model, String fmName) {
+        this(id,model,fmName,false);
+    }
 
-	public AmpLabelFieldPanel(String id, IModel<T> model, String fmName, boolean hideLabel) {
-		super(id, model, fmName,hideLabel);
-		valueLabel=new TrnLabel("valueLabel",(model.getObject() != null ? model.getObject().toString() : " "));
-		add(valueLabel);
-	}
-	
-	public AmpLabelFieldPanel(String id, IModel<T> model, String fmName,boolean hideLabel, boolean hideNewLine,boolean modelo) {
-		super(id, model, fmName,hideLabel,hideNewLine);
-		if(modelo){
-		valueLabel=new Label("valueLabel",model);
-		}else{
-		valueLabel=new TrnLabel("valueLabel",(model.getObject() != null ? model.getObject().toString() : " "));
-		}
-		add(valueLabel);
-	}
+    public AmpLabelFieldPanel(String id, IModel<T> model, String fmName, boolean hideLabel) {
+        super(id, model, fmName,hideLabel);
+        valueLabel=new TrnLabel("valueLabel",(model.getObject() != null ? model.getObject().toString() : " "));
+        add(valueLabel);
+    }
+    
+    public AmpLabelFieldPanel(String id, IModel<T> model, String fmName,boolean hideLabel, boolean hideNewLine,boolean modelo) {
+        super(id, model, fmName,hideLabel,hideNewLine);
+        if(modelo){
+        valueLabel=new Label("valueLabel",model);
+        }else{
+        valueLabel=new TrnLabel("valueLabel",(model.getObject() != null ? model.getObject().toString() : " "));
+        }
+        add(valueLabel);
+    }
 
 }

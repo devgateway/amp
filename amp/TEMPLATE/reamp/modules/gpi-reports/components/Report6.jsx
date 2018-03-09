@@ -7,10 +7,12 @@ import * as startUp from '../actions/StartUpAction.jsx';
 import Utils from '../common/Utils';
 import * as Constants from '../common/Constants';
 import HeaderToolTip from './HeaderToolTip';
+import Loading from './Loading';
+import YearsFilterSection from './YearsFilterSection';
 export default class Report6 extends Component {
     constructor( props, context ) {
         super( props, context );
-        this.state = { recordsPerPage: 150, hierarchy: 'donor-agency', selectedYear: null, selectedDonor: "" };
+        this.state = { recordsPerPage: 150, hierarchy: 'donor-agency', selectedYear: null, selectedDonor: "", waiting: true};
         this.showFilters = this.showFilters.bind( this );
         this.showSettings = this.showSettings.bind( this );
         this.goToClickedPage = this.goToClickedPage.bind( this );
@@ -19,7 +21,6 @@ export default class Report6 extends Component {
         this.updateRecordsPerPage = this.updateRecordsPerPage.bind( this );
         this.onDonorFilterChange = this.onDonorFilterChange.bind( this );
         this.toggleHierarchy = this.toggleHierarchy.bind( this );
-        this.onYearClick = this.onYearClick.bind( this );
         this.downloadExcelFile = this.downloadExcelFile.bind(this);
         this.downloadPdfFile = this.downloadPdfFile.bind(this);
     }
@@ -60,6 +61,9 @@ export default class Report6 extends Component {
     showSettings() {
         this.settingsWidget.setElement( this.refs.settingsPopup );
         this.settingsWidget.definitions.loaded.done( function() {
+            const settings  = this.settingsWidget.toAPIFormat();
+            const calendarId = settings && settings['calendar-id'] ?  settings['calendar-id'] : this.settingsWidget.definitions.getDefaultCalendarId();
+            this.setState( { calendarId: calendarId });
             this.settingsWidget.show();
         }.bind( this ) );
 
@@ -69,7 +73,14 @@ export default class Report6 extends Component {
         }.bind( this ) );
 
         this.settingsWidget.on( 'applySettings', function() {
-            this.fetchReportData();
+            const settings  = this.settingsWidget.toAPIFormat();
+            const currentCalendarId = settings && settings['calendar-id'] ?  settings['calendar-id'] : this.settingsWidget.definitions.getDefaultCalendarId();        
+            //if calendar has changed reset year filter
+            if (currentCalendarId !== this.state.calendarId) {            
+                this.onYearClick(null);            
+            } else {
+                this.fetchReportData(); 
+            } 
             $( this.refs.settingsPopup ).hide();
         }.bind( this ) );
     }
@@ -113,7 +124,10 @@ export default class Report6 extends Component {
 
     fetchReportData( requestData ) {
         var requestData = requestData || this.getRequestData();
-        this.props.actions.fetchReportData( requestData, '6' );
+        this.setState({waiting: true});
+        this.props.actions.fetchReportData( requestData, '6' ).then(function(){
+            this.setState({waiting: false});  
+        }.bind(this));    
     }
 
     onDonorFilterChange( e ) {
@@ -127,22 +141,18 @@ export default class Report6 extends Component {
         }.bind( this ) );
     }
 
-    onYearClick( event ) {
-        this.setState( { selectedYear: $( event.target ).data( "year" ) }, function() {                      
-            var filters = this.filter.serialize().filters;
-            filters.date = {};
-            if (this.state.selectedYear) {
-                filters.date = {
-                        'start': this.state.selectedYear + '-01-01',
-                        'end': this.state.selectedYear + '-12-31'
-                    };  
-            }           
-            this.filter.deserialize({filters: filters}, {silent : true});           
-            this.fetchReportData();
-        }.bind( this ) );
-
-    }
-
+    onYearClick(year) {
+          this.setState( { selectedYear: year}, function() {                      
+              var filters = this.filter.serialize().filters;
+              filters.date = {};
+              if (this.state.selectedYear) {
+                  filters.date = Utils.getStartEndDates(this.settingsWidget, this.props.calendars, this.state.selectedYear, this.props.years);
+              }           
+              this.filter.deserialize({filters: filters}, {silent : true});           
+              this.fetchReportData();
+          }.bind( this ) );
+     }
+      
     resetQuickFilters() {
         var filters = this.filter.serialize().filters;
         if ( filters.date ) {
@@ -217,30 +227,6 @@ export default class Report6 extends Component {
         }
     }
 
-    showSelectedDates() {
-        var displayDates = '';
-        if(this.filter){
-            var filters = this.filter.serialize().filters;            
-            if ( filters.date ) {
-                filters.date.start = filters.date.start || '';
-                filters.date.end = filters.date.end || '';
-                var startDatePrefix = ( filters.date.start.length > 0 && filters.date.end.length === 0 ) ? this.props.translations['amp.gpi-reports:from'] : '';
-                var endDatePrefix = ( filters.date.start.length === 0 && filters.date.end.length > 0 ) ? this.props.translations['amp.gpi-reports:until'] : '';
-                if ( filters.date.start.length > 0 ) {
-                    displayDates = startDatePrefix + " " + this.filter.formatDate( filters.date.start );
-                }
-
-                if ( filters.date.end.length > 0 ) {
-                    if ( filters.date.start.length > 0 ) {
-                        displayDates += " - ";
-                    }
-                    displayDates += endDatePrefix + " " + this.filter.formatDate( filters.date.end );
-                }
-            } 
-        }
-        return displayDates;
-    }
-
     displayPagingInfo() {
         var transParams = {};
         transParams.fromRecord = ( ( this.props.mainReport.page.currentPageNumber - 1 ) * this.props.mainReport.page.recordsPerPage ) + 1;
@@ -262,19 +248,16 @@ export default class Report6 extends Component {
         this.props.actions.downloadPdfFile(this.getRequestData(), '6');
     } 
     
-    getYears() {
-        let settings  = this.settingsWidget.toAPIFormat()
-        let calendarId = settings && settings['calendar-id'] ?  settings['calendar-id'] : this.settingsWidget.definitions.getDefaultCalendarId();
-        let calendar = this.props.years.filter(calendar => calendar.calendarId == calendarId)[0];
-        return calendar.years.slice();       
-    }
-    
     render() {
-        if ( this.props.mainReport && this.props.mainReport.page && this.settingsWidget && this.settingsWidget.definitions) {
-            var addedGroups = [];
-            var years = this.getYears();
+        var years = Utils.getYears(this.settingsWidget, this.props.years);
+        var addedGroups = [];           
             return (
                 <div>
+                    {this.state.waiting &&                      
+                        <Loading/>                
+                    } 
+                    {this.props.mainReport && this.props.mainReport.page && this.settingsWidget && this.settingsWidget.definitions &&                      
+                    <div>
                     <div id="filter-popup" ref="filterPopup"> </div>
                     <div id="amp-settings" ref="settingsPopup"> </div>
                     <div className="container-fluid indicator-nav no-padding">
@@ -295,9 +278,8 @@ export default class Report6 extends Component {
                             </div>
                         </div>
                     </div>
-
                     <div className="section-divider"></div>
-                    {this.props.mainReport && this.props.mainReport.summary &&
+                    {this.props.mainReport && this.props.mainReport.summary && this.props.mainReport.empty == false  &&
                         <div className="container-fluid indicator-stats no-padding">
                             <div className="col-md-3">
                                 <div className="indicator-stat-wrapper">
@@ -308,7 +290,7 @@ export default class Report6 extends Component {
                             <div className="col-md-3">
                                 <div className="indicator-stat-wrapper">
                                     <div className="stat-value">{this.props.mainReport.summary[Constants.PLANNED_DISBURSEMENTS]}</div>
-                                    <div className="stat-label">{this.getLocalizedColumnName( Constants.PLANNED_DISBURSEMENTS )}</div>
+                                    <div className="stat-label">{this.props.translations['amp-gpi-reports:annual-planned-disbursements']}</div>
                                 </div>
                             </div>
                             <div className="col-md-3">
@@ -319,32 +301,11 @@ export default class Report6 extends Component {
                             </div>                            
                         </div>
                     }
-                    <div className="container-fluid no-padding">
-                        <ul className="year-nav">
-                            <li className={this.state.selectedYear ? '' : 'active'}>
-                                <a onClick={this.onYearClick}>{this.props.translations['amp.gpi-reports:all-years']}</a>
-                            </li>
-                            {( ( years.length > 3 ) ? years.splice( years.length - 3, 3 ).reverse() : years.reverse() ).map( year =>
-                                <li className={this.state.selectedYear == year ? 'active' : ''} key={year}><a data-year={year} onClick={this.onYearClick}>{year}</a></li>
-                            )}
-                            <li >
-                                <div className="dropdown">
-                                    <a className={years.includes( this.state.selectedYear ) ? 'btn dropdown-toggle btn-years btn-years-active' : 'btn dropdown-toggle btn-years'} type="button" id="years" data-toggle="dropdown">
-                                        {this.props.translations['amp.gpi-reports:other-years']}
-                                        <span className="caret"></span></a>
-                                    <ul className="dropdown-menu dropdown-years" role="menu">
-                                        {years.reverse().map( year =>
-                                            <li role="presentation" className={this.state.selectedYear == year ? 'active' : ''} key={year}><a data-year={year} onClick={this.onYearClick}>{year}</a></li>
-                                        )}
-
-                                    </ul>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div className="selection-legend">
-                        <div className="pull-right">{this.showSelectedDates()}</div>
-                    </div>
+                    <YearsFilterSection onYearClick={this.onYearClick.bind(this)} selectedYear={this.state.selectedYear}
+                                        mainReport={this.props.mainReport} filter={this.filter} dateField="date"
+                                        settingsWidget={this.settingsWidget}
+                                        prefix={Utils.getCalendarPrefix(this.settingsWidget,this.props.calendars,
+                                            this.props.translate('amp.gpi-reports:fy'))}/>
                     <div className="container-fluid no-padding">
                         <div className="dropdown">
                             <select name="donorAgency" className="form-control donor-dropdown" value={this.state.selectedDonor} onChange={this.onDonorFilterChange}>
@@ -354,15 +315,22 @@ export default class Report6 extends Component {
                                 )}
                             </select>
                         </div>
-                        <div className="pull-right"><h4>{this.props.translations['amp.gpi-reports:currency']} {this.props.mainReport.settings['currency-code']} 
+                        <div className="pull-right currency-label">{this.props.translations['amp.gpi-reports:currency']} {this.props.mainReport.settings['currency-code']} 
                         {(this.props.settings['number-divider'] != 1) &&
                             <span className="amount-units"> ({this.props.translations['amp-gpi-reports:amount-in-' + this.props.settings['number-divider']]})</span>                    
                         }
-                        </h4></div>
-
-                    </div>
-
-                    <div className="section-divider"></div>
+                       </div>                                       
+                    <div className="container-fluid">
+                        <div className="row">
+                          <h4>{this.props.translations['amp.gpi-reports:indicator6-description']}</h4>
+                        </div>
+                      </div>                     
+                    </div>                          
+                    <div className="section-divider"></div>                    
+                    {this.props.mainReport.empty == true  &&
+                       <div className="text-center">{this.props.translations['amp-gpi-reports:no-data']}</div>
+                    }                    
+                    { this.props.mainReport.empty == false  &&
                     <table className="table table-bordered table-striped indicator-table">
                         <thead>
                             <tr>
@@ -375,7 +343,7 @@ export default class Report6 extends Component {
                                     column={Constants.ANNUAL_GOVERNMENT_BUDGET}
                                     headers={this.props.mainReport.page.headers}/>
                                      {this.getLocalizedColumnName( Constants.ANNUAL_GOVERNMENT_BUDGET )}</th>
-                                <th className="col-md-2">{this.getLocalizedColumnName( Constants.PLANNED_DISBURSEMENTS )}</th>
+                                <th className="col-md-2">{this.props.translations['amp-gpi-reports:annual-planned-disbursements']}</th>
                                 <th className="col-md-2"><HeaderToolTip
                                     column={Constants.PERCENTAGE_OF_PLANNED_ON_BUDGET}
                                     headers={this.props.mainReport.page.headers}/>{this.getLocalizedColumnName( Constants.PERCENTAGE_OF_PLANNED_ON_BUDGET )}</th>
@@ -393,6 +361,9 @@ export default class Report6 extends Component {
                             )}
                         </tbody>
                     </table>
+                    }
+                    
+                    {this.props.mainReport.page.totalPageCount > 1 &&
                     <div >
                         <div className="row">
                             <div className="col-md-8 pull-right pagination-wrapper">
@@ -418,14 +389,14 @@ export default class Report6 extends Component {
                                 {this.displayPagingInfo()}
                             </div>
                         </div>
-                    </div>
-
-
+                    
+                      </div>
+                    }
+                 </div>
+                }
                 </div>
             );
-        }
-
-        return ( <div></div> );
+                
     }
 
 }
@@ -437,7 +408,8 @@ function mapStateToProps( state, ownProps ) {
         years: state.commonLists.years,
         translations: state.startUp.translations,
         translate: state.startUp.translate,
-        settings: state.commonLists.settings
+        settings: state.commonLists.settings,
+        calendars: state.commonLists.calendars
     }
 }
 

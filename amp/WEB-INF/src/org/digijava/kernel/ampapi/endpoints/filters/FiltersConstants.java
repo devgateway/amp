@@ -29,6 +29,7 @@ public class FiltersConstants {
     public static final String PROPOSED_COMPLETION_DATE = "proposed-completion-date";
     public static final String PROPOSED_START_DATE = "proposed-start-date";
 
+    public static final String ACTIVITY_ID = "activity-id";
     public static final String APPROVAL_STATUS = "approval-status";
     public static final String ARCHIVED = "archived";
     public static final String BENEFICIARY_AGENCY = "beneficiary-agency";
@@ -64,6 +65,7 @@ public class FiltersConstants {
     public static final String NATIONAL_PLANNING_OBJECTIVES_LEVEL_7 = "national-planning-objectives-level-7";
     public static final String NATIONAL_PLANNING_OBJECTIVES_LEVEL_8 = "national-planning-objectives-level-8";
     public static final String ON_OFF_TREASURY_BUDGET = "on-off-treasury-budget";
+    public static final String PERFORMANCE_ALERT_LEVEL = "performance-alert-level";
     public static final String PLEDGES_AID_MODALITY = "pledges-aid-modality";
     public static final String PLEDGES_DONOR_GROUP = "pledges-donor-group";
     public static final String PLEDGES_NATIONAL_PLAN_OBJECTIVES = "pledges-national-plan-objectives";

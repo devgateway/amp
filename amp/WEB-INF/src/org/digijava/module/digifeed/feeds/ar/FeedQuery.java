@@ -32,69 +32,69 @@ import org.digijava.module.digifeed.core.GenericFeedRequest;
 // get the max id (the last id) - this can be optimized and cached
 public class FeedQuery extends GenericFeedQuery {
 
-	public FeedQuery() {
-		super();
-	}
+    public FeedQuery() {
+        super();
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.digijava.module.digifeed.core.GenericFeedQuery#query(org.digijava.module.digifeed.core.GenericFeedRequest)
-	 */
-	public List select(GenericFeedRequest r) throws Exception {
-		List ret = new ArrayList();
-		Session session = PersistenceManager.getSession();
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.digijava.module.digifeed.core.GenericFeedQuery#query(org.digijava.module.digifeed.core.GenericFeedRequest)
+     */
+    public List select(GenericFeedRequest r) throws Exception {
+        List ret = new ArrayList();
+        Session session = PersistenceManager.getSession();
 
-		FeedRequest rr = (FeedRequest) r;
+        FeedRequest rr = (FeedRequest) r;
 
-		if ("all".equalsIgnoreCase(rr.getIdList())) {
-			Query qry = session.createQuery("from "
-					+ AmpReports.class.getName());
-			Iterator i = qry.list().iterator();
-			while (i.hasNext()) {
-				AmpReports element = (AmpReports) i.next();
-				ret.add(element);
-			}
-		} else {
-			StringTokenizer st = new StringTokenizer(rr.getIdList(), ",");
-			while (st.hasMoreTokens()) {
-				String sid = st.nextToken();
-				AmpReports reportMeta = (AmpReports) session.get(
-						AmpReports.class, new Long(sid));
-				ret.add(reportMeta);
-			}
-		}
+        if ("all".equalsIgnoreCase(rr.getIdList())) {
+            Query qry = session.createQuery("from "
+                    + AmpReports.class.getName());
+            Iterator i = qry.list().iterator();
+            while (i.hasNext()) {
+                AmpReports element = (AmpReports) i.next();
+                ret.add(element);
+            }
+        } else {
+            StringTokenizer st = new StringTokenizer(rr.getIdList(), ",");
+            while (st.hasMoreTokens()) {
+                String sid = st.nextToken();
+                AmpReports reportMeta = (AmpReports) session.get(
+                        AmpReports.class, new Long(sid));
+                ret.add(reportMeta);
+            }
+        }
 
-		
-		return ret;
-	}
+        
+        return ret;
+    }
 
-	/**
-	 * @return Returns the last.
-	 */
-	public boolean isLast() {
-		return last;
-	}
+    /**
+     * @return Returns the last.
+     */
+    public boolean isLast() {
+        return last;
+    }
 
-	/**
-	 * @param last
-	 *            The last to set.
-	 */
-	public void setLast(boolean last) {
-		this.last = last;
-	}
+    /**
+     * @param last
+     *            The last to set.
+     */
+    public void setLast(boolean last) {
+        this.last = last;
+    }
 
-	public Integer count(GenericFeedRequest r) throws Exception {
-		throw new NotImplementedException(
-				"count method is not used by this feed");
-	}
+    public Integer count(GenericFeedRequest r) throws Exception {
+        throw new NotImplementedException(
+                "count method is not used by this feed");
+    }
 
-	/* (non-Javadoc)
-	 * @see org.digijava.module.digifeed.core.GenericFeedQuery#saveObject(java.lang.Object, java.util.Map)
-	 */
-	public void saveObject(Object o, Map metadata) {
-		
-		
-	}
+    /* (non-Javadoc)
+     * @see org.digijava.module.digifeed.core.GenericFeedQuery#saveObject(java.lang.Object, java.util.Map)
+     */
+    public void saveObject(Object o, Map metadata) {
+        
+        
+    }
 
 }

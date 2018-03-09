@@ -9,12 +9,12 @@ import org.digijava.kernel.request.TLSUtils;
  * @author Dolghier Constantin
  *
  */
-public class TextColumnKeyBuilder implements KeyBuilder<String> {
+public class TextColumnKeyBuilder implements KeyBuilder {
 
-	@Override
-	public String buildKey(NiReportsEngine engine, NiReportColumn<?> col) {
-		return TLSUtils.getEffectiveLangCode();
-	}
-	
-	public final static TextColumnKeyBuilder instance = new TextColumnKeyBuilder();
+    @Override
+    public String buildKey(NiReportsEngine engine, NiReportColumn<?> col) {
+        return TLSUtils.getEffectiveLangCode();
+    }
+    
+    public final static TextColumnKeyBuilder instance = new TextColumnKeyBuilder();
 }

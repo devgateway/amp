@@ -14,22 +14,22 @@ import org.apache.wicket.model.IModel;
  */
 public abstract class AmpEditLinkField extends AmpLinkField {
 
-	/**
-	 * @param id
-	 * @param fmName
-	 */
-	public AmpEditLinkField(String id, String fmName) {
-		super(id, fmName);
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * @param id
+     * @param fmName
+     */
+    public AmpEditLinkField(String id, String fmName) {
+        super(id, fmName);
+        // TODO Auto-generated constructor stub
+    }
 
-	public AmpEditLinkField(String id, String fmName, final IModel<String> qModel) {
-		super(id, fmName, qModel);
-	}
-	
-	public AmpEditLinkField(String id, String fmName, Boolean hideLabel, Boolean hideNewLine) {
-		super(id, fmName,hideLabel, hideNewLine);
-		// TODO Auto-generated constructor stub
-	}
+    public AmpEditLinkField(String id, String fmName, final IModel<String> qModel) {
+        super(id, fmName, qModel);
+    }
+    
+    public AmpEditLinkField(String id, String fmName, Boolean hideLabel, Boolean hideNewLine) {
+        super(id, fmName,hideLabel, hideNewLine);
+        // TODO Auto-generated constructor stub
+    }
 
 }

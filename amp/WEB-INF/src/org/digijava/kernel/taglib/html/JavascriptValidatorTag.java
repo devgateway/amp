@@ -53,8 +53,8 @@ import org.digijava.kernel.taglib.util.TagUtil;
 public class JavascriptValidatorTag
     extends org.apache.struts.taglib.html.JavascriptValidatorTag {
 
-	private static final long serialVersionUID = 1L;
-	private String htmlBeginComment = "\n<!-- Begin \n";
+    private static final long serialVersionUID = 1L;
+    private String htmlBeginComment = "\n<!-- Begin \n";
 
     /**
      * Constructs the beginning &lt;script&gt; element depending on xhtml status.

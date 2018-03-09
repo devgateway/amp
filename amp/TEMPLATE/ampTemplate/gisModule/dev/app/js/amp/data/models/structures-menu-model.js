@@ -20,6 +20,7 @@ module.exports = Backbone.Model
   initialize: function(things, options) {
     this.appData = options.appData;
     this.filter = options.filter;
+    this.settingsWidget = options.settingsWidget;
     this.structuresCollection = this.appData.structures;
     this.attachListeners();
   },
@@ -50,15 +51,20 @@ module.exports = Backbone.Model
     });
 
     this.listenTo(this.filter, 'apply', this.applyFilters);
+    this.listenTo(this.settingsWidget, 'applySettings', this.applyFilters);
 
     this.listenTo(this, 'change:filterVertical', function() {
       self.structuresCollection.updatePaletteSet();
     });
+    
+    
+    this.listenTo(this.appData.performanceToggleModel, 'change:isPerformanceToggleSelected', this.applyFilters);
+    
   },
 
   applyFilters: function() {
     if (this.get('selected')) {
-      this.structuresCollection.fetchStructuresWithActivities();
+       this.structuresCollection.fetchStructuresWithActivities();
     }
   },
 
@@ -90,8 +96,13 @@ module.exports = Backbone.Model
 	1: 'None.svg',
     100: 'Social.svg',
     110: 'Education.svg',
+    111: 'Education.svg',
+    112: 'Education.svg',
     113: 'Education.svg',
+    114: 'Education.svg',
     120: 'Health.svg',
+    121: 'Health.svg',
+    122: 'Health.svg',
     130: 'Population.svg',
     140: 'Water.svg',
     150: 'Gov.svg',
@@ -116,6 +127,12 @@ module.exports = Backbone.Model
     910: 'CostDonor.svg',
     920: 'NGO_Support.svg',
     930: 'Refugees.svg',
+    410: 'Environmental_Protection.svg',
+    520: 'Food_Security.svg',
+    530: 'Other_Commodity.svg',
+    720: 'Emergency_Response.svg',
+    730: 'Reconstruction.svg',
+    740: 'Disaster_Prevention.svg',
     998: 'Unspecified.svg'
   },
   

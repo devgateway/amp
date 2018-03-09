@@ -1,5 +1,5 @@
 {
-"amp.common:footer": "Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and DGF",
+"amp.common:footer": "Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and DG",
 
 "amp.common:title": "AMP Toolbar",
 "amp.common:title-desktop": "Desktop",
@@ -112,5 +112,6 @@
 "amp.gis-layers-manager:tooltip-created-on": "Created on",
 "amp.gis-layers-manager:tooltip-created-by": "by",
 "amp.gis:date-from": "From",
-"amp.gis:date-until": "Until"
+"amp.gis:date-until": "Until",
+"amp.gis:title-performance-selector": "Good Performance Projects View"
 }

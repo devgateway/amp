@@ -22,31 +22,31 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
  * since Oct 20, 2010
  */
 public class AmpFormSectionFeaturePanel extends AmpFeaturePanel {
-	
-	
-	protected final IModel<AmpActivityVersion> am;
-	private TransparentWebMarkupContainer mrk;
+    
+    
+    protected final IModel<AmpActivityVersion> am;
+    private TransparentWebMarkupContainer mrk;
 
-	/**
-	 * @param id
-	 * @param fmName
-	 * @throws Exception
-	 */
-	public AmpFormSectionFeaturePanel(String id, String fmName,final IModel<AmpActivityVersion> am)
-			throws Exception {
-		super(id, fmName);	
-		this.am = am;
-		this.labelContainer.add(new AttributeModifier("id", Hex.encodeHexString(fmName.getBytes())));
-		
-		mrk = new TransparentWebMarkupContainer("foldable");
-		add(mrk);
-	}
+    /**
+     * @param id
+     * @param fmName
+     * @throws Exception
+     */
+    public AmpFormSectionFeaturePanel(String id, String fmName,final IModel<AmpActivityVersion> am)
+            throws Exception {
+        super(id, fmName);  
+        this.am = am;
+        this.labelContainer.add(new AttributeModifier("id", Hex.encodeHexString(fmName.getBytes())));
+        
+        mrk = new TransparentWebMarkupContainer("foldable");
+        add(mrk);
+    }
 
-	public void setFolded(boolean folded){
-		if (folded)
-			mrk.add(new AttributeAppender("style", new Model("display: none;"), ""));
-		else
-			mrk.add(new AttributeAppender("style", new Model("display: block;"), ""));
-			
-	}
+    public void setFolded(boolean folded){
+        if (folded)
+            mrk.add(new AttributeAppender("style", new Model("display: none;"), ""));
+        else
+            mrk.add(new AttributeAppender("style", new Model("display: block;"), ""));
+            
+    }
 }

@@ -10,10 +10,10 @@ import org.digijava.kernel.translator.TranslatorWorker;
 
 public class RenderFormSubsectionTag extends BodyTagSupport {
     private static final long serialVersionUID = 1L;
-	private String title = "";
-	private String styleId = "";
-	private String styleClass = "";
-	
+    private String title = "";
+    private String styleId = "";
+    private String styleClass = "";
+    
     public String getStyleClass() {
         return styleClass;
     }
@@ -39,39 +39,39 @@ public class RenderFormSubsectionTag extends BodyTagSupport {
     }
 
 
-	public int doStartTag() throws JspException {
-		try {
- 			JspWriter out = pageContext.getOut();
-			StringBuffer html = new StringBuffer();
-			html.append(String.format("<div %s class='fields_group %s'>\n", this.getStyleId().isEmpty() ? "" : "id = '" + getStyleId() + "'",
-					this.getStyleClass()));
-			html.append(String.format("<div class='fields_group_title'>%s</div>\n", TranslatorWorker.translateText(this.getTitle())));
-			html.append("<div class='fields_group_contents'>\n");
+    public int doStartTag() throws JspException {
+        try {
+            JspWriter out = pageContext.getOut();
+            StringBuffer html = new StringBuffer();
+            html.append(String.format("<div %s class='fields_group content-dir %s'>\n", 
+                    this.getStyleId().isEmpty() ? "" : "id = '" + getStyleId() + "'", this.getStyleClass()));
+            html.append(String.format("<div class='fields_group_title'>%s</div>\n", TranslatorWorker.translateText(this.getTitle())));
+            html.append("<div class='fields_group_contents'>\n");
 
-			out.write(html.toString());
-			return super.doStartTag();
-		} catch (IOException ioe) {
+            out.write(html.toString());
+            return super.doStartTag();
+        } catch (IOException ioe) {
 
-		}
-		return (EVAL_BODY_INCLUDE);
+        }
+        return (EVAL_BODY_INCLUDE);
 
-	}
+    }
 
-	@Override
-	public int doAfterBody() throws JspException {
-		// TODO Auto-generated method stub
-		return super.doAfterBody();
-	}
+    @Override
+    public int doAfterBody() throws JspException {
+        // TODO Auto-generated method stub
+        return super.doAfterBody();
+    }
 
-	@Override
-	public int doEndTag() throws JspException {
-		try {
-			JspWriter out = pageContext.getOut();
-			out.print(bodyContent.getString());
-			out.print("</div>\n"); // closing fields_grou_contents
-			out.print("</div>\n"); // closing fields_group
-		} catch (Exception e) {}
+    @Override
+    public int doEndTag() throws JspException {
+        try {
+            JspWriter out = pageContext.getOut();
+            out.print(bodyContent.getString());
+            out.print("</div>\n"); // closing fields_grou_contents
+            out.print("</div>\n"); // closing fields_group
+        } catch (Exception e) {}
 
-		return EVAL_PAGE;
-	}
+        return EVAL_PAGE;
+    }
 }

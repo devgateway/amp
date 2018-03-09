@@ -2,7 +2,7 @@
  *   ModuleEmailManager.java
  *   @Author Maka Kharalashvili maka@digijava.org
  *   Created: Apr 21, 2004
- * 	CVS-ID: $Id$
+ *  CVS-ID: $Id$
  *
  *   This file is part of DiGi project (www.digijava.org).
  *   DiGi is a multi-site portal system written in Java/J2EE.
@@ -171,7 +171,7 @@ public class ModuleEmailManager {
 
                 message = DgUtil.fillPattern(message, hMap);
 
-                DgEmailManager.sendMail(currAdmin.getEmail(), from,
+                DgEmailManager.sendMail(currAdmin.getEmailUsedForNotification(), from,
                                         subject, message,
                                         locale, true);
 
@@ -265,7 +265,7 @@ public class ModuleEmailManager {
 
         message = DgUtil.fillPattern(message, hMap);
 
-        DgEmailManager.sendMail(user.getEmail(), from,
+        DgEmailManager.sendMail(user.getEmailUsedForNotification(), from,
                                 subject, message,
                                 locale, true);
 

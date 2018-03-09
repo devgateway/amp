@@ -28,20 +28,33 @@ define([ 'marionette', 'models/document', 'collections/documents',
 		var dynamicContentView = new DynamicContentView();
 		app.TabsApp.documentsWidgetRegion.show(dynamicContentView);
 
-		var DocumentItemView = Marionette.ItemView.extend({
-			tagName : 'li',
-			className : 'document-item tri',
-			template : _.template(documentTemplate)
-		});
-		var DocumentsItemsView = Marionette.CollectionView.extend({
-			tagName : 'ul',
-			childViewContainer : 'ul',
-			childView : DocumentItemView
-		});
-		var documentsItemsView = new DocumentsItemsView({
-			collection : documents
-		});		
-		dynamicContentView.content.show(documentsItemsView);
+        var docItemTagName, docItemClassName, docItemTemplate;
+        if (documents.length == 0) {
+            var fakeDoc = new Document();
+            documents.add(fakeDoc);
+			var message = TranslationManager.getTranslated("No results");
+            docItemTagName = 'p';
+            docItemClassName = 'right_menu_empty';
+            docItemTemplate = _.template(message);
+        } else {
+            docItemTagName = 'li';
+            docItemClassName = 'document-item tri tri-desktop';
+            docItemTemplate = _.template(documentTemplate);
+        }
+        var DocumentItemView = Marionette.ItemView.extend({
+            tagName : docItemTagName,
+            className : docItemClassName,
+            template : docItemTemplate
+        });
+        var DocumentsItemsView = Marionette.CollectionView.extend({
+            tagName : 'ul',
+            childViewContainer : 'ul',
+            childView : DocumentItemView
+        });
+        var documentsItemsView = new DocumentsItemsView({
+            collection : documents
+        });
+        dynamicContentView.content.show(documentsItemsView);
 	};
 
 	return DocumentsWidgetManager;

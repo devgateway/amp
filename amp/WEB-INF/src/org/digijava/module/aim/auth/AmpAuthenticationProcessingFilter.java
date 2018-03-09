@@ -35,8 +35,8 @@ public class AmpAuthenticationProcessingFilter
     public Authentication attemptAuthentication(HttpServletRequest request) throws
         AuthenticationException {
 
-    	String id = request.getParameter("j_autoWorkspaceId");
-    	request.getSession().setAttribute("j_autoWorkspaceId", id);
+        String id = request.getParameter("j_autoWorkspaceId");
+        request.getSession().setAttribute("j_autoWorkspaceId", id);
         Authentication authResult = super.attemptAuthentication(request, null);
         User currentUser = null;
         try {
@@ -71,10 +71,10 @@ public class AmpAuthenticationProcessingFilter
 //         */
 //        Iterator itr = members.iterator();
 //        while (itr.hasNext()){
-//        	AmpTeamMember member = (AmpTeamMember) itr.next();
-//        	AmpApplicationSettings ampAppSettings = DbUtil.getMemberAppSettings(member.getAmpTeamMemId());
-//            if (ampAppSettings == null)	//if the user hasn't got the personalized settings
-//            	throw new InvalidUserException(currentUser.getEmail());
+//          AmpTeamMember member = (AmpTeamMember) itr.next();
+//          AmpApplicationSettings ampAppSettings = DbUtil.getMemberAppSettings(member.getAmpTeamMemId());
+//            if (ampAppSettings == null)   //if the user hasn't got the personalized settings
+//              throw new InvalidUserException(currentUser.getEmail());
 //        }
         AuditLoggerUtil.logUserLogin(request,currentUser, Constants.LOGIN_ACTION);
         return authResult;
@@ -123,7 +123,7 @@ public class AmpAuthenticationProcessingFilter
             session.removeAttribute("ampAdmin");
         }
         if(session.getAttribute("publicuser") != null) {
-        	session.removeAttribute("publicuser");
+            session.removeAttribute("publicuser");
         }
     }
 

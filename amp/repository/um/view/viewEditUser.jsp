@@ -20,6 +20,18 @@
 
 <script type="text/javascript">
 
+$(document).ready(function() {
+	initialize();
+});
+
+function initialize() {
+	$('#notificationEmailEnabled').bind("click", function() {
+        $('#notificationEmailRow') [this.checked ? "show" : "hide"]();
+      });
+    
+    $('#notificationEmailRow')[$('#notificationEmailEnabled').is(":checked") ? "show" : "hide"]();
+}
+
 function cancel()
 {
 	document.umViewEditUserForm.action = "/um/viewAllUsers.do~reset=true";
@@ -80,15 +92,17 @@ function validate(str,value){
 
 function validateUserInfo(){
 	var userMail=document.getElementById("userMail").value;
+	var notificationEmail = $("#notificationEmail").val();
 	var firstName=document.getElementById("firstName").value;
 	var lastName=document.getElementById("lastName").value;
 	var country=document.getElementById("country").value;
 	var language = $('select[name="selectedLanguageCode"]').val();
 	var errorMsg='';
 	
-	if(! validateEmail(userMail)) {
+	if(!validateEmail(userMail)) {
 		return false;
 	}
+	
 	if(isInvalid(firstName)==1){
 		<c:set var="translation">
 		<digi:trn key="erroruregistration.FirstNameBlank">First Name is Blank or starts with an space</digi:trn>
@@ -117,6 +131,13 @@ function validateUserInfo(){
 		alert("${translation}");
     	return false;
     }
+	
+	if ($('#notificationEmailEnabled').is(":checked")) {
+        if (!validateNotificationEmail(notificationEmail) || !validateMailWithNotificationMail(userMail, notificationEmail)) {
+            return false;
+        }
+    }
+	
 	if(country=='-1'){
 		errorMsg='<digi:trn jsFriendly="true" >Please Select Country</digi:trn>';
 		alert(errorMsg);
@@ -254,6 +275,23 @@ function validateUserInfo(){
 																           <html:text name="umViewEditUserForm" property="email"  style="background-color: #FFFFFF;border: 1px solid #D0D0D0;color: #767676;font-size: 11px;margin: 5px;padding: 2px; width:180px;" styleId="userMail"/>
 																		</td>
 																	</tr>
+																	<tr>
+                                                                        <td width="169" align="right" height="30"style="font-size: 11px; font-weight: bold; color:#000;">
+                                                                             <digi:trn>Use different email for email notifications</digi:trn>
+                                                                        </td>
+                                                                        <td width="380" height="30" colspan="2">
+                                                                            <html:checkbox property="notificationEmailEnabled" styleClass="inp-text" style="margin: 5px" styleId="notificationEmailEnabled"/>
+                                                                        </td>
+                                                                    </tr>
+	                                                                    <tr id="notificationEmailRow">
+	                                                                        <td width="169" align="right" height="30"style="font-size: 11px; font-weight: bold; color:#000;">
+	                                                                            <digi:trn>Notification Email</digi:trn>
+	                                                                            <font color="red">*</font>
+	                                                                        </td>
+	                                                                        <td width="190" height="30">
+	                                                                           <html:text name="umViewEditUserForm" property="notificationEmail" style="background-color: #FFFFFF;border: 1px solid #D0D0D0;color: #767676;font-size: 11px;margin: 5px;padding: 2px; width:180px;" styleId="notificationEmail"/>
+	                                                                        </td>
+	                                                                    </tr>
 																	<tr>
 																		<td width="169" height="30" align="right"style="font-size: 11px;
     font-weight: bold; color:#000;">
@@ -411,7 +449,7 @@ function validateUserInfo(){
 																			<digi:trn>Verified Region</digi:trn>
 																	    </td>
 																	    <td width="190" height="30">
-																           <html:select name="umViewEditUserForm" property="selectedRegionId"  style="background-color: #FFFFFF;border: 1px solid #D0D0D0;color: #767676;font-size: 11px;margin: 5px;padding: 2px; width:180px;" styleId="country">
+																           <html:select name="umViewEditUserForm" property="selectedRegionId"  style="background-color: #FFFFFF;border: 1px solid #D0D0D0;color: #767676;font-size: 11px;margin: 5px;padding: 2px; width:180px;" styleId="region">
 																                <c:set var="translation">
 																                  <digi:trn>
 																                  --Select region--
@@ -453,7 +491,7 @@ function validateUserInfo(){
                                                                      		 <digi:trn key="um:pledgesUser">Pledges User</digi:trn>
 																		</td>
 																	    <td width="380" height="30" colspan="2">
-          																	<html:checkbox property="pledger" styleClass="inp-text"/>
+          																	<html:checkbox property="pledger" style="margin: 5px" styleClass="inp-text"/>
 																		</td>
 																	</tr>
 																	</module:display>																	
@@ -462,7 +500,7 @@ function validateUserInfo(){
                                                                      		 <digi:trn key="um:nationalCoordinator">National Coordinator</digi:trn>
 																		</td>
 																	    <td width="380" height="30" colspan="2">
-          																	<html:checkbox property="nationalCoordinator" styleClass="inp-text"/>
+          																	<html:checkbox property="nationalCoordinator" style="margin: 5px" styleClass="inp-text"/>
 																		</td>
 																	</tr>																	
 																		<tr>
@@ -471,10 +509,10 @@ function validateUserInfo(){
 																			</td>
 																			<td class="f-names" align="left">
 																				<c:if test="${!umViewEditUserForm.banReadOnly}">
-																					<html:checkbox property="addWorkspace" styleClass="inp-text"></html:checkbox>
+																					<html:checkbox property="addWorkspace" style="margin: 5px" styleClass="inp-text"></html:checkbox>
 																				</c:if>
 																				<c:if test="${umViewEditUserForm.banReadOnly}">
-																					<html:checkbox property="addWorkspace" styleClass="inp-text" disabled="true"></html:checkbox>
+																					<html:checkbox property="addWorkspace" style="margin: 5px" styleClass="inp-text" disabled="true"></html:checkbox>
 																				</c:if>
 																			</td>
 																		</tr>
@@ -483,7 +521,7 @@ function validateUserInfo(){
                                                                      		 <digi:trn key="um:exemptFromDataFreezing">Exempt from activity freezing</digi:trn>
 																		</td>
 																	    <td width="380" height="30" colspan="2">
-          																	<html:checkbox property="exemptFromDataFreezing" styleClass="inp-text"/>
+          																	<html:checkbox property="exemptFromDataFreezing" style="margin: 5px" styleClass="inp-text"/>
 																		</td>
 																	 </tr>
 																	<tr>
@@ -573,7 +611,6 @@ function validateUserInfo(){
 </digi:form>
 </div>
 </center>
-
 
 
 

@@ -19,6 +19,7 @@ import org.dgfoundation.amp.reports.xml.Config;
 import org.dgfoundation.amp.reports.xml.Contents;
 import org.dgfoundation.amp.reports.xml.Filter;
 import org.dgfoundation.amp.reports.xml.Filters;
+import org.dgfoundation.amp.reports.xml.GroupingOption;
 import org.dgfoundation.amp.reports.xml.Headers;
 import org.dgfoundation.amp.reports.xml.Output;
 import org.dgfoundation.amp.reports.xml.ParentColumn;
@@ -40,195 +41,221 @@ import clover.org.apache.commons.lang.StringEscapeUtils;
  */
 public class GeneratedReportToXmlConverter {
 
-	private GeneratedReport generatedReport;
+    private GeneratedReport generatedReport;
 
-	public GeneratedReportToXmlConverter(GeneratedReport report) {
-		super();
-		this.generatedReport = report;
-	}
+    public GeneratedReportToXmlConverter(GeneratedReport report) {
+        super();
+        this.generatedReport = report;
+    }
 
-	public Report convert() {
-		Report xmlReport = new Report();
-		xmlReport.setConfig(getReportConfig());
-		xmlReport.setOutput(getReportOutput());
+    public Report convert() {
+        Report xmlReport = new Report();
+        xmlReport.setConfig(getReportConfig());
+        xmlReport.setOutput(getReportOutput());
 
-		return xmlReport;
-	}
+        return xmlReport;
+    }
 
-	private Output getReportOutput() {
-		Output output = new Output();
-		output.setHeaders(getReportHeaders());
-		output.setReportArea(getOutputReportArea());
+    private Output getReportOutput() {
+        Output output = new Output();
+        output.setHeaders(getReportHeaders());
+        output.setReportArea(getOutputReportArea());
 
-		return output;
-	}
+        return output;
+    }
 
-	private ReportArea getOutputReportArea() {
-		return getReportArea(generatedReport.reportContents);
-	}
+    private ReportArea getOutputReportArea() {
+        return getReportArea(generatedReport.reportContents);
+    }
 
-	/**
-	 * @param reportArea
-	 */
-	private ReportArea getReportArea(org.dgfoundation.amp.newreports.ReportArea reportArea) {
-		ReportArea xmlReportArea = new ReportArea();
+    /**
+     * @param reportArea
+     */
+    private ReportArea getReportArea(org.dgfoundation.amp.newreports.ReportArea reportArea) {
+        ReportArea xmlReportArea = new ReportArea();
 
-		xmlReportArea.setContents(getContents(reportArea));
-		xmlReportArea.setChildren(getChildren(reportArea));
+        xmlReportArea.setContents(getContents(reportArea));
+        xmlReportArea.setChildren(getChildren(reportArea));
 
-		return xmlReportArea;
-	}
+        return xmlReportArea;
+    }
 
-	/**
-	 * @param reportArea
-	 */
-	private Contents getContents(org.dgfoundation.amp.newreports.ReportArea reportArea) {
-		Contents contents = new Contents();
+    /**
+     * @param reportArea
+     */
+    private Contents getContents(org.dgfoundation.amp.newreports.ReportArea reportArea) {
+        Contents contents = new Contents();
 
-		generatedReport.leafHeaders.stream()
-			.filter(roc -> !isHiddenColumn(roc.originalColumnName))
-			.forEach(roc -> {
-				ReportCell rc = reportArea.getContents().get(roc) != null ? reportArea.getContents().get(roc) : roc.emptyCell;
-				Cell cell = new Cell();
-				cell.setColumnName(roc.getHierarchicalName());
-				cell.setValue(rc.displayedValue);
-				contents.getCell().add(cell);
-			});
+        generatedReport.leafHeaders.stream()
+            .filter(roc -> !isHiddenColumn(roc.originalColumnName))
+            .forEach(roc -> {
+                ReportCell rc = reportArea.getContents().get(roc) != null ? reportArea.getContents().get(roc) : roc.emptyCell;
+                Cell cell = new Cell();
+                cell.setColumnName(roc.getHierarchicalName());
+                cell.setValue(rc.displayedValue);
+                contents.getCell().add(cell);
+            });
 
-		return contents;
-	}
+        return contents;
+    }
 
-	/**
-	 * 
-	 * @param reportArea
-	 * @return children of reportArea
-	 */
-	private Children getChildren(org.dgfoundation.amp.newreports.ReportArea reportArea) {
-		Children children = new Children();
+    /**
+     * 
+     * @param reportArea
+     * @return children of reportArea
+     */
+    private Children getChildren(org.dgfoundation.amp.newreports.ReportArea reportArea) {
+        Children children = new Children();
 
-		if (reportArea.getChildren() != null) {
-			reportArea.getChildren().forEach(ra -> children.getReportArea().add(getReportArea(ra)));
-		}
+        if (reportArea.getChildren() != null) {
+            reportArea.getChildren().forEach(ra -> children.getReportArea().add(getReportArea(ra)));
+        }
 
-		return children;
-	}
+        return children;
+    }
 
-	private Headers getReportHeaders() {
-		Headers headers = new Headers();
+    private Headers getReportHeaders() {
+        Headers headers = new Headers();
 
-		generatedReport.leafHeaders.stream().filter(roc -> !isHiddenColumn(roc.originalColumnName))
-				.forEach(roc -> headers.getColumn().add(getHeaderColumn(roc)));
+        generatedReport.leafHeaders.stream().filter(roc -> !isHiddenColumn(roc.originalColumnName))
+                .forEach(roc -> headers.getColumn().add(getHeaderColumn(roc)));
 
-		return headers;
-	}
+        return headers;
+    }
 
-	/**
-	 * 
-	 * @param reportOutputColumn
-	 * @return column 
-	 */
-	private Column getHeaderColumn(ReportOutputColumn reportOutputColumn) {
-		Column headerColumn = new Column();
+    /**
+     * 
+     * @param reportOutputColumn
+     * @return column 
+     */
+    private Column getHeaderColumn(ReportOutputColumn reportOutputColumn) {
+        Column headerColumn = new Column();
 
-		headerColumn.setName(reportOutputColumn.columnName);
-		headerColumn.setDescription(reportOutputColumn.description);
-		headerColumn.setHierarchicalName(reportOutputColumn.getHierarchicalName());
+        headerColumn.setName(reportOutputColumn.columnName);
+        headerColumn.setDescription(reportOutputColumn.description);
+        headerColumn.setHierarchicalName(reportOutputColumn.getHierarchicalName());
 
-		if (reportOutputColumn.parentColumn != null) {
-			ParentColumn parentColumn = new ParentColumn();
-			parentColumn.setColumn(getHeaderColumn(reportOutputColumn.parentColumn));
-			headerColumn.setParentColumn(parentColumn);
-		}
+        if (reportOutputColumn.parentColumn != null) {
+            ParentColumn parentColumn = new ParentColumn();
+            parentColumn.setColumn(getHeaderColumn(reportOutputColumn.parentColumn));
+            headerColumn.setParentColumn(parentColumn);
+        }
 
-		return headerColumn;
-	}
+        return headerColumn;
+    }
 
-	private Config getReportConfig() {
-		Config reportConfig = new Config();
+    private Config getReportConfig() {
+        Config reportConfig = new Config();
 
-		reportConfig.setSorting(getReportSorting());
-		reportConfig.setFilters(getReportFilters());
-		reportConfig.setSettings(getReportSettings());
+        reportConfig.setSorting(getReportSorting());
+        reportConfig.setFilters(getReportFilters());
+        reportConfig.setSettings(getReportSettings());
+        reportConfig.setSummary(getReportSummary());
+        reportConfig.setGroupingOption(getReportGroupingOption());
 
-		return reportConfig;
-	}
+        return reportConfig;
+    }
 
-	private Sorting getReportSorting() {
-		Sorting sorting = new Sorting();
+    private GroupingOption getReportGroupingOption() {
+        switch (generatedReport.spec.getGroupingCriteria()) {
+            case GROUPING_YEARLY:
+                return GroupingOption.A;
+            case GROUPING_QUARTERLY:
+                return GroupingOption.Q;
+            case GROUPING_MONTHLY:
+                return GroupingOption.M;
+            default:
+                return null;
+        }
+    }
 
-		generatedReport.spec.getSorters().forEach(sorter -> {
-			Sort sort = new Sort();
-			String pathName = sorter.hierPath.get(0);
+    private Boolean getReportSummary() {
+        return generatedReport.spec.isSummaryReport();
+    }
 
-			if (!sorter.isHierarchySorter(generatedReport.spec.getHierarchyNames())) {
-				pathName = sorter.buildPath("][", NiReportsEngine.FUNDING_COLUMN_NAME,
-						NiReportsEngine.TOTALS_COLUMN_NAME);
-			}
+    private Sorting getReportSorting() {
+        Sorting sorting = new Sorting();
 
-			sort.setAsc(Boolean.toString(sorter.ascending));
-			sort.setValue(StringEscapeUtils.escapeXml("[" + pathName + "]"));
-			sorting.getSort().add(sort);
-		});
+        generatedReport.spec.getSorters().forEach(sorter -> {
+            Sort sort = new Sort();
+            String pathName = sorter.hierPath.get(0);
 
-		return sorting;
-	}
+            if (!sorter.isHierarchySorter(generatedReport.spec.getHierarchyNames())) {
+                pathName = sorter.buildPath("][", NiReportsEngine.FUNDING_COLUMN_NAME,
+                        NiReportsEngine.TOTALS_COLUMN_NAME);
+            }
 
-	private Settings getReportSettings() {
-		Settings xmlSettings = new Settings();
-		ReportSettings settings = generatedReport.spec.getSettings();
+            sort.setAsc(Boolean.toString(sorter.ascending));
+            sort.setValue(StringEscapeUtils.escapeXml("[" + pathName + "]"));
+            sorting.getSort().add(sort);
+        });
 
-		xmlSettings.setCurrencyCode(settings.getCurrencyCode());
-		xmlSettings.setCalendarId(settings.getCalendar().getIdentifier().intValue());
+        return sorting;
+    }
 
-		YearRange yearRange = new YearRange();
-		if (settings.getYearRangeFilter().min != null)
-			yearRange.setFrom(Integer.parseInt(settings.getYearRangeFilter().min));
-		if (settings.getYearRangeFilter().max != null)
-			yearRange.setTo(Integer.parseInt(settings.getYearRangeFilter().max));
+    private Settings getReportSettings() {
+        Settings xmlSettings = new Settings();
+        ReportSettings settings = generatedReport.spec.getSettings();
 
-		xmlSettings.setYearRange(yearRange);
+        xmlSettings.setCurrencyCode(settings.getCurrencyCode());
+        if (settings.getCalendar() != null && settings.getCalendar().getIdentifier() != null) {
+            xmlSettings.setCalendarId(settings.getCalendar().getIdentifier().intValue());
+        }
 
-		AmountFormat xmlAmountFormat = new AmountFormat();
-		DecimalFormat amountFormat = settings.getCurrencyFormat();
-		DecimalFormatSymbols ds = amountFormat.getDecimalFormatSymbols();
-		xmlAmountFormat.setNumberDivider(settings.getUnitsOption().divider);
-		xmlAmountFormat.setMaxFracDigits(amountFormat.getMaximumFractionDigits());
-		xmlAmountFormat.setDecimalSymbol(String.valueOf(ds.getDecimalSeparator()));
-		xmlAmountFormat.setGroupSeparator(String.valueOf(ds.getGroupingSeparator()));
-		xmlAmountFormat.setUseGrouping(amountFormat.isGroupingUsed());
-		xmlAmountFormat.setGroupSize(amountFormat.getGroupingSize());
+        YearRange yearRange = new YearRange();
+        if (settings.getYearRangeFilter() != null && settings.getYearRangeFilter().min != null) {
+            yearRange.setFrom(Integer.parseInt(settings.getYearRangeFilter().min));
+        }
+        
+        if (settings.getYearRangeFilter() != null && settings.getYearRangeFilter().max != null) {
+            yearRange.setTo(Integer.parseInt(settings.getYearRangeFilter().max));
+        }
 
-		xmlSettings.setAmountFormat(xmlAmountFormat);
+        xmlSettings.setYearRange(yearRange);
 
-		return xmlSettings;
-	}
+        AmountFormat xmlAmountFormat = new AmountFormat();
+        DecimalFormat amountFormat = settings.getCurrencyFormat();
+        if (amountFormat != null) {
+            DecimalFormatSymbols ds = amountFormat.getDecimalFormatSymbols();
+            xmlAmountFormat.setNumberDivider(settings.getUnitsOption().divider);
+            xmlAmountFormat.setMaxFracDigits(amountFormat.getMaximumFractionDigits());
+            xmlAmountFormat.setDecimalSymbol(String.valueOf(ds.getDecimalSeparator()));
+            xmlAmountFormat.setGroupSeparator(String.valueOf(ds.getGroupingSeparator()));
+            xmlAmountFormat.setUseGrouping(amountFormat.isGroupingUsed());
+            xmlAmountFormat.setGroupSize(amountFormat.getGroupingSize());
+        }
 
-	private Filters getReportFilters() {
-		Filters filters = new Filters();
+        xmlSettings.setAmountFormat(xmlAmountFormat);
 
-		Map<String, List<String>> extractedFilters = ExportFilterUtils
-				.getFilterValuesForIds(generatedReport.spec.getFilters());
+        return xmlSettings;
+    }
 
-		for (Map.Entry<String, List<String>> filter : extractedFilters.entrySet()) {
-			Filter xmlFilter = new Filter();
-			xmlFilter.setName(filter.getKey());
-			
-			Values values = new Values();
-			values.getValue().addAll(filter.getValue());
-			
-			xmlFilter.setValues(values);
-			filters.getFilter().add(xmlFilter);
-		}
-		
-		return filters;
-	}
+    private Filters getReportFilters() {
+        Filters filters = new Filters();
 
-	protected boolean isHiddenColumn(String columnName) {
-		return columnName.equals("Draft") || columnName.equals("Approval Status");
-	}
+        Map<String, List<String>> extractedFilters = ExportFilterUtils
+                .getFilterValuesForIds(generatedReport.spec.getFilters());
 
-	protected boolean hasReportGeneratedDummyColumn(GeneratedReport report) {
-		return report.spec.isSummaryReport()
-				&& (report.spec.getHierarchies() == null || report.spec.getHierarchies().isEmpty());
-	}
+        for (Map.Entry<String, List<String>> filter : extractedFilters.entrySet()) {
+            Filter xmlFilter = new Filter();
+            xmlFilter.setName(filter.getKey());
+            
+            Values values = new Values();
+            values.getValue().addAll(filter.getValue());
+            
+            xmlFilter.setValues(values);
+            filters.getFilter().add(xmlFilter);
+        }
+        
+        return filters;
+    }
+
+    protected boolean isHiddenColumn(String columnName) {
+        return columnName.equals("Draft") || columnName.equals("Approval Status");
+    }
+
+    protected boolean hasReportGeneratedDummyColumn(GeneratedReport report) {
+        return report.spec.isSummaryReport()
+                && (report.spec.getHierarchies() == null || report.spec.getHierarchies().isEmpty());
+    }
 }

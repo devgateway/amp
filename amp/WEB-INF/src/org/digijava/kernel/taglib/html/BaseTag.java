@@ -45,8 +45,8 @@ import org.digijava.kernel.Constants;
 public class BaseTag
     extends org.apache.struts.taglib.html.BaseTag {
 
-	private static final long serialVersionUID = 1L;
-	private static Logger logger = Logger.getLogger(BaseTag.class);
+    private static final long serialVersionUID = 1L;
+    private static Logger logger = Logger.getLogger(BaseTag.class);
 
     /**
      * Process the start of this tag.

@@ -52,8 +52,8 @@ public class ViewAmp
                                  HttpServletRequest request,
                                  HttpServletResponse response) throws java.lang.
             Exception {
-    	
-    	String workspaceId = (String) request.getSession().getAttribute("j_autoWorkspaceId");
+        
+        String workspaceId = (String) request.getSession().getAttribute("j_autoWorkspaceId");
         User user = RequestUtils.getUser(request);
         Site site = RequestUtils.getSite(request);
         
@@ -74,7 +74,7 @@ public class ViewAmp
         session.setAttribute(Constants.USER_WORKSPACES, members);
         
         if (tm != null && tm.getTeamId() != null &&
-        	tm.getTeamId().longValue() > 0) {
+            tm.getTeamId().longValue() > 0) {
             String fwdUrl = "showDesktop.do";
             response.sendRedirect(fwdUrl);
             return null;
@@ -83,8 +83,8 @@ public class ViewAmp
             response.sendRedirect(fwdUrl);
             return null;
         } else if(workspaceId != null){
-        	response.sendRedirect("selectTeam.do");
-        	return null;
+            response.sendRedirect("selectTeam.do");
+            return null;
         }
 
 
@@ -94,7 +94,7 @@ public class ViewAmp
         LoginForm lForm = (LoginForm) form; // login form instance
        
         session.setAttribute("currentUser", user);
-		lForm.setMembers(members);
+        lForm.setMembers(members);
 
         Collection<AmpCategoryValue> workspaceGroups = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.WORKSPACE_GROUP_KEY);
         lForm.setWorkspaceGroups(workspaceGroups);
@@ -139,8 +139,8 @@ public class ViewAmp
          */
         Collection members = TeamMemberUtil.getTeamMembers(usr.getEmail());
         if (members == null || members.size() == 0) {
-			//
-			if (siteAdmin == true) { // user is a site admin
+            //
+            if (siteAdmin == true) { // user is a site admin
                 // set the session variable 'ampAdmin' to the value 'yes'
                 session.setAttribute("ampAdmin", new String("yes"));
                 // create a TeamMember object and set it to a session variabe 'currentMember'
@@ -186,7 +186,7 @@ public class ViewAmp
                     if (editActMap != null) {
                         Iterator<String> itr1 = editActMap.keySet().iterator();
                         while (itr1.hasNext()) {
-                        	sessId = itr1.next();
+                            sessId = itr1.next();
                             Long tempActId = (Long) editActMap.get(sessId);
 
                             //logger.info("tempActId = " + tempActId + " actId = " + actId);

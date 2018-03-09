@@ -21,8 +21,9 @@ export default class App extends Component {
         this.outputChanged = this.outputChanged.bind(this);
     }
 
-    componentDidMount() {
+    componentWillMount() {
         this.props.actions.fetchReportVisibilityConfiguration();
+        this.props.actions.getCalendars();
     }
 
     tabChanged( event ) {
@@ -86,7 +87,7 @@ export default class App extends Component {
                    </ul>
                    </div>
                 }               
-                {this.getReport(indicatorCode, currentReport)}
+                <div className="report" >{this.getReport(indicatorCode, currentReport)}</div>
                 </div>
                 )}
              </div>

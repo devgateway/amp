@@ -27,59 +27,59 @@ import org.hibernate.Transaction;
 
 public class LocationUtil {
 
-	private static Logger logger = Logger.getLogger(LocationUtil.class);
-	
-	public static final List<String> LOCATIONS_COLUMNS_NAMES = Collections.unmodifiableList( 
-	        Arrays.asList(ColumnConstants.COUNTRY, ColumnConstants.REGION, ColumnConstants.ZONE, 
+    private static Logger logger = Logger.getLogger(LocationUtil.class);
+    
+    public static final List<String> LOCATIONS_COLUMNS_NAMES = Collections.unmodifiableList( 
+            Arrays.asList(ColumnConstants.COUNTRY, ColumnConstants.REGION, ColumnConstants.ZONE, 
             ColumnConstants.DISTRICT, ColumnConstants.LOCATION));
 
-	//End Search Location.
-	public static AmpLocation getAmpLocationByCVLocation(Long ampCVLocationId) {
-		Session session = null;
-		AmpLocation loc = null;
+    //End Search Location.
+    public static AmpLocation getAmpLocationByCVLocation(Long ampCVLocationId) {
+        Session session = null;
+        AmpLocation loc = null;
 
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			
-			String queryString 	= "select l from " + AmpLocation.class.getName()
-					+ " l where location=:locationId order by l.ampLocationId";
-			Query qry = session.createQuery(queryString);
-			qry.setLong("locationId", ampCVLocationId);
-			
-			Collection result	= qry.list();
-			if ( result != null && result.size() > 0 ) {
-				return (AmpLocation)result.iterator().next();
-			}
-			
-		} catch (Exception e) {
-			logger.error("Uanble to get location :" + e);
-		}
-		return loc;
-		
-	}
-	public static AmpLocation getAmpLocationByGeoCode(String geoCode) {
-		Session session = null;
-		AmpLocation loc = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            
+            String queryString  = "select l from " + AmpLocation.class.getName()
+                    + " l where location=:locationId order by l.ampLocationId";
+            Query qry = session.createQuery(queryString);
+            qry.setLong("locationId", ampCVLocationId);
+            
+            Collection result   = qry.list();
+            if ( result != null && result.size() > 0 ) {
+                return (AmpLocation)result.iterator().next();
+            }
+            
+        } catch (Exception e) {
+            logger.error("Uanble to get location :" + e);
+        }
+        return loc;
+        
+    }
+    public static AmpLocation getAmpLocationByGeoCode(String geoCode) {
+        Session session = null;
+        AmpLocation loc = null;
 
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			
-			String queryString 	= "select l from " + AmpLocation.class.getName()
-					+ " l where location.geoCode =:geoCode order by l.ampLocationId";
-			Query qry = session.createQuery(queryString);
-			qry.setString("geoCode", geoCode);
-			
-			Collection result	= qry.list();
-			if ( result != null && result.size() > 0 ) {
-				return (AmpLocation)result.iterator().next();
-			}
-			
-		} catch (Exception e) {
-			logger.error("Uanble to get location :" + e);
-		} 
-		return loc;
-		
-	}
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            
+            String queryString  = "select l from " + AmpLocation.class.getName()
+                    + " l where location.geoCode =:geoCode order by l.ampLocationId";
+            Query qry = session.createQuery(queryString);
+            qry.setString("geoCode", geoCode);
+            
+            Collection result   = qry.list();
+            if ( result != null && result.size() > 0 ) {
+                return (AmpLocation)result.iterator().next();
+            }
+            
+        } catch (Exception e) {
+            logger.error("Uanble to get location :" + e);
+        } 
+        return loc;
+        
+    }
          /**
          * Returns list of locations using their ids
          * @param ids consists  selected locations id separted by comma
@@ -88,13 +88,13 @@ public class LocationUtil {
          */
 
         public static List<AmpCategoryValueLocations> getAllLocations(String ids) throws DgException{
-		Session session = null;
-		 List<AmpCategoryValueLocations> col = null;
+        Session session = null;
+         List<AmpCategoryValueLocations> col = null;
 
-		try {
+        try {
                     
-			session = PersistenceManager.getRequestDBSession();
-			String queryString = " from " + AmpCategoryValueLocations.class.getName()+
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = " from " + AmpCategoryValueLocations.class.getName()+
                         " vl where vl.parentLocation  is null " ;
                         
                          if(ids!=null&&ids.length()>0){
@@ -102,34 +102,34 @@ public class LocationUtil {
                             queryString+="  or vl.parentLocation  in ("+id+")";
                         }
 
-			Query qry = session.createQuery(queryString);
-			col = qry.list();
-		} catch (Exception e) {
-			logger.error("Unable to get locations from database "
-					+ e.getMessage());
+            Query qry = session.createQuery(queryString);
+            col = qry.list();
+        } catch (Exception e) {
+            logger.error("Unable to get locations from database "
+                    + e.getMessage());
                         throw new DgException(e);
-		} 
-		return col;
-	}
+        } 
+        return col;
+    }
         
         public static List<AmpCategoryValueLocations> getAllCountriesAndRegions() {
-    		Session session = null;
-    		 List<AmpCategoryValueLocations> col = null;
+            Session session = null;
+             List<AmpCategoryValueLocations> col = null;
 
-    		try {
+            try {
                         
-    			session = PersistenceManager.getRequestDBSession();
-    			String queryString = " from " + AmpCategoryValueLocations.class.getName();
+                session = PersistenceManager.getRequestDBSession();
+                String queryString = " from " + AmpCategoryValueLocations.class.getName();
 
-    			Query qry = session.createQuery(queryString);
-    			col = qry.list();
-    		} catch (Exception e) {
-    			logger.error("Unable to get locations from database "
-    					+ e.getMessage());
+                Query qry = session.createQuery(queryString);
+                col = qry.list();
+            } catch (Exception e) {
+                logger.error("Unable to get locations from database "
+                        + e.getMessage());
                             throw new RuntimeException(e);
-    		} 
-    		return col;
-    	}
+            } 
+            return col;
+        }
         
          /**
          * Returns location using its id
@@ -139,8 +139,8 @@ public class LocationUtil {
          */
         
         public static AmpCategoryValueLocations getAmpCategoryValueLocationById(Long id) throws DgException {
-        	return (AmpCategoryValueLocations) PersistenceManager.getSession().load(AmpCategoryValueLocations.class, id);
-		}
+            return (AmpCategoryValueLocations) PersistenceManager.getSession().load(AmpCategoryValueLocations.class, id);
+        }
          
          /**
          * Saves location into the database
@@ -154,34 +154,34 @@ public class LocationUtil {
         Transaction tx = null;
 
         if (!editing){
-        	
-        	/*  country check for duplicate iso and iso3 codes */
-        	boolean isCountry	=  
-        			CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue( loc.getParentCategoryValue());
-        	if ( isCountry ) {
-        		AmpCategoryValueLocations tempLoc	= 
-        			DynLocationManagerUtil.getLocationByIso(loc.getIso(), CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY );
-        		if ( tempLoc != null ) 
-        			throw new DuplicateLocationCodeException("There is already a country with the same iso !", "iso", loc.getParentCategoryValue().getValue() );
-        		tempLoc	= 
-        			DynLocationManagerUtil.getLocationByIso3(loc.getIso3(), CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY );
-        		if ( tempLoc != null ) 
-        			throw new DuplicateLocationCodeException("There is already a country with the same iso 3!", "iso3", loc.getParentCategoryValue().getValue() );
-        		
-        	}
-        	
-        	AmpCategoryValueLocations tempLoc	= 
-        		DynLocationManagerUtil.getLocationByName(loc.getName(), loc.getParentCategoryValue(), loc.getParentLocation() );
-        	if ( tempLoc != null ) 
-        		throw new DuplicateLocationCodeException("There is already a location with the same name!", "name", loc.getParentCategoryValue().getValue() );
-        	
-        	if ( loc.getParentLocation() != null){
-        		if(loc.getParentLocation().getChildLocations()==null){
-        			loc.getParentLocation().setChildLocations(new HashSet<AmpCategoryValueLocations>());
-        		}
-        		loc.getParentLocation().getChildLocations().add(loc);
-        	}
-        		
+            
+            /*  country check for duplicate iso and iso3 codes */
+            boolean isCountry   =  
+                    CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue( loc.getParentCategoryValue());
+            if ( isCountry ) {
+                AmpCategoryValueLocations tempLoc   = 
+                    DynLocationManagerUtil.getLocationByIso(loc.getIso(), CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY );
+                if ( tempLoc != null ) 
+                    throw new DuplicateLocationCodeException("There is already a country with the same iso !", "iso", loc.getParentCategoryValue().getValue() );
+                tempLoc = 
+                    DynLocationManagerUtil.getLocationByIso3(loc.getIso3(), CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY );
+                if ( tempLoc != null ) 
+                    throw new DuplicateLocationCodeException("There is already a country with the same iso 3!", "iso3", loc.getParentCategoryValue().getValue() );
+                
+            }
+            
+            AmpCategoryValueLocations tempLoc   = 
+                DynLocationManagerUtil.getLocationByName(loc.getName(), loc.getParentCategoryValue(), loc.getParentLocation() );
+            if ( tempLoc != null ) 
+                throw new DuplicateLocationCodeException("There is already a location with the same name!", "name", loc.getParentCategoryValue().getValue() );
+            
+            if ( loc.getParentLocation() != null){
+                if(loc.getParentLocation().getChildLocations()==null){
+                    loc.getParentLocation().setChildLocations(new HashSet<AmpCategoryValueLocations>());
+                }
+                loc.getParentLocation().getChildLocations().add(loc);
+            }
+                
         }
         
         
@@ -199,11 +199,11 @@ public class LocationUtil {
 
                 } catch (HibernateException ex) {
                      logger.error("Unable to rollback transaction  "
-					+ e.getMessage());
+                    + e.getMessage());
                 }
             }
             logger.error("Unable to save location into the database "
-					+ e.getMessage());
+                    + e.getMessage());
              throw new DgException(e);
         }
 
@@ -232,11 +232,11 @@ public class LocationUtil {
 
                 } catch (HibernateException ex) {
                      logger.error("Unable to rollback transaction  "
-					+ e.getMessage());
+                    + e.getMessage());
                 }
             }
             logger.error("Unable to save location into the database "
-					+ e.getMessage());
+                    + e.getMessage());
              throw new DgException(e);
         }
 

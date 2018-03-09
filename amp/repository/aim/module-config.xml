@@ -226,6 +226,7 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpStructureType</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpStructure</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpStructureImg</hibernate-class>
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpStructureCoordinate</hibernate-class>	
 
         <hibernate-class>org.digijava.module.aim.dbentity.OnepagerSection</hibernate-class>
         <hibernate-class>org.digijava.module.aim.dbentity.AmpContentTranslation</hibernate-class>
@@ -240,11 +241,17 @@
         <hibernate-class>org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicator</hibernate-class>
         <hibernate-class>org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicatorOption</hibernate-class>
         
+        <hibernate-class>org.digijava.module.aim.dbentity.AmpInterchangeableResult</hibernate-class>
+        
         <!-- Menu -->
         <hibernate-class>org.digijava.module.aim.dbentity.AmpMenuEntry</hibernate-class>
         
         <!-- Visibility -->
         <hibernate-class>org.digijava.module.aim.dbentity.AmpVisibilityRule</hibernate-class>
+        
+        <!-- Performance Rules -->
+        <hibernate-class>org.digijava.module.aim.dbentity.AmpPerformanceRule</hibernate-class>
+        <hibernate-class>org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute</hibernate-class>
         
         <!-- Allowed MimeTypes -->
         <hibernate-class>org.digijava.module.aim.dbentity.AmpFileType</hibernate-class>

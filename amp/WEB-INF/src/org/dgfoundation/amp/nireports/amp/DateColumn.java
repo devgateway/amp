@@ -22,56 +22,56 @@ import org.digijava.module.common.util.DateTimeUtil;
  * @author Dolghier Constantin
  *
  */
-public class DateColumn extends AmpDifferentialColumn<DateCell, Boolean> {
+public class DateColumn extends AmpDifferentialColumn<DateCell> {
 
-	private boolean allowNulls;
-	public DateColumn(String columnName, NiDimension.LevelColumn levelColumn, String viewName) {
-		this(columnName, levelColumn, viewName, DateTokenBehaviour.instance);
-	}
+    private boolean allowNulls;
+    public DateColumn(String columnName, NiDimension.LevelColumn levelColumn, String viewName) {
+        this(columnName, levelColumn, viewName, DateTokenBehaviour.instance);
+    }
 
-	public DateColumn(String columnName, NiDimension.LevelColumn levelColumn, String viewName, Behaviour<?> behaviour) {
-		super(columnName, levelColumn, viewName, (engine, col) -> true, behaviour);
-	}
+    public DateColumn(String columnName, NiDimension.LevelColumn levelColumn, String viewName, Behaviour<?> behaviour) {
+        super(columnName, levelColumn, viewName, (engine, col) -> "", behaviour);
+    }
 
-	public DateColumn(String columnName, String viewName) {
-		this(columnName, null, viewName);
-	}
+    public DateColumn(String columnName, String viewName) {
+        this(columnName, null, viewName);
+    }
 
-	@Override
-	protected DateCell extractCell(NiReportsEngine engine, ResultSet rs) throws SQLException {
-		java.sql.Date sqlDate = rs.getDate(2);
-		if (!allowNulls && sqlDate == null)
-			return null;
-		LocalDate date = (sqlDate != null) ? sqlDate.toLocalDate() : null;
+    @Override
+    protected DateCell extractCell(NiReportsEngine engine, ResultSet rs) throws SQLException {
+        java.sql.Date sqlDate = rs.getDate(2);
+        if (!allowNulls && sqlDate == null)
+            return null;
+        LocalDate date = (sqlDate != null) ? sqlDate.toLocalDate() : null;
         long entityId = this.levelColumn.isPresent() ? rs.getLong(3) : idFromDate(date);
         Map<NiDimensionUsage, Coordinate> coos = buildCoordinates(entityId, engine, rs);
-		return new DateCell(date, rs.getLong(1), entityId, coos, this.levelColumn);
-	}
+        return new DateCell(date, rs.getLong(1), entityId, coos, this.levelColumn);
+    }
 
-	private long idFromDate(LocalDate date) {
-		if (date == null) {
-			return 0;
-		} else {
-			return DateTimeUtil.toJulianDayNumber(date);
-		}
-	}
-	
-	@Override
-	public boolean getKeptInSummaryReports() {
-		return false;
-	}
-	
-	public static DateColumn fromView(String columnName, String viewName, NiDimension.LevelColumn levelColumn) {
-		return new DateColumn(columnName, levelColumn, viewName);
-	}
+    private long idFromDate(LocalDate date) {
+        if (date == null) {
+            return 0;
+        } else {
+            return DateTimeUtil.toJulianDayNumber(date);
+        }
+    }
+    
+    @Override
+    public boolean getKeptInSummaryReports() {
+        return false;
+    }
+    
+    public static DateColumn fromView(String columnName, String viewName, NiDimension.LevelColumn levelColumn) {
+        return new DateColumn(columnName, levelColumn, viewName);
+    }
 
-	public DateColumn allowNulls(boolean allowNulls) {
-		this.allowNulls = allowNulls;
-		return this;
-	}
+    public DateColumn allowNulls(boolean allowNulls) {
+        this.allowNulls = allowNulls;
+        return this;
+    }
 
-	@Override
-	public List<ReportRenderWarning> performCheck() {
-		return null;
-	}
+    @Override
+    public List<ReportRenderWarning> performCheck() {
+        return null;
+    }
 }

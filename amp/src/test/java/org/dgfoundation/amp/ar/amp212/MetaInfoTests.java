@@ -1,13 +1,5 @@
 package org.dgfoundation.amp.ar.amp212;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Collection;
-import java.util.function.Function;
-
-import org.dgfoundation.amp.algo.Graph;
 import org.dgfoundation.amp.nireports.meta.MetaInfo;
 import org.dgfoundation.amp.nireports.meta.MetaInfoGenerator;
 import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
@@ -22,10 +14,6 @@ import org.junit.Test;
  *
  */
 public class MetaInfoTests extends AmpTestCase {
-    
-    public MetaInfoTests() {
-        super("MetaInfo tests");
-    }
     
     @Test
     public void testMetaInfoBuildingFailing() {

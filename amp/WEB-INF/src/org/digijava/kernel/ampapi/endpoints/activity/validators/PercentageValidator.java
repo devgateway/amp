@@ -7,12 +7,12 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 /**
  * Validates that the sum of percentages is equal to 100
@@ -28,11 +28,11 @@ public class PercentageValidator extends InputValidator {
 
     @SuppressWarnings("unchecked")
     @Override
-    public boolean isValid(ActivityImporter importer, Map<String, Object> newFieldParent, 
-            Map<String, Object> oldFieldParent, JsonBean fieldDescription, String fieldPath) {
+    public boolean isValid(ObjectImporter importer, Map<String, Object> newFieldParent,
+                           Map<String, Object> oldFieldParent, APIField fieldDescription, String fieldPath) {
         boolean isValid = true;
-        String fieldName = (String) fieldDescription.get(ActivityEPConstants.FIELD_NAME);
-        String percentageField = fieldDescription.getString(ActivityEPConstants.PERCENTAGE_CONSTRAINT);
+        String fieldName = fieldDescription.getFieldName();
+        String percentageField = fieldDescription.getPercentageConstraint();
         if (StringUtils.isNotBlank(percentageField)) {
             // get Collection with values to be summed into percentages
             Collection<Map<String, Object>> fieldValue = (Collection<Map<String, Object>>) newFieldParent.get(fieldName);

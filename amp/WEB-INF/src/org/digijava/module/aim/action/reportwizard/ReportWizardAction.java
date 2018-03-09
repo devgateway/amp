@@ -10,6 +10,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.lang.reflect.Field;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -27,6 +28,7 @@ import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.dgfoundation.amp.utils.MultiAction;
@@ -325,14 +327,26 @@ public class ReportWizardAction extends MultiAction {
         request.setAttribute(MULTILINGUAL_REPORT_PREFIX + "_title", new MultilingualInputFieldValues(AmpReports.class, myForm.getReportId(), "name", null, null));
 
         myForm.setAmpTreeColumns( this.buildAmpTreeColumnSimple(AdvancedReportUtil.getColumnListFiltered(),typereport,request.getSession()));
+        List<AmpMeasures> reportWizardMeasures = new ArrayList<>();
         if (typereport==ArConstants.PLEDGES_TYPE || myForm.getReportType().equalsIgnoreCase("pledge")){
-            myForm.setAmpMeasures( AdvancedReportUtil.getMeasureListbyTypeFiltered("P"));
+            reportWizardMeasures = AdvancedReportUtil.getMeasureListbyTypeFiltered("P");
         } else if (myForm.getReportType().equalsIgnoreCase("donor")){
-            myForm.setAmpMeasures( AdvancedReportUtil.getMeasureListbyTypeFiltered("A") );
-            myForm.getAmpMeasures().addAll(AdvancedReportUtil.getMeasureListbyTypeFiltered("D") );
+            reportWizardMeasures = AdvancedReportUtil.getMeasureListbyTypeFiltered("A");
+            reportWizardMeasures.addAll(AdvancedReportUtil.getMeasureListbyTypeFiltered("D"));
         } else {
-            myForm.setAmpMeasures( AdvancedReportUtil.getMeasureListbyTypeFiltered("A") );
+            reportWizardMeasures = AdvancedReportUtil.getMeasureListbyTypeFiltered("A");
         }
+        
+        boolean mtefColumnsEnabled = FeaturesUtil.
+                getGlobalSettingValueBoolean(GlobalSettingsConstants.MTEF_ANNUAL_DATE_FORMAT);
+        
+        if (mtefColumnsEnabled) {
+            reportWizardMeasures = reportWizardMeasures.stream()
+            .filter(m -> !isMTEFName(m.getMeasureName()))
+            .collect(Collectors.toList());
+        }
+        
+        myForm.setAmpMeasures(reportWizardMeasures);
 
         if ( request.getParameter("desktopTab")!=null && "true".equals(request.getParameter("desktopTab")) ) {
             myForm.setDesktopTab( true );
@@ -869,11 +883,18 @@ public class ReportWizardAction extends MultiAction {
         Map<String, AmpFieldsVisibility> ampAllFieldsByName = new HashMap<String, AmpFieldsVisibility>();
         for(AmpFieldsVisibility field:ampAllFields)
             ampAllFieldsByName.put(field.getName(), field);
-
+        
+        boolean mtefColumnsEnabled = FeaturesUtil.
+                getGlobalSettingValueBoolean(GlobalSettingsConstants.MTEF_ANNUAL_DATE_FORMAT);
+        
         for(AmpColumns ampColumn:allAmpColumns)
         {
             String columnName = ampColumn.getColumnName();
             if (columnIgnoredInReportWizard(columnName)) {
+                continue;
+            }
+            
+            if (!mtefColumnsEnabled && isMTEFName(columnName)) {
                 continue;
             }
 
@@ -1080,6 +1101,17 @@ public class ReportWizardAction extends MultiAction {
     
     public static boolean columnIgnoredInReportWizard(String columnName) {
         return COLUMNS_IGNORED_IN_REPORT_WIZARD.contains(columnName);
+    }
+    
+    public static boolean isMTEFName(String name) {
+        String regex = "^(" + MeasureConstants.MTEF 
+                + "|" + MeasureConstants.REAL_MTEF
+                + "|" + MeasureConstants.MTEF_PROJECTIONS 
+                + "|" + MeasureConstants.PIPELINE_MTEF_PROJECTIONS 
+                + "|" + MeasureConstants.PROJECTION_MTEF_PROJECTIONS 
+                + ").*$";
+        
+        return name.matches(regex);
     }
 
 }

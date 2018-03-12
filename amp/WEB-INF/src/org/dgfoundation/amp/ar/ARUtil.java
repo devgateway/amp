@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -85,7 +86,6 @@ import org.digijava.module.budgetexport.reports.implementation.BudgetMetaTextCol
 import org.digijava.module.budgetexport.reports.implementation.BudgetTextColWorker;
 import org.digijava.module.budgetexport.util.BudgetExportConstants;
 import org.digijava.module.budgetexport.util.MappingEncoder;
-import org.digijava.module.dataExchange.utils.DataExchangeUtils;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -637,9 +637,9 @@ public final class ARUtil {
     }
 
     private static void cleanTextCell(TextCell cell) {
-        if(cell.getFullTextVersion()!=null){
-            cell.setValue(DataExchangeUtils.convertHTMLtoChar(cell.getFullTextVersion()));
-        }else{
+        if (cell.getFullTextVersion() != null) {
+            cell.setValue(StringEscapeUtils.unescapeHtml(cell.getFullTextVersion()));
+        } else {
             cell.setValue("");
         }
     }

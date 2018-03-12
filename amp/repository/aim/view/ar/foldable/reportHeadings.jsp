@@ -171,7 +171,7 @@
       </logic:iterate>
       
     </logic:iterate>
-    <td width="16" bgcolor=#FFFFFF><img src="img_2/t.gif" width="16" height="1" /></td>
+
   </tr>
 
   <%}

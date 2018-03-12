@@ -8,4 +8,5 @@ export const OPTION_NO = 'NO';
 export const SAVE_SUCCESSFUL = 'SAVE_SUCCESSFUL';
 export const UNFREEZE_ALL = 'UNFREEZE_ALL';
 export const DATA_FREEZE_EVENTS = 'DATA_FREEZE_EVENTS';
+export const ACCESS_DENIED_STATUS = 403;
 

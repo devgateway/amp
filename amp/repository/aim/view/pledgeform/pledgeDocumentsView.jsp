@@ -5,6 +5,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ page import="org.digijava.module.fundingpledges.form.PledgeForm"%>
+<%@ page import="org.digijava.kernel.util.SiteUtils"%>
 
 <digi:instance property="pledgeForm" />
 <div id='pledge_form_documents_data'>
@@ -24,12 +25,14 @@
 			<c:set var="indexLoc" value="${indexLoc+1}"/>
 			<tr id="pledge_form_row_for_document_${selectedDocs.uniqueId}">
 				<td class="text-right"><c:out value="${selectedDocs.title}" /></td>
-				<td>
-					<a target="_blank" href="${selectedDocs.generalLink}">
-						<c:out value="${selectedDocs.fileName}" /><%--
-						<img src="/repository/contentrepository/view/images/check_out.gif" border="0"> --%>
-					</a>
-					 (<c:out value="${selectedDocs.formattedSize}" /> MB)
+				<td class="text-left">
+				<% if(SiteUtils.isEffectiveLangRTL()) { %>
+				    (MB <span dir="ltr"><c:out value="${selectedDocs.formattedSize}" /></span>) 
+					<a target="_blank" href="${selectedDocs.generalLink}"><c:out value="${selectedDocs.fileName}" /></a>
+				<% } else { %>
+				    <a target="_blank" href="${selectedDocs.generalLink}"><c:out value="${selectedDocs.fileName}" /></a>
+                     (<span dir="ltr"><c:out value="${selectedDocs.formattedSize}" /></span> MB)
+				<% } %>
 				</td>
 			</tr>
 		</c:forEach>

@@ -1,5 +1,8 @@
 package org.dgfoundation.amp.ar.amp212;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,16 +11,12 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.StringJoiner;
 
-import org.dgfoundation.amp.testutils.AmpTestCase;
 import org.digijava.module.translation.exotic.AmpDateFormatter;
 import org.digijava.module.translation.exotic.AmpDateFormatterFactory;
 import org.junit.Test;
 
-public class DateTimeTests extends AmpTestCase {
+public class DateTimeTests {
     
-    public DateTimeTests() {
-        super("Date/time conversion tests");
-    }
     private final static Set<String> PATTERNS = AmpDateFormatter.generateSupportedPatterns();
     
     private final static List<String> LIMITED_PATTERNS = Arrays.asList("dd/MMM/yyyy", "MMM/dd/yyyy", "yyyy/MMM/dd");

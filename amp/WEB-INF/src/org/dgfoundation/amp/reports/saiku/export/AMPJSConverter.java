@@ -13,10 +13,13 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
-import org.saiku.web.rest.objects.resultset.QueryResult;
 
 public class AMPJSConverter extends JSConverter {
 
+    private static final String UNDERSCORE_JS = "/../../TEMPLATE/ampTemplate/saikuui_reports/js/backbone/underscore.js";
+    private static final String TABLE_RENDERER_JS = 
+                    "/../../TEMPLATE/ampTemplate/saikuui_reports/js/saiku/render/AMPTableRenderer.js";
+    
     private static final Logger logger = Logger.getLogger(AMPJSConverter.class);
 
     public static String convertToHtml(JsonBean jb, String type) throws IOException {
@@ -25,14 +28,12 @@ public class AMPJSConverter extends JSConverter {
         StringWriter sw = new StringWriter();
         Context context = Context.enter();
         Scriptable globalScope = context.initStandardObjects();
-        Reader underscoreReader = new InputStreamReader(
-                AMPJSConverter.class
-                        .getResourceAsStream("/../../TEMPLATE/ampTemplate/saikuui_nireports/js/backbone/underscore.js"));
+        
+        Reader underscoreReader = new InputStreamReader(AMPJSConverter.class.getResourceAsStream(UNDERSCORE_JS));
         context.evaluateReader(globalScope, underscoreReader, "underscore.js", 1, null);
-        Reader ampReader = new InputStreamReader(
-                AMPJSConverter.class
-                        .getResourceAsStream("/../../TEMPLATE/ampTemplate/saikuui_nireports/js/saiku/render/AMPTableRenderer.js"));
+        Reader ampReader = new InputStreamReader(AMPJSConverter.class.getResourceAsStream(TABLE_RENDERER_JS));
         context.evaluateReader(globalScope, ampReader, "AMPTableRenderer.js", 1, null);
+
         String data = om.writeValueAsString(jb);
         Object wrappedQr = Context.javaToJS(data, globalScope);
         ScriptableObject.putProperty(globalScope, "data", wrappedQr);

@@ -1,10 +1,15 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.toMap;
+
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -13,10 +18,13 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import org.dgfoundation.amp.algo.AmpCollections;
+import org.digijava.kernel.ampapi.endpoints.activity.utils.AmpMediaType;
+import org.digijava.kernel.ampapi.endpoints.activity.utils.ApiCompat;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
@@ -29,31 +37,210 @@ import org.digijava.module.aim.helper.TeamMember;
 
 /**
  * AMP Activity Endpoints for Activity Import / Export
- * 
+ *
+ * @implicitParam X-Auth-Token|string|header
  * @author acartaleanu
  */
 @Path("activity")
 public class InterchangeEndpoints implements ErrorReportingEndpoint {
-    
-    @Context
-    private HttpServletRequest httpRequest;
 
     @Context
     private UriInfo uri;
 
     /**
-     * Returns a list of JSON objects, each describing a possible value that might be specified 
-     * in an activity field
-     * 
-     * @param fieldName, the Activity field title, underscorified (see <InterchangeUtils.underscorify for details>
-     * @return list of JsonBean objects, each representing a possible value
+     * Returns a list of JSON objects, each describing a possible value that might be specified in an activity field
+     * <p>If Accept: application/vnd.possible-values-v2+json is used then possible values will be represented in a tree
+     * structure.</p>
+     * <p>If value can be translated then each possible value will contain value-translations element, a map where key
+     * is language code and value is translated value.</p>
+     * <h3>Sample response (with translations):</h3><pre>
+     * [
+     *   {
+     *     "id": 262,
+     *     "value": "Off Budget",
+     *     "translated-value": {
+     *       "en": "Off Budget",
+     *       "fr": "Hors Budget"
+     *     }
+     *   },
+     *   {
+     *     "id": 263,
+     *     "value": "On Budget",
+     *     "translated-value": {
+     *       "en": "On Budget",
+     *       "fr": "Inscrit dans le budget"
+     *     }
+     *   }
+     * ]
+     * </pre>
+     *
+     * <h3>Sample response (flat):</h3><pre>
+     * [
+     *   {
+     *     "id": 539,
+     *     "value": "Cote d'Ivoire",
+     *     "extra_info": {
+     *       "parent_location_id": null,
+     *       "parent_location_name": null,
+     *       "implementation_level_id": 76,
+     *       "implementation_location_name": "Country"
+     *     }
+     *   },
+     *   {
+     *     "id": 796,
+     *     "value": "BAGOUE",
+     *     "extra_info": {
+     *       "parent_location_id": 539,
+     *       "parent_location_name": "Cote d'Ivoire",
+     *       "implementation_level_id": 77,
+     *       "implementation_location_name": "Region"
+     *     }
+     *   }
+     * ]
+     * </pre>
+     *
+     * <h3>Sample response (tree):</h3><pre>
+     * [
+     *   {
+     *     "id": 539,
+     *     "value": "Cote d'Ivoire",
+     *     "children": [
+     *       {
+     *         "id": 796,
+     *         "value": "BAGOUE",
+     *         "extra_info": {
+     *           "implementation_level_id": 77,
+     *           "implementation_location_name": "Region"
+     *         }
+     *       }
+     *     ],
+     *     "extra_info": {
+     *       "implementation_level_id": 76,
+     *       "implementation_location_name": "Country"
+     *     }
+     *   }
+     * ]
+     * </pre>
+     *
+     * @implicitParam Accept|string|header
+     * @implicitParam translations|string|query|false|||||false|pipe separated list of language codes
+     * @param fieldName fully qualified activity field
+     * @return list of possible values
      */
     @GET
     @Path("fields/{fieldName}")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(authTypes = {AuthRule.TOKEN, AuthRule.IN_WORKSPACE}, id = "getValues", ui = false)
-    public List<JsonBean> getValues(@PathParam("fieldName") String fieldName) {
-        return PossibleValuesEnumerator.getPossibleValuesForField(fieldName, AmpActivityFields.class, null);
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8", AmpMediaType.POSSIBLE_VALUES_V2_JSON})
+    @ApiMethod(authTypes = AuthRule.IN_WORKSPACE, id = "getValues", ui = false)
+    public Response getPossibleValuesFlat(@PathParam("fieldName") String fieldName) {
+        List<PossibleValue> possibleValues = possibleValuesFor(fieldName);
+        MediaType responseType = MediaType.APPLICATION_JSON_TYPE;
+        if (AmpMediaType.POSSIBLE_VALUES_V2_JSON.equals(ApiCompat.getRequestedMediaType())) {
+            responseType = AmpMediaType.POSSIBLE_VALUES_V2_JSON_TYPE;
+        } else {
+            possibleValues = PossibleValue.flattenPossibleValues(possibleValues);
+        }
+        return Response.ok(possibleValues, responseType).build();
+    }
+
+    /**
+     * Returns a list of possible values for each requested field.
+     * <p>If Accept: application/vnd.possible-values-v2+json is used then possible values will be represented in a tree
+     * structure.</p>
+     * <p>If value can be translated then each possible value will contain value-translations element, a map where key
+     * is language code and value is translated value.</p>
+     * <h3>Sample request:</h3><pre>
+     * ["fundings~donor_organization_id", "approval_status", "activity_budget"]
+     * </pre>
+     * <h3>Sample response (flat):</h3><pre>
+     * {
+     *   "fundings~donor_organization_id": [
+     *     {
+     *       "id": 1,
+     *       "value": "Donor 1"
+     *     },
+     *     {
+     *       "id": 2,
+     *       "value": "Donor 2"
+     *     }
+     *   ],
+     *   "approval_status": [
+     *     {
+     *       "id": "1",
+     *       "value": "approved"
+     *     },
+     *     {
+     *       "id": "2",
+     *       "value": "edited"
+     *     }
+     *   ],
+     *   "activity_budget": [
+     *     {
+     *       "id": 262,
+     *       "value": "Off Budget",
+     *       "translated-value": {
+     *         "en": "Off Budget",
+     *         "fr": "Hors Budget"
+     *       }
+     *     },
+     *     {
+     *       "id": 263,
+     *       "value": "On Budget",
+     *       "translated-value": {
+     *         "en": "On Budget",
+     *         "fr": "Inscrit dans le budget"
+     *       }
+     *     }
+     *   ]
+     * }
+     * </pre>
+     * <h3>Sample response (tree):</h3><pre>
+     * {
+     *   ...
+     *   "locations~locations": [
+     *     {
+     *       "id": "1",
+     *       "value": "Cote d'Ivoire",
+     *       "children": [
+     *         {
+     *          "id": 796,
+     *          "value": "BAGOUE"
+     *         }
+     *       ]
+     *     }
+     *   ],
+     *   ...
+     * }
+     * </pre>
+     * @implicitParam Accept|string|header
+     * @implicitParam translations|string|query|false|||||false|pipe separated list of language codes
+     * @param fields list of fully qualified activity fields
+     * @return list of possible values grouped by field
+     */
+    @POST
+    @Path("field/values")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8", AmpMediaType.POSSIBLE_VALUES_V2_JSON})
+    @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getMultiValues", ui = false)
+    public Response getValues(List<String> fields) {
+        Map<String, List<PossibleValue>> response;
+        if (fields == null) {
+            response = Collections.emptyMap();
+        } else {
+            response = fields.stream()
+                    .filter(Objects::nonNull)
+                    .distinct()
+                    .collect(toMap(identity(), this::possibleValuesFor));
+        }
+        MediaType responseType = MediaType.APPLICATION_JSON_TYPE;
+        if (AmpMediaType.POSSIBLE_VALUES_V2_JSON.equals(ApiCompat.getRequestedMediaType())) {
+            responseType = AmpMediaType.POSSIBLE_VALUES_V2_JSON_TYPE;
+        } else {
+            response = AmpCollections.remap(response, PossibleValue::flattenPossibleValues);
+        }
+        return Response.ok(response, responseType).build();
+    }
+
+    private List<PossibleValue> possibleValuesFor(String fieldName) {
+        return PossibleValuesEnumerator.INSTANCE.getPossibleValuesForField(fieldName, AmpActivityFields.class, null);
     }
     
     /**
@@ -64,9 +251,18 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
     @GET
     @Path("fields")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(authTypes = {AuthRule.TOKEN, AuthRule.IN_WORKSPACE}, id = "getFields", ui = false)
-    public List<JsonBean> getAvailableFields() {
-        return FieldsEnumerator.getAllAvailableFields();
+    @ApiMethod(authTypes = AuthRule.IN_WORKSPACE, id = "getFields", ui = false)
+    public List<APIField> getAvailableFields() {
+        return AmpFieldsEnumerator.PUBLIC_ENUMERATOR.getAllAvailableFields();
+    }
+    
+    // TODO remove it as part of AMP-25568
+    @GET
+    @Path("fields-no-workspace")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getDefaultFields", ui = false)
+    public List<APIField> getAvailableFieldsBasedOnDefaultFM() {
+        return getAvailableFields();
     }
     
     /**
@@ -86,7 +282,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
     @GET
     @Path("/projects")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(authTypes = {AuthRule.TOKEN, AuthRule.IN_WORKSPACE}, id = "getProjectList", ui = false)
+    @ApiMethod(authTypes = AuthRule.IN_WORKSPACE, id = "getProjectList", ui = false)
     public Collection<JsonBean> getProjects(@QueryParam ("pid") String pid,@QueryParam("offset") Integer offset, @QueryParam("count") Integer count) {
         TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
         Collection<JsonBean> activityCollection = ProjectList.getActivityList(pid, tm);
@@ -109,27 +305,58 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
     @GET
     @Path("/projects/{projectId}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(authTypes = {AuthRule.TOKEN, AuthRule.VIEW_ACTIVITY}, id = "getProject", ui = false)
+    @ApiMethod(authTypes = AuthRule.VIEW_ACTIVITY, id = "getProject", ui = false)
     public JsonBean getProject(@PathParam("projectId") Long projectId) {
         return InterchangeUtils.getActivity(projectId);
     }
     
     /**
-     * Provides full project information 
+     * Provides full project information
      * @param projectId project id
      * @param filter jsonBean with a list of fields that will be displayed
-     * @return project with full set of configured fields and their values 
+     * @return project with full set of configured fields and their values
      */
     @POST
     @Path("/projects/{projectId}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(authTypes = {AuthRule.TOKEN, AuthRule.VIEW_ACTIVITY}, id = "getProjectsFilter", ui = false)
+    @ApiMethod(authTypes = AuthRule.VIEW_ACTIVITY, id = "getProjectsFilter", ui = false)
     public JsonBean getProject(@PathParam("projectId") Long projectId, JsonBean filter) {
         return InterchangeUtils.getActivity(projectId, filter);
     }
-    
+
     /**
-     * Imports an activity
+     * Retrieve project by AMP Id.
+     *
+     * <h3>Sample Output:</h3><pre>
+     * {
+     *   "project_impact": null,
+     *   "project_management": null,
+     *   "internal_id": 10827,
+     *   "amp_id": "112007154460",
+     *   "project_title": "Activity title",
+     *   "description": "Activity description",
+     *   "lessons_learned": null,
+     *   ...
+     * }
+     * </pre>
+     *
+     * @param ampId AMP Id
+     * @return Project with full set of configured fields and their values.
+     */
+    @GET
+    @Path("/project")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getProjectByAmpId", ui = false)
+    public JsonBean getProjectByAmpId(@QueryParam("amp-id") String ampId) {
+        return InterchangeUtils.getActivityByAmpId(ampId);
+    }
+
+    /**
+     * Imports an activity.
+     * <p>Original behaviour: is_draft field cannot be specified. If saving as draft is allowed then activity will
+     * be saved as draft. Otherwise activity will be saved as submitted.</p>
+     * <p>AMP Offline behaviour (User-Agent: AMPOffline): is_draft field is importable and it's value always
+     * honored.</p>
      * 
      * @param newJson activity configuration
      * @return latest project overview or an error if invalid configuration is received
@@ -137,14 +364,21 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
     @POST
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(authTypes = {AuthRule.TOKEN, AuthRule.ADD_ACTIVITY}, id = "addProject", ui = false)
+    @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "addProject", ui = false)
     public JsonBean addProject(JsonBean newJson) {
         return InterchangeUtils.importActivity(newJson, false, uri.getBaseUri() + "activity");
     }
     
     /**
      * Updates an activity
-     * 
+     * <p>Original behaviour: is_draft field cannot be specified. If existing activity was submitted then at import
+     * this status will be kept if possible. Otherwise activity will be saved as draft.</p>
+     * <p>AMP Offline behaviour (User-Agent: AMPOffline): is_draft field is importable and it's value always
+     * honored.</p>
+     * <p>AMP Offline must use optimistic lock in order to update activity. For other clients locking is optional.
+     * Locking is achieved by sending last known value of activity_group.version. If activity was updated in meantime
+     * then version will be different and subsequent updates will fail with appropriate message.</p>
+     *
      * @param projectId the id of the activity which should be updated
      * @param newJson activity configuration
      * @return latest project overview or an error if invalid configuration is received
@@ -152,7 +386,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
     @POST
     @Path("/{projectId}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(authTypes = {AuthRule.TOKEN, AuthRule.EDIT_ACTIVITY}, id = "updateProject", ui = false)
+    @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "updateProject", ui = false)
     public JsonBean updateProject(@PathParam("projectId") Long projectId, JsonBean newJson) {
         /*
          * Originally it was defined as PUT to avoid these type of issues checked here.

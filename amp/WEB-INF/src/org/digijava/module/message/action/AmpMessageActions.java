@@ -1064,8 +1064,8 @@ public class AmpMessageActions extends DispatchAction {
         message.setSenderType(MessageConstants.SENDER_TYPE_USER);
         message.setSenderId(teamMember.getMemberId());
         User user=TeamMemberUtil.getAmpTeamMember(teamMember.getMemberId()).getUser();
-        String senderName = user.getFirstNames() + " " + user.getLastName() + "<" + user.getNotificationEmail() + ">;"
-                + teamMember.getTeamName();
+        String senderName = user.getFirstNames() + " " + user.getLastName() 
+                            + "<" + user.getEmailUsedForNotification() + ">;" + teamMember.getTeamName();
         message.setSenderName(senderName);
         /**
          * this will be filled only when we are forwarding a message
@@ -1178,7 +1178,7 @@ public class AmpMessageActions extends DispatchAction {
                     if (settings != null && settings.getEmailMsgs() != null && settings.getEmailMsgs().equals(new Long(1))) {
                         //creating internet address where the mail will be sent
                         addrCol.add(new InternetAddress(
-                                TeamMemberUtil.getAmpTeamMember(memId).getUser().getNotificationEmail()));
+                                TeamMemberUtil.getAmpTeamMember(memId).getUser().getEmailUsedForNotification()));
                     }
                 } else if (receiver.startsWith("c")) { //contacts or people outside AMP
                     // we should send email to contacts, regardless setting value in Message Manager
@@ -1208,7 +1208,7 @@ public class AmpMessageActions extends DispatchAction {
                 if (request.getParameter("toDo") != null && !request.getParameter("toDo").equals("draft")) {
                     InternetAddress[] addresses = (InternetAddress[]) addrCol
                             .toArray(new InternetAddress[addrCol.size()]);
-                    DgEmailManager.sendMail(addresses, teamMember.getNotificationEmail(), message, doc);
+                    DgEmailManager.sendMail(addresses, user.getEmailUsedForNotification(), message, doc);
                 }
             }
             AmpMessageUtil.saveOrUpdateMessage(message);

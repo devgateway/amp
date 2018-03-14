@@ -5,6 +5,9 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+
+<jsp:include page="/repository/aim/view/strongPassword.jsp"  />
+
 <script language="JavaScript">
 
 
@@ -245,7 +248,9 @@ Please do not attempt to use the Notification Email as user login.
                       </li>
                     </logic:iterate>
                   </ul>
-                  </font> </td>
+                  </font>
+                  <jsp:include page="/repository/aim/view/strongPasswordRulesLegend.jsp"  />
+                </td>
               </tr>
             </logic:notEmpty>
 
@@ -268,20 +273,27 @@ Please do not attempt to use the Notification Email as user login.
             <tr>
               <td class=f-names noWrap style="padding-bottom:10px;"><FONT color=red>*</FONT>
                 <digi:trn key="um:emailAddress">E-mail Address </digi:trn>              </td>
-              <td align="right" style="padding-bottom:10px;"><html:text property="email" size="20" styleClass="inp-text"/>              </td>
+              <td align="right" style="padding-bottom:10px;"><html:text property="email" size="20" styleClass="inp-text pwd_username"/>
+              </td>
               <td>&nbsp;</td>
               <td class=f-names noWrap style="padding-bottom:10px;"><FONT color=red>*</FONT>
                 <digi:trn key="um:repEmailAddress">Repeat Email Address </digi:trn>              </td>
               <td align="right" style="padding-bottom:10px;"><html:text property="emailConfirmation" size="20" styleClass="inp-text"/>              </td>
             </tr>
             <tr>
-              <td class=f-names noWrap style="padding-bottom:10px;"><FONT color=red>*</FONT>
+              <td valign="top" class=f-names noWrap style="padding-bottom:10px;"><FONT color=red>*</FONT>
                 <digi:trn key="um:password">Password </digi:trn>              </td>
-              <td align="right" style="padding-bottom:10px;"><html:password property="password" size="20" styleClass="inp-text"/>              </td>
+              <td style="padding-bottom:10px;"><html:password property="password" size="20"
+                                                              styleClass="inp-text"/>
+                <div style="display: none" class="pwd_container" id="pwd_container">
+                  <span class="pwstrength_viewport_verdict">&nbsp;</span>
+                  <span class="pwstrength_viewport_progress"></span>
+                </div>
+              </td>
               <td>&nbsp;</td>
-              <td class=f-names noWrap style="padding-bottom:10px;"><FONT color=red>*</FONT>
+              <td class=f-names valign="top" noWrap style="padding-bottom:10px;"><FONT color=red>*</FONT>
                 <digi:trn key="um:repPassword">Repeat Password </digi:trn>              </td>
-              <td align="right" style="padding-bottom:10px;"><html:password property="passwordConfirmation" size="20" styleClass="inp-text" />              </td>
+              <td align="right" valign="top" style="padding-bottom:10px;"><html:password property="passwordConfirmation" size="20" styleClass="inp-text" />              </td>
             </tr>
             <tr>
               <td class=f-names noWrap style="padding-bottom:10px;">

@@ -18,7 +18,6 @@ import org.dgfoundation.amp.gpi.reports.GPIDonorActivityDocument;
 import org.dgfoundation.amp.gpi.reports.GPIRemark;
 import org.dgfoundation.amp.gpi.reports.GPIReport;
 import org.dgfoundation.amp.gpi.reports.GPIReportConstants;
-import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
@@ -671,6 +670,15 @@ public class GPIEndPoints implements ErrorReportingEndpoint {
     public List<JsonBean> getYears() {       
          return GPIDataService.getYears();
     }
+
+    @GET
+    @Path("/report/donors/")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = { AuthRule.IN_WORKSPACE }, id = "getDonors", ui = false)
+    public List<JsonBean> getDonors() {       
+        return GPIDataService.getDonors(); 
+
+    }
     
     @GET
     @Path("/report/calendars/")
@@ -678,14 +686,6 @@ public class GPIEndPoints implements ErrorReportingEndpoint {
     @ApiMethod(authTypes = { AuthRule.IN_WORKSPACE }, id = "getCalendars", ui = false)
     public List<AmpFiscalCalendar> getCalendars() {
         return FiscalCalendarUtil.getAllAmpFiscalCalendars();
-    }
-
-    @GET
-    @Path("/report/donors/")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(authTypes = { AuthRule.IN_WORKSPACE }, id = "getDonors", ui = false)
-    public List<JsonBean> getDonors() {
-        return GPIDataService.getDonors();
     }
 
     /**

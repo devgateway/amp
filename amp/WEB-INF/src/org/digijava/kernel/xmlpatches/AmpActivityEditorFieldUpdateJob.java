@@ -6,7 +6,6 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.dataExchange.utils.DataExchangeUtils;
 import org.digijava.module.editor.dbentity.Editor;
 import org.hibernate.Session;
 import org.slf4j.Logger;
@@ -93,8 +92,11 @@ public class AmpActivityEditorFieldUpdateJob {
 
                 String key = new StringBuilder(EDITOR_KEY_PREFIX).append(field).append("-").append(
                         System.currentTimeMillis()).toString();
-                Editor editor = null;
-                editor = DataExchangeUtils.createEditor(SiteUtils.getDefaultSite(), key, TLSUtils.getLangCode());
+                
+                Editor editor = new Editor();
+                editor.setSite(SiteUtils.getDefaultSite());
+                editor.setEditorKey(key);
+                editor.setLanguage(TLSUtils.getLangCode());
                 editor.setLastModDate(new Date());
                 editor.setBody(currentValue);
 

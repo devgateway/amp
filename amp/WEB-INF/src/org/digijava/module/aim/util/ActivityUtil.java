@@ -681,26 +681,27 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
       final IdWithValueShim result = new IdWithValueShim(-1l, "");
       PersistenceManager.getSession().doWork(new Work() {
             public void execute(Connection conn) throws SQLException {
-                String groupClause = "";
-                Long groupId = null;
-                if (g != null) {
-                    groupClause = " AND object_id NOT IN (SELECT amp_activity_id FROM amp_activity_version WHERE amp_activity_group_id = ?) ";
-                    groupId = g.getAmpActivityGroupId();
-                }
-                String query = "SELECT aav.amp_activity_id, team.name FROM amp_activity_version aav "
-                        + "left outer JOIN amp_team team ON aav.amp_team_id = team.amp_team_id "
-                        + "WHERE amp_activity_id IN"
-                        + "(SELECT object_id FROM amp_content_translation WHERE object_class = 'org.digijava.module.aim.dbentity.AmpActivityVersion' AND field_name='name' "
-                        + groupClause
-                        + " AND object_id IN (SELECT amp_activity_last_version_id FROM amp_activity_group) "
-                        + " AND translation = ?) "
-                        + " OR aav.name = ? ";
                 List<FilterParam> params = new ArrayList<FilterParam>();
-                if (groupId != null) {
-                    params.add(new FilterParam(groupId, java.sql.Types.BIGINT));
+                String groupClause = "";
+                
+                if (g != null) {
+                    groupClause = "AND amp_activity_id NOT IN "
+                            + "(SELECT amp_activity_id FROM amp_activity_version WHERE amp_activity_group_id = ?) ";
+                    params.add(new FilterParam(g.getAmpActivityGroupId(), java.sql.Types.BIGINT));
                 }
+                
+                String query = "SELECT aav.amp_activity_id, team.name FROM amp_activity_version aav "
+                        + "LEFT OUTER JOIN amp_team team ON aav.amp_team_id = team.amp_team_id "
+                        + "WHERE amp_activity_id IN (SELECT amp_activity_last_version_id FROM amp_activity_group) "
+                        + groupClause
+                        + "AND (amp_activity_id IN (SELECT object_id FROM amp_content_translation "
+                        + "WHERE object_class = 'org.digijava.module.aim.dbentity.AmpActivityVersion' "
+                        + "AND field_name='name' AND translation = ?) "
+                        + "OR aav.name = ?)";
+                
                 params.add(new FilterParam(name, java.sql.Types.VARCHAR));
                 params.add(new FilterParam(name, java.sql.Types.VARCHAR));
+                
                 try(RsInfo rsi = SQLUtils.rawRunQuery(conn, query, params)) {
                     while (rsi.rs.next()) {
                         Long id = rsi.rs.getLong(1);
@@ -709,7 +710,6 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                         result.setValue(teamName);
                     }
                 }
-                
             }
       });
       if (result.getId() == -1l)

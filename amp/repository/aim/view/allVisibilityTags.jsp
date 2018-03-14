@@ -624,7 +624,8 @@ deleted 6 fields, do not reinsert
 <field:display name="Donor Fax Number" feature="Donor Contact Information"></field:display> 
 <field:display name="Donor First Name" feature="Donor Contact Information"></field:display> 
 <field:display name="Donor Group" feature="Funding Information"></field:display>
-<field:display name="Donor Type" feature="Funding Information"></field:display> 
+<field:display name="Donor Type" feature="Funding Information"></field:display>
+<field:display name="Donor Budget Code" feature="Funding Information"></field:display>
 <field:display name="Donor Last Name" feature="Donor Contact Information"></field:display> 
 <field:display name="Donor Objective" feature="Funding Information"></field:display> 
 <field:display name="Donor Organization" feature="Donor Contact Information"></field:display> 
@@ -784,6 +785,7 @@ deleted 6 fields, do not reinsert
 <field:display name="Physical progress title" feature="Physical Progress"></field:display> 
 <field:display name="Planned Disbursement Preview" feature="Disbursement"></field:display> 
 <field:display name="Primary Program" feature="NPD Programs"></field:display>
+<field:display name="Primary Sector Code Official" feature="Sectors"></field:display>
 <field:display name="Primary Sector Sub-Sector" feature="Sectors"></field:display> 
 <field:display name="Primary Sector Sub-Sub-Sector" feature="Sectors"></field:display> 
 <field:display name="Primary Sector" feature="Sectors"></field:display> 

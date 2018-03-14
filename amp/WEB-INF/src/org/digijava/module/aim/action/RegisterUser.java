@@ -65,6 +65,12 @@ public class RegisterUser extends Action {
 
             // register through
             user.setRegisteredThrough(RequestUtils.getSite(request));
+            
+            user.setNotificationEmailEnabled(userRegisterForm.getNotificationEmailEnabled());
+            
+            if (userRegisterForm.getNotificationEmailEnabled()) {
+                user.setNotificationEmail(userRegisterForm.getNotificationEmail());
+            }
 
             // set mailing address
             user.setAddress(userRegisterForm.getMailingAddress());

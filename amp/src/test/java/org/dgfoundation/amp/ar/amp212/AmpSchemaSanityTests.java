@@ -418,6 +418,63 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
     }
     
     @Test
+    public void testMtefMeasuresOnHierarchies() {
+        NiReportModel correctReport = new NiReportModel("testcase mtefs measures hiers")
+            .withHeaders(Arrays.asList(
+                    "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 19))",
+                    "(Executing Agency: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Contracting Agency: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 3, colSpan: 12));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 15, colSpan: 4))",
+                    "(2011: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 4));(2012: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 7, colSpan: 4));(2015: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 11, colSpan: 4))",
+                    "(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(MTEF: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Projection MTEF Projections: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Pipeline MTEF Projections: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(MTEF: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1));(Projection MTEF Projections: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1));(Pipeline MTEF Projections: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 10, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 11, colSpan: 1));(MTEF: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 12, colSpan: 1));(Projection MTEF Projections: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 13, colSpan: 1));(Pipeline MTEF Projections: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 14, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 15, colSpan: 1));(MTEF: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 16, colSpan: 1));(Projection MTEF Projections: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 17, colSpan: 1));(Pipeline MTEF Projections: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 18, colSpan: 1))"))
+                .withWarnings(Arrays.asList())
+                .withBody(      new ReportAreaForTests(null)
+                  .withContents("Executing Agency", "", "Contracting Agency", "", "Project Title", "", "Funding-2011-Actual Commitments", "0", "Funding-2011-MTEF", "1,718,011", "Funding-2011-Projection MTEF Projections", "809,123", "Funding-2011-Pipeline MTEF Projections", "908,888", "Funding-2012-Actual Commitments", "0", "Funding-2012-MTEF", "271,000", "Funding-2012-Projection MTEF Projections", "163,000", "Funding-2012-Pipeline MTEF Projections", "108,000", "Funding-2015-Actual Commitments", "1,011,456", "Funding-2015-MTEF", "0", "Funding-2015-Projection MTEF Projections", "0", "Funding-2015-Pipeline MTEF Projections", "0", "Totals-Actual Commitments", "1,011,456", "Totals-MTEF", "1,989,011", "Totals-Projection MTEF Projections", "972,123", "Totals-Pipeline MTEF Projections", "1,016,888")
+                  .withChildren(
+                    new ReportAreaForTests(new AreaOwner("Executing Agency", "Finland", 21698)).withContents("Contracting Agency", "", "Project Title", "", "Funding-2011-Actual Commitments", "0", "Funding-2011-MTEF", "0", "Funding-2011-Projection MTEF Projections", "0", "Funding-2011-Pipeline MTEF Projections", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-MTEF", "0", "Funding-2012-Projection MTEF Projections", "0", "Funding-2012-Pipeline MTEF Projections", "0", "Funding-2015-Actual Commitments", "40,740,48", "Funding-2015-MTEF", "0", "Funding-2015-Projection MTEF Projections", "0", "Funding-2015-Pipeline MTEF Projections", "0", "Totals-Actual Commitments", "40,740,48", "Totals-MTEF", "0", "Totals-Projection MTEF Projections", "0", "Totals-Pipeline MTEF Projections", "0", "Executing Agency", "Finland")
+                    .withChildren(
+                      new ReportAreaForTests(new AreaOwner("Contracting Agency", "Contracting Agency: Undefined", -999999999)).withContents("Project Title", "", "Funding-2011-Actual Commitments", "0", "Funding-2011-MTEF", "0", "Funding-2011-Projection MTEF Projections", "0", "Funding-2011-Pipeline MTEF Projections", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-MTEF", "0", "Funding-2012-Projection MTEF Projections", "0", "Funding-2012-Pipeline MTEF Projections", "0", "Funding-2015-Actual Commitments", "40,740,48", "Funding-2015-MTEF", "0", "Funding-2015-Projection MTEF Projections", "0", "Funding-2015-Pipeline MTEF Projections", "0", "Totals-Actual Commitments", "40,740,48", "Totals-MTEF", "0", "Totals-Projection MTEF Projections", "0", "Totals-Pipeline MTEF Projections", "0", "Contracting Agency", "Contracting Agency: Undefined")
+                      .withChildren(
+                        new ReportAreaForTests(new AreaOwner(73), "Project Title", "activity with directed MTEFs", "Funding-2015-Actual Commitments", "40,740,48", "Totals-Actual Commitments", "40,740,48")          )        ),
+                    new ReportAreaForTests(new AreaOwner("Executing Agency", "Ministry of Economy", 21700)).withContents("Contracting Agency", "", "Project Title", "", "Funding-2011-Actual Commitments", "0", "Funding-2011-MTEF", "33,888", "Funding-2011-Projection MTEF Projections", "0", "Funding-2011-Pipeline MTEF Projections", "33,888", "Funding-2012-Actual Commitments", "0", "Funding-2012-MTEF", "0", "Funding-2012-Projection MTEF Projections", "0", "Funding-2012-Pipeline MTEF Projections", "0", "Funding-2015-Actual Commitments", "0", "Funding-2015-MTEF", "0", "Funding-2015-Projection MTEF Projections", "0", "Funding-2015-Pipeline MTEF Projections", "0", "Totals-Actual Commitments", "0", "Totals-MTEF", "33,888", "Totals-Projection MTEF Projections", "0", "Totals-Pipeline MTEF Projections", "33,888", "Executing Agency", "Ministry of Economy")
+                    .withChildren(
+                      new ReportAreaForTests(new AreaOwner("Contracting Agency", "Contracting Agency: Undefined", -999999999)).withContents("Project Title", "", "Funding-2011-Actual Commitments", "0", "Funding-2011-MTEF", "33,888", "Funding-2011-Projection MTEF Projections", "0", "Funding-2011-Pipeline MTEF Projections", "33,888", "Funding-2012-Actual Commitments", "0", "Funding-2012-MTEF", "0", "Funding-2012-Projection MTEF Projections", "0", "Funding-2012-Pipeline MTEF Projections", "0", "Funding-2015-Actual Commitments", "0", "Funding-2015-MTEF", "0", "Funding-2015-Projection MTEF Projections", "0", "Funding-2015-Pipeline MTEF Projections", "0", "Totals-Actual Commitments", "0", "Totals-MTEF", "33,888", "Totals-Projection MTEF Projections", "0", "Totals-Pipeline MTEF Projections", "33,888", "Contracting Agency", "Contracting Agency: Undefined")
+                      .withChildren(
+                        new ReportAreaForTests(new AreaOwner(19), "Project Title", "Pure MTEF Project", "Funding-2011-MTEF", "33,888", "Funding-2011-Pipeline MTEF Projections", "33,888", "Totals-MTEF", "33,888", "Totals-Pipeline MTEF Projections", "33,888")          )        ),
+                    new ReportAreaForTests(new AreaOwner("Executing Agency", "Norway", 21694)).withContents("Contracting Agency", "", "Project Title", "", "Funding-2011-Actual Commitments", "0", "Funding-2011-MTEF", "0", "Funding-2011-Projection MTEF Projections", "0", "Funding-2011-Pipeline MTEF Projections", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-MTEF", "0", "Funding-2012-Projection MTEF Projections", "0", "Funding-2012-Pipeline MTEF Projections", "0", "Funding-2015-Actual Commitments", "27,160,32", "Funding-2015-MTEF", "0", "Funding-2015-Projection MTEF Projections", "0", "Funding-2015-Pipeline MTEF Projections", "0", "Totals-Actual Commitments", "27,160,32", "Totals-MTEF", "0", "Totals-Projection MTEF Projections", "0", "Totals-Pipeline MTEF Projections", "0", "Executing Agency", "Norway")
+                    .withChildren(
+                      new ReportAreaForTests(new AreaOwner("Contracting Agency", "Contracting Agency: Undefined", -999999999)).withContents("Project Title", "", "Funding-2011-Actual Commitments", "0", "Funding-2011-MTEF", "0", "Funding-2011-Projection MTEF Projections", "0", "Funding-2011-Pipeline MTEF Projections", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-MTEF", "0", "Funding-2012-Projection MTEF Projections", "0", "Funding-2012-Pipeline MTEF Projections", "0", "Funding-2015-Actual Commitments", "27,160,32", "Funding-2015-MTEF", "0", "Funding-2015-Projection MTEF Projections", "0", "Funding-2015-Pipeline MTEF Projections", "0", "Totals-Actual Commitments", "27,160,32", "Totals-MTEF", "0", "Totals-Projection MTEF Projections", "0", "Totals-Pipeline MTEF Projections", "0", "Contracting Agency", "Contracting Agency: Undefined")
+                      .withChildren(
+                        new ReportAreaForTests(new AreaOwner(73), "Project Title", "activity with directed MTEFs", "Funding-2015-Actual Commitments", "27,160,32", "Totals-Actual Commitments", "27,160,32")          )        ),
+                    new ReportAreaForTests(new AreaOwner("Executing Agency", "USAID", 21696)).withContents("Contracting Agency", "", "Project Title", "", "Funding-2011-Actual Commitments", "0", "Funding-2011-MTEF", "0", "Funding-2011-Projection MTEF Projections", "0", "Funding-2011-Pipeline MTEF Projections", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-MTEF", "0", "Funding-2012-Projection MTEF Projections", "0", "Funding-2012-Pipeline MTEF Projections", "0", "Funding-2015-Actual Commitments", "55,555,2", "Funding-2015-MTEF", "0", "Funding-2015-Projection MTEF Projections", "0", "Funding-2015-Pipeline MTEF Projections", "0", "Totals-Actual Commitments", "55,555,2", "Totals-MTEF", "0", "Totals-Projection MTEF Projections", "0", "Totals-Pipeline MTEF Projections", "0", "Executing Agency", "USAID")
+                    .withChildren(
+                      new ReportAreaForTests(new AreaOwner("Contracting Agency", "Contracting Agency: Undefined", -999999999)).withContents("Project Title", "", "Funding-2011-Actual Commitments", "0", "Funding-2011-MTEF", "0", "Funding-2011-Projection MTEF Projections", "0", "Funding-2011-Pipeline MTEF Projections", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-MTEF", "0", "Funding-2012-Projection MTEF Projections", "0", "Funding-2012-Pipeline MTEF Projections", "0", "Funding-2015-Actual Commitments", "55,555,2", "Funding-2015-MTEF", "0", "Funding-2015-Projection MTEF Projections", "0", "Funding-2015-Pipeline MTEF Projections", "0", "Totals-Actual Commitments", "55,555,2", "Totals-MTEF", "0", "Totals-Projection MTEF Projections", "0", "Totals-Pipeline MTEF Projections", "0", "Contracting Agency", "Contracting Agency: Undefined")
+                      .withChildren(
+                        new ReportAreaForTests(new AreaOwner(73), "Project Title", "activity with directed MTEFs", "Funding-2015-Actual Commitments", "55,555,2", "Totals-Actual Commitments", "55,555,2")          )        ),
+                    new ReportAreaForTests(new AreaOwner("Executing Agency", "Water Foundation", 21702)).withContents("Contracting Agency", "", "Project Title", "", "Funding-2011-Actual Commitments", "0", "Funding-2011-MTEF", "150,000", "Funding-2011-Projection MTEF Projections", "0", "Funding-2011-Pipeline MTEF Projections", "150,000", "Funding-2012-Actual Commitments", "0", "Funding-2012-MTEF", "65,000", "Funding-2012-Projection MTEF Projections", "0", "Funding-2012-Pipeline MTEF Projections", "65,000", "Funding-2015-Actual Commitments", "0", "Funding-2015-MTEF", "0", "Funding-2015-Projection MTEF Projections", "0", "Funding-2015-Pipeline MTEF Projections", "0", "Totals-Actual Commitments", "0", "Totals-MTEF", "215,000", "Totals-Projection MTEF Projections", "0", "Totals-Pipeline MTEF Projections", "215,000", "Executing Agency", "Water Foundation")
+                    .withChildren(
+                      new ReportAreaForTests(new AreaOwner("Contracting Agency", "Contracting Agency: Undefined", -999999999)).withContents("Project Title", "", "Funding-2011-Actual Commitments", "0", "Funding-2011-MTEF", "150,000", "Funding-2011-Projection MTEF Projections", "0", "Funding-2011-Pipeline MTEF Projections", "150,000", "Funding-2012-Actual Commitments", "0", "Funding-2012-MTEF", "65,000", "Funding-2012-Projection MTEF Projections", "0", "Funding-2012-Pipeline MTEF Projections", "65,000", "Funding-2015-Actual Commitments", "0", "Funding-2015-MTEF", "0", "Funding-2015-Projection MTEF Projections", "0", "Funding-2015-Pipeline MTEF Projections", "0", "Totals-Actual Commitments", "0", "Totals-MTEF", "215,000", "Totals-Projection MTEF Projections", "0", "Totals-Pipeline MTEF Projections", "215,000", "Contracting Agency", "Contracting Agency: Undefined")
+                      .withChildren(
+                        new ReportAreaForTests(new AreaOwner(18), "Project Title", "Test MTEF directed", "Funding-2011-MTEF", "150,000", "Funding-2011-Pipeline MTEF Projections", "150,000", "Funding-2012-MTEF", "65,000", "Funding-2012-Pipeline MTEF Projections", "65,000", "Totals-MTEF", "215,000", "Totals-Pipeline MTEF Projections", "215,000")          )        ),
+                    new ReportAreaForTests(new AreaOwner("Executing Agency", "Executing Agency: Undefined", -999999999)).withContents("Contracting Agency", "", "Project Title", "", "Funding-2011-Actual Commitments", "0", "Funding-2011-MTEF", "1,534,123", "Funding-2011-Projection MTEF Projections", "809,123", "Funding-2011-Pipeline MTEF Projections", "725,000", "Funding-2012-Actual Commitments", "0", "Funding-2012-MTEF", "206,000", "Funding-2012-Projection MTEF Projections", "163,000", "Funding-2012-Pipeline MTEF Projections", "43,000", "Funding-2015-Actual Commitments", "888,000", "Funding-2015-MTEF", "0", "Funding-2015-Projection MTEF Projections", "0", "Funding-2015-Pipeline MTEF Projections", "0", "Totals-Actual Commitments", "888,000", "Totals-MTEF", "1,740,123", "Totals-Projection MTEF Projections", "972,123", "Totals-Pipeline MTEF Projections", "768,000", "Executing Agency", "Executing Agency: Undefined")
+                    .withChildren(
+                      new ReportAreaForTests(new AreaOwner("Contracting Agency", "Contracting Agency: Undefined", -999999999))
+                      .withContents("Project Title", "", "Funding-2011-Actual Commitments", "0", "Funding-2011-MTEF", "1,534,123", "Funding-2011-Projection MTEF Projections", "809,123", "Funding-2011-Pipeline MTEF Projections", "725,000", "Funding-2012-Actual Commitments", "0", "Funding-2012-MTEF", "206,000", "Funding-2012-Projection MTEF Projections", "163,000", "Funding-2012-Pipeline MTEF Projections", "43,000", "Funding-2015-Actual Commitments", "888,000", "Funding-2015-MTEF", "0", "Funding-2015-Projection MTEF Projections", "0", "Funding-2015-Pipeline MTEF Projections", "0", "Totals-Actual Commitments", "888,000", "Totals-MTEF", "1,740,123", "Totals-Projection MTEF Projections", "972,123", "Totals-Pipeline MTEF Projections", "768,000", "Contracting Agency", "Contracting Agency: Undefined")
+                      .withChildren(
+                        new ReportAreaForTests(new AreaOwner(25), "Project Title", "mtef activity 1", "Funding-2011-MTEF", "789,123", "Funding-2011-Projection MTEF Projections", "789,123", "Totals-MTEF", "789,123", "Totals-Projection MTEF Projections", "789,123"),
+                        new ReportAreaForTests(new AreaOwner(70), "Project Title", "Activity with both MTEFs and Act.Comms", "Funding-2011-MTEF", "700,000", "Funding-2011-Pipeline MTEF Projections", "700,000", "Funding-2012-MTEF", "150,000", "Funding-2012-Projection MTEF Projections", "150,000", "Funding-2015-Actual Commitments", "888,000", "Totals-Actual Commitments", "888,000", "Totals-MTEF", "850,000", "Totals-Projection MTEF Projections", "150,000", "Totals-Pipeline MTEF Projections", "700,000"),
+                        new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs", "Funding-2011-MTEF", "45,000", "Funding-2011-Projection MTEF Projections", "20,000", "Funding-2011-Pipeline MTEF Projections", "25,000", "Funding-2012-MTEF", "56,000", "Funding-2012-Projection MTEF Projections", "13,000", "Funding-2012-Pipeline MTEF Projections", "43,000", "Totals-MTEF", "101,000", "Totals-Projection MTEF Projections", "33,000", "Totals-Pipeline MTEF Projections", "68,000")          )        )      ));
+
+        runNiTestCase(
+                this.buildSpecification("testcase mtefs measures hiers", 
+                        
+                        Arrays.asList(ColumnConstants.EXECUTING_AGENCY, ColumnConstants.CONTRACTING_AGENCY, ColumnConstants.PROJECT_TITLE), 
+                        Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.MTEF, MeasureConstants.PROJECTION_MTEF_PROJECTIONS, MeasureConstants.PIPELINE_MTEF_PROJECTIONS), 
+                        Arrays.asList(ColumnConstants.EXECUTING_AGENCY,ColumnConstants.CONTRACTING_AGENCY), GroupingCriteria.GROUPING_YEARLY),                       
+                        "en", 
+                        Arrays.asList("Pure MTEF Project", "activity with directed MTEFs", "Activity with both MTEFs and Act.Comms", "activity with many MTEFs", "mtef activity 1", "Test MTEF directed", "Eth Water"),
+                        correctReport); 
+    }
+    
+    @Test
     public void testProjectTitleLanguages() {
         NiReportModel correctReport = new NiReportModel("testcase EN")
             .withHeaders(Arrays.asList(
@@ -490,6 +547,64 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
             GroupingCriteria.GROUPING_TOTALS_ONLY);
         
         spec.getOrCreateSettings().setUnitsOption(AmountsUnits.AMOUNTS_OPTION_MILLIONS);
+        runNiTestCase(cor, spec, mtefActs);
+    }
+    
+    @Test
+    public void testMtefMeasuresInMillions() {
+        NiReportModel cor =  new NiReportModel("MTEF measures millions")
+            .withHeaders(Arrays.asList(
+                    "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 4))",
+                    "(Project Title: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1));(MTEF 2011: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 1, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 2))",
+                    "(Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(MTEF: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1))"))
+                .withWarnings(Arrays.asList())
+                .withBody(      new ReportAreaForTests(null)
+                  .withContents("Project Title", "", "MTEF 2011", "1,72", "Totals-Actual Commitments", "0,89", "Totals-MTEF", "1,72")
+                  .withChildren(
+                    new ReportAreaForTests(new AreaOwner(18), "Project Title", "Test MTEF directed", "MTEF 2011", "0,15", "Totals-MTEF", "0,15"),
+                    new ReportAreaForTests(new AreaOwner(19), "Project Title", "Pure MTEF Project", "MTEF 2011", "0,03", "Totals-MTEF", "0,03"),
+                    new ReportAreaForTests(new AreaOwner(25), "Project Title", "mtef activity 1", "MTEF 2011", "0,79", "Totals-MTEF", "0,79"),
+                    new ReportAreaForTests(new AreaOwner(27), "Project Title", "mtef activity 2"),
+                    new ReportAreaForTests(new AreaOwner(70), "Project Title", "Activity with both MTEFs and Act.Comms", "MTEF 2011", "0,7", "Totals-Actual Commitments", "0,89", "Totals-MTEF", "0,7"),
+                    new ReportAreaForTests(new AreaOwner(76), "Project Title", "activity with pipeline MTEFs and act. disb"),
+                    new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs", "MTEF 2011", "0,04", "Totals-MTEF", "0,04")      ));
+
+        ReportSpecificationImpl spec = buildSpecification("MTEF measures millions",
+            Arrays.asList(ColumnConstants.PROJECT_TITLE, "MTEF 2011"), 
+            Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS), 
+            null,
+            GroupingCriteria.GROUPING_TOTALS_ONLY);
+        
+        spec.getOrCreateSettings().setUnitsOption(AmountsUnits.AMOUNTS_OPTION_MILLIONS);
+        runNiTestCase(cor, spec, mtefActs);
+    }
+    
+    @Test
+    public void testAllMtefMeasures() {
+        NiReportModel cor =  new NiReportModel("MTEF measures")
+            .withHeaders(Arrays.asList(
+                    "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 25))",
+                    "(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 1, colSpan: 20));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 21, colSpan: 4))",
+                    "(2011: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 1, colSpan: 4));(2012: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 5, colSpan: 4));(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 9, colSpan: 4));(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 13, colSpan: 4));(2015: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 17, colSpan: 4))",
+                    "(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1));(MTEF: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Projection MTEF Projections: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Pipeline MTEF Projections: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(MTEF: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Projection MTEF Projections: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Pipeline MTEF Projections: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1));(MTEF: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 10, colSpan: 1));(Projection MTEF Projections: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 11, colSpan: 1));(Pipeline MTEF Projections: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 12, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 13, colSpan: 1));(MTEF: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 14, colSpan: 1));(Projection MTEF Projections: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 15, colSpan: 1));(Pipeline MTEF Projections: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 16, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 17, colSpan: 1));(MTEF: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 18, colSpan: 1));(Projection MTEF Projections: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 19, colSpan: 1));(Pipeline MTEF Projections: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 20, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 21, colSpan: 1));(MTEF: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 22, colSpan: 1));(Projection MTEF Projections: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 23, colSpan: 1));(Pipeline MTEF Projections: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 24, colSpan: 1))"))
+                .withWarnings(Arrays.asList())
+                .withBody(      new ReportAreaForTests(null)
+                  .withContents("Project Title", "", "Funding-2011-Actual Commitments", "0", "Funding-2011-MTEF", "1,718,011", "Funding-2011-Projection MTEF Projections", "809,123", "Funding-2011-Pipeline MTEF Projections", "908,888", "Funding-2012-Actual Commitments", "0", "Funding-2012-MTEF", "271,000", "Funding-2012-Projection MTEF Projections", "163,000", "Funding-2012-Pipeline MTEF Projections", "108,000", "Funding-2013-Actual Commitments", "0", "Funding-2013-MTEF", "158,654", "Funding-2013-Projection MTEF Projections", "0", "Funding-2013-Pipeline MTEF Projections", "158,654", "Funding-2014-Actual Commitments", "0", "Funding-2014-MTEF", "105,000", "Funding-2014-Projection MTEF Projections", "55,000", "Funding-2014-Pipeline MTEF Projections", "50,000", "Funding-2015-Actual Commitments", "888,000", "Funding-2015-MTEF", "0", "Funding-2015-Projection MTEF Projections", "0", "Funding-2015-Pipeline MTEF Projections", "0", "Totals-Actual Commitments", "888,000", "Totals-MTEF", "2,252,665", "Totals-Projection MTEF Projections", "1,027,123", "Totals-Pipeline MTEF Projections", "1,225,542")
+                  .withChildren(
+                    new ReportAreaForTests(new AreaOwner(18), "Project Title", "Test MTEF directed", "Funding-2011-MTEF", "150,000", "Funding-2011-Pipeline MTEF Projections", "150,000", "Funding-2012-MTEF", "65,000", "Funding-2012-Pipeline MTEF Projections", "65,000", "Totals-MTEF", "215,000", "Totals-Pipeline MTEF Projections", "215,000"),
+                    new ReportAreaForTests(new AreaOwner(19), "Project Title", "Pure MTEF Project", "Funding-2011-MTEF", "33,888", "Funding-2011-Pipeline MTEF Projections", "33,888", "Totals-MTEF", "33,888", "Totals-Pipeline MTEF Projections", "33,888"),
+                    new ReportAreaForTests(new AreaOwner(25), "Project Title", "mtef activity 1", "Funding-2011-MTEF", "789,123", "Funding-2011-Projection MTEF Projections", "789,123", "Totals-MTEF", "789,123", "Totals-Projection MTEF Projections", "789,123"),
+                    new ReportAreaForTests(new AreaOwner(27), "Project Title", "mtef activity 2", "Funding-2013-MTEF", "123,654", "Funding-2013-Pipeline MTEF Projections", "123,654", "Totals-MTEF", "123,654", "Totals-Pipeline MTEF Projections", "123,654"),
+                    new ReportAreaForTests(new AreaOwner(70), "Project Title", "Activity with both MTEFs and Act.Comms", "Funding-2011-MTEF", "700,000", "Funding-2011-Pipeline MTEF Projections", "700,000", "Funding-2012-MTEF", "150,000", "Funding-2012-Projection MTEF Projections", "150,000", "Funding-2015-Actual Commitments", "888,000", "Totals-Actual Commitments", "888,000", "Totals-MTEF", "850,000", "Totals-Projection MTEF Projections", "150,000", "Totals-Pipeline MTEF Projections", "700,000"),
+                    new ReportAreaForTests(new AreaOwner(76), "Project Title", "activity with pipeline MTEFs and act. disb", "Funding-2013-MTEF", "35,000", "Funding-2013-Pipeline MTEF Projections", "35,000", "Funding-2014-MTEF", "105,000", "Funding-2014-Projection MTEF Projections", "55,000", "Funding-2014-Pipeline MTEF Projections", "50,000", "Totals-MTEF", "140,000", "Totals-Projection MTEF Projections", "55,000", "Totals-Pipeline MTEF Projections", "85,000"),
+                    new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs", "Funding-2011-MTEF", "45,000", "Funding-2011-Projection MTEF Projections", "20,000", "Funding-2011-Pipeline MTEF Projections", "25,000", "Funding-2012-MTEF", "56,000", "Funding-2012-Projection MTEF Projections", "13,000", "Funding-2012-Pipeline MTEF Projections", "43,000", "Totals-MTEF", "101,000", "Totals-Projection MTEF Projections", "33,000", "Totals-Pipeline MTEF Projections", "68,000")      ));
+
+        ReportSpecificationImpl spec = buildSpecification("MTEF measures",
+            Arrays.asList(ColumnConstants.PROJECT_TITLE), 
+            Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.MTEF, MeasureConstants.PROJECTION_MTEF_PROJECTIONS, MeasureConstants.PIPELINE_MTEF_PROJECTIONS, MeasureConstants.REAL_MTEF),
+            null,
+            GroupingCriteria.GROUPING_YEARLY);
+        
         runNiTestCase(cor, spec, mtefActs);
     }
     
@@ -1472,14 +1587,92 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                 .withContents("Project Title", "", "Totals-Actual Commitments", "50,100", "Disaster Response Marker", "Disaster Response Marker: Undefined")
                 .withChildren(
                   new ReportAreaForTests(new AreaOwner(63), "Project Title", "activity with funded components", "Totals-Actual Commitments", "100"),
-                  new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response", "Totals-Actual Commitments", "50,000")        )      ));    
+                  new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response", "Totals-Actual Commitments", "50,000"),
+                  new ReportAreaForTests(new AreaOwner(95), "Project Title", "activity 1 with indicators")        )      ));
         
-        List<String> someActs = Arrays.asList("activity_with_disaster_response", "expenditure class", "second with disaster response", "activity with funded components");
+        List<String> someActs = Arrays.asList("activity_with_disaster_response", "expenditure class", "second with disaster response", "activity with funded components", "activity 1 with indicators");
         
         ReportSpecificationImpl spec = buildSpecification("by-disaster-response",
             Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.DISASTER_RESPONSE_MARKER), 
             Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
             Arrays.asList(ColumnConstants.DISASTER_RESPONSE_MARKER), 
+            GroupingCriteria.GROUPING_TOTALS_ONLY);
+        
+        spec.setDisplayEmptyFundingRows(true);
+        runNiTestCase(cor, spec, "en", someActs);
+    }
+    
+    @Test
+    public void testShowEmptyFundingRowsDonorAgencyHierarchy() {
+        NiReportModel cor = new NiReportModel("by-donor-agency")
+        .withHeaders(Arrays.asList(
+                "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 3))",
+                "(Donor Agency: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 1, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 1))",
+                "(Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1))"))
+            .withWarnings(Arrays.asList())
+            .withBody(      new ReportAreaForTests(null)
+              .withContents("Donor Agency", "", "Project Title", "", "Totals-Actual Commitments", "578,666")
+              .withChildren(
+                new ReportAreaForTests(new AreaOwner("Donor Agency", "Finland", 21698)).withContents("Project Title", "", "Totals-Actual Commitments", "150,000", "Donor Agency", "Finland")
+                .withChildren(
+                  new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response", "Totals-Actual Commitments", "150,000")        ),
+                new ReportAreaForTests(new AreaOwner("Donor Agency", "Ministry of Economy", 21700)).withContents("Project Title", "", "Totals-Actual Commitments", "62,000", "Donor Agency", "Ministry of Economy")
+                .withChildren(
+                  new ReportAreaForTests(new AreaOwner(87), "Project Title", "expenditure class", "Totals-Actual Commitments", "62,000")        ),
+                new ReportAreaForTests(new AreaOwner("Donor Agency", "Ministry of Finance", 21699)).withContents("Project Title", "", "Totals-Actual Commitments", "0", "Donor Agency", "Ministry of Finance")
+                .withChildren(
+                  new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response")        ),
+                new ReportAreaForTests(new AreaOwner("Donor Agency", "Norway", 21694))
+                .withContents("Project Title", "", "Totals-Actual Commitments", "366,666", "Donor Agency", "Norway")
+                .withChildren(
+                  new ReportAreaForTests(new AreaOwner(87), "Project Title", "expenditure class"),
+                  new ReportAreaForTests(new AreaOwner(92), "Project Title", "second with disaster response", "Totals-Actual Commitments", "366,666")        ),
+                new ReportAreaForTests(new AreaOwner("Donor Agency", "Donor Agency: Undefined", -999999999)).withContents("Project Title", "", "Totals-Actual Commitments", "0", "Donor Agency", "Donor Agency: Undefined")
+                .withChildren(
+                  new ReportAreaForTests(new AreaOwner(95), "Project Title", "activity 1 with indicators")        )      ));   
+        
+        List<String> someActs = Arrays.asList("activity_with_disaster_response", "expenditure class", "second with disaster response", "activity 1 with indicators");
+        
+        ReportSpecificationImpl spec = buildSpecification("by-donor-agency",
+            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.DONOR_AGENCY), 
+            Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
+            Arrays.asList(ColumnConstants.DONOR_AGENCY), 
+            GroupingCriteria.GROUPING_TOTALS_ONLY);
+        
+        spec.setDisplayEmptyFundingRows(true);
+        runNiTestCase(cor, spec, "en", someActs);
+    }
+    
+    @Test
+    public void testShowEmptyFundingRowsModeOfPaymentAgencyHierarchy() {
+        NiReportModel cor = new NiReportModel("by-mode-of-payment")
+        .withHeaders(Arrays.asList(
+            "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 3))",
+            "(Mode of Payment: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 1, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 1))",
+            "(Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1))"))
+        .withWarnings(Arrays.asList())
+        .withBody(      new ReportAreaForTests(null)
+          .withContents("Mode of Payment", "", "Project Title", "", "Totals-Actual Disbursements", "253,700")
+          .withChildren(
+            new ReportAreaForTests(new AreaOwner("Mode of Payment", "Direct payment", 2094))
+            .withContents("Project Title", "", "Totals-Actual Disbursements", "0", "Mode of Payment", "Direct payment")
+            .withChildren(
+              new ReportAreaForTests(new AreaOwner(27), "Project Title", "mtef activity 2"),
+              new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response")        ),
+            new ReportAreaForTests(new AreaOwner("Mode of Payment", "Mode of Payment: Undefined", -999999999))
+            .withContents("Project Title", "", "Totals-Actual Disbursements", "253,700", "Mode of Payment", "Mode of Payment: Undefined")
+            .withChildren(
+              new ReportAreaForTests(new AreaOwner(19), "Project Title", "Pure MTEF Project"),
+              new ReportAreaForTests(new AreaOwner(87), "Project Title", "expenditure class", "Totals-Actual Disbursements", "253,700"),
+              new ReportAreaForTests(new AreaOwner(92), "Project Title", "second with disaster response"),
+              new ReportAreaForTests(new AreaOwner(95), "Project Title", "activity 1 with indicators")        )      ));
+        
+        List<String> someActs = Arrays.asList("activity_with_disaster_response", "expenditure class", "second with disaster response", "activity 1 with indicators", "mtef activity 2", "Pure MTEF Project");
+        
+        ReportSpecificationImpl spec = buildSpecification("by-mode-of-payment",
+            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.MODE_OF_PAYMENT), 
+            Arrays.asList(MeasureConstants.ACTUAL_DISBURSEMENTS),
+            Arrays.asList(ColumnConstants.MODE_OF_PAYMENT), 
             GroupingCriteria.GROUPING_TOTALS_ONLY);
         
         spec.setDisplayEmptyFundingRows(true);
@@ -2241,6 +2434,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                                 new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity", "Donor Agency", "Ministry of Finance, UNDP", "Primary Sector", "110 - EDUCATION", "Funding-2014-Planned Disbursements", "56,000", "Funding-2014-Actual Disbursements", "55,000", "Funding-2014-Disbursed as Scheduled", "98,21", "Funding-2015-Planned Disbursements", "36,000", "Funding-2015-Actual Disbursements", "35,000", "Funding-2015-Disbursed as Scheduled", "97,22", "Totals-Planned Disbursements", "92,000", "Totals-Actual Disbursements", "90,000", "Totals-Disbursed as Scheduled", "97,83"),
                                 new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs", "Donor Agency", "Finland, Norway, USAID", "Primary Sector", "110 - EDUCATION", "Funding-2015-Actual Disbursements", "80,000", "Totals-Actual Disbursements", "80,000"),
                                 new ReportAreaForTests(new AreaOwner(79), "Project Title", "with weird currencies", "Donor Agency", "Finland, Ministry of Finance, Norway", "Primary Sector", "110 - EDUCATION, 112 - BASIC EDUCATION")      ));
+
 
 
         ReportSpecificationImpl spec = buildSpecification("testOverDisbursedAsScheduledFlatReport",

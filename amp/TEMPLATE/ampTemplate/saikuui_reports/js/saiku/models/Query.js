@@ -230,6 +230,6 @@ var Query = Backbone.Model.extend({
     
     url: function() {
     	Saiku.logger.log("Query.url");
-   		return "/TEMPLATE/ampTemplate/saikuui_nireports/mockData/query.json";
+   		return "/TEMPLATE/ampTemplate/saikuui_reports/mockData/query.json";
     }
 });

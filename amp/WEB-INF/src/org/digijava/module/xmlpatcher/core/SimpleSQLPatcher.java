@@ -380,6 +380,14 @@ public class SimpleSQLPatcher {
             addPatch(new SimpleSQLPatch("014",
                     "UPDATE amp_xml_patch SET state = 0 WHERE patch_id = 'amp_activity.xml'"
             ));
+            addPatch(new SimpleSQLPatch("015",
+                    "UPDATE dg_locale SET left_to_right = false WHERE name IN "
+                            + "('Persian','Urdu','Hebrew','Arabic',"
+                            + "'Kurdish')", "UPDATE dg_locale SET left_to_right = true WHERE name NOT IN ('Persian',"
+                    + "'Urdu','Hebrew','Arabic','Kurdish')"));
+            // AMP-27104 for the patch to work a double restart is needed with a simple_sql_patch we avoid this
+            // this was introduced in AMP-26932
+
     }};
     DataSource dataSource;
     

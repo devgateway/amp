@@ -7,7 +7,7 @@
     <apply>
         <script>
             <lang delimiter=";" type="bsh">
-                org.digijava.kernel.xmlpatches.AmpActivityEditorFieldUpdateJob.run();
+                org.digijava.kernel.xmlpatches.AmpActivityEditorFieldUpdatePatch.run();
             </lang>
         </script>
     </apply>

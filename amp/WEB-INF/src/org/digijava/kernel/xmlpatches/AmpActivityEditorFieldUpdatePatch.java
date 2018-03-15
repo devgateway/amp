@@ -22,9 +22,8 @@ import java.util.StringJoiner;
  *
  * @author Aldo Picca
  */
-public class AmpActivityEditorFieldUpdateJob {
+public class AmpActivityEditorFieldUpdatePatch {
 
-    private static Logger logger = LoggerFactory.getLogger(AmpActivityEditorFieldUpdateJob.class);
     public static final String EDITOR_KEY_PREFIX = "aim-";
     public static final String EDITOR_KEY_IATI_IMPORT_PREFIX = "_iati_import_";
     public static final Map<String, String> EDITOR_FIELDS_MAP = Collections.unmodifiableMap(
@@ -73,7 +72,7 @@ public class AmpActivityEditorFieldUpdateJob {
     }
 
     public static void run() {
-        new AmpActivityEditorFieldUpdateJob().updateAllFields();
+        new AmpActivityEditorFieldUpdatePatch().updateAllFields();
     }
 
     /**

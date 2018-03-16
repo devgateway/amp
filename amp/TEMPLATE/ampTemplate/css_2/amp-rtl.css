@@ -724,6 +724,9 @@ a.last_page {
 .nvtooltip {
     text-align: right;
 }
+.nvtooltip .panel-footer{
+    direction: ltr;
+}
 
 .heatmap-chart g text {
     direction: ltr;

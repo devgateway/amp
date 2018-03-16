@@ -114,11 +114,24 @@ module.exports = Backbone.View.extend({
           .showLegend(false);
       chart.color(util.categoryColours(data.length));
       chart.tooltipContent(function(a, y, raw) {
-        return topsTooltipTemplate({
+          debugger;
+              var isRtl = app.data.generalSettings.get("rtl-direction");
+          var percentage = "";
+
+          if ( raw.value> 0) {
+
+              percentage = d3.format('f')(raw.value / model.total * 100);
+              if (isRtl) {
+                  percentage = '% ' +  percentage;
+              } else {
+                  percentage = percentage + ' %';
+              }
+          }
+          return topsTooltipTemplate({
           label: raw.point.label,
           value: d3.format(',')(Math.round(raw.value)),
           currency: model.currency,
-          percent: d3.format('%')(raw.value / model.total),
+          percent: percentage,
           totalLegend: app.translator.translateSync('amp.gis.cluster.tooltip-of-total', 'of total')
         });
       });

@@ -2,7 +2,7 @@ package org.digijava.kernel.ampapi.endpoints.filters;
 
 public interface FilterListManager {
     
-    public static final String ITEMS_NAME = "values";
+    static final String ITEMS_NAME = "values";
     
     default FilterList getFilterList() {
         return new FilterList();

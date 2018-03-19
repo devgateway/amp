@@ -16,6 +16,7 @@ import static org.dgfoundation.amp.nireports.formulas.NiFormula.PERCENTAGEIFLOWE
 import static org.dgfoundation.amp.nireports.formulas.NiFormula.SUBTRACT;
 import static org.dgfoundation.amp.nireports.formulas.NiFormula.SUBTRACTIFGREATER;
 import static org.dgfoundation.amp.nireports.formulas.NiFormula.VARIABLE;
+import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_0;
 import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_1;
 import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_2;
 import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_3;
@@ -654,10 +655,9 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         date_column(ColumnConstants.FUNDING_END_DATE, "v_funding_end_date");
         date_column(ColumnConstants.FUNDING_START_DATE, "v_funding_start_date");
         date_column(ColumnConstants.ORIGINAL_COMPLETION_DATE, "v_original_completion_date");
-        /*pledge columns -- commented for now, should be added once pledge reports are implemented*/
-//      date_column(ColumnConstants.PLEDGES_DETAIL_START_DATE, "v_pledges_funding_start_date"); 
-//      date_column(ColumnConstants.PLEDGES_DETAIL_END_DATE, "v_pledges_funding_end_date "); 
         date_column(ColumnConstants.PROPOSED_APPROVAL_DATE, "v_actual_proposed_date"); 
+        date_column(ColumnConstants.PLEDGES_DETAIL_START_DATE, "v_pledges_funding_start_date"); 
+        date_column(ColumnConstants.PLEDGES_DETAIL_END_DATE, "v_pledges_funding_end_date"); 
         date_column(ColumnConstants.PROPOSED_COMPLETION_DATE, "v_proposed_completion_date"); 
         date_column(ColumnConstants.PROPOSED_START_DATE, "v_proposed_start_date");
 
@@ -746,18 +746,35 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         single_dimension(ColumnConstants.PLEDGES_DONOR_TYPE, "v_pledges_donor_type", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION_TYPE));
         
         with_percentage(ColumnConstants.PLEDGES_PROGRAMS, "v_pledges_programs", PP_DIM_USG, LEVEL_1);
+        with_percentage(ColumnConstants.PLEDGES_PROGRAMS_LEVEL_0, "v_pledges_programs_level_0", PP_DIM_USG, LEVEL_0);
+        with_percentage(ColumnConstants.PLEDGES_PROGRAMS_LEVEL_1, "v_pledges_programs_level_1", PP_DIM_USG, LEVEL_1);
         with_percentage(ColumnConstants.PLEDGES_PROGRAMS_LEVEL_2, "v_pledges_programs_level_2", PP_DIM_USG, LEVEL_2);
         with_percentage(ColumnConstants.PLEDGES_PROGRAMS_LEVEL_3, "v_pledges_programs_level_3", PP_DIM_USG, LEVEL_3);
         
-        with_percentage(ColumnConstants.PLEDGES_SECONDARY_PROGRAMS, "v_pledges_secondary_programs", SP_DIM_USG, LEVEL_1);
+        with_percentage(ColumnConstants.PLEDGES_SECONDARY_PROGRAMS, "v_pledges_secondary_programs", 
+                SP_DIM_USG, LEVEL_1);
+        with_percentage(ColumnConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_0, "v_pledges_secondary_programs_level_0", 
+                SP_DIM_USG, LEVEL_0);
+        with_percentage(ColumnConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_1, "v_pledges_secondary_programs_level_1", 
+                SP_DIM_USG, LEVEL_1);
         with_percentage(ColumnConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_2, "v_pledges_secondary_programs_level_2", SP_DIM_USG, LEVEL_2);
         with_percentage(ColumnConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_3, "v_pledges_secondary_programs_level_3", SP_DIM_USG, LEVEL_3);
         
-        with_percentage(ColumnConstants.PLEDGES_TERTIARY_PROGRAMS, "v_pledges_tertiary_programs", TP_DIM_USG, LEVEL_1);
+        with_percentage(ColumnConstants.PLEDGES_TERTIARY_PROGRAMS, "v_pledges_tertiary_programs", 
+                TP_DIM_USG, LEVEL_1);
+        with_percentage(ColumnConstants.PLEDGES_TERTIARY_PROGRAMS_LEVEL_0, "v_pledges_tertiary_programs_level_0", 
+                TP_DIM_USG, LEVEL_0);
+        with_percentage(ColumnConstants.PLEDGES_TERTIARY_PROGRAMS_LEVEL_1, "v_pledges_tertiary_programs_level_1", 
+                TP_DIM_USG, LEVEL_1);
         with_percentage(ColumnConstants.PLEDGES_TERTIARY_PROGRAMS_LEVEL_2, "v_pledges_tertiary_programs_level_2", TP_DIM_USG, LEVEL_2);
         with_percentage(ColumnConstants.PLEDGES_TERTIARY_PROGRAMS_LEVEL_3, "v_pledges_tertiary_programs_level_3", TP_DIM_USG, LEVEL_3);
         
-        with_percentage(ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES, "v_pledges_npd_objectives", NPO_DIM_USG, LEVEL_1);
+        with_percentage(ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES, "v_pledges_npd_objectives", 
+                NPO_DIM_USG, LEVEL_1);
+        with_percentage(ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_0, "v_pledges_npd_objectives_level_0", 
+                NPO_DIM_USG, LEVEL_0);
+        with_percentage(ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_1, "v_pledges_npd_objectives_level_1", 
+                NPO_DIM_USG, LEVEL_1);
         with_percentage(ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_2, "v_pledges_npd_objectives_level_2", NPO_DIM_USG, LEVEL_2);
         with_percentage(ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_3, "v_pledges_npd_objectives_level_3", NPO_DIM_USG, LEVEL_3);
         
@@ -811,9 +828,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
             no_entity(entry.getKey(), entry.getValue());
             no_entity(entry.getKey().replace("1", "2"), entry.getValue().replace("1", "2"));
         }
+        
         no_entity(ColumnConstants.PLEDGES_DETAIL_DATE_RANGE, "v_pledges_funding_range_date");
-        no_entity(ColumnConstants.PLEDGES_DETAIL_START_DATE, "v_pledges_funding_start_date");
-        no_entity(ColumnConstants.PLEDGES_DETAIL_END_DATE, "v_pledges_funding_end_date");
     }
     
     

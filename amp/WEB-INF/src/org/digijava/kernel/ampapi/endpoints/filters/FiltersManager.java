@@ -44,4 +44,44 @@ public final class FiltersManager {
         return ProgramFilterListManager.getInstance().getFilterList();
     }
 
+    public FilterList getApprovalStatusFilter() {
+        return ApprovalStatusFilterListManager.getInstance().getFilterList();
+    }
+    
+    public FilterList getCategoryValueFilter(String filterId) {
+        return CategoryValueFilterListManager.getInstance().getFilterList(filterId);
+    }
+    
+    public FilterList getBooleanFilter(String filterId) {
+        return BooleanFilterListManager.getInstance().getFilterList(filterId);
+    }
+    
+    public FilterList getWorkspaceFilter() {
+        return WorkspaceFilterListManager.getInstance().getFilterList();
+    }
+    
+    public FilterList getComputedYearFilter() {
+        return ComputedYearFilterListManager.getInstance().getFilterList();
+    }
+    
+    public FilterList getDateFilter() {
+        return DateFilterListManager.getInstance().getFilterList();
+    }
+    
+    public FilterList getPledgesDonorFilterList() {
+        return PledgesDonorFilterListManager.getInstance().getFilterList();
+    }
+
+    public FilterList getPledgesLocationFilterList() {
+        return PledgesLocationFilterListManager.getInstance().getFilterList();
+    }
+    
+    public FilterList getPledgesSectorFilterList() {
+        return PledgesSectorFilterListManager.getInstance().getFilterList();
+    }
+    
+    public FilterList getPledgesProgramFilterList() {
+        return PledgesProgramFilterListManager.getInstance().getFilterList();
+    }
+
 }

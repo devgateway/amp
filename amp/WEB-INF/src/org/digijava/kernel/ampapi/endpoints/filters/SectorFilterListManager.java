@@ -8,7 +8,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
-import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
@@ -21,9 +20,9 @@ import org.digijava.module.aim.util.SectorUtil;
  * @author Viorel Chihai
  *
  */
-public final class SectorFilterListManager implements FilterListManager {
+public class SectorFilterListManager implements FilterListManager {
     
-    private static final String SECTORS_SUFFIX = " Sectors";
+    protected static final String SECTORS_SUFFIX = "Sectors";
     
     private static SectorFilterListManager sectorFilterListManager;
 
@@ -35,7 +34,7 @@ public final class SectorFilterListManager implements FilterListManager {
         return sectorFilterListManager;
     }
     
-    private SectorFilterListManager() { }
+    protected SectorFilterListManager() { }
 
     @Override
     public FilterList getFilterList() {
@@ -45,24 +44,24 @@ public final class SectorFilterListManager implements FilterListManager {
         return new FilterList(sectorListDefinitions, sectorListItems);
     }
     
-    private List<FilterListDefinition> getSectorListDefinitions() {
+    protected List<FilterListDefinition> getSectorListDefinitions() {
         List<FilterListDefinition> listDefinitions = new ArrayList<>();
         List<AmpClassificationConfiguration> sectorConfigs = getSectorConfigs();
        
         for (AmpClassificationConfiguration sc : sectorConfigs) {
             List<String> filterIds = AmpClassificationConfiguration.NAME_TO_COLUMN_AND_LEVEL.get(sc.getName())
                     .values().stream()
-                    .map(col -> FilterUtils.INSTANCE.idFromColumnName(col))
+                    .map(col -> getFilterId(FilterUtils.INSTANCE.idFromColumnName(col)))
                     .collect(Collectors.toList());
+            String filterDefinitionName = getFilterDefinitionName(sc.getName());
             
             FilterListDefinition listDefinition = new FilterListDefinition();
             listDefinition.setId(sc.getId());
-            listDefinition.setName(sc.getName() + SECTORS_SUFFIX);
-            listDefinition.setDisplayName(TranslatorWorker.translateText(sc.getName() + SECTORS_SUFFIX));
+            listDefinition.setName(filterDefinitionName);
+            listDefinition.setDisplayName(TranslatorWorker.translateText(filterDefinitionName));
             listDefinition.setFiltered(true);
             listDefinition.setFilterIds(filterIds);
             listDefinition.setItems(sc.getName().toLowerCase());
-            listDefinition.setTab(EPConstants.TAB_SECTORS);
             listDefinitions.add(listDefinition);
         }
         
@@ -106,6 +105,14 @@ public final class SectorFilterListManager implements FilterListManager {
         }
         
         return node;
+    }
+
+    protected String getFilterId(String filterId) {
+        return filterId;
+    }
+
+    protected String getFilterDefinitionName(String sectorConfigurationName) {
+        return String.format("%s %s", sectorConfigurationName, SECTORS_SUFFIX);
     }
 
 }

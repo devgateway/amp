@@ -133,6 +133,7 @@ public class EPConstants {
     public static final String TAB_SECTORS = "Sector";
     public static final String TAB_PROGRAMS = "Programs";
     public static final String TAB_ACTIVITY = "Activity";
+    public static final String TAB_PLEDGE = "Pledge";
     public static final String TAB_ALL_AGENCIES = "All Agencies";
     public static final String TAB_FINANCIALS = "Financial";
     public static final String TAB_LOCATIONS = "Location";

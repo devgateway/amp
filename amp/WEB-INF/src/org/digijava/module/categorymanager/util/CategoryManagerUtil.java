@@ -567,6 +567,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
         }
 
         List<AmpCategoryValue> ampCategoryValues = ampCategoryClass.getPossibleValues();
+        ampCategoryValues.removeAll(Collections.singleton(null));
         
         PersistenceManager.getSession().evict(ampCategoryClass); // else funny things will happen if someone tries to delete()
         

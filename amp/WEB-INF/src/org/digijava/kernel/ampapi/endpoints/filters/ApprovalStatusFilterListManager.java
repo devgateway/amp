@@ -11,14 +11,13 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.util.TeamMemberUtil;
 
 /**
- * This class generates the filter list (tree) object for locations
+ * This class generates the filter list (tree) object for activity approval status
  * 
  * @author Viorel Chihai
  *
  */
 public final class ApprovalStatusFilterListManager implements FilterListManager {
     
-    private static final String ITEMS_NAME = "values";
     private static ApprovalStatusFilterListManager catValFilterListManager;
 
     public static ApprovalStatusFilterListManager getInstance() {

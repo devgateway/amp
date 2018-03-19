@@ -22,7 +22,6 @@ import com.google.common.collect.ImmutableMap;
  */
 public final class CategoryValueFilterListManager implements FilterListManager {
     
-    private static final String ITEMS_NAME = "values";
     private static CategoryValueFilterListManager catValFilterListManager;
     
     public static final Map<String, CategoryBean> FILTER_NAME_TO_CATEGORY_ITEM =

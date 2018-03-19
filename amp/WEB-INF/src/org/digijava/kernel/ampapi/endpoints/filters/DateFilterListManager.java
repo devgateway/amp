@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * This class generates the filter list object for computed year
@@ -15,12 +17,9 @@ import org.digijava.kernel.translator.TranslatorWorker;
  */
 public final class DateFilterListManager implements FilterListManager {
     
-    private static final String ITEMS_NAME = "values";
     private static final String DATE_FILTER_NAME = "Date";
     private static final String START_YEAR = "startYear";
     private static final String END_YEAR = "endYear";
-    private static final long DATE_START_YEAR = 1985;
-    private static final long DATE_END_YEAR = 2025;
     
     private static DateFilterListManager dateFilterListManager;
     
@@ -64,18 +63,21 @@ public final class DateFilterListManager implements FilterListManager {
         Map<String, List<FilterListTreeNode>> items = new HashMap<>();
         List<FilterListTreeNode> nodes = new ArrayList<>();
         
+        long startYear = FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.YEAR_RANGE_START);
+        long range = FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.NUMBER_OF_YEARS_IN_RANGE);
+        long endYear = startYear + range;
+        
         FilterListTreeNode startYearNode = new FilterListTreeNode();
-        startYearNode.setId(DATE_START_YEAR);
+        startYearNode.setId(startYear);
         startYearNode.setName(START_YEAR);
-        startYearNode.setValue(String.valueOf(DATE_START_YEAR));
+        startYearNode.setValue(String.valueOf(startYear));
         nodes.add(startYearNode);
         
         FilterListTreeNode endYearNode = new FilterListTreeNode();
-        endYearNode.setId(DATE_END_YEAR);
+        endYearNode.setId(endYear);
         endYearNode.setName(END_YEAR);
-        endYearNode.setValue(String.valueOf(DATE_END_YEAR));
+        endYearNode.setValue(String.valueOf(endYear));
         nodes.add(endYearNode);
-       
         
         items.put(ITEMS_NAME, nodes);
 

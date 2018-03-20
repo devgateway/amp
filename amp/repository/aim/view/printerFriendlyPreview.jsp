@@ -1077,7 +1077,9 @@ body {background:none;}
 													Duration of project</digi:trn></td>
 													<td width="1">:</td>
 													<td align="left">
-														${aimEditActivityForm.planning.projectPeriod}
+													<c:if test="${not empty aimEditActivityForm.planning.projectPeriod}">
+													   <b>${aimEditActivityForm.planning.projectPeriod}&nbsp; </b><digi:trn>Months</digi:trn>
+													</c:if>
 													</td>
 												</tr>
 												</c:if>
@@ -2617,8 +2619,7 @@ body {background:none;}
 									</tr>
 									</module:display>
 									</module:display>
-                             <module:display name="Document" parentModule="PROJECT MANAGEMENT">
-                                   	<feature:display name="Related Documents" module="Document">
+                             <module:display name="/Activity Form/Related Documents" parentModule="/Activity Form">
 									<tr>
 										<td class="field_name">
 											<b>
@@ -2679,8 +2680,7 @@ body {background:none;}
 																			<img src="/repository/contentrepository/view/images/check_out.gif" border="0">
 																		</a> --%>
 																		<a id="<c:out value="${crDoc.uuid}"/>" target="_blank" href="${crDoc.generalLink}" title="${translation}">
-																			<img src="/repository/contentrepository/view/images/check_out.gif" border="0">
-																		</a>
+																			<img src="/repository/contentrepository/view/images/check_out.gif" border="0"></a>
 																		<logic:notEmpty name="crDoc" property="description">
 																			<br />&nbsp;
 																			<b><digi:trn key="aim:description">Description</digi:trn>:</b>&nbsp;
@@ -2704,7 +2704,6 @@ body {background:none;}
 											</c:if>
 										</td>
 									</tr>
-									</feature:display>
                                  </module:display>
                                  <module:display name="/Activity Form/Line Ministry Observations" parentModule="/Activity Form">
                                  	<tr>

@@ -13,7 +13,7 @@ import YearsFilterSection from './YearsFilterSection';
 export default class Report5b extends Component {
     constructor( props, context ) {
         super( props, context );
-        this.state = { recordsPerPage: 150, hierarchy: 'donor-agency', selectedYear: new Date().getFullYear(), selectedDonor: "", waiting: true};
+        this.state = { recordsPerPage: 150, hierarchy: 'donor-agency', selectedDonor: "", waiting: true};
         this.showFilters = this.showFilters.bind( this );
         this.showSettings = this.showSettings.bind( this );
         this.goToClickedPage = this.goToClickedPage.bind( this );
@@ -62,8 +62,10 @@ export default class Report5b extends Component {
         }.bind(this));
    }
 
+
    showSettings() {
-        this.settingsWidget.setElement(this.refs.settingsPopup);
+       this.setState( { calendarId: Utils.getCalendarId(this.settingsWidget) });
+       this.settingsWidget.setElement(this.refs.settingsPopup);
         this.settingsWidget.definitions.loaded.done(function () {
              this.settingsWidget.show();
         }.bind(this));
@@ -73,12 +75,33 @@ export default class Report5b extends Component {
              $(this.refs.settingsPopup).hide();
         }.bind(this));
 
-        this.settingsWidget.on('applySettings', function () {           
-            this.fetchReportData();             
+        this.settingsWidget.on('applySettings', function () {
+            //if calendar has changed reset year filter
+            if (Utils.hasCalendarChanged(this.settingsWidget,this.state.calendarId)) {
+                this.onYearClick(null);
+            }else{
+                this.fetchReportData();
+            }
             $(this.refs.settingsPopup).hide();
         }.bind(this));
    }
 
+    getSelectedYear()
+    {
+        let selectedYear = undefined;
+        if (this.state.selectedYear) { //if selected year is null we need to
+            // get the current year for the current Calendar
+            selectedYear = this.state.selectedYear;
+        }
+        else {
+            const settings = this.settingsWidget.toAPIFormat();
+            const calendarId = settings && settings['calendar-id'] ? settings['calendar-id'] :
+                this.settingsWidget.definitions.getDefaultCalendarId();
+            const calendarYears = Utils.getYearByCalendarId (this.props.years ,calendarId);
+            selectedYear = calendarYears.years[calendarYears.years.length - 1].year
+        }
+        return selectedYear;
+    }
     getRequestData() {
         var requestData = {
             "hierarchy": this.state.hierarchy,
@@ -88,7 +111,7 @@ export default class Report5b extends Component {
 
         requestData.filters = this.filter.serialize().filters;        
         requestData.settings = this.settingsWidget.toAPIFormat();      
-        if ( this.state.selectedYear ) {
+        if ( this.getSelectedYear() ) {
             requestData.filters.date = this.getStartEndDates();
         }
         
@@ -111,8 +134,7 @@ export default class Report5b extends Component {
     }
     
     getStartEndDates() {
-        const defaultCalendar = this.props.calendars.filter(cal => cal.baseCal == GREG_BASE_CALENDAR)[0];
-        return Utils.getStartEndDates(this.settingsWidget, this.props.calendars, this.state.selectedYear, this.props.years, defaultCalendar.ampFiscalCalId);        
+        return Utils.getStartEndDates(this.settingsWidget, this.props.calendars, this.getSelectedYear(), this.props.years);
     }
     
    updateRecordsPerPage() {
@@ -257,7 +279,8 @@ export default class Report5b extends Component {
         this.props.actions.downloadPdfFile(this.getRequestData(), '5b');
     } 
     
-    render() { 
+    render() {
+
         var MTEFYears =  this.getMTEFYears();
         var addedGroups = [];            
         return (
@@ -299,7 +322,13 @@ export default class Report5b extends Component {
                             </div>                           
                         </div>
                     }
-                    <YearsFilterSection onYearClick={this.onYearClick.bind(this)} selectedYear={this.state.selectedYear} mainReport={this.props.mainReport} filter={this.filter} dateField="date" settingsWidget={this.settingsWidget} report={INDICATOR_5B_CODE} />                    
+                    {this.props.mainReport.empty == true  &&
+                        <div className="text-center">{this.props.translations['amp-gpi-reports:no-data']}</div>
+                    }
+                    <YearsFilterSection onYearClick={this.onYearClick.bind(this)}
+                                        selectedYear={this.state.selectedYear} mainReport={this.props.mainReport}
+                                        filter={this.filter} dateField="date" settingsWidget={this.settingsWidget}
+                                        report={INDICATOR_5B_CODE} prefix={Utils.getCalendarPrefix(this.settingsWidget,this.props.calendars)}/>
                     <div className="container-fluid no-padding">
                         <div className="dropdown">
                             <select name="donorAgency" className="form-control donor-dropdown" value={this.state.selectedDonor} onChange={this.onDonorFilterChange}>
@@ -328,7 +357,9 @@ export default class Report5b extends Component {
                               </th>
                               {MTEFYears.map(( year, i ) =>
                                 <th className="col-md-2" key = {i}>
-                                <HeaderToolTip column={year} headers={this.props.mainReport.page.headers}/>{year} <br/> {this.props.translations['amp-gpi-reports:5b-column-legend']}
+                                <HeaderToolTip column={year} headers={this.props.mainReport.page.headers}/>{
+                                    Utils.getCalendarPrefix(this.settingsWidget,this.props.calendars, this.props.translate('amp.gpi-reports:fy')) +
+                                    year} <br/> {this.props.translations['amp-gpi-reports:5b-column-legend']}
                                 </th>
                               )}                          
                               <th className="col-md-2">

@@ -301,7 +301,11 @@ export default class Report6 extends Component {
                             </div>                            
                         </div>
                     }
-                    <YearsFilterSection onYearClick={this.onYearClick.bind(this)} selectedYear={this.state.selectedYear} mainReport={this.props.mainReport} filter={this.filter} dateField="date" settingsWidget={this.settingsWidget} />
+                    <YearsFilterSection onYearClick={this.onYearClick.bind(this)} selectedYear={this.state.selectedYear}
+                                        mainReport={this.props.mainReport} filter={this.filter} dateField="date"
+                                        settingsWidget={this.settingsWidget}
+                                        prefix={Utils.getCalendarPrefix(this.settingsWidget,this.props.calendars,
+                                            this.props.translate('amp.gpi-reports:fy'))}/>
                     <div className="container-fluid no-padding">
                         <div className="dropdown">
                             <select name="donorAgency" className="form-control donor-dropdown" value={this.state.selectedDonor} onChange={this.onDonorFilterChange}>
@@ -315,19 +319,18 @@ export default class Report6 extends Component {
                         {(this.props.settings['number-divider'] != 1) &&
                             <span className="amount-units"> ({this.props.translations['amp-gpi-reports:amount-in-' + this.props.settings['number-divider']]})</span>                    
                         }
-                       </div>
-                        </div>
-                     
-                     <div className="container-fluid">
-                       <div className="row">
+                       </div>                                       
+                    <div className="container-fluid">
+                        <div className="row">
                           <h4>{this.props.translations['amp.gpi-reports:indicator6-description']}</h4>
                         </div>
-                      </div>
-                     <div className="section-divider"></div>
+                      </div>                     
+                    </div>                          
+                    <div className="section-divider"></div>                    
                     {this.props.mainReport.empty == true  &&
                        <div className="text-center">{this.props.translations['amp-gpi-reports:no-data']}</div>
-                    }
-                    { this.props.mainReport.empty == false  &&                     
+                    }                    
+                    { this.props.mainReport.empty == false  &&
                     <table className="table table-bordered table-striped indicator-table">
                         <thead>
                             <tr>

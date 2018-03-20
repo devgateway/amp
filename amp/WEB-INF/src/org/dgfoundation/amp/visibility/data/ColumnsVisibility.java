@@ -234,6 +234,7 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
         put(ColumnConstants.DONOR_ID, ColumnConstants.DONOR_AGENCY);
         put(ColumnConstants.DONOR_GROUP, ColumnConstants.DONOR_AGENCY);
         put(ColumnConstants.DONOR_TYPE, ColumnConstants.DONOR_AGENCY);
+        put(ColumnConstants.DONOR_BUDGET_CODE, ColumnConstants.DONOR_AGENCY);
         put(ColumnConstants.DONOR_COMMITMENT_DATE, ColumnConstants.DONOR_AGENCY);
         put(ColumnConstants.RESPONSIBLE_ORGANIZATION_DEPARTMENT_DIVISION, ColumnConstants.RESPONSIBLE_ORGANIZATION);
         put(ColumnConstants.RESPONSIBLE_ORGANIZATION_GROUPS, ColumnConstants.RESPONSIBLE_ORGANIZATION);
@@ -351,6 +352,7 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
             put("Pledges Type Of Assistance", ColumnConstants.PLEDGES_TYPE_OF_ASSISTANCE);
             put("Pledges Titles", ColumnConstants.PLEDGES_TITLES);
             put("Pledges Zones", ColumnConstants.PLEDGES_ZONES);
+            put("Primary Sector Code Official", ColumnConstants.PRIMARY_SECTOR_CODE_OFFICIAL);
             put("Project Age Ratio", ColumnConstants.PROJECT_AGE_RATIO);
             put("Project Implementation Delay", ColumnConstants.PROJECT_IMPLEMENTATION_DELAY);
             put("Project Description", ColumnConstants.PROJECT_DESCRIPTION);

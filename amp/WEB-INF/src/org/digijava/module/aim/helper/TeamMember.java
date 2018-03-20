@@ -295,6 +295,5 @@ public class TeamMember implements Comparable, Serializable{
     public long getVisibilityTemplateId() {
         return this.visibilityTemplateId;
     }
-    
-    
+
 }

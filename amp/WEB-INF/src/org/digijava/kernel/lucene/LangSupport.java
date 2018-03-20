@@ -18,13 +18,14 @@ import org.digijava.kernel.lucene.analyzers.SpanishAnalyzer;
  *
  */
 public enum LangSupport {
-    ENGLISH ("en"), 
-    FRENCH ("fr"), 
-    SPANISH ("es"),
-    ROMANIAN ("ro"),
-    RUSSIAN ("ru"),
-    ALBANIAN ("sq"),
-    ARABIC ("ar");
+    ENGLISH("en"),
+    FRENCH("fr"),
+    SPANISH("es"),
+    ROMANIAN("ro"),
+    RUSSIAN("ru"),
+    ALBANIAN("sq"),
+    ARABIC("ar"),
+    AMHARIC("am");
     
     private String languageCode;
     

@@ -233,6 +233,10 @@ table.dynamic-content-table th,td {
 	border-right-width: 0px;
 }
 
+.ui-jqgrid tr.footrow-rtl td {
+    border-left-width: 0px;
+}
+
 .ui-jqgrid-sortable {
 	font-weight: bolder;
 }

@@ -19,7 +19,7 @@ import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponseDocument;
 
 /**
  * This field can be used to validate the GPI Ni responses and show an error
- * message when one of the questions is not populated.
+ * message when one of the questions are not populated.
  * 
  * @author Viorel Chihai
  *
@@ -111,9 +111,7 @@ public class AmpGPINiIndicatorValidatorField extends AmpCollectionValidatorField
                     )
                     .collect(Collectors.toSet());
             return newResponseResourceItems.size() == 0 && (response.isEmpty() || isEmptyAfterDelete(response));
-
         }
-
     }
 
     private boolean isEmptyAfterDelete(AmpGPINiSurveyResponse response) {

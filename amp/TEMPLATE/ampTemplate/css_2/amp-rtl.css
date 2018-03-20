@@ -8,6 +8,16 @@
     direction: rtl;
 }
 
+.flag {
+    float: right !important;
+    margin-right: -4px !important;
+    margin-left: 4px;
+}
+
+div#amp-header .double-row .nav > li > a {
+    padding-left: 10px !important;
+}
+
 body, div, p {
     font-family: Droid Arabic Naskh, Arial !important;
 }
@@ -120,6 +130,10 @@ div.trnpanel div.trn-row ul {
     -ms-transform: scale(-1, 1);
     transform: scale(-1, 1);
     width: inherit;
+}
+
+.text-right {
+    text-align: left !important;
 }
 
 .del-funding {

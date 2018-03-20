@@ -75,9 +75,11 @@ public final class BooleanFilterListManager implements FilterListManager {
         BOOLEAN_VALUES_MAP.entrySet().forEach(e -> {
             FilterListTreeNode node = new FilterListTreeNode();
             node.setId(e.getKey());
+            node.setValue(e.getValue());
             node.setName(TranslatorWorker.translateText(e.getValue()));
             nodeAll.addChild(node);
         });
+        nodeAll.addChild(UNDEFINED_OPTION);
         
         List<FilterListTreeNode> nodes = new ArrayList<>();
         nodes.add(nodeAll);

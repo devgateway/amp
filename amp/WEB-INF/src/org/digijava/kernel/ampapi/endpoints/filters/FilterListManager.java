@@ -1,16 +1,15 @@
 package org.digijava.kernel.ampapi.endpoints.filters;
 
+import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
 import org.digijava.kernel.translator.TranslatorWorker;
 
 public interface FilterListManager {
     
     String ITEMS_NAME = "values";
     
-    Long UNDEFINED_ID = 999999999L;
-    String UNDEFINED_NAME = "Undefined";
-    
-    FilterListTreeNode UNDEFINED_OPTION = new FilterListTreeNode(UNDEFINED_ID, UNDEFINED_NAME, 
-            TranslatorWorker.translateText(UNDEFINED_NAME));
+    FilterListTreeNode UNDEFINED_OPTION = new FilterListTreeNode(ColumnReportData.UNALLOCATED_ID, 
+            FiltersConstants.UNDEFINED_NAME, 
+            TranslatorWorker.translateText(FiltersConstants.UNDEFINED_NAME));
     
     default FilterList getFilterList() {
         return new FilterList();

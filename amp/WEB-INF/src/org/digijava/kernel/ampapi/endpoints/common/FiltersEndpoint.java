@@ -22,6 +22,7 @@ import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
+import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.digijava.kernel.ampapi.endpoints.dto.SimpleJsonBean;
 import org.digijava.kernel.ampapi.endpoints.filters.FilterList;
@@ -70,8 +71,7 @@ public class FiltersEndpoint {
     private static final String SECTORS_SUFFIX = " Sectors";
     private static final Logger logger = Logger.getLogger(FiltersEndpoint.class);
     
-    /** the value to use as a filter value when filtering booleans for ANY DEFINED */
-    public static final String ANY_BOOLEAN = "999888777";
+    public static final String ANY_VALUE = "999888777";
 
     // todo
     // probably not the best place to keep, but definitely better than in the method
@@ -669,6 +669,7 @@ public class FiltersEndpoint {
         }
         //reorder because after we get the translated name we lose ordering
         fi = orderByProperty (fi,NAME_PROPERTY);
+        fi.add(new SimpleJsonBean(ColumnReportData.UNALLOCATED_ID, FiltersConstants.UNDEFINED_NAME));
         return fi;
         
     }
@@ -724,11 +725,13 @@ public class FiltersEndpoint {
         res.set("filterId", FilterUtils.INSTANCE.idFromColumnName(columnName));
         res.set("name", columnName);
         res.set("translatedName", columnName);
-        res.set("id", ANY_BOOLEAN);
+        res.set("id", ANY_VALUE);
         res.set("values", 
                 Arrays.asList(
                     new SimpleJsonBean(1, "Yes", null, TranslatorWorker.translateText("Yes")),
-                    new SimpleJsonBean(2, "No", null, TranslatorWorker.translateText("No"))
+                    new SimpleJsonBean(2, "No", null, TranslatorWorker.translateText("No")),
+                    new SimpleJsonBean(ColumnReportData.UNALLOCATED_ID, FiltersConstants.UNDEFINED_NAME, null, 
+                            TranslatorWorker.translateText(FiltersConstants.UNDEFINED_NAME))
                 ));
         return res;
     }

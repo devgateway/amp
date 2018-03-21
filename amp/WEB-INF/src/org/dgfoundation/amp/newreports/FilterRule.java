@@ -35,6 +35,9 @@ public class FilterRule {
     /** the value to use as a filter value when filtering booleans for FALSEs */
     public static final String FALSE_VALUE = "2";
     
+    /** the value to use as a filter value when filtering booleans for Undefined */
+    public static final String UNDEFINED_VALUE = "-999999999";
+    
     public final static Map<String, Long> HARDCODED_VALUES = Collections.unmodifiableMap(new HashMap<String, Long>() {{
         put(NULL_VALUE, null);
         put("true", Long.parseLong(TRUE_VALUE));

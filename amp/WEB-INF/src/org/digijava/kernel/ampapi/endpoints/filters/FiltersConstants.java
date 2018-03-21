@@ -15,6 +15,8 @@ import org.digijava.module.aim.helper.Constants;
  */
 public class FiltersConstants {
     
+    public static final String UNDEFINED_NAME = "Undefined";
+    
     // filters IDs 
     public static final String CURRENT = "current";
 

@@ -19,18 +19,34 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres"><![CDATA[
-				CREATE OR REPLACE VIEW v_mode_of_payment AS
-				  SELECT DISTINCT a.amp_activity_id, val.category_value AS mode_of_payment_name, val.id AS mode_of_payment_code,
-					f.type_of_assistance_category_va as terms_assist_id,
-					f.financing_instr_category_value as financing_instrument_id,
-					f.amp_donor_org_id as donor_org_id,
-					f.mode_of_payment_category_va as mode_of_payment_id,
-					f.funding_status_category_va as funding_status_id,
-					f.agreement as agreement_id,
-					f.amp_funding_id as funding_id
-				  FROM amp_activity_version a
-					JOIN amp_funding f ON f.amp_activity_id = a.amp_activity_id
-					JOIN amp_category_value val ON val.id = f.mode_of_payment_category_va;
+			         CREATE OR REPLACE VIEW v_mode_of_payment AS
+			             SELECT aav.amp_activity_id,
+	                        v.mode_of_payment_name,
+	                        COALESCE(v.mode_of_payment_code, -999999999) AS mode_of_payment_code,
+	                        v.terms_assist_id,
+	                        v.financing_instrument_id,
+	                        v.donor_org_id,
+	                        v.mode_of_payment_id,
+	                        v.funding_status_id,
+	                        v.agreement_id,
+	                        v.funding_id
+	                       FROM amp_activity_version aav
+	                       LEFT JOIN (
+						         SELECT DISTINCT a.amp_activity_id,
+						             val.category_value AS mode_of_payment_name,
+						             val.id AS mode_of_payment_code,
+						             f.type_of_assistance_category_va as terms_assist_id,
+						             f.financing_instr_category_value as financing_instrument_id,
+						             f.amp_donor_org_id as donor_org_id,
+						             f.mode_of_payment_category_va as mode_of_payment_id,
+						             f.funding_status_category_va as funding_status_id,
+						             f.agreement as agreement_id,
+						             f.amp_funding_id as funding_id
+						         FROM amp_activity_version a
+						         JOIN amp_funding f ON f.amp_activity_id = a.amp_activity_id
+						         JOIN amp_category_value val ON val.id = f.mode_of_payment_category_va
+					       ) v
+                           ON aav.amp_activity_id = v.amp_activity_id;
 			]]></lang>
 		</script>
 	</apply>

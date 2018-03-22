@@ -42,7 +42,8 @@ public abstract class TabularSourcedNiDimension extends NiDimension {
             childrenPerLevel.add(new HashMap<>());
         }
         // build parent and child relationships
-        for(List<Long> row:getTabularData()) {
+        List<List<Long>> tabularData = getTabularData();
+        for(List<Long> row : tabularData) {
             NiUtils.failIf(row.size() != depth, () -> String.format("NiDimension %s: row has length %d instead of %d: %s", this.name, row.size(), depth, row.toString()));
             for(int level = 0; level < depth; level++) {
                 final int llevel = level;
@@ -75,19 +76,21 @@ public abstract class TabularSourcedNiDimension extends NiDimension {
             }
         };
         
-        // AMP-24342 - Add 'Undefined' items 
-        for(int level = 0; level < depth; level++) {
-            Map<Long, Long> levelParents = parentsPerLevel.get(level);
-            Map<Long, Set<Long>> levelChildren = childrenPerLevel.get(level);
-            
-            long elemId = ColumnReportData.UNALLOCATED_ID;
-            long parentId = level == 0 ? 0L : ColumnReportData.UNALLOCATED_ID;
-            long childId = ColumnReportData.UNALLOCATED_ID;
-            
-            levelParents.putIfAbsent(elemId, parentId);
-
-            if (level < depth - 1) {
-                levelChildren.computeIfAbsent(elemId, key -> new HashSet<>()).add(childId);
+        // AMP-24342 - Add 'Undefined' items
+        if (!tabularData.isEmpty()) {
+            for(int level = 0; level < depth; level++) {
+                Map<Long, Long> levelParents = parentsPerLevel.get(level);
+                Map<Long, Set<Long>> levelChildren = childrenPerLevel.get(level);
+                
+                long elemId = ColumnReportData.UNALLOCATED_ID;
+                long parentId = level == 0 ? 0L : ColumnReportData.UNALLOCATED_ID;
+                long childId = ColumnReportData.UNALLOCATED_ID;
+                
+                levelParents.putIfAbsent(elemId, parentId);
+    
+                if (level < depth - 1) {
+                    levelChildren.computeIfAbsent(elemId, key -> new HashSet<>()).add(childId);
+                }
             }
         }
         

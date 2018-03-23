@@ -341,7 +341,7 @@ public class FilterUtils {
         List<String> s = new ArrayList<String>();
         for (Object obj : theArray) {
             if (obj != null) {
-                if(FiltersEndpoint.ANY_VALUE.equals(obj.toString())) {
+                if (FiltersEndpoint.ANY_VALUE.equals(obj.toString())) {
                     s.add(FilterRule.FALSE_VALUE);
                     s.add(FilterRule.TRUE_VALUE);
                     s.add(FilterRule.UNDEFINED_VALUE);

@@ -11,7 +11,6 @@ import java.util.Set;
 
 import org.dgfoundation.amp.nireports.NiUtils;
 import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
-import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
 
 /**
  * a NiDimension which uses a tabular bidiarray as a source of data.
@@ -43,9 +42,11 @@ public abstract class TabularSourcedNiDimension extends NiDimension {
         }
         // build parent and child relationships
         List<List<Long>> tabularData = getTabularData();
-        for(List<Long> row : tabularData) {
-            NiUtils.failIf(row.size() != depth, () -> String.format("NiDimension %s: row has length %d instead of %d: %s", this.name, row.size(), depth, row.toString()));
-            for(int level = 0; level < depth; level++) {
+        for (List<Long> row : tabularData) {
+            NiUtils.failIf(row.size() != depth, 
+                    () -> String.format("NiDimension %s: row has length %d instead of %d: %s", 
+                    this.name, row.size(), depth, row.toString()));
+            for (int level = 0; level < depth; level++) {
                 final int llevel = level;
                 NiUtils.failIf(row.get(level) == null, () -> String.format("NiDimension %s: row contains null: <%s>", this.name, row.toString()));
                 Map<Long, Long> levelParents = parentsPerLevel.get(level);
@@ -78,7 +79,7 @@ public abstract class TabularSourcedNiDimension extends NiDimension {
         
         // AMP-24342 - Add 'Undefined' items
         if (!tabularData.isEmpty()) {
-            for(int level = 0; level < depth; level++) {
+            for (int level = 0; level < depth; level++) {
                 Map<Long, Long> levelParents = parentsPerLevel.get(level);
                 Map<Long, Set<Long>> levelChildren = childrenPerLevel.get(level);
                 

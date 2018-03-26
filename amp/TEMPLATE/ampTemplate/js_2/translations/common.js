@@ -7,7 +7,7 @@
 function getTranslations(originalTranslation,processTranslations){
     $.ajax({
         type: "POST",
-        url: "http://local.amp.org:8080/rest/translations/label-translations",
+        url: "/rest/translations/label-translations",
         data: JSON.stringify(originalTranslation),
         contentType: "application/json; charset=utf-8",
         Accept:"application/json",

@@ -30,6 +30,8 @@ import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
  */
 public class SimpleTextColumn extends AmpDifferentialColumn<TextCell, String> {
 
+    private static final int ENTITY_ID_INDEX_3 = 3;
+
     protected Function<String, String> postprocessor = Function.identity();
 
     private boolean allowNulls;
@@ -46,10 +48,11 @@ public class SimpleTextColumn extends AmpDifferentialColumn<TextCell, String> {
     @Override
     protected TextCell extractCell(NiReportsEngine engine, ResultSet rs) throws SQLException {
         String text = postprocessor.apply(rs.getString(2));
-        Long entityId = rs.getLong(withoutEntity ? 1 : 3);
+        Long entityId = rs.getLong(withoutEntity ? 1 : ENTITY_ID_INDEX_3);
         
-        if (!allowNulls && text == null && entityId != ColumnReportData.UNALLOCATED_ID)
+        if (!allowNulls && text == null && entityId != ColumnReportData.UNALLOCATED_ID) {
             return null;
+        }
 
         Map<NiDimensionUsage, Coordinate> coos = buildCoordinates(entityId, engine, rs);
         return new TextCell(text, rs.getLong(1), entityId, coos, this.levelColumn);

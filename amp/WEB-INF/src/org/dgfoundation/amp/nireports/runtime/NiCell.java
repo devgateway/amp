@@ -16,7 +16,6 @@ import org.dgfoundation.amp.nireports.schema.IdsAcceptor;
 import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 import org.dgfoundation.amp.nireports.schema.NiReportedEntity;
-import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
 
 /**
  * An immutable {@link Cell} wrapper which has identity and is not shared between reports or columns.

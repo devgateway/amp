@@ -18,6 +18,7 @@ import java.util.stream.Stream;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.dgfoundation.amp.algo.AmpCollections;
+import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
 
 /**
  * Filter rule that can be of one of {@link FilterType} type
@@ -36,7 +37,7 @@ public class FilterRule {
     public static final String FALSE_VALUE = "2";
     
     /** the value to use as a filter value when filtering booleans for Undefined */
-    public static final String UNDEFINED_VALUE = "-999999999";
+    public static final String UNDEFINED_VALUE = String.valueOf(ColumnReportData.UNALLOCATED_ID);
     
     public final static Map<String, Long> HARDCODED_VALUES = Collections.unmodifiableMap(new HashMap<String, Long>() {{
         put(NULL_VALUE, null);

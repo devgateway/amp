@@ -3,7 +3,6 @@ package org.dgfoundation.amp.nireports.schema;
 import java.util.Arrays;
 
 import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
-import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
 
 /**
  * NiReports' hardcoded boolean dimension, used for yes/no/undefined columns

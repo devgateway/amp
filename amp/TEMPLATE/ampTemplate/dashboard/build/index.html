@@ -32,7 +32,7 @@
     <script src="compiled-js/app.js"></script>
     <script language="JavaScript">
 
-        function processTranslations(data, status, jqXHR){
+        function processTranslations(data){
             $("#amp-dashboard").find("h1").text(data['dashboard.common:amp_dashboard']);
             $("#amp-dashboard").find("h2").text(data['dashboard.common:loading']);
         }

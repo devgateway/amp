@@ -13,7 +13,9 @@ function getTranslations(originalTranslation,processTranslations){
         Accept:"application/json",
         crossDomain: true,
         dataType: "json",
-        success: processTranslations,
+        success: function(data, status, jqXHR) {
+        processTranslations(data);
+    },
         error: function (jqXHR, status) {
             // error handler
             // No need to do further processing, the labels will be shown in the original language

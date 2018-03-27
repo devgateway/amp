@@ -59,6 +59,7 @@ public class EPConstants {
     public static final String COUNT = "count";
     public static final String SUMMARY = "summary";
     public static final String GROUPING_OPTION = "groupingOption";
+    public static final String INCLUDE_LOCATION_CHILDREN = "include-location-children";
     
     // report type & activities configurations
     public static final String DEFAULT_REPORT_TYPE = "D";

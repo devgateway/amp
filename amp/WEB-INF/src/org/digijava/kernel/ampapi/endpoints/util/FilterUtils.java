@@ -84,6 +84,7 @@ public class FilterUtils {
         mapSimpleColumn(FiltersConstants.IMPLEMENTING_AGENCY_TYPE, ColumnConstants.IMPLEMENTING_AGENCY_TYPE);
         mapSimpleColumn(FiltersConstants.JOINT_CRITERIA, ColumnConstants.JOINT_CRITERIA);
         mapSimpleColumn(FiltersConstants.LOCATION, ColumnConstants.LOCATION);
+        mapSimpleColumn(FiltersConstants.RAW_LOCATION, ColumnConstants.RAW_LOCATION);
         mapSimpleColumn(FiltersConstants.MODE_OF_PAYMENT, ColumnConstants.MODE_OF_PAYMENT);
         mapSimpleColumn(FiltersConstants.NATIONAL_PLANNING_OBJECTIVES, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES);
         mapSimpleColumn(FiltersConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1);

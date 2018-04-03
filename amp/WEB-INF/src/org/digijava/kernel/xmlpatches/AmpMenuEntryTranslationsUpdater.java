@@ -29,11 +29,13 @@ public class AmpMenuEntryTranslationsUpdater {
     protected Logger logger = LoggerFactory.getLogger(AmpMenuEntryTranslationsUpdater.class);
     
     private void updateAllMenuEntriesAndTranslations() {
-        PersistenceManager.doInTransaction(s -> s.doWork(connection -> {
-            updateMenuEntries(connection);
-            updateMenuTranslations(connection);
-            deleteOldMenuTranslations(connection);
-        }));
+        PersistenceManager.doInTransaction(s -> {
+            s.doWork(connection -> {
+                updateMenuEntries(connection);
+                updateMenuTranslations(connection);
+                deleteOldMenuTranslations(connection);
+            });
+        });
     }
 
     private void updateMenuEntries(Connection connection) {

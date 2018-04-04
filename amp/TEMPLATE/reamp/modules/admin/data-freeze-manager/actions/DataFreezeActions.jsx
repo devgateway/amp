@@ -11,7 +11,6 @@ export function getDataFreezeEventListSuccess(data) {
 }
 
 export function savingEvent(){
-     debugger;
      return {type:DATA_FREEZE_EVENT_SAVING,data:{saving:true}};
 }
 

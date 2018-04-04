@@ -35,21 +35,23 @@ function countCategories(data) {
 
 
 function chart(options, data) {
-	var height = options.height < 400 ? 300 : 400;
-	  var calculatedHeight = util.calculateChartHeight(data[0].values.length, false, options.model);
-	  if (calculatedHeight !== null) {
-		  height = calculatedHeight; 
-	  }
+    var height = options.height < 400 ? 300 : 400;
+    var calculatedHeight = util.calculateChartHeight(data[0].values.length, false, options.model);
+    if (calculatedHeight !== null) {
+        height = calculatedHeight;
+    }
+    var isRtl = app.generalSettings.attributes['rtl-direction'];
 
-  var _chart = nv.models.customizedPieChart()
-    .valueFormat(options.shortFormatter)
-    .labelType('percent')
-    .showLegend(false)
-    .donut(true)
-    .height(height)
-    .margin({ top: 5, right: 5, bottom: 5, left: 5 })
-    .donutRatio(0.35);
-  return _chart;
+    var _chart = nv.models.customizedPieChart()
+        .valueFormat(options.shortFormatter)
+        .labelType('percent')
+        .showLegend(false)
+        .donut(true)
+        .rtl(isRtl)
+        .height(height)
+        .margin({top: 5, right: 5, bottom: 5, left: 5})
+        .donutRatio(0.35);
+    return _chart;
 }
 
 function addLegend(svg, chart, nvData, trimLabels, width) {

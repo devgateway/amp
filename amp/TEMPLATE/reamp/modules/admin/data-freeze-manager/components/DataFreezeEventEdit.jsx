@@ -13,10 +13,11 @@ import * as commonListsActions from '../actions/CommonListsActions';
 import * as dataFreezeActions from '../actions/DataFreezeActions';
 import DatePicker from 'react-date-picker';
 import moment from 'moment';
-require('react-date-picker/base.css');
-require('react-date-picker/theme/hackerone.css');
 import * as Constants from '../common/Constants';
 require('../styles/less/main.less');
+require('react-date-picker/base.css');
+require('react-date-picker/theme/hackerone.css');
+
 export default class DataFreezeEventEdit extends Component {
     constructor(props, context) {
         super(props, context);

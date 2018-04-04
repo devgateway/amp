@@ -61,6 +61,7 @@
     "rc-checkbox": "^1.5.0",
     "react-bootstrap-typeahead": "^1.2.0",
     "react-filtered-multiselect": "^0.4.2",
+    "react-modal": "^3.3.1",
     "react-number-input": "^15.0.0-rc2",
     "react-select": "^1.0.0-rc.3"
   }

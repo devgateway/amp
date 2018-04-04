@@ -17,7 +17,6 @@ export default class Processing extends Component {
     }
 
     render() {
-        debugger;
         if (!this.props.show) {
             return null;
         }

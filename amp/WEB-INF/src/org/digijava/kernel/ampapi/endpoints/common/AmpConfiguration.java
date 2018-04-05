@@ -31,6 +31,7 @@ import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.filters.AmpOfflineModeHolder;
 import org.digijava.module.aim.dbentity.AmpOfflineRelease;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.services.AmpOfflineService;
 import org.digijava.kernel.util.SpringUtil;
@@ -136,7 +137,7 @@ public class AmpConfiguration implements ErrorReportingEndpoint {
 
         VersionCheckResponse response = new VersionCheckResponse();
         response.setAmpOfflineCompatible(isAmpOfflineCompatible(clientRelease));
-        response.setAmpOfflineEnabled(true);
+        response.setAmpOfflineEnabled(isAmpOfflineEnabled());
         response.setAmpVersion(ampVersionService.getVersionInfo().getAmpVersion());
         response.setLatestAmpOffline(ampOfflineService.findLastRelease(clientRelease));
 
@@ -155,6 +156,10 @@ public class AmpConfiguration implements ErrorReportingEndpoint {
             }
         }
         return release;
+    }
+    
+    private boolean isAmpOfflineEnabled() {
+        return FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.AMP_OFFLINE_ENABLED);
     }
 
     private boolean isAmpOfflineCompatible(AmpOfflineRelease release) {

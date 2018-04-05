@@ -18,6 +18,7 @@ import org.digijava.kernel.ampapi.endpoints.common.TranslationUtil;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.exception.AmpWebApplicationException;
+import org.digijava.kernel.ampapi.endpoints.gpi.GPIErrors;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.types.ISO8601TimeStamp;
@@ -27,6 +28,8 @@ import org.digijava.kernel.services.sync.model.SystemDiff;
 import org.digijava.kernel.services.sync.model.Translation;
 import org.digijava.kernel.util.SpringUtil;
 import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
 /**
@@ -82,16 +85,16 @@ public class SynchronizerEndpoint implements ErrorReportingEndpoint {
      * </pre>
      */
     @POST
-    @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "computeSync", ui = false)
+    @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_ENABLED}, id = "computeSync", ui = false)
     public SystemDiff computeSync(SyncRequest syncRequest) {
-
+        
         if (syncRequest.getUserIds() == null || syncRequest.getUserIds().isEmpty()) {
             ApiErrorResponse.reportError(BAD_REQUEST, SynchronizerErrors.NO_USERS_ARE_SPECIFIED);
         }
 
         return syncService.diff(syncRequest);
     }
-    
+
     /**
     * Provides full workspaces definitions
     * <p>
@@ -137,7 +140,7 @@ public class SynchronizerEndpoint implements ErrorReportingEndpoint {
     @GET
     @Path("/workspaces")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = "", ui = false, authTypes = {AuthRule.AUTHENTICATED})
+    @ApiMethod(id = "", ui = false, authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_ENABLED})
     public List<AmpTeam> getWorkspaces(@DefaultValue("false") @QueryParam("management") Boolean includeManagement,
             @DefaultValue("false") @QueryParam("private") Boolean includePrivate) {
         return TeamUtil.getAllTeams(includeManagement, includePrivate);
@@ -180,6 +183,7 @@ public class SynchronizerEndpoint implements ErrorReportingEndpoint {
     @GET
     @Path("/translations")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "", ui = false, authTypes = {AuthRule.AMP_OFFLINE_ENABLED})
     public Map<String, Map<String, String>> getTranslationsToSync(
             @QueryParam("last-sync-time") ISO8601TimeStamp lastSyncTime) {
         List<Translation> translations = syncService.getTranslationsToSync(lastSyncTime);
@@ -227,7 +231,7 @@ public class SynchronizerEndpoint implements ErrorReportingEndpoint {
     @GET
     @Path("/exchange-rates")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = "exchange-rates", ui = false, authTypes = {AuthRule.AUTHENTICATED})
+    @ApiMethod(id = "exchange-rates", ui = false, authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_ENABLED})
     public ExchangeRatesDiff getExchangeRatesToSync(@QueryParam("last-sync-time") ISO8601TimeStamp lastSyncTime) {
         if (lastSyncTime == null) {
             throw new AmpWebApplicationException(Status.BAD_REQUEST, SynchronizerErrors.LAST_SYNC_TIME_REQUIRED);
@@ -239,4 +243,5 @@ public class SynchronizerEndpoint implements ErrorReportingEndpoint {
     public Class getErrorsClass() {
         return SynchronizerErrors.class;
     }
+    
 }

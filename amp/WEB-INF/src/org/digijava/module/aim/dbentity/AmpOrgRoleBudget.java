@@ -5,11 +5,13 @@ import java.io.Serializable;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 
 
-public class AmpOrgRoleBudget implements Serializable,Comparable<AmpOrgRoleBudget>, Cloneable{
+public class AmpOrgRoleBudget implements Serializable, Comparable<AmpOrgRoleBudget>, Cloneable {
     
-    private Long ampOrgRoleBudgetId ;
-    @Interchangeable(fieldTitle="Budget code")
-    private String budgetCode ;
+    private Long ampOrgRoleBudgetId;
+    
+    @Interchangeable(fieldTitle = "Budget Code", importable = true)
+    private String budgetCode;
+    
     private AmpOrgRole ampOrgRole;
     
     public Long getAmpOrgRoleBudgetId() {

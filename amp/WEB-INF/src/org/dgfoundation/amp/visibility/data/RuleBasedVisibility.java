@@ -26,12 +26,12 @@ public abstract class RuleBasedVisibility extends DataVisibility implements FMSe
     protected abstract Class<? extends RuleBasedData> getClazz();
     
     @Override
-    public Set<String> getEnabledSettings() {
-        return getCurrentVisibleData();
+    public Set<String> getEnabledSettings(Long templateId) {
+        return getVisibleData(templateId);
     }
     
     @Override
-    protected Set<String> detectVisibleData() {
+    protected Set<String> detectVisibleData(Long templateId) {
         List<? extends RuleBasedData> ruleBasedData = VisibilityUtil.getDataWithVisibilityRule(getClazz());
 
         // these are visible by default
@@ -103,7 +103,7 @@ public abstract class RuleBasedVisibility extends DataVisibility implements FMSe
     
     protected boolean isVisibleData(Object o, boolean isAny) {
         if (o instanceof AmpObjectVisibility) {
-            return FeaturesUtil.isVisible((AmpObjectVisibility) o);
+            return FeaturesUtil.isVisible((AmpObjectVisibility) o, null);
         }
         if (o instanceof AmpVisibilityRule) {
             return isVisibleByRule((AmpVisibilityRule) o);

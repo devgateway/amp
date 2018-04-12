@@ -94,13 +94,13 @@ public class DashboardsFMSettings extends DataVisibility implements FMSettings {
     }   
     
     @Override
-    protected Set<String> detectVisibleData() {
+    protected Set<String> detectVisibleData(Long templateId) {
         sanityCheck();
         Set<String> visiblePrecursors = new HashSet<String>(); 
         Set<String> invisiblePrecursors = new HashSet<String>(getAllPrecursors());
         Set<String> visibleData = new HashSet<String>(); 
         Set<String> invisibleData = new HashSet<String>(getAllData());
-        AmpTemplatesVisibility currentTemplate = FeaturesUtil.getCurrentTemplate();
+        AmpTemplatesVisibility currentTemplate = FeaturesUtil.getTemplateById(templateId);
 
         //check modules
         List<AmpModulesVisibility> modules = FeaturesUtil.getAmpModulesVisibility(getDataMap(DataMapType.MODULES).keySet(), currentTemplate.getId());
@@ -128,8 +128,8 @@ public class DashboardsFMSettings extends DataVisibility implements FMSettings {
     }
     
     @Override
-    public Set<String> getEnabledSettings() {
-        return getCurrentVisibleData();
+    public Set<String> getEnabledSettings(Long templateId) {
+        return getVisibleData(templateId);
     }
     
     protected DashboardsFMSettings() {

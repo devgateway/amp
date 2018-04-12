@@ -3,6 +3,8 @@
  */
 package org.digijava.kernel.ampapi.endpoints.common.fm;
 
+import java.util.List;
+
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -81,7 +83,45 @@ public class FMEndpoint {
     @Produces(MediaType.APPLICATION_JSON)
     @ApiMethod(ui=false, name="fm", id="")
     public JsonBean getFMSettings(JsonBean config) {
-        return FMService.getFMSettings(config);
+        return FMService.getCurrentUserFMSettings(config);
+    }
+    
+    /**
+     * Provides FM (Feature Manager) settings for the requested options grouped by workspaces
+     * The settings will be taken from the each FM template. 
+     * 
+     * <h3>Sample Output:</h3><pre>
+     * {
+     *   "ws-member-ids" : [1, 3, 5, ...],
+     *   "fm-tree" : {
+     *     "reporting-fields" : ["Project Title", "Primary Sector", ...],
+     *     "enabled-modules" : ["GIS", "Dashboards", ...],
+     *     "GIS" : ["/gis-enabled-setting1/enabled-childX", "/enabled-setting2", ...],
+     *     ...
+     *   }
+     * },
+     * {
+     *   "ws-member-ids" : [4, 7],
+     *   "fm-tree" : {
+     *     "reporting-fields" : ["Project Title", "Primary Sector", ...],
+     *     "enabled-modules" : ["GIS", ...],
+     *     "GIS" : ["/gis-enabled-setting1/enabled-childX", "/enabled-setting2", ...],
+     *     ...
+     *   }
+     * }
+     * </pre>
+     * 
+     * 
+     * 
+     * @param config config a JSON object with requested options (see the example from /fm) 
+     * @return list of FM settings grouped by workspaces id
+     */
+    @POST
+    @Path("/fm-by-ws-member")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiMethod(ui = false, name = "fm-by-ws-member", id = "fm-by-ws-member")
+    public List<JsonBean> getFMSettingsByWsMember(JsonBean config) {
+        return FMService.getFMSettingsGroupedByWsMember(config);
     }
 }
 

@@ -87,7 +87,7 @@ public class FMEndpoint {
     }
     
     /**
-     * Provides FM (Feature Manager) settings for the requested options grouped by workspaces
+     * Provides FM (Feature Manager) settings for the requested options grouped by workspace member ids
      * The settings will be taken from the each FM template. 
      * 
      * <h3>Sample Output:</h3><pre>
@@ -114,7 +114,7 @@ public class FMEndpoint {
      * 
      * 
      * @param config config a JSON object with requested options (see the example from /fm) 
-     * @return list of FM settings grouped by workspaces id
+     * @return list of FM settings grouped by workspace member ids
      */
     @POST
     @Path("/fm-by-ws-member")

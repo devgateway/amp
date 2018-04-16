@@ -58,10 +58,15 @@ public class FMService {
         return fmTrees;
     }
     
-    
+    /**
+     * Get the list workspace members grouped by feature manager templates
+     * 
+     * @return
+     */
     private static Map<Long, List<Long>> getFMTreeWsMap() {
-        String wsQuery = "SELECT amp_team_id, COALESCE(fm_template, (SELECT settingsvalue FROM amp_global_settings "
-                + "WHERE settingsname = 'Visibility Template')::bigint) AS fm_template FROM amp_team";
+        String wsQuery = "SELECT amp_team_mem_id, COALESCE(fm_template, (SELECT settingsvalue FROM amp_global_settings "
+                + "WHERE settingsname = 'Visibility Template')::bigint) AS fm_template FROM amp_team_member tm "
+                + "JOIN amp_team t ON tm.amp_team_id = t.amp_team_id";
         
         PersistenceManager.getSession().doReturningWork(connection -> SQLUtils.collectKeyValue(connection, wsQuery));
         Map<Long, Long> valsA = PersistenceManager.getSession()

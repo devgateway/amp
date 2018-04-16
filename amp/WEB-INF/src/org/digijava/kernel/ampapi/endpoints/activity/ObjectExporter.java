@@ -65,7 +65,7 @@ public abstract class ObjectExporter<T> {
         Interchangeable interchangeable = field.getAnnotation(Interchangeable.class);
 
         if (interchangeable != null && !InterchangeUtils.isAmpActivityVersion(field.getType())
-                && FMVisibility.isVisible(interchangeable.fmPath(), context.getIntchStack())
+                && FMVisibility.getSessionInstance().isVisible(interchangeable.fmPath(), context.getIntchStack())
                 && isInContext(interchangeable, context)) {
             context.getIntchStack().push(interchangeable);
             field.setAccessible(true);
@@ -246,7 +246,8 @@ public abstract class ObjectExporter<T> {
         for (Interchangeable setting : settings) {
             context.getIntchStack().push(setting);
             String fieldTitle = InterchangeUtils.underscorify(setting.fieldTitle());
-            if (isFiltered(fieldTitle) && FMVisibility.isVisible(setting.fmPath(), context.getIntchStack())) {
+            if (isFiltered(fieldTitle) && FMVisibility.getSessionInstance()
+                    .isVisible(setting.fmPath(), context.getIntchStack())) {
                 resultJson.set(fieldTitle, compositeMap.get(setting.discriminatorOption()));
             }
             context.getIntchStack().pop();

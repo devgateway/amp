@@ -46,6 +46,9 @@ public class ActivityEPConstants {
     public static final String DEPENDENCIES ="dependencies";
     public static final String TREE_COLLECTION_CONSTRAINT = "tree_collection";
     
+    public static final String API_WS_MEMBER_IDS = "ws-member-ids";
+    public static final String API_FIELDS = "fields";
+    
     // fields constants
     public static final String AMP_ACTIVITY_ID_FIELD_NAME = 
             InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ACTIVITY_ID);

@@ -48,7 +48,7 @@ public class FieldsEnumeratorTest {
     @Rule public MockitoRule rule = MockitoJUnit.rule();
 
     @Mock private FieldInfoProvider provider;
-    @Mock private FMService fmService;
+    @Mock private FeatureManagerService fmService;
     @Mock private TranslatorService translatorService;
     @Mock private TranslatorService throwingTranslatorService;
     @Mock private TranslatorService emptyTranslatorService;
@@ -121,7 +121,7 @@ public class FieldsEnumeratorTest {
 
     @Test
     public void testInvisibleField() {
-        FMService invisibleFmService = mock(FMService.class);
+        FeatureManagerService invisibleFmService = mock(FeatureManagerService.class);
 
         when(invisibleFmService.isVisible(any(), any())).thenReturn(false);
 

@@ -19,11 +19,6 @@ import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCateg
  */
 public class GisConstants {
     
-    /*
-    public static final String COMMITMENTS = "Commitments";  
-    public static final String DISBURSEMENTS = "Disbursements";
-    public static final String EXPENDITURES = "Expenditures";
-    */
     public static final String USE_ICONS_FOR_SECTORS_IN_PROJECT_LIST =  "Use icons for Sectors in Project List";
     public static final String PROJECT_SITES = "Project sites";
     public static final String DOWNLOAD_MAP_SELECTOR = "Download Map selector";
@@ -36,18 +31,6 @@ public class GisConstants {
     public static final String GIS_STRUCTURE_POLYGON = "Polygon";
     public static final String GIS_STRUCTURE_POINT = "Point";
     public static final String GIS_STRUCTURE_POLYLINE = "Polyline";
-    
-    /**
-     * The order is important - this is the priority order between measures, 
-     * that is used to convert the report config to gis funding type option   
-     */
-    /* 
-    public static final Map<String, String> MEASURE_TO_NAME_MAP = new LinkedHashMap<String, String>() {{
-        put(MeasureConstants.ACTUAL_COMMITMENTS, COMMITMENTS);
-        put(MeasureConstants.ACTUAL_DISBURSEMENTS, DISBURSEMENTS);
-        put(MeasureConstants.ACTUAL_EXPENDITURES, EXPENDITURES);
-    }};
-    */
     
     /**
      * Set of measures that can be used in GIS module as funding type options.

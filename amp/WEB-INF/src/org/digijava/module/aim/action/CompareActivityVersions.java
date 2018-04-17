@@ -390,6 +390,7 @@ public class CompareActivityVersions extends DispatchAction {
                             CompareOutput auxOutput = new CompareOutput(auxAnnotation.fieldTitle(), new String[] {
                                     ActivityVersionUtil.generateFormattedOutput(request, auxVersionable1.getOutput()),
                                     "" }, fields[i], new Object[] { auxObject1, null }, false, false);
+                            auxOutput.setBlockSingleChangeOutput(auxVersionable1.getOutput().hasDeletedValues());
                             vForm.getOutputCollection().add(auxOutput);
                             auxList.add(auxVersionable1);
                         }
@@ -432,6 +433,7 @@ public class CompareActivityVersions extends DispatchAction {
                                         ActivityVersionUtil.generateFormattedOutput(request, auxVersionable2
                                                 .getOutput()) }, fields[i], new Object[] { null, auxObject2 }, false,
                                         false);
+                                auxOutput.setBlockSingleChangeOutput(auxVersionable2.getOutput().hasDeletedValues());
                                 vForm.getOutputCollection().add(auxOutput);
                             }
                         }

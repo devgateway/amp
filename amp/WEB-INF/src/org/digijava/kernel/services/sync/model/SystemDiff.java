@@ -49,6 +49,9 @@ public class SystemDiff {
 
     @JsonProperty("feature-manager")
     private boolean featureManager;
+    
+    @JsonProperty("fields")
+    private boolean fields;
 
     public void updateTimestamp(Date timestamp) {
         if (this.timestamp == null || (timestamp != null && this.timestamp.before(timestamp))) {
@@ -111,4 +114,9 @@ public class SystemDiff {
     public void setFeatureManager(boolean featureManager) {
         this.featureManager = featureManager;
     }
+
+    public void setFields(boolean fields) {
+        this.fields = fields;
+    }
+    
 }

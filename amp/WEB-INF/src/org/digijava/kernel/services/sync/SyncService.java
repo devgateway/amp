@@ -123,6 +123,8 @@ public class SyncService implements InitializingBean {
         systemDiff.setExchangeRates(shouldSyncExchangeRates(lastSyncTime));
 
         updateDiffForFeatureManager(systemDiff, syncRequest);
+        
+        systemDiff.setFields(true);
 
         if (systemDiff.getTimestamp() == null) {
             systemDiff.setTimestamp(syncRequest.getLastSyncTime());

@@ -634,9 +634,10 @@ public class ReportsUtil {
                 ColumnsVisibility.getConfigurableColumns(), isCustom);
         if (err != null) errors.add(err);
         
-        // validate the measures
+        // validate the measures they are not mandatory anymore since we have
+        // measureless reports
         err = validateList("measures", (List<String>) formParams.get(EPConstants.ADD_MEASURES),
-                MeasuresVisibility.getConfigurableMeasures(), isCustom);
+                MeasuresVisibility.getConfigurableMeasures(), false);
         if (err != null) errors.add(err);
         
         // validate the hierarchies

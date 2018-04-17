@@ -38,9 +38,9 @@ public class ApiErrorResponse {
      * @param mediaType the MediaType
      */
     public static Response buildGenericError(Status status, JsonBean errorBean, String mediaType) {
-        
-        Object formattedMessage = mediaType.equals(MediaType.APPLICATION_XML) ? 
-                                ApiError.toXmlErrorString(errorBean) : errorBean;
+
+        Object formattedMessage = mediaType.contains(MediaType.APPLICATION_XML)
+                ? ApiError.toXmlErrorString(errorBean) : errorBean;
         
         ResponseBuilder builder = Response.status(status)
                 .entity(formattedMessage)

@@ -9,6 +9,7 @@ import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.DefaultValue;
@@ -144,7 +145,10 @@ public class GisEndPoints implements ErrorReportingEndpoint {
     public final FeatureCollectionGeoJSON getProjectSites(final JsonBean config,@QueryParam("startFrom") Integer startFrom,
             @QueryParam("size")Integer size) throws AmpApiException {
         FeatureCollectionGeoJSON f = new FeatureCollectionGeoJSON();
-        List<AmpStructure> al = LocationService.getStructures( config);
+        List<AmpStructure> al = LocationService.getStructures(config).stream()
+                .filter(s -> s.getLatitude() != null && s.getLongitude() != null)
+                .collect(Collectors.toList());
+        
         int start = 0;
         int end = al.size() -1;
         if (startFrom!=null && size!=null && startFrom < al.size()) {

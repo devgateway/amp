@@ -5,7 +5,11 @@ import org.dgfoundation.amp.ar.MeasureConstants;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-public class PublicConstants {
+public final  class PublicConstants {
+
+    private PublicConstants() {
+
+    }
     /**
      * Set of measures that can be used in Public Portal module as funding type options.
      */

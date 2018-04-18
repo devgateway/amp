@@ -173,7 +173,7 @@ public class SettingsDefinitionsEndpoint implements ErrorReportingEndpoint {
     @Path("/public")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     public final List<SettingField> getSettingDefinitionsForPublicPortal() {
-        return Arrays.asList(getReportAmountFormatField(), getCurrencyField(true),getFundingTypeField(new
+        return Arrays.asList(getReportAmountFormatField(), getCurrencyField(true), getFundingTypeField(new
                 LinkedHashSet<>(PublicConstants.FUNDING_TYPES)));
     }
 

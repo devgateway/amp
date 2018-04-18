@@ -1,6 +1,6 @@
 package org.digijava.kernel.mail;
 
-final  class EmailConstants {
+public final class EmailConstants {
     private EmailConstants() {
     }
 

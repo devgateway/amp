@@ -129,7 +129,7 @@ public class AmpReleaseOfFundsFormTableFeature extends
                     protected void onClick(final org.apache.wicket.ajax.AjaxRequestTarget target) {
                         AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
                         super.onClick(target);
-                        parent.getFundingInfo().checkChoicesRequired(list.getCount());
+                        parent.getFundingInfo().configureRequiredFields();
                         target.add(parent.getFundingInfo());
                         target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
                         target.appendJavaScript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));

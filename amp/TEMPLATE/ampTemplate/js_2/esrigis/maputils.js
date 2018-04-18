@@ -185,7 +185,7 @@ function filldatasourcetable() {
 		cell = row.insertCell(0);
 		var url = '<a title="'
 				+ activitiesarray[int].activityname
-				+ '"href="/aim/viewActivityPreview.do~pageId=2~activityId='
+				+ '"href="/aim/viewActivityPreview.do~activityId='
 				+ activitiesarray[int].id
 				+ '~isPreview=1" target="_blank" style="text-decoration:none;">'
 				+ trimmedPathname + '...</a>';
@@ -235,7 +235,7 @@ function filldatasourcetablenational() {
 		cell = row.insertCell(0);
 		var url = '<a title="'
 				+ nationalactivitiesarray[int].activityname
-				+ '"href="/aim/viewActivityPreview.do~pageId=2~activityId='
+				+ '"href="/aim/viewActivityPreview.do~activityId='
 				+ nationalactivitiesarray[int].id
 				+ '~isPreview=1" target="_blank" style="text-decoration:none;">'
 				+ trimmedPathname + '...</a>';

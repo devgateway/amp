@@ -111,11 +111,10 @@ public class ImportExportTranslations extends Action {
     }
 
     private ActionForward doExport(ActionMapping mapping, HttpServletRequest request, HttpServletResponse response, ImportExportForm ioForm) throws Exception {
-        ActionForm form;
         if (ioForm.getSelectedLanguages() != null && ioForm.getSelectedLanguages().length > 0) {
-            long startTime = System.currentTimeMillis();
             response.setCharacterEncoding("UTF-8");
             Set<String> languagesToExport = new HashSet<String>(Arrays.asList(ioForm.getSelectedLanguages()));
+            boolean exportAmpOfflineTranslationsOnly = ioForm.isExportAmpOfflineTranslationsOnly();
             if (ioForm.getExportFormat() == XML_FORMAT) {
                 response.setContentType("text/xml");
                 response.setHeader("content-disposition", "attachment; filename=exportLanguage.xml");
@@ -123,14 +122,15 @@ public class ImportExportTranslations extends Action {
                 ObjectFactory objFactory = new ObjectFactory();
                 Translations translations = objFactory.createTranslations();
                 //Do work - export data in Translations instance
-                ImportExportUtil.exportTranslations(translations, languagesToExport);
+                ImportExportUtil.exportTranslations(translations, languagesToExport, exportAmpOfflineTranslationsOnly);
 
                 marshaller.marshal(translations, response.getOutputStream());
             } else {
                 response.setContentType("application/vnd.ms-excel");
                 response.setHeader("Content-disposition",
                         "inline; filename=translations.xls");
-                List<MessageGroup> messageGroups=ImportExportUtil.loadMessageGroups(languagesToExport);
+                List<MessageGroup> messageGroups =
+                        ImportExportUtil.loadMessageGroups(languagesToExport, exportAmpOfflineTranslationsOnly);
                 String targetLang=null;
                 for(String lang:languagesToExport){
                     if(!lang.equals("en")){
@@ -215,7 +215,6 @@ public class ImportExportTranslations extends Action {
                 wb.write(response.getOutputStream());
                 return null;
             }
-            form = null;
             request.getSession().removeAttribute("aimTranslatorManagerForm"); //???
             long endTime = System.currentTimeMillis();
             //System.out.println("Export finished in "+((endTime-startTime))+" milliseconds");

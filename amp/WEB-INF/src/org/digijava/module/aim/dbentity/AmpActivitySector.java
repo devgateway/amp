@@ -15,13 +15,13 @@ public class AmpActivitySector implements Versionable, Serializable, Cloneable {
     @Interchangeable(fieldTitle="Activity ID", pickIdOnly = true)
     private AmpActivityVersion activityId;
     
-    @Interchangeable(fieldTitle="Sector ID", importable = true , pickIdOnly = true, uniqueConstraint = true, required = ActivityEPConstants.REQUIRED_ALWAYS)
+    @Interchangeable(fieldTitle="Sector", importable = true , pickIdOnly = true, uniqueConstraint = true, required = ActivityEPConstants.REQUIRED_ALWAYS)
     private AmpSector sectorId;
     
     @Interchangeable(fieldTitle="Sector Percentage", importable = true, percentageConstraint = true, 
-            fmPath = FMVisibility.PARENT_FM + "/sectorPercentage")
+            fmPath = FMVisibility.PARENT_FM + "/sectorPercentage", required = ActivityEPConstants.REQUIRED_ALWAYS)
     private Float sectorPercentage;
-        
+
     private AmpClassificationConfiguration classificationConfig;
 
     public AmpClassificationConfiguration getClassificationConfig() {

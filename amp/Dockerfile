@@ -16,4 +16,4 @@ RUN rm -r /usr/local/tomcat/webapps/ROOT && mkdir /usr/local/tomcat/webapps/ROOT
 ADD $AMP_EXPLODED_WAR /usr/local/tomcat/webapps/ROOT
 ADD META-INF/context.xml /usr/local/tomcat/webapps/ROOT/META-INF/
 
-ENV AMP_REGISTRY_PRIVATE_KEY = $AMP_REGISTRY_PRIVATE_KEY
+ENV AMP_REGISTRY_PRIVATE_KEY $AMP_REGISTRY_PRIVATE_KEY

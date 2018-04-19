@@ -58,26 +58,28 @@ public class AmpFundingAmountComponent<T> extends Panel {
         private List<KeyValue> list = null;
         @Override
         public List<KeyValue> getObject() {
-            if (list != null)
+            if (list != null) {
                 return list;
-
-            list = new ArrayList<KeyValue>(21);
-            boolean fiscal = MTEFYearsModel.getFiscal();
-            Calendar calendar = Calendar.getInstance();
-            int currentYear = calendar.get(Calendar.YEAR);
-            calendar.set(Calendar.DAY_OF_YEAR, 1);
-            //go back 10 years for historical data
-            currentYear -= 10;
-            //10 years back + current year + 10 years forward
-            for (int i = 0; i < 21; i++){
-                calendar.set(Calendar.YEAR, currentYear);
-                list.add(MTEFYearsModel.convert(calendar.getTime(), fiscal));
-                currentYear++;
             }
+
+            int startYear = FeaturesUtil.getGlobalSettingValueInteger(GlobalSettingsConstants.YEAR_RANGE_START);
+            int range = FeaturesUtil.getGlobalSettingValueInteger(GlobalSettingsConstants.NUMBER_OF_YEARS_IN_RANGE);
+            boolean fiscal = MTEFYearsModel.getFiscal();
+            
+            list = new ArrayList<KeyValue>(range);
+            
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.DAY_OF_YEAR, 1);
+            
+            for (int i = 0; i < range; i++) {
+                calendar.set(Calendar.YEAR, startYear + i);
+                list.add(MTEFYearsModel.convert(calendar.getTime(), fiscal));
+            }
+            
             return list;
         }
     };
- 
+
     private Collection<AmpCollectionValidatorField> validationFields = new ArrayList<AmpCollectionValidatorField>();
 
     public AmpFundingAmountComponent(String id, IModel<T> model, String fmAmount,

@@ -413,8 +413,7 @@ LoggerIdentifiable, Cloneable {
     @VersionableCollection(fieldTitle = ActivityFieldsConstants.COMPONENTS)
     protected Set<AmpComponent> components;
 
-    //TTIL
-//  @Interchangeable(fieldTitle = "Structures", importable = true, fmPath = "/Activity Form/Structures")
+    @Interchangeable(fieldTitle = "Structures", importable = true, fmPath = "/Activity Form/Structures")
     @VersionableCollection(fieldTitle = "Structures")
     protected Set<AmpStructure> structures;
 

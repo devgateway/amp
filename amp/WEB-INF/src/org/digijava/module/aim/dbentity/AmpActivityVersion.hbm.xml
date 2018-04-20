@@ -196,7 +196,7 @@
 				column="amp_component_id" />
 		</set>
 		
-		<set name="structures" table="AMP_ACTIVITY_STRUCTURES" lazy="true" cascade="all-delete-orphan">
+		<set name="structures" table="AMP_ACTIVITY_STRUCTURES" lazy="true" inverse="true" cascade="all-delete-orphan">
 			<cache usage="read-write" />
 			<key column="amp_activity_id" />
 			<many-to-many class="org.digijava.module.aim.dbentity.AmpStructure"

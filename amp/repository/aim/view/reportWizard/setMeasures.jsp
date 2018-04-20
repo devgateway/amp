@@ -16,7 +16,7 @@
 							<script type="text/javascript" >
                                 insertMeasureInfo('${ampMeasures.measureId}', '${ampMeasures.measureName}');
 							</script>
-							<li class="list1" id="measure_${ampMeasures.measureId}">
+							<li class="list1 text-align" id="measure_${ampMeasures.measureId}">
 								<input type="checkbox" value="${ampMeasures.measureId}" style='line-height:15px; margin-top:6px;'/>
 								<digi:trn key="aim:reportBuilder:${ampMeasures.measureName}">
 									<c:out value="${ampMeasures.measureName}"/>

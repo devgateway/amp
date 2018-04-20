@@ -881,6 +881,6 @@ public class ReportsUtil {
     
 
     public static String getUrl(AmpReports report) {
-        return "/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/open/" + report.getAmpReportId();
+        return "/TEMPLATE/ampTemplate/saikuui_reports/index_reports.html#report/open/" + report.getAmpReportId();
     }
 }

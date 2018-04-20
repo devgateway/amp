@@ -2,39 +2,23 @@ package org.dgfoundation.amp.ar.legacy;
 
 import static org.dgfoundation.amp.testutils.ReportTestingUtils.MUST_BE_EMPTY;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.SortedMap;
-import java.util.TreeMap;
 
-import org.dgfoundation.amp.algo.AlgoUtils;
-import org.dgfoundation.amp.mondrian.ReportingTestCase;
 import org.dgfoundation.amp.nireports.testcases.ColumnReportDataModel;
 import org.dgfoundation.amp.nireports.testcases.GroupColumnModel;
 import org.dgfoundation.amp.nireports.testcases.GroupReportModel;
 import org.dgfoundation.amp.nireports.testcases.SimpleColumnModel;
-import org.dgfoundation.amp.testutils.AmpRunnable;
 import org.dgfoundation.amp.testutils.ReportsTestCase;
-import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.dbentity.AmpCurrencyRate;
-import org.digijava.module.aim.dbentity.AmpInflationRate;
-import org.digijava.module.aim.util.CurrencyUtil;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * testcases for new features added into the old reports engine in AMP 2.11
  * @author Constantin Dolghier
- *
  */
 public class OldReportsNewFeaturesTests extends ReportsTestCase {
     
     public static String[] activities = new String[] {"Eth Water", "pledged 2", "activity with directed MTEFs", "Activity with both MTEFs and Act.Comms"};
     public static String[] mtefActivities = new String[] {"TAC_activity_1", "Test MTEF directed", "Pure MTEF Project", "mtef activity 1", "Activity with both MTEFs and Act.Comms"};
-    
-    public OldReportsNewFeaturesTests() {
-        super("mtef tests in old reports");
-    }
     
     @Test
     public void testRealCommsDisbsByRegion() {
@@ -180,6 +164,7 @@ public class OldReportsNewFeaturesTests extends ReportsTestCase {
     }
     
     @Test
+    @Ignore
     public void testMtefProjectionsAsColumns() {
         GroupReportModel cor = GroupReportModel.withColumnReports("AMP-21275-split-mtef-projections-as-columns",
                 ColumnReportDataModel.withColumns("AMP-21275-split-mtef-projections-as-columns",
@@ -209,6 +194,7 @@ public class OldReportsNewFeaturesTests extends ReportsTestCase {
     }
     
     @Test
+    @Ignore
     public void testMtefProjectionsAsColumnsNoMtefs() {
         GroupReportModel cor = GroupReportModel.withColumnReports("AMP-21275-split-mtef-projections-as-columns-small",
                 ColumnReportDataModel.withColumns("AMP-21275-split-mtef-projections-as-columns-small",
@@ -233,6 +219,7 @@ public class OldReportsNewFeaturesTests extends ReportsTestCase {
     }
     
     @Test
+    @Ignore
     public void testMtefProjectionsAllAsColumns() {
         GroupReportModel cor = GroupReportModel.withColumnReports("AMP-21275-all-plain-mtefs",
                 ColumnReportDataModel.withColumns("AMP-21275-all-plain-mtefs",
@@ -264,6 +251,7 @@ public class OldReportsNewFeaturesTests extends ReportsTestCase {
     }
     
     @Test
+    @Ignore
     public void testMtefProjectionsAllAsColumnsRare() {
         GroupReportModel cor = GroupReportModel.withColumnReports("AMP-21275-all-plain-mtefs-rare",
                 ColumnReportDataModel.withColumns("AMP-21275-all-plain-mtefs-rare",
@@ -291,6 +279,7 @@ public class OldReportsNewFeaturesTests extends ReportsTestCase {
     }
     
     @Test
+    @Ignore
     public void testMtefProjectionsAllAsColumnsVeryRare() {
         GroupReportModel cor = GroupReportModel.withColumnReports("AMP-21275-all-plain-mtefs-very-rare",
                 ColumnReportDataModel.withColumns("AMP-21275-all-plain-mtefs-very-rare",

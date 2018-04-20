@@ -8,8 +8,8 @@ nv.models.customizedMultiBarChart = function() {
   var multibar = nv.models.multiBar()
     , xAxis = nv.models.axis()
     , yAxis = nv.models.axis()
-    , legend = nv.models.legend()
-    , controls = nv.models.legend() //this isn't exposed by default :(
+    , legend = nv.models.customizedLegend()
+    , controls = nv.models.customizedLegend() //this isn't exposed by default :(
     ;
 
   var margin = {top: 30, right: 20, bottom: 50, left: 60}
@@ -20,6 +20,8 @@ nv.models.customizedMultiBarChart = function() {
     , showLegend = true
     , showXAxis = true
     , showYAxis = true
+    , rtl = false
+    , rigthAlign = false
     , rightAlignYAxis = false
     , reduceXTicks = true // if false a tick will show for every data point
     , staggerLabels = false
@@ -161,6 +163,7 @@ nv.models.customizedMultiBarChart = function() {
       // Legend
 
       if (showLegend) {
+        legend.rtl(rtl);
         legend.width(availableWidth - controlWidth());
 
         if (multibar.barColor())
@@ -197,6 +200,7 @@ nv.models.customizedMultiBarChart = function() {
         ];
 
         controls.width(controlWidth()).color(['#444', '#444', '#444']);
+        controls.rtl(rtl);
         g.select('.nv-controlsWrap')
           .datum(controlsData)
           .attr('transform', 'translate(0,' + (-margin.top) +')')
@@ -204,9 +208,13 @@ nv.models.customizedMultiBarChart = function() {
       }
 
       //------------------------------------------------------------
+      var xTranslate = margin.left;
+      //40 needs to be the lenght of the containing text leaving 40 hardocoded termporarly
+      if(rightAlignYAxis){
+          var xTranslate = margin.left - 40;
+      }
 
-
-      wrap.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+      wrap.attr('transform', 'translate(' + xTranslate + ',' + margin.top + ')');
 
       if (rightAlignYAxis) {
         g.select(".nv-y.nv-axis")
@@ -427,7 +435,20 @@ nv.models.customizedMultiBarChart = function() {
     return chart;
   };
 
-  chart.width = function(_) {
+    chart.rigthAlign = function(_) {
+        if (!arguments.length) return rigthAlign;
+        rigthAlign = _;
+        return chart;
+    };
+
+    chart.rtl = function(_) {
+        if (!arguments.length) return rtl;
+        rtl = _;
+        return chart;
+    };
+
+
+    chart.width = function(_) {
     if (!arguments.length) return width;
     width = _;
     return chart;

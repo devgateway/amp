@@ -2,12 +2,20 @@ import dataFreezeApi from '../api/DataFreezeApi.jsx';
 import Utils from '../common/Utils.jsx';
 import * as Constants from '../common/Constants';
 
+export const DATA_FREEZE_EVENT_SAVING = 'DATA_FREEZE_EVENT_SAVING';
+export const DATA_FREEZE_EVENT_ON_SAVE = 'DATA_FREEZE_EVENT_ON_SAVE';
+export const LOAD_DATA_FREEZE_EVENT_LIST_SUCCESS ='LOAD_DATA_FREEZE_EVENT_LIST_SUCCESS'
+
 export function getDataFreezeEventListSuccess(data) {
-     return { type: 'LOAD_DATA_FREEZE_EVENT_LIST_SUCCESS', data: data }
+     return { type: LOAD_DATA_FREEZE_EVENT_LIST_SUCCESS, data: data }
+}
+
+export function savingEvent(){
+     return {type:DATA_FREEZE_EVENT_SAVING,data:{saving:true}};
 }
 
 export function onSave(data) {
-     return { type: 'DATA_FREEZE_EVENT_ON_SAVE', data: data }
+     return { type: DATA_FREEZE_EVENT_ON_SAVE, data: data }
 }
 
 export function onSaveAllEdits(data) {
@@ -64,6 +72,7 @@ export function loadDataFreezeEventList(data) {
 
 export function save(data) {
      return function (dispatch) {
+          dispatch(savingEvent());
           const errors = Utils.validateDataFreezeEvent(data);
           if (errors.length > 0) {
                const result = {};

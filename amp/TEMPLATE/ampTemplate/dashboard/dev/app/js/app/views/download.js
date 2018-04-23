@@ -19,6 +19,11 @@ module.exports = BackboneDash.View.extend({
   initialize: function(options) {
 	var self = this;
     this.app = options.app;
+      if (app && app.generalSettings && app.generalSettings.attributes && app.generalSettings.attributes['rtl-direction']) {
+          this.isRtl = true;
+      } else {
+          this.isRtl = false;
+      }
     var valuesLength = this.model.get('values') ? this.model.get('values').length : 0;
     var height = util.calculateChartHeight(valuesLength, true);
     this.dashChartOptions = _({}).extend(options.chartOptions, {
@@ -136,7 +141,7 @@ module.exports = BackboneDash.View.extend({
         if (adjType) {
             trnAdjType = this.chart.$el.find('.ftype-options option:selected').text();
         }
-        if (app.generalSettings.attributes['rtl-direction']) {
+        if (self.isRtl) {
             moneyContext = currencyName + ' ' + ( this.model.get('sumarizedTotal') !== undefined ?
                 util.translateLanguage(this.model.get('sumarizedTotal')) +' : ' +  ' ': ' ')  ;
             moneyContext = moneyContext + trnAdjType ;
@@ -168,8 +173,7 @@ module.exports = BackboneDash.View.extend({
         var moneyContextX = w - 10;
         var moneyContextTextAlign='right';
         var moneyContextTextAlignReset='left';
-
-        if (app.generalSettings.attributes['rtl-direction']) {
+        if (self.isRtl) {
             //for title
             titleX = w - strTitle.length;
             ctx.textAlign = 'right';
@@ -231,116 +235,121 @@ module.exports = BackboneDash.View.extend({
   },
 
   renderCSV: function(csvContainer) {
-	var self = this;
-	var currencyName = app.settingsWidget.definitions.findCurrencyById(self.model.get('currency')).value;
-    var data = this.model.get('processed'),
-        currency = currencyName,
-        adjtype = this.model.get('adjtype') || false,
-        csvTransformed,
-        headerRow,
-        textContent,
-        preview;
+      var self = this;
+      var currencyName = app.settingsWidget.definitions.findCurrencyById(self.model.get('currency')).value;
+      var data = this.model.get('processed'),
+          currency = currencyName,
+          adjtype = this.model.get('adjtype') || false,
+          csvTransformed,
+          headerRow,
+          textContent,
+          preview;
 
-    var self = this;
-    var keys = _(data).pluck('key');
-    
-    if (self.model.get('chartType') !== 'fragmentation') {
-	    // table of all the data
-	    csvTransformed = _(data)
-	      .chain()
-	      .pluck('values')
-	      .transpose()
-	      .map(function(row) {
-	        return _(row).reduce(function(csvRow, cell) {
-	          csvRow.push(cell.y);
-	          return csvRow;
-	        }, [row[0].x]);
-	      })
-	      .map(function(row) {
-              var trnAdjType = '';
-              if (adjtype) {
-                  trnAdjType = self.chart.$el.find('.ftype-options option:selected').text();
-              }
-              if (app.generalSettings.attributes['rtl-direction']) {
-                  row.push(trnAdjType || '');
-                  row.push(currency);
-              } else {
+      var self = this;
+      var keys = _(data).pluck('key');
+
+      if (self.model.get('chartType') !== 'fragmentation') {
+          // table of all the data
+          csvTransformed = _(data)
+              .chain()
+              .pluck('values')
+              .transpose()
+              .map(function (row) {
+                  return _(row).reduce(function (csvRow, cell) {
+                      csvRow.push(cell.y);
+                      return csvRow;
+                  }, [row[0].x]);
+              })
+              .map(function (row) {
+                  var trnAdjType = '';
+                  if (adjtype) {
+                      trnAdjType = self.chart.$el.find('.ftype-options option:selected').text();
+                  }
                   row.push(currency || '');
                   row.push(trnAdjType);
+                  return row;
+              })
+              .value();
+      } else {
+          csvTransformed = _.map(self.model.get("matrix"), function (itemY, i) {
+              return _.map(itemY, function (itemX, j) {
+                  return [self.model.get("yDataSet")[i],
+                      self.model.get("xDataSet")[j],
+                      self.model.get("matrix")[i][j] ? self.model.get("matrix")[i][j].dv : '',
+                      self.model.get("matrix")[i][j] ? self.model.get("matrix")[i][j].p : ''
+                  ]
+              })
+          });
+          csvTransformed = [].concat.apply([], csvTransformed);
+          csvTransformed = _.each(csvTransformed, function (item) {
+              item.push(currency);
+              if (adjtype) {
+                  var trnAdjType = self.chart.$el.find('.ftype-options option:selected').text();
+                  item.push(trnAdjType);
               }
-              return row;
-	      })
-	      .value();
-    } else {
-        csvTransformed = _.map(self.model.get("matrix"), function(itemY, i) {
-			return _.map(itemY, function(itemX, j) {
-				return [self.model.get("yDataSet")[i],
-					self.model.get("xDataSet")[j],
-					self.model.get("matrix")[i][j] ? self.model.get("matrix")[i][j].dv : '',
-					self.model.get("matrix")[i][j] ? self.model.get("matrix")[i][j].p : ''
-				]
-			})
-		});
-	    csvTransformed = [].concat.apply([], csvTransformed);
-	    csvTransformed = _.each(csvTransformed, function(item) {
-	        item.push(currency);
-	        if (adjtype) {
-				var trnAdjType = self.chart.$el.find('.ftype-options option:selected').text();
-	            item.push(trnAdjType);
-	        }	        
-	    });
-    }
+          });
+      }
 
-    // prepend a header row
-    headerRow = [];
-    var amountTrn = this.app.translator.translateSync('amp.dashboard:download-amount', 'Amount');
-    var currencyTrn = this.app.translator.translateSync('amp.dashboard:currency', 'Currency');
-    var percentageTrn = this.app.translator.translateSync('amp.dashboard:percentage', 'Percentage');
-    var typeTrn = this.app.translator.translateSync('amp.dashboard:type', 'Type');
-    var yearTrn = this.app.translator.translateSync('amp.dashboard:year', 'Year');
+      // prepend a header row
+      headerRow = [];
+      var amountTrn = this.app.translator.translateSync('amp.dashboard:download-amount', 'Amount');
+      var currencyTrn = this.app.translator.translateSync('amp.dashboard:currency', 'Currency');
+      var percentageTrn = this.app.translator.translateSync('amp.dashboard:percentage', 'Percentage');
+      var typeTrn = this.app.translator.translateSync('amp.dashboard:type', 'Type');
+      var yearTrn = this.app.translator.translateSync('amp.dashboard:year', 'Year');
 
-	if (this.model.url.indexOf('/tops') > -1) {
-        if (app.generalSettings.attributes['rtl-direction']) {
-            headerRow.push(typeTrn);
-            headerRow.push(currencyTrn);
-            headerRow.push(amountTrn);
-            headerRow.push(this.model.get('title'));
-        }else{
-            headerRow.push(this.model.get('title'));
-            headerRow.push(amountTrn);
-            headerRow.push(currencyTrn);
-            headerRow.push(typeTrn);
-        }
+      if (this.model.url.indexOf('/tops') > -1) {
+          if (self.isRtl) {
+              headerRow.push(typeTrn);
+              headerRow.push(currencyTrn);
+              headerRow.push(amountTrn);
+              headerRow.push(this.model.get('title'));
+          } else {
+              headerRow.push(this.model.get('title'));
+              headerRow.push(amountTrn);
+              headerRow.push(currencyTrn);
+              headerRow.push(typeTrn);
+          }
 
-	} else if (this.model.url.indexOf('/aid-predictability') > -1) {
-	    headerRow.push(yearTrn);
-	    _.each(keys, function(item) {
-	    	headerRow.push(item);
-	    });
-	    headerRow.push(currencyTrn);
-	} else if (this.model.url.indexOf('/ftype') > -1) {
-		headerRow.push(yearTrn);
-	    _.each(keys, function(item) {
-	    	headerRow.push(item);
-	    });
-	    headerRow.push(currencyTrn);
-	    headerRow.push(typeTrn);
-	} else if (this.model.get('chartType') === 'fragmentation') {
-		// For AMP-23582: we dont want the name from "summary" because thats the origName and not always the same name than the X axis combo selector. 
-		var firstColumnName = _.find(self.model.get('heatmap_config').models[0].get('columns'), function(item) {
-			return item.origName === self.model.get('summary')[0];
-		}).name; 
-		var secondColumnName = _.find(self.model.get('heatmap_config').models[0].get('columns'), function(item) {
-			return item.origName === self.model.get('summary')[1];
-		}).name;
-		headerRow.push(firstColumnName);
-		headerRow.push(secondColumnName);
-	    headerRow.push(amountTrn);
-	    headerRow.push(percentageTrn);
-	    headerRow.push(currencyTrn);
-	    headerRow.push(typeTrn);
-	}
-
+      } else {
+          if (this.model.url.indexOf('/aid-predictability') > -1) {
+              headerRow.push(yearTrn);
+              _.each(keys, function (item) {
+                  headerRow.push(item);
+              });
+              headerRow.push(currencyTrn);
+          } else if (this.model.url.indexOf('/ftype') > -1) {
+              headerRow.push(yearTrn);
+              _.each(keys, function (item) {
+                  headerRow.push(item);
+              });
+              headerRow.push(currencyTrn);
+              headerRow.push(typeTrn);
+          } else if (this.model.get('chartType') === 'fragmentation') {
+              // For AMP-23582: we dont want the name from "summary" because thats the origName and not always the same name than the X axis combo selector.
+              var firstColumnName = _.find(self.model.get('heatmap_config').models[0].get('columns'), function (item) {
+                  return item.origName === self.model.get('summary')[0];
+              }).name;
+              var secondColumnName = _.find(self.model.get('heatmap_config').models[0].get('columns'), function (item) {
+                  return item.origName === self.model.get('summary')[1];
+              }).name;
+              headerRow.push(firstColumnName);
+              headerRow.push(secondColumnName);
+              headerRow.push(amountTrn);
+              headerRow.push(percentageTrn);
+              headerRow.push(currencyTrn);
+              headerRow.push(typeTrn);
+          }
+          if(self.isRtl) {
+              headerRow.reverse();
+          }
+      }
+    //if we are in RTL we reverse each element of the array
+      if (self.isRtl) {
+          csvTransformed.forEach(function (row) {
+              row.reverse();
+          });
+      }
     csvTransformed.unshift(headerRow);
     /* Add sep=, for automatic Excel support at the very top of the file works but breaks BOM unicode.
      * Let us use tab-delimited instead.

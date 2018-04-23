@@ -32,8 +32,7 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
             fmPath = FMVisibility.PARENT_FM + "/relOrgadditionalInfo")
     private String additionalInfo;
 
-    @Interchangeable(fieldTitle = "GPI Ni Survey", fmPath = "/Activity Form/GPI 2017/GPI NI Survey")
-    private Set<AmpGPINiSurvey> gpiNiSurveys;       
+    private Set<AmpGPINiSurvey> gpiNiSurveys;
     
     public Float getPercentage() {
         return percentage;

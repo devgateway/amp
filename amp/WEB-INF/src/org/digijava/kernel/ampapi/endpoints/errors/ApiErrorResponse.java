@@ -45,6 +45,7 @@ public class ApiErrorResponse {
         String responseMediaType = Optional.ofNullable(mediaType).orElse(MediaType.APPLICATION_JSON);
 
         Object formattedMessage = responseMediaType.equals(MediaType.APPLICATION_XML)
+        Object formattedMessage = responseMediaType.contains(MediaType.APPLICATION_XML)
                 ? ApiError.toXmlErrorString(errorBean) : errorBean;
 
         ResponseBuilder builder = Response.status(status)

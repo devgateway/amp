@@ -17,6 +17,19 @@ public class FilterListTreeNode {
     private List<Long> listDefinitionIds;
     
     private List<FilterListTreeNode> children;
+    
+    public FilterListTreeNode() { }
+    
+    public FilterListTreeNode(Long id, String value) {
+        this(id, value, value);
+    }
+
+    public FilterListTreeNode(Long id, String value, String name) {
+        super();
+        this.id = id;
+        this.name = name;
+        this.value = value;
+    }
 
     public void addChild(FilterListTreeNode child) {
         if (children == null) {

@@ -66,9 +66,11 @@ public final class ApprovalStatusFilterListManager implements FilterListManager 
         for (String key : AmpARFilter.activityApprovalStatus.keySet()) {
             FilterListTreeNode node = new FilterListTreeNode();
             node.setId((long) AmpARFilter.activityApprovalStatus.get(key));
+            node.setValue(key);
             node.setName(TranslatorWorker.translateText(key));
             statusItems.add(node);
         }
+        statusItems.add(UNDEFINED_OPTION);
         
         items.put(ITEMS_NAME, statusItems);
 

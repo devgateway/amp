@@ -23,6 +23,7 @@ import org.dgfoundation.amp.newreports.CompleteWorkspaceFilter;
 import org.digijava.kernel.ampapi.endpoints.datafreeze.DataFreezeUtil;
 import org.digijava.kernel.config.DigiConfig;
 import org.digijava.kernel.mail.DgEmailManager;
+import org.digijava.kernel.mail.EmailConstants;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -84,7 +85,6 @@ import org.hibernate.jdbc.Work;
 
 public class AmpMessageWorker {
 
-    public static final String DEFAULT_EMAIL_SENDER = "system@digijava.org";
     public static final long SITE_ID = 3L;
     private static final String PARAM_NAME = "name";
     private static final int SUBJECT_MAX_LENGTH = 77;
@@ -868,7 +868,7 @@ public class AmpMessageWorker {
 
         if (receiversAddresses.size() > 0) {
             for (String emailAddr : receiversAddresses) {
-                String senderEmail = (msgSender == null) ? DEFAULT_EMAIL_SENDER 
+                String senderEmail = (msgSender == null) ? EmailConstants.DEFAULT_EMAIL_SENDER
                         : msgSender.getUser().getEmailUsedForNotification();
                 
                 String translatedName = TranslatorWorker.translateText(newMsg.getName());
@@ -1364,7 +1364,7 @@ public class AmpMessageWorker {
         params.put(DataFreezeEmailNotificationTrigger.PARAM_DATA_FREEZING_DATE, 
                 e.getParameters().get(DataFreezeEmailNotificationTrigger.PARAM_DATA_FREEZING_DATE).toString());
         for(User user : users) {
-            String senderEmail = (msgSender == null) ? DEFAULT_EMAIL_SENDER
+            String senderEmail = (msgSender == null) ? EmailConstants.DEFAULT_EMAIL_SENDER
                     : msgSender.getUser().getEmailUsedForNotification();
             AmpEmail ampEmail = emails.get(user.getRegisterLanguage().getCode());
             if (ampEmail == null) {
@@ -1393,7 +1393,7 @@ public class AmpMessageWorker {
         params.put(SummaryChangeNotificationTrigger.PARAM_SUMMARY_BODY, String.valueOf(
                 SummaryChangeNotificationTrigger.PARAM_SUMMARY_BODY));
 
-        String senderEmail = DEFAULT_EMAIL_SENDER;
+        String senderEmail = EmailConstants.DEFAULT_EMAIL_SENDER;
         AmpEmail ampEmail;
 
         String translatedName = TranslatorWorker.translateText(newMsg.getName(), user.getRegisterLanguage()
@@ -1487,7 +1487,7 @@ public class AmpMessageWorker {
                     ampEmail = new AmpEmail(msgSender.getUser().getEmailUsedForNotification(), 
                             message.getName(), description);
                 } else {
-                    ampEmail = new AmpEmail(DEFAULT_EMAIL_SENDER, message.getName(), description);
+                    ampEmail = new AmpEmail(EmailConstants.DEFAULT_EMAIL_SENDER, message.getName(), description);
                 }
 
                 DbUtil.saveOrUpdateObject(ampEmail);

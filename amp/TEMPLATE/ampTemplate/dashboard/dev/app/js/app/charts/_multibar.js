@@ -22,6 +22,7 @@ function countCategories(data) {
 
 function chart(options) {
   var maxValue = 10;
+    var isRtl = app.generalSettings.attributes['rtl-direction'];
   //this check is needed because I need strictly either 300 or 400 px, and sometimes, when the chart overflows, it
   //will give me >400 px height
   var height = options.height < 400 ? 300 : 400;
@@ -31,6 +32,9 @@ function chart(options) {
                             // (meaning if the are values falling outside the range it will show then).
     .reduceXTicks(false)
     .height(height)
+      .rtl(isRtl)
+      .rigthAlign(isRtl)
+      .rightAlignYAxis(isRtl)
     .margin({ top: 5, right: 10, bottom: 20, left: 50 });
 
   if (!options.nvControls) {

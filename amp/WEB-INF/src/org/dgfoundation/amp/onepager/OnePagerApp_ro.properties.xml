@@ -12,6 +12,7 @@
 	<entry key="AmpUniqueCollectionValidator">Următoarele elemente sunt repetate cel puțin o dată: ${label}</entry>
 	<entry key="AmpTreeCollectionValidator">Atât elementul părinte cât și elementul copil sunt prezente: ${label}</entry>
 	<entry key="AmpUniqueActivityTitleValidator">În spațiul de lucru ${workspace} există deja un proiect cu același titlu.</entry>
+	<entry key="AmpUniqueActivityTitleNoWorkspaceValidator">Există deja un proiect cu același titlu și nu face parte dintr-un spațiu de lucru.</entry>
 	<entry key="AmpUniqueComponentTitleValidator">Există deja o componentă cu același titlu.</entry>
 	<entry key="CoordinatesValidator">Coordonatele nu sunt în formatul corect.</entry>
 	<entry key="AmpCommitmentsCollectionsSumComparatorValidator">Vărsămintele sunt mai mari decât suma angajamentelor</entry>

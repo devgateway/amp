@@ -3,7 +3,10 @@ package org.digijava.module.um.util;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
@@ -24,6 +27,7 @@ import org.digijava.module.aim.dbentity.AmpUserExtension;
 import org.digijava.module.aim.dbentity.AmpUserExtensionPK;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.hibernate.criterion.Restrictions;
 
 /**
  * Methods for working with User related tasks.
@@ -161,6 +165,22 @@ public class AmpUserUtil {
         }
         return result;
         
+    }
+
+    /**
+     * Bulk version of user extensions retrieval.
+     */
+    public static Map<Long, AmpUserExtension> getAmpUserExtensions(List<User> users) {
+        List<Long> usersIds = users.stream().map(User::getId).collect(Collectors.toList());
+        Session session = PersistenceManager.getRequestDBSession();
+        List<AmpUserExtension> extensions = session
+                .createCriteria(AmpUserExtension.class)
+                .add(Restrictions.in("ampUserExtId.user.id", usersIds))
+                .list();
+
+        Map<Long, AmpUserExtension> result = new HashMap<>();
+        extensions.forEach(e -> result.put(e.getAmpUserExtId().getUser().getId(), e));
+        return result;
     }
     
     /**

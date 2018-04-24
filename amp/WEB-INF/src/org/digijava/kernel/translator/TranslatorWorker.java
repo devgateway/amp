@@ -41,6 +41,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.wicket.protocol.http.WebApplication;
+import org.digijava.kernel.ampapi.filters.AmpOfflineModeHolder;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.lucene.LuceneWorker;
@@ -224,23 +225,60 @@ public class TranslatorWorker {
      * @param siteId
      * @return
      * @throws WorkerException
-     */    
-    public static String translateText(String text, String keyWords, String locale, Long siteId)
-    {
+     */
+    public static String translateText(String text, String keyWords, String locale, Long siteId) {
         if (text == null)
             return "";
-        
+
         TranslatorWorker worker = getInstance("");
-        
+
+        Message message = findMessage(worker, text, keyWords, locale, siteId);
+
+        processAmpOfflineMessage(worker, text, message);
+
+        return message.getMessage();
+    }
+
+    /**
+     * Mark message as used by AMP Offline if current request is issued by AMP Offline.
+     *
+     * @param worker worker used to update message
+     * @param message the message to check
+     */
+    private static void processAmpOfflineMessage(TranslatorWorker worker, String text, Message message) {
+        boolean updateRequired = false;
+        if (AmpOfflineModeHolder.isAmpOfflineMode() && !isAmpOfflineMessage(message)) {
+            message.setAmpOffline(true);
+            updateRequired = true;
+        }
+        if (message.getLocale().equals("en") && isOriginalMsgKeyIncorrect(message)) {
+            message.setOriginalMessage(text);
+            updateRequired = true;
+        }
+        if (updateRequired) {
+            worker.update(message);
+        }
+    }
+
+    private static boolean isOriginalMsgKeyIncorrect(Message message) {
+        return !TranslatorWorker.generateTrnKey(message.getOriginalMessage()).equals(message.getKey());
+    }
+
+    private static boolean isAmpOfflineMessage(Message message) {
+        return message.getAmpOffline() != null && message.getAmpOffline();
+    }
+
+    private static Message findMessage(TranslatorWorker worker, String text, String keyWords, String locale, Long siteId) {
+
         //Try to find translation
         Message msg = worker.getByBody(text, keyWords, locale, siteId);
         if (msg != null)
-            return msg.getMessage();
+            return msg;
               
         // Then try to find in default language
         msg = worker.getByBody(text, keyWords, getDefaultLocalCode(), siteId);
         if (msg != null)
-            return msg.getMessage();
+            return msg;
             
         // no translations found => create a default entry
         msg = new Message();
@@ -250,10 +288,10 @@ public class TranslatorWorker {
         msg.setKeyWords(keyWords);
         msg.setKey(TranslatorWorker.generateTrnKey(text));
         worker.save(msg);
-        
-        return text;
+
+        return msg;
     }
-    
+
     public static TranslatorWorker getInstance(String key) {
         /** @todo temporary solution. needs to be read from digi.xml */
         //if (key.startsWith("cpv:")) {
@@ -1101,7 +1139,7 @@ public class TranslatorWorker {
      * @param message
      * @throws WorkerException
      */
-    public void update(Message message) throws WorkerException {
+    public void update(Message message) {
         updateDb(message);
         fireRefreshAlert(message);
     }
@@ -1115,7 +1153,7 @@ public class TranslatorWorker {
      * @see TrnAccessUpdateQueue
      * @see TrnAccesTimeSaver
      */
-    protected void updateDb(Message message) throws WorkerException {
+    protected void updateDb(Message message) {
         logger.debug("Updating translation. siteId="+ message.getSiteId() + ", key = " + message.getKey() + ",locale=" + message.getLocale());
         Session ses = null;
 
@@ -1142,7 +1180,7 @@ public class TranslatorWorker {
 //          //System.out.println("Error updating translation. msg="+message.getMessage()+" siteId="
 //                  + message.getSiteId() + ", key = " + message.getKey() +
 //                  ",locale=" + message.getLocale());
-            throw new WorkerException("TranslatorWorker.HibExUpdateMessage.err", e);
+            throw new RuntimeException("TranslatorWorker.HibExUpdateMessage.err", e);
         }
     }
 
@@ -1385,7 +1423,7 @@ public class TranslatorWorker {
 
         return message;
     }
-    
+
     /**
      * Same as {@link #getAllTranslationsOfKey(String, String)} but uses some text, 
      * usually body of trn tag or default text to generate key.
@@ -1402,13 +1440,17 @@ public class TranslatorWorker {
     /**
      * Returns all translations for specified key on specified site.
      * If any some translation has been translated in 3 languages, then this will find all 3 records for the key.
-     * @param key   
+     * @param key
      * @param siteId
      * @return
      * @throws WorkerException
      */
+    public static Collection<Message> getAllTranslationsOfKey(String key, Long siteId) throws WorkerException {
+        return getInstance("").getAllTranslationsOfKeyInternal(key, siteId);
+    }
+
     @SuppressWarnings("unchecked")
-    public static Collection<Message> getAllTranslationsOfKey(String key, Long siteId) throws WorkerException{
+    public Collection<Message> getAllTranslationsOfKeyInternal(String key, Long siteId) throws WorkerException {
         Session session = null;
         List<Message> result = null;
         try {

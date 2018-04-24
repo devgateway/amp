@@ -92,7 +92,6 @@ module.exports = Backbone.View.extend({
   _renderCountryBoundary: function() {
     var self = this;
     this.app.data.boundaries.load().then(function() {
-      debugger;
       var boundary0 = self.app.data.boundaries.get('adm-0');
 
       boundary0.fetch().then(function(topoJSON) {

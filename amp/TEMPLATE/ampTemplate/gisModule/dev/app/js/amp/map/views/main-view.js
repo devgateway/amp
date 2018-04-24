@@ -118,8 +118,8 @@ module.exports = Backbone.View.extend({
 
               var natlBounds = L.GeoJSON.geometryToLayer(feature.geometry).getBounds();
 
-              if (boundary0.attributes['rectangle-to-center-gis']) { //if the recntangle is present we use it to
-                  // center the map
+              if (boundary0.attributes['rectangle-to-center-gis']) { //If there is a rectangle configured in
+                  // list.json then we use it to center the map so that rectangle is visible
                   var upperLeftCorner = boundary0.attributes['rectangle-to-center-gis']['upper-left-corner'],
                       lowerRightCorner = boundary0.attributes['rectangle-to-center-gis']['lower-right-corner'];
 

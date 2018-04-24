@@ -23,8 +23,10 @@ public class PhantomService {
     private static File scriptFile;
     private static final Logger LOGGER = Logger.getLogger(PhantomService.class);
 
-    public static String createImage(final String uri, final String imagePath, final Integer width, final Integer height, final String scriptPath) throws ExecutionException, InterruptedException {
-        if(!initialized) {
+    public static String createImage(final String uri, final String imagePath, final Integer width,
+                                     final Integer height, final String scriptPath)
+            throws ExecutionException, InterruptedException {
+        if (!initialized) {
             init();
         }
         return executor.execute(scriptFile, uri, imagePath, width.toString(), height.toString(), scriptPath).get();

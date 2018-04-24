@@ -1,5 +1,8 @@
+import { DATA_FREEZE_EVENT_ON_SAVE, DATA_FREEZE_EVENT_SAVING ,LOAD_DATA_FREEZE_EVENT_LIST_SUCCESS }
+from '../actions/DataFreezeActions'
 const defaultState = {
      data: {
+          saving : false,
           dataFreezeEventList: [],
           errors: [],
           infoMessages: [],
@@ -23,11 +26,16 @@ const defaultState = {
 
 export default function dataFreezeEventReducer(state: Object = defaultState.data, action: Object) {
      switch (action.type) {
-          case 'LOAD_DATA_FREEZE_EVENT_LIST_SUCCESS':
+         case DATA_FREEZE_EVENT_SAVING:
+              const newState = Object.assign({},state);
+              newState.saving = true;
+              return newState;
+          case LOAD_DATA_FREEZE_EVENT_LIST_SUCCESS:
                var newState = Object.assign({}, action.data);
                newState.cid = state.cid;
+               newState.saving = false;
                return newState;
-          case 'DATA_FREEZE_EVENT_ON_SAVE':
+          case DATA_FREEZE_EVENT_ON_SAVE:
                var newState = Object.assign({}, state);
                var actionData = Object.assign({}, action.data);
                newState.dataFreezeEventList = newState.dataFreezeEventList.map(function (dataFreezeEvent) {
@@ -35,6 +43,7 @@ export default function dataFreezeEventReducer(state: Object = defaultState.data
                });
                newState.errors = actionData.errors || [];
                newState.infoMessages = actionData.infoMessages || [];
+               newState.saving = false;
                return newState;
           case 'DATA_FREEZE_EVENT_ON_SAVE_ALL_EDITS':
                var newState = Object.assign({}, state);

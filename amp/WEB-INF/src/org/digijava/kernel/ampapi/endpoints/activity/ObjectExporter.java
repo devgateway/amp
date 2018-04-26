@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -30,7 +31,7 @@ public abstract class ObjectExporter<T> {
     public JsonBean export(T object) {
         JsonBean resultJson = new JsonBean();
 
-        Field[] fields = getClassOf(object).getDeclaredFields();
+        Field[] fields = FieldUtils.getAllFields(getClassOf(object));
 
         for (Field field : fields) {
             try {
@@ -138,8 +139,8 @@ public abstract class ObjectExporter<T> {
             throws IllegalArgumentException, IllegalAccessException,
             NoSuchMethodException, SecurityException, InvocationTargetException, EditorException {
 
-        Field[] itemFields = item.getClass().getDeclaredFields();
         JsonBean itemJson = new JsonBean();
+        Field[] itemFields = FieldUtils.getAllFields(item.getClass());
 
         // iterate the fields of the object and generate the JSON
         for (Field itemField : itemFields) {

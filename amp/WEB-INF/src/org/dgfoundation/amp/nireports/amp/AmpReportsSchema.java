@@ -460,7 +460,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         no_entity(ColumnConstants.BUDGET_CODE_PROJECT_ID, "v_budget_code_project_id");
         degenerate_dimension(ColumnConstants.BUDGET_DEPARTMENT, "v_budget_department", departmentsDimension);
         single_dimension(ColumnConstants.BUDGET_SECTOR, "v_budget_sector", RAW_SCT_LEVEL_COLUMN);
-        degenerate_dimension(ColumnConstants.CAPITAL___EXPENDITURE, "v_capital_and_exp", boolDimension);
+        degenerate_dimension(ColumnConstants.CAPITAL_EXPENDITURE, "v_capital_and_exp", boolDimension);
         no_entity(ColumnConstants.CRIS_NUMBER, "v_cris_number");
         no_entity(ColumnConstants.CURRENT_COMPLETION_DATE_COMMENTS, "v_actual_completion_date_comments");
         no_entity(ColumnConstants.DONOR_CONTACT_EMAIL, "v_donor_cont_email");

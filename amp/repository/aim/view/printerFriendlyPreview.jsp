@@ -249,7 +249,7 @@ body {background:none;}
 										</c:if>
 									</module:display>
 
-                                 <module:display name="/Activity Form/Identification/Objective" parentModule="/Activity Form/Identification">
+                                 <module:display name="/Activity Form/Identification/Objective" parentModule="/Activity Form/Identification">   	
                                     <tr>
 										<td class="field_name">
 											<b>
@@ -3121,7 +3121,7 @@ body {background:none;}
 									<module:display name="M & E" parentModule="MONITORING AND EVALUATING">
 										<tr>
 											<td class="field_name" >
-												<b><digi:trn>M &amp; E</digi:trn></b>
+												<b><digi:trn>M&E</digi:trn></b>
 											</td>
 											<td>
                                                 <bean:define id="aimEditActivityForm" name="aimEditActivityForm" scope="page" toScope="request"/>
@@ -3590,7 +3590,7 @@ body {background:none;}
 						</td>
 					</tr>
 				</c:if>
-
+			
 	</table>
 	<br />
 	<hr>

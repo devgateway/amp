@@ -262,11 +262,11 @@ module.exports = BackboneDash.View.extend({
               })
               .map(function (row) {
                   var trnAdjType = '';
+                  row.push(currency || '');
                   if (adjtype) {
                       trnAdjType = self.chart.$el.find('.ftype-options option:selected').text();
+                      row.push(trnAdjType);
                   }
-                  row.push(currency || '');
-                  row.push(trnAdjType);
                   return row;
               })
               .value();

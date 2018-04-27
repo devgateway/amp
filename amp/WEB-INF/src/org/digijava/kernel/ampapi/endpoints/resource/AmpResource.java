@@ -2,6 +2,7 @@ package org.digijava.kernel.ampapi.endpoints.resource;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 /**
@@ -11,6 +12,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
  */
 public class AmpResource {
     
+    @Interchangeable(fieldTitle = "UUID")
     private String uuid;
     
     @Interchangeable(fieldTitle = "Title", importable = true, required = ActivityEPConstants.REQUIRED_ALWAYS)
@@ -22,14 +24,12 @@ public class AmpResource {
     @Interchangeable(fieldTitle = "Note", importable = true)
     private String note;
     
+    @PossibleValues(ResourceTypePossibleValuesProvider.class)
     @Interchangeable(fieldTitle = "Type", importable = true, pickIdOnly = true)
     private AmpCategoryValue type;
     
     @Interchangeable(fieldTitle = "URL", importable = true)
     private String url;
-    
-    @Interchangeable(fieldTitle = "Resource Type", importable = true)
-    private String resourceType;
     
     public String getUuid() {
         return uuid;
@@ -77,14 +77,6 @@ public class AmpResource {
 
     public void setUrl(String url) {
         this.url = url;
-    }
-
-    public String getResourceType() {
-        return resourceType;
-    }
-
-    public void setResourceType(String resourceType) {
-        this.resourceType = resourceType;
     }
 
 }

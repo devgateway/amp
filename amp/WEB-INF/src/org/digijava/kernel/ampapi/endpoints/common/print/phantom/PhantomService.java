@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 public class PhantomService {
 
     private static final String PHANTOM_SCRIPT_FILE = "phantom-script.js";
-    private static final int TIMEOUT = 40;
+    private static final int TIMEOUT = 120;
     private static volatile boolean initialized = false;
     private static PhantomJSFileExecutor executor;
     private static File scriptFile;

@@ -19,6 +19,7 @@ import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
+import org.digijava.kernel.ampapi.endpoints.resource.AmpResource;
 import org.digijava.kernel.ampapi.filters.AmpOfflineModeHolder;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
@@ -211,6 +212,10 @@ public class FieldsEnumerator {
 
     public List<APIField> getContactFields() {
         return getAllAvailableFields(AmpContact.class);
+    }
+    
+    public List<APIField> getResourceFields() {
+        return getAllAvailableFields(AmpResource.class);
     }
 
     List<APIField> getAllAvailableFields(Class<?> clazz) {

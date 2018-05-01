@@ -8,26 +8,32 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.AmpFieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesEnumerator;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
+import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 /**
  * @author Viorel Chihai
  */
 @Path("resource")
 public class ResourceEndpoint implements ErrorReportingEndpoint {
-
+    
     /**
      * Provides full set of available fields and their settings/rules in a hierarchical structure.
      * @return JSON with fields information
@@ -92,6 +98,42 @@ public class ResourceEndpoint implements ErrorReportingEndpoint {
 
     private List<PossibleValue> possibleValuesFor(String fieldName) {
         return PossibleValuesEnumerator.INSTANCE.getPossibleValuesForField(fieldName, AmpResource.class, null);
+    }
+    
+    /**
+     * Retrieve resource.
+     * @param uuid resource uuid
+     */
+    @GET
+    @Path("{uuid}")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getResource", ui = false)
+    public JsonBean getResource(@Context HttpServletRequest request, @PathParam("uuid") String uuid) {
+        return ResourceUtil.getResource(request, uuid);
+    }
+    
+    /**
+     * Retrieve all resources.
+     */
+    @GET
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getAllResources", ui = false)
+    public List<JsonBean> getAllResources(@Context HttpServletRequest request) {
+        return ResourceUtil.getAllResources(request);
+    }
+
+    /**
+     * Create new resource.
+     * @param resource the resource to create
+     * @return brief representation of contact
+     */
+    @PUT
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "createResource", ui = false)
+    public JsonBean createResource(@Context HttpServletRequest request, JsonBean resource) {
+        ResourceImporter importer = new ResourceImporter();
+        List<ApiErrorMessage> errors = importer.createResource(request, resource);
+        return ResourceUtil.getImportResult(importer.getResource(), importer.getNewJson(), errors);
     }
 
     @Override

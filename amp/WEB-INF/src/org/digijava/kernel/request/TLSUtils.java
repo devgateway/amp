@@ -166,7 +166,15 @@ public class TLSUtils {
     }
     
     public static void populate(HttpServletRequest request){
-        SiteDomain siteDomain = RequestUtils.getSiteDomain(request);
+        populate(request, null);
+    }
+    
+    public static void populate(HttpServletRequest request, SiteDomain siteDomain) {
+        if (siteDomain == null) {
+            siteDomain = RequestUtils.getSiteDomain(request);
+        } else {
+            RequestUtils.setSiteDomain(request, siteDomain);
+        }
         TLSUtils.getThreadLocalInstance().request = request;
         TLSUtils.getThreadLocalInstance().site = siteDomain == null ? null : siteDomain.getSite();
     }

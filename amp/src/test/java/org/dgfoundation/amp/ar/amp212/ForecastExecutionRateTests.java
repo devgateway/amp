@@ -5,21 +5,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.stream.Collectors;
 
-import org.dgfoundation.amp.ar.AllTests_amp212;
-import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.mondrian.ReportAreaForTests;
 import org.dgfoundation.amp.mondrian.ReportingTestCase;
 import org.dgfoundation.amp.newreports.AreaOwner;
-import org.dgfoundation.amp.newreports.FilterRule;
-import org.dgfoundation.amp.newreports.GroupingCriteria;
-import org.dgfoundation.amp.newreports.ReportColumn;
-import org.dgfoundation.amp.newreports.ReportElement;
-import org.dgfoundation.amp.newreports.ReportFiltersImpl;
-import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
-import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.dgfoundation.amp.nireports.NiPrecisionSetting;
 import org.dgfoundation.amp.nireports.amp.ForecastExecutionRateBehaviour;
 import org.dgfoundation.amp.nireports.output.NiReportExecutor;
@@ -35,10 +25,6 @@ import org.junit.Test;
 public class ForecastExecutionRateTests extends ReportingTestCase {
         
     ForecastExecutionRateBehaviour ferbeh = ForecastExecutionRateBehaviour.instance;
-    
-    public ForecastExecutionRateTests(String name) {
-        super(name);
-    }
     
     final List<String> acts = Arrays.asList(
             "Activity with both MTEFs and Act.Comms",
@@ -316,10 +302,5 @@ public class ForecastExecutionRateTests extends ReportingTestCase {
     @Override
     protected NiReportExecutor getNiExecutor(List<String> activityNames) {
         return getDbExecutor(activityNames);
-    }
-    
-    @Override
-    public void setUp() {
-        AllTests_amp212.setUp();
     }
 }

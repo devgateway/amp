@@ -16,6 +16,21 @@ div.otherCriteriaBigTable div.grouping_selector_wrapper_body {
 	overflow: auto;
 }
 
+.grouping_selector_wrapper {
+	float: left;
+	width: 40%;
+	padding: 0px;
+	height: 98%;
+}
+
+.member_selector_wrapper {
+	float: right;
+	width: 60%;
+	padding: 0px;
+	height: 98%;
+	background: white;
+}
+
 .memberSelectorHeader {
 	font-weight: bold; 
 	font-size: small;
@@ -56,4 +71,16 @@ input.memberSelectorTextbox {
 .yui-panel {
     border-collapse: separate;
 	font-size:12px !important;
+}
+
+.search-panel-title {
+	padding: 10px 5px;
+}
+
+.filter-just-search {
+	display: block;
+	overflow: hidden;
+	width: 40%;
+	float: left;
+	font-size: 12px
 }

@@ -112,14 +112,26 @@ module.exports = Backbone.View.extend({
           .donutRatio(0.35)
           //.showLabels(true)
           .showLegend(false);
-
       chart.color(util.categoryColours(data.length));
       chart.tooltipContent(function(a, y, raw) {
-        return topsTooltipTemplate({
+          debugger;
+              var isRtl = app.data.generalSettings.get("rtl-direction");
+          var percentage = "";
+
+          if ( raw.value> 0) {
+
+              percentage = d3.format('f')(raw.value / model.total * 100);
+              if (isRtl) {
+                  percentage = '% ' +  percentage;
+              } else {
+                  percentage = percentage + ' %';
+              }
+          }
+          return topsTooltipTemplate({
           label: raw.point.label,
           value: d3.format(',')(Math.round(raw.value)),
           currency: model.currency,
-          percent: d3.format('%')(raw.value / model.total),
+          percent: percentage,
           totalLegend: app.translator.translateSync('amp.gis.cluster.tooltip-of-total', 'of total')
         });
       });
@@ -128,8 +140,13 @@ module.exports = Backbone.View.extend({
           .datum(data)
           .transition().duration(350)
           .call(chart);
+        d3.select(selector).select('.nv-pieLabels').selectAll('text')[0].forEach(function (element) {
+            if (element.textContent.length > 0 && element.textContent.lastIndexOf("%")) {
+                element.textContent = "%" + element.textContent.substring(0, element.textContent.length - 1);
+            }
+        });
 
-      return chart;
+        return chart;
     });
 
   },

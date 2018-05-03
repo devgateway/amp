@@ -342,6 +342,12 @@ public class FieldsEnumerator {
         visit(AmpContact.class, visitor, new VisitorContext());
         return visitor.fields;
     }
+    
+    public List<String> findResourceFieldPaths(Predicate<Field> fieldFilter) {
+        FieldNameCollectingVisitor visitor = new FieldNameCollectingVisitor(fieldFilter);
+        visit(AmpResource.class, visitor, new VisitorContext());
+        return visitor.fields;
+    }
 
     private class FieldNameCollectingVisitor implements InterchangeVisitor {
 

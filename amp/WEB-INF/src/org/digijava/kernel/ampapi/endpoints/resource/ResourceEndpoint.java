@@ -8,14 +8,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.digijava.kernel.ampapi.endpoints.activity.APIField;
@@ -101,38 +99,81 @@ public class ResourceEndpoint implements ErrorReportingEndpoint {
     }
     
     /**
-     * Retrieve resource.
+     * Retrieve resource by uuid.
+     * 
+     * <h3>Sample response:</h3><pre>
+     *  {
+     *     "uuid": "05a2f2d4-58f5-4198-8a05-cf42a758ce85",
+     *     "title": "fda",
+     *     "file_name": null,
+     *     "web_link": "https://www.postgresql.org/docs/9.2/static/sql-createcast.html",
+     *     "description": "fdas",
+     *     "note": "fda",
+     *     "type": 50,
+     *     "url": "/contentrepository/downloadFile.do?uuid=05a2f2d4-58f5-4198-8a05-cf42a758ce85",
+     *     "year_of_publication": "2002",
+     *     "adding_date": "2018-05-03T15:03:40.607+0300",
+     *     "file_size": 0,
+     *     "public": false,
+     *     "private": true,
+     *     "creator_email": "atl@amp.org",
+     *     "team": null,
+     *     "team_member": 14
+     *  }
+     *  </pre>
      * @param uuid resource uuid
      */
     @GET
     @Path("{uuid}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getResource", ui = false)
-    public JsonBean getResource(@Context HttpServletRequest request, @PathParam("uuid") String uuid) {
-        return ResourceUtil.getResource(request, uuid);
+    public JsonBean getResource(@PathParam("uuid") String uuid) {
+        return ResourceUtil.getResource(uuid);
     }
     
     /**
-     * Retrieve all resources.
+     * Retrieve all resources from AMP.
+     * 
+     * @return list of resources
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getAllResources", ui = false)
-    public List<JsonBean> getAllResources(@Context HttpServletRequest request) {
-        return ResourceUtil.getAllResources(request);
+    public List<JsonBean> getAllResources() {
+        return ResourceUtil.getAllResources();
+    }
+    
+    /**
+     * Retrieve resources from AMP.
+     * 
+     * <h3>Sample request:</h3><pre>
+     *  ["02af826a-d89e-4f7b-a30b-0a79630d2151", 
+     *  "66434e33-d8db-4787-93e6-be09ae828de4", 
+     *  "bb5cfc4a-9399-4afa-bef2-4a0e74c4a728"
+     *  ]
+     * </pre>
+     * 
+     * @param uuids the list of uuids
+     * @return list of resources
+     */
+    @POST
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getAllResourcesByIds", ui = false)
+    public List<JsonBean> getAllResources(List<String> uuids) {
+        return ResourceUtil.getAllResources(uuids);
     }
 
     /**
      * Create new resource.
      * @param resource the resource to create
-     * @return brief representation of contact
+     * @return brief representation of resource
      */
     @PUT
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "createResource", ui = false)
-    public JsonBean createResource(@Context HttpServletRequest request, JsonBean resource) {
+    public JsonBean createResource(JsonBean resource) {
         ResourceImporter importer = new ResourceImporter();
-        List<ApiErrorMessage> errors = importer.createResource(request, resource);
+        List<ApiErrorMessage> errors = importer.createResource(resource);
         return ResourceUtil.getImportResult(importer.getResource(), importer.getNewJson(), errors);
     }
 

@@ -1,23 +1,25 @@
 package org.digijava.kernel.ampapi.endpoints.resource;
 
-import static java.util.Collections.singletonList;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import javax.jcr.Node;
+import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
-import javax.servlet.http.HttpServletRequest;
+import javax.jcr.Session;
+import javax.jcr.query.Query;
+import javax.jcr.query.QueryManager;
 
-import org.apache.commons.lang3.StringUtils;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 
@@ -29,12 +31,12 @@ import com.google.common.cache.CacheBuilder;
 public final class ResourceUtil {
     
     /** the maximum number of minutes to keep a list of public documents in memory after generation */
-    public final static int ENTRY_EXPIRATION_MINUTES = 10;
+    public static final int ENTRY_EXPIRATION_MINUTES = 10;
     
     /** the maximum number of sessions to keep in cache */
-    public final static int MAXIMUM_CACHE_SIZE = 10;
+    public static final int MAXIMUM_CACHE_SIZE = 10;
     
-    protected final static Map<String, List<String>> PUBLIC_RESOURCES_MAP = (Map) CacheBuilder.newBuilder().softValues()
+    protected static final Map<String, List<String>> PUBLIC_RESOURCES_MAP = (Map) CacheBuilder.newBuilder().softValues()
             .maximumSize(MAXIMUM_CACHE_SIZE)
             .expireAfterWrite(ENTRY_EXPIRATION_MINUTES, TimeUnit.MINUTES)
             .build().asMap();
@@ -65,28 +67,12 @@ public final class ResourceUtil {
         return result;
     }
 
-    public static JsonBean getResource(HttpServletRequest request, String uuid) {
+    public static JsonBean getResource(String uuid) {
         
         AmpResource resource = new AmpResource();
-        Node readNode = DocumentManagerUtil.getReadNode(uuid, request);
-        
-        if (readNode == null) {
-            return ApiError.toError(ResourceErrors.RESOURCE_NOT_FOUND);
-        }
-        
-        try {
-            if(!readNode.isNodeType("mix:referenceable")) {
-                return null;
-            }
-        } catch (RepositoryException e) {
-            return ApiError.toError(ResourceErrors.RESOURCE_ERROR, e);
-        }
+        Node readNode = DocumentManagerUtil.getReadNode(uuid, TLSUtils.getRequest());
         
         NodeWrapper nodeWrapper = new NodeWrapper(readNode);
-        if (isNodeEmpty(nodeWrapper)) {
-            return null;
-        }
-        
         resource.setUuid(nodeWrapper.getUuid());
         resource.setTitle(nodeWrapper.getTitle());
         resource.setDescription(nodeWrapper.getDescription());
@@ -99,7 +85,7 @@ public final class ResourceUtil {
         resource.setFileSize(nodeWrapper.getFileSizeInMegabytes());
         resource.setCreatorEmail(nodeWrapper.getCreator());
         resource.setYearOfPublication(nodeWrapper.getYearOfPublication());
-        resource.setPublic(getPublicResources(request).contains(uuid));
+        resource.setPublic(getPublicResources().contains(uuid));
         
         try {
             if (isPrivate(nodeWrapper)) {
@@ -113,7 +99,7 @@ public final class ResourceUtil {
             return ApiError.toError(ResourceErrors.RESOURCE_ERROR, e);
         }
 
-        DocumentManagerUtil.logoutJcrSessions(request);
+        DocumentManagerUtil.logoutJcrSessions(TLSUtils.getRequest());
         
         return new ResourceExporter().export(resource);
     }
@@ -122,50 +108,86 @@ public final class ResourceUtil {
         return nodeWrapper.getNode().getPath().contains(PRIVATE_PATH_ITEM);
     }
 
-    private static boolean isNodeEmpty(NodeWrapper nodeWrapper) {
-        return StringUtils.isBlank(nodeWrapper.getTitle()) && StringUtils.isBlank(nodeWrapper.getCreator());
-    }
-
     /**
      * Get all resources from AMP
      * 
      * @param request
      * @return
      */
-    public static List<JsonBean> getAllResources(HttpServletRequest request) {
+    public static List<JsonBean> getAllResources() {
         List<JsonBean> resources = new ArrayList<>();
         List<String> resourceUuids = getAllNodeUuids();
         
-        for(String uuid : resourceUuids) {
-            resources.add(getResource(request, uuid));
+        for (String uuid : resourceUuids) {
+            resources.add(getResource(uuid));
         }
         
-        resources.removeAll(singletonList(null));
+        return resources;
+    }
+    
+    /**
+     * Get resources 
+     * 
+     * @param uuids the list of uuids
+     * @return
+     */
+    public static List<JsonBean> getAllResources(List<String> uuids) {
+        List<JsonBean> resources = new ArrayList<>();
+        
+        for (String uuid : uuids) {
+            resources.add(getResource(uuid));
+        }
         
         return resources;
     }
 
     /**
-     * Retrieve all uuids from database
+     * Retrieve all uuids
      * 
      * @return list of node uuids
      */
-    private static List<String> getAllNodeUuids() {
+    public static List<String> getAllNodeUuids() {
         List<String> nodeUuids = new ArrayList<>();
-        String query = "SELECT node_id FROM reppm_node";
-        
-        PersistenceManager.doWorkInTransaction(connection -> {
-            nodeUuids.addAll(SQLUtils.fetchStrings(connection, query));
-        });
+        nodeUuids.addAll(getPrivateUuids());
+        nodeUuids.addAll(getTeamUuids());
         
         return nodeUuids;
     }
     
-    private static List<String> getPublicResources(HttpServletRequest request) {
-        return PUBLIC_RESOURCES_MAP.putIfAbsent(request.getSession().getId(), getPublicResources());
+    private static List<? extends String> getPrivateUuids() {
+        return getUuidsFromPath("private");
+    }
+    
+    private static List<String> getTeamUuids() {
+        return getUuidsFromPath("team");
+    }
+    
+    private static List<String> getUuidsFromPath(String path) {
+        Session session = DocumentManagerUtil.getReadSession(TLSUtils.getRequest());
+        List<String> uuids = new ArrayList<>();
+        try {
+            QueryManager queryManager = session.getWorkspace().getQueryManager();
+            Query query = queryManager.createQuery(String.format("SELECT * FROM nt:base WHERE %s "
+                    + "IS NOT NULL AND jcr:path LIKE '/%s/%%/'", CrConstants.PROPERTY_CREATOR, path), Query.SQL);
+            NodeIterator nodes = query.execute().getNodes();
+            while (nodes.hasNext()) {
+                uuids.add(nodes.nextNode().getIdentifier());
+            }
+        } catch (RepositoryException e) {
+            throw new RuntimeException(e);
+        }
+ 
+        return uuids;
     }
     
     private static List<String> getPublicResources() {
+        String sessionId = TLSUtils.getRequest().getSession().getId();
+        PUBLIC_RESOURCES_MAP.putIfAbsent(sessionId, getPublicResourcesFromDb());
+        
+        return PUBLIC_RESOURCES_MAP.get(sessionId);
+    }
+    
+    private static List<String> getPublicResourcesFromDb() {
         List<String> publicDocs = new ArrayList<>();
         String query = "SELECT uuid FROM cr_document_node_attributes";
         

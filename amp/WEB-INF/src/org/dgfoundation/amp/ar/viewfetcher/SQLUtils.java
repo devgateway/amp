@@ -253,12 +253,11 @@ public class SQLUtils {
      */
     public static List<String> fetchStrings(Connection connection, String query) {
         List<String> res = new ArrayList<>();
-        try(RsInfo rsi = rawRunQuery(connection, query, null)) {
+        try (RsInfo rsi = rawRunQuery(connection, query, null)) {
             while (rsi.rs.next()) {
                 res.add(rsi.rs.getString(1));
             }
-        }
-        catch(SQLException ex) {
+        } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
         

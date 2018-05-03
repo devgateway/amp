@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.struts.action.ActionMessages;
 import org.digijava.kernel.ampapi.endpoints.activity.APIField;
@@ -15,6 +13,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
@@ -30,11 +29,11 @@ public class ResourceImporter extends ObjectImporter {
         super(AmpResource.class, new InputValidatorProcessor(InputValidatorProcessor.getResourceValidators()));
     }
 
-    public List<ApiErrorMessage> createResource(HttpServletRequest request, JsonBean newJson) {
-        return importResource(request, null, newJson);
+    public List<ApiErrorMessage> createResource(JsonBean newJson) {
+        return importResource(null, newJson);
     }
 
-    private List<ApiErrorMessage> importResource(HttpServletRequest request, Long resourceId, JsonBean newJson) {
+    private List<ApiErrorMessage> importResource(Long resourceId, JsonBean newJson) {
         this.newJson = newJson;
 
         List<APIField> fieldsDef = AmpFieldsEnumerator.PRIVATE_ENUMERATOR.getResourceFields();
@@ -49,7 +48,7 @@ public class ResourceImporter extends ObjectImporter {
             
             ActionMessages messages = new ActionMessages();
             TemporaryDocumentData tdd = getTemporaryDocumentData(resource);
-            NodeWrapper node = tdd.saveToRepository(request, messages);
+            NodeWrapper node = tdd.saveToRepository(TLSUtils.getRequest(), messages);
             
             resource.setUuid(node.getUuid());
         } catch (ObjectConversionException | RuntimeException e) {

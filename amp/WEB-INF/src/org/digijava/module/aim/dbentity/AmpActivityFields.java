@@ -520,9 +520,9 @@ LoggerIdentifiable, Cloneable {
 //  @Validators (unique="/Activity Form/M&E/Unique MEs Validator")
     protected Set<IndicatorActivity> indicators;
 
-//  @Interchangeable(fieldTitle = "Activity Documents",fmPath="/Activity Form/Related Documents")
+    @Interchangeable(fieldTitle = "Activity Documents", fmPath = "/Activity Form/Related Documents", importable = true)
     @VersionableCollection(fieldTitle = "Activity Documents")
-    protected Set<AmpActivityDocument> activityDocuments    = null;
+    protected Set<AmpActivityDocument> activityDocuments = null;
     
     /* Categories */
     @Interchangeable(fieldTitle = "Categories", importable = true)

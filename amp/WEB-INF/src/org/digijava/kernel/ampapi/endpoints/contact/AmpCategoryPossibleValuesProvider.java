@@ -41,7 +41,7 @@ public abstract class AmpCategoryPossibleValuesProvider extends PossibleValuesPr
 
     @Override
     public Long getIdOf(Object value) {
-        return null;
+        return value != null ? ((AmpCategoryValue) value).getId() : null;
     }
 
     @Override

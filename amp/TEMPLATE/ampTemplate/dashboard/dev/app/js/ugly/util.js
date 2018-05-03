@@ -40,14 +40,14 @@ var formatShortText = function(maxWidth) {
   };
 };
 var formatOfTotal = function(dividend, divisor,ofTotal) {
-var isRtl = app.generalSettings.attributes['rtl-direction'];
+    var isRtl = app.generalSettings.attributes['rtl-direction'];
 
     if (dividend > 0) {
         var number = d3.format('f')(divisor / dividend * 100);
         if (isRtl) {
-            ofTotal = ofTotal + ' &nbsp<span>' + '<b>% ' + number +'</b>';
+            ofTotal = ofTotal + ' &nbsp<span>' + '<b>% ' + number + '</b>';
         } else {
-            ofTotal = '<b>'+ number + ' %' + '</b>&nbsp<span>' + ofTotal;
+            ofTotal = '<b>' + number + ' %' + '</b>&nbsp<span>' + ofTotal;
         }
     }
     return ofTotal;

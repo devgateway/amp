@@ -29,6 +29,7 @@ import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
+import org.digijava.kernel.ampapi.endpoints.resource.AmpResource;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -76,6 +77,7 @@ public class InterchangeUtils {
     static {
         addUnderscoredTitlesToMap(AmpActivityFields.class);
         addUnderscoredTitlesToMap(AmpContact.class);
+        addUnderscoredTitlesToMap(AmpResource.class);
     }
 
     private static final ThreadLocal<SimpleDateFormat> DATE_FORMATTER = new ThreadLocal<SimpleDateFormat>();
@@ -133,27 +135,25 @@ public class InterchangeUtils {
      * @param clazz
      */
     private static void addUnderscoredTitlesToMap(Class<?> clazz) {
-        for (Field field : clazz.getDeclaredFields()) {
+        for (Field field : FieldUtils.getFieldsWithAnnotation(clazz, Interchangeable.class)) {
             Interchangeable ant = field.getAnnotation(Interchangeable.class);
-            if (ant != null) {
-                if (!isCompositeField(field))
-                {
-                    underscoreToTitleMap.put(underscorify(ant.fieldTitle()), ant.fieldTitle());
-                    titleToUnderscoreMap.put(ant.fieldTitle(), underscorify(ant.fieldTitle()));
-                } else {
-                    InterchangeableDiscriminator antd = field.getAnnotation(InterchangeableDiscriminator.class);
-                    Interchangeable[] settings = antd.settings();
-                    for (Interchangeable ants : settings) {
-                        underscoreToTitleMap.put(underscorify(ants.fieldTitle()), ants.fieldTitle());
-                        titleToUnderscoreMap.put(ants.fieldTitle(), underscorify(ants.fieldTitle()));
-                        discriminatorMap.put(ants.fieldTitle(), ant.fieldTitle());
-                        discriminatedFieldsByFieldTitle
-                                .computeIfAbsent(ant.fieldTitle(), z -> new ArrayList())
-                                .add(underscorify(ants.fieldTitle()));
-                    }
+            if (!isCompositeField(field)) {
+                underscoreToTitleMap.put(underscorify(ant.fieldTitle()), ant.fieldTitle());
+                titleToUnderscoreMap.put(ant.fieldTitle(), underscorify(ant.fieldTitle()));
+            } else {
+                InterchangeableDiscriminator antd = field.getAnnotation(InterchangeableDiscriminator.class);
+                Interchangeable[] settings = antd.settings();
+                for (Interchangeable ants : settings) {
+                    underscoreToTitleMap.put(underscorify(ants.fieldTitle()), ants.fieldTitle());
+                    titleToUnderscoreMap.put(ants.fieldTitle(), underscorify(ants.fieldTitle()));
+                    discriminatorMap.put(ants.fieldTitle(), ant.fieldTitle());
+                    discriminatedFieldsByFieldTitle
+                            .computeIfAbsent(ant.fieldTitle(), z -> new ArrayList())
+                            .add(underscorify(ants.fieldTitle()));
                 }
-                if (!isSimpleType(getClassOfField(field)) && !ant.pickIdOnly())
-                    addUnderscoredTitlesToMap(getClassOfField(field));
+            }
+            if (!isSimpleType(getClassOfField(field)) && !ant.pickIdOnly()) {
+                addUnderscoredTitlesToMap(getClassOfField(field));
             }
         }
     }
@@ -787,9 +787,10 @@ public class InterchangeUtils {
      * @return Field the instance of the field from the Class clazz
      */
     private static Field getField(Class<?> clazz, String fieldname) {
-        for (Field field: clazz.getDeclaredFields()) {
+        
+        for (Field field : FieldUtils.getFieldsWithAnnotation(clazz, Interchangeable.class)) {
             Interchangeable ant = field.getAnnotation(Interchangeable.class);
-            if (ant != null && fieldname.equals(ant.fieldTitle())) {
+            if (fieldname.equals(ant.fieldTitle())) {
                 return field;
             }
         }

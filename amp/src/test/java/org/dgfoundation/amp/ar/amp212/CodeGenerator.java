@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.ar.AllTests_amp212;
+import org.dgfoundation.amp.StandaloneAMPInitializer;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.codegenerators.ActivityTitlesGenerator;
 import org.dgfoundation.amp.codegenerators.CategoriesTreeGenerator;
@@ -190,8 +190,7 @@ delete from amp_activities_categoryvalues where amp_activity_id NOT IN (select a
      * @throws IOException
      */
     public static void main(String[] args)  throws AMPException, IOException {
-        AllTests_amp212.configureLog4j();
-        AllTests_amp212.setUp();
+        StandaloneAMPInitializer.initialize();
         new CodeGenerator().generateCode();
     }
 }

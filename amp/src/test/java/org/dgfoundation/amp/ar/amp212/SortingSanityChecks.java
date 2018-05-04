@@ -1,33 +1,19 @@
 package org.dgfoundation.amp.ar.amp212;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
-import org.dgfoundation.amp.algo.AlgoUtils;
-import org.dgfoundation.amp.algo.ExceptionRunnable;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.mondrian.ReportAreaForTests;
 import org.dgfoundation.amp.mondrian.ReportingTestCase;
 import org.dgfoundation.amp.newreports.AreaOwner;
-import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
-import org.dgfoundation.amp.newreports.NamedTypedEntity;
-import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportMeasure;
-import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
-import org.dgfoundation.amp.nireports.GrandTotalsDigest;
-import org.dgfoundation.amp.nireports.TrailCellsDigest;
-import org.dgfoundation.amp.nireports.output.NiReportOutputBuilder;
-import org.dgfoundation.amp.nireports.output.NiReportsFormatter;
 import org.dgfoundation.amp.nireports.testcases.NiReportModel;
-import org.dgfoundation.amp.nireports.testcases.ReportModelGenerator;
-import org.dgfoundation.amp.testutils.AmpTestCase;
-import org.dgfoundation.amp.testutils.ReportsTestCase;
 import org.junit.Test;
 
 /**
@@ -38,10 +24,6 @@ import org.junit.Test;
  */
 public abstract class SortingSanityChecks extends ReportingTestCase {
             
-    public SortingSanityChecks(String name) {
-        super(name);
-    }
-    
     final List<String> acts = Arrays.asList(
             "activity 1 with agreement",
             "Activity 2 with multiple agreements",

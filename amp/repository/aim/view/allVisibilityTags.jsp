@@ -37,6 +37,7 @@
 <module:display name="Document" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Funding" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Pledges" parentModule="PROJECT MANAGEMENT"/>
+<module:display name="AMP Offline" parentModule="PROJECT MANAGEMENT"/>
 <module:display name="/GIS"></module:display>
 
 <module:display  name="/Dashboards"></module:display>
@@ -307,7 +308,7 @@
 <field:display feature="Edit Activity" name="Edit Activity Button"></field:display> 
 <field:display feature="Edit Activity" name="Validate Activity Button"></field:display> 
 <field:display feature="Funding Information" name="Type Of Assistance"></field:display>
-<field:display feature="Funding Information" name="Capital - Expenditure"></field:display>
+<field:display feature="Funding Information" name="Capital Expenditure"></field:display>
 <field:display feature="Funding Information" name="Payment Capital - Recurrent"></field:display>
 <field:display feature="Funding Information" name="Agreement Title + Code"></field:display>
 <field:display feature="Funding Information" name="Agreement Code"></field:display>
@@ -1093,6 +1094,8 @@ deleted 6 fields, do not reinsert
 <module:display name="Home Page Menu Entry" parentModule="PUBLIC VIEW"></module:display>
 
 <feature:display name="Show Printer Friendly option" module="Public Reports"></feature:display>
+
+<module:display name="Public AMP Offline" parentModule="PUBLIC VIEW"></module:display>
 <!--  -->
 
 <field:display name="Donor Contract Fundin" feature="Contracting"></field:display> 

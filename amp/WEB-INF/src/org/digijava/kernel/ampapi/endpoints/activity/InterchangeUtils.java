@@ -34,6 +34,7 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.SiteUtils;
+import org.digijava.module.aim.annotations.activityversioning.ResourceTextField;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
@@ -309,6 +310,10 @@ public class InterchangeUtils {
     public static boolean isVersionableTextField(Field field) {
         return field.getAnnotation(VersionableFieldTextEditor.class) != null;
     }
+    
+    public static boolean isResourceTextField(Field field) {
+        return field.getAnnotation(ResourceTextField.class) != null;
+    }
 
     public static JsonBean getActivityByAmpId(String ampId) {
         Long activityId = ActivityUtil.findActivityIdByAmpId(ampId);
@@ -368,15 +373,18 @@ public class InterchangeUtils {
      * @param fieldValue 
      * @param parentObject is the parent that contains the object in order to retrieve translations throu parent object id
      * @return object with the translated values
+     * @throws NoSuchFieldException 
      */
-    public static Object getTranslationValues(Field field, Class<?> clazz, Object fieldValue, Long parentObjectId) throws NoSuchMethodException, 
-            SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, EditorException {
+    public static Object getTranslationValues(Field field, Class<?> clazz, Object fieldValue, Object parentObject) 
+            throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, 
+            InvocationTargetException, EditorException, NoSuchFieldException {
         
         TranslationSettings translationSettings = TranslationSettings.getCurrent();
         
         // check if this is translatable field
         boolean isTranslatable = translationSettings.isTranslatable(field);
         boolean isEditor = InterchangeUtils.isVersionableTextField(field);
+        boolean isResource = InterchangeUtils.isResourceTextField(field);
         
         // provide map for translatable fields
         if (isTranslatable) {
@@ -391,8 +399,11 @@ public class InterchangeUtils {
                     fieldTrnValues.put(translation, getJsonStringValue(translatedText));
                 }
                 return fieldTrnValues;
+            } else if (isResource) {
+                return loadTranslationsForResourceField(field, parentObject, translationSettings);
             } else {
-                return loadTranslationsForField(clazz, field.getName(), fieldText, parentObjectId, translationSettings.getTrnLocaleCodes());
+                return loadTranslationsForField(clazz, field.getName(), fieldText, parentObject, 
+                        translationSettings.getTrnLocaleCodes());
             }
         }
         
@@ -626,8 +637,8 @@ public class InterchangeUtils {
         return id;
     }
 
-    private static Object loadTranslationsForField(Class<?> clazz, String propertyName, String fieldValue, Long id,
-            Set<String> languages) {
+    private static Object loadTranslationsForField(Class<?> clazz, String propertyName, String fieldValue, 
+            Object parentObject, Set<String> languages) {
         
         Map<String, String> translations = new LinkedHashMap<>();
         TranslationSettings translationSettings = TranslationSettings.getDefault();
@@ -636,6 +647,7 @@ public class InterchangeUtils {
         for (String l : languages) {
             translations.put(l, null);
         }
+        Long id = parentObject instanceof Long ? (Long) parentObject : InterchangeUtils.getId(parentObject);
         
         if (id == null)
             return translations; 
@@ -650,6 +662,31 @@ public class InterchangeUtils {
         translations.putIfAbsent(defLangCode, fieldValue);
         
         return translations;
+    }
+    
+    /**
+     * @param field
+     * @param parentObject
+     * @param translationSettings
+     * @return translations
+     * @throws NoSuchFieldException
+     * @throws IllegalAccessException
+     */
+    private static Map<String, Object> loadTranslationsForResourceField(Field field, Object parentObject,
+            TranslationSettings translationSettings) throws NoSuchFieldException, IllegalAccessException {
+        
+        Map<String, Object> fieldTrnValues = new HashMap<String, Object>();
+        AmpResource resource = (AmpResource) parentObject;
+        ResourceTextField resourceAnnotation = field.getAnnotation(ResourceTextField.class);
+        Field translationsField = resource.getClass().getDeclaredField(resourceAnnotation.translations());
+        translationsField.setAccessible(true);
+        
+        Map<String, String> resourceTranslations = (Map<String, String>) translationsField.get(resource);
+        for (String translation : translationSettings.getTrnLocaleCodes()) {
+            fieldTrnValues.put(translation, resourceTranslations.get(translation));
+        }
+        
+        return fieldTrnValues;
     }
     
     protected static SimpleDateFormat getDateFormatter() {

@@ -38,7 +38,7 @@ public abstract class ObjectExporter<T> {
                 readFieldValue(field, object, object, resultJson, null, new FEContext());
             } catch (IllegalArgumentException | IllegalAccessException
                     | NoSuchMethodException | SecurityException
-                    | InvocationTargetException | EditorException e) {
+                    | InvocationTargetException | EditorException | NoSuchFieldException e) {
                 throw new RuntimeException(String.format("Couldn't convert object %s to json.", object), e);
             }
         }
@@ -58,10 +58,11 @@ public abstract class ObjectExporter<T> {
      * @param resultJson result JSON object which will be filled with the values of the fields
      * @param fieldPath the underscorified path to the field currently exported
      * @return
+     * @throws NoSuchFieldException 
      */
     private void readFieldValue(Field field, Object fieldInstance, Object parentObject, JsonBean resultJson,
             String fieldPath, FEContext context) throws IllegalArgumentException, IllegalAccessException,
-            NoSuchMethodException, SecurityException, InvocationTargetException, EditorException {
+            NoSuchMethodException, SecurityException, InvocationTargetException, EditorException, NoSuchFieldException {
 
         Interchangeable interchangeable = field.getAnnotation(Interchangeable.class);
 
@@ -98,9 +99,8 @@ public abstract class ObjectExporter<T> {
                         if (InterchangeableClassMapper.containsSupportedClass(field.getType()) || fieldValue == null) {
                             Class<? extends Object> parentClassName =
                                     parentObject == null ? field.getDeclaringClass() : parentObject.getClass();
-                            Long id = InterchangeUtils.getId(parentObject);
-                            Object values =
-                                    InterchangeUtils.getTranslationValues(field, parentClassName, fieldValue, id);
+                            Object values = InterchangeUtils.getTranslationValues(field, parentClassName, fieldValue, 
+                                    parentObject);
                             resultJson.set(fieldTitle, values);
                         } else {
                             Class<? extends PossibleValuesProvider> providerClass =
@@ -134,10 +134,11 @@ public abstract class ObjectExporter<T> {
      * @param item
      * @param fieldPath the underscorified path to the field currently exported
      * @return itemJson object JSON containing the value of the item
+     * @throws NoSuchFieldException 
      */
     private JsonBean getObjectJson(Object item, String fieldPath, FEContext context)
             throws IllegalArgumentException, IllegalAccessException,
-            NoSuchMethodException, SecurityException, InvocationTargetException, EditorException {
+            NoSuchMethodException, SecurityException, InvocationTargetException, EditorException, NoSuchFieldException {
 
         JsonBean itemJson = new JsonBean();
         Field[] itemFields = FieldUtils.getAllFields(item.getClass());
@@ -158,10 +159,11 @@ public abstract class ObjectExporter<T> {
      * @param fieldInstance the object of the field
      * @param resultJson object JSON containing the value of the item
      * @param fieldPath the underscorified path to the field currently exported
+     * @throws NoSuchFieldException 
      */
     private void generateCompositeValues(Field field, Object object, String fieldPath,
             FEContext context, JsonBean resultJson) throws IllegalArgumentException, IllegalAccessException,
-            NoSuchMethodException, SecurityException, InvocationTargetException, EditorException {
+            NoSuchMethodException, SecurityException, InvocationTargetException, EditorException, NoSuchFieldException {
 
         Interchangeable interchangeable = field.getAnnotation(Interchangeable.class);
         InterchangeableDiscriminator discriminator = field.getAnnotation(InterchangeableDiscriminator.class);

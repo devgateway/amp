@@ -1,8 +1,10 @@
 package org.digijava.kernel.ampapi.endpoints.resource;
 
 import java.util.Date;
+import java.util.Map;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
+import org.digijava.module.aim.annotations.activityversioning.ResourceTextField;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -18,6 +20,7 @@ public class AmpResource {
     private String uuid;
     
     @Interchangeable(fieldTitle = "Title", importable = true, required = ActivityEPConstants.REQUIRED_ALWAYS)
+    @ResourceTextField(fieldTitle = "Title", translations = "translatedTitles")
     private String title;
     
     @Interchangeable(fieldTitle = "File Name")
@@ -27,9 +30,11 @@ public class AmpResource {
     private String webLink;
     
     @Interchangeable(fieldTitle = "Description", importable = true)
+    @ResourceTextField(fieldTitle = "Description", translations = "translatedDescriptions")
     private String description;
     
     @Interchangeable(fieldTitle = "Note", importable = true)
+    @ResourceTextField(fieldTitle = "Note", translations = "translatedNotes")
     private String note;
     
     @PossibleValues(ResourceTypePossibleValuesProvider.class)
@@ -62,6 +67,10 @@ public class AmpResource {
     
     @Interchangeable(fieldTitle = "Team Member")
     private Long teamMember;
+    
+    private Map<String, String> translatedTitles;
+    private Map<String, String> translatedDescriptions;
+    private Map<String, String> translatedNotes;
     
     public String getUuid() {
         return uuid;
@@ -189,6 +198,30 @@ public class AmpResource {
 
     public void setTeamMember(Long teamMember) {
         this.teamMember = teamMember;
+    }
+
+    public Map<String, String> getTranslatedTitles() {
+        return translatedTitles;
+    }
+
+    public void setTranslatedTitles(Map<String, String> translatedTitles) {
+        this.translatedTitles = translatedTitles;
+    }
+
+    public Map<String, String> getTranslatedDescriptions() {
+        return translatedDescriptions;
+    }
+
+    public void setTranslatedDescriptions(Map<String, String> translatedDescriptions) {
+        this.translatedDescriptions = translatedDescriptions;
+    }
+
+    public Map<String, String> getTranslatedNotes() {
+        return translatedNotes;
+    }
+
+    public void setTranslatedNotes(Map<String, String> translatedNotes) {
+        this.translatedNotes = translatedNotes;
     }
     
 }

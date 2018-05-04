@@ -12,7 +12,9 @@ import javax.jcr.Session;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -56,12 +58,20 @@ public final class ResourceUtil {
         } else {
             result = new JsonBean();
             result.set(ResourceEPConstants.UUID, resource.getUuid());
-            result.set(ResourceEPConstants.TITLE, resource.getTitle());
-            result.set(ResourceEPConstants.DESCRIPTION, resource.getDescription());
+            if (TranslationSettings.getCurrent().isMultilingual()) {
+                result.set(ResourceEPConstants.TITLE, resource.getTranslatedTitles());
+                result.set(ResourceEPConstants.DESCRIPTION, resource.getTranslatedDescriptions());
+                result.set(ResourceEPConstants.NOTE, resource.getTranslatedNotes());
+            } else {
+                result.set(ResourceEPConstants.TITLE, resource.getTitle());
+                result.set(ResourceEPConstants.DESCRIPTION, resource.getDescription());
+                result.set(ResourceEPConstants.NOTE, resource.getNote());
+            }
+            
             result.set(ResourceEPConstants.TYPE, resource.getType().getId());
-            result.set(ResourceEPConstants.NOTE, resource.getNote());
             result.set(ResourceEPConstants.WEB_LINK, resource.getWebLink());
-            result.set(ResourceEPConstants.ADDING_DATE, resource.getAddingDate());
+            result.set(ResourceEPConstants.ADDING_DATE, 
+                    DateFormatUtils.ISO_DATETIME_TIME_ZONE_FORMAT.format(resource.getAddingDate()));
         }
         
         return result;
@@ -86,6 +96,10 @@ public final class ResourceUtil {
         resource.setCreatorEmail(nodeWrapper.getCreator());
         resource.setYearOfPublication(nodeWrapper.getYearOfPublication());
         resource.setPublic(getPublicResources().contains(uuid));
+        
+        resource.setTranslatedTitles(nodeWrapper.getTranslatedTitle());
+        resource.setTranslatedDescriptions(nodeWrapper.getTranslatedDescription());
+        resource.setTranslatedNotes(nodeWrapper.getTranslatedNote());
         
         try {
             if (isPrivate(nodeWrapper)) {

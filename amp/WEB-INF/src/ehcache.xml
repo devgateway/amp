@@ -191,6 +191,14 @@
 		maxElementsOnDisk="1000"
 		statistics="true"		
 		/>
-		
+
+	<cache
+		name="org.digijava.kernel.ampapi.endpoints.activity.AmpPossibleValuesDAO"
+		maxElementsInMemory="50"
+		overflowToDisk="false"
+		diskPersistent="false"
+		statistics="true"
+		/>
+
     <!-- See http://ehcache.sourceforge.net/documentation/#mozTocId258426 for how to configure caching for your objects -->
 </ehcache>

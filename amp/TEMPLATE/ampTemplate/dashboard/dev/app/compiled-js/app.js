@@ -3437,6 +3437,7 @@ module.exports = BackboneDash.Collection.extend({
 var d3 = require('d3');
 var ChartViewBase = require('./chart-view-base');
 var _ = require('underscore');
+var util = require('../../ugly/util');
 
 
 module.exports = ChartViewBase.extend({
@@ -3496,16 +3497,14 @@ module.exports = ChartViewBase.extend({
     var header = context.x.raw + ' ' +
           app.translator.translateSync('amp.dashboard:aid-predictability-' +
           context.data[index].originalKey + '-' + this.model.get('measure'), '');
+    var ofTotal = of + ' '  + context.x.raw + ' ' + total;
 
     var otherSeries = context.data[1 - index];  // WARNING: assumes only 2 series
     var otherHere = otherSeries.values[context.x.index];
-    var line2Amount = 0;
-    if (otherHere.y > 0) {
-      line2Amount = context.y.raw / otherHere.y;
-    }
-    var line2 = '<b>' + d3.format('f')(line2Amount * 100) +
-        ' %</b>&nbsp<span>' + of + '</span>&nbsp' + context.x.raw +
-        '&nbsp<span>' + total + '</span>';
+
+    var line2 = util.formatOfTotal(context.y.raw, otherHere.y, ofTotal);
+
+
     var self = this;
     var currencyName = app.settingsWidget.definitions.findCurrencyById(self.model.get('currency')).value; 
     return {tt: {
@@ -3517,10 +3516,11 @@ module.exports = ChartViewBase.extend({
 
 });
 
-},{"./chart-view-base":32,"d3":"d3","underscore":"underscore"}],28:[function(require,module,exports){
+},{"../../ugly/util":45,"./chart-view-base":32,"d3":"d3","underscore":"underscore"}],28:[function(require,module,exports){
 var d3 = require('d3');
 var ChartViewBase = require('./chart-view-base');
 var _ = require('underscore');
+var util = require('../../ugly/util');
 
 
 module.exports = ChartViewBase.extend({
@@ -3580,17 +3580,16 @@ module.exports = ChartViewBase.extend({
     });
     
     var totalForYear = this.model.get('yearTotals') ? this.model.get('yearTotals')[context.x.raw ] : null;
-    var d3FormatTotal = '', totalSpan = '';
-    if(totalForYear && totalForYear != 0){
-    	d3FormatTotal = d3.format('f')(context.y.raw / totalForYear * 100) + ' %';
-        totalSpan = ' &nbsp<span>' + total + '</span>';
-    }
+    var totalSpan = ' &nbsp<span>' + total + '</span>';
+    var ofTotal =  of + '</span>&nbsp' + context.x.raw + totalSpan;
+    var footerText =  util.formatOfTotal(context.y.raw,totalForYear,ofTotal);
+
     var self = this;
     var currencyName =  app.settingsWidget.definitions.findCurrencyById(self.model.get('currency')).value;  
     return {tt: {
       heading: context.x.raw + ' ' + activeTooltipTitles[context.series.index].key,
       bodyText: '<b>' + context.y.fmt + '</b> ' + currencyName + ' (' + units + ')',
-      footerText: '<b>' + d3FormatTotal + '</b>&nbsp<span>' + of + '</span>&nbsp' + context.x.raw + totalSpan
+      footerText: footerText + '</span>'
     }};
   },
 
@@ -3603,7 +3602,7 @@ module.exports = ChartViewBase.extend({
 
 });
 
-},{"./chart-view-base":32,"d3":"d3","underscore":"underscore"}],29:[function(require,module,exports){
+},{"../../ugly/util":45,"./chart-view-base":32,"d3":"d3","underscore":"underscore"}],29:[function(require,module,exports){
 var d3 = require('d3');
 var ChartViewBase = require('./chart-view-base');
 var ModalView = require('./chart-tops-info-modal');
@@ -3707,6 +3706,8 @@ var d3 = require('d3');
 var ChartViewBase = require('./chart-view-base');
 var ModalView = require('./chart-tops-info-modal');
 var _ = require('underscore');
+var util = require('../../ugly/util');
+
 
 module.exports = ChartViewBase.extend({
 
@@ -3739,24 +3740,16 @@ module.exports = ChartViewBase.extend({
 	var ofTotal = app.translator.translateSync("amp.dashboard:of-total","of total");
 	var units = app.translator.translateSync(app.generalSettings.numberDividerDescription);
     var self = this;
-    var isRtl = app.generalSettings.attributes['rtl-direction'];
-
+    
     var currencyName =  app.settingsWidget.definitions.findCurrencyById(self.model.get('currency')).value;
-    var number = "";
-    if ( context.y.raw > 0) {
-        number = d3.format('f')(context.y.raw / this.model.get('totalPositive') * 100);
-        if (isRtl) {
-            number = '% ' + number;
-        } else {
-            number = number + ' %';
-        }
-    }
-    var percentage = number  + '</b>&nbsp<span>' + ofTotal;
+      var ofTotal = app.translator.translateSync("amp.dashboard:of-total", "of total");
+
+    var percentage = util.formatOfTotal(context.y.raw,this.model.get('totalPositive'), ofTotal);
 
     return {tt: {
       heading: context.x.raw,
       bodyText: '<b>' + context.y.fmt + '</b> ' + currencyName + ' (' + units + ')',
-      footerText: '<b>' + percentage + '</span>'
+      footerText:  percentage + '</span>'
     }};
   },
 
@@ -3785,7 +3778,7 @@ module.exports = ChartViewBase.extend({
 
 });
 
-},{"./chart-tops-info-modal":30,"./chart-view-base":32,"d3":"d3","underscore":"underscore"}],32:[function(require,module,exports){
+},{"../../ugly/util":45,"./chart-tops-info-modal":30,"./chart-view-base":32,"d3":"d3","underscore":"underscore"}],32:[function(require,module,exports){
 
 var Deferred = require('jquery').Deferred;
 var _ = require('underscore');
@@ -4408,6 +4401,12 @@ module.exports = BackboneDash.View.extend({
 			        nv.tooltip.cleanup();
 			        if (rendered === false) {
 			        	rendered = true;
+                        if (self.model.get('chartType') === 'fragmentation') {
+                            var svg = $($($(chart)[0].el).find("svg"))[0].getBBox();
+                            this.dashChartOptions.height = svg.height + 100;
+                            this.dashChartOptions.width = svg.width + 80;
+                        }
+
 			        	self.renderChart(self.$('.preview-area .svg-wrap').removeClass('hidden'),
 			        		self.$('.preview-area .canvas-wrap'), self.chart);
 			        }
@@ -4415,7 +4414,6 @@ module.exports = BackboneDash.View.extend({
 			});
 		}
     }, 100);
-    
     return this;
   },
 
@@ -4425,11 +4423,7 @@ module.exports = BackboneDash.View.extend({
       this.app.viewFail(this, 'Chart export requires a modern web browser');
     }
     
-    if (self.model.get('chartType') === 'fragmentation') {
-    	var svg = $($($(chart)[0].el).find("svg"))[0].getBBox();
-	    this.dashChartOptions.height = svg.height + 100;
-	    this.dashChartOptions.width = svg.width + 80;
-    }
+
         
     var view = this.model.get('view'),
         data = this.model.get('processed'),
@@ -4438,11 +4432,11 @@ module.exports = BackboneDash.View.extend({
           _({}).extend(this.dashChartOptions, { height: this.dashChartOptions.height - 42 })).el;
 
     svgContainer.html(chartEl);
-
     this.prepareCanvas(canvas, this.dashChartOptions.height, this.dashChartOptions.width);
+    svgContainer.hide();
 
     this.chartToCanvas(chartEl, canvas, function() {
-      svgContainer.hide();
+
       var img = new Image();
       img.src = canvas.toDataURL('image/png');
       canvasContainer.html(img);
@@ -4558,15 +4552,34 @@ module.exports = BackboneDash.View.extend({
     var boundCB = _(cb).bind(this);
     window.setTimeout(function() {
       this.app.tryTo(function() {
-        canvg(canvas, svg.parentNode.innerHTML, { // note: svg.outerHTML breaks IE
-          offsetY: ((self.model.get('chartType') !== 'fragmentation') ? 42 : 65),
-          ignoreDimensions: true,
-          ignoreClear: true,
-          ignoreMouse: true,
-          renderCallback: boundCB
-        });
+          //before calling canvas we adjust the text if in rtl mode
+
+          if (this.isRtl) {
+              $('.preview-area .svg-wrap .nv-group .nv-bar text').each(function (index, element) {
+
+                  var NUMERIC_REGEXP = /[-]{0,1}[\d]*[\.]{0,1}[\d]+/;
+                  var STRING_REGEXP = /[^0-9.]/;
+                  if (this.textContent.match(NUMERIC_REGEXP) && this.textContent.match(STRING_REGEXP)) {
+                      var newText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                      newText.setAttributeNS(null, "x", parseFloat(element.getAttributeNS(null, "x")) - 20);
+                      newText.setAttributeNS(null, "y", element.getAttributeNS(null, "y"));
+                      var textNode = document.createTextNode(this.textContent.match(STRING_REGEXP)[0]);
+                      newText.appendChild(textNode);
+                      this.parentNode.appendChild(newText);
+                      this.textContent = this.textContent.match(NUMERIC_REGEXP)[0];
+                  }
+
+              });
+          }
+          canvg(canvas, svg.parentNode.innerHTML, { // note: svg.outerHTML breaks IE
+              offsetY: ((self.model.get('chartType') !== 'fragmentation') ? 42 : 65),
+              ignoreDimensions: true,
+              ignoreClear: true,
+              ignoreMouse: true,
+              renderCallback: boundCB
+          });
       }, this);
-    }.bind(this), 1500);  // we have to wait for stupid nvd3...
+    }.bind(this), 1500);  // we have to wait for nvd3 to load
   },
 
   renderCSV: function(csvContainer) {
@@ -4597,11 +4610,11 @@ module.exports = BackboneDash.View.extend({
               })
               .map(function (row) {
                   var trnAdjType = '';
+                  row.push(currency || '');
                   if (adjtype) {
                       trnAdjType = self.chart.$el.find('.ftype-options option:selected').text();
+                      row.push(trnAdjType);
                   }
-                  row.push(currency || '');
-                  row.push(trnAdjType);
                   return row;
               })
               .value();
@@ -8481,6 +8494,19 @@ var formatShortText = function(maxWidth) {
     return text;
   };
 };
+var formatOfTotal = function(dividend, divisor,ofTotal) {
+    var isRtl = app.generalSettings.attributes['rtl-direction'];
+
+    if (dividend > 0) {
+        var number = d3.format('f')(divisor / dividend * 100);
+        if (isRtl) {
+            ofTotal = ofTotal + ' &nbsp<span>' + '<b>% ' + number + '</b>';
+        } else {
+            ofTotal = '<b>' + number + ' %' + '</b>&nbsp<span>' + ofTotal;
+        }
+    }
+    return ofTotal;
+}
 
 
 var categoryColours = function(cats) {
@@ -8608,15 +8634,16 @@ function calculateChartHeight(length, isDownload, model) {
 
 
 module.exports = {
-  formatKMB: formatKMB,
-  translateLanguage: translateLanguage,
-  formatShortText: formatShortText,
-  categoryColours: categoryColours,
-  u16le64: u16le64,
-  textAsDataURL: textAsDataURL,
-  transformArgs: transformArgs,
-  data: data,
-  calculateChartHeight: calculateChartHeight
+    formatKMB: formatKMB,
+    translateLanguage: translateLanguage,
+    formatShortText: formatShortText,
+    categoryColours: categoryColours,
+    u16le64: u16le64,
+    textAsDataURL: textAsDataURL,
+    transformArgs: transformArgs,
+    data: data,
+    calculateChartHeight: calculateChartHeight,
+    formatOfTotal: formatOfTotal
 };
 
 },{"d3":"d3"}],46:[function(require,module,exports){
@@ -23854,6 +23881,11 @@ module.exports = Backbone.Model.extend({
 var _ = require('underscore');
 var Backbone = require('backbone');
 module.exports = Backbone.Model.extend({
+    fetch: function (options) {
+        options = options || {};
+        options.cache = false;
+        return Backbone.Collection.prototype.fetch.call(this, options);
+    },
 	url: '/rest/amp/settings'
 });
 },{"backbone":"backbone","underscore":"underscore"}],56:[function(require,module,exports){
@@ -23927,7 +23959,7 @@ module.exports = Backbone.View.extend({
 var Backbone = require('backbone');
 require('bootstrap/dist/js/bootstrap');
 var _ = require('underscore');
-var Template = "<link rel=\"stylesheet\" href=\"/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/src/css/main.css\">\n<% if(currentLanguage.get(\"ltr-direction\") === false) { %>\n  <link rel=\"stylesheet\" href=\"/TEMPLATE/ampTemplate/css_2/amp-rtl.css\">\n  <link rel=\"stylesheet\" href=\"/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/src/css/boilerplate-rtl.css\">\n<% } %>\n<script type=\"text/javascript\">\n  function switchTranslation (url) {\n    $('#backUrl').val(document.location.href);\n    document.modeSwitchForm.action = url;\n    document.modeSwitchForm.submit();\n  }\n</script>\n<form name=\"modeSwitchForm\" method=\"post\" action=\"/translation/switchMode.do\" style=\"display:none;\">\n  <input type=\"hidden\" name=\"backUrl\" id=\"backUrl\" value=\"\">\n</form>\n<%\n/***\n * Single Row Header Design (used when optionally requested: on GIS)\n * Useful for fixed height apps.\n *\n * Container-fluid structure:\n * row\n *  column navbar-brand (logo)\n *  column navbar-collapse\n *    nested row:\n *      columns AmpMenus (public or internal menus shown as provided by API)\n *      nested row ampUserLoggedInMenus (shown when logged in, incl: workspace, user, logout):\n *        3 columns\n *  login_here (ignores bootstrap container structure; shown when logged out)\n *  div#logincontainer: inserted by jQuery + rendered by JSP\n ***/\n\n  if (useSingleRowHeader) {\n %>\n<nav class=\"navbar navbar-default single-row\" role=\"navigation\">\n  <div class=\"container-fluid <%= properties.logged === true ? 'ampUserLoggedIn' : '' %>\">\n    <div class=\"row no-gutters\">\n      <!-- .ampUserLoggedIn hides public version-->\n\n      <!-- Brand and toggle get grouped for better mobile display -->\n      <div class=\"navbar-header col-sm-1\">\n        <button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\"#bs-example-navbar-collapse-1\">\n          <span class=\"sr-only\">Toggle navigation</span>\n          <span class=\"icon-bar\"></span>\n          <span class=\"icon-bar\"></span>\n          <span class=\"icon-bar\"></span>\n        </button>\n          <a id=\"headerUrl\" class=\"navbar-brand\" href=\"<%= properties.logged === true ? '/aim' : '/' %>\" data-i18n=\"[title]amp.common:platform\">\n          <span>\n            <img class=\"flag\" src=\"/aim/default/displayFlag.do\" height=\"20\" width=\"30\">\n          </span>\n          <span data-i18n=\"amp.common:platform-short\">AMP</span></a>\n      </div>\n\n      <div class=\"col-sm-11\">\n        <div class=\"collapse navbar-collapse row no-gutters\" id=\"bs-example-navbar-collapse-1\">\n          <div class=\"col-md-8 col-sm-10\">\n            <ul id=\"AmpMenus\" class=\"nav navbar-nav menus\">\n\n              <!-- File -->\n\n            </ul>\n            <div class=\"clearfix\"></div>\n          </div>\n          <div class=\"col-md-4 col-sm-2\">\n              <ul class=\"row no-gutters nav navbar-nav ampUserLoggedIn ampLoggedInMenus\">\n                <li id=\"header-workspace-li\" class=\"col-sm-9 col-md-6\"><a title=\"Workspace\" class=\"workspace-name\" id=\"header-workspace\" title=\"<%= properties.workspace ? properties.workspace : '' %>\"><%= properties.workspace ? properties.workspace : \" \" %></a></li>\n                <li id=\"header-name\" class=\"hidden-xs hidden-sm col-md-4\">\n                  <a class=\"user-url\">\n                    <span id=\"header-first-name\"><%= properties.firstName ? properties.firstName : \" \"  %></span>&nbsp;<span id=\"header-last-name\"><%= properties.lastName ? properties.lastName : \" \" %></span>\n                  </a>\n                </li>\n                <li id=\"header-logout\" class=\"col-sm-2\"><a data-i18n=\"amp.common:title-logout\" href=\"/aim/j_spring_logout\" >Logout</a></li>\n              </ul>\n              <% if(showLogin) { %>\n                <% if(loginDropdown){ %>\n                  <div class=\"login_here\" id=\"show_login_pop\">\n                    <div class=\"login_here_cont\">\n                      <a data-i18n=\"amp.common:title-login\" href=\"javascript:void(0)\">Login</a>\n                    </div>\n                  </div>\n                <% } else { %>\n                  <ul class=\"nav navbar-nav ampPublic navbar-right\">\n                    <li id=\"header-login\"><a data-i18n=\"amp.common:title-login\" href=\"/login.do\" >Login</a></li>\n                  </ul>\n                <% } %>\n              <% } %>\n              <!-- div#logincontainer with anchors gets appended here -->\n          </div>\n        </div>\n      </div>\n\n    </div>\n    <!-- Collect the nav links, forms, and other content for toggling -->\n  </div><!-- /.container-fluid -->\n</nav>\n <% } else { %>\n\n<% /***\n * Double Row Header Design (used by default)\n *\n * Container-Fluid structure:\n * row\n *  column navbar-brand (logo)\n *  column navbar-collapse\n *    nested row:\n *        nested row ampUserLoggedInMenus (shown when logged in, incl: workspace, user, logout):\n            3 columns\n * row\n *    columns AmpMenus (public or internal menus shown as provided by API)\n *  login_here (ignores bootstrap container structure, shown when logged out)\n *  div#logincontainer: inserted by jQuery + rendered by JSP\n ***/ %>\n<nav class=\"navbar navbar-default double-row\" role=\"navigation\">\n  <div class=\"container-fluid no-gutters <%= properties.logged === true ? 'ampUserLoggedIn' : '' %>\">\n    <div class=\"row no-gutters\">\n      <!-- .ampUserLoggedIn hides public version-->\n\n      <!-- Brand and toggle get grouped for better mobile display -->\n      <div class=\"navbar-header col-sm-1 col-sm-offset-1\">\n        <button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\"#bs-example-navbar-collapse-1\">\n          <span class=\"sr-only\">Toggle navigation</span>\n          <span class=\"icon-bar\"></span>\n          <span class=\"icon-bar\"></span>\n          <span class=\"icon-bar\"></span>\n        </button>\n          <a id=\"headerUrl\" class=\"navbar-brand\" href=\"<%= properties.logged === true ? '/aim' : '/' %>\" data-i18n=\"[title]amp.common:platform\">\n          <span>\n            <img class=\"flag\" src=\"/aim/default/displayFlag.do\" height=\"20\" width=\"30\">\n          </span>\n          <span data-i18n=\"amp.common:platform-short\">AMP</span></a>\n      </div>\n\n      <div class=\"col-sm-9\">\n        <div class=\"collapse navbar-collapse row no-gutters\" id=\"bs-example-navbar-collapse-1\">\n          <!-- To change workspace/user truncation length, edit the offset and grid number below:-->\n          <div class=\"col-sm-offset-5 col-sm-7\">\n            <ul class=\"row no-gutters nav navbar-nav ampUserLoggedIn ampLoggedInMenus\">\n              <li id=\"header-workspace-li\" class=\"col-sm-9 col-md-6\"><a title=\"Workspace\" class=\"workspace-name\" id=\"header-workspace\" title=\"<%= properties.workspace ? properties.workspace : '' %>\"><%= properties.workspace ? properties.workspace : \" \" %></a></li>\n              <li id=\"header-name\" class=\"hidden-xs hidden-sm col-md-4\">\n                <a class=\"user-url\">\n                  <span id=\"header-first-name\"><%= properties.firstName ? properties.firstName : \" \"  %></span>&nbsp;<span id=\"header-last-name\"><%= properties.lastName ? properties.lastName : \" \" %></span>\n                </a>\n              </li>\n              <li id=\"header-logout\" class=\"col-sm-2\"><a data-i18n=\"amp.common:title-logout\" href=\"/aim/j_spring_logout\" >Logout</a></li>\n            </ul>\n            <% if(showLogin) { %>\n              <% if(loginDropdown){ %>\n                <div class=\"login_here\" id=\"show_login_pop\">\n                  <div class=\"login_here_cont\">\n                    <a data-i18n=\"amp.common:title-login\" href=\"javascript:void(0)\">Login</a>\n                  </div>\n                </div>\n              <% } else { %>\n                <ul class=\"nav navbar-nav ampPublic navbar-right\">\n                  <li id=\"header-login\"><a data-i18n=\"amp.common:title-login\" href=\"/login.do\" >Login</a></li>\n                </ul>\n              <% } %>\n            <% } %>\n            <!-- div#logincontainer with anchors gets appended here -->\n          </div>\n        </div>\n      </div>\n\n    </div>\n\n    <div class=\"row no-gutters\">\n      <div class=\"col-sm-11 col-sm-offset-1\">\n        <ul id=\"AmpMenus\" class=\"nav navbar-nav menus\">\n\n          <!-- File -->\n\n        </ul>\n        <div class=\"clearfix\"></div>\n      </div>\n    </div>\n    <!-- Collect the nav links, forms, and other content for toggling -->\n  </div><!-- /.container-fluid -->\n</nav>\n\n<%\n  } %>\n";
+var Template = "<link rel=\"stylesheet\" href=\"/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/src/css/main.css\">\n<% if(currentLanguage.get(\"ltr-direction\") === false) { %>\n  <link rel=\"stylesheet\" href=\"/TEMPLATE/ampTemplate/css_2/amp-rtl.css\">\n  <link rel=\"stylesheet\" href=\"/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/src/css/boilerplate-rtl.css\">\n<% } %>\n<script type=\"text/javascript\">\n  function switchTranslation (url) {\n    $('#backUrl').val(document.location.href);\n    document.modeSwitchForm.action = url;\n    document.modeSwitchForm.submit();\n  }\n</script>\n<form name=\"modeSwitchForm\" method=\"post\" action=\"/translation/switchMode.do\" style=\"display:none;\">\n  <input type=\"hidden\" name=\"backUrl\" id=\"backUrl\" value=\"\">\n</form>\n<%\n/***\n * Single Row Header Design (used when optionally requested: on GIS)\n * Useful for fixed height apps.\n *\n * Container-fluid structure:\n * row\n *  column navbar-brand (logo)\n *  column navbar-collapse\n *    nested row:\n *      columns AmpMenus (public or internal menus shown as provided by API)\n *      nested row ampUserLoggedInMenus (shown when logged in, incl: workspace, user, logout):\n *        3 columns\n *  login_here (ignores bootstrap container structure; shown when logged out)\n *  div#logincontainer: inserted by jQuery + rendered by JSP\n ***/\n\n  if (useSingleRowHeader) {\n %>\n<nav class=\"navbar navbar-default single-row\" role=\"navigation\">\n  <div class=\"container-fluid <%= properties.logged === true ? 'ampUserLoggedIn' : '' %>\">\n    <div class=\"row no-gutters\">\n      <!-- .ampUserLoggedIn hides public version-->\n\n      <!-- Brand and toggle get grouped for better mobile display -->\n      <span>\n      <div class=\"navbar-header col-sm-1\">\n        <button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\"#bs-example-navbar-collapse-1\">\n          <span class=\"sr-only\">Toggle navigation</span>\n          <span class=\"icon-bar\"></span>\n          <span class=\"icon-bar\"></span>\n          <span class=\"icon-bar\"></span>\n        </button>\n          <a id=\"headerUrl\" class=\"navbar-brand\" href=\"<%= properties.logged === true ? '/aim' : '/' %>\" data-i18n=\"[title]amp.common:platform\">\n          <span>\n            <img class=\"flag\" src=\"/aim/default/displayFlag.do\" height=\"20\" width=\"30\">\n          </span>\n          <span data-i18n=\"amp.common:platform-short\">AMP</span></a>\n      </div>\n    </span>\n    <span>\n      <div class=\"col-sm-11 col-sm-11-gis\">\n        <div class=\"collapse navbar-collapse row no-gutters\" id=\"bs-example-navbar-collapse-1\">\n          <div class=\"col-md-8 col-sm-10 col-sm-10-gis\">\n            <ul id=\"AmpMenus\" class=\"nav navbar-nav menus\">\n\n              <!-- File -->\n\n            </ul>\n            <div class=\"clearfix\"></div>\n          </div>\n        </div>\n      </div>\n    </span>\n    <span class=\"header-login-gis\">\n         <div class=\"col-md-4 col-sm-2 col-sm-2-gis\">\n              <ul class=\"row no-gutters nav navbar-nav ampUserLoggedIn ampLoggedInMenus\">\n                <li id=\"header-workspace-li\" class=\"col-sm-9 col-md-6\"><a title=\"Workspace\" class=\"workspace-name\" id=\"header-workspace\" title=\"<%= properties.workspace ? properties.workspace : '' %>\"><%= properties.workspace ? properties.workspace : \" \" %></a></li>\n                <li id=\"header-name\" class=\"hidden-xs hidden-sm col-md-4\">\n                  <a class=\"user-url\">\n                    <span id=\"header-first-name\"><%= properties.firstName ? properties.firstName : \" \"  %></span>&nbsp;<span id=\"header-last-name\"><%= properties.lastName ? properties.lastName : \" \" %></span>\n                  </a>\n                </li>\n                <li id=\"header-logout\" class=\"col-sm-2\"><a data-i18n=\"amp.common:title-logout\" href=\"/aim/j_spring_logout\" >Logout</a></li>\n              </ul>\n              <% if(showLogin) { %>\n                <% if(loginDropdown){ %>\n                  <div class=\"login_here\" id=\"show_login_pop\">\n                    <div class=\"login_here_cont\">\n                      <a data-i18n=\"amp.common:title-login\" href=\"javascript:void(0)\">Login</a>\n                    </div>\n                  </div>\n                <% } else { %>\n                  <ul class=\"nav navbar-nav ampPublic navbar-right\">\n                    <li id=\"header-login\"><a data-i18n=\"amp.common:title-login\" href=\"/login.do\" >Login</a></li>\n                  </ul>\n                <% } %>\n              <% } %>\n              <!-- div#logincontainer with anchors gets appended here -->\n          </div>\n    </span>\n    </div>\n    <!-- Collect the nav links, forms, and other content for toggling -->\n  </div><!-- /.container-fluid -->\n</nav>\n <% } else { %>\n\n<% /***\n * Double Row Header Design (used by default)\n *\n * Container-Fluid structure:\n * row\n *  column navbar-brand (logo)\n *  column navbar-collapse\n *    nested row:\n *        nested row ampUserLoggedInMenus (shown when logged in, incl: workspace, user, logout):\n            3 columns\n * row\n *    columns AmpMenus (public or internal menus shown as provided by API)\n *  login_here (ignores bootstrap container structure, shown when logged out)\n *  div#logincontainer: inserted by jQuery + rendered by JSP\n ***/ %>\n<nav class=\"navbar navbar-default double-row\" role=\"navigation\">\n  <div class=\"container-fluid no-gutters <%= properties.logged === true ? 'ampUserLoggedIn' : '' %>\">\n    <div class=\"row no-gutters\">\n      <!-- .ampUserLoggedIn hides public version-->\n\n      <!-- Brand and toggle get grouped for better mobile display -->\n      <div class=\"navbar-header col-sm-1 col-sm-offset-1\">\n        <button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\"#bs-example-navbar-collapse-1\">\n          <span class=\"sr-only\">Toggle navigation</span>\n          <span class=\"icon-bar\"></span>\n          <span class=\"icon-bar\"></span>\n          <span class=\"icon-bar\"></span>\n        </button>\n          <a id=\"headerUrl\" class=\"navbar-brand\" href=\"<%= properties.logged === true ? '/aim' : '/' %>\" data-i18n=\"[title]amp.common:platform\">\n          <span>\n            <img class=\"flag\" src=\"/aim/default/displayFlag.do\" height=\"20\" width=\"30\">\n          </span>\n          <span data-i18n=\"amp.common:platform-short\">AMP</span></a>\n      </div>\n\n      <div class=\"col-sm-9\">\n        <div class=\"collapse navbar-collapse row no-gutters\" id=\"bs-example-navbar-collapse-1\">\n          <!-- To change workspace/user truncation length, edit the offset and grid number below:-->\n          <div class=\"col-sm-offset-5 col-sm-7\">\n            <ul class=\"row no-gutters nav navbar-nav ampUserLoggedIn ampLoggedInMenus\">\n              <li id=\"header-workspace-li\" class=\"col-sm-9 col-md-6\"><a title=\"Workspace\" class=\"workspace-name\" id=\"header-workspace\" title=\"<%= properties.workspace ? properties.workspace : '' %>\"><%= properties.workspace ? properties.workspace : \" \" %></a></li>\n              <li id=\"header-name\" class=\"hidden-xs hidden-sm col-md-4\">\n                <a class=\"user-url\">\n                  <span id=\"header-first-name\"><%= properties.firstName ? properties.firstName : \" \"  %></span>&nbsp;<span id=\"header-last-name\"><%= properties.lastName ? properties.lastName : \" \" %></span>\n                </a>\n              </li>\n              <li id=\"header-logout\" class=\"col-sm-2\"><a data-i18n=\"amp.common:title-logout\" href=\"/aim/j_spring_logout\" >Logout</a></li>\n            </ul>\n            <% if(showLogin) { %>\n              <% if(loginDropdown){ %>\n                <div class=\"login_here\" id=\"show_login_pop\">\n                  <div class=\"login_here_cont\">\n                    <a data-i18n=\"amp.common:title-login\" href=\"javascript:void(0)\">Login</a>\n                  </div>\n                </div>\n              <% } else { %>\n                <ul class=\"nav navbar-nav ampPublic navbar-right\">\n                  <li id=\"header-login\"><a data-i18n=\"amp.common:title-login\" href=\"/login.do\" >Login</a></li>\n                </ul>\n              <% } %>\n            <% } %>\n            <!-- div#logincontainer with anchors gets appended here -->\n          </div>\n        </div>\n      </div>\n\n    </div>\n\n    <div class=\"row no-gutters\">\n      <div class=\"col-sm-11 col-sm-offset-1\">\n        <ul id=\"AmpMenus\" class=\"nav navbar-nav menus\">\n\n          <!-- File -->\n\n        </ul>\n        <div class=\"clearfix\"></div>\n      </div>\n    </div>\n    <!-- Collect the nav links, forms, and other content for toggling -->\n  </div><!-- /.container-fluid -->\n</nav>\n\n<%\n  } %>\n";
 var MenuCollection = require('../collections/amp-menus-collection.js');
 var MenuModel = require('../models/amp-menus-model.js');
 var SubmenuView = require('./submenu-compositeview.js');
@@ -30564,8 +30596,12 @@ module.exports = Backbone.Model.extend({
 });
 
 },{"backbone":"backbone"}],72:[function(require,module,exports){
-module.exports=require(55)
-},{"/Users/julian/dev/code/AmpIntelliJ/amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/src/models/settings.js":55,"backbone":"backbone","underscore":"underscore"}],73:[function(require,module,exports){
+var _ = require('underscore');
+var Backbone = require('backbone');
+module.exports = Backbone.Model.extend({
+	url: '/rest/amp/settings'
+});
+},{"backbone":"backbone","underscore":"underscore"}],73:[function(require,module,exports){
 var _ = require('underscore');
 
 var BaseFilterModel = require('../models/base-filter-model');

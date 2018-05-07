@@ -593,9 +593,16 @@ LoggerIdentifiable, Cloneable {
     @VersionableFieldSimple(fieldTitle = "Indirect On Budget")
     protected Boolean indirectOnBudget;
     
-    @Interchangeable(fieldTitle = "FY", importable = true, fmPath = "/Activity Form/Identification/Budget Extras/FY", required = "/Activity Form/Identification/Budget Extras/Required Validator for fy")
     @VersionableFieldSimple(fieldTitle = "FY")
     protected String FY;
+    
+    /*
+     * This field is used for API only. The values are stored in database as a string using FY field
+     */
+    @Interchangeable(fieldTitle = "FY", importable = true, fmPath = "/Activity Form/Identification/Budget Extras/FY", 
+            required = "/Activity Form/Identification/Budget Extras/Required Validator for fy",
+            dependencies = {InterchangeDependencyResolver.ON_BUDGET_KEY})
+    protected List<Integer> FYApiList;
     
     @Interchangeable(fieldTitle = "Vote", importable = true, fmPath = "/Activity Form/Identification/Budget Extras/Vote", 
             dependencies={InterchangeDependencyResolver.ON_BUDGET_KEY})
@@ -2107,6 +2114,14 @@ LoggerIdentifiable, Cloneable {
 
         public void setDeleted(Boolean deleted) {
             this.deleted = deleted;
+        }
+        
+        public List<Integer> getFYApiList() {
+            return FYApiList;
+        }
+
+        public void setFYApiList(List<Integer> fYApiList) {
+            FYApiList = fYApiList;
         }
 
         public Set<AmpAidEffectivenessIndicatorOption> getSelectedEffectivenessIndicatorOptions() {

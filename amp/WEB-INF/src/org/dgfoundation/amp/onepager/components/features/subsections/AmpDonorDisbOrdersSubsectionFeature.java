@@ -99,9 +99,9 @@ public class AmpDonorDisbOrdersSubsectionFeature extends
      * @throws Exception
      */
     public AmpDonorDisbOrdersSubsectionFeature(String id,
-            final IModel<AmpFunding> model, String fmName, int transactionType)
+            final IModel<AmpFunding> model, int transactionType)
             throws Exception {
-        super(id, fmName, model);
+        super(id, AmpFundingItemFeaturePanel.FM_NAME_BY_TRANSACTION_TYPE.get(transactionType), model);
         disbOrdersTableFeature = new AmpDonorDisbOrdersFormTableFeature(
                 "disbOrdersTableFeature", model, "Disbursement Orders Table", transactionType);
         add(disbOrdersTableFeature);
@@ -125,7 +125,7 @@ public class AmpDonorDisbOrdersSubsectionFeature extends
                 target.add(disbOrdersTableFeature);
                 updateDisbOrderPickers(target);
                 AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
-                parent.getFundingInfo().checkChoicesRequired(disbOrdersTableFeature.getEditorList().getCount());
+                parent.getFundingInfo().configureRequiredFields();
                 target.add(parent.getFundingInfo());
                 target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
                 target.appendJavaScript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));

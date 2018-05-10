@@ -1,6 +1,8 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -601,8 +603,9 @@ LoggerIdentifiable, Cloneable {
      */
     @Interchangeable(fieldTitle = "FY", importable = true, fmPath = "/Activity Form/Identification/Budget Extras/FY", 
             required = "/Activity Form/Identification/Budget Extras/Required Validator for fy",
-            dependencies = {InterchangeDependencyResolver.ON_BUDGET_KEY})
-    protected List<Integer> FYApiList;
+            dependencies = {InterchangeDependencyResolver.ON_BUDGET_KEY}, 
+            validators = @Validators (unique = "/Activity Form/Identification/Budget Extras/FY"))
+    protected List<AmpAPIFiscalYear> fiscalYears;
     
     @Interchangeable(fieldTitle = "Vote", importable = true, fmPath = "/Activity Form/Identification/Budget Extras/Vote", 
             dependencies={InterchangeDependencyResolver.ON_BUDGET_KEY})
@@ -2116,12 +2119,21 @@ LoggerIdentifiable, Cloneable {
             this.deleted = deleted;
         }
         
-        public List<Integer> getFYApiList() {
-            return FYApiList;
+        public List<AmpAPIFiscalYear> getFiscalYears() {
+            if (fiscalYears == null) {
+                fiscalYears = new ArrayList<>();
+                if (FY != null) {
+                    List<String> years = Arrays.asList(FY.split(","));
+                    for (String year : years) {
+                        fiscalYears.add(new AmpAPIFiscalYear(Long.parseLong(year)));
+                    }
+                }
+            }
+            return fiscalYears;
         }
 
-        public void setFYApiList(List<Integer> fYApiList) {
-            FYApiList = fYApiList;
+        public void setFiscalYears(List<AmpAPIFiscalYear> fiscalYears) {
+            this.fiscalYears = fiscalYears;
         }
 
         public Set<AmpAidEffectivenessIndicatorOption> getSelectedEffectivenessIndicatorOptions() {

@@ -454,6 +454,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                 Hibernate.initialize(str.getType());
                 Hibernate.initialize(str.getCoordinates());
             }
+            result.getFiscalYears();
         } catch (ObjectNotFoundException e) {
             logger.debug("AmpActivityVersion with id=" + id + " not found");
         } catch (Exception e) {

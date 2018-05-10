@@ -50,7 +50,7 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
      */
     synchronized
     public static Set<String> getVisibleColumnsWithFakeOnes() {
-        return FMSettingsMediator.getEnabledSettings(FMSettingsMediator.FMGROUP_COLUMNS);
+        return FMSettingsMediator.getEnabledSettings(FMSettingsMediator.FMGROUP_COLUMNS, null);
     }
 
     /**
@@ -58,12 +58,20 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
      */
     synchronized
     public static Set<String> getVisibleColumns() {
-        return FMSettingsMediator.getEnabledSettings(FMSettingsMediator.FMGROUP_COLUMNS)
+        return getVisibleColumns(null);
+    }
+    
+    public static Set<String> getVisibleColumns(Long templateId) {
+        return FMSettingsMediator.getEnabledSettings(FMSettingsMediator.FMGROUP_COLUMNS, templateId)
                 .stream().filter(z -> !fakeColumns.contains(z)).collect(Collectors.toSet());
     }
     
     public static Set<String> getConfigurableColumns() {
-        Set<String> configurableColumns = new HashSet<String>(getVisibleColumns());
+        return getConfigurableColumns(null);
+    }
+    
+    public static Set<String> getConfigurableColumns(Long templateId) {
+        Set<String> configurableColumns = new HashSet<String>(getVisibleColumns(templateId));
         configurableColumns.retainAll(AmpReportsSchema.getInstance().getColumns().keySet());
         return configurableColumns;
     }
@@ -72,8 +80,8 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
     }
     
     @Override
-    public Set<String> getEnabledSettings() {
-        return getCurrentVisibleData();
+    public Set<String> getEnabledSettings(Long templateId) {
+        return getVisibleData(templateId);
     }
     
     @Override

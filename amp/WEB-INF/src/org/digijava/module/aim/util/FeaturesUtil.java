@@ -991,9 +991,13 @@ public class FeaturesUtil {
      * @param object - AmpObjectVisibility to check
      * @return true if it is visible
      */
-    public static <T extends AmpObjectVisibility> boolean isVisible(T object) {
-        AmpTreeVisibility ampTreeVisibility=FeaturesUtil.getAmpTreeVisibility(TLSUtils.getRequest().getServletContext(), TLSUtils.getRequest().getSession());
-        return object.isVisibleTemplateObj((AmpTemplatesVisibility)ampTreeVisibility.getRoot());
+    public static <T extends AmpObjectVisibility> boolean isVisible(T object, Long templateId) {
+        if (templateId == null) {
+            templateId = FeaturesUtil.getCurrentTemplateId();
+        }
+
+        AmpTemplatesVisibility ampTreeVisibility = FeaturesUtil.getTemplateVisibility(templateId);
+        return object.isVisibleTemplateObj(ampTreeVisibility);
     }
 
     /**
@@ -1138,17 +1142,7 @@ public class FeaturesUtil {
      * @author dan
      */
     public static String getTemplateNameVisibility(Long id) {
-        Session session = null;
-        AmpTemplatesVisibility ft = new AmpTemplatesVisibility();
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            ft = (AmpTemplatesVisibility) session.load(AmpTemplatesVisibility.class,
-                    id);
-        }
-        catch (Exception ex) {
-            logger.error(ex);
-        }    
-        return ft.getName();
+        return getTemplateVisibility(id).getName();
     }
 
 

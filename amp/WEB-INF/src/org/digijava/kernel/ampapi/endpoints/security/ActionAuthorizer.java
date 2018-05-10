@@ -14,7 +14,6 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.security.RuleHierarchy;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
@@ -49,7 +48,7 @@ public class ActionAuthorizer {
 
         Collection<AuthRule> authRules = ruleHierarchy.getEffectiveRules(apiMethod.authTypes());
         
-        if (authRules.contains(AuthRule.AMP_OFFLINE_ENABLED) && !isAmpOfflineEnabled()) {
+        if (authRules.contains(AuthRule.AMP_OFFLINE_ENABLED) && !FeaturesUtil.isAmpOfflineEnabled()) {
             ApiErrorMessage errorMessage = SecurityErrors.NOT_ALLOWED.withDetails("AMP Offline is not enabled");
             ApiErrorResponse.reportForbiddenAccess(errorMessage);
         }
@@ -85,10 +84,6 @@ public class ActionAuthorizer {
         }
     }
     
-    private static boolean isAmpOfflineEnabled() {
-        return FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.AMP_OFFLINE_ENABLED);
-    }
-
     /**
      * Merges errors of the same type
      * @param errors  current set of errors

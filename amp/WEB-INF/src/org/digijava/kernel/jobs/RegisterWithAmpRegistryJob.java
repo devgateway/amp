@@ -46,14 +46,10 @@ public class RegisterWithAmpRegistryJob extends ConnectionCleaningJob {
     @Override
     public void executeInternal(JobExecutionContext context) throws JobExecutionException {
         String secretToken = System.getenv(AMP_REGISTRY_SECRET_TOKEN_ENV_NAME);
-        if (secretToken != null && isAmpOfflineEnabled()) {
+        if (secretToken != null && FeaturesUtil.isAmpOfflineEnabled()) {
             AmpRegistryClient client = new AmpRegistryClient();
             client.register(getCurrentInstallation(), secretToken);
         }
-    }
-
-    private boolean isAmpOfflineEnabled() {
-        return FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.AMP_OFFLINE_ENABLED);
     }
 
     private AmpInstallation getCurrentInstallation() {

@@ -2,6 +2,7 @@ package org.digijava.kernel.jobs;
 
 import static java.util.stream.Collectors.toList;
 
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collection;
@@ -30,6 +31,8 @@ import org.digijava.module.message.jobs.ConnectionCleaningJob;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
+import com.google.common.hash.Hashing;
+
 /**
  * Registers this AMP installation in AMP Registry.
  *
@@ -40,16 +43,35 @@ public class RegisterWithAmpRegistryJob extends ConnectionCleaningJob {
     public static final String NAME = "Register with AMP Registry";
 
     private static final String AMP_REGISTRY_SECRET_TOKEN_ENV_NAME = "AMP_REGISTRY_SECRET_TOKEN";
+    private static final String AMP_REGISTRY_PRIVATE_KEY_ENV_NAME = "AMP_REGISTRY_PRIVATE_KEY";
+    
+    private static final String AMP_DEVELOPMENT_ENV_NAME = "AMP_DEVELOPMENT";
 
     private static final int JOB_FIRST_START_DELAY_IN_MIN = 5;
 
     @Override
     public void executeInternal(JobExecutionContext context) throws JobExecutionException {
-        String secretToken = System.getenv(AMP_REGISTRY_SECRET_TOKEN_ENV_NAME);
-        if (secretToken != null && isAmpOfflineEnabled()) {
-            AmpRegistryClient client = new AmpRegistryClient();
-            client.register(getCurrentInstallation(), secretToken);
+        if (isAmpOfflineEnabled()) {
+            String secretToken = System.getenv(AMP_REGISTRY_SECRET_TOKEN_ENV_NAME);
+            
+            if (secretToken == null && isDevServer()) {
+                secretToken = generateDevSecretToken();
+            }
+            
+            if (secretToken != null) {
+                AmpRegistryClient client = new AmpRegistryClient();
+                client.register(getCurrentInstallation(), secretToken);
+            }
         }
+    }
+    
+    private String generateDevSecretToken() {
+        String privateKey = System.getenv(AMP_REGISTRY_PRIVATE_KEY_ENV_NAME);
+        String isoCode = getCurrentCountry().getIso().toUpperCase();
+        String hashKey = Hashing.sha256().hashString(isoCode + privateKey, StandardCharsets.UTF_8).toString();
+        String secretToken = String.format("%s%s", isoCode, hashKey);
+        
+        return secretToken;
     }
 
     private boolean isAmpOfflineEnabled() {
@@ -62,9 +84,23 @@ public class RegisterWithAmpRegistryJob extends ConnectionCleaningJob {
 
         AmpInstallation installation = new AmpInstallation();
         installation.setIso2(country.getIso().toUpperCase());
-        installation.setName(getAllTranslations(defaultSite, country.getCountryName()));
-        installation.setUrls(getSiteUrls(defaultSite));
+        
+        List<String> siteUrls = getSiteUrls(defaultSite);
+        Map<String, String> allTranslations = getAllTranslations(defaultSite, country.getCountryName());
+        
+        // AMP-27350 add URLs in all translated names if AMP is in stg (dev) mode
+        if (Boolean.parseBoolean(System.getProperty(AMP_DEVELOPMENT_ENV_NAME))) {
+            allTranslations.replaceAll((k, v) -> String.format("%s (%s)", v, String.join(", ", siteUrls)));
+        }
+        
+        installation.setUrls(siteUrls);
+        installation.setName(allTranslations);
+        
         return installation;
+    }
+    
+    private boolean isDevServer() {
+        return Boolean.parseBoolean(System.getProperty(AMP_DEVELOPMENT_ENV_NAME));
     }
 
     private Country getCurrentCountry() {

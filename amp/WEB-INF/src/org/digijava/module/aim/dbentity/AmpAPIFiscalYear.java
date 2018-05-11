@@ -10,7 +10,7 @@ public class AmpAPIFiscalYear {
     protected Long id;
     
     @Interchangeable(fieldTitle = "Year", importable = true, uniqueConstraint = true, 
-            required = ActivityEPConstants.REQUIRED_ND)
+            required = ActivityEPConstants.REQUIRED_ALWAYS)
     @PossibleValues(FiscalYearPossibleValuesProvider.class)
     protected Long year;
     

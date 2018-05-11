@@ -1,8 +1,6 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -2120,15 +2118,6 @@ LoggerIdentifiable, Cloneable {
         }
         
         public List<AmpAPIFiscalYear> getFiscalYears() {
-            if (fiscalYears == null) {
-                fiscalYears = new ArrayList<>();
-                if (FY != null) {
-                    List<String> years = Arrays.asList(FY.split(","));
-                    for (String year : years) {
-                        fiscalYears.add(new AmpAPIFiscalYear(Long.parseLong(year)));
-                    }
-                }
-            }
             return fiscalYears;
         }
 

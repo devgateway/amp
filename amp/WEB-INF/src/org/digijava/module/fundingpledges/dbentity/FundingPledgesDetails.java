@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRole;
@@ -21,18 +22,34 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.common.util.DateTimeUtil;
 
-public class FundingPledgesDetails implements FundingInformationItem, Identifiable{
+public class FundingPledgesDetails implements FundingInformationItem, Identifiable {
     
     private long id;
+    
     private FundingPledges pledgeid;
+    
+    @Interchangeable(fieldTitle = "Pledge Type", label = "Type Of Pledge", pickIdOnly = true)
     private AmpCategoryValue pledgetype;
+    
+    @Interchangeable(fieldTitle = "Type Of Assistance", pickIdOnly = true)
     private AmpCategoryValue typeOfAssistance;
+    
+    @Interchangeable(fieldTitle = "Aid Of Modality", pickIdOnly = true)
     private AmpCategoryValue aidmodality;
+    
+    @Interchangeable(fieldTitle = "Amount")
     private Double amount;
+    
+    @Interchangeable(fieldTitle = "Currency", pickIdOnly = true)
     private AmpCurrency currency;
+    
+    @Interchangeable(fieldTitle = "Funding Year")
     private String fundingYear;
     
+    @Interchangeable(fieldTitle = "Funding Date Start")
     private Date fundingDateStart; // only meaningful when [Pledge Funding]/[Pledge Funding - Year Range] is enabled
+    
+    @Interchangeable(fieldTitle = "Funding Date End")
     private Date fundingDateEnd; // only meaningful when [Pledge Funding]/[Pledge Funding - Year Range] is enabled
     
     public java.sql.Timestamp getFunding_date() {

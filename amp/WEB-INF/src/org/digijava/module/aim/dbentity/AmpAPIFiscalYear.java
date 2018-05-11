@@ -1,5 +1,6 @@
 package org.digijava.module.aim.dbentity;
 
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.discriminators.FiscalYearPossibleValuesProvider;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
@@ -8,7 +9,8 @@ public class AmpAPIFiscalYear {
 
     protected Long id;
     
-    @Interchangeable(fieldTitle = "Year", importable = true, uniqueConstraint = true)
+    @Interchangeable(fieldTitle = "Year", importable = true, uniqueConstraint = true, 
+            required = ActivityEPConstants.REQUIRED_ND)
     @PossibleValues(FiscalYearPossibleValuesProvider.class)
     protected Long year;
     

@@ -42,11 +42,12 @@ import org.dgfoundation.amp.onepager.helper.TemporaryActivityDocument;
 import org.dgfoundation.amp.onepager.helper.TemporaryGPINiDocument;
 import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
+import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.module.aim.dbentity.AmpAPIFiscalYear;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
@@ -58,7 +59,6 @@ import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
-import org.digijava.module.aim.dbentity.AmpAPIFiscalYear;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingAmount;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
@@ -101,6 +101,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.util.CollectionUtils;
 
 /**
  * Util class used to manipulate an activity
@@ -399,7 +400,7 @@ public class ActivityUtil {
     private static void updateFiscalYears(AmpActivityVersion a) {
         List<AmpAPIFiscalYear> fiscalYears = a.getFiscalYears();
         
-        if (fiscalYears != null) {
+        if (!CollectionUtils.isEmpty(fiscalYears)) {
             fiscalYears.sort(Comparator.comparing(AmpAPIFiscalYear::getYear));
             List<String> years = fiscalYears.stream().map(fy -> fy.getYear().toString()).collect(Collectors.toList());
             a.setFY(StringUtils.join(years, ","));

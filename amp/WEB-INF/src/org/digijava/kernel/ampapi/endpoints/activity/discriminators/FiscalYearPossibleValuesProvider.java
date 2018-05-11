@@ -17,7 +17,7 @@ public class FiscalYearPossibleValuesProvider extends PossibleValuesProvider {
         List<PossibleValue> values = new ArrayList<>();
         
         for (String year : ActivityUtil.getFiscalYearsRange()) {
-            values.add(new PossibleValue(year, year, ImmutableMap.of()));
+            values.add(new PossibleValue(Long.parseLong(year), year, ImmutableMap.of()));
         }
         
         return values;

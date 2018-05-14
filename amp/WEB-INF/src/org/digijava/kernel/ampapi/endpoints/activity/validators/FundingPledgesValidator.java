@@ -18,19 +18,18 @@ import org.digijava.module.fundingpledges.dbentity.FundingPledges;
  */
 public class FundingPledgesValidator extends InputValidator {
 
-    private static final String FUNDING = "fundings";
-    private static final String SRC_ORG = "donor_organization_id";
+    private static final String FUNDING_PATH = "fundings";
+    private static final String PLEDGE_PATH = "fundings~funding_details~pledge";
 
-    private static final String FUNDING_DETAILS = "funding_details";
-    
+    private static final String SRC_ORG = "donor_organization_id";
     private static final String PLEDGE = "pledge";
 
     @Override
     public boolean isValid(ObjectImporter importer, Map<String, Object> newFieldParent,
                            Map<String, Object> oldFieldParent, APIField fieldDescription, String fieldPath) {
 
-        if (fieldPath.equals(FUNDING + "~" + FUNDING_DETAILS + "~" + PLEDGE)) {
-            Map<String, Object> fundingJson = (Map<String, Object>) importer.getBranchJsonVisitor().get(FUNDING);
+        if (fieldPath.equals(PLEDGE_PATH)) {
+            Map<String, Object> fundingJson = (Map<String, Object>) importer.getBranchJsonVisitor().get(FUNDING_PATH);
             return isPledgeValid(fundingJson, newFieldParent);
         }
 
@@ -61,10 +60,6 @@ public class FundingPledgesValidator extends InputValidator {
         }
         
         return true;
-    }
-
-    private Long getLong(Object o) {
-        return o instanceof Number ? ((Number) o).longValue() : null;
     }
 
     @Override

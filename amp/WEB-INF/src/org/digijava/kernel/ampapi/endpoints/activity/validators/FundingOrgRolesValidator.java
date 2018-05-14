@@ -139,10 +139,6 @@ public class FundingOrgRolesValidator extends InputValidator {
         }
     }
 
-    private Long getLong(Object o) {
-        return o instanceof Number ? ((Number) o).longValue() : null;
-    }
-
     @Override
     public ApiErrorMessage getErrorMessage() {
         return ActivityErrors.ORGANIZATION_ROLE_PAIR_NOT_DECLARED;

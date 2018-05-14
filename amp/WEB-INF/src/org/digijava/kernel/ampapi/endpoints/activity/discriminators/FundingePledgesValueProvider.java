@@ -8,6 +8,7 @@ import java.util.Map;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
 
@@ -48,7 +49,7 @@ public class FundingePledgesValueProvider extends PossibleValuesProvider {
     }
 
     public Object toAmpFormat(Object obj) {
-        return obj;
+        return PersistenceManager.getSession().get(FundingPledges.class, ((Number) obj).longValue());
     }
     
 }

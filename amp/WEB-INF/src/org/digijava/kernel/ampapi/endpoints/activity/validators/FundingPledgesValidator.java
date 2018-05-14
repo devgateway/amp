@@ -19,32 +19,23 @@ import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 public class FundingPledgesValidator extends InputValidator {
 
     private static final String FUNDING_PATH = "fundings";
-    private static final String PLEDGE_PATH = "fundings~funding_details~pledge";
-
     private static final String SRC_ORG = "donor_organization_id";
-    private static final String PLEDGE = "pledge";
 
     @Override
     public boolean isValid(ObjectImporter importer, Map<String, Object> newFieldParent,
                            Map<String, Object> oldFieldParent, APIField fieldDescription, String fieldPath) {
-
-        if (fieldPath.equals(PLEDGE_PATH)) {
-            Map<String, Object> fundingJson = (Map<String, Object>) importer.getBranchJsonVisitor().get(FUNDING_PATH);
-            return isPledgeValid(fundingJson, newFieldParent);
-        }
-
         return true;
     }
 
-    private boolean isPledgeValid(Map<String, Object> funding, Map<String, Object> fundingDetails) {
-        Object pledgeObj = fundingDetails.get(PLEDGE);
+    public boolean isPledgeValid(ObjectImporter importer, Object pledgeObj) {
+        Map<String, Object> fundingJson = (Map<String, Object>) importer.getBranchJsonVisitor().get(FUNDING_PATH);
         if (pledgeObj != null && pledgeObj instanceof Number) {
             Long id = getLong(pledgeObj);
             FundingPledges pledge = (FundingPledges) PersistenceManager.getSession().load(FundingPledges.class, id);
             if (pledge != null) {
                 Long pledgeOrgGrpId = pledge.getOrganizationGroup().getAmpOrgGrpId();
                 
-                Object donorObj = funding.get(SRC_ORG);
+                Object donorObj = fundingJson.get(SRC_ORG);
                 if (donorObj != null && donorObj instanceof Number) {
                     Long donorId = getLong(donorObj);
                     AmpOrganisation donor = (AmpOrganisation) PersistenceManager.getSession()
@@ -62,8 +53,7 @@ public class FundingPledgesValidator extends InputValidator {
         return true;
     }
 
-    @Override
     public ApiErrorMessage getErrorMessage() {
-        return ActivityErrors.FUNDING_PLEGE_ORG_GROUP_MISMATCH;
+        return ActivityErrors.FUNDING_PLEDGE_ORG_GROUP_MISMATCH;
     }
 }

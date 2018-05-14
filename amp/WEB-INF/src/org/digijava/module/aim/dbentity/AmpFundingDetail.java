@@ -199,7 +199,8 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
             fmPath = FMVisibility.ANY_FM + ActivityEPConstants.COMMITMENTS_PLEDGES_FM_PATH
                     + "|" + ActivityEPConstants.DISBURSEMENTS_PLEDGES_FM_PATH
                     + "|" + ActivityEPConstants.ESTIMATED_DISBURSEMENTS_PLEDGES_FM_PATH
-                    + "|" + ActivityEPConstants.RELEASE_OF_FUNDS_PLEDGES_FM_PATH)
+                    + "|" + ActivityEPConstants.RELEASE_OF_FUNDS_PLEDGES_FM_PATH,
+            dependencies = {InterchangeDependencyResolver.FUNDING_ORGANIZATION_VALID_PRESENT_KEY})
     @PossibleValues(FundingePledgesValueProvider.class)
     private FundingPledges pledgeid;
     

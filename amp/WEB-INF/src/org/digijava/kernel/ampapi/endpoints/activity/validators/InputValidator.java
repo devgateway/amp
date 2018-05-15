@@ -65,4 +65,8 @@ public abstract class InputValidator {
     public void setContinueOnSuccess(boolean continueOnSuccess) {
         this.continueOnSuccess = continueOnSuccess;
     }
+    
+    public Long getLong(Object o) {
+        return o instanceof Number ? ((Number) o).longValue() : null;
+    }
 }

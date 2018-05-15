@@ -6,11 +6,10 @@ package org.digijava.kernel.ampapi.endpoints.activity.validators;
 import java.util.Collection;
 import java.util.Map;
 
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
+import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
+import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 /**
  * Validates that multiple values are provided only when it is allowed
@@ -25,11 +24,11 @@ public class MultipleEntriesValidator extends InputValidator {
     }
 
     @Override
-    public boolean isValid(ActivityImporter importer, Map<String, Object> newFieldParent, 
-            Map<String, Object> oldFieldParent, JsonBean fieldDescription, String fieldPath) {
+    public boolean isValid(ObjectImporter importer, Map<String, Object> newFieldParent,
+                           Map<String, Object> oldFieldParent, APIField fieldDescription, String fieldPath) {
         boolean isValid = true;
-        boolean multipleValuesAllowed = Boolean.valueOf(fieldDescription.getString(ActivityEPConstants.MULTIPLE_VALUES));
-        String fieldName = fieldDescription.getString(ActivityEPConstants.FIELD_NAME);
+        boolean multipleValuesAllowed = Boolean.TRUE.equals(fieldDescription.isMultipleValues());
+        String fieldName = fieldDescription.getFieldName();
         Object fieldValue = newFieldParent.get(fieldName);
         if (!multipleValuesAllowed && hasManyElements(fieldValue)) {
             isValid = false;

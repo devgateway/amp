@@ -273,6 +273,10 @@ public class InternationalizedViewsRepository {
                 addSimpleTranslatedView(this, "v_ac_chapters", "name", "val_id");
                 addSimpleTranslatedView(this, "v_performance_alert_level", "name", "level_code");
 
+                addViewDef(this, new I18nViewDescription("v_raw_locations").
+                        addColumnDef(new I18nViewColumnDescription("location_name", "id", AmpCategoryValueLocations
+                                .class, "name")));
+
                 addViewDef(this, new I18nViewDescription("v_implementing_agency").
                         addColumnDef(new I18nViewColumnDescription("org_name", "org_id", AmpOrganisation.class, "name")));
                 

@@ -308,7 +308,7 @@
 <field:display feature="Edit Activity" name="Edit Activity Button"></field:display> 
 <field:display feature="Edit Activity" name="Validate Activity Button"></field:display> 
 <field:display feature="Funding Information" name="Type Of Assistance"></field:display>
-<field:display feature="Funding Information" name="Capital - Expenditure"></field:display>
+<field:display feature="Funding Information" name="Capital Expenditure"></field:display>
 <field:display feature="Funding Information" name="Payment Capital - Recurrent"></field:display>
 <field:display feature="Funding Information" name="Agreement Title + Code"></field:display>
 <field:display feature="Funding Information" name="Agreement Code"></field:display>

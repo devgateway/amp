@@ -27,5 +27,4 @@ public interface PossibleValuesDAO {
     
     List<AmpContact> getContacts();
     
-    List<AmpContact> getContacts();
 }

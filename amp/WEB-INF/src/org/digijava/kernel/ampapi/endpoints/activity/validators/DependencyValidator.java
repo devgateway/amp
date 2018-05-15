@@ -48,8 +48,8 @@ public class DependencyValidator extends InputValidator {
                     errors.add(dep);
                     break;
                 case VALID:
-                default:
                     result = true;
+                default:
                     break;
                 }
             }

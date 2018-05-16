@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -19,12 +20,14 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
@@ -39,11 +42,12 @@ import org.dgfoundation.amp.onepager.helper.TemporaryActivityDocument;
 import org.dgfoundation.amp.onepager.helper.TemporaryGPINiDocument;
 import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
+import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.module.aim.dbentity.AmpAPIFiscalYear;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
@@ -97,6 +101,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.util.CollectionUtils;
 
 /**
  * Util class used to manipulate an activity
@@ -316,6 +321,7 @@ public class ActivityUtil {
         saveAnnualProjectBudgets(a, session);
         saveProjectCosts(a, session);
         updatePerformanceIssues(a);
+        updateFiscalYears(a);
 
         if (createNewVersion){
             //a.setAmpActivityId(null); //hibernate will save as a new version
@@ -388,6 +394,16 @@ public class ActivityUtil {
 
         if (!ruleManager.isEqualPerformanceLevelCollection(matchedLevels, activityLevels)) {
             ruleManager.updatePerformanceIssuesInActivity(a, activityLevels, matchedLevels);
+        }
+    }
+    
+    private static void updateFiscalYears(AmpActivityVersion a) {
+        List<AmpAPIFiscalYear> fiscalYears = a.getFiscalYears();
+        
+        if (!CollectionUtils.isEmpty(fiscalYears)) {
+            fiscalYears.sort(Comparator.comparing(AmpAPIFiscalYear::getYear));
+            List<String> years = fiscalYears.stream().map(fy -> fy.getYear().toString()).collect(Collectors.toList());
+            a.setFY(StringUtils.join(years, ","));
         }
     }
 
@@ -1315,6 +1331,23 @@ public class ActivityUtil {
         }
         
         return false;
+    }
+    
+    /**
+     * Get the range list of fiscal years (FY field from budget extras component, identification section in AF)
+     * @return
+     */
+    public static List<String> getFiscalYearsRange() {
+        int rangeStartYear = FeaturesUtil
+                .getGlobalSettingValueInteger(GlobalSettingsConstants.YEAR_RANGE_START);
+        int rangeNumber = FeaturesUtil
+                .getGlobalSettingValueInteger(GlobalSettingsConstants.NUMBER_OF_YEARS_IN_RANGE);
+        
+        List<String> years = Stream.iterate(rangeStartYear, i -> i + 1)
+                .limit(rangeNumber).map(i -> i.toString())
+                .collect(Collectors.toList());
+        
+        return years;
     }
 
     /**

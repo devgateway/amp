@@ -108,14 +108,23 @@ public class InterchangeDependencyResolver {
         
         Object referenceOnBudgetValue = getOnBudgetValue();
         Object onOffBudgetValue = InterchangeUtils.getFieldValuesFromJsonActivity(incomingActivity, BUDGET_PATH);
-        if (onOffBudgetValue != null)
+        if (onOffBudgetValue != null) {
             if (Number.class.isAssignableFrom(onOffBudgetValue.getClass())) {
                 onOffBudgetValue = ((Number)onOffBudgetValue).longValue();
                 referenceOnBudgetValue = ((Number)referenceOnBudgetValue).longValue();
             }
+        }
+        
+        boolean valueIsNullOrEmpty = checkedValue == null;
+        if (!valueIsNullOrEmpty && List.class.isAssignableFrom(checkedValue.getClass())) {
+            valueIsNullOrEmpty = ((List<?>) checkedValue).isEmpty();
+        }
+        
         boolean activityIsOnBudget = referenceOnBudgetValue.equals(onOffBudgetValue);
-        if (checkedValue == null && activityIsOnBudget)
+        if (valueIsNullOrEmpty && activityIsOnBudget) {
             return DependencyCheckResult.INVALID_REQUIRED;
+        }
+        
         return DependencyCheckResult.VALID;
 //      return (checkedValue != null) ^ (activityIsOnBudget);
         /**

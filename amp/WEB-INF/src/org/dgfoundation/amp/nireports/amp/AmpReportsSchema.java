@@ -74,6 +74,7 @@ import org.dgfoundation.amp.nireports.amp.dimensions.ProgramsDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.SectorsDimension;
 import org.dgfoundation.amp.nireports.amp.indicators.IndicatorDateTokenBehaviour;
 import org.dgfoundation.amp.nireports.amp.indicators.IndicatorTextualTokenBehaviour;
+import org.dgfoundation.amp.nireports.behaviours.CurrencyMeasureBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.FilteredMeasureBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.GeneratedIntegerBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.TaggedMeasureBehaviour;
@@ -1552,6 +1553,17 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         
         // should this measure be split by ModeOfPayment?
         boolean splitByMoP = cc.splitCell != null && (cc.splitCell.entityType.equals(NiReportsEngine.PSEUDOCOLUMN_MEASURE)) && scratch.verticalSplitByModeOfPayment;
+        
+        // should this measure be split by Currencies?
+        boolean splitByCurrencies = cc.splitCell != null 
+                && (cc.splitCell.entityType.equals(NiReportsEngine.PSEUDOCOLUMN_MEASURE)) 
+                && scratch.isVerticalSplitByCurrency();
+        
+        if (splitByCurrencies) {
+            return Arrays.asList(
+                    CurrencyMeasureBehaviour.getSplittingStrategy(scratch.usedCurrency, 
+                            ColumnConstants.ORIGINAL_CURRENCY));
+        }
         
         if (splitByToA)
             return Arrays.asList(

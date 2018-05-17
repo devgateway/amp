@@ -7,7 +7,6 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import org.dgfoundation.amp.nireports.ComparableValue;
-import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 
 /**
@@ -91,7 +90,7 @@ public interface VSplitStrategy {
      * @param entityType
      */
     public static VSplitStrategy build(Function<NiCell, ComparableValue<String>> cat, String entityType) {
-        return build(cat, entityType, null);
+        return build(cat, entityType, null, s -> false);
     }
     
     /**
@@ -102,6 +101,19 @@ public interface VSplitStrategy {
      * @return
      */
     public static VSplitStrategy build(Function<NiCell, ComparableValue<String>> cat, String entityType, Supplier<ComparableValue<String>> totalColumnNameSupplier) {
+        return build(cat, entityType, totalColumnNameSupplier, s -> false);
+    }
+    
+    /**
+     * builds a VSplitStrategy which categorizes cells by a callback, while optionally sporting a "Total" subcolumn
+     * @param cat
+     * @param entityType
+     * @param totalColumnNameSupplier a supplier of the "total" subcolumn name. 
+     * In case it is null, the strategy will not feature a Total subcolumn
+     * @return
+     */
+    static VSplitStrategy build(Function<NiCell, ComparableValue<String>> cat, String entityType, 
+            Supplier<ComparableValue<String>> totalColumnNameSupplier, Function<String, Boolean> ignoreColumnFunc) {
         return new VSplitStrategy() {
             
             @Override
@@ -120,6 +132,15 @@ public interface VSplitStrategy {
                         VSplitStrategy.super.getTotalSubcolumnName() : 
                         totalColumnNameSupplier.get();
             }
+            
+            @Override
+            public boolean shouldIgnoreColumn(String value) {
+                return ignoreColumnFunc.apply(value);
+            }
         };
+    }
+
+    default boolean shouldIgnoreColumn(String value) {
+        return false;
     }
 }

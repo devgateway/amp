@@ -213,12 +213,33 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
             List<CategAmountCellProto> protos;
             synchronized(CACHE_SYNC_OBJ) {
                 FundingFetcherContext cache = cacher.buildOrGetValue(true, engine);
-                Set<Long> deltas = scratchpad.differentiallyImportCells(engine.timer, mainColumn, cache.cache, ids -> fetchSkeleton(engine, ids, cache));
+                
+                scratchpad.differentiallyImportCells(engine.timer, mainColumn, cache.cache, 
+                        ids -> fetchSkeleton(engine, ids, cache));
+                
                 protos = cache.cache.getCells(scratchpad.getMainIds(engine, this));
                 long delta = System.currentTimeMillis() - start;
                 engine.timer.putMetaInNode("hot_time", delta);
             }
-            List<CategAmountCell> res = protos.stream().map(cacp -> cacp.materialize(usedCurrency, engine.calendar, schema.currencyConvertor, scratchpad.getPrecisionSetting())).collect(toList());
+            List<CategAmountCell> res = new ArrayList<>();
+            
+            // AMP-27571
+            // if showOriginalCurrencies splitting is enabled we need to duplicate cells with original currencies
+            if (engine.spec.isShowOriginalCurrency()) {
+                // generate cells for original currency only (except used currency)
+                res.addAll(protos.stream().map(cacp -> cacp.materializeOriginalCurrency(engine.calendar, 
+                                schema.currencyConvertor, scratchpad.getPrecisionSetting())).collect(toList()));
+                
+                // generate cells for current used currency
+                res.addAll(protos.stream().filter(cacp -> usedCurrency.getId() != cacp.origCurrency.getId())
+                        .map(cacp -> cacp.materializeUsedCurrency(usedCurrency, engine.calendar, 
+                                schema.currencyConvertor, scratchpad.getPrecisionSetting()))
+                        .collect(toList()));
+            } else {
+                res.addAll(protos.stream().map(cacp -> cacp.materialize(usedCurrency, engine.calendar, 
+                        schema.currencyConvertor, scratchpad.getPrecisionSetting())).collect(toList()));
+            }
+            
             return res;
         }
         else {

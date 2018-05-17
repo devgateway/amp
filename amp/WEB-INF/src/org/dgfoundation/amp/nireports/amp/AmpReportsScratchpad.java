@@ -122,6 +122,11 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
     public final boolean verticalSplitByTypeOfAssistance;
     
     /**
+     * this will be true {@link ReportSpecification#showOriginalCurrency} is true
+     */
+    private final boolean verticalSplitByCurrency;
+    
+    /**
      * the currency used to render the report - do not write anything to it!
      */
     protected final AmpCurrency usedCurrency;
@@ -145,6 +150,7 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
         this.verticalSplitByModeOfPayment = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SPLIT_BY_MODE_OF_PAYMENT).equalsIgnoreCase("true") &&
             engine.spec.getColumnNames().contains(ColumnConstants.MODE_OF_PAYMENT) &&
             !engine.spec.getHierarchyNames().contains(ColumnConstants.MODE_OF_PAYMENT);
+        this.verticalSplitByCurrency = engine.spec.isShowOriginalCurrency();
 
         checkMeasurelessHierarchies(engine.spec);
     }
@@ -331,4 +337,9 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
     public String getTimeRangeSubTotalColumnName(ReportSpecification spec) {
         return spec.isDisplayTimeRangeSubTotals() ? TranslatorWorker.translateText("Total") : null;
     }
+
+    public boolean isVerticalSplitByCurrency() {
+        return verticalSplitByCurrency;
+    }
+    
 }

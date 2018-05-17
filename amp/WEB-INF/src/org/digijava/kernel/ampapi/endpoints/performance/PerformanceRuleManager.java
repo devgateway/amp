@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -311,14 +310,13 @@ public final class PerformanceRuleManager {
                 act.getOrgrole().stream().filter(o -> o.getRole().getRoleCode().
                         equals(PerformanceRuleConstants.GROUPING_ROLE_CODE)).forEach(role -> {
                     Map<Long, Map<PerformanceRuleMatcher, List<AmpActivityVersion>>>
-                            actByDonorAndRuleExisting = actByDonorAndRuleByRole.get(role.getOrganisation().getAmpOrgId
-                            ());
+                            actByDonorAndRuleExisting = actByDonorAndRuleByRole.
+                            get(role.getOrganisation().getAmpOrgId());
                     if (actByDonorAndRuleExisting == null) {
                         //if we don't have the donors by the role yet we just add this
                         actByDonorAndRuleByRole.put(role.getOrganisation().getAmpOrgId(), actByDonorAndRule);
-
-                        organisationById.put(role.getOrganisation().getAmpOrgId(),role.getOrganisation());
-                    }else {
+                        organisationById.put(role.getOrganisation().getAmpOrgId(), role.getOrganisation());
+                    } else {
                         //if the role already has the donor, we need to merge them
                         Map<Long, Map<PerformanceRuleMatcher, List<AmpActivityVersion>>>
                                 actByDonorAndRuleMerged = Stream.of(actByDonorAndRule, actByDonorAndRuleExisting)
@@ -344,7 +342,7 @@ public final class PerformanceRuleManager {
         String url = SiteUtils.getBaseUrl();
 
         //if (actByDonorAndRule.isEmpty()) {
-          if(actByDonorAndRuleByRole.isEmpty()){
+        if (actByDonorAndRuleByRole.isEmpty()) {
             String noActivityWithRule = TranslatorWorker
                     .translateText("No activities with performance issues have been found");
             sb.append("<br/>" + noActivityWithRule + ".<br/>");
@@ -354,7 +352,7 @@ public final class PerformanceRuleManager {
                     .getKey()).getName()));
             sb.append("<table witdh=\"100%\" border=\"1\"><tr><td>");
             buildTableByDonor(sb, groupingRoleEntry.getValue(), organisationById, ampIdLabel, titleLabel,
-                    donorAgencyLabel,url);
+                    donorAgencyLabel, url);
             sb.append("</td></tr></table>");
             sb.append("<br/><br/>");
         });
@@ -381,7 +379,7 @@ public final class PerformanceRuleManager {
         actByDonorAndRule.entrySet().forEach(donorEntry -> {
             String donorName = organisationById.get(donorEntry.getKey()).getName();
             sb.append("<br/>");
-            sb.append(String.format("<b>%s:</b>%s", donorAgencyLabel, HtmlUtils.htmlEscape(donorName)));
+            sb.append(String.format("<b>%s: </b>%s", donorAgencyLabel, HtmlUtils.htmlEscape(donorName)));
             sb.append("<br/>");
 
             Map<PerformanceRuleMatcher, List<AmpActivityVersion>> activitiesByRule = donorEntry.getValue();

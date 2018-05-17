@@ -33,6 +33,10 @@ public final class PerformanceRuleConstants {
     
     public static final String HAS_ENABLED_PERFORMANCE_RULES = "hasEnabledPerformanceRules";
 
+    public static final String GROUPING_ROLE_CODE="RO";
+    public static final String GROUPING_ROLE_LABEL="Responsible Organisation";
+
+
     private PerformanceRuleConstants() { }
 
 }

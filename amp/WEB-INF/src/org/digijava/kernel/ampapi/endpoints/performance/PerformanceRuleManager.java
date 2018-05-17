@@ -347,8 +347,8 @@ public final class PerformanceRuleManager {
                     .translateText("No activities with performance issues have been found");
             sb.append("<br/>" + noActivityWithRule + ".<br/>");
         }
-        actByDonorAndRuleByRole.entrySet().forEach(groupingRoleEntry->{
-            sb.append(String.format("<b>%s</b>: %s ", groupingAgencyLabel,organisationById.get(groupingRoleEntry
+        actByDonorAndRuleByRole.entrySet().forEach(groupingRoleEntry -> {
+            sb.append(String.format("<b>%s</b>: %s ", groupingAgencyLabel, organisationById.get(groupingRoleEntry
                     .getKey()).getName()));
             sb.append("<table witdh=\"100%\" border=\"1\"><tr><td>");
             buildTableByDonor(sb, groupingRoleEntry.getValue(), organisationById, ampIdLabel, titleLabel,

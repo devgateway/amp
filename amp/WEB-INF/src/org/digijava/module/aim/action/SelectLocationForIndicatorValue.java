@@ -146,17 +146,8 @@ import org.digijava.module.aim.util.LocationUtil;
                       }
 
                 }
-                AmpLocation ampLoc = null;
-                if ( id != null ) {
-                    ampLoc      = LocationUtil.getAmpLocationByCVLocation(id);
-                    if (ampLoc == null) {
-                        AmpCategoryValueLocations selectedLoc=DynLocationManagerUtil.getLocation(id, false);
-                        ampLoc = new AmpLocation();
-                        ampLoc.setRegionLocation(selectedLoc);
-                        ampLoc.setLocation(selectedLoc);
-                        LocationUtil.saveLocation(ampLoc);
-                    }
-                }
+                
+                AmpLocation ampLoc = DynLocationManagerUtil.getOrCreateAmpLocationByCVLId(id);
                 
                 indValue.setLocation(ampLoc);
                 themeForm.setLocationLevelIndex(-1);
@@ -173,20 +164,6 @@ import org.digijava.module.aim.util.LocationUtil;
                 return mapping.findForward("backToAddDataPage");
             }
     
-    //        Collection<AmpRegion> locations = LocationUtil.getAmpLocations();
-    //        if(locations != null) {
-    //            List<AmpRegion> locationsList = new ArrayList<AmpRegion>(locations);
-    //            if(locationsList != null && themeForm.getKeyword() != null) {
-    //                for(Iterator iter = locationsList.iterator(); iter.hasNext(); ) {
-    //                    AmpRegion location = (AmpRegion) iter.next();
-    //                    if(location.getName().indexOf(themeForm.getKeyword()) == -1) {
-    //                        iter.remove();
-    //                    }
-    //                }
-    //            }
-    //            Collections.sort(locationsList, new LocationUtil.HelperAmpRegionNameComparator());
-    //            themeForm.setLocationsCol(locationsList);
-    //        }
             return mapping.findForward("forward");
         }
     

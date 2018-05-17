@@ -303,7 +303,7 @@ public final class PerformanceRuleManager {
                     actByDonorAndRule.get(donorId).get(matcher).add(act);
                 }
 
-                //onnce we have grouped the donor for this activites we have to group at a higher level
+                //once we have grouped the donor for this activity we have to group at a higher level
                 // and group by the role
 
 
@@ -341,7 +341,6 @@ public final class PerformanceRuleManager {
         //TODO get the url correctly
         String url = SiteUtils.getBaseUrl();
 
-        //if (actByDonorAndRule.isEmpty()) {
         if (actByDonorAndRuleByRole.isEmpty()) {
             String noActivityWithRule = TranslatorWorker
                     .translateText("No activities with performance issues have been found");

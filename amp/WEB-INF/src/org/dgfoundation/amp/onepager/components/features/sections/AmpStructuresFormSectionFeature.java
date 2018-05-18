@@ -259,7 +259,9 @@ public class AmpStructuresFormSectionFeature extends
                 pln.setVisible(visible);
             }
         };
-        add(addbutton);
+        
+       addbutton.getButton().add(new AttributeModifier("class", new Model("addStructure button_green_btm")));
+       add(addbutton);
         
         
     }

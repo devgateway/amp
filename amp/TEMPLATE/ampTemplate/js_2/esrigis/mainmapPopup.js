@@ -123,19 +123,44 @@ function onMapClick (e) {
 	
 }
 
-function selectLocationCallerShape(selectedGraphic){
+var isFirstSelect = true;
+function selectLocationCallerShape(selectedGraphic) {	
 	var callerButton = window.opener.callerGisObject;
-	//Lat
-	var latitudeInput = callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[1];
+	var row = findRow(selectedGraphic);
+	if (row != null) {
+		alert('The selected loaction has already been added.');
+		return;
+	}
+	
+	// first update, the row that was clicked
+	if (isFirstSelect == true) {
+		row = callerButton.parentNode.parentNode;		
+		updateActivityForm(row, selectedGraphic);
+		isFirstSelect = false;
+	} else {
+	 // for any subsequent selection, find row and if  not exists add it
+	  callerButton.ownerDocument.getElementsByClassName('addStructure')[0].click();	
+	  setTimeout(function(){
+			var rows = callerButton.ownerDocument.getElementsByClassName('structureRow');
+			row = rows[rows.length - 1];
+			updateActivityForm(row, selectedGraphic);			
+		 }, 3000);		
+							
+	}
+	
+}
+
+function updateActivityForm(row, selectedGraphic) {
+	var latitudeInput = row.getElementsByTagName("INPUT")[1];
 	latitudeInput.value = "";
 	//Long
-	var longitudeInput = callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[2];
+	var longitudeInput = row.getElementsByTagName("INPUT")[2];
 	longitudeInput.value = "";
 
-	var coordsInput = callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[5];
+	var coordsInput = row.getElementsByTagName("INPUT")[5];
 	coordsInput.value = "";
 
-	var shapeInput = callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[6];
+	var shapeInput = row.getElementsByTagName("INPUT")[6];
 	shapeInput.value = "";
 
     if(selectedPointEvent.target instanceof L.Marker || selectedGraphic.target instanceof L.CircleMarker) {
@@ -182,10 +207,79 @@ function selectLocationCallerShape(selectedGraphic){
         latitudeInput.fireEvent("onchange");
         longitudeInput.fireEvent("onchange");
     }
-
-	window.close();
+ 
+	//window.close();
+}
+ 
+function findRow(selectedGraphic) {
+	var callerButton = window.opener.callerGisObject;
+	var rows = callerButton.ownerDocument.getElementsByClassName('structureRow');
+		
+	for (var i = 0; i < rows.length; i++) {
+		var latitudeInput = rows[i].getElementsByTagName("INPUT")[1];		
+		var longitudeInput = rows[i].getElementsByTagName("INPUT")[2];
+		var coordsInput = rows[i].getElementsByTagName("INPUT")[5];
+		
+		if(selectedPointEvent.target instanceof L.Marker || selectedGraphic.target instanceof L.CircleMarker) {
+			var latLng = selectedGraphic.latlng ? selectedGraphic.latlng : selectedGraphic.getLatLng();
+			if (latitudeInput.value == latLng.lat && longitudeInput.value == latLng.lng) {
+				return rows[i];
+			}	    	
+		} else {
+			console.log(coordsInput.value);	
+			
+			var latLngs = selectedGraphic.target.getLatLngs();
+			var data = [];					
+			for(i = 0; i < latLngs.length; i++){
+				var obj = {}
+				obj.latitude = latLngs[i].lat;
+				obj.longitude = latLngs[i].lng;
+				data.push(obj);
+			}
+			
+			var jsonString = JSON.stringify({'coordinates': data});
+			if (coordsInput.value === jsonString ) {
+				return rows[i];
+			}	
+		}		
+	}
+	
+	return null;
 }
 
+
+function editLocationTitle(selectedGraphic) {
+	var callerButton = window.opener.callerGisObject;
+	$("#locationTitleDialog" ).dialog({
+		"title": "Edit title",
+		 buttons: [
+		    {
+		      text: "Close",
+		      click: function() {
+		        $( this ).dialog( "close" );
+		      }	
+		    },
+		    {
+			      text: "Submit",
+			      click: function() {
+			    	var row = findRow(selectedGraphic);
+			    	if (row == null) {
+			    		row = callerButton.parentNode.parentNode;
+			    	}
+			    	
+			    	if (row) {
+			    		var title = row.getElementsByTagName("INPUT")[0];				        
+				        title.value = $("#locationTitle").val();
+			    	}
+			        
+			        $( this ).dialog( "close" );
+			      }	
+			    }
+		  ]
+	 });
+	
+	
+}
 
 function locate() {
 	var location = $("#address").val();
@@ -351,13 +445,23 @@ function startContextMenu () {
 	    switch($(this).attr("data-action")) {
 	        // A case for each action
 	        case "select": 	selectLocationCallerShape (selectedPointEvent); break;
-	        case "remove": map.removeLayer(selectedPointEvent.target); circlePoint = null; break;
+	        case "remove": removeStructure(selectedPointEvent); circlePoint = null; break;
+	        case "editTitle": editLocationTitle(selectedPointEvent); break;
 	    }
 	  
 	    // Hide it AFTER the action was triggered
 	    $(".custom-menu").hide(100);
 	    isMenuOpen = false;
 	  });
+}
+
+function removeStructure(selectedPointEvent) {
+	var row = findRow(selectedPointEvent);
+	if (row) {
+		row.getElementsByTagName('IMG')[2].click();		
+	}
+	
+	map.removeLayer(selectedPointEvent.target);	
 }
 
 function hideMenu () {

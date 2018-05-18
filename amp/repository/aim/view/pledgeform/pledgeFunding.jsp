@@ -48,7 +48,7 @@
 					<c:choose>
 						<c:when test="${pledgeForm.fundingShowDateRange}">
 							<div >
-								<div style="width: 49%;display: inline-block;">
+								<div class="pledge-date">
 							<label for="pledgeFundingDateStart_${indexLoc}"><digi:trn key="aim:year">Pledge
 								start date</digi:trn></label> <br />
 							<span>
@@ -57,7 +57,7 @@
 								class="form-control input-sm inline-input validate-date-range-start date-range-start validate-date-range-group-${selectedFunding.uniqueId}" value="${selectedFunding.fundingDateStartSettingsFormat}"/>
 							</span>
 							</div>
-								<div style="width: 49%;display: inline-block;">
+								<div class="pledge-date">
 							<label for="pledgeFundingDateEnd_${indexLoc}"><digi:trn key="aim:year">Pledge end
 								date</digi:trn></label> <br />
 							<span>

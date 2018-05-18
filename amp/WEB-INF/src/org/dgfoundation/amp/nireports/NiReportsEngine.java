@@ -634,7 +634,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
         });
 
         //step3: create the Ni columns based on the collected cells
-        GroupColumn totalsColumn = new GroupColumn(columnName, columnLabel, null, parentColumn, null);
+        GroupColumn totalsColumn = new GroupColumn(columnName, columnLabel, null, parentColumn, null, true);
         totalsColumnsContents.forEach((name, cont) -> {
             totalsColumn.addColumn(new CellColumn(name, new LocalizableLabel(name), cont.v, totalsColumn, cont.k, cont.k.getBehaviour(), new NiColSplitCell(PSEUDOCOLUMN_MEASURE, new ComparableValue<String>(name, name))));
         });

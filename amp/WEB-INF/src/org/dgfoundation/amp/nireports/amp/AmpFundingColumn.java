@@ -227,12 +227,14 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
             // if showOriginalCurrencies splitting is enabled we need to duplicate cells with original currencies
             if (engine.spec.isShowOriginalCurrency()) {
                 // generate cells for original currency only (except used currency)
-                res.addAll(protos.stream().map(cacp -> cacp.materializeOriginalCurrency(engine.calendar, 
-                                schema.currencyConvertor, scratchpad.getPrecisionSetting())).collect(toList()));
+                res.addAll(protos.stream()
+                        .map(cacp -> cacp.materialize(usedCurrency, engine.calendar, 
+                                schema.currencyConvertor, scratchpad.getPrecisionSetting(), false))
+                        .collect(toList()));
                 
                 // generate cells for current used currency
                 res.addAll(protos.stream().filter(cacp -> usedCurrency.getId() != cacp.origCurrency.getId())
-                        .map(cacp -> cacp.materializeUsedCurrency(usedCurrency, engine.calendar, 
+                        .map(cacp -> cacp.materialize(usedCurrency, engine.calendar, 
                                 schema.currencyConvertor, scratchpad.getPrecisionSetting()))
                         .collect(toList()));
             } else {

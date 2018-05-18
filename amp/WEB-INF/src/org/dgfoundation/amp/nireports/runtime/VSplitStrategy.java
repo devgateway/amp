@@ -47,6 +47,16 @@ public interface VSplitStrategy {
      * @return
      */
     public default List<ComparableValue<String>> getSubcolumnsNames(Set<ComparableValue<String>> existant) {
+        return getSubcolumnsNames(existant, false);
+    }
+    
+    /**
+     * returns the list of the subcolumns to be created based on the list of existant categories
+     * @param existant
+     * @return
+     */
+    default List<ComparableValue<String>> getSubcolumnsNames(Set<ComparableValue<String>> existant, 
+            boolean isTotal) {
         return new ArrayList<>(existant);
     }
     
@@ -60,7 +70,7 @@ public interface VSplitStrategy {
     public default ComparableValue<String> getTotalSubcolumnName() {
         return null;
     }
-
+    
     public static VSplitStrategy build(Function<NiCell, ComparableValue<String>> cat, Function<ComparableValue<String>, Behaviour<?>> beh, Function<Set<ComparableValue<String>>, List<ComparableValue<String>>> subColumnNames, String entityType) {
         return new VSplitStrategy() {
 
@@ -84,13 +94,8 @@ public interface VSplitStrategy {
         };
     }
     
-    /**
-     * builds a VSplitStrategu which categorizes cells by a callback. Equivalent to calling {@link #build(Function, String, null)}
-     * @param cat
-     * @param entityType
-     */
     public static VSplitStrategy build(Function<NiCell, ComparableValue<String>> cat, String entityType) {
-        return build(cat, entityType, null, s -> false);
+        return build(cat, entityType, null);
     }
     
     /**
@@ -101,19 +106,6 @@ public interface VSplitStrategy {
      * @return
      */
     public static VSplitStrategy build(Function<NiCell, ComparableValue<String>> cat, String entityType, Supplier<ComparableValue<String>> totalColumnNameSupplier) {
-        return build(cat, entityType, totalColumnNameSupplier, s -> false);
-    }
-    
-    /**
-     * builds a VSplitStrategy which categorizes cells by a callback, while optionally sporting a "Total" subcolumn
-     * @param cat
-     * @param entityType
-     * @param totalColumnNameSupplier a supplier of the "total" subcolumn name. 
-     * In case it is null, the strategy will not feature a Total subcolumn
-     * @return
-     */
-    static VSplitStrategy build(Function<NiCell, ComparableValue<String>> cat, String entityType, 
-            Supplier<ComparableValue<String>> totalColumnNameSupplier, Function<String, Boolean> ignoreColumnFunc) {
         return new VSplitStrategy() {
             
             @Override
@@ -133,14 +125,7 @@ public interface VSplitStrategy {
                         totalColumnNameSupplier.get();
             }
             
-            @Override
-            public boolean shouldIgnoreColumn(String value) {
-                return ignoreColumnFunc.apply(value);
-            }
         };
     }
 
-    default boolean shouldIgnoreColumn(String value) {
-        return false;
-    }
 }

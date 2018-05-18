@@ -1,5 +1,7 @@
 package org.dgfoundation.amp.nireports.runtime;
 
+import static java.util.Collections.emptyList;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -9,16 +11,12 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.function.Consumer;
 
-import static java.util.Collections.emptyList;
-
-import org.digijava.kernel.translator.LocalizableLabel;
-import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.nireports.ComparableValue;
-import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.NiUtils;
 import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.NiReportedEntity;
+import org.digijava.kernel.translator.LocalizableLabel;
 
 /**
  * a leaf column
@@ -59,29 +57,22 @@ public class CellColumn extends Column {
         }
             
         GroupColumn res = this.asGroupColumn(null, newParent);
-        List<ComparableValue<String>> subColumnNames = strategy.getSubcolumnsNames(values.keySet());
+        List<ComparableValue<String>> subColumnNames = strategy.getSubcolumnsNames(values.keySet(), isTotal());
+        if (isTotal()) {
+            System.out.println(subColumnNames);
+        }
         for(ComparableValue<String> key:subColumnNames) {
-            // AMP-27571 do not show original currency in TOTALS columns if it's not the current used currency
-            if (!(strategy.getEntityType().equals(ColumnConstants.ORIGINAL_CURRENCY) && isTotalColumn() 
-                    && strategy.shouldIgnoreColumn(key.getValue().toString()))) {
-
-                res.addColumn(
-                    new CellColumn(key.getValue(),
-                        new LocalizableLabel(key.getValue()),
-                        new ColumnContents(Optional.ofNullable(values.get(key)).orElse(emptyList())),
-                        res, 
-                        this.entity,
-                        strategy.getBehaviour(key, this),
-                        strategy.getEntityType() == null ? null : new NiColSplitCell(strategy.getEntityType(), key)));
-            }
+            res.addColumn(
+                new CellColumn(key.getValue(),
+                    new LocalizableLabel(key.getValue()),
+                    new ColumnContents(Optional.ofNullable(values.get(key)).orElse(emptyList())),
+                    res, 
+                    this.entity,
+                    strategy.getBehaviour(key, this),
+                    strategy.getEntityType() == null ? null : new NiColSplitCell(strategy.getEntityType(), key)));
         };
         
         return res;
-    }
-
-    private boolean isTotalColumn() {
-        return String.format("%s / %s", NiReportsEngine.ROOT_COLUMN_NAME, NiReportsEngine.TOTALS_COLUMN_NAME)
-                .equals(this.parent.getHierName());
     }
 
     public ColumnContents getContents() {
@@ -117,5 +108,9 @@ public class CellColumn extends Column {
     @Override
     public <K> K accept(ColumnVisitor<K> cv) {
         return cv.visit(this);
+    }
+    
+    public boolean isTotal() {
+        return parent.isTotal();
     }
 }

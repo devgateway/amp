@@ -56,10 +56,7 @@ public class CategAmountCellProto extends Cell {
      * @return
      */
     public CategAmountCell materialize(AmpCurrency usedCurrency, CachingCalendarConverter calendarConverter, CurrencyConvertor currencyConvertor, NiPrecisionSetting precisionSetting) {
-        BigDecimal usedExchangeRate = BigDecimal.valueOf(currencyConvertor.getExchangeRate(origCurrency.getCurrencyCode(), usedCurrency.getCurrencyCode(), fixed_exchange_rate == null ? null : fixed_exchange_rate.doubleValue(), transactionDate));
-        MonetaryAmount amount = new MonetaryAmount(origAmount.multiply(usedExchangeRate), origAmount, origCurrency, transactionDate, precisionSetting);
-        CategAmountCell cell = new CategAmountCell(activityId, amount, metaInfo, coordinates, calendarConverter.translate(transactionMoment));
-        return cell;
+        return materialize(usedCurrency, calendarConverter, currencyConvertor, precisionSetting, true);
     }
     
     /**
@@ -74,45 +71,27 @@ public class CategAmountCellProto extends Cell {
      * @param precisionSetting
      * @return
      */
-    public CategAmountCell materializeUsedCurrency(AmpCurrency usedCurr, CachingCalendarConverter calendarConverter, 
-            CurrencyConvertor currencyConvertor, NiPrecisionSetting precisionSetting) {
+    public CategAmountCell materialize(AmpCurrency usedCurr, CachingCalendarConverter calendarConverter, 
+            CurrencyConvertor currencyConvertor, NiPrecisionSetting precisionSetting, boolean isAmountConverted) {
         
-        BigDecimal usedExchangeRate = BigDecimal.valueOf(currencyConvertor.getExchangeRate(
-                origCurrency.getCurrencyCode(), usedCurr.getCurrencyCode(), 
-                fixed_exchange_rate == null ? null : fixed_exchange_rate.doubleValue(), transactionDate));
+        BigDecimal convertedAmount = origAmount;
         
-        MonetaryAmount amount = new MonetaryAmount(origAmount.multiply(usedExchangeRate), origAmount, usedCurr, 
-                transactionDate, precisionSetting);
+        if (isAmountConverted) {
+            BigDecimal usedExchangeRate = BigDecimal.valueOf(currencyConvertor.getExchangeRate(
+                    origCurrency.getCurrencyCode(), usedCurr.getCurrencyCode(), 
+                    fixed_exchange_rate == null ? null : fixed_exchange_rate.doubleValue(), transactionDate));
+            convertedAmount = origAmount.multiply(usedExchangeRate);
+        }
+        
+        MonetaryAmount amount = new MonetaryAmount(convertedAmount, origAmount, origCurrency, transactionDate, 
+                precisionSetting);
         
         CategAmountCell cell = new CategAmountCell(activityId, amount, metaInfo, coordinates, 
-                calendarConverter.translate(transactionMoment));
+                calendarConverter.translate(transactionMoment), isAmountConverted);
         
         return cell;
     }
     
-    /**
-     * AMP-27571
-     * Materializes this instance into a full transaction. The original amount will not be converted.
-     * This method is called only when report.spec.showOriginalCurrency is set to true
-     * 
-     * @param currency
-     * @param calendarConverter
-     * @param currencyConvertor
-     * @param precisionSetting
-     * @return
-     */
-    public CategAmountCell materializeOriginalCurrency(CachingCalendarConverter calendarConverter, 
-            CurrencyConvertor currencyConvertor, NiPrecisionSetting precisionSetting) {
-        
-        MonetaryAmount amount = new MonetaryAmount(origAmount, origAmount, origCurrency, 
-                transactionDate, precisionSetting);
-        
-        CategAmountCell cell = new CategAmountCell(activityId, amount, metaInfo, coordinates, 
-                calendarConverter.translate(transactionMoment));
-        
-        return cell;
-    }
-
     @Override
     public CategAmountCellProto changeOwnerId(long newActivityId) {
         return new CategAmountCellProto(newActivityId, origAmount, origCurrency, transactionMoment, metaInfo, this.coordinates, fixed_exchange_rate);

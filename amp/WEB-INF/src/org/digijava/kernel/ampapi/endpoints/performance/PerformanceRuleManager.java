@@ -1,8 +1,15 @@
 package org.digijava.kernel.ampapi.endpoints.performance;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
@@ -15,7 +22,6 @@ import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.Perfo
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleMatcherDefinition;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleMatcherPossibleValuesSupplier;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -319,8 +325,8 @@ public final class PerformanceRuleManager {
 
                                 actByDonorAndRuleToMerge
                                         .getValue().entrySet().forEach(mapaTemp2It -> {
-                                    performanceRuleForDonorToMerge.merge(mapaTemp2It.getKey(), mapaTemp2It.getValue()
-                                            , (v1, v2) -> {
+                                    performanceRuleForDonorToMerge.merge(mapaTemp2It.getKey(), mapaTemp2It.getValue(),
+                                            (v1, v2) -> {
                                         v1.addAll(v2);
                                         return v1;
                                     });
@@ -328,8 +334,8 @@ public final class PerformanceRuleManager {
                                 actByDonorAndRuleExisting.put(actByDonorAndRuleToMerge.getKey(),
                                         performanceRuleForDonorToMerge);
                             } else {
-                                actByDonorAndRuleExisting.put(actByDonorAndRuleToMerge.getKey(), actByDonorAndRuleToMerge
-                                        .getValue());
+                                actByDonorAndRuleExisting.put(actByDonorAndRuleToMerge.getKey(),
+                                        actByDonorAndRuleToMerge.getValue());
                             }
                         });
                     }

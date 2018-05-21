@@ -2,8 +2,10 @@ package org.digijava.kernel.ampapi.endpoints.performance;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -275,7 +277,7 @@ public final class PerformanceRuleManager {
     }
 
     public String buildPerformanceIssuesMessage(Map<AmpActivityVersion, List<PerformanceIssue>> actsWithIssues) {
-        
+
         StringBuilder sb = new StringBuilder();
 
         Map<Long, AmpOrganisation> organisationById = new HashMap<>();
@@ -295,11 +297,11 @@ public final class PerformanceRuleManager {
                         actByDonorAndRule.put(donorId, new HashMap<>());
                         organisationById.put(donorId, donor);
                     }
-                    
+
                     if (!actByDonorAndRule.get(donorId).containsKey(matcher)) {
                         actByDonorAndRule.get(donorId).put(matcher, new LinkedHashSet<>());
                     }
-                    
+
                     actByDonorAndRule.get(donorId).get(matcher).add(act);
                 }
 
@@ -358,7 +360,22 @@ public final class PerformanceRuleManager {
                     .translateText("No activities with performance issues have been found");
             sb.append("<br/>" + noActivityWithRule + ".<br/>");
         }
-        actByDonorAndRuleByRole.entrySet().forEach(groupingRoleEntry -> {
+
+        // we sort the map by org asc
+
+        Map<Long, Map<Long, Map<PerformanceRuleMatcher, Set<AmpActivityVersion>>>>  actByDonorAndRuleByRoleSorted
+                = actByDonorAndRuleByRole.entrySet().stream()
+                .sorted(Map.Entry.comparingByKey(new Comparator<Long>() {
+                    @Override
+                    public int compare(Long o1, Long o2) {
+                        return organisationById.get(o1).getName().compareTo(organisationById.get(o2).getName());
+                    }
+                }))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+                        (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+
+
+        actByDonorAndRuleByRoleSorted.entrySet().forEach(groupingRoleEntry -> {
             sb.append(String.format("<b>%s</b>: %s ", groupingAgencyLabel, organisationById.get(groupingRoleEntry
                     .getKey()).getName()));
             sb.append("<table witdh=\"100%\" border=\"1\"><tr><td>");

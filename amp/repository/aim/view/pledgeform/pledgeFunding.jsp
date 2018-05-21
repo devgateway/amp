@@ -49,8 +49,8 @@
 						<c:when test="${pledgeForm.fundingShowDateRange}">
 							<div >
 								<div class="pledge-date">
-							<label for="pledgeFundingDateStart_${indexLoc}"><digi:trn key="aim:year">Pledge
-								start date</digi:trn></label> <br />
+							<label for="pledgeFundingDateStart_${indexLoc}">
+								<digi:trn key="aim:year">Pledge start date</digi:trn></label> <br />
 							<span>
 								<input name="selectedFunding[${indexLoc}].fundingDateStart" type="text" id="pledgeFundingDateStart_${indexLoc}" 
 								data-date-format="${pledgeForm.globalDateFormat}" 
@@ -58,8 +58,8 @@
 							</span>
 							</div>
 								<div class="pledge-date">
-							<label for="pledgeFundingDateEnd_${indexLoc}"><digi:trn key="aim:year">Pledge end
-								date</digi:trn></label> <br />
+							<label for="pledgeFundingDateEnd_${indexLoc}">
+								<digi:trn key="aim:year">Pledge end date</digi:trn> </label> <br />
 							<span>
 								<input name="selectedFunding[${indexLoc}].fundingDateEnd" type="text" id="pledgeFundingDateEnd_${indexLoc}" 
 								data-date-format="${pledgeForm.globalDateFormat}" 

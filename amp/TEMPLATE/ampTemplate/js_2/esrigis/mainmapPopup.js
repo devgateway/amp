@@ -128,7 +128,7 @@ function selectLocationCallerShape(selectedGraphic) {
 	var callerButton = window.opener.callerGisObject;
 	var row = findRow(selectedGraphic);
 	if (row != null) {
-		alert('The selected loaction has already been added.');
+		alert(TranslationManager.getTranslated('The selected loaction has already been added.'));
 		return;
 	}
 	
@@ -138,7 +138,8 @@ function selectLocationCallerShape(selectedGraphic) {
 		updateActivityForm(row, selectedGraphic);
 		isFirstSelect = false;
 	} else {
-	 // for any subsequent selection, find row and if  not exists add it
+	  // if not first selection, find row and if  not exists add it		
+	  // trigger click on add structure button to add row on structures table in AF
 	  callerButton.ownerDocument.getElementsByClassName('addStructure')[0].click();	
 	  setTimeout(function(){
 			var rows = callerButton.ownerDocument.getElementsByClassName('structureRow');
@@ -206,9 +207,7 @@ function updateActivityForm(row, selectedGraphic) {
     	coordsInput.fireEvent("onchange");
         latitudeInput.fireEvent("onchange");
         longitudeInput.fireEvent("onchange");
-    }
- 
-	//window.close();
+    }	
 }
  
 function findRow(selectedGraphic) {
@@ -458,6 +457,7 @@ function startContextMenu () {
 function removeStructure(selectedPointEvent) {
 	var row = findRow(selectedPointEvent);
 	if (row) {
+		//trigger click on delete button to remove row on structures table in AF
 		row.getElementsByTagName('IMG')[2].click();		
 	}
 	

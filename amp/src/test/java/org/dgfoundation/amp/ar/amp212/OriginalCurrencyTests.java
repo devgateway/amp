@@ -9,6 +9,7 @@ import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.mondrian.ReportAreaForTests;
 import org.dgfoundation.amp.mondrian.ReportingTestCase;
+import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.newreports.AreaOwner;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
@@ -72,6 +73,17 @@ public class OriginalCurrencyTests extends ReportingTestCase {
             "third activity with agreements",
             "Unvalidated activity",
             "with weird currencies"
+        );
+    
+    final List<String> ppcActs = Arrays.asList(
+            "Proposed Project Cost 1 - USD",
+            "Proposed Project Cost 2 - EUR",
+            "SubNational no percentages",
+            "Activity with primary_tertiary_program",
+            "activity with primary_program",
+            "activity with tertiary_program",
+            "activity 1 with agreement",
+            "activity with directed MTEFs"
         );
     
     public OriginalCurrencyTests() {
@@ -230,6 +242,44 @@ public class OriginalCurrencyTests extends ReportingTestCase {
         try {
             TestcasesReportsSchema.disableToAMoPSplitting = false;
             runNiTestCase(spec, "en", acts, cor);
+        } finally {
+            TestcasesReportsSchema.disableToAMoPSplitting = true;
+        }
+    }
+    
+    @Test
+    public void testProposedProjectOriginalCurrency() {
+        NiReportModel cor =  new NiReportModel("PPC-original-currency")
+                .withHeaders(Arrays.asList(
+                        "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 5, colStart: 0, colSpan: 6))",
+                        "(Project Title: (startRow: 1, rowSpan: 4, totalRowSpan: 4, colStart: 0, colSpan: 1));(Proposed Project Amount: (startRow: 1, rowSpan: 3, totalRowSpan: 4, colStart: 1, colSpan: 2));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 4, colStart: 3, colSpan: 2));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 4, colStart: 5, colSpan: 1))",
+                        "(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 3, colStart: 3, colSpan: 1));(2015: (startRow: 2, rowSpan: 1, totalRowSpan: 3, colStart: 4, colSpan: 1))",
+                        "(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 4, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 5, colSpan: 1))",
+                        "(EUR: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1));(USD: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(USD: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(USD: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(USD: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1))"))
+                    .withWarnings(Arrays.asList())
+                    .withBody(      new ReportAreaForTests(null)
+                      .withContents("Project Title", "", "Proposed Project Amount-EUR", "2,550", "Proposed Project Amount-USD", "4,630,9", "Funding-2014-Actual Commitments-USD", "172", "Funding-2015-Actual Commitments-USD", "580,24", "Totals-Actual Commitments-USD", "752,24")
+                      .withChildren(
+                        new ReportAreaForTests(new AreaOwner(15), "Project Title", "Proposed Project Cost 1 - USD", "Proposed Project Amount-USD", "1,000"),
+                        new ReportAreaForTests(new AreaOwner(17), "Project Title", "Proposed Project Cost 2 - EUR", "Proposed Project Amount-EUR", "2,500", "Proposed Project Amount-USD", "3,399,51"),
+                        new ReportAreaForTests(new AreaOwner(40), "Project Title", "SubNational no percentages", "Proposed Project Amount-USD", "60", "Funding-2014-Actual Commitments-USD", "75", "Totals-Actual Commitments-USD", "75"),
+                        new ReportAreaForTests(new AreaOwner(43), "Project Title", "Activity with primary_tertiary_program", "Proposed Project Amount-EUR", "50", "Proposed Project Amount-USD", "66,39", "Funding-2014-Actual Commitments-USD", "50", "Totals-Actual Commitments-USD", "50"),
+                        new ReportAreaForTests(new AreaOwner(44), "Project Title", "activity with primary_program", "Proposed Project Amount-USD", "35", "Funding-2014-Actual Commitments-USD", "32", "Totals-Actual Commitments-USD", "32"),
+                        new ReportAreaForTests(new AreaOwner(45), "Project Title", "activity with tertiary_program", "Proposed Project Amount-USD", "70", "Funding-2014-Actual Commitments-USD", "15", "Totals-Actual Commitments-USD", "15"),
+                        new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement", "Funding-2015-Actual Commitments-USD", "456,79", "Totals-Actual Commitments-USD", "456,79"),
+                        new ReportAreaForTests(new AreaOwner(73), "Project Title", "activity with directed MTEFs", "Funding-2015-Actual Commitments-USD", "123,46", "Totals-Actual Commitments-USD", "123,46")      ));
+        
+        ReportSpecificationImpl spec = buildSpecification("PPC-original-currency", 
+            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.PROPOSED_PROJECT_AMOUNT),
+            Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS), 
+            null,
+            GroupingCriteria.GROUPING_YEARLY);
+        spec.getOrCreateSettings().setUnitsOption(AmountsUnits.AMOUNTS_OPTION_THOUSANDS);
+        spec.setShowOriginalCurrency(true);
+        
+        try {
+            TestcasesReportsSchema.disableToAMoPSplitting = false;
+            runNiTestCase(spec, "en", ppcActs, cor);
         } finally {
             TestcasesReportsSchema.disableToAMoPSplitting = true;
         }

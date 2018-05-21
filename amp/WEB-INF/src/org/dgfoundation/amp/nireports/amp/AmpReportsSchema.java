@@ -1561,8 +1561,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
                 && engine.spec.isShowOriginalCurrency();
         
         if (splitByCurrencies) {
-            return Arrays.asList(CurrencyMeasureSplittingStrategy.getInstance(scratch.usedCurrency, 
-                    ColumnConstants.ORIGINAL_CURRENCY));
+            return Arrays.asList(CurrencyMeasureSplittingStrategy.getInstance(scratch.usedCurrency));
         }
         
         if (splitByToA)
@@ -1575,7 +1574,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 
         return raw;
     }
-     
+
     /**
      * returns true IFF splitByToA, splitByMoP and other behaviours like that (splitting a measure into subcategories) should be disabled.
      * Used for testcases only

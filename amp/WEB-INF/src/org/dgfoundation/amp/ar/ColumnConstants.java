@@ -383,7 +383,5 @@ public class ColumnConstants {
     public static final String INDICATOR_REVISED_TARGET_VALUE = "Indicator Revised Target Value";
     public static final String INDICATOR_REVISED_TARGET_DATE = "Indicator Revised Target Date";
     public static final String INDICATOR_REVISED_TARGET_COMMENT = "Indicator Revised Target Comment";
-    
-    public static final String ORIGINAL_CURRENCY = "Original Currency";
 
 }

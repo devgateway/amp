@@ -61,10 +61,9 @@ public class CurrencyMeasureSplittingStrategy implements VSplitStrategy {
      * The currend used currency should be at the end of the list, those a prefix should be added.
      * 
      * @param usedCurrency 
-     * @param pseudoColumnName
      * @return
      */
-    public static VSplitStrategy getInstance(AmpCurrency usedCurrency, String pseudoColumnName) {
+    public static VSplitStrategy getInstance(AmpCurrency usedCurrency) {
         VSplitStrategy byCurrency = new CurrencyMeasureSplittingStrategy(cell -> 
                             new ComparableValue<String>(
                                     getCurrencyCode(usedCurrency, cell.getCell()),

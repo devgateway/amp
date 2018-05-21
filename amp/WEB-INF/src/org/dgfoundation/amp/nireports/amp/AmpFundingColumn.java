@@ -223,8 +223,10 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
             }
             List<CategAmountCell> res = new ArrayList<>();
             
-            // AMP-27571
-            // if showOriginalCurrencies splitting is enabled we need to duplicate cells with original currencies
+            /* 
+             * AMP-27571
+             * if showOriginalCurrencies splitting is enabled we need to duplicate cells with original currencies
+            */
             if (engine.spec.isShowOriginalCurrency()) {
                 // generate cells for original currency only (except used currency)
                 res.addAll(protos.stream()

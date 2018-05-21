@@ -249,8 +249,17 @@ function findRow(selectedGraphic) {
 
 function editLocationTitle(selectedGraphic) {
 	var callerButton = window.opener.callerGisObject;
+	var row = findRow(selectedGraphic);
+	
 	$("#locationTitleDialog" ).dialog({
 		"title": "Edit title",
+		 open: function( event, ui ) {
+			 $("#locationTitle").val('');
+			 if (row) {
+		    		var title = row.getElementsByTagName("INPUT")[0];		        
+			        $("#locationTitle").val(title.value);
+		     }
+		 },
 		 buttons: [
 		    {
 		      text: "Close",
@@ -260,8 +269,7 @@ function editLocationTitle(selectedGraphic) {
 		    },
 		    {
 			      text: "Submit",
-			      click: function() {
-			    	var row = findRow(selectedGraphic);
+			      click: function() {			    	
 			    	if (row == null) {
 			    		row = callerButton.parentNode.parentNode;
 			    	}

@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
@@ -21,7 +22,6 @@ import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.Perfo
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleMatcherDefinition;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleMatcherPossibleValuesSupplier;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -279,11 +279,11 @@ public final class PerformanceRuleManager {
         StringBuilder sb = new StringBuilder();
 
         Map<Long, AmpOrganisation> organisationById = new HashMap<>();
-        Map<Long, Map<Long, Map<PerformanceRuleMatcher, List<AmpActivityVersion>>>> actByDonorAndRuleByRole =
+        Map<Long, Map<Long, Map<PerformanceRuleMatcher, Set<AmpActivityVersion>>>> actByDonorAndRuleByRole =
                 new HashMap<>();
 
         actsWithIssues.forEach((AmpActivityVersion act, List<PerformanceIssue> issues) -> {
-            Map<Long, Map<PerformanceRuleMatcher, List<AmpActivityVersion>>> actByDonorAndRule = new HashMap<>();
+            Map<Long, Map<PerformanceRuleMatcher, Set<AmpActivityVersion>>> actByDonorAndRule = new HashMap<>();
 
             for (PerformanceIssue issue : issues) {
                 List<AmpOrganisation> donors = issue.getDonors();
@@ -297,7 +297,7 @@ public final class PerformanceRuleManager {
                     }
                     
                     if (!actByDonorAndRule.get(donorId).containsKey(matcher)) {
-                        actByDonorAndRule.get(donorId).put(matcher, new ArrayList<>());
+                        actByDonorAndRule.get(donorId).put(matcher, new LinkedHashSet<>());
                     }
                     
                     actByDonorAndRule.get(donorId).get(matcher).add(act);
@@ -309,7 +309,7 @@ public final class PerformanceRuleManager {
 
                 act.getOrgrole().stream().filter(o -> o.getRole().getRoleCode().
                         equals(PerformanceRuleConstants.GROUPING_ROLE_CODE)).forEach(role -> {
-                    Map<Long, Map<PerformanceRuleMatcher, List<AmpActivityVersion>>>
+                    Map<Long, Map<PerformanceRuleMatcher, Set<AmpActivityVersion>>>
                             actByDonorAndRuleExisting = actByDonorAndRuleByRole.
                             get(role.getOrganisation().getAmpOrgId());
                     if (actByDonorAndRuleExisting == null) {
@@ -318,14 +318,26 @@ public final class PerformanceRuleManager {
                         organisationById.put(role.getOrganisation().getAmpOrgId(), role.getOrganisation());
                     } else {
                         //if the role already has the donor, we need to merge them
-                        Map<Long, Map<PerformanceRuleMatcher, List<AmpActivityVersion>>>
-                                actByDonorAndRuleMerged = Stream.of(actByDonorAndRule, actByDonorAndRuleExisting)
-                                .flatMap(map -> map.entrySet().stream())
-                                .collect(Collectors.toMap(Map.Entry::getKey,
-                                        Map.Entry::getValue, (map1, map2) -> {
-                                            map1.putAll(map2);
-                                            return map1;
-                                        }));
+                        actByDonorAndRule.entrySet().forEach(actByDonorAndRuleToMerge -> {
+                            if (actByDonorAndRuleExisting.get(actByDonorAndRuleToMerge.getKey()) != null) {
+                                Map<PerformanceRuleMatcher, Set<AmpActivityVersion>> performanceRuleForDonorToMerge =
+                                        actByDonorAndRuleExisting.get(actByDonorAndRuleToMerge.getKey());
+
+                                actByDonorAndRuleToMerge
+                                        .getValue().entrySet().forEach(mapaTemp2It -> {
+                                    performanceRuleForDonorToMerge.merge(mapaTemp2It.getKey(), mapaTemp2It.getValue(),
+                                            (v1, v2) -> {
+                                        v1.addAll(v2);
+                                        return v1;
+                                    });
+                                });
+                                actByDonorAndRuleExisting.put(actByDonorAndRuleToMerge.getKey(),
+                                        performanceRuleForDonorToMerge);
+                            } else {
+                                actByDonorAndRuleExisting.put(actByDonorAndRuleToMerge.getKey(),
+                                        actByDonorAndRuleToMerge.getValue());
+                            }
+                        });
                     }
                 });
 
@@ -356,9 +368,6 @@ public final class PerformanceRuleManager {
             sb.append("<br/><br/>");
         });
 
-//
-        
-        
         return sb.toString();
     }
 
@@ -371,7 +380,7 @@ public final class PerformanceRuleManager {
      * @param titleLabel
      * @param url
      */
-    private void buildTableByDonor(StringBuilder sb, Map<Long, Map<PerformanceRuleMatcher, List<AmpActivityVersion>>>
+    private void buildTableByDonor(StringBuilder sb, Map<Long, Map<PerformanceRuleMatcher, Set<AmpActivityVersion>>>
             actByDonorAndRule, Map<Long, AmpOrganisation> organisationById, String ampIdLabel, String titleLabel,
                                    String donorAgencyLabel, String url) {
         sb.append("<table><tr><td>");
@@ -381,7 +390,7 @@ public final class PerformanceRuleManager {
             sb.append(String.format("<b>%s: </b>%s", donorAgencyLabel, HtmlUtils.htmlEscape(donorName)));
             sb.append("<br/>");
 
-            Map<PerformanceRuleMatcher, List<AmpActivityVersion>> activitiesByRule = donorEntry.getValue();
+            Map<PerformanceRuleMatcher, Set<AmpActivityVersion>> activitiesByRule = donorEntry.getValue();
             sb.append("<table border=1 cellpadding=5 cellspacing=0 width=100%>");
             activitiesByRule.entrySet().forEach(e -> {
                 sb.append("<tr>");

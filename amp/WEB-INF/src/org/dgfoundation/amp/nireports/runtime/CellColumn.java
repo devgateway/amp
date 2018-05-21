@@ -58,9 +58,6 @@ public class CellColumn extends Column {
             
         GroupColumn res = this.asGroupColumn(null, newParent);
         List<ComparableValue<String>> subColumnNames = strategy.getSubcolumnsNames(values.keySet(), isTotal());
-        if (isTotal()) {
-            System.out.println(subColumnNames);
-        }
         for(ComparableValue<String> key:subColumnNames) {
             res.addColumn(
                 new CellColumn(key.getValue(),
@@ -71,7 +68,6 @@ public class CellColumn extends Column {
                     strategy.getBehaviour(key, this),
                     strategy.getEntityType() == null ? null : new NiColSplitCell(strategy.getEntityType(), key)));
         };
-        
         return res;
     }
 

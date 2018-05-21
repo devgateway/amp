@@ -70,7 +70,7 @@ public interface VSplitStrategy {
     public default ComparableValue<String> getTotalSubcolumnName() {
         return null;
     }
-    
+
     public static VSplitStrategy build(Function<NiCell, ComparableValue<String>> cat, Function<ComparableValue<String>, Behaviour<?>> beh, Function<Set<ComparableValue<String>>, List<ComparableValue<String>>> subColumnNames, String entityType) {
         return new VSplitStrategy() {
 
@@ -84,7 +84,14 @@ public interface VSplitStrategy {
             
             @Override
             public List<ComparableValue<String>> getSubcolumnsNames(Set<ComparableValue<String>> existant) {
-                return subColumnNames == null ? VSplitStrategy.super.getSubcolumnsNames(existant) : subColumnNames.apply(existant);
+                return getSubcolumnsNames(existant, false);
+            }
+            
+            @Override
+            public List<ComparableValue<String>> getSubcolumnsNames(Set<ComparableValue<String>> existant, 
+                    boolean isTotal) {
+                return subColumnNames == null ? VSplitStrategy.super.getSubcolumnsNames(existant) 
+                        : subColumnNames.apply(existant);
             }
             
             @Override
@@ -94,6 +101,11 @@ public interface VSplitStrategy {
         };
     }
     
+    /**
+     * builds a VSplitStrategu which categorizes cells by a callback. Equivalent to calling {@link #build(Function, String, null)}
+     * @param cat
+     * @param entityType
+     */
     public static VSplitStrategy build(Function<NiCell, ComparableValue<String>> cat, String entityType) {
         return build(cat, entityType, null);
     }
@@ -124,8 +136,6 @@ public interface VSplitStrategy {
                         VSplitStrategy.super.getTotalSubcolumnName() : 
                         totalColumnNameSupplier.get();
             }
-            
         };
     }
-
 }

@@ -22,6 +22,7 @@ import org.dgfoundation.amp.ar.amp212.InflationRatesTests;
 import org.dgfoundation.amp.ar.amp212.NiComputedMeasuresTests;
 import org.dgfoundation.amp.ar.amp212.NiReportsFetchingTests;
 import org.dgfoundation.amp.ar.amp212.OfflineTests;
+import org.dgfoundation.amp.ar.amp212.OriginalCurrencyTests;
 import org.dgfoundation.amp.ar.amp212.SQLUtilsTests;
 import org.dgfoundation.amp.ar.amp212.UnitsSettingsUtilityTests;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedViewsRepository;
@@ -59,6 +60,7 @@ public class AllTests_amp212
         suite.addTest(new JUnit4TestAdapter(FundingFlowsTests.class));
         suite.addTest(new JUnit4TestAdapter(ExpenditureClassTests.class));
         suite.addTest(new JUnit4TestAdapter(NiComputedMeasuresTests.class));
+        suite.addTest(new JUnit4TestAdapter(OriginalCurrencyTests.class));
 
         suite.addTest(new JUnit4TestAdapter(CurrencyConvertorTests.class));
         suite.addTest(new JUnit4TestAdapter(UnitsSettingsUtilityTests.class));

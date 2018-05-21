@@ -155,5 +155,5 @@ public final class CategAmountCell extends Cell implements CategCell, DatedCell,
     public boolean isScalableByUnits() {
         return true;
     }
-    
+
 }

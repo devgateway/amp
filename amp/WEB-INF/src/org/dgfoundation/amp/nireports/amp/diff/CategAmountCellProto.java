@@ -91,7 +91,7 @@ public class CategAmountCellProto extends Cell {
         
         return cell;
     }
-    
+
     @Override
     public CategAmountCellProto changeOwnerId(long newActivityId) {
         return new CategAmountCellProto(newActivityId, origAmount, origCurrency, transactionMoment, metaInfo, this.coordinates, fixed_exchange_rate);

@@ -331,5 +331,4 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
     public String getTimeRangeSubTotalColumnName(ReportSpecification spec) {
         return spec.isDisplayTimeRangeSubTotals() ? TranslatorWorker.translateText("Total") : null;
     }
-
 }

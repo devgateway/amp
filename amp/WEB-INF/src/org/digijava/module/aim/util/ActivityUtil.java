@@ -448,6 +448,12 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
             Hibernate.initialize(result.getActivityDocuments());
             Hibernate.initialize(result.getComponents());
             Hibernate.initialize(result.getOrgrole());
+            //we need to initialize role from org role
+            if (result.getOrgrole() != null) {
+                for (AmpOrgRole or : result.getOrgrole()) {
+                    Hibernate.initialize(or.getRole());
+                }
+            }
             Hibernate.initialize(result.getIssues());
             Hibernate.initialize(result.getRegionalObservations());
             Hibernate.initialize(result.getStructures());

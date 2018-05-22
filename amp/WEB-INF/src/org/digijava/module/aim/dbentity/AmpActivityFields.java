@@ -708,7 +708,8 @@ LoggerIdentifiable, Cloneable {
     @Interchangeable(fieldTitle = "PPC Annual Budgets", importable = true, fmPath = "/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost")
     @VersionableCollection(fieldTitle = "PPC Annual Budgets")
     protected Set<AmpAnnualProjectBudget> annualProjectBudgets;
-    //protected Set <AmpActivityContact> activityContacts;
+    
+    protected Set<AmpPerformanceRule> performanceRules;
 
         public Boolean getMergedActivity() {
             return mergedActivity;
@@ -2150,5 +2151,14 @@ LoggerIdentifiable, Cloneable {
             }
             this.costAmounts.add(costAmount);
         }
+
+    public Set<AmpPerformanceRule> getPerformanceRules() {
+        return performanceRules;
+    }
+
+    public void setPerformanceRules(Set<AmpPerformanceRule> performanceRules) {
+        this.performanceRules = performanceRules;
+    }
+        
 }
 

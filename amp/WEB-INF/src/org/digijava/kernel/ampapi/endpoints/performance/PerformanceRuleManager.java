@@ -224,8 +224,7 @@ public final class PerformanceRuleManager {
      * order to match a list of activities, get the matcher list once and match
      * the items one by one
      * 
-     * @param a
-     *            activity
+     * @param a activity
      * @return matchers
      */
     public List<PerformanceIssue> findPerformanceIssues(AmpActivityVersion a) {
@@ -381,28 +380,15 @@ public final class PerformanceRuleManager {
         return performanceRuleAttributeOption.getTranslatedLabel();
     }
 
-    public Set<AmpCategoryValue> getPerformanceIssuesFromActivity(AmpActivityVersion a) {
-        Set<AmpCategoryValue> issues = new HashSet<>();
-        
-        if (a.getCategories() != null) {
-            issues = a.getCategories().stream().filter(
-                    acv -> acv.getAmpCategoryClass().getKeyName().equals(CategoryConstants.PERFORMANCE_ALERT_LEVEL_KEY))
-                    .sorted()
-                    .collect(Collectors.toSet());
-        }
-        
-        return issues;
-    }
-
-    public void updatePerformanceIssuesInActivity(AmpActivityVersion a, Set<AmpCategoryValue> from, 
-            Set<AmpCategoryValue> to) {
+    public void updatePerformanceRulesInActivity(AmpActivityVersion a, Set<AmpPerformanceRule> from, 
+            Set<AmpPerformanceRule> to) {
         
         if (from != null && !from.isEmpty()) {
-            a.getCategories().removeAll(from);
+            a.getPerformanceRules().removeAll(from);
         }
 
         if (to != null && !to.isEmpty()) {
-            a.getCategories().addAll(to);
+            a.getPerformanceRules().addAll(to);
         }
     }
 
@@ -411,14 +397,9 @@ public final class PerformanceRuleManager {
                 && AmpARFilter.validatedActivityStatus.contains(a.getApprovalStatus());
     }
 
-    public Set<AmpCategoryValue> getPerformanceLevelsFromIssues(List<PerformanceIssue> issues) {
-        Set<PerformanceRuleMatcher> matchers = issues.stream()
-                .map(PerformanceIssue::getMatcher)
-                .collect(Collectors.toSet());
-        
-        return matchers.stream()
-                .map(prm -> prm.getRule().getLevel())
-                .sorted()
+    public Set<AmpPerformanceRule> getPerformanceRulesFromIssues(List<PerformanceIssue> issues) {
+        return issues.stream()
+                .map(issue -> issue.getMatcher().getRule())
                 .collect(Collectors.toSet());
     }
 
@@ -429,13 +410,13 @@ public final class PerformanceRuleManager {
      * 
      * @return true if the collections contain the same performance levels
      */
-    public boolean isEqualPerformanceLevelCollection(Set<AmpCategoryValue> col1, Set<AmpCategoryValue> col2) {
+    public boolean isEqualPerformanceRuleCollection(Set<AmpPerformanceRule> col1, Set<AmpPerformanceRule> col2) {
         if (col1.size() != col2.size()) {
             return false;
         }
         
-        Set<Long> colId1 = col1.stream().map(AmpCategoryValue::getId).collect(Collectors.toSet());
-        Set<Long> colId2 = col2.stream().map(AmpCategoryValue::getId).collect(Collectors.toSet());
+        Set<Long> colId1 = col1.stream().map(AmpPerformanceRule::getId).collect(Collectors.toSet());
+        Set<Long> colId2 = col2.stream().map(AmpPerformanceRule::getId).collect(Collectors.toSet());
         
         return colId1.equals(colId2);
     }

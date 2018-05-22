@@ -9,7 +9,7 @@ import org.digijava.module.aim.annotations.interchange.Interchangeable;
  *
  * @author Octavian Ciubotaru
  */
-public interface FMService {
+public interface FeatureManagerService {
 
     boolean isVisible(String fmPath, Deque<Interchangeable> intchStack);
 }

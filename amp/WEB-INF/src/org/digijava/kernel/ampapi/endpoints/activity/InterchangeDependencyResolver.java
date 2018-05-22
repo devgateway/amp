@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.digijava.kernel.ampapi.endpoints.activity.validators.ComponentFundingOrgsValidator;
-import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
@@ -303,35 +302,41 @@ public class InterchangeDependencyResolver {
      * @param dependencyKey
      * @return this or any other dependency key or null if no dependency key should be actually considered
      */
-    public static String getActualDependency(String dependencyKey) {
+    public static String getActualDependency(FeatureManagerService fmService, String dependencyKey) {
         // verify any custom keys processing
         switch (dependencyKey) {
         case COMMITMENTS_PRESENT_KEY:
-            if (!FMVisibility.isVisible(ActivityEPConstants.COMMITMENTS_DISASTER_RESPONSE_FM_PATH, null)) {
+            if (!fmService.isVisible(ActivityEPConstants.COMMITMENTS_DISASTER_RESPONSE_FM_PATH, null)) {
                 return null;
-            } else if (FMVisibility.isVisible(ActivityEPConstants.DISBURSEMENTS_DISASTER_RESPONSE_FM_PATH, null)) {
+            } else if (fmService.isVisible(ActivityEPConstants.DISBURSEMENTS_DISASTER_RESPONSE_FM_PATH, null)) {
                 return COMMITMENTS_OR_DISBURSEMENTS_PRESENT_KEY;
             }
             break;
         case DISBURSEMENTS_PRESENT_KEY:
-            if (!FMVisibility.isVisible(ActivityEPConstants.DISBURSEMENTS_DISASTER_RESPONSE_FM_PATH, null)) {
+            if (!fmService.isVisible(ActivityEPConstants.DISBURSEMENTS_DISASTER_RESPONSE_FM_PATH, null)) {
                 return null;
-            } else if (FMVisibility.isVisible(ActivityEPConstants.COMMITMENTS_DISASTER_RESPONSE_FM_PATH, null)) {
+            } else if (fmService.isVisible(ActivityEPConstants.COMMITMENTS_DISASTER_RESPONSE_FM_PATH, null)) {
                 // since it will be or was provided as part of COMMITMENTS_PRESENT_KEY
                 return null;
             }
             break;
         case COMMITMENTS_DISASTER_RESPONSE_REQUIRED:
             // do not mention commitments dependency key required setting if not enabled
-            if (!FMVisibility.isVisible(ActivityEPConstants.COMMITMENTS_DISASTER_RESPONSE_FM_PATH, null) ||
-                    !FMVisibility.isVisible("/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Required Validator for Disaster Response", null))
+            if (!fmService.isVisible(ActivityEPConstants.COMMITMENTS_DISASTER_RESPONSE_FM_PATH, null)
+                    || !fmService.isVisible(
+                            "/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/"
+                            + "Required Validator for Disaster Response", null)) {
                 return null;
+            }
             break;
         case DSIBURSEMENTS_DISASTER_RESPONSE_REQUIRED:
             // do not mention disbursements dependency key required setting if not enabled
-            if (!FMVisibility.isVisible(ActivityEPConstants.DISBURSEMENTS_DISASTER_RESPONSE_FM_PATH, null) ||
-                    !FMVisibility.isVisible("/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Required Validator for Disaster Response", null))
+            if (!fmService.isVisible(ActivityEPConstants.DISBURSEMENTS_DISASTER_RESPONSE_FM_PATH, null)
+                    || !fmService.isVisible(
+                            "/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/"
+                                    + "Required Validator for Disaster Response", null)) {
                 return null;
+            }
             break;
         }
         // provide back the dependency key if no changes detected so far 
@@ -361,12 +366,12 @@ public class InterchangeDependencyResolver {
      * @param dependecies
      * @return actual dependencies list or null if no dependency
      */
-    public static List<String> getActualDependencies(String[] dependecies) {
+    public static List<String> getActualDependencies(FeatureManagerService fmService, String[] dependecies) {
         if (dependecies == null || dependecies.length == 0)
             return null;
         List<String> actualDependecies = new ArrayList<String>();
         for(String dependency : dependecies) {
-            dependency = getActualDependency(dependency);
+            dependency = getActualDependency(fmService, dependency);
             if (StringUtils.isNotBlank(dependency)) {
                 actualDependecies.add(dependency);
             }

@@ -123,7 +123,7 @@ public class ActivityImporter extends ObjectImporter {
         this.update = update;
         this.currentUser = TeamUtil.getCurrentUser();
         this.newJson = newJson;
-        this.isDraftFMEnabled = FMVisibility.isVisible(SAVE_AS_DRAFT_PATH, null);
+        this.isDraftFMEnabled = FMVisibility.getSessionInstance().isVisible(SAVE_AS_DRAFT_PATH, null);
         this.isMultilingual = ContentTranslationUtil.multilingualIsEnabled();
         this.endpointContextPath = endpointContextPath;
     }
@@ -738,7 +738,8 @@ public class ActivityImporter extends ObjectImporter {
      * Updates Proposed Project Cost amount depending on configuration (annual budget)
      */
     protected void updatePPCAmount() {
-        boolean isAnnualBudget = FMVisibility.isVisible("/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost", null);
+        boolean isAnnualBudget = FMVisibility.getSessionInstance().isVisible(
+                "/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost", null);
 
         if (isAnnualBudget && newActivity.getAnnualProjectBudgets() != null) {
             AmpFundingAmount ppc = newActivity.getProjectCostByType(AmpFundingAmount.FundingType.PROPOSED);
@@ -758,7 +759,8 @@ public class ActivityImporter extends ObjectImporter {
      */
     
     protected void updateRoleFundings() {
-        boolean isSourceRoleEnalbed = FMVisibility.isVisible("/Activity Form/Funding/Funding Group/Funding Item/Source Role", null);
+        boolean isSourceRoleEnalbed = FMVisibility.getSessionInstance().isVisible(
+                "/Activity Form/Funding/Funding Group/Funding Item/Source Role", null);
 
         if (!isSourceRoleEnalbed) {
             AmpRole role = org.digijava.module.aim.util.DbUtil.getAmpRole(Constants.FUNDING_AGENCY);

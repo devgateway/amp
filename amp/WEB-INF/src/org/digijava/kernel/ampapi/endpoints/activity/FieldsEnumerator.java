@@ -54,7 +54,7 @@ public class FieldsEnumerator {
 
     private FieldInfoProvider fieldInfoProvider;
 
-    private FMService fmService;
+    private FeatureManagerService fmService;
 
     private TranslatorService translatorService;
 
@@ -65,7 +65,7 @@ public class FieldsEnumerator {
      * 
      * @param internalUse flags if additional information for internal use is needed 
      */
-    public FieldsEnumerator(FieldInfoProvider fieldInfoProvider, FMService fmService,
+    public FieldsEnumerator(FieldInfoProvider fieldInfoProvider, FeatureManagerService fmService,
                             TranslatorService translatorService, boolean internalUse) {
         this.fieldInfoProvider = fieldInfoProvider;
         this.fmService = fmService;
@@ -132,7 +132,8 @@ public class FieldsEnumerator {
         if (interchangeable.percentageConstraint()){
             apiField.setPercentage(true);
         }
-        List<String> actualDependencies = InterchangeDependencyResolver.getActualDependencies(interchangeable.dependencies());
+        List<String> actualDependencies = InterchangeDependencyResolver.getActualDependencies(fmService,
+                interchangeable.dependencies());
         if (actualDependencies != null) {
             apiField.setDependencies(actualDependencies);
         }

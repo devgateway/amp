@@ -87,7 +87,7 @@ public class RecreateFMEntries {
             
             
             Set<String> enabledMeasuresByAF = new HashSet<String>();
-            enabledMeasuresByAF.addAll(mv.detectVisibleData_AF(templateId));
+            enabledMeasuresByAF.addAll(mv.detectVisibleDataAF(templateId));
             
             
             String gsValue = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NEW_FIELDS_VISIBILITY);

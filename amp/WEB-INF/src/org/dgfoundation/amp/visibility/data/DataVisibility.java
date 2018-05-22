@@ -63,32 +63,32 @@ public abstract class DataVisibility {
         registeredUsers.add(this);
     }
     
-    synchronized
-    protected Set<String> getCurrentVisibleData() {
+    protected synchronized Set<String> getVisibleData(Long templateId) {
         if (atomicVisibilityChanged.compareAndSet(true, false) || visibleData == null)
-            visibleData = detectVisibleData();
+            visibleData = detectVisibleData(templateId);
         return visibleData;
     }
     
-    protected Set<String> detectVisibleData() {
+    protected Set<String> detectVisibleData(Long templateId) {
         sanityCheck();
         Set<String> visibleData = new HashSet<String>(); 
         visibleData.addAll(getVisibleByDefault());
         Set<String> invisibleData = new HashSet<String>(getAllData());
         invisibleData.removeAll(getVisibleByDefault());
         
-        AmpTemplatesVisibility currentTemplate = FeaturesUtil.getCurrentTemplate();
-        
         //check fields
-        List<AmpFieldsVisibility> fields = FeaturesUtil.getAmpFieldsVisibility(getDataMap(DataMapType.FIELDS).keySet(), currentTemplate.getId());
+        List<AmpFieldsVisibility> fields = FeaturesUtil.getAmpFieldsVisibility(
+                getDataMap(DataMapType.FIELDS).keySet(), templateId);
         splitObjectsByVisibility(fields, getDataMap(DataMapType.FIELDS), visibleData, invisibleData);
         
         //check features
-        List<AmpFeaturesVisibility> features = FeaturesUtil.getAmpFeaturesVisibility(getDataMap(DataMapType.FEATURES).keySet(), currentTemplate.getId());
+        List<AmpFeaturesVisibility> features = FeaturesUtil.getAmpFeaturesVisibility(
+                getDataMap(DataMapType.FEATURES).keySet(), templateId);
         splitObjectsByVisibility(features, getDataMap(DataMapType.FEATURES), visibleData, invisibleData);
         
         //check modules
-        List<AmpModulesVisibility> modules = FeaturesUtil.getAmpModulesVisibility(getDataMap(DataMapType.MODULES).keySet(), currentTemplate.getId());
+        List<AmpModulesVisibility> modules = FeaturesUtil.getAmpModulesVisibility(
+                getDataMap(DataMapType.MODULES).keySet(), templateId);
         splitObjectsByVisibility(modules, getDataMap(DataMapType.MODULES), visibleData, invisibleData);
         dependencyCheck(visibleData, invisibleData);
         

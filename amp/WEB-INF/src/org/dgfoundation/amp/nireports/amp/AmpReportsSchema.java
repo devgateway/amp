@@ -1560,17 +1560,18 @@ public class AmpReportsSchema extends AbstractReportsSchema {
                 && !GroupingCriteria.GROUPING_TOTALS_ONLY.equals(engine.spec.getGroupingCriteria())
                 && engine.spec.isShowOriginalCurrency();
         
-        if (splitByCurrencies) {
-            return Arrays.asList(CurrencyMeasureSplittingStrategy.getInstance(scratch.usedCurrency));
+        raw = new ArrayList<>();
+        if (splitByToA) {
+            raw.add(TaggedMeasureBehaviour.getSplittingStrategy(MetaCategory.TYPE_OF_ASSISTANCE.category, 
+                    ColumnConstants.TYPE_OF_ASSISTANCE, () -> TranslatorWorker.translateText("Total")));
+        } else if (splitByMoP) {
+            raw.add(TaggedMeasureBehaviour.getSplittingStrategy(MetaCategory.MODE_OF_PAYMENT.category, 
+                    ColumnConstants.MODE_OF_PAYMENT, () -> TranslatorWorker.translateText("Total")));
         }
         
-        if (splitByToA)
-            return Arrays.asList(
-                    TaggedMeasureBehaviour.getSplittingStrategy(MetaCategory.TYPE_OF_ASSISTANCE.category, ColumnConstants.TYPE_OF_ASSISTANCE, () -> TranslatorWorker.translateText("Total")));
-
-        if (splitByMoP)
-            return Arrays.asList(
-                    TaggedMeasureBehaviour.getSplittingStrategy(MetaCategory.MODE_OF_PAYMENT.category, ColumnConstants.MODE_OF_PAYMENT, () -> TranslatorWorker.translateText("Total")));
+        if (splitByCurrencies) {
+            raw.add(CurrencyMeasureSplittingStrategy.getInstance(scratch.usedCurrency));
+        }
 
         return raw;
     }

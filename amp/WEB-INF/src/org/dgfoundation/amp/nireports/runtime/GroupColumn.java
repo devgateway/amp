@@ -21,11 +21,11 @@ public class GroupColumn extends Column {
     protected List<Column> subColumns;
     protected boolean mutable;  
     
-    protected boolean isTotal;
+    protected boolean isTotal = false;
     
     public GroupColumn(String name, LocalizableLabel label, List<Column> subColumns, GroupColumn parent, 
             NiColSplitCell splitCell) {
-        this(name, label, subColumns, parent, splitCell, false);
+        this(name, label, subColumns, parent, splitCell, parent == null ? false : parent.isTotal());
     }
     
     /**

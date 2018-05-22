@@ -86,6 +86,17 @@ public class OriginalCurrencyTests extends ReportingTestCase {
             "activity with directed MTEFs"
         );
     
+    final List<String> mtefActs = Arrays.asList(
+            "mtef activity 1",
+            "mtef activity 2",
+            "Pure MTEF Project",
+            "activity with MTEFs",
+            "Activity with both MTEFs and Act.Comms",
+            "activity with many MTEFs",
+            "Test MTEF directed",
+            "activity with pipeline MTEFs and act. disb"
+        );
+    
     public OriginalCurrencyTests() {
         super("OriginalCurrencyTests");
     }
@@ -283,6 +294,44 @@ public class OriginalCurrencyTests extends ReportingTestCase {
         } finally {
             TestcasesReportsSchema.disableToAMoPSplitting = true;
         }
+    }
+    
+    @Test
+    public void testMtefOriginalCurrency() {
+        NiReportModel cor =  new NiReportModel("MTEF-original-currency")
+                .withHeaders(Arrays.asList(
+                        "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 5, colStart: 0, colSpan: 11))",
+                        "(Project Title: (startRow: 1, rowSpan: 4, totalRowSpan: 4, colStart: 0, colSpan: 1));(MTEF 2011: (startRow: 1, rowSpan: 3, totalRowSpan: 4, colStart: 1, colSpan: 2));(MTEF 2012: (startRow: 1, rowSpan: 3, totalRowSpan: 4, colStart: 3, colSpan: 2));(MTEF 2013: (startRow: 1, rowSpan: 3, totalRowSpan: 4, colStart: 5, colSpan: 2));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 4, colStart: 7, colSpan: 2));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 4, colStart: 9, colSpan: 2))",
+                        "(2015: (startRow: 2, rowSpan: 1, totalRowSpan: 3, colStart: 7, colSpan: 2))",
+                        "(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 7, colSpan: 2));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 9, colSpan: 1));(MTEF: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 10, colSpan: 1))",
+                        "(USD: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1));(EUR: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(USD: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(EUR: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(USD: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(EUR: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(USD: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(EUR: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1));(EUR: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1));(EUR: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 10, colSpan: 1))"))
+                    .withWarnings(Arrays.asList())
+                    .withBody(      new ReportAreaForTests(null)
+                      .withContents("Project Title", "", "MTEF 2011-USD", "1,718,01", "MTEF 2011-EUR", "1,283,18", "MTEF 2012-USD", "271", "MTEF 2012-EUR", "202,44", "MTEF 2013-USD", "158,65", "MTEF 2013-EUR", "120,18", "Funding-2015-Actual Commitments-USD", "888", "Funding-2015-Actual Commitments-EUR", "810,21", "Totals-Actual Commitments-EUR", "810,21", "Totals-MTEF-EUR", "1,605,8")
+                      .withChildren(
+                        new ReportAreaForTests(new AreaOwner(18), "Project Title", "Test MTEF directed", "MTEF 2011-USD", "150", "MTEF 2011-EUR", "112,04", "MTEF 2012-USD", "65", "MTEF 2012-EUR", "48,56", "Totals-MTEF-EUR", "160,59"),
+                        new ReportAreaForTests(new AreaOwner(19), "Project Title", "Pure MTEF Project", "MTEF 2011-USD", "33,89", "MTEF 2011-EUR", "25,31", "Totals-MTEF-EUR", "25,31"),
+                        new ReportAreaForTests(new AreaOwner(25), "Project Title", "mtef activity 1", "MTEF 2011-USD", "789,12", "MTEF 2011-EUR", "589,4", "Totals-MTEF-EUR", "589,4"),
+                        new ReportAreaForTests(new AreaOwner(27), "Project Title", "mtef activity 2", "MTEF 2013-USD", "123,65", "MTEF 2013-EUR", "93,67", "Totals-MTEF-EUR", "93,67"),
+                        new ReportAreaForTests(new AreaOwner(70), "Project Title", "Activity with both MTEFs and Act.Comms", "MTEF 2011-USD", "700", "MTEF 2011-EUR", "522,83", "MTEF 2012-USD", "150", "MTEF 2012-EUR", "112,05", "Funding-2015-Actual Commitments-USD", "888", "Funding-2015-Actual Commitments-EUR", "810,21", "Totals-Actual Commitments-EUR", "810,21", "Totals-MTEF-EUR", "634,88"),
+                        new ReportAreaForTests(new AreaOwner(76), "Project Title", "activity with pipeline MTEFs and act. disb", "MTEF 2013-USD", "35", "MTEF 2013-EUR", "26,51", "Totals-MTEF-EUR", "26,51"),
+                        new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs", "MTEF 2011-USD", "45", "MTEF 2011-EUR", "33,61", "MTEF 2012-USD", "56", "MTEF 2012-EUR", "41,83", "Totals-MTEF-EUR", "75,44")      ));
+
+            ReportSpecificationImpl spec = buildSpecification("MTEF-original-currency",
+                Arrays.asList(ColumnConstants.PROJECT_TITLE, "MTEF 2011", "MTEF 2012", "MTEF 2013"), 
+                Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS), 
+                null,
+                GroupingCriteria.GROUPING_YEARLY);
+            spec.getOrCreateSettings().setUnitsOption(AmountsUnits.AMOUNTS_OPTION_THOUSANDS);
+            spec.getOrCreateSettings().setCurrencyCode("EUR");
+            spec.setShowOriginalCurrency(true);
+            
+            try {
+                TestcasesReportsSchema.disableToAMoPSplitting = false;
+                runNiTestCase(cor, spec, mtefActs);
+            } finally {
+                TestcasesReportsSchema.disableToAMoPSplitting = true;
+            }
     }
     
     @Override

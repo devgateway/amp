@@ -132,7 +132,7 @@ function selectLocationCallerShape(selectedGraphic) {
 	var row = findRow(selectedGraphic);
 
 	$("#locationTitleDialog").dialog({
-		"title" : "Edit title",
+		"title" : TranslationManager.getTranslated("Select Structure"),
 		open : function(event, ui) {
 			$("#locationTitle").val('');
 			if (row) {
@@ -273,10 +273,6 @@ function findRow(selectedGraphic) {
 	}
 
 	return null;
-}
-
-function editLocationTitle(selectedGraphic) {
-
 }
 
 function locate() {
@@ -439,10 +435,7 @@ function startContextMenu() {
 		case "remove":
 			removeStructure(selectedPointEvent);
 			circlePoint = null;
-			break;
-		case "editTitle":
-			editLocationTitle(selectedPointEvent);
-			break;
+			break;		
 		}
 
 		// Hide it AFTER the action was triggered

@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -24,6 +25,7 @@ import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.Perfo
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleMatcherDefinition;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleMatcherPossibleValuesSupplier;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -31,6 +33,7 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpPerformanceRule;
 import org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute;
 import org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute.PerformanceRuleAttributeType;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.hibernate.Session;
@@ -362,13 +365,16 @@ public final class PerformanceRuleManager {
         }
 
         // we sort the map by org asc
+        DbUtil.HelperAmpOrganisationNameComparator helperAmpOrganisationNameComparator = new
+                DbUtil.HelperAmpOrganisationNameComparator(new Locale(TLSUtils.getLangCode()));
 
         Map<Long, Map<Long, Map<PerformanceRuleMatcher, Set<AmpActivityVersion>>>>  actByDonorAndRuleByRoleSorted
                 = actByDonorAndRuleByRole.entrySet().stream()
                 .sorted(Map.Entry.comparingByKey(new Comparator<Long>() {
                     @Override
                     public int compare(Long o1, Long o2) {
-                        return organisationById.get(o1).getName().compareTo(organisationById.get(o2).getName());
+                        return helperAmpOrganisationNameComparator.compare(organisationById.get(o1), organisationById
+                                .get(o2));
                     }
                 }))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,

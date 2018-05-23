@@ -100,8 +100,7 @@
    <span id="custom-menu-wrapper">
    <ul class='custom-menu'>
 	  <li data-action="select"><digi:trn>Select</digi:trn></li>
-	  <li data-action="remove"><digi:trn>Remove</digi:trn></li>
-	  <li data-action="editTitle"><digi:trn>Edit Title</digi:trn></li>
+	  <li data-action="remove"><digi:trn>Remove</digi:trn></li>	  
 	</ul>
   </span>
    <div id="locationTitleDialog"> 

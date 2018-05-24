@@ -106,12 +106,18 @@ public class PerformanceRulesAlertJob extends ConnectionCleaningJob implements S
                         a = updActivity;
                         
                         final StringJoiner actLabelJoiner = new StringJoiner(",");
-                        activityRules.stream().forEach(s -> actLabelJoiner.add(s.getLevel().getLabel()));
+                        activityRules.stream().forEach(r -> actLabelJoiner.add(
+                                String.format("%s (%s)", 
+                                    PerformanceRuleManager.PERF_ALERT_TYPE_TO_DESCRIPTION.get(r.getTypeClassName()),
+                                    r.getLevel().getLabel())));
                         
                         final StringJoiner matchedLabelJoiner = new StringJoiner(",");
-                        matchedRules.stream().forEach(s -> matchedLabelJoiner.add(s.getLevel().getLabel()));
+                        matchedRules.stream().forEach(r -> matchedLabelJoiner.add(
+                                String.format("%s (%s)", 
+                                PerformanceRuleManager.PERF_ALERT_TYPE_TO_DESCRIPTION.get(r.getTypeClassName()),
+                                r.getLevel().getLabel())));
                         
-                        logger.info(String.format("\tactivity %d, updated performance alert level from <%s> to <%s>...",
+                        logger.info(String.format("\tactivity %d, updated performance alert rules from <%s> to <%s>...",
                                 actId, activityRules.isEmpty() ? null : actLabelJoiner.toString(),
                                         matchedRules.isEmpty() ? null : matchedLabelJoiner.toString()));
                         

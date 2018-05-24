@@ -128,6 +128,7 @@ function onMapClick(e) {
 
 var isFirstSelect = true;
 function selectLocationCallerShape(selectedGraphic) {
+	$("#errorMsg").html("");
 	var callerButton = window.opener.callerGisObject;
 	var row = findRow(selectedGraphic);
 
@@ -148,6 +149,11 @@ function selectLocationCallerShape(selectedGraphic) {
 		}, {
 			text : "Submit",
 			click : function() {
+				if ($("#locationTitle").val() == '') {
+					$("#errorMsg").html(TranslationManager.getTranslated('Title is a required field'));
+					return;
+				}
+				
 				// first update, the row that was clicked
 				if (isFirstSelect == true) {
 					row = callerButton.parentNode.parentNode;
@@ -170,7 +176,7 @@ function selectLocationCallerShape(selectedGraphic) {
 	});
 }
 
-function updateActivityForm(row, selectedGraphic) {
+function updateActivityForm(row, selectedGraphic) {		
 	var title = row.getElementsByTagName("INPUT")[0];
 	title.value = $("#locationTitle").val();
 	window.opener.postvaluesx(title)

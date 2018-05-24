@@ -151,3 +151,12 @@ button:focus {
     border: none !important;
     background: none !important;  
 }
+
+#errorMsg {
+	color: #FF0000;
+	padding: 5px;
+}
+
+.required {
+	color: #FF0000;
+}

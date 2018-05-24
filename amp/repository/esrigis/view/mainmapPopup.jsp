@@ -104,7 +104,9 @@
 	</ul>
   </span>
    <div id="locationTitleDialog"> 
-   <label><digi:trn>Title</digi:trn></label> <input id="locationTitle" type="text"/>   
+   <div id="errorMsg"></div>
+   
+   <label><digi:trn>Title</digi:trn></label><span class="required"> * </span><input id="locationTitle" type="text"/>   
    </div>
   </body>
 </html>

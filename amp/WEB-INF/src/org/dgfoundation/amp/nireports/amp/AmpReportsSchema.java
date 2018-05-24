@@ -98,6 +98,7 @@ import org.dgfoundation.amp.nireports.schema.NiTransactionMeasure;
 import org.dgfoundation.amp.nireports.schema.SchemaSpecificScratchpad;
 import org.dgfoundation.amp.nireports.schema.TimeRange;
 import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
+import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.LocalizableLabel;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -281,6 +282,12 @@ public class AmpReportsSchema extends AbstractReportsSchema {
      * the callback called on DG_EDITOR-backed text columns
      */
     public final static Function<String, String> DG_EDITOR_POSTPROCESSOR = DgUtil::cleanHtmlTags;
+    
+    /**
+     * the callback called on performance-alert-type column
+     */
+    public static final Function<String, String> PERFORMANCE_ALERT_POSTPROCESSOR = 
+            PerformanceRuleManager::getAlertDescriptionFromMatcher;
 
     private IndicatorTextualTokenBehaviour indicatorTextualTokenBehaviour =
             IndicatorTextualTokenBehaviour.forText(INDICATOR_DIM_USG, true);
@@ -409,6 +416,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         degenerate_dimension(ColumnConstants.FUNDING_STATUS, "v_funding_status", catsDimension);
         degenerate_dimension(ColumnConstants.HUMANITARIAN_AID, "v_humanitarian_aid", boolDimension);
         degenerate_dimension(ColumnConstants.IMPLEMENTATION_LEVEL, "v_implementation_level", catsDimension);
+        no_entity(ColumnConstants.PERFORMANCE_ALERT_TYPE, "v_performance_alert_type", PERFORMANCE_ALERT_POSTPROCESSOR);
         degenerate_dimension(ColumnConstants.PERFORMANCE_ALERT_LEVEL, "v_performance_alert_level", catsDimension);
         degenerate_dimension(ColumnConstants.INDIRECT_ON_BUDGET, "v_indirect_on_budget", boolDimension);
         degenerate_dimension(ColumnConstants.INSTITUTIONS, "v_institutions", catsDimension, true);

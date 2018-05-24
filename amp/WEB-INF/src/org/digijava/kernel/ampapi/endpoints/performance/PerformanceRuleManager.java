@@ -3,7 +3,6 @@ package org.digijava.kernel.ampapi.endpoints.performance;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -20,7 +19,6 @@ import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.Perfo
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleMatcherDefinition;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleMatcherPossibleValuesSupplier;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -29,12 +27,14 @@ import org.digijava.module.aim.dbentity.AmpPerformanceRule;
 import org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute;
 import org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute.PerformanceRuleAttributeType;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.springframework.web.util.HtmlUtils;
 import org.thymeleaf.util.StringUtils;
+
+import com.google.common.collect.ImmutableMap;
+
 
 /**
  * 
@@ -50,8 +50,27 @@ public final class PerformanceRuleManager {
     private List<AmpPerformanceRule> cachedPerformanceRules;
 
     private List<PerformanceRuleMatcher> cachedPerformanceRuleMatchers;
+    
+    public static final Map<String, Long> PERF_ALERT_TYPE_TO_ID = ImmutableMap.of(
+            PerformanceRuleConstants.MATCHER_DISB_ACTIVITY_DATE, 1L,
+            PerformanceRuleConstants.MATCHER_NO_DISB_FUNDING_DATE, 2L,
+            PerformanceRuleConstants.MATCHER_NO_UPD_DISB_TIME_PERIOD, 3L,
+            PerformanceRuleConstants.MATCHER_NO_UPDATED_STATUS, 4L
+        );
+    
+    public static final Map<String, String> PERF_ALERT_TYPE_TO_DESCRIPTION = ImmutableMap.of(
+            PerformanceRuleConstants.MATCHER_DISB_ACTIVITY_DATE, 
+                PerformanceRuleConstants.MATCHER_DESCR_DISB_ACTIVITY_DATE,
+            PerformanceRuleConstants.MATCHER_NO_DISB_FUNDING_DATE, 
+                PerformanceRuleConstants.MATCHER_DESCR_NO_DISB_FUNDING_DATE,
+            PerformanceRuleConstants.MATCHER_NO_UPD_DISB_TIME_PERIOD, 
+                PerformanceRuleConstants.MATCHER_DESCR_NO_UPD_DISB_TIME_PERIOD,
+            PerformanceRuleConstants.MATCHER_NO_UPDATED_STATUS, 
+                PerformanceRuleConstants.MATCHER_DESCR_NO_UPDATED_STATUS
+        );
 
     private static final Logger logger = Logger.getLogger(PerformanceRuleManager.class);
+    
 
     private PerformanceRuleManager() {
         initPerformanceRuleDefinitions();
@@ -111,7 +130,7 @@ public final class PerformanceRuleManager {
 
         AmpCategoryValue dbLevel = requireCategoryValueExists(performanceRule.getLevel().getId());
         performanceRule.setLevel(dbLevel);
-
+        
         Session session = PersistenceManager.getSession();
         session.merge(performanceRule);
 
@@ -126,7 +145,7 @@ public final class PerformanceRuleManager {
 
         AmpCategoryValue dbLevel = requireCategoryValueExists(performanceRule.getLevel().getId());
         performanceRule.setLevel(dbLevel);
-
+        
         Session session = PersistenceManager.getSession();
         session.saveOrUpdate(performanceRule);
 
@@ -419,6 +438,10 @@ public final class PerformanceRuleManager {
         Set<Long> colId2 = col2.stream().map(AmpPerformanceRule::getId).collect(Collectors.toSet());
         
         return colId1.equals(colId2);
+    }
+    
+    public static String getAlertDescriptionFromMatcher(String matcherName) {
+        return TranslatorWorker.translateText(PERF_ALERT_TYPE_TO_DESCRIPTION.get(matcherName));
     }
     
 }

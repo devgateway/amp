@@ -74,7 +74,7 @@ import org.dgfoundation.amp.nireports.amp.dimensions.ProgramsDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.SectorsDimension;
 import org.dgfoundation.amp.nireports.amp.indicators.IndicatorDateTokenBehaviour;
 import org.dgfoundation.amp.nireports.amp.indicators.IndicatorTextualTokenBehaviour;
-import org.dgfoundation.amp.nireports.behaviours.CurrencyMeasureSplittingStrategy;
+import org.dgfoundation.amp.nireports.behaviours.CurrencySplittingStrategy;
 import org.dgfoundation.amp.nireports.behaviours.FilteredMeasureBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.GeneratedIntegerBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.TaggedMeasureBehaviour;
@@ -1570,7 +1570,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         }
         
         if (splitByCurrencies) {
-            raw.add(CurrencyMeasureSplittingStrategy.getInstance(scratch.usedCurrency));
+            raw.add(CurrencySplittingStrategy.getInstance(scratch.usedCurrency));
         }
 
         return raw;

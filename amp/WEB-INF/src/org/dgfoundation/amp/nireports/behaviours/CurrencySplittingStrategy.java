@@ -17,7 +17,7 @@ import org.digijava.module.aim.dbentity.AmpCurrency;
  * @author Viorel Chihai
  *
  */
-public class CurrencyMeasureSplittingStrategy implements VSplitStrategy {
+public class CurrencySplittingStrategy implements VSplitStrategy {
     
     public static final String PREFIX_DEFAULT_CURRENCY = "~";
     public static final String UNDEFINED_CURRENCY = "Undefined";
@@ -25,31 +25,44 @@ public class CurrencyMeasureSplittingStrategy implements VSplitStrategy {
     private final Function<NiCell, ComparableValue<String>> cat;
     private final AmpCurrency usedCurrency;
         
-    public CurrencyMeasureSplittingStrategy(Function<NiCell, ComparableValue<String>> cat, AmpCurrency usedCurrency) {
+    public CurrencySplittingStrategy(Function<NiCell, ComparableValue<String>> cat, AmpCurrency usedCurrency) {
         this.cat = cat;
         this.usedCurrency = usedCurrency;
     }
 
+    /**
+     * 
+     * @param usedCurrency the used currency
+     * @param cell cell
+     * @return the currency code. For cells with informative amount it would be the original currency
+     */
     public static String getCurrencyCode(AmpCurrency usedCurrency, Cell cell) {
         String currencyCode = UNDEFINED_CURRENCY;
         if (cell instanceof CategAmountCell) {
             CategAmountCell categCell = (CategAmountCell) cell;
-            NiCurrency currency = categCell.hasConvertedAmount() ? usedCurrency : categCell.amount.origCurrency;
+            NiCurrency currency = categCell.isInformativeAmount() ? categCell.amount.origCurrency : usedCurrency;
             currencyCode = currency.getCurrencyCode();
         }
         
         return currencyCode;
     }
     
+    /**
+     * 
+     * @param usedCurrency the used currency
+     * @param cell cell
+     * @return the currency value. For cells with non-informative amount it would be the used currency.
+     * The prefix is added to make the currency be the last in the list during the normal sorting.
+     */
     public static String getCurrencyValue(AmpCurrency usedCurrency, Cell cell) {
         String currencyValue = UNDEFINED_CURRENCY;
         if (cell instanceof CategAmountCell) {
             CategAmountCell categCell = (CategAmountCell) cell;
-            String categCurrencyCode = categCell.amount.origCurrency.getCurrencyCode();
-            if (categCell.hasConvertedAmount() || categCurrencyCode.equals(usedCurrency.getCurrencyCode())) {
-                currencyValue = PREFIX_DEFAULT_CURRENCY + usedCurrency.getCurrencyCode();
+            String originalCurrencyCode = categCell.amount.origCurrency.getCurrencyCode();
+            if (categCell.isInformativeAmount() && !usedCurrency.getCurrencyCode().equals(originalCurrencyCode)) {
+                currencyValue = categCell.amount.origCurrency.getCurrencyCode();
             } else {
-                currencyValue = categCurrencyCode;
+                currencyValue = PREFIX_DEFAULT_CURRENCY + usedCurrency.getCurrencyCode();
             }
         }
         
@@ -58,13 +71,13 @@ public class CurrencyMeasureSplittingStrategy implements VSplitStrategy {
     
     /**
      * Builds a splitting strategy which splits by original currency. 
-     * The currend used currency should be at the end of the list, those a prefix should be added.
+     * The current used currency should be at the end of the list, those a prefix should be added.
      * 
      * @param usedCurrency 
      * @return
      */
     public static VSplitStrategy getInstance(AmpCurrency usedCurrency) {
-        VSplitStrategy byCurrency = new CurrencyMeasureSplittingStrategy(cell -> 
+        VSplitStrategy byCurrency = new CurrencySplittingStrategy(cell -> 
                             new ComparableValue<String>(
                                     getCurrencyCode(usedCurrency, cell.getCell()),
                                     getCurrencyValue(usedCurrency, cell.getCell())), 

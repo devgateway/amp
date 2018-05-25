@@ -47,38 +47,28 @@ public class CategAmountCellProto extends Cell {
     }
     
     /**
-     * materializes this instance into a full transaction. The operation is O(1) cheap because the heavyweight components of a cell are deeply immutable structures
-     * which are shared between with the prototype (namely, {@link #metaInfo} and {@link #getCoordinates()})
-     * @param usedCurrency the {@link AmpCurrency} to use for converting the natural transaction to
-     * @param calendarConverter the O(1) {@link CalendarConverter} to use for translating the natural transaction's date
-     * @param currencyConvertor the O(1) {@link CurrencyConvertor} to use for for converting amounts between currencies
-     * @param precisionSetting the precision settings to use while doing the amount conversions and to store in the generated {@link MonetaryAmount}
-     * @return
-     */
-    public CategAmountCell materialize(AmpCurrency usedCurrency, CachingCalendarConverter calendarConverter, CurrencyConvertor currencyConvertor, NiPrecisionSetting precisionSetting) {
-        return materialize(usedCurrency, calendarConverter, currencyConvertor, precisionSetting, true);
-    }
-    
-    /**
-     * AMP-27571
      * Materializes this instance into a full transaction. 
+     * The operation is O(1) cheap because the heavyweight components of a cell are deeply immutable structures
+     * which are shared between with the prototype (namely, {@link #metaInfo} and {@link #getCoordinates()})
      * The original currency will be set to the current used one, in order to group the cells by currency.
      * This method is called only when report.spec.showOriginalCurrency is set to true
      * 
-     * @param usedCurr
-     * @param calendarConverter
-     * @param currencyConvertor
-     * @param precisionSetting
+     * @param usedCurrency the {@link AmpCurrency} to use for converting the natural transaction to
+     * @param calendarConverter the O(1) {@link CalendarConverter} to use for translating the natural transaction's date
+     * @param currencyConvertor the O(1) {@link CurrencyConvertor} to use for for converting amounts between currencies
+     * @param precisionSetting the precision settings to use while doing the amount conversions 
+     * and to store in the generated {@link MonetaryAmount}
+     * @param isInformativeAmount if the amount is informative (amount not converted) or not
      * @return
      */
-    public CategAmountCell materialize(AmpCurrency usedCurr, CachingCalendarConverter calendarConverter, 
-            CurrencyConvertor currencyConvertor, NiPrecisionSetting precisionSetting, boolean isAmountConverted) {
+    public CategAmountCell materialize(AmpCurrency usedCurrency, CachingCalendarConverter calendarConverter, 
+            CurrencyConvertor currencyConvertor, NiPrecisionSetting precisionSetting, boolean isInformativeAmount) {
         
         BigDecimal convertedAmount = origAmount;
         
-        if (isAmountConverted) {
+        if (!isInformativeAmount) {
             BigDecimal usedExchangeRate = BigDecimal.valueOf(currencyConvertor.getExchangeRate(
-                    origCurrency.getCurrencyCode(), usedCurr.getCurrencyCode(), 
+                    origCurrency.getCurrencyCode(), usedCurrency.getCurrencyCode(), 
                     fixed_exchange_rate == null ? null : fixed_exchange_rate.doubleValue(), transactionDate));
             convertedAmount = origAmount.multiply(usedExchangeRate);
         }
@@ -87,7 +77,7 @@ public class CategAmountCellProto extends Cell {
                 precisionSetting);
         
         CategAmountCell cell = new CategAmountCell(activityId, amount, metaInfo, coordinates, 
-                calendarConverter.translate(transactionMoment), isAmountConverted);
+                calendarConverter.translate(transactionMoment), isInformativeAmount);
         
         return cell;
     }

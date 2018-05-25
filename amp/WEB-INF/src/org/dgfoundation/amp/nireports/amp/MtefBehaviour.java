@@ -5,16 +5,14 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.wicket.behavior.Behavior;
-import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
-import org.dgfoundation.amp.nireports.behaviours.CurrencyMeasureSplittingStrategy;
+import org.dgfoundation.amp.nireports.behaviours.CurrencySplittingStrategy;
 import org.dgfoundation.amp.nireports.behaviours.TrivialMeasureBehaviour;
 import org.dgfoundation.amp.nireports.runtime.ColumnContents;
 import org.dgfoundation.amp.nireports.runtime.VSplitStrategy;
 import org.dgfoundation.amp.nireports.schema.NiReportedEntity;
 import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.util.CurrencyUtil;
 
 /**
  * the {@link Behavior} of a non-Funding-Flow MTEF column
@@ -37,11 +35,9 @@ public class MtefBehaviour extends TrivialMeasureBehaviour {
     @Override
     public List<VSplitStrategy> getSubMeasureHierarchies(NiReportsEngine context) {
         if (context.spec.isShowOriginalCurrency()) {
-            AmpCurrency usedCurrency = context.spec.getSettings() == null 
-                    || context.spec.getSettings().getCurrencyCode() == null ? AmpARFilter.getDefaultCurrency() 
-                    : CurrencyUtil.getAmpcurrency(context.spec.getSettings().getCurrencyCode());
+            AmpCurrency usedCurrency = AmpReportsScratchpad.get(context).getUsedCurrency();
                     
-            VSplitStrategy byCurrency = CurrencyMeasureSplittingStrategy.getInstance(usedCurrency);
+            VSplitStrategy byCurrency = CurrencySplittingStrategy.getInstance(usedCurrency);
             return Arrays.asList(byCurrency);
         }
         

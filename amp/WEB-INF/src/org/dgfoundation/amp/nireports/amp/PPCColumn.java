@@ -15,7 +15,7 @@ import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.NiPrecisionSetting;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.amp.diff.CategAmountCellProto;
-import org.dgfoundation.amp.nireports.behaviours.NumericalColumnBehaviour;
+import org.dgfoundation.amp.nireports.behaviours.PPCColumnBehaviour;
 import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
 import org.dgfoundation.amp.nireports.runtime.CachingCalendarConverter;
 import org.digijava.module.aim.dbentity.AmpCurrency;
@@ -29,7 +29,7 @@ import org.digijava.module.aim.util.CurrencyUtil;
 public class PPCColumn extends PsqlSourcedColumn<CategAmountCell> {
 
     public PPCColumn(String columnName, String extractorViewName) {
-        super(columnName, null, extractorViewName, NumericalColumnBehaviour.getInstance());
+        super(columnName, null, extractorViewName, PPCColumnBehaviour.getInstance());
     }
         
     @Override
@@ -61,20 +61,16 @@ public class PPCColumn extends PsqlSourcedColumn<CategAmountCell> {
                 CategAmountCellProto cellProto = new CategAmountCellProto(ampActivityId, transactionAmount, 
                         origCurrency, transactionMoment, MetaInfoSet.empty(), Collections.emptyMap(), null);
                 
+                cells.add(cellProto.materialize(usedCurrency, calendar, currencyConvertor, precisionSetting, true));
+                
                 /* 
                  * AMP-27571
                  * if showOriginalCurrencies splitting is enabled we need to duplicate cells with original currencies
                 */
-                if (engine.spec.isShowOriginalCurrency()) {
+                if (engine.spec.isShowOriginalCurrency() && usedCurrency.getId() != origCurrency.getId()) {
                     cells.add(cellProto.materialize(usedCurrency, calendar, currencyConvertor, precisionSetting, 
                             false));
-                    
-                    if (usedCurrency.getId() != origCurrency.getId()) {
-                        cells.add(cellProto.materialize(usedCurrency, calendar, currencyConvertor, precisionSetting));
-                    }
-                } else {
-                    cells.add(cellProto.materialize(usedCurrency, calendar, currencyConvertor, precisionSetting));
-                }
+                } 
             }
         }
         

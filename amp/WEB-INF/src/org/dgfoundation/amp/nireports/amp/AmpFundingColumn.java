@@ -207,10 +207,10 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
         AmpReportsScratchpad scratchpad = AmpReportsScratchpad.get(engine);
         AmpReportsSchema schema = (AmpReportsSchema) engine.schema;
         boolean enableDiffing = schema.ENABLE_CACHING;
-        AmpCurrency usedCurrency = scratchpad.getUsedCurrency();
+        
+        List<CategAmountCellProto> protos;
         if (enableDiffing) {
             long start = System.currentTimeMillis();
-            List<CategAmountCellProto> protos;
             synchronized(CACHE_SYNC_OBJ) {
                 FundingFetcherContext cache = cacher.buildOrGetValue(true, engine);
                 
@@ -221,34 +221,40 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
                 long delta = System.currentTimeMillis() - start;
                 engine.timer.putMetaInNode("hot_time", delta);
             }
-            List<CategAmountCell> res = new ArrayList<>();
-            
-            /* 
-             * AMP-27571
-             * if showOriginalCurrencies splitting is enabled we need to duplicate cells with original currencies
-            */
-            if (engine.spec.isShowOriginalCurrency()) {
-                // generate cells for original currency only (except used currency)
-                res.addAll(protos.stream()
-                        .map(cacp -> cacp.materialize(usedCurrency, engine.calendar, 
-                                schema.currencyConvertor, scratchpad.getPrecisionSetting(), false))
-                        .collect(toList()));
-                
-                // generate cells for current used currency
-                res.addAll(protos.stream().filter(cacp -> usedCurrency.getId() != cacp.origCurrency.getId())
-                        .map(cacp -> cacp.materialize(usedCurrency, engine.calendar, 
-                                schema.currencyConvertor, scratchpad.getPrecisionSetting()))
-                        .collect(toList()));
-            } else {
-                res.addAll(protos.stream().map(cacp -> cacp.materialize(usedCurrency, engine.calendar, 
-                        schema.currencyConvertor, scratchpad.getPrecisionSetting())).collect(toList()));
-            }
-            
-            return res;
+        } else {
+            protos = fetchSkeleton(engine, scratchpad.getMainIds(engine, this), resetCache(engine));
         }
-        else {
-            return fetchSkeleton(engine, scratchpad.getMainIds(engine, this), resetCache(engine)).stream().map(cacp -> cacp.materialize(usedCurrency, engine.calendar, schema.currencyConvertor, scratchpad.getPrecisionSetting())).collect(toList());
+        
+        return materialize(engine, scratchpad, schema, protos);
+    }
+
+    /**
+     * @param engine
+     * @param scratchpad
+     * @param schema
+     * @param protos
+     * @return
+     */
+    private List<CategAmountCell> materialize(NiReportsEngine engine, AmpReportsScratchpad scratchpad,
+            AmpReportsSchema schema, List<CategAmountCellProto> protos) {
+        List<CategAmountCell> res = new ArrayList<>();
+        AmpCurrency usedCurrency = scratchpad.getUsedCurrency();
+        res.addAll(protos.stream().map(cacp -> cacp.materialize(usedCurrency, engine.calendar, 
+                schema.currencyConvertor, scratchpad.getPrecisionSetting(), false)).collect(toList()));
+        
+        /* 
+         * AMP-27571
+         * if showOriginalCurrencies splitting is enabled we need to duplicate cells in original currency
+        */
+        if (engine.spec.isShowOriginalCurrency()) {
+            // generate cells for original currency only (except used currency)
+            res.addAll(protos.stream()
+                    .filter(cacp -> usedCurrency.getId() != cacp.origCurrency.getId())
+                    .map(cacp -> cacp.materialize(usedCurrency, engine.calendar, 
+                            schema.currencyConvertor, scratchpad.getPrecisionSetting(), true))
+                    .collect(toList()));
         }
+        return res;
     }
     
     protected String buildSupplementalCondition(NiReportsEngine engine, Set<Long> ids, FundingFetcherContext context) {

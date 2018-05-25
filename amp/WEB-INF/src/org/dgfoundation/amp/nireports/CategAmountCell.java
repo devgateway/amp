@@ -41,9 +41,9 @@ public final class CategAmountCell extends Cell implements CategCell, DatedCell,
     public final TranslatedDate translatedDate;
     
     /**
-     * is amount converted into user currency
+     * is amount informative
      */
-    protected final Boolean hasConvertedAmount;
+    private final Boolean isInformativeAmount;
     
     /**
      * constructs an instance which has its fields trivially set to the supplied arguments. entityId will be set as -1, levelColumn will be set to empty() 
@@ -68,12 +68,12 @@ public final class CategAmountCell extends Cell implements CategCell, DatedCell,
      * @param translatedDate
      */
     public CategAmountCell(long activityId, MonetaryAmount amount, MetaInfoSet metaInfo, 
-            Map<NiDimensionUsage, Coordinate> coos, TranslatedDate translatedDate, Boolean hasConvertedAmount) {
+            Map<NiDimensionUsage, Coordinate> coos, TranslatedDate translatedDate, Boolean isInformative) {
         super(activityId, -1, coos, Optional.empty());
         this.amount = amount;
         this.metaInfo = metaInfo.freeze();
         this.translatedDate = translatedDate;
-        this.hasConvertedAmount = hasConvertedAmount;
+        this.isInformativeAmount = isInformative;
     }
 
     /**
@@ -147,8 +147,8 @@ public final class CategAmountCell extends Cell implements CategCell, DatedCell,
         return amount.precisionSetting;
     }
     
-    public Boolean hasConvertedAmount() {
-        return hasConvertedAmount;
+    public Boolean isInformativeAmount() {
+        return isInformativeAmount;
     }
 
     @Override

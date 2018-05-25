@@ -42,22 +42,12 @@ public interface VSplitStrategy {
     }
 
     /**
-     * returns the list of the subcolumns to be created based on the list of existant categories
-     * @param existant
+     * returns the list of the subcolumns to be created based on the list of existent categories
+     * @param existent
      * @return
      */
-    public default List<ComparableValue<String>> getSubcolumnsNames(Set<ComparableValue<String>> existant) {
-        return getSubcolumnsNames(existant, false);
-    }
-    
-    /**
-     * returns the list of the subcolumns to be created based on the list of existant categories
-     * @param existant
-     * @return
-     */
-    default List<ComparableValue<String>> getSubcolumnsNames(Set<ComparableValue<String>> existant, 
-            boolean isTotal) {
-        return new ArrayList<>(existant);
+    default List<ComparableValue<String>> getSubcolumnsNames(Set<ComparableValue<String>> existent, boolean isTotal) {
+        return new ArrayList<>(existent);
     }
     
     /**
@@ -83,14 +73,9 @@ public interface VSplitStrategy {
             }
             
             @Override
-            public List<ComparableValue<String>> getSubcolumnsNames(Set<ComparableValue<String>> existant) {
-                return getSubcolumnsNames(existant, false);
-            }
-            
-            @Override
             public List<ComparableValue<String>> getSubcolumnsNames(Set<ComparableValue<String>> existant, 
                     boolean isTotal) {
-                return subColumnNames == null ? VSplitStrategy.super.getSubcolumnsNames(existant) 
+                return subColumnNames == null ? VSplitStrategy.super.getSubcolumnsNames(existant, isTotal) 
                         : subColumnNames.apply(existant);
             }
             

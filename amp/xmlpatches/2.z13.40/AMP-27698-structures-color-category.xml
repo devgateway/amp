@@ -20,13 +20,11 @@
             INSERT INTO amp_category_class(id, category_name, keyname, description, is_multiselect, is_ordered)
             VALUES (nextval('amp_category_class_seq'), 'GIS Structures Color Coding' , 'gis_structures_color_coding', '', 'f', 'f');
             
-            INSERT INTO amp_category_value(id, category_value, amp_category_class_id, index_column)
+            INSERT INTO amp_category_value(id, category_value, amp_category_class_id, index_column, deleted)
             VALUES (nextval('amp_category_value_seq'), '#000000: Road',
-                        (select id from amp_category_class where keyname='gis_structures_color_coding'), 0),
+                        (select id from amp_category_class where keyname='gis_structures_color_coding'), 0, false),
                     (nextval('amp_category_value_seq'), '#ffff00: Electricity Line',
-                        (select id from amp_category_class where keyname='gis_structures_color_coding'), 1);
-            
-           
+                        (select id from amp_category_class where keyname='gis_structures_color_coding'), 1, false);           
          </lang>
     </script>
   </apply>

@@ -28,7 +28,7 @@ public class FundingePledgesValueProvider extends PossibleValuesProvider {
             if (fundingPledge.getOrganizationGroup() != null) {
                 extraInfo.put("organization_group", fundingPledge.getOrganizationGroup().getName());
             }
-            values.add(new PossibleValue(fundingPledge.getId(), fundingPledge.getTitleFreeText(), 
+            values.add(new PossibleValue(fundingPledge.getId(), fundingPledge.getEffectiveName(), 
                     ImmutableMap.of(), extraInfo));
         }
         return values;

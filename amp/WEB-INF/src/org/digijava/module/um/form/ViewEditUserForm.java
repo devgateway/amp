@@ -320,7 +320,8 @@ public class ViewEditUserForm extends ActionForm {
      * @param pledger the pledger to set
      */
     public void setPledger(Boolean pledger) {
-        this.pledger = pledger;}
+        this.pledger = pledger;
+    }
 
     public Boolean getPledgeSuperUser() {
         return pledgeSuperUser;

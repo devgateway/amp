@@ -27,6 +27,9 @@ var MapConstants = {
 };
 var basemapUrl;
 var isOsm = false;
+var isFirstSelect = true;
+var tempId = 1; 
+var labels = {};
 
 function MapPopup(lat, long) {
 	latitude = lat;
@@ -126,19 +129,23 @@ function onMapClick(e) {
 
 }
 
-var isFirstSelect = true;
-var tempId = 1;
 function selectLocationCallerShape(selectedGraphic) {
 	$("#errorMsg").html("");
 	var callerButton = window.opener.callerGisObject;
 	var row = findRow(selectedGraphic);
-	$("#locationTitleDialog").dialog({
+
+	//set temporary client side id used for identifying structures and rows 
+	if (selectedGraphic.target.tempId == null) {
+		selectedGraphic.target.tempId = tempId++;
+	}
+	
+	  $("#locationTitleDialog").dialog({
 		"title" : TranslationManager.getTranslated("Select Structure"),
 		open : function(event, ui) {
 			$("#locationTitle").val('');
 			if (row) {
 				var title = row.getElementsByTagName("INPUT")[0];
-				$("#locationTitle").val(title.value);
+				$("#locationTitle").val(title.value);				
 			}
 		},
 		buttons : [ {
@@ -154,6 +161,7 @@ function selectLocationCallerShape(selectedGraphic) {
 					return;
 				}
 				
+				addStructureLabel(selectedGraphic, $("#locationTitle").val());				
 				isFirstSelect = false;
 				// if row does not exist, trigger click on add structure button to add row on structures table in AF					
 				if (row == null) {
@@ -172,14 +180,14 @@ function selectLocationCallerShape(selectedGraphic) {
 	});
 }
 
-function updateActivityForm(row, selectedGraphic) {		
+function updateActivityForm(row, selectedGraphic) {
 	var title = row.getElementsByTagName("INPUT")[0];
 	title.value = $("#locationTitle").val();
-	window.opener.postvaluesx(title)
+	window.opener.postvaluesx(title);
 
 	var latitudeInput = row.getElementsByTagName("INPUT")[1];
 	latitudeInput.value = "";
-	//Long
+	
 	var longitudeInput = row.getElementsByTagName("INPUT")[2];
 	longitudeInput.value = "";
 
@@ -188,13 +196,10 @@ function updateActivityForm(row, selectedGraphic) {
 
 	var shapeInput = row.getElementsByTagName("INPUT")[6];
 	shapeInput.value = "";
-	
+
 	var tempIdInput = row.getElementsByTagName("INPUT")[7];
-	if (selectedGraphic.target.tempId == null) {
-		selectedGraphic.target.tempId = tempId++;
-		tempIdInput.value = selectedGraphic.target.tempId;		
-		window.opener.postvaluesx(tempIdInput);
-	}
+	tempIdInput.value = selectedGraphic.target.tempId;
+	window.opener.postvaluesx(tempIdInput);
 
 	if (selectedPointEvent.target instanceof L.Marker || selectedGraphic.target instanceof L.CircleMarker) {
 		latitudeInput.value = selectedGraphic.latlng.lat;
@@ -233,19 +238,19 @@ function updateActivityForm(row, selectedGraphic) {
 		var evt = document.createEvent("HTMLEvents");
 		evt.initEvent("change", false, true);
 		coordsInput.dispatchEvent(evt);
-		
+
 		var evtLatitude = document.createEvent("HTMLEvents");
 		evtLatitude.initEvent("change", false, true);
 		latitudeInput.dispatchEvent(evtLatitude);
-		
+
 		var evtLongitude = document.createEvent("HTMLEvents");
 		evtLongitude.initEvent("change", false, true);
 		longitudeInput.dispatchEvent(evtLongitude);
-		
+
 		var evtTitle = document.createEvent("HTMLEvents");
 		evtTitle.initEvent("change", false, true);
-		title.dispatchEvent(evtTitle);	
-		
+		title.dispatchEvent(evtTitle);
+
 		var evtTempId = document.createEvent("HTMLEvents");
 		evtTempId.initEvent("change", false, true);
 		tempIdInput.dispatchEvent(evtTempId);
@@ -253,8 +258,37 @@ function updateActivityForm(row, selectedGraphic) {
 		coordsInput.fireEvent("onchange");
 		latitudeInput.fireEvent("onchange");
 		longitudeInput.fireEvent("onchange");
-		title.fireEvent("onchange");		
+		title.fireEvent("onchange");
 		tempIdInput.fireEvent("onchange");
+	}
+}
+
+function addStructureLabel(selectedGraphic, title) {
+	var label = labels[selectedGraphic.target.tempId];
+	if (label) {
+		label.setIcon(L.divIcon({
+			iconSize : null,
+			className : 'label',
+			html : '<div>' + title + '</div>'
+		}));
+
+	} else {
+		label = L.marker(selectedGraphic.latlng, {
+			icon : L.divIcon({
+				iconSize : null,
+				className : 'label',
+				html : '<div>' + title + '</div>'
+			})
+		}).addTo(map);
+	}
+
+	labels[selectedGraphic.target.tempId] = label;
+}
+
+function removeStructureLabel(selectedGraphic) {
+	var label = labels[selectedGraphic.target.tempId];
+	if (label) {
+		map.removeLayer(label);
 	}
 }
 
@@ -449,9 +483,9 @@ function removeStructure(selectedPointEvent) {
 	var row = findRow(selectedPointEvent);
 	if (row) {
 		//trigger click on delete button to remove row on structures table in AF
-		row.getElementsByTagName('IMG')[2].click();
+		row.getElementsByTagName('IMG')[2].click();		
 	}
-
+	removeStructureLabel(selectedPointEvent);
 	map.removeLayer(selectedPointEvent.target);
 }
 

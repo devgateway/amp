@@ -69,6 +69,9 @@
  	        <many-to-many class="org.digijava.module.aim.dbentity.AmpOrganisation" column="ORG_ID"/>
  	 	</set>
 		<property name="pledger" column="PLEDGER" type="boolean" />
+		<property name="pledgeSuperUser"  type="boolean" >
+			<column name="PLEDGE_SUPER_USER" default="false"/>
+		</property>
 		<property name="exemptFromDataFreezing" column="EXEMPT_FROM_DATA_FREEZING" type="boolean" />
 		<property name="notificationEmail" column="notification_email" type="java.lang.String" />
 		<property name="notificationEmailEnabled" type="boolean">

@@ -87,6 +87,13 @@ public class AmpStructuresFormSectionFeature extends
                 if (name.isComponentMultilingual()) {
                     name.getTextContainer().add(new AttributeAppender("style", "margin-bottom:40px;"));
                 }
+                name.getTextContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
+                    @Override
+                    protected void onUpdate(AjaxRequestTarget target) {
+                        target.add(name);
+                    }
+                });
+                             
                 item.add(name);
                 
                 final AmpTextAreaFieldPanel description = new AmpTextAreaFieldPanel("description", new PropertyModel<String>(structureModel, "description"),"Structure Description",false, true, true);
@@ -228,6 +235,18 @@ public class AmpStructuresFormSectionFeature extends
 
                 coords.setOutputMarkupId(true);
                 item.add(coords);
+                
+                final TextField<String> tempId = new TextField<String>("tempId",
+                        new PropertyModel<String>(structureModel, "tempId"));    
+                tempId.setOutputMarkupId(true);                
+                tempId.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+                    @Override
+                    protected void onUpdate(AjaxRequestTarget target) {
+                        target.add(tempId);
+                    }
+                });                
+                item.add(tempId);
+                
                 latitude.getTextContainer().setEnabled(!hasCoordinates(structureModel));
                 longitude.getTextContainer().setEnabled(!hasCoordinates(structureModel));
                 viewCoords.getButton().setEnabled(hasCoordinates(structureModel));

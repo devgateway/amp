@@ -127,11 +127,11 @@ function onMapClick(e) {
 }
 
 var isFirstSelect = true;
+var tempId = 1;
 function selectLocationCallerShape(selectedGraphic) {
 	$("#errorMsg").html("");
 	var callerButton = window.opener.callerGisObject;
 	var row = findRow(selectedGraphic);
-
 	$("#locationTitleDialog").dialog({
 		"title" : TranslationManager.getTranslated("Select Structure"),
 		open : function(event, ui) {
@@ -154,22 +154,18 @@ function selectLocationCallerShape(selectedGraphic) {
 					return;
 				}
 				
-				// first update, the row that was clicked
-				if (isFirstSelect == true) {
-					row = callerButton.parentNode.parentNode;
-					updateActivityForm(row, selectedGraphic);
-					isFirstSelect = false;
+				isFirstSelect = false;
+				// if row does not exist, trigger click on add structure button to add row on structures table in AF					
+				if (row == null) {
+						callerButton.ownerDocument.getElementsByClassName('addStructure')[0].click();
+						setTimeout(function() {
+							var rows = callerButton.ownerDocument.getElementsByClassName('structureRow');
+							row = rows[rows.length - 1];
+							updateActivityForm(row, selectedGraphic);
+						}, 3000);
 				} else {
-					// if not first selection, find row and if  not exists add it		
-					// trigger click on add structure button to add row on structures table in AF
-					callerButton.ownerDocument.getElementsByClassName('addStructure')[0].click();
-					setTimeout(function() {
-						var rows = callerButton.ownerDocument.getElementsByClassName('structureRow');
-						row = rows[rows.length - 1];
 						updateActivityForm(row, selectedGraphic);
-					}, 3000);
-
-				}
+				}				
 				$(this).dialog("close");
 			}
 		} ]
@@ -192,6 +188,13 @@ function updateActivityForm(row, selectedGraphic) {
 
 	var shapeInput = row.getElementsByTagName("INPUT")[6];
 	shapeInput.value = "";
+	
+	var tempIdInput = row.getElementsByTagName("INPUT")[7];
+	if (selectedGraphic.target.tempId == null) {
+		selectedGraphic.target.tempId = tempId++;
+		tempIdInput.value = selectedGraphic.target.tempId;		
+		window.opener.postvaluesx(tempIdInput);
+	}
 
 	if (selectedPointEvent.target instanceof L.Marker || selectedGraphic.target instanceof L.CircleMarker) {
 		latitudeInput.value = selectedGraphic.latlng.lat;
@@ -230,52 +233,44 @@ function updateActivityForm(row, selectedGraphic) {
 		var evt = document.createEvent("HTMLEvents");
 		evt.initEvent("change", false, true);
 		coordsInput.dispatchEvent(evt);
+		
 		var evtLatitude = document.createEvent("HTMLEvents");
 		evtLatitude.initEvent("change", false, true);
 		latitudeInput.dispatchEvent(evtLatitude);
+		
 		var evtLongitude = document.createEvent("HTMLEvents");
 		evtLongitude.initEvent("change", false, true);
-		longitudeInput.dispatchEvent(evt);
+		longitudeInput.dispatchEvent(evtLongitude);
+		
+		var evtTitle = document.createEvent("HTMLEvents");
+		evtTitle.initEvent("change", false, true);
+		title.dispatchEvent(evtTitle);	
+		
+		var evtTempId = document.createEvent("HTMLEvents");
+		evtTempId.initEvent("change", false, true);
+		tempIdInput.dispatchEvent(evtTempId);
 	} else {
 		coordsInput.fireEvent("onchange");
 		latitudeInput.fireEvent("onchange");
 		longitudeInput.fireEvent("onchange");
+		title.fireEvent("onchange");		
+		tempIdInput.fireEvent("onchange");
 	}
 }
 
-function findRow(selectedGraphic) {
+function findRow(selectedGraphic) {	
 	var callerButton = window.opener.callerGisObject;
+    if (isFirstSelect) {
+    	return callerButton.parentNode.parentNode;
+	}
+    
 	var rows = callerButton.ownerDocument.getElementsByClassName('structureRow');
-
 	for (var i = 0; i < rows.length; i++) {
-		var latitudeInput = rows[i].getElementsByTagName("INPUT")[1];
-		var longitudeInput = rows[i].getElementsByTagName("INPUT")[2];
-		var coordsInput = rows[i].getElementsByTagName("INPUT")[5];
-
-		if (selectedPointEvent.target instanceof L.Marker || selectedGraphic.target instanceof L.CircleMarker) {
-			var latLng = selectedGraphic.latlng ? selectedGraphic.latlng : selectedGraphic.getLatLng();
-			if (latitudeInput.value == latLng.lat && longitudeInput.value == latLng.lng) {
-				return rows[i];
-			}
-		} else {
-			console.log(coordsInput.value);
-
-			var latLngs = selectedGraphic.target.getLatLngs();
-			var data = [];
-			for (i = 0; i < latLngs.length; i++) {
-				var obj = {}
-				obj.latitude = latLngs[i].lat;
-				obj.longitude = latLngs[i].lng;
-				data.push(obj);
-			}
-
-			var jsonString = JSON.stringify({
-				'coordinates' : data
-			});
-			if (coordsInput.value === jsonString) {
-				return rows[i];
-			}
+		var tempIdInput = rows[i].getElementsByTagName("INPUT")[7];		
+		if (tempIdInput.value == selectedGraphic.target.tempId) {
+			return rows[i];
 		}
+	
 	}
 
 	return null;

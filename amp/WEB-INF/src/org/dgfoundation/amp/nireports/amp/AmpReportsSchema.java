@@ -1555,7 +1555,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         boolean splitByMoP = cc.splitCell != null && (cc.splitCell.entityType.equals(NiReportsEngine.PSEUDOCOLUMN_MEASURE)) && scratch.verticalSplitByModeOfPayment;
         
         // should this measure be split by Currencies?
-        boolean splitByCurrencies = cc.splitCell != null 
+        boolean splitByCurrencies = cc.behaviour.canBeSplitByCurrency() && cc.splitCell != null 
                 && (cc.splitCell.entityType.equals(NiReportsEngine.PSEUDOCOLUMN_MEASURE)) 
                 && !GroupingCriteria.GROUPING_TOTALS_ONLY.equals(engine.spec.getGroupingCriteria())
                 && engine.spec.isShowOriginalCurrency();

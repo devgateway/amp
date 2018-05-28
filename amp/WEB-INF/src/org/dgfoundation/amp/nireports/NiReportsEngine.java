@@ -26,6 +26,7 @@ import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.algo.Graph;
 import org.dgfoundation.amp.algo.ValueWrapper;
 import org.dgfoundation.amp.algo.timing.InclusiveTimer;
+import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportCollapsingStrategy;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportWarning;
@@ -756,5 +757,10 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
     public IdsAcceptor buildAcceptor(NiDimensionUsage dimUsage, List<Coordinate> coos) {
         DimensionSnapshot snapshot = getDimensionSnapshot(dimUsage.dimension);
         return snapshot.getCachingIdsAcceptor(coos);
+    }
+    
+    public boolean canSplittingStrategyBeAdded() {
+        return !GroupingCriteria.GROUPING_TOTALS_ONLY.equals(spec.getGroupingCriteria())
+                && spec.isShowOriginalCurrency();
     }
 }

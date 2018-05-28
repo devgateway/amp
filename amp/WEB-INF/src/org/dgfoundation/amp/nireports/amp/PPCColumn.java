@@ -61,15 +61,15 @@ public class PPCColumn extends PsqlSourcedColumn<CategAmountCell> {
                 CategAmountCellProto cellProto = new CategAmountCellProto(ampActivityId, transactionAmount, 
                         origCurrency, transactionMoment, MetaInfoSet.empty(), Collections.emptyMap(), null);
                 
-                cells.add(cellProto.materialize(usedCurrency, calendar, currencyConvertor, precisionSetting, true));
+                cells.add(cellProto.materialize(usedCurrency, calendar, currencyConvertor, precisionSetting, false));
                 
                 /* 
                  * AMP-27571
-                 * if showOriginalCurrencies splitting is enabled we need to duplicate cells with original currencies
+                 * if canSplittingStrategyBeAdded is true we need to duplicate cells with original currencies
                 */
-                if (engine.spec.isShowOriginalCurrency() && usedCurrency.getId() != origCurrency.getId()) {
+                if (engine.canSplittingStrategyBeAdded() && usedCurrency.getId() != origCurrency.getId()) {
                     cells.add(cellProto.materialize(usedCurrency, calendar, currencyConvertor, precisionSetting, 
-                            false));
+                            true));
                 } 
             }
         }

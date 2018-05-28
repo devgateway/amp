@@ -1,6 +1,6 @@
 package org.dgfoundation.amp.nireports.amp;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -11,15 +11,15 @@ import org.dgfoundation.amp.nireports.ComparableValue;
 import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.amp.dimensions.OrganisationsDimension;
+import org.dgfoundation.amp.nireports.behaviours.CurrencySplittingStrategy;
 import org.dgfoundation.amp.nireports.behaviours.TrivialMeasureBehaviour;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.ColumnContents;
-import org.dgfoundation.amp.nireports.runtime.NiCell;
 import org.dgfoundation.amp.nireports.runtime.VSplitStrategy;
 import org.dgfoundation.amp.nireports.schema.IdsAcceptor;
 import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
-import org.dgfoundation.amp.nireports.schema.NiReportedEntity;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
+import org.dgfoundation.amp.nireports.schema.NiReportedEntity;
 
 /**
  * the {@link Behavior} of a Funding Flow entity.
@@ -47,8 +47,16 @@ public class DirectedMeasureBehaviour extends TrivialMeasureBehaviour {
      */
     @Override
     public List<VSplitStrategy> getSubMeasureHierarchies(NiReportsEngine context) {
-        VSplitStrategy byFundingFlow = VSplitStrategy.build(cell -> new ComparableValue<String>(getFlowName(cell.getCell()), getFlowName(cell.getCell())), AmpReportsSchema.PSEUDOCOLUMN_FLOW);
-        return Arrays.asList(byFundingFlow);
+        List<VSplitStrategy> strategies = new ArrayList<>();
+        strategies.add(VSplitStrategy.build(
+                cell -> new ComparableValue<String>(getFlowName(cell.getCell()), getFlowName(cell.getCell())), 
+                AmpReportsSchema.PSEUDOCOLUMN_FLOW));
+        
+        if (context != null && context.canSplittingStrategyBeAdded()) {
+            strategies.add(CurrencySplittingStrategy.getInstance(AmpReportsScratchpad.get(context).getUsedCurrency()));
+        }
+        
+        return strategies;
     }
 
     public static String getFlowName(Cell cell) {
@@ -105,4 +113,10 @@ public class DirectedMeasureBehaviour extends TrivialMeasureBehaviour {
     public boolean shouldDeleteLeafIfEmpty(CellColumn column) {
         return true;
     }
+    
+    @Override
+    public boolean canBeSplitByCurrency() {
+        return true;
+    }
+    
 }

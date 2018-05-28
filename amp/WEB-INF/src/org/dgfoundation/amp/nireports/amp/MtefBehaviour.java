@@ -34,7 +34,7 @@ public class MtefBehaviour extends TrivialMeasureBehaviour {
     
     @Override
     public List<VSplitStrategy> getSubMeasureHierarchies(NiReportsEngine context) {
-        if (context.spec.isShowOriginalCurrency()) {
+        if (context != null && context.canSplittingStrategyBeAdded()) {
             AmpCurrency usedCurrency = AmpReportsScratchpad.get(context).getUsedCurrency();
                     
             VSplitStrategy byCurrency = CurrencySplittingStrategy.getInstance(usedCurrency);

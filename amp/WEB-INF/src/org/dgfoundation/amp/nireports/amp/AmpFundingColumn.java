@@ -244,9 +244,9 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
         
         /* 
          * AMP-27571
-         * if showOriginalCurrencies splitting is enabled we need to duplicate cells in original currency
+         * if canSplittingStrategyBeAdded is true we need to duplicate cells in original currency
         */
-        if (engine.spec.isShowOriginalCurrency()) {
+        if (engine.canSplittingStrategyBeAdded()) {
             // generate cells for original currency only (except used currency)
             res.addAll(protos.stream()
                     .filter(cacp -> usedCurrency.getId() != cacp.origCurrency.getId())

@@ -1,6 +1,6 @@
 package org.dgfoundation.amp.nireports.behaviours;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -9,6 +9,7 @@ import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.ComparableValue;
 import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
+import org.dgfoundation.amp.nireports.amp.AmpReportsScratchpad;
 import org.dgfoundation.amp.nireports.meta.MetaInfo;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.ColumnContents;
@@ -45,8 +46,14 @@ public class TaggedMeasureBehaviour extends TrivialMeasureBehaviour {
     
     @Override
     public List<VSplitStrategy> getSubMeasureHierarchies(NiReportsEngine context) {
-        VSplitStrategy byTaggedCategory = getSplittingStrategy(tagCategory, pseudoColumnName, totalSubcolumn);
-        return Arrays.asList(byTaggedCategory);
+        List<VSplitStrategy> strategies = new ArrayList<>();
+        strategies.add(getSplittingStrategy(tagCategory, pseudoColumnName, totalSubcolumn));
+        
+        if (context != null && context.canSplittingStrategyBeAdded()) {
+            strategies.add(CurrencySplittingStrategy.getInstance(AmpReportsScratchpad.get(context).getUsedCurrency()));
+        }
+        
+        return strategies;
     }
 
     public static String getTagName(Cell cell, String tagCategory) {

@@ -290,13 +290,6 @@
 			<key column="amp_activity_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpFundingAmount" />
 		</set>
-		
-		<set name="performanceRules" table="AMP_ACTIVITY_PERFORMANCE_RULE" lazy="false" cascade="none">
-            <cache usage="read-write" />
-            <key column="amp_activity_id" />
-            <many-to-many class="org.digijava.module.aim.dbentity.AmpPerformanceRule"
-                column="amp_performance_rule_id" />
-        </set>
 
 	' 
 	>

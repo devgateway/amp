@@ -305,7 +305,6 @@ public class ActivityUtil {
         updateComponentFunding(a, session);
         saveAnnualProjectBudgets(a, session);
         saveProjectCosts(a, session);
-        updatePerformanceRules(a);
     
         if (createNewVersion){
             //a.setAmpActivityId(null); //hibernate will save as a new version
@@ -315,6 +314,8 @@ public class ActivityUtil {
             session.saveOrUpdate(a);
             //session.update(a);
         }
+        
+        updatePerformanceRules(oldA, a);
 
         if (newActivity){
             a.setAmpId(org.digijava.module.aim.util.ActivityUtil.generateAmpId(ampCurrentMember.getUser(), a.getAmpActivityId(), session));
@@ -323,7 +324,7 @@ public class ActivityUtil {
         return a;
     }
 
-    private static void updatePerformanceRules(AmpActivityVersion a) {
+    private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityVersion a) {
         PerformanceRuleManager ruleManager = PerformanceRuleManager.getInstance();
 
         Set<AmpPerformanceRule> matchedRules = new HashSet<>();
@@ -332,9 +333,8 @@ public class ActivityUtil {
             matchedRules = ruleManager.getPerformanceRulesFromIssues(ruleManager.findPerformanceIssues(a));
         }
         
-        if (!ruleManager.isEqualPerformanceRuleCollection(matchedRules, a.getPerformanceRules())) {
-            ruleManager.updatePerformanceRulesInActivity(a, a.getPerformanceRules(), matchedRules);
-        }
+        ruleManager.deleteActivityPerformanceRule(oldA.getAmpActivityId());
+        ruleManager.updatePerformanceRules(a.getAmpActivityId(), matchedRules);
     }
 
     /**

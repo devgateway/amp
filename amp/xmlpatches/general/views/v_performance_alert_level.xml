@@ -22,10 +22,10 @@
 				CREATE OR REPLACE VIEW v_performance_alert_level AS
 				  SELECT DISTINCT
                     apr.amp_activity_id,
-                    acv.category_value       AS name,
+                    acv.category_value AS name,
                     acv.id AS level_code
                   FROM amp_activity_performance_rule apr
-                    JOIN amp_performance_rule pr ON pr.rule_id = apr.amp_performance_rule_id
+                    JOIN amp_performance_rule pr ON pr.rule_id = apr.performance_rule_id
                     JOIN amp_category_value acv ON pr.level_category = acv.id
 
 			]]></lang>

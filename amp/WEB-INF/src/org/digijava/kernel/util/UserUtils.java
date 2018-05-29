@@ -288,8 +288,8 @@ public class UserUtils {
      * @return User by specified id, null of no user by that id was found
      */
     public static User getUser(Long id) {
-        User result = null;
-        Session session = null;
+        User result ;
+        Session session;
 
         try {
             session = PersistenceManager.getRequestDBSession();
@@ -306,6 +306,12 @@ public class UserUtils {
             throw new RuntimeException(ex);
         }
         return result;
+
+    }
+
+    public static boolean hasVerfifiedOrgGroup(Long userId, Long orgGroupId){
+        User user = getUser(userId);
+        return user.getAssignedOrgs().stream().anyMatch(t->t.getOrgGrpId().getAmpOrgGrpId().equals(orgGroupId));
 
     }
 

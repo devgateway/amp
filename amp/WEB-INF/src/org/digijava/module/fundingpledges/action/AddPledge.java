@@ -11,7 +11,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
@@ -93,7 +92,7 @@ public class AddPledge extends Action {
             //we need the pledge loaded to see if the user can edit it
             FundingPledges fp = PledgesEntityHelper.getPledgesById(plForm.getPledgeId());
             String editRightsMsg = editRightCheck(plForm, request, response, fp);
-            if (editRightsMsg != null){
+            if (editRightsMsg != null) {
                 request.getSession().setAttribute("PNOTIFY_ERROR_MESSAGE", editRightsMsg);
                 request.getSession().setAttribute("PNOTIFY_ERROR_TITLE", TranslatorWorker.translateText("Error"));
                 if (plForm.getPledgeId() == null) {

@@ -272,7 +272,7 @@ public class TeamMember implements Comparable, Serializable{
         return pledger;
     }
 
-    public Boolean getPledgeSuperUser(){
+    public Boolean getPledgeSuperUser() {
         return pledgeSuperUser;
     }
     public Boolean getPublishDocuments() {

@@ -288,7 +288,7 @@ public class UserUtils {
      * @return User by specified id, null of no user by that id was found
      */
     public static User getUser(Long id) {
-        User result ;
+        User result;
         Session session;
 
         try {
@@ -309,10 +309,9 @@ public class UserUtils {
 
     }
 
-    public static boolean hasVerfifiedOrgGroup(Long userId, Long orgGroupId){
+    public static boolean hasVerfifiedOrgGroup(Long userId, Long orgGroupId) {
         User user = getUser(userId);
-        return user.getAssignedOrgs().stream().anyMatch(t->t.getOrgGrpId().getAmpOrgGrpId().equals(orgGroupId));
-
+        return user.getAssignedOrgs().stream().anyMatch(t -> t.getOrgGrpId().getAmpOrgGrpId().equals(orgGroupId));
     }
 
     /**

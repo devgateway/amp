@@ -43,6 +43,10 @@ public final class PerformanceRuleConstants {
     public static final String MATCHER_DESCR_NO_UPD_DISB_TIME_PERIOD = "No updated disbursements";
     public static final String MATCHER_DESCR_NO_UPDATED_STATUS = "No updated status after selected funding date";
 
+    public static final String GROUPING_ROLE_CODE = "RO";
+    public static final String GROUPING_ROLE_LABEL = "Responsible Organisation";
+
+
     private PerformanceRuleConstants() { }
 
 }

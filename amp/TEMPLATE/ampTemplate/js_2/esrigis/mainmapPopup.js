@@ -234,32 +234,22 @@ function updateActivityForm(row, selectedGraphic) {
 		}
 		window.opener.postvaluesx(shapeInput);
 	}
+	
+	fireChangeEvent(coordsInput);
+	fireChangeEvent(latitudeInput);
+	fireChangeEvent(longitudeInput);
+	fireChangeEvent(title);
+	fireChangeEvent(tempIdInput);
+	fireChangeEvent(shapeInput);
+}
+
+function fireChangeEvent(element) {
 	if ("createEvent" in document) {
 		var evt = document.createEvent("HTMLEvents");
 		evt.initEvent("change", false, true);
-		coordsInput.dispatchEvent(evt);
-
-		var evtLatitude = document.createEvent("HTMLEvents");
-		evtLatitude.initEvent("change", false, true);
-		latitudeInput.dispatchEvent(evtLatitude);
-
-		var evtLongitude = document.createEvent("HTMLEvents");
-		evtLongitude.initEvent("change", false, true);
-		longitudeInput.dispatchEvent(evtLongitude);
-
-		var evtTitle = document.createEvent("HTMLEvents");
-		evtTitle.initEvent("change", false, true);
-		title.dispatchEvent(evtTitle);
-
-		var evtTempId = document.createEvent("HTMLEvents");
-		evtTempId.initEvent("change", false, true);
-		tempIdInput.dispatchEvent(evtTempId);
-	} else {
-		coordsInput.fireEvent("onchange");
-		latitudeInput.fireEvent("onchange");
-		longitudeInput.fireEvent("onchange");
-		title.fireEvent("onchange");
-		tempIdInput.fireEvent("onchange");
+		element.dispatchEvent(evt);
+	} else {		
+		element.fireEvent("onchange");
 	}
 }
 

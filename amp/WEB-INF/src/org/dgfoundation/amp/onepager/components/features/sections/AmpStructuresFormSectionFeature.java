@@ -138,9 +138,14 @@ public class AmpStructuresFormSectionFeature extends
                 item.add(latitude);
 
                 final AmpTextFieldPanel<String> shape = new AmpTextFieldPanel<String>("shape", new PropertyModel<String>(structureModel, "shape"),"Structure Shape", true, true);
-                shape.setOutputMarkupId(true);
-                
+                shape.setOutputMarkupId(true);                
                 shape.getTextContainer().add(new AttributeAppender("size", new Model("7px"), ";"));
+                shape.getTextContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
+                    @Override
+                    protected void onUpdate(AjaxRequestTarget target) {                        
+                        target.add(shape);
+                    }
+                });
                 item.add(shape);
 
                 ListEditorRemoveButton delbutton = new ListEditorRemoveButton("deleteStructure", "Delete Structure"){

@@ -26,10 +26,12 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.stream.Stream;
 
 import javax.security.auth.Subject;
 import javax.servlet.http.HttpServletRequest;
 
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
@@ -310,10 +312,13 @@ public class UserUtils {
     }
 
     public static boolean hasVerfifiedOrgGroup(Long userId, Long orgGroupId) {
-        User user = getUser(userId);
-        return user.getAssignedOrgs().stream().anyMatch(t -> t.getOrgGrpId().getAmpOrgGrpId().equals(orgGroupId));
+        return getVerifiedOrgsStream(userId).anyMatch(t -> t.getOrgGrpId().getAmpOrgGrpId().equals(orgGroupId));
     }
 
+    public static Stream<AmpOrganisation> getVerifiedOrgsStream(Long userId){
+        User user = getUser(userId);
+        return user.getAssignedOrgs().stream();
+    }
     /**
      * Searchs users with given criteria
      * @param criteria criteria by which users are searched

@@ -19,14 +19,11 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 public class RequiredValidator extends InputValidator {
 
     private boolean draftDisabled = false;
-    private boolean isValidRequiredValue = true;
     
     @Override
     public ApiErrorMessage getErrorMessage() {
         if (this.draftDisabled) {
             return ActivityErrors.SAVE_AS_DRAFT_FM_DISABLED;
-        } else if (!isValidRequiredValue) {
-            return ActivityErrors.FIELD_REQUIRED_VALUE;
         }
         
         return ActivityErrors.FIELD_REQUIRED;
@@ -41,7 +38,6 @@ public class RequiredValidator extends InputValidator {
         boolean importable = fieldDescription.isImportable();
         // don't care if value has something
         if (importable && isEmpty(fieldValue)) {
-            isValidRequiredValue = fieldValue == null;
             if (ActivityEPConstants.FIELD_ALWAYS_REQUIRED.equals(requiredStatus)) {
                 // field is always required -> can't save it even as a draft
                 return false;

@@ -74,7 +74,7 @@ public class RequiredValidatorTest {
     
     @Test
     public void testAlwaysRequiredFieldEmptyValueNotPresent() throws Exception {
-        assertValidator(EMPTY_VALUE_BEAN, fd(FIELD_ALWAYS_REQUIRED), ActivityErrors.FIELD_REQUIRED_VALUE, false);
+        assertValidator(EMPTY_VALUE_BEAN, fd(FIELD_ALWAYS_REQUIRED), ActivityErrors.FIELD_REQUIRED, false);
     }
 
     @Test
@@ -112,7 +112,7 @@ public class RequiredValidatorTest {
     public void testSubmitModeAlwaysRequiredFieldEmptyValueNotPresent() throws Exception {
         when(importer.getRequestedSaveMode()).thenReturn(SUBMIT);
 
-        assertValidator(EMPTY_VALUE_BEAN, fd(FIELD_ALWAYS_REQUIRED), ActivityErrors.FIELD_REQUIRED_VALUE, false);
+        assertValidator(EMPTY_VALUE_BEAN, fd(FIELD_ALWAYS_REQUIRED), ActivityErrors.FIELD_REQUIRED, false);
     }
 
     @Test
@@ -133,7 +133,7 @@ public class RequiredValidatorTest {
     public void testSubmitModeSubmissionRequiredFieldPresentEmptyValue() throws Exception {
         when(importer.getRequestedSaveMode()).thenReturn(SUBMIT);
 
-        assertValidator(EMPTY_VALUE_BEAN, fd(FIELD_NON_DRAFT_REQUIRED), ActivityErrors.FIELD_REQUIRED_VALUE, false);
+        assertValidator(EMPTY_VALUE_BEAN, fd(FIELD_NON_DRAFT_REQUIRED), ActivityErrors.FIELD_REQUIRED, false);
     }
 
     @Test
@@ -149,7 +149,7 @@ public class RequiredValidatorTest {
         when(importer.getRequestedSaveMode()).thenReturn(SUBMIT);
         when(importer.isDraftFMEnabled()).thenReturn(false);
 
-        assertValidator(EMPTY_VALUE_BEAN, fd(FIELD_NON_DRAFT_REQUIRED), ActivityErrors.FIELD_REQUIRED_VALUE, false);
+        assertValidator(EMPTY_VALUE_BEAN, fd(FIELD_NON_DRAFT_REQUIRED), ActivityErrors.FIELD_REQUIRED, false);
     }
 
     private APIField fd(String required) {

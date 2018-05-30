@@ -42,6 +42,13 @@ public class ContactImporter extends ObjectImporter {
         this.newJson = newJson;
 
         List<APIField> fieldsDef = AmpFieldsEnumerator.PRIVATE_ENUMERATOR.getContactFields();
+        
+        Object contactJsonId = newJson.get(ContactEPConstants.ID);
+        
+        if (contactJsonId != null) {
+            return singletonList(ContactErrors.FIELD_READ_ONLY.withDetails(ContactEPConstants.ID));
+        }
+        
 
         Object createdById = newJson.get(ContactEPConstants.CREATED_BY);
         AmpTeamMember createdBy = TeamMemberUtil.getAmpTeamMember(getLongOrNull(createdById));

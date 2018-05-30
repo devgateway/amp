@@ -432,7 +432,8 @@ public class PledgeForm extends ActionForm implements Serializable {
 
         List<Long> orgGroupIds = null;
         TeamMember currentTeamMember = TeamMemberUtil.getLoggedInTeamMember();
-        if (!currentTeamMember.getPledgeSuperUser()) {
+        if (!currentTeamMember.getPledgeSuperUser() && FeaturesUtil.isVisibleFeature("Pledges",
+                "Limit Pledge Edition"))  {
             orgGroupIds = UserUtils.getVerifiedOrgsStream(currentTeamMember.getUserId()).map(organisation ->
                     organisation.getOrgGrpId().getAmpOrgGrpId()).collect(Collectors.toList());
         }

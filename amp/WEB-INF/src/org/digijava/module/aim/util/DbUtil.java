@@ -1715,7 +1715,9 @@ public class DbUtil {
             queryString += " order by lower(" + orgGrpNameHql + ") asc";
 
             Query qry = session.createQuery(queryString);
-            qry.setParameterList("ids", ampOrgGroupIds);
+            if (ampOrgGroupIds != null && ampOrgGroupIds.size() > 0) {
+                qry.setParameterList("ids", ampOrgGroupIds);
+            }
             return qry.list();
         } catch (Exception e) {
             logger.debug("Exception from getAllOrgGroups()");

@@ -242,8 +242,9 @@
 
 
 <feature:display name="Portfolio Dashboard" module="M & E"></feature:display> 
-<feature:display name="Add Pledge Button" module="Pledges"></feature:display> 
-<feature:display name="Pledge Donor Information" module="Pledges"></feature:display> 
+<feature:display name="Add Pledge Button" module="Pledges"></feature:display>
+<feature:display name="Limit Pledge Edition" module="Pledges"></feature:display>
+<feature:display name="Pledge Donor Information" module="Pledges"></feature:display>
 <feature:display name="Pledge Sector and Location" module="Pledges"></feature:display>
 <feature:display name="Pledge Status" module="Pledges"></feature:display>
 <feature:display name="Pledge Contact 1" module="Pledges"></feature:display> 

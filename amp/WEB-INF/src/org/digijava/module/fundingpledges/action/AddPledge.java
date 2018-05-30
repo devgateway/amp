@@ -11,7 +11,9 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
@@ -41,6 +43,7 @@ public class AddPledge extends Action {
         session.removeAttribute(PLEDGE_TIMESTAMP_EDITED_BY_CURRENT_SESSION_ATTR);
     }
 
+
     public String editRightCheck(PledgeForm plForm, HttpServletRequest request, HttpServletResponse response,
                                  FundingPledges fp){
         TeamMember currentMember = TeamMemberUtil.getLoggedInTeamMember();
@@ -48,10 +51,14 @@ public class AddPledge extends Action {
         // check that logged in
         if (currentMember == null){
             return TranslatorWorker.translateText("Only logged-in members can edit pledges");
-        };
+        }
         
-        if (currentMember.getPledger() == null || !currentMember.getPledger())
+        if (currentMember.getPledger() == null || !currentMember.getPledger() || !((currentMember.getPledgeSuperUser()
+                || UserUtils.hasVerfifiedOrgGroup(currentMember.getUserId(), fp
+                .getOrganizationGroup().getAmpOrgGrpId())) || !FeaturesUtil.isVisibleFeature("Pledges",
+                "Limit Pledge Edition"))) {
             return TranslatorWorker.translateText("You are not allowed to edit pledges");
+        }
         
         Long timeStamp = (Long) request.getSession().getAttribute(PLEDGE_TIMESTAMP_EDITED_BY_CURRENT_SESSION_ATTR);
         if (timeStamp != null){

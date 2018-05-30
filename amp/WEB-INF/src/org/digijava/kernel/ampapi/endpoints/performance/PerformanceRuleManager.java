@@ -13,7 +13,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
@@ -27,6 +28,7 @@ import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.NoUpd
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleAttributeOption;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleMatcherDefinition;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleMatcherPossibleValuesSupplier;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -36,9 +38,11 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpPerformanceRule;
 import org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute;
 import org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute.PerformanceRuleAttributeType;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.jdbc.Work;
@@ -63,6 +67,8 @@ public final class PerformanceRuleManager {
 
     private List<PerformanceRuleMatcher> cachedPerformanceRuleMatchers;
     
+    private ExecutorService execService;
+    
     public static final Map<String, Long> PERF_ALERT_TYPE_TO_ID = ImmutableMap.of(
             PerformanceRuleConstants.MATCHER_DISB_ACTIVITY_DATE, 1L,
             PerformanceRuleConstants.MATCHER_NO_DISB_FUNDING_DATE, 2L,
@@ -86,6 +92,7 @@ public final class PerformanceRuleManager {
 
     private PerformanceRuleManager() {
         initPerformanceRuleDefinitions();
+        execService = Executors.newCachedThreadPool();
     }
 
     /**
@@ -145,7 +152,8 @@ public final class PerformanceRuleManager {
         
         Session session = PersistenceManager.getSession();
         session.merge(performanceRule);
-
+        
+        execService.submit(() -> matchActivitiesByPerformanceRule(performanceRule));
         invalidateCachedPerformanceRules();
     }
 
@@ -160,7 +168,9 @@ public final class PerformanceRuleManager {
         
         Session session = PersistenceManager.getSession();
         session.saveOrUpdate(performanceRule);
-
+        
+        execService.submit(() -> matchActivitiesByPerformanceRule(performanceRule));
+        updatePerformanceAlertETL(session);
         invalidateCachedPerformanceRules();
     }
 
@@ -169,7 +179,9 @@ public final class PerformanceRuleManager {
 
         Session session = PersistenceManager.getSession();
         session.delete(performanceRule);
-
+        
+        deleteRelatedActivitiesFromPerformanceRuleTable(session, id);
+        updatePerformanceAlertETL(session);
         invalidateCachedPerformanceRules();
     }
 
@@ -270,7 +282,7 @@ public final class PerformanceRuleManager {
 
         for (PerformanceRuleMatcher matcher : matchers) {
             PerformanceIssue issue = matcher.findPerformanceIssue(a);
-            if (matcher.findPerformanceIssue(a) != null) {
+            if (issue != null) {
                 performanceIssues.add(issue);
             }
         }
@@ -369,8 +381,6 @@ public final class PerformanceRuleManager {
                         });
                     }
                 });
-
-
             }
         });
         String ampIdLabel = TranslatorWorker.translateText("AMP ID");
@@ -542,7 +552,7 @@ public final class PerformanceRuleManager {
         return cachedPerformanceRules.stream().filter(p -> ruleIds.contains(p.getId())).collect(Collectors.toSet());
     }
 
-    public void updatePerformanceRules(Long activityId, Set<AmpPerformanceRule> matchedRules) {
+    public void updateActivityPerformanceRules(Long activityId, Set<AmpPerformanceRule> matchedRules) {
         String deleteQuery = "DELETE FROM amp_activity_performance_rule WHERE amp_activity_id = %s";
         String insertQuery = "INSERT INTO amp_activity_performance_rule (amp_activity_id, performance_rule_id) "
                 + "VALUES (%s, %s)";
@@ -559,22 +569,117 @@ public final class PerformanceRuleManager {
         });
     }
     
-    public void deleteAllActivityPerformanceRules() {
-        String deleteQuery = "DELETE FROM amp_activity_performance_rule";
-        PersistenceManager.getSession().doWork(new Work() {
+    /**
+     * Insert a new item in amp_activity_performance_rule table.
+     * 
+     * @param session
+     * @param activityId
+     * @param ruleId
+     */
+    public void insertActivityPerformanceRule(Session session, Long activityId, Long ruleId) {
+        String insertQuery = "INSERT INTO amp_activity_performance_rule (amp_activity_id, performance_rule_id) "
+                + "VALUES (%s, %s)";
+
+        session.doWork(new Work() {
             public void execute(Connection conn) throws SQLException {
+                SQLUtils.executeQuery(conn, String.format(insertQuery, activityId, ruleId));
+            }
+        });
+    }
+    
+    /**
+     * Delete all data from from amp_activity_performance_rule table
+     * 
+     * @param session
+     */
+    public void deleteAllActivityPerformanceRules(Session session) {
+        String deleteQuery = "DELETE FROM amp_activity_performance_rule";
+        session.doWork(new Work() {
+            public void execute(Connection conn) throws SQLException {  
                 SQLUtils.executeQuery(conn, deleteQuery);
             }
         });
     }
     
-    public void deleteActivityPerformanceRule(Long activityId) {
+    /**
+     * Delete the rows from amp_activity_performance_rule table with a specific activity id.
+     * 
+     * @param session
+     * @param activityId
+     */
+    public void deleteActivityPerformanceRule(Session session, Long activityId) {
         String deleteQuery = "DELETE FROM amp_activity_performance_rule WHERE amp_activity_id = %s";
-        PersistenceManager.getSession().doWork(new Work() {
+        session.doWork(new Work() {
             public void execute(Connection conn) throws SQLException {
                 SQLUtils.executeQuery(conn, String.format(deleteQuery, activityId));
             }
         });
     }
     
+    /**
+     * Delete the rows from amp_activity_performance_rule table with a specific ruleId.
+     * 
+     * @param session
+     * @param ruleId
+     */
+    private void deleteRelatedActivitiesFromPerformanceRuleTable(Session session, Long ruleId) {
+        String deleteQuery = "DELETE FROM amp_activity_performance_rule WHERE performance_rule_id = %s";
+        session.doWork(new Work() {
+            public void execute(Connection conn) throws SQLException {
+                SQLUtils.executeQuery(conn, String.format(deleteQuery, ruleId));
+            }
+        });
+    }
+    
+    /**
+     * Check activities for performance for a specific rule. Updates the tabel amp_activity_performance_rule
+     * 
+     * @param rule
+     */
+    private void matchActivitiesByPerformanceRule(AmpPerformanceRule rule) {
+        Session session = PersistenceManager.openNewSession();
+        Transaction tx = session.beginTransaction();
+        try {
+            if (rule.getEnabled()) {
+                List<Long> actIds = org.digijava.module.aim.util.ActivityUtil.getValidatedActivityIds();
+                PerformanceRuleMatcher matcher = getMatcherDefinition(rule.getTypeClassName()).createMatcher(rule);
+                deleteRelatedActivitiesFromPerformanceRuleTable(session, rule.getId());
+                
+                for (Long actId : actIds) {
+                    try {
+                        AmpActivityVersion a = ActivityUtil.loadActivity(actId);
+                        if (matcher.findPerformanceIssue(a) != null) {
+                            insertActivityPerformanceRule(session, actId, rule.getId());
+                        }
+                    } catch (DgException e) {
+                        logger.error(e.getMessage(), e);
+                    }
+                }
+            } else {
+                deleteRelatedActivitiesFromPerformanceRuleTable(session, rule.getId());
+            }
+            updatePerformanceAlertETL(session);
+        } catch (Throwable e) {
+            tx.rollback();
+            throw e;
+        } finally {
+            PersistenceManager.closeSession(session);
+        }
+    }
+    
+    /**
+     * Updates the ETL table by adding a row in it. 
+     * In order to refresh the report fetching of performance columns, we need to add an item in this table
+     * 
+     * @param session
+     */
+    public void updatePerformanceAlertETL(Session session) {
+        String query = "INSERT INTO amp_etl_changelog(entity_name, entity_id) VALUES ('alert', 1);";
+        session.doWork(new Work() {
+            public void execute(Connection conn) throws SQLException {
+                SQLUtils.executeQuery(conn, query);
+            }
+        });
+        
+    }
 }

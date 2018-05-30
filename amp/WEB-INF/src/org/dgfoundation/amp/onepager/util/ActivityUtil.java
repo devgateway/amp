@@ -333,8 +333,8 @@ public class ActivityUtil {
             matchedRules = ruleManager.getPerformanceRulesFromIssues(ruleManager.findPerformanceIssues(a));
         }
         
-        ruleManager.deleteActivityPerformanceRule(oldA.getAmpActivityId());
-        ruleManager.updatePerformanceRules(a.getAmpActivityId(), matchedRules);
+        ruleManager.deleteActivityPerformanceRule(PersistenceManager.getSession(), oldA.getAmpActivityId());
+        ruleManager.updateActivityPerformanceRules(a.getAmpActivityId(), matchedRules);
     }
 
     /**

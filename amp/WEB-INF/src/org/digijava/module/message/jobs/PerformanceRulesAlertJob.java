@@ -68,7 +68,7 @@ public class PerformanceRulesAlertJob extends ConnectionCleaningJob implements S
         
         Map<AmpActivityVersion, List<PerformanceIssue>> activitiesWithPerformanceIssues = new HashMap<>();
         PerformanceRuleManager ruleManager = PerformanceRuleManager.getInstance();
-        ruleManager.deleteAllActivityPerformanceRules();
+        ruleManager.deleteAllActivityPerformanceRules(PersistenceManager.getSession());
         
         boolean noMatcherFound = ruleManager.getPerformanceRuleMatchers().isEmpty();
         
@@ -87,7 +87,7 @@ public class PerformanceRulesAlertJob extends ConnectionCleaningJob implements S
                     matchedRules = ruleManager.getPerformanceRulesFromIssues(failedIssues);
                 }
                 
-                ruleManager.updatePerformanceRules(actId, matchedRules);
+                ruleManager.updateActivityPerformanceRules(actId, matchedRules);
                
                 final StringJoiner matchedLabelJoiner = new StringJoiner(",");
                 matchedRules.stream().forEach(r -> matchedLabelJoiner.add(
@@ -104,10 +104,9 @@ public class PerformanceRulesAlertJob extends ConnectionCleaningJob implements S
                 }
             } catch (Exception e) {
                 logger.error(String.format("\tactivity %d, error occured... %s", actId, e.getMessage()), e);
-            } finally {
-                PersistenceManager.endSessionLifecycle();
             }
         }
+        ruleManager.updatePerformanceAlertETL(PersistenceManager.getSession());
         
         return activitiesWithPerformanceIssues;
     }

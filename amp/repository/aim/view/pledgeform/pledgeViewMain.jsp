@@ -53,8 +53,11 @@
 		<jsp:include page="/repository/aim/view/pledgeform/pledgeContactsView.jsp"></jsp:include>
 		<jsp:include page="/repository/aim/view/pledgeform/pledgeEpilogueView.jsp"></jsp:include>
 	
+	</div><br/>
+	<div class="big-form-buttons">
+		<button type="button" onclick="parent.window.location = '/viewPledgesList.do';" class="btn btn-primary"
+				id='pledgeForm_cancel'><digi:trn>Return</digi:trn></button>
 	</div>
-
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="/repository/bootstrap/bootstrap.min.js"></script>
     <script src="/repository/bootstrap/bootstrap-select.min.js" type="text/javascript"></script>

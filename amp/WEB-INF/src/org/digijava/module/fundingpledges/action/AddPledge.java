@@ -55,7 +55,7 @@ public class AddPledge extends Action {
 
         if (currentMember.getPledger() == null || !currentMember.getPledger() || !((currentMember.getPledgeSuperUser()
                 || (fp == null || UserUtils.hasVerfifiedOrgGroup(currentMember.getUserId(), fp
-                .getOrganizationGroup().getAmpOrgGrpId()) )) || !FeaturesUtil.isVisibleFeature("Pledges",
+                .getOrganizationGroup().getAmpOrgGrpId()))) || !FeaturesUtil.isVisibleFeature("Pledges",
                 "Limit Pledge Edition"))) {
             return TranslatorWorker.translateText("You are not allowed to edit pledges");
         }

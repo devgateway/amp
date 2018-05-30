@@ -124,7 +124,7 @@ public class ValueValidator extends InputValidator {
         if (maxLength != null) {
             Object obj = newFieldParent.get(fieldDescription.getFieldName());
             if (obj != null) {
-                if (Boolean.TRUE.equals(fieldDescription.isTranslatable())) {
+                if (!Boolean.TRUE.equals(fieldDescription.isTranslatable())) {
                     isValidLength = isValidLength(obj, maxLength);
                 } else if (Map.class.isAssignableFrom(obj.getClass())) {
                     for (Object trn : ((Map) obj).values()) {

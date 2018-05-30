@@ -471,13 +471,28 @@ function startContextMenu() {
 }
 
 function removeStructure(selectedPointEvent) {
-	var row = findRow(selectedPointEvent);
-	if (row) {
-		//trigger click on delete button to remove row on structures table in AF
-		row.getElementsByTagName('IMG')[2].click();		
+	// trigger click on delete button to remove row on structures table in AF
+	var deleteIcon = findDeleteIcon(selectedPointEvent);
+	if (deleteIcon) {
+		deleteIcon.click();
 	}
+
 	removeStructureLabel(selectedPointEvent);
 	map.removeLayer(selectedPointEvent.target);
+}
+
+function findDeleteIcon(selectedPointEvent) {
+	var row = findRow(selectedPointEvent);
+	if (row) {
+		var images = row.getElementsByTagName('IMG');
+		for (var i = 0; i < images.length; i++) {
+			if (images[i].src.endsWith("ico_del.gif")) {
+				return images[i];
+			}
+		}
+	}
+	
+	return null;
 }
 
 function hideMenu() {

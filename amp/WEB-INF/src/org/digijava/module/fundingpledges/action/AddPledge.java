@@ -45,14 +45,14 @@ public class AddPledge extends Action {
 
 
     public String editRightCheck(PledgeForm plForm, HttpServletRequest request, HttpServletResponse response,
-                                 FundingPledges fp){
+                                 FundingPledges fp) {
         TeamMember currentMember = TeamMemberUtil.getLoggedInTeamMember();
         
         // check that logged in
         if (currentMember == null){
             return TranslatorWorker.translateText("Only logged-in members can edit pledges");
         }
-        
+
         if (currentMember.getPledger() == null || !currentMember.getPledger() || !((currentMember.getPledgeSuperUser()
                 || UserUtils.hasVerfifiedOrgGroup(currentMember.getUserId(), fp
                 .getOrganizationGroup().getAmpOrgGrpId())) || !FeaturesUtil.isVisibleFeature("Pledges",
@@ -104,10 +104,8 @@ public class AddPledge extends Action {
                 request.getSession().setAttribute("PNOTIFY_ERROR_MESSAGE", editRightsMsg);
                 request.getSession().setAttribute("PNOTIFY_ERROR_TITLE", TranslatorWorker.translateText("Error"));
                 if (plForm.getPledgeId() == null) {
-                    response.sendRedirect("/viewPledgesList.do"); // cannot view empty
-                }
-                else
-                {
+                    response.sendRedirect("/viewPledgesList.do");
+                } else {
                     response.sendRedirect("/viewPledge.do?id=" + plForm.getPledgeId());
                 }
                 return null;

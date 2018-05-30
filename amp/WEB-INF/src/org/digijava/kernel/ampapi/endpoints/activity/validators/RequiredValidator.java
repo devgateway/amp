@@ -2,6 +2,7 @@ package org.digijava.kernel.ampapi.endpoints.activity.validators;
 
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
@@ -18,13 +19,17 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 public class RequiredValidator extends InputValidator {
 
     private boolean draftDisabled = false;
+    private boolean isValidRequiredValue = true;
     
     @Override
     public ApiErrorMessage getErrorMessage() {
-        if (this.draftDisabled)
+        if (this.draftDisabled) {
             return ActivityErrors.SAVE_AS_DRAFT_FM_DISABLED;
-        else
-            return ActivityErrors.FIELD_REQUIRED;
+        } else if (!isValidRequiredValue) {
+            return ActivityErrors.FIELD_REQUIRED_VALUE;
+        }
+        
+        return ActivityErrors.FIELD_REQUIRED;
     }
     
     @Override
@@ -35,7 +40,8 @@ public class RequiredValidator extends InputValidator {
         String requiredStatus = fieldDescription.getRequired();
         boolean importable = fieldDescription.isImportable();
         // don't care if value has something
-        if (importable && fieldValue == null) {
+        if (importable && isEmpty(fieldValue)) {
+            isValidRequiredValue = fieldValue == null;
             if (ActivityEPConstants.FIELD_ALWAYS_REQUIRED.equals(requiredStatus)) {
                 // field is always required -> can't save it even as a draft
                 return false;
@@ -57,8 +63,16 @@ public class RequiredValidator extends InputValidator {
                 }
                 return activityImporter.getRequestedSaveMode() != SaveMode.SUBMIT;
             }
-        } 
+        }
         // field value != null, it's fine from this validator's POV
         return true;    
+    }
+    
+    private boolean isEmpty(Object fieldValue) {
+        return fieldValue == null || isEmptyString(fieldValue);
+    }
+    
+    private boolean isEmptyString(Object fieldValue) {
+        return fieldValue instanceof String && StringUtils.isBlank((String) fieldValue);
     }
 }

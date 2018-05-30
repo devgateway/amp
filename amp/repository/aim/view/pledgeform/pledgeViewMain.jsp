@@ -8,7 +8,8 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/struts-nested" prefix="nested" %>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
-
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>cc
 
     <!-- Bootstrap-select http://silviomoreto.github.io/bootstrap-select/ -->
     <link href="/repository/bootstrap/bootstrap-select.min.css" rel="stylesheet" type="text/css">
@@ -32,24 +33,27 @@
  	<div id="pledge_form_big_div"> 
 		<aim:renderFormSubsection title="Pledge Identification">
 			<jsp:include page="pledgeIdentificationView.jsp"></jsp:include>
-		</aim:renderFormSubsection>	
-			
-		<aim:renderFormSubsection title="Sector" styleId="pledge_form_sectors">
-			<jsp:include page="pledgeSectorsView.jsp"></jsp:include>
 		</aim:renderFormSubsection>
-	
-		<aim:renderFormSubsection title="Location" styleId="pledge_form_locations">			
-			<jsp:include page="pledgelocationslistView.jsp"></jsp:include>
-		</aim:renderFormSubsection>
-	
-		<aim:renderFormSubsection title="Program" styleId="pledge_form_programs">
-			<jsp:include page="pledgeProgramsView.jsp"></jsp:include>
-		</aim:renderFormSubsection>
-	
-		<aim:renderFormSubsection title="Pledge Information" styleId="pledge_form_funding">
-			<jsp:include page="pledgeFundingView.jsp"></jsp:include>
-		</aim:renderFormSubsection>
-		
+		<field:display name="Pledge Sector" feature="Pledge Sector and Location">
+			<aim:renderFormSubsection title="Sector" styleId="pledge_form_sectors">
+				<jsp:include page="pledgeSectorsView.jsp"></jsp:include>
+			</aim:renderFormSubsection>
+		</field:display>
+		<field:display name="Pledge Location" feature="Pledge Sector and Location">
+			<aim:renderFormSubsection title="Location" styleId="pledge_form_locations">
+				<jsp:include page="pledgelocationslistView.jsp"></jsp:include>
+			</aim:renderFormSubsection>
+		</field:display>
+		<field:display name="Pledge Program" feature="Pledge Sector and Location">
+			<aim:renderFormSubsection title="Program" styleId="pledge_form_programs">
+				<jsp:include page="pledgeProgramsView.jsp"></jsp:include>
+			</aim:renderFormSubsection>
+		</field:display>
+		<feature:display name="Pledge Funding" module="Pledges">
+			<aim:renderFormSubsection title="Pledge Information" styleId="pledge_form_funding">
+				<jsp:include page="pledgeFundingView.jsp"></jsp:include>
+			</aim:renderFormSubsection>
+		</feature:display>
 		<jsp:include page="/repository/aim/view/pledgeform/pledgeContactsView.jsp"></jsp:include>
 		<jsp:include page="/repository/aim/view/pledgeform/pledgeEpilogueView.jsp"></jsp:include>
 	

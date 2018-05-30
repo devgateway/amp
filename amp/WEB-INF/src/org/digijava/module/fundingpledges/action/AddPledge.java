@@ -54,8 +54,8 @@ public class AddPledge extends Action {
         }
 
         if (currentMember.getPledger() == null || !currentMember.getPledger() || !((currentMember.getPledgeSuperUser()
-                || UserUtils.hasVerfifiedOrgGroup(currentMember.getUserId(), fp
-                .getOrganizationGroup().getAmpOrgGrpId())) || !FeaturesUtil.isVisibleFeature("Pledges",
+                || (fp == null || UserUtils.hasVerfifiedOrgGroup(currentMember.getUserId(), fp
+                .getOrganizationGroup().getAmpOrgGrpId()) )) || !FeaturesUtil.isVisibleFeature("Pledges",
                 "Limit Pledge Edition"))) {
             return TranslatorWorker.translateText("You are not allowed to edit pledges");
         }
@@ -97,8 +97,13 @@ public class AddPledge extends Action {
             if (request.getParameter("pledgeId") != null){
                 plForm.setPledgeId(Long.parseLong(request.getParameter("pledgeId")));
             }
-            //we need the pledge loaded to see if the user can edit it
-            FundingPledges fp = PledgesEntityHelper.getPledgesById(plForm.getPledgeId());
+        //we need the pledge loaded to see if the user can edit it
+        FundingPledges fp = null;
+
+        if (plForm.getPledgeId() != null) {
+            fp = PledgesEntityHelper.getPledgesById(plForm.getPledgeId());
+        }
+
             String editRightsMsg = editRightCheck(plForm, request, response, fp);
             if (editRightsMsg != null) {
                 request.getSession().setAttribute("PNOTIFY_ERROR_MESSAGE", editRightsMsg);

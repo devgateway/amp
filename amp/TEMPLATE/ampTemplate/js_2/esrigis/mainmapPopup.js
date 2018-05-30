@@ -284,11 +284,12 @@ function removeStructureLabel(selectedGraphic) {
 
 function findRow(selectedGraphic) {	
 	var callerButton = window.opener.callerGisObject;
-    if (isFirstSelect) {
-    	return callerButton.parentNode.parentNode;
-	}
-    
 	var rows = callerButton.ownerDocument.getElementsByClassName('structureRow');
+	
+    if (isFirstSelect && rows.length !== 0) {
+    	return callerButton.parentNode.parentNode;
+	}    
+	
 	for (var i = 0; i < rows.length; i++) {
 		var tempIdInput = rows[i].getElementsByTagName("INPUT")[7];		
 		if (tempIdInput.value == selectedGraphic.target.tempId) {

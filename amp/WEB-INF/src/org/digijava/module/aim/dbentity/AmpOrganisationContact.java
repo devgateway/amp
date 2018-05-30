@@ -21,7 +21,6 @@ public class AmpOrganisationContact implements Serializable,OrgProfileValue {
             importable = true)
     private AmpOrganisation organisation;
     
-    @Interchangeable(fieldTitle = "Primary Contact", importable = true)
     private Boolean primaryContact;
     
     public AmpOrganisationContact(){

@@ -433,14 +433,16 @@ public class PledgeForm extends ActionForm implements Serializable {
         List<Long> orgGroupIds = null;
         TeamMember currentTeamMember = TeamMemberUtil.getLoggedInTeamMember();
         if (!currentTeamMember.getPledgeSuperUser()) {
-            orgGroupIds = UserUtils.getVerifiedOrgsStream(currentTeamMember.getUserId()).map
-                    (organisation -> organisation.getOrgGrpId().getAmpOrgGrpId()).collect(Collectors.toList());
+            orgGroupIds = UserUtils.getVerifiedOrgsStream(currentTeamMember.getUserId()).map(organisation ->
+                    organisation.getOrgGrpId().getAmpOrgGrpId()).collect(Collectors.toList());
         }
         List<IdWithValueShim> res = new ArrayList<>();
-        if (this.getSelectedOrgGrpId() == null)
+        if (this.getSelectedOrgGrpId() == null) {
             res.add(new IdWithValueShim(-1L, TranslatorWorker.translateText("Please select")));
-        for (AmpOrgGroup acv : org.digijava.module.aim.util.DbUtil.getAllVisibleOrgGroups(orgGroupIds))
+        }
+        for (AmpOrgGroup acv : org.digijava.module.aim.util.DbUtil.getAllVisibleOrgGroups(orgGroupIds)) {
             res.add(new IdWithValueShim(acv));
+        }
         return res;
     }
     

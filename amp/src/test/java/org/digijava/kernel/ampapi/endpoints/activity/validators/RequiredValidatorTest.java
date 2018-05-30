@@ -32,9 +32,11 @@ public class RequiredValidatorTest {
 
     private static final String SAMPLE_FIELD = "field";
     private static final String SAMPLE_VALUE = "value";
+    private static final String EMPTY_VALUE = "";
 
     private static final Map<String, Object> EMPTY_BEAN = ImmutableMap.of();
     private static final Map<String, Object> SAMPLE_BEAN = ImmutableMap.of(SAMPLE_FIELD, SAMPLE_VALUE);
+    private static final Map<String, Object> EMPTY_VALUE_BEAN = ImmutableMap.of(SAMPLE_FIELD, EMPTY_VALUE);
 
     @Rule
     public MockitoRule mockitoRule = MockitoJUnit.rule();
@@ -69,6 +71,11 @@ public class RequiredValidatorTest {
     public void testAlwaysRequiredFieldNotPresent() throws Exception {
         assertValidator(EMPTY_BEAN, fd(FIELD_ALWAYS_REQUIRED), ActivityErrors.FIELD_REQUIRED, false);
     }
+    
+    @Test
+    public void testAlwaysRequiredFieldEmptyValueNotPresent() throws Exception {
+        assertValidator(EMPTY_VALUE_BEAN, fd(FIELD_ALWAYS_REQUIRED), ActivityErrors.FIELD_REQUIRED_VALUE, false);
+    }
 
     @Test
     public void testSubmissionRequiredFieldPresent() throws Exception {
@@ -100,6 +107,13 @@ public class RequiredValidatorTest {
 
         assertValidator(EMPTY_BEAN, fd(FIELD_ALWAYS_REQUIRED), ActivityErrors.FIELD_REQUIRED, false);
     }
+    
+    @Test
+    public void testSubmitModeAlwaysRequiredFieldEmptyValueNotPresent() throws Exception {
+        when(importer.getRequestedSaveMode()).thenReturn(SUBMIT);
+
+        assertValidator(EMPTY_VALUE_BEAN, fd(FIELD_ALWAYS_REQUIRED), ActivityErrors.FIELD_REQUIRED_VALUE, false);
+    }
 
     @Test
     public void testDraftModeSubmissionRequiredFieldNotPresent() throws Exception {
@@ -114,6 +128,13 @@ public class RequiredValidatorTest {
 
         assertValidator(EMPTY_BEAN, fd(FIELD_NON_DRAFT_REQUIRED), ActivityErrors.FIELD_REQUIRED, false);
     }
+    
+    @Test
+    public void testSubmitModeSubmissionRequiredFieldPresentEmptyValue() throws Exception {
+        when(importer.getRequestedSaveMode()).thenReturn(SUBMIT);
+
+        assertValidator(EMPTY_VALUE_BEAN, fd(FIELD_NON_DRAFT_REQUIRED), ActivityErrors.FIELD_REQUIRED_VALUE, false);
+    }
 
     @Test
     public void testSubmitModeSubmissionRequiredFieldNotPresentSaveAsDraftDisabled() throws Exception {
@@ -121,6 +142,14 @@ public class RequiredValidatorTest {
         when(importer.isDraftFMEnabled()).thenReturn(false);
 
         assertValidator(EMPTY_BEAN, fd(FIELD_NON_DRAFT_REQUIRED), ActivityErrors.FIELD_REQUIRED, false);
+    }
+    
+    @Test
+    public void testSubmitModeSubmissionRequiredFieldEmptyValueNotPresentSaveAsDraftDisabled() throws Exception {
+        when(importer.getRequestedSaveMode()).thenReturn(SUBMIT);
+        when(importer.isDraftFMEnabled()).thenReturn(false);
+
+        assertValidator(EMPTY_VALUE_BEAN, fd(FIELD_NON_DRAFT_REQUIRED), ActivityErrors.FIELD_REQUIRED_VALUE, false);
     }
 
     private APIField fd(String required) {

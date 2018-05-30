@@ -41,7 +41,8 @@ public class AddPledge extends Action {
         session.removeAttribute(PLEDGE_TIMESTAMP_EDITED_BY_CURRENT_SESSION_ATTR);
     }
 
-    public String editRightCheck(PledgeForm plForm, HttpServletRequest request, HttpServletResponse response, FundingPledges fp){
+    public String editRightCheck(PledgeForm plForm, HttpServletRequest request, HttpServletResponse response,
+                                 FundingPledges fp){
         TeamMember currentMember = TeamMemberUtil.getLoggedInTeamMember();
         
         // check that logged in

@@ -315,7 +315,7 @@ public class UserUtils {
         return getVerifiedOrgsStream(userId).anyMatch(t -> t.getOrgGrpId().getAmpOrgGrpId().equals(orgGroupId));
     }
 
-    public static Stream<AmpOrganisation> getVerifiedOrgsStream(Long userId){
+    public static Stream<AmpOrganisation> getVerifiedOrgsStream(Long userId) {
         User user = getUser(userId);
         return user.getAssignedOrgs().stream();
     }

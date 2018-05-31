@@ -8,14 +8,11 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.multistepwizard.MultiStepActionForm;
 import org.digijava.module.aim.multistepwizard.annotation.Checkbox;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-import org.hibernate.annotations.Check;
 
 public class UpdateWorkspaceForm extends MultiStepActionForm{
     private Long selectedOrgId;
@@ -36,7 +33,7 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
     @Checkbox(step=1, resetValue="false")
     private Boolean isolated=null;
 
-    @Checkbox(step = 1,resetValue = "false")
+    @Checkbox(step = 1, resetValue = "false")
     private Boolean sendSummaryChanges = null;
 
     

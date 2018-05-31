@@ -72,7 +72,7 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, /*Versi
     private AmpTemplatesVisibility fmTemplate;
     private AmpCategoryValue workspacePrefix;
     private Boolean crossteamvalidation;
-    public Boolean sendSummaryChanges;
+    private Boolean sendSummaryChanges;
 
     
     

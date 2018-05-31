@@ -15,6 +15,7 @@ import org.digijava.module.aim.multistepwizard.annotation.Checkbox;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.hibernate.annotations.Check;
 
 public class UpdateWorkspaceForm extends MultiStepActionForm{
     private Long selectedOrgId;
@@ -34,6 +35,10 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
     
     @Checkbox(step=1, resetValue="false")
     private Boolean isolated=null;
+
+    @Checkbox(step = 1,resetValue = "false")
+    private Boolean sendSummaryChanges = null;
+
     
     
     private Collection organizations;
@@ -716,8 +721,16 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
 
     public void setIsolated(Boolean isolated) {
         this.isolated = isolated;
-    }    
-    
+    }
+
+    public Boolean getSendSummaryChanges() {
+        return sendSummaryChanges;
+    }
+
+    public void setSendSummaryChanges(Boolean sendSummaryChanges) {
+        this.sendSummaryChanges = sendSummaryChanges;
+    }
+
     public void setWorkspacePrefix(Long workspacePrefix) {
         this.workspacePrefix = workspacePrefix;
     }

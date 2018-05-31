@@ -41,7 +41,6 @@ public class GetWorkspace extends Action {
         boolean permitted = false;
         HttpSession session = request.getSession();
         TeamMember tmember = (TeamMember) session.getAttribute("currentMember");
-        //////System.out.println("-----------------------------------"+tmember.getTeamHead());
         if(tmember!=null)
             permitted=tmember.getTeamHead();
         if (session.getAttribute("ampAdmin") != null) {
@@ -147,6 +146,7 @@ public class GetWorkspace extends Action {
                 uwForm.setComputation(workspace.getComputation());
                 uwForm.setCrossteamvalidation(workspace.getCrossteamvalidation());
                 uwForm.setIsolated(workspace.getIsolated());
+                uwForm.setSendSummaryChanges(workspace.getSendSummaryChanges());
                 uwForm.setUseFilter(workspace.getUseFilter());
                 uwForm.setParentTeamName(workspace.getParentTeamName());
                 uwForm.setParentTeamId(workspace.getParentTeamId());

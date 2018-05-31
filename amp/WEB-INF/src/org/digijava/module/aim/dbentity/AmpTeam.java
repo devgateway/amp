@@ -72,6 +72,7 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, /*Versi
     private AmpTemplatesVisibility fmTemplate;
     private AmpCategoryValue workspacePrefix;
     private Boolean crossteamvalidation;
+    public Boolean sendSummaryChanges;
 
     
     
@@ -361,6 +362,14 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, /*Versi
 
     public void setCrossteamvalidation(Boolean crossteamvalidation) {
         this.crossteamvalidation = crossteamvalidation;
+    }
+
+    public Boolean getSendSummaryChanges() {
+        return sendSummaryChanges;
+    }
+
+    public void setSendSummaryChanges(Boolean sendSummaryChanges) {
+        this.sendSummaryChanges = sendSummaryChanges;
     }
 
     public Boolean getIsolated() {

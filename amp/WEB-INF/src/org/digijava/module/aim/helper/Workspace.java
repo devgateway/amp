@@ -36,6 +36,7 @@ public class Workspace {
     
     private Boolean crossteamvalidation;
     private Boolean isolated;
+    private Boolean sendSummaryChanges;
     
     public Boolean getAddActivity() {
         return addActivity;
@@ -241,6 +242,14 @@ public class Workspace {
 
     public void setIsolated(Boolean isolated) {
         this.isolated = isolated;
+    }
+
+    public Boolean getSendSummaryChanges() {
+        return sendSummaryChanges;
+    }
+
+    public void setSendSummaryChanges(Boolean sendSummaryChanges) {
+        this.sendSummaryChanges = sendSummaryChanges;
     }
 
     public Long getParentTeamId() {

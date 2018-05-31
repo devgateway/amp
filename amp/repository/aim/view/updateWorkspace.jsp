@@ -872,7 +872,21 @@ function cancel()
 															</table>
 															
 														</td>
-													</tr>	
+													</tr>
+													<tr id="send_summary_notification_">
+														<td colspan="4">
+															<table>
+																<tr>
+																	<td style="font-size:12px; font-weight:bold;">
+																		<html:checkbox property="sendSummaryChanges" value="true" >
+																			<digi:trn>Send summary changes</digi:trn>
+																		</html:checkbox>
+																	</td>
+																</tr>
+															</table>
+
+														</td>
+													</tr>
 													<c:if test="${aimUpdateWorkspaceForm.actionEvent == 'add'}">
 														<c:if test="${aimUpdateWorkspaceForm.relatedTeamFlag != 'no'}">
 															<tr  id="relTeamRow">

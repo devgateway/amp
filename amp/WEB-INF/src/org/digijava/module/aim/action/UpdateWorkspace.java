@@ -101,7 +101,8 @@ public class UpdateWorkspace extends Action {
             newTeam.setComputation(uwForm.getComputation());
             newTeam.setCrossteamvalidation(uwForm.getCrossteamvalidation());
             newTeam.setIsolated(uwForm.getIsolated());
-                    newTeam.setAddActivity(uwForm.getAddActivity());
+            newTeam.setSendSummaryChanges(uwForm.getSendSummaryChanges());
+            newTeam.setAddActivity(uwForm.getAddActivity());
 
             if (!newTeam.getIsolated()) {
                 newTeam.setAddActivity(uwForm.getAddActivity());
@@ -158,6 +159,7 @@ public class UpdateWorkspace extends Action {
             uwForm.setComputation(null);
             uwForm.setCrossteamvalidation(null);
             uwForm.setIsolated(null);
+            uwForm.setSendSummaryChanges(null);
             uwForm.setUseFilter(null);
             if (uwForm.getChildWorkspaces() != null) {
                 uwForm.getChildWorkspaces().clear();

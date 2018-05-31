@@ -45,7 +45,8 @@ public class AmpStructure implements Serializable,Comparable, Versionable, Clone
     private Set<AmpStructureCoordinate> coordinates;
     private String coords;
     private AmpCategoryValue structureColor;
-    
+    private Integer tempId; // client side id used for identifying structures
+
     public Set getActivities() {
         return activities;
     }
@@ -257,6 +258,12 @@ public class AmpStructure implements Serializable,Comparable, Versionable, Clone
     }
     public void setStructureColor(AmpCategoryValue structureColor) {
         this.structureColor = structureColor;
+    }
+    public Integer getTempId() {
+        return tempId;
+    }
+    public void setTempId(Integer tempId) {
+        this.tempId = tempId;
     }
     @Override
     public String toString()

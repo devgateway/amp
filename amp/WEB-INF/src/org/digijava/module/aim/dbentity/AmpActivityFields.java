@@ -399,7 +399,8 @@ LoggerIdentifiable, Cloneable {
             @Interchangeable(fieldTitle = ActivityFieldsConstants.MOFED_CONTACT, importable = true, discriminatorOption = Constants.MOFED_CONTACT, 
                             fmPath = "/Activity Form/Contacts/Mofed Contact Information", 
                             validators = @Validators(unique = "/Activity Form/Contacts/Mofed Contact Information")),
-            @Interchangeable(fieldTitle = ActivityFieldsConstants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT, importable = true, discriminatorOption = Constants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT, 
+            @Interchangeable(fieldTitle = ActivityFieldsConstants.IMPL_EXECUTING_AGENCY_CONTACT, importable = true, 
+                            discriminatorOption = Constants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT, 
                             fmPath = "/Activity Form/Contacts/Implementing Executing Agency Contact Information", 
                             validators = @Validators(unique = "/Activity Form/Contacts/Implementing Executing Agency Contact Information"))
     })

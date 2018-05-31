@@ -23,7 +23,7 @@ public final class AmpFieldsEnumerator {
         
         AmpFieldInfoProvider contactFieldInfoProvider = new AmpFieldInfoProvider(AmpContact.class);
         PUBLIC_CONTACT_ENUMERATOR = 
-                new FieldsEnumerator(contactFieldInfoProvider, fmService, AMPTranslatorService.INSTANCE, true);
+                new FieldsEnumerator(contactFieldInfoProvider, fmService, AMPTranslatorService.INSTANCE, false);
         PRIVATE_CONTACT_ENUMERATOR = 
                 new FieldsEnumerator(contactFieldInfoProvider, fmService, AMPTranslatorService.INSTANCE, true);
     }

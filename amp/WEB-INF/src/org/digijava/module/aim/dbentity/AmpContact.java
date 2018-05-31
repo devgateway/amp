@@ -33,14 +33,16 @@ public class AmpContact implements Comparable, Serializable, Cloneable, Versiona
     @Interchangeable(fieldTitle = "ID", id = true)
     private Long id;
     
-    @Interchangeable(fieldTitle = "Name", importable = true, required = ActivityEPConstants.REQUIRED_ALWAYS)
+    @Interchangeable(fieldTitle = "Contact First Name", importable = true, 
+            required = ActivityEPConstants.REQUIRED_ALWAYS)
     private String name;
     
-    @Interchangeable(fieldTitle = "Last Name", importable = true, required = ActivityEPConstants.REQUIRED_ALWAYS)
+    @Interchangeable(fieldTitle = "Contact Last Name", importable = true, 
+            required = ActivityEPConstants.REQUIRED_ALWAYS)
     private String lastname;
 
     @PossibleValues(ContactTitlePossibleValuesProvider.class)
-    @Interchangeable(fieldTitle = "Title", importable = true, pickIdOnly = true)
+    @Interchangeable(fieldTitle = "Contact Title", importable = true, pickIdOnly = true)
     private AmpCategoryValue title;
 
     @TranslatableField
@@ -48,10 +50,10 @@ public class AmpContact implements Comparable, Serializable, Cloneable, Versiona
     private String organisationName;
     
     @TranslatableField
-    @Interchangeable(fieldTitle = "Function", importable = true)
+    @Interchangeable(fieldTitle = "Contact Function", importable = true)
     private String function;
     
-    @Interchangeable(fieldTitle = "Office Address", importable = true)
+    @Interchangeable(fieldTitle = "Contact Office Address", importable = true)
     private String officeaddress;
     
     // do we need it?

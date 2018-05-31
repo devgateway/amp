@@ -41,7 +41,20 @@ public class ContactImporter extends ObjectImporter {
     private List<ApiErrorMessage> importContact(Long contactId, JsonBean newJson) {
         this.newJson = newJson;
 
+
         List<APIField> fieldsDef = AmpFieldsEnumerator.PRIVATE_CONTACT_ENUMERATOR.getContactFields();
+        
+        Object contactJsonId = newJson.get(ContactEPConstants.ID);
+        
+        if (contactJsonId != null) {
+            if (contactId != null) {
+                if (contactId != getLongOrNull(contactJsonId)) {
+                    return singletonList(ContactErrors.FIELD_INVALID_VALUE.withDetails(ContactEPConstants.ID));
+                }
+            } else {
+                return singletonList(ContactErrors.FIELD_READ_ONLY.withDetails(ContactEPConstants.ID));
+            }
+        }
 
         Object createdById = newJson.get(ContactEPConstants.CREATED_BY);
         AmpTeamMember createdBy = TeamMemberUtil.getAmpTeamMember(getLongOrNull(createdById));

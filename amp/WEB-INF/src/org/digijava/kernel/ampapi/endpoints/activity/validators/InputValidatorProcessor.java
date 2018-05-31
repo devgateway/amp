@@ -50,6 +50,7 @@ public class InputValidatorProcessor {
                 new InputTypeValidator(),
                 new RequiredValidator(),
                 new MultipleEntriesValidator(),
+                new UniqueValidator(),
                 new ValueValidator(),
                 new PrimaryOrganisationContactValidator());
     }

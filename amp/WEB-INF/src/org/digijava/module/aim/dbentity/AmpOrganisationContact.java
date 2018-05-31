@@ -18,7 +18,7 @@ public class AmpOrganisationContact implements Serializable,OrgProfileValue {
     private AmpContact contact;
     
     @Interchangeable(fieldTitle = "Organisation", pickIdOnly = true, required = ActivityEPConstants.REQUIRED_ALWAYS,
-            importable = true)
+            uniqueConstraint = true, importable = true)
     private AmpOrganisation organisation;
     
     private Boolean primaryContact;

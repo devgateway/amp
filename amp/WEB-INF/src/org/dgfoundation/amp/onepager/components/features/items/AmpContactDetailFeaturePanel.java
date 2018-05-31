@@ -33,6 +33,7 @@ import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.events.ContactChangedEvent;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.validators.ContactEmailValidator;
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.helper.Constants;
@@ -51,8 +52,6 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
      * @param fmName
      * @throws Exception
      */
-    
-    final String  EXPRESSION = "^\\+?\\d?(\\([\\d]{1,3}\\))?[\\s\\d\\-\\/]*\\d+[\\s\\d\\-\\/]*";
     
     private WebMarkupContainer detailFeedbackContainer;
     private Label detailFeedbackLabel;
@@ -150,7 +149,7 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
                         else{
                             TextField<String> detailTextField=detailField.getTextContainer();
                             detailTextField.add(new AttributeModifier("size", "20"));
-                            detailTextField.add(new PatternValidator(EXPRESSION));
+                            detailTextField.add(new PatternValidator(ActivityEPConstants.REGEX_PATTERN_PHONE));
                             detailTextField.setRequired(true);
                         }
                         frg1.add(detailField);
@@ -174,7 +173,7 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
                       
                             TextField<String> detailTextField=phn.getTextContainer();
                             detailTextField.setRequired(true);
-                            detailTextField.add(new PatternValidator(EXPRESSION));
+                            detailTextField.add(new PatternValidator(ActivityEPConstants.REGEX_PATTERN_PHONE));
                             detailTextField.add(new AttributeModifier("size", "20"));
                             final AmpTextFieldPanel<String> phnExt = new AmpTextFieldPanel<String>("phoneExt", extensionValueModel, fmName, true,true);
                             phnExt.getTextContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
@@ -188,7 +187,7 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
                       
                             TextField<String> detailTextFieldExt=phnExt.getTextContainer();
                             detailTextFieldExt.setRequired(false);
-                            detailTextFieldExt.add(new PatternValidator(EXPRESSION));
+                            detailTextFieldExt.add(new PatternValidator(ActivityEPConstants.REGEX_PATTERN_PHONE));
                             detailTextFieldExt.add(new AttributeModifier("size", "5"));
                             final AmpCategorySelectFieldPanel typeField = new AmpCategorySelectFieldPanel("type",
                                     CategoryConstants.CONTACT_PHONE_TYPE_KEY, typeModel,

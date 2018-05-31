@@ -90,8 +90,12 @@ public @interface Interchangeable {
 
     Class<? extends ContextMatcher> context() default DefaultContextMatcher.class;
     
+    /** regex pattern used for validation (mail, phone, fax) */
+    String regexPattern() default "";
+    
     /* constraints for multi-level validators */
     boolean uniqueConstraint() default false;
     boolean percentageConstraint() default false;
+    boolean regexConstraint() default false;
 
 }

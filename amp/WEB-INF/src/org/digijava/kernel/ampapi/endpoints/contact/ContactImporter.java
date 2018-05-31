@@ -41,7 +41,7 @@ public class ContactImporter extends ObjectImporter {
     private List<ApiErrorMessage> importContact(Long contactId, JsonBean newJson) {
         this.newJson = newJson;
 
-        List<APIField> fieldsDef = AmpFieldsEnumerator.PRIVATE_ENUMERATOR.getContactFields();
+        List<APIField> fieldsDef = AmpFieldsEnumerator.PRIVATE_CONTACT_ENUMERATOR.getContactFields();
 
         Object createdById = newJson.get(ContactEPConstants.CREATED_BY);
         AmpTeamMember createdBy = TeamMemberUtil.getAmpTeamMember(getLongOrNull(createdById));

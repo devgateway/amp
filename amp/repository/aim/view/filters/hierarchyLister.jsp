@@ -43,7 +43,7 @@
 			<logic:present name="element" property="rootHierarchyListable.parentMapping">
 				<c:set var="parentId" scope="page" >parentId='${element.rootHierarchyListable.parentMapping[uniqueId]}'</c:set>
 			</logic:present>
-			<li style="margin-left: -20px; ">
+			<li class="hierarchy-list-margin">
 				<table>
 					<tr>
 						<td width="10px" valign="top"><input onclick="toggleCheckChildren(this);if(typeof buildLabels ==

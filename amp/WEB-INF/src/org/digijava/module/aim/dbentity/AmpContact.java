@@ -9,6 +9,7 @@ import java.util.TreeSet;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
+import org.digijava.kernel.ampapi.endpoints.contact.ContactEPConstants;
 import org.digijava.kernel.ampapi.endpoints.contact.ContactFieldsConstants;
 import org.digijava.kernel.ampapi.endpoints.contact.ContactTitlePossibleValuesProvider;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
@@ -79,11 +80,11 @@ public class AmpContact implements Comparable, Serializable, Cloneable, Versiona
     @Interchangeable(fieldTitle = "Properties")
     @InterchangeableDiscriminator(discriminatorField = "name", settings = {
             @Interchangeable(fieldTitle = "email", discriminatorOption = Constants.CONTACT_PROPERTY_NAME_EMAIL,
-                    importable = true),
+                    importable = true, sizeLimit = ContactEPConstants.CONTACT_PROPERTY_MAX_SIZE),
             @Interchangeable(fieldTitle = "phone", discriminatorOption = Constants.CONTACT_PROPERTY_NAME_PHONE,
-                    importable = true),
+                    importable = true, sizeLimit = ContactEPConstants.CONTACT_PROPERTY_MAX_SIZE),
             @Interchangeable(fieldTitle = "fax", discriminatorOption = Constants.CONTACT_PROPERTY_NAME_FAX,
-                    importable = true)
+                    importable = true, sizeLimit = ContactEPConstants.CONTACT_PROPERTY_MAX_SIZE)
     })
     private SortedSet<AmpContactProperty> properties;
 

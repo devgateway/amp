@@ -27,6 +27,7 @@ public class ActivityEPConstants {
     public static final String MULTIPLE_VALUES = "multiple_values";
     public static final String CHILDREN = "children";
     public static final String PERCENTAGE = "percentage";
+    public static final String SIZE_LIMIT = "size-limit";
     public static final String UNIQUE = "unique";
     public static final String REQUIRED = "required";   
     public static final String ID_ONLY = "id_only";

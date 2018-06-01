@@ -519,7 +519,10 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
         String units = reportSpec.getSettings().getUnitsOption().userMessage;
         currency = ConstantCurrency.retrieveCCCurrencyCodeWithoutCalendar(currency);
         
-        renderSummaryLine(summarySheet, currLine, TranslatorWorker.translateText("Currency"), currency);
+        if (!reportSpec.isShowOriginalCurrency()) {
+            renderSummaryLine(summarySheet, currLine, TranslatorWorker.translateText("Currency"), currency);
+        }
+        
         renderSummaryLine(summarySheet, currLine, TranslatorWorker.translateText("Calendar"), calendar);
         renderSummaryLine(summarySheet, currLine, TranslatorWorker.translateText("Units"),
                 TranslatorWorker.translateText(units));

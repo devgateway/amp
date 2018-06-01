@@ -155,6 +155,10 @@ public class FieldsEnumerator {
                 if (!hasMaxSizeValidatorEnabled(field, context)
                         && interchangeable.multipleValues()) {
                     apiField.setMultipleValues(true);
+                    
+                    if (interchangeable.sizeLimit() > 1) {
+                        apiField.setSizeLimit(interchangeable.sizeLimit());
+                    }
                 } else {
                     apiField.setMultipleValues(false);
                 }
@@ -170,6 +174,7 @@ public class FieldsEnumerator {
                 if (hasTreeCollectionValidatorEnabled(context)) {
                     apiField.setTreeCollectionConstraint(true);
                 }
+                
             }
             
             if (!interchangeable.pickIdOnly() && !InterchangeUtils.isAmpActivityVersion(field.getClass())) {

@@ -12,6 +12,7 @@ import java.util.TreeSet;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.event.Broadcast;
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -33,6 +34,7 @@ import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.events.ContactChangedEvent;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.validators.ContactEmailValidator;
+import org.digijava.kernel.ampapi.endpoints.contact.ContactEPConstants;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.helper.Constants;
@@ -230,13 +232,20 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
         AmpAddLinkField addLink = new AmpAddLinkField("addDetailButton","Add Detail Button") {
             @Override
             protected void onClick(AjaxRequestTarget target) {
-                if(detailsList.getModelObject().size() >= 3) {
-                    if(contactProperty.equals(Constants.CONTACT_PROPERTY_NAME_EMAIL)){
-                        detailFeedbackLabel.setDefaultModelObject("*" + TranslatorUtil.getTranslatedText("Max limit for emails is 3"));                     
-                    }else if(contactProperty.equals(Constants.CONTACT_PROPERTY_NAME_PHONE)){
-                        detailFeedbackLabel.setDefaultModelObject("*" + TranslatorUtil.getTranslatedText("Max limit for phones is 3"));
-                    }else if(contactProperty.equals(Constants.CONTACT_PROPERTY_NAME_FAX)){
-                        detailFeedbackLabel.setDefaultModelObject("*" + TranslatorUtil.getTranslatedText("Max limit for faxes is 3"));
+                if (detailsList.getModelObject().size() >= ContactEPConstants.CONTACT_PROPERTY_MAX_SIZE) {
+                    String property = "";
+                    if (contactProperty.equals(Constants.CONTACT_PROPERTY_NAME_EMAIL)) {
+                        property = "emails";
+                    } else if (contactProperty.equals(Constants.CONTACT_PROPERTY_NAME_PHONE)) {
+                        property = "phones";
+                    } else if (contactProperty.equals(Constants.CONTACT_PROPERTY_NAME_FAX)) {
+                        property = "faxes";
+                    }
+                    
+                    if (StringUtils.isNotBlank(property)) {
+                        detailFeedbackLabel.setDefaultModelObject("*" 
+                                   + TranslatorUtil.getTranslatedText(String.format("Max limit for %s is %s", property, 
+                            ContactEPConstants.CONTACT_PROPERTY_MAX_SIZE)));
                     }
                     detailFeedbackContainer.setVisible(true);
                     target.add(detailFeedbackContainer);

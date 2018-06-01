@@ -15,7 +15,7 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 @JsonPropertyOrder({ "field_name", "id", "field_type", "field_label", "required", "importable", "dependencies",
         "id_only", "multiple_values", "percentage_constraint", "unique_constraint", "tree_collection", "translatable",
-        "field_length" })
+        "field_length", "size_limit" })
 public class APIField {
 
     @JsonProperty(ActivityEPConstants.FIELD_NAME)
@@ -71,6 +71,9 @@ public class APIField {
 
     @JsonProperty(ActivityEPConstants.PERCENTAGE)
     private Boolean percentage;
+    
+    @JsonProperty(ActivityEPConstants.SIZE_LIMIT)
+    private Integer sizeLimit;
 
     @JsonIgnore
     private String discriminator;
@@ -193,6 +196,14 @@ public class APIField {
 
     public void setFieldLength(Integer fieldLength) {
         this.fieldLength = fieldLength;
+    }
+    
+    public Integer getSizeLimit() {
+        return sizeLimit;
+    }
+
+    public void setSizeLimit(Integer sizeLimit) {
+        this.sizeLimit = sizeLimit;
     }
 
     public List<APIField> getChildren() {

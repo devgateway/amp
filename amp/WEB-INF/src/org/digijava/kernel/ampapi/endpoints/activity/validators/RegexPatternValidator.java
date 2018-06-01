@@ -62,7 +62,7 @@ public class RegexPatternValidator extends InputValidator {
      */
     private boolean match(String regexPattern, Object fieldValue) {
         String value = (String) fieldValue;
-        Pattern pattern = Pattern.compile(regexPattern, Pattern.CASE_INSENSITIVE);
+        Pattern pattern = Pattern.compile(regexPattern);
         Matcher matcher = pattern.matcher(value);
         
         return matcher.find();

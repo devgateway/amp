@@ -41,7 +41,8 @@ public class InputValidatorProcessor {
                 new PrimaryContactValidator(),
                 new AgreementCodeValidator(),
                 new AgreementTitleValidator(),
-                new FundingOrgRolesValidator());
+                new FundingOrgRolesValidator(),
+                new RegexPatternValidator());
     }
 
     public static List<InputValidator> getContactValidators() {
@@ -52,7 +53,8 @@ public class InputValidatorProcessor {
                 new MultipleEntriesValidator(),
                 new UniqueValidator(),
                 new ValueValidator(),
-                new PrimaryOrganisationContactValidator());
+                new PrimaryOrganisationContactValidator(),
+                new RegexPatternValidator());
     }
 
     private final List<InputValidator> validators;

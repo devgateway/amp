@@ -6,11 +6,10 @@ package org.digijava.kernel.ampapi.endpoints.activity.validators;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
+import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
+import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 /**
  * Validates that agreement title field value is not blank
@@ -27,10 +26,10 @@ public class AgreementTitleValidator extends InputValidator {
     }
 
     @Override
-    public boolean isValid(ActivityImporter importer, Map<String, Object> newFieldParent,
-            Map<String, Object> oldFieldParent, JsonBean fieldDescription, String fieldPath) {
+    public boolean isValid(ObjectImporter importer, Map<String, Object> newFieldParent,
+                           Map<String, Object> oldFieldParent, APIField fieldDescription, String fieldPath) {
         
-        String fieldName = (String) fieldDescription.get(ActivityEPConstants.FIELD_NAME);
+        String fieldName = fieldDescription.getFieldName();
         // this validator only validates agreement title
         if (agreementCodeTitle.equals(fieldPath)) {
             // validate the agreement title (not blank)

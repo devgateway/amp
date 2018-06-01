@@ -1,5 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.currency;
 
+import org.digijava.kernel.ampapi.endpoints.currency.dto.ExchangeRatesForPair;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
@@ -18,6 +19,9 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
+/**
+ * @implicitParam X-Auth-Token|string|header
+ */
 @Path("currency")
 public class Currencies implements ErrorReportingEndpoint {
     
@@ -252,6 +256,58 @@ public class Currencies implements ErrorReportingEndpoint {
     @ApiMethod(id = "save-constant-currencies", authTypes = {AuthRule.IN_ADMIN}, ui = false)
     public JsonBean saveConstantCurrencies(JsonBean input) {
         return CurrencyService.saveConstantCurrencies(input);
+    }
+
+    /**
+     * Retrieve exchange rates for all active currency pairs.
+     * <h3>Sample Output:</h3><pre>
+     * [
+     *   {
+     *     "rates": [
+     *       {
+     *         "date": "2016-06-30",
+     *         "rate": 1.2
+     *       },
+     *       {
+     *         "date": "2016-04-01",
+     *         "rate": 1.21
+     *       },
+     *       {
+     *         "date": "2016-01-01",
+     *         "rate": 1.26
+     *       }
+     *     ],
+     *     "currency-pair": {
+     *       "from": "USD",
+     *       "to": "EUR"
+     *     }
+     *   },
+     *   {
+     *     "rates": [
+     *       {
+     *         "date": "2016-09-23",
+     *         "rate": 0.0010
+     *       },
+     *       {
+     *         "date": "2016-09-25",
+     *         "rate": 0.00098
+     *       }
+     *     ],
+     *     "currency-pair": {
+     *       "from": "USD",
+     *       "to": "XOF"
+     *     }
+     *   }
+     * ]
+     * </pre>
+     * @return rates grouped by currency pairs
+     */
+    @GET
+    @Path("/exchange-rates")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "exchange-rates", authTypes = AuthRule.AUTHENTICATED, ui = false)
+    public List<ExchangeRatesForPair> getExchangeRates() {
+        return CurrencyService.INSTANCE.getExchangeRatesForPairs();
     }
 
     /**

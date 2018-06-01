@@ -155,6 +155,10 @@ public class FieldsEnumerator {
                 if (!hasMaxSizeValidatorEnabled(field, context)
                         && interchangeable.multipleValues()) {
                     apiField.setMultipleValues(true);
+                    
+                    if (interchangeable.sizeLimit() > 1) {
+                        apiField.setSizeLimit(interchangeable.sizeLimit());
+                    }
                 } else {
                     apiField.setMultipleValues(false);
                 }
@@ -171,6 +175,7 @@ public class FieldsEnumerator {
                     apiField.setTreeCollectionConstraint(true);
                 }
                 
+
                 if (StringUtils.isNotBlank(interchangeable.regexPattern())) {
                     apiField.setRegexConstraint(getRegexConstraint(field, context));
                 }

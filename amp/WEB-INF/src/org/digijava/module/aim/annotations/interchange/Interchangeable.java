@@ -96,6 +96,9 @@ public @interface Interchangeable {
     /* constraints for multi-level validators */
     boolean uniqueConstraint() default false;
     boolean percentageConstraint() default false;
+
     boolean regexConstraint() default false;
+    
+    int sizeLimit() default 1;
 
 }

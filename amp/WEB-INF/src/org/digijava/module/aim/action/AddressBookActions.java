@@ -32,12 +32,15 @@ import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpOrganisationContact;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.AddressBookForm;
 import org.digijava.module.aim.helper.AmpContactsWorker;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.ContactPropertyHelper;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ContactInfoUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -527,6 +530,11 @@ public class AddressBookActions extends DispatchAction {
         if(myForm.getPhones()!=null){
             contactProperties.addAll(AmpContactsWorker.buildAmpContactProperties(myForm.getPhones()));
         }
+        
+        TeamMember teamMember = TeamMemberUtil.getLoggedInTeamMember();
+        AmpTeamMember creator = TeamMemberUtil.getAmpTeamMember(teamMember.getMemberId());
+        
+        contact.setCreator(creator);
         
         //save or update contact
         ContactInfoUtil.saveOrUpdateContact(contact);

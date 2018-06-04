@@ -129,11 +129,7 @@ function onMapClick(e) {
 
 }
 
-function selectLocationCallerShape(selectedGraphic) {
-	
-	$("#errorMsg").html("");
-	var callerButton = window.opener.callerGisObject;
-	var row = findRow(selectedGraphic);
+function createColorCheckboxes() {
 	if (window.opener.structuresData) {
 		$('.colors').html('');
 		window.opener.structuresData.structureColors.forEach(function(c) {
@@ -149,8 +145,13 @@ function selectLocationCallerShape(selectedGraphic) {
 				});		    	
 		    }
 		});
-	}
-	
+	}	
+}
+
+function selectLocationCallerShape(selectedGraphic) {	
+	$("#errorMsg").html("");
+	var callerButton = window.opener.callerGisObject;
+	var row = findRow(selectedGraphic);	
 
 	//set temporary client side id used for identifying structures and rows 
 	if (selectedGraphic.target.tempId == null) {
@@ -161,16 +162,14 @@ function selectLocationCallerShape(selectedGraphic) {
 		"title" : TranslationManager.getTranslated("Select Structure"),
 		open : function(event, ui) {
 			$("#locationTitle").val('');
+			createColorCheckboxes();
 			if (row) {
-				debugger
 				var title = row.getElementsByTagName("INPUT")[0];
-				$("#locationTitle").val(title.value);	
-				
+				$("#locationTitle").val(title.value);					
 				var structureColor = row.getElementsByTagName("INPUT")[8];
 				if (structureColor && structureColor.value) {
 					$(".color-checkbox:checkbox[value='"+ structureColor.value +"']").attr("checked", true);
-				}
-				
+				}				
 			}
 		},
 		buttons : [ {

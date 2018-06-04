@@ -208,17 +208,18 @@ public class AmpStructuresFormSectionFeature extends
                         target.add(viewCoords);
                         
                         JsonBean data = new JsonBean();
-                        List<JsonBean> structureColors = new ArrayList<>();                        
+                        List<JsonBean> structureColors = new ArrayList<>();
                         Collection<AmpCategoryValue> categoryValues = CategoryManagerUtil
-                                .getAmpCategoryValueCollectionByKey(CategoryConstants.GIS_STRUCTURES_COLOR_CODING_KEY);                        
+                                .getAmpCategoryValueCollectionByKey(CategoryConstants.GIS_STRUCTURES_COLOR_CODING_KEY);
                         for (AmpCategoryValue v : categoryValues) {
                             JsonBean value = new JsonBean();
                             value.set("id", v.getId());
-                            value.set("value", v.getValue());                           
+                            value.set("value", v.getValue());
                             structureColors.add(value);
                         }
                         data.set("structureColors", structureColors);
-                        target.appendJavaScript("gisPopup($('#" + this.getMarkupId() + "')[0], '" + data.asJsonString() +"'); return false;");
+                        target.appendJavaScript("gisPopup($('#" + this.getMarkupId() + "')[0], '" + data.asJsonString()
+                                + "'); return false;");
                     }
                 };
                 item.add(openMapPopup);

@@ -12,7 +12,6 @@ import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.Output;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 /**
  * Persister class for Structures

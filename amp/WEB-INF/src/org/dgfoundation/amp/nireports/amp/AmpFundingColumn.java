@@ -249,7 +249,6 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
         if (engine.canSplittingStrategyBeAdded()) {
             // generate cells for original currency only (except used currency)
             res.addAll(protos.stream()
-                    .filter(cacp -> usedCurrency.getId() != cacp.origCurrency.getId())
                     .map(cacp -> cacp.materialize(usedCurrency, engine.calendar, 
                             schema.currencyConvertor, scratchpad.getPrecisionSetting(), true))
                     .collect(toList()));

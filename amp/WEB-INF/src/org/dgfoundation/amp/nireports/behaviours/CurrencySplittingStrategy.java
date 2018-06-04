@@ -7,9 +7,9 @@ import java.util.function.Function;
 import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.ComparableValue;
-import org.dgfoundation.amp.nireports.NiCurrency;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
 import org.dgfoundation.amp.nireports.runtime.VSplitStrategy;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 
 /**
@@ -19,8 +19,9 @@ import org.digijava.module.aim.dbentity.AmpCurrency;
  */
 public class CurrencySplittingStrategy implements VSplitStrategy {
     
-    public static final String PREFIX_DEFAULT_CURRENCY = "~";
     public static final String UNDEFINED_CURRENCY = "Undefined";
+    public static final String PREFIX_DEFAULT_CURRENCY = "~";
+    public static final String PREFIX_TOTAL = "TOTAL";
     
     private final Function<NiCell, ComparableValue<String>> cat;
     private final AmpCurrency usedCurrency;
@@ -40,8 +41,12 @@ public class CurrencySplittingStrategy implements VSplitStrategy {
         String currencyCode = UNDEFINED_CURRENCY;
         if (cell instanceof CategAmountCell) {
             CategAmountCell categCell = (CategAmountCell) cell;
-            NiCurrency currency = categCell.isInformativeAmount() ? categCell.amount.origCurrency : usedCurrency;
-            currencyCode = currency.getCurrencyCode();
+            if (categCell.isInformativeAmount()) {
+                currencyCode = categCell.amount.origCurrency.getCurrencyCode();
+            } else {
+                currencyCode = String.format("%s %s", TranslatorWorker.translateText(PREFIX_TOTAL), 
+                        usedCurrency.getCurrencyCode());
+            }
         }
         
         return currencyCode;
@@ -58,11 +63,11 @@ public class CurrencySplittingStrategy implements VSplitStrategy {
         String currencyValue = UNDEFINED_CURRENCY;
         if (cell instanceof CategAmountCell) {
             CategAmountCell categCell = (CategAmountCell) cell;
-            String originalCurrencyCode = categCell.amount.origCurrency.getCurrencyCode();
-            if (categCell.isInformativeAmount() && !usedCurrency.getCurrencyCode().equals(originalCurrencyCode)) {
+            if (categCell.isInformativeAmount()) {
                 currencyValue = categCell.amount.origCurrency.getCurrencyCode();
             } else {
-                currencyValue = PREFIX_DEFAULT_CURRENCY + usedCurrency.getCurrencyCode();
+                currencyValue = String.format("%s%s %s", PREFIX_DEFAULT_CURRENCY, 
+                        TranslatorWorker.translateText(PREFIX_TOTAL), usedCurrency.getCurrencyCode());
             }
         }
         
@@ -94,7 +99,7 @@ public class CurrencySplittingStrategy implements VSplitStrategy {
     @Override
     public List<ComparableValue<String>> getSubcolumnsNames(Set<ComparableValue<String>> existant, boolean isTotal) {
         if (isTotal) {
-            existant.removeIf(val -> !val.getValue().equals(usedCurrency.getCurrencyCode()));
+            existant.removeIf(val -> !val.getValue().contains(PREFIX_TOTAL));
         }
         
         return VSplitStrategy.super.getSubcolumnsNames(existant, isTotal);

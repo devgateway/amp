@@ -67,7 +67,7 @@ public class PPCColumn extends PsqlSourcedColumn<CategAmountCell> {
                  * AMP-27571
                  * if canSplittingStrategyBeAdded is true we need to duplicate cells with original currencies
                 */
-                if (engine.canSplittingStrategyBeAdded() && usedCurrency.getId() != origCurrency.getId()) {
+                if (engine.canSplittingStrategyBeAdded()) {
                     cells.add(cellProto.materialize(usedCurrency, calendar, currencyConvertor, precisionSetting, 
                             true));
                 } 

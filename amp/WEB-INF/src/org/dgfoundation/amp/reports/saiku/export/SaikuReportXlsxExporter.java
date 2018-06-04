@@ -173,8 +173,14 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
         
         String translatedNotes = TranslatorWorker.translateText(unitsOption);
         String translatedCurrencyCode = TranslatorWorker.translateText(currencyCode);
+        
+        String tableCurrencyUnitText = translatedNotes;
+        
+        if (!report.spec.isShowOriginalCurrency()) {
+            tableCurrencyUnitText += " - " + translatedCurrencyCode;
+        }
 
-        cell.setCellValue(translatedNotes + " - " + translatedCurrencyCode);
+        cell.setCellValue(tableCurrencyUnitText);
         
         CellRangeAddress mergedUnitsCell = new CellRangeAddress(currencyUnitsRowPosition, currencyUnitsRowPosition, 
                 0, report.rootHeaders.size() + 1);

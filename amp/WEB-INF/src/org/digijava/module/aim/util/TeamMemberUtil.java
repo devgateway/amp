@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -22,6 +23,7 @@ import java.util.TreeSet;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
@@ -1463,4 +1465,17 @@ public class TeamMemberUtil {
         }
     }
 
+    public static void getActivitiesWsByTeamMember(Map<Long, Set<String>> activitiesWs, AmpTeamMember atm) {
+        TeamMember teamMember = new TeamMember(atm);
+        String wsFilterQuery = WorkspaceFilter.generateWorkspaceFilterQuery(teamMember);
+        List<Long> editableIds = ActivityUtil.getEditableActivityIds(teamMember, wsFilterQuery);
+
+        for (Long actId : editableIds) {
+            if (!activitiesWs.containsKey(actId)) {
+                activitiesWs.put(actId, new HashSet<String>());
+            }
+
+            activitiesWs.get(actId).add(teamMember.getTeamId().toString());
+        }
+    }
 }

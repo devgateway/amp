@@ -146,7 +146,8 @@ public class GetWorkspace extends Action {
                 uwForm.setComputation(workspace.getComputation());
                 uwForm.setCrossteamvalidation(workspace.getCrossteamvalidation());
                 uwForm.setIsolated(workspace.getIsolated());
-                uwForm.setSendSummaryChanges(workspace.getSendSummaryChanges());
+                uwForm.setSendSummaryChangesApprover(workspace.getSendSummaryChangesApprover());
+                uwForm.setSendSummaryChangesManager(workspace.getSendSummaryChangesManager());
                 uwForm.setUseFilter(workspace.getUseFilter());
                 uwForm.setParentTeamName(workspace.getParentTeamName());
                 uwForm.setParentTeamId(workspace.getParentTeamId());

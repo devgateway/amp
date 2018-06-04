@@ -19,9 +19,6 @@
 		<property name="hideDraftActivities" column="hide_draft" type="java.lang.Boolean" />
 		<property name="useFilter" column="use_filter" type="java.lang.Boolean" />
 		<property name="crossteamvalidation" column="cross_team_validation" type="java.lang.Boolean" />
-		<property name="sendSummaryChanges" type="java.lang.Boolean">
-			<column name="send_summary_changes" default="false"/>
-		</property>
 
 		<many-to-one name="teamLead" column="team_lead_id"
 			class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="none" />
@@ -46,6 +43,9 @@
 			<many-to-many class="org.digijava.module.aim.dbentity.AmpOrganisation"
 				column="amp_org_id" />
 		</set>
+		<one-to-one name="sumaryNotificationSettings"
+					class="org.digijava.module.aim.dbentity.AmpSummaryNotificationSettings"
+					property-ref="ampTeam" cascade="save-update" />
 
 		<one-to-one name="npdSettings" class="org.digijava.module.aim.dbentity.NpdSettings"
 			property-ref="team" cascade="delete" />

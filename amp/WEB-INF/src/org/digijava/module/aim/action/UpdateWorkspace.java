@@ -24,6 +24,7 @@ import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.dgfoundation.amp.ar.dbentity.AmpTeamFilterData;
 import org.dgfoundation.amp.permissionmanager.web.PMUtil;
+import org.digijava.module.aim.dbentity.AmpSummaryNotificationSettings;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.form.UpdateWorkspaceForm;
 import org.digijava.module.aim.helper.TeamMember;
@@ -101,7 +102,11 @@ public class UpdateWorkspace extends Action {
             newTeam.setComputation(uwForm.getComputation());
             newTeam.setCrossteamvalidation(uwForm.getCrossteamvalidation());
             newTeam.setIsolated(uwForm.getIsolated());
-            newTeam.setSendSummaryChanges(uwForm.getSendSummaryChanges());
+
+            newTeam.setSumaryNotificationSettings(new AmpSummaryNotificationSettings());
+            newTeam.getSumaryNotificationSettings().setNotifyApprover(uwForm.getSendSummaryChangesApprover());
+            newTeam.getSumaryNotificationSettings().setNotifyManager(uwForm.getSendSummaryChangesManager());
+
             newTeam.setAddActivity(uwForm.getAddActivity());
 
             if (!newTeam.getIsolated()) {
@@ -159,7 +164,8 @@ public class UpdateWorkspace extends Action {
             uwForm.setComputation(null);
             uwForm.setCrossteamvalidation(null);
             uwForm.setIsolated(null);
-            uwForm.setSendSummaryChanges(null);
+            uwForm.setSendSummaryChangesApprover(null);
+            uwForm.setSendSummaryChangesManager(null);
             uwForm.setUseFilter(null);
             if (uwForm.getChildWorkspaces() != null) {
                 uwForm.getChildWorkspaces().clear();
@@ -254,7 +260,8 @@ public class UpdateWorkspace extends Action {
                     }
                     uwForm.getDeletedChildWorkspaces().clear();
                 }
-
+                //we have to delete send summary changes settings
+               // TeamUtil.deteleSummaryChangesForTeam(newTeam.getAmpTeamId());
                 if (!uwForm.getIsolated()) {
                     if (uwForm.getUseFilter()!=null && !uwForm.getUseFilter()) {
                         if (uwForm.getOrganizations() != null) {

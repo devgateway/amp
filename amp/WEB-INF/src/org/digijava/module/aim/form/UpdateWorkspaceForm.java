@@ -34,7 +34,10 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
     private Boolean isolated=null;
 
     @Checkbox(step = 1, resetValue = "false")
-    private Boolean sendSummaryChanges = null;
+    private Boolean sendSummaryChangesApprover = null;
+    @Checkbox(step = 1, resetValue = "false")
+
+    private Boolean sendSummaryChangesManager = null;
 
     
     
@@ -720,12 +723,20 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
         this.isolated = isolated;
     }
 
-    public Boolean getSendSummaryChanges() {
-        return sendSummaryChanges;
+    public Boolean getSendSummaryChangesApprover() {
+        return sendSummaryChangesApprover;
     }
 
-    public void setSendSummaryChanges(Boolean sendSummaryChanges) {
-        this.sendSummaryChanges = sendSummaryChanges;
+    public void setSendSummaryChangesApprover(Boolean sendSummaryChangesApprover) {
+        this.sendSummaryChangesApprover = sendSummaryChangesApprover;
+    }
+
+    public Boolean getSendSummaryChangesManager() {
+        return sendSummaryChangesManager;
+    }
+
+    public void setSendSummaryChangesManager(Boolean sendSummaryChangesManager) {
+        this.sendSummaryChangesManager = sendSummaryChangesManager;
     }
 
     public void setWorkspacePrefix(Long workspacePrefix) {

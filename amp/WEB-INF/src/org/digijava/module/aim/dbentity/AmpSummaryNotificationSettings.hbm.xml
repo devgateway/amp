@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="org.digijava.module.aim.dbentity.AmpSummaryNotificationSettings"
+           table="amp_Summary_notification_settings">
+        <cache usage="read-write" />
+        <id name="ampSummaryNotificationSettings" column="amp_summary_notification_settings" type="java.lang.Long"
+            unsaved-value="null">
+            <generator class="native">
+                <param name="sequence">amp_Summary_notification_settings_seq</param>
+            </generator>
+        </id>
+
+        <property name="notifyManager" column="notifiy_manager" type="java.lang.Boolean" />
+        <property name="notifyApprover" column="notifiy_approverr" type="java.lang.Boolean" />
+        <many-to-one name="ampTeam" column="amp_team_id" class="org.digijava.module.aim.dbentity.AmpTeam"
+                     unique="true" />
+    </class>
+</hibernate-mapping>

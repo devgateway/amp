@@ -106,7 +106,19 @@
    <div id="locationTitleDialog"> 
    <div id="errorMsg"></div>
    
-   <label><digi:trn>Title</digi:trn></label><span class="required"> * </span><input id="locationTitle" type="text"/>   
+    <label><digi:trn>Title</digi:trn></label><span class="required"> * </span><input id="locationTitle" type="text"/> </br>
+    <div>
+     
+     <div id="colorsDiv">
+     <label><digi:trn>Select a color</digi:trn></label>
+     <ul class="colors">	  
+	   
+	 </ul>
+     </div>
+    
+    </div>
+    
+      
    </div>
   </body>
 </html>

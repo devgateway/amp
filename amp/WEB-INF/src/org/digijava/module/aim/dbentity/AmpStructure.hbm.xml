@@ -15,6 +15,7 @@
 		<property column="latitude" name="latitude" type="text" />
 		<property column="longitude" name="longitude" type="text" />
 		<property column="shape" name="shape" type="text" />
+		<property column="structure_color" name="structureColor" type="java.lang.Long" />
 		<property column="creation_date" name="creationdate" type="java.sql.Timestamp"/>
 		
 		<set name="activities" table="AMP_ACTIVITY_STRUCTURES" lazy="true" cascade="none">
@@ -38,8 +39,6 @@
 			<key column="amp_structure_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpStructureCoordinate" />
 		</set>
-		<many-to-one name="structureColor" column="structure_color" 
-		    class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 
 	</class>
 </hibernate-mapping>

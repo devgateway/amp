@@ -130,9 +130,27 @@ function onMapClick(e) {
 }
 
 function selectLocationCallerShape(selectedGraphic) {
+	
 	$("#errorMsg").html("");
 	var callerButton = window.opener.callerGisObject;
 	var row = findRow(selectedGraphic);
+	if (window.opener.structuresData) {
+		$('.colors').html('');
+		window.opener.structuresData.structureColors.forEach(function(c) {
+			appendColor(c);
+		});
+		
+		$('.color-checkbox').click(function(event ){			
+		    if (event.target.checked === true) {
+		    	$('.color-checkbox').each(function(i) {
+		    		if (this.value !== event.target.value) {
+		    			$(this).prop('checked', false);
+		    		}					
+				});		    	
+		    }
+		});
+	}
+	
 
 	//set temporary client side id used for identifying structures and rows 
 	if (selectedGraphic.target.tempId == null) {
@@ -144,17 +162,24 @@ function selectLocationCallerShape(selectedGraphic) {
 		open : function(event, ui) {
 			$("#locationTitle").val('');
 			if (row) {
+				debugger
 				var title = row.getElementsByTagName("INPUT")[0];
-				$("#locationTitle").val(title.value);				
+				$("#locationTitle").val(title.value);	
+				
+				var structureColor = row.getElementsByTagName("INPUT")[8];
+				if (structureColor && structureColor.value) {
+					$(".color-checkbox:checkbox[value='"+ structureColor.value +"']").attr("checked", true);
+				}
+				
 			}
 		},
 		buttons : [ {
-			text : "Close",
+			text : TranslationManager.getTranslated('Close'),
 			click : function() {
 				$(this).dialog("close");
 			}
 		}, {
-			text : "Submit",
+			text : TranslationManager.getTranslated('Submit'),
 			click : function() {
 				if ($("#locationTitle").val() == '') {
 					$("#errorMsg").html(TranslationManager.getTranslated('Title is a required field'));
@@ -200,6 +225,16 @@ function updateActivityForm(row, selectedGraphic) {
 	var tempIdInput = row.getElementsByTagName("INPUT")[7];
 	tempIdInput.value = selectedGraphic.target.tempId;
 	window.opener.postvaluesx(tempIdInput);
+	
+	var structureColorInput = row.getElementsByTagName("INPUT")[8];
+	
+	var selectedColors = document.querySelectorAll('.color-checkbox:checked');	
+	if (selectedColors.length > 0){
+		structureColorInput.value = parseInt(selectedColors[0].value);
+	} else {
+		structureColorInput.value = null;
+	}
+	window.opener.postvaluesx(structureColorInput);
 
 	if (selectedPointEvent.target instanceof L.Marker || selectedGraphic.target instanceof L.CircleMarker) {
 		latitudeInput.value = selectedGraphic.latlng.lat;
@@ -241,6 +276,7 @@ function updateActivityForm(row, selectedGraphic) {
 	fireChangeEvent(title);
 	fireChangeEvent(tempIdInput);
 	fireChangeEvent(shapeInput);
+	fireChangeEvent(structureColorInput);
 }
 
 function fireChangeEvent(element) {
@@ -439,6 +475,21 @@ function filterLocation(value) {
 		}
 	});
 
+}
+
+function appendColor(categoryValue) {
+	var colorMarkup = getColorMarkup();	
+	colorMarkup = colorMarkup.replace('{value}', categoryValue.id);	
+	var splits = categoryValue.value.split(":");
+	if (splits.length == 2) {
+		colorMarkup = colorMarkup.replace('{color}', splits[0]).replace('{name}', splits[1]);		
+	} 
+	
+	$('.colors').append(colorMarkup);
+}
+
+function getColorMarkup() {
+	return '<li><input type="checkbox" class="color-checkbox" name="structure-color" id="structure-color" value="{value}"><svg width="24" height="24"> <rect style="fill:{color}" width="24" height="24" x="0" y="5"></rect></svg><label class="color-label">{name}</label></li>';
 }
 
 function startContextMenu() {

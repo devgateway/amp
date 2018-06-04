@@ -59,8 +59,10 @@ import org.digijava.module.aim.dbentity.AmpStructureCoordinate;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.jdbc.Work;
@@ -394,7 +396,9 @@ public class LocationService {
             }
             
             if (structure.getStructureColor() != null) { 
-                fgj.properties.put("color", new TextNode(structure.getStructureColor().getValue()));
+                AmpCategoryValue cValue = CategoryManagerUtil.getAmpCategoryValueFromDb(structure.getStructureColor());
+                
+                fgj.properties.put("color", new TextNode(cValue.getValue()));
             }
             
             

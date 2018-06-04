@@ -477,17 +477,17 @@ function filterLocation(value) {
 }
 
 function appendColor(categoryValue) {
-	var colorMarkup = getColorMarkup();	
-	colorMarkup = colorMarkup.replace('{value}', categoryValue.id);	
+	var colorHTML = getColorHTMLTemplate();	
+	colorHTML = colorHTML.replace('{value}', categoryValue.id);	
 	var splits = categoryValue.value.split(":");
 	if (splits.length == 2) {
-		colorMarkup = colorMarkup.replace('{color}', splits[0]).replace('{name}', splits[1]);		
+		colorHTML = colorHTML.replace('{color}', splits[0]).replace('{name}', splits[1]);		
 	} 
 	
-	$('.colors').append(colorMarkup);
+	$('.colors').append(colorHTML);
 }
 
-function getColorMarkup() {
+function getColorHTMLTemplate() {
 	return '<li><input type="checkbox" class="color-checkbox" name="structure-color" id="structure-color" value="{value}"><svg width="24" height="24"> <rect style="fill:{color}" width="24" height="24" x="0" y="5"></rect></svg><label class="color-label">{name}</label></li>';
 }
 

@@ -466,10 +466,10 @@ public class TeamUtil {
                 workspace.setWorkspacePrefix(team.getWorkspacePrefix());
                 workspace.setCrossteamvalidation(team.getCrossteamvalidation());
                 workspace.setIsolated(team.getIsolated());
-                if(team.getSumaryNotificationSettings() == null){
+                if (team.getSumaryNotificationSettings() == null) {
                     workspace.setSendSummaryChangesApprover(false);
-                    workspace.setSendSummaryChangesApprover(false);
-                }else{
+                    workspace.setSendSummaryChangesManager(false);
+                } else {
                     workspace.setSendSummaryChangesApprover(team.getSumaryNotificationSettings().getNotifyApprover());
                     workspace.setSendSummaryChangesManager(team.getSumaryNotificationSettings().getNotifyManager());
                 }
@@ -480,7 +480,7 @@ public class TeamUtil {
                 else {
                     workspace.setParentTeamId(null);
                     workspace.setParentTeamName(null);
-                    
+
                 }
                 if(null == team.getRelatedTeamId())
                     workspace.setRelatedTeam(null);
@@ -590,12 +590,12 @@ public class TeamUtil {
                 updTeam.setCrossteamvalidation(team.getCrossteamvalidation());
                 updTeam.setIsolated(team.getIsolated());
 
-                if(updTeam.getSumaryNotificationSettings() != null){
+                if (updTeam.getSumaryNotificationSettings() != null) {
                     updTeam.getSumaryNotificationSettings().setNotifyManager(team.getSumaryNotificationSettings()
                             .getNotifyManager());
                     updTeam.getSumaryNotificationSettings().setNotifyApprover(team.getSumaryNotificationSettings()
                             .getNotifyApprover());
-                }else{
+                } else {
                     updTeam.setSumaryNotificationSettings(team.getSumaryNotificationSettings());
                     updTeam.getSumaryNotificationSettings().setAmpTeam(updTeam);
                 }
@@ -853,11 +853,9 @@ public class TeamUtil {
         removeAmpSummaryNotificationSettiongs(teamId, null);
     }
 
-        private static void removeAmpSummaryNotificationSettiongs(Long teamId, Session session) {
-        String qryStrDeleteSummaryNotificationSettings = "delete from " +AmpSummaryNotificationSettings.class
-                .getName() +" sns where sns" +
-                ".ampTeam" +
-                ".ampTeamId = :teamId";
+    private static void removeAmpSummaryNotificationSettiongs(Long teamId, Session session) {
+        String qryStrDeleteSummaryNotificationSettings = "delete from " + AmpSummaryNotificationSettings.class
+                .getName() + " sns where sns.ampTeam.ampTeamId = :teamId";
 
         Query qryDeeleteSummaryNotificationSettiongs = session.createQuery(qryStrDeleteSummaryNotificationSettings);
         qryDeeleteSummaryNotificationSettiongs.setParameter("teamId", teamId);

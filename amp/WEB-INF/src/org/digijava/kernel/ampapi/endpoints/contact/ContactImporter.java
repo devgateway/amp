@@ -11,6 +11,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.ObjectConversionException;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpContact;
@@ -74,7 +75,12 @@ public class ContactImporter extends ObjectImporter {
             if (contactId == null) {
                 contact = new AmpContact();
             } else {
-                contact = (AmpContact) PersistenceManager.getSession().load(AmpContact.class, contactId);
+                contact = (AmpContact) PersistenceManager.getSession().get(AmpContact.class, contactId);
+                
+                if (contact == null) {
+                    ApiErrorResponse.reportResourceNotFound(ContactErrors.CONTACT_NOT_FOUND);
+                }
+                
                 cleanImportableFields(fieldsDef, contact);
             }
 

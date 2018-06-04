@@ -6,8 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ResourceTextField {
 
-    String fieldTitle() default "Empty String";
+    String fieldTitle();
     
-    String translations() default "translatedTitles";
+    String translationsField();
     
 }

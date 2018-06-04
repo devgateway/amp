@@ -20,7 +20,7 @@ public class AmpResource {
     private String uuid;
     
     @Interchangeable(fieldTitle = "Title", importable = true, required = ActivityEPConstants.REQUIRED_ALWAYS)
-    @ResourceTextField(fieldTitle = "Title", translations = "translatedTitles")
+    @ResourceTextField(fieldTitle = "Title", translationsField = "translatedTitles")
     private String title;
     
     @Interchangeable(fieldTitle = "File Name")
@@ -30,11 +30,11 @@ public class AmpResource {
     private String webLink;
     
     @Interchangeable(fieldTitle = "Description", importable = true)
-    @ResourceTextField(fieldTitle = "Description", translations = "translatedDescriptions")
+    @ResourceTextField(fieldTitle = "Description", translationsField = "translatedDescriptions")
     private String description;
     
     @Interchangeable(fieldTitle = "Note", importable = true)
-    @ResourceTextField(fieldTitle = "Note", translations = "translatedNotes")
+    @ResourceTextField(fieldTitle = "Note", translationsField = "translatedNotes")
     private String note;
     
     @PossibleValues(ResourceTypePossibleValuesProvider.class)

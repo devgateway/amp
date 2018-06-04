@@ -126,7 +126,7 @@ public class ResourceImporter extends ObjectImporter {
     }
 
     private String extractResourceTranslation(Field field, Object parentObj, Map<String, Object> jsonValue) {
-        String translatedMapFieldName = field.getAnnotation(ResourceTextField.class).translations();
+        String translatedMapFieldName = field.getAnnotation(ResourceTextField.class).translationsField();
         try {
             Field translatedMapField = parentObj.getClass().getDeclaredField(translatedMapFieldName);
             translatedMapField.setAccessible(true);

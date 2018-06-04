@@ -678,7 +678,7 @@ public class InterchangeUtils {
         Map<String, Object> fieldTrnValues = new HashMap<String, Object>();
         AmpResource resource = (AmpResource) parentObject;
         ResourceTextField resourceAnnotation = field.getAnnotation(ResourceTextField.class);
-        Field translationsField = resource.getClass().getDeclaredField(resourceAnnotation.translations());
+        Field translationsField = resource.getClass().getDeclaredField(resourceAnnotation.translationsField());
         translationsField.setAccessible(true);
         
         Map<String, String> resourceTranslations = (Map<String, String>) translationsField.get(resource);

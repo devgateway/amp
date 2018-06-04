@@ -339,7 +339,7 @@ public class NodeWrapper{
             if (tempDoc.getTitle() == null) 
                 tempDoc.setTitle(tempDoc.getWebLink());
             if (tempDoc.getName() == null) 
-                tempDoc.setTitle(tempDoc.getWebLink());
+                tempDoc.setName(tempDoc.getWebLink());
             
             
             if (tempDoc.getName().indexOf("http://") >= 0){
@@ -1030,9 +1030,13 @@ public class NodeWrapper{
                         
                 }
             }
+        } catch (PathNotFoundException e) {
+            logger.error(e.getMessage(), e);
+            translatedField.put(TLSUtils.getEffectiveLangCode(), getStringProperty(fieldName));
         } catch (RepositoryException e) {
-            logger.error("Exception accesing traslated titles in NodeWrapper",e);
-        }
+            logger.error("Exception accesing traslated titles in NodeWrapper", e);
+        } 
+        
         return translatedField;
     }
     

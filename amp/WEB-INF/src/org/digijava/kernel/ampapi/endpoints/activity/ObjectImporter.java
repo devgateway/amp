@@ -549,7 +549,7 @@ public class ObjectImporter {
         }
         return null;
     }
-
+    
     /**
      * Used to set value of the field used for discrimination. FIXME generalize this part
      */

@@ -19,11 +19,13 @@ public class AmpContactProperty  implements Comparable, Serializable {
 
     private String name;
     
-    @Interchangeable(fieldTitle = "Value", required = ActivityEPConstants.REQUIRED_ALWAYS, importable = true)
+    @Interchangeable(fieldTitle = "Value", required = ActivityEPConstants.REQUIRED_ALWAYS, importable = true, 
+            regexConstraint = true)
     private String value;
     
-    @Interchangeable(fieldTitle = "Extension Value", importable = true,
-            context = PhoneDiscriminatorContextMatcher.class)
+    @Interchangeable(fieldTitle = "Extension Value", importable = true, 
+            context = PhoneDiscriminatorContextMatcher.class, 
+            regexPattern = ActivityEPConstants.REGEX_PATTERN_PHONE_EXTENSION)
     private String extensionValue;
 
     @PossibleValues(ContactPhoneTypePossibleValuesProvider.class)

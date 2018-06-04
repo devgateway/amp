@@ -46,5 +46,6 @@ public class ActivityErrors {
     public static final ApiErrorMessage ACTIVITY_IS_STALE = new ApiErrorMessage(29, "The activity is stale");
     public static final ApiErrorMessage FUNDING_PLEDGE_ORG_GROUP_MISMATCH = new ApiErrorMessage(30, 
             "The organization group of the pledge doesn't match with funding donor organization group");
+    public static final ApiErrorMessage FIELD_TOO_MANY_VALUES_NOT_ALLOWED = new ApiErrorMessage(31, "Too many values");
 
 }

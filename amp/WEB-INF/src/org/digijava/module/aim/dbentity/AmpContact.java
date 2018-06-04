@@ -8,11 +8,14 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
+import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
+import org.digijava.kernel.ampapi.endpoints.contact.ContactEPConstants;
 import org.digijava.kernel.ampapi.endpoints.contact.ContactFieldsConstants;
 import org.digijava.kernel.ampapi.endpoints.contact.ContactTitlePossibleValuesProvider;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
+import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.helper.Constants;
@@ -70,17 +73,21 @@ public class AmpContact implements Comparable, Serializable, Cloneable, Versiona
     
     private SortedSet<AmpActivityContact> activityContacts;
     
-    @Interchangeable(fieldTitle = "Organisation Contacts", importable = true)
+    @Interchangeable(fieldTitle = "Organisation Contacts", importable = true, 
+            validators = @Validators(unique = FMVisibility.ALWAYS_VISIBLE_FM))
     private Set<AmpOrganisationContact> organizationContacts;
 
     @Interchangeable(fieldTitle = "Properties")
     @InterchangeableDiscriminator(discriminatorField = "name", settings = {
             @Interchangeable(fieldTitle = "email", discriminatorOption = Constants.CONTACT_PROPERTY_NAME_EMAIL,
-                    importable = true),
+                    sizeLimit = ContactEPConstants.CONTACT_PROPERTY_MAX_SIZE,
+                    regexPattern = ActivityEPConstants.REGEX_PATTERN_EMAIL, importable = true),
             @Interchangeable(fieldTitle = "phone", discriminatorOption = Constants.CONTACT_PROPERTY_NAME_PHONE,
-                    importable = true),
+                    sizeLimit = ContactEPConstants.CONTACT_PROPERTY_MAX_SIZE,
+                    regexPattern = ActivityEPConstants.REGEX_PATTERN_PHONE, importable = true),
             @Interchangeable(fieldTitle = "fax", discriminatorOption = Constants.CONTACT_PROPERTY_NAME_FAX,
-                    importable = true)
+                    sizeLimit = ContactEPConstants.CONTACT_PROPERTY_MAX_SIZE,
+                    regexPattern = ActivityEPConstants.REGEX_PATTERN_PHONE, importable = true)
     })
     private SortedSet<AmpContactProperty> properties;
 

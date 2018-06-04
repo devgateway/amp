@@ -155,6 +155,10 @@ public class FieldsEnumerator {
                 if (!hasMaxSizeValidatorEnabled(field, context)
                         && interchangeable.multipleValues()) {
                     apiField.setMultipleValues(true);
+                    
+                    if (interchangeable.sizeLimit() > 1) {
+                        apiField.setSizeLimit(interchangeable.sizeLimit());
+                    }
                 } else {
                     apiField.setMultipleValues(false);
                 }
@@ -169,6 +173,11 @@ public class FieldsEnumerator {
                 
                 if (hasTreeCollectionValidatorEnabled(context)) {
                     apiField.setTreeCollectionConstraint(true);
+                }
+                
+
+                if (StringUtils.isNotBlank(interchangeable.regexPattern())) {
+                    apiField.setRegexConstraint(getRegexConstraint(field, context));
                 }
             }
             
@@ -186,6 +195,10 @@ public class FieldsEnumerator {
         }
         if (ActivityEPConstants.TYPE_VARCHAR.equals(fieldInfoProvider.getType(field))) {
             apiField.setFieldLength(fieldInfoProvider.getMaxLength(field));
+        }
+        
+        if (StringUtils.isNotBlank(interchangeable.regexPattern())) {
+            apiField.setRegexPattern(interchangeable.regexPattern());
         }
 
         apiField.setDiscriminator(interchangeable.discriminatorOption());
@@ -319,6 +332,20 @@ public class FieldsEnumerator {
             Interchangeable interchangeable = f.getAnnotation(Interchangeable.class);
             if (interchangeable != null && isVisible(interchangeable.fmPath(), context)
                     && interchangeable.uniqueConstraint()) {
+                return InterchangeUtils.underscorify(interchangeable.fieldTitle());
+            }
+        }
+        
+        return null;
+    }
+    
+    private String getRegexConstraint(Field field, FEContext context) {
+        Class<?> genericClass = InterchangeUtils.getGenericClass(field);
+        Field[] fields = genericClass.getDeclaredFields();
+        for (Field f : fields) {
+            Interchangeable interchangeable = f.getAnnotation(Interchangeable.class);
+            if (interchangeable != null && isVisible(interchangeable.fmPath(), context)
+                    && interchangeable.regexConstraint()) {
                 return InterchangeUtils.underscorify(interchangeable.fieldTitle());
             }
         }

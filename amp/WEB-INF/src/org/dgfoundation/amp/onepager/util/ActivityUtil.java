@@ -83,6 +83,7 @@ import org.digijava.module.aim.util.ContactInfoUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.LuceneUtil;
+import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.contentrepository.exception.JCRSessionException;
 import org.digijava.module.contentrepository.helper.CrConstants;
@@ -1235,6 +1236,9 @@ public class ActivityUtil {
         //to avoid saving the same contact twice on the same session, we keep track of the 
         //already saved ones.
         Map <Long,Boolean> savedContacts = new HashMap <Long,Boolean> ();
+        
+        TeamMember teamMember = TeamMemberUtil.getLoggedInTeamMember();
+        AmpTeamMember creator = TeamMemberUtil.getAmpTeamMember(teamMember.getMemberId());
       
         //add or edit activity contact and amp contact
         if(activityContacts != null && activityContacts.size() > 0) {
@@ -1246,6 +1250,7 @@ public class ActivityUtil {
                 }
                // save the contact first, if the contact is new or if it is not new but has not been saved already.
                if (contactId == null || (newActivity && !savedContacts.get(contactId))) {
+                activityContact.getContact().setCreator(creator);
                 session.saveOrUpdate(activityContact.getContact());
                 savedContacts.put(activityContact.getContact().getId(), true);
                }

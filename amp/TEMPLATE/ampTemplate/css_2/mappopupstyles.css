@@ -179,9 +179,14 @@ button:focus {
 	margin:0px;
 }
 
+#colors-section {
+	margin-top: 15px;
+}
+
 .color-label {
 	margin: 10px;
 }
 
-.color-checkbox {	
+label{
+	font-weight: 600;
 }

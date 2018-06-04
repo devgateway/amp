@@ -109,7 +109,7 @@
     <label><digi:trn>Title</digi:trn></label><span class="required"> * </span><input id="locationTitle" type="text"/> </br>
     <div>
      
-     <div id="colorsDiv">
+     <div id="colors-section">
      <label><digi:trn>Select a color</digi:trn></label>
      <ul class="colors">	  
 	   

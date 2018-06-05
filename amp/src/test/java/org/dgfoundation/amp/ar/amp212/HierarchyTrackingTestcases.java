@@ -2,21 +2,12 @@ package org.dgfoundation.amp.ar.amp212;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Collection;
-import java.util.function.Function;
-import java.util.function.Predicate;
 
-import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.dgfoundation.amp.nireports.runtime.CacheHitsCounter;
 import org.dgfoundation.amp.nireports.runtime.HierarchiesTracker;
 import org.dgfoundation.amp.nireports.schema.ConstantNiDimension;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
-import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
 import org.dgfoundation.amp.testutils.AmpTestCase;
 import org.junit.Test;
 
@@ -60,10 +51,6 @@ public class HierarchyTrackingTestcases extends AmpTestCase {
     
     BigDecimal fraction(int d) {
         return ONE.divide(BigDecimal.valueOf(d));
-    }
-    
-    public HierarchyTrackingTestcases() {
-        super("hierarchy tracking tests");
     }
     
     @Test

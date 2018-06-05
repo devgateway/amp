@@ -4,7 +4,6 @@ import java.util.Collection;
 
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.translation.util.HashKeyPatch;
 
 /**
  * Group of messages with same translation key.

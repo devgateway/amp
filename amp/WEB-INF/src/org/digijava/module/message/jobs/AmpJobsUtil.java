@@ -3,24 +3,17 @@ package org.digijava.module.message.jobs;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
-import com.tonbeller.wcf.param.SqlEqualExpr;
 import org.dgfoundation.amp.algo.ValueWrapper;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.hibernate.jdbc.Work;
 import org.quartz.JobExecutionException;
 
-import static mondrian.olap.Category.Set;
 
 public final class AmpJobsUtil {
     private AmpJobsUtil() {
@@ -50,7 +43,7 @@ public final class AmpJobsUtil {
             }
     }
 
-    public static ValueWrapper<List<Long>> getTeamMebers( String query) {
+    public static ValueWrapper<List<Long>> getTeamMebers(String query) {
 
         final ValueWrapper<List<Long>> ampTeamMemberId = new ValueWrapper<>(new ArrayList<>());
         PersistenceManager.getSession().doWork(new Work() {

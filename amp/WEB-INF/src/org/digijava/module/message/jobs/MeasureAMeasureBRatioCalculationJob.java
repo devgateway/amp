@@ -54,6 +54,7 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
     private static Double DEFAULT_PERCENTAGE = 1D;
     private static BigDecimal HUNDRED = new BigDecimal(100);
     private static Integer DAYS_AFTER_QUARTER = 25;
+    private static Integer DEFAULT_SCALE = 6 ;
 
     @Override
     public void executeInternal(JobExecutionContext context) throws JobExecutionException {
@@ -174,8 +175,8 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
                             }
                             if (dblMeasureA.compareTo(BigDecimal.ZERO) != 0
                                     && dblMeasureB.compareTo(BigDecimal.ZERO) != 0
-                                    && (100 - dblMeasureA.multiply(HUNDRED)
-                                    .divide(dblMeasureB, 6, RoundingMode.HALF_EVEN)
+                                    && (HUNDRED.subtract(dblMeasureA.multiply(HUNDRED))
+                                    .divide(dblMeasureB, DEFAULT_SCALE, RoundingMode.HALF_EVEN)
                                     .compareTo(percentage)) >= 0) {
 
                                 activitiesToNofity.add(activityToNotify);

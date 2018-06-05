@@ -36,7 +36,7 @@ public class SummaryChangeNotificationTrigger extends Trigger {
         e.getParameters().put(PARAM_SUMMARY_SUBJECT, event.getSubject());
         e.getParameters().put(PARAM_SUMMARY_BODY, event.getBody());
         e.getParameters().put(PARAM_SUMMARY_DATE, FormatHelper.formatDate(event.getDate()));
-        e.getParameters().put(PARAM_SUMMARY_BODY_HEADER,event.getBodyHeader());
+        e.getParameters().put(PARAM_SUMMARY_BODY_HEADER, event.getBodyHeader());
 
         return e;
     }

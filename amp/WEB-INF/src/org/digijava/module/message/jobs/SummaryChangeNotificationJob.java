@@ -2,8 +2,6 @@ package org.digijava.module.message.jobs;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.text.LocalizationUtil;
-import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -11,7 +9,6 @@ import org.digijava.module.aim.helper.SummaryChange;
 import org.digijava.module.aim.helper.SummaryChangeData;
 import org.digijava.module.aim.helper.SummaryChangeHtmlRenderer;
 import org.digijava.module.aim.helper.SummaryChangesService;
-import org.digijava.module.message.helper.AmpMessageWorker;
 import org.digijava.module.message.triggers.SummaryChangeNotificationTrigger;
 import org.hibernate.jdbc.Work;
 import org.quartz.JobExecutionContext;
@@ -24,7 +21,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class SummaryChangeNotificationJob extends ConnectionCleaningJob implements StatefulJob {
 

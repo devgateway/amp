@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -37,8 +36,6 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.message.jobs.AmpJobsUtil;
 import org.hibernate.jdbc.Work;
-import org.hibernate.type.LongType;
-import org.hibernate.type.StringType;
 
 /**
  * @author Aldo Picca
@@ -82,7 +79,7 @@ public final class SummaryChangesService {
         //we first need to fetch all ws in which we can see the activities 
         Map<Long, java.util.Set<String>> activityWs = getActivityWsVisibilityToNotify();
 
-        Map<String,List<String>> approversAndManagers = getApproversAndManagers();
+        Map<String, List<String>> approversAndManagers = getApproversAndManagers();
         activities.keySet().stream().forEach(activityId -> {
             AmpActivityVersion currentActivity = ActivityUtil.loadAmpActivity(activityId);
             //we go and see every ws in which the activity is visible
@@ -107,12 +104,12 @@ public final class SummaryChangesService {
     private static Map<Long, java.util.Set<String>> getActivityWsVisibilityToNotify()  {
         AmpJobsUtil.populateRequest();
 
-        final String query = "select min(tm.amp_team_mem_id) from amp_team_member tm ,amp_team t,amp_team_member_roles tmr\n" +
-                ",amp_summary_notification_settings sns " +
-                "where tm.amp_member_role_id = tmr. amp_team_mem_role_id " +
-                "and (tmr.team_head = true or tmr.approver = true) " +
-                "and  tm.amp_team_id=t.amp_team_id  and sns.amp_team_id=t.amp_team_id " +
-                "and (sns.notify_approver = true or sns.notify_manager = true) group by tm.amp_team_id ";
+        final String query = "select min(tm.amp_team_mem_id) from amp_team_member tm ,amp_team t, "
+                + "amp_team_member_roles tmr, amp_summary_notification_settings sns "
+                + "where tm.amp_member_role_id = tmr. amp_team_mem_role_id "
+                + "and (tmr.team_head = true or tmr.approver = true) "
+                + "and  tm.amp_team_id=t.amp_team_id  and sns.amp_team_id=t.amp_team_id "
+                + "and (sns.notify_approver = true or sns.notify_manager = true) group by tm.amp_team_id ";
         ValueWrapper<List<Long>> ampTeamMemberId = AmpJobsUtil.getTeamMebers(query);
         Map<Long, java.util.Set<String>> activitiesWs = new HashMap<>();
 
@@ -136,13 +133,13 @@ public final class SummaryChangesService {
         //its outside of the scope  of the current implementation to refactor that map
         //it will be covered in AMP-27844
         final Map<String, List<String>> approversAndManagersPerWS = new HashMap<>();
-        final String qryApproversAndManagers = "select t.amp_team_id as amp_team_id, u.email as email " +
-                "from amp_team t, amp_team_member atm, amp_team_member_roles tmr, amp_summary_notification_settings " +
-                "sns, dg_user u where t.amp_team_id =atm.amp_team_id " +
-                "and atm.amp_member_role_id = tmr.amp_team_mem_role_id  " +
-                "and t.amp_team_id = sns.amp_team_id and atm.user_ = u.id " +
-                "and ((case when sns.notify_approver then tmr.approver and tmr.team_head = false end ) " +
-                "or (case when sns.notify_manager then tmr.approver and tmr.team_head end )) ";
+        final String qryApproversAndManagers = "select t.amp_team_id as amp_team_id, u.email as email "
+                + "from amp_team t, amp_team_member atm, amp_team_member_roles tmr, amp_summary_notification_settings"
+                + "sns, dg_user u where t.amp_team_id =atm.amp_team_id "
+                + "and atm.amp_member_role_id = tmr.amp_team_mem_role_id  "
+                + "and t.amp_team_id = sns.amp_team_id and atm.user_ = u.id "
+                + "and ((case when sns.notify_approver then tmr.approver and tmr.team_head = false end ) "
+                + "or (case when sns.notify_manager then tmr.approver and tmr.team_head end )) ";
 
         PersistenceManager.getSession().doWork(new Work() {
             public void execute(Connection conn) throws SQLException {

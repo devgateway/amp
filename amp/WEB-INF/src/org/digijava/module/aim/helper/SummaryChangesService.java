@@ -110,7 +110,7 @@ public final class SummaryChangesService {
                 + "and (tmr.team_head = true or tmr.approver = true) "
                 + "and  tm.amp_team_id=t.amp_team_id  and sns.amp_team_id=t.amp_team_id "
                 + "and (sns.notify_approver = true or sns.notify_manager = true) group by tm.amp_team_id ";
-        ValueWrapper<List<Long>> ampTeamMemberId = AmpJobsUtil.getTeamMebers(query);
+        ValueWrapper<List<Long>> ampTeamMemberId = AmpJobsUtil.getTeamMembers(query);
         Map<Long, java.util.Set<String>> activitiesWs = new HashMap<>();
 
         if (ampTeamMemberId.value.size() > 0) {
@@ -135,7 +135,7 @@ public final class SummaryChangesService {
         final Map<String, List<String>> approversAndManagersPerWS = new HashMap<>();
         final String qryApproversAndManagers = "select t.amp_team_id as amp_team_id, u.email as email "
                 + "from amp_team t, amp_team_member atm, amp_team_member_roles tmr, amp_summary_notification_settings"
-                + "sns, dg_user u where t.amp_team_id =atm.amp_team_id "
+                + " sns, dg_user u where t.amp_team_id =atm.amp_team_id "
                 + "and atm.amp_member_role_id = tmr.amp_team_mem_role_id  "
                 + "and t.amp_team_id = sns.amp_team_id and atm.user_ = u.id "
                 + "and ((case when sns.notify_approver then tmr.approver and tmr.team_head = false end ) "

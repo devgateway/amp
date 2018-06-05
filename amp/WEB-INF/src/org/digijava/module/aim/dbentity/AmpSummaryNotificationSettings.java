@@ -13,7 +13,7 @@ public class AmpSummaryNotificationSettings implements Serializable {
     public AmpSummaryNotificationSettings() {
 
     }
-    private Long ampSummaryNotificationSettings;
+    private Long id;
     private Boolean notifyManager;
     private Boolean notifyApprover;
     private AmpTeam ampTeam;
@@ -35,12 +35,12 @@ public class AmpSummaryNotificationSettings implements Serializable {
         this.notifyManager = notifyManager;
     }
 
-    public Long getAmpSummaryNotificationSettings() {
-        return ampSummaryNotificationSettings;
+    public Long getId() {
+        return id;
     }
 
-    public void setAmpSummaryNotificationSettings(Long ampSummaryNotificationSettings) {
-        this.ampSummaryNotificationSettings = ampSummaryNotificationSettings;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public AmpTeam getAmpTeam() {

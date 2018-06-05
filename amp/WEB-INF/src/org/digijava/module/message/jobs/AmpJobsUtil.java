@@ -33,7 +33,7 @@ public final class AmpJobsUtil {
                     + " where tm.amp_member_role_id in(1,3) " + " and tm.amp_team_id=t.amp_team_id "
                     + " and t.amp_team_id= " + ampTeamId + " group by tm.amp_team_id";
 
-            ValueWrapper<List<Long>> ampTeamMemberId = getTeamMebers(query);
+            ValueWrapper<List<Long>> ampTeamMemberId = getTeamMembers(query);
             if (ampTeamMemberId.value.size() > 0) {
                 TeamUtil.setupFiltersForLoggedInUser(TLSUtils.getRequest(),
                         TeamUtil.getAmpTeamMember(ampTeamMemberId.value.get(0)));
@@ -43,7 +43,7 @@ public final class AmpJobsUtil {
             }
     }
 
-    public static ValueWrapper<List<Long>> getTeamMebers(String query) {
+    public static ValueWrapper<List<Long>> getTeamMembers(String query) {
 
         final ValueWrapper<List<Long>> ampTeamMemberId = new ValueWrapper<>(new ArrayList<>());
         PersistenceManager.getSession().doWork(new Work() {

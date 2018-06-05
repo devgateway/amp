@@ -4,7 +4,7 @@
     <class name="org.digijava.module.aim.dbentity.AmpSummaryNotificationSettings"
            table="amp_Summary_notification_settings">
         <cache usage="read-write" />
-        <id name="ampSummaryNotificationSettings" column="amp_summary_notification_settings" type="java.lang.Long"
+        <id name="id" column="id" type="java.lang.Long"
             unsaved-value="null">
             <generator class="native">
                 <param name="sequence">amp_Summary_notification_settings_seq</param>

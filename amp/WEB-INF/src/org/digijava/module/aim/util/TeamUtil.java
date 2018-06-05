@@ -854,12 +854,9 @@ public class TeamUtil {
     }
 
     private static void removeAmpSummaryNotificationSettiongs(Long teamId, Session session) {
-        String qryStrDeleteSummaryNotificationSettings = "delete from " + AmpSummaryNotificationSettings.class
+        String qryDeleteSummaryNotificationSettings = "delete from " + AmpSummaryNotificationSettings.class
                 .getName() + " sns where sns.ampTeam.ampTeamId = :teamId";
-
-        Query qryDeeleteSummaryNotificationSettiongs = session.createQuery(qryStrDeleteSummaryNotificationSettings);
-        qryDeeleteSummaryNotificationSettiongs.setParameter("teamId", teamId);
-        qryDeeleteSummaryNotificationSettiongs.executeUpdate();
+        session.createQuery(qryDeleteSummaryNotificationSettings).setParameter("teamId", teamId).executeUpdate();
     }
 
     /**

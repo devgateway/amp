@@ -168,7 +168,8 @@ function validateSubmitQuery () {
 	<div id="myFilter" style="height: 480px; overflow: hidden; width: 900px; margin-left: auto; margin-right: auto; border: 1px solid lightgray;" >
 		<jsp:include page="/aim/reportsFilterPicker.do" />
 	</div>
-	<br />	
+	<br />
+<div class="content-dir">
 	<fieldset class="main_side_cont" style="width: 900px; margin-left: auto; margin-right: auto;">
 		<legend><digi:trn>Selected Filters</digi:trn></legend>
 		<div id="queryLabelsDiv"><digi:trn>No filters selected so far</digi:trn></div>
@@ -176,8 +177,9 @@ function validateSubmitQuery () {
 			<button class="buttonx_sm" id="refershResultsButton" onclick="submitQuery();"><digi:trn>Refresh Results</digi:trn></button> 
 		</div>
 	</fieldset>
-	
-<br />
-<div id="results" >
 
+	<br />
+	<div id="results" >
+
+	</div>
 </div>

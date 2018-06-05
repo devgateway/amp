@@ -3,7 +3,6 @@ package org.dgfoundation.amp.ar.amp212;
 import java.util.Arrays;
 import java.util.List;
 
-import org.dgfoundation.amp.ar.AllTests_amp212;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
@@ -31,10 +30,6 @@ public class AmpSchemaRegionalTests extends ReportingTestCase {
 
     private static final String CORRECT_TOTALS =
             "{RAW / Funding / 2017 / Actual Commitments=660, RAW / Totals / Actual Commitments=660}";
-
-    public AmpSchemaRegionalTests() {
-        super("AmpSchemaRegionalTests");
-    }
 
     public void testSingleHierarchyDoesNotChangeTotals() {
         assertTotalsWithoutHierarchy();
@@ -197,10 +192,5 @@ public class AmpSchemaRegionalTests extends ReportingTestCase {
     @Override
     protected NiReportExecutor getNiExecutor(List<String> activityNames) {
         return getDbExecutor(activityNames);
-    }
-
-    @Override
-    public void setUp() {
-        AllTests_amp212.setUp();
     }
 }

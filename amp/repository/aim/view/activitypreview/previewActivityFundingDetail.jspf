@@ -30,7 +30,7 @@ other rows (if any): capital spending percent / classification / attached pledge
 		</span>
 	</td>
 
-	<td height="18px" align="right" nowrap>
+	<td height="18px" class="preview-align" nowrap>
 	    <module:display name="/Activity Form/Funding/Funding Group/Funding Item/${transaction}/Disaster Response"
 			parentModule="/Activity Form/Funding/Funding Group/Funding Item/${transaction}">
 
@@ -57,17 +57,17 @@ other rows (if any): capital spending percent / classification / attached pledge
 
 	<c:choose>
 		<c:when test="${aimEditActivityForm.funding.fixerate}">
-			<td height="18" align="right" nowrap="nowrap">
-				<b><bean:write name="fundingDetail" property="transactionAmount" /> <bean:write name="fundingDetail" property="currencyCode" /></b>
+			<td height="18" class="preview-align" nowrap="nowrap">
+				<b><span dir="ltr"><bean:write name="fundingDetail" property="transactionAmount" /></span> <bean:write name="fundingDetail" property="currencyCode" /></b>
 				&nbsp;
 			</td>
-			<td align='right'>
+			<td class="preview-align">
 				<b><bean:write name="fundingDetail" property="formattedRate" /></b>
 			</td>
 		</c:when>
 		<c:otherwise>
-			<td height="18" align="right" colspan="2">
-				<b><bean:write name="fundingDetail" property="transactionAmount" /> <bean:write name="fundingDetail" property="currencyCode" /></b>
+			<td height="18" class="preview-align" colspan="2">
+				<b><span dir="ltr"><bean:write name="fundingDetail" property="transactionAmount" /></span> <bean:write name="fundingDetail" property="currencyCode" /></b>
 				&nbsp;
 			</td>
 		</c:otherwise>
@@ -76,8 +76,8 @@ other rows (if any): capital spending percent / classification / attached pledge
 <logic:present name="fundingDetail" property="capitalPercent">
 	<tr>
 		<td colspan="1">&nbsp;</td>
-		<td colspan="3" align="right">
-			<digi:trn>Capital spending percentage</digi:trn>:&nbsp;<b><bean:write name="fundingDetail" property="capitalPercent" /></b>%&nbsp;			
+		<td colspan="3" class="preview-align">
+			<digi:trn>Capital spending percentage</digi:trn>:&nbsp;<b><bean:write name="fundingDetail" property="capitalPercent" /></b> %&nbsp;			
 		</td>
 	</tr>
 </logic:present>
@@ -88,7 +88,7 @@ other rows (if any): capital spending percent / classification / attached pledge
 													parentModule="/Activity Form/Funding/Funding Group/Funding Item/${transaction}">
 	<tr>
 		<td colspan="1">&nbsp;</td>
-		<td colspan="3" align="right">
+		<td colspan="3" class="preview-align">
 			<digi:trn>Recipient</digi:trn>:&nbsp;<b><bean:write name="fundingDetail" property="recipientOrganisation.name" /></b><digi:trn>&nbsp;as the</digi:trn>&nbsp;<b><bean:write name="fundingDetail" property="recipientOrganisationRole.name" /></b>&nbsp;			
 		</td>
 	</tr>
@@ -98,14 +98,14 @@ other rows (if any): capital spending percent / classification / attached pledge
 <logic:present name="fundingDetail" property="classification">
 	<tr>
 		<td colspan="1">&nbsp;</td>
-		<td colspan="3" align="right">
+		<td colspan="3" class="preview-align">
 			<digi:trn>Classification</digi:trn>:&nbsp;<b><bean:write name="fundingDetail" property="classification"/></b>&nbsp;			
 		</td>
 	</tr>
 </logic:present>
 <logic:present name="fundingDetail" property="attachedPledgeName">
 	<tr>
-		<td colspan="1" align="right"><digi:trn>Source Pledge</digi:trn>:</td>
+		<td colspan="1" class="preview-align"><digi:trn>Source Pledge</digi:trn>:</td>
 		<td colspan="3" align="left">
 			<b><bean:write name="fundingDetail" property="attachedPledgeName"/></b>&nbsp;			
 		</td>
@@ -116,7 +116,7 @@ other rows (if any): capital spending percent / classification / attached pledge
 		parentModule="/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures Table">
 	<logic:present name="fundingDetail" property="expenditureClass">
 		<tr>
-		<td colspan="1" align="right"><digi:trn>Expenditure Category</digi:trn>:&nbsp;</td>
+		<td colspan="1" class="preview-align"><digi:trn>Expenditure Category</digi:trn>:&nbsp;</td>
 		<td colspan="3" align="left">
 			<digi:trn><bean:write name="fundingDetail" property="expenditureClass.value" /></digi:trn>			
 		</td>

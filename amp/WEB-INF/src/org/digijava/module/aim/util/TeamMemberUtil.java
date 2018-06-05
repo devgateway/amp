@@ -19,6 +19,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -846,12 +847,20 @@ public class TeamMemberUtil {
         return role;
     }
 
+    public static List<AmpTeamMember> getNonManagementTeamMembers(Collection<Long> userIds) {
+        return getTeamMembersByUserId(userIds).values()
+                .stream()
+                .flatMap(Collection::stream)
+                .filter(tm -> !tm.getAmpTeam().getAccessType().equals(Constants.ACCESS_TYPE_MNGMT))
+                .collect(Collectors.toList());
+    }
+
     /**
      * Map<User.id, List<AmpTeamMember>>
      *
      * @return
      */
-    public static Map<Long, List<AmpTeamMember>> getTeamMembersByUserId(Set<Long> userIds) {
+    public static Map<Long, List<AmpTeamMember>> getTeamMembersByUserId(Collection<Long> userIds) {
         Map<Long, List<AmpTeamMember>> res = new HashMap<>();
 
         if (userIds != null && !userIds.isEmpty()) {

@@ -81,6 +81,12 @@ public class SelectPledgeProgram extends Action {
                 ARUtil.writeResponse(response, "ok");
                 return null;
             }
+
+            if (extraAction.equals("pledge_sector_divide_percentage")) {
+                pledgeForm.dividePercentageSector();
+                ARUtil.writeResponse(response, "ok");
+                return null;
+            }
             
             if (extraAction.equals("pledge_sector_delete")){
                 pledgeForm.deleteUniquelyIdentifiable(pledgeForm.getSelectedSectors(), Long.parseLong(request.getParameter("id")));

@@ -460,7 +460,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         no_entity(ColumnConstants.BUDGET_CODE_PROJECT_ID, "v_budget_code_project_id");
         degenerate_dimension(ColumnConstants.BUDGET_DEPARTMENT, "v_budget_department", departmentsDimension);
         single_dimension(ColumnConstants.BUDGET_SECTOR, "v_budget_sector", RAW_SCT_LEVEL_COLUMN);
-        degenerate_dimension(ColumnConstants.CAPITAL___EXPENDITURE, "v_capital_and_exp", boolDimension);
+        degenerate_dimension(ColumnConstants.CAPITAL_EXPENDITURE, "v_capital_and_exp", boolDimension);
         no_entity(ColumnConstants.CRIS_NUMBER, "v_cris_number");
         no_entity(ColumnConstants.CURRENT_COMPLETION_DATE_COMMENTS, "v_actual_completion_date_comments");
         no_entity(ColumnConstants.DONOR_CONTACT_EMAIL, "v_donor_cont_email");
@@ -651,7 +651,6 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         date_column(ColumnConstants.ACTUAL_APPROVAL_DATE, "v_actual_approval_date");
         date_column(ColumnConstants.ACTUAL_COMPLETION_DATE, "v_actual_completion_date");
         date_column(ColumnConstants.ACTUAL_START_DATE, "v_actual_start_date");
-        date_column(ColumnConstants.CURRENT_COMPLETION_DATE, "v_actual_completion_date");
         date_column(ColumnConstants.DONOR_COMMITMENT_DATE, "v_donor_commitment_date");
         date_column(ColumnConstants.FINAL_DATE_FOR_CONTRACTING, "v_contracting_date");
         date_column(ColumnConstants.FINAL_DATE_FOR_DISBURSEMENTS, "v_disbursements_date");

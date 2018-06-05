@@ -70,7 +70,7 @@
 		<logic:notEmpty name="aimSearchSectorForm" property="pages">
 			<tr>
 				<td width="100%">
-					<digi:trn>Pages :</digi:trn>
+					<digi:trn>Pages:</digi:trn>
 					<logic:iterate name="aimSearchSectorForm" property="pages" id="pages" type="java.lang.Integer">
 						<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
 						<c:set target="${urlParams1}" property="page">

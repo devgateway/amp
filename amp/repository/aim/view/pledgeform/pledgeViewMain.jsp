@@ -9,7 +9,7 @@
 <%@ taglib uri="/taglib/struts-nested" prefix="nested" %>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
-<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>cc
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 
     <!-- Bootstrap-select http://silviomoreto.github.io/bootstrap-select/ -->
     <link href="/repository/bootstrap/bootstrap-select.min.css" rel="stylesheet" type="text/css">

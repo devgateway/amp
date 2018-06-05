@@ -53,7 +53,7 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
     private static Double DEFAULT_PERCENTAGE = 1D;
     private static BigDecimal HUNDRED = new BigDecimal(100);
     private static Integer DAYS_AFTER_QUARTER = 25;
-    private static Integer DEFAULT_SCALE = 6 ;
+    private static final Integer DEFAULT_SCALE = 6;
 
     @Override
     public void executeInternal(JobExecutionContext context) throws JobExecutionException {

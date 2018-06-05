@@ -878,8 +878,29 @@ function cancel()
 															<table>
 																<tr>
 																	<td style="font-size:12px; font-weight:bold;">
-																		<html:checkbox property="sendSummaryChanges" value="true" >
-																			<digi:trn>Send summary changes</digi:trn>
+																		<html:checkbox
+																				property="sendSummaryChangesManager"
+																				value="true" >
+																			<digi:trn>Send summary changes
+																				to managers</digi:trn>
+																		</html:checkbox>
+																	</td>
+																</tr>
+															</table>
+
+														</td>
+													</tr>
+
+													<tr id="send_summary_notification_">
+														<td colspan="4">
+															<table>
+																<tr>
+																	<td style="font-size:12px; font-weight:bold;">
+																		<html:checkbox
+																				property="sendSummaryChangesApprover"
+																				value="true" >
+																			<digi:trn>Send summary changes
+																				to approvers</digi:trn>
 																		</html:checkbox>
 																	</td>
 																</tr>

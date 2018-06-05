@@ -2,6 +2,8 @@ package org.digijava.module.message.jobs;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.text.LocalizationUtil;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -9,6 +11,7 @@ import org.digijava.module.aim.helper.SummaryChange;
 import org.digijava.module.aim.helper.SummaryChangeData;
 import org.digijava.module.aim.helper.SummaryChangeHtmlRenderer;
 import org.digijava.module.aim.helper.SummaryChangesService;
+import org.digijava.module.message.helper.AmpMessageWorker;
 import org.digijava.module.message.triggers.SummaryChangeNotificationTrigger;
 import org.hibernate.jdbc.Work;
 import org.quartz.JobExecutionContext;
@@ -47,6 +50,10 @@ public class SummaryChangeNotificationJob extends ConnectionCleaningJob implemen
                             .getValidators(activityList);
 
                     try {
+                        String bodyHeader ="The following activities, for which you are " +
+                                "an approver, were either added or edited within the last 24 hours. The details are " +
+                                "below.";
+                        String subject = "Summary of changes in AMP";
 
                         for (String receiver : reminderUsers.keySet()) {
                             StringBuffer body = new StringBuffer();
@@ -59,6 +66,8 @@ public class SummaryChangeNotificationJob extends ConnectionCleaningJob implemen
                                 SummaryChangeHtmlRenderer renderer = new SummaryChangeHtmlRenderer(activity,
                                         changesList, user.getRegisterLanguage().getCode());
                                 if (body.length() == 0) {
+                                    body.append("<br/>");
+                                    body.append("<br/><br/><br/>");
                                     body.append(renderer.renderWithLegend());
                                 } else {
                                     body.append(renderer.render());
@@ -66,8 +75,10 @@ public class SummaryChangeNotificationJob extends ConnectionCleaningJob implemen
                             }
                             SummaryChangeData event = new SummaryChangeData();
                             event.setEmail(receiver);
+                            event.setSubject(subject);
                             event.setBody(body.toString());
                             event.setDate(date);
+                            event.setBodyHeader(bodyHeader);
                             new SummaryChangeNotificationTrigger(event);
                         }
                     } catch (Exception ex) {

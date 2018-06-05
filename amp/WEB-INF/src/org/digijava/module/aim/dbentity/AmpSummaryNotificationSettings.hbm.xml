@@ -11,8 +11,8 @@
             </generator>
         </id>
 
-        <property name="notifyManager" column="notifiy_manager" type="java.lang.Boolean" />
-        <property name="notifyApprover" column="notifiy_approverr" type="java.lang.Boolean" />
+        <property name="notifyManager" column="notify_manager" type="java.lang.Boolean" />
+        <property name="notifyApprover" column="notify_approver" type="java.lang.Boolean" />
         <many-to-one name="ampTeam" column="amp_team_id" class="org.digijava.module.aim.dbentity.AmpTeam"
                      unique="true" />
     </class>

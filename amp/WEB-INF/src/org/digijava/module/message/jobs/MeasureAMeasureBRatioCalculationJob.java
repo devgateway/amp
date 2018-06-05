@@ -57,7 +57,6 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 
     @Override
     public void executeInternal(JobExecutionContext context) throws JobExecutionException {
-
         AmpJobsUtil.populateRequest();
         Long ampTeamId = FeaturesUtil
                 .getGlobalSettingValueLong(GlobalSettingsConstants.WORKSPACE_TO_RUN_REPORT_FROM_JOB);
@@ -113,9 +112,9 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 
                     BigDecimal percentage = BigDecimal.valueOf(FeaturesUtil
                             .getGlobalSettingDouble(GlobalSettingsConstants.FUNDING_GAP_NOTIFICATION_THRESHOLD) != null
-                                    ? FeaturesUtil.getGlobalSettingDouble(
-                                            GlobalSettingsConstants.FUNDING_GAP_NOTIFICATION_THRESHOLD)
-                                    : DEFAULT_PERCENTAGE);
+                            ? FeaturesUtil.getGlobalSettingDouble(
+                            GlobalSettingsConstants.FUNDING_GAP_NOTIFICATION_THRESHOLD)
+                            : DEFAULT_PERCENTAGE);
 
                     spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_ID));
                     spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE));
@@ -176,8 +175,8 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
                             if (dblMeasureA.compareTo(BigDecimal.ZERO) != 0
                                     && dblMeasureB.compareTo(BigDecimal.ZERO) != 0
                                     && (100 - dblMeasureA.multiply(HUNDRED)
-                                            .divide(dblMeasureB, 6, RoundingMode.HALF_EVEN)
-                                            .compareTo(percentage)) >= 0) {
+                                    .divide(dblMeasureB, 6, RoundingMode.HALF_EVEN)
+                                    .compareTo(percentage)) >= 0) {
 
                                 activitiesToNofity.add(activityToNotify);
                             } else {

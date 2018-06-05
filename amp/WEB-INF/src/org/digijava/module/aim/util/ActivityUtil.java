@@ -102,6 +102,8 @@ import org.joda.time.Period;
 
 import clover.org.apache.commons.lang.StringUtils;
 
+import javax.servlet.http.HttpSession;
+
 public class ActivityUtil {
 
   private static Logger logger = Logger.getLogger(ActivityUtil.class);
@@ -2074,4 +2076,34 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         return getActivityIdsByApprovalStatus(AmpARFilter.unvalidatedActivityStatus);
     }
 
+    /**
+     * Get the activities ids for the current workspace
+     *
+     * @param session HttpSession
+     * @return List<Long> with the editable activity Ids
+     */
+    public static List<Long> getEditableActivityIds(TeamMember tm) {
+        HttpSession session = TLSUtils.getRequest().getSession();
+        String query = WorkspaceFilter.getWorkspaceFilterQuery(session);
+
+        return getEditableActivityIds(tm, query);
+    }
+
+    /**
+     * Get the activities ids for the current workspace
+     *
+     * @param session HttpSession
+     * @return List<Long> with the editable activity Ids
+     */
+    public static List<Long> getEditableActivityIds(TeamMember tm, String query) {
+        // based on AMP-20520 research the only rule found when activities are not editable is when in Mng WS
+        if (TeamMemberUtil.isManagementWorkspace(tm)) {
+            return Collections.emptyList();
+        }
+
+        List<Long> result = PersistenceManager.getSession().createSQLQuery(query)
+                .addScalar("amp_activity_id", LongType.INSTANCE).list();
+
+        return result;
+    }
 }

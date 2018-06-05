@@ -1,6 +1,5 @@
 package org.digijava.module.aim.dbentity;
 
-import org.apache.log4j.Logger;
 
 import java.io.Serializable;
 
@@ -11,7 +10,7 @@ public class AmpSummaryNotificationSettings implements Serializable {
 
     private static final long serialVersionUID = 1898518611418974995L;
 
-    public AmpSummaryNotificationSettings(){
+    public AmpSummaryNotificationSettings() {
 
     }
     private Long ampSummaryNotificationSettings;

@@ -40,7 +40,6 @@ import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
-import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.message.triggers.ActivityMeassureComparisonTrigger;
 import org.hibernate.jdbc.Work;
 import org.joda.time.DateTime;

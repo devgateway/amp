@@ -46,9 +46,8 @@ public class SummaryChangeNotificationJob extends ConnectionCleaningJob implemen
                             .getValidators(activityList);
 
                     try {
-                        String bodyHeader ="The following activities, for which you are " +
-                                "an approver, were either added or edited within the last 24 hours. The details are " +
-                                "below.";
+                        String bodyHeader = "The following activities, for which you are an approver, "
+                                + "were either added or edited within the last 24 hours. The details are below.";
                         String subject = "Summary of changes in AMP";
 
                         for (String receiver : reminderUsers.keySet()) {

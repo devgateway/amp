@@ -67,8 +67,10 @@ public final class ResourceUtil {
                 result.set(ResourceEPConstants.DESCRIPTION, resource.getDescription());
                 result.set(ResourceEPConstants.NOTE, resource.getNote());
             }
-            
-            result.set(ResourceEPConstants.TYPE, resource.getType().getId());
+
+            if (resource.getType() != null) {
+                result.set(ResourceEPConstants.TYPE, resource.getType().getId());
+            }
             result.set(ResourceEPConstants.WEB_LINK, resource.getWebLink());
             result.set(ResourceEPConstants.ADDING_DATE, 
                     DateFormatUtils.ISO_DATETIME_TIME_ZONE_FORMAT.format(resource.getAddingDate()));

@@ -4,10 +4,14 @@ import static java.util.Collections.emptyMap;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toMap;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -15,22 +19,32 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
+import com.sun.jersey.core.header.FormDataContentDisposition;
+import com.sun.jersey.multipart.FormDataParam;
+import org.apache.commons.io.FileUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.AmpFieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesEnumerator;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Viorel Chihai
  */
 @Path("resource")
 public class ResourceEndpoint implements ErrorReportingEndpoint {
+
+    private static final Logger logger = LoggerFactory.getLogger(ResourceEndpoint.class);
     
     /**
      * Provides full set of available fields and their settings/rules in a hierarchical structure.
@@ -164,17 +178,78 @@ public class ResourceEndpoint implements ErrorReportingEndpoint {
     }
 
     /**
-     * Create new resource.
+     * Create new web link resource.
+     *
+     * <h3>Sample request body:</h3><pre>
+     * {
+     *   "title": "Resource title",
+     *   "description": "Resource description",
+     *   "note": "Resource note",
+     *   "web_link": "https://sample.resource.com/"
+     * }
+     * </pre>
+     *
      * @param resource the resource to create
      * @return brief representation of resource
      */
     @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "createResource", ui = false)
     public JsonBean createResource(JsonBean resource) {
         ResourceImporter importer = new ResourceImporter();
         List<ApiErrorMessage> errors = importer.createResource(resource);
         return ResourceUtil.getImportResult(importer.getResource(), importer.getNewJson(), errors);
+    }
+
+    /**
+     * Create new web link or document resource.
+     *
+     * <h3>Sample resource parameter:</h3><pre>
+     * {
+     *   "title": "Resource title",
+     *   "description": "Resource description",
+     *   "note": "Resource note"
+     * }
+     * </pre>
+     *
+     * @param resource the resource to create
+     * @param file the associated file
+     * @return brief representation of resource
+     */
+    @PUT
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "createResourceWithDoc", ui = false)
+    public JsonBean createDocResource(
+            @FormDataParam("resource") JsonBean resource,
+            @FormDataParam("file") InputStream uploadedInputStream,
+            @FormDataParam("file") FormDataContentDisposition fileDetail) {
+
+        if (resource == null) {
+            throw new ApiRuntimeException(Response.Status.BAD_REQUEST, ApiError.toError(
+                    "Parameter 'resource' is not specified or Content-Type for 'resource' is wrong."));
+        }
+
+        File file = null;
+        JerseyFileAdapter formFile = null;
+        try {
+            if (uploadedInputStream != null) {
+                file = File.createTempFile("createResourceWithDoc", null);
+                FileUtils.copyInputStreamToFile(uploadedInputStream, file);
+                formFile = new JerseyFileAdapter(fileDetail, file);
+            }
+
+            ResourceImporter importer = new ResourceImporter();
+            List<ApiErrorMessage> errors = importer.createResource(resource, formFile);
+            return ResourceUtil.getImportResult(importer.getResource(), importer.getNewJson(), errors);
+        } catch (IOException e) {
+            logger.error("Failed to process file.", e);
+            throw new ApiRuntimeException(Response.Status.BAD_REQUEST,
+                    ApiError.toError("Failed to process 'file' parameter."));
+        } finally {
+            FileUtils.deleteQuietly(file);
+        }
     }
 
     @Override

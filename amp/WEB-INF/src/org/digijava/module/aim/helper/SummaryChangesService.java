@@ -143,10 +143,11 @@ public final class SummaryChangesService {
         final String qryApproversAndManagers = "select t.amp_team_id as amp_team_id, u.email as email "
                 + "from amp_team t, amp_team_member atm, amp_team_member_roles tmr, amp_summary_notification_settings"
                 + " sns, dg_user u where t.amp_team_id =atm.amp_team_id "
-                + "and atm.amp_member_role_id = tmr.amp_team_mem_role_id  "
-                + "and t.amp_team_id = sns.amp_team_id and atm.user_ = u.id "
-                + "and ((case when sns.notify_approver then tmr.approver and tmr.team_head = false end ) "
-                + "or (case when sns.notify_manager then tmr.approver and tmr.team_head end )) ";
+                + " and atm.amp_member_role_id = tmr.amp_team_mem_role_id  "
+                + " and t.amp_team_id = sns.amp_team_id and atm.user_ = u.id "
+                + " AND    (atm.deleted = false or atm.deleted is null) "
+                + " and ((case when sns.notify_approver then tmr.approver and tmr.team_head = false end ) "
+                + " or (case when sns.notify_manager then tmr.approver and tmr.team_head end )) ";
 
         PersistenceManager.getSession().doWork(new Work() {
             public void execute(Connection conn) throws SQLException {

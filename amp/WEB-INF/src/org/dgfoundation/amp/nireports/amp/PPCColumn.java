@@ -10,12 +10,13 @@ import org.dgfoundation.amp.algo.VivificatingMap;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.currencyconvertor.CurrencyConvertor;
+import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportRenderWarning;
 import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.NiPrecisionSetting;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.amp.diff.CategAmountCellProto;
-import org.dgfoundation.amp.nireports.behaviours.PPCColumnBehaviour;
+import org.dgfoundation.amp.nireports.behaviours.NumericalColumnBehaviour;
 import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
 import org.dgfoundation.amp.nireports.runtime.CachingCalendarConverter;
 import org.digijava.module.aim.dbentity.AmpCurrency;
@@ -29,7 +30,7 @@ import org.digijava.module.aim.util.CurrencyUtil;
 public class PPCColumn extends PsqlSourcedColumn<CategAmountCell> {
 
     public PPCColumn(String columnName, String extractorViewName) {
-        super(columnName, null, extractorViewName, PPCColumnBehaviour.getInstance());
+        super(columnName, null, extractorViewName, NumericalColumnBehaviour.getInstance());
     }
         
     @Override
@@ -67,7 +68,8 @@ public class PPCColumn extends PsqlSourcedColumn<CategAmountCell> {
                  * AMP-27571
                  * if canSplittingStrategyBeAdded is true we need to duplicate cells with original currencies
                 */
-                if (engine.canSplittingStrategyBeAdded()) {
+                if (engine.spec.isShowOriginalCurrency() 
+                        && !GroupingCriteria.GROUPING_TOTALS_ONLY.equals(engine.spec.getGroupingCriteria())) {
                     cells.add(cellProto.materialize(usedCurrency, calendar, currencyConvertor, precisionSetting, 
                             true));
                 } 

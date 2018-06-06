@@ -22,6 +22,7 @@ import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.diffcaching.ActivityInvalidationDetector;
 import org.dgfoundation.amp.diffcaching.ExpiringCacher;
+import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportRenderWarning;
 import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.IdValuePair;
@@ -246,7 +247,8 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
          * AMP-27571
          * if canSplittingStrategyBeAdded is true we need to duplicate cells in original currency
         */
-        if (engine.canSplittingStrategyBeAdded()) {
+        if (engine.spec.isShowOriginalCurrency() 
+                && !GroupingCriteria.GROUPING_TOTALS_ONLY.equals(engine.spec.getGroupingCriteria())) {
             // generate cells for original currency only (except used currency)
             res.addAll(protos.stream()
                     .map(cacp -> cacp.materialize(usedCurrency, engine.calendar, 

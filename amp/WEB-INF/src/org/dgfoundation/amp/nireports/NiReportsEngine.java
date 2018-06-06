@@ -1,5 +1,7 @@
 package org.dgfoundation.amp.nireports;
 
+import static java.util.stream.Collectors.toList;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -20,13 +22,11 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
-import org.digijava.kernel.translator.LocalizableLabel;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.algo.Graph;
 import org.dgfoundation.amp.algo.ValueWrapper;
 import org.dgfoundation.amp.algo.timing.InclusiveTimer;
-import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportCollapsingStrategy;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportWarning;
@@ -44,9 +44,9 @@ import org.dgfoundation.amp.nireports.runtime.ColumnContents;
 import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
 import org.dgfoundation.amp.nireports.runtime.GroupColumn;
 import org.dgfoundation.amp.nireports.runtime.GroupReportData;
+import org.dgfoundation.amp.nireports.runtime.HierarchiesTracker;
 import org.dgfoundation.amp.nireports.runtime.IdsAcceptorsBuilder;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
-import org.dgfoundation.amp.nireports.runtime.HierarchiesTracker;
 import org.dgfoundation.amp.nireports.runtime.NiColSplitCell;
 import org.dgfoundation.amp.nireports.runtime.PostMeasureVHiersVisitor;
 import org.dgfoundation.amp.nireports.runtime.ReportData;
@@ -64,8 +64,7 @@ import org.dgfoundation.amp.nireports.schema.NiReportedEntity;
 import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
 import org.dgfoundation.amp.nireports.schema.SchemaSpecificScratchpad;
 import org.dgfoundation.amp.nireports.schema.TimeRange;
-
-import static java.util.stream.Collectors.toList;
+import org.digijava.kernel.translator.LocalizableLabel;
 
 /**
  * The NiReports engine API-independent entrypoint. A single report should be run per instance <br />
@@ -759,8 +758,4 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
         return snapshot.getCachingIdsAcceptor(coos);
     }
     
-    public boolean canSplittingStrategyBeAdded() {
-        return !GroupingCriteria.GROUPING_TOTALS_ONLY.equals(spec.getGroupingCriteria())
-                && spec.isShowOriginalCurrency();
-    }
 }

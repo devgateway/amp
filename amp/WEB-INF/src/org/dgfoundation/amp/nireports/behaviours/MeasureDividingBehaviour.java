@@ -8,6 +8,8 @@ import org.dgfoundation.amp.nireports.schema.TimeRange;
 
 /**
  * @author Viorel Chihai
+ * 
+ * This behavior is used by measures that contains percentages and not amounts with currencies
  *
  */
 public class MeasureDividingBehaviour extends TrivialMeasureBehaviour {

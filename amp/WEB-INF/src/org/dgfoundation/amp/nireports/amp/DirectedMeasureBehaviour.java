@@ -1,6 +1,6 @@
 package org.dgfoundation.amp.nireports.amp;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -11,7 +11,6 @@ import org.dgfoundation.amp.nireports.ComparableValue;
 import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.amp.dimensions.OrganisationsDimension;
-import org.dgfoundation.amp.nireports.behaviours.CurrencySplittingStrategy;
 import org.dgfoundation.amp.nireports.behaviours.TrivialMeasureBehaviour;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.ColumnContents;
@@ -47,16 +46,8 @@ public class DirectedMeasureBehaviour extends TrivialMeasureBehaviour {
      */
     @Override
     public List<VSplitStrategy> getSubMeasureHierarchies(NiReportsEngine context) {
-        List<VSplitStrategy> strategies = new ArrayList<>();
-        strategies.add(VSplitStrategy.build(
-                cell -> new ComparableValue<String>(getFlowName(cell.getCell()), getFlowName(cell.getCell())), 
-                AmpReportsSchema.PSEUDOCOLUMN_FLOW));
-        
-        if (context != null && context.canSplittingStrategyBeAdded()) {
-            strategies.add(CurrencySplittingStrategy.getInstance(AmpReportsScratchpad.get(context).getUsedCurrency()));
-        }
-        
-        return strategies;
+        VSplitStrategy byFundingFlow = VSplitStrategy.build(cell -> new ComparableValue<String>(getFlowName(cell.getCell()), getFlowName(cell.getCell())), AmpReportsSchema.PSEUDOCOLUMN_FLOW);
+        return Arrays.asList(byFundingFlow);
     }
 
     public static String getFlowName(Cell cell) {

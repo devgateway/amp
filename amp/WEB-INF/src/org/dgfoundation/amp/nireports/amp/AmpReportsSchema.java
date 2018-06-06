@@ -1540,11 +1540,13 @@ public class AmpReportsSchema extends AbstractReportsSchema {
     @Override
     public List<VSplitStrategy> getSubMeasureHierarchies(NiReportsEngine engine, CellColumn cc) {
         List<VSplitStrategy> raw = super.getSubMeasureHierarchies(engine, cc);
-        if (raw != null && !raw.isEmpty())
-            return raw; // the measure specifies its own submeasures - run them (example: Funding Flows)
         
         if (disableSubmeasureSplittingByColumn(engine))
             return raw; // let the subclasses the chance to disable submeasures
+        
+        if (raw == null) {
+            raw = new ArrayList<>();
+        }
         
         AmpReportsScratchpad scratch = AmpReportsScratchpad.get(engine);
         
@@ -1554,12 +1556,6 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         // should this measure be split by ModeOfPayment?
         boolean splitByMoP = cc.splitCell != null && (cc.splitCell.entityType.equals(NiReportsEngine.PSEUDOCOLUMN_MEASURE)) && scratch.verticalSplitByModeOfPayment;
         
-        // should this measure be split by Currencies?
-        boolean splitByCurrencies = cc.behaviour.canBeSplitByCurrency() && cc.splitCell != null 
-                && (cc.splitCell.entityType.equals(NiReportsEngine.PSEUDOCOLUMN_MEASURE)) 
-                && engine.canSplittingStrategyBeAdded();
-        
-        raw = new ArrayList<>();
         if (splitByToA) {
             raw.add(TaggedMeasureBehaviour.getSplittingStrategy(MetaCategory.TYPE_OF_ASSISTANCE.category, 
                     ColumnConstants.TYPE_OF_ASSISTANCE, () -> TranslatorWorker.translateText("Total")));
@@ -1567,6 +1563,11 @@ public class AmpReportsSchema extends AbstractReportsSchema {
             raw.add(TaggedMeasureBehaviour.getSplittingStrategy(MetaCategory.MODE_OF_PAYMENT.category, 
                     ColumnConstants.MODE_OF_PAYMENT, () -> TranslatorWorker.translateText("Total")));
         }
+        
+        // should this measure be split by Currencies?
+        boolean splitByCurrencies = cc.behaviour.canBeSplitByCurrency() && cc.splitCell != null 
+                && !GroupingCriteria.GROUPING_TOTALS_ONLY.equals(engine.spec.getGroupingCriteria())
+                && engine.spec.isShowOriginalCurrency();
         
         if (splitByCurrencies) {
             raw.add(CurrencySplittingStrategy.getInstance(scratch.usedCurrency));

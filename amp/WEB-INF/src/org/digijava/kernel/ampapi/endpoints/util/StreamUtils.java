@@ -7,7 +7,10 @@ import java.util.stream.StreamSupport;
 /**
  * @author Octavian Ciubotaru
  */
-public class StreamUtils {
+public final class StreamUtils {
+
+    private StreamUtils() {
+    }
 
     /**
      * Creates a sequential Stream from an iterator.

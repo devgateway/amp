@@ -20,7 +20,7 @@ class JerseyFileAdapter implements FormFile {
     private FormDataContentDisposition fileDetail;
     private File file;
 
-    public JerseyFileAdapter(FormDataContentDisposition fileDetail, File file) {
+    JerseyFileAdapter(FormDataContentDisposition fileDetail, File file) {
         this.fileDetail = fileDetail;
         this.file = file;
     }

@@ -32,7 +32,8 @@ public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicator
     private Date createdOn;
     private Date updatedOn;
     private AmpTeamMember createdBy;
-
+    private Boolean zeroCategoryEnabled;
+    
     public Long getId() {
         return id;
     }
@@ -186,4 +187,14 @@ public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicator
     public void setPopulation(Boolean population) {
         this.population = population;
     }
+
+    public Boolean getZeroCategoryEnabled() {
+        return zeroCategoryEnabled;
+    }
+
+    public void setZeroCategoryEnabled(Boolean zeroCategoryEnabled) {
+        this.zeroCategoryEnabled = zeroCategoryEnabled;
+    }
+
+   
 }

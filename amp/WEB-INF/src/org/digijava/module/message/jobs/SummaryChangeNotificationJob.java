@@ -21,6 +21,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class SummaryChangeNotificationJob extends ConnectionCleaningJob implements StatefulJob {
 
@@ -42,7 +43,7 @@ public class SummaryChangeNotificationJob extends ConnectionCleaningJob implemen
                     LinkedHashMap<Long, Collection<SummaryChange>> activityList = SummaryChangesService
                             .processActivity(activitiesIds);
 
-                    Map<String, Collection<AmpActivityVersion>> reminderUsers = SummaryChangesService
+                    Map<String, Set<AmpActivityVersion>> reminderUsers = SummaryChangesService
                             .getValidators(activityList);
 
                     try {

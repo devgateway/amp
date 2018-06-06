@@ -26,6 +26,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
@@ -70,10 +71,10 @@ public final class SummaryChangesService {
      * @param activities activities list.
      * @return list of approvers and activities.
      */
-    public static Map<String, Collection<AmpActivityVersion>> getValidators(LinkedHashMap<Long,
+    public static Map<String, Set<AmpActivityVersion>> getValidators(LinkedHashMap<Long,
             Collection<SummaryChange>> activities) {
 
-        Map<String, Collection<AmpActivityVersion>> results = new LinkedHashMap<>();
+        Map<String, Set<AmpActivityVersion>> results = new LinkedHashMap<>();
 
 
         //we first need to fetch all ws in which we can see the activities 
@@ -87,7 +88,7 @@ public final class SummaryChangesService {
                     approversAndManagers.get(strTeamId).stream().forEach(approver -> {
                         //we add the activity to the users who will get notifications
                         if (results.get(approver) == null) {
-                            results.put(approver, new ArrayList<AmpActivityVersion>());
+                            results.put(approver, new LinkedHashSet<AmpActivityVersion>());
                         }
                         results.get(approver).add(currentActivity);
                     });

@@ -106,6 +106,7 @@ public class UpdateWorkspace extends Action {
             newTeam.setSumaryNotificationSettings(new AmpSummaryNotificationSettings());
             newTeam.getSumaryNotificationSettings().setNotifyApprover(uwForm.getSendSummaryChangesApprover());
             newTeam.getSumaryNotificationSettings().setNotifyManager(uwForm.getSendSummaryChangesManager());
+            newTeam.getSumaryNotificationSettings().setAmpTeam(newTeam);
 
             newTeam.setAddActivity(uwForm.getAddActivity());
 

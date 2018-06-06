@@ -78,21 +78,26 @@ public final class SummaryChangesService {
 
         //we first need to fetch all ws in which we can see the activities 
         Map<Long, java.util.Set<String>> activityWs = getActivityWsVisibilityToNotify();
-
-        Map<String, List<String>> approversAndManagers = getApproversAndManagers();
-        activities.keySet().stream().forEach(activityId -> {
-            AmpActivityVersion currentActivity = ActivityUtil.loadAmpActivity(activityId);
-            //we go and see every ws in which the activity is visible
-            activityWs.get(activityId).stream().forEach(strTeamId-> {
-                approversAndManagers.get(strTeamId).stream().forEach(approver -> {
-                    //we add the activity to the users who will get notifications
-                    if (results.get(approver) == null) {
-                        results.put(approver, new ArrayList<AmpActivityVersion>());
-                    }
-                    results.get(approver).add(currentActivity);
+        if (activityWs.size() > 0) {
+            Map<String, List<String>> approversAndManagers = getApproversAndManagers();
+            activities.keySet().stream().forEach(activityId -> {
+                AmpActivityVersion currentActivity = ActivityUtil.loadAmpActivity(activityId);
+                //we go and see every ws in which the activity is visible
+                activityWs.get(activityId).stream().forEach(strTeamId -> {
+                    approversAndManagers.get(strTeamId).stream().forEach(approver -> {
+                        //we add the activity to the users who will get notifications
+                        if (results.get(approver) == null) {
+                            results.put(approver, new ArrayList<AmpActivityVersion>());
+                        }
+                        results.get(approver).add(currentActivity);
+                    });
                 });
             });
-        });
+        }
+        else {
+            LOGGER.debug("There are no visible activities");
+        }
+
         return results;
     }
 
@@ -108,6 +113,7 @@ public final class SummaryChangesService {
                 + "amp_team_member_roles tmr, amp_summary_notification_settings sns "
                 + "where tm.amp_member_role_id = tmr. amp_team_mem_role_id "
                 + "and (tmr.team_head = true or tmr.approver = true) "
+                + " and (tm.deleted = false or tm.deleted is null )"
                 + "and  tm.amp_team_id=t.amp_team_id  and sns.amp_team_id=t.amp_team_id "
                 + "and (sns.notify_approver = true or sns.notify_manager = true) group by tm.amp_team_id ";
         ValueWrapper<List<Long>> ampTeamMemberId = AmpJobsUtil.getTeamMembers(query);

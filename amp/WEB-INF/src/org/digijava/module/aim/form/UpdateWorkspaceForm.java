@@ -439,6 +439,8 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
             relatedTeamFlag = "no";
             relatedTeamBilatCollSize = null;
             parentTeamId = null;
+            sendSummaryChangesApprover = false;
+            sendSummaryChangesManager = false;
             parentTeamName = null;
             deleteFlag = null;
             updateFlag = false;

@@ -26,6 +26,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -37,6 +38,8 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.message.jobs.AmpJobsUtil;
 import org.hibernate.jdbc.Work;
+
+import static java.util.Collections.emptySet;
 
 /**
  * @author Aldo Picca
@@ -84,18 +87,18 @@ public final class SummaryChangesService {
             activities.keySet().stream().forEach(activityId -> {
                 AmpActivityVersion currentActivity = ActivityUtil.loadAmpActivity(activityId);
                 //we go and see every ws in which the activity is visible
-                activityWs.get(activityId).stream().forEach(strTeamId -> {
-                    approversAndManagers.get(strTeamId).stream().forEach(approver -> {
-                        //we add the activity to the users who will get notifications
-                        if (results.get(approver) == null) {
-                            results.put(approver, new LinkedHashSet<AmpActivityVersion>());
-                        }
-                        results.get(approver).add(currentActivity);
-                    });
-                });
+                Optional.ofNullable(activityWs.get(activityId)).orElse(emptySet()).stream()
+                        .forEach(strTeamId -> {
+                            approversAndManagers.get(strTeamId).stream().forEach(approver -> {
+                                //we add the activity to the users who will get notifications
+                                if (results.get(approver) == null) {
+                                    results.put(approver, new LinkedHashSet<AmpActivityVersion>());
+                                }
+                                results.get(approver).add(currentActivity);
+                            });
+                        });
             });
-        }
-        else {
+        } else {
             LOGGER.debug("There are no visible activities");
         }
 

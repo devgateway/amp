@@ -2,7 +2,11 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
+import org.digijava.kernel.ampapi.endpoints.contact.ContactPhoneTypePossibleValuesProvider;
+import org.digijava.kernel.ampapi.endpoints.contact.PhoneDiscriminatorContextMatcher;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.util.ContactInfoUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -12,53 +16,47 @@ public class AmpContactProperty  implements Comparable, Serializable {
     
     private Long id;
     private AmpContact contact;
-    
-    @Interchangeable(fieldTitle = "Name")
+
     private String name;
     
-    @Interchangeable(fieldTitle = "Value")
+    @Interchangeable(fieldTitle = "Value", required = ActivityEPConstants.REQUIRED_ALWAYS, importable = true, 
+            regexConstraint = true)
     private String value;
     
-    @Interchangeable(fieldTitle = "Extension Value")
+    @Interchangeable(fieldTitle = "Extension Value", importable = true, 
+            context = PhoneDiscriminatorContextMatcher.class, 
+            regexPattern = ActivityEPConstants.REGEX_PATTERN_PHONE_EXTENSION)
     private String extensionValue;
-        /*this value is not saved in db, let's hope
-         somebody will refactor phone and use this*/
-    
-    private AmpCategoryValue categoryValue;
 
-    public String getActualValue() {
-        return actualValue;
+    @PossibleValues(ContactPhoneTypePossibleValuesProvider.class)
+    @Interchangeable(fieldTitle = "Type", importable = true, pickIdOnly = true,
+            context = PhoneDiscriminatorContextMatcher.class)
+    private AmpCategoryValue type;
+
+    public AmpCategoryValue getType() {
+        return type;
     }
 
-    public void setActualValue(String actualValue) {
-        this.actualValue = actualValue;
-    }
-        //dummy variable
-        private String actualValue;
-
-    public AmpCategoryValue getCategoryValue() {
-        return categoryValue;
-    }
-
-    public void setCategoryValue(AmpCategoryValue categoryValue) {
-        this.categoryValue = categoryValue;
-    }
-
-    public String getActualPhoneNumber() {
-        return ContactInfoUtil.getActualPhoneNumber(value);
+    public void setType(AmpCategoryValue type) {
+        this.type = type;
     }
 
     public String getPhoneCategory() {
-        return ContactInfoUtil.getPhoneCategory(value);
+        if (type != null) {
+            return type.getValue();
+        } else {
+            return "None";
+        }
     }
     
     public String getValueAsFormatedPhoneNum () {
-        return ContactInfoUtil.getFormatedPhoneNum(value);
+        return ContactInfoUtil.getFormattedPhoneNum(type, value);
     }
 
     public Long getId() {
         return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -108,13 +106,6 @@ public class AmpContactProperty  implements Comparable, Serializable {
                 if (this.getValue() != null && a.getValue() != null) {
                     if (this.getValue().equals(a.getValue())) {
                         return 0;
-                    }
-                } else {
-                    if (this.getActualValue() != null
-                            && a.getActualValue() != null) {
-                        if (this.getActualValue().equals(this.getActualValue())) {
-                            return 0;
-                        } 
                     }
                 }
                 

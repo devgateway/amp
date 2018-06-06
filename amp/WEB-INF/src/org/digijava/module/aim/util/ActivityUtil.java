@@ -10,6 +10,7 @@ import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -38,6 +39,7 @@ import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.admin.helper.AmpActivityFake;
+import org.digijava.module.aim.dbentity.AmpAPIFiscalYear;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
@@ -460,12 +462,45 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                 Hibernate.initialize(str.getType());
                 Hibernate.initialize(str.getCoordinates());
             }
+            
+            // initialize the fiscal year list field. Used in Activity API only
+            initializeFiscalYears(result);
+            
         } catch (ObjectNotFoundException e) {
             logger.debug("AmpActivityVersion with id=" + id + " not found");
         } catch (Exception e) {
             throw new DgException("Cannot load AmpActivityVersion with id " + id, e);
         }
         return result;
+    }
+  
+    /**
+     * Initialize Fiscal Years list object in activity. Used in Activity API only. 
+     * 
+     * @param activity
+     */
+    private static void initializeFiscalYears(AmpActivityVersion activity) {
+        if (activity.getFiscalYears() == null) {
+            List<AmpAPIFiscalYear> fiscalYears = new ArrayList<>();
+            if (StringUtils.isNotBlank(activity.getFY())) {
+                try {
+                    List<String> years = Arrays.asList(activity.getFY().split(","));
+                    for (String year : years) {
+                        fiscalYears.add(new AmpAPIFiscalYear(Long.parseLong(year)));
+                    }
+                    activity.setFiscalYears(fiscalYears);
+                } catch (NumberFormatException e) {
+                    logger.error("Error in parsing numbers of FY field - " + activity.getFY(), e);
+                }
+            }
+        }
+    }
+
+    public static Long findActivityIdByAmpId(String ampId) {
+        Session session = PersistenceManager.getRequestDBSession();
+        return (Long) session.createQuery("select ampActivityId from AmpActivity where ampId=:ampId")
+                .setParameter("ampId", ampId)
+                .uniqueResult();
     }
   
   public static AmpActivityVersion loadAmpActivity(Long id){

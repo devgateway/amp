@@ -63,7 +63,7 @@
 
 		<many-to-one name="registeredThrough" column="REGISTERED_THROUGH" class="org.digijava.kernel.request.Site" cascade="none" />
 		
-		<set name="assignedOrgs" table="DG_USER_ORGS" lazy="false" cascade="none">
+		<set name="assignedOrgs" table="DG_USER_ORGS" lazy="true" cascade="none">
 		 	<cache usage="read-write" />
  	 	 	<key column="USER_ID" />
  	        <many-to-many class="org.digijava.module.aim.dbentity.AmpOrganisation" column="ORG_ID"/>

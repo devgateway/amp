@@ -20,7 +20,7 @@ import org.digijava.module.aim.dbentity.AmpCurrency;
 public class CurrencySplittingStrategy implements VSplitStrategy {
     
     public static final String UNDEFINED_CURRENCY = "Undefined";
-    public static final String PREFIX_DEFAULT_CURRENCY = "~";
+    public static final String PREFIX_TOTAL_VALUE = "~";
     public static final String PREFIX_TOTAL = "TOTAL";
     
     private final Function<NiCell, ComparableValue<String>> cat;
@@ -44,8 +44,7 @@ public class CurrencySplittingStrategy implements VSplitStrategy {
             if (categCell.isInformativeAmount()) {
                 currencyCode = categCell.amount.origCurrency.getCurrencyCode();
             } else {
-                currencyCode = String.format("%s %s", TranslatorWorker.translateText(PREFIX_TOTAL), 
-                        usedCurrency.getCurrencyCode());
+                currencyCode = getTotalCurrencyCode(usedCurrency);
             }
         }
         
@@ -66,8 +65,7 @@ public class CurrencySplittingStrategy implements VSplitStrategy {
             if (categCell.isInformativeAmount()) {
                 currencyValue = categCell.amount.origCurrency.getCurrencyCode();
             } else {
-                currencyValue = String.format("%s%s %s", PREFIX_DEFAULT_CURRENCY, 
-                        TranslatorWorker.translateText(PREFIX_TOTAL), usedCurrency.getCurrencyCode());
+                currencyValue = getTotalCurrencyValue(usedCurrency);
             }
         }
         
@@ -111,6 +109,20 @@ public class CurrencySplittingStrategy implements VSplitStrategy {
 
     public AmpCurrency getUsedCurrency() {
         return usedCurrency;
+    }
+    
+    @Override
+    public ComparableValue<String> getEmptyTotalSubcolumnName() {
+        return new ComparableValue<>(getTotalCurrencyCode(usedCurrency), getTotalCurrencyValue(usedCurrency));
+    }
+    
+    private static String getTotalCurrencyCode(AmpCurrency usedCurrency) {
+        return String.format("%s %s", TranslatorWorker.translateText(PREFIX_TOTAL), usedCurrency.getCurrencyCode());
+    }
+    
+    private static String getTotalCurrencyValue(AmpCurrency usedCurrency) {
+        return String.format("%s%s %s", PREFIX_TOTAL_VALUE, 
+                TranslatorWorker.translateText(PREFIX_TOTAL), usedCurrency.getCurrencyCode());
     }
     
 }

@@ -54,6 +54,8 @@ public class CellColumn extends Column {
         if (totalsSubcolumnCategory != null) {
             values.put(totalsSubcolumnCategory, new ArrayList<>());
             this.forEachCell(cell -> values.get(totalsSubcolumnCategory).add(cell));
+        } else if (values.isEmpty() && strategy.getEmptyTotalSubcolumnName() != null) {
+            values.put(strategy.getEmptyTotalSubcolumnName(), new ArrayList<>());
         }
             
         GroupColumn res = this.asGroupColumn(null, newParent);

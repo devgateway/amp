@@ -60,6 +60,20 @@ public interface VSplitStrategy {
     public default ComparableValue<String> getTotalSubcolumnName() {
         return null;
     }
+    
+    /**
+     * AMP-27773
+     * returns the category name of the Total Empty subcolumn. If returns null, no Total Empty subcolumn exists.
+     * By default there is no subtotal empty column, thus the default implementation of this function returns null
+     * It is used for example for currency splitting, when it is needed to put empty total column in order to avoid
+     * hiding measures columns without data
+     * 
+     * @param engine the context
+     * @return
+     */
+    default ComparableValue<String> getEmptyTotalSubcolumnName() {
+        return null;
+    }
 
     public static VSplitStrategy build(Function<NiCell, ComparableValue<String>> cat, Function<ComparableValue<String>, Behaviour<?>> beh, Function<Set<ComparableValue<String>>, List<ComparableValue<String>>> subColumnNames, String entityType) {
         return new VSplitStrategy() {

@@ -1098,7 +1098,7 @@ function collapseAll() {
 		</c:if>
 		</module:display>
 			<c:if test="${aimEditActivityForm.identification.budgetCV==aimEditActivityForm.identification.budgetCVOn}">
-				<module:display name="/Activity Form/Identification/Budget Extras/FY" parentModule="/Activity Form/Identification">
+				<module:display name="/Activity Form/Identification/Budget Extras/FY" parentModule="/Activity Form/Identification/Budget Extras">
 					<digi:trn>FY</digi:trn>:&nbsp;
 					<b><bean:write name="aimEditActivityForm" property="identification.FY"/></b>
 					<br />

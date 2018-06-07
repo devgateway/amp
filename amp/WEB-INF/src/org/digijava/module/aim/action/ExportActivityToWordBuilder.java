@@ -352,9 +352,9 @@ public class ExportActivityToWordBuilder {
     private void getProgramsTables() throws Exception {
         String columnVal;
         if (FeaturesUtil.isVisibleFeature("NPD Programs")) {
-            XWPFTable programsTbl = buildXwpfTable(2);
-
             addSectionTitle(TranslatorWorker.translateText("programs").toUpperCase());
+            
+            XWPFTable programsTbl = buildXwpfTable(2);
 
             if (FeaturesUtil.isVisibleModule("/Activity Form/Program/National Plan Objective")) {
                 if (hasContent(programs.getNationalPlanObjectivePrograms())) {
@@ -645,10 +645,11 @@ public class ExportActivityToWordBuilder {
          */
         if (FeaturesUtil.isVisibleField("Project Risk")) {
 
+            addSectionTitle("Activity Risk");
+            
             XWPFTable table = buildXwpfTable(1);
             table.setWidth(WIDTH);
             setTableAlignment(table, STJc.CENTER);
-            addSectionTitle("Activity Risk");
 
             // chart
             ByteArrayOutputStream outByteStream1 = new ByteArrayOutputStream();
@@ -686,10 +687,11 @@ public class ExportActivityToWordBuilder {
          * Activity - Performance
          */
         if (FeaturesUtil.isVisibleField("Activity Performance")) {
+            addSectionTitle("Activity Performance");
+            
             XWPFTable table = buildXwpfTable(1);
             table.setWidth(WIDTH);
             setTableAlignment(table, STJc.CENTER);
-            addSectionTitle("Activity Performance");
 
             // chart
             Set<IndicatorActivity> values = activity.getIndicators();
@@ -1555,7 +1557,8 @@ public class ExportActivityToWordBuilder {
                     addRowLtrData(projCost == null ? null : projCost.getFunAmount()).
                     addRowData(currencyCode));
             eshProjectCostTable.addRowData(new ExportSectionHelperRowData("Date", null, null, true).
-                    addRowLtrData(projCost == null ? null : projCost.getFunDate()));
+                    addRowLtrData(projCost == null ? null : projCost.getFunDate())
+                    .addEmptyData());
 
             if ("Proposed Project Cost".equals(costName)
                     && FeaturesUtil.isVisibleModule(

@@ -35,20 +35,9 @@ public class RegexPatternValidator extends InputValidator {
         String regexPattern = fieldDescription.getRegexPattern();
         String fieldName = fieldDescription.getFieldName();
         Object fieldValue = newFieldParent.get(fieldName);
-        String regexField = fieldDescription.getRegexConstraint();
-        if (StringUtils.isNotBlank(regexPattern)) {
-            if (fieldValue instanceof Collection) {
-                Collection<Map<String, Object>> values = 
-                        (Collection<Map<String, Object>>) newFieldParent.get(fieldName);
-                for (Map<String, Object> val : values) {
-                    if (!match(regexPattern, val.get(regexField))) {
-                        isValid = false;
-                    }
-                }
-            } else if (!match(regexPattern, fieldValue)) {
-                isValid = false;
-            }
-        } 
+        if (fieldValue != null && StringUtils.isNotBlank(regexPattern)) {
+            isValid = match(regexPattern, fieldValue);
+        }
         
         return isValid;
     }
@@ -58,7 +47,7 @@ public class RegexPatternValidator extends InputValidator {
      * 
      * @param regexPattern, the regular expression pattern
      * @param fieldValue, the Object to check
-     * @return true if the Object is a Collection with many elements, false otherwise
+     * @return true if the value matches the regex pattern
      */
     private boolean match(String regexPattern, Object fieldValue) {
         String value = (String) fieldValue;

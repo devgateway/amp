@@ -14,7 +14,6 @@ import java.util.Set;
 import java.util.StringJoiner;
 import java.util.function.Predicate;
 
-import com.google.common.collect.ImmutableSet;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.nireports.ImmutablePair;
@@ -26,12 +25,15 @@ import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
+import org.digijava.module.aim.annotations.interchange.RegexDiscriminator;
 import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.util.ProgramUtil;
+
+import com.google.common.collect.ImmutableSet;
 
 /**
  * AMP Activity Endpoints for Activity Import / Export
@@ -174,11 +176,6 @@ public class FieldsEnumerator {
                 if (hasTreeCollectionValidatorEnabled(context)) {
                     apiField.setTreeCollectionConstraint(true);
                 }
-                
-
-                if (StringUtils.isNotBlank(interchangeable.regexPattern())) {
-                    apiField.setRegexConstraint(getRegexConstraint(field, context));
-                }
             }
             
             if (!interchangeable.pickIdOnly() && !InterchangeUtils.isAmpActivityVersion(field.getClass())) {
@@ -199,11 +196,34 @@ public class FieldsEnumerator {
         
         if (StringUtils.isNotBlank(interchangeable.regexPattern())) {
             apiField.setRegexPattern(interchangeable.regexPattern());
+        } else if (interchangeable.regexPatterns().length > 0) {
+            String parentTitle = getParentTitle(context);
+            for (RegexDiscriminator regexDiscr : interchangeable.regexPatterns()) {
+                String parent = regexDiscr.parent();
+                String regexPattern = regexDiscr.regexPattern();
+                if (parent.equals(parentTitle)) {
+                    apiField.setRegexPattern(regexPattern);
+                }
+            }
         }
 
         apiField.setDiscriminator(interchangeable.discriminatorOption());
 
         return apiField;
+    }
+
+    /**
+     * Get the title of the parent field from the context interchangeable stack
+     * 
+     * @param context
+     * @return
+     */
+    private String getParentTitle(FEContext context) {
+        Interchangeable current = context.getIntchStack().pop();
+        Interchangeable parent = context.getIntchStack().peek();
+        context.getIntchStack().push(current);
+        
+        return parent.fieldTitle();
     }
 
     private String getLabelOf(Interchangeable interchangeable) {
@@ -339,20 +359,6 @@ public class FieldsEnumerator {
         return null;
     }
     
-    private String getRegexConstraint(Field field, FEContext context) {
-        Class<?> genericClass = InterchangeUtils.getGenericClass(field);
-        Field[] fields = genericClass.getDeclaredFields();
-        for (Field f : fields) {
-            Interchangeable interchangeable = f.getAnnotation(Interchangeable.class);
-            if (interchangeable != null && isVisible(interchangeable.fmPath(), context)
-                    && interchangeable.regexConstraint()) {
-                return InterchangeUtils.underscorify(interchangeable.fieldTitle());
-            }
-        }
-        
-        return null;
-    }
-
     public List<String> findActivityFieldPaths(Predicate<Field> fieldFilter) {
         FieldNameCollectingVisitor visitor = new FieldNameCollectingVisitor(fieldFilter);
         visit(AmpActivityFields.class, visitor, new VisitorContext());

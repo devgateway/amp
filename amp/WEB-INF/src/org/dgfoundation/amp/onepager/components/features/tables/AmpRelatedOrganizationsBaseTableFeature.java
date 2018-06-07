@@ -24,6 +24,7 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.dgfoundation.amp.onepager.OnePagerMessages;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.AmpSearchOrganizationComponent;
@@ -36,6 +37,7 @@ import org.dgfoundation.amp.onepager.events.FundingOrgListUpdateEvent;
 import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
+import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.dgfoundation.amp.onepager.util.AmpDividePercentageField;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -380,27 +382,33 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
         updateColSpan2.add(new AttributeModifier("colspan", new Model<Integer>(colspan)));
     }
 
-    protected void onDeleteOrg(AjaxRequestTarget target, ListItem<AmpOrgRole> item, IModel<AmpActivityVersion> am){
-        MarkupContainer listParent = list.getObject().getParent();
-
-        Set<AmpFunding> fundings=am.getObject().getFunding();
-        AmpOrgRole modelObject = item.getModelObject();
-        AmpOrgRole ampOrgRole = (AmpOrgRole) modelObject;
-        for (Iterator iterator = fundings.iterator(); iterator.hasNext();) {
-            AmpFunding ampFunding = (AmpFunding) iterator.next();
-            if (ampFunding.getAmpDonorOrgId().getAmpOrgId().equals(ampOrgRole.getOrganisation().getAmpOrgId()) &&
-                    ((ampFunding.getSourceRole() == null && ampOrgRole.getRole().getRoleCode().equals(Constants.FUNDING_AGENCY))
-                            ||(ampFunding.getSourceRole() != null && ampFunding.getSourceRole().getRoleCode().equals(ampOrgRole.getRole().getRoleCode())))){
-                String translatedMessage = TranslatorUtil.getTranslation("This organization has a funding related.");
-                target.appendJavaScript("alert ('"+translatedMessage+"')");
-                return;
-            }
+    protected void onDeleteOrg(AjaxRequestTarget target, ListItem<AmpOrgRole> item, IModel<AmpActivityVersion> am) {
+        AmpActivityVersion activity = am.getObject();
+        AmpOrgRole ampOrgRole = item.getModelObject();
+        AmpOrganisation org = ampOrgRole.getOrganisation();
+        
+        boolean hasFundings = ActivityUtil.hasOrgRoleFundingsInActivity(activity, ampOrgRole);
+        if (hasFundings) {
+            String message = TranslatorUtil.getTranslation(OnePagerMessages.HAS_FUNDINGS_ALERT_MSG);
+            target.appendJavaScript(OnePagerUtil.createJSAlert(message));
+            return;
         }
-        setModel.getObject().remove(modelObject);
+        
+        boolean hasComponentFundings = ActivityUtil.hasOrgComponentFundingsInActivity(activity, org);
+        if (hasComponentFundings) {
+            String message = TranslatorUtil.getTranslation(OnePagerMessages.HAS_COMP_FUNDINGS_ALERT_MSG);
+            target.appendJavaScript(OnePagerUtil.createJSAlert(message));
+            return;
+        }
+        
+        setModel.getObject().remove(ampOrgRole);
         uniqueCollectionValidationField.reloadValidationField(target);
+        
+        MarkupContainer listParent = list.getObject().getParent();
         target.add(listParent);
+        
         //do not move the roleRemoved method above the listParent refresh
-        roleRemoved(target, modelObject);
+        roleRemoved(target, ampOrgRole);
         list.getObject().removeAll();
     }
 }

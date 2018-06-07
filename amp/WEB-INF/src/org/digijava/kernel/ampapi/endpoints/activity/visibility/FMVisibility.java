@@ -25,6 +25,7 @@ public class FMVisibility {
     
     public static final String PARENT_FM = "_PARENT_FM_";
     public static final String ANY_FM = "_ANY_FM_";
+    public static final String ALWAYS_VISIBLE_FM = "_ALWAYS_VISIBLE_FM_";
 
     private final static Map<String, Boolean> visibilityMap = new HashMap<String, Boolean>();
     private static Date lastTreeVisibilityUpdate;
@@ -116,7 +117,7 @@ public class FMVisibility {
         HttpSession session = TLSUtils.getRequest().getSession();
         checkTreeVisibilityUpdate(session);
         boolean isVisible = false;
-        if (fmPath.equals("")) {
+        if (fmPath.equals(FMVisibility.ALWAYS_VISIBLE_FM) || fmPath.equals("")) {
             isVisible = true;
         } else {
             isVisible = isFmPathEnabled(fmPath, intchStack);

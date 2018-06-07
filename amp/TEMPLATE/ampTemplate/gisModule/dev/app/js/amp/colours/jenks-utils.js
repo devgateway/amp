@@ -9,7 +9,7 @@ function getGVF(dataset, numClass, zeroCategoryEnabled) {
     var breaks;  
     if (zeroCategoryEnabled == true) {
     	dataList = _.reject(dataList, function(data){ return data == 0; });
-    	breaks = getJenksBreaks(dataList, numClass - 1, zeroCategoryEnabled);
+    	breaks = getJenksBreaks(dataList, numClass, zeroCategoryEnabled);
     } else {
     	breaks = getJenksBreaks(dataList, numClass, zeroCategoryEnabled);
     }
@@ -43,11 +43,7 @@ function getGVF(dataset, numClass, zeroCategoryEnabled) {
     }
     var varFit = (SDAM - SDCM) / SDAM;
     //console.log("varianceFit:", varFit)
-    var result = [];
-    if (zeroCategoryEnabled == true) {
-    	result.push([0, 0]);
-    }
-   
+    var result = [];   
     for ( var i = 0; i < breaks.length - 1; i++) {
         result.push([breaks[i], breaks[i + 1]])
     }

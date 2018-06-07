@@ -306,6 +306,7 @@ public class IndicatorUtils {
         response.set(IndicatorEPConstants.ADM_LEVEL_NAME, indicator.getAdmLevel().getLabel());
         response.set(IndicatorEPConstants.DO_GAP_ANALYSIS, doingGapAnalysis);
         response.set(IndicatorEPConstants.INDICATOR_TYPE_ID, indicator.getIndicatorType() == null ? null : indicator.getIndicatorType().getId());
+        response.set(IndicatorEPConstants.FIELD_ZERO_CATEGORY_ENABLED, indicator.getZeroCategoryEnabled());
         
         // build locations values
         List<JsonBean> values = new ArrayList<>();

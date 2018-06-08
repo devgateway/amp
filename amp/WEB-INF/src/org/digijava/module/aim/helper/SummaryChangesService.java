@@ -26,6 +26,8 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
@@ -36,6 +38,9 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.message.jobs.AmpJobsUtil;
 import org.hibernate.jdbc.Work;
+
+import static java.util.Collections.emptyList;
+import static java.util.Collections.emptySet;
 
 /**
  * @author Aldo Picca
@@ -70,10 +75,10 @@ public final class SummaryChangesService {
      * @param activities activities list.
      * @return list of approvers and activities.
      */
-    public static Map<String, Collection<AmpActivityVersion>> getValidators(LinkedHashMap<Long,
+    public static Map<String, Set<AmpActivityVersion>> getValidators(LinkedHashMap<Long,
             Collection<SummaryChange>> activities) {
 
-        Map<String, Collection<AmpActivityVersion>> results = new LinkedHashMap<>();
+        Map<String, Set<AmpActivityVersion>> results = new LinkedHashMap<>();
 
 
         //we first need to fetch all ws in which we can see the activities 
@@ -83,18 +88,19 @@ public final class SummaryChangesService {
             activities.keySet().stream().forEach(activityId -> {
                 AmpActivityVersion currentActivity = ActivityUtil.loadAmpActivity(activityId);
                 //we go and see every ws in which the activity is visible
-                activityWs.get(activityId).stream().forEach(strTeamId -> {
-                    approversAndManagers.get(strTeamId).stream().forEach(approver -> {
-                        //we add the activity to the users who will get notifications
-                        if (results.get(approver) == null) {
-                            results.put(approver, new ArrayList<AmpActivityVersion>());
-                        }
-                        results.get(approver).add(currentActivity);
-                    });
-                });
+                Optional.ofNullable(activityWs.get(activityId)).orElse(emptySet()).stream()
+                        .forEach(strTeamId -> {
+                            Optional.ofNullable(approversAndManagers.get(strTeamId)).orElse(emptyList()).
+                                    stream().forEach(approver -> {
+                                //we add the activity to the users who will get notifications
+                                if (results.get(approver) == null) {
+                                    results.put(approver, new LinkedHashSet<AmpActivityVersion>());
+                                }
+                                results.get(approver).add(currentActivity);
+                            });
+                        });
             });
-        }
-        else {
+        } else {
             LOGGER.debug("There are no visible activities");
         }
 
@@ -123,7 +129,7 @@ public final class SummaryChangesService {
             List<AmpTeamMember> ampTeamMembers = TeamUtil.getAmpTeamMembers(ampTeamMemberId.value);
             for (AmpTeamMember atm : ampTeamMembers) {
                 TeamUtil.setupFiltersForLoggedInUser(TLSUtils.getRequest(), atm);
-                TeamMemberUtil.getActivitiesWsByTeamMember(activitiesWs, atm);
+                TeamMemberUtil.getActivitiesWsByTeamMemberComputed(activitiesWs, atm);
             }
         }
         return activitiesWs;
@@ -142,10 +148,11 @@ public final class SummaryChangesService {
         final String qryApproversAndManagers = "select t.amp_team_id as amp_team_id, u.email as email "
                 + "from amp_team t, amp_team_member atm, amp_team_member_roles tmr, amp_summary_notification_settings"
                 + " sns, dg_user u where t.amp_team_id =atm.amp_team_id "
-                + "and atm.amp_member_role_id = tmr.amp_team_mem_role_id  "
-                + "and t.amp_team_id = sns.amp_team_id and atm.user_ = u.id "
-                + "and ((case when sns.notify_approver then tmr.approver and tmr.team_head = false end ) "
-                + "or (case when sns.notify_manager then tmr.approver and tmr.team_head end )) ";
+                + " and atm.amp_member_role_id = tmr.amp_team_mem_role_id  "
+                + " and t.amp_team_id = sns.amp_team_id and atm.user_ = u.id "
+                + " AND    (atm.deleted = false or atm.deleted is null) "
+                + " and ((case when sns.notify_approver then tmr.approver and tmr.team_head = false end ) "
+                + " or (case when sns.notify_manager then tmr.approver and tmr.team_head end )) ";
 
         PersistenceManager.getSession().doWork(new Work() {
             public void execute(Connection conn) throws SQLException {

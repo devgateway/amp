@@ -7,9 +7,9 @@ function getGVF(dataset, numClass, zeroCategoryEnabled) {
     // get the breaks:
     // THIS IS WHAT IS USED TO RENDER THE MAP:
     var breaks;  
-    if (zeroCategoryEnabled == true) {
+    if (zeroCategoryEnabled === true) {
     	dataList = _.reject(dataList, function(data){ return data == 0; });
-    	breaks = getJenksBreaks(dataList, numClass, zeroCategoryEnabled);
+    	breaks = getJenksBreaks(dataList, numClass - 1, zeroCategoryEnabled);
     } else {
     	breaks = getJenksBreaks(dataList, numClass, zeroCategoryEnabled);
     }
@@ -42,8 +42,11 @@ function getGVF(dataset, numClass, zeroCategoryEnabled) {
         SDCM += preSDCM
     }
     var varFit = (SDAM - SDCM) / SDAM;
-    //console.log("varianceFit:", varFit)
-    var result = [];   
+    
+    var result = [];
+    if (zeroCategoryEnabled == true) {
+    	result.push([0, 0]);
+    }
     for ( var i = 0; i < breaks.length - 1; i++) {
         result.push([breaks[i], breaks[i + 1]])
     }

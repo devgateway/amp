@@ -62,8 +62,6 @@ public class SummaryChangeNotificationJob extends ConnectionCleaningJob implemen
                                 SummaryChangeHtmlRenderer renderer = new SummaryChangeHtmlRenderer(activity,
                                         changesList, user.getRegisterLanguage().getCode());
                                 if (body.length() == 0) {
-                                    body.append("<br/>");
-                                    body.append("<br/><br/><br/>");
                                     body.append(renderer.renderWithLegend());
                                 } else {
                                     body.append(renderer.render());

@@ -17,13 +17,16 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
+import org.dgfoundation.amp.newreports.CompleteWorkspaceFilter;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
@@ -31,7 +34,6 @@ import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpAnalyticalReport;
-import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpDesktopTabSelection;
@@ -44,7 +46,6 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.dbentity.AmpCalendarAttendee;
-import org.digijava.module.calendar.dbentity.Calendar;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -1465,17 +1466,33 @@ public class TeamMemberUtil {
         }
     }
 
+    public static void getActivitiesWsByTeamMemberComputed(Map<Long, Set<String>> activitiesWs, AmpTeamMember atm) {
+        CompleteWorkspaceFilter completeWSFilter = (CompleteWorkspaceFilter)
+                TLSUtils.getRequest().getSession().getAttribute(Constants.COMPLETE_TEAM_FILTER);
+        if (completeWSFilter != null) {
+            TeamMember teamMember = new TeamMember(atm);
+            Set<Long> visibleActivitiesIds = completeWSFilter.computeIds();
+            processActivitiesId(activitiesWs, teamMember, Optional.ofNullable(visibleActivitiesIds).
+                    orElse(Collections.emptySet()).stream());
+        }
+    }
+
     public static void getActivitiesWsByTeamMember(Map<Long, Set<String>> activitiesWs, AmpTeamMember atm) {
         TeamMember teamMember = new TeamMember(atm);
         String wsFilterQuery = WorkspaceFilter.generateWorkspaceFilterQuery(teamMember);
         List<Long> editableIds = ActivityUtil.getEditableActivityIds(teamMember, wsFilterQuery);
+        processActivitiesId(activitiesWs, teamMember, Optional.ofNullable(editableIds).orElse(Collections.emptyList()
+        ).stream());
 
-        for (Long actId : editableIds) {
+    }
+
+    private static void processActivitiesId(Map<Long, Set<String>> activitiesWs, TeamMember teamMember,
+                                            Stream<Long> activityStream) {
+        activityStream.forEach(actId -> {
             if (!activitiesWs.containsKey(actId)) {
                 activitiesWs.put(actId, new HashSet<String>());
             }
-
             activitiesWs.get(actId).add(teamMember.getTeamId().toString());
-        }
+        });
     }
 }

@@ -399,9 +399,10 @@ public class ActivityUtil {
     }
     
     private static void updateFiscalYears(AmpActivityVersion a) {
-        List<AmpAPIFiscalYear> fiscalYears = a.getFiscalYears();
+        Set<AmpAPIFiscalYear> actFiscalYears = a.getFiscalYears();
         
-        if (!CollectionUtils.isEmpty(fiscalYears)) {
+        if (!CollectionUtils.isEmpty(actFiscalYears)) {
+            List<AmpAPIFiscalYear> fiscalYears = new ArrayList<>(actFiscalYears);
             fiscalYears.sort(Comparator.comparing(AmpAPIFiscalYear::getYear));
             List<String> years = fiscalYears.stream().map(fy -> fy.getYear().toString()).collect(Collectors.toList());
             a.setFY(StringUtils.join(years, ","));

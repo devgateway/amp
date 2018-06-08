@@ -488,7 +488,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                     for (String year : years) {
                         fiscalYears.add(new AmpAPIFiscalYear(Long.parseLong(year)));
                     }
-                    activity.setFiscalYears(fiscalYears);
+                    activity.setFiscalYears(new HashSet<>(fiscalYears));
                 } catch (NumberFormatException e) {
                     logger.error("Error in parsing numbers of FY field - " + activity.getFY(), e);
                 }

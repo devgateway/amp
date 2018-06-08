@@ -39,6 +39,7 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.message.jobs.AmpJobsUtil;
 import org.hibernate.jdbc.Work;
 
+import static java.util.Collections.emptyList;
 import static java.util.Collections.emptySet;
 
 /**
@@ -89,7 +90,8 @@ public final class SummaryChangesService {
                 //we go and see every ws in which the activity is visible
                 Optional.ofNullable(activityWs.get(activityId)).orElse(emptySet()).stream()
                         .forEach(strTeamId -> {
-                            approversAndManagers.get(strTeamId).stream().forEach(approver -> {
+                            Optional.ofNullable(approversAndManagers.get(strTeamId)).orElse(emptyList()).
+                                    stream().forEach(approver -> {
                                 //we add the activity to the users who will get notifications
                                 if (results.get(approver) == null) {
                                     results.put(approver, new LinkedHashSet<AmpActivityVersion>());

@@ -100,6 +100,6 @@ public class ActivityEPConstants {
             "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*((\\.[A-Za-z]{2,}){1}$)";
     public static final String REGEX_PATTERN_PHONE = 
             "^\\+?\\d?(\\([\\d]{1,3}\\))?[\\s\\d\\-\\/]*\\d+[\\s\\d\\-\\/]*";
-    public static final String REGEX_PATTERN_PHONE_EXTENSION = "\\d{1,4}";
+    public static final String REGEX_PATTERN_PHONE_EXTENSION = "^\\d{1,4}$";
     
 }

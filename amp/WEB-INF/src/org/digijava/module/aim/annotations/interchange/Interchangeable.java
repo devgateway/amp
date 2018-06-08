@@ -98,8 +98,8 @@ public @interface Interchangeable {
     boolean uniqueConstraint() default false;
     boolean percentageConstraint() default false;
 
-    boolean regexConstraint() default false;
-    
     int sizeLimit() default 1;
+
+    RegexDiscriminator[] regexPatterns() default {};
 
 }

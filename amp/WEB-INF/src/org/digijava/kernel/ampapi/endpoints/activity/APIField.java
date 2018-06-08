@@ -71,9 +71,6 @@ public class APIField {
     @JsonProperty(ActivityEPConstants.REGEX_PATTERN)
     private String regexPattern;
     
-    @JsonProperty(ActivityEPConstants.REGEX_CONSTRAINT)
-    private String regexConstraint;
-
     @JsonProperty(ActivityEPConstants.PERCENTAGE)
     private Boolean percentage;
     
@@ -235,14 +232,6 @@ public class APIField {
         this.regexPattern = regexPattern;
     }
     
-    public String getRegexConstraint() {
-        return regexConstraint;
-    }
-
-    public void setRegexConstraint(String regexConstraint) {
-        this.regexConstraint = regexConstraint;
-    }
-
     public Boolean getPercentage() {
         return percentage;
     }
@@ -268,6 +257,6 @@ public class APIField {
                 + ", uniqueConstraint='" + uniqueConstraint + '\'' + ", percentageConstraint='" + percentageConstraint
                 + '\'' + ", treeCollectionConstraint=" + treeCollectionConstraint + ", fieldLength=" + fieldLength
                 + ", children=" + children + ", dependencies=" + dependencies + ", percentage=" + percentage 
-                + ", regex_pattern=" + regexPattern + ", regex_constraint=" + regexConstraint + "}";
+                + ", regex_pattern=" + regexPattern + "}";
     }
 }

@@ -79,15 +79,15 @@ public class AmpContact implements Comparable, Serializable, Cloneable, Versiona
 
     @Interchangeable(fieldTitle = "Properties")
     @InterchangeableDiscriminator(discriminatorField = "name", settings = {
-            @Interchangeable(fieldTitle = "email", discriminatorOption = Constants.CONTACT_PROPERTY_NAME_EMAIL,
-                    sizeLimit = ContactEPConstants.CONTACT_PROPERTY_MAX_SIZE,
-                    regexPattern = ActivityEPConstants.REGEX_PATTERN_EMAIL, importable = true),
-            @Interchangeable(fieldTitle = "phone", discriminatorOption = Constants.CONTACT_PROPERTY_NAME_PHONE,
-                    sizeLimit = ContactEPConstants.CONTACT_PROPERTY_MAX_SIZE,
-                    regexPattern = ActivityEPConstants.REGEX_PATTERN_PHONE, importable = true),
-            @Interchangeable(fieldTitle = "fax", discriminatorOption = Constants.CONTACT_PROPERTY_NAME_FAX,
-                    sizeLimit = ContactEPConstants.CONTACT_PROPERTY_MAX_SIZE,
-                    regexPattern = ActivityEPConstants.REGEX_PATTERN_PHONE, importable = true)
+            @Interchangeable(fieldTitle = ContactEPConstants.EMAIL, 
+                    discriminatorOption = Constants.CONTACT_PROPERTY_NAME_EMAIL,
+                    sizeLimit = ContactEPConstants.CONTACT_PROPERTY_MAX_SIZE, importable = true),
+            @Interchangeable(fieldTitle = ContactEPConstants.PHONE, 
+                    discriminatorOption = Constants.CONTACT_PROPERTY_NAME_PHONE,
+                    sizeLimit = ContactEPConstants.CONTACT_PROPERTY_MAX_SIZE, importable = true),
+            @Interchangeable(fieldTitle = ContactEPConstants.FAX, 
+                    discriminatorOption = Constants.CONTACT_PROPERTY_NAME_FAX,
+                    sizeLimit = ContactEPConstants.CONTACT_PROPERTY_MAX_SIZE, importable = true)
     })
     private SortedSet<AmpContactProperty> properties;
 

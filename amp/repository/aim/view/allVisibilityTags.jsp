@@ -1112,6 +1112,7 @@ deleted 6 fields, do not reinsert
 <field:display name="Mandatory Organization Code" feature="Organization Form"></field:display>
 
   <!-- GPI  -->
+<module:display name="GPI Data Entry" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="GPI Reports" parentModule="REPORTING"></module:display>
 <module:display name="GPI" parentModule="GPI Reports"></module:display>
 <module:display name="GPI 2014" parentModule="GPI Reports"></module:display>

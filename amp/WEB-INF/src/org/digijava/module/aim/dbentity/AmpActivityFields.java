@@ -604,7 +604,7 @@ LoggerIdentifiable, Cloneable {
             required = "/Activity Form/Identification/Budget Extras/Required Validator for fy",
             dependencies = {InterchangeDependencyResolver.ON_BUDGET_KEY}, 
             validators = @Validators (unique = "/Activity Form/Identification/Budget Extras/FY"))
-    protected List<AmpAPIFiscalYear> fiscalYears;
+    protected Set<AmpAPIFiscalYear> fiscalYears;
     
     @Interchangeable(fieldTitle = "Vote", importable = true, fmPath = "/Activity Form/Identification/Budget Extras/Vote", 
             dependencies={InterchangeDependencyResolver.ON_BUDGET_KEY})
@@ -2118,11 +2118,11 @@ LoggerIdentifiable, Cloneable {
             this.deleted = deleted;
         }
         
-        public List<AmpAPIFiscalYear> getFiscalYears() {
+        public Set<AmpAPIFiscalYear> getFiscalYears() {
             return fiscalYears;
         }
 
-        public void setFiscalYears(List<AmpAPIFiscalYear> fiscalYears) {
+        public void setFiscalYears(Set<AmpAPIFiscalYear> fiscalYears) {
             this.fiscalYears = fiscalYears;
         }
 

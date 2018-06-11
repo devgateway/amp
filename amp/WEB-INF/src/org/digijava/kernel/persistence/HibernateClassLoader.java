@@ -28,6 +28,8 @@ import org.digijava.kernel.config.DigiConfig;
 import org.digijava.kernel.config.HibernateClass;
 import org.digijava.kernel.config.HibernateClasses;
 import org.digijava.kernel.config.moduleconfig.ModuleConfig;
+import org.digijava.kernel.services.AmpOfflineVersion;
+import org.digijava.kernel.services.AmpOfflineVersionType;
 import org.digijava.kernel.util.I18NHelper;
 import org.digijava.module.translation.hibernate.TranslatorInterceptor;
 import org.hibernate.HibernateException;
@@ -152,6 +154,7 @@ public class HibernateClassLoader {
             cfg.addSqlFunction("count", new ClassicCountFunction());
             cfg.addSqlFunction("avg", new ClassicAvgFunction());
             cfg.addSqlFunction("sum", new ClassicSumFunction());
+            cfg.registerTypeOverride(new AmpOfflineVersionType(), new String[]{AmpOfflineVersion.class.getName()});
         }
 
         if (classes == null) {

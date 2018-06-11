@@ -2,11 +2,10 @@ package org.digijava.module.aim.helper ;
 
 import java.awt.Color;
 
+public final class Constants {
 
-
-
-public class Constants
-{
+    private Constants() {
+    }
 
     public static class GlobalSettings {
         public static final String YEAR_RANGE_START         = "Year Range Start";
@@ -447,5 +446,7 @@ public class Constants
     public static final String COMPARATOR_REPORTING_DATE_ASC = "4";
 
 
-    public static final String AUTOMATIC_VALIDATION_JOB_CLASS_NAME = "org.digijava.module.message.jobs.ActivityAutomaticValidationJob" ;
+    public static final String AUTOMATIC_VALIDATION_JOB_CLASS_NAME =
+            "org.digijava.module.message.jobs.ActivityAutomaticValidationJob";
+
 }

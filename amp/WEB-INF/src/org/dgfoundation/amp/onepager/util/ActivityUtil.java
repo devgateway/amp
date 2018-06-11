@@ -1239,22 +1239,27 @@ public class ActivityUtil {
         Map <Long,Boolean> savedContacts = new HashMap <Long,Boolean> ();
         
         TeamMember teamMember = TeamMemberUtil.getLoggedInTeamMember();
-        AmpTeamMember creator = TeamMemberUtil.getAmpTeamMember(teamMember.getMemberId());
+        AmpTeamMember creator = teamMember != null ? TeamMemberUtil.getAmpTeamMember(teamMember.getMemberId()) : null;
       
         //add or edit activity contact and amp contact
-        if(activityContacts != null && activityContacts.size() > 0) {
+        if (activityContacts != null && activityContacts.size() > 0) {
             for (AmpActivityContact activityContact : activityContacts) {
                 Long contactId = activityContact.getContact().getId();
-                //if the contact already exists on the DB, and was not saved already
-                if (contactId!=null && savedContacts.get(contactId) == null) {
+                // if the contact already exists on the DB, and was not saved
+                // already
+                if (contactId != null && savedContacts.get(contactId) == null) {
                     savedContacts.put(activityContact.getContact().getId(), false);
                 }
-               // save the contact first, if the contact is new or if it is not new but has not been saved already.
-               if (contactId == null || (newActivity && !savedContacts.get(contactId))) {
-                activityContact.getContact().setCreator(creator);
-                session.saveOrUpdate(activityContact.getContact());
-                savedContacts.put(activityContact.getContact().getId(), true);
-               }
+                // save the contact first, if the contact is new or if it is not
+                // new but has not been saved already.
+                if (contactId == null || (newActivity && !savedContacts.get(contactId))) {
+                    if (creator == null) {
+                        throw new RuntimeException("Contact creator cannot be null");
+                    }
+                    activityContact.getContact().setCreator(creator);
+                    session.saveOrUpdate(activityContact.getContact());
+                    savedContacts.put(activityContact.getContact().getId(), true);
+                }
                 if (activityContact.getId() == null) {
                     session.saveOrUpdate(activityContact);
                     if (!newActivity) {

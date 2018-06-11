@@ -1,5 +1,7 @@
 package org.digijava.module.aim.action;
 
+import static  org.digijava.kernel.util.SiteUtils.getDefaultLanguages;
+
 import static org.digijava.module.aim.helper.Constants.CURRENT_MEMBER;
 
 import java.awt.*;
@@ -1758,6 +1760,8 @@ public class ExportActivityToWord extends Action {
             Set<AmpStructure> structures = act.getStructures();
 
             ArrayList<AmpStructure> res = new ArrayList<AmpStructure>();
+
+            DecimalFormat df = new DecimalFormat("###.######");
             for (AmpStructure struc : structures) {
                 ExportSectionHelper eshProjectCostTable = new ExportSectionHelper(
                         null, false).setWidth(WIDTH).setAlign("left");
@@ -1773,13 +1777,13 @@ public class ExportActivityToWord extends Action {
                         .getDescription()));
                 if (struc.getLatitude() != null) {
                     eshProjectCostTable.addRowData(new ExportSectionHelperRowData(
-                            "Latitude", null, null, true).addRowData(struc
-                            .getLatitude()));
+                            "Latitude", null, null, true).addRowData(df.format(struc
+                            .getLatitude())));
                 }
                 if (struc.getLongitude() != null) {
                     eshProjectCostTable.addRowData(new ExportSectionHelperRowData(
-                            "Longitude", null, null, true).addRowData(struc
-                            .getLongitude()));
+                            "Longitude", null, null, true).addRowData(df.format(struc
+                            .getLongitude())));
                 }
 
                 if (struc.getCoordinates() != null && struc.getCoordinates().size() > 0) {
@@ -3986,11 +3990,13 @@ public class ExportActivityToWord extends Action {
         table.addCell(cell);
     }
 
-    private String  getEditTagValue(HttpServletRequest request,String editKey) throws Exception{
+    private String getEditTagValue(HttpServletRequest request, String editKey) throws Exception {
         Site site = RequestUtils.getSite(request);
-        String editorBody = org.digijava.module.editor.util.DbUtil.getEditorBody(site,editKey,RequestUtils.getNavigationLanguage(request).getCode());
+        String editorBody = org.digijava.module.editor.util.DbUtil.getEditorBody(site, editKey,
+                RequestUtils.getNavigationLanguage(request).getCode());
         if (editorBody == null) {
-            editorBody = org.digijava.module.editor.util.DbUtil.getEditorBody(site,editKey,SiteUtils.getDefaultLanguages(site).getCode());
+            editorBody = org.digijava.module.editor.util.DbUtil.getEditorBody(site, editKey,
+                    getDefaultLanguages(site).getCode());
         }
         return editorBody;
     }

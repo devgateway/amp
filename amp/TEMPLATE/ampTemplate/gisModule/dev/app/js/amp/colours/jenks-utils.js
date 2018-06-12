@@ -44,7 +44,7 @@ function getGVF(dataset, numClass, zeroCategoryEnabled) {
     var varFit = (SDAM - SDCM) / SDAM;
     
     var result = [];
-    if (zeroCategoryEnabled == true) {
+    if (zeroCategoryEnabled === true) {
     	result.push([0, 0]);
     }
     for ( var i = 0; i < breaks.length - 1; i++) {

@@ -74,7 +74,9 @@ public class ObjectImporter {
             Field field = ReflectionUtil.getField(obj, fieldDef.getFieldNameInternal());
             if (Collection.class.isAssignableFrom(field.getType())) {
                 Collection collection = (Collection) PropertyUtils.getProperty(obj, fieldDef.getFieldNameInternal());
-                collection.clear();
+                if (collection != null) {
+                    collection.clear();
+                }
             } else {
                 PropertyUtils.setProperty(obj, fieldDef.getFieldNameInternal(), null);
             }

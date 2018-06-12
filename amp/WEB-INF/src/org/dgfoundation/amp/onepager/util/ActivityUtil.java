@@ -1253,10 +1253,9 @@ public class ActivityUtil {
                 // save the contact first, if the contact is new or if it is not
                 // new but has not been saved already.
                 if (contactId == null || (newActivity && !savedContacts.get(contactId))) {
-                    if (creator == null) {
-                        throw new RuntimeException("Contact creator cannot be null");
+                    if (contactId == null) {
+                        activityContact.getContact().setCreator(creator);
                     }
-                    activityContact.getContact().setCreator(creator);
                     session.saveOrUpdate(activityContact.getContact());
                     savedContacts.put(activityContact.getContact().getId(), true);
                 }

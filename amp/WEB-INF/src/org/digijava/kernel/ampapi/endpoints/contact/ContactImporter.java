@@ -13,6 +13,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorPr
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.ampapi.filters.AmpOfflineModeHolder;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
@@ -134,4 +135,10 @@ public class ContactImporter extends ObjectImporter {
     public AmpContact getContact() {
         return contact;
     }
+    
+    @Override
+    protected boolean ignoreUnknownFields() {
+        return AmpOfflineModeHolder.isAmpOfflineMode();
+    }
+    
 }

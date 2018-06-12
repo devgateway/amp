@@ -3,7 +3,6 @@
  */
 package org.digijava.kernel.ampapi.endpoints.activity.validators;
 
-import java.util.Collection;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -54,7 +53,7 @@ public class RegexPatternValidator extends InputValidator {
         Pattern pattern = Pattern.compile(regexPattern);
         Matcher matcher = pattern.matcher(value);
         
-        return matcher.find();
+        return matcher.matches();
     }
 
 }

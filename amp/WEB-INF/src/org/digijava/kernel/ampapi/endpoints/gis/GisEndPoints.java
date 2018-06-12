@@ -207,6 +207,7 @@ public class GisEndPoints implements ErrorReportingEndpoint {
             i.setId(ampMapConfig.getId());
             i.setTitle(ampMapConfig.getConfigName());
             i.setLink(ampMapConfig.getMapUrl());
+            i.setLegendNotes(ampMapConfig.getLegendNotes());
             String type = MapConstants.mapTypeNames.get(ampMapConfig
                     .getMapType());
             i.setType(type);

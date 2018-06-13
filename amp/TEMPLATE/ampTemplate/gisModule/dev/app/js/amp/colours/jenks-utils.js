@@ -5,7 +5,6 @@ var _ = require('underscore');
 function getGVF(dataset, numClass, zeroCategoryEnabled) {
     var dataList = _.pluck(dataset, 'value');
     var dataHasZero = dataList.includes(0);
-    debugger
     // get the breaks:
     // THIS IS WHAT IS USED TO RENDER THE MAP:
     var breaks;  

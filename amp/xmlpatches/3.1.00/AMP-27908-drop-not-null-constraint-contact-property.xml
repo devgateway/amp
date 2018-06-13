@@ -10,7 +10,7 @@
         <script>
             <lang delimiter=";" type="postgres"><![CDATA[
             
-                    ALTER TABLE amp_contact_properties ALTER COLUMN contact_id SET NOT NULL;
+                    ALTER TABLE amp_contact_properties ALTER COLUMN contact_id DROP NOT NULL;
                 
             ]]></lang>
         </script>

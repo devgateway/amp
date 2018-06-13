@@ -50,7 +50,7 @@ public class ContactImporter extends ObjectImporter {
         
         if (contactJsonId != null) {
             if (contactId != null) {
-                if (contactId != getLongOrNull(contactJsonId)) {
+                if (!contactId.equals(getLongOrNull(contactJsonId))) {
                     return singletonList(ContactErrors.FIELD_INVALID_VALUE.withDetails(ContactEPConstants.ID));
                 }
             } else {
@@ -92,7 +92,6 @@ public class ContactImporter extends ObjectImporter {
             }
 
             setupBeforeSave(contact, createdBy);
-
             PersistenceManager.getSession().saveOrUpdate(contact);
 
             PersistenceManager.flushAndCommit(PersistenceManager.getSession());

@@ -33,11 +33,14 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.security.ResourcePermission;
 import org.digijava.kernel.security.SitePermission;
 
+import com.google.common.collect.ImmutableSet;
+
 public class Group
     extends Entity
     implements Principal, Serializable {
 
     public static final String ADMINISTRATORS = "ADM";
+    public static final String SUPER_ADMINISTRATORS = "SADM";
     public static final String MEMBERS = "MEM";
     public static final String TRANSLATORS = "TRN";
     public static final String EDITORS = "EDT";
@@ -45,6 +48,7 @@ public class Group
     public static final String NATIONAL_COORDINATORS = "NCO";
 
     public static final String ADMINISTRATORS_NAME = "Administrators";
+    public static final String SUPER_ADMINISTRATORS_NAME = "Super Administrators";
     public static final String MEMBERS_NAME = "Members";
     public static final String TRANSLATORS_NAME = "Translators";
     public static final String EDITORS_NAME = "Editors";
@@ -56,6 +60,7 @@ public class Group
     static {
         defaultGroups = new HashMap();
         defaultGroups.put(ADMINISTRATORS, ADMINISTRATORS_NAME);
+        defaultGroups.put(SUPER_ADMINISTRATORS, SUPER_ADMINISTRATORS_NAME);
         defaultGroups.put(MEMBERS, MEMBERS_NAME);
         defaultGroups.put(TRANSLATORS, TRANSLATORS_NAME);
         defaultGroups.put(EDITORS, EDITORS_NAME);
@@ -68,6 +73,8 @@ public class Group
     private Set users;
     private Long parentId;
     private boolean inheritSecurity;
+    
+    public static final Set<String> ADMIN_GROUPS = ImmutableSet.of(Group.ADMINISTRATORS, Group.SUPER_ADMINISTRATORS);
 
     public Group() {
     }
@@ -125,6 +132,14 @@ public class Group
         return key.equals(ADMINISTRATORS);
     }
 
+    public boolean isSuperAdminGroup() {
+        if (key == null) {
+            return false;
+        }
+
+        return key.equals(SUPER_ADMINISTRATORS);
+    }
+
     public boolean isMemberGroup() {
         if( key == null ) return false;
         return key.equals(MEMBERS);
@@ -152,24 +167,19 @@ public class Group
      * @return Returns required action(s)
      */
     public String getRequiredActions() {
-        if (isAdminGroup()) {
+        if (isSuperAdminGroup()) {
+            return ResourcePermission.SUPER_ADMIN;
+        } else if (isAdminGroup()) {
             return ResourcePermission.ADMIN;
-        }
-        else
-        if (isMemberGroup()) {
+        } else if (isMemberGroup()) {
             return SitePermission.READ;
-        }
-        else
-        if (isTranslatorGroup()) {
+        } else if (isTranslatorGroup()) {
             return SitePermission.TRANSLATE;
-        }
-        else
-        if (isEditorGroup()) {
+        } else if (isEditorGroup()) {
             return SitePermission.WRITE;
         }
-        else
-            return null;
 
+        return null;
     }
 
     public Set getUsers() {

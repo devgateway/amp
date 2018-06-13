@@ -6,6 +6,8 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
+<jsp:include page="/repository/aim/view/strongPassword.jsp"  />
+
 <digi:instance property="aimChangePasswordForm" />
 <script language="JavaScript">
 function isVoid(name){
@@ -57,31 +59,32 @@ function validate(){
 <table width="100%" valign="top" align="left" cellpadding="0" cellspacing="0" border="0">
 <tr>
 <td width="100%" valign="top" align="left">
-<table bgColor=#ffffff border="0" cellpadding="0" cellspacing="0" width="100%">
+<table bgColor=#ffffff border="0" cellpadding="5" cellspacing="1" width="100%">
 	<tr>
 		<td width="5%">&nbsp;
 		</td>
 		<td align=left valign="top" width="60%">
 			<digi:errors/>
+			<jsp:include page="/repository/aim/view/strongPasswordRulesLegend.jsp"  />
 		</td>
 	</tr>
 	<tr>
 		<td width="5%">&nbsp;
 		</td>
 		<td align=left valign="top" width="60%"><br>
-			<table border="0" cellPadding=5 cellspacing="0" width="100%">
+			<table border="0" cellPadding=5 cellspacing="0" width="80%">
 				
 				<tr>
 					<td width="3">&nbsp;</td>
-					<td align=right class=f-names noWrap width="40%" valign=top>
+					<td class=f-names style="padding-bottom:10px;" noWrap width="40%" valign=top>
 <!--						<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>-->
+						<span style="color:#FF0000;">*</span>
 						<digi:trn key="aim:email">
 							UserId
-						</digi:trn>:<span style="color:#FF0000;">*</span>						
+						</digi:trn>
 					</td>
-					</td>
-					<td align="left">
-						<html:text property="userId" size="20" /><br>
+					<td align="left" style="padding-bottom:10px;">
+						<html:text property="userId" styleClass="pwd_username" size="20" /><br>
 						<font color="red" style="font-size:11px;">
 						<digi:trn key="aim:userIdExample1">
 						e.g. yourname@emailaddress.com
@@ -91,32 +94,37 @@ function validate(){
 				</tr>
 				<tr>
 					<td width="3">&nbsp;</td>
-					<td align=right class=f-names noWrap>
+					<td class=f-names style="padding-bottom:10px;" noWrap>
 <!--						<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>-->
-						<digi:trn key="aim:oldPassword">Old Password</digi:trn>: <span style="color:#FF0000;">*</span>
+						<span style="color:#FF0000;">*</span> <digi:trn key="aim:oldPassword">Old Password</digi:trn>
 					</td>
-					<td align="left">
+					<td align="left" style="padding-bottom:10px;">
 						<html:password property="oldPassword" size="20" />
 					</td>
 				</tr>
 				<tr>
 					<td width="3">&nbsp;</td>
-					<td align=right class=f-names noWrap>
+					<td class=f-names style="padding-bottom:10px;" valign="top" noWrap>
 <!--						<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>-->
-						<digi:trn key="aim:newPassword">New Password</digi:trn>: <span style="color:#FF0000;">*</span>						
+						<span style="color:#FF0000;">*</span> <digi:trn key="aim:newPassword">New Password</digi:trn>
 					</td>
-					<td align="left">
-						<html:password property="newPassword" size="20" />
+					<td align="left" style="padding-bottom:10px;">
+							<html:password property="newPassword" size="20" />
+						<div style="display: none" class="pwd_container" id="pwd_container">
+							<span class="pwstrength_viewport_verdict">&nbsp;</span>
+							<span class="pwstrength_viewport_progress"></span>
+						</div>
 					</td>
 				</tr>
 				<tr>
 					<td width="3">&nbsp;</td>
-					<td align=right class=f-names noWrap>
+					<td class=f-names style="padding-bottom:10px;" noWrap>
 <!--						<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>-->
-						<digi:trn key="aim:confirmNewPassword">Confirm new Password</digi:trn>: <span style="color:#FF0000;">*</span>						
+						<span style="color:#FF0000;">*</span> <digi:trn key="aim:confirmNewPassword">Confirm new
+						Password</digi:trn>
 					</td>
-					<td align="left">
-						<html:password property="confirmNewPassword" size="20" />
+					<td align="left" style="padding-bottom:10px;">
+						<html:password property="confirmNewPassword" maxlength="16" size="20" />
 					</td>
 				</tr>
 

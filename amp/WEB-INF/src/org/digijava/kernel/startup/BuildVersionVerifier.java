@@ -99,33 +99,27 @@ public class BuildVersionVerifier {
         //if it's the first run since version tracking was added, just wait for the XML patcher to add the initial startup afterwards
         if (!SQLUtils.tableExists("amp_global_event_log"))
             return; 
-        PersistenceManager.getSession().doWork(new Work(){
-            @Override
-            public void execute(Connection conn) throws SQLException {  
-                List<String> columnNames = Arrays.asList("event_name", "message", "amp_version", "amp_version_encoded");
-                List<Object> values = new ArrayList<Object>(Arrays.asList(eventName, message, codeVersion.version, codeVersion.encodedVersion));
-                SQLUtils.insert(conn, "amp_global_event_log", "id", "amp_global_event_log_id_seq", columnNames, Arrays.asList(values));
-            }
+        PersistenceManager.doWorkInTransaction(conn -> {
+            List<String> columnNames = Arrays.asList("event_name", "message", "amp_version", "amp_version_encoded");
+            List<Object> values = new ArrayList<Object>(Arrays.asList(eventName, message, codeVersion.version, codeVersion.encodedVersion));
+            SQLUtils.insert(conn, "amp_global_event_log", "id", "amp_global_event_log_id_seq", columnNames, Arrays.asList(values));
         });
-    }    
+    }
     
     private AmpVersion getLatestAmpStartupVersion() {
         if (!SQLUtils.tableExists("amp_global_event_log"))
             return new AmpVersion(null, null);
         final String query = "SELECT amp_version, amp_version_encoded FROM amp_global_event_log "
                 + "WHERE amp_version_encoded IN (SELECT max(amp_version_encoded) FROM amp_global_event_log) LIMIT 1";
-        return PersistenceManager.getSession().doReturningWork(new ReturningWork<AmpVersion>(){
-            @Override
-            public AmpVersion execute(Connection conn) throws SQLException {
-                RsInfo rsi = SQLUtils.rawRunQuery(conn, query, null);
-                String version = null;
-                Long versionEncoded = null;
-                if (rsi.rs.next()) {
-                    version = rsi.rs.getString(1);
-                    versionEncoded = rsi.rs.getLong(2); 
-                }
-                return new AmpVersion(version, versionEncoded);
+        return PersistenceManager.doReturningWorkInTransaction(conn -> {
+            RsInfo rsi = SQLUtils.rawRunQuery(conn, query, null);
+            String version = null;
+            Long versionEncoded = null;
+            if (rsi.rs.next()) {
+                version = rsi.rs.getString(1);
+                versionEncoded = rsi.rs.getLong(2);
             }
+            return new AmpVersion(version, versionEncoded);
         });
     }
     

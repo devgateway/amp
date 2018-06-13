@@ -11,10 +11,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.ampregistry.AmpInstallation;
 import org.digijava.kernel.ampregistry.AmpRegistryClient;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.entity.Message;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.SiteDomain;
@@ -28,6 +30,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.QuartzJobClassUtils;
 import org.digijava.module.aim.util.QuartzJobUtils;
 import org.digijava.module.message.jobs.ConnectionCleaningJob;
+import org.hibernate.jdbc.Work;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
@@ -45,7 +48,10 @@ public class RegisterWithAmpRegistryJob extends ConnectionCleaningJob {
     private static final String AMP_REGISTRY_SECRET_TOKEN_ENV_NAME = "AMP_REGISTRY_SECRET_TOKEN";
     private static final String AMP_REGISTRY_PRIVATE_KEY_ENV_NAME = "AMP_REGISTRY_PRIVATE_KEY";
     
-    private static final String AMP_DEVELOPMENT_ENV_NAME = "AMP_DEVELOPMENT";
+    public static final String AMP_DEVELOPMENT_ENV_NAME = "AMP_DEVELOPMENT";
+    
+    public static final String REGISTRY_STG_URL = "https://amp-registry-stg.ampsite.net/";
+    public static final String OFFLINE_ENABLED = "true";
 
     private static final int JOB_FIRST_START_DELAY_IN_MIN = 5;
 
@@ -54,7 +60,12 @@ public class RegisterWithAmpRegistryJob extends ConnectionCleaningJob {
         if (isAmpOfflineEnabled()) {
             String secretToken = System.getenv(AMP_REGISTRY_SECRET_TOKEN_ENV_NAME);
             
-            if (secretToken == null && isDevServer()) {
+            if (isDevServer()) {
+                String registryUrl = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMP_REGISTRY_URL);
+                if (!registryUrl.equals(REGISTRY_STG_URL)) {
+                    updateRegistryStgURL();
+                }
+                
                 secretToken = generateDevSecretToken();
             }
             
@@ -99,7 +110,7 @@ public class RegisterWithAmpRegistryJob extends ConnectionCleaningJob {
         return installation;
     }
     
-    private boolean isDevServer() {
+    public boolean isDevServer() {
         return Boolean.parseBoolean(System.getProperty(AMP_DEVELOPMENT_ENV_NAME));
     }
 
@@ -125,6 +136,18 @@ public class RegisterWithAmpRegistryJob extends ConnectionCleaningJob {
         } catch (WorkerException e) {
             throw new RuntimeException("Failed to translate country name.", e);
         }
+    }
+    
+    private void updateRegistryStgURL() {
+        PersistenceManager.getSession().doWork(new Work() {
+            public void execute(java.sql.Connection connection) {
+                SQLUtils.executeQuery(connection,
+                        String.format("UPDATE amp_global_settings SET settingsvalue = '%s' WHERE settingsname ='%s'", 
+                                REGISTRY_STG_URL, GlobalSettingsConstants.AMP_REGISTRY_URL));
+            };
+        });
+        
+        FeaturesUtil.buildGlobalSettingsCache(FeaturesUtil.getGlobalSettings());
     }
 
     @SuppressWarnings("unused")

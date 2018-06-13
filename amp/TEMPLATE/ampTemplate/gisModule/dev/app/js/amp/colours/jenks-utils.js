@@ -4,10 +4,12 @@ var _ = require('underscore');
 
 function getGVF(dataset, numClass, zeroCategoryEnabled) {
     var dataList = _.pluck(dataset, 'value');
+    var dataHasZero = dataList.includes(0);
+    debugger
     // get the breaks:
     // THIS IS WHAT IS USED TO RENDER THE MAP:
     var breaks;  
-    if (zeroCategoryEnabled === true) {
+    if (zeroCategoryEnabled === true && dataHasZero === true) {
     	dataList = _.reject(dataList, function(data){ return data == 0; });
     	breaks = getJenksBreaks(dataList, numClass - 1, zeroCategoryEnabled);
     } else {
@@ -44,7 +46,7 @@ function getGVF(dataset, numClass, zeroCategoryEnabled) {
     var varFit = (SDAM - SDCM) / SDAM;
     
     var result = [];
-    if (zeroCategoryEnabled === true) {
+    if (zeroCategoryEnabled === true && dataHasZero === true) {
     	result.push([0, 0]);
     }
     for ( var i = 0; i < breaks.length - 1; i++) {

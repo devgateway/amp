@@ -74,6 +74,7 @@ public final class ResourceUtil {
             result.set(ResourceEPConstants.WEB_LINK, resource.getWebLink());
             result.set(ResourceEPConstants.ADDING_DATE, 
                     DateFormatUtils.ISO_DATETIME_TIME_ZONE_FORMAT.format(resource.getAddingDate()));
+            result.set(ResourceEPConstants.TEAM_MEMBER, resource.getTeamMember());
         }
         
         return result;

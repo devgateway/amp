@@ -2,6 +2,7 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 
 
@@ -9,7 +10,7 @@ public class AmpOrgRoleBudget implements Serializable, Comparable<AmpOrgRoleBudg
     
     private Long ampOrgRoleBudgetId;
     
-    @Interchangeable(fieldTitle = "Budget Code", importable = true)
+    @Interchangeable(fieldTitle = "Budget Code", importable = true, required = ActivityEPConstants.REQUIRED_ALWAYS)
     private String budgetCode;
     
     private AmpOrgRole ampOrgRole;

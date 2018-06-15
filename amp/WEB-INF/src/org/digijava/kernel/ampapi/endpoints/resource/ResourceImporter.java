@@ -1,5 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.resource;
 
+import static java.util.Collections.singletonList;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -23,7 +25,10 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.StreamUtils;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.annotations.activityversioning.ResourceTextField;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
 
@@ -65,6 +70,17 @@ public class ResourceImporter extends ObjectImporter {
         this.newJson = newJson;
 
         List<APIField> fieldsDef = AmpFieldsEnumerator.PRIVATE_ENUMERATOR.getResourceFields();
+        
+        if (formFile != null) {
+            long maxSizeInMB = FeaturesUtil.getGlobalSettingValueInteger(GlobalSettingsConstants.CR_MAX_FILE_SIZE);
+            long maxFileSizeInBytes = 1024 * 1024 * maxSizeInMB;
+            if (formFile.getFileSize() > maxFileSizeInBytes) {
+                long fileSizeInMB = formFile.getFileSize() / (1024 * 1024);
+                String errorMessage = String.format("%s %sMB. %s %sMB", TranslatorWorker.translateText("File size is"), 
+                        fileSizeInMB, TranslatorWorker.translateText("Max size allowed is"), maxSizeInMB);
+                return singletonList(ResourceErrors.FILE_SIZE_INVALID.withDetails(errorMessage));
+            }
+        }
 
         try {
             resource = new AmpResource();

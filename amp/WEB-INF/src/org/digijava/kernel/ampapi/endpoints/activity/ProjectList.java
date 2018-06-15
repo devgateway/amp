@@ -31,6 +31,7 @@ import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.hibernate.jdbc.Work;
 import org.hibernate.type.LongType;
@@ -81,7 +82,7 @@ public class ProjectList {
         List<JsonBean> editableActivities = new ArrayList<JsonBean>();
         
         final List<Long> viewableIds = getViewableActivityIds(tm);
-        List<Long> editableIds = getEditableActivityIds(tm);
+        List<Long> editableIds = ActivityUtil.getEditableActivityIds(tm);
         
         // get list of the workspaces where the user is member of and can edit each activity
         Map<Long, Set<String>> activitiesWs = getEditableWorkspacesForActivities(tm);
@@ -111,17 +112,7 @@ public class ProjectList {
             Collection<AmpTeamMember> currentTeamMembers = TeamMemberUtil.getAllAmpTeamMembersByUser(currentUser);
 
             for (AmpTeamMember atm : currentTeamMembers) {
-                TeamMember teamMember = new TeamMember(atm);
-                String wsFilterQuery = WorkspaceFilter.generateWorkspaceFilterQuery(teamMember);
-                List<Long> editableIds = getEditableActivityIds(teamMember, wsFilterQuery);
-                
-                for (Long actId : editableIds) {
-                    if (!activitiesWs.containsKey(actId)) {
-                        activitiesWs.put(actId, new HashSet<String>());
-                    } 
-                    
-                    activitiesWs.get(actId).add(teamMember.getTeamId().toString());
-                }
+                TeamMemberUtil.getActivitiesWsByTeamMember(activitiesWs, atm);
             }
         } catch (DgException e) {
             LOGGER.warn("Couldn't generate the list of editable workspaces for activities", e);
@@ -130,6 +121,8 @@ public class ProjectList {
         
         return activitiesWs;
     }
+
+
 
     private static void populateActivityMap(Map<String, JsonBean> activityMap, List<JsonBean> activities) {
         for (JsonBean activity : activities) {
@@ -156,7 +149,18 @@ public class ProjectList {
         
         return getEditableActivityIds(tm, query);
     }
-    
+
+    /**
+     * Get list of editable activity ids for the team member.
+     * Useful for cases when you need to check list of editable activities for a team member that is not a principal.
+     * I.e. this team member is not authenticated right now.
+     * @return List<Long> with the editable activity Ids
+     */
+    public static List<Long> getEditableActivityIdsNoSession(TeamMember tm) {
+        String query = WorkspaceFilter.generateWorkspaceFilterQuery(tm);
+        return getEditableActivityIds(tm, query);
+    }
+
     /**
      * Get the activities ids for the current workspace
      * 
@@ -216,7 +220,7 @@ public class ProjectList {
         final List<JsonBean> activitiesList = new ArrayList<JsonBean>();
         
         String iatiIdAmpField = InterchangeUtils.getAmpIatiIdentifierFieldName();
-        
+
         PersistenceManager.getSession().doWork(new Work() {
             public void execute(Connection conn) throws SQLException {
                 String ids = StringUtils.join(activityIds, ",");
@@ -226,13 +230,13 @@ public class ProjectList {
                         + "act.%s as %s, act.date_updated as date_updated, at.name as team_name "
                         + "FROM amp_activity act "
                         + "JOIN amp_team at ON act.amp_team_id = at.amp_team_id ";
-                
+
                 if (activityIds.size() > 0) {
                     query += " WHERE act.amp_activity_id " + negate + " in (" + ids + ")";
                 }
-                
+
                 String allActivitiesQuery = String.format(query, iatiIdAmpField, iatiIdAmpField);
-                
+
                 try (RsInfo rsi = SQLUtils.rawRunQuery(conn, allActivitiesQuery, null)) {
                     ResultSet rs = rsi.rs;
                     while (rs.next()) {
@@ -281,7 +285,7 @@ public class ProjectList {
     }
 
     private static String getIatiIdentifierValue(AmpActivityVersion a, String iatiIdAmpField) {
-        Field field = InterchangeUtils.getFieldByLongName(iatiIdAmpField, false);
+        Field field = InterchangeUtils.getFieldByLongName(iatiIdAmpField);
         try {
             return (String) PropertyUtils.getProperty(a, field.getName());
         } catch (Exception e) {

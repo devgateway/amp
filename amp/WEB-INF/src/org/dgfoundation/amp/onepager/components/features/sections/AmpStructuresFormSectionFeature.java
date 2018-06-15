@@ -87,6 +87,13 @@ public class AmpStructuresFormSectionFeature extends
                 if (name.isComponentMultilingual()) {
                     name.getTextContainer().add(new AttributeAppender("style", "margin-bottom:40px;"));
                 }
+                name.getTextContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
+                    @Override
+                    protected void onUpdate(AjaxRequestTarget target) {
+                        target.add(name);
+                    }
+                });
+                             
                 item.add(name);
                 
                 final AmpTextAreaFieldPanel description = new AmpTextAreaFieldPanel("description", new PropertyModel<String>(structureModel, "description"),"Structure Description",false, true, true);
@@ -131,11 +138,16 @@ public class AmpStructuresFormSectionFeature extends
                 item.add(latitude);
 
                 final AmpTextFieldPanel<String> shape = new AmpTextFieldPanel<String>("shape", new PropertyModel<String>(structureModel, "shape"),"Structure Shape", true, true);
-                shape.setOutputMarkupId(true);
-                
+                shape.setOutputMarkupId(true);                
                 shape.getTextContainer().add(new AttributeAppender("size", new Model("7px"), ";"));
+                shape.getTextContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
+                    @Override
+                    protected void onUpdate(AjaxRequestTarget target) {                        
+                        target.add(shape);
+                    }
+                });
                 item.add(shape);
-
+                
                 ListEditorRemoveButton delbutton = new ListEditorRemoveButton("deleteStructure", "Delete Structure"){
 
                     @Override
@@ -155,7 +167,7 @@ public class AmpStructuresFormSectionFeature extends
                     
                 };
                 item.add(delbutton);
-
+                
                 final AmpAjaxLinkField viewCoords = new AmpAjaxLinkField("viewCoords", "Map", "View") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
@@ -192,9 +204,9 @@ public class AmpStructuresFormSectionFeature extends
                         target.add(longitude);
                         target.add(viewCoords);
                         target.appendJavaScript("gisPopup($('#" + this.getMarkupId() + "')[0]); return false;");
-                    }
+                }
                 };
-                item.add(openMapPopup);
+                item.add(openMapPopup); 
 
                 final TextField<String> coords = new TextField<String>("coords",
                         new PropertyModel<String>(structureModel, "coords"));
@@ -228,6 +240,18 @@ public class AmpStructuresFormSectionFeature extends
 
                 coords.setOutputMarkupId(true);
                 item.add(coords);
+                
+                final TextField<String> tempId = new TextField<String>("tempId",
+                        new PropertyModel<String>(structureModel, "tempId"));    
+                tempId.setOutputMarkupId(true);                
+                tempId.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+                    @Override
+                    protected void onUpdate(AjaxRequestTarget target) {
+                        target.add(tempId);
+                    }
+                });                
+                item.add(tempId);
+                
                 latitude.getTextContainer().setEnabled(!hasCoordinates(structureModel));
                 longitude.getTextContainer().setEnabled(!hasCoordinates(structureModel));
                 viewCoords.getButton().setEnabled(hasCoordinates(structureModel));
@@ -244,13 +268,8 @@ public class AmpStructuresFormSectionFeature extends
             @Override
             public void onClick(AjaxRequestTarget target) {
                 AmpStructure stru = new AmpStructure();
-                if(FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.DEFAULT_STRUCTURE_TYPE)!=-1){
-                    AmpStructureType s=(AmpStructureType)PersistenceManager.getSession().load(AmpStructureType.class, 
-                            FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.DEFAULT_STRUCTURE_TYPE));
-                    stru.setType(s);    
-                }
-                
                 list.addItem(stru);
+
                 target.add(this.getParent());
                 target.add(containter);
                 target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(this.getParent()));
@@ -259,15 +278,17 @@ public class AmpStructuresFormSectionFeature extends
                 pln.setVisible(visible);
             }
         };
-        add(addbutton);
+        
+       addbutton.getButton().add(new AttributeModifier("class", new Model("addStructure button_green_btm")));
+       add(addbutton);
         
         
     }
-
+    
     private boolean hasCoordinates(IModel<AmpStructure> structureModel) {
         return structureModel.getObject().getCoordinates() != null && structureModel.getObject().
                 getCoordinates().size() > 0;
     }
-
+    
 
 }

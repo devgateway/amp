@@ -15,6 +15,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.AmpRequiredComponentContainer;
 import org.dgfoundation.amp.onepager.models.ActivityFYModel;
+import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -33,20 +34,10 @@ implements AmpRequiredComponentContainer{
         super(id, model, fmName, true);
         this.fmType = AmpFMTypes.MODULE;
         
-        String startYear = FeaturesUtil
-                .getGlobalSettingValue(GlobalSettingsConstants.YEAR_RANGE_START);
-        int rangeStartYear = Integer.parseInt(startYear);
-        String numbYearsRange = FeaturesUtil
-                .getGlobalSettingValue(GlobalSettingsConstants.NUMBER_OF_YEARS_IN_RANGE);
-        int rangeNumber = Integer.parseInt(numbYearsRange);
-        List<String> years = new ArrayList<String>();
-        for (int i = rangeStartYear; i < rangeStartYear + rangeNumber; i++) {
-            years.add("" + i);
-        }
 
         AmpCheckBoxFieldPanel indirectOnBudget = new AmpCheckBoxFieldPanel("indirectOnBudget", "Indirect On Budget", new PropertyModel<Boolean>(model, "indirectOnBudget"));
         add(indirectOnBudget);
-
+        List<String> years = ActivityUtil.getFiscalYearsRange();
         final AmpSelectFieldPanel fy = new AmpSelectFieldPanel<String>("fy", new ActivityFYModel(new PropertyModel<String>(model, "FY")), years, "FY", false, true, false);
 
         fy.getChoiceContainer().setOutputMarkupId(true);

@@ -8,3 +8,5 @@ createdb -U amp amp
 psql -U amp -c "UPDATE dg_site_domain SET site_domain='$AMP_SITE_DOMAIN';"
 psql -U amp -c "TRUNCATE amp_email_receiver;"
 psql -U amp -c "UPDATE dg_user SET password='a9993e364706816aba3e25717850c26c9cd0d89d';"
+psql -U amp -c "UPDATE amp_global_settings SET settingsvalue = 'https://amp-registry-stg.ampsite.net/' WHERE settingsname = 'AMP Registry URL';"
+psql -U amp -c "UPDATE amp_global_settings SET settingsvalue = 'true' WHERE settingsname = 'AMP Offline Enabled';"

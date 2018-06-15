@@ -604,7 +604,7 @@ final class PermissionStorage implements Serializable {
             Principal principal = principals[i];
             if (principal instanceof UserPrincipal) {
                 UserPrincipal userPrincipal = (UserPrincipal)principal;
-                if (userPrincipal.isGlobalAdmin()) {
+                if (permission.getActionMask() != ResourcePermission.INT_SUPER_ADMIN && userPrincipal.isGlobalAdmin()) {
                     return true;
                 }
             }

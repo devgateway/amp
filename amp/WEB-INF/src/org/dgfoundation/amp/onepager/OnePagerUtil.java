@@ -217,25 +217,6 @@ public final class OnePagerUtil {
         return String.format(OnePagerConst.clickToggle2JS, c.getMarkupId());
     }
     
-    
-    /**
-     * Gets the {@link AmpOrganisation} {@link AmpRole}S from DB
-     * @return a {@link List} of {@link AmpRole}S
-     */
-    public static List<AmpRole> getOrgRoles() {
-        Session session = null;
-        List<AmpRole> list=null;
-        ArrayList<AmpRole> currency = new ArrayList<AmpRole>();
-        try {
-                session = PersistenceManager.getRequestDBSession();
-                Criteria criteria = session.createCriteria(AmpRole.class);
-                 list = criteria.list();                    
-        } catch (Exception ex) {
-            logger.error("Unable to get roles " + ex);
-        }
-        return list;    
-    }
-
     public static AmpFundingFlowsOrgRoleSelector getFundingFlowRoleSelector(final IModel<AmpFunding> model,
             IModel itemModel) {
         AmpFundingFlowsOrgRoleSelector orgRoleSelector=
@@ -246,6 +227,10 @@ public final class OnePagerUtil {
     
     public interface SerializablePredicate<T> extends Predicate<T>, Serializable {
         
+    }
+    
+    public static String createJSAlert(String message) {
+        return "alert ('" + message + "')";
     }
 
 }

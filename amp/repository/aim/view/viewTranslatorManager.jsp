@@ -363,7 +363,7 @@ div.fakefile2 input{
 							 	<td>
 							 		<div style="visibility: visible;" id="keywordsDiv">
 							 			<input id="keyword" type="text" style="width:250px;height: 20px" align="top">
-								 		<input type="button" style="width:100px;vertical-align: top;" onclick="addKeyword(document.getElementById('keyword'))" value="<digi:trn key="message:addUsBtn">Add >></digi:trn>">
+								 		<input type="button" style="width:100px;vertical-align: top;" onclick="addKeyword(document.getElementById('keyword'))" value="<digi:trn key="message:addUsBtn">Add</digi:trn> >>">
 										<br>
 										<html:select multiple="multiple" styleId="keywords" name="aimTranslatorManagerForm" property="keywords" size="11" styleClass="inp-text" style="width: 250px;height: 50px;">
 										</html:select>

@@ -3,20 +3,31 @@ package org.digijava.module.aim.annotations.interchange;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
+import org.digijava.kernel.ampapi.endpoints.activity.ContextMatcher;
+import org.digijava.kernel.ampapi.endpoints.activity.DefaultContextMatcher;
+
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Interchangeable {
     /**
-     * field title -- a capitalized, preferrably unabbreviated name for the field
+     * field title -- a capitalized, preferrably unabbreviated name for the field.
+     * <p>fieldTitle must match the label name used in activity form. Usually it coincides with fmName.</p>
      * example: "Sectors"; "AMP Internal ID"
      */
     String fieldTitle();
-    
+
+    /**
+     * Field label that will be used in UI. If not specified defaults to {@link #fieldTitle()}.
+     */
+    String label() default ActivityEPConstants.FIELD_TITLE;
+
     /**
      * <pre>
      * Path in the Feature Manager, corresponding to enabling / disabling said field in AF
      * Usage examples:
      * fmPath = "/Activity Form/Organization/Donor Organization"  
-     * fmPath = FMVisibility.ANY_FM + "/Activity Form/Organizations/Donor Organization|/Activity Form/Donor Funding/Search Funding Organizations/Search Organizations"
+     * fmPath = FMVisibility.ANY_FM + "/Activity Form/Organizations/Donor Organization
+     *                                |/Activity Form/Funding/Search Funding Organizations/Search Organizations"
      * fmPath = FMVisibility.PARENT_FM + "/sectorPercentage"
      * </pre>   
      */
@@ -38,7 +49,7 @@ public @interface Interchangeable {
     /**
      *Whether the field is always required, required for non-draft saves, or not required. 
      */
-    String required () default "_NONE_";
+    String required () default ActivityEPConstants.REQUIRED_NONE;
     
     /**
      * Set to true if underlying field value can be obtained from the 
@@ -66,17 +77,6 @@ public @interface Interchangeable {
     boolean value() default false;
     
     /**
-     * Used in PossibleValues EP. (Designed for the AmpActivityLocation->AmpLocation->AmpCategoryValueLocations)
-     * 
-     * Marks a field that contains information useful for describing a possible value, 
-     * yet not contained within the class itself. 
-     * Said info is to be specified under the tag "Extra info" and grouped in a JSON. 
-     * Said JSON will have the structure expected from a 'Possible Value' item.  
-     *  
-     */
-    boolean extraInfo() default false;
-    
-    /**
      * Specifies the dependencies used for later checking in DependencyValidator. 
      * Dependencies (path and value) are encoded via {@link InterchangeDependencyMapper} public static strings,
      * like {@link InterchangeDependencyMapper#ON_BUDGET_CODE}. 
@@ -88,9 +88,18 @@ public @interface Interchangeable {
     String discriminatorOption() default "";
     
     Validators validators() default @Validators;
+
+    Class<? extends ContextMatcher> context() default DefaultContextMatcher.class;
+    
+    /** regex pattern used for validation (mail, phone, fax) */
+    String regexPattern() default "";
     
     /* constraints for multi-level validators */
     boolean uniqueConstraint() default false;
     boolean percentageConstraint() default false;
+
+    int sizeLimit() default 1;
+
+    RegexDiscriminator[] regexPatterns() default {};
 
 }

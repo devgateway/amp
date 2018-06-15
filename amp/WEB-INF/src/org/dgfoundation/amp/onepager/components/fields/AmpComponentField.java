@@ -5,8 +5,10 @@
 package org.dgfoundation.amp.onepager.components.fields;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
+import com.google.common.collect.ImmutableMap;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
@@ -27,6 +29,12 @@ import org.digijava.module.aim.helper.Constants;
 public class AmpComponentField extends AmpFeaturePanel<Boolean>{
 
     private static final long serialVersionUID = 0L;
+
+    public static final Map<Integer, String> FM_NAME_BY_TRANSACTION_TYPE = new ImmutableMap.Builder<Integer, String>()
+            .put(Constants.COMMITMENT, "Components Commitments")
+            .put(Constants.DISBURSEMENT, "Components Disbursements")
+            .put(Constants.EXPENDITURE, "Components Expenditures")
+            .build();
 
     public AmpComponentField(String id, IModel<AmpActivityVersion> activityModel, 
             final IModel<AmpComponent> componentModel, String fmName){
@@ -52,22 +60,19 @@ public class AmpComponentField extends AmpFeaturePanel<Boolean>{
             add(ident);
             
             AmpComponentsFundingSubsectionFeature commitments = new AmpComponentsFundingSubsectionFeature("commitments", activityModel, 
-                    componentModel, componentsSetModel, "Components Commitments", 
-                    Constants.COMMITMENT);
+                    componentModel, componentsSetModel, Constants.COMMITMENT);
             commitments.setOutputMarkupId(true);
             commitments.setOutputMarkupPlaceholderTag(true);
             add(commitments);
             
             AmpComponentsFundingSubsectionFeature disbursements = new AmpComponentsFundingSubsectionFeature("disbursements", activityModel, 
-                    componentModel, componentsSetModel, "Components Disbursements", 
-                    Constants.DISBURSEMENT);
+                    componentModel, componentsSetModel, Constants.DISBURSEMENT);
             disbursements.setOutputMarkupId(true);
             disbursements.setOutputMarkupPlaceholderTag(true);
             add(disbursements);
 
             AmpComponentsFundingSubsectionFeature expeditures = new AmpComponentsFundingSubsectionFeature("expeditures", activityModel, 
-                    componentModel, componentsSetModel, "Components Expenditures", 
-                    Constants.EXPENDITURE);
+                    componentModel, componentsSetModel, Constants.EXPENDITURE);
             expeditures.setOutputMarkupId(true);
             expeditures.setOutputMarkupPlaceholderTag(true);
             add(expeditures);

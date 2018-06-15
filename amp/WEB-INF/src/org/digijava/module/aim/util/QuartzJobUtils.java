@@ -265,6 +265,13 @@ public class QuartzJobUtils {
         }
     }
 
+    public static void runJobIfNotPaused(String name) {
+        QuartzJobForm job = getJobByName(name);
+        if (!job.isPaused()) {
+            runJob(job);
+        }
+    }
+
     /**
      * Creates a new trigger now for the given job. Used to run job manually
      * 

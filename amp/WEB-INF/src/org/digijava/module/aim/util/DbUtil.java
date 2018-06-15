@@ -114,7 +114,7 @@ public class DbUtil {
     /**
      * Used in the AMP-23713.xml patch. Can be reused for other tables, but
      * highly inadvisable to be edited itself.
-     * 
+     *
      * @param tableName
      *            the tablename
      */
@@ -129,7 +129,7 @@ public class DbUtil {
     /**
      * Generates queries that would drop all foreign key constraints pointing to
      * specified table. Used in AMP-23713.xml, reuse, but do not edit
-     * 
+     *
      * @param tableName
      *            the table name to have foreign keys stripped
      * @return
@@ -422,7 +422,7 @@ public class DbUtil {
 
     /**
      * this is probably useless
-     * 
+     *
      * @param c
      * @param id
      * @return
@@ -457,7 +457,7 @@ public class DbUtil {
 
     /**
      * returns null on non-existing organisation
-     * 
+     *
      * @param id
      * @return
      */
@@ -689,6 +689,21 @@ public class DbUtil {
         AmpApplicationSettings ampAppSettings = (AmpApplicationSettings) PersistenceManager.getSession()
                 .createQuery(queryString).setLong("teamId", teamId).uniqueResult();
         return ampAppSettings;
+    }
+
+    public static List<AmpApplicationSettings> getTeamAppSettings(List<Long> teamIds) {
+        if (teamIds.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        String queryString = "from "
+                + AmpApplicationSettings.class.getName()
+                + " a where a.team.ampTeamId in (:teamIds)";
+
+        return PersistenceManager.getSession()
+                .createQuery(queryString)
+                .setParameterList("teamIds", teamIds)
+                .list();
     }
 
     public static AmpApplicationSettings getTeamAppSettingsMemberNotNull(Long teamId) {
@@ -1024,7 +1039,7 @@ public class DbUtil {
     /**
      * returns list of all Organisations which belong to a group which belongs
      * to a type and do not have an id in the exclusion area
-     * 
+     *
      * @param orgType
      * @param excludeIds
      * @return
@@ -1049,7 +1064,7 @@ public class DbUtil {
 
     /**
      * Appends the NOT IN criteria to the queryString
-     * 
+     *
      * @param columnName
      * @param excludeIds
      * @param queryString
@@ -1074,7 +1089,7 @@ public class DbUtil {
 
     /**
      * Returns list of amp organizations, excluding the <code>excludeIds</code>
-     * 
+     *
      * @param excludeIds
      *            if not null, the organizations with these ids will be excluded
      *            from the search result
@@ -1163,7 +1178,7 @@ public class DbUtil {
      * returns a sorted-by-name list of @link {@link OrganizationSkeleton}
      * instances selected by a HQL query <br />
      * the query should be of the for, "SELECT ampOrgId, ampOrgName ..."
-     * 
+     *
      * @param query
      * @return
      */
@@ -1184,7 +1199,7 @@ public class DbUtil {
      * returns a representation of the organizations in the database
      * (lightweight, composed of of @link {@link OrganizationSkeleton}).<br />
      * they are grouped by ampOrgGroup
-     * 
+     *
      * @return
      */
     public static java.util.Map<Long, Set<OrganizationSkeleton>> getOrgSkeletonGroupedByGroupId() {
@@ -1212,7 +1227,7 @@ public class DbUtil {
 
     /**
      * returns a sorted-by-name list of @link {@link OrganizationSkeleton}
-     * 
+     *
      * @param orgGroupId
      *            - orgGroupId to filter by. If equals null -> no filtering
      * @return
@@ -1674,7 +1689,7 @@ public class DbUtil {
 
     /**
      * gets the skeletons of all the OrgGroups in the database
-     * 
+     *
      * @return
      */
     public static List<OrgGroupSkeleton> getAllOrgGroupSkeletons() {
@@ -1696,7 +1711,7 @@ public class DbUtil {
     /**
      * generates a list of all AmpOrgGroup elements which have deleted =null or
      * deleted = false
-     * 
+     *
      * @return
      */
     public static List<AmpOrgGroup> getAllVisibleOrgGroups() {
@@ -1797,7 +1812,7 @@ public class DbUtil {
 
     /**
      * fetches DONOR org groups of the database portfolio
-     * 
+     *
      * @return
      */
     public static List<AmpOrgGroup> getAllOrgGroupsOfPortfolio() {
@@ -1888,7 +1903,7 @@ public class DbUtil {
 
     /**
      * Gets the deleted amp org group with specified name, if it exists
-     * 
+     *
      * @param name
      *            name of the amp org group
      * @param id
@@ -2183,7 +2198,7 @@ public class DbUtil {
 
     /**
      * to be removed as soon as NOONE is using PI
-     * 
+     *
      * @param surveyId
      * @param activityId
      * @return
@@ -2737,6 +2752,9 @@ public class DbUtil {
 
         public HelperAmpOrganisationNameComparator() {
             this.locale = new Locale("en", "EN");
+        }
+        public HelperAmpOrganisationNameComparator(Locale locale) {
+            this.locale = locale;
         }
 
         public HelperAmpOrganisationNameComparator(String iso) {

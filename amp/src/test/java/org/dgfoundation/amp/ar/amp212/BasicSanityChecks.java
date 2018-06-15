@@ -35,10 +35,6 @@ import org.junit.Test;
  */
 public abstract class BasicSanityChecks extends ReportingTestCase {
             
-    public BasicSanityChecks(String name) {
-        super(name);
-    }
-    
     final List<String> acts = Arrays.asList(
             "activity 1 with agreement",
             "Activity 2 with multiple agreements",
@@ -1164,7 +1160,7 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
         
         runNiTestCase(spec, "en", Arrays.asList("ptc activity 1", "mtef activity 1", "mtef activity 2", "ptc activity 2"), cor);
     }
-    
+
     @Test
     public void testHierByModeOfPayment() {
         NiReportModel cor = new NiReportModel("test_by_mode_of_payment")

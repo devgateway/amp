@@ -1164,7 +1164,7 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
         
         runNiTestCase(spec, "en", Arrays.asList("ptc activity 1", "mtef activity 1", "mtef activity 2", "ptc activity 2"), cor);
     }
-    
+
     @Test
     public void testHierByModeOfPayment() {
         NiReportModel cor = new NiReportModel("test_by_mode_of_payment")

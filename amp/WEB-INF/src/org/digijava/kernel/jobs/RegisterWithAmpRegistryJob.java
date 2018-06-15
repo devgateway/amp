@@ -4,10 +4,12 @@ import static java.util.stream.Collectors.toList;
 
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -96,7 +98,7 @@ public class RegisterWithAmpRegistryJob extends ConnectionCleaningJob {
         AmpInstallation installation = new AmpInstallation();
         installation.setIso2(country.getIso().toUpperCase());
         
-        List<String> siteUrls = getSiteUrls(defaultSite);
+        List<String> siteUrls = new ArrayList<>(new LinkedHashSet<String>(getSiteUrls(defaultSite)));
         Map<String, String> allTranslations = getAllTranslations(defaultSite, country.getCountryName());
         
         // AMP-27350 add URLs in all translated names if AMP is in stg (dev) mode

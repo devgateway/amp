@@ -70,7 +70,6 @@ public class MenuConstants {
     public static final String GIS = "GIS";
     public static final String ADVANCED_GIS = "Advanced GIS";
     public static final String NEW_GIS_BETA = "NEW GIS (BETA)";
-    public static final String NEW_DASHBOARDS_BETA = "NEW DASHBOARD (BETA)";
     public static final String MESSAGES = "Messages";
     public static final String MESSAGES_VIEW = "View Messages";
     public static final String MESSAGES_TAB = "Message Tab";
@@ -90,4 +89,5 @@ public class MenuConstants {
     public static final String LANGUAGE_ITEM = "Language Item";
     public static final String WORKSPACE_ITEM = "Workspace Item";
     public static final String GPI_DATA = "GPI Data";
+    public static final String GPI_DATA_ENTRY = "GPI Data Entry";
 }

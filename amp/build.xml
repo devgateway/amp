@@ -119,15 +119,6 @@
   <target name="jaxb" description="Generate JAXB Java source files">
     <echo message="Compiling the schema..." />
     <mkdir dir="${gen-src}" />   	
-    <xjc destdir="${gen-src}" schema="./doc/IDML2.0.xsd" package="org.digijava.module.dataExchange.jaxb">
-    	<produces dir="${gen-src}" includes="org/digijava/module/dataExchange/jaxb/*.java"/>
-   	</xjc>
-    <xjc destdir="${gen-src}" schema="./doc/dataExchange/iati-activities-schema.xsd" package="org.digijava.module.dataExchangeIATI.iatiSchema.jaxb">
-    	<produces dir="${gen-src}" includes="org/digijava/module/dataExchangeIATI/iatiSchema/jaxb/*.java"/>
-   	</xjc>
-  	<xjc destdir="${gen-src}" schema="./doc/dataExchange/v1_03/iati-activities-schema-1_03.xsd" package="org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb">
-    	<produces dir="${gen-src}" includes="org/digijava/module/dataExchangeIATI/iatiSchema/v1_03/jaxb/*.java"/>
-   	</xjc>
    	<xjc destdir="${gen-src}" schema="./doc/translation.xsd" package="org.digijava.module.translation.jaxb">
    		<produces dir="${gen-src}" includes="org/digijava/module/translation/jaxb/*.java"/>
     </xjc>

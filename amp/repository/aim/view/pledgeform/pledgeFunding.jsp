@@ -34,7 +34,7 @@
 				<div class="col-xs-6">
 					<div class="form-inline" >
 						<label for="pledgeAmount_${indexLoc}"><digi:trn key="aim:amount">Amount</digi:trn></label> <br />
-						<input name="selectedFunding[${indexLoc}].amount" type="text" id="pledgeAmount_${indexLoc}" class="form-control input-sm validate-mandatory-number" 
+						<input name="selectedFunding[${indexLoc}].amount" type="text" dir="ltr" id="pledgeAmount_${indexLoc}" class="form-control input-sm validate-mandatory-number ltr-input" 
 								value="${selectedFunding.amount}"/>
 					
 						<c:set var="select_id" value="pledgeCurrencyDropDown_${indexLoc}" /><c:set var="extra_tags">name="selectedFunding[${indexLoc}].currencyId" class="validate-mandatory"</c:set>
@@ -47,18 +47,26 @@
 				<div class="col-xs-6">				
 					<c:choose>
 						<c:when test="${pledgeForm.fundingShowDateRange}">
-							<label for="pledgeFundingDateStart_${indexLoc}"><digi:trn key="aim:year">Pledge Time Frame</digi:trn></label> <br />
+							<div >
+								<div class="pledge-date">
+							<label for="pledgeFundingDateStart_${indexLoc}">
+								<digi:trn key="aim:year">Pledge start date</digi:trn></label> <br />
 							<span>
 								<input name="selectedFunding[${indexLoc}].fundingDateStart" type="text" id="pledgeFundingDateStart_${indexLoc}" 
 								data-date-format="${pledgeForm.globalDateFormat}" 
 								class="form-control input-sm inline-input validate-date-range-start date-range-start validate-date-range-group-${selectedFunding.uniqueId}" value="${selectedFunding.fundingDateStartSettingsFormat}"/>
-							</span> 
-							&nbsp;&nbsp; &dash; &nbsp;&nbsp;
+							</span>
+							</div>
+								<div class="pledge-date">
+							<label for="pledgeFundingDateEnd_${indexLoc}">
+								<digi:trn key="aim:year">Pledge end date</digi:trn> </label> <br />
 							<span>
 								<input name="selectedFunding[${indexLoc}].fundingDateEnd" type="text" id="pledgeFundingDateEnd_${indexLoc}" 
 								data-date-format="${pledgeForm.globalDateFormat}" 
 								class="form-control input-sm inline-input validate-date-range-end date-range-end validate-date-range-group-${selectedFunding.uniqueId}" value="${selectedFunding.fundingDateEndSettingsFormat}"/>
 							</span>
+							</div>
+				</div>
 						</c:when>
 						<c:otherwise>
 							<label for="pledgeFundingYear_${indexLoc}"><digi:trn key="aim:year">Year</digi:trn></label>

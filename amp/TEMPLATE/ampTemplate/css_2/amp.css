@@ -1414,3 +1414,11 @@ div.footer {
 .tabs-grid-pager-info {
     display: inline-block;
 }
+.pledge-date {
+    width: 49%;
+    display: inline-block;
+}
+.map-configuration-cell{
+    padding: 2px;
+    width: 50%;
+}

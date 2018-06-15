@@ -55,9 +55,7 @@ export default class Report5a extends Component {
     }
 
     showSettings() {
-       const settings  = this.settingsWidget.toAPIFormat();
-       const calendarId = settings && settings['calendar-id'] ?  settings['calendar-id'] : this.settingsWidget.definitions.getDefaultCalendarId();
-       this.setState( { calendarId: calendarId });
+       this.setState( { calendarId: Utils.getCalendarId(this.settingsWidget) });
        Utils.showSettings(this.refs.settingsPopup, this.settingsWidget, this.onSettingsApply.bind(this), this.onSettingsCancel.bind(this));       
     }
     
@@ -66,10 +64,8 @@ export default class Report5a extends Component {
     }
 
     onSettingsApply(){
-        const settings  = this.settingsWidget.toAPIFormat();
-        const currentCalendarId = settings && settings['calendar-id'] ?  settings['calendar-id'] : this.settingsWidget.definitions.getDefaultCalendarId();        
         //if calendar has changed reset year filter
-        if (currentCalendarId !== this.state.calendarId) {            
+        if(Utils.hasCalendarChanged(this.settingsWidget, this.state.calendarId)) {
             this.onYearClick(null);            
         } else {
             this.fetchReportData(); 
@@ -238,7 +234,11 @@ export default class Report5a extends Component {
                         </div>
                       </div>                        
                     }
-                    <YearsFilterSection onYearClick={this.onYearClick.bind(this)} selectedYear={this.state.selectedYear} mainReport={this.props.mainReport} filter={this.filter} dateField="date" settingsWidget={this.settingsWidget} />                    
+                    <YearsFilterSection onYearClick={this.onYearClick.bind(this)} selectedYear={this.state.selectedYear}
+                                        mainReport={this.props.mainReport} filter={this.filter}
+                                        dateField="date" settingsWidget={this.settingsWidget}
+                                        prefix={Utils.getCalendarPrefix(this.settingsWidget,this.props.calendars,
+                                            this.props.translate('amp.gpi-reports:fy'))}/>
                     <div className="container-fluid no-padding">
                         <div className="dropdown">
                             <select name="donorAgency" className="form-control donor-dropdown" value={this.state.selectedDonor} onChange={this.onDonorFilterChange}>

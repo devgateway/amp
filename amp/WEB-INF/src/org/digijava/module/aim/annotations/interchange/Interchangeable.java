@@ -26,7 +26,8 @@ public @interface Interchangeable {
      * Path in the Feature Manager, corresponding to enabling / disabling said field in AF
      * Usage examples:
      * fmPath = "/Activity Form/Organization/Donor Organization"  
-     * fmPath = FMVisibility.ANY_FM + "/Activity Form/Organizations/Donor Organization|/Activity Form/Donor Funding/Search Funding Organizations/Search Organizations"
+     * fmPath = FMVisibility.ANY_FM + "/Activity Form/Organizations/Donor Organization
+     *                                |/Activity Form/Funding/Search Funding Organizations/Search Organizations"
      * fmPath = FMVisibility.PARENT_FM + "/sectorPercentage"
      * </pre>   
      */
@@ -90,8 +91,15 @@ public @interface Interchangeable {
 
     Class<? extends ContextMatcher> context() default DefaultContextMatcher.class;
     
+    /** regex pattern used for validation (mail, phone, fax) */
+    String regexPattern() default "";
+    
     /* constraints for multi-level validators */
     boolean uniqueConstraint() default false;
     boolean percentageConstraint() default false;
+
+    int sizeLimit() default 1;
+
+    RegexDiscriminator[] regexPatterns() default {};
 
 }

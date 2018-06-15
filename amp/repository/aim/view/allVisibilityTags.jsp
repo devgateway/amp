@@ -308,7 +308,7 @@
 <field:display feature="Edit Activity" name="Edit Activity Button"></field:display> 
 <field:display feature="Edit Activity" name="Validate Activity Button"></field:display> 
 <field:display feature="Funding Information" name="Type Of Assistance"></field:display>
-<field:display feature="Funding Information" name="Capital - Expenditure"></field:display>
+<field:display feature="Funding Information" name="Capital Expenditure"></field:display>
 <field:display feature="Funding Information" name="Payment Capital - Recurrent"></field:display>
 <field:display feature="Funding Information" name="Agreement Title + Code"></field:display>
 <field:display feature="Funding Information" name="Agreement Code"></field:display>
@@ -1115,6 +1115,7 @@ deleted 6 fields, do not reinsert
 <field:display name="Mandatory Organization Code" feature="Organization Form"></field:display>
 
   <!-- GPI  -->
+<module:display name="GPI Data Entry" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="GPI Reports" parentModule="REPORTING"></module:display>
 <module:display name="GPI" parentModule="GPI Reports"></module:display>
 <module:display name="GPI 2014" parentModule="GPI Reports"></module:display>

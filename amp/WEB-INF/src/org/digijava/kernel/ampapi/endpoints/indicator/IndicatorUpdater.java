@@ -92,8 +92,13 @@ public class IndicatorUpdater {
         }
         indicatorLayer.setUpdatedOn(new Date());
         indicatorLayer.setAccessType( (indicator.getString(IndicatorEPConstants.ACCESS_TYPE_ID)!=null ? IndicatorAccessType.getValueFromLong(Long.valueOf(indicator.getString(IndicatorEPConstants.ACCESS_TYPE_ID))) :IndicatorAccessType.TEMPORARY));
-        setAdmLevel(indicatorLayer);
-
+        setAdmLevel(indicatorLayer);  
+        
+        String zeroCategoryEnabled = indicator.getString(IndicatorEPConstants.FIELD_ZERO_CATEGORY_ENABLED);
+        if (zeroCategoryEnabled != null) {
+           indicatorLayer.setZeroCategoryEnabled(Boolean.parseBoolean(zeroCategoryEnabled));
+        }        
+        
         if (indicator.get(IndicatorEPConstants.COLOR_RAMP_ID)!=null) {
             Set<AmpIndicatorColor> colorRamp = new HashSet<AmpIndicatorColor>();
             String[] colorRampColors = ColorRampUtil.getColorRamp(EndpointUtils.getSingleValue(indicator, IndicatorEPConstants.COLOR_RAMP_ID,null),

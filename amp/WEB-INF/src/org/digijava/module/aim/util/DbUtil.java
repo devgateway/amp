@@ -2753,6 +2753,9 @@ public class DbUtil {
         public HelperAmpOrganisationNameComparator() {
             this.locale = new Locale("en", "EN");
         }
+        public HelperAmpOrganisationNameComparator(Locale locale) {
+            this.locale = locale;
+        }
 
         public HelperAmpOrganisationNameComparator(String iso) {
             this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());

@@ -76,9 +76,10 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, /*Versi
     private AmpTemplatesVisibility fmTemplate;
     private AmpCategoryValue workspacePrefix;
     private Boolean crossteamvalidation;
+    private AmpSummaryNotificationSettings sumaryNotificationSettings;
 
-    
-    
+
+
     //Global function to initialize the team filters inside the session
     public static AmpARFilter initializeTeamFiltersSession(AmpTeamMember member, HttpServletRequest request, HttpSession session){
         //Initialize Team Filter
@@ -366,17 +367,24 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, /*Versi
     public void setCrossteamvalidation(Boolean crossteamvalidation) {
         this.crossteamvalidation = crossteamvalidation;
     }
-
+    
     public Boolean getIsolated() {
         return isolated;
     }
 
     public void setIsolated(Boolean isolated) {
-        if (isolated == null)
+        if (isolated == null) {
             this.isolated = false;
-        else
+        } else {
             this.isolated = isolated;
+        }
     }
-    
-    
+
+    public AmpSummaryNotificationSettings getSumaryNotificationSettings() {
+        return sumaryNotificationSettings;
+    }
+
+    public void setSumaryNotificationSettings(AmpSummaryNotificationSettings sumaryNotificationSettings) {
+        this.sumaryNotificationSettings = sumaryNotificationSettings;
+    }
 }

@@ -10,6 +10,7 @@ export const NATIONAL_FINANCIAL_REPORTING_PROCEDURES = 'National Financial Repor
 export const NATIONAL_AUDITING_PROCEDURES = 'National Auditing Procedures';
 export const NATIONAL_PROCUREMENT_EXECUTION_PROCEDURES = 'National Procurement Systems';
 export const YEAR = 'Year';
+export const FY = 'FY';
 export const DONOR_GROUP = 'Donor Group';
 export const DONOR_AGENCY = 'Donor Agency';
 export const ACTIVITY_ID = 'Activity Id';

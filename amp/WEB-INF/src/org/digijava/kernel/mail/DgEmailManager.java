@@ -48,6 +48,7 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+import org.apache.commons.validator.EmailValidator;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.config.ForwardEmails;
 import org.digijava.kernel.config.Smtp;
@@ -448,13 +449,24 @@ public class DgEmailManager {
                      subject + ". Encoding: " + charset + ". asHtml: " + asHtml);
         logger.debug("Mail text:\n" + text);
 
+        // see digi.xml for more details
+        logger.info("Start Getting Config");
+        Smtp smtp = DigiConfigManager.getConfig().getSmtp();
+
+        //If the from address is the default we will use the one configured in amp/repository/digi.xml
+        if (from.equals(EmailConstants.DEFAULT_EMAIL_SENDER) && smtp.getFrom() != null) {
+            if (EmailValidator.getInstance().isValid(smtp.getFrom())) {
+                from = smtp.getFrom();
+            } else {
+                logger.error("Email Address configured in amp/repository/digi.xml is not valid");
+            }
+        }
+
         PlainTextEmailMessage emailMessage = createEmailMessage(to,new InternetAddress(from), cc, bcc, subject, text, charset, asHtml, rtl);
 
         // Get SMTP object from configuration file,
         
-        // see digi.xml for more details
-        logger.info("Start Getting Config");
-        Smtp smtp = DigiConfigManager.getConfig().getSmtp();
+
 
         logger.info("End Getting Config");
         logger.debug("SMTP User Name: " + smtp.getUserName() + " Password: " + smtp.getUserPassword());

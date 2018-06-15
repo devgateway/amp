@@ -34,7 +34,7 @@ public class BudgetCapitalCellGenerator extends CapitalCellGenerator {
     
     @Override
     public void setSession ( HttpSession session ) {
-        this.insider    = ColWorkerInsider.getOrBuildInsider("v_capital_and_exp", "Capital - Expenditure", session);
+        this.insider    = ColWorkerInsider.getOrBuildInsider("v_capital_and_exp", "Capital Expenditure", session);
         this.session = session;
     }
     

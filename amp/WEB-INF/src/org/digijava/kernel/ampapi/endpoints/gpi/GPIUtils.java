@@ -290,8 +290,8 @@ public class GPIUtils {
     }
 
     public static Date getYearEndDate(AmpFiscalCalendar calendar, int year) {
-        int month = Calendar.JANUARY;
-        int day = GPIEPConstants.GREGORIAN_YEAR_START_DAY;
-        return new GregorianCalendar(year + 1, month, day).getTime();
+        int month = Calendar.DECEMBER;
+        int day = GPIEPConstants.GREGORIAN_YEAR_END_DAY;
+        return new GregorianCalendar(year, month, day).getTime();
     }
 }

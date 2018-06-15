@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessages;
@@ -73,9 +74,9 @@ public class ResourceImporter extends ObjectImporter {
         
         if (formFile != null) {
             long maxSizeInMB = FeaturesUtil.getGlobalSettingValueInteger(GlobalSettingsConstants.CR_MAX_FILE_SIZE);
-            long maxFileSizeInBytes = 1024 * 1024 * maxSizeInMB;
+            long maxFileSizeInBytes = maxSizeInMB * FileUtils.ONE_MB;
             if (formFile.getFileSize() > maxFileSizeInBytes) {
-                long fileSizeInMB = formFile.getFileSize() / (1024 * 1024);
+                long fileSizeInMB = formFile.getFileSize() / FileUtils.ONE_MB;
                 String errorMessage = String.format("%s %sMB. %s %sMB", TranslatorWorker.translateText("File size is"), 
                         fileSizeInMB, TranslatorWorker.translateText("Max size allowed is"), maxSizeInMB);
                 return singletonList(ResourceErrors.FILE_SIZE_INVALID.withDetails(errorMessage));

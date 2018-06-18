@@ -389,20 +389,24 @@ public class PossibleValuesEnumerator {
 
         List<Object[]> possibleLocations = possibleValuesDAO.getPossibleLocations();
         for (Object[] item : possibleLocations) {
-            Long locId = ((Number)(item[0])).longValue();
-            Long locCatId = item[1] == null ? null : ((Number)(item[1])).longValue(); // FIXME should be non-null AMP-25735
+            Long locId = ((Number) item[PossibleValuesDAO.LOC_ID_POS]).longValue();
+
+            // FIXME should be non-null AMP-25735
+            Long locCatId = getLongOrNull((Number) item[PossibleValuesDAO.LOC_CAT_ID_POS]);
+
             if (locCatId != null) {
                 locCatToLocId.put(locCatId, locId);
             }
         }
 
         for (Object[] item : possibleLocations) {
-            Long locId = ((Number)(item[0])).longValue();
-            String locCatName = ((String)(item[2]));
-            Long parentLocCatId = item[3] == null? null : ((Number)(item[3])).longValue();
-            String parentLocCatName = item[4] == null? null : ((String)(item[4]));
-            Long categoryValueId = item[5] == null? null : ((Number)(item[5])).longValue();
-            String categoryValueName = item[6] == null? null : ((String)(item[6]));
+            Long locId = ((Number) item[PossibleValuesDAO.LOC_ID_POS]).longValue();
+            String locCatName = ((String) item[PossibleValuesDAO.LOC_CAT_NAME_POS]);
+            Long parentLocCatId = getLongOrNull(PossibleValuesDAO.LOC_PARENT_CAT_ID_POS);
+            String parentLocCatName = ((String) item[PossibleValuesDAO.LOC_PARENT_CAT_NAME_POS]);
+            Long categoryValueId = getLongOrNull(PossibleValuesDAO.LOC_CAT_VAL_ID_POS);
+            String categoryValueName = ((String) item[PossibleValuesDAO.LOC_CAT_VAL_NAME_POS]);
+            String iso = ((String) item[PossibleValuesDAO.LOC_ISO]);
 
             // FIXME remove this filter during AMP-25735
             if (locCatName == null && parentLocCatId == null && parentLocCatName == null
@@ -413,12 +417,20 @@ public class PossibleValuesEnumerator {
             Long parentLocId = locCatToLocId.get(parentLocCatId);
 
             LocationExtraInfo extraInfo = new LocationExtraInfo(parentLocId, parentLocCatName,
-                    categoryValueId, categoryValueName);
+                    categoryValueId, categoryValueName, iso);
 
             Map<String, String> translatedValues = translatorService.translateLabel(locCatName);
             groupedValues.put(parentLocId, new PossibleValue(locId, locCatName, translatedValues, extraInfo));
         }
         return convertToHierarchical(groupedValues);
+    }
+
+    private Long getLongOrNull(Number number) {
+        if (number != null) {
+            return number.longValue();
+        } else {
+            return null;
+        }
     }
 
     /**

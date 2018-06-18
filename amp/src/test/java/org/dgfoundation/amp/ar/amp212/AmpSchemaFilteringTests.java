@@ -3,7 +3,6 @@ package org.dgfoundation.amp.ar.amp212;
 import java.util.Arrays;
 import java.util.List;
 
-import org.dgfoundation.amp.ar.AllTests_amp212;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.mondrian.ReportAreaForTests;
 import org.dgfoundation.amp.newreports.AreaOwner;
@@ -45,10 +44,6 @@ public class AmpSchemaFilteringTests extends FilteringSanityChecks {
             "TAC_activity_2", 
             "pledged 2"
         );
-    
-    public AmpSchemaFilteringTests() {
-        super("AmpSchemaFilteringTests sanity tests");
-    }
     
     @Override
     protected NiReportExecutor getNiExecutor(List<String> activityNames) {
@@ -655,10 +650,5 @@ public class AmpSchemaFilteringTests extends FilteringSanityChecks {
                 ColumnConstants.MODE_OF_PAYMENT, Arrays.asList(ColumnReportData.UNALLOCATED_ID), true);
         
         runNiTestCase(cor, spec, acts);
-    }
-    
-    @Override
-    public void setUp() {
-        AllTests_amp212.setUp();
     }
 }

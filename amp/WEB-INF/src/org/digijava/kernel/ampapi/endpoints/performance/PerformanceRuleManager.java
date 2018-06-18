@@ -2,11 +2,16 @@ package org.digijava.kernel.ampapi.endpoints.performance;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+
 import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
@@ -20,18 +25,21 @@ import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.Perfo
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleMatcherDefinition;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.PerformanceRuleMatcherPossibleValuesSupplier;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.request.SiteDomain;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpPerformanceRule;
 import org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute;
 import org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute.PerformanceRuleAttributeType;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
+import org.springframework.web.util.HtmlUtils;
 import org.thymeleaf.util.StringUtils;
 
 /**
@@ -226,23 +234,24 @@ public final class PerformanceRuleManager {
      *            activity
      * @return matchers
      */
-    public List<PerformanceRuleMatcher> matchActivity(AmpActivityVersion a) {
+    public List<PerformanceIssue> findPerformanceIssues(AmpActivityVersion a) {
         List<PerformanceRuleMatcher> matchers = getPerformanceRuleMatchers();
 
-        return matchActivity(matchers, a);
+        return findPerformanceIssues(matchers, a);
     }
 
-    public List<PerformanceRuleMatcher> matchActivity(List<PerformanceRuleMatcher> matchers, AmpActivityVersion a) {
+    public List<PerformanceIssue> findPerformanceIssues(List<PerformanceRuleMatcher> matchers, AmpActivityVersion a) {
 
-        List<PerformanceRuleMatcher> matchedRules = new ArrayList<>();
+        List<PerformanceIssue> performanceIssues = new ArrayList<>();
 
         for (PerformanceRuleMatcher matcher : matchers) {
-            if (matcher.match(a)) {
-                matchedRules.add(matcher);
+            PerformanceIssue issue = matcher.findPerformanceIssue(a);
+            if (matcher.findPerformanceIssue(a) != null) {
+                performanceIssues.add(issue);
             }
         }
 
-        return matchedRules;
+        return performanceIssues;
     }
 
     public AmpPerformanceRuleAttribute getAttributeFromRule(AmpPerformanceRule rule, String attributeName) {
@@ -270,66 +279,166 @@ public final class PerformanceRuleManager {
         }
     }
 
-    public String buildPerformanceIssuesMessage(Map<AmpActivityVersion, List<PerformanceRuleMatcher>> actPerfRules) {
+    public String buildPerformanceIssuesMessage(Map<AmpActivityVersion, List<PerformanceIssue>> actsWithIssues) {
+
         StringBuilder sb = new StringBuilder();
-        Map<PerformanceRuleMatcher, List<AmpActivityVersion>> activitiesByPerformanceRuleMatcher = new HashMap<>();
-        
-        actPerfRules.forEach((act, matchers) -> {
-            for (PerformanceRuleMatcher m : matchers) {
-                if (!activitiesByPerformanceRuleMatcher.containsKey(m)) {
-                    activitiesByPerformanceRuleMatcher.put(m, new ArrayList<>());
+
+        Map<Long, AmpOrganisation> organisationById = new HashMap<>();
+        Map<Long, Map<Long, Map<PerformanceRuleMatcher, Set<AmpActivityVersion>>>> actByDonorAndRuleByRole =
+                new HashMap<>();
+
+        actsWithIssues.forEach((AmpActivityVersion act, List<PerformanceIssue> issues) -> {
+            Map<Long, Map<PerformanceRuleMatcher, Set<AmpActivityVersion>>> actByDonorAndRule = new HashMap<>();
+
+            for (PerformanceIssue issue : issues) {
+                List<AmpOrganisation> donors = issue.getDonors();
+                PerformanceRuleMatcher matcher = issue.getMatcher();
+
+                for (AmpOrganisation donor : donors) {
+                    Long donorId = donor.getAmpOrgId();
+                    if (!actByDonorAndRule.containsKey(donorId)) {
+                        actByDonorAndRule.put(donorId, new HashMap<>());
+                        organisationById.put(donorId, donor);
+                    }
+
+                    if (!actByDonorAndRule.get(donorId).containsKey(matcher)) {
+                        actByDonorAndRule.get(donorId).put(matcher, new LinkedHashSet<>());
+                    }
+
+                    actByDonorAndRule.get(donorId).get(matcher).add(act);
                 }
-                activitiesByPerformanceRuleMatcher.get(m).add(act);
+
+                //once we have grouped the donor for this activity we have to group at a higher level
+                // and group by the role
+
+
+                act.getOrgrole().stream().filter(o -> o.getRole().getRoleCode().
+                        equals(PerformanceRuleConstants.GROUPING_ROLE_CODE)).forEach(role -> {
+                    Map<Long, Map<PerformanceRuleMatcher, Set<AmpActivityVersion>>>
+                            actByDonorAndRuleExisting = actByDonorAndRuleByRole.
+                            get(role.getOrganisation().getAmpOrgId());
+                    if (actByDonorAndRuleExisting == null) {
+                        //if we don't have the donors by the role yet we just add this
+                        actByDonorAndRuleByRole.put(role.getOrganisation().getAmpOrgId(), actByDonorAndRule);
+                        organisationById.put(role.getOrganisation().getAmpOrgId(), role.getOrganisation());
+                    } else {
+                        //if the role already has the donor, we need to merge them
+                        actByDonorAndRule.entrySet().forEach(actByDonorAndRuleToMerge -> {
+                            if (actByDonorAndRuleExisting.get(actByDonorAndRuleToMerge.getKey()) != null) {
+                                Map<PerformanceRuleMatcher, Set<AmpActivityVersion>> performanceRuleForDonorToMerge =
+                                        actByDonorAndRuleExisting.get(actByDonorAndRuleToMerge.getKey());
+
+                                actByDonorAndRuleToMerge
+                                        .getValue().entrySet().forEach(mapaTemp2It -> {
+                                    performanceRuleForDonorToMerge.merge(mapaTemp2It.getKey(), mapaTemp2It.getValue(),
+                                            (v1, v2) -> {
+                                        v1.addAll(v2);
+                                        return v1;
+                                    });
+                                });
+                                actByDonorAndRuleExisting.put(actByDonorAndRuleToMerge.getKey(),
+                                        performanceRuleForDonorToMerge);
+                            } else {
+                                actByDonorAndRuleExisting.put(actByDonorAndRuleToMerge.getKey(),
+                                        actByDonorAndRuleToMerge.getValue());
+                            }
+                        });
+                    }
+                });
+
+
             }
         });
-        
         String ampIdLabel = TranslatorWorker.translateText("AMP ID");
         String titleLabel = TranslatorWorker.translateText("Title");
-        
+        String donorAgencyLabel = TranslatorWorker.translateText("Donor Agency");
+        String groupingAgencyLabel = TranslatorWorker.translateText(PerformanceRuleConstants.GROUPING_ROLE_LABEL);
+
+
         //TODO get the url correctly
-        String url = getBaseUrl();
-        
-        if (activitiesByPerformanceRuleMatcher.isEmpty()) {
-            sb.append("<br/>No activities with performance issues have been found.<br/>");
+        String url = SiteUtils.getBaseUrl();
+
+        if (actByDonorAndRuleByRole.isEmpty()) {
+            String noActivityWithRule = TranslatorWorker
+                    .translateText("No activities with performance issues have been found");
+            sb.append("<br/>" + noActivityWithRule + ".<br/>");
         }
-        
-        activitiesByPerformanceRuleMatcher.entrySet().forEach(e -> {
+
+        // we sort the map by org asc
+        DbUtil.HelperAmpOrganisationNameComparator helperAmpOrganisationNameComparator = new
+                DbUtil.HelperAmpOrganisationNameComparator(new Locale(TLSUtils.getLangCode()));
+
+        Map<Long, Map<Long, Map<PerformanceRuleMatcher, Set<AmpActivityVersion>>>>  actByDonorAndRuleByRoleSorted
+                = actByDonorAndRuleByRole.entrySet().stream()
+                .sorted(Map.Entry.comparingByKey(new Comparator<Long>() {
+                    @Override
+                    public int compare(Long o1, Long o2) {
+                        return helperAmpOrganisationNameComparator.compare(organisationById.get(o1), organisationById
+                                .get(o2));
+                    }
+                }))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+                        (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+
+
+        actByDonorAndRuleByRoleSorted.entrySet().forEach(groupingRoleEntry -> {
+            sb.append(String.format("<b>%s</b>: %s ", groupingAgencyLabel, organisationById.get(groupingRoleEntry
+                    .getKey()).getName()));
+            sb.append("<table witdh=\"100%\" border=\"1\"><tr><td>");
+            buildTableByDonor(sb, groupingRoleEntry.getValue(), organisationById, ampIdLabel, titleLabel,
+                    donorAgencyLabel, url);
+            sb.append("</td></tr></table>");
+            sb.append("<br/><br/>");
+        });
+
+        return sb.toString();
+    }
+
+    /**
+     * Builds the donor table. this table will go inside the table that is build for the role we are grouping by
+     * @param sb
+     * @param actByDonorAndRule
+     * @param organisationById
+     * @param ampIdLabel
+     * @param titleLabel
+     * @param url
+     */
+    private void buildTableByDonor(StringBuilder sb, Map<Long, Map<PerformanceRuleMatcher, Set<AmpActivityVersion>>>
+            actByDonorAndRule, Map<Long, AmpOrganisation> organisationById, String ampIdLabel, String titleLabel,
+                                   String donorAgencyLabel, String url) {
+        sb.append("<table><tr><td>");
+        actByDonorAndRule.entrySet().forEach(donorEntry -> {
+            String donorName = organisationById.get(donorEntry.getKey()).getName();
             sb.append("<br/>");
-            PerformanceRuleMatcher matcher = e.getKey();
-            sb.append(String.format("<b>%s (%s)</b>", 
-                    getPerformanceRuleMatcherMessage(matcher), matcher.getRule().getLevel().getLabel()));
+            sb.append(String.format("<b>%s: </b>%s", donorAgencyLabel, HtmlUtils.htmlEscape(donorName)));
             sb.append("<br/>");
-            
-            sb.append("<table border=1 cellpadding=5 cellspacing=0>");
-            sb.append(String.format("<tr><td><b>%s</b></td><td><b>%s</b></td></tr>", ampIdLabel, titleLabel));
-            e.getValue().forEach(a -> {
+
+            Map<PerformanceRuleMatcher, Set<AmpActivityVersion>> activitiesByRule = donorEntry.getValue();
+            sb.append("<table border=1 cellpadding=5 cellspacing=0 width=100%>");
+            activitiesByRule.entrySet().forEach(e -> {
                 sb.append("<tr>");
-                sb.append(String.format("<td>%s</td>", a.getAmpId()));
-                sb.append("<td>");
-                sb.append(String.format("<a href=\"http://%s/aim/viewActivityPreview.do~activityId=%s\">%s</a>", 
-                        url, a.getAmpActivityId(), a.getName()));
-                sb.append("</td>");
-                sb.append("</tr>");
+
+                PerformanceRuleMatcher matcher = e.getKey();
+                String ruleMsg = TranslatorWorker.translateText(getPerformanceRuleMatcherMessage(matcher));
+                String ruleLabel = TranslatorWorker.translateText(matcher.getRule().getLevel().getLabel());
+                sb.append(String.format("<td colspan=2><b>%s (%s)</b></td></tr>",
+                        HtmlUtils.htmlEscape(ruleMsg), HtmlUtils.htmlEscape(ruleLabel)));
+
+                sb.append(String.format("<tr><td width='150px'><b>%s</b></td><td><b>%s</b></td></tr>",
+                        ampIdLabel, titleLabel));
+                e.getValue().forEach(a -> {
+                    sb.append("<tr>");
+                    sb.append(String.format("<td>%s</td>", a.getAmpId()));
+                    sb.append("<td>");
+                    sb.append(String.format("<a href=\"http://%s/aim/viewActivityPreview.do~activityId=%s\">%s</a>",
+                            url, a.getAmpActivityId(), HtmlUtils.htmlEscape(a.getName())));
+                    sb.append("</td>");
+                    sb.append("</tr>");
+                });
             });
             sb.append("</table>");
         });
-        
-        return sb.toString();
-    }
-    
-    private String getBaseUrl() {
-        String url = "";
-        Set<SiteDomain> siteDomains = SiteUtils.getDefaultSite().getSiteDomains();
-        SiteDomain principalSiteDomain = siteDomains.stream()
-                .filter(SiteDomain::isDefaultDomain)
-                .findFirst()
-                .orElse(null);
-        
-        if (principalSiteDomain != null) {
-            url = principalSiteDomain.getSiteDomain();
-        }
-        
-        return url;
+        sb.append("</td></tr></table>");
     }
 
     public String getPerformanceRuleMatcherMessage(PerformanceRuleMatcher matcher) {
@@ -390,11 +499,15 @@ public final class PerformanceRuleManager {
     }
 
     public boolean canActivityContainPerformanceIssues(AmpActivityVersion a) {
-        return !a.isCreatedAsDraft() && !a.getDraft() && !a.getDeleted() && a.getTeam() != null
+        return !a.isCreatedAsDraft() && !Boolean.TRUE.equals(a.getDraft()) && !a.getDeleted() && a.getTeam() != null
                 && AmpARFilter.validatedActivityStatus.contains(a.getApprovalStatus());
     }
 
-    public Set<AmpCategoryValue> getPerformanceLevelsFromMatchers(List<PerformanceRuleMatcher> matchers) {
+    public Set<AmpCategoryValue> getPerformanceLevelsFromIssues(List<PerformanceIssue> issues) {
+        Set<PerformanceRuleMatcher> matchers = issues.stream()
+                .map(PerformanceIssue::getMatcher)
+                .collect(Collectors.toSet());
+        
         return matchers.stream()
                 .map(prm -> prm.getRule().getLevel())
                 .sorted()

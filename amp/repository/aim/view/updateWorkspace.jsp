@@ -56,7 +56,7 @@
 
 <link rel="stylesheet" type="text/css" href="<digi:file src= '/repository/aim/view/scripts/jquery-ui-1.11.0/jquery-ui.min.css'/>">
 <link rel="stylesheet" type="text/css" href="<digi:file src= 'gisModule/dev/node_modules/jquery-ui/themes/smoothness/jquery-ui.min.css'/>">
-
+<link rel="stylesheet" type="text/css" href="/repository/aim/view/css/filters/filters2.css">
 <script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/prefilters.js'/>" ></script>
 <script type="text/javascript" src="<digi:file src='module/aim/scripts/filters/filters.js'/>?version=fantastic_15" ></script>
 <script type="text/javascript" src="<digi:file src='module/aim/scripts/filters/searchManager.js'/>" ></script>
@@ -872,7 +872,42 @@ function cancel()
 															</table>
 															
 														</td>
-													</tr>	
+													</tr>
+													<tr id="send_summary_notification_">
+														<td colspan="4">
+															<table>
+																<tr>
+																	<td style="font-size:12px; font-weight:bold;">
+																		<html:checkbox
+																				property="sendSummaryChangesManager"
+																				value="true" >
+																			<digi:trn>Send summary changes
+																				to managers</digi:trn>
+																		</html:checkbox>
+																	</td>
+																</tr>
+															</table>
+
+														</td>
+													</tr>
+
+													<tr id="send_summary_notification_">
+														<td colspan="4">
+															<table>
+																<tr>
+																	<td style="font-size:12px; font-weight:bold;">
+																		<html:checkbox
+																				property="sendSummaryChangesApprover"
+																				value="true" >
+																			<digi:trn>Send summary changes
+																				to approvers</digi:trn>
+																		</html:checkbox>
+																	</td>
+																</tr>
+															</table>
+
+														</td>
+													</tr>
 													<c:if test="${aimUpdateWorkspaceForm.actionEvent == 'add'}">
 														<c:if test="${aimUpdateWorkspaceForm.relatedTeamFlag != 'no'}">
 															<tr  id="relTeamRow">

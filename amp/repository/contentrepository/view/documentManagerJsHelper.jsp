@@ -518,7 +518,7 @@ myTable.enhanceMarkup = function(markupName) {
  
 	var myPaginator = new YAHOO.widget.Paginator({ 
     	rowsPerPage:10,
-    	template : "<span class='t_sm'><b><digi:trn>Pages :</digi:trn></b><span> {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}",
+    	template : "<span class='t_sm'><b><digi:trn>Pages:</digi:trn></b><span> {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}",
     	//template : "{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}&nbsp;&nbsp;",
     	firstPageLinkLabel : 	"<digi:trn>&lt;&lt;</digi:trn>", 
         previousPageLinkLabel : "<digi:trn>prev</digi:trn>",
@@ -1465,7 +1465,7 @@ function validateAddDocument() {
 	}
 
     if (document.forms['crDocumentManagerForm'].fileData.files[0].size > ${uploadMaxFileSize}) {
-        msg = msg + showFailedTooBigMsg('${translation_upload_failed_too_big}', ${maxFileSizeGS}) + '<br>';
+        msg = msg + showFailedTooBigMsg("${translation_upload_failed_too_big}", ${maxFileSizeGS}) + '<br>';
     }
 
 	document.getElementById('addDocumentErrorHolderDiv').innerHTML	= msg;

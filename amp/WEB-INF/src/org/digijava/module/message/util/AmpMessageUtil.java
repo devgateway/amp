@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
@@ -54,21 +53,10 @@ public class AmpMessageUtil {
         PersistenceManager.getSession().saveOrUpdate(message);
     }
     
-    public static AmpMessage getMessage(Long messageId) throws AimException{
-        Session session=null;
-        String queryString =null;
-        Query query=null;
-        AmpMessage returnValue=null;
-        try {
-            session=PersistenceManager.getRequestDBSession();
-            queryString= "select a from " + AmpMessage.class.getName()+ " a where a.id=:id";
-            query=session.createQuery(queryString);
-            query.setParameter("id", messageId);
-            returnValue=(AmpMessage)query.uniqueResult();
-        }catch(Exception ex) {
-            logger.error("couldn't load Message" ,ex);
-        }
-        return returnValue;
+    public static AmpMessage getMessage(Long messageId) {
+        AmpMessage message = (AmpMessage) PersistenceManager.getSession().get(AmpMessage.class, messageId);
+
+        return message;
     }
     /**
      * removes AmpMessage from db
@@ -948,18 +936,6 @@ public class AmpMessageUtil {
         newMessageState.setSender(receiver.getUser().getName());
         //newMessageState.setMemberId(memberId);
         newMessageState.setReceiver(receiver);
-        String receivers = message.getReceivers();
-        if (receivers == null) {
-            receivers = "";
-        } else {
-            if (receivers.length() > 0) {
-                receivers += ", ";
-            }
-        }
-        User user = receiver.getUser();
-
-        receivers += user.getFirstNames() + " " + user.getLastName() + "<" + user.getEmail() + ">;" + receiver.getAmpTeam().getName() + ";";
-        message.setReceivers(receivers);
         newMessageState.setRead(false);
         //check if user's inbox is already full
 
@@ -977,5 +953,10 @@ public class AmpMessageUtil {
         }
         //saving current state in db
         AmpMessageUtil.saveOrUpdateMessageState(newMessageState);
+    }
+    
+    public static void createMessageReceiver(AmpTeamMember teamMember) {
+        
+        
     }
 }

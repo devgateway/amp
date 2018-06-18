@@ -36,7 +36,6 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.digijava.kernel.request.TLSUtils;
-import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.apache.log4j.Logger;
@@ -559,4 +558,19 @@ public class SiteUtils {
         Locale locale = getDefaultSite().getLocale(TLSUtils.getEffectiveLangCode());
         return !locale.getLeftToRight();
     }
+
+    public static String getBaseUrl() {
+        String url = "";
+        Set<SiteDomain> siteDomains = SiteUtils.getDefaultSite().getSiteDomains();
+        SiteDomain principalSiteDomain = siteDomains.stream()
+                .filter(SiteDomain::isDefaultDomain)
+                .findFirst()
+                .orElse(null);
+        
+        if (principalSiteDomain != null) {
+            url = principalSiteDomain.getSiteDomain();
+        }
+        
+        return url;
+    }    
 }

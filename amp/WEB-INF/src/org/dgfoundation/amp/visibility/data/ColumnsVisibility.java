@@ -5,8 +5,11 @@ package org.dgfoundation.amp.visibility.data;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.dgfoundation.amp.utils.ConstantsUtil;
+import org.digijava.module.aim.dbentity.AmpColumns;
+import org.digijava.module.aim.util.AdvancedReportUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
@@ -31,6 +34,8 @@ import java.util.stream.Collectors;
 public class ColumnsVisibility extends DataVisibility implements FMSettings {
     protected static final Logger logger = Logger.getLogger(ColumnsVisibility.class);
     
+    public static final int PROGRAM_LEVEL_COUNT = 8;
+
     private static final Set<String> columnsSet = ConstantsUtil.getConstantsSet(ColumnConstants.class);
 
     /*
@@ -97,7 +102,7 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
         switch(dataMapType) {
         case MODULES: return modulesToColumnsMap; 
         case FEATURES: return featuresToColumnsMap;
-        case FIELDS: return fieldsToColumnsMap;
+        case FIELDS: return FIELDS_TO_COLUMNS_MAP;
         case DEPENDENCY: return dependencyMap;
         default: return null; //shouldn't come here
         }
@@ -229,6 +234,7 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
         put(ColumnConstants.DONOR_ID, ColumnConstants.DONOR_AGENCY);
         put(ColumnConstants.DONOR_GROUP, ColumnConstants.DONOR_AGENCY);
         put(ColumnConstants.DONOR_TYPE, ColumnConstants.DONOR_AGENCY);
+        put(ColumnConstants.DONOR_BUDGET_CODE, ColumnConstants.DONOR_AGENCY);
         put(ColumnConstants.DONOR_COMMITMENT_DATE, ColumnConstants.DONOR_AGENCY);
         put(ColumnConstants.RESPONSIBLE_ORGANIZATION_DEPARTMENT_DIVISION, ColumnConstants.RESPONSIBLE_ORGANIZATION);
         put(ColumnConstants.RESPONSIBLE_ORGANIZATION_GROUPS, ColumnConstants.RESPONSIBLE_ORGANIZATION);
@@ -279,7 +285,7 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
     }};
     
     @SuppressWarnings("serial")
-    protected static final Map<String, String> fieldsToColumnsMap = new HashMap<String, String>() {{
+    protected static final Map<String, String> FIELDS_TO_COLUMNS_MAP = new HashMap<String, String>() {{
         put("AMP ID", ColumnConstants.AMP_ID);
         put("Activity Approved By", ColumnConstants.ACTIVITY_APPROVED_BY);
         put("Activity Created By", ColumnConstants.ACTIVITY_CREATED_BY);
@@ -297,7 +303,7 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
         put("Budget Program", ColumnConstants.BUDGET_PROGRAM);
         put("Budget Sector", ColumnConstants.BUDGET_SECTOR);
         put("Calculated Project Life", ColumnConstants.CALCULATED_PROJECT_LIFE);
-        put("Capital - Expenditure", ColumnConstants.CAPITAL___EXPENDITURE);
+        put("Capital Expenditure", ColumnConstants.CAPITAL_EXPENDITURE);
         put("Component Name", ColumnConstants.COMPONENT_NAME);
         put("Component description", ColumnConstants.COMPONENT_DESCRIPTION);
         put("Component Funding Organization", ColumnConstants.COMPONENT_FUNDING_ORGANIZATION);
@@ -309,7 +315,6 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
         put("Description of Component Funding", ColumnConstants.DESCRIPTION_OF_COMPONENT_FUNDING);
         put("Draft", ColumnConstants.DRAFT);
         put("Execution Rate", ColumnConstants.EXECUTION_RATE);
-//      put("Expenditure Class", ColumnConstants.EXPENDITURE_CLASS);
         put("Final Date for Disbursements Comments", ColumnConstants.FINAL_DATE_FOR_DISBURSEMENTS_COMMENTS);
         put("Funding end date", ColumnConstants.FUNDING_END_DATE);
         put("Funding start date", ColumnConstants.FUNDING_START_DATE);
@@ -375,6 +380,7 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
         put("Pledges Type Of Assistance", ColumnConstants.PLEDGES_TYPE_OF_ASSISTANCE);
         put("Pledge Status", ColumnConstants.PLEDGE_STATUS);
         put("Pledges Titles", ColumnConstants.PLEDGES_TITLES);
+        put("Primary Sector Code Official", ColumnConstants.PRIMARY_SECTOR_CODE_OFFICIAL);
         put("Project Age Ratio", ColumnConstants.PROJECT_AGE_RATIO);
         put("Project Implementation Delay", ColumnConstants.PROJECT_IMPLEMENTATION_DELAY);
         put("Project Description", ColumnConstants.PROJECT_DESCRIPTION);
@@ -393,20 +399,38 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
         String[] colPrefixList = new String[] {"National Planning Objectives Level ", "Primary Program Level ", 
                 "Secondary Program Level ", "Tertiary Program Level "};
         for (String colPrefix : colPrefixList) {
-            for (int i = 1; i < 9 ; i++) {
+            for (int i = 1; i <= PROGRAM_LEVEL_COUNT; i++) {
                 String level = colPrefix + i; 
                 put(level, level);
             }
+
+            put(ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR, ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR);
+            put(ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR, ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR);
+            put(ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR, ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR);
+            put(ColumnConstants.SECONDARY_SECTOR_SUB_SUB_SECTOR, ColumnConstants.SECONDARY_SECTOR_SUB_SUB_SECTOR);
+            put(ColumnConstants.TERTIARY_SECTOR_SUB_SECTOR, ColumnConstants.TERTIARY_SECTOR_SUB_SECTOR);
+            put(ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR, ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR);
+            put(ColumnConstants.EFFECTIVE_FUNDING_DATE, ColumnConstants.EFFECTIVE_FUNDING_DATE);
+            put(ColumnConstants.FUNDING_CLOSING_DATE, ColumnConstants.FUNDING_CLOSING_DATE);
+
+            putAll(getMtefColumns());
+        }}
+        
+        private Map<String, String> getMtefColumns() {
+            String regex = "^(MTEF|Real MTEF"
+                    + "|" + MeasureConstants.MTEF_PROJECTIONS
+                    + "|" + MeasureConstants.PIPELINE_MTEF_PROJECTIONS
+                    + "|" + MeasureConstants.PROJECTION_MTEF_PROJECTIONS
+                    + ").*$";
+    
+            Map<String, String> mtefColumns = AdvancedReportUtil.getColumnList().stream()
+                    .filter(col -> col.getColumnName().matches(regex))
+                    .collect(Collectors.toMap(AmpColumns::getColumnName, AmpColumns::getColumnName));
+    
+            return mtefColumns;
         }
-        put(ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR, ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR);
-        put(ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR, ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR);
-        put(ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR, ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR);
-        put(ColumnConstants.SECONDARY_SECTOR_SUB_SUB_SECTOR, ColumnConstants.SECONDARY_SECTOR_SUB_SUB_SECTOR);
-        put(ColumnConstants.TERTIARY_SECTOR_SUB_SECTOR, ColumnConstants.TERTIARY_SECTOR_SUB_SECTOR);
-        put(ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR, ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR);
-        put(ColumnConstants.EFFECTIVE_FUNDING_DATE, ColumnConstants.EFFECTIVE_FUNDING_DATE);
-        put(ColumnConstants.FUNDING_CLOSING_DATE, ColumnConstants.FUNDING_CLOSING_DATE);
-    }};
+    };
+    
     
     protected static final List<String> visibleByDefault = Arrays.asList(
             ColumnConstants.ACTIVITY_COUNT,

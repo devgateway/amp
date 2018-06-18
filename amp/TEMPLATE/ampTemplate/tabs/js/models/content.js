@@ -15,8 +15,8 @@ define([ 'underscore', 'backbone', 'documentModel' ], function(_, Backbone, Docu
 			});
 		},
 		parse : function(resp, xhr) {
-			 var data =(resp.data) ? resp.data: resp;			 
-			 this.rawFilters = {filters: data.reportMetadata.reportSpec.filters || {} };  	
+			 var data =(resp.data) ? resp.data: resp;
+			 this.rawFilters = {filters: _.clone(data.reportMetadata.reportSpec.filters || {})};
 			 return data;
 		},		
 		defaults : {
@@ -29,7 +29,7 @@ define([ 'underscore', 'backbone', 'documentModel' ], function(_, Backbone, Docu
 			}
 		},
 		filtersToJSON : function() {
-			return _.clone(this.rawFilters);			 
+			return _.clone(this.rawFilters);
 		}
 	});
 

@@ -33,7 +33,7 @@ public class OrganizationSkeleton implements Comparable<OrganizationSkeleton>, H
     private String code;
     private String description;
     private Long orgGrpId;
-    
+    private List<Long> roleIds;
     
     boolean translatable;
     public OrganizationSkeleton() {}
@@ -77,6 +77,22 @@ public class OrganizationSkeleton implements Comparable<OrganizationSkeleton>, H
 
     public Long getOrgGrpId() {
         return orgGrpId;
+    }
+    
+    public List<Long> getRoleIds() {
+        return roleIds;
+    }
+
+    public void setRoleIds(List<Long> roleIds) {
+        this.roleIds = roleIds;
+    }
+    
+    public void setAcronym(String acronym) {
+        this.acronym = acronym;
+    }
+    
+    public void setOrgGrpId(Long orgGrpId) {
+        this.orgGrpId = orgGrpId;
     }
 
     /**

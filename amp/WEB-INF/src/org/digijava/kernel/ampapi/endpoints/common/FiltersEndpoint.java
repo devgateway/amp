@@ -16,18 +16,19 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
+import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.digijava.kernel.ampapi.endpoints.dto.SimpleJsonBean;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
+import org.digijava.kernel.ampapi.endpoints.filters.FilterList;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersBuilder;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
+import org.digijava.kernel.ampapi.endpoints.filters.FiltersManager;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingField;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
@@ -70,8 +71,7 @@ public class FiltersEndpoint {
     private static final String SECTORS_SUFFIX = " Sectors";
     private static final Logger logger = Logger.getLogger(FiltersEndpoint.class);
     
-    /** the value to use as a filter value when filtering booleans for ANY DEFINED */
-    public static final String ANY_BOOLEAN = "999888777";
+    public static final String ANY_VALUE = "999888777";
 
     // todo
     // probably not the best place to keep, but definitely better than in the method
@@ -224,6 +224,20 @@ public class FiltersEndpoint {
         }
         return sector;
     }
+    
+    /**
+     * List the sector schemas and the sector tree
+     * 
+     * @return tree definitions (filter types) and the tree structure of the organizations
+     */
+    @GET
+    @Path("/sectorlist")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = true, id = "SectorList", name = "SectorList", tab = EPConstants.TAB_SECTORS)
+    public FilterList getSectorList() {
+        return FiltersManager.getInstance().getSectorFilterList();
+    }
+    
     /**
      * Return the year range configure for GIS
      * @return
@@ -358,6 +372,19 @@ public class FiltersEndpoint {
     }
     
     /**
+     * List the program settings and the program items
+     * 
+     * @return tree definitions (filter types) and the list of the programs
+     */
+    @GET
+    @Path("/programlist")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = true, id = "ProgramList", name = "ProgramList", tab = EPConstants.TAB_PROGRAMS)
+    public FilterList getProgramList() {
+        return FiltersManager.getInstance().getProgramFilterList();
+    }
+    
+    /**
      * Return org types with its orgs groups
      * 
      * @return
@@ -427,7 +454,22 @@ public class FiltersEndpoint {
     public List<JsonBean> getOrgs() { 
         List <JsonBean> orgs = QueryUtil.getOrgs();
         return orderByName(orgs);
-    }   
+    }
+    
+    /**
+     * List the organization filter types and the organization tree
+     * 
+     * @return tree definitions (filter types) and the tree structure of the organizations
+     */
+    @GET
+    @Path("/organizations")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = true, id = "Orgs", name = "Orgs", tab = EPConstants.TAB_ORGANIZATIONS)
+    public FilterList getOrganizations() {
+        return FiltersManager.getInstance().getOrganizationFilterList();
+    }
+
+
 
     /**
      * List all available orgs roles
@@ -627,6 +669,7 @@ public class FiltersEndpoint {
         }
         //reorder because after we get the translated name we lose ordering
         fi = orderByProperty (fi,NAME_PROPERTY);
+        fi.add(new SimpleJsonBean(ColumnReportData.UNALLOCATED_ID, FiltersConstants.UNDEFINED_NAME));
         return fi;
         
     }
@@ -644,6 +687,19 @@ public class FiltersEndpoint {
             tab=EPConstants.TAB_LOCATIONS)
     public JsonBean getLocations() {
         return QueryUtil.getLocationsForFilter();
+    }
+    
+    /**
+     * List the locations tree
+     * 
+     * @return tree definitions (filter types) and the tree structure of the locations
+     */
+    @GET
+    @Path("/locationlist")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = true, id = "LocationList", name = "LocationList", tab = EPConstants.TAB_LOCATIONS)
+    public FilterList getLocationsList() {
+        return FiltersManager.getInstance().getLocationFilterList();
     }
     
     @GET
@@ -669,11 +725,13 @@ public class FiltersEndpoint {
         res.set("filterId", FilterUtils.INSTANCE.idFromColumnName(columnName));
         res.set("name", columnName);
         res.set("translatedName", columnName);
-        res.set("id", ANY_BOOLEAN);
+        res.set("id", ANY_VALUE);
         res.set("values", 
                 Arrays.asList(
                     new SimpleJsonBean(1, "Yes", null, TranslatorWorker.translateText("Yes")),
-                    new SimpleJsonBean(2, "No", null, TranslatorWorker.translateText("No"))
+                    new SimpleJsonBean(2, "No", null, TranslatorWorker.translateText("No")),
+                    new SimpleJsonBean(ColumnReportData.UNALLOCATED_ID, FiltersConstants.UNDEFINED_NAME, null, 
+                            TranslatorWorker.translateText(FiltersConstants.UNDEFINED_NAME))
                 ));
         return res;
     }

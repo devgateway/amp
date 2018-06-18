@@ -22,7 +22,7 @@ public @interface ApiMethod {
      *
      * <p>Note: Used in filters only.</p>
      */
-    boolean ui();
+    boolean ui() default false;
 
     /**
      * Translatable method name.

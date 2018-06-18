@@ -12,6 +12,7 @@ import org.dgfoundation.amp.nireports.TextCell;
 import org.dgfoundation.amp.nireports.amp.diff.TextColumnKeyBuilder;
 import org.dgfoundation.amp.nireports.behaviours.TextualTokenBehaviour;
 import org.dgfoundation.amp.nireports.output.nicells.NiTextCell;
+import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
@@ -28,6 +29,8 @@ import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
  *
  */
 public class SimpleTextColumn extends AmpDifferentialColumn<TextCell> {
+
+    private static final int ENTITY_ID_INDEX_3 = 3;
 
     protected Function<String, String> postprocessor = Function.identity();
 
@@ -50,11 +53,12 @@ public class SimpleTextColumn extends AmpDifferentialColumn<TextCell> {
     @Override
     protected TextCell extractCell(NiReportsEngine engine, ResultSet rs) throws SQLException {
         String text = postprocessor.apply(rs.getString(2));
+        Long entityId = rs.getLong(withoutEntity ? 1 : ENTITY_ID_INDEX_3);
         
-        if (!allowNulls && text == null)
+        if (!allowNulls && text == null && entityId != ColumnReportData.UNALLOCATED_ID) {
             return null;
+        }
 
-        Long entityId = rs.getLong(withoutEntity ? 1 : 3);
         Map<NiDimensionUsage, Coordinate> coos = buildCoordinates(entityId, engine, rs);
         return new TextCell(text, rs.getLong(1), entityId, coos, this.levelColumn);
     }

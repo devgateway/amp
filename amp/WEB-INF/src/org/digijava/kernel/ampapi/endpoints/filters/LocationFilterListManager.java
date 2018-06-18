@@ -83,10 +83,9 @@ public class LocationFilterListManager implements FilterListManager {
         for (Long countryId : countriesWithChildrenIds) {
             LocationSkeleton countryLocation = locations.get(countryId);
             locationItems.add(getLocations(countryLocation));
+            locationItems.add(UNDEFINED_OPTION);
         }
         
-        locationItems.add(getLocations(defaultCountryLocation));
-        locationItems.add(UNDEFINED_OPTION);
         items.put(LOCATIONS_ITEMS_NAME, locationItems);
 
         return items;

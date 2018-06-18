@@ -414,7 +414,7 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
             put(ColumnConstants.FUNDING_CLOSING_DATE, ColumnConstants.FUNDING_CLOSING_DATE);
 
             putAll(getMtefColumns());
-        }}
+        } }
         
         private Map<String, String> getMtefColumns() {
             String regex = "^(MTEF|Real MTEF"

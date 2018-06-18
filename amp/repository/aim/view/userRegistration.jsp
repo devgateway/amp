@@ -116,6 +116,7 @@
 			alert("${translation}");
         	return false;
         }
+        
         if(selectedOrgType=="-1"){
 			<c:set var="translation">
 			<digi:trn key="error.registration.enterorganizationother">Please enter Organization Type</digi:trn>
@@ -140,6 +141,7 @@
 
         return true;
 	}
+    
 	function validateEmail() {
 	    var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
 		var address = document.aimUserRegisterForm.email.value;
@@ -158,6 +160,22 @@
 			alert("${translation}");
         	return false;
 		}
+		
+		var notificationEmail = $('#notificationEmail').val();
+        if ($('#notificationEmailEnabled').is(":checked")) {
+	        	if(reg.test(notificationEmail) == false) {
+		        	<c:set var="translation"><digi:trn>Please enter a valid Notification Email</digi:trn></c:set>
+		            alert("${translation}");
+		            return false;
+		        }
+	        	
+	        	if(address == notificationEmail) {
+                    <c:set var="translation"><digi:trn>Email address and notification email address must be different</digi:trn></c:set>
+                    alert("${translation}");
+                    return false;
+                }
+        }
+        
 		return true;
 	}
 	
@@ -172,13 +190,33 @@
 		document.getElementsByName("selectedOrgType")[0].selectedIndex = 0;
 		document.getElementsByName("selectedOrgGroup")[0].selectedIndex = 0;
 		document.getElementsByName("selectedOrganizationId")[0].selectedIndex = 0;
-
+		
+		$('#notificationEmailEnabled').prop('checked', false);
+		$('#notificationEmailRow').hide();
+	}
+	
+	function init() {
+		$('#notificationEmailEnabled').bind("click", function() {
+            $('#notificationEmailRow') [this.checked ? "show" : "hide"]();
+        });
+		
+		$('#notificationEmailRow')[$('#notificationEmailEnabled').is(":checked") ? "show" : "hide"]();
 	}
 
 
 	var enterBinder	= new EnterHitBinder('registerUserBtn');
+	
+	YAHOOAmp.util.Event.addListener(window, "load", init);
 
 </script>
+
+<c:set var="notificationHelp"><digi:trn>
+Please select this checkbox in case you want to specify an email address to receive system notifications.&#013;
+This email address will potentially be used by the system to send AMP related information.&#013;
+If you are unsure now, an AMP admin can add your Notification Email later on.&#013;
+Please do not attempt to use the Notification Email as user login.
+</digi:trn></c:set>
+
 <center>
 <div class="reg_form_container">
 <div class="home_sec_title"><digi:trn key="um:accountInfoAboutYou">Account information / about you </digi:trn></div>
@@ -244,6 +282,28 @@
               <td class=f-names noWrap style="padding-bottom:10px;"><FONT color=red>*</FONT>
                 <digi:trn key="um:repPassword">Repeat Password </digi:trn>              </td>
               <td align="right" style="padding-bottom:10px;"><html:password property="passwordConfirmation" size="20" styleClass="inp-text" />              </td>
+            </tr>
+            <tr>
+              <td class=f-names noWrap style="padding-bottom:10px;">
+                <img src= "../ampTemplate/images/help.gif" border="0" title="${notificationHelp}">
+                <digi:trn>Use different email for email notifications</digi:trn></td>
+              <td align="center" style="padding-bottom:10px;">
+                <html:checkbox property="notificationEmailEnabled" style="width: auto" styleId="notificationEmailEnabled"/>              
+              </td>
+              <td>&nbsp;</td>
+              <td colspan=2>
+                <table width="100%">
+                    <tr id="notificationEmailRow">
+                        <td class=f-names noWrap style="padding-bottom:10px;">
+                            <FONT color=red>*</FONT>
+                            <digi:trn>Notification Email</digi:trn>
+                        </td>
+                        <td align="right" style="padding-bottom:10px;">
+                            <html:text property="notificationEmail" size="20" styleClass="inp-text" styleId="notificationEmail"/>
+                        </td>
+                    </tr>
+                </table>
+              </td>
             </tr>
             <tr>
               <td class=f-names noWrap style="padding-bottom:10px;"><FONT color=red>*</FONT>

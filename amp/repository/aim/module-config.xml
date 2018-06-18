@@ -107,6 +107,7 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpInflationSource</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpFilteredCurrencyRate</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpTeam</hibernate-class>
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpSummaryNotificationSettings</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpMEIndicatorValue</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpMEIndicators</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpTeamMemberRoles</hibernate-class>
@@ -240,6 +241,8 @@
         <!-- Aid Effectiveness Indicators -->
         <hibernate-class>org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicator</hibernate-class>
         <hibernate-class>org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicatorOption</hibernate-class>
+        
+        <hibernate-class>org.digijava.module.aim.dbentity.AmpInterchangeableResult</hibernate-class>
         
         <!-- Menu -->
         <hibernate-class>org.digijava.module.aim.dbentity.AmpMenuEntry</hibernate-class>

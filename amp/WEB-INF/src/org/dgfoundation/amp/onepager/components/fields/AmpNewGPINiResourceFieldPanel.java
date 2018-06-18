@@ -73,8 +73,9 @@ public class AmpNewGPINiResourceFieldPanel extends AmpFeaturePanel {
     private IModel<AmpGPINiSurveyResponse> responseModel;
 
     public AmpNewGPINiResourceFieldPanel(final String id, final IModel<AmpGPINiSurveyResponse> model,
-                                    final String fmName, final AmpGPINiSurveyResourcesFormTableFeature resourcesList,
-                                    boolean newResourceIsWebLink) throws Exception {
+            final String fmName, final AmpGPINiSurveyResourcesFormTableFeature resourcesList,
+            List<AmpCollectionValidatorField<AmpGPINiSurveyResponse, String>> responseValidationFields,
+            boolean newResourceIsWebLink) throws Exception {
         
         super(id, model, fmName, true);
         
@@ -147,6 +148,11 @@ public class AmpNewGPINiResourceFieldPanel extends AmpFeaturePanel {
                     tmpDoc.setNewTemporaryDocumentId(docId);
                     td.setObject(tmpDoc);
                     fileItemModel.setObject(null);
+                    
+                    final AjaxRequestTarget target = getRequestCycle().find(AjaxRequestTarget.class);
+                    if (target != null) {
+                        responseValidationFields.stream().forEach(r -> r.reloadValidationField(target, false));
+                    }
                 }
             }
         };

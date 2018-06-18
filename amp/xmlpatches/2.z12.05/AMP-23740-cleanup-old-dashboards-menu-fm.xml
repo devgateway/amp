@@ -77,6 +77,11 @@
                     WHERE module_id IN (SELECT id FROM amp_modules_visibility 
 					WHERE parent IN (SELECT id FROM amp_modules_visibility WHERE name = 'Visualization Dashboards'));
 				
+                DELETE from amp_features_visibility where parent in 
+                    (SELECT id FROM amp_modules_visibility WHERE parent IN 
+                    (SELECT id FROM amp_modules_visibility WHERE name = 'Visualization Dashboards')
+                );
+
 				DELETE FROM amp_modules_visibility WHERE parent IN (SELECT id FROM amp_modules_visibility WHERE name = 'Visualization Dashboards');
 	    		
 				DELETE FROM amp_modules_templates WHERE module IN (

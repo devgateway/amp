@@ -43,7 +43,6 @@ public class MeasureConstants {
     public static final String REAL_PLANNED_DISBURSEMENTS = "Real Planned Disbursements";
     public static final String REAL_DISBURSEMENTS = "Real Disbursements";
     public static final String REAL_COMMITMENTS = "Real Commitments";
-    public static final String REAL_MTEFS = "Real MTEFs";
     public static final String PERCENTAGE_OF_TOTAL_COMMITMENTS = "Percentage of Total Commitments";
     public static final String PERCENTAGE_OF_TOTAL_DISBURSEMENTS = "Percentage Of Total Disbursements";
     public static final String LAST_YEAR_OF_PLANNED_DISBURSEMENTS = "Last Year of Planned Disbursements";
@@ -55,7 +54,7 @@ public class MeasureConstants {
     public static final String NATIONAL_BUDGET_EXECUTION_PROCEDURES = "National Budget Execution Procedures";
     public static final String NATIONAL_FINANCIAL_REPORTING_PROCEDURES = "National Financial Reporting Procedures";
     public static final String NATIONAL_AUDITING_PROCEDURES = "National Auditing Procedures";
-    public static final String NATIONAL_PROCUREMENT_EXECUTION_PROCEDURES = "National Procurement Execution Procedures";
+    public static final String NATIONAL_PROCUREMENT_EXECUTION_PROCEDURES = "National Procurement Systems";
     
      
     //type = D (?)
@@ -68,8 +67,14 @@ public class MeasureConstants {
     public static final String PIPELINE_RELEASE_OF_FUNDS = "pipeline Release of Funds";
     public static final String PLANNED_ESTIMATED_DISBURSEMENTS = "Planned Estimated Disbursements";
     public static final String PLANNED_RELEASE_OF_FUNDS = "Planned Release of Funds";
+    public static final String MTEF_PROJECTIONS = "MTEF Projections";
     public static final String PIPELINE_MTEF_PROJECTIONS = "Pipeline " + ArConstants.MTEF_PROJECTION;
     public static final String PROJECTION_MTEF_PROJECTIONS = "Projection " + ArConstants.MTEF_PROJECTION;
+    public static final String REAL_MTEFS = "Real MTEFs";
+    
+    // AMP-27467 MTEF measures
+    public static final String MTEF = "MTEF";
+    public static final String REAL_MTEF = "Real MTEF";
 
     public static final String VARIANCE_OF_COMMITMENTS = "Variance Of Commitments";
     public static final String VARIANCE_OF_DISBURSEMENTS = "Variance Of Disbursements";
@@ -83,7 +88,6 @@ public class MeasureConstants {
     public static final String PLEDGES_PERCENTAGE_OF_DISBURSEMENT = "Percentage of Disbursement";
     public static final String PLEDGES_PLANNED_COMMITMENTS = "Planned Commitments";
     public static final String PLEDGES_PLANNED_DISBURSEMENTS = "Planned Disbursements";
-    public static final String MTEF_PROJECTIONS = "MTEF Projections";
     
     //type unset
     public static final String EXECUTION_RATE = "Execution Rate";

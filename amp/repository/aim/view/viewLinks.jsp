@@ -61,7 +61,7 @@
 										<tr bgcolor="#f4f4f2">
 											<td>
 
-												<digi:trn key="aim:lnkTitle">Title:</digi:trn> <b><c:out value="${document.title}"/></b> <br>
+												<digi:trn key="aim:lnkTitle">Title</digi:trn>: <b><c:out value="${document.title}"/></b> <br>
 												<c:if test="${!empty document.docDescription}">
                                                   <digi:trn key="aim:lnkDescription">Description:</digi:trn>
                                                   <c:out value="${document.docDescription}"/><br>

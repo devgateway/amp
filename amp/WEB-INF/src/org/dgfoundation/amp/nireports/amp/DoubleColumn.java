@@ -14,12 +14,12 @@ import org.dgfoundation.amp.nireports.schema.NiDimension;
 /**
  * @author Octavian Ciubotaru
  */
-public class DoubleColumn extends AmpDifferentialColumn<DoubleCell, Boolean> {
+public class DoubleColumn extends AmpDifferentialColumn<DoubleCell> {
 
     public DoubleColumn(String columnName,
             NiDimension.LevelColumn levelColumn, String viewName,
             Behaviour<?> behaviour) {
-        super(columnName, levelColumn, viewName, (engine, col) -> true, behaviour);
+        super(columnName, levelColumn, viewName, (engine, col) -> "", behaviour);
     }
 
     @Override

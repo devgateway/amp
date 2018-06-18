@@ -70,7 +70,7 @@ public class ShowUserTell extends Action {
 
           if (contactUser != null) {
               userForm.setSenderName(user.getName());
-              userForm.setSenderEmail(user.getEmail());
+              userForm.setSenderEmail(user.getEmailUsedForNotification());
               userForm.setContentLanguages(TrnUtil.getSortedUserLanguages(
                   request));
           }

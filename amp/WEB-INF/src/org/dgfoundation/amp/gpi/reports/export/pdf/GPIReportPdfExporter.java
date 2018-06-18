@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.currency.ConstantCurrency;
@@ -156,10 +157,10 @@ public class GPIReportPdfExporter implements GPIReportExporter {
     public void renderReportTableHeader(GPIReport report, PdfPTable table) {
         Font bfBold11 = new Font(Font.HELVETICA, 10, Font.BOLD, new Color(0, 0, 0));
         Color bkgColor = Color.LIGHT_GRAY;
-
-        report.getPage().getHeaders()
-                .forEach(column -> insertCell(table, getHeaderColumnName(column), 
-                        Element.ALIGN_CENTER, 1, bfBold11, bkgColor));
+        
+        List<GPIReportOutputColumn> columns = getDataTableColumns(report);
+        columns.forEach(column -> insertCell(table, getHeaderColumnName(column), 
+                Element.ALIGN_CENTER, 1, bfBold11, bkgColor));
 
         table.setHeaderRows(1);
 
@@ -168,9 +169,10 @@ public class GPIReportPdfExporter implements GPIReportExporter {
     protected void renderReportTableData(GPIReport report, PdfPTable table) {
         Font bf10 = new Font(Font.HELVETICA, 10);
         Color bkgColor = Color.WHITE;
-
+        
+        List<GPIReportOutputColumn> columns = getDataTableColumns(report);
         report.getPage().getContents().forEach(row -> {
-            report.getPage().getHeaders().forEach(col -> {
+            columns.forEach(col -> {
                 insertCell(table, row.get(col), getCellAlignment(col.originalColumnName), 1, bf10, bkgColor);
             });
         });

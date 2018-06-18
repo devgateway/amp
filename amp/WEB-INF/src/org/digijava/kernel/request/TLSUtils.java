@@ -14,6 +14,10 @@ import org.digijava.kernel.Constants;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.SiteCache;
+import org.digijava.kernel.util.SiteUtils;
+import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.TeamUtil;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -33,10 +37,19 @@ public class TLSUtils {
     public Site site;
     public HttpServletRequest request;
     private static String forcedLangCode = null;
+    private Boolean forcedSSCWorkspace;
     
     public static String getLangCode() {
-        if (TLSUtils.forcedLangCode != null)
+        if (TLSUtils.forcedLangCode != null) {
             return TLSUtils.forcedLangCode;
+        } else {
+            // we force the langcode for this request, to be used by JOBS where we use mock
+            // request
+            if (TLSUtils.getThreadLocalInstance().request != null
+                    && TLSUtils.getThreadLocalInstance().request.getAttribute(Constants.FORCED_LANGUAGE) != null) {
+                return TLSUtils.getThreadLocalInstance().request.getAttribute(Constants.FORCED_LANGUAGE).toString();
+            }
+        }
         try
         {
             ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
@@ -65,7 +78,20 @@ public class TLSUtils {
             return "en";
         }
     }
-    
+
+    public void setForcedSSCWorkspace(Boolean forcedSSCWorkspace) {
+        this.forcedSSCWorkspace = forcedSSCWorkspace;
+    }
+
+    public boolean inSSCWorkspace() {
+        if (forcedSSCWorkspace != null) {
+            return forcedSSCWorkspace;
+        } else {
+            TeamMember member = TeamUtil.getCurrentMember();
+            return member != null && member.getWorkspacePrefix() != null;
+        }
+    }
+
     public final static boolean equalValues(Object a, Object b)
     {
         if (a == null)
@@ -194,9 +220,21 @@ public class TLSUtils {
         });
         schemaStubber.when(mockServletContext).getRealPath(Mockito.anyString());
         
-        TLSUtils.getThreadLocalInstance().request = mockRequest;
+        populateMockSiteDomain(mockRequest, "/");
+        populate(mockRequest);
+        
     }
 
+    private static void populateMockSiteDomain(HttpServletRequest httpRequest, String mainPath) {
+        // we use localhost since at this point we don't have access to the real hosts
+        String defaultUrl = SiteUtils.getBaseUrl();
+        SiteDomain siteDomain = SiteCache.getInstance().getSiteDomain(defaultUrl, mainPath);
+        if (siteDomain != null) {
+            httpRequest.setAttribute(org.digijava.kernel.Constants.CURRENT_SITE, siteDomain);
+        } else {
+            logger.error("Site domain for localhost not configured");
+        }
+    }
     private static Stubber getMockGetter(final Map<String, Object> sessionAttributes) {
         Stubber s=
         Mockito.doAnswer(new Answer<Object>() {
@@ -222,6 +260,14 @@ public class TLSUtils {
             }
         });
         return s;
+    }
+
+    public static void forceLangCodeToSiteLangCode() {
+        if (TLSUtils.getThreadLocalInstance().request != null && TLSUtils.getThreadLocalInstance().site != null) {
+            TLSUtils.getThreadLocalInstance().request.setAttribute(Constants.FORCED_LANGUAGE,
+                    TLSUtils.getThreadLocalInstance().site.getDefaultLanguage().getCode());
+        }
+
     }
          
 }

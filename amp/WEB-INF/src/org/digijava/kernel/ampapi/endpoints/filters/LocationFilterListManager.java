@@ -1,6 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.filters;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -9,8 +11,6 @@ import java.util.stream.Collectors;
 
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationSkeleton;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -78,8 +78,12 @@ public class LocationFilterListManager implements FilterListManager {
         
         Map<Long, LocationSkeleton> locations = LocationSkeleton.populateSkeletonLocationsList();
         
-        long defaultCountryLocationId = getDefaultCountryLocationId();
-        LocationSkeleton defaultCountryLocation = locations.get(defaultCountryLocationId);
+        List<Long> countriesWithChildrenIds = getCountriesWithChildrenIds();
+        
+        for (Long countryId : countriesWithChildrenIds) {
+            LocationSkeleton countryLocation = locations.get(countryId);
+            locationItems.add(getLocations(countryLocation));
+        }
         
         locationItems.add(getLocations(defaultCountryLocation));
         locationItems.add(UNDEFINED_OPTION);
@@ -89,17 +93,20 @@ public class LocationFilterListManager implements FilterListManager {
     }
 
     /**
-     * @return default AMP country id
+     * @return Country ids with children
      */
-    protected long getDefaultCountryLocationId() {
-        long parentLocationId = PersistenceManager.getLong(PersistenceManager.getSession()
-                .createSQLQuery("SELECT acvl.id FROM amp_category_value_location acvl "
-                        + "WHERE acvl.parent_location IS NULL AND location_name = (" 
-                        + "SELECT country_name FROM dg_countries WHERE iso = '" 
-                        + FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_COUNTRY) + "')")
-                        .list().get(0));
+    protected List<Long> getCountriesWithChildrenIds() {
+        String query = "SELECT acvl.id FROM amp_category_value_location acvl "
+                + "WHERE acvl.parent_location IS NULL "
+                + "AND acvl.id IN (SELECT DISTINCT parent_location FROM amp_category_value_location)";
         
-        return parentLocationId;
+        Collection<BigInteger> countryCollection = PersistenceManager.getSession().createSQLQuery(query).list();
+        List<Long> countryIds = countryCollection
+                .stream()
+                .map(b -> Long.valueOf(b.intValue()))
+                .collect(Collectors.toList());
+        
+        return countryIds;
     }
     
     protected FilterListTreeNode getLocations(LocationSkeleton location) {

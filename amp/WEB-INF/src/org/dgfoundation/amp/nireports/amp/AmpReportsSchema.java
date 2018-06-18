@@ -72,6 +72,7 @@ import org.dgfoundation.amp.nireports.amp.dimensions.CategoriesDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.OrganisationsDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.ProgramsDimension;
+import org.dgfoundation.amp.nireports.amp.dimensions.RawLocationsDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.SectorsDimension;
 import org.dgfoundation.amp.nireports.amp.indicators.IndicatorDateTokenBehaviour;
 import org.dgfoundation.amp.nireports.amp.indicators.IndicatorTextualTokenBehaviour;
@@ -145,6 +146,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
     
     public final static OrganisationsDimension orgsDimension = OrganisationsDimension.instance;
     public final static LocationsDimension locsDimension = LocationsDimension.instance;
+    public static final  RawLocationsDimension RAW_LOCS_DIMENSION = RawLocationsDimension.INSTANCE;
     public final static SectorsDimension secsDimension = SectorsDimension.instance;
     public final static ProgramsDimension progsDimension = ProgramsDimension.instance;
     public final static CategoriesDimension catsDimension = CategoriesDimension.instance;
@@ -632,6 +634,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         with_percentage(ColumnConstants.DISTRICT, "v_districts", LOC_DIM_USG, LEVEL_DISTRICT);
         with_percentage(ColumnConstants.LOCATION, "v_raw_locations", LOC_DIM_USG, LEVEL_RAW);
         with_percentage(ColumnConstants.GEOCODE, "v_geocodes", LOC_DIM_USG, LEVEL_RAW);
+        degenerate_dimension(ColumnConstants.RAW_LOCATION, "v_raw_locations", RAW_LOCS_DIMENSION);
 
         single_dimension(ColumnConstants.REGIONAL_REGION, "v_regions", LOC_DIM_USG.getLevelColumn(LEVEL_REGION));
 
@@ -1221,7 +1224,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 
     List<NiDimension> whitelistedDegenerateDimensions = 
             Arrays.asList(catsDimension, agreementsDimension, boolDimension, usersDimension, departmentsDimension,
-                    fundingDimension, COMPS_DIMENSION, COMP_TYPES_DIMENSION);
+                    fundingDimension, COMPS_DIMENSION, COMP_TYPES_DIMENSION, RAW_LOCS_DIMENSION);
     
     
     /**
@@ -1437,7 +1440,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
             GroupingCriteria.GROUPING_YEARLY));
         
         // test dimensions: make a snapshot of each
-        for(NiDimension dimension:Arrays.asList(orgsDimension, locsDimension, secsDimension, progsDimension)) {
+        for (NiDimension dimension : Arrays.asList(orgsDimension, locsDimension, secsDimension, progsDimension)) {
             dimension.getDimensionData().toString();
         }
     }
@@ -1613,6 +1616,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
                 return NamedElemType.PROGRAM;
                 
             case "locs":
+            case "rawLocs":
                 return NamedElemType.LOCATION;
                 
             case "orgs": {

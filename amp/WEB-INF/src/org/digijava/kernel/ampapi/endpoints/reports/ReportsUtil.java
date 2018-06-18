@@ -19,8 +19,6 @@ import javax.servlet.http.HttpSession;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
-import net.sf.json.JSONObject;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
@@ -71,7 +69,10 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.TeamUtil;
+
+import net.sf.json.JSONObject;
 
 /**
  * Reports API utility classes
@@ -242,6 +243,10 @@ public class ReportsUtil {
             if (original.get(EPConstants.IS_DYNAMIC) != null) {
                 newParams.set(EPConstants.IS_DYNAMIC, true);
             }
+            if (queryModel.get(EPConstants.INCLUDE_LOCATION_CHILDREN) != null) {
+                newParams.set(EPConstants.INCLUDE_LOCATION_CHILDREN, 
+                        queryModel.get(EPConstants.INCLUDE_LOCATION_CHILDREN));
+            }
         }
         
         if (original.get(EPConstants.ADD_COLUMNS) != null) {
@@ -351,6 +356,9 @@ public class ReportsUtil {
         
         // update report data
         configureProjectTypes(specImpl, formParams);
+        
+        // configure include location children
+        configureIncludeLocationChildrenFilters(specImpl, formParams);
         
         // update other settings
         setOtherOptions(specImpl, formParams);
@@ -504,6 +512,48 @@ public class ReportsUtil {
         return result;
     }
     
+    /**
+     * Configure to include or not the location children (AMP-27559)
+     * 
+     * @param specImpl
+     * @param formParams
+     */
+    private static void configureIncludeLocationChildrenFilters(ReportSpecificationImpl specImpl, JsonBean formParams) {
+        if (formParams.get(EPConstants.INCLUDE_LOCATION_CHILDREN) != null) {
+            boolean includeLocationChildren = (boolean) formParams.get(EPConstants.INCLUDE_LOCATION_CHILDREN);
+            if (!includeLocationChildren) {
+                List<String> locationIds = new ArrayList<>();
+                AmpReportFilters filterRules = (AmpReportFilters) specImpl.getFilters();
+                for (Entry<ReportElement, FilterRule> filterRule : filterRules.getFilterRules().entrySet()) {
+                    if (isFilterLocationType(filterRule)) {
+                       locationIds.addAll(filterRule.getValue().values);
+                    }
+                }
+                
+                if (!locationIds.isEmpty()) {
+                    filterRules.addFilterRule(new ReportColumn(ColumnConstants.RAW_LOCATION), 
+                            new FilterRule(locationIds, true));
+                }
+            }
+        }
+    }
+    
+    /**
+     * Determine if the filter rule is of location type
+     * 
+     * @param filterRule
+     * @return
+     */
+    private static boolean isFilterLocationType(Entry<ReportElement, FilterRule> filterRule) {
+        if (filterRule.getKey() != null && filterRule.getKey().entity != null) {
+            String columnName = filterRule.getKey().entity.getEntityName();
+            
+            return LocationUtil.LOCATIONS_COLUMNS_NAMES.contains(columnName);
+        }
+        
+        return false;
+    }
+
     /**
      * Explicitly configures projects that has to be included into the report. 
      * If nothing specified, then the default project types are used for the given report type.

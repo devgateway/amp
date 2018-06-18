@@ -253,7 +253,7 @@ var submmited = false;
 																                                    </table>
 																                                </td>
 																                                <td>
-																                                  <input type="button" class="buttonx" onclick="MyaddUserOrTeam();" style="width:80px;font-family:tahoma;font-size:11px;" value="<digi:trn>Add >></digi:trn>">
+																                                  <input type="button" class="buttonx" onclick="MyaddUserOrTeam();" style="width:80px;font-family:tahoma;font-size:11px;" value="<digi:trn>Add</digi:trn> >>">
 																                                  <br><br>
 																                       			  <input type="button" class="buttonx" style="width:80px;font-family:tahoma;font-size:11px;" onclick="MyremoveUserOrTeam()" value="<<<digi:trn>Remove</digi:trn>" >	
 																                                </td>

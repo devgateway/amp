@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,6 +25,7 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.message.dbentity.AmpMessage;
+import org.digijava.module.message.dbentity.AmpMessageReceiver;
 import org.digijava.module.message.dbentity.AmpMessageState;
 import org.digijava.module.message.dbentity.TemplateAlert;
 import org.digijava.module.message.form.AmpMessageForm;
@@ -63,52 +65,47 @@ public class TemplateAlertActions extends DispatchAction {
              messagesForm.setDescription(tempAlert.getDescription());
              messagesForm.setSelectedTrigger(tempAlert.getRelatedTriggerName());
              //receivers             
-             messagesForm.setReceivers(getMessageRecipients(tempAlert.getId()));
+             messagesForm.setReceivers(getMessageRecipients(tempAlert));
          }
          
          return mapping.findForward("addOrEditPage"); 
      }
      
-     public ActionForward saveTemplate(ActionMapping mapping,ActionForm form, HttpServletRequest request,   HttpServletResponse response) throws Exception {
+     public ActionForward saveTemplate(ActionMapping mapping, ActionForm form, HttpServletRequest request, 
+             HttpServletResponse response) throws Exception {
         
-            AmpMessageForm msgForm=(AmpMessageForm)form;        
-            TemplateAlert newTemplate=null; 
-            String[] messageReceivers=msgForm.getReceiversIds();
+            AmpMessageForm msgForm = (AmpMessageForm) form;        
+            TemplateAlert newTemplate = new TemplateAlert();
+            String[] messageReceivers = msgForm.getReceiversIds();
             
-            if(msgForm.getTemplateId()==null) {
-                newTemplate=new TemplateAlert();
-            }else {
-                newTemplate=new TemplateAlert();
-                //remove all States that were associated to this message
-                List<AmpMessageState> statesAssociatedWithMsg=AmpMessageUtil.loadMessageStates(msgForm.getTemplateId());                
-                for (AmpMessageState state : statesAssociatedWithMsg) {
+            if (msgForm.getTemplateId() != null) {
+                // remove all States that were associated to this message
+                List<AmpMessageState> msgStates = AmpMessageUtil.loadMessageStates(msgForm.getTemplateId());
+                for (AmpMessageState state : msgStates) {
                     AmpMessageUtil.removeMessageState(state);
                 }
                 //remove message
                 AmpMessageUtil.removeMessage(msgForm.getTemplateId());
-            }       
+            }
+            
             newTemplate.setName(msgForm.getMessageName());
             newTemplate.setDescription(msgForm.getDescription());
             Calendar cal=Calendar.getInstance();
             newTemplate.setCreationDate(cal.getTime());     
             newTemplate.setRelatedTriggerName(msgForm.getSelectedTrigger());
                             
+            if (messageReceivers != null && messageReceivers.length > 0) {
+                for (String receiver : messageReceivers) {
+                    if (receiver.startsWith("m")) { // <--this means that receiver is a team member
+                        Long memId = new Long(receiver.substring(2));
+                        AmpTeamMember msgReceiver = TeamMemberUtil.getAmpTeamMember(memId);
+                        newTemplate.addMessageReceiver(msgReceiver);
+                    }
+                }
+            }
+            
             //saving template
             AmpMessageUtil.saveOrUpdateMessage(newTemplate);        
-                    
-        //the code below is used to create messagesStates in the AmpMessageWorker.java
-            if(messageReceivers!=null && messageReceivers.length>0){                
-                for (String receiver : messageReceivers) {              
-                    if(receiver.startsWith("m")){//<--this means that receiver is team              
-                    //<--receiver is team member
-                            Long memId=new Long(receiver.substring(2));
-                            AmpTeamMember msgReceiver=TeamMemberUtil.getAmpTeamMember(memId);
-                            String teamName = msgReceiver.getAmpTeam().getName();
-                            createMessageState(newTemplate,msgReceiver,teamName);                           
-                        
-                    }               
-                }       
-            }
             //cleaning form values
             setDefaultValues(msgForm);
 
@@ -163,73 +160,39 @@ public class TemplateAlertActions extends DispatchAction {
      /**
       * used to get message recipients, which will be shown on edit Message Page 
       */
-     private static List<LabelValueBean> getMessageRecipients(Long tempId) throws Exception{
-            List<AmpMessageState> msgStates=AmpMessageUtil.loadMessageStates(tempId);
-            List<LabelValueBean> members=null;
-            if(msgStates!=null && msgStates.size()>0){
-                members=new ArrayList<LabelValueBean>();
-                Collection<AmpTeam> teamList = new ArrayList<AmpTeam>();
-                Collection<AmpTeamMember> memberList = new ArrayList<AmpTeamMember>();
-                for (AmpMessageState state : msgStates) {
-//                  if(state.getMemberId()!=null){
-//                      AmpTeamMember teamMember=TeamMemberUtil.getAmpTeamMember(state.getMemberId());
-//                      //in case if teamMember is not banned
-//                      if(teamMember!=null){
-//                          AmpTeam team = teamMember.getAmpTeam();
-//                          if(!teamList.contains(team)){
-//                             teamList.add(team);
-//                          }
-//                          memberList.add(teamMember);
-//                      }                       
-//                  }
-                    if(state.getReceiver()!=null){
-                        AmpTeamMember teamMember=state.getReceiver();
-                        AmpTeam team=teamMember.getAmpTeam();
-                        if(!teamList.contains(team)){
-                            teamList.add(team);
-                        }
-                         memberList.add(teamMember);
-                    }
-                }
-                for(AmpTeam team : teamList){
-                    LabelValueBean teamLabel=new LabelValueBean("---"+team.getName()+"---","t:"+team.getAmpTeamId().toString());                
-                    members.add(teamLabel);
-                    for(AmpTeamMember member : memberList){
-                        if(team.getAmpTeamId().longValue()==member.getAmpTeam().getAmpTeamId().longValue()){
-                            LabelValueBean tm=new LabelValueBean(member.getUser().getFirstNames() + " " + member.getUser().getLastName(),"m:" + member.getAmpTeamMemId().toString());               
-                            members.add(tm);                        
-                        }
-                    }
-                }
-            }
-            return members;
-     }
-     
-     private void createMessageState(TemplateAlert tempAlert,AmpTeamMember receiver,String teamName){
-            AmpMessageState newMessageState=new AmpMessageState();
-            newMessageState.setMessage(tempAlert);          
-            newMessageState.setReceiver(receiver);
-            //receivers list as string
-            String receivers = tempAlert.getReceivers();
-            if (receivers == null) {
-                receivers = "";
-            } else {
-                if (receivers.length() > 0) {
-                    receivers += ", ";
-                }
-            }
-            User user=receiver.getUser();
-            receivers+=user.getFirstNames()+" "+user.getLastName()+"<"+user.getEmail()+">;"+teamName+";";
-            tempAlert.setReceivers(receivers);
+    private static List<LabelValueBean> getMessageRecipients(TemplateAlert template) throws Exception {
+        Set<AmpMessageReceiver> msgReceivers = template.getMessageReceivers();
+        List<LabelValueBean> members = null;
+        if (msgReceivers != null && msgReceivers.size() > 0) {
+            members = new ArrayList<LabelValueBean>();
+            Collection<AmpTeam> teamList = new ArrayList<AmpTeam>();
+            Collection<AmpTeamMember> memberList = new ArrayList<AmpTeamMember>();
             
-            //saving current state in db
-            try {
-                AmpMessageUtil.saveOrUpdateMessageState(newMessageState);
-            } catch (AimException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+            for (AmpMessageReceiver receiver : msgReceivers) {
+                AmpTeamMember teamMember = receiver.getReceiver();
+                AmpTeam team = teamMember.getAmpTeam();
+                if (!teamList.contains(team)) {
+                    teamList.add(team);
+                }
+                memberList.add(teamMember);
+            }
+
+            for (AmpTeam team : teamList) {
+                members.add(new LabelValueBean("---" + team.getName() + "---", "t:" + team.getAmpTeamId().toString()));
+                for (AmpTeamMember member : memberList) {
+                    if (team.getAmpTeamId().longValue() == member.getAmpTeam().getAmpTeamId().longValue()) {
+                        LabelValueBean tm = new LabelValueBean(
+                                member.getUser().getFirstNames() + " " + member.getUser().getLastName(),
+                                "m:" + member.getAmpTeamMemId().toString());
+                        
+                        members.add(tm);
+                    }
+                }
             }
         }
+        
+        return members;
+    }
      
      private void setDefaultValues(AmpMessageForm form){
          form.setEditingMessage(false);

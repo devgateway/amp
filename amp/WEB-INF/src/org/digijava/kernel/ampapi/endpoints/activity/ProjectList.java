@@ -31,6 +31,7 @@ import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.hibernate.jdbc.Work;
 import org.hibernate.type.LongType;
@@ -81,7 +82,7 @@ public class ProjectList {
         List<JsonBean> editableActivities = new ArrayList<JsonBean>();
         
         final List<Long> viewableIds = getViewableActivityIds(tm);
-        List<Long> editableIds = getEditableActivityIds(tm);
+        List<Long> editableIds = ActivityUtil.getEditableActivityIds(tm);
         
         // get list of the workspaces where the user is member of and can edit each activity
         Map<Long, Set<String>> activitiesWs = getEditableWorkspacesForActivities(tm);
@@ -111,17 +112,7 @@ public class ProjectList {
             Collection<AmpTeamMember> currentTeamMembers = TeamMemberUtil.getAllAmpTeamMembersByUser(currentUser);
 
             for (AmpTeamMember atm : currentTeamMembers) {
-                TeamMember teamMember = new TeamMember(atm);
-                String wsFilterQuery = WorkspaceFilter.generateWorkspaceFilterQuery(teamMember);
-                List<Long> editableIds = getEditableActivityIds(teamMember, wsFilterQuery);
-                
-                for (Long actId : editableIds) {
-                    if (!activitiesWs.containsKey(actId)) {
-                        activitiesWs.put(actId, new HashSet<String>());
-                    } 
-                    
-                    activitiesWs.get(actId).add(teamMember.getTeamId().toString());
-                }
+                TeamMemberUtil.getActivitiesWsByTeamMember(activitiesWs, atm);
             }
         } catch (DgException e) {
             LOGGER.warn("Couldn't generate the list of editable workspaces for activities", e);
@@ -130,6 +121,8 @@ public class ProjectList {
         
         return activitiesWs;
     }
+
+
 
     private static void populateActivityMap(Map<String, JsonBean> activityMap, List<JsonBean> activities) {
         for (JsonBean activity : activities) {
@@ -142,36 +135,6 @@ public class ProjectList {
                 activityMap.put((String) activity.get(InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ID)), activity);
             }
         }
-    }
-
-    /**
-     * Get the activities ids for the current workspace
-     * 
-     * @param session HttpSession
-     * @return List<Long> with the editable activity Ids
-     */
-    public static List<Long> getEditableActivityIds(TeamMember tm) {
-        HttpSession session = TLSUtils.getRequest().getSession();
-        String query = WorkspaceFilter.getWorkspaceFilterQuery(session);
-        
-        return getEditableActivityIds(tm, query);
-    }
-    
-    /**
-     * Get the activities ids for the current workspace
-     * 
-     * @param session HttpSession
-     * @return List<Long> with the editable activity Ids
-     */
-    public static List<Long> getEditableActivityIds(TeamMember tm, String query) {
-        // based on AMP-20520 research the only rule found when activities are not editable is when in Mng WS
-        if (TeamMemberUtil.isManagementWorkspace(tm))
-            return Collections.emptyList();
-        
-        List<Long> result = PersistenceManager.getSession().createSQLQuery(query)
-                .addScalar("amp_activity_id", LongType.INSTANCE).list();
-        
-        return result;
     }
 
     /**

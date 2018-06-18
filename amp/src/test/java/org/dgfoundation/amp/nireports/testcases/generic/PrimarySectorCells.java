@@ -6,6 +6,7 @@ import java.util.Map;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 
 import org.dgfoundation.amp.nireports.PercentageTextCell;
+import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
 
 
 public class PrimarySectorCells extends HardcodedCells<PercentageTextCell>{
@@ -83,7 +84,9 @@ public class PrimarySectorCells extends HardcodedCells<PercentageTextCell>{
 
             // cells below have been added manually (no AMP correspondent). They should be restored manually in case this file is overwritten by codegen
             cell("custom_1", "112 - BASIC EDUCATION", 6242, 0.400000),
-            cell("custom_1", "110 - EDUCATION", 6236, 0.600000)
+            cell("custom_1", "110 - EDUCATION", 6236, 0.600000),
+            
+            cell("new activity with contracting", "", ColumnReportData.UNALLOCATED_ID, 1.000000)
 );
     }
 

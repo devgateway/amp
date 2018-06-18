@@ -12,6 +12,7 @@ import org.dgfoundation.amp.nireports.TextCell;
 import org.dgfoundation.amp.nireports.amp.diff.TextColumnKeyBuilder;
 import org.dgfoundation.amp.nireports.behaviours.TextualTokenBehaviour;
 import org.dgfoundation.amp.nireports.output.nicells.NiTextCell;
+import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
@@ -27,7 +28,9 @@ import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
  * @author Dolghier Constantin
  *
  */
-public class SimpleTextColumn extends AmpDifferentialColumn<TextCell, String> {
+public class SimpleTextColumn extends AmpDifferentialColumn<TextCell> {
+
+    private static final int ENTITY_ID_INDEX_3 = 3;
 
     protected Function<String, String> postprocessor = Function.identity();
 
@@ -39,17 +42,23 @@ public class SimpleTextColumn extends AmpDifferentialColumn<TextCell, String> {
 
     public SimpleTextColumn(String columnName, NiDimension.LevelColumn levelColumn, String viewName,
             Behaviour<NiTextCell> behaviour) {
-        super(columnName, levelColumn, viewName, TextColumnKeyBuilder.instance, behaviour);
+        this(columnName, levelColumn, viewName, behaviour, false);
     }
-    
+
+    public SimpleTextColumn(String columnName, NiDimension.LevelColumn levelColumn, String viewName,
+            Behaviour<NiTextCell> behaviour, boolean sscEnabledColumn) {
+        super(columnName, levelColumn, viewName, TextColumnKeyBuilder.instance, behaviour, sscEnabledColumn);
+    }
+
     @Override
     protected TextCell extractCell(NiReportsEngine engine, ResultSet rs) throws SQLException {
         String text = postprocessor.apply(rs.getString(2));
+        Long entityId = rs.getLong(withoutEntity ? 1 : ENTITY_ID_INDEX_3);
         
-        if (!allowNulls && text == null)
+        if (!allowNulls && text == null && entityId != ColumnReportData.UNALLOCATED_ID) {
             return null;
+        }
 
-        Long entityId = rs.getLong(withoutEntity ? 1 : 3);
         Map<NiDimensionUsage, Coordinate> coos = buildCoordinates(entityId, engine, rs);
         return new TextCell(text, rs.getLong(1), entityId, coos, this.levelColumn);
     }
@@ -61,15 +70,26 @@ public class SimpleTextColumn extends AmpDifferentialColumn<TextCell, String> {
     public static SimpleTextColumn fromView(String columnName, String viewName, NiDimension.LevelColumn levelColumn) {
         return new SimpleTextColumn(columnName, levelColumn, viewName, TextualTokenBehaviour.instance);
     }
-    
+
+    public static SimpleTextColumn fromView(String columnName, String viewName, NiDimension.LevelColumn levelColumn,
+            boolean sscEnabledColumn) {
+        return new SimpleTextColumn(columnName, levelColumn, viewName, TextualTokenBehaviour.instance,
+                sscEnabledColumn);
+    }
+
     public static SimpleTextColumn fromViewWithoutEntity(String columnName, String viewName, Behaviour<NiTextCell> behaviour) {
         return new SimpleTextColumn(columnName, null, viewName, behaviour).withoutEntity();
     }
 
     public static SimpleTextColumn fromViewWithoutEntity(String columnName, String viewName) {
-        return new SimpleTextColumn(columnName, null, viewName, TextualTokenBehaviour.instance).withoutEntity();
-    }   
-    
+        return fromViewWithoutEntity(columnName, viewName, false);
+    }
+
+    public static SimpleTextColumn fromViewWithoutEntity(String columnName, String viewName, boolean sscEnabledColumn) {
+        return new SimpleTextColumn(columnName, null, viewName, TextualTokenBehaviour.instance,
+                sscEnabledColumn).withoutEntity();
+    }
+
     private boolean withoutEntity = false;
     
     private SimpleTextColumn withoutEntity() {

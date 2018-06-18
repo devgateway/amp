@@ -24,6 +24,7 @@ import org.dgfoundation.amp.nireports.GrandTotalsDigest;
 import org.dgfoundation.amp.nireports.TrailCellsDigest;
 import org.dgfoundation.amp.nireports.testcases.NiReportModel;
 import org.digijava.kernel.ampapi.endpoints.util.DateFilterUtils;
+import org.digijava.module.aim.util.DbUtil;
 import org.junit.Test;
 
 /**
@@ -473,6 +474,94 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
             }
         }
         //System.err.println("nr of failures: " + fails);
+        long delta = System.currentTimeMillis() - start;
+        long speed = reps * 1000 / delta;
+        double relativeSpeed = speed / 516.0;
+        System.err.format("I ran %d triple-hier reports in %d millies (%d per second, relativeSpeed: %.2f)\n", reps, delta, speed, relativeSpeed);
+    }
+    
+    @Test
+    public void testSingleHierarchiesWithEmptyRowsDoNotChangeTotals() throws Exception {
+        
+        ReportSpecificationImpl initSpec = buildSpecification("initSpec", 
+                Arrays.asList(ColumnConstants.PROJECT_TITLE), 
+                Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+                null, 
+                GroupingCriteria.GROUPING_YEARLY);
+                
+        assertEquals(correctTotals, buildDigest(initSpec, acts, fundingGrandTotalsDigester).toString());
+                
+        // single-hierarchy reports
+        for(boolean isSummary:Arrays.asList(true, false)) {
+            for (String hierName : DONOR_HIERARCHIES_TO_TRY) {
+                ReportSpecificationImpl spec = buildSpecification(String.format("%s summary: %b", hierName, isSummary), 
+                        Arrays.asList(ColumnConstants.PROJECT_TITLE, hierName), 
+                        Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+                        Arrays.asList(hierName), 
+                        GroupingCriteria.GROUPING_YEARLY);
+                spec.setSummaryReport(isSummary);
+                spec.setDisplayEmptyFundingRows(true);
+                assertEquals(spec.getReportName(), correctTotals, buildDigest(spec, acts, fundingGrandTotalsDigester).toString());
+            }
+        }
+    }
+
+    @Test
+    public void testDoubleHierarchiesWithEmptyRowsDoNotChangeTotals() {
+        long start = System.currentTimeMillis();
+        long reps = 0;
+       
+        // double-hierarchy reports
+        for(boolean isSummary:Arrays.asList(true, false)) {
+            for (String hier1Name : DONOR_HIERARCHIES_TO_TRY)
+                for (String hier2Name : DONOR_HIERARCHIES_TO_TRY)
+                    if (hier1Name != hier2Name) {
+                        reps ++;
+                        ReportSpecificationImpl spec = buildSpecification(String.format("%s, %s summary: %b", hier1Name, hier2Name, isSummary), 
+                                Arrays.asList(ColumnConstants.PROJECT_TITLE, hier1Name, hier2Name), 
+                                Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+                                Arrays.asList(hier1Name, hier2Name), 
+                                GroupingCriteria.GROUPING_YEARLY);
+                        spec.setSummaryReport(isSummary);
+                        spec.setDisplayEmptyFundingRows(true);
+                        String digest = buildDigest(spec, acts, fundingGrandTotalsDigester).toString();
+                        assertEquals(spec.getReportName(), correctTotals, digest);
+            }
+        }
+
+        long delta = System.currentTimeMillis() - start;
+        long speed = reps * 1000 / delta;
+        double relativeSpeed = speed / 349.0;
+        System.err.format("I ran %d double-hier reports in %d millies (%d per second, relativeSpeed: %.2f)\n", reps, delta, speed, relativeSpeed);
+    }
+    
+    
+    @Test
+    public void testTripleHierarchiesWithEmptyRowsDoNotChangeTotals() {
+        if (this.getClass().getSimpleName().equals("AmpSchemaSanityTests"))
+            return; // these are too slow if backed by DB
+        long start = System.currentTimeMillis();
+        long reps = 0;
+        
+        // triple-hierarchy reports
+        for(boolean isSummary:Arrays.asList(true, false)) {
+            for (String hier1Name : DONOR_HIERARCHIES_TO_TRY)
+                for (String hier2Name : DONOR_HIERARCHIES_TO_TRY)
+                    for (String hier3Name : DONOR_HIERARCHIES_TO_TRY)
+                    if (hier1Name != hier2Name && hier2Name != hier3Name && hier1Name != hier3Name) {
+                        reps ++;
+                        ReportSpecificationImpl spec = buildSpecification(String.format("%s, %s, %s summary: %b", hier1Name, hier2Name, hier3Name, isSummary), 
+                                Arrays.asList(ColumnConstants.PROJECT_TITLE, hier1Name, hier2Name, hier3Name), 
+                                Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+                                Arrays.asList(hier1Name, hier2Name, hier3Name), 
+                                GroupingCriteria.GROUPING_YEARLY);
+                        spec.setSummaryReport(isSummary);
+                        spec.setDisplayEmptyFundingRows(true);
+                        String digest = buildDigest(spec, acts, fundingGrandTotalsDigester).toString();
+                        assertEquals(spec.getReportName(), correctTotals, digest);
+            }
+        }
+
         long delta = System.currentTimeMillis() - start;
         long speed = reps * 1000 / delta;
         double relativeSpeed = speed / 516.0;
@@ -1441,7 +1530,7 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
                                 new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2", "Donor Agency", "Finland, USAID", "Primary Sector", "113 - SECONDARY EDUCATION", "Funding-2014-Actual Disbursements", "450,000", "Totals-Actual Disbursements", "450,000"),
                                 new ReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending", "Donor Agency", "Finland", "Primary Sector", "110 - EDUCATION", "Funding-2014-Planned Disbursements", "90,000", "Funding-2014-Actual Disbursements", "80,000", "Totals-Planned Disbursements", "90,000", "Totals-Actual Disbursements", "80,000", "Totals-Execution Rate", "88,89"),
                                 new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency", "Donor Agency", "Finland, Ministry of Finance", "Primary Sector", "110 - EDUCATION, 112 - BASIC EDUCATION, 120 - HEALTH", "Funding-2014-Actual Disbursements", "50,000", "Totals-Actual Disbursements", "50,000"),
-                                new ReportAreaForTests(new AreaOwner(53), "Project Title", "new activity with contracting", "Donor Agency", "Finland"),
+                                new ReportAreaForTests(new AreaOwner(53), "Project Title", "new activity with contracting", "Donor Agency", "Finland", "Primary Sector", ""),
                                 new ReportAreaForTests(new AreaOwner(61), "Project Title", "activity-with-unfunded-components", "Donor Agency", "Finland, Ministry of Economy", "Primary Sector", "110 - EDUCATION"),
                                 new ReportAreaForTests(new AreaOwner(63), "Project Title", "activity with funded components", "Donor Agency", "UNDP, Water Foundation, World Bank", "Primary Sector", "110 - EDUCATION"),
                                 new ReportAreaForTests(new AreaOwner(64), "Project Title", "Unvalidated activity", "Donor Agency", "UNDP", "Primary Sector", "110 - EDUCATION"),
@@ -1509,7 +1598,7 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
                                 new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2", "Donor Agency", "Finland, USAID", "Primary Sector", "113 - SECONDARY EDUCATION", "Funding-2014-Actual Disbursements", "450", "Totals-Actual Disbursements", "450"),
                                 new ReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending", "Donor Agency", "Finland", "Primary Sector", "110 - EDUCATION", "Funding-2014-Planned Disbursements", "90", "Funding-2014-Actual Disbursements", "80", "Totals-Planned Disbursements", "90", "Totals-Actual Disbursements", "80", "Totals-Execution Rate", "88,89"),
                                 new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency", "Donor Agency", "Finland, Ministry of Finance", "Primary Sector", "110 - EDUCATION, 112 - BASIC EDUCATION, 120 - HEALTH", "Funding-2014-Actual Disbursements", "50", "Totals-Actual Disbursements", "50"),
-                                new ReportAreaForTests(new AreaOwner(53), "Project Title", "new activity with contracting", "Donor Agency", "Finland"),
+                                new ReportAreaForTests(new AreaOwner(53), "Project Title", "new activity with contracting", "Donor Agency", "Finland", "Primary Sector", ""),
                                 new ReportAreaForTests(new AreaOwner(61), "Project Title", "activity-with-unfunded-components", "Donor Agency", "Finland, Ministry of Economy", "Primary Sector", "110 - EDUCATION"),
                                 new ReportAreaForTests(new AreaOwner(63), "Project Title", "activity with funded components", "Donor Agency", "UNDP, Water Foundation, World Bank", "Primary Sector", "110 - EDUCATION"),
                                 new ReportAreaForTests(new AreaOwner(64), "Project Title", "Unvalidated activity", "Donor Agency", "UNDP", "Primary Sector", "110 - EDUCATION"),
@@ -1699,7 +1788,6 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
         
         runNiTestCase(spec, "en", acts, cor);
     }
-
 
     @Test
     public void testUnfilteredMeasuresInUnfilteredReport() {

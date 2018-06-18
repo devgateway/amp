@@ -1,11 +1,12 @@
 package org.digijava.kernel.ampapi.endpoints.performance.matcher;
 
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNull;
 
 import org.dgfoundation.amp.activity.builder.ActivityBuilder;
 import org.dgfoundation.amp.activity.builder.FundingBuilder;
+import org.dgfoundation.amp.activity.builder.OrganisationBuilder;
 import org.dgfoundation.amp.activity.builder.TransactionBuilder;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleConstants;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.definition.DisbursementsAfterActivityDateMatcherDefinition;
@@ -55,11 +56,14 @@ public class DisbursementsAfterActivityDateMatcherTests extends PerformanceRuleM
                                         .withTransactionType(Constants.DISBURSEMENT)
                                         .withTransactionDate(new LocalDate(2015, 12, 12).toDate())
                                         .getTransaction())
+                                .withDonor(new OrganisationBuilder()
+                                        .withOrganisationName("Donor1")
+                                        .getOrganisation())
                                 .getFunding())
                 .withActualCompletionDate(new LocalDate(2011, 11, 12).toDate())
                 .getActivity();
         
-        assertTrue(match(rule, a));
+        assertNotNull(findPerformanceIssue(rule, a));
     }
     
     @Test
@@ -73,6 +77,9 @@ public class DisbursementsAfterActivityDateMatcherTests extends PerformanceRuleM
                                         .withTransactionType(Constants.DISBURSEMENT)
                                         .withTransactionDate(new LocalDate(2016, 12, 12).toDate())
                                         .getTransaction())
+                                .withDonor(new OrganisationBuilder()
+                                        .withOrganisationName("Donor1")
+                                        .getOrganisation())
                                 .getFunding())
                 .addFunding(
                         new FundingBuilder()
@@ -81,11 +88,14 @@ public class DisbursementsAfterActivityDateMatcherTests extends PerformanceRuleM
                                         .withTransactionType(Constants.DISBURSEMENT)
                                         .withTransactionDate(new LocalDate(2015, 12, 12).toDate())
                                         .getTransaction())
+                                .withDonor(new OrganisationBuilder()
+                                        .withOrganisationName("Donor2")
+                                        .getOrganisation())
                                 .getFunding())
                 .withActualCompletionDate(new LocalDate(2016, 11, 12).toDate())
                 .getActivity();
         
-        assertTrue(match(rule, a));
+        assertEquals(findPerformanceIssue(rule, a).getDonors().size(), 1);
     }
     
     @Test
@@ -99,6 +109,9 @@ public class DisbursementsAfterActivityDateMatcherTests extends PerformanceRuleM
                                         .withTransactionType(Constants.DISBURSEMENT)
                                         .withTransactionDate(new LocalDate(2016, 12, 12).toDate())
                                         .getTransaction())
+                                .withDonor(new OrganisationBuilder()
+                                        .withOrganisationName("Donor1")
+                                        .getOrganisation())
                                 .getFunding())
                 .addFunding(
                         new FundingBuilder()
@@ -107,11 +120,14 @@ public class DisbursementsAfterActivityDateMatcherTests extends PerformanceRuleM
                                         .withTransactionType(Constants.DISBURSEMENT)
                                         .withTransactionDate(new LocalDate(2015, 12, 12).toDate())
                                         .getTransaction())
+                                .withDonor(new OrganisationBuilder()
+                                        .withOrganisationName("Donor2")
+                                        .getOrganisation())
                                 .getFunding())
                 .withActualCompletionDate(new LocalDate(2016, 12, 13).toDate())
                 .getActivity();
         
-        assertFalse(match(rule, a));
+        assertNull(findPerformanceIssue(rule, a));
     }
         
     public AmpPerformanceRule createRule(String activityDate, AmpCategoryValue level) {

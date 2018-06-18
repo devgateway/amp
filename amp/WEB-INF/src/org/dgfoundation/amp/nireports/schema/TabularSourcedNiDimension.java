@@ -1,5 +1,7 @@
 package org.dgfoundation.amp.nireports.schema;
 
+import static org.dgfoundation.amp.algo.AmpCollections.safeGet;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -8,10 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.dgfoundation.amp.nireports.NiUtils;
-import org.dgfoundation.amp.nireports.schema.DimensionLevel;
-import org.dgfoundation.amp.nireports.schema.NiDimension;
-
-import static org.dgfoundation.amp.algo.AmpCollections.safeGet;
+import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
 
 /**
  * a NiDimension which uses a tabular bidiarray as a source of data.
@@ -20,6 +19,7 @@ import static org.dgfoundation.amp.algo.AmpCollections.safeGet;
  *
  */
 public abstract class TabularSourcedNiDimension extends NiDimension {
+    
     /**
      * @param name
      * @param sourceViewName
@@ -28,7 +28,7 @@ public abstract class TabularSourcedNiDimension extends NiDimension {
     public TabularSourcedNiDimension(String name, int depth) {
         super(name, depth);
     }
-
+    
     @Override
     protected List<DimensionLevel> fetchDimension() {
         
@@ -41,14 +41,17 @@ public abstract class TabularSourcedNiDimension extends NiDimension {
             childrenPerLevel.add(new HashMap<>());
         }
         // build parent and child relationships
-        for(List<Long> row:getTabularData()) {
-            NiUtils.failIf(row.size() != depth, () -> String.format("NiDimension %s: row has length %d instead of %d: %s", this.name, row.size(), depth, row.toString()));
-            for(int level = 0; level < depth; level++) {
+        List<List<Long>> tabularData = getTabularData();
+        for (List<Long> row : tabularData) {
+            NiUtils.failIf(row.size() != depth, 
+                    () -> String.format("NiDimension %s: row has length %d instead of %d: %s", 
+                    this.name, row.size(), depth, row.toString()));
+            for (int level = 0; level < depth; level++) {
                 final int llevel = level;
                 NiUtils.failIf(row.get(level) == null, () -> String.format("NiDimension %s: row contains null: <%s>", this.name, row.toString()));
                 Map<Long, Long> levelParents = parentsPerLevel.get(level);
                 Map<Long, Set<Long>> levelChildren = childrenPerLevel.get(level);
-                    
+                
                 Long elemId = row.get(level);
                 if (elemId == null) {
                     for(int i = level + 1; i < depth; i++) {
@@ -73,6 +76,25 @@ public abstract class TabularSourcedNiDimension extends NiDimension {
                 }
             }
         };
+        
+        // AMP-24342 - Add 'Undefined' items
+        if (!tabularData.isEmpty()) {
+            for (int level = 0; level < depth; level++) {
+                Map<Long, Long> levelParents = parentsPerLevel.get(level);
+                Map<Long, Set<Long>> levelChildren = childrenPerLevel.get(level);
+                
+                long elemId = ColumnReportData.UNALLOCATED_ID;
+                long parentId = level == 0 ? 0L : ColumnReportData.UNALLOCATED_ID;
+                long childId = ColumnReportData.UNALLOCATED_ID;
+                
+                levelParents.putIfAbsent(elemId, parentId);
+    
+                if (level < depth - 1) {
+                    levelChildren.computeIfAbsent(elemId, key -> new HashSet<>()).add(childId);
+                }
+            }
+        }
+        
         List<DimensionLevel> res = new ArrayList<>();
         for(int level = 0; level < depth; level++) {
             res.add(new DimensionLevel(level, childrenPerLevel.get(level), parentsPerLevel.get(level), level == depth - 1));

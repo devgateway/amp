@@ -5,6 +5,7 @@ import java.util.HashSet;
 
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 
 /**
  * 
@@ -24,8 +25,15 @@ public class FundingBuilder {
 
         return this;
     }
+    
+    public FundingBuilder withDonor(AmpOrganisation organisation) {
+        funding.setAmpDonorOrgId(organisation);
+
+        return this;
+    }
 
     public FundingBuilder addTransaction(AmpFundingDetail fundingDetail) {
+        fundingDetail.setAmpFundingId(funding);
         if (funding.getFundingDetails() == null) {
             funding.setFundingDetails(new HashSet<>());
         }

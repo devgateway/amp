@@ -13,8 +13,6 @@ import java.util.Map.Entry;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import org.dgfoundation.amp.gpi.reports.GpiReport1Output2Visitor;
-
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.nireports.formulas.NiFormula;
@@ -69,7 +67,8 @@ public class GPIReport1Output2Builder extends GPIReportOutputBuilder {
         generatedReport.reportContents.accept(visitor);
 
         Map<String, List<GPIOutput2Item>> gpiElements = visitor.getGpiItems().stream()
-                .collect(groupingBy(GPIOutput2Item::getApprovalYear));
+                .collect(groupingBy(gpiItem -> String.valueOf(
+                        GPIReportUtils.getYearOfCustomCalendar(generatedReport.spec, gpiItem.getApprovalDate()))));
 
         gpiElements.entrySet().stream().forEach(gpiElement -> contents.add(generateYearRow(gpiElement)));
 

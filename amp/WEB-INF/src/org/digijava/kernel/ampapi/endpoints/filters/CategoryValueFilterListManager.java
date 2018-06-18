@@ -22,7 +22,6 @@ import com.google.common.collect.ImmutableMap;
  */
 public final class CategoryValueFilterListManager implements FilterListManager {
     
-    private static final String ITEMS_NAME = "values";
     private static CategoryValueFilterListManager catValFilterListManager;
     
     public static final Map<String, CategoryBean> FILTER_NAME_TO_CATEGORY_ITEM =
@@ -107,9 +106,11 @@ public final class CategoryValueFilterListManager implements FilterListManager {
         for (AmpCategoryValue ampCategoryValue : categoryItems) {
             FilterListTreeNode node = new FilterListTreeNode();
             node.setId(ampCategoryValue.getId());
+            node.setValue(ampCategoryValue.getValue());
             node.setName(TranslatorWorker.translateText(ampCategoryValue.getValue()));
             nodes.add(node);
         }
+        nodes.add(UNDEFINED_OPTION);
         
         items.put(ITEMS_NAME, nodes);
 

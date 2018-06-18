@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
 import org.dgfoundation.amp.nireports.schema.DimensionLevel;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
 
@@ -39,6 +40,24 @@ public abstract class HardcodedNiDimension extends NiDimension {
         
         for(HNDNode rootNode:rootElements)
             populateMaps(rootNode, 0l, 0);
+        
+        // AMP-24342 - Add 'Undefined' items
+        if (!rootElements.isEmpty()) {
+            for (int level = 0; level < depth; level++) {
+                Map<Long, Long> levelParents = parentsPerLevel.get(level);
+                Map<Long, Set<Long>> levelChildren = childrenPerLevel.get(level);
+                
+                long elemId = ColumnReportData.UNALLOCATED_ID;
+                long parentId = level == 0 ? 0L : ColumnReportData.UNALLOCATED_ID;
+                long childId = ColumnReportData.UNALLOCATED_ID;
+                
+                levelParents.putIfAbsent(elemId, parentId);
+    
+                if (level < depth - 1) {
+                    levelChildren.computeIfAbsent(elemId, key -> new HashSet<>()).add(childId);
+                }
+            }
+        }
         
         for(int level = 0; level < depth; level++) {
             computedLevels.add(new DimensionLevel(level, childrenPerLevel.get(level), parentsPerLevel.get(level), level == depth - 1));

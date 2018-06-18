@@ -2,7 +2,6 @@ package org.dgfoundation.amp.gpi.reports;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +16,6 @@ import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportVisitor;
-import org.digijava.module.common.util.DateTimeUtil;
 
 import clover.org.apache.commons.lang.StringUtils;
 
@@ -315,12 +313,5 @@ class GPIOutput1Item {
     public String toString() {
         return "GPIIndicatator1Item [approvalDate=" + getApprovalDateAsString() + ", q6=" + q6 + ", q7=" + q7 + ", q8="
                 + q8 + ", q9=" + q9 + ", q10=" + q10 + "]";
-    }
-
-    public String getApprovalYear() {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(DateTimeUtil.fromJulianNumberToDate(Long.toString(approvalDate)));
-
-        return Long.toString(cal.get(Calendar.YEAR));
     }
 }

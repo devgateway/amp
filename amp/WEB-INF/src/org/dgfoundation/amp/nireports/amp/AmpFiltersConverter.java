@@ -109,6 +109,10 @@ public class AmpFiltersConverter extends BasicFiltersConverter {
         if (columnName.equals(ColumnConstants.ARCHIVED))
             return; //TODO: hack so that preexisting testcases are not broken while developing the feature
         
+        if (columnName.equals(ColumnConstants.COMPUTED_YEAR)) {
+            return; /** Ignore computed year, the value is processed through {@link AmpReportFilters#computedYear} */
+        }
+        
         if (columnName.equals(ColumnConstants.DONOR_ID))
             columnName = ColumnConstants.DONOR_AGENCY; // Hello, filter widget with your weird peculiarities
         

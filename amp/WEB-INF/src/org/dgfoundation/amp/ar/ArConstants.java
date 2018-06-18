@@ -362,7 +362,7 @@ public final class ArConstants {
     public final static String COLUMN_ANY_PRIMARYPROG           = "Primary Program";
     public final static String COLUMN_ANY_SECONDARYPROG = "Secondary Program";
     
-    public final static String COLUMN_CAPITAL_EXPENDITRURE  =   "Capital - Expenditure";
+    public static final String COLUMN_CAPITAL_EXPENDITRURE  =   "Capital Expenditure";
     public final static String COLUMN_ACTUAL_DISB_CAPITAL_RECURRENT="Payment Capital - Recurrent";
     
     //additional measures

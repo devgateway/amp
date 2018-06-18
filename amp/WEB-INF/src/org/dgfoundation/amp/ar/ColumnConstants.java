@@ -54,7 +54,7 @@ public class ColumnConstants {
     public static final String BUDGET_SECTOR = "Budget Sector";
     public static final String BUDGET_STRUCTURE = "Budget Structure";
     public static final String CALCULATED_PROJECT_LIFE = "Calculated Project Life";
-    public static final String CAPITAL___EXPENDITURE = "Capital - Expenditure";
+    public static final String CAPITAL_EXPENDITURE = "Capital Expenditure";
     public static final String COMPONENT_DESCRIPTION = "Component description";
     public static final String COMPONENT_FUNDING_ORGANIZATION = "Component Funding Organization";
     public static final String COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION = "Component Second Responsible Organization";
@@ -89,6 +89,7 @@ public class ColumnConstants {
     public static final String DONOR_CONTACT_TITLE = "Donor Contact Title";
     public static final String DONOR_GROUP = "Donor Group";
     public static final String DONOR_TYPE = "Donor Type";
+    public static final String DONOR_BUDGET_CODE = "Donor Budget Code";
     public static final String DRAFT = "Draft";
     public static final String ENVIRONMENT = "Environment";
     public static final String EQUAL_OPPORTUNITY = "Equal Opportunity";
@@ -266,6 +267,7 @@ public class ColumnConstants {
     public static final String PRIMARY_PROGRAM_LEVEL_7 = "Primary Program Level 7";
     public static final String PRIMARY_PROGRAM_LEVEL_8 = "Primary Program Level 8";
     public static final String PRIMARY_SECTOR = "Primary Sector";
+    public static final String PRIMARY_SECTOR_CODE_OFFICIAL = "Primary Sector Code Official";
     public static final String PRIMARY_SECTOR_SUB_SECTOR = "Primary Sector Sub-Sector";
     public static final String PRIMARY_SECTOR_SUB_SUB_SECTOR = "Primary Sector Sub-Sub-Sector";
     public static final String PROCUREMENT_SYSTEM = "Procurement System";

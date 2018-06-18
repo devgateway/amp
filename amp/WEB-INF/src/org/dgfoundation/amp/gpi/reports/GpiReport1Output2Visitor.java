@@ -147,14 +147,7 @@ class GPIOutput2Item {
 
     @Override
     public String toString() {
-        return "GPIIndicatator1Item [approvalDate=" + getApprovalYear() + ", q6=" + q6 + ", q7=" + q7 + ", q8=" + q8
+        return "GPIIndicatator1Item [approvalDate=" + getApprovalDate() + ", q6=" + q6 + ", q7=" + q7 + ", q8=" + q8
                 + ", q9=" + q9 + ", q10=" + q10 + "]";
-    }
-
-    public String getApprovalYear() {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(DateTimeUtil.fromJulianNumberToDate(Long.toString(approvalDate)));
-
-        return Long.toString(cal.get(Calendar.YEAR));
     }
 }

@@ -85,6 +85,8 @@ public class LocationFilterListManager implements FilterListManager {
             locationItems.add(getLocations(countryLocation));
         }
         
+        locationItems.add(getLocations(defaultCountryLocation));
+        locationItems.add(UNDEFINED_OPTION);
         items.put(LOCATIONS_ITEMS_NAME, locationItems);
 
         return items;

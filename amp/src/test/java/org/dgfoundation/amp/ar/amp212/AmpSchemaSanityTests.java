@@ -418,6 +418,63 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
     }
     
     @Test
+    public void testMtefMeasuresOnHierarchies() {
+        NiReportModel correctReport = new NiReportModel("testcase mtefs measures hiers")
+            .withHeaders(Arrays.asList(
+                    "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 19))",
+                    "(Executing Agency: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Contracting Agency: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 3, colSpan: 12));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 15, colSpan: 4))",
+                    "(2011: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 4));(2012: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 7, colSpan: 4));(2015: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 11, colSpan: 4))",
+                    "(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(MTEF: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Projection MTEF Projections: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Pipeline MTEF Projections: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(MTEF: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1));(Projection MTEF Projections: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1));(Pipeline MTEF Projections: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 10, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 11, colSpan: 1));(MTEF: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 12, colSpan: 1));(Projection MTEF Projections: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 13, colSpan: 1));(Pipeline MTEF Projections: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 14, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 15, colSpan: 1));(MTEF: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 16, colSpan: 1));(Projection MTEF Projections: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 17, colSpan: 1));(Pipeline MTEF Projections: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 18, colSpan: 1))"))
+                .withWarnings(Arrays.asList())
+                .withBody(      new ReportAreaForTests(null)
+                  .withContents("Executing Agency", "", "Contracting Agency", "", "Project Title", "", "Funding-2011-Actual Commitments", "0", "Funding-2011-MTEF", "1,718,011", "Funding-2011-Projection MTEF Projections", "809,123", "Funding-2011-Pipeline MTEF Projections", "908,888", "Funding-2012-Actual Commitments", "0", "Funding-2012-MTEF", "271,000", "Funding-2012-Projection MTEF Projections", "163,000", "Funding-2012-Pipeline MTEF Projections", "108,000", "Funding-2015-Actual Commitments", "1,011,456", "Funding-2015-MTEF", "0", "Funding-2015-Projection MTEF Projections", "0", "Funding-2015-Pipeline MTEF Projections", "0", "Totals-Actual Commitments", "1,011,456", "Totals-MTEF", "1,989,011", "Totals-Projection MTEF Projections", "972,123", "Totals-Pipeline MTEF Projections", "1,016,888")
+                  .withChildren(
+                    new ReportAreaForTests(new AreaOwner("Executing Agency", "Finland", 21698)).withContents("Contracting Agency", "", "Project Title", "", "Funding-2011-Actual Commitments", "0", "Funding-2011-MTEF", "0", "Funding-2011-Projection MTEF Projections", "0", "Funding-2011-Pipeline MTEF Projections", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-MTEF", "0", "Funding-2012-Projection MTEF Projections", "0", "Funding-2012-Pipeline MTEF Projections", "0", "Funding-2015-Actual Commitments", "40,740,48", "Funding-2015-MTEF", "0", "Funding-2015-Projection MTEF Projections", "0", "Funding-2015-Pipeline MTEF Projections", "0", "Totals-Actual Commitments", "40,740,48", "Totals-MTEF", "0", "Totals-Projection MTEF Projections", "0", "Totals-Pipeline MTEF Projections", "0", "Executing Agency", "Finland")
+                    .withChildren(
+                      new ReportAreaForTests(new AreaOwner("Contracting Agency", "Contracting Agency: Undefined", -999999999)).withContents("Project Title", "", "Funding-2011-Actual Commitments", "0", "Funding-2011-MTEF", "0", "Funding-2011-Projection MTEF Projections", "0", "Funding-2011-Pipeline MTEF Projections", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-MTEF", "0", "Funding-2012-Projection MTEF Projections", "0", "Funding-2012-Pipeline MTEF Projections", "0", "Funding-2015-Actual Commitments", "40,740,48", "Funding-2015-MTEF", "0", "Funding-2015-Projection MTEF Projections", "0", "Funding-2015-Pipeline MTEF Projections", "0", "Totals-Actual Commitments", "40,740,48", "Totals-MTEF", "0", "Totals-Projection MTEF Projections", "0", "Totals-Pipeline MTEF Projections", "0", "Contracting Agency", "Contracting Agency: Undefined")
+                      .withChildren(
+                        new ReportAreaForTests(new AreaOwner(73), "Project Title", "activity with directed MTEFs", "Funding-2015-Actual Commitments", "40,740,48", "Totals-Actual Commitments", "40,740,48")          )        ),
+                    new ReportAreaForTests(new AreaOwner("Executing Agency", "Ministry of Economy", 21700)).withContents("Contracting Agency", "", "Project Title", "", "Funding-2011-Actual Commitments", "0", "Funding-2011-MTEF", "33,888", "Funding-2011-Projection MTEF Projections", "0", "Funding-2011-Pipeline MTEF Projections", "33,888", "Funding-2012-Actual Commitments", "0", "Funding-2012-MTEF", "0", "Funding-2012-Projection MTEF Projections", "0", "Funding-2012-Pipeline MTEF Projections", "0", "Funding-2015-Actual Commitments", "0", "Funding-2015-MTEF", "0", "Funding-2015-Projection MTEF Projections", "0", "Funding-2015-Pipeline MTEF Projections", "0", "Totals-Actual Commitments", "0", "Totals-MTEF", "33,888", "Totals-Projection MTEF Projections", "0", "Totals-Pipeline MTEF Projections", "33,888", "Executing Agency", "Ministry of Economy")
+                    .withChildren(
+                      new ReportAreaForTests(new AreaOwner("Contracting Agency", "Contracting Agency: Undefined", -999999999)).withContents("Project Title", "", "Funding-2011-Actual Commitments", "0", "Funding-2011-MTEF", "33,888", "Funding-2011-Projection MTEF Projections", "0", "Funding-2011-Pipeline MTEF Projections", "33,888", "Funding-2012-Actual Commitments", "0", "Funding-2012-MTEF", "0", "Funding-2012-Projection MTEF Projections", "0", "Funding-2012-Pipeline MTEF Projections", "0", "Funding-2015-Actual Commitments", "0", "Funding-2015-MTEF", "0", "Funding-2015-Projection MTEF Projections", "0", "Funding-2015-Pipeline MTEF Projections", "0", "Totals-Actual Commitments", "0", "Totals-MTEF", "33,888", "Totals-Projection MTEF Projections", "0", "Totals-Pipeline MTEF Projections", "33,888", "Contracting Agency", "Contracting Agency: Undefined")
+                      .withChildren(
+                        new ReportAreaForTests(new AreaOwner(19), "Project Title", "Pure MTEF Project", "Funding-2011-MTEF", "33,888", "Funding-2011-Pipeline MTEF Projections", "33,888", "Totals-MTEF", "33,888", "Totals-Pipeline MTEF Projections", "33,888")          )        ),
+                    new ReportAreaForTests(new AreaOwner("Executing Agency", "Norway", 21694)).withContents("Contracting Agency", "", "Project Title", "", "Funding-2011-Actual Commitments", "0", "Funding-2011-MTEF", "0", "Funding-2011-Projection MTEF Projections", "0", "Funding-2011-Pipeline MTEF Projections", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-MTEF", "0", "Funding-2012-Projection MTEF Projections", "0", "Funding-2012-Pipeline MTEF Projections", "0", "Funding-2015-Actual Commitments", "27,160,32", "Funding-2015-MTEF", "0", "Funding-2015-Projection MTEF Projections", "0", "Funding-2015-Pipeline MTEF Projections", "0", "Totals-Actual Commitments", "27,160,32", "Totals-MTEF", "0", "Totals-Projection MTEF Projections", "0", "Totals-Pipeline MTEF Projections", "0", "Executing Agency", "Norway")
+                    .withChildren(
+                      new ReportAreaForTests(new AreaOwner("Contracting Agency", "Contracting Agency: Undefined", -999999999)).withContents("Project Title", "", "Funding-2011-Actual Commitments", "0", "Funding-2011-MTEF", "0", "Funding-2011-Projection MTEF Projections", "0", "Funding-2011-Pipeline MTEF Projections", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-MTEF", "0", "Funding-2012-Projection MTEF Projections", "0", "Funding-2012-Pipeline MTEF Projections", "0", "Funding-2015-Actual Commitments", "27,160,32", "Funding-2015-MTEF", "0", "Funding-2015-Projection MTEF Projections", "0", "Funding-2015-Pipeline MTEF Projections", "0", "Totals-Actual Commitments", "27,160,32", "Totals-MTEF", "0", "Totals-Projection MTEF Projections", "0", "Totals-Pipeline MTEF Projections", "0", "Contracting Agency", "Contracting Agency: Undefined")
+                      .withChildren(
+                        new ReportAreaForTests(new AreaOwner(73), "Project Title", "activity with directed MTEFs", "Funding-2015-Actual Commitments", "27,160,32", "Totals-Actual Commitments", "27,160,32")          )        ),
+                    new ReportAreaForTests(new AreaOwner("Executing Agency", "USAID", 21696)).withContents("Contracting Agency", "", "Project Title", "", "Funding-2011-Actual Commitments", "0", "Funding-2011-MTEF", "0", "Funding-2011-Projection MTEF Projections", "0", "Funding-2011-Pipeline MTEF Projections", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-MTEF", "0", "Funding-2012-Projection MTEF Projections", "0", "Funding-2012-Pipeline MTEF Projections", "0", "Funding-2015-Actual Commitments", "55,555,2", "Funding-2015-MTEF", "0", "Funding-2015-Projection MTEF Projections", "0", "Funding-2015-Pipeline MTEF Projections", "0", "Totals-Actual Commitments", "55,555,2", "Totals-MTEF", "0", "Totals-Projection MTEF Projections", "0", "Totals-Pipeline MTEF Projections", "0", "Executing Agency", "USAID")
+                    .withChildren(
+                      new ReportAreaForTests(new AreaOwner("Contracting Agency", "Contracting Agency: Undefined", -999999999)).withContents("Project Title", "", "Funding-2011-Actual Commitments", "0", "Funding-2011-MTEF", "0", "Funding-2011-Projection MTEF Projections", "0", "Funding-2011-Pipeline MTEF Projections", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-MTEF", "0", "Funding-2012-Projection MTEF Projections", "0", "Funding-2012-Pipeline MTEF Projections", "0", "Funding-2015-Actual Commitments", "55,555,2", "Funding-2015-MTEF", "0", "Funding-2015-Projection MTEF Projections", "0", "Funding-2015-Pipeline MTEF Projections", "0", "Totals-Actual Commitments", "55,555,2", "Totals-MTEF", "0", "Totals-Projection MTEF Projections", "0", "Totals-Pipeline MTEF Projections", "0", "Contracting Agency", "Contracting Agency: Undefined")
+                      .withChildren(
+                        new ReportAreaForTests(new AreaOwner(73), "Project Title", "activity with directed MTEFs", "Funding-2015-Actual Commitments", "55,555,2", "Totals-Actual Commitments", "55,555,2")          )        ),
+                    new ReportAreaForTests(new AreaOwner("Executing Agency", "Water Foundation", 21702)).withContents("Contracting Agency", "", "Project Title", "", "Funding-2011-Actual Commitments", "0", "Funding-2011-MTEF", "150,000", "Funding-2011-Projection MTEF Projections", "0", "Funding-2011-Pipeline MTEF Projections", "150,000", "Funding-2012-Actual Commitments", "0", "Funding-2012-MTEF", "65,000", "Funding-2012-Projection MTEF Projections", "0", "Funding-2012-Pipeline MTEF Projections", "65,000", "Funding-2015-Actual Commitments", "0", "Funding-2015-MTEF", "0", "Funding-2015-Projection MTEF Projections", "0", "Funding-2015-Pipeline MTEF Projections", "0", "Totals-Actual Commitments", "0", "Totals-MTEF", "215,000", "Totals-Projection MTEF Projections", "0", "Totals-Pipeline MTEF Projections", "215,000", "Executing Agency", "Water Foundation")
+                    .withChildren(
+                      new ReportAreaForTests(new AreaOwner("Contracting Agency", "Contracting Agency: Undefined", -999999999)).withContents("Project Title", "", "Funding-2011-Actual Commitments", "0", "Funding-2011-MTEF", "150,000", "Funding-2011-Projection MTEF Projections", "0", "Funding-2011-Pipeline MTEF Projections", "150,000", "Funding-2012-Actual Commitments", "0", "Funding-2012-MTEF", "65,000", "Funding-2012-Projection MTEF Projections", "0", "Funding-2012-Pipeline MTEF Projections", "65,000", "Funding-2015-Actual Commitments", "0", "Funding-2015-MTEF", "0", "Funding-2015-Projection MTEF Projections", "0", "Funding-2015-Pipeline MTEF Projections", "0", "Totals-Actual Commitments", "0", "Totals-MTEF", "215,000", "Totals-Projection MTEF Projections", "0", "Totals-Pipeline MTEF Projections", "215,000", "Contracting Agency", "Contracting Agency: Undefined")
+                      .withChildren(
+                        new ReportAreaForTests(new AreaOwner(18), "Project Title", "Test MTEF directed", "Funding-2011-MTEF", "150,000", "Funding-2011-Pipeline MTEF Projections", "150,000", "Funding-2012-MTEF", "65,000", "Funding-2012-Pipeline MTEF Projections", "65,000", "Totals-MTEF", "215,000", "Totals-Pipeline MTEF Projections", "215,000")          )        ),
+                    new ReportAreaForTests(new AreaOwner("Executing Agency", "Executing Agency: Undefined", -999999999)).withContents("Contracting Agency", "", "Project Title", "", "Funding-2011-Actual Commitments", "0", "Funding-2011-MTEF", "1,534,123", "Funding-2011-Projection MTEF Projections", "809,123", "Funding-2011-Pipeline MTEF Projections", "725,000", "Funding-2012-Actual Commitments", "0", "Funding-2012-MTEF", "206,000", "Funding-2012-Projection MTEF Projections", "163,000", "Funding-2012-Pipeline MTEF Projections", "43,000", "Funding-2015-Actual Commitments", "888,000", "Funding-2015-MTEF", "0", "Funding-2015-Projection MTEF Projections", "0", "Funding-2015-Pipeline MTEF Projections", "0", "Totals-Actual Commitments", "888,000", "Totals-MTEF", "1,740,123", "Totals-Projection MTEF Projections", "972,123", "Totals-Pipeline MTEF Projections", "768,000", "Executing Agency", "Executing Agency: Undefined")
+                    .withChildren(
+                      new ReportAreaForTests(new AreaOwner("Contracting Agency", "Contracting Agency: Undefined", -999999999))
+                      .withContents("Project Title", "", "Funding-2011-Actual Commitments", "0", "Funding-2011-MTEF", "1,534,123", "Funding-2011-Projection MTEF Projections", "809,123", "Funding-2011-Pipeline MTEF Projections", "725,000", "Funding-2012-Actual Commitments", "0", "Funding-2012-MTEF", "206,000", "Funding-2012-Projection MTEF Projections", "163,000", "Funding-2012-Pipeline MTEF Projections", "43,000", "Funding-2015-Actual Commitments", "888,000", "Funding-2015-MTEF", "0", "Funding-2015-Projection MTEF Projections", "0", "Funding-2015-Pipeline MTEF Projections", "0", "Totals-Actual Commitments", "888,000", "Totals-MTEF", "1,740,123", "Totals-Projection MTEF Projections", "972,123", "Totals-Pipeline MTEF Projections", "768,000", "Contracting Agency", "Contracting Agency: Undefined")
+                      .withChildren(
+                        new ReportAreaForTests(new AreaOwner(25), "Project Title", "mtef activity 1", "Funding-2011-MTEF", "789,123", "Funding-2011-Projection MTEF Projections", "789,123", "Totals-MTEF", "789,123", "Totals-Projection MTEF Projections", "789,123"),
+                        new ReportAreaForTests(new AreaOwner(70), "Project Title", "Activity with both MTEFs and Act.Comms", "Funding-2011-MTEF", "700,000", "Funding-2011-Pipeline MTEF Projections", "700,000", "Funding-2012-MTEF", "150,000", "Funding-2012-Projection MTEF Projections", "150,000", "Funding-2015-Actual Commitments", "888,000", "Totals-Actual Commitments", "888,000", "Totals-MTEF", "850,000", "Totals-Projection MTEF Projections", "150,000", "Totals-Pipeline MTEF Projections", "700,000"),
+                        new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs", "Funding-2011-MTEF", "45,000", "Funding-2011-Projection MTEF Projections", "20,000", "Funding-2011-Pipeline MTEF Projections", "25,000", "Funding-2012-MTEF", "56,000", "Funding-2012-Projection MTEF Projections", "13,000", "Funding-2012-Pipeline MTEF Projections", "43,000", "Totals-MTEF", "101,000", "Totals-Projection MTEF Projections", "33,000", "Totals-Pipeline MTEF Projections", "68,000")          )        )      ));
+
+        runNiTestCase(
+                this.buildSpecification("testcase mtefs measures hiers", 
+                        
+                        Arrays.asList(ColumnConstants.EXECUTING_AGENCY, ColumnConstants.CONTRACTING_AGENCY, ColumnConstants.PROJECT_TITLE), 
+                        Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.MTEF, MeasureConstants.PROJECTION_MTEF_PROJECTIONS, MeasureConstants.PIPELINE_MTEF_PROJECTIONS), 
+                        Arrays.asList(ColumnConstants.EXECUTING_AGENCY,ColumnConstants.CONTRACTING_AGENCY), GroupingCriteria.GROUPING_YEARLY),                       
+                        "en", 
+                        Arrays.asList("Pure MTEF Project", "activity with directed MTEFs", "Activity with both MTEFs and Act.Comms", "activity with many MTEFs", "mtef activity 1", "Test MTEF directed", "Eth Water"),
+                        correctReport); 
+    }
+    
+    @Test
     public void testProjectTitleLanguages() {
         NiReportModel correctReport = new NiReportModel("testcase EN")
             .withHeaders(Arrays.asList(
@@ -490,6 +547,64 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
             GroupingCriteria.GROUPING_TOTALS_ONLY);
         
         spec.getOrCreateSettings().setUnitsOption(AmountsUnits.AMOUNTS_OPTION_MILLIONS);
+        runNiTestCase(cor, spec, mtefActs);
+    }
+    
+    @Test
+    public void testMtefMeasuresInMillions() {
+        NiReportModel cor =  new NiReportModel("MTEF measures millions")
+            .withHeaders(Arrays.asList(
+                    "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 4))",
+                    "(Project Title: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1));(MTEF 2011: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 1, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 2))",
+                    "(Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(MTEF: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1))"))
+                .withWarnings(Arrays.asList())
+                .withBody(      new ReportAreaForTests(null)
+                  .withContents("Project Title", "", "MTEF 2011", "1,72", "Totals-Actual Commitments", "0,89", "Totals-MTEF", "1,72")
+                  .withChildren(
+                    new ReportAreaForTests(new AreaOwner(18), "Project Title", "Test MTEF directed", "MTEF 2011", "0,15", "Totals-MTEF", "0,15"),
+                    new ReportAreaForTests(new AreaOwner(19), "Project Title", "Pure MTEF Project", "MTEF 2011", "0,03", "Totals-MTEF", "0,03"),
+                    new ReportAreaForTests(new AreaOwner(25), "Project Title", "mtef activity 1", "MTEF 2011", "0,79", "Totals-MTEF", "0,79"),
+                    new ReportAreaForTests(new AreaOwner(27), "Project Title", "mtef activity 2"),
+                    new ReportAreaForTests(new AreaOwner(70), "Project Title", "Activity with both MTEFs and Act.Comms", "MTEF 2011", "0,7", "Totals-Actual Commitments", "0,89", "Totals-MTEF", "0,7"),
+                    new ReportAreaForTests(new AreaOwner(76), "Project Title", "activity with pipeline MTEFs and act. disb"),
+                    new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs", "MTEF 2011", "0,04", "Totals-MTEF", "0,04")      ));
+
+        ReportSpecificationImpl spec = buildSpecification("MTEF measures millions",
+            Arrays.asList(ColumnConstants.PROJECT_TITLE, "MTEF 2011"), 
+            Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS), 
+            null,
+            GroupingCriteria.GROUPING_TOTALS_ONLY);
+        
+        spec.getOrCreateSettings().setUnitsOption(AmountsUnits.AMOUNTS_OPTION_MILLIONS);
+        runNiTestCase(cor, spec, mtefActs);
+    }
+    
+    @Test
+    public void testAllMtefMeasures() {
+        NiReportModel cor =  new NiReportModel("MTEF measures")
+            .withHeaders(Arrays.asList(
+                    "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 25))",
+                    "(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 1, colSpan: 20));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 21, colSpan: 4))",
+                    "(2011: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 1, colSpan: 4));(2012: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 5, colSpan: 4));(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 9, colSpan: 4));(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 13, colSpan: 4));(2015: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 17, colSpan: 4))",
+                    "(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1));(MTEF: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Projection MTEF Projections: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Pipeline MTEF Projections: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(MTEF: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Projection MTEF Projections: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Pipeline MTEF Projections: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1));(MTEF: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 10, colSpan: 1));(Projection MTEF Projections: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 11, colSpan: 1));(Pipeline MTEF Projections: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 12, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 13, colSpan: 1));(MTEF: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 14, colSpan: 1));(Projection MTEF Projections: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 15, colSpan: 1));(Pipeline MTEF Projections: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 16, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 17, colSpan: 1));(MTEF: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 18, colSpan: 1));(Projection MTEF Projections: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 19, colSpan: 1));(Pipeline MTEF Projections: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 20, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 21, colSpan: 1));(MTEF: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 22, colSpan: 1));(Projection MTEF Projections: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 23, colSpan: 1));(Pipeline MTEF Projections: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 24, colSpan: 1))"))
+                .withWarnings(Arrays.asList())
+                .withBody(      new ReportAreaForTests(null)
+                  .withContents("Project Title", "", "Funding-2011-Actual Commitments", "0", "Funding-2011-MTEF", "1,718,011", "Funding-2011-Projection MTEF Projections", "809,123", "Funding-2011-Pipeline MTEF Projections", "908,888", "Funding-2012-Actual Commitments", "0", "Funding-2012-MTEF", "271,000", "Funding-2012-Projection MTEF Projections", "163,000", "Funding-2012-Pipeline MTEF Projections", "108,000", "Funding-2013-Actual Commitments", "0", "Funding-2013-MTEF", "158,654", "Funding-2013-Projection MTEF Projections", "0", "Funding-2013-Pipeline MTEF Projections", "158,654", "Funding-2014-Actual Commitments", "0", "Funding-2014-MTEF", "105,000", "Funding-2014-Projection MTEF Projections", "55,000", "Funding-2014-Pipeline MTEF Projections", "50,000", "Funding-2015-Actual Commitments", "888,000", "Funding-2015-MTEF", "0", "Funding-2015-Projection MTEF Projections", "0", "Funding-2015-Pipeline MTEF Projections", "0", "Totals-Actual Commitments", "888,000", "Totals-MTEF", "2,252,665", "Totals-Projection MTEF Projections", "1,027,123", "Totals-Pipeline MTEF Projections", "1,225,542")
+                  .withChildren(
+                    new ReportAreaForTests(new AreaOwner(18), "Project Title", "Test MTEF directed", "Funding-2011-MTEF", "150,000", "Funding-2011-Pipeline MTEF Projections", "150,000", "Funding-2012-MTEF", "65,000", "Funding-2012-Pipeline MTEF Projections", "65,000", "Totals-MTEF", "215,000", "Totals-Pipeline MTEF Projections", "215,000"),
+                    new ReportAreaForTests(new AreaOwner(19), "Project Title", "Pure MTEF Project", "Funding-2011-MTEF", "33,888", "Funding-2011-Pipeline MTEF Projections", "33,888", "Totals-MTEF", "33,888", "Totals-Pipeline MTEF Projections", "33,888"),
+                    new ReportAreaForTests(new AreaOwner(25), "Project Title", "mtef activity 1", "Funding-2011-MTEF", "789,123", "Funding-2011-Projection MTEF Projections", "789,123", "Totals-MTEF", "789,123", "Totals-Projection MTEF Projections", "789,123"),
+                    new ReportAreaForTests(new AreaOwner(27), "Project Title", "mtef activity 2", "Funding-2013-MTEF", "123,654", "Funding-2013-Pipeline MTEF Projections", "123,654", "Totals-MTEF", "123,654", "Totals-Pipeline MTEF Projections", "123,654"),
+                    new ReportAreaForTests(new AreaOwner(70), "Project Title", "Activity with both MTEFs and Act.Comms", "Funding-2011-MTEF", "700,000", "Funding-2011-Pipeline MTEF Projections", "700,000", "Funding-2012-MTEF", "150,000", "Funding-2012-Projection MTEF Projections", "150,000", "Funding-2015-Actual Commitments", "888,000", "Totals-Actual Commitments", "888,000", "Totals-MTEF", "850,000", "Totals-Projection MTEF Projections", "150,000", "Totals-Pipeline MTEF Projections", "700,000"),
+                    new ReportAreaForTests(new AreaOwner(76), "Project Title", "activity with pipeline MTEFs and act. disb", "Funding-2013-MTEF", "35,000", "Funding-2013-Pipeline MTEF Projections", "35,000", "Funding-2014-MTEF", "105,000", "Funding-2014-Projection MTEF Projections", "55,000", "Funding-2014-Pipeline MTEF Projections", "50,000", "Totals-MTEF", "140,000", "Totals-Projection MTEF Projections", "55,000", "Totals-Pipeline MTEF Projections", "85,000"),
+                    new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs", "Funding-2011-MTEF", "45,000", "Funding-2011-Projection MTEF Projections", "20,000", "Funding-2011-Pipeline MTEF Projections", "25,000", "Funding-2012-MTEF", "56,000", "Funding-2012-Projection MTEF Projections", "13,000", "Funding-2012-Pipeline MTEF Projections", "43,000", "Totals-MTEF", "101,000", "Totals-Projection MTEF Projections", "33,000", "Totals-Pipeline MTEF Projections", "68,000")      ));
+
+        ReportSpecificationImpl spec = buildSpecification("MTEF measures",
+            Arrays.asList(ColumnConstants.PROJECT_TITLE), 
+            Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.MTEF, MeasureConstants.PROJECTION_MTEF_PROJECTIONS, MeasureConstants.PIPELINE_MTEF_PROJECTIONS, MeasureConstants.REAL_MTEF),
+            null,
+            GroupingCriteria.GROUPING_YEARLY);
+        
         runNiTestCase(cor, spec, mtefActs);
     }
     
@@ -916,8 +1031,8 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                 .withBody(      new ReportAreaForTests(null)
                   .withContents("Project Title", "", "Disaster Response Marker", "", "Funding-2009-Actual Commitments", "100 000", "Funding-2012-Actual Commitments", "25 000", "Funding-2013-Actual Commitments", "2 670 000", "Funding-2014-Actual Commitments", "4 433 000", "Funding-2015-Actual Commitments", "117 000", "Totals-Actual Commitments", "7 345 000")
                   .withChildren(
-                    new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity", "Funding-2009-Actual Commitments", "100 000", "Funding-2012-Actual Commitments", "25 000", "Totals-Actual Commitments", "125 000"),
-                    new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2", "Funding-2013-Actual Commitments", "2 670 000", "Funding-2014-Actual Commitments", "4 400 000", "Totals-Actual Commitments", "7 070 000"),
+                    new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity", "Disaster Response Marker", "", "Funding-2009-Actual Commitments", "100 000", "Funding-2012-Actual Commitments", "25 000", "Totals-Actual Commitments", "125 000"),
+                    new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2", "Disaster Response Marker", "", "Funding-2013-Actual Commitments", "2 670 000", "Funding-2014-Actual Commitments", "4 400 000", "Totals-Actual Commitments", "7 070 000"),
                     new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response", "Disaster Response Marker", "No, Yes", "Funding-2014-Actual Commitments", "33 000", "Funding-2015-Actual Commitments", "117 000", "Totals-Actual Commitments", "150 000")      ));
         
         runNiTestCase(spec("AMP-20980-disaster-response-marker"), "en",
@@ -1174,7 +1289,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                   new ReportAreaForTests(new AreaOwner(77), "Region", "Chisinau City, Dubasari County", "Primary Sector", "110 - EDUCATION", "Funding-2014-Actual Disbursements", "55,000", "Funding-2015-Actual Disbursements", "35,000", "Totals-Actual Disbursements", "90,000")        ),
                 new ReportAreaForTests(new AreaOwner("Project Title", "new activity with contracting", 53)).withContents("Region", "", "Primary Sector", "", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "12,000", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "12,000", "Totals-Actual Disbursements", "0", "Project Title", "new activity with contracting")
                 .withChildren(
-                  new ReportAreaForTests(new AreaOwner(53), "Funding-2014-Actual Commitments", "12,000", "Totals-Actual Commitments", "12,000")        ),
+                  new ReportAreaForTests(new AreaOwner(53), "Primary Sector", "", "Funding-2014-Actual Commitments", "12,000", "Totals-Actual Commitments", "12,000")        ),
                 new ReportAreaForTests(new AreaOwner("Project Title", "pledged 2", 48)).withContents("Region", "", "Primary Sector", "", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "2,670,000", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "4,400,000", "Funding-2014-Actual Disbursements", "450,000", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "7,070,000", "Totals-Actual Disbursements", "450,000", "Project Title", "pledged 2")
                 .withChildren(
                   new ReportAreaForTests(new AreaOwner(48), "Region", "Cahul County", "Primary Sector", "113 - SECONDARY EDUCATION", "Funding-2013-Actual Commitments", "2,670,000", "Funding-2014-Actual Commitments", "4,400,000", "Funding-2014-Actual Disbursements", "450,000", "Totals-Actual Commitments", "7,070,000", "Totals-Actual Disbursements", "450,000")        ),
@@ -1385,7 +1500,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                 .withChildren(
                   new ReportAreaForTests(new AreaOwner("Donor Agency", "Finland", 21698)).withContents("Region", "", "Primary Sector", "", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "12,000", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "12,000", "Totals-Actual Disbursements", "0", "Donor Agency", "Finland")
                   .withChildren(
-                    new ReportAreaForTests(new AreaOwner(53), "Funding-2014-Actual Commitments", "12,000", "Totals-Actual Commitments", "12,000")          )        ),
+                    new ReportAreaForTests(new AreaOwner(53), "Primary Sector", "", "Funding-2014-Actual Commitments", "12,000", "Totals-Actual Commitments", "12,000")          )        ),
                 new ReportAreaForTests(new AreaOwner("Project Title", "pledged 2", 48)).withContents("Donor Agency", "", "Region", "", "Primary Sector", "", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "2,670,000", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "4,400,000", "Funding-2014-Actual Disbursements", "450,000", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "7,070,000", "Totals-Actual Disbursements", "450,000", "Project Title", "pledged 2")
                 .withChildren(
                   new ReportAreaForTests(new AreaOwner("Donor Agency", "USAID", 21696)).withContents("Region", "", "Primary Sector", "", "Funding-2006-Actual Commitments", "0", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "0", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "2,670,000", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "4,400,000", "Funding-2014-Actual Disbursements", "450,000", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "7,070,000", "Totals-Actual Disbursements", "450,000", "Donor Agency", "USAID")
@@ -1472,14 +1587,92 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                 .withContents("Project Title", "", "Totals-Actual Commitments", "50,100", "Disaster Response Marker", "Disaster Response Marker: Undefined")
                 .withChildren(
                   new ReportAreaForTests(new AreaOwner(63), "Project Title", "activity with funded components", "Totals-Actual Commitments", "100"),
-                  new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response", "Totals-Actual Commitments", "50,000")        )      ));    
+                  new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response", "Totals-Actual Commitments", "50,000"),
+                  new ReportAreaForTests(new AreaOwner(95), "Project Title", "activity 1 with indicators")        )      ));
         
-        List<String> someActs = Arrays.asList("activity_with_disaster_response", "expenditure class", "second with disaster response", "activity with funded components");
+        List<String> someActs = Arrays.asList("activity_with_disaster_response", "expenditure class", "second with disaster response", "activity with funded components", "activity 1 with indicators");
         
         ReportSpecificationImpl spec = buildSpecification("by-disaster-response",
             Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.DISASTER_RESPONSE_MARKER), 
             Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
             Arrays.asList(ColumnConstants.DISASTER_RESPONSE_MARKER), 
+            GroupingCriteria.GROUPING_TOTALS_ONLY);
+        
+        spec.setDisplayEmptyFundingRows(true);
+        runNiTestCase(cor, spec, "en", someActs);
+    }
+    
+    @Test
+    public void testShowEmptyFundingRowsDonorAgencyHierarchy() {
+        NiReportModel cor = new NiReportModel("by-donor-agency")
+        .withHeaders(Arrays.asList(
+                "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 3))",
+                "(Donor Agency: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 1, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 1))",
+                "(Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1))"))
+            .withWarnings(Arrays.asList())
+            .withBody(      new ReportAreaForTests(null)
+              .withContents("Donor Agency", "", "Project Title", "", "Totals-Actual Commitments", "578,666")
+              .withChildren(
+                new ReportAreaForTests(new AreaOwner("Donor Agency", "Finland", 21698)).withContents("Project Title", "", "Totals-Actual Commitments", "150,000", "Donor Agency", "Finland")
+                .withChildren(
+                  new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response", "Totals-Actual Commitments", "150,000")        ),
+                new ReportAreaForTests(new AreaOwner("Donor Agency", "Ministry of Economy", 21700)).withContents("Project Title", "", "Totals-Actual Commitments", "62,000", "Donor Agency", "Ministry of Economy")
+                .withChildren(
+                  new ReportAreaForTests(new AreaOwner(87), "Project Title", "expenditure class", "Totals-Actual Commitments", "62,000")        ),
+                new ReportAreaForTests(new AreaOwner("Donor Agency", "Ministry of Finance", 21699)).withContents("Project Title", "", "Totals-Actual Commitments", "0", "Donor Agency", "Ministry of Finance")
+                .withChildren(
+                  new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response")        ),
+                new ReportAreaForTests(new AreaOwner("Donor Agency", "Norway", 21694))
+                .withContents("Project Title", "", "Totals-Actual Commitments", "366,666", "Donor Agency", "Norway")
+                .withChildren(
+                  new ReportAreaForTests(new AreaOwner(87), "Project Title", "expenditure class"),
+                  new ReportAreaForTests(new AreaOwner(92), "Project Title", "second with disaster response", "Totals-Actual Commitments", "366,666")        ),
+                new ReportAreaForTests(new AreaOwner("Donor Agency", "Donor Agency: Undefined", -999999999)).withContents("Project Title", "", "Totals-Actual Commitments", "0", "Donor Agency", "Donor Agency: Undefined")
+                .withChildren(
+                  new ReportAreaForTests(new AreaOwner(95), "Project Title", "activity 1 with indicators")        )      ));   
+        
+        List<String> someActs = Arrays.asList("activity_with_disaster_response", "expenditure class", "second with disaster response", "activity 1 with indicators");
+        
+        ReportSpecificationImpl spec = buildSpecification("by-donor-agency",
+            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.DONOR_AGENCY), 
+            Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
+            Arrays.asList(ColumnConstants.DONOR_AGENCY), 
+            GroupingCriteria.GROUPING_TOTALS_ONLY);
+        
+        spec.setDisplayEmptyFundingRows(true);
+        runNiTestCase(cor, spec, "en", someActs);
+    }
+    
+    @Test
+    public void testShowEmptyFundingRowsModeOfPaymentAgencyHierarchy() {
+        NiReportModel cor = new NiReportModel("by-mode-of-payment")
+        .withHeaders(Arrays.asList(
+            "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 3))",
+            "(Mode of Payment: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 1, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 1))",
+            "(Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1))"))
+        .withWarnings(Arrays.asList())
+        .withBody(      new ReportAreaForTests(null)
+          .withContents("Mode of Payment", "", "Project Title", "", "Totals-Actual Disbursements", "253,700")
+          .withChildren(
+            new ReportAreaForTests(new AreaOwner("Mode of Payment", "Direct payment", 2094))
+            .withContents("Project Title", "", "Totals-Actual Disbursements", "0", "Mode of Payment", "Direct payment")
+            .withChildren(
+              new ReportAreaForTests(new AreaOwner(27), "Project Title", "mtef activity 2"),
+              new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response")        ),
+            new ReportAreaForTests(new AreaOwner("Mode of Payment", "Mode of Payment: Undefined", -999999999))
+            .withContents("Project Title", "", "Totals-Actual Disbursements", "253,700", "Mode of Payment", "Mode of Payment: Undefined")
+            .withChildren(
+              new ReportAreaForTests(new AreaOwner(19), "Project Title", "Pure MTEF Project"),
+              new ReportAreaForTests(new AreaOwner(87), "Project Title", "expenditure class", "Totals-Actual Disbursements", "253,700"),
+              new ReportAreaForTests(new AreaOwner(92), "Project Title", "second with disaster response"),
+              new ReportAreaForTests(new AreaOwner(95), "Project Title", "activity 1 with indicators")        )      ));
+        
+        List<String> someActs = Arrays.asList("activity_with_disaster_response", "expenditure class", "second with disaster response", "activity 1 with indicators", "mtef activity 2", "Pure MTEF Project");
+        
+        ReportSpecificationImpl spec = buildSpecification("by-mode-of-payment",
+            Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.MODE_OF_PAYMENT), 
+            Arrays.asList(MeasureConstants.ACTUAL_DISBURSEMENTS),
+            Arrays.asList(ColumnConstants.MODE_OF_PAYMENT), 
             GroupingCriteria.GROUPING_TOTALS_ONLY);
         
         spec.setDisplayEmptyFundingRows(true);
@@ -1499,50 +1692,50 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
             .withBody(      new ReportAreaForTests(null)
               .withContents("Project Title", "", "Mode of Payment", "", "Totals-Undisbursed Balance-Cash", "17 334", "Totals-Undisbursed Balance-Direct payment", "1 438 038,98", "Totals-Undisbursed Balance-No Information", "333 222", "Totals-Undisbursed Balance-Reimbursable", "666 777", "Totals-Undisbursed Balance-Unassigned", "13 746 517,21", "Totals-Undisbursed Balance-Total", "16 201 889,19")
               .withChildren(
-                new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Totals-Undisbursed Balance-Unassigned", "89 910", "Totals-Undisbursed Balance-Total", "89 910"),
-                new ReportAreaForTests(new AreaOwner(13), "Project Title", "TAC_activity_2", "Totals-Undisbursed Balance-Unassigned", "546 675", "Totals-Undisbursed Balance-Total", "546 675"),
-                new ReportAreaForTests(new AreaOwner(15), "Project Title", "Proposed Project Cost 1 - USD"),
-                new ReportAreaForTests(new AreaOwner(17), "Project Title", "Proposed Project Cost 2 - EUR"),
-                new ReportAreaForTests(new AreaOwner(18), "Project Title", "Test MTEF directed", "Mode of Payment", "Cash", "Totals-Undisbursed Balance-Cash", "-143 777", "Totals-Undisbursed Balance-Total", "-143 777"),
-                new ReportAreaForTests(new AreaOwner(19), "Project Title", "Pure MTEF Project"),
-                new ReportAreaForTests(new AreaOwner(21), "Project Title", "activity with components"),
-                new ReportAreaForTests(new AreaOwner(23), "Project Title", "Project with documents"),
-                new ReportAreaForTests(new AreaOwner(24), "Project Title", "Eth Water", "Mode of Payment", "Direct payment", "Totals-Undisbursed Balance-Unassigned", "-545 000", "Totals-Undisbursed Balance-Total", "-545 000"),
-                new ReportAreaForTests(new AreaOwner(25), "Project Title", "mtef activity 1"),
-                new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity", "Totals-Undisbursed Balance-Unassigned", "53 000", "Totals-Undisbursed Balance-Total", "53 000"),
-                new ReportAreaForTests(new AreaOwner(27), "Project Title", "mtef activity 2", "Mode of Payment", "Direct payment"),
-                new ReportAreaForTests(new AreaOwner(28), "Project Title", "ptc activity 1", "Mode of Payment", "Reimbursable", "Totals-Undisbursed Balance-Reimbursable", "666 777", "Totals-Undisbursed Balance-Total", "666 777"),
-                new ReportAreaForTests(new AreaOwner(29), "Project Title", "ptc activity 2", "Mode of Payment", "No Information", "Totals-Undisbursed Balance-No Information", "333 222", "Totals-Undisbursed Balance-Total", "333 222"),
-                new ReportAreaForTests(new AreaOwner(30), "Project Title", "SSC Project 1", "Mode of Payment", "Direct payment", "Totals-Undisbursed Balance-Direct payment", "-443 778", "Totals-Undisbursed Balance-Total", "-443 778"),
-                new ReportAreaForTests(new AreaOwner(31), "Project Title", "SSC Project 2", "Mode of Payment", "Direct payment", "Totals-Undisbursed Balance-Direct payment", "435 576", "Totals-Undisbursed Balance-Total", "435 576"),
-                new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1", "Mode of Payment", "Cash, Direct payment", "Totals-Undisbursed Balance-Cash", "111 111", "Totals-Undisbursed Balance-Direct payment", "222 222", "Totals-Undisbursed Balance-Total", "333 333"),
-                new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones", "Totals-Undisbursed Balance-Unassigned", "570 000", "Totals-Undisbursed Balance-Total", "570 000"),
-                new ReportAreaForTests(new AreaOwner(36), "Project Title", "Activity With Zones and Percentages", "Totals-Undisbursed Balance-Unassigned", "890 000", "Totals-Undisbursed Balance-Total", "890 000"),
-                new ReportAreaForTests(new AreaOwner(40), "Project Title", "SubNational no percentages", "Mode of Payment", "Direct payment", "Totals-Undisbursed Balance-Direct payment", "75 000", "Totals-Undisbursed Balance-Total", "75 000"),
-                new ReportAreaForTests(new AreaOwner(41), "Project Title", "Activity Linked With Pledge", "Totals-Undisbursed Balance-Unassigned", "50 000", "Totals-Undisbursed Balance-Total", "50 000"),
-                new ReportAreaForTests(new AreaOwner(43), "Project Title", "Activity with primary_tertiary_program", "Mode of Payment", "Cash", "Totals-Undisbursed Balance-Cash", "50 000", "Totals-Undisbursed Balance-Total", "50 000"),
-                new ReportAreaForTests(new AreaOwner(44), "Project Title", "activity with primary_program", "Totals-Undisbursed Balance-Unassigned", "32 000", "Totals-Undisbursed Balance-Total", "32 000"),
-                new ReportAreaForTests(new AreaOwner(45), "Project Title", "activity with tertiary_program", "Totals-Undisbursed Balance-Unassigned", "15 000", "Totals-Undisbursed Balance-Total", "15 000"),
-                new ReportAreaForTests(new AreaOwner(46), "Project Title", "pledged education activity 1", "Totals-Undisbursed Balance-Unassigned", "5 000 000", "Totals-Undisbursed Balance-Total", "5 000 000"),
-                new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2", "Totals-Undisbursed Balance-Unassigned", "6 620 000", "Totals-Undisbursed Balance-Total", "6 620 000"),
-                new ReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending", "Totals-Undisbursed Balance-Unassigned", "-14 239,37", "Totals-Undisbursed Balance-Total", "-14 239,37"),
-                new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency", "Totals-Undisbursed Balance-Unassigned", "46 840,58", "Totals-Undisbursed Balance-Total", "46 840,58"),
-                new ReportAreaForTests(new AreaOwner(53), "Project Title", "new activity with contracting", "Totals-Undisbursed Balance-Unassigned", "12 000", "Totals-Undisbursed Balance-Total", "12 000"),
-                new ReportAreaForTests(new AreaOwner(61), "Project Title", "activity-with-unfunded-components", "Totals-Undisbursed Balance-Unassigned", "123 321", "Totals-Undisbursed Balance-Total", "123 321"),
-                new ReportAreaForTests(new AreaOwner(63), "Project Title", "activity with funded components", "Totals-Undisbursed Balance-Unassigned", "100", "Totals-Undisbursed Balance-Total", "100"),
-                new ReportAreaForTests(new AreaOwner(64), "Project Title", "Unvalidated activity", "Totals-Undisbursed Balance-Unassigned", "45 000", "Totals-Undisbursed Balance-Total", "45 000"),
-                new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement", "Totals-Undisbursed Balance-Unassigned", "135 024", "Totals-Undisbursed Balance-Total", "135 024"),
-                new ReportAreaForTests(new AreaOwner(66), "Project Title", "Activity 2 with multiple agreements", "Totals-Undisbursed Balance-Unassigned", "1 200", "Totals-Undisbursed Balance-Total", "1 200"),
-                new ReportAreaForTests(new AreaOwner(67), "Project Title", "third activity with agreements", "Totals-Undisbursed Balance-Unassigned", "123 456", "Totals-Undisbursed Balance-Total", "123 456"),
-                new ReportAreaForTests(new AreaOwner(68), "Project Title", "activity with incomplete agreement", "Totals-Undisbursed Balance-Unassigned", "123 000", "Totals-Undisbursed Balance-Total", "123 000"),
-                new ReportAreaForTests(new AreaOwner(69), "Project Title", "Activity with planned disbursements", "Totals-Undisbursed Balance-Unassigned", "-770", "Totals-Undisbursed Balance-Total", "-770"),
-                new ReportAreaForTests(new AreaOwner(70), "Project Title", "Activity with both MTEFs and Act.Comms", "Mode of Payment", "Direct payment", "Totals-Undisbursed Balance-Direct payment", "888 000", "Totals-Undisbursed Balance-Total", "888 000"),
-                new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response", "Mode of Payment", "Direct payment", "Totals-Undisbursed Balance-Direct payment", "150 000", "Totals-Undisbursed Balance-Total", "150 000"),
-                new ReportAreaForTests(new AreaOwner(73), "Project Title", "activity with directed MTEFs", "Mode of Payment", "Direct payment, Non-Cash", "Totals-Undisbursed Balance-Direct payment", "123 456", "Totals-Undisbursed Balance-Total", "123 456"),
-                new ReportAreaForTests(new AreaOwner(76), "Project Title", "activity with pipeline MTEFs and act. disb", "Mode of Payment", "Direct payment", "Totals-Undisbursed Balance-Direct payment", "-110 000", "Totals-Undisbursed Balance-Total", "-110 000"),
-                new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity", "Totals-Undisbursed Balance-Unassigned", "-90 000", "Totals-Undisbursed Balance-Total", "-90 000"),
-                new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs", "Totals-Undisbursed Balance-Unassigned", "-80 000", "Totals-Undisbursed Balance-Total", "-80 000"),
-                new ReportAreaForTests(new AreaOwner(79), "Project Title", "with weird currencies", "Mode of Payment", "Direct payment", "Totals-Undisbursed Balance-Direct payment", "97 562,98", "Totals-Undisbursed Balance-Total", "97 562,98")      ));
+                  new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Mode of Payment", "", "Totals-Undisbursed Balance-Unassigned", "89 910", "Totals-Undisbursed Balance-Total", "89 910"),
+                  new ReportAreaForTests(new AreaOwner(13), "Project Title", "TAC_activity_2", "Mode of Payment", "", "Totals-Undisbursed Balance-Unassigned", "546 675", "Totals-Undisbursed Balance-Total", "546 675"),
+                  new ReportAreaForTests(new AreaOwner(15), "Project Title", "Proposed Project Cost 1 - USD", "Mode of Payment", ""),
+                  new ReportAreaForTests(new AreaOwner(17), "Project Title", "Proposed Project Cost 2 - EUR", "Mode of Payment", ""),
+                  new ReportAreaForTests(new AreaOwner(18), "Project Title", "Test MTEF directed", "Mode of Payment", "Cash", "Totals-Undisbursed Balance-Cash", "-143 777", "Totals-Undisbursed Balance-Total", "-143 777"),
+                  new ReportAreaForTests(new AreaOwner(19), "Project Title", "Pure MTEF Project", "Mode of Payment", ""),
+                  new ReportAreaForTests(new AreaOwner(21), "Project Title", "activity with components", "Mode of Payment", ""),
+                  new ReportAreaForTests(new AreaOwner(23), "Project Title", "Project with documents", "Mode of Payment", ""),
+                  new ReportAreaForTests(new AreaOwner(24), "Project Title", "Eth Water", "Mode of Payment", "Direct payment", "Totals-Undisbursed Balance-Unassigned", "-545 000", "Totals-Undisbursed Balance-Total", "-545 000"),
+                  new ReportAreaForTests(new AreaOwner(25), "Project Title", "mtef activity 1", "Mode of Payment", ""),
+                  new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity", "Mode of Payment", "", "Totals-Undisbursed Balance-Unassigned", "53 000", "Totals-Undisbursed Balance-Total", "53 000"),
+                  new ReportAreaForTests(new AreaOwner(27), "Project Title", "mtef activity 2", "Mode of Payment", "Direct payment"),
+                  new ReportAreaForTests(new AreaOwner(28), "Project Title", "ptc activity 1", "Mode of Payment", "Reimbursable", "Totals-Undisbursed Balance-Reimbursable", "666 777", "Totals-Undisbursed Balance-Total", "666 777"),
+                  new ReportAreaForTests(new AreaOwner(29), "Project Title", "ptc activity 2", "Mode of Payment", "No Information", "Totals-Undisbursed Balance-No Information", "333 222", "Totals-Undisbursed Balance-Total", "333 222"),
+                  new ReportAreaForTests(new AreaOwner(30), "Project Title", "SSC Project 1", "Mode of Payment", "Direct payment", "Totals-Undisbursed Balance-Direct payment", "-443 778", "Totals-Undisbursed Balance-Total", "-443 778"),
+                  new ReportAreaForTests(new AreaOwner(31), "Project Title", "SSC Project 2", "Mode of Payment", "Direct payment", "Totals-Undisbursed Balance-Direct payment", "435 576", "Totals-Undisbursed Balance-Total", "435 576"),
+                  new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1", "Mode of Payment", "Cash, Direct payment", "Totals-Undisbursed Balance-Cash", "111 111", "Totals-Undisbursed Balance-Direct payment", "222 222", "Totals-Undisbursed Balance-Total", "333 333"),
+                  new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones", "Mode of Payment", "", "Totals-Undisbursed Balance-Unassigned", "570 000", "Totals-Undisbursed Balance-Total", "570 000"),
+                  new ReportAreaForTests(new AreaOwner(36), "Project Title", "Activity With Zones and Percentages", "Mode of Payment", "", "Totals-Undisbursed Balance-Unassigned", "890 000", "Totals-Undisbursed Balance-Total", "890 000"),
+                  new ReportAreaForTests(new AreaOwner(40), "Project Title", "SubNational no percentages", "Mode of Payment", "Direct payment", "Totals-Undisbursed Balance-Direct payment", "75 000", "Totals-Undisbursed Balance-Total", "75 000"),
+                  new ReportAreaForTests(new AreaOwner(41), "Project Title", "Activity Linked With Pledge", "Mode of Payment", "", "Totals-Undisbursed Balance-Unassigned", "50 000", "Totals-Undisbursed Balance-Total", "50 000"),
+                  new ReportAreaForTests(new AreaOwner(43), "Project Title", "Activity with primary_tertiary_program", "Mode of Payment", "Cash", "Totals-Undisbursed Balance-Cash", "50 000", "Totals-Undisbursed Balance-Total", "50 000"),
+                  new ReportAreaForTests(new AreaOwner(44), "Project Title", "activity with primary_program", "Mode of Payment", "", "Totals-Undisbursed Balance-Unassigned", "32 000", "Totals-Undisbursed Balance-Total", "32 000"),
+                  new ReportAreaForTests(new AreaOwner(45), "Project Title", "activity with tertiary_program", "Mode of Payment", "", "Totals-Undisbursed Balance-Unassigned", "15 000", "Totals-Undisbursed Balance-Total", "15 000"),
+                  new ReportAreaForTests(new AreaOwner(46), "Project Title", "pledged education activity 1", "Mode of Payment", "", "Totals-Undisbursed Balance-Unassigned", "5 000 000", "Totals-Undisbursed Balance-Total", "5 000 000"),
+                  new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2", "Mode of Payment", "", "Totals-Undisbursed Balance-Unassigned", "6 620 000", "Totals-Undisbursed Balance-Total", "6 620 000"),
+                  new ReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending", "Mode of Payment", "", "Totals-Undisbursed Balance-Unassigned", "-14 239,37", "Totals-Undisbursed Balance-Total", "-14 239,37"),
+                  new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency", "Mode of Payment", "", "Totals-Undisbursed Balance-Unassigned", "46 840,58", "Totals-Undisbursed Balance-Total", "46 840,58"),
+                  new ReportAreaForTests(new AreaOwner(53), "Project Title", "new activity with contracting", "Mode of Payment", "", "Totals-Undisbursed Balance-Unassigned", "12 000", "Totals-Undisbursed Balance-Total", "12 000"),
+                  new ReportAreaForTests(new AreaOwner(61), "Project Title", "activity-with-unfunded-components", "Mode of Payment", "", "Totals-Undisbursed Balance-Unassigned", "123 321", "Totals-Undisbursed Balance-Total", "123 321"),
+                  new ReportAreaForTests(new AreaOwner(63), "Project Title", "activity with funded components", "Mode of Payment", "", "Totals-Undisbursed Balance-Unassigned", "100", "Totals-Undisbursed Balance-Total", "100"),
+                  new ReportAreaForTests(new AreaOwner(64), "Project Title", "Unvalidated activity", "Mode of Payment", "", "Totals-Undisbursed Balance-Unassigned", "45 000", "Totals-Undisbursed Balance-Total", "45 000"),
+                  new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement", "Mode of Payment", "", "Totals-Undisbursed Balance-Unassigned", "135 024", "Totals-Undisbursed Balance-Total", "135 024"),
+                  new ReportAreaForTests(new AreaOwner(66), "Project Title", "Activity 2 with multiple agreements", "Mode of Payment", "", "Totals-Undisbursed Balance-Unassigned", "1 200", "Totals-Undisbursed Balance-Total", "1 200"),
+                  new ReportAreaForTests(new AreaOwner(67), "Project Title", "third activity with agreements", "Mode of Payment", "", "Totals-Undisbursed Balance-Unassigned", "123 456", "Totals-Undisbursed Balance-Total", "123 456"),
+                  new ReportAreaForTests(new AreaOwner(68), "Project Title", "activity with incomplete agreement", "Mode of Payment", "", "Totals-Undisbursed Balance-Unassigned", "123 000", "Totals-Undisbursed Balance-Total", "123 000"),
+                  new ReportAreaForTests(new AreaOwner(69), "Project Title", "Activity with planned disbursements", "Mode of Payment", "", "Totals-Undisbursed Balance-Unassigned", "-770", "Totals-Undisbursed Balance-Total", "-770"),
+                  new ReportAreaForTests(new AreaOwner(70), "Project Title", "Activity with both MTEFs and Act.Comms", "Mode of Payment", "Direct payment", "Totals-Undisbursed Balance-Direct payment", "888 000", "Totals-Undisbursed Balance-Total", "888 000"),
+                  new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response", "Mode of Payment", "Direct payment", "Totals-Undisbursed Balance-Direct payment", "150 000", "Totals-Undisbursed Balance-Total", "150 000"),
+                  new ReportAreaForTests(new AreaOwner(73), "Project Title", "activity with directed MTEFs", "Mode of Payment", "Direct payment, Non-Cash", "Totals-Undisbursed Balance-Direct payment", "123 456", "Totals-Undisbursed Balance-Total", "123 456"),
+                  new ReportAreaForTests(new AreaOwner(76), "Project Title", "activity with pipeline MTEFs and act. disb", "Mode of Payment", "Direct payment", "Totals-Undisbursed Balance-Direct payment", "-110 000", "Totals-Undisbursed Balance-Total", "-110 000"),
+                  new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity", "Mode of Payment", "", "Totals-Undisbursed Balance-Unassigned", "-90 000", "Totals-Undisbursed Balance-Total", "-90 000"),
+                  new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs", "Mode of Payment", "", "Totals-Undisbursed Balance-Unassigned", "-80 000", "Totals-Undisbursed Balance-Total", "-80 000"),
+                  new ReportAreaForTests(new AreaOwner(79), "Project Title", "with weird currencies", "Mode of Payment", "Direct payment", "Totals-Undisbursed Balance-Direct payment", "97 562,98", "Totals-Undisbursed Balance-Total", "97 562,98")      ));
 
         try {
             TestcasesReportsSchema.disableToAMoPSplitting = false;
@@ -1566,49 +1759,49 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
             .withBody(      new ReportAreaForTests(null)
               .withContents("Project Title", "", "Mode of Payment", "", "Totals-Undisbursed Balance-Cash", "17 334", "Totals-Undisbursed Balance-Direct payment", "1 438 038,98", "Totals-Undisbursed Balance-No Information", "333 222", "Totals-Undisbursed Balance-Reimbursable", "666 777", "Totals-Undisbursed Balance-Unassigned", "13 746 517,21", "Totals-Undisbursed Balance-Всего", "16 201 889,19")
               .withChildren(
-                new ReportAreaForTests(new AreaOwner(12), "Project Title", "Проект_TAC_1", "Totals-Undisbursed Balance-Unassigned", "89 910", "Totals-Undisbursed Balance-Всего", "89 910"),
-                new ReportAreaForTests(new AreaOwner(13), "Project Title", "Проект_TAC_2", "Totals-Undisbursed Balance-Unassigned", "546 675", "Totals-Undisbursed Balance-Всего", "546 675"),
-                new ReportAreaForTests(new AreaOwner(15), "Project Title", "Предполагаемая стоймость проекта 1 - USD"),
-                new ReportAreaForTests(new AreaOwner(17), "Project Title", "Предполагаемая стоймость проекта 2 - EUR"),
+                new ReportAreaForTests(new AreaOwner(12), "Project Title", "Проект_TAC_1", "Mode of Payment", "", "Totals-Undisbursed Balance-Unassigned", "89 910", "Totals-Undisbursed Balance-Всего", "89 910"),
+                new ReportAreaForTests(new AreaOwner(13), "Project Title", "Проект_TAC_2", "Mode of Payment", "", "Totals-Undisbursed Balance-Unassigned", "546 675", "Totals-Undisbursed Balance-Всего", "546 675"),
+                new ReportAreaForTests(new AreaOwner(15), "Project Title", "Предполагаемая стоймость проекта 1 - USD", "Mode of Payment", ""),
+                new ReportAreaForTests(new AreaOwner(17), "Project Title", "Предполагаемая стоймость проекта 2 - EUR", "Mode of Payment", ""),
                 new ReportAreaForTests(new AreaOwner(18), "Project Title", "Тест направленных МТЕФ", "Mode of Payment", "Наличные", "Totals-Undisbursed Balance-Cash", "-143 777", "Totals-Undisbursed Balance-Всего", "-143 777"),
-                new ReportAreaForTests(new AreaOwner(19), "Project Title", "Чисто-МТЕФ-Проект"),
-                new ReportAreaForTests(new AreaOwner(21), "Project Title", "проект с подпроектами"),
-                new ReportAreaForTests(new AreaOwner(23), "Project Title", "Проект с документами"),
+                new ReportAreaForTests(new AreaOwner(19), "Project Title", "Чисто-МТЕФ-Проект", "Mode of Payment", ""),
+                new ReportAreaForTests(new AreaOwner(21), "Project Title", "проект с подпроектами", "Mode of Payment", ""),
+                new ReportAreaForTests(new AreaOwner(23), "Project Title", "Проект с документами", "Mode of Payment", ""),
                 new ReportAreaForTests(new AreaOwner(24), "Project Title", "Вода Eth", "Mode of Payment", "Прямая оплата", "Totals-Undisbursed Balance-Unassigned", "-545 000", "Totals-Undisbursed Balance-Всего", "-545 000"),
-                new ReportAreaForTests(new AreaOwner(25), "Project Title", "Проект МТЕФ 1"),
-                new ReportAreaForTests(new AreaOwner(26), "Project Title", "проект-фильтры-по-датам", "Totals-Undisbursed Balance-Unassigned", "53 000", "Totals-Undisbursed Balance-Всего", "53 000"),
+                new ReportAreaForTests(new AreaOwner(25), "Project Title", "Проект МТЕФ 1", "Mode of Payment", ""),
+                new ReportAreaForTests(new AreaOwner(26), "Project Title", "проект-фильтры-по-датам", "Mode of Payment", "", "Totals-Undisbursed Balance-Unassigned", "53 000", "Totals-Undisbursed Balance-Всего", "53 000"),
                 new ReportAreaForTests(new AreaOwner(27), "Project Title", "Проект МТЕФ 2", "Mode of Payment", "Прямая оплата"),
                 new ReportAreaForTests(new AreaOwner(28), "Project Title", "Проект PTC 1", "Mode of Payment", "Компенсируемые", "Totals-Undisbursed Balance-Reimbursable", "666 777", "Totals-Undisbursed Balance-Всего", "666 777"),
                 new ReportAreaForTests(new AreaOwner(29), "Project Title", "Проект PTC 2", "Mode of Payment", "Нет данных", "Totals-Undisbursed Balance-No Information", "333 222", "Totals-Undisbursed Balance-Всего", "333 222"),
                 new ReportAreaForTests(new AreaOwner(30), "Project Title", "Проект КЮЮ 1", "Mode of Payment", "Прямая оплата", "Totals-Undisbursed Balance-Direct payment", "-443 778", "Totals-Undisbursed Balance-Всего", "-443 778"),
                 new ReportAreaForTests(new AreaOwner(31), "Project Title", "Проект КЮЮ 2", "Mode of Payment", "Прямая оплата", "Totals-Undisbursed Balance-Direct payment", "435 576", "Totals-Undisbursed Balance-Всего", "435 576"),
                 new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1", "Mode of Payment", "Наличные, Прямая оплата", "Totals-Undisbursed Balance-Cash", "111 111", "Totals-Undisbursed Balance-Direct payment", "222 222", "Totals-Undisbursed Balance-Всего", "333 333"),
-                new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones", "Totals-Undisbursed Balance-Unassigned", "570 000", "Totals-Undisbursed Balance-Всего", "570 000"),
-                new ReportAreaForTests(new AreaOwner(36), "Project Title", "Activity With Zones and Percentages", "Totals-Undisbursed Balance-Unassigned", "890 000", "Totals-Undisbursed Balance-Всего", "890 000"),
+                new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones", "Mode of Payment", "", "Totals-Undisbursed Balance-Unassigned", "570 000", "Totals-Undisbursed Balance-Всего", "570 000"),
+                new ReportAreaForTests(new AreaOwner(36), "Project Title", "Activity With Zones and Percentages", "Mode of Payment", "", "Totals-Undisbursed Balance-Unassigned", "890 000", "Totals-Undisbursed Balance-Всего", "890 000"),
                 new ReportAreaForTests(new AreaOwner(40), "Project Title", "SubNational no percentages", "Mode of Payment", "Прямая оплата", "Totals-Undisbursed Balance-Direct payment", "75 000", "Totals-Undisbursed Balance-Всего", "75 000"),
-                new ReportAreaForTests(new AreaOwner(41), "Project Title", "Activity Linked With Pledge", "Totals-Undisbursed Balance-Unassigned", "50 000", "Totals-Undisbursed Balance-Всего", "50 000"),
+                new ReportAreaForTests(new AreaOwner(41), "Project Title", "Activity Linked With Pledge", "Mode of Payment", "", "Totals-Undisbursed Balance-Unassigned", "50 000", "Totals-Undisbursed Balance-Всего", "50 000"),
                 new ReportAreaForTests(new AreaOwner(43), "Project Title", "Activity with primary_tertiary_program", "Mode of Payment", "Наличные", "Totals-Undisbursed Balance-Cash", "50 000", "Totals-Undisbursed Balance-Всего", "50 000"),
-                new ReportAreaForTests(new AreaOwner(44), "Project Title", "activity with primary_program", "Totals-Undisbursed Balance-Unassigned", "32 000", "Totals-Undisbursed Balance-Всего", "32 000"),
-                new ReportAreaForTests(new AreaOwner(45), "Project Title", "activity with tertiary_program", "Totals-Undisbursed Balance-Unassigned", "15 000", "Totals-Undisbursed Balance-Всего", "15 000"),
-                new ReportAreaForTests(new AreaOwner(46), "Project Title", "pledged education activity 1 Русский", "Totals-Undisbursed Balance-Unassigned", "5 000 000", "Totals-Undisbursed Balance-Всего", "5 000 000"),
-                new ReportAreaForTests(new AreaOwner(48), "Project Title", "обещание 2", "Totals-Undisbursed Balance-Unassigned", "6 620 000", "Totals-Undisbursed Balance-Всего", "6 620 000"),
-                new ReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending", "Totals-Undisbursed Balance-Unassigned", "-14 239,37", "Totals-Undisbursed Balance-Всего", "-14 239,37"),
-                new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency", "Totals-Undisbursed Balance-Unassigned", "46 840,58", "Totals-Undisbursed Balance-Всего", "46 840,58"),
-                new ReportAreaForTests(new AreaOwner(53), "Project Title", "new activity with contracting", "Totals-Undisbursed Balance-Unassigned", "12 000", "Totals-Undisbursed Balance-Всего", "12 000"),
-                new ReportAreaForTests(new AreaOwner(61), "Project Title", "activity-with-unfunded-components", "Totals-Undisbursed Balance-Unassigned", "123 321", "Totals-Undisbursed Balance-Всего", "123 321"),
-                new ReportAreaForTests(new AreaOwner(63), "Project Title", "activity with funded components", "Totals-Undisbursed Balance-Unassigned", "100", "Totals-Undisbursed Balance-Всего", "100"),
-                new ReportAreaForTests(new AreaOwner(64), "Project Title", "Unvalidated activity", "Totals-Undisbursed Balance-Unassigned", "45 000", "Totals-Undisbursed Balance-Всего", "45 000"),
-                new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement", "Totals-Undisbursed Balance-Unassigned", "135 024", "Totals-Undisbursed Balance-Всего", "135 024"),
-                new ReportAreaForTests(new AreaOwner(66), "Project Title", "Проект с множеством проектов", "Totals-Undisbursed Balance-Unassigned", "1 200", "Totals-Undisbursed Balance-Всего", "1 200"),
-                new ReportAreaForTests(new AreaOwner(67), "Project Title", "third activity with agreements", "Totals-Undisbursed Balance-Unassigned", "123 456", "Totals-Undisbursed Balance-Всего", "123 456"),
-                new ReportAreaForTests(new AreaOwner(68), "Project Title", "activity with incomplete agreement", "Totals-Undisbursed Balance-Unassigned", "123 000", "Totals-Undisbursed Balance-Всего", "123 000"),
-                new ReportAreaForTests(new AreaOwner(69), "Project Title", "Activity with planned disbursements", "Totals-Undisbursed Balance-Unassigned", "-770", "Totals-Undisbursed Balance-Всего", "-770"),
+                new ReportAreaForTests(new AreaOwner(44), "Project Title", "activity with primary_program", "Mode of Payment", "", "Totals-Undisbursed Balance-Unassigned", "32 000", "Totals-Undisbursed Balance-Всего", "32 000"),
+                new ReportAreaForTests(new AreaOwner(45), "Project Title", "activity with tertiary_program", "Mode of Payment", "", "Totals-Undisbursed Balance-Unassigned", "15 000", "Totals-Undisbursed Balance-Всего", "15 000"),
+                new ReportAreaForTests(new AreaOwner(46), "Project Title", "pledged education activity 1 Русский", "Mode of Payment", "", "Totals-Undisbursed Balance-Unassigned", "5 000 000", "Totals-Undisbursed Balance-Всего", "5 000 000"),
+                new ReportAreaForTests(new AreaOwner(48), "Project Title", "обещание 2", "Mode of Payment", "", "Totals-Undisbursed Balance-Unassigned", "6 620 000", "Totals-Undisbursed Balance-Всего", "6 620 000"),
+                new ReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending", "Mode of Payment", "", "Totals-Undisbursed Balance-Unassigned", "-14 239,37", "Totals-Undisbursed Balance-Всего", "-14 239,37"),
+                new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency", "Mode of Payment", "", "Totals-Undisbursed Balance-Unassigned", "46 840,58", "Totals-Undisbursed Balance-Всего", "46 840,58"),
+                new ReportAreaForTests(new AreaOwner(53), "Project Title", "new activity with contracting", "Mode of Payment", "", "Totals-Undisbursed Balance-Unassigned", "12 000", "Totals-Undisbursed Balance-Всего", "12 000"),
+                new ReportAreaForTests(new AreaOwner(61), "Project Title", "activity-with-unfunded-components", "Mode of Payment", "", "Totals-Undisbursed Balance-Unassigned", "123 321", "Totals-Undisbursed Balance-Всего", "123 321"),
+                new ReportAreaForTests(new AreaOwner(63), "Project Title", "activity with funded components", "Mode of Payment", "", "Totals-Undisbursed Balance-Unassigned", "100", "Totals-Undisbursed Balance-Всего", "100"),
+                new ReportAreaForTests(new AreaOwner(64), "Project Title", "Unvalidated activity", "Mode of Payment", "", "Totals-Undisbursed Balance-Unassigned", "45 000", "Totals-Undisbursed Balance-Всего", "45 000"),
+                new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement", "Mode of Payment", "", "Totals-Undisbursed Balance-Unassigned", "135 024", "Totals-Undisbursed Balance-Всего", "135 024"),
+                new ReportAreaForTests(new AreaOwner(66), "Project Title", "Проект с множеством проектов", "Mode of Payment", "", "Totals-Undisbursed Balance-Unassigned", "1 200", "Totals-Undisbursed Balance-Всего", "1 200"),
+                new ReportAreaForTests(new AreaOwner(67), "Project Title", "third activity with agreements", "Mode of Payment", "", "Totals-Undisbursed Balance-Unassigned", "123 456", "Totals-Undisbursed Balance-Всего", "123 456"),
+                new ReportAreaForTests(new AreaOwner(68), "Project Title", "activity with incomplete agreement", "Mode of Payment", "", "Totals-Undisbursed Balance-Unassigned", "123 000", "Totals-Undisbursed Balance-Всего", "123 000"),
+                new ReportAreaForTests(new AreaOwner(69), "Project Title", "Activity with planned disbursements", "Mode of Payment", "", "Totals-Undisbursed Balance-Unassigned", "-770", "Totals-Undisbursed Balance-Всего", "-770"),
                 new ReportAreaForTests(new AreaOwner(70), "Project Title", "Activity with both MTEFs and Act.Comms", "Mode of Payment", "Прямая оплата", "Totals-Undisbursed Balance-Direct payment", "888 000", "Totals-Undisbursed Balance-Всего", "888 000"),
                 new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response", "Mode of Payment", "Прямая оплата", "Totals-Undisbursed Balance-Direct payment", "150 000", "Totals-Undisbursed Balance-Всего", "150 000"),
                 new ReportAreaForTests(new AreaOwner(73), "Project Title", "activity with directed MTEFs", "Mode of Payment", "Безналичные, Прямая оплата", "Totals-Undisbursed Balance-Direct payment", "123 456", "Totals-Undisbursed Balance-Всего", "123 456"),
                 new ReportAreaForTests(new AreaOwner(76), "Project Title", "activity with pipeline MTEFs and act. disb", "Mode of Payment", "Прямая оплата", "Totals-Undisbursed Balance-Direct payment", "-110 000", "Totals-Undisbursed Balance-Всего", "-110 000"),
-                new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity", "Totals-Undisbursed Balance-Unassigned", "-90 000", "Totals-Undisbursed Balance-Всего", "-90 000"),
-                new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs", "Totals-Undisbursed Balance-Unassigned", "-80 000", "Totals-Undisbursed Balance-Всего", "-80 000"),
+                new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity", "Mode of Payment", "", "Totals-Undisbursed Balance-Unassigned", "-90 000", "Totals-Undisbursed Balance-Всего", "-90 000"),
+                new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs", "Mode of Payment", "", "Totals-Undisbursed Balance-Unassigned", "-80 000", "Totals-Undisbursed Balance-Всего", "-80 000"),
                 new ReportAreaForTests(new AreaOwner(79), "Project Title", "with weird currencies", "Mode of Payment", "Прямая оплата", "Totals-Undisbursed Balance-Direct payment", "97 562,98", "Totals-Undisbursed Balance-Всего", "97 562,98")      ));
 
         try {
@@ -1635,12 +1828,12 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
               .withChildren(
                 new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Type Of Assistance", "default type of assistance", "Funding-2010-Actual Disbursements-default type of assistance", "123 321", "Funding-2010-Actual Disbursements-Total", "123 321", "Funding-2011-Actual Commitments-default type of assistance", "213 231", "Funding-2011-Actual Commitments-Total", "213 231", "Totals-Actual Commitments-default type of assistance", "213 231", "Totals-Actual Commitments-Total", "213 231", "Totals-Actual Disbursements-default type of assistance", "123 321", "Totals-Actual Disbursements-Total", "123 321"),
                 new ReportAreaForTests(new AreaOwner(13), "Project Title", "TAC_activity_2", "Type Of Assistance", "default type of assistance", "Funding-2010-Actual Disbursements-default type of assistance", "453 213", "Funding-2010-Actual Disbursements-Total", "453 213", "Funding-2011-Actual Commitments-default type of assistance", "999 888", "Funding-2011-Actual Commitments-Total", "999 888", "Totals-Actual Commitments-default type of assistance", "999 888", "Totals-Actual Commitments-Total", "999 888", "Totals-Actual Disbursements-default type of assistance", "453 213", "Totals-Actual Disbursements-Total", "453 213"),
-                new ReportAreaForTests(new AreaOwner(15), "Project Title", "Proposed Project Cost 1 - USD"),
-                new ReportAreaForTests(new AreaOwner(17), "Project Title", "Proposed Project Cost 2 - EUR"),
+                new ReportAreaForTests(new AreaOwner(15), "Project Title", "Proposed Project Cost 1 - USD", "Type Of Assistance", ""),
+                new ReportAreaForTests(new AreaOwner(17), "Project Title", "Proposed Project Cost 2 - EUR", "Type Of Assistance", ""),
                 new ReportAreaForTests(new AreaOwner(18), "Project Title", "Test MTEF directed", "Type Of Assistance", "default type of assistance", "Funding-2010-Actual Disbursements-default type of assistance", "143 777", "Funding-2010-Actual Disbursements-Total", "143 777", "Totals-Actual Disbursements-default type of assistance", "143 777", "Totals-Actual Disbursements-Total", "143 777"),
                 new ReportAreaForTests(new AreaOwner(19), "Project Title", "Pure MTEF Project", "Type Of Assistance", "default type of assistance"),
-                new ReportAreaForTests(new AreaOwner(21), "Project Title", "activity with components"),
-                new ReportAreaForTests(new AreaOwner(23), "Project Title", "Project with documents"),
+                new ReportAreaForTests(new AreaOwner(21), "Project Title", "activity with components", "Type Of Assistance", ""),
+                new ReportAreaForTests(new AreaOwner(23), "Project Title", "Project with documents", "Type Of Assistance", ""),
                 new ReportAreaForTests(new AreaOwner(24), "Project Title", "Eth Water", "Type Of Assistance", "default type of assistance, second type of assistance", "Funding-2013-Actual Disbursements-default type of assistance", "545 000", "Funding-2013-Actual Disbursements-Total", "545 000", "Totals-Actual Disbursements-default type of assistance", "545 000", "Totals-Actual Disbursements-Total", "545 000"),
                 new ReportAreaForTests(new AreaOwner(25), "Project Title", "mtef activity 1", "Type Of Assistance", "default type of assistance"),
                 new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity", "Type Of Assistance", "default type of assistance", "Funding-2009-Actual Commitments-default type of assistance", "100 000", "Funding-2009-Actual Commitments-Total", "100 000", "Funding-2010-Actual Disbursements-default type of assistance", "60 000", "Funding-2010-Actual Disbursements-Total", "60 000", "Funding-2012-Actual Commitments-default type of assistance", "25 000", "Funding-2012-Actual Commitments-Total", "25 000", "Funding-2012-Actual Disbursements-default type of assistance", "12 000", "Funding-2012-Actual Disbursements-Total", "12 000", "Totals-Actual Commitments-default type of assistance", "125 000", "Totals-Actual Commitments-Total", "125 000", "Totals-Actual Disbursements-default type of assistance", "72 000", "Totals-Actual Disbursements-Total", "72 000"),
@@ -1702,12 +1895,12 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
               .withChildren(
                 new ReportAreaForTests(new AreaOwner(12), "Project Title", "Проект_TAC_1", "Type Of Assistance", "первичный тип помощи", "Funding-2010-Actual Disbursements-default type of assistance", "123 321", "Funding-2010-Actual Disbursements-Всего", "123 321", "Funding-2011-Actual Commitments-default type of assistance", "213 231", "Funding-2011-Actual Commitments-Всего", "213 231", "Totals-Actual Commitments-default type of assistance", "213 231", "Totals-Actual Commitments-Всего", "213 231", "Totals-Actual Disbursements-default type of assistance", "123 321", "Totals-Actual Disbursements-Всего", "123 321"),
                 new ReportAreaForTests(new AreaOwner(13), "Project Title", "Проект_TAC_2", "Type Of Assistance", "первичный тип помощи", "Funding-2010-Actual Disbursements-default type of assistance", "453 213", "Funding-2010-Actual Disbursements-Всего", "453 213", "Funding-2011-Actual Commitments-default type of assistance", "999 888", "Funding-2011-Actual Commitments-Всего", "999 888", "Totals-Actual Commitments-default type of assistance", "999 888", "Totals-Actual Commitments-Всего", "999 888", "Totals-Actual Disbursements-default type of assistance", "453 213", "Totals-Actual Disbursements-Всего", "453 213"),
-                new ReportAreaForTests(new AreaOwner(15), "Project Title", "Предполагаемая стоймость проекта 1 - USD"),
-                new ReportAreaForTests(new AreaOwner(17), "Project Title", "Предполагаемая стоймость проекта 2 - EUR"),
+                new ReportAreaForTests(new AreaOwner(15), "Project Title", "Предполагаемая стоймость проекта 1 - USD", "Type Of Assistance", ""),
+                new ReportAreaForTests(new AreaOwner(17), "Project Title", "Предполагаемая стоймость проекта 2 - EUR", "Type Of Assistance", ""),
                 new ReportAreaForTests(new AreaOwner(18), "Project Title", "Тест направленных МТЕФ", "Type Of Assistance", "первичный тип помощи", "Funding-2010-Actual Disbursements-default type of assistance", "143 777", "Funding-2010-Actual Disbursements-Всего", "143 777", "Totals-Actual Disbursements-default type of assistance", "143 777", "Totals-Actual Disbursements-Всего", "143 777"),
                 new ReportAreaForTests(new AreaOwner(19), "Project Title", "Чисто-МТЕФ-Проект", "Type Of Assistance", "первичный тип помощи"),
-                new ReportAreaForTests(new AreaOwner(21), "Project Title", "проект с подпроектами"),
-                new ReportAreaForTests(new AreaOwner(23), "Project Title", "Проект с документами"),
+                new ReportAreaForTests(new AreaOwner(21), "Project Title", "проект с подпроектами", "Type Of Assistance", ""),
+                new ReportAreaForTests(new AreaOwner(23), "Project Title", "Проект с документами", "Type Of Assistance", ""),
                 new ReportAreaForTests(new AreaOwner(24), "Project Title", "Вода Eth", "Type Of Assistance", "вторичный тип помощи, первичный тип помощи", "Funding-2013-Actual Disbursements-default type of assistance", "545 000", "Funding-2013-Actual Disbursements-Всего", "545 000", "Totals-Actual Disbursements-default type of assistance", "545 000", "Totals-Actual Disbursements-Всего", "545 000"),
                 new ReportAreaForTests(new AreaOwner(25), "Project Title", "Проект МТЕФ 1", "Type Of Assistance", "первичный тип помощи"),
                 new ReportAreaForTests(new AreaOwner(26), "Project Title", "проект-фильтры-по-датам", "Type Of Assistance", "первичный тип помощи", "Funding-2009-Actual Commitments-default type of assistance", "100 000", "Funding-2009-Actual Commitments-Всего", "100 000", "Funding-2010-Actual Disbursements-default type of assistance", "60 000", "Funding-2010-Actual Disbursements-Всего", "60 000", "Funding-2012-Actual Commitments-default type of assistance", "25 000", "Funding-2012-Actual Commitments-Всего", "25 000", "Funding-2012-Actual Disbursements-default type of assistance", "12 000", "Funding-2012-Actual Disbursements-Всего", "12 000", "Totals-Actual Commitments-default type of assistance", "125 000", "Totals-Actual Commitments-Всего", "125 000", "Totals-Actual Disbursements-default type of assistance", "72 000", "Totals-Actual Disbursements-Всего", "72 000"),
@@ -1766,12 +1959,12 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
             .withBody(      new ReportAreaForTests(null)
               .withContents("Project Title", "", "Mode of Payment", "", "Totals-Actual Commitments-Cash", "111,111", "Totals-Actual Commitments-Direct payment", "222,222", "Totals-Actual Commitments-Unassigned", "8,408,119", "Totals-Actual Commitments-Total", "8,741,452", "Totals-Actual Disbursements-Unassigned", "1,099,304", "Totals-Actual Disbursements-Total", "1,099,304", "Totals-Cumulated Disbursements-Total", "0")
               .withChildren(
-                new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Totals-Actual Commitments-Unassigned", "213,231", "Totals-Actual Commitments-Total", "213,231", "Totals-Actual Disbursements-Unassigned", "123,321", "Totals-Actual Disbursements-Total", "123,321"),
-                new ReportAreaForTests(new AreaOwner(13), "Project Title", "TAC_activity_2", "Totals-Actual Commitments-Unassigned", "999,888", "Totals-Actual Commitments-Total", "999,888", "Totals-Actual Disbursements-Unassigned", "453,213", "Totals-Actual Disbursements-Total", "453,213"),
-                new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity", "Totals-Actual Commitments-Unassigned", "125,000", "Totals-Actual Commitments-Total", "125,000", "Totals-Actual Disbursements-Unassigned", "72,000", "Totals-Actual Disbursements-Total", "72,000"),
+                new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Mode of Payment", "", "Totals-Actual Commitments-Unassigned", "213,231", "Totals-Actual Commitments-Total", "213,231", "Totals-Actual Disbursements-Unassigned", "123,321", "Totals-Actual Disbursements-Total", "123,321"),
+                new ReportAreaForTests(new AreaOwner(13), "Project Title", "TAC_activity_2", "Mode of Payment", "", "Totals-Actual Commitments-Unassigned", "999,888", "Totals-Actual Commitments-Total", "999,888", "Totals-Actual Disbursements-Unassigned", "453,213", "Totals-Actual Disbursements-Total", "453,213"),
+                new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity", "Mode of Payment", "", "Totals-Actual Commitments-Unassigned", "125,000", "Totals-Actual Commitments-Total", "125,000", "Totals-Actual Disbursements-Unassigned", "72,000", "Totals-Actual Disbursements-Total", "72,000"),
                 new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1", "Mode of Payment", "Cash, Direct payment", "Totals-Actual Commitments-Cash", "111,111", "Totals-Actual Commitments-Direct payment", "222,222", "Totals-Actual Commitments-Total", "333,333"),
-                new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2", "Totals-Actual Commitments-Unassigned", "7,070,000", "Totals-Actual Commitments-Total", "7,070,000", "Totals-Actual Disbursements-Unassigned", "450,000", "Totals-Actual Disbursements-Total", "450,000"),
-                new ReportAreaForTests(new AreaOwner(69), "Project Title", "Activity with planned disbursements", "Totals-Actual Disbursements-Unassigned", "770", "Totals-Actual Disbursements-Total", "770")      ));
+                new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2", "Mode of Payment", "", "Totals-Actual Commitments-Unassigned", "7,070,000", "Totals-Actual Commitments-Total", "7,070,000", "Totals-Actual Disbursements-Unassigned", "450,000", "Totals-Actual Disbursements-Total", "450,000"),
+                new ReportAreaForTests(new AreaOwner(69), "Project Title", "Activity with planned disbursements", "Mode of Payment", "", "Totals-Actual Disbursements-Unassigned", "770", "Totals-Actual Disbursements-Total", "770")      ));
 
         try {
             TestcasesReportsSchema.disableToAMoPSplitting = false;
@@ -2139,9 +2332,9 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                       .withChildren(
                         new ReportAreaForTests(new AreaOwner(18), "Project Title", "Test MTEF directed", "Executing Agency", "Water Foundation", "Has Executing Agency", "yes", "Funding-2010-Actual Disbursements", "143,777", "Totals-Actual Disbursements", "143,777"),
                         new ReportAreaForTests(new AreaOwner(24), "Project Title", "Eth Water", "Executing Agency", "UNDP, World Bank", "Has Executing Agency", "yes", "Funding-2013-Actual Disbursements", "545,000", "Totals-Actual Disbursements", "545,000"),
-                        new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones", "Has Executing Agency", "no"),
+                        new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones", "Executing Agency", "", "Has Executing Agency", "no"),
                         new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency", "Executing Agency", "Water Foundation", "Has Executing Agency", "yes", "Funding-2014-Actual Disbursements", "50,000", "Totals-Actual Disbursements", "50,000"),
-                        new ReportAreaForTests(new AreaOwner(79), "Project Title", "with weird currencies", "Has Executing Agency", "no")      ));
+                        new ReportAreaForTests(new AreaOwner(79), "Project Title", "with weird currencies", "Executing Agency", "", "Has Executing Agency", "no")      ));
 
         List<String> execActs = Arrays.asList("Eth Water", "Test MTEF directed", "Activity with Zones",
                 "activity with contracting agency", "with weird currencies","activity with contracting agency");
@@ -2225,7 +2418,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                                 new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2", "Donor Agency", "Finland, USAID", "Primary Sector", "113 - SECONDARY EDUCATION", "Funding-2014-Actual Disbursements", "450,000", "Totals-Actual Disbursements", "450,000"),
                                 new ReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending", "Donor Agency", "Finland", "Primary Sector", "110 - EDUCATION", "Funding-2014-Planned Disbursements", "90,000", "Funding-2014-Actual Disbursements", "80,000", "Funding-2014-Disbursed as Scheduled", "88,89", "Totals-Planned Disbursements", "90,000", "Totals-Actual Disbursements", "80,000", "Totals-Disbursed as Scheduled", "88,89"),
                                 new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency", "Donor Agency", "Finland, Ministry of Finance", "Primary Sector", "110 - EDUCATION, 112 - BASIC EDUCATION, 120 - HEALTH", "Funding-2014-Actual Disbursements", "50,000", "Totals-Actual Disbursements", "50,000"),
-                                new ReportAreaForTests(new AreaOwner(53), "Project Title", "new activity with contracting", "Donor Agency", "Finland"),
+                                new ReportAreaForTests(new AreaOwner(53), "Project Title", "new activity with contracting", "Donor Agency", "Finland", "Primary Sector", ""),
                                 new ReportAreaForTests(new AreaOwner(61), "Project Title", "activity-with-unfunded-components", "Donor Agency", "Finland, Ministry of Economy", "Primary Sector", "110 - EDUCATION"),
                                 new ReportAreaForTests(new AreaOwner(63), "Project Title", "activity with funded components", "Donor Agency", "UNDP, Water Foundation, World Bank", "Primary Sector", "110 - EDUCATION"),
                                 new ReportAreaForTests(new AreaOwner(64), "Project Title", "Unvalidated activity", "Donor Agency", "UNDP", "Primary Sector", "110 - EDUCATION"),
@@ -2241,7 +2434,6 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
                                 new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity", "Donor Agency", "Ministry of Finance, UNDP", "Primary Sector", "110 - EDUCATION", "Funding-2014-Planned Disbursements", "56,000", "Funding-2014-Actual Disbursements", "55,000", "Funding-2014-Disbursed as Scheduled", "98,21", "Funding-2015-Planned Disbursements", "36,000", "Funding-2015-Actual Disbursements", "35,000", "Funding-2015-Disbursed as Scheduled", "97,22", "Totals-Planned Disbursements", "92,000", "Totals-Actual Disbursements", "90,000", "Totals-Disbursed as Scheduled", "97,83"),
                                 new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs", "Donor Agency", "Finland, Norway, USAID", "Primary Sector", "110 - EDUCATION", "Funding-2015-Actual Disbursements", "80,000", "Totals-Actual Disbursements", "80,000"),
                                 new ReportAreaForTests(new AreaOwner(79), "Project Title", "with weird currencies", "Donor Agency", "Finland, Ministry of Finance, Norway", "Primary Sector", "110 - EDUCATION, 112 - BASIC EDUCATION")      ));
-
 
         ReportSpecificationImpl spec = buildSpecification("testOverDisbursedAsScheduledFlatReport",
             Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.DONOR_AGENCY, ColumnConstants.PRIMARY_SECTOR),

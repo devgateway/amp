@@ -778,7 +778,7 @@ public class InterchangeUtils {
         }
         Long id = getRequestId(containerReq);
         // we reuse the same approach as the one done by Project List EP
-        return id != null && ProjectList.getEditableActivityIds(TeamUtil.getCurrentMember()).contains(id);
+        return id != null && ActivityUtil.getEditableActivityIds(TeamUtil.getCurrentMember()).contains(id);
     }
     
     /**

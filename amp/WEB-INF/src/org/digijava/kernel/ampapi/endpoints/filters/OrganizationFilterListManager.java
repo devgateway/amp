@@ -110,6 +110,7 @@ public final class OrganizationFilterListManager implements FilterListManager {
 
             orgItems.add(typeNode);
         }
+        orgItems.add(UNDEFINED_OPTION);
         
         items.put(ORGANIZATIONS_ITEMS_NAME, orgItems);
 

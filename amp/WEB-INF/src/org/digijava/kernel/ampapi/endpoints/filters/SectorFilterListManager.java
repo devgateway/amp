@@ -78,6 +78,7 @@ public class SectorFilterListManager implements FilterListManager {
             for (AmpSector as : sectors) {
                 sectorItems.add(getSectors(as));
             }
+            sectorItems.add(UNDEFINED_OPTION);
             
             items.put(sectorConfigName.toLowerCase(), sectorItems);
         }

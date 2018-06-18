@@ -21,11 +21,21 @@
 			<lang delimiter=";" type="postgres">
 				DROP VIEW IF EXISTS v_implementing_agency_groups CASCADE;
 			   	CREATE OR REPLACE VIEW v_implementing_agency_groups AS
-					SELECT f.activity AS amp_activity_id, org.org_grp_name, org.org_grp_id, sum(f.percentage) AS percentage, COUNT(*) - COUNT(f.percentage) AS cnt_nulls
-						FROM amp_org_role f
-							JOIN ni_all_orgs_dimension org ON org.org_id = f.organisation
-							JOIN amp_role r ON (f.role = r.amp_role_id) AND (r.role_code = 'IA')
-						GROUP BY f.activity, org.org_grp_id, org.org_grp_name;
+			   	    SELECT 
+                        aav.amp_activity_id, 
+                        v.org_grp_name, 
+                        COALESCE(v.org_grp_id, -999999999) AS org_grp_id,
+                        percentage,
+                        COALESCE(v.cnt_nulls, 0) AS cnt_nulls
+                    FROM amp_activity_version aav
+                    LEFT JOIN (
+						SELECT f.activity AS amp_activity_id, org.org_grp_name, org.org_grp_id, sum(f.percentage) AS percentage, COUNT(*) - COUNT(f.percentage) AS cnt_nulls
+							FROM amp_org_role f
+								JOIN ni_all_orgs_dimension org ON org.org_id = f.organisation
+								JOIN amp_role r ON (f.role = r.amp_role_id) AND (r.role_code = 'IA')
+							GROUP BY f.activity, org.org_grp_id, org.org_grp_name
+                    ) v
+                    ON aav.amp_activity_id = v.amp_activity_id;                
 			</lang>
 		</script>
 	</apply>

@@ -176,7 +176,8 @@ public class GlobalSettingsConstants {
    
     public static final String DASHBOARD_DEFAULT_MAX_YEAR_RANGE ="Dashboards Default Max Year Filter Range";
     public static final String DASHBOARD_DEFAULT_MIN_YEAR_RANGE ="Dashboards Default Min Year Filter Range";
-   
+    
+    public static final String MTEF_ANNUAL_DATE_FORMAT = "Show annual MTEF entry date format";
     
     public static final String COUNTRY_LATITUDE ="Country Latitude";
     

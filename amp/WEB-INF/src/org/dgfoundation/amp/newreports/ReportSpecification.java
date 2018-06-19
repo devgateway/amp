@@ -98,6 +98,12 @@ public interface ReportSpecification extends Cloneable {
     public boolean isSummaryReport();
     
     /**
+     * whether to show original currencies of transactions
+     * @return
+     */
+    boolean isShowOriginalCurrency();
+    
+    /**
      * whether to collapse same-named hierarchies with different IDs
      * @return
      */

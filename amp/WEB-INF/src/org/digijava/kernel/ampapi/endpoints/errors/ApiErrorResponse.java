@@ -44,7 +44,7 @@ public class ApiErrorResponse {
 
         String responseMediaType = Optional.ofNullable(mediaType).orElse(MediaType.APPLICATION_JSON);
 
-        Object formattedMessage = responseMediaType.contains(MediaType.APPLICATION_XML)
+        Object formattedMessage = responseMediaType.equals(MediaType.APPLICATION_XML)
                 ? ApiError.toXmlErrorString(errorBean) : errorBean;
 
         ResponseBuilder builder = Response.status(status)
@@ -98,6 +98,14 @@ public class ApiErrorResponse {
      */
     public static void reportForbiddenAccess(JsonBean msg) {
         reportError(Response.Status.FORBIDDEN, msg);
+    }
+    
+    /**
+     * Reports that the resource is not found (HTTP 404)
+     * @param msg API error message
+     */
+    public static void reportResourceNotFound(ApiErrorMessage msg) {
+        reportError(Response.Status.NOT_FOUND, msg);
     }
     
     /**

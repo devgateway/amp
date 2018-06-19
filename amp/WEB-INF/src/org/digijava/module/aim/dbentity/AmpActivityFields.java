@@ -399,7 +399,8 @@ LoggerIdentifiable, Cloneable {
             @Interchangeable(fieldTitle = ActivityFieldsConstants.MOFED_CONTACT, importable = true, discriminatorOption = Constants.MOFED_CONTACT, 
                             fmPath = "/Activity Form/Contacts/Mofed Contact Information", 
                             validators = @Validators(unique = "/Activity Form/Contacts/Mofed Contact Information")),
-            @Interchangeable(fieldTitle = ActivityFieldsConstants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT, importable = true, discriminatorOption = Constants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT, 
+            @Interchangeable(fieldTitle = ActivityFieldsConstants.IMPL_EXECUTING_AGENCY_CONTACT, importable = true, 
+                            discriminatorOption = Constants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT, 
                             fmPath = "/Activity Form/Contacts/Implementing Executing Agency Contact Information", 
                             validators = @Validators(unique = "/Activity Form/Contacts/Implementing Executing Agency Contact Information"))
     })
@@ -593,9 +594,17 @@ LoggerIdentifiable, Cloneable {
     @VersionableFieldSimple(fieldTitle = "Indirect On Budget")
     protected Boolean indirectOnBudget;
     
-    @Interchangeable(fieldTitle = "FY", importable = true, fmPath = "/Activity Form/Identification/Budget Extras/FY", required = "/Activity Form/Identification/Budget Extras/Required Validator for fy")
     @VersionableFieldSimple(fieldTitle = "FY")
     protected String FY;
+    
+    /*
+     * This field is used for API only. The values are stored in database as a string using FY field
+     */
+    @Interchangeable(fieldTitle = "FY", importable = true, fmPath = "/Activity Form/Identification/Budget Extras/FY", 
+            required = "/Activity Form/Identification/Budget Extras/Required Validator for fy",
+            dependencies = {InterchangeDependencyResolver.ON_BUDGET_KEY}, 
+            validators = @Validators (unique = "/Activity Form/Identification/Budget Extras/FY"))
+    protected Set<AmpAPIFiscalYear> fiscalYears;
     
     @Interchangeable(fieldTitle = "Vote", importable = true, fmPath = "/Activity Form/Identification/Budget Extras/Vote", 
             dependencies={InterchangeDependencyResolver.ON_BUDGET_KEY})
@@ -2107,6 +2116,14 @@ LoggerIdentifiable, Cloneable {
 
         public void setDeleted(Boolean deleted) {
             this.deleted = deleted;
+        }
+        
+        public Set<AmpAPIFiscalYear> getFiscalYears() {
+            return fiscalYears;
+        }
+
+        public void setFiscalYears(Set<AmpAPIFiscalYear> fiscalYears) {
+            this.fiscalYears = fiscalYears;
         }
 
         public Set<AmpAidEffectivenessIndicatorOption> getSelectedEffectivenessIndicatorOptions() {

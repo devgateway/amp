@@ -1708,19 +1708,32 @@ public class DbUtil {
         return col;
     }
 
+    public static List<AmpOrgGroup> getAllVisibleOrgGroups() {
+        return getAllVisibleOrgGroups(null);
+    }
     /**
+     *
      * generates a list of all AmpOrgGroup elements which have deleted =null or
      * deleted = false
      *
+     * @param ampOrgGroupIds if not null will filter the list for the given ids
      * @return
      */
-    public static List<AmpOrgGroup> getAllVisibleOrgGroups() {
+    public static List<AmpOrgGroup> getAllVisibleOrgGroups(List<Long> ampOrgGroupIds) {
         try {
             Session session = PersistenceManager.getRequestDBSession();
             String orgGrpNameHql = AmpOrgGroup.hqlStringForName("c");
             String queryString = "select c from " + AmpOrgGroup.class.getName() + " c"
-                    + " WHERE c.deleted IS NULL OR c.deleted = false" + " order by lower(" + orgGrpNameHql + ") asc";
+                    + " WHERE (c.deleted IS NULL OR c.deleted = false)";
+            if (ampOrgGroupIds != null && ampOrgGroupIds.size() > 0) {
+                queryString += " AND c.ampOrgGrpId IN (:ids) ";
+            }
+            queryString += " order by lower(" + orgGrpNameHql + ") asc";
+
             Query qry = session.createQuery(queryString);
+            if (ampOrgGroupIds != null && ampOrgGroupIds.size() > 0) {
+                qry.setParameterList("ids", ampOrgGroupIds);
+            }
             return qry.list();
         } catch (Exception e) {
             logger.debug("Exception from getAllOrgGroups()");
@@ -2752,6 +2765,9 @@ public class DbUtil {
 
         public HelperAmpOrganisationNameComparator() {
             this.locale = new Locale("en", "EN");
+        }
+        public HelperAmpOrganisationNameComparator(Locale locale) {
+            this.locale = locale;
         }
 
         public HelperAmpOrganisationNameComparator(String iso) {

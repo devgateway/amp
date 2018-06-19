@@ -30,6 +30,9 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.annotations.activityversioning.ResourceTextField;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
 
@@ -83,6 +86,25 @@ public class ResourceImporter extends ObjectImporter {
             }
         }
 
+        Object teamMemberObj = newJson.get(ResourceEPConstants.TEAM_MEMBER);
+        Long teamMemberId = getLongOrNull(teamMemberObj);
+        AmpTeamMember ampTeamMember = TeamMemberUtil.getAmpTeamMember(teamMemberId);
+        
+        if (teamMemberId != null && ampTeamMember == null) {
+            return singletonList(ResourceErrors.FIELD_INVALID_VALUE.withDetails(ResourceEPConstants.TEAM_MEMBER));
+        }
+        
+        TeamMember teamMemberCreator = null;
+        if (teamMemberId == null) {
+            teamMemberCreator = TeamMemberUtil.getLoggedInTeamMember();
+            
+            if (teamMemberCreator == null) {
+                return singletonList(ResourceErrors.FIELD_REQUIRED.withDetails(ResourceEPConstants.TEAM_MEMBER));
+            }
+        } else {
+            teamMemberCreator = TeamMemberUtil.getTeamMember(teamMemberId);
+        }
+
         try {
             resource = new AmpResource();
             resource = (AmpResource) validateAndImport(resource, null, fieldsDef, newJson.any(), null, null);
@@ -95,7 +117,7 @@ public class ResourceImporter extends ObjectImporter {
             
             ActionMessages messages = new ActionMessages();
             TemporaryDocumentData tdd = getTemporaryDocumentData(resource, formFile);
-            NodeWrapper node = tdd.saveToRepository(TLSUtils.getRequest(), messages);
+            NodeWrapper node = tdd.saveToRepository(TLSUtils.getRequest(), teamMemberCreator, messages);
 
             if (node != null) {
                 resource.setUuid(node.getUuid());
@@ -195,6 +217,14 @@ public class ResourceImporter extends ObjectImporter {
         }
         
         return (String) jsonValue.get(trnSettings.getDefaultLangCode());
+    }
+    
+    private Long getLongOrNull(Object obj) {
+        if (obj instanceof Number) {
+            return ((Number) obj).longValue();
+        } else {
+            return null;
+        }
     }
     
 }

@@ -16,6 +16,7 @@ public final class ResourceErrors {
     public static final ApiErrorMessage RESOURCE_NOT_FOUND = new ApiErrorMessage(4, 
             "The requested resource does not exist");
     public static final ApiErrorMessage RESOURCE_ERROR = new ApiErrorMessage(5, 
-            "Error durin processing the requested resource");
+            "Error during processing the requested resource");
+    public static final ApiErrorMessage FILE_SIZE_INVALID = new ApiErrorMessage(6, "File is too large");
     
 }

@@ -1,16 +1,21 @@
 package org.digijava.kernel.ampapi.endpoints.resource;
 
+import static java.util.Collections.singletonList;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessages;
+import org.apache.struts.upload.FormFile;
 import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.AmpFieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectConversionException;
@@ -19,8 +24,15 @@ import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings.Transla
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.ampapi.endpoints.util.StreamUtils;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.annotations.activityversioning.ResourceTextField;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
 
@@ -37,14 +49,61 @@ public class ResourceImporter extends ObjectImporter {
         super(AmpResource.class, new InputValidatorProcessor(InputValidatorProcessor.getResourceValidators()));
     }
 
+    /**
+     * Create a web link resource.
+     *
+     * @param newJson json description of the resource
+     * @return errors if any
+     */
     public List<ApiErrorMessage> createResource(JsonBean newJson) {
-        return importResource(null, newJson);
+        return importResource(newJson, null);
     }
 
-    private List<ApiErrorMessage> importResource(Long resourceId, JsonBean newJson) {
+    /**
+     * Create a web link or document resource.
+     *
+     * @param newJson json description of the resource
+     * @param formFile file for document resource, may be null for web link resources
+     * @return errors if any
+     */
+    public List<ApiErrorMessage> createResource(JsonBean newJson, FormFile formFile) {
+        return importResource(newJson, formFile);
+    }
+
+    private List<ApiErrorMessage> importResource(JsonBean newJson, FormFile formFile) {
         this.newJson = newJson;
 
         List<APIField> fieldsDef = AmpFieldsEnumerator.PRIVATE_ENUMERATOR.getResourceFields();
+        
+        if (formFile != null) {
+            long maxSizeInMB = FeaturesUtil.getGlobalSettingValueInteger(GlobalSettingsConstants.CR_MAX_FILE_SIZE);
+            long maxFileSizeInBytes = maxSizeInMB * FileUtils.ONE_MB;
+            if (formFile.getFileSize() > maxFileSizeInBytes) {
+                long fileSizeInMB = formFile.getFileSize() / FileUtils.ONE_MB;
+                String errorMessage = String.format("%s %sMB. %s %sMB", TranslatorWorker.translateText("File size is"), 
+                        fileSizeInMB, TranslatorWorker.translateText("Max size allowed is"), maxSizeInMB);
+                return singletonList(ResourceErrors.FILE_SIZE_INVALID.withDetails(errorMessage));
+            }
+        }
+
+        Object teamMemberObj = newJson.get(ResourceEPConstants.TEAM_MEMBER);
+        Long teamMemberId = getLongOrNull(teamMemberObj);
+        AmpTeamMember ampTeamMember = TeamMemberUtil.getAmpTeamMember(teamMemberId);
+        
+        if (teamMemberId != null && ampTeamMember == null) {
+            return singletonList(ResourceErrors.FIELD_INVALID_VALUE.withDetails(ResourceEPConstants.TEAM_MEMBER));
+        }
+        
+        TeamMember teamMemberCreator = null;
+        if (teamMemberId == null) {
+            teamMemberCreator = TeamMemberUtil.getLoggedInTeamMember();
+            
+            if (teamMemberCreator == null) {
+                return singletonList(ResourceErrors.FIELD_REQUIRED.withDetails(ResourceEPConstants.TEAM_MEMBER));
+            }
+        } else {
+            teamMemberCreator = TeamMemberUtil.getTeamMember(teamMemberId);
+        }
 
         try {
             resource = new AmpResource();
@@ -57,10 +116,14 @@ public class ResourceImporter extends ObjectImporter {
             resource.setAddingDate(new Date());
             
             ActionMessages messages = new ActionMessages();
-            TemporaryDocumentData tdd = getTemporaryDocumentData(resource);
-            NodeWrapper node = tdd.saveToRepository(TLSUtils.getRequest(), messages);
-            
-            resource.setUuid(node.getUuid());
+            TemporaryDocumentData tdd = getTemporaryDocumentData(resource, formFile);
+            NodeWrapper node = tdd.saveToRepository(TLSUtils.getRequest(), teamMemberCreator, messages);
+
+            if (node != null) {
+                resource.setUuid(node.getUuid());
+            } else {
+                reportErrors(messages);
+            }
         } catch (ObjectConversionException | RuntimeException e) {
             if (e instanceof RuntimeException) {
                 throw new RuntimeException("Failed to create resource", e);
@@ -70,7 +133,21 @@ public class ResourceImporter extends ObjectImporter {
         return new ArrayList<>(errors.values());
     }
 
-    protected TemporaryDocumentData getTemporaryDocumentData(AmpResource resource) {
+    /**
+     * Copies struts messages to API error messages. If struts messages are empty will report a single API error
+     * message 'Failed without specifying a reason.'.
+     * @param messages struts messages to copy to API error messages
+     */
+    private void reportErrors(ActionMessages messages) {
+        if (messages.isEmpty()) {
+            errors.put(0, new ApiErrorMessage(0, "Failed without specifying a reason."));
+        } else {
+            StreamUtils.asStream((Iterator<Object>) messages.get())
+                    .forEach(m -> errors.put(0, new ApiErrorMessage(0, m.toString())));
+        }
+    }
+
+    private TemporaryDocumentData getTemporaryDocumentData(AmpResource resource, FormFile formFile) {
         TemporaryDocumentData tdd = new TemporaryDocumentData();
         
         tdd.setTitle(resource.getTitle());
@@ -92,6 +169,9 @@ public class ResourceImporter extends ObjectImporter {
         
         if (StringUtils.isNotBlank(resource.getWebLink())) {
             tdd.setWebLink(resource.getWebLink());
+        } else {
+            tdd.setFileSize(formFile.getFileSize());
+            tdd.setFormFile(formFile);
         }
         
         return tdd;
@@ -106,7 +186,7 @@ public class ResourceImporter extends ObjectImporter {
         return extractTranslationsOrSimpleValue(field, parentObj, jsonValue);
     }
     
-    protected String extractTranslationsOrSimpleValue(Field field, Object parentObj, Object jsonValue) {
+    private String extractTranslationsOrSimpleValue(Field field, Object parentObj, Object jsonValue) {
         TranslationType trnType = trnSettings.getTranslatableType(field);
         String value = null;
         if (TranslationType.NONE == trnType) {
@@ -137,6 +217,14 @@ public class ResourceImporter extends ObjectImporter {
         }
         
         return (String) jsonValue.get(trnSettings.getDefaultLangCode());
+    }
+    
+    private Long getLongOrNull(Object obj) {
+        if (obj instanceof Number) {
+            return ((Number) obj).longValue();
+        } else {
+            return null;
+        }
     }
     
 }

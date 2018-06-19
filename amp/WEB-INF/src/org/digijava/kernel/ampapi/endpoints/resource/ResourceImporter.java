@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessages;
@@ -25,7 +26,10 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.StreamUtils;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.annotations.activityversioning.ResourceTextField;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamMemberUtil;
@@ -71,6 +75,17 @@ public class ResourceImporter extends ObjectImporter {
 
         List<APIField> fieldsDef = AmpFieldsEnumerator.PRIVATE_ENUMERATOR.getResourceFields();
         
+        if (formFile != null) {
+            long maxSizeInMB = FeaturesUtil.getGlobalSettingValueInteger(GlobalSettingsConstants.CR_MAX_FILE_SIZE);
+            long maxFileSizeInBytes = maxSizeInMB * FileUtils.ONE_MB;
+            if (formFile.getFileSize() > maxFileSizeInBytes) {
+                long fileSizeInMB = formFile.getFileSize() / FileUtils.ONE_MB;
+                String errorMessage = String.format("%s %sMB. %s %sMB", TranslatorWorker.translateText("File size is"), 
+                        fileSizeInMB, TranslatorWorker.translateText("Max size allowed is"), maxSizeInMB);
+                return singletonList(ResourceErrors.FILE_SIZE_INVALID.withDetails(errorMessage));
+            }
+        }
+
         Object teamMemberObj = newJson.get(ResourceEPConstants.TEAM_MEMBER);
         Long teamMemberId = getLongOrNull(teamMemberObj);
         AmpTeamMember ampTeamMember = TeamMemberUtil.getAmpTeamMember(teamMemberId);

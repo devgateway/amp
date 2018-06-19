@@ -1,5 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.resource;
 
+import static java.util.Collections.singletonList;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -24,6 +26,9 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.StreamUtils;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.annotations.activityversioning.ResourceTextField;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
 
@@ -65,6 +70,25 @@ public class ResourceImporter extends ObjectImporter {
         this.newJson = newJson;
 
         List<APIField> fieldsDef = AmpFieldsEnumerator.PRIVATE_ENUMERATOR.getResourceFields();
+        
+        Object teamMemberObj = newJson.get(ResourceEPConstants.TEAM_MEMBER);
+        Long teamMemberId = getLongOrNull(teamMemberObj);
+        AmpTeamMember ampTeamMember = TeamMemberUtil.getAmpTeamMember(teamMemberId);
+        
+        if (teamMemberId != null && ampTeamMember == null) {
+            return singletonList(ResourceErrors.FIELD_INVALID_VALUE.withDetails(ResourceEPConstants.TEAM_MEMBER));
+        }
+        
+        TeamMember teamMemberCreator = null;
+        if (teamMemberId == null) {
+            teamMemberCreator = TeamMemberUtil.getLoggedInTeamMember();
+            
+            if (teamMemberCreator == null) {
+                return singletonList(ResourceErrors.FIELD_REQUIRED.withDetails(ResourceEPConstants.TEAM_MEMBER));
+            }
+        } else {
+            teamMemberCreator = TeamMemberUtil.getTeamMember(teamMemberId);
+        }
 
         try {
             resource = new AmpResource();
@@ -78,7 +102,7 @@ public class ResourceImporter extends ObjectImporter {
             
             ActionMessages messages = new ActionMessages();
             TemporaryDocumentData tdd = getTemporaryDocumentData(resource, formFile);
-            NodeWrapper node = tdd.saveToRepository(TLSUtils.getRequest(), messages);
+            NodeWrapper node = tdd.saveToRepository(TLSUtils.getRequest(), teamMemberCreator, messages);
 
             if (node != null) {
                 resource.setUuid(node.getUuid());
@@ -178,6 +202,14 @@ public class ResourceImporter extends ObjectImporter {
         }
         
         return (String) jsonValue.get(trnSettings.getDefaultLangCode());
+    }
+    
+    private Long getLongOrNull(Object obj) {
+        if (obj instanceof Number) {
+            return ((Number) obj).longValue();
+        } else {
+            return null;
+        }
     }
     
 }

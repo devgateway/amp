@@ -65,7 +65,7 @@ public class AmpResource {
     @Interchangeable(fieldTitle = "Team")
     private Long team;
     
-    @Interchangeable(fieldTitle = "Team Member")
+    @Interchangeable(fieldTitle = "Team Member", importable = true)
     private Long teamMember;
     
     private Map<String, String> translatedTitles;

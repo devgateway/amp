@@ -22,21 +22,28 @@
 
 package org.digijava.kernel.util;
 
+import static java.util.stream.Collectors.toList;
+
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.stream.Stream;
 
 import javax.security.auth.Subject;
 import javax.servlet.http.HttpServletRequest;
 
-import org.hibernate.HibernateException;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.error.AMPUncheckedException;
 import org.digijava.kernel.entity.UserLangPreferences;
 import org.digijava.kernel.entity.UserPreferences;
 import org.digijava.kernel.entity.UserPreferencesPK;
@@ -50,6 +57,8 @@ import org.digijava.kernel.security.principal.GroupPrincipal;
 import org.digijava.kernel.security.principal.UserPrincipal;
 import org.digijava.kernel.user.Group;
 import org.digijava.kernel.user.User;
+
+import org.hibernate.criterion.Restrictions;
 
 /**
  * This class containts user-related utillity functions. User must be
@@ -139,6 +148,23 @@ public class UserUtils {
             throw new DgException(ex);
         }
 
+        return result;
+    }
+
+    /**
+     * Bulk version of user lang preferences retrieval.
+     */
+    public static Map<Long, UserLangPreferences> getUserLangPreferences(List<User> users, Site site) {
+        List<UserPreferencesPK> keys = users.stream().map(u -> new UserPreferencesPK(u, site)).collect(toList());
+
+        org.hibernate.Session session = PersistenceManager.getSession();
+        List<UserLangPreferences> preferences = session
+                .createCriteria(UserLangPreferences.class)
+                .add(Restrictions.in("id", keys))
+                .list();
+
+        Map<Long, UserLangPreferences> result = new HashMap<>();
+        preferences.forEach(p -> result.put(p.getId().getUser().getId(), p));
         return result;
     }
 
@@ -288,8 +314,8 @@ public class UserUtils {
      * @return User by specified id, null of no user by that id was found
      */
     public static User getUser(Long id) {
-        User result = null;
-        Session session = null;
+        User result;
+        Session session;
 
         try {
             session = PersistenceManager.getRequestDBSession();
@@ -309,6 +335,45 @@ public class UserUtils {
 
     }
 
+    /**
+     * Retrieves all users.
+     * @return list of users
+     */
+    public static List<User> getAllUsers() {
+        List<User> users = PersistenceManager.getSession()
+                .createCriteria(User.class)
+                .list();
+        return users;
+    }
+    
+    /**
+     * Retrieves users data for the required users ids
+     * @param userIds the users ids
+     * @return list of users
+     */
+    public static List<User> getUsers(List<Long> userIds) {
+        if (userIds == null || userIds.isEmpty())
+            return Collections.emptyList();
+        List<User> users = PersistenceManager.getSession().createQuery("from " + User.class.getName() + " o " + 
+                "where o.id in (:ids)").setParameterList("ids", userIds).list();
+        users.forEach(user -> ProxyHelper.initializeObject(user));
+        return users;
+    }
+
+    /**
+     *
+     * @param userId
+     * @param orgGroupId
+     * @return
+     */
+    public static boolean hasVerfifiedOrgGroup(Long userId, Long orgGroupId) {
+        return getVerifiedOrgsStream(userId).anyMatch(t -> t.getOrgGrpId().getAmpOrgGrpId().equals(orgGroupId));
+    }
+
+    public static Stream<AmpOrganisation> getVerifiedOrgsStream(Long userId) {
+        User user = getUser(userId);
+        return user.getAssignedOrgs().stream();
+    }
     /**
      * Searchs users with given criteria
      * @param criteria criteria by which users are searched
@@ -429,6 +494,23 @@ public class UserUtils {
     /**
      * Searches user object by email and returns it. If such user does not
      * exists, returns null
+     * <p>The sole purpose of this function is to handle checked DgException by converting it to
+     * unchecked exception.</p>
+     * @param email String User email
+     * @return User object
+     * @throws AMPUncheckedException if error occurs
+     */
+    public static User getUserByEmailRt(String email) {
+        try {
+            return UserUtils.getUserByEmail(email);
+        } catch (DgException e) {
+            throw new AMPUncheckedException(e);
+        }
+    }
+
+    /**
+     * Searches user object by email and returns it. If such user does not
+     * exists, returns null
      * @param email String User email
      * @return User object
      * @throws DgException if error occurs
@@ -441,7 +523,8 @@ public class UserUtils {
             
             Query query = sess.createQuery("from " + User.class.getName() + " rs where rs.email = :email ");
             query.setString("email", email);
-            
+            query.setCacheable(true);
+
             Iterator iter = query.iterate();
             while (iter.hasNext()) {
                 user = (User) iter.next();
@@ -469,6 +552,7 @@ public class UserUtils {
     public static void setPassword(User user, String password) {
         user.setPassword(ShaCrypt.crypt(password.trim()).trim());
         user.setSalt(new Long(password.trim().hashCode()).toString());
+        user.setPasswordChangedAt(new Date());
     }
     
     /**
@@ -480,5 +564,11 @@ public class UserUtils {
         Subject subject = UserUtils.getUserSubject(user);
         retVal = DgSecurityManager.permitted(subject, site,ResourcePermission.INT_ADMIN);
         return retVal;
+    }
+    
+    public static boolean isSuperAdmin(User user, Site site) {
+        Subject subject = UserUtils.getUserSubject(user);
+
+        return DgSecurityManager.permitted(subject, site, ResourcePermission.INT_SUPER_ADMIN);
     }
 }

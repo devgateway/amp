@@ -54,7 +54,7 @@ function computateVisibleSections(){
 // Manage the position of the right menu in AF after scrolling
 function adjustQuickLinks(){
 	var contentMarginTop = $('#stepHead').offset().top;
-	var contentHeight = $('#stepHead').height() + $('#mainContent').height() + 55; 
+	var contentHeight = $('#stepHead').height() + $('#mainContent').height() + 55;
 	var rightMenuHeight = $('#rightMenu').height();
 	
 	// the initial position of the right menu should be below the next menu
@@ -81,9 +81,9 @@ function adjustQuickLinks(){
 		$('#rightMenu').css('top', contentMarginTop + "px");
 		leftPositionOfRightMenu = getLeftPositionOfRightMenu(false);
 	}
-	
+
 	$('#rightMenu').css('left', leftPositionOfRightMenu + "px");
-	
+
 	if (onepagerMode) {
 		computateVisibleSections();
 	}
@@ -91,24 +91,24 @@ function adjustQuickLinks(){
 
 //Manage the position of the right menu in AF on initialization
 function initQuickLinksInRtlMode(){
-	
+
 	var contentMarginTop = $('#stepHead').offset().top;
-	var contentHeight = $('#stepHead').height() + $('#mainContent').height() + 55; 
+	var contentHeight = $('#stepHead').height() + $('#mainContent').height() + 55;
 	var rightMenuHeight = $('#rightMenu').height();
 	var contentWidth = $('#stepHead').width() + DISTANCE_BETWEEN_CONTENT_AND_MENU;
 	var rightMenuWidth = $('#rightMenu').width();
-	
+
 	// the initial position of the right menu should be below the next menu
 	if (contentMarginTop < 130) {
 		contentMarginTop = 130;
 	}
-	
+
 	var rightMenuLeftPosition = (window.outerWidth - $('#stepHead').outerWidth()) / 2 + INIT_RTL_DISTANCE_BETWEEN_CONTENT_AND_MENU - $('#rightMenu').width();
-	
+
 	if ($(window).width() < (contentWidth + rightMenuWidth + DISTANCE_BETWEEN_CONTENT_AND_MENU)) {
 		rightMenuLeftPosition = $('#stepHead').offset().left - $('#rightMenu').width() - INIT_RTL_DISTANCE_BETWEEN_CONTENT_AND_MENU;
 	}
-	
+
 	$('#rightMenu').css('position', 'fixed')
 	$('#rightMenu').css('top', contentMarginTop + "px");
 	$('#rightMenu').css('left', rightMenuLeftPosition + "px");
@@ -247,20 +247,20 @@ function getLeftPositionOfRightMenu(isAbsolutePosition) {
 	var contentWidth = $('#stepHead').width() + DISTANCE_BETWEEN_CONTENT_AND_MENU;
 	var rightMenuWidth = $('#rightMenu').width();
 	var currentScrollLeft = $(window).scrollLeft();
-	
+
 	if (isAbsolutePosition) {
 		return getAbsoluteLeftPositionOfRightMenu(contentMarginLeft, contentWidth, rightMenuWidth, currentScrollLeft);
 	}
-	
+
 	return getFixedLeftPositionOfRightMenu(contentMarginLeft, contentWidth, rightMenuWidth, currentScrollLeft);
 }
 
 function getFixedLeftPositionOfRightMenu(contentMarginLeft, contentWidth, rightMenuWidth, currentScrollLeft) {
-	
+
 	if (isRtl) {
 		return contentMarginLeft - rightMenuWidth - DISTANCE_BETWEEN_CONTENT_AND_MENU - currentScrollLeft;
 	}
-	
+
 	return contentMarginLeft + contentWidth - currentScrollLeft;
 }
 
@@ -269,7 +269,7 @@ function getAbsoluteLeftPositionOfRightMenu(contentMarginLeft, contentWidth, rig
 	if (isRtl) {
 		return contentMarginLeft - rightMenuWidth - DISTANCE_BETWEEN_CONTENT_AND_MENU;
 	}
-	
+
 	if ($(window).width() < (contentWidth + rightMenuWidth)) {
 		return contentWidth;
 	} else {
@@ -296,7 +296,7 @@ $(document).ready(function(){
 		
 	    return $('#rightMenu').height() > DEFAULT_MAIN_BODY_MIN_HEIGHT ? ($('#rightMenu').height() - 20) : DEFAULT_MAIN_BODY_MIN_HEIGHT;
 	});
-	
+
 	// in RTL Mode the initial position of menu should be calculated in a different way
 	if (isRtl) {
 		initQuickLinksInRtlMode();

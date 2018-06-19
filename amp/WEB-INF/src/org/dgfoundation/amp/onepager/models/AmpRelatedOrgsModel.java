@@ -23,7 +23,7 @@ import org.digijava.module.aim.util.DbUtil;
 public class AmpRelatedOrgsModel extends AbstractReadOnlyModel<List<AmpOrganisation>> {
 
     private IModel<AmpActivityVersion> am;
-    protected AbstractChoice<?, AmpRole> roleChoiceContainer;
+    private AbstractChoice<?, AmpRole> roleChoiceContainer;
     private boolean showAllIfNoRolePresent;
 
     public AmpRelatedOrgsModel(IModel<AmpActivityVersion> am, AbstractChoice<?, AmpRole> roleChoiceContainer, boolean showAllIfNoRolePresent) {

@@ -115,7 +115,7 @@ public class AmpBackgroundActivitiesUtil
         user.setOrganizationName("Development Gateway");
 
         user.setPledger(false);
-
+        user.setPledgeSuperUser(false);
         user.setOrganizationTypeOther(" ");
 
         // set country

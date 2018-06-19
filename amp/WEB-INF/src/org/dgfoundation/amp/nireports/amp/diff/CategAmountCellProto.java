@@ -50,8 +50,7 @@ public class CategAmountCellProto extends Cell {
      * Materializes this instance into a full transaction. 
      * The operation is O(1) cheap because the heavyweight components of a cell are deeply immutable structures
      * which are shared between with the prototype (namely, {@link #metaInfo} and {@link #getCoordinates()})
-     * The original currency will be set to the current used one, in order to group the cells by currency.
-     * This method is called only when report.spec.showOriginalCurrency is set to true
+     * If the informativeAmount parameter is set to true, the amount will have the same value as the origAmount
      * 
      * @param usedCurrency the {@link AmpCurrency} to use for converting the natural transaction to
      * @param calendarConverter the O(1) {@link CalendarConverter} to use for translating the natural transaction's date
@@ -64,19 +63,19 @@ public class CategAmountCellProto extends Cell {
     public CategAmountCell materialize(AmpCurrency usedCurrency, CachingCalendarConverter calendarConverter, 
             CurrencyConvertor currencyConvertor, NiPrecisionSetting precisionSetting, boolean isInformativeAmount) {
         
-        BigDecimal convertedAmount = origAmount;
+        BigDecimal amount = origAmount;
         
         if (!isInformativeAmount) {
             BigDecimal usedExchangeRate = BigDecimal.valueOf(currencyConvertor.getExchangeRate(
                     origCurrency.getCurrencyCode(), usedCurrency.getCurrencyCode(), 
                     fixed_exchange_rate == null ? null : fixed_exchange_rate.doubleValue(), transactionDate));
-            convertedAmount = origAmount.multiply(usedExchangeRate);
+            amount = origAmount.multiply(usedExchangeRate);
         }
         
-        MonetaryAmount amount = new MonetaryAmount(convertedAmount, origAmount, origCurrency, transactionDate, 
+        MonetaryAmount monetaryAmount = new MonetaryAmount(amount, origAmount, origCurrency, transactionDate, 
                 precisionSetting);
         
-        CategAmountCell cell = new CategAmountCell(activityId, amount, metaInfo, coordinates, 
+        CategAmountCell cell = new CategAmountCell(activityId, monetaryAmount, metaInfo, coordinates, 
                 calendarConverter.translate(transactionMoment), isInformativeAmount);
         
         return cell;

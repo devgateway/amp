@@ -1550,23 +1550,28 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         
         AmpReportsScratchpad scratch = AmpReportsScratchpad.get(engine);
         
-        // should this measure be split by TypeOfAssistance?
-        boolean splitByToA = cc.splitCell != null && (cc.splitCell.entityType.equals(NiReportsEngine.PSEUDOCOLUMN_MEASURE)) && scratch.verticalSplitByTypeOfAssistance;
-        
-        // should this measure be split by ModeOfPayment?
-        boolean splitByMoP = cc.splitCell != null && (cc.splitCell.entityType.equals(NiReportsEngine.PSEUDOCOLUMN_MEASURE)) && scratch.verticalSplitByModeOfPayment;
-        
-        if (splitByToA) {
-            raw.add(TaggedMeasureBehaviour.getSplittingStrategy(MetaCategory.TYPE_OF_ASSISTANCE.category, 
-                    ColumnConstants.TYPE_OF_ASSISTANCE, () -> TranslatorWorker.translateText("Total")));
-        } else if (splitByMoP) {
-            raw.add(TaggedMeasureBehaviour.getSplittingStrategy(MetaCategory.MODE_OF_PAYMENT.category, 
-                    ColumnConstants.MODE_OF_PAYMENT, () -> TranslatorWorker.translateText("Total")));
+        if (raw.isEmpty()) {
+            // should this measure be split by TypeOfAssistance?
+            boolean splitByToA = cc.splitCell != null 
+                    && (cc.splitCell.entityType.equals(NiReportsEngine.PSEUDOCOLUMN_MEASURE)) 
+                    && scratch.verticalSplitByTypeOfAssistance;
+            
+            // should this measure be split by ModeOfPayment?
+            boolean splitByMoP = cc.splitCell != null 
+                    && (cc.splitCell.entityType.equals(NiReportsEngine.PSEUDOCOLUMN_MEASURE)) 
+                    && scratch.verticalSplitByModeOfPayment;
+            
+            if (splitByToA) {
+                raw.add(TaggedMeasureBehaviour.getSplittingStrategy(MetaCategory.TYPE_OF_ASSISTANCE.category, 
+                        ColumnConstants.TYPE_OF_ASSISTANCE, () -> TranslatorWorker.translateText("Total")));
+            } else if (splitByMoP) {
+                raw.add(TaggedMeasureBehaviour.getSplittingStrategy(MetaCategory.MODE_OF_PAYMENT.category, 
+                        ColumnConstants.MODE_OF_PAYMENT, () -> TranslatorWorker.translateText("Total")));
+            }
         }
         
         // should this measure be split by Currencies?
-        boolean splitByCurrencies = cc.behaviour.canBeSplitByCurrency() && cc.splitCell != null 
-                && !GroupingCriteria.GROUPING_TOTALS_ONLY.equals(engine.spec.getGroupingCriteria())
+        boolean splitByCurrencies = cc.behaviour.canBeSplitByCurrency() && cc.splitCell != null
                 && engine.spec.isShowOriginalCurrency();
         
         if (splitByCurrencies) {

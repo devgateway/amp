@@ -10,7 +10,6 @@ import org.dgfoundation.amp.algo.VivificatingMap;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.currencyconvertor.CurrencyConvertor;
-import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportRenderWarning;
 import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.NiPrecisionSetting;
@@ -68,8 +67,7 @@ public class PPCColumn extends PsqlSourcedColumn<CategAmountCell> {
                  * AMP-27571
                  * if canSplittingStrategyBeAdded is true we need to duplicate cells with original currencies
                 */
-                if (engine.spec.isShowOriginalCurrency() 
-                        && !GroupingCriteria.GROUPING_TOTALS_ONLY.equals(engine.spec.getGroupingCriteria())) {
+                if (engine.spec.isShowOriginalCurrency()) {
                     cells.add(cellProto.materialize(usedCurrency, calendar, currencyConvertor, precisionSetting, 
                             true));
                 } 

@@ -104,7 +104,10 @@ public class InterchangeDependencyResolver {
      * @param incomingActivity the full imported||updated activity, used for getting the on_budget category value
      * @return
      */
-    private static DependencyCheckResult checkOnBudget(Object checkedValue, JsonBean incomingActivity) {
+    private static DependencyCheckResult checkOnBudget(Object checkedValue, ObjectImporter importer, 
+            APIField fieldDescription) {
+        
+        JsonBean incomingActivity = importer.getNewJson();
         
         Object referenceOnBudgetValue = getOnBudgetValue();
         Object onOffBudgetValue = InterchangeUtils.getFieldValuesFromJsonActivity(incomingActivity, BUDGET_PATH);
@@ -120,8 +123,14 @@ public class InterchangeDependencyResolver {
             valueIsNullOrEmpty = ((List<?>) checkedValue).isEmpty();
         }
         
+        String requiredStatus = fieldDescription.getRequired();
+        
         boolean activityIsOnBudget = referenceOnBudgetValue.equals(onOffBudgetValue);
         if (valueIsNullOrEmpty && activityIsOnBudget) {
+            if (ActivityEPConstants.FIELD_NOT_REQUIRED.equals(requiredStatus)) {
+                return DependencyCheckResult.VALID;
+            }
+            
             return DependencyCheckResult.INVALID_REQUIRED;
         }
         
@@ -207,12 +216,12 @@ public class InterchangeDependencyResolver {
      * @return
      */
     public static DependencyCheckResult checkDependency(Object value, ObjectImporter importer, String code, 
-            Map<String, Object> fieldParent) {
+            Map<String, Object> fieldParent, APIField fieldDescription) {
         
         JsonBean incomingActivity = importer.getNewJson();
         
         switch (code) {
-        case ON_BUDGET_KEY: return checkOnBudget(value, incomingActivity);
+        case ON_BUDGET_KEY: return checkOnBudget(value, importer, fieldDescription);
         case IMPLEMENTATION_LEVEL_PRESENT_KEY: return checkFieldPresent(incomingActivity, IMPLEMENTATION_LEVEL_PATH);
         case IMPLEMENTATION_LOCATION_PRESENT_KEY: return checkFieldPresent(incomingActivity, IMPLEMENTATION_LOCATION_PATH);
         case AGREEMENT_CODE_PRESENT_KEY : return checkFieldValuePresent(value, AGREEMENT_CODE_PATH);
@@ -286,7 +295,7 @@ public class InterchangeDependencyResolver {
         return DependencyCheckResult.INVALID_NOT_CONFIGURABLE;
     }
 
-    private static Object getOnBudgetValue() {
+    public static Object getOnBudgetValue() {
         return CategoryConstants.ACTIVITY_BUDGET_ON.getAmpCategoryValueFromDB().getIdentifier();
     }
     

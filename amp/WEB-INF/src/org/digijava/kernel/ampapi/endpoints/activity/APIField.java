@@ -12,9 +12,9 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
  * @author Octavian Ciubotaru
  */
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-@JsonPropertyOrder({ "field_name", "id", "field_type", "field_label", "required", "importable", "dependencies",
-        "id_only", "multiple_values", "percentage_constraint", "unique_constraint", "tree_collection", "translatable",
-        "regex_pattern", "regex_constraint", "field_length", "size_limit" })
+@JsonPropertyOrder({ "field_name", "id", "field_type", "field_label", "required", "required-dependency", "importable", 
+        "dependencies", "id_only", "multiple_values", "percentage_constraint", "unique_constraint", "tree_collection", 
+        "translatable", "regex_pattern", "regex_constraint", "field_length", "size_limit" })
 public class APIField {
 
     @JsonProperty(ActivityEPConstants.FIELD_NAME)
@@ -79,6 +79,9 @@ public class APIField {
 
     @JsonIgnore
     private String discriminator;
+    
+    @JsonProperty(ActivityEPConstants.REQUIRED_DEPENDENCY)
+    private boolean requiredDependency; 
 
     public String getFieldName() {
         return fieldName;
@@ -247,6 +250,14 @@ public class APIField {
     public void setDiscriminator(String discriminator) {
         this.discriminator = discriminator;
     }
+    
+    public boolean getRequiredDependency() {
+        return requiredDependency;
+    }
+
+    public void setRequiredDependency(boolean requiredDependency) {
+        this.requiredDependency = requiredDependency;
+    }
 
     @Override
     public String toString() {
@@ -257,6 +268,6 @@ public class APIField {
                 + ", uniqueConstraint='" + uniqueConstraint + '\'' + ", percentageConstraint='" + percentageConstraint
                 + '\'' + ", treeCollectionConstraint=" + treeCollectionConstraint + ", fieldLength=" + fieldLength
                 + ", children=" + children + ", dependencies=" + dependencies + ", percentage=" + percentage 
-                + ", regex_pattern=" + regexPattern + "}";
+                + ", regex_pattern=" + regexPattern + ", requiredDependency=" + requiredDependency + "}";
     }
 }

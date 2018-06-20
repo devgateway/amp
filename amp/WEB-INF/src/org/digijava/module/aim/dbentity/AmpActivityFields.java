@@ -601,34 +601,43 @@ LoggerIdentifiable, Cloneable {
      */
     @Interchangeable(fieldTitle = "FY", importable = true, fmPath = "/Activity Form/Identification/Budget Extras/FY", 
             required = "/Activity Form/Identification/Budget Extras/Required Validator for fy",
+            requiredDependency = true,
             dependencies = {InterchangeDependencyResolver.ON_BUDGET_KEY}, 
             validators = @Validators (unique = "/Activity Form/Identification/Budget Extras/FY"))
     protected Set<AmpAPIFiscalYear> fiscalYears;
     
-    @Interchangeable(fieldTitle = "Vote", importable = true, fmPath = "/Activity Form/Identification/Budget Extras/Vote", 
+    @Interchangeable(fieldTitle = "Vote", importable = true, 
+            fmPath = "/Activity Form/Identification/Budget Extras/Vote",
+            required = ActivityEPConstants.REQUIRED_ND, requiredDependency = true,
             dependencies={InterchangeDependencyResolver.ON_BUDGET_KEY})
     @VersionableFieldSimple(fieldTitle = "Vote")
     protected String vote;
     
-    @Interchangeable(fieldTitle = "Sub Vote", importable = true, fmPath = "/Activity Form/Identification/Budget Extras/Sub-Vote", 
+    @Interchangeable(fieldTitle = "Sub Vote", importable = true, 
+            fmPath = "/Activity Form/Identification/Budget Extras/Sub-Vote",
+            required = ActivityEPConstants.REQUIRED_ND, requiredDependency = true,
             dependencies={InterchangeDependencyResolver.ON_BUDGET_KEY})
     @VersionableFieldSimple(fieldTitle = "Sub Vote")
     protected String subVote;
     
-    @Interchangeable(fieldTitle = "Sub Program", importable = true, fmPath = "/Activity Form/Identification/Budget Extras/Sub-Program", 
+    @Interchangeable(fieldTitle = "Sub Program", importable = true, 
+            fmPath = "/Activity Form/Identification/Budget Extras/Sub-Program",
+            required = ActivityEPConstants.REQUIRED_ND, requiredDependency = true,
             dependencies={InterchangeDependencyResolver.ON_BUDGET_KEY})
     @VersionableFieldSimple(fieldTitle = "Sub Program")
     protected String subProgram;
 
     @Interchangeable(fieldTitle = ActivityFieldsConstants.PROJECT_CODE, importable = true,
-            required = ActivityEPConstants.BUDGET_EXTRAS_PROJECT_CODE_FM_PATH,
+            required = ActivityEPConstants.REQUIRED_ND, requiredDependency = true,
             dependencies = InterchangeDependencyResolver.ON_BUDGET_KEY,
             fmPath = FMVisibility.ANY_FM + ActivityEPConstants.DONOR_PROJECT_CODE_FM_PATH
                     + "|" + ActivityEPConstants.BUDGET_EXTRAS_PROJECT_CODE_FM_PATH)
     @VersionableFieldSimple(fieldTitle = "Project Code")
     protected String projectCode;
 
-    @Interchangeable(fieldTitle = "Ministry Code", importable = true, fmPath = "/Activity Form/Identification/Budget Extras/Ministry Code",
+    @Interchangeable(fieldTitle = "Ministry Code", importable = true, 
+            fmPath = "/Activity Form/Identification/Budget Extras/Ministry Code",
+            required = ActivityEPConstants.REQUIRED_ND, requiredDependency = true,
             dependencies={InterchangeDependencyResolver.ON_BUDGET_KEY})
     @VersionableFieldSimple(fieldTitle = "Ministry Code")
     protected String ministryCode;

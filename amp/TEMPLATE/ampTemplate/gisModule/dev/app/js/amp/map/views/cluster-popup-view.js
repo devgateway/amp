@@ -139,13 +139,14 @@ module.exports = Backbone.View.extend({
           .datum(data)
           .transition().duration(350)
           .call(chart);
-      	if(app.data.generalSettings.get("rtl-direction")) {
-      		d3.select(selector).select('.nv-pieLabels').selectAll('text')[0].forEach(function (element) {
-      			if (element.textContent.length > 0 && element.textContent.lastIndexOf("%")) {
-      				element.textContent = "%" + element.textContent.substring(0, element.textContent.length - 1);
-      			}
-      		});
-      	}
+      if(app.data.generalSettings.get("rtl-direction")) {
+          d3.select(selector).select('.nv-pieLabels').selectAll('text')[0].forEach(function (element) {
+              if (element.textContent.length > 0 && element.textContent.lastIndexOf("%")) {
+                  element.textContent = "%" + element.textContent.substring(0, element.textContent.length - 1);
+              }
+          });
+      }
+
 
         return chart;
     });

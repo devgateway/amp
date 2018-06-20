@@ -2,14 +2,20 @@
 
 var _ = require('underscore');
 
-function getGVF(dataset, numClass) {
+function getGVF(dataset, numClass, zeroCategoryEnabled) {
     var dataList = _.pluck(dataset, 'value');
+    var dataHasZero = dataList.includes(0);
     // get the breaks:
     // THIS IS WHAT IS USED TO RENDER THE MAP:
-    var breaks = getJenksBreaks(dataList, numClass);
-
+    var breaks;  
+    if (zeroCategoryEnabled === true && dataHasZero === true) {
+    	dataList = _.reject(dataList, function(data){ return data == 0; });
+    	breaks = getJenksBreaks(dataList, numClass - 1, zeroCategoryEnabled);
+    } else {
+    	breaks = getJenksBreaks(dataList, numClass, zeroCategoryEnabled);
+    }
+    
     dataList.sort(function(a, b) {return b - a;});
-
     var listMean = sum(dataList) / dataList.length;
     var SDAM = 0.0;
     // now iterate through all the values and add up the sqDev to get the SDAM:
@@ -37,18 +43,20 @@ function getGVF(dataset, numClass) {
         SDCM += preSDCM
     }
     var varFit = (SDAM - SDCM) / SDAM;
-    //console.log("varianceFit:", varFit)
+    
     var result = [];
+    if (zeroCategoryEnabled === true && dataHasZero === true) {
+    	result.push([0, 0]);
+    }
     for ( var i = 0; i < breaks.length - 1; i++) {
         result.push([breaks[i], breaks[i + 1]])
     }
+    
     return result;
 }
 
-function getJenksBreaks(dataList, numClass) {
-
+function getJenksBreaks(dataList, numClass, zeroCategoryEnabled) {
     dataList.sort(sortNumber);
-
     var mat1 = [];
     for ( var x = 0, xl = dataList.length + 1; x < xl; x++) {
         var temp = [];
@@ -117,9 +125,12 @@ function getJenksBreaks(dataList, numClass) {
         countNum -= 1;
     }
 
-    if (kclass[0] > 0) {
-        kclass[0] = 0;
+    if (zeroCategoryEnabled !== true) {
+    	if (kclass[0] > 0) {
+            kclass[0] = 0;
+        }
     }
+    
     return Array.from(new Set(kclass));
 }
 

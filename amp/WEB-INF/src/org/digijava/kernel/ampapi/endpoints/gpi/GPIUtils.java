@@ -4,9 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -289,9 +287,8 @@ public class GPIUtils {
     }
 
     public static Date getYearEndDate(AmpFiscalCalendar calendar, int year) {
-        int MILLISECONDS_IN_DAY = 1000 * 60 * 60 * 24;
         return new Date(
                 CalendarUtil.getStartOfYear(year + 1, calendar.getStartMonthNum() - 1, calendar.getStartDayNum())
-                        .getTime() - MILLISECONDS_IN_DAY);
+                        .getTime() - GPIEPConstants.MILLISECONDS_IN_DAY);
     }
 }

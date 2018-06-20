@@ -158,7 +158,13 @@ function selectLocationCallerShape(selectedGraphic) {
 		selectedGraphic.target.tempId = tempId++;
 	}
 	
-	  $("#locationTitleDialog").dialog({
+	if (selectedGraphic.target instanceof L.Marker) {
+		$("#colors-section").hide();
+	} else {
+		$("#colors-section").show();
+	}
+	
+	 $("#locationTitleDialog").dialog({
 		"title" : TranslationManager.getTranslated("Select Structure"),
 		open : function(event, ui) {
 			$("#locationTitle").val('');

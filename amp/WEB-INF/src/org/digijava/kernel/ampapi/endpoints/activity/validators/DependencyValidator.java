@@ -28,7 +28,8 @@ public class DependencyValidator extends InputValidator {
         {
             boolean result = false;
             for (String dep : deps) {
-                switch(InterchangeDependencyResolver.checkDependency(value, importer, dep, newFieldParent)) {
+                switch(InterchangeDependencyResolver.checkDependency(value, importer, dep, newFieldParent, 
+                        fieldDescription)) {
                 case INVALID_ALWAYS_REQUIRED:
                     errors.add(dep);
                     break;

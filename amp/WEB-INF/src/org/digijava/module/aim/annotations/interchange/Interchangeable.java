@@ -52,6 +52,11 @@ public @interface Interchangeable {
     String required () default ActivityEPConstants.REQUIRED_NONE;
     
     /**
+     *Whether the required of the field depends on a condition
+     */
+    boolean requiredDependency() default false;
+    
+    /**
      * Set to true if underlying field value can be obtained from the 
      * Possible Values endpoint -- meaning it can be identified by an ID
      * and picked from a list instead of being computed by AMP

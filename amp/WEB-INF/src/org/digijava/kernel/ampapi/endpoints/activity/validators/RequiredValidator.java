@@ -36,8 +36,9 @@ public class RequiredValidator extends InputValidator {
         Object fieldValue = newFieldParent.get(fieldName);
         String requiredStatus = fieldDescription.getRequired();
         boolean importable = fieldDescription.isImportable();
+        boolean requiredDependency = fieldDescription.getRequiredDependency();
         // don't care if value has something
-        if (importable && isEmpty(fieldValue)) {
+        if (importable && isEmpty(fieldValue) && !requiredDependency) {
             if (ActivityEPConstants.FIELD_ALWAYS_REQUIRED.equals(requiredStatus)) {
                 // field is always required -> can't save it even as a draft
                 return false;
@@ -63,7 +64,7 @@ public class RequiredValidator extends InputValidator {
         // field value != null, it's fine from this validator's POV
         return true;    
     }
-    
+
     private boolean isEmpty(Object fieldValue) {
         return fieldValue == null || isEmptyString(fieldValue);
     }

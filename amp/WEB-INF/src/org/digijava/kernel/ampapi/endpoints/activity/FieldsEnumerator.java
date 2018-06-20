@@ -210,6 +210,7 @@ public class FieldsEnumerator {
         }
 
         apiField.setDiscriminator(interchangeable.discriminatorOption());
+        apiField.setRequiredDependency(interchangeable.requiredDependency());
 
         return apiField;
     }

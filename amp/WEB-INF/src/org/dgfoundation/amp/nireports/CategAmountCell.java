@@ -41,6 +41,11 @@ public final class CategAmountCell extends Cell implements CategCell, DatedCell,
     public final TranslatedDate translatedDate;
     
     /**
+     * is amount informative
+     */
+    private final Boolean isInformativeAmount;
+    
+    /**
      * constructs an instance which has its fields trivially set to the supplied arguments. entityId will be set as -1, levelColumn will be set to empty() 
      * @param activityId the owning "activity" (fundamental entity)
      * @param amount  
@@ -49,10 +54,26 @@ public final class CategAmountCell extends Cell implements CategCell, DatedCell,
      * @param translatedDate
      */
     public CategAmountCell(long activityId, MonetaryAmount amount, MetaInfoSet metaInfo, Map<NiDimensionUsage, Coordinate> coos, TranslatedDate translatedDate) {
+        this(activityId, amount, metaInfo, coos, translatedDate, true);
+    }
+    
+    /**
+     * constructs an instance which has its fields trivially set to the supplied arguments. 
+     * entityId will be set as -1, levelColumn will be set to empty() 
+     * 
+     * @param activityId the owning "activity" (fundamental entity)
+     * @param amount  
+     * @param metaInfo
+     * @param coos
+     * @param translatedDate
+     */
+    public CategAmountCell(long activityId, MonetaryAmount amount, MetaInfoSet metaInfo, 
+            Map<NiDimensionUsage, Coordinate> coos, TranslatedDate translatedDate, Boolean isInformative) {
         super(activityId, -1, coos, Optional.empty());
         this.amount = amount;
         this.metaInfo = metaInfo.freeze();
         this.translatedDate = translatedDate;
+        this.isInformativeAmount = isInformative;
     }
 
     /**
@@ -124,6 +145,10 @@ public final class CategAmountCell extends Cell implements CategCell, DatedCell,
     @Override
     public NiPrecisionSetting getPrecision() {
         return amount.precisionSetting;
+    }
+    
+    public Boolean isInformativeAmount() {
+        return isInformativeAmount;
     }
 
     @Override

@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.digijava.kernel.ampapi.endpoints.util.CalendarUtil;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
 import org.dgfoundation.amp.gpi.reports.GPIReportConstants;
@@ -284,14 +285,13 @@ public class GPIUtils {
     }
     
     public static Date getYearStartDate(AmpFiscalCalendar calendar, int year) {
-        int month = Calendar.JANUARY;
-        int day = GPIEPConstants.GREGORIAN_YEAR_START_DAY;
-        return new GregorianCalendar(year, month, day).getTime();
+        return CalendarUtil.getStartOfYear(year, calendar.getStartMonthNum() - 1, calendar.getStartDayNum());
     }
 
     public static Date getYearEndDate(AmpFiscalCalendar calendar, int year) {
-        int month = Calendar.DECEMBER;
-        int day = GPIEPConstants.GREGORIAN_YEAR_END_DAY;
-        return new GregorianCalendar(year, month, day).getTime();
+        int MILLISECONDS_IN_DAY = 1000 * 60 * 60 * 24;
+        return new Date(
+                CalendarUtil.getStartOfYear(year + 1, calendar.getStartMonthNum() - 1, calendar.getStartDayNum())
+                        .getTime() - MILLISECONDS_IN_DAY);
     }
 }

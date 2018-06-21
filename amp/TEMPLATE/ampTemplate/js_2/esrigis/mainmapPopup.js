@@ -137,15 +137,14 @@ function createColorCheckboxes(selectedGraphic) {
 			appendColor(c);
 		});
 		
-		$('.color-checkbox').click(function(event ){			
-		    if (event.target.checked === true) {
-		    	$('.color-checkbox').each(function(i) {
-		    		if (this.value !== event.target.value) {
-		    			$(this).prop('checked', false);
-		    		}	
-		    		
-				});	
-		    	
+		$('.color-checkbox').click(function(event ){
+			
+			if ($(this).data('wasChecked')) {
+				$(this).prop('checked', false);
+			}
+			
+			$(this).data('wasChecked', event.target.checked);				
+		    if (event.target.checked === true) {		    	
 		    	selectedGraphic.target.setStyle({color: event.target.dataset.color});	    		
 		    } else {
 		    	selectedGraphic.target.setStyle({color: DEFAULT_STRUCTURE_COLOR});		    
@@ -180,7 +179,7 @@ function selectLocationCallerShape(selectedGraphic) {
 				$("#locationTitle").val(title.value);					
 				var structureColor = row.getElementsByTagName("INPUT")[8];
 				if (structureColor && structureColor.value) {
-					$(".color-checkbox:checkbox[value='"+ structureColor.value +"']").attr("checked", true);
+					$(".color-checkbox:radio[value='"+ structureColor.value +"']").attr("checked", true);
 				}				
 			}
 		},
@@ -500,7 +499,7 @@ function appendColor(categoryValue) {
 }
 
 function getColorHTMLTemplate() {
-	return '<li><input type="checkbox" class="color-checkbox" name="structure-color" id="structure-color" value="{value}" data-color={color}><svg width="24" height="24"> <rect style="fill:{color}" width="24" height="24" x="0" y="5"></rect></svg><label class="color-label">{name}</label></li>';
+	return '<li><input type="radio" class="color-checkbox" name="structure-color" id="structure-color" value="{value}" data-color={color}><svg width="24" height="24"> <rect style="fill:{color}" width="24" height="24" x="0" y="5"></rect></svg><label class="color-label">{name}</label></li>';
 }
 
 function startContextMenu() {

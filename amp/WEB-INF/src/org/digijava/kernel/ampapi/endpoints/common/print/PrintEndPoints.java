@@ -40,7 +40,7 @@ public class PrintEndPoints {
     @POST
     @Path("/print")
     @Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @Produces("image/png")
+    @Produces("image/png") // hardcoded for image only. this could be dynamic also for PDF
     @ApiMethod(ui = false, id = "print")
     public final Response createImage(final HtmlContent parameters) {
         return PrintImageService.createImage(parameters);

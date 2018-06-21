@@ -101,6 +101,14 @@ public class ApiErrorResponse {
     }
     
     /**
+     * Reports that the resource is not found (HTTP 404)
+     * @param msg API error message
+     */
+    public static void reportResourceNotFound(ApiErrorMessage msg) {
+        reportError(Response.Status.NOT_FOUND, msg);
+    }
+    
+    /**
      * Reports any custom response status for the given message
      * @param status HTTP response status 
      * @param msg    API Error message

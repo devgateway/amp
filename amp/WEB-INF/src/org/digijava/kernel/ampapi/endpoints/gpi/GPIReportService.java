@@ -114,6 +114,7 @@ public final class GPIReportService {
     }
 
     public Response exportGPIReport(String indicatorCode, JsonBean formParams, String type) {
+        formParams.set("recordsPerPage", Integer.MAX_VALUE);
         GPIReport gpiReport = getGPIReport(indicatorCode, formParams);
         
         return getExportAsResponse(indicatorCode, type, gpiReport, formParams);

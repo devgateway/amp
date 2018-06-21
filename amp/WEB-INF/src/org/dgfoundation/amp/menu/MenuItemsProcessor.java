@@ -22,6 +22,7 @@ import org.digijava.kernel.user.Group;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 
 /**
@@ -108,8 +109,7 @@ public class MenuItemsProcessor {
             visible = tm != null && Boolean.TRUE.equals(tm.getAddActivity());
             break;
         case MenuConstants.GPI_DATA:
-            AmpTeamMember atm = TeamMemberUtil.getAmpTeamMember(tm.getMemberId()); 
-            visible = atm.getUser().hasNationalCoordinatorGroup() || atm.getUser().hasVerifiedDonor();
+            visible = FeaturesUtil.isVisibleModule(MenuConstants.GPI_DATA_ENTRY);
             break;
         }
         // if requestURL (the actual referrer) filter is specified, then display this menu item only for a referrer that matches it

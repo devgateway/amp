@@ -42,6 +42,14 @@ public class ObjectImporter {
 
     private Map<String, List<PossibleValue>> possibleValuesCached = new HashMap<>();
 
+    /**
+     * This field is used for storing the current json values during field validation
+     * E.g: validate the pledge field (present in funding_details)
+     * fundings - will contain the json values of the parent of funding_details 
+     * fundings~funding_details - will contain the json values of the parent of pledge
+     */
+    private Map<String, Object> branchJsonVisitor = new HashMap<>();
+
     public ObjectImporter(Class<?> targetClass, InputValidatorProcessor validator) {
         this.targetClass = targetClass;
         this.validator = validator;
@@ -66,7 +74,9 @@ public class ObjectImporter {
             Field field = ReflectionUtil.getField(obj, fieldDef.getFieldNameInternal());
             if (Collection.class.isAssignableFrom(field.getType())) {
                 Collection collection = (Collection) PropertyUtils.getProperty(obj, fieldDef.getFieldNameInternal());
-                collection.clear();
+                if (collection != null) {
+                    collection.clear();
+                }
             } else {
                 PropertyUtils.setProperty(obj, fieldDef.getFieldNameInternal(), null);
             }
@@ -461,6 +471,7 @@ public class ObjectImporter {
             Iterator<Map<String, Object>> iterNew = childrenNewValues.iterator();
             while (iterNew.hasNext()) {
                 Map<String, Object> newChild = iterNew.next();
+                branchJsonVisitor.put(fieldPath, newChild);
                 APIField childFieldDef = getMatchedFieldDef(newChild, childrenFields);
                 Map<String, Object> oldChild = getMatchedOldValue(childFieldDef, childrenOldValues);
 
@@ -569,4 +580,9 @@ public class ObjectImporter {
     public TranslationSettings getTrnSettings() {
         return trnSettings;
     }
+
+    public Map<String, Object> getBranchJsonVisitor() {
+        return branchJsonVisitor;
+    }
+    
 }

@@ -716,7 +716,7 @@ function collapseAll() {
 				</c:if>
 			</module:display>
 
-
+			
 			<module:display name="/Activity Form/Identification/Objective" parentModule="/Activity Form/Identification">
 				<digi:trn key="aim:objectives">Objectives</digi:trn>:&nbsp;<br />
 				<c:if test="${aimEditActivityForm.identification.objectives!=null}">
@@ -1050,7 +1050,7 @@ function collapseAll() {
 					<hr />
 				</c:if>
 			</module:display>
-
+						 
 			<!-- MISSING FIELD IN THE NEW FM STRUCTURE -->
 			<module:display name="/Activity Form/Identification/Government Agreement Number" parentModule="/Activity Form/Identification">
 				<c:if test="${not empty aimEditActivityForm.identification.govAgreementNumber}">
@@ -1098,7 +1098,7 @@ function collapseAll() {
 		</c:if>
 		</module:display>
 			<c:if test="${aimEditActivityForm.identification.budgetCV==aimEditActivityForm.identification.budgetCVOn}">
-				<module:display name="/Activity Form/Identification/Budget Extras/FY" parentModule="/Activity Form/Identification">
+				<module:display name="/Activity Form/Identification/Budget Extras/FY" parentModule="/Activity Form/Identification/Budget Extras">
 					<digi:trn>FY</digi:trn>:&nbsp;
 					<b><bean:write name="aimEditActivityForm" property="identification.FY"/></b>
 					<br />
@@ -1678,7 +1678,7 @@ function collapseAll() {
 	<fieldset>
 		<legend>
 			<span class=legend_label id="melink" style="cursor: pointer;">
-				<digi:trn>M &amp; E</digi:trn>
+				<digi:trn>M&E</digi:trn>
 			</span>	
 		</legend>
 
@@ -2063,7 +2063,7 @@ function collapseAll() {
 												</td>
 												<td class="prv_right">
 													<c:forEach var="fd" items="${comp.commitments}">
-													<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee" class="component-funding-table">
+													<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee" class="component-funding-table">												
 														<tr>
 															<module:display name="/Activity Form/Components/Component/Components Commitments" 
 																parentModule="/Activity Form/Components/Component">
@@ -2131,7 +2131,7 @@ function collapseAll() {
 																</td>
 															</tr>
 														</module:display>
-														</table>
+														</table> 
 														<hr />
 													</c:forEach>
 												</td>

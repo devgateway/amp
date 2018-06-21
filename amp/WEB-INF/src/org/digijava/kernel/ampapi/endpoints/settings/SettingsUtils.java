@@ -128,8 +128,8 @@ public class SettingsUtils {
     /**
      * @return options
      */
-    static SettingOptions getFundingTypeSettings() {
-        Set<String> measures = new LinkedHashSet<>(GisConstants.FUNDING_TYPES);
+    static SettingOptions getFundingTypeSettings(Set<String> measures) {
+
         measures.retainAll(MeasuresVisibility.getConfigurableMeasures());
 
         // identifies the default funding type
@@ -237,8 +237,8 @@ public class SettingsUtils {
         return getSettingFieldForOptions(SettingsConstants.CURRENCY_ID, getCurrencySettings(includeVirtual));
     }
 
-    static SettingField getFundingTypeField() {
-        return getSettingFieldForOptions(SettingsConstants.FUNDING_TYPE_ID, getFundingTypeSettings());
+    static SettingField getFundingTypeField(Set<String> measures) {
+        return getSettingFieldForOptions(SettingsConstants.FUNDING_TYPE_ID, getFundingTypeSettings(measures));
     }
 
     static SettingField getReportAmountFormatField() {

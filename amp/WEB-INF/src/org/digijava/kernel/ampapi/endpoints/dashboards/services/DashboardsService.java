@@ -345,7 +345,9 @@ public class DashboardsService {
                     intlAmount = intlAmount.add(otherCountryAmount);
                 }
                 //internationId = uRegion.entityId; // remember any id, not relevant
-                internationalEntitiesIdsValues.putAll(uRegionCell.entitiesIdsValues);
+                if (uRegionCell.entitiesIdsValues != null) {
+                    internationalEntitiesIdsValues.putAll(uRegionCell.entitiesIdsValues);
+                }
                 intlChildren.addAll(undefined.getChildren());
             }
         }

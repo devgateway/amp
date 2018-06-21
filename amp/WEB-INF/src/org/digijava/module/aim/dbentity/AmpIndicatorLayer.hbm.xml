@@ -22,6 +22,7 @@
 		<property name="description" column="description" type="text" />
 		<property name="numberOfClasses" column="number_of_classes" type="java.lang.Long" />
 		<property name="unit" column="unit" type="java.lang.String" />
+		
 		<many-to-one name="indicatorType" column="indicator_type_id" foreign-key="indTypeForeignKey"
             class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" lazy="false" />
 		<property name="population" type="java.lang.Boolean">
@@ -29,6 +30,9 @@
 		</property>
 		<property name="createdOn" column="created_on" type="java.util.Date" />
 		<property name="updatedOn" column="updated_on" type="java.util.Date" />
+		<property name="zeroCategoryEnabled" type="java.lang.Boolean">
+		  <column name="zero_category_enabled" default="false"/>
+		</property>
 		<many-to-one name="createdBy" column="created_by" class="org.digijava.module.aim.dbentity.AmpTeamMember" />
 
 		<set name="colorRamp" cascade="all-delete-orphan" order-by="amp_indicator_color_id asc" lazy="false">

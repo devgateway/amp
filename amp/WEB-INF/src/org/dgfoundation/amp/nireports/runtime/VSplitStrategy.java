@@ -7,7 +7,6 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import org.dgfoundation.amp.nireports.ComparableValue;
-import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 
 /**
@@ -43,12 +42,12 @@ public interface VSplitStrategy {
     }
 
     /**
-     * returns the list of the subcolumns to be created based on the list of existant categories
-     * @param existant
+     * returns the list of the subcolumns to be created based on the list of existent categories
+     * @param existent
      * @return
      */
-    public default List<ComparableValue<String>> getSubcolumnsNames(Set<ComparableValue<String>> existant) {
-        return new ArrayList<>(existant);
+    default List<ComparableValue<String>> getSubcolumnsNames(Set<ComparableValue<String>> existent, boolean isTotal) {
+        return new ArrayList<>(existent);
     }
     
     /**
@@ -59,6 +58,20 @@ public interface VSplitStrategy {
      * @return
      */
     public default ComparableValue<String> getTotalSubcolumnName() {
+        return null;
+    }
+    
+    /**
+     * AMP-27773
+     * returns the category name of the Total Empty subcolumn. If returns null, no Total Empty subcolumn exists.
+     * By default there is no subtotal empty column, thus the default implementation of this function returns null
+     * It is used for example for currency splitting, when it is needed to put empty total column in order to avoid
+     * hiding measures columns without data
+     * 
+     * @param engine the context
+     * @return
+     */
+    default ComparableValue<String> getEmptyTotalSubcolumnName() {
         return null;
     }
 
@@ -74,8 +87,10 @@ public interface VSplitStrategy {
             }
             
             @Override
-            public List<ComparableValue<String>> getSubcolumnsNames(Set<ComparableValue<String>> existant) {
-                return subColumnNames == null ? VSplitStrategy.super.getSubcolumnsNames(existant) : subColumnNames.apply(existant);
+            public List<ComparableValue<String>> getSubcolumnsNames(Set<ComparableValue<String>> existant, 
+                    boolean isTotal) {
+                return subColumnNames == null ? VSplitStrategy.super.getSubcolumnsNames(existant, isTotal) 
+                        : subColumnNames.apply(existant);
             }
             
             @Override

@@ -56,7 +56,7 @@ public class InterchangeDependencyResolver {
     public final static String AGREEMENT_TITLE_PRESENT_KEY = "agreement_title_required";
     public static final String TRANSACTION_PRESENT_KEY = "transaction_present";
     public static final String ORGANIZATION_PRESENT_KEY = "organization_present";
-    
+    public static final String FUNDING_ORGANIZATION_VALID_PRESENT_KEY = "funding_organization_group_valid";
     
     /*
      * End of dependency codes section
@@ -106,14 +106,23 @@ public class InterchangeDependencyResolver {
         
         Object referenceOnBudgetValue = getOnBudgetValue();
         Object onOffBudgetValue = InterchangeUtils.getFieldValuesFromJsonActivity(incomingActivity, BUDGET_PATH);
-        if (onOffBudgetValue != null)
+        if (onOffBudgetValue != null) {
             if (Number.class.isAssignableFrom(onOffBudgetValue.getClass())) {
                 onOffBudgetValue = ((Number)onOffBudgetValue).longValue();
                 referenceOnBudgetValue = ((Number)referenceOnBudgetValue).longValue();
             }
+        }
+        
+        boolean valueIsNullOrEmpty = checkedValue == null;
+        if (!valueIsNullOrEmpty && List.class.isAssignableFrom(checkedValue.getClass())) {
+            valueIsNullOrEmpty = ((List<?>) checkedValue).isEmpty();
+        }
+        
         boolean activityIsOnBudget = referenceOnBudgetValue.equals(onOffBudgetValue);
-        if (checkedValue == null && activityIsOnBudget)
+        if (valueIsNullOrEmpty && activityIsOnBudget) {
             return DependencyCheckResult.INVALID_REQUIRED;
+        }
+        
         return DependencyCheckResult.VALID;
 //      return (checkedValue != null) ^ (activityIsOnBudget);
         /**
@@ -195,8 +204,11 @@ public class InterchangeDependencyResolver {
      * @param code
      * @return
      */
-    public static DependencyCheckResult checkDependency(Object value, JsonBean incomingActivity, String code, 
+    public static DependencyCheckResult checkDependency(Object value, ObjectImporter importer, String code, 
             Map<String, Object> fieldParent) {
+        
+        JsonBean incomingActivity = importer.getNewJson();
+        
         switch (code) {
         case ON_BUDGET_KEY: return checkOnBudget(value, incomingActivity);
         case IMPLEMENTATION_LEVEL_PRESENT_KEY: return checkFieldPresent(incomingActivity, IMPLEMENTATION_LEVEL_PATH);
@@ -224,6 +236,8 @@ public class InterchangeDependencyResolver {
             return DependencyCheckResult.convertToAlwaysRequired(value != null || transactionsCount == 0);
         case ORGANIZATION_PRESENT_KEY: 
             return checkComponentFundingOrg(value, incomingActivity);
+        case FUNDING_ORGANIZATION_VALID_PRESENT_KEY: 
+            return checkFundingPledgesOrgGroup(importer, value);
         
         default: throw new RuntimeException("Interchange Dependency Mapper: no dependency found for code " + code);
         }
@@ -354,6 +368,25 @@ public class InterchangeDependencyResolver {
         
         ComponentFundingOrgsValidator validator = new ComponentFundingOrgsValidator();
         if (validator.isValid(incomingActivity, e)) {
+            return DependencyCheckResult.VALID; 
+        }
+        
+        return DependencyCheckResult.INVALID_NOT_CONFIGURABLE;
+    }
+    
+    /**
+     * Performs a check on funding pledges org gropu id corresponding to org group of donor organization object -- 
+     * whether those is present in the parent funding
+     * 
+     * @param importer
+     * @param e
+     * @return
+     */
+    private static DependencyCheckResult checkFundingPledgesOrgGroup(ObjectImporter importer, Object e) {
+        
+        FundingPledgesValidator validator = new FundingPledgesValidator();
+        
+        if (validator.isPledgeValid(importer, e)) {
             return DependencyCheckResult.VALID; 
         }
         

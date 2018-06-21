@@ -30,6 +30,7 @@ var isOsm = false;
 var isFirstSelect = true;
 var tempId = 1; 
 var labels = {};
+var DEFAULT_STRUCTURE_COLOR = '#3388ff'; 
 
 function MapPopup(lat, long) {
 	latitude = lat;
@@ -129,7 +130,7 @@ function onMapClick(e) {
 
 }
 
-function createColorCheckboxes() {
+function createColorCheckboxes(selectedGraphic) {
 	if (window.opener.structuresData) {
 		$('.colors').html('');
 		window.opener.structuresData.structureColors.forEach(function(c) {
@@ -141,9 +142,14 @@ function createColorCheckboxes() {
 		    	$('.color-checkbox').each(function(i) {
 		    		if (this.value !== event.target.value) {
 		    			$(this).prop('checked', false);
-		    		}					
-				});		    	
-		    }
+		    		}	
+		    		
+				});	
+		    	
+		    	selectedGraphic.target.setStyle({color: event.target.dataset.color});	    		
+		    } else {
+		    	selectedGraphic.target.setStyle({color: DEFAULT_STRUCTURE_COLOR});		    
+		    }		
 		});
 	}	
 }
@@ -168,7 +174,7 @@ function selectLocationCallerShape(selectedGraphic) {
 		"title" : TranslationManager.getTranslated("Select Structure"),
 		open : function(event, ui) {
 			$("#locationTitle").val('');
-			createColorCheckboxes();
+			createColorCheckboxes(selectedGraphic);
 			if (row) {
 				var title = row.getElementsByTagName("INPUT")[0];
 				$("#locationTitle").val(title.value);					
@@ -191,7 +197,7 @@ function selectLocationCallerShape(selectedGraphic) {
 					return;
 				}
 				
-				addStructureLabel(selectedGraphic, $("#locationTitle").val());				
+				updateStructure(selectedGraphic, $("#locationTitle").val());				
 				isFirstSelect = false;
 				// if row does not exist, trigger click on add structure button to add row on structures table in AF					
 				if (row == null) {
@@ -294,8 +300,8 @@ function fireChangeEvent(element) {
 	}
 }
 
-function addStructureLabel(selectedGraphic, title) {
-	var label = labels[selectedGraphic.target.tempId];
+function updateStructure(selectedGraphic, title) {
+	var label = labels[selectedGraphic.target.tempId];	
 	if (label) {
 		label.setIcon(L.divIcon({
 			iconSize : null,
@@ -487,14 +493,14 @@ function appendColor(categoryValue) {
 	colorHTML = colorHTML.replace('{value}', categoryValue.id);	
 	var splits = categoryValue.value.split(":");
 	if (splits.length == 2) {
-		colorHTML = colorHTML.replace('{color}', splits[0]).replace('{name}', splits[1]);		
+		colorHTML = colorHTML.replace('{color}', splits[0]).replace('{color}', splits[0]).replace('{name}', splits[1]);		
 	} 
 	
 	$('.colors').append(colorHTML);
 }
 
 function getColorHTMLTemplate() {
-	return '<li><input type="checkbox" class="color-checkbox" name="structure-color" id="structure-color" value="{value}"><svg width="24" height="24"> <rect style="fill:{color}" width="24" height="24" x="0" y="5"></rect></svg><label class="color-label">{name}</label></li>';
+	return '<li><input type="checkbox" class="color-checkbox" name="structure-color" id="structure-color" value="{value}" data-color={color}><svg width="24" height="24"> <rect style="fill:{color}" width="24" height="24" x="0" y="5"></rect></svg><label class="color-label">{name}</label></li>';
 }
 
 function startContextMenu() {

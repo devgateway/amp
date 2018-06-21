@@ -2,18 +2,23 @@ package org.digijava.kernel.jobs;
 
 import static java.util.stream.Collectors.toList;
 
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
+import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.ampregistry.AmpInstallation;
 import org.digijava.kernel.ampregistry.AmpRegistryClient;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.entity.Message;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.SiteDomain;
@@ -27,8 +32,11 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.QuartzJobClassUtils;
 import org.digijava.module.aim.util.QuartzJobUtils;
 import org.digijava.module.message.jobs.ConnectionCleaningJob;
+import org.hibernate.jdbc.Work;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+
+import com.google.common.hash.Hashing;
 
 /**
  * Registers this AMP installation in AMP Registry.
@@ -40,16 +48,43 @@ public class RegisterWithAmpRegistryJob extends ConnectionCleaningJob {
     public static final String NAME = "Register with AMP Registry";
 
     private static final String AMP_REGISTRY_SECRET_TOKEN_ENV_NAME = "AMP_REGISTRY_SECRET_TOKEN";
+    private static final String AMP_REGISTRY_PRIVATE_KEY_ENV_NAME = "AMP_REGISTRY_PRIVATE_KEY";
+    
+    public static final String AMP_DEVELOPMENT_ENV_NAME = "AMP_DEVELOPMENT";
+    
+    public static final String REGISTRY_STG_URL = "https://amp-registry-stg.ampsite.net/";
+    public static final String OFFLINE_ENABLED = "true";
 
     private static final int JOB_FIRST_START_DELAY_IN_MIN = 5;
 
     @Override
     public void executeInternal(JobExecutionContext context) throws JobExecutionException {
-        String secretToken = System.getenv(AMP_REGISTRY_SECRET_TOKEN_ENV_NAME);
-        if (secretToken != null && isAmpOfflineEnabled()) {
-            AmpRegistryClient client = new AmpRegistryClient();
-            client.register(getCurrentInstallation(), secretToken);
+        if (isAmpOfflineEnabled()) {
+            String secretToken = System.getenv(AMP_REGISTRY_SECRET_TOKEN_ENV_NAME);
+            
+            if (isDevServer()) {
+                String registryUrl = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMP_REGISTRY_URL);
+                if (!registryUrl.equals(REGISTRY_STG_URL)) {
+                    updateRegistryStgURL();
+                }
+                
+                secretToken = generateDevSecretToken();
+            }
+            
+            if (secretToken != null) {
+                AmpRegistryClient client = new AmpRegistryClient();
+                client.register(getCurrentInstallation(), secretToken);
+            }
         }
+    }
+    
+    private String generateDevSecretToken() {
+        String privateKey = System.getenv(AMP_REGISTRY_PRIVATE_KEY_ENV_NAME);
+        String isoCode = getCurrentCountry().getIso().toUpperCase();
+        String hashKey = Hashing.sha256().hashString(isoCode + privateKey, StandardCharsets.UTF_8).toString();
+        String secretToken = String.format("%s%s", isoCode, hashKey);
+        
+        return secretToken;
     }
 
     private boolean isAmpOfflineEnabled() {
@@ -62,9 +97,23 @@ public class RegisterWithAmpRegistryJob extends ConnectionCleaningJob {
 
         AmpInstallation installation = new AmpInstallation();
         installation.setIso2(country.getIso().toUpperCase());
-        installation.setName(getAllTranslations(defaultSite, country.getCountryName()));
-        installation.setUrls(getSiteUrls(defaultSite));
+        
+        List<String> siteUrls = new ArrayList<>(new LinkedHashSet<String>(getSiteUrls(defaultSite)));
+        Map<String, String> allTranslations = getAllTranslations(defaultSite, country.getCountryName());
+        
+        // AMP-27350 add URLs in all translated names if AMP is in stg (dev) mode
+        if (Boolean.parseBoolean(System.getProperty(AMP_DEVELOPMENT_ENV_NAME))) {
+            allTranslations.replaceAll((k, v) -> String.format("%s (%s)", v, String.join(", ", siteUrls)));
+        }
+        
+        installation.setUrls(siteUrls);
+        installation.setName(allTranslations);
+        
         return installation;
+    }
+    
+    public boolean isDevServer() {
+        return Boolean.parseBoolean(System.getProperty(AMP_DEVELOPMENT_ENV_NAME));
     }
 
     private Country getCurrentCountry() {
@@ -89,6 +138,18 @@ public class RegisterWithAmpRegistryJob extends ConnectionCleaningJob {
         } catch (WorkerException e) {
             throw new RuntimeException("Failed to translate country name.", e);
         }
+    }
+    
+    private void updateRegistryStgURL() {
+        PersistenceManager.getSession().doWork(new Work() {
+            public void execute(java.sql.Connection connection) {
+                SQLUtils.executeQuery(connection,
+                        String.format("UPDATE amp_global_settings SET settingsvalue = '%s' WHERE settingsname ='%s'", 
+                                REGISTRY_STG_URL, GlobalSettingsConstants.AMP_REGISTRY_URL));
+            };
+        });
+        
+        FeaturesUtil.buildGlobalSettingsCache(FeaturesUtil.getGlobalSettings());
     }
 
     @SuppressWarnings("unused")

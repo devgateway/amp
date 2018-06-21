@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpContact;
@@ -34,6 +35,11 @@ public final class ContactUtil {
 
     public static JsonBean getContact(Long id) {
         AmpContact contact = (AmpContact) PersistenceManager.getSession().get(AmpContact.class, id);
+        
+        if (contact == null) {
+            ApiErrorResponse.reportResourceNotFound(ContactErrors.CONTACT_NOT_FOUND);
+        }
+        
         return new ContactExporter().export(contact);
     }
 }

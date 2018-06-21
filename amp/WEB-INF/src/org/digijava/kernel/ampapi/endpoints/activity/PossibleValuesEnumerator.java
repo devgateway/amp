@@ -302,6 +302,9 @@ public class PossibleValuesEnumerator {
             return getPossibleLocations();
         if (clazz.isAssignableFrom(AmpComponentType.class))
             return getComponentTypes();
+        if (clazz.isAssignableFrom(AmpContact.class)) {
+            return getPossibleContacts();
+        }
         return getPossibleValuesGenericCase(clazz, () -> possibleValuesDAO.getGenericValues(clazz));
     }
 
@@ -313,6 +316,10 @@ public class PossibleValuesEnumerator {
 
     private PossibleValue toPossibleValue(AmpComponentType type) {
         return new PossibleValue(type.getType_id(), type.getName(), translatorService.translateLabel(type.getName()));
+    }
+    
+    private PossibleValue toPossibleValue(AmpContact contact) {
+        return new PossibleValue(contact.getId(), contact.getNameAndLastName(),  ImmutableMap.of());
     }
 
     private <T> List<PossibleValue> getPossibleValuesGenericCase(Class<T> clazz,
@@ -461,6 +468,17 @@ public class PossibleValuesEnumerator {
                 implementationLevels);
 
         return new PossibleValue(id, value, translatedValues, extraInfo);
+    }
+    
+    /**
+     * Gets possible values for the AmpContact class
+     * @return contact possible values 
+     */
+    @SuppressWarnings("unchecked")
+    private List<PossibleValue> getPossibleContacts() {
+        return possibleValuesDAO.getContacts().stream()
+                .map(this::toPossibleValue)
+                .collect(toList());
     }
 
     private List<PossibleValue> setProperties(List<Object[]> objColList, boolean checkDeleted,

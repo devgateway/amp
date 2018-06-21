@@ -9,6 +9,7 @@ import java.util.Date;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
+import org.digijava.kernel.ampapi.endpoints.activity.discriminators.FundingePledgesValueProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.discriminators.TransactionTypePossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
@@ -193,12 +194,16 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
     private AmpCurrency fixedRateBaseCurrency;
     @Interchangeable(fieldTitle = "Disbursement Order Rejected", importable = true)
     private Boolean disbursementOrderRejected;
-    @Interchangeable(fieldTitle = "Pledge", importable = true, fmPath =
-            FMVisibility.ANY_FM + ActivityEPConstants.COMMITMENTS_PLEDGES_FM_PATH
+    
+    @Interchangeable(fieldTitle = "Pledge", importable = true, pickIdOnly = true,
+            fmPath = FMVisibility.ANY_FM + ActivityEPConstants.COMMITMENTS_PLEDGES_FM_PATH
                     + "|" + ActivityEPConstants.DISBURSEMENTS_PLEDGES_FM_PATH
                     + "|" + ActivityEPConstants.ESTIMATED_DISBURSEMENTS_PLEDGES_FM_PATH
-                    + "|" + ActivityEPConstants.RELEASE_OF_FUNDS_PLEDGES_FM_PATH)
+                    + "|" + ActivityEPConstants.RELEASE_OF_FUNDS_PLEDGES_FM_PATH,
+            dependencies = {InterchangeDependencyResolver.FUNDING_ORGANIZATION_VALID_PRESENT_KEY})
+    @PossibleValues(FundingePledgesValueProvider.class)
     private FundingPledges pledgeid;
+    
     @Interchangeable(fieldTitle = "Capital Spending Percentage", importable = true)
     private Float capitalSpendingPercentage;
     @Interchangeable(fieldTitle = "Recipient Organization", importable = true, pickIdOnly = true)

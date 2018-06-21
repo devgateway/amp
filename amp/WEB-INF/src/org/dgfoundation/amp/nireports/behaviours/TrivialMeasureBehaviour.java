@@ -171,4 +171,9 @@ public class TrivialMeasureBehaviour implements Behaviour<NiAmountCell> {
             NiFormula.PERCENTAGE(NiFormula.CONSTANT(rawValue), NiFormula.CONSTANT(engine.fetchedMeasures.get(measureName).getSumOfValues()))
                 .evaluateOrUndefined(Collections.emptyMap(), null);
     }
+    
+    @Override
+    public boolean canBeSplitByCurrency() {
+        return true;
+    }
 }

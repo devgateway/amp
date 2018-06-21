@@ -27,7 +27,7 @@ public class PrimaryContactValidator extends InputValidator {
         add(InterchangeUtils.underscorify(ActivityFieldsConstants.PROJECT_COORDINATOR_CONTACT));
         add(InterchangeUtils.underscorify(ActivityFieldsConstants.SECTOR_MINISTRY_CONTACT));
         add(InterchangeUtils.underscorify(ActivityFieldsConstants.MOFED_CONTACT));
-        add(InterchangeUtils.underscorify(ActivityFieldsConstants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT));
+        add(InterchangeUtils.underscorify(ActivityFieldsConstants.IMPL_EXECUTING_AGENCY_CONTACT));
     }};
     
     public PrimaryContactValidator() {

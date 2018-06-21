@@ -74,6 +74,7 @@ import org.dgfoundation.amp.nireports.amp.dimensions.ProgramsDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.SectorsDimension;
 import org.dgfoundation.amp.nireports.amp.indicators.IndicatorDateTokenBehaviour;
 import org.dgfoundation.amp.nireports.amp.indicators.IndicatorTextualTokenBehaviour;
+import org.dgfoundation.amp.nireports.behaviours.CurrencySplittingStrategy;
 import org.dgfoundation.amp.nireports.behaviours.FilteredMeasureBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.GeneratedIntegerBehaviour;
 import org.dgfoundation.amp.nireports.behaviours.TaggedMeasureBehaviour;
@@ -460,7 +461,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         no_entity(ColumnConstants.BUDGET_CODE_PROJECT_ID, "v_budget_code_project_id");
         degenerate_dimension(ColumnConstants.BUDGET_DEPARTMENT, "v_budget_department", departmentsDimension);
         single_dimension(ColumnConstants.BUDGET_SECTOR, "v_budget_sector", RAW_SCT_LEVEL_COLUMN);
-        degenerate_dimension(ColumnConstants.CAPITAL___EXPENDITURE, "v_capital_and_exp", boolDimension);
+        degenerate_dimension(ColumnConstants.CAPITAL_EXPENDITURE, "v_capital_and_exp", boolDimension);
         no_entity(ColumnConstants.CRIS_NUMBER, "v_cris_number");
         no_entity(ColumnConstants.CURRENT_COMPLETION_DATE_COMMENTS, "v_actual_completion_date_comments");
         no_entity(ColumnConstants.DONOR_CONTACT_EMAIL, "v_donor_cont_email");
@@ -1539,31 +1540,47 @@ public class AmpReportsSchema extends AbstractReportsSchema {
     @Override
     public List<VSplitStrategy> getSubMeasureHierarchies(NiReportsEngine engine, CellColumn cc) {
         List<VSplitStrategy> raw = super.getSubMeasureHierarchies(engine, cc);
-        if (raw != null && !raw.isEmpty())
-            return raw; // the measure specifies its own submeasures - run them (example: Funding Flows)
         
         if (disableSubmeasureSplittingByColumn(engine))
             return raw; // let the subclasses the chance to disable submeasures
         
+        if (raw == null) {
+            raw = new ArrayList<>();
+        }
+        
         AmpReportsScratchpad scratch = AmpReportsScratchpad.get(engine);
         
-        // should this measure be split by TypeOfAssistance?
-        boolean splitByToA = cc.splitCell != null && (cc.splitCell.entityType.equals(NiReportsEngine.PSEUDOCOLUMN_MEASURE)) && scratch.verticalSplitByTypeOfAssistance;
+        if (raw.isEmpty()) {
+            // should this measure be split by TypeOfAssistance?
+            boolean splitByToA = cc.splitCell != null 
+                    && (cc.splitCell.entityType.equals(NiReportsEngine.PSEUDOCOLUMN_MEASURE)) 
+                    && scratch.verticalSplitByTypeOfAssistance;
+            
+            // should this measure be split by ModeOfPayment?
+            boolean splitByMoP = cc.splitCell != null 
+                    && (cc.splitCell.entityType.equals(NiReportsEngine.PSEUDOCOLUMN_MEASURE)) 
+                    && scratch.verticalSplitByModeOfPayment;
+            
+            if (splitByToA) {
+                raw.add(TaggedMeasureBehaviour.getSplittingStrategy(MetaCategory.TYPE_OF_ASSISTANCE.category, 
+                        ColumnConstants.TYPE_OF_ASSISTANCE, () -> TranslatorWorker.translateText("Total")));
+            } else if (splitByMoP) {
+                raw.add(TaggedMeasureBehaviour.getSplittingStrategy(MetaCategory.MODE_OF_PAYMENT.category, 
+                        ColumnConstants.MODE_OF_PAYMENT, () -> TranslatorWorker.translateText("Total")));
+            }
+        }
         
-        // should this measure be split by ModeOfPayment?
-        boolean splitByMoP = cc.splitCell != null && (cc.splitCell.entityType.equals(NiReportsEngine.PSEUDOCOLUMN_MEASURE)) && scratch.verticalSplitByModeOfPayment;
+        // should this measure be split by Currencies?
+        boolean splitByCurrencies = cc.behaviour.canBeSplitByCurrency() && cc.splitCell != null
+                && engine.spec.isShowOriginalCurrency();
         
-        if (splitByToA)
-            return Arrays.asList(
-                    TaggedMeasureBehaviour.getSplittingStrategy(MetaCategory.TYPE_OF_ASSISTANCE.category, ColumnConstants.TYPE_OF_ASSISTANCE, () -> TranslatorWorker.translateText("Total")));
-
-        if (splitByMoP)
-            return Arrays.asList(
-                    TaggedMeasureBehaviour.getSplittingStrategy(MetaCategory.MODE_OF_PAYMENT.category, ColumnConstants.MODE_OF_PAYMENT, () -> TranslatorWorker.translateText("Total")));
+        if (splitByCurrencies) {
+            raw.add(CurrencySplittingStrategy.getInstance(scratch.usedCurrency));
+        }
 
         return raw;
     }
-     
+
     /**
      * returns true IFF splitByToA, splitByMoP and other behaviours like that (splitting a measure into subcategories) should be disabled.
      * Used for testcases only

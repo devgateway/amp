@@ -12,6 +12,7 @@ import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpComponentType;
+import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
@@ -130,6 +131,14 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
     public List<AmpComponentType> getComponentTypes() {
         return ComponentsUtil.getAmpComponentTypes(true);
     }
-
+    
+    @Override
+    public List<AmpContact> getContacts() {
+        return InterchangeUtils.getSessionWithPendingChanges()
+                .createCriteria(AmpContact.class)
+                .setCacheable(true)
+                .setCacheRegion(CACHE)
+                .list();
+    }
 
 }

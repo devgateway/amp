@@ -43,7 +43,7 @@ public class ContactEndpoint implements ErrorReportingEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getFields", ui = false)
     public List<APIField> getAvailableFields() {
-        return AmpFieldsEnumerator.PUBLIC_ENUMERATOR.getContactFields();
+        return AmpFieldsEnumerator.PUBLIC_CONTACT_ENUMERATOR.getContactFields();
     }
 
     /**

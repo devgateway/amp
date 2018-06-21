@@ -91,6 +91,16 @@ function validate(str,value){
     goAction(value);
   }
 }
+function checkPledgeSuperUser(){
+    if(!$('#pledger').is(':checked')){
+        $('#pledgeSuperUser').prop('checked', false);
+        $('#pledgeSuperUser').attr('disabled', true);
+
+    }
+	else{
+        $('#pledgeSuperUser').removeAttr('disabled');
+	}
+}
 
 function validateUserInfo(){
 	var userMail=document.getElementById("userMail").value;
@@ -495,9 +505,38 @@ function validateUserInfo(){
                                                                      		 <digi:trn key="um:pledgesUser">Pledges User</digi:trn>
 																		</td>
 																	    <td width="380" height="30" colspan="2">
-          																	<html:checkbox property="pledger" style="margin: 5px" styleClass="inp-text"/>
+          																	<html:checkbox property="pledger"
+																						   style="margin: 5px"
+																						   styleClass="inp-text"
+
+																			styleId="pledger"/>
 																		</td>
 																	</tr>
+																		<tr>
+																			<td width="169" align="right" height="30"style="font-size: 11px;
+    font-weight: bold; color:#000;">
+																				<digi:trn key="um:pledgesSuperUser">Pledges Super User</digi:trn>
+																			</td>
+																			<td width="380" height="30" colspan="2">
+																				<c:if
+																						test="${umViewEditUserForm.pledger}">
+																				<html:checkbox
+																						property="pledgeSuperUser"
+																							   style="margin: 5px"
+																						styleClass="inp-text"
+																						styleId="pledgeSuperUser"/>
+																				</c:if>
+																				<c:if
+																						test="${!umViewEditUserForm.pledger}">
+																					<html:checkbox
+																							property="pledgeSuperUser"
+																							style="margin: 5px"
+																							styleClass="inp-text"
+																							styleId="pledgeSuperUser"
+																							disabled="true"/>
+																				</c:if>
+																			</td>
+																		</tr>
 																	</module:display>																	
 																		<tr>
 																		<td width="169" align="right" height="30"style="font-size: 11px;font-weight: bold; color:#000;">

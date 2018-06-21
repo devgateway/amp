@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.digijava.kernel.ampapi.endpoints.activity.validators.ComponentFundingOrgsValidator;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.FundingPledgesValidator;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
@@ -375,7 +376,7 @@ public class InterchangeDependencyResolver {
     }
     
     /**
-     * Performs a check on funding pledges org gropu id corresponding to org group of donor organization object -- 
+     * Performs a check on funding pledges org group id corresponding to org group of donor organization object -- 
      * whether those is present in the parent funding
      * 
      * @param importer

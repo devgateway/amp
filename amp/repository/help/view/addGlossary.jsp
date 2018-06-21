@@ -63,7 +63,7 @@
 					</tr>
 					<tr>
 						<td nowrap="nowrap" align="right" width="30%">
-							<strong><digi:trn>Title:</digi:trn></strong>
+							<strong><digi:trn>Title</digi:trn>:</strong>
 						</td>
 						<td>
 							<html:text styleId="txtGlossaryTitle" name="glossaryForm" property="nodeName"/>

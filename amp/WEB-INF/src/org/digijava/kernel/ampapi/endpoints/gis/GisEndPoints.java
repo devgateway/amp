@@ -207,6 +207,7 @@ public class GisEndPoints implements ErrorReportingEndpoint {
             i.setId(ampMapConfig.getId());
             i.setTitle(ampMapConfig.getConfigName());
             i.setLink(ampMapConfig.getMapUrl());
+            i.setLegendNotes(ampMapConfig.getLegendNotes());
             String type = MapConstants.mapTypeNames.get(ampMapConfig
                     .getMapType());
             i.setType(type);
@@ -348,6 +349,7 @@ public class GisEndPoints implements ErrorReportingEndpoint {
             json.set(IndicatorEPConstants.ACCESS_TYPE_ID, indicator.getAccessType().getValue());
             json.set(IndicatorEPConstants.INDICATOR_TYPE_ID, indicator.getIndicatorType() == null ? null : indicator.getIndicatorType().getId());
             json.set(IndicatorEPConstants.CAN_DO_GAP_ANALYSIS, gapAnalysis.canDoGapAnalysis(indicator));
+            json.set(IndicatorEPConstants.FIELD_ZERO_CATEGORY_ENABLED, indicator.getZeroCategoryEnabled());
             
             json.set(IndicatorEPConstants.CREATED_ON, FormatHelper.formatDate(indicator.getCreatedOn()));
             json.set(IndicatorEPConstants.UPDATED_ON, FormatHelper.formatDate(indicator.getUpdatedOn()));

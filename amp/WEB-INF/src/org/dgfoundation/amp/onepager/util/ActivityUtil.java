@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -19,12 +20,14 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
@@ -39,11 +42,12 @@ import org.dgfoundation.amp.onepager.helper.TemporaryActivityDocument;
 import org.dgfoundation.amp.onepager.helper.TemporaryGPINiDocument;
 import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
+import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.module.aim.dbentity.AmpAPIFiscalYear;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
@@ -79,6 +83,7 @@ import org.digijava.module.aim.util.ContactInfoUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.LuceneUtil;
+import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.contentrepository.exception.JCRSessionException;
 import org.digijava.module.contentrepository.helper.CrConstants;
@@ -97,6 +102,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.util.CollectionUtils;
 
 /**
  * Util class used to manipulate an activity
@@ -316,6 +322,7 @@ public class ActivityUtil {
         saveAnnualProjectBudgets(a, session);
         saveProjectCosts(a, session);
         updatePerformanceIssues(a);
+        updateFiscalYears(a);
 
         if (createNewVersion){
             //a.setAmpActivityId(null); //hibernate will save as a new version
@@ -388,6 +395,17 @@ public class ActivityUtil {
 
         if (!ruleManager.isEqualPerformanceLevelCollection(matchedLevels, activityLevels)) {
             ruleManager.updatePerformanceIssuesInActivity(a, activityLevels, matchedLevels);
+        }
+    }
+    
+    private static void updateFiscalYears(AmpActivityVersion a) {
+        Set<AmpAPIFiscalYear> actFiscalYears = a.getFiscalYears();
+        
+        if (!CollectionUtils.isEmpty(actFiscalYears)) {
+            List<AmpAPIFiscalYear> fiscalYears = new ArrayList<>(actFiscalYears);
+            fiscalYears.sort(Comparator.comparing(AmpAPIFiscalYear::getYear));
+            List<String> years = fiscalYears.stream().map(fy -> fy.getYear().toString()).collect(Collectors.toList());
+            a.setFY(StringUtils.join(years, ","));
         }
     }
 
@@ -1219,20 +1237,28 @@ public class ActivityUtil {
         //to avoid saving the same contact twice on the same session, we keep track of the 
         //already saved ones.
         Map <Long,Boolean> savedContacts = new HashMap <Long,Boolean> ();
+        
+        TeamMember teamMember = TeamMemberUtil.getLoggedInTeamMember();
+        AmpTeamMember creator = teamMember != null ? TeamMemberUtil.getAmpTeamMember(teamMember.getMemberId()) : null;
       
         //add or edit activity contact and amp contact
-        if(activityContacts != null && activityContacts.size() > 0) {
+        if (activityContacts != null && activityContacts.size() > 0) {
             for (AmpActivityContact activityContact : activityContacts) {
                 Long contactId = activityContact.getContact().getId();
-                //if the contact already exists on the DB, and was not saved already
-                if (contactId!=null && savedContacts.get(contactId) == null) {
+                // if the contact already exists on the DB, and was not saved
+                // already
+                if (contactId != null && savedContacts.get(contactId) == null) {
                     savedContacts.put(activityContact.getContact().getId(), false);
                 }
-               // save the contact first, if the contact is new or if it is not new but has not been saved already.
-               if (contactId == null || (newActivity && !savedContacts.get(contactId))) {
-                session.saveOrUpdate(activityContact.getContact());
-                savedContacts.put(activityContact.getContact().getId(), true);
-               }
+                // save the contact first, if the contact is new or if it is not
+                // new but has not been saved already.
+                if (contactId == null || (newActivity && !savedContacts.get(contactId))) {
+                    if (contactId == null) {
+                        activityContact.getContact().setCreator(creator);
+                    }
+                    session.saveOrUpdate(activityContact.getContact());
+                    savedContacts.put(activityContact.getContact().getId(), true);
+                }
                 if (activityContact.getId() == null) {
                     session.saveOrUpdate(activityContact);
                     if (!newActivity) {
@@ -1315,6 +1341,23 @@ public class ActivityUtil {
         }
         
         return false;
+    }
+    
+    /**
+     * Get the range list of fiscal years (FY field from budget extras component, identification section in AF)
+     * @return
+     */
+    public static List<String> getFiscalYearsRange() {
+        int rangeStartYear = FeaturesUtil
+                .getGlobalSettingValueInteger(GlobalSettingsConstants.YEAR_RANGE_START);
+        int rangeNumber = FeaturesUtil
+                .getGlobalSettingValueInteger(GlobalSettingsConstants.NUMBER_OF_YEARS_IN_RANGE);
+        
+        List<String> years = Stream.iterate(rangeStartYear, i -> i + 1)
+                .limit(rangeNumber).map(i -> i.toString())
+                .collect(Collectors.toList());
+        
+        return years;
     }
 
     /**

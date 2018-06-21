@@ -71,10 +71,6 @@ public class ComponentFundingOrgsValidator extends InputValidator {
         return orgIds;
     }
 
-    private Long getLong(Object o) {
-        return o instanceof Number ? ((Number) o).longValue() : null;
-    }
-
     @Override
     public ApiErrorMessage getErrorMessage() {
         return ActivityErrors.ORGANIZATION_NOT_DECLARED;

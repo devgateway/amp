@@ -263,7 +263,7 @@ read more in http://docs.dhtmlx.com/scheduler/recurring_events.html
 			}
 		    var text = evName;
 	        var img = '<digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/magnifier.png" height="12" width="12" align="left"/>';
-	        var trnLbelTitle 		= '<digi:trn jsFriendly="true">Title:</digi:trn>';
+	        var trnLbelTitle 		= '<digi:trn jsFriendly="true">Title</digi:trn>:';
 	        var trnLabelStartDate 	= '<digi:trn jsFriendly="true">StartDate:</digi:trn>';
 	        var trnLabelEndDate 	= '<digi:trn jsFriendly="true">EndDate:</digi:trn>';
 	        return "<span  title='"+trnLbelTitle+" "+text+"  "+trnLabelStartDate+" "+start_date+" "+trnLabelEndDate+" "+end_date+"'>"+img+""+shortText+"</span>";

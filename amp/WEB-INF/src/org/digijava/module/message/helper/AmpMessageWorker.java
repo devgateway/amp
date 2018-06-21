@@ -1396,14 +1396,18 @@ public class AmpMessageWorker {
         String senderEmail = EmailConstants.DEFAULT_EMAIL_SENDER;
         AmpEmail ampEmail;
 
-        String translatedName = TranslatorWorker.translateText(newMsg.getName(), user.getRegisterLanguage()
+        String translatedSubject = TranslatorWorker.translateText(e.getParameters().get(SummaryChangeNotificationTrigger
+                .PARAM_SUMMARY_SUBJECT).toString(), user.getRegisterLanguage()
                 .getCode(), SITE_ID) + ": " + e.getParameters().get(SummaryChangeNotificationTrigger
                 .PARAM_SUMMARY_DATE).toString();
+        String translatedBodyHeader = TranslatorWorker.translateText(e.getParameters().
+                get(SummaryChangeNotificationTrigger.PARAM_SUMMARY_BODY_HEADER).toString(), user.getRegisterLanguage()
+                .getCode(), SITE_ID);
 
-        String translatedDescription = e.getParameters().get(SummaryChangeNotificationTrigger
-                .PARAM_SUMMARY_BODY).toString();
+        String translatedDescription = "<br/>" + translatedBodyHeader + e.getParameters().
+                get(SummaryChangeNotificationTrigger.PARAM_SUMMARY_BODY).toString() + "<br/><br/>";
 
-        ampEmail = new AmpEmail(senderEmail, DgUtil.fillPattern(translatedName, params), DgUtil.fillPattern(
+        ampEmail = new AmpEmail(senderEmail, DgUtil.fillPattern(translatedSubject, params), DgUtil.fillPattern(
                 translatedDescription, params));
         DbUtil.saveOrUpdateObject(ampEmail);
 

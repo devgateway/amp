@@ -59,6 +59,7 @@ public class AmpStructure implements Serializable, Comparable<Object>, Versionab
     private Set<AmpStructureCoordinate> coordinates;
     
     private String coords;
+    private Integer tempId; // client side id used for identifying structures
 
     public Set<AmpActivityVersion> getActivities() {
         return activities;
@@ -252,7 +253,14 @@ public class AmpStructure implements Serializable, Comparable<Object>, Versionab
     public void setCoords(String coords) {
         this.coords = coords;
     }
-    
+
+    public Integer getTempId() {
+        return tempId;
+    }
+    public void setTempId(Integer tempId) {
+        this.tempId = tempId;
+    }
+
     @Override
     public String toString() {
         return String.format("AmpStructure[id=%s], title = %s, description = %s", this.ampStructureId, this.title, this.description);

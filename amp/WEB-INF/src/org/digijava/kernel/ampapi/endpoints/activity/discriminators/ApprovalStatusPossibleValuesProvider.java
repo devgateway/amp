@@ -21,7 +21,7 @@ public class ApprovalStatusPossibleValuesProvider extends PossibleValuesProvider
     }
 
     @Override
-    public Object toJsonOutput( Object object) {
+    public Object toJsonOutput(Object object) {
         return object;
     }
 

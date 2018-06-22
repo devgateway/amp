@@ -209,9 +209,9 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 
 							if(app.TabsApp.settings.teamId){
 								teamid = app.TabsApp.settings.teamId;
-								crossTeamValidation = (app.TabsApp.settings.crossTeamEnable === 'true');
-								teamlead = (app.TabsApp.settings.teamLead === 'true');
-								validator = (app.TabsApp.settings.validator === 'true');
+								crossTeamValidation = app.TabsApp.settings.crossTeamEnable;
+								teamlead = app.TabsApp.settings.teamLead;
+								validator = app.TabsApp.settings.validator;
 								teamtype = app.TabsApp.settings.accessType;
 							}
 							if(app.TabsApp.settings.workspacePrefix){
@@ -252,9 +252,9 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 								if(!teamid) continue;
 								
 								teamid = app.TabsApp.settings.teamId;
-								crossTeamValidation = (app.TabsApp.settings.crossTeamEnable === 'true');
-								teamlead = (app.TabsApp.settings.teamLead === 'true');
-								validator = (app.TabsApp.settings.validator === 'true');
+								crossTeamValidation = app.TabsApp.settings.crossTeamEnable;
+								teamlead = app.TabsApp.settings.teamLead;
+								validator = app.TabsApp.settings.validator;
 								teamtype = app.TabsApp.settings.accessType;
 								
 								// Set font color according to status.

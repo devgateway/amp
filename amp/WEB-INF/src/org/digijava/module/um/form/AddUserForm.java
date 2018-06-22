@@ -77,6 +77,7 @@ public class AddUserForm  extends ValidatorForm {
     private boolean newsLetterRadio;
     private boolean membersProfile;
     private Boolean pledger;
+    private Boolean pledgeSuperUser;
     private Collection contentLanguages;
     private Collection navigationLanguages;
     private String selectedLanguage;
@@ -421,6 +422,8 @@ public class AddUserForm  extends ValidatorForm {
         setOrgType(null);
         setNotificationEmailEnabled(false);
         setNotificationEmail(null);
+        setPledger(false);
+        setPledgeSuperUser(false);
  //       setWebSite(null);
 
         organizationTypeOther = null;
@@ -606,6 +609,14 @@ public class AddUserForm  extends ValidatorForm {
      */
     public void setPledger(Boolean pledger) {
         this.pledger = pledger;
+    }
+
+    public Boolean getPledgeSuperUser() {
+        return pledgeSuperUser;
+    }
+
+    public void setPledgeSuperUser(Boolean pledgeSuperUser) {
+        this.pledgeSuperUser = pledgeSuperUser;
     }
 
     public boolean isRegistrationByEmail() {

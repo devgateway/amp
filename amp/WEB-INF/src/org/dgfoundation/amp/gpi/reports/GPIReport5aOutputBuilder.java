@@ -255,7 +255,7 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
         String donorType = isDonorAgency ? GPIReportConstants.HIERARCHY_DONOR_AGENCY
                 : GPIReportConstants.HIERARCHY_DONOR_GROUP;
 
-        int y = Integer.parseInt(year);
+        int y = parseYear(year);
         String min = Integer.toString(DateTimeUtil.toJulianDayNumber(LocalDate.ofYearDay(y, 1)));
         String max = Integer.toString(DateTimeUtil.toJulianDayNumber(LocalDate.ofYearDay(y + 1, 1)));
 
@@ -265,7 +265,7 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
     private Integer getNumberOfRemarks(String year, long id, List<AmpGPINiDonorNotes> donorNotes) {
         String donorType = isDonorAgency ? GPIReportConstants.HIERARCHY_DONOR_AGENCY
                 : GPIReportConstants.HIERARCHY_DONOR_GROUP;
-        int y = Integer.parseInt(year);
+        int y = parseYear(year);
         Integer from = DateTimeUtil.toJulianDayNumber(LocalDate.ofYearDay(y, 1));
         Integer to = DateTimeUtil.toJulianDayNumber(LocalDate.ofYearDay(y + 1, 1));
         List<Long> donorIds = new ArrayList<>();
@@ -383,6 +383,11 @@ public class GPIReport5aOutputBuilder extends GPIReportOutputBuilder {
     
     public String getColumnLabel(String columnName) {
         return getColumnLabel(GPIReportConstants.INDICATOR_5A_COLUMN_LABELS, columnName);
+    }
+    
+    private int parseYear(String year) {
+        int y = Integer.parseInt(year.replaceAll("[^0-9-]", "").split("-")[0]);
+        return y;        
     }
 
 }

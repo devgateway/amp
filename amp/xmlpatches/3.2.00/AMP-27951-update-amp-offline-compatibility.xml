@@ -10,7 +10,7 @@
         <script>
             <lang delimiter=";" type="postgres"><![CDATA[
             
-                UPDATE amp_offline_compatible_version_range SET from_version = '1.2.0-SNAPSHOT', to_version = '1.2.0' WHERE id = 1;
+                UPDATE amp_offline_compatible_version_range SET from_version = '1.2.0-SNAPSHOT', to_version = '1.2.0';
                 
             ]]></lang>
         </script>

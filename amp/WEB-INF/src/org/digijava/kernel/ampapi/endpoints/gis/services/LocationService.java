@@ -51,6 +51,7 @@ import org.digijava.kernel.ampapi.helpers.geojson.PolygonGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.objects.ClusteredPoints;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
@@ -398,7 +399,7 @@ public class LocationService {
             if (structure.getStructureColor() != null) { 
                 AmpCategoryValue cValue = CategoryManagerUtil.getAmpCategoryValueFromDb(structure.getStructureColor());
                 
-                fgj.properties.put("color", new TextNode(cValue.getValue()));
+                fgj.properties.put("color", new TextNode(TranslatorWorker.translateText(cValue.getValue())));
             }
             
             

@@ -490,7 +490,8 @@ function filterLocation(value) {
 function appendColor(categoryValue) {
 	var colorHTML = getColorHTMLTemplate();	
 	colorHTML = colorHTML.replace('{value}', categoryValue.id);	
-	var splits = categoryValue.value.split(":");
+	var translatedValue = TranslationManager.getTranslated(categoryValue.value);
+	var splits = translatedValue.split(":");
 	if (splits.length == 2) {
 		colorHTML = colorHTML.replace('{color}', splits[0]).replace('{color}', splits[0]).replace('{name}', splits[1]);		
 	} 

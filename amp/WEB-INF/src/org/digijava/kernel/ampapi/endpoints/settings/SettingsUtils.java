@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.MeasureConstants;
@@ -48,7 +50,6 @@ import org.digijava.module.aim.util.ResourceManagerSettingsUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
-import org.h2.util.StringUtils;
 
 /**
  * Utility class for amp settings handling
@@ -665,7 +666,7 @@ public class SettingsUtils {
     private static void configureCalendar(ReportSettingsImpl reportSettings, Map<String, Object> settings,
             boolean setDefaults) {
         String calendarId = settings == null ? null : String.valueOf(settings.get(SettingsConstants.CALENDAR_TYPE_ID));
-        if (settings != null && StringUtils.isNumber(calendarId)) {
+        if (settings != null && NumberUtils.isNumber(calendarId)) {
             reportSettings.setOldCalendar(reportSettings.getCalendar());
             reportSettings.setCalendar(DbUtil.getAmpFiscalCalendar(Long.valueOf(calendarId)));
         }

@@ -52,7 +52,6 @@ import org.digijava.kernel.ampapi.helpers.geojson.LineStringGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.PointGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.PolygonGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.objects.ClusteredPoints;
-import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -305,16 +304,16 @@ public class LocationService {
         if (adminLevel != null) {
             switch (adminLevel) {
                 case ColumnConstants.COUNTRY:
-                    implementationLevelColumn = new ReportColumn(MoConstants.H_COUNTRIES);
+                    implementationLevelColumn = new ReportColumn(ColumnConstants.COUNTRY);
                     break;
                 case ColumnConstants.REGION:
-                    implementationLevelColumn = new ReportColumn(MoConstants.H_REGIONS);
+                    implementationLevelColumn = new ReportColumn(ColumnConstants.REGION);
                     break;
                 case ColumnConstants.ZONE:
-                    implementationLevelColumn = new ReportColumn(MoConstants.H_ZONES);
+                    implementationLevelColumn = new ReportColumn(ColumnConstants.ZONE);
                     break;
                 case ColumnConstants.DISTRICT:
-                    implementationLevelColumn = new ReportColumn(MoConstants.H_DISTRICTS);
+                    implementationLevelColumn = new ReportColumn(ColumnConstants.DISTRICT);
                     break;
             }
         }

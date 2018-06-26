@@ -5,7 +5,6 @@ import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -33,15 +32,14 @@ import javax.ws.rs.core.Response;
 import javax.xml.bind.JAXBElement;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.GeneratedReport;
-import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportRenderWarning;
 import org.dgfoundation.amp.newreports.ReportSpecification;
@@ -69,7 +67,6 @@ import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JSONResult;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.kernel.ampapi.endpoints.util.ReportConstants;
 import org.digijava.kernel.ampapi.endpoints.util.ReportMetadata;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -88,8 +85,6 @@ import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.translation.util.MultilingualInputFieldValues;
 import org.hibernate.Session;
 
-import mondrian.util.Pair;
-
 /***
  * 
  * @author
@@ -99,13 +94,6 @@ import mondrian.util.Pair;
 @Path("data")
 public class Reports implements ErrorReportingEndpoint {
     
-    private static final String DEFAULT_CATALOG_NAME = "AMP";
-    private static final String DEFAULT_CUBE_NAME = "Donor Funding";
-    private static final String DEFAULT_UNIQUE_NAME = "[amp].[AMP].[AMP].[Donor Funding]";
-    private static final String DEFAULT_QUERY_NAME = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX";
-    private static final String DEFAULT_CONNECTION_NAME = "amp";
-    private static final String DEFAULT_SCHEMA_NAME = "AMP";
-
     private static final String IN_MEMORY = "IN_MEMORY";
     private static final String SAVED = "SAVED";
 
@@ -158,14 +146,6 @@ public class Reports implements ErrorReportingEndpoint {
         metadata.setName(ampReport.getName());
         metadata.setRecordsPerPage(ReportPaginationUtils.getRecordsNumberPerPage());
         
-        //Properties that make a Saiku Query. Might be removed later
-        metadata.setCatalog(DEFAULT_CATALOG_NAME);
-        metadata.setCube(DEFAULT_CUBE_NAME);
-        metadata.setUniqueName(DEFAULT_UNIQUE_NAME);
-        metadata.setQueryName(DEFAULT_QUERY_NAME);
-        metadata.setConnection(DEFAULT_CONNECTION_NAME);
-        metadata.setSchema(DEFAULT_SCHEMA_NAME);
-
         result.setReportMetadata(metadata);
         
         //Translate column names.
@@ -936,7 +916,7 @@ public class Reports implements ErrorReportingEndpoint {
         for (Map<String,String> langAndName : reportData) {
             if(StringUtils.isNotEmpty(langAndName.get("name"))) {
                 String locale = langAndName.get("lang");
-                rawData.add(new Pair<>(locale, langAndName.get("name")));
+                rawData.add(Pair.of(locale, langAndName.get("name")));
             }
             
         }

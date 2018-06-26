@@ -16,6 +16,7 @@ import org.dgfoundation.amp.ar.amp212.InflationRatesTests;
 import org.dgfoundation.amp.ar.amp212.NiComputedMeasuresTests;
 import org.dgfoundation.amp.ar.amp212.NiReportsFetchingTests;
 import org.dgfoundation.amp.ar.amp212.OfflineNiReportsTestSuite;
+import org.dgfoundation.amp.ar.amp212.OriginalCurrencyTests;
 import org.dgfoundation.amp.ar.amp212.SQLUtilsTests;
 import org.dgfoundation.amp.ar.amp212.UnitsSettingsUtilityTests;
 import org.junit.runner.RunWith;
@@ -41,6 +42,7 @@ import org.junit.runners.Suite;
         ExpenditureClassTests.class,
         NiComputedMeasuresTests.class,
         CurrencyConvertorTests.class,
+        OriginalCurrencyTests.class,
         UnitsSettingsUtilityTests.class,
         DimensionsFetchingTests.class,
         SQLUtilsTests.class,

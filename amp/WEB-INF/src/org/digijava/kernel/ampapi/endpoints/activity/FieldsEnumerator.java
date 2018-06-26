@@ -165,17 +165,19 @@ public class FieldsEnumerator {
                     apiField.setMultipleValues(false);
                 }
                 
+                
                 if (hasPercentageValidatorEnabled(context)) {
                     apiField.setPercentageConstraint(getPercentageConstraint(field, context));
                 }
                 
-                if (hasUniqueValidatorEnabled(context)) {
-                    apiField.setUniqueConstraint(getUniqueConstraint(field, context));
-                }
-                
+                String uniqueConstraint = getUniqueConstraint(field, context);
                 if (hasTreeCollectionValidatorEnabled(context)) {
                     apiField.setTreeCollectionConstraint(true);
+                    apiField.setUniqueConstraint(uniqueConstraint);
+                } else if (hasUniqueValidatorEnabled(context)) {
+                    apiField.setUniqueConstraint(uniqueConstraint);
                 }
+                
             }
             
             if (!interchangeable.pickIdOnly() && !InterchangeUtils.isAmpActivityVersion(field.getClass())) {

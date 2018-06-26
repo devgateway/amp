@@ -4,9 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -21,6 +19,7 @@ import java.util.stream.Collectors;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.digijava.kernel.ampapi.endpoints.util.CalendarUtil;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
 import org.dgfoundation.amp.gpi.reports.GPIReportConstants;
@@ -290,14 +289,12 @@ public class GPIUtils {
     }
     
     public static Date getYearStartDate(AmpFiscalCalendar calendar, int year) {
-        int month = Calendar.JANUARY;
-        int day = GPIEPConstants.GREGORIAN_YEAR_START_DAY;
-        return new GregorianCalendar(year, month, day).getTime();
+        return CalendarUtil.getStartOfYear(year, calendar.getStartMonthNum() - 1, calendar.getStartDayNum());
     }
 
     public static Date getYearEndDate(AmpFiscalCalendar calendar, int year) {
-        int month = Calendar.JANUARY;
-        int day = GPIEPConstants.GREGORIAN_YEAR_START_DAY;
-        return new GregorianCalendar(year + 1, month, day).getTime();
+        return new Date(
+                CalendarUtil.getStartOfYear(year + 1, calendar.getStartMonthNum() - 1, calendar.getStartDayNum())
+                        .getTime() - GPIEPConstants.MILLISECONDS_IN_DAY);
     }
 }

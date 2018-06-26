@@ -32,6 +32,7 @@ public class ReportSpecificationImpl implements ReportSpecification {
     protected boolean summaryReport = false;
     protected ReportCollapsingStrategy reportCollapsingStrategy = ReportCollapsingStrategy.UNKNOWNS;
     protected boolean displayTimeRangeSubtotals = true;
+    protected boolean showOriginalCurrency = false;
     
     /**
      * If the report query results in empty data
@@ -314,4 +315,13 @@ public class ReportSpecificationImpl implements ReportSpecification {
     public void setDisplayTimeRangeSubtotals(Boolean displayTimeRangeSubtotals) {
         this.displayTimeRangeSubtotals = displayTimeRangeSubtotals;
     }
+
+    public boolean isShowOriginalCurrency() {
+        return showOriginalCurrency;
+    }
+
+    public void setShowOriginalCurrency(boolean showOriginalCurrency) {
+        this.showOriginalCurrency = showOriginalCurrency;
+    }
+    
 }

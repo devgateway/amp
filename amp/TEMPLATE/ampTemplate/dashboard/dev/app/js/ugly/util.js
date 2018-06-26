@@ -43,7 +43,7 @@ var formatOfTotal = function(dividend, divisor,ofTotal) {
     var isRtl = app.generalSettings.attributes['rtl-direction'];
 
     if (dividend > 0) {
-        var number = d3.format('f')(divisor / dividend * 100);
+        var number = d3.format('f')(dividend / divisor * 100);
         if (isRtl) {
             ofTotal = ofTotal + ' &nbsp<span>' + '<b>% ' + number + '</b>';
         } else {

@@ -28,7 +28,6 @@ import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.DashboardConstants;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -88,35 +87,35 @@ public class TopsChartService {
         switch (this.type.toUpperCase()) {
             case "DO":
                 if (FeaturesUtil.isVisibleField("Show Names As Acronyms")) {
-                    setColumn(MoConstants.ATTR_ORG_ACRONYM);
+                    setColumn(ColumnConstants.DONOR_ACRONYM);
                 } else {
-                    setColumn(MoConstants.DONOR_AGENCY);
+                    setColumn(ColumnConstants.DONOR_AGENCY);
                 }
-                applyFilter(FilterUtils.INSTANCE.idFromColumnName(MoConstants.DONOR_AGENCY));
+                applyFilter(FilterUtils.INSTANCE.idFromColumnName(ColumnConstants.DONOR_AGENCY));
                 title = TranslatorWorker.translateText(DashboardConstants.TOP_DONOR_AGENCIES);
                 name = DashboardConstants.TOP_DONOR_AGENCIES;
                 break;
             case "RO":
-                setColumn(MoConstants.RESPONSIBLE_AGENCY);
-                applyFilter(FilterUtils.INSTANCE.idFromColumnName(MoConstants.RESPONSIBLE_AGENCY));
+                setColumn(ColumnConstants.RESPONSIBLE_ORGANIZATION);
+                applyFilter(FilterUtils.INSTANCE.idFromColumnName(ColumnConstants.RESPONSIBLE_ORGANIZATION));
                 title = TranslatorWorker.translateText(DashboardConstants.TOP_RESPONSIBLE_ORGS);
                 name = DashboardConstants.TOP_RESPONSIBLE_ORGS;
                 break;
             case "BA":
-                setColumn(MoConstants.BENEFICIARY_AGENCY);
-                applyFilter(FilterUtils.INSTANCE.idFromColumnName(MoConstants.BENEFICIARY_AGENCY));
+                setColumn(ColumnConstants.BENEFICIARY_AGENCY);
+                applyFilter(FilterUtils.INSTANCE.idFromColumnName(ColumnConstants.BENEFICIARY_AGENCY));
                 title = TranslatorWorker.translateText(DashboardConstants.TOP_BENEFICIARY_ORGS);
                 name = DashboardConstants.TOP_BENEFICIARY_ORGS;
                 break;
             case "IA":
-                setColumn(MoConstants.IMPLEMENTING_AGENCY);
-                applyFilter(FilterUtils.INSTANCE.idFromColumnName(MoConstants.IMPLEMENTING_AGENCY));
+                setColumn(ColumnConstants.IMPLEMENTING_AGENCY);
+                applyFilter(FilterUtils.INSTANCE.idFromColumnName(ColumnConstants.IMPLEMENTING_AGENCY));
                 title = TranslatorWorker.translateText(DashboardConstants.TOP_IMPLEMENTING_ORGS);
                 name = DashboardConstants.TOP_IMPLEMENTING_ORGS;
                 break;
             case "EA":
-                setColumn(MoConstants.EXECUTING_AGENCY);
-                applyFilter(FilterUtils.INSTANCE.idFromColumnName(MoConstants.EXECUTING_AGENCY));
+                setColumn(ColumnConstants.EXECUTING_AGENCY);
+                applyFilter(FilterUtils.INSTANCE.idFromColumnName(ColumnConstants.EXECUTING_AGENCY));
                 title = TranslatorWorker.translateText(DashboardConstants.TOP_EXECUTING_ORGS);
                 name = DashboardConstants.TOP_EXECUTING_ORGS;
                 break;
@@ -128,8 +127,8 @@ public class TopsChartService {
                 spec.setReportCollapsingStrategy(ReportCollapsingStrategy.NEVER);
                 break;
             case "PS":
-                setColumn(MoConstants.PRIMARY_SECTOR);
-                applyFilter(FilterUtils.INSTANCE.idFromColumnName(MoConstants.PRIMARY_SECTOR));
+                setColumn(ColumnConstants.PRIMARY_SECTOR);
+                applyFilter(FilterUtils.INSTANCE.idFromColumnName(ColumnConstants.PRIMARY_SECTOR));
                 title = TranslatorWorker.translateText(DashboardConstants.TOP_SECTORS);
                 name = DashboardConstants.TOP_SECTORS;
                 break;
@@ -173,8 +172,8 @@ public class TopsChartService {
 
                 break;
             default:
-                setColumn(MoConstants.DONOR_AGENCY);
-                applyFilter(FilterUtils.INSTANCE.idFromColumnName(MoConstants.DONOR_AGENCY));
+                setColumn(ColumnConstants.DONOR_AGENCY);
+                applyFilter(FilterUtils.INSTANCE.idFromColumnName(ColumnConstants.DONOR_AGENCY));
                 title = TranslatorWorker.translateText(DashboardConstants.TOP_DONOR_AGENCIES);
                 name = DashboardConstants.TOP_DONOR_AGENCIES;
                 break;

@@ -1,11 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.filetype;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -16,16 +13,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.dgfoundation.amp.error.AMPException;
-import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
-import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.admin.util.DbUtil;
 import org.digijava.module.aim.dbentity.AmpFileType;
-import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.hsqldb.lib.HashSet;
-import org.jfree.util.Log;
 
 /**
  * FileTypes Endpoint provides supported file types in AMP

@@ -215,7 +215,7 @@ public class AmpStructuresFormSectionFeature extends
                             if (!Boolean.TRUE.equals(v.getDeleted())) {
                                 JsonBean value = new JsonBean();
                                 value.set("id", v.getId());
-                                value.set("value", v.getValue());                                                         
+                                value.set("value", v.getValue());
                                 structureColors.add(value);
                             }
                         }
@@ -323,6 +323,4 @@ public class AmpStructuresFormSectionFeature extends
         return structureModel.getObject().getCoordinates() != null && structureModel.getObject().
                 getCoordinates().size() > 0;
     }
-
-
 }

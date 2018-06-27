@@ -424,14 +424,15 @@ public class LocationService {
     }
 
     private static boolean isValidColor(String color) {
-       if(color.contains(GisConstants.GIS_STRUCTURE_COLOR_DELIMITER) == false) {
-           return false;
-       } 
-       
-       String hex = color.split(GisConstants.GIS_STRUCTURE_COLOR_DELIMITER)[0];       
-       Matcher matcher = GisConstants.HEX_PATTERN.matcher(hex);       
-       return matcher.matches();
+        if (!color.contains(GisConstants.GIS_STRUCTURE_COLOR_DELIMITER)) {
+            return false;
+        }
+
+        String hex = color.split(GisConstants.GIS_STRUCTURE_COLOR_DELIMITER)[0];
+        Matcher matcher = GisConstants.HEX_PATTERN.matcher(hex);
+        return matcher.matches();
     }
+    
     private static GeoJSON getGeometry(AmpStructure structure) {
         String shape = StringUtils.isEmpty(structure.getShape()) ? GisConstants.GIS_STRUCTURE_POINT
                 : structure.getShape();

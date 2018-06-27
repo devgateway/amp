@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.ComponentFundingOrgsValidator;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.FundingPledgesValidator;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
@@ -18,8 +19,6 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.hibernate.FlushMode;
 import org.hibernate.Session;
-
-import clover.org.apache.commons.lang.StringUtils;
 
 /**
  * 

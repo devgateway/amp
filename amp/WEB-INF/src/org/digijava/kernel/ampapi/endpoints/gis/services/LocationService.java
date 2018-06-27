@@ -5,11 +5,9 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -22,7 +20,6 @@ import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.algo.ValueWrapper;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.newreports.AmountsUnits;
@@ -34,7 +31,6 @@ import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportColumn;
-import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSettingsImpl;
 import org.dgfoundation.amp.newreports.ReportSpecification;
@@ -54,7 +50,6 @@ import org.digijava.kernel.ampapi.helpers.geojson.LineStringGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.PointGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.PolygonGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.objects.ClusteredPoints;
-import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
@@ -305,16 +300,16 @@ public class LocationService {
         if (adminLevel != null) {
             switch (adminLevel) {
                 case ColumnConstants.COUNTRY:
-                    implementationLevelColumn = new ReportColumn(MoConstants.H_COUNTRIES);
+                    implementationLevelColumn = new ReportColumn(ColumnConstants.COUNTRY);
                     break;
                 case ColumnConstants.REGION:
-                    implementationLevelColumn = new ReportColumn(MoConstants.H_REGIONS);
+                    implementationLevelColumn = new ReportColumn(ColumnConstants.REGION);
                     break;
                 case ColumnConstants.ZONE:
-                    implementationLevelColumn = new ReportColumn(MoConstants.H_ZONES);
+                    implementationLevelColumn = new ReportColumn(ColumnConstants.ZONE);
                     break;
                 case ColumnConstants.DISTRICT:
-                    implementationLevelColumn = new ReportColumn(MoConstants.H_DISTRICTS);
+                    implementationLevelColumn = new ReportColumn(ColumnConstants.DISTRICT);
                     break;
             }
         }

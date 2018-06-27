@@ -220,9 +220,7 @@ public class SQLUtils {
         }
         
         ResultSet rs = ps.executeQuery();
-        if (!connection.getMetaData().getDatabaseProductName().equals("MonetDB"))
-            rs.setFetchSize(500);
-        
+
         return new RsInfo(rs, ps);
     }
     

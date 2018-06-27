@@ -14,8 +14,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import javax.servlet.http.HttpSession;
-
 import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
@@ -23,9 +21,7 @@ import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.dgfoundation.amp.ar.dbentity.FilterDataSetInterface;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
-import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
-import org.digijava.kernel.ampapi.mondrian.util.MondrianMapping;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;

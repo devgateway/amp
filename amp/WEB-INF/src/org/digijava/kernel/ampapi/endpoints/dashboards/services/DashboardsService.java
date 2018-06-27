@@ -3,14 +3,13 @@ package org.digijava.kernel.ampapi.endpoints.dashboards.services;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import clover.com.google.common.base.Strings;
+import com.google.common.base.Strings;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
@@ -114,30 +113,30 @@ public class DashboardsService {
         switch (type.toUpperCase()) {
         case "DO":
             if (FeaturesUtil.isVisibleField("Show Names As Acronyms")) {
-                spec.addColumn(new ReportColumn(MoConstants.ATTR_ORG_ACRONYM));
+                spec.addColumn(new ReportColumn(ColumnConstants.DONOR_ACRONYM));
             } else {
-                spec.addColumn(new ReportColumn(MoConstants.DONOR_AGENCY));
+                spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
             }
             title = TranslatorWorker.translateText(DashboardConstants.TOP_DONOR_AGENCIES);
             name = DashboardConstants.TOP_DONOR_AGENCIES;
             break;
         case "RO":
-            spec.addColumn(new ReportColumn(MoConstants.RESPONSIBLE_AGENCY));
+            spec.addColumn(new ReportColumn(ColumnConstants.RESPONSIBLE_ORGANIZATION));
             title = TranslatorWorker.translateText(DashboardConstants.TOP_RESPONSIBLE_ORGS);
             name = DashboardConstants.TOP_RESPONSIBLE_ORGS;
             break;
         case "BA":
-            spec.addColumn(new ReportColumn(MoConstants.BENEFICIARY_AGENCY));
+            spec.addColumn(new ReportColumn(ColumnConstants.BENEFICIARY_AGENCY));
             title = TranslatorWorker.translateText(DashboardConstants.TOP_BENEFICIARY_ORGS);
             name = DashboardConstants.TOP_BENEFICIARY_ORGS;
             break;
         case "IA":
-            spec.addColumn(new ReportColumn(MoConstants.IMPLEMENTING_AGENCY));
+            spec.addColumn(new ReportColumn(ColumnConstants.IMPLEMENTING_AGENCY));
             title = TranslatorWorker.translateText(DashboardConstants.TOP_IMPLEMENTING_ORGS);
             name = DashboardConstants.TOP_IMPLEMENTING_ORGS;
             break;
         case "EA":
-            spec.addColumn(new ReportColumn(MoConstants.EXECUTING_AGENCY));
+            spec.addColumn(new ReportColumn(ColumnConstants.EXECUTING_AGENCY));
             title = TranslatorWorker.translateText(DashboardConstants.TOP_EXECUTING_ORGS);
             name = DashboardConstants.TOP_EXECUTING_ORGS;
             break;
@@ -148,7 +147,7 @@ public class DashboardsService {
             spec.setReportCollapsingStrategy(ReportCollapsingStrategy.NEVER);
             break;
         case "PS":
-            spec.addColumn(new ReportColumn(MoConstants.PRIMARY_SECTOR));
+            spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_SECTOR));
             title = TranslatorWorker.translateText(DashboardConstants.TOP_SECTORS);
             name = DashboardConstants.TOP_SECTORS;
             break;
@@ -179,7 +178,7 @@ public class DashboardsService {
 
             break;
         default:
-            spec.addColumn(new ReportColumn(MoConstants.DONOR_AGENCY));
+            spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
             title = TranslatorWorker.translateText(DashboardConstants.TOP_DONOR_AGENCIES);
             name = DashboardConstants.TOP_DONOR_AGENCIES;
             break;
@@ -401,7 +400,7 @@ public class DashboardsService {
         if (filters == null) {
             filters = new LinkedHashMap<>();
         }
-        if (year != null && year.intValue() > 0 && !Strings.isNullOrEmpty(measure)) {
+        if (year != null && year > 0 && !Strings.isNullOrEmpty(measure)) {
             spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE));
             spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_UPDATED_ON));
             if (measure.equalsIgnoreCase(MeasureConstants.PLANNED_DISBURSEMENTS)) {
@@ -513,8 +512,8 @@ public class DashboardsService {
             spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE));
             spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_UPDATED_ON));
             spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
-            filters.putAll(DashboardsService.setFilterId(id.longValue(), FilterUtils.INSTANCE.idFromColumnName(MoConstants
-                    .TYPE_OF_ASSISTANCE)));
+            filters.putAll(DashboardsService.setFilterId(id.longValue(),
+                    FilterUtils.INSTANCE.idFromColumnName(ColumnConstants.TYPE_OF_ASSISTANCE)));
             filters.putAll(setFilterYear(year));
             AmpReportFilters filterRules = FilterUtils.getFilterRules(filters, null);
             if (filterRules != null) {
@@ -524,7 +523,7 @@ public class DashboardsService {
         } else {
 
             spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
-            spec.addColumn(new ReportColumn(MoConstants.TYPE_OF_ASSISTANCE));
+            spec.addColumn(new ReportColumn(ColumnConstants.TYPE_OF_ASSISTANCE));
             spec.getHierarchies().addAll(spec.getColumns());
             spec.setSummaryReport(true);
 

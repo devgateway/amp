@@ -16,6 +16,7 @@ import java.util.Set;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
@@ -35,8 +36,6 @@ import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.hibernate.jdbc.Work;
 import org.hibernate.type.LongType;
-
-import clover.org.apache.commons.lang.StringUtils;
 
 /**
  * Project List generation class

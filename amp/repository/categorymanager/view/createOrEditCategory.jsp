@@ -46,7 +46,7 @@
 	<digi:trn key="cm:warningDeleteLabelCategory">Are you sure you want to remove this label category ?</digi:trn>
 </c:set>
 <c:set var="translation9">
-	<digi:trn>Please, for title use only letters, digits, '_', () and space.</digi:trn>
+	<digi:trn>Please, for title use only letters, digits, _, /, (), #, -, : and space.</digi:trn>
 </c:set>
 
 <c:set var="translation10">

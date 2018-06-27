@@ -209,16 +209,17 @@ public class AmpStructuresFormSectionFeature extends
                         
                         JsonBean data = new JsonBean();
                         List<JsonBean> structureColors = new ArrayList<>();
+                        
                         Collection<AmpCategoryValue> categoryValues = CategoryManagerUtil
-                                .getAmpCategoryValueCollectionByKey(CategoryConstants.GIS_STRUCTURES_COLOR_CODING_KEY);
+                                .getAmpCategoryValueCollectionByKeyExcludeDeleted(
+                                        CategoryConstants.GIS_STRUCTURES_COLOR_CODING_KEY);
                         for (AmpCategoryValue v : categoryValues) {
-                            if (!Boolean.TRUE.equals(v.getDeleted())) {
-                                JsonBean value = new JsonBean();
-                                value.set("id", v.getId());
-                                value.set("value", v.getValue());
-                                structureColors.add(value);
-                            }
+                            JsonBean value = new JsonBean();
+                            value.set("id", v.getId());
+                            value.set("value", v.getValue());
+                            structureColors.add(value);
                         }
+                        
                         data.set("structureColors", structureColors);
                         target.appendJavaScript("gisPopup($('#" + this.getMarkupId() + "')[0], '" + data.asJsonString()
                                 + "'); return false;");

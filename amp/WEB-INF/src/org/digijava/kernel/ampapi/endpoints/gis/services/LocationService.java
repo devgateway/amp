@@ -11,6 +11,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.node.POJONode;
@@ -398,10 +400,10 @@ public class LocationService {
             
             if (structure.getStructureColor() != null) { 
                 AmpCategoryValue cValue = CategoryManagerUtil.getAmpCategoryValueFromDb(structure.getStructureColor());
-                
-                fgj.properties.put("color", new TextNode(TranslatorWorker.translateText(cValue.getValue())));
-            }
-            
+                if (isValidColor(cValue.getValue())) {
+                    fgj.properties.put("color", new TextNode(TranslatorWorker.translateText(cValue.getValue())));  
+                }                
+            }            
             
             Set<AmpActivityVersion> av = structure.getActivities();
             List<Long> actIds = new ArrayList<Long>();
@@ -421,6 +423,15 @@ public class LocationService {
 
     }
 
+    private static boolean isValidColor(String color) {
+       if(color.contains(GisConstants.GIS_STRUCTURE_COLOR_DELIMITER) == false) {
+           return false;
+       } 
+       
+       String hex = color.split(GisConstants.GIS_STRUCTURE_COLOR_DELIMITER)[0];       
+       Matcher matcher = GisConstants.HEX_PATTERN.matcher(hex);       
+       return matcher.matches();
+    }
     private static GeoJSON getGeometry(AmpStructure structure) {
         String shape = StringUtils.isEmpty(structure.getShape()) ? GisConstants.GIS_STRUCTURE_POINT
                 : structure.getShape();

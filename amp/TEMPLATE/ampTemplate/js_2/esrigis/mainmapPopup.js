@@ -493,10 +493,9 @@ function appendColor(categoryValue) {
 	var translatedValue = TranslationManager.getTranslated(categoryValue.value);
 	var splits = translatedValue.split(":");
 	if (splits.length == 2) {
-		colorHTML = colorHTML.replace('{color}', splits[0]).replace('{color}', splits[0]).replace('{name}', splits[1]);		
+		colorHTML = colorHTML.replace('{color}', splits[0]).replace('{color}', splits[0]).replace('{name}', splits[1]);
+		$('.colors').append(colorHTML);
 	} 
-	
-	$('.colors').append(colorHTML);
 }
 
 function getColorHTMLTemplate() {

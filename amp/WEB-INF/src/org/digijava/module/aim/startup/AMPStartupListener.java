@@ -186,7 +186,7 @@ public class AMPStartupListener extends HttpServlet implements
             
             PersistenceManager.getSession().getTransaction().commit();
             
-            ContentRepositoryManager.getRepositoryInstance();
+            ContentRepositoryManager.initialize();
             
             checkDatabaseSanity();
             checkMondrianETLSanity();

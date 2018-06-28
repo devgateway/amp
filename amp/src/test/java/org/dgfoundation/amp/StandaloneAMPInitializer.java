@@ -47,7 +47,7 @@ public class StandaloneAMPInitializer {
 
             DigiConfigManager.initialize("./repository");
             PersistenceManager.initialize(false, null);
-            ContentRepositoryManager.getRepositoryInstance();
+            ContentRepositoryManager.initialize();
             
             TLSUtils.getThreadLocalInstance().setForcedLangCode(SiteUtils.getDefaultSite().getDefaultLanguage().getCode());
             InternationalizedViewsRepository.i18Models.size(); // force init outside of testcases

@@ -22,8 +22,6 @@ import org.digijava.module.contentrepository.listeners.NodeRemovalListener;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 
 /**
- * Class used for management of content repository sessions.
- * 
  * @author Viorel Chihai
  *
  */
@@ -45,26 +43,33 @@ public final class ContentRepositoryManager {
     private static RepositoryImpl repository;
     
     private ContentRepositoryManager() { }
-
+    
     /**
-     * Get the jackrabbit repository instance. If it null, it will be created.
+     * Get the jackrabbit repository instance.
      * 
      * @return content repository
      */
     public static RepositoryImpl getRepositoryInstance() {
         if (repository == null) {
-            String appPath = DocumentManagerUtil.getApplicationPath();
-            String dir = appPath + JACKRABBIT_DIR_PATH;
-            String configFilePath = dir + REPOSITORY_CONFIG_FILE_PATH;
-            
-            try {
-                repository = RepositoryImpl.create(RepositoryConfig.install(new File(configFilePath), new File(dir)));
-            } catch (RepositoryException | IOException e) {
-                throw new RuntimeException(e.getMessage(), e);
-            }
+            initialize();
         }
         
         return repository;
+    }
+    
+    /**
+     * Initiate the jackrabbit repository.
+     */
+    public static void initialize() {
+        String appPath = DocumentManagerUtil.getApplicationPath();
+        String dir = appPath + JACKRABBIT_DIR_PATH;
+        String configFilePath = dir + REPOSITORY_CONFIG_FILE_PATH;
+        
+        try {
+            repository = RepositoryImpl.create(RepositoryConfig.install(new File(configFilePath), new File(dir)));
+        } catch (RepositoryException | IOException e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
     }
     
     /**
@@ -82,14 +87,17 @@ public final class ContentRepositoryManager {
      */
     public static Session getReadSession(HttpServletRequest request) {
         Session readSession = (Session) request.getAttribute(JCR_READ_SESSION);
-        if (readSession == null || !readSession.isLive()) {
-            try {
+        
+        try {
+            readSession = getOrCloseIfNotLive(readSession);
+            if (readSession == null) {
                 readSession = getRepositoryInstance().login();
-                request.setAttribute(JCR_READ_SESSION, readSession);
-            } catch (RepositoryException e) {
-                throw new RuntimeException(e.getMessage(), e);
             }
+        } catch (RepositoryException e) {
+            throw new RuntimeException(e.getMessage(), e);
         }
+        
+        request.setAttribute(JCR_READ_SESSION, readSession);
         
         return readSession;
     }
@@ -103,7 +111,8 @@ public final class ContentRepositoryManager {
     public static Session getWriteSession(HttpServletRequest request) {
         Session writeSession = (Session) request.getAttribute(JCR_WRITE_SESSION);
         try {
-            if (writeSession == null || !writeSession.isLive()) {
+            writeSession = getOrCloseIfNotLive(writeSession);
+            if (writeSession == null) {
                 writeSession = getRepositoryInstance().login(getCredentials(request));
                 request.setAttribute(JCR_WRITE_SESSION, writeSession);
             } else {
@@ -114,6 +123,8 @@ public final class ContentRepositoryManager {
         } catch (RepositoryException e) {
             throw new RuntimeException(e.getMessage(), e);
         }
+        
+        request.setAttribute(JCR_WRITE_SESSION, writeSession);
         
         return writeSession;
     }
@@ -197,4 +208,18 @@ public final class ContentRepositoryManager {
         }
     }
     
+    /**
+     * Return session if is usable. Close if it is unusable and return null.
+     * 
+     * @param session
+     * @return
+     */
+    private static Session getOrCloseIfNotLive(Session session) {
+        if (session != null && !session.isLive()) {
+            closeSession(session);
+            return null;
+        }
+        
+        return session;
+    }
 }

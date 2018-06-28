@@ -1,6 +1,7 @@
 package org.digijava.module.fundingpledges.action;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -142,6 +143,7 @@ public class SavePledge extends Action {
         res.addAll(do_save_locations(session, pledge, plForm.getSelectedLocs()));
         res.addAll(do_save_funding(session, pledge, plForm.getSelectedFunding()));
         res.addAll(do_save_documents(session, pledge, plForm.getSelectedDocs(), plForm.getInitialDocuments()));
+        pledge.setCreatedDate(new Date());
         session.saveOrUpdate(pledge);
         if (res.isEmpty()) { //save succeeded
             boolean newPledge = plForm.isNewPledge();

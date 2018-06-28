@@ -326,7 +326,7 @@ public class NodeWrapper{
     }   
     
     
-    public NodeWrapper(TemporaryDocumentData tempDoc, HttpServletRequest httpRequest, TeamMember teamMember, 
+    public NodeWrapper(TemporaryDocumentData tempDoc, HttpServletRequest httpRequest, TeamMember teamMember,
             Node parentNode, boolean isANewVersion, ActionMessages errors) {
         
         FormFile formFile       = tempDoc.getFormFile(); 
@@ -534,7 +534,8 @@ public class NodeWrapper{
         try {
             jcrWriteSession.save();
             node.checkin();
-            logger.error(String.format("CREATED JackRabbit node with uuid = %s, name = %s", this.getUuid(), this.tryGetName()));
+            logger.info(String.format("CREATED JackRabbit node with uuid = %s, name = %s",
+                    this.getUuid(), this.tryGetName()));
             return true;
         }
         catch (Exception E) {
@@ -1032,7 +1033,7 @@ public class NodeWrapper{
             translatedField.put(TLSUtils.getEffectiveLangCode(), getStringProperty(fieldName));
         } catch (RepositoryException e) {
             logger.error("Exception accesing traslated titles in NodeWrapper", e);
-        } 
+        }
         
         return translatedField;
     }

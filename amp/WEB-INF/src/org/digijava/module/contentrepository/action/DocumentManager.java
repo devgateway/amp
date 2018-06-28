@@ -483,9 +483,8 @@ public class DocumentManager extends Action {
             while ( nodeIterator.hasNext() ) {
                 Node documentNode   = (Node)nodeIterator.next();
                 Node baseNode=documentNode; //in case document node last version should be hidden and another should be shown
-                String documentNodeBaseVersionUUID=documentNode.getUUID();
+                String documentNodeBaseVersionUUID = documentNode.getIdentifier();
                 
-                System.out.println(documentNodeBaseVersionUUID);
                 /*
                  
                 pledge documents aren't workspace-bound and therefore can only be added or removed from the pledge itself

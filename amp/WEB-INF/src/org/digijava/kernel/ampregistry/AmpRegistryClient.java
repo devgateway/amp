@@ -11,9 +11,6 @@ import javax.ws.rs.core.UriBuilder;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.GenericType;
-import com.sun.jersey.api.client.config.ClientConfig;
-import com.sun.jersey.api.client.config.DefaultClientConfig;
-import com.sun.jersey.api.json.JSONConfiguration;
 import org.digijava.module.aim.dbentity.AmpOfflineRelease;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -85,10 +82,7 @@ public class AmpRegistryClient {
     private <T> T doWithClientReturning(Function<Client, T> function) {
         Client client = null;
         try {
-            ClientConfig clientConfig = new DefaultClientConfig();
-            clientConfig.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, Boolean.TRUE);
-
-            client = Client.create(clientConfig);
+            client = Client.create();
 
             return function.apply(client);
         } finally {

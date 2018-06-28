@@ -3,17 +3,17 @@
  */
 package org.digijava.kernel.ampapi.endpoints.settings;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.digijava.kernel.translator.TranslatorWorker;
-
 import java.util.List;
 
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+import com.fasterxml.jackson.annotation.JsonInclude;
+import org.digijava.kernel.translator.TranslatorWorker;
+
 /**
  * Setting Field that allows us to drill down & define custom settings structure 
- * 
+ *
  * @author Nadejda Mandrescu
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class SettingField {
     public enum FieldType {
         /** The actual value */

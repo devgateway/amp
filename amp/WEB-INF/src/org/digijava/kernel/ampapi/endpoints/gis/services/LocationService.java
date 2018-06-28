@@ -65,7 +65,6 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
-import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.jdbc.Work;
@@ -399,7 +398,7 @@ public class LocationService {
             }
             
             if (structure.getStructureColor() != null) { 
-                AmpCategoryValue cValue = CategoryManagerUtil.getAmpCategoryValueFromDb(structure.getStructureColor());
+                AmpCategoryValue cValue = structure.getStructureColor();
                 if (isValidColor(cValue.getValue())) {
                     fgj.properties.put("color", new TextNode(TranslatorWorker.translateText(cValue.getValue())));  
                 }                

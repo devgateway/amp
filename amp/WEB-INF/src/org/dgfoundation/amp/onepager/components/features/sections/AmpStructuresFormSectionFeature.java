@@ -271,16 +271,23 @@ public class AmpStructuresFormSectionFeature extends
                 });                
                 item.add(tempId);
                 
-                final TextField<String> structureColor = new TextField<String>("structureColor",
-                        new PropertyModel<String>(structureModel, "structureColor"));    
-                structureColor.setOutputMarkupId(true);                
-                structureColor.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+                final TextField<String> structureColorId = new TextField<String>("structureColorId",
+                        new PropertyModel<String>(structureModel, "structureColorId"));
+                structureColorId.setOutputMarkupId(true);
+                structureColorId.add(new AjaxFormComponentUpdatingBehavior("onchange") {
                     @Override
                     protected void onUpdate(AjaxRequestTarget target) {
-                        target.add(structureColor);
+                        AmpStructure structure = structureModel.getObject();
+                        if (structureColorId.getDefaultModelObject() == null) {
+                            structure.setStructureColor(null);
+                        } else {
+                            Long id = Long.parseLong(structureColorId.getDefaultModelObject().toString());
+                            structure.setStructureColor(CategoryManagerUtil.getAmpCategoryValueFromDb(id));
+                        }
+                        target.add(structureColorId);
                     }
-                });                
-                item.add(structureColor);
+                });
+                item.add(structureColorId);               
                 
                 latitude.getTextContainer().setEnabled(!hasCoordinates(structureModel));
                 longitude.getTextContainer().setEnabled(!hasCoordinates(structureModel));

@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
@@ -33,6 +34,7 @@ public class FundingPledges implements Comparable<FundingPledges>, Serializable 
     private static final long serialVersionUID = 1L;
     @Interchangeable(fieldTitle="ID")
     private Long id;
+    private Date createdDate;
     @Interchangeable(fieldTitle="Title")
     private AmpCategoryValue title;
     @Interchangeable(fieldTitle="Status")
@@ -142,7 +144,15 @@ public class FundingPledges implements Comparable<FundingPledges>, Serializable 
     public Long getId() {
         return this.id;
     }
-    
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+    }
+
     @java.lang.SuppressWarnings("all")
     public AmpCategoryValue getTitle() {
         return this.title;

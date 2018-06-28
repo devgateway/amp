@@ -2,15 +2,15 @@ package org.dgfoundation.amp.newreports;
 
 import java.io.IOException;
 
-import org.codehaus.jackson.JsonGenerator;
-import org.codehaus.jackson.map.SerializerProvider;
-import org.codehaus.jackson.map.ser.std.SerializerBase;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import org.digijava.module.aim.util.AmpMath;
 
 /**
  * @author Octavian Ciubotaru
  */
-public class FilterRuleSerializer extends SerializerBase<FilterRule> {
+public class FilterRuleSerializer extends StdSerializer<FilterRule> {
 
     public FilterRuleSerializer() {
         super(FilterRule.class);

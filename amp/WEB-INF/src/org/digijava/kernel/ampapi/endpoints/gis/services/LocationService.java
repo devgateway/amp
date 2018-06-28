@@ -13,11 +13,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 
+import com.fasterxml.jackson.databind.node.POJONode;
+import com.fasterxml.jackson.databind.node.TextNode;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.codehaus.jackson.node.POJONode;
-import org.codehaus.jackson.node.TextNode;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.algo.ValueWrapper;
 import org.dgfoundation.amp.ar.ArConstants;
@@ -398,14 +398,14 @@ public class LocationService {
                 fgj.properties.put("description", new TextNode(
                         StringEscapeUtils.escapeHtml(structure.getDescription())));
             }
-            
-            if (structure.getStructureColor() != null) { 
+
+            if (structure.getStructureColor() != null) {
                 AmpCategoryValue cValue = structure.getStructureColor();
                 if (isValidColor(cValue.getValue())) {
-                    fgj.properties.put("color", new TextNode(TranslatorWorker.translateText(cValue.getValue())));  
-                }                
-            }            
-            
+                    fgj.properties.put("color", new TextNode(TranslatorWorker.translateText(cValue.getValue())));
+                }
+            }
+
             Set<AmpActivityVersion> av = structure.getActivities();
             List<Long> actIds = new ArrayList<Long>();
 
@@ -433,7 +433,7 @@ public class LocationService {
         Matcher matcher = GisConstants.HEX_PATTERN.matcher(hex);
         return matcher.matches();
     }
-    
+
     private static GeoJSON getGeometry(AmpStructure structure) {
         String shape = StringUtils.isEmpty(structure.getShape()) ? GisConstants.GIS_STRUCTURE_POINT
                 : structure.getShape();

@@ -1,6 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.common.print;
 
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
  * Created by esoliani on 22/07/16.

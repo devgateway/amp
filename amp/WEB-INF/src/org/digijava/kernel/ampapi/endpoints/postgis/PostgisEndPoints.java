@@ -1,7 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.postgis;
 
+import com.fasterxml.jackson.databind.node.TextNode;
 import org.apache.log4j.Logger;
-import org.codehaus.jackson.node.TextNode;
 import org.digijava.kernel.ampapi.helpers.geojson.FeatureCollectionGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.FeatureGeoJSON;
 import org.digijava.kernel.ampapi.postgis.entity.AmpLocator;

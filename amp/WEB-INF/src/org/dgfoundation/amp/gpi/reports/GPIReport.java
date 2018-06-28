@@ -2,7 +2,7 @@ package org.dgfoundation.amp.gpi.reports;
 
 import java.util.Map;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.digijava.kernel.ampapi.endpoints.settings.Settings;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;

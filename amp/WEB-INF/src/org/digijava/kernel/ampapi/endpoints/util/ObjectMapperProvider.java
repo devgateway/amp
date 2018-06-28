@@ -7,11 +7,11 @@ import java.util.Map.Entry;
 import javax.ws.rs.ext.ContextResolver;
 import javax.ws.rs.ext.Provider;
 
-import org.codehaus.jackson.JsonGenerator;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.SerializationConfig.Feature;
-import org.codehaus.jackson.map.ser.impl.SimpleBeanPropertyFilter;
-import org.codehaus.jackson.map.ser.impl.SimpleFilterProvider;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 
 /**
@@ -52,8 +52,8 @@ public class ObjectMapperProvider implements ContextResolver<ObjectMapper> {
         }
         // if nothing to filter or invalid filter
         sfp.setFailOnUnknownId(false);
-        jsonBeanMapper.configure(Feature.FAIL_ON_EMPTY_BEANS, false);
-        jsonBeanMapper.setFilters(sfp);
+        jsonBeanMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+        jsonBeanMapper.setFilterProvider(sfp);
     }
 
     /**

@@ -2,7 +2,7 @@ package org.digijava.kernel.ampapi.endpoints.currency.dto;
 
 import java.util.Date;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.digijava.kernel.ampapi.endpoints.util.ISO8601DateSerializer;
 
 /**

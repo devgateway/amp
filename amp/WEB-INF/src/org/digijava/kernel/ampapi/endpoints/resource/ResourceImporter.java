@@ -75,6 +75,10 @@ public class ResourceImporter extends ObjectImporter {
 
         List<APIField> fieldsDef = AmpFieldsEnumerator.PRIVATE_ENUMERATOR.getResourceFields();
         
+        if (formFile == null && StringUtils.isBlank(String.valueOf(newJson.get(ResourceEPConstants.WEB_LINK)))) {
+            return singletonList(ResourceErrors.FIELD_REQUIRED.withDetails(ResourceEPConstants.WEB_LINK));
+        }
+        
         if (formFile != null) {
             long maxSizeInMB = FeaturesUtil.getGlobalSettingValueInteger(GlobalSettingsConstants.CR_MAX_FILE_SIZE);
             long maxFileSizeInBytes = maxSizeInMB * FileUtils.ONE_MB;

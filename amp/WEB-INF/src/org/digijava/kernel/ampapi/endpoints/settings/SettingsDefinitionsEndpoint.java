@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
 
+import io.swagger.annotations.Api;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
@@ -38,6 +39,7 @@ import org.digijava.module.aim.util.DbUtil;
  * @author Octavian Ciubotaru
  */
 @Path("settings-definitions")
+@Api("settings-definitions")
 public class SettingsDefinitionsEndpoint implements ErrorReportingEndpoint {
 
     /**

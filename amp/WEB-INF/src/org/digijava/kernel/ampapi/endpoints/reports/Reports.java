@@ -18,6 +18,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
@@ -31,6 +32,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.bind.JAXBElement;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
@@ -85,13 +91,8 @@ import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.translation.util.MultilingualInputFieldValues;
 import org.hibernate.Session;
 
-/***
- * 
- * @author
- * 
- */
-
 @Path("data")
+@Api("data")
 public class Reports implements ErrorReportingEndpoint {
     
     private static final String IN_MEMORY = "IN_MEMORY";
@@ -178,7 +179,7 @@ public class Reports implements ErrorReportingEndpoint {
         ReportSpecificationImpl spec = ReportsUtil.getReport(reportId);
         return AmpReportsSchema.getRenderedReport(spec);
     }
-    
+
     @GET
     @Path("/report/{report_id}/result")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -187,97 +188,49 @@ public class Reports implements ErrorReportingEndpoint {
         return EndpointUtils.runReport(spec);
     }
 
-    /**
-     * Provides a report preview.
-     * </br>
-     * <dl>
-     * The JSON object holds information regarding:
-     * <dt><b>groupingOption</b><dd> - the timeframe by which to group funding data in the report
-     * <dt><b>add_columns</b><dd> - a list of columns names to be added to the report configuration
-     * <dt><b>add_hierarchies</b><dd> - a list of hierarchies to be added to the report configuration
-     * <dt><b>add_measures</b><dd> - a list of measures to be added to the report configuration
-     * <dt><b>filters</b><dd> - Report filters
-     * <dt><b>settings</b><dd> - Report settings
-     * </dl></br></br>
-     *
-     * </br>
-     * <h3>Sample Input:</h3><pre>
-     * {
-     *  "groupingOption": "A",
-     *  "add_columns": ["Activity Id",
-     *  "Project Title",
-     *  "Donor Agency",
-     *  "Status",
-     *  "AMP ID"],
-     *  "add_hierarchies": ["Project Title"],
-     *  "add_measures": ["Actual Commitments"],
-     *  "filters": {
-     *      "date": {
-     *          "start": "2010-01-01",
-     *          "end": "2015-12-31"
-     *      }
-     *  },
-     *  "settings": {
-     *      "funding-type": ["Actual Commitments",
-     *      "Actual Disbursements"],
-     *      "currency-code": "USD",
-     *      "calendar-id": "123",
-     *      "year-range": {
-     *          "from": "2012",
-     *          "to": "2014"
-     *      }
-     *  }
-     *}</pre>
-     * <h3>Sample Output:</h3><pre>
-     * <table class='nireport_table inside' cellpadding='0' cellspacing='0' width='100%'>
-     *   <thead>
-     *     <tr class='nireport_header'>
-     *       <td class='nireport_header' rowSpan='3' colSpan='1'>Project Title<br /><font class='headermeta'>#ni#column -> Project Title</font></td>
-     *       <td class='nireport_header' rowSpan='3' colSpan='1'>Activity Id<br /><font class='headermeta'>#ni#column -> Activity Id</font></td>
-     *       <td class='nireport_header' rowSpan='3' colSpan='1'>Donor Agency<br /><font class='headermeta'>#ni#column -> Donor Agency</font></td>
-     *       <td class='nireport_header' rowSpan='3' colSpan='1'>Status<br /><font class='headermeta'>#ni#column -> Status</font></td>
-     *       <td class='nireport_header' rowSpan='3' colSpan='1'>AMP ID<br /><font class='headermeta'>#ni#column -> AMP ID</font></td>
-     *       <td class='nireport_header' rowSpan='2' colSpan='1'>Totals</td>
-     *     </tr>
-     *     <tr class='nireport_header'></tr>
-     *     <tr class='nireport_header'>
-     *       <td class='nireport_header' rowSpan='1' colSpan='1'>Actual Commitments<br /><font class='headermeta'>#ni#measure -> Actual Commitments</font></td>
-     *     </tr>
-     *   </thead>
-     *   <tbody>
-     *     <tr>
-     *       <td class='ni_hierarchyCell ni_hierarchyLevel1' rowspan='2'>2008.2077.9 Sustainable Land Management Program (SLM I) and 2004.2060.4 SUN Program (GIZ)</td>
-     *       <td class='nireport_data_cell'>105656</td>
-     *       <td class='nireport_data_cell'>Germany</td>
-     *       <td class='nireport_data_cell'>Ongoing</td>
-     *       <td class='nireport_data_cell'>AMP-100411</td>
-     *       <td class='nireport_data_cell'>11497999.622859</td>
-     *     </tr>
-     *     <td class='nireport_data_cell ni_hierarchyLevel2 ni_trailcell'></td>
-     *     <td class='nireport_data_cell ni_hierarchyLevel2 ni_trailcell'></td>
-     *     <td class='nireport_data_cell ni_hierarchyLevel2 ni_trailcell'></td>
-     *     <td class='nireport_data_cell ni_hierarchyLevel2 ni_trailcell'></td>
-     *     <td class='nireport_data_cell ni_hierarchyLevel2 ni_trailcell'>11497999.622859</td>
-     *     </tr>
-     *     <td class='ni_hierarchyCell ni_hierarchyLevel1' rowspan='2'>2010.9002.6 Technical College in Holeta/ETH (GIZ)</td>
-     *     <td class='nireport_data_cell'>103936</td>
-     *     <td class='nireport_data_cell'>Germany</td>
-     *     <td class='nireport_data_cell'>Ongoing</td>
-     *     <td class='nireport_data_cell'>87143122101223</td>
-     *     <td class='nireport_data_cell'>1892441.860465</td>
-     *     </tr>
-     *  ....
-     *   </tbody>
-     * </table></pre>
-     *
-     * @param formParams a JSON object with the report's parameters
-     *
-     * @return a HTML with the report preview
-     */
     @POST
     @Path("/report/preview")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    public final String getReportResult(JsonBean formParams) {
+    @Produces(MediaType.TEXT_HTML)
+    @ApiOperation(
+            value = "Render a report preview in HTML format.",
+            notes = "<dl>\n"
+                    + "The JSON object holds information regarding:\n"
+                    + "<dt><b>groupingOption</b><dd> - the timeframe by which to group funding data in the report\n"
+                    + "<dt><b>add_columns</b><dd> - a list of columns names to be added to the report configuration\n"
+                    + "<dt><b>add_hierarchies</b><dd> - a list of hierarchies to be added to the report configuration\n"
+                    + "<dt><b>add_measures</b><dd> - a list of measures to be added to the report configuration\n"
+                    + "<dt><b>filters</b><dd> - Report filters\n"
+                    + "<dt><b>settings</b><dd> - Report settings\n"
+                    + "</dl></br></br>\n"
+                    + "</br>\n"
+                    + "<h3>Sample Input:</h3><pre>\n"
+                    + "{\n"
+                    + " \"groupingOption\": \"A\",\n"
+                    + " \"add_columns\": [\"Activity Id\",\n"
+                    + " \"Project Title\",\n"
+                    + " \"Donor Agency\",\n"
+                    + " \"Status\",\n"
+                    + " \"AMP ID\"],\n"
+                    + " \"add_hierarchies\": [\"Project Title\"],\n"
+                    + " \"add_measures\": [\"Actual Commitments\"],\n"
+                    + " \"filters\": {\n"
+                    + "     \"date\": {\n"
+                    + "         \"start\": \"2010-01-01\",\n"
+                    + "         \"end\": \"2015-12-31\"\n"
+                    + "     }\n"
+                    + " },\n"
+                    + " \"settings\": {\n"
+                    + "     \"funding-type\": [\"Actual Commitments\",\n"
+                    + "     \"Actual Disbursements\"],\n"
+                    + "     \"currency-code\": \"USD\",\n"
+                    + "     \"calendar-id\": \"123\",\n"
+                    + "     \"year-range\": {\n"
+                    + "         \"from\": \"2012\",\n"
+                    + "         \"to\": \"2014\"\n"
+                    + "     }\n"
+                    + " }\n"
+                    + "}</pre>")
+    public final String getReportResult(@ApiParam("a JSON object with the report's parameters") JsonBean formParams) {
         ReportSpecificationImpl spec = new ReportSpecificationImpl("preview report", ArConstants.DONOR_TYPE);
         String groupingOption = (String) formParams.get("groupingOption");
         ReportsUtil.setGroupingCriteria(spec, groupingOption);
@@ -290,16 +243,13 @@ public class Reports implements ErrorReportingEndpoint {
         return htmlRenederer.renderTable().toString();
     }
 
+    /**
+     * @see ReportsUtil#getReportResultByPage
+     */
     @POST
     @Path("/report/custom/paginate")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    /**
-     * Generates a custom report.  
-     * 
-     * @param formParams {@link ReportsUtil#getReportResultByPage form parameters}
-     * @return Response JsonBean result for the requested page and pagination information
-     * @see ReportsUtil#getReportResultByPage
-     */
+    @ApiOperation("Generates a custom report.")
     public final JsonBean getCustomReport(JsonBean formParams) {
         JsonBean result = ReportsUtil.validateReportConfig(formParams, true);
         if (result != null) {
@@ -311,49 +261,30 @@ public class Reports implements ErrorReportingEndpoint {
         return getReportResultByPage(formParams, reportId);
     }
     
-    /**
-     * Generates a custom xml report.
-     *
-     * @param reportParameter report parameters ({@link /src/main/resources/schemas/report.xsd})
-     * @return Response in xml format result for the report
-     */
     @POST
     @Path("/report/custom")
     @Consumes(MediaType.APPLICATION_XML)
     @Produces(MediaType.APPLICATION_XML + ";charset=utf-8")
+    @ApiOperation("Generates a custom xml report.")
     public final JAXBElement<Report> getXmlReportResult(ReportParameter reportParameter) {
         return getXmlReportResult(reportParameter, null);
     }
 
-    /**
-     * Retrieves report data for the specified reportId and a given page number
-     *  
-     * @param reportId    report Id
-     * @param formParams  {@link ReportsUtil#getReportResultByPage form parameters}
-     * @return JsonBean result for the requested page and pagination information
-     * @see ReportsUtil#getReportResultByPage
-     */
     @POST
     @Path("/report/{report_id}/paginate")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiOperation("Retrieves report data for the specified reportId and a given page number")
     public final JsonBean getReportResultByPage(JsonBean formParams,
             @PathParam("report_id") Long reportId) {
         return ReportsUtil.getReportResultByPage(reportId, formParams);
     }
     
-    /**
-     * Retrieves report data in XML format for the specified reportId
-     *
-     * @param reportId report Id
-     * @param reportParameter report parameters ({@link /src/main/resources/schemas/report.xsd})
-     * @return XML result for the specified reportId
-     * @see ApiXMLService#getXmlReport
-     */
     @POST
     @Path("/report/{report_id}")
     @Consumes(MediaType.APPLICATION_XML)
     @Produces(MediaType.APPLICATION_XML + ";charset=utf-8")
+    @ApiOperation("Retrieves report data in XML format for the specified reportId")
     public final JAXBElement<Report> getXmlReportResult(ReportParameter reportParameter, @PathParam("report_id") Long reportId) {
         Report xmlReport = ApiXMLService.getXmlReport(reportParameter, reportId);
         ObjectFactory xmlReportObjFactory = new ObjectFactory();
@@ -364,10 +295,7 @@ public class Reports implements ErrorReportingEndpoint {
     @POST
     @Path("/report/{report_id}/result/jqGrid")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    /**
-     * Provides paginated result for tabs.  
-     * @see {@link getReportResultByPage} for more details
-     */
+    @ApiOperation("Provides paginated result for tabs.")
     public final JsonBean getReportResultForTabGrid(JsonBean formParams, 
             @PathParam("report_id") Long reportId) {
 
@@ -926,14 +854,10 @@ public class Reports implements ErrorReportingEndpoint {
     @POST
     @Path("/report/export-to-map/{report_id}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    /**
-     * Exports the report to Map
-     * 
-     * @param config current report configuration (settings, filters)
-     * @param reportId report id
-     * @return Api state configuration id 
-     */
-    public String exportToMap(JsonBean config, @PathParam("report_id") Long reportId) {
+    @ApiOperation("Exports the report to Map")
+    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "Api state configuration id"))
+    public String exportToMap(
+            @ApiParam("report configuration") JsonBean config, @PathParam("report_id") Long reportId) {
         return ReportsUtil.exportToMap(config, reportId);
     }
     

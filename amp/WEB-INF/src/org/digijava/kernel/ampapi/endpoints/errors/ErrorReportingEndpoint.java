@@ -6,8 +6,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.digijava.kernel.ampapi.endpoints.AmpEndpoint;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
-import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
@@ -17,7 +17,7 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
  *
  * @author Octavian Ciubotaru
  */
-public interface ErrorReportingEndpoint {
+public interface ErrorReportingEndpoint extends AmpEndpoint {
 
     ApiErrorCollector errorCollector = new ApiErrorCollector();
 

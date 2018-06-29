@@ -14,7 +14,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jersey.version>1.19</jersey.version>
         <jackson.version>2.9.5</jackson.version>
-        <apidocs>false</apidocs>
+        <swagger.version>1.5.20</swagger.version>
         <buildSource></buildSource>
         <buildDate></buildDate>
     </properties>
@@ -938,6 +938,22 @@
             <version>1.2.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-core</artifactId>
+            <version>${swagger.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-annotations</artifactId>
+            <version>${swagger.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-jersey-jaxrs</artifactId>
+            <version>${swagger.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -1594,55 +1610,6 @@
             </plugins>
         </pluginManagement>
     </build>
-
-    <profiles>
-        <profile>
-            <id>swagger-api-docs</id>
-
-            <properties>
-                <docBasePath>/api-docs</docBasePath>
-                <apiBasePath>/rest</apiBasePath>
-            </properties>
-
-            <activation>
-                <property>
-                    <name>apidocs</name>
-                    <value>true</value>
-                </property>
-            </activation>
-
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>2.9.1</version>
-                        <executions>
-                            <execution>
-                                <id>generate-service-docs</id>
-                                <phase>generate-resources</phase>
-                                <configuration>
-                                    <doclet>com.carma.swagger.doclet.ServiceDoclet</doclet>
-                                    <docletArtifact>
-                                        <groupId>com.carma</groupId>
-                                        <artifactId>swagger-doclet</artifactId>
-                                        <version>1.0.6</version>
-                                    </docletArtifact>
-                                    <sourcepath>${project.basedir}/WEB-INF/src/org/digijava/kernel/ampapi</sourcepath>
-                                    <reportOutputDirectory>${project.build.outputDirectory}</reportOutputDirectory>
-                                    <useStandardDocletOptions>false</useStandardDocletOptions>
-                                    <additionalparam>-apiVersion 1 -docBasePath ${docBasePath} -apiBasePath ${apiBasePath} -d ${project.basedir}/api-docs -swaggerUiPath ${project.basedir}/swagger-ui-src</additionalparam>
-                                </configuration>
-                                <goals>
-                                    <goal>javadoc</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 
     <organization>
         <name>Development Gateway</name>

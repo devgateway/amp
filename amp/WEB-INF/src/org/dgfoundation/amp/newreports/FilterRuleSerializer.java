@@ -5,12 +5,15 @@ import java.io.IOException;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import io.swagger.models.Model;
+import io.swagger.models.ModelImpl;
+import org.digijava.kernel.ampapi.swagger.converters.ModelDescriber;
 import org.digijava.module.aim.util.AmpMath;
 
 /**
  * @author Octavian Ciubotaru
  */
-public class FilterRuleSerializer extends StdSerializer<FilterRule> {
+public class FilterRuleSerializer extends StdSerializer<FilterRule> implements ModelDescriber {
 
     public FilterRuleSerializer() {
         super(FilterRule.class);
@@ -86,5 +89,16 @@ public class FilterRuleSerializer extends StdSerializer<FilterRule> {
             }
             jgen.writeEndObject();
         }
+    }
+
+    @Override
+    public Model describe() {
+        // This version of swagger-core does not support specifying oneOf combining schema.
+        // Swagger-core 2.x seems to support such use cases.
+        // See https://github.com/swagger-api/swagger-core/issues/2277.
+        // A filter rule is oneOf: null/number/string/array of numbers or strings/range object
+        ModelImpl model = new ModelImpl();
+        model.name("FilterRule");
+        return model;
     }
 }

@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -21,6 +22,13 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.AmpMediaType;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.ApiCompat;
@@ -34,104 +42,41 @@ import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 
-
 /**
  * AMP Activity Endpoints for Activity Import / Export
  *
- * @implicitParam X-Auth-Token|string|header
  * @author acartaleanu
  */
 @Path("activity")
+@Api("activity")
 public class InterchangeEndpoints implements ErrorReportingEndpoint {
 
     @Context
     private UriInfo uri;
 
-    /**
-     * Returns a list of JSON objects, each describing a possible value that might be specified in an activity field
-     * <p>If Accept: application/vnd.possible-values-v2+json is used then possible values will be represented in a tree
-     * structure.</p>
-     * <p>If value can be translated then each possible value will contain value-translations element, a map where key
-     * is language code and value is translated value.</p>
-     * <h3>Sample response (with translations):</h3><pre>
-     * [
-     *   {
-     *     "id": 262,
-     *     "value": "Off Budget",
-     *     "translated-value": {
-     *       "en": "Off Budget",
-     *       "fr": "Hors Budget"
-     *     }
-     *   },
-     *   {
-     *     "id": 263,
-     *     "value": "On Budget",
-     *     "translated-value": {
-     *       "en": "On Budget",
-     *       "fr": "Inscrit dans le budget"
-     *     }
-     *   }
-     * ]
-     * </pre>
-     *
-     * <h3>Sample response (flat):</h3><pre>
-     * [
-     *   {
-     *     "id": 539,
-     *     "value": "Cote d'Ivoire",
-     *     "extra_info": {
-     *       "parent_location_id": null,
-     *       "parent_location_name": null,
-     *       "implementation_level_id": 76,
-     *       "implementation_location_name": "Country"
-     *     }
-     *   },
-     *   {
-     *     "id": 796,
-     *     "value": "BAGOUE",
-     *     "extra_info": {
-     *       "parent_location_id": 539,
-     *       "parent_location_name": "Cote d'Ivoire",
-     *       "implementation_level_id": 77,
-     *       "implementation_location_name": "Region"
-     *     }
-     *   }
-     * ]
-     * </pre>
-     *
-     * <h3>Sample response (tree):</h3><pre>
-     * [
-     *   {
-     *     "id": 539,
-     *     "value": "Cote d'Ivoire",
-     *     "children": [
-     *       {
-     *         "id": 796,
-     *         "value": "BAGOUE",
-     *         "extra_info": {
-     *           "implementation_level_id": 77,
-     *           "implementation_location_name": "Region"
-     *         }
-     *       }
-     *     ],
-     *     "extra_info": {
-     *       "implementation_level_id": 76,
-     *       "implementation_location_name": "Country"
-     *     }
-     *   }
-     * ]
-     * </pre>
-     *
-     * @implicitParam Accept|string|header
-     * @implicitParam translations|string|query|false|||||false|pipe separated list of language codes
-     * @param fieldName fully qualified activity field
-     * @return list of possible values
-     */
     @GET
     @Path("fields/{fieldName}")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8", AmpMediaType.POSSIBLE_VALUES_V2_JSON})
     @ApiMethod(authTypes = AuthRule.IN_WORKSPACE, id = "getValues", ui = false)
-    public Response getPossibleValuesFlat(@PathParam("fieldName") String fieldName) {
+    @ApiOperation(
+            value = "Returns a list of JSON objects, each describing a possible value that might be specified "
+                    + "in an activity field",
+            notes = "If Accept: application/vnd.possible-values-v2+json is used then possible values will be "
+                    + "represented in a tree structure.\nIf value can be translated then each possible value "
+                    + "will contain value-translations element, a map where key is language code and value is "
+                    + "translated value.")
+    @ApiImplicitParams(
+            @ApiImplicitParam(
+                    name = "Accept",
+                    paramType = "header",
+                    allowableValues = "application/vnd.possible-values-v2+json,application/json",
+                    example = "application/vnd.possible-values-v2+json"))
+    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "list of possible values",
+            response = PossibleValue.class, responseContainer = "List"))
+    public Response getPossibleValuesFlat(
+            @PathParam("fieldName")
+            @ApiParam(value = "fully qualified activity field", example = "locations~location")
+            String fieldName) {
         List<PossibleValue> possibleValues = possibleValuesFor(fieldName);
         MediaType responseType = MediaType.APPLICATION_JSON_TYPE;
         if (AmpMediaType.POSSIBLE_VALUES_V2_JSON.equals(ApiCompat.getRequestedMediaType())) {
@@ -142,85 +87,28 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
         return Response.ok(possibleValues, responseType).build();
     }
 
-    /**
-     * Returns a list of possible values for each requested field.
-     * <p>If Accept: application/vnd.possible-values-v2+json is used then possible values will be represented in a tree
-     * structure.</p>
-     * <p>If value can be translated then each possible value will contain value-translations element, a map where key
-     * is language code and value is translated value.</p>
-     * <h3>Sample request:</h3><pre>
-     * ["fundings~donor_organization_id", "approval_status", "activity_budget"]
-     * </pre>
-     * <h3>Sample response (flat):</h3><pre>
-     * {
-     *   "fundings~donor_organization_id": [
-     *     {
-     *       "id": 1,
-     *       "value": "Donor 1"
-     *     },
-     *     {
-     *       "id": 2,
-     *       "value": "Donor 2"
-     *     }
-     *   ],
-     *   "approval_status": [
-     *     {
-     *       "id": "1",
-     *       "value": "approved"
-     *     },
-     *     {
-     *       "id": "2",
-     *       "value": "edited"
-     *     }
-     *   ],
-     *   "activity_budget": [
-     *     {
-     *       "id": 262,
-     *       "value": "Off Budget",
-     *       "translated-value": {
-     *         "en": "Off Budget",
-     *         "fr": "Hors Budget"
-     *       }
-     *     },
-     *     {
-     *       "id": 263,
-     *       "value": "On Budget",
-     *       "translated-value": {
-     *         "en": "On Budget",
-     *         "fr": "Inscrit dans le budget"
-     *       }
-     *     }
-     *   ]
-     * }
-     * </pre>
-     * <h3>Sample response (tree):</h3><pre>
-     * {
-     *   ...
-     *   "locations~locations": [
-     *     {
-     *       "id": "1",
-     *       "value": "Cote d'Ivoire",
-     *       "children": [
-     *         {
-     *          "id": 796,
-     *          "value": "BAGOUE"
-     *         }
-     *       ]
-     *     }
-     *   ],
-     *   ...
-     * }
-     * </pre>
-     * @implicitParam Accept|string|header
-     * @implicitParam translations|string|query|false|||||false|pipe separated list of language codes
-     * @param fields list of fully qualified activity fields
-     * @return list of possible values grouped by field
-     */
     @POST
     @Path("field/values")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8", AmpMediaType.POSSIBLE_VALUES_V2_JSON})
     @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getMultiValues", ui = false)
-    public Response getValues(List<String> fields) {
+    @ApiOperation(
+            value = "Returns a list of possible values for each requested field.",
+            notes = "If Accept: application/vnd.possible-values-v2+json is used then possible values will be "
+                    + "represented in a tree structure.\n\n"
+                    + "If value can be translated then each possible value will contain value-translations element, "
+                    + "a map where key is language code and value is translated value.\n\n"
+                    + "Example body: `[\"fundings~donor_organization_id\", \"approval_status\", \"activity_budget\"]`"
+    )
+    @ApiImplicitParams(
+            @ApiImplicitParam(
+                    name = "Accept",
+                    paramType = "header",
+                    allowableValues = "application/vnd.possible-values-v2+json,application/json",
+                    example = "application/vnd.possible-values-v2+json"))
+    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "list of possible values grouped by field"))
+    public Response getValues(
+            @ApiParam(value = "list of fully qualified activity fields")
+            List<String> fields) {
         Map<String, List<PossibleValue>> response;
         if (fields == null) {
             response = Collections.emptyMap();
@@ -243,15 +131,13 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
         return PossibleValuesEnumerator.INSTANCE.getPossibleValuesForField(fieldName, AmpActivityFields.class, null);
     }
     
-    /**
-     * Provides full set of available fields and their settings/rules in a hierarchical structure.
-     * @return JSON with fields information
-     * @see <a href="https://wiki.dgfoundation.org/display/AMPDOC/Fields+enumeration">Fields Enumeration Wiki<a/>
-     */
     @GET
     @Path("fields")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.IN_WORKSPACE, id = "getFields", ui = false)
+    @ApiOperation(value = "Provides full set of available fields and their settings/rules in a hierarchical "
+            + "structure.\n\n"
+            + "See [Fields Enumeration Wiki](https://wiki.dgfoundation.org/display/AMPDOC/Fields+enumeration)")
     public List<APIField> getAvailableFields() {
         return AmpFieldsEnumerator.PUBLIC_ENUMERATOR.getAllAvailableFields();
     }
@@ -265,25 +151,27 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
         return getAvailableFields();
     }
     
-    /**
-     * Returns a JSON object with the list of all projects on the system, including its view and edit status for the current logged user.
-     * If the user can view the project, the 'view' property of the project is set to true. False otherwise.
-     * If the user can edit the project, the 'edit' property of the project on the JSON is set to true. False otherwise.
-     * Pagination can be used if the parameters are sent on the request. If not parameters are sent, the full list
-     * of projects is returned.
-     * 
-     * @param pid  current pagination request reference (random id). It acts as a key for a LRU caching mechanism that holds the 
-     * full list of projects for the current user. If it is not provided no caching is used
-     * @param offset, Integer used for pagination. It represents which is the first project to return. It helps to skip the unnecessary 
-     * records.
-     * @param size, Integer used for pagination. It tells how many projects to return
-     * @return list of JsonBean with all the projects on the system
-     */
     @GET
     @Path("/projects")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.IN_WORKSPACE, id = "getProjectList", ui = false)
-    public Collection<JsonBean> getProjects(@QueryParam ("pid") String pid,@QueryParam("offset") Integer offset, @QueryParam("count") Integer count) {
+    @ApiOperation(
+            value = "Returns a JSON object with the list of all projects on the system, including its view and edit "
+                    + "status for the current logged user.",
+            notes = "If the user can view the project, the 'view' property of the project is set to true. False "
+                    + "otherwise. If the user can edit the project, the 'edit' property of the project on the JSON "
+                    + "is set to true. False otherwise. Pagination can be used if the parameters are sent on the "
+                    + "request. If not parameters are sent, the full list of projects is returned.")
+    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK,
+            message = "list of JsonBean with all the projects on the system"))
+    public Collection<JsonBean> getProjects(
+            @ApiParam("Current pagination request reference (random id). It acts as a key for a LRU caching "
+                    + "mechanism that holds the full list of projects for the current user. If it is not "
+                    + "provided no caching is used")
+            @QueryParam("pid")
+            String pid,
+            @ApiParam("Number of projects to skip") @QueryParam("offset") Integer offset,
+            @ApiParam("Number of projects to return") @QueryParam("count") Integer count) {
         TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
         Collection<JsonBean> activityCollection = ProjectList.getActivityList(pid, tm);
         int start = 0;
@@ -297,97 +185,80 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
         return new ArrayList(activityCollection).subList(start, end);
     }
 
-    /**
-     * Provides full project information 
-     * @param projectId project id
-     * @return project with full set of configured fields and their values 
-     */
     @GET
     @Path("/projects/{projectId}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.VIEW_ACTIVITY, id = "getProject", ui = false)
-    public JsonBean getProject(@PathParam("projectId") Long projectId) {
+    @ApiOperation("Provides full project information")
+    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK,
+            message = "project with full set of configured fields and their values"))
+    public JsonBean getProject(@ApiParam("project id") @PathParam("projectId") Long projectId) {
         return InterchangeUtils.getActivity(projectId);
     }
     
-    /**
-     * Provides full project information
-     * @param projectId project id
-     * @param filter jsonBean with a list of fields that will be displayed
-     * @return project with full set of configured fields and their values
-     */
     @POST
     @Path("/projects/{projectId}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.VIEW_ACTIVITY, id = "getProjectsFilter", ui = false)
-    public JsonBean getProject(@PathParam("projectId") Long projectId, JsonBean filter) {
+    @ApiOperation("Provides full project information")
+    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK,
+            message = "project with full set of configured fields and their values"))
+    public JsonBean getProject(
+            @ApiParam("project id") @PathParam("projectId") Long projectId,
+            @ApiParam("jsonBean with a list of fields that will be displayed") JsonBean filter) {
         return InterchangeUtils.getActivity(projectId, filter);
     }
 
-    /**
-     * Retrieve project by AMP Id.
-     *
-     * <h3>Sample Output:</h3><pre>
-     * {
-     *   "project_impact": null,
-     *   "project_management": null,
-     *   "internal_id": 10827,
-     *   "amp_id": "112007154460",
-     *   "project_title": "Activity title",
-     *   "description": "Activity description",
-     *   "lessons_learned": null,
-     *   ...
-     * }
-     * </pre>
-     *
-     * @param ampId AMP Id
-     * @return Project with full set of configured fields and their values.
-     */
     @GET
     @Path("/project")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getProjectByAmpId", ui = false)
-    public JsonBean getProjectByAmpId(@QueryParam("amp-id") String ampId) {
+    @ApiOperation("Retrieve project by AMP Id.")
+    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK,
+            message = "project with full set of configured fields and their values"))
+    public JsonBean getProjectByAmpId(@ApiParam("AMP Id") @QueryParam("amp-id") String ampId) {
         return InterchangeUtils.getActivityByAmpId(ampId);
     }
 
-    /**
-     * Imports an activity.
-     * <p>Original behaviour: is_draft field cannot be specified. If saving as draft is allowed then activity will
-     * be saved as draft. Otherwise activity will be saved as submitted.</p>
-     * <p>AMP Offline behaviour (User-Agent: AMPOffline): is_draft field is importable and it's value always
-     * honored.</p>
-     * 
-     * @param newJson activity configuration
-     * @return latest project overview or an error if invalid configuration is received
-     */
     @POST
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "addProject", ui = false)
-    public JsonBean addProject(JsonBean newJson) {
+    @ApiOperation(
+            value = "Imports an activity.",
+            notes = "Original behaviour: is_draft field cannot be specified. If saving as draft is allowed then "
+                    + "activity will be saved as draft. Otherwise activity will be saved as submitted.\n\n"
+                    + "AMP Offline behaviour (User-Agent: AMPOffline): is_draft field is importable and it's"
+                    + "value is always honored.")
+    @ApiResponses({
+            @ApiResponse(code = HttpServletResponse.SC_OK, message = "latest project overview"),
+            @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST,
+                    message = "error if invalid configuration is received")})
+    public JsonBean addProject(@ApiParam("activity configuration") JsonBean newJson) {
         return InterchangeUtils.importActivity(newJson, false, uri.getBaseUri() + "activity");
     }
     
-    /**
-     * Updates an activity
-     * <p>Original behaviour: is_draft field cannot be specified. If existing activity was submitted then at import
-     * this status will be kept if possible. Otherwise activity will be saved as draft.</p>
-     * <p>AMP Offline behaviour (User-Agent: AMPOffline): is_draft field is importable and it's value always
-     * honored.</p>
-     * <p>AMP Offline must use optimistic lock in order to update activity. For other clients locking is optional.
-     * Locking is achieved by sending last known value of activity_group.version. If activity was updated in meantime
-     * then version will be different and subsequent updates will fail with appropriate message.</p>
-     *
-     * @param projectId the id of the activity which should be updated
-     * @param newJson activity configuration
-     * @return latest project overview or an error if invalid configuration is received
-     */
     @POST
     @Path("/{projectId}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "updateProject", ui = false)
-    public JsonBean updateProject(@PathParam("projectId") Long projectId, JsonBean newJson) {
+    @ApiOperation(
+            value = "Updates an activity",
+            notes = "Original behaviour: is_draft field cannot be specified. If existing activity was submitted then "
+                    + "at import this status will be kept if possible. Otherwise activity will be saved as draft.\n\n"
+                    + "AMP Offline behaviour (User-Agent: AMPOffline): is_draft field is importable and it's value "
+                    + "is always honored.\n\n"
+                    + "AMP Offline must use optimistic lock in order to update activity. For other clients locking is "
+                    + "optional. Locking is achieved by sending last known value of activity_group.version. "
+                    + "If activity was updated in meantime then version will be different and subsequent updates "
+                    + "will fail with appropriate message.")
+    @ApiResponses({
+            @ApiResponse(code = HttpServletResponse.SC_OK, message = "latest project overview"),
+            @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST,
+                    message = "error if invalid configuration is received")})
+    public JsonBean updateProject(
+            @ApiParam("the id of the activity which should be updated") @PathParam("projectId") Long projectId,
+            @ApiParam("activity configuration") JsonBean newJson) {
         /*
          * Originally it was defined as PUT to avoid these type of issues checked here.
          * But it is more common to use it as POST, so let's then validate

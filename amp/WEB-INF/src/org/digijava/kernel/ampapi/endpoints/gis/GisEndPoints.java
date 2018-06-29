@@ -26,6 +26,9 @@ import javax.ws.rs.core.StreamingOutput;
 
 import com.fasterxml.jackson.databind.node.POJONode;
 import com.fasterxml.jackson.databind.node.TextNode;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.dgfoundation.amp.newreports.AmountsUnits;
@@ -76,6 +79,7 @@ import net.sf.json.JSONObject;
  * 
  */
 @Path("gis")
+@Api("gis")
 public class GisEndPoints implements ErrorReportingEndpoint {
     private static final Logger logger = Logger.getLogger(GisEndPoints.class);
     
@@ -85,25 +89,28 @@ public class GisEndPoints implements ErrorReportingEndpoint {
         return EndpointUtils.getAvailableMethods(GisEndPoints.class.getName());
     }   
 
-    /**
-     * Returns Aggregate ADM info by ADM Level
-     * 
-     * @param filter
-     *            adminLevel to filter, the json should look like {
-     *            "FiltersParams":
-     *            {"params":[{"filterName":"adminLevel","filterValue"
-     *            :["Region"]}] } }
-     * 
-     *            Available regions
-     * @return
-     * @throws AmpApiException 
-     */
     @POST
     @Path("/cluster")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "ClusterPointsByAdmin")
+    @ApiOperation(
+            value = "Returns Aggregate ADM info by ADM Level",
+            notes = "### Filter sample\n"
+                    + "\n"
+                    + "```\n"
+                    + "{\n"
+                    + "  \"FiltersParams\": {\n"
+                    + "    \"params\": [\n"
+                    + "      {\n"
+                    + "        \"filterName\": \"adminLevel\",\n"
+                    + "        \"filterValue\": [ \"Region\" ]\n"
+                    + "      }\n"
+                    + "    ]\n"
+                    + "  }\n"
+                    + "}\n"
+                    + "```")
     public final FeatureCollectionGeoJSON getClusteredPointsByAdm(
-            final JsonBean config) throws AmpApiException {
+            @ApiParam("filter") final JsonBean config) throws AmpApiException {
 
         List<ClusteredPoints> c = LocationService.getClusteredPoints(config);
         FeatureCollectionGeoJSON result = new FeatureCollectionGeoJSON();
@@ -119,25 +126,30 @@ public class GisEndPoints implements ErrorReportingEndpoint {
         return result;
     }
 
-    /**
-     * Returns Aggregate ADM info by ADM Level
-     * 
-     * @param filter
-     *            adminLevel to filter, the json should look like {
-     *            "FiltersParams":
-     *            {"params":[{"filterName":"adminLevel","filterValue"
-     *            :["Region"]}] } }
-     * 
-     *            Available regions
-     * @return
-     * @throws AmpApiException 
-     */
     @SuppressWarnings("unchecked")
     @POST
     @Path("/structures")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "Structures")
-    public final FeatureCollectionGeoJSON getProjectSites(final JsonBean config,@QueryParam("startFrom") Integer startFrom,
+    @ApiOperation(
+            value = "Returns Aggregate ADM info by ADM Level",
+            notes = "### Filter sample\n"
+                    + "\n"
+                    + "```\n"
+                    + "{\n"
+                    + "  \"FiltersParams\": {\n"
+                    + "    \"params\": [\n"
+                    + "      {\n"
+                    + "        \"filterName\": \"adminLevel\",\n"
+                    + "        \"filterValue\": [ \"Region\" ]\n"
+                    + "      }\n"
+                    + "    ]\n"
+                    + "  }\n"
+                    + "}\n"
+                    + "```")
+    public final FeatureCollectionGeoJSON getProjectSites(
+            @ApiParam("filter") final JsonBean config,
+            @QueryParam("startFrom") Integer startFrom,
             @QueryParam("size")Integer size) throws AmpApiException {
         FeatureCollectionGeoJSON f = new FeatureCollectionGeoJSON();
         List<AmpStructure> al = LocationService.getStructures( config);
@@ -212,35 +224,37 @@ public class GisEndPoints implements ErrorReportingEndpoint {
         return indicatorLayers;
     }
 
-    /**
-    * Config sample <br/>
-    * {                                                 <br/>
-    *  "columnFilters":{                                <br/>  
-    *   "National Planning Objectives Level 1 Id":[     <br/>  
-    *     1,2,3,4                                       <br/>
-    *   ],                                              <br/>
-    *  "Primary Sector Sub-Sector Id":[                 <br/>  
-    *     11,22,32,43                                   <br/>
-    *   ]                                               <br/>
-    * },                                                <br/>
-    * "filters":{                                       <br/>
-    *   "date":{                                        <br/>
-    *      "start":"1967-01-01",                        <br/>
-    *      "end":"2015-12-31"                           <br/>
-    *  },                                               <br/>
-    *  "keyWord":"some activity"                        <br/>
-    * },                                                <br/>
-    * “settings” :  {                                   <br/>
-    *       "0" : [“Actual Commitments”, “Actual Disbursements”],   <br/>
-    *       "1" : “USD”,                                <br/>
-    *       "2" : “123”                                 <br/>
-    *   }                                               <br/>
-    * }                                                 <br/>
-    */
     @POST
     @Path("/activities")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "ActivitiesNewLists")
+    @ApiOperation(
+            value = "",
+            notes = "### Config sample\n"
+                    + "\n"
+                    + "```json\n"
+                    + "{\n"
+                    + "  \"columnFilters\": {\n"
+                    + "    \"National Planning Objectives Level 1 Id\": [1,2,3,4],\n"
+                    + "    \"Primary Sector Sub-Sector Id\": [11,22,32,43]\n"
+                    + "  },\n"
+                    + "  \"filters\": {\n"
+                    + "    \"date\": {\n"
+                    + "      \"start\": \"1967-01-01\",\n"
+                    + "      \"end\": \"2015-12-31\"\n"
+                    + "    },\n"
+                    + "    \"keyWord\": \"some activity\"\n"
+                    + "  },\n"
+                    + "  \"settings\": {\n"
+                    + "    \"0\": [\n"
+                    + "      \"Actual Commitments\",\n"
+                    + "      \"Actual Disbursements\"\n"
+                    + "    ],\n"
+                    + "    \"1\": \"USD\",\n"
+                    + "    \"2\": \"123\"\n"
+                    + "  }\n"
+                    + "}\n"
+                    + "```\n")
     public JsonBean getActivitiesNew(JsonBean config, @QueryParam("start") Integer page,@QueryParam("size") Integer pageSize) {
         logger.error(String.format("Requesting %s pagesize from %s page", pageSize, page));
         try {
@@ -251,18 +265,15 @@ public class GisEndPoints implements ErrorReportingEndpoint {
         }   
     }
 
-    /**
-     * return activity by id in the format /activities/12,15,16
-     * @param config {@link #getActivitiesNew  Json config}
-     * @param activityIds comma separated list of ids
-     * @return
-     * @see #getActivitiesNew
-     */
     @POST
     @Path("/activities/{activityId}") //once its done remove the New
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "ActivitiesById")
-    public JsonBean getActivities(JsonBean config, @PathParam("activityId") PathSegment activityIds) {
+    @ApiOperation(value = "return activity by id in the format /activities/12,15,16",
+            notes = "For config sample see POST /gis/activities")
+    public JsonBean getActivities(
+            @ApiParam("config") JsonBean config,
+            @ApiParam("comma separated list of ids") @PathParam("activityId") PathSegment activityIds) {
         try {
             return ActivityService.getActivities(config,
                     Arrays.asList(activityIds.getPath().split("\\s*,\\s*")),
@@ -377,82 +388,75 @@ public class GisEndPoints implements ErrorReportingEndpoint {
         return indicatorsJson;
     }
     
-    /**
-     * Clarifies if Gap Analysis can be done over for the indicator layer based on its indicator Type and ADM level
-     * @param indicatorTypeId the indicator type id
-     * @param admLevel administrative level id
-     * @return <pre>
-     * {
-     *     "canDoGapAnalysis": true/false
-     *     "error" : {...} // OPTIONAL, on invalid input/other errors   
-     * }
-     * </pre>
-     * 
-     */
     @GET
     @Path("/can-do-gap-analysis")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "canDoGapAnalysis")
-    public JsonBean canDoGapAnalysis(@QueryParam("indicatorTypeId") Long indicatorTypeId, 
+    @ApiOperation(
+            value = "Clarifies if Gap Analysis can be done over for the indicator layer based on its indicator "
+                    + "Type and ADM level",
+            notes = "### Sample response\n"
+                    + "\n"
+                    + "```json\n"
+                    + "{\n"
+                    + "    \"canDoGapAnalysis\": true/false\n"
+                    + "    \"error\" : {...} // OPTIONAL, on invalid input/other errors   \n"
+                    + "}\n"
+                    + "```")
+    public JsonBean canDoGapAnalysis(
+            @QueryParam("indicatorTypeId") Long indicatorTypeId,
             @QueryParam("admLevelId") Long admLevelId) {
         return new PublicGapAnalysis().canDoGapAnalysis(indicatorTypeId, admLevelId);
     }
     
-    /**
-     * Runs Gap Analysis directly over external indicator data, not from DB. 
-     * For saved indicators Gap Analysis see {@link #getIndicatorsById(JsonBean, Long)} 
-     * @param input
-     * <pre>
-     * {
-     *   "indicator" : {...}, // full indicator data, like the one that is used for saving
-     *   "filters" : {...}, // current filters
-     *   "settings" : {...} // current settings if any
-     * }
-     * </pre>
-     * @return
-     */
     @POST
     @Path("/do-gap-analysis")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "doGapAnalysis")
+    @ApiOperation(
+            value = "Runs Gap Analysis directly over external indicator data, not from DB.",
+            notes = "For saved indicators Gap Analysis see `POST /gis/indicators/{indicatorId}`. \n"
+                    + "\n"
+                    + "### Sample input\n"
+                    + "```\n"
+                    + "{\n"
+                    + "  \"indicator\" : {...}, // full indicator data, like the one that is used for saving\n"
+                    + "  \"filters\" : {...}, // current filters\n"
+                    + "  \"settings\" : {...} // current settings if any\n"
+                    + "}\n"
+                    + "```")
     public JsonBean doGapAnalysis(JsonBean input) {
         return new PublicGapAnalysis().doPublicGapAnalysis(input);
     }
     
-    /**
-     * Just returns the same data so the GIS code doesnt break with public layers. 
-     * @param input
-     * <pre>
-     * {
-     *   "indicator" : {...}, // full indicator data, like the one that is used for saving
-     * }
-     * </pre>
-     * @return
-     */
     @POST
     @Path("/process-public-layer")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "processPublicLayer")
+    @ApiOperation(
+            value = "Just returns the same data so the GIS code doesnt break with public layers.",
+            notes = "### Sample input\n"
+                    + "\n"
+                    + "```\n"
+                    + "{\n"
+                    + " \"indicator\" : {...}, // full indicator data, like the one that is used for saving\n"
+                    + "}\n"
+                    + "```")
     public JsonBean processPublicLayer(JsonBean input) {
         // Due to problems on the frontend for now we receive the public layer data and if there is no gap analysis then we return it without changes.
         return input;
     }    
     
-    /**
-     * Export map id from current filters
-     * 
-     * @param webResponse
-     * @param mapId
-     * @param exportType type 1 to export activity locations
-     *                   type 2 to export activity Structures
-     * @return
-     * @throws AmpApiException 
-     */
     @GET
     @Path("/export-map/")
     @Produces("application/vnd.ms-excel")
     @ApiMethod(ui = false, id = "MapExport")
-     public StreamingOutput getExportMap(@Context HttpServletResponse webResponse,@QueryParam("mapId") Long mapId,@DefaultValue("1") @QueryParam("exportType") Long exportType) throws AmpApiException
+    @ApiOperation("Export map id from current filters")
+     public StreamingOutput getExportMap(
+             @Context HttpServletResponse webResponse,
+            @QueryParam("mapId") Long mapId,
+            @ApiParam(value = "1=locations, 2=structures", allowableValues = "1,2")
+            @DefaultValue("1") @QueryParam("exportType") Long exportType) throws AmpApiException
     {
         final HSSFWorkbook wb;
         String name="";
@@ -515,22 +519,15 @@ public class GisEndPoints implements ErrorReportingEndpoint {
         return false;
     }
     
-    /**
-     * Return the last updated activities
-     * 
-     * @param limit
-     *             the number of activities to include
-     * @param columns
-     *            the name of extra columns to include on the report. The
-     *            report already includes: project title, date of update and
-     *            donor names
-     * @return JSONObject, with the last updated activities
-     */
     @POST
     @Path("/last-updated")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "LastUpdatedActivities")
-    public JSONObject getLastUpdated(@DefaultValue("10") @QueryParam("limit") Integer limit,
+    @ApiOperation("Return the last updated activities")
+    public JSONObject getLastUpdated(
+            @ApiParam("the number of activities to include") @DefaultValue("10") @QueryParam("limit") Integer limit,
+            @ApiParam("the name of extra columns to include on the report. The report already includes: "
+                    + "project title, date of update and donor names")
             @QueryParam("columns") String columns, JsonBean config) {
         List<String> extraColumns = new ArrayList<String>();
         if (columns != null) {
@@ -559,21 +556,21 @@ public class GisEndPoints implements ErrorReportingEndpoint {
         return ReportsUtil.getApiState(reportConfigId);
     }
     
-    /**
-     * Provides information about the availability or not of enabled performance rules. 
-     * This information is used for configuring the GIS UI.
-     * The performance rule toggle on GIS UI is only displayed if enabled performance rules are available.
-     * @return <pre>
-     * {
-     *     "hasEnabledPerformanceRules": true/false  
-     * }
-     * </pre>
-     * 
-     */
     @GET
     @Path("/has-enabled-performance-rules")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "hasEnabledPerformanceRules")
+    @ApiOperation(
+            value = "Provides information about the availability or not of enabled performance rules.",
+            notes = "This information is used for configuring the GIS UI.\n\n"
+                    + "The performance rule toggle on GIS UI is only displayed if enabled performance rules are "
+                    + "available.\n\n"
+                    + "### Sample response\n"
+                    + "```\n"
+                    + "{\n"
+                    + "    \"hasEnabledPerformanceRules\": true/false  \n"
+                    + "}\n"
+                    + "```")
     public JsonBean hasEnabledPerformanceRules() {
         JsonBean result = new JsonBean();
         result.set(PerformanceRuleConstants.HAS_ENABLED_PERFORMANCE_RULES,

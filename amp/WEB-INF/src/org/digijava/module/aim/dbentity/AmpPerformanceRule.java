@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import io.swagger.annotations.ApiModelProperty;
 import org.digijava.kernel.ampapi.endpoints.performance.AmpCategoryValueSerializer;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleConstants;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -20,6 +21,7 @@ public class AmpPerformanceRule {
 
     private Long id;
 
+    @ApiModelProperty(example = "No disbursements")
     private String name;
 
     private String description;

@@ -29,7 +29,7 @@ import org.junit.Test;
 public class FundingFlowsInnerTests extends NiTestCase {
         
     public FundingFlowsInnerTests() {
-        super("FundingFlows tests", HardcodedReportsTestSchema.getInstance());
+        super(HardcodedReportsTestSchema.getInstance());
     }
     
     @Test

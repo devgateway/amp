@@ -11,6 +11,7 @@ import org.dgfoundation.amp.ar.viewfetcher.InternationalizedViewsRepository;
 import org.dgfoundation.amp.mondrian.monet.MonetConnection;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
+import org.digijava.kernel.content.ContentRepositoryManager;
 import org.digijava.kernel.persistence.HibernateClassLoader;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -46,6 +47,8 @@ public class StandaloneAMPInitializer {
 
             DigiConfigManager.initialize("./repository");
             PersistenceManager.initialize(false, null);
+            ContentRepositoryManager.initialize();
+            
             TLSUtils.getThreadLocalInstance().setForcedLangCode(SiteUtils.getDefaultSite().getDefaultLanguage().getCode());
             InternationalizedViewsRepository.i18Models.size(); // force init outside of testcases
 

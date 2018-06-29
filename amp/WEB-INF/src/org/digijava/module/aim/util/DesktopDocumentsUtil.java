@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.dgfoundation.amp.utils.BoundedList;
+import org.digijava.kernel.content.ContentRepositoryManager;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponseDocument;
 import org.digijava.module.aim.helper.Constants;
@@ -32,7 +33,7 @@ public class DesktopDocumentsUtil {
         HttpSession session = request.getSession();
         TeamMember tm = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
 
-        Session readSession = DocumentManagerUtil.getReadSession(request);
+        Session readSession = ContentRepositoryManager.getReadSession(request);
 
         DesktopDocumentsUtil desktopDocumentUtils = new DesktopDocumentsUtil();
 

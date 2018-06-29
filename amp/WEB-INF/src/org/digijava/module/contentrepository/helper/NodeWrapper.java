@@ -533,7 +533,8 @@ public class NodeWrapper{
         try {
             jcrWriteSession.save();
             node.checkin();
-            logger.error(String.format("CREATED JackRabbit node with uuid = %s, name = %s", this.getUuid(), this.tryGetName()));
+            logger.info(String.format("CREATED JackRabbit node with uuid = %s, name = %s", 
+                    this.getUuid(), this.tryGetName()));
             return true;
         }
         catch (Exception E) {
@@ -1007,14 +1008,14 @@ public class NodeWrapper{
                 }
             }
         }catch (PathNotFoundException ex) {
-        //Some fields were saved as properties before multilingual was enabled for them
-        //like: title,notes, description. Check if contains the value as a property
-            logger.warn("The field "+fieldName + " was not found as a property. Probably old config");
+        // Some fields were saved as properties before multilingual was enabled for them
+        // E.g.: title, notes, description. Check if contains the value as a property
             value = getStringProperty(fieldName);
         }   
         catch (RepositoryException e) {
             logger.error("Exception accesing traslated titles in NodeWrapper",e);
         }
+        
         return value;
     }
     

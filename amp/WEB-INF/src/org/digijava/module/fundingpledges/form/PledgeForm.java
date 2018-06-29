@@ -207,7 +207,7 @@ public class PledgeForm extends ActionForm implements Serializable {
         //this.setFundingPledges(fp);
         this.setPledgeId(fp.getId());
         //we set the id formated only for the view form
-        this.setCreatedDate(fp.getCreatedDate()!=null?FormatHelper.formatDate(fp.getCreatedDate()):"-");
+        this.setCreatedDate(fp.getCreatedDate() != null ? FormatHelper.formatDate(fp.getCreatedDate()) : "-");
         this.setTitleFreeText(fp.getTitleFreeText());
         this.setPledgeTitleId(fp.getTitle() == null ? null : fp.getTitle().getId());
         this.setPledgeStatusId(fp.getStatus() == null ? null : fp.getStatus().getId());

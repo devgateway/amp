@@ -15,7 +15,7 @@
 <c:choose>
 <c:when test="${pledgeUser}">
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+	<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <jsp:include page="teamPagesHeader.jsp"  />
 
 <style type="text/css">
@@ -133,6 +133,10 @@ function setHoveredRow(rowId) {
 
 
 </script>
+
+	<logic:present name="PNOTIFY_ERROR_MESSAGE" scope="request">
+		<div class="pledge-error-message"><c:out value="${PNOTIFY_ERROR_MESSAGE}" /></div>
+	</logic:present>
 
 <digi:instance property="viewPledgesForm" />
 

@@ -60,6 +60,7 @@ public class SavePledge extends Action {
                 {
                     ARUtil.writeResponse(response, "ok");
                     AddPledge.markPledgeEditorClosed(request.getSession());
+                    plForm.reset();
                     return null;
                 }
             }
@@ -95,8 +96,8 @@ public class SavePledge extends Action {
         return plForm.getPledgeId() == preexistingPledgeWithSameName.getId();
     }
     
-    protected List<ValidationError> doSave(PledgeForm plForm, HttpServletRequest request) throws Exception // it might die, ALWAYS check
-    // for exceptions and forward cleanly by AJAX
+    protected List<ValidationError> doSave(PledgeForm plForm, HttpServletRequest request) throws Exception
+    // it might die, ALWAYS check for exceptions and forward cleanly by AJAX
     {       
         String action = "add";
         Session session = PersistenceManager.getSession();
@@ -139,7 +140,7 @@ public class SavePledge extends Action {
         res.addAll(do_save_documents(session, pledge, plForm.getSelectedDocs(), plForm.getInitialDocuments()));
         pledge.setCreatedDate(new Date());
         session.saveOrUpdate(pledge);
-        AuditLoggerUtil.logObject(request,pledge,action,null);
+        AuditLoggerUtil.logObject(request, pledge, action, null);
         if (res.isEmpty()) { //save succeeded
             boolean newPledge = plForm.isNewPledge();
             try {

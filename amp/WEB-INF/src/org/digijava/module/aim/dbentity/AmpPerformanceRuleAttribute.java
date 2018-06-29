@@ -9,6 +9,7 @@ import java.util.stream.Stream;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * 
@@ -23,10 +24,13 @@ public class AmpPerformanceRuleAttribute {
     @JsonBackReference
     private AmpPerformanceRule rule;
 
+    @ApiModelProperty(example = "timeAmount")
     private String name;
-    
+
+    @ApiModelProperty(example = "20")
     private String value;
 
+    @ApiModelProperty(example = "AMOUNT")
     private PerformanceRuleAttributeType type;
 
     public Long getId() {

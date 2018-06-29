@@ -87,6 +87,7 @@
 	 -->
 	<http pattern="/rest/**" security="none" />
     <http pattern="/api-docs/**" security="none" />
+    <http pattern="/redoc.html" security="none" />
 
 	<http pattern="/TEMPLATE/ampTEMPLATE**" security="none" />
 	<http pattern="/TEMPLATE/ampTemplate/gisModule/dist/**" security="none" />

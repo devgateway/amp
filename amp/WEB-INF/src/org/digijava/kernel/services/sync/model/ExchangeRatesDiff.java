@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import io.swagger.annotations.ApiModelProperty;
 import org.digijava.kernel.ampapi.endpoints.currency.dto.ExchangeRatesForPair;
 import org.digijava.kernel.ampapi.endpoints.util.ISO8601DateSerializer;
 
@@ -13,6 +14,7 @@ import org.digijava.kernel.ampapi.endpoints.util.ISO8601DateSerializer;
  */
 public class ExchangeRatesDiff {
 
+    @ApiModelProperty("dates for which exchange rates changed and must be replaced")
     @JsonProperty("changed-dates")
     @JsonSerialize(contentUsing = ISO8601DateSerializer.class)
     private final List<Date> changedDates;

@@ -14,6 +14,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import io.swagger.annotations.Api;
 import org.dgfoundation.amp.gpi.reports.GPIDonorActivityDocument;
 import org.dgfoundation.amp.gpi.reports.GPIRemark;
 import org.dgfoundation.amp.gpi.reports.GPIReport;
@@ -28,6 +29,7 @@ import org.digijava.module.aim.util.FiscalCalendarUtil;
 
 
 @Path("gpi")
+@Api("gpi")
 public class GPIEndPoints implements ErrorReportingEndpoint {
 
     /**

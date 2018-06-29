@@ -18,5 +18,9 @@ public final class ResourceErrors {
     public static final ApiErrorMessage RESOURCE_ERROR = new ApiErrorMessage(5, 
             "Error during processing the requested resource");
     public static final ApiErrorMessage FILE_SIZE_INVALID = new ApiErrorMessage(6, "File is too large");
+    public static final ApiErrorMessage INVALID_TEAM_MEMBER = 
+            new ApiErrorMessage(7, "Creator email is not member of team");
+    public static final ApiErrorMessage PRIVATE_RESOURCE_SUPPORTED_ONLY = new ApiErrorMessage(7, 
+            "Only private resources are supported");
     
 }

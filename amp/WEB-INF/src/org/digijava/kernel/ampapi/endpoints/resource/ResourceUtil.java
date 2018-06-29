@@ -20,6 +20,7 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.user.User;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
@@ -74,7 +75,7 @@ public final class ResourceUtil {
             result.set(ResourceEPConstants.WEB_LINK, resource.getWebLink());
             result.set(ResourceEPConstants.ADDING_DATE, 
                     DateFormatUtils.ISO_DATETIME_TIME_ZONE_FORMAT.format(resource.getAddingDate()));
-            result.set(ResourceEPConstants.TEAM_MEMBER, resource.getTeamMember());
+            result.set(ResourceEPConstants.TEAM, resource.getTeam());
         }
         
         return result;
@@ -107,11 +108,11 @@ public final class ResourceUtil {
         try {
             if (isPrivate(nodeWrapper)) {
                 resource.setPrivate(true);
-                resource.setTeamMember(Long.valueOf(nodeWrapper.getNode().getParent().getParent().getName()));
+                resource.setCreatorEmail(nodeWrapper.getNode().getParent().getName());
             } else {
                 resource.setPrivate(false);
-                resource.setTeam(Long.valueOf(nodeWrapper.getNode().getParent().getName()));
             }
+            resource.setTeam(Long.valueOf(nodeWrapper.getNode().getParent().getName()));
         } catch (RepositoryException e) {
             return ApiError.toError(ResourceErrors.RESOURCE_ERROR, e);
         }
@@ -213,6 +214,22 @@ public final class ResourceUtil {
         });
         
         return publicDocs;
+    }
+
+    public static User getUserByEmail(Object creatorEmail) {
+        if (creatorEmail == null) {
+            return null;
+        }
+        
+        String email = creatorEmail.toString();
+        String queryString = "SELECT u FROM " + User.class.getName() + " u where u.email = :email";
+        
+        User u = (User) PersistenceManager.getSession()
+                .createQuery(queryString)
+                .setString("email", email)
+                .uniqueResult();
+        
+        return u;
     }
     
 }

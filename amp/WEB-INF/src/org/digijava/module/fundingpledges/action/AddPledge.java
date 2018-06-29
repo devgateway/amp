@@ -54,9 +54,11 @@ public class AddPledge extends Action {
         }
 
         if (currentMember.getPledger() == null || !currentMember.getPledger() || !((currentMember.getPledgeSuperUser()
-                || (fp == null || UserUtils.hasVerfifiedOrgGroup(currentMember.getUserId(), fp
-                .getOrganizationGroup().getAmpOrgGrpId()))) || !FeaturesUtil.isVisibleFeature("Pledges",
-                "Limit Pledge Edition"))) {
+                || (fp != null && UserUtils.hasVerfifiedOrgGroup(currentMember.getUserId(), fp
+                .getOrganizationGroup().getAmpOrgGrpId())) || (fp == null && !UserUtils.getVerifiedOrgs(currentMember
+                .getUserId()).isEmpty())) || !FeaturesUtil
+                        .isVisibleFeature("Pledges",
+                                        "Limit Pledge Edition"))) {
             return TranslatorWorker.translateText("You are not allowed to edit pledges");
         }
         
@@ -96,6 +98,8 @@ public class AddPledge extends Action {
             
             if (request.getParameter("pledgeId") != null){
                 plForm.setPledgeId(Long.parseLong(request.getParameter("pledgeId")));
+            }else {
+                plForm.reset();
             }
         //we need the pledge loaded to see if the user can edit it
         FundingPledges fp = null;

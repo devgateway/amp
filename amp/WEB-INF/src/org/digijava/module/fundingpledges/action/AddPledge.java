@@ -95,12 +95,12 @@ public class AddPledge extends Action {
                 doHeartBeat(plForm, request.getParameter("heartBeat"));
                 return null;
             }
-            
-            if (request.getParameter("pledgeId") != null){
-                plForm.setPledgeId(Long.parseLong(request.getParameter("pledgeId")));
-            }else {
-                plForm.reset();
-            }
+
+        if (request.getParameter("pledgeId") != null) {
+            plForm.setPledgeId(Long.parseLong(request.getParameter("pledgeId")));
+        } else {
+            plForm.reset();
+        }
         //we need the pledge loaded to see if the user can edit it
         FundingPledges fp = null;
 

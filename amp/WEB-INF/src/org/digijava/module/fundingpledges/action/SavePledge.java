@@ -118,12 +118,17 @@ public class SavePledge extends Action {
             pledge = PledgesEntityHelper.getPledgesById(plForm.getPledgeId());
             action = "update";
         }
-
-        session.saveOrUpdate(pledge);
-        //if (FeaturesUtil.isVisibleField("Use Free Text")){
+        pledge.setCreatedDate(new Date());
         pledge.setTitleFreeText(plForm.getTitleFreeText());  // copy both - one of them will be null and that's it
 //          }else{
         pledge.setTitle(CategoryManagerUtil.getAmpCategoryValueFromDb(plForm.getPledgeTitleId()));
+
+        //Moving this 3 lines here, after AMP-28001 is fixed, they this wont be needed and we will save everything
+        //after validation happens
+        session.saveOrUpdate(pledge);
+        AuditLoggerUtil.logObject(request, pledge, action, null);
+        //if (FeaturesUtil.isVisibleField("Use Free Text")){
+
         pledge.setStatus(CategoryManagerUtil.getAmpCategoryValueFromDb(plForm.getPledgeStatusId()));
  
         pledge.setOrganizationGroup(PledgesEntityHelper.getOrgGroupById(plForm.getSelectedOrgGrpId()));
@@ -138,9 +143,7 @@ public class SavePledge extends Action {
         res.addAll(do_save_locations(session, pledge, plForm.getSelectedLocs()));
         res.addAll(do_save_funding(session, pledge, plForm.getSelectedFunding()));
         res.addAll(do_save_documents(session, pledge, plForm.getSelectedDocs(), plForm.getInitialDocuments()));
-        pledge.setCreatedDate(new Date());
         session.saveOrUpdate(pledge);
-        AuditLoggerUtil.logObject(request, pledge, action, null);
         if (res.isEmpty()) { //save succeeded
             boolean newPledge = plForm.isNewPledge();
             try {

@@ -25,6 +25,7 @@ package org.digijava.kernel.util;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.stream.Stream;
 
@@ -315,9 +316,13 @@ public class UserUtils {
         return getVerifiedOrgsStream(userId).anyMatch(t -> t.getOrgGrpId().getAmpOrgGrpId().equals(orgGroupId));
     }
 
-    public static Stream<AmpOrganisation> getVerifiedOrgsStream(Long userId) {
+    public static Set<AmpOrganisation> getVerifiedOrgs(Long userId) {
         User user = getUser(userId);
-        return user.getAssignedOrgs().stream();
+        return user.getAssignedOrgs();
+    }
+
+    public static Stream<AmpOrganisation> getVerifiedOrgsStream(Long userId) {
+        return getVerifiedOrgs(userId).stream();
     }
     /**
      * Searchs users with given criteria

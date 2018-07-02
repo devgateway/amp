@@ -16,6 +16,9 @@
 <c:set var="viewFieldName"><digi:trn>Pledge Identification</digi:trn></c:set>
 <c:set var="viewFieldValue">${pledgeForm.effectiveName}</c:set>
 <%@include file="pledgeViewField.jspf" %>
+<c:set var="viewFieldName"><digi:trn>Creation date</digi:trn></c:set>
+<c:set var="viewFieldValue">${pledgeForm.createdDate}</c:set>
+<%@include file="pledgeViewField.jspf" %>
 
 <c:set var="viewFieldName"><digi:trn>Organization Group</digi:trn></c:set>
 <c:set var="viewFieldValue">${pledgeForm.selectedOrgGrpName}</c:set>

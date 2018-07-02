@@ -15,7 +15,7 @@
 <c:choose>
 <c:when test="${pledgeUser}">
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+	<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <jsp:include page="teamPagesHeader.jsp"  />
 
 <style type="text/css">
@@ -134,6 +134,10 @@ function setHoveredRow(rowId) {
 
 </script>
 
+	<logic:present name="PNOTIFY_ERROR_MESSAGE" scope="request">
+		<div class="pledge-error-message"><c:out value="${PNOTIFY_ERROR_MESSAGE}" /></div>
+	</logic:present>
+
 <digi:instance property="viewPledgesForm" />
 
 <digi:form action="/viewPledgesList.do" method="post">
@@ -177,24 +181,31 @@ function setHoveredRow(rowId) {
 				<tr>
 					<td>
 					<div class="report content-dir">
-					<table width="100%" cellspacing="0" cellpadding="0" id="dataTable" class="inside dataTable" style="margin-top:15px;">
+					<table width="1000px" cellspacing="0" cellpadding="0" id="dataTable" class="inside dataTable"
+						   style="margin-top:15px;" border="3">
 					<tr style="background-color: #C7D4DB; color: #000000; fnt-size:12px;" align="center">
-							<td width="25%" align="center" class="inside">
+							<td width="300px" align="center" class="inside">
 								<b> 
 									<digi:trn>Pledge Name</digi:trn>
 								</b>							</td>
-							<td width="25%" align="center" class="inside">
+							<td width="170px" align="center" class="inside">
 								<b> 
 									<digi:trn>Organization Group</digi:trn>
 								</b>							</td>
-							<td width="25%" align="center" class="inside">
+							<td width="170px" align="center" class="inside">
 								<b><digi:trn>Total Pledged Amount</digi:trn></b> (${usedCurrency})
 							</td>
-							<td width="19%" align="center" class="inside">
+							<td width="150px" align="center" class="inside">
 								<b> 
 									<digi:trn>Time frame</digi:trn>
 								</b>							</td>
-							<td colspan="4" align="center" class="inside">
+						<td width="150" align="center" class="inside">
+							<b>
+								<digi:trn>Creation date</digi:trn>
+							</b>
+						</td>
+
+						<td width="60px" align="center" class="inside">
 								<b> 
 									<digi:trn>Action</digi:trn>
 								</b>							</td>
@@ -205,21 +216,24 @@ function setHoveredRow(rowId) {
 							<c:set var="pledgeUsed" value="${allFundingPledges.usedInActivityFunding}" />
 							
 							<tr style="height: 25px">
-								<td width="24%" align="center" class="inside"><a href="/viewPledge.do?id=${pledgeId}">
+								<td width="300px" align="center" class="inside"><a href="/viewPledge.do?id=${pledgeId}">
 									<c:out value="${allFundingPledges.effectiveName }" />
 								</a></td>
-								<td width="24%" align="center" class="inside">
+								<td width="170px" align="center" class="inside">
 									<bean:write name="allFundingPledges" property="organizationGroup.orgGrpName" />
 								</td>
-								<td width="24%" align="center" class="inside">
+								<td width="170px" align="center" class="inside">
 									<span dir="ltr"><aim:formatNumber value="${allFundingPledges.getTotalPledgedAmount(usedCurrency)}" /></span>
 								</td>
-								<td width="19%" align="left" class="inside">
+								<td width="150px" align="left" class="inside">
 									<c:forEach var="year" items="${allFundingPledges.yearsList}" varStatus="index">
 										<li> <digi:trn>${year}</digi:trn>&nbsp;</li>
 									</c:forEach>
-								</td>	
-								<td width="9%" align="center" class="inside">
+								</td>
+								<td width="150px" align="center" class="inside">
+									<aim:formatDate value="${allFundingPledges.createdDate}"></aim:formatDate>
+									</td>
+								<td width="60px" align="center" class="inside">
 									<a class="itr" href="/addPledge.do?pledgeId=${pledgeId}" title="<digi:trn key="aim:ClickToEditPledge">Click on this icon to edit pledge</digi:trn>">
 	                                   	<img src= "../ampTemplate/images/application_edit.png" border="0"></a>
 									&nbsp;

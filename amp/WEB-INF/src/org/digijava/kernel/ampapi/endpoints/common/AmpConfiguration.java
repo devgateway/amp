@@ -136,7 +136,7 @@ public class AmpConfiguration implements ErrorReportingEndpoint {
 
         VersionCheckResponse response = new VersionCheckResponse();
         response.setAmpOfflineCompatible(isAmpOfflineCompatible(clientRelease));
-        response.setAmpOfflineEnabled(true);
+        response.setAmpOfflineEnabled(FeaturesUtil.isAmpOfflineEnabled());
         response.setAmpVersion(ampVersionService.getVersionInfo().getAmpVersion());
         response.setLatestAmpOffline(ampOfflineService.findLastRelease(clientRelease));
 
@@ -156,7 +156,7 @@ public class AmpConfiguration implements ErrorReportingEndpoint {
         }
         return release;
     }
-
+    
     private boolean isAmpOfflineCompatible(AmpOfflineRelease release) {
         return release != null && ampVersionService.isAmpOfflineCompatible(release.getVersion());
     }

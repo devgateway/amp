@@ -114,11 +114,12 @@ public class SavePledge extends Action {
         FundingPledges pledge;
         if (plForm.isNewPledge()){
             pledge = new FundingPledges();
+            //we only set creation date if we are adding
+            pledge.setCreatedDate(new Date());
         } else{
             pledge = PledgesEntityHelper.getPledgesById(plForm.getPledgeId());
             action = "update";
         }
-        pledge.setCreatedDate(new Date());
         pledge.setTitleFreeText(plForm.getTitleFreeText());  // copy both - one of them will be null and that's it
 //          }else{
         pledge.setTitle(CategoryManagerUtil.getAmpCategoryValueFromDb(plForm.getPledgeTitleId()));

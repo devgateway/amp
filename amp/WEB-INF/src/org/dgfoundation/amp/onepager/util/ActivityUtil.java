@@ -807,8 +807,10 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
         HashSet<AmpActivityDocument> deletedResources = s.getMetaData(OnePagerConst.RESOURCES_DELETED_ITEMS);
         HashSet<TemporaryActivityDocument> existingTitles = s.getMetaData(OnePagerConst.RESOURCES_EXISTING_ITEM_TITLES);
 
-        // update titles
-        updateResourcesTitles(newResources, deletedResources, existingTitles);
+        // update titles when multilingual is enabled
+        if (ContentTranslationUtil.multilingualIsEnabled()) {
+            updateResourcesTitles(newResources, deletedResources, existingTitles);
+        }
 
         // remove old resources
         deleteResources(a, deletedResources);

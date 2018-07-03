@@ -22,7 +22,6 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
@@ -67,15 +66,13 @@ public class AuditLoggerUtil {
         String remoteAddr = request != null ? request.getRemoteAddr() : null;
         try {
             session = PersistenceManager.getRequestDBSession();
-
-//beginTransaction();
             AmpAuditLogger aal = new AmpAuditLogger();
             long time = System.currentTimeMillis();
             Timestamp ts = new Timestamp(time);
             if ("update".compareTo(action) == 0) {
                 Collection<AmpAuditLogger> col = getAudits(session, objId, objType);
                 if (col != null && col.size() == 1) {
-                    AmpAuditLogger existentLoggerObj = (AmpAuditLogger) col.iterator().next();
+                    AmpAuditLogger existentLoggerObj =  col.iterator().next();
                     aal.setAuthorEmail(existentLoggerObj.getAuthorEmail());
                     aal.setAuthorName(existentLoggerObj.getAuthorName());
                     aal.setLoggedDate(existentLoggerObj.getLoggedDate());
@@ -85,7 +82,6 @@ public class AuditLoggerUtil {
                 aal.setAuthorEmail(tm.getEmail());
                 aal.setLoggedDate(ts);
             }
-
 
             aal.setEditorEmail(tm.getEmail());
             aal.setEditorName(tm.getMemberName());
@@ -100,18 +96,7 @@ public class AuditLoggerUtil {
             aal.setDetail(additionalDetails);
             
             session.save(aal);
-            //tx.commit();
         } catch (Exception ex) {
-            ex.printStackTrace();
-            logger.error("Cannot save audit logger :", ex);
-//          if (tx!=null){
-//              try {
-//                  tx.rollback();
-//              } catch (Exception e1) {
-//                  logger.error("Release session failed :", e1);
-//                  throw new DgException("Cannot rallback",e1);
-//              }
-//          }
             throw new DgException("Cannot save audit logger",ex);
         } 
         return;
@@ -184,7 +169,6 @@ public class AuditLoggerUtil {
     public static void logSentReminderEmails(Session session,User user){
         try {
 
-//beginTransaction();
             AmpAuditLogger aal = new AmpAuditLogger();
             long time = System.currentTimeMillis();
             Timestamp ts = new Timestamp(time);
@@ -205,7 +189,6 @@ public class AuditLoggerUtil {
             
             session.save(aal);
         }catch (Exception ex) {
-            ex.printStackTrace();
             logger.error("Cannot save audit logger :", ex);
         } 
     }
@@ -297,9 +280,6 @@ public class AuditLoggerUtil {
                 aal.setObjectName(activity.getObjectName());
                 aal.setDetail(message.toString());
                 session.save(aal);              
-            
-
-            //tx.commit();
         } catch (Exception ex) {
             logger.error("Exception : ", ex);
         }

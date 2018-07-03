@@ -980,6 +980,7 @@ deleted 6 fields, do not reinsert
 <field:display name="Commitment Gap" feature="Computed Fields"></field:display>
 <field:display name="Calculated Project Life" feature="Computed Fields"></field:display>
 <field:display name="Performance Alert Level" feature="Performance Monitoring"></field:display>
+<field:display name="Performance Alert Type" feature="Performance Monitoring"></field:display>
 
 <field:display name="Beneficiary Agency Groups" feature="Beneficiary Agency"></field:display> 
 <field:display name="Beneficiary Agency  Department/Division"  feature="Beneficiary Agency"></field:display>

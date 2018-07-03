@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -28,6 +29,7 @@ import org.digijava.module.contentrepository.helper.DocumentData;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.util.DocumentManagerRights;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
+import org.digijava.module.contentrepository.util.DocumentsNodesAttributeManager;
 
 
 /**
@@ -114,7 +116,9 @@ public class GetVersionsForDocumentManager extends Action {
         if ( docData.getVersionNumber() == 0 )
             docData.setVersionNumber(verNum);
         
-        HashMap<String,CrDocumentNodeAttributes> uuidMapVer     = CrDocumentNodeAttributes.getPublicDocumentsMap(true);
+        Map<String, CrDocumentNodeAttributes> uuidMapVer = DocumentsNodesAttributeManager.getInstance()
+                .getPublicDocumentsMap(true);
+        
         String nodeUUID                                         = n.getUUID();
         if ( uuidMapVer.containsKey(nodeUUID) ) {
             docData.setIsPublic(true);

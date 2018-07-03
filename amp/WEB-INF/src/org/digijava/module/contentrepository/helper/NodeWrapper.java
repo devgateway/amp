@@ -1,6 +1,5 @@
 package org.digijava.module.contentrepository.helper;
 
-import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -25,9 +24,7 @@ import javax.jcr.version.Version;
 import javax.jcr.version.VersionHistory;
 import javax.jcr.version.VersionIterator;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
-import org.apache.jackrabbit.core.NodeImpl;
 import org.apache.jackrabbit.core.PropertyImpl;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessage;
@@ -55,6 +52,7 @@ public class NodeWrapper{
     
     private Node node;
     private boolean errorAppeared   = false;
+    private String langCode = TLSUtils.getLangCode();
     
     public NodeWrapper() {
         
@@ -752,50 +750,53 @@ public class NodeWrapper{
         }
         return null;
     }
+    
     public List<Label> getLabels() {
-        ArrayList<Label> labels     = new ArrayList<Label>();
+        ArrayList<Label> labels = new ArrayList<Label>();
         try {
-            Node labelContainerNode     = node.getNode( CrConstants.LABEL_CONTAINER_NODE_NAME );
-            Property pVH                = null;
+            Node labelContainerNode = node.getNode(CrConstants.LABEL_CONTAINER_NODE_NAME);
+            Property pVH = null;
             try {
-                if(labelContainerNode.hasProperty("jcr:childVersionHistory")){
+                if (labelContainerNode.hasProperty("jcr:childVersionHistory")) {
                     pVH = labelContainerNode.getProperty("jcr:childVersionHistory");
-                    VersionHistory vh       = (VersionHistory) pVH.getNode();
-                    VersionIterator vIter   = vh.getAllVersions();
-                    Version v               = null;
-                    while ( vIter.hasNext() ) {
-                        v   = vIter.nextVersion();
+                    VersionHistory vh = (VersionHistory) pVH.getNode();
+                    VersionIterator vIter = vh.getAllVersions();
+                    Version v = null;
+                    while (vIter.hasNext()) {
+                        v = vIter.nextVersion();
                     }
-                    if ( v != null ) {
-                        NodeIterator nIter      = v.getNodes();
-                        if (nIter.hasNext() ) 
-                            labelContainerNode      = nIter.nextNode();
+                    if (v != null) {
+                        NodeIterator nIter = v.getNodes();
+                        if (nIter.hasNext()) {
+                            labelContainerNode = nIter.nextNode();
+                        }
                     }
-                }               
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            if ( labelContainerNode instanceof VersionHistory ) {
-                VersionHistory vh   = (VersionHistory) labelContainerNode;
-                NodeIterator nIter  = vh.getBaseVersion().getNodes();
-                if ( nIter.hasNext() ) {
-                    labelContainerNode  = nIter.nextNode();
+            if (labelContainerNode instanceof VersionHistory) {
+                VersionHistory vh = (VersionHistory) labelContainerNode;
+                NodeIterator nIter = vh.getBaseVersion().getNodes();
+                if (nIter.hasNext()) {
+                    labelContainerNode = nIter.nextNode();
                 }
             }
-            PropertyIterator pIter      = labelContainerNode.getProperties();
-            while ( pIter.hasNext() ) {
-                Property p          = pIter.nextProperty();
-                if ( p.getName().contains("ampdoc:label") ) {
-                    Node labelNode      = p.getNode();
-                    labels.add( new Label(labelNode) );
+            PropertyIterator pIter = labelContainerNode.getProperties();
+            while (pIter.hasNext()) {
+                Property p = pIter.nextProperty();
+                if (p.getName().contains("ampdoc:label")) {
+                    Node labelNode = p.getNode();
+                    labels.add(new Label(labelNode));
                 }
             }
         } catch (Exception e) {
-            //logger.warn("Document " + this.getName() + " has no label container node");
-            //e.printStackTrace();
+            e.printStackTrace();
         }
+        
         return labels;
     }
+    
     public void addLabel(Node label) {
         try {
             Node labelContainerNode         = null;

@@ -11,7 +11,9 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -69,25 +71,7 @@ import org.hibernate.Query;
 
 public class DocumentManagerUtil {
     
-    private static Logger logger    = Logger.getLogger(DocumentManagerUtil.class);
-    
-    public static String getUUIDByPublicVersionUUID (String publicVersionUUID) {
-        String retVal = null;
-        org.hibernate.Session session = null;
-        try {
-            session = PersistenceManager.getSession();
-            StringBuilder queryStr = new StringBuilder("select obj.uuid from ").
-                    append(CrDocumentNodeAttributes.class.getName()).
-                    append(" obj where obj.publicVersionUUID=:publicVersionUUID");
-            Query query = session.createQuery(queryStr.toString());
-            query.setString("publicVersionUUID", publicVersionUUID);
-            retVal = (String) query.uniqueResult();
-            //session.flush();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return retVal;
-    }
+    private static Logger logger = Logger.getLogger(DocumentManagerUtil.class);
     
     /**
      * to be called after every HttpServletRequest processed
@@ -107,10 +91,10 @@ public class DocumentManagerUtil {
 
     public static NodeWrapper getReadNodeWrapper(String uuid, HttpServletRequest request) {
         Node n = getReadNode(uuid, request);
-        if (n != null) 
-        {
+        if (n != null) {
             return new NodeWrapper(n);
         }
+        
         return null;
     }
 
@@ -119,48 +103,6 @@ public class DocumentManagerUtil {
             return node.getVersionHistory().getNodes().getSize() > 0;
         }
         catch(Exception e){return false;}       
-    }
-    
-    /**
-    * DEBUG CODE
-    */
-    public static Set<DocumentData> collectRepository(Node node, Set<DocumentData> bld) throws RepositoryException{
-        DocumentData dd = DocumentData.buildFromNode(node);
-        if ((dd != null) && (dd.getName() != null)){
-            bld.add(dd);
-            
-            if (isVersionable(node)){
-                VersionHistory vh = node.getVersionHistory();
-                NodeIterator niter  = vh.getNodes();
-                while (niter.hasNext()){
-                    Node n = niter.nextNode();
-                    DocumentData docData = DocumentData.buildFromNodeVersion(n, dd);
-                    docData.setName(dd.getName() + " VERSION with uuid = " + docData.getUuid());
-                    bld.add(docData);
-                }
-            }
-        }
-        
-        NodeIterator children = node.getNodes();
-        while(children.hasNext()){
-            collectRepository(children.nextNode(), bld);
-        }
-        return bld;
-    }
-    /**
-     * debug-only function: return blabla
-     * @param session
-     * @param bld
-     * @return
-     */
-    public static Set<DocumentData> collectRepository(Session session, Set<DocumentData> bld){
-        try{
-            collectRepository(session.getRootNode() , bld);
-        }
-        catch(Exception e){
-            e.printStackTrace(); // this is a debug-only function, so it is acceptable
-        }
-        return bld;
     }
     
     public static Node getReadNode(String uuid, HttpServletRequest request) {
@@ -387,16 +329,15 @@ public class DocumentManagerUtil {
             Iterator iterator           = documents.iterator();
             while ( iterator.hasNext() ) {
                 Node documentNode   = (Node)iterator.next();
-                //Node baseNode=documentNode; 
-                String documentNodeBaseVersionUUID=documentNode.getUUID();
-                //NodeLastApprovedVersion nlpv  = DocumentManagerUtil.getlastApprovedVersionOfTeamNode(documentNodeBaseVersionUUID);
+                String documentNodeBaseVersionUUID = documentNode.getIdentifier();
                 NodeWrapper nodeWrapper = new NodeWrapper(documentNode);
                 String fileName =  nodeWrapper.getName();
                 if ( fileName == null && nodeWrapper.getWebLink() == null ){
                     continue;
                 }
                 
-                DocumentData documentData = DocumentData.buildFromNodeWrapper(nodeWrapper, fileName, documentNodeBaseVersionUUID, nodeWrapper.getUuid());               
+                DocumentData documentData = DocumentData.buildFromNodeWrapper(nodeWrapper, documentNodeBaseVersionUUID, 
+                        nodeWrapper.getUuid());               
                 ret.add(documentData);
             }   
             return ret;
@@ -409,21 +350,21 @@ public class DocumentManagerUtil {
     }
     
     
-    public static Collection<DocumentData> createDocumentDataCollectionFromSession(HttpServletRequest request) {
-        Collection<String> UUIDs = SelectDocumentDM.getSelectedDocsSet(request, ActivityDocumentsConstants.RELATED_DOCUMENTS, false);
-        if ( UUIDs == null ) {
-            return null;
-        }   
-        try {
-            DocumentManager dm = new DocumentManager();
-            Collection<DocumentData> ret = dm.getDocuments(UUIDs, request, null, false, true);
-            ret.addAll(TemporaryDocumentData.retrieveTemporaryDocDataList(request));
-            return ret;
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            return null;
+    public static List<DocumentData> createDocumentDataCollectionFromSession(HttpServletRequest request) {
+        List<String> uuids = new ArrayList<>();
+        uuids.addAll(SelectDocumentDM.getSelectedDocsSet(request, ActivityDocumentsConstants.RELATED_DOCUMENTS, false));
+        if (!uuids.isEmpty()) {
+            try {
+                DocumentManager dm = new DocumentManager();
+                List<DocumentData> ret = dm.getDocuments(uuids, request, null, false, true);
+                ret.addAll(TemporaryDocumentData.retrieveTemporaryDocDataList(request));
+                return ret;
+            } catch (Exception e) {
+                logger.error(e.getMessage(), e);
+            }
         }
+        
+        return null;
     }
     
     public static boolean checkFileSize(FormFile formFile, ActionMessages errors) {
@@ -571,24 +512,31 @@ public class DocumentManagerUtil {
     }
     
     public static Node getTeamNode(Session jcrWriteSession, Long teamId) {
-        return  DocumentManagerUtil.getNodeByPath(jcrWriteSession, null, "team/"+teamId);
+        return  DocumentManagerUtil.getNodeByPath(jcrWriteSession, "team/" + teamId);
     }
     
     @Deprecated
     //please use getTeamNode(Session jcrWriteSession, Long teamId) instead
     public static Node getTeamNode(Session jcrWriteSession, TeamMember teamMember) {
-        return  DocumentManagerUtil.getNodeByPath(jcrWriteSession, teamMember, "team/"+teamMember.getTeamId());
+        return  DocumentManagerUtil.getNodeByPath(jcrWriteSession, "team/" + teamMember.getTeamId());
     }
 
     public static Node getUserPrivateNode(Session jcrSession, TeamMember teamMember) {
         String userName = teamMember.getEmail();
         String teamId = "" + teamMember.getTeamId();
-        return  DocumentManagerUtil.getNodeByPath(jcrSession, teamMember, "private/"+teamId+"/"+userName);
+        return  DocumentManagerUtil.getNodeByPath(jcrSession, "private/" + teamId + "/" + userName);
+    }
+    
+    public static Node createUserPrivateNode(Session jcrSession, TeamMember teamMember) {
+        String userEmail = teamMember.getEmail();
+        String path =  "private/" + teamMember.getTeamId() + "/" + userEmail;
+        
+        return DocumentManagerUtil.createNodeUsingPath(jcrSession, teamMember, path);
     }
     
     public static Node getTeamPendingNode(Session jcrSession, TeamMember teamMember) {
         String teamId = "" + teamMember.getTeamId();
-        return DocumentManagerUtil.getNodeByPath(jcrSession, teamMember, "pending/"+teamId);
+        return DocumentManagerUtil.getNodeByPath(jcrSession, "pending/" + teamId);
     }
 
     public static String getWebLinkByUuid(String uuid, HttpServletRequest request) {
@@ -602,52 +550,55 @@ public class DocumentManagerUtil {
     /**
      * 
      * @param jcrWriteSession
-     * @param teamMember
      * @param path
      */
-    public static Node getNodeByPath(Session jcrWriteSession, TeamMember teamMember, String path) {
-        Node folderNode = null;
-        
+    public static Node getNodeByPath(Session session, String path) {
         try {
-            Node tempNode;
-            
-            folderNode  = jcrWriteSession.getRootNode();
-        
-            String [] elements  = path.split("/");
-            
-            for (int i=0; i<elements.length; i++) {
-                
-                    try{
-                        tempNode    = folderNode.getNode( elements[i] );
-                    }
-                    catch (PathNotFoundException e) {
-                        logger.info("Node '" + elements[i] + "' not created from path '" + path + "'. Trying to create now.");
-                        try {
-                            tempNode    = folderNode.addNode( elements[i] );
-                        }
-                        catch(Exception E) {
-                            logger.error("Cannot create '" + elements[i] + "' node from path '" + path + "'.");
-                            e.printStackTrace();
-                            return null;
-                        }
-                    }
-                    catch (RepositoryException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                        return null;
-                    }
-                    folderNode  = tempNode;
+            Node folderPathNode = session.getRootNode();
+            String[] elements = path.split("/");
+
+            for (int i = 0; i < elements.length; i++) {
+                if (folderPathNode.hasNode(elements[i])) {
+                    folderPathNode = folderPathNode.getNode(elements[i]);
+                } else {
+                    return null;
                 }
-                
-                return folderNode;
-        
+            }
+            
+            return folderPathNode;
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
         }
-        catch (Exception e) {
-            e.printStackTrace();
-            return null;
+
+        return null;
+    }
+    
+    public static Node createNodeUsingPath(Session session, TeamMember teamMember, String path) {
+        boolean toSave = false;
+        try {
+            Node folderPathNode = session.getRootNode();
+            String[] elements = path.split("/");
+
+            for (int i = 0; i < elements.length; i++) {
+                if (folderPathNode.hasNode(elements[i])) {
+                    folderPathNode = folderPathNode.getNode(elements[i]);
+                } else {
+                    folderPathNode.addNode(elements[i]);
+                    folderPathNode = folderPathNode.getNode(elements[i]);
+                    toSave = true;
+                }
+            }
+            
+            if (toSave) {
+                session.save();
+            }
+            
+            return folderPathNode;
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
         }
-        
-        
+
+        return null;
     }
     
     public class PathHelper {
@@ -699,7 +650,8 @@ public class DocumentManagerUtil {
      * @param state
      * @return
      */
-    public static List<String> getSharedNodeUUIDs(Long teamId,Integer state){
+    public static List<String> getSharedNodeUUIDs(TeamMember team, Integer state) {
+        Long teamId = team.getTeamId();
         List<String> retVal=null;
         org.hibernate.Session session=null;
         Query qry=null;
@@ -900,6 +852,17 @@ public class DocumentManagerUtil {
         return retVal;
     }
     
+    public static Map<String, NodeLastApprovedVersion> getLastApprovedVersionsByUUIDMap() {
+        return getLastApprovedVersions().stream()
+                .collect(Collectors.toMap(NodeLastApprovedVersion::getNodeUUID, Function.identity()));
+    }
+    
+    public static List<NodeLastApprovedVersion> getLastApprovedVersions() {
+        return PersistenceManager.getRequestDBSession()
+                .createCriteria(NodeLastApprovedVersion.class)
+                .list();
+    }
+    
     public static List<TeamNodePendingVersion> getPendingVersionsForResource(String nodeUUID){
         List<TeamNodePendingVersion> retVal=null;
         org.hibernate.Session session=null;
@@ -1027,38 +990,34 @@ public class DocumentManagerUtil {
         logger.info("Jackrabbit repository shutdown succesfully !");
     }
     
-    public static boolean privateDocumentsExist(Session jcrWriteSession, TeamMember teamMember){
-        boolean retVal=false;
-        String userName     = teamMember.getEmail();
-        String teamId       = "" + teamMember.getTeamId();
-        Node node = DocumentManagerUtil.getNodeByPath(jcrWriteSession, teamMember, "private/"+teamId+"/"+userName);
-        try {
-            NodeIterator iter = node.getNodes();
-            if(iter.hasNext()){
-                retVal=true;
+    public static boolean privateDocumentsExist(Session session, TeamMember teamMember) {
+        String userName = teamMember.getEmail();
+        String teamId = "" + teamMember.getTeamId();
+        Node node = DocumentManagerUtil.getNodeByPath(session, "private/" + teamId + "/" + userName);
+        
+        if (node != null) {
+            try {
+                return node.hasNodes();
+            } catch (RepositoryException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
             }
-        } catch (RepositoryException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
         }
-        return retVal;
+
+        return false;
     }
     
-    
-    public static boolean teamDocumentsExist(Session jcrWriteSession, TeamMember teamMember){
-        boolean retVal=false;
-        String teamId       = "" + teamMember.getTeamId();
-        Node node = DocumentManagerUtil.getNodeByPath(jcrWriteSession, null, "team/"+teamId);
-        try {
-            NodeIterator iter = node.getNodes();
-            if(iter.hasNext()){
-                retVal=true;
+    public static boolean teamDocumentsExist(Session session, TeamMember teamMember) {
+        Node node = DocumentManagerUtil.getNodeByPath(session, "team/" + teamMember.getTeamId());
+        if (node != null) {
+            try {
+                return node.hasNodes();
+            } catch (RepositoryException e) {
+                logger.error(e.getMessage(), e);
             }
-        } catch (RepositoryException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
         }
-        return retVal;
+
+        return false;
     }
     
     

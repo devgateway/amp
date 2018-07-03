@@ -5,11 +5,13 @@ package org.digijava.module.contentrepository.form;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.upload.FormFile;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.contentrepository.helper.DocumentData;
+import org.digijava.module.contentrepository.helper.TeamMemberMail;
 
 /**
  * @author Alex Gartner
@@ -51,7 +53,7 @@ public class DocumentManagerForm extends ActionForm {
     private String docCategory = null;
     
     private TeamMember teamMember           = null;
-    private Collection teamMembers          = null;
+    private List<TeamMemberMail> teamMembers          = null;
     
     private boolean teamLeader              = false;
     
@@ -188,11 +190,11 @@ public class DocumentManagerForm extends ActionForm {
         this.teamMember = teamMember;
     }
 
-    public Collection getTeamMembers() {
+    public List<TeamMemberMail> getTeamMembers() {
         return teamMembers;
     }
 
-    public void setTeamMembers(Collection teamMembers) {
+    public void setTeamMembers(List<TeamMemberMail> teamMembers) {
         this.teamMembers = teamMembers;
     }
 

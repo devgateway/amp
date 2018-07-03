@@ -44,6 +44,7 @@ import org.digijava.module.contentrepository.form.DocumentManagerForm;
 import org.digijava.module.contentrepository.helper.template.WordOrPdfFileHelper;
 import org.digijava.module.contentrepository.jcrentity.Label;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
+import org.digijava.module.translation.util.ContentTranslationUtil;
 
 /**
  * a class wrapping a javax.jcr.Node instance for convenience reasons mainly (nice getters / setters which would otherwise be a soup of hardcoded strings and exception handling) 
@@ -594,20 +595,16 @@ public class NodeWrapper{
         }
     }
     
-    public String getTitle() 
-    {
-        //old way of accessing. Now is a multilingual property
-        //return getStringProperty(CrConstants.PROPERTY_TITLE);
+    public String getTitle() {
         return getTranslatedTitleByLang(TLSUtils.getLangCode());
     }
-    
+
     public String getDescription() {
-        //. Now is a multilingual property
         return getTranslatedDescriptionByLang(TLSUtils.getLangCode());
     }
-    
+
     public String getNotes() {
-        //Now is a multilingual property
+        // Now is a multilingual property
         return getTranslatedNoteByLang(TLSUtils.getLangCode());
     }
     
@@ -979,42 +976,42 @@ public class NodeWrapper{
     }
     
     public String getTranslatedTitleByLang (String language) {
-        return getTranslatedProperty(CrConstants.PROPERTY_TITLE,language);
+        return getTranslatedProperty(CrConstants.PROPERTY_TITLE, language);
     }
     
     public String getTranslatedNoteByLang (String language) {
-        return getTranslatedProperty(CrConstants.PROPERTY_NOTES,language);
+        return getTranslatedProperty(CrConstants.PROPERTY_NOTES, language);
     }
     
     public String getTranslatedDescriptionByLang (String language) {
-        return getTranslatedProperty(CrConstants.PROPERTY_DESCRIPTION,language);
+        return getTranslatedProperty(CrConstants.PROPERTY_DESCRIPTION, language);
     }
     
     
-    private String getTranslatedProperty (String fieldName,String language) {
+    private String getTranslatedProperty(String fieldName, String language) {
         String value = null;
-        try {
-            Node titleNode = node.getNode(fieldName);
-            if (titleNode != null) {
-                PropertyIterator  iterator = titleNode.getProperties();
-                while (iterator.hasNext()) {
-                    PropertyImpl property = (PropertyImpl)iterator.next();
-                    if (property.getName().equals(language)) {
-                        value = property.getString();
-                        break;
+        if (ContentTranslationUtil.multilingualIsEnabled()) {
+            try {
+                Node titleNode = node.getNode(fieldName);
+                if (titleNode != null) {
+                    PropertyIterator  iterator = titleNode.getProperties();
+                    while (iterator.hasNext()) {
+                        PropertyImpl property = (PropertyImpl) iterator.next();
+                        if (property.getName().equals(language)) {
+                            value = property.getString();
+                            break;
+                        }
                     }
-                        
                 }
+            } catch (PathNotFoundException ex) {
+                value = getStringProperty(fieldName);
+            } catch (RepositoryException e) {
+                logger.error("Exception accesing traslated titles in NodeWrapper", e);
             }
-        }catch (PathNotFoundException ex) {
-        //Some fields were saved as properties before multilingual was enabled for them
-        //like: title,notes, description. Check if contains the value as a property
-            logger.warn("The field "+fieldName + " was not found as a property. Probably old config");
+        } else {
             value = getStringProperty(fieldName);
-        }   
-        catch (RepositoryException e) {
-            logger.error("Exception accesing traslated titles in NodeWrapper",e);
         }
+        
         return value;
     }
     

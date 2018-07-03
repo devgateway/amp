@@ -24,6 +24,7 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
+import org.digijava.module.translation.util.ContentTranslationUtil;
 
 import com.google.common.cache.CacheBuilder;
 
@@ -100,9 +101,11 @@ public final class ResourceUtil {
         resource.setYearOfPublication(nodeWrapper.getYearOfPublication());
         resource.setPublic(getPublicResources().contains(uuid));
         
-        resource.setTranslatedTitles(nodeWrapper.getTranslatedTitle());
-        resource.setTranslatedDescriptions(nodeWrapper.getTranslatedDescription());
-        resource.setTranslatedNotes(nodeWrapper.getTranslatedNote());
+        if (ContentTranslationUtil.multilingualIsEnabled()) {
+            resource.setTranslatedTitles(nodeWrapper.getTranslatedTitle());
+            resource.setTranslatedDescriptions(nodeWrapper.getTranslatedDescription());
+            resource.setTranslatedNotes(nodeWrapper.getTranslatedNote());
+        }
         
         try {
             if (isPrivate(nodeWrapper)) {

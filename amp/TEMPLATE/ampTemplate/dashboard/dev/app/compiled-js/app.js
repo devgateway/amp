@@ -31755,6 +31755,7 @@ module.exports = Backbone.View.extend({
         break;
       case 'status':
       case 'performance-alert-level':
+      case 'performance-alert-type':
       case 'approval-status':
         this.filterViewsInstances.activity.filterCollection.add(tmpModel);
         break;

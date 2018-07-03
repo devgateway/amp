@@ -388,6 +388,8 @@ public class AmpARFilter extends PropertyListable {
     private Set<AmpCategoryValue> expenditureClass = null;
 
     private Set<AmpCategoryValue> performanceAlertLevel = null;
+    
+    private Set<String> performanceAlertType = null;
 
     // private Long ampModalityId=null;
 
@@ -1458,7 +1460,7 @@ public class AmpARFilter extends PropertyListable {
 
         String performanceAlertLevelFilter = "SELECT amp_activity_id FROM v_performance_alert_level "
                 + "WHERE level_code IN (" + Util.toCSStringForIN(getPerformanceAlertLevelForFilters()) + ")";
-
+        
         String MODE_OF_PAYMENT_FILTER = "SELECT amp_activity_id FROM v_mode_of_payment WHERE mode_of_payment_code IN ("
             + Util.toCSString(modeOfPayment) + ")";
         
@@ -1678,7 +1680,7 @@ public class AmpARFilter extends PropertyListable {
         if (performanceAlertLevel != null && performanceAlertLevel.size() > 0) {
             queryAppend(performanceAlertLevelFilter);
         }
-
+        
         if (modeOfPayment != null && modeOfPayment.size() > 0)
             queryAppend(MODE_OF_PAYMENT_FILTER);
         
@@ -3849,6 +3851,14 @@ public class AmpARFilter extends PropertyListable {
                 .stream()
                 .map(AmpCategoryValue::getId)
                 .collect(toSet());
+    }
+    
+    public Set<String> getPerformanceAlertType() {
+        return performanceAlertType;
+    }
+
+    public void setPerformanceAlertType(final Set<String> performanceAlertLevel) {
+        this.performanceAlertType = performanceAlertLevel;
     }
 
     public static boolean isTrue(Boolean b) {

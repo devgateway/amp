@@ -36,9 +36,9 @@ import org.digijava.module.aim.util.ProgramUtil;
 import com.google.common.collect.ImmutableSet;
 
 /**
- * AMP Activity Endpoints for Activity Import / Export
+ * Enumerate & describe all fields of an object used for import / export in API.
  * 
- * @author acartaleanu
+ * @author acartaleanu, Octavian Ciubotaru
  */
 public class FieldsEnumerator {
     
@@ -60,8 +60,6 @@ public class FieldsEnumerator {
 
     private TranslatorService translatorService;
 
-    private String iatiIdentifierField;
-
     /**
      * Fields Enumerator
      * 
@@ -73,7 +71,6 @@ public class FieldsEnumerator {
         this.fmService = fmService;
         this.translatorService = translatorService;
         this.internalUse = internalUse;
-        this.iatiIdentifierField = InterchangeUtils.getAmpIatiIdentifierFieldName();
     }
     
     /**
@@ -98,7 +95,7 @@ public class FieldsEnumerator {
      * @param context current context
      * @return field definition
      */
-    private APIField describeField(Field field, FEContext context) {
+    protected APIField describeField(Field field, FEContext context) {
         Interchangeable interchangeable = context.getIntchStack().peek();
         String fieldTitle = InterchangeUtils.underscorify(interchangeable.fieldTitle());
 
@@ -126,11 +123,6 @@ public class FieldsEnumerator {
             apiField.setImportable(true);
         }
         
-        if (!AmpOfflineModeHolder.isAmpOfflineMode() && isFieldIatiIdentifier(fieldTitle)) {
-            apiField.setRequired(ActivityEPConstants.FIELD_ALWAYS_REQUIRED);
-            apiField.setImportable(true);
-        }
-
         if (interchangeable.percentageConstraint()){
             apiField.setPercentage(true);
         }
@@ -558,16 +550,6 @@ public class FieldsEnumerator {
         return isEnabled;
     }
 
-    /**
-     * Decides whether a field stores iati-identifier value
-     *
-     * @param fieldName
-     * @return true if is iati-identifier
-     */
-    private boolean isFieldIatiIdentifier(String fieldName) {
-        return StringUtils.equals(this.iatiIdentifierField, fieldName);
-    }
-
     private boolean isFieldVisible(FEContext context) {
         Interchangeable interchangeable = context.getIntchStack().peek();
 
@@ -584,14 +566,7 @@ public class FieldsEnumerator {
         return isVisible(interchangeable.fmPath(), context);
     }
 
-    private boolean isVisible(String fmPath, FEContext context) {
-        Interchangeable interchangeable = context.getIntchStack().peek();
-        String fieldTitle = InterchangeUtils.underscorify(interchangeable.fieldTitle());
-
-        if (!AmpOfflineModeHolder.isAmpOfflineMode() && isFieldIatiIdentifier(fieldTitle)) {
-            return true;
-        } else {
-            return fmService.isVisible(fmPath, context.getIntchStack());
-        }
+    protected boolean isVisible(String fmPath, FEContext context) {
+        return fmService.isVisible(fmPath, context.getIntchStack());
     }
 }

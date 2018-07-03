@@ -1,6 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.common;
 
-import org.codehaus.jackson.annotate.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.digijava.module.aim.dbentity.AmpOfflineRelease;
 
 /**

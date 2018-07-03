@@ -1,10 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.dto;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 /**
@@ -18,7 +14,7 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
  * @author Fernando Ferreyra
  *
  */
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Activity {
     private Long id;
     private String name;

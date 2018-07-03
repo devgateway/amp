@@ -3,7 +3,7 @@ package org.digijava.kernel.ampapi.endpoints.performance.matcher.definition;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.digijava.kernel.ampapi.endpoints.performance.matcher.PerformanceRuleMatcher;
 import org.digijava.module.aim.dbentity.AmpPerformanceRule;
 
@@ -20,7 +20,7 @@ public abstract class PerformanceRuleMatcherDefinition {
     
     protected String message;
     
-    @JsonIgnore 
+    @JsonIgnore
     protected List<PerformanceRuleMatcherAttribute> attributes = new ArrayList<>();
     
     public PerformanceRuleMatcherDefinition(String name, String description, String message) {

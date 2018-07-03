@@ -10,10 +10,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import org.apache.log4j.Logger;
-import org.codehaus.jackson.annotate.JsonAutoDetect;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.SerializationConfig;
 import org.digijava.module.aim.util.DesktopDocumentsUtil;
 import org.digijava.module.contentrepository.helper.DocumentData;
 
@@ -123,11 +123,11 @@ public class Documents {
         Collection<DocumentData> documents = desktopDocumentsUtil.getLatestDesktopLinks(httpRequest, MAX_NUMBER_OF_DOCS);
 
         ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(SerializationConfig.Feature.FAIL_ON_EMPTY_BEANS, false);
+        mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 
         // do not serialize transient fields
         // if fields is marked as transient, but has public method, we need to add this config
-        mapper.setVisibilityChecker(
+        mapper.setVisibility(
                 mapper.getSerializationConfig().
                         getDefaultVisibilityChecker().
                         withFieldVisibility(JsonAutoDetect.Visibility.ANY).

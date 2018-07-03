@@ -4,15 +4,15 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.codehaus.jackson.JsonGenerator;
-import org.codehaus.jackson.map.SerializerProvider;
-import org.codehaus.jackson.map.ser.std.SerializerBase;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 
 /**
  * @author Octavian Ciubotaru
  */
-public class ISO8601TimeStampSerializer extends SerializerBase<Date> {
+public class ISO8601TimeStampSerializer extends StdSerializer<Date> {
 
     public ISO8601TimeStampSerializer() {
         super(Date.class);

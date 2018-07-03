@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -19,20 +19,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessages;
-import org.apache.wicket.util.lang.Bytes;
-import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
-import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponseDocument;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DocumentUtil;
@@ -40,6 +36,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.RepairDbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.contentrepository.dbentity.CrDocumentNodeAttributes;
+import org.digijava.module.contentrepository.dbentity.CrSharedDoc;
 import org.digijava.module.contentrepository.dbentity.NodeLastApprovedVersion;
 import org.digijava.module.contentrepository.dbentity.TeamNodePendingVersion;
 import org.digijava.module.contentrepository.dbentity.filter.DocumentFilter;
@@ -52,6 +49,7 @@ import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
 import org.digijava.module.contentrepository.util.DocumentManagerRights;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
+import org.digijava.module.contentrepository.util.DocumentsNodesAttributeManager;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 
 public class DocumentManager extends Action {
@@ -73,7 +71,7 @@ public class DocumentManager extends Action {
 
         DocumentManagerUtil.setMaxFileSizeAttribute(request);
 
-        if ( !isLoggeedIn(request) ) {
+        if (!isLoggeedIn(request)) {
             return mapping.findForward("publicView");
         }
         
@@ -85,7 +83,6 @@ public class DocumentManager extends Action {
             myForm.getYears().add(new Long(i));
         }
         
-        
         showContentRepository(request, myForm, errors);
         
         this.saveErrors(request, errors);
@@ -94,57 +91,57 @@ public class DocumentManager extends Action {
         AmpApplicationSettings sett = DbUtil.getTeamAppSettings(teamMember.getTeamId());
         boolean shareWithoutApprovalNeeded=((sett!=null && sett.getAllowAddTeamRes()!=null && sett.getAllowAddTeamRes().intValue()>=CrConstants.TEAM_RESOURCES_ADD_ALLOWED_WORKSP_MEMBER) || teamMember.getTeamHead());
         request.setAttribute("shareWithoutApprovalNeeded", shareWithoutApprovalNeeded);
-
         return mapping.findForward("forward");
     }
 
     private boolean ajaxDocumentList(HttpServletRequest myRequest, DocumentManagerForm myForm) {
         // UGLY HACK. This needs to be re-written
-        if ( myRequest.getHeader("referer")!=null && myRequest.getHeader("referer").contains("documentManager.do") ) {
+        if (myRequest.getHeader("referer") != null && myRequest.getHeader("referer").contains("documentManager.do")) {
             myRequest.setAttribute("checkBoxToHide", true);
         }
-        
-        boolean showActionsButtons=true;
-        if(myForm.getShowActions()!=null && ! myForm.getShowActions()){
-            showActionsButtons=false;
+        boolean showActionsButtons = true;
+        if (myForm.getShowActions() != null && !myForm.getShowActions()) {
+            showActionsButtons = false;
         }
         
-        Session jcrWriteSession         =   DocumentManagerUtil.getWriteSession(myRequest);
-        if ( !isLoggeedIn(myRequest) || myRequest.getParameter(CrConstants.GET_PUBLIC_DOCUMENTS) != null ) {
-            HashMap<String, CrDocumentNodeAttributes> uuidMap       = CrDocumentNodeAttributes.getPublicDocumentsMap(true);
+        Session jcrWriteSession = DocumentManagerUtil.getWriteSession(myRequest);
+        
+        if (!isLoggeedIn(myRequest) || myRequest.getParameter(CrConstants.GET_PUBLIC_DOCUMENTS) != null) {
+            Map<String, CrDocumentNodeAttributes> uuidMap = DocumentsNodesAttributeManager.getInstance()
+                    .getPublicDocumentsMap(true);
+            
             try {
-                Collection<DocumentData> otherDocuments = this.getDocuments( uuidMap.keySet(), myRequest ,CrConstants.PUBLIC_DOCS_TAB,false,showActionsButtons);
-                myForm.setOtherDocuments( otherDocuments );
+                List<String> uuidList = uuidMap.keySet().stream().collect(Collectors.toList());
+                List<DocumentData> otherDocuments = this.getDocuments(uuidList, myRequest, CrConstants.PUBLIC_DOCS_TAB,
+                        false, showActionsButtons);
+                myForm.setOtherDocuments(otherDocuments);
             } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                logger.error(e.getMessage(), e);
             }
-        }
-        if (myForm.getDocListInSession() != null) {
-            HashSet<String> UUIDs               = SelectDocumentDM.getSelectedDocsSet(myRequest, myForm.getDocListInSession(), true);
-            Collection<DocumentData> tempCol    = TemporaryDocumentData.retrieveTemporaryDocDataList(myRequest);
-            if (UUIDs != null)
-                try {
-                    Collection<DocumentData> documents = this.getDocuments(UUIDs, myRequest,null,false,showActionsButtons);
+        } else {
+            if (myForm.getDocListInSession() != null) {
+                List<String> uuids = new ArrayList<>();
+                uuids.addAll(SelectDocumentDM.getSelectedDocsSet(myRequest, myForm.getDocListInSession(), true));
+                Collection<DocumentData> tempCol = TemporaryDocumentData.retrieveTemporaryDocDataList(myRequest);
+                if (!uuids.isEmpty()) {
+                    List<DocumentData> documents = this.getDocuments(uuids, myRequest, null, false, showActionsButtons);
                     myForm.setOtherDocuments(documents);
-                }catch(Exception e){
-                    e.printStackTrace();
                 }
-                
-                try{    
-                    if ( tempCol != null ) {
-                        if ( myForm.getOtherDocuments() == null ) {
-                            myForm.setOtherDocuments( tempCol );
-                        }
-                        else
+
+                try {
+                    if (tempCol != null) {
+                        if (myForm.getOtherDocuments() == null) {
+                            myForm.setOtherDocuments(tempCol);
+                        } else {
                             myForm.getOtherDocuments().addAll(tempCol);
+                        }
                     }
                 } catch (Exception e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                    logger.error(e.getMessage(), e);
                 }
+
                 return false;
-        }
+            }
         
         //for selectDocumentDM
         
@@ -233,10 +230,13 @@ public class DocumentManager extends Action {
             }
             
             if (otherTeamMember != null) {
-                Node otherHomeNode              = DocumentManagerUtil.getUserPrivateNode(jcrWriteSession , otherTeamMember );
-                Collection<DocumentData> allPrivateDocs =  
-                    this.getDocuments(otherHomeNode, myRequest,CrConstants.PRIVATE_DOCS_TAB,false,showActionsButtons);
-                myForm.setOtherDocuments( documentFilter.applyFilter(allPrivateDocs) );
+                List<DocumentData> allPrivateDocs = new ArrayList<>();
+                Node otherHomeNode = DocumentManagerUtil.getUserPrivateNode(jcrWriteSession, otherTeamMember);
+                if (otherHomeNode != null) {
+                    allPrivateDocs = this.getDocuments(otherHomeNode, myRequest, CrConstants.PRIVATE_DOCS_TAB, false, 
+                            showActionsButtons);
+                }
+                myForm.setOtherDocuments(documentFilter.applyFilter(allPrivateDocs));
             }
         }
         else if ( DocumentFilter.SOURCE_TEAM_DOCUMENTS.equals(documentFilter.getSource()) ) {
@@ -246,11 +246,11 @@ public class DocumentManager extends Action {
             
             //resources pending approval
             TeamMember currentTM = getCurrentTeamMember(myRequest);
-            Collection<DocumentData> pendingResources=null;
-            if(currentTM.getTeamHead()){ //should see all docs that are pending approval for this team
-                List<String> pendingResourcesIds=DocumentManagerUtil.getSharedNodeUUIDs(currentTM.getTeamId(), CrConstants.PENDING_STATUS);
-                if(pendingResourcesIds!=null && pendingResourcesIds.size()>0){
-                    pendingResources = getDocuments(pendingResourcesIds,myRequest,CrConstants.TEAM_DOCS_TAB,true,true);
+            List<DocumentData> pendingResources = null;
+            if (currentTM.getTeamHead()) { // should see all docs that are pending approval for this team
+                List<String> uuids = DocumentManagerUtil.getSharedNodeUUIDs(currentTM, CrConstants.PENDING_STATUS);
+                if (uuids != null && uuids.size() > 0) {
+                    pendingResources = getDocuments(uuids, myRequest, CrConstants.TEAM_DOCS_TAB, true, true);
                 }
             }
                     
@@ -263,34 +263,38 @@ public class DocumentManager extends Action {
             myForm.setOtherDocuments( documentFilter.applyFilter(allTeamsDocs) );
         }
         //shared documents
-        else if( DocumentFilter.SOURCE_SHARED_DOCUMENTS.equals(documentFilter.getSource()) ){
-            Collection<DocumentData> allSharedDocs  = this.getSharedDocuments(getCurrentTeamMember(myRequest), myRequest,showActionsButtons);
-            myForm.setOtherDocuments( documentFilter.applyFilter(allSharedDocs) );
-        }
-        else if ( DocumentFilter.SOURCE_PUBLIC_DOCUMENTS.equals(documentFilter.getSource() )) {
+        else if (DocumentFilter.SOURCE_SHARED_DOCUMENTS.equals(documentFilter.getSource())) {
+            Collection<DocumentData> allSharedDocs = this.getSharedDocuments(getCurrentTeamMember(myRequest), myRequest,
+                    showActionsButtons);
+            myForm.setOtherDocuments(documentFilter.applyFilter(allSharedDocs));
+        } else if (DocumentFilter.SOURCE_PUBLIC_DOCUMENTS.equals(documentFilter.getSource())) {
             myRequest.getSession().setAttribute(DocumentFilter.SESSION_LAST_APPLIED_PUBLIC_FILTER, documentFilter);
-            HashMap<String, CrDocumentNodeAttributes> uuidMap       = CrDocumentNodeAttributes.getPublicDocumentsMap(true);
+            Map<String, CrDocumentNodeAttributes> uuidMap = DocumentsNodesAttributeManager.getInstance()
+                    .getPublicDocumentsMap(true);
             try {
-                Collection<DocumentData> otherDocuments = this.getDocuments( uuidMap.keySet(), myRequest ,CrConstants.PUBLIC_DOCS_TAB,false,showActionsButtons);
-                myForm.setOtherDocuments( documentFilter.applyFilter(otherDocuments) );
+                List<String> uuids = new ArrayList<>();
+                uuids.addAll(uuidMap.keySet());
+                List<DocumentData> otherDocuments = this.getDocuments(uuids, myRequest, CrConstants.PUBLIC_DOCS_TAB, 
+                        false, showActionsButtons);
+                myForm.setOtherDocuments(documentFilter.applyFilter(otherDocuments));
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error(e.getMessage(), e);
             }
+        } 
         }
         return false;
     }
     
     private boolean showContentRepository(HttpServletRequest request, DocumentManagerForm myForm, ActionMessages errors) {
         try {
-            
             HttpSession httpSession     = request.getSession();
             TeamMember teamMember       = (TeamMember)httpSession.getAttribute(Constants.CURRENT_MEMBER);
             
             myForm.setTeamMember(teamMember);
             myForm.setTeamLeader( teamMember.getTeamHead() );
-            myForm.setTeamMembers( TeamMemberUtil.getAllTeamMembers(teamMember.getTeamId()) );
-            
+            myForm.setTeamMembers(TeamMemberUtil.getAllTeamMembersMail(teamMember.getTeamId()));
             Session jcrWriteSession     = DocumentManagerUtil.getWriteSession(request);
+            
             
             //check if tabs have data
             myForm.setSharedDocsTabVisible(DocumentManagerUtil.sharedDocumentsExist(teamMember));
@@ -327,10 +331,12 @@ public class DocumentManager extends Action {
             if (teamMember == null) {
                 throw new Exception("No TeamMember found in HttpSession !");
             }           
-            
             if (myForm.getType() != null && myForm.getType().equals("private") ) {
                 if (myForm.getFileData() != null || myForm.getWebLink() != null) {
                     Node userHomeNode = DocumentManagerUtil.getUserPrivateNode(jcrWriteSession, teamMember);
+                    if (userHomeNode == null) {
+                        userHomeNode = DocumentManagerUtil.createUserPrivateNode(jcrWriteSession, teamMember);
+                    }
                     NodeWrapper nodeWrapper = new NodeWrapper(myForm, request, userHomeNode, false, errors);
                     if (nodeWrapper != null && !nodeWrapper.isErrorAppeared()) {
                         nodeWrapper.saveNode(jcrWriteSession);
@@ -368,7 +374,6 @@ public class DocumentManager extends Action {
                     }                   
                 }
             }
-            
             myForm.setYearOfPublication(null);
             
         } catch (Exception e) {
@@ -399,102 +404,57 @@ public class DocumentManager extends Action {
         }
     }
 
-    private Collection getPrivateDocuments(TeamMember teamMember, Node rootNode, HttpServletRequest request) {
-        ArrayList<DocumentData> documents = new ArrayList<DocumentData>();
-        Node userNode;
-        try {
-            userNode    = DocumentManagerUtil.getUserPrivateNode(rootNode.getSession(), teamMember);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-        return getDocuments(userNode, request,CrConstants.PRIVATE_DOCS_TAB,false,true);
-    }
-    
-    private Collection getTeamDocuments(TeamMember teamMember, Node rootNode, HttpServletRequest request) {
-        Node teamNode;
-        Collection<DocumentData> pendingResources=null;
-        Collection<DocumentData> retVal=null;
-        ArrayList<DocumentData> documents   = new ArrayList<DocumentData>();
-        try {
-            teamNode    = DocumentManagerUtil.getTeamNode(rootNode.getSession(), teamMember.getTeamId());
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+    private List<DocumentData> getSharedDocuments(TeamMember teamMember, HttpServletRequest request,
+            boolean showActionButtons) {
+        List<DocumentData> sharedDocs = null;
+        // get all nodes that are shared to this team
+        List<String> allSharedDocsIds = DocumentManagerUtil.getSharedNodeUUIDs(teamMember,
+                CrConstants.SHARED_AMONG_WORKSPACES);
+        if (allSharedDocsIds != null) {
+            sharedDocs = getDocuments(allSharedDocsIds, request, CrConstants.SHARED_DOCS_TAB, false, showActionButtons);
         }
         
-        //all docs that are originated by this team
-        Collection<DocumentData> teamDocs=getDocuments(teamNode, request,CrConstants.TEAM_DOCS_TAB,false,true);
-        //resources pending approval
-        if(teamMember.getTeamHead()){ //should see all docs that are pending approval for this team
-            List<String> pendingResourcesIds=DocumentManagerUtil.getSharedNodeUUIDs(teamMember.getTeamId(), CrConstants.PENDING_STATUS);
-            if(pendingResourcesIds!=null && pendingResourcesIds.size()>0){
-                pendingResources = getDocuments(pendingResourcesIds,request,CrConstants.TEAM_DOCS_TAB,true,true);
-            }
-        }
-                
-        if(teamDocs!=null || pendingResources!=null){
-            retVal=new HashSet<DocumentData>();
-            if(teamDocs!=null){
-                retVal.addAll(teamDocs);
-            }
-            if(pendingResources!=null){
-                retVal.addAll(pendingResources);
-            }
-        }
-        return retVal;
-    }
-    
-    private Collection getSharedDocuments(TeamMember teamMember, HttpServletRequest request,boolean showActionButtons) {
-        Collection<DocumentData> sharedDocs=null;       
-        //get all nodes that are shared to this team
-        List<String> allSharedDocsIds = DocumentManagerUtil.getSharedNodeUUIDs(teamMember.getTeamId(), CrConstants.SHARED_AMONG_WORKSPACES);        
-        if(allSharedDocsIds!=null){
-            sharedDocs=getDocuments(allSharedDocsIds,request,CrConstants.SHARED_DOCS_TAB,false,showActionButtons);
-        }
         return sharedDocs;
     }
     
     
-    private Collection getDocuments(Node node, HttpServletRequest request,String tabName,boolean isPending,boolean showActionButtons) {
-        try {
-            NodeIterator nodeIterator   = node.getNodes();
-            return getDocuments(nodeIterator, request,tabName,isPending,showActionButtons);
-        } catch (RepositoryException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            return null;
+    private List<DocumentData> getDocuments(Node node, HttpServletRequest request, String tabName, boolean isPending,
+            boolean showActionButtons) {
+        
+        if (node != null) {
+            try {
+                NodeIterator nodeIterator = node.getNodes();
+                List<Node> nodes = new ArrayList<Node>();
+                
+                while (nodeIterator.hasNext()) {
+                    nodes.add(nodeIterator.nextNode());
+                }
+                
+                return getDocumentsFromNodes(nodes, request, tabName, isPending, showActionButtons);
+            } catch (RepositoryException e) {
+                logger.error(e.getMessage(), e);
+            }
         }
+        
+        return null;
     }
     
-    private Collection<DocumentData> getDocuments(Iterator nodeIterator, HttpServletRequest request,String tabName,boolean isPending,boolean showActionButtons) {
-        ArrayList<DocumentData> documents                                       = new ArrayList<DocumentData>();
-        HashMap<String,CrDocumentNodeAttributes> uuidMapOrg     = CrDocumentNodeAttributes.getPublicDocumentsMap(false);
-        HashMap<String,CrDocumentNodeAttributes> uuidMapVer     = CrDocumentNodeAttributes.getPublicDocumentsMap(true);
-        
-        Collection<String> pledgeDocumentsUuids = FundingPledges.getPledgeDocumentUuids();
-        List<String> gpiSupportiveDocuments = DocumentUtil.getAllSupportiveDocumentsUUID();
-        
-        Boolean hasMakePublicRights     = DocumentManagerRights.hasMakePublicRights(request);
+    private List<DocumentData> getDocumentsFromNodes(List<Node> nodes, HttpServletRequest request, String tabName,
+            boolean isPending, boolean showActionButtons) {
+        ArrayList<DocumentData> documents = new ArrayList<DocumentData>();
+        DocumentsNodesAttributeManager docAttrManager = DocumentsNodesAttributeManager.getInstance();
+        Map<String, CrDocumentNodeAttributes> uuidMapVer = docAttrManager.getPublicDocumentsMap(true);
+        Map<String, NodeLastApprovedVersion> nlpvMap = DocumentManagerUtil.getLastApprovedVersionsByUUIDMap();
         
         try {
-            while ( nodeIterator.hasNext() ) {
-                Node documentNode   = (Node)nodeIterator.next();
-                Node baseNode=documentNode; //in case document node last version should be hidden and another should be shown
-                String documentNodeBaseVersionUUID = documentNode.getIdentifier();
+            for (Node documentNode : nodes) {
+                // in case document node last version should be hidden and another should be shown
+                Node baseNode = documentNode; 
+                String docBaseUUID = documentNode.getIdentifier();
                 
-                /*
-                 
-                pledge documents aren't workspace-bound and therefore can only be added or removed from the pledge itself
-                this sounds a bit underdesigned, though, and in my honest opinion should be revised with the whole 
-                document management concept
-                
-                gpi survey documents shouldn't be visible as well
-                
-                */
-                if (gpiSupportiveDocuments.contains(documentNodeBaseVersionUUID)
-                        || pledgeDocumentsUuids.contains(documentNodeBaseVersionUUID)) {
+                /* pledge documents aren't workspace-bound and can only be added or removed from the pledge itself
+                gpi survey documents shouldn't be visible as well */
+                if (isDocumentPartOfPledgeOrGPI(docBaseUUID)) {
                     continue;
                 }
                 
@@ -502,230 +462,228 @@ public class DocumentManager extends Action {
                  * If this version of node is pending to be approved, then it should be visible only to the creator of the node or the TL
                  * other users should see last approved version of this node, so get version number from sharedDoc entry and load that version
                  */
-                NodeLastApprovedVersion nlpv    = DocumentManagerUtil.getlastApprovedVersionOfTeamNode(documentNodeBaseVersionUUID);
-                if(tabName!=null && !tabName.equals(CrConstants.PUBLIC_DOCS_TAB) //in public docs case documentNode is non-versionable,but public version of some node 
-                        && (DocumentManagerUtil.isGivenVersionPendingApproval(DocumentManagerUtil.getNodeOfLastVersion(documentNodeBaseVersionUUID, request).getUUID())!=null
-                        || (nlpv!=null && ! nlpv.getNodeUUID().equals(documentNodeBaseVersionUUID)))
-                ){                  
-                    
-                    String sharedVersionId          = null;
-                    if ( nlpv != null ) {
-                        sharedVersionId         = nlpv.getVersionID();
-                    }
-                    else {
-                        Node verNode                = DocumentManagerUtil.getLastVersionNotWaitingApproval(documentNodeBaseVersionUUID, request);
-                        if ( verNode != null )
-                            sharedVersionId         = verNode.getUUID();
-                        else {
-                            logger.error( "Code should never get here. There should be at least one version of a document not waiting approval." );
+                NodeLastApprovedVersion nlpv = nlpvMap.get(docBaseUUID);
+                Node lastVersionNode = DocumentManagerUtil.getNodeOfLastVersion(docBaseUUID, request);
+                if (tabName != null && !tabName.equals(CrConstants.PUBLIC_DOCS_TAB)
+                        && (DocumentManagerUtil.isGivenVersionPendingApproval(lastVersionNode.getIdentifier()) != null
+                                || (nlpv != null && !nlpv.getNodeUUID().equals(docBaseUUID)))) {
+
+                    String sharedVersionId = null;
+                    if (nlpv != null) {
+                        sharedVersionId = nlpv.getVersionID();
+                    } else {
+                        Node verNode = DocumentManagerUtil.getLastVersionNotWaitingApproval(docBaseUUID, request);
+                        if (verNode != null) {
+                            sharedVersionId = verNode.getIdentifier();
+                        } else {
+                            logger.error("There should be at least one version of a document not waiting approval.");
                             continue;
                         }
-                            
                     }
-                    
                     documentNode = DocumentManagerUtil.getReadNode(sharedVersionId, request);
                 }
                 
-                if(isPending){ //getting documents that need approval to become team docs
-                    String sharedVersionId= DocumentManagerUtil.getCrSharedDoc(documentNodeBaseVersionUUID, getCurrentTeamMember(request).getTeamId(), CrConstants.PENDING_STATUS).getSharedNodeVersionUUID();
-                    Node documentNodesLastVersionId = DocumentManagerUtil.getNodeOfLastVersion(documentNode.getUUID(), request);
+                if (isPending) { //getting documents that need approval to become team docs
+                    CrSharedDoc crSharedDoc = DocumentManagerUtil.getCrSharedDoc(docBaseUUID, 
+                            getCurrentTeamMember(request).getTeamId(), CrConstants.PENDING_STATUS);
+                    String sharedVersionId = crSharedDoc.getSharedNodeVersionUUID();
+                    Node docNodeLastVersion = DocumentManagerUtil.getNodeOfLastVersion(documentNode.getUUID(), request);
                     /**
                      * If private document wasn't yet approved to become team doc and meanwhile TM added new version to his private doc,
                      * the version which he marked as shared should be visible and not the last version of the document.
                      */
-                    if(! documentNodesLastVersionId.getUUID().equals(sharedVersionId)){
+                    if (!docNodeLastVersion.getUUID().equals(sharedVersionId)) {
                         documentNode = DocumentManagerUtil.getReadNode(sharedVersionId, request);
                     }
                 }
                 
-                NodeWrapper nodeWrapper = new NodeWrapper(documentNode);
-                
-                if ( nodeWrapper.getWebLink()!=null && showOnlyDocs ){
-                    continue;
-                }                   
-                if ( nodeWrapper.getWebLink()==null && showOnlyLinks ){
+                NodeWrapper nw = new NodeWrapper(documentNode);
+                if (shouldSkipNode(nw, baseNode, uuidMapVer, request)) {
                     continue;
                 }
                 
-                Boolean hasViewRights           = false;
-                Boolean hasShowVersionsRights   = false;
-                Boolean hasVersioningRights     = false;
-                Boolean hasDeleteRights         = false;
-                Boolean hasDeleteRightsOnPublicVersion  = false;
-                Boolean hasApproveVersionRights         = false;
-                Boolean hasAddParticipatingOrgRights    = false;
+                DocumentData documentData = DocumentData.buildFromNodeWrapper(nw, docBaseUUID, nw.getUuid());
                 
-                String uuid                     = documentNode.getUUID();
-                boolean isPublicVersion     = uuidMapVer.containsKey(uuid);
-                
-                if ( isPublicVersion ) { // This document is public and exactly this version is the public one
-                        hasViewRights           = true;
-                }else{
-                    hasViewRights   = DocumentManagerRights.hasViewRights(baseNode, request);
-                }               
-                
-                if ( hasViewRights == null || !hasViewRights.booleanValue() ) {
-                    continue;
-                }
-                //fill node with data
-                String fileName =  nodeWrapper.getName();
-                if ( fileName == null && nodeWrapper.getWebLink() == null ){
-                    continue;
-                }
-                DocumentData documentData = DocumentData.buildFromNodeWrapper(nodeWrapper, fileName, documentNodeBaseVersionUUID, 
-                            nodeWrapper.getUuid() /*if it's original,node then this value is equal to documentNodeBaseVersionUUID, otherwise it's node's visible version uuid */);
-                
-                if ( !CrConstants.PUBLIC_DOCS_TAB.equals(tabName) && showActionButtons) {
+                if (!CrConstants.PUBLIC_DOCS_TAB.equals(tabName) && showActionButtons) {
                     /**
-                     * resources that are pending approval to become team resources,shouldn't have possibility to view versions,
-                     * add new versions e.t.c. 
+                     * resources that are pending approval to become team resources, 
+                     * shouldn't have possibility to view versions, add new versions e.t.c. 
                     */
-                    
-                    hasShowVersionsRights   = DocumentManagerRights.hasShowVersionsRights(baseNode, request);
-                    if ( hasShowVersionsRights != null )
-                        documentData.setHasShowVersionsRights(hasShowVersionsRights && !isPending); 
-                    
-                    hasVersioningRights     = DocumentManagerRights.hasVersioningRights(baseNode, request); //just indicates whether add version button is visible or not
-                    if ( hasVersioningRights != null ) {
-                        documentData.setHasVersioningRights( hasVersioningRights.booleanValue() && !isPending);
-                    }
-                    hasDeleteRights         = DocumentManagerRights.hasDeleteRights(baseNode, request);
-                    if ( hasDeleteRights != null ) {
-                        documentData.setHasDeleteRights( hasDeleteRights.booleanValue() && !isPending);
-                    }
-                    if ( hasMakePublicRights != null ) {
-                        documentData.setHasMakePublicRights( hasMakePublicRights.booleanValue() && !isPending);
-                    }
-
-                    hasAddParticipatingOrgRights    = DocumentManagerRights.hasAddParticipatingOrgRights(documentNode, request);
-                    if (hasAddParticipatingOrgRights != null) {
-                        documentData.setHasAddParticipatingOrgRights(hasAddParticipatingOrgRights);
-                    }
-                    
-                    hasDeleteRightsOnPublicVersion          = DocumentManagerRights.hasDeleteRightsOnPublicVersion(baseNode, request);
-                    if ( hasDeleteRightsOnPublicVersion != null ) {
-                        documentData.setHasDeleteRightsOnPublicVersion( hasDeleteRightsOnPublicVersion.booleanValue() && !isPending);
-                    }
+                    setDocumentDataRights(documentData, baseNode, documentNode, isPending, request, tabName);
                     
                     //share rights ! this will be different according to settings
-                    if(tabName!=null && ! tabName.equals(CrConstants.PUBLIC_DOCS_TAB)){
-                        if(tabName.equals(CrConstants.PRIVATE_DOCS_TAB) || (tabName.equals(CrConstants.TEAM_DOCS_TAB) && isPending)){
-                            documentData.setShareWith(CrConstants.SHAREABLE_WITH_TEAM);
-                        }else{
-                            documentData.setShareWith(CrConstants.SHAREABLE_WITH_OTHER_TEAMS);
-                        }
-                    }                   
-                    
-                    //version approval rights
-                    hasApproveVersionRights = DocumentManagerRights.hasApproveVersionRights(request);
-                    if(hasApproveVersionRights!=null){
-                        documentData.setHasApproveVersionRights(hasApproveVersionRights);
+                    if (StringUtils.equalsIgnoreCase(tabName, CrConstants.PRIVATE_DOCS_TAB)
+                            || (StringUtils.equalsIgnoreCase(tabName, CrConstants.TEAM_DOCS_TAB) && isPending)) {
+                        documentData.setShareWith(CrConstants.SHAREABLE_WITH_TEAM);
+                    } else {
+                        documentData.setShareWith(CrConstants.SHAREABLE_WITH_OTHER_TEAMS);
                     }
                     
                     //if documentNode has pending status in sharedDocs,then it should be true
                     boolean needsApproval=false;
-                    if(tabName!=null) {
-                        if(tabName.equalsIgnoreCase(CrConstants.TEAM_DOCS_TAB) ) 
-                            needsApproval   = DocumentManagerUtil.isResourcePendingtoBeShared(documentNodeBaseVersionUUID);
-                            
-                        if ( tabName.equalsIgnoreCase(CrConstants.PRIVATE_DOCS_TAB) )
-                            needsApproval   = 
-                                DocumentManagerUtil.isResourceVersionPendingtoBeShared(documentNodeBaseVersionUUID, nodeWrapper.getLastVersionUUID(request));
-                            
+                    if (StringUtils.equalsIgnoreCase(tabName, CrConstants.TEAM_DOCS_TAB)) {
+                        needsApproval = DocumentManagerUtil.isResourcePendingtoBeShared(docBaseUUID);
+                    } else if (StringUtils.equalsIgnoreCase(tabName, CrConstants.PRIVATE_DOCS_TAB)) {
+                        needsApproval = DocumentManagerUtil.isResourceVersionPendingtoBeShared(docBaseUUID,
+                                nw.getLastVersionUUID(request));
                     }
                     documentData.setNeedsApproval(needsApproval);   //should show "share" or "approve" link
-                    documentData.setHasShareRights(DocumentManagerRights.hasShareRights(documentNode, request, tabName));
-                    documentData.setHasUnshareRights(DocumentManagerRights.hasUnshareRights(documentNode, request, tabName));
-                    
                     
                     List<String> sharedNodeVersionId=new ArrayList<String>();
-                    if(tabName!=null){
-                        if(tabName.equals(CrConstants.PRIVATE_DOCS_TAB)){
-                            sharedNodeVersionId=DocumentManagerUtil.isPrivateResourceShared(documentNodeBaseVersionUUID);
-                        }else if(tabName.equalsIgnoreCase(CrConstants.TEAM_DOCS_TAB) && ! isPending){
-                            String retVal= DocumentManagerUtil.isTeamResourceSharedWithGivenWorkspace(documentNodeBaseVersionUUID,null);
-                            if(retVal!=null){
-                                sharedNodeVersionId.add(retVal);
-                            }                       
+                    if (StringUtils.equalsIgnoreCase(tabName, CrConstants.PRIVATE_DOCS_TAB)) {
+                        sharedNodeVersionId = DocumentManagerUtil.isPrivateResourceShared(docBaseUUID);
+                    } else if (StringUtils.equalsIgnoreCase(tabName, CrConstants.TEAM_DOCS_TAB) && !isPending) {
+                        String retVal = DocumentManagerUtil.isTeamResourceSharedWithGivenWorkspace(docBaseUUID, null);
+                        if (retVal != null) {
+                            sharedNodeVersionId.add(retVal);
                         }
-                    }                   
-                    
-                    
+                    }
                     /**
                      * In case of team doc, instead of lastVersion we need just firstly given documentData-s uuid
                      *  if it's some version of the node and not original last version node !
                      */
-                    Node lastVersion=null;
-                    String lastVerUUID=null;
-                    if(! documentNodeBaseVersionUUID.equals(uuid)){ //this means that document data version that was passed to function,was hidden and we fund it's last not hidden version
-                        lastVerUUID =uuid;
-                    }else{
+                    String lastVerUUID = null;
+                    if (!docBaseUUID.equals(documentNode.getIdentifier())) {
+                        lastVerUUID = documentNode.getIdentifier();
+                    } else {
                         try{
-                            lastVersion = DocumentManagerUtil.getNodeOfLastVersion(uuid, request);
-                            lastVerUUID = lastVersion.getUUID();
-                        }
-                        catch (NoVersionsFoundException e) {
+                            lastVerUUID = DocumentManagerUtil
+                                    .getNodeOfLastVersion(documentNode.getIdentifier(), request).getIdentifier();
+                        } catch (NoVersionsFoundException e) {
                             logger.warn(e.getMessage());
                         }
                     }
                     
-                    if(sharedNodeVersionId!=null && sharedNodeVersionId.size()>0){
-                        documentData.setIsShared(true);                                             
-                        
-                        if(sharedNodeVersionId.contains(lastVerUUID)){
-                            documentData.setLastVersionIsShared(true);
-                        }else{
-                            documentData.setLastVersionIsShared(false);
-                        }
+                    if (sharedNodeVersionId != null && sharedNodeVersionId.size() > 0) {
+                        documentData.setIsShared(true);
+                        documentData.setLastVersionIsShared(sharedNodeVersionId.contains(lastVerUUID));
                     }
+                    
                     //whether this document's any version is public and if is, then which one is public
-                    if ( uuidMapOrg.containsKey(documentNodeBaseVersionUUID) ) {
-                            documentData.setIsPublic(true);
-                            //Verify if the last (current) version is the public one.
-                            //Node lastVersion  = DocumentManagerUtil.getNodeOfLastVersion(documentNodeBaseVersionUUID, request);
-                            //String lastVerUUID    = lastVersion.getUUID();
-                                                        
-                            if ( uuidMapVer.containsKey(lastVerUUID) ) {
-                                documentData.setLastVersionIsPublic( true );
-                            }
-                    }else{
+                    if (docAttrManager.getPublicDocumentsMap(false).containsKey(docBaseUUID)) {
+                        documentData.setIsPublic(true);
+                        documentData.setLastVersionIsPublic(uuidMapVer.containsKey(lastVerUUID));
+                    } else {
                         documentData.setIsPublic(false);
                     }
                     
                     // whether this document has any version, that needs to be approved to become team doc version
-                    List<TeamNodePendingVersion> pendingVersionsForBaseNode=null;
-                    if(tabName!=null && tabName.equals(CrConstants.TEAM_DOCS_TAB)){
-                        pendingVersionsForBaseNode=DocumentManagerUtil.getPendingVersionsForResource(documentNodeBaseVersionUUID);
+                    List<TeamNodePendingVersion> pendingVersionsForBaseNode = null;
+                    if (tabName != null && tabName.equals(CrConstants.TEAM_DOCS_TAB)) {
+                        pendingVersionsForBaseNode = DocumentManagerUtil.getPendingVersionsForResource(docBaseUUID);
                     }
-                    if(pendingVersionsForBaseNode!=null && pendingVersionsForBaseNode.size()>0){
+                    if (pendingVersionsForBaseNode != null && pendingVersionsForBaseNode.size() > 0) {
                         documentData.setHasAnyVersionPendingApproval(true);
-                    }else{
+                    } else {
                         documentData.setHasAnyVersionPendingApproval(false);
                     }
                 }
-                // This is not the actual document node. It is the node of the public version. That's why one shouldn't have 
-                // the above rights.
+                // This is not the actual document node. It is the node of the public version. 
+                // That's why one shouldn't have the above rights.
                 else {
                     documentData.setShowVersionHistory(false); 
                 }
                 documents.add(documentData);
-                
-                
             }
         } catch (Exception e) {
             e.printStackTrace();
-            // TODO: handle exception
         }
         return documents;
     }
+
+    private boolean isDocumentPartOfPledgeOrGPI(String docBaseUUID) {
+        Collection<String> pledgeDocumentsUuids = FundingPledges.getPledgeDocumentUuids();
+        List<String> gpiSupportiveDocuments = DocumentUtil.getAllSupportiveDocumentsUUID();
+        
+        return gpiSupportiveDocuments.contains(docBaseUUID) || pledgeDocumentsUuids.contains(docBaseUUID);
+    }
+
+    private boolean shouldSkipNode(NodeWrapper nodeWrapper, Node baseNode, 
+            Map<String, CrDocumentNodeAttributes> uuidMapVer, HttpServletRequest request) {
+        
+        boolean shouldSkip = false;
+        if (nodeWrapper.getWebLink() != null && showOnlyDocs 
+                || (nodeWrapper.getWebLink() == null && showOnlyLinks)) {
+            shouldSkip = true;
+        }
+        // This document is public and exactly this version is the public one
+        boolean isPublicVersion = uuidMapVer.containsKey(nodeWrapper.getUuid());
+        
+        if (!(isPublicVersion || DocumentManagerRights.hasViewRights(baseNode, request))) {
+            shouldSkip = true;
+        }
+        
+        if (nodeWrapper.getName() == null && nodeWrapper.getWebLink() == null) {
+            shouldSkip = true;
+        }
+        
+        return shouldSkip;
+    }
+
+    /**
+     * @param documentData
+     * @param baseNode
+     * @param documentNode
+     * @param isPending
+     * @param request
+     * @param tabName 
+     */
+    private void setDocumentDataRights(DocumentData documentData, Node baseNode, Node documentNode, boolean isPending,
+            HttpServletRequest request, String tabName) {
+
+        Boolean hasShowVersionsRights = false;
+        Boolean hasMakePublicRights = false;
+        Boolean hasVersioningRights = false;
+        Boolean hasDeleteRights = false;
+        Boolean hasDeleteRightsOnPublicVersion = false;
+        Boolean hasApproveVersionRights = false;
+        Boolean hasAddParticipatingOrgRights = false;
+
+        hasShowVersionsRights = DocumentManagerRights.hasShowVersionsRights(baseNode, request);
+        if (hasShowVersionsRights != null) {
+            documentData.setHasShowVersionsRights(hasShowVersionsRights && !isPending);
+        }
+
+        hasVersioningRights = DocumentManagerRights.hasVersioningRights(baseNode, request);
+        if (hasVersioningRights != null) {
+            documentData.setHasVersioningRights(hasVersioningRights.booleanValue() && !isPending);
+        }
+        
+        hasDeleteRights = DocumentManagerRights.hasDeleteRights(baseNode, request);
+        if (hasDeleteRights != null) {
+            documentData.setHasDeleteRights(hasDeleteRights.booleanValue() && !isPending);
+        }
+        
+        hasMakePublicRights = DocumentManagerRights.hasMakePublicRights(request);
+        if (hasMakePublicRights != null) {
+            documentData.setHasMakePublicRights(hasMakePublicRights.booleanValue() && !isPending);
+        }
+
+        hasAddParticipatingOrgRights = DocumentManagerRights.hasAddParticipatingOrgRights(documentNode, request);
+        if (hasAddParticipatingOrgRights != null) {
+            documentData.setHasAddParticipatingOrgRights(hasAddParticipatingOrgRights);
+        }
+
+        hasDeleteRightsOnPublicVersion = DocumentManagerRights.hasDeleteRightsOnPublicVersion(baseNode, request);
+        if (hasDeleteRightsOnPublicVersion != null) {
+            documentData.setHasDeleteRightsOnPublicVersion(hasDeleteRightsOnPublicVersion.booleanValue() && !isPending);
+        }
+
+        hasApproveVersionRights = DocumentManagerRights.hasApproveVersionRights(request);
+        if (hasApproveVersionRights != null) {
+            documentData.setHasApproveVersionRights(hasApproveVersionRights);
+        }
+        
+        documentData.setHasShareRights(DocumentManagerRights.hasShareRights(documentNode, request, tabName));
+        documentData.setHasUnshareRights(DocumentManagerRights.hasUnshareRights(documentNode, request, tabName));
+    }
     
-    public Collection<DocumentData> getDocuments(Collection<String> UUIDs, HttpServletRequest myRequest,String tabName,boolean isPending,boolean showActionsButton) {
-        ArrayList<Node> documents       = new ArrayList<Node>();
-        Iterator<String> iter           = UUIDs.iterator();
-        while (iter.hasNext()) {
-            String uuid         = iter.next();
-            Node documentNode   = DocumentManagerUtil.getReadNode(uuid, myRequest);
-            
+    public List<DocumentData> getDocuments(List<String> uuidList, HttpServletRequest myRequest, String tabName,
+            boolean isPending, boolean showActionsButton) {
+        
+        List<Node> documents = new ArrayList<Node>();
+        for (String uuid : uuidList) {
+            Node documentNode = DocumentManagerUtil.getReadNode(uuid, myRequest);
             /**
              * If documentNode is null it means that there is no node with the specified uuid in the repository
              * but the application still has some information about that node.
@@ -733,40 +691,30 @@ public class DocumentManager extends Action {
              * exception.
              */
             if (documentNode == null) {
-                try {
-                  logger.error("JACKRABBIT: no document found", new Exception("Document with uuid '" + uuid + "' not found !"));
-                }
-                catch (Exception e) {
-                    e.printStackTrace();
-                    RepairDbUtil.repairDocumentNoLongerInContentRepository(uuid, CrDocumentNodeAttributes.class.getName() );
-                    RepairDbUtil.repairDocumentNoLongerInContentRepository(uuid, AmpActivityDocument.class.getName() );
-                }
-                
-            }
-            else
+                logger.error("JACKRABBIT: Document with uuid '" + uuid + "' not found !");
+                RepairDbUtil.repairDocumentNoLongerInContentRepository(uuid, CrDocumentNodeAttributes.class.getName());
+                RepairDbUtil.repairDocumentNoLongerInContentRepository(uuid, AmpActivityDocument.class.getName());
+            } else {
                 documents.add(documentNode);
+            }
         }
-        Iterator iterator           = documents.iterator();
-        if(tabName!=null && tabName.equals(CrConstants.SHARED_DOCS_TAB)){
-            return getSharedDocuments(iterator, myRequest,showActionsButton);
-        }else{
-            return getDocuments(iterator, myRequest,tabName,isPending,showActionsButton);
-        }   
+
+        if (tabName != null && tabName.equals(CrConstants.SHARED_DOCS_TAB)) {
+            return getSharedDocuments(documents, myRequest, showActionsButton);
+        } 
         
+        return getDocumentsFromNodes(documents, myRequest, tabName, isPending, showActionsButton);
     }
     
     //for shared Docs tab
-    private Collection<DocumentData> getSharedDocuments(Iterator nodeIterator, HttpServletRequest request,boolean showActionsButton) {
-        ArrayList<DocumentData> documents   = new ArrayList<DocumentData>();
+    private List<DocumentData> getSharedDocuments(List<Node> nodes, HttpServletRequest request, 
+            boolean showActionsButton) {
+        ArrayList<DocumentData> documents = new ArrayList<DocumentData>();
         try {
-            while ( nodeIterator.hasNext() ) {
-                Node documentNode   = (Node)nodeIterator.next();                                
+            for (Node documentNode : nodes) {
                 NodeWrapper nodeWrapper = new NodeWrapper(documentNode);
                 
-                if ( nodeWrapper.getWebLink()!=null && showOnlyDocs ){
-                    continue;
-                }                   
-                if ( nodeWrapper.getWebLink()==null && showOnlyLinks ){
+                if (nodeWrapper.getWebLink() != null && (showOnlyDocs || showOnlyLinks)) {
                     continue;
                 }
                 
@@ -776,10 +724,11 @@ public class DocumentManager extends Action {
                     continue;
                 }
                 
-                DocumentData documentData = DocumentData.buildFromNodeWrapper(nodeWrapper, fileName, null, null);
+                DocumentData documentData = DocumentData.buildFromNodeWrapper(nodeWrapper);
                 
                 if(showActionsButton){
-                    documentData.setHasUnshareRights(DocumentManagerRights.hasUnshareRights(documentNode, request, CrConstants.SHARED_DOCS_TAB));
+                    documentData.setHasUnshareRights(DocumentManagerRights.hasUnshareRights(documentNode, request, 
+                            CrConstants.SHARED_DOCS_TAB));
                 }               
                 documentData.setIsShared(true);
                 
@@ -788,8 +737,9 @@ public class DocumentManager extends Action {
                 
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
+        
         return documents;
     }
     

@@ -52,7 +52,7 @@ clearReferencesThreadLocals="true" jndiExceptionOnFailedWrite="false" processTld
     testWhileIdle="false" 
     timeBetweenEvictionRunsMillis="20000" 
     useDisposableConnectionFacade="true"  
-    jdbcInterceptors="ConnectionState;StatementFinalizer;SlowQueryReport(threshold=60000)" 
+    jdbcInterceptors="ConnectionState;StatementFinalizer;ResetAbandonedTimer;SlowQueryReport(threshold=60000)" 
   />
   
   <!-- MonetDB connection. IT IS A DUMMY, DO NOT USE IT (now only used to shut up Saiku during AMP startup - will be removed in the near future -->

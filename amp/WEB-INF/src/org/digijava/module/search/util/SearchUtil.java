@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -39,6 +40,7 @@ import org.digijava.module.aim.util.time.StopWatch;
 import org.digijava.module.contentrepository.dbentity.CrDocumentNodeAttributes;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
+import org.digijava.module.contentrepository.util.DocumentsNodesAttributeManager;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.search.helper.Resource;
 import org.hibernate.Query;
@@ -363,7 +365,8 @@ public class SearchUtil {
                     }
                 }
 
-                HashMap<String, CrDocumentNodeAttributes> pd = CrDocumentNodeAttributes.getPublicDocumentsMap(false);
+                Map<String, CrDocumentNodeAttributes> pd = DocumentsNodesAttributeManager.getInstance()
+                        .getPublicDocumentsMap(false);
                 Set<String> keySet = pd.keySet();
                 for (String uuid : keySet) {
                     Node lastVersion = DocumentManagerUtil.getReadNode(uuid, request);

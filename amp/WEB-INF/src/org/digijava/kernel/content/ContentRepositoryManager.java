@@ -16,6 +16,7 @@ import org.apache.jackrabbit.core.config.RepositoryConfig;
 import org.apache.log4j.Logger;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 
 /**
@@ -74,6 +75,20 @@ public final class ContentRepositoryManager {
      */
     public static void shutdown() {
         getRepositoryInstance().shutdown();
+    }
+    
+    /**
+     * Gets a jackrabbit session.
+     * 
+     * @param request
+     * @return logged in session
+     */
+    public static Session getSession(HttpServletRequest request) {
+        if (TeamMemberUtil.getLoggedInTeamMember() != null) {
+            return getWriteSession(request);
+        }
+        
+        return getReadSession(request);
     }
     
     /**

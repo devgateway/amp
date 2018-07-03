@@ -27,7 +27,7 @@ import org.digijava.module.contentrepository.form.DocumentManagerForm;
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.jcrentity.Label;
-import org.digijava.module.contentrepository.util.DocToOrgDAO;
+import org.digijava.module.contentrepository.util.DocumentOrganizationManager;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.message.triggers.ApprovedResourceShareTrigger;
 import org.digijava.module.message.triggers.PendingResourceShareTrigger;
@@ -64,6 +64,11 @@ public class ShareDocument extends Action {
                     
                     Session jcrWriteSession     = DocumentManagerUtil.getWriteSession(request);
                     Node teamHomeNode           = DocumentManagerUtil.getTeamNode(jcrWriteSession, teamMember.getTeamId());
+                    
+                    if (teamHomeNode == null) {
+                        teamHomeNode = DocumentManagerUtil.createNodeUsingPath(jcrWriteSession, teamMember, 
+                                "team/" + teamMember.getTeamId());
+                    }
                     
                     /**
                      * if tm shared document,which was yet unapproved by TL and in the meantime he(TM) added new version to this private document,
@@ -179,11 +184,12 @@ public class ShareDocument extends Action {
      */
     private void copyOrganizations(String originalNodeUUID, String destinationNodeUUID) {
         // copy all organizations from the original Node
-        List<AmpOrganisation> existingOrgs = DocToOrgDAO.getOrgsObjByUuid(originalNodeUUID);
+        List<AmpOrganisation> existingOrgs = DocumentOrganizationManager.getInstance()
+                .getOrganizationsByUUID(originalNodeUUID);
         if (existingOrgs != null) {
             for (AmpOrganisation organizationLinkToClone : existingOrgs) {
                 CrDocumentsToOrganisations docToOrgObj = new CrDocumentsToOrganisations(destinationNodeUUID, organizationLinkToClone);
-                DocToOrgDAO.saveObject(docToOrgObj);
+                DocumentOrganizationManager.getInstance().saveObject(docToOrgObj);
             }
         }       
     }

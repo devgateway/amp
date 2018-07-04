@@ -341,12 +341,12 @@ public class AMPStartupListener extends HttpServlet implements
             registerEhCacheMBeans();
 
             QuartzJobUtils.runJobIfNotPaused(RegisterWithAmpRegistryJob.NAME);
+
+            new SwaggerConfigurer().configure();
         } catch (Throwable e) {
             logger.error("Exception while initialising AMP :" + e.getMessage(), e);
             throw new Error(e);
         }
-
-        new SwaggerConfigurer().configure();
     }
 
     public void registerEhCacheMBeans() {

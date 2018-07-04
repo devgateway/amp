@@ -2,8 +2,8 @@ package org.digijava.kernel.ampapi.swagger;
 
 import io.swagger.converter.ModelConverters;
 import io.swagger.jaxrs.config.BeanConfig;
-import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.digijava.kernel.ampapi.swagger.converters.AmpOfflineVersionResolver;
+import org.digijava.kernel.ampapi.swagger.converters.GeneratedReportResolver;
 import org.digijava.kernel.ampapi.swagger.converters.JsonSerializeUsingResolver;
 import org.digijava.kernel.ampapi.swagger.converters.JAXBElementUnwrapper;
 
@@ -27,6 +27,6 @@ public class SwaggerConfigurer {
 
         ModelConverters.getInstance().addConverter(new JsonSerializeUsingResolver());
 
-        ModelConverters.getInstance().addClassToSkip(GeneratedReport.class.getName());
+        ModelConverters.getInstance().addConverter(new GeneratedReportResolver());
     }
 }

@@ -23,8 +23,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
@@ -65,12 +63,6 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
                     + "represented in a tree structure.\nIf value can be translated then each possible value "
                     + "will contain value-translations element, a map where key is language code and value is "
                     + "translated value.")
-    @ApiImplicitParams(
-            @ApiImplicitParam(
-                    name = "Accept",
-                    paramType = "header",
-                    allowableValues = "application/vnd.possible-values-v2+json,application/json",
-                    example = "application/vnd.possible-values-v2+json"))
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "list of possible values",
             response = PossibleValue.class, responseContainer = "List"))
     public Response getPossibleValuesFlat(
@@ -97,14 +89,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
                     + "represented in a tree structure.\n\n"
                     + "If value can be translated then each possible value will contain value-translations element, "
                     + "a map where key is language code and value is translated value.\n\n"
-                    + "Example body: `[\"fundings~donor_organization_id\", \"approval_status\", \"activity_budget\"]`"
-    )
-    @ApiImplicitParams(
-            @ApiImplicitParam(
-                    name = "Accept",
-                    paramType = "header",
-                    allowableValues = "application/vnd.possible-values-v2+json,application/json",
-                    example = "application/vnd.possible-values-v2+json"))
+                    + "Example body: `[\"fundings~donor_organization_id\", \"approval_status\", \"activity_budget\"]`")
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "list of possible values grouped by field"))
     public Response getValues(
             @ApiParam(value = "list of fully qualified activity fields")

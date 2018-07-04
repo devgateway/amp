@@ -678,7 +678,7 @@ public class EndPoints implements ErrorReportingEndpoint {
                     + "if \"Other\" is present on Y\n"
                     + "}</pre>"
     )
-    public JsonBean getHeatMap(JsonBean config) {
+    public JsonBean getHeatMap(@PathParam("type") String type, JsonBean config) {
         return new HeatMapService(config).buildHeatMap();
     }
 
@@ -729,6 +729,7 @@ public class EndPoints implements ErrorReportingEndpoint {
                     + "    }]\n"
                     + "}</pre>")
     public JsonBean getHeatMapDataDetail(JsonBean config,
+            @PathParam("type") String type,
             @ApiParam("id of the x dimention of Heat Map matrix.") @PathParam("xId") Long xId,
             @ApiParam("id of the y dimention of Heat Map matrix.") @PathParam("yId") Long yId) {
         return new HeatMapService(config, xId, yId).buildHeatMapDetail();

@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
  */
 public class AmpOfflineVersion implements Comparable<AmpOfflineVersion>, Serializable {
 
-    public static final Pattern PATTERN = Pattern.compile("(\\d{1,9}).(\\d{1,9}).(\\d{1,9})(?:-(.*))?");
+    public static final Pattern PATTERN = Pattern.compile("(\\d{1,9})\\.(\\d{1,9})\\.(\\d{1,9})(?:-(.*))?");
 
     private static final Comparator<String> SUFFIX_ORDER = Comparator.nullsLast(String.CASE_INSENSITIVE_ORDER);
 

@@ -56,17 +56,14 @@ public class AmpResource {
     @Interchangeable(fieldTitle = "Public")
     private Boolean isPublic;
     
-    @Interchangeable(fieldTitle = "Private")
+    @Interchangeable(fieldTitle = "Private", importable = true, required = ActivityEPConstants.REQUIRED_ALWAYS)
     private Boolean isPrivate;
     
-    @Interchangeable(fieldTitle = "Creator Email")
+    @Interchangeable(fieldTitle = "Creator Email", importable = true, required = ActivityEPConstants.REQUIRED_ALWAYS)
     private String creatorEmail;
     
-    @Interchangeable(fieldTitle = "Team")
+    @Interchangeable(fieldTitle = "Team", importable = true, required = ActivityEPConstants.REQUIRED_ALWAYS)
     private Long team;
-    
-    @Interchangeable(fieldTitle = "Team Member", importable = true)
-    private Long teamMember;
     
     private Map<String, String> translatedTitles;
     private Map<String, String> translatedDescriptions;
@@ -190,14 +187,6 @@ public class AmpResource {
 
     public void setTeam(Long team) {
         this.team = team;
-    }
-
-    public Long getTeamMember() {
-        return teamMember;
-    }
-
-    public void setTeamMember(Long teamMember) {
-        this.teamMember = teamMember;
     }
 
     public Map<String, String> getTranslatedTitles() {

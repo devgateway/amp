@@ -17,6 +17,7 @@ import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -75,7 +76,7 @@ public final class ResourceUtil {
             result.set(ResourceEPConstants.WEB_LINK, resource.getWebLink());
             result.set(ResourceEPConstants.ADDING_DATE, 
                     DateFormatUtils.ISO_DATETIME_TIME_ZONE_FORMAT.format(resource.getAddingDate()));
-            result.set(ResourceEPConstants.TEAM_MEMBER, resource.getTeamMember());
+            result.set(ResourceEPConstants.TEAM, resource.getTeam());
         }
         
         return result;
@@ -85,6 +86,10 @@ public final class ResourceUtil {
         
         AmpResource resource = new AmpResource();
         Node readNode = DocumentManagerUtil.getReadNode(uuid, TLSUtils.getRequest());
+        
+        if (readNode == null) {
+            ApiErrorResponse.reportResourceNotFound(ResourceErrors.RESOURCE_NOT_FOUND);
+        }
         
         NodeWrapper nodeWrapper = new NodeWrapper(readNode);
         resource.setUuid(nodeWrapper.getUuid());
@@ -108,12 +113,14 @@ public final class ResourceUtil {
         }
         
         try {
+            Node folderNode = nodeWrapper.getNode().getParent();
             if (isPrivate(nodeWrapper)) {
                 resource.setPrivate(true);
-                resource.setTeamMember(Long.valueOf(nodeWrapper.getNode().getParent().getParent().getName()));
+                resource.setCreatorEmail(folderNode.getName());
+                resource.setTeam(Long.valueOf(folderNode.getParent().getName()));
             } else {
                 resource.setPrivate(false);
-                resource.setTeam(Long.valueOf(nodeWrapper.getNode().getParent().getName()));
+                resource.setTeam(Long.valueOf(folderNode.getName()));
             }
         } catch (RepositoryException e) {
             return ApiError.toError(ResourceErrors.RESOURCE_ERROR, e);
@@ -217,5 +224,5 @@ public final class ResourceUtil {
         
         return publicDocs;
     }
-    
+
 }

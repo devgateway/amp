@@ -25,14 +25,19 @@ import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorPr
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.StreamUtils;
+import org.digijava.kernel.ampapi.filters.AmpOfflineModeHolder;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.user.User;
+import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.annotations.activityversioning.ResourceTextField;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
 
@@ -75,6 +80,32 @@ public class ResourceImporter extends ObjectImporter {
 
         List<APIField> fieldsDef = AmpFieldsEnumerator.PRIVATE_ENUMERATOR.getResourceFields();
         
+        String privateAttr = newJson.getString(ResourceEPConstants.PRIVATE);
+        
+        if (StringUtils.isBlank(privateAttr)) {
+            return singletonList(ResourceErrors.FIELD_INVALID_VALUE.withDetails(ResourceEPConstants.PRIVATE));
+        }
+        
+        if (!Boolean.parseBoolean(privateAttr)) {
+            return singletonList(ResourceErrors.PRIVATE_RESOURCE_SUPPORTED_ONLY
+                    .withDetails(ResourceEPConstants.PRIVATE));
+        }
+        
+        TeamMember teamMemberCreator = null;
+        if (AmpOfflineModeHolder.isAmpOfflineMode()) {
+            List<ApiErrorMessage> errorMessages = validateCreatorEmailTeam(newJson);
+            if (errorMessages != null) {
+                return errorMessages;
+            }
+            
+            String creatorEmail = newJson.getString(ResourceEPConstants.CREATOR_EMAIL);
+            Long teamId = getLongOrNull(newJson.get(ResourceEPConstants.TEAM));
+            AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMemberByEmailAndTeam(creatorEmail, teamId);
+            teamMemberCreator = TeamMemberUtil.getTeamMember(teamMember.getAmpTeamMemId());
+        } else {
+            teamMemberCreator = TeamMemberUtil.getLoggedInTeamMember();
+        }
+
         if (formFile == null && StringUtils.isBlank(String.valueOf(newJson.get(ResourceEPConstants.WEB_LINK)))) {
             return singletonList(ResourceErrors.FIELD_REQUIRED.withDetails(ResourceEPConstants.WEB_LINK));
         }
@@ -89,26 +120,7 @@ public class ResourceImporter extends ObjectImporter {
                 return singletonList(ResourceErrors.FILE_SIZE_INVALID.withDetails(errorMessage));
             }
         }
-
-        Object teamMemberObj = newJson.get(ResourceEPConstants.TEAM_MEMBER);
-        Long teamMemberId = getLongOrNull(teamMemberObj);
-        AmpTeamMember ampTeamMember = TeamMemberUtil.getAmpTeamMember(teamMemberId);
         
-        if (teamMemberId != null && ampTeamMember == null) {
-            return singletonList(ResourceErrors.FIELD_INVALID_VALUE.withDetails(ResourceEPConstants.TEAM_MEMBER));
-        }
-        
-        TeamMember teamMemberCreator = null;
-        if (teamMemberId == null) {
-            teamMemberCreator = TeamMemberUtil.getLoggedInTeamMember();
-            
-            if (teamMemberCreator == null) {
-                return singletonList(ResourceErrors.FIELD_REQUIRED.withDetails(ResourceEPConstants.TEAM_MEMBER));
-            }
-        } else {
-            teamMemberCreator = TeamMemberUtil.getTeamMember(teamMemberId);
-        }
-
         try {
             resource = new AmpResource();
             resource = (AmpResource) validateAndImport(resource, null, fieldsDef, newJson.any(), null, null);
@@ -117,16 +129,20 @@ public class ResourceImporter extends ObjectImporter {
                 throw new ObjectConversionException();
             }
             
+            resource.setCreatorEmail(teamMemberCreator.getEmail());
+            resource.setTeam(teamMemberCreator.getTeamId());
             resource.setAddingDate(new Date());
             
-            ActionMessages messages = new ActionMessages();
-            TemporaryDocumentData tdd = getTemporaryDocumentData(resource, formFile);
-            NodeWrapper node = tdd.saveToRepository(TLSUtils.getRequest(), teamMemberCreator, messages);
-
-            if (node != null) {
-                resource.setUuid(node.getUuid());
-            } else {
-                reportErrors(messages);
+            if (errors.isEmpty()) {
+                ActionMessages messages = new ActionMessages();
+                TemporaryDocumentData tdd = getTemporaryDocumentData(resource, formFile);
+                NodeWrapper node = tdd.saveToRepository(TLSUtils.getRequest(), teamMemberCreator, messages);
+    
+                if (node != null) {
+                    resource.setUuid(node.getUuid());
+                } else {
+                    reportErrors(messages);
+                }
             }
         } catch (ObjectConversionException | RuntimeException e) {
             if (e instanceof RuntimeException) {
@@ -229,6 +245,55 @@ public class ResourceImporter extends ObjectImporter {
         } else {
             return null;
         }
+    }
+    
+    /**
+     * validates creator email and team
+     * 
+     * @param newJson
+     * @return
+     */
+    private List<ApiErrorMessage> validateCreatorEmailTeam(JsonBean newJson) {
+        
+        Object creatorEmail = newJson.get(ResourceEPConstants.CREATOR_EMAIL);
+        if (creatorEmail == null || StringUtils.isBlank(creatorEmail.toString())) {
+            return singletonList(ResourceErrors.FIELD_REQUIRED.withDetails(ResourceEPConstants.CREATOR_EMAIL));
+        }
+        
+        Object team = newJson.get(ResourceEPConstants.TEAM);
+        if (team == null || getLongOrNull(team) == null) {
+            return singletonList(ResourceErrors.FIELD_REQUIRED.withDetails(ResourceEPConstants.TEAM));
+        }
+        
+        User creatorUser = creatorEmail != null ? UserUtils.getUserByEmailAddress(creatorEmail.toString()) : null;
+        if (creatorUser == null) {
+            return singletonList(ResourceErrors.FIELD_INVALID_VALUE.withDetails(ResourceEPConstants.CREATOR_EMAIL));
+        }
+        
+        Long teamId = getLongOrNull(team);
+        AmpTeam ampTeam = TeamUtil.getAmpTeam(teamId);
+        
+        if (ampTeam == null) {
+            return singletonList(ResourceErrors.FIELD_INVALID_VALUE.withDetails(ResourceEPConstants.TEAM));
+        }
+
+        AmpTeamMember ampTeamMember = TeamMemberUtil.getAmpTeamMemberByEmailAndTeam(creatorUser.getEmail(),
+                ampTeam.getAmpTeamId());
+
+        if (ampTeamMember == null) {
+            List<String> errorDetails = new ArrayList<>();
+            errorDetails.add(ResourceEPConstants.CREATOR_EMAIL);
+            errorDetails.add(ResourceEPConstants.TEAM);
+
+            return singletonList(ResourceErrors.INVALID_TEAM_MEMBER.withDetails(errorDetails));
+        }
+
+        return null;
+    }
+    
+    @Override
+    protected boolean ignoreUnknownFields() {
+        return AmpOfflineModeHolder.isAmpOfflineMode();
     }
     
 }

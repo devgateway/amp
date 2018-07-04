@@ -21,7 +21,6 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.kernel.user.User;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
@@ -226,20 +225,4 @@ public final class ResourceUtil {
         return publicDocs;
     }
 
-    public static User getUserByEmail(Object creatorEmail) {
-        if (creatorEmail == null) {
-            return null;
-        }
-        
-        String email = creatorEmail.toString();
-        String queryString = "SELECT u FROM " + User.class.getName() + " u where u.email = :email";
-        
-        User u = (User) PersistenceManager.getSession()
-                .createQuery(queryString)
-                .setString("email", email)
-                .uniqueResult();
-        
-        return u;
-    }
-    
 }

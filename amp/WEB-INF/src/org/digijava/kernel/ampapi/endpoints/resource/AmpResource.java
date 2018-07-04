@@ -56,13 +56,13 @@ public class AmpResource {
     @Interchangeable(fieldTitle = "Public")
     private Boolean isPublic;
     
-    @Interchangeable(fieldTitle = "Private", importable = true)
+    @Interchangeable(fieldTitle = "Private", importable = true, required = ActivityEPConstants.REQUIRED_ALWAYS)
     private Boolean isPrivate;
     
-    @Interchangeable(fieldTitle = "Creator Email", importable = true)
+    @Interchangeable(fieldTitle = "Creator Email", importable = true, required = ActivityEPConstants.REQUIRED_ALWAYS)
     private String creatorEmail;
     
-    @Interchangeable(fieldTitle = "Team", importable = true)
+    @Interchangeable(fieldTitle = "Team", importable = true, required = ActivityEPConstants.REQUIRED_ALWAYS)
     private Long team;
     
     private Map<String, String> translatedTitles;

@@ -448,6 +448,12 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
             Hibernate.initialize(result.getActivityDocuments());
             Hibernate.initialize(result.getComponents());
             Hibernate.initialize(result.getOrgrole());
+            //we need to initialize role from org role
+            if (result.getOrgrole() != null) {
+                for (AmpOrgRole or : result.getOrgrole()) {
+                    Hibernate.initialize(or.getRole());
+                }
+            }
             Hibernate.initialize(result.getIssues());
             Hibernate.initialize(result.getRegionalObservations());
             Hibernate.initialize(result.getStructures());
@@ -1625,16 +1631,16 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                         + " AND "; 
             } else {
                 nameSearchQuery = "";
-            }   
+            }
             
-            String dataFreezeQuery = "";
+           String dataFreezeQuery = "";
             if (frozenActivityIds != null && frozenActivityIds.size() > 0) {
                 if (ActivityForm.DataFreezeFilter.FROZEN.equals(dataFreezeFilter)) {               
-                    dataFreezeQuery = " and f.ampActivityId in (:frozenActivityIds) ";
+                   dataFreezeQuery = " and f.ampActivityId in (:frozenActivityIds) ";
                 } else if (ActivityForm.DataFreezeFilter.UNFROZEN.equals(dataFreezeFilter)) {
-                    dataFreezeQuery = " and f.ampActivityId not in (:frozenActivityIds) ";
-                }
-            }
+                   dataFreezeQuery = " and f.ampActivityId not in (:frozenActivityIds) ";
+               }
+           }
                 
             String queryString = "select f.ampActivityId, f.ampId, " + activityName + ", ampTeam , ampGroup "
                     + "FROM " + AmpActivity.class.getName() 
@@ -1642,9 +1648,9 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                     + nameSearchQuery + " ((f.deleted = false) or (f.deleted is null))" + dataFreezeQuery;
             
             Query qry = session.createQuery(queryString);
-            if(isSearchByName) {
-                qry.setString("searchTerm", "%" + searchTerm + "%");
-            }
+           if (isSearchByName) {
+               qry.setString("searchTerm", "%" + searchTerm + "%");
+           }
             
             if (frozenActivityIds != null && frozenActivityIds.size() > 0
                     && (ActivityForm.DataFreezeFilter.FROZEN.equals(dataFreezeFilter)

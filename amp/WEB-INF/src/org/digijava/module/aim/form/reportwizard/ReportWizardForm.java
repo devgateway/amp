@@ -56,6 +56,7 @@ public class ReportWizardForm extends ActionForm {
     private Boolean runReport = false;
     private String defaultLanguage = "";
     private Boolean splitByFunding = false;
+    private Boolean showOriginalCurrency = false;
 
     @java.lang.SuppressWarnings("all")
     public ReportWizardForm() {
@@ -369,6 +370,14 @@ public class ReportWizardForm extends ActionForm {
 
     public void setSplitByFunding(Boolean splitByFunding) {
         this.splitByFunding = splitByFunding;
+    }
+    
+    public Boolean getShowOriginalCurrency() {
+        return showOriginalCurrency;
+    }
+
+    public void setShowOriginalCurrency(Boolean showOriginalCurrency) {
+        this.showOriginalCurrency = showOriginalCurrency;
     }
 
     @java.lang.Override

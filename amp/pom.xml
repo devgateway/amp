@@ -1527,6 +1527,28 @@
                     </excludes>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.asciidoctor</groupId>
+                <artifactId>asciidoctor-maven-plugin</artifactId>
+                <version>1.5.6</version>
+                <configuration>
+                    <outputDirectory>${project.build.directory}/${project.build.finalName}/api-docs</outputDirectory>
+                    <backend>html</backend>
+                    <attributes>
+                        <toc>left</toc>
+                    </attributes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>html-output</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>process-asciidoc</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
 
         <pluginManagement>

@@ -17,6 +17,7 @@ import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -87,6 +88,10 @@ public final class ResourceUtil {
         AmpResource resource = new AmpResource();
         Node readNode = DocumentManagerUtil.getReadNode(uuid, TLSUtils.getRequest());
         
+        if (readNode == null) {
+            ApiErrorResponse.reportResourceNotFound(ResourceErrors.RESOURCE_NOT_FOUND);
+        }
+        
         NodeWrapper nodeWrapper = new NodeWrapper(readNode);
         resource.setUuid(nodeWrapper.getUuid());
         resource.setTitle(nodeWrapper.getTitle());
@@ -109,13 +114,15 @@ public final class ResourceUtil {
         }
         
         try {
+            Node folderNode = nodeWrapper.getNode().getParent();
             if (isPrivate(nodeWrapper)) {
                 resource.setPrivate(true);
-                resource.setCreatorEmail(nodeWrapper.getNode().getParent().getName());
+                resource.setCreatorEmail(folderNode.getName());
+                resource.setTeam(Long.valueOf(folderNode.getParent().getName()));
             } else {
                 resource.setPrivate(false);
+                resource.setTeam(Long.valueOf(folderNode.getName()));
             }
-            resource.setTeam(Long.valueOf(nodeWrapper.getNode().getParent().getName()));
         } catch (RepositoryException e) {
             return ApiError.toError(ResourceErrors.RESOURCE_ERROR, e);
         }

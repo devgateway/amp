@@ -18,8 +18,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.StreamingOutput;
 
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.digijava.kernel.ampapi.endpoints.common.CategoryValueService;
@@ -300,7 +298,10 @@ public class IndicatorEndPoints implements ErrorReportingEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiOperation(
             value = "Import indicator layers values in the file.",
-            notes = "<dl>\n"
+            notes = "Parameters:\n"
+                    + "* admLevelId - to check if the file has same adm level than the indicator\n"
+                    + "* file - file with values to be uploaded\n\n"
+                    + "<dl>\n"
                     + "The file to be uploaded is generated on /indicator-layer/download\n"
                     + "</dl></br></br>\n"
                     + "<h3>Sample Output:</h3><pre>\n"
@@ -314,15 +315,9 @@ public class IndicatorEndPoints implements ErrorReportingEndpoint {
                     + "    }\n"
                     + "  ]\n"
                     + "}</pre>")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "admLevelId", value = "to check if the file has same adm level than the indicator",
-                    required = true, dataType = "long", paramType = "formData"),
-            @ApiImplicitParam(name = "file", value = "file with values to be uploaded", required = true,
-                    dataType = "file", paramType = "formData")})
     public JsonBean importIndicator(
             @FormDataParam("admLevelId") long admLevelId,
-            @FormDataParam("file") InputStream uploadedInputStream
-    ) {
+            @FormDataParam("file") InputStream uploadedInputStream) {
         return IndicatorImporter.importIndicator(uploadedInputStream, admLevelId);
     }
 

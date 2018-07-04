@@ -3,6 +3,7 @@ package org.digijava.kernel.ampapi.endpoints.gpi;
 
 import java.util.List;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -518,7 +519,10 @@ public class GPIEndPoints implements ErrorReportingEndpoint {
     @POST
     @Path("/report/export/xls/{indicatorCode}")
     @Produces({"application/vnd.ms-excel" })
-    public final Response exportXlsGPIReport(@PathParam("indicatorCode") String indicatorCode, @FormParam("formParams") String formParams) {        
+    @Consumes({MediaType.APPLICATION_FORM_URLENCODED, MediaType.MULTIPART_FORM_DATA})
+    public final Response exportXlsGPIReport(
+            @PathParam("indicatorCode") String indicatorCode,
+            @FormParam("formParams") String formParams) {
         return GPIReportService.getInstance().exportGPIReport(indicatorCode, JsonBean.getJsonBeanFromString(formParams), GPIReportConstants.XLSX);
     }
     
@@ -535,6 +539,7 @@ public class GPIEndPoints implements ErrorReportingEndpoint {
     @POST
     @Path("/report/export/pdf/{indicatorCode}")
     @Produces({"application/pdf" })
+    @Consumes({MediaType.APPLICATION_FORM_URLENCODED, MediaType.MULTIPART_FORM_DATA})
     public final Response exportPdfGPIReport(@PathParam("indicatorCode") String indicatorCode, @FormParam("formParams") String formParams) {
         return GPIReportService.getInstance().exportGPIReport(indicatorCode, JsonBean.getJsonBeanFromString(formParams), GPIReportConstants.PDF);
     }

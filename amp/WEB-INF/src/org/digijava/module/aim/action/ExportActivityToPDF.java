@@ -3558,9 +3558,9 @@ public class ExportActivityToPDF extends Action {
     private void createGeneralInfoRow(PdfPTable mainLayout, String columnName, String label, String value, 
             boolean isLtr) {
         
-        if (value == null || value.isEmpty())
+        if (value == null || value.isEmpty()) {
             return;
-        
+        }
         PdfPCell cell1 = new PdfPCell();
         Paragraph p1 = new Paragraph(postprocessText(columnName), titleFont);
         p1.setAlignment(Element.ALIGN_RIGHT);

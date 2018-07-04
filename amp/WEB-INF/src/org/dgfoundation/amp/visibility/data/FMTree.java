@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Set;
 
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
@@ -104,4 +105,28 @@ public class FMTree {
         return json;
     }
 
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public Map<String, FMTree> getEntries() {
+        return entries;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        FMTree fmTree = (FMTree) o;
+        return enabled == fmTree.enabled && Objects.equals(entries, fmTree.entries);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(enabled, entries);
+    }
 }

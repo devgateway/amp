@@ -59,6 +59,7 @@ public class GroupPermissionsForm
         actions.add(ResourcePermission.WRITE);
         actions.add(ResourcePermission.CONTENT_ADMIN);
         actions.add(ResourcePermission.ADMIN);
+        actions.add(ResourcePermission.SUPER_ADMIN);
         actions.add(ResourcePermission.TRANSLATE);
     }
 

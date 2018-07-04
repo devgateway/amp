@@ -586,18 +586,18 @@ public class ReportsFilterPicker extends Action {
         AmpApplicationSettings ampAppSettings = null;
         boolean showAllCountries = false;
         
-        if (currentMember != null) {
+        if (currentMember != null && currentMember.getMemberId() != null) {
             AmpTeamMember ampCurrentMember = TeamMemberUtil.getAmpTeamMemberCached(currentMember.getMemberId());
-        
+
             if (ampCurrentMember != null) {
                 ampAppSettings = DbUtil.getTeamAppSettings(ampCurrentMember.getAmpTeam().getAmpTeamId());
                 showAllCountries = ampAppSettings != null && ampAppSettings.getShowAllCountries();
-        
-            } else {
-                showAllCountries = "true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SHOW_ALL_COUNTRIES));
-        
+
             }
+        } else {
+            showAllCountries = FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.SHOW_ALL_COUNTRIES);
         }
+        
         List<LocationSkeleton> filterCountries = new ArrayList<LocationSkeleton>();
         if (showAllCountries) {
             AmpCategoryValue layer = CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getAmpCategoryValueFromDB();

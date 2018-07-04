@@ -5,9 +5,9 @@ package org.digijava.kernel.ampapi.endpoints.activity.validators;
 
 import java.util.Map;
 
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
+import org.digijava.kernel.ampapi.endpoints.activity.APIField;
+import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 /**
  * Defines common base class for input validation
@@ -29,8 +29,8 @@ public abstract class InputValidator {
      * @param update true if this is an update request
      * @return true if chain validation passed
      */
-    public abstract boolean isValid(ActivityImporter importer, Map<String, Object> newFieldParent, 
-            Map<String, Object> oldFieldParent, JsonBean fieldDescription, String fieldPath);
+    public abstract boolean isValid(ObjectImporter importer, Map<String, Object> newFieldParent,
+                                    Map<String, Object> oldFieldParent, APIField fieldDescription, String fieldPath);
     
     /**
      * @return this validator specific Error message
@@ -64,5 +64,9 @@ public abstract class InputValidator {
      */
     public void setContinueOnSuccess(boolean continueOnSuccess) {
         this.continueOnSuccess = continueOnSuccess;
+    }
+    
+    public Long getLong(Object o) {
+        return o instanceof Number ? ((Number) o).longValue() : null;
     }
 }

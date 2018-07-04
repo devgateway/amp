@@ -3,6 +3,7 @@ var ChartViewBase = require('./chart-view-base');
 var _ = require('underscore');
 var util = require('../../ugly/util');
 
+var ProjectsListModalView = require('./chart-detail-info-modal');
 
 module.exports = ChartViewBase.extend({
 
@@ -20,7 +21,7 @@ module.exports = ChartViewBase.extend({
       });
   },  
   changeChartColumns: function(e){
-	  var key = $(e.currentTarget).find('.nv-legend-text').text();
+      var key = $(e.currentTarget).find('.nv-legend-text').text();
 	  var plannedDisbursementTrn = app.translator.translateSync("amp.dashboard:aid-predictability-planned-disbursements","Planned Disbursements");
 	  var actualDisbursementTrn = app.translator.translateSync("amp.dashboard:aid-predictability-actual-disbursements","Actual Disbursements");
 	  if(key == plannedDisbursementTrn){
@@ -33,6 +34,8 @@ module.exports = ChartViewBase.extend({
     'multibar',
     'table'
   ],
+
+  modalView: undefined,
 
   chartOptions: {
     nvControls: false
@@ -76,6 +79,39 @@ module.exports = ChartViewBase.extend({
       bodyText: '<b>' + context.y.fmt + '</b> ' + currencyName + ' (' + units + ')',
       footerText: line2
     }};
-  }
+  },
+
+    getNiceContext: function (e) {
+
+        var x = e.data[e.series.index].values[e.x.index].x,
+            y = e.data[e.series.index].key;
+
+        if (x == undefined || y == undefined) {
+            return null;
+        }
+        return {
+            data: e.data,
+            series: e.series,
+            x: {
+                raw: x,
+                fmt: x,
+                index: x
+            },
+            y: {
+                raw: y,
+                fmt: y,
+                index: y
+            }
+        };
+    },
+
+    chartClickHandler: function (e) {
+        var self = this;
+        var context = self.getNiceContext(e);
+        if (context){
+            this.modalView = new ProjectsListModalView({app: app, context: context, model: this.model});
+            this.openInfoWindow((context.x.fmt || context.x.raw) + ' ' + context.series.key);
+        }
+    }
 
 });

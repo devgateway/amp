@@ -3,38 +3,36 @@
  */
 package org.digijava.module.aim.startup;
 
+import java.lang.management.ManagementFactory;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Hashtable;
-import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
+import javax.management.MBeanServer;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.http.HttpServlet;
 
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.management.ManagementService;
 import org.apache.jackrabbit.util.TransientFileFactory;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.PledgesToActivitiesBridge;
 import org.dgfoundation.amp.ar.dimension.ARDimension;
-import org.dgfoundation.amp.ar.dyn.DynamicColumnsUtil;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedViewsRepository;
-import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.importers.GazeteerCSVImporter;
 import org.dgfoundation.amp.mondrian.MondrianETL;
 import org.dgfoundation.amp.mondrian.MondrianUtils;
-import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
-import org.digijava.kernel.ampapi.endpoints.security.SecurityService;
 import org.digijava.kernel.job.cachedtables.PublicViewColumnsUtil;
+import org.digijava.kernel.jobs.RegisterWithAmpRegistryJob;
 import org.digijava.kernel.lucene.LuceneModules;
 import org.digijava.kernel.lucene.LuceneWorker;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -53,7 +51,6 @@ import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
 import org.hibernate.Session;
-import org.hibernate.jdbc.Work;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.SchedulerFactory;
@@ -341,12 +338,21 @@ public class AMPStartupListener extends HttpServlet implements
             //doMonetETL();
             initNiReports();
             importGazeteer();
+            registerEhCacheMBeans();
+
+            QuartzJobUtils.runJobIfNotPaused(RegisterWithAmpRegistryJob.NAME);
         } catch (Throwable e) {
             logger.error("Exception while initialising AMP :" + e.getMessage(), e);
             throw new Error(e);
         }
     }
-    
+
+    public void registerEhCacheMBeans() {
+        MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
+        CacheManager cacheManager = CacheManager.getInstance();
+        ManagementService.registerMBeans(cacheManager, mBeanServer, true, true, true, true);
+    }
+
     private void printResultIfNonVoid(Set<String> result) {
         if (result.size() > 0) {
             logger.info(String.format("Result: %d items, {%s}", result.size(), String.join(", ", result)));

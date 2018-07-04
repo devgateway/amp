@@ -9,6 +9,7 @@ var _ = require('underscore');
 var common = require('./common');
 var util = require('../../ugly/util');
 var customizedPieChart = require('./customized/pieChart.js');
+var customizedLegend = require('./customized/customizedLegend');
 
 
 function dataToNv(data) {
@@ -34,30 +35,33 @@ function countCategories(data) {
 
 
 function chart(options, data) {
-	var height = options.height < 400 ? 300 : 400;
-	  var calculatedHeight = util.calculateChartHeight(data[0].values.length, false, options.model);
-	  if (calculatedHeight !== null) {
-		  height = calculatedHeight; 
-	  }
+    var height = options.height < 400 ? 300 : 400;
+    var calculatedHeight = util.calculateChartHeight(data[0].values.length, false, options.model);
+    if (calculatedHeight !== null) {
+        height = calculatedHeight;
+    }
+    var isRtl = app.generalSettings.attributes['rtl-direction'];
 
-  var _chart = nv.models.customizedPieChart()
-    .valueFormat(options.shortFormatter)
-    .labelType('percent')
-    .showLegend(false)
-    .donut(true)
-    .height(height)
-    .margin({ top: 5, right: 5, bottom: 5, left: 5 })
-    .donutRatio(0.35);
-  return _chart;
+    var _chart = nv.models.customizedPieChart()
+        .valueFormat(options.shortFormatter)
+        .labelType('percent')
+        .showLegend(false)
+        .donut(true)
+        .rtl(isRtl)
+        .height(height)
+        .margin({top: 5, right: 5, bottom: 5, left: 5})
+        .donutRatio(0.35);
+    return _chart;
 }
 
 function addLegend(svg, chart, nvData, trimLabels, width) {
 	  var legendHeight;
-
-	  var legend = nv.models.legend()
+      var isRtl = app.generalSettings.attributes['rtl-direction'];
+	  var legend = nv.models.customizedLegend()
 	    .width(width || svg.clientWidth)
 	    .margin({left: 20, right: 20})
-	    .rightAlign(false)
+	    .rightAlign(isRtl)
+         .rtl(isRtl)
 	    .color(util.categoryColours(nvData.length))
 	    .key(function(d) { return trimLabels ? util.formatShortText(12)(d.x) : util.formatShortText(85)(d.x); });
 

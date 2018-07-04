@@ -23,7 +23,6 @@ public class ColumnConstants {
     public static final String ACTORS = "Actors";
     public static final String ACTUAL_APPROVAL_DATE = "Actual Approval Date";
     public static final String ACTUAL_COMPLETION_DATE = "Actual Completion Date";
-    public static final String CURRENT_COMPLETION_DATE = "Current Completion Date";
     public static final String ACTUAL_START_DATE = "Actual Start Date";
     public static final String AGE_OF_PROJECT_MONTHS = "Age of Project (Months)";
     public static final String AGREEMENT_CLOSE_DATE = "Agreement Close Date";
@@ -55,7 +54,7 @@ public class ColumnConstants {
     public static final String BUDGET_SECTOR = "Budget Sector";
     public static final String BUDGET_STRUCTURE = "Budget Structure";
     public static final String CALCULATED_PROJECT_LIFE = "Calculated Project Life";
-    public static final String CAPITAL___EXPENDITURE = "Capital - Expenditure";
+    public static final String CAPITAL_EXPENDITURE = "Capital Expenditure";
     public static final String COMPONENT_DESCRIPTION = "Component description";
     public static final String COMPONENT_FUNDING_ORGANIZATION = "Component Funding Organization";
     public static final String COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION = "Component Second Responsible Organization";

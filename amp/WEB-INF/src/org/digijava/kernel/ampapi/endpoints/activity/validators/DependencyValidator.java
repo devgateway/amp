@@ -28,22 +28,9 @@ public class DependencyValidator extends InputValidator {
         {
             boolean result = false;
             for (String dep : deps) {
-                switch(InterchangeDependencyResolver.checkDependency(value, importer, dep, newFieldParent, 
-                        fieldDescription)) {
+                switch(InterchangeDependencyResolver.checkDependency(value, importer, dep, newFieldParent)) {
                 case INVALID_ALWAYS_REQUIRED:
                     errors.add(dep);
-                    break;
-                case INVALID_REQUIRED:
-                    ActivityImporter activityImporter =
-                            importer instanceof ActivityImporter ? (ActivityImporter) importer : null;
-                    SaveMode saveMode = activityImporter == null ? null : activityImporter.getRequestedSaveMode();
-                    if (activityImporter != null && activityImporter.isDraftFMEnabled()
-                            && (saveMode == null || saveMode == SaveMode.DRAFT)) {
-                        activityImporter.downgradeToDraftSave();
-                        result = true;
-                    } else {
-                        errors.add(dep);
-                    }
                     break;
                 case INVALID_NOT_CONFIGURABLE:
                     errors.add(dep);

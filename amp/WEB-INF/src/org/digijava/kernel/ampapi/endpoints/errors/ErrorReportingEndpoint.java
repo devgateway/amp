@@ -6,6 +6,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import io.swagger.annotations.ApiOperation;
 import org.digijava.kernel.ampapi.endpoints.AmpEndpoint;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
@@ -25,6 +26,7 @@ public interface ErrorReportingEndpoint extends AmpEndpoint {
     @Path("errors")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "errors", ui = false)
+    @ApiOperation("Errors reported by this endpoint")
     default JsonBean getErrors() {
         JsonBean jsonBean = ApiError.toError(errorCollector.collect(getErrorsClass()));
         EndpointUtils.setResponseStatusMarker(HttpServletResponse.SC_OK);

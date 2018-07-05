@@ -32,7 +32,6 @@ public class ActivityEPConstants {
     public static final String SIZE_LIMIT = "size-limit";
     public static final String UNIQUE = "unique";
     public static final String REQUIRED = "required";   
-    public static final String REQUIRED_DEPENDENCY = "required-dependency"; 
     public static final String ID_ONLY = "id_only";
     public static final String TRANSLATABLE = "translatable";
     public static final String INVALID = "invalid";

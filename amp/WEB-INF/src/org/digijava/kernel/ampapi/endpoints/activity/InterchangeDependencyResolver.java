@@ -99,13 +99,11 @@ public class InterchangeDependencyResolver {
     }
 
     /**
+     * check if activity is on budget or not
      * 
-     * @param checkedValue the value that is currently being validated 
-     * @param incomingActivity the full imported||updated activity, used for getting the on_budget category value
-     * @return
+     * @return 
      */
-    private static DependencyCheckResult checkOnBudget(Object checkedValue, ObjectImporter importer, 
-            APIField fieldDescription) {
+    private static boolean isOnBudget(Object checkedValue, ObjectImporter importer, APIField fieldDescription) {
         
         JsonBean incomingActivity = importer.getNewJson();
         
@@ -118,35 +116,7 @@ public class InterchangeDependencyResolver {
             }
         }
         
-        boolean valueIsNullOrEmpty = checkedValue == null;
-        if (!valueIsNullOrEmpty && List.class.isAssignableFrom(checkedValue.getClass())) {
-            valueIsNullOrEmpty = ((List<?>) checkedValue).isEmpty();
-        }
-        
-        String requiredStatus = fieldDescription.getRequired();
-        
-        boolean activityIsOnBudget = referenceOnBudgetValue.equals(onOffBudgetValue);
-        if (valueIsNullOrEmpty && activityIsOnBudget) {
-            if (ActivityEPConstants.FIELD_NOT_REQUIRED.equals(requiredStatus)) {
-                return DependencyCheckResult.VALID;
-            }
-            
-            return DependencyCheckResult.INVALID_REQUIRED;
-        }
-        
-        return DependencyCheckResult.VALID;
-//      return (checkedValue != null) ^ (activityIsOnBudget);
-        /**
-         * checkedValue ->      null              not null
-         * on budget
-         *    |     false       fine(*0)      not fine(*1)
-         *    |     true      not fine(*2)   fine (*3)
-         *    V
-         *    (*0) not on budget, and the value isn't there, it's ok
-         *    (*1) not on budget, but there's a value, it's ok
-         *    (*2) on budget, but there's no value -> fields are required, not ok
-         *    (*3) on budget, and there's a value -> awesome
-         */
+        return referenceOnBudgetValue.equals(onOffBudgetValue);
     }
 
     /**
@@ -216,12 +186,11 @@ public class InterchangeDependencyResolver {
      * @return
      */
     public static DependencyCheckResult checkDependency(Object value, ObjectImporter importer, String code, 
-            Map<String, Object> fieldParent, APIField fieldDescription) {
+            Map<String, Object> fieldParent) {
         
         JsonBean incomingActivity = importer.getNewJson();
         
         switch (code) {
-        case ON_BUDGET_KEY: return checkOnBudget(value, importer, fieldDescription);
         case IMPLEMENTATION_LEVEL_PRESENT_KEY: return checkFieldPresent(incomingActivity, IMPLEMENTATION_LEVEL_PATH);
         case IMPLEMENTATION_LOCATION_PRESENT_KEY: return checkFieldPresent(incomingActivity, IMPLEMENTATION_LOCATION_PATH);
         case AGREEMENT_CODE_PRESENT_KEY : return checkFieldValuePresent(value, AGREEMENT_CODE_PATH);
@@ -249,9 +218,34 @@ public class InterchangeDependencyResolver {
             return checkComponentFundingOrg(value, incomingActivity);
         case FUNDING_ORGANIZATION_VALID_PRESENT_KEY: 
             return checkFundingPledgesOrgGroup(importer, value);
+        case ON_BUDGET_KEY:
+            return DependencyCheckResult.VALID;
         
         default: throw new RuntimeException("Interchange Dependency Mapper: no dependency found for code " + code);
         }
+    }
+    
+    /**
+     * Checks if required dependency is fullfilled
+     * 
+     * @param value
+     * @param importer
+     * @param code
+     * @param fieldDescription
+     * @return
+     */
+    public static boolean checkRequiredDependencyFulfilled(Object value, ObjectImporter importer, 
+            APIField fieldDescription) {
+        
+        List<String> deps = fieldDescription.getDependencies();
+        boolean result = true;
+        if (deps != null) {
+            if (deps.contains(ON_BUDGET_KEY)) {
+                return isOnBudget(value, importer, fieldDescription);
+            }
+        }
+        
+        return result;
     }
     
     /**
@@ -416,4 +410,5 @@ public class InterchangeDependencyResolver {
         }
         return actualDependecies.size() > 0 ? actualDependecies : null;
     }
+    
 }

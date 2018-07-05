@@ -7,11 +7,6 @@ package org.digijava.kernel.ampapi.endpoints.activity;
  */
 public enum DependencyCheckResult {
     /**
-     * Defines the state when a dependency isn't valid because the field attempting to be validated is 
-     * required, but no value is supplied. Implies a shift to draft import mode in DependencyValidator.
-     */
-    INVALID_REQUIRED,
-    /**
      * The field has no value and is always required when some dependency is met, even on save as draft.
      */
     INVALID_ALWAYS_REQUIRED,

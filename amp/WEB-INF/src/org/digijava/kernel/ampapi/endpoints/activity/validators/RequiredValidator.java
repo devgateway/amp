@@ -41,7 +41,7 @@ public class RequiredValidator extends InputValidator {
         if (importable && isEmpty(fieldValue)) {
             
             boolean dependencyFulfilled = InterchangeDependencyResolver
-                    .checkRequiredDependencyFulfilled(fieldValue, importer, fieldDescription);
+                    .checkRequiredDependencyFulfilled(fieldValue, importer, fieldDescription, newFieldParent);
             
             if (dependencyFulfilled) {
                 if (ActivityEPConstants.FIELD_ALWAYS_REQUIRED.equals(requiredStatus)) {

@@ -594,7 +594,7 @@ public class GisEndPoints implements ErrorReportingEndpoint {
     @GET
     @Path("/map-tiles")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    @ApiMethod(authTypes = {AuthRule.IN_ADMIN, AuthRule.AMP_OFFLINE_ENABLED}, id = "mapTiles", ui = false)
+    @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_ENABLED}, id = "mapTiles", ui = false)
     public Response getMapTiles() {
         return MapTilesService.getInstance().getArchivedMapTiles();
     }

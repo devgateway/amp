@@ -274,7 +274,7 @@ public class SavePledge extends Action {
 
         }
     }
-    protected List<ValidationError> validateDocuments(List<DocumentShim> docs){
+    protected List<ValidationError> validateDocuments(List<DocumentShim> docs) {
         List<ValidationError> errors =  new ArrayList<>();
         Optional.ofNullable(docs).orElse(Collections.emptyList()).stream().forEach(document-> {
             if (document.getTitle() == null || document.getTitle().isEmpty()) {

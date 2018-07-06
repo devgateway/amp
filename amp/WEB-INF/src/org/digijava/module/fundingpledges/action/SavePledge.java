@@ -1,13 +1,11 @@
 package org.digijava.module.fundingpledges.action;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -18,23 +16,18 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
-import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.forms.ValidationError;
-import org.dgfoundation.amp.onepager.models.AmpActivityModel;
-import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.admin.helper.AmpPledgeFake;
-import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.AuditLoggerUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-import org.digijava.module.categorymanager.util.IdWithValueShim;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails;
@@ -50,7 +43,6 @@ import org.digijava.module.fundingpledges.form.PledgeForm;
 import org.digijava.module.fundingpledges.form.PledgeFormContact;
 import org.digijava.module.fundingpledges.form.TransientDocumentShim;
 import org.hibernate.Session;
-import org.digijava.module.admin.helper.AmpPledgeFake;
 
 public class SavePledge extends Action {
     private static Logger logger = Logger.getLogger(SavePledge.class);
@@ -63,11 +55,12 @@ public class SavePledge extends Action {
             List<ValidationError> errors = new ArrayList<>();
             try
             {
-                errors = do_save(plForm);
+                errors = doSave(plForm, request);
                 if (errors.isEmpty())
                 {
                     ARUtil.writeResponse(response, "ok");
                     AddPledge.markPledgeEditorClosed(request.getSession());
+                    plForm.reset();
                     return null;
                 }
             }
@@ -103,16 +96,18 @@ public class SavePledge extends Action {
         return plForm.getPledgeId() == preexistingPledgeWithSameName.getId();
     }
     
-    protected List<ValidationError> do_save(PledgeForm plForm) throws Exception // it might die, ALWAYS check for exceptions and forward cleanly by AJAX
+    protected List<ValidationError> doSave(PledgeForm plForm, HttpServletRequest request) throws Exception
+    // it might die, ALWAYS check for exceptions and forward cleanly by AJAX
     {       
-//      this.pledge = null;
+        String action = "add";
         Session session = PersistenceManager.getSession();
         
         List<ValidationError> res = new ArrayList<>();
         
         if (plForm.getUseFreeText() && (!checkNameUniqueness(plForm)))
         {
-            res.add(new org.dgfoundation.amp.forms.ValidationError(TranslatorWorker.translateText("A different pledge with the same name exists")));
+            res.add(new org.dgfoundation.amp.forms.ValidationError(
+                    TranslatorWorker.translateText("A different pledge with the same name exists")));
             return res;
         }
         
@@ -121,13 +116,19 @@ public class SavePledge extends Action {
             pledge = new FundingPledges();
         } else{
             pledge = PledgesEntityHelper.getPledgesById(plForm.getPledgeId());
+            action = "update";
         }
-
-        session.saveOrUpdate(pledge);
-        //if (FeaturesUtil.isVisibleField("Use Free Text")){
+        pledge.setCreatedDate(new Date());
         pledge.setTitleFreeText(plForm.getTitleFreeText());  // copy both - one of them will be null and that's it
 //          }else{
         pledge.setTitle(CategoryManagerUtil.getAmpCategoryValueFromDb(plForm.getPledgeTitleId()));
+
+        //Moving this 3 lines here, after AMP-28001 is fixed, they this wont be needed and we will save everything
+        //after validation happens
+        session.saveOrUpdate(pledge);
+        AuditLoggerUtil.logObject(request, pledge, action, null);
+        //if (FeaturesUtil.isVisibleField("Use Free Text")){
+
         pledge.setStatus(CategoryManagerUtil.getAmpCategoryValueFromDb(plForm.getPledgeStatusId()));
  
         pledge.setOrganizationGroup(PledgesEntityHelper.getOrgGroupById(plForm.getSelectedOrgGrpId()));

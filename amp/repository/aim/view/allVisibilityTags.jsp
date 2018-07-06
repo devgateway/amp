@@ -243,8 +243,9 @@
 
 
 <feature:display name="Portfolio Dashboard" module="M & E"></feature:display> 
-<feature:display name="Add Pledge Button" module="Pledges"></feature:display> 
-<feature:display name="Pledge Donor Information" module="Pledges"></feature:display> 
+<feature:display name="Add Pledge Button" module="Pledges"></feature:display>
+<feature:display name="Limit Pledge Edition" module="Pledges"></feature:display>
+<feature:display name="Pledge Donor Information" module="Pledges"></feature:display>
 <feature:display name="Pledge Sector and Location" module="Pledges"></feature:display>
 <feature:display name="Pledge Status" module="Pledges"></feature:display>
 <feature:display name="Pledge Contact 1" module="Pledges"></feature:display> 
@@ -979,6 +980,7 @@ deleted 6 fields, do not reinsert
 <field:display name="Commitment Gap" feature="Computed Fields"></field:display>
 <field:display name="Calculated Project Life" feature="Computed Fields"></field:display>
 <field:display name="Performance Alert Level" feature="Performance Monitoring"></field:display>
+<field:display name="Performance Alert Type" feature="Performance Monitoring"></field:display>
 
 <field:display name="Beneficiary Agency Groups" feature="Beneficiary Agency"></field:display> 
 <field:display name="Beneficiary Agency  Department/Division"  feature="Beneficiary Agency"></field:display>

@@ -20,7 +20,9 @@ public enum AuthRule {
     /** edit activity right must be enabled */
     EDIT_ACTIVITY,
     /** view activity right must be enabled */
-    VIEW_ACTIVITY;
+    VIEW_ACTIVITY,
+    /** amp offline global settings must be enabled */
+    AMP_OFFLINE_ENABLED;
     
     @Override
     public String toString() {

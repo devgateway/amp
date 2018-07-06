@@ -22,6 +22,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.REQUIRED_ALWAYS;
 
 @TranslatableClass(displayName = "Funding")
 public class AmpFunding implements Serializable, Versionable, Cloneable {
@@ -92,12 +93,15 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
     private ArrayList<Boolean> activeList;
     // private AmpModality modalityId;
     
-    @Interchangeable(fieldTitle="Type of Assistance", fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Type of Assistence", 
+    @Interchangeable(fieldTitle = "Type of Assistance", required = REQUIRED_ALWAYS, 
+            fmPath = "/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Type of Assistence", 
                      discriminatorOption = CategoryConstants.TYPE_OF_ASSISTENCE_KEY, importable = true,
-                     pickIdOnly = true, dependencies = {InterchangeDependencyResolver.TRANSACTION_PRESENT_KEY})
+                     pickIdOnly = true, 
+                     dependencies = {InterchangeDependencyResolver.TRANSACTION_PRESENT_KEY})
     private AmpCategoryValue typeOfAssistance;
     
-    @Interchangeable(fieldTitle="Financing Instrument",  
+    @Interchangeable(fieldTitle = "Financing Instrument", required = REQUIRED_ALWAYS,
+            fmPath = "/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Financing Instrument", 
                      discriminatorOption = CategoryConstants.FINANCING_INSTRUMENT_KEY, importable = true,
                      pickIdOnly = true, dependencies = {InterchangeDependencyResolver.TRANSACTION_PRESENT_KEY})
     private AmpCategoryValue financingInstrument;

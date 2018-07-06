@@ -79,7 +79,7 @@ public class TeamMember implements Comparable, Serializable{
     
     private void init(User u) {
         if( u!=null ) {
-            //added userId and removed memberId here since its overwritten further in code
+            this.memberId = u.getId();
             this.userId = u.getId();
             this.memberName = u.getName();
             this.email = u.getEmail();

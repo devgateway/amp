@@ -1,9 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.indicator;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,10 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONSerializer;
-
-import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.TranslationUtil;
@@ -22,6 +14,7 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiEMGroup;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.gis.services.GapAnalysis;
+import org.digijava.kernel.ampapi.endpoints.gis.GisFormParameters;
 import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.SecurityUtil;
@@ -33,12 +26,10 @@ import org.digijava.module.aim.dbentity.AmpIndicatorWorkspace;
 import org.digijava.module.aim.dbentity.AmpLocationIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.FormatHelper;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ColorRampUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
@@ -243,7 +234,7 @@ public class IndicatorUtils {
     
     /**
      * Get unique Population Layer designated for the given implementation location
-     * @param implLoc the implementation location (Region, etc)
+     * @param implementationLocation the implementation location (Region, etc)
      * @return the population layer or null if no unique layer found
      */
     public static AmpIndicatorLayer getPopulationLayer(AmpCategoryValue implementationLocation) {
@@ -270,7 +261,8 @@ public class IndicatorUtils {
      * @param isGapAnalysis
      * @return
      */
-    public static JsonBean getIndicatorsAndLocationValues(Long indicatorId, JsonBean input, boolean isGapAnalysis) {
+    public static JsonBean getIndicatorsAndLocationValues(Long indicatorId, GisFormParameters input,
+            boolean isGapAnalysis) {
         AmpIndicatorLayer indicator = (AmpIndicatorLayer) DbUtil.getObjectOrNull(AmpIndicatorLayer.class, indicatorId);
         if (indicator == null) {
             return ApiError.toError(IndicatorErrors.INVALID_ID.withDetails(String.valueOf(indicatorId)));
@@ -278,7 +270,7 @@ public class IndicatorUtils {
         return getIndicatorsAndLocationValues(indicator, input, isGapAnalysis);
     }
     
-    public static JsonBean getIndicatorsAndLocationValues(AmpIndicatorLayer indicator, JsonBean input, 
+    public static JsonBean getIndicatorsAndLocationValues(AmpIndicatorLayer indicator, GisFormParameters input,
             boolean isGapAnalysis) {
      
         GapAnalysis gapAnalysis = isGapAnalysis ? new GapAnalysis(indicator, input) : null;

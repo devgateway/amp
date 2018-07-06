@@ -19,7 +19,6 @@ import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
-import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.FiltersEndpoint;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersProcessor;
@@ -381,14 +380,7 @@ public class FilterUtils {
         return "";
     }
     
-    /**
-     * 
-     * @param JsonBean 
-     * @param value
-     * @return
-     */
-    public static String getSettingbyName(JsonBean config, String value){
-        Map<String, Object> settings = config == null ? null : (Map<String, Object>) config.get(EPConstants.SETTINGS);
+    public static String getSettingbyName(Map<String, Object> settings, String value) {
         String retval = settings == null ? null : (String) settings.get(value);
         return retval;
     }

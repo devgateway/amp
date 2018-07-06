@@ -97,23 +97,6 @@ public class EndPoints implements ErrorReportingEndpoint {
                     + "sumarizedTotal|sumarized total amount\n"
                     + "maxLimit|number of donors\n"
                     + "name|name of the report\n"
-                    + " \n"
-                    + "### Sample Input\n"
-                    + "```\n"
-                    + "{\n"
-                    + "  \"filters\": {},\n"
-                    + "  \"settings\": {\n"
-                    + "      \"funding-type\": [\"Actual Commitments\",\"Actual Disbursements\"],\n"
-                    + "      \"currency-code\": \"USD\",\n"
-                    + "      \"calendar-id\": \"123\",\n"
-                    + "      \"year-range\": {\n"
-                    + "          \"from\": \"2014\",\n"
-                    + "          \"to\": \"2015\"\n"
-                    + "      }\n"
-                    + "  }\n"
-                    + "}\n"
-                    + "```\n"
-                    + " \n"
                     + "\n"
                     + " ### Sample Output\n"
                     + "```\n"
@@ -143,11 +126,9 @@ public class EndPoints implements ErrorReportingEndpoint {
                     + " }\n"
                     + "```")
     @ApiResponses(@ApiResponse(code = SC_OK, message = "a JSON objects with a tops donors"))
-    //TODO: Implement Filters
-    public JsonBean getAdminLevelsTotals(JsonBean config,
+    public JsonBean getAdminLevelsTotals(DashboardFormParameters config,
             @ApiParam(value = "Chart type", allowableValues = "do,re,ps,dg") @PathParam("type") String type,
             @DefaultValue("5") @QueryParam("limit") Integer limit) {
-        //return DashboardsService.getTops(type, null, limit, config);
         return new TopsChartService(config, type, limit).buildChartData();
     }
 
@@ -171,21 +152,7 @@ public class EndPoints implements ErrorReportingEndpoint {
                     + "    amount - amount of the project.\n"
                     + "    formattedAmount - formatted amount of the project.\n"
                     + "    id - id of the project.\n"
-                    + "</dl></br></br>\n"
-                    + "<h3>Sample Input:</h3><pre>\n"
-                    + "{\n"
-                    + " \"filters\": {},\n"
-                    + " \"settings\": {\n"
-                    + "     \"funding-type\": [\"Actual Commitments\",\"Actual Disbursements\"],\n"
-                    + "     \"currency-code\": \"USD\",\n"
-                    + "     \"calendar-id\": \"123\",\n"
-                    + "     \"year-range\": {\n"
-                    + "         \"from\": \"2014\",\n"
-                    + "         \"to\": \"2015\"\n"
-                    + "     }\n"
-                    + " }\n"
-                    + "}</pre>\n"
-                    + "</br>\n"
+                    + "</dl>\n\n"
                     + "<h3>Sample Output:</h3><pre>\n"
                     + "{\n"
                     + "    \"totalRecords\": 10,\n"
@@ -204,7 +171,7 @@ public class EndPoints implements ErrorReportingEndpoint {
                     + "        \"id\": 19111\n"
                     + "    }]\n"
                     + "}</pre>")
-    public JsonBean getChartsDataDetail(JsonBean config,
+    public JsonBean getChartsDataDetail(DashboardFormParameters config,
             @ApiParam("chart type") @PathParam("type") String type,
             @ApiParam("id of the category to query the projects") @PathParam("id") Long id) {
         return new TopsChartService(config, type, id).buildChartData();
@@ -227,21 +194,7 @@ public class EndPoints implements ErrorReportingEndpoint {
                     + "<dt><b>measure</b><dd> - measure type \"disbursements\"\n"
                     + "</dl></br></br>\n"
                     + "Returns a JSONObject objects with the years, amounts by funding type, currency and total "
-                    + "amount.\n"
-                    + "<h3>Sample Input:</h3><pre>\n"
-                    + "{\n"
-                    + " \"filters\": {},\n"
-                    + " \"settings\": {\n"
-                    + "     \"funding-type\": [\"Actual Commitments\",\"Actual Disbursements\"],\n"
-                    + "     \"currency-code\": \"USD\",\n"
-                    + "     \"calendar-id\": \"123\",\n"
-                    + "     \"year-range\": {\n"
-                    + "         \"from\": \"2014\",\n"
-                    + "         \"to\": \"2015\"\n"
-                    + "     }\n"
-                    + " }\n"
-                    + "}</pre>\n"
-                    + "</br>\n"
+                    + "amount.\n\n"
                     + "<h3>Sample Output:</h3><pre>\n"
                     + "{\n"
                     + "  \"years\": [\n"
@@ -283,7 +236,7 @@ public class EndPoints implements ErrorReportingEndpoint {
                     + "  \"title\": \"Aid predictability\",\n"
                     + "  \"measure\": \"disbursements\"\n"
                     + "}</pre>")
-    public JsonBean getAidPredictability(JsonBean filter) throws Exception {
+    public JsonBean getAidPredictability(DashboardFormParameters filter) throws Exception {
         return DashboardsService.getAidPredictability(filter);
     }
 
@@ -301,21 +254,7 @@ public class EndPoints implements ErrorReportingEndpoint {
                     + "    amount - amount of the project.\n"
                     + "    formattedAmount - formatted amount of the project.\n"
                     + "    id - id of the project.\n"
-                    + "</dl></br></br>\n"
-                    + "<h3>Sample Input:</h3><pre>\n"
-                    + "{\n"
-                    + " \"filters\": {},\n"
-                    + " \"settings\": {\n"
-                    + "     \"funding-type\": [\"Actual Commitments\",\"Actual Disbursements\"],\n"
-                    + "     \"currency-code\": \"USD\",\n"
-                    + "     \"calendar-id\": \"123\",\n"
-                    + "     \"year-range\": {\n"
-                    + "         \"from\": \"2014\",\n"
-                    + "         \"to\": \"2015\"\n"
-                    + "     }\n"
-                    + " }\n"
-                    + "}</pre>\n"
-                    + "</br>\n"
+                    + "</dl>\n\n"
                     + "<h3>Sample Output:</h3><pre>\n"
                     + "{\n"
                     + "    \"totalRecords\": 10,\n"
@@ -334,8 +273,10 @@ public class EndPoints implements ErrorReportingEndpoint {
                     + "        \"id\": 19111\n"
                     + "    }]\n"
                     + "}</pre>")
-    public JsonBean getAidPredictabilityDataDetail(JsonBean filter, @PathParam("year") Integer year, @PathParam("measure")
-            String measure) throws Exception {
+    public JsonBean getAidPredictabilityDataDetail(
+            DashboardFormParameters filter,
+            @PathParam("year") Integer year,
+            @PathParam("measure") String measure) {
         return DashboardsService.getAidPredictability(filter, year, measure);
     }
 
@@ -354,22 +295,7 @@ public class EndPoints implements ErrorReportingEndpoint {
                     + "amount\n"
                     + "<dt><b>name</b><dd> - name of the report\n"
                     + "<dt><b>title</b><dd> - title of the report\n"
-                    + "</dl></br></br>\n"
-                    + "</br>\n"
-                    + "<h3>Sample Input:</h3><pre>\n"
-                    + "{\n"
-                    + " \"filters\": {},\n"
-                    + " \"settings\": {\n"
-                    + "     \"funding-type\": [\"Actual Commitments\",\"Actual Disbursements\"],\n"
-                    + "     \"currency-code\": \"USD\",\n"
-                    + "     \"calendar-id\": \"123\",\n"
-                    + "     \"year-range\": {\n"
-                    + "         \"from\": \"2014\",\n"
-                    + "         \"to\": \"2015\"\n"
-                    + "     }\n"
-                    + " }\n"
-                    + "}</pre>\n"
-                    + "</br>\n"
+                    + "</dl>\n\n"
                     + "<h3>Sample Output:</h3><pre>\n"
                     + "{\n"
                     + "  \"total\": 154123105.30153,\n"
@@ -420,7 +346,7 @@ public class EndPoints implements ErrorReportingEndpoint {
     //TODO: Implement Filters
     public JsonBean getfundingtype(
             @ApiParam("a JSON object with the configuration that is going to be "
-                    + "used by the report to get the funding-type") JsonBean config,
+                    + "used by the report to get the funding-type") DashboardFormParameters config,
             @DefaultValue("ac") @QueryParam("adjtype") String adjtype) {
         return DashboardsService.fundingtype(adjtype,config);
     }
@@ -439,22 +365,7 @@ public class EndPoints implements ErrorReportingEndpoint {
                     + "    amount - amount of the project.\n"
                     + "    formattedAmount - formatted amount of the project.\n"
                     + "    id - id of the project.\n"
-                    + "</dl></br></br>\n"
-                    + "</br>\n"
-                    + "<h3>Sample Input:</h3><pre>\n"
-                    + "{\n"
-                    + " \"filters\": {},\n"
-                    + " \"settings\": {\n"
-                    + "     \"funding-type\": [\"Actual Commitments\",\"Actual Disbursements\"],\n"
-                    + "     \"currency-code\": \"USD\",\n"
-                    + "     \"calendar-id\": \"123\",\n"
-                    + "     \"year-range\": {\n"
-                    + "         \"from\": \"2014\",\n"
-                    + "         \"to\": \"2015\"\n"
-                    + "     }\n"
-                    + " }\n"
-                    + "}</pre>\n"
-                    + "</br>\n"
+                    + "</dl>\n\n"
                     + "<h3>Sample Output:</h3><pre>\n"
                     + "{\n"
                     + "    \"totalRecords\": 10,\n"
@@ -477,7 +388,7 @@ public class EndPoints implements ErrorReportingEndpoint {
     //TODO: Implement Filters
     public JsonBean getfundingtypeDataDetail(
             @ApiParam("a JSON object with the configuration that is going to be used by "
-                    + "the report to get the funding-type") JsonBean config,
+                    + "the report to get the funding-type") DashboardFormParameters config,
             @DefaultValue("ac") @QueryParam("adjtype") String adjtype,
             @PathParam("year") Integer year,
             @ApiParam("id of the funding type") @PathParam("id") Integer id) {
@@ -596,21 +507,7 @@ public class EndPoints implements ErrorReportingEndpoint {
                     + "<dt><b>amount</b><dd> - amount\n"
                     + "<dt><b>formattedAmount</b><dd> - formatted amount\n"
                     + "<dt><b>id</b><dd> - donor id\n"
-                    + "</dl></br></br>\n"
-                    + "<h3>Sample Input:</h3><pre>\n"
-                    + "{\n"
-                    + " \"filters\": {},\n"
-                    + " \"settings\": {\n"
-                    + "     \"funding-type\": [\"Actual Commitments\",\"Actual Disbursements\"],\n"
-                    + "     \"currency-code\": \"USD\",\n"
-                    + "     \"calendar-id\": \"123\",\n"
-                    + "     \"year-range\": {\n"
-                    + "         \"from\": \"2014\",\n"
-                    + "         \"to\": \"2015\"\n"
-                    + "     }\n"
-                    + " }\n"
-                    + "}</pre>\n"
-                    + "</br>\n"
+                    + "</dl>\n\n"
                     + "<h3>Sample Output:</h3><pre>\n"
                     + "{\n"
                     + "  \"values\": [\n"
@@ -629,7 +526,7 @@ public class EndPoints implements ErrorReportingEndpoint {
                     + "    ....\n"
                     + "  ]\n"
                     + "}</pre>")
-    public JsonBean getAdminLevelsTotals(JsonBean config, @PathParam("id") Integer id) {
+    public JsonBean getAdminLevelsTotals(DashboardFormParameters config, @PathParam("id") Integer id) {
         //TODO: Once we implement details for all top charts we can change the path to '/tops/details/' 
         // and send the type of chart and category id as params. 
         return DashboardsService.getPeaceMarkerProjectsByCategory(config, id);
@@ -646,19 +543,7 @@ public class EndPoints implements ErrorReportingEndpoint {
                     + "differentiates each heatmap in the dashboard by its url,\n"
                     + " so we need for each heatmap (by Sector, Location or Program) an extra parameter that isnt "
                     + "actually used on the backend.\n"
-                    + "</dl></br></br>\n"
-                    + "<h3>Sample Input:</h3><pre>\n"
-                    + "{\n"
-                    + " “xCount” : 25, // default 25, set -1 to no limit. +1 (\"Others\") will be added "
-                    + "if more than that available\n"
-                    + " “yCount” : 10, // default 10, set -1 to no limit. +1 (\"Others\") will be added "
-                    + "if more than that available\n"
-                    + " “xColumn” : “Primary Sector”, // must be OrigName\n"
-                    + " “yColumn” : “Donor Group”, // must be origName\n"
-                    + " “filters”: { ... }, // usual filters input\n"
-                    + " “settings” : { ... } // usual settings input, and Dashboard specific with Measure selection\n"
-                    + "}</pre>\n"
-                    + "</br>\n"
+                    + "</dl>\n\n"
                     + "<h3>Sample Output:</h3><pre>\n"
                     + "{\n"
                     + " “summary” : [“Primary Sector”, “Donor Group”, “Actual Commitments”],\n"
@@ -678,7 +563,7 @@ public class EndPoints implements ErrorReportingEndpoint {
                     + "if \"Other\" is present on Y\n"
                     + "}</pre>"
     )
-    public JsonBean getHeatMap(@PathParam("type") String type, JsonBean config) {
+    public JsonBean getHeatMap(@PathParam("type") String type, DashboardHMFormParameters config) {
         return new HeatMapService(config).buildHeatMap();
     }
 
@@ -697,19 +582,7 @@ public class EndPoints implements ErrorReportingEndpoint {
                     + "    amount - amount of the project.\n"
                     + "    formattedAmount - formatted amount of the project.\n"
                     + "    id - id of the project.\n"
-                    + "</dl></br></br>\n"
-                    + "<h3>Sample Input:</h3><pre>\n"
-                    + "{\n"
-                    + " “xCount” : 25, // default 25, set -1 to no limit. +1 (\"Others\") will be added "
-                    + "if more than that available\n"
-                    + " “yCount” : 10, // default 10, set -1 to no limit. +1 (\"Others\") will be added "
-                    + "if more than that available\n"
-                    + " “xColumn” : “Primary Sector”, // must be OrigName\n"
-                    + " “yColumn” : “Donor Group”, // must be origName\n"
-                    + " “filters”: { ... }, // usual filters input\n"
-                    + " “settings” : { ... } // usual settings input, and Dashboard specific with Measure selection\n"
-                    + "}</pre>\n"
-                    + "</br>\n"
+                    + "</dl>\n\n"
                     + "<h3>Sample Output:</h3><pre>\n"
                     + "{\n"
                     + "    \"totalRecords\": 10,\n"
@@ -728,7 +601,7 @@ public class EndPoints implements ErrorReportingEndpoint {
                     + "        \"id\": 19111\n"
                     + "    }]\n"
                     + "}</pre>")
-    public JsonBean getHeatMapDataDetail(JsonBean config,
+    public JsonBean getHeatMapDataDetail(DashboardHMFormParameters config,
             @PathParam("type") String type,
             @ApiParam("id of the x dimention of Heat Map matrix.") @PathParam("xId") Long xId,
             @ApiParam("id of the y dimention of Heat Map matrix.") @PathParam("yId") Long yId) {

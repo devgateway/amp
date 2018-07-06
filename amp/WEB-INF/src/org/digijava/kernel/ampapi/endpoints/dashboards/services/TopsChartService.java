@@ -18,10 +18,10 @@ import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.nireports.amp.OutputSettings;
-import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
+import org.digijava.kernel.ampapi.endpoints.dashboards.DashboardFormParameters;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportErrors;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
@@ -51,7 +51,7 @@ import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 public class TopsChartService {
     private static final Logger LOGGER = Logger.getLogger(TopsChartService.class);
 
-    private JsonBean config;
+    private DashboardFormParameters config;
     private ReportSpecificationImpl spec;
     private GeneratedReport report;
     private Long id;
@@ -62,14 +62,14 @@ public class TopsChartService {
     private OutputSettings outSettings;
     private Integer limit;
 
-    public TopsChartService(JsonBean config, String type, Integer limit) {
+    public TopsChartService(DashboardFormParameters config, String type, Integer limit) {
         this.config = config;
         this.type = type;
         this.limit = limit;
         this.isDisaggregate = false;
     }
 
-    public TopsChartService(JsonBean config, String type, Long id) {
+    public TopsChartService(DashboardFormParameters config, String type, Long id) {
         this.config = config;
         this.type = type;
         this.id = id;
@@ -159,7 +159,7 @@ public class TopsChartService {
                 peaceFilter.put(FiltersConstants.PROCUREMENT_SYSTEM, peaceFilterOptions);
                 LinkedHashMap<String, Object> filters = null;
                 if (config != null) {
-                    filters = (LinkedHashMap<String, Object>) config.get(EPConstants.FILTERS);
+                    filters = (LinkedHashMap<String, Object>) config.getFilters();
                 }
                 if (filters == null) {
                     filters = new LinkedHashMap<>();
@@ -185,8 +185,8 @@ public class TopsChartService {
                 }});
 
         // applies settings, including funding type as a measure
-        SettingsUtils.applyExtendedSettings(spec, config);
-        ReportsUtil.configureFilters(spec, config);
+        SettingsUtils.applyExtendedSettings(spec, config.getSettings());
+        ReportsUtil.configureFilters(spec, config.getFilters());
 
         setOrder();
 
@@ -212,7 +212,7 @@ public class TopsChartService {
     public void applyFilter(String column) {
         Map<String, Object> filters = null;
         if (config != null) {
-            filters = (Map<String, Object>) config.get(EPConstants.FILTERS);
+            filters = config.getFilters();
         }
         if (filters == null) {
             filters = new LinkedHashMap<>();

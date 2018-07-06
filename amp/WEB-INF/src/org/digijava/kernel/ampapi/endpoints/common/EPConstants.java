@@ -36,8 +36,6 @@ public class EPConstants {
     public static final String TYPE = "type";
     public static final String REPORT_NAME = "name";
     public static final String IS_CUSTOM = "custom";
-    public static final String IS_DYNAMIC = "dinamic";
-    public static final String REGENERATE = "regenerate";
     public static final String ADD_COLUMNS = "add_columns";
     public static final String COLUMNS_WITH_IDS = "columns_with_ids";
     public static final String ADD_HIERARCHIES = "add_hierarchies";
@@ -47,7 +45,6 @@ public class EPConstants {
     public static final String SHOW_EMPTY_ROWS = "show_empty_rows";
     public static final String SHOW_EMPTY_COLUMNS = "show_empty_cols"; // this is for column groups (quarter, year)
     public static final String SHOW_ORIGINAL_CURRENCY = "show_original_currency";
-    public static final String DO_ROW_TOTALS = "rowTotals";
     public static final String FORCE_HEADERS = "forceHeaders";
     public static final String PROJECT_TYPE = "projectType";
     public static final String REPORT_TYPE = "reportType";

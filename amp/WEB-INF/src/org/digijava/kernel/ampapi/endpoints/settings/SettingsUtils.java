@@ -26,7 +26,6 @@ import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
-import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -496,11 +495,10 @@ public class SettingsUtils {
      * c) needs to have 'Bilateral SSC Commitments' and  'Triangular SSC Commitments' if any SSC setting is selected.
      *
      * @param spec
-     * @param config
+     * @param settings
      */
-    public static void configureMeasures(final ReportSpecificationImpl spec, final  JsonBean config) {
-        if (spec != null && config != null) {
-            Map<String, Object> settings = (Map<String, Object>) config.get(EPConstants.SETTINGS);
+    public static void configureMeasures(final ReportSpecificationImpl spec, final Map<String, Object> settings) {
+        if (spec != null) {
             String fundingType = (String) (settings == null ? null : settings.get(SettingsConstants.FUNDING_TYPE_ID));
             if (fundingType == null) {
                 fundingType = SettingsUtils.getDefaultFundingType();
@@ -525,17 +523,16 @@ public class SettingsUtils {
      *
      * @param spec
      *            report specification
-     * @param config
-     *            request configuration that stores the settings
+     * @param settings
+     *            the settings
      */
-    public static void applyExtendedSettings(ReportSpecificationImpl spec, JsonBean config) {
+    public static void applyExtendedSettings(ReportSpecificationImpl spec, Map<String, Object> settings) {
         // apply first common settings, i.e. calendar and currency
-        applySettings(spec, config, true);
+        applySettings(spec, settings, true);
 
         // now apply custom settings, i.e. selected measures
         List<String> measureOptions = new ArrayList<String>();
-        if (config.get(EPConstants.SETTINGS) != null) {
-            Map<Integer, Object> settings = (Map<Integer, Object>) config.get(EPConstants.SETTINGS);
+        if (settings != null) {
             Object fundingTypes = settings.get(SettingsConstants.FUNDING_TYPE_ID);
             if (fundingTypes != null) {
                 if (fundingTypes instanceof String)
@@ -578,16 +575,16 @@ public class SettingsUtils {
      * values "funding-type" : [“Actual Commitments”, “Actual Disbursements”],
      * "currency-code" : “USD”, "calendar-id" : “123” "year-range" : { from :
      * "all", to : "2014" } } }
-     * 
+     *
      * @param spec
      *            - report specification over which to apply the settings
-     * @param config
-     *            - JSON request that includes the settings
+     * @param settings
+     *            - the settings
      * @param setDefaults
      *            if true, then not specified settings will be configured with
      *            defaults
      */
-    public static void applySettings(ReportSpecificationImpl spec, JsonBean config, boolean setDefaults) {
+    public static void applySettings(ReportSpecificationImpl spec, Map<String, Object> settings, boolean setDefaults) {
         if (spec.getSettings() != null && !ReportSettingsImpl.class.isAssignableFrom(spec.getSettings().getClass())) {
             logger.error("Unsupported conversion for: " + spec.getSettings().getClass());
             return;
@@ -599,9 +596,6 @@ public class SettingsUtils {
             spec.setSettings(reportSettings);
         }
 
-        // these are the settings provided via json
-        Map<String, Object> settings = (Map<String, Object>) config.get(EPConstants.SETTINGS);
-
         configureCurrencyCode(reportSettings, settings, setDefaults);
         configureNumberFormat(reportSettings, settings, setDefaults);
         configureCalendar(reportSettings, settings, setDefaults);
@@ -609,7 +603,7 @@ public class SettingsUtils {
     }
 
     /**
-     * 
+     *
      * @param reportSettings
      * @param settings
      * @param setDefaults

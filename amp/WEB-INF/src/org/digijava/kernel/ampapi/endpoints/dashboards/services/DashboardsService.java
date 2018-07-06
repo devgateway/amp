@@ -15,13 +15,12 @@ import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.newreports.*;
-import org.dgfoundation.amp.newreports.ReportCollapsingStrategy;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.amp.OutputSettings;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
-import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
+import org.digijava.kernel.ampapi.endpoints.dashboards.DashboardFormParameters;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
@@ -30,10 +29,8 @@ import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -85,184 +82,8 @@ public class DashboardsService {
         return tops;
     }
     
-    /**
-     * Return (n) Donors sorted by amount
-     * 
-     * @param type
-     *            (Donor, Regions, Primary Sector)
-     * @param n
-     * @param config request configuration that stores filters, settings and any other options
-     * @return
-     */
-    public static JsonBean getTops(String type, Integer n, JsonBean config) {
-        String err = null;
-        JsonBean retlist = new JsonBean();
-        String name = "";
-        String title = "";
-        List<JsonBean> values = new ArrayList<JsonBean>();
-        ReportSpecificationImpl spec = new ReportSpecificationImpl("GetTops", ArConstants.DONOR_TYPE);
-
-        Map<String, Object> filters = null;
-        if (config != null) {
-            filters = (Map<String, Object>) config.get(EPConstants.FILTERS);
-        }
-        if (filters == null) {
-            filters = new LinkedHashMap<>();
-        }
-
-        switch (type.toUpperCase()) {
-        case "DO":
-            if (FeaturesUtil.isVisibleField("Show Names As Acronyms")) {
-                spec.addColumn(new ReportColumn(ColumnConstants.DONOR_ACRONYM));
-            } else {
-                spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
-            }
-            title = TranslatorWorker.translateText(DashboardConstants.TOP_DONOR_AGENCIES);
-            name = DashboardConstants.TOP_DONOR_AGENCIES;
-            break;
-        case "RO":
-            spec.addColumn(new ReportColumn(ColumnConstants.RESPONSIBLE_ORGANIZATION));
-            title = TranslatorWorker.translateText(DashboardConstants.TOP_RESPONSIBLE_ORGS);
-            name = DashboardConstants.TOP_RESPONSIBLE_ORGS;
-            break;
-        case "BA":
-            spec.addColumn(new ReportColumn(ColumnConstants.BENEFICIARY_AGENCY));
-            title = TranslatorWorker.translateText(DashboardConstants.TOP_BENEFICIARY_ORGS);
-            name = DashboardConstants.TOP_BENEFICIARY_ORGS;
-            break;
-        case "IA":
-            spec.addColumn(new ReportColumn(ColumnConstants.IMPLEMENTING_AGENCY));
-            title = TranslatorWorker.translateText(DashboardConstants.TOP_IMPLEMENTING_ORGS);
-            name = DashboardConstants.TOP_IMPLEMENTING_ORGS;
-            break;
-        case "EA":
-            spec.addColumn(new ReportColumn(ColumnConstants.EXECUTING_AGENCY));
-            title = TranslatorWorker.translateText(DashboardConstants.TOP_EXECUTING_ORGS);
-            name = DashboardConstants.TOP_EXECUTING_ORGS;
-            break;
-        case "RE":
-            spec.addColumn(new ReportColumn(ColumnConstants.REGION));
-            title = TranslatorWorker.translateText(DashboardConstants.TOP_REGIONS);
-            name = DashboardConstants.TOP_REGIONS;
-            spec.setReportCollapsingStrategy(ReportCollapsingStrategy.NEVER);
-            break;
-        case "PS":
-            spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_SECTOR));
-            title = TranslatorWorker.translateText(DashboardConstants.TOP_SECTORS);
-            name = DashboardConstants.TOP_SECTORS;
-            break;
-        case "DG":
-            spec.addColumn(new ReportColumn(ColumnConstants.DONOR_GROUP));
-            title = TranslatorWorker.translateText(DashboardConstants.TOP_DONOR_GROUPS);
-            name = DashboardConstants.TOP_DONOR_GROUPS;
-            break;
-        case "NDD":
-            spec.addColumn(new ReportColumn(ColumnConstants.SECONDARY_PROGRAM));
-            name = DashboardConstants.PEACE_BUILDING_AND_STATE_BUILDING_GOALS;
-            title = TranslatorWorker.translateText(DashboardConstants.PEACE_BUILDING_AND_STATE_BUILDING_GOALS);
-            n = 99999; // This chart has no limit of categories (no 'Others').
-
-            // Add must-have filters for this chart.
-            ArrayList<AmpCategoryValue> catList = new ArrayList<AmpCategoryValue>(
-                    CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.PEACE_MARKERS_KEY));
-            List<Integer> peaceFilterOptions = new ArrayList<Integer>();
-            for (AmpCategoryValue category : catList) {
-                if (category.getValue().equals("1") || category.getValue().equals("2")
-                        || category.getValue().equals("3")) {
-                    peaceFilterOptions.add(category.getId().intValue());
-                }
-            }
-            LinkedHashMap<String, Object> peaceFilter = new LinkedHashMap<String, Object>();
-            peaceFilter.put(FiltersConstants.PROCUREMENT_SYSTEM, peaceFilterOptions);
-            filters.putAll(peaceFilter);
-
-            break;
-        default:
-            spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
-            title = TranslatorWorker.translateText(DashboardConstants.TOP_DONOR_AGENCIES);
-            name = DashboardConstants.TOP_DONOR_AGENCIES;
-            break;
-        }
-        
-        OutputSettings outSettings = new OutputSettings(
-                new HashSet<String>() {{add(spec.getColumnNames().iterator().next());}});
-
-        spec.getHierarchies().addAll(spec.getColumns());
-        // applies settings, including funding type as a measure
-        SettingsUtils.applyExtendedSettings(spec, config);
-        spec.addSorter(new SortingInfo(spec.getMeasures().iterator().next(), SiteUtils.isEffectiveLangRTL()));
-
-        AmpReportFilters filterRules = FilterUtils.getFilterRules(filters, null);
-        if (filterRules != null) {
-            spec.setFilters(filterRules);
-        }
-
-        // AMP-18740: For dashboards we need to use the default number formatting and leave the rest of the settings
-        // configurable (calendar, currency, etc).
-        setCustomSettings(config, spec);
-
-        // TODO: add error reporting
-        GeneratedReport report = EndpointUtils.runReport(spec, ReportAreaImpl.class, outSettings);
-        if (report == null) {
-            retlist.set(EPConstants.ERROR, "Could not generate report");
-        }
-        ReportOutputColumn criteriaCol = report.leafHeaders.get(0);
-        ReportOutputColumn valueCol = report.leafHeaders.get(1);
-
-        AmountsUnits unitsOption = spec.getSettings().getUnitsOption();
-        
-        // Format the report output return a simple list. 
-        // this is the report totals, which is not for the top N, but for ALL
-        // results
-        ReportCell totals = null;
-        Double rawTotal = null;
-        
-        if (report != null && report.reportContents != null && report.reportContents.getContents() != null
-                && report.reportContents.getContents().size() > 0) {
-            totals = (ReportCell) report.reportContents.getContents().get(valueCol);
-            rawTotal = ((BigDecimal) totals.value).doubleValue() * unitsOption.divider; // Save total in units.
-            postProcess(report, spec, outSettings, type);
-        } else {
-            rawTotal = new Double("0");
-        }
-
-        String currcode = spec.getSettings().getCurrencyCode();
-        retlist.set("currency", currcode);
-        Integer maxLimit = report.reportContents.getChildren().size();
-
-        double totalPositive = 0;
-        for (ReportArea reportArea: report.reportContents.getChildren()) {
-            Map<ReportOutputColumn, ReportCell> content = reportArea.getContents();
-            AmountCell ac = (AmountCell) content.get(valueCol);
-            double amount = ((BigDecimal) ac.value).doubleValue() * unitsOption.divider;
-            if (values.size() < n) {
-                JsonBean row = new JsonBean();
-                row.set("name", content.get(criteriaCol).displayedValue);
-                row.set("id", ((IdentifiedReportCell) content.get(criteriaCol)).entityId);
-                row.set("amount", amount);
-                row.set("formattedAmount", ac.displayedValue);
-                values.add(row);
-            }
-            if(amount > 0) {
-                totalPositive += amount;
-            }
-        }
-        retlist.set("values", values);
-
-        retlist.set("total", rawTotal);
-        retlist.set("sumarizedTotal",
-                calculateSumarizedTotals(rawTotal / unitsOption.divider, spec));
-        // report the total number of tops available
-        retlist.set("maxLimit", maxLimit);
-        retlist.set("totalPositive", totalPositive);
-        retlist.set("name", name);
-        retlist.set("title", title);
-        return retlist;
-    }
-    
-
-    public static int getOffset(JsonBean config) {
-        return (Integer) EndpointUtils.getSingleValue(config, "offset", 0);
+    public static int getOffset(DashboardFormParameters config) {
+        return EndpointUtils.getSingleValue(config.getOffset(), 0);
     }
 
     public static LinkedHashMap<String, Object> setFilterId(Long id, String column) {
@@ -379,7 +200,7 @@ public class DashboardsService {
     }
 
 
-    public static JsonBean getAidPredictability(JsonBean filter) throws Exception {
+    public static JsonBean getAidPredictability(DashboardFormParameters filter) throws Exception {
         return getAidPredictability(filter, null, null);
     }
 
@@ -389,13 +210,13 @@ public class DashboardsService {
      * @param filter
      * @return
      */
-    public static JsonBean getAidPredictability(JsonBean filter, Integer year, String measure) throws Exception {
+    public static JsonBean getAidPredictability(DashboardFormParameters filter, Integer year, String measure) {
         JsonBean retlist = new JsonBean();
         String err = null;
         ReportSpecificationImpl spec = new ReportSpecificationImpl("GetAidPredictability", ArConstants.DONOR_TYPE);
         LinkedHashMap<String, Object> filters = null;
         if (filter != null) {
-            filters = (LinkedHashMap<String, Object>) filter.get(EPConstants.FILTERS);
+            filters = (LinkedHashMap<String, Object>) filter.getFilters();
         }
         if (filters == null) {
             filters = new LinkedHashMap<>();
@@ -428,7 +249,7 @@ public class DashboardsService {
                 spec.setFilters(filterRules);
             }
         }
-        SettingsUtils.applySettings(spec, filter, true);
+        SettingsUtils.applySettings(spec, filter.getSettings(), true);
         
         // AMP-18740: For dashboards we need to use the default number formatting and leave the rest of the settings
         // configurable (calendar, currency, etc).
@@ -485,7 +306,7 @@ public class DashboardsService {
     }
 
 
-    public static JsonBean fundingtype(String adjtype, JsonBean filter) {
+    public static JsonBean fundingtype(String adjtype, DashboardFormParameters filter) {
         return fundingtype(adjtype, filter, null, null);
     }
 
@@ -495,14 +316,14 @@ public class DashboardsService {
      * @param filter
      * @return
      */
-    public static JsonBean fundingtype(String adjtype, JsonBean filter, Integer year, Integer id) {
+    public static JsonBean fundingtype(String adjtype, DashboardFormParameters filter, Integer year, Integer id) {
         String err = null;
         JsonBean retlist = new JsonBean();
         
         ReportSpecificationImpl spec = new ReportSpecificationImpl("fundingtype", ArConstants.DONOR_TYPE);
         LinkedHashMap<String, Object> filters = null;
         if (filter != null) {
-            filters = (LinkedHashMap<String, Object>) filter.get(EPConstants.FILTERS);
+            filters = (LinkedHashMap<String, Object>) filter.getFilters();
         }
         if (filters == null) {
             filters = new LinkedHashMap<>();
@@ -529,7 +350,7 @@ public class DashboardsService {
 
         }
         // also configures funding type
-        SettingsUtils.applyExtendedSettings(spec, filter);
+        SettingsUtils.applyExtendedSettings(spec, filter.getSettings());
         
         spec.addSorter(new SortingInfo(spec.getMeasures().iterator().next(), false));
         if (filters != null) {
@@ -596,7 +417,7 @@ public class DashboardsService {
         }
     }
 
-    public static JsonBean getPeaceMarkerProjectsByCategory(JsonBean config, Integer id) {
+    public static JsonBean getPeaceMarkerProjectsByCategory(DashboardFormParameters config, Integer id) {
         String err = null;
         JsonBean retlist = new JsonBean();
         List<JsonBean> values = new ArrayList<JsonBean>();
@@ -607,12 +428,12 @@ public class DashboardsService {
 
         OutputSettings outSettings = new OutputSettings(new HashSet<String>(){{add(ColumnConstants.PROJECT_TITLE);}});
         // applies settings, including funding type as a measure
-        SettingsUtils.applyExtendedSettings(spec, config);
+        SettingsUtils.applyExtendedSettings(spec, config.getSettings());
         spec.addSorter(new SortingInfo(spec.getMeasures().iterator().next(), false));
         
         LinkedHashMap<String, Object> filters = null;
         if (config != null) {
-            filters = (LinkedHashMap<String, Object>) config.get(EPConstants.FILTERS);
+            filters = (LinkedHashMap<String, Object>) config.getFilters();
         }
         if (filters == null) {
             filters = new LinkedHashMap<>();
@@ -682,8 +503,8 @@ public class DashboardsService {
      * @param config Is the JsonBean object from UI.
      * @param spec Is the current Mondrian Report specification.
      */
-    public static void setCustomSettings(JsonBean config, ReportSpecificationImpl spec) {
-        LinkedHashMap<String, Object> userSettings = (LinkedHashMap<String, Object>) config.get("settings");
+    public static void setCustomSettings(DashboardFormParameters config, ReportSpecificationImpl spec) {
+        LinkedHashMap<String, Object> userSettings = (LinkedHashMap<String, Object>) config.getSettings();
         ReportSettingsImpl defaultSettings = MondrianReportUtils.getCurrentUserDefaultSettings();
         defaultSettings.setUnitsOption(AmountsUnits.getDefaultValue());
         if (userSettings.get(SettingsConstants.CURRENCY_ID) != null) {

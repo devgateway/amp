@@ -38,8 +38,8 @@ import org.dgfoundation.amp.newreports.ReportSettingsImpl;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.amp.OutputSettings;
-import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.gis.GisFormParameters;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
@@ -89,7 +89,7 @@ public class LocationService {
      * @param config json configuration
      * @return
      */
-    public JsonBean getTotals(String admlevel, JsonBean config, AmountsUnits amountUnits) {
+    public JsonBean getTotals(String admlevel, GisFormParameters config, AmountsUnits amountUnits) {
         JsonBean retlist = new JsonBean();
         HardCodedCategoryValue admLevelCV = GisConstants.ADM_TO_IMPL_CATEGORY_VALUE.getOrDefault(admlevel,
                 CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
@@ -101,7 +101,7 @@ public class LocationService {
         spec.addColumn(new ReportColumn(admlevel));
         spec.getHierarchies().addAll(spec.getColumns());
         // also configures the measure(s) from funding type settings request
-        SettingsUtils.applyExtendedSettings(spec, config);
+        SettingsUtils.applyExtendedSettings(spec, config.getSettings());
         ReportSettingsImpl mrs = (ReportSettingsImpl) spec.getSettings();
         // THIS IS OLD, just allowing now to not reset the units when used by other services 
         if (amountUnits != null)
@@ -110,7 +110,7 @@ public class LocationService {
         AmpReportFilters filterRules = new AmpReportFilters((AmpFiscalCalendar) spec.getSettings().getCalendar());
         
         if(config != null){
-            Map<String, Object> filters = (Map<String, Object>) config.get(EPConstants.FILTERS);
+            Map<String, Object> filters = config.getFilters();
             if (filters != null) {
                 filterRules = FilterUtils.getFilterRules(filters, null, filterRules);
             }
@@ -144,7 +144,7 @@ public class LocationService {
         admLevelToGeoCode = getAdmLevelGeoCodeMap(admlevel, admLevelCV);
         spec.setFilters(filterRules);
         
-        String currcode = FilterUtils.getSettingbyName(config, SettingsConstants.CURRENCY_ID);
+        String currcode = FilterUtils.getSettingbyName(config.getSettings(), SettingsConstants.CURRENCY_ID);
         retlist.set("currency", currcode);
         retlist.set("numberformat", numberformat);
         GeneratedReport report = EndpointUtils.runReport(spec);
@@ -189,12 +189,12 @@ public class LocationService {
         return levelToGeoCodeMap;
     }
     
-    public static List<ClusteredPoints> getClusteredPoints(JsonBean config) throws AmpApiException {
+    public static List<ClusteredPoints> getClusteredPoints(GisFormParameters config) throws AmpApiException {
         String adminLevel = "";
         final List<ClusteredPoints> l = new ArrayList<ClusteredPoints>();
 
         if (config != null) {
-            Map filters = (Map) config.get(EPConstants.FILTERS);
+            Map filters = config.getFilters();
             if (filters != null && filters.get("adminLevel") != null) {
                 adminLevel = filters.get("adminLevel").toString();
             }
@@ -284,7 +284,7 @@ public class LocationService {
     
         return l;
     }
-    private static Set<Long> getActivitiesForFiltering(JsonBean config, String adminLevel)
+    private static Set<Long> getActivitiesForFiltering(GisFormParameters config, String adminLevel)
             throws AmpApiException {
         Set<Long> activitiesId = new HashSet<Long>();
          
@@ -298,7 +298,7 @@ public class LocationService {
             add(ColumnConstants.AMP_ID);
         }});
         
-        SettingsUtils.configureMeasures(spec, config);
+        SettingsUtils.configureMeasures(spec, config.getSettings());
 
         ReportColumn implementationLevelColumn = null;
         if (adminLevel != null) {
@@ -326,12 +326,12 @@ public class LocationService {
         }
         spec.setDisplayEmptyFundingRows(true);
         
-        SettingsUtils.applyExtendedSettings(spec, config);
+        SettingsUtils.applyExtendedSettings(spec, config.getSettings());
         ReportSettingsImpl mrs = (ReportSettingsImpl) spec.getSettings();
         mrs.setUnitsOption(AmountsUnits.AMOUNTS_OPTION_UNITS);
 
         if (config != null) {
-            Map<String, Object> filterMap = (Map<String, Object>) config.get(EPConstants.FILTERS);
+            Map<String, Object> filterMap = config.getFilters();
             AmpReportFilters filterRules = FilterUtils.getFilters(filterMap, new AmpReportFilters(mrs.getCalendar()));
 
             GisUtils.configurePerformanceFilter(config, filterRules);
@@ -376,9 +376,9 @@ public class LocationService {
     }
 
     @SuppressWarnings("unchecked")
-    public static List<AmpStructure> getStructures(JsonBean config) throws AmpApiException{
+    public static List<AmpStructure> getStructures(GisFormParameters config) throws AmpApiException {
         List<AmpStructure> al = null;
-        Set<Long> activitiesId = getActivitiesForFiltering( config,null);
+        Set<Long> activitiesId = getActivitiesForFiltering(config, null);
         String queryString = "select s from " + AmpStructure.class.getName() + " s inner join s.activities a where"
                     + " a.ampActivityId in (" + Util.toCSStringForIN(activitiesId) + " )";
         Query q = PersistenceManager.getSession().createQuery(queryString);

@@ -11,6 +11,7 @@ import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorEPConstants;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorErrors;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorService;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorUtils;
+import org.digijava.kernel.ampapi.endpoints.gis.GisFormParameters;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -58,8 +59,8 @@ public class PublicGapAnalysis {
      * @param input full indicator data, filters and settings
      * @return indicator values or error
      */
-    public JsonBean doPublicGapAnalysis(JsonBean input) {
-        Map<String, Object> indicatorMap = getDataAsMap(input, IndicatorEPConstants.INDICATOR);
+    public JsonBean doPublicGapAnalysis(GisFormParameters input) {
+        Map<String, Object> indicatorMap = getDataAsMap(input.getIndicator(), IndicatorEPConstants.INDICATOR);
         if (errors.isEmpty()) {
             // create a temporary indicator layer
             JsonBean indicatorJson = new JsonBean();
@@ -77,8 +78,7 @@ public class PublicGapAnalysis {
         return ApiError.toError(errors);
     }
     
-    private Map<String, Object> getDataAsMap(JsonBean input, String name) {
-        Object data = input.get(name);
+    private Map<String, Object> getDataAsMap(Object data, String name) {
         Map<String, Object> result = null;
         if (data != null) {
             if (Map.class.isAssignableFrom(data.getClass())) {

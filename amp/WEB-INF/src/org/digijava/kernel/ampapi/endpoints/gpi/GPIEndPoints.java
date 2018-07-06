@@ -428,70 +428,34 @@ public class GPIEndPoints implements ErrorReportingEndpoint {
     @Path("/report/{indicatorCode}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = { AuthRule.IN_WORKSPACE }, id = "getGpiReport", ui = false)
-    @ApiOperation(
-            value = "Retrieve gpi report for the specified indicator.",
-            notes = " The form parameters is a JSON objects containing the following fields:<br/>\n"
-                    + "  <dt><b>settings</b></dt> - Report settings. Contains \"currency-code\" and \"calendar-id\" "
-                    + "fields.\n"
-                    + "  <dt><b>filters</b></dt> - Report filters.\n"
-                    + "  <dt><b>hierarchy</b></dt> - The hierarchy used. Donor Agency or Donor Group "
-                    + "(donor-agency|donor-group).\n"
-                    + "  <dt><b>page</b></dt> - optional, page number, starting from 1. Use 0 to retrieve only "
-                    + "pagination information, \n"
-                    + "                         without any records. Default to 0</dd>\n"
-                    + "  <dt><b>recordsPerPage</b></dt> - optional, the number of records per page to return. "
-                    + "The default value will \n"
-                    + "  be set to the number configured in AMP. Set it to -1 to get the unlimited records "
-                    + "(all records).\n"
-                    + "  <dt><b>output</b></dt> - The output. Used for indicator 1. Possible values: (1|2).\n"
-                    + "<br>\n"
-                    + "<h3>Sample Input:</h3>\n"
-                    + "<pre>\n"
-                    + "{  \n"
-                    + "  \"settings\": {\n"
-                    + "    \"currency-code\": \"USD\",\n"
-                    + "    \"calendar-id\": \"4\"\n"
-                    + "  },\n"
-                    + "  \"filters\": {\n"
-                    + "    \"actual-approval-date\": {\n"
-                    + "      \"start\": \"2017-01-01\",\n"
-                    + "      \"end\": \"2018-01-01\"\n"
-                    + "    }\n"
-                    + "  },\n"
-                    + "  \"hierarchy\" : \"donor-agency\",\n"
-                    + "  \"output\" : 1\n"
-                    + "}\n"
-                    + "</pre>")
+    @ApiOperation("Retrieve gpi report for the specified indicator.")
     public GPIReport getGPIReport(
             @ApiParam(allowableValues = "1,5a,5b,6,9")
-            @PathParam("indicatorCode") String indicatorCode, JsonBean formParams) {
+            @PathParam("indicatorCode") String indicatorCode,
+            GpiFormParameters formParams) {
         return GPIReportService.getInstance().getGPIReport(indicatorCode, formParams);
     }
 
     @POST
     @Path("/report/export/xls/{indicatorCode}")
     @Produces({"application/vnd.ms-excel" })
-    @Consumes({MediaType.APPLICATION_FORM_URLENCODED, MediaType.MULTIPART_FORM_DATA})
-    @ApiOperation(
-            value = "Retrieve gpi report in XLSX format.",
-            notes = "See /rest/report/{indicatorCode} endpoint for formParams description.")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @ApiOperation("Retrieve gpi report in XLSX format.")
     public final Response exportXlsGPIReport(
             @ApiParam(allowableValues = "1,5a,5b,6,9") @PathParam("indicatorCode") String indicatorCode,
-            @FormParam("formParams") String formParams) {
-        return GPIReportService.getInstance().exportGPIReport(indicatorCode, JsonBean.getJsonBeanFromString(formParams), GPIReportConstants.XLSX);
+            @FormParam("formParams") GpiFormParameters formParams) {
+        return GPIReportService.getInstance().exportGPIReport(indicatorCode, formParams, GPIReportConstants.XLSX);
     }
 
     @POST
     @Path("/report/export/pdf/{indicatorCode}")
     @Produces({"application/pdf" })
-    @Consumes({MediaType.APPLICATION_FORM_URLENCODED, MediaType.MULTIPART_FORM_DATA})
-    @ApiOperation(
-            value = "Retrieve gpi report in PDF format.",
-            notes = "See /rest/report/{indicatorCode} endpoint for formParams description.")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @ApiOperation("Retrieve gpi report in PDF format.")
     public final Response exportPdfGPIReport(
             @ApiParam(allowableValues = "1,5a,5b,6,9") @PathParam("indicatorCode") String indicatorCode,
-            @FormParam("formParams") String formParams) {
-        return GPIReportService.getInstance().exportGPIReport(indicatorCode, JsonBean.getJsonBeanFromString(formParams), GPIReportConstants.PDF);
+            @FormParam("formParams") GpiFormParameters formParams) {
+        return GPIReportService.getInstance().exportGPIReport(indicatorCode, formParams, GPIReportConstants.PDF);
     }
 
     @GET

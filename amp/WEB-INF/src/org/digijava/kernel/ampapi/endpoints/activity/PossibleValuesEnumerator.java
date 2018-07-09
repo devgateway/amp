@@ -402,9 +402,9 @@ public class PossibleValuesEnumerator {
         for (Object[] item : possibleLocations) {
             Long locId = ((Number) item[PossibleValuesDAO.LOC_ID_POS]).longValue();
             String locCatName = ((String) item[PossibleValuesDAO.LOC_CAT_NAME_POS]);
-            Long parentLocCatId = getLongOrNull(PossibleValuesDAO.LOC_PARENT_CAT_ID_POS);
+            Long parentLocCatId = getLongOrNull((Number) item[PossibleValuesDAO.LOC_PARENT_CAT_ID_POS]);
             String parentLocCatName = ((String) item[PossibleValuesDAO.LOC_PARENT_CAT_NAME_POS]);
-            Long categoryValueId = getLongOrNull(PossibleValuesDAO.LOC_CAT_VAL_ID_POS);
+            Long categoryValueId = getLongOrNull((Number) item[PossibleValuesDAO.LOC_CAT_VAL_ID_POS]);
             String categoryValueName = ((String) item[PossibleValuesDAO.LOC_CAT_VAL_NAME_POS]);
             String iso = ((String) item[PossibleValuesDAO.LOC_ISO]);
 

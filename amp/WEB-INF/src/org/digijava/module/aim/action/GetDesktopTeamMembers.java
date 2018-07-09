@@ -25,9 +25,6 @@ public class GetDesktopTeamMembers extends TilesAction {
 
         HttpSession session = request.getSession();
         
-        String settingValue = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ACTIVITY_LEVEL);                               
-        if("true".equals(settingValue)) request.setAttribute("activity_level", "true");
-        
         if (session.getAttribute(Constants.MY_TEAM_MEMBERS) == null) {
             TeamMember tm = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
             ////System.out.println("######### "+tm.getMemberName()+"  team head:" +tm.getTeamHead() );

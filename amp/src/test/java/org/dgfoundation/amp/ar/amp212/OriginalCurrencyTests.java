@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
-import org.dgfoundation.amp.ar.AllTests_amp212;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.mondrian.ReportAreaForTests;
@@ -96,10 +95,6 @@ public class OriginalCurrencyTests extends ReportingTestCase {
             "Test MTEF directed",
             "activity with pipeline MTEFs and act. disb"
         );
-    
-    public OriginalCurrencyTests() {
-        super("OriginalCurrencyTests");
-    }
     
     @Override
     protected NiReportExecutor getNiExecutor(List<String> activityNames) {
@@ -334,13 +329,4 @@ public class OriginalCurrencyTests extends ReportingTestCase {
             }
     }
     
-    @Override
-    public void tearDown() {
-        AmpReportsScratchpad.forcedNowDate = null;
-    }
-    
-    @Override
-    public void setUp() {
-        AllTests_amp212.setUp();
-    }
 }

@@ -92,8 +92,13 @@ public class IndicatorUpdater {
         }
         indicatorLayer.setUpdatedOn(new Date());
         indicatorLayer.setAccessType( (indicator.getString(IndicatorEPConstants.ACCESS_TYPE_ID)!=null ? IndicatorAccessType.getValueFromLong(Long.valueOf(indicator.getString(IndicatorEPConstants.ACCESS_TYPE_ID))) :IndicatorAccessType.TEMPORARY));
-        setAdmLevel(indicatorLayer);
-
+        setAdmLevel(indicatorLayer);  
+        
+        String zeroCategoryEnabled = indicator.getString(IndicatorEPConstants.FIELD_ZERO_CATEGORY_ENABLED);
+        if (zeroCategoryEnabled != null) {
+           indicatorLayer.setZeroCategoryEnabled(Boolean.parseBoolean(zeroCategoryEnabled));
+        }        
+        
         if (indicator.get(IndicatorEPConstants.COLOR_RAMP_ID)!=null) {
             Set<AmpIndicatorColor> colorRamp = new HashSet<AmpIndicatorColor>();
             String[] colorRampColors = ColorRampUtil.getColorRamp(EndpointUtils.getSingleValue(indicator, IndicatorEPConstants.COLOR_RAMP_ID,null),
@@ -103,9 +108,16 @@ public class IndicatorUpdater {
                 long payload = i + 1;
                 color.setPayload(payload);
                 color.setColor(colorRampColors[i]);
+                color.setIndicatorLayer(indicatorLayer);
                 colorRamp.add(color);
             }
-            indicatorLayer.setColorRamp(colorRamp);
+            
+            if (indicatorLayer.getColorRamp() != null) {
+                indicatorLayer.getColorRamp().clear();
+                indicatorLayer.getColorRamp().addAll(colorRamp); 
+            } else {
+                indicatorLayer.setColorRamp(colorRamp);
+            }
         }
 
         if (indicator.get(IndicatorEPConstants.SHARED_WORKSPACES)!=null) {
@@ -115,9 +127,16 @@ public class IndicatorUpdater {
                 AmpTeam team = TeamUtil.getAmpTeam(new Long(String.valueOf(indicatorTeams.get(i))));
                 AmpIndicatorWorkspace indicatorWs = new AmpIndicatorWorkspace();
                 indicatorWs.setWorkspace(team);
+                indicatorWs.setIndicatorLayer(indicatorLayer);
                 teams.add(indicatorWs);
             }
-            indicatorLayer.setSharedWorkspaces(teams);
+            
+            if (indicatorLayer.getSharedWorkspaces() != null) {
+                indicatorLayer.getSharedWorkspaces().clear();
+                indicatorLayer.getSharedWorkspaces().addAll(teams); 
+            } else {
+                indicatorLayer.setSharedWorkspaces(teams);
+            }
         }
 
         if (indicator.get(IndicatorEPConstants.VALUES)!=null) {
@@ -158,7 +177,13 @@ public class IndicatorUpdater {
                     errors.addApiErrorMessage(IndicatorErrors.LOCATION_NOT_FOUND, IndicatorEPConstants.FIELD_ID + " = " + locId);
                 }
             }
-            indicatorLayer.setIndicatorValues(locationIndicatorValues);
+            
+            if (indicatorLayer.getIndicatorValues() != null) {
+                indicatorLayer.getIndicatorValues().clear();
+                indicatorLayer.getIndicatorValues().addAll(locationIndicatorValues); 
+            } else {
+                indicatorLayer.setIndicatorValues(locationIndicatorValues);
+            }
         }
 
         return indicatorLayer;

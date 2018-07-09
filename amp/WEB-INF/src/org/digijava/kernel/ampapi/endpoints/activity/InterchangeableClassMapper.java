@@ -41,18 +41,6 @@ public class InterchangeableClassMapper {
         add(Date.class);
     }};
     
-    /**
-     * Stores a mapping between the contact type field discriminator names 
-     * and their matching internal contact type constants 
-     */
-    public static Map<String, String> CONTACT_SET_NAME_TO_CONTACT_TYPE = new HashMap<String, String>() {{
-        put(ActivityFieldsConstants.DONOR_CONTACT, Constants.DONOR_CONTACT);
-        put(ActivityFieldsConstants.PROJECT_COORDINATOR_CONTACT, Constants.PROJECT_COORDINATOR_CONTACT);
-        put(ActivityFieldsConstants.SECTOR_MINISTRY_CONTACT, Constants.SECTOR_MINISTRY_CONTACT);
-        put(ActivityFieldsConstants.MOFED_CONTACT, Constants.MOFED_CONTACT);
-        put(ActivityFieldsConstants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT, Constants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT);
-    }};
-    
     public static String getCustomMapping(Class<?> clazz) {
         return classToCustomType.get(adjust(clazz));
     }

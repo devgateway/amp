@@ -15,9 +15,11 @@ import java.util.StringJoiner;
 import java.util.function.Predicate;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
+import org.digijava.kernel.ampapi.endpoints.resource.AmpResource;
 import org.digijava.kernel.ampapi.filters.AmpOfflineModeHolder;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
@@ -245,6 +247,10 @@ public class FieldsEnumerator {
     public List<APIField> getContactFields() {
         return getAllAvailableFields(AmpContact.class);
     }
+    
+    public List<APIField> getResourceFields() {
+        return getAllAvailableFields(AmpResource.class);
+    }
 
     List<APIField> getAllAvailableFields(Class<?> clazz) {
         return getAllAvailableFields(clazz, new FEContext());
@@ -260,10 +266,10 @@ public class FieldsEnumerator {
     private List<APIField> getAllAvailableFields(Class<?> clazz, FEContext context) {
         List<APIField> result = new ArrayList<>();
         //StopWatch.next("Descending into", false, clazz.getName());
-        Field[] fields = clazz.getDeclaredFields();
+        Field[] fields = FieldUtils.getFieldsWithAnnotation(clazz, Interchangeable.class);
         for (Field field : fields) {
             Interchangeable interchangeable = field.getAnnotation(Interchangeable.class);
-            if (interchangeable == null || !internalUse && InterchangeUtils.isAmpActivityVersion(field.getType())) {
+            if (!internalUse && InterchangeUtils.isAmpActivityVersion(field.getType())) {
                 continue;
             }
             context.getIntchStack().push(interchangeable);
@@ -332,11 +338,10 @@ public class FieldsEnumerator {
      */
     private String getPercentageConstraint(Field field, FEContext context) {
         Class<?> genericClass = InterchangeUtils.getGenericClass(field);
-        Field[] fields = genericClass.getDeclaredFields();
+        Field[] fields = FieldUtils.getFieldsWithAnnotation(genericClass, Interchangeable.class);
         for (Field f : fields) {
             Interchangeable interchangeable = f.getAnnotation(Interchangeable.class);
-            if (interchangeable != null && isVisible(interchangeable.fmPath(), context)
-                    && interchangeable.percentageConstraint()) {
+            if (isVisible(interchangeable.fmPath(), context) && interchangeable.percentageConstraint()) {
                 return InterchangeUtils.underscorify(interchangeable.fieldTitle());
             }
         }
@@ -349,11 +354,10 @@ public class FieldsEnumerator {
      */
     private String getUniqueConstraint(Field field, FEContext context) {
         Class<?> genericClass = InterchangeUtils.getGenericClass(field);
-        Field[] fields = genericClass.getDeclaredFields();
+        Field[] fields = FieldUtils.getFieldsWithAnnotation(genericClass, Interchangeable.class);
         for (Field f : fields) {
             Interchangeable interchangeable = f.getAnnotation(Interchangeable.class);
-            if (interchangeable != null && isVisible(interchangeable.fmPath(), context)
-                    && interchangeable.uniqueConstraint()) {
+            if (isVisible(interchangeable.fmPath(), context) && interchangeable.uniqueConstraint()) {
                 return InterchangeUtils.underscorify(interchangeable.fieldTitle());
             }
         }
@@ -370,6 +374,12 @@ public class FieldsEnumerator {
     public List<String> findContactFieldPaths(Predicate<Field> fieldFilter) {
         FieldNameCollectingVisitor visitor = new FieldNameCollectingVisitor(fieldFilter);
         visit(AmpContact.class, visitor, new VisitorContext());
+        return visitor.fields;
+    }
+    
+    public List<String> findResourceFieldPaths(Predicate<Field> fieldFilter) {
+        FieldNameCollectingVisitor visitor = new FieldNameCollectingVisitor(fieldFilter);
+        visit(AmpResource.class, visitor, new VisitorContext());
         return visitor.fields;
     }
 
@@ -404,29 +414,27 @@ public class FieldsEnumerator {
 
     // TODO how to reuse this logic?
     private void visit(Class<?> clazz, InterchangeVisitor visitor, VisitorContext context) {
-        for (Field field : clazz.getDeclaredFields()) {
+        for (Field field : FieldUtils.getFieldsWithAnnotation(clazz, Interchangeable.class)) {
             Interchangeable ant = field.getAnnotation(Interchangeable.class);
-            if (ant != null) {
-                context.feContext.getIntchStack().push(ant);
-                if (!InterchangeUtils.isCompositeField(field)) {
-                    if (isFieldVisible(context.feContext)) {
-                        visit(field, InterchangeUtils.underscorify(ant.fieldTitle()), ant, visitor, context);
-                    }
-                } else {
-                    InterchangeableDiscriminator antd = field.getAnnotation(InterchangeableDiscriminator.class);
-                    Interchangeable[] settings = antd.settings();
-                    for (Interchangeable ants : settings) {
-                        context.feContext.getDiscriminationInfoStack().push(getDiscriminationInfo(field, ants));
-                        context.feContext.getIntchStack().push(ants);
-                        if (isFieldVisible(context.feContext)) {
-                            visit(field, InterchangeUtils.underscorify(ants.fieldTitle()), ant, visitor, context);
-                        }
-                        context.feContext.getIntchStack().pop();
-                        context.feContext.getDiscriminationInfoStack().pop();
-                    }
+            context.feContext.getIntchStack().push(ant);
+            if (!InterchangeUtils.isCompositeField(field)) {
+                if (isFieldVisible(context.feContext)) {
+                    visit(field, InterchangeUtils.underscorify(ant.fieldTitle()), ant, visitor, context);
                 }
-                context.feContext.getIntchStack().pop();
+            } else {
+                InterchangeableDiscriminator antd = field.getAnnotation(InterchangeableDiscriminator.class);
+                Interchangeable[] settings = antd.settings();
+                for (Interchangeable ants : settings) {
+                    context.feContext.getDiscriminationInfoStack().push(getDiscriminationInfo(field, ants));
+                    context.feContext.getIntchStack().push(ants);
+                    if (isFieldVisible(context.feContext)) {
+                        visit(field, InterchangeUtils.underscorify(ants.fieldTitle()), ant, visitor, context);
+                    }
+                    context.feContext.getIntchStack().pop();
+                    context.feContext.getDiscriminationInfoStack().pop();
+                }
             }
+            context.feContext.getIntchStack().pop();
         }
     }
 
@@ -436,7 +444,7 @@ public class FieldsEnumerator {
 
         visitor.visit(field, fieldName, context);
 
-        Class classOfField = InterchangeUtils.getClassOfField(field);
+        Class<?> classOfField = InterchangeUtils.getClassOfField(field);
         if (!InterchangeUtils.isSimpleType(classOfField) && !ant.pickIdOnly()) {
             visit(classOfField, visitor, context);
         }

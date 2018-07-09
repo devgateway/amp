@@ -135,7 +135,7 @@ public class AmpConfiguration implements ErrorReportingEndpoint {
         AmpOfflineRelease clientRelease = detectClientRelease();
 
         VersionCheckResponse response = new VersionCheckResponse();
-        response.setAmpOfflineCompatible(isAmpOfflineCompatible(clientRelease));
+        response.setAmpOfflineCompatible(ampVersionService.isAmpOfflineCompatible(clientRelease));
         response.setAmpOfflineEnabled(FeaturesUtil.isAmpOfflineEnabled());
         response.setAmpVersion(ampVersionService.getVersionInfo().getAmpVersion());
         response.setLatestAmpOffline(ampOfflineService.findLastRelease(clientRelease));
@@ -143,7 +143,7 @@ public class AmpConfiguration implements ErrorReportingEndpoint {
         return response;
     }
 
-    private AmpOfflineRelease detectClientRelease() {
+    public static AmpOfflineRelease detectClientRelease() {
         AmpOfflineRelease release = null;
         if (AmpOfflineModeHolder.isAmpOfflineMode()) {
             try {
@@ -155,10 +155,6 @@ public class AmpConfiguration implements ErrorReportingEndpoint {
             }
         }
         return release;
-    }
-    
-    private boolean isAmpOfflineCompatible(AmpOfflineRelease release) {
-        return release != null && ampVersionService.isAmpOfflineCompatible(release.getVersion());
     }
 
     /**

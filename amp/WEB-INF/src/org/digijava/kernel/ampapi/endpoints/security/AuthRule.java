@@ -21,8 +21,10 @@ public enum AuthRule {
     EDIT_ACTIVITY,
     /** view activity right must be enabled */
     VIEW_ACTIVITY,
-    /** amp offline global settings must be enabled */
-    AMP_OFFLINE_ENABLED;
+    /** amp offline global settings must be enabled and client version must be compatible */
+    AMP_OFFLINE,
+    /** if amp offline user-agent is present in headers check for AMP_OFFLINE. If not, check for orther actions */
+    AMP_OFFLINE_OPTIONAL;
     
     @Override
     public String toString() {

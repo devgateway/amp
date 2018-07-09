@@ -82,7 +82,7 @@ public class SynchronizerEndpoint implements ErrorReportingEndpoint {
      * </pre>
      */
     @POST
-    @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_ENABLED}, id = "computeSync", ui = false)
+    @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE}, id = "computeSync", ui = false)
     public SystemDiff computeSync(SyncRequest syncRequest) {
         
         if (syncRequest.getUserIds() == null || syncRequest.getUserIds().isEmpty()) {
@@ -137,7 +137,7 @@ public class SynchronizerEndpoint implements ErrorReportingEndpoint {
     @GET
     @Path("/workspaces")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = "", ui = false, authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_ENABLED})
+    @ApiMethod(id = "", ui = false, authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE})
     public List<AmpTeam> getWorkspaces(@DefaultValue("false") @QueryParam("management") Boolean includeManagement,
             @DefaultValue("false") @QueryParam("private") Boolean includePrivate) {
         return TeamUtil.getAllTeams(includeManagement, includePrivate);
@@ -180,7 +180,7 @@ public class SynchronizerEndpoint implements ErrorReportingEndpoint {
     @GET
     @Path("/translations")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = "", ui = false, authTypes = {AuthRule.AMP_OFFLINE_ENABLED})
+    @ApiMethod(id = "", ui = false, authTypes = {AuthRule.AMP_OFFLINE})
     public Map<String, Map<String, String>> getTranslationsToSync(
             @QueryParam("last-sync-time") ISO8601TimeStamp lastSyncTime) {
         List<Translation> translations = syncService.getTranslationsToSync(lastSyncTime);
@@ -228,7 +228,7 @@ public class SynchronizerEndpoint implements ErrorReportingEndpoint {
     @GET
     @Path("/exchange-rates")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = "exchange-rates", ui = false, authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_ENABLED})
+    @ApiMethod(id = "exchange-rates", ui = false, authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE})
     public ExchangeRatesDiff getExchangeRatesToSync(@QueryParam("last-sync-time") ISO8601TimeStamp lastSyncTime) {
         if (lastSyncTime == null) {
             throw new AmpWebApplicationException(Status.BAD_REQUEST, SynchronizerErrors.LAST_SYNC_TIME_REQUIRED);

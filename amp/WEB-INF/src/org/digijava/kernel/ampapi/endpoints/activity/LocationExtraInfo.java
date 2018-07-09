@@ -22,12 +22,15 @@ public class LocationExtraInfo {
 
     private final String categoryValueName;
 
+    private final String iso2;
+
     public LocationExtraInfo(Long parentLocationId, String parentLocationName, Long categoryValueId,
-            String categoryValueName) {
+            String categoryValueName, String iso2) {
         this.parentLocationId = parentLocationId;
         this.parentLocationName = parentLocationName;
         this.categoryValueId = categoryValueId;
         this.categoryValueName = categoryValueName;
+        this.iso2 = iso2;
     }
 
     public Long getParentLocationId() {
@@ -44,5 +47,9 @@ public class LocationExtraInfo {
 
     public String getCategoryValueName() {
         return categoryValueName;
+    }
+
+    public String getIso2() {
+        return iso2;
     }
 }

@@ -1,9 +1,11 @@
 package org.digijava.module.fundingpledges.action;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -96,75 +98,62 @@ public class SavePledge extends Action {
         return plForm.getPledgeId() == preexistingPledgeWithSameName.getId();
     }
     
-    protected List<ValidationError> doSave(PledgeForm plForm, HttpServletRequest request) throws Exception
-    // it might die, ALWAYS check for exceptions and forward cleanly by AJAX
-    {       
+    protected List<ValidationError> doSave(PledgeForm plForm, HttpServletRequest request) throws Exception {
         String action = "add";
         Session session = PersistenceManager.getSession();
-        
+
         List<ValidationError> res = new ArrayList<>();
-        
-        if (plForm.getUseFreeText() && (!checkNameUniqueness(plForm)))
-        {
+
+        if (plForm.getUseFreeText() && (!checkNameUniqueness(plForm))) {
             res.add(new org.dgfoundation.amp.forms.ValidationError(
                     TranslatorWorker.translateText("A different pledge with the same name exists")));
+        }
+        res.addAll(validateFunding(plForm.getSelectedFunding()));
+        res.addAll(validateDocuments(plForm.getSelectedDocs()));
+        if (res.size() > 0) {
             return res;
         }
-        
+
         FundingPledges pledge;
-        if (plForm.isNewPledge()){
+        if (plForm.isNewPledge()) {
             pledge = new FundingPledges();
-        } else{
+            pledge.setCreatedDate(new Date());
+        } else {
             pledge = PledgesEntityHelper.getPledgesById(plForm.getPledgeId());
             action = "update";
         }
-        pledge.setCreatedDate(new Date());
-        pledge.setTitleFreeText(plForm.getTitleFreeText());  // copy both - one of them will be null and that's it
-//          }else{
+        pledge.setTitleFreeText(plForm.getTitleFreeText());
         pledge.setTitle(CategoryManagerUtil.getAmpCategoryValueFromDb(plForm.getPledgeTitleId()));
-
-        //Moving this 3 lines here, after AMP-28001 is fixed, they this wont be needed and we will save everything
-        //after validation happens
-        session.saveOrUpdate(pledge);
-        AuditLoggerUtil.logObject(request, pledge, action, null);
-        //if (FeaturesUtil.isVisibleField("Use Free Text")){
-
         pledge.setStatus(CategoryManagerUtil.getAmpCategoryValueFromDb(plForm.getPledgeStatusId()));
- 
         pledge.setOrganizationGroup(PledgesEntityHelper.getOrgGroupById(plForm.getSelectedOrgGrpId()));
         pledge.setAdditionalInformation(plForm.getAdditionalInformation());
         pledge.setWhoAuthorizedPledge(plForm.getWhoAuthorizedPledge());
         pledge.setFurtherApprovalNedded(plForm.getFurtherApprovalNedded());
-                
-        res.addAll(do_save_contact1(pledge, plForm.getContact1()));
-        res.addAll(do_save_contact2(pledge, plForm.getContact2()));
-        res.addAll(do_save_sectors(session, pledge, plForm.getSelectedSectors()));
-        res.addAll(do_save_programs(session, pledge, plForm.getSelectedProgs()));
-        res.addAll(do_save_locations(session, pledge, plForm.getSelectedLocs()));
-        res.addAll(do_save_funding(session, pledge, plForm.getSelectedFunding()));
-        res.addAll(do_save_documents(session, pledge, plForm.getSelectedDocs(), plForm.getInitialDocuments()));
-        session.saveOrUpdate(pledge);
-        if (res.isEmpty()) { //save succeeded
-            boolean newPledge = plForm.isNewPledge();
-            try {
-                LuceneUtil.addUpdatePledge(TLSUtils.getRequest().getServletContext().getRealPath("/"), !newPledge, 
-                        new AmpPledgeFake(pledge.getEffectiveName(), pledge.getId(), pledge.getAdditionalInformation()));
-            } catch (Exception e) {
-                logger.error("error while trying to update lucene logs:", e);
-            }       
 
-        } else {
-            PersistenceManager.getSession().getTransaction().rollback();
+        session.saveOrUpdate(pledge);
+        AuditLoggerUtil.logObject(request, pledge, action, null);
+
+        doSaveContact1(pledge, plForm.getContact1());
+        doSaveContact2(pledge, plForm.getContact2());
+        doSaveSectors(session, pledge, plForm.getSelectedSectors());
+        doSavePrograms(session, pledge, plForm.getSelectedProgs());
+        doSaveLocations(session, pledge, plForm.getSelectedLocs());
+        doSaveFunding(session, pledge, plForm.getSelectedFunding());
+        doSaveDocuments(session, pledge, plForm.getSelectedDocs(), plForm.getInitialDocuments());
+        session.saveOrUpdate(pledge);
+        boolean newPledge = plForm.isNewPledge();
+        try {
+            LuceneUtil.addUpdatePledge(TLSUtils.getRequest().getServletContext().getRealPath("/"), !newPledge,
+                    new AmpPledgeFake(pledge.getEffectiveName(), pledge.getId(), pledge.getAdditionalInformation()));
+        } catch (Exception e) {
+            logger.error("error while trying to update lucene logs:", e);
         }
-        
-//      System.out.println("Pledge id is: " + pledge.getId());
-        
-//      this.pledge = new AmpPledgeFake(pledge.getEffectiveName(), pledge.getId(), pledge.getAdditionalInformation());
+
+
         return res;
     }
     
-    protected List<ValidationError> do_save_contact1(FundingPledges pledge, PledgeFormContact contact1) throws Exception
-    {
+    protected  void doSaveContact1(FundingPledges pledge, PledgeFormContact contact1) {
         pledge.setContactName(contact1.getName());
         pledge.setContactTitle(contact1.getTitle());
         if (contact1.getOrgId()!=null && contact1.getOrgId().length()!=0) {
@@ -178,12 +167,10 @@ public class SavePledge extends Action {
         pledge.setContactAlternativeName(contact1.getAlternateName());
         pledge.setContactAlternativeEmail(contact1.getAlternateEmail());
         pledge.setContactAlternativeTelephone(contact1.getAlternateTelephone());
-        
-        return new ArrayList<>();
+
     }
     
-    protected List<ValidationError> do_save_contact2(FundingPledges pledge, PledgeFormContact contact2) throws Exception
-    {
+    protected void doSaveContact2(FundingPledges pledge, PledgeFormContact contact2) {
         pledge.setContactName_1(contact2.getName());
         pledge.setContactTitle_1(contact2.getTitle());
         if (contact2.getOrgId()!=null && contact2.getOrgId().length()!=0) {
@@ -197,12 +184,9 @@ public class SavePledge extends Action {
         pledge.setContactAlternativeName_1(contact2.getAlternateName());
         pledge.setContactAlternativeEmail_1(contact2.getAlternateEmail());
         pledge.setContactAlternativeTelephone_1(contact2.getAlternateTelephone());
-        
-        return new ArrayList<>();
     }
 
-    protected List<ValidationError> do_save_sectors(Session session, FundingPledges pledge, List<IdNamePercentage> selectedSectors) throws Exception
-    {
+    protected  void doSaveSectors(Session session, FundingPledges pledge, List<IdNamePercentage> selectedSectors) {
         Set<FundingPledgesSector> pledgesSectors = pledge.getSectorlist();
         if (pledgesSectors == null)     {
             pledgesSectors = new HashSet<>();
@@ -218,11 +202,9 @@ public class SavePledge extends Action {
             session.save(fps);
             pledgesSectors.add(fps);
         }
-        return new ArrayList<>();
     }
     
-    protected List<ValidationError> do_save_programs(Session session, FundingPledges pledge, List<IdNamePercentage> selectedPrograms) throws Exception
-    {
+    protected void doSavePrograms(Session session, FundingPledges pledge, List<IdNamePercentage> selectedPrograms) {
         Set<FundingPledgesProgram> pledgesPrograms = pledge.getProgramlist();
         if (pledgesPrograms == null)        {
             pledgesPrograms = new HashSet<>();
@@ -238,19 +220,16 @@ public class SavePledge extends Action {
             session.save(fps);
             pledgesPrograms.add(fps);
         }
-        return new ArrayList<>();
     }
 
-    protected List<ValidationError> do_save_locations(Session session, FundingPledges pledge, List<IdNamePercentage> selectedLocs) throws Exception
-    {
+    protected void doSaveLocations(Session session, FundingPledges pledge, List<IdNamePercentage> selectedLocs) {
         Set<FundingPledgesLocation> pledgesLocs = pledge.getLocationlist();
-        if (pledgesLocs == null){
+        if (pledgesLocs == null) {
             pledgesLocs = new HashSet<>();
             pledge.setLocationlist(pledgesLocs);
         }
         pledgesLocs.clear();
-        for(IdNamePercentage location:selectedLocs)
-        {
+        for (IdNamePercentage location : selectedLocs) {
             FundingPledgesLocation fps = new FundingPledgesLocation();
             fps.setPledgeid(pledge);
             fps.setLocationpercentage(location.getPercentageOrNull());
@@ -258,11 +237,28 @@ public class SavePledge extends Action {
             session.save(fps);
             pledgesLocs.add(fps);
         }
-        return new ArrayList<>();
     }
 
-    protected List<ValidationError> do_save_funding(Session session, FundingPledges pledge, List<FundingPledgesDetailsShim> selectedFunding) throws Exception
-    {
+    /**
+     * method to validate pledge funding details. This should be invalid since its validated in the front end
+     * @param selectedFunding
+     * @return
+     */
+    protected List<ValidationError> validateFunding(List<FundingPledgesDetailsShim> selectedFunding) {
+        List<ValidationError> errs = new ArrayList<>();
+        boolean dateRangeEnabled = FundingPledgesDetails.isDateRangeEnabled();
+        for (FundingPledgesDetailsShim shim:selectedFunding) {
+            if (dateRangeEnabled && shim.getFundingDateEndAsDate() != null
+                    && shim.getFundingDateStartAsDate() != null && shim.getFundingDateEndAsDate().before(shim
+                    .getFundingDateStartAsDate())) {
+                errs.add(new ValidationError("Timeframe Start must be before Timeframe End"));
+            }
+        }
+        return errs;
+    }
+
+    protected void doSaveFunding(Session session, FundingPledges pledge, List<FundingPledgesDetailsShim>
+            selectedFunding) {
         Set<FundingPledgesDetails> pledgeFunds = pledge.getFundingPledgesDetails();
         if (pledgeFunds == null){
             pledgeFunds = new HashSet<>();
@@ -270,23 +266,25 @@ public class SavePledge extends Action {
         }
         pledgeFunds.clear();
         boolean dateRangeEnabled = FundingPledgesDetails.isDateRangeEnabled();
-        List<ValidationError> errs = new ArrayList<>();
-        
-        for(FundingPledgesDetailsShim shim:selectedFunding){
-            if (dateRangeEnabled && shim.getFundingDateEndAsDate() != null && shim.getFundingDateStartAsDate() != null && 
-                    shim.getFundingDateEndAsDate().before(shim.getFundingDateStartAsDate())){
-                errs.add(new ValidationError("Timeframe Start must be before Timeframe End"));
-            }
-            else {
-                FundingPledgesDetails fps = shim.buildFundingPledgesDetail(pledge);
-                session.save(fps);
-                pledgeFunds.add(fps);
-            }
+
+        for (FundingPledgesDetailsShim shim:selectedFunding) {
+            FundingPledgesDetails fps = shim.buildFundingPledgesDetail(pledge);
+            session.save(fps);
+            pledgeFunds.add(fps);
+
         }
-        return errs;
     }
-    
-    protected List<ValidationError> do_save_documents(Session session, FundingPledges pledge, List<DocumentShim> docs, Set<String> preexistingIds){
+    protected List<ValidationError> validateDocuments(List<DocumentShim> docs) {
+        List<ValidationError> errors =  new ArrayList<>();
+        Optional.ofNullable(docs).orElse(Collections.emptyList()).stream().forEach(document-> {
+            if (document.getTitle() == null || document.getTitle().isEmpty()) {
+                errors.add(new ValidationError("You need to submit or cancel the pending document"));
+            }
+        });
+        return errors;
+    }
+    protected void doSaveDocuments(Session session, FundingPledges pledge, List<DocumentShim> docs, Set<String>
+            preexistingIds) {
         
         Set<FundingPledgesDocument> pledgeDocs = pledge.getDocuments();
         if (pledgeDocs == null){
@@ -296,7 +294,7 @@ public class SavePledge extends Action {
         pledgeDocs.clear();
         
         Set<String> stillExistingIds = new HashSet<String>();
-        List<ValidationError> errs = new ArrayList<>();
+        //List<ValidationError> errs = new ArrayList<>();
         for(DocumentShim doc:docs){
             /**
              * any document falls into one of the following 3 categories:
@@ -332,6 +330,6 @@ public class SavePledge extends Action {
                 DocumentManagerUtil.deleteNode(null, uuidToDelete);
             }
         }
-        return errs;
+        //return errs;
     }
 }

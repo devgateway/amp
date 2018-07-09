@@ -8,6 +8,7 @@ import java.util.Set;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.SiteUtils;
+import org.digijava.module.aim.annotations.activityversioning.ResourceTextField;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
@@ -26,6 +27,8 @@ public class TranslationSettings {
         STRING,
         /** Associated to @VersionableFieldTextEditor fields if multilingual is enabled */
         TEXT,
+        /** Associated to @ResourceTextField fields if multilingual is enabled */
+        RESOURCE,
         /** No Translation associated to the given String field or multilingual is disabled */
         NONE
     };
@@ -159,7 +162,8 @@ public class TranslationSettings {
     public boolean isTranslatable(Field field) {
         return multilingual && (field.isAnnotationPresent(TranslatableField.class) 
                 && field.getDeclaringClass().isAnnotationPresent(TranslatableClass.class)
-                || field.isAnnotationPresent(VersionableFieldTextEditor.class));
+                || field.isAnnotationPresent(VersionableFieldTextEditor.class)
+                || field.isAnnotationPresent(ResourceTextField.class));
     }
     
     /**
@@ -175,6 +179,9 @@ public class TranslationSettings {
         }
         if (field.isAnnotationPresent(VersionableFieldTextEditor.class)) {
             return TranslationType.TEXT;
+        }
+        if (field.isAnnotationPresent(ResourceTextField.class)) {
+            return TranslationType.RESOURCE;
         }
         return TranslationType.NONE;
     }

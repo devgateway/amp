@@ -44,16 +44,15 @@
 	
 	<!-- End Planned Disbursements -->
 	<tr>
-		<td colspan="2" bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase;">
+		<td colspan="2" class="preview-funding-total">
 			<digi:trn key='aim:subtotalplanneddisbursement'>Subtotal Planned Disbursement</digi:trn>:
 		</td>
-		<td colspan="2" nowrap="nowrap" align="right" bgcolor="#eeeeee"
-			style="border-top: 1px solid #000000">
+		<td colspan="2" nowrap="nowrap" class="preview-align preview-funding-total">
 			<c:if test="${not empty funding.subtotalPlannedDisbursements}">
-          		  <b>${funding.subtotalPlannedDisbursements} ${aimEditActivityForm.currCode}</b>
+          		  <b><span dir="ltr">${funding.subtotalPlannedDisbursements}</span> ${aimEditActivityForm.currCode}</b>
             </c:if>&nbsp;
 			</td>
-		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
+		<td class="preview-funding-total">&nbsp;</td>
 	</tr>
 	</c:if>
 	</c:if>
@@ -88,16 +87,16 @@
 	<!-- End Actual Disbursements -->
 
 	<tr>
-		<td colspan="2" bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase">
+		<td colspan="2" class="preview-funding-total">
             <digi:trn key='aim:subtotalActualdisbursement'>Subtotal Actual Disbursement</digi:trn>:
 		</td>
-		<td colspan="2" nowrap="nowrap" align="right" bgcolor="#eeeeee"	style="border-top: 1px solid #000000">
+		<td colspan="2" nowrap="nowrap" class="preview-align preview-funding-total">
 			 <c:if test="${not empty funding.subtotalDisbursements}">
-                <b>${funding.subtotalDisbursements} ${aimEditActivityForm.currCode}</b>
+                <b><span dir="ltr">${funding.subtotalDisbursements}</span> ${aimEditActivityForm.currCode}</b>
              </c:if>&nbsp;
         </td>
                    
-		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
+		<td class="preview-funding-total">&nbsp;</td>
 	</tr>
 	</c:if>
 	</c:if>
@@ -130,16 +129,15 @@
 	<!-- End Pipeline Disbursements -->
 
 	<tr>
-		<td colspan="2" bgcolor="#eeeeee"
-			style="border-top: 1px solid #000000"><digi:trn>Subtotal Pipeline Disbursement </digi:trn>:
+		<td colspan="2" class="preview-funding-total"><digi:trn>Subtotal Pipeline Disbursement </digi:trn>:
 		</td>
-		<td colspan="2" nowrap="nowrap" align="right" bgcolor="#eeeeee"	style="border-top: 1px solid #000000">
+		<td colspan="2" nowrap="nowrap" class="preview-align preview-funding-total">
 			 <c:if test="${not empty funding.subtotalDisbursements}">
-                <b>${funding.subtotalPipelineDisbursements} ${aimEditActivityForm.currCode}</b>
+                <b><span dir="ltr">${funding.subtotalPipelineDisbursements}</span> ${aimEditActivityForm.currCode}</b>
              </c:if>&nbsp;
         </td>
                    
-		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
+		<td class="preview-funding-total">&nbsp;</td>
 	</tr>
 	</c:if>
 	</c:if>

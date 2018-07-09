@@ -25,11 +25,14 @@ package org.digijava.kernel.util;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.stream.Stream;
 
 import javax.security.auth.Subject;
 import javax.servlet.http.HttpServletRequest;
 
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
@@ -288,8 +291,8 @@ public class UserUtils {
      * @return User by specified id, null of no user by that id was found
      */
     public static User getUser(Long id) {
-        User result = null;
-        Session session = null;
+        User result;
+        Session session;
 
         try {
             session = PersistenceManager.getRequestDBSession();
@@ -309,6 +312,18 @@ public class UserUtils {
 
     }
 
+    public static boolean hasVerfifiedOrgGroup(Long userId, Long orgGroupId) {
+        return getVerifiedOrgsStream(userId).anyMatch(t -> t.getOrgGrpId().getAmpOrgGrpId().equals(orgGroupId));
+    }
+
+    public static Set<AmpOrganisation> getVerifiedOrgs(Long userId) {
+        User user = getUser(userId);
+        return user.getAssignedOrgs();
+    }
+
+    public static Stream<AmpOrganisation> getVerifiedOrgsStream(Long userId) {
+        return getVerifiedOrgs(userId).stream();
+    }
     /**
      * Searchs users with given criteria
      * @param criteria criteria by which users are searched

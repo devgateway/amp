@@ -5,9 +5,10 @@ import java.util.EnumSet;
 import java.util.List;
 
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.es.SpanishAnalyzer;
 import org.apache.lucene.analysis.fr.FrenchAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.digijava.kernel.lucene.analyzers.SpanishAnalyzer;
+import org.apache.lucene.util.Version;
 
 /**
  * Enumeration for supported languages.
@@ -46,14 +47,14 @@ public enum LangSupport {
      * @return Analyzer instance
      * @see Analyzer
      */
-    public Analyzer getAnalyzer(){
+    public Analyzer getAnalyzer(Version version) {
         if (FRENCH.equals(this)){
-            return new FrenchAnalyzer();
+            return new FrenchAnalyzer(version);
         } else if (SPANISH.equals(this)){
-            return new SpanishAnalyzer();
+            return new SpanishAnalyzer(version);
         }
         //For all other languages including ENGLISH we use StandardAnalzyer which is English language one.
-        return new StandardAnalyzer();
+        return new StandardAnalyzer(version);
     }
     
     /**

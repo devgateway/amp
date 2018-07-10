@@ -12,12 +12,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.dgfoundation.amp.ar.dbentity.AmpTeamFilterData;
 import org.dgfoundation.amp.ar.dbentity.FilterDataSetInterface;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
+import org.digijava.kernel.ampapi.endpoints.serializers.AmpTeamSerializer;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
@@ -27,12 +29,14 @@ import org.digijava.module.aim.util.NameableOrIdentifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 @TranslatableClass (displayName = "Team")
+@JsonSerialize(using = AmpTeamSerializer.class)
 public class AmpTeam  implements Serializable, Comparable, Identifiable, /*Versionable,*/ FilterDataSetInterface<AmpTeamFilterData>,  
                                     NameableOrIdentifiable {
     private static final Logger logger = Logger.getLogger(AmpTeam.class);
+    @Interchangeable(fieldTitle = "id", id = true)
     private Long ampTeamId;
     @TranslatableField
-    @Interchangeable(fieldTitle = "name")
+    @Interchangeable(fieldTitle = "name", value = true)
     private String name;
     
     private Boolean addActivity;
@@ -72,9 +76,10 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, /*Versi
     private AmpTemplatesVisibility fmTemplate;
     private AmpCategoryValue workspacePrefix;
     private Boolean crossteamvalidation;
+    private AmpSummaryNotificationSettings sumaryNotificationSettings;
 
-    
-    
+
+
     //Global function to initialize the team filters inside the session
     public static AmpARFilter initializeTeamFiltersSession(AmpTeamMember member, HttpServletRequest request, HttpSession session){
         //Initialize Team Filter
@@ -362,17 +367,24 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, /*Versi
     public void setCrossteamvalidation(Boolean crossteamvalidation) {
         this.crossteamvalidation = crossteamvalidation;
     }
-
+    
     public Boolean getIsolated() {
         return isolated;
     }
 
     public void setIsolated(Boolean isolated) {
-        if (isolated == null)
+        if (isolated == null) {
             this.isolated = false;
-        else
+        } else {
             this.isolated = isolated;
+        }
     }
-    
-    
+
+    public AmpSummaryNotificationSettings getSumaryNotificationSettings() {
+        return sumaryNotificationSettings;
+    }
+
+    public void setSumaryNotificationSettings(AmpSummaryNotificationSettings sumaryNotificationSettings) {
+        this.sumaryNotificationSettings = sumaryNotificationSettings;
+    }
 }

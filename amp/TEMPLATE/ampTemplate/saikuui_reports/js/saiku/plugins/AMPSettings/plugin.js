@@ -4,6 +4,7 @@ var AMPSettingsView = Backbone.View.extend({
 				var self = this;
 				this.workspace = args.workspace;
 				this.settings_data = this.workspace.query.get('settings_data');
+				this.original_currency = this.workspace.query.get('original_currency');
 				this.id = _.uniqueId("amp_settings_");
 				$(this.el).attr({
 					id : this.id

@@ -1460,7 +1460,7 @@ public class ExportActivityToPDF extends Action {
             /**
              * Activity Last Updated by
              */
-            if (FeaturesUtil.isVisibleField("Activity Last Updated by")) {
+            if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Activity Last Updated by")) {
                 columnName = TranslatorWorker.translateText("Activity last updated by");
                 createGeneralInfoRow(mainLayout, columnName, identification.getModifiedBy().getUser().getFirstNames() + " " + identification.getModifiedBy().getUser().getLastName());
             }
@@ -1468,7 +1468,7 @@ public class ExportActivityToPDF extends Action {
             /**
              * Activity updated on
              */
-            if(FeaturesUtil.isVisibleField("Activity Updated On")){
+            if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Activity Updated On")){
                 columnName=TranslatorWorker.translateText("Activity updated on");
                 createGeneralInfoRow(mainLayout,columnName,identification.getUpdatedDate());
             }
@@ -3558,9 +3558,9 @@ public class ExportActivityToPDF extends Action {
     private void createGeneralInfoRow(PdfPTable mainLayout, String columnName, String label, String value, 
             boolean isLtr) {
         
-        if (value == null || value.isEmpty())
+        if (value == null || value.isEmpty()) {
             return;
-        
+        }
         PdfPCell cell1 = new PdfPCell();
         Paragraph p1 = new Paragraph(postprocessText(columnName), titleFont);
         p1.setAlignment(Element.ALIGN_RIGHT);

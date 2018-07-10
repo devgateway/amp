@@ -3,6 +3,9 @@ package org.digijava.module.fundingpledges.action;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Optional;
 
 
 import net.sf.json.JSONArray;
@@ -17,6 +20,7 @@ import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
 import org.dgfoundation.amp.ar.ARUtil;
 import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
+import org.digijava.module.fundingpledges.action.constants.PledgeActionsConstants;
 import org.digijava.module.fundingpledges.form.DocumentShim;
 import org.digijava.module.fundingpledges.form.PledgeForm;
 import org.digijava.module.fundingpledges.form.TransientDocumentShim;
@@ -107,12 +111,17 @@ public class SelectPledgeProgram extends Action {
                 pledgeForm.deleteUniquelyIdentifiable(pledgeForm.getSelectedDocs(), Long.parseLong(request.getParameter("id")));
                 return null;
             }
-            
-//          if (extraAction.equals("pledge_document_refresh_add")){
-//              return null;
-//          }
-            
-            if (extraAction.equals("file_upload")){
+
+            if (extraAction.equals(PledgeActionsConstants.PLEDGE_DOCUMENT_DELETE_ALL_NON_SUBMITTED)) {
+                Optional.ofNullable(Arrays.asList(request.getParameter("idsToDelete").
+                        split("\\s*,\\s*"))).orElse(Collections.emptyList()).stream().forEach(documentId -> {
+                    pledgeForm.deleteUniquelyIdentifiable(pledgeForm.getSelectedDocs(),
+                            Long.parseLong(documentId));
+                });
+                return null;
+            }
+
+            if (extraAction.equals("file_upload")) {
                 return maintainFileUpload(pledgeForm, request, response);
             }
             

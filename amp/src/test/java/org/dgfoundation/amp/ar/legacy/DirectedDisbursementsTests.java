@@ -1,6 +1,5 @@
 package org.dgfoundation.amp.ar.legacy;
 
-import java.util.HashSet;
 import java.util.List;
 
 import org.dgfoundation.amp.nireports.testcases.ColumnReportDataModel;
@@ -8,46 +7,23 @@ import org.dgfoundation.amp.nireports.testcases.GroupColumnModel;
 import org.dgfoundation.amp.nireports.testcases.GroupReportModel;
 import org.dgfoundation.amp.nireports.testcases.SimpleColumnModel;
 import org.dgfoundation.amp.testutils.*;
-import org.digijava.kernel.persistence.HibernateClassLoader;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.util.DigiConfigManager;
-import org.digijava.kernel.util.resource.ResourceStreamHandlerFactory;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.hibernate.Query;
+import org.junit.Test;
 
-import org.hibernate.cfg.*;
 
 import static org.dgfoundation.amp.testutils.ReportTestingUtils.NULL_PLACEHOLDER;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
 
 /**
  * testcase for Directed Disbursements (AMP-15337)
- * this can only be run IFF amp has been started standalone. For this, AllTests.setUp() should have been run previously (typically called by AllTests.suite() as part of the JUnit discovery process)
  * @author Dolghier Constantin
  *
  */
 public class DirectedDisbursementsTests extends ReportsTestCase
 {
-    public DirectedDisbursementsTests(String name) {
-        super(name);
-    }
-        
-    public static Test suite()
-    {
-        TestSuite suite = new TestSuite(DirectedDisbursementsTests.class.getName());
-        suite.addTest(new DirectedDisbursementsTests("testFlatReport"));
-        suite.addTest(new DirectedDisbursementsTests("testByBeneficiary"));
-        suite.addTest(new DirectedDisbursementsTests("testByDonor"));
-        suite.addTest(new DirectedDisbursementsTests("testDonorAgencyFlat"));
-        suite.addTest(new DirectedDisbursementsTests("testDonorAgencyHier"));
-        suite.addTest(new DirectedDisbursementsTests("testByExecuting"));
-        suite.addTest(new DirectedDisbursementsTests("testActualDisbursementsNotDoubleCounted"));
-        
-        return suite;
-    }
-        
+
     protected List<AmpActivity> getAllActivities() throws Exception
     {
          org.hibernate.Session session = PersistenceManager.getRequestDBSession();
@@ -59,6 +35,7 @@ public class DirectedDisbursementsTests extends ReportsTestCase
     /**
      * a flat report containing RealDisbursements of a single activity
      */
+    @Test
     public void testFlatReport()
     {
         // ========================= one more report ===============================
@@ -85,6 +62,7 @@ public class DirectedDisbursementsTests extends ReportsTestCase
     /**
      * same report as {@link #testFlatReport()}, but with a hierarchy by Beneficiary Agency
      */
+    @Test
     public void testByBeneficiary()
     {
         /// ========================= one more report ===============================
@@ -121,6 +99,7 @@ public class DirectedDisbursementsTests extends ReportsTestCase
     /**
      * same report as {@link #testFlatReport()}, but with a hierarchy by Donor Agency
      */
+    @Test
     public void testByDonor()
     {
         /// ========================= one more report ===============================
@@ -168,7 +147,8 @@ public class DirectedDisbursementsTests extends ReportsTestCase
     
     /**
      * same report as {@link #testFlatReport()}, but with a hierarchy by Executing Agency
-     */ 
+     */
+    @Test
     public void testByExecuting()
     {
         /// ========================= one more report ===============================
@@ -206,7 +186,8 @@ public class DirectedDisbursementsTests extends ReportsTestCase
         runReportTest("by executing Directed Disbursements Report", "AMP-15337-real-disbursements-by-executing", new String[] {"Eth Water"}, by_exec_ddr_correct);
                 
     }
-    
+
+    @Test
     public void testActualDisbursementsNotDoubleCounted()
     {
         GroupReportModel by_exec_ddr_correct = GroupReportModel.withGroupReports("AMP-15988-actual-disbursements-doublecounting-real-disbursements",
@@ -254,6 +235,7 @@ public class DirectedDisbursementsTests extends ReportsTestCase
     /**
      * "Donor Agency" column for an activity with multiple donors and intermediary donors
      */
+    @Test
     public void testDonorAgencyFlat()
     {
         // ========================= one more report ===============================
@@ -274,6 +256,7 @@ public class DirectedDisbursementsTests extends ReportsTestCase
         runReportTest("flat Donor Agency Report", "AMP-16093-no-hier", new String[] {"Eth Water"}, fddr_correct);
     }
 
+    @Test
     public void testDonorAgencyHier()
     {
         // ========================= one more report ===============================

@@ -264,7 +264,7 @@ module.exports = Backbone.View
 	  var colors = this._getColors(feature);
 	  var polyline = L.polyline(feature.geometry.coordinates, {color: colors[0].hex()}); 
 	  polyline.feature = feature;
-	  this._bindPopup(polyline, false);
+	  this._bindPopup(polyline, true);
 	  return polyline;
   },
   
@@ -272,7 +272,7 @@ module.exports = Backbone.View
 	  var colors = this._getColors(feature);
 	  var polygon = L.polygon(feature.geometry.coordinates, {color: colors[0].hex()}); 
 	  polygon.feature = feature;
-	  this._bindPopup(polygon, false);
+	  this._bindPopup(polygon, true);
 	  return polygon;
   },
   
@@ -351,9 +351,11 @@ module.exports = Backbone.View
   },
 
   _dehilightProject: function(projectId) {
+	var self = this;
     this.featureGroup.eachLayer(function(layer) {
       if (layer.feature.properties.activity.id === projectId && layer.setStyle) {
-        layer.setStyle({stroke:false});
+    	  var colors = self._getColors(layer.feature);      
+          layer.setStyle({stroke:true, color:colors[0].hex()});
       }
     });
   },

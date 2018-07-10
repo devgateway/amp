@@ -191,9 +191,9 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 
 							if(app.TabsApp.settings.teamId){
 								teamid = app.TabsApp.settings.teamId;
-								crossTeamValidation = (app.TabsApp.settings.crossTeamEnable === 'true');
-								teamlead = (app.TabsApp.settings.teamLead === 'true');
-								validator = (app.TabsApp.settings.validator === 'true');
+								crossTeamValidation = app.TabsApp.settings.crossTeamEnable;
+								teamlead = app.TabsApp.settings.teamLead;
+								validator = app.TabsApp.settings.validator;
 								teamtype = app.TabsApp.settings.accessType;
 							}
 							if(app.TabsApp.settings.workspacePrefix){
@@ -234,9 +234,9 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 								if(!teamid) continue;
 								
 								teamid = app.TabsApp.settings.teamId;
-								crossTeamValidation = (app.TabsApp.settings.crossTeamEnable === 'true');
-								teamlead = (app.TabsApp.settings.teamLead === 'true');
-								validator = (app.TabsApp.settings.validator === 'true');
+								crossTeamValidation = app.TabsApp.settings.crossTeamEnable;
+								teamlead = app.TabsApp.settings.teamLead;
+								validator = app.TabsApp.settings.validator;
 								teamtype = app.TabsApp.settings.accessType;
 								
 								// Set font color according to status.
@@ -517,6 +517,11 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 					// Property entityId replaced column AMP_ID on NiReports.
 					if (column.hierarchicalName === "[" + app.TabsApp.COLUMNS_WITH_IDS[0] + "]" && element && element.entityId !== undefined) {
 						row[app.TabsApp.COLUMN_ACTIVITY_ID] = element.entityId;
+					}
+					
+					// for team column it is needed to fetch the entityId
+					if (column.hierarchicalName === "[" + app.TabsApp.COLUMNS_WITH_IDS[1] + "]" && element && element.entityId !== undefined) {
+						row[column.columnName] = element.entityId;
 					}
 				});
 				

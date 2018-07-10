@@ -246,27 +246,15 @@ public class AuditLoggerUtil {
             }else{
                 ts= new Timestamp(time);
             }
-            AmpAuditLogger existentLoggerObj = null;
                 
-            Collection<AmpAuditLogger> col = getAudits(session, objId, objType);
-            if (col != null && col.size() == 1) {
-                existentLoggerObj = (AmpAuditLogger) col
-                        .iterator().next();
-            }
             StringBuilder message=new StringBuilder();
             for(String detail:details){
                 message.append(detail+" ");
             }
                 AmpAuditLogger aal = new AmpAuditLogger();
-                if(existentLoggerObj!=null){
-                    aal.setAuthorEmail(existentLoggerObj.getAuthorEmail());
-                    aal.setAuthorName(existentLoggerObj.getAuthorName());
-                    aal.setLoggedDate(existentLoggerObj.getLoggedDate());
-                } else{
-                    aal.setAuthorName(tm.getMemberName());
-                    aal.setAuthorEmail(tm.getEmail());
-                    aal.setLoggedDate(ts);
-                }
+                aal.setAuthorEmail(activity.getActivityCreator().getUser().getEmail());
+                aal.setAuthorName(activity.getActivityCreator().getUser().getName());
+                aal.setLoggedDate(new Timestamp(activity.getCreatedDate().getTime()));
                 aal.setUserid(DbUtil.getUser(tm.getEmail()).getId());
                 aal.setEditorEmail(tm.getEmail());
                 aal.setEditorName(tm.getMemberName());
@@ -292,9 +280,10 @@ public class AuditLoggerUtil {
         try {
             String qryStr = null;
             if (!withLogin){
-                qryStr = "select f from " + AmpAuditLogger.class.getName() + " f where action<>'"+Constants.LOGIN_ACTION+"' order by loggedDate desc";
-            }else {
-                qryStr = "select f from " + AmpAuditLogger.class.getName() + " f order by loggedDate desc";
+                qryStr = "select f from " + AmpAuditLogger.class.getName() + " f where action<>'"
+                        + Constants.LOGIN_ACTION + "' order by modifyDate desc";
+            } else {
+                qryStr = "select f from " + AmpAuditLogger.class.getName() + " f order by modifyDate desc";
             }
             return PersistenceManager.getSession().createQuery(qryStr).list();
         } catch (Exception ex) {

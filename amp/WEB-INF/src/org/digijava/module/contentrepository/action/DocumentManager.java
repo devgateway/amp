@@ -7,7 +7,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -114,12 +113,12 @@ public class DocumentManager extends Action {
                     .getPublicDocumentsMap(true);
             
             try {
-                List<String> uuidList = uuidMap.keySet().stream().collect(Collectors.toList());
+                List<String> uuidList = new ArrayList<>(uuidMap.keySet());
                 List<DocumentData> otherDocuments = this.getDocuments(uuidList, myRequest, CrConstants.PUBLIC_DOCS_TAB,
                         false, showActionsButtons);
                 myForm.setOtherDocuments(otherDocuments);
             } catch (Exception e) {
-                logger.error(e.getMessage(), e);
+                throw new RuntimeException(e.getMessage(), e);
             }
         } else {
             if (myForm.getDocListInSession() != null) {
@@ -140,7 +139,7 @@ public class DocumentManager extends Action {
                         }
                     }
                 } catch (Exception e) {
-                    logger.error(e.getMessage(), e);
+                    throw new RuntimeException(e.getMessage(), e);
                 }
 
                 return false;
@@ -281,7 +280,7 @@ public class DocumentManager extends Action {
                         false, showActionsButtons);
                 myForm.setOtherDocuments(documentFilter.applyFilter(otherDocuments));
             } catch (Exception e) {
-                logger.error(e.getMessage(), e);
+                throw new RuntimeException(e.getMessage(), e);
             }
         }
         }
@@ -424,22 +423,18 @@ public class DocumentManager extends Action {
     private List<DocumentData> getDocuments(Node node, HttpServletRequest request, String tabName, boolean isPending,
             boolean showActionButtons) {
         
-        if (node != null) {
-            try {
-                NodeIterator nodeIterator = node.getNodes();
-                List<Node> nodes = new ArrayList<Node>();
-                
-                while (nodeIterator.hasNext()) {
-                    nodes.add(nodeIterator.nextNode());
-                }
-                
-                return getDocumentsFromNodes(nodes, request, tabName, isPending, showActionButtons);
-            } catch (RepositoryException e) {
-                logger.error(e.getMessage(), e);
+        try {
+            NodeIterator nodeIterator = node.getNodes();
+            List<Node> nodes = new ArrayList<Node>();
+            
+            while (nodeIterator.hasNext()) {
+                nodes.add(nodeIterator.nextNode());
             }
+            
+            return getDocumentsFromNodes(nodes, request, tabName, isPending, showActionButtons);
+        } catch (RepositoryException e) {
+            throw new RuntimeException(e.getMessage(), e);
         }
-        
-        return null;
     }
     
     private List<DocumentData> getDocumentsFromNodes(List<Node> nodes, HttpServletRequest request, String tabName,
@@ -466,9 +461,9 @@ public class DocumentManager extends Action {
                  * other users should see last approved version of this node, so get version number from sharedDoc entry and load that version
                  */
                 NodeLastApprovedVersion nlpv = nlpvMap.get(docBaseUUID);
-                Node lastVersionNode = DocumentManagerUtil.getNodeOfLastVersion(docBaseUUID, request);
                 if (tabName != null && !tabName.equals(CrConstants.PUBLIC_DOCS_TAB)
-                        && (DocumentManagerUtil.isGivenVersionPendingApproval(lastVersionNode.getIdentifier()) != null
+                        && (DocumentManagerUtil.isGivenVersionPendingApproval(
+                                DocumentManagerUtil.getNodeOfLastVersion(docBaseUUID, request).getIdentifier()) != null
                                 || (nlpv != null && !nlpv.getNodeUUID().equals(docBaseUUID)))) {
 
                     String sharedVersionId = null;
@@ -745,7 +740,7 @@ public class DocumentManager extends Action {
                 
             }
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            throw new RuntimeException(e.getMessage(), e);
         }
         
         return documents;

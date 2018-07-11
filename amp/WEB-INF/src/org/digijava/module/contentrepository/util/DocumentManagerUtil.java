@@ -9,11 +9,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -360,7 +359,7 @@ public class DocumentManagerUtil {
                 ret.addAll(TemporaryDocumentData.retrieveTemporaryDocDataList(request));
                 return ret;
             } catch (Exception e) {
-                logger.error(e.getMessage(), e);
+                throw new RuntimeException(e.getMessage(), e);
             }
         }
         
@@ -567,10 +566,8 @@ public class DocumentManagerUtil {
             
             return folderPathNode;
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            throw new RuntimeException(e.getMessage(), e);
         }
-
-        return null;
     }
     
     public static Node createNodeUsingPath(Session session, TeamMember teamMember, String path) {
@@ -595,10 +592,8 @@ public class DocumentManagerUtil {
             
             return folderPathNode;
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            throw new RuntimeException(e.getMessage(), e);
         }
-
-        return null;
     }
     
     public class PathHelper {
@@ -853,8 +848,12 @@ public class DocumentManagerUtil {
     }
     
     public static Map<String, NodeLastApprovedVersion> getLastApprovedVersionsByUUIDMap() {
-        return getLastApprovedVersions().stream()
-                .collect(Collectors.toMap(NodeLastApprovedVersion::getNodeUUID, Function.identity()));
+        Map<String, NodeLastApprovedVersion> versionsMap = new HashMap<>();
+        for (NodeLastApprovedVersion version : getLastApprovedVersions()) {
+            versionsMap.put(version.getNodeUUID(), version);
+        }
+        
+        return versionsMap;
     }
     
     public static List<NodeLastApprovedVersion> getLastApprovedVersions() {
@@ -1013,7 +1012,7 @@ public class DocumentManagerUtil {
             try {
                 return node.hasNodes();
             } catch (RepositoryException e) {
-                logger.error(e.getMessage(), e);
+                throw new RuntimeException(e.getMessage(), e);
             }
         }
 

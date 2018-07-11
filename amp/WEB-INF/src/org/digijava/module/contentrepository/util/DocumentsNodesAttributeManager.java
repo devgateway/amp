@@ -1,6 +1,5 @@
 package org.digijava.module.contentrepository.util;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -102,16 +101,11 @@ public class DocumentsNodesAttributeManager {
     }
     
     public Map<String, CrDocumentNodeAttributes> getPublicDocumentsMap(boolean keyIsVersionOfDocument) {
-        HashMap<String, CrDocumentNodeAttributes> returnMap = new HashMap<String, CrDocumentNodeAttributes>();
         
         Function<CrDocumentNodeAttributes, String> keyMapper = keyIsVersionOfDocument
                 ? CrDocumentNodeAttributes::getPublicVersionUUID : CrDocumentNodeAttributes::getUuid;
         
-        if (keyIsVersionOfDocument) {
-            return getPublicDocuments().stream().collect(Collectors.toMap(keyMapper, Function.identity()));
-        } else {
-            return getPublicDocuments().stream().collect(Collectors.toMap(keyMapper, Function.identity())); 
-        }
+        return getPublicDocuments().stream().collect(Collectors.toMap(keyMapper, Function.identity()));
     }
     
     public List<CrDocumentNodeAttributes> getPublicDocuments() {

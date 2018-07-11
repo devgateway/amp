@@ -34,17 +34,16 @@ public class DesktopDocumentsUtil {
     protected static final Logger logger = Logger.getLogger(DesktopDocumentsUtil.class);
 
     public Collection<DocumentData> getLatestDesktopLinks(HttpServletRequest request, int top) {
+        
         ArrayList<DocumentData> reducedList = null;
-
-        Session jcrSession = ContentRepositoryManager.getSession(request);
-
+        Session jcrSession = ContentRepositoryManager.getWriteSession(request);
         DesktopDocumentsUtil desktopDocumentUtils = new DesktopDocumentsUtil();
 
         Node rootNode = null;
         try {
             rootNode = jcrSession.getRootNode();
         } catch (RepositoryException ex) {
-            logger.warn("Failed to read documents from repository", ex);
+            logger.error("Failed to read documents from repository", ex);
             return Collections.emptyList();
         }
 
@@ -95,9 +94,12 @@ public class DesktopDocumentsUtil {
         try {
             TeamMember teamMember = TeamMemberUtil.getLoggedInTeamMember();
             Node userNode = DocumentManagerUtil.getUserPrivateNode(rootNode.getSession(), teamMember);
-            return getDocuments(userNode, request);
+            
+            if (userNode != null) {
+                return getDocuments(userNode, request);
+            }
         } catch (RepositoryException e) {
-            logger.warn("Failed to read user private documents from the Repository", e);
+            logger.error("Failed to read user private documents from the Repository", e);
         }
         
         return Collections.emptyList();
@@ -108,19 +110,21 @@ public class DesktopDocumentsUtil {
         TeamMember teamMember = TeamMemberUtil.getLoggedInTeamMember();
         try {
             teamNode = DocumentManagerUtil.getTeamNode(rootNode.getSession(), teamMember.getTeamId());
+            
+            if (teamNode != null) {
+                return getDocuments(teamNode, request);
+            }
         } catch (RepositoryException e) {
-            logger.warn("Failed to read team documents from the Repository", e);
-            return Collections.emptyList();
+            logger.error("Failed to read team documents from the Repository", e);
         }
-        return getDocuments(teamNode, request);
+        
+        return Collections.emptyList();
     }
 
     private List<DocumentData> getDocuments(Node node, HttpServletRequest request) {
         try {
-            if (node != null) {
-                NodeIterator nodeIterator = node.getNodes();
-                return getDocuments(nodeIterator, request);
-            }
+            NodeIterator nodeIterator = node.getNodes();
+            return getDocuments(nodeIterator, request);
         } catch (RepositoryException e) {
             logger.error("Failed to read documents from the Repository", e);
         }

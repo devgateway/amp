@@ -23,10 +23,11 @@ public class AmpOfflineRelease implements Comparable<AmpOfflineRelease>, Cloneab
     public static final String WINDOWS = "windows";
     public static final String MAC_OS = "osx";
 
-    private static final String VER_REGEX = "(?<ver>\\d+\\.\\d+\\.\\d+(?:-\\w+)?)";
-    private static final String OS_REGEX = "(?<os>" + WINDOWS + "|redhat|debian|" + MAC_OS + ")";
-    private static final String ARCH_REGEX = "(?<arch>32|64)";
-    private static final String UA_REGEX = "AMPOffline/" + VER_REGEX + " \\(" + OS_REGEX + "; " + ARCH_REGEX + "\\).*";
+    private static final String VER_REGEX = "\\d+\\.\\d+\\.\\d+(?:-\\w+)?";
+    private static final String OS_REGEX = WINDOWS + "|redhat|debian|" + MAC_OS;
+    private static final String ARCH_REGEX = "32|64";
+    private static final String UA_REGEX = "AMPOffline/(?<ver>" + VER_REGEX + ") \\((?<os>" + OS_REGEX
+            + "); (?<arch>" + ARCH_REGEX + ")\\).*";
     private static final Pattern UA_PATTERN = Pattern.compile(UA_REGEX);
 
     private static final Comparator<AmpOfflineRelease> NATURAL = Comparator.comparing(AmpOfflineRelease::getVersion)

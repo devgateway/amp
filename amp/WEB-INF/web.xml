@@ -185,7 +185,11 @@
 		<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
 		<init-param>
 		    <param-name>com.sun.jersey.config.property.packages</param-name>
-		    <param-value>org.digijava.kernel.ampapi.endpoints</param-value>
+		    <param-value>
+                io.swagger.jaxrs.json,
+                io.swagger.jaxrs.listing,
+                org.digijava.kernel.ampapi.endpoints
+            </param-value>
 	    </init-param>
     	<init-param>
 			<param-name>com.sun.jersey.spi.container.ContainerRequestFilters</param-name>
@@ -202,7 +206,7 @@
  		<url-pattern>/rest/*</url-pattern>
  	</servlet-mapping>
 	<!-- End Jersey  -->
-	
+
 	<servlet>
 		<servlet-name>action</servlet-name>
 		<servlet-class>

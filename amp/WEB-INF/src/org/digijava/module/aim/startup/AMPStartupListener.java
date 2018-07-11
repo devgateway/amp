@@ -31,6 +31,7 @@ import org.dgfoundation.amp.mondrian.MondrianETL;
 import org.dgfoundation.amp.mondrian.MondrianUtils;
 import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
+import org.digijava.kernel.ampapi.swagger.SwaggerConfigurer;
 import org.digijava.kernel.job.cachedtables.PublicViewColumnsUtil;
 import org.digijava.kernel.jobs.RegisterWithAmpRegistryJob;
 import org.digijava.kernel.lucene.LuceneModules;
@@ -340,6 +341,8 @@ public class AMPStartupListener extends HttpServlet implements
             registerEhCacheMBeans();
 
             QuartzJobUtils.runJobIfNotPaused(RegisterWithAmpRegistryJob.NAME);
+
+            new SwaggerConfigurer().configure();
         } catch (Throwable e) {
             logger.error("Exception while initialising AMP :" + e.getMessage(), e);
             throw new Error(e);

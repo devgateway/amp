@@ -258,7 +258,7 @@ public class SettingsUtils {
                 SettingsConstants.MAX_FRACT_DIGITS_MAP));
 
         // is grouping used
-        formatFields.add(new SettingField(SettingsConstants.USE_GROUPING, null,
+        formatFields.add(SettingField.create(SettingsConstants.USE_GROUPING, null,
                 SettingsConstants.ID_NAME_MAP.get(SettingsConstants.USE_GROUPING), format.isGroupingUsed()));
 
         // grouping separator
@@ -267,7 +267,7 @@ public class SettingsUtils {
                 selectedGroupSeparator, SettingsConstants.GROUP_SEPARATOR_MAP));
 
         // group size
-        formatFields.add(new SettingField(SettingsConstants.GROUP_SIZE, SettingsConstants.USE_GROUPING,
+        formatFields.add(SettingField.create(SettingsConstants.GROUP_SIZE, SettingsConstants.USE_GROUPING,
                 SettingsConstants.ID_NAME_MAP.get(SettingsConstants.GROUP_SIZE), format.getGroupingSize()));
 
         // amount units
@@ -275,7 +275,7 @@ public class SettingsUtils {
         formatFields.add(getOptionValueSetting(SettingsConstants.AMOUNT_UNITS, SettingsConstants.USE_GROUPING,
                 selectedAmountUnits, SettingsConstants.AMOUNT_UNITS_MAP));
 
-        return new SettingField(SettingsConstants.AMOUNT_FORMAT_ID, null,
+        return SettingField.create(SettingsConstants.AMOUNT_FORMAT_ID, null,
                 SettingsConstants.ID_NAME_MAP.get(SettingsConstants.AMOUNT_FORMAT_ID), formatFields);
     }
 
@@ -304,7 +304,7 @@ public class SettingsUtils {
         }
 
         String settingName = SettingsConstants.ID_NAME_MAP.get(settingId);
-        return new SettingField(settingId, groupId, settingName, new SettingOptions(selectedId, options));
+        return SettingField.create(settingId, groupId, settingName, new SettingOptions(selectedId, options));
     }
 
     /**
@@ -347,7 +347,7 @@ public class SettingsUtils {
             range.setRangeTo(EndpointUtils.getRangeEndYear());
         }
 
-        return new SettingField(SettingsConstants.YEAR_RANGE_ID, null,
+        return SettingField.create(SettingsConstants.YEAR_RANGE_ID, null,
                 SettingsConstants.ID_NAME_MAP.get(SettingsConstants.YEAR_RANGE_ID), range);
     }
 
@@ -370,7 +370,7 @@ public class SettingsUtils {
 
     private static SettingField getSettingFieldForOptions(String id, SettingOptions options) {
         String name = SettingsConstants.ID_NAME_MAP.get(id);
-        return new SettingField(id, null, name, options);
+        return SettingField.create(id, null, name, options);
     }
 
     /**
@@ -750,19 +750,19 @@ public class SettingsUtils {
     private static SettingField getIntSetting(String id, int value) {
         String name = SettingsConstants.ID_NAME_MAP.get(id);
 
-        return new SettingField(id, null, name, value);
+        return SettingField.create(id, null, name, value);
     }
 
     private static SettingField getStringSetting(String id, String value) {
         String name = SettingsConstants.ID_NAME_MAP.get(id);
 
-        return new SettingField(id, null, name, value);
+        return SettingField.create(id, null, name, value);
     }
 
     private static SettingField getBooleanSetting(String id, boolean value) {
         String name = SettingsConstants.ID_NAME_MAP.get(id);
 
-        return new SettingField(id, null, name, value);
+        return SettingField.create(id, null, name, value);
     }
 
     static List<SettingField> getResourceManagerSettings() {

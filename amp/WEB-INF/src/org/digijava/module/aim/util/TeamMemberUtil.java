@@ -517,7 +517,6 @@ public class TeamMemberUtil {
         return PersistenceManager.getSession().doReturningWork(conn -> {
             String query =  "SELECT DISTINCT email FROM dg_user u "
                     + "JOIN amp_team_member tm ON tm.user_ = u.id "
-                    + "JOIN amp_team t ON tm.amp_team_id = t.amp_team_id "
                     + "WHERE tm.deleted IS NOT TRUE";
             return SQLUtils.fetchAsList(conn, query, 1);
         });

@@ -47,8 +47,9 @@ public class DocumentOrganizationManager {
      */
     public String getOrganisationsAsStringByUUID(String uuid) {
         List<AmpOrganisation> orgs = getOrganizationsByUUID(uuid);
+        
         if (orgs == null || orgs.isEmpty()) {
-            return null;
+            return "";
         }
         
         SortedSet<String> names = new java.util.TreeSet<String>();

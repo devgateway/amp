@@ -11,7 +11,7 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.contentrepository.helper.DocumentData;
 import org.digijava.module.contentrepository.jcrentity.Label;
-import org.digijava.module.contentrepository.util.DocToOrgDAO;
+import org.digijava.module.contentrepository.util.DocumentOrganizationManager;
 
 /**
  * filters a document by a set of AND conditions
@@ -127,7 +127,8 @@ public class DocumentFilter {
                 
                 if ((this.organisationId != null) && (this.organisationId > 0))
                 {
-                    java.util.Set<Long> organisationIds = DocToOrgDAO.getDocToOrgIdsByUUID(dd.getUuid());
+                    java.util.Set<Long> organisationIds = DocumentOrganizationManager.getInstance()
+                            .getDocToOrgIdsByUUID(dd.getUuid());
                     
                     pass &= organisationIds.contains(this.organisationId);
                 }

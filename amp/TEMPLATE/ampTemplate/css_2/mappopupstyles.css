@@ -173,3 +173,20 @@ button:focus {
     left: -50%;
     text-shadow: 0px 2px 1px rgba(255,255,255,0.85);
 }
+
+.colors {
+	list-style-type: none;
+	margin:0px;
+}
+
+#colors-section {
+	margin-top: 15px;
+}
+
+.color-label {
+	margin: 10px;
+}
+
+label{
+	font-weight: 600;
+}

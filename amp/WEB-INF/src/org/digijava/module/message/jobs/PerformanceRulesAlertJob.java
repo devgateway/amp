@@ -15,7 +15,6 @@ import org.digijava.kernel.ampapi.endpoints.performance.PerformanceIssue;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpPerformanceRule;
 import org.digijava.module.message.triggers.PerformanceRuleAlertTrigger;
@@ -25,16 +24,10 @@ import org.quartz.StatefulJob;
 
 public class PerformanceRulesAlertJob extends ConnectionCleaningJob implements StatefulJob {
     
-    private static final String AMP_MODIFIER_USER_EMAIL = "amp_modifier@amp.org";
-    private static final String AMP_MODIFIER_FIRST_NAME = "AMP";
-    private static final String AMP_MODIFIER_LAST_NAME = "Activities Modifier";
-    
     private static Logger logger = Logger.getLogger(PerformanceRulesAlertJob.class);
     
     public static final String PERFORMANCE_RULE_FM_PATH = "Project Performance Alerts Manager";
     public static final String DEFAULT_LOCALE_LANGUAGE = "en";
-
-    private User user = new User(AMP_MODIFIER_USER_EMAIL, AMP_MODIFIER_FIRST_NAME, AMP_MODIFIER_LAST_NAME);
 
     @Override
     public void executeInternal(JobExecutionContext context) throws JobExecutionException {
@@ -97,7 +90,6 @@ public class PerformanceRulesAlertJob extends ConnectionCleaningJob implements S
                 
                 logger.info(String.format("\tactivity %d, alert rules: <%s>...",
                         actId, matchedRules.isEmpty() ? null : matchedLabelJoiner.toString()));
-                    
                 
                 if (!failedIssues.isEmpty()) {
                     activitiesWithPerformanceIssues.put(a, failedIssues);

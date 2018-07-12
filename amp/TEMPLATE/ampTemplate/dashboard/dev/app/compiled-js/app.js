@@ -106,7 +106,7 @@ _.extend(App.prototype, BackboneDash.Events, {
           }
       }
 
-      var dashboardTranslateKeys = JSON.parse("{\r\n\"amp.common:footer\": \"Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and DG\",\r\n\r\n\"amp.common:title\": \"AMP\",\r\n\"amp.common:title-desktop\": \"Desktop\",\r\n\"amp.common:subtitle-my-desktop\": \"My Desktop\",\r\n\"amp.common:subtitle-add-tab\": \"Add Tab\",\r\n\"amp.common:subtitle-tab-manager\": \"Tab Manager\",\r\n\"amp.common:title-reports\": \"Reports\",\r\n\"amp.common:subtitle-all-reports\": \"All Reports\",\r\n\"amp.common:subtitle-fav-reports\": \"Favourite Reports\",\r\n\"amp.common:subtitle-report-generator\": \"Report Generator\",\r\n\"amp.common:subtitle-saiku\": \"Saiku\",\r\n\"amp.common:title-documents\": \"Documents\",\r\n\"amp.common:title-dashboards\": \"Dashboards\",\r\n\"amp.common:subtitle-gis\": \"New GIS (BETA)\",\r\n\"amp.common:subtitle-dashboards\": \"Dashboard\",\r\n\"amp.common:subtitle-dashboard-generator\": \"Dashboard Generator\",\r\n\"amp.common:subtitle-donor-profile\": \"Donor Profile\",\r\n\"amp.common:subtitle-region-profile\": \"Region Profile\",\r\n\"amp.common:subtitle-sector-profile\": \"Sector Profile\",\r\n\"amp.common:subtitle-executing-profile\": \"Executing Agency Profile\",\r\n\"amp.common:subtitle-beneficiary-profile\": \"Beneficiary Ministry Profile\",\r\n\"amp.common:title-tools\": \"Tools\",\r\n\"amp.common:subtitle-workspace-setup\": \"Workspace Setup\",\r\n\"amp.common:subtitle-advanced-mode\": \"Advanced Mode\",\r\n\"amp.common:subtitle-search\": \"Search\",\r\n\"amp.common:subtitle-addressbook\": \"Address Book\",\r\n\"amp.common:title-help\": \"Help\",\r\n\"amp.common:subtitle-amp-help\": \"AMP Help\",\r\n\"amp.common:subtitle-glossary\": \"Glossary\",\r\n\"amp.common:subtitle-email-support-team\": \"Email Support Team\",\r\n\"amp.common:title-logout\": \"Logout\",\r\n\"amp.common:filters-loading\": \"Loading...\",\r\n\"amp.dashboard:page-title\":\"AMP Dashboards\",\r\n\"amp.dashboard:loading\": \"Loading...\",\r\n\"amp.dashboard:title-projectdata\": \"Project Data\",\r\n\"amp.dashboard:sub-title-projectdata\": \"View where projects are being implemented throughout the country.\",\r\n\"amp.dashboard:title-Country\": \"Country\",\r\n\"amp.dashboard:title-Region\": \"Region\",\r\n\"amp.dashboard:title-Zone\": \"Zone\",\r\n\"amp.dashboard:title-District\": \"District\",\r\n\"amp.dashboard:chart-reset\": \"reset others\",\r\n\"amp.dashboard:chart-radioui-commitments\": \"Commitments\",\r\n\"amp.dashboard:chart-radioui-disbursements\": \"Disbursements\",\r\n\"amp.dashboard:filters-none-applied\": \"No filters applied\",\r\n\"amp.dashboard:close\": \"Close\",\r\n\"amp.dashboard:modal-sorry\": \"Sorry for any inconvenience\",\r\n\"amp.dashboard:share-dashboard-top\": \"Share dashboard\",\r\n\"amp.dashboard:share-dashboard\": \"Share this dashboard view\",\r\n\"amp.dashboard:share-link\": \"Link\",\r\n\"amp.dashboard:of\": \"of\",\r\n\"amp.dashboard:tooltip-predict-otherseries\": \"TRANSLATEME\",\r\n\"amp.dashboard:total\": \"total\",\r\n\"amp.common:title\": \"AMP Toolbar\",\r\n\"amp.common:title-filters\": \"Filters\",\r\n\"amp.dashboard:chart-TopDonorAgencies\": \"Top Donor Agencies\",\r\n\"amp.dashboard:chart-TopDonorGroups\": \"Top Donor Groups\",\r\n\"amp.dashboard:chart-TopRegions\": \"Top Regions\",\r\n\"amp.dashboard:chart-TopSectors\": \"Top Sectors\",\r\n\"amp.dashboard:chart-AidPredictability\": \"Aid Predictability\",\r\n\"amp.dashboard:chart-FundingType\": \"Funding Type\",\r\n\"amp.dashboard:chart-ResponsibleOrganizations\": \"Responsible Organizations\",\r\n\"amp.dashboard:chart-BeneficiaryAgencies\": \"Beneficiary Agencies\",\r\n\"amp.dashboard:chart-ExecutingAgencies\": \"Executing Agencies\",\r\n\"amp.dashboard:chart-ImplementingAgencies\": \"Implementing Agencies\",\r\n\"amp.dashboard:chart-Peace-buildingandState-buildingGoals\": \"Peace-building and State-building Goals\",\r\n\"amp.dashboard:predictability-planned\": \"Planned\",\r\n\"amp.dashboard:predictability-actual\": \"Actual\",\r\n\"amp.dashboard:chart-FundingType-Grant\": \"Grant\",\r\n\"amp.dashboard:chart-FundingType-Loan\": \"Loan\",\r\n\"amp.dashboard:chart-FundingType-others\": \"Others\",\r\n\"amp.dashboard:chart-TopRegions-DistrictUndefined\": \"District: U\",\r\n\"amp.dashboard:chart-TopRegions-others\": \"Others\",\r\n\"amp.dashboard:chart-TopSectors-others\": \"Others\",\r\n\"amp.dashboard:chart-TopDonorAgencies-others\": \"Others\",\r\n\"amp.dashboard:chart-TopDonorGroups-others\": \"Others\",\r\n\"amp.dashboard:chart-ResponsibleOrganizations-others\": \"Others\",\r\n\"amp.dashboard:chart-BeneficiaryAgencies-others\": \"Others\",\r\n\"amp.dashboard:chart-ExecutingAgencies-others\": \"Others\",\r\n\"amp.dashboard:chart-ImplementingAgencies-others\": \"Others\",\r\n\"amp.dashboard:chart-Peace-buildingandState-buildingGoals-others\":\"Others\",\r\n\"amp.dashboard:filters-edit\":\"edit filters\",\r\n\"amp.dashboard:dashboard-settings\":\"Settings\",\r\n\"amp.dashboard:settings-edit\":\"edit settings\",\r\n\"amp.dashboard:download-amount\":\"Amount\",\r\n\"amp.dashboard:download-preview\":\"Preview:\",\r\n\"amp.dashboard:download-rendering\":\"Rendering...\",\r\n\"amp.dashboard:download-download-chart\":\"Download chart\",\r\n\"amp.dashboard:download-download-data\":\"Download data\",\r\n\"amp.dashboard:chart-no-data-available\":\"No Data Available\",\r\n\"amp.dashboard:chart-loading-saved-settings\":\"Loading saved settings...\",\r\n\"amp.dashboard:filters-show-settings\":\"Show filter settings\",\r\n\"amp.dashboard:filters-chart-legends-Grouped\":\"Grouped\",\r\n\"amp.dashboard:filters-chart-legends-Stacked\":\"Stacked\",\r\n\"amp.dashboard:of-total\": \"of total\",\r\n\"amp.dashboard:aid-predictability-actual-disbursements\": \"Actual Disbursements\",\r\n\"amp.dashboard:aid-predictability-planned-disbursements\": \"Planned Disbursements\",\r\n\"amp.dashboard:filters-hide-details\": \"Hide filter details\",\r\n\"amp.dashboard:saving-state\": \"Saving dashboard state, please wait...\",\r\n\"amp.dashboard:date-range\": \"Date Range\",\r\n\"amp.dashboard:currency\" : \"Currency\",\r\n\"amp.dashboard:type\" : \"Type\",\r\n\"amp.dashboard:year\" : \"Year\",\r\n\"amp.dashboard:ftype-actual-commitment\": \"Actual Commitments\",\r\n\"amp.dashboard:ftype-actual-disbursement\": \"Actual Disbursements\",\r\n\"amp.dashboard:ftype-actual-expenditure\": \"Actual Expenditures\",\r\n\"amp.dashboard:ftype-planned-commitment\": \"Planned Commitments\" ,\r\n\"amp.dashboard:ftype-planned-disbursement\":\t\"Planned Disbursements\" ,\r\n\"amp.dashboard:ftype-planned-expenditures\":\t\"Planned Expenditures\",  \t\t\t\r\n\"amp.dashboard:dashboard-chart-tops-info-modal\": \"Category Detail\",\r\n\"amp.dashboard:chart-tops-table-projecttitle\": \"Project Title\",\r\n\"amp.dashboard:chart-tops-inunits\": \"In units\",\r\n\"amp.dashboard:chart-tops-inthousands\": \"In thousands\",\r\n\"amp.dashboard:chart-tops-inmillions\": \"In millions\",\r\n\"amp.dashboard:chart-thousand\": \"k\",\r\n\"amp.dashboard:chart-million\": \"M\",\r\n\"amp.dashboard:chart-billion\": \"B\",\r\n\"amp.dashboard:chart-trillion\": \"T\",\r\n\"amp.dashboard:chart-peta\": \"P\",\r\n\"amp.dashboard:chart-exa\": \"E\",\r\n\"amp.dashboard:chart-swap-axes\": \"Swap Axes\",\r\n\"amp.dashboard:chart-HeatMapbySectorandDonorGroup\":\"Sector Fragmentation\",\r\n\"amp.dashboard:chart-HeatMapbyLocationandDonorGroup\":\"Location Fragmentation\",\r\n\"amp.dashboard:chart-HeatMapbyProgramandDonorGroup\":\"Program Fragmentation\",\r\n\"amp.dashboard:chart-heatmap-reset-others\":\"Reset Others\",\r\n\"amp.dashboard:negatives-values\":\"Negative values are not represented in this chart.\",\r\n\"amp.dashboard:negatives-values-parag\":\"Please switch to bar chart or table view to view all values.\",\r\n\"amp.dashboard:chart-heatmap-legends\":\"LEGENDS\",\r\n\"amp.dashboard:chart-heatmap-totals\":\"TOTALS\",\r\n\"amp.dashboard:chart-heatmap-legend-less-than\":\"Less than\",\r\n\"amp.dashboard:chart-heatmap-legend-between\":\"Between\",\r\n\"amp.dashboard:chart-heatmap-legend-and\":\"and\",\r\n\"amp.dashboard:chart-heatmap-legend-more-than\":\"More than\",\r\n\"amp.dashboard:chart-heatmap-others\":\"Others\",\r\n\"amp.dashboard:percentage\": \"Percentage\",\r\n\"amp.dashboard:chart-heatmap-legend-n-a\": \"N/A\",\r\n\"amp.dashboard:chart-heatmap-help-text-location\":\"Each cell represents an intersection between a donor group and a location and represents how much that funder contributes to the total funding received by that location.\",\r\n\"amp.dashboard:chart-heatmap-help-text-sector\":\"Each cell represents an intersection between a donor group and a sector and represents how much that funder contributes to the total funding received by that sector.\",\r\n\"amp.dashboard:chart-heatmap-help-text-program\":\"Each cell represents an intersection between a donor group and a program and represents how much that funder contributes to the total funding received by that program.\",\r\n\"amp.dashboard:chart-tooltip-pie-chart[title]\":\"View data in pie chart\",\r\n\"amp.dashboard:chart-tooltip-bar-chart[title]\":\"View data in bar chart\",\r\n\"amp.dashboard:chart-tooltip-table-chart[title]\":\"View data in table format\",\r\n\"amp.dashboard:chart-tooltip-multibar-chart[title]\":\"View data in multibar chart\",\r\n\"amp.dashboard:chart-tooltip-download-chart[title]\":\"Download image or table\",\r\n\"amp.dashboard:chart-tooltip-expand-chart[title]\":\"Expand chart\",\r\n\"amp.dashboard:chart-tooltip-collapse-chart[title]\":\"Collapse chart\",\r\n\"amp.dashboard:chart-tooltip-heatmap-chart[title]\":\"View heat map\"\r\n}");
+      var dashboardTranslateKeys = JSON.parse("{\r\n\"amp.common:footer\": \"Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and DG\",\r\n\r\n\"amp.common:title\": \"AMP\",\r\n\"amp.common:title-desktop\": \"Desktop\",\r\n\"amp.common:subtitle-my-desktop\": \"My Desktop\",\r\n\"amp.common:subtitle-add-tab\": \"Add Tab\",\r\n\"amp.common:subtitle-tab-manager\": \"Tab Manager\",\r\n\"amp.common:title-reports\": \"Reports\",\r\n\"amp.common:subtitle-all-reports\": \"All Reports\",\r\n\"amp.common:subtitle-fav-reports\": \"Favourite Reports\",\r\n\"amp.common:subtitle-report-generator\": \"Report Generator\",\r\n\"amp.common:subtitle-saiku\": \"Saiku\",\r\n\"amp.common:title-documents\": \"Documents\",\r\n\"amp.common:title-dashboards\": \"Dashboards\",\r\n\"amp.common:subtitle-gis\": \"New GIS (BETA)\",\r\n\"amp.common:subtitle-dashboards\": \"Dashboard\",\r\n\"amp.common:subtitle-dashboard-generator\": \"Dashboard Generator\",\r\n\"amp.common:subtitle-donor-profile\": \"Donor Profile\",\r\n\"amp.common:subtitle-region-profile\": \"Region Profile\",\r\n\"amp.common:subtitle-sector-profile\": \"Sector Profile\",\r\n\"amp.common:subtitle-executing-profile\": \"Executing Agency Profile\",\r\n\"amp.common:subtitle-beneficiary-profile\": \"Beneficiary Ministry Profile\",\r\n\"amp.common:title-tools\": \"Tools\",\r\n\"amp.common:subtitle-workspace-setup\": \"Workspace Setup\",\r\n\"amp.common:subtitle-advanced-mode\": \"Advanced Mode\",\r\n\"amp.common:subtitle-search\": \"Search\",\r\n\"amp.common:subtitle-addressbook\": \"Address Book\",\r\n\"amp.common:title-help\": \"Help\",\r\n\"amp.common:subtitle-amp-help\": \"AMP Help\",\r\n\"amp.common:subtitle-glossary\": \"Glossary\",\r\n\"amp.common:subtitle-email-support-team\": \"Email Support Team\",\r\n\"amp.common:title-logout\": \"Logout\",\r\n\"amp.common:filters-loading\": \"Loading...\",\r\n\"amp.dashboard:page-title\":\"AMP Dashboards\",\r\n\"amp.dashboard:loading\": \"Loading...\",\r\n\"amp.dashboard:title-projectdata\": \"Project Data\",\r\n\"amp.dashboard:sub-title-projectdata\": \"View where projects are being implemented throughout the country.\",\r\n\"amp.dashboard:title-Country\": \"Country\",\r\n\"amp.dashboard:title-Region\": \"Region\",\r\n\"amp.dashboard:title-Zone\": \"Zone\",\r\n\"amp.dashboard:title-District\": \"District\",\r\n\"amp.dashboard:chart-reset\": \"reset others\",\r\n\"amp.dashboard:chart-radioui-commitments\": \"Commitments\",\r\n\"amp.dashboard:chart-radioui-disbursements\": \"Disbursements\",\r\n\"amp.dashboard:filters-none-applied\": \"No filters applied\",\r\n\"amp.dashboard:close\": \"Close\",\r\n\"amp.dashboard:modal-sorry\": \"Sorry for any inconvenience\",\r\n\"amp.dashboard:share-dashboard-top\": \"Share dashboard\",\r\n\"amp.dashboard:share-dashboard\": \"Share this dashboard view\",\r\n\"amp.dashboard:share-link\": \"Link\",\r\n\"amp.dashboard:of\": \"of\",\r\n\"amp.dashboard:tooltip-predict-otherseries\": \"TRANSLATEME\",\r\n\"amp.dashboard:total\": \"total\",\r\n\"amp.common:title\": \"AMP Toolbar\",\r\n\"amp.common:title-filters\": \"Filters\",\r\n\"amp.dashboard:chart-TopDonorAgencies\": \"Top Donor Agencies\",\r\n\"amp.dashboard:chart-TopDonorGroups\": \"Top Donor Groups\",\r\n\"amp.dashboard:chart-TopRegions\": \"Top Regions\",\r\n\"amp.dashboard:chart-TopSectors\": \"Top Sectors\",\r\n\"amp.dashboard:chart-AidPredictability\": \"Aid Predictability\",\r\n\"amp.dashboard:chart-FundingType\": \"Funding Type\",\r\n\"amp.dashboard:chart-ResponsibleOrganizations\": \"Responsible Organizations\",\r\n\"amp.dashboard:chart-BeneficiaryAgencies\": \"Beneficiary Agencies\",\r\n\"amp.dashboard:chart-ExecutingAgencies\": \"Executing Agencies\",\r\n\"amp.dashboard:chart-ImplementingAgencies\": \"Implementing Agencies\",\r\n\"amp.dashboard:chart-Peace-buildingandState-buildingGoals\": \"Peace-building and State-building Goals\",\r\n\"amp.dashboard:predictability-planned\": \"Planned\",\r\n\"amp.dashboard:predictability-actual\": \"Actual\",\r\n\"amp.dashboard:chart-FundingType-Grant\": \"Grant\",\r\n\"amp.dashboard:chart-FundingType-Loan\": \"Loan\",\r\n\"amp.dashboard:chart-FundingType-others\": \"Others\",\r\n\"amp.dashboard:chart-TopRegions-DistrictUndefined\": \"District: U\",\r\n\"amp.dashboard:chart-TopRegions-others\": \"Others\",\r\n\"amp.dashboard:chart-TopSectors-others\": \"Others\",\r\n\"amp.dashboard:chart-TopDonorAgencies-others\": \"Others\",\r\n\"amp.dashboard:chart-TopDonorGroups-others\": \"Others\",\r\n\"amp.dashboard:chart-ResponsibleOrganizations-others\": \"Others\",\r\n\"amp.dashboard:chart-BeneficiaryAgencies-others\": \"Others\",\r\n\"amp.dashboard:chart-ExecutingAgencies-others\": \"Others\",\r\n\"amp.dashboard:chart-ImplementingAgencies-others\": \"Others\",\r\n\"amp.dashboard:chart-Peace-buildingandState-buildingGoals-others\":\"Others\",\r\n\"amp.dashboard:filters-edit\":\"edit filters\",\r\n\"amp.dashboard:dashboard-settings\":\"Settings\",\r\n\"amp.dashboard:settings-edit\":\"edit settings\",\r\n\"amp.dashboard:download-amount\":\"Amount\",\r\n\"amp.dashboard:download-preview\":\"Preview:\",\r\n\"amp.dashboard:download-rendering\":\"Rendering...\",\r\n\"amp.dashboard:download-download-chart\":\"Download chart\",\r\n\"amp.dashboard:download-download-data\":\"Download data\",\r\n\"amp.dashboard:chart-no-data-available\":\"No Data Available\",\r\n\"amp.dashboard:chart-loading-saved-settings\":\"Loading saved settings...\",\r\n\"amp.dashboard:filters-show-settings\":\"Show filter settings\",\r\n\"amp.dashboard:filters-chart-legends-Grouped\":\"Grouped\",\r\n\"amp.dashboard:filters-chart-legends-Stacked\":\"Stacked\",\r\n\"amp.dashboard:of-total\": \"of total\",\r\n\"amp.dashboard:aid-predictability-actual-disbursements\": \"Actual Disbursements\",\r\n\"amp.dashboard:aid-predictability-planned-disbursements\": \"Planned Disbursements\",\r\n\"amp.dashboard:filters-hide-details\": \"Hide filter details\",\r\n\"amp.dashboard:saving-state\": \"Saving dashboard state, please wait...\",\r\n\"amp.dashboard:date-range\": \"Date Range\",\r\n\"amp.dashboard:currency\" : \"Currency\",\r\n\"amp.dashboard:type\" : \"Type\",\r\n\"amp.dashboard:year\" : \"Year\",\r\n\"amp.dashboard:ftype-actual-commitment\": \"Actual Commitments\",\r\n\"amp.dashboard:ftype-actual-disbursement\": \"Actual Disbursements\",\r\n\"amp.dashboard:ftype-actual-expenditure\": \"Actual Expenditures\",\r\n\"amp.dashboard:ftype-planned-commitment\": \"Planned Commitments\" ,\r\n\"amp.dashboard:ftype-planned-disbursement\":\t\"Planned Disbursements\" ,\r\n\"amp.dashboard:ftype-planned-expenditures\":\t\"Planned Expenditures\",\r\n\"amp.dashboard:chart-tops-table-projecttitle\": \"Project Title\",\r\n\"amp.dashboard:chart-tops-table-amount\": \"Amount\",\r\n\"amp.dashboard:chart-tops-table-loadmore\": \"load more\",\r\n\"amp.dashboard:chart-tops-inunits\": \"In units\",\r\n\"amp.dashboard:chart-tops-inthousands\": \"In thousands\",\r\n\"amp.dashboard:chart-tops-inmillions\": \"In millions\",\r\n\"amp.dashboard:chart-tops-detail-inthousands\": \"Amounts in Thousands (000)\",\r\n\"amp.dashboard:chart-tops-detail-inmillions\": \"Amounts in Millions (000 000)\",\r\n\"amp.dashboard:chart-tops-detail-inbillions\": \"Amounts in Billions (000 000 000)\",\r\n\"amp.dashboard:chart-thousand\": \"k\",\r\n\"amp.dashboard:chart-million\": \"M\",\r\n\"amp.dashboard:chart-billion\": \"B\",\r\n\"amp.dashboard:chart-trillion\": \"T\",\r\n\"amp.dashboard:chart-peta\": \"P\",\r\n\"amp.dashboard:chart-exa\": \"E\",\r\n\"amp.dashboard:chart-swap-axes\": \"Swap Axes\",\r\n\"amp.dashboard:chart-HeatMapbySectorandDonorGroup\":\"Sector Fragmentation\",\r\n\"amp.dashboard:chart-HeatMapbyLocationandDonorGroup\":\"Location Fragmentation\",\r\n\"amp.dashboard:chart-HeatMapbyProgramandDonorGroup\":\"Program Fragmentation\",\r\n\"amp.dashboard:chart-heatmap-reset-others\":\"Reset Others\",\r\n\"amp.dashboard:negatives-values\":\"Negative values are not represented in this chart.\",\r\n\"amp.dashboard:negatives-values-parag\":\"Please switch to bar chart or table view to view all values.\",\r\n\"amp.dashboard:chart-heatmap-legends\":\"LEGENDS\",\r\n\"amp.dashboard:chart-heatmap-totals\":\"TOTALS\",\r\n\"amp.dashboard:chart-heatmap-legend-less-than\":\"Less than\",\r\n\"amp.dashboard:chart-heatmap-legend-between\":\"Between\",\r\n\"amp.dashboard:chart-heatmap-legend-and\":\"and\",\r\n\"amp.dashboard:chart-heatmap-legend-more-than\":\"More than\",\r\n\"amp.dashboard:chart-heatmap-others\":\"Others\",\r\n\"amp.dashboard:percentage\": \"Percentage\",\r\n\"amp.dashboard:chart-heatmap-legend-n-a\": \"N/A\",\r\n\"amp.dashboard:chart-heatmap-help-text-location\":\"Each cell represents an intersection between a donor group and a location and represents how much that funder contributes to the total funding received by that location.\",\r\n\"amp.dashboard:chart-heatmap-help-text-sector\":\"Each cell represents an intersection between a donor group and a sector and represents how much that funder contributes to the total funding received by that sector.\",\r\n\"amp.dashboard:chart-heatmap-help-text-program\":\"Each cell represents an intersection between a donor group and a program and represents how much that funder contributes to the total funding received by that program.\",\r\n\"amp.dashboard:chart-tooltip-pie-chart[title]\":\"View data in pie chart\",\r\n\"amp.dashboard:chart-tooltip-bar-chart[title]\":\"View data in bar chart\",\r\n\"amp.dashboard:chart-tooltip-table-chart[title]\":\"View data in table format\",\r\n\"amp.dashboard:chart-tooltip-multibar-chart[title]\":\"View data in multibar chart\",\r\n\"amp.dashboard:chart-tooltip-download-chart[title]\":\"Download image or table\",\r\n\"amp.dashboard:chart-tooltip-expand-chart[title]\":\"Expand chart\",\r\n\"amp.dashboard:chart-tooltip-collapse-chart[title]\":\"Collapse chart\",\r\n\"amp.dashboard:chart-tooltip-heatmap-chart[title]\":\"View heat map\"\r\n}");
       this.translator = new Translator({
         defaultKeys: dashboardTranslateKeys,
         ajax: BackboneDash.wrappedAjax
@@ -1642,6 +1642,8 @@ nv.models.heatMapChart = function() {
 			.attr("height", cubeSize)
 			.style("fill", noColor)
 			.attr("data-x", data.x - 1)
+			.attr("xid", data.xid)
+			.attr("yid", data.yid)
 			.attr("data-y", data.y - 1);
 		
 		cube.transition()
@@ -1652,7 +1654,9 @@ nv.models.heatMapChart = function() {
 		text.attr('font-family', 'Arial')
 			.attr('font-size', '11px')
 			.attr("x", ((data.y - 1) * cubeSize))
+			.attr("xid", data.xid)
 			.attr("y", ((data.y - 1) * cubeSize) + 19)
+			.attr("yid", data.yid)
 			.attr("class", "heatmap-cell")
 			.attr("x", function() {
 				// The "offsets" we add on each return call are tied to the current font family and size, so if we change them we might need to change the offsets too.
@@ -1694,7 +1698,7 @@ nv.models.heatMapChart = function() {
 				// Highlight this cell.
 				$($(cubesContainer[0]).find("[data-y='"+ (selfData.y - 1) + "']" + "[data-x='"+ (selfData.x - 1) + "']")).removeAttr("filter");
 			});
-		
+
 		if (data.tooltip) {
 			text.attr('data-title', data.tooltip)
 				.attr("class", "nv-series heatmap-cell");
@@ -2852,6 +2856,7 @@ module.exports = ChartModel.extend({
       .map(function(s) {
         var cleanName = s.replace(/[ :.]/g, '');
         var localizedName = s;
+        var keyId;
         if (self.localizedLookup[chartName + cleanName]) {
           localizedName = self.localizedLookup[chartName + cleanName];
         }
@@ -2859,13 +2864,15 @@ module.exports = ChartModel.extend({
           key: localizedName,
           values: _(years).map(function(y) {
             var yearValue = _(y.values).findWhere({type: s});
+            keyId = yearValue.id;
             return {
               x: y.Year,
               y: yearValue && yearValue.amount || 0,
               z: yearValue && yearValue.formattedAmount || 0,
             };
           }),
-          disabled: (_.indexOf(self.get('seriesToExclude'),localizedName) != -1)
+          disabled: (_.indexOf(self.get('seriesToExclude'),localizedName) != -1),
+		  keyId: keyId
         };
       })
       .value();
@@ -2997,6 +3004,8 @@ module.exports = ChartModel.extend({
 			// The EP for heatmaps is different than the other charts because it returns an empty object, so we set explicitly some fields to empty value. 
 			data.yDataSet = [];
 			data.xDataSet = [];
+			data.yDataSetIds = [];
+			data.xDataSetIds = [];
 			data.matrix = [];
 			data.xTotals = 0;
 			data.yTotals = 0;
@@ -3006,15 +3015,19 @@ module.exports = ChartModel.extend({
 			data.yTotalCount = 0;
 		}		
 		self.values.x = data.xDataSet;
+		self.values.xid = data.xDataSetIds;
 		self.values.y = data.yDataSet;
+		self.values.yid = data.yDataSetIds;
 		for (var i = 0; i < data.yDataSet.length; i++) {
 			for (var j = 0; j < data.xDataSet.length; j++) {
 				if (data.matrix[i] !== null) {
 					var value = data.matrix[i][j] !== null ? data.matrix[i][j] : {p: -1, amount: '0'};
-					var row = {y: i + 1, x: j + 1, value: value.p, amount: value.dv/*, yname: data.yDataSet[i], xname: data.xDataSet[i]*/}; //name is for tooltip
+					var row = {y: i + 1, x: j + 1, value: value.p, amount: value.dv, yid: data.yDataSetIds[i], xid: data.xDataSetIds[j]/*, yname:
+					 data.yDataSet[i],
+					 xname: data.xDataSet[i]*/}; //name is for tooltip
 					self.values.push(row);
 				} else {
-					self.values.push({y: i + 1, x: j + 1, value: -1, amount: "0"});
+					self.values.push({y: i + 1, x: j + 1, value: -1, amount: "0", yid: data.yDataSetIds[i], xid: data.xDataSetIds[j]});
 				}
 			}
 		}
@@ -3439,6 +3452,7 @@ var ChartViewBase = require('./chart-view-base');
 var _ = require('underscore');
 var util = require('../../ugly/util');
 
+var ProjectsListModalView = require('./chart-detail-info-modal');
 
 module.exports = ChartViewBase.extend({
 
@@ -3456,7 +3470,7 @@ module.exports = ChartViewBase.extend({
       });
   },  
   changeChartColumns: function(e){
-	  var key = $(e.currentTarget).find('.nv-legend-text').text();
+      var key = $(e.currentTarget).find('.nv-legend-text').text();
 	  var plannedDisbursementTrn = app.translator.translateSync("amp.dashboard:aid-predictability-planned-disbursements","Planned Disbursements");
 	  var actualDisbursementTrn = app.translator.translateSync("amp.dashboard:aid-predictability-actual-disbursements","Actual Disbursements");
 	  if(key == plannedDisbursementTrn){
@@ -3469,6 +3483,8 @@ module.exports = ChartViewBase.extend({
     'multibar',
     'table'
   ],
+
+  modalView: undefined,
 
   chartOptions: {
     nvControls: false
@@ -3512,16 +3528,209 @@ module.exports = ChartViewBase.extend({
       bodyText: '<b>' + context.y.fmt + '</b> ' + currencyName + ' (' + units + ')',
       footerText: line2
     }};
-  }
+  },
+
+    getNiceContext: function (e) {
+
+        var x = e.data[e.series.index].values[e.x.index].x,
+            y = e.data[e.series.index].key;
+
+        if (x == undefined || y == undefined) {
+            return null;
+        }
+        return {
+            data: e.data,
+            series: e.series,
+            x: {
+                raw: x,
+                fmt: x,
+                index: x
+            },
+            y: {
+                raw: y,
+                fmt: y,
+                index: y
+            }
+        };
+    },
+
+    chartClickHandler: function (e) {
+        var self = this;
+        var context = self.getNiceContext(e);
+        if (context){
+            this.modalView = new ProjectsListModalView({app: app, context: context, model: this.model});
+            this.openInfoWindow((context.x.fmt || context.x.raw) + ' ' + context.series.key);
+        }
+    }
 
 });
 
-},{"../../ugly/util":45,"./chart-view-base":32,"d3":"d3","underscore":"underscore"}],28:[function(require,module,exports){
+},{"../../ugly/util":45,"./chart-detail-info-modal":28,"./chart-view-base":32,"d3":"d3","underscore":"underscore"}],28:[function(require,module,exports){
+
+var _ = require('underscore');
+var BackboneDash = require('../backbone-dash');
+var util = require('../../ugly/util');
+var template = _.template("<div>\r\n\t<span class=\"number-divider-detail\"></span>\r\n</div>\r\n<div class=\"panel-default\">\r\n\t<div class=\"chart-tops-info-container\">\r\n\t\t<div class=\"chart-tops-info-content\">\r\n\t\t\t<% if(error) { %>\r\n\t\t\t\t<div class=\"alert alert-danger\" role=\"alert\">\r\n\t\t\t\t\t<strong><span data-i18n=\"amp.dashboard:error\">Error</span></strong>\r\n\t\t\t\t\t<span data-i18n=\"amp.dashboard:error-detail\">The Aid Management Platform has temporarily encountered an issue. We apologize for any inconvenience.</span>\r\n\t\t\t\t</div>\r\n\t\t\t<% } else if(values === undefined) { %>\r\n\t\t\t\t<img alt=\"\" src=\"/TEMPLATE/ampTemplate/dashboard/build/img/loading-icon.gif\">\r\n\t\t\t\t<span data-i18n=\"amp.dashboard:download-rendering\">Rendering...</span>\r\n\t\t\t<% } else { %>\r\n\t\t\t\t<% var rowClass = ''; %>\r\n\t\t\t\t<table class=\"table table-striped\">\r\n\t\t\t\t\t<thead>\r\n\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t<th class=\"header-row\"><span data-i18n=\"amp.dashboard:chart-tops-table-projecttitle\">Project Title</span></th>\r\n\t\t\t\t\t\t<th class=\"header-row\"><span class=\"funding-type-title-column\"></span> (<%=\r\n\t\t\t\t\t\t\tmodel.get('currency') %>)</th>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t\t</thead>\r\n\t\t\t\t\t<tbody>\r\n\t\t\t\t<% _(values).each(function(row, i) { %>\r\n\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t<td scope=\"row\">\r\n\t\t\t\t\t\t\t<a class=\"title-column\" target=\"_blank\"\r\n\t\t\t\t\t\t\t   href=\"/aim/viewActivityPreview.do~activityId=<%=row.id%>\" title=\"<%=row.name%>\">\r\n\t\t\t\t\t\t\t\t<%=row.name%>\r\n\t\t\t\t\t\t\t</a>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t\t<td class=\"amount-column\"><%=row.formattedAmount%></td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t<% }) %>\r\n\t\t\t\t\t</tbody>\r\n\t\t\t\t</table>\r\n\t\t\t<% } %>\r\n\t\t\t<div class=\"btn btn-success load-more\" style=\"display: none\"><span\r\n\t\t\t\t\tdata-i18n=\"amp.dashboard:chart-tops-table-loadmore\">load\r\n\t\t\t\tmore</span>...</div>\r\n\t\t</div>\r\n\t</div>\r\n</div>\r\n");
+
+module.exports = BackboneDash.View.extend({
+    _currentPage: 0,
+    PAGE_SIZE: 50,
+    TOP: 'top',
+    FRAGMENTATION: 'fragmentation',
+    AID_PREDICTABILITY: 'aidPredictability',
+    FUNDING_TYPE: 'fundingType',
+	initialize: function(options) {
+		this.app = options.app;
+		this.context = options.context;
+		this.model = options.model;
+		this.numberDivider = app.generalSettings.numberDivider;			
+	},
+
+    getUrl : function() {
+        var self = this;
+        var url = self.model.url + '/';
+        if (this.model.get('chartType') == this.AID_PREDICTABILITY) {
+            url += this.context.x.index + '/' + this.context.y.index;
+        } else  if (this.model.get('chartType') == this.FUNDING_TYPE) {
+            url += this.context.x.raw + '/' + this.context.data[this.context.series.index].keyId;
+        } else  if (this.model.get('chartType') == this.FRAGMENTATION) {
+            url += this.context.x.index + '/' + this.context.y.index;
+        } else  if (this.model.get('chartType') == this.TOP) {
+            url += this.context.data[0].values[this.context.x.index].id;
+        } else {
+            throw new Error('error building url, wrong chartType.');
+        }
+        return url;
+    },
+
+    getConfig: function () {
+        var self = this;
+
+        //TODO: move this code to a new model so the API call is made automatically.
+        var config = self.app.filter.serialize();
+        config.settings = self.app.settingsWidget.toAPIFormat();
+        config.settings['funding-type'] = self.model.get('adjtype');
+        config.offset = self._currentPage * self.PAGE_SIZE;
+
+        if (this.model.get('chartType') == this.FRAGMENTATION) {
+            // Process params from heat-map/configs, in that EP we have defined each heatmap.
+            var configs = self.model.get('heatmap_config').models[0];
+            var thisChart = _.find(configs.get('charts'), function (item) {
+                return item.name === self.model.get('name')
+            });
+            var xColumn = self.model.get('xAxisColumn') !== '' ? self.model.get('xAxisColumn') : configs.get('columns')[thisChart.xColumns[0]].origName; // First column is default.
+            var yColumn = configs.get('columns')[thisChart.yColumns[0]].origName; // First column is default.
+
+            // Check if we need to switch axis.
+            if (self.model.get('swapAxes') === true) {
+                var auxAxis = yColumn;
+                yColumn = xColumn;
+                xColumn = auxAxis;
+            }
+
+            config.xCount = self.model.get('xLimit');
+            config.xColumn = xColumn;
+            config.yColumn = yColumn;
+            config.yCount = self.model.get('yLimit');
+        }
+        return config;
+    },
+
+	render: function() {
+		var self = this;
+
+		this.$el.html(template({
+			error: undefined,
+			model: this.model,
+			context: this.context,
+			values: undefined,
+			numberDivider: this.numberDivider
+		}));
+
+		app.translator.translateDOM($(".chart-tops-info-container"));
+		
+        var config = self.getConfig();
+    	var url = self.getUrl();
+
+        $.ajax({
+    		method: 'POST',
+    		url: url,
+    		dataType: 'json',
+    		contentType: 'application/json',
+    		processData: false,
+    		data: JSON.stringify(config)
+    	}).done(function(data) {
+    		//TODO: Can we avoid re-calling the template by binding the changes in the 'values' field? 
+    		self.$el.html(template({
+				error: undefined,
+    			model: self.model,
+    			context: self.context,
+    			values: data.values,
+    			numberDivider: self.numberDivider
+    		}));
+
+            self.$el.find('.load-more').click(function() {
+                self._currentPage++;
+                self.render();
+            });
+            //hide button if all activities were loaded.
+            var startIndex = self._currentPage * self.PAGE_SIZE;
+			if ((startIndex + self.PAGE_SIZE) >= data.totalRecords) {
+            	self.$el.find('.load-more').hide();
+            } else {
+				self.$el.find('.load-more').html('<span data-i18n="amp.dashboard:chart-tops-table-loadmore">load more</span> ' +
+                (startIndex + self.PAGE_SIZE) + '/' + data.totalRecords);
+                self.$el.find('.load-more').show();
+            }
+
+            if (self.app.generalSettings.numberDivider != 1) {
+				var units;
+                if(self.app.generalSettings.numberDivider === 1000) {
+                    units = '<span data-i18n="amp.dashboard:chart-tops-detail-inthousands">Amounts in Thousands (000)</span>';
+                } else if(self.app.generalSettings.numberDivider === 1000000) {
+                    units = '<span data-i18n="amp.dashboard:chart-tops-detail-inmillions">Amounts in Millions (000 000)</span>';
+                }else if(self.app.generalSettings.numberDivider === 1000000000) {
+                    units = '<span data-i18n="amp.dashboard:chart-tops-detail-inbillions">Amounts in Billions (000 000 000)</span>';
+                }
+                self.$el.find('.number-divider-detail').html(units)
+            }
+
+            var fundingType;
+            if (self.model.get('chartType') == self.AID_PREDICTABILITY) {
+                fundingType = self.context.series.key;
+            } else {
+                var adjSettings = self.app.settingsWidget.definitions.getFundingTypeSetting();
+                fundingType = $.map(adjSettings.get('value').options, function (option) {
+                    if (option.id === self.model.get('adjtype')) {
+                        return option.name;
+                    }
+                });
+            }
+            self.$el.find('.funding-type-title-column').html(fundingType);
+
+    		app.translator.translateDOM($(".modal-body"));
+    	}).fail(function(xhr, err) {
+			var msg = JSON.parse(xhr.responseText).error;
+			console.error("Error Getting chart-detail-info-modal from EP", msg);
+			self.$el.html(template({
+				model: self.model,
+				context: self.context,
+				error: err,
+				numberDivider: self.numberDivider
+			}));
+		});
+
+		return this;
+	},
+
+});
+},{"../../ugly/util":45,"../backbone-dash":3,"underscore":"underscore"}],29:[function(require,module,exports){
 var d3 = require('d3');
 var ChartViewBase = require('./chart-view-base');
 var _ = require('underscore');
 var util = require('../../ugly/util');
 
+var ProjectsListModalView = require('./chart-detail-info-modal');
 
 module.exports = ChartViewBase.extend({
 
@@ -3597,15 +3806,17 @@ module.exports = ChartViewBase.extend({
     // clicking on the "others" bar loads five more.
     if (context.data[context.series.index].special === 'others') {
       this.model.set('limit', this.model.get('limit') + 1);
+    } else {
+        this.modalView = new ProjectsListModalView({app: app, context: context, model: this.model});
+        this.openInfoWindow((context.x.fmt || context.x.raw) + ' ' + context.data[context.series.index].key);
     }
   }
 
 });
 
-},{"../../ugly/util":45,"./chart-view-base":32,"d3":"d3","underscore":"underscore"}],29:[function(require,module,exports){
+},{"../../ugly/util":45,"./chart-detail-info-modal":28,"./chart-view-base":32,"d3":"d3","underscore":"underscore"}],30:[function(require,module,exports){
 var d3 = require('d3');
 var ChartViewBase = require('./chart-view-base');
-var ModalView = require('./chart-tops-info-modal');
 var _ = require('underscore');
 
 module.exports = ChartViewBase.extend({
@@ -3639,72 +3850,10 @@ module.exports = ChartViewBase.extend({
   }
 
 });
-},{"./chart-tops-info-modal":30,"./chart-view-base":32,"d3":"d3","underscore":"underscore"}],30:[function(require,module,exports){
-
-var _ = require('underscore');
-var BackboneDash = require('../backbone-dash');
-var template = _.template("<script type=\"text/javascript\">\r\n\tfunction openPreviewActivity(id) {\r\n\t\twindow.open('/aim/viewActivityPreview.do~public=true~pageId=2~activityId=' + id, '_blank');\r\n\t}\r\n</script>\r\n\r\n<div class='chart-tops-info-category'>\r\n\t<span>\r\n\t\t<b><%= (context.x.fmt || context.x.raw) %></b> - <%= model.get('adjtype')%> -  \t\t\r\n\t\t<span data-i18n=\"<%= app.generalSettings.numberDividerDescription %>\"></span>\r\n\t\t<%= model.get('currency') %>\r\n\t</span>\r\n</div>\r\n<div class=\"chart-tops-info-container\">\r\n\t<div class=\"chart-tops-info-content\">\r\n\t\t<% if(error) { %>\r\n\t\t\t<div class=\"alert alert-danger\" role=\"alert\">\r\n\t\t\t\t<strong><span data-i18n=\"amp.dashboard:error\">Error</span></strong>\r\n\t\t\t\t<span data-i18n=\"amp.dashboard:error-detail\">The Aid Management Platform has temporarily encountered an issue. We apologize for any inconvenience.</span>\r\n\t\t\t</div>\r\n\t\t<% } else if(values === undefined) { %>\r\n\t\t\t<img alt=\"\" src=\"/TEMPLATE/ampTemplate/dashboard/build/img/loading-icon.gif\">\r\n\t\t\t<span data-i18n=\"amp.dashboard:download-rendering\">Rendering...</span>\r\n\t\t<% } else { %>\r\n\t\t\t<% var rowClass = ''; %>\r\n\t\t\t<table>\r\n\t\t\t\t<tr>\r\n\t\t\t\t\t<th><span data-i18n=\"amp.dashboard:chart-tops-table-projecttitle\">Project Title</span></th>\r\n\t\t\t\t\t<th><span data-i18n=\"amp.dashboard:chart-tops-table-amount\">Amount</span></th>\r\n\t\t\t\t</tr>\t\t\t\r\n\t\t\t<% _(values).each(function(row, i) { %>\r\n          \t\t<% \tif (i % 2 === 0) rowClass = 'odd_row';\r\n    \t\t\t\telse rowClass = ''; %>\r\n    \t\t\t<tr class=\"<%=rowClass%>\">\r\n    \t\t\t\t<td>\r\n    \t\t\t\t\t<span class='pointer' onclick='openPreviewActivity(<%=row.id%>)'><%=row.name%></span>\r\n    \t\t\t\t</td>\r\n    \t\t\t\t<td><%=row.formattedAmount%></td>\r\n    \t\t\t</tr>\r\n        \t<% }) %>\r\n        \t</table>\r\n\t\t<% } %>\r\n\t</div>\r\n</div>");
-
-module.exports = BackboneDash.View.extend({
-
-	initialize: function(options) {
-		this.app = options.app;
-		this.context = options.context;
-		this.model = options.model;
-		this.numberDivider = app.generalSettings.numberDivider;			
-	},
-
-	render: function() {
-		var self = this;
-		this.$el.html(template({
-			error: undefined,
-			model: this.model,
-			context: this.context,
-			values: undefined,
-			numberDivider: this.numberDivider
-		}));
-		app.translator.translateDOM($(".dash-settings-modal"));
-		
-		//TODO: move this code to a new model so the API call is made automatically.
-    	var config = this.app.filter.serialize();
-    	config.settings = this.app.settingsWidget.toAPIFormat();
-    	config.settings['funding-type'] = this.model.get('adjtype');
-    	$.ajax({
-    		method: 'POST',
-    		url: self.model.url + '/' + this.context.data[0].values[this.context.x.index].id,
-    		dataType: 'json',
-    		contentType: 'application/json',
-    		processData: false,
-    		data: JSON.stringify(config)
-    	}).done(function(data) {
-    		//TODO: Can we avoid re-calling the template by binding the changes in the 'values' field? 
-    		self.$el.html(template({
-				error: undefined,
-    			model: self.model,
-    			context: self.context,
-    			values: data.values,
-    			numberDivider: self.numberDivider
-    		}));
-    		app.translator.translateDOM($(".dash-settings-modal"));
-    	}).fail(function(xhr, err) {
-			var msg = JSON.parse(xhr.responseText).error;
-			console.error("Error Getting chart-tops-info-modal from EP", msg);
-			self.$el.html(template({
-				model: self.model,
-				context: self.context,
-				error: err,
-				numberDivider: self.numberDivider
-			}));
-		});
-    	
-		return this;
-	},
-
-});
-},{"../backbone-dash":3,"underscore":"underscore"}],31:[function(require,module,exports){
+},{"./chart-view-base":32,"d3":"d3","underscore":"underscore"}],31:[function(require,module,exports){
 var d3 = require('d3');
 var ChartViewBase = require('./chart-view-base');
-var ModalView = require('./chart-tops-info-modal');
+var ProjectsListModalView = require('./chart-detail-info-modal');
 var _ = require('underscore');
 var util = require('../../ugly/util');
 
@@ -3757,28 +3906,17 @@ module.exports = ChartViewBase.extend({
     // clicking on the "others" bar loads five more.
     if (context.data[context.series.index]
                .values[context.x.index].special === 'others') {
-      this.model.set('limit', this.model.get('limit') + 5);      
+        this.model.set('limit', this.model.get('limit') + 5);
         this.model.set('big', true);      
-    } else if (this.model.get('showCategoriesInfo') === true) {    	
-    	this.modalView = new ModalView({ app: app, context: context, model: this.model });
-    	this.openInfoWindow();    	    	
+    } else {
+    	this.modalView = new ProjectsListModalView({ app: app, context: context, model: this.model });
+    	this.openInfoWindow((context.x.fmt || context.x.raw));
     }
-  },
-  
-  openInfoWindow: function() {
-	  var specialClass = 'dash-settings-modal';
-	  this.app.modal('Category Detail', {
-		  specialClass: specialClass,
-	      bodyEl: this.modalView.render().el,
-	      i18nTitle: 'amp.dashboard:dashboard-chart-tops-info-modal'
-	  });	    
-	  // Translate modal popup.
-	  app.translator.translateDOM($("." + specialClass));
   }
 
 });
 
-},{"../../ugly/util":45,"./chart-tops-info-modal":30,"./chart-view-base":32,"d3":"d3","underscore":"underscore"}],32:[function(require,module,exports){
+},{"../../ugly/util":45,"./chart-detail-info-modal":28,"./chart-view-base":32,"d3":"d3","underscore":"underscore"}],32:[function(require,module,exports){
 
 var Deferred = require('jquery').Deferred;
 var _ = require('underscore');
@@ -3786,6 +3924,7 @@ var BackboneDash = require('../backbone-dash');
 var getChart = require('../charts/chart');
 var util = require('../../ugly/util');
 var DownloadView = require('./download');
+var ProjectsListModalView = require('./chart-detail-info-modal');
 var template = _.template("<div class=\"col-xs-12 <% if (!model.get('big')) { %>col-md-6<% } else { %> big-chart-<%= model.get('bigN')%> <% } %>\">\r\n\r\n  <div class=\"panel panel-chart\">\r\n    <div class=\"panel-heading fix-title-height\">\r\n      <% if (model.get('showTotal') === true) { %>\r\n\t      <div class=\"pull-right big-number\">\r\n\t        <b class=\"chart-total\"></b>\r\n\t        <span class=\"chart-currency\"></span>\r\n\t      </div>\r\n      <% } %>\r\n      <div class=\"chart-title\">\r\n\t      <h2 data-i18n=\"amp.dashboard:chart-<%= model.get('name').replace(/ /g,'') %>\"><%= model.get('title') %></h2>\r\n\t      <% if (model.get('chartType') === 'fragmentation') { %>\r\n\t      \t<% var help_icon_text = app.translator.translateSync('amp.dashboard:chart-heatmap-help-text-' + model.get('heatmap_type'));%>\r\n\t      \t<img src=\"/TEMPLATE/ampTemplate/dashboard/build/img/questionmark1.png\" class=\"question_mark nv-series\" data-title=\"<%= help_icon_text %>\">\r\n\t      <% } %>\r\n      </div>\r\n    </div>\r\n\t\r\n    <div class=\"panel-body\">\r\n      <div class=\"chart-container\">\r\n        <h3 class=\"dash-chart-diagnostic text-center\"></h3>\r\n        <div class=\"dash-chart-wrap <%= (model.get('alternativeContainerClass') !== undefined ? model.get('alternativeContainerClass') : '')%>\">\r\n        </div>\r\n        <button type=\"button\" class=\"btn btn-link btn-xs pull-right reset\" style=\"display:none\" data-i18n=\"amp.dashboard:chart-reset\">reset others</button>\r\n      </div>\r\n      <div class=\"alert alert-warning negative-values-message\" role=\"alert\">\r\n          <strong data-i18n=\"amp.dashboard:negatives-values\">Negative values are not represented in this chart.</strong><br>\r\n          <span data-i18n=\"amp.dashboard:negatives-values-parag\">Please switch to bar chart or table view to view all values.</span>\r\n      </div>\r\n    </div>\r\n\r\n    <div class=\"panel-footer clearfix\">\r\n\r\n      <div class=\"pull-right\">\r\n\r\n        <div class=\"btn-group\">\r\n          <% _(views).each(function(view) { %>\r\n            <button data-i18n=\"amp.dashboard:chart-tooltip-<%= view %>-chart[title]\" data-toggle=\"tooltip\" title=\"View data in <%= view %> chart\" type=\"button\" data-view=\"<%= view %>\"\r\n                class=\"chart-view btn btn-sm btn-<%= (view === model.get('view')) ? 'primary' : 'default' %>\">\r\n              <span class=\"glyphicon glyphicon-<%= {\r\n                bar: 'signal',\r\n                multibar: 'signal',\r\n                heatmap: 'stats',\r\n                pie: 'adjust',\r\n                table: 'th-list'\r\n              }[view] %>\"></span>\r\n            </button>\r\n          <% }) %>\r\n        </div>\r\n\r\n        <div class=\"btn-group\">\r\n          <a data-i18n=\"amp.dashboard:chart-tooltip-download-chart[title]\" data-toggle=\"tooltip\" title=\"Download image or table\"\r\n            class=\"btn btn-sm btn-default download\"\r\n            download=\"AMP <%= model.get('title') %> - <%= (new Date()).toISOString().split('T')[0] %>.png\"\r\n            target=\"_blank\">\r\n            <span class=\"glyphicon glyphicon-cloud-download\"></span>\r\n          </a>\r\n          <button data-i18n=\"<%= model.get('big') ? 'amp.dashboard:chart-tooltip-collapse-chart[title]' : 'amp.dashboard:chart-tooltip-expand-chart[title]' %>\" data-toggle=\"tooltip\" title=\"<%= model.get('big') ? 'Collapse chart' : 'Expand chart' %>\" type=\"button\" class=\"btn btn-sm btn-<%= model.get('big') ? 'primary' : 'default' %> expand hidden-xs hidden-sm\" <%= model.get('disableResize') ? 'disabled' : ''%>>\r\n            <span class=\"glyphicon glyphicon-fullscreen\"></span>\r\n          </button>\r\n        </div>\r\n\r\n      </div><!-- buttons in .pull-right -->\r\n\r\n      <% if (model.get('adjtype') && model.get('showMeasuresSelector') === true) { %>\r\n        <form class=\"form-inline dash-form dash-adj-type\" role=\"form\">\r\n          <select class=\"form-control like-btn-sm ftype-options\">\r\n            <option>...</option>\r\n            <!-- gets populated after settings load -->\r\n          </select>\r\n          <span class=\"cheat-lineheight\"></span>\r\n        </form>\r\n      <% } %>\r\n      \r\n      <% if (model.get('chartType') === 'fragmentation') { %>\r\n\t\t<form class=\"form-inline dash-form dash-xaxis-options\" role=\"form\">\r\n        \t<select class=\"form-control like-btn-sm xaxis-options\">\r\n            \t<option>...</option>\r\n            \t<!-- gets populated after settings load -->\r\n          \t</select>\r\n          \t<span class=\"cheat-lineheight\"></span>\r\n        </form>\r\n        <button type=\"button\" class=\"btn btn-sm btn-default heatmap-switch\">\r\n            <span data-i18n=\"amp.dashboard:chart-swap-axes\">Swap Axes</span>\r\n        </button>\r\n\t <% } %>\r\n\r\n    </div>\r\n  </div>\r\n\r\n  <div class=\"export-modal\"></div>\r\n</div>");
 
 
@@ -3997,9 +4136,46 @@ module.exports = BackboneDash.View.extend({
         
     this.showChartPromise.resolve();
   },
-  
+
+    getCellContext: function (e, data) {
+
+        var t = e.target,
+            x = t.getAttribute('xid'),
+            y = t.getAttribute('yid'),
+            labelx = data.x[data.xid.indexOf(parseInt(t.getAttribute('xid'), 10))],
+            labely = data.y[data.yid.indexOf(parseInt(t.getAttribute('yid'), 10))];
+
+        if (x == undefined || y == undefined) {
+            return null;
+        }
+        return {
+            data: data,
+            series: {},
+            x: {
+                raw: labelx,
+                fmt: labelx,
+                index: x
+            },
+            y: {
+                raw: labely,
+                fmt: labely,
+                index: y
+            }
+        };
+    },
+
   handleHeatmapClicks: function() {
 	  var self = this;
+	  var cell = this.$(".heatmap-cell");
+      if (cell) {
+          $(cell).on('click', function(e) {
+              var context = self.getCellContext(e, self.model.values);
+              if (context) {
+                  self.modalView = new ProjectsListModalView({app: app, context: context, model: self.model});
+                  self.openInfoWindow((context.x.fmt || context.x.raw) + ' - ' + (context.y.fmt || context.y.raw));
+              }
+          });
+      }
 	  var others = this.$(".legend-others");
 	  if (others) {
 		  $(others).on('click', function(evt) {
@@ -4220,11 +4396,21 @@ module.exports = BackboneDash.View.extend({
 		  }else if(this.app.generalSettings.numberDivider === 1000000000) {
 			  this.app.generalSettings.numberDividerDescription = 'amp.dashboard:chart-tops-inbillions';
 		  }
-	  }
+	  },
+
+    openInfoWindow: function(title) {
+        var specialClass = 'dash-settings-modal';
+        this.app.modal(title, {
+            specialClass: specialClass,
+            bodyEl: this.modalView.render().el
+        });
+        // Translate modal popup.
+        app.translator.translateDOM($("." + specialClass));
+    }
 
 });
 
-},{"../../ugly/util":45,"../backbone-dash":3,"../charts/chart":9,"./download":35,"jquery":"jquery","underscore":"underscore"}],33:[function(require,module,exports){
+},{"../../ugly/util":45,"../backbone-dash":3,"../charts/chart":9,"./chart-detail-info-modal":28,"./download":35,"jquery":"jquery","underscore":"underscore"}],33:[function(require,module,exports){
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
 
@@ -4297,7 +4483,7 @@ module.exports = BackboneDash.View.extend({
 
 });
 
-},{"../backbone-dash":3,"../models/chart-aid-predictability":17,"../models/chart-funding-type":18,"../models/chart-heatmaps":19,"../models/chart-tops":21,"./chart-aid-predictability":27,"./chart-funding-type":28,"./chart-heatmaps":29,"./chart-tops":31,"underscore":"underscore"}],34:[function(require,module,exports){
+},{"../backbone-dash":3,"../models/chart-aid-predictability":17,"../models/chart-funding-type":18,"../models/chart-heatmaps":19,"../models/chart-tops":21,"./chart-aid-predictability":27,"./chart-funding-type":29,"./chart-heatmaps":30,"./chart-tops":31,"underscore":"underscore"}],34:[function(require,module,exports){
 var BackboneDash = require('../backbone-dash');
 var Filters = require('./filters');
 var Settings = require('./settings');
@@ -4943,7 +5129,7 @@ var PredictabilityChart = require('../models/chart-aid-predictability');
 var FundingTypeChart = require('../models/chart-funding-type');
 
 var template = _.template("<div class=\"container\">\r\n</div>\r\n");
-var modalTemplate = _.template("<div class=\"modal fade\" id=\"<%= m.id %>\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">\r\n  <div class=\"modal-dialog <%= m.specialClass %>\">\r\n    <div class=\"modal-content\">\r\n      <div class=\"modal-header\">\r\n        <button type=\"button\" class=\"close\" data-dismiss=\"modal\"><span aria-hidden=\"true\">&times;</span><span data-i18n=\"amp.dashboard:close\" class=\"sr-only\">Close</span></button>\r\n        <h4 class=\"modal-title text-<%= m.tone %>\" data-i18n=\"<%= m.i18nTitle %>\"><%= m.title %></h4>\r\n      </div>\r\n      <div class=\"modal-body\">\r\n        <% if (m.content) { %>\r\n          <%= m.content %>\r\n        <% } %>\r\n        <% if (m.messages) { %>\r\n          <% _(m.messages).each(function(message) { %>\r\n            <p><%= message %></p>\r\n          <% }) %>\r\n        <% } %>\r\n      </div>      \r\n    </div>\r\n  </div>\r\n</div>\r\n");
+var modalTemplate = _.template("<div class=\"modal fade\" data-keyboard=\"false\" data-backdrop=\"static\" id=\"<%= m.id %>\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">\r\n  <div class=\"modal-dialog <%= m.specialClass %>\">\r\n    <div class=\"modal-content\">\r\n      <div class=\"modal-header\">\r\n        <button type=\"button\" class=\"close\" data-dismiss=\"modal\"><span aria-hidden=\"true\">&times;</span><span data-i18n=\"amp.dashboard:close\" class=\"sr-only\">Close</span></button>\r\n        <h4 class=\"modal-title text-<%= m.tone %>\" data-i18n=\"<%= m.i18nTitle %>\"><%= m.title %></h4>\r\n      </div>\r\n      <div class=\"modal-body\">\r\n        <% if (m.content) { %>\r\n          <%= m.content %>\r\n        <% } %>\r\n        <% if (m.messages) { %>\r\n          <% _(m.messages).each(function(message) { %>\r\n            <p><%= message %></p>\r\n          <% }) %>\r\n        <% } %>\r\n      </div>      \r\n    </div>\r\n  </div>\r\n</div>\r\n");
 
 var EnabledChartsCollection = require('../models/enabled-charts-collection');
 var HeatmapsConfigCollection = require('../models/heatmaps-config-collection');
@@ -24079,7 +24265,7 @@ module.exports = Backbone.View.extend({
 
 var Backbone = require('backbone');
 var _ = require('underscore');
-var Template = "<%\r\n  /* Prepare the A tag at top level menus */\r\n  if (!obj.url) {\r\n      obj.url = '#';\r\n      obj.className = 'dropdown-toggle';\r\n      obj.dataToggle = 'data-toggle=\"dropdown\"';\r\n    }\r\n    else {\r\n      obj.className = '';\r\n      obj.dataToggle = '';\r\n    }\r\n\r\n    if (obj.tab) {\r\n      obj.tabTarget = 'target=\"_blank\"';\r\n    }\r\n    else {\r\n      obj.tabTarget = '';\r\n    }\r\n    %>\r\n<%\r\n/* TODO escape the code in HTML */\r\n%>\r\n<a href=\"<%= url %>\" class=\"<%= className %>\" <%= dataToggle %> <%= obj.tabTarget %> >\r\n  <span class=\"dropdown-text\" title=\"<%= obj.name.trim() %>\"><%= obj.name.trim() %>&nbsp;</span><% if (obj.children && obj.children.length > 0) { %><span class=\"caret\"></span><% } %>\r\n</a>\r\n<% if (obj.children && obj.children.length !== 0) { %>\r\n  <ul class=\"children dropdown-menu\" role=\"menu\">\r\n  <% _.each(obj.children, function(model) { %>\r\n\r\n    <%\r\n      /* Prepare the A tag at second level menus */\r\n      if (model.children && model.children.length !== 0) {\r\n        model.dropdownSubmenu = 'dropdown-submenu';\r\n       };\r\n\r\n       if (!model.tooltip) {\r\n         model.tooltip = '';\r\n       };\r\n       var elementClass = '2nd-level-item';\r\n       if (model.language) {\r\n\t\t\t elementClass = elementClass+ ' language';\r\n\t   }\r\n       if (model.popup) {\r\n       \t elementClass = elementClass + ' popup';\r\n       }\r\n       if (model.tab) {\r\n         model.tabTarget = 'target=\"_blank\"';\r\n       } else {\r\n         model.tabTarget = '';\r\n       }\r\n       var elementUrl = model.url;\r\n       if (model.post === true) {\r\n         elementUrl = 'javascript:switchTranslation (\"'+elementUrl+'\")';\r\n\r\n       }\r\n       if (!model.url) {\r\n        elementUrl = 'javascript:;';\r\n       }\r\n       /* if it doesn't have children, nor url. then it is the About */\r\n       if (!model.url && !model.children) {\r\n       elementClass = elementClass + ' about-amp';\r\n       }\r\n    %>\r\n\r\n    <li class='dropdown <%= model.dropdownSubmenu %>' >\r\n    <a href='<%=  elementUrl %>' title=\"<%= model.tooltip %>\" onclick=\"return canExit()\" class=\"<%= elementClass %>\" <%= model.tabTarget %> ><%= model.name %></a>\r\n\r\n    <%\r\n      if (model.children && model.children.length !== 0) {\r\n     %>\r\n\r\n      <ul class=\"children dropdown-menu scrollable-menu\" role=\"menu\">\r\n      <% _.each(model.children, function(submodel) { %>\r\n\r\n        <%\r\n          /* Prepare the A tag at third level menus */\r\n          if (!submodel.url) {\r\n            submodel.url = '#';\r\n          };\r\n\t\t  var itemClass = '3rd-level-item';\r\n\t\t  if (submodel.language) {\r\n\t\t\t itemClass = itemClass+ ' language';\r\n\t\t   }\r\n\t\t  if (!submodel.tooltip) {\r\n            submodel.tooltip = '';\r\n          };\r\n\r\n          if (submodel.tab) {\r\n            submodel.tabTarget='target=\"_blank\"';\r\n          } else {\r\n            submodel.tabTarget = '';\r\n          };\r\n        %>\r\n\r\n        <li class=\"menu-item\"><a href=\"<%= submodel.url %>\" onclick=\"return canExit()\" class=\"<%= itemClass %>\" <%= submodel.tabTarget %> title=\"<%= submodel.tooltip %>\"><%= submodel.name %></a></li>\r\n\r\n      <% }) %>\r\n      </ul>\r\n    <% } %>\r\n\r\n    </li>\r\n\r\n  <% }); %>\r\n  </ul>\r\n<% }%>\r\n<!--\r\n<li class=\"menu-item dropdown dropdown-submenu\"><a class=\"dropdown-toggle\" data-toggle=\"dropdown\">\r\n<ul class=\"children dropdown-menu scrollable-menu\" role=\"menu\">\r\n      <li class=\"menu-item first-of-type\" id=\"yui-gen4\" groupindex=\"0\" index=\"0\">\r\n  <a class=\"yuiampmenuitemlabel yuimenuitemlabel\" href=\"/selectTeam.do?id=680\" onclick=\"return canExit()\">\r\n    Academy of Sciences\r\n  </a>\r\n</li>--!>\r\n";
+var Template = "<%\r\n  /* Prepare the A tag at top level menus */\r\n  \tif (!obj.url) {\r\n  \t  obj.url = '#';\r\n  \t  if (!obj.children || obj.children.length === 0) {\r\n      \tobj.className = 'hidden';\r\n      \tobj.dataToggle = 'data-toggle=\"\"';\r\n      } else {\r\n      \tobj.className = 'dropdown-toggle';\r\n      \tobj.dataToggle = 'data-toggle=\"dropdown\"';\r\n      }\r\n    } else {\r\n      obj.className = '';\r\n      obj.dataToggle = '';\r\n    }\r\n\r\n    if (obj.tab) {\r\n      obj.tabTarget = 'target=\"_blank\"';\r\n    }\r\n    else {\r\n      obj.tabTarget = '';\r\n    }\r\n    %>\r\n<%\r\n/* TODO escape the code in HTML */\r\n%>\r\n<a href=\"<%= url %>\" class=\"<%= className %>\" <%= dataToggle %> <%= obj.tabTarget %> >\r\n  <span class=\"dropdown-text\" title=\"<%= obj.name.trim() %>\"><%= obj.name.trim() %>&nbsp;</span><% if (obj.children && obj.children.length > 0) { %><span class=\"caret\"></span><% } %>\r\n</a>\r\n<% if (obj.children && obj.children.length !== 0) { %>\r\n  <ul class=\"children dropdown-menu\" role=\"menu\">\r\n  <% _.each(obj.children, function(model) { %>\r\n\r\n    <%\r\n      /* Prepare the A tag at second level menus */\r\n      if (model.children && model.children.length !== 0) {\r\n        model.dropdownSubmenu = 'dropdown-submenu';\r\n       };\r\n\r\n       if (!model.tooltip) {\r\n         model.tooltip = '';\r\n       };\r\n       var elementClass = '2nd-level-item';\r\n       if (model.language) {\r\n\t\t\t elementClass = elementClass+ ' language';\r\n\t   }\r\n       if (model.popup) {\r\n       \t elementClass = elementClass + ' popup';\r\n       }\r\n       if (model.tab) {\r\n         model.tabTarget = 'target=\"_blank\"';\r\n       } else {\r\n         model.tabTarget = '';\r\n       }\r\n       var elementUrl = model.url;\r\n       if (model.post === true) {\r\n         elementUrl = 'javascript:switchTranslation (\"'+elementUrl+'\")';\r\n\r\n       }\r\n       if (!model.url) {\r\n        elementUrl = 'javascript:;';\r\n       }\r\n       /* if it doesn't have children, nor url. then it is the About */\r\n       if (!model.url && !model.children) {\r\n       elementClass = elementClass + ' about-amp';\r\n       }\r\n    %>\r\n\r\n    <li class='dropdown <%= model.dropdownSubmenu %>' >\r\n    <a href='<%=  elementUrl %>' title=\"<%= model.tooltip %>\" onclick=\"return canExit()\" class=\"<%= elementClass %>\" <%= model.tabTarget %> ><%= model.name %></a>\r\n\r\n    <%\r\n      if (model.children && model.children.length !== 0) {\r\n     %>\r\n\r\n      <ul class=\"children dropdown-menu scrollable-menu\" role=\"menu\">\r\n      <% _.each(model.children, function(submodel) { %>\r\n\r\n        <%\r\n          /* Prepare the A tag at third level menus */\r\n          if (!submodel.url) {\r\n            submodel.url = '#';\r\n          };\r\n\t\t  var itemClass = '3rd-level-item';\r\n\t\t  if (submodel.language) {\r\n\t\t\t itemClass = itemClass+ ' language';\r\n\t\t   }\r\n\t\t  if (!submodel.tooltip) {\r\n            submodel.tooltip = '';\r\n          };\r\n\r\n          if (submodel.tab) {\r\n            submodel.tabTarget='target=\"_blank\"';\r\n          } else {\r\n            submodel.tabTarget = '';\r\n          };\r\n        %>\r\n\r\n        <li class=\"menu-item\"><a href=\"<%= submodel.url %>\" onclick=\"return canExit()\" class=\"<%= itemClass %>\" <%= submodel.tabTarget %> title=\"<%= submodel.tooltip %>\"><%= submodel.name %></a></li>\r\n\r\n      <% }) %>\r\n      </ul>\r\n    <% } %>\r\n\r\n    </li>\r\n\r\n  <% }); %>\r\n  </ul>\r\n<% }%>\r\n<!--\r\n<li class=\"menu-item dropdown dropdown-submenu\"><a class=\"dropdown-toggle\" data-toggle=\"dropdown\">\r\n<ul class=\"children dropdown-menu scrollable-menu\" role=\"menu\">\r\n      <li class=\"menu-item first-of-type\" id=\"yui-gen4\" groupindex=\"0\" index=\"0\">\r\n  <a class=\"yuiampmenuitemlabel yuimenuitemlabel\" href=\"/selectTeam.do?id=680\" onclick=\"return canExit()\">\r\n    Academy of Sciences\r\n  </a>\r\n</li>--!>\r\n";
 
 
 module.exports = Backbone.View.extend({

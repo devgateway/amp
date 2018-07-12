@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.node.POJONode;
@@ -392,9 +393,11 @@ public class LocationService {
         try {
             fgj.geometry = getGeometry(structure);
             fgj.id = structure.getAmpStructureId().toString();
-            fgj.properties.put("title", new TextNode(structure.getTitle()));
+
+            fgj.properties.put("title", new TextNode( StringEscapeUtils.escapeHtml(structure.getTitle())));
             if (structure.getDescription() != null && !structure.getDescription().trim().equals("")) {
-                fgj.properties.put("description", new TextNode(structure.getDescription()));
+                fgj.properties.put("description", new TextNode( StringEscapeUtils.escapeHtml(structure.getDescription
+                        ())));
             }
             
             if (structure.getStructureColor() != null) { 

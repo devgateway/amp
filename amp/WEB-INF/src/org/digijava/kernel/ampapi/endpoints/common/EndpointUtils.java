@@ -526,5 +526,4 @@ public class EndpointUtils {
         TLSUtils.getRequest().removeAttribute(EPConstants.JSON_FILTERS);
         return filtersDef;
     }
-
 }

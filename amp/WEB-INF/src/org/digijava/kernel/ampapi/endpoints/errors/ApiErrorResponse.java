@@ -3,6 +3,9 @@
  */
 package org.digijava.kernel.ampapi.endpoints.errors;
 
+import java.util.Optional;
+
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
@@ -20,7 +23,7 @@ import org.digijava.kernel.translator.TranslatorWorker;
 public class ApiErrorResponse {
     protected static final Logger logger = Logger.getLogger(ApiErrorResponse.class);
     
-    public static final String UNKOWN_ERROR = "Unkown Error";
+    public static final String UNKNOWN_ERROR = "Unknown Error";
     public static final String INTERNAL_ERROR = "Internal Error";
     
     /**
@@ -39,12 +42,14 @@ public class ApiErrorResponse {
      */
     public static Response buildGenericError(Status status, JsonBean errorBean, String mediaType) {
 
-        Object formattedMessage = mediaType.contains(MediaType.APPLICATION_XML)
+        String responseMediaType = Optional.ofNullable(mediaType).orElse(MediaType.APPLICATION_JSON);
+
+        Object formattedMessage = responseMediaType.equals(MediaType.APPLICATION_XML)
                 ? ApiError.toXmlErrorString(errorBean) : errorBean;
-        
+
         ResponseBuilder builder = Response.status(status)
                 .entity(formattedMessage)
-                .type(mediaType);
+                .type(responseMediaType);
         
         return builder.build();
     }
@@ -76,7 +81,7 @@ public class ApiErrorResponse {
      * Reports forbidden access with unknown reason
      */
     public static void reportForbiddenAccess() {
-        reportError(Response.Status.FORBIDDEN, ApiError.toError(TranslatorWorker.translateText(UNKOWN_ERROR)));
+        reportError(Response.Status.FORBIDDEN, ApiError.toError(TranslatorWorker.translateText(UNKNOWN_ERROR)));
     }
     
     /**
@@ -96,6 +101,14 @@ public class ApiErrorResponse {
     }
     
     /**
+     * Reports that the resource is not found (HTTP 404)
+     * @param msg API error message
+     */
+    public static void reportResourceNotFound(ApiErrorMessage msg) {
+        reportError(Response.Status.NOT_FOUND, msg);
+    }
+    
+    /**
      * Reports any custom response status for the given message
      * @param status HTTP response status 
      * @param msg    API Error message
@@ -110,8 +123,15 @@ public class ApiErrorResponse {
      * @param error  JSON with the error details
      */
     public static void reportError(Response.Status status, JsonBean error) {
+        throw new WebApplicationException(buildResponse(status, error));
+    }
+    
+    public static Response buildResponse(Response.Status status, JsonBean error) {
         logger.error(String.format("[HTTP %d] Error response = %s", status.getStatusCode(), error.toString()));
-
-        throw new ApiRuntimeException(status, error);
+        ResponseBuilder builder = Response.status(status).
+                entity(error).
+                type(MediaType.APPLICATION_JSON);
+        
+        return builder.build();
     }
 }

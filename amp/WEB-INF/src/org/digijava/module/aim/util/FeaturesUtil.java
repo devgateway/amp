@@ -684,6 +684,10 @@ public class FeaturesUtil {
         String globalValue = getGlobalSettingValue(globalSettingName);
         return (globalValue != null && globalValue.equalsIgnoreCase("true"));
     }
+    
+    public static boolean isAmpOfflineEnabled() {
+        return FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.AMP_OFFLINE_ENABLED);
+    }
 
     /**
      *

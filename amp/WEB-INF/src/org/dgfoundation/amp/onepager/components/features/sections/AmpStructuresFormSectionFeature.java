@@ -40,6 +40,9 @@ import org.digijava.module.aim.dbentity.AmpStructureType;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.StructuresUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 public class AmpStructuresFormSectionFeature extends
         AmpFormSectionFeaturePanel {
@@ -147,7 +150,7 @@ public class AmpStructuresFormSectionFeature extends
                     }
                 });
                 item.add(shape);
-                
+
                 ListEditorRemoveButton delbutton = new ListEditorRemoveButton("deleteStructure", "Delete Structure"){
 
                     @Override
@@ -167,7 +170,7 @@ public class AmpStructuresFormSectionFeature extends
                     
                 };
                 item.add(delbutton);
-                
+
                 final AmpAjaxLinkField viewCoords = new AmpAjaxLinkField("viewCoords", "Map", "View") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
@@ -203,10 +206,26 @@ public class AmpStructuresFormSectionFeature extends
                         target.add(latitude);
                         target.add(longitude);
                         target.add(viewCoords);
-                        target.appendJavaScript("gisPopup($('#" + this.getMarkupId() + "')[0]); return false;");
-                }
+                        
+                        JsonBean data = new JsonBean();
+                        List<JsonBean> structureColors = new ArrayList<>();
+                        
+                        Collection<AmpCategoryValue> categoryValues = CategoryManagerUtil
+                                .getAmpCategoryValueCollectionByKeyExcludeDeleted(
+                                        CategoryConstants.GIS_STRUCTURES_COLOR_CODING_KEY);
+                        for (AmpCategoryValue v : categoryValues) {
+                            JsonBean value = new JsonBean();
+                            value.set("id", v.getId());
+                            value.set("value", v.getValue());
+                            structureColors.add(value);
+                        }
+                        
+                        data.set("structureColors", structureColors);
+                        target.appendJavaScript("gisPopup($('#" + this.getMarkupId() + "')[0], '" + data.asJsonString()
+                                + "'); return false;");
+                    }
                 };
-                item.add(openMapPopup); 
+                item.add(openMapPopup);
 
                 final TextField<String> coords = new TextField<String>("coords",
                         new PropertyModel<String>(structureModel, "coords"));
@@ -252,6 +271,24 @@ public class AmpStructuresFormSectionFeature extends
                 });                
                 item.add(tempId);
                 
+                final TextField<String> structureColorId = new TextField<String>("structureColorId",
+                        new PropertyModel<String>(structureModel, "structureColorId"));
+                structureColorId.setOutputMarkupId(true);
+                structureColorId.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+                    @Override
+                    protected void onUpdate(AjaxRequestTarget target) {
+                        AmpStructure structure = structureModel.getObject();
+                        if (structureColorId.getDefaultModelObject() == null) {
+                            structure.setStructureColor(null);
+                        } else {
+                            Long id = Long.parseLong(structureColorId.getDefaultModelObject().toString());
+                            structure.setStructureColor(CategoryManagerUtil.getAmpCategoryValueFromDb(id));
+                        }
+                        target.add(structureColorId);
+                    }
+                });
+                item.add(structureColorId);               
+                
                 latitude.getTextContainer().setEnabled(!hasCoordinates(structureModel));
                 longitude.getTextContainer().setEnabled(!hasCoordinates(structureModel));
                 viewCoords.getButton().setEnabled(hasCoordinates(structureModel));
@@ -269,7 +306,6 @@ public class AmpStructuresFormSectionFeature extends
             public void onClick(AjaxRequestTarget target) {
                 AmpStructure stru = new AmpStructure();
                 list.addItem(stru);
-
                 target.add(this.getParent());
                 target.add(containter);
                 target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(this.getParent()));
@@ -284,11 +320,9 @@ public class AmpStructuresFormSectionFeature extends
         
         
     }
-    
+
     private boolean hasCoordinates(IModel<AmpStructure> structureModel) {
         return structureModel.getObject().getCoordinates() != null && structureModel.getObject().
                 getCoordinates().size() > 0;
     }
-    
-
 }

@@ -27,9 +27,10 @@ public class AmpOrganisationContact implements Serializable,OrgProfileValue {
         
     }
     
-    public AmpOrganisationContact(AmpOrganisation organisation, AmpContact contact){
-        this.organisation=organisation;
-        this.contact=contact;
+    public AmpOrganisationContact(AmpOrganisation organisation, AmpContact contact) {
+        this.organisation = organisation;
+        this.contact = contact;
+        this.primaryContact = false;
     }
     
     

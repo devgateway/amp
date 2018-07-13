@@ -520,9 +520,9 @@ LoggerIdentifiable, Cloneable {
 //  @Validators (unique="/Activity Form/M&E/Unique MEs Validator")
     protected Set<IndicatorActivity> indicators;
 
-//  @Interchangeable(fieldTitle = "Activity Documents",fmPath="/Activity Form/Related Documents")
+    @Interchangeable(fieldTitle = "Activity Documents", fmPath = "/Activity Form/Related Documents", importable = true)
     @VersionableCollection(fieldTitle = "Activity Documents")
-    protected Set<AmpActivityDocument> activityDocuments    = null;
+    protected Set<AmpActivityDocument> activityDocuments = null;
     
     /* Categories */
     @Interchangeable(fieldTitle = "Categories", importable = true)
@@ -714,8 +714,7 @@ LoggerIdentifiable, Cloneable {
     @Interchangeable(fieldTitle = "PPC Annual Budgets", importable = true, fmPath = "/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost")
     @VersionableCollection(fieldTitle = "PPC Annual Budgets")
     protected Set<AmpAnnualProjectBudget> annualProjectBudgets;
-    //protected Set <AmpActivityContact> activityContacts;
-
+    
         public Boolean getMergedActivity() {
             return mergedActivity;
         }
@@ -2164,5 +2163,6 @@ LoggerIdentifiable, Cloneable {
             }
             this.costAmounts.add(costAmount);
         }
+
 }
 

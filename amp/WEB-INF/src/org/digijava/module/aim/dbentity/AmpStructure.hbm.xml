@@ -25,6 +25,9 @@
 		
 		<many-to-one name="type" column="type" 
 			class="org.digijava.module.aim.dbentity.AmpStructureType" cascade="none" />
+			
+		<many-to-one name="structureColor" column="structure_color" 
+		class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 		
 		<set name="images" cascade="all-delete-orphan" lazy="true">
 			<cache usage="read-write" />

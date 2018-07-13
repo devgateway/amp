@@ -1,10 +1,9 @@
 package org.digijava.module.contentrepository.action;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Iterator;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -13,7 +12,6 @@ import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.UnsupportedRepositoryOperationException;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -25,11 +23,10 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessages;
-import org.apache.wicket.util.lang.Bytes;
 import org.digijava.kernel.ampapi.endpoints.gis.services.MapTilesService;
-import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
@@ -48,7 +45,6 @@ import org.digijava.module.contentrepository.form.DocumentManagerForm;
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.helper.DocumentData;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
-import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
 import org.digijava.module.contentrepository.util.DocumentManagerRights;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.contentrepository.util.DocumentsNodesAttributeManager;
@@ -56,236 +52,208 @@ import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 
 public class DocumentManager extends Action {
     
-    private static Logger logger        = Logger.getLogger(DocumentManager.class);
-    private boolean showOnlyLinks       = false;
-    private boolean showOnlyDocs        = false;
+    private static Logger logger = Logger.getLogger(DocumentManager.class);
+    
+    private static final String TYPE_PRIVATE = "private";
+    private static final String TYPE_TEAM = "team";
+    private static final String TYPE_SHARED = "shared";
+    private static final String TYPE_PUBLIC = "public";
+    
+    public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+            HttpServletResponse response) {
 
-    public ActionForward execute(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception{
-
-        ActionMessages errors                   = new ActionMessages();
-        DocumentManagerForm myForm      = (DocumentManagerForm) form;
-
-        request.setAttribute("ServletContext", this.getServlet().getServletContext() );
-        if (  myForm.getAjaxDocumentList() ) {
-            ajaxDocumentList(request, myForm);
-            return mapping.findForward("ajaxDocumentList");
-        }
-
-        DocumentManagerUtil.setMaxFileSizeAttribute(request);
+        ActionMessages errors = new ActionMessages();
+        DocumentManagerForm docForm = (DocumentManagerForm) form;
 
         if (!isLoggeedIn(request)) {
             return mapping.findForward("publicView");
         }
         
-        //set years
-        myForm.setYears(new ArrayList<Long>());
-        Long yearFrom = Long.parseLong(FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.YEAR_RANGE_START));
-        Long countYear = Long.parseLong(FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.NUMBER_OF_YEARS_IN_RANGE));
-        for (long i = yearFrom; i <= (yearFrom + countYear); i++) {
-            myForm.getYears().add(new Long(i));
+        if (docForm.getAjaxDocumentList()) {
+            populateDocumentManagerForm(request, docForm);
+            return mapping.findForward("ajaxDocumentList");
         }
+
+        showContentRepository(request, docForm, errors);
         
-        showContentRepository(request, myForm, errors);
-        
-        this.saveErrors(request, errors);
-        HttpSession httpSession     = request.getSession();
-        TeamMember teamMember       = (TeamMember)httpSession.getAttribute(Constants.CURRENT_MEMBER);
-        AmpApplicationSettings sett = DbUtil.getTeamAppSettings(teamMember.getTeamId());
-        boolean shareWithoutApprovalNeeded=((sett!=null && sett.getAllowAddTeamRes()!=null && sett.getAllowAddTeamRes().intValue()>=CrConstants.TEAM_RESOURCES_ADD_ALLOWED_WORKSP_MEMBER) || teamMember.getTeamHead());
-        request.setAttribute("shareWithoutApprovalNeeded", shareWithoutApprovalNeeded);
         return mapping.findForward("forward");
     }
 
-    private boolean ajaxDocumentList(HttpServletRequest myRequest, DocumentManagerForm myForm) {
-        // UGLY HACK. This needs to be re-written
-        if (myRequest.getHeader("referer") != null && myRequest.getHeader("referer").contains("documentManager.do")) {
-            myRequest.setAttribute("checkBoxToHide", true);
-        }
-        boolean showActionsButtons = true;
-        if (myForm.getShowActions() != null && !myForm.getShowActions()) {
-            showActionsButtons = false;
+    /**
+     * Populate document form with requested documents
+     *
+     * @param request
+     * @param docForm
+     */
+    private void populateDocumentManagerForm(HttpServletRequest request, DocumentManagerForm docForm) {
+        
+        if (request.getHeader("referer") != null && request.getHeader("referer").contains("documentManager.do")) {
+            request.setAttribute("checkBoxToHide", true);
         }
         
-        Session jcrWriteSession = DocumentManagerUtil.getWriteSession(myRequest);
+        boolean showActionsButtons = docForm.getShowActions() != null && !docForm.getShowActions() ? false : true;
+        List<DocumentData> documents = new ArrayList<>();
         
-        if (!isLoggeedIn(myRequest) || myRequest.getParameter(CrConstants.GET_PUBLIC_DOCUMENTS) != null) {
-            Map<String, CrDocumentNodeAttributes> uuidMap = DocumentsNodesAttributeManager.getInstance()
-                    .getPublicDocumentsMap(true);
-            
-            try {
-                List<String> uuidList = new ArrayList<>(uuidMap.keySet());
-                List<DocumentData> otherDocuments = this.getDocuments(uuidList, myRequest, CrConstants.PUBLIC_DOCS_TAB,
-                        false, showActionsButtons);
-                myForm.setOtherDocuments(otherDocuments);
-            } catch (Exception e) {
-                throw new RuntimeException(e.getMessage(), e);
-            }
+        if (!isLoggeedIn(request)) {
+            documents = getPublicDocuments(request, showActionsButtons);
+        } else if (docForm.getDocListInSession() != null) {
+            documents = getSessionDocuments(request, showActionsButtons, docForm.getDocListInSession());
         } else {
-            if (myForm.getDocListInSession() != null) {
-                List<String> uuids = new ArrayList<>();
-                uuids.addAll(SelectDocumentDM.getSelectedDocsSet(myRequest, myForm.getDocListInSession(), true));
-                Collection<DocumentData> tempCol = TemporaryDocumentData.retrieveTemporaryDocDataList(myRequest);
-                if (!uuids.isEmpty()) {
-                    List<DocumentData> documents = this.getDocuments(uuids, myRequest, null, false, showActionsButtons);
-                    myForm.setOtherDocuments(documents);
-                }
-
-                try {
-                    if (tempCol != null) {
-                        if (myForm.getOtherDocuments() == null) {
-                            myForm.setOtherDocuments(tempCol);
-                        } else {
-                            myForm.getOtherDocuments().addAll(tempCol);
-                        }
-                    }
-                } catch (Exception e) {
-                    throw new RuntimeException(e.getMessage(), e);
-                }
-
-                return false;
-            }
-        
-        //for selectDocumentDM
-        
-        myRequest.setAttribute("dynamicList", myRequest.getParameter("dynamicList") );
-        String source   = null;
-        if ( myForm.getOtherUsername() != null && myForm.getOtherTeamId() != null ) {
-            source      = DocumentFilter.SOURCE_PRIVATE_DOCUMENTS;
-            myForm.setType("private"); //TODO-CONSTANTIN COPY SOURCE
-        }else if ( myForm.getOtherUsername() == null && myForm.getOtherTeamId() != null ) {
-            source      = DocumentFilter.SOURCE_TEAM_DOCUMENTS;
-            myForm.setType("team");
-        }else if(myForm.getShowSharedDocs()!=null){
-            source      = DocumentFilter.SOURCE_SHARED_DOCUMENTS;
-            myForm.setType("shared");
-        }else {
-            source          = DocumentFilter.SOURCE_PUBLIC_DOCUMENTS;
+            DocumentFilter documentFormFilter = new DocumentFilter(docForm);
+            documents = getFilteredDocuments(request, documentFormFilter, showActionsButtons);
+            docForm.setType(getDocumentFormType(docForm));
+            request.setAttribute("dynamicList", request.getParameter("dynamicList"));
+            request.setAttribute("tabType", docForm.getType());
         }
         
-        myRequest.setAttribute("tabType", myForm.getType());        
-        
-        List<String> filterLablesUUID   = null;
-        if ( myForm.getFilterLabelsUUID() != null ){
-            filterLablesUUID        = Arrays.asList(myForm.getFilterLabelsUUID() );
-        }
-        
-        List<Long> filterDocTypes       = null;
-        if ( myForm.getFilterDocTypeIds() != null ){
-            filterDocTypes          = Arrays.asList(myForm.getFilterDocTypeIds() );
-            filterDocTypes          = new ArrayList<Long>(filterDocTypes );
-            filterDocTypes.remove(new Long(0));
-            filterDocTypes.remove(new Long(-1));
-        }
-        
-        List<String> filterFileTypes    = null;
-        if ( myForm.getFilterFileTypes() != null ){
-            filterFileTypes         = Arrays.asList(myForm.getFilterFileTypes() );
-            filterFileTypes         = new ArrayList<String>(filterFileTypes);
-            filterFileTypes.remove("-1");
-        }
-        
-        List<String> filterOwners           = null;
-        if ( myForm.getFilterOwners() != null ) {
-            filterOwners            = Arrays.asList(myForm.getFilterOwners() );
-            filterOwners            = new ArrayList<String>( filterOwners );
-            filterOwners.remove("-1");
-        }
-        
-        
-        List<Long> filterTeamIds            = null; 
-        if ( myForm.getFilterTeamIds() != null ) { 
-            filterTeamIds           = Arrays.asList(myForm.getFilterTeamIds() );
-            filterTeamIds           = new ArrayList<Long> ( filterTeamIds );
-            filterTeamIds.remove(new Long(0));
-            filterTeamIds.remove(new Long(-1));
-        }
-        
-        List<String> filterkeywords = null;
-        if ( myForm.getFilterKeywords() != null ){
-            filterkeywords      = Arrays.asList(myForm.getFilterKeywords() );
-        }
-        
-        // organisationID to filter by: null, zero or negative numbers mean "no filtering"
-        Long orgId = null;
-        if (myForm.getFilterOrganisations() != null)
-            orgId = Long.parseLong(myForm.getFilterOrganisations());
-        
-        String filterFromDate = myForm.getFilterFromDate();
-        String filterToDate = myForm.getFilterToDate();
-        
-        DocumentFilter documentFilter   = new DocumentFilter(source, filterLablesUUID, filterDocTypes, 
-                        filterFileTypes, filterTeamIds, filterOwners,filterkeywords, myForm.getOtherUsername(), myForm.getOtherTeamId(), orgId, filterFromDate, filterToDate);
-        
-
-        if ( DocumentFilter.SOURCE_PRIVATE_DOCUMENTS.equals(documentFilter.getSource()) ) {
-            TeamMember  otherTeamMember     = null;
-            Collection otherTeamMembers     = TeamMemberUtil.getTMTeamMembers( documentFilter.getBaseUsername() );
-            
-            Iterator iterator               = otherTeamMembers.iterator();
-            //this search is terribly inefficient
-            while ( iterator.hasNext() ) {
-                TeamMember someTeamMember   = (TeamMember) iterator.next(); 
-                if ( someTeamMember.getTeamId().longValue() == documentFilter.getBaseTeamId().longValue() ) {
-                    otherTeamMember     = someTeamMember;
-                    break;
-                }
-            }
-            
-            if (otherTeamMember != null) {
-                List<DocumentData> allPrivateDocs = new ArrayList<>();
-                Node otherHomeNode = DocumentManagerUtil.getUserPrivateNode(jcrWriteSession, otherTeamMember);
-                if (otherHomeNode != null) {
-                    allPrivateDocs = this.getDocuments(otherHomeNode, myRequest, CrConstants.PRIVATE_DOCS_TAB, false,
-                            showActionsButtons);
-                }
-                myForm.setOtherDocuments(documentFilter.applyFilter(allPrivateDocs));
-            }
-        }
-        else if ( DocumentFilter.SOURCE_TEAM_DOCUMENTS.equals(documentFilter.getSource()) ) {
-            Node otherHomeNode                  = DocumentManagerUtil.getTeamNode(jcrWriteSession, myForm.getOtherTeamId());
-            
-            Collection<DocumentData> allTeamsDocs   = this.getDocuments(otherHomeNode, myRequest,CrConstants.TEAM_DOCS_TAB,false,showActionsButtons);       
-            
-            //resources pending approval
-            TeamMember currentTM = getCurrentTeamMember(myRequest);
-            List<DocumentData> pendingResources = null;
-            if (currentTM.getTeamHead()) { // should see all docs that are pending approval for this team
-                List<String> uuids = DocumentManagerUtil.getSharedNodeUUIDs(currentTM, CrConstants.PENDING_STATUS);
-                if (uuids != null && uuids.size() > 0) {
-                    pendingResources = getDocuments(uuids, myRequest, CrConstants.TEAM_DOCS_TAB, true, true);
-                }
-            }
-                    
-            if(allTeamsDocs!=null){
-                if(pendingResources!=null){
-                    allTeamsDocs.addAll(pendingResources);
-                }
-            }
-            
-            myForm.setOtherDocuments( documentFilter.applyFilter(allTeamsDocs) );
-        }
-        //shared documents
-        else if (DocumentFilter.SOURCE_SHARED_DOCUMENTS.equals(documentFilter.getSource())) {
-            Collection<DocumentData> allSharedDocs = this.getSharedDocuments(getCurrentTeamMember(myRequest), myRequest,
-                    showActionsButtons);
-            myForm.setOtherDocuments(documentFilter.applyFilter(allSharedDocs));
-        } else if (DocumentFilter.SOURCE_PUBLIC_DOCUMENTS.equals(documentFilter.getSource())) {
-            myRequest.getSession().setAttribute(DocumentFilter.SESSION_LAST_APPLIED_PUBLIC_FILTER, documentFilter);
-            Map<String, CrDocumentNodeAttributes> uuidMap = DocumentsNodesAttributeManager.getInstance()
-                    .getPublicDocumentsMap(true);
-            try {
-                List<String> uuids = new ArrayList<>();
-                uuids.addAll(uuidMap.keySet());
-                List<DocumentData> otherDocuments = this.getDocuments(uuids, myRequest, CrConstants.PUBLIC_DOCS_TAB,
-                        false, showActionsButtons);
-                myForm.setOtherDocuments(documentFilter.applyFilter(otherDocuments));
-            } catch (Exception e) {
-                throw new RuntimeException(e.getMessage(), e);
-            }
-        }
-        }
-        return false;
+        docForm.setOtherDocuments(documents);
     }
+    
+    /**
+     * Get session documents from document form session
+     *
+     * @param request
+     * @param showActionsButtons
+     * @param docListInSession
+     * @return documents
+     */
+    private List<DocumentData> getSessionDocuments(HttpServletRequest request, boolean showActionsButtons,
+            String docListInSession) {
+        
+        List<DocumentData> documents = new ArrayList<>();
+        List<String> uuids = new ArrayList<>(SelectDocumentDM.getSelectedDocsSet(request, docListInSession, true));
+        
+        documents = getDocuments(uuids, request, null, false, showActionsButtons);
+        documents.addAll(DocumentManagerUtil.retrieveTemporaryDocDataList(request));
+        
+        return documents;
+    }
+
+    /**
+     * Get documents based on document filter
+     *
+     * @param request
+     * @param filter
+     * @param showActionsButtons
+     * @return documents
+     */
+    private List<DocumentData> getFilteredDocuments(HttpServletRequest request, DocumentFilter filter,
+            boolean showActionsButtons) {
+        
+        List<DocumentData> documents = new ArrayList<>();
+        
+        switch (filter.getSource()) {
+            case DocumentFilter.SOURCE_PRIVATE_DOCUMENTS:
+                documents = getPrivateDocuments(request, filter.getBaseUsername(), filter.getBaseTeamId(),
+                        showActionsButtons);
+                break;
+            case DocumentFilter.SOURCE_TEAM_DOCUMENTS:
+                documents = getTeamDocuments(request, filter.getBaseTeamId(), showActionsButtons);
+                break;
+            case DocumentFilter.SOURCE_SHARED_DOCUMENTS:
+                documents = getSharedDocuments(request, getCurrentTeamMember(request), showActionsButtons);
+                break;
+            case DocumentFilter.SOURCE_PUBLIC_DOCUMENTS:
+                request.getSession().setAttribute(DocumentFilter.SESSION_LAST_APPLIED_PUBLIC_FILTER, filter);
+                documents = getPublicDocuments(request, showActionsButtons);
+                break;
+            default:
+                break;
+        }
+
+        return filter.applyFilter(documents);
+    }
+
+    /**
+     * Get team document list based on team_id
+     * This method is used to populate the table from team tab in Resource Manager
+     *
+     * @param request
+     * @param teamId
+     * @param showActionsButtons
+     * @return documents
+     */
+    private List<DocumentData> getTeamDocuments(HttpServletRequest request, Long teamId, boolean showActionsButtons) {
+        List<DocumentData> documents = new ArrayList<>();
+        Session jcrWriteSession = DocumentManagerUtil.getWriteSession(request);
+        
+        Node otherHomeNode = DocumentManagerUtil.getTeamNode(jcrWriteSession, teamId);
+        if (otherHomeNode != null) {
+            documents = getDocuments(otherHomeNode, request, CrConstants.TEAM_DOCS_TAB, false, showActionsButtons);
+        }
+        
+        //resources pending approval
+        TeamMember currentTM = getCurrentTeamMember(request);
+        if (currentTM.getTeamHead()) { // should see all docs that are pending approval for this team
+            List<String> uuids = DocumentManagerUtil.getSharedNodeUUIDs(currentTM, CrConstants.PENDING_STATUS);
+            List<DocumentData> pendingResources = getDocuments(uuids, request, CrConstants.TEAM_DOCS_TAB, true, true);
+            documents.addAll(pendingResources);
+        }
+        
+        return documents;
+    }
+
+    /**
+     * Get private document list based on teammember (email + team_id)
+     * This method is used to populate the table from private tab in Resource Manager
+     *
+     * @param request
+     * @param email
+     * @param teamId
+     * @param showActionsButtons
+     * @return documents
+     */
+    private List<DocumentData> getPrivateDocuments(HttpServletRequest request, String email, Long teamId,
+            boolean showActionsButtons) {
+        
+        Session jcrWriteSession = DocumentManagerUtil.getWriteSession(request);
+        AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMemberByEmailAndTeam(email, teamId);
+        
+        if (teamMember != null) {
+            TeamMember userTeamMember = TeamMemberUtil.getTeamMember(teamMember.getAmpTeamMemId());
+            Node otherHomeNode = DocumentManagerUtil.getUserPrivateNode(jcrWriteSession, userTeamMember);
+            if (otherHomeNode != null) {
+                return getDocuments(otherHomeNode, request, CrConstants.PRIVATE_DOCS_TAB, false, showActionsButtons);
+            }
+        }
+        
+        return Collections.emptyList();
+    }
+    
+    /**
+     * Get shared documents among workspaces
+     * This method is used to populate the table from shared tab in Resource Manager
+     *
+     * @param request
+     * @param teamMember
+     * @param showActionButtons
+     * @return documents
+     */
+    private List<DocumentData> getSharedDocuments(HttpServletRequest request, TeamMember teamMember,
+            boolean showActionButtons) {
+        
+        List<String> allSharedDocsIds = DocumentManagerUtil.getSharedNodeUUIDs(teamMember,
+                CrConstants.SHARED_AMONG_WORKSPACES);
+        
+        return getDocuments(allSharedDocsIds, request, CrConstants.SHARED_DOCS_TAB, false, showActionButtons);
+    }
+    
+    /**
+     * Get public documents
+     * This method is used to populate the table from public tab in Resource Manager
+     *
+     * @param request
+     * @param showActionsButtons
+     * @return documents
+     */
+    private List<DocumentData> getPublicDocuments(HttpServletRequest request, boolean showActionsButtons) {
+        DocumentsNodesAttributeManager docNodesAttributeManager = DocumentsNodesAttributeManager.getInstance();
+        Map<String, CrDocumentNodeAttributes> uuidMap = docNodesAttributeManager.getPublicDocumentsMap(true);
+        List<String> uuids = new ArrayList<>(uuidMap.keySet());
+        
+        return getDocuments(uuids, request, CrConstants.PUBLIC_DOCS_TAB, false, showActionsButtons);
+    }
+
     
     private boolean showContentRepository(HttpServletRequest request, DocumentManagerForm myForm, ActionMessages errors) {
         try {
@@ -297,43 +265,38 @@ public class DocumentManager extends Action {
             myForm.setTeamMembers(TeamMemberUtil.getAllTeamMembersMail(teamMember.getTeamId()));
             Session jcrWriteSession     = DocumentManagerUtil.getWriteSession(request);
             
-            
+            DocumentManagerUtil.setMaxFileSizeAttribute(request);
             //check if tabs have data
             myForm.setSharedDocsTabVisible(DocumentManagerUtil.sharedDocumentsExist(teamMember));
             myForm.setPublicDocsTabVisible(DocumentManagerUtil.publicDocumentsExist(teamMember));
             
             // AMP-8791: "resourcesTab" is set only when the document is
             // shared/unshared.
-            // Then the attribute is deleted from session. If there is no
-            // resourceTab and no type set then select the first tab.
+            // Then the attribute is deleted from session.
+            // If there is no resourceTab and no type set then select the first tab.
             if (httpSession.getAttribute("resourcesTab") == null || httpSession.getAttribute("resourcesTab").toString().equals("")) {
                 if (myForm.getType() == null || myForm.getType().equals("")) {
-                    ServletContext ampContext = null;                   
-                    ampContext = getServlet().getServletContext();                  
                     if(FeaturesUtil.isVisibleFeature("My Resources")){
-                        myForm.setType("private");
+                        myForm.setType(TYPE_PRIVATE);
                     }else if (FeaturesUtil.isVisibleFeature("Team Resources")){
-                        myForm.setType("team");
+                        myForm.setType(TYPE_TEAM);
                     }else if (FeaturesUtil.isVisibleFeature("Shared Resources") && myForm.getSharedDocsTabVisible()){
-                        myForm.setType("shared");
+                        myForm.setType(TYPE_SHARED);
                     }else if (FeaturesUtil.isVisibleFeature("Public Resources") && myForm.getPublicDocsTabVisible()){
-                        myForm.setType("public");
+                        myForm.setType(TYPE_PUBLIC);
                     }
                     
                 }
             } else {
                 myForm.setType(httpSession.getAttribute("resourcesTab").toString());
-                if (myForm.getType().equals("shared") && (!myForm.getSharedDocsTabVisible()))
+                if (myForm.getType().equals(TYPE_SHARED) && (!myForm.getSharedDocsTabVisible()))
                 {
-                    myForm.setType("private");
+                    myForm.setType(TYPE_PRIVATE);
                 }
                 httpSession.removeAttribute("resourcesTab");
             }
                         
-            if (teamMember == null) {
-                throw new Exception("No TeamMember found in HttpSession !");
-            }
-            if (myForm.getType() != null && myForm.getType().equals("private") ) {
+            if (myForm.getType() != null && myForm.getType().equals(TYPE_PRIVATE)) {
                 if (myForm.getFileData() != null || myForm.getWebLink() != null) {
                     Node userHomeNode = DocumentManagerUtil.getUserPrivateNode(jcrWriteSession, teamMember);
                     if (userHomeNode == null) {
@@ -345,7 +308,9 @@ public class DocumentManager extends Action {
                     }
                 }
             }
-            if (myForm.getType() != null && myForm.getType().equals("team") && DocumentManagerRights.hasAddResourceToTeamResourcesRights(request) ) {
+            if (myForm.getType() != null && myForm.getType().equals(TYPE_TEAM)
+                    && DocumentManagerRights.hasAddResourceToTeamResourcesRights(request)) {
+                
                 if (myForm.getFileData() != null || myForm.getWebLink() != null) {
                     Node teamHomeNode = DocumentManagerUtil.getTeamNode(jcrWriteSession, teamMember.getTeamId());
                     NodeWrapper nodeWrapper = new NodeWrapper(myForm, request, teamHomeNode, false, errors);
@@ -370,7 +335,7 @@ public class DocumentManager extends Action {
                     if (nodeWrapper != null && !nodeWrapper.isErrorAppeared()) {
                         nodeWrapper.saveNode(jcrWriteSession);
                         if (nodeWrapper.isTeamDocument()) {
-                            myForm.setType("team");
+                            myForm.setType(TYPE_TEAM);
                             createVersionApprovalStatus(request,hasVersioningRightsWithoutApprovalNeeded,nodeWrapper);                          
                         }
                     }                   
@@ -383,43 +348,38 @@ public class DocumentManager extends Action {
             return false;
         }
         
+        myForm.setYears(getDocumentManagerFormYears());
+        request.setAttribute("shareWithoutApprovalNeeded", isShareWithoutApprovalNeeded(request));
+        
+        saveErrors(request, errors);
+        
         return true;
     }
 
     private void createVersionApprovalStatus(HttpServletRequest request,Boolean hasVersioningRightsWithoutApprovalNeeded,NodeWrapper nodeWrapper)
             throws UnsupportedRepositoryOperationException, RepositoryException, CrException, Exception {
-        if(hasVersioningRightsWithoutApprovalNeeded){
+        if (hasVersioningRightsWithoutApprovalNeeded) {
             //update team's last approved version id- If new team document is created,it's uuid is last approved
-            String lastApprovedNodeVersionUUID=DocumentManagerUtil.getNodeOfLastVersion(nodeWrapper.getUuid(), request).getUUID();
-            NodeLastApprovedVersion lastAppVersion=DocumentManagerUtil.getlastApprovedVersionOfTeamNode(nodeWrapper.getUuid());
-            if(lastAppVersion!=null){
+            String lastApprovedNodeVersionUUID = DocumentManagerUtil
+                    .getNodeOfLastVersion(nodeWrapper.getUuid(), request).getIdentifier();
+            NodeLastApprovedVersion lastAppVersion = DocumentManagerUtil
+                    .getlastApprovedVersionOfTeamNode(nodeWrapper.getUuid());
+            if (lastAppVersion != null) {
                 lastAppVersion.setVersionID(lastApprovedNodeVersionUUID);
-            }else{
-                lastAppVersion=new NodeLastApprovedVersion(nodeWrapper.getUuid(), lastApprovedNodeVersionUUID);
-            }                   
+            } else {
+                lastAppVersion = new NodeLastApprovedVersion(nodeWrapper.getUuid(), lastApprovedNodeVersionUUID);
+            }
             DbUtil.saveOrUpdateObject(lastAppVersion);
-        }else{
+        } else {
             //version is unapproved
-            String lastVersionOfTheNode=DocumentManagerUtil.getNodeOfLastVersion(nodeWrapper.getUuid(), request).getUUID();
-            TeamNodePendingVersion pendingVersion=new TeamNodePendingVersion(nodeWrapper.getUuid(),lastVersionOfTheNode);
+            String lastVersionOfTheNode = DocumentManagerUtil.getNodeOfLastVersion(nodeWrapper.getUuid(), request)
+                    .getIdentifier();
+            TeamNodePendingVersion pendingVersion = new TeamNodePendingVersion(nodeWrapper.getUuid(),
+                    lastVersionOfTheNode);
             DbUtil.saveOrUpdateObject(pendingVersion);
         }
     }
 
-    private List<DocumentData> getSharedDocuments(TeamMember teamMember, HttpServletRequest request,
-            boolean showActionButtons) {
-        List<DocumentData> sharedDocs = null;
-        // get all nodes that are shared to this team
-        List<String> allSharedDocsIds = DocumentManagerUtil.getSharedNodeUUIDs(teamMember,
-                CrConstants.SHARED_AMONG_WORKSPACES);
-        if (allSharedDocsIds != null) {
-            sharedDocs = getDocuments(allSharedDocsIds, request, CrConstants.SHARED_DOCS_TAB, false, showActionButtons);
-        }
-        
-        return sharedDocs;
-    }
-    
-    
     private List<DocumentData> getDocuments(Node node, HttpServletRequest request, String tabName, boolean isPending,
             boolean showActionButtons) {
         
@@ -485,12 +445,13 @@ public class DocumentManager extends Action {
                     CrSharedDoc crSharedDoc = DocumentManagerUtil.getCrSharedDoc(docBaseUUID,
                             getCurrentTeamMember(request).getTeamId(), CrConstants.PENDING_STATUS);
                     String sharedVersionId = crSharedDoc.getSharedNodeVersionUUID();
-                    Node docNodeLastVersion = DocumentManagerUtil.getNodeOfLastVersion(documentNode.getUUID(), request);
+                    Node docNodeLastVersion = DocumentManagerUtil.getNodeOfLastVersion(documentNode.getIdentifier(),
+                            request);
                     /**
                      * If private document wasn't yet approved to become team doc and meanwhile TM added new version to his private doc,
                      * the version which he marked as shared should be visible and not the last version of the document.
                      */
-                    if (!docNodeLastVersion.getUUID().equals(sharedVersionId)) {
+                    if (!docNodeLastVersion.getIdentifier().equals(sharedVersionId)) {
                         documentNode = DocumentManagerUtil.getReadNode(sharedVersionId, request);
                     }
                 }
@@ -501,7 +462,6 @@ public class DocumentManager extends Action {
                 }
     
                 DocumentData documentData = DocumentData.buildFromNodeWrapper(nw, docBaseUUID, nw.getUuid());
-                
                 if (!CrConstants.PUBLIC_DOCS_TAB.equals(tabName) && showActionButtons) {
                     /**
                      * resources that are pending approval to become team resources,
@@ -600,10 +560,7 @@ public class DocumentManager extends Action {
             Map<String, CrDocumentNodeAttributes> uuidMapVer, HttpServletRequest request) {
         
         boolean shouldSkip = false;
-        if (nodeWrapper.getWebLink() != null && showOnlyDocs
-                || (nodeWrapper.getWebLink() == null && showOnlyLinks)) {
-            shouldSkip = true;
-        }
+
         // This document is public and exactly this version is the public one
         boolean isPublicVersion = uuidMapVer.containsKey(nodeWrapper.getUuid());
         
@@ -702,7 +659,7 @@ public class DocumentManager extends Action {
             }
         }
 
-        if (tabName != null && tabName.equals(CrConstants.SHARED_DOCS_TAB)) {
+        if (StringUtils.equals(tabName, CrConstants.SHARED_DOCS_TAB)) {
             return getSharedDocuments(documents, myRequest, showActionsButton);
         }
         
@@ -717,7 +674,7 @@ public class DocumentManager extends Action {
             for (Node documentNode : nodes) {
                 NodeWrapper nodeWrapper = new NodeWrapper(documentNode);
                 
-                if (nodeWrapper.getWebLink() != null && (showOnlyDocs || showOnlyLinks)) {
+                if (nodeWrapper.getWebLink() != null) {
                     continue;
                 }
                 
@@ -747,14 +704,52 @@ public class DocumentManager extends Action {
     }
     
     private boolean isLoggeedIn(HttpServletRequest request) {
-        if ( getCurrentTeamMember(request) != null) 
-            return true;
-        return false;
+        return getCurrentTeamMember(request) != null;
     }
     
-    private TeamMember getCurrentTeamMember( HttpServletRequest request ) {
-        HttpSession httpSession     = request.getSession();
-        TeamMember teamMember       = (TeamMember)httpSession.getAttribute(Constants.CURRENT_MEMBER);
+    private TeamMember getCurrentTeamMember(HttpServletRequest request) {
+        HttpSession httpSession = request.getSession();
+        TeamMember teamMember = (TeamMember) httpSession.getAttribute(Constants.CURRENT_MEMBER);
         return teamMember;
+    }
+    
+    /**
+     * @return years based on Global Settings
+     */
+    private List<Long> getDocumentManagerFormYears() {
+        List<Long> years = new ArrayList<Long>();
+        Long yearFrom = FeaturesUtil.getGlobalSettingValueLong(Constants.GlobalSettings.YEAR_RANGE_START);
+        Long countYear = FeaturesUtil.getGlobalSettingValueLong(Constants.GlobalSettings.NUMBER_OF_YEARS_IN_RANGE);
+        
+        for (long i = yearFrom; i <= (yearFrom + countYear); i++) {
+            years.add(new Long(i));
+        }
+        
+        return years;
+    }
+    
+    /**
+     * @param request
+     * @return
+     */
+    private boolean isShareWithoutApprovalNeeded(HttpServletRequest request) {
+        TeamMember teamMember = getCurrentTeamMember(request);
+        AmpApplicationSettings sett = DbUtil.getTeamAppSettings(teamMember.getTeamId());
+        boolean shareWithoutApprovalNeeded = ((sett != null && sett.getAllowAddTeamRes() != null
+                && sett.getAllowAddTeamRes().intValue() >= CrConstants.TEAM_RESOURCES_ADD_ALLOWED_WORKSP_MEMBER)
+                || teamMember.getTeamHead());
+        
+        return shareWithoutApprovalNeeded;
+    }
+    
+    private String getDocumentFormType(DocumentManagerForm docForm) {
+        if (docForm.getOtherUsername() != null && docForm.getOtherTeamId() != null) {
+            return TYPE_PRIVATE;
+        } else if (docForm.getOtherUsername() == null && docForm.getOtherTeamId() != null) {
+            return TYPE_TEAM;
+        } else if (docForm.getShowSharedDocs() != null) {
+            return TYPE_SHARED;
+        }
+        return TYPE_PUBLIC;
     }
 }

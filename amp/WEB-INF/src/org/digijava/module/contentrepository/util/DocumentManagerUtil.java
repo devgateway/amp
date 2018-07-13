@@ -9,6 +9,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -174,12 +175,11 @@ public class DocumentManagerUtil {
         for ( int i=versions.size()-1; i>=0; i-- ) {
             Version v           = versions.get(i);
             NodeIterator nIter  = v.getNodes();
-            if ( nIter.hasNext() ) {
-                Node n              = nIter.nextNode();
-                if ( isGivenVersionPendingApproval(n.getUUID()) != null ) 
-                    continue;
-                else
+            if (nIter.hasNext()) {
+                Node n = nIter.nextNode();
+                if (isGivenVersionPendingApproval(n.getIdentifier()) == null) {
                     return n;
+                }
             }
         }
         return null;
@@ -291,24 +291,26 @@ public class DocumentManagerUtil {
         TeamInformationBeanDM teamInfo  = new TeamInformationBeanDM();
         teamInfo.setMeTeamMember( (TeamMember)session.getAttribute(Constants.CURRENT_MEMBER) );
         
-        TeamMember me   = teamInfo.getMeTeamMember();
+        TeamMember me = teamInfo.getMeTeamMember();
         
         if (me != null) {
-            teamInfo.setIsTeamLeader( me.getTeamHead() );
-            teamInfo.setMyTeamMembers( TeamMemberUtil.getAllTeamMembers(me.getTeamId()) );
+            teamInfo.setIsTeamLeader(me.getTeamHead());
+            teamInfo.setMyTeamMembers(TeamMemberUtil.getAllTeamMembers(me.getTeamId()));
         }
         
         return teamInfo;
     }
     
     public static Collection<DocumentData> createDocumentDataCollectionForActivityPreview(HttpServletRequest request) {
-        Collection<String> UUIDs = SelectDocumentDM.getSelectedDocsSet(request, ActivityDocumentsConstants.RELATED_DOCUMENTS, false);
+        Collection<String> uuids = SelectDocumentDM.getSelectedDocsSet(request, 
+                ActivityDocumentsConstants.RELATED_DOCUMENTS, false);
         ArrayList<DocumentData> ret = new ArrayList<DocumentData>();
-        if ( UUIDs == null )
-            return null;
+        if (uuids == null) {
+            return Collections.emptyList();
+        }
         try {
             ArrayList<Node> documents = new ArrayList<Node>();
-            Iterator<String> iter = UUIDs.iterator();
+            Iterator<String> iter = uuids.iterator();
             while (iter.hasNext()) {
                 String uuid = iter.next();
                 Node documentNode = DocumentManagerUtil.getReadNode(uuid, request);
@@ -351,12 +353,12 @@ public class DocumentManagerUtil {
     
     public static List<DocumentData> createDocumentDataCollectionFromSession(HttpServletRequest request) {
         List<String> uuids = new ArrayList<>();
-        uuids.addAll(SelectDocumentDM.getSelectedDocsSet(request, ActivityDocumentsConstants.RELATED_DOCUMENTS, false));
+        uuids.addAll(SelectDocumentDM.getSelectedDocsSet(request, ActivityDocumentsConstants.RELATED_DOCUMENTS, true));
         if (!uuids.isEmpty()) {
             try {
                 DocumentManager dm = new DocumentManager();
                 List<DocumentData> ret = dm.getDocuments(uuids, request, null, false, true);
-                ret.addAll(TemporaryDocumentData.retrieveTemporaryDocDataList(request));
+                ret.addAll(DocumentManagerUtil.retrieveTemporaryDocDataList(request));
                 return ret;
             } catch (Exception e) {
                 throw new RuntimeException(e.getMessage(), e);
@@ -647,7 +649,6 @@ public class DocumentManagerUtil {
      */
     public static List<String> getSharedNodeUUIDs(TeamMember team, Integer state) {
         Long teamId = team.getTeamId();
-        List<String> retVal=null;
         org.hibernate.Session session=null;
         Query qry=null;
         String queryString=null;
@@ -660,11 +661,12 @@ public class DocumentManagerUtil {
             }
             
             qry=session.createQuery(queryString);
-            retVal=qry.list();
+            return qry.list();
         } catch (Exception e) {
             logger.error("Couldn't Load Resourcess: " + e.toString());
         }
-        return retVal;
+        
+        return Collections.emptyList();
     }
     
     public static CrSharedDoc getCrSharedDoc(String uuid,Long teamId, Integer state){
@@ -1058,5 +1060,17 @@ public class DocumentManagerUtil {
         request.setAttribute("maxFileSizeGS", maxFileSizeGS);
         request.setAttribute("uploadMaxFileSize",
                 Long.toString(Bytes.megabytes(Long.parseLong(maxFileSizeGS)).bytes()));
+    }
+    
+    public static ArrayList<DocumentData> retrieveTemporaryDocDataList(HttpServletRequest request) {
+        HashMap<String, Object> map = SelectDocumentDM.getContentRepositoryHashMap(request);
+        ArrayList<DocumentData> list = (ArrayList<DocumentData>) map
+                .get(ActivityDocumentsConstants.TEMPORARY_DOCUMENTS);
+        if (list == null || (list != null && list.size() == 0)) {
+            list = new ArrayList<DocumentData>();
+            map.put(ActivityDocumentsConstants.TEMPORARY_DOCUMENTS, list);
+        }
+        
+        return list;
     }
 }

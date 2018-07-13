@@ -746,7 +746,7 @@ public class LuceneUtil implements Serializable {
         Term term = new Term(field, search);
         IndexReader indexReader;
         try {
-            indexReader = IndexReader.open(FSDirectory.open(new File(idx)));
+            indexReader = IndexReader.open(FSDirectory.open(new File(idx)), false);
             //listDocuments(indexReader);
             int ret = indexReader.deleteDocuments(term);
             indexReader.close();

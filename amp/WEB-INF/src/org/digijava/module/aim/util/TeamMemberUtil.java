@@ -1006,36 +1006,6 @@ public class TeamMemberUtil {
                 }
             };
 
-    public static Collection getTMTeamMembers(String email) {
-        User user = org.digijava.module.aim.util.DbUtil.getUser(email);
-        if (user == null) {
-            return null;
-        }
-
-        Session session = null;
-        Query qry = null;
-        Collection col = new ArrayList();
-
-        try {
-            session = PersistenceManager.getSession();
-            String queryString = "select tm from " + AmpTeamMember.class.getName() +
-                    " tm where (tm.deleted is null or tm.deleted = false) and (tm.user=:user)";
-            qry = session.createQuery(queryString);
-            qry.setParameter("user", user.getId(), LongType.INSTANCE);
-            Collection results = qry.list();
-            Iterator itr = results.iterator();
-
-            while (itr.hasNext()) {
-                TeamMember tm = new TeamMember((AmpTeamMember) itr.next());
-                col.add(tm);
-            }
-        } catch (Exception e) {
-            logger.error("Unable to get TeamMembers" + e.getMessage());
-            e.printStackTrace(System.out);
-        }
-        return col;
-    }
-
     public static void assignActivitiesToMember(Long memberId, Long activities[]) {
         Session session = null;
         AmpTeamMember member = null;
@@ -1348,7 +1318,7 @@ public class TeamMemberUtil {
 
         User user = DbUtil.getUser(email);
         if (user == null) {
-            return null;
+            return Collections.emptyList();
         }
 
         Session session = null;

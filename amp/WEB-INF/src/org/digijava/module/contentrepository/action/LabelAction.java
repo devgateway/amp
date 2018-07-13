@@ -70,8 +70,8 @@ public class LabelAction extends MultiAction {
                 Label label     = new Label(labelNode);
                 labelsInForm.add(label);
                 if ( existingLabels.contains(label) ){
-                    if ( !"true".equals(applyClickAction) ){
-                        nw.removeLabel( labelNode.getUUID() );
+                    if (!"true".equals(applyClickAction)) {
+                        nw.removeLabel(labelNode.getIdentifier());
                     }
                 }
                 else{
@@ -80,7 +80,7 @@ public class LabelAction extends MultiAction {
             }
             for(Label l:existingLabels){
                 if(!labelsInForm.contains(l)){
-                    nw.removeLabel(l.getNode().getUUID());
+                    nw.removeLabel(l.getNode().getIdentifier());
                 }
                 
             }

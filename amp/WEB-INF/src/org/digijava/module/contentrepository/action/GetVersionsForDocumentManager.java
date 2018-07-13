@@ -63,8 +63,8 @@ public class GetVersionsForDocumentManager extends Action {
                     Node n                  = nIter.nextNode();
                     boolean thisVersionNeedsApproval=false;
                     //if this node is not approved,then only TL or it's creator should be allowed to see the version
-                    if(DocumentManagerUtil.isGivenVersionPendingApproval(n.getUUID())!=null){
-                        thisVersionNeedsApproval=true;
+                    if (DocumentManagerUtil.isGivenVersionPendingApproval(n.getIdentifier()) != null) {
+                        thisVersionNeedsApproval = true;
                     }
                     if(thisVersionNeedsApproval){
                         //thisVersionNeedsApproval=true;
@@ -119,12 +119,12 @@ public class GetVersionsForDocumentManager extends Action {
         Map<String, CrDocumentNodeAttributes> uuidMapVer = DocumentsNodesAttributeManager.getInstance()
                 .getPublicDocumentsMap(true);
         
-        String nodeUUID                                         = n.getUUID();
+        String nodeUUID = n.getIdentifier();
         if ( uuidMapVer.containsKey(nodeUUID) ) {
             docData.setIsPublic(true);
         }
         //if this version is shared or not
-        boolean isCurrentVersionShared=DocumentManagerUtil.isGivenVersionShared(n.getUUID());
+        boolean isCurrentVersionShared = DocumentManagerUtil.isGivenVersionShared(n.getIdentifier());
         docData.setIsShared(isCurrentVersionShared);
         
         docData.setCurrentVersionNeedsApproval(versionNeedsApproval);

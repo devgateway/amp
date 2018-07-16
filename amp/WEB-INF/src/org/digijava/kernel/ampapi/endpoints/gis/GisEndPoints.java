@@ -22,6 +22,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.PathSegment;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 
 import org.apache.log4j.Logger;
@@ -39,28 +40,26 @@ import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityStructuresExpor
 import org.digijava.kernel.ampapi.endpoints.gis.services.BoundariesService;
 import org.digijava.kernel.ampapi.endpoints.gis.services.GapAnalysis;
 import org.digijava.kernel.ampapi.endpoints.gis.services.LocationService;
+import org.digijava.kernel.ampapi.endpoints.gis.services.MapTilesService;
 import org.digijava.kernel.ampapi.endpoints.gis.services.PublicGapAnalysis;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorEPConstants;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorUtils;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleConstants;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
+import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
-import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.helpers.geojson.FeatureCollectionGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.FeatureGeoJSON;
-import org.digijava.kernel.ampapi.helpers.geojson.LineStringGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.PointGeoJSON;
-import org.digijava.kernel.ampapi.helpers.geojson.PolygonGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.objects.ClusteredPoints;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
 import org.digijava.module.aim.dbentity.AmpIndicatorColor;
 import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
 import org.digijava.module.aim.dbentity.AmpStructure;
-import org.digijava.module.aim.dbentity.AmpStructureCoordinate;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.util.ColorRampUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -584,6 +583,20 @@ public class GisEndPoints implements ErrorReportingEndpoint {
                 !PerformanceRuleManager.getInstance().getPerformanceRuleMatchers().isEmpty());
         
         return result;
+    }
+    
+    
+    /**
+     * Gets the map-tiles file from content repository.
+     * 
+     * @return archived file with map-tiles
+     */
+    @GET
+    @Path("/map-tiles")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_ENABLED}, id = "mapTiles", ui = false)
+    public Response getMapTiles() {
+        return MapTilesService.getInstance().getArchivedMapTiles();
     }
 
     /**

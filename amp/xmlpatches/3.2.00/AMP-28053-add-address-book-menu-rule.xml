@@ -12,24 +12,25 @@
 				INSERT INTO amp_features_visibility (id,name,haslevel,parent)
 				SELECT (SELECT Nextval('amp_modules_visibility_seq')),
 				'Address Book',true, (SELECT id FROM   amp_modules_visibility
-				                      WHERE  NAME = 'Tools')
+				WHERE  NAME = 'Tools')
 				WHERE  NOT EXISTS (SELECT id FROM   amp_features_visibility
-				                   WHERE  NAME = 'Address Book');
+				WHERE  NAME = 'Address Book');
 
 				INSERT INTO amp_visibility_rule (id,parent_id,rule_type)
 				select (SELECT nextval('amp_visibility_rule_seq')), null, 1
-				where not exists (select 1 from amp_menu_entry_view
+				where not exists (
+				select * from amp_menu_entry_view
 				where menu_id = (
 				SELECT id FROM amp_menu_entry
-				WHERE name = 'Address Book' ) );
+				WHERE name = 'Address Book' ) and rule_id is not null );
 
 				UPDATE amp_menu_entry_view SET rule_id=(SELECT currval('amp_visibility_rule_seq'))
 				WHERE menu_id= (SELECT id FROM amp_menu_entry WHERE name = 'Address Book')
 				and not exists (
-				select 1 from amp_menu_entry_view
+				select * from amp_menu_entry_view
 				where menu_id = (
 				SELECT id FROM amp_menu_entry
-				WHERE name = 'Address Book' ) );
+				WHERE name = 'Address Book' ) and rule_id is not null );
 
 				INSERT INTO amp_visibility_rule_amp_features_visibility (rule_id , feature_id)
 				select

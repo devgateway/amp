@@ -16,6 +16,7 @@ import io.swagger.models.properties.ObjectProperty;
 import io.swagger.models.properties.RefProperty;
 import io.swagger.util.Json;
 import org.dgfoundation.amp.newreports.ReportFilters;
+import org.digijava.kernel.ampapi.endpoints.gis.MultilingualLabelPH;
 import org.digijava.kernel.ampapi.swagger.types.FiltersPH;
 import org.digijava.kernel.ampapi.swagger.types.SettingsPH;
 
@@ -69,6 +70,18 @@ public class ReportTypesResolver extends AbstractModelConverter {
             HashMap<Object, Object> example = new HashMap<>();
             example.put("currency-code", "USD");
             example.put("calendar-id", "4");
+            model.example(example);
+            return model;
+        }
+
+        if (javaType.getRawClass().isAssignableFrom(MultilingualLabelPH.class)) {
+            ModelImpl model = new ModelImpl();
+            model.name("MultilingualLabelPH");
+            model.description("Multilingual label.");
+            model.additionalProperties(new ObjectProperty());
+            HashMap<Object, Object> example = new HashMap<>();
+            example.put("en", "English label");
+            example.put("fr", "French label");
             model.example(example);
             return model;
         }

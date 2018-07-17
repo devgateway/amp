@@ -43,10 +43,6 @@ public class IndicatorImporter {
         return errors;
     }
 
-    public enum Option {
-        OVERWRITE, NEW
-    }
-
     /**
      * Return the errorc
      *

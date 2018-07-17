@@ -12,12 +12,14 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.common.MapIdWrapper;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.TopsChartService;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.DashboardsService;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.HeatMapConfigs;
@@ -26,6 +28,7 @@ import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.module.esrigis.dbentity.AmpApiState;
 
 
 /**
@@ -399,29 +402,8 @@ public class EndPoints implements ErrorReportingEndpoint {
     @Path("/saved-charts")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "SaveChart")
-    @ApiOperation(
-            value = "Save the state of a chart to be able to share it.",
-            notes = "</br>\n"
-                    + "<dl>\n"
-                    + "The JSON object holds information regarding:\n"
-                    + "<dt><b>mapId</b><dd> - map id\n"
-                    + "</dl></br></br>\n"
-                    + "\n"
-                    + "<h3>Sample Input:</h3><pre>\n"
-                    + "{\n"
-                    + "    \"title\" : \"Dashboard\",\n"
-                    + "    \"description\" : \"Saved dashboard\",\n"
-                    + "    \"stateBlob\" : \"{\"chart:/rest/dashboard/tops/do\":{\"limit\":5,\"adjtype\":"
-                    + "\"Actual Commitments\",\"view\":\"bar\",\"big\":false},\"chart:/rest/dashboard/tops/dg\""
-                    + ":{\"limit\":5,\"adjtype\":\"Actual Commitments\",\"view\":\"bar\",\"big\":false},"
-                    + "\"chart:/rest/dashboard/tops/re\":{\"limit\":5,\"adjtype\":\"A (...)\"\n"
-                    + "}</pre>\n"
-                    + "</br>\n"
-                    + "<h3>Sample Output:</h3><pre>\n"
-                    + "{\n"
-                    + "    \"mapId\": 155\n"
-                    + "}</pre>\n")
-    public JsonBean savedMaps(final JsonBean pChart) {
+    @ApiOperation("Save the state of a chart")
+    public MapIdWrapper savedMaps(@JsonView(AmpApiState.DetailView.class) AmpApiState pChart) {
         return EndpointUtils.saveApiState(pChart,"C");
     }
 
@@ -429,67 +411,19 @@ public class EndPoints implements ErrorReportingEndpoint {
     @Path("/saved-charts/{chartId}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "ChartById")
-    @ApiOperation(
-            value = "Retrieve a saved chart by Id.",
-            notes = "<dl>\n"
-                    + "The JSON object holds information regarding:\n"
-                    + "<dt><b>id</b><dd> - map id\n"
-                    + "<dt><b>title</b><dd> - a chart title\n"
-                    + "<dt><b>description</b><dd> - a chart description\n"
-                    + "<dt><b>stateBlob</b><dd> - a chart blob\n"
-                    + "<dt><b>created</b><dd> - a creation date\n"
-                    + "<dt><b>lastAccess</b><dd> - a last access date\n"
-                    + "</dl></br></br>\n"
-                    + "\n"
-                    + "</br>\n"
-                    + "<h3>Sample Output:</h3><pre>\n"
-                    + "{\n"
-                    + "    \"id\": 155,\n"
-                    + "    \"title\": \"title\",\n"
-                    + "    \"description\": \"description\",\n"
-                    + "    \"stateBlob\": \"{\"chart:/rest/dashboard/tops/do\":{\"limit\":5,\"adjtype\":"
-                    + "\"Actual Commitments\",\"view\":\"bar\",\"big\":false},\"chart:/rest/dashboard/tops/dg\":"
-                    + "{\"limit\":5,\"adjtype\":\"Actual Commitments\",\"view\":\"bar\",\"big\":false},"
-                    + "\"chart:/rest/dashboard/tops/re\":{\"limit\":5,\"adjtype\":\"A (...)\",\n"
-                    + "    \"created\": \"15/12/2016T11:02Z\",\n"
-                    + "    \"lastAccess\": \"15/12/2016T11:12Z\"\n"
-                    + "}</pre>\n")
-    public JsonBean savedCharts(@PathParam("chartId") Long chartId) {
+    @JsonView(AmpApiState.DetailView.class)
+    @ApiOperation("Get the state of a chart")
+    public AmpApiState savedCharts(@PathParam("chartId") Long chartId) {
         return EndpointUtils.getApiState(chartId);
-
     }
 
     @GET
     @Path("/saved-charts")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "ChartList")
-    @ApiOperation(
-            value = "Retrieve a list of saved charts.",
-            notes = "<dl>\n"
-                    + "The JSON object holds information regarding:\n"
-                    + "<dt><b>id</b><dd> - map id\n"
-                    + "<dt><b>title</b><dd> - a chart title\n"
-                    + "<dt><b>description</b><dd> - a chart description\n"
-                    + "<dt><b>created</b><dd> - a creation date\n"
-                    + "</dl></br></br>\n"
-                    + "</br>\n"
-                    + "<h3>Sample Output:</h3><pre>\n"
-                    + "[\n"
-                    + "  {\n"
-                    + "    \"id\": 11,\n"
-                    + "    \"title\": \"Dashboard\",\n"
-                    + "    \"description\": \"Saved dashboard\",\n"
-                    + "    \"created\": \"19/11/2014T19:53Z\"\n"
-                    + "  },\n"
-                    + "  {\n"
-                    + "    \"id\": 6,\n"
-                    + "    \"title\": \"Dashboard\",\n"
-                    + "    \"description\": \"Saved dashboard\",\n"
-                    + "    \"created\": \"19/11/2014T14:01Z\"\n"
-                    + "  },\n"
-                    + "  ....\n"
-                    + "]</pre>")
-    public List<JsonBean> savedCharts() {
+    @ApiOperation("Retrieve a list of saved charts.")
+    @JsonView(AmpApiState.BriefView.class)
+    public List<AmpApiState> savedCharts() {
         String type="C";
         return EndpointUtils.getApiStateList(type);
     }

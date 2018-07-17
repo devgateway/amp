@@ -1,4 +1,4 @@
-package org.digijava.kernel.ampapi.endpoints.dashboards;
+package org.digijava.kernel.ampapi.endpoints.gis;
 
 import java.util.Map;
 
@@ -11,9 +11,7 @@ import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
  * @author Octavian Ciubotaru
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class DashboardFormParameters {
-
-    private Integer offset;
+public class SettingsAndFiltersParameters {
 
     @JsonProperty(EPConstants.SETTINGS)
     @ApiModelProperty(dataType = "org.digijava.kernel.ampapi.swagger.types.SettingsPH")
@@ -22,14 +20,6 @@ public class DashboardFormParameters {
     @JsonProperty(EPConstants.FILTERS)
     @ApiModelProperty(dataType = "org.digijava.kernel.ampapi.swagger.types.FiltersPH")
     private Map<String, Object> filters;
-
-    public Integer getOffset() {
-        return offset;
-    }
-
-    public void setOffset(Integer offset) {
-        this.offset = offset;
-    }
 
     public Map<String, Object> getSettings() {
         return settings;

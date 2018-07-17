@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -25,6 +24,7 @@ import javax.ws.rs.core.PathSegment;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.node.POJONode;
 import com.fasterxml.jackson.databind.node.TextNode;
 import io.swagger.annotations.Api;
@@ -34,20 +34,26 @@ import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.common.MapIdWrapper;
 import org.digijava.kernel.ampapi.endpoints.common.TranslationUtil;
 import org.digijava.kernel.ampapi.endpoints.dto.gis.IndicatorLayers;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
+import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityList;
 import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityLocationExporter;
 import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityService;
 import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityStructuresExporter;
+import org.digijava.kernel.ampapi.endpoints.gis.services.AdmLevel;
+import org.digijava.kernel.ampapi.endpoints.gis.services.AdmLevelTotals;
 import org.digijava.kernel.ampapi.endpoints.gis.services.BoundariesService;
+import org.digijava.kernel.ampapi.endpoints.gis.services.Boundary;
 import org.digijava.kernel.ampapi.endpoints.gis.services.GapAnalysis;
 import org.digijava.kernel.ampapi.endpoints.gis.services.LocationService;
 import org.digijava.kernel.ampapi.endpoints.gis.services.MapTilesService;
 import org.digijava.kernel.ampapi.endpoints.gis.services.PublicGapAnalysis;
+import org.digijava.kernel.ampapi.endpoints.gis.services.RecentlyUpdatedActivities;
+import org.digijava.kernel.ampapi.endpoints.indicator.Indicator;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorEPConstants;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorUtils;
-import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleConstants;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
@@ -63,16 +69,12 @@ import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
 import org.digijava.module.aim.dbentity.AmpIndicatorColor;
 import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
 import org.digijava.module.aim.dbentity.AmpStructure;
-import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.util.ColorRampUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.esrigis.dbentity.AmpApiState;
 import org.digijava.module.esrigis.dbentity.AmpMapConfig;
 import org.digijava.module.esrigis.helpers.DbHelper;
 import org.digijava.module.esrigis.helpers.MapConstants;
-
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 
 /**
@@ -88,6 +90,7 @@ public class GisEndPoints implements ErrorReportingEndpoint {
     
     @GET
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiOperation("Get available filters")
     public List<AvailableMethod> getAvailableFilters() {
         return EndpointUtils.getAvailableMethods(GisEndPoints.class.getName());
     }   
@@ -98,7 +101,7 @@ public class GisEndPoints implements ErrorReportingEndpoint {
     @ApiMethod(ui = false, id = "ClusterPointsByAdmin")
     @ApiOperation("Returns Aggregate ADM info by ADM Level")
     public final FeatureCollectionGeoJSON getClusteredPointsByAdm(
-            @ApiParam("filter") final GisFormParameters config) throws AmpApiException {
+            @ApiParam("filter") final PerformanceFilterParameters config) throws AmpApiException {
 
         List<ClusteredPoints> c = LocationService.getClusteredPoints(config);
         FeatureCollectionGeoJSON result = new FeatureCollectionGeoJSON();
@@ -114,6 +117,19 @@ public class GisEndPoints implements ErrorReportingEndpoint {
         return result;
     }
 
+    private FeatureGeoJSON getPoint(Double lat, Double lon,
+            List<Long> activityid, String adm, Long admId) {
+        FeatureGeoJSON fgj = new FeatureGeoJSON();
+        PointGeoJSON pg = new PointGeoJSON();
+        pg.coordinates.add(lat);
+        pg.coordinates.add(lon);
+        fgj.properties.put("activityid", new POJONode(activityid));
+        fgj.properties.put("admName", new TextNode(adm));
+        fgj.properties.put("admId", new POJONode(admId));
+        fgj.geometry = pg;
+        return fgj;
+    }
+
     @SuppressWarnings("unchecked")
     @POST
     @Path("/structures")
@@ -121,7 +137,7 @@ public class GisEndPoints implements ErrorReportingEndpoint {
     @ApiMethod(ui = false, id = "Structures")
     @ApiOperation("Returns Aggregate ADM info by ADM Level")
     public final FeatureCollectionGeoJSON getProjectSites(
-            @ApiParam("filter") final GisFormParameters config,
+            @ApiParam("filter") final PerformanceFilterParameters config,
             @QueryParam("startFrom") Integer startFrom,
             @QueryParam("size")Integer size) throws AmpApiException {
         FeatureCollectionGeoJSON f = new FeatureCollectionGeoJSON();
@@ -129,7 +145,7 @@ public class GisEndPoints implements ErrorReportingEndpoint {
         int start = 0;
         int end = al.size() -1;
         if (startFrom!=null && size!=null && startFrom < al.size()) {
-            start = startFrom.intValue();
+            start = startFrom;
             if (al.size()>(startFrom + size)) {
                 end = startFrom + size;
             }
@@ -142,44 +158,41 @@ public class GisEndPoints implements ErrorReportingEndpoint {
         return f;
     }
  
-    
     @POST
     @Path("/saved-maps")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "SaveMap")
-    public JsonBean savedMaps(final JsonBean pMap) {
+    @ApiOperation("Save map state")
+    public MapIdWrapper savedMaps(final @JsonView(AmpApiState.DetailView.class) AmpApiState pMap) {
         return EndpointUtils.saveApiState(pMap,"G");
     }
-
-
 
     @GET
     @Path("/saved-maps/{mapId}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "MapById")
-    public JsonBean savedMaps(@PathParam("mapId") Long mapId) {
+    @JsonView(AmpApiState.DetailView.class)
+    @ApiOperation("Get map state")
+    public AmpApiState savedMaps(@PathParam("mapId") Long mapId) {
         return EndpointUtils.getApiState(mapId);
-
     }
-
-
-
 
     @GET
     @Path("/saved-maps")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "MapList")
-    public List<JsonBean> savedMaps() {
+    @JsonView(AmpApiState.BriefView.class)
+    @ApiOperation("List map states")
+    public List<AmpApiState> savedMaps() {
         String type="G";
         return EndpointUtils.getApiStateList(type);
     }
-
-
 
     @GET
     @Path("/indicator-layers")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "IndicatorLayers")
+    @ApiOperation("List indicator layers")
     public List<IndicatorLayers> getIndicatorLayers() {
         List<IndicatorLayers> indicatorLayers = new ArrayList<IndicatorLayers>();
         List<AmpMapConfig> mapsConfigs = DbHelper.getMaps();
@@ -201,7 +214,8 @@ public class GisEndPoints implements ErrorReportingEndpoint {
     @Path("/activities")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "ActivitiesNewLists")
-    public JsonBean getActivitiesNew(GisFormParameters config,
+    @ApiOperation("List activities")
+    public ActivityList getActivitiesNew(PerformanceFilterParameters config,
             @QueryParam("start") Integer page,
             @QueryParam("size") Integer pageSize) {
         logger.error(String.format("Requesting %s pagesize from %s page", pageSize, page));
@@ -213,40 +227,26 @@ public class GisEndPoints implements ErrorReportingEndpoint {
     @Path("/activities/{activityId}") //once its done remove the New
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "ActivitiesById")
-    @ApiOperation(value = "return activity by id in the format /activities/12,15,16",
-            notes = "For config sample see POST /gis/activities")
-    public JsonBean getActivities(
-            @ApiParam("config") GisFormParameters config,
-            @ApiParam("comma separated list of ids") @PathParam("activityId") PathSegment activityIds) {
+    @ApiOperation(value = "List activities", notes = "activityId is a comma separated list of activity ids")
+    public ActivityList getActivities(
+            @ApiParam("config") PerformanceFilterParameters config,
+            @PathParam("activityId") PathSegment activityIds) {
         return ActivityService.getActivities(config,
                 Arrays.asList(activityIds.getPath().split("\\s*,\\s*")),
                 null, null);
     }
-    
-    
-    private FeatureGeoJSON getPoint(Double lat, Double lon,
-            List<Long> activityid, String adm, Long admId) {
-        FeatureGeoJSON fgj = new FeatureGeoJSON();
-        PointGeoJSON pg = new PointGeoJSON();
-        pg.coordinates.add(lat);
-        pg.coordinates.add(lon);
-        fgj.properties.put("activityid", new POJONode(activityid));
-        fgj.properties.put("admName", new TextNode(adm));
-        fgj.properties.put("admId", new POJONode(admId));
-        fgj.geometry = pg;
-        return fgj;
-    }
 
-
-    
     @POST
     @Path("/locationstotals/{admlevel}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = false, id = "locationstotals")  
-    public JsonBean getAdminLevelsTotals(GisFormParameters filters, @PathParam ("admlevel") String admlevel) {
+    @ApiMethod(ui = false, id = "locationstotals")
+    @ApiOperation("Return funding data for an administrative level")
+    public AdmLevelTotals getAdminLevelsTotals(
+            PerformanceFilterParameters filters,
+            @PathParam("admlevel") AdmLevel admlevel) {
         LocationService ls = new LocationService();
         // this Service was resetting the amount units so far (used by this EP only), now changed its interface to allow other "users" to not reset it
-        return ls.getTotals(admlevel, filters, AmountsUnits.AMOUNTS_OPTION_UNITS);
+        return ls.getTotals(admlevel.getLabel(), filters, AmountsUnits.AMOUNTS_OPTION_UNITS);
     }
     
     
@@ -254,7 +254,8 @@ public class GisEndPoints implements ErrorReportingEndpoint {
     @Path("/indicators")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "IndicatorsList")
-    public List<JsonBean> getIndicators(@QueryParam("admLevel") String admLevel) {
+    @ApiOperation("List indicators")
+    public List<Indicator> getIndicators(@QueryParam("admLevel") AdmLevel admLevel) {
         List<AmpIndicatorLayer> indicators;
         if (admLevel !=null) {
             indicators = QueryUtil.getIndicatorByCategoryValue(admLevel);
@@ -263,92 +264,85 @@ public class GisEndPoints implements ErrorReportingEndpoint {
         else {
             indicators = QueryUtil.getIndicatorLayers();
             return generateIndicatorJson(indicators, true);
-
         }
     }
-    
+
+    /**
+     * FIXME simplify
+     * this operation is used to:
+     * 1. retrieve plain values (which should be GET /gis/indicators/{indicatorId}/values)
+     * 2. do gap analysis (which should be POST /gis/indicators/{indicatorId}/do-gap-analysis)
+     */
     @POST
     @Path("/indicators/{indicatorId}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "IndicatorById")
-    public JsonBean getIndicatorsById(GisFormParameters input, @PathParam ("indicatorId") Long indicatorId) {
+    @ApiOperation("Get indicator")
+    public Indicator getIndicatorsById(
+            SavedIndicatorGapAnalysisParameters input,
+            @PathParam ("indicatorId") Long indicatorId) {
         boolean isGapAnalysis = EndpointUtils.getSingleValue(input.getGapAnalysis(), Boolean.FALSE);
         return IndicatorUtils.getIndicatorsAndLocationValues(indicatorId, input, isGapAnalysis);
     }
-    
-    private List<JsonBean> generateIndicatorJson (List<AmpIndicatorLayer> indicators,boolean includeAdmLevel) {
-        List<JsonBean> indicatorsJson = new ArrayList<JsonBean>();
+
+    private List<Indicator> generateIndicatorJson(List<AmpIndicatorLayer> indicators, boolean includeAdmLevel) {
+        List<Indicator> apiIndicators = new ArrayList<>();
         GapAnalysis gapAnalysis = new GapAnalysis();
 
         for (AmpIndicatorLayer indicator : indicators) {
-            JsonBean json = new JsonBean();
-            json.set(IndicatorEPConstants.ID, indicator.getId());
-            json.set(IndicatorEPConstants.NAME, TranslationUtil.getTranslatableFieldValue(IndicatorEPConstants.NAME, indicator.getName(), indicator.getId()));
-            json.set(IndicatorEPConstants.DESCRIPTION, TranslationUtil.getTranslatableFieldValue(IndicatorEPConstants.DESCRIPTION, indicator.getDescription(), indicator.getId()));
-            json.set(IndicatorEPConstants.UNIT, TranslationUtil.getTranslatableFieldValue(IndicatorEPConstants.UNIT, indicator.getUnit(), indicator.getId()));
-            json.set(IndicatorEPConstants.ID, indicator.getId());
+            Indicator apiIndicator = new Indicator();
+            apiIndicator.setId(indicator.getId());
+            apiIndicator.setName(TranslationUtil.getTranslatableFieldValue(
+                    IndicatorEPConstants.NAME, indicator.getName(), indicator.getId()));
+            apiIndicator.setDescription(TranslationUtil.getTranslatableFieldValue(
+                    IndicatorEPConstants.DESCRIPTION, indicator.getDescription(), indicator.getId()));
+            apiIndicator.setUnit(TranslationUtil.getTranslatableFieldValue(
+                    IndicatorEPConstants.UNIT, indicator.getUnit(), indicator.getId()));
             if (includeAdmLevel) {
-                json.set(IndicatorEPConstants.ADM_LEVEL_ID, indicator.getAdmLevel().getId());
-                json.set(IndicatorEPConstants.ADM_LEVEL_NAME, indicator.getAdmLevel().getLabel());
-                json.set(IndicatorEPConstants.ADMIN_LEVEL, IndicatorEPConstants.ADM_PREFIX + indicator.getAdmLevel().getIndex());
+                apiIndicator.setAdmLevelId(indicator.getAdmLevel().getId());
+                apiIndicator.setAdmLevelName(indicator.getAdmLevel().getLabel());
+                String admLevelLabel = IndicatorEPConstants.ADM_PREFIX + indicator.getAdmLevel().getIndex();
+                apiIndicator.setAdminLevel(AdmLevel.fromString(admLevelLabel));
             }
-            json.set(IndicatorEPConstants.NUMBER_OF_CLASSES, indicator.getNumberOfClasses());
-            json.set(IndicatorEPConstants.ACCESS_TYPE_ID, indicator.getAccessType().getValue());
-            json.set(IndicatorEPConstants.INDICATOR_TYPE_ID, indicator.getIndicatorType() == null ? null : indicator.getIndicatorType().getId());
-            json.set(IndicatorEPConstants.CAN_DO_GAP_ANALYSIS, gapAnalysis.canDoGapAnalysis(indicator));
-            json.set(IndicatorEPConstants.FIELD_ZERO_CATEGORY_ENABLED, indicator.getZeroCategoryEnabled());
+            apiIndicator.setNumberOfClasses(indicator.getNumberOfClasses());
+            apiIndicator.setAccessTypeId(indicator.getAccessType().getValue());
+            apiIndicator.setIndicatorTypeId(
+                    indicator.getIndicatorType() == null ? null : indicator.getIndicatorType().getId());
+            apiIndicator.setCanDoGapAnalysis(gapAnalysis.canDoGapAnalysis(indicator));
+            apiIndicator.setZeroCategoryEnabled(indicator.getZeroCategoryEnabled());
             
-            json.set(IndicatorEPConstants.CREATED_ON, FormatHelper.formatDate(indicator.getCreatedOn()));
-            json.set(IndicatorEPConstants.UPDATED_ON, FormatHelper.formatDate(indicator.getUpdatedOn()));
+            apiIndicator.setCreatedOn(indicator.getCreatedOn());
+            apiIndicator.setUpdatedOn(indicator.getUpdatedOn());
 
             if (indicator.getCreatedBy() != null) {
-                json.set(IndicatorEPConstants.CREATE_BY, indicator.getCreatedBy().getUser().getEmail());
+                apiIndicator.setCreatedBy(indicator.getCreatedBy().getUser().getEmail());
             }
-            List<JsonBean> colors = new ArrayList<JsonBean>();
-            List<AmpIndicatorColor> colorList = new ArrayList<AmpIndicatorColor>(indicator.getColorRamp());
-            Collections.sort(colorList, new Comparator<AmpIndicatorColor>() {
-                @Override
-                public int compare(AmpIndicatorColor o1, AmpIndicatorColor o2) {
-                    return o1.getPayload().compareTo(o2.getPayload());
-                }
-            });
+            List<AmpIndicatorColor> colorList = new ArrayList<>(indicator.getColorRamp());
+            colorList.sort(Comparator.comparing(AmpIndicatorColor::getPayload));
             for (AmpIndicatorColor color : colorList) {
-                JsonBean colorJson = new JsonBean();
-                colorJson.set("color", color.getColor());
-                colorJson.set("order", color.getPayload());
-                colors.add(colorJson);
-                 if (color.getPayload() == IndicatorEPConstants.PAYLOAD_INDEX) {
-                        long colorId = ColorRampUtil.getColorId(color.getColor());
-                        json.set(IndicatorEPConstants.IS_MULTI_COLOR, IndicatorEPConstants.MULTI_COLOR_PALETTES.contains(colorId));
-                 }
+                if (color.getPayload() == IndicatorEPConstants.PAYLOAD_INDEX) {
+                    long colorId = ColorRampUtil.getColorId(color.getColor());
+                    apiIndicator.setMultiColor(IndicatorEPConstants.MULTI_COLOR_PALETTES.contains(colorId));
+                }
             }
-            json.set("colorRamp", colors);
-            indicatorsJson.add(json);
+            apiIndicator.setColorRamp(colorList);
+            apiIndicators.add(apiIndicator);
         }
-        return indicatorsJson;
+        return apiIndicators;
     }
     
     @GET
     @Path("/can-do-gap-analysis")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "canDoGapAnalysis")
-    @ApiOperation(
-            value = "Clarifies if Gap Analysis can be done over for the indicator layer based on its indicator "
-                    + "Type and ADM level",
-            notes = "### Sample response\n"
-                    + "\n"
-                    + "```json\n"
-                    + "{\n"
-                    + "    \"canDoGapAnalysis\": true/false\n"
-                    + "    \"error\" : {...} // OPTIONAL, on invalid input/other errors   \n"
-                    + "}\n"
-                    + "```")
-    public JsonBean canDoGapAnalysis(
+    @ApiOperation("Clarifies if Gap Analysis can be done over for the indicator layer based on its indicator "
+            + "Type and ADM level")
+    public boolean canDoGapAnalysis(
             @QueryParam("indicatorTypeId") Long indicatorTypeId,
             @QueryParam("admLevelId") Long admLevelId) {
         return new PublicGapAnalysis().canDoGapAnalysis(indicatorTypeId, admLevelId);
     }
-    
+
     @POST
     @Path("/do-gap-analysis")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -356,7 +350,7 @@ public class GisEndPoints implements ErrorReportingEndpoint {
     @ApiOperation(
             value = "Runs Gap Analysis directly over external indicator data, not from DB.",
             notes = "For saved indicators Gap Analysis see `POST /gis/indicators/{indicatorId}`.")
-    public JsonBean doGapAnalysis(GisFormParameters input) {
+    public Indicator doGapAnalysis(RuntimeIndicatorGapAnalysisParameters input) {
         return new PublicGapAnalysis().doPublicGapAnalysis(input);
     }
     
@@ -364,7 +358,7 @@ public class GisEndPoints implements ErrorReportingEndpoint {
     @Path("/process-public-layer")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "processPublicLayer")
-    @ApiOperation("Just returns the same data so the GIS code doesnt break with public layers.")
+    @ApiOperation("Just returns the same data so the GIS code doesn't break with public layers.")
     public JsonBean processPublicLayer(JsonBean input) {
         // Due to problems on the frontend for now we receive the public layer data and if there is no gap analysis then we return it without changes.
         return input;
@@ -417,48 +411,46 @@ public class GisEndPoints implements ErrorReportingEndpoint {
     @Path("/clusters")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "ClusterLevels")
-    public List<JsonBean> getClusterLevels() {
+    @ApiOperation("List clusters")
+    public List<Cluster> getClusterLevels() {
         List<AmpCategoryValue> values = QueryUtil.getClusterLevels();
-        List<JsonBean> levelsJson = new ArrayList<JsonBean>();
-        JSONArray boundaries = getBoundaries();
+        List<Cluster> clusters = new ArrayList<>();
+        List<Boundary> boundaries = getBoundaries();
         for (AmpCategoryValue value : values) {
-            if(hasMapBounderies(value, boundaries)) {
-                JsonBean json = new JsonBean();
-                json.set("id", value.getId());
-                json.set("title", value.getLabel());
-                json.set("adminLevel", "adm-" + value.getIndex());
-                levelsJson.add(json);
+            if (hasMapBoundaries(value, boundaries)) {
+                AdmLevel adminLevel = AdmLevel.fromString("adm-" + value.getIndex());
+                clusters.add(new Cluster(value.getId(), value.getLabel(), adminLevel));
             }
         }
-        return levelsJson;
+        return clusters;
     }
     
-    private boolean hasMapBounderies(AmpCategoryValue value, JSONArray boundaries) {
-        for (Object object : boundaries) {
-            if (object instanceof JSONObject && ("adm-"+value.getIndex()).equals(((JSONObject) object).get("id"))) {
+    private boolean hasMapBoundaries(AmpCategoryValue value, List<Boundary> boundaries) {
+        AdmLevel admLevel = AdmLevel.fromString("adm-" + value.getIndex());
+        for (Boundary boundary : boundaries) {
+            if (admLevel.equals(boundary.getId())) {
                 return true;
             }           
         }
         return false;
     }
-    
+
     @POST
     @Path("/last-updated")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "LastUpdatedActivities")
-    @ApiOperation("Return the last updated activities")
-    public JSONObject getLastUpdated(
+    @ApiOperation("List of recently updated activities")
+    public RecentlyUpdatedActivities getLastUpdated(
             @ApiParam("the number of activities to include") @DefaultValue("10") @QueryParam("limit") Integer limit,
             @ApiParam("the name of extra columns to include on the report. The report already includes: "
                     + "project title, date of update and donor names")
-            @QueryParam("columns") String columns, GisFormParameters config) {
+            @QueryParam("columns") String columns, SettingsAndFiltersParameters config) {
         List<String> extraColumns = new ArrayList<String>();
         if (columns != null) {
             StringTokenizer tokenizer = new StringTokenizer(columns, ",");
             while (tokenizer.hasMoreTokens()) {
                 extraColumns.add(tokenizer.nextToken());
             }
-
         }
         return ActivityService.getLastUpdatedActivities(extraColumns, limit,config);
     }
@@ -467,7 +459,8 @@ public class GisEndPoints implements ErrorReportingEndpoint {
     @GET
     @Path("/boundaries")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    public JSONArray getBoundaries() {
+    @ApiOperation("List boundaries")
+    public List<Boundary> getBoundaries() {
         return BoundariesService.getBoundaries();
     }
     
@@ -475,6 +468,7 @@ public class GisEndPoints implements ErrorReportingEndpoint {
     @Path("/report/{report_config_id}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "reportExport")
+    @ApiOperation("Load report configuration from current session")
     public JsonBean getLastUpdated(@PathParam("report_config_id") String reportConfigId) {
         return ReportsUtil.getApiState(reportConfigId);
     }
@@ -487,19 +481,9 @@ public class GisEndPoints implements ErrorReportingEndpoint {
             value = "Provides information about the availability or not of enabled performance rules.",
             notes = "This information is used for configuring the GIS UI.\n\n"
                     + "The performance rule toggle on GIS UI is only displayed if enabled performance rules are "
-                    + "available.\n\n"
-                    + "### Sample response\n"
-                    + "```\n"
-                    + "{\n"
-                    + "    \"hasEnabledPerformanceRules\": true/false  \n"
-                    + "}\n"
-                    + "```")
-    public JsonBean hasEnabledPerformanceRules() {
-        JsonBean result = new JsonBean();
-        result.set(PerformanceRuleConstants.HAS_ENABLED_PERFORMANCE_RULES,
-                !PerformanceRuleManager.getInstance().getPerformanceRuleMatchers().isEmpty());
-        
-        return result;
+                    + "available.")
+    public boolean hasEnabledPerformanceRules() {
+        return !PerformanceRuleManager.getInstance().getPerformanceRuleMatchers().isEmpty();
     }
     
     

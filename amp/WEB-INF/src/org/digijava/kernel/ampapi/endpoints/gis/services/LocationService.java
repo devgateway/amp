@@ -39,12 +39,11 @@ import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.amp.OutputSettings;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
-import org.digijava.kernel.ampapi.endpoints.gis.GisFormParameters;
+import org.digijava.kernel.ampapi.endpoints.gis.PerformanceFilterParameters;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.helpers.geojson.FeatureGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.GeoJSON;
@@ -89,13 +88,11 @@ public class LocationService {
      * @param config json configuration
      * @return
      */
-    public JsonBean getTotals(String admlevel, GisFormParameters config, AmountsUnits amountUnits) {
-        JsonBean retlist = new JsonBean();
+    public AdmLevelTotals getTotals(String admlevel, PerformanceFilterParameters config, AmountsUnits amountUnits) {
         HardCodedCategoryValue admLevelCV = GisConstants.ADM_TO_IMPL_CATEGORY_VALUE.getOrDefault(admlevel,
                 CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
         admlevel = admLevelCV.getValueKey();
         
-        String numberformat = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT);
         ReportSpecificationImpl spec = new ReportSpecificationImpl("LocationsTotals", ArConstants.DONOR_TYPE);
         this.spec = spec;
         spec.addColumn(new ReportColumn(admlevel));
@@ -145,31 +142,28 @@ public class LocationService {
         spec.setFilters(filterRules);
         
         String currcode = FilterUtils.getSettingbyName(config.getSettings(), SettingsConstants.CURRENCY_ID);
-        retlist.set("currency", currcode);
-        retlist.set("numberformat", numberformat);
+
+        String numberformat = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT);
+
         GeneratedReport report = EndpointUtils.runReport(spec);
-        List<JsonBean> values = new ArrayList<JsonBean>();
+        List<AdmLevelTotal> values = new ArrayList<>();
         
         if (report != null && report.reportContents != null && report.reportContents.getChildren() != null) {
             // find the admID (geocode) for each implementation location name
             
             for (ReportArea reportArea : report.reportContents.getChildren()) {
-                JsonBean item = new JsonBean();
                 Iterator<ReportCell> iter = reportArea.getContents().values().iterator();
-                BigDecimal value=(BigDecimal) iter.next().value;                
-                ReportCell reportcell = (ReportCell) iter.next();
+                BigDecimal value = (BigDecimal) iter.next().value;
+                ReportCell reportcell = iter.next();
                 //we fetch the entity id so we can Univocally search the GeoId
                 Long entityId=((IdentifiedReportCell)reportcell).entityId;
                 String admid = admLevelToGeoCode.get(entityId);
-                item.set("admID", admid);
-                item.set("amount", value);
-                if (admid!=null){
-                    values.add(item);
+                if (admid != null) {
+                    values.add(new AdmLevelTotal(admid, value));
                 }
             }
         }
-        retlist.set("values", values);
-        return retlist;
+        return new AdmLevelTotals(currcode, numberformat, values);
     }
     
     /**
@@ -189,7 +183,7 @@ public class LocationService {
         return levelToGeoCodeMap;
     }
     
-    public static List<ClusteredPoints> getClusteredPoints(GisFormParameters config) throws AmpApiException {
+    public static List<ClusteredPoints> getClusteredPoints(PerformanceFilterParameters config) throws AmpApiException {
         String adminLevel = "";
         final List<ClusteredPoints> l = new ArrayList<ClusteredPoints>();
 
@@ -284,7 +278,7 @@ public class LocationService {
     
         return l;
     }
-    private static Set<Long> getActivitiesForFiltering(GisFormParameters config, String adminLevel)
+    private static Set<Long> getActivitiesForFiltering(PerformanceFilterParameters config, String adminLevel)
             throws AmpApiException {
         Set<Long> activitiesId = new HashSet<Long>();
          
@@ -376,7 +370,7 @@ public class LocationService {
     }
 
     @SuppressWarnings("unchecked")
-    public static List<AmpStructure> getStructures(GisFormParameters config) throws AmpApiException {
+    public static List<AmpStructure> getStructures(PerformanceFilterParameters config) throws AmpApiException {
         List<AmpStructure> al = null;
         Set<Long> activitiesId = getActivitiesForFiltering(config, null);
         String queryString = "select s from " + AmpStructure.class.getName() + " s inner join s.activities a where"

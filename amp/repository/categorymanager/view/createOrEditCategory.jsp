@@ -126,7 +126,7 @@
     	var catValueKeys = $('input[id^="field"]');
     	var regexp = new RegExp("[a-zA-Z0-9_ÀÁÃÄÇÈÉËÌÍÏÑÒÓÕÖÙÚÜàáãäçèéêëìíïñòóõöùúü%&'/\ ()-:#]+");
     	for (var i=0;i<catValueKeys.length;i++){    		
-    		if(catValueKeys[i].value.trim().length === 0  &&
+    		if(!catValueKeys[i].disabled && catValueKeys[i].value.trim().length === 0  &&
 				regexp.exec(catValueKeys[i].value) !== catValueKeys[i].value){
     			alert("${translation9}");
     			return false;

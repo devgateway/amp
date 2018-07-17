@@ -31,17 +31,14 @@ import org.dgfoundation.amp.nireports.amp.OutputSettings;
 import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.dto.SimpleJsonBean;
-import org.digijava.kernel.ampapi.endpoints.gis.GisFormParameters;
+import org.digijava.kernel.ampapi.endpoints.gis.PerformanceFilterParameters;
+import org.digijava.kernel.ampapi.endpoints.gis.SettingsAndFiltersParameters;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.util.SectorUtil;
-
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 public class ActivityService {
     protected static Logger logger = Logger.getLogger(ActivityService.class);
@@ -66,7 +63,7 @@ public class ActivityService {
          columnsToProvide.add(MeasureConstants.TRIANGULAR_SSC_COMMITMENTS);
         }
 
-    public static JsonBean getActivities(GisFormParameters config, List<String> activitIds, Integer page,
+    public static ActivityList getActivities(PerformanceFilterParameters config, List<String> activitIds, Integer page,
             Integer pageSize) {
         boolean applyFilter=false;
         List<JsonBean> activities=new ArrayList<JsonBean>();
@@ -167,10 +164,7 @@ public class ActivityService {
             activity.set("matchesFilters", matchesFilters);
             activities.add(activity);
         }
-        JsonBean list = new JsonBean();
-        list.set("count", count);
-        list.set("activities", activities);
-        return list;
+        return new ActivityList(count, activities);
     }
 
     /**
@@ -181,9 +175,8 @@ public class ActivityService {
      * @return
      */
 
-    public static JSONObject getLastUpdatedActivities(List<String> extraColumns, Integer pageSize,
-            GisFormParameters config) {
-    JSONObject responseJson = new JSONObject();
+    public static RecentlyUpdatedActivities getLastUpdatedActivities(List<String> extraColumns, Integer pageSize,
+            SettingsAndFiltersParameters config) {
     if (pageSize == null) {
         pageSize = new Integer(10);
     }
@@ -211,16 +204,16 @@ public class ActivityService {
     
     //ReportAreaMultiLinked[] areasDFArray = ReportPaginationUtils.convert(report.reportContents);
     ReportArea pagedReport = PaginatedReport.getPage(report.reportContents, 0, pageSize);
-    JSONArray activities = new JSONArray();
-    JSONArray headers = new JSONArray();
+    List<Map<String, String>> activities = new ArrayList<>();
+    List<Map<String, String>> headers = new ArrayList<>();
     
         if (pagedReport != null) {
             List<ReportArea> area = pagedReport.getChildren();
 
             boolean headerAdded = false;
             for (Iterator<ReportArea> iterator = area.iterator(); iterator.hasNext();) {
-                JSONObject activityObj = new JSONObject();
-                JSONObject header = new JSONObject();
+                Map<String, String> activityObj = new HashMap<>();
+                Map<String, String> header = new HashMap<>();
                 ReportArea reportArea = iterator.next();
 
                 Map<ReportOutputColumn, ReportCell> row = reportArea.getContents();
@@ -247,9 +240,7 @@ public class ActivityService {
                 headerAdded = true;
             }
         }
-    responseJson.put("activities", activities);
-    responseJson.put("headers", headers);
-    return responseJson;
+    return new RecentlyUpdatedActivities(headers, activities);
 
     }
 }

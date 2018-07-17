@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 
 /**
@@ -29,6 +30,11 @@ public class ObjectMapperProvider implements ContextResolver<ObjectMapper> {
         mapper.configure(JsonGenerator.Feature.FLUSH_PASSED_TO_STREAM, false);
 
         mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+
+        Hibernate4Module hibernateModule = new Hibernate4Module();
+        hibernateModule.enable(Hibernate4Module.Feature.FORCE_LAZY_LOADING);
+
+        mapper.registerModule(hibernateModule);
     }
 
     @Override

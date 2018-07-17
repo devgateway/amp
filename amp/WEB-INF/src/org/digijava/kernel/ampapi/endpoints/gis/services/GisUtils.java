@@ -6,7 +6,7 @@ import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.ReportColumn;
-import org.digijava.kernel.ampapi.endpoints.gis.GisFormParameters;
+import org.digijava.kernel.ampapi.endpoints.gis.PerformanceFilterParameters;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.hibernate.Session;
 import org.hibernate.type.StandardBasicTypes;
@@ -17,7 +17,7 @@ public final class GisUtils {
 
     }
     
-    public static void configurePerformanceFilter(GisFormParameters config, AmpReportFilters filterRules) {
+    public static void configurePerformanceFilter(PerformanceFilterParameters config, AmpReportFilters filterRules) {
         if (config.getShowActivitiewWithPerformanceIssues() != null) {
             boolean showActivitiewWithPerformanceIssues = config.getShowActivitiewWithPerformanceIssues();
             List<String> actIds = getActivitiesWithPerformanceIssues();

@@ -809,12 +809,12 @@ public class Reports implements ErrorReportingEndpoint {
         }
         return MultilingualInputFieldValues.populateContentTranslations(rawData, AmpReports.class, reportId, "name");
     }
-    
+
     @POST
     @Path("/report/export-to-map/{report_id}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiOperation("Exports the report to Map")
-    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "Api state configuration id"))
+    @ApiOperation("Save report configuration for current session")
+    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "configuration id"))
     public String exportToMap(
             @ApiParam("report configuration") JsonBean config, @PathParam("report_id") Long reportId) {
         return ReportsUtil.exportToMap(config, reportId);

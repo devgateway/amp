@@ -170,7 +170,7 @@ public class ReportsUtil {
         if (cachedReportData != null) {
             fillReportInfo(cachedReportData.report, result, formParams);
         }
-        
+
         // extract data for the requested page
         ReportArea pageArea = null;
         if (recordsPerPage != -1) {
@@ -184,8 +184,8 @@ public class ReportsUtil {
         // configure the result
         result.setPage(new JSONReportPage(pageArea, recordsPerPage, page, totalPageCount,
                 cachedReportData.paginationInfo.getRecordsCount()));
-        result.setSettings(cachedReportData != null ?
-                SettingsUtils.getReportSettings(cachedReportData.report.spec) : null);
+        result.setSettings(cachedReportData != null
+                ? SettingsUtils.getReportSettings(cachedReportData.report.spec) : null);
         
         processRawValues(formParams);
         result.setReportWarnings(cachedReportData.report.reportWarnings);

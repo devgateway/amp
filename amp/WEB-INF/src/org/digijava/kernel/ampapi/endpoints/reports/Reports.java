@@ -223,7 +223,8 @@ public class Reports implements ErrorReportingEndpoint {
     @Path("/report/custom/paginate")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiOperation("Generates a custom report.")
-    @ApiResponses(@ApiResponse(code = 200, message = "successful operation", response = PagedReportResult.class))
+    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "successful operation",
+            response = PagedReportResult.class))
     public final Response getCustomReport(ReportFormParameters formParams) {
         JsonBean result = ReportsUtil.validateReportConfig(formParams, true);
         if (result != null) {
@@ -365,7 +366,9 @@ public class Reports implements ErrorReportingEndpoint {
     @Path("/saikureport/{report_id}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiOperation("Generate report")
-    public final SaikuPagedReportResult getSaikuReport(SaikuBasedQuery queryObject, @PathParam("report_id") Long reportId) {
+    public final SaikuPagedReportResult getSaikuReport(
+            SaikuBasedQuery queryObject,
+            @PathParam("report_id") Long reportId) {
 
         ReportSpecificationImpl spec = ReportsUtil.getReport(reportId);
         if(spec == null){
@@ -418,7 +421,9 @@ public class Reports implements ErrorReportingEndpoint {
     @Path("/saikureport/run/{report_token}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiOperation("Generate session report")
-    public final SaikuPagedReportResult getSaikuReport(SaikuBasedQuery formParams, @PathParam("report_token") String reportToken,
+    public final SaikuPagedReportResult getSaikuReport(
+            SaikuBasedQuery formParams,
+            @PathParam("report_token") String reportToken,
             @DefaultValue("false") @QueryParam ("nireport") Boolean asNiReport) {
         //here we fetch the report by reportToken from session session
         formParams.setDinamic(true);
@@ -473,7 +478,7 @@ public class Reports implements ErrorReportingEndpoint {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces({"application/xml"})
     @ApiOperation("Generate XML report")
-    @ApiResponses(@ApiResponse(code = 200, message = "success", response = Report.class))
+    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "success", response = Report.class))
     public final Response exportXmlSaikuReport(@FormParam("query") SaikuBasedQuery query,
             @PathParam("report_id") Long reportId,
             @DefaultValue("false") @QueryParam ("nireport") Boolean asNiReport) {
@@ -485,7 +490,7 @@ public class Reports implements ErrorReportingEndpoint {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces({"application/xml"})
     @ApiOperation("Generate XML for a session report")
-    @ApiResponses(@ApiResponse(code = 200, message = "success", response = Report.class))
+    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "success", response = Report.class))
     public final Response exportXmlSaikuReport(@FormParam("query") SaikuBasedQuery query,
             @PathParam("report_token") Integer reportToken,
             @DefaultValue("false") @QueryParam ("nireport") Boolean asNiReport) {

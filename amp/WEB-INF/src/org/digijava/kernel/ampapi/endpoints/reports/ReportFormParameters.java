@@ -67,7 +67,8 @@ public class ReportFormParameters {
     private List<String> additionalColumns;
 
     @JsonProperty(EPConstants.ADD_HIERARCHIES)
-    @ApiModelProperty("Column names to be used as hierarchy")
+    @ApiModelProperty("Column names to be used as hierarchy. If a column is selected as hierarchy, then it "
+            + "must be included in " + EPConstants.ADD_COLUMNS + " as well.")
     private List<String> additionalHierarchies;
 
     @JsonProperty(EPConstants.ADD_MEASURES)
@@ -86,11 +87,11 @@ public class ReportFormParameters {
     private List<SortParam> sorting;
 
     @JsonProperty(EPConstants.SHOW_EMPTY_ROWS)
-    @ApiModelProperty("Default false. To show rows with empty measures amounts.")
+    @ApiModelProperty("To show rows with empty measures amounts. Default false.")
     private Boolean showEmptyRows;
 
     @JsonProperty(EPConstants.SHOW_EMPTY_COLUMNS)
-    @ApiModelProperty("Default false. To show full column groups (by quarter, year) with empty measures amounts.")
+    @ApiModelProperty("To show full column groups (by quarter, year) with empty measures amounts. Default false.")
     private Boolean showEmptyColumnGroups;
 
     @JsonProperty(EPConstants.FORCE_HEADERS)
@@ -99,8 +100,9 @@ public class ReportFormParameters {
     private Boolean forceHeaders;
 
     @JsonProperty(EPConstants.GROUPING_OPTION)
-    @ApiModelProperty(value = "Timeframe by which to group funding data in the report", example = "A",
-            allowableValues = "A,Q,M")
+    @ApiModelProperty(value = "Time frame by which to group funding data in the report. If not specified only totals "
+            + "will be computed.\n* A - Anually\n* Q - Quarterly\n* M - Monthly",
+            example = "A", allowableValues = "A, Q, M")
     private String groupingOption;
 
     @JsonProperty(EPConstants.SUMMARY)
@@ -114,14 +116,18 @@ public class ReportFormParameters {
     private List<String> columnsWithIds;
 
     @JsonProperty(EPConstants.INFO)
-    @ApiModelProperty("Additional information to include [\"stats\", \"warnings\", \"generatedHeaders\"], "
-            + "default is [] (none).")
+    @ApiModelProperty("Additional information to include [\"stats\", \"warnings\", \"generatedHeaders\"]. "
+            + "Default is [] (none).")
     private List<String> additionalInfo;
 
-    @ApiModelProperty("JQGrid style sort param.")
+    @ApiModelProperty(
+            value = "JQGrid style sort param. Comma separated list of columns and optionally the diresction.",
+            example = "Project Title desc, Donor Agency")
     private String sidx;
 
-    @ApiModelProperty("JQGrid style sort param.")
+    @ApiModelProperty(
+            value = "JQGrid style sort param. Default order when not specified at column level.",
+            allowableValues = "asc, desc")
     private String sord;
 
     public static ReportFormParameters fromString(String value) {

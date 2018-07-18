@@ -197,7 +197,8 @@ public class ActivityImporter extends ObjectImporter {
                 
                 if (key == null){ //lock not acquired
                     logger.error("Cannot aquire lock during IATI update for activity " + activityId);
-                    errors.put(ActivityErrors.ACTIVITY_IS_LOCKED.id, ActivityErrors.ACTIVITY_IS_LOCKED);
+                    errors.put(ActivityErrors.ACTIVITY_IS_LOCKED.id,
+                            ActivityErrors.ACTIVITY_IS_LOCKED.withDetails(activityId));
                 }
                 
                 newActivity = oldActivity;

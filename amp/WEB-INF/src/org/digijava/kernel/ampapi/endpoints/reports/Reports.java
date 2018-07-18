@@ -858,7 +858,7 @@ public class Reports implements ErrorReportingEndpoint {
         // Convert jqgrid sorting params into ReportUtils sorting params.
         if (sidx != null) {
 
-            String[] auxColumns = sidx.toString().split(",");
+            String[] auxColumns = sidx.split(",");
             for (int i = 0; i < auxColumns.length; i++) {
                 if (!auxColumns[i].trim().equals("")) {
                     SortParam sort = new SortParam();

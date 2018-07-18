@@ -207,7 +207,7 @@
 											<li>
 											<c:set var="star" scope="page" value=""/> 
 											<digi:link module="aim"
-												href="/viewActivityPreview.do?pageId=2&activityId=${activity.ampActivityId}">
+												href="/viewActivityPreview.do?activityId=${activity.ampActivityId}">
 											<c:choose>
 											<c:when test="${activity.draft == true}">
             									<font color="RED">

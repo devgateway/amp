@@ -14,6 +14,7 @@ public class AmpMapConfig {
     private String countField;
     private byte[] legendImage;
     private String configName;
+    private String legendNotes;
 
     
     public String getMapTypeName(){
@@ -102,4 +103,11 @@ public class AmpMapConfig {
         this.configName = configName;
     }
 
+    public String getLegendNotes() {
+        return legendNotes;
+    }
+
+    public void setLegendNotes(String legendNotes) {
+        this.legendNotes = legendNotes;
+    }
 }

@@ -4,7 +4,6 @@
 package org.digijava.kernel.ampapi.endpoints.dashboards.services;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -22,7 +21,9 @@ import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.newreports.AmountCell;
+import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportCell;
@@ -40,9 +41,9 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.DashboardConstants;
+import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.helper.FormatHelper;
 
 
 /**
@@ -61,6 +62,8 @@ public class HeatMapService {
     public static final int SCALE = 6;
 
     private JsonBean config;
+    private Long xId;
+    private Long yId;
     private String xCol;
     private String yCol;
     private Integer xCount;
@@ -77,6 +80,13 @@ public class HeatMapService {
     private ReportOutputColumn yOutCol;
     private ReportOutputColumn mOutCol;
     
+    public HeatMapService(JsonBean config, Long xId, Long yId) {
+        this.config = config;
+        this.visibleColumns = ColumnsVisibility.getVisibleColumns();
+        this.xId = xId;
+        this.yId = yId;
+    }
+
     public HeatMapService(JsonBean config) {
         this.config = config;
         this.visibleColumns = ColumnsVisibility.getVisibleColumns();
@@ -102,7 +112,20 @@ public class HeatMapService {
         
         return result;
     }
-    
+
+    /**
+     * Set filters, settings and columns to the report specification and return a projects list
+     * "Others"
+     * @return a json with a list of projects.
+     */
+    public JsonBean buildHeatMapDetail() {
+        this.spec = getCustomReportDetailRequest();
+        if (spec != null && errors.isEmpty()) {
+            this.report = EndpointUtils.runReport(this.spec);
+        }
+        return DashboardsService.buildPaginateJsonBean(report, DashboardsService.getOffset(this.config));
+    }
+
     private void transform(JsonBean result) {
         // total as funding amounts
         List<String> yTotalAmounts = new ArrayList<>();
@@ -111,15 +134,19 @@ public class HeatMapService {
         Map<String, Map<String, ReportCell>> data = new LinkedHashMap<>();
         Map<String, BigDecimal> xTotal = new HashMap<>();
         Map<String, BigDecimal> yTotal = new LinkedHashMap<>();
-        
+
+        Map<String, Long> yDataSetIds = new LinkedHashMap<>();
+        Map<String, Long> xDataSetIds = new HashMap<>();
+
         // distribute fundings per sets
-        prepareXYResults(yTotalAmounts, yTotal, xTotal, data);
+        prepareXYResults(yTotalAmounts, yTotal, xTotal, data, yDataSetIds, xDataSetIds);
         
         // sort X axis descending (highest first)
         int xTotalCount = xTotal.size();
         int maxSize = xCount == null ? xTotal.size() : xCount;
         xTotal = getTopEntries(xTotal, maxSize, data);
-        
+        xDataSetIds = setOrder(xTotal, xDataSetIds);
+
         // build matrix and update amounts to %
         JsonBean[][] matrix = calculateMatrixAndPercentages(xTotalAmounts, xTotal, yTotal, data);
         
@@ -131,6 +158,9 @@ public class HeatMapService {
         // X * Y dataset
         result.set("yDataSet", data.keySet());
         result.set("xDataSet", xTotal.keySet());
+        // X * Y ids
+        result.set("yDataSetIds", yDataSetIds.values());
+        result.set("xDataSetIds", xDataSetIds.values());
         // Amount and Percentage totals for each X, Y dataset
         result.set("yTotals", yTotalAmounts);
         result.set("yPTotals", yTotal.values());
@@ -142,9 +172,10 @@ public class HeatMapService {
         String currcode = spec.getSettings().getCurrencyCode();
         result.set("currency", currcode);
     }
-    
-    private void prepareXYResults(List<String> yTotalAmounts, Map<String, BigDecimal> yTotal, 
-            Map<String, BigDecimal> xTotal, Map<String, Map<String, ReportCell>> data) {
+
+    private void prepareXYResults(List<String> yTotalAmounts, Map<String, BigDecimal> yTotal,
+                                  Map<String, BigDecimal> xTotal, Map<String, Map<String, ReportCell>> data,
+                                  Map<String, Long> yDataSetIds, Map<String, Long> xDataSetIds) {
         // how many y full entries left to include, while remaining will go to others
         int yCountLeft = yCount == null ? report.reportContents.getChildren().size() : yCount;
         boolean buildOthers = yCountLeft < report.reportContents.getChildren().size();
@@ -155,7 +186,11 @@ public class HeatMapService {
             // build Y axis and get row data
             Map<String, ReportCell> row = buildYRow(yArea, yCountLeft--, yTotal, yTotalAmounts, data);
             boolean isOthersY = yCountLeft < 0;
-            
+
+            if (!isOthersY) {
+                yDataSetIds.put(yArea.getContents().get(yOutCol).displayedValue, yArea.getOwner().id);
+            }
+
             for (ReportArea xArea : yArea.getChildren()) {
                 // configure X * Y intersection
                 String xValue = xArea.getContents().get(xOutCol).displayedValue;
@@ -170,6 +205,7 @@ public class HeatMapService {
                 // calculate X totals
                 amount = amount.add(xTotal.getOrDefault(xValue, BigDecimal.ZERO));
                 xTotal.put(xValue, amount);
+                xDataSetIds.put(xValue, xArea.getOwner().id);
             }
         }
         
@@ -362,38 +398,85 @@ public class HeatMapService {
         }
         return result;
     }
-    
+
+    private Map<String, Long> setOrder(Map<String, BigDecimal> map,
+                                       Map<String, Long> xDataSetIds) {
+        Map<String, Long> result = new LinkedHashMap<String, Long>();
+        for (Map.Entry<String, BigDecimal> entry : map.entrySet()) {
+            result.put(entry.getKey(),xDataSetIds.get(entry.getKey()));
+        }
+        return result;
+    }
+
     private ReportSpecification getCustomReportRequest() {
         this.xCol = readXYColumn(DashboardConstants.X_COLUMN);
         this.yCol = readXYColumn(DashboardConstants.Y_COLUMN);
         this.xCount = readXYCount(DashboardConstants.X_COUNT, DEFAULT_X_COUNT);
         this.yCount = readXYCount(DashboardConstants.Y_COUNT, DEFAULT_Y_COUNT);
-        
+
         String rName = String.format("HeatMap by %s and %s (xCount = %d, yCount = %d)", xCol, yCol, xCount, yCount);
         LOGGER.info(String.format("Generating Chart '%s'%s", rName, errors.isEmpty() ? "" : " - aborted due to errors"));
-        
+
         // no generation if errors found
         if (!errors.isEmpty())
             return null;
-        
+
         ReportSpecificationImpl spec = new ReportSpecificationImpl(rName, ArConstants.DONOR_TYPE);
-        ReportColumn yRepCol = new ReportColumn(yCol); 
+        ReportColumn yRepCol = new ReportColumn(yCol);
         spec.addColumn(yRepCol);
         spec.addColumn(new ReportColumn(xCol));
         spec.getHierarchies().addAll(spec.getColumns());
-        
+
         // also configures Measures - consistent with other Dashboards
         SettingsUtils.applyExtendedSettings(spec, config);
         ReportsUtil.configureFilters(spec, config);
-        
+
         // sort ascending by Y axis (aka Donor Group)
         spec.addSorter(new SortingInfo(yRepCol, true));
-        
+
         this.decimalFormatter = ReportsUtil.getDecimalFormatOrDefault(spec);
-        
+
         return spec;
     }
-    
+
+    /**
+     * Set filters, settings and columns to the report specification
+     * "Others"
+     * @return a report specification updated.
+     */
+    private ReportSpecification getCustomReportDetailRequest() {
+        String rName = "";
+        this.xCol = FilterUtils.INSTANCE.idFromColumnName(readXYColumn(DashboardConstants.X_COLUMN));
+        this.yCol = FilterUtils.INSTANCE.idFromColumnName(readXYColumn(DashboardConstants.Y_COLUMN));
+        ReportSpecificationImpl spec = new ReportSpecificationImpl(rName, ArConstants.DONOR_TYPE);
+
+        spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE));
+        spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_UPDATED_ON));
+
+        Map<String, Object> filters = null;
+        if (this.config != null) {
+            filters = (Map<String, Object>) this.config.get(EPConstants.FILTERS);
+        }
+        if (filters == null) {
+            filters = new LinkedHashMap<>();
+        }
+        filters.putAll(DashboardsService.setFilterId(xId, this.xCol));
+        filters.putAll(DashboardsService.setFilterId(yId, this.yCol));
+        AmpReportFilters filterRules = FilterUtils.getFilterRules(filters, null);
+        if (filterRules != null) {
+            spec.setFilters(filterRules);
+        }
+        spec.addSorter(new SortingInfo(new ReportColumn(ColumnConstants.ACTIVITY_UPDATED_ON), false));
+
+        // also configures Measures - consistent with other Dashboards
+        SettingsUtils.applyExtendedSettings(spec, config);
+        ReportsUtil.configureFilters(spec, config);
+
+        this.decimalFormatter = ReportsUtil.getDecimalFormatOrDefault(spec);
+
+        return spec;
+    }
+
     private String readXYColumn(String param) {
         String colName = config.getString(param);
         // only if visible, since a generic EP

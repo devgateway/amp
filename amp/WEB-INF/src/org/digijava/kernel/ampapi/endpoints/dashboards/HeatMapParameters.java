@@ -2,12 +2,13 @@ package org.digijava.kernel.ampapi.endpoints.dashboards;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
+import org.digijava.kernel.ampapi.endpoints.gis.SettingsAndFiltersParameters;
 import org.digijava.kernel.ampapi.endpoints.util.DashboardConstants;
 
 /**
  * @author Octavian Ciubotaru
  */
-public class DashboardHMFormParameters extends DashboardFormParameters {
+public class HeatMapParameters extends SettingsAndFiltersParameters {
 
     @JsonProperty(DashboardConstants.X_COLUMN)
     @ApiModelProperty(value = "must be OrigName", example = "Primary Sector")

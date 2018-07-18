@@ -111,7 +111,8 @@ public class GPIReport9bOutputBuilder extends GPIReportOutputBuilder {
                     final BooleanWrapper isRowEmpty = new BooleanWrapper(true);
                     v.forEach((x, y) -> {
                         row.put(getColumns().get(x), y.displayedValue);
-                        if (YEAR_LEVEL_HIERARCHIES.contains(x) && (((AmountCell) y).extractValue() != 0)) {
+                        if (YEAR_LEVEL_HIERARCHIES.contains(x)
+                                && (((AmountCell) y).extractValue().compareTo(BigDecimal.ZERO) != 0)) {
                             isRowEmpty.set(false);
                         }
                     });
@@ -152,7 +153,7 @@ public class GPIReport9bOutputBuilder extends GPIReportOutputBuilder {
             ReportCell rc = generatedReport.reportContents.getContents().get(roc);
             rc = rc != null ? rc : TextCell.EMPTY;
             if (isTotalMeasureColumn(roc)) {
-                BigDecimal nationalVal = new BigDecimal(((AmountCell) rc).extractValue());
+                BigDecimal nationalVal = ((AmountCell) rc).extractValue();
                 summaryColumns.put(new GPIReportOutputColumn(roc), getPercentage(nationalVal, actDisbSum) + "%");
                 sumIndicator9b = sumIndicator9b.add(nationalVal);
                 numOfProcedures++;
@@ -186,7 +187,7 @@ public class GPIReport9bOutputBuilder extends GPIReportOutputBuilder {
                 .filter(e -> MeasureConstants.ACTUAL_DISBURSEMENTS.equals(e.getKey().originalColumnName))
                 .filter(e -> NiReportsEngine.TOTALS_COLUMN_NAME.equals(e.getKey().parentColumn.originalColumnName))
                 .map(e -> e.getValue()).filter(rc -> rc != null)
-                .map(rc -> new BigDecimal(((AmountCell) rc).extractValue()))
+                .map(rc -> ((AmountCell) rc).extractValue())
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
         
         return actDisbSum;

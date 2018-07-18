@@ -3171,6 +3171,9 @@ public class DbUtil {
         PersistenceManager.getSession().clear();
     }
 
+    /**
+     * get colors ordered by threshold
+     */
     public static List<AmpColorThreshold> getColorThresholds() {
         return PersistenceManager.getSession().createCriteria(AmpColorThreshold.class)
                 .addOrder(org.hibernate.criterion.Order.asc("thresholdStart")).list();

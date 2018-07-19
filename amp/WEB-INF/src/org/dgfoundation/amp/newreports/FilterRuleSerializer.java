@@ -93,12 +93,11 @@ public class FilterRuleSerializer extends StdSerializer<FilterRule> implements M
 
     @Override
     public Model describe() {
-        // This version of swagger-core does not support specifying oneOf combining schema.
-        // Swagger-core 2.x seems to support such use cases.
-        // See https://github.com/swagger-api/swagger-core/issues/2277.
-        // A filter rule is oneOf: null/number/string/array of numbers or strings/range object
+        // Open API v2 does not support oneOf combining schema. Open API v3 supports oneOf!
         ModelImpl model = new ModelImpl();
         model.name("FilterRule");
+        model.type("string");
+        model.description("Actual type is oneOf: integer/string/array of integer or string/range object.");
         return model;
     }
 }

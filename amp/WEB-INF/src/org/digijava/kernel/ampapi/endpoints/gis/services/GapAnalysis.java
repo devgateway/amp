@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorUtils;
+import org.digijava.kernel.ampapi.endpoints.gis.GisFormParameters;
 import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
@@ -32,7 +33,7 @@ public class GapAnalysis {
     private Map<String, AmpIndicatorLayer> implLocPopulationLayer = new HashMap<>();
     
     private AmpIndicatorLayer indicator;
-    private JsonBean input;
+    private GisFormParameters input;
     private boolean canDoGapAnalysis = false;
     
     private Map<String, BigDecimal> admFundings;
@@ -43,7 +44,7 @@ public class GapAnalysis {
     public GapAnalysis() {
     }
     
-    public GapAnalysis(AmpIndicatorLayer indicator, JsonBean input) {
+    public GapAnalysis(AmpIndicatorLayer indicator, GisFormParameters input) {
         this.indicator = indicator;
         this.input = input;
         initForGapAnalysis();
@@ -125,7 +126,6 @@ public class GapAnalysis {
     /**
      * Converts total fundings to internal map for flexibility
      * @param data
-     * @param locationValues
      * @return
      */
     private Map<String, BigDecimal> convertToMap(JsonBean data) {

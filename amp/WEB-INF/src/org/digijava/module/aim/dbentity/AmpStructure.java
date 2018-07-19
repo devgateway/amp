@@ -8,7 +8,6 @@ import java.util.Set;
 
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
-import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
@@ -63,9 +62,9 @@ public class AmpStructure implements Serializable, Comparable<Object>, Versionab
     
     private String coords;
 
-    @Interchangeable(fieldTitle="Structure Color",
-            fmPath="/Activity Form/Structures/Map",
-            discriminatorOption = CategoryConstants.GIS_STRUCTURES_COLOR_CODING_KEY, importable=true, pickIdOnly=true)
+    @Interchangeable(fieldTitle = "Structure Color", fmPath = "/Activity Form/Structures/Map",
+            discriminatorOption = CategoryConstants.GIS_STRUCTURES_COLOR_CODING_KEY, importable = true,
+            pickIdOnly = true)
     private AmpCategoryValue structureColor;
     private Long structureColorId;
     private Integer tempId; // client side id used for identifying structures

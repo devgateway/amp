@@ -34,6 +34,7 @@ public class SwaggerConfigurer {
         beanConfig.setVersion("1.0");
         beanConfig.setBasePath("/rest");
         beanConfig.setTitle("AMP REST API Documentation");
+        beanConfig.setDescription("[AMP API User Guide](user-guide.html)");
         beanConfig.setResourcePackage("org.digijava.kernel.ampapi.endpoints");
         beanConfig.setScan(true);
     }

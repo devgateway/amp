@@ -152,18 +152,18 @@ public class EndpointUtils {
     /**
      * Retrieves a common specification configuration based on the incoming json request
      * 
-     * @param config
+     * @param reportType
      * @return report specification
      */
-    public static ReportSpecificationImpl getReportSpecification(JsonBean config, String reportName) {
+    public static ReportSpecificationImpl getReportSpecification(String reportType, String reportName) {
         // identify report type
-        String typeCode = getSingleValue(config, EPConstants.REPORT_TYPE, EPConstants.DEFAULT_REPORT_TYPE);
-        Integer reportType = EPConstants.REPORT_TYPE_ID_MAP.get(typeCode);
-        if (reportType == null) {
-            reportType = ArConstants.DONOR_TYPE;
+        String typeCode = getSingleValue(reportType, EPConstants.DEFAULT_REPORT_TYPE);
+        Integer reportTypeId = EPConstants.REPORT_TYPE_ID_MAP.get(typeCode);
+        if (reportTypeId == null) {
+            reportTypeId = ArConstants.DONOR_TYPE;
         }
         
-        return new ReportSpecificationImpl(reportName, reportType);
+        return new ReportSpecificationImpl(reportName, reportTypeId);
     }
     
     /**
@@ -221,7 +221,11 @@ public class EndpointUtils {
             return (T) formParams.get(key);
         return defaultValue;
     }
-    
+
+    public static <T> T getSingleValue(T value, T defaultValue) {
+        return value != null ? value : defaultValue;
+    }
+
     
     public static List<JsonBean> getApiStateList(String type) {
         List<JsonBean> maps = new ArrayList<JsonBean>();

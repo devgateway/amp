@@ -10,7 +10,8 @@ import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.util.Output;
 
 @TranslatableClass (displayName="ActivityContact")
-public class AmpActivityContact implements Versionable, Comparable, Serializable, Cloneable {
+public class AmpActivityContact extends AbstractAuditLogger implements Versionable, Comparable, Serializable,
+        Cloneable {
     
     private Long id;
     
@@ -110,6 +111,7 @@ public class AmpActivityContact implements Versionable, Comparable, Serializable
     public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
         AmpActivityContact aux = (AmpActivityContact) clone();
         aux.activity = newActivity;
+        aux.setPreviousObjectId(aux.getId());
         aux.id = null;
                 if(this.contact.getActivityContacts()==null){
                     this.contact.setActivityContacts(new TreeSet<AmpActivityContact>());

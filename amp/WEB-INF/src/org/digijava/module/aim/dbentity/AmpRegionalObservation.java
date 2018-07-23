@@ -13,7 +13,7 @@ import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.Output;
 @TranslatableClass (displayName = "Regional Observation")
-public class AmpRegionalObservation implements Serializable, Versionable, Cloneable {
+public class AmpRegionalObservation extends AbstractAuditLogger implements Serializable, Versionable, Cloneable {
 
     //IATI-check: to be ignored
 //  @Interchangeable(fieldTitle="ID")
@@ -154,6 +154,7 @@ public class AmpRegionalObservation implements Serializable, Versionable, Clonea
     public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
         AmpRegionalObservation aux = (AmpRegionalObservation) clone();
         aux.activity = newActivity;
+        aux.setPreviousObjectId(aux.getAmpRegionalObservationId());
         aux.ampRegionalObservationId = null;
 
         if (aux.regionalObservationMeasures != null && aux.regionalObservationMeasures.size() > 0){
@@ -161,6 +162,7 @@ public class AmpRegionalObservation implements Serializable, Versionable, Clonea
             Iterator<AmpRegionalObservationMeasure> i = aux.regionalObservationMeasures.iterator();
             while (i.hasNext()) {
                 AmpRegionalObservationMeasure newMeasure = (AmpRegionalObservationMeasure) i.next().clone();
+                newMeasure.setPreviousObjectId(newMeasure.getAmpRegionalObservationMeasureId());
                 newMeasure.setAmpRegionalObservationMeasureId(null);
                 newMeasure.setRegionalObservation(aux);
                 set.add(newMeasure);

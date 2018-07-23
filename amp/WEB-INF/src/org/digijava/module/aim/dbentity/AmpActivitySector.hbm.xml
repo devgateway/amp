@@ -21,7 +21,7 @@
 			not-null="true" lazy="false"/>
 
 		<property name="sectorPercentage" column="sector_percentage" type="java.lang.Float" />
-
+		<property name="previousObjectId" column="previous_object_id" type="java.lang.Long" />
 
 	</class>
 

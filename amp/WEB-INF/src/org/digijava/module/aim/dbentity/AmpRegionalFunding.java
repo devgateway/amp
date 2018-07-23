@@ -16,7 +16,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
-public class AmpRegionalFunding implements Versionable, Serializable, Cloneable {
+public class AmpRegionalFunding extends AbstractAuditLogger implements Versionable, Serializable, Cloneable {
     //IATI-check: to be ignored
 //  @Interchangeable(fieldTitle = "ID", id = true)
     private Long ampRegionalFundingId;
@@ -241,6 +241,7 @@ public class AmpRegionalFunding implements Versionable, Serializable, Cloneable 
     public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
         AmpRegionalFunding aux = (AmpRegionalFunding) clone();
         aux.activity = newActivity;
+        aux.setPreviousObjectId(aux.getAmpRegionalFundingId());
         aux.ampRegionalFundingId = null;
         return aux;
     }

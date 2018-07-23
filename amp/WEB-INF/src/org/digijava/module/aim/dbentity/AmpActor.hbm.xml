@@ -11,6 +11,6 @@
 		<property column="name" name="name" type="text" />
 		<many-to-one name="measure" column="amp_measure_id"
 			class="org.digijava.module.aim.dbentity.AmpMeasure" cascade="none" />
-
+		<property name="previousObjectId" column="previous_object_id" type="java.lang.Long" />
 	</class>
 </hibernate-mapping>

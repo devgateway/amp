@@ -96,6 +96,7 @@
 
 		<property name="effectiveFundingDate" column="effective_funding_date" type="java.util.Date" />
 		<property name="fundingClosingDate" column="funding_closing_date" type="java.util.Date" />
-			
+
+		<property name="previousObjectId" column="previous_object_id" type="java.lang.Long" />			
 	</class>
 </hibernate-mapping>

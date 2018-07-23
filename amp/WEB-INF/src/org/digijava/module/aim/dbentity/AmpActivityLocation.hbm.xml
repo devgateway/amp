@@ -20,9 +20,8 @@
 		<property name="locationPercentage" column="location_percentage" type="java.lang.Float" />
 		<property name="latitude" column="location_latitude" type="java.lang.String" />
 		<property name="longitude" column="location_longitude" type="java.lang.String" />
-		
 
-
+		<property name="previousObjectId" column="previous_object_id" type="java.lang.Long" />
 	</class>
 
 </hibernate-mapping>

@@ -106,12 +106,12 @@ public class AmpActivitySector extends AbstractAuditLogger implements Versionabl
         out.getOutputs().add(new Output(null, new String[] { scheme + name + " - Percentage: "}, new Object[] { this.sectorPercentage }));
         return out;
     }
-    
+
     @Override
     public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
         AmpActivitySector aux = (AmpActivitySector) clone();
         aux.activityId = newActivity;
-        this.setPreviousObjectId(aux.ampActivitySectorId);
+        aux.setPreviousObjectId(aux.ampActivitySectorId);
         aux.ampActivitySectorId = null;
         return aux;
     }

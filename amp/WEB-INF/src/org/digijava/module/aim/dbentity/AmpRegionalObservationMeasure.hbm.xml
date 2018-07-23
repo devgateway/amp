@@ -17,6 +17,6 @@
 			<key column="amp_reg_obs_measure_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpRegionalObservationActor" />
 		</set>
-
+		<property name="previousObjectId" column="previous_object_id" type="java.lang.Long" />
 	</class>
 </hibernate-mapping>

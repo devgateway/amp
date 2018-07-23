@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.util.Output;
 
-public class AmpActivityInternalId implements Serializable, Versionable, Cloneable {
+public class AmpActivityInternalId extends AbstractAuditLogger implements Serializable, Versionable, Cloneable {
     //IATI-check: used. 
     private static final long serialVersionUID = 469552292854192522L;
     
@@ -84,6 +84,7 @@ public class AmpActivityInternalId implements Serializable, Versionable, Cloneab
     public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
         AmpActivityInternalId aux = (AmpActivityInternalId) clone();
         aux.ampActivity = newActivity;
+        aux.setPreviousObjectId(aux.id);
         aux.id = null;
         return aux;
     }

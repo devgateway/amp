@@ -18,6 +18,6 @@
 	<many-to-one name="activity" column="activity_id"	class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" lazy="false"/>
 	
 	<many-to-one name="contact"  column="contact_id"	class="org.digijava.module.aim.dbentity.AmpContact" cascade="none" lazy="false"/>
-
-  </class>
+	<property name="previousObjectId" column="previous_object_id" type="java.lang.Long" />
+	</class>
 </hibernate-mapping>

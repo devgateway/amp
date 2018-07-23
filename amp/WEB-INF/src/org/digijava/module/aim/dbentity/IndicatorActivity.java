@@ -142,6 +142,7 @@ public class IndicatorActivity extends IndicatorConnection implements Versionabl
     public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
         IndicatorActivity aux = (IndicatorActivity) clone();
         aux.activity = newActivity;
+        aux.setPreviousObjectId(aux.getId());
         aux.setId(null);
         
         if (aux.values != null && aux.values.size() > 0){
@@ -149,6 +150,7 @@ public class IndicatorActivity extends IndicatorConnection implements Versionabl
             Iterator<AmpIndicatorValue> i = aux.values.iterator();
             while (i.hasNext()) {
                 AmpIndicatorValue ampIndicatorValue = (AmpIndicatorValue) i.next().clone();
+                ampIndicatorValue.setPreviousObjectId(ampIndicatorValue.getIndValId());
                 ampIndicatorValue.setIndValId(null);
                 ampIndicatorValue.setIndicatorConnection(aux);
                 set.add(ampIndicatorValue);

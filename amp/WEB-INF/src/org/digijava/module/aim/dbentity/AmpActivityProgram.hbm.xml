@@ -23,8 +23,7 @@
 			class="org.digijava.module.aim.dbentity.AmpActivityProgramSettings" cascade="none"
 			not-null="true" />
 
-
-
+		<property name="previousObjectId" column="previous_object_id" type="java.lang.Long" />
 	</class>
 
 </hibernate-mapping>

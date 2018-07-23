@@ -8,7 +8,7 @@ import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.aim.util.ProgramUtil;
 
-public class AmpActivityProgram implements Versionable, Serializable, Cloneable {
+public class AmpActivityProgram extends AbstractAuditLogger implements Versionable, Serializable, Cloneable {
 
 //      @Interchangeable(fieldTitle="Activity ID", importable=false, pickIdOnly=true)
         private Long ampActivityProgramId;
@@ -101,8 +101,8 @@ public class AmpActivityProgram implements Versionable, Serializable, Cloneable 
     public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
         AmpActivityProgram aux = (AmpActivityProgram) clone();
         aux.activity = newActivity;
+        this.setPreviousObjectId(aux.ampActivityProgramId);
         aux.ampActivityProgramId = null;
-        
         return aux;
     }
     

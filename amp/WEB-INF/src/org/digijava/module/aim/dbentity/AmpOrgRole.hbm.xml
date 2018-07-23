@@ -28,7 +28,8 @@
 			<cache usage="read-write" />
 			<key column="amp_org_role_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpGPINiSurvey" />
-		</set>		
+		</set>
+		<property name="previousObjectId" column="previous_object_id" type="java.lang.Long" />
 	</class>
 </hibernate-mapping>
 

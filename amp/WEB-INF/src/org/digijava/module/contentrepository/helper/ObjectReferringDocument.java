@@ -3,15 +3,18 @@
  */
 package org.digijava.module.contentrepository.helper;
 
+import org.digijava.module.aim.dbentity.AbstractAuditLogger;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 
 /**
  * @author Alex Gartner
  * This class should be extended by all other classes that are referencing documents from
- * Content Repository through their UUID  
+ * Content Repository through their UUID
+ * If a class Inheriting ObjectReferringDocument needs to track previous object id will have to
+ * define its in own mapping file the said database column
  */
-public abstract class ObjectReferringDocument {
+public abstract class ObjectReferringDocument extends AbstractAuditLogger {
     private String uuid;
     public ObjectReferringDocument() {
         uuid    = null;

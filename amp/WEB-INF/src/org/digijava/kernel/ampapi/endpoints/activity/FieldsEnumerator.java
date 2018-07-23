@@ -27,7 +27,6 @@ import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
-import org.digijava.module.aim.annotations.interchange.RegexDiscriminator;
 import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
@@ -76,20 +75,6 @@ public class FieldsEnumerator {
         this.translatorService = translatorService;
         this.internalUse = internalUse;
         this.iatiIdentifierField = InterchangeUtils.getAmpIatiIdentifierFieldName();
-    }
-    
-    /**
-     * gets fields from the type of the field
-     * 
-     * @param field field to be described
-     * @param context current context
-     * @return field definitions
-     */
-    private List<APIField> getChildrenOfField(Field field, FEContext context) {
-        if (!InterchangeUtils.isCollection(field))
-            return getAllAvailableFields(field.getType(), context);
-        else
-            return getAllAvailableFields(InterchangeUtils.getGenericClass(field), context);
     }
 
     /**
@@ -185,7 +170,11 @@ public class FieldsEnumerator {
 
             // FIXME remove condition that excludes activties
             if (!interchangeable.pickIdOnly() && !InterchangeUtils.isAmpActivityVersion(field.getClass())) {
-                List<APIField> children = getChildrenOfField(field, context);
+                Class type = getType(field, context);
+                List<APIField> children = getAllAvailableFields(type, context);
+                if (InterchangeUtils.isCollection(field)) {
+                    apiField.setElementType(type);
+                }
                 if (children != null && children.size() > 0) {
                     apiField.setChildren(children);
                 }
@@ -202,15 +191,6 @@ public class FieldsEnumerator {
         
         if (StringUtils.isNotBlank(interchangeable.regexPattern())) {
             apiField.setRegexPattern(interchangeable.regexPattern());
-        } else if (interchangeable.regexPatterns().length > 0) {
-            String parentTitle = getParentTitle(context);
-            for (RegexDiscriminator regexDiscr : interchangeable.regexPatterns()) {
-                String parent = regexDiscr.parent();
-                String regexPattern = regexDiscr.regexPattern();
-                if (parent.equals(parentTitle)) {
-                    apiField.setRegexPattern(regexPattern);
-                }
-            }
         }
 
         if (StringUtils.isNotEmpty(interchangeable.discriminatorOption())) {
@@ -220,18 +200,19 @@ public class FieldsEnumerator {
         return apiField;
     }
 
-    /**
-     * Get the title of the parent field from the context interchangeable stack
-     * 
-     * @param context
-     * @return
-     */
-    private String getParentTitle(FEContext context) {
-        Interchangeable current = context.getIntchStack().pop();
-        Interchangeable parent = context.getIntchStack().peek();
-        context.getIntchStack().push(current);
-        
-        return parent.fieldTitle();
+    private Class<?> getType(Field field, FEContext context) {
+        if (!context.getIntchStack().isEmpty()) {
+            Interchangeable interchangeable = context.getIntchStack().peek();
+            Class<?> type = interchangeable.type();
+            if (type != Interchangeable.DefaultType.class) {
+                return type;
+            }
+        }
+        if (InterchangeUtils.isCollection(field)) {
+            return InterchangeUtils.getGenericClass(field);
+        } else {
+            return field.getType();
+        }
     }
 
     private String getLabelOf(Interchangeable interchangeable) {
@@ -583,16 +564,6 @@ public class FieldsEnumerator {
 
     private boolean isFieldVisible(FEContext context) {
         Interchangeable interchangeable = context.getIntchStack().peek();
-
-        try {
-            Class<? extends ContextMatcher> cmc = interchangeable.context();
-            ContextMatcher contextMatcher = cmc.newInstance();
-            if (!contextMatcher.inContext(context)) {
-                return false;
-            }
-        } catch (ReflectiveOperationException e) {
-            throw new RuntimeException("Context matcher failure", e);
-        }
 
         return isVisible(interchangeable.fmPath(), context);
     }

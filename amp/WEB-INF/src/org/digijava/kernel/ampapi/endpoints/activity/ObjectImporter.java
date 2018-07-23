@@ -414,7 +414,7 @@ public class ObjectImporter {
             Field oldField = ReflectionUtil.getField(oldParent, actualFieldName);
             Object newFieldValue = null;
             Object oldFieldValue = null;
-            Class<?> subElementClass = null;
+            Class<?> subElementClass = fieldDef.getElementType();
             boolean isCollection = false;
             try {
                 newFieldValue = newField == null ? null : newField.get(newParent);
@@ -426,7 +426,6 @@ public class ObjectImporter {
                 // (no parent obj ref)
                 if (newFieldValue != null && Collection.class.isAssignableFrom(newFieldValue.getClass())) {
                     isCollection = true;
-                    subElementClass = AIHelper.getGenericsParameterClass(newField);
                 }
             } catch (IllegalArgumentException | IllegalAccessException e) {
                 logger.error(e.getMessage());
@@ -543,7 +542,7 @@ public class ObjectImporter {
         }
         return null;
     }
-    
+
     /**
      * Used to restore the value of the discrimination field.
      */

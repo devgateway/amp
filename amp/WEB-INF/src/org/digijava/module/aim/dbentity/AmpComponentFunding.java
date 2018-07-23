@@ -18,7 +18,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
-import org.digijava.kernel.ampapi.endpoints.activity.discriminators.ComponentTransactionTypePossibleValuesProvider;
+import org.digijava.kernel.ampapi.endpoints.activity.values.ComponentTransactionTypePossibleValuesProvider;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.util.FeaturesUtil;

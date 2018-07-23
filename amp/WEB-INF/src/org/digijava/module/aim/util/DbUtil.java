@@ -730,33 +730,6 @@ public class DbUtil {
         return ampAppSettings;
     }
 
-    public static boolean isUserTranslator(User user) {
-
-        logger.debug("In isUserTranslator()");
-        boolean flag = false;
-        try {
-
-            Iterator itr = user.getGroups().iterator();
-            if (!itr.hasNext()) {
-                logger.debug("No groups");
-            }
-            while (itr.hasNext()) {
-                Group grp = (Group) itr.next();
-                logger.debug("Group key is " + grp.getKey());
-                if ((grp.getKey() != null) && "TRN".equals(grp.getKey().trim())) {
-                    logger.debug("setting flag as true");
-                    flag = true;
-                    break;
-                } else {
-                    logger.debug("in else");
-                }
-            }
-        } catch (Exception ex) {
-            logger.error("Unable to get team member ", ex);
-        }
-        return flag;
-    }
-
     /*
      * Get all reports if tabs = null (all) tab = true only get tabs tab = false
      * reports which aren't tabs

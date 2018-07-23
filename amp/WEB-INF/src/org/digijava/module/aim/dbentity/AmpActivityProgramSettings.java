@@ -2,9 +2,7 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 
-import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
-import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.ProgramUtil;
 

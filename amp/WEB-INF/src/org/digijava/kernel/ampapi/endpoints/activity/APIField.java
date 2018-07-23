@@ -6,6 +6,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.annotate.JsonPropertyOrder;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.digijava.kernel.ampapi.discriminators.DiscriminationConfigurer;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 /**
@@ -78,7 +79,13 @@ public class APIField {
     private Integer sizeLimit;
 
     @JsonIgnore
-    private String discriminator;
+    private String discriminatorField;
+
+    @JsonIgnore
+    private String discriminatorValue;
+
+    @JsonIgnore
+    private Class<? extends DiscriminationConfigurer> discriminationConfigurer;
 
     public String getFieldName() {
         return fieldName;
@@ -240,12 +247,29 @@ public class APIField {
         this.percentage = percentage;
     }
 
-    public String getDiscriminator() {
-        return discriminator;
+    public String getDiscriminatorValue() {
+        return discriminatorValue;
     }
 
-    public void setDiscriminator(String discriminator) {
-        this.discriminator = discriminator;
+    public void setDiscriminatorValue(String discriminatorValue) {
+        this.discriminatorValue = discriminatorValue;
+    }
+
+    public String getDiscriminatorField() {
+        return discriminatorField;
+    }
+
+    public void setDiscriminatorField(String discriminatorField) {
+        this.discriminatorField = discriminatorField;
+    }
+
+    public Class<? extends DiscriminationConfigurer> getDiscriminationConfigurer() {
+        return discriminationConfigurer;
+    }
+
+    public void setDiscriminationConfigurer(
+            Class<? extends DiscriminationConfigurer> discriminationConfigurer) {
+        this.discriminationConfigurer = discriminationConfigurer;
     }
 
     @Override

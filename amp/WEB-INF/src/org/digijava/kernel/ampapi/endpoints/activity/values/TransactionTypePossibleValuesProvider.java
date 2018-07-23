@@ -1,4 +1,4 @@
-package org.digijava.kernel.ampapi.endpoints.activity.discriminators;
+package org.digijava.kernel.ampapi.endpoints.activity.values;
 
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
 import org.digijava.module.aim.annotations.interchange.PossibleValuesEntity;

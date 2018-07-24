@@ -570,8 +570,8 @@ public class ObjectImporter {
      */
     private void configureDiscriminationField(Object obj, APIField fieldDef) {
         if (fieldDef.getDiscriminationConfigurer() != null) {
-            DiscriminationConfigurer configurer = discriminatorConfigurerCache.computeIfAbsent(fieldDef.getDiscriminationConfigurer(),
-                    this::newConfigurer);
+            DiscriminationConfigurer configurer = discriminatorConfigurerCache.computeIfAbsent(
+                    fieldDef.getDiscriminationConfigurer(), this::newConfigurer);
             configurer.configure(obj, fieldDef.getDiscriminatorField(), fieldDef.getDiscriminatorValue());
         }
     }

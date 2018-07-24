@@ -8,18 +8,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
-import org.digijava.module.aim.dbentity.AmpActivityContact;
-import org.digijava.module.aim.dbentity.AmpActivityProgram;
-import org.digijava.module.aim.dbentity.AmpActivitySector;
-import org.digijava.module.aim.dbentity.AmpContactProperty;
-import org.digijava.module.aim.dbentity.AmpFundingAmount;
-import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.editor.exception.EditorException;
 
@@ -156,7 +151,7 @@ public abstract class ObjectExporter<T> {
      * in JSON the list should be written by classification
      * (primary programs, secondary programs, etc.)
      * @param field the instance of the field
-     * @param fieldInstance the object of the field
+     * @param object the object of the field
      * @param resultJson object JSON containing the value of the item
      * @param fieldPath the underscorified path to the field currently exported
      * @throws NoSuchFieldException 
@@ -203,28 +198,16 @@ public abstract class ObjectExporter<T> {
                     isRealCollection = false;
                 }
                 for (Object obj : compositeCollection) {
-                    String discOption = null;
-                    if (obj instanceof AmpActivitySector) {
-                        discOption = ((AmpActivitySector) obj).getClassificationConfig().getName();
-                    } else if (obj instanceof AmpActivityProgram) {
-                        discOption = ((AmpActivityProgram) obj).getProgramSetting().getName();
-                    } else if (obj instanceof AmpCategoryValue) {
+                    String discOption = getDiscriminationValue(obj, discriminator.discriminatorField());
+
+                    if (obj instanceof AmpCategoryValue) {
                         AmpCategoryValue catVal = (AmpCategoryValue) obj;
-                        discOption = catVal.getAmpCategoryClass().getKeyName();
                         // we may need to move up for all composites, but so far applies to ACV,
                         // so keeping here to avoid side effects in rush changes
                         if (!isRealCollection) {
                             compositeMap.put(catVal.getAmpCategoryClass().getKeyName(), catVal.getId());
                         }
                         //TODO we have to manage when the ActivityBudet is not present (Budget Unallocated)
-                    } else if (obj instanceof AmpOrgRole) {
-                        discOption = ((AmpOrgRole) obj).getRole().getRoleCode();
-                    } else if (obj instanceof AmpActivityContact) {
-                        discOption = ((AmpActivityContact) obj).getContactType();
-                    } else if (obj instanceof AmpFundingAmount) {
-                        discOption = "" + ((AmpFundingAmount) obj).getFunType().ordinal();
-                    } else if (obj instanceof AmpContactProperty) {
-                        discOption = ((AmpContactProperty) obj).getName();
                     }
 
                     String filteredFieldPath = filteredFieldsMap.get(discOption);
@@ -255,6 +238,26 @@ public abstract class ObjectExporter<T> {
             context.getIntchStack().pop();
         }
         context.getIntchStack().pop();
+    }
+
+    private String getDiscriminationValue(Object obj, String discriminatorField) {
+
+        Object discriminatorObj;
+        try {
+            discriminatorObj = PropertyUtils.getProperty(obj, discriminatorField);
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            throw new RuntimeException(String.format(
+                    "Failed to read discriminator value. Obj %s, discriminator field %s.",
+                    obj, discriminatorField));
+        }
+
+        if (discriminatorObj == null) {
+            throw new RuntimeException(String.format(
+                    "Discriminator value must be non-null. Field path %s, discriminator field %s.",
+                    obj, discriminatorField));
+        }
+
+        return discriminatorObj.toString();
     }
 
     private boolean isInContext(Interchangeable intch, FEContext context) {

@@ -18,6 +18,7 @@ import java.util.TreeSet;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.digijava.kernel.ampapi.discriminators.DiscriminationConfigurer;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.AIHelper;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
 import org.digijava.kernel.ampapi.endpoints.common.ReflectionUtil;
@@ -49,6 +50,9 @@ public class ObjectImporter {
      * fundings~funding_details - will contain the json values of the parent of pledge
      */
     private Map<String, Object> branchJsonVisitor = new HashMap<>();
+
+    private Map<Class<? extends DiscriminationConfigurer>, DiscriminationConfigurer> discriminatorConfigurerCache =
+            new HashMap<>();
 
     public ObjectImporter(Class<?> targetClass, InputValidatorProcessor validator) {
         this.targetClass = targetClass;
@@ -495,7 +499,7 @@ public class ObjectImporter {
                     // validation failed, reset parent to stop config
                     newParent = null;
                 } else if (newParent != null && isCollection) {
-                    configureCustom(res, fieldDef);
+                    configureDiscriminationField(res, fieldDef);
                     // actual links will be updated
                     ((Collection) newFieldValue).add(res);
                 }
@@ -562,9 +566,22 @@ public class ObjectImporter {
     }
     
     /**
-     * Used to set value of the field used for discrimination. FIXME generalize this part
+     * Used to restore the value of the discrimination field.
      */
-    protected void configureCustom(Object obj, APIField fieldDef) {
+    private void configureDiscriminationField(Object obj, APIField fieldDef) {
+        if (fieldDef.getDiscriminationConfigurer() != null) {
+            DiscriminationConfigurer configurer = discriminatorConfigurerCache.computeIfAbsent(
+                    fieldDef.getDiscriminationConfigurer(), this::newConfigurer);
+            configurer.configure(obj, fieldDef.getDiscriminatorField(), fieldDef.getDiscriminatorValue());
+        }
+    }
+
+    private DiscriminationConfigurer newConfigurer(Class<? extends DiscriminationConfigurer> configurer) {
+        try {
+            return configurer.newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            throw new RuntimeException("Failed to instantiate discriminator configurer " + configurer, e);
+        }
     }
 
     /**

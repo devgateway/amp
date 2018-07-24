@@ -16,7 +16,6 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.filters.AmpOfflineModeHolder;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpContact;
-import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamMemberUtil;
@@ -120,15 +119,6 @@ public class ContactImporter extends ObjectImporter {
         }
         contact.getProperties().forEach(p -> p.setContact(contact));
         contact.getOrganizationContacts().forEach(o -> o.setContact(contact));
-    }
-
-    @Override
-    protected void configureCustom(Object obj, APIField fieldDef) {
-        super.configureCustom(obj, fieldDef);
-
-        if (obj instanceof AmpContactProperty) {
-            ((AmpContactProperty) obj).setName(fieldDef.getDiscriminator());
-        }
     }
 
     public AmpContact getContact() {

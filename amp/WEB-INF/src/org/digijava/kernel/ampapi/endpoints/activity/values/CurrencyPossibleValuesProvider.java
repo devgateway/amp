@@ -1,25 +1,29 @@
-package org.digijava.kernel.ampapi.endpoints.activity.discriminators;
+package org.digijava.kernel.ampapi.endpoints.activity.values;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import com.google.common.collect.ImmutableMap;
-import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
+import org.digijava.module.aim.annotations.interchange.PossibleValuesEntity;
+import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.util.CurrencyUtil;
 
-public class ApprovalStatusPossibleValuesProvider extends PossibleValuesProvider {
-
+@PossibleValuesEntity(AmpCurrency.class)
+public class CurrencyPossibleValuesProvider extends PossibleValuesProvider {
+    
     @Override
     public List<PossibleValue> getPossibleValues(TranslatorService translatorService) {
+        List<AmpCurrency> currencies = CurrencyUtil.getActiveAmpCurrencyByCode();
         List<PossibleValue> values = new ArrayList<>();
-        for (Map.Entry<String, Integer> entry : AmpARFilter.activityStatusToNr.entrySet())
-            values.add(new PossibleValue(entry.getValue().toString(), entry.getKey(), ImmutableMap.of()));
+        for (AmpCurrency currency : currencies) {
+            values.add(new PossibleValue(currency.getCurrencyCode(), currency.getCurrencyCode(),
+                    translatorService.translateLabel(currency.getCurrencyName())));
+        }
         return values;
     }
-
+    
     @Override
     public Object toJsonOutput(Object object) {
         return object;
@@ -30,7 +34,6 @@ public class ApprovalStatusPossibleValuesProvider extends PossibleValuesProvider
         return null;
     }
 
-    @Override
     public Object toAmpFormat(Object obj) {
         return obj;
     }

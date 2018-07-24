@@ -211,7 +211,7 @@ public class FieldsEnumerator {
             }
         }
 
-        apiField.setDiscriminator(interchangeable.discriminatorOption());
+        apiField.setDiscriminatorValue(interchangeable.discriminatorOption());
 
         return apiField;
     }
@@ -288,9 +288,9 @@ public class FieldsEnumerator {
                     context.getIntchStack().push(settings[i]);
                     if (isFieldVisible(context)) {
                         APIField descr = describeField(field, context);
-                        if (descr != null) {
-                            result.add(descr);
-                        }
+                        descr.setDiscriminatorField(discriminator.discriminatorField());
+                        descr.setDiscriminationConfigurer(discriminator.configurer());
+                        result.add(descr);
                     }
                     context.getIntchStack().pop();
                     context.getDiscriminationInfoStack().pop();

@@ -1,4 +1,4 @@
-package org.digijava.kernel.ampapi.endpoints.activity.discriminators;
+package org.digijava.kernel.ampapi.endpoints.activity.values;
 
 import java.util.ArrayList;
 import java.util.HashMap;

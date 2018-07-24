@@ -9,8 +9,8 @@ import java.util.Date;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
-import org.digijava.kernel.ampapi.endpoints.activity.discriminators.FundingePledgesValueProvider;
-import org.digijava.kernel.ampapi.endpoints.activity.discriminators.TransactionTypePossibleValuesProvider;
+import org.digijava.kernel.ampapi.endpoints.activity.values.FundingePledgesValueProvider;
+import org.digijava.kernel.ampapi.endpoints.activity.values.TransactionTypePossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;

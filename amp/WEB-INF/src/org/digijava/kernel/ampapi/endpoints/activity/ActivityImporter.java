@@ -20,7 +20,6 @@ import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
@@ -105,7 +104,8 @@ public class ActivityImporter extends ObjectImporter {
     private Long latestActivityId;
 
     public ActivityImporter() {
-        super(AmpActivityFields.class, new InputValidatorProcessor(InputValidatorProcessor.getActivityValidators()));
+        super(new InputValidatorProcessor(InputValidatorProcessor.getActivityValidators()),
+                AmpFieldsEnumerator.PRIVATE_ENUMERATOR.getAllAvailableFields());
     }
 
     private void init(JsonBean newJson, boolean update, String endpointContextPath) {
@@ -134,7 +134,7 @@ public class ActivityImporter extends ObjectImporter {
         }
 
         // retrieve fields definition for internal use
-        List<APIField> fieldsDef = AmpFieldsEnumerator.PRIVATE_ENUMERATOR.getAllAvailableFields();
+        List<APIField> fieldsDef = getApiFields();
         // get existing activity if this is an update request
         Long ampActivityId = update ? AIHelper.getActivityIdOrNull(newJson) : null;
 
@@ -323,28 +323,6 @@ public class ActivityImporter extends ObjectImporter {
 
     protected boolean ignoreUnknownFields() {
         return AmpOfflineModeHolder.isAmpOfflineMode();
-    }
-
-    /**
-     * Identifies if an existing object has to be worked with
-     * @param fieldDefOfAnObject
-     * @param jsonValue
-     * @return
-     */
-    private Long getElementId(APIField fieldDefOfAnObject, Object jsonValue) {
-        List<APIField> children = fieldDefOfAnObject.getChildren();
-        if (children != null && jsonValue != null) {
-            for (APIField childDef : children) {
-                if (Boolean.TRUE.equals(childDef.isId())) {
-                    String idFieldName = childDef.getFieldName();
-                    String idStr = String.valueOf(((List<Map<String, Object>>) jsonValue).get(0).get(idFieldName));
-                    if (StringUtils.isNumeric(idStr))
-                        return Long.valueOf(idStr);
-                    break;
-                }
-            }
-        }
-        return null;
     }
 
     @Override

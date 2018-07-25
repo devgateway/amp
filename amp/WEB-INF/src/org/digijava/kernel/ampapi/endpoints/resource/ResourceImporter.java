@@ -51,7 +51,8 @@ public class ResourceImporter extends ObjectImporter {
     private AmpResource resource;
 
     public ResourceImporter() {
-        super(AmpResource.class, new InputValidatorProcessor(InputValidatorProcessor.getResourceValidators()));
+        super(new InputValidatorProcessor(InputValidatorProcessor.getResourceValidators()),
+                AmpFieldsEnumerator.PRIVATE_ENUMERATOR.getResourceFields());
     }
 
     /**
@@ -78,7 +79,7 @@ public class ResourceImporter extends ObjectImporter {
     private List<ApiErrorMessage> importResource(JsonBean newJson, FormFile formFile) {
         this.newJson = newJson;
 
-        List<APIField> fieldsDef = AmpFieldsEnumerator.PRIVATE_ENUMERATOR.getResourceFields();
+        List<APIField> fieldsDef = getApiFields();
         
         String privateAttr = newJson.getString(ResourceEPConstants.PRIVATE);
         

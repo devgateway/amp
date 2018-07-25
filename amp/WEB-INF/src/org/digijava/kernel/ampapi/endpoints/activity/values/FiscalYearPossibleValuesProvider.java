@@ -22,20 +22,4 @@ public class FiscalYearPossibleValuesProvider extends PossibleValuesProvider {
         
         return values;
     }
-
-    @Override
-    public Object toJsonOutput(Object object) {
-        return object;
-    }
-
-    @Override
-    public Long getIdOf(Object value) {
-        return null;
-    }
-
-    @Override
-    public Object toAmpFormat(Object obj) {
-        return obj;
-    }
-
 }

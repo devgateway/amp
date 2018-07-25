@@ -140,7 +140,7 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
      * public static final int ARREAR = 10;
      */
 
-    @Interchangeable(fieldTitle = ActivityFieldsConstants.TRANSACTION_TYPE, importable = true, pickIdOnly = true,
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.TRANSACTION_TYPE, importable = true,
             required = REQUIRED_ALWAYS)
     @PossibleValues(TransactionTypePossibleValuesProvider.class)
     private Integer transactionType;

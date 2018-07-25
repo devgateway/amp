@@ -5,12 +5,26 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpContact;
 
 /**
+ * TODO enumerated fields are good candidate for caching, they only change when FM entries change!
+ *
  * @author Octavian Ciubotaru
  */
 public final class AmpFieldsEnumerator {
 
     public static final FieldsEnumerator PUBLIC_ENUMERATOR;
+
+    /**
+     * Private enumerator main scope is to restore back references to the activity.
+     *
+     * It adds new extra fields that point to parent activity and then through
+     * {@link ActivityImporter#setupNotImportableField(java.lang.Object, java.lang.reflect.Field)}
+     * restores the reference.
+     *
+     * TODO rethink & make it work for other back references too!
+     */
     public static final FieldsEnumerator PRIVATE_ENUMERATOR;
+
+    // TODO remove these enumerators
     public static final FieldsEnumerator PUBLIC_CONTACT_ENUMERATOR;
     public static final FieldsEnumerator PRIVATE_CONTACT_ENUMERATOR;
 

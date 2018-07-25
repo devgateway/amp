@@ -3,14 +3,14 @@ package org.digijava.module.aim.dbentity ;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.dimension.NPODimension;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.PossibleValueId;
+import org.digijava.module.aim.annotations.interchange.PossibleValueValue;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
@@ -19,7 +19,6 @@ import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.aim.util.HierarchyListableComparator;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.NameableOrIdentifiable;
-import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SoftDeletable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
@@ -29,7 +28,8 @@ public class AmpTheme implements Serializable, Comparable<AmpTheme>, SoftDeletab
 {
 
     private static final long serialVersionUID = 1L;
-    @Interchangeable(fieldTitle="ID", id=true)
+    @Interchangeable(fieldTitle = "ID")
+    @PossibleValueId
     private Long ampThemeId ;
     @Interchangeable(fieldTitle="Parent Theme ID", pickIdOnly=true)
     private AmpTheme parentThemeId ;
@@ -40,7 +40,7 @@ public class AmpTheme implements Serializable, Comparable<AmpTheme>, SoftDeletab
     private String budgetProgramCode ;
     @Interchangeable(fieldTitle="Is Budget Program")
     private Integer isbudgetprogram;
-    @Interchangeable(fieldTitle="Name", value = true)
+    @PossibleValueValue
     @TranslatableField
     private String name ;
     @Interchangeable(fieldTitle="Encoded Name")

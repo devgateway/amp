@@ -200,11 +200,10 @@ public class InterchangeUtilsTest {
     }
 
     @Test
-    public void testIsAmpActivityVersion() throws Exception {
-        // FIXME very high probability of incorrect behaviour
-        assertTrue(InterchangeUtils.isAmpActivityVersion(Object.class));
-        assertTrue(InterchangeUtils.isAmpActivityVersion(Permissible.class));
-        assertTrue(InterchangeUtils.isAmpActivityVersion(AmpActivityFields.class));
+    public void testIsAmpActivityVersion() {
+        assertFalse(InterchangeUtils.isAmpActivityVersion(Object.class));
+        assertFalse(InterchangeUtils.isAmpActivityVersion(Permissible.class));
+        assertFalse(InterchangeUtils.isAmpActivityVersion(AmpActivityFields.class));
         assertTrue(InterchangeUtils.isAmpActivityVersion(AmpActivityVersion.class));
         assertFalse(InterchangeUtils.isAmpActivityVersion(String.class));
         assertFalse(InterchangeUtils.isAmpActivityVersion(AmpActivity.class));

@@ -6,6 +6,8 @@ import java.util.Set;
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.PossibleValueId;
+import org.digijava.module.aim.annotations.interchange.PossibleValueValue;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 
@@ -13,10 +15,12 @@ import org.digijava.module.aim.annotations.translation.TranslatableField;
 public class AmpStructureType implements ARDimensionable, Serializable{
 //IATI-check: not to be ignored
     private static final long serialVersionUID = 1L;
-    @Interchangeable(fieldTitle="ID", id = true)
+    @Interchangeable(fieldTitle = "ID")
+    @PossibleValueId
     private Long typeId;
     @TranslatableField
-    @Interchangeable(fieldTitle="Name", value = true)
+    @Interchangeable(fieldTitle = "Name")
+    @PossibleValueValue
     private String name;
     @Interchangeable(fieldTitle="Graphic Type")
     private String graphicType;

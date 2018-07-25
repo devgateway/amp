@@ -251,25 +251,25 @@ public class FieldsEnumeratorTest {
         assertEqualsSingle(expected, actual);
     }
 
-    private static class IdClass {
+    private static class LongFieldClass {
 
-        @Interchangeable(fieldTitle = "field", id = true)
+        @Interchangeable(fieldTitle = "field")
         private Long field;
     }
 
     @Test
     public void testId() {
-        List<APIField> actual = fieldsFor(IdClass.class);
+        List<APIField> actual = fieldsFor(LongFieldClass.class);
 
         APIField expected = newAPIField();
         expected.setFieldType(FIELD_TYPE_LONG);
-        expected.setId(true);
 
         assertEqualsSingle(expected, actual);
     }
 
     private static class PickIdOnlyClass {
 
+        // FIXME such annotations should be illegal
         @Interchangeable(fieldTitle = "field", pickIdOnly = true)
         private Long field;
     }

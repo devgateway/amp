@@ -107,10 +107,11 @@ public class FieldsEnumerator {
         APIField apiField = new APIField();
         apiField.setFieldName(fieldTitle);
 
-        if (interchangeable.id()) {
-            apiField.setId(interchangeable.id());
-        }
-        
+        // for discriminated case we can override the type here
+        apiField.setType(InterchangeUtils.getClassOfField(field));
+
+        apiField.setPossibleValuesProviderClass(InterchangeUtils.getPossibleValuesProvider(field));
+
         if (interchangeable.pickIdOnly()) {
             apiField.setFieldType(InterchangeableClassMapper.getCustomMapping(java.lang.Long.class));
         } else {
@@ -181,7 +182,8 @@ public class FieldsEnumerator {
                 }
                 
             }
-            
+
+            // FIXME remove condition that excludes activties
             if (!interchangeable.pickIdOnly() && !InterchangeUtils.isAmpActivityVersion(field.getClass())) {
                 List<APIField> children = getChildrenOfField(field, context);
                 if (children != null && children.size() > 0) {
@@ -211,7 +213,9 @@ public class FieldsEnumerator {
             }
         }
 
-        apiField.setDiscriminatorValue(interchangeable.discriminatorOption());
+        if (StringUtils.isNotEmpty(interchangeable.discriminatorOption())) {
+            apiField.setDiscriminatorValue(interchangeable.discriminatorOption());
+        }
 
         return apiField;
     }

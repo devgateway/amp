@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.module.aim.dbentity.AmpOfflineChangelog" table="amp_offline_changelog" lazy="false">
+		<id name="id" type="java.lang.Long">
+			<generator class="native">
+				<param name="sequence">amp_offline_changelog_seq</param>
+			</generator>
+		</id>
+		<property name="entityName" column="entity_name" type="java.lang.String"/>
+		<property name="entityId" column="entity_id" type="java.lang.String"/>
+		<property name="operationName" column="operation_name" type="java.lang.String"/>
+		<property name="operationTime" column="operation_time" type="java.util.Date"/>
+	</class>
+</hibernate-mapping>

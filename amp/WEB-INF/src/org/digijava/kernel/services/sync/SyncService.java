@@ -61,7 +61,7 @@ import org.digijava.kernel.ampapi.endpoints.sync.SyncRequest;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.services.sync.model.ActivityChange;
-import org.digijava.kernel.services.sync.model.AmpOfflineChangelog;
+import org.digijava.module.aim.dbentity.AmpOfflineChangelog;
 import org.digijava.kernel.services.sync.model.ExchangeRatesDiff;
 import org.digijava.kernel.services.sync.model.ListDiff;
 import org.digijava.kernel.services.sync.model.ResourceChange;
@@ -71,6 +71,7 @@ import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.repository.AmpOfflineChangelogRepository;
 import org.digijava.module.aim.util.ContactInfoUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.contentrepository.helper.CrConstants;
@@ -103,6 +104,8 @@ public class SyncService implements InitializingBean {
     private PossibleValuesEnumerator possibleValuesEnumerator = PossibleValuesEnumerator.INSTANCE;
     private FieldsEnumerator fieldsEnumerator = AmpFieldsEnumerator.PRIVATE_ENUMERATOR;
     private CurrencyService currencyService = CurrencyService.INSTANCE;
+
+    private AmpOfflineChangelogRepository ampOfflineChangelogRepository = AmpOfflineChangelogRepository.INSTANCE;
 
     private static class AmpOfflineChangelogMapper implements RowMapper<AmpOfflineChangelog> {
 
@@ -365,11 +368,19 @@ public class SyncService implements InitializingBean {
                     updated.add(resourceChange.getUuid());
                 }
             }
-            
-            systemDiff.setResources(new ListDiff<>(emptyList(), updated));
+
+            List<String> removed = new ArrayList<>();
+            List<AmpOfflineChangelog> removedLogs =
+                    ampOfflineChangelogRepository.findRemovedResources(syncRequest.getLastSyncTime());
+            for (AmpOfflineChangelog removedLog : removedLogs) {
+                removed.add(removedLog.getEntityId());
+                systemDiff.updateTimestamp(removedLog.getOperationTime());
+            }
+
+            systemDiff.setResources(new ListDiff<>(removed, updated));
         }
     }
-    
+
     private boolean resourcesChanged(Date lastSyncTime) {
         return !loadChangeLog(lastSyncTime, asList(RESOURCE)).isEmpty();
     }
@@ -586,7 +597,7 @@ public class SyncService implements InitializingBean {
         
         return changedResources;
     }
-    
+
     private static List<ResourceChange> getLastUpdatedUuids(String path, Date syncDate) {
         Session session = DocumentManagerUtil.getReadSession(TLSUtils.getRequest());
         Calendar cal = Calendar.getInstance();

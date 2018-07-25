@@ -584,6 +584,13 @@ public class ActivityImporter extends ObjectImporter {
         updateOrgRoles();
         initComponents();
         initStructures();
+        initDocs();
+    }
+
+    private void initDocs() {
+        if (newActivity.getActivityDocuments() != null) {
+            newActivity.getActivityDocuments().forEach(ad -> ad.setAmpActivity(newActivity));
+        }
     }
 
     private void initComponents() {

@@ -324,7 +324,8 @@ public class NodeWrapper{
     }   
     
     
-    public NodeWrapper(TemporaryDocumentData tempDoc, HttpServletRequest httpRequest, Node parentNode,boolean isANewVersion, ActionMessages errors) {
+    public NodeWrapper(TemporaryDocumentData tempDoc, HttpServletRequest httpRequest, TeamMember teamMember, 
+            Node parentNode, boolean isANewVersion, ActionMessages errors) {
         
         FormFile formFile       = tempDoc.getFormFile(); 
         
@@ -338,7 +339,7 @@ public class NodeWrapper{
             if (tempDoc.getTitle() == null) 
                 tempDoc.setTitle(tempDoc.getWebLink());
             if (tempDoc.getName() == null) 
-                tempDoc.setTitle(tempDoc.getWebLink());
+                tempDoc.setName(tempDoc.getWebLink());
             
             
             if (tempDoc.getName().indexOf("http://") >= 0){
@@ -351,7 +352,6 @@ public class NodeWrapper{
         }
         
         try {
-            TeamMember teamMember       = (TeamMember)httpRequest.getSession().getAttribute(Constants.CURRENT_MEMBER);
             Node newNode    = null;
             if (isANewVersion){
                 newNode     = parentNode;
@@ -590,14 +590,13 @@ public class NodeWrapper{
     public String getTitle() {
         return getTranslatedTitleByLang(TLSUtils.getLangCode());
     }
-    
+
     public String getDescription() {
-        //. Now is a multilingual property
         return getTranslatedDescriptionByLang(TLSUtils.getLangCode());
     }
-    
+
     public String getNotes() {
-        //Now is a multilingual property
+        // Now is a multilingual property
         return getTranslatedNoteByLang(TLSUtils.getLangCode());
     }
     
@@ -970,15 +969,15 @@ public class NodeWrapper{
     }
     
     public String getTranslatedTitleByLang (String language) {
-        return getTranslatedProperty(CrConstants.PROPERTY_TITLE,language);
+        return getTranslatedProperty(CrConstants.PROPERTY_TITLE, language);
     }
     
     public String getTranslatedNoteByLang (String language) {
-        return getTranslatedProperty(CrConstants.PROPERTY_NOTES,language);
+        return getTranslatedProperty(CrConstants.PROPERTY_NOTES, language);
     }
     
     public String getTranslatedDescriptionByLang (String language) {
-        return getTranslatedProperty(CrConstants.PROPERTY_DESCRIPTION,language);
+        return getTranslatedProperty(CrConstants.PROPERTY_DESCRIPTION, language);
     }
     
     
@@ -1021,9 +1020,13 @@ public class NodeWrapper{
                         
                 }
             }
+        } catch (PathNotFoundException e) {
+            logger.error(e.getMessage(), e);
+            translatedField.put(TLSUtils.getEffectiveLangCode(), getStringProperty(fieldName));
         } catch (RepositoryException e) {
-            logger.error("Exception accesing traslated titles in NodeWrapper",e);
-        }
+            logger.error("Exception accesing traslated titles in NodeWrapper", e);
+        } 
+        
         return translatedField;
     }
     

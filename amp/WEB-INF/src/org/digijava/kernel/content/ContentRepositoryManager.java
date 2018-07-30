@@ -9,6 +9,8 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.SimpleCredentials;
 import javax.jcr.Workspace;
+import javax.jcr.observation.Event;
+import javax.jcr.observation.ObservationManager;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.jackrabbit.core.RepositoryImpl;
@@ -16,6 +18,7 @@ import org.apache.jackrabbit.core.config.RepositoryConfig;
 import org.apache.log4j.Logger;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.contentrepository.listeners.NodeRemovalListener;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 
 /**
@@ -117,6 +120,7 @@ public final class ContentRepositoryManager {
                 registerNamespace(writeSession, "ampdoc", AMP_DOC_NAMESPACE);
                 registerNamespace(writeSession, "amplabel", AMP_LABLE_NAMESPACE);
             }
+            registerObservers(writeSession);
         } catch (RepositoryException e) {
             throw new RuntimeException(e.getMessage(), e);
         }
@@ -200,4 +204,23 @@ public final class ContentRepositoryManager {
         
         return session;
     }
+    
+    private static void registerObservers(Session session) {
+        try {
+            ObservationManager observationManager = session.getWorkspace().getObservationManager();
+
+            NodeRemovalListener teamListener =
+                    new NodeRemovalListener(NodeRemovalListener.TEAM_RESOURCE_PATH_DEPTH);
+            observationManager.addEventListener(teamListener, Event.NODE_REMOVED, "/team",
+                    true, null, null, false);
+
+            NodeRemovalListener privateListener =
+                    new NodeRemovalListener(NodeRemovalListener.PRIVATE_RESOURCE_PATH_DEPTH);
+            observationManager.addEventListener(privateListener, Event.NODE_REMOVED, "/private",
+                    true, null, null, false);
+        } catch (RepositoryException e) {
+            throw new RuntimeException("Failed to register observers.", e);
+        }
+    }
+    
 }

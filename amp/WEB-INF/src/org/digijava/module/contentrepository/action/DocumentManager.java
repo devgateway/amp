@@ -23,6 +23,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessages;
+import org.digijava.kernel.ampapi.endpoints.gis.services.MapTilesService;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
@@ -457,6 +458,11 @@ public class DocumentManager extends Action {
                 
                 NodeWrapper nw = new NodeWrapper(documentNode);
                 if (shouldSkipNode(nw, baseNode, uuidMapVer, request)) {
+                    continue;
+                }
+                
+                // AMP-27996 Map Tiles file shouldn't be visible in public documents table
+                if (CrConstants.PUBLIC_DOCS_TAB.equals(tabName) && MapTilesService.FILE_NAME.equals(nw.getName())) {
                     continue;
                 }
                 

@@ -8,7 +8,6 @@ import java.util.Set;
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.dimension.NPODimension;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.PossibleValueId;
 import org.digijava.module.aim.annotations.interchange.PossibleValueValue;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
@@ -28,34 +27,23 @@ public class AmpTheme implements Serializable, Comparable<AmpTheme>, SoftDeletab
 {
 
     private static final long serialVersionUID = 1L;
-    @Interchangeable(fieldTitle = "ID")
     @PossibleValueId
     private Long ampThemeId ;
-    @Interchangeable(fieldTitle="Parent Theme ID", pickIdOnly=true)
     private AmpTheme parentThemeId ;
-    @Interchangeable(fieldTitle="Theme Code")
     private String themeCode ;
-    @Interchangeable(fieldTitle="Budget Program Code")
-    
+
     private String budgetProgramCode ;
-    @Interchangeable(fieldTitle="Is Budget Program")
     private Integer isbudgetprogram;
     @PossibleValueValue
     @TranslatableField
     private String name ;
-    @Interchangeable(fieldTitle="Encoded Name")
     private String encodeName;
     //private String type ;
-    @Interchangeable(fieldTitle="Type Category Value", pickIdOnly=true)
     private AmpCategoryValue typeCategoryValue;
-    @Interchangeable(fieldTitle="Level")
     private Integer indlevel;
-    @Interchangeable(fieldTitle="Description")
     @TranslatableField
     private String description ;
-    @Interchangeable(fieldTitle="Language")
     private String language ;
-    @Interchangeable(fieldTitle="Version")
     private String version ;
     
     private Boolean deleted;
@@ -72,25 +60,15 @@ public class AmpTheme implements Serializable, Comparable<AmpTheme>, SoftDeletab
      * Please refer to AmpTheme.hbm.xml and IndicatorConnection.hbm.xml for details.
      */
     private Set<IndicatorTheme> indicators;
-//  @Interchangeable(fieldTitle="Lead Agency")
     private String leadAgency;
-//  @Interchangeable(fieldTitle="Target Groups")
     private String targetGroups;
-//  @Interchangeable(fieldTitle="Background")
     private String background;
-//  @Interchangeable(fieldTitle="Objectives")
     private String objectives;
-//  @Interchangeable(fieldTitle="Outputs")
     private String outputs;
-//  @Interchangeable(fieldTitle="Beneficiaries")
     private String beneficiaries;
-//  @Interchangeable(fieldTitle="Environment Considerations")
     private String environmentConsiderations;
-//  @Interchangeable(fieldTitle="External Financing")
     private Double externalFinancing;
-//  @Interchangeable(fieldTitle="Internal Financing")
     private Double internalFinancing;
-//  @Interchangeable(fieldTitle="Total Financing")
     private Double totalFinancing;
     
     private transient Collection<AmpTheme> transientChildren;

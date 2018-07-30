@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.digijava.kernel.exception.DgException;
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.PossibleValueId;
 import org.digijava.module.aim.annotations.interchange.PossibleValueValue;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
@@ -14,12 +13,9 @@ import org.digijava.module.aim.util.SectorUtil;
 public class AmpSectorScheme implements Serializable
 {
     //IATI-check: might be relevant, but obtained from possible values
-    @Interchangeable(fieldTitle = "AMP Sector Scheme ID")
     @PossibleValueId
     private Long ampSecSchemeId ;
-    @Interchangeable(fieldTitle="Sector Scheme Code")
     private String secSchemeCode ;
-    @Interchangeable(fieldTitle = "Sector Scheme Name")
     @PossibleValueValue
     @TranslatableField
     private String secSchemeName ;

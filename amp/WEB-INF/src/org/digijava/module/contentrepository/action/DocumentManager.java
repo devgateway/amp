@@ -457,12 +457,7 @@ public class DocumentManager extends Action {
                 }
                 
                 NodeWrapper nw = new NodeWrapper(documentNode);
-                if (shouldSkipNode(nw, baseNode, uuidMapVer, request)) {
-                    continue;
-                }
-                
-                // AMP-27996 Map Tiles file shouldn't be visible in public documents table
-                if (CrConstants.PUBLIC_DOCS_TAB.equals(tabName) && MapTilesService.FILE_NAME.equals(nw.getName())) {
+                if (shouldSkipNode(nw, tabName, baseNode, uuidMapVer, request)) {
                     continue;
                 }
                 
@@ -483,7 +478,7 @@ public class DocumentManager extends Action {
                     }
                     
                     //if documentNode has pending status in sharedDocs,then it should be true
-                    boolean needsApproval=false;
+                    boolean needsApproval = false;
                     if (StringUtils.equalsIgnoreCase(tabName, CrConstants.TEAM_DOCS_TAB)) {
                         needsApproval = DocumentManagerUtil.isResourcePendingtoBeShared(docBaseUUID);
                     } else if (StringUtils.equalsIgnoreCase(tabName, CrConstants.PRIVATE_DOCS_TAB)) {
@@ -492,7 +487,7 @@ public class DocumentManager extends Action {
                     }
                     documentData.setNeedsApproval(needsApproval);   //should show "share" or "approve" link
                     
-                    List<String> sharedNodeVersionId=new ArrayList<String>();
+                    List<String> sharedNodeVersionId = new ArrayList<String>();
                     if (StringUtils.equalsIgnoreCase(tabName, CrConstants.PRIVATE_DOCS_TAB)) {
                         sharedNodeVersionId = DocumentManagerUtil.isPrivateResourceShared(docBaseUUID);
                     } else if (StringUtils.equalsIgnoreCase(tabName, CrConstants.TEAM_DOCS_TAB) && !isPending) {
@@ -540,10 +535,9 @@ public class DocumentManager extends Action {
                     } else {
                         documentData.setHasAnyVersionPendingApproval(false);
                     }
-                }
-                // This is not the actual document node. It is the node of the public version. 
-                // That's why one shouldn't have the above rights.
-                else {
+                } else {
+                    // This is not the actual document node. It is the node of the public version. 
+                    // That's why one shouldn't have the above rights.
                     documentData.setShowVersionHistory(false); 
                 }
                 documents.add(documentData);
@@ -561,7 +555,7 @@ public class DocumentManager extends Action {
         return gpiSupportiveDocuments.contains(docBaseUUID) || pledgeDocumentsUuids.contains(docBaseUUID);
     }
 
-    private boolean shouldSkipNode(NodeWrapper nodeWrapper, Node baseNode, 
+    private boolean shouldSkipNode(NodeWrapper nodeWrapper, String tabName, Node baseNode, 
             Map<String, CrDocumentNodeAttributes> uuidMapVer, HttpServletRequest request) {
         
         boolean shouldSkip = false;
@@ -574,6 +568,11 @@ public class DocumentManager extends Action {
         }
         
         if (nodeWrapper.getName() == null && nodeWrapper.getWebLink() == null) {
+            shouldSkip = true;
+        }
+        
+        // AMP-27996 Map Tiles file shouldn't be visible in public documents table
+        if (CrConstants.PUBLIC_DOCS_TAB.equals(tabName) && MapTilesService.FILE_NAME.equals(nodeWrapper.getName())) {
             shouldSkip = true;
         }
         

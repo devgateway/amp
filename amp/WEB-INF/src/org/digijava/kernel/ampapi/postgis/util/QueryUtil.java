@@ -14,6 +14,7 @@ import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.ar.viewfetcher.ViewFetcher;
 import org.digijava.kernel.ampapi.endpoints.dto.SimpleJsonBean;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
+import org.digijava.kernel.ampapi.endpoints.gis.services.AdmLevel;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorAccessType;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.postgis.entity.AmpLocator;
@@ -75,10 +76,9 @@ public class QueryUtil {
      * return a list of saved maps.
      * 
      * @return
-     * @throws DgException
      */
     @SuppressWarnings("unchecked")
-    public static List<AmpApiState> getMapList(String type) throws DgException {
+    public static List<AmpApiState> getMapList(String type) {
         Criteria mapsCriteria = PersistenceManager.getRequestDBSession().createCriteria(AmpApiState.class);
         mapsCriteria.add(Restrictions.eq("type", type));
         return mapsCriteria.list();
@@ -404,7 +404,7 @@ public class QueryUtil {
         return getIndicatorByCategoryValue(null);
  }
 
-    public static List <AmpIndicatorLayer> getIndicatorByCategoryValue (String admLevel) {
+    public static List<AmpIndicatorLayer> getIndicatorByCategoryValue(AdmLevel admLevel) {
             Session dbSession = PersistenceManager.getSession();
             String queryString = "select ind from "
                     + AmpIndicatorLayer.class.getName() + " ind "
@@ -428,7 +428,7 @@ public class QueryUtil {
             Query qry = dbSession.createQuery(queryString);
             qry.setCacheable(true);
             if (admLevel != null)
-                qry.setString("admLevel", admLevel.toUpperCase());
+                qry.setString("admLevel", admLevel.getLabel().toUpperCase());
             return qry.list();
          
      }

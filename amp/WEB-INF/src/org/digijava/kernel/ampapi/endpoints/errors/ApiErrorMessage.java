@@ -67,7 +67,9 @@ public class ApiErrorMessage {
         if (values != null) {
             newValues.addAll(values);
         }
-        newValues.add(value);
+        if (value != null) {
+            newValues.add(value);
+        }
         return new ApiErrorMessage(id, description, prefix, newValues);
     }
 

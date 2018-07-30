@@ -6,11 +6,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-import net.sf.json.JSONSerializer;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
@@ -25,17 +25,19 @@ public class BoundariesService {
     private static final String CONTEXT_PATH = TLSUtils.getRequest().getServletContext().getRealPath("/");
     private static final String BOUNDARY_PATH = "gis" + File.separator + "boundaries" + File.separator;
 
+    private static final ObjectMapper MAPPER = new ObjectMapper();
+
     /**
      * Return the list .json files for this country as a JSONArray object.
      * 
      * @return
      */
-    public static JSONArray getBoundaries() {
+    public static List<Boundary> getBoundaries() {
         String countryIso = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_COUNTRY);
         String path = CONTEXT_PATH + BOUNDARY_PATH + countryIso.toUpperCase() + File.separator + "list.json";
         try (InputStream is = new FileInputStream(path)) {
             String jsonTxt = IOUtils.toString(is, StandardCharsets.UTF_8);
-            return (JSONArray) JSONSerializer.toJSON(jsonTxt);
+            return MAPPER.readValue(jsonTxt, new TypeReference<List<Boundary>>() { });
         } catch (IOException e) {
             logger.error("Failed to load boundaries for " + countryIso, e);
             throw new RuntimeException(e);
@@ -48,12 +50,11 @@ public class BoundariesService {
      * 
      * @return
      */
-    public static Map<String, JSONObject> getBoundariesAsList() {
-        JSONArray boundariesJSON = BoundariesService.getBoundaries();
-        Map<String, JSONObject> boundariesMap = new HashMap<>();
-        for (final Object adm : boundariesJSON) {
-            boundariesMap.put(String.valueOf(((JSONObject) adm).get("id")),
-                    (JSONObject) adm);
+    public static Map<String, Boundary> getBoundariesAsList() {
+        List<Boundary> boundaries = BoundariesService.getBoundaries();
+        Map<String, Boundary> boundariesMap = new HashMap<>();
+        for (Boundary boundary : boundaries) {
+            boundariesMap.put(boundary.getId().getLabel(), boundary);
         }
         return boundariesMap;
     }

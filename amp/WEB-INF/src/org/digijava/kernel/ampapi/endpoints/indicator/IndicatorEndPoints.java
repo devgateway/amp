@@ -23,6 +23,7 @@ import io.swagger.annotations.ApiParam;
 import org.digijava.kernel.ampapi.endpoints.common.CategoryValueService;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.gis.services.BoundariesService;
+import org.digijava.kernel.ampapi.endpoints.gis.services.Boundary;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -33,8 +34,6 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 import com.sun.jersey.multipart.FormDataParam;
-
-import net.sf.json.JSONObject;
 
 @Path("indicator")
 @Api("indicator")
@@ -230,22 +229,7 @@ public class IndicatorEndPoints implements ErrorReportingEndpoint {
                     + "<dt><b>result</b><dd> - \"INSERTED\" if the indicator layer was inserted correctly\n"
                     + "<dt><b>data</b><dd> - the indicator layer inserted\n"
                     + "for more details of indicators layer info go to /indicator-layer/{id}\n"
-                    + "</dl></br></br>\n"
-                    + "<h3>Sample Imput:</h3><pre>\n"
-                    + "{\n"
-                    + "    \"name\": \"New layer\",\n"
-                    + "    \"description\": \"layer description\",\n"
-                    + "    \"numberOfClasses\": 5,\n"
-                    + "    \"unit\": \"\",\n"
-                    + "    \"admLevelId\": 77,\n"
-                    + "    \"accessTypeId\": 2,\n"
-                    + "    \"indicatorTypeId\": 262,\n"
-                    + "    \"createdOn\": \"2016-06-24\",\n"
-                    + "    \"updatedOn\": \"2016-06-24\",\n"
-                    + "    \"createdBy\": \"atl@amp.org\",\n"
-                    + "    \"colorRampId\": 5,\n"
-                    + "    \"numberOfImportedRecords\": 0\n"
-                    + "}</pre>\n"
+                    + "</dl>\n"
                     + "<h3>Sample Output:</h3><pre>\n"
                     + "{\n"
                     + " \"result\": \"INSERTED\",\n"
@@ -273,7 +257,7 @@ public class IndicatorEndPoints implements ErrorReportingEndpoint {
                     + "     \"numberOfImportedRecords\": 0\n"
                     + " }\n"
                     + "}</pre>")
-    public JsonBean saveIndicator(@ApiParam("a JSON with the indicator layer information") final JsonBean indicator) {
+    public JsonBean saveIndicator(SaveIndicatorRequest indicator) {
         return IndicatorService.saveIndicator(indicator);
     }
 
@@ -325,7 +309,7 @@ public class IndicatorEndPoints implements ErrorReportingEndpoint {
     @Path("/amp-color")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiOperation(
-            value = "Retrieve and provide a color list.",
+            value = "List color ramps",
             notes = "<dl>\n"
                     + "The list of JSON object holds information regarding:\n"
                     + "<dt><b>name</b><dd> - the index of the color\n"
@@ -386,7 +370,7 @@ public class IndicatorEndPoints implements ErrorReportingEndpoint {
     public Collection<JsonBean> getLevels() {
         Collection<AmpCategoryValue> admLevels = CategoryManagerUtil.getAmpCategoryValueCollectionByKeyExcludeDeleted(
                 "implementation_location", false);
-        Map<String, JSONObject> jsonFilesMap = BoundariesService.getBoundariesAsList();        
+        Map<String, Boundary> jsonFilesMap = BoundariesService.getBoundariesAsList();
         Collection<JsonBean> indicatorLayerList = new ArrayList<JsonBean>();
         for (AmpCategoryValue admLevel: admLevels){         
             if (jsonFilesMap.containsKey(IndicatorEPConstants.ADM_PREFIX + admLevel.getIndex())) {

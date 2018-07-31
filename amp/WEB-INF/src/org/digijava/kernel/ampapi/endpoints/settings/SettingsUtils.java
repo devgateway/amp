@@ -539,7 +539,8 @@ public class SettingsUtils {
 		if (amountFormat != null) {
 			String decimalSymbol = (String) amountFormat.get(SettingsConstants.DECIMAL_SYMBOL);
 			String maxFractDigits = (String) amountFormat.get(SettingsConstants.MAX_FRACT_DIGITS);
-			Integer maxFractDigitsNum  = StringUtils.isNumber(maxFractDigits) ? Integer.valueOf(maxFractDigits) : null;
+			Integer maxFractDigitsNum  = maxFractDigits != null? (StringUtils.isNumber(maxFractDigits) ? Integer.valueOf
+					(maxFractDigits) : null):null;
 			Boolean useGrouping  = (Boolean) amountFormat.get(SettingsConstants.DECIMAL_SYMBOL);
 			String groupingSeparator  = (String) amountFormat.get(SettingsConstants.GROUP_SEPARATOR);
 			Integer groupingSize  = (Integer) amountFormat.get(SettingsConstants.GROUP_SIZE);
@@ -547,8 +548,11 @@ public class SettingsUtils {
 			DecimalFormat format = AmpARFilter.buildCustomFormat(decimalSymbol, groupingSeparator, 
 					maxFractDigitsNum, useGrouping, groupingSize);
 			reportSettings.setCurrencyFormat((DecimalFormat) format.getInstance(new Locale("en", "US")));
-			
-			Double multiplier  = (Double) amountFormat.get(SettingsConstants.AMOUNT_UNITS);
+			Object amountUnits = amountFormat.get(SettingsConstants.AMOUNT_UNITS);
+			Double multiplier = null;
+			if(amountUnits != null && Double.class.isInstance(amountUnits)){
+				multiplier = Double.valueOf(amountUnits.toString());
+			}
 			if (multiplier != null)
 				reportSettings.setUnitsMultiplier(multiplier);
 		}

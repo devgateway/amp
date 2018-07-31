@@ -9,6 +9,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.ws.rs.GET;
@@ -29,6 +30,7 @@ import org.digijava.kernel.ampapi.endpoints.filters.FilterList;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersBuilder;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersManager;
+import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingField;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
@@ -628,7 +630,7 @@ public class FiltersEndpoint {
     }
 
     /**
-     * Funding status filter information
+     * Performance Alert Level filter
      *
      * @return
      */
@@ -640,6 +642,38 @@ public class FiltersEndpoint {
             tab = EPConstants.TAB_ACTIVITY)
     public JsonBean getPerformanceAlertLevel() {
         return getCategoryValue(CategoryConstants.PERFORMANCE_ALERT_LEVEL_KEY, ColumnConstants.PERFORMANCE_ALERT_LEVEL);
+    }
+    
+    /**
+     * Performance Alert Type filter
+     *
+     * @return
+     */
+    @GET
+    @Path("/performanceAlertType")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = true, id = FiltersConstants.PERFORMANCE_ALERT_TYPE,
+            columns = ColumnConstants.PERFORMANCE_ALERT_TYPE, name = ColumnConstants.PERFORMANCE_ALERT_TYPE,
+            tab = EPConstants.TAB_ACTIVITY)
+    public JsonBean getPerformanceAlertType() {
+        JsonBean pt = new JsonBean();
+        
+        List<SimpleJsonBean> performanceAlertTypes = new ArrayList<SimpleJsonBean>();
+        
+        for (Entry<String, Long> entry : PerformanceRuleManager.PERF_ALERT_TYPE_TO_ID.entrySet()) {
+            SimpleJsonBean sjb = new SimpleJsonBean();
+            sjb.setId(entry.getValue());
+            sjb.setName(TranslatorWorker.translateText(
+                    PerformanceRuleManager.PERF_ALERT_TYPE_TO_DESCRIPTION.get(entry.getKey())));
+            performanceAlertTypes.add(sjb);
+        }
+        
+        performanceAlertTypes = orderByProperty(performanceAlertTypes, NAME_PROPERTY);
+        pt.set("filterId", FiltersConstants.PERFORMANCE_ALERT_TYPE);
+        pt.set("name", TranslatorWorker.translateText(ColumnConstants.PERFORMANCE_ALERT_TYPE));
+        pt.set("values", performanceAlertTypes);
+        
+        return pt;
     }
 
     /**

@@ -14,6 +14,7 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.security.RuleHierarchy;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
 import com.sun.jersey.spi.container.ContainerRequest;
@@ -46,6 +47,11 @@ public class ActionAuthorizer {
         }
 
         Collection<AuthRule> authRules = ruleHierarchy.getEffectiveRules(apiMethod.authTypes());
+        
+        if (authRules.contains(AuthRule.AMP_OFFLINE_ENABLED) && !FeaturesUtil.isAmpOfflineEnabled()) {
+            ApiErrorMessage errorMessage = SecurityErrors.NOT_ALLOWED.withDetails("AMP Offline is not enabled");
+            ApiErrorResponse.reportForbiddenAccess(errorMessage);
+        }
 
         if (authRules.contains(AuthRule.AUTHENTICATED) && TeamUtil.getCurrentUser() == null) {
             ApiErrorResponse.reportUnauthorisedAccess(SecurityErrors.NOT_AUTHENTICATED);
@@ -77,7 +83,7 @@ public class ActionAuthorizer {
             ApiErrorResponse.reportForbiddenAccess(ApiError.toError(errors.values()));
         }
     }
-
+    
     /**
      * Merges errors of the same type
      * @param errors  current set of errors

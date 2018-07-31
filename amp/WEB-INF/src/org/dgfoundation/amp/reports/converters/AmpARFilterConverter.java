@@ -99,6 +99,7 @@ public class AmpARFilterConverter {
         addCategoryValueNamesFilter(arFilter.getProjectImplementingUnits(), ColumnConstants.PROJECT_IMPLEMENTING_UNIT);
         addCategoryValueNamesFilter(arFilter.getActivityPledgesTitle(), ColumnConstants.PLEDGES_TITLES);
         addCategoryValueNamesFilter(arFilter.getPerformanceAlertLevel(), ColumnConstants.PERFORMANCE_ALERT_LEVEL);
+        addPerformanceAlertTypeFilter();
     }
     
     /**
@@ -121,6 +122,14 @@ public class AmpARFilterConverter {
             return;
         List<String> values = new ArrayList<String>(arFilter.getApprovalStatusSelected());
         filterRules.addFilterRule(new ReportColumn(ColumnConstants.APPROVAL_STATUS), new FilterRule(arFilter.getApprovalStatusSelectedStrings(), values, true));
+    }
+    
+    private void addPerformanceAlertTypeFilter() {
+        if (arFilter.getPerformanceAlertType() != null && !arFilter.getPerformanceAlertType().isEmpty()) {
+            List<String> values = new ArrayList<String>(arFilter.getPerformanceAlertType());
+            filterRules.addFilterRule(new ReportColumn(ColumnConstants.PERFORMANCE_ALERT_TYPE),
+                    new FilterRule(values, values, true));
+        }
     }
     
     private void addFundingDatesFilters() {

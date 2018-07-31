@@ -67,6 +67,7 @@ public class User
     private boolean active;
     private boolean banned;
     private Boolean pledger;
+    private Boolean pledgeSuperUser;
     private Site registeredThrough;
     private Set interests;
     private java.sql.Clob bio;
@@ -434,6 +435,14 @@ public class User
      */
     public void setPledger(Boolean pledger) {
         this.pledger = pledger;
+    }
+
+    public Boolean getPledgeSuperUser() {
+        return pledgeSuperUser;
+    }
+
+    public void setPledgeSuperUser(Boolean pledgeSuperUser) {
+        this.pledgeSuperUser = pledgeSuperUser;
     }
 
     @Override

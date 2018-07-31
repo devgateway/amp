@@ -18,6 +18,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 public class TeamMember implements Comparable, Serializable{
 
     private Long memberId;
+    private Long userId;
     private String memberName;
     private String email;
     private Long roleId;
@@ -44,6 +45,7 @@ public class TeamMember implements Comparable, Serializable{
     private AmpCategoryValue workspacePrefix;
     private Integer allowAddTeamRes;
     private long visibilityTemplateId;
+    private Boolean pledgeSuperUser;
 
     /**
      * use {@link #TeamMember(AmpTeamMember)} instead of this one
@@ -78,9 +80,11 @@ public class TeamMember implements Comparable, Serializable{
     private void init(User u) {
         if( u!=null ) {
             this.memberId = u.getId();
+            this.userId = u.getId();
             this.memberName = u.getName();
             this.email = u.getEmail();
             this.pledger = u.getPledger();
+            this.pledgeSuperUser = u.getPledgeSuperUser();
             this.translator = DbUtil.isUserTranslator(u);
         }
     }
@@ -151,6 +155,15 @@ public class TeamMember implements Comparable, Serializable{
     public void setMemberId(Long memberId) {
         this.memberId = memberId;
     }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
     /**
      * @return Returns the memberName.
      */
@@ -259,6 +272,9 @@ public class TeamMember implements Comparable, Serializable{
         return pledger;
     }
 
+    public Boolean getPledgeSuperUser() {
+        return pledgeSuperUser;
+    }
     public Boolean getPublishDocuments() {
         return publishDocuments;
     }

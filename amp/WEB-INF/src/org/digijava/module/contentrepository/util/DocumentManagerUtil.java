@@ -24,6 +24,8 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.SimpleCredentials;
 import javax.jcr.Workspace;
+import javax.jcr.observation.Event;
+import javax.jcr.observation.ObservationManager;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionHistory;
 import javax.jcr.version.VersionIterator;
@@ -70,6 +72,7 @@ import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.helper.ObjectReferringDocument;
 import org.digijava.module.contentrepository.helper.TeamInformationBeanDM;
 import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
+import org.digijava.module.contentrepository.listeners.NodeRemovalListener;
 import org.hibernate.Query;
 
 
@@ -274,8 +277,6 @@ public class DocumentManagerUtil {
         {
             Session jcrSession = annulateSessionIfNotAlive((Session) request.getAttribute(JCR_WRITE_SESSION));              
             
-            boolean newlyCreatedSession = (jcrSession == null);
-            
             if (jcrSession == null)
             {
                 HttpSession session = request.getSession();
@@ -305,17 +306,17 @@ public class DocumentManagerUtil {
                 }
                 if (jcrSession == null)
                     throw new JCRSessionException("could not open a JCR WriteSession");
-            }
-    
-            
-            if (newlyCreatedSession)
-            {
-                try {jcrSession.save();}
-                catch(Exception e){logger.error("error saving JCR WriteSession", e);}
+
+                try {
+                    jcrSession.save();
+                } catch (Exception e) {
+                    logger.error("error saving JCR WriteSession", e);
+                }
                 registerNamespace(jcrSession, "ampdoc", "http://amp-demo.code.ro/ampdoc");
                 registerNamespace(jcrSession, "amplabel", "http://amp-demo.code.ro/label");
+                registerObservers(jcrSession);
             }
-            
+
             request.setAttribute(JCR_WRITE_SESSION, jcrSession);
             try {
                 Node rootNode = jcrSession.getRootNode();
@@ -330,7 +331,25 @@ public class DocumentManagerUtil {
             return jcrSession;
         }
     }
-    
+
+    private static void registerObservers(Session session) {
+        try {
+            ObservationManager observationManager = session.getWorkspace().getObservationManager();
+
+            NodeRemovalListener teamListener =
+                    new NodeRemovalListener(NodeRemovalListener.TEAM_RESOURCE_PATH_DEPTH);
+            observationManager.addEventListener(teamListener, Event.NODE_REMOVED, "/team",
+                    true, null, null, false);
+
+            NodeRemovalListener privateListener =
+                    new NodeRemovalListener(NodeRemovalListener.PRIVATE_RESOURCE_PATH_DEPTH);
+            observationManager.addEventListener(privateListener, Event.NODE_REMOVED, "/private",
+                    true, null, null, false);
+        } catch (RepositoryException e) {
+            throw new RuntimeException("Failed to register observers.", e);
+        }
+    }
+
     public static NodeWrapper getReadNodeWrapper(String uuid, HttpServletRequest request) {
         Node n = getReadNode(uuid, request);
         if (n != null) 
@@ -584,7 +603,7 @@ public class DocumentManagerUtil {
         
         return false;
     }
-    
+
     private static boolean deleteDocument(String uuid, HttpServletRequest request) {
         return deleteNode(getWriteSession(request), uuid);
     }

@@ -773,6 +773,11 @@ public class ReportsUtil {
             spec.setSummaryReport(summary);
         }
         
+        Boolean showOriginalCurrency = (Boolean) formParams.get(EPConstants.SHOW_ORIGINAL_CURRENCY);
+        if (showOriginalCurrency != null) {
+            spec.setShowOriginalCurrency(showOriginalCurrency);
+        }
+        
     }
     
     /**

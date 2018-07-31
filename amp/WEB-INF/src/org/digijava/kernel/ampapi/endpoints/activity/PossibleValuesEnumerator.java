@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -27,6 +26,8 @@ import org.digijava.kernel.ampapi.endpoints.common.valueproviders.GenericInterch
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
+import org.digijava.kernel.ampapi.endpoints.exception.ApiExceptionMapper;
+import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.services.sync.model.SyncConstants.Entities;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValue;
@@ -229,8 +230,7 @@ public class PossibleValuesEnumerator {
                     return getPossibleValuesDirectly(providerClass);
                 }
             } catch (Exception e) {
-                throw newServerErrorException(ActivityErrors.DISCRIMINATOR_CLASS_METHOD_ERROR
-                        .withDetails(Objects.toString(e.getMessage())));
+                throw newServerErrorException("Failed to obtain possible values.", e);
             }
             if (apiField.getDiscriminatorValue() != null || configString != null) {
                 return getPossibleValuesForComplexField(apiField, configString);
@@ -247,8 +247,14 @@ public class PossibleValuesEnumerator {
                 .orElseThrow(() -> newBadRequestException(ActivityErrors.FIELD_INVALID.withDetails(fieldName)));
     }
 
-    private ApiRuntimeException newServerErrorException(ApiErrorMessage message) {
-        return new ApiRuntimeException(Response.Status.INTERNAL_SERVER_ERROR, ApiError.toError(message));
+    private ApiRuntimeException newServerErrorException(String message) {
+        return newServerErrorException(message, null);
+    }
+
+    private ApiRuntimeException newServerErrorException(String message, Throwable e) {
+        JsonBean error = ApiError.toError(ApiExceptionMapper.INTERNAL_ERROR
+                .withDetails(message));
+        return new ApiRuntimeException(Response.Status.INTERNAL_SERVER_ERROR, error, e);
     }
 
     private ApiRuntimeException newBadRequestException(ApiErrorMessage message) {
@@ -353,10 +359,10 @@ public class PossibleValuesEnumerator {
 
         Field[] valueFields = FieldUtils.getFieldsWithAnnotation(clazz, PossibleValueValue.class);
         if (valueFields.length == 0) {
-            throw new RuntimeException("Could not find a field annotated with @PossibleValueValue in " + clazz);
+            throw newServerErrorException("Could not find a field annotated with @PossibleValueValue in " + clazz);
         }
         if (valueFields.length > 1) {
-            throw new RuntimeException("Found more than one field annotated with @PossibleValueValue in " + clazz);
+            throw newServerErrorException("Found more than one field annotated with @PossibleValueValue in " + clazz);
         }
         String valueFieldName = valueFields[0].getName();
 
@@ -366,10 +372,10 @@ public class PossibleValuesEnumerator {
     private <T> String getIdFieldName(Class<T> clazz) {
         Field[] idFields = FieldUtils.getFieldsWithAnnotation(clazz, PossibleValueId.class);
         if (idFields.length == 0) {
-            throw new RuntimeException("Could not find a field annotated with @PossibleValueId in " + clazz);
+            throw newServerErrorException("Could not find a field annotated with @PossibleValueId in " + clazz);
         }
         if (idFields.length > 1) {
-            throw new RuntimeException("Found more than one field annotated with @PossibleValueId in " + clazz);
+            throw newServerErrorException("Found more than one field annotated with @PossibleValueId in " + clazz);
         }
         return idFields[0].getName();
     }
@@ -379,7 +385,7 @@ public class PossibleValuesEnumerator {
         try {
             return annotation.value().newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
-            throw new RuntimeException("Failed to instantiate value provider for " + clazz, e);
+            throw newServerErrorException("Failed to instantiate value provider for " + clazz, e);
         }
     }
 
@@ -395,7 +401,7 @@ public class PossibleValuesEnumerator {
             Object extraInfo = valueProvider.getExtraInfo(object);
             return new PossibleValue(id, value, translatedValue, extraInfo);
         } catch (ReflectiveOperationException e) {
-            throw new RuntimeException("Failed to extract possible value object from " + object, e);
+            throw newServerErrorException("Failed to extract possible value object from " + object, e);
         }
     }
 
@@ -457,7 +463,7 @@ public class PossibleValuesEnumerator {
     private List<PossibleValue> getPossibleCategoryValues(APIField apiField) {
         String discriminatorOption = apiField.getDiscriminatorValue();
         if (StringUtils.isBlank(discriminatorOption)) {
-            throw new RuntimeException("Category value field without discriminator value. " + apiField);
+            throw newServerErrorException("Category value field without discriminator value. " + apiField);
         }
 
         if (discriminatorOption.equals(CategoryConstants.IMPLEMENTATION_LOCATION_KEY)) {

@@ -16,6 +16,8 @@ import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.PossibleValueId;
+import org.digijava.module.aim.annotations.interchange.PossibleValueValue;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -32,7 +34,8 @@ public class FundingPledges implements Comparable<FundingPledges>, Serializable,
     
     private static final long serialVersionUID = 1L;
     
-    @Interchangeable(fieldTitle = "ID", id = true)
+    @Interchangeable(fieldTitle = "ID")
+    @PossibleValueId
     private Long id;
     private Date createdDate;
     @Interchangeable(fieldTitle = "Title")
@@ -40,7 +43,8 @@ public class FundingPledges implements Comparable<FundingPledges>, Serializable,
     @Interchangeable(fieldTitle = "Status")
     private AmpCategoryValue status;
     
-    @Interchangeable(fieldTitle = "Title Free Text", value = true)
+    @Interchangeable(fieldTitle = "Title Free Text")
+    @PossibleValueValue
     private String titleFreeText;
     
     @Interchangeable(fieldTitle="Additional Information")

@@ -19,6 +19,7 @@ import org.digijava.kernel.ampapi.endpoints.common.valueproviders.TeamMemberValu
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValue;
+import org.digijava.module.aim.annotations.interchange.PossibleValueId;
 import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.Identifiable;
@@ -27,7 +28,8 @@ import org.digijava.module.message.dbentity.AmpMessageState;
 @InterchangeableValue(TeamMemberValueProvider.class)
 public class AmpTeamMember implements Serializable, Identifiable/*, Versionable*/ {
 
-    @Interchangeable(fieldTitle="AmpTeamMember ID", id=true)
+    @Interchangeable(fieldTitle = "AmpTeamMember ID")
+    @PossibleValueId
     private Long ampTeamMemId;
 
     @Interchangeable(fieldTitle = "User")

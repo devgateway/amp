@@ -33,7 +33,7 @@ public class AmpComponentFunding implements Cloneable, Serializable {
     // @Interchangeable(fieldTitle="Activity")
     // private AmpActivityVersion activity;
 
-    @Interchangeable(fieldTitle = COMPONENT_FUNDING_TRANSACTION_TYPE, importable = true, pickIdOnly = true, required = REQUIRED_ALWAYS)
+    @Interchangeable(fieldTitle = COMPONENT_FUNDING_TRANSACTION_TYPE, importable = true, required = REQUIRED_ALWAYS)
     @PossibleValues(ComponentTransactionTypePossibleValuesProvider.class)
     private Integer transactionType;
 

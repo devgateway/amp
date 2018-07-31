@@ -38,6 +38,7 @@ import org.digijava.module.aim.annotations.activityversioning.ResourceTextField;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
+import org.digijava.module.aim.annotations.interchange.PossibleValueId;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.annotations.interchange.PossibleValuesEntity;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
@@ -57,7 +58,6 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.editor.exception.EditorException;
 import org.hibernate.FlushMode;
 import org.hibernate.Session;
-import org.hibernate.proxy.HibernateProxyHelper;
 
 import com.sun.jersey.spi.container.ContainerRequest;
 
@@ -94,24 +94,17 @@ public class InterchangeUtils {
     }
 
     /**
-     * Decides whether a field is enumerable (may be called in the Possible Values EP)
+     * Decides whether a class is enumerable (may be called in the Possible Values EP)
      *  
-     * @param inputField
+     * @param clazz
      * @return true if possible values are limited to a set for this field, false if otherwise
      */
-    public static boolean isFieldEnumerable(Field inputField) {
-        Class<?> clazz = getClassOfField(inputField);
+    public static boolean isEnumerable(Class<?> clazz) {
         if (isSimpleType(clazz)) {
             return false;
         }
-        Field[] fields = FieldUtils.getFieldsWithAnnotation(clazz, Interchangeable.class);
-        for (Field field : fields) {
-            Interchangeable ant = field.getAnnotation(Interchangeable.class); 
-            if (ant.id()) {
-                return true;
-            }
-        }
-        return false;
+        Field[] fields = FieldUtils.getFieldsWithAnnotation(clazz, PossibleValueId.class);
+        return fields.length > 0;
     }
 
     public static String getAmpIatiIdentifierFieldName() {
@@ -163,7 +156,7 @@ public class InterchangeUtils {
      * Gets the value at the specified path from the JSON description of the activity. 
      * 
      * @param activity a JsonBean description of the activity
-     * @param fieldPath path to the field 
+     * @param path path to the field
      * @return null if the path abruptly stops before reaching the end, or the value itself,
      * if the end of the path is reached
      */
@@ -351,7 +344,7 @@ public class InterchangeUtils {
     /**
      * Activity Export as JSON 
      * 
-     * @param AmpActivityVersion is the activity
+     * @param activity is the activity
      * @param filter is the JSON with a list of fields
      * @return Json Activity
      */
@@ -369,7 +362,7 @@ public class InterchangeUtils {
     /**
      * Get the translation values of the field.
      * @param field
-     * @param class used for retrieving translation
+     * @param clazz class used for retrieving translation
      * @param fieldValue 
      * @param parentObject is the parent that contains the object in order to retrieve translations throu parent object id
      * @return object with the translated values
@@ -519,7 +512,7 @@ public class InterchangeUtils {
 
     /**
      * Imports or Updates an activity
-     * @param json new activity configuration
+     * @param newJson new activity configuration
      * @param update flags whether this is an import or an update request
      * @param endpointContextPath full API method path where this method has been called
      *
@@ -578,8 +571,9 @@ public class InterchangeUtils {
         }
 
         try {
+            List<APIField> fields = AmpFieldsEnumerator.PUBLIC_ENUMERATOR.getAllAvailableFields();
             for (String field : filteredItems) {
-                PossibleValuesEnumerator.INSTANCE.getPossibleValuesForField(field, AmpActivityFields.class, null);
+                PossibleValuesEnumerator.INSTANCE.getPossibleValuesForField(field, fields);
             }
         } catch (ApiRuntimeException e) {
             result.set(ApiError.JSON_ERROR_CODE, e.getUnwrappedError());
@@ -722,11 +716,9 @@ public class InterchangeUtils {
 
     /**
      * Determine if this is an AmpActivityVersion field reference
-     * @param field
-     * @return
      */
     public static boolean isAmpActivityVersion(Class<?> clazz) {
-        return clazz.isAssignableFrom(AmpActivityVersion.class);
+        return AmpActivityVersion.class.isAssignableFrom(clazz);
     }
 
     /**

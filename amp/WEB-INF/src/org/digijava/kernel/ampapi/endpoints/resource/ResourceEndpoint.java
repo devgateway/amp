@@ -100,16 +100,17 @@ public class ResourceEndpoint implements ErrorReportingEndpoint {
         if (fields == null) {
             response = emptyMap();
         } else {
+            List<APIField> apiFields = AmpFieldsEnumerator.PUBLIC_ENUMERATOR.getResourceFields();
             response = fields.stream()
                     .filter(Objects::nonNull)
                     .distinct()
-                    .collect(toMap(identity(), this::possibleValuesFor));
+                    .collect(toMap(identity(), fieldName -> possibleValuesFor(fieldName, apiFields)));
         }
         return response;
     }
 
-    private List<PossibleValue> possibleValuesFor(String fieldName) {
-        return PossibleValuesEnumerator.INSTANCE.getPossibleValuesForField(fieldName, AmpResource.class, null);
+    private List<PossibleValue> possibleValuesFor(String fieldName, List<APIField> apiFields) {
+        return PossibleValuesEnumerator.INSTANCE.getPossibleValuesForField(fieldName, apiFields);
     }
     
     /**

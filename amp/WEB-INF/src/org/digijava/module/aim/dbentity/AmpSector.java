@@ -7,6 +7,8 @@ import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.dimension.SectorDimension;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.PossibleValueId;
+import org.digijava.module.aim.annotations.interchange.PossibleValueValue;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.helper.donorReport.OrgProfileValue;
@@ -22,13 +24,15 @@ import org.digijava.module.aim.util.SoftDeletable;
 public class AmpSector implements Serializable, Comparable<AmpSector>, Identifiable,
         ARDimensionable, HierarchyListable, AmpAutoCompleteDisplayable,
         SoftDeletable, Cloneable, OrgProfileValue, NameableOrIdentifiable {
-    @Interchangeable(fieldTitle="Sector ID", id=true)
+    @Interchangeable(fieldTitle = "Sector ID")
+    @PossibleValueId
     private Long ampSectorId;
     @Interchangeable(fieldTitle="Parent Sector ID", pickIdOnly=true)
     private AmpSector parentSectorId;
     @Interchangeable(fieldTitle="Sector Code")
     private String sectorCode;
-    @Interchangeable(fieldTitle="Name", value=true)
+    @Interchangeable(fieldTitle = "Name")
+    @PossibleValueValue
     @TranslatableField
     private String name;
     @Interchangeable(fieldTitle="Type")

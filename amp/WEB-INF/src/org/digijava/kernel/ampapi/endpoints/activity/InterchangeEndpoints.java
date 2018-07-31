@@ -30,7 +30,6 @@ import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 
@@ -132,7 +131,8 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8", AmpMediaType.POSSIBLE_VALUES_V2_JSON})
     @ApiMethod(authTypes = AuthRule.IN_WORKSPACE, id = "getValues", ui = false)
     public Response getPossibleValuesFlat(@PathParam("fieldName") String fieldName) {
-        List<PossibleValue> possibleValues = possibleValuesFor(fieldName);
+        List<APIField> apiFields = AmpFieldsEnumerator.PUBLIC_ENUMERATOR.getAllAvailableFields();
+        List<PossibleValue> possibleValues = possibleValuesFor(fieldName, apiFields);
         MediaType responseType = MediaType.APPLICATION_JSON_TYPE;
         if (AmpMediaType.POSSIBLE_VALUES_V2_JSON.equals(ApiCompat.getRequestedMediaType())) {
             responseType = AmpMediaType.POSSIBLE_VALUES_V2_JSON_TYPE;
@@ -225,10 +225,11 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
         if (fields == null) {
             response = Collections.emptyMap();
         } else {
+            List<APIField> apiFields = AmpFieldsEnumerator.PUBLIC_ENUMERATOR.getAllAvailableFields();
             response = fields.stream()
                     .filter(Objects::nonNull)
                     .distinct()
-                    .collect(toMap(identity(), this::possibleValuesFor));
+                    .collect(toMap(identity(), fieldName -> possibleValuesFor(fieldName, apiFields)));
         }
         MediaType responseType = MediaType.APPLICATION_JSON_TYPE;
         if (AmpMediaType.POSSIBLE_VALUES_V2_JSON.equals(ApiCompat.getRequestedMediaType())) {
@@ -239,8 +240,8 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
         return Response.ok(response, responseType).build();
     }
 
-    private List<PossibleValue> possibleValuesFor(String fieldName) {
-        return PossibleValuesEnumerator.INSTANCE.getPossibleValuesForField(fieldName, AmpActivityFields.class, null);
+    private List<PossibleValue> possibleValuesFor(String fieldName, List<APIField> apiFields) {
+        return PossibleValuesEnumerator.INSTANCE.getPossibleValuesForField(fieldName, apiFields);
     }
     
     /**
@@ -276,7 +277,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
      * full list of projects for the current user. If it is not provided no caching is used
      * @param offset, Integer used for pagination. It represents which is the first project to return. It helps to skip the unnecessary 
      * records.
-     * @param size, Integer used for pagination. It tells how many projects to return
+     * @param count, Integer used for pagination. It tells how many projects to return
      * @return list of JsonBean with all the projects on the system
      */
     @GET

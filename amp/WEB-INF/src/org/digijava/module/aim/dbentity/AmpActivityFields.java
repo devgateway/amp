@@ -102,7 +102,7 @@ LoggerIdentifiable, Cloneable {
 
     //protected String govAgreementNumber;
 
-    @Interchangeable(fieldTitle = ActivityFieldsConstants.AMP_ACTIVITY_ID, importable = false, id = true)
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.AMP_ACTIVITY_ID, importable = false)
     @PermissibleProperty(type={Permissible.PermissibleProperty.PROPERTY_TYPE_ID})
     @VersionableFieldSimple(fieldTitle = "Internal ID", blockSingleChange = true)
     protected Long ampActivityId ;

@@ -33,7 +33,6 @@ public class ObjectImporter {
 
     private static final Logger logger = Logger.getLogger(ObjectImporter.class);
 
-    private final Class<?> targetClass;
     private final InputValidatorProcessor validator;
 
     protected Map<Integer, ApiErrorMessage> errors = new HashMap<>();
@@ -42,6 +41,8 @@ public class ObjectImporter {
     protected TranslationSettings trnSettings;
 
     private Map<String, List<PossibleValue>> possibleValuesCached = new HashMap<>();
+
+    private List<APIField> apiFields;
 
     /**
      * This field is used for storing the current json values during field validation
@@ -54,10 +55,14 @@ public class ObjectImporter {
     private Map<Class<? extends DiscriminationConfigurer>, DiscriminationConfigurer> discriminatorConfigurerCache =
             new HashMap<>();
 
-    public ObjectImporter(Class<?> targetClass, InputValidatorProcessor validator) {
-        this.targetClass = targetClass;
+    public ObjectImporter(InputValidatorProcessor validator, List<APIField> apiFields) {
         this.validator = validator;
         this.trnSettings = TranslationSettings.getCurrent();
+        this.apiFields = apiFields;
+    }
+
+    public List<APIField> getApiFields() {
+        return apiFields;
     }
 
     /**
@@ -161,10 +166,6 @@ public class ObjectImporter {
 
     /**
      * Configures new value, no validation outside of this method scope, it must be verified before
-     * @param newParent
-     * @param field
-     * @param newJson
-     * @return
      */
     protected Object setNewField(Object newParent, APIField fieldDef, Map<String, Object> newJsonParent,
             String fieldPath) {
@@ -234,25 +235,15 @@ public class ObjectImporter {
 
         Object value = null;
         String fieldType = fieldDef.getFieldType();
-        List<PossibleValue> allowedValues = getPossibleValuesForFieldCached(fieldPath);
         boolean idOnly = Boolean.TRUE.equals(fieldDef.isIdOnly());
 
         // this is an object reference
         if (!isCollection && idOnly) {
-            Class<? extends PossibleValuesProvider> providerClass = InterchangeUtils.getPossibleValuesProvider(field);
-            if (providerClass != null) {
-                try {
-                    PossibleValuesProvider provider = providerClass.newInstance();
-                    return provider.toAmpFormat(jsonValue);
-                } catch (InstantiationException | IllegalAccessException e) {
-                    throw new RuntimeException("Could not convert value to AMP object.", e);
-                }
-            }
             return getObjectReferencedById(field.getType(), ((Number) jsonValue).longValue());
         }
 
         // this is a collection
-        if (Collection.class.isAssignableFrom(field.getType())) {
+        if (isCollection) {
             try {
                 value = field.get(parentObj);
                 Collection col = (Collection) value;
@@ -296,18 +287,6 @@ public class ObjectImporter {
                 logger.error(e.getMessage());
                 throw new RuntimeException(e);
             }
-        } else if (allowedValues != null && allowedValues.size() > 0) {
-            // => this is an object => it has children elements
-            if (fieldDef.getChildren() != null) {
-                for (APIField childDef : fieldDef.getChildren()) {
-                    if (Boolean.TRUE.equals(childDef.isId())) {
-                        Map<String, Object> jsonValueMap = (Map<String, Object>) jsonValue;
-                        Long id = ((Integer) jsonValueMap.get(childDef.getFieldName())).longValue();
-                        value = InterchangeUtils.getObjectById(field.getType(), id);
-                        break;
-                    }
-                }
-            }
         } else {
             try {
                 if (AmpAgreement.class.equals(field.getType())) {
@@ -325,7 +304,7 @@ public class ObjectImporter {
     public List<PossibleValue> getPossibleValuesForFieldCached(String fieldPath) {
         if (!possibleValuesCached.containsKey(fieldPath)) {
             possibleValuesCached.put(fieldPath, PossibleValuesEnumerator.INSTANCE
-                    .getPossibleValuesForField(fieldPath, targetClass, null));
+                    .getPossibleValuesForField(fieldPath, apiFields));
         }
         return possibleValuesCached.get(fieldPath);
     }

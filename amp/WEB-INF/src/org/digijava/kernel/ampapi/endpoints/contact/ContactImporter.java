@@ -28,7 +28,8 @@ public class ContactImporter extends ObjectImporter {
     private AmpContact contact;
 
     public ContactImporter() {
-        super(AmpContact.class, new InputValidatorProcessor(InputValidatorProcessor.getContactValidators()));
+        super(new InputValidatorProcessor(InputValidatorProcessor.getContactValidators()),
+                AmpFieldsEnumerator.PRIVATE_CONTACT_ENUMERATOR.getContactFields());
     }
 
     public List<ApiErrorMessage> createContact(JsonBean newJson) {
@@ -43,7 +44,7 @@ public class ContactImporter extends ObjectImporter {
         this.newJson = newJson;
 
 
-        List<APIField> fieldsDef = AmpFieldsEnumerator.PRIVATE_CONTACT_ENUMERATOR.getContactFields();
+        List<APIField> fieldsDef = getApiFields();
         
         Object contactJsonId = newJson.get(ContactEPConstants.ID);
         

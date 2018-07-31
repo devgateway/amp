@@ -98,26 +98,13 @@ public abstract class ObjectExporter<T> {
                                     parentObject);
                             resultJson.set(fieldTitle, values);
                         } else {
-                            Class<? extends PossibleValuesProvider> providerClass =
-                                    InterchangeUtils.getPossibleValuesProvider(field);
-                            if (providerClass != null) {
-                                resultJson.set(InterchangeUtils.underscorify(interchangeable.fieldTitle()),
-                                        getJsonValue(providerClass, fieldValue));
-                            } else {
-                                resultJson.set(fieldTitle, getObjectJson(fieldValue, filteredFieldPath, context));
-                            }
+                            resultJson.set(fieldTitle, getObjectJson(fieldValue, filteredFieldPath, context));
                         }
                     }
                 }
             } else {
                 if (isFiltered(filteredFieldPath)) {
-                    Class<? extends PossibleValuesProvider> providerClass =
-                            InterchangeUtils.getPossibleValuesProvider(field);
-                    if (providerClass != null) {
-                        resultJson.set(fieldTitle, getIdValue(providerClass, fieldValue));
-                    } else {
-                        resultJson.set(fieldTitle, InterchangeUtils.getId(fieldValue));
-                    }
+                    resultJson.set(fieldTitle, InterchangeUtils.getId(fieldValue));
                 }
             }
             context.getIntchStack().pop();
@@ -266,30 +253,6 @@ public abstract class ObjectExporter<T> {
             return contextMatcher.inContext(context);
         } catch (ReflectiveOperationException e) {
             throw new RuntimeException("Failed to check field context.");
-        }
-    }
-
-    /**
-     *
-     * @param providerClass Provider class that will be used to load the values of the object
-     * @param fieldValue Object which will be used to retrieve the custom value
-     * @return object Custom value of the object
-     */
-    private Object getJsonValue(Class<? extends PossibleValuesProvider> providerClass, Object fieldValue) {
-        try {
-            PossibleValuesProvider providerObj = providerClass.newInstance();
-            return providerObj.toJsonOutput(fieldValue);
-        } catch (InstantiationException | IllegalAccessException e) {
-            throw new RuntimeException("Failed to obtain json value.", e);
-        }
-    }
-
-    private Object getIdValue(Class<? extends PossibleValuesProvider> providerClass, Object fieldValue) {
-        try {
-            PossibleValuesProvider providerObj = providerClass.newInstance();
-            return providerObj.getIdOf(fieldValue);
-        } catch (InstantiationException | IllegalAccessException e) {
-            throw new RuntimeException("Failed to obtain id value.", e);
         }
     }
 

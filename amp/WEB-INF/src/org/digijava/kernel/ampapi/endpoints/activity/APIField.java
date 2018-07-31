@@ -21,9 +21,6 @@ public class APIField {
     @JsonProperty(ActivityEPConstants.FIELD_NAME)
     private String fieldName;
 
-    @JsonProperty(ActivityEPConstants.ID)
-    private Boolean id;
-
     @JsonProperty(ActivityEPConstants.FIELD_TYPE)
     private String fieldType;
 
@@ -87,6 +84,29 @@ public class APIField {
     @JsonIgnore
     private Class<? extends DiscriminationConfigurer> discriminationConfigurer;
 
+    @JsonIgnore
+    private Class<?> type;
+
+    @JsonIgnore
+    private Class<? extends PossibleValuesProvider> possibleValuesProviderClass;
+
+    public Class<? extends PossibleValuesProvider> getPossibleValuesProviderClass() {
+        return possibleValuesProviderClass;
+    }
+
+    public void setPossibleValuesProviderClass(
+            Class<? extends PossibleValuesProvider> possibleValuesProviderClass) {
+        this.possibleValuesProviderClass = possibleValuesProviderClass;
+    }
+
+    public Class<?> getType() {
+        return type;
+    }
+
+    public void setType(Class<?> type) {
+        this.type = type;
+    }
+
     public String getFieldName() {
         return fieldName;
     }
@@ -125,14 +145,6 @@ public class APIField {
 
     public void setRequired(String required) {
         this.required = required;
-    }
-
-    public Boolean isId() {
-        return id;
-    }
-
-    public void setId(Boolean id) {
-        this.id = id;
     }
 
     public Boolean isIdOnly() {
@@ -274,7 +286,7 @@ public class APIField {
 
     @Override
     public String toString() {
-        return "APIField{" + "fieldName='" + fieldName + '\'' + ", id=" + id + ", fieldType='" + fieldType + '\''
+        return "APIField{" + "fieldName='" + fieldName + '\'' + ", fieldType='" + fieldType + '\''
                 + ", fieldLabel=" + fieldLabel + ", fieldNameInternal='" + fieldNameInternal + '\'' + ", required='"
                 + required + '\'' + ", idOnly=" + idOnly + ", importable=" + importable + ", translatable="
                 + translatable + ", multipleValues=" + multipleValues + ", activity=" + activity

@@ -227,6 +227,10 @@
 			<param-name>com.sun.jersey.spi.container.ContainerResponseFilters</param-name>
 			<param-value>org.digijava.kernel.ampapi.endpoints.common.ApiResponseFilter</param-value>
 		</init-param>
+		<init-param>
+			<param-name>com.sun.jersey.spi.container.ResourceFilters</param-name>
+			<param-value>org.digijava.kernel.ampapi.endpoints.security.AuthorizerResourceFilterFactory</param-value>
+		</init-param>
 		 
     	<init-param>
         	<param-name>jersey.config.server.tracing</param-name>

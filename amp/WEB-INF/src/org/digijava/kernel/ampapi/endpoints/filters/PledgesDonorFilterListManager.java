@@ -1,6 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.filters;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -80,6 +81,7 @@ public final class PledgesDonorFilterListManager implements FilterListManager {
             
             List<AmpOrgGroup> orgGroups = orgType.getOrgGroups().stream()
                 .filter(orgGroup -> donorGroupsIds.contains(orgGroup.getAmpOrgGrpId()))
+                .sorted(Comparator.comparing(AmpOrgGroup::getOrgGrpName))
                 .collect(Collectors.toList());
             
             if (!orgGroups.isEmpty()) {

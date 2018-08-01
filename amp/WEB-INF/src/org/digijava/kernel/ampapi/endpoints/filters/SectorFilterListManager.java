@@ -1,6 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.filters;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -101,7 +102,11 @@ public class SectorFilterListManager implements FilterListManager {
         node.setCode(as.getSectorCodeOfficial());
         node.setName(as.getName());
         
-        for (AmpSector ampSectorChild : as.getSectors()) {
+        List<AmpSector> orderedSectors = as.getSectors().stream()
+                .sorted(Comparator.comparing(AmpSector::getName))
+                .collect(Collectors.toList());
+        
+        for (AmpSector ampSectorChild : orderedSectors) {
             node.addChild(getSectors(ampSectorChild));
         }
         

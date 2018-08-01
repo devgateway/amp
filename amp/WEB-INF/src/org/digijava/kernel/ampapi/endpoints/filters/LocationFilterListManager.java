@@ -114,7 +114,11 @@ public class LocationFilterListManager implements FilterListManager {
         node.setCode(location.getCode());
         node.setName(location.getName());
         
-        for (LocationSkeleton locationChild : location.getChildLocations()) {
+        List<LocationSkeleton> orderedLocations = location.getChildLocations().stream()
+                .sorted(Comparator.comparing(LocationSkeleton::getName))
+                .collect(Collectors.toList());
+        
+        for (LocationSkeleton locationChild : orderedLocations) {
             node.addChild(getLocations(locationChild));
         }
         

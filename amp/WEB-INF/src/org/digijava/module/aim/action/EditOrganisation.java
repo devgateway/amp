@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -928,6 +929,13 @@ public class EditOrganisation extends DispatchAction {
             if (!orgsCol.isEmpty()) { // To check for duplicate org-code
                 errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
                         "error.aim.organizationManager.saveOrgCodeError"));
+            }
+        }
+        if (!StringUtils.isBlank(editForm.getAcronym())) {
+            Collection orgsColAcronym = DbUtil.getOrgByAcronym(action, editForm.getAcronym(), editForm.getAmpOrgId());
+            if (!orgsColAcronym.isEmpty()) { // To check for duplicate org-code
+                errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
+                        "error.aim.organizationManager.saveOrgAcronymError"));
             }
         }
       }

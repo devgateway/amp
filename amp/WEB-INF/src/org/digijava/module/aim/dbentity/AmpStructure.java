@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
@@ -58,7 +59,7 @@ public class AmpStructure implements Serializable, Comparable<Object>, Versionab
     private Set<AmpStructureImg> images;
     
     @Interchangeable(fieldTitle = "Coordinates", importable = true, fmPath = "/Activity Form/Structures/Map")
-    private Set<AmpStructureCoordinate> coordinates;
+    private List<AmpStructureCoordinate> coordinates;
     
     private String coords;
 
@@ -194,7 +195,7 @@ public class AmpStructure implements Serializable, Comparable<Object>, Versionab
         }
 
         if (aux.getCoordinates() != null && aux.getCoordinates().size() > 0) {
-            Set<AmpStructureCoordinate> coords = new LinkedHashSet<AmpStructureCoordinate>();
+            List<AmpStructureCoordinate> coords = new ArrayList<AmpStructureCoordinate>();
             for (AmpStructureCoordinate coord : aux.getCoordinates()) {
                 AmpStructureCoordinate auxCoord = (AmpStructureCoordinate) coord.clone();
                 auxCoord.setAmpStructureCoordinateId(null);
@@ -246,11 +247,11 @@ public class AmpStructure implements Serializable, Comparable<Object>, Versionab
         this.images = images;
     }
 
-    public Set<AmpStructureCoordinate> getCoordinates() {
+    public List<AmpStructureCoordinate> getCoordinates() {
         return coordinates;
     }
 
-    public void setCoordinates(Set<AmpStructureCoordinate> coordinates) {
+    public void setCoordinates(List<AmpStructureCoordinate> coordinates) {
         this.coordinates = coordinates;
     }
 

@@ -2,6 +2,7 @@ package org.digijava.kernel.ampapi.endpoints.filters;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -95,8 +96,12 @@ public final class OrganizationFilterListManager implements FilterListManager {
             FilterListTreeNode typeNode = new FilterListTreeNode();
             typeNode.setId(orgType.getAmpOrgTypeId());
             typeNode.setName(orgType.getName());
+            
+            List<AmpOrgGroup> orderedGroups = orgType.getOrgGroups().stream()
+                .sorted(Comparator.comparing(AmpOrgGroup::getName))
+                .collect(Collectors.toList());
 
-            for (AmpOrgGroup orgGroup : orgType.getOrgGroups()) {
+            for (AmpOrgGroup orgGroup : orderedGroups) {
                 if (orgFilterNodes.containsKey(orgGroup.getAmpOrgGrpId())) {
                     FilterListTreeNode groupNode = new FilterListTreeNode();
                     groupNode.setId(orgGroup.getAmpOrgGrpId());
@@ -188,7 +193,8 @@ public final class OrganizationFilterListManager implements FilterListManager {
         List<Long> visibleRoleIds = getVisibleRoles().stream().map(AmpRole::getAmpRoleId).collect(Collectors.toList());
 
         Session session = PersistenceManager.getSession();
-        String query = "SELECT orgId, orgName, orgAcronym, grpId, roles FROM v_all_organizations_with_roles";
+        String query = "SELECT orgId, orgName, orgAcronym, grpId, roles FROM v_all_organizations_with_roles "
+                + "ORDER BY orgname";
         List<Object[]> rows = session.createSQLQuery(query).list();
         
         ArrayList<OrganizationSkeleton> orgsWithRoles = new ArrayList<OrganizationSkeleton>();
@@ -212,8 +218,12 @@ public final class OrganizationFilterListManager implements FilterListManager {
                 orgsWithRoles.add(org);
             }
         }
+        
+        List<OrganizationSkeleton> orderedOrgs = orgsWithRoles.stream()
+                .sorted(Comparator.comparing(OrganizationSkeleton::getName))
+                .collect(Collectors.toList());
 
-        return orgsWithRoles;
+        return orderedOrgs;
     }
 
 }

@@ -1,6 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.filters;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -100,6 +101,7 @@ public final class CategoryValueFilterListManager implements FilterListManager {
                 .getAmpCategoryValueCollectionByKey(FILTER_NAME_TO_CATEGORY_ITEM.get(filterName).getKey(), true)
                 .stream()
                 .filter(catValue -> !Boolean.TRUE.equals(catValue.getDeleted()))
+                .sorted(Comparator.comparing(acv -> TranslatorWorker.translateText(acv.getValue())))
                 .collect(Collectors.toList());
               
         

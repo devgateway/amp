@@ -1,6 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.filters;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -124,7 +125,12 @@ public class ProgramFilterListManager implements FilterListManager {
         node.setCode(program.getCode());
         node.setName(program.getName());
         
-        for (AmpThemeSkeleton ampProgramChild : program.getChildLocations()) {
+        
+        List<AmpThemeSkeleton> orderedChildPrograms = program.getChildLocations().stream()
+                .sorted(Comparator.comparing(AmpThemeSkeleton::getName))
+                .collect(Collectors.toList());
+        
+        for (AmpThemeSkeleton ampProgramChild : orderedChildPrograms) {
             node.addChild(getPrograms(ampProgramChild));
         }
         

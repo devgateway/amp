@@ -1,9 +1,11 @@
 package org.digijava.kernel.ampapi.endpoints.filters;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ColumnConstants;
@@ -63,7 +65,12 @@ public final class ApprovalStatusFilterListManager implements FilterListManager 
         Map<String, List<FilterListTreeNode>> items = new HashMap<>();
         
         List<FilterListTreeNode> statusItems = new ArrayList<>();
-        for (String key : AmpARFilter.activityApprovalStatus.keySet()) {
+        
+        List<String> orderedKeys = AmpARFilter.activityApprovalStatus.keySet().stream()
+                .sorted(Comparator.comparing(key -> TranslatorWorker.translateText(key)))
+                .collect(Collectors.toList());
+        
+        for (String key : orderedKeys) {
             FilterListTreeNode node = new FilterListTreeNode();
             node.setId((long) AmpARFilter.activityApprovalStatus.get(key));
             node.setValue(key);

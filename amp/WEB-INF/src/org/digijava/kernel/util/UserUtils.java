@@ -31,6 +31,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.stream.Stream;
 
@@ -370,9 +371,13 @@ public class UserUtils {
         return getVerifiedOrgsStream(userId).anyMatch(t -> t.getOrgGrpId().getAmpOrgGrpId().equals(orgGroupId));
     }
 
-    public static Stream<AmpOrganisation> getVerifiedOrgsStream(Long userId) {
+    public static Set<AmpOrganisation> getVerifiedOrgs(Long userId) {
         User user = getUser(userId);
-        return user.getAssignedOrgs().stream();
+        return user.getAssignedOrgs();
+    }
+
+    public static Stream<AmpOrganisation> getVerifiedOrgsStream(Long userId) {
+        return getVerifiedOrgs(userId).stream();
     }
     /**
      * Searchs users with given criteria
@@ -511,6 +516,7 @@ public class UserUtils {
     /**
      * Searches user object by email and returns it. If such user does not
      * exists, returns null
+     * @deprecated use {@link #getUserByEmailAddress()} method
      * @param email String User email
      * @return User object
      * @throws DgException if error occurs
@@ -540,6 +546,24 @@ public class UserUtils {
         }
 
         return user;
+    }
+    
+    /**
+     * Get user by email. 
+     * Use this method instead of {@link #getUserByEmail()}
+     * 
+     * @param email
+     * @return user
+     */
+    public static User getUserByEmailAddress(String email) {
+        String queryString = "SELECT u FROM " + User.class.getName() + " u where u.email = :email";
+        
+        User u = (User) PersistenceManager.getSession()
+                .createQuery(queryString)
+                .setString("email", email)
+                .uniqueResult();
+        
+        return u;
     }
 
     /**

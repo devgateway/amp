@@ -11,6 +11,15 @@ import org.digijava.module.aim.dbentity.AmpContact;
  */
 public interface PossibleValuesDAO {
 
+    int LOC_ID_POS = 0;
+    int LOC_CAT_ID_POS = 1;
+    int LOC_CAT_NAME_POS = 2;
+    int LOC_PARENT_CAT_ID_POS = 3;
+    int LOC_PARENT_CAT_NAME_POS = 4;
+    int LOC_CAT_VAL_ID_POS = 5;
+    int LOC_CAT_VAL_NAME_POS = 6;
+    int LOC_ISO = 7;
+
     List<Object[]> getCategoryValues(String discriminatorOption);
 
     <T> List<T> getGenericValues(Class<T> entity);

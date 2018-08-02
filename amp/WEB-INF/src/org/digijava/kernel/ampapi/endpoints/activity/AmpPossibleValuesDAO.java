@@ -103,7 +103,7 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
     @Override
     public List<Object[]> getPossibleLocations() {
         String queryString = "SELECT loc.id, acvl.id, acvl.name, acvlParent.id, acvlParent.name, "
-                + "parentCat.id, parentCat.value "
+                + "parentCat.id, parentCat.value, acvl.iso "
                 + " FROM " + AmpLocation.class.getName() + " loc "
                 + " LEFT JOIN loc.location AS acvl"
                 + " LEFT JOIN acvl.parentLocation AS acvlParent"

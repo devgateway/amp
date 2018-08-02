@@ -1,7 +1,16 @@
 var callerGisObject;
-function gisPopup(caller){
+var structuresData;
+function gisPopup(caller, data){
 	var param = "width=780, height=500, scrollbars=yes,modal=yes, resizable, status";
 	callerGisObject = caller;
+	if (data) {
+	    try {
+	    	structuresData = JSON.parse(data);	    	
+	    } catch(e) {
+	        console.log('invalid json string');
+	    }
+	}
+	
 	window.open("/esrigis/mainmap.do?popup=true", "", param);
 }
 

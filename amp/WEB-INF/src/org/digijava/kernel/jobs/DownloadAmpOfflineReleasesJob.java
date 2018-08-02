@@ -19,7 +19,6 @@ import org.digijava.kernel.services.AmpVersionService;
 import org.digijava.kernel.util.SpringUtil;
 import org.digijava.module.aim.dbentity.AmpQuartzJobClass;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.QuartzJobForm;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.QuartzJobClassUtils;
@@ -52,7 +51,7 @@ public class DownloadAmpOfflineReleasesJob extends ConnectionCleaningJob {
 
     @Override
     public void executeInternal(JobExecutionContext context) throws JobExecutionException {
-        if (isAmpOfflineEnabled()) {
+        if (FeaturesUtil.isAmpOfflineEnabled()) {
             initialize(context);
 
             removeInvalidAmpOfflineReleases();
@@ -61,10 +60,6 @@ public class DownloadAmpOfflineReleasesJob extends ConnectionCleaningJob {
 
             removeIncompatibleReleases();
         }
-    }
-
-    private boolean isAmpOfflineEnabled() {
-        return FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.AMP_OFFLINE_ENABLED);
     }
 
     /**

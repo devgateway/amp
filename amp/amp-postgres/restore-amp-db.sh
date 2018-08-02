@@ -11,3 +11,4 @@ psql -U amp -c "UPDATE dg_user SET password='a9993e364706816aba3e25717850c26c9cd
 psql -U amp -c "UPDATE amp_global_settings SET settingsvalue = (SELECT CONCAT(settingsvalue, '-', now()::timestamp(0)) FROM amp_global_settings WHERE settingsname = 'Default Country') WHERE settingsname = 'AMP Server ID';"
 psql -U amp -c "UPDATE amp_global_settings SET settingsvalue = 'https://amp-registry-stg.ampsite.net/' WHERE settingsname = 'AMP Registry URL';"
 psql -U amp -c "UPDATE amp_global_settings SET settingsvalue = 'true' WHERE settingsname = 'AMP Offline Enabled';"
+psql -U amp -c "UPDATE amp_global_settings SET settingsvalue='off' WHERE settingsname = 'Secure Server';"

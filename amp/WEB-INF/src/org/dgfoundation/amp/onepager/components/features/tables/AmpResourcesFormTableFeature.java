@@ -81,17 +81,14 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
             private transient List<TemporaryActivityDocument> existingTmpDocs = getExistingObject();
             
             private List<TemporaryActivityDocument> getExistingObject() {
-                 Iterator<AmpActivityDocument> it = setModel.getObject().iterator();
+                Iterator<AmpActivityDocument> it = setModel.getObject().iterator();
                 List<TemporaryActivityDocument> ret = new ArrayList<TemporaryActivityDocument>();
                 HashSet <TemporaryActivityDocument> existingDocTitles = new HashSet<TemporaryActivityDocument>();
 
                 while (it.hasNext()) {
-                    AmpActivityDocument d = (AmpActivityDocument) it
-                            .next();
+                    AmpActivityDocument d = (AmpActivityDocument) it.next();
                     Node node = DocumentManagerUtil.getWriteNode(d.getUuid(), SessionUtil.getCurrentServletRequest());
                     NodeWrapper nw = new NodeWrapper(node);
-
-
 
                     if (node == null || nw == null)
                         continue;
@@ -109,19 +106,23 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
                     td.setType(CategoryManagerUtil.getAmpCategoryValueFromDb(nw.getCmDocTypeId()));
                     td.setWebLink(nw.getWebLink());
                     td.setYear(nw.getYearOfPublication());
-
                     td.setFileSize(nw.getFileSizeInMegabytes());
                     td.setFileName(nw.getName());
                     td.setLabels(nw.getLabels());
                     td.setContentType(nw.getContentType());
-                    TemporaryActivityDocument titleHolder = new TemporaryActivityDocument();
-                    titleHolder.setTitle(td.getTitle());
-                    titleHolder.setExistingDocument(d);
-                    existingDocTitles.add(titleHolder);
-                    existingDocTitles.add(td);
-                
+
                     ret.add(td);
+                    
+                    // Existing doc titles should be populated only when multilingual is enabled
+                    if (ContentTranslationUtil.multilingualIsEnabled()) {
+                        TemporaryActivityDocument titleHolder = new TemporaryActivityDocument();
+                        titleHolder.setTitle(td.getTitle());
+                        titleHolder.setExistingDocument(d);
+                        existingDocTitles.add(titleHolder);
+                        existingDocTitles.add(td);
+                    }
                 }
+                
                 getSession().setMetaData(OnePagerConst.RESOURCES_EXISTING_ITEM_TITLES, existingDocTitles);
                 refreshExistingDocs = false;
                 return ret;

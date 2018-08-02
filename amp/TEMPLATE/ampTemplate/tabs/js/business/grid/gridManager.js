@@ -209,9 +209,9 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 
 							if(app.TabsApp.settings.teamId){
 								teamid = app.TabsApp.settings.teamId;
-								crossTeamValidation = (app.TabsApp.settings.crossTeamEnable === 'true');
-								teamlead = (app.TabsApp.settings.teamLead === 'true');
-								validator = (app.TabsApp.settings.validator === 'true');
+								crossTeamValidation = app.TabsApp.settings.crossTeamEnable;
+								teamlead = app.TabsApp.settings.teamLead;
+								validator = app.TabsApp.settings.validator;
 								teamtype = app.TabsApp.settings.accessType;
 							}
 							if(app.TabsApp.settings.workspacePrefix){
@@ -252,9 +252,9 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 								if(!teamid) continue;
 								
 								teamid = app.TabsApp.settings.teamId;
-								crossTeamValidation = (app.TabsApp.settings.crossTeamEnable === 'true');
-								teamlead = (app.TabsApp.settings.teamLead === 'true');
-								validator = (app.TabsApp.settings.validator === 'true');
+								crossTeamValidation = app.TabsApp.settings.crossTeamEnable;
+								teamlead = app.TabsApp.settings.teamLead;
+								validator = app.TabsApp.settings.validator;
 								teamtype = app.TabsApp.settings.accessType;
 								
 								// Set font color according to status.
@@ -316,9 +316,10 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 								};
 
 								// Assign colors for each row for loggued users.
+								var statusClass = '';
 								var x = getApprovalStatus(draft, approvalStatus);
 								if (x === statusMapping.Approved) {
-									row.className = className + ' status_1';
+									statusClass = ' status_1';
 									// Create link to edit activity.
 									if (teamtype !== app.TabsApp.MANAGER_TYPE) {
 										jQuery(row.cells[0]).html(iconedit + link);
@@ -327,11 +328,11 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 									}
 
 								} else if (x === statusMapping.Existing_Draft || x === statusMapping.New_Draft) {
-									row.className = className + ' status_2';
+									statusClass = ' status_2';
 									jQuery(row.cells[0]).html(iconedit);
 
 								} else if (x === statusMapping.Existing_Unvalidated || x === statusMapping.New_Unvalidated) {
-									row.className = className + ' status_3';
+									statusClass = ' status_3';
 									// Cross team enable team lead and validators able to validate show icon.
 									if (crossTeamValidation && (teamlead || validator)) {
 										if (teamtype !== app.TabsApp.MANAGER_TYPE) {
@@ -347,6 +348,7 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 										jQuery(row.cells[0]).html(iconedit);
 									}
 								}
+								row.className = className + statusClass;
 
 								// Create link to preview activity on first not grouped column.
 								var colIndex = -1;
@@ -355,7 +357,7 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 										colIndex = i;
 									}
 								});
-                                var newContent = "<a class='preview-cell' href='" + getPreviewPageURL(id) + "'>"
+                                var newContent = "<a class='preview-cell" + statusClass + "' href='" + getPreviewPageURL(id) + "'>"
 									+ jQuery(row.cells[colIndex]).html() + "</a>";
 								jQuery(row.cells[colIndex]).html(newContent);
 							}
@@ -535,6 +537,11 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 					// Property entityId replaced column AMP_ID on NiReports.
 					if (column.hierarchicalName === "[" + app.TabsApp.COLUMNS_WITH_IDS[0] + "]" && element && element.entityId !== undefined) {
 						row[app.TabsApp.COLUMN_ACTIVITY_ID] = element.entityId;
+					}
+					
+					// for team column it is needed to fetch the entityId
+					if (column.hierarchicalName === "[" + app.TabsApp.COLUMNS_WITH_IDS[1] + "]" && element && element.entityId !== undefined) {
+						row[column.columnName] = element.entityId;
 					}
 				});
 				

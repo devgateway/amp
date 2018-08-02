@@ -235,7 +235,7 @@ public class ObjectImporter {
 
         Object value = null;
         String fieldType = fieldDef.getFieldType();
-        boolean idOnly = Boolean.TRUE.equals(fieldDef.isIdOnly());
+        boolean idOnly = fieldDef.isIdOnly();
 
         // this is an object reference
         if (!isCollection && idOnly) {
@@ -393,7 +393,7 @@ public class ObjectImporter {
          */
 
         // skip children validation immediately if only ID is expected
-        boolean idOnly = Boolean.TRUE.equals(fieldDef.isIdOnly());
+        boolean idOnly = fieldDef.isIdOnly();
         if (idOnly) {
             return newParent;
         }

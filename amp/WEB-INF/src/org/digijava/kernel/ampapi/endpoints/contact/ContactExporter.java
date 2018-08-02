@@ -1,5 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.contact;
 
+import org.digijava.kernel.ampapi.endpoints.activity.AmpFieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectExporter;
 import org.digijava.module.aim.dbentity.AmpContact;
 
@@ -7,4 +8,8 @@ import org.digijava.module.aim.dbentity.AmpContact;
  * @author Octavian Ciubotaru
  */
 public class ContactExporter extends ObjectExporter<AmpContact> {
+
+    public ContactExporter() {
+        super(AmpFieldsEnumerator.PUBLIC_CONTACT_ENUMERATOR.getContactFields());
+    }
 }

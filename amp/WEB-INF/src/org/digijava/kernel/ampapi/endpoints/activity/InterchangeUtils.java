@@ -1,7 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.text.ParseException;
@@ -19,7 +18,6 @@ import java.util.Set;
 import javax.ws.rs.core.PathSegment;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.WordUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
@@ -369,8 +367,7 @@ public class InterchangeUtils {
      * @throws NoSuchFieldException 
      */
     public static Object getTranslationValues(Field field, Class<?> clazz, Object fieldValue, Object parentObject) 
-            throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, 
-            InvocationTargetException, EditorException, NoSuchFieldException {
+            throws IllegalAccessException, EditorException, NoSuchFieldException {
         
         TranslationSettings translationSettings = TranslationSettings.getCurrent();
         
@@ -461,29 +458,6 @@ public class InterchangeUtils {
     }   
     
     /**
-     * TODO replace this method with (PropertyUtils or PropertyUtilsBean).getProperty()
-     * generates a string that should hit with the getter method name
-     * @param fieldName
-     * @return
-     */
-    public static String getGetterMethodName(String fieldName) {
-        return "get" + WordUtils.capitalize(fieldName);
-    }   
-    
-    /**
-     * TODO replace this method with (PropertyUtils or PropertyUtilsBean).setProperty()
-     * generates a string that should hit with the setter method name
-     * @param fieldName
-     * @return
-     */
-    public static String getSetterMethodName(String fieldName) {
-        if (fieldName.length() == 1)
-            return "set" + Character.toUpperCase(fieldName.charAt(0));
-        return "set" + Character.toUpperCase(fieldName.charAt(0)) + 
-                ((fieldName.length() > 1) ? fieldName.substring(1) : "");
-    }
-    
-    /**
      * Gets the ID of an enumerable object (used in Possible Values EP)
      * @param obj
      * @return ID if it's identifiable, null otherwise
@@ -551,7 +525,7 @@ public class InterchangeUtils {
     }
 
     @SuppressWarnings("unchecked")
-    public static boolean validateFilterActivityFields(JsonBean filterJson, JsonBean result) {
+    public static boolean validateFilterActivityFields(JsonBean filterJson, JsonBean result, List<APIField> fields) {
         List<String> filteredItems = new ArrayList<String>();
         
         if (filterJson != null) {
@@ -571,7 +545,6 @@ public class InterchangeUtils {
         }
 
         try {
-            List<APIField> fields = AmpFieldsEnumerator.PUBLIC_ENUMERATOR.getAllAvailableFields();
             for (String field : filteredItems) {
                 PossibleValuesEnumerator.INSTANCE.getPossibleValuesForField(field, fields);
             }

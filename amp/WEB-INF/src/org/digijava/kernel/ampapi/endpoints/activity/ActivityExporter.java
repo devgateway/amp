@@ -17,6 +17,7 @@ public class ActivityExporter extends ObjectExporter<AmpActivityVersion> {
     private List<String> filteredFields = new ArrayList<>();
 
     public ActivityExporter(JsonBean filter) {
+        super(AmpFieldsEnumerator.PUBLIC_ENUMERATOR.getAllAvailableFields());
         this.filter = filter;
     }
 
@@ -24,7 +25,7 @@ public class ActivityExporter extends ObjectExporter<AmpActivityVersion> {
     public JsonBean export(AmpActivityVersion object) {
         JsonBean resultJson = new JsonBean();
 
-        if (!InterchangeUtils.validateFilterActivityFields(filter, resultJson)) {
+        if (!InterchangeUtils.validateFilterActivityFields(filter, resultJson, getApiFields())) {
             return resultJson;
         }
 
@@ -33,15 +34,6 @@ public class ActivityExporter extends ObjectExporter<AmpActivityVersion> {
         }
 
         return super.export(object);
-    }
-
-    @Override
-    protected Class<?> getClassOf(Object object) {
-        if (object instanceof AmpActivityVersion) {
-            return object.getClass().getSuperclass();
-        } else {
-            return object.getClass();
-        }
     }
 
     /**

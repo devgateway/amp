@@ -141,9 +141,9 @@ public class FieldsEnumerator {
         if (actualDependencies != null) {
             apiField.setDependencies(actualDependencies);
         }
-        
+
+        apiField.setFieldNameInternal(field.getName());
         if (internalUse) {
-            apiField.setFieldNameInternal(field.getName());
             if (InterchangeUtils.isAmpActivityVersion(field.getType())) {
                 apiField.setActivity(true);
             }
@@ -151,10 +151,8 @@ public class FieldsEnumerator {
         
         /* list type */
         
-        if (interchangeable.pickIdOnly()) {
-            apiField.setIdOnly(true);
-        }
-        
+        apiField.setIdOnly(interchangeable.pickIdOnly());
+
         if (!InterchangeUtils.isSimpleType(field.getType())) {
             if (InterchangeUtils.isCollection(field)) {
                 if (!hasMaxSizeValidatorEnabled(field, context)
@@ -181,6 +179,8 @@ public class FieldsEnumerator {
                     apiField.setUniqueConstraint(uniqueConstraint);
                 }
                 
+            } else if (!interchangeable.pickIdOnly()) {
+                apiField.setMultipleValues(false);
             }
 
             // FIXME remove condition that excludes activties
@@ -280,9 +280,8 @@ public class FieldsEnumerator {
             if (!InterchangeUtils.isCompositeField(field)) {
                 if (isFieldVisible(context)) {
                     APIField descr = describeField(field, context);
-                    if (descr != null) {
-                        result.add(descr);
-                    }
+                    descr.setFieldValueReader(new SimpleFieldValueReader(field.getName()));
+                    result.add(descr);
                 }
             } else {
                 InterchangeableDiscriminator discriminator = field.getAnnotation(InterchangeableDiscriminator.class);
@@ -294,6 +293,8 @@ public class FieldsEnumerator {
                         APIField descr = describeField(field, context);
                         descr.setDiscriminatorField(discriminator.discriminatorField());
                         descr.setDiscriminationConfigurer(discriminator.configurer());
+                        descr.setFieldValueReader(new DiscriminatedFieldValueReader(field.getName(),
+                                discriminator.discriminatorField(), settings[i].discriminatorOption()));
                         result.add(descr);
                     }
                     context.getIntchStack().pop();

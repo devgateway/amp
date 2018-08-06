@@ -34,7 +34,8 @@ public class APIField {
     private String required;
 
     @JsonProperty(ActivityEPConstants.ID_ONLY)
-    private Boolean idOnly;
+    @JsonSerialize(include = JsonSerialize.Inclusion.NON_DEFAULT)
+    private boolean idOnly;
 
     @JsonProperty(ActivityEPConstants.IMPORTABLE)
     private Boolean importable;
@@ -89,6 +90,17 @@ public class APIField {
 
     @JsonIgnore
     private Class<? extends PossibleValuesProvider> possibleValuesProviderClass;
+
+    @JsonIgnore
+    private FieldValueReader fieldValueReader;
+
+    public void setFieldValueReader(FieldValueReader fieldValueReader) {
+        this.fieldValueReader = fieldValueReader;
+    }
+
+    public FieldValueReader getFieldValueReader() {
+        return fieldValueReader;
+    }
 
     public Class<? extends PossibleValuesProvider> getPossibleValuesProviderClass() {
         return possibleValuesProviderClass;
@@ -147,11 +159,11 @@ public class APIField {
         this.required = required;
     }
 
-    public Boolean isIdOnly() {
+    public boolean isIdOnly() {
         return idOnly;
     }
 
-    public void setIdOnly(Boolean idOnly) {
+    public void setIdOnly(boolean idOnly) {
         this.idOnly = idOnly;
     }
 
@@ -175,16 +187,16 @@ public class APIField {
         return multipleValues;
     }
 
+    public void setMultipleValues(Boolean multipleValues) {
+        this.multipleValues = multipleValues;
+    }
+
     public Boolean isActivity() {
         return activity;
     }
 
     public void setActivity(Boolean activity) {
         this.activity = activity;
-    }
-
-    public void setMultipleValues(Boolean multipleValues) {
-        this.multipleValues = multipleValues;
     }
 
     public String getUniqueConstraint() {

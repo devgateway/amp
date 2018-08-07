@@ -7,8 +7,10 @@ import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.digijava.kernel.ampapi.endpoints.gis.PerformanceFilterParameters;
+import org.digijava.kernel.ampapi.postgis.entity.AmpLocator;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.hibernate.Session;
+import org.hibernate.criterion.Order;
 import org.hibernate.type.StandardBasicTypes;
 
 public final class GisUtils {
@@ -38,4 +40,11 @@ public final class GisUtils {
         return actIds;
     }
     
+    public static List<AmpLocator> getLocators() {
+        Session session = PersistenceManager.getSession();
+        List<AmpLocator> locators = session.createCriteria(AmpLocator.class).addOrder(Order.asc("id")).list();
+
+        return locators;
+    }
+
 }

@@ -53,7 +53,7 @@ public class DocumentsNodesAttributeManager {
             boolean shouldSaveObject = false;
 
             CrDocumentNodeAttributes docAttributes = getDocumentNodeAttributes().stream()
-                    .filter(d -> d.getUuid().equals(uuid)).findFirst().get();
+                    .filter(d -> d.getUuid().equals(uuid)).findFirst().orElse(null);
 
             if ((docAttributes == null) || (docAttributes.getUuid() == null)) {
                 docAttributes = new CrDocumentNodeAttributes();

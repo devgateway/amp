@@ -19,7 +19,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
@@ -34,9 +33,9 @@ public class AmpComponent implements Serializable,Comparable<AmpComponent>, Vers
     
     //IATI-check: to be ignored
     
-    private static Logger logger = Logger.getLogger(AmpComponent.class);
-
     private Long ampComponentId;
+
+    private AmpActivityVersion activity;
 
     @Interchangeable(fieldTitle = COMPONENT_TITLE, required = REQUIRED_ALWAYS, importable = true,
             fmPath="/Activity Form/Components/Component/Component Information/Component Title")
@@ -79,15 +78,16 @@ public class AmpComponent implements Serializable,Comparable<AmpComponent>, Vers
             fmPath = "/Activity Form/Components/Component/Component Information/Component Type")
     private AmpComponentType type;
     
-    private Set activities;
     private String Url;
-    
-    public Set getActivities() {
-        return activities;
+
+    public AmpActivityVersion getActivity() {
+        return activity;
     }
-    public void setActivities(Set activities) {
-        this.activities = activities;
+
+    public void setActivity(AmpActivityVersion activity) {
+        this.activity = activity;
     }
+
     public Long getAmpComponentId() {
         return ampComponentId;
     }
@@ -274,8 +274,7 @@ public class AmpComponent implements Serializable,Comparable<AmpComponent>, Vers
     @Override
     public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
         AmpComponent auxComponent = (AmpComponent) clone();
-        auxComponent.setActivities(new HashSet<AmpActivityVersion>());
-        auxComponent.getActivities().add(newActivity);
+        auxComponent.setActivity(newActivity);
         auxComponent.setAmpComponentId(null);
         
         if (auxComponent.getFundings() != null && auxComponent.getFundings().size() > 0) {

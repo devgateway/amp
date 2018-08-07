@@ -602,7 +602,7 @@ public class ActivityImporter extends ObjectImporter {
     }
 
     private void initComponent(AmpActivityVersion activity, AmpComponent component) {
-        component.setActivities(new HashSet<>(Arrays.asList(activity)));
+        component.setActivity(activity);
         if (component.getFundings() != null) {
             component.getFundings().forEach(f -> initComponentFunding(component, f));
         }

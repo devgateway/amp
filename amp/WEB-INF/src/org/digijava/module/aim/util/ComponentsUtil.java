@@ -420,7 +420,7 @@ public class ComponentsUtil {
             try {
                 session = PersistenceManager.getRequestDBSession();
                 String componentTitle = InternationalizedModelDescription.getForProperty(AmpComponent.class, "title").getSQLFunctionCall("co.ampComponentId");
-                queryString = "select co from " + AmpComponent.class.getName() + " as co inner join co.activities ac inner join ac.ampActivityGroup actGroup where " + componentTitle + "=:title and actGroup.ampActivityGroupId <> :groupId ";
+                queryString = "select co from " + AmpComponent.class.getName() + " as co inner join co.activity.ampActivityGroup actGroup where " + componentTitle + "=:title and actGroup.ampActivityGroupId <> :groupId ";
                 qry = session.createQuery(queryString);
                 qry.setParameter("title", title, StringType.INSTANCE);
                 qry.setParameter("groupId", g.getAmpActivityGroupId(), LongType.INSTANCE);

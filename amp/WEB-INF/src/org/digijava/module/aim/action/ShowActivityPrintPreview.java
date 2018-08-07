@@ -532,8 +532,8 @@ public class ShowActivityPrintPreview
 
                 eaForm.getComponents().setSelectedComponents(null);
                 eaForm.getComponents().setCompTotalDisb(0);
-                
-                Collection comp = ActivityUtil.getComponents(activity.getAmpActivityId());
+
+                Collection comp = activity.getComponents();
                 if (comp != null && comp.size() > 0) {
                     getComponents(comp, activity.getAmpActivityId(), eaForm);
                 }

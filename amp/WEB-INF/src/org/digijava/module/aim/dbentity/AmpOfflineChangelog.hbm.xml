@@ -7,9 +7,15 @@
 				<param name="sequence">amp_offline_changelog_seq</param>
 			</generator>
 		</id>
-		<property name="entityName" column="entity_name" type="java.lang.String"/>
+		<property name="entityName" type="java.lang.String">
+			<column name="entity_name" not-null="true" length="50"/>
+		</property>
 		<property name="entityId" column="entity_id" type="java.lang.String"/>
-		<property name="operationName" column="operation_name" type="java.lang.String"/>
-		<property name="operationTime" column="operation_time" type="java.util.Date"/>
+		<property name="operationName" type="java.lang.String">
+			<column name="operation_name" length="20" not-null="true"/>
+		</property>
+		<property name="operationTime" type="java.util.Date">
+			<column name="operation_time" not-null="true"/>
+		</property>
 	</class>
 </hibernate-mapping>

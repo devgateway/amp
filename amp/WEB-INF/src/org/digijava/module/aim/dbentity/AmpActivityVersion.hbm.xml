@@ -42,7 +42,7 @@
 		<property name="changeType" column="change_type" type="java.lang.String" />
 		<property name="lastImportedAt" column="last_imported_at" type="java.util.Date" />
 		<many-to-one name="lastImportedBy" column="last_imported_by"
-			class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="none" />
+			class="org.digijava.kernel.user.User" cascade="none" />
 
 		<property name="deleted" column="deleted" type="java.lang.Boolean" />
 
@@ -196,7 +196,7 @@
 				column="amp_component_id" />
 		</set>
 		
-		<set name="structures" table="AMP_ACTIVITY_STRUCTURES" lazy="true" cascade="all-delete-orphan">
+		<set name="structures" table="AMP_ACTIVITY_STRUCTURES" lazy="true" inverse="true" cascade="all-delete-orphan">
 			<cache usage="read-write" />
 			<key column="amp_activity_id" />
 			<many-to-many class="org.digijava.module.aim.dbentity.AmpStructure"

@@ -12,6 +12,7 @@
 	<entry key="AmpUniqueCollectionValidator">Ces éléments suivants sont répétés au moins une fois: ${label}</entry>
 	<entry key="AmpTreeCollectionValidator">Les deux éléments, Parent et Enfant, sont présents: ${label}</entry>
 	<entry key="AmpUniqueActivityTitleValidator">Cet espace de travail contient déjà une activité avec le même titre ${workspace}.</entry>
+	<entry key="AmpUniqueActivityTitleNoWorkspaceValidator">Une activité avec ce titre existe et n'est pas affectée à un espace de travail.</entry>
 	<entry key="AmpUniqueComponentTitleValidator">Il existe déjà un composant avec le même titre.</entry>
 	<entry key="CoordinatesValidator">Les coordonnées n’ont pas été saisies dans un format correct.</entry>
 	<entry key="AmpCommitmentsCollectionsSumComparatorValidator">Les décaissements sont supérieurs à la somme des engagements</entry>

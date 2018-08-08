@@ -423,7 +423,7 @@ public class ActivityUtil {
                             a.setApprovedBy(ampCurrentMember);
                             a.setApprovalDate(Calendar.getInstance().getTime());
                         } else {
-                            a.setApprovalStatus(Constants.STARTED_STATUS);
+                            a.setApprovalStatus(Constants.EDITED_STATUS);
                         }
                     }
                 }

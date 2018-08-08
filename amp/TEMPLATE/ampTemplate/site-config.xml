@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE page [
-<!ENTITY ampVersion "2.13.1.7">
-<!ENTITY releaseDate "25.06.2018">
+<!ENTITY ampVersion "${project.version}">
+<!ENTITY releaseDate "17.7.2018">
 <!ENTITY buildDate "${buildDate}">
 <!ENTITY buildSource "${buildSource}">
 ]>
@@ -63,7 +63,7 @@
 			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
 	 		<put-item name="loginWidget" file="loginWidget.jsp"/>
 			<put-item name="footer" layout="footerLayout"/>
-			<put-item name="body"  module="message" page="addMessages"/>
+			<put-item name="body"  module="message" page="addMessages"/>			
 		</layout>
 
 
@@ -132,7 +132,7 @@
 			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
 	 		<put-item name="loginWidget" file="loginWidget.jsp"/>
 			<put-item name="footer" layout="footerLayoutPledges"/>
-			<put-item name="body" file="/repository/aim/view/addPledge.jsp"/>
+			<put-item name="body" file="/repository/aim/view/addPledge.jsp"/>			
 		</layout>
 		<layout name="logoutLayout" file="logoutLayout.jsp">
 			<put-item name="logout" module="aim" instance="default" teaser="logout"/>
@@ -697,7 +697,7 @@
                 <page>viewActivityHistory</page>
                 <page>myLastVersions</page>
                 <page>aim_assignActivitiesJSON</page>
-				<page>aim_updateTeamMembersJSON</page>
+				<page>aim_updateTeamMembersJSON</page> 
 				<page>aim_filterPicker2</page>
             </module>
 			<module name="contentrepository">
@@ -706,7 +706,7 @@
 				<page>tempFieldPreDefinedValues</page>
 				<page>docFromTemplate</page>
 			</module>
-			<module name="dataExchange">
+			<module name="budgetintegration">
 				<page>de_showLog</page>
 			</module>
 			<module name="help">
@@ -739,7 +739,7 @@
                 <page>largestProjectsPrinterFriendly</page>
                 <page>exportOptions</page>
 			</module>
-			<module name="dataExchange">
+			<module name="budgetintegration">
 				<page>de_showSourceDetails</page>
 				<page>de_showLogItemDetails</page>
             </module>

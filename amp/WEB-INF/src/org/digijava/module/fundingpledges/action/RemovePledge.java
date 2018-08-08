@@ -15,6 +15,7 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.helper.ActivitySector;
+import org.digijava.module.aim.util.AuditLoggerUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesSector;
@@ -31,6 +32,7 @@ public class RemovePledge extends Action {
             if (request.getParameter("pledgeId") != null && Long.valueOf(request.getParameter("pledgeId")) > 0){
                 FundingPledges fp = PledgesEntityHelper.getPledgesById(Long.valueOf(request.getParameter("pledgeId")));
                 PledgesEntityHelper.removePledge(fp);
+                AuditLoggerUtil.logObject(request, fp, "delete", null);
             }
             return mapping.findForward("forward"); 
     }

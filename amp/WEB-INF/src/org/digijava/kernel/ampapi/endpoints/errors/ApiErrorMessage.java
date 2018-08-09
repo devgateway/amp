@@ -73,7 +73,7 @@ public class ApiErrorMessage {
 
     /**
      * Configures an {@link #ApiErrorMessage(Integer, String, String)} with more details
-     * @param values details, see {@link #values}
+     * @param details details, see {@link #values}
      */
     public ApiErrorMessage withDetails(List<String> details) {
         List<String> newValues = new ArrayList<>();

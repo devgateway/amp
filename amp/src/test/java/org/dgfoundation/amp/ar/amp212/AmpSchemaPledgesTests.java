@@ -6,8 +6,8 @@ import java.util.List;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
+import org.dgfoundation.amp.mondrian.AmpReportingTestCase;
 import org.dgfoundation.amp.mondrian.ReportAreaForTests;
-import org.dgfoundation.amp.mondrian.ReportingTestCase;
 import org.dgfoundation.amp.newreports.AreaOwner;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
@@ -27,7 +27,7 @@ import org.junit.Test;
  * @author Constantin Dolghier
  *
  */
-public class AmpSchemaPledgesTests extends ReportingTestCase {
+public class AmpSchemaPledgesTests extends AmpReportingTestCase {
 
     final List<String> acts = Arrays.asList(
             "activity 1 with agreement",
@@ -89,12 +89,7 @@ public class AmpSchemaPledgesTests extends ReportingTestCase {
 
     public final static String correctTotals = "{RAW / Funding / 1998 / Actual Pledge=938069.75219, RAW / Funding / 1998 / Actual Commitments=0, RAW / Funding / 1998 / Actual Disbursements=0, RAW / Funding / 1998 / Commitment Gap=938069.75219, RAW / Funding / 2012 / Actual Pledge=1041111.767105, RAW / Funding / 2012 / Actual Commitments=0, RAW / Funding / 2012 / Actual Disbursements=0, RAW / Funding / 2012 / Commitment Gap=1041111.767105, RAW / Funding / 2013 / Actual Pledge=1800000, RAW / Funding / 2013 / Actual Commitments=2670000, RAW / Funding / 2013 / Actual Disbursements=0, RAW / Funding / 2013 / Commitment Gap=-870000, RAW / Funding / 2014 / Actual Pledge=9186878.10434, RAW / Funding / 2014 / Actual Commitments=3350000, RAW / Funding / 2014 / Actual Disbursements=450000, RAW / Funding / 2014 / Commitment Gap=5836878.10434, RAW / Totals / Actual Pledge=12966059.623635, RAW / Totals / Actual Commitments=6020000, RAW / Totals / Actual Disbursements=450000, RAW / Totals / Commitment Gap=6946059.623635}";
     
-    @Override
-    protected NiReportExecutor getNiExecutor(List<String> activityNames) {
-        return getDbExecutor(activityNames);
-    }
-    
-    protected ReportSpecificationImpl buildPledgeReport(String reportName, List<String> columns, List<String> measures, 
+    protected ReportSpecificationImpl buildPledgeReport(String reportName, List<String> columns, List<String> measures,
             List<String> hierarchies, GroupingCriteria groupingCriteria) {
         return ReportSpecificationImpl.buildFor(reportName, columns, measures, hierarchies, groupingCriteria, 
                 ArConstants.PLEDGES_TYPE);

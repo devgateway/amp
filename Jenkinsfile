@@ -88,7 +88,7 @@ stage('Build') {
                     sh returnStatus: true, script: 'tar -xf ../amp-node-cache.tar'
 
                     // Build AMP
-                    sh "cd amp && mvn -T 4 clean compile war:exploded -Djdbc.user=amp -Djdbc.password=amp122006 -Djdbc.db=amp -Djdbc.host=db -Djdbc.port=5432 -DdbName=postgresql -Djdbc.driverClassName=org.postgresql.Driver -Dmaven.test.skip=true -Dapidocs=true -DbuildSource=${tag} -e"
+                    sh "cd amp && mvn -T 4 clean compile test war:exploded -Djdbc.user=amp -Djdbc.password=amp122006 -Djdbc.db=amp -Djdbc.host=db -Djdbc.port=5432 -DdbName=postgresql -Djdbc.driverClassName=org.postgresql.Driver -Dapidocs=true -DbuildSource=${tag} -e"
 
                     // Build Docker images & push it
                     sh "docker build -q -t phosphorus:5000/amp-webapp:${tag} --build-arg AMP_EXPLODED_WAR=target/amp --build-arg AMP_PULL_REQUEST='${pr}' --build-arg AMP_BRANCH='${branch}' --build-arg AMP_REGISTRY_PRIVATE_KEY='${registryKey}' --label git-hash='${hash}' amp"

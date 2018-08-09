@@ -60,8 +60,6 @@ public class GlobalSettingsConstants {
     
     public static final String NEW_FIELDS_VISIBILITY= "New fields Visibility";
     
-    public static  final String  SECURE_SERVER= "Secure Server";
-    
     public static final String BASE_CURRENCY= "Base Currency";
     
     public static final String USER_REGISTRATION_BY_MAIL = "User registration by email";

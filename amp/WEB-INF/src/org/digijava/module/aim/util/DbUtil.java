@@ -730,12 +730,12 @@ public class DbUtil {
         return ampAppSettings;
     }
 
-    public static boolean isUserTranslator(User user) {
+    public static boolean isUserTranslator(User u) {
 
         logger.debug("In isUserTranslator()");
+        User user = (User) PersistenceManager.getSession().get(User.class, u.getId());
         boolean flag = false;
         try {
-
             Iterator itr = user.getGroups().iterator();
             if (!itr.hasNext()) {
                 logger.debug("No groups");

@@ -206,6 +206,8 @@ public class GlobalSettingsConstants {
     public static final String AMP_REGISTRY_URL = "AMP Registry URL";
 
     public static final String AMP_OFFLINE_ENABLED = "AMP Offline Enabled";
+    
+    public static final String AMP_SERVER_ID = "AMP Server ID";
 
     /**
      * fields which, although existing in the database, should be rendered with a display: none on the GlobalSettings form so that the user never has a chance of changing their value

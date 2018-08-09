@@ -15,7 +15,7 @@ import java.util.Map;
 
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.ampregistry.AmpInstallation;
-import org.digijava.kernel.ampregistry.AmpRegistryClient;
+import org.digijava.kernel.ampregistry.AmpRegistryService;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -32,7 +32,6 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.QuartzJobClassUtils;
 import org.digijava.module.aim.util.QuartzJobUtils;
 import org.digijava.module.message.jobs.ConnectionCleaningJob;
-import org.hibernate.jdbc.Work;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
@@ -57,6 +56,8 @@ public class RegisterWithAmpRegistryJob extends ConnectionCleaningJob {
 
     private static final int JOB_FIRST_START_DELAY_IN_MIN = 5;
 
+    private AmpRegistryService ampRegistryService = AmpRegistryService.INSTANCE;
+
     @Override
     public void executeInternal(JobExecutionContext context) throws JobExecutionException {
         if (FeaturesUtil.isAmpOfflineEnabled()) {
@@ -64,7 +65,7 @@ public class RegisterWithAmpRegistryJob extends ConnectionCleaningJob {
             
             if (isDevServer()) {
                 String registryUrl = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMP_REGISTRY_URL);
-                if (!registryUrl.equals(REGISTRY_STG_URL)) {
+                if (!REGISTRY_STG_URL.equals(registryUrl)) {
                     updateRegistryStgURL();
                 }
                 
@@ -72,8 +73,7 @@ public class RegisterWithAmpRegistryJob extends ConnectionCleaningJob {
             }
             
             if (secretToken != null) {
-                AmpRegistryClient client = new AmpRegistryClient();
-                client.register(getCurrentInstallation(), secretToken);
+                ampRegistryService.register(getCurrentInstallation(), secretToken);
             }
         }
     }
@@ -82,9 +82,7 @@ public class RegisterWithAmpRegistryJob extends ConnectionCleaningJob {
         String privateKey = System.getenv(AMP_REGISTRY_PRIVATE_KEY_ENV_NAME);
         String isoCode = getCurrentCountry().getIso().toUpperCase();
         String hashKey = Hashing.sha256().hashString(isoCode + privateKey, StandardCharsets.UTF_8).toString();
-        String secretToken = String.format("%s%s", isoCode, hashKey);
-        
-        return secretToken;
+        return String.format("%s%s", isoCode, hashKey);
     }
 
     private AmpInstallation getCurrentInstallation() {
@@ -94,7 +92,7 @@ public class RegisterWithAmpRegistryJob extends ConnectionCleaningJob {
         AmpInstallation installation = new AmpInstallation();
         installation.setIso2(country.getIso().toUpperCase());
         
-        List<String> siteUrls = new ArrayList<>(new LinkedHashSet<String>(getSiteUrls(defaultSite)));
+        List<String> siteUrls = new ArrayList<>(new LinkedHashSet<>(getSiteUrls(defaultSite)));
         Map<String, String> allTranslations = getAllTranslations(defaultSite, country.getCountryName());
         
         // AMP-27350 add URLs in all translated names if AMP is in stg (dev) mode
@@ -104,11 +102,12 @@ public class RegisterWithAmpRegistryJob extends ConnectionCleaningJob {
         
         installation.setUrls(siteUrls);
         installation.setName(allTranslations);
+        installation.setServerId(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMP_SERVER_ID));
         
         return installation;
     }
     
-    public boolean isDevServer() {
+    private boolean isDevServer() {
         return Boolean.parseBoolean(System.getProperty(AMP_DEVELOPMENT_ENV_NAME));
     }
 
@@ -137,13 +136,9 @@ public class RegisterWithAmpRegistryJob extends ConnectionCleaningJob {
     }
     
     private void updateRegistryStgURL() {
-        PersistenceManager.getSession().doWork(new Work() {
-            public void execute(java.sql.Connection connection) {
-                SQLUtils.executeQuery(connection,
-                        String.format("UPDATE amp_global_settings SET settingsvalue = '%s' WHERE settingsname ='%s'", 
-                                REGISTRY_STG_URL, GlobalSettingsConstants.AMP_REGISTRY_URL));
-            };
-        });
+        PersistenceManager.getSession().doWork(connection -> SQLUtils.executeQuery(connection,
+                String.format("UPDATE amp_global_settings SET settingsvalue = '%s' WHERE settingsname ='%s'",
+                        REGISTRY_STG_URL, GlobalSettingsConstants.AMP_REGISTRY_URL)));
         
         FeaturesUtil.buildGlobalSettingsCache(FeaturesUtil.getGlobalSettings());
     }

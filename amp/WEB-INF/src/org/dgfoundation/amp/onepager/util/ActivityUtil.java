@@ -514,7 +514,11 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
                             a.setApprovedBy(ampCurrentMember);
                             a.setApprovalDate(Calendar.getInstance().getTime());
                         } else {
-                            a.setApprovalStatus(Constants.STARTED_STATUS);
+                            if (StringUtils.equals(oldA.getApprovalStatus(), Constants.STARTED_STATUS)) {
+                                a.setApprovalStatus(Constants.STARTED_STATUS);
+                            } else {
+                                a.setApprovalStatus(Constants.EDITED_STATUS);
+                            }
                         }
                     }
                 }

@@ -142,7 +142,7 @@ public class NoDisbursementsAfterFundingDateMatcherTests extends PerformanceRule
         AmpActivityVersion a = new ActivityBuilder()
                 .addFunding(
                         new FundingBuilder()
-                                .withClassificationDate(new LocalDate(2018, 5, 8).toDate())
+                                .withClassificationDate(new LocalDate(2016, 11, 11).toDate())
                                 .addTransaction(new TransactionBuilder()
                                         .withTransactionType(Constants.COMMITMENT)
                                         .withTransactionDate(new LocalDate(2015, 12, 12).toDate())
@@ -150,6 +150,33 @@ public class NoDisbursementsAfterFundingDateMatcherTests extends PerformanceRule
                                 .addTransaction(new TransactionBuilder()
                                         .withTransactionType(Constants.COMMITMENT)
                                         .withTransactionDate(new LocalDate(2014, 12, 12).toDate())
+                                        .getTransaction())
+                                .withDonor(new OrganisationBuilder()
+                                        .withOrganisationName("Donor1")
+                                        .getOrganisation())
+                                .getFunding())
+                .getActivity();
+        
+        assertNotNull(findPerformanceIssue(rule, a));
+    }
+    
+    @Test
+    public void testWithDisbursement() {
+       
+        AmpPerformanceRule rule = createRule(PerformanceRuleConstants.TIME_UNIT_DAY, "30", 
+                PerformanceRuleConstants.FUNDING_CLASSIFICATION_DATE, getMinorLevel());
+        
+        AmpActivityVersion a = new ActivityBuilder()
+                .addFunding(
+                        new FundingBuilder()
+                                .withClassificationDate(new LocalDate(2016, 11, 11).toDate())
+                                .addTransaction(new TransactionBuilder()
+                                        .withTransactionType(Constants.COMMITMENT)
+                                        .withTransactionDate(new LocalDate(2015, 12, 12).toDate())
+                                        .getTransaction())
+                                .addTransaction(new TransactionBuilder()
+                                        .withTransactionType(Constants.DISBURSEMENT)
+                                        .withTransactionDate(new LocalDate(2016, 12, 12).toDate())
                                         .getTransaction())
                                 .withDonor(new OrganisationBuilder()
                                         .withOrganisationName("Donor1")

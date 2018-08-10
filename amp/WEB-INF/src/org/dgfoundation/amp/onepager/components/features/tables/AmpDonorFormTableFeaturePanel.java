@@ -5,6 +5,8 @@
 package org.dgfoundation.amp.onepager.components.features.tables;
 
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -36,6 +38,7 @@ import org.dgfoundation.amp.onepager.models.AbstractMixedSetModel;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.FundingDetailReportingDateComparator;
 import org.digijava.module.aim.helper.FundingDetailTransactionDateComparator;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -190,11 +193,20 @@ public abstract class AmpDonorFormTableFeaturePanel extends
                     
                     @Override
                     public NumberFormat getNumberFormat(Locale locale) {
-                        NumberFormat format = super.getNumberFormat(locale);
+                        DecimalFormat format = FormatHelper.getDecimalFormat();
                         format.setMaximumFractionDigits(CURRENCY_RATE_MAXIMUM_FRACTION_DIGITS);
                         format.setMinimumIntegerDigits(CURENCY_RATE_MINIMUM_INTEGER_DIGITS);
+                        DecimalFormatSymbols decimalFormatSymbols = format.getDecimalFormatSymbols();
+                        
+                        // org.apache.wicket.util.convert.converter.AbstractDecimalConverter.parse() 
+                        // replace spaces with '\u00A0'. If the grouping separator is space ' ', the parse would fail.
+                        if (decimalFormatSymbols.getGroupingSeparator() == ' ') {
+                            decimalFormatSymbols.setGroupingSeparator('\u00A0');
+                            format.setDecimalFormatSymbols(decimalFormatSymbols);
+                        }
+                        
                         return format;
-                    }  
+                    }
                 };
             }
             

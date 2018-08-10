@@ -90,12 +90,13 @@ stage('Build') {
                     // Build AMP
                     sh "cd amp && mvn -T 4 clean compile  test war:exploded -Djdbc.user=amp -Djdbc.password=amp122006 -Djdbc.db=amp -Djdbc.host=db -Djdbc.port=5432 -DdbName=postgresql -Djdbc.driverClassName=org.postgresql.Driver -Dapidocs=true -DbuildSource=${tag} -e"
 
-                    junit 'amp/target/surefire-reports/TEST-*.xml'
-
                     // Build Docker images & push it
                     sh "docker build -q -t phosphorus:5000/amp-webapp:${tag} --build-arg AMP_EXPLODED_WAR=target/amp --build-arg AMP_PULL_REQUEST='${pr}' --build-arg AMP_BRANCH='${branch}' --build-arg AMP_REGISTRY_PRIVATE_KEY='${registryKey}' --label git-hash='${hash}' amp"
                     sh "docker push phosphorus:5000/amp-webapp:${tag} > /dev/null"
                 } finally {
+                    // Archive unit test report
+                    junit 'amp/target/surefire-reports/TEST-*.xml'
+
                     // Cleanup after Docker & Maven
                     sh returnStatus: true, script: "docker rmi phosphorus:5000/amp-webapp:${tag}"
                     sh returnStatus: true, script: "cd amp && mvn clean -Djdbc.db=dummy"

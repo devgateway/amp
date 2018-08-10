@@ -64,18 +64,24 @@ public class FieldsEnumerator {
 
     private String iatiIdentifierField;
 
+    public FieldsEnumerator(FieldInfoProvider fieldInfoProvider, FMService fmService,
+            TranslatorService translatorService, boolean internalUse) {
+        this(fieldInfoProvider, fmService, translatorService, internalUse, null);
+    }
+
     /**
      * Fields Enumerator
      * 
      * @param internalUse flags if additional information for internal use is needed 
      */
     public FieldsEnumerator(FieldInfoProvider fieldInfoProvider, FMService fmService,
-                            TranslatorService translatorService, boolean internalUse) {
+                            TranslatorService translatorService, boolean internalUse,
+            String iatiIdentifierField) {
         this.fieldInfoProvider = fieldInfoProvider;
         this.fmService = fmService;
         this.translatorService = translatorService;
         this.internalUse = internalUse;
-        this.iatiIdentifierField = InterchangeUtils.getAmpIatiIdentifierFieldName();
+        this.iatiIdentifierField = iatiIdentifierField;
     }
     
     /**
@@ -182,7 +188,7 @@ public class FieldsEnumerator {
                 
             }
             
-            if (!interchangeable.pickIdOnly() && !InterchangeUtils.isAmpActivityVersion(field.getClass())) {
+            if (!interchangeable.pickIdOnly() && !InterchangeUtils.isAmpActivityVersion(field.getType())) {
                 List<APIField> children = getChildrenOfField(field, context);
                 if (children != null && children.size() > 0) {
                     apiField.setChildren(children);

@@ -33,7 +33,7 @@ import org.digijava.kernel.ampapi.endpoints.resource.AmpResource;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.util.SiteUtils;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.annotations.activityversioning.ResourceTextField;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
@@ -57,7 +57,6 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.editor.exception.EditorException;
 import org.hibernate.FlushMode;
 import org.hibernate.Session;
-import org.hibernate.proxy.HibernateProxyHelper;
 
 import com.sun.jersey.spi.container.ContainerRequest;
 
@@ -394,7 +393,7 @@ public class InterchangeUtils {
                 for (String translation : translationSettings.getTrnLocaleCodes()) {
                     // AMP-20884: no html tags cleanup so far
                     //String translatedText = DgUtil.cleanHtmlTags(DbUtil.getEditorBodyEmptyInclude(SiteUtils.getGlobalSite(), fieldText, translation));
-                    String translatedText = translatorService.getEditorBodyEmptyInclude(SiteUtils.getGlobalSite(),
+                    String translatedText = translatorService.getEditorBodyEmptyInclude(TLSUtils.getSite(),
                             fieldText, translation);
                     fieldTrnValues.put(translation, getJsonStringValue(translatedText));
                 }
@@ -410,7 +409,7 @@ public class InterchangeUtils {
         // for reach text editors
         if (isEditor) {
             // AMP-20884: no html tags cleanup so far
-            return translatorService.getEditorBodyEmptyInclude(SiteUtils.getGlobalSite(), (String) fieldValue,
+            return translatorService.getEditorBodyEmptyInclude(TLSUtils.getSite(), (String) fieldValue,
                     translationSettings.getDefaultLangCode());
         }
         

@@ -18,10 +18,10 @@ import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.user.User;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
-import org.digijava.module.aim.dbentity.AmpRole;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -91,7 +91,7 @@ public class PossibleValuesEnumeratorTest {
 
     @Test
     public void testNested() throws IOException {
-        assertJsonEquals(possibleValuesFor("donor_organization~amp_organization_role_id"), "[]");
+        assertJsonEquals(possibleValuesFor("donor_organization~organization"), "[]");
     }
 
     @Test
@@ -106,24 +106,25 @@ public class PossibleValuesEnumeratorTest {
 
     @Test
     public void testNestedNonComposite() throws IOException {
-        assertJsonEquals(possibleValuesFor("donor_organization~role~name"), "[]");
+        assertJsonEquals(possibleValuesFor("fundings~type_of_assistance"), "[]");
     }
 
     @Test
     public void testPossibleValuesForGeneric() throws IOException {
         when(possibleValuesDAO.getGenericValues(any())).thenReturn(Arrays.asList(
-                ampRole(1, "Donor"),
-                ampRole(2, "Implementing Agency")
+                user(1, "John", "Doe"),
+                user(2, "Luigi", "Bianchi")
         ));
-        assertJsonEquals(possibleValuesFor("donor_organization~role"),
-                "[{\"id\":1,\"value\":\"Donor\"},{\"id\":2,\"value\":\"Implementing Agency\"}]");
+        assertJsonEquals(possibleValuesFor("last_imported_by"),
+                "[{\"id\":1,\"value\":\"John Doe\"},{\"id\":2,\"value\":\"Luigi Bianchi\"}]");
     }
 
-    private AmpRole ampRole(long id, String value) {
-        AmpRole role = new AmpRole();
-        role.setAmpRoleId(id);
-        role.setName(value);
-        return role;
+    private User user(long id, String firstName, String lastName) {
+        User user = new User();
+        user.setId(id);
+        user.setFirstNames(firstName);
+        user.setLastName(lastName);
+        return user;
     }
 
     @Test
@@ -178,12 +179,14 @@ public class PossibleValuesEnumeratorTest {
         when(translatorService.translateLabel(any())).thenReturn(ImmutableMap.of("en", "en value", "fr", "fr value"));
 
         when(possibleValuesDAO.getCategoryValues(any())).thenReturn(Arrays.asList(
-                values(1, "Planned", false),
-                values(2, "Canceled", true)
+                values(1, "Planned", false, 1),
+                values(2, "Canceled", true, 2)
         ));
 
         assertJsonEquals(possibleValuesFor("activity_status"),
-                "[{\"id\":1,\"value\":\"Planned\",\"translated-value\":{\"en\":\"en value\",\"fr\":\"fr value\"}}]");
+                "[{\"id\":1,\"value\":\"Planned\","
+                        + "\"translated-value\":{\"en\":\"en value\",\"fr\":\"fr value\"},"
+                        + "\"extra_info\":{\"index\":1}}]");
     }
 
     @Test
@@ -198,7 +201,7 @@ public class PossibleValuesEnumeratorTest {
                         values(1, "Sector 1"),
                         values(2, "Sector 2")
                 ));
-        assertJsonEquals(possibleValuesFor("primary_sectors~sector_id"),
+        assertJsonEquals(possibleValuesFor("primary_sectors~sector"),
                 "[{\"id\":1,\"value\":\"Sector 1\"},{\"id\":2,\"value\":\"Sector 2\"}]");
     }
 
@@ -216,15 +219,16 @@ public class PossibleValuesEnumeratorTest {
     @Test
     public void testStraightCaseAmpLocation() throws IOException {
         when(possibleValuesDAO.getPossibleLocations()).thenReturn(Arrays.asList(
-                        values(101, 1, "Loc 1", null, null, 50, "Country"),
-                        values(102, 2, "Loc 2", 1, "Loc 1", 51, "Commune")
+                        values(101, 1, "Loc 1", null, null, 50, "Country", "MD"),
+                        values(102, 2, "Loc 2", 1, "Loc 1", 51, "Commune", null)
                 ));
         assertJsonEquals(possibleValuesFor("locations~location"),
                 "[{\"id\":101,\"value\":\"Loc 1\",\"children\":[{\"id\":102,\"value\":\"Loc 2\","
                         + "\"extra_info\":{\"parent_location_id\":101,\"parent_location_name\":\"Loc 1\","
                         + "\"implementation_level_id\":51,\"implementation_location_name\":\"Commune\"}}],"
                         + "\"extra_info\":{\"parent_location_id\":null,\"parent_location_name\":null,"
-                        + "\"implementation_level_id\":50,\"implementation_location_name\":\"Country\"}}]");
+                        + "\"implementation_level_id\":50,\"implementation_location_name\":\"Country\","
+                        + "\"iso2\":\"MD\"}}]");
     }
 
     private Object[] values(Object... values) {

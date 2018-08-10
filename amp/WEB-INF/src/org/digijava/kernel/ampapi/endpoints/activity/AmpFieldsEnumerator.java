@@ -18,8 +18,10 @@ public final class AmpFieldsEnumerator {
         AmpFieldInfoProvider provider = new AmpFieldInfoProvider(AmpActivityVersion.class);
        
         AMPFMService fmService = new AMPFMService();
-        PUBLIC_ENUMERATOR = new FieldsEnumerator(provider, fmService, AMPTranslatorService.INSTANCE, false);
-        PRIVATE_ENUMERATOR = new FieldsEnumerator(provider, fmService, AMPTranslatorService.INSTANCE, true);
+        PUBLIC_ENUMERATOR = new FieldsEnumerator(provider, fmService, AMPTranslatorService.INSTANCE, false,
+                InterchangeUtils.getAmpIatiIdentifierFieldName());
+        PRIVATE_ENUMERATOR = new FieldsEnumerator(provider, fmService, AMPTranslatorService.INSTANCE, true,
+                InterchangeUtils.getAmpIatiIdentifierFieldName());
         
         AmpFieldInfoProvider contactFieldInfoProvider = new AmpFieldInfoProvider(AmpContact.class);
         PUBLIC_CONTACT_ENUMERATOR = 

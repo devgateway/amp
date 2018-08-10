@@ -23,7 +23,7 @@ public enum AuthRule {
     VIEW_ACTIVITY,
     /** amp offline global settings must be enabled and client version must be compatible */
     AMP_OFFLINE,
-    /** if amp offline user-agent is present in headers check for AMP_OFFLINE. If not, check for orther actions */
+    /** if amp offline user-agent is present in headers check for AMP_OFFLINE. If not, check for other actions */
     AMP_OFFLINE_OPTIONAL;
     
     @Override

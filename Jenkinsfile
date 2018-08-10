@@ -94,8 +94,10 @@ stage('Build') {
                     sh "docker build -q -t phosphorus:5000/amp-webapp:${tag} --build-arg AMP_EXPLODED_WAR=target/amp --build-arg AMP_PULL_REQUEST='${pr}' --build-arg AMP_BRANCH='${branch}' --build-arg AMP_REGISTRY_PRIVATE_KEY='${registryKey}' --label git-hash='${hash}' amp"
                     sh "docker push phosphorus:5000/amp-webapp:${tag} > /dev/null"
                 } finally {
-                    // Archive unit test report
-                    junit 'amp/target/surefire-reports/TEST-*.xml'
+                    if (branch != null) {
+                        // Archive unit test report
+                        junit 'amp/target/surefire-reports/TEST-*.xml'
+                    }
 
                     // Cleanup after Docker & Maven
                     sh returnStatus: true, script: "docker rmi phosphorus:5000/amp-webapp:${tag}"

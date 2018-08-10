@@ -24,6 +24,7 @@ import javax.jcr.RepositoryException;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
@@ -423,7 +424,11 @@ public class ActivityUtil {
                             a.setApprovedBy(ampCurrentMember);
                             a.setApprovalDate(Calendar.getInstance().getTime());
                         } else {
-                            a.setApprovalStatus(Constants.EDITED_STATUS);
+                            if (StringUtils.equals(oldA.getApprovalStatus(), Constants.STARTED_STATUS)) {
+                                a.setApprovalStatus(Constants.STARTED_STATUS);
+                            } else {
+                                a.setApprovalStatus(Constants.EDITED_STATUS);
+                            }
                         }
                     }
                 }

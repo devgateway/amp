@@ -63,6 +63,8 @@ import org.digijava.module.aim.dbentity.AmpMeasure;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrgRoleBudget;
 import org.digijava.module.aim.dbentity.AmpRole;
+import org.digijava.module.aim.dbentity.AmpStructure;
+import org.digijava.module.aim.dbentity.AmpStructureCoordinate;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
@@ -197,7 +199,10 @@ public class ActivityImporter extends ObjectImporter {
                 
                 if (key == null){ //lock not acquired
                     logger.error("Cannot aquire lock during IATI update for activity " + activityId);
-                    errors.put(ActivityErrors.ACTIVITY_IS_LOCKED.id, ActivityErrors.ACTIVITY_IS_LOCKED);
+                    Long editingUserId = ActivityGatekeeper.getUserEditing(activityId);
+                    String memberName = TeamMemberUtil.getTeamMember(editingUserId).getMemberName();
+                    errors.put(ActivityErrors.ACTIVITY_IS_BEING_EDITED.id,
+                            ActivityErrors.ACTIVITY_IS_BEING_EDITED.withDetails(memberName));
                 }
                 
                 newActivity = oldActivity;
@@ -580,6 +585,14 @@ public class ActivityImporter extends ObjectImporter {
         updateRoleFundings();
         updateOrgRoles();
         initComponents();
+        initStructures();
+        initDocs();
+    }
+
+    private void initDocs() {
+        if (newActivity.getActivityDocuments() != null) {
+            newActivity.getActivityDocuments().forEach(ad -> ad.setAmpActivity(newActivity));
+        }
     }
 
     private void initComponents() {
@@ -597,6 +610,23 @@ public class ActivityImporter extends ObjectImporter {
 
     private void initComponentFunding(AmpComponent component, AmpComponentFunding f) {
         f.setComponent(component);
+    }
+    
+    private void initStructures() {
+        if (newActivity.getStructures() != null) {
+            newActivity.getStructures().forEach(structure -> initStructure(newActivity, structure));
+        }
+    }
+    
+    private void initStructure(AmpActivityVersion activity, AmpStructure structure) {
+        structure.setActivities(new HashSet<>(Arrays.asList(activity)));
+        if (structure.getCoordinates() != null) {
+            structure.getCoordinates().forEach(coord -> initStructureCoordinate(structure, coord));
+        }
+    }
+    
+    private void initStructureCoordinate(AmpStructure structure, AmpStructureCoordinate coord) {
+        coord.setStructure(structure);
     }
 
     private void updateIssues() {

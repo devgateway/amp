@@ -46,7 +46,7 @@
 	<digi:trn key="cm:warningDeleteLabelCategory">Are you sure you want to remove this label category ?</digi:trn>
 </c:set>
 <c:set var="translation9">
-	<digi:trn>Please, for title use only letters, digits, '_', () and space.</digi:trn>
+	<digi:trn>Title cannot be empty and can only contain letters, digits, _, /, (), #, -, : and space. </digi:trn>
 </c:set>
 
 <c:set var="translation10">
@@ -96,6 +96,7 @@
 	}
 	
     function doSubmit() {
+
         if (document.cmCategoryManagerForm.categoryName.value.length == 0) {
             alert ("${translation1}");
             return false;
@@ -123,9 +124,10 @@
     
     function validateText(){
     	var catValueKeys = $('input[id^="field"]');
-    	var regexp = new RegExp("[a-zA-Z0-9_ÀÁÃÄÇÈÉËÌÍÏÑÒÓÕÖÙÚÜàáãäçèéêëìíïñòóõöùúü%&'/\ ()-:]+");
+    	var regexp = new RegExp("[a-zA-Z0-9_ÀÁÃÄÇÈÉËÌÍÏÑÒÓÕÖÙÚÜàáãäçèéêëìíïñòóõöùúü%&'/\ ()-:#]+");
     	for (var i=0;i<catValueKeys.length;i++){    		
-    		if(catValueKeys[i].value!='' && regexp.exec(catValueKeys[i].value)!=catValueKeys[i].value){
+    		if(!catValueKeys[i].disabled && catValueKeys[i].value.trim().length === 0  &&
+				regexp.exec(catValueKeys[i].value) !== catValueKeys[i].value){
     			alert("${translation9}");
     			return false;
     		}

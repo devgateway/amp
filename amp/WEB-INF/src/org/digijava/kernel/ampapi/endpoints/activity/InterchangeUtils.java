@@ -15,6 +15,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 
 import javax.ws.rs.core.PathSegment;
 
@@ -690,7 +691,9 @@ public class InterchangeUtils {
     
     protected static SimpleDateFormat getDateFormatter() {
         if (DATE_FORMATTER.get() == null) {
-            DATE_FORMATTER.set(new SimpleDateFormat(EPConstants.ISO8601_DATE_AND_TIME_FORMAT));
+            SimpleDateFormat format = new SimpleDateFormat(EPConstants.ISO8601_DATE_AND_TIME_FORMAT);
+            format.setTimeZone(TimeZone.getTimeZone("UTC"));
+            DATE_FORMATTER.set(format);
         }
         return DATE_FORMATTER.get();
     }

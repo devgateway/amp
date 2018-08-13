@@ -16,6 +16,7 @@ nv.models.customizedPieChart = function() {
         , showLegend = true
         , color = nv.utils.defaultColor()
         , tooltips = true
+        , rtl = false
         , tooltip = function(key, y, e, graph) {
             return '<h3 style="background-color: '
                 + e.color + '">' + key + '</h3>'
@@ -67,7 +68,7 @@ nv.models.customizedPieChart = function() {
     //------------------------------------------------------------
 
     function chart(selection) {
-    	
+
         renderWatch.reset();
         renderWatch.models(pie);
 
@@ -159,7 +160,15 @@ nv.models.customizedPieChart = function() {
                 dispatch.tooltipHide(e);
             });
 
-            // Update chart from a state object passed to event handler
+
+            if(rtl) {
+                wrap.select('.nv-pieLabels').selectAll('text')[0].forEach(function (element) {
+                    if (element.textContent.length > 0 && element.textContent.lastIndexOf("%")) {
+                        element.textContent = "%" + element.textContent.substring(0, element.textContent.length - 1);
+                    }
+                });
+            }
+
             dispatch.on('changeState', function(e) {
                 if (typeof e.disabled !== 'undefined') {
                     data.forEach(function(series,i) {
@@ -234,7 +243,15 @@ nv.models.customizedPieChart = function() {
         	legendMargin.left   = _.left   !== undefined ? _.left   : legendMargin.left;
         }},*/
     });
-    
+    //we create the RTL property for the pieChart
+    chart.rtl = function(_) {
+        if (!arguments.length) return rtl;
+        rtl = _;
+        return chart;
+    };
+
+
+
     nv.utils.inheritOptions(chart, pie);
     nv.utils.initOptions(chart);
     return chart;

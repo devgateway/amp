@@ -12,6 +12,7 @@ import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.Output;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 /**
  * Persister class for Structures
@@ -43,6 +44,9 @@ public class AmpStructure implements Serializable,Comparable, Versionable, Clone
     private Set<AmpStructureImg> images;
     private Set<AmpStructureCoordinate> coordinates;
     private String coords;
+    private AmpCategoryValue structureColor;
+    private Long structureColorId;
+    private Integer tempId; // client side id used for identifying structures
 
     public Set getActivities() {
         return activities;
@@ -249,6 +253,24 @@ public class AmpStructure implements Serializable,Comparable, Versionable, Clone
     }
     public void setCoords(String coords) {
         this.coords = coords;
+    }
+    public AmpCategoryValue getStructureColor() {
+        return structureColor;
+    }
+    public void setStructureColor(AmpCategoryValue structureColor) {
+        this.structureColor = structureColor;
+    }
+    public Integer getTempId() {
+        return tempId;
+    }
+    public void setTempId(Integer tempId) {
+        this.tempId = tempId;
+    }
+    public Long getStructureColorId() {
+        return structureColorId;
+    }
+    public void setStructureColorId(Long structureColorId) {
+        this.structureColorId = structureColorId;
     }
     @Override
     public String toString()

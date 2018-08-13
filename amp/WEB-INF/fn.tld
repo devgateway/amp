@@ -206,7 +206,7 @@
 
   <function>
     <description>
-      Returns the correct url for specific report. It can point to legacy or nireports.
+      Returns the correct url for specific report. It can point to legacy or reports.
     </description>
     <name>getReportUrl</name>
     <function-class>org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil</function-class>

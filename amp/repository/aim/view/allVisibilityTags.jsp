@@ -16,14 +16,9 @@
 <module:display name="ADMINISTRATIVE SECTION"></module:display> 
 <module:display name="Activity Approval Process" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Activity Costing" parentModule="PROJECT MANAGEMENT"></module:display> 
-<module:display name="Activity Export Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Structures Importer" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Applied Patches" parentModule="ADMINISTRATIVE SECTION"></module:display>
-<module:display name="Activity Import Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
-<module:display name="Activity Partial Import Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
-<module:display name="Budget Codes Exporter" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Budget Integration" parentModule="ADMINISTRATIVE SECTION"></module:display>
-<module:display name="Code Chapitre Importer" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Currency deflator" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Dashboards Manager" parentModule="ADMINISTRATIVE SECTION"/>
 <module:display name="Add & Edit Activity" parentModule="PARIS INDICATORS"></module:display> 
@@ -131,8 +126,6 @@
 
 <module:display name="Map configuration" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Aid Effectiveness Indicators Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
-
-<feature:display name="Synergy Client" module="Activity Import Manager"></feature:display>
 
 <feature:display name="My Resources" module="Content Repository"></feature:display> 
 <feature:display name="Team Resources" module="Content Repository"></feature:display>
@@ -249,8 +242,9 @@
 
 
 <feature:display name="Portfolio Dashboard" module="M & E"></feature:display> 
-<feature:display name="Add Pledge Button" module="Pledges"></feature:display> 
-<feature:display name="Pledge Donor Information" module="Pledges"></feature:display> 
+<feature:display name="Add Pledge Button" module="Pledges"></feature:display>
+<feature:display name="Limit Pledge Edition" module="Pledges"></feature:display>
+<feature:display name="Pledge Donor Information" module="Pledges"></feature:display>
 <feature:display name="Pledge Sector and Location" module="Pledges"></feature:display>
 <feature:display name="Pledge Status" module="Pledges"></feature:display>
 <feature:display name="Pledge Contact 1" module="Pledges"></feature:display> 
@@ -314,7 +308,7 @@
 <field:display feature="Edit Activity" name="Edit Activity Button"></field:display> 
 <field:display feature="Edit Activity" name="Validate Activity Button"></field:display> 
 <field:display feature="Funding Information" name="Type Of Assistance"></field:display>
-<field:display feature="Funding Information" name="Capital - Expenditure"></field:display>
+<field:display feature="Funding Information" name="Capital Expenditure"></field:display>
 <field:display feature="Funding Information" name="Payment Capital - Recurrent"></field:display>
 <field:display feature="Funding Information" name="Agreement Title + Code"></field:display>
 <field:display feature="Funding Information" name="Agreement Code"></field:display>
@@ -590,7 +584,6 @@ deleted 6 fields, do not reinsert
 <field:display name="Currency Expenditure" feature="Expenditures"></field:display> 
 <field:display name="Currency Expenditures" feature="Regional Funding"></field:display> 
 <field:display name="Currency of Disbursement Order" feature="Disbursement Orders"></field:display> 
-<field:display name="Current Completion Date" feature="Planning"></field:display> 
 <field:display name="Data Source" feature="Identification"></field:display>
 <field:display name="Data Team Leader" feature="Identification"></field:display> 
 <field:display name="Date Commitment" feature="Commitments"></field:display>
@@ -986,6 +979,7 @@ deleted 6 fields, do not reinsert
 <field:display name="Commitment Gap" feature="Computed Fields"></field:display>
 <field:display name="Calculated Project Life" feature="Computed Fields"></field:display>
 <field:display name="Performance Alert Level" feature="Performance Monitoring"></field:display>
+<field:display name="Performance Alert Type" feature="Performance Monitoring"></field:display>
 
 <field:display name="Beneficiary Agency Groups" feature="Beneficiary Agency"></field:display> 
 <field:display name="Beneficiary Agency  Department/Division"  feature="Beneficiary Agency"></field:display>
@@ -1120,6 +1114,7 @@ deleted 6 fields, do not reinsert
 <field:display name="Mandatory Organization Code" feature="Organization Form"></field:display>
 
   <!-- GPI  -->
+<module:display name="GPI Data Entry" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="GPI Reports" parentModule="REPORTING"></module:display>
 <module:display name="GPI" parentModule="GPI Reports"></module:display>
 <module:display name="GPI 2014" parentModule="GPI Reports"></module:display>

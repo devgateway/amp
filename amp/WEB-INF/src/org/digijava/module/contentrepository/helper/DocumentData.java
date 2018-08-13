@@ -328,7 +328,7 @@ public class DocumentData implements Comparable<DocumentData>, Serializable {
         String extension    = null;
         if ( webLink == null ) {
             int index           = name.lastIndexOf(".");
-            extension           = name.substring(index + 1, name.length()) ;
+            extension           = name.substring(index + 1, name.length()).toLowerCase();
         }
         else 
             extension           = "link";

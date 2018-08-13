@@ -64,14 +64,14 @@ public class DocumentManager extends Action {
 
         ActionMessages errors = new ActionMessages();
         DocumentManagerForm docForm = (DocumentManagerForm) form;
-
-        if (!isLoggeedIn(request)) {
-            return mapping.findForward("publicView");
-        }
         
+        DocumentManagerUtil.setMaxFileSizeAttribute(request);
+
         if (docForm.getAjaxDocumentList()) {
             populateDocumentManagerForm(request, docForm);
             return mapping.findForward("ajaxDocumentList");
+        } else if (!isLoggeedIn(request)) {
+            return mapping.findForward("publicView");
         }
 
         showContentRepository(request, docForm, errors);
@@ -265,7 +265,6 @@ public class DocumentManager extends Action {
             myForm.setTeamMembers(TeamMemberUtil.getAllTeamMembersMail(teamMember.getTeamId()));
             Session jcrWriteSession     = DocumentManagerUtil.getWriteSession(request);
             
-            DocumentManagerUtil.setMaxFileSizeAttribute(request);
             //check if tabs have data
             myForm.setSharedDocsTabVisible(DocumentManagerUtil.sharedDocumentsExist(teamMember));
             myForm.setPublicDocsTabVisible(DocumentManagerUtil.publicDocumentsExist(teamMember));

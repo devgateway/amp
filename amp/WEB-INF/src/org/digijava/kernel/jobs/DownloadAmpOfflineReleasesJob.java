@@ -146,7 +146,7 @@ public class DownloadAmpOfflineReleasesJob extends ConnectionCleaningJob {
         jobForm.setGroupName("ampServices");
         jobForm.setManualJob(false);
         jobForm.setName(jobClass.getName());
-        jobForm.setTriggerType(2);
+        jobForm.setTriggerType(QuartzJobForm.HOURLY);
         jobForm.setExeTimeH("1");
 
         Calendar instance = Calendar.getInstance();

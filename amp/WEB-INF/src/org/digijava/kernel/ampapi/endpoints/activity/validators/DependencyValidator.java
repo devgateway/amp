@@ -4,15 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
+import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
-import org.digijava.kernel.ampapi.endpoints.activity.DependencyCheckResult;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
+import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-
-import clover.com.google.common.base.Joiner;
 
 /**
  * Validates that dependencies are met and all fields required by dependency are specified 
@@ -20,32 +16,25 @@ import clover.com.google.common.base.Joiner;
 public class DependencyValidator extends InputValidator {
 
     @Override
-    public boolean isValid(ActivityImporter importer,
+    public boolean isValid(ObjectImporter importer,
             Map<String, Object> newFieldParent,
-            Map<String, Object> oldFieldParent, JsonBean fieldDescription,
+            Map<String, Object> oldFieldParent, APIField fieldDescription,
             String fieldPath) {
-        Object value = newFieldParent.get(fieldDescription.get(ActivityEPConstants.FIELD_NAME));
-        if (value == null)
-            return true;
-        List<String> deps =  (List<String>) fieldDescription.get(ActivityEPConstants.DEPENDENCIES);
+        Object value = newFieldParent.get(fieldDescription.getFieldName());
+        List<String> deps = fieldDescription.getDependencies();
         if (deps != null)
         {
-            boolean result = true;
+            boolean result = false;
             for (String dep : deps) {
-                switch(InterchangeDependencyResolver.checkDependency(value, importer.getNewJson(), dep, newFieldParent)) {
-                case INVALID_REQUIRED:
-                    importer.setSaveAsDraft(true);
-                    break;
-                case INVALID_NOT_CONFIGURABLE:
-                    result = false;
-                    errors.add(dep);
-                    break;
-                case VALID: 
-                    break;
-                    
-//                  result = false;
-//                  errors.add(dep);
-                }
+                switch(InterchangeDependencyResolver.checkDependency(value, importer, dep, newFieldParent)) {
+                    case INVALID_NOT_CONFIGURABLE:
+                        errors.add(dep);
+                        break;
+                    case VALID:
+                        result = true;
+                    default:
+                        break;
+                    }
             }
             return result;
         }

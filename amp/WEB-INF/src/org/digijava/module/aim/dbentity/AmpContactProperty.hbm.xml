@@ -14,8 +14,8 @@
 		<property name="name" column="name" type="java.lang.String" />
 		<property name="value" column="value" type="java.lang.String" />
 		<property name="extensionValue" column="extension_value" type="java.lang.String"></property>
-		
-		<many-to-one name="contact"  column="contact_id" class="org.digijava.module.aim.dbentity.AmpContact" cascade="save-update" lazy="false"/>
+		<many-to-one name="type" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
+		<many-to-one name="contact" column="contact_id" class="org.digijava.module.aim.dbentity.AmpContact" cascade="none" lazy="false"/>
 		
 	</class>
 </hibernate-mapping>

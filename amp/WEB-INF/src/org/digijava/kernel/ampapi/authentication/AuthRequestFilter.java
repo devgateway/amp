@@ -32,9 +32,7 @@ import com.sun.jersey.spi.container.ContainerRequestFilter;
  * @author Diego Dimunzio
  */
 public class AuthRequestFilter implements ContainerRequestFilter {
-    // use it to disable temporarily the authorization
-    private static final boolean AUTHORIZE = true;
-    
+
     // Inject request into the filter
     @Context
     private HttpServletRequest httpRequest;
@@ -58,18 +56,12 @@ public class AuthRequestFilter implements ContainerRequestFilter {
         TLSUtils.populate(httpRequest);
         
         addDefaultTreeVisibility();
-        //we check for authentication exclude /rest/security/user and include only /activity/ for now
-        // TODO: we need to move token validation within authorization
-        if (!httpRequest.getRequestURL().toString()
-                .endsWith(mainPath + SecurityUtil.USER_ENDPOINT_PATH) && httpRequest.getRequestURL().toString().contains(mainPath + "/activity")) {
-            String token = containerReq.getHeaderValue("X-Auth-Token");
+
+        String token = containerReq.getHeaderValue("X-Auth-Token");
+        if (token != null) {
             SecurityUtil.validateTokenAndRestoreSession(token);
         }
 
-        if (AUTHORIZE) {
-            Security.authorize(containerReq);
-        }
-        
         return containerReq;
     }
     

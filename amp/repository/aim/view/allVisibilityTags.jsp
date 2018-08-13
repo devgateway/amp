@@ -37,6 +37,7 @@
 <module:display name="Document" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Funding" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Pledges" parentModule="PROJECT MANAGEMENT"/>
+<module:display name="AMP Offline" parentModule="PROJECT MANAGEMENT"/>
 <module:display name="/GIS"></module:display>
 
 <module:display  name="/Dashboards"></module:display>
@@ -175,6 +176,7 @@
 <feature:display name="Activity Dashboard" module="M & E"></feature:display>
 <feature:display name="Workspace Info" module="Tools"></feature:display>
 <feature:display name="IATI Importer" module="Tools"></feature:display>
+<feature:display name="Address Book" module="Tools"></feature:display>
 <field:display name="Unassigned Activities" feature="Workspace Info"></field:display>
 <field:display name="Non-archived Activities" feature="Workspace Info"></field:display>
 <field:display name="Archived Activities" feature="Workspace Info"></field:display>
@@ -1095,6 +1097,8 @@ deleted 6 fields, do not reinsert
 <module:display name="Home Page Menu Entry" parentModule="PUBLIC VIEW"></module:display>
 
 <feature:display name="Show Printer Friendly option" module="Public Reports"></feature:display>
+
+<module:display name="Public AMP Offline" parentModule="PUBLIC VIEW"></module:display>
 <!--  -->
 
 <field:display name="Donor Contract Fundin" feature="Contracting"></field:display> 

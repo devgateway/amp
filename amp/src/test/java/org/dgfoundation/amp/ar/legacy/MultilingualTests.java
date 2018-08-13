@@ -1,5 +1,7 @@
 package org.dgfoundation.amp.ar.legacy;
 
+import static org.junit.Assert.*;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -12,6 +14,7 @@ import java.util.Set;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.testutils.ReportTestingUtils;
+import org.dgfoundation.amp.testutils.ReportsTestCase;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.admin.helper.AmpActivityFake;
@@ -21,46 +24,18 @@ import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.form.ActivityForm;
-import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ComponentsUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.junit.Test;
 
 import java.util.Arrays;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+public class MultilingualTests extends ReportsTestCase {
 
-public class MultilingualTests extends TestCase
-{
-    private MultilingualTests(String name)
-    {
-        super(name);
-    }
-    
-    public static Test suite()
-    {
-        TestSuite suite = new TestSuite(MultilingualTests.class.getName());
-        suite.addTest(new MultilingualTests("testStickyTranslations"));
-        suite.addTest(new MultilingualTests("testAmpActivityMappedCorrectly"));
-        suite.addTest(new MultilingualTests("testReportsLookup"));
-        suite.addTest(new MultilingualTests("testRewriteQuery"));
-        suite.addTest(new MultilingualTests("testActivitiesLoading"));
-        suite.addTest(new MultilingualTests("testActivitiesSearching"));
-        suite.addTest(new MultilingualTests("testComponentsSearching"));
-        suite.addTest(new MultilingualTests("testGetOrgGroups"));
-        suite.addTest(new MultilingualTests("testGetOrgTypes"));
-        suite.addTest(new MultilingualTests("testGetOrgsByRole"));
-        suite.addTest(new MultilingualTests("testAmpActivityResume"));
-        suite.addTest(new MultilingualTests("testActivityDonorNames"));
-        suite.addTest(new MultilingualTests("testTopSectorNames"));
-        return suite;
-    }
-    
     protected List<String> loadSectors(List<Long> ids){
         List<AmpSector> sectors = PersistenceManager.getSession().createQuery("from " + AmpSector.class.getName() + " s").list();
         List<String> res = new ArrayList<>();
@@ -69,7 +44,8 @@ public class MultilingualTests extends TestCase
         }
         return res;
     }
-    
+
+    @Test
     public void testTopSectorNames()
     {
         List<Long> sectorIds = Arrays.asList(new Long[] {6476L, 6482L, 6488L, 6493L, 6480L});
@@ -91,7 +67,8 @@ public class MultilingualTests extends TestCase
 
         //System.out.println(sectorNamesEn.size() + sectorNamesRu.size());
     }
-    
+
+    @Test
     public void testActivityDonorNames(){
         TLSUtils.getThreadLocalInstance().setForcedLangCode("en");
         Set<String> donorNamesEn =
@@ -111,7 +88,8 @@ public class MultilingualTests extends TestCase
         assertTrue(donorNamesEn.contains("World Bank"));
         assertTrue(donorNamesRu.contains("Всемирный банк"));
     }
-         
+
+    @Test
     public void testAmpActivityResume()
     {
         //public static Map<Long, Object[]> getAllTeamAmpActivitiesResume(Long teamId, boolean includedraft, String keyword, String...fieldsList) {
@@ -123,7 +101,8 @@ public class MultilingualTests extends TestCase
         assertEquals("Project with documents", actResumesEn.get(23L)[1]);
         assertEquals("Проект с документами", actResumesRu.get(23L)[1]);
     }
-    
+
+    @Test
     public void testGetOrgsByRole()
     {
         // we actually just test that we don't crash + couple of sanity checks
@@ -143,7 +122,8 @@ public class MultilingualTests extends TestCase
         assertTrue(orgNamesRu.contains("Норвегия"));
         ////System.out.println("msh " + orgNamesEn.size() + ", " + orgNamesRu.size());
     }
-        
+
+    @Test
     public void testGetOrgGroups()
     {
         TLSUtils.getThreadLocalInstance().setForcedLangCode("en");
@@ -179,7 +159,8 @@ public class MultilingualTests extends TestCase
         assertNotNull(DbUtil.getAmpOrgGroupByName("Международная"));
         assertNull(DbUtil.getAmpOrgGroupByName("dummy_nonexisting"));
     }
-    
+
+    @Test
     public void testGetOrgTypes()
     {
         //DbUtil.getAllOrgTypes(); nothing to test - superfluous
@@ -208,7 +189,8 @@ public class MultilingualTests extends TestCase
             res.add(aaf.getName());
         return res;
     }
-    
+
+    @Test
     public void testComponentsSearching()
     {
         TLSUtils.getThreadLocalInstance().setForcedLangCode("en");
@@ -219,7 +201,8 @@ public class MultilingualTests extends TestCase
         assertFalse(ComponentsUtil.checkComponentNameExists("First Component", 1L));        
         assertTrue(ComponentsUtil.checkComponentNameExists("Первый подпроект", 1L));
     }
-    
+
+    @Test
     public void testActivitiesSearching()
     {
         TLSUtils.getThreadLocalInstance().setForcedLangCode("en");
@@ -266,7 +249,8 @@ public class MultilingualTests extends TestCase
         assertFalse(actiesRu.contains("Pure MTEF Project"));
         assertFalse(actiesRu.contains("Test MTEF directed"));       
     }
-    
+
+    @Test
     public void testActivitiesLoading() throws Exception
     {
         TeamMember member = new TeamMember(TeamMemberUtil.getAmpTeamMember(12L));// ATL in "test workspace"
@@ -284,12 +268,17 @@ public class MultilingualTests extends TestCase
         assertEquals(true, z.contains("Proposed Project Cost 1 - USD"));
          //public static String[] loadActivitiesNamesAndIds(TeamMember member) throws DgException{
     }
-    
+
+    @Test
     public void testRewriteQuery() throws Exception
     {
         Map<String, String> renames = new HashMap<String, String>() {{put("name", "translateReportName()");put("report_description", "translateReportDescription()");}};
         String res = SQLUtils.rewriteQuery("amp_reports", "r", renames);
-        String corQuery = "r.amp_report_id, translateReportName() AS name, r.options, translateReportDescription() AS report_description, r.type, r.hide_activities, r.drilldown_tab, r.publicreport, r.workspacelinked, r.budget_exporter, r.allow_empty_fund_cols, r.ownerid, r.cv_activity_level, r.report_category, r.updated_date, r.published_date, r.also_show_pledges";
+        String corQuery = "r.amp_report_id, translateReportName() AS name, r.options, "
+                + "translateReportDescription() AS report_description, r.type, r.hide_activities, r.drilldown_tab, "
+                + "r.publicreport, r.workspacelinked, r.budget_exporter, r.allow_empty_fund_cols, r.ownerid, "
+                + "r.cv_activity_level, r.report_category, r.updated_date, r.published_date, r.also_show_pledges, "
+                + "r.split_by_funding, r.show_original_currency";
         assertEquals(corQuery, res);
         
         TLSUtils.getThreadLocalInstance().setForcedLangCode("en");
@@ -309,14 +298,16 @@ public class MultilingualTests extends TestCase
 //      TLSUtils.getThreadLocalInstance().setForcedLangCode("en");
 //      assertEquals("activity with components", ActivityUtil.getActivityByName("activity with components", null));
     }
-    
+
+    @Test
     public void testReportsLookup() throws Exception
     {
 //      TLSUtils.getThreadLocalInstance().setForcedLangCode("ru");
 //      Map<Long, AmpReports> ruLanguageReports = buildMap(ARUtil.getAllPublicReports(false, null, null));
 //      TLSUtils.getThreadLocalInstance().setForcedLangCode("en");
     }
-    
+
+    @Test
     public void testStickyTranslations() throws Exception
     {
         for(int i = 0; i < 50; i++)
@@ -331,7 +322,8 @@ public class MultilingualTests extends TestCase
             assertEquals("Eth Water", enVer);
         }
     }
-    
+
+    @Test
     public void testAmpActivityMappedCorrectly() throws Exception
     {
         TLSUtils.getThreadLocalInstance().setForcedLangCode("ru");

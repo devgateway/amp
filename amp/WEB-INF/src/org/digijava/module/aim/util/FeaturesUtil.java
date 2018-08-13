@@ -631,11 +631,6 @@ public class FeaturesUtil {
         }
     }
 
-    public static int getEsriMapsRegionsHighlightSelectedColourScheme()
-    {
-        return Integer.valueOf(getGlobalSettingValue(GlobalSettingsConstants.ESRI_REGIONS_HIGHLIGHT_COLOUR_SCHEME));
-    }
-    
     public static AmpGlobalSettings getGlobalSetting(String globalSettingName) {
         
         AmpGlobalSettings ampGlobalSettings = null;
@@ -688,6 +683,10 @@ public class FeaturesUtil {
     public static boolean getGlobalSettingValueBoolean(String globalSettingName) {
         String globalValue = getGlobalSettingValue(globalSettingName);
         return (globalValue != null && globalValue.equalsIgnoreCase("true"));
+    }
+    
+    public static boolean isAmpOfflineEnabled() {
+        return FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.AMP_OFFLINE_ENABLED);
     }
 
     /**

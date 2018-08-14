@@ -30,7 +30,7 @@ public class FilterValues {
     public List<KeyValue> possibleOrganisations;
     
     public FilterValues(HttpServletRequest request) {
-        List<String> possibleOwners = TeamMemberUtil.getAllTeamMemberUserMails();
+        possibleOwners = TeamMemberUtil.getAllTeamMemberUserMails();
         Collections.sort(possibleOwners);
         Collection<AmpTeam> allTeams    = TeamUtil.getAllTeams();
         if ( allTeams != null ) {

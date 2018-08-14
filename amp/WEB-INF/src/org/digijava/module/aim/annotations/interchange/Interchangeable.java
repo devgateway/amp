@@ -4,8 +4,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
-import org.digijava.kernel.ampapi.endpoints.activity.ContextMatcher;
-import org.digijava.kernel.ampapi.endpoints.activity.DefaultContextMatcher;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.module.aim.util.Identifiable;
 
@@ -73,6 +71,8 @@ public @interface Interchangeable {
      */
     boolean pickIdOnly() default false;
 
+    Class<?> type() default DefaultType.class;
+
     /**
      * Specifies the dependencies used for later checking in DependencyValidator. 
      * Dependencies (path and value) are encoded via {@link InterchangeDependencyMapper} public static strings,
@@ -86,8 +86,6 @@ public @interface Interchangeable {
     
     Validators validators() default @Validators;
 
-    Class<? extends ContextMatcher> context() default DefaultContextMatcher.class;
-    
     /** regex pattern used for validation (mail, phone, fax) */
     String regexPattern() default "";
     
@@ -97,6 +95,10 @@ public @interface Interchangeable {
 
     int sizeLimit() default 1;
 
-    RegexDiscriminator[] regexPatterns() default {};
+    /**
+     * If type property is set to this class then type will be determined via reflection.
+     */
+    final class DefaultType {
+    }
 
 }

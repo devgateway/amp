@@ -24,6 +24,12 @@ public class APIField {
     @JsonProperty(ActivityEPConstants.FIELD_TYPE)
     private String fieldType;
 
+    /**
+     * Meaningful only when fieldType is list.
+     */
+    @JsonIgnore
+    private Class<?> elementType;
+
     @JsonProperty(ActivityEPConstants.FIELD_LABEL)
     private JsonBean fieldLabel;
 
@@ -294,6 +300,14 @@ public class APIField {
     public void setDiscriminationConfigurer(
             Class<? extends DiscriminationConfigurer> discriminationConfigurer) {
         this.discriminationConfigurer = discriminationConfigurer;
+    }
+
+    public Class<?> getElementType() {
+        return elementType;
+    }
+
+    public void setElementType(Class<?> elementType) {
+        this.elementType = elementType;
     }
 
     @Override

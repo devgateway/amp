@@ -49,7 +49,7 @@ module.exports = Backbone.Model
   initializePalette: function() {
 	  var numStops = this.get('classes') || 5;
 	  var values = this.get('values') || [];
-	  this.palette = new Palette.FromRange({stops: numStops, seed: this.get('id'), values: values });
+	  this.palette = new Palette.FromRange({stops: numStops, seed: this.get('id'), values: values, zeroCategoryEnabled: this.get('zeroCategoryEnabled') });
 
 	  if (this.get('colorRamp') && this.get('colorRamp').length > 0) {
 		  //use the colors provided, if the colorRamp has multiple colors. By default it uses shades of the same color generated in colour-palette.js

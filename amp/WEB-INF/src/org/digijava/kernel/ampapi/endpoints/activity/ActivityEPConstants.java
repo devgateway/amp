@@ -26,7 +26,10 @@ public class ActivityEPConstants {
     public static final String IMPORTABLE = "importable";
     public static final String MULTIPLE_VALUES = "multiple_values";
     public static final String CHILDREN = "children";
+    public static final String REGEX_PATTERN = "regex-pattern";
+    public static final String REGEX_CONSTRAINT = "regex-constraint";
     public static final String PERCENTAGE = "percentage";
+    public static final String SIZE_LIMIT = "size-limit";
     public static final String UNIQUE = "unique";
     public static final String REQUIRED = "required";   
     public static final String ID_ONLY = "id_only";
@@ -47,9 +50,12 @@ public class ActivityEPConstants {
     public static final String TREE_COLLECTION_CONSTRAINT = "tree_collection";
     
     // fields constants
-    public static final String AMP_ACTIVITY_ID_FIELD_NAME = InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ACTIVITY_ID);
+    public static final String AMP_ACTIVITY_ID_FIELD_NAME = 
+            InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ACTIVITY_ID);
     public static final String AMP_ID_FIELD_NAME = InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ID);
-    
+    public static final String MODIFIED_BY_FIELD_NAME = 
+            InterchangeUtils.underscorify(ActivityFieldsConstants.MODIFIED_BY);
+
     public static final String IATI_IDENTIFIER_AMP_FIELD_DEFAULT_NAME = "project_code";
     
     // field types
@@ -72,8 +78,28 @@ public class ActivityEPConstants {
     
     // floating comparison constant
     public static final Double EPSILON = 0.0001;
-    
+
+    public static final String FIELD_TITLE = "_FIELD_TITLE_";
+
+    private static final String FUNDING_ITEM_FM_PATH = "/Activity Form/Funding/Funding Group/Funding Item";
+
     // some FM paths
-    public static final String COMMITMENTS_DISASTER_RESPONSE_FM_PATH = "/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Disaster Response";
-    public static final String DISBURSEMENTS_DISASTER_RESPONSE_FM_PATH = "/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Disaster Response";
+    public static final String COMMITMENTS_DISASTER_RESPONSE_FM_PATH = FUNDING_ITEM_FM_PATH + "/Commitments/Commitments Table/Disaster Response";
+    public static final String DISBURSEMENTS_DISASTER_RESPONSE_FM_PATH = FUNDING_ITEM_FM_PATH + "/Disbursements/Disbursements Table/Disaster Response";
+
+    public static final String COMMITMENTS_PLEDGES_FM_PATH = FUNDING_ITEM_FM_PATH + "/Commitments/Commitments Table/Pledges";
+    public static final String DISBURSEMENTS_PLEDGES_FM_PATH = FUNDING_ITEM_FM_PATH + "/Disbursements/Disbursements Table/Pledges";
+    public static final String ESTIMATED_DISBURSEMENTS_PLEDGES_FM_PATH = FUNDING_ITEM_FM_PATH + "/Estimated Disbursements/Estimated Disbursements Table/Pledges";
+    public static final String RELEASE_OF_FUNDS_PLEDGES_FM_PATH = FUNDING_ITEM_FM_PATH + "/Release of Funds/Release of Funds Table/Pledges";
+
+    public static final String AF_ID_FM_PATH = "/Activity Form/Identification";
+    public static final String DONOR_PROJECT_CODE_FM_PATH = AF_ID_FM_PATH + "/Donor Project Code";
+    public static final String BUDGET_EXTRAS_PROJECT_CODE_FM_PATH = AF_ID_FM_PATH + "/Budget Extras/Project Code";
+    
+    public static final String REGEX_PATTERN_EMAIL = 
+            "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*((\\.[A-Za-z]{2,}){1}$)";
+    public static final String REGEX_PATTERN_PHONE = 
+            "^\\+?\\d?(\\([\\d]{1,3}\\))?[\\s\\d\\-\\/]*\\d+[\\s\\d\\-\\/]*";
+    public static final String REGEX_PATTERN_PHONE_EXTENSION = "^\\d{1,4}$";
+    
 }

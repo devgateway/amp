@@ -7,11 +7,6 @@ package org.digijava.kernel.ampapi.endpoints.activity;
  */
 public enum DependencyCheckResult {
     /**
-     * Defines the state when a dependency isn't valid because the field attempting to be validated is 
-     * required, but no value is supplied. Implies a shift to draft import mode in DependencyValidator.
-     */
-    INVALID_REQUIRED, 
-    /**
      * Defines the state when a dependency isn't valid because the field the import (and validation) is performed into 
      * isn't available. Example: one cannot import a location if no implementation level is selected, since in AF
      * this field would be unavailable. Same goes for ministry code in case the activity isn't on budget.
@@ -33,10 +28,5 @@ public enum DependencyCheckResult {
             return VALID;
         else return INVALID_NOT_CONFIGURABLE;
     }
-    public DependencyCheckResult tristateOr(DependencyCheckResult other) {
-        if (this.equals(INVALID_NOT_CONFIGURABLE) || other.equals(INVALID_NOT_CONFIGURABLE)){
-            return INVALID_NOT_CONFIGURABLE;
-        }
-        return VALID;
-    }
+    
 }

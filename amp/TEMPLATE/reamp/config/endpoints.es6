@@ -7,3 +7,4 @@ export const CONSTANT_CURRENCIES = CURRENCIES + '/constant-currencies';
 export const DEFLATOR_SETTINGS = API_BASE + '/settings-definitions/reports';
 export const DASHBOARD_BASE = API_BASE + '/dashboard';
 export const HEAT_MAP_ADMIN = DASHBOARD_BASE + '/heat-map/settings';
+export const OFFLINE_INSTALLERS = API_BASE + '/amp/amp-offline-release';

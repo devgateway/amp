@@ -11,6 +11,15 @@
 	<!-- * DO NOT ADD ANYTHING BEFORE THIS SEGMENT * -->
 	<!-- ******************************************* -->
 
+	<filter>
+		<filter-name>gzipRequestFilter</filter-name>
+		<filter-class>org.digijava.kernel.web.gzip.GzipRequestFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>gzipRequestFilter</filter-name>
+		<url-pattern>/rest/*</url-pattern>
+	</filter-mapping>
+
 <!-- Saiku parts -->
 	<filter>
 		<filter-name>org.springframework.security.filterChainProxy</filter-name>
@@ -122,13 +131,6 @@
 			org.digijava.module.aim.patches.DBPatcher:patchAMPDB
 		</param-value>
 	</context-param>
-	<context-param>
-		<param-name>contextConfigLocation</param-name>
-		<param-value>
-			/WEB-INF/spring/application-context.xml
-			/WEB-INF/saiku/context.xml
-		</param-value>
-	</context-param>
 
 
 	<!-- Apache Wicket -->
@@ -190,6 +192,24 @@
 			org.springframework.web.context.ContextLoaderListener
 		</listener-class>
 	</listener>
+
+	<filter>
+		<filter-name>ampOfflineClientDetector</filter-name>
+		<filter-class>org.digijava.kernel.ampapi.filters.AmpOfflineClientDetectorFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>ampOfflineClientDetector</filter-name>
+		<url-pattern>/rest/*</url-pattern>
+	</filter-mapping>
+
+	<filter>
+		<filter-name>apiCompatFilter</filter-name>
+		<filter-class>org.digijava.kernel.ampapi.endpoints.activity.utils.ApiCompatFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>apiCompatFilter</filter-name>
+		<url-pattern>/rest/*</url-pattern>
+	</filter-mapping>
 	
 	<!-- Jersey Servlet  -->
 	<servlet>
@@ -217,6 +237,10 @@
     	 <init-param>
 			<param-name>com.sun.jersey.spi.container.ContainerResponseFilters</param-name>
 			<param-value>org.digijava.kernel.ampapi.endpoints.common.ApiResponseFilter</param-value>
+		</init-param>
+		<init-param>
+			<param-name>com.sun.jersey.spi.container.ResourceFilters</param-name>
+			<param-value>org.digijava.kernel.ampapi.endpoints.security.AuthorizerResourceFilterFactory</param-value>
 		</init-param>
 		 
     	<init-param>

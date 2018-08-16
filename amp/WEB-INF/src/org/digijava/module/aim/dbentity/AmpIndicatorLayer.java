@@ -32,7 +32,8 @@ public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicator
     private Date createdOn;
     private Date updatedOn;
     private AmpTeamMember createdBy;
-
+    private Boolean zeroCategoryEnabled;
+    
     public Long getId() {
         return id;
     }
@@ -99,12 +100,7 @@ public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicator
     }
 
     public void setColorRamp(Set<AmpIndicatorColor> colorRamp) {
-        if (this.colorRamp == null) {
-            this.colorRamp = colorRamp;
-        } else {
-            this.colorRamp.retainAll(colorRamp);
-            this.colorRamp.addAll(colorRamp);
-        }
+        this.colorRamp = colorRamp;
     }
 
     public Set<AmpLocationIndicatorValue> getIndicatorValues() {
@@ -113,12 +109,7 @@ public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicator
 
 
     public void setIndicatorValues(Set<AmpLocationIndicatorValue> indicatorValues) {
-        if (this.indicatorValues == null) {
-            this.indicatorValues = indicatorValues;
-        } else {
-            this.indicatorValues.retainAll(indicatorValues);
-            this.indicatorValues.addAll(indicatorValues);
-        }
+        this.indicatorValues = indicatorValues;
     }
 
     public String getUnit() {
@@ -166,12 +157,7 @@ public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicator
     }
 
     public void setSharedWorkspaces(Set<AmpIndicatorWorkspace> sharedWorkspaces) {
-        if (this.sharedWorkspaces == null) {
-            this.sharedWorkspaces = sharedWorkspaces;
-        } else {
-            this.sharedWorkspaces.retainAll(sharedWorkspaces);
-            this.sharedWorkspaces.addAll(sharedWorkspaces);
-        }
+        this.sharedWorkspaces = sharedWorkspaces;
     }
 
     /**
@@ -201,4 +187,14 @@ public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicator
     public void setPopulation(Boolean population) {
         this.population = population;
     }
+
+    public Boolean getZeroCategoryEnabled() {
+        return zeroCategoryEnabled;
+    }
+
+    public void setZeroCategoryEnabled(Boolean zeroCategoryEnabled) {
+        this.zeroCategoryEnabled = zeroCategoryEnabled;
+    }
+
+   
 }

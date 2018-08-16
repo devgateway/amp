@@ -65,8 +65,8 @@ import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
 import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponse;
 import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponseDocument;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
-import org.digijava.module.aim.dbentity.AmpPerformanceRule;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpPerformanceRule;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.dbentity.AmpStructureImg;
@@ -321,6 +321,7 @@ public class ActivityUtil {
         updateComponentFunding(a, session);
         saveAnnualProjectBudgets(a, session);
         saveProjectCosts(a, session);
+        saveStructures(a, session);
         updateFiscalYears(a);
 
         if (createNewVersion){
@@ -1279,6 +1280,18 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
             for (AmpAnnualProjectBudget annualBudget : a.getAnnualProjectBudgets()){
                 annualBudget.setActivity(a);
                 session.saveOrUpdate(annualBudget);
+            }
+        }
+    }
+    
+    private static void saveStructures(AmpActivityVersion a, Session session) throws Exception {
+        if (a.getAmpActivityId() != null) {
+            for (AmpStructure structure : a.getStructures()) {
+                if (structure.getActivities() == null) {
+                    structure.setActivities(new HashSet<AmpActivityVersion>());
+                    structure.getActivities().add(a);
+                }
+                session.saveOrUpdate(structure);
             }
         }
     }

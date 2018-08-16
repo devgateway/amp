@@ -26,7 +26,7 @@ public class JerseyAmpRegistryClient implements AmpRegistryClient {
 
     private Client client;
 
-    private UriBuilder uriBuilder;
+    private String baseUrl;
 
     public JerseyAmpRegistryClient() {
         ClientConfig clientConfig = new DefaultClientConfig();
@@ -34,13 +34,12 @@ public class JerseyAmpRegistryClient implements AmpRegistryClient {
 
         client = Client.create(clientConfig);
 
-        String url = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMP_REGISTRY_URL);
-        uriBuilder = UriBuilder.fromUri(url);
+        baseUrl = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMP_REGISTRY_URL);
     }
 
     @Override
     public List<AmpOfflineRelease> getReleases() {
-        return client.resource(uriBuilder.path(AMP_OFFLINE_RELEASE_RESOURCE).build())
+        return client.resource(UriBuilder.fromUri(baseUrl).path(AMP_OFFLINE_RELEASE_RESOURCE).build())
                 .accept(MediaType.APPLICATION_JSON_TYPE)
                 .get(new GenericType<List<AmpOfflineRelease>>() { });
     }
@@ -52,7 +51,7 @@ public class JerseyAmpRegistryClient implements AmpRegistryClient {
 
     @Override
     public List<AmpInstallation> listAmpInstallations(String secretToken) {
-        return client.resource(uriBuilder.path(AMP_REGISTRY_RESOURCE).build())
+        return client.resource(UriBuilder.fromUri(baseUrl).path(AMP_REGISTRY_RESOURCE).build())
                 .header(SECRET_TOKEN_HEADER, secretToken)
                 .accept(MediaType.APPLICATION_JSON_TYPE)
                 .get(new GenericType<List<AmpInstallation>>() { });
@@ -60,7 +59,7 @@ public class JerseyAmpRegistryClient implements AmpRegistryClient {
 
     @Override
     public void createAmpInstallation(AmpInstallation installation, String secretToken) {
-        client.resource(uriBuilder.path(AMP_REGISTRY_RESOURCE).build())
+        client.resource(UriBuilder.fromUri(baseUrl).path(AMP_REGISTRY_RESOURCE).build())
                 .header(SECRET_TOKEN_HEADER, secretToken)
                 .type(MediaType.APPLICATION_JSON_TYPE)
                 .put(installation);
@@ -68,7 +67,7 @@ public class JerseyAmpRegistryClient implements AmpRegistryClient {
 
     @Override
     public void updateAmpInstallation(Long id, AmpInstallation installation, String secretToken) {
-        client.resource(uriBuilder.path(AMP_REGISTRY_RESOURCE).path(id.toString()).build())
+        client.resource(UriBuilder.fromUri(baseUrl).path(AMP_REGISTRY_RESOURCE).path(id.toString()).build())
                 .header(SECRET_TOKEN_HEADER, secretToken)
                 .type(MediaType.APPLICATION_JSON_TYPE)
                 .post(installation);

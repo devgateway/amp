@@ -2,6 +2,7 @@ package org.digijava.kernel.ampregistry;
 
 import java.io.InputStream;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -34,7 +35,7 @@ public class AmpRegistryService {
             List<AmpInstallation> installations = client.listAmpInstallations(secretToken);
 
             AmpInstallation existingInstallation = installations.stream()
-                    .filter(i -> i.getServerId().equals(installation.getServerId()))
+                    .filter(i -> Objects.equals(i.getServerId(), installation.getServerId()))
                     .findFirst()
                     .orElse(null);
 

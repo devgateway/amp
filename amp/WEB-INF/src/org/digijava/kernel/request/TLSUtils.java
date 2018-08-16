@@ -165,7 +165,7 @@ public class TLSUtils {
         return res;
     }
     
-    public static void populate(HttpServletRequest request){
+    public static void populate(HttpServletRequest request) {
         SiteDomain siteDomain = SiteCache.getInstance().getSiteDomain(request.getServerName(), null);
         populate(request, siteDomain);
     }

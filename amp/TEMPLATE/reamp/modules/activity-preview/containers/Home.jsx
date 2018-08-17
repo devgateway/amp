@@ -16,7 +16,7 @@ export default class App extends Component {
     getActivity(activityId){       
         var component = <div></div>;  
         if (activityId > 0) {            
-            component = <ActivityView/>;    
+            //component = <ActivityView/>;    
         } 
         
         return component;
@@ -26,23 +26,23 @@ export default class App extends Component {
     render() { 
       
       return (
-            <div >             
-             <div className="title-bar">
-             <div className="container">
-               <h2>{this.props.translations['amp.activity-preview:main-title']}</h2>
-			   <div className="activity" >{this.getActivity('16704')}</div>
-                
-             </div>
-           </div>
+            <div>             
+                <div className="title-bar">
+                    <div className="container">
+                        <h2>{this.props.translations['amp.activity-preview:main-title']}</h2>
+                        <div className="activity" >{this.getActivity('16704')}</div>
+                    </div>
+                    </div>
+            </div>
              
         );
     }
 }
 
 function mapStateToProps(state, ownProps) { 
-    return {
+    return { 
         translations: state.startUp.translations,
-        translate: state.startUp.translate,
+        translate: state.startUp.translate
     }
 }
 

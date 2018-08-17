@@ -15,7 +15,7 @@ export default class ActivityView extends Component {
 
     initializeFiltersAndSettings() {
         this.props.actions.getFields();
-        this.props.actions.getActivity(false);
+        this.props.actions.getActivity(activityId);
     }
 
 	
@@ -33,7 +33,7 @@ function mapStateToProps( state, ownProps ) {
 }
 
 function mapDispatchToProps( dispatch ) {
-    return { actions: bindActionCreators( Object.assign( {}, reportsActions, commonListsActions ), dispatch ) }
+    return { actions: bindActionCreators( Object.assign( {}, commonListsActions ), dispatch ) }
 }
 
 export default connect( mapStateToProps, mapDispatchToProps )( ActivityView );

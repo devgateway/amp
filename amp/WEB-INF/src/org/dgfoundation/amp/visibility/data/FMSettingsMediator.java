@@ -56,6 +56,16 @@ public class FMSettingsMediator {
         }
         return Collections.emptySet();
     }
+
+    /**
+     * Retrieves a set of all settings for the given FM group name
+     * @param fmGroupName
+     * @return
+     */
+    public static Set<String> getSettings(String fmGroupName) {
+        FMSettings fmGroup = getFMSettings(fmGroupName);
+        return fmGroup.getSettings();
+    }
     
     protected static FMSettings getFMSettings(String fmGroupName) {
         Map<String, FMSettings> templateGroup = getTemplate(FeaturesUtil.getCurrentTemplateId());

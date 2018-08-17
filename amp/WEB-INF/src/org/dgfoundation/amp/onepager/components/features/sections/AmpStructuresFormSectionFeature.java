@@ -237,7 +237,7 @@ public class AmpStructuresFormSectionFeature extends
                             List<Map<String, String>> coordinates = (List<Map<String, String>>) data.get("coordinates");
                             AmpStructure structure = structureModel.getObject();
                             if (structure.getCoordinates() == null) {
-                                structure.setCoordinates(new LinkedHashSet<>());
+                                structure.setCoordinates(new ArrayList<>());
                             } else {
                                 structure.getCoordinates().clear();
                             }
@@ -305,12 +305,6 @@ public class AmpStructuresFormSectionFeature extends
             @Override
             public void onClick(AjaxRequestTarget target) {
                 AmpStructure stru = new AmpStructure();
-                if(FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.DEFAULT_STRUCTURE_TYPE)!=-1){
-                    AmpStructureType s=(AmpStructureType)PersistenceManager.getSession().load(AmpStructureType.class, 
-                            FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.DEFAULT_STRUCTURE_TYPE));
-                    stru.setType(s);    
-                }
-                
                 list.addItem(stru);
                 target.add(this.getParent());
                 target.add(containter);

@@ -2,6 +2,7 @@ package org.digijava.kernel.ampapi.endpoints.errors;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Defines API Error Message template and stores custom value if needed
@@ -72,20 +73,15 @@ public class ApiErrorMessage {
 
     /**
      * Configures an {@link #ApiErrorMessage(Integer, String, String)} with more details
-     * @param values details, see {@link #values}
+     * @param details details, see {@link #values}
      */
-    public ApiErrorMessage withDetails(List<String> values) {
+    public ApiErrorMessage withDetails(List<String> details) {
         List<String> newValues = new ArrayList<>();
         if (values != null) {
             newValues.addAll(values);
         }
-        newValues.addAll(values);
+        newValues.addAll(details);
         return new ApiErrorMessage(id, description, prefix, newValues);
-    }
-    
-    @Override
-    public int hashCode() {
-        return (19 + id) * 23 + description.hashCode();
     }
     
     @Override
@@ -96,4 +92,19 @@ public class ApiErrorMessage {
                 (values == null ? "" :  " : " + values);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ApiErrorMessage message = (ApiErrorMessage) o;
+        return Objects.equals(id, message.id) &&
+                Objects.equals(description, message.description) &&
+                Objects.equals(prefix, message.prefix) &&
+                Objects.equals(values, message.values);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, description, prefix, values);
+    }
 }

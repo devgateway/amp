@@ -71,6 +71,7 @@ public class ResourceManager {
     @GET
     @Path("file-types")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = false, id = "getAllFiletypes", authTypes = AuthRule.IN_ADMIN)
     public List<AmpFileType> getAllFiletypes() {
         FileTypeManager fileTypeManager = FileTypeManager.getInstance();
 
@@ -113,6 +114,7 @@ public class ResourceManager {
     @GET
     @Path("file-types/allowed")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = false, id = "getAllowedFileTypes", authTypes = AuthRule.IN_WORKSPACE)
     public List<AmpFileType> getAllowedFileTypes() {
         FileTypeManager fileTypeManager = FileTypeManager.getInstance();
 
@@ -155,6 +157,7 @@ public class ResourceManager {
     @POST
     @Path("save-settings")
     @Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = false, id = "saveSettings", authTypes = AuthRule.IN_ADMIN)
     @SuppressWarnings("unchecked")
     public Response saveSettings(JsonBean settings) throws AMPException {
         List<String> allowedFileType = (List<String>) settings.get("allowedFileType");

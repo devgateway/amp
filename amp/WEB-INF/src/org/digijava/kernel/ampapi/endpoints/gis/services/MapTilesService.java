@@ -87,10 +87,10 @@ public final class MapTilesService {
             changelog = new AmpOfflineChangelog();
             changelog.setEntityName(SyncConstants.Entities.MAP_TILES);
             changelog.setOperationName(SyncConstants.Ops.UPDATED);
+            session.save(changelog);
         }
         
         changelog.setOperationTime(new Date());
-        session.save(changelog);
     }
 
 }

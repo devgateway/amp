@@ -73,7 +73,7 @@ public class SetAttributes extends Action {
                 hbSession.save(docAttributes);
                 NodeWrapper nw = new NodeWrapper(lastVersionNode);
                 if (nw.getName().equals(MapTilesService.FILE_NAME)) {
-                    MapTilesService.getInstance().addOfflineChangeLog(hbSession);
+                    MapTilesService.getInstance().updateOfflineChangeLog(hbSession);
                 }
             }
 //session.flush();
@@ -106,7 +106,7 @@ public class SetAttributes extends Action {
                 hbSession.delete(docNodeAtt);
                 NodeWrapper nw = new NodeWrapper(lastVersionNode);
                 if (nw.getName().equals(MapTilesService.FILE_NAME)) {
-                    MapTilesService.getInstance().addOfflineChangeLog(hbSession);
+                    MapTilesService.getInstance().updateOfflineChangeLog(hbSession);
                 }
             }
 //session.flush();

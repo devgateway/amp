@@ -19,6 +19,7 @@ import org.digijava.module.contentrepository.dbentity.CrDocumentNodeAttributes;
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
+import org.hibernate.Query;
 import org.hibernate.Session;
 
 /**
@@ -77,10 +78,17 @@ public final class MapTilesService {
         }
     }
     
-    public void addOfflineChangeLog(Session session) throws RepositoryException {
-        AmpOfflineChangelog changelog = new AmpOfflineChangelog();
-        changelog.setEntityName(SyncConstants.Entities.MAP_TILES);
-        changelog.setOperationName(SyncConstants.Ops.UPDATED);
+    public void updateOfflineChangeLog(Session session) throws RepositoryException {
+        Query query = session.createQuery("from AmpOfflineChangelog item where item.entityName = :entityName");
+        query.setString("entityName", SyncConstants.Entities.MAP_TILES);
+        AmpOfflineChangelog changelog = (AmpOfflineChangelog) query.uniqueResult();
+                
+        if (changelog == null) {
+            changelog = new AmpOfflineChangelog();
+            changelog.setEntityName(SyncConstants.Entities.MAP_TILES);
+            changelog.setOperationName(SyncConstants.Ops.UPDATED);
+        }
+        
         changelog.setOperationTime(new Date());
         session.save(changelog);
     }

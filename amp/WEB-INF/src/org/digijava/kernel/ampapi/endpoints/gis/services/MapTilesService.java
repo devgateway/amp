@@ -1,6 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.gis.services;
 
 import java.io.InputStream;
+import java.util.Date;
 import java.util.List;
 
 import javax.jcr.Node;
@@ -11,11 +12,14 @@ import javax.ws.rs.core.Response;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.services.sync.model.SyncConstants;
+import org.digijava.module.aim.dbentity.AmpOfflineChangelog;
 import org.digijava.module.aim.util.DocumentUtil;
 import org.digijava.module.contentrepository.dbentity.CrDocumentNodeAttributes;
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
+import org.hibernate.Session;
 
 /**
  * Service clas used to download map tiles
@@ -71,6 +75,14 @@ public final class MapTilesService {
             logger.error(e.getMessage(), e);
             return Response.serverError().build();
         }
+    }
+    
+    public void addOfflineChangeLog(Session session) throws RepositoryException {
+        AmpOfflineChangelog changelog = new AmpOfflineChangelog();
+        changelog.setEntityName(SyncConstants.Entities.MAP_TILES);
+        changelog.setOperationName(SyncConstants.Ops.UPDATED);
+        changelog.setOperationTime(new Date());
+        session.save(changelog);
     }
 
 }

@@ -7,15 +7,15 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.sql.SQLException;
+import java.util.Date;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.services.sync.model.SyncConstants;
+import org.digijava.module.aim.dbentity.AmpOfflineChangelog;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-
-import org.apache.log4j.Logger;
-import org.dgfoundation.amp.ar.MetaInfo;
-import org.digijava.kernel.persistence.PersistenceManager;
 
 /**
  * @author mihai
@@ -55,16 +55,29 @@ public abstract class AmpImporter {
         
         session = PersistenceManager.getSession(); // ensure a clean Session exists
         try {
+            boolean locatorsUpdated = false;
             while (true) {          
                 Map<String, String> o = parseNextLine();
                 if (o == null) break;
                 saveToDB(o);
+                locatorsUpdated = true;
             };
+            if (locatorsUpdated) {
+                addLocatorsAmpOfflineChangelog();
+            }
         } catch (Exception e) {
             logger.error("error while running import on " + this.getClass().getName(), e);
         }
         PersistenceManager.closeQuietly(fr);
         PersistenceManager.endSessionLifecycle();
+    }
+
+    private void addLocatorsAmpOfflineChangelog() {
+        AmpOfflineChangelog changelog = new AmpOfflineChangelog();
+        changelog.setEntityName(SyncConstants.Entities.LOCATORS);
+        changelog.setOperationName(SyncConstants.Ops.UPDATED);
+        changelog.setOperationTime(new Date());
+        session.save(changelog);
     }
 
     protected abstract String getFileType();

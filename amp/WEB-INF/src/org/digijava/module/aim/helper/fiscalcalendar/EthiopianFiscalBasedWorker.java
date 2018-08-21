@@ -108,14 +108,14 @@ public class EthiopianFiscalBasedWorker implements ICalendarWorker {
 
     @Override
     public String getFiscalYear(String prefix) throws Exception {
-        if (this.fiscalCalendar.getIsFiscal()) {
-            if (fiscalCalendar.getStartMonthNum() == 1) {
-                return getFiscalPrefix(prefix) + " " + (this.getYear());
-            } else {
-                return getFiscalPrefix(prefix) + " " + (this.getYear()) + " - " + (this.getYear() + 1);
-            }
-        }
-        return this.getYear().toString();
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public int parseYear(String year, String prefix) {
+        // TODO Auto-generated method stub
+        return 0;
     }
 
 }

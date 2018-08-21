@@ -1,7 +1,6 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -12,7 +11,6 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.newreports.CalendarConverter;
 import org.dgfoundation.amp.nireports.TranslatedDate;
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.helper.donorReport.OrgProfileValue;
 import org.digijava.module.aim.helper.donorReport.ValueTranslatabePair;
 import org.digijava.module.aim.helper.fiscalcalendar.EthiopianBasedWorker;
@@ -22,26 +20,23 @@ import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 import org.digijava.module.aim.helper.fiscalcalendar.NepaliBasedWorker;
 import org.digijava.module.aim.util.Identifiable;
 
-import java.util.Arrays;
-
 public class AmpFiscalCalendar implements Serializable, Identifiable, OrgProfileValue, CalendarConverter {
     
     //IATI-check: to be ignored
-//  @Interchangeable(fieldTitle="Fiscal Calendar ID")
     private Long ampFiscalCalId;
-//  @Interchangeable(fieldTitle="Start Month Number")
+
     private Integer startMonthNum;
-//  @Interchangeable(fieldTitle="Year Offset")
+
     private Integer yearOffset;
-//  @Interchangeable(fieldTitle="Start Day Number")
+
     private Integer startDayNum;
-//  @Interchangeable(fieldTitle="Name")
+
     private String name;
-//  @Interchangeable(fieldTitle="Description")
+
     private String description;
-//  @Interchangeable(fieldTitle="Base Calendar")
+
     private String baseCal;
-//  @Interchangeable(fieldTitle="Is Fiscal")
+
     private Boolean isFiscal; // This indicates whether calendar is fiscal or
 
     // not.

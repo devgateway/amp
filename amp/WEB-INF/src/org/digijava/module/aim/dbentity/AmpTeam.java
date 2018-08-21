@@ -20,7 +20,6 @@ import org.dgfoundation.amp.ar.dbentity.AmpTeamFilterData;
 import org.dgfoundation.amp.ar.dbentity.FilterDataSetInterface;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.digijava.kernel.ampapi.endpoints.serializers.AmpTeamSerializer;
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.PossibleValueId;
 import org.digijava.module.aim.annotations.interchange.PossibleValueValue;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
@@ -35,11 +34,9 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 public class AmpTeam  implements Serializable, Comparable, Identifiable, /*Versionable,*/ FilterDataSetInterface<AmpTeamFilterData>,  
                                     NameableOrIdentifiable {
     private static final Logger logger = Logger.getLogger(AmpTeam.class);
-    @Interchangeable(fieldTitle = "id")
     @PossibleValueId
     private Long ampTeamId;
     @TranslatableField
-    @Interchangeable(fieldTitle = "name")
     @PossibleValueValue
     private String name;
     

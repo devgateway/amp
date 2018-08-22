@@ -114,7 +114,7 @@ public class ResourceManager {
     @GET
     @Path("file-types/allowed")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = false, id = "getAllowedFileTypes", authTypes = AuthRule.IN_WORKSPACE)
+    @ApiMethod(ui = false, id = "getAllowedFileTypes", authTypes = AuthRule.IN_ADMIN)
     public List<AmpFileType> getAllowedFileTypes() {
         FileTypeManager fileTypeManager = FileTypeManager.getInstance();
 

@@ -129,4 +129,16 @@ public class EthiopianBasedWorker implements ICalendarWorker {
         }
         return this.getYear().toString();
     }
+
+    @Override
+    public int parseYear(String year, String prefix) {
+        String parsedYear = year;
+        if (this.fiscalCalendar.getIsFiscal()) {
+            parsedYear = year.substring(getFiscalPrefix(prefix).length() + 1, 
+                    getFiscalPrefix(prefix).length() + YEAR_OFFSET_STRING);
+        }
+        
+        return Integer.parseInt(parsedYear);
+    }
+
 }

@@ -1,6 +1,13 @@
 import commonListsApi from '../api/CommonListsApi.jsx';
 
 
+/**
+ * @author Daniel Oliva
+ */
+
+export function getActivityLoading(){
+    return {type: 'LOADING_ACTIVITY'}
+}
 
 export function getActivitySuccess(activity){
     return {type: 'LOAD_ACTIVITY_SUCCESS', activity: activity}
@@ -16,6 +23,7 @@ export function getFieldSubListSuccess(fieldSublist){
 
 export function getActivity(activityId){
     return function(dispatch) {
+        dispatch(getActivityLoading());
         return commonListsApi.getActivity(activityId).then(response => {
             dispatch(getActivitySuccess(response));
         }).catch(error => {

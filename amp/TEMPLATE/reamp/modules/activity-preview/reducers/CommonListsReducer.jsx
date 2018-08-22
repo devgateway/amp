@@ -1,10 +1,28 @@
-const defaultState = {activity: {}, fields: [], fieldSublist:[]};
+/**
+ * @author Daniel Oliva
+ */
+
+const defaultState = {
+    isActivityLoading: false,
+    isActivityLoaded: false,
+    isActivityHydrated: false,
+    activity: undefined, 
+    fields: undefined, 
+    fieldSublist: undefined
+};
+
 
 export default function commonListsReducer(state: Object = defaultState, action: Object) { 
-    switch (action.type) {               
+    switch (action.type) {
+    case 'LOADING_ACTIVITY':
+        var newState = Object.assign({}, state); 
+        newState.isActivityLoading = true;        
+        return  newState;              
     case 'LOAD_ACTIVITY_SUCCESS': 
         var newState = Object.assign({}, state); 
-        newState.activity = action.activity
+        newState.activity = action.activity;
+        newState.isActivityLoading = false;
+        newState.isActivityLoaded = true;
         return  newState; 
     case 'LOAD_FIELDS_SUCCESS':
         var newState = Object.assign({}, state); 

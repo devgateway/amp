@@ -2,6 +2,11 @@ import { combineReducers } from "redux";
 import { routerReducer as routing } from "react-router-redux";
 import startUp from "./StartUpReducer";
 import commonLists from "./CommonListsReducer.jsx"
+
+/**
+ * @author Daniel Oliva
+ */
+
 const rootReducer = combineReducers({
    routing,
    startUp,

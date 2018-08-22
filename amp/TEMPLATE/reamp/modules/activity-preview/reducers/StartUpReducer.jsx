@@ -1,5 +1,10 @@
 import { STATE_TRANSLATIONS_LOADED } from '../actions/StartUpAction.jsx';
 
+/**
+ * @author Daniel Oliva
+ */
+
+ 
 const defaultState = {
     translations: {}
 };

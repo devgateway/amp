@@ -516,14 +516,6 @@ public class Security implements ErrorReportingEndpoint {
     }
 
     /**
-     * Authorizes Container Request
-     * @param containerReq
-     */
-    public static void authorize(ContainerRequest containerReq) {
-        ApiAuthorization.authorize(containerReq);
-    }
-    
-    /**
      * THIS IS FOR DEBUG ONLY. Must be disabled on production.
      * @param token
      * @return

@@ -196,7 +196,7 @@ public class ResourceEndpoint implements ErrorReportingEndpoint {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "createResource", ui = false)
+    @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_OPTIONAL}, id = "createResource", ui = false)
     public JsonBean createResource(JsonBean resource) {
         ResourceImporter importer = new ResourceImporter();
         List<ApiErrorMessage> errors = importer.createResource(resource);
@@ -221,7 +221,8 @@ public class ResourceEndpoint implements ErrorReportingEndpoint {
     @PUT
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "createResourceWithDoc", ui = false)
+    @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_OPTIONAL}, 
+                    id = "createResourceWithDoc", ui = false)
     public JsonBean createDocResource(
             @FormDataParam("resource") JsonBean resource,
             @FormDataParam("file") InputStream uploadedInputStream,

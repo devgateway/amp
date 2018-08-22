@@ -147,7 +147,7 @@ public class ContactEndpoint implements ErrorReportingEndpoint {
      */
     @PUT
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "createContact", ui = false)
+    @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_OPTIONAL}, id = "createContact", ui = false)
     public JsonBean createContact(JsonBean contact) {
         ContactImporter importer = new ContactImporter();
         List<ApiErrorMessage> errors = importer.createContact(contact);
@@ -163,7 +163,7 @@ public class ContactEndpoint implements ErrorReportingEndpoint {
     @POST
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "updateContact", ui = false)
+    @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_OPTIONAL}, id = "updateContact", ui = false)
     public JsonBean updateContact(@PathParam("id") Long id, JsonBean contact) {
         ContactImporter importer = new ContactImporter();
         List<ApiErrorMessage> errors = importer.updateContact(id, contact);

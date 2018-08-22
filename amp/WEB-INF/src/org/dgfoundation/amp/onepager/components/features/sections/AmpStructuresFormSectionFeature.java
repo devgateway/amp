@@ -237,7 +237,7 @@ public class AmpStructuresFormSectionFeature extends
                             List<Map<String, String>> coordinates = (List<Map<String, String>>) data.get("coordinates");
                             AmpStructure structure = structureModel.getObject();
                             if (structure.getCoordinates() == null) {
-                                structure.setCoordinates(new LinkedHashSet<>());
+                                structure.setCoordinates(new ArrayList<>());
                             } else {
                                 structure.getCoordinates().clear();
                             }

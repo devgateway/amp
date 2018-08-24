@@ -1,9 +1,10 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as commonListsActions from '../actions/CommonListsActions';
-import styles from './ActivityView.css';
 import * as AC from '../utils/ActivityConstants';
+import StatusBar from './sections/StatusBar';
+require('../styles/ActivityView.css');
 
 /**
  * @author Daniel Oliva
@@ -19,16 +20,27 @@ export default class ActivityView extends Component {
     }
 
     initializeFieldsAndActivity() {
-        this.props.actions.getFields();
-        this.props.actions.getActivity(this.props.activityId);
+        this.props.actions.getActivityAndFields(this.props.activityId);
     }
 
     _renderData() {
         const activity = this.props.activity;
+        debugger;
+        const translations = this.props.translations;
         return (
-            <div className={styles.preview_container}>
-                <div className={styles.preview_header} >
-                    <span className={styles.preview_title} >{activity[AC.PROJECT_TITLE]}</span>
+            <div className="preview_container">
+                <div className="preview_header">
+                    <span className="preview_title">
+                        {activity[0][AC.PROJECT_TITLE].value}
+                    </span>
+                    <div className="preview_status_container" >
+                        <StatusBar activity={activity}
+                            translations={translations}
+                            fieldNameClass="preview_status_title" 
+                            fieldValueClass="preview_status_detail"
+                            inline titleClass="status_title_class" 
+                            groupClass="status_group_class" />
+                    </div>
                 </div>
             </div>
         );
@@ -36,14 +48,14 @@ export default class ActivityView extends Component {
 
 	
 	_hasActivity() {
-        return this.props.activity !== undefined && this.props.activity !== null;
+        return this.props.activity !== undefined && this.props.isActivityHydrated;
     }
     
     _getMessage() {
         let message = null;
-        if (this.props.isActivityLoading === true) {
+        if (this.props.isActivityHydratedLoading === true) {
             message = this.props.translations['amp.activity-preview:activityLoading'];
-        } else if (this.props.isActivityLoaded === true) {
+        } else if (this.props.isActivityHydrated === true) {
             if (!this.props.activity) {
                 message = this.props.translations['amp.activity-preview:activityUnexpectedError'];
             }
@@ -65,10 +77,9 @@ export default class ActivityView extends Component {
 function mapStateToProps( state, ownProps ) {
     return {
         activityId: ownProps.params.id,
-        activity: state.commonLists.activity,
-        isActivityLoading: state.commonLists.isActivityLoading,
-        isActivityLoaded: state.commonLists.isActivityLoaded,
-        fields: state.commonLists.fields,
+        activity: state.commonLists.hydratedActivity,
+        isActivityHydratedLoading: state.commonLists.isActivityHydratedLoading,
+        isActivityHydrated: state.commonLists.isActivityHydrated,
         translations: state.startUp.translations,
         translate: state.startUp.translate
     }

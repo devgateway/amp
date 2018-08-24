@@ -27,8 +27,9 @@ class CommonListsApi {
    }
    
    static getFieldSubList(parentName, childrenName){
+       let fieldName = childrenName ? parentName + '~' + childrenName : parentName;
        return new Promise((resolve, reject) => {
-           fetchJson('/rest/activity/fields/' + parentName + '~' + childrenName).then((fields) => {                            
+           fetchJson('/rest/activity/fields/' + fieldName).then((fields) => {                            
                resolve(fields);
            }).catch((error) => {
                reject(error);

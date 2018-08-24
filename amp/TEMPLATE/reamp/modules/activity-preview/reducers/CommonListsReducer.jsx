@@ -5,10 +5,11 @@
 const defaultState = {
     isActivityLoading: false,
     isActivityLoaded: false,
+    isActivityHydratedLoading: false,
     isActivityHydrated: false,
     activity: undefined, 
-    fields: undefined, 
-    fieldSublist: undefined
+    hydratedActivity: undefined, 
+    fields: undefined
 };
 
 
@@ -17,12 +18,23 @@ export default function commonListsReducer(state: Object = defaultState, action:
     case 'LOADING_ACTIVITY':
         var newState = Object.assign({}, state); 
         newState.isActivityLoading = true;        
-        return  newState;              
+        return  newState;
+    case 'LOADING_HYDRATED_ACTIVITY':
+        var newState = Object.assign({}, state); 
+        newState.isActivityHydratedLoading = true;  
+        newState.hydratedActivity = action.hydratedActivity;
+        return  newState;
     case 'LOAD_ACTIVITY_SUCCESS': 
         var newState = Object.assign({}, state); 
         newState.activity = action.activity;
         newState.isActivityLoading = false;
         newState.isActivityLoaded = true;
+        return  newState; 
+    case 'LOAD_HYDRATED_ACTIVITY_SUCCESS': 
+        var newState = Object.assign({}, state); 
+        newState.hydratedActivity = action.hydratedActivity;
+        newState.isActivityHydratedLoading = false;  
+        newState.isActivityHydrated = true;
         return  newState; 
     case 'LOAD_FIELDS_SUCCESS':
         var newState = Object.assign({}, state); 
@@ -30,7 +42,6 @@ export default function commonListsReducer(state: Object = defaultState, action:
         return  newState; 
     case 'LOAD_FIELD_SUBLIST_SUCCESS':
         var newState = Object.assign({}, state); 
-        newState.fieldSublist = action.fieldSublist;        
         return  newState; 
     default:            
         return state;

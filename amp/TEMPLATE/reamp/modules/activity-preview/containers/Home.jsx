@@ -1,11 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import * as startUp from '../actions/StartUpAction';
 import * as commonListsActions from '../actions/CommonListsActions';
 require('../styles/main.less');
 require('bootstrap');
-import ActivityView from '../components/ActivityView';
 
 /**
  * @author Daniel Oliva
@@ -22,9 +20,7 @@ export default class App extends Component {
       return (
             <div>             
                 <div className="title-bar">
-                    <div className="container">
-                        <h2>{this.props.translations['amp.activity-preview:main-title']}</h2>
-                    </div>
+                    <h2>{this.props.translations['amp.activity-preview:main-title']}</h2>
                 </div>
             </div>
              

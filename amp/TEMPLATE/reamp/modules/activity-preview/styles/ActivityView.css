@@ -1,5 +1,6 @@
 .preview_container {
-  font-family: 'open_sansregular', sans-serif;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
   margin-left: 30px;
   margin-right: 50px;
 }
@@ -57,7 +58,8 @@
 
 .preview_status_detail {
   display: inline-block !important;
-  font-family: 'open_sansextrabold', sans-serif;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 700;
   margin-right: 20px;
 }
 
@@ -163,7 +165,8 @@
 
 .summary_field_value {
   padding-left: 15px;
-  font-family: 'open_sansextrabold', sans-serif;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 700;
   margin-bottom: 15px;
 }
 

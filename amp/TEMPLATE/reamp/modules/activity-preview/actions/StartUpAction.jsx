@@ -1,6 +1,6 @@
 import * as AMP from 'amp/architecture';
 import { loadTranslations } from 'amp/modules/translate';
-import { initialTranslations } from '../common/Translations.jsx';
+import { initialTranslations } from '../common/Translations';
 
 /**
  * @author Daniel Oliva

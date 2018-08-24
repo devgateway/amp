@@ -200,7 +200,12 @@ function selectLocationCallerShape(selectedGraphic) {
 				
 				updateStructure(selectedGraphic, $("#locationTitle").val());				
 				isFirstSelect = false;
-				// if row does not exist, trigger click on add structure button to add row on structures table in AF					
+				// if row does not exist, trigger click on add structure button to add row on structures table in AF
+                //this confirmation is added just in case the user closes the window before the content is submited
+				//and after pressing the submit button
+				window.onbeforeunload = function() {
+                    return confirm('Are you sure you want to leave the current page?');
+                }
 				if (row == null) {
 						callerButton.ownerDocument.getElementsByClassName('addStructure')[0].click();
 						setTimeout(function() {
@@ -210,7 +215,7 @@ function selectLocationCallerShape(selectedGraphic) {
 						}, 3000);
 				} else {
 						updateActivityForm(row, selectedGraphic);
-				}				
+				}
 				$(this).dialog("close");
 			}
 		} ]
@@ -218,6 +223,7 @@ function selectLocationCallerShape(selectedGraphic) {
 }
 
 function updateActivityForm(row, selectedGraphic) {
+
 	var title = row.getElementsByTagName("INPUT")[0];
 	title.value = $("#locationTitle").val();
 	window.opener.postvaluesx(title);
@@ -289,6 +295,7 @@ function updateActivityForm(row, selectedGraphic) {
 	fireChangeEvent(tempIdInput);
 	fireChangeEvent(shapeInput);
 	fireChangeEvent(structureColorInput);
+    window.onbeforeunload = null;
 }
 
 function fireChangeEvent(element) {

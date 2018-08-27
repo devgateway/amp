@@ -45,7 +45,7 @@ public class FileUploadResourceReference extends ResourceReference
                         fileJson.put("size", fileItem.getSize());
                         fileJson.put("uploadTxt", TranslatorUtil.getTranslatedText("File") + " '"
                                 + fileItem.getName() + "' " +  TranslatorUtil.
-                                getTranslatedText("was uploaded, with " + "size") + " '" + fileItem.getSize()
+                                getTranslatedText("was uploaded, with size") + " '" + fileItem.getSize()
                                 + "'" + TranslatorUtil.getTranslatedText("bytes"));
 
                     } catch (JSONException e) {

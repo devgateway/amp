@@ -5,7 +5,8 @@ import * as AC from '../../utils/ActivityConstants';
 /**
  * @author Daniel Oliva
  */
-class StatusBar extends Component {
+class Identification extends Component {
+
   constructor(props) {
     super(props);
   }
@@ -13,10 +14,11 @@ class StatusBar extends Component {
   render() {
     const { buildSimpleField } = this.props;
     const activity = this.props.activity;
-    const inline = this.props.inline;
+    const fieldPaths = [AC.STATUS_REASON, AC.OBJECTIVE, AC.DESCRIPTION, AC.PROJECT_COMMENTS, 
+      AC.CRIS_NUMBER, AC.ACTIVITY_BUDGET];
     const translations = this.props.translations;
     const noDataValue = translations['amp.activity-preview:noData'];
-    const fieldPaths = [AC.AMP_ID, AC.ACTIVITY_STATUS, AC.ACTIVITY_BUDGET];
+    const inline = this.props.inline;
     const options = {
       fieldNameClass: this.props.fieldNameClass,
       fieldValueClass: this.props.fieldValueClass,
@@ -31,4 +33,4 @@ class StatusBar extends Component {
   }
 }
 
-export default Section(StatusBar);
+export default Section(Identification, 'Identification', true, 'AcIdentification');

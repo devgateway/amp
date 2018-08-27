@@ -1,6 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 require('../../styles/ActivityView.css');
 
+/**
+ * @author Daniel Oliva
+ */
 export default class SimpleField extends Component {
 
 
@@ -12,16 +15,16 @@ export default class SimpleField extends Component {
    * @param separator add or not an <hr> tag.
    * @return {SimpleField}
    */
-  static instance(title, value, inline = false, separator = false, nameClass, valueClass) {
+  static instance(title, value, useInnerHTML=false ,inline = false, separator = false, nameClass, valueClass) {
     return (<SimpleField
-      title={title} value={value} inline={inline} separator={separator}
+      title={title} value={value} useInnerHTML={useInnerHTML} inline={inline} separator={separator}
       fieldNameClass={nameClass} fieldValueClass={valueClass} />);
   }
 
   constructor(props) {
     super(props);
     this.useSeparator = this.props.separator !== false;
-    this.displayClass = this.props.fieldNameClass || (this.props.inline === true ? 'inline' : 'block');
+    this.displayClass = this.props.fieldClass || (this.props.inline === true ? 'inline' : 'block');
   }
 
   _getValue() {
@@ -35,7 +38,11 @@ export default class SimpleField extends Component {
       displayValue = (this.props.inline && this.props.value instanceof String) ? `${value} ` : value;
     }
     
-    return <div className={classNames}>{displayValue}</div>;
+    if (this.props.useInnerHTML) {
+      return <div className={classNames} dangerouslySetInnerHTML={{ __html: displayValue }} />;
+    } else {
+      return <div className={classNames}>{displayValue}</div>;
+    }
     
   }
 

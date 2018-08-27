@@ -31,9 +31,8 @@ export function getFieldSubListSuccess(){
 
 export function getActivityAndFields(activityId){
     return function(dispatch) {
-        dispatch(getActivityLoading());
-        let hydratedActivity = {};
-        
+        dispatch(getHydratedActivityLoading());
+        let hydratedActivity = {};        
         return commonListsApi.getActivity(activityId).then(activity => {
             dispatch(getActivitySuccess(activity));
             hydratedActivity = _createHydratedActivity(Object.keys(activity), activity);

@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Col, Grid, Row } from 'react-bootstrap';
 import { bindActionCreators } from 'redux';
+import Scrollspy from 'react-scrollspy';
 import * as commonListsActions from '../actions/CommonListsActions';
 import * as AC from '../utils/ActivityConstants';
 import StatusBar from './sections/StatusBar';
+import MainGroup from './MainGroup'
+import SummaryGroup from './SummaryGroup';
 require('../styles/ActivityView.css');
 
 /**
@@ -25,8 +29,11 @@ export default class ActivityView extends Component {
 
     _renderData() {
         const activity = this.props.activity;
-        debugger;
         const translations = this.props.translations;
+        const sections = AC.ACTIVITY_SECTION_IDS.map((section) => {
+            return <li><a href={section.hash}> {translations[section.translationKey]} </a></li>;
+          });
+        const sectionKeys = AC.ACTIVITY_SECTION_IDS.map(section => section.key);
         return (
             <div className="preview_container">
                 <div className="preview_header">
@@ -41,6 +48,28 @@ export default class ActivityView extends Component {
                             inline titleClass="status_title_class" 
                             groupClass="status_group_class" />
                     </div>
+                    <div className={'preview_categories'} >
+                        <Scrollspy items={sectionKeys} currentClassName={'preview_category_selected'}>
+                        {sections}
+                        </Scrollspy>
+                    </div>
+                </div>
+                <div className={'preview_content'}>
+                    <Grid fluid>
+                        <Row>
+                        <Col md={9} >
+                            <MainGroup activity={activity}
+                                translations={translations}
+                                titleClass="section_title_class"
+                                groupClass="section_group_class"
+                                fieldNameClass="section_field_name" 
+                                fieldValueClass="section_field_value" />
+                        </Col>
+                        <Col mdOffset={9} className={'preview_summary'} >
+                            <SummaryGroup />
+                        </Col>
+                        </Row>
+                    </Grid>
                 </div>
             </div>
         );

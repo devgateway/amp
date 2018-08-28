@@ -36,5 +36,7 @@ public class SyncConstants {
         public static final String COMPONENT_TYPE = "component type";
         public static final String EXCHANGE_RATES = "exchange rates";
         public static final String FEATURE_MANAGER = "feature manager";
+        public static final String MAP_TILES = "map_tiles";
+        public static final String LOCATORS = "locators";
     }
 }

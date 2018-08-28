@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -124,6 +125,7 @@ public class AmpOrganisationSearchModel extends AbstractAmpAutoCompleteModel<Amp
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
+	Collections.sort(ret);
 	return ret;
     }
 

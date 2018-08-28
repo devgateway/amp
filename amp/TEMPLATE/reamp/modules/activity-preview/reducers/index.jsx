@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
 import { routerReducer as routing } from "react-router-redux";
 import startUp from "./StartUpReducer";
-import commonLists from "./CommonListsReducer.jsx"
+import commonLists from "./CommonListsReducer"
 
 /**
  * @author Daniel Oliva

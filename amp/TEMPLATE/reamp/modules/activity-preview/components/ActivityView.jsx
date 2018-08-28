@@ -59,14 +59,11 @@ export default class ActivityView extends Component {
                         <Row>
                         <Col md={9} >
                             <MainGroup activity={activity}
-                                translations={translations}
-                                titleClass="section_title_class"
-                                groupClass="section_group_class"
-                                fieldNameClass="section_field_name" 
-                                fieldValueClass="section_field_value" />
+                                translations={translations} />
                         </Col>
                         <Col mdOffset={9} className={'preview_summary'} >
-                            <SummaryGroup />
+                            <SummaryGroup activity={activity}
+                                translations={translations}/>
                         </Col>
                         </Row>
                     </Grid>

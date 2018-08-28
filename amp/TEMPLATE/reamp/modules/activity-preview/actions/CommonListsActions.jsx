@@ -76,12 +76,15 @@ function _createHydratedActivity(keys, obj) {
 function _addLabelAndType(hydratedActivity, fields) {
     for(var field in fields) {
         let fieldObj = fields[field];
-        let hydratedField = hydratedActivity[fieldObj.field_name];
-        hydratedField['field_label'] = fieldObj.field_label;
-        hydratedField['field_type'] = fieldObj.field_type;
-        if (fieldObj.children !== undefined && hydratedField.value !== undefined && Array.isArray(hydratedField.value)) {
-            for(var child in hydratedField.value) {
-                _addLabelAndType(hydratedField.value[child], fieldObj.children);
+        if (fieldObj !== undefined) {
+            let hydratedField = hydratedActivity[fieldObj.field_name];
+            hydratedField['field_label'] = fieldObj.field_label;
+            hydratedField['field_type'] = fieldObj.field_type;
+            if (fieldObj.children !== undefined && hydratedField.value !== undefined && 
+                Array.isArray(hydratedField.value)) {
+                for(var child in hydratedField.value) {
+                    _addLabelAndType(hydratedField.value[child], fieldObj.children);
+                }
             }
         }
     }
@@ -89,38 +92,44 @@ function _addLabelAndType(hydratedActivity, fields) {
 
 function _addRealValue(hydratedActivity, parentName) {
     return new Promise((resolve, reject) => {
-        let keys = Object.keys(hydratedActivity);
         let actions = [];
-        for(var key in keys) {
-            let fieldObj = hydratedActivity[keys[key]];
-            if(fieldObj.field_type === 'long') {
-                let _parentName = parentName ? parentName : keys[key];
-                let _childName = parentName ? keys[key] : undefined;
-                actions.push(
-                    commonListsApi.getFieldSubList(_parentName, _childName).then(field => {
-                        if (field.length > 0) {
-                            let element = field.find(function(element){ if (element.id === fieldObj.value) {return element}});
-                            let newValue = element ? element.value : undefined;
-                            if (newValue !== undefined) {
-                                fieldObj.value = newValue;
-                            }
-                        }
-                    }).catch(error => {
-                        throw(error);
-                    })
-                );
-            } /*else if (fieldObj.field_type === 'list' && fieldObj.value.length > 0) {
-                for(var value in fieldObj.value) {
-                    
-                }
-            }*/
-        }
+        _addRealValueHelper(actions, hydratedActivity, parentName)
         Promise.all(actions).then(data => resolve(hydratedActivity));
         
     });
 }
 
-
+function _addRealValueHelper(actions, hydratedActivity, parentName) {
+    let keys = Object.keys(hydratedActivity);
+    
+    for(var key in keys) {
+        let fieldObj = hydratedActivity[keys[key]];
+        if(fieldObj.field_type === 'long') {
+            let _parentName = parentName ? parentName : keys[key];
+            let _childName = parentName ? keys[key] : undefined;
+            actions.push(
+                commonListsApi.getFieldSubList(_parentName, _childName).then(field => {
+                    if (field.length > 0) {
+                        let element = field.find(function(element){ if (element.id === fieldObj.value) {
+                            return element
+                        }});
+                        let newValue = element ? element.value : undefined;
+                        if (newValue !== undefined) {
+                            fieldObj.value = newValue;
+                        }
+                    }
+                }).catch(error => {
+                    throw(error);
+                })
+            );
+        } else if (fieldObj.field_type === 'list' && fieldObj.value.length > 0) {
+            let _parentName = parentName ? parentName + '~' + keys[key] : keys[key];
+            for(var pos in fieldObj.value) {
+                _addRealValueHelper(actions, fieldObj.value[pos], _parentName);
+            }
+        }
+    }
+}
 
 export function getActivity(activityId){
     return function(dispatch) {

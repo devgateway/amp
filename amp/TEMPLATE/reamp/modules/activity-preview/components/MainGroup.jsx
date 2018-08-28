@@ -15,14 +15,13 @@ export default class MainGroup extends Component {
   render() {
     const activity = this.props.activity;
     const translations = this.props.translations;
-    const fieldNameClass = this.props.fieldNameClass;
-    const fieldValueClass = this.props.fieldValueClass;
-    const titleClass = this.props.titleClass;
-    const groupClass = this.props.groupClass;
     
     return (<div className={'main_group_container'}>
-      <Identification activity={activity} translations={translations} fieldNameClass={fieldNameClass}
-        fieldValueClass={fieldValueClass} titleClass={titleClass} groupClass={groupClass}/>
+      <Identification activity={activity} translations={translations} 
+        fieldNameClass={'section_field_name'}
+        fieldValueClass={'section_field_value'} 
+        titleClass={'section_title_class'} 
+        groupClass={'section_group_class'}/>
       
     </div>);
   }

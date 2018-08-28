@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Home from "./Home.jsx";
+import Home from "./Home";
 
 /**
  * @author Daniel Oliva

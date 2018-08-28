@@ -4,9 +4,9 @@ import { Provider } from 'react-redux';
 import { Router, hashHistory, Route, IndexRoute } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 import ReactDOM from "react-dom";
-import configureStore from './store/configureStore.jsx';
-import App from "./containers/App.jsx";
-import { startUp } from './actions/StartUpAction.jsx';
+import configureStore from './store/configureStore';
+import App from "./containers/App";
+import { startUp } from './actions/StartUpAction';
 import ActivityView from './components/ActivityView';
 
 export const store = configureStore();

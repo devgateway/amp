@@ -46,4 +46,13 @@ export const ACTIVITY_INTERNAL_IDS = "activity_internal_ids";
 export const INTERNAL_ID = "internal_id";
 export const ORGANIZATION = "organization";
 
+export const PROPOSED_APPROVAL_DATE = "proposed_approval_date";
+export const ACTUAL_APPROVAL_DATE = "actual_approval_date";
+export const PROPOSED_START_DATE = "proposed_start_date";
+export const ACTUAL_START_DATE = "actual_start_date";
+export const CREATION_DATE = "creation_date";
+export const PROPOSED_COMPLETION_DATE = "proposed_completion_date";
+export const ACTUAL_COMPLETION_DATE = "actual_completion_date";
+
+
 

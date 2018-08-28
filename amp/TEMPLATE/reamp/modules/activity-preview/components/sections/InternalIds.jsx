@@ -33,8 +33,6 @@ const InternalIds = (isSeparateSection) => class extends Component {
   }
 
   render() {
-    debugger;
-
     const columnNumber = 3;
     let content = this.buildContent();
     if (isSeparateSection === true) {

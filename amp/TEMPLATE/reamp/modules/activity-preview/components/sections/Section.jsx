@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import SimpleField from '../fields/SimpleField';
 import * as AC from '../../utils/ActivityConstants';
+import DateUtils from '../../utils/DateUtils';
 require('../../styles/ActivityView.css');
 
 /**
@@ -13,7 +14,9 @@ const Section = (ComposedSection, SectionTitle = null, useEncapsulateHeader = tr
     //TODO
     const title_ = (field.field_label.en ? field.field_label.en : '');
     let value_ = field.value;
-    
+    if (field.field_type === 'date') {
+      value_ = DateUtils.createFormattedDate(value_);
+    }
     if (value_ === '' || value_ === null) {
       value_ = noDataValue;
     }

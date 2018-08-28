@@ -18,8 +18,8 @@ function gisPopup(caller, data){
 
 function postvaluesx(element){
 	element.focus();
-	setTimeout(function(){element.select();}, 1000);
-	setTimeout(function(){element.blur();}, 1000);
+	setTimeout(function(){element.select();}, 500);
+	setTimeout(function(){element.blur();}, 500);
 }
 function postvaluesy(element){
 	setTimeout(function(){element.focus();}, 3000);

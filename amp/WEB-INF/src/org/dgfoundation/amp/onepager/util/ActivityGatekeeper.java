@@ -99,8 +99,8 @@ public class ActivityGatekeeper {
             }
         }
     }
-    
-    private static Long getUserEditing(String id){
+
+    public static Long getUserEditing(String id) {
         return userEditing.get(id);
     }
 

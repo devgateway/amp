@@ -25,6 +25,7 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivityBudgetStructure;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
+import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
@@ -107,6 +108,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.action.SelectDocumentDM;
+import org.digijava.module.contentrepository.helper.DocumentData;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.esrigis.dbentity.AmpMapConfig;
 import org.digijava.module.esrigis.helpers.DbHelper;
@@ -713,33 +715,10 @@ public class EditActivity extends Action {
 
         /* End - Insert Categories */
 
-        /* Injecting documents into session */
-        SelectDocumentDM.clearContentRepositoryHashMap(request);
-        
-        if (false) // debug code for AMP-17265
-        {
-            logger.error("scanning DB for lost documents...");
-            List<String> uuids = PersistenceManager.getSession().createSQLQuery("SELECT DISTINCT(uuid) FROM amp_activity_document").list();
-            Set<String> missingUuids = new HashSet<String>();
-            for(String uuid:uuids){
-                Node documentNode = DocumentManagerUtil.getReadNode(uuid, TLSUtils.getRequest());
-                if (documentNode == null)
-                    missingUuids.add(uuid);
-            }
-            logger.error("missing uuids: " + missingUuids.toString());
-            logger.error("done scanning DB");
-            //Node documentNode = DocumentManagerUtil.getReadNode(uuid, myRequest);
+        for (AmpActivityDocument actDoc : activity.getActivityDocuments()) {
+            eaForm.getDocuments().getCrDocuments().add(DocumentData.buildFromUuid(actDoc.getUuid()));
         }
 
-
-        if (activity.getActivityDocuments() != null && activity.getActivityDocuments().size() > 0) {
-            ActivityDocumentsUtil.injectActivityDocuments(request, activity.getActivityDocuments());
-        }
-
-        eaForm.getDocuments().setCrDocuments(DocumentManagerUtil.createDocumentDataCollectionFromSession(request));
-        /* END - Injecting documents into session */
-
-        DocumentManagerUtil.logoutJcrSessions(request);
         /* Clearing session information about comments */
         String action = request.getParameter("action");
         if (action != null && action.trim().length() != 0) {

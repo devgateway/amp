@@ -270,7 +270,7 @@ function collapseAll() {
 
 <!-- MAIN CONTENT PART START -->
 <div class="content-dir">
-<logic:present scope="request" parameter="editError">
+<logic:present scope="request" parameter="editingUserId">
 	<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center style="margin-top:15px;">
 	     <tr>
 		     <td align="center">

@@ -2,6 +2,7 @@ package org.digijava.module.um.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -20,7 +21,6 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.SiteCache;
-import org.digijava.kernel.util.SiteUtils;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpAuditLogger;
 import org.digijava.module.aim.dbentity.AmpUserExtension;
@@ -171,6 +171,9 @@ public class AmpUserUtil {
      * Bulk version of user extensions retrieval.
      */
     public static Map<Long, AmpUserExtension> getAmpUserExtensions(List<User> users) {
+        if (users.isEmpty()) {
+            return Collections.emptyMap();
+        }
         List<Long> usersIds = users.stream().map(User::getId).collect(Collectors.toList());
         Session session = PersistenceManager.getRequestDBSession();
         List<AmpUserExtension> extensions = session

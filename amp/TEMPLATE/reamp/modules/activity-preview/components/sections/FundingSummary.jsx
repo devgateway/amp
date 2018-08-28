@@ -18,7 +18,7 @@ class FundingSummary extends Component {
    */
   
   _buildFundingInformation() {
-    const activity = this.props.activity[0];
+    const activity = this.props.params.activity;
     const measuresTotals = {};
     let actualCommitmentsAreEnabled = false;
     let actualDisbursementsAreEnabled = false;
@@ -73,7 +73,7 @@ class FundingSummary extends Component {
         const key = `Summary-Total-${measure.trn}`;
         fundingInfoSummary.push(<SimpleField
           key={key} title={title} value={value} separator={false}
-          fieldNameClass={this.props.fieldNameClass} fieldValueClass={this.props.fieldValueClass} />);
+          fieldNameClass={this.props.styles.fieldNameClass} fieldValueClass={this.props.styles.fieldValueClass} />);
       }
     });
     return fundingInfoSummary;

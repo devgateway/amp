@@ -12,16 +12,16 @@ class StatusBar extends Component {
 
   render() {
     const { buildSimpleField } = this.props;
-    const activity = this.props.activity;
-    const inline = this.props.inline;
-    const translations = this.props.translations;
+    const activity = this.props.params.activity;
+    const translations = this.props.params.translations;
     const noDataValue = translations['amp.activity-preview:noData'];
     const fieldPaths = [AC.AMP_ID, AC.ACTIVITY_STATUS, AC.ACTIVITY_BUDGET];
+    const inline = this.props.styles.inline;
     const options = {
-      fieldNameClass: this.props.fieldNameClass,
-      fieldValueClass: this.props.fieldValueClass,
-      titleClass: this.props.titleClass,
-      groupClass: this.props.groupClass
+      fieldNameClass: this.props.styles.fieldNameClass,
+      fieldValueClass: this.props.styles.fieldValueClass,
+      titleClass: this.props.styles.titleClass,
+      groupClass: this.props.styles.groupClass
     };
     return (
       <div>

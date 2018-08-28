@@ -13,16 +13,19 @@ export default class SummaryGroup extends Component {
   }
 
   render() {
-    const activity = this.props.activity;
-    const translations = this.props.translations;
+    const params = {
+      activity: this.props.params.activity,
+      translations : this.props.params.translations
+    }
+    const styles = {
+      fieldNameClass : 'summary_field_name',
+      fieldValueClass : 'section_field_value',
+      titleClass : 'summary_field_value', 
+      groupClass : 'summary_section_group'
+    }
     return (
     <div className={'summary_container'}>
-      <FundingSummary
-        activity={activity} translations={translations} 
-        titleClass={'summary_section_title'}
-        groupClass={'summary_section_group'}
-        fieldNameClass={'summary_field_name'}
-        fieldValueClass={'summary_field_value'} />
+      <FundingSummary params={params} styles={styles} />
       
     </div>);
   }

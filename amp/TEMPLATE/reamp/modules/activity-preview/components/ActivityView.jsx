@@ -28,25 +28,31 @@ export default class ActivityView extends Component {
     }
 
     _renderData() {
-        const activity = this.props.activity;
+        const activity = this.props.activity[0];
         const translations = this.props.translations;
         const sections = AC.ACTIVITY_SECTION_IDS.map((section) => {
             return <li><a href={section.hash}> {translations[section.translationKey]} </a></li>;
           });
         const sectionKeys = AC.ACTIVITY_SECTION_IDS.map(section => section.key);
+        const params = {
+            activity: activity,
+            translations : translations
+        }
+        const statusBarStyles = {
+            inline : true,         
+            fieldNameClass: 'preview_status_title',
+            fieldValueClass: 'preview_status_detail',
+            titleClass: 'status_title_class',
+            groupClass: 'status_group_class'
+        }
         return (
             <div className="preview_container">
                 <div className="preview_header">
                     <span className="preview_title">
-                        {activity[0][AC.PROJECT_TITLE].value}
+                        {activity[AC.PROJECT_TITLE].value}
                     </span>
                     <div className="preview_status_container" >
-                        <StatusBar activity={activity}
-                            translations={translations}
-                            fieldNameClass="preview_status_title" 
-                            fieldValueClass="preview_status_detail"
-                            inline titleClass="status_title_class" 
-                            groupClass="status_group_class" />
+                        <StatusBar params={params} styles={statusBarStyles} />
                     </div>
                     <div className={'preview_categories'} >
                         <Scrollspy items={sectionKeys} currentClassName={'preview_category_selected'}>
@@ -58,12 +64,10 @@ export default class ActivityView extends Component {
                     <Grid fluid>
                         <Row>
                         <Col md={9} >
-                            <MainGroup activity={activity}
-                                translations={translations} />
+                            <MainGroup params={params} />
                         </Col>
                         <Col mdOffset={9} className={'preview_summary'} >
-                            <SummaryGroup activity={activity}
-                                translations={translations}/>
+                            <SummaryGroup params={params}/>
                         </Col>
                         </Row>
                     </Grid>

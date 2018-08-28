@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 require('../../styles/ActivityView.css');
 
 /**
@@ -15,7 +15,7 @@ export default class SimpleField extends Component {
    * @param separator add or not an <hr> tag.
    * @return {SimpleField}
    */
-  static instance(title, value, useInnerHTML=false ,inline = false, separator = false, nameClass, valueClass) {
+  static instance(title, value, useInnerHTML=false, inline = false, separator = false, nameClass, valueClass) {
     return (<SimpleField
       title={title} value={value} useInnerHTML={useInnerHTML} inline={inline} separator={separator}
       fieldNameClass={nameClass} fieldValueClass={valueClass} />);

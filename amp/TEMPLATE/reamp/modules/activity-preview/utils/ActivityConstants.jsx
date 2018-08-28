@@ -42,5 +42,8 @@ export const CURRENCY = "currency";
 export const TRANSACTION_DATE = "transaction_date";
 export const TRANSACTION_AMOUNT = "transaction_amount";
 
+export const ACTIVITY_INTERNAL_IDS = "activity_internal_ids";
+export const INTERNAL_ID = "internal_id";
+export const ORGANIZATION = "organization";
 
 

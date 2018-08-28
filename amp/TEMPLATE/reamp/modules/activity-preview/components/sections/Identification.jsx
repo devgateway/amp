@@ -13,17 +13,17 @@ class Identification extends Component {
 
   render() {
     const { buildSimpleField } = this.props;
-    const activity = this.props.activity;
+    const activity = this.props.params.activity;
     const fieldPaths = [AC.STATUS_REASON, AC.OBJECTIVE, AC.DESCRIPTION, AC.PROJECT_COMMENTS, 
       AC.CRIS_NUMBER, AC.ACTIVITY_BUDGET];
-    const translations = this.props.translations;
+    const translations = this.props.params.translations;
     const noDataValue = translations['amp.activity-preview:noData'];
-    const inline = this.props.inline;
+    const inline = this.props.params.inline;
     const options = {
-      fieldNameClass: this.props.fieldNameClass,
-      fieldValueClass: this.props.fieldValueClass,
-      titleClass: this.props.titleClass,
-      groupClass: this.props.groupClass
+      fieldNameClass: this.props.params.fieldNameClass,
+      fieldValueClass: this.props.params.fieldValueClass,
+      titleClass: this.props.params.titleClass,
+      groupClass: this.props.params.groupClass
     };
     return (
       <div>

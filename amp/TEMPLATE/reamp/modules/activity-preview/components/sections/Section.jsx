@@ -8,9 +8,8 @@ require('../../styles/ActivityView.css');
  */
 const Section = (ComposedSection, SectionTitle = null, useEncapsulateHeader = true, sID) => class extends Component {
 
-  buildSimpleField(activity, fieldPath, showIfNotAvailable, noDataValue, inline = false, options) {
-    const field = activity[0][fieldPath];
-    const options_ = options || {};
+  buildSimpleField(activity, fieldPath, showIfNotAvailable, noDataValue, inline = false) {
+    const field = activity[fieldPath];
     //TODO
     const title_ = (field.field_label.en ? field.field_label.en : '');
     let value_ = field.value;
@@ -25,8 +24,8 @@ const Section = (ComposedSection, SectionTitle = null, useEncapsulateHeader = tr
         useInnerHTML={useInnerHTML}
         inline={inline}
         separator={false}
-        fieldNameClass={options_.fieldNameClass || ''}
-        fieldValueClass={options_.fieldValueClass || ''} />);
+        fieldNameClass={this.props.styles.fieldNameClass || ''}
+        fieldValueClass={this.props.styles.fieldValueClass || ''} />);
     }
     
   }
@@ -35,11 +34,11 @@ const Section = (ComposedSection, SectionTitle = null, useEncapsulateHeader = tr
     const composedSection = (<ComposedSection
       {...this.props} {...this.state} {...this.context} buildSimpleField={this.buildSimpleField.bind(this)} />);
 
-    return (<div key={SectionTitle} className={this.props.groupClass} id={sID}>
-      <div className={this.props.titleClass}>
-        <span>{SectionTitle} </span><span>{this.props.titleDetails}</span>
+    return (<div key={SectionTitle} className={this.props.styles.groupClass} id={sID}>
+      <div className={this.props.styles.titleClass}>
+        <span>{SectionTitle} </span><span>{this.props.styles.titleDetails}</span>
       </div>
-      <div className={this.props.composedClass}>
+      <div className={this.props.styles.composedClass}>
         {composedSection}
       </div>
     </div>);

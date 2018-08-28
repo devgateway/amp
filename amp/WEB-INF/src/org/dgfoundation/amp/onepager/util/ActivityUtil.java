@@ -66,6 +66,7 @@ import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponse;
 import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponseDocument;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpPerformanceRule;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.dbentity.AmpStructureImg;
@@ -84,7 +85,6 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.contentrepository.exception.JCRSessionException;
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
@@ -321,7 +321,7 @@ public class ActivityUtil {
         updateComponentFunding(a, session);
         saveAnnualProjectBudgets(a, session);
         saveProjectCosts(a, session);
-        updatePerformanceIssues(a);
+        saveStructures(a, session);
         updateFiscalYears(a);
 
         if (createNewVersion){
@@ -332,6 +332,8 @@ public class ActivityUtil {
             session.saveOrUpdate(a);
             //session.update(a);
         }
+        
+        updatePerformanceRules(oldA, a);
 
         if (newActivity){
             a.setAmpId(org.digijava.module.aim.util.ActivityUtil.generateAmpId(ampCurrentMember.getUser(), a.getAmpActivityId(), session));
@@ -382,20 +384,17 @@ public class ActivityUtil {
                 || Constants.STARTED_APPROVED_STATUS.equals(approvalStatus);
     }
 
-    private static void updatePerformanceIssues(AmpActivityVersion a) {
+private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityVersion a) {
         PerformanceRuleManager ruleManager = PerformanceRuleManager.getInstance();
 
-        Set<AmpCategoryValue> matchedLevels = new HashSet<>();
+        Set<AmpPerformanceRule> matchedRules = new HashSet<>();
 
         if (ruleManager.canActivityContainPerformanceIssues(a)) {
-            matchedLevels = ruleManager.getPerformanceLevelsFromIssues(ruleManager.findPerformanceIssues(a));
+            matchedRules = ruleManager.getPerformanceRulesFromIssues(ruleManager.findPerformanceIssues(a));
         }
 
-        Set<AmpCategoryValue> activityLevels = ruleManager.getPerformanceIssuesFromActivity(a);
-
-        if (!ruleManager.isEqualPerformanceLevelCollection(matchedLevels, activityLevels)) {
-            ruleManager.updatePerformanceIssuesInActivity(a, activityLevels, matchedLevels);
-        }
+        ruleManager.deleteActivityPerformanceRule(PersistenceManager.getSession(), oldA.getAmpActivityId());
+        ruleManager.updateActivityPerformanceRules(a.getAmpActivityId(), matchedRules);
     }
     
     private static void updateFiscalYears(AmpActivityVersion a) {
@@ -516,7 +515,11 @@ public class ActivityUtil {
                             a.setApprovedBy(ampCurrentMember);
                             a.setApprovalDate(Calendar.getInstance().getTime());
                         } else {
-                            a.setApprovalStatus(Constants.STARTED_STATUS);
+                            if (StringUtils.equals(oldA.getApprovalStatus(), Constants.STARTED_STATUS)) {
+                                a.setApprovalStatus(Constants.STARTED_STATUS);
+                            } else {
+                                a.setApprovalStatus(Constants.EDITED_STATUS);
+                            }
                         }
                     }
                 }
@@ -809,8 +812,10 @@ public class ActivityUtil {
         HashSet<AmpActivityDocument> deletedResources = s.getMetaData(OnePagerConst.RESOURCES_DELETED_ITEMS);
         HashSet<TemporaryActivityDocument> existingTitles = s.getMetaData(OnePagerConst.RESOURCES_EXISTING_ITEM_TITLES);
 
-        // update titles
-        updateResourcesTitles(newResources, deletedResources, existingTitles);
+        // update titles when multilingual is enabled
+        if (ContentTranslationUtil.multilingualIsEnabled()) {
+            updateResourcesTitles(newResources, deletedResources, existingTitles);
+        }
 
         // remove old resources
         deleteResources(a, deletedResources);
@@ -1275,6 +1280,18 @@ public class ActivityUtil {
             for (AmpAnnualProjectBudget annualBudget : a.getAnnualProjectBudgets()){
                 annualBudget.setActivity(a);
                 session.saveOrUpdate(annualBudget);
+            }
+        }
+    }
+    
+    private static void saveStructures(AmpActivityVersion a, Session session) throws Exception {
+        if (a.getAmpActivityId() != null) {
+            for (AmpStructure structure : a.getStructures()) {
+                if (structure.getActivities() == null) {
+                    structure.setActivities(new HashSet<AmpActivityVersion>());
+                    structure.getActivities().add(a);
+                }
+                session.saveOrUpdate(structure);
             }
         }
     }

@@ -96,9 +96,11 @@ import org.dgfoundation.amp.nireports.schema.NiReportMeasure;
 import org.dgfoundation.amp.nireports.schema.NiReportedEntity;
 import org.dgfoundation.amp.nireports.schema.NiTransactionContextMeasure;
 import org.dgfoundation.amp.nireports.schema.NiTransactionMeasure;
+import org.dgfoundation.amp.nireports.schema.PerformanceAlertTypeDimension;
 import org.dgfoundation.amp.nireports.schema.SchemaSpecificScratchpad;
 import org.dgfoundation.amp.nireports.schema.TimeRange;
 import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
+import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.LocalizableLabel;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -161,6 +163,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
     public final static NiDimension indicatorsDimension = SqlSourcedNiDimension.buildDegenerateDimension("indicators", "amp_indicator", "indicator_id");
     public final static NiDimension indicatorRiskRatingsDimension = SqlSourcedNiDimension.buildDegenerateDimension("risks", "amp_indicator_risk_ratings", "amp_ind_risk_ratings_id");
     public final static NiDimension fundingDimension = SqlSourcedNiDimension.buildDegenerateDimension("funding", "amp_funding", "amp_funding_id");
+    public static final PerformanceAlertTypeDimension PERF_TYPE_DIM = new PerformanceAlertTypeDimension("perfTypes");
 
     /**
      * the pseudocolumn of the header Splitter for cells which are funding flows
@@ -282,6 +285,12 @@ public class AmpReportsSchema extends AbstractReportsSchema {
      * the callback called on DG_EDITOR-backed text columns
      */
     public final static Function<String, String> DG_EDITOR_POSTPROCESSOR = DgUtil::cleanHtmlTags;
+    
+    /**
+     * the callback called on performance-alert-type column
+     */
+    public static final Function<String, String> PERFORMANCE_ALERT_POSTPROCESSOR = 
+            PerformanceRuleManager::getAlertDescriptionFromMatcher;
 
     private IndicatorTextualTokenBehaviour indicatorTextualTokenBehaviour =
             IndicatorTextualTokenBehaviour.forText(INDICATOR_DIM_USG, true);
@@ -410,6 +419,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         degenerate_dimension(ColumnConstants.FUNDING_STATUS, "v_funding_status", catsDimension);
         degenerate_dimension(ColumnConstants.HUMANITARIAN_AID, "v_humanitarian_aid", boolDimension);
         degenerate_dimension(ColumnConstants.IMPLEMENTATION_LEVEL, "v_implementation_level", catsDimension);
+        degenerate_dimension(ColumnConstants.PERFORMANCE_ALERT_TYPE, "v_performance_alert_type", 
+                PERF_TYPE_DIM, PERFORMANCE_ALERT_POSTPROCESSOR);
         degenerate_dimension(ColumnConstants.PERFORMANCE_ALERT_LEVEL, "v_performance_alert_level", catsDimension);
         degenerate_dimension(ColumnConstants.INDIRECT_ON_BUDGET, "v_indirect_on_budget", boolDimension);
         degenerate_dimension(ColumnConstants.INSTITUTIONS, "v_institutions", catsDimension, true);
@@ -1219,6 +1230,15 @@ public class AmpReportsSchema extends AbstractReportsSchema {
     private AmpReportsSchema degenerate_dimension(String columnName, String view, NiDimension dimension) {
         return degenerate_dimension(columnName, view, dimension, false);
     }
+    
+    private AmpReportsSchema degenerate_dimension(String columnName, String view, NiDimension dimension, 
+            Function<String, String> postprocessor) {
+        LevelColumn levelColumn = dimension.getLevelColumn(columnName, dimension.depth - 1);
+        SimpleTextColumn col = SimpleTextColumn.fromView(columnName, view, levelColumn)
+                .withPostprocessor(postprocessor);
+        col.allowNulls(true);
+        return addColumn(col);
+    }
 
     private AmpReportsSchema degenerate_dimension(String columnName, String view, NiDimension dimension,
             boolean sscEnabledColumn) {
@@ -1370,7 +1390,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
             return AmpCollections.union(_getWorkspaceActivities(engine), getWorkspacePledges(engine).stream().map(z -> z + MondrianETL.PLEDGE_ID_ADDER).collect(Collectors.toSet()));
         else if (engine.spec.getReportType() == ArConstants.COMPONENT_TYPE) {
             Set<Long> wf = new HashSet<>(_getWorkspaceActivities(engine));
-            wf.retainAll(SQLUtils.fetchLongs(pad.connection, "SELECT DISTINCT amp_activity_id FROM amp_activity_components"));
+            wf.retainAll(SQLUtils.fetchLongs(pad.connection, "SELECT DISTINCT amp_activity_id FROM amp_components"));
             return Collections.unmodifiableSet(wf);
         }
         else

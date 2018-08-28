@@ -41,7 +41,7 @@ SELECT
 	END as currency_id
 
 FROM
-	amp_component_funding f, amp_activity_components aac
+	amp_component_funding f, amp_components aac
 WHERE f.amp_component_id = aac.amp_component_id
 
 UNION ALL
@@ -55,7 +55,7 @@ SELECT
 	to_char(to_date('1970-01-01', 'YYYY-MM-DD'), 'J')::integer AS date_code,
 	100 AS transaction_amount,
 	(SELECT amp_currency_id FROM amp_currency WHERE currency_code = (SELECT settingsvalue FROM amp_global_Settings WHERE settingsname = 'Base Currency')) AS currency_id
-FROM amp_activity_components aac;
+FROM amp_components aac;
 			</lang>
 		</script>
 	</apply>

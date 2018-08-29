@@ -58,14 +58,14 @@
 
 </script>
 
-<c:set var="layout" value="${contentForm.layout}"/>
+<c:set var="contentLayout" value="${contentForm.contentLayout}"/>
 <c:set var="htmlblock_1" value="${contentForm.htmlblock_1}"/>
 <c:set var="htmlblock_2" value="${contentForm.htmlblock_2}"/>
 <c:set var="pageCode" value="${contentForm.pageCode}"/>
 <c:set var="thumbnailCount" value="${fn:length(contentForm.contentThumbnails)}"/>
 
 
-<c:import url="/repository/content/view/layout_${layout}.jsp">
+<c:import url="/repository/content/view/layout_${contentLayout}.jsp">
 	<c:param name="htmlblock_1" value="${htmlblock_1}"/>
 	<c:param name="htmlblock_2" value="${htmlblock_2}"/>
 	<c:param name="pageCode" value="${pageCode}"/>

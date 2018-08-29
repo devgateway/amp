@@ -243,13 +243,16 @@ public class MondrianETL {
         int oldNrComponents = components.size();
 
         String componentIdCondition = "amp_component_id IN (" + Util.toCSStringForIN(components) + ")";
-        activities.addAll(SQLUtils.fetchLongs(conn, "SELECT DISTINCT(amp_activity_id) FROM amp_activity_components WHERE " + componentIdCondition));
+        activities.addAll(SQLUtils.fetchLongs(conn,
+                "SELECT DISTINCT(amp_activity_id) FROM amp_components WHERE " + componentIdCondition));
 
         String pledgeIdsCondition = "afd.pledge_id IN (" + Util.toCSStringForIN(pledges) + ")";
         activities.addAll(SQLUtils.fetchLongs(conn, "select distinct(af.amp_activity_id) from amp_funding_detail afd JOIN amp_funding af on afd.amp_funding_id = af.amp_funding_id WHERE " + pledgeIdsCondition));
         pledges.addAll(SQLUtils.fetchLongs(conn, "SELECT distinct(pledge_id) FROM amp_funding_detail afd JOIN amp_funding af ON afd.amp_funding_id = af.amp_funding_id WHERE af.amp_activity_id IN (" + Util.toCSStringForIN(activities) + ")"));
 
-        components.addAll(SQLUtils.fetchLongs(conn, "SELECT DISTINCT(amp_component_id) FROM amp_activity_components WHERE amp_activity_id IN (" + Util.toCSStringForIN(activities) + ")"));
+        components.addAll(SQLUtils.fetchLongs(conn,
+                "SELECT DISTINCT(amp_component_id) FROM amp_components WHERE amp_activity_id IN ("
+                        + Util.toCSStringForIN(activities) + ")"));
         
         agreements.addAll(SQLUtils.fetchLongs(conn, "SELECT DISTINCT(agreement) FROM amp_funding WHERE amp_activity_id IN (" + Util.toCSStringForIN(activities) + ")"));
         

@@ -1390,7 +1390,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
             return AmpCollections.union(_getWorkspaceActivities(engine), getWorkspacePledges(engine).stream().map(z -> z + MondrianETL.PLEDGE_ID_ADDER).collect(Collectors.toSet()));
         else if (engine.spec.getReportType() == ArConstants.COMPONENT_TYPE) {
             Set<Long> wf = new HashSet<>(_getWorkspaceActivities(engine));
-            wf.retainAll(SQLUtils.fetchLongs(pad.connection, "SELECT DISTINCT amp_activity_id FROM amp_activity_components"));
+            wf.retainAll(SQLUtils.fetchLongs(pad.connection, "SELECT DISTINCT amp_activity_id FROM amp_components"));
             return Collections.unmodifiableSet(wf);
         }
         else

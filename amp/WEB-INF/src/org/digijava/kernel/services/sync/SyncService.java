@@ -8,6 +8,8 @@ import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.CON
 import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.EXCHANGE_RATES;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.FEATURE_MANAGER;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.GLOBAL_SETTINGS;
+import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.LOCATORS;
+import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.MAP_TILES;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.RESOURCE;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.TRANSLATION;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.WORKSPACES;
@@ -61,7 +63,6 @@ import org.digijava.kernel.ampapi.endpoints.sync.SyncRequest;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.services.sync.model.ActivityChange;
-import org.digijava.module.aim.dbentity.AmpOfflineChangelog;
 import org.digijava.kernel.services.sync.model.ExchangeRatesDiff;
 import org.digijava.kernel.services.sync.model.ListDiff;
 import org.digijava.kernel.services.sync.model.ResourceChange;
@@ -69,6 +70,7 @@ import org.digijava.kernel.services.sync.model.SystemDiff;
 import org.digijava.kernel.services.sync.model.Translation;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.ar.util.FilterUtil;
+import org.digijava.module.aim.dbentity.AmpOfflineChangelog;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.repository.AmpOfflineChangelogRepository;
@@ -142,6 +144,7 @@ public class SyncService implements InitializingBean {
         updateDiffsForActivities(systemDiff, syncRequest);
         updateDiffsForContacts(systemDiff, syncRequest);
         updateDiffsForResources(systemDiff, syncRequest);
+        updateDiffsForMapTilesAndLocators(systemDiff, lastSyncTime);
 
         systemDiff.setTranslations(shouldSyncTranslations(systemDiff, lastSyncTime));
 
@@ -380,7 +383,7 @@ public class SyncService implements InitializingBean {
             systemDiff.setResources(new ListDiff<>(removed, updated));
         }
     }
-
+    
     private boolean resourcesChanged(Date lastSyncTime) {
         return !loadChangeLog(lastSyncTime, asList(RESOURCE)).isEmpty();
     }
@@ -436,6 +439,12 @@ public class SyncService implements InitializingBean {
                 if (changelog.getEntityName().equals(WORKSPACE_SETTINGS)) {
                     systemDiff.setWorkspaceSettings(true);
                 }
+                if (changelog.getEntityName().equals(MAP_TILES)) {
+                    systemDiff.setMapTiles(true);
+                }
+                if (changelog.getEntityName().equals(LOCATORS)) {
+                    systemDiff.setLocators(true);
+                }
                 systemDiff.updateTimestamp(changelog.getOperationTime());
             }
         } else {
@@ -444,13 +453,36 @@ public class SyncService implements InitializingBean {
             systemDiff.setWorkspaceSettings(true);
         }
     }
+    
+    private void updateDiffsForMapTilesAndLocators(SystemDiff systemDiff, Date lastSyncTime) {
+        if (lastSyncTime != null) {
+            List<AmpOfflineChangelog> changelogs = findChangedMapTilesAndLocators(lastSyncTime);
+
+            for (AmpOfflineChangelog changelog : changelogs) {
+                if (changelog.getEntityName().equals(MAP_TILES)) {
+                    systemDiff.setMapTiles(true);
+                }
+                if (changelog.getEntityName().equals(LOCATORS)) {
+                    systemDiff.setLocators(true);
+                }
+                systemDiff.updateTimestamp(changelog.getOperationTime());
+            }
+        } else {
+            systemDiff.setMapTiles(true);
+            systemDiff.setLocators(true);
+        }
+    }
 
     private List<AmpOfflineChangelog> findChangedWsAndGs(Date lastSyncTime) {
         return loadChangeLog(lastSyncTime,
                 asList(GLOBAL_SETTINGS, WORKSPACES, WORKSPACE_SETTINGS, WORKSPACE_FILTER_DATA, 
                         WORKSPACE_ORGANIZATIONS));
     }
-
+    
+    private List<AmpOfflineChangelog> findChangedMapTilesAndLocators(Date lastSyncTime) {
+        return loadChangeLog(lastSyncTime, asList(MAP_TILES, LOCATORS));
+    }
+    
     private void updateDiffForWorkspaceMembers(SystemDiff systemDiff, Date lastSyncTime) {
         if (lastSyncTime == null) {
             List<Long> workspaceMemberIds = findWorkspaceMembers();

@@ -606,7 +606,7 @@ public class LuceneUtil implements Serializable {
                 qryStr = String.format("SELECT vt.* FROM v_bolivia_component_code vt JOIN v_activity_latest_and_validated lv ON vt.amp_activity_id = lv.amp_activity_id WHERE (vt.amp_activity_id >= %d) AND (vt.amp_activity_id < %d)", chunkStart, chunkEnd);
                 rs = st.executeQuery(qryStr);
                 rs.last();
-                logger.info("Starting iteration of " + rs.getRow() + " amp_activity_components!");
+                logger.info("Starting iteration of " + rs.getRow() + " v_bolivia_component_code!");
                 isNext = rs.first();
 
                 while (isNext) {
@@ -640,7 +640,7 @@ public class LuceneUtil implements Serializable {
                  * + chunkStart + " and amp_activity_id < " + chunkEnd + " "; rs
                  * = st.executeQuery(qryStr); rs.last();
                  * logger.info("Starting iteration of " + rs.getRow() +
-                 * " amp_activity_components!"); isNext = rs.first();
+                 * " v_senegal_cris_budget!"); isNext = rs.first();
                  * 
                  * while (isNext) { int currActId =
                  * rs.getInt("amp_activity_id"); x = (Items)

@@ -1448,8 +1448,11 @@ function validateAddDocument() {
 	}
 
 	var webUrlVisible=document.getElementById('tr_url');
+	
+	var fileData = document.forms['crDocumentManagerForm'].fileData;
+	
 	if(webUrlVisible.style.display=='none') { 
-		if(document.forms['crDocumentManagerForm'].fileData.value == '') { //adding document
+		if(fileData.value == '') { //adding document
 			msg = msg + "${translation_validation_filedata}"+'<br>';
 		} else if(!FileTypeValidator.isValid(fileData.value)) {
 			msg = msg + FileTypeValidator.errorMessage +'<br>';
@@ -1463,8 +1466,8 @@ function validateAddDocument() {
 			msg = msg + "${translation_url_format}"+'<br>' ;
 		}
 	}
-
-    if (document.forms['crDocumentManagerForm'].fileData.files[0].size > ${uploadMaxFileSize}) {
+    var fileData = document.forms['crDocumentManagerForm'].fileData;
+    if (fileData && fileData.value != '' && fileData.files[0].size > ${uploadMaxFileSize}) {
         msg = msg + showFailedTooBigMsg("${translation_upload_failed_too_big}", ${maxFileSizeGS}) + '<br>';
     }
 

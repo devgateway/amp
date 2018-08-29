@@ -22,15 +22,14 @@
 				DROP VIEW IF EXISTS v_component_funding_description;
 				CREATE OR REPLACE VIEW v_component_funding_description AS
 				  SELECT
-					aac.amp_activity_id,
-					f.description                AS description,
-					f.amp_component_id,
-					c.type                       AS component_type_id,
-					f.rep_organization_id        AS component_rep_org_id,
-					f.component_second_rep_org_id AS component_second_rep_org_id
-				  FROM amp_activity_components aac
-					JOIN amp_components c ON c.amp_component_id = aac.amp_component_id
-					JOIN amp_component_funding f ON f.amp_component_id = c.amp_component_id;
+						 c.amp_activity_id,
+						 f.description                AS description,
+						 f.amp_component_id,
+						 c.type                       AS component_type_id,
+						 f.rep_organization_id        AS component_rep_org_id,
+						 f.component_second_rep_org_id AS component_second_rep_org_id
+				  FROM amp_components c
+						 JOIN amp_component_funding f ON f.amp_component_id = c.amp_component_id;
 			]]></lang>
 		</script>
 	</apply>

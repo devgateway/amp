@@ -3,13 +3,13 @@ require('../../styles/ActivityView.css');
 
 export default class Tablify extends Component {
 
-
   /**
    * Takes an array and turns it into table rows and columns.
+   * @param keyName key for tr and td inside  table
    * @param content content for table
    * @param cols number of columns
    */
-  static addRows(content, cols) {
+  static addRows(keyName, content, cols) {
     // Remove undefined cells.
     content = content.filter(c => c);
     // Decrease number of cols if we dont have enough elements.
@@ -18,13 +18,17 @@ export default class Tablify extends Component {
     }
     const rows = Math.ceil(content.length / cols);
     const tableContent = [];
-
     for (let i = 0; i < rows; i++) {
+      let trKey = keyName + '-' + i;
       const rowContent = [];
       for (let j = 0; j < cols; j++) {
-        rowContent.push(<td>{content.pop()}</td>);
+        let tdKey = trKey + '-' + j;
+        let cellValue = content.pop();
+        if (cellValue) {
+          rowContent.push(<td key={tdKey}>{cellValue}</td>);
+        }
       }
-      tableContent.push(<tr>{rowContent}</tr>);
+      tableContent.push(<tr key={trKey}>{rowContent}</tr>);
     }
     return tableContent;
   }

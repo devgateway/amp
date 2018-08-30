@@ -34,7 +34,8 @@ const Section = (ComposedSection, SectionTitle = null, useEncapsulateHeader = tr
   }
 
   render() {
-    const composedSection = (<ComposedSection
+    const sectionKey = SectionTitle + '-Section';
+    const composedSection = (<ComposedSection key={sectionKey}
       {...this.props} {...this.state} {...this.context} buildSimpleField={this.buildSimpleField.bind(this)} />);
 
     return (<div key={SectionTitle} className={this.props.styles.groupClass} id={sID}>

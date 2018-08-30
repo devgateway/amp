@@ -2,9 +2,12 @@ import React, { Component } from 'react';
 import Section from './Section';
 import * as AC from '../../utils/ActivityConstants';
 import ActivityFundingTotals from '../activity/ActivityFundingTotals';
+import NumberUtils from '../../utils/NumberUtils'
 import SimpleField from '../fields/SimpleField';
 
-
+/**
+ * @author Daniel Oliva
+ */
 class FundingSummary extends Component {
 
   constructor(props) {
@@ -16,7 +19,6 @@ class FundingSummary extends Component {
    * @return {Section}
    * @private
    */
-  
   _buildFundingInformation() {
     const activity = this.props.params.activity;
     const measuresTotals = {};
@@ -64,8 +66,9 @@ class FundingSummary extends Component {
       { trn: AC.DELIVERY_RATE, total: false }];
     const fundingInfoSummary = [];
     measuresOrder.forEach(measure => {
-      const value = measuresTotals[measure.trn];
+      let value = measuresTotals[measure.trn];
       if (value !== undefined) {
+        value = NumberUtils.rawNumberToFormattedString(value);
         let title = measure.trn;
         if (measure.total) {
           title = `Total ${title}`;

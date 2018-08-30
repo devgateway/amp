@@ -4,7 +4,9 @@ import Tablify from '../fields/Tablify';
 import * as AC from '../../utils/ActivityConstants';
 require('../../styles/ActivityView.css');
 
-
+/**
+ * @author Daniel Oliva
+ */
 class Planning extends Component {
 
   constructor(props) {
@@ -32,7 +34,7 @@ class Planning extends Component {
       this.props.buildSimpleField(activity, fieldPath, showIfNotAvailable.has(fieldPath), inline, false)
     ).filter(data => data !== undefined));
 
-    const tableContent = Tablify.addRows(content, columnNumber);
+    const tableContent = Tablify.addRows('Planning', content, columnNumber);
     return <div><table className={'box_table'}><tbody>{tableContent}</tbody></table></div>;
   }
 

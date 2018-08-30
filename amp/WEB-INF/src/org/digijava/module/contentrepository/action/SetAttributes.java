@@ -98,6 +98,7 @@ public class SetAttributes extends Action {
             CrDocumentNodeAttributes docNodeAtt         = (CrDocumentNodeAttributes)query.uniqueResult();
             if (docNodeAtt != null )
                 hbSession.delete(docNodeAtt);
+            
 //session.flush();
                         
         } catch (Exception e) {

@@ -151,28 +151,17 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 	
-	<!-- Quartz Listener -->
-     <context-param>
-         <param-name>shutdown-on-unload</param-name>
-         <param-value>true</param-value>
-     </context-param>
-     <context-param>
-         <param-name>start-scheduler-on-load</param-name>
-         <param-value>false</param-value>
-     </context-param>
-     <listener>
-         <listener-class>
-             org.quartz.ee.servlet.QuartzInitializerListener
-         </listener-class>
-     </listener>
-	
-	
-
 	<listener>
 		<listener-class>
 			org.digijava.module.aim.startup.AMPStartupListener
 		</listener-class>
 	</listener>
+
+	<!-- Quartz Listener -->
+	<listener>
+		<listener-class>org.digijava.module.aim.startup.QuartzStartupListener</listener-class>
+	</listener>
+
 	<listener>
 		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
 	</listener>

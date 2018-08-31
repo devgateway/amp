@@ -65,6 +65,7 @@ public class FiltersConstants {
     public static final String NATIONAL_PLANNING_OBJECTIVES_LEVEL_8 = "national-planning-objectives-level-8";
     public static final String ON_OFF_TREASURY_BUDGET = "on-off-treasury-budget";
     public static final String PERFORMANCE_ALERT_LEVEL = "performance-alert-level";
+    public static final String PERFORMANCE_ALERT_TYPE = "performance-alert-type";
     public static final String PLEDGES_AID_MODALITY = "pledges-aid-modality";
     public static final String PLEDGES_DONOR_GROUP = "pledges-donor-group";
     public static final String PLEDGES_NATIONAL_PLAN_OBJECTIVES = "pledges-national-plan-objectives";

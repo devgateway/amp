@@ -7,20 +7,20 @@ import javax.jcr.Node;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.hibernate.Query;
-import org.hibernate.Session;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.ampapi.endpoints.gis.services.MapTilesService;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.contentrepository.dbentity.CrDocumentNodeAttributes;
-import org.digijava.module.contentrepository.exception.NoVersionsFoundException;
 import org.digijava.module.contentrepository.form.SetAttributesForm;
 import org.digijava.module.contentrepository.helper.CrConstants;
+import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
+import org.hibernate.Query;
+import org.hibernate.Session;
 
 /**
  * @author Alex Gartner
@@ -38,7 +38,7 @@ public class SetAttributes extends Action {
         if ( myForm.getAction() != null && myForm.getAction().equals(CrConstants.MAKE_PUBLIC) ) 
                 makePublic( myForm.getUuid(), request);
         if ( myForm.getAction() != null && myForm.getAction().equals(CrConstants.UNPUBLISH) ) 
-                unpublish( myForm.getUuid() );
+                unpublish(myForm.getUuid());
         
         request.getSession().setAttribute("resourcesTab", myForm.getType());
         return null;
@@ -70,7 +70,11 @@ public class SetAttributes extends Action {
             docAttributes.setPublicVersionUUID(lastVersionNode.getUUID());
             
             if (shouldSaveObject) {
-                hbSession.save( docAttributes );
+                hbSession.save(docAttributes);
+                NodeWrapper nw = new NodeWrapper(lastVersionNode);
+                if (nw.getName().equals(MapTilesService.FILE_NAME)) {
+                    MapTilesService.getInstance().updateOfflineChangeLog(hbSession);
+                }
             }
 //session.flush();
             
@@ -96,8 +100,10 @@ public class SetAttributes extends Action {
             query.setString("uuid", uuid);
             
             CrDocumentNodeAttributes docNodeAtt         = (CrDocumentNodeAttributes)query.uniqueResult();
-            if (docNodeAtt != null )
+            if (docNodeAtt != null) {
                 hbSession.delete(docNodeAtt);
+            }
+            
 //session.flush();
                         
         } catch (Exception e) {

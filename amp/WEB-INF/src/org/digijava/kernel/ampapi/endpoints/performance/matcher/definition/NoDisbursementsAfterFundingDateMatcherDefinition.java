@@ -19,7 +19,8 @@ public class NoDisbursementsAfterFundingDateMatcherDefinition extends Performanc
     
     public NoDisbursementsAfterFundingDateMatcherDefinition() {
         
-        super("noDisbursementsAfterFundingDate", "No disbursements after selected funding date", 
+        super(PerformanceRuleConstants.MATCHER_NO_DISB_FUNDING_DATE, 
+                PerformanceRuleConstants.MATCHER_DESCR_NO_DISB_FUNDING_DATE, 
                 String.format("{%s} {%s} have passed since the '{%s}' and still no disbursement from donor", 
                         PerformanceRuleConstants.ATTRIBUTE_TIME_AMOUNT, 
                         PerformanceRuleConstants.ATTRIBUTE_TIME_UNIT, 

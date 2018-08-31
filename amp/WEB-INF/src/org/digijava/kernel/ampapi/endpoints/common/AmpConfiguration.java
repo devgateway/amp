@@ -14,6 +14,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -31,6 +32,7 @@ import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.filters.AmpOfflineModeHolder;
 import org.digijava.module.aim.dbentity.AmpOfflineRelease;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.services.AmpOfflineService;
 import org.digijava.kernel.util.SpringUtil;
@@ -130,20 +132,22 @@ public class AmpConfiguration implements ErrorReportingEndpoint {
     @Path("/amp-offline-version-check")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "version-check")
-    public VersionCheckResponse ampOfflineVersionCheck() {
+    public VersionCheckResponse ampOfflineVersionCheck(@QueryParam("server-id") String serverId) {
 
         AmpOfflineRelease clientRelease = detectClientRelease();
 
         VersionCheckResponse response = new VersionCheckResponse();
-        response.setAmpOfflineCompatible(isAmpOfflineCompatible(clientRelease));
-        response.setAmpOfflineEnabled(true);
+        response.setAmpOfflineCompatible(ampVersionService.isAmpOfflineCompatible(clientRelease));
+        response.setAmpOfflineEnabled(FeaturesUtil.isAmpOfflineEnabled());
         response.setAmpVersion(ampVersionService.getVersionInfo().getAmpVersion());
         response.setLatestAmpOffline(ampOfflineService.findLastRelease(clientRelease));
+        response.setServerId(getServerId());
+        response.setServerIdMatch(isServerIdMatch(serverId));
 
         return response;
     }
 
-    private AmpOfflineRelease detectClientRelease() {
+    public static AmpOfflineRelease detectClientRelease() {
         AmpOfflineRelease release = null;
         if (AmpOfflineModeHolder.isAmpOfflineMode()) {
             try {
@@ -155,10 +159,6 @@ public class AmpConfiguration implements ErrorReportingEndpoint {
             }
         }
         return release;
-    }
-
-    private boolean isAmpOfflineCompatible(AmpOfflineRelease release) {
-        return release != null && ampVersionService.isAmpOfflineCompatible(release.getVersion());
     }
 
     /**
@@ -434,6 +434,14 @@ public class AmpConfiguration implements ErrorReportingEndpoint {
             JsonBean error = ApiError.toError(AmpConfigurationErrors.INVALID_INPUT.withDetails("Invalid architecture"));
             throw new ApiRuntimeException(Response.Status.BAD_REQUEST, error);
         }
+    }
+    
+    public String getServerId() {
+        return FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMP_SERVER_ID);
+    }
+    
+    private boolean isServerIdMatch(String serverId) {
+        return getServerId() != null ? getServerId().equals(serverId) : false;
     }
 
     @Override

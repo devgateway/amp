@@ -30,6 +30,7 @@ var isOsm = false;
 var isFirstSelect = true;
 var tempId = 1; 
 var labels = {};
+var DEFAULT_STRUCTURE_COLOR = '#3388ff'; 
 
 function MapPopup(lat, long) {
 	latitude = lat;
@@ -129,41 +130,82 @@ function onMapClick(e) {
 
 }
 
-function selectLocationCallerShape(selectedGraphic) {
+function createColorCheckboxes(selectedGraphic) {
+	if (window.opener.structuresData) {
+		$('.colors').html('');
+		window.opener.structuresData.structureColors.forEach(function(c) {
+			appendColor(c);
+		});
+		
+		$('.color-checkbox').click(function(event ){
+			
+			if ($(this).data('wasChecked')) {
+				$(this).prop('checked', false);
+			}
+			
+			$(this).data('wasChecked', event.target.checked);				
+		    if (event.target.checked === true) {		    	
+		    	selectedGraphic.target.setStyle({color: event.target.dataset.color});	    		
+		    } else {
+		    	selectedGraphic.target.setStyle({color: DEFAULT_STRUCTURE_COLOR});		    
+		    }		
+		});
+	}	
+}
+function isBlank(str) {
+    return (!str || /^\s*$/.test(str));
+}
+function selectLocationCallerShape(selectedGraphic) {	
 	$("#errorMsg").html("");
 	var callerButton = window.opener.callerGisObject;
-	var row = findRow(selectedGraphic);
+	var row = findRow(selectedGraphic);	
 
 	//set temporary client side id used for identifying structures and rows 
 	if (selectedGraphic.target.tempId == null) {
 		selectedGraphic.target.tempId = tempId++;
 	}
 	
-	  $("#locationTitleDialog").dialog({
+	if (selectedGraphic.target instanceof L.Marker || selectedGraphic.target instanceof L.CircleMarker) {
+		$("#colors-section").hide();
+	} else {
+		$("#colors-section").show();
+	}
+	
+	 $("#locationTitleDialog").dialog({
 		"title" : TranslationManager.getTranslated("Select Structure"),
 		open : function(event, ui) {
 			$("#locationTitle").val('');
+			createColorCheckboxes(selectedGraphic);
 			if (row) {
 				var title = row.getElementsByTagName("INPUT")[0];
-				$("#locationTitle").val(title.value);				
+				$("#locationTitle").val(title.value);					
+				var structureColor = row.getElementsByTagName("INPUT")[8];
+				if (structureColor && structureColor.value) {
+					$(".color-checkbox:radio[value='"+ structureColor.value +"']").attr("checked", true);
+				}				
 			}
 		},
 		buttons : [ {
-			text : "Close",
+			text : TranslationManager.getTranslated('Close'),
 			click : function() {
 				$(this).dialog("close");
 			}
 		}, {
-			text : "Submit",
+			text : TranslationManager.getTranslated('Submit'),
 			click : function() {
-				if ($("#locationTitle").val() == '') {
+				if (isBlank($("#locationTitle").val()) ) {
 					$("#errorMsg").html(TranslationManager.getTranslated('Title is a required field'));
 					return;
 				}
 				
-				addStructureLabel(selectedGraphic, $("#locationTitle").val());				
+				updateStructure(selectedGraphic, $("#locationTitle").val());				
 				isFirstSelect = false;
-				// if row does not exist, trigger click on add structure button to add row on structures table in AF					
+				// if row does not exist, trigger click on add structure button to add row on structures table in AF
+                //this confirmation is added just in case the user closes the window before the content is submited
+				//and after pressing the submit button
+				window.onbeforeunload = function() {
+                    return confirm('Are you sure you want to leave the current page?');
+                }
 				if (row == null) {
 						callerButton.ownerDocument.getElementsByClassName('addStructure')[0].click();
 						setTimeout(function() {
@@ -173,7 +215,7 @@ function selectLocationCallerShape(selectedGraphic) {
 						}, 3000);
 				} else {
 						updateActivityForm(row, selectedGraphic);
-				}				
+				}
 				$(this).dialog("close");
 			}
 		} ]
@@ -181,6 +223,7 @@ function selectLocationCallerShape(selectedGraphic) {
 }
 
 function updateActivityForm(row, selectedGraphic) {
+
 	var title = row.getElementsByTagName("INPUT")[0];
 	title.value = $("#locationTitle").val();
 	window.opener.postvaluesx(title);
@@ -200,6 +243,16 @@ function updateActivityForm(row, selectedGraphic) {
 	var tempIdInput = row.getElementsByTagName("INPUT")[7];
 	tempIdInput.value = selectedGraphic.target.tempId;
 	window.opener.postvaluesx(tempIdInput);
+	
+	var structureColorInput = row.getElementsByTagName("INPUT")[8];
+	
+	var selectedColors = document.querySelectorAll('.color-checkbox:checked');	
+	if (selectedColors.length > 0){
+		structureColorInput.value = parseInt(selectedColors[0].value);
+	} else {
+		structureColorInput.value = null;
+	}
+	window.opener.postvaluesx(structureColorInput);
 
 	if (selectedPointEvent.target instanceof L.Marker || selectedGraphic.target instanceof L.CircleMarker) {
 		latitudeInput.value = selectedGraphic.latlng.lat;
@@ -241,6 +294,8 @@ function updateActivityForm(row, selectedGraphic) {
 	fireChangeEvent(title);
 	fireChangeEvent(tempIdInput);
 	fireChangeEvent(shapeInput);
+	fireChangeEvent(structureColorInput);
+    window.onbeforeunload = null;
 }
 
 function fireChangeEvent(element) {
@@ -253,8 +308,8 @@ function fireChangeEvent(element) {
 	}
 }
 
-function addStructureLabel(selectedGraphic, title) {
-	var label = labels[selectedGraphic.target.tempId];
+function updateStructure(selectedGraphic, title) {
+	var label = labels[selectedGraphic.target.tempId];	
 	if (label) {
 		label.setIcon(L.divIcon({
 			iconSize : null,
@@ -439,6 +494,21 @@ function filterLocation(value) {
 		}
 	});
 
+}
+
+function appendColor(categoryValue) {
+	var colorHTML = getColorHTMLTemplate();	
+	colorHTML = colorHTML.replace('{value}', categoryValue.id);	
+	var translatedValue = TranslationManager.getTranslated(categoryValue.value);
+	var splits = translatedValue.split(":");
+	if (splits.length == 2) {
+		colorHTML = colorHTML.replace('{color}', splits[0]).replace('{color}', splits[0]).replace('{name}', splits[1]);
+		$('.colors').append(colorHTML);
+	} 
+}
+
+function getColorHTMLTemplate() {
+	return '<li><input type="radio" class="color-checkbox" name="structure-color" id="structure-color" value="{value}" data-color={color}><svg width="24" height="24"> <rect style="fill:{color}" width="24" height="24" x="0" y="5"></rect></svg><label class="color-label">{name}</label></li>';
 }
 
 function startContextMenu() {

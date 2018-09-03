@@ -68,7 +68,7 @@ public class AmpResource {
     @Interchangeable(fieldTitle = "Team", importable = true, required = ActivityEPConstants.REQUIRED_ALWAYS)
     private Long team;
     
-    @PossibleValues(ResourcesTypePossibleValuesProvider.class)
+    @PossibleValues(ResourceTypePossibleValuesProvider.class)
     @Interchangeable(fieldTitle = "Resource Type", importable = true, required = ActivityEPConstants.REQUIRED_ALWAYS)
     private String resourceType;
     

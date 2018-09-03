@@ -38,7 +38,7 @@ public class SetAttributes extends Action {
         if ( myForm.getAction() != null && myForm.getAction().equals(CrConstants.MAKE_PUBLIC) ) 
                 makePublic( myForm.getUuid(), request);
         if ( myForm.getAction() != null && myForm.getAction().equals(CrConstants.UNPUBLISH) ) 
-                unpublish(myForm.getUuid(), request);
+                unpublish(myForm.getUuid());
         
         request.getSession().setAttribute("resourcesTab", myForm.getType());
         return null;
@@ -90,25 +90,20 @@ public class SetAttributes extends Action {
 //      }
     }
     
-    public static void unpublish(String uuid, HttpServletRequest request) {
+    public static void unpublish(String uuid) {
         Session hbSession                           = null;
         try {
             hbSession           = PersistenceManager.getRequestDBSession();
             String queryStr     = "SELECT a FROM " + CrDocumentNodeAttributes.class.getName() + " a WHERE uuid=:uuid" ;
             Query query         = hbSession.createQuery(queryStr);
             
-            Node lastVersionNode = DocumentManagerUtil.getLastVersionNotWaitingApproval(uuid, request);
-            
             query.setString("uuid", uuid);
             
             CrDocumentNodeAttributes docNodeAtt         = (CrDocumentNodeAttributes)query.uniqueResult();
             if (docNodeAtt != null) {
                 hbSession.delete(docNodeAtt);
-                NodeWrapper nw = new NodeWrapper(lastVersionNode);
-                if (nw.getName().equals(MapTilesService.FILE_NAME)) {
-                    MapTilesService.getInstance().updateOfflineChangeLog(hbSession);
-                }
             }
+            
 //session.flush();
                         
         } catch (Exception e) {

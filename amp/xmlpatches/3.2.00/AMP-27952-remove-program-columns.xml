@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-27952</jira>
+	<keyword>Remove program columns</keyword>
+	<author>vchihai</author>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+
+                <!-- National Planning Objectives -->
+				DELETE FROM amp_report_column rc
+				    WHERE rc.columnid IN (SELECT columnid FROM amp_columns WHERE columnname = 'National Planning Objectives')
+				    AND EXISTS(SELECT 1 FROM amp_report_column rc2 
+				        WHERE rc2.columnid IN (SELECT columnid FROM amp_columns WHERE columnname = 'National Planning Objectives Level 1') 
+				        AND rc.amp_report_id = rc2.amp_report_id LIMIT 1);
+				        
+				UPDATE amp_report_column SET columnid = (SELECT columnid FROM amp_columns WHERE columnname = 'National Planning Objectives Level 1') 
+				    WHERE columnid IN (SELECT columnid FROM amp_columns WHERE columnname = 'National Planning Objectives');
+				                
+				DELETE FROM amp_report_hierarchy rh
+				    WHERE rh.columnid IN (SELECT columnid FROM amp_columns WHERE columnname = 'National Planning Objectives')
+				    AND EXISTS(SELECT 1 FROM amp_report_hierarchy rh2 
+				        WHERE rh2.columnid IN (SELECT columnid FROM amp_columns WHERE columnname = 'National Planning Objectives Level 1') 
+				        AND rh.amp_report_id = rh2.amp_report_id LIMIT 1);
+				
+				UPDATE amp_report_hierarchy SET columnid = (SELECT columnid FROM amp_columns WHERE columnname = 'National Planning Objectives Level 1') 
+				    WHERE columnid IN (SELECT columnid FROM amp_columns WHERE columnname = 'National Planning Objectives');
+				
+				DELETE FROM amp_columns_filters WHERE column_id IN (
+				    SELECT columnid FROM amp_columns WHERE columnname = 'National Planning Objectives');
+				    
+				DELETE FROM amp_columns WHERE columnname = 'National Planning Objectives';
+				
+				
+				<!-- Primary Program -->
+                DELETE FROM amp_report_column rc
+                    WHERE rc.columnid IN (SELECT columnid FROM amp_columns WHERE columnname = 'Primary Program')
+                    AND EXISTS(SELECT 1 FROM amp_report_column rc2 
+                        WHERE rc2.columnid IN (SELECT columnid FROM amp_columns WHERE columnname = 'Primary Program Level 1') 
+                        AND rc.amp_report_id = rc2.amp_report_id LIMIT 1);
+                        
+                UPDATE amp_report_column SET columnid = (SELECT columnid FROM amp_columns WHERE columnname = 'Primary Program Level 1') 
+                    WHERE columnid IN (SELECT columnid FROM amp_columns WHERE columnname = 'Primary Program');
+                                
+                DELETE FROM amp_report_hierarchy rh
+                    WHERE rh.columnid IN (SELECT columnid FROM amp_columns WHERE columnname = 'Primary Program')
+                    AND EXISTS(SELECT 1 FROM amp_report_hierarchy rh2 
+                        WHERE rh2.columnid IN (SELECT columnid FROM amp_columns WHERE columnname = 'Primary Program Level 1') 
+                        AND rh.amp_report_id = rh2.amp_report_id LIMIT 1);
+                
+                UPDATE amp_report_hierarchy SET columnid = (SELECT columnid FROM amp_columns WHERE columnname = 'Primary Program Level 1') 
+                    WHERE columnid IN (SELECT columnid FROM amp_columns WHERE columnname = 'Primary Program');
+                
+                DELETE FROM amp_columns_filters WHERE column_id IN (
+                    SELECT columnid FROM amp_columns WHERE columnname = 'Primary Program');
+                    
+                DELETE FROM amp_columns WHERE columnname = 'Primary Program';
+				
+				
+				<!-- Secondary Program -->
+                DELETE FROM amp_report_column rc
+                    WHERE rc.columnid IN (SELECT columnid FROM amp_columns WHERE columnname = 'Secondary Program')
+                    AND EXISTS(SELECT 1 FROM amp_report_column rc2 
+                        WHERE rc2.columnid IN (SELECT columnid FROM amp_columns WHERE columnname = 'Secondary Program Level 1') 
+                        AND rc.amp_report_id = rc2.amp_report_id LIMIT 1);
+                        
+                UPDATE amp_report_column SET columnid = (SELECT columnid FROM amp_columns WHERE columnname = 'Secondary Program Level 1') 
+                    WHERE columnid IN (SELECT columnid FROM amp_columns WHERE columnname = 'Secondary Program');
+                                
+                DELETE FROM amp_report_hierarchy rh
+                    WHERE rh.columnid IN (SELECT columnid FROM amp_columns WHERE columnname = 'Secondary Program')
+                    AND EXISTS(SELECT 1 FROM amp_report_hierarchy rh2 
+                        WHERE rh2.columnid IN (SELECT columnid FROM amp_columns WHERE columnname = 'Secondary Program Level 1') 
+                        AND rh.amp_report_id = rh2.amp_report_id LIMIT 1);
+                
+                UPDATE amp_report_hierarchy SET columnid = (SELECT columnid FROM amp_columns WHERE columnname = 'Secondary Program Level 1') 
+                    WHERE columnid IN (SELECT columnid FROM amp_columns WHERE columnname = 'Secondary Program');
+                
+                DELETE FROM amp_columns_filters WHERE column_id IN (
+                    SELECT columnid FROM amp_columns WHERE columnname = 'Secondary Program');
+                    
+                DELETE FROM amp_columns WHERE columnname = 'Secondary Program';
+                
+                
+                <!-- Tertiary Program -->
+                DELETE FROM amp_report_column rc
+                    WHERE rc.columnid IN (SELECT columnid FROM amp_columns WHERE columnname = 'Tertiary Program')
+                    AND EXISTS(SELECT 1 FROM amp_report_column rc2 
+                        WHERE rc2.columnid IN (SELECT columnid FROM amp_columns WHERE columnname = 'Tertiary Program Level 1') 
+                        AND rc.amp_report_id = rc2.amp_report_id LIMIT 1);
+                        
+                UPDATE amp_report_column SET columnid = (SELECT columnid FROM amp_columns WHERE columnname = 'Tertiary Program Level 1') 
+                    WHERE columnid IN (SELECT columnid FROM amp_columns WHERE columnname = 'Tertiary Program');
+                                
+                DELETE FROM amp_report_hierarchy rh
+                    WHERE rh.columnid IN (SELECT columnid FROM amp_columns WHERE columnname = 'Tertiary Program')
+                    AND EXISTS(SELECT 1 FROM amp_report_hierarchy rh2 
+                        WHERE rh2.columnid IN (SELECT columnid FROM amp_columns WHERE columnname = 'Tertiary Program Level 1') 
+                        AND rh.amp_report_id = rh2.amp_report_id LIMIT 1);
+                
+                UPDATE amp_report_hierarchy SET columnid = (SELECT columnid FROM amp_columns WHERE columnname = 'Tertiary Program Level 1') 
+                    WHERE columnid IN (SELECT columnid FROM amp_columns WHERE columnname = 'Tertiary Program');
+                
+                DELETE FROM amp_columns_filters WHERE column_id IN (
+                    SELECT columnid FROM amp_columns WHERE columnname = 'Tertiary Program');
+                    
+                DELETE FROM amp_columns WHERE columnname = 'Tertiary Program';
+				
+				
+				<!-- Update column index in reports -->
+                UPDATE amp_report_column SET order_id = v.new_order_id
+                    FROM (
+                        SELECT amp_report_id, columnid, order_id, row_number() 
+                        OVER (partition by amp_report_id order by order_id, columnid) new_order_id
+                        FROM amp_report_column
+                    ) v
+                    WHERE amp_report_column.amp_report_id = v.amp_report_id
+                    AND amp_report_column.columnid = v.columnid;
+				
+				UPDATE amp_report_hierarchy SET levelid = v.new_levelid
+                    FROM (
+                        SELECT amp_report_id, columnid, levelid, row_number() 
+                        OVER (partition by amp_report_id order by levelid, columnid) new_levelid
+                        FROM amp_report_hierarchy
+                    ) v
+                    WHERE amp_report_hierarchy.amp_report_id = v.amp_report_id
+                    AND amp_report_hierarchy.columnid = v.columnid;
+				
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

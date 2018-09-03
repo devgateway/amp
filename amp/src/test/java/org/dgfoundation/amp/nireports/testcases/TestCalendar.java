@@ -41,5 +41,15 @@ public class TestCalendar implements CalendarConverter {
     public String getDefaultFiscalYearPrefix() {
         return "FY";
     }
+    
+    @Override
+    public int parseYear(String year, String prefix) {
+        return 0;
+    }
+    
+    @Override
+    public int parseYear(String year) {
+        return 0;
+    }
 
 }

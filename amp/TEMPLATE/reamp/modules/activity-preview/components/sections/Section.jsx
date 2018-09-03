@@ -9,10 +9,22 @@ require('../../styles/ActivityView.css');
  */
 const Section = (ComposedSection, SectionTitle = null, useEncapsulateHeader = true, sID) => class extends Component {
 
+  _getTitle(field) {
+    let ret = '';
+    if (field && field.field_label) {
+      if (field.field_label['en']) {
+        ret = field.field_label['en'];
+      } else if (field.field_label['EN']) {        
+        ret = field.field_label['EN'];
+      }
+    }
+    return ret;
+  }
+
   buildSimpleField(activity, fieldPath, showIfNotAvailable, noDataValue, inline = false) {
     const field = activity[fieldPath];
     //TODO
-    const title_ = (field.field_label.en ? field.field_label.en : '');
+    const title_ = this._getTitle(field);
     let value_ = field.value;
     if (field.field_type === 'date') {
       value_ = DateUtils.createFormattedDate(value_);

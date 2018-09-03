@@ -2,6 +2,8 @@
  * @author Daniel Oliva
  */
 
+export const DEFAULT_CURRENCY = 'XOF';
+
 export const PROJECT_TITLE = 'project_title';
 export const AMP_ID = 'amp_id';
 export const ACTIVITY_STATUS = 'activity_status';
@@ -9,7 +11,8 @@ export const ACTIVITY_BUDGET = 'activity_budget';
 export const ACTIVITY_SECTION_IDS =
   [
     { key: 'AcIdentification', hash: '#AcIdentification', value: 'Identification', translationKey: 'amp.activity-preview:sectionIdentification'},
-    { key: 'AcInternalIds', hash: '#AcInternalIds', value: 'Agency Internal IDs', translationKey: 'amp.activity-preview:sectionInternalIds' }
+    { key: 'AcInternalIds', hash: '#AcInternalIds', value: 'Agency Internal IDs', translationKey: 'amp.activity-preview:sectionInternalIds' },
+    { key: 'AcFundingSources', hash: '#AcFundingSources', value: 'Funding Sources', translationKey: 'amp.activity-preview:fundingSources' }
   ];
 
 export const STATUS_REASON = 'status_reason';
@@ -69,5 +72,28 @@ export const NATIONAL_PLAN_OBJECTIVE = 'national_plan_objective';
 export const PROGRAM = 'program';
 export const PROGRAM_PERCENTAGE = 'program_percentage';
 
+//Programs
+export const PROGRAM_SETTINGS = 'program_settings';
+export const PRIMARY_PROGRAMS = 'primary_programs';
+export const SECONDARY_PROGRAMS = 'secondary_programs';
+
+//Sectors
+export const PRIMARY_SECTORS = 'primary_sectors';
+export const SECONDARY_SECTORS = 'secondary_sectors';
+export const SECTOR = 'sector';
+export const SECTOR_PERCENTAGE = 'sector_percentage';
+
+//Funding Section
+export const FUNDINGS = 'fundings';
+export const AMP_FUNDING_ID = 'amp_funding_id';
+export const FUNDING_DONOR_ORG_ID = 'donor_organization_id';
+export const SOURCE_ROLE = 'source_role';
+export const TYPE_OF_ASSISTANCE = 'type_of_assistance';
+export const FINANCING_INSTRUMENT = 'financing_instrument';
+export const FUNDING_STATUS = 'funding_status';
+export const FINANCING_ID = 'financing_id';
+export const FUNDING_DETAILS = 'funding_details';
+export const ADJUSTMENT_TYPE = 'adjustment_type';
+export const TRANSACTION_TYPE = 'transaction_type';
 
 

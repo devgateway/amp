@@ -21,7 +21,7 @@ const PercentageList = (listField, valueField, percentageField, listTitle = null
         const itemTitle = item[valueField].value ? item[valueField].value : 
           item[percentageField].field_label.EN;
         return (<PercentageField
-          key={itemTitle} title={itemTitle} value={item[percentageField]}
+          key={item[percentageField].field_label.EN} title={itemTitle} value={item[percentageField]}
           titleClass={this.props.percentTitleClass} valueClass={this.props.percentValueClass} />);
       });
       if (this.props.tablify) {

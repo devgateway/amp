@@ -5,6 +5,10 @@ import InternalIds from './sections/InternalIds';
 import Planning from './sections/Planning';
 import Location from './sections/Location'
 import NationalPlanObjective from './sections/NationalPlanObjective'
+import Program from './sections/Program'
+import Sector from './sections/Sector'
+import FundingSources from './sections/FundingSources'
+import FundingSection from './sections/funding/FundingSection'
 require('../styles/ActivityView.css');
 
 /**
@@ -38,6 +42,14 @@ export default class MainGroup extends Component {
       <Location params={params} tablify styles={this._getBoxStyles()} />
 
       <NationalPlanObjective params={params} styles={styles} />
+
+      <Program params={params} styles={this._getPercentageStyles()} />
+
+      <Sector params={params} styles={this._getPercentageStyles()} />
+
+      <FundingSources params={params} styles={styles} />
+
+      <FundingSection params={params} styles={this._getBoxStyles()}/>
       
     </div>);
   }
@@ -47,6 +59,16 @@ export default class MainGroup extends Component {
       inline : false,
       fieldNameClass : 'box_field_name',
       fieldValueClass : 'box_field_value',
+      titleClass : 'section_title_class', 
+      groupClass : 'section_group_class'
+    }
+  }
+
+  _getPercentageStyles() {
+    return {
+      inline : false,
+      fieldNameClass : 'sector_title',
+      fieldValueClass : '',
       titleClass : 'section_title_class', 
       groupClass : 'section_group_class'
     }

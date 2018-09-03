@@ -1,0 +1,63 @@
+import React, { Component } from 'react';
+import * as AC from '../../../utils/ActivityConstants';
+import FundingItem from './FundingItem';
+import FundingTotalItem from './FundingTotalItem';
+import Label from '../../fields/Label';
+import ActivityFundingTotals from '../../activity/ActivityFundingTotals';
+
+require('../../../styles/ActivityView.css');
+
+/**
+ * @author Daniel Oliva
+ */
+class FundingTransactionTypeItem extends Component {
+
+  constructor(props, context) {
+    super(props);
+  }
+
+  _filterFundingDetails() {
+    return (this.props.fundingDetails.filter(o => o[AC.TRANSACTION_TYPE].id === this.props.group.trnType.id
+    && o[AC.ADJUSTMENT_TYPE].id === this.props.group.adjType.id));
+  }
+
+  _drawHeader() {    
+    const label = `${this.props.group.adjType} ${this.props.group.trnType}`;
+    const key = this.props.group.adjType + this.props.group.trnType;
+  
+    return (<div><Label label={label} labelClass={'header'} key={key} /></div>);
+  }
+
+  _drawDetail() {
+    const filteredFD = this._filterFundingDetails();
+    const content = [];
+    filteredFD.forEach((item) => {
+      content.push(<FundingItem item={item} wsCurrency={AC.DEFAULT_CURRENCY} />);
+    });
+    return <table className={'funding_table'} >{content}</table>;
+  }
+
+  _drawSubTotalFooter() {
+    let subtotal = 0;
+    subtotal = ActivityFundingTotals.convertFundingDetailsToCurrency(this._filterFundingDetails(), AC.DEFAULT_CURRENCY);
+    const measure = `${this.props.group.adjType.value} ${this.props.group.trnType.value}`;
+    const labelTrn = `Subtotal ${measure}`.toUpperCase();
+    return (<div>
+      <FundingTotalItem
+        value={subtotal}
+        label={labelTrn}
+        currency={AC.DEFAULT_CURRENCY}
+        key={this.props.group.adjType.value + this.props.group.trnType.value} />
+    </div>);
+  }
+
+  render() {
+    return (<div className={'table_container'} >
+      <div>{this._drawHeader()}</div>
+      <div>{this._drawDetail()}</div>
+      <div>{this._drawSubTotalFooter()}</div>
+    </div>);
+  }
+}
+
+export default FundingTransactionTypeItem;

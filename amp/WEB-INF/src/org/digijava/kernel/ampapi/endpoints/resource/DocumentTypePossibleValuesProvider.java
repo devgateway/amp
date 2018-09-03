@@ -6,9 +6,9 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 /**
  * @author Viorel Chihai
  */
-public class ResourceTypePossibleValuesProvider extends AmpCategoryPossibleValuesProvider {
+public class DocumentTypePossibleValuesProvider extends AmpCategoryPossibleValuesProvider {
 
-    public ResourceTypePossibleValuesProvider() {
+    public DocumentTypePossibleValuesProvider() {
         super(CategoryConstants.DOCUMENT_TYPE_KEY);
     }
 }

@@ -17,13 +17,16 @@ class FundingTransactionTypeItem extends Component {
   }
 
   _filterFundingDetails() {
-    return (this.props.fundingDetails.filter(o => o[AC.TRANSACTION_TYPE].id === this.props.group.trnType.id
-    && o[AC.ADJUSTMENT_TYPE].id === this.props.group.adjType.id));
+    const trnType = this.props.group.trnType;
+    const adjType = this.props.group.adjType;
+    return (this.props.fundingDetails.filter(o => 
+      o[AC.TRANSACTION_TYPE].value === trnType && o[AC.ADJUSTMENT_TYPE].value === adjType
+    ));
   }
 
   _drawHeader() {    
     const label = `${this.props.group.adjType} ${this.props.group.trnType}`;
-    const key = this.props.group.adjType + this.props.group.trnType;
+    const key = 'TTI_' + this.props.group.adjType + this.props.group.trnType;
   
     return (<div><Label label={label} labelClass={'header'} key={key} /></div>);
   }
@@ -52,6 +55,7 @@ class FundingTransactionTypeItem extends Component {
   }
 
   render() {
+    debugger;
     return (<div className={'table_container'} >
       <div>{this._drawHeader()}</div>
       <div>{this._drawDetail()}</div>

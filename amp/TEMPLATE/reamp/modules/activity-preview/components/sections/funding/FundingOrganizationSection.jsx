@@ -46,7 +46,7 @@ class FundingOrganizationSection extends Component {
       const auxFd = {
         adjType: item[AC.ADJUSTMENT_TYPE].value,
         trnType: item[AC.TRANSACTION_TYPE].value,
-        key: item.id,
+        key: 'FOS_' + item[AC.ADJUSTMENT_TYPE].value + item[AC.TRANSACTION_TYPE].value,
         currency: item[AC.CURRENCY]
       };
       if (!groups.find(o => o.adjType === auxFd.adjType && o.trnType === auxFd.trnType)) {

@@ -54,15 +54,18 @@ class Contacts extends Component {
   }
 
   _buildContacts() {
-    const { activity } = this.props.params;
+    const { activity, translations } = this.props.params;
 
     const contacts = [];
     CONTACT_INFORMATION_SOURCE.forEach(source => {
       let contactInfo = activity[source] && activity[source].value ? activity[source].value : undefined;
-      if (contactInfo) {
+      if (contactInfo && contactInfo.length > 0) {
         contacts.push(this._createColumns(contactInfo, this._getTitle(activity[source])));
       }
-    });    
+    });
+    if (contacts.length < 1) {
+      contacts.push(<div className={'nodata'}>{translations['amp.activity-preview:noData']}</div>);
+    }
     return contacts;
   }
 

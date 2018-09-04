@@ -23,7 +23,6 @@ export const initialTranslations = {
         'Planning': 'Planning',
         'Location': 'Location',
         'NationalPlan': 'National Plan',
-        'Sectors': 'Sectors',
         'Program': 'Program',
         'FundingSources': 'Funding Sources',
         'Funding': 'Funding Section',
@@ -34,5 +33,6 @@ export const initialTranslations = {
         'ResponsibleOrganization': 'Responsible Organization',
         'ExecutingAgency': 'Executing Agency',
         'Issues': 'Issues',
-        'Contacts': 'Contacts'
+        'Contacts': 'Contacts',
+        'SectorsLabel': 'Sectors' 
 };

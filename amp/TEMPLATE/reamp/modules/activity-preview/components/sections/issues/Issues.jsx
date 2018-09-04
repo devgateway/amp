@@ -28,7 +28,7 @@ class Issues extends Component {
         });
       });
       if (content.length === 0) {
-        content = (<div className={'nodata'}>{translations['amp.activity-preview:noData']}</div>);
+        content = (<div className={'nodata'}>{this.props.params.translations['amp.activity-preview:noData']}</div>);
       }
     }
     return content;

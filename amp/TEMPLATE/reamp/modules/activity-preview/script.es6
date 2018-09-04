@@ -12,13 +12,26 @@ import ActivityView from './components/ActivityView';
 export const store = configureStore();
 const history = syncHistoryWithStore(hashHistory, store);
 
+function hashLinkScroll() {
+    const { hash } = window.location;
+    if (hash !== '') {
+        // Push onto callback queue so it runs after the DOM is updated,
+        // this is required when navigating from a different page so that
+        // the element is rendered on the page before trying to getElementById.
+        setTimeout(() => {
+        const id = hash.replace('#', '');
+        const element = document.getElementById(id);
+        if (element) element.scrollIntoView();
+        }, 0);
+    }
+}
 
 startUp(store).then(() => {
 
 ReactDOM.render(
   
     <Provider store={store}>
-        <Router history={history} store={store}>
+        <Router history={history} store={store} onUpdate={hashLinkScroll}>
             <Route path="/" component={App}/>
             <Route path="/activity/:id" component={ActivityView}/>
         </Router>

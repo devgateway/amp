@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import * as AC from '../utils/ActivityConstants';
 import Identification from './sections/Identification';
 import InternalIds from './sections/InternalIds';
 import Planning from './sections/Planning';

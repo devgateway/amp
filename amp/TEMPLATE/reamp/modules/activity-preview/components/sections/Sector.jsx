@@ -37,4 +37,4 @@ class Sector extends Component {
   }
 }
 
-export default Section(Sector, 'Sectors', true, 'AcSector');
+export default Section(Sector, 'SectorsLabel', true, 'AcSector');

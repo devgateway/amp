@@ -44,14 +44,14 @@ class FundingTransactionTypeItem extends Component {
   _drawSubTotalFooter() {
     let subtotal = 0;
     subtotal = ActivityFundingTotals.convertFundingDetailsToCurrency(this._filterFundingDetails(), AC.DEFAULT_CURRENCY);
-    const measure = `${this.props.group.adjType.value} ${this.props.group.trnType.value}`;
+    const measure = `${this.props.group.adjType} ${this.props.group.trnType}`;
     const labelTrn = `Subtotal ${measure}`.toUpperCase();
     return (<div>
       <FundingTotalItem
         value={subtotal}
         label={labelTrn}
         currency={AC.DEFAULT_CURRENCY}
-        key={'FTI_' + this.props.group.adjType.value + this.props.group.trnType.value} />
+        key={'FTI_' + this.props.group.adjType + this.props.group.trnType} />
     </div>);
   }
 

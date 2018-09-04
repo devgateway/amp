@@ -64,7 +64,7 @@ class Contacts extends Component {
       }
     });
     if (contacts.length < 1) {
-      contacts.push(<div className={'nodata'}>{translations['amp.activity-preview:noData']}</div>);
+      contacts.push(<div key={contactNodata} className={'nodata'}>{translations['amp.activity-preview:noData']}</div>);
     }
     return contacts;
   }

@@ -2,9 +2,6 @@ package org.digijava.kernel.ampapi.endpoints.settings;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.digijava.kernel.ampapi.endpoints.activity.discriminators.CurrencyPossibleValuesProvider;
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
-import org.digijava.module.aim.annotations.interchange.PossibleValues;
 
 /**
  * Structure used to store user specified settings.
@@ -15,8 +12,6 @@ import org.digijava.module.aim.annotations.interchange.PossibleValues;
 public class Settings {
 
     @JsonProperty(SettingsConstants.CURRENCY_ID)
-    @PossibleValues(CurrencyPossibleValuesProvider.class)
-    @Interchangeable(fieldTitle = "Currency")
     private String currencyCode;
 
     @JsonProperty(SettingsConstants.CALENDAR_TYPE_ID)

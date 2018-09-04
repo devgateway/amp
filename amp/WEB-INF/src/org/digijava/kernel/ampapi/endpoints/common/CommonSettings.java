@@ -1,8 +1,9 @@
 package org.digijava.kernel.ampapi.endpoints.common;
 
-import org.digijava.kernel.ampapi.endpoints.activity.discriminators.CurrencyPossibleValuesProvider;
+import org.digijava.kernel.ampapi.endpoints.activity.discriminators.CurrencyCommonPossibleValuesProvider;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
+import org.digijava.module.aim.dbentity.AmpCurrency;
 
 /**
  * Structure used for common settings.
@@ -11,8 +12,8 @@ import org.digijava.module.aim.annotations.interchange.PossibleValues;
  */
 public class CommonSettings {
 
-    @PossibleValues(CurrencyPossibleValuesProvider.class)
+    @PossibleValues(CurrencyCommonPossibleValuesProvider.class)
     @Interchangeable(fieldTitle = "Currency")
-    private String currency;
+    private AmpCurrency currency;
 
 }

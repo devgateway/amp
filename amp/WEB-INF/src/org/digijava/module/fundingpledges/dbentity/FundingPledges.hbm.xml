@@ -9,7 +9,7 @@
 			</generator>
 		</id>
 
-<!--		<property name="title" column="title" type="java.lang.String" />-->
+		<property name="createdDate" column="date_created" type="java.util.Date" />
 		<many-to-one name="title" column="title" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue"/>
 		<many-to-one name="status" column="status" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue"/>
 		<property name="titleFreeText" column="titleFreeText" type="java.lang.String" />

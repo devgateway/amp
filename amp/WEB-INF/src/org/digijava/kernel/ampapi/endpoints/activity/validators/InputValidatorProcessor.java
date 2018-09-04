@@ -56,6 +56,15 @@ public class InputValidatorProcessor {
                 new PrimaryOrganisationContactValidator(),
                 new RegexPatternValidator());
     }
+    
+    public static List<InputValidator> getResourceValidators() {
+        return Arrays.asList(
+                new ValidFieldValidator(),
+                new InputTypeValidator(),
+                new RequiredValidator(),
+                new ValueValidator(),
+                new WebLinkValidator());
+    }
 
     private final List<InputValidator> validators;
 

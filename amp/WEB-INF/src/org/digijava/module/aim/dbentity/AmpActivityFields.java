@@ -414,8 +414,7 @@ LoggerIdentifiable, Cloneable {
     @VersionableCollection(fieldTitle = ActivityFieldsConstants.COMPONENTS)
     protected Set<AmpComponent> components;
 
-    //TTIL
-//  @Interchangeable(fieldTitle = "Structures", importable = true, fmPath = "/Activity Form/Structures")
+    @Interchangeable(fieldTitle = "Structures", importable = true, fmPath = "/Activity Form/Structures")
     @VersionableCollection(fieldTitle = "Structures")
     protected Set<AmpStructure> structures;
 
@@ -521,9 +520,9 @@ LoggerIdentifiable, Cloneable {
 //  @Validators (unique="/Activity Form/M&E/Unique MEs Validator")
     protected Set<IndicatorActivity> indicators;
 
-//  @Interchangeable(fieldTitle = "Activity Documents",fmPath="/Activity Form/Related Documents")
+    @Interchangeable(fieldTitle = "Activity Documents", fmPath = "/Activity Form/Related Documents", importable = true)
     @VersionableCollection(fieldTitle = "Activity Documents")
-    protected Set<AmpActivityDocument> activityDocuments    = null;
+    protected Set<AmpActivityDocument> activityDocuments = null;
     
     /* Categories */
     @Interchangeable(fieldTitle = "Categories", importable = true)
@@ -606,30 +605,38 @@ LoggerIdentifiable, Cloneable {
             validators = @Validators (unique = "/Activity Form/Identification/Budget Extras/FY"))
     protected Set<AmpAPIFiscalYear> fiscalYears;
     
-    @Interchangeable(fieldTitle = "Vote", importable = true, fmPath = "/Activity Form/Identification/Budget Extras/Vote", 
+    @Interchangeable(fieldTitle = "Vote", importable = true, 
+            fmPath = "/Activity Form/Identification/Budget Extras/Vote",
+            required = ActivityEPConstants.REQUIRED_ND,
             dependencies={InterchangeDependencyResolver.ON_BUDGET_KEY})
     @VersionableFieldSimple(fieldTitle = "Vote")
     protected String vote;
     
-    @Interchangeable(fieldTitle = "Sub Vote", importable = true, fmPath = "/Activity Form/Identification/Budget Extras/Sub-Vote", 
+    @Interchangeable(fieldTitle = "Sub Vote", importable = true, 
+            fmPath = "/Activity Form/Identification/Budget Extras/Sub-Vote",
+            required = ActivityEPConstants.REQUIRED_ND,
             dependencies={InterchangeDependencyResolver.ON_BUDGET_KEY})
     @VersionableFieldSimple(fieldTitle = "Sub Vote")
     protected String subVote;
     
-    @Interchangeable(fieldTitle = "Sub Program", importable = true, fmPath = "/Activity Form/Identification/Budget Extras/Sub-Program", 
+    @Interchangeable(fieldTitle = "Sub Program", importable = true, 
+            fmPath = "/Activity Form/Identification/Budget Extras/Sub-Program",
+            required = ActivityEPConstants.REQUIRED_ND,
             dependencies={InterchangeDependencyResolver.ON_BUDGET_KEY})
     @VersionableFieldSimple(fieldTitle = "Sub Program")
     protected String subProgram;
 
     @Interchangeable(fieldTitle = ActivityFieldsConstants.PROJECT_CODE, importable = true,
-            required = ActivityEPConstants.BUDGET_EXTRAS_PROJECT_CODE_FM_PATH,
+            required = ActivityEPConstants.REQUIRED_ND,
             dependencies = InterchangeDependencyResolver.ON_BUDGET_KEY,
             fmPath = FMVisibility.ANY_FM + ActivityEPConstants.DONOR_PROJECT_CODE_FM_PATH
                     + "|" + ActivityEPConstants.BUDGET_EXTRAS_PROJECT_CODE_FM_PATH)
     @VersionableFieldSimple(fieldTitle = "Project Code")
     protected String projectCode;
 
-    @Interchangeable(fieldTitle = "Ministry Code", importable = true, fmPath = "/Activity Form/Identification/Budget Extras/Ministry Code",
+    @Interchangeable(fieldTitle = "Ministry Code", importable = true, 
+            fmPath = "/Activity Form/Identification/Budget Extras/Ministry Code",
+            required = ActivityEPConstants.REQUIRED_ND,
             dependencies={InterchangeDependencyResolver.ON_BUDGET_KEY})
     @VersionableFieldSimple(fieldTitle = "Ministry Code")
     protected String ministryCode;
@@ -715,8 +722,7 @@ LoggerIdentifiable, Cloneable {
     @Interchangeable(fieldTitle = "PPC Annual Budgets", importable = true, fmPath = "/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost")
     @VersionableCollection(fieldTitle = "PPC Annual Budgets")
     protected Set<AmpAnnualProjectBudget> annualProjectBudgets;
-    //protected Set <AmpActivityContact> activityContacts;
-
+    
         public Boolean getMergedActivity() {
             return mergedActivity;
         }
@@ -2165,5 +2171,6 @@ LoggerIdentifiable, Cloneable {
             }
             this.costAmounts.add(costAmount);
         }
+
 }
 

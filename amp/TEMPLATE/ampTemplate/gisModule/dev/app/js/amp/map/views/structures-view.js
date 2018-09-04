@@ -6,9 +6,8 @@ var Backbone = require('backbone');
 var L = require('../../../../../node_modules/esri-leaflet/dist/esri-leaflet.js');
 var StructureClusterMixin = require('./structure-cluster-mixin');
 var SettingsUtils = require('../../../libs/local/settings-utils.js');
-
+var Constants = require('../../../libs/local/constants.js');
 var ProjectSiteTemplate = fs.readFileSync(__dirname + '/../templates/structure-template.html', 'utf8');
-
 
 function breathAfter(func, context) {
   return function(/* arguments */) {
@@ -20,7 +19,6 @@ function breathAfter(func, context) {
     return finished.promise();
   };
 }
-
 
 module.exports = Backbone.View
 .extend(StructureClusterMixin).extend({
@@ -239,6 +237,13 @@ module.exports = Backbone.View
   },
 
   _getColors: function(feature){
+	  if (feature.properties.color) {		  
+		  var color = feature.properties.color.substring(0, feature.properties.color.indexOf(Constants.STRUCTURE_COLORS_DELIMITER)); 
+		  if (color.length > 0) {
+			  return [{hex: function() { return color;}}];	
+		  }	  
+	  }
+	  
 	  var colors = this.structureMenuModel.structuresCollection.palette.colours.filter(function(colour) {
 	      return colour.get('test').call(colour, feature.properties.id);
 	    });
@@ -340,7 +345,7 @@ module.exports = Backbone.View
   _hilightProject: function(projectId) {
     this.featureGroup.eachLayer(function(layer) {
       if (layer.feature.properties.activity.id === projectId && layer.setStyle) {
-        layer.setStyle({color: '#222', stroke: true, weight:2});
+    	  layer.setStyle({color: '#222', stroke: true, weight: 4});
       }
     });
   },

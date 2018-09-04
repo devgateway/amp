@@ -27,6 +27,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessages;
 import org.apache.wicket.util.lang.Bytes;
+import org.digijava.kernel.ampapi.endpoints.gis.services.MapTilesService;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
@@ -575,6 +576,11 @@ public class DocumentManager extends Action {
                 }
                 DocumentData documentData = DocumentData.buildFromNodeWrapper(nodeWrapper, fileName, documentNodeBaseVersionUUID, 
                             nodeWrapper.getUuid() /*if it's original,node then this value is equal to documentNodeBaseVersionUUID, otherwise it's node's visible version uuid */);
+                
+                // AMP-27996 Map Tiles file shouldn't be visible in public documents table
+                if (CrConstants.PUBLIC_DOCS_TAB.equals(tabName) && fileName.equals(MapTilesService.FILE_NAME)) {
+                    continue;
+                }
                 
                 if ( !CrConstants.PUBLIC_DOCS_TAB.equals(tabName) && showActionButtons) {
                     /**

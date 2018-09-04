@@ -15,7 +15,7 @@ import org.junit.Test;
  */
 public class LocationExtraInfoTest {
 
-    private LocationExtraInfo locationExtraInfo = new LocationExtraInfo(1L, "PL", 2L, "CV");
+    private LocationExtraInfo locationExtraInfo = new LocationExtraInfo(1L, "PL", 2L, "CV", null);
 
     private String originalJson = "{\"parent_location_id\":1,\"parent_location_name\":\"PL\","
             + "\"implementation_level_id\":2,\"implementation_location_name\":\"CV\"}";

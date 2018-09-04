@@ -14,7 +14,7 @@
 				-------------------------------------------------------------------------------------
 
 				-- create new FM module
-				INSERT INTO amp_modules_visibility VALUES (
+				INSERT INTO amp_modules_visibility (id, name, description, haslevel, parent) VALUES (
 				  nextval('amp_modules_visibility_seq'),
 				  '/Activity Form/Identification/Activity Updated On',
 				  NULL,
@@ -39,7 +39,7 @@
 				-------------------------------------------------------------------------------------
 
 				-- create new FM module
-				INSERT INTO amp_modules_visibility VALUES (
+				INSERT INTO amp_modules_visibility (id, name, description, haslevel, parent) VALUES (
 				  nextval('amp_modules_visibility_seq'),
 				  '/Activity Form/Identification/Activity Last Updated by',
 				  NULL,

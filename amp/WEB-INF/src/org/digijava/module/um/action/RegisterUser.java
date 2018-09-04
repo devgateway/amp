@@ -93,6 +93,8 @@ public class RegisterUser extends Action {
             user.setOrganizationName(userRegisterForm.getOrganizationName());
 
             user.setPledger(userRegisterForm.getPledger());
+            //only if its a pledge user it can be a super user
+            user.setPledgeSuperUser(userRegisterForm.getPledger() && userRegisterForm.getPledgeSuperUser());
             user.setExemptFromDataFreezing(userRegisterForm.getExemptFromDataFreezing());
             
             user.setNotificationEmailEnabled(userRegisterForm.getNotificationEmailEnabled());

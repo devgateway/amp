@@ -19,8 +19,15 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_accession_instruments AS SELECT acc.amp_activity_id, acv.category_value AS name FROM amp_activities_categoryvalues acc, amp_category_value acv, amp_category_class ac WHERE (((acv.id = acc.amp_categoryvalue_id) AND (ac.id = acv.amp_category_class_id)) AND ((ac.keyname)::text = 'accessioninstr'::text));;;
-			    	CREATE OR REPLACE VIEW v_ssc_accession_instruments AS SELECT acc.amp_activity_id, acv.category_value AS name FROM amp_activities_categoryvalues acc, amp_category_value acv, amp_category_class ac WHERE (((acv.id = acc.amp_categoryvalue_id) AND (ac.id = acv.amp_category_class_id)) AND ((ac.keyname)::text = 'SSC_accessioninstr'::text));;;
+			    	CREATE OR REPLACE VIEW v_accession_instruments AS 
+			    	    SELECT acc.amp_activity_id, acv.category_value AS name, acv.id AS id
+			    	    FROM amp_activities_categoryvalues acc, amp_category_value acv, amp_category_class ac 
+			    	    WHERE (((acv.id = acc.amp_categoryvalue_id) AND (ac.id = acv.amp_category_class_id)) AND ((ac.keyname)::text = 'accessioninstr'::text));
+			    	
+			    	CREATE OR REPLACE VIEW v_ssc_accession_instruments AS 
+			    	    SELECT acc.amp_activity_id, acv.category_value AS name, acv.id AS id
+			    	    FROM amp_activities_categoryvalues acc, amp_category_value acv, amp_category_class ac 
+			    	    WHERE (((acv.id = acc.amp_categoryvalue_id) AND (ac.id = acv.amp_category_class_id)) AND ((ac.keyname)::text = 'SSC_accessioninstr'::text));
         		</lang>
 		</script>
 	</apply>

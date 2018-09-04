@@ -730,12 +730,12 @@ public class DbUtil {
         return ampAppSettings;
     }
 
-    public static boolean isUserTranslator(User user) {
+    public static boolean isUserTranslator(User u) {
 
         logger.debug("In isUserTranslator()");
+        User user = (User) PersistenceManager.getSession().get(User.class, u.getId());
         boolean flag = false;
         try {
-
             Iterator itr = user.getGroups().iterator();
             if (!itr.hasNext()) {
                 logger.debug("No groups");
@@ -1708,19 +1708,32 @@ public class DbUtil {
         return col;
     }
 
+    public static List<AmpOrgGroup> getAllVisibleOrgGroups() {
+        return getAllVisibleOrgGroups(null);
+    }
     /**
+     *
      * generates a list of all AmpOrgGroup elements which have deleted =null or
      * deleted = false
      *
+     * @param ampOrgGroupIds if not null will filter the list for the given ids
      * @return
      */
-    public static List<AmpOrgGroup> getAllVisibleOrgGroups() {
+    public static List<AmpOrgGroup> getAllVisibleOrgGroups(List<Long> ampOrgGroupIds) {
         try {
             Session session = PersistenceManager.getRequestDBSession();
             String orgGrpNameHql = AmpOrgGroup.hqlStringForName("c");
             String queryString = "select c from " + AmpOrgGroup.class.getName() + " c"
-                    + " WHERE c.deleted IS NULL OR c.deleted = false" + " order by lower(" + orgGrpNameHql + ") asc";
+                    + " WHERE (c.deleted IS NULL OR c.deleted = false)";
+            if (ampOrgGroupIds != null && ampOrgGroupIds.size() > 0) {
+                queryString += " AND c.ampOrgGrpId IN (:ids) ";
+            }
+            queryString += " order by lower(" + orgGrpNameHql + ") asc";
+
             Query qry = session.createQuery(queryString);
+            if (ampOrgGroupIds != null && ampOrgGroupIds.size() > 0) {
+                qry.setParameterList("ids", ampOrgGroupIds);
+            }
             return qry.list();
         } catch (Exception e) {
             logger.debug("Exception from getAllOrgGroups()");
@@ -2067,6 +2080,14 @@ public class DbUtil {
     }
 
     public static Collection getOrgByCode(String action, String code, Long id) {
+        return getOrgByCodeAndAcronym(action, code, null, id);
+    }
+
+    public static Collection getOrgByAcronym(String action, String acronym, Long id) {
+        return getOrgByCodeAndAcronym(action, null, acronym, id);
+    }
+
+    public static Collection getOrgByCodeAndAcronym(String action, String code, String acronym, Long id) {
 
         Session sess = null;
         Collection col = new ArrayList();
@@ -2075,16 +2096,26 @@ public class DbUtil {
 
         try {
             sess = PersistenceManager.getRequestDBSession();
-            if ("create".equals(action)) {
-                queryString = "select o from " + AmpOrganisation.class.getName()
-                        + " o where (o.orgCode=:code) and (o.deleted is null or o.deleted = false) ";
-                qry = sess.createQuery(queryString);
+            queryString = "select o from " + AmpOrganisation.class.getName()
+                    + " o where (o.deleted is null or o.deleted = false) ";
+            if (code != null) {
+                queryString += " AND (o.orgCode=:code) ";
+            }
+            if (acronym != null) {
+                queryString += " AND (o.acronym=:acronym) ";
+            }
+            if ("edit".equals(action)) {
+
+                queryString += " and (o.ampOrgId!=:id) ";
+            }
+            qry = sess.createQuery(queryString);
+            if (code != null) {
                 qry.setParameter("code", code, StringType.INSTANCE);
-            } else if ("edit".equals(action)) {
-                queryString = "select o from " + AmpOrganisation.class.getName()
-                        + " o where (o.orgCode=:code) and (o.ampOrgId!=:id) and (o.deleted is null or o.deleted = false) ";
-                qry = sess.createQuery(queryString);
-                qry.setParameter("code", code, StringType.INSTANCE);
+            }
+            if (acronym != null) {
+                qry.setParameter("acronym", acronym, StringType.INSTANCE);
+            }
+            if ("edit".equals(action)) {
                 qry.setParameter("id", id, LongType.INSTANCE);
             }
             col = qry.list();
@@ -2772,7 +2803,7 @@ public class DbUtil {
     }
 
     /**
-     * This class is used for soring organisations by acronym.
+     * This class is used for sorting organisations by acronym.
      * 
      * @author Dare Roinishvili
      * 

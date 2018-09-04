@@ -12,8 +12,9 @@ const PercentageList = (listField, valueField, percentageField, listTitle = null
   }
 
   render() {
-    const title = listTitle;
-    const items = this.props.params.activity[listField];
+    const {activity, translations} = this.props.params;
+    const title = translations[listTitle] ? translations[listTitle] : listTitle;
+    const items = activity[listField];
     let content = null;
     let isListEnabled = items && items.value.length;
     if (isListEnabled) {

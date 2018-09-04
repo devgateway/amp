@@ -17,7 +17,7 @@ const SecondarySectorList = PercentageList(SECONDARY_SECTORS, SECTOR, SECTOR_PER
  * Activity Preview Sector section
  * @author Daniel Oliva
  */
-class APSector extends Component {
+class Sector extends Component {
   
   constructor(props) {
     super(props);
@@ -37,4 +37,4 @@ class APSector extends Component {
   }
 }
 
-export default Section(APSector, 'Sectors', true, 'APSector');
+export default Section(Sector, 'Sectors', true, 'AcSector');

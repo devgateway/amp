@@ -6,6 +6,6 @@ import { NATIONAL_PLAN_OBJECTIVE, PROGRAM, PROGRAM_PERCENTAGE } from '../../util
  * @author Daniel Oliva
  */
 const NationalPlanObjective = Section(PercentageList(NATIONAL_PLAN_OBJECTIVE, PROGRAM, PROGRAM_PERCENTAGE),
-'National Plan', true, 'AcNationalPlan');
+'NationalPlan', true, 'AcNationalPlan');
 
 export default NationalPlanObjective;

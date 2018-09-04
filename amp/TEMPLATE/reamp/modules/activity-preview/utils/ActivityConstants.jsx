@@ -96,4 +96,25 @@ export const FUNDING_DETAILS = 'funding_details';
 export const ADJUSTMENT_TYPE = 'adjustment_type';
 export const TRANSACTION_TYPE = 'transaction_type';
 
+//Aditional Info
+export const TEAM = 'team';
+export const CREATED_BY = 'created_by';
+export const MODIFIED_BY = 'modified_by';
+export const UPDATE_DATE = 'update_date';
+
+//Related Orgs
+export const RESPONSIBLE_ORGANIZATION = 'responsible_organization';
+export const DONOR_ORGANIZATION = 'donor_organization';
+export const EXECUTING_AGENCY = 'executing_agency';
+
+//Issues
+export const ISSUES = 'issues';
+export const ISSUE_DATE = 'issue_date';
+export const ISSUE_NAME = 'name';
+export const MEASURES = 'measures';
+export const MEASURE_NAME = 'name';
+export const MEASURE_DATE = 'measure_date';
+export const ACTORS = 'actors';
+export const ACTOR_NAME = 'name';
+
 

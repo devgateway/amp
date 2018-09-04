@@ -15,7 +15,7 @@ export default class FundingSources extends Component {
 
   render() {
     const { activity, translations } = this.props.params;
-    const title = translations['amp.activity-preview:fundingSources'];
+    const title = translations['FundingSources'];
     let value_ = activity[AC.FUNDINGS] && activity[AC.FUNDINGS].length ? activity[AC.FUNDINGS].length : 0;
     const content = <SimpleField key={title}
     title={title} value={value_} 
@@ -24,7 +24,7 @@ export default class FundingSources extends Component {
     separator={false}
     fieldNameClass={'section_title_class'}
     fieldValueClass={this.props.styles.fieldValueClass || ''} />
-    return (<div key={'AcFundingSources'} id={'#AcFundingSources'}>{content}</div>);
+    return (<div key={'AcFundingSources'} id={'AcFundingSources'}>{content}</div>);
   }
 }
 

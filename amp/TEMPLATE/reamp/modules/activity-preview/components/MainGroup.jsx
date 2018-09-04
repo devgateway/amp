@@ -9,6 +9,8 @@ import Program from './sections/Program'
 import Sector from './sections/Sector'
 import FundingSources from './sections/FundingSources'
 import FundingSection from './sections/funding/FundingSection'
+import RelatedOrganizations from './sections/RelatedOrganizations'
+import Issues from './sections/issues/Issues'
 require('../styles/ActivityView.css');
 
 /**
@@ -50,7 +52,10 @@ export default class MainGroup extends Component {
       <FundingSources params={params} styles={styles} />
 
       <FundingSection params={params} styles={this._getBoxStyles()}/>
-      
+
+      <RelatedOrganizations params={params} styles={styles} />
+
+      <Issues params={params} styles={styles}  />
     </div>);
   }
 

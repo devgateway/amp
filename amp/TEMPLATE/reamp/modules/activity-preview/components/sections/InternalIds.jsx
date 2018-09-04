@@ -55,4 +55,4 @@ const InternalIds = (isSeparateSection) => class extends Component {
   }
 };
 
-export default Section(InternalIds(true), 'Agency Internal IDs', true, 'AcInternalIds');
+export default Section(InternalIds(true), 'InternalIds', true, 'AcInternalIds');

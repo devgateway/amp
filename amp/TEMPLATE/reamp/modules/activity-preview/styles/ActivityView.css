@@ -570,3 +570,20 @@
   border-top: 1px solid #ebebeb;
   border-bottom: 1px solid #ebebeb;
 }
+.measures {
+  font-weight: normal;
+  margin-left: 15px;
+  display: list-item;
+  list-style-position: inside;
+}
+.issues {
+  font-weight: bold;
+  display: list-item;
+  list-style-position: inside;
+}
+.actors {
+  font-weight: normal;
+  margin-left: 30px;
+  display: list-item;
+  list-style-position: inside;
+}

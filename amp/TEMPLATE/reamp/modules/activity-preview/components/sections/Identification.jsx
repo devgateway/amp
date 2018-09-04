@@ -19,15 +19,9 @@ class Identification extends Component {
     const translations = this.props.params.translations;
     const noDataValue = translations['amp.activity-preview:noData'];
     const inline = this.props.params.inline;
-    const options = {
-      fieldNameClass: this.props.params.fieldNameClass,
-      fieldValueClass: this.props.params.fieldValueClass,
-      titleClass: this.props.params.titleClass,
-      groupClass: this.props.params.groupClass
-    };
     return (
       <div>
-        {fieldPaths.map(fieldPath => buildSimpleField(activity, fieldPath, true, noDataValue, inline, options))}
+        {fieldPaths.map(fieldPath => buildSimpleField(activity, fieldPath, true, noDataValue, inline))}
       </div>
     );
   }

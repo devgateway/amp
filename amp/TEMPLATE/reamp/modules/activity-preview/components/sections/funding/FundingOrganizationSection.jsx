@@ -33,7 +33,6 @@ class FundingOrganizationSection extends Component {
 
 
   _buildFundingDetailSection() {
-    debugger;
     const content = [];
     // Group the list of funding details by adjustment_type and transaction_type.
     const fd = this.props.funding[AC.FUNDING_DETAILS] ? this.props.funding[AC.FUNDING_DETAILS].value : undefined;

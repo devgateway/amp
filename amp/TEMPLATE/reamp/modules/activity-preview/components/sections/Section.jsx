@@ -21,10 +21,10 @@ const Section = (ComposedSection, SectionTitle = null, useEncapsulateHeader = tr
     return ret;
   }
 
-  buildSimpleField(activity, fieldPath, showIfNotAvailable, noDataValue, inline = false) {
+  buildSimpleField(activity, fieldPath, showIfNotAvailable, noDataValue, inline = false, title) {
     const field = activity[fieldPath];
     //TODO
-    const title_ = this._getTitle(field);
+    const title_ = title ? title : this._getTitle(field);
     let value_ = field.value;
     if (field.field_type === 'date') {
       value_ = DateUtils.createFormattedDate(value_);
@@ -34,7 +34,7 @@ const Section = (ComposedSection, SectionTitle = null, useEncapsulateHeader = tr
     }
     if (showIfNotAvailable === true || (value_ !== undefined && value_ !== null)) {
       const useInnerHTML = AC.RICH_TEXT_FIELDS.has(fieldPath);
-      return (<SimpleField key={title_}
+      return (<SimpleField key={title_ + fieldPath} 
         title={title_} value={value_} 
         useInnerHTML={useInnerHTML}
         inline={inline}
@@ -46,13 +46,14 @@ const Section = (ComposedSection, SectionTitle = null, useEncapsulateHeader = tr
   }
 
   render() {
+    const translations = this.props.params.translations;
     const sectionKey = SectionTitle + '-Section';
     const composedSection = (<ComposedSection key={sectionKey}
       {...this.props} {...this.state} {...this.context} buildSimpleField={this.buildSimpleField.bind(this)} />);
 
-    return (<div key={SectionTitle} className={this.props.styles.groupClass} id={sID}>
+    return (<div key={sectionKey} className={this.props.styles.groupClass} id={sID}>
       <div className={this.props.styles.titleClass}>
-        <span>{SectionTitle} </span><span>{this.props.styles.titleDetails}</span>
+        <span>{translations[SectionTitle]} </span><span>{this.props.styles.titleDetails}</span>
       </div>
       <div className={this.props.styles.composedClass}>
         {composedSection}

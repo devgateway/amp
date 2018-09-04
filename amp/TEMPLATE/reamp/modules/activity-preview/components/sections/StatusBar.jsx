@@ -17,15 +17,9 @@ class StatusBar extends Component {
     const noDataValue = translations['amp.activity-preview:noData'];
     const fieldPaths = [AC.AMP_ID, AC.ACTIVITY_STATUS, AC.ACTIVITY_BUDGET];
     const inline = this.props.styles.inline;
-    const options = {
-      fieldNameClass: this.props.styles.fieldNameClass,
-      fieldValueClass: this.props.styles.fieldValueClass,
-      titleClass: this.props.styles.titleClass,
-      groupClass: this.props.styles.groupClass
-    };
     return (
       <div>
-        {fieldPaths.map(fieldPath => buildSimpleField(activity, fieldPath, true, noDataValue, inline, options))}
+        {fieldPaths.map(fieldPath => buildSimpleField(activity, fieldPath, true, noDataValue, inline))}
       </div>
     );
   }

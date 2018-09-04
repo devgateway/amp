@@ -88,4 +88,4 @@ class FundingSummary extends Component {
   }
 }
 
-export default Section(FundingSummary, 'Funding Information');
+export default Section(FundingSummary, 'FundingInformation', true, 'AcFundingSummary');

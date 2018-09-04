@@ -11,6 +11,7 @@ import FundingSources from './sections/FundingSources'
 import FundingSection from './sections/funding/FundingSection'
 import RelatedOrganizations from './sections/RelatedOrganizations'
 import Issues from './sections/issues/Issues'
+import Contacts from './sections/Contacts'
 require('../styles/ActivityView.css');
 
 /**
@@ -56,6 +57,8 @@ export default class MainGroup extends Component {
       <RelatedOrganizations params={params} styles={styles} />
 
       <Issues params={params} styles={styles}  />
+
+      <Contacts params={params} styles={styles}  />
     </div>);
   }
 

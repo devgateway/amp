@@ -117,4 +117,12 @@ export const MEASURE_DATE = 'measure_date';
 export const ACTORS = 'actors';
 export const ACTOR_NAME = 'name';
 
+//Contacts
+export const DONOR_CONTACT_INFORMATION = 'donor_contact_information';
+export const SECTOR_MINISTRY_CONTACT_INFORMATION = 'sector_ministry_contact_information';
+export const IMPLEMENTING_AGENCY_CONTACT_INFORMATION = 'implementing/executing_agency_contact_information';
+export const MARK_AS_PRIMARY = 'mark_as_primary';
+export const CONTACT = 'contact';
+
+
 

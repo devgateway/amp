@@ -15,6 +15,8 @@ export const initialTranslations = {
         'amp.activity-preview:undisbursedBalance': 'Undisbursed Balance',
         'amp.activity-preview:deliveryRate': 'Delivery Rate',
         'amp.activity-preview:workspaceManager': 'Workspace Manager',
+        'amp.activity-preview:primaryContact': 'Primary Contact',
+        'amp.activity-preview:secondaryContact': 'Secondary Contact',
         'amp.activity-preview:noData': 'No data',
         'Identification': 'Identification',
         'InternalIds': 'Agency Internal IDs',
@@ -31,5 +33,6 @@ export const initialTranslations = {
         'DonorOrganization': 'Donor Organization',
         'ResponsibleOrganization': 'Responsible Organization',
         'ExecutingAgency': 'Executing Agency',
-        'Issues': 'Issues'
+        'Issues': 'Issues',
+        'Contacts': 'Contacts'
 };

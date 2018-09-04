@@ -2657,7 +2657,7 @@ public class ExportActivityToWordBuilder {
         List<ExportSectionHelperRowData> mtefProjection = new ArrayList<ExportSectionHelperRowData>();
 
         for (AmpFundingMTEFProjection projection : mtefList) {
-            String projectedType = projection.getProjected().getValue();
+            String projectedType = projection.getProjection().getValue();
             FundingDetail fd = getCalculatedMtefFundingDetail(calc, projection);
 
             String transactionAmount = fd == null ? formatNumber(projection.getAmount()) : fd.getTransactionAmount();

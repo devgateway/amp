@@ -34,7 +34,7 @@ export const initialTranslations = {
         'ExecutingAgency': 'Executing Agency',
         'Issues': 'Issues',
         'Contacts': 'Contacts',
-        'SectorsLabel': 'Agency Sectors',
+        'SectorsLabel': 'Activity Sectors',
         'Structures': 'Structures',
         'Coordinates': 'Coordinates'
 };

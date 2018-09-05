@@ -37,7 +37,7 @@ class Contacts extends Component {
       });
       return (<div>
         <div>
-          <div className={'section_field_value'}>{title}</div>
+          <div className={'contact_title'}>{title}</div>
         </div>
         <div>
           <div className={'primary_sector'}>{primaryContact}</div>

@@ -135,5 +135,20 @@ export const IMPLEMENTING_AGENCY_CONTACT_INFORMATION = 'implementing/executing_a
 export const MARK_AS_PRIMARY = 'mark_as_primary';
 export const CONTACT = 'contact';
 
+//Structures
+export const STRUCTURES = 'structures';
+export const STRUCTURES_TITLE = 'title';
+export const STRUCTURES_DESCRIPTION = 'description';
+export const STRUCTURES_LATITUDE = 'latitude';
+export const STRUCTURES_LONGITUDE = 'longitude';
+export const STRUCTURES_COLOR = 'structure_color';
+export const STRUCTURES_LAT = 'lat';
+export const STRUCTURES_LNG = 'lng';
+export const STRUCTURES_SHAPE = 'shape';
+export const STRUCTURES_POINT = 'Point';
+export const STRUCTURES_POLYGON = 'Polygon';
+export const STRUCTURES_POLYLINE = 'Polyline';
+export const STRUCTURES_COORDINATES = 'coordinates';
+
 
 

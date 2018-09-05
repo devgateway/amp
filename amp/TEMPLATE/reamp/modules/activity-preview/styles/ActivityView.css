@@ -452,7 +452,19 @@
   border: 1px solid #ebebeb;
   padding: 8px;
   margin-bottom: 15px;
-  font-size: 1.2em;
+  font-size: 1.1em;
+  font-weight: bold;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+.contact_title {
+  background-color: #f4f4f4;
+  color: #3a84b3;
+  border: 1px solid #ebebeb;
+  padding: 8px;
+  margin-bottom: 15px;
+  font-size: 1.1em;
   font-weight: bold;
   border-radius: 5px;
   margin-top: 10px;

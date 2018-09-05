@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Section from './Section';
 import * as AC from '../../utils/ActivityConstants';
 import SimpleField from '../fields/SimpleField';
+import ActivityUtils from '../../utils/ActivityUtils';
 
 
 /**
@@ -49,10 +50,6 @@ class Contacts extends Component {
     }
   }
 
-  _getTitle(field){
-    return field && field.field_label ? field.field_label.en : '';
-  }
-
   _buildContacts() {
     const { activity, translations } = this.props.params;
 
@@ -60,11 +57,11 @@ class Contacts extends Component {
     CONTACT_INFORMATION_SOURCE.forEach(source => {
       let contactInfo = activity[source] && activity[source].value ? activity[source].value : undefined;
       if (contactInfo && contactInfo.length > 0) {
-        contacts.push(this._createColumns(contactInfo, this._getTitle(activity[source])));
+        contacts.push(this._createColumns(contactInfo, ActivityUtils.getTitle(activity[source])));
       }
     });
     if (contacts.length < 1) {
-      contacts.push(<div key={contactNodata} className={'nodata'}>{translations['amp.activity-preview:noData']}</div>);
+      contacts.push(<div key={'contactNodata'} className={'nodata'}>{translations['amp.activity-preview:noData']}</div>);
     }
     return contacts;
   }

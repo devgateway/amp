@@ -75,7 +75,7 @@ class Structures extends Component {
         </div>
       );
     }
-    return null;
+    return <div key={'structNodata'} className={'nodata'}>{translations['amp.activity-preview:noData']}</div>;
   }
 }
 

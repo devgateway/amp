@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import SimpleField from './SimpleField';
 import PercentageField from './PercentageField';
 import Tablify from './Tablify';
+import ActivityUtils from '../../utils/ActivityUtils';
 require('../../styles/ActivityView.css');
 
 
@@ -19,10 +20,9 @@ const PercentageList = (listField, valueField, percentageField, listTitle = null
     let isListEnabled = items && items.value.length;
     if (isListEnabled) {
       content = items.value.map(item => {
-        const itemTitle = item[valueField].value ? item[valueField].value : 
-          item[percentageField].field_label.EN;
+        const itemTitle = item[valueField].value ? item[valueField].value : ActivityUtils.getTitle(item[percentageField]);
         return (<PercentageField
-          key={item[percentageField].field_label.EN} title={itemTitle} value={item[percentageField]}
+          key={'IT_' + itemTitle} title={itemTitle} value={item[percentageField]}
           titleClass={this.props.percentTitleClass} valueClass={this.props.percentValueClass} />);
       });
       if (this.props.tablify) {

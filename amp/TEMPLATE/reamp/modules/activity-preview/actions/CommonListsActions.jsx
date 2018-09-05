@@ -13,6 +13,10 @@ export function getActivitySuccess(activity){
     return {type: 'LOAD_ACTIVITY_SUCCESS', activity: activity}
 }
 
+export function getActivityError(errorMsg){
+    return {type: 'LOAD_ACTIVITY_ERROR', errorMsg: errorMsg}
+}
+
 export function getHydratedActivityLoading(hydratedActivity){
     return {type: 'LOADING_HYDRATED_ACTIVITY', hydratedActivity: [hydratedActivity]}
 }
@@ -34,21 +38,29 @@ export function getActivityAndFields(activityId){
         dispatch(getHydratedActivityLoading());
         let hydratedActivity = {};        
         return commonListsApi.getActivity(activityId).then(activity => {
-            dispatch(getActivitySuccess(activity));
-            hydratedActivity = _createHydratedActivity(Object.keys(activity), activity);
-            dispatch(getHydratedActivityLoading(hydratedActivity));
-            commonListsApi.getFields().then(fields => {
-                dispatch(getFieldsSuccess(fields));
-                _addLabelAndType(hydratedActivity, fields);
-                _addRealValue(hydratedActivity).then(response => {;
-                    dispatch(getHydratedActivitySuccess(hydratedActivity));
+            if (!activity.error) {
+                dispatch(getActivitySuccess(activity));
+                hydratedActivity = _createHydratedActivity(Object.keys(activity), activity);
+                dispatch(getHydratedActivityLoading(hydratedActivity));
+                commonListsApi.getFields().then(fields => {
+                    dispatch(getFieldsSuccess(fields));
+                    _addLabelAndType(hydratedActivity, fields);
+                    _addRealValue(hydratedActivity).then(response => {;
+                        dispatch(getHydratedActivitySuccess(hydratedActivity));
+                    }).catch(error => {
+                        throw(error);
+                    });
                 }).catch(error => {
                     throw(error);
                 });
-            }).catch(error => {
-                throw(error);
-            });
-
+            } else {
+                let errorMsg = '';
+                let keys = Object.keys(activity.error);
+                for(var key in keys) {
+                    activity.error[keys[key]].forEach(error => {errorMsg += error + ' '});
+                }
+                dispatch(getActivityError(errorMsg));
+            }
         }).catch(error => {
             throw(error);
         });

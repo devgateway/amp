@@ -83,7 +83,9 @@ export default class ActivityView extends Component {
     
     _getMessage() {
         let message = null;
-        if (this.props.isActivityHydratedLoading === true) {
+        if (this.props.isActivityError === true) {
+            message = this.props.translations['amp.activity-preview:activityError'] + this.props.errorMsg;
+        } else if (this.props.isActivityHydratedLoading === true) {
             message = this.props.translations['amp.activity-preview:activityLoading'];
         } else if (this.props.isActivityHydrated === true) {
             if (!this.props.activity) {
@@ -108,6 +110,8 @@ function mapStateToProps( state, ownProps ) {
     return {
         activityId: ownProps.params.id,
         activity: state.commonLists.hydratedActivity,
+        errorMsg: state.commonLists.errorMsg,
+        isActivityError: state.commonLists.isActivityError,
         isActivityHydratedLoading: state.commonLists.isActivityHydratedLoading,
         isActivityHydrated: state.commonLists.isActivityHydrated,
         translations: state.startUp.translations,

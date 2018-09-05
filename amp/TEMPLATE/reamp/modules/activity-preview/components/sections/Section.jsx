@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import SimpleField from '../fields/SimpleField';
 import * as AC from '../../utils/ActivityConstants';
 import DateUtils from '../../utils/DateUtils';
+import ActivityUtils from '../../utils/ActivityUtils';
 require('../../styles/ActivityView.css');
 
 /**
@@ -9,22 +10,11 @@ require('../../styles/ActivityView.css');
  */
 const Section = (ComposedSection, SectionTitle = null, useEncapsulateHeader = true, sID) => class extends Component {
 
-  _getTitle(field) {
-    let ret = '';
-    if (field && field.field_label) {
-      if (field.field_label['en']) {
-        ret = field.field_label['en'];
-      } else if (field.field_label['EN']) {        
-        ret = field.field_label['EN'];
-      }
-    }
-    return ret;
-  }
 
   buildSimpleField(activity, fieldPath, showIfNotAvailable, noDataValue, inline = false, title) {
     const field = activity[fieldPath];
     //TODO
-    const title_ = title ? title : this._getTitle(field);
+    const title_ = title ? title : ActivityUtils.getTitle(field);
     let value_ = field.value;
     if (field.field_type === 'date') {
       value_ = DateUtils.createFormattedDate(value_);

@@ -18,6 +18,7 @@ export const initialTranslations = {
         'amp.activity-preview:primaryContact': 'Primary Contact',
         'amp.activity-preview:secondaryContact': 'Secondary Contact',
         'amp.activity-preview:noData': 'No data',
+        'amp.activity-preview:activityError': 'Error loading activity: ',        
         'Identification': 'Identification',
         'InternalIds': 'Agency Internal IDs',
         'Planning': 'Planning',

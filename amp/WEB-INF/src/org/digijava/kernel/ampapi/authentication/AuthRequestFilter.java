@@ -62,8 +62,6 @@ public class AuthRequestFilter implements ContainerRequestFilter {
             SecurityUtil.validateTokenAndRestoreSession(token);
         }
 
-        Security.authorize(containerReq);
-
         return containerReq;
     }
     

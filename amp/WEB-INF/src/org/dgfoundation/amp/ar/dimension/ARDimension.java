@@ -43,19 +43,15 @@ public abstract class ARDimension {
                 put("Implementing Agency", "Implementing Agency Groups");
                 put("Implementing Agency Groups", "Implementing Agency Type");
                 
-                put("National Planning Objectives Level 1", "National Planning Objectives");
                 for(int i = 1; i <= 7; i++)
                     put("National Planning Objectives Level " + (i + 1), "National Planning Objectives Level " + i);
 
-                put("Primary Program Level 1", "Primary Program");
                 for(int i = 1; i <= 7; i++)
                     put("Primary Program Level " + (i + 1), "Primary Program Level " + i);
 
-                put("Secondary Program Level 1", "Secondary Program");
                 for(int i = 1; i <= 7; i++)
                     put("Secondary Program Level " + (i + 1), "Secondary Program Level " + i);
                 
-                put("Tertiary Program Level 1", "Tertiary Program");
                 for(int i = 1; i <= 7; i++)
                     put("Tertiary Program Level " + (i + 1), "Tertiary Program Level " + i);                
 

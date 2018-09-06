@@ -22,25 +22,24 @@
 				DROP VIEW IF EXISTS v_component_funding;
 				CREATE OR REPLACE VIEW v_component_funding AS
 				  SELECT
-					aac.amp_activity_id        AS amp_activity_id,
-					f.amp_component_funding_id,
-					f.amp_component_funding_id AS amp_fund_detail_id,
-					c.title                    AS component_name,
-					f.transaction_type,
-					f.adjustment_type,
-					adj.category_value         AS adjustment_type_name,
-					f.transaction_date,
-					f.transaction_amount,
-					f.currency_id,
-					cu.currency_code,
-					ct.name                    AS component_type
-				  FROM amp_activity_components aac
-					JOIN amp_components c ON c.amp_component_id = aac.amp_component_id
-					JOIN amp_component_funding f ON f.amp_component_id = c.amp_component_id
-					JOIN amp_currency cu ON cu.amp_currency_id = f.currency_id
-					JOIN amp_category_value adj ON f.adjustment_type = adj.id
-					JOIN amp_component_type ct ON ct.type_id = c.type
-				  ORDER BY aac.amp_activity_id;
+						 c.amp_activity_id        AS amp_activity_id,
+						 f.amp_component_funding_id,
+						 f.amp_component_funding_id AS amp_fund_detail_id,
+						 c.title                    AS component_name,
+						 f.transaction_type,
+						 f.adjustment_type,
+						 adj.category_value         AS adjustment_type_name,
+						 f.transaction_date,
+						 f.transaction_amount,
+						 f.currency_id,
+						 cu.currency_code,
+						 ct.name                    AS component_type
+				  FROM amp_components c
+						 JOIN amp_component_funding f ON f.amp_component_id = c.amp_component_id
+						 JOIN amp_currency cu ON cu.amp_currency_id = f.currency_id
+						 JOIN amp_category_value adj ON f.adjustment_type = adj.id
+						 JOIN amp_component_type ct ON ct.type_id = c.type
+				  ORDER BY c.amp_activity_id;
 			]]></lang>
 		</script>
 	</apply>

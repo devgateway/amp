@@ -28,7 +28,7 @@ const InternalIds = (isSeparateSection) => class extends Component {
   buildContent() {
     const activity = this.props.params.activity;
     let orgIds = [];
-    if (activity[AC.ACTIVITY_INTERNAL_IDS] && activity[AC.ACTIVITY_INTERNAL_IDS].value.length > 0) {
+    if (activity[AC.ACTIVITY_INTERNAL_IDS] && activity[AC.ACTIVITY_INTERNAL_IDS].value && activity[AC.ACTIVITY_INTERNAL_IDS].value.length > 0) {
       activity[AC.ACTIVITY_INTERNAL_IDS].value.forEach(actIntId => orgIds.push(this._getActInternalIdContent(actIntId)));
     }
     return orgIds.length > 0 ? orgIds : null;

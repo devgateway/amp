@@ -35,7 +35,7 @@ class Structures extends Component {
       content.push(buildSimpleField(structure, AC.STRUCTURES_LONGITUDE, true, null, false));
       return content;
     } else {
-      if (structure[AC.STRUCTURES_COORDINATES] && structure[AC.STRUCTURES_COORDINATES].value.length > 0) {
+      if (structure[AC.STRUCTURES_COORDINATES] && structure[AC.STRUCTURES_COORDINATES].value && structure[AC.STRUCTURES_COORDINATES].value.length > 0) {
         const content = [];
         structure[AC.STRUCTURES_COORDINATES].value.forEach(c => {
           content.push(

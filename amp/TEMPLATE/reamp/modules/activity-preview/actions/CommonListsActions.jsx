@@ -121,7 +121,7 @@ function _addRealValueHelper(actions, hydratedActivity, parentName) {
             let _childName = parentName ? keys[key] : undefined;
             actions.push(
                 commonListsApi.getFieldSubList(_parentName, _childName).then(field => {
-                    if (field.length > 0) {
+                    if (field && field.length > 0) {
                         let element = field.find(function(element){ if (element.id === fieldObj.value) {
                             return element
                         }});
@@ -134,7 +134,7 @@ function _addRealValueHelper(actions, hydratedActivity, parentName) {
                     throw(error);
                 })
             );
-        } else if (fieldObj.field_type === 'list' && fieldObj.value.length > 0) {
+        } else if (fieldObj.field_type === 'list' && fieldObj.value && fieldObj.value.length > 0) {
             let _parentName = parentName ? parentName + '~' + keys[key] : keys[key];
             for(var pos in fieldObj.value) {
                 _addRealValueHelper(actions, fieldObj.value[pos], _parentName);

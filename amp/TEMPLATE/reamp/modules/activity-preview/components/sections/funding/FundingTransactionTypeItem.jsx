@@ -35,7 +35,7 @@ class FundingTransactionTypeItem extends Component {
     const filteredFD = this._filterFundingDetails();
     const content = [];
     filteredFD.forEach((item) => {
-      content.push(<FundingItem key={'FI_' + item[AC.ADJUSTMENT_TYPE].value + item[AC.TRANSACTION_DATE].value} 
+      content.push(<FundingItem key={'FI_' + Math.random()} 
         item={item} wsCurrency={AC.DEFAULT_CURRENCY} />);
     });
     return <table className={'funding_table'} >{content}</table>;

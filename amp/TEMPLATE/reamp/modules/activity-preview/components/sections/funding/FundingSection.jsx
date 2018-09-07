@@ -69,7 +69,7 @@ class FundingSection extends Component {
     const { activity, translations }  = this.props.params;
     const fundingList = [];
     let counter = 1;
-    if (activity.fundings && activity.fundings.value.length) {
+    if (activity.fundings && activity.fundings.value && activity.fundings.value.length) {
       activity.fundings.value.forEach((funding) => {
         const item = (<FundingOrganizationSection
           funding={funding} key={funding[AC.FUNDING_DONOR_ORG_ID].value}

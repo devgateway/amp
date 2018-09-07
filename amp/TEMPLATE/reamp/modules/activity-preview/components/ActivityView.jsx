@@ -84,15 +84,28 @@ export default class ActivityView extends Component {
     _getMessage() {
         let message = null;
         if (this.props.isActivityError === true) {
-            message = this.props.translations['amp.activity-preview:activityError'] + this.props.errorMsg;
+            message = (<h1>{this.props.translations['amp.activity-preview:activityError'] + 
+                this.props.errorMsg}</h1> );
         } else if (this.props.isActivityHydratedLoading === true) {
-            message = this.props.translations['amp.activity-preview:activityLoading'];
+            message = (<div>
+                <h1>{this.props.translations['amp.activity-preview:activityLoading']}</h1>
+                <div className={'jumbotron'}>
+                    <div className={'progress'}>
+                        <div className={'progress-bar progress-bar-striped bg-info'}
+                            role={'progressbar'}
+                            aria-valuenow={'100'}
+                            aria-valuemin={'0'}
+                            aria-valuemax={'100'} style={{width: '100%'}}>
+                        </div>
+                    </div>
+                </div></div>
+            );
         } else if (this.props.isActivityHydrated === true) {
             if (!this.props.activity) {
-                message = this.props.translations['amp.activity-preview:activityUnexpectedError'];
+                message = (<h1>{this.props.translations['amp.activity-preview:activityUnexpectedError']}</h1>);
             }
         } 
-        return message === null ? '' : <h1>{message}</h1>;
+        return message === null ? '' : <div>{message}</div>;
     }
     
     render() {

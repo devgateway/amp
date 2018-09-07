@@ -17,7 +17,7 @@ const PercentageList = (listField, valueField, percentageField, listTitle = null
     const title = translations[listTitle] ? translations[listTitle] : listTitle;
     const items = activity[listField];
     let content = null;
-    let isListEnabled = items && items.value.length;
+    let isListEnabled = items && items.value && items.value.length;
     if (isListEnabled) {
       content = items.value.map(item => {
         const itemTitle = item[valueField].value ? item[valueField].value : ActivityUtils.getTitle(item[percentageField]);

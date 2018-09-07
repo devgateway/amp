@@ -22,9 +22,9 @@ class Issues extends Component {
       if (issue[AC.ISSUE_DATE]) {
           date = ` ${createFormattedDate(issue[AC.ISSUE_DATE].value)}`;
         }
-        content.push(<div className={'issues'}>{`${issue.name.value || ''}${date}`}</div>);
+        content.push(<div key={'Issue_' + issue.name.value} className={'issues'}>{`${issue.name.value || ''}${date}`}</div>);
         issue[AC.MEASURES].value.forEach((measure) => {
-          content.push(<Measure key={'Measure'} measure={measure} />);
+          content.push(<Measure key={'Measure_' + Math.random()} measure={measure} />);
         });
       });
       if (content.length === 0) {
@@ -37,7 +37,7 @@ class Issues extends Component {
   render() {
     const {activity, translations} = this.props.params;
     if (activity[AC.ISSUES]) {
-      return <div>{this._buildIssues(activity)}</div>;
+      return <div key={'RenderIssue_' + Math.random()} >{this._buildIssues(activity)}</div>;
     } else {
       return <div className={'nodata'}>{translations['amp.activity-preview:noData']}</div>;
     }

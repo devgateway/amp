@@ -21,7 +21,7 @@ export default class Measures extends Component {
       date = ` ${createFormattedDate(measure[AC.MEASURE_DATE].value)}`;
     }
     const measureName = `${measure[AC.MEASURE_NAME].value || ''}${date}`;
-    content.push(<div className={'measures'}>{measureName}</div>);
+    content.push(<div key={'Measure' + Math.random()} className={'measures'}>{measureName}</div>);
     if (measure[AC.ACTORS] && measure[AC.ACTORS].values) {
       measure[AC.ACTORS].values.forEach((actor) => {
         content.push(<Actor key={'Actor'} actor={actor} />);
@@ -32,7 +32,7 @@ export default class Measures extends Component {
 
   render() {
     if (this.props.measure) {
-      return <div>{this._buildMeasure(this.props.measure)}</div>;
+      return <div key={'RenderMeasure' + Math.random()}>{this._buildMeasure(this.props.measure)}</div>;
     } else {
       return null;
     }

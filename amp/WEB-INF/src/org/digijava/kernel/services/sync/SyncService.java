@@ -58,6 +58,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.ampapi.endpoints.currency.CurrencyService;
 import org.digijava.kernel.ampapi.endpoints.currency.dto.ExchangeRatesForPair;
+import org.digijava.kernel.ampapi.endpoints.gis.services.MapTilesService;
 import org.digijava.kernel.ampapi.endpoints.resource.ResourceUtil;
 import org.digijava.kernel.ampapi.endpoints.sync.SyncRequest;
 import org.digijava.kernel.request.Site;
@@ -439,12 +440,6 @@ public class SyncService implements InitializingBean {
                 if (changelog.getEntityName().equals(WORKSPACE_SETTINGS)) {
                     systemDiff.setWorkspaceSettings(true);
                 }
-                if (changelog.getEntityName().equals(MAP_TILES)) {
-                    systemDiff.setMapTiles(true);
-                }
-                if (changelog.getEntityName().equals(LOCATORS)) {
-                    systemDiff.setLocators(true);
-                }
                 systemDiff.updateTimestamp(changelog.getOperationTime());
             }
         } else {
@@ -455,12 +450,13 @@ public class SyncService implements InitializingBean {
     }
     
     private void updateDiffsForMapTilesAndLocators(SystemDiff systemDiff, Date lastSyncTime) {
+        boolean isMapTilesPublished = MapTilesService.getInstance().getMapTilesNodeWrapper() != null;
         if (lastSyncTime != null) {
             List<AmpOfflineChangelog> changelogs = findChangedMapTilesAndLocators(lastSyncTime);
 
             for (AmpOfflineChangelog changelog : changelogs) {
                 if (changelog.getEntityName().equals(MAP_TILES)) {
-                    systemDiff.setMapTiles(true);
+                    systemDiff.setMapTiles(isMapTilesPublished);
                 }
                 if (changelog.getEntityName().equals(LOCATORS)) {
                     systemDiff.setLocators(true);
@@ -468,7 +464,7 @@ public class SyncService implements InitializingBean {
                 systemDiff.updateTimestamp(changelog.getOperationTime());
             }
         } else {
-            systemDiff.setMapTiles(true);
+            systemDiff.setMapTiles(isMapTilesPublished);
             systemDiff.setLocators(true);
         }
     }

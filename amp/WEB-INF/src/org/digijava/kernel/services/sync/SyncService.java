@@ -152,6 +152,7 @@ public class SyncService implements InitializingBean {
         systemDiff.setActivityPossibleValuesFields(findChangedPossibleValuesFields(systemDiff, lastSyncTime));
         systemDiff.setContactPossibleValuesFields(findChangedContactPossibleValuesFields(systemDiff, lastSyncTime));
         systemDiff.setResourcePossibleValuesFields(findChangedResourcePossibleValuesFields(systemDiff, lastSyncTime));
+        systemDiff.setCommonPossibleValuesFields(findChangedCommonPossibleValuesFields(systemDiff, lastSyncTime));
 
         systemDiff.setExchangeRates(shouldSyncExchangeRates(lastSyncTime));
 
@@ -217,6 +218,11 @@ public class SyncService implements InitializingBean {
     private List<String> findChangedResourcePossibleValuesFields(SystemDiff systemDiff, Date lastSyncTime) {
         Predicate<Field> fieldFilter = getChangedFields(systemDiff, lastSyncTime);
         return fieldsEnumerator.findResourceFieldPaths(fieldFilter);
+    }
+    
+    private List<String> findChangedCommonPossibleValuesFields(SystemDiff systemDiff, Date lastSyncTime) {
+        Predicate<Field> fieldFilter = getChangedFields(systemDiff, lastSyncTime);
+        return fieldsEnumerator.findCommonFieldPaths(fieldFilter);
     }
 
     private Predicate<Field> getChangedFields(SystemDiff systemDiff, Date lastSyncTime) {

@@ -22,7 +22,7 @@ const PercentageList = (listField, valueField, percentageField, listTitle = null
       content = items.value.map(item => {
         const itemTitle = item[valueField].value ? item[valueField].value : ActivityUtils.getTitle(item[percentageField]);
         return (<PercentageField
-          key={'IT_' + itemTitle} title={itemTitle} value={item[percentageField]}
+          key={'IT_' + itemTitle} title={itemTitle} value={item[percentageField].value}
           titleClass={this.props.percentTitleClass} valueClass={this.props.percentValueClass} />);
       });
       if (this.props.tablify) {

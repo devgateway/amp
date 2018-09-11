@@ -15,7 +15,7 @@ class Identification extends Component {
     const { buildSimpleField } = this.props;
     const activity = this.props.params.activity;
     const fieldPaths = [AC.STATUS_REASON, AC.OBJECTIVE, AC.DESCRIPTION, AC.PROJECT_COMMENTS, 
-      AC.CRIS_NUMBER, AC.ACTIVITY_BUDGET];
+      AC.CRIS_NUMBER, AC.ACTIVITY_BUDGET, AC.MINISTRY_CODE, AC.VOTE, AC.SUB_VOTE, AC.SUB_PROGRAM, AC.PROJECT_CODE];
     const translations = this.props.params.translations;
     const noDataValue = translations['amp.activity-preview:noData'];
     const inline = this.props.params.inline;

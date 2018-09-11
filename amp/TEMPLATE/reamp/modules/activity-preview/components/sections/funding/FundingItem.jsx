@@ -21,7 +21,7 @@ class FundingItem extends Component {
       <tbody>
         <tr className={'row'}>
           <td className={'left_text'}>{this.props.item[AC.ADJUSTMENT_TYPE].value}</td>
-          <td className={'right_text'}>{createFormattedDate(this.props.item[AC.TRANSACTION_DATE])}</td>
+          <td className={'right_text'}>{createFormattedDate(this.props.item[AC.TRANSACTION_DATE].value)}</td>
           <td className={'right_text'}>{`${rawNumberToFormattedString(convertedAmount)} ${this.props.wsCurrency}`}</td>
         </tr>
       </tbody>);

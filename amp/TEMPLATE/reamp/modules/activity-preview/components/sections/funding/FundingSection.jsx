@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Section from '../Section';
 import FundingOrganizationSection from './FundingOrganizationSection';
-import FundingTotalsSection from './FundingTotalsSection';
 import * as AC from '../../../utils/ActivityConstants';
 require('../../../styles/ActivityView.css');
 

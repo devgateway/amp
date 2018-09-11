@@ -8,6 +8,11 @@ export const PROJECT_TITLE = 'project_title';
 export const AMP_ID = 'amp_id';
 export const ACTIVITY_STATUS = 'activity_status';
 export const ACTIVITY_BUDGET = 'activity_budget';
+export const MINISTRY_CODE = 'ministry_code';
+export const VOTE = 'vote';
+export const SUB_VOTE = 'sub_vote';
+export const SUB_PROGRAM = 'sub_program';
+export const PROJECT_CODE = 'project_code';
 export const ACTIVITY_SECTION_IDS =
   [
     { key: 'AcIdentification', hash: '#AcIdentification', value: 'Identification', translationKey: 'amp.activity-preview:sectionIdentification'},

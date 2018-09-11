@@ -37,5 +37,8 @@ export const initialTranslations = {
         'Contacts': 'Contacts',
         'SectorsLabel': 'Activity Sectors',
         'Structures': 'Structures',
-        'Coordinates': 'Coordinates'
+        'Coordinates': 'Coordinates',
+        'Duration': 'Duration of project',
+        'months': 'Months',
+        'years': 'Years'
 };

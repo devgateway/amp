@@ -70,6 +70,7 @@ export const ACTUAL_START_DATE = "actual_start_date";
 export const CREATION_DATE = "creation_date";
 export const PROPOSED_COMPLETION_DATE = "proposed_completion_date";
 export const ACTUAL_COMPLETION_DATE = "actual_completion_date";
+export const PROPOSED_PROJECT_LIFE = "proposed_project_life";
 
 //Locations
 export const LOCATIONS = 'locations';

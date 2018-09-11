@@ -25,7 +25,7 @@ export default class DateUtils {
     if (date) {
       const dateAsMoment = moment(date);
       if (dateAsMoment.isValid()) {
-        return dateAsMoment.format(format);
+        return dateAsMoment.utc().format(format);
       }
     }
     return '';
@@ -61,6 +61,15 @@ export default class DateUtils {
     const minutes = Math.floor(seconds / 60);
     seconds %= 60;
     return `${minutes} min ${seconds} sec`;
+  }
+
+  static durationImproved(from, to, meassure = 'years') {
+    let diff = moment(to).diff(from, meassure);
+    if (diff > 0 || meassure === 'months') {
+      return `${diff} ${meassure}`;
+    } else {
+      return DateUtils.durationImproved(from, to, 'months')
+    }
   }
 
   /**

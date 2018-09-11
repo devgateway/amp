@@ -280,8 +280,7 @@ public class QueryUtil {
                             + " SELECT DISTINCT org.amp_org_id orgId, org.name, org.acronym, org.org_grp_id "
                             + " grpId, (select amp_role_id from amp_role where role_code = '"
                             + Constants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION + "') roleId "
-                            + " FROM amp_activity_components aac "
-                            + " JOIN amp_components c ON (c.amp_component_id = aac.amp_component_id) "
+                            + " FROM amp_components c "
                             + " JOIN amp_component_funding f ON (c.amp_component_id = f.amp_component_id) "
                             + " JOIN amp_organisation org ON org.amp_org_id = f.component_second_rep_org_id ";
                 }
@@ -290,8 +289,7 @@ public class QueryUtil {
                             + " SELECT DISTINCT org.amp_org_id orgId, org.name, org.acronym, org.org_grp_id grpId, "
                             + " (select amp_role_id from amp_role where role_code = '"
                             + Constants.COMPONENT_FUNDING_ORGANIZATION + "') roleId "
-                            + " FROM amp_activity_components aac "
-                            + " JOIN amp_components c ON (c.amp_component_id = aac.amp_component_id) "
+                            + " FROM amp_components c "
                             + " JOIN amp_component_funding f ON (f.amp_component_id = c.amp_component_id)"
                             + " JOIN amp_organisation org ON org.amp_org_id = f.rep_organization_id ";
                 }

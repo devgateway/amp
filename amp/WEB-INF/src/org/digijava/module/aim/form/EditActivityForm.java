@@ -5000,7 +5000,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
         private int pageId;
         //private Collection documentList;
         private List<org.digijava.module.aim.helper.Documents> documents = new ArrayList<org.digijava.module.aim.helper.Documents>();
-        private Collection<DocumentData> crDocuments;
+        private Collection<DocumentData> crDocuments = new ArrayList<>();
         private Collection managedDocumentList;
         private long[] selDocs;
         private long[] selLinks;

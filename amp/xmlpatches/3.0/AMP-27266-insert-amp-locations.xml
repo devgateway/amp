@@ -17,8 +17,8 @@
                  
                 DELETE FROM amp_location 
                  WHERE location_id IN (SELECT id FROM amp_category_value_location WHERE deleted IS TRUE)
-                 AND location_id NOT IN (SELECT amp_location_id FROM amp_activity_location)
-                 AND location_id NOT IN (SELECT amp_location_id FROM amp_location_indicator_value);
+                 AND amp_location_id NOT IN (SELECT amp_location_id FROM amp_activity_location)
+                 AND amp_location_id NOT IN (SELECT amp_location_id FROM amp_location_indicator_value);
 
 			]]></lang>
 		</script>

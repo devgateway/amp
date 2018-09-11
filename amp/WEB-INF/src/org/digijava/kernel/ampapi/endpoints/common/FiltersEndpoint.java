@@ -347,10 +347,7 @@ public class FiltersEndpoint {
     @GET
     @Path("/programs")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, name = "Programs", id = "Programs", 
-    columns={ColumnConstants.PRIMARY_PROGRAM, ColumnConstants.SECONDARY_PROGRAM, 
-            ColumnConstants.NATIONAL_PLANNING_OBJECTIVES, ColumnConstants.TERTIARY_PROGRAM},
-            tab = EPConstants.TAB_PROGRAMS)
+    @ApiMethod(ui = true, name = "Programs", id = "Programs", tab = EPConstants.TAB_PROGRAMS)
     public List<SimpleJsonBean> getPrograms() {
         List<SimpleJsonBean> programs = new ArrayList<SimpleJsonBean>();
         try {
@@ -505,9 +502,7 @@ public class FiltersEndpoint {
     @GET
     @Path("/programs/{programId}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = false, id = "ProgramsByProgramName", 
-    columns={ColumnConstants.PRIMARY_PROGRAM, ColumnConstants.SECONDARY_PROGRAM, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES, ColumnConstants.TERTIARY_PROGRAM}, 
-    tab=EPConstants.TAB_PROGRAMS)
+    @ApiMethod(ui = false, id = "ProgramsByProgramName", tab = EPConstants.TAB_PROGRAMS)
     public SimpleJsonBean getPrograms(@PathParam("programId") Long programId) {
         try {
             Object[] idname = (Object[]) PersistenceManager.getSession().createSQLQuery("select default_hierarchy, name from amp_program_settings where amp_program_settings_id = " + programId).uniqueResult();
@@ -515,9 +510,10 @@ public class FiltersEndpoint {
             if (rootAmpThemeId != null) {
                 String schemeName = String.valueOf(idname[1]);
                 Map<Long, AmpThemeSkeleton> themes = AmpThemeSkeleton.populateThemesTree(rootAmpThemeId);
-                String programName = schemeName.equals(ProgramUtil.NATIONAL_PLAN_OBJECTIVE) ? ColumnConstants.NATIONAL_PLANNING_OBJECTIVES : schemeName;
+                String programName = schemeName.equals(ProgramUtil.NATIONAL_PLAN_OBJECTIVE)
+                        ? ProgramUtil.NATIONAL_PLANNING_OBJECTIVES : schemeName;
                 SimpleJsonBean bean = buildProgramsJsonBean(themes.get(rootAmpThemeId), programName, 0);
-                bean.setFilterId(FilterUtils.INSTANCE.idFromColumnName(programName));
+                bean.setFilterId(FilterUtils.INSTANCE.idFromColumnName(programName + " Level 1"));
                 return bean;
             } else {
                 return new SimpleJsonBean();
@@ -810,18 +806,18 @@ public class FiltersEndpoint {
         p.setName(t.getName());
         p.setChildren(new ArrayList<SimpleJsonBean>());
         String columnName=null;
-        if(level>0){
-            if(programName.equals(ProgramUtil.NATIONAL_PLAN_OBJECTIVE)){
-                columnName=ColumnConstants.NATIONAL_PLANNING_OBJECTIVES +" Level " +level;
-            }else{
-                if(programName.equals(ProgramUtil.PRIMARY_PROGRAM)){
-                    columnName=ColumnConstants.PRIMARY_PROGRAM +" Level " +level;
-                }else{
-                    if(programName.equals(ProgramUtil.SECONDARY_PROGRAM)){
-                        columnName=ColumnConstants.SECONDARY_PROGRAM +" Level " +level;
-                    }else{
-                        if(programName.equals(ProgramUtil.TERTIARY_PROGRAM)){
-                            columnName=ColumnConstants.TERTIARY_PROGRAM +" Level " +level;
+        if (level > 0) {
+            if (programName.equals(ProgramUtil.NATIONAL_PLAN_OBJECTIVE)) {
+                columnName = ProgramUtil.NATIONAL_PLANNING_OBJECTIVES + " Level " + level;
+            } else {
+                if (programName.equals(ProgramUtil.PRIMARY_PROGRAM)) {
+                    columnName = ProgramUtil.PRIMARY_PROGRAM + " Level " + level;
+                } else {
+                    if (programName.equals(ProgramUtil.SECONDARY_PROGRAM)) {
+                        columnName = ProgramUtil.SECONDARY_PROGRAM + " Level " + level;
+                    } else {
+                        if (programName.equals(ProgramUtil.TERTIARY_PROGRAM)) {
+                            columnName = ProgramUtil.TERTIARY_PROGRAM + " Level " + level;
                         }
                     }
                 }

@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.Message;
@@ -572,8 +573,9 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
         PersistenceManager.getSession().evict(ampCategoryClass); // else funny things will happen if someone tries to delete()
         
         boolean shouldOrderAlphabetically = ordered == null ? ampCategoryClass.getIsOrdered() : ordered;
-        if ( !shouldOrderAlphabetically )
-                return ampCategoryValues;
+        if (!shouldOrderAlphabetically) {
+            return ampCategoryValues;
+        }
         
         TreeSet<AmpCategoryValue> treeSet   = new TreeSet<AmpCategoryValue>( new CategoryManagerUtil.CategoryComparator() );
         treeSet.addAll(ampCategoryValues);

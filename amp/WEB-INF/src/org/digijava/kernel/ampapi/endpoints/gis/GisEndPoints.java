@@ -39,6 +39,7 @@ import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityService;
 import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityStructuresExporter;
 import org.digijava.kernel.ampapi.endpoints.gis.services.BoundariesService;
 import org.digijava.kernel.ampapi.endpoints.gis.services.GapAnalysis;
+import org.digijava.kernel.ampapi.endpoints.gis.services.GisUtils;
 import org.digijava.kernel.ampapi.endpoints.gis.services.LocationService;
 import org.digijava.kernel.ampapi.endpoints.gis.services.MapTilesService;
 import org.digijava.kernel.ampapi.endpoints.gis.services.PublicGapAnalysis;
@@ -56,6 +57,7 @@ import org.digijava.kernel.ampapi.helpers.geojson.FeatureCollectionGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.FeatureGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.PointGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.objects.ClusteredPoints;
+import org.digijava.kernel.ampapi.postgis.entity.AmpLocator;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
 import org.digijava.module.aim.dbentity.AmpIndicatorColor;
 import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
@@ -594,9 +596,22 @@ public class GisEndPoints implements ErrorReportingEndpoint {
     @GET
     @Path("/map-tiles")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_ENABLED}, id = "mapTiles", ui = false)
+    @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE}, id = "mapTiles", ui = false)
     public Response getMapTiles() {
         return MapTilesService.getInstance().getArchivedMapTiles();
+    }
+    
+    /**
+     * Gets the amp locator objects.
+     * 
+     * @return locators
+     */
+    @GET
+    @Path("/locators")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE}, id = "locators", ui = false)
+    public List<AmpLocator> getLocators() {
+        return GisUtils.getLocators();
     }
 
     /**

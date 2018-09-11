@@ -156,6 +156,9 @@ public class UserUtils {
      * Bulk version of user lang preferences retrieval.
      */
     public static Map<Long, UserLangPreferences> getUserLangPreferences(List<User> users, Site site) {
+        if (users.isEmpty()) {
+            return Collections.emptyMap();
+        }
         List<UserPreferencesPK> keys = users.stream().map(u -> new UserPreferencesPK(u, site)).collect(toList());
 
         org.hibernate.Session session = PersistenceManager.getSession();

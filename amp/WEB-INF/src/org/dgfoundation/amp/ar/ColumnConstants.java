@@ -155,6 +155,7 @@ public class ColumnConstants {
     public static final String MINORITIES = "Minorities";
     public static final String MODE_OF_PAYMENT = "Mode of Payment";
     public static final String MULTI_DONOR = "Multi Donor";
+    public static final String NATIONAL_PLANNING_OBJECTIVES = "National Planning Objectives";
     public static final String NATIONAL_PLANNING_OBJECTIVES_LEVEL_1 = "National Planning Objectives Level 1";
     public static final String NATIONAL_PLANNING_OBJECTIVES_LEVEL_2 = "National Planning Objectives Level 2";
     public static final String NATIONAL_PLANNING_OBJECTIVES_LEVEL_3 = "National Planning Objectives Level 3";

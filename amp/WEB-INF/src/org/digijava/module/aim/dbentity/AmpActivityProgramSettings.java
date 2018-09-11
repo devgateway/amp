@@ -29,7 +29,6 @@ public class AmpActivityProgramSettings implements Serializable, Identifiable {
     
     private static final Map<Integer, String> NATIONAL_PLANNING_OBJECTIVES_COLUMNS_BY_LEVEL =
             new ImmutableMap.Builder<Integer, String>()
-                    .put(LEVEL_0, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES)
                     .put(LEVEL_1, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1)
                     .put(LEVEL_2, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_2)
                     .put(LEVEL_3, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_3)
@@ -42,7 +41,6 @@ public class AmpActivityProgramSettings implements Serializable, Identifiable {
 
     private static final Map<Integer, String> PRIMARY_PROGRAM_COLUMNS_BY_LEVEL =
             new ImmutableMap.Builder<Integer, String>()
-                    .put(LEVEL_0, ColumnConstants.PRIMARY_PROGRAM)
                     .put(LEVEL_1, ColumnConstants.PRIMARY_PROGRAM_LEVEL_1)
                     .put(LEVEL_2, ColumnConstants.PRIMARY_PROGRAM_LEVEL_2)
                     .put(LEVEL_3, ColumnConstants.PRIMARY_PROGRAM_LEVEL_3)
@@ -55,7 +53,6 @@ public class AmpActivityProgramSettings implements Serializable, Identifiable {
     
     private static final Map<Integer, String> SECONDARY_PROGRAM_COLUMNS_BY_LEVEL =
             new ImmutableMap.Builder<Integer, String>()
-                    .put(LEVEL_0, ColumnConstants.SECONDARY_PROGRAM)
                     .put(LEVEL_1, ColumnConstants.SECONDARY_PROGRAM_LEVEL_1)
                     .put(LEVEL_2, ColumnConstants.SECONDARY_PROGRAM_LEVEL_2)
                     .put(LEVEL_3, ColumnConstants.SECONDARY_PROGRAM_LEVEL_3)
@@ -68,7 +65,6 @@ public class AmpActivityProgramSettings implements Serializable, Identifiable {
     
     private static final Map<Integer, String> TERTIARY_PROGRAM_COLUMNS_BY_LEVEL =
             new ImmutableMap.Builder<Integer, String>()
-                    .put(LEVEL_0, ColumnConstants.TERTIARY_PROGRAM)
                     .put(LEVEL_1, ColumnConstants.TERTIARY_PROGRAM_LEVEL_1)
                     .put(LEVEL_2, ColumnConstants.TERTIARY_PROGRAM_LEVEL_2)
                     .put(LEVEL_3, ColumnConstants.TERTIARY_PROGRAM_LEVEL_3)

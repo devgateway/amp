@@ -74,9 +74,9 @@ module.exports = BackboneDash.View.extend({
 			        if (rendered === false) {
 			        	rendered = true;
                         if (self.model.get('chartType') === 'fragmentation') {
-                            var svg = $($($(chart)[0].el).find("svg"))[0].getBBox();
-                            this.dashChartOptions.height = svg.height + 100;
-                            this.dashChartOptions.width = svg.width + 80;
+                            var svg = $($($(self.chart)[0].el).find("svg"))[0].getBBox();
+                            self.dashChartOptions.height = svg.height + 100;
+                            self.dashChartOptions.width = svg.width + 80;
                         }
 
 			        	self.renderChart(self.$('.preview-area .svg-wrap').removeClass('hidden'),

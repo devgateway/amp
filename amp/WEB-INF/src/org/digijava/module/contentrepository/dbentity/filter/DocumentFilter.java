@@ -8,7 +8,9 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.contentrepository.form.DocumentManagerForm;
 import org.digijava.module.contentrepository.helper.DocumentData;
@@ -28,6 +30,9 @@ public class DocumentFilter {
     public final static String SOURCE_TEAM_DOCUMENTS    = "team_documents";
     public final static String SOURCE_SHARED_DOCUMENTS  = "shared_documents";
     public final static String SOURCE_PUBLIC_DOCUMENTS  = "public_documents";
+    
+    public static final Long KEYWORDS_MODE_ANY = 0L;
+    public static final Long KEYWORDS_MODE_ALL = 1L;
     
     private Long id;
     
@@ -55,6 +60,8 @@ public class DocumentFilter {
     
     private String filterFromDate;
     private String filterToDate;
+    
+    private Long filterKeywordMode = KEYWORDS_MODE_ANY;
     
     private Long publicViewPosition;
     
@@ -109,11 +116,18 @@ public class DocumentFilter {
         }
 
         if (docForm.getFilterKeywords() != null) {
-            filterKeywords = Arrays.asList(docForm.getFilterKeywords());
+            filterKeywords = Arrays.asList(docForm.getFilterKeywords()).stream()
+                    .filter(keyword -> StringUtils.isNotBlank(keyword))
+                    .map(String::toLowerCase)
+                    .collect(Collectors.toList());
         }
         
         if (docForm.getFilterOrganisations() != null) {
             organisationId = Long.parseLong(docForm.getFilterOrganisations());
+        }
+        
+        if (docForm.getKeywordMode() != null) {
+            filterKeywordMode = docForm.getKeywordMode();
         }
         
         filterFromDate = docForm.getFilterFromDate();
@@ -175,18 +189,17 @@ public class DocumentFilter {
                 }
                 
                 if (!isNullOrEmpty(this.filterKeywords)) {
-                    int iterationNo = 0;
-                    for (String keyword : this.filterKeywords) {
-                        if ((dd.getTitle() != null && dd.getTitle().toLowerCase().indexOf(keyword.toLowerCase()) != -1)
-                                || (dd.getName() != null && dd.getName().toLowerCase().indexOf(keyword.toLowerCase()) != -1)){
-                            pass &= true;
-                            break;
-                        }else if (iterationNo == (this.filterKeywords.size() - 1)){
-                            pass &= false;
-                        }
-                        iterationNo++;
+                    String title = dd.getTitle() == null ? null : dd.getTitle().toLowerCase();
+                    String name = dd.getName() == null ? null : dd.getName().toLowerCase();
+                    Set<Boolean> keywordFound = this.filterKeywords.stream()
+                            .map(keyword -> StringUtils.indexOf(title, keyword) != StringUtils.INDEX_NOT_FOUND
+                                    || StringUtils.indexOf(name, keyword) != StringUtils.INDEX_NOT_FOUND)
+                            .collect(Collectors.toSet());
+                    if (KEYWORDS_MODE_ALL.equals(this.filterKeywordMode)) {
+                        pass &= !keywordFound.contains(Boolean.FALSE);
+                    } else {
+                        pass &= keywordFound.contains(Boolean.TRUE);
                     }
-                    
                 }
                 
                 SimpleDateFormat sdf1 = new SimpleDateFormat("dd/MM/yyyy");
@@ -370,6 +383,13 @@ public class DocumentFilter {
     public void setFilterToDate(String filterToDate) {
         this.filterToDate = filterToDate;
     }
-    
+
+    public Long getFilterKeywordMode() {
+        return filterKeywordMode;
+    }
+
+    public void setFilterKeywordMode(Long filterKeywordMode) {
+        this.filterKeywordMode = filterKeywordMode;
+    }
     
 }

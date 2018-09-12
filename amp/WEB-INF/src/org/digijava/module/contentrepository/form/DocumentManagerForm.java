@@ -47,6 +47,8 @@ public class DocumentManagerForm extends ActionForm {
     private String docListInSession         = null;
     private String showSharedDocs           = null;
     private String filterOrganisations = null;
+    
+    private Long keywordMode = null;
 
     
     private String docIndex = null;
@@ -463,6 +465,14 @@ public class DocumentManagerForm extends ActionForm {
     public void setFilterOrganisations(String org)
     {
         this.filterOrganisations = org;
+    }
+
+    public Long getKeywordMode() {
+        return keywordMode;
+    }
+
+    public void setKeywordMode(Long keywordMode) {
+        this.keywordMode = keywordMode;
     }
     
 }

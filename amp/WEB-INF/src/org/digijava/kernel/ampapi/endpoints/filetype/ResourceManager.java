@@ -1,11 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.filetype;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -22,10 +19,7 @@ import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.admin.util.DbUtil;
 import org.digijava.module.aim.dbentity.AmpFileType;
-import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.hsqldb.lib.HashSet;
-import org.jfree.util.Log;
 
 /**
  * FileTypes Endpoint provides supported file types in AMP
@@ -71,6 +65,7 @@ public class ResourceManager {
     @GET
     @Path("file-types")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = false, id = "getAllFiletypes", authTypes = AuthRule.IN_ADMIN)
     public List<AmpFileType> getAllFiletypes() {
         FileTypeManager fileTypeManager = FileTypeManager.getInstance();
 
@@ -113,6 +108,7 @@ public class ResourceManager {
     @GET
     @Path("file-types/allowed")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = false, id = "getAllowedFileTypes", authTypes = AuthRule.AUTHENTICATED)
     public List<AmpFileType> getAllowedFileTypes() {
         FileTypeManager fileTypeManager = FileTypeManager.getInstance();
 
@@ -155,6 +151,7 @@ public class ResourceManager {
     @POST
     @Path("save-settings")
     @Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = false, id = "saveSettings", authTypes = AuthRule.IN_ADMIN)
     @SuppressWarnings("unchecked")
     public Response saveSettings(JsonBean settings) throws AMPException {
         List<String> allowedFileType = (List<String>) settings.get("allowedFileType");

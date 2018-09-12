@@ -19,12 +19,11 @@ import org.digijava.module.contentrepository.util.DocumentsNodesAttributeManager
  *
  */
 public class SetAttributes extends Action {
-    private SetAttributesForm myForm = null;
 
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
             HttpServletResponse response) throws java.lang.Exception {
 
-        myForm = (SetAttributesForm) form;
+        SetAttributesForm myForm = (SetAttributesForm) form;
 
         if (myForm.getAction() != null && myForm.getAction().equals(CrConstants.MAKE_PUBLIC)) {
             makePublic(request, myForm.getUuid());

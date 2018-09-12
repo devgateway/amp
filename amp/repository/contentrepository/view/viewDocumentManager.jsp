@@ -432,12 +432,14 @@ border-right: 1px solid rgb(208, 208, 208);
 
 	
 	
-	function reset(objListStr) {
+	function reset(objListStr, resetFilters) {
         // reset search string
 		document.getElementById(objListStr+'SearchStr').value='';
 		var targetList = eval(objListStr +'ListObj');
         // reset filters and lables
-        targetList.resetFilterData(targetList.fDivId);
+        if (resetFilters) {
+            targetList.resetFilterData(targetList.fDivId);
+        }
         // execute the request with empty data
         targetList.sendRequest();
 	}
@@ -659,7 +661,7 @@ border-right: 1px solid rgb(208, 208, 208);
 								    		<digi:trn>Labels</digi:trn>
 											<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
 								    	</button>
-									        <button id="privateClearButtonId" type="button" onclick="reset('private');"  class="buttonx">
+									        <button id="privateClearButtonId" type="button" onclick="reset('private', true);"  class="buttonx">
 							        		<digi:trn>Clear</digi:trn>
 							        	</button>
 								    </td>
@@ -719,7 +721,7 @@ border-right: 1px solid rgb(208, 208, 208);
 								    		<digi:trn>Labels</digi:trn>
 								    		<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
 								    	</button>
-								    	 <button id="teamClearButtonId" type="button" onclick="reset('team');"  class="buttonx">
+								    	 <button id="teamClearButtonId" type="button" onclick="reset('team', true);"  class="buttonx">
 							        		<digi:trn>Clear</digi:trn>
 							        	</button>
 									</td>
@@ -774,7 +776,7 @@ border-right: 1px solid rgb(208, 208, 208);
 									    		<digi:trn>Labels</digi:trn>
 									    		<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
 									    	</button>
-									    	<button id="sharedClearButtonId" type="button" onclick="reset('shared');"  class="buttonx">
+									    	<button id="sharedClearButtonId" type="button" onclick="reset('shared', true);"  class="buttonx">
 							        		<digi:trn>Clear</digi:trn>
 							        	</button>
 										</td>
@@ -816,7 +818,7 @@ border-right: 1px solid rgb(208, 208, 208);
                                                 <digi:trn>Mode</digi:trn>
                                                 <img src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
                                             </button>
-											<button id="publicClearButtonId" type="button" onclick="reset('public');"  class="buttonx">
+											<button id="publicClearButtonId" type="button" onclick="reset('public', false);"  class="buttonx">
 							        		<digi:trn>Clear</digi:trn>
 								        	
 								        	

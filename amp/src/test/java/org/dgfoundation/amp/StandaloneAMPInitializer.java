@@ -40,7 +40,7 @@ public class StandaloneAMPInitializer {
 
             configureLog4j();
             HibernateClassLoader.HIBERNATE_CFG_XML = "/standAloneAmpHibernate.cfg.xml";
-            MonetConnection.MONET_CFG_OVERRIDE_URL = "jdbc:monetdb://localhost/amp_tests_30";
+            MonetConnection.MONET_CFG_OVERRIDE_URL = "jdbc:monetdb://localhost/amp_tests_212";
             
             org.digijava.kernel.ampapi.mondrian.util.Connection.IS_TESTING = true;
             ResourceStreamHandlerFactory.installIfNeeded();

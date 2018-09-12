@@ -10,9 +10,11 @@ import javax.jcr.RepositoryException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.digijava.kernel.ampapi.endpoints.gis.services.MapTilesService;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.contentrepository.dbentity.CrDocumentNodeAttributes;
 import org.digijava.module.contentrepository.exception.CrException;
+import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -68,6 +70,11 @@ public class DocumentsNodesAttributeManager {
             if (shouldSaveObject) {
                 PersistenceManager.getSession().saveOrUpdate(docAttributes);
                 invalidateCachedDocumentNodeAttributes();
+                
+                NodeWrapper nw = new NodeWrapper(lastVersionNode);
+                if (nw.getName().equals(MapTilesService.FILE_NAME)) {
+                    MapTilesService.getInstance().updateOfflineChangeLog(PersistenceManager.getSession());
+                }
             }
         } catch (RepositoryException | CrException e) {
             logger.error(e.getMessage(), e);

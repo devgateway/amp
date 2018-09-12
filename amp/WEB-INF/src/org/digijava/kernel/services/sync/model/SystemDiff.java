@@ -25,7 +25,13 @@ public class SystemDiff {
 
     @JsonProperty("workspace-members")
     private ListDiff<Long> workspaceMembers;
-
+    
+    @JsonProperty("map-tiles")
+    private boolean mapTiles;
+    
+    @JsonProperty("locators")
+    private boolean locators;
+    
     @JsonProperty
     private ListDiff<Long> users;
 
@@ -124,5 +130,13 @@ public class SystemDiff {
 
     public void setFeatureManager(boolean featureManager) {
         this.featureManager = featureManager;
+    }
+    
+    public void setMapTiles(boolean mapTiles) {
+        this.mapTiles = mapTiles;
+    }
+    
+    public void setLocators(boolean locators) {
+        this.locators = locators;
     }
 }

@@ -197,8 +197,8 @@ AbstractDynamicList.prototype.sendRequest		= function (shouldRetrieveFilters) {
 			this.reqString, callbackObj );
 	this.closeAll();
 	
-	if ( this.filterInfoDivId != null ) {
-		var divEl	= document.getElementById( this.filterInfoDivId );
+	if (this.filterInfoDivId != null && document.getElementById(this.filterInfoDivId)) {
+		var divEl = document.getElementById(this.filterInfoDivId);
 		divEl.innerHTML = this.filterWrapper.labelsToHTML(getlabelsext()) + "&nbsp;&nbsp;&nbsp;&nbsp;" + this.filterWrapper.fToHTML(getfiltertext())
 		+ "&nbsp;&nbsp;&nbsp;&nbsp;" + this.filterWrapper.kToHTML(getkeywordsext()) 
 		+ "&nbsp;&nbsp;&nbsp;&nbsp;" + this.filterWrapper.mToHTML(getkeywordModeext());

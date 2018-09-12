@@ -12,7 +12,7 @@ import java.util.Set;
 import javax.servlet.ServletContext;
 
 import com.sun.jersey.api.client.UniformInterfaceException;
-import org.digijava.kernel.ampregistry.AmpRegistryClient;
+import org.digijava.kernel.ampregistry.AmpRegistryService;
 import org.digijava.module.aim.dbentity.AmpOfflineRelease;
 import org.digijava.kernel.services.AmpOfflineService;
 import org.digijava.kernel.services.AmpVersionService;
@@ -47,7 +47,7 @@ public class DownloadAmpOfflineReleasesJob extends ConnectionCleaningJob {
     private AmpVersionService ampVersionService;
     private AmpOfflineService ampOfflineService;
 
-    private AmpRegistryClient ampRegistryClient = new AmpRegistryClient();
+    private AmpRegistryService ampRegistryService = AmpRegistryService.INSTANCE;
 
     @Override
     public void executeInternal(JobExecutionContext context) throws JobExecutionException {
@@ -66,7 +66,7 @@ public class DownloadAmpOfflineReleasesJob extends ConnectionCleaningJob {
      * Download all new and compatible AMPOfflineReleases.
      */
     private void downloadNewReleases() {
-        ampRegistryClient.getReleases()
+        ampRegistryService.getReleases()
                 .stream()
                 .filter(this::isNewAndCompatibleRelease)
                 .forEach(this::persistRelease);
@@ -126,7 +126,7 @@ public class DownloadAmpOfflineReleasesJob extends ConnectionCleaningJob {
      */
     private void persistRelease(AmpOfflineRelease release) {
         try {
-            ampOfflineService.addRelease(release, ampRegistryClient.releaseFileSupplier(release));
+            ampOfflineService.addRelease(release, ampRegistryService.releaseFileSupplier(release));
 
             existingReleases.add(release);
         } catch (IOException | UniformInterfaceException e) {
@@ -146,7 +146,7 @@ public class DownloadAmpOfflineReleasesJob extends ConnectionCleaningJob {
         jobForm.setGroupName("ampServices");
         jobForm.setManualJob(false);
         jobForm.setName(jobClass.getName());
-        jobForm.setTriggerType(2);
+        jobForm.setTriggerType(QuartzJobForm.HOURLY);
         jobForm.setExeTimeH("1");
 
         Calendar instance = Calendar.getInstance();

@@ -52,6 +52,9 @@ public class SystemDiff {
     
     @JsonProperty("resource-possible-values-fields")
     private List<String> resourcePossibleValuesFields;
+    
+    @JsonProperty("common-possible-values-fields")
+    private List<String> commonPossibleValuesFields;
 
     @JsonProperty
     private boolean translations;
@@ -122,6 +125,10 @@ public class SystemDiff {
     
     public void setResourcePossibleValuesFields(List<String> resourcePossibleValuesFields) {
         this.resourcePossibleValuesFields = resourcePossibleValuesFields;
+    }
+    
+    public void setCommonPossibleValuesFields(List<String> commonPossibleValuesFields) {
+        this.commonPossibleValuesFields = commonPossibleValuesFields;
     }
 
     public void setExchangeRates(boolean exchangeRates) {

@@ -104,9 +104,11 @@ public class MenuItemsProcessor {
             visible = TranslatorWorker.isTranslationMode(TLSUtils.getRequest());
             break;
         case MenuConstants.ADD_ACTIVITY:
-        case MenuConstants.IATI_IMPORTER:
         case MenuConstants.ADD_SSC_ACTIVITY:
-            visible = tm != null && Boolean.TRUE.equals(tm.getAddActivity());
+            visible = canAddActivity();
+            break;
+        case MenuConstants.IATI_IMPORTER:
+            visible = canAddActivity() || MenuUtils.isAmpAdmin();
             break;
         case MenuConstants.GPI_DATA:
             visible = FeaturesUtil.isVisibleModule(MenuConstants.GPI_DATA_ENTRY);
@@ -117,7 +119,11 @@ public class MenuItemsProcessor {
         
         return visible;
     }
-    
+
+    private boolean canAddActivity() {
+        return tm != null && Boolean.TRUE.equals(tm.getAddActivity());
+    }
+
     private boolean isAllowedUserGroup(MenuItem mi) {
         if (mi.groupKeys == null || mi.groupKeys.size() == 0 
                 || AmpView.ADMIN == view && CollectionUtils.containsAny(mi.groupKeys, Group.ADMIN_GROUPS)) {

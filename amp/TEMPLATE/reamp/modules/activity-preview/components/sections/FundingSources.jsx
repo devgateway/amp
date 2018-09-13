@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import SimpleField from '../fields/SimpleField';
 import * as AC from '../../utils/ActivityConstants';
 
@@ -16,7 +16,11 @@ export default class FundingSources extends Component {
   render() {
     const { activity, translations } = this.props.params;
     const title = translations['FundingSources'];
-    let value_ = activity[AC.FUNDINGS] && activity[AC.FUNDINGS].length ? activity[AC.FUNDINGS].length : 0;
+    let quantity = activity[AC.FUNDINGS] && activity[AC.FUNDINGS].value.length ? activity[AC.FUNDINGS].value.length : 0;
+    let value_ = quantity + " ";
+    if (quantity > 0) {
+      activity[AC.FUNDINGS].value.forEach(v=> {value_ += '[' + v.donor_organization_id.value + '] '});
+    }
     const content = <SimpleField key={title}
     title={title} value={value_} 
     useInnerHTML={false}

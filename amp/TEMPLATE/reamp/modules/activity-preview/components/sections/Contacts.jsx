@@ -36,13 +36,13 @@ class Contacts extends Component {
           );
         }
       });
-      return (<div key={'ContactDiv'}>
+      return (<div key={'ContactDiv' + title}>
         <div>
-          <div key={'ContactTitle'} className={'contact_title'}>{title}</div>
+          <div key={'ContactTitle' + title} className={'contact_title'}>{title}</div>
         </div>
         <div>
-          <div key={'primaryContact'} className={'primary_sector'}>{primaryContact}</div>
-          <div key={'secondaryContact'} className={'secondary_sector'}>{secondaryContact}</div>
+          <div key={'primaryContact' + title} className={'primary_sector'}>{primaryContact}</div>
+          <div key={'secondaryContact' + title} className={'secondary_sector'}>{secondaryContact}</div>
         </div>
       </div>);
     } else {

@@ -6,9 +6,12 @@ import static java.util.stream.Collectors.toMap;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -237,6 +240,99 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
             response = AmpCollections.remap(response, PossibleValue::flattenPossibleValues);
         }
         return Response.ok(response, responseType).build();
+    }
+    
+    /**
+     * Returns a list of values for all id of requested fields.
+     * 
+     * For fields like locations, sectors, programs the object contains the ancestor values.
+     * <h3>Sample request:</h3><pre>
+     * {
+     *   "locations~location": [534, 126],
+     *   "national_plan_objective~program": [123],
+     *   "primary_sectors~sector": [297]
+     * }
+     * </pre>
+     * <h3>Sample response:</h3><pre>
+     * {
+     *   "locations~location": [
+     *     {
+     *       "id": 534,
+     *       "value": "2ème Section Bois Neuf",
+     *       "ancestor-values": ["Haiti", "Artibonite", "Gros Morne Arrondissement", "Terre-Neuve", "Bois Neuf"]
+     *     },
+     *     {
+     *       "id": 126,
+     *       "value": "Grande Rivière du Nord",
+     *       "ancestor-values": ["Haiti", "Nord", "Grand Rivière du Nord", "Grande Rivière du Nord"]
+     *     }
+     *   ],
+     *   "national_plan_objective~program": [
+     *     {
+     *       "id": "123",
+     *       "value": "1.3.1 : Protéger les bassins versants",
+     *       "ancestor-values": ["Plan stratégique de développement d'Haiti (2030), "1 : REFONDATION TERRITORIALE", 
+     *           "1.3 : GÉRER LES BASSINS VERSANTS", "1.3.1 : Protéger les bassins versants"]
+     *     }
+     *   ],
+     *   "activity_status": [
+     *     {
+     *       "id": 263,
+     *       "value": "Ongoing"
+     *     }
+     *   ]
+     * }
+     * </pre>
+     * @param fields list of fully qualified activity fields with list of ids
+     * @return list of values grouped by id and field
+     */
+    @POST
+    @Path("field/id-values")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_OPTIONAL}, id = "getIdValues", ui = false)
+    public Response getFieldValuesById(Map<String, List<Long>> fieldIds) {
+        Map<String, List<FieldIdValue>> response = new HashMap<>();
+        
+        if (fieldIds != null) {
+            for (Entry<String, List<Long>> field : fieldIds.entrySet()) {
+                String fieldName = field.getKey();
+                List<PossibleValue> allValues = possibleValuesFor(fieldName).stream()
+                        .map(PossibleValue::flattenPossibleValues)
+                        .flatMap(List::stream)
+                        .collect(Collectors.toList());
+                
+                Map<Object, PossibleValue> allValuesMap = allValues.stream()
+                        .collect(Collectors.toMap(PossibleValue::getId, identity()));
+                
+                List<PossibleValue> possibleValue = allValues.stream()
+                        .filter(pv -> field.getValue().contains(pv.getId()))
+                        .collect(Collectors.toList());
+                
+                List<FieldIdValue> idValues = possibleValue.stream()
+                        .map(pv -> new FieldIdValue((Long) pv.getId(), pv.getValue(), 
+                                getAncestorValues(allValuesMap, pv.getId(), new ArrayList<>())))
+                        .collect(Collectors.toList());
+                
+                response.put(fieldName, idValues);
+            }
+        }
+        
+        return Response.ok(response, MediaType.APPLICATION_JSON_TYPE).build();
+    }
+
+    private List<String> getAncestorValues(Map<Object, PossibleValue> allValuesMap, Object id, List<String> values) {
+        PossibleValue obj = allValuesMap.get(id);
+        List<String> ancestorValues = new ArrayList<>(values);
+        if (obj.getExtraInfo() instanceof ParentExtraInfo) {
+            ParentExtraInfo parentExtraInfo = (ParentExtraInfo) obj.getExtraInfo();
+            if (parentExtraInfo.getParentId() != null) {
+                ancestorValues.addAll(getAncestorValues(allValuesMap, parentExtraInfo.getParentId(), ancestorValues));
+            }
+            ancestorValues.add(obj.getValue());
+            return ancestorValues;
+        } 
+        
+        return null;
     }
 
     private List<PossibleValue> possibleValuesFor(String fieldName) {

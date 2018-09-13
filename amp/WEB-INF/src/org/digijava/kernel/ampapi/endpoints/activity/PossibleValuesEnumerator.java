@@ -270,19 +270,18 @@ public class PossibleValuesEnumerator {
         List<Object[]> items;
         Class<?> clazz = InterchangeUtils.getClassOfField(field);
         if (clazz.equals(AmpSector.class)) {
-            items = possibleValuesDAO.getSectors(configValue);
+            return getPossibleSectors(field, configValue);
         } else if (clazz.equals(AmpTheme.class)) {
-            items = possibleValuesDAO.getThemes(configValue);
+            return getPossibleThemes(field, configValue);
         } else if (clazz.equals(AmpCategoryValue.class)){
             return getPossibleCategoryValues(field, configValue);
         } else if (clazz.equals(AmpClassificationConfiguration.class)) {
             return getPossibleValuesGenericCase(clazz,
                     () -> Collections.singletonList(possibleValuesDAO.getAmpClassificationConfiguration(configValue)));
-        } else {
-            //not a complex field, after all
-            return getPossibleValuesForField(field);
         }
-        return setProperties(items, false, null);
+
+        //not a complex field, after all
+        return getPossibleValuesForField(field);
     }
     
     /**
@@ -424,6 +423,16 @@ public class PossibleValuesEnumerator {
         }
         return convertToHierarchical(groupedValues);
     }
+    
+    private List<PossibleValue> getPossibleSectors(Field field, String configValue) {
+        List<Object[]> items = possibleValuesDAO.getSectors(configValue);
+        return setProperties(items, false, this::getSectorExtraInfo);
+    }
+    
+    private List<PossibleValue> getPossibleThemes(Field field, String configValue) {
+        List<Object[]> items = possibleValuesDAO.getThemes(configValue);
+        return setProperties(items, false, this::getThemeExtraInfo);
+    }
 
     private Long getLongOrNull(Number number) {
         if (number != null) {
@@ -531,5 +540,17 @@ public class PossibleValuesEnumerator {
     private Object getCategoryValueExtraInfo(Object[] item) {
         Integer index = ((Number) (item[CategoryValueExtraInfo.EXTRA_INFO_START_INDEX])).intValue();
         return new CategoryValueExtraInfo(index);
+    }
+    
+    private Object getSectorExtraInfo(Object[] item) {
+        Long parentSectorId = item.length > 2 ? (Long) item[PossibleValuesDAO.SECTOR_PARENT_ID_POS] : null;
+        
+        return new SectorExtraInfo(parentSectorId);
+    }
+    
+    private Object getThemeExtraInfo(Object[] item) {
+        Long parentProgramId = item.length > 2 ? (Long) item[PossibleValuesDAO.THEME_PARENT_ID_POS] : null;
+        
+        return new ProgramExtraInfo(parentProgramId);
     }
 }

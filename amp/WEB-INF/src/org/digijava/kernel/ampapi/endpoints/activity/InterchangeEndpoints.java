@@ -245,7 +245,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
     /**
      * Returns a list of values for all id of requested fields.
      * 
-     * For fields like locations, sectors, programs the object contains the full (ancestor) path.
+     * For fields like locations, sectors, programs the object contains the ancestor values.
      * <h3>Sample request:</h3><pre>
      * [
      *   "locations~location": [534, 126],
@@ -259,20 +259,20 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
      *     {
      *       "id": 534,
      *       "value": "2ème Section Bois Neuf",
-     *       "ancestor-path": "[Haiti] [Artibonite] [Gros Morne Arrondissement] [Terre-Neuve] [2ème Section Bois Neuf]"
+     *       "ancestor-values": ["Haiti", "Artibonite", "Gros Morne Arrondissement", "Terre-Neuve", "Bois Neuf"]
      *     },
      *     {
      *       "id": 126,
      *       "value": "Grande Rivière du Nord",
-     *       "ancestor-path": "[Haiti] [Nord] [Grand Rivière du Nord] [Grande Rivière du Nord]"
+     *       "ancestor-values": ["Haiti", "Nord", "Grand Rivière du Nord", "Grande Rivière du Nord"]
      *     }
      *   ],
      *   "national_plan_objective~program": [
      *     {
      *       "id": "123",
      *       "value": "1.3.1 : Protéger les bassins versants",
-     *       "ancestor-path": "[Plan stratégique de développement d'Haiti (2030)] [ 1 : REFONDATION TERRITORIALE] 
-     *       [1.3 : GÉRER LES BASSINS VERSANTS] [1.3.1 : Protéger les bassins versants]"
+     *       "ancestor-values": ["Plan stratégique de développement d'Haiti (2030), "1 : REFONDATION TERRITORIALE", 
+     *           "1.3 : GÉRER LES BASSINS VERSANTS", "1.3.1 : Protéger les bassins versants"]
      *     }
      *   ],
      *   "activity_status": [
@@ -310,7 +310,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
                 
                 List<FieldIdValue> idValues = possibleValue.stream()
                         .map(pv -> new FieldIdValue((Long) pv.getId(), pv.getValue(), 
-                                getAncestorPath(allValuesMap, pv.getId())))
+                                getAncestorValues(allValuesMap, pv.getId(), new ArrayList<>())))
                         .collect(Collectors.toList());
                 
                 response.put(fieldName, idValues);
@@ -320,16 +320,16 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
         return Response.ok(response, MediaType.APPLICATION_JSON_TYPE).build();
     }
 
-    private String getAncestorPath(Map<Object, PossibleValue> allValuesMap, Object id) {
+    private List<String> getAncestorValues(Map<Object, PossibleValue> allValuesMap, Object id, List<String> values) {
         PossibleValue obj = allValuesMap.get(id);
+        List<String> ancestorValues = new ArrayList<>(values);
         if (obj.getExtraInfo() instanceof ParentExtraInfo) {
             ParentExtraInfo parentExtraInfo = (ParentExtraInfo) obj.getExtraInfo();
             if (parentExtraInfo.getParentId() != null) {
-                return String.format("%s [%s]", 
-                        getAncestorPath(allValuesMap, parentExtraInfo.getParentId()), obj.getValue());
-            } else {
-                return String.format("[%s]", obj.getValue());
+                ancestorValues.addAll(getAncestorValues(allValuesMap, parentExtraInfo.getParentId(), ancestorValues));
             }
+            ancestorValues.add(obj.getValue());
+            return ancestorValues;
         } 
         
         return null;

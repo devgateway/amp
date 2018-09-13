@@ -1,5 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
+import java.util.List;
+
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
@@ -10,13 +12,13 @@ public class FieldIdValue {
     private String value;
     
     @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-    @JsonProperty("ancestor-path")
-    private String ancestorPath;
+    @JsonProperty("ancestor-values")
+    private List<String> ancestorValues;
 
-    public FieldIdValue(Long id, String value, String ancestorPath) {
+    public FieldIdValue(Long id, String value, List<String> ancestorPath) {
         this.id = id;
         this.value = value;
-        this.ancestorPath = ancestorPath;
+        this.ancestorValues = ancestorPath;
     }
 
     public Long getId() {
@@ -35,12 +37,12 @@ public class FieldIdValue {
         this.value = value;
     }
 
-    public String getAncestorPath() {
-        return ancestorPath;
+    public List<String> getAncestorValues() {
+        return ancestorValues;
     }
 
-    public void setAncestorPath(String ancestorPath) {
-        this.ancestorPath = ancestorPath;
+    public void setAncestorValues(List<String> ancestorPath) {
+        this.ancestorValues = ancestorPath;
     }
 
 }

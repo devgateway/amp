@@ -19,6 +19,9 @@ public interface PossibleValuesDAO {
     int LOC_CAT_VAL_ID_POS = 5;
     int LOC_CAT_VAL_NAME_POS = 6;
     int LOC_ISO = 7;
+    
+    int SECTOR_PARENT_ID_POS = 2;
+    int THEME_PARENT_ID_POS = 2;
 
     List<Object[]> getCategoryValues(String discriminatorOption);
 

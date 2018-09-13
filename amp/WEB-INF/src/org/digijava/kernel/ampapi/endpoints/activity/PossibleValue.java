@@ -76,6 +76,10 @@ public class PossibleValue {
     public List<PossibleValue> getChildren() {
         return children;
     }
+    
+    public Object getExtraInfo() {
+        return extraInfo;
+    }
 
     @Override
     public boolean equals(Object o) {

@@ -247,11 +247,11 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
      * 
      * For fields like locations, sectors, programs the object contains the ancestor values.
      * <h3>Sample request:</h3><pre>
-     * [
+     * {
      *   "locations~location": [534, 126],
      *   "national_plan_objective~program": [123],
      *   "primary_sectors~sector": [297]
-     * ]
+     * }
      * </pre>
      * <h3>Sample response:</h3><pre>
      * {

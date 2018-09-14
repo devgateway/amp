@@ -794,7 +794,7 @@ public class SettingsUtils {
         settingFieldList.add(getStringSetting(SettingsConstants.LIMIT_FILE_TO_UPLOAD,
                 ResourceManagerSettingsUtil.isLimitFileToUpload() + ""));
         settingFieldList.add(getSettingFieldForOptions(SettingsConstants.SORT_COLUMN,
-                getSettingOptionsFromGlobalSettings(ResourceManagerSettingsUtil.getSortColumn(),
+                getSortSetting(ResourceManagerSettingsUtil.getSortColumn())));
                         SettingsConstants.SORT_COLUMN_VIEW)));
 
         return settingFieldList;

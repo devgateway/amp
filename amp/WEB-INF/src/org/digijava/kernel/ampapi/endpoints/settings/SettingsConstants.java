@@ -49,6 +49,8 @@ public class SettingsConstants {
     public static final String CUSTOM = "custom";
 
     public static final String REORDER_FUNDING_ITEM_ID = "reorder-funding-item";
+    public static final String WORKSPACE_CURRENCY_CODE = "workspace-" + CURRENCY_ID;
+
 
 
     /** {id, value} map for settings fields ID-NAME map */

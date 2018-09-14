@@ -240,7 +240,30 @@ public class SettingsUtils {
     static SettingField getFundingTypeField(Set<String> measures) {
         return getSettingFieldForOptions(SettingsConstants.FUNDING_TYPE_ID, getFundingTypeSettings(measures));
     }
+    static SettingField getActivityPreviewPublicSettings() {
 
+        final List<SettingField> previewPublicSettings = new ArrayList<>();
+
+        previewPublicSettings.add(new SettingField(SettingsConstants.DEFAULT_DATE_FORMAT_ID, null,
+                SettingsConstants.ID_NAME_MAP.get(SettingsConstants.DEFAULT_DATE_FORMAT_ID),
+                FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT)));
+
+        previewPublicSettings.add(new  SettingField(SettingsConstants.REORDER_FUNDING_ITEM_ID, null,
+                SettingsConstants.ID_NAME_MAP.get(SettingsConstants.REORDER_FUNDING_ITEM_ID),
+                getSettingOptionsFromGlobalSettings(FeaturesUtil.getGlobalSettingValue(
+                        GlobalSettingsConstants.REORDER_FUNDING_ITEMS), SettingsConstants.REORDER_FUNDING_ITEM_VIEW)));
+
+        previewPublicSettings.add(new SettingField(SettingsConstants.SHOW_EDITABLE_FORMATS_ID, null,
+                SettingsConstants.ID_NAME_MAP.get(SettingsConstants.SHOW_EDITABLE_FORMATS_ID),
+                FeaturesUtil.showEditableExportFormats()));
+
+
+
+
+        return new SettingField(SettingsConstants.ACTIVITY_PREVIEW_PUBLIC_SETTINGS_ID, null,
+                SettingsConstants.ID_NAME_MAP.get(SettingsConstants.ACTIVITY_PREVIEW_PUBLIC_SETTINGS_ID),
+                previewPublicSettings);
+    }
     static SettingField getReportAmountFormatField() {
         DecimalFormat format = FormatHelper.getDefaultFormat();
         final List<SettingField> formatFields = new ArrayList<>();
@@ -410,8 +433,7 @@ public class SettingsUtils {
         settings.set("default-date-format",
                 FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT));
 
-        settings.set("hide-editable-export-formats-public-view",
-                !FeaturesUtil.isVisibleModule("Show Editable Export Formats"));
+        settings.set("hide-editable-export-formats-public-view", !FeaturesUtil.showEditableExportFormats());
 
         settings.set("download-map-selector", FeaturesUtil.isVisibleFeature(GisConstants.DOWNLOAD_MAP_SELECTOR));
 
@@ -721,26 +743,25 @@ public class SettingsUtils {
     }
 
     /**
-     * @param sortColumn
+     * @param selectedOption
      * @return general currency settings
      */
-    private static SettingOptions getSortSetting(String sortColumn) {
+    private static SettingOptions getSettingOptionsFromGlobalSettings(String selectedOption, String view) {
 
-        // build currency options
-        List<KeyValue> sortOptions = org.digijava.module.admin.util.DbUtil
-                .getPossibleValues(SettingsConstants.SORT_COLUMN_VIEW);
+        List<KeyValue> settingsOptions = org.digijava.module.admin.util.DbUtil
+                .getPossibleValues(view);
 
         List<SettingOptions.Option> options = new ArrayList<>();
 
-        for (KeyValue sortOption : sortOptions) {
-            SettingOptions.Option resourceSortingOption = new SettingOptions.Option(sortOption.getKey(),
+        for (KeyValue sortOption : settingsOptions) {
+            SettingOptions.Option settingsOption = new SettingOptions.Option(sortOption.getKey(),
                     sortOption.getValue());
-            options.add(resourceSortingOption);
+            options.add(settingsOption);
         }
 
         String defaultId = "";
-        if (sortColumn != null) {
-            defaultId = sortColumn;
+        if (selectedOption != null) {
+            defaultId = selectedOption;
         }
 
         return new SettingOptions(defaultId, options);
@@ -773,7 +794,8 @@ public class SettingsUtils {
         settingFieldList.add(getStringSetting(SettingsConstants.LIMIT_FILE_TO_UPLOAD,
                 ResourceManagerSettingsUtil.isLimitFileToUpload() + ""));
         settingFieldList.add(getSettingFieldForOptions(SettingsConstants.SORT_COLUMN,
-                getSortSetting(ResourceManagerSettingsUtil.getSortColumn())));
+                getSettingOptionsFromGlobalSettings(ResourceManagerSettingsUtil.getSortColumn(),
+                        SettingsConstants.SORT_COLUMN_VIEW)));
 
         return settingFieldList;
     }

@@ -240,7 +240,7 @@ public class SettingsUtils {
     static SettingField getFundingTypeField(Set<String> measures) {
         return getSettingFieldForOptions(SettingsConstants.FUNDING_TYPE_ID, getFundingTypeSettings(measures));
     }
-    static SettingField getActivityPreviewPublicSettings() {
+    public static SettingField getActivityPreviewPublicSettings() {
 
         final List<SettingField> previewPublicSettings = new ArrayList<>();
 
@@ -264,7 +264,7 @@ public class SettingsUtils {
                 SettingsConstants.ID_NAME_MAP.get(SettingsConstants.ACTIVITY_PREVIEW_PUBLIC_SETTINGS_ID),
                 previewPublicSettings);
     }
-    static SettingField getReportAmountFormatField() {
+    public static SettingField getReportAmountFormatField() {
         DecimalFormat format = FormatHelper.getDefaultFormat();
         final List<SettingField> formatFields = new ArrayList<>();
 

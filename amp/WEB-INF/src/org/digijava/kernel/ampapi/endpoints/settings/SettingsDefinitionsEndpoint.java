@@ -467,50 +467,6 @@ public class SettingsDefinitionsEndpoint implements ErrorReportingEndpoint {
         return Arrays.asList(getCurrencyField(true), getCalendarField(), getCalendarCurrenciesField());
     }
 
-    /**
-     * Returns setting definitions for Activity preview
-     *
-     * <h3>Sample Output:</h3>
-     *
-     *
-     * <pre>
-     *     ... other fields
-     *  {
-     *      "type":"FIELDS",
-     *      "id":"activity-preview-public-settings",
-     *      "name":"Activity preview public settings",
-     *      "value":[
-     *              {
-     *                  "type":"STR_VALUE",
-     *                  "id":"default-date-format",
-     *                  "name":"Format de la date par défaut",
-     *                  "value":"dd/MM/yyyy"
-     *              },
-     *              {
-     *                  "type":"OPTIONS",
-     *                  "id":"reorder-funding-item",
-     *                  "name":"Reorder funding items",
-     *                  "value":
-     *                  {
-     *                      "multi":false,
-     *                      "defaultId":"4",
-     *                      "options":[
-     *                                ]
-     *                  }
-     *   ... other fields
-     * ]
-     * </pre>
-     *
-     * @return a list of setting definitions for activity preview
-     */
-    @GET
-    @Path("/activity-preview")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    public final Response getSettingDefinitionsForActivityPreview() {
-        List<SettingField> response = Arrays.asList(getReportAmountFormatField(), getActivityPreviewPublicSettings());
-        return Response.ok(response, MediaType.APPLICATION_JSON_TYPE).build();
-    }
-
     @Override
     public Class getErrorsClass() {
         return SettingsDefinitionsErrors.class;

@@ -3,6 +3,7 @@ package org.digijava.kernel.ampapi.endpoints.common;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -27,6 +28,7 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.filetype.MimeUtil;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
+import org.digijava.kernel.ampapi.endpoints.settings.SettingField;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -42,6 +44,9 @@ import org.digijava.module.aim.dbentity.AmpOfflineCompatibleVersionRange;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getActivityPreviewPublicSettings;
+import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getReportAmountFormatField;
 
 /**
  * This class should have all end point related to the configuration of amp
@@ -427,6 +432,50 @@ public class AmpConfiguration implements ErrorReportingEndpoint {
     public Response getMacReleaseFile(@PathParam("arch") String arch, @PathParam("id") Long id) {
         requireValidArch(arch);
         return getAmpOfflineReleaseFile(id);
+    }
+
+    /**
+     * Returns setting  for Activity preview
+     *
+     * <h3>Sample Output:</h3>
+     *
+     *
+     * <pre>
+     *     ... other fields
+     *  {
+     *      "type":"FIELDS",
+     *      "id":"activity-preview-public-settings",
+     *      "name":"Activity preview public settings",
+     *      "value":[
+     *              {
+     *                  "type":"STR_VALUE",
+     *                  "id":"default-date-format",
+     *                  "name":"Format de la date par défaut",
+     *                  "value":"dd/MM/yyyy"
+     *              },
+     *              {
+     *                  "type":"OPTIONS",
+     *                  "id":"reorder-funding-item",
+     *                  "name":"Reorder funding items",
+     *                  "value":
+     *                  {
+     *                      "multi":false,
+     *                      "defaultId":"4",
+     *                      "options":[
+     *                                ]
+     *                  }
+     *   ... other fields
+     * ]
+     * </pre>
+     *
+     * @return a list of setting  for activity preview
+     */
+    @GET
+    @Path("/activity-preview-settings")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    public final Response getSettingForActivityPreview() {
+        List<SettingField> response = Arrays.asList(getReportAmountFormatField(), getActivityPreviewPublicSettings());
+        return Response.ok(response, MediaType.APPLICATION_JSON_TYPE).build();
     }
 
     private void requireValidArch(String arch) {

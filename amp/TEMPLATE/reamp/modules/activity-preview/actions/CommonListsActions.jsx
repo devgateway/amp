@@ -104,40 +104,64 @@ function _addLabelAndType(hydratedActivity, fields) {
 
 function _addRealValue(hydratedActivity, parentName) {
     return new Promise((resolve, reject) => {
-        let actions = [];
-        _addRealValueHelper(actions, hydratedActivity, parentName)
-        Promise.all(actions).then(data => resolve(hydratedActivity));
-        
+        let requestData = {};
+        _createRequestDataHelper(requestData, hydratedActivity, parentName);
+        commonListsApi.fetchFieldsData(requestData).then(fields => {
+            let keys = Object.keys(fields);
+            for(var key in keys) {
+                let path = keys[key].split('~');
+                if(fields[keys[key]]) {
+                    _addRealValueHelper(hydratedActivity, path, fields[keys[key]])
+                }
+            }
+            resolve(hydratedActivity);
+        }).catch(error => {
+            throw(error);
+        });        
     });
 }
 
-function _addRealValueHelper(actions, hydratedActivity, parentName) {
+function _addRealValueHelper(fieldParam, path, values) {
+    let pathName = path.shift();
+    if (fieldParam.value && Array.isArray(fieldParam.value)) {
+        for(var field in fieldParam.value){
+            if (path.length > 0) {
+                _addRealValueHelper(fieldParam.value[field][pathName], path, values)
+            } else {        
+                let valueId = fieldParam.value[field][pathName];
+                let valueObj = values.filter(c => c.id === valueId.value);
+                valueId.value = valueObj[0] ? valueObj[0].value : valueId.value;
+            }
+        }
+    } else {
+        if (path.length > 0) {
+            _addRealValueHelper(fieldParam[pathName], path, values)
+        } else {        
+            let valueId = fieldParam[pathName];
+            let valueObj = values.filter(c => c.id === valueId.value);
+            fieldParam[pathName].value = valueObj[0] ? valueObj[0].value : valueId.value;
+        }
+    }
+}
+
+
+function _createRequestDataHelper(requestData, hydratedActivity, parentName) {
     let keys = Object.keys(hydratedActivity);
-    
     for(var key in keys) {
         let fieldObj = hydratedActivity[keys[key]];
         if(fieldObj.field_type === 'long') {
-            let _parentName = parentName ? parentName : keys[key];
-            let _childName = parentName ? keys[key] : undefined;
-            actions.push(
-                commonListsApi.getFieldSubList(_parentName, _childName).then(field => {
-                    if (field && field.length > 0) {
-                        let element = field.find(function(element){ if (element.id === fieldObj.value) {
-                            return element
-                        }});
-                        let newValue = element ? element.value : undefined;
-                        if (newValue !== undefined) {
-                            fieldObj.value = newValue;
-                        }
-                    }
-                }).catch(error => {
-                    throw(error);
-                })
-            );
+            if(fieldObj.value !== undefined && fieldObj.value !== null) {
+                let _parentName = parentName ? parentName + '~' + keys[key] : keys[key];
+                if (requestData[_parentName]) {
+                    requestData[_parentName].push(fieldObj.value);
+                } else {
+                    requestData[_parentName] = [fieldObj.value];
+                }
+            }
         } else if (fieldObj.field_type === 'list' && fieldObj.value && fieldObj.value.length > 0) {
             let _parentName = parentName ? parentName + '~' + keys[key] : keys[key];
             for(var pos in fieldObj.value) {
-                _addRealValueHelper(actions, fieldObj.value[pos], _parentName);
+                _createRequestDataHelper(requestData, fieldObj.value[pos], _parentName);
             }
         }
     }

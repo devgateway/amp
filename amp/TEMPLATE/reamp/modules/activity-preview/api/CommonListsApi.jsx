@@ -36,6 +36,17 @@ class CommonListsApi {
            });
        });
    }   
+
+   static fetchFieldsData(requestData) {
+        return new Promise(( resolve, reject ) => {
+            postJson('/rest/activity/field/id-values', requestData).then(response => {
+                resolve(response.json() );
+
+            }).catch(error => {
+                reject(error );
+        });
+    });
+}
    
 }
 

@@ -289,7 +289,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
     @POST
     @Path("field/id-values")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod( id = "getIdValues", ui = false)
+    @ApiMethod(id = "getIdValues", ui = false)
     public Response getFieldValuesById(Map<String, List<Long>> fieldIds) {
         Map<String, List<FieldIdValue>> response = new HashMap<>();
         
@@ -347,7 +347,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
     @GET
     @Path("fields")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod( id = "getFields", ui = false)
+    @ApiMethod(id = "getFields", ui = false)
     public List<APIField> getAvailableFields() {
         return AmpFieldsEnumerator.PUBLIC_ENUMERATOR.getAllAvailableFields();
     }

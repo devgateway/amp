@@ -19,10 +19,8 @@ public class SettingsConstants {
     public static final String CALENDAR_TYPE_ID = "calendar-id";
     public static final String CALENDAR_CURRENCIES_ID = "calendar-currencies";
     public static final String AMOUNT_FORMAT_ID = "amount-format";
-    public static final String ACTIVITY_PREVIEW_PUBLIC_SETTINGS_ID = "activity-preview-public-settings";
 
     public static final String YEAR_RANGE_ID = "year-range";
-    public static final String DEFAULT_DATE_FORMAT_ID = "default-date-format";
 
     public static final String DEFAULT_FUNDING_TYPE_ID = MeasureConstants.ACTUAL_COMMITMENTS;
 
@@ -51,8 +49,6 @@ public class SettingsConstants {
     public static final String CUSTOM = "custom";
 
     public static final String REORDER_FUNDING_ITEM_ID = "reorder-funding-item";
-    public static final String REORDER_FUNDING_ITEM_VIEW = "v_g_settings_reorder_funding";
-    public static final String SHOW_EDITABLE_FORMATS_ID = "show-editable-formats";
 
 
     /** {id, value} map for settings fields ID-NAME map */
@@ -81,10 +77,6 @@ public class SettingsConstants {
         put(SORT_COLUMN,GlobalSettingsConstants.DEFAULT_RESOURCES_SORT_COLUMN );
         put(MAXIMUM_FILE_SIZE, GlobalSettingsConstants.CR_MAX_FILE_SIZE );
         put(LIMIT_FILE_TO_UPLOAD,GlobalSettingsConstants.LIMIT_FILE_TYPE_FOR_UPLOAD);
-        put(DEFAULT_DATE_FORMAT_ID, "Default date format");
-        put(ACTIVITY_PREVIEW_PUBLIC_SETTINGS_ID, "Activity preview public settings");
-        put(REORDER_FUNDING_ITEM_ID, "Reorder funding items");
-        put(SHOW_EDITABLE_FORMATS_ID, "Show editable formats");
     }});
 
     public static final String DOT = "dot";

@@ -240,30 +240,7 @@ public class SettingsUtils {
     static SettingField getFundingTypeField(Set<String> measures) {
         return getSettingFieldForOptions(SettingsConstants.FUNDING_TYPE_ID, getFundingTypeSettings(measures));
     }
-    public static SettingField getActivityPreviewPublicSettings() {
 
-        final List<SettingField> previewPublicSettings = new ArrayList<>();
-
-        previewPublicSettings.add(new SettingField(SettingsConstants.DEFAULT_DATE_FORMAT_ID, null,
-                SettingsConstants.ID_NAME_MAP.get(SettingsConstants.DEFAULT_DATE_FORMAT_ID),
-                FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT)));
-
-        previewPublicSettings.add(new  SettingField(SettingsConstants.REORDER_FUNDING_ITEM_ID, null,
-                SettingsConstants.ID_NAME_MAP.get(SettingsConstants.REORDER_FUNDING_ITEM_ID),
-                getSettingOptionsFromGlobalSettings(FeaturesUtil.getGlobalSettingValue(
-                        GlobalSettingsConstants.REORDER_FUNDING_ITEMS), SettingsConstants.REORDER_FUNDING_ITEM_VIEW)));
-
-        previewPublicSettings.add(new SettingField(SettingsConstants.SHOW_EDITABLE_FORMATS_ID, null,
-                SettingsConstants.ID_NAME_MAP.get(SettingsConstants.SHOW_EDITABLE_FORMATS_ID),
-                FeaturesUtil.showEditableExportFormats()));
-
-
-
-
-        return new SettingField(SettingsConstants.ACTIVITY_PREVIEW_PUBLIC_SETTINGS_ID, null,
-                SettingsConstants.ID_NAME_MAP.get(SettingsConstants.ACTIVITY_PREVIEW_PUBLIC_SETTINGS_ID),
-                previewPublicSettings);
-    }
     public static SettingField getReportAmountFormatField() {
         DecimalFormat format = FormatHelper.getDefaultFormat();
         final List<SettingField> formatFields = new ArrayList<>();
@@ -444,6 +421,9 @@ public class SettingsUtils {
         DecimalFormatSymbols formatSymbols = FormatHelper.getDefaultFormat().getDecimalFormatSymbols();
         settings.set("number-group-separator", formatSymbols.getGroupingSeparator());
         settings.set("number-decimal-separator", formatSymbols.getDecimalSeparator());
+
+        settings.set(SettingsConstants.REORDER_FUNDING_ITEM_ID ,
+                FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.REORDER_FUNDING_ITEMS) );
 
         if (MenuUtils.getCurrentView() == AmpView.TEAM) {
             addWorkspaceSettings(settings);

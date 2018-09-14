@@ -689,13 +689,10 @@ public class FeaturesUtil {
         return FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.AMP_OFFLINE_ENABLED);
     }
 
-
     public static boolean showEditableExportFormats() {
         return TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER) != null
                 || FeaturesUtil.isVisibleModule("Show Editable Export Formats");
     }
-
-
 
         /**
          *

@@ -289,7 +289,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
     @POST
     @Path("field/id-values")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_OPTIONAL}, id = "getIdValues", ui = false)
+    @ApiMethod(id = "getIdValues", ui = false)
     public Response getFieldValuesById(Map<String, List<Long>> fieldIds) {
         Map<String, List<FieldIdValue>> response = new HashMap<>();
         
@@ -347,7 +347,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
     @GET
     @Path("fields")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(authTypes = AuthRule.IN_WORKSPACE, id = "getFields", ui = false)
+    @ApiMethod(id = "getFields", ui = false)
     public List<APIField> getAvailableFields() {
         return AmpFieldsEnumerator.PUBLIC_ENUMERATOR.getAllAvailableFields();
     }
@@ -401,7 +401,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
     @GET
     @Path("/projects/{projectId}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(authTypes = AuthRule.VIEW_ACTIVITY, id = "getProject", ui = false)
+    @ApiMethod(id = "getProject", ui = false)
     public JsonBean getProject(@PathParam("projectId") Long projectId) {
         return InterchangeUtils.getActivity(projectId);
     }

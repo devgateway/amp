@@ -1,6 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.settings;
 
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
+import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getActivityPreviewPublicSettings;
 import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getCalendarCurrenciesField;
 import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getCalendarField;
 import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getCurrencyField;
@@ -15,6 +16,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -327,7 +329,7 @@ public class SettingsDefinitionsEndpoint implements ErrorReportingEndpoint {
      * Returns definitions for the following settings: resource manager.
      * </p>
      * <h3>Sample Output:</h3> 
-     * 
+     *
      * <pre>
      *  [
      *      {
@@ -365,8 +367,8 @@ public class SettingsDefinitionsEndpoint implements ErrorReportingEndpoint {
      *              }
      *      }
      *  ]
-     * 
-     * 
+     *
+     *
      * </pre>
      * 
      * @return a list of setting definitions
@@ -464,7 +466,51 @@ public class SettingsDefinitionsEndpoint implements ErrorReportingEndpoint {
     public final List<SettingField> getSettingDefinitionsForGPIReports() {
         return Arrays.asList(getCurrencyField(true), getCalendarField(), getCalendarCurrenciesField());
     }
-    
+
+    /**
+     * Returns setting definitions for Activity preview
+     *
+     * <h3>Sample Output:</h3>
+     *
+     *
+     * <pre>
+     *     ... other fields
+     *  {
+     *      "type":"FIELDS",
+     *      "id":"activity-preview-public-settings",
+     *      "name":"Activity preview public settings",
+     *      "value":[
+     *              {
+     *                  "type":"STR_VALUE",
+     *                  "id":"default-date-format",
+     *                  "name":"Format de la date par défaut",
+     *                  "value":"dd/MM/yyyy"
+     *              },
+     *              {
+     *                  "type":"OPTIONS",
+     *                  "id":"reorder-funding-item",
+     *                  "name":"Reorder funding items",
+     *                  "value":
+     *                  {
+     *                      "multi":false,
+     *                      "defaultId":"4",
+     *                      "options":[
+     *                                ]
+     *                  }
+     *   ... other fields
+     * ]
+     * </pre>
+     *
+     * @return a list of setting definitions for activity preview
+     */
+    @GET
+    @Path("/activity-preview")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    public final Response getSettingDefinitionsForActivityPreview() {
+        List<SettingField> response = Arrays.asList(getReportAmountFormatField(), getActivityPreviewPublicSettings());
+        return Response.ok(response, MediaType.APPLICATION_JSON_TYPE).build();
+    }
+
     @Override
     public Class getErrorsClass() {
         return SettingsDefinitionsErrors.class;

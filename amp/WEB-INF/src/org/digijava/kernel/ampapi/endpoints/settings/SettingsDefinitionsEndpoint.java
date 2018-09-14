@@ -1,7 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.settings;
 
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
-import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getActivityPreviewPublicSettings;
 import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getCalendarCurrenciesField;
 import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getCalendarField;
 import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getCurrencyField;
@@ -16,7 +15,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;

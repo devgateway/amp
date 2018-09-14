@@ -54,7 +54,6 @@ import bsh.org.objectweb.asm.Constants;
 public class CurrencyUtil {
 
     private static Logger logger = Logger.getLogger(CurrencyUtil.class);
-    public static DecimalFormat df = new DecimalFormat("###,###,###,###,###");
 
     public static final int RATE_FROM_FILE = 0;
     public static final int RATE_FROM_WEB_SERVICE = 1;
@@ -793,17 +792,16 @@ public class CurrencyUtil {
     }
 
     public static AmpCurrency getEffectiveCurrency() {
-
-        AmpCurrency curr = null;
-        TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute("currentMember");
-        if (tm != null && tm.getAppSettings() != null && tm.getAppSettings().getCurrencyId() != null) {
-            curr = CurrencyUtil.getAmpcurrency(tm.getAppSettings().getCurrencyId());
+        return CurrencyUtil.getWorkspaceCurrency(TeamUtil.getCurrentMember());
+    }
+    
+    public static String  getEffectiveCurrencyCode() {
+        //It should never be null since its coming from gs but just in case we default to USD
+        AmpCurrency curr = CurrencyUtil.getEffectiveCurrency();
+        if (curr != null) {
+            return curr.getCurrencyCode();
         } else {
-            String currCode = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
-            if (currCode != null) {
-                curr = CurrencyUtil.getAmpcurrency(currCode);
-            }
+            return CurrencyUtil.BASE_CODE;
         }
-        return curr;
     }
 }

@@ -422,7 +422,7 @@ public class SettingsUtils {
         settings.set("number-group-separator", formatSymbols.getGroupingSeparator());
         settings.set("number-decimal-separator", formatSymbols.getDecimalSeparator());
 
-        settings.set(SettingsConstants.WORKSPACE_CURRENCY_CODE, getDefaultCurrencyCode());
+        settings.set(SettingsConstants.WORKSPACE_CURRENCY_CODE, CurrencyUtil.getEffectiveCurrencyCode());
 
         settings.set(SettingsConstants.REORDER_FUNDING_ITEM_ID,
                 FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.REORDER_FUNDING_ITEMS));
@@ -436,15 +436,6 @@ public class SettingsUtils {
         return settings;
     }
 
-    private static String  getDefaultCurrencyCode() {
-        //It should never be null since its coming from gs but just in case we default to USD
-        AmpCurrency curr = CurrencyUtil.getEffectiveCurrency();
-        if (curr != null) {
-            return curr.getCurrencyCode();
-        } else {
-            return CurrencyUtil.BASE_CODE;
-        }
-    }
     private static void addWorkspaceSettings(JsonBean settings) {
         TeamMember teamMember = TeamUtil.getCurrentMember();
         AmpTeam ampTeam = EndpointUtils.getAppSettings().getTeam();

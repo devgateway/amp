@@ -241,7 +241,7 @@ public class SettingsUtils {
         return getSettingFieldForOptions(SettingsConstants.FUNDING_TYPE_ID, getFundingTypeSettings(measures));
     }
 
-    public static SettingField getReportAmountFormatField() {
+    static SettingField getReportAmountFormatField() {
         DecimalFormat format = FormatHelper.getDefaultFormat();
         final List<SettingField> formatFields = new ArrayList<>();
 

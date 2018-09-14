@@ -87,8 +87,7 @@ export default class ActivityView extends Component {
             message = (<h1>{this.props.translations['amp.activity-preview:activityError'] + 
                 this.props.errorMsg}</h1> );
         } else if (this.props.isActivityHydratedLoading === true) {
-            message = (<div>
-                <h1>{this.props.translations['amp.activity-preview:activityLoading']}</h1>
+            message = (
                 <div className={'jumbotron'}>
                     <div className={'progress'}>
                         <div className={'progress-bar progress-bar-striped bg-info'}
@@ -98,7 +97,7 @@ export default class ActivityView extends Component {
                             aria-valuemax={'100'} style={{width: '100%'}}>
                         </div>
                     </div>
-                </div></div>
+                </div>
             );
         } else if (this.props.isActivityHydrated === true) {
             if (!this.props.activity) {

@@ -422,6 +422,8 @@ public class SettingsUtils {
         settings.set("number-group-separator", formatSymbols.getGroupingSeparator());
         settings.set("number-decimal-separator", formatSymbols.getDecimalSeparator());
 
+        settings.set(SettingsConstants.WORKSPACE_CURRENCY_CODE, CurrencyUtil.getEffectiveCurrencyCode());
+
         settings.set(SettingsConstants.REORDER_FUNDING_ITEM_ID,
                 FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.REORDER_FUNDING_ITEMS));
 

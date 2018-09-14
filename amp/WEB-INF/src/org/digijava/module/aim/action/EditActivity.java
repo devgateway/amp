@@ -447,44 +447,25 @@ public class EditActivity extends Action {
 
         eaForm.getComments().setAllComments(allComments);
 
+        String currCode = "";
+        String currName = "";
 
-        if (tm != null && tm.getAppSettings() != null && tm.getAppSettings().getCurrencyId() != null) {
-            String currCode = "";
-            String currName = "";
-            AmpCurrency curr = CurrencyUtil.getAmpcurrency(tm.getAppSettings().getCurrencyId());
+        AmpCurrency curr = CurrencyUtil.getEffectiveCurrency();
 
-            if (curr != null) {
-                currCode = curr.getCurrencyCode();
-                currName = curr.getCurrencyName();
-            }
+        if (curr != null) {
+            currCode = curr.getCurrencyCode();
+            currName = curr.getCurrencyName();
+        }
 
-            eaForm.setCurrCode(currCode);
-            eaForm.setCurrName(currName);
+        eaForm.setCurrCode(currCode);
+        eaForm.setCurrName(currName);
 
-            if (eaForm.getFundingCurrCode() == null) {
-                eaForm.setFundingCurrCode(currCode);
-            }
+        if (eaForm.getFundingCurrCode() == null) {
+            eaForm.setFundingCurrCode(currCode);
+        }
 
-            if (eaForm.getRegFundingPageCurrCode() == null) {
-                eaForm.setRegFundingPageCurrCode(currCode);
-            }
-        } else {
-            String currCode = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
-            if (currCode != null) {
-                AmpCurrency curr = CurrencyUtil.getAmpcurrency(currCode);
-
-                eaForm.setCurrCode(currCode);
-                eaForm.setCurrName(curr.getCurrencyName());
-
-                if (eaForm.getFundingCurrCode() == null) {
-                    eaForm.setFundingCurrCode(currCode);
-                }
-
-                if (eaForm.getRegFundingPageCurrCode() == null) {
-                    eaForm.setRegFundingPageCurrCode(currCode);
-                }
-            }
-
+        if (eaForm.getRegFundingPageCurrCode() == null) {
+            eaForm.setRegFundingPageCurrCode(currCode);
         }
 
 

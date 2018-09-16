@@ -55,9 +55,12 @@ public class ActivityEPConstants {
     public static final String AMP_ID_FIELD_NAME = InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ID);
     public static final String MODIFIED_BY_FIELD_NAME = 
             InterchangeUtils.underscorify(ActivityFieldsConstants.MODIFIED_BY);
+
+    public static final String AMP_ACTIVITY_ID = "amp-activity-id";
     public static final String VALIDATION_STATUS = "validation-status";
     public static final String IS_ACTIVITY_WORKSPACE_PRIVATE = "is-activity-workspace-private";
     public static final String DAYS_FOR_AUTOMATIC_VALIDATION = "days-for-automatic-validation";
+    public static final String ACTIVITY_TEAM = "activity-team";
     public static final String IATI_IDENTIFIER_AMP_FIELD_DEFAULT_NAME = "project_code";
     
     // field types
@@ -82,7 +85,6 @@ public class ActivityEPConstants {
     public static final Double EPSILON = 0.0001;
 
     public static final String FIELD_TITLE = "_FIELD_TITLE_";
-
     private static final String FUNDING_ITEM_FM_PATH = "/Activity Form/Funding/Funding Group/Funding Item";
 
     // some FM paths

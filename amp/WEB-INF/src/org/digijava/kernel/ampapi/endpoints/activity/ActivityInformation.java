@@ -2,14 +2,16 @@ package org.digijava.kernel.ampapi.endpoints.activity;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.util.ValidationStatus;
 
 public class ActivityInformation {
 
+    @JsonProperty(ActivityEPConstants.AMP_ACTIVITY_ID)
     private Long ampActivityId;
 
     private boolean edit;
-
+    
     private boolean validate;
 
     @JsonProperty(ActivityEPConstants.VALIDATION_STATUS)
@@ -22,10 +24,14 @@ public class ActivityInformation {
     @JsonProperty(ActivityEPConstants.DAYS_FOR_AUTOMATIC_VALIDATION)
     private Integer daysForAutomaticValidation;
 
+    @JsonProperty(ActivityEPConstants.ACTIVITY_TEAM)
+    private AmpTeam activityTeam;
+
     public ActivityInformation(Long ampActivityId) {
         this.ampActivityId = ampActivityId;
         this.validationStatus = ValidationStatus.UNKNOWN;
     }
+
     public Long getAmpActivityId() {
         return ampActivityId;
     }
@@ -71,5 +77,13 @@ public class ActivityInformation {
 
     public void setDaysForAutomaticValidation(Integer daysForAutomaticValidation) {
         this.daysForAutomaticValidation = daysForAutomaticValidation;
+    }
+
+    public AmpTeam getActivityTeam() {
+        return activityTeam;
+    }
+
+    public void setActivityTeam(AmpTeam activityTeam) {
+        this.activityTeam = activityTeam;
     }
 }

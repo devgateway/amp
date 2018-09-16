@@ -28,11 +28,13 @@ import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.resource.AmpResource;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.annotations.activityversioning.ResourceTextField;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
@@ -45,6 +47,7 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
@@ -53,6 +56,7 @@ import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.aim.util.ValidationStatus;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.editor.exception.EditorException;
 import org.hibernate.FlushMode;
@@ -329,7 +333,14 @@ public class InterchangeUtils {
     public static JsonBean getActivity(Long projectId) {
         return getActivity(projectId, null);
     }
-    
+
+    public static AmpActivityVersion loadActivity(Long projectId) {
+        try {
+            return ActivityUtil.loadActivity(projectId);
+        } catch (DgException e) {
+            throw new RuntimeException(e);
+        }
+    }
     /**
      * Activity Export as JSON 
      * 
@@ -338,14 +349,7 @@ public class InterchangeUtils {
      * @return
      */
     public static JsonBean getActivity(Long projectId, JsonBean filter) {
-        try {
-            AmpActivityVersion activity = ActivityUtil.loadActivity(projectId);
-            
-            return getActivity(activity, filter);
-        } catch (DgException e) {
-            LOGGER.error("Coudn't load activity with id: " + projectId + ". " + e.getMessage());
-            throw new RuntimeException(e);
-        }
+        return getActivity(loadActivity(projectId), filter);
     }
     
     /**
@@ -833,5 +837,30 @@ public class InterchangeUtils {
         }
         
         return null;
+    }
+
+    public static ActivityInformation getActivityInformation(Long projectId) {
+        AmpActivityVersion project = loadActivity(projectId);
+        if (project == null) {
+            //so far project will never be null since an exception will be thrown
+            //I leave the code prepared to throw the appropriate response code
+            ApiErrorResponse.reportResourceNotFound(ActivityErrors.ACTIVITY_NOT_FOUND);
+        }
+        ActivityInformation activityInformation = new ActivityInformation(projectId);
+        TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
+        activityInformation.setActivityWorkspacePrivate(project.getTeam().getIsolated());
+
+        if (tm != null) {
+            activityInformation.setEdit(isEditableActivity(tm, projectId));
+            if (activityInformation.isEdit()) {
+                activityInformation.setValidate(ActivityUtil.canValidateAcitivty(project, tm));
+            }
+            activityInformation.setValidationStatus(ActivityUtil.getValidationStatus(project, tm));
+            if (activityInformation.getValidationStatus() == ValidationStatus.AUTOMATIC_VALIDATION) {
+                activityInformation.setDaysForAutomaticValidation(ActivityUtil.daysToValidation(project));
+            }
+        }
+
+        return activityInformation;
     }
 }

@@ -58,7 +58,6 @@ public class ActivityEPConstants {
 
     public static final String AMP_ACTIVITY_ID = "amp-activity-id";
     public static final String VALIDATION_STATUS = "validation-status";
-    public static final String IS_ACTIVITY_WORKSPACE_PRIVATE = "is-activity-workspace-private";
     public static final String DAYS_FOR_AUTOMATIC_VALIDATION = "days-for-automatic-validation";
     public static final String ACTIVITY_TEAM = "activity-team";
     public static final String IATI_IDENTIFIER_AMP_FIELD_DEFAULT_NAME = "project_code";

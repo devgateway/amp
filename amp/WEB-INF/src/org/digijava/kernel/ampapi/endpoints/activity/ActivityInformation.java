@@ -11,14 +11,11 @@ public class ActivityInformation {
     private Long ampActivityId;
 
     private boolean edit;
-    
+
     private boolean validate;
 
     @JsonProperty(ActivityEPConstants.VALIDATION_STATUS)
     private ValidationStatus validationStatus;
-
-    @JsonProperty(ActivityEPConstants.IS_ACTIVITY_WORKSPACE_PRIVATE)
-    private boolean activityWorkspacePrivate;
 
     @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
     @JsonProperty(ActivityEPConstants.DAYS_FOR_AUTOMATIC_VALIDATION)
@@ -61,14 +58,6 @@ public class ActivityInformation {
 
     public void setValidationStatus(ValidationStatus validationStatus) {
         this.validationStatus = validationStatus;
-    }
-
-    public boolean isActivityWorkspacePrivate() {
-        return activityWorkspacePrivate;
-    }
-
-    public void setActivityWorkspacePrivate(boolean activityWorkspacePrivate) {
-        this.activityWorkspacePrivate = activityWorkspacePrivate;
     }
 
     public Integer getDaysForAutomaticValidation() {

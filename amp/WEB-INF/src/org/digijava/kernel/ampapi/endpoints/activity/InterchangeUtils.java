@@ -848,7 +848,6 @@ public class InterchangeUtils {
         }
         ActivityInformation activityInformation = new ActivityInformation(projectId);
         TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
-        activityInformation.setActivityWorkspacePrivate(project.getTeam().getIsolated());
         activityInformation.setActivityTeam(project.getTeam());
         if (tm != null) {
             activityInformation.setEdit(isEditableActivity(tm, projectId));

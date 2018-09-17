@@ -863,7 +863,7 @@ public class InterchangeUtils {
                 activityInformation.setDaysForAutomaticValidation(ActivityUtil.daysToValidation(project));
             }
         }
-        activityInformation.setAmpASctiviylastVersionId(ActivityVersionUtil.getLastVersionForVersion(projectId));
+        activityInformation.setAmpActiviylastVersionId(ActivityVersionUtil.getLastVersionForVersion(projectId));
         return activityInformation;
     }
 

@@ -27,23 +27,23 @@ public class AmpFiscalCalendar implements Serializable, Identifiable, OrgProfile
     @JsonProperty("id")
     private Long ampFiscalCalId;
     
-    @JsonProperty("start_month_num")
+    @JsonProperty("start-month-num")
     private Integer startMonthNum;
     
-    @JsonProperty("year_offset")
+    @JsonProperty("year-offset")
     private Integer yearOffset;
     
-    @JsonProperty("start_day_num")
+    @JsonProperty("start-day-num")
     private Integer startDayNum;
     
     private String name;
     
     private String description;
     
-    @JsonProperty("base_cal")
+    @JsonProperty("base-cal")
     private String baseCal;
     
-    @JsonProperty("is_fiscal")
+    @JsonProperty("is-fiscal")
     private Boolean isFiscal; // This indicates whether calendar is fiscal or not.
     
     private Set<AmpCurrency> constantCurrencies;

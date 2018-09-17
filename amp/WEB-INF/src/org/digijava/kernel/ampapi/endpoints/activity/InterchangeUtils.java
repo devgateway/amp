@@ -52,6 +52,7 @@ import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.Identifiable;
@@ -335,11 +336,18 @@ public class InterchangeUtils {
     }
 
     public static AmpActivityVersion loadActivity(Long projectId) {
+        AmpActivityVersion activity = null;
         try {
-            return ActivityUtil.loadActivity(projectId);
+            activity = ActivityUtil.loadActivity(projectId);
+            if (activity == null) {
+                //so far project will never be null since an exception will be thrown
+                //I leave the code prepared to throw the appropriate response code
+                ApiErrorResponse.reportResourceNotFound(ActivityErrors.ACTIVITY_NOT_FOUND);
+            }
         } catch (DgException e) {
             throw new RuntimeException(e);
         }
+        return activity;
     }
     /**
      * Activity Export as JSON 
@@ -841,11 +849,7 @@ public class InterchangeUtils {
 
     public static ActivityInformation getActivityInformation(Long projectId) {
         AmpActivityVersion project = loadActivity(projectId);
-        if (project == null) {
-            //so far project will never be null since an exception will be thrown
-            //I leave the code prepared to throw the appropriate response code
-            ApiErrorResponse.reportResourceNotFound(ActivityErrors.ACTIVITY_NOT_FOUND);
-        }
+
         ActivityInformation activityInformation = new ActivityInformation(projectId);
         TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
         activityInformation.setActivityTeam(project.getTeam());
@@ -859,7 +863,15 @@ public class InterchangeUtils {
                 activityInformation.setDaysForAutomaticValidation(ActivityUtil.daysToValidation(project));
             }
         }
-
+        activityInformation.setAmpASctiviylastVersionId(ActivityVersionUtil.getLastVersionForVersion(projectId));
         return activityInformation;
+    }
+
+    public static boolean canViewActivityIfCreatedInPrivateWs(ContainerRequest containerReq) {
+        Long id = getRequestId(containerReq);
+        AmpActivityVersion project = InterchangeUtils.loadActivity(id);
+        TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
+        return !(project.getTeam().getIsolated() && (tm == null || !tm.getTeamId().equals(project.getTeam().
+                getAmpTeamId())));
     }
 }

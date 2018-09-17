@@ -423,13 +423,11 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
     @GET
     @Path("/info/{projectId}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = "getProjectsFilter", ui = false)
+    @ApiMethod(authTypes = AuthRule.PUBLIC_VIEW_ACTIVITY, id = "getProjectsFilter", ui = false)
     public Response getProjectInfo(@PathParam("projectId") Long projectId) {
         ActivityInformation response =
         InterchangeUtils.getActivityInformation(projectId);
-
         return Response.ok(response, MediaType.APPLICATION_JSON_TYPE).build();
-
     }
 
     /**

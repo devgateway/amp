@@ -10,6 +10,9 @@ public class ActivityInformation {
     @JsonProperty(ActivityEPConstants.AMP_ACTIVITY_ID)
     private Long ampActivityId;
 
+    @JsonProperty(ActivityEPConstants.AMP_ACTIVITY_LAAST_VERSION_ID)
+    private Long ampASctiviylastVersionId;
+
     private boolean edit;
 
     private boolean validate;
@@ -35,6 +38,14 @@ public class ActivityInformation {
 
     public void setAmpActivityId(Long ampActivityId) {
         this.ampActivityId = ampActivityId;
+    }
+
+    public Long getAmpASctiviylastVersionId() {
+        return ampASctiviylastVersionId;
+    }
+
+    public void setAmpASctiviylastVersionId(Long ampASctiviylastVersionId) {
+        this.ampASctiviylastVersionId = ampASctiviylastVersionId;
     }
 
     public boolean isEdit() {

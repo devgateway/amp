@@ -57,7 +57,7 @@ public class ActivityEPConstants {
             InterchangeUtils.underscorify(ActivityFieldsConstants.MODIFIED_BY);
 
     public static final String AMP_ACTIVITY_ID = "amp-activity-id";
-    public static final String AMP_ACTIVITY_LAAST_VERSION_ID = "amp-activity-last-version-id";
+    public static final String AMP_ACTIVITY_LAST_VERSION_ID = "amp-activity-last-version-id";
 
     public static final String VALIDATION_STATUS = "validation-status";
     public static final String DAYS_FOR_AUTOMATIC_VALIDATION = "days-for-automatic-validation";

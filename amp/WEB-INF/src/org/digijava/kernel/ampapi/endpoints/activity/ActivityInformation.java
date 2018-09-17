@@ -10,7 +10,7 @@ public class ActivityInformation {
     @JsonProperty(ActivityEPConstants.AMP_ACTIVITY_ID)
     private Long ampActivityId;
 
-    @JsonProperty(ActivityEPConstants.AMP_ACTIVITY_LAAST_VERSION_ID)
+    @JsonProperty(ActivityEPConstants.AMP_ACTIVITY_LAST_VERSION_ID)
     private Long ampASctiviylastVersionId;
 
     private boolean edit;

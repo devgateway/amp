@@ -33,6 +33,9 @@ public class SystemDiff {
     private boolean locators;
     
     @JsonProperty
+    private ListDiff<Long> calendars;
+    
+    @JsonProperty
     private ListDiff<Long> users;
 
     @JsonProperty
@@ -146,4 +149,9 @@ public class SystemDiff {
     public void setLocators(boolean locators) {
         this.locators = locators;
     }
+
+    public void setCalendars(ListDiff<Long> calendars) {
+        this.calendars = calendars;
+    }
+    
 }

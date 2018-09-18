@@ -157,4 +157,9 @@ export const STRUCTURES_POLYLINE = 'Polyline';
 export const STRUCTURES_COORDINATES = 'coordinates';
 
 
+//SETTINGS
+
+export const HIDE_EXPORT = 'hide-editable-export-formats-public-view';
+
+
 

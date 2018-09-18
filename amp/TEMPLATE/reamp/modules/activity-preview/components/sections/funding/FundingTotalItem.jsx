@@ -12,7 +12,9 @@ class FundingTotalItem extends Component {
   }
 
   render() {
-    let val = this.props.dontFormatNumber ? this.props.value : rawNumberToFormattedString(this.props.value);
+    let val = this.props.dontFormatNumber ? this.props.value : 
+        rawNumberToFormattedString(this.props.value, false, this.props.settings);
+        
     val = this.props.isPercentage === true ? `${val}%` : val;
     return (<div>
       <div className={'subtotal_footer_legend'}>

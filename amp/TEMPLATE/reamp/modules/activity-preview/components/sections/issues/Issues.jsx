@@ -14,17 +14,17 @@ class Issues extends Component {
     super(props);
   }
 
-  _buildIssues(activity) {
+  _buildIssues(activity, settings) {
     let content = [];
     if (activity[AC.ISSUES]) {
       activity[AC.ISSUES].value.forEach((issue) => {
       let date = '';
       if (issue[AC.ISSUE_DATE]) {
-          date = ` ${createFormattedDate(issue[AC.ISSUE_DATE].value)}`;
+          date = ` ${createFormattedDate(issue[AC.ISSUE_DATE].value, settings)}`;
         }
         content.push(<div key={'Issue_' + issue.name.value} className={'issues'}>{`${issue.name.value || ''}${date}`}</div>);
         issue[AC.MEASURES].value.forEach((measure) => {
-          content.push(<Measure key={'Measure_' + Math.random()} measure={measure} />);
+          content.push(<Measure key={'Measure_' + Math.random()} measure={measure} settings={settings} />);
         });
       });
       if (content.length === 0) {
@@ -35,9 +35,9 @@ class Issues extends Component {
   }
 
   render() {
-    const {activity, translations} = this.props.params;
+    const {activity, translations, settings} = this.props.params;
     if (activity[AC.ISSUES]) {
-      return <div key={'RenderIssue_' + Math.random()} >{this._buildIssues(activity)}</div>;
+      return <div key={'RenderIssue_' + Math.random()} >{this._buildIssues(activity, settings)}</div>;
     } else {
       return <div className={'nodata'}>{translations['amp.activity-preview:noData']}</div>;
     }

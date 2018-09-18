@@ -14,14 +14,14 @@ class AdditionalInfo extends Component {
   }
 
   _buildAdditionalInfo() {
-    const { activity }  = this.props.params;
+    const { activity, settings }  = this.props.params;
     const additionalInfo = [];
    
-    additionalInfo.push(this.props.buildSimpleField(activity, AC.CREATED_BY, true));
-    additionalInfo.push(this.props.buildSimpleField(activity, AC.CREATION_DATE, true));
-    additionalInfo.push(this.props.buildSimpleField(activity, AC.MODIFIED_BY, true));
-    additionalInfo.push(this.props.buildSimpleField(activity, AC.UPDATE_DATE, true));
-    additionalInfo.push(this.props.buildSimpleField(activity, AC.TEAM, true));
+    additionalInfo.push(this.props.buildSimpleField(activity, AC.CREATED_BY, settings, true));
+    additionalInfo.push(this.props.buildSimpleField(activity, AC.CREATION_DATE, settings, true));
+    additionalInfo.push(this.props.buildSimpleField(activity, AC.MODIFIED_BY, settings, true));
+    additionalInfo.push(this.props.buildSimpleField(activity, AC.UPDATE_DATE, settings, true));
+    additionalInfo.push(this.props.buildSimpleField(activity, AC.TEAM, settings, true));
 
     return additionalInfo;
   }

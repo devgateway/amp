@@ -5,6 +5,19 @@
   margin-right: 50px;
 }
 
+.l_divright {
+  text-align:right;
+  margin-bottom: 20px;
+}
+
+.l_sm {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 11px;
+  margin: 0px 8px;
+  cursor: pointer; 
+  color:#376091;
+}
+
 .preview_title {
   margin-left: 10px;
   background-color: #FFFFFF;

@@ -31,12 +31,14 @@ export default class DateUtils {
     return '';
   }
 
-  static createFormattedDate(date) {
-    return DateUtils.formatDate(date, API_SHORT_DATE_FORMAT);
+  static createFormattedDate(date, settings) {
+    let format = settings && settings['default-date-format'] ? settings['default-date-format'].toUpperCase() : API_SHORT_DATE_FORMAT;
+    return DateUtils.formatDate(date, format);
   }
 
   static createFormattedDateTime(date) {
-    return DateUtils.formatDate(date, API_LONG_DATE_FORMAT);
+    let format = settings && settings['default-date-format'] ? settings['default-date-format'] : API_LONG_DATE_FORMAT;
+    return DateUtils.formatDate(date, format);
   }
 
   /**

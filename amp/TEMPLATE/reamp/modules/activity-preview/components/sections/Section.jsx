@@ -11,13 +11,13 @@ require('../../styles/ActivityView.css');
 const Section = (ComposedSection, SectionTitle = null, useEncapsulateHeader = true, sID) => class extends Component {
 
 
-  buildSimpleField(activity, fieldPath, showIfNotAvailable, noDataValue, inline = false, title) {
+  buildSimpleField(activity, fieldPath, settings, showIfNotAvailable, noDataValue, inline = false, title) {
     const field = activity[fieldPath];
     //TODO
-    const title_ = title ? title : ActivityUtils.getTitle(field);
+    const title_ = title ? title : ActivityUtils.getTitle(field, settings);
     let value_ = field.value;
     if (field.field_type === 'date') {
-      value_ = DateUtils.createFormattedDate(value_);
+      value_ = DateUtils.createFormattedDate(value_, settings);
     }
     if (value_ === '' || value_ === null) {
       value_ = noDataValue;

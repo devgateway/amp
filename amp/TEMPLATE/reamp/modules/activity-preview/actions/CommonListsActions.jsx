@@ -5,6 +5,13 @@ import commonListsApi from '../api/CommonListsApi';
  * @author Daniel Oliva
  */
 
+export function getSettingsLoading(){
+    return {type: 'LOADING_SETTINGS'}
+}
+
+export function getSettingsSuccess(settings){
+    return {type: 'LOAD_SETTINGS_SUCCESS', settings: settings}
+}
 export function getActivityLoading(){
     return {type: 'LOADING_ACTIVITY'}
 }
@@ -31,6 +38,17 @@ export function getFieldsSuccess(fields){
 
 export function getFieldSubListSuccess(){
     return {type: 'LOAD_FIELD_SUBLIST_SUCCESS'}
+}
+
+export function getSettings(){
+    return function(dispatch) {
+        dispatch(getSettingsLoading());
+        return commonListsApi.getSettings().then(settings => {
+            dispatch(getSettingsSuccess(settings));
+        }).catch(error => {
+            throw(error);
+        });
+    }
 }
 
 export function getActivityAndFields(activityId){
@@ -90,12 +108,14 @@ function _addLabelAndType(hydratedActivity, fields) {
         let fieldObj = fields[field];
         if (fieldObj !== undefined) {
             let hydratedField = hydratedActivity[fieldObj.field_name];
-            hydratedField['field_label'] = fieldObj.field_label;
-            hydratedField['field_type'] = fieldObj.field_type;
-            if (fieldObj.children !== undefined && hydratedField.value !== undefined && 
-                Array.isArray(hydratedField.value)) {
-                for(var child in hydratedField.value) {
-                    _addLabelAndType(hydratedField.value[child], fieldObj.children);
+            if (hydratedField) {
+                hydratedField['field_label'] = fieldObj.field_label ? fieldObj.field_label : '';
+                hydratedField['field_type'] = fieldObj.field_type;
+                if (fieldObj.children !== undefined && hydratedField.value !== undefined && 
+                    Array.isArray(hydratedField.value)) {
+                    for(var child in hydratedField.value) {
+                        _addLabelAndType(hydratedField.value[child], fieldObj.children);
+                    }
                 }
             }
         }

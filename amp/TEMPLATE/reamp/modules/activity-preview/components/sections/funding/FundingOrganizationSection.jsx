@@ -18,14 +18,14 @@ class FundingOrganizationSection extends Component {
   _buildDonorInfo() {
     const content = [];
     const columnsNumber = 2;
-    const { buildSimpleField, funding } = this.props;
-    content.push(buildSimpleField(funding, AC.FUNDING_DONOR_ORG_ID, true, null, false));
-    content.push(buildSimpleField(funding, AC.TYPE_OF_ASSISTANCE, true, null, false));
-    content.push(buildSimpleField(funding, AC.FINANCING_INSTRUMENT, true, null, false));
-    content.push(buildSimpleField(funding, AC.FUNDING_STATUS, true, null, false));
-    content.push(buildSimpleField(funding, AC.ACTUAL_START_DATE, true, null, false));
-    content.push(buildSimpleField(funding, AC.ACTUAL_COMPLETION_DATE, true, null, false));
-    content.push(buildSimpleField(funding, AC.FINANCING_ID, true, null, false));
+    const { buildSimpleField, funding, settings } = this.props;
+    content.push(buildSimpleField(funding, AC.FUNDING_DONOR_ORG_ID, settings, true, null, false));
+    content.push(buildSimpleField(funding, AC.TYPE_OF_ASSISTANCE, settings, true, null, false));
+    content.push(buildSimpleField(funding, AC.FINANCING_INSTRUMENT, settings, true, null, false));
+    content.push(buildSimpleField(funding, AC.FUNDING_STATUS, settings, true, null, false));
+    content.push(buildSimpleField(funding, AC.ACTUAL_START_DATE, settings, true, null, false));
+    content.push(buildSimpleField(funding, AC.ACTUAL_COMPLETION_DATE, settings, true, null, false));
+    content.push(buildSimpleField(funding, AC.FINANCING_ID, settings, true, null, false));
     
     const tableContent = Tablify.addRows('fundingOrganizationSection', content, columnsNumber);
     return tableContent;
@@ -54,7 +54,7 @@ class FundingOrganizationSection extends Component {
     });
     const sortedGroups = groups.sort(this.props.comparator);
     sortedGroups.forEach((group) => {
-      content.push(<FundingTransactionTypeItem fundingDetails={fd} group={group} key={group.key} />);
+      content.push(<FundingTransactionTypeItem fundingDetails={fd} group={group} key={group.key} settings={this.props.settings} />);
     });
     return content;
   }
@@ -79,7 +79,7 @@ class FundingOrganizationSection extends Component {
     return (<div>
       <FundingTotalItem
         label={this.props.translations['amp.activity-preview:undisbursedBalance']} value={totalActualCommitments - totalActualDisbursements}
-        currency={AC.DEFAULT_CURRENCY} key={'undisbursed-balance-key'} />
+        currency={AC.DEFAULT_CURRENCY} key={'undisbursed-balance-key'} settings={this.props.settings} />
     </div>);
   }
 

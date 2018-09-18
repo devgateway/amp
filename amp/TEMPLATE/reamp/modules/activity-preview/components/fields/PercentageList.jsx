@@ -13,17 +13,17 @@ const PercentageList = (listField, valueField, percentageField, listTitle = null
   }
 
   render() {
-    const {activity, translations} = this.props.params;
+    const {activity, translations, settings} = this.props.params;
     const title = translations[listTitle] ? translations[listTitle] : listTitle;
     const items = activity[listField];
     let content = null;
     let isListEnabled = items && items.value && items.value.length;
     if (isListEnabled) {
       content = items.value.map(item => {
-        const itemTitle = item[valueField].value ? item[valueField].value : ActivityUtils.getTitle(item[percentageField]);
+        const itemTitle = item[valueField].value ? item[valueField].value : ActivityUtils.getTitle(item[percentageField], settings);
         return (<PercentageField
           key={'IT_' + itemTitle} title={itemTitle} value={item[percentageField].value}
-          titleClass={this.props.percentTitleClass} valueClass={this.props.percentValueClass} />);
+          titleClass={this.props.percentTitleClass} valueClass={this.props.percentValueClass} settings={settings} />);
       });
       if (this.props.tablify) {
         content = <Tablify content={content} columns={this.props.columns} />;

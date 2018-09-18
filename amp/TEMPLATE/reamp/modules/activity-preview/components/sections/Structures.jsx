@@ -15,7 +15,7 @@ class Structures extends Component {
     super(props);
   }
 
-  getCoordinates(structure) {
+  getCoordinates(structure, settings) {
     const { buildSimpleField } = this.props;
     let isPoint = false;
     if (!structure[AC.STRUCTURES_SHAPE].value) {
@@ -31,8 +31,8 @@ class Structures extends Component {
     }
     if (isPoint) {
       const content = [];
-      content.push(buildSimpleField(structure, AC.STRUCTURES_LATITUDE, true, null, false));
-      content.push(buildSimpleField(structure, AC.STRUCTURES_LONGITUDE, true, null, false));
+      content.push(buildSimpleField(structure, AC.STRUCTURES_LATITUDE, settings, true, null, false));
+      content.push(buildSimpleField(structure, AC.STRUCTURES_LONGITUDE, settings, true, null, false));
       return content;
     } else {
       if (structure[AC.STRUCTURES_COORDINATES] && structure[AC.STRUCTURES_COORDINATES].value && structure[AC.STRUCTURES_COORDINATES].value.length > 0) {
@@ -40,8 +40,8 @@ class Structures extends Component {
         structure[AC.STRUCTURES_COORDINATES].value.forEach(c => {
           content.push(
             <tr>
-              <td>{buildSimpleField(c, AC.STRUCTURES_LATITUDE, true, null, true)}</td>
-              <td>{buildSimpleField(c, AC.STRUCTURES_LONGITUDE, true, null, true)}</td>
+              <td>{buildSimpleField(c, AC.STRUCTURES_LATITUDE, settings, true, null, true)}</td>
+              <td>{buildSimpleField(c, AC.STRUCTURES_LONGITUDE, settings, true, null, true)}</td>
             </tr>);
         });
         return (
@@ -61,15 +61,15 @@ class Structures extends Component {
 
   render() {    
     const { buildSimpleField } = this.props;
-    const activity = this.props.params.activity;
+    const {activity, settings} = this.props.params;
     if (activity[AC.STRUCTURES]) {
       return (
         <div>{activity[AC.STRUCTURES].value.sort((a, b) => (a[AC.STRUCTURES_TITLE] > b[AC.STRUCTURES_TITLE])).map(s => (
           <div key={Math.random()}>
             <div className={'structure_title'}>{s[AC.STRUCTURES_TITLE].value}</div>
-            {buildSimpleField(s, AC.STRUCTURES_TITLE, true, null, false)}
-            {buildSimpleField(s, AC.STRUCTURES_DESCRIPTION, false, null, false)}
-            {this.getCoordinates(s)}
+            {buildSimpleField(s, AC.STRUCTURES_TITLE, settings, true, null, false)}
+            {buildSimpleField(s, AC.STRUCTURES_DESCRIPTION, settings, false, null, false)}
+            {this.getCoordinates(s, settings)}
           </div>)
         )}
         </div>

@@ -51,13 +51,13 @@ class Contacts extends Component {
   }
 
   _buildContacts() {
-    const { activity, translations } = this.props.params;
+    const { activity, translations, settings } = this.props.params;
 
     const contacts = [];
     CONTACT_INFORMATION_SOURCE.forEach(source => {
       let contactInfo = activity[source] && activity[source].value ? activity[source].value : undefined;
       if (contactInfo && contactInfo.length > 0) {
-        contacts.push(this._createColumns(contactInfo, ActivityUtils.getTitle(activity[source])));
+        contacts.push(this._createColumns(contactInfo, ActivityUtils.getTitle(activity[source], settings)));
       }
     });
     if (contacts.length < 1) {

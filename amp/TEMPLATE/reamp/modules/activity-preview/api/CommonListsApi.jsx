@@ -3,7 +3,18 @@ import { postJson, delay, fetchJson } from 'amp/tools';
 /**
  * @author Daniel Oliva
  */
-class CommonListsApi {    
+class CommonListsApi {
+
+    static getSettings() {  
+        var url = '/rest/amp/settings';
+          return new Promise((resolve, reject) => {
+             fetchJson(url).then((settings) => {                
+                 resolve(settings)
+             }).catch((error) => {
+                 reject(error);
+             });
+         });        
+     } 
 
    static getActivity(activityId) {  
        var url = '/rest/activity/projects/' + activityId;

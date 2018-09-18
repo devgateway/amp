@@ -36,7 +36,7 @@ class FundingTransactionTypeItem extends Component {
     const content = [];
     filteredFD.forEach((item) => {
       content.push(<FundingItem key={'FI_' + Math.random()} 
-        item={item} wsCurrency={AC.DEFAULT_CURRENCY} />);
+        item={item} wsCurrency={AC.DEFAULT_CURRENCY} settings={this.props.settings} />);
     });
     return <table className={'funding_table'} >{content}</table>;
   }
@@ -51,7 +51,8 @@ class FundingTransactionTypeItem extends Component {
         value={subtotal}
         label={labelTrn}
         currency={AC.DEFAULT_CURRENCY}
-        key={'FTI_' + this.props.group.adjType + this.props.group.trnType} />
+        key={'FTI_' + this.props.group.adjType + this.props.group.trnType}
+        settings={this.props.settings} />
     </div>);
   }
 

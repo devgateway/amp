@@ -10,9 +10,16 @@ const DEFAULT_GLOBAL_SETTINGS = {
 
 export default class NumberUtils {
   
-  static rawNumberToFormattedString(number, forceUnits = false) {
-    const formatted = numeral(forceUnits ? number : NumberUtils.calculateInThousands(number))
-      .format(DEFAULT_GLOBAL_SETTINGS.format).replace(/,/g, ' ');
+  static rawNumberToFormattedString(number, forceUnits = false, settings) {
+    let format = settings && settings['number-format'] ? 
+          settings['number-format'].replace('#,##', '0,').replace(/#/g, '0') : 
+          DEFAULT_GLOBAL_SETTINGS.format;
+
+    let divider = settings && settings['number-divider'] ? 
+          settings['number-divider'] : 
+          DEFAULT_GLOBAL_SETTINGS.amountsInThousands;
+
+    const formatted = numeral(forceUnits ? number : NumberUtils.calculateInDivider(number, divider)).format(format);
     return formatted;
   }
 
@@ -20,8 +27,8 @@ export default class NumberUtils {
     return numeral(numberString).value();
   }
 
-  static calculateInThousands(number) {
-    switch (DEFAULT_GLOBAL_SETTINGS.amountsInThousands) {
+  static calculateInDivider(number, divider) {
+    switch (divider) {
       case 0:
         return number;
       case 1:

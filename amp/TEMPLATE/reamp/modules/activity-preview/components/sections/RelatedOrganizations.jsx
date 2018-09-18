@@ -13,7 +13,7 @@ class RelatedOrganizations extends Component {
   }
 
   _buildRelatedOrganizations() {
-    const { activity, translations } = this.props.params;
+    const { activity, translations, settings } = this.props.params;
     const dOrg = activity[AC.DONOR_ORGANIZATION] && activity[AC.DONOR_ORGANIZATION].value ? 
       activity[AC.DONOR_ORGANIZATION].value[0] : undefined;
     const rOrg = activity[AC.RESPONSIBLE_ORGANIZATION] && activity[AC.RESPONSIBLE_ORGANIZATION] ? 
@@ -23,13 +23,13 @@ class RelatedOrganizations extends Component {
 
     const relatedOrganizations = [];
     if (dOrg) {
-      relatedOrganizations.push(this.props.buildSimpleField(dOrg, AC.ORGANIZATION, true, false, false, translations ['DonorOrganization']));
+      relatedOrganizations.push(this.props.buildSimpleField(dOrg, AC.ORGANIZATION, settings, true, false, false, translations ['DonorOrganization']));
     }
     if (rOrg) {
-      relatedOrganizations.push(this.props.buildSimpleField(rOrg, AC.ORGANIZATION, true, false, false, translations ['ResponsibleOrganization']));
+      relatedOrganizations.push(this.props.buildSimpleField(rOrg, AC.ORGANIZATION, settings, true, false, false, translations ['ResponsibleOrganization']));
     }
     if (eAge) {
-      relatedOrganizations.push(this.props.buildSimpleField(eAge, AC.ORGANIZATION, true, false, false, translations ['ExecutingAgency']));
+      relatedOrganizations.push(this.props.buildSimpleField(eAge, AC.ORGANIZATION, settings, true, false, false, translations ['ExecutingAgency']));
     }
 
     return relatedOrganizations;

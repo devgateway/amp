@@ -13,22 +13,27 @@ require('../styles/ActivityView.css');
 /**
  * @author Daniel Oliva
  */
-export default class ActivityView extends Component {
-	
-	constructor( props, context ) {
+
+
+export default class ActivityView extends Component { 
+    
+    constructor( props, context ) {
         super( props, context );
     }
+
 	
 	componentDidMount() {
         this.initializeFieldsAndActivity();
     }
 
     initializeFieldsAndActivity() {
+        this.props.actions.getSettings();
         this.props.actions.getActivityAndFields(this.props.activityId);
     }
 
     _renderData() {
         const activity = this.props.activity[0];
+        const settings = this.props.settings;
         const translations = this.props.translations;
         const sections = AC.ACTIVITY_SECTION_IDS.map((section) => {
             return <li key={section.key}><a href={section.hash}> {translations[section.translationKey]} </a></li>;
@@ -36,7 +41,8 @@ export default class ActivityView extends Component {
         const sectionKeys = AC.ACTIVITY_SECTION_IDS.map(section => section.key);
         const params = {
             activity: activity,
-            translations : translations
+            translations: translations,
+            settings: settings
         }
         const statusBarStyles = {
             inline : true,         
@@ -47,6 +53,9 @@ export default class ActivityView extends Component {
         }
         return (
             <div className="preview_container">
+                <div className="l_divright">
+                    {this._getExportOptions(activity, translations, settings)}
+                </div>
                 <div className="preview_header">
                     <span className="preview_title">
                         {activity[AC.PROJECT_TITLE].value}
@@ -76,9 +85,12 @@ export default class ActivityView extends Component {
         );
     }
 
+	_hasSettings() {
+        return this.props.isSettingsLoaded && this.props.settings;
+    }
 	
 	_hasActivity() {
-        return this.props.activity !== undefined && this.props.isActivityHydrated;
+        return this.props.isActivityHydrated && this.props.activity;
     }
     
     _getMessage() {
@@ -106,9 +118,32 @@ export default class ActivityView extends Component {
         } 
         return message === null ? '' : <div>{message}</div>;
     }
+
+    _getExportOptions(activity, translations, settings) {
+        let ret = (<div></div>);
+        if (settings && !settings[AC.HIDE_EXPORT]) {
+            ret = (
+                <div>
+                    <a onclick={"javascript:exportToPdf(" + activity[AC.INTERNAL_ID].value +")"} className="l_sm"
+                        title={translations['amp.activity-preview:exportPDF']}>
+						<img src="/TEMPLATE/ampTemplate/img_2/ico_pdf.gif"/>{translations['amp.activity-preview:exportPDF']}
+				    </a>
+                    <a onclick={"javascript:exportToWord(" + activity[AC.INTERNAL_ID].value +")"} className="l_sm"
+                        title={translations['amp.activity-preview:exportWord']}>
+						<img src="/TEMPLATE/ampTemplate/img_2/ico_word.gif"/>{translations['amp.activity-preview:exportWord']}
+				    </a>
+                    <a onclick="window.open('/showPrinterFriendlyPage.do?edit=true', '_blank', '');" className="l_sm" 
+                        title={translations['amp.activity-preview:print']}>
+						<img src="/TEMPLATE/ampTemplate/img_2/ico_print.gif"/>{translations['amp.activity-preview:print']}
+					</a>
+                </div>
+            );
+        }
+        return ret;
+    }
     
     render() {
-        const activityPreview = this._hasActivity() ? this._renderData() : '';
+        const activityPreview = this._hasActivity() && this._hasSettings() ? this._renderData() : '';
         return (
             <div>
                 {this._getMessage()}
@@ -122,7 +157,9 @@ function mapStateToProps( state, ownProps ) {
     return {
         activityId: ownProps.params.id,
         activity: state.commonLists.hydratedActivity,
+        settings: state.commonLists.settings,
         errorMsg: state.commonLists.errorMsg,
+        isSettingsLoaded: state.commonLists.isSettingsLoaded,
         isActivityError: state.commonLists.isActivityError,
         isActivityHydratedLoading: state.commonLists.isActivityHydratedLoading,
         isActivityHydrated: state.commonLists.isActivityHydrated,

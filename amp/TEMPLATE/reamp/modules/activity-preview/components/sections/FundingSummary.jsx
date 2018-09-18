@@ -68,7 +68,7 @@ class FundingSummary extends Component {
     measuresOrder.forEach(measure => {
       let value = measuresTotals[measure.trn];
       if (value !== undefined) {
-        value = NumberUtils.rawNumberToFormattedString(value);
+        value = NumberUtils.rawNumberToFormattedString(value, false, this.props.params.settings);
         let title = measure.trn;
         if (measure.total) {
           title = `Total ${title}`;

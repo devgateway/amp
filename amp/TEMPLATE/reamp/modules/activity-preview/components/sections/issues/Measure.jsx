@@ -18,7 +18,7 @@ export default class Measures extends Component {
     const content = [];
     let date = '';
     if (measure[AC.MEASURE_DATE] && measure[AC.MEASURE_DATE].value) {
-      date = ` ${createFormattedDate(measure[AC.MEASURE_DATE].value)}`;
+      date = ` ${createFormattedDate(measure[AC.MEASURE_DATE].value, this.props.settings)}`;
     }
     const measureName = `${measure[AC.MEASURE_NAME].value || ''}${date}`;
     content.push(<div key={'Measure' + Math.random()} className={'measures'}>{measureName}</div>);

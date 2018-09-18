@@ -65,7 +65,7 @@ class FundingSection extends Component {
   }
 
   render() {
-    const { activity, translations }  = this.props.params;
+    const { activity, translations, settings }  = this.props.params;
     const fundingList = [];
     let counter = 1;
     if (activity.fundings && activity.fundings.value && activity.fundings.value.length) {
@@ -74,7 +74,7 @@ class FundingSection extends Component {
           funding={funding} key={funding[AC.FUNDING_DONOR_ORG_ID].value}
           counter={counter} comparator={this._compareFundings}
           buildSimpleField={this.props.buildSimpleField} 
-          translations={translations}/>);
+          translations={translations} settings={settings}/>);
         fundingList.push(item);
         counter += 1;
       });

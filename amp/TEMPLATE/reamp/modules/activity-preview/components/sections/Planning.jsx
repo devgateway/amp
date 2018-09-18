@@ -17,7 +17,7 @@ class Planning extends Component {
 
   render() {
     const columnNumber = 3;
-    const activity = this.props.params.activity;
+    const { activity, translations, settings } = this.props.params;
     const inline = this.props.styles.inline;
     let content = [];
     const fieldPaths = [
@@ -32,25 +32,25 @@ class Planning extends Component {
     const showIfNotAvailable = new Set([AC.PROPOSED_APPROVAL_DATE, AC.ACTUAL_APPROVAL_DATE, AC.PROPOSED_START_DATE,
       AC.ACTUAL_START_DATE, AC.CREATION_DATE, AC.PROPOSED_COMPLETION_DATE, AC.ACTUAL_COMPLETION_DATE]);
 
-    let startDate = DateUtils.createFormattedDate(activity[AC.ACTUAL_START_DATE].value);
-    let endDate = DateUtils.createFormattedDate(activity[AC.ACTUAL_COMPLETION_DATE].value);
-    let duration = this.props.params.translations['amp.activity-preview:noData'];
+    let startDate = DateUtils.createFormattedDate(activity[AC.ACTUAL_START_DATE].value, settings);
+    let endDate = DateUtils.createFormattedDate(activity[AC.ACTUAL_COMPLETION_DATE].value, settings);
+    let duration = translations['amp.activity-preview:noData'];
     if (startDate && endDate) {
       let res = DateUtils.durationImproved(startDate, endDate).split(' ');
       if (res.length > 0 ) {
-        duration = res[0] + ' ' + this.props.params.translations[res[1]];
+        duration = res[0] + ' ' + translations[res[1]];
       }
 
     }
     content.push(
       <SimpleField key={'Duration'} 
-      title={this.props.params.translations['Duration']} value={duration} inline={inline} separator={false}
+      title={translations['Duration']} value={duration} inline={inline} separator={false}
       fieldNameClass={this.props.styles.fieldNameClass || ''}
       fieldValueClass={this.props.styles.fieldValueClass || ''} />
     );
     
     content = content.concat(fieldPaths.map(fieldPath =>
-      this.props.buildSimpleField(activity, fieldPath, showIfNotAvailable.has(fieldPath), inline, false)
+      this.props.buildSimpleField(activity, fieldPath, settings, showIfNotAvailable.has(fieldPath), inline, false)
     ).filter(data => data !== undefined));
 
     const tableContent = Tablify.addRows('Planning', content, columnNumber);

@@ -125,6 +125,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -165,7 +167,7 @@ public class EditActivity extends Action {
     AmpTeam currentTeam = null;
     if(tm != null)
         currentTeam=TeamUtil.getAmpTeam(tm.getTeamId());
-    boolean isPreview=mapping.getPath().trim().endsWith("viewActivityPreview");
+    boolean isPreview=mapping.getPath().trim().endsWith("editingUserId");
 
     String langCode = RequestUtils.getNavigationLanguage(request).getCode();
 
@@ -207,8 +209,18 @@ public class EditActivity extends Action {
         logger.error(e.getMessage(), e);
     }
 
+    // TODO this is temporary until we change all links in all modules that link to the previe
+    // TODO on scope of this ticket too we will implement the messages that are displayed from outside the preview
+    // TODO also we need still to be able to call the old preview for testing purposes AMP-28330
 
-    String resetMessages = request.getParameter("resetMessages");
+
+    if (request.getParameter("callOldActivityPreview") == null){
+       callActivityPreview(request,response, activityId);
+    }
+
+
+
+      String resetMessages = request.getParameter("resetMessages");
     if(resetMessages != null && resetMessages.equals("true")) {
         if(eaForm.getMessages() != null) {
             eaForm.getMessages().clear();
@@ -1648,6 +1660,35 @@ public class EditActivity extends Action {
 
     return mapping.findForward("forward");
   }
+
+    private void callActivityPreview(HttpServletRequest request, HttpServletResponse response, Long ampActivityId) {
+        try {
+            String message = null;
+            if (request.getParameter("editingUserId") != null) {
+                Long editingUserId = Long.valueOf(request.getParameter("editingUserId"));
+                if (TeamUtil.getCurrentMember().getMemberId().equals(editingUserId)) {
+                    message = TranslatorWorker.translateText("You may only edit one activity at a time.");
+                } else {
+                    message = TranslatorWorker.translateText("Current activity is being edited by:")
+                            + TeamMemberUtil.getTeamMember(editingUserId).getMemberName();
+                }
+            }
+
+            if (request.getParameter("editPermissionError") != null) {
+                message = TranslatorWorker.translateText("You do not have permissions to edit this activity.");
+            }
+            //
+            if (message != null) {
+                message = "?message=" + URLEncoder.encode(message, "UTF-8");
+            } else {
+                message = "";
+            }
+            response.sendRedirect("/TEMPLATE/reamp/modules/activity-preview/index.html#/activity/" + ampActivityId
+                    + message);
+        } catch (IOException e) {
+            logger.error("Cannot redirect to activity preview");
+        }
+    }
 
     private ProposedProjCost getProposedProjectCost(AmpActivityVersion activity, EditActivityForm eaForm, 
             Double ppcAmount, String ppcCurrencyCode, Date year, boolean yearDate, AmpFundingAmount.FundingType funType) {

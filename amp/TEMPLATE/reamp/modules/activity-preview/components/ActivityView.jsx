@@ -33,6 +33,7 @@ export default class ActivityView extends Component {
 
     _renderData() {
         const activity = this.props.activity[0];
+        const activityInfo = this.props.activityInfo;
         const settings = this.props.settings;
         const translations = this.props.translations;
         const sections = AC.ACTIVITY_SECTION_IDS.map((section) => {
@@ -92,6 +93,10 @@ export default class ActivityView extends Component {
 	_hasActivity() {
         return this.props.isActivityHydrated && this.props.activity;
     }
+	
+	_hasActivityInfo() {
+        return this.props.isActivityInfoLoaded && this.props.activityInfo;
+    }
     
     _getMessage() {
         let message = null;
@@ -119,31 +124,33 @@ export default class ActivityView extends Component {
         return message === null ? '' : <div>{message}</div>;
     }
 
+
     _getExportOptions(activity, translations, settings) {
-        let ret = (<div></div>);
-        if (settings && !settings[AC.HIDE_EXPORT]) {
-            ret = (
-                <div>
-                    <a onclick={"javascript:exportToPdf(" + activity[AC.INTERNAL_ID].value +")"} className="l_sm"
-                        title={translations['amp.activity-preview:exportPDF']}>
-						<img src="/TEMPLATE/ampTemplate/img_2/ico_pdf.gif"/>{translations['amp.activity-preview:exportPDF']}
-				    </a>
-                    <a onclick={"javascript:exportToWord(" + activity[AC.INTERNAL_ID].value +")"} className="l_sm"
-                        title={translations['amp.activity-preview:exportWord']}>
-						<img src="/TEMPLATE/ampTemplate/img_2/ico_word.gif"/>{translations['amp.activity-preview:exportWord']}
-				    </a>
-                    <a onclick="window.open('/showPrinterFriendlyPage.do?edit=true', '_blank', '');" className="l_sm" 
-                        title={translations['amp.activity-preview:print']}>
-						<img src="/TEMPLATE/ampTemplate/img_2/ico_print.gif"/>{translations['amp.activity-preview:print']}
-					</a>
-                </div>
+        let word = settings && settings[AC.HIDE_EXPORT] ? '' : 
+            (
+                <a href={'/aim/exportActToWord.do?activityid=' + activity[AC.INTERNAL_ID].value} className="l_sm"
+                    title={translations['amp.activity-preview:exportWord']} target="_blank">
+                    <img src="/TEMPLATE/ampTemplate/img_2/ico_word.gif"/>{translations['amp.activity-preview:exportWord']}
+                </a>
             );
-        }
+        let ret = (
+            <div>
+                <a href={'/aim/exportActToPDF.do?activityid='+ activity[AC.INTERNAL_ID].value} className="l_sm"
+                    title={translations['amp.activity-preview:exportPDF']} target="_blank">
+                    <img src="/TEMPLATE/ampTemplate/img_2/ico_pdf.gif"/>{translations['amp.activity-preview:exportPDF']}
+                </a>
+                {word}
+                <a href={'/showPrinterFriendlyPage.do?edit=true&activityid='+ activity[AC.INTERNAL_ID].value} className="l_sm" 
+                    title={translations['amp.activity-preview:print']} target="_blank">
+                    <img src="/TEMPLATE/ampTemplate/img_2/ico_print.gif"/>{translations['amp.activity-preview:print']}
+                </a>
+            </div>
+        );        
         return ret;
     }
     
     render() {
-        const activityPreview = this._hasActivity() && this._hasSettings() ? this._renderData() : '';
+        const activityPreview = this._hasActivity() && this._hasSettings() && this._hasActivityInfo() ? this._renderData() : '';
         return (
             <div>
                 {this._getMessage()}
@@ -157,9 +164,11 @@ function mapStateToProps( state, ownProps ) {
     return {
         activityId: ownProps.params.id,
         activity: state.commonLists.hydratedActivity,
+        activityInfo: state.commonLists.activityInfo,
         settings: state.commonLists.settings,
         errorMsg: state.commonLists.errorMsg,
         isSettingsLoaded: state.commonLists.isSettingsLoaded,
+        isActivityInfoLoaded: state.commonLists.isActivityInfoLoaded,
         isActivityError: state.commonLists.isActivityError,
         isActivityHydratedLoading: state.commonLists.isActivityHydratedLoading,
         isActivityHydrated: state.commonLists.isActivityHydrated,

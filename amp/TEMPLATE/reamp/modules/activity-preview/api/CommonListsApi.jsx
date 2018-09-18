@@ -26,6 +26,17 @@ class CommonListsApi {
             });
         });        
     }  
+
+    static getActivityInfo(activityId) {  
+        var url = '/rest/activity/info/' + activityId;
+          return new Promise((resolve, reject) => {
+             fetchJson(url).then((activityInfo) => {                
+                 resolve(activityInfo)
+             }).catch((error) => {
+                 reject(error);
+             });
+         });        
+     } 
    
    static getFields(){
        return new Promise((resolve, reject) => {

@@ -1,5 +1,6 @@
 
 import numeral from 'numeral';
+import * as AC from './ActivityConstants';
 
 const DEFAULT_GLOBAL_SETTINGS = {
     decimalSeparator: '.',
@@ -11,12 +12,12 @@ const DEFAULT_GLOBAL_SETTINGS = {
 export default class NumberUtils {
   
   static rawNumberToFormattedString(number, forceUnits = false, settings) {
-    let format = settings && settings['number-format'] ? 
-          settings['number-format'].replace('#,##', '0,').replace(/#/g, '0') : 
+    let format = settings && settings[AC.NUMBER_FORMAT] ? 
+          settings[AC.NUMBER_FORMAT].replace('#,##', '0,').replace(/#/g, '0') : 
           DEFAULT_GLOBAL_SETTINGS.format;
 
-    let divider = settings && settings['number-divider'] ? 
-          settings['number-divider'] : 
+    let divider = settings && settings[AC.NUMBER_DIVIDER] ? 
+          settings[AC.NUMBER_DIVIDER] : 
           DEFAULT_GLOBAL_SETTINGS.amountsInThousands;
 
     const formatted = numeral(forceUnits ? number : NumberUtils.calculateInDivider(number, divider)).format(format);

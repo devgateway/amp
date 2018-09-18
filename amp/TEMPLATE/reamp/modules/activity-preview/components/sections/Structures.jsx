@@ -61,8 +61,8 @@ class Structures extends Component {
 
   render() {    
     const { buildSimpleField } = this.props;
-    const {activity, settings} = this.props.params;
-    if (activity[AC.STRUCTURES]) {
+    const { activity, translations, settings } = this.props.params;
+    if (activity[AC.STRUCTURES].value.length > 0) {
       return (
         <div>{activity[AC.STRUCTURES].value.sort((a, b) => (a[AC.STRUCTURES_TITLE] > b[AC.STRUCTURES_TITLE])).map(s => (
           <div key={Math.random()}>

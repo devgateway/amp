@@ -12,6 +12,15 @@ export function getSettingsLoading(){
 export function getSettingsSuccess(settings){
     return {type: 'LOAD_SETTINGS_SUCCESS', settings: settings}
 }
+
+export function getActivityInfoLoading(){
+    return {type: 'LOADING_ACTIVITY_INFO'}
+}
+
+export function getActivityInfoSuccess(activityInfo){
+    return {type: 'LOAD_ACTIVITY_INFO_SUCCESS', activityInfo: activityInfo}
+}
+
 export function getActivityLoading(){
     return {type: 'LOADING_ACTIVITY'}
 }
@@ -54,10 +63,16 @@ export function getSettings(){
 export function getActivityAndFields(activityId){
     return function(dispatch) {
         dispatch(getHydratedActivityLoading());
-        let hydratedActivity = {};        
+        let hydratedActivity = {};
         return commonListsApi.getActivity(activityId).then(activity => {
             if (!activity.error) {
                 dispatch(getActivitySuccess(activity));
+                dispatch(getActivityInfoLoading());
+                commonListsApi.getActivityInfo(activityId).then(activityInfo => {
+                    dispatch(getActivityInfoSuccess(activityInfo));
+                }).catch(error => {
+                    throw(error);
+                });
                 hydratedActivity = _createHydratedActivity(Object.keys(activity), activity);
                 dispatch(getHydratedActivityLoading(hydratedActivity));
                 commonListsApi.getFields().then(fields => {

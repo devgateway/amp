@@ -5,6 +5,8 @@
 const defaultState = {
     isSettingsLoading: false,
     isSettingsLoaded: false,
+    isActivityInfoLoading: false,
+    isActivityInfoLoaded: false,
     isActivityLoading: false,
     isActivityError: false,
     isActivityLoaded: false,
@@ -12,6 +14,7 @@ const defaultState = {
     isActivityHydrated: false,
     settings: undefined, 
     activity: undefined, 
+    activityInfo: undefined, 
     hydratedActivity: undefined, 
     fields: undefined,
     errorMsg: undefined
@@ -36,6 +39,16 @@ export default function commonListsReducer(state: Object = defaultState, action:
             newState.isActivityLoading = true;  
             newState.isActivityError = false;        
             return  newState;
+        case 'LOADING_ACTIVITY_INFO':
+            var newState = Object.assign({}, state); 
+            newState.isActivityInfoLoading = true;  
+            return  newState;
+        case 'LOAD_ACTIVITY_INFO_SUCCESS': 
+            var newState = Object.assign({}, state); 
+            newState.activityInfo = action.activityInfo;
+            newState.isActivityInfoLoading = false;
+            newState.isActivityInfoLoaded = true;
+            return  newState; 
         case 'LOAD_ACTIVITY_ERROR':
             var newState = Object.assign({}, state); 
             newState.isActivityLoading = false;

@@ -158,8 +158,10 @@ export const STRUCTURES_COORDINATES = 'coordinates';
 
 
 //SETTINGS
-
 export const HIDE_EXPORT = 'hide-editable-export-formats-public-view';
+export const DATE_FORMAT = 'default-date-format';
+export const NUMBER_FORMAT = 'number-format';
+export const NUMBER_DIVIDER = 'number-divider';
 
 
 

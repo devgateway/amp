@@ -49,16 +49,7 @@ public final class MapTilesService {
 
     public Response getArchivedMapTiles() {
         
-        List<CrDocumentNodeAttributes> publicDocuments = DocumentUtil.getAllPublicDocuments();
-        NodeWrapper mapTilesNodeWrapper = null;
-        for (CrDocumentNodeAttributes publicDocument : publicDocuments) {
-            Node node = DocumentManagerUtil.getReadNode(publicDocument.getUuid(), TLSUtils.getRequest());
-            NodeWrapper nodeWrapper = new NodeWrapper(node);
-            if (nodeWrapper.getName().equals(FILE_NAME)) {
-                mapTilesNodeWrapper = nodeWrapper;
-                break;
-            }
-        }
+        NodeWrapper mapTilesNodeWrapper = getMapTilesNodeWrapper();
         
         if (mapTilesNodeWrapper == null) {
             logger.error("Map tiles file not found in repository as public document: " + FILE_NAME);
@@ -76,6 +67,21 @@ public final class MapTilesService {
             logger.error(e.getMessage(), e);
             return Response.serverError().build();
         }
+    }
+    
+    public NodeWrapper getMapTilesNodeWrapper() {
+        List<CrDocumentNodeAttributes> publicDocuments = DocumentUtil.getAllPublicDocuments();
+        NodeWrapper mapTilesNodeWrapper = null;
+        for (CrDocumentNodeAttributes publicDocument : publicDocuments) {
+            Node node = DocumentManagerUtil.getReadNode(publicDocument.getUuid(), TLSUtils.getRequest());
+            NodeWrapper nodeWrapper = new NodeWrapper(node);
+            if (nodeWrapper.getName().equals(FILE_NAME)) {
+                mapTilesNodeWrapper = nodeWrapper;
+                break;
+            }
+        }
+        
+        return mapTilesNodeWrapper;
     }
     
     public void updateOfflineChangeLog(Session session) throws RepositoryException {

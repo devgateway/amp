@@ -47,6 +47,7 @@ import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicatorOption;
+import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpAuditLogger;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
@@ -108,6 +109,8 @@ import javax.servlet.http.HttpSession;
 public class ActivityUtil {
 
   private static Logger logger = Logger.getLogger(ActivityUtil.class);
+
+  private static final  Integer MILLISECONDS_IN_A_DAY = 1000 * 60 * 60 * 24;
    
   public static List<AmpComponent> getComponents(Long actId) {
     Session session = null;
@@ -1212,7 +1215,34 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
             }
   }
 
-  /* functions to DELETE an activity by Admin end here.... */
+    public static ValidationStatus getValidationStatus(AmpActivityVersion activity, TeamMember tm) {
+
+      AmpTeam currentTeam = null;
+        if (tm != null) {
+            currentTeam = TeamUtil.getAmpTeam(tm.getTeamId());
+        }
+        boolean hasTeamLeadOrValidator = false;
+        if (currentTeam != null) {
+            List<AmpTeamMember> valids = TeamMemberUtil.getTeamHeadAndApprovers(currentTeam.getAmpTeamId());
+            if (valids != null && valids.size() > 0) {
+                hasTeamLeadOrValidator = true;
+            }
+        }
+        if (Constants.ACTIVITY_NEEDS_APPROVAL_STATUS.contains(activity.getApprovalStatus())) {
+            if (hasTeamLeadOrValidator) {
+                if (ActivityUtil.isAutomaticValidationEnabled()) {
+                    return ValidationStatus.AUTOMATIC_VALIDATION;
+                } else {
+                    return ValidationStatus.AWAITING_VALIDATION;
+                }
+            } else {
+                return ValidationStatus.CANNOT_BE_VALIDATED;
+            }
+        }
+        return ValidationStatus.UNKNOWN;
+    }
+
+    /* functions to DELETE an activity by Admin end here.... */
 
 
   public static class ActivityAmounts {
@@ -2148,5 +2178,64 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                 .addScalar("amp_activity_id", LongType.INSTANCE).list();
 
         return result;
+    }
+
+    public static boolean canValidateAcitivty(AmpActivityVersion activity,  TeamMember teamMember) {
+
+        boolean canValidate = false;
+        AmpApplicationSettings appSettings = AmpARFilter.getEffectiveSettings();
+        String validationOption = appSettings != null ? appSettings.getValidation() : null;
+
+
+        Boolean crossteamvalidation =
+                (appSettings != null && appSettings.getTeam() != null)
+                        ? appSettings.getTeam().getCrossteamvalidation()
+                        : false;
+
+        //Check if cross team validation is enable
+        Boolean crossteamcheck = false;
+        if (crossteamvalidation) {
+            crossteamcheck = true;
+        } else {
+            //check if the activity belongs to the team where the user is logged.
+            if (teamMember != null && teamMember.getTeamId() != null && activity.getTeam() != null
+                    && activity.getTeam().getAmpTeamId() != null) {
+                crossteamcheck = teamMember.getTeamId().equals(activity.getTeam().getAmpTeamId());
+            }
+        }
+        boolean teamLeadFlag = teamMember.getTeamHead() || teamMember.isApprover();
+        if ("alledits".equalsIgnoreCase(validationOption)) {
+            if (teamLeadFlag && activity.getTeam() != null && crossteamcheck
+                    && (Constants.STARTED_STATUS.equalsIgnoreCase(activity.getApprovalStatus())
+                    || Constants.EDITED_STATUS.equalsIgnoreCase(activity.getApprovalStatus()))) {
+                canValidate = true;
+            }
+        } else {
+            //it will display the validate label only if it is just started and was not approved not even once
+            if ("newonly".equalsIgnoreCase(validationOption) && crossteamcheck) {
+                if (teamLeadFlag && Constants.STARTED_STATUS.equalsIgnoreCase(activity.getApprovalStatus())) {
+                    canValidate = true;
+                }
+            }
+        }
+        return canValidate;
+    }
+
+    private static int daysBetween(Date d1, Date d2) {
+        return (int) ((d2.getTime() - d1.getTime()) / (MILLISECONDS_IN_A_DAY));
+    }
+
+    public static int daysToValidation(AmpActivityVersion activity) {
+        int result;
+        int daysBetween = daysBetween(activity.getUpdatedDate(), new Date());
+        String daysBeforeValidation = FeaturesUtil.getGlobalSettingValue(
+                GlobalSettingsConstants.NUMBER_OF_DAYS_BEFORE_AUTOMATIC_VALIDATION);
+        result = (Integer.parseInt(daysBeforeValidation) - daysBetween);
+        return result <= 0 ? 1 : result;
+    }
+
+    public static boolean isAutomaticValidationEnabled() {
+        return (QuartzJobUtils.getJobByClassFullname(Constants.AUTOMATIC_VALIDATION_JOB_CLASS_NAME) == null
+                ? false : true);
     }
 }

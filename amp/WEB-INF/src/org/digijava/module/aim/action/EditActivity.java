@@ -101,6 +101,7 @@ import org.digijava.module.aim.util.QuartzJobUtils;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.aim.util.ValidationStatus;
 import org.digijava.module.aim.version.exception.CannotGetLastVersionForVersionException;
 import org.digijava.module.budget.dbentity.AmpDepartments;
 import org.digijava.module.budget.helper.BudgetDbUtil;
@@ -285,34 +286,31 @@ public class EditActivity extends Action {
                 eaForm.getIdentification().setActAthLastName(activity.getActivityCreator().getUser().getLastName());
                 eaForm.getIdentification().setActAthEmail(activity.getActivityCreator().getUser().getEmail());
             }
-            boolean hasTeamLeadOrValidator = false;
-            if (currentTeam != null) {
-                AmpTeamMember teamHead = TeamMemberUtil.getTeamHead(currentTeam.getAmpTeamId());
-                List<AmpTeamMember> valids =TeamMemberUtil.getTeamHeadAndApprovers(currentTeam.getAmpTeamId()); 
-                if ( valids != null && valids.size() > 0)
-                    hasTeamLeadOrValidator = true;
-                
-            }
-
             if (activity.getDraft() != null && activity.getDraft()) {
                 eaForm.getWarningMessges().add(TranslatorWorker.translateText("This is a draft activity"));
             } else {
-                if (Constants.ACTIVITY_NEEDS_APPROVAL_STATUS.contains(activity.getApprovalStatus())) {
-                    if (hasTeamLeadOrValidator) {
-                        if (isAutomaticValidationEnabled()) {
-                            LocalizableLabel label = new LocalizableLabel("The activity is awaiting approval and "
-                                    + "will be "
-                                    + "automatically approved within {0} days.", daysToValidation(activity.getUpdatedDate()));
-                            eaForm.getWarningMessges().add(label.toString());
-                        } else {
-                            eaForm.getWarningMessges().add(TranslatorWorker.translateText("The activity is awaiting "
-                                    + "approval."));
-                        }
-                    } else {
-                        eaForm.getWarningMessges().add(TranslatorWorker.translateText("This activity cannot be "
-                                + "validated because there is no Workspace Manager."));
-                    }
-                }
+                ValidationStatus validationStatus = ActivityUtil.getValidationStatus(activity, tm);
+               switch(validationStatus) {
+                   case AUTOMATIC_VALIDATION:
+                       LocalizableLabel label = new LocalizableLabel("The activity is awaiting approval and "
+                               + "will be automatically approved within {0} days.",
+                               ActivityUtil.daysToValidation(activity));
+                       eaForm.getWarningMessges().add(label.toString());
+                       break;
+                   case AWAITING_VALIDATION:
+                       eaForm.getWarningMessges().add(TranslatorWorker.translateText("The activity is awaiting "
+                               + "approval."));
+                       break;
+                   case CANNOT_BE_VALIDATED:
+                       eaForm.getWarningMessges().add(TranslatorWorker.translateText("This activity cannot be "
+                               + "validated because there is no Workspace Manager."));
+                       break;
+                   case UNKNOWN:
+                   default:
+                       break;
+
+               }
+
             }
             Map scope=new HashMap();
             scope.put(GatePermConst.ScopeKeys.CURRENT_MEMBER, tm);
@@ -1597,27 +1595,9 @@ public class EditActivity extends Action {
 
     TeamMember teamMember = (TeamMember) session.getAttribute("currentMember");
     eaForm.getFunding().fillFinancialBreakdowns(activityId, DbUtil.getAmpFunding(activityId), debug);
-    AmpApplicationSettings appSettings = AmpARFilter.getEffectiveSettings();
-    String validationOption = appSettings != null ? appSettings.getValidation() : null;
-    Boolean crossteamvalidation =
-            (appSettings != null && appSettings.getTeam() != null)
-                    ? appSettings.getTeam().getCrossteamvalidation()
-                    : false;
-    
-    //Check if cross team validation is enable
-    Boolean crossteamcheck = false;
-    if (crossteamvalidation) {
-        crossteamcheck = true;
-    } else {
-        //check if the activity belongs to the team where the user is logged.
-        if (teamMember != null && teamMember.getTeamId() != null && activity.getTeam() != null && activity.getTeam().getAmpTeamId() != null) {
-            crossteamcheck = teamMember.getTeamId().equals(activity.getTeam().getAmpTeamId());
-        }
-    }
     
     if (teamMember != null && teamMember.getTeamAccessType() != null){
         Long ampTeamId = teamMember.getTeamId();
-        boolean teamLeadFlag    = teamMember.getTeamHead() || teamMember.isApprover();
         boolean workingTeamFlag = TeamUtil.checkForParentTeam(ampTeamId);
 
         String globalProjectsValidation     = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.PROJECTS_VALIDATION);
@@ -1631,23 +1611,11 @@ public class EditActivity extends Action {
                 if("Off".toLowerCase().compareTo(globalProjectsValidation.toLowerCase())==0){
                     //global validation off
                     eaForm.setButtonText("edit");
-                }
-                else{
+                } else {
                     //global validation is on
                     //only the team leader of the team that owns the activity has rights to validate it if cross team validation is off
-                    if ( validationOption != null && "alledits".equalsIgnoreCase(validationOption)) {
-                        if (teamLeadFlag && activity.getTeam() != null && crossteamcheck  &&
-                           (Constants.STARTED_STATUS.equalsIgnoreCase(activity.getApprovalStatus()) ||
-                            Constants.EDITED_STATUS.equalsIgnoreCase(activity.getApprovalStatus()))
-                           ) {
-                            eaForm.setButtonText("validate");
-                        }
-                    }
-                    //it will display the validate label only if it is just started and was not approved not even once
-                    if (validationOption != null && "newonly".equalsIgnoreCase(validationOption) && crossteamcheck){
-                        if (teamLeadFlag && Constants.STARTED_STATUS.equalsIgnoreCase(activity.getApprovalStatus())){ 
-                            eaForm.setButtonText("validate");
-                        }
+                    if (ActivityUtil.canValidateAcitivty(activity, teamMember)) {
+                        eaForm.setButtonText("validate");
                     }
                 }
         }
@@ -1981,20 +1949,4 @@ private void setLineMinistryObservationsToForm(AmpActivityVersion activity, Edit
         eaForm.getWarningMessges().add(TranslatorWorker.translateText("An error occurred when loading the page. Please contact the AMP administrator."));
         logger.error(e.getMessage(), e);
     }
-
-     private int daysBetween(Date d1, Date d2) {
-         return (int) ((d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
-     }
-
-     private int daysToValidation(Date updatedDate) {
-         int result;
-         int daysBetween = daysBetween(updatedDate, new Date());
-         String daysBeforeValidation = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_OF_DAYS_BEFORE_AUTOMATIC_VALIDATION);
-         result = (Integer.parseInt(daysBeforeValidation) - daysBetween);
-         return result <= 0 ? 1 : result;
-     }
-
-     private boolean isAutomaticValidationEnabled() {
-         return (QuartzJobUtils.getJobByClassFullname(Constants.AUTOMATIC_VALIDATION_JOB_CLASS_NAME) == null ? false : true);
-     }
 }

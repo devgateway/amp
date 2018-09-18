@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Col, Grid, Row } from 'react-bootstrap';
+import { Col, Grid, Row, Button, Alert } from 'react-bootstrap';
 import { bindActionCreators } from 'redux';
 import Scrollspy from 'react-scrollspy';
 import * as commonListsActions from '../actions/CommonListsActions';
@@ -43,7 +43,8 @@ export default class ActivityView extends Component {
         const params = {
             activity: activity,
             translations: translations,
-            settings: settings
+            settings: settings,
+            activityInfo: activityInfo
         }
         const statusBarStyles = {
             inline : true,         
@@ -54,8 +55,17 @@ export default class ActivityView extends Component {
         }
         return (
             <div className="preview_container">
+                <div>
+                    {this._getLegends(translations, activityInfo)}
+                </div>
+                <div>
+                    {this._getValidations(translations, activityInfo)}
+                </div>
                 <div className="l_divright">
                     {this._getExportOptions(activity, translations, settings)}
+                </div>
+                <div className="l_divright">
+                    {this._getEditOptions(activity, translations, activityInfo)}
                 </div>
                 <div className="preview_header">
                     <span className="preview_title">
@@ -124,6 +134,58 @@ export default class ActivityView extends Component {
         return message === null ? '' : <div>{message}</div>;
     }
 
+    _getLegends(translations, activityInfo) {
+        let alertMsg = activityInfo[AC.INFO_ACTIVITY_TEAM] && !activityInfo[AC.INFO_ACTIVITY_TEAM][AC.INFO_IS_PRIVATE] ? '' : 
+        (
+            <Alert bsStyle="warning">
+                <strong>{translations['amp.activity-preview:isPrivate']}</strong>
+            </Alert>
+        );
+        let ret = (
+            <div>{alertMsg}</div>
+        );
+    return ret;
+    }
+
+    _getValidations(translations, activityInfo) {
+        let msg = '';
+        let lastVersionMsg;
+        let addLink = false;
+        switch (activityInfo[AC.INFO_VALIDATION_STATUS]) {
+            case AC.AUTOMATIC_VALIDATION:
+              msg = translations['automatic_validation'];
+              break;
+            case AC.AWAITING_VALIDATION:
+              msg = translations['awaiting_validation'];
+              break;
+            case AC.CANNOT_BE_VALIDATE:
+              if (activityInfo[AC.INFO_ACTIVITY_ID] !== activityInfo[AC.INFO_LAST_VERSION]) {
+                lastVersionMsg = translations['not_latest_version'];
+                addLink = true;
+              }
+              msg = translations['cannot_be_validated'];
+              break;
+          }
+
+        let alertMsg = msg.length < 1 ? '' : 
+        (
+            <Alert bsStyle="info">
+                <strong><li>{msg}</li></strong>
+                {lastVersionMsg &&
+                    <div><strong><li>{lastVersionMsg}</li></strong></div>
+                }
+                {addLink && 
+                    <div><li><a href={'/TEMPLATE/reamp/modules/activity-preview/index.html#/activity/' + 
+                        activityInfo[AC.INFO_LAST_VERSION]}>{translations['click_latest_version']}
+                    </a></li></div>
+                }
+            </Alert>
+        );
+        let ret = (
+            <div>{alertMsg}</div>
+        );
+    return ret;
+    }
 
     _getExportOptions(activity, translations, settings) {
         let word = settings && settings[AC.HIDE_EXPORT] ? '' : 
@@ -146,6 +208,20 @@ export default class ActivityView extends Component {
                 </a>
             </div>
         );        
+        return ret;
+    }
+
+    _getEditOptions(activity, translations, activityInfo) {
+        let msg = activityInfo && !activityInfo[AC.INFO_VALIDATE] ? translations['amp.activity-preview:validate'] : translations['amp.activity-preview:edit'];
+        let edit = activityInfo && !activityInfo[AC.INFO_EDIT] ? '' : 
+            (
+                <Button href={'/wicket/onepager/activity/' + activity[AC.INTERNAL_ID].value} 
+                    bsStyle="primary" bsSize="small">{msg}
+                </Button>
+            );
+        let ret = (
+            <div>{edit}</div>
+        );
         return ret;
     }
     

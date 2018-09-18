@@ -19,6 +19,9 @@ export const initialTranslations = {
         'amp.activity-preview:exportPDF': 'Export to PDF',
         'amp.activity-preview:exportWord': 'Export to Word',
         'amp.activity-preview:print': 'Print',
+        'amp.activity-preview:edit': 'Edit',
+        'amp.activity-preview:validate': 'Validate',
+        'amp.activity-preview:isPrivate': 'This activity has been created in a private workspace. It will not be visible in other workspaces.',
         'amp.activity-preview:noData': 'No data',
         'amp.activity-preview:activityError': 'Error loading activity: ',        
         'Identification': 'Identification',
@@ -42,5 +45,11 @@ export const initialTranslations = {
         'Coordinates': 'Coordinates',
         'Duration': 'Duration of project',
         'months': 'Months',
-        'years': 'Years'
+        'years': 'Years',
+        'computation': 'Computation',
+        'automatic_validation' : 'The activity is awaiting approval and will be automatically approved within {0} days.',
+        'awaiting_validation' : 'The activity is awaiting approval.',
+        'cannot_be_validated' : 'This activity cannot be validated because there is no Workspace Manager.',
+        'not_latest_version' : 'Requested activity version was not the latest version.',
+        'click_latest_version' : 'Click here to show the latest version'
 };

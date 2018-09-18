@@ -163,5 +163,18 @@ export const DATE_FORMAT = 'default-date-format';
 export const NUMBER_FORMAT = 'number-format';
 export const NUMBER_DIVIDER = 'number-divider';
 
+//INFO
+export const INFO_EDIT = 'edit';
+export const INFO_VALIDATE = 'validate';
+export const INFO_ACTIVITY_TEAM = 'activity-team';
+export const INFO_IS_PRIVATE = 'is-private';
+export const INFO_IS_COMPUTED = 'is-computed';
+export const INFO_VALIDATION_STATUS = 'validation-status';
+export const AUTOMATIC_VALIDATION = 'AUTOMATIC_VALIDATION';
+export const AWAITING_VALIDATION = 'AWAITING_VALIDATION';
+export const CANNOT_BE_VALIDATE = 'CANNOT_BE_VALIDATED';
+export const INFO_LAST_VERSION = 'amp-activity-last-version-id';
+export const INFO_ACTIVITY_ID = 'amp-activity-id'
+
 
 

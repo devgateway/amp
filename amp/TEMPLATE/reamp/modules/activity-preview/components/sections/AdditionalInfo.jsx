@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Section from './Section';
+import SimpleField from '../fields/SimpleField';
 import * as AC from '../../utils/ActivityConstants';
 
 
@@ -14,7 +15,7 @@ class AdditionalInfo extends Component {
   }
 
   _buildAdditionalInfo() {
-    const { activity, settings }  = this.props.params;
+    const { activity, translations, settings, activityInfo }  = this.props.params;
     const additionalInfo = [];
    
     additionalInfo.push(this.props.buildSimpleField(activity, AC.CREATED_BY, settings, true));
@@ -22,6 +23,13 @@ class AdditionalInfo extends Component {
     additionalInfo.push(this.props.buildSimpleField(activity, AC.MODIFIED_BY, settings, true));
     additionalInfo.push(this.props.buildSimpleField(activity, AC.UPDATE_DATE, settings, true));
     additionalInfo.push(this.props.buildSimpleField(activity, AC.TEAM, settings, true));
+    additionalInfo.push(<SimpleField key={'computation'} 
+      title={translations['computation']} value={activityInfo[AC.INFO_ACTIVITY_TEAM][AC.INFO_IS_COMPUTED]} 
+      useInnerHTML={true}
+      inline={false}
+      separator={false}
+      fieldNameClass={this.props.styles.fieldNameClass || ''}
+      fieldValueClass={this.props.styles.fieldValueClass || ''} />);
 
     return additionalInfo;
   }

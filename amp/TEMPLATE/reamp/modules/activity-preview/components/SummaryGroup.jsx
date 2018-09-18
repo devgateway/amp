@@ -16,7 +16,8 @@ export default class SummaryGroup extends Component {
     const params = {
       activity: this.props.params.activity,
       translations : this.props.params.translations,
-      settings : this.props.params.settings
+      settings : this.props.params.settings,
+      activityInfo : this.props.params.activityInfo
     }
     const styles = {
       fieldNameClass : 'summary_field_name',

@@ -213,7 +213,7 @@ public class FundingCalculationsHelper {
             fundingDetail.setAdjustmentTypeName(fundDet.getAdjustmentType());
             fundingDetail.setExpenditureClass(fundDet.getExpenditureClass());
             if(fundDet.getTransactionType().equals(Constants.MTEFPROJECTION)){
-                fundingDetail.setProjectionTypeName(((AmpFundingMTEFProjection)fundDet).getProjected());    
+                fundingDetail.setProjectionTypeName(((AmpFundingMTEFProjection) fundDet).getProjection());    
             }
             
             fundingDetail.setContract(fundDet.getContract());
@@ -262,7 +262,7 @@ public class FundingCalculationsHelper {
          */
         if (fundDet.getTransactionType() == Constants.MTEFPROJECTION) {
             totalMtef.add(amt);
-            String projectionType = ((AmpFundingMTEFProjection)fundDet).getProjected().getValue();
+            String projectionType = ((AmpFundingMTEFProjection) fundDet).getProjection().getValue();
             if ("pipeline".equals(projectionType)) {
                 totalMtefPipeline.add(amt);
             } else if ("projection".equals(projectionType)) {

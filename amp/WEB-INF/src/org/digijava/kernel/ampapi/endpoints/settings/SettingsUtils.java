@@ -422,7 +422,7 @@ public class SettingsUtils {
         settings.set("number-group-separator", formatSymbols.getGroupingSeparator());
         settings.set("number-decimal-separator", formatSymbols.getDecimalSeparator());
 
-        settings.set(SettingsConstants.WORKSPACE_CURRENCY_CODE, CurrencyUtil.getEffectiveCurrencyCode());
+        adddEffectiveCurrency(settings);
 
         settings.set(SettingsConstants.REORDER_FUNDING_ITEM_ID,
                 FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.REORDER_FUNDING_ITEMS));
@@ -434,6 +434,14 @@ public class SettingsUtils {
         addDateRangeSettingsForDashboardsAndGis(settings);
 
         return settings;
+    }
+
+    private static void adddEffectiveCurrency(JsonBean settings) {
+        JsonBean currency = new JsonBean();
+        AmpCurrency effectiveCurrency = CurrencyUtil.getEffectiveCurrency();
+        currency.set(SettingsConstants.ID, effectiveCurrency.getAmpCurrencyId());
+        currency.set(SettingsConstants.CODE, effectiveCurrency.getCurrencyCode());
+        settings.set(SettingsConstants.EFFECTIVE_CURRENCY, currency);
     }
 
     private static void addWorkspaceSettings(JsonBean settings) {

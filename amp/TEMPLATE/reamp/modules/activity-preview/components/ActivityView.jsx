@@ -217,7 +217,7 @@ export default class ActivityView extends Component {
     }
 
     _getEditOptions(activity, translations, activityInfo) {
-        let msg = activityInfo && !activityInfo[AC.INFO_VALIDATE] ? translations['amp.activity-preview:validate'] : translations['amp.activity-preview:edit'];
+        let msg = activityInfo && activityInfo[AC.INFO_VALIDATE] ? translations['amp.activity-preview:validate'] : translations['amp.activity-preview:edit'];
         let edit = activityInfo && !activityInfo[AC.INFO_EDIT] ? '' : 
             (
                 <Button href={'/wicket/onepager/activity/' + activity[AC.INTERNAL_ID].value} 

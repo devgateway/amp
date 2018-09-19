@@ -65,13 +65,8 @@ export default class DateUtils {
     return `${minutes} min ${seconds} sec`;
   }
 
-  static durationImproved(from, to, meassure = 'years') {
-    let diff = moment(to).diff(from, meassure);
-    if (diff > 0 || meassure === 'months') {
-      return `${diff} ${meassure}`;
-    } else {
-      return DateUtils.durationImproved(from, to, 'months')
-    }
+  static durationImproved(from, to, settings, meassure = 'months') {
+    return moment(to, settings[AC.DATE_FORMAT].toUpperCase()).diff(from, meassure);
   }
 
   /**

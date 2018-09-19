@@ -22,7 +22,6 @@ class Planning extends Component {
     let content = [];
     const fieldPaths = [
       AC.PROPOSED_APPROVAL_DATE, 
-      AC.CREATION_DATE, 
       AC.PROPOSED_COMPLETION_DATE, 
       AC.ACTUAL_COMPLETION_DATE, 
       AC.ACTUAL_APPROVAL_DATE, 
@@ -30,17 +29,13 @@ class Planning extends Component {
       AC.ACTUAL_START_DATE];
 
     const showIfNotAvailable = new Set([AC.PROPOSED_APPROVAL_DATE, AC.ACTUAL_APPROVAL_DATE, AC.PROPOSED_START_DATE,
-      AC.ACTUAL_START_DATE, AC.CREATION_DATE, AC.PROPOSED_COMPLETION_DATE, AC.ACTUAL_COMPLETION_DATE]);
+      AC.ACTUAL_START_DATE, AC.PROPOSED_COMPLETION_DATE, AC.ACTUAL_COMPLETION_DATE]);
 
     let startDate = DateUtils.createFormattedDate(activity[AC.ACTUAL_START_DATE].value, settings);
     let endDate = DateUtils.createFormattedDate(activity[AC.ACTUAL_COMPLETION_DATE].value, settings);
     let duration = translations['amp.activity-preview:noData'];
     if (startDate && endDate) {
-      let res = DateUtils.durationImproved(startDate, endDate).split(' ');
-      if (res.length > 0 ) {
-        duration = res[0] + ' ' + translations[res[1]];
-      }
-
+      duration = DateUtils.durationImproved(startDate, endDate, settings) + ' ' + translations['months'];
     }
     content.push(
       <SimpleField key={'Duration'} 

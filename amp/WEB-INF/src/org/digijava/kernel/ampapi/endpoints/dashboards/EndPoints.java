@@ -1,5 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.dashboards;
 
+import java.util.List;
+
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -8,13 +10,12 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import java.util.List;
 
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
-import org.digijava.kernel.ampapi.endpoints.dashboards.services.TopsChartService;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.DashboardsService;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.HeatMapConfigs;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.HeatMapService;
+import org.digijava.kernel.ampapi.endpoints.dashboards.services.TopsChartService;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
@@ -347,9 +348,9 @@ public class EndPoints implements ErrorReportingEndpoint {
     @Path("/aid-predictability/{year}/{measure}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "aidPredictabilityDataDetail")
-    public JsonBean getAidPredictabilityDataDetail(JsonBean filter, @PathParam("year") Integer year, @PathParam("measure")
-            String measure) throws Exception {
-        return DashboardsService.getAidPredictability(filter, year, measure);
+    public JsonBean getAidPredictabilityDataDetail(JsonBean filter, @PathParam("year") String year,
+            @PathParam("measure") String measure) {
+        return DashboardsService.getAidPredictability(filter, measure, year);
     }
 
     /**
@@ -442,7 +443,7 @@ public class EndPoints implements ErrorReportingEndpoint {
     //TODO: Implement Filters
     public JsonBean getfundingtype(JsonBean config,
             @DefaultValue("ac") @QueryParam("adjtype") String adjtype) {
-        return DashboardsService.fundingtype(adjtype,config);
+        return DashboardsService.getFundingType(adjtype, config);
     }
 
     /**
@@ -504,10 +505,9 @@ public class EndPoints implements ErrorReportingEndpoint {
     @ApiMethod(ui = false, id = "ftypeDataDetail")
     //TODO: Implement Filters
     public JsonBean getfundingtypeDataDetail(JsonBean config,
-                                   @DefaultValue("ac") @QueryParam("adjtype") String adjtype, @PathParam("year")
-                                                         Integer year, @PathParam("id")
-                                                         Integer id) {
-        return DashboardsService.fundingtype(adjtype,config, year, id);
+                                   @DefaultValue("ac") @QueryParam("adjtype") String adjtype, 
+                                   @PathParam("year") String year, @PathParam("id") Integer id) {
+        return DashboardsService.getFundingType(adjtype, config, year, id);
     }
 
     /**

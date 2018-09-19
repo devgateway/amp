@@ -4,14 +4,10 @@ import org.apache.wicket.ajax.json.JSONArray;
 import org.apache.wicket.ajax.json.JSONException;
 import org.apache.wicket.ajax.json.JSONObject;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
-import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.upload.FileItem;
-import org.dgfoundation.amp.onepager.OnePagerApp;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 
 import java.util.List;
@@ -25,8 +21,6 @@ import static org.apache.commons.lang.StringEscapeUtils.escapeHtml;
  */
 public class FileUploadResourceReference extends ResourceReference
 {
-    public static final String UPLOAD_OK_PART1 = TranslatorUtil.getTranslatedText("File");
-    public static final String UPLOAD_OK_PART2 = TranslatorUtil.getTranslatedText("was uploaded, with size");
 
     private FileManager fileManager;
 
@@ -48,13 +42,12 @@ public class FileUploadResourceReference extends ResourceReference
 
                     try {
                         fileJson.put("name", fileItem.getName());
-                        //fileJson.put("url", getViewUrl(fileItem));
-                        //fileJson.put("thumbnail_url", getViewUrl(fileItem));
                         fileJson.put("size", fileItem.getSize());
-                        fileJson.put("uploadTxt", UPLOAD_OK_PART1 + " '" + fileItem.getName() + "' " +
-                                UPLOAD_OK_PART2 + " '" + fileItem.getSize() + "' bytes");
-                        //fileJson.put("delete_type", "POST");
-                        //fileJson.put("delete_url", getDeleteUrl(fileItem));
+                        fileJson.put("uploadTxt", TranslatorUtil.getTranslatedText("File") + " '"
+                                + fileItem.getName() + "' " +  TranslatorUtil.
+                                getTranslatedText("was uploaded, with size") + " '" + fileItem.getSize()
+                                + "'" + TranslatorUtil.getTranslatedText("bytes"));
+
                     } catch (JSONException e) {
                         try {
                             fileJson.put("error", e.getMessage());
@@ -75,21 +68,4 @@ public class FileUploadResourceReference extends ResourceReference
             }
         };
     }
-    /*
-    private CharSequence getViewUrl(FileItem fileItem) {
-        PageParameters params = new PageParameters();
-        params.set("filename", fileItem.getName());
-        CharSequence url = RequestCycle.get().urlFor(new FileManageResourceReference(OnePagerApp.getTomcatTemporaryDirectory()), params);
-        return url;
-    }
-
-
-    private CharSequence getDeleteUrl(FileItem fileItem) {
-        PageParameters params = new PageParameters();
-        params.set("filename", fileItem.getName());
-        params.set("delete", true);
-        CharSequence url = RequestCycle.get().urlFor(new FileManageResourceReference(OnePagerApp.getTomcatTemporaryDirectory()), params);
-        return url;
-    }
-    */
 }

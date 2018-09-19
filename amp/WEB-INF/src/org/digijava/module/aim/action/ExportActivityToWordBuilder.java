@@ -2287,7 +2287,7 @@ public class ExportActivityToWordBuilder {
             // Delivery Rate
             if (activityForm.getFunding().getDeliveryRate() != null
                     && activityForm.getFunding().getDeliveryRate().length() > 0) {
-                addTotalsOutput(fundingTotalsDetails, "Delivery Rate",
+                addTotalsOutput(fundingTotalsDetails, "Delivery rate",
                         activityForm.getFunding().getDeliveryRate().replace("%", ""), "%");
             }
 

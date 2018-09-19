@@ -27,8 +27,7 @@ export default class ActivityView extends Component {
     }
 
     initializeFieldsAndActivity() {
-        this.props.actions.getSettings();
-        this.props.actions.getActivityAndFields(this.props.activityId);
+        this.props.actions.getSettingsAndActivity(this.props.activityId);
     }
 
     _renderData() {

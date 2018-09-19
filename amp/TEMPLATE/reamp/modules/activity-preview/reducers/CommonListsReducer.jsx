@@ -11,10 +11,13 @@ const defaultState = {
     isActivityError: false,
     isActivityLoaded: false,
     isActivityHydratedLoading: false,
-    isActivityHydrated: false,
+    isActivityHydrated: false,    
+    isFundingInfoLoading: false,
+    isFundingInfoLoaded: false,
     settings: undefined, 
     activity: undefined, 
     activityInfo: undefined, 
+    fundingInfo: undefined,
     hydratedActivity: undefined, 
     fields: undefined,
     errorMsg: undefined
@@ -78,6 +81,17 @@ export default function commonListsReducer(state: Object = defaultState, action:
             return  newState; 
         case 'LOAD_FIELD_SUBLIST_SUCCESS':
             var newState = Object.assign({}, state); 
+            return  newState; 
+        case 'LOADING_FUNDING_INFO':
+            var newState = Object.assign({}, state); 
+            newState.isFundingInfoLoading = true;  
+            newState.isFundingInfoLoaded = false;        
+            return  newState;
+        case 'LOAD_FUNDING_INFO_SUCCESS': 
+            var newState = Object.assign({}, state); 
+            newState.fundingInfo = action.fundingInfo;
+            newState.isFundingInfoLoading = false;
+            newState.isFundingInfoLoaded = true;
             return  newState; 
         default:            
             return state;

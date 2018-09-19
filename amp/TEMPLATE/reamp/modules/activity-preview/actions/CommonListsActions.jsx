@@ -50,24 +50,43 @@ export function getFieldSubListSuccess(){
     return {type: 'LOAD_FIELD_SUBLIST_SUCCESS'}
 }
 
-export function getSettings(){
+export function getFundingInfoLoading(){
+    return {type: 'LOADING_FUNDING_INFO'}
+}
+
+export function getFundingInfoSuccess(fundingInfo){
+    return {type: 'LOAD_FUNDING_INFO_SUCCESS', fundingInfo: fundingInfo}
+}
+
+export function getSettingsAndActivity(activityId){
     return function(dispatch) {
         dispatch(getSettingsLoading());
         return commonListsApi.getSettings().then(settings => {
             dispatch(getSettingsSuccess(settings));
+            dispatch(getFundingInfoLoading());
+            commonListsApi.getFundingData(activityId, settings[AC.CURRENCY_CODE] ? settings[AC.CURRENCY_CODE] : 46).then(fundingInfo =>{
+                dispatch(getFundingInfoSuccess(fundingInfo));
+                getActivityAndFields(activityId, fundingInfo);
+            }).catch(error => {
+                dispatch(getActivityError(error));
+                throw(error);
+            });            
         }).catch(error => {
             throw(error);
         });
     }
 }
 
-export function getActivityAndFields(activityId){
+export function getActivityAndFields(activityId, fundingInfo){
     return function(dispatch) {
         dispatch(getHydratedActivityLoading());
         let hydratedActivity = {};
         return commonListsApi.getActivity(activityId).then(activity => {
             if (!activity.error) {
                 dispatch(getActivitySuccess(activity));
+                if(fundingInfo) {
+                    activity[AC.FUNDINGS] = fundingInfo[AC.FUNDING_INFORMATION][AC.FUNDINGS];
+                }
                 dispatch(getActivityInfoLoading());
                 commonListsApi.getActivityInfo(activityId).then(activityInfo => {
                     dispatch(getActivityInfoSuccess(activityInfo));

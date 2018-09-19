@@ -163,6 +163,7 @@ export const HIDE_EXPORT = 'hide-editable-export-formats-public-view';
 export const DATE_FORMAT = 'default-date-format';
 export const NUMBER_FORMAT = 'number-format';
 export const NUMBER_DIVIDER = 'number-divider';
+export const CURRENCY_CODE = 'effective-currency-code-id';
 
 //INFO
 export const INFO_EDIT = 'edit';

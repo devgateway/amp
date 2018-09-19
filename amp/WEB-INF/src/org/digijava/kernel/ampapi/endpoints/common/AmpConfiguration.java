@@ -155,7 +155,7 @@ public class AmpConfiguration implements ErrorReportingEndpoint {
                 release = AmpOfflineRelease.fromUserAgent(userAgent);
             } catch (IllegalArgumentException e) {
                 JsonBean error = ApiError.toError(AmpConfigurationErrors.INVALID_INPUT.withDetails(e.getMessage()));
-                throw new ApiRuntimeException(Response.Status.BAD_REQUEST, error);
+                throw new ApiRuntimeException(error);
             }
         }
         return release;

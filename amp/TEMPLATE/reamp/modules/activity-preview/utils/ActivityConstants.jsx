@@ -175,7 +175,8 @@ export const AUTOMATIC_VALIDATION = 'AUTOMATIC_VALIDATION';
 export const AWAITING_VALIDATION = 'AWAITING_VALIDATION';
 export const CANNOT_BE_VALIDATE = 'CANNOT_BE_VALIDATED';
 export const INFO_LAST_VERSION = 'amp-activity-last-version-id';
-export const INFO_ACTIVITY_ID = 'amp-activity-id'
+export const INFO_ACTIVITY_ID = 'amp-activity-id';
+export const ANCESTOR_VALUES = 'ancestor-values';
 
 
 

@@ -1,4 +1,5 @@
 import commonListsApi from '../api/CommonListsApi';
+import * as AC from '../utils/ActivityConstants'
 
 
 /**
@@ -166,7 +167,16 @@ function _addRealValueHelper(fieldParam, path, values) {
             } else {        
                 let valueId = fieldParam.value[field][pathName];
                 let valueObj = values.filter(c => c.id === valueId.value);
-                valueId.value = valueObj[0] ? valueObj[0].value : valueId.value;
+                if (valueObj[0]) {
+                    if (valueObj[0][AC.ANCESTOR_VALUES]) {
+                        valueId.value = '';
+                        for(var id in valueObj[0][AC.ANCESTOR_VALUES]) {
+                            valueId.value += '[' + valueObj[0][AC.ANCESTOR_VALUES][id] + ']';
+                        }
+                    } else {
+                        valueId.value = valueObj[0].value;
+                    }                    
+                }
             }
         }
     } else {

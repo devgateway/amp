@@ -25,6 +25,8 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import org.dgfoundation.amp.algo.AmpCollections;
+import org.digijava.kernel.ampapi.endpoints.activity.preview.PreviewActivityFunding;
+import org.digijava.kernel.ampapi.endpoints.activity.preview.PreviewActivityService;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.AmpMediaType;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.ApiCompat;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
@@ -507,6 +509,66 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
         }
 
         return InterchangeUtils.importActivity(newJson, true, uri.getBaseUri() + "activity");
+    }
+    
+    /**
+     * Retrieve activity fundings with converted amounts and totals.
+     * 
+     * <p>This endpoint is used for fetching information about activity fundings.
+     * The transactions are grouped by transaction type and adjustment type.
+     * All the transactions amounts are converted in the specified currency.
+     * The response includes subtotals and totals</p>
+     * 
+     *  <h3>Sample Output:</h3><pre>
+     *  {
+     *      "currency": 21,
+     *      "funding_information": {
+     *          "fundings": [
+     *                {
+     *                       "donor_organization_id": 1409,
+     *                       "funding_id": 66552,
+     *                       "funding_details": [
+     *                         {
+     *                           "transactions": [
+     *                            {
+     *                               "transaction_id": 167257,
+     *                               "transaction_amount": "60000",
+     *                               "transaction_date": "2018-09-18T00:00:00.000+0300"
+     *                            }
+     *                         ]
+     *                           "subtotal": "60000",
+     *                           "transaction_type": 0,
+     *                           "adjustment_type": 326
+     *                         }
+     *                      ],
+     *                      "undisbursed_balance": "60000"
+     *                 }
+     *          ],
+     *          "totals": [
+     *            {
+     *              "amount": "1500000",
+     *              "transaction_type": 0,
+     *              "adjustment_type": 326
+     *            }
+     *          ],
+     *          "undisbursed_balance": "60000",
+     *          "delivery_rate": "100"
+     *     },
+     *     "ppc_amount": "389610",
+     *     "rpc_amount": "321027"
+     * }
+     * 
+     * @param projectId the id of the activity
+     * @param currencyId the currency id in which the amount should be converted
+     * @return activity fundings with converted amounts
+     */
+    @GET
+    @Path("/{project-id}/preview/fundings")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "getPreviewFundings", ui = false)
+    public PreviewActivityFunding getPreviewFundingInformation(@PathParam("project-id") Long projectId, 
+            @QueryParam(ActivityEPConstants.PREVIEW_CURRENCY_ID) Long currencyId) {
+        return PreviewActivityService.getInstance().getPreviewActivityFunding(projectId, currencyId);
     }
 
     /**

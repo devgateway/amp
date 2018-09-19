@@ -794,14 +794,4 @@ public class CurrencyUtil {
     public static AmpCurrency getEffectiveCurrency() {
         return CurrencyUtil.getWorkspaceCurrency(TeamUtil.getCurrentMember());
     }
-    
-    public static String  getEffectiveCurrencyCode() {
-        //It should never be null since its coming from gs but just in case we default to USD
-        AmpCurrency curr = CurrencyUtil.getEffectiveCurrency();
-        if (curr != null) {
-            return curr.getCurrencyCode();
-        } else {
-            return CurrencyUtil.BASE_CODE;
-        }
-    }
 }

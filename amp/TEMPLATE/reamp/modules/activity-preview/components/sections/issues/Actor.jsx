@@ -13,7 +13,7 @@ export default class Actors extends Component {
 
   render() {
     if (this.props.actor) {
-      return <div className={'actors'}>{this.props.actor[AC.ACTOR_NAME] || ''}</div>;
+      return <div className={'actors'}>{this.props.actor[AC.ACTOR_NAME].value || ''}</div>;
     } else {
       return null;
     }

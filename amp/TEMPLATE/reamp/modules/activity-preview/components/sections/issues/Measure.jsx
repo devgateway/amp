@@ -22,8 +22,8 @@ export default class Measures extends Component {
     }
     const measureName = `${measure[AC.MEASURE_NAME].value || ''}${date}`;
     content.push(<div key={'Measure' + Math.random()} className={'measures'}>{measureName}</div>);
-    if (measure[AC.ACTORS] && measure[AC.ACTORS].values) {
-      measure[AC.ACTORS].values.forEach((actor) => {
+    if (measure[AC.ACTORS] && measure[AC.ACTORS].value) {
+      measure[AC.ACTORS].value.forEach((actor) => {
         content.push(<Actor key={'Actor'} actor={actor} />);
       });
     }

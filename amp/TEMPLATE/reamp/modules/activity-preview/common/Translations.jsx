@@ -44,6 +44,7 @@ export const initialTranslations = {
         'Structures': 'Structures',
         'Coordinates': 'Coordinates',
         'Duration': 'Duration of project',
+        'DeliveryRate': 'Delivery Rate',
         'months': 'Months',
         'years': 'Years',
         'computation': 'Computation',

@@ -62,8 +62,7 @@ class FundingSummary extends Component {
       { trn: AC.ACTUAL_COMMITMENTS, total: true },
       { trn: AC.PLANNED_COMMITMENTS, total: true },
       { trn: AC.ACTUAL_DISBURSEMENTS, total: true },
-      { trn: AC.PLANNED_DISBURSEMENTS, total: true },
-      { trn: AC.DELIVERY_RATE, total: false }];
+      { trn: AC.PLANNED_DISBURSEMENTS, total: true }];
     const fundingInfoSummary = [];
     measuresOrder.forEach(measure => {
       let value = measuresTotals[measure.trn];
@@ -79,6 +78,10 @@ class FundingSummary extends Component {
           fieldNameClass={this.props.styles.fieldNameClass} fieldValueClass={this.props.styles.fieldValueClass} />);
       }
     });
+    fundingInfoSummary.push(<SimpleField
+      key={AC.DELIVERY_RATE} title={this.props.params.translations['DeliveryRate']} value={measuresTotals[AC.DELIVERY_RATE]} separator={false}
+      fieldNameClass={this.props.styles.fieldNameClass} fieldValueClass={this.props.styles.fieldValueClass} />);
+
     return fundingInfoSummary;
   }
 

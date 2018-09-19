@@ -557,7 +557,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "getPreviewFundings", ui = false)
     public PreviewActivityFunding getPreviewFundingInformation(@PathParam("project-id") Long projectId, 
-            @QueryParam("currency-id") Long currencyId) {
+            @QueryParam(ActivityEPConstants.PREVIEW_CURRENCY_ID) Long currencyId) {
         return PreviewActivityService.getInstance().getPreviewActivityFunding(projectId, currencyId);
     }
 

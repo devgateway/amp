@@ -2,7 +2,6 @@ package org.digijava.kernel.ampapi.endpoints.activity.preview;
 
 import static java.util.stream.Collectors.groupingBy;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,14 +55,19 @@ public final class PreviewActivityService {
         try {
             AmpActivityVersion activity = ActivityUtil.loadActivity(activityId);
             
+            if (activity == null) {
+                throw new ApiRuntimeException(Response.Status.BAD_REQUEST, 
+                        ApiError.toError(PreviewActivityErrors.ACTIVITY_NOT_FOUND));
+            }
+            
             AmpCurrency currency = null;
             if (currencyId != null) {
                 currency = CurrencyUtil.getAmpcurrency(currencyId);
             }
             
             if (currencyId == null || currency == null) {
-                throw new ApiRuntimeException(Response.Status.BAD_REQUEST, ApiError.toError(
-                        "Parameter 'currency-id' is not specified or it is not a valid value"));
+                throw new ApiRuntimeException(Response.Status.BAD_REQUEST, 
+                        ApiError.toError(PreviewActivityErrors.CURRENCY_NOT_FOUND));
             }
             
             String currencyCode = currency.getCurrencyCode();
@@ -219,7 +223,8 @@ public final class PreviewActivityService {
         LocalDate transactionDate = DateTimeUtil.getLocalDate(fd.getTransactionDate());
         Double fixedRate = fd.getFixedExchangeRate();
         
-        Double convertedAmount = convertAmount(amount, fromCurrencyCode, currencyCode, fixedRate, transactionDate);
+        Double convertedAmount = AmpCurrencyConvertor.getInstance()
+                .convertAmount(amount, fromCurrencyCode, currencyCode, fixedRate, transactionDate);
         
         PreviewFundingTransaction transaction = new PreviewFundingTransaction();
         transaction.setTransactionId(fd.getDbId());
@@ -267,24 +272,8 @@ public final class PreviewActivityService {
         String costCurrencyCode = projectCost.getCurrencyCode();
         LocalDate costDate = DateTimeUtil.getLocalDate(projectCost.getFunDate());
 
-        return convertAmount(costAmount, costCurrencyCode, currencyCode, costDate);
-    }
-
-    private Double convertAmount(Double originalAmount, String fromCurrencyCode, String toCurrencyCode,
-            LocalDate transactionDate) {
-
-        return convertAmount(originalAmount, fromCurrencyCode, toCurrencyCode, null, transactionDate);
-    }
-
-    private Double convertAmount(Double originalAmount, String fromCurrencyCode, String toCurrencyCode,
-            Double fixedExchangeRate, LocalDate transactionDate) {
-
-        Double exchangeRate = AmpCurrencyConvertor.getInstance().getExchangeRate(fromCurrencyCode, toCurrencyCode,
-                fixedExchangeRate, transactionDate);
-        Double convertedAmount = BigDecimal.valueOf(originalAmount).multiply(BigDecimal.valueOf(exchangeRate))
-                .doubleValue();
-
-        return convertedAmount;
+        return AmpCurrencyConvertor.getInstance().
+                convertAmount(costAmount, costCurrencyCode, currencyCode, costDate);
     }
 
 }

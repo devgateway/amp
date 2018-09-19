@@ -138,6 +138,7 @@ export const ACTOR_NAME = 'name';
 export const DONOR_CONTACT_INFORMATION = 'donor_contact_information';
 export const SECTOR_MINISTRY_CONTACT_INFORMATION = 'sector_ministry_contact_information';
 export const IMPLEMENTING_AGENCY_CONTACT_INFORMATION = 'implementing/executing_agency_contact_information';
+export const MOFED_CONTACT_INFORMATION = 'mofed_contact_information';
 export const MARK_AS_PRIMARY = 'mark_as_primary';
 export const CONTACT = 'contact';
 

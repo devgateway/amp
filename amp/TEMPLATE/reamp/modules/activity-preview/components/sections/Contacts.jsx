@@ -8,8 +8,8 @@ import ActivityUtils from '../../utils/ActivityUtils';
 /**
  * @author Daniel Oliva
  */
-const CONTACT_INFORMATION_SOURCE = [AC.DONOR_CONTACT_INFORMATION, AC.SECTOR_MINISTRY_CONTACT_INFORMATION, 
-  AC.IMPLEMENTING_AGENCY_CONTACT_INFORMATION];
+const CONTACT_INFORMATION_SOURCE = [AC.DONOR_CONTACT_INFORMATION, AC.MOFED_CONTACT_INFORMATION, 
+  AC.SECTOR_MINISTRY_CONTACT_INFORMATION, AC.IMPLEMENTING_AGENCY_CONTACT_INFORMATION];
 
 class Contacts extends Component {
 
@@ -18,36 +18,36 @@ class Contacts extends Component {
   }
 
   _createColumns(contactInformation, title){
-    if (contactInformation && contactInformation.length > 0 ) {
-      let primaryContact = (<div></div>);
-      let secondaryContact = (<div></div>);
-      contactInformation.forEach(contact => {
-        if (contact[AC.MARK_AS_PRIMARY].value === true) {
-          primaryContact = (<SimpleField
-              key={'contact1-' + title} title={this.props.params.translations['amp.activity-preview:primaryContact']} 
-              value={contact[AC.CONTACT].value} separator={false} inline={false}
-              fieldNameClass={this.props.styles.fieldNameClass} fieldValueClass={this.props.styles.fieldValueClass} />
-          );
-        } else {
-          secondaryContact = (<SimpleField
-              key={'contact2-' + title} title={this.props.params.translations['amp.activity-preview:secondaryContact']}
-              value={contact[AC.CONTACT].value} separator={false} inline={false}
-              fieldNameClass={this.props.styles.fieldNameClass} fieldValueClass={this.props.styles.fieldValueClass} />
-          );
-        }
-      });
-      return (<div key={'ContactDiv' + title}>
-        <div>
-          <div key={'ContactTitle' + title} className={'contact_title'}>{title}</div>
-        </div>
-        <div>
+    let primaryContact;
+    let secondaryContact;
+    contactInformation.forEach(contact => {
+      if (contact[AC.MARK_AS_PRIMARY].value === true) {
+        primaryContact = (<SimpleField
+            key={'contact1-' + title} title={this.props.params.translations['amp.activity-preview:primaryContact']} 
+            value={contact[AC.CONTACT].value} separator={false} inline={false}
+            fieldNameClass={this.props.styles.fieldNameClass} fieldValueClass={this.props.styles.fieldValueClass} />
+        );
+      } else {
+        secondaryContact = (<SimpleField
+            key={'contact2-' + title} title={this.props.params.translations['amp.activity-preview:secondaryContact']}
+            value={contact[AC.CONTACT].value} separator={false} inline={false}
+            fieldNameClass={this.props.styles.fieldNameClass} fieldValueClass={this.props.styles.fieldValueClass} />
+        );
+      }
+    });
+    return (<div key={'ContactDiv' + title}>
+      <div>
+        <div key={'ContactTitle' + title} className={'contact_title'}>{title}</div>
+      </div>
+      <div>
+        {primaryContact &&
           <div key={'primaryContact' + title} className={'primary_sector'}>{primaryContact}</div>
+        }
+        {secondaryContact &&
           <div key={'secondaryContact' + title} className={'secondary_sector'}>{secondaryContact}</div>
-        </div>
-      </div>);
-    } else {
-      return (<div></div>);
-    }
+        }
+      </div>
+    </div>);    
   }
 
   _buildContacts() {

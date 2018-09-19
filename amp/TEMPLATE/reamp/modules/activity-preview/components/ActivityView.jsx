@@ -58,9 +58,6 @@ export default class ActivityView extends Component {
                 <div>
                     {this._getLegends(translations, activityInfo)}
                 </div>
-                <div>
-                    {this._getValidations(translations, activityInfo)}
-                </div>
                 <div className="l_divright">
                     {this._getExportOptions(activity, translations, settings)}
                 </div>
@@ -71,6 +68,9 @@ export default class ActivityView extends Component {
                     <span className="preview_title">
                         {activity[AC.PROJECT_TITLE].value}
                     </span>
+                    <div>
+                        {this._getValidations(translations, activityInfo)}
+                    </div>
                     <div className="preview_status_container" >
                         <StatusBar params={params} styles={statusBarStyles} />
                     </div>
@@ -174,7 +174,7 @@ export default class ActivityView extends Component {
 
         let alertMsg = msg.length < 1 ? '' : 
         (
-            <Alert bsStyle="info">
+            <Alert bsStyle="danger">
                 <strong><li>{msg}</li></strong>
                 {lastVersionMsg &&
                     <div><strong><li>{lastVersionMsg}</li></strong></div>

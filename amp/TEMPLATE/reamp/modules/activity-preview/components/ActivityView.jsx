@@ -111,8 +111,10 @@ export default class ActivityView extends Component {
     _getMessage() {
         let message = null;
         if (this.props.isActivityError === true) {
-            message = (<h1>{this.props.translations['amp.activity-preview:activityError'] + 
-                this.props.errorMsg}</h1> );
+            message = (
+                <Alert bsStyle="danger">
+                    <strong>{this.props.translations['amp.activity-preview:activityError'] + this.props.errorMsg}</strong>
+                </Alert>);
         } else if (this.props.isActivityHydratedLoading === true) {
             message = (
                 <div className={'jumbotron'}>
@@ -128,7 +130,10 @@ export default class ActivityView extends Component {
             );
         } else if (this.props.isActivityHydrated === true) {
             if (!this.props.activity) {
-                message = (<h1>{this.props.translations['amp.activity-preview:activityUnexpectedError']}</h1>);
+                message = ( 
+                    <Alert bsStyle="danger">
+                        <strong>{this.props.translations['amp.activity-preview:activityUnexpectedError']}</strong>
+                    </Alert>);
             }
         } 
         return message === null ? '' : <div>{message}</div>;

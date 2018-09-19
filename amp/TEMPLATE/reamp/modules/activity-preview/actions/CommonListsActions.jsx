@@ -95,6 +95,7 @@ export function getActivityAndFields(activityId){
                 dispatch(getActivityError(errorMsg));
             }
         }).catch(error => {
+            dispatch(getActivityError(error));
             throw(error);
         });
     }

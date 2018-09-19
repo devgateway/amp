@@ -34,7 +34,7 @@ import org.digijava.module.common.util.DateTimeUtil;
  *
  */
 public final class PreviewActivityService {
-    
+
     protected static final int PERCENTAGE_MULTIPLIER = 100;
 
     private static PreviewActivityService previewActivityService;
@@ -54,22 +54,22 @@ public final class PreviewActivityService {
         PreviewActivityFunding activityFunding = new PreviewActivityFunding();
         try {
             AmpActivityVersion activity = ActivityUtil.loadActivity(activityId);
-            
+
             if (activity == null) {
-                throw new ApiRuntimeException(Response.Status.BAD_REQUEST, 
+                throw new ApiRuntimeException(Response.Status.BAD_REQUEST,
                         ApiError.toError(PreviewActivityErrors.ACTIVITY_NOT_FOUND));
             }
-            
+
             AmpCurrency currency = null;
             if (currencyId != null) {
                 currency = CurrencyUtil.getAmpcurrency(currencyId);
             }
-            
+
             if (currencyId == null || currency == null) {
-                throw new ApiRuntimeException(Response.Status.BAD_REQUEST, 
+                throw new ApiRuntimeException(Response.Status.BAD_REQUEST,
                         ApiError.toError(PreviewActivityErrors.CURRENCY_NOT_FOUND));
             }
-            
+
             String currencyCode = currency.getCurrencyCode();
 
             activityFunding.setPpcAmount(convertProjectCostAmount(
@@ -135,7 +135,7 @@ public final class PreviewActivityService {
 
     /**
      * Calculate totals for transactions grouped by transaction type and adjustment type
-     * 
+     *
      * @param previewFundings
      * @return
      */
@@ -144,13 +144,13 @@ public final class PreviewActivityService {
                 .map(PreviewFunding::getFundingDetails)
                 .flatMap(List::stream)
                 .collect(Collectors.toList());
-        
+
         Map<Long, Map<Long, List<PreviewFundingDetail>>> groupedFundingDetails = allFundingDetails.stream()
                 .collect(groupingBy(PreviewFundingDetail::getTransactionType,
                         groupingBy(PreviewFundingDetail::getAdjustmentType)));
-        
+
         List<PreviewFundingTotal> totals = new ArrayList<>();
-        
+
         for (Entry<Long, Map<Long, List<PreviewFundingDetail>>> e : groupedFundingDetails.entrySet()) {
             Long transactionTypeId = e.getKey();
             Map<Long, List<PreviewFundingDetail>> fdMap = e.getValue();
@@ -162,118 +162,127 @@ public final class PreviewActivityService {
                 totals.add(total);
             }
         }
-        
+
         return totals;
     }
 
     /**
      * Delviery Rate = Total Actual Disbursements / Total Actual Commitments * 100;
-     * 
+     *
      * @param totals
      * @return delivery rate
      */
     private Double calculateDeliveryRate(List<PreviewFundingTotal> totals) {
         Long actualCategoryValueId = CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getIdInDatabase();
-        
+
         Double totalActualCommitments = totals.stream()
-            .filter(fd -> fd.getTransactionType().equals(Long.valueOf(Constants.COMMITMENT)) 
-                && fd.getAdjustmentType().equals(actualCategoryValueId))
-            .collect(Collectors.summingDouble(PreviewFundingTotal::getAmount));
-        
-        Double totalActualDisbursements = totals.stream()
-                .filter(fd -> fd.getTransactionType().equals(Long.valueOf(Constants.DISBURSEMENT)) 
-                    && fd.getAdjustmentType().equals(actualCategoryValueId))
+                .filter(fd -> fd.getTransactionType().equals(Long.valueOf(Constants.COMMITMENT))
+                        && fd.getAdjustmentType().equals(actualCategoryValueId))
                 .collect(Collectors.summingDouble(PreviewFundingTotal::getAmount));
-        
+
+        Double totalActualDisbursements = totals.stream()
+                .filter(fd -> fd.getTransactionType().equals(Long.valueOf(Constants.DISBURSEMENT))
+                        && fd.getAdjustmentType().equals(actualCategoryValueId))
+                .collect(Collectors.summingDouble(PreviewFundingTotal::getAmount));
+
         Double deliveryRate = null;
-        
+
         if (totalActualCommitments != 0 && totalActualDisbursements != 0) {
             deliveryRate = totalActualDisbursements / totalActualCommitments * PERCENTAGE_MULTIPLIER;
         }
-        
+
         return deliveryRate;
     }
 
     /**
-     * 
      * Undisbursed Balance = Total Actual Commitments - Total Actual Disbursements
-     * 
+     *
      * @param totals
      * @return undisbursed balance
      */
     private Double calculateTotalsUndisbursedBalance(List<PreviewFundingTotal> totals) {
         Long actualCategoryValueId = CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getIdInDatabase();
         Double totalActualCommitments = totals.stream()
-                .filter(fd -> fd.getTransactionType().equals(Long.valueOf(Constants.COMMITMENT)) 
-                    && fd.getAdjustmentType().equals(actualCategoryValueId))
+                .filter(fd -> fd.getTransactionType().equals(Long.valueOf(Constants.COMMITMENT))
+                        && fd.getAdjustmentType().equals(actualCategoryValueId))
                 .collect(Collectors.summingDouble(PreviewFundingTotal::getAmount));
-            
+
         Double totalActualDisbursements = totals.stream()
-                .filter(fd -> fd.getTransactionType().equals(Long.valueOf(Constants.DISBURSEMENT)) 
-                    && fd.getAdjustmentType().equals(actualCategoryValueId))
+                .filter(fd -> fd.getTransactionType().equals(Long.valueOf(Constants.DISBURSEMENT))
+                        && fd.getAdjustmentType().equals(actualCategoryValueId))
                 .collect(Collectors.summingDouble(PreviewFundingTotal::getAmount));
-        
+
         return totalActualCommitments > 0 ? totalActualCommitments - totalActualDisbursements : null;
     }
 
-    
+
     private PreviewFundingTransaction generateFundingTransaction(FundingInformationItem fd, String currencyCode) {
         Double amount = fd.getTransactionAmount();
         String fromCurrencyCode = fd.getAmpCurrencyId().getCurrencyCode();
         LocalDate transactionDate = DateTimeUtil.getLocalDate(fd.getTransactionDate());
         Double fixedRate = fd.getFixedExchangeRate();
-        
+
         Double convertedAmount = AmpCurrencyConvertor.getInstance()
                 .convertAmount(amount, fromCurrencyCode, currencyCode, fixedRate, transactionDate);
-        
+
         PreviewFundingTransaction transaction = new PreviewFundingTransaction();
         transaction.setTransactionId(fd.getDbId());
         transaction.setTransactionAmount(convertedAmount);
         transaction.setTransactionDate(InterchangeUtils.formatISO8601Date(fd.getTransactionDate()));
-        
+
         return transaction;
     }
 
     private Double calculateSubTotal(List<PreviewFundingTransaction> transactions) {
         return transactions.stream().collect(Collectors.summingDouble(PreviewFundingTransaction::getTransactionAmount));
     }
-    
+
     private Double calculateTotal(List<PreviewFundingDetail> fundingDetails) {
         return fundingDetails.stream().collect(Collectors.summingDouble(PreviewFundingDetail::getSubtotal));
     }
-    
+
     /**
      * Undisbursed Balance = Total Actual Commitments - Total Actual Disbursements
-     * 
+     *
      * @param fundingDetails
      * @return undisbursed balance
      */
     private Double calculateUndisbursedBalance(List<PreviewFundingDetail> fundingDetails) {
         Long actualCategoryValueId = CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getIdInDatabase();
         Double totalActualCommitments = fundingDetails.stream()
-            .filter(fd -> fd.getTransactionType().equals(Long.valueOf(Constants.COMMITMENT)) 
-                && fd.getAdjustmentType().equals(actualCategoryValueId))
-            .map(PreviewFundingDetail::getTransactions)
-            .flatMap(List::stream)
-            .collect(Collectors.summingDouble(PreviewFundingTransaction::getTransactionAmount));
-        
+                .filter(fd -> fd.getTransactionType().equals(Long.valueOf(Constants.COMMITMENT))
+                        && fd.getAdjustmentType().equals(actualCategoryValueId))
+                .map(PreviewFundingDetail::getTransactions)
+                .flatMap(List::stream)
+                .collect(Collectors.summingDouble(PreviewFundingTransaction::getTransactionAmount));
+
         Double totalActualDisbursements = fundingDetails.stream()
-            .filter(fd -> fd.getTransactionType().equals(Long.valueOf(Constants.DISBURSEMENT)) 
-                && fd.getAdjustmentType().equals(actualCategoryValueId))
-            .map(PreviewFundingDetail::getTransactions)
-            .flatMap(List::stream)
-            .collect(Collectors.summingDouble(PreviewFundingTransaction::getTransactionAmount));
-        
+                .filter(fd -> fd.getTransactionType().equals(Long.valueOf(Constants.DISBURSEMENT))
+                        && fd.getAdjustmentType().equals(actualCategoryValueId))
+                .map(PreviewFundingDetail::getTransactions)
+                .flatMap(List::stream)
+                .collect(Collectors.summingDouble(PreviewFundingTransaction::getTransactionAmount));
+
         return totalActualCommitments > 0 ? totalActualCommitments - totalActualDisbursements : null;
     }
 
     private Double convertProjectCostAmount(AmpFundingAmount projectCost, String currencyCode) {
-        Double costAmount = projectCost.getFunAmount();
-        String costCurrencyCode = projectCost.getCurrencyCode();
-        LocalDate costDate = DateTimeUtil.getLocalDate(projectCost.getFunDate());
+        //as from the Activity form settings you can end up with nulls either in dates
+        //or in amounts.
+        if (projectCost.getFunDate() == null && projectCost.getFunAmount() != null) {
+            return currencyCode.equals(projectCost.getCurrencyCode()) ? projectCost.getFunAmount() : 0D;
+        } else {
+            if (projectCost.getFunDate() != null && projectCost.getFunAmount() != null) {
+                Double costAmount = projectCost.getFunAmount();
+                String costCurrencyCode = projectCost.getCurrencyCode();
+                LocalDate costDate = DateTimeUtil.getLocalDate(projectCost.getFunDate());
 
-        return AmpCurrencyConvertor.getInstance().
-                convertAmount(costAmount, costCurrencyCode, currencyCode, costDate);
+                return AmpCurrencyConvertor.getInstance().
+                        convertAmount(costAmount, costCurrencyCode, currencyCode, costDate);
+            } else {
+                return 0D;
+            }
+        }
     }
 
 }

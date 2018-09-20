@@ -203,7 +203,8 @@ export default class ActivityView extends Component {
     _getExportOptions(activity, translations, settings) {
         let word = settings && settings[AC.HIDE_EXPORT] ? '' : 
             (
-                <a href={'/aim/exportActToWord.do?activityid=' + activity[AC.INTERNAL_ID].value} className="l_sm"
+                <a href={'/aim/viewActivityPreview.do~activityId=' + activity[AC.INTERNAL_ID].value
+                +'~exportActivityToWord=true'} className="l_sm"
                     title={translations['amp.activity-preview:exportWord']} target="_blank">
                     <img src="/TEMPLATE/ampTemplate/img_2/ico_word.gif"/>{translations['amp.activity-preview:exportWord']}
                 </a>

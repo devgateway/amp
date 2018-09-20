@@ -74,7 +74,6 @@ public class UserService {
             user.setPasswordChangedAt(sdf.format(ampUser.getPasswordChangedAt()));
         }
         user.setBanned(ampUser.isBanned());
-        user.setActive(ampUser.isActivate());
         if (ampUser.getPledger() != null) {
             user.setPledger(ampUser.getPledger());
         }

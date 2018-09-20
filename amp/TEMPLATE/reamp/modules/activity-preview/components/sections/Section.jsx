@@ -8,7 +8,7 @@ require('../../styles/ActivityView.css');
 /**
  * @author Daniel Oliva
  */
-const Section = (ComposedSection, SectionTitle = null, useEncapsulateHeader = true, sID) => class extends Component {
+const Section = (ComposedSection, SectionTitle = null ,useEncapsulateHeader = true, sID) => class extends Component {
 
 
   buildSimpleField(activity, fieldPath, settings, showIfNotAvailable, noDataValue, inline = false, title) {
@@ -43,7 +43,8 @@ const Section = (ComposedSection, SectionTitle = null, useEncapsulateHeader = tr
 
     return (<div key={sectionKey} className={this.props.styles.groupClass} id={sID}>
       <div className={this.props.styles.titleClass}>
-        <span>{translations[SectionTitle]} </span><span>{this.props.styles.titleDetails}</span>
+        <span>{translations[SectionTitle] + (this.props.titleExtra? this.props.titleExtra:'')}
+        </span><span>{this.props.styles.titleDetails}</span>
       </div>
       <div className={this.props.styles.composedClass}>
         {composedSection}

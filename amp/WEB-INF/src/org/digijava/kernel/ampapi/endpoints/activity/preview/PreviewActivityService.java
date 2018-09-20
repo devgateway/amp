@@ -77,7 +77,7 @@ public final class PreviewActivityService {
             if (ppcAmount != null) {
                 activityFunding.setPpcAmount(convertProjectCostAmount(ppcAmount, currencyCode));
             }
-            if (ppcAmount != null) {
+            if (rpcAmount != null) {
                 activityFunding.setRpcAmount(convertProjectCostAmount(rpcAmount, currencyCode));
             }
 

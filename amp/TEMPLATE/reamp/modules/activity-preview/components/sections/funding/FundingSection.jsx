@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Section from '../Section';
 import FundingOrganizationSection from './FundingOrganizationSection';
+import FundingTotalsSection from './FundingTotalsSection';
 import * as AC from '../../../utils/ActivityConstants';
 require('../../../styles/ActivityView.css');
 
@@ -79,6 +80,9 @@ class FundingSection extends Component {
         counter += 1;
       });
     }
+    const totals = (<FundingTotalsSection activity={activity} translations={translations} settings={settings}/>);
+    fundingList.push(totals);
+
     return (<div className={'container_funding'}>
       <div>{fundingList}</div>
       

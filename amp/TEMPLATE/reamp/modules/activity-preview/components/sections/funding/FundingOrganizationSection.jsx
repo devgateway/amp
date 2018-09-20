@@ -41,7 +41,8 @@ class FundingOrganizationSection extends Component {
     }
     const sortedGroups = fd.sort(this.props.comparator);
     sortedGroups.forEach((group) => {
-      content.push(<FundingTransactionTypeItem fundingDetails={fd} group={group} key={'FTTI_' + Math.random()} settings={this.props.settings} />);
+      content.push(<FundingTransactionTypeItem translations={this.props.translations} group={group} 
+        key={'FTTI_' + Math.random()} settings={this.props.settings} />);
     });
     return content;
   }

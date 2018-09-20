@@ -575,6 +575,11 @@
   float: left;
 }
 
+.header_total {
+  font-size: 1.10em;
+  font-weight: bold;
+}
+
 .container_funding {
   max-width: 675px;
   min-width: 675px;

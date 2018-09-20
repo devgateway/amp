@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import * as AC from '../../../utils/ActivityConstants';
 import FundingTotalItem from './FundingTotalItem';
-import ActivityFundingTotals from '../../activity/ActivityFundingTotals';
-
+import Label from '../../fields/Label';
 
 /**
  * @author Daniel Oliva
@@ -14,37 +13,46 @@ class FundingTotalsSection extends Component {
   }
 
   render() {
-    debugger;
     const content = [];
-    const translations = this.props.translations;
-    const actualCommitments = ActivityFundingTotals.buildStandardMeasureTotal(null, AC.ACTUAL, AC.COMMITMENTS);
-    const plannedCommitments = ActivityFundingTotals.buildStandardMeasureTotal(null, AC.PLANNED, AC.COMMITMENTS);
-    const actualDisbursements = ActivityFundingTotals.buildStandardMeasureTotal(null, AC.ACTUAL, AC.DISBURSEMENTS);
-    const plannedDisbursements = ActivityFundingTotals.buildStandardMeasureTotal(null, AC.PLANNED, AC.DISBURSEMENTS);
-    const options = [{ label: translations['amp.activity-preview:totalActualCommitments'], value: actualCommitments },
-      { label: translations['amp.activity-preview:totalPlannedCommitments'], value: plannedCommitments },
-      { label: translations['amp.activity-preview:totalActualDisbursements'], value: actualDisbursements },
-      { label: translations['amp.activity-preview:totalPlannedDisbursements'], value: plannedDisbursements },];
-    options.forEach(g => {
-      if (g.value > 0) {
-        content.push(<FundingTotalItem
-          key={Utils.numberRandom()}
-          currency={AC.DEFAULT_CURRENCY}
-          value={g.value}
-          label={g.label} />);
-      }
+    const {activity, translations, settings} = this.props;
+
+    const measuresTotals = {};
+    // Commitments, Disbursements
+    AC.TRANSACTION_TYPES.forEach(trnType => {
+      AC.ADJUSTMENT_TYPES.forEach(adjType => {        
+        let trx = activity[AC.FUNDING_TOTALS].value[AC.TOTALS].find(t => 
+          t[AC.TRANSACTION_TYPE] === trnType && t[AC.ADJUSTMENT_TYPE] === adjType);
+        let value = trx ? trx[AC.AMOUNT] : 0;
+        measuresTotals[`${adjType} ${trnType}`] = value;
+      });      
     });
-    if (actualDisbursements !== 0 && plannedDisbursements !== 0) {
+
+    const actualCommitments = measuresTotals[AC.ACTUAL_COMMITMENTS];
+    const plannedCommitments = measuresTotals[AC.PLANNED_COMMITMENTS];
+    const actualDisbursements = measuresTotals[AC.ACTUAL_DISBURSEMENTS];
+    const plannedDisbursements = measuresTotals[AC.PLANNED_DISBURSEMENTS];
+    const undisbursed = activity[AC.FUNDING_TOTALS].value[AC.UNDISBURSED_BALANCE];
+    const rate = activity[AC.FUNDING_TOTALS].value[AC.DELIVERY_RATE_PROP];
+    const options = [
+      { label: translations['amp.activity-preview:totalActualCommitments'], value: actualCommitments, format: true, isPercentage: false },
+      { label: translations['amp.activity-preview:totalPlannedCommitments'], value: plannedCommitments, format: true, isPercentage: false },
+      { label: translations['amp.activity-preview:totalActualDisbursements'], value: actualDisbursements, format: true, isPercentage: false },
+      { label: translations['amp.activity-preview:totalPlannedDisbursements'], value: plannedDisbursements, format: true, isPercentage: false },,
+      { label: translations['undisbursed_balance'], value: undisbursed, format: true, isPercentage: false},
+      { label: translations['delivery_rate'], value: rate, format: false, isPercentage: true }
+    ];
+    content.push(<div><Label label={translations['total']} labelClass={'header_total'} key={'TotalFunding'} /></div>);
+
+    for(var g in options) {
       content.push(<FundingTotalItem
-        label={translations['amp.activity-preview:undisbursedBalance']} value={actualCommitments - actualDisbursements}
-        currency={AC.DEFAULT_CURRENCY} key={Utils.numberRandom()} />);
+        key={'Totals_' + Math.random() }
+        value={options[g].value}
+        label={options[g].label.toUpperCase()}
+        dontFormatNumber={!options[g].format}
+        isPercentage={options[g].isPercentage}
+        settings={settings} />);
     }
-    if (actualDisbursements !== 0 && plannedDisbursements !== 0) {
-      content.push(<FundingTotalItem
-        currency={AC.DEFAULT_CURRENCY} key={Utils.numberRandom()}
-        value={Math.round((actualDisbursements / actualCommitments) * 100)}
-        label={translations['amp.activity-preview:deliveryRate']} isPercentage />);
-    }
+    
     return (<div>{content}</div>);
   }
 }

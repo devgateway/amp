@@ -35,7 +35,7 @@ class FundingTransactionTypeItem extends Component {
   _drawSubTotalFooter() {
     let subtotal = this.props.group[AC.SUBTOTAL].value;
     const measure = `${this.props.group.adjustment_type.value} ${this.props.group.transaction_type.value}`;
-    const labelTrn = `Subtotal ${measure}`.toUpperCase();
+    const labelTrn = `${this.props.translations['subtotal']} ${measure}`.toUpperCase();
     return (<div>
       <FundingTotalItem
         value={subtotal}

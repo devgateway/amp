@@ -26,8 +26,7 @@ class FundingSummary extends Component {
     const measuresTotals = {};
     // Commitments, Disbursements
     AC.TRANSACTION_TYPES.forEach(trnType => {
-      AC.ADJUSTMENT_TYPES.forEach(adjType => {
-        
+      AC.ADJUSTMENT_TYPES.forEach(adjType => {        
         let trx = activity[AC.FUNDING_TOTALS].value[AC.TOTALS].find(t => 
           t[AC.TRANSACTION_TYPE] === trnType && t[AC.ADJUSTMENT_TYPE] === adjType);
         let value = trx ? trx[AC.AMOUNT] : 0;
@@ -59,7 +58,7 @@ class FundingSummary extends Component {
       if (value !== undefined) {
         let title = measure.trn;
         if (measure.total) {
-          title = `Total ${title}`;
+          title = `${translations['total']} ${title}`;
         }
         const key = `Summary-Total-${measure.trn}`;
         fundingInfoSummary.push(<SimpleField

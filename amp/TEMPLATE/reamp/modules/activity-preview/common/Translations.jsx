@@ -40,7 +40,7 @@ export const initialTranslations = {
         'ExecutingAgency': 'Executing Agency',
         'Issues': 'Issues',
         'Contacts': 'Contacts',
-        'SectorsLabel': 'Activity Sectors',
+        'SectorsLabel': 'Sectors',
         'Structures': 'Structures',
         'Coordinates': 'Coordinates',
         'Duration': 'Duration of project',
@@ -57,5 +57,7 @@ export const initialTranslations = {
         'click_latest_version' : 'Click here to show the latest version',
         'delivery_rate': 'Delivery Rate',
         'undisbursed_balance': 'Udisbursed Balance',
-        'draft_activity': 'This is a draft activity'
+        'draft_activity': 'This is a draft activity',
+        'subtotal':'Subtotal',
+        'total' : 'Total'
 };

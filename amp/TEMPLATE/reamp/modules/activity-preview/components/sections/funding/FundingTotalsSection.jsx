@@ -13,7 +13,6 @@ class FundingTotalsSection extends Component {
   }
 
   render() {
-    debugger;
     const content = [];
     const {activity, translations, settings} = this.props;
 

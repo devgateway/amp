@@ -152,7 +152,7 @@ export default class ActivityView extends Component {
     }
 
     _checkDraft(activity, translations) {
-        if (activity[AC.IS_DRAFT]) {
+        if (activity[AC.IS_DRAFT] && activity[AC.IS_DRAFT].value) {
             return (<Alert bsStyle="danger">
                 <strong><li>{translations['draft_activity']}</li></strong>
             </Alert>);

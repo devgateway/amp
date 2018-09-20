@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Section from '../Section';
 import FundingOrganizationSection from './FundingOrganizationSection';
 import FundingTotalsSection from './FundingTotalsSection';
+import SimpleField from '../../fields/SimpleField';
 import * as AC from '../../../utils/ActivityConstants';
 require('../../../styles/ActivityView.css');
 
@@ -65,6 +66,26 @@ class FundingSection extends Component {
     return f1String > f2String ? 1 : -1;
   }
 
+  _getSources() {
+    const { activity, translations } = this.props.params;
+    const title = translations['FundingSources'];
+    var sources = new Set();
+    if (activity[AC.FUNDINGS] && activity[AC.FUNDINGS].value.length) {
+      activity[AC.FUNDINGS].value.forEach(v=> {sources.add('[' + v.donor_organization_id.value + '] ')});
+    }
+    let value_ = sources.size + ' ';
+    sources.forEach(x => value_ += x); 
+    const content = <SimpleField key={title}
+      title={title} value={value_} 
+      useInnerHTML={false}
+      inline={false}
+      separator={false}
+      fieldNameClass={'section_field_name'}
+      fieldValueClass={this.props.styles.fieldValueClass || ''} />;
+    return (<div key={'AcFundingSources'} >{content}</div>);
+    
+  }
+
   render() {
     const { activity, translations, settings }  = this.props.params;
     const fundingList = [];
@@ -83,7 +104,9 @@ class FundingSection extends Component {
     const totals = (<FundingTotalsSection activity={activity} translations={translations} settings={settings}/>);
     fundingList.push(totals);
 
-    return (<div className={'container_funding'}>
+    return (
+    <div className={'container_funding'}>
+      <div>{this._getSources()}</div>
       <div>{fundingList}</div>
       
       <div className={'clear'} />

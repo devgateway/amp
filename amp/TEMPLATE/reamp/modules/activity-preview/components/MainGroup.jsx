@@ -51,8 +51,6 @@ export default class MainGroup extends Component {
 
       <Sector params={params} styles={this._getPercentageStyles()} />
 
-      <FundingSources params={params} styles={styles} />
-
       <FundingSection params={params} styles={this._getBoxStyles()}/>
 
       <RelatedOrganizations params={params} styles={styles} />

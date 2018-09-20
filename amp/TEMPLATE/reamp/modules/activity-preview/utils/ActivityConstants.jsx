@@ -22,7 +22,6 @@ export const ACTIVITY_SECTION_IDS =
     { key: 'AcNationalPlan', hash: '#AcNationalPlan', value: 'National Plan', translationKey: 'NationalPlan' },
     { key: 'AcProgram', hash: '#AcProgram', value: 'Program', translationKey: 'Program' },
     { key: 'AcSector', hash: '#AcSector', value: 'Sectors', translationKey: 'SectorsLabel' },
-    { key: 'AcFundingSources', hash: '#AcFundingSources', value: 'Funding Sources', translationKey: 'FundingSources' },
     { key: 'AcFunding', hash: '#AcFunding', value: 'Funding', translationKey: 'Funding' },
     { key: 'AcRelatedOrganizations', hash: '#AcRelatedOrganizations', value: 'Related Organizations', translationKey: 'RelatedOrganizations' },
     { key: 'AcIssues', hash: '#AcIssues', value: 'Issues', translationKey: 'Issues' },

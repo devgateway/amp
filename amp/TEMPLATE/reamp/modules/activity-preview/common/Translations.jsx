@@ -35,7 +35,7 @@ export const initialTranslations = {
         'NationalPlan': 'National Plan',
         'Program': 'Program',
         'FundingSources': 'Funding Sources',
-        'Funding': 'Funding Section',
+        'Funding': 'Funding',
         'FundingInformation': 'Funding Information',
         'AdditionalInfo': 'Additional Info',
         'RelatedOrganizations': 'Related Organizations',

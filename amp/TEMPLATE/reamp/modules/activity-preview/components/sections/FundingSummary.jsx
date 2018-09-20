@@ -54,11 +54,16 @@ class FundingSummary extends Component {
       { trn: translations['delivery_rate'], total: false }];
     const fundingInfoSummary = [];
     measuresOrder.forEach(measure => {
+      debugger;
       let value = measuresTotals[measure.trn];
       if (value !== undefined) {
         let title = measure.trn;
+        let translationKey = 'amp.activity-preview:';
+        if(measure.total){
+            translationKey = translationKey + 'total';
+        }
         if (measure.total) {
-          title = `${translations['total']} ${title}`;
+          title =translations[ translationKey+ title.replace(/\s/g, '')];
         }
         const key = `Summary-Total-${measure.trn}`;
         fundingInfoSummary.push(<SimpleField

@@ -61,6 +61,7 @@ export const DELIVERY_RATE = 'Delivery Rate';
 export const FIXED_EXCHANGE_RATE = "fixed_exchange_rate";
 export const CURRENCY = "currency";
 export const TRANSACTION_DATE = "transaction_date";
+export const TRANSACTION_ID = "transaction_id";
 export const TRANSACTION_AMOUNT = "transaction_amount";
 
 //Activity Internal Ids
@@ -196,6 +197,7 @@ export const FUNDING_TOTALS = 'funding_totals';
 export const TRX_TYPE_PATH = 'fundings~funding_details~transaction_type';
 export const ADJ_TYPE_PATH = 'fundings~funding_details~adjustment_type';
 export const AMOUNT = 'amount';
+export const REORDER_TRX = 'reorder-funding-item';
 
 
 

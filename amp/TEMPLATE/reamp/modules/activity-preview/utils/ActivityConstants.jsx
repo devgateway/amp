@@ -48,7 +48,7 @@ export const PLANNED = 'Planned';
 export const PIPELINE = 'Pipeline';
 export const COMMITMENTS = 'Commitments';
 export const DISBURSEMENTS = 'Disbursements';
-export const ADJUSTMENT_TYPES = [ACTUAL, PLANNED, PIPELINE];
+export const ADJUSTMENT_TYPES = [PLANNED, ACTUAL];
 export const TRANSACTION_TYPES = [COMMITMENTS, DISBURSEMENTS];
 
 export const ACTUAL_COMMITMENTS = 'Actual Commitments';
@@ -103,6 +103,7 @@ export const SECTOR_PERCENTAGE = 'sector_percentage';
 //Funding Section
 export const FUNDINGS = 'fundings';
 export const AMP_FUNDING_ID = 'amp_funding_id';
+export const FUNDING_ID = 'funding_id';
 export const FUNDING_DONOR_ORG_ID = 'donor_organization_id';
 export const SOURCE_ROLE = 'source_role';
 export const TYPE_OF_ASSISTANCE = 'type_of_assistance';
@@ -178,6 +179,20 @@ export const CANNOT_BE_VALIDATE = 'CANNOT_BE_VALIDATED';
 export const INFO_LAST_VERSION = 'amp-activity-last-version-id';
 export const INFO_ACTIVITY_ID = 'amp-activity-id';
 export const ANCESTOR_VALUES = 'ancestor-values';
+
+//FUNDING
+export const FUNDING_INFORMATION = 'funding_information';
+export const PPC_AMOUNT = 'ppc_amount';
+export const RPC_AMOUNT = 'rpc_amount';
+export const TRANSACTIONS = 'transactions';
+export const SUBTOTAL = 'subtotal';
+export const UNDISBURSED_BALANCE = 'undisbursed_balance';
+export const TOTALS = 'totals';
+export const DELIVERY_RATE_PROP = 'delivery_rate';
+export const FUNDING_TOTALS = 'funding_totals';
+export const TRX_TYPE_PATH = 'fundings~funding_details~transaction_type';
+export const ADJ_TYPE_PATH = 'fundings~funding_details~adjustment_type';
+export const AMOUNT = 'amount';
 
 
 

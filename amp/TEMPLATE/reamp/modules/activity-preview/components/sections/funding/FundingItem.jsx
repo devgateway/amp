@@ -15,14 +15,13 @@ class FundingItem extends Component {
   }
 
   render() {
-    const convertedAmount = ActivityFundingTotals.convertTransactionAmountToCurrency(this.props.item,
-      this.props.wsCurrency);
+    const amount = this.props.item[AC.TRANSACTION_AMOUNT].value;
     return (
       <tbody>
         <tr className={'row'}>
-          <td className={'left_text'}>{this.props.item[AC.ADJUSTMENT_TYPE].value}</td>
+          <td className={'left_text'}>{this.props.adjustment_type}</td>
           <td className={'right_text'}>{createFormattedDate(this.props.item[AC.TRANSACTION_DATE].value, this.props.settings)}</td>
-          <td className={'right_text'}>{`${rawNumberToFormattedString(convertedAmount, false, this.props.settings)} 
+          <td className={'right_text'}>{`${rawNumberToFormattedString(amount, false, this.props.settings)} 
             ${this.props.wsCurrency}`}</td>
         </tr>
       </tbody>);

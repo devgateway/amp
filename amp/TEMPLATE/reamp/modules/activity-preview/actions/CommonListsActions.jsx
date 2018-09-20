@@ -66,54 +66,60 @@ export function getSettingsAndActivity(activityId){
             dispatch(getFundingInfoLoading());
             commonListsApi.getFundingData(activityId, settings[AC.CURRENCY_CODE] ? settings[AC.CURRENCY_CODE] : 46).then(fundingInfo =>{
                 dispatch(getFundingInfoSuccess(fundingInfo));
-                getActivityAndFields(activityId, fundingInfo);
+                dispatch(getHydratedActivityLoading());
+                let hydratedActivity = {};
+                commonListsApi.getActivity(activityId).then(activity => {
+                    if (!activity.error) {
+                        dispatch(getActivitySuccess(activity));
+                        if(fundingInfo) {
+                            activity[AC.FUNDINGS].forEach(funding => {
+                                let details = fundingInfo[AC.FUNDING_INFORMATION][AC.FUNDINGS].find(f => f[AC.FUNDING_ID] === funding[AC.FUNDING_ID]);
+                                funding[AC.FUNDING_DETAILS] = details[AC.FUNDING_DETAILS];
+                                funding[AC.UNDISBURSED_BALANCE] = details[AC.UNDISBURSED_BALANCE];
+                            });
+                            activity[AC.FUNDING_TOTALS] = {};
+                            activity[AC.FUNDING_TOTALS][AC.UNDISBURSED_BALANCE] = fundingInfo[AC.FUNDING_INFORMATION][AC.UNDISBURSED_BALANCE];
+                            activity[AC.FUNDING_TOTALS][AC.TOTALS] = fundingInfo[AC.FUNDING_INFORMATION][AC.TOTALS];
+                            activity[AC.FUNDING_TOTALS][AC.DELIVERY_RATE_PROP] = fundingInfo[AC.FUNDING_INFORMATION][AC.DELIVERY_RATE_PROP];
+                            activity[AC.FUNDING_TOTALS][AC.PPC_AMOUNT] = fundingInfo[AC.PPC_AMOUNT];
+                            activity[AC.FUNDING_TOTALS][AC.RPC_AMOUNT] = fundingInfo[AC.RPC_AMOUNT];
+                            activity[AC.FUNDING_TOTALS][AC.CURRENCY] = fundingInfo[AC.CURRENCY];
+                        }
+                        dispatch(getActivityInfoLoading());
+                        commonListsApi.getActivityInfo(activityId).then(activityInfo => {
+                            dispatch(getActivityInfoSuccess(activityInfo));
+                        }).catch(error => {
+                            throw(error);
+                        });
+                        hydratedActivity = _createHydratedActivity(Object.keys(activity), activity);
+                        dispatch(getHydratedActivityLoading(hydratedActivity));
+                        commonListsApi.getFields().then(fields => {
+                            dispatch(getFieldsSuccess(fields));
+                            _addLabelAndType(hydratedActivity, fields);
+                            _addRealValue(hydratedActivity).then(response => {;
+                                dispatch(getHydratedActivitySuccess(hydratedActivity));
+                            }).catch(error => {
+                                throw(error);
+                            });
+                        }).catch(error => {
+                            throw(error);
+                        });
+                    } else {
+                        let errorMsg = '';
+                        let keys = Object.keys(activity.error);
+                        for(var key in keys) {
+                            activity.error[keys[key]].forEach(error => {errorMsg += error + ' '});
+                        }
+                        dispatch(getActivityError(errorMsg));
+                    }
+                }).catch(error => {
+                    dispatch(getActivityError(error));
+                    throw(error);
+                });
             }).catch(error => {
                 dispatch(getActivityError(error));
                 throw(error);
             });            
-        }).catch(error => {
-            throw(error);
-        });
-    }
-}
-
-export function getActivityAndFields(activityId, fundingInfo){
-    return function(dispatch) {
-        dispatch(getHydratedActivityLoading());
-        let hydratedActivity = {};
-        return commonListsApi.getActivity(activityId).then(activity => {
-            if (!activity.error) {
-                dispatch(getActivitySuccess(activity));
-                if(fundingInfo) {
-                    activity[AC.FUNDINGS] = fundingInfo[AC.FUNDING_INFORMATION][AC.FUNDINGS];
-                }
-                dispatch(getActivityInfoLoading());
-                commonListsApi.getActivityInfo(activityId).then(activityInfo => {
-                    dispatch(getActivityInfoSuccess(activityInfo));
-                }).catch(error => {
-                    throw(error);
-                });
-                hydratedActivity = _createHydratedActivity(Object.keys(activity), activity);
-                dispatch(getHydratedActivityLoading(hydratedActivity));
-                commonListsApi.getFields().then(fields => {
-                    dispatch(getFieldsSuccess(fields));
-                    _addLabelAndType(hydratedActivity, fields);
-                    _addRealValue(hydratedActivity).then(response => {;
-                        dispatch(getHydratedActivitySuccess(hydratedActivity));
-                    }).catch(error => {
-                        throw(error);
-                    });
-                }).catch(error => {
-                    throw(error);
-                });
-            } else {
-                let errorMsg = '';
-                let keys = Object.keys(activity.error);
-                for(var key in keys) {
-                    activity.error[keys[key]].forEach(error => {errorMsg += error + ' '});
-                }
-                dispatch(getActivityError(errorMsg));
-            }
         }).catch(error => {
             dispatch(getActivityError(error));
             throw(error);
@@ -170,6 +176,12 @@ function _addRealValue(hydratedActivity, parentName) {
                     _addRealValueHelper(hydratedActivity, path, fields[keys[key]])
                 }
             }
+            if(hydratedActivity[AC.FUNDING_TOTALS] && hydratedActivity[AC.FUNDING_TOTALS].value && hydratedActivity[AC.FUNDING_TOTALS].value[AC.TOTALS].length > 0) {
+                hydratedActivity[AC.FUNDING_TOTALS].value[AC.TOTALS].forEach(t => {
+                    t[AC.TRANSACTION_TYPE] = fields[AC.TRX_TYPE_PATH].find(x => x.id === t[AC.TRANSACTION_TYPE]).value;
+                    t[AC.ADJUSTMENT_TYPE] = fields[AC.ADJ_TYPE_PATH].find(x => x.id === t[AC.ADJUSTMENT_TYPE]).value;
+                });
+            }
             resolve(hydratedActivity);
         }).catch(error => {
             throw(error);
@@ -185,15 +197,15 @@ function _addRealValueHelper(fieldParam, path, values) {
                 _addRealValueHelper(fieldParam.value[field][pathName], path, values)
             } else {        
                 let valueId = fieldParam.value[field][pathName];
-                let valueObj = values.filter(c => c.id === valueId.value);
-                if (valueObj[0]) {
-                    if (valueObj[0][AC.ANCESTOR_VALUES]) {
+                let valueObj = values.find(c => c.id === valueId.value);
+                if (valueObj) {
+                    if (valueObj[AC.ANCESTOR_VALUES]) {
                         valueId.value = '';
-                        for(var id in valueObj[0][AC.ANCESTOR_VALUES]) {
-                            valueId.value += '[' + valueObj[0][AC.ANCESTOR_VALUES][id] + ']';
+                        for(var id in valueObj[AC.ANCESTOR_VALUES]) {
+                            valueId.value += '[' + valueObj[AC.ANCESTOR_VALUES][id] + ']';
                         }
                     } else {
-                        valueId.value = valueObj[0].value;
+                        valueId.value = valueObj.value;
                     }                    
                 }
             }
@@ -203,8 +215,8 @@ function _addRealValueHelper(fieldParam, path, values) {
             _addRealValueHelper(fieldParam[pathName], path, values)
         } else {        
             let valueId = fieldParam[pathName];
-            let valueObj = values.filter(c => c.id === valueId.value);
-            fieldParam[pathName].value = valueObj[0] ? valueObj[0].value : valueId.value;
+            let valueObj = values.find(c => c.id === valueId.value);
+            fieldParam[pathName].value = valueObj ? valueObj.value : valueId.value;
         }
     }
 }

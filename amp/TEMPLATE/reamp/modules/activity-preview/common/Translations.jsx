@@ -52,5 +52,7 @@ export const initialTranslations = {
         'awaiting_validation' : 'The activity is awaiting approval.',
         'cannot_be_validated' : 'This activity cannot be validated because there is no Workspace Manager.',
         'not_latest_version' : 'Requested activity version was not the latest version.',
-        'click_latest_version' : 'Click here to show the latest version'
+        'click_latest_version' : 'Click here to show the latest version',
+        'delivery_rate': 'Delivery Rate',
+        'undisbursed_balance': 'Udisbursed Balance'
 };

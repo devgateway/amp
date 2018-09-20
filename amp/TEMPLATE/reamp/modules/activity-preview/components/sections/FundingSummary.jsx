@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Section from './Section';
 import * as AC from '../../utils/ActivityConstants';
-import ActivityFundingTotals from '../activity/ActivityFundingTotals';
 import NumberUtils from '../../utils/NumberUtils'
 import SimpleField from '../fields/SimpleField';
 
@@ -20,54 +19,44 @@ class FundingSummary extends Component {
    * @private
    */
   _buildFundingInformation() {
-    const activity = this.props.params.activity;
+    const { activity, translations} = this.props.params;
+    if (!activity[AC.FUNDING_TOTALS]) {
+      return (<div></div>);
+    }
     const measuresTotals = {};
-    let actualCommitmentsAreEnabled = false;
-    let actualDisbursementsAreEnabled = false;
     // Commitments, Disbursements
     AC.TRANSACTION_TYPES.forEach(trnType => {
       AC.ADJUSTMENT_TYPES.forEach(adjType => {
-        if (adjType && trnType) {
-          const value = ActivityFundingTotals.getTotals(activity, adjType, trnType);
-          measuresTotals[`${adjType} ${trnType}`] = value;
-        }
-        // Save these 2 flags for "Delivery Rate".
-        if (trnType === AC.COMMITMENTS && adjType === AC.ACTUAL) {
-          actualCommitmentsAreEnabled = true;
-        }
-        if (trnType === AC.DISBURSEMENTS && adjType === AC.ACTUAL) {
-          actualDisbursementsAreEnabled = true;
-        }
+        
+        let trx = activity[AC.FUNDING_TOTALS].value[AC.TOTALS].find(t => 
+          t[AC.TRANSACTION_TYPE] === trnType && t[AC.ADJUSTMENT_TYPE] === adjType);
+        let value = trx ? trx[AC.AMOUNT] : 0;
+        measuresTotals[`${adjType} ${trnType}`] = NumberUtils.rawNumberToFormattedString(value, false, this.props.params.settings);
       });      
     });
     
-    // Other measures: "Delivery rate".
-    if (actualCommitmentsAreEnabled && actualDisbursementsAreEnabled
-      && measuresTotals[`${AC.ACTUAL} ${AC.DISBURSEMENTS}`] !== '0'
-      && measuresTotals[`${AC.ACTUAL} ${AC.COMMITMENTS}`] !== '0') {
-      let value = (measuresTotals[`${AC.ACTUAL} ${AC.DISBURSEMENTS}`]) / (measuresTotals[`${AC.ACTUAL} ${AC.COMMITMENTS}`]);
-      value *= 100;
-      value = `${value}%`;
-      measuresTotals[AC.DELIVERY_RATE] = value;
-    } else {
-      measuresTotals[AC.DELIVERY_RATE] = '0%';
-    }
+    // Other measures
+    let undisbursed = activity[AC.FUNDING_TOTALS].value[AC.UNDISBURSED_BALANCE];
+    measuresTotals[translations['undisbursed_balance']] = NumberUtils.rawNumberToFormattedString(undisbursed, false, this.props.params.settings);;
+    measuresTotals[translations['delivery_rate']] = activity[AC.FUNDING_TOTALS].value[AC.DELIVERY_RATE_PROP] + '%';
     
 
     return this._buildTotalFields(measuresTotals);
   }
 
   _buildTotalFields(measuresTotals) {
+    const { translations} = this.props.params;
     const measuresOrder = [
-      { trn: AC.ACTUAL_COMMITMENTS, total: true },
       { trn: AC.PLANNED_COMMITMENTS, total: true },
+      { trn: AC.ACTUAL_COMMITMENTS, total: true },
+      { trn: AC.PLANNED_DISBURSEMENTS, total: true },
       { trn: AC.ACTUAL_DISBURSEMENTS, total: true },
-      { trn: AC.PLANNED_DISBURSEMENTS, total: true }];
+      { trn: translations['undisbursed_balance'], total: true },
+      { trn: translations['delivery_rate'], total: false }];
     const fundingInfoSummary = [];
     measuresOrder.forEach(measure => {
       let value = measuresTotals[measure.trn];
       if (value !== undefined) {
-        value = NumberUtils.rawNumberToFormattedString(value, false, this.props.params.settings);
         let title = measure.trn;
         if (measure.total) {
           title = `Total ${title}`;
@@ -78,9 +67,6 @@ class FundingSummary extends Component {
           fieldNameClass={this.props.styles.fieldNameClass} fieldValueClass={this.props.styles.fieldValueClass} />);
       }
     });
-    fundingInfoSummary.push(<SimpleField
-      key={AC.DELIVERY_RATE} title={this.props.params.translations['DeliveryRate']} value={measuresTotals[AC.DELIVERY_RATE]} separator={false}
-      fieldNameClass={this.props.styles.fieldNameClass} fieldValueClass={this.props.styles.fieldValueClass} />);
 
     return fundingInfoSummary;
   }

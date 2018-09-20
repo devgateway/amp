@@ -17,7 +17,7 @@ class FundingSection extends Component {
   _compareFundings(f1, f2) {
     let f1String = '';
     let f2String = '';
-    switch (f1.trnType.value) {
+    switch (f1.transaction_type.value) {
       case AC.COMMITMENTS:
         f1String += 'a';
         break;
@@ -28,7 +28,7 @@ class FundingSection extends Component {
         f1String += 'c';
         break;
     }
-    switch (f1.adjType.value) {
+    switch (f1.adjustment_type.value) {
       case AC.PLANNED:
         f1String += 'a';
         break;
@@ -39,7 +39,7 @@ class FundingSection extends Component {
         f1String += 'c';
         break;
     }
-    switch (f2.trnType.value) {
+    switch (f2.transaction_type.value) {
       case AC.COMMITMENTS:
         f2String += 'a';
         break;
@@ -50,7 +50,7 @@ class FundingSection extends Component {
         f2String += 'c';
         break;
     }
-    switch (f2.adjType.value) {
+    switch (f2.adjustment_type.value) {
       case AC.PLANNED:
         f2String += 'a';
         break;

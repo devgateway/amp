@@ -3,7 +3,6 @@ import * as AC from '../../../utils/ActivityConstants';
 import FundingItem from './FundingItem';
 import FundingTotalItem from './FundingTotalItem';
 import Label from '../../fields/Label';
-import ActivityFundingTotals from '../../activity/ActivityFundingTotals';
 
 require('../../../styles/ActivityView.css');
 
@@ -16,42 +15,33 @@ class FundingTransactionTypeItem extends Component {
     super(props);
   }
 
-  _filterFundingDetails() {
-    const trnType = this.props.group.trnType;
-    const adjType = this.props.group.adjType;
-    return (this.props.fundingDetails.filter(o => 
-      o[AC.TRANSACTION_TYPE].value === trnType && o[AC.ADJUSTMENT_TYPE].value === adjType
-    ));
-  }
-
   _drawHeader() {    
-    const label = `${this.props.group.adjType} ${this.props.group.trnType}`;
-    const key = 'TTI_' + this.props.group.adjType + this.props.group.trnType;
+    const label = `${this.props.group.adjustment_type.value} ${this.props.group.transaction_type.value}`;
+    const key = 'TTI_' + this.props.group.adjustment_type.value + this.props.group.transaction_type.value;
   
     return (<div><Label label={label} labelClass={'header'} key={key} /></div>);
   }
 
   _drawDetail() {
-    const filteredFD = this._filterFundingDetails();
     const content = [];
-    filteredFD.forEach((item) => {
-      content.push(<FundingItem key={'FI_' + Math.random()} 
-        item={item} wsCurrency={AC.DEFAULT_CURRENCY} settings={this.props.settings} />);
+    this.props.group[AC.TRANSACTIONS].value.forEach((item) => {
+      content.push(<FundingItem key={'FI_' + Math.random()} item={item} 
+        adjustment_type={this.props.group[AC.ADJUSTMENT_TYPE].value} transaction_type={this.props.group[AC.ADJUSTMENT_TYPE].value} 
+        settings={this.props.settings} />);
     });
     return <table className={'funding_table'} >{content}</table>;
   }
 
   _drawSubTotalFooter() {
-    let subtotal = 0;
-    subtotal = ActivityFundingTotals.convertFundingDetailsToCurrency(this._filterFundingDetails(), AC.DEFAULT_CURRENCY);
-    const measure = `${this.props.group.adjType} ${this.props.group.trnType}`;
+    let subtotal = this.props.group[AC.SUBTOTAL].value;
+    const measure = `${this.props.group.adjustment_type.value} ${this.props.group.transaction_type.value}`;
     const labelTrn = `Subtotal ${measure}`.toUpperCase();
     return (<div>
       <FundingTotalItem
         value={subtotal}
         label={labelTrn}
         currency={AC.DEFAULT_CURRENCY}
-        key={'FTI_' + this.props.group.adjType + this.props.group.trnType}
+        key={'FTI_' + this.props.group.adjustment_type.value + this.props.group.transaction_type.value}
         settings={this.props.settings} />
     </div>);
   }

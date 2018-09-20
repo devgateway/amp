@@ -14,6 +14,7 @@ class FundingTotalsSection extends Component {
   }
 
   render() {
+    debugger;
     const content = [];
     const translations = this.props.translations;
     const actualCommitments = ActivityFundingTotals.buildStandardMeasureTotal(null, AC.ACTUAL, AC.COMMITMENTS);

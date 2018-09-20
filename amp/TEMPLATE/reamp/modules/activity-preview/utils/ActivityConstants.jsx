@@ -164,7 +164,9 @@ export const HIDE_EXPORT = 'hide-editable-export-formats-public-view';
 export const DATE_FORMAT = 'default-date-format';
 export const NUMBER_FORMAT = 'number-format';
 export const NUMBER_DIVIDER = 'number-divider';
-export const CURRENCY_CODE = 'effective-currency-code-id';
+export const EFFECTIVE_CURRENCY = 'effective-currency';
+export const CURRENCY_CODE = 'code';
+export const CURRENCY_ID = 'id';
 
 //INFO
 export const INFO_EDIT = 'edit';

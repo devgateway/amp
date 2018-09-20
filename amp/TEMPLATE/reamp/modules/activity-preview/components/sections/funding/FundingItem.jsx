@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import * as AC from '../../../utils/ActivityConstants';
 import { createFormattedDate } from '../../../utils/DateUtils';
 import { rawNumberToFormattedString } from '../../../utils/NumberUtils';
-import ActivityFundingTotals from '../../activity/ActivityFundingTotals';
-
 
 /**
  * @author Daniel Oliva
@@ -22,7 +20,7 @@ class FundingItem extends Component {
           <td className={'left_text'}>{this.props.adjustment_type}</td>
           <td className={'right_text'}>{createFormattedDate(this.props.item[AC.TRANSACTION_DATE].value, this.props.settings)}</td>
           <td className={'right_text'}>{`${rawNumberToFormattedString(amount, false, this.props.settings)} 
-            ${this.props.wsCurrency}`}</td>
+            ${this.props.settings[AC.EFFECTIVE_CURRENCY][AC.CURRENCY_CODE] || ''}`}</td>
         </tr>
       </tbody>);
   }

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { rawNumberToFormattedString } from '../../../utils/NumberUtils';
+import * as AC from '../../../utils/ActivityConstants';
 require('../../../styles/ActivityView.css');
 
 /**
@@ -21,7 +22,7 @@ class FundingTotalItem extends Component {
         {`${this.props.label}:`}
       </div>
       <div className={'subtotal_footer_number'}>
-        {`${val} ${this.props.currency || ''}`}
+        {`${val} ${this.props.settings[AC.EFFECTIVE_CURRENCY][AC.CURRENCY_CODE] || ''}`}
       </div>
     </div>);
   }

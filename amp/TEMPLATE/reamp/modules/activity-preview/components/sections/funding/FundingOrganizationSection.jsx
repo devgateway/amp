@@ -51,7 +51,7 @@ class FundingOrganizationSection extends Component {
     return (<div>
       <FundingTotalItem
         label={this.props.translations['amp.activity-preview:undisbursedBalance']} value={undirbursed}
-        currency={AC.DEFAULT_CURRENCY} key={'undisbursed-balance-key'} settings={this.props.settings} />
+        key={'undisbursed-balance-key'} settings={this.props.settings} />
     </div>);
   }
 

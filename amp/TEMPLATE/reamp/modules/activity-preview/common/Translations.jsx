@@ -48,6 +48,8 @@ export const initialTranslations = {
         'months': 'Months',
         'years': 'Years',
         'computation': 'Computation',
+        'yes':'yes',
+        'no':'No',
         'automatic_validation' : 'The activity is awaiting approval and will be automatically approved within {0} days.',
         'awaiting_validation' : 'The activity is awaiting approval.',
         'cannot_be_validated' : 'This activity cannot be validated because there is no Workspace Manager.',

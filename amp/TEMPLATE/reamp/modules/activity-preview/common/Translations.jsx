@@ -54,5 +54,6 @@ export const initialTranslations = {
         'not_latest_version' : 'Requested activity version was not the latest version.',
         'click_latest_version' : 'Click here to show the latest version',
         'delivery_rate': 'Delivery Rate',
-        'undisbursed_balance': 'Udisbursed Balance'
+        'undisbursed_balance': 'Udisbursed Balance',
+        'draft_activity': 'This is a draft activity'
 };

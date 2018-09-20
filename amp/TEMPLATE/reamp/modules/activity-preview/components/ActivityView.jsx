@@ -60,13 +60,13 @@ export default class ActivityView extends Component {
                 <div className="l_divright">
                     {this._getExportOptions(activity, translations, settings)}
                 </div>
-                <div className="l_divright">
-                    {this._getEditOptions(activity, translations, activityInfo)}
-                </div>
                 <div className="preview_header">
                     <span className="preview_title">
-                        {activity[AC.PROJECT_TITLE].value}
+                        {activity[AC.PROJECT_TITLE].value} {this._getEditOptions(activity, translations, activityInfo)}
                     </span>
+                    <div>
+                        {this._checkDraft(activity, translations)}
+                    </div>
                     <div>
                         {this._getValidations(translations, activityInfo)}
                     </div>
@@ -151,10 +151,19 @@ export default class ActivityView extends Component {
     return ret;
     }
 
+    _checkDraft(activity, translations) {
+        if (activity[AC.IS_DRAFT]) {
+            return (<Alert bsStyle="danger">
+                <strong><li>{translations['draft_activity']}</li></strong>
+            </Alert>);
+        }
+    }
+
     _getValidations(translations, activityInfo) {
         let msg = '';
         let lastVersionMsg;
         let addLink = false;
+
         switch (activityInfo[AC.INFO_VALIDATION_STATUS]) {
             case AC.AUTOMATIC_VALIDATION:
               msg = translations['automatic_validation'];
@@ -169,7 +178,7 @@ export default class ActivityView extends Component {
               }
               msg = translations['cannot_be_validated'];
               break;
-          }
+        }
 
         let alertMsg = msg.length < 1 ? '' : 
         (
@@ -188,7 +197,7 @@ export default class ActivityView extends Component {
         let ret = (
             <div>{alertMsg}</div>
         );
-    return ret;
+        return ret;
     }
 
     _getExportOptions(activity, translations, settings) {
@@ -219,12 +228,12 @@ export default class ActivityView extends Component {
         let msg = activityInfo && activityInfo[AC.INFO_VALIDATE] ? translations['amp.activity-preview:validate'] : translations['amp.activity-preview:edit'];
         let edit = activityInfo && !activityInfo[AC.INFO_EDIT] ? '' : 
             (
-                <Button href={'/wicket/onepager/activity/' + activity[AC.INTERNAL_ID].value} 
-                    bsStyle="primary" bsSize="small">{msg}
-                </Button>
+                <a href={'/wicket/onepager/activity/' + activity[AC.INTERNAL_ID].value} title={msg}>
+                    <img src='/TEMPLATE/reamp/modules/activity-preview/styles/images/edit.svg'/>
+                </a>
             );
         let ret = (
-            <div>{edit}</div>
+            <div className='preview_icons'>{edit}</div>
         );
         return ret;
     }

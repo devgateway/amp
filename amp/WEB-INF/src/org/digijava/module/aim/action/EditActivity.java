@@ -214,7 +214,8 @@ public class EditActivity extends Action {
     // TODO also we need still to be able to call the old preview for testing purposes AMP-28330
 
 
-    if (request.getParameter("callOldActivityPreview") == null){
+    if (request.getParameter("callOldActivityPreview") == null
+            && request.getParameter("exportActivityToWord") == null) {
        callActivityPreview(request,response, activityId);
     }
 
@@ -1655,10 +1656,15 @@ public class EditActivity extends Action {
     }
 
     if ("true".equals(request.getParameter("popupView"))) {
-        return mapping.findForward("popupPreview");
+            return mapping.findForward("popupPreview");
     }
-
-    return mapping.findForward("forward");
+    //TODO the word export will be refactored since it relies on the activity
+      // be loaded by the preview. Its outside of the scope of this iteration
+      // to do such refactoring. AMP-28330
+    if (request.getParameter("exportActivityToWord") != null) {
+        response.sendRedirect("/aim/exportActToWord.do?activityid=" + activityId);
+    }
+      return mapping.findForward("forward");
   }
 
     private void callActivityPreview(HttpServletRequest request, HttpServletResponse response, Long ampActivityId) {

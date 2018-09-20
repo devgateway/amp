@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import FundingSummary from './sections/FundingSummary';
+import { EFFECTIVE_CURRENCY } from '../utils/ActivityConstants';
 import AdditionalInfo from './sections/AdditionalInfo';
 require('../styles/ActivityView.css');
 
@@ -19,6 +20,7 @@ export default class SummaryGroup extends Component {
       settings : this.props.params.settings,
       activityInfo : this.props.params.activityInfo
     }
+    const currency = this.props.params.settings[EFFECTIVE_CURRENCY].code;
     const styles = {
       fieldNameClass : 'summary_field_name',
       fieldValueClass : 'summary_field_value',
@@ -27,9 +29,9 @@ export default class SummaryGroup extends Component {
     }
     return (
     <div className={'summary_container'}>
-      <FundingSummary params={params} styles={styles} />
+      <FundingSummary params={params} styles={styles} titleExtra = {` (${currency})`} />
       
-      <AdditionalInfo params={params} styles={styles} />
+      <AdditionalInfo params={params} styles={styles}  />
       
     </div>);
   }

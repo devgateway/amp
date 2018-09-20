@@ -66,7 +66,8 @@ export default class DateUtils {
   }
 
   static durationImproved(from, to, settings, meassure = 'months') {
-    return moment(to, settings[AC.DATE_FORMAT].toUpperCase()).diff(from, meassure);
+    return moment(to, settings[AC.DATE_FORMAT].toUpperCase())
+            .diff(moment(from, settings[AC.DATE_FORMAT].toUpperCase()), meassure);
   }
 
   /**

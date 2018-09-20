@@ -54,7 +54,6 @@ class FundingSummary extends Component {
       { trn: translations['delivery_rate'], total: false }];
     const fundingInfoSummary = [];
     measuresOrder.forEach(measure => {
-      debugger;
       let value = measuresTotals[measure.trn];
       if (value !== undefined) {
         let title = measure.trn;

@@ -194,7 +194,8 @@ function _addRealValueHelper(fieldParam, path, values) {
     if (fieldParam.value && Array.isArray(fieldParam.value)) {
         for(var field in fieldParam.value){
             if (path.length > 0) {
-                _addRealValueHelper(fieldParam.value[field][pathName], path, values)
+                var newPath = path.slice();
+                _addRealValueHelper(fieldParam.value[field][pathName], newPath, values);                
             } else {        
                 let valueId = fieldParam.value[field][pathName];
                 let valueObj = values.find(c => c.id === valueId.value);

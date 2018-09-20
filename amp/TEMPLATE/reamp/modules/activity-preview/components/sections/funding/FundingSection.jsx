@@ -71,7 +71,7 @@ class FundingSection extends Component {
     if (activity.fundings && activity.fundings.value && activity.fundings.value.length) {
       activity.fundings.value.forEach((funding) => {
         const item = (<FundingOrganizationSection
-          funding={funding} key={funding[AC.FUNDING_DONOR_ORG_ID].value}
+          funding={funding} key={funding[AC.FUNDING_ID].value}
           counter={counter} comparator={this._compareFundings}
           buildSimpleField={this.props.buildSimpleField} 
           translations={translations} settings={settings}/>);

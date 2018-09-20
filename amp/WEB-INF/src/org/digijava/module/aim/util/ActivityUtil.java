@@ -1216,30 +1216,32 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
   }
 
     public static ValidationStatus getValidationStatus(AmpActivityVersion activity, TeamMember tm) {
-
-      AmpTeam currentTeam = null;
-        if (tm != null) {
-            currentTeam = TeamUtil.getAmpTeam(tm.getTeamId());
-        }
-        boolean hasTeamLeadOrValidator = false;
-        if (currentTeam != null) {
-            List<AmpTeamMember> valids = TeamMemberUtil.getTeamHeadAndApprovers(currentTeam.getAmpTeamId());
-            if (valids != null && valids.size() > 0) {
-                hasTeamLeadOrValidator = true;
+        ValidationStatus vs = ValidationStatus.UNKNOWN;
+        if (!activity.getDraft()) {
+            AmpTeam currentTeam = null;
+            if (tm != null) {
+                currentTeam = TeamUtil.getAmpTeam(tm.getTeamId());
             }
-        }
-        if (Constants.ACTIVITY_NEEDS_APPROVAL_STATUS.contains(activity.getApprovalStatus())) {
-            if (hasTeamLeadOrValidator) {
-                if (ActivityUtil.isAutomaticValidationEnabled()) {
-                    return ValidationStatus.AUTOMATIC_VALIDATION;
-                } else {
-                    return ValidationStatus.AWAITING_VALIDATION;
+            boolean hasTeamLeadOrValidator = false;
+            if (currentTeam != null) {
+                List<AmpTeamMember> valids = TeamMemberUtil.getTeamHeadAndApprovers(currentTeam.getAmpTeamId());
+                if (valids != null && valids.size() > 0) {
+                    hasTeamLeadOrValidator = true;
                 }
-            } else {
-                return ValidationStatus.CANNOT_BE_VALIDATED;
+            }
+            if (Constants.ACTIVITY_NEEDS_APPROVAL_STATUS.contains(activity.getApprovalStatus())) {
+                if (hasTeamLeadOrValidator) {
+                    if (ActivityUtil.isAutomaticValidationEnabled()) {
+                        return ValidationStatus.AUTOMATIC_VALIDATION;
+                    } else {
+                        return ValidationStatus.AWAITING_VALIDATION;
+                    }
+                } else {
+                    return ValidationStatus.CANNOT_BE_VALIDATED;
+                }
             }
         }
-        return ValidationStatus.UNKNOWN;
+        return vs;
     }
 
     /* functions to DELETE an activity by Admin end here.... */
@@ -2183,38 +2185,40 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
     public static boolean canValidateAcitivty(AmpActivityVersion activity,  TeamMember teamMember) {
 
         boolean canValidate = false;
-        AmpApplicationSettings appSettings = AmpARFilter.getEffectiveSettings();
-        String validationOption = appSettings != null ? appSettings.getValidation() : null;
+        if (!activity.getDraft()) {
+            AmpApplicationSettings appSettings = AmpARFilter.getEffectiveSettings();
+            String validationOption = appSettings != null ? appSettings.getValidation() : null;
 
 
-        Boolean crossteamvalidation =
-                (appSettings != null && appSettings.getTeam() != null)
-                        ? appSettings.getTeam().getCrossteamvalidation()
-                        : false;
+            Boolean crossteamvalidation =
+                    (appSettings != null && appSettings.getTeam() != null)
+                            ? appSettings.getTeam().getCrossteamvalidation()
+                            : false;
 
-        //Check if cross team validation is enable
-        Boolean crossteamcheck = false;
-        if (crossteamvalidation) {
-            crossteamcheck = true;
-        } else {
-            //check if the activity belongs to the team where the user is logged.
-            if (teamMember != null && teamMember.getTeamId() != null && activity.getTeam() != null
-                    && activity.getTeam().getAmpTeamId() != null) {
-                crossteamcheck = teamMember.getTeamId().equals(activity.getTeam().getAmpTeamId());
+            //Check if cross team validation is enable
+            Boolean crossteamcheck = false;
+            if (crossteamvalidation) {
+                crossteamcheck = true;
+            } else {
+                //check if the activity belongs to the team where the user is logged.
+                if (teamMember != null && teamMember.getTeamId() != null && activity.getTeam() != null
+                        && activity.getTeam().getAmpTeamId() != null) {
+                    crossteamcheck = teamMember.getTeamId().equals(activity.getTeam().getAmpTeamId());
+                }
             }
-        }
-        boolean teamLeadFlag = teamMember.getTeamHead() || teamMember.isApprover();
-        if ("alledits".equalsIgnoreCase(validationOption)) {
-            if (teamLeadFlag && activity.getTeam() != null && crossteamcheck
-                    && (Constants.STARTED_STATUS.equalsIgnoreCase(activity.getApprovalStatus())
-                    || Constants.EDITED_STATUS.equalsIgnoreCase(activity.getApprovalStatus()))) {
-                canValidate = true;
-            }
-        } else {
-            //it will display the validate label only if it is just started and was not approved not even once
-            if ("newonly".equalsIgnoreCase(validationOption) && crossteamcheck) {
-                if (teamLeadFlag && Constants.STARTED_STATUS.equalsIgnoreCase(activity.getApprovalStatus())) {
+            boolean teamLeadFlag = teamMember.getTeamHead() || teamMember.isApprover();
+            if ("alledits".equalsIgnoreCase(validationOption)) {
+                if (teamLeadFlag && activity.getTeam() != null && crossteamcheck
+                        && (Constants.STARTED_STATUS.equalsIgnoreCase(activity.getApprovalStatus())
+                        || Constants.EDITED_STATUS.equalsIgnoreCase(activity.getApprovalStatus()))) {
                     canValidate = true;
+                }
+            } else {
+                //it will display the validate label only if it is just started and was not approved not even once
+                if ("newonly".equalsIgnoreCase(validationOption) && crossteamcheck) {
+                    if (teamLeadFlag && Constants.STARTED_STATUS.equalsIgnoreCase(activity.getApprovalStatus())) {
+                        canValidate = true;
+                    }
                 }
             }
         }

@@ -71,11 +71,15 @@ public final class PreviewActivityService {
             }
 
             String currencyCode = currency.getCurrencyCode();
+            AmpFundingAmount ppcAmount = activity.getProjectCostByType(AmpFundingAmount.FundingType.PROPOSED);
+            AmpFundingAmount rpcAmount = activity.getProjectCostByType(AmpFundingAmount.FundingType.REVISED);
 
-            activityFunding.setPpcAmount(convertProjectCostAmount(
-                    activity.getProjectCostByType(AmpFundingAmount.FundingType.PROPOSED), currencyCode));
-            activityFunding.setRpcAmount(convertProjectCostAmount(
-                    activity.getProjectCostByType(AmpFundingAmount.FundingType.REVISED), currencyCode));
+            if (ppcAmount != null) {
+                activityFunding.setPpcAmount(convertProjectCostAmount(ppcAmount, currencyCode));
+            }
+            if (ppcAmount != null) {
+                activityFunding.setRpcAmount(convertProjectCostAmount(rpcAmount, currencyCode));
+            }
 
             activityFunding.setFundingInformation(getFundingInformation(activity, currencyCode));
 

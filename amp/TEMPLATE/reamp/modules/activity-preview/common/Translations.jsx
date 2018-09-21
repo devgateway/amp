@@ -63,5 +63,10 @@ export const initialTranslations = {
         'undisbursed_balance': 'Udisbursed Balance',
         'draft_activity': 'This is a draft activity',
         'subtotal':'Subtotal',
-        'total' : 'Total'
+        'total' : 'Total',
+        'primary_program' : 'Primary Program',
+        'secondary_program' : 'Secondary Program',
+        'national_plan' : 'National Plan',
+        'primary_sector' : 'Primary Sector',
+        'secondary_sector' : 'Secondary Sector'
 };

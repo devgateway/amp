@@ -19,7 +19,6 @@ export const ACTIVITY_SECTION_IDS =
     { key: 'AcInternalIds', hash: '#AcInternalIds', value: 'Agency Internal IDs', translationKey: 'amp.activity-preview:sectionInternalIds' },
     { key: 'AcPlanning', hash: '#AcPlanning', value: 'Planning', translationKey: 'Planning' },
     { key: 'AcLocation', hash: '#AcLocation', value: 'Location', translationKey: 'Location' },
-    { key: 'AcNationalPlan', hash: '#AcNationalPlan', value: 'National Plan', translationKey: 'NationalPlan' },
     { key: 'AcProgram', hash: '#AcProgram', value: 'Program', translationKey: 'Program' },
     { key: 'AcSector', hash: '#AcSector', value: 'Sectors', translationKey: 'SectorsLabel' },
     { key: 'AcFunding', hash: '#AcFunding', value: 'Funding', translationKey: 'Funding' },

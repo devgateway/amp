@@ -31,6 +31,10 @@ class RelatedOrganizations extends Component {
     if (eAge) {
       relatedOrganizations.push(this.props.buildSimpleField(eAge, AC.ORGANIZATION, settings, true, false, false, translations ['ExecutingAgency']));
     }
+    if (!dOrg && !rOrg && !eAge){
+      relatedOrganizations.push(<div key={'relatedOrgNodata'} 
+        className={'nodata'}>{translations['amp.activity-preview:noData']}</div>);
+    }
 
     return relatedOrganizations;
   }

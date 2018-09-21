@@ -4,6 +4,7 @@ import static java.util.stream.Collectors.groupingBy;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -112,7 +113,10 @@ public final class PreviewActivityService {
                     PreviewFundingDetail fundingDetail = new PreviewFundingDetail();
 
                     List<PreviewFundingTransaction> transactions = fdMap.get(cv).stream()
-                            .map(fd -> generateFundingTransaction(fd, currencyCode)).collect(Collectors.toList());
+                            .map(fd -> generateFundingTransaction(fd, currencyCode))
+                            .collect(Collectors.toList());
+
+                    transactions.sort(Comparator.comparing(PreviewFundingTransaction::getReportingDate));
 
                     fundingDetail.setTransactionType(transactionType.longValue());
                     fundingDetail.setAdjustmentType(cv.getId());
@@ -233,6 +237,7 @@ public final class PreviewActivityService {
         transaction.setTransactionId(fd.getDbId());
         transaction.setTransactionAmount(convertedAmount);
         transaction.setTransactionDate(InterchangeUtils.formatISO8601Date(fd.getTransactionDate()));
+        transaction.setReportingDate(InterchangeUtils.formatISO8601Date(fd.getReportingDate()));
 
         return transaction;
     }

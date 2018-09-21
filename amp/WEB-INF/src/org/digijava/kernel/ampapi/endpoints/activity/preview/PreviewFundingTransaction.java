@@ -19,6 +19,9 @@ public class PreviewFundingTransaction {
     
     @JsonProperty("transaction_date")
     private String transactionDate;
+
+    @JsonProperty("reporting_date")
+    private String reportingDate;
     
     public Long getTransactionId() {
         return transactionId;
@@ -43,5 +46,12 @@ public class PreviewFundingTransaction {
     public void setTransactionDate(String transactionDate) {
         this.transactionDate = transactionDate;
     }
-    
+
+    public String getReportingDate() {
+        return reportingDate;
+    }
+
+    public void setReportingDate(String reportingDate) {
+        this.reportingDate = reportingDate;
+    }
 }

@@ -75,7 +75,7 @@ export default class MainGroup extends Component {
     return {
       inline : false,
       fieldNameClass : 'sector_title',
-      fieldValueClass : 'box_field_value',
+      fieldValueClass : 'list_field_value',
       titleClass : 'section_title_class', 
       groupClass : 'section_group_class'
     }

@@ -64,7 +64,8 @@ export function getSettingsAndActivity(activityId){
         return commonListsApi.getSettings().then(settings => {
             dispatch(getSettingsSuccess(settings));
             dispatch(getFundingInfoLoading());
-            commonListsApi.getFundingData(activityId, settings[AC.CURRENCY_CODE] ? settings[AC.CURRENCY_CODE] : 46).then(fundingInfo =>{
+            commonListsApi.getFundingData(activityId, settings[AC.EFFECTIVE_CURRENCY].id
+                ? settings[AC.EFFECTIVE_CURRENCY].id : 21).then(fundingInfo =>{
                 dispatch(getFundingInfoSuccess(fundingInfo));
                 dispatch(getHydratedActivityLoading());
                 let hydratedActivity = {};

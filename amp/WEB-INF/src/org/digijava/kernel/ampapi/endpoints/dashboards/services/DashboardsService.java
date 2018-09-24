@@ -337,7 +337,8 @@ public class DashboardsService {
      * @param config
      * @return
      */
-    public static JsonBean getFundingType(String adjtype, DashboardFormParameters config, String yearString, Integer id) {
+    public static JsonBean getFundingType(String adjtype, DashboardFormParameters config, String yearString,
+            Integer id) {
         String err = null;
         JsonBean retlist = new JsonBean();
         

@@ -24,6 +24,12 @@ public class VersionCheckResponse {
     @ApiModelProperty("Latest AMP Offline release")
     @JsonProperty("latest-amp-offline")
     private AmpOfflineRelease latestAmpOffline;
+    
+    @JsonProperty("server-id")
+    private String serverId;
+    
+    @JsonProperty("server-id-match")
+    private boolean serverIdMatch;
 
     public boolean isAmpOfflineCompatible() {
         return ampOfflineCompatible;
@@ -56,4 +62,21 @@ public class VersionCheckResponse {
     public void setLatestAmpOffline(AmpOfflineRelease latestAmpOffline) {
         this.latestAmpOffline = latestAmpOffline;
     }
+
+    public String getServerId() {
+        return serverId;
+    }
+
+    public void setServerId(String serverId) {
+        this.serverId = serverId;
+    }
+
+    public boolean isServerIdMatch() {
+        return serverIdMatch;
+    }
+
+    public void setServerIdMatch(boolean serverIdMatch) {
+        this.serverIdMatch = serverIdMatch;
+    }
+    
 }

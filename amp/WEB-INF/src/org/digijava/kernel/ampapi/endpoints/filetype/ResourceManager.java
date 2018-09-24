@@ -15,7 +15,9 @@ import javax.ws.rs.core.Response;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.dgfoundation.amp.error.AMPException;
+import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
+import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.admin.util.DbUtil;
 import org.digijava.module.aim.dbentity.AmpFileType;
@@ -33,6 +35,7 @@ public class ResourceManager {
     @GET
     @Path("file-types")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = false, id = "getAllFiletypes", authTypes = AuthRule.IN_ADMIN)
     @ApiOperation("Get all available file types supported by AMP.")
     public List<AmpFileType> getAllFiletypes() {
         FileTypeManager fileTypeManager = FileTypeManager.getInstance();
@@ -43,6 +46,7 @@ public class ResourceManager {
     @GET
     @Path("file-types/allowed")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = false, id = "getAllowedFileTypes", authTypes = AuthRule.AUTHENTICATED)
     @ApiOperation("Get allowed file types for file uploading in AMP.")
     public List<AmpFileType> getAllowedFileTypes() {
         FileTypeManager fileTypeManager = FileTypeManager.getInstance();
@@ -53,6 +57,7 @@ public class ResourceManager {
     @POST
     @Path("save-settings")
     @Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = false, id = "saveSettings", authTypes = AuthRule.IN_ADMIN)
     @ApiOperation(
             value = "Save the resource manager settings and file types supported by AMP for file uploading.",
             notes = "The parameters used for saving file types and settings:\n"

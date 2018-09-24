@@ -120,8 +120,7 @@ public class ActivityUtil {
                   put("description", InternationalizedModelDescription.getForProperty(AmpComponent.class, "description").getSQLFunctionCall("ac.amp_component_id"));
               }});      
       String queryString = "select " + rewrittenColumns + " from amp_components ac " +
-            "inner join amp_activity_components aac on (aac.amp_component_id = ac.amp_component_id) " +
-            "where (aac.amp_activity_id=:actId)";
+            "where (ac.amp_activity_id=:actId)";
       Query qry = session.createSQLQuery(queryString).addEntity(AmpComponent.class);
       qry.setParameter("actId", actId, LongType.INSTANCE);
       col = qry.list();
@@ -1125,11 +1124,6 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         //Delete the connection with Team.
         String deleteActivityTeam = "DELETE FROM amp_team_activities WHERE amp_activity_id = " + ampAct.getAmpActivityId();
         SQLUtils.executeQuery(con, deleteActivityTeam );
-
-        //Delete the connection with components.
-        String deleteActivityComponent = "DELETE FROM amp_activity_components WHERE amp_activity_id = " + ampAct.getAmpActivityId();
-        SQLUtils.executeQuery(con, deleteActivityComponent );
-
     }
     
     public static void removeMergeSources(Long ampActivityId,Session session){

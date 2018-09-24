@@ -26,7 +26,7 @@ public class AmpSchemaRegionalTests extends ReportingTestCase {
             "regional funding activity 3");
 
     private static final List<String> HIERARCHIES = Arrays.asList(
-            "Status", "Primary Sector", "Primary Sector Sub-Sector", "National Planning Objectives", "Regional Region"
+            "Status", "Primary Sector", "Primary Sector Sub-Sector", "National Planning Objectives Level 1", "Regional Region"
     );
 
     private static final String CORRECT_TOTALS =

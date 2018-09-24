@@ -10,17 +10,33 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import com.google.common.base.Strings;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.newreports.*;
+import org.dgfoundation.amp.newreports.AmountCell;
+import org.dgfoundation.amp.newreports.AmountsUnits;
+import org.dgfoundation.amp.newreports.AmpReportFilters;
+import org.dgfoundation.amp.newreports.DateCell;
+import org.dgfoundation.amp.newreports.GeneratedReport;
+import org.dgfoundation.amp.newreports.GroupingCriteria;
+import org.dgfoundation.amp.newreports.IdentifiedReportCell;
+import org.dgfoundation.amp.newreports.ReportArea;
+import org.dgfoundation.amp.newreports.ReportAreaImpl;
+import org.dgfoundation.amp.newreports.ReportColumn;
+import org.dgfoundation.amp.newreports.ReportMeasure;
+import org.dgfoundation.amp.newreports.ReportOutputColumn;
+import org.dgfoundation.amp.newreports.ReportSettingsImpl;
+import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
+import org.dgfoundation.amp.newreports.SortingInfo;
+import org.dgfoundation.amp.newreports.TextCell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.amp.OutputSettings;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
-import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
 import org.digijava.kernel.ampapi.endpoints.dashboards.DashboardFormParameters;
+import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
@@ -210,9 +226,8 @@ public class DashboardsService {
      * @param filter
      * @return
      */
-    public static JsonBean getAidPredictability(DashboardFormParameters filter, Integer year, String measure) {
+    public static JsonBean getAidPredictability(DashboardFormParameters filter, String measure, String yearString) {
         JsonBean retlist = new JsonBean();
-        String err = null;
         ReportSpecificationImpl spec = new ReportSpecificationImpl("GetAidPredictability", ArConstants.DONOR_TYPE);
         LinkedHashMap<String, Object> filters = null;
         if (filter != null) {
@@ -221,12 +236,18 @@ public class DashboardsService {
         if (filters == null) {
             filters = new LinkedHashMap<>();
         }
-        if (year != null && year > 0 && !Strings.isNullOrEmpty(measure)) {
+
+        SettingsUtils.applySettings(spec, filter.getSettings(), true);
+        int year = 0;
+        if (spec.getSettings() != null && StringUtils.isNotBlank(yearString)) {
+            year = spec.getSettings().getCalendar().parseYear(yearString);
+        }
+        if (year > 0 && !Strings.isNullOrEmpty(measure)) {
             spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE));
             spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_UPDATED_ON));
             if (measure.equalsIgnoreCase(MeasureConstants.PLANNED_DISBURSEMENTS)) {
                 spec.addMeasure(new ReportMeasure(MeasureConstants.PLANNED_DISBURSEMENTS));
-            }else {
+            } else {
                 spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
             }
             spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
@@ -248,16 +269,16 @@ public class DashboardsService {
             if (filterRules != null) {
                 spec.setFilters(filterRules);
             }
+            FilterUtils.updateAllDateFilters(spec);
         }
-        SettingsUtils.applySettings(spec, filter.getSettings(), true);
-        
+
         // AMP-18740: For dashboards we need to use the default number formatting and leave the rest of the settings
         // configurable (calendar, currency, etc).
         setCustomSettings(filter, spec);
         
         GeneratedReport report = EndpointUtils.runReport(spec, ReportAreaImpl.class, null);
 
-        if (year != null && year.intValue() > 0 && !Strings.isNullOrEmpty(measure)) {
+        if (year > 0 && !Strings.isNullOrEmpty(measure)) {
             return buildPaginateJsonBean(report, getOffset(filter));
         }
 
@@ -306,30 +327,37 @@ public class DashboardsService {
     }
 
 
-    public static JsonBean fundingtype(String adjtype, DashboardFormParameters filter) {
-        return fundingtype(adjtype, filter, null, null);
+    public static JsonBean getFundingType(String adjtype, DashboardFormParameters config) {
+        return getFundingType(adjtype, config, null, null);
     }
 
     /**
      * Get a list of funding types by year.
      * @param adjtype - Measure Actual commitment, Actual Disbursement, Etc.
-     * @param filter
+     * @param config
      * @return
      */
-    public static JsonBean fundingtype(String adjtype, DashboardFormParameters filter, Integer year, Integer id) {
+    public static JsonBean getFundingType(String adjtype, DashboardFormParameters config, String yearString, Integer id) {
         String err = null;
         JsonBean retlist = new JsonBean();
         
         ReportSpecificationImpl spec = new ReportSpecificationImpl("fundingtype", ArConstants.DONOR_TYPE);
         LinkedHashMap<String, Object> filters = null;
-        if (filter != null) {
-            filters = (LinkedHashMap<String, Object>) filter.getFilters();
+        if (config != null) {
+            filters = (LinkedHashMap<String, Object>) config.getFilters();
         }
         if (filters == null) {
             filters = new LinkedHashMap<>();
         }
-        List<Integer> filterIds = new ArrayList<Integer>();
-        if (year != null && year.intValue() > 0 && id != null && id.intValue() > 0) {
+
+        SettingsUtils.applyExtendedSettings(spec, config.getSettings());
+
+        int year = 0;
+        if (spec.getSettings() != null && StringUtils.isNotBlank(yearString)) {
+            year = spec.getSettings().getCalendar().parseYear(yearString);
+        }
+
+        if (year > 0 && id != null && id.intValue() > 0) {
             spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE));
             spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_UPDATED_ON));
             spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
@@ -342,32 +370,32 @@ public class DashboardsService {
             }
             spec.addSorter(new SortingInfo(new ReportColumn(ColumnConstants.ACTIVITY_UPDATED_ON), false));
         } else {
-
             spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
             spec.addColumn(new ReportColumn(ColumnConstants.TYPE_OF_ASSISTANCE));
             spec.getHierarchies().addAll(spec.getColumns());
             spec.setSummaryReport(true);
 
         }
-        // also configures funding type
-        SettingsUtils.applyExtendedSettings(spec, filter.getSettings());
-        
+
         spec.addSorter(new SortingInfo(spec.getMeasures().iterator().next(), false));
+
         if (filters != null) {
             AmpReportFilters filterRules = FilterUtils.getFilterRules(filters, null);
             if (filterRules != null) {
                 spec.setFilters(filterRules);
             }
+
+            FilterUtils.updateAllDateFilters(spec);
         }
         
         // AMP-18740: For dashboards we need to use the default number formatting and leave the rest of the settings
         // configurable (calendar, currency, etc).
-        setCustomSettings(filter, spec);
+        setCustomSettings(config, spec);
         
         GeneratedReport report = EndpointUtils.runReport(spec, ReportAreaImpl.class, null);
 
-        if (year != null && year.intValue() > 0 && id != null && id.intValue() > 0) {
-            return buildPaginateJsonBean(report, getOffset(filter));
+        if (year > 0 && id != null && id.intValue() > 0) {
+            return buildPaginateJsonBean(report, getOffset(config));
         } else {
             spec.addSorter(new SortingInfo(spec.getMeasures().iterator().next(), false));
             //Get total
@@ -482,11 +510,20 @@ public class DashboardsService {
                     IdentifiedReportCell title = (IdentifiedReportCell) n.getContents().get(titleCol);
                     AmountCell amount = (AmountCell) n.getContents().get(amountCol);
                     DateCell date = (DateCell) n.getContents().get(dateCol);
-                    row.set("name", title.displayedValue);
-                    row.set("amount", amount.value);
-                    row.set("date", date.displayedValue);
-                    row.set("formattedAmount", amount.displayedValue);
-                    row.set("id", title.entityId);
+
+                    if (title != null) {
+                        row.set("name", title.displayedValue);
+                        row.set("id", title.entityId);
+                    }
+
+                    if (amount != null) {
+                        row.set("amount", amount.value);
+                        row.set("formattedAmount", amount.displayedValue);
+                    }
+
+                    if (date != null) {
+                        row.set("date", date.displayedValue);
+                    }
                     values.add(row);
                 }
         );

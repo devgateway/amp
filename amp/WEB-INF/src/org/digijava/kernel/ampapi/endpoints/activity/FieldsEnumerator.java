@@ -18,6 +18,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.nireports.ImmutablePair;
+import org.digijava.kernel.ampapi.endpoints.common.CommonSettings;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.ampapi.endpoints.resource.AmpResource;
 import org.digijava.kernel.ampapi.filters.AmpOfflineModeHolder;
@@ -243,6 +244,10 @@ public class FieldsEnumerator {
     public List<APIField> getResourceFields() {
         return getAllAvailableFields(AmpResource.class);
     }
+    
+    public List<APIField> getCommonSettingsFields() {
+        return getAllAvailableFields(CommonSettings.class);
+    }
 
     List<APIField> getAllAvailableFields(Class<?> clazz) {
         return getAllAvailableFields(clazz, new FEContext());
@@ -372,6 +377,12 @@ public class FieldsEnumerator {
     public List<String> findResourceFieldPaths(Predicate<Field> fieldFilter) {
         FieldNameCollectingVisitor visitor = new FieldNameCollectingVisitor(fieldFilter);
         visit(AmpResource.class, visitor, new VisitorContext());
+        return visitor.fields;
+    }
+    
+    public List<String> findCommonFieldPaths(Predicate<Field> fieldFilter) {
+        FieldNameCollectingVisitor visitor = new FieldNameCollectingVisitor(fieldFilter);
+        visit(CommonSettings.class, visitor, new VisitorContext());
         return visitor.fields;
     }
 

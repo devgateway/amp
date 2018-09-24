@@ -47,7 +47,7 @@ public class ConfigEndpoints implements AmpEndpoint {
     private static final String INSERTED = "INSERTED";
     private static final String NOT_VALID = "NOT A VALID GLOBAL SETTING";
     private static final String NOT_VALID_VALUE = "NOT A VALID VALUE";
-    
+
     @POST
     @Path("/globalSettings")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -137,7 +137,7 @@ public class ConfigEndpoints implements AmpEndpoint {
         
         return resultList;
     }
-    
+
     @POST
     @Path("/getGlobalSettings")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -152,7 +152,7 @@ public class ConfigEndpoints implements AmpEndpoint {
                     + "settingValue|the current value of the settings\n"
                     + "possibleValues|the type of possible values. Available types are: t_Boolean, t_Integer, "
                     + "t_Double, t_year_default_start, t_year_default_end, t_static_range, t_static_year, "
-                    + "t_audit_trial_clenaup, t_components_sort, t_daily_currency_update_hour, t_secure_values, "
+                    + "t_audit_trial_clenaup, t_components_sort, t_daily_currency_update_hour, "
                     + "t_timeout_currency_update \n"
                     + "description|the description of the global settings\n"
                     + "section|the section where the global settings belongs to\n"

@@ -115,7 +115,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
     private List<PossibleValue> possibleValuesFor(String fieldName) {
         return PossibleValuesEnumerator.INSTANCE.getPossibleValuesForField(fieldName, AmpActivityFields.class, null);
     }
-    
+
     @GET
     @Path("fields")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -135,7 +135,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
     public List<APIField> getAvailableFieldsBasedOnDefaultFM() {
         return getAvailableFields();
     }
-    
+
     @GET
     @Path("/projects")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -180,7 +180,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
     public JsonBean getProject(@ApiParam("project id") @PathParam("projectId") Long projectId) {
         return InterchangeUtils.getActivity(projectId);
     }
-    
+
     @POST
     @Path("/projects/{projectId}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -208,7 +208,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
     @POST
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "addProject", ui = false)
+    @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_OPTIONAL}, id = "addProject", ui = false)
     @ApiOperation(
             value = "Imports an activity.",
             notes = "Original behaviour: is_draft field cannot be specified. If saving as draft is allowed then "
@@ -222,11 +222,11 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
     public JsonBean addProject(@ApiParam("activity configuration") JsonBean newJson) {
         return InterchangeUtils.importActivity(newJson, false, uri.getBaseUri() + "activity");
     }
-    
+
     @POST
     @Path("/{projectId}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "updateProject", ui = false)
+    @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_OPTIONAL}, id = "updateProject", ui = false)
     @ApiOperation(
             value = "Updates an activity",
             notes = "Original behaviour: is_draft field cannot be specified. If existing activity was submitted then "

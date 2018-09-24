@@ -43,7 +43,7 @@ public class SynchronizerEndpoint implements ErrorReportingEndpoint {
     private SyncService syncService = SpringUtil.getBean(SyncService.class);
 
     @POST
-    @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_ENABLED}, id = "computeSync", ui = false)
+    @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE}, id = "computeSync", ui = false)
     @ApiOperation(
             value = "Returns list of objects that were changed in specific period of time.",
             notes = "For initial sync caller must send only user ids. For subsequent syncs caller must send all "
@@ -60,7 +60,7 @@ public class SynchronizerEndpoint implements ErrorReportingEndpoint {
     @GET
     @Path("/workspaces")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = "", ui = false, authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_ENABLED})
+    @ApiMethod(id = "", ui = false, authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE})
     @ApiOperation(
             value = "Provides full workspaces definitions",
             notes = "Each workspace definition includes non-null/non-empty properties.")
@@ -75,7 +75,7 @@ public class SynchronizerEndpoint implements ErrorReportingEndpoint {
     @GET
     @Path("/translations")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = "", ui = false, authTypes = {AuthRule.AMP_OFFLINE_ENABLED})
+    @ApiMethod(id = "", ui = false, authTypes = {AuthRule.AMP_OFFLINE})
     @ApiOperation(
             value = "Returns translations that were changed since last sync.",
             notes = "For initial sync last-sync-time must be omitted. In this case it will return all translations. "
@@ -93,7 +93,7 @@ public class SynchronizerEndpoint implements ErrorReportingEndpoint {
     @GET
     @Path("/exchange-rates")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = "exchange-rates", ui = false, authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_ENABLED})
+    @ApiMethod(id = "exchange-rates", ui = false, authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE})
     @ApiOperation(
             value = "Returns exchange rates that changed since last sync.",
             notes = "For first time synchronization please use GET /rest/currency/exchange-rates.\n\n"

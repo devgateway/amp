@@ -2,6 +2,8 @@ package org.digijava.kernel.ampapi.endpoints.dashboards;
 
 import static javax.servlet.http.HttpServletResponse.SC_OK;
 
+import java.util.List;
+
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -10,7 +12,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.annotations.Api;
@@ -278,9 +279,9 @@ public class EndPoints implements ErrorReportingEndpoint {
                     + "}</pre>")
     public JsonBean getAidPredictabilityDataDetail(
             DashboardFormParameters filter,
-            @PathParam("year") Integer year,
+            @PathParam("year") String year,
             @PathParam("measure") String measure) {
-        return DashboardsService.getAidPredictability(filter, year, measure);
+        return DashboardsService.getAidPredictability(filter, measure, year);
     }
 
     @POST
@@ -351,7 +352,7 @@ public class EndPoints implements ErrorReportingEndpoint {
             @ApiParam("a JSON object with the configuration that is going to be "
                     + "used by the report to get the funding-type") DashboardFormParameters config,
             @DefaultValue("ac") @QueryParam("adjtype") String adjtype) {
-        return DashboardsService.fundingtype(adjtype,config);
+        return DashboardsService.getFundingType(adjtype, config);
     }
 
     @POST
@@ -393,9 +394,9 @@ public class EndPoints implements ErrorReportingEndpoint {
             @ApiParam("a JSON object with the configuration that is going to be used by "
                     + "the report to get the funding-type") DashboardFormParameters config,
             @DefaultValue("ac") @QueryParam("adjtype") String adjtype,
-            @PathParam("year") Integer year,
+            @PathParam("year") String year,
             @ApiParam("id of the funding type") @PathParam("id") Integer id) {
-        return DashboardsService.fundingtype(adjtype,config, year, id);
+        return DashboardsService.getFundingType(adjtype, config, year, id);
     }
 
     @POST
@@ -465,7 +466,7 @@ public class EndPoints implements ErrorReportingEndpoint {
         // and send the type of chart and category id as params. 
         return DashboardsService.getPeaceMarkerProjectsByCategory(config, id);
     }
-    
+
     @POST
     @Path("/heat-map/{type}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -541,7 +542,7 @@ public class EndPoints implements ErrorReportingEndpoint {
             @ApiParam("id of the y dimention of Heat Map matrix.") @PathParam("yId") Long yId) {
         return new HeatMapService(config, xId, yId).buildHeatMapDetail();
     }
-    
+
     @GET
     @Path("/heat-map/configs")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")

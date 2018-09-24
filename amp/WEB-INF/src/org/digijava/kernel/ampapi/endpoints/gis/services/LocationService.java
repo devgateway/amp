@@ -412,6 +412,8 @@ public class LocationService {
             logger.warn("Couldn't get parse latitude/longitude for structure with latitude: "
                     + structure.getLatitude() + " longitude: " + structure.getLongitude() + " and title: "
                     + structure.getTitle());
+            
+            return null;
         }
 
         return fgj;

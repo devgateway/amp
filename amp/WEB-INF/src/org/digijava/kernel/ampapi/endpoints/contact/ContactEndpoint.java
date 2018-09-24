@@ -93,7 +93,7 @@ public class ContactEndpoint implements ErrorReportingEndpoint {
 
     @PUT
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "createContact", ui = false)
+    @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_OPTIONAL}, id = "createContact", ui = false)
     @ApiOperation("Create new contact")
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "brief representation of contact"))
     public JsonBean createContact(JsonBean contact) {
@@ -105,7 +105,7 @@ public class ContactEndpoint implements ErrorReportingEndpoint {
     @POST
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "updateContact", ui = false)
+    @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_OPTIONAL}, id = "updateContact", ui = false)
     @ApiOperation("Update an existing contact")
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "brief representation of contact"))
     public JsonBean updateContact(@ApiParam("id of the existing contact") @PathParam("id") Long id, JsonBean contact) {

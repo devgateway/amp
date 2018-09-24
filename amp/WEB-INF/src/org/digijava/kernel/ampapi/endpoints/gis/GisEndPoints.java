@@ -155,7 +155,11 @@ public class GisEndPoints implements ErrorReportingEndpoint {
         
         for (; start <= end; start++) {
             AmpStructure structure = al.get(start);
-            f.features.add(LocationService.buildFeatureGeoJSON(structure));
+            FeatureGeoJSON fgj = LocationService.buildFeatureGeoJSON(structure);
+            if (fgj != null) {
+                f.features.add(fgj);
+            }
+
         }
         return f;
     }
@@ -497,7 +501,7 @@ public class GisEndPoints implements ErrorReportingEndpoint {
     @GET
     @Path("/map-tiles")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_ENABLED}, id = "mapTiles", ui = false)
+    @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE}, id = "mapTiles", ui = false)
     public Response getMapTiles() {
         return MapTilesService.getInstance().getArchivedMapTiles();
     }
@@ -510,7 +514,7 @@ public class GisEndPoints implements ErrorReportingEndpoint {
     @GET
     @Path("/locators")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_ENABLED}, id = "locators", ui = false)
+    @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE}, id = "locators", ui = false)
     public List<AmpLocator> getLocators() {
         return GisUtils.getLocators();
     }

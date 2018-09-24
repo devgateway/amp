@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.newreports.CalendarConverter;
 import org.dgfoundation.amp.nireports.TranslatedDate;
@@ -23,25 +24,27 @@ import org.digijava.module.aim.util.Identifiable;
 
 public class AmpFiscalCalendar implements Serializable, Identifiable, OrgProfileValue, CalendarConverter {
     
-    //IATI-check: to be ignored
-//  @Interchangeable(fieldTitle="Fiscal Calendar ID")
+    @JsonProperty("id")
     private Long ampFiscalCalId;
-//  @Interchangeable(fieldTitle="Start Month Number")
+    
+    @JsonProperty("start-month-num")
     private Integer startMonthNum;
-//  @Interchangeable(fieldTitle="Year Offset")
+    
+    @JsonProperty("year-offset")
     private Integer yearOffset;
-//  @Interchangeable(fieldTitle="Start Day Number")
+    
+    @JsonProperty("start-day-num")
     private Integer startDayNum;
-//  @Interchangeable(fieldTitle="Name")
+    
     private String name;
-//  @Interchangeable(fieldTitle="Description")
+    
     private String description;
-//  @Interchangeable(fieldTitle="Base Calendar")
+    
+    @JsonProperty("base-cal")
     private String baseCal;
-//  @Interchangeable(fieldTitle="Is Fiscal")
-    private Boolean isFiscal; // This indicates whether calendar is fiscal or
-
-    // not.
+    
+    @JsonProperty("is-fiscal")
+    private Boolean isFiscal; // This indicates whether calendar is fiscal or not.
     
     private Set<AmpCurrency> constantCurrencies;
 
@@ -125,6 +128,7 @@ public class AmpFiscalCalendar implements Serializable, Identifiable, OrgProfile
         description = string;
     }
 
+    @JsonIgnore
     public Long getIdentifier() {
         return this.getAmpFiscalCalId();
     }
@@ -158,7 +162,9 @@ public class AmpFiscalCalendar implements Serializable, Identifiable, OrgProfile
     public void setIsFiscal(Boolean isFiscal) {
         this.isFiscal = isFiscal;
     }
+    
     @Override
+    @JsonIgnore
     public List<ValueTranslatabePair> getValuesForOrgReport(){
         List<ValueTranslatabePair> values=new ArrayList<ValueTranslatabePair>();
         ValueTranslatabePair value=new ValueTranslatabePair(Arrays.asList(new String[]{getName()}),false);
@@ -167,6 +173,7 @@ public class AmpFiscalCalendar implements Serializable, Identifiable, OrgProfile
     }
 
     @Override
+    @JsonIgnore
     public String[] getSubHeaders() {
         // TODO Auto-generated method stub
         return null;
@@ -200,6 +207,7 @@ public class AmpFiscalCalendar implements Serializable, Identifiable, OrgProfile
     }
 
     @Override
+    @JsonIgnore
     public String getDefaultFiscalYearPrefix() {
         return this.getworker().getDefaultFiscalPrefix();
     }

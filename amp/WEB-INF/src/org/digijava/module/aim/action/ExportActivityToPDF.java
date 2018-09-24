@@ -3250,7 +3250,7 @@ public class ExportActivityToPDF extends Action {
                 }
 
                 if (myForm.getFunding().getDeliveryRate() != null) {
-                    addTotalsOutput(fundingTable, "Delivery Rate",
+                    addTotalsOutput(fundingTable, "Delivery rate",
                         myForm.getFunding().getDeliveryRate().replace("%", ""), "%");
                 }
 

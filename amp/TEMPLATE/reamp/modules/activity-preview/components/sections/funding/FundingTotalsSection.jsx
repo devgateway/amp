@@ -41,7 +41,7 @@ class FundingTotalsSection extends Component {
       { label: translations['undisbursed_balance'], value: undisbursed, format: true, isPercentage: false},
       { label: translations['delivery_rate'], value: rate, format: false, isPercentage: true }
     ];
-    content.push(<div><Label label={translations['total']} labelClass={'header_total'} key={'TotalFunding'} /></div>);
+    content.push(<div><Label label={translations['total']} labelClass={'header_total'} key={'TotalFundingLabel' + Math.random()} /></div>);
 
     for(var g in options) {
       content.push(<FundingTotalItem

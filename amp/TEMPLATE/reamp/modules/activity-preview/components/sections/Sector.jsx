@@ -9,8 +9,8 @@ import {
 } from '../../utils/ActivityConstants';
 
 
-const PrimarySectorList = PercentageList(PRIMARY_SECTORS, SECTOR, SECTOR_PERCENTAGE, 'Primary Sector');
-const SecondarySectorList = PercentageList(SECONDARY_SECTORS, SECTOR, SECTOR_PERCENTAGE, 'Secondary Sector');
+const PrimarySectorList = PercentageList(PRIMARY_SECTORS, SECTOR, SECTOR_PERCENTAGE, 'primary_sector');
+const SecondarySectorList = PercentageList(SECONDARY_SECTORS, SECTOR, SECTOR_PERCENTAGE, 'secondary_sector');
 
 
 /**

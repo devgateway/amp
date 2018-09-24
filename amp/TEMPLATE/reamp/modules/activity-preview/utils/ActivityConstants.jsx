@@ -19,10 +19,8 @@ export const ACTIVITY_SECTION_IDS =
     { key: 'AcInternalIds', hash: '#AcInternalIds', value: 'Agency Internal IDs', translationKey: 'amp.activity-preview:sectionInternalIds' },
     { key: 'AcPlanning', hash: '#AcPlanning', value: 'Planning', translationKey: 'Planning' },
     { key: 'AcLocation', hash: '#AcLocation', value: 'Location', translationKey: 'Location' },
-    { key: 'AcNationalPlan', hash: '#AcNationalPlan', value: 'National Plan', translationKey: 'NationalPlan' },
     { key: 'AcProgram', hash: '#AcProgram', value: 'Program', translationKey: 'Program' },
     { key: 'AcSector', hash: '#AcSector', value: 'Sectors', translationKey: 'SectorsLabel' },
-    { key: 'AcFundingSources', hash: '#AcFundingSources', value: 'Funding Sources', translationKey: 'FundingSources' },
     { key: 'AcFunding', hash: '#AcFunding', value: 'Funding', translationKey: 'Funding' },
     { key: 'AcRelatedOrganizations', hash: '#AcRelatedOrganizations', value: 'Related Organizations', translationKey: 'RelatedOrganizations' },
     { key: 'AcIssues', hash: '#AcIssues', value: 'Issues', translationKey: 'Issues' },
@@ -61,6 +59,7 @@ export const DELIVERY_RATE = 'Delivery Rate';
 export const FIXED_EXCHANGE_RATE = "fixed_exchange_rate";
 export const CURRENCY = "currency";
 export const TRANSACTION_DATE = "transaction_date";
+export const TRANSACTION_ID = "transaction_id";
 export const TRANSACTION_AMOUNT = "transaction_amount";
 
 //Activity Internal Ids
@@ -196,6 +195,7 @@ export const FUNDING_TOTALS = 'funding_totals';
 export const TRX_TYPE_PATH = 'fundings~funding_details~transaction_type';
 export const ADJ_TYPE_PATH = 'fundings~funding_details~adjustment_type';
 export const AMOUNT = 'amount';
+export const REORDER_TRX = 'reorder-funding-item';
 
 
 

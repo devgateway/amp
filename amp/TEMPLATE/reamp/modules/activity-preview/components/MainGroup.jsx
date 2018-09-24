@@ -45,13 +45,9 @@ export default class MainGroup extends Component {
 
       <Location params={params} tablify styles={this._getBoxStyles()} />
 
-      <NationalPlanObjective params={params} styles={styles} />
-
       <Program params={params} styles={this._getPercentageStyles()} />
 
       <Sector params={params} styles={this._getPercentageStyles()} />
-
-      <FundingSources params={params} styles={styles} />
 
       <FundingSection params={params} styles={this._getBoxStyles()}/>
 
@@ -79,7 +75,7 @@ export default class MainGroup extends Component {
     return {
       inline : false,
       fieldNameClass : 'sector_title',
-      fieldValueClass : '',
+      fieldValueClass : 'list_field_value',
       titleClass : 'section_title_class', 
       groupClass : 'section_group_class'
     }

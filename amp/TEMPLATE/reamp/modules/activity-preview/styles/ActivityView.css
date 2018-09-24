@@ -270,6 +270,12 @@
   padding-bottom: 10px;
 }
 
+.list_field_value {
+  font-weight: bold;
+  padding-bottom: 10px;
+  padding-left: 10px;
+}
+
 .box_field_value_tight {
   font-weight: bold;
 }
@@ -382,7 +388,7 @@
 
 .right_text {
   text-align: right;
-  width: 25%;
+  width: 30%;
   padding-right: 35px;
 }
 

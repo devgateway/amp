@@ -195,10 +195,19 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
     
     @Interchangeable(fieldTitle = "Capital Spending Percentage", importable = true)
     private Float capitalSpendingPercentage;
-    @Interchangeable(fieldTitle = "Recipient Organization", importable = true, pickIdOnly = true)
+    
+    @Interchangeable(fieldTitle = "Recipient Organization", importable = true, pickIdOnly = true,
+            fmPath = FMVisibility.ANY_FM + ActivityEPConstants.COMMITMENTS_RECIPIENT_ORG_FM_PATH
+                    + "|" + ActivityEPConstants.DISB_RECIPIENT_ORG_FM_PATH,
+            dependencies = {InterchangeDependencyResolver.COMMITMENTS_OR_DISBURSEMENTS_PRESENT_KEY})
     private AmpOrganisation recipientOrg;
-    @Interchangeable(fieldTitle = "Recipient Role", importable = true, pickIdOnly = true)
+    
+    @Interchangeable(fieldTitle = "Recipient Role", importable = true, pickIdOnly = true,
+            fmPath = FMVisibility.ANY_FM + ActivityEPConstants.COMMITMENTS_RECIPIENT_ROLE_FM_PATH 
+                    + "|" + ActivityEPConstants.DISB_RECIPIENT_ROLE_FM_PATH,
+            dependencies = {InterchangeDependencyResolver.COMMITMENTS_OR_DISBURSEMENTS_PRESENT_KEY})
     private AmpRole recipientRole;
+    
     @Interchangeable(fieldTitle = "Expenditure Category", importable = true)
     private String expCategory;
     @Interchangeable(fieldTitle = "Disbursement Order ID", importable = true)

@@ -1,23 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.ws.rs.core.PathSegment;
-
+import com.sun.jersey.spi.container.ContainerRequest;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -47,6 +30,7 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -56,15 +40,30 @@ import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.Identifiable;
+import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.aim.util.ValidationStatus;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.editor.exception.EditorException;
 import org.hibernate.FlushMode;
 import org.hibernate.Session;
-import org.hibernate.proxy.HibernateProxyHelper;
 
-import com.sun.jersey.spi.container.ContainerRequest;
+import javax.ws.rs.core.PathSegment;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Activity Import/Export Utility methods 
@@ -862,8 +861,19 @@ public class InterchangeUtils {
             if (activityInformation.getValidationStatus() == ValidationStatus.AUTOMATIC_VALIDATION) {
                 activityInformation.setDaysForAutomaticValidation(ActivityUtil.daysToValidation(project));
             }
+
+            AmpTeamMember ampCurrentMember = TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
+
+            boolean isCurrentWorkspaceManager = ampCurrentMember.getAmpMemberRole().getTeamHead();
+            boolean isPartOfMamanagetmentWorkspace = ampCurrentMember.getAmpTeam().getAccessType()
+                    .equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT);
+
+            activityInformation.setUpdateCurrentVersion(isCurrentWorkspaceManager && !isPartOfMamanagetmentWorkspace);
+            activityInformation.setVersionHistory(ActivityUtil.getActivityHistories(projectId));
         }
+
         activityInformation.setAmpActiviylastVersionId(ActivityVersionUtil.getLastVersionForVersion(projectId));
+
         return activityInformation;
     }
 

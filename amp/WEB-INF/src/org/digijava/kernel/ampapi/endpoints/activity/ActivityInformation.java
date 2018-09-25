@@ -3,7 +3,10 @@ package org.digijava.kernel.ampapi.endpoints.activity;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.helper.ActivityHistory;
 import org.digijava.module.aim.util.ValidationStatus;
+
+import java.util.List;
 
 public class ActivityInformation {
 
@@ -26,6 +29,12 @@ public class ActivityInformation {
 
     @JsonProperty(ActivityEPConstants.ACTIVITY_TEAM)
     private AmpTeam activityTeam;
+
+    @JsonProperty(ActivityEPConstants.VERSION_HISTORY)
+    private List<ActivityHistory> versionHistory;
+
+    @JsonProperty(ActivityEPConstants.UPDATE_CURRENT_VERSION)
+    private boolean updateCurrentVersion;
 
     public ActivityInformation(Long ampActivityId) {
         this.ampActivityId = ampActivityId;
@@ -85,5 +94,21 @@ public class ActivityInformation {
 
     public void setActivityTeam(AmpTeam activityTeam) {
         this.activityTeam = activityTeam;
+    }
+
+    public List<ActivityHistory> getVersionHistory() {
+        return versionHistory;
+    }
+
+    public void setVersionHistory(List<ActivityHistory> versionHistory) {
+        this.versionHistory = versionHistory;
+    }
+
+    public boolean isUpdateCurrentVersion() {
+        return updateCurrentVersion;
+    }
+
+    public void setUpdateCurrentVersion(boolean updateCurrentVersion) {
+        this.updateCurrentVersion = updateCurrentVersion;
     }
 }

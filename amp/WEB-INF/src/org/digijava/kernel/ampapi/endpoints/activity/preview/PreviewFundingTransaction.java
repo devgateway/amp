@@ -54,4 +54,5 @@ public class PreviewFundingTransaction {
     public void setReportingDate(String reportingDate) {
         this.reportingDate = reportingDate;
     }
+
 }

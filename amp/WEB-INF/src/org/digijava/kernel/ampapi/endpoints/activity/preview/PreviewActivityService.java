@@ -1,17 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.activity.preview;
 
-import static java.util.stream.Collectors.groupingBy;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.stream.Collectors;
-
-import javax.ws.rs.core.Response;
-
 import org.dgfoundation.amp.currencyconvertor.AmpCurrencyConvertor;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
@@ -28,6 +16,16 @@ import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.common.util.DateTimeUtil;
+
+import javax.ws.rs.core.Response;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.groupingBy;
 
 /**
  * 
@@ -114,9 +112,8 @@ public final class PreviewActivityService {
 
                     List<PreviewFundingTransaction> transactions = fdMap.get(cv).stream()
                             .map(fd -> generateFundingTransaction(fd, currencyCode))
+                            .sorted(PreviewFundingTransactionComparator.getTransactionComparator())
                             .collect(Collectors.toList());
-
-                    transactions.sort(Comparator.comparing(PreviewFundingTransaction::getReportingDate));
 
                     fundingDetail.setTransactionType(transactionType.longValue());
                     fundingDetail.setAdjustmentType(cv.getId());

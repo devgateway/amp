@@ -12,16 +12,24 @@ const Section = (ComposedSection, SectionTitle = null ,useEncapsulateHeader = tr
 
 
   buildSimpleField(activity, fieldPath, settings, showIfNotAvailable, noDataValue, inline = false, title) {
-    const field = activity[fieldPath];
-    //TODO
-    const title_ = title ? title : ActivityUtils.getTitle(field, settings);
-    let value_ = field.value;
-    if (field.field_type === 'date') {
-      value_ = DateUtils.createFormattedDate(value_, settings);
+    let title_ = title;
+    let value_ = '';
+    if (!Array.isArray(activity)) {
+      title_ = title ? title : ActivityUtils.getTitle(field, settings);
+      const field = activity[fieldPath];   
+      value_ = field.value;
+      if (field.field_type === 'date') {
+        value_ = DateUtils.createFormattedDate(value_, settings);
+      }
+      if (value_ === '' || value_ === null) {
+        value_ = noDataValue;
+      }
+    } else {
+      for (var id in activity) {
+        value_+= '<li>' + activity[id][fieldPath].value + '</li>';
+      }
     }
-    if (value_ === '' || value_ === null) {
-      value_ = noDataValue;
-    }
+
     if (showIfNotAvailable === true || (value_ !== undefined && value_ !== null)) {
       const useInnerHTML = AC.RICH_TEXT_FIELDS.has(fieldPath);
       return (<SimpleField key={title_ + fieldPath} 

@@ -15,14 +15,15 @@ class RelatedOrganizations extends Component {
   _buildRelatedOrganizations() {
     const { activity, translations, settings } = this.props.params;
     const dOrg = activity[AC.DONOR_ORGANIZATION] && activity[AC.DONOR_ORGANIZATION].value ? 
-      activity[AC.DONOR_ORGANIZATION].value[0] : undefined;
+      activity[AC.DONOR_ORGANIZATION].value : undefined;
     const rOrg = activity[AC.RESPONSIBLE_ORGANIZATION] && activity[AC.RESPONSIBLE_ORGANIZATION] ? 
-      activity[AC.RESPONSIBLE_ORGANIZATION].value[0] : undefined;
+      activity[AC.RESPONSIBLE_ORGANIZATION].value : undefined;
     const eAge = activity[AC.EXECUTING_AGENCY] && activity[AC.EXECUTING_AGENCY].value ? 
-      activity[AC.EXECUTING_AGENCY].value[0] : undefined;
+      activity[AC.EXECUTING_AGENCY].value : undefined;
 
     const relatedOrganizations = [];
     if (dOrg) {
+      for(var id in activity[AC.DONOR_ORGANIZATION].value)
       relatedOrganizations.push(this.props.buildSimpleField(dOrg, AC.ORGANIZATION, settings, true, false, false, translations ['DonorOrganization']));
     }
     if (rOrg) {

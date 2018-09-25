@@ -36,10 +36,12 @@ export const PROJECT_COMMENTS = 'project_comments';
 export const CRIS_NUMBER = 'cris_number';
 export const IS_DRAFT = 'is_draft';
 
+export const ORGANIZATION = "organization";
+
   /*export const RICH_TEXT_FIELDS = new Set([STATUS_REASON, OBJECTIVE, DESCRIPTION, PROJECT_COMMENTS,
     LESSONS_LEARNED, PROJECT_IMPACT, ACTIVITY_SUMMARY, CONDITIONALITIES, PROJECT_MANAGEMENT, RESULTS,
   ]);*/
-export const RICH_TEXT_FIELDS = new Set([STATUS_REASON, OBJECTIVE, DESCRIPTION, PROJECT_COMMENTS ]);
+export const RICH_TEXT_FIELDS = new Set([STATUS_REASON, OBJECTIVE, DESCRIPTION, PROJECT_COMMENTS, ORGANIZATION]);
 
 //Funding
 export const ACTUAL = 'Actual';
@@ -65,7 +67,6 @@ export const TRANSACTION_AMOUNT = "transaction_amount";
 //Activity Internal Ids
 export const ACTIVITY_INTERNAL_IDS = "activity_internal_ids";
 export const INTERNAL_ID = "internal_id";
-export const ORGANIZATION = "organization";
 
 //Planning
 export const PROPOSED_APPROVAL_DATE = "proposed_approval_date";

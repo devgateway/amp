@@ -18,10 +18,10 @@ class FundingTotalItem extends Component {
         
     val = this.props.isPercentage ? val + '%' : val + ' ' + this.props.settings[AC.EFFECTIVE_CURRENCY][AC.CURRENCY_CODE];
     return (<div>
-      <div className={'subtotal_footer_legend'}>
+      <div key={'Total_Item_Label_' + Math.random()} className={'subtotal_footer_legend'}>
         {`${this.props.label}:`}
       </div>
-      <div className={'subtotal_footer_number'}>
+      <div key={'Total_Item__Val' + Math.random()} className={'subtotal_footer_number'}>
         {`${val}`}
       </div>
     </div>);

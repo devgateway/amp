@@ -32,6 +32,7 @@ import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -2007,7 +2008,6 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 
     /** Get the user first name and last name  who modified (created) the activity.
      * @param actitivity
-     * @param modifiedByInfo
      * @param auditHistory
      * @return
      */
@@ -2032,7 +2032,6 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
     /** Get modified date
      * @param activity
      * @param auditHistory
-     * @param activityHistory
      */
     public static Date getModifiedByDate(AmpActivityVersion activity, ActivityHistory auditHistory) {
         if (activity.getUpdatedDate() != null) {
@@ -2040,7 +2039,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         } else if (activity.getModifiedDate() != null) {
             return activity.getModifiedDate();
         } else if (auditHistory != null) {
-            return FormatHelper.parseDate2(auditHistory.getModifiedDate());
+            return InterchangeUtils.parseISO8601Date(auditHistory.getModifiedDate());
         } else if (activity.getApprovalDate() != null) {
             return activity.getApprovalDate();
         } else if (activity.getCreatedDate() != null) {
@@ -2062,14 +2061,14 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         for(AmpAuditLogger aal : activityLogObjects) {
             if (StringUtils.isNotEmpty(aal.getEditorName())) {
                 logActivityHistory.setModifiedBy(aal.getEditorName());
-                logActivityHistory.setModifiedDate(FormatHelper.formatDate(aal.getLoggedDate()));
+                logActivityHistory.setModifiedDate(InterchangeUtils.formatISO8601Date(aal.getLoggedDate()));
                 return logActivityHistory;
             } else if (StringUtils.isNotEmpty(aal.getEditorEmail())) {
                 try {
                     User u = UserUtils.getUserByEmail(aal.getEditorEmail());
                     if (u != null) {
                         logActivityHistory.setModifiedBy(String.format("%s %s", u.getFirstNames(), u.getLastName()));
-                        logActivityHistory.setModifiedDate(FormatHelper.formatDate(aal.getLoggedDate()));
+                        logActivityHistory.setModifiedDate(InterchangeUtils.formatISO8601Date(aal.getLoggedDate()));
                         return logActivityHistory;
                     }
                 } catch (DgException e) {
@@ -2092,16 +2091,52 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         return new HashSet<String>(((List<String>) qry.list()));
     }
 
-    public static AmpActivityVersion getPreviousVersion(AmpActivityVersion activity) {
+    public static AmpActivityVersion getPreviousVersion(Long activityId) {
         Session session = PersistenceManager.getRequestDBSession();
+        AmpActivityVersion activity = (AmpActivityVersion) session.load(AmpActivityVersion.class, activityId);
         Query qry = session.createQuery(String.format("SELECT act FROM " + AmpActivityVersion.class.getName()
                 + " act WHERE approval_status in ( '%s','%s' )  and act.ampActivityGroup.ampActivityGroupId = ? "
                 + " and act.ampActivityId <> ? "
                 + " ORDER BY act.ampActivityId DESC", Constants.APPROVED_STATUS, Constants.STARTED_APPROVED_STATUS))
                 .setMaxResults(1);
         qry.setParameter(0, activity.getAmpActivityGroup().getAmpActivityGroupId());
-        qry.setParameter(1, activity.getAmpActivityId());
+        qry.setParameter(1, activityId);
         return (qry.list().size() > 0 ? (AmpActivityVersion) qry.list().get(0) : null);
+    }
+
+    public static List<ActivityHistory> getActivityHistories(Long activityId) {
+        Session session = PersistenceManager.getRequestDBSession();
+        AmpActivityVersion currentActivity = (AmpActivityVersion) session.load(AmpActivityVersion.class, activityId);
+
+        Query qry = session.createQuery("SELECT act FROM " + AmpActivityVersion.class.getName()
+                + " act WHERE act.ampActivityGroup.ampActivityGroupId = ? ORDER BY act.ampActivityId DESC")
+                .setMaxResults(ActivityVersionUtil.numberOfVersions());
+        qry.setParameter(0, currentActivity.getAmpActivityGroup().getAmpActivityGroupId());
+        List<AmpActivityVersion> activities = new ArrayList<AmpActivityVersion>(qry.list());
+
+        return getActivitiesHistory(activities);
+    }
+
+    private static List<ActivityHistory> getActivitiesHistory(List<AmpActivityVersion> activities) {
+        List<ActivityHistory> activitiesHistory = new ArrayList<>();
+
+        for (AmpActivityVersion activity : activities) {
+            ActivityHistory auditHistory = null;
+
+            if (activity.getModifiedBy() == null || (activity.getUpdatedDate() == null && activity.getModifiedDate() == null)) {
+                auditHistory = ActivityUtil.getModifiedByInfoFromAuditLogger(activity.getAmpActivityId());
+            }
+
+            ActivityHistory activityHistory = new ActivityHistory();
+            activityHistory.setActivityId(activity.getAmpActivityId());
+            activityHistory.setModifiedBy(ActivityUtil.getModifiedByUserName(activity, auditHistory));
+            activityHistory.setModifiedDate(InterchangeUtils.formatISO8601Date(
+                    ActivityUtil.getModifiedByDate(activity, auditHistory)));
+
+            activitiesHistory.add(activityHistory);
+        }
+
+        return activitiesHistory;
     }
 
     /**

@@ -40,11 +40,11 @@ const Section = (ComposedSection, SectionTitle = null ,useEncapsulateHeader = tr
     const sectionKey = SectionTitle + '-Section';
     const composedSection = (<ComposedSection key={sectionKey}
       {...this.props} {...this.state} {...this.context} buildSimpleField={this.buildSimpleField.bind(this)} />);
-
+    const sectionTitle = SectionTitle ? translations[SectionTitle] + (this.props.titleExtra ? this.props.titleExtra : '') : '';
     return (<div key={sectionKey} className={this.props.styles.groupClass} id={sID}>
       <div className={this.props.styles.titleClass}>
-        <span>{translations[SectionTitle] + (this.props.titleExtra? this.props.titleExtra:'')}
-        </span><span>{this.props.styles.titleDetails}</span>
+        <span>{sectionTitle}</span>
+        <span>{this.props.styles.titleDetails}</span>
       </div>
       <div className={this.props.styles.composedClass}>
         {composedSection}

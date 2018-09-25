@@ -21,6 +21,7 @@ class Planning extends Component {
     const inline = this.props.styles.inline;
     let content = [];
     const fieldPaths = [
+      AC.PROPOSED_PROJECT_LIFE,
       AC.PROPOSED_APPROVAL_DATE, 
       AC.PROPOSED_COMPLETION_DATE, 
       AC.ACTUAL_COMPLETION_DATE, 
@@ -28,8 +29,8 @@ class Planning extends Component {
       AC.PROPOSED_START_DATE,
       AC.ACTUAL_START_DATE];
 
-    const showIfNotAvailable = new Set([AC.PROPOSED_APPROVAL_DATE, AC.ACTUAL_APPROVAL_DATE, AC.PROPOSED_START_DATE,
-      AC.ACTUAL_START_DATE, AC.PROPOSED_COMPLETION_DATE, AC.ACTUAL_COMPLETION_DATE]);
+    const showIfNotAvailable = new Set([AC.PROPOSED_PROJECT_LIFE, AC.PROPOSED_APPROVAL_DATE, AC.ACTUAL_APPROVAL_DATE, 
+      AC.PROPOSED_START_DATE, AC.ACTUAL_START_DATE, AC.PROPOSED_COMPLETION_DATE, AC.ACTUAL_COMPLETION_DATE]);
 
     let startDate = DateUtils.createFormattedDate(activity[AC.ACTUAL_START_DATE].value, settings);
     let endDate = DateUtils.createFormattedDate(activity[AC.ACTUAL_COMPLETION_DATE].value, settings);

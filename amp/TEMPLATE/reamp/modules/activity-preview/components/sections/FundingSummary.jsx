@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Section from './Section';
 import * as AC from '../../utils/ActivityConstants';
 import NumberUtils from '../../utils/NumberUtils'
+import DateUtils from '../../utils/DateUtils'
 import SimpleField from '../fields/SimpleField';
 
 /**
@@ -19,7 +20,7 @@ class FundingSummary extends Component {
    * @private
    */
   _buildFundingInformation() {
-    const { activity, translations} = this.props.params;
+    const { activity, translations, settings } = this.props.params;
     if (!activity[AC.FUNDING_TOTALS]) {
       return (<div></div>);
     }
@@ -36,9 +37,17 @@ class FundingSummary extends Component {
     
     // Other measures
     let undisbursed = activity[AC.FUNDING_TOTALS].value[AC.UNDISBURSED_BALANCE];
-    measuresTotals[translations['undisbursed_balance']] = NumberUtils.rawNumberToFormattedString(undisbursed, false, this.props.params.settings);;
-    measuresTotals[translations['delivery_rate']] = activity[AC.FUNDING_TOTALS].value[AC.DELIVERY_RATE_PROP] + '%';
+    measuresTotals[translations['undisbursed_balance']] = NumberUtils.rawNumberToFormattedString(undisbursed, false, this.props.params.settings);
+    let rate = activity[AC.FUNDING_TOTALS].value[AC.DELIVERY_RATE_PROP] ? activity[AC.FUNDING_TOTALS].value[AC.DELIVERY_RATE_PROP] + '%' : '0%';
+    measuresTotals[translations['delivery_rate']] = rate;
     
+    let startDate = DateUtils.createFormattedDate(activity[AC.ACTUAL_START_DATE].value, settings);
+    let endDate = DateUtils.createFormattedDate(activity[AC.ACTUAL_COMPLETION_DATE].value, settings);
+    let duration = translations['amp.activity-preview:noData'];
+    if (startDate && endDate) {
+      duration = DateUtils.durationImproved(startDate, endDate, settings) + ' ' + translations['months'];
+    }
+    measuresTotals[translations['Duration']] = duration;
 
     return this._buildTotalFields(measuresTotals);
   }
@@ -50,19 +59,16 @@ class FundingSummary extends Component {
       { trn: AC.ACTUAL_COMMITMENTS, total: true },
       { trn: AC.PLANNED_DISBURSEMENTS, total: true },
       { trn: AC.ACTUAL_DISBURSEMENTS, total: true },
-      { trn: translations['undisbursed_balance'], total: true },
-      { trn: translations['delivery_rate'], total: false }];
+      { trn: translations['undisbursed_balance'], total: false },
+      { trn: translations['delivery_rate'], total: false },
+      { trn: translations['Duration'], total: false }];
     const fundingInfoSummary = [];
     measuresOrder.forEach(measure => {
       let value = measuresTotals[measure.trn];
       if (value !== undefined) {
         let title = measure.trn;
-        let translationKey = 'amp.activity-preview:';
         if(measure.total){
-            translationKey = translationKey + 'total';
-        }
-        if (measure.total) {
-          title =translations[ translationKey+ title.replace(/\s/g, '')];
+          title = translations[ 'amp.activity-preview:total' + title.replace(/\s/g, '')];
         }
         const key = `Summary-Total-${measure.trn}`;
         fundingInfoSummary.push(<SimpleField

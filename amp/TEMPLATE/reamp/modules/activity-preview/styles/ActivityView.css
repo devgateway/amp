@@ -552,11 +552,8 @@
   border-bottom: 1px solid #ebebeb;
   text-align: left;
   width: 50%;
-  padding: 5px;
-  padding-left: 20px;
-  padding-top: 8px;
-  padding-bottom: 6px;
   margin-bottom: 15px;
+  padding-left: 20px;
   font-size: 0.85em;
   color: #767676;
 }
@@ -570,7 +567,7 @@
   width: 50%;
   text-align: right;
   padding: 5px;
-  padding-right: 116px;
+  padding-right: 120px;
   margin-bottom: 15px;
 }
 

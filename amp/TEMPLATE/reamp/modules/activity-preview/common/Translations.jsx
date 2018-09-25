@@ -60,7 +60,7 @@ export const initialTranslations = {
         'not_latest_version' : 'Requested activity version was not the latest version.',
         'click_latest_version' : 'Click here to show the latest version',
         'delivery_rate': 'Delivery Rate',
-        'undisbursed_balance': 'Udisbursed Balance',
+        'undisbursed_balance': 'Undisbursed Balance',
         'draft_activity': 'This is a draft activity',
         'subtotal':'Subtotal',
         'total' : 'Total',
@@ -68,5 +68,11 @@ export const initialTranslations = {
         'secondary_program' : 'Secondary Program',
         'national_plan' : 'National Plan',
         'primary_sector' : 'Primary Sector',
-        'secondary_sector' : 'Secondary Sector'
+        'secondary_sector' : 'Secondary Sector',
+        'proposed_project_life' : 'Proposed Project Life',
+        'unit' : 'Unit',
+        'amount_units' : 'Amounts in Units',
+        'amount_thousands' : 'Proposed Project Life',
+        'amount_millions' : 'Proposed Project Life'
+        
 };

@@ -3,10 +3,8 @@ import Identification from './sections/Identification';
 import InternalIds from './sections/InternalIds';
 import Planning from './sections/Planning';
 import Location from './sections/Location'
-import NationalPlanObjective from './sections/NationalPlanObjective'
 import Program from './sections/Program'
 import Sector from './sections/Sector'
-import FundingSources from './sections/FundingSources'
 import FundingSection from './sections/funding/FundingSection'
 import RelatedOrganizations from './sections/RelatedOrganizations'
 import Issues from './sections/issues/Issues'

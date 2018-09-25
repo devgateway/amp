@@ -32,7 +32,7 @@ class FundingTotalsSection extends Component {
     const actualDisbursements = measuresTotals[AC.ACTUAL_DISBURSEMENTS];
     const plannedDisbursements = measuresTotals[AC.PLANNED_DISBURSEMENTS];
     const undisbursed = activity[AC.FUNDING_TOTALS].value[AC.UNDISBURSED_BALANCE];
-    const rate = activity[AC.FUNDING_TOTALS].value[AC.DELIVERY_RATE_PROP];
+    const rate = activity[AC.FUNDING_TOTALS].value[AC.DELIVERY_RATE_PROP] ? activity[AC.FUNDING_TOTALS].value[AC.DELIVERY_RATE_PROP] : 0;
     const options = [
       { label: translations['amp.activity-preview:totalActualCommitments'], value: actualCommitments, format: true, isPercentage: false },
       { label: translations['amp.activity-preview:totalPlannedCommitments'], value: plannedCommitments, format: true, isPercentage: false },

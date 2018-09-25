@@ -227,10 +227,11 @@ export default class ActivityView extends Component {
 
     _getEditOptions(activity, translations, activityInfo) {
         let msg = activityInfo && activityInfo[AC.INFO_VALIDATE] ? translations['amp.activity-preview:validate'] : translations['amp.activity-preview:edit'];
+        let icon = activityInfo && activityInfo[AC.INFO_VALIDATE] ? '/TEMPLATE/reamp/modules/activity-preview/styles/images/check.svg' : '/TEMPLATE/reamp/modules/activity-preview/styles/images/edit.svg';
         let edit = activityInfo && !activityInfo[AC.INFO_EDIT] ? '' : 
             (
                 <a href={'/wicket/onepager/activity/' + activity[AC.INTERNAL_ID].value} title={msg}>
-                    <img src='/TEMPLATE/reamp/modules/activity-preview/styles/images/edit.svg'/>
+                    <img src={icon}/>
                 </a>
             );
         let ret = (

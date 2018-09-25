@@ -1,29 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import static java.util.function.Function.identity;
-import static java.util.stream.Collectors.toMap;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Objects;
-import java.util.stream.Collectors;
-
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
-
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.digijava.kernel.ampapi.endpoints.activity.preview.PreviewActivityFunding;
 import org.digijava.kernel.ampapi.endpoints.activity.preview.PreviewActivityService;
@@ -38,6 +14,29 @@ import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.toMap;
 
 
 /**
@@ -285,7 +284,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
      *   ]
      * }
      * </pre>
-     * @param fields list of fully qualified activity fields with list of ids
+     * @param fieldIds list of fully qualified activity fields with list of ids
      * @return list of values grouped by id and field
      */
     @POST
@@ -311,7 +310,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
                         .collect(Collectors.toList());
                 
                 List<FieldIdValue> idValues = possibleValue.stream()
-                        .map(pv -> new FieldIdValue((Long) pv.getId(), pv.getValue(), 
+                        .map(pv -> new FieldIdValue((Long) pv.getId(), pv.getValue(), pv.getTranslatedValues(),
                                 getAncestorValues(allValuesMap, pv.getId(), new ArrayList<>())))
                         .collect(Collectors.toList());
                 

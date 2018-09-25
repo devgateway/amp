@@ -307,6 +307,9 @@ public class PossibleValuesEnumerator {
         if (clazz.isAssignableFrom(AmpContact.class)) {
             return getPossibleContacts();
         }
+        if (clazz.isAssignableFrom(AmpOrganisation.class)) {
+            return getPossibleValuesGenericCase(clazz, () -> possibleValuesDAO.getOrganisations());
+        }
         return getPossibleValuesGenericCase(clazz, () -> possibleValuesDAO.getGenericValues(clazz));
     }
 

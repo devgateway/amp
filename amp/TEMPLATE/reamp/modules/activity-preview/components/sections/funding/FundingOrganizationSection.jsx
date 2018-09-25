@@ -19,11 +19,9 @@ class FundingOrganizationSection extends Component {
     const columnsNumber = 2;
     const { buildSimpleField, funding, settings } = this.props;
     content.push(buildSimpleField(funding, AC.FUNDING_DONOR_ORG_ID, settings, true, null, false));
+    content.push(buildSimpleField(funding, AC.FUNDING_STATUS, settings, true, null, false));
     content.push(buildSimpleField(funding, AC.TYPE_OF_ASSISTANCE, settings, true, null, false));
     content.push(buildSimpleField(funding, AC.FINANCING_INSTRUMENT, settings, true, null, false));
-    content.push(buildSimpleField(funding, AC.FUNDING_STATUS, settings, true, null, false));
-    content.push(buildSimpleField(funding, AC.ACTUAL_START_DATE, settings, true, null, false));
-    content.push(buildSimpleField(funding, AC.ACTUAL_COMPLETION_DATE, settings, true, null, false));
     content.push(buildSimpleField(funding, AC.FINANCING_ID, settings, true, null, false));
     
     const tableContent = Tablify.addRows('fundingOrganizationSection', content, columnsNumber);

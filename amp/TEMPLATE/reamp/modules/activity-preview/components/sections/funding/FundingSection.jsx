@@ -106,7 +106,7 @@ class FundingSection extends Component {
 
     return (
     <div className={'container_funding'}>
-      <div>{this._getSources()}</div>
+      
       <div>{fundingList}</div>
       
       <div className={'clear'} />

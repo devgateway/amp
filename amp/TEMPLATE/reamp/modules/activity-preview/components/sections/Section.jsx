@@ -15,8 +15,8 @@ const Section = (ComposedSection, SectionTitle = null ,useEncapsulateHeader = tr
     let title_ = title;
     let value_ = '';
     if (!Array.isArray(activity)) {
-      title_ = title ? title : ActivityUtils.getTitle(field, settings);
       const field = activity[fieldPath];   
+      title_ = title ? title : ActivityUtils.getTitle(field, settings);
       value_ = field.value;
       if (field.field_type === 'date') {
         value_ = DateUtils.createFormattedDate(value_, settings);

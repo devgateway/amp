@@ -13,7 +13,7 @@ import Structures from './sections/Structures'
 require('../styles/ActivityView.css');
 
 /**
- * @author Daniel Oliva
+ *    
  */
 export default class MainGroup extends Component {
 

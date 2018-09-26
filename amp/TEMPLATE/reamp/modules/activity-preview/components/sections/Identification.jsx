@@ -3,7 +3,7 @@ import Section from './Section';
 import * as AC from '../../utils/ActivityConstants';
 
 /**
- * @author Daniel Oliva
+ *    
  */
 class Identification extends Component {
 

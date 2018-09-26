@@ -3,7 +3,7 @@ import * as AC from '../utils/ActivityConstants'
 
 
 /**
- * @author Daniel Oliva
+ *    
  */
 
 export function getSettingsLoading(){

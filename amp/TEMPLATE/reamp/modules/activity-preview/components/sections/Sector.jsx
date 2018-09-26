@@ -15,7 +15,7 @@ const SecondarySectorList = PercentageList(SECONDARY_SECTORS, SECTOR, SECTOR_PER
 
 /**
  * Activity Preview Sector section
- * @author Daniel Oliva
+ *    
  */
 class Sector extends Component {
   

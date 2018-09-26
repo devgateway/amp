@@ -4,7 +4,7 @@ import FundingTotalItem from './FundingTotalItem';
 import Label from '../../fields/Label';
 
 /**
- * @author Daniel Oliva
+ *    
  */
 class FundingTotalsSection extends Component {
 

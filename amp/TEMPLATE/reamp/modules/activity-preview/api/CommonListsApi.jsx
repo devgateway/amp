@@ -1,7 +1,7 @@
 import { postJson, delay, fetchJson } from 'amp/tools';
 
 /**
- * @author Daniel Oliva
+ *    
  */
 class CommonListsApi {
 

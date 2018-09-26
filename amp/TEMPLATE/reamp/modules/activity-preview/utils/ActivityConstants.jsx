@@ -1,5 +1,5 @@
 /**
- * @author Daniel Oliva
+ *    
  */
 
 export const DEFAULT_CURRENCY = 'XOF';

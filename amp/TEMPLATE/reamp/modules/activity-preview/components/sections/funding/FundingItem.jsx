@@ -4,7 +4,7 @@ import { createFormattedDate } from '../../../utils/DateUtils';
 import { rawNumberToFormattedString } from '../../../utils/NumberUtils';
 
 /**
- * @author Daniel Oliva
+ *    
  */
 class FundingItem extends Component {
 

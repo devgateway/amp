@@ -1,16 +1,3 @@
-.top_icons {
-  font-family: 'Arial', sans-serif;
-  font-size: 11px;
-  color: #405473;
-  cursor: pointer; 
-}
-
-.top_icons img{
-  padding: 5px;
-  height: 20px;
-  width: 20px;
-}
-
 .preview_container {
   font-family: 'Open Sans', sans-serif;
   font-weight: 400;
@@ -47,8 +34,17 @@
 }
 
 .preview_icons img {
-  height: 20px;
-  width: 20px;
+  height: 32px;
+  width: 32px;
+  padding: 5px;
+}
+
+.preview_icons a {
+  font-family: 'Arial', sans-serif;
+  font-size: 11px;
+  color: #405473;
+  cursor: pointer; 
+  padding-right: 5px;
 }
 
 .preview_icons object {

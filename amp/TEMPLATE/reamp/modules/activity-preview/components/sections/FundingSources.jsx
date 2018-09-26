@@ -5,7 +5,7 @@ import * as AC from '../../utils/ActivityConstants';
 
 /**
  * Total Number of Funding Sources section
- * @author Daniel Oliva
+ *    
  */
 export default class FundingSources extends Component {
 

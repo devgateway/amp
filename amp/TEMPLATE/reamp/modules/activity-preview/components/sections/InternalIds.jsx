@@ -5,7 +5,7 @@ import * as AC from '../../utils/ActivityConstants';
 require('../../styles/ActivityView.css');
 
 /**
- * @author Daniel Oliva
+ *    
  */
 const InternalIds = (isSeparateSection) => class extends Component {
   

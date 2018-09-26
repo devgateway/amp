@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 require('../../styles/ActivityView.css');
 
 /**
- * @author Daniel Oliva
+ *    
  */
 export default class SimpleField extends Component {
 

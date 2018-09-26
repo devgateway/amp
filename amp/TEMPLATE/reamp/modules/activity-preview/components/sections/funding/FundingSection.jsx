@@ -8,7 +8,7 @@ require('../../../styles/ActivityView.css');
 
 /**
  * Total Number of Fundings section
- * @author Daniel Oliva
+ *    
  */
 class FundingSection extends Component {
 

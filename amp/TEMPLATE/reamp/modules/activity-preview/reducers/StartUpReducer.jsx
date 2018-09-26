@@ -1,7 +1,7 @@
 import { STATE_TRANSLATIONS_LOADED } from '../actions/StartUpAction';
 
 /**
- * @author Daniel Oliva
+ *    
  */
 
  

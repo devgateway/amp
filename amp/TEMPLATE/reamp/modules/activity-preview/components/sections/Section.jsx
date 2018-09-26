@@ -6,7 +6,7 @@ import ActivityUtils from '../../utils/ActivityUtils';
 require('../../styles/ActivityView.css');
 
 /**
- * @author Daniel Oliva
+ *    
  */
 const Section = (ComposedSection, SectionTitle = null ,useEncapsulateHeader = true, sID) => class extends Component {
 

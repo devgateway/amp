@@ -1,5 +1,5 @@
 /**
- * @author Daniel Oliva
+ *    
  */
 
 export default class ActivityUtils {

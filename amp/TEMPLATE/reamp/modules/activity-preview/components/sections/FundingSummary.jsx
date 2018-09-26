@@ -6,7 +6,7 @@ import DateUtils from '../../utils/DateUtils'
 import SimpleField from '../fields/SimpleField';
 
 /**
- * @author Daniel Oliva
+ *    
  */
 class FundingSummary extends Component {
 

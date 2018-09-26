@@ -6,7 +6,7 @@ import Measure from './Measure';
 require('../../../styles/ActivityView.css');
 
 /**
- * @author Daniel Oliva
+ *    
  */
 class Issues extends Component {
 

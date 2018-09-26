@@ -7,7 +7,7 @@ import DateUtils from '../../utils/DateUtils';
 require('../../styles/ActivityView.css');
 
 /**
- * @author Daniel Oliva
+ *    
  */
 class Planning extends Component {
 

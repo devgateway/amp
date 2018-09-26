@@ -6,7 +6,7 @@ require('../styles/main.less');
 require('bootstrap');
 
 /**
- * @author Daniel Oliva
+ *    
  */
 export default class App extends Component {
     constructor( props, context ) {

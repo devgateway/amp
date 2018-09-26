@@ -6,7 +6,7 @@ require('../../styles/ActivityView.css');
 
 /**
  * Activity Preview Structures section
- * @author Daniel Oliva
+ *    
  */
 class Structures extends Component {
 

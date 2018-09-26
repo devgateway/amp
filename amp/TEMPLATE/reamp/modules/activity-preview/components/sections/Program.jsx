@@ -16,7 +16,7 @@ const SecondaryProgramList = PercentageList(SECONDARY_PROGRAMS, PROGRAM, PROGRAM
 
 /**
  * Activity Preview Program section
- * @author Daniel Oliva
+ *    
  */
 class Program extends Component {
 

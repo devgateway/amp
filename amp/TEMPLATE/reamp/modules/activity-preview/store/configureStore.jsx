@@ -5,7 +5,7 @@ import { routerMiddleware } from 'react-router-redux';
 import rootReducer from '../reducers';
 
 /**
- * @author Daniel Oliva
+ *    
  */
 
 const router = routerMiddleware(hashHistory);

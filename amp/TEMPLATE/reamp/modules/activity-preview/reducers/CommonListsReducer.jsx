@@ -1,5 +1,5 @@
 /**
- * @author Daniel Oliva
+ *    
  */
 
 const defaultState = {

@@ -4,7 +4,7 @@ import * as AC from '../../utils/ActivityConstants';
 
 
 /**
- * @author Daniel Oliva
+ *    
  */
 class RelatedOrganizations extends Component {
 

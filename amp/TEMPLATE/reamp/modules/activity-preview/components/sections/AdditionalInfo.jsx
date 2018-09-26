@@ -6,7 +6,7 @@ import * as AC from '../../utils/ActivityConstants';
 
 /**
  * Additional Info summary section
- * @author Daniel Oliva
+ *    
  */
 class AdditionalInfo extends Component {
 

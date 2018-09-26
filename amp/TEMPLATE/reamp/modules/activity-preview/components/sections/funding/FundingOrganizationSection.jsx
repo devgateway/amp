@@ -6,7 +6,7 @@ import FundingTotalItem from './FundingTotalItem';
 require('../../../styles/ActivityView.css');
 
 /**
- * @author Daniel Oliva
+ *    
  */
 class FundingOrganizationSection extends Component {
 

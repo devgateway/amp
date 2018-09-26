@@ -3,7 +3,7 @@ import { loadTranslations } from 'amp/modules/translate';
 import { initialTranslations } from '../common/Translations';
 
 /**
- * @author Daniel Oliva
+ *    
  */
 export const STATE_TRANSLATIONS_LOADED = 'STATE_TRANSLATIONS_LOADED';
 

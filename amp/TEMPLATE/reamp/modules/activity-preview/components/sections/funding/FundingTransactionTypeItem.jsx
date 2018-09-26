@@ -7,7 +7,7 @@ import Label from '../../fields/Label';
 require('../../../styles/ActivityView.css');
 
 /**
- * @author Daniel Oliva
+ *    
  */
 class FundingTransactionTypeItem extends Component {
 

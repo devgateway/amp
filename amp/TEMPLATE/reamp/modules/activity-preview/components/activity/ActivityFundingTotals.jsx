@@ -1,7 +1,7 @@
 import * as AC from '../../utils/ActivityConstants';
 
 /**
- * @author Daniel Oliva
+ *    
  */
 const dateFormat = 'YYYY-MM-DD';
 const currencyHour = '00:00';

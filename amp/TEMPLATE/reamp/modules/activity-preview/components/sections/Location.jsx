@@ -11,7 +11,7 @@ import {
 require('../../styles/ActivityView.css');
 
 /**
- * @author Daniel Oliva
+ *    
  */
 const LocationsList = PercentageList(LOCATIONS, LOCATION, LOCATION_PERCENTAGE);
 class Location extends Component {

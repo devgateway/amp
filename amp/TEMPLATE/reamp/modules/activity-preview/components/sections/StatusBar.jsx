@@ -4,7 +4,7 @@ import * as AC from '../../utils/ActivityConstants';
 import SimpleField from '../fields/SimpleField';
 
 /**
- * @author Daniel Oliva
+ *    
  */
 class StatusBar extends Component {
   constructor(props) {

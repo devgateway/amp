@@ -5,7 +5,7 @@ import AdditionalInfo from './sections/AdditionalInfo';
 require('../styles/ActivityView.css');
 
 /**
- * @author Daniel Oliva
+ *    
  */
 export default class SummaryGroup extends Component {
 

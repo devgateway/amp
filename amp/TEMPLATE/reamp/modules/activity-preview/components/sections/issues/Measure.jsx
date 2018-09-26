@@ -6,7 +6,7 @@ require('../../../styles/ActivityView.css');
 
 
 /**
- * @author Daniel Oliva
+ *    
  */
 export default class Measures extends Component {
  

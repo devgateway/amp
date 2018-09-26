@@ -4,7 +4,7 @@ import * as AC from '../../../utils/ActivityConstants';
 require('../../../styles/ActivityView.css');
 
 /**
- * @author Daniel Oliva
+ *    
  */
 class FundingTotalItem extends Component {
 

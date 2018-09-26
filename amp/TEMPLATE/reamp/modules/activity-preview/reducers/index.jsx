@@ -4,7 +4,7 @@ import startUp from "./StartUpReducer";
 import commonLists from "./CommonListsReducer"
 
 /**
- * @author Daniel Oliva
+ *    
  */
 
 const rootReducer = combineReducers({

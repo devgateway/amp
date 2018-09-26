@@ -8,13 +8,12 @@ import * as AC from '../utils/ActivityConstants';
 import StatusBar from './sections/StatusBar';
 import MainGroup from './MainGroup'
 import SummaryGroup from './SummaryGroup';
+import IconGroup from './IconGroup';
 require('../styles/ActivityView.css');
 
 /**
- * @author Daniel Oliva
+ *    
  */
-
-
 export default class ActivityView extends Component { 
     
     constructor( props, context ) {
@@ -58,11 +57,12 @@ export default class ActivityView extends Component {
                     {this._getLegends(translations, activityInfo)}
                 </div>
                 <div className="l_divright">
-                    {this._getExportOptions(activity, translations, settings)}
+                   <IconGroup activity={activity} translations={translations} 
+                   settings={settings} activityInfo={activityInfo} />
                 </div>
                 <div className="preview_header">
                     <span className="preview_title">
-                        {activity[AC.PROJECT_TITLE].value} {this._getEditOptions(activity, translations, activityInfo)}
+                        {activity[AC.PROJECT_TITLE].value}
                     </span>
                     <div>
                         {this._checkDraft(activity, translations)}
@@ -196,46 +196,6 @@ export default class ActivityView extends Component {
         );
         let ret = (
             <div>{alertMsg}</div>
-        );
-        return ret;
-    }
-
-    _getExportOptions(activity, translations, settings) {
-        let word = settings && settings[AC.HIDE_EXPORT] ? '' : 
-            (
-                <a href={'/aim/viewActivityPreview.do~activityId=' + activity[AC.INTERNAL_ID].value
-                +'~exportActivityToWord=true'} className="top_icons"
-                    title={translations['amp.activity-preview:exportWord']} target="_blank">
-                    <img src="/TEMPLATE/reamp/modules/activity-preview/styles/images/AMP_word.svg"/>{translations['amp.activity-preview:exportWord']}
-                </a>
-            );
-        let ret = (
-            <div>
-                <a href={'/aim/exportActToPDF.do?activityid='+ activity[AC.INTERNAL_ID].value} className="top_icons"
-                    title={translations['amp.activity-preview:exportPDF']} target="_blank">
-                    <img src="/TEMPLATE/reamp/modules/activity-preview/styles/images/AMP_pdf.svg"/>{translations['amp.activity-preview:exportPDF']}
-                </a>
-                {word}
-                <a href={'/showPrinterFriendlyPage.do?edit=true&activityid='+ activity[AC.INTERNAL_ID].value} className="top_icons" 
-                    title={translations['amp.activity-preview:print']} target="_blank">
-                    <img src="/TEMPLATE/reamp/modules/activity-preview/styles/images/AMP_print.svg"/>{translations['amp.activity-preview:print']}
-                </a>
-            </div>
-        );        
-        return ret;
-    }
-
-    _getEditOptions(activity, translations, activityInfo) {
-        let msg = activityInfo && activityInfo[AC.INFO_VALIDATE] ? translations['amp.activity-preview:validate'] : translations['amp.activity-preview:edit'];
-        let icon = activityInfo && activityInfo[AC.INFO_VALIDATE] ? '/TEMPLATE/reamp/modules/activity-preview/styles/images/check.svg' : '/TEMPLATE/reamp/modules/activity-preview/styles/images/edit.svg';
-        let edit = activityInfo && !activityInfo[AC.INFO_EDIT] ? '' : 
-            (
-                <a href={'/wicket/onepager/activity/' + activity[AC.INTERNAL_ID].value} title={msg}>
-                    <img src={icon}/>
-                </a>
-            );
-        let ret = (
-            <div className='preview_icons'>{edit}</div>
         );
         return ret;
     }

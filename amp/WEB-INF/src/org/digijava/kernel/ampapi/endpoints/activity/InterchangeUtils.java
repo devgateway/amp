@@ -614,7 +614,7 @@ public class InterchangeUtils {
      */
     public static boolean isEditableActivity(TeamMember teamMember, Long activityId) {
         // we reuse the same approach as the one done by Project List EP
-        return activityId != null && ProjectList.getEditableActivityIdsNoSession(teamMember).contains(activityId);
+        return activityId != null && ActivityUtil.getEditableActivityIdsNoSession(teamMember).contains(activityId);
     }
 
     /**

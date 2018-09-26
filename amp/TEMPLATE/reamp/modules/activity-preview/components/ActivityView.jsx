@@ -204,21 +204,21 @@ export default class ActivityView extends Component {
         let word = settings && settings[AC.HIDE_EXPORT] ? '' : 
             (
                 <a href={'/aim/viewActivityPreview.do~activityId=' + activity[AC.INTERNAL_ID].value
-                +'~exportActivityToWord=true'} className="l_sm"
+                +'~exportActivityToWord=true'} className="top_icons"
                     title={translations['amp.activity-preview:exportWord']} target="_blank">
-                    <img src="/TEMPLATE/ampTemplate/img_2/ico_word.gif"/>{translations['amp.activity-preview:exportWord']}
+                    <img src="/TEMPLATE/reamp/modules/activity-preview/styles/images/AMP_word.svg"/>{translations['amp.activity-preview:exportWord']}
                 </a>
             );
         let ret = (
             <div>
-                <a href={'/aim/exportActToPDF.do?activityid='+ activity[AC.INTERNAL_ID].value} className="l_sm"
+                <a href={'/aim/exportActToPDF.do?activityid='+ activity[AC.INTERNAL_ID].value} className="top_icons"
                     title={translations['amp.activity-preview:exportPDF']} target="_blank">
-                    <img src="/TEMPLATE/ampTemplate/img_2/ico_pdf.gif"/>{translations['amp.activity-preview:exportPDF']}
+                    <img src="/TEMPLATE/reamp/modules/activity-preview/styles/images/AMP_pdf.svg"/>{translations['amp.activity-preview:exportPDF']}
                 </a>
                 {word}
-                <a href={'/showPrinterFriendlyPage.do?edit=true&activityid='+ activity[AC.INTERNAL_ID].value} className="l_sm" 
+                <a href={'/showPrinterFriendlyPage.do?edit=true&activityid='+ activity[AC.INTERNAL_ID].value} className="top_icons" 
                     title={translations['amp.activity-preview:print']} target="_blank">
-                    <img src="/TEMPLATE/ampTemplate/img_2/ico_print.gif"/>{translations['amp.activity-preview:print']}
+                    <img src="/TEMPLATE/reamp/modules/activity-preview/styles/images/AMP_print.svg"/>{translations['amp.activity-preview:print']}
                 </a>
             </div>
         );        

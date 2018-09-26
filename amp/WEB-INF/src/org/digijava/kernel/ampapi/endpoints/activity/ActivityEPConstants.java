@@ -106,6 +106,8 @@ public class ActivityEPConstants {
     public static final String AF_ID_FM_PATH = "/Activity Form/Identification";
     public static final String DONOR_PROJECT_CODE_FM_PATH = AF_ID_FM_PATH + "/Donor Project Code";
     public static final String BUDGET_EXTRAS_PROJECT_CODE_FM_PATH = AF_ID_FM_PATH + "/Budget Extras/Project Code";
+
+    public static final String CONTACTS_PATH = "/Activity Form/Contacts";
     
     public static final String REGEX_PATTERN_EMAIL = 
             "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*((\\.[A-Za-z]{2,}){1}$)";

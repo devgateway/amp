@@ -71,7 +71,7 @@ export const initialTranslations = {
         'secondary_sector' : 'Secondary Sector',
         'unit' : 'Unit',
         'amount_units' : 'Amounts in Units',
-        'amount_thousands' : 'Proposed Project Life',
-        'amount_millions' : 'Proposed Project Life'
+        'amount_thousands' : 'Amounts in Thousands',
+        'amount_millions' : 'Amounts in Millions'
         
 };

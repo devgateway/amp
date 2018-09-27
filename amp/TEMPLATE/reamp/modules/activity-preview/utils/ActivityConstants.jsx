@@ -168,6 +168,8 @@ export const NUMBER_DIVIDER = 'number-divider';
 export const EFFECTIVE_CURRENCY = 'effective-currency';
 export const CURRENCY_CODE = 'code';
 export const CURRENCY_ID = 'id';
+export const LANGUAGE = 'language';
+export const TRANSLATED_VALUE = 'translated-value';
 
 //INFO
 export const INFO_EDIT = 'edit';

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Col, Grid, Row, Button, Alert } from 'react-bootstrap';
+import { Col, Grid, Row, Alert } from 'react-bootstrap';
 import { bindActionCreators } from 'redux';
 import Scrollspy from 'react-scrollspy';
 import * as commonListsActions from '../actions/CommonListsActions';

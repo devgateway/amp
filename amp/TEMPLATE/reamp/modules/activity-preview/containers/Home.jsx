@@ -3,7 +3,6 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as commonListsActions from '../actions/CommonListsActions';
 require('../styles/main.less');
-require('bootstrap');
 
 /**
  *    

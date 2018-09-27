@@ -1,13 +1,13 @@
 import React from 'react';
-import { render } from 'react-dom';
 import { Provider } from 'react-redux';
-import { Router, hashHistory, Route, IndexRoute } from 'react-router';
+import { Router, hashHistory, Route } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 import ReactDOM from "react-dom";
 import configureStore from './store/configureStore';
 import App from "./containers/App";
 import { startUp } from './actions/StartUpAction';
 import ActivityView from './components/ActivityView';
+
 
 export const store = configureStore();
 const history = syncHistoryWithStore(hashHistory, store);
@@ -42,4 +42,4 @@ ReactDOM.render(
 });
 
 
-new boilerplate({showLogin: false});
+new boilerplate({showLogin: false });

@@ -64,6 +64,7 @@ export function getSettingsAndActivity(activityId){
         return commonListsApi.getSettings().then(settings => {
             dispatch(getSettingsSuccess(settings));
             dispatch(getFundingInfoLoading());
+            const lang = settings[AC.LANGUAGE]
             commonListsApi.getFundingData(activityId, settings[AC.EFFECTIVE_CURRENCY].id
                 ? settings[AC.EFFECTIVE_CURRENCY].id : 21).then(fundingInfo =>{
                 dispatch(getFundingInfoSuccess(fundingInfo));
@@ -97,7 +98,7 @@ export function getSettingsAndActivity(activityId){
                         commonListsApi.getFields().then(fields => {
                             dispatch(getFieldsSuccess(fields));
                             _addLabelAndType(hydratedActivity, fields);
-                            _addRealValue(hydratedActivity).then(response => {;
+                            _addRealValue(hydratedActivity, lang).then(response => {;
                                 dispatch(getHydratedActivitySuccess(hydratedActivity));
                             }).catch(error => {
                                 throw(error);
@@ -165,16 +166,16 @@ function _addLabelAndType(hydratedActivity, fields) {
     }
 }
 
-function _addRealValue(hydratedActivity, parentName) {
+function _addRealValue(hydratedActivity, lang) {
     return new Promise((resolve, reject) => {
         let requestData = {};
-        _createRequestDataHelper(requestData, hydratedActivity, parentName);
+        _createRequestDataHelper(requestData, hydratedActivity);
         commonListsApi.fetchFieldsData(requestData).then(fields => {
             let keys = Object.keys(fields);
             for(var key in keys) {
                 let path = keys[key].split('~');
                 if(fields[keys[key]]) {
-                    _addRealValueHelper(hydratedActivity, path, fields[keys[key]])
+                    _addRealValueHelper(hydratedActivity, path, fields[keys[key]], lang)
                 }
             }
             if(hydratedActivity[AC.FUNDING_TOTALS] && hydratedActivity[AC.FUNDING_TOTALS].value && hydratedActivity[AC.FUNDING_TOTALS].value[AC.TOTALS].length > 0) {
@@ -190,7 +191,7 @@ function _addRealValue(hydratedActivity, parentName) {
     });
 }
 
-function _addRealValueHelper(fieldParam, path, values) {
+function _addRealValueHelper(fieldParam, path, values, lang) {
     let pathName = path.shift();
     if (fieldParam.value && Array.isArray(fieldParam.value)) {
         for(var field in fieldParam.value){
@@ -208,6 +209,9 @@ function _addRealValueHelper(fieldParam, path, values) {
                         }
                     } else {
                         valueId.value = valueObj.value;
+                        if (lang !== 'en' && valueObj && valueObj[AC.TRANSLATED_VALUE] && valueObj[AC.TRANSLATED_VALUE][lang]) {
+                            valueId.value = valueObj[AC.TRANSLATED_VALUE][lang];
+                        }
                     }                    
                 }
             }
@@ -219,6 +223,9 @@ function _addRealValueHelper(fieldParam, path, values) {
             let valueId = fieldParam[pathName];
             let valueObj = values.find(c => c.id === valueId.value);
             fieldParam[pathName].value = valueObj ? valueObj.value : valueId.value;
+            if (lang !== 'en' && valueObj && valueObj[AC.TRANSLATED_VALUE] && valueObj[AC.TRANSLATED_VALUE][lang]) {
+                fieldParam[pathName].value = valueObj[AC.TRANSLATED_VALUE][lang];
+            }
         }
     }
 }

@@ -17,7 +17,7 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
-import org.digijava.module.contentrepository.util.DocToOrgDAO;
+import org.digijava.module.contentrepository.util.DocumentOrganizationManager;
 
 /**
  * an instance of this class is constructed whenever it is needed to build a list of all the possible filtered-value-values (see filters.jsp for an example)
@@ -30,18 +30,8 @@ public class FilterValues {
     public List<KeyValue> possibleOrganisations;
     
     public FilterValues(HttpServletRequest request) {
-        
-        Collection<User> allUsers   = TeamMemberUtil.getAllTeamMemberUsers();
-        if (allUsers != null) {
-            possibleOwners      = new ArrayList<String>();
-            
-            for ( User u: allUsers ) {
-                if (!possibleOwners.contains( u.getEmail() ))
-                    possibleOwners.add( u.getEmail() );
-            }
-        }
-        Collections.sort(possibleOwners );
-        
+        possibleOwners = TeamMemberUtil.getAllTeamMemberUserMails();
+        Collections.sort(possibleOwners);
         Collection<AmpTeam> allTeams    = TeamUtil.getAllTeams();
         if ( allTeams != null ) {
             possibleTeams       = new ArrayList<KeyValue>();
@@ -50,8 +40,7 @@ public class FilterValues {
                 possibleTeams.add(kv);
             }
         }
-        
-        List<AmpOrganisation> allOrganisations = DocToOrgDAO.getAllUsedOrganisations();
+        List<AmpOrganisation> allOrganisations = DocumentOrganizationManager.getInstance().getAllUsedOrganisations();
         possibleOrganisations = new ArrayList<KeyValue>();
         if (allOrganisations != null)
         {
@@ -61,19 +50,15 @@ public class FilterValues {
             possibleOrganisations.addAll(orgs);
         }
         
-//      Site site = RequestUtils.getSite(request);
-//      String siteId = site.getId().toString();
-//      String locale = RequestUtils.getNavigationLanguage(request).getCode();
-        
         possibleFileTypes = new ArrayList<KeyValue>();
 
-        possibleFileTypes.add( new KeyValue("application/pdf", TranslatorWorker.translateText("PDF Document")));
-        possibleFileTypes.add( new KeyValue("application/msword",TranslatorWorker.translateText("Word Document")));
-        possibleFileTypes.add( new KeyValue("application/vnd.ms-excel",TranslatorWorker.translateText("Excel Spreadsheet")));
-        possibleFileTypes.add( new KeyValue("text/plain",TranslatorWorker.translateText("Text")));
-        possibleFileTypes.add( new KeyValue("application/zip",TranslatorWorker.translateText("Zip file")));
-        possibleFileTypes.add( new KeyValue("image/",TranslatorWorker.translateText("Images")));            
-        
+        possibleFileTypes.add(new KeyValue("application/pdf", TranslatorWorker.translateText("PDF Document")));
+        possibleFileTypes.add(new KeyValue("application/msword", TranslatorWorker.translateText("Word Document")));
+        possibleFileTypes.add(new KeyValue("application/vnd.ms-excel", 
+                TranslatorWorker.translateText("Excel Spreadsheet")));
+        possibleFileTypes.add(new KeyValue("text/plain", TranslatorWorker.translateText("Text")));
+        possibleFileTypes.add(new KeyValue("application/zip", TranslatorWorker.translateText("Zip file")));
+        possibleFileTypes.add(new KeyValue("image/", TranslatorWorker.translateText("Images")));  
     }
 
     public List<String> getPossibleOwners() {

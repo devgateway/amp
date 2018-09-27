@@ -28,10 +28,10 @@ import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.
 public class AmpFunding implements Serializable, Versionable, Cloneable {
     //IATI-check: not ignored!
     private static final long serialVersionUID = 1L;
-    
     @Interchangeable(fieldTitle = "Funding ID")
     private Long ampFundingId;
-    @Interchangeable(fieldTitle="Donor Organization ID", pickIdOnly=true, importable=true)
+    @Interchangeable(fieldTitle="Donor Organization ID", pickIdOnly = true, importable = true,
+            required = ActivityEPConstants.REQUIRED_ALWAYS)
     private AmpOrganisation ampDonorOrgId;
     @Interchangeable(fieldTitle="Activity ID", pickIdOnly = true, importable = false)
     private AmpActivityVersion ampActivityId;
@@ -132,7 +132,8 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
             InterchangeDependencyResolver.AGREEMENT_TITLE_PRESENT_KEY})
     private AmpAgreement agreement;
     
-    @Interchangeable(fieldTitle="Source Role",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Source Role", importable=true, pickIdOnly=true, required = ActivityEPConstants.REQUIRED_ALWAYS)
+    @Interchangeable(fieldTitle = "Source Role", importable = true, pickIdOnly = true,
+            required = ActivityEPConstants.REQUIRED_ALWAYS)
     private AmpRole sourceRole;
     @Interchangeable(fieldTitle="Funding Classification Date",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Classification Date", importable=true)
     private Date fundingClassificationDate;

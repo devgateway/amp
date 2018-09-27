@@ -433,6 +433,9 @@ public class SettingsUtils {
 
         addDateRangeSettingsForDashboardsAndGis(settings);
 
+        settings.set("public-version-history", FeaturesUtil.isVisibleFeature("Version History"));
+        settings.set("public-change-summary", FeaturesUtil.isVisibleField("Show Change Summary"));
+
         return settings;
     }
 

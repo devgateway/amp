@@ -41,8 +41,9 @@ class FundingSummary extends Component {
     let rate = activity[AC.FUNDING_TOTALS].value[AC.DELIVERY_RATE_PROP] ? activity[AC.FUNDING_TOTALS].value[AC.DELIVERY_RATE_PROP] + '%' : '0%';
     measuresTotals[translations['delivery_rate']] = rate;
     
+    let endDateHelper = activity[AC.ACTUAL_COMPLETION_DATE].value ? activity[AC.ACTUAL_COMPLETION_DATE].value : activity[AC.PROPOSED_COMPLETION_DATE].value;
     let startDate = DateUtils.createFormattedDate(activity[AC.ACTUAL_START_DATE].value, settings);
-    let endDate = DateUtils.createFormattedDate(activity[AC.ACTUAL_COMPLETION_DATE].value, settings);
+    let endDate = DateUtils.createFormattedDate(endDateHelper, settings);
     let duration = translations['amp.activity-preview:noData'];
     if (startDate && endDate) {
       duration = DateUtils.durationImproved(startDate, endDate, settings) + ' ' + translations['months'];

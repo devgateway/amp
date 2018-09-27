@@ -32,8 +32,9 @@ class Planning extends Component {
     const showIfNotAvailable = new Set([AC.PROPOSED_PROJECT_LIFE, AC.PROPOSED_APPROVAL_DATE, AC.ACTUAL_APPROVAL_DATE, 
       AC.PROPOSED_START_DATE, AC.ACTUAL_START_DATE, AC.PROPOSED_COMPLETION_DATE, AC.ACTUAL_COMPLETION_DATE]);
 
+    let endDateHelper = activity[AC.ACTUAL_COMPLETION_DATE].value ? activity[AC.ACTUAL_COMPLETION_DATE].value : activity[AC.PROPOSED_COMPLETION_DATE].value;
     let startDate = DateUtils.createFormattedDate(activity[AC.ACTUAL_START_DATE].value, settings);
-    let endDate = DateUtils.createFormattedDate(activity[AC.ACTUAL_COMPLETION_DATE].value, settings);
+    let endDate = DateUtils.createFormattedDate(endDateHelper, settings);
     let duration = translations['amp.activity-preview:noData'];
     if (startDate && endDate) {
       duration = DateUtils.durationImproved(startDate, endDate, settings) + ' ' + translations['months'];

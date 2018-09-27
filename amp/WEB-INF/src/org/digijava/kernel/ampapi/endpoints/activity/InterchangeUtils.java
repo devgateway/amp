@@ -870,6 +870,13 @@ public class InterchangeUtils {
 
             activityInformation.setUpdateCurrentVersion(isCurrentWorkspaceManager && !isPartOfMamanagetmentWorkspace);
             activityInformation.setVersionHistory(ActivityUtil.getActivityHistories(projectId));
+        } else {
+            // if not logged in but the show version history in public preview is on, then we should show
+            // version history information
+            if (FeaturesUtil.isVisibleFeature("Version History")) {
+                activityInformation.setVersionHistory(ActivityUtil.getActivityHistories(projectId));
+                activityInformation.setUpdateCurrentVersion(false);
+            }
         }
 
         activityInformation.setAmpActiviylastVersionId(ActivityVersionUtil.getLastVersionForVersion(projectId));

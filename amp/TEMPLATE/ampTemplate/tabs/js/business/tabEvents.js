@@ -79,7 +79,7 @@ define([ 'marionette', 'models/content', 'models/legend', 'views/dynamicContentV
 				});
 
 				app.TabsApp.settingsWidget.restoreFromSaved(firstContent.get('reportMetadata').get('settings').toJSON());			
-				app.TabsApp.numericFormatOptions = firstContent.get('reportMetadata').get('settings').models;
+				app.TabsApp.numericFormatOptions = firstContent.get('reportMetadata').get('settings').attributes;
 
 				// Render views.
 				var dynamicLayoutView = new DynamicContentView({

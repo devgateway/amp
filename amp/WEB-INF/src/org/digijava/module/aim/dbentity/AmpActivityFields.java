@@ -612,14 +612,14 @@ LoggerIdentifiable, Cloneable {
     @VersionableFieldSimple(fieldTitle = "Vote")
     protected String vote;
     
-    @Interchangeable(fieldTitle = "Sub Vote", importable = true, 
+    @Interchangeable(fieldTitle = "Sub Vote", label = "Sub-Vote", importable = true,
             fmPath = "/Activity Form/Identification/Budget Extras/Sub-Vote",
             required = ActivityEPConstants.REQUIRED_ND,
             dependencies={InterchangeDependencyResolver.ON_BUDGET_KEY})
     @VersionableFieldSimple(fieldTitle = "Sub Vote")
     protected String subVote;
     
-    @Interchangeable(fieldTitle = "Sub Program", importable = true, 
+    @Interchangeable(fieldTitle = "Sub Program", label = "Sub-Program", importable = true,
             fmPath = "/Activity Form/Identification/Budget Extras/Sub-Program",
             required = ActivityEPConstants.REQUIRED_ND,
             dependencies={InterchangeDependencyResolver.ON_BUDGET_KEY})

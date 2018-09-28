@@ -81,6 +81,10 @@ public class PossibleValue {
         return extraInfo;
     }
 
+    public Map<String, String> getTranslatedValues() {
+        return translatedValues;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

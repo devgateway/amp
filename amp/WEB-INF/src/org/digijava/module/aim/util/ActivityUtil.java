@@ -40,6 +40,7 @@ import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.admin.helper.AmpActivityFake;
+import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpAPIFiscalYear;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
@@ -2187,16 +2188,17 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
     }
 
     /**
-     * Get the activities ids for the current workspace
-     *
-     * @param session HttpSession
+     * Get list of editable activity ids for the team member.
+     * Useful for cases when you need to check list of editable activities for a team member that is not a principal.
+     * I.e. this team member is not authenticated right now.
      * @return List<Long> with the editable activity Ids
      */
-    public static List<Long> getEditableActivityIds(TeamMember tm) {
-        HttpSession session = TLSUtils.getRequest().getSession();
-        String query = WorkspaceFilter.getWorkspaceFilterQuery(session);
-
-        return getEditableActivityIds(tm, query);
+    public static List<Long> getEditableActivityIdsNoSession(TeamMember tm) {
+        AmpTeamMember ampTeamMember = TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
+        AmpARFilter ampARFilter = FilterUtil.buildFilter(ampTeamMember.getAmpTeam(), null);
+        ampARFilter.generateFilterQuery(TLSUtils.getRequest(), true);
+        String query = ampARFilter.getGeneratedFilterQuery();
+        return ActivityUtil.getEditableActivityIds(tm, query);
     }
 
     /**

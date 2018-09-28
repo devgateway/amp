@@ -208,10 +208,12 @@ public class CurrencyUtil {
             session = PersistenceManager.getRequestDBSession();
 
             if (active == CurrencyUtil.ORDER_BY_CURRENCY_CODE) {
-                qryStr = "select curr from " + AmpCurrency.class.getName() + " as curr left join fetch  curr.countryLocation dg where curr.virtual is false order by curr.currencyCode " + sortOrder;
+                qryStr = "select curr from " + AmpCurrency.class.getName() + " as curr left join fetch  "
+                        + "curr.countryLocation dg where curr.virtual is false order by curr.currencyCode " + sortOrder;
                 qry = session.createQuery(qryStr);
             } else if (active == CurrencyUtil.ORDER_BY_CURRENCY_NAME) {
-                qryStr = "select curr from " + AmpCurrency.class.getName() + " as curr left join fetch  curr.countryLocation dg where curr.virtual is false order by curr.currencyName " + sortOrder;
+                qryStr = "select curr from " + AmpCurrency.class.getName() + " as curr left join fetch  "
+                        + "curr.countryLocation dg where curr.virtual is false order by curr.currencyName " + sortOrder;
                 qry = session.createQuery(qryStr);
             } else if (active == CurrencyUtil.ORDER_BY_CURRENCY_COUNTRY_NAME) {
                 qryStr = "select curr from " + AmpCurrency.class.getName()
@@ -393,9 +395,9 @@ public class CurrencyUtil {
             logger.debug("currency rates size :" + currRates.size());
             while (itr.hasNext()) {
                 CurrencyRates cr = (CurrencyRates) itr.next();
-                qryStr = "select crate from " + AmpCurrencyRate.class.getName() +
-                        " crate where (crate.toCurrencyCode=:code) and (crate.fromCurrencyCode=:fromCurrencyCode) and " +
-                        "(crate.exchangeRateDate=:date)";
+                qryStr = "select crate from " + AmpCurrencyRate.class.getName()
+                        + " crate where (crate.toCurrencyCode=:code) and (crate.fromCurrencyCode=:fromCurrencyCode) "
+                        + "and (crate.exchangeRateDate=:date)";
                 qry = session.createQuery(qryStr);
                 qry.setParameter("code", cr.getCurrencyCode(), StringType.INSTANCE);
                 qry.setParameter("fromCurrencyCode", baseCurrencyCode, StringType.INSTANCE);
@@ -627,8 +629,9 @@ public class CurrencyUtil {
      */
     public static double getLatestExchangeRate(String currencyCode) throws AimException {
         String baseCurrCode = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
-        if (baseCurrCode == null)
+        if (baseCurrCode == null) {
             baseCurrCode = "USD";
+        }
 
         Session session = null;
         Query q = null;
@@ -683,13 +686,13 @@ public class CurrencyUtil {
     /*
      * For Deleting a Currency...
      */
-    public static void deleteCurrency(String Code) throws Exception {
+    public static void deleteCurrency(String code) throws Exception {
         /*try
         {
         */
         AmpCaching.getInstance().currencyCache.reset();
         AmpCurrency ampC = new AmpCurrency();
-        ampC = CurrencyUtil.getCurrencyByCode(Code);
+        ampC = CurrencyUtil.getCurrencyByCode(code);
         if (ampC != null) {
             DbUtil.delete(ampC);
         }
@@ -784,8 +787,9 @@ public class CurrencyUtil {
     }
 
     public static void deleteCurrencyRates(List<String> currencyCode) {
-        if (currencyCode.size() == 0)
+        if (currencyCode.size() == 0) {
             return;
+        }
         String codes = Util.toCSString(currencyCode);
         PersistenceManager.getSession().createSQLQuery(String.format("DELETE FROM amp_currency_rate r "
                 + " WHERE r.from_currency_code in (%s) OR r.to_currency_code in (%s)", codes, codes)).executeUpdate();

@@ -167,7 +167,7 @@ public class EditActivity extends Action {
     AmpTeam currentTeam = null;
     if(tm != null)
         currentTeam=TeamUtil.getAmpTeam(tm.getTeamId());
-    boolean isPreview=mapping.getPath().trim().endsWith("editingUserId");
+    boolean isPreview = mapping.getPath().trim().endsWith("editingUserId");
 
     String langCode = RequestUtils.getNavigationLanguage(request).getCode();
 
@@ -216,7 +216,7 @@ public class EditActivity extends Action {
 
     if (request.getParameter("callOldActivityPreview") == null
             && request.getParameter("exportActivityToWord") == null) {
-       callActivityPreview(request,response, activityId);
+       callActivityPreview(request, response, activityId);
     }
 
 

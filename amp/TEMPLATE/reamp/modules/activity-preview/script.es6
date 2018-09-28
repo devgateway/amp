@@ -27,7 +27,6 @@ function hashLinkScroll() {
 }
 
 startUp(store).then(() => {
-
 ReactDOM.render(
   
     <Provider store={store}>

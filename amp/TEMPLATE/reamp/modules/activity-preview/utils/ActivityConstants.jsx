@@ -15,18 +15,18 @@ export const SUB_PROGRAM = 'sub_program';
 export const PROJECT_CODE = 'project_code';
 export const ACTIVITY_SECTION_IDS =
   [
-    { key: 'AcIdentification', hash: '#AcIdentification', value: 'Identification', translationKey: 'amp.activity-preview:sectionIdentification'},
-    { key: 'AcInternalIds', hash: '#AcInternalIds', value: 'Agency Internal IDs', translationKey: 'amp.activity-preview:sectionInternalIds' },
-    { key: 'AcPlanning', hash: '#AcPlanning', value: 'Planning', translationKey: 'Planning' },
-    { key: 'AcLocation', hash: '#AcLocation', value: 'Location', translationKey: 'Location' },
-    { key: 'AcProgram', hash: '#AcProgram', value: 'Program', translationKey: 'Program' },
-    { key: 'AcSector', hash: '#AcSector', value: 'Sectors', translationKey: 'SectorsLabel' },
-    { key: 'AcFunding', hash: '#AcFunding', value: 'Funding', translationKey: 'Funding' },
-    { key: 'AcRelatedOrganizations', hash: '#AcRelatedOrganizations', value: 'Related Organizations', translationKey: 'RelatedOrganizations' },
-    { key: 'AcIssues', hash: '#AcIssues', value: 'Issues', translationKey: 'Issues' },
-    { key: 'AcContacts', hash: '#AcContacts', value: 'Contacts', translationKey: 'Contacts' },
-    { key: 'AcFundingSummary', hash: '#AcFundingSummary', value: 'Funding Summary', translationKey: 'FundingInformation' },
-    { key: 'AcAdditionalInfo', hash: '#AcAdditionalInfo', value: 'Additional Info', translationKey: 'AdditionalInfo' }
+    { key: 'AcIdentification', hash: 'AcIdentification', value: 'Identification', translationKey: 'amp.activity-preview:sectionIdentification'},
+    { key: 'AcInternalIds', hash: 'AcInternalIds', value: 'Agency Internal IDs', translationKey: 'amp.activity-preview:sectionInternalIds' },
+    { key: 'AcPlanning', hash: 'AcPlanning', value: 'Planning', translationKey: 'Planning' },
+    { key: 'AcLocation', hash: 'AcLocation', value: 'Location', translationKey: 'Location' },
+    { key: 'AcProgram', hash: 'AcProgram', value: 'Program', translationKey: 'Program' },
+    { key: 'AcSector', hash: 'AcSector', value: 'Sectors', translationKey: 'SectorsLabel' },
+    { key: 'AcFunding', hash: 'AcFunding', value: 'Funding', translationKey: 'Funding' },
+    { key: 'AcRelatedOrganizations', hash: 'AcRelatedOrganizations', value: 'Related Organizations', translationKey: 'RelatedOrganizations' },
+    { key: 'AcIssues', hash: 'AcIssues', value: 'Issues', translationKey: 'Issues' },
+    { key: 'AcContacts', hash: 'AcContacts', value: 'Contacts', translationKey: 'Contacts' },
+    { key: 'AcFundingSummary', hash: 'AcFundingSummary', value: 'Funding Summary', translationKey: 'FundingInformation' },
+    { key: 'AcAdditionalInfo', hash: 'AdditionalInfo', value: 'Additional Info', translationKey: 'AdditionalInfo' }
   ];
 
 export const STATUS_REASON = 'status_reason';

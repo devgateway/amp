@@ -35,7 +35,8 @@ export default class ActivityView extends Component {
         const settings = this.props.settings;
         const translations = this.props.translations;
         const sections = AC.ACTIVITY_SECTION_IDS.map((section) => {
-            return <li key={section.key}><a href={section.hash}> {translations[section.translationKey]} </a></li>;
+            return <li key={section.key}><a href={'javascript:openSection("'+section.hash+'")'}> 
+                {translations[section.translationKey]} </a></li>;
           });
         const sectionKeys = AC.ACTIVITY_SECTION_IDS.map(section => section.key);
         const params = {

@@ -23,7 +23,7 @@ class Identification extends Component {
     return (
       <div>
         {fieldPaths.map(fieldPath => buildSimpleField(activity, fieldPath, settings, true, noDataValue, inline))}
-        {(activity[AC.ACTIVITY_BUDGET].value === 'On Budget') &&
+        {(activity[AC.ACTIVITY_BUDGET].value === 'On Budget' || activity[AC.ACTIVITY_BUDGET].value === 'Dans le Budget') &&
           budgetPaths.map(fieldPath => buildSimpleField(activity, fieldPath, settings, true, noDataValue, inline))
         }
       </div>

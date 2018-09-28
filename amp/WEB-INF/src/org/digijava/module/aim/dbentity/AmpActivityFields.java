@@ -384,24 +384,24 @@ LoggerIdentifiable, Cloneable {
 //  @Interchangeable(fieldTitle = "Sector Ministry Contact Fax Number",fmPath="/Activity Form/Contacts/Sector Ministry Contact Information/Add Contact Fax")
     protected String secMiCntFaxNumber;
 
-    @Interchangeable(fieldTitle = "Activity Contacts", importable = true, fmPath = "/Activity Form/Contacts")
+    @Interchangeable(fieldTitle = "Activity Contacts", importable = true, fmPath = ActivityEPConstants.CONTACTS_PATH)
     @VersionableCollection(fieldTitle = "Activity Contacts")
     @InterchangeableDiscriminator(discriminatorField = "contactType", settings = {
             @Interchangeable(fieldTitle = ActivityFieldsConstants.DONOR_CONTACT, importable = true, discriminatorOption = Constants.DONOR_CONTACT, 
-                            fmPath = "/Activity Form/Contacts/Donor Contact Information", 
+                            fmPath = "/Activity Form/Contacts/Donor Contact Information",
                             validators = @Validators(unique = "/Activity Form/Contacts/Donor Contact Information")),
             @Interchangeable(fieldTitle = ActivityFieldsConstants.PROJECT_COORDINATOR_CONTACT, importable = true, discriminatorOption = Constants.PROJECT_COORDINATOR_CONTACT, 
-                            fmPath = "/Activity Form/Contacts/Project Coordinator Contact Information", 
+                            fmPath = "/Activity Form/Contacts/Project Coordinator Contact Information",
                             validators = @Validators(unique = "/Activity Form/Contacts/Project Coordinator Contact Information")),
             @Interchangeable(fieldTitle = ActivityFieldsConstants.SECTOR_MINISTRY_CONTACT, importable = true, discriminatorOption = Constants.SECTOR_MINISTRY_CONTACT, 
-                            fmPath = "/Activity Form/Contacts/Sector Ministry Contact Information", 
+                            fmPath = "/Activity Form/Contacts/Sector Ministry Contact Information",
                             validators = @Validators(unique = "/Activity Form/Contacts/Sector Ministry Contact Information")),
             @Interchangeable(fieldTitle = ActivityFieldsConstants.MOFED_CONTACT, importable = true, discriminatorOption = Constants.MOFED_CONTACT, 
-                            fmPath = "/Activity Form/Contacts/Mofed Contact Information", 
+                            fmPath = "/Activity Form/Contacts/Mofed Contact Information",
                             validators = @Validators(unique = "/Activity Form/Contacts/Mofed Contact Information")),
             @Interchangeable(fieldTitle = ActivityFieldsConstants.IMPL_EXECUTING_AGENCY_CONTACT, importable = true, 
                             discriminatorOption = Constants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT, 
-                            fmPath = "/Activity Form/Contacts/Implementing Executing Agency Contact Information", 
+                            fmPath = "/Activity Form/Contacts/Implementing Executing Agency Contact Information",
                             validators = @Validators(unique = "/Activity Form/Contacts/Implementing Executing Agency Contact Information"))
     })
     protected Set<AmpActivityContact> activityContacts;
@@ -612,14 +612,14 @@ LoggerIdentifiable, Cloneable {
     @VersionableFieldSimple(fieldTitle = "Vote")
     protected String vote;
     
-    @Interchangeable(fieldTitle = "Sub Vote", importable = true, 
+    @Interchangeable(fieldTitle = "Sub Vote", label = "Sub-Vote", importable = true,
             fmPath = "/Activity Form/Identification/Budget Extras/Sub-Vote",
             required = ActivityEPConstants.REQUIRED_ND,
             dependencies={InterchangeDependencyResolver.ON_BUDGET_KEY})
     @VersionableFieldSimple(fieldTitle = "Sub Vote")
     protected String subVote;
     
-    @Interchangeable(fieldTitle = "Sub Program", importable = true, 
+    @Interchangeable(fieldTitle = "Sub Program", label = "Sub-Program", importable = true,
             fmPath = "/Activity Form/Identification/Budget Extras/Sub-Program",
             required = ActivityEPConstants.REQUIRED_ND,
             dependencies={InterchangeDependencyResolver.ON_BUDGET_KEY})

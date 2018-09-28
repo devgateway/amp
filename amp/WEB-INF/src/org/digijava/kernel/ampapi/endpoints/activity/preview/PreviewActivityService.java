@@ -181,12 +181,12 @@ public final class PreviewActivityService {
         Long actualCategoryValueId = CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getIdInDatabase();
 
         Double totalActualCommitments = totals.stream()
-                .filter(fd -> fd.getTransactionType().equals(Long.valueOf(Constants.COMMITMENT))
+                .filter(fd -> fd.getTransactionType().equals((long) Constants.COMMITMENT)
                         && fd.getAdjustmentType().equals(actualCategoryValueId))
                 .collect(Collectors.summingDouble(PreviewFundingTotal::getAmount));
 
         Double totalActualDisbursements = totals.stream()
-                .filter(fd -> fd.getTransactionType().equals(Long.valueOf(Constants.DISBURSEMENT))
+                .filter(fd -> fd.getTransactionType().equals((long) Constants.DISBURSEMENT)
                         && fd.getAdjustmentType().equals(actualCategoryValueId))
                 .collect(Collectors.summingDouble(PreviewFundingTotal::getAmount));
 
@@ -208,16 +208,17 @@ public final class PreviewActivityService {
     private Double calculateTotalsUndisbursedBalance(List<PreviewFundingTotal> totals) {
         Long actualCategoryValueId = CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getIdInDatabase();
         Double totalActualCommitments = totals.stream()
-                .filter(fd -> fd.getTransactionType().equals(Long.valueOf(Constants.COMMITMENT))
+                .filter(fd -> fd.getTransactionType().equals((long) Constants.COMMITMENT)
                         && fd.getAdjustmentType().equals(actualCategoryValueId))
                 .collect(Collectors.summingDouble(PreviewFundingTotal::getAmount));
 
         Double totalActualDisbursements = totals.stream()
-                .filter(fd -> fd.getTransactionType().equals(Long.valueOf(Constants.DISBURSEMENT))
+                .filter(fd -> fd.getTransactionType().equals((long) Constants.DISBURSEMENT)
                         && fd.getAdjustmentType().equals(actualCategoryValueId))
                 .collect(Collectors.summingDouble(PreviewFundingTotal::getAmount));
 
-        return totalActualCommitments > 0 ? totalActualCommitments - totalActualDisbursements : null;
+        return totalActualCommitments != 0 || totalActualDisbursements != 0
+                ? totalActualCommitments - totalActualDisbursements : null;
     }
 
 
@@ -269,7 +270,8 @@ public final class PreviewActivityService {
                 .flatMap(List::stream)
                 .collect(Collectors.summingDouble(PreviewFundingTransaction::getTransactionAmount));
 
-        return totalActualCommitments > 0 ? totalActualCommitments - totalActualDisbursements : null;
+        return totalActualCommitments != 0 || totalActualDisbursements != 0
+                ? totalActualCommitments - totalActualDisbursements : null;
     }
 
     private Double convertProjectCostAmount(AmpFundingAmount projectCost, String currencyCode) {

@@ -14,6 +14,7 @@ import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpComponentType;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpLocation;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.util.ComponentsUtil;
@@ -136,6 +137,19 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
     public List<AmpContact> getContacts() {
         return InterchangeUtils.getSessionWithPendingChanges()
                 .createCriteria(AmpContact.class)
+                .setCacheable(true)
+                .setCacheRegion(CACHE)
+                .list();
+    }
+    
+    @Override
+    public List<AmpOrganisation> getOrganisations() {
+        return InterchangeUtils.getSessionWithPendingChanges()
+                .createCriteria(AmpOrganisation.class)
+                .add(Restrictions.or(
+                        Restrictions.eq("deleted", false),
+                        Restrictions.isNull("deleted")
+                    ))
                 .setCacheable(true)
                 .setCacheRegion(CACHE)
                 .list();

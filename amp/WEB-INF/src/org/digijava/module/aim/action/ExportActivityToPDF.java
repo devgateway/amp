@@ -1156,53 +1156,67 @@ public class ExportActivityToPDF extends Action {
                 createGeneralInfoRow(mainLayout,columnName,result);
             }
 
-            if(FeaturesUtil.isVisibleModule("/Activity Form/Program")){
-                if(FeaturesUtil.isVisibleModule("/Activity Form/Program/National Plan Objective")){
-                    //National Plan Objective
-                    if (hasContents(myForm.getPrograms().getNationalPlanObjectivePrograms())){
-                        columnName=TranslatorWorker.translateText("National Plan Objective");
-                        String result= buildProgramsOutput(myForm.getPrograms().getNationalPlanObjectivePrograms());
-                        createGeneralInfoRow(mainLayout,columnName,result);
-                    }
-                }
+            // Programs
+            if (FeaturesUtil.isVisibleModule("/Activity Form/Program")) {
+                PdfPCell programCell1 = new PdfPCell();
+                p1 = new Paragraph(postprocessText(
+                        TranslatorWorker.translateText("Program", locale, siteId)), titleFont);
+                p1.setAlignment(Element.ALIGN_RIGHT);
+                programCell1.addElement(p1);
+                programCell1.setBackgroundColor(BACKGROUND_COLOR);
+                programCell1.setBorder(0);
+                mainLayout.addCell(programCell1);
 
-
-                if(FeaturesUtil.isVisibleModule("/Activity Form/Program/Primary Programs")){
-                    //Primary Programs
-                    if (hasContents(myForm.getPrograms().getPrimaryPrograms())){
-                        columnName=TranslatorWorker.translateText("Primary Programs");
-                        String result= buildProgramsOutput(myForm.getPrograms().getPrimaryPrograms());
-                        createGeneralInfoRow(mainLayout,columnName,result);
+                PdfPTable programsTable = new PdfPTable(2);
+                if (SiteUtils.isEffectiveLangRTL()) {
+                    programsTable.setRunDirection(PdfWriter.RUN_DIRECTION_RTL);
+                }
+                
+                if (FeaturesUtil.isVisibleModule("/Activity Form/Program/National Plan Objective")) {
+                    if (hasContents(myForm.getPrograms().getNationalPlanObjectivePrograms())) {
+                        String programs = buildProgramsOutput(myForm.getPrograms().getNationalPlanObjectivePrograms());
+                        programsTable.addCell(buildProgramCell("National Plan Objective", true));
+                        programsTable.addCell(buildProgramCell(programs, false));
                     }
                 }
-
-                if(FeaturesUtil.isVisibleModule("/Activity Form/Program/Secondary Programs")){
-                    //secondary Programs
-                    if (hasContents(myForm.getPrograms().getSecondaryPrograms())){
-                        columnName=TranslatorWorker.translateText("Secondary Programs");
-                        String result= buildProgramsOutput(myForm.getPrograms().getSecondaryPrograms());
-                        createGeneralInfoRow(mainLayout,columnName,result);
+                
+                if (FeaturesUtil.isVisibleModule("/Activity Form/Program/Primary Programs")) {
+                    if (hasContents(myForm.getPrograms().getPrimaryPrograms())) {
+                        String programs = buildProgramsOutput(myForm.getPrograms().getPrimaryPrograms());
+                        programsTable.addCell(buildProgramCell("Primary Programs", true));
+                        programsTable.addCell(buildProgramCell(programs, false));
                     }
                 }
-
-                if(FeaturesUtil.isVisibleModule("/Activity Form/Program/Tertiary Programs")){
-                    //tertiary Programs
-                    if (hasContents(myForm.getPrograms().getTertiaryPrograms())){
-                        columnName=TranslatorWorker.translateText("Tertiary Programs");
-                        String result= buildProgramsOutput(myForm.getPrograms().getTertiaryPrograms());
-                        createGeneralInfoRow(mainLayout,columnName,result);
+                
+                if (FeaturesUtil.isVisibleModule("/Activity Form/Program/Secondary Programs")) {
+                    if (hasContents(myForm.getPrograms().getSecondaryPrograms())) {
+                        String programs = buildProgramsOutput(myForm.getPrograms().getSecondaryPrograms());
+                        programsTable.addCell(buildProgramCell("Secondary Programs", true));
+                        programsTable.addCell(buildProgramCell(programs, false));
                     }
                 }
-                if(FeaturesUtil.isVisibleModule("/Activity Form/Program/Program Description")){
-                    //tertiary Programs
-                    if(myForm.getPrograms().getProgramDescription()!=null ){
-                        columnName=TranslatorWorker.translateText("Program Description");
-                        String result=processEditTagValue(request,  myForm.getPrograms().getProgramDescription());
-                        createGeneralInfoRow(mainLayout,columnName,result);
+                
+                if (FeaturesUtil.isVisibleModule("/Activity Form/Program/Tertiary Programs")) {
+                    if (hasContents(myForm.getPrograms().getTertiaryPrograms())) {
+                        String programs = buildProgramsOutput(myForm.getPrograms().getTertiaryPrograms());
+                        programsTable.addCell(buildProgramCell("Tertiary Programs", true));
+                        programsTable.addCell(buildProgramCell(programs, false));
                     }
                 }
+                
+                if (FeaturesUtil.isVisibleModule("/Activity Form/Program/Program Description")) {
+                    if (myForm.getPrograms().getProgramDescription() != null) {
+                        String programs = processEditTagValue(request, myForm.getPrograms().getProgramDescription());
+                        programsTable.addCell(buildProgramCell("Program Description", true));
+                        programsTable.addCell(buildProgramCell(programs, false));
+                    }
+                }
+                
+                PdfPCell cell2 = new PdfPCell(programsTable);
+                cell2.setBorder(0);
+                mainLayout.addCell(cell2);
             }
-
+            
             /**
              * funding
              */
@@ -1718,6 +1732,17 @@ public class ExportActivityToPDF extends Action {
         out.flush();
         // TODO Auto-generated method stub
         return null;
+    }
+
+    private PdfPCell buildProgramCell(String programText, boolean toTranslate) {
+        String text = toTranslate ? TranslatorWorker.translateText(programText) : programText;
+        PdfPCell programsCell1 = new PdfPCell();
+        Paragraph p1 = new Paragraph(postprocessText(text), plainFont);
+        p1.setAlignment(Element.ALIGN_LEFT);
+        programsCell1.addElement(p1);
+        programsCell1.setBorder(0);
+        
+        return programsCell1;
     }
 
     private PdfPTable buildPdfTable(int columns) {
@@ -3882,6 +3907,7 @@ public class ExportActivityToPDF extends Action {
             relatedOrgsTable.addCell(emptyCell);
         }
     }
+    
     protected PdfPCell buildPdfCell(String text, Font font, int colSpan)
     {
         PdfPCell result = new PdfPCell();
@@ -4030,9 +4056,9 @@ public class ExportActivityToPDF extends Action {
     }
 
     private String buildProgramsOutput(List<AmpActivityProgram> programs) {
-        String result="";
-        for (AmpActivityProgram pr :programs) {
-            result+=pr.getHierarchyNames()+" "+pr.getProgramPercentage()+"% \n";
+        String result = "";
+        for (AmpActivityProgram pr : programs) {
+            result += pr.getHierarchyNames() + " " + pr.getProgramPercentage() + "%\n";
         }
         return result;
     }

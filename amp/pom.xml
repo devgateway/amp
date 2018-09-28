@@ -12,6 +12,8 @@
         <springSecurityVersion>3.1.4.RELEASE</springSecurityVersion>
         <springVersion>3.0.7.RELEASE</springVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <jackrabbit.version>2.16.2</jackrabbit.version>
+        <lucene.version>3.6.2</lucene.version>
         <jersey.version>1.19</jersey.version>
         <jackson.version>2.9.5</jackson.version>
         <swagger.version>1.5.20</swagger.version>
@@ -277,27 +279,27 @@
         <dependency>
             <groupId>org.apache.jackrabbit</groupId>
             <artifactId>jackrabbit-api</artifactId>
-            <version>1.6.5</version>
+            <version>${jackrabbit.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.jackrabbit</groupId>
             <artifactId>jackrabbit-core</artifactId>
-            <version>1.6.5</version>
+            <version>${jackrabbit.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.jackrabbit</groupId>
             <artifactId>jackrabbit-jcr-commons</artifactId>
-            <version>1.6.5</version>
+            <version>${jackrabbit.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.jackrabbit</groupId>
             <artifactId>jackrabbit-spi</artifactId>
-            <version>1.6.5</version>
+            <version>${jackrabbit.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.jackrabbit</groupId>
             <artifactId>jackrabbit-spi-commons</artifactId>
-            <version>1.6.5</version>
+            <version>${jackrabbit.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.jackrabbit</groupId>
@@ -494,22 +496,22 @@
         <dependency>
             <groupId>org.apache.lucene</groupId>
             <artifactId>lucene-analyzers</artifactId>
-            <version>2.4.1</version>
+            <version>${lucene.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.lucene</groupId>
             <artifactId>lucene-core</artifactId>
-            <version>2.4.1</version>
+            <version>${lucene.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.lucene</groupId>
             <artifactId>lucene-highlighter</artifactId>
-            <version>2.4.1</version>
+            <version>${lucene.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.lucene</groupId>
             <artifactId>lucene-snowball</artifactId>
-            <version>2.4.1</version>
+            <version>3.0.3</version>
         </dependency>
         <dependency>
             <groupId>odmg</groupId>
@@ -939,7 +941,7 @@
 		<dependency>
 			<groupId>org.apache.tika</groupId>
 			<artifactId>tika-core</artifactId>
-			<version>1.14</version>
+			<version>1.18</version>
 		</dependency>
 
         <dependency>

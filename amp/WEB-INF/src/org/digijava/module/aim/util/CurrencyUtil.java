@@ -24,14 +24,10 @@ import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.diffcaching.DatabaseChangedDetector;
 import org.dgfoundation.amp.diffcaching.ExpiringCacher;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
-import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpCurrencyRate;
-import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.Currency;
 import org.digijava.module.aim.helper.CurrencyRates;
@@ -39,10 +35,8 @@ import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.caching.AmpCaching;
-import org.hibernate.JDBCException;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.hibernate.type.DateType;
 import org.hibernate.type.IntegerType;
 import org.hibernate.type.LongType;
@@ -220,11 +214,14 @@ public class CurrencyUtil {
                 qryStr = "select curr from " + AmpCurrency.class.getName() + " as curr left join fetch  curr.countryLocation dg where curr.virtual is false order by curr.currencyName " + sortOrder;
                 qry = session.createQuery(qryStr);
             } else if (active == CurrencyUtil.ORDER_BY_CURRENCY_COUNTRY_NAME) {
-                qryStr = "select curr from " + AmpCurrency.class.getName() + " as curr left outer join curr.countryLocation dg where curr.virtual is false order by dg.name " + sortOrder;
+                qryStr = "select curr from " + AmpCurrency.class.getName()
+                        + " as curr left outer join curr.countryLocation dg where curr.virtual "
+                        + "is false order by dg.name " + sortOrder;
                 qry = session.createQuery(qryStr);
             } else {
-                qryStr = "select curr from " + AmpCurrency.class.getName() + " curr " +
-                        "where (curr.activeFlag=:flag) and curr.virtual is false order by curr.currencyCode " + sortOrder;
+                qryStr = "select curr from " + AmpCurrency.class.getName() + " curr "
+                        + "where (curr.activeFlag=:flag) and curr.virtual is false order by curr.currencyCode "
+                        + sortOrder;
                 qry = session.createQuery(qryStr);
                 qry.setParameter("flag", new Integer(active), IntegerType.INSTANCE);
             }
@@ -330,8 +327,8 @@ public class CurrencyUtil {
 
         try {
             session = PersistenceManager.getSession();
-            qryStr = "select curr from " + AmpCurrency.class.getName() + " curr " +
-                    "where (curr.ampCurrencyId=:id)";
+            qryStr = "select curr from " + AmpCurrency.class.getName() + " curr "
+                    + "where (curr.ampCurrencyId=:id)";
             qry = session.createQuery(qryStr);
             logger.debug("Checking with the id " + currency.getAmpCurrencyId());
             qry.setParameter("id", currency.getAmpCurrencyId(), StandardBasicTypes.LONG);
@@ -356,7 +353,7 @@ public class CurrencyUtil {
         }
     }
 
-    public static void deleteCurrencyRates(Long cRates[]) {
+    public static void deleteCurrencyRates(Long[] cRates) {
         AmpCaching.getInstance().currencyCache.reset();
         Session session = null;
         try {
@@ -640,7 +637,8 @@ public class CurrencyUtil {
             session = PersistenceManager.getRequestDBSession();
             String queryString = "select f.exchangeRate from "
                     + AmpCurrencyRate.class.getName()
-                    + " f where (f.toCurrencyCode=:currencyCode and f.fromCurrencyCode=:baseCurrencyCode) order by f.exchangeRateDate desc limit 1";
+                    + " f where (f.toCurrencyCode=:currencyCode and f.fromCurrencyCode=:baseCurrencyCode) "
+                    + "order by f.exchangeRateDate desc limit 1";
             q = session.createQuery(queryString);
             q.setString("currencyCode", currencyCode);
             q.setString("baseCurrencyCode", baseCurrCode);
@@ -692,8 +690,9 @@ public class CurrencyUtil {
         AmpCaching.getInstance().currencyCache.reset();
         AmpCurrency ampC = new AmpCurrency();
         ampC = CurrencyUtil.getCurrencyByCode(Code);
-        if (ampC != null)
+        if (ampC != null) {
             DbUtil.delete(ampC);
+        }
         /*}
         catch (Exception e) {
             logger.error("Exception from getAllCurrencies()");
@@ -738,8 +737,9 @@ public class CurrencyUtil {
     private static AmpCurrency defaultCurrency;
 
     public static AmpCurrency getDefaultCurrency() {
-        if (defaultCurrency == null)
+        if (defaultCurrency == null) {
             defaultCurrency = AmpARFilter.getDefaultCurrency();
+        }
         return defaultCurrency;
     }
 

@@ -2124,7 +2124,8 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         for (AmpActivityVersion activity : activities) {
             ActivityHistory auditHistory = null;
 
-            if (activity.getModifiedBy() == null || (activity.getUpdatedDate() == null && activity.getModifiedDate() == null)) {
+            if (activity.getModifiedBy() == null || (activity.getUpdatedDate() == null
+                    && activity.getModifiedDate() == null)) {
                 auditHistory = ActivityUtil.getModifiedByInfoFromAuditLogger(activity.getAmpActivityId());
             }
 

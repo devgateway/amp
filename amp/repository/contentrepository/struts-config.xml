@@ -62,9 +62,6 @@
     <action path="/contentrepository/docToOrg" scope="session" type="org.digijava.module.contentrepository.action.DocToOrgAction" validate="false" name="crDocToOrgForm">
     	<forward name="list" path="/showLayout.do?layout=cr_docToOrg" />
     </action>
-     <action path="/contentrepository/createPdf" scope="session" type="org.digijava.module.contentrepository.action.CreatePdf" validate="false">
-    	<forward name="list" path="/contentrepository/documentManager.do" />
-    </action>
     
      <action path="/contentrepository/tempDocManager" scope="session" type="org.digijava.module.contentrepository.action.TemplateDocActions" validate="false" name="tempDocManagerForm" parameter="actType">
     	<forward name="list" path="/showLayout.do?layout=templateDocsManager" />

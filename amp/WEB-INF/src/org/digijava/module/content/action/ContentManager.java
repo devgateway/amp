@@ -282,7 +282,7 @@ public class ContentManager extends DispatchAction {
             contentForm.setDescription(contentItem.getDescription());
             contentForm.setTitle(contentItem.getTitle());
             contentForm.setPageCode(contentItem.getPageCode());
-            contentForm.setLayout(contentItem.getLayout());
+            contentForm.setContentLayout(contentItem.getLayout());
             contentForm.setHtmlblock_1(contentItem.getHtmlblock_1());
             contentForm.setHtmlblock_2(contentItem.getHtmlblock_2());
             contentForm
@@ -320,7 +320,7 @@ public class ContentManager extends DispatchAction {
             contentItem = new AmpContentItem();
         }
 
-        contentItem.setLayout(contentForm.getLayout());
+        contentItem.setLayout(contentForm.getContentLayout());
         contentItem.setDescription(contentForm.getDescription());
         contentItem.setTitle(contentForm.getTitle());
         contentItem.setPageCode(contentForm.getPageCode().trim());

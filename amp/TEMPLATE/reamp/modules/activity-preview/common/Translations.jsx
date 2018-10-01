@@ -61,6 +61,7 @@ export const initialTranslations = {
         'click_latest_version' : 'Click here to show the latest version',
         'delivery_rate': 'Delivery Rate',
         'undisbursed_balance': 'Undisbursed Balance',
+        'total_undisbursed_balance': 'Total Undisbursed Balance',
         'draft_activity': 'This is a draft activity',
         'subtotal':'Subtotal',
         'total' : 'Total',
@@ -72,6 +73,15 @@ export const initialTranslations = {
         'unit' : 'Unit',
         'amount_units' : 'Amounts in Units',
         'amount_thousands' : 'Amounts in Thousands',
-        'amount_millions' : 'Amounts in Millions'
+        'amount_millions' : 'Amounts in Millions',
+        'version_history' : 'Version history',
+        'last_modification': 'Last modification made by',
+        'action': 'Action',
+        'date': 'Date', 
+        'compare_versions': 'Compare Versions',
+        'show_change_summary' : 'Show Change Summary',
+        'close':'Close',
+        'current_version' : "Current Version",
+        'make_current_version' : 'Make this the current version'
         
 };

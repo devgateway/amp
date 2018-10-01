@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import TopIcon from './fields/TopIcon';
 import * as AC from '../utils/ActivityConstants';
-
+import SimpleModal from './fields/SimpleModal';
 require('../styles/ActivityView.css');
 
 /**
@@ -10,6 +10,10 @@ require('../styles/ActivityView.css');
 export default class IconGroup extends Component {
     render() {
         const { activity, translations, settings, activityInfo }  = this.props; 
+
+        let history = (
+            <SimpleModal activityInfo={activityInfo} translations={translations}/>
+        );
 
         //Edit && Validate
         let editMsg = activityInfo && activityInfo[AC.INFO_VALIDATE] ? translations['amp.activity-preview:validate'] : translations['amp.activity-preview:edit'];
@@ -33,6 +37,7 @@ export default class IconGroup extends Component {
             );
         return (
             <div>
+                {history}
                 {editOrValidate}
                 <TopIcon key={'pdfIcon'} link={'/aim/exportActToPDF.do?activityid=' + activity[AC.INTERNAL_ID].value}
                     label={translations['amp.activity-preview:exportPDF']}

@@ -44,12 +44,25 @@
   padding: 5px;
 }
 
+.modal-header{
+  background-color: #3a84b3;
+  color: white;
+}
+
+.close {
+  color: white;
+}
+
 .preview_icons a {
   font-family: 'Arial', sans-serif;
   font-size: 11px;
   color: #405473;
   cursor: pointer; 
   padding-right: 5px;
+}
+
+.preview_icons modal-open {
+  overflow: initial;
 }
 
 .preview_icons object {

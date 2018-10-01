@@ -55,7 +55,7 @@ class FundingTotalsSection extends Component {
       }
     }
     
-    return (<div key={'Funding_Total_Section'}>{content}</div>);
+    return (<div key={'Funding_Total_Section' + Math.random()}>{content}</div>);
   }
 }
 

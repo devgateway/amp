@@ -34,17 +34,17 @@ class FundingTotalsSection extends Component {
     const undisbursed = activity[AC.FUNDING_TOTALS].value[AC.UNDISBURSED_BALANCE];
     const rate = activity[AC.FUNDING_TOTALS].value[AC.DELIVERY_RATE_PROP] ? activity[AC.FUNDING_TOTALS].value[AC.DELIVERY_RATE_PROP] : 0;
     const options = [
-      { label: translations['amp.activity-preview:totalPlannedCommitments'], value: plannedCommitments, format: true, isPercentage: false },
-      { label: translations['amp.activity-preview:totalActualCommitments'], value: actualCommitments, format: true, isPercentage: false },
-      { label: translations['amp.activity-preview:totalPlannedDisbursements'], value: plannedDisbursements, format: true, isPercentage: false },
-      { label: translations['amp.activity-preview:totalActualDisbursements'], value: actualDisbursements, format: true, isPercentage: false },
-      { label: translations['undisbursed_balance'], value: undisbursed, format: true, isPercentage: false},
-      { label: translations['delivery_rate'], value: rate, format: false, isPercentage: true }
+      { label: translations['amp.activity-preview:totalPlannedCommitments'], value: plannedCommitments, format: true, isPercentage: false, showIfZero: false },
+      { label: translations['amp.activity-preview:totalActualCommitments'], value: actualCommitments, format: true, isPercentage: false, showIfZero: false },
+      { label: translations['amp.activity-preview:totalPlannedDisbursements'], value: plannedDisbursements, format: true, isPercentage: false, showIfZero: false },
+      { label: translations['amp.activity-preview:totalActualDisbursements'], value: actualDisbursements, format: true, isPercentage: false, showIfZero: false },
+      { label: translations['total_undisbursed_balance'], value: undisbursed, format: true, isPercentage: false, showIfZero: true},
+      { label: translations['delivery_rate'], value: rate, format: false, isPercentage: true, showIfZero: true }
     ];
     //content.push(<div key={'Funding_TSL'}><Label label={translations['total']} labelClass={'header_total'} key={'TotalFundingLabel' + Math.random()} /></div>);
 
     for(var g in options) {
-      if (options[g].value > 0) {
+      if (options[g].value > 0 || options[g].showIfZero) {
         content.push(<FundingTotalItem
           key={'Totals_' + Math.random() }
           value={options[g].value}

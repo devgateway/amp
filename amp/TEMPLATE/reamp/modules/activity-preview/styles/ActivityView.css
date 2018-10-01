@@ -5,6 +5,11 @@
   margin-right: 50px;
 }
 
+.link_version {
+  padding: 1px 0px;
+  font-size: 14px;
+}
+
 .l_divright {
   text-align:right;
   margin-bottom: 20px;

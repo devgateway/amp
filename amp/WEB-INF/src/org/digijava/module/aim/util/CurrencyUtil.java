@@ -516,7 +516,7 @@ public class CurrencyUtil {
     public static List<AmpCurrency> getActiveAmpCurrencyByName(boolean includeVirtual) {
         List<AmpCurrency> currencies = getActiveAlsoVirtualAmpCurrencyByName();
         if (!includeVirtual) {
-            for (Iterator<AmpCurrency> iter = currencies.iterator(); iter.hasNext(); ) {
+            for (Iterator<AmpCurrency> iter = currencies.iterator(); iter.hasNext();) {
                 if (iter.next().isVirtual()) {
                     iter.remove();
                 }
@@ -567,9 +567,11 @@ public class CurrencyUtil {
                     + " c where c.activeFlag='1' order by c.currencyCode";
             List<AmpCurrency> temp = PersistenceManager.getSession().createQuery(queryString).setCacheable(true).list();
             List<AmpCurrency> res = new ArrayList<>();
-            for (AmpCurrency c : temp)
-                if (!c.isVirtual())
+            for (AmpCurrency c : temp) {
+                if (!c.isVirtual()) {
                     res.add(c);
+                }
+            }
             return res;
         } catch (Exception ex) {
             logger.error("Unable to get currency " + ex);
@@ -601,10 +603,11 @@ public class CurrencyUtil {
         //Only currencies having exchanges rates AMP-2620
         List<AmpCurrency> usableCurrencies = new ArrayList<AmpCurrency>();
 
-        for (AmpCurrency currency : getActiveAmpCurrencyByName(includeVirtual))
+        for (AmpCurrency currency : getActiveAmpCurrencyByName(includeVirtual)) {
             if (currency.isRate()) {
                 usableCurrencies.add(currency);
             }
+        }
         return usableCurrencies;
     }
 
@@ -612,10 +615,11 @@ public class CurrencyUtil {
         //Only currencies having exchanges rates AMP-2620
         List<AmpCurrency> usableCurrencies = new ArrayList<AmpCurrency>();
 
-        for (AmpCurrency currency : getActiveAmpCurrencyByName())
+        for (AmpCurrency currency : getActiveAmpCurrencyByName()) {
             if (currency.isRate() && !currency.isVirtual()) {
                 usableCurrencies.add(currency);
             }
+        }
         return usableCurrencies;
     }
 

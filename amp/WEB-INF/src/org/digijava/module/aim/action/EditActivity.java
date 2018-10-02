@@ -215,7 +215,8 @@ public class EditActivity extends Action {
 
 
     if (request.getParameter("callOldActivityPreview") == null
-            && request.getParameter("exportActivityToWord") == null) {
+            && request.getParameter("exportActivityToWord") == null
+            && FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.USE_NEW_ACTIVITY_PREVIEW)) {
        callActivityPreview(request, response, activityId);
     }
 

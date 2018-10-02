@@ -104,6 +104,13 @@ public class ActionAuthorizer {
         if (authRules.contains(AuthRule.VIEW_ACTIVITY) && !InterchangeUtils.isViewableActivity(containerReq)) {
             addError(methodInfo, errors, SecurityErrors.INVALID_REQUEST, "Activity doesn't exist or is not the latest version");
         }
+        if (authRules.contains(AuthRule.PUBLIC_VIEW_ACTIVITY) && !InterchangeUtils.
+                canViewActivityIfCreatedInPrivateWs(containerReq)) {
+            ApiErrorMessage errorMessage = SecurityErrors.NOT_ALLOWED.withDetails("You must be logged-in in the "
+                    + "workspace where the activity was created");
+            ApiErrorResponse.reportForbiddenAccess(errorMessage);
+            return;
+        }
 
         if (!errors.isEmpty()) {
             ApiErrorResponse.reportForbiddenAccess(ApiError.toError(errors.values()));

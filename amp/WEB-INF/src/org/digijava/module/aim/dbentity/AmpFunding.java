@@ -30,7 +30,7 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
     private static final long serialVersionUID = 1L;
     @Interchangeable(fieldTitle = "Funding ID")
     private Long ampFundingId;
-    @Interchangeable(fieldTitle="Donor Organization ID", pickIdOnly = true, importable = true,
+    @Interchangeable(fieldTitle = "Donor Organization ID", pickIdOnly = true, importable = true,
             required = ActivityEPConstants.REQUIRED_ALWAYS)
     private AmpOrganisation ampDonorOrgId;
     @Interchangeable(fieldTitle="Activity ID", pickIdOnly = true, importable = false)

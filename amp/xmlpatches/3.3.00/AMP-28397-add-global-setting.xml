@@ -19,9 +19,10 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-				INSERT INTO amp_global_settings (id, settingsname, settingsvalue, possiblevalues, description, section)
+				INSERT INTO amp_global_settings (id, settingsname, settingsvalue, possiblevalues, description,
+				section, internal)
 				VALUES (nextval('amp_global_settings_seq'), 'Use new activity preview', 'false',
-				't_Boolean', 'If true use new activity preview', null);
+				't_Boolean', 'If true use new activity preview','user',true);
 			</lang>
 		</script>
 	</apply>

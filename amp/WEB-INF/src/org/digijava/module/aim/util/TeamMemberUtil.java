@@ -1467,8 +1467,7 @@ public class TeamMemberUtil {
 
     public static void getActivitiesWsByTeamMember(Map<Long, Set<String>> activitiesWs, AmpTeamMember atm) {
         TeamMember teamMember = new TeamMember(atm);
-        String wsFilterQuery = WorkspaceFilter.generateWorkspaceFilterQuery(teamMember);
-        List<Long> editableIds = ActivityUtil.getEditableActivityIds(teamMember, wsFilterQuery);
+        List<Long> editableIds = ActivityUtil.getEditableActivityIdsNoSession(teamMember);
         processActivitiesId(activitiesWs, teamMember, Optional.ofNullable(editableIds).orElse(Collections.emptyList()
         ).stream());
 

@@ -13,6 +13,9 @@
                 SET settingsname = 'Remove empty rows from Reports',
                 description = 'If the setting is set to true empty rows are removed when date filters are applied or hierarchies are used'
                 WHERE settingsname = 'Filter by date hides projects';
+
+                DELETE from dg_message where message_key = '1177288538'; <!-- 'Filter by date hides projects' -->
+                DELETE from dg_message where message_key = '-261836529'; <!-- 'When using the date filter in reports/tabs, the projects that do not hold funding within the specified filter will not be displayed in the report' -->
 				
             </lang>
         </script>

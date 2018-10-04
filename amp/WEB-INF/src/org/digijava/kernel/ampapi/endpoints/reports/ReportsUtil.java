@@ -19,7 +19,6 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
 import net.sf.json.JSONObject;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
@@ -186,6 +185,12 @@ public class ReportsUtil {
                 cachedReportData.paginationInfo.getRecordsCount()));
         result.setSettings(cachedReportData != null
                 ? SettingsUtils.getReportSettings(cachedReportData.report.spec) : null);
+
+        boolean showRowTotals = cachedReportData.report.reportContents.getContents().values().stream()
+                .map(rc -> rc.displayedValue)
+                .anyMatch(StringUtils::isNotEmpty);
+
+        result.setRowTotals(showRowTotals);
         
         processRawValues(formParams);
         result.setReportWarnings(cachedReportData.report.reportWarnings);
@@ -683,7 +688,7 @@ public class ReportsUtil {
         }
         return errors.size() > 0 ? ApiError.toError(errors) : null;
     }
-    
+
     private static ApiErrorMessage validateList(String listName, List<String> values,
             Collection<String> allowedValues, boolean isMandatory) {
         if (values == null || values.size() == 0) {

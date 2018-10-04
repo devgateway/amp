@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.SortedMap;
 import java.util.SortedSet;
 
+import org.apache.commons.lang.StringUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.dgfoundation.amp.algo.timing.RunNode;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -61,7 +62,9 @@ public class GeneratedReport {
     public final JsonBean jsonTimings;
     
     public final boolean isEmpty;
-    
+
+    private final boolean hasTotals;
+
     public GeneratedReport(ReportSpecification spec, int generationTime, TeamMember requestingUser, 
             ReportArea reportContents, List<ReportOutputColumn> rootHeaders, List<ReportOutputColumn> leafHeaders, 
             List<List<HeaderCell>> generatedHeaders, RunNode timings, SortedMap<Long, SortedSet<ReportWarning>> reportWarnings, boolean isEmpty) {
@@ -76,12 +79,19 @@ public class GeneratedReport {
         this.generatedHeaders = generatedHeaders;
         this.reportWarnings = reportWarnings;
         this.isEmpty = isEmpty;
+        this.hasTotals = reportContents.getContents().values().stream()
+                .map(rc -> rc.displayedValue)
+                .anyMatch(StringUtils::isNotEmpty);
     }
 
     public boolean hasMeasures() {
         return !spec.getMeasures().isEmpty();
     }
-    
+
+    public boolean hasTotals() {
+        return hasTotals;
+    }
+
 }
 
     

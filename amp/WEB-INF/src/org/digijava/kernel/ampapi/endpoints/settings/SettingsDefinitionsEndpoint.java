@@ -137,7 +137,7 @@ public class SettingsDefinitionsEndpoint implements ErrorReportingEndpoint {
     public final List<SettingField> getSettingDefinitionsForGPIData() {
         return Arrays.asList(getCurrencyField(false));
     }
-    
+
     @GET
     @Path("/gpi-reports")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -147,7 +147,7 @@ public class SettingsDefinitionsEndpoint implements ErrorReportingEndpoint {
     public final List<SettingField> getSettingDefinitionsForGPIReports() {
         return Arrays.asList(getCurrencyField(true), getCalendarField(), getCalendarCurrenciesField());
     }
-    
+
     @Override
     public Class getErrorsClass() {
         return SettingsDefinitionsErrors.class;

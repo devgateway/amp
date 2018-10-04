@@ -37,6 +37,8 @@ public class PagedReportResult {
     @JsonProperty(EPConstants.STATS)
     private JsonBean stats;
 
+    private boolean rowTotals;
+
     public JSONReportPage getPage() {
         return page;
     }
@@ -99,5 +101,13 @@ public class PagedReportResult {
 
     public void setStats(JsonBean stats) {
         this.stats = stats;
+    }
+
+    public boolean isRowTotals() {
+        return rowTotals;
+    }
+
+    public void setRowTotals(boolean rowTotals) {
+        this.rowTotals = rowTotals;
     }
 }

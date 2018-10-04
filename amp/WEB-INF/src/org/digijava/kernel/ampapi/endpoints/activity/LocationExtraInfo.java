@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
  * @author Octavian Ciubotaru
  */
 @JsonSerialize(using = LocationExtraInfoJsonSerializer.class)
-public class LocationExtraInfo {
+public class LocationExtraInfo implements ParentExtraInfo {
 
     /**
      * Note: this field is kept for backwards compatibility and is only used in flat format of possible values.
@@ -51,5 +51,10 @@ public class LocationExtraInfo {
 
     public String getIso2() {
         return iso2;
+    }
+    
+    @Override
+    public Long getParentId() {
+        return parentLocationId;
     }
 }

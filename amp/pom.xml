@@ -1247,7 +1247,7 @@
                             <arguments>build</arguments>
                				<workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-boilerplate</workingDirectory>
                         </configuration>
-                    </execution>                                      
+                    </execution>
                     <!-- Installing node and npm  for amp-filter-->
                     <execution>
                         <!-- optional: you don't really need execution ids, but it looks nice in your build log. -->
@@ -1415,7 +1415,7 @@
                         <configuration>
                              <workingDirectory>${project.basedir}/TEMPLATE/reamp</workingDirectory>
                         </configuration>
-                    </execution>                    				
+                    </execution>
 					 <execution>
                         <id>npm install for reamp</id>
                         <goals>
@@ -1443,8 +1443,8 @@
                   </execution>
 <!--                    !!!! Next part is for building filters and dashboard. It was commented out until  -->
 <!--                     there is a decision on how to approach dependecies caching (node_modules) AMP-20022 !!! -->
-                    
-                    
+
+
 <!--                           Installing node and npm for filters -->
 <!--                     <execution> -->
 <!--                         <id>install node and npm for filters</id> -->
@@ -1478,9 +1478,9 @@
 <!--                				<workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-filter</workingDirectory> -->
 <!--                         </configuration> -->
 <!--                     </execution> -->
-                    
-                    
-                    
+
+
+
 <!--                     Installing node and npm for dashboard -->
 <!--                     <execution> -->
 <!--                         <id>install node and npm for dashboard</id> -->
@@ -1502,7 +1502,7 @@
 <!--                  		    <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/dashboard/dev</workingDirectory> -->
 <!--                         </configuration> -->
 <!--                     </execution> -->
-                    
+
 <!--                     Running gulp for dashboard -->
 <!--                     <execution> -->
 <!--                         <id>gulp build for dashboard</id> -->
@@ -1515,12 +1515,12 @@
 <!--                				<workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/dashboard/dev</workingDirectory> -->
 <!--                         </configuration> -->
 <!--                     </execution> -->
-                
-                
-                      
-                    
+
+
+
+
                 </executions>
-                
+
             </plugin>
 
             <plugin>

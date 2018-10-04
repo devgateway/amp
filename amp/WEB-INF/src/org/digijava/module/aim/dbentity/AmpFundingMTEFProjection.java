@@ -18,6 +18,7 @@ public class AmpFundingMTEFProjection
 
     private static final long serialVersionUID = -1583797313318079006L;
 
+    @Interchangeable(fieldTitle = "Transaction ID")
     private Long ampFundingMTEFProjectionId;
 
     @Interchangeable(fieldTitle = "Projection", pickIdOnly = true, importable = true, 

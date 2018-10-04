@@ -6,14 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -24,7 +20,6 @@ import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
@@ -81,7 +76,7 @@ public class ProjectList {
         List<JsonBean> editableActivities = new ArrayList<JsonBean>();
         
         final List<Long> viewableIds = getViewableActivityIds(tm);
-        List<Long> editableIds = ActivityUtil.getEditableActivityIds(tm);
+        List<Long> editableIds = ActivityUtil.getEditableActivityIdsNoSession(tm);
         
         // get list of the workspaces where the user is member of and can edit each activity
         Map<Long, Set<String>> activitiesWs = getEditableWorkspacesForActivities(tm);
@@ -134,47 +129,6 @@ public class ProjectList {
                 activityMap.put((String) activity.get(InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ID)), activity);
             }
         }
-    }
-
-    /**
-     * Get the activities ids for the current workspace
-     * 
-     * @param session HttpSession
-     * @return List<Long> with the editable activity Ids
-     */
-    public static List<Long> getEditableActivityIds(TeamMember tm) {
-        HttpSession session = TLSUtils.getRequest().getSession();
-        String query = WorkspaceFilter.getWorkspaceFilterQuery(session);
-        
-        return getEditableActivityIds(tm, query);
-    }
-
-    /**
-     * Get list of editable activity ids for the team member.
-     * Useful for cases when you need to check list of editable activities for a team member that is not a principal.
-     * I.e. this team member is not authenticated right now.
-     * @return List<Long> with the editable activity Ids
-     */
-    public static List<Long> getEditableActivityIdsNoSession(TeamMember tm) {
-        String query = WorkspaceFilter.generateWorkspaceFilterQuery(tm);
-        return getEditableActivityIds(tm, query);
-    }
-
-    /**
-     * Get the activities ids for the current workspace
-     * 
-     * @param session HttpSession
-     * @return List<Long> with the editable activity Ids
-     */
-    public static List<Long> getEditableActivityIds(TeamMember tm, String query) {
-        // based on AMP-20520 research the only rule found when activities are not editable is when in Mng WS
-        if (TeamMemberUtil.isManagementWorkspace(tm))
-            return Collections.emptyList();
-        
-        List<Long> result = PersistenceManager.getSession().createSQLQuery(query)
-                .addScalar("amp_activity_id", LongType.INSTANCE).list();
-        
-        return result;
     }
 
     /**

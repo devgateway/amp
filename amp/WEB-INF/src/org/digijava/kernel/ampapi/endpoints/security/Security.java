@@ -83,6 +83,7 @@ public class Security implements ErrorReportingEndpoint {
     @GET
     @Path("/user/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "user", ui = false)
     public JsonBean user() {
         AmpApiToken apiToken = SecurityUtil.getTokenFromSession();
 

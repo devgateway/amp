@@ -4,6 +4,7 @@ import java.util.EnumSet;
 import java.util.List;
 
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.util.Version;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.lucene.LangSupport;
@@ -33,7 +34,7 @@ public class TrnLuceneModule extends LucTranslationModule {
 
     @Override
     public Analyzer getAnalyzer() {
-        return lang.getAnalyzer();
+        return lang.getAnalyzer(Version.LUCENE_36);
     }
 
     @Override

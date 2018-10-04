@@ -76,6 +76,14 @@ public class PossibleValue {
     public List<PossibleValue> getChildren() {
         return children;
     }
+    
+    public Object getExtraInfo() {
+        return extraInfo;
+    }
+
+    public Map<String, String> getTranslatedValues() {
+        return translatedValues;
+    }
 
     @Override
     public boolean equals(Object o) {

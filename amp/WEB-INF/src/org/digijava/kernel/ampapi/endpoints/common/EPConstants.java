@@ -47,7 +47,7 @@ public class EPConstants {
     public static final String SHOW_EMPTY_ROWS = "show_empty_rows";
     public static final String SHOW_EMPTY_COLUMNS = "show_empty_cols"; // this is for column groups (quarter, year)
     public static final String SHOW_ORIGINAL_CURRENCY = "show_original_currency";
-    public static final String DO_ROW_TOTALS = "rowTotals";
+    public static final String SHOW_ROW_TOTALS = "rowTotals";
     public static final String FORCE_HEADERS = "forceHeaders";
     public static final String PROJECT_TYPE = "projectType";
     public static final String REPORT_TYPE = "reportType";

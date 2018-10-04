@@ -124,6 +124,7 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
             return arg0.hashCode() - arg1.hashCode();
         }
     }
+    @Interchangeable(fieldTitle = "Transaction ID")
     private Long ampFundDetailId;
     private Integer fiscalYear;
     private Integer fiscalQuarter;

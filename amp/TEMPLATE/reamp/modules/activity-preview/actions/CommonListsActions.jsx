@@ -93,13 +93,29 @@ export function getSettingsAndActivity(activityId){
                         }).catch(error => {
                             throw(error);
                         });
+                        
                         hydratedActivity = _createHydratedActivity(Object.keys(activity), activity);
                         dispatch(getHydratedActivityLoading(hydratedActivity));
                         commonListsApi.getFields().then(fields => {
                             dispatch(getFieldsSuccess(fields));
                             _addLabelAndType(hydratedActivity, fields);
-                            _addRealValue(hydratedActivity, lang).then(response => {;
-                                dispatch(getHydratedActivitySuccess(hydratedActivity));
+                            _addRealValue(hydratedActivity, lang).then(response => {
+                                let docs = hydratedActivity[AC.ACTIVITY_DOCUMENTS].value;
+                                if (docs && docs.length > 0) {
+                                    let res = [];
+                                    for(var i in docs) {
+                                        res.push(docs[i][AC.DOC_UUID].value);
+                                    }
+                                    commonListsApi.fetchResources(res).then(resources =>{
+                                        hydratedActivity[AC.ACTIVITY_DOCUMENTS].value = resources;
+                                        dispatch(getHydratedActivitySuccess(hydratedActivity));
+                                    }).catch(error => {
+                                        throw(error);
+                                    });
+                                } else {
+                                    dispatch(getHydratedActivitySuccess(hydratedActivity));
+                                }
+                                
                             }).catch(error => {
                                 throw(error);
                             });

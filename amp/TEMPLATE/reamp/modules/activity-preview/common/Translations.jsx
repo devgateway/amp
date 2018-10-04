@@ -82,6 +82,12 @@ export const initialTranslations = {
         'show_change_summary' : 'Show Change Summary',
         'close':'Close',
         'current_version' : "Current Version",
-        'make_current_version' : 'Make this the current version'
+        'make_current_version' : 'Make this the current version',
+        'RelatedDocuments' : 'Related Documents',
+        'title' : 'Title',
+        'description' : 'Description',
+        'link' : 'Link',
+        'adding_date' : 'Adding Date',
+        'clickToDownload' : 'Click to Download'
         
 };

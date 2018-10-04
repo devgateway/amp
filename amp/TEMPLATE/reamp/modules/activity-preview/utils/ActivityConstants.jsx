@@ -24,6 +24,7 @@ export const ACTIVITY_SECTION_IDS =
     { key: 'AcFunding', hash: 'AcFunding', value: 'Funding', translationKey: 'Funding' },
     { key: 'AcRelatedOrganizations', hash: 'AcRelatedOrganizations', value: 'Related Organizations', translationKey: 'RelatedOrganizations' },
     { key: 'AcIssues', hash: 'AcIssues', value: 'Issues', translationKey: 'Issues' },
+    { key: 'AcRelatedDocuments', hash: 'AcRelatedDocuments', value: 'Related Documents', translationKey: 'RelatedDocuments' },
     { key: 'AcContacts', hash: 'AcContacts', value: 'Contacts', translationKey: 'Contacts' },
     { key: 'AcFundingSummary', hash: 'AcFundingSummary', value: 'Funding Summary', translationKey: 'FundingInformation' },
     { key: 'AcAdditionalInfo', hash: 'AdditionalInfo', value: 'Additional Info', translationKey: 'AdditionalInfo' }
@@ -203,6 +204,17 @@ export const TRX_TYPE_PATH = 'fundings~funding_details~transaction_type';
 export const ADJ_TYPE_PATH = 'fundings~funding_details~adjustment_type';
 export const AMOUNT = 'amount';
 export const REORDER_TRX = 'reorder-funding-item';
+
+//RELATED DOCUMENTS
+export const ACTIVITY_DOCUMENTS = 'activity_documents';
+export const DOC_UUID = 'uuid';
+export const DOC_TITLE = 'title';
+export const DOC_DESC = 'description';
+export const DOC_WEB_LINK = 'web_link';
+export const DOC_URL = 'url';
+export const DOC_DATE = 'adding_date';
+
+
 
 
 

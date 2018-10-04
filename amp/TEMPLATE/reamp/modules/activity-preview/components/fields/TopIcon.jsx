@@ -7,11 +7,11 @@ require('../../styles/ActivityView.css');
 export default class TopIcon extends Component {
 
     render() {
-        const {link, img, label, target} = this.props;
+        const {link, img, label, target, tooltip} = this.props;
 
         return (
         <div className={'preview_icons'}>
-            <a href={link} title={label} target={target}>
+            <a href={link} title={label || tooltip} target={target}>
                 <img src={img}/>{label}
             </a>
         </div>);

@@ -384,6 +384,16 @@
   font-weight: bold;
 }
 
+.linkDocument {
+  color: #000;
+  font-weight: 200;
+  font-size: 14px;
+}
+
+.iconDocument {
+  float: right;
+}
+
 .inline {
   display: inline;
 }

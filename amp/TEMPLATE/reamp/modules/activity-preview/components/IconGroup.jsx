@@ -37,8 +37,8 @@ export default class IconGroup extends Component {
             );
         return (
             <div>
-                {history}
                 {editOrValidate}
+                {history}
                 <TopIcon key={'pdfIcon'} link={'/aim/exportActToPDF.do?activityid=' + activity[AC.INTERNAL_ID].value}
                     label={translations['amp.activity-preview:exportPDF']}
                     img={"/TEMPLATE/reamp/modules/activity-preview/styles/images/AMP_pdf.svg"} 

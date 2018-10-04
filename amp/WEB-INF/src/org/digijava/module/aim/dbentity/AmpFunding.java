@@ -28,8 +28,11 @@ import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.
 public class AmpFunding implements Serializable, Versionable, Cloneable {
     //IATI-check: not ignored!
     private static final long serialVersionUID = 1L;
+    
+    @Interchangeable(fieldTitle = "Funding ID")
     private Long ampFundingId;
-    @Interchangeable(fieldTitle="Donor Organization ID", pickIdOnly=true, importable=true)
+    @Interchangeable(fieldTitle = "Donor Organization ID", pickIdOnly = true, importable = true,
+            required = ActivityEPConstants.REQUIRED_ALWAYS)
     private AmpOrganisation ampDonorOrgId;
     @Interchangeable(fieldTitle="Activity ID", pickIdOnly = true, importable = false)
     private AmpActivityVersion ampActivityId;
@@ -61,18 +64,14 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
     private String calType;
     private String comments;
     private Date signatureDate;
+    
     @Interchangeable(fieldTitle = ActivityFieldsConstants.FUNDING_DETAILS, importable = true)
     private Set<AmpFundingDetail> fundingDetails;
-
     
-    //now, MTEF projections are to be ignored   
-    
-//  @Interchangeable(fieldTitle="MTEF Projections",fmPath="/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections")
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.MTEF_PROJECTIONS, importable = true, 
+            fmPath = "/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections")
     private Set<AmpFundingMTEFProjection> mtefProjections;
-    // private AmpTermsAssist ampTermsAssistId ;
-    /*
-     * tanzania adds funding amp-1707
-     */
+    
     @Interchangeable(fieldTitle="Active",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Active", importable = true)
     private Boolean active;
     @Interchangeable(fieldTitle="Delegated Cooperation",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Delegated Cooperation", importable = true)
@@ -118,7 +117,8 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
             InterchangeDependencyResolver.AGREEMENT_TITLE_PRESENT_KEY})
     private AmpAgreement agreement;
 
-    @Interchangeable(fieldTitle="Source Role",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Source Role", importable=true, pickIdOnly=true, required = ActivityEPConstants.REQUIRED_ALWAYS)
+    @Interchangeable(fieldTitle = "Source Role", importable = true, pickIdOnly = true,
+            required = ActivityEPConstants.REQUIRED_ALWAYS)
     private AmpRole sourceRole;
     @Interchangeable(fieldTitle="Funding Classification Date",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Classification Date", importable=true)
     private Date fundingClassificationDate;
@@ -382,7 +382,7 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
                 out.getOutputs().add(new Output(new ArrayList<Output>(), new String[]{"MTEF Projection"}, new Object[]{""}));
                 trnMTEF = true;
             }
-            String adjustment = mtef.getProjected().getValue();
+            String adjustment = mtef.getProjection().getValue();
             Output auxOutDetail = out.getOutputs().get(out.getOutputs().size() - 1);
             auxOutDetail.getOutputs().add(new Output(null, new String[]{""}, new Object[]{adjustment, " - ", mtef.getAmount(), " ", mtef.getAmpCurrency(), " - ", mtef.getProjectionDate()}));
         }

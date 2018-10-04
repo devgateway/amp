@@ -410,8 +410,7 @@ public class SettingsUtils {
         settings.set("default-date-format",
                 FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT));
 
-        settings.set("hide-editable-export-formats-public-view",
-                !FeaturesUtil.isVisibleModule("Show Editable Export Formats"));
+        settings.set("hide-editable-export-formats-public-view", !FeaturesUtil.showEditableExportFormats());
 
         settings.set("download-map-selector", FeaturesUtil.isVisibleFeature(GisConstants.DOWNLOAD_MAP_SELECTOR));
 
@@ -423,13 +422,29 @@ public class SettingsUtils {
         settings.set("number-group-separator", formatSymbols.getGroupingSeparator());
         settings.set("number-decimal-separator", formatSymbols.getDecimalSeparator());
 
+        adddEffectiveCurrency(settings);
+
+        settings.set(SettingsConstants.REORDER_FUNDING_ITEM_ID,
+                FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.REORDER_FUNDING_ITEMS));
+
         if (MenuUtils.getCurrentView() == AmpView.TEAM) {
             addWorkspaceSettings(settings);
         }
 
         addDateRangeSettingsForDashboardsAndGis(settings);
 
+        settings.set("public-version-history", FeaturesUtil.isVisibleFeature("Version History"));
+        settings.set("public-change-summary", FeaturesUtil.isVisibleField("Show Change Summary"));
+
         return settings;
+    }
+
+    private static void adddEffectiveCurrency(JsonBean settings) {
+        JsonBean currency = new JsonBean();
+        AmpCurrency effectiveCurrency = CurrencyUtil.getEffectiveCurrency();
+        currency.set(SettingsConstants.ID, effectiveCurrency.getAmpCurrencyId());
+        currency.set(SettingsConstants.CODE, effectiveCurrency.getCurrencyCode());
+        settings.set(SettingsConstants.EFFECTIVE_CURRENCY, currency);
     }
 
     private static void addWorkspaceSettings(JsonBean settings) {
@@ -721,26 +736,25 @@ public class SettingsUtils {
     }
 
     /**
-     * @param sortColumn
+     * @param selectedOption
      * @return general currency settings
      */
-    private static SettingOptions getSortSetting(String sortColumn) {
+    private static SettingOptions getSettingOptionsFromGlobalSettings(String selectedOption, String view) {
 
-        // build currency options
-        List<KeyValue> sortOptions = org.digijava.module.admin.util.DbUtil
-                .getPossibleValues(SettingsConstants.SORT_COLUMN_VIEW);
+        List<KeyValue> settingsOptions = org.digijava.module.admin.util.DbUtil
+                .getPossibleValues(view);
 
         List<SettingOptions.Option> options = new ArrayList<>();
 
-        for (KeyValue sortOption : sortOptions) {
-            SettingOptions.Option resourceSortingOption = new SettingOptions.Option(sortOption.getKey(),
+        for (KeyValue sortOption : settingsOptions) {
+            SettingOptions.Option settingsOption = new SettingOptions.Option(sortOption.getKey(),
                     sortOption.getValue());
-            options.add(resourceSortingOption);
+            options.add(settingsOption);
         }
 
         String defaultId = "";
-        if (sortColumn != null) {
-            defaultId = sortColumn;
+        if (selectedOption != null) {
+            defaultId = selectedOption;
         }
 
         return new SettingOptions(defaultId, options);
@@ -773,7 +787,8 @@ public class SettingsUtils {
         settingFieldList.add(getStringSetting(SettingsConstants.LIMIT_FILE_TO_UPLOAD,
                 ResourceManagerSettingsUtil.isLimitFileToUpload() + ""));
         settingFieldList.add(getSettingFieldForOptions(SettingsConstants.SORT_COLUMN,
-                getSortSetting(ResourceManagerSettingsUtil.getSortColumn())));
+                getSettingOptionsFromGlobalSettings(ResourceManagerSettingsUtil.getSortColumn(),
+                        SettingsConstants.SORT_COLUMN_VIEW)));
 
         return settingFieldList;
     }

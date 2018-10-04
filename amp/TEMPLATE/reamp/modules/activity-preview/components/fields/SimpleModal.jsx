@@ -153,8 +153,9 @@ export default class SimpleModal extends Component {
   }
 
   render () {
-    const { activityInfo, translations } = this.props;
+    const { activityInfo, translations, settings } = this.props;
     const label = translations['version_history'];
+    let showChangeSummary = settings[AC.TEAM_ID] || settings[AC.PUBLIC_CHANGE_SUMMARY];
     return (
         <div className={'preview_icons'}>
             <a title={label} onClick={() => this.setState({ show: true })}>
@@ -172,7 +173,9 @@ export default class SimpleModal extends Component {
                     <Button onClick={this.handleCompare} disabled={!this._compareToggle()}>
                         {translations['compare_versions']}
                     </Button>
-                    <Button onClick={this.handleHistory}>{translations['show_change_summary']}</Button>
+                    {showChangeSummary &&
+                        <Button onClick={this.handleHistory}>{translations['show_change_summary']}</Button>
+                    }                    
                 </Modal.Body>
                 <Modal.Footer>
                 <Button onClick={this.handleHide}>{translations['close']}</Button>

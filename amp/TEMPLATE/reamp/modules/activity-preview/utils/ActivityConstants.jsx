@@ -171,6 +171,9 @@ export const CURRENCY_CODE = 'code';
 export const CURRENCY_ID = 'id';
 export const LANGUAGE = 'language';
 export const TRANSLATED_VALUE = 'translated-value';
+export const TEAM_ID = 'team-id';
+export const PUBLIC_VERSION_HISTORY = 'public-version-history';
+export const PUBLIC_CHANGE_SUMMARY = 'public-change-summary';
 
 //INFO
 export const INFO_EDIT = 'edit';

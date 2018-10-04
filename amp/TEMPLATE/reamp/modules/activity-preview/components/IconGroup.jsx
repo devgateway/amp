@@ -10,9 +10,9 @@ require('../styles/ActivityView.css');
 export default class IconGroup extends Component {
     render() {
         const { activity, translations, settings, activityInfo }  = this.props; 
-
+        let showHistory = settings[AC.TEAM_ID] || settings[AC.PUBLIC_VERSION_HISTORY];
         let history = (
-            <SimpleModal activityInfo={activityInfo} translations={translations}/>
+            <SimpleModal activityInfo={activityInfo} translations={translations} settings={settings}/>
         );
 
         //Edit && Validate
@@ -38,7 +38,7 @@ export default class IconGroup extends Component {
         return (
             <div>
                 {editOrValidate}
-                {history}
+                {showHistory && history}
                 <TopIcon key={'pdfIcon'} link={'/aim/exportActToPDF.do?activityid=' + activity[AC.INTERNAL_ID].value}
                     label={translations['amp.activity-preview:exportPDF']}
                     img={"/TEMPLATE/reamp/modules/activity-preview/styles/images/AMP_pdf.svg"} 

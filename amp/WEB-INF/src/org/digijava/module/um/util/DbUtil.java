@@ -509,7 +509,6 @@ public class DbUtil {
             iduser = (BigInteger) query.uniqueResult();
             if (iduser!= null){
                 User user = (User) session.load(User.class, iduser.longValue());
-                user.setActivate(true);
                 user.setBanned(false);
                 user.setEmailVerified(true);
                 user.updateLastModified();

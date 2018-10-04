@@ -56,7 +56,6 @@ public class ShowAdministrateUser
         userForm.setLastName(selectedUser.getLastName());
 
         userForm.setBan(selectedUser.isBanned());
-        userForm.setAlertable(!selectedUser.isActivate());
 
         userForm.setGlobalAdmin(selectedUser.isGlobalAdmin());
         

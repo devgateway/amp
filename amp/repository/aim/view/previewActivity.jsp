@@ -367,7 +367,7 @@ function collapseAll() {
 					</td>
 					<td>
 						<c:set var="showWordSetting" scope="page" value="false"/>
-						<%if(FeaturesUtil.isVisibleModule("Show Editable Export Formats")){ %>
+						<%if(FeaturesUtil.showEditableExportFormats()){ %>
 							<c:set var="showWordSetting" scope="page" value="true"/>
 						<%}%>
 						<c:if test="${(sessionScope.currentMember != null) || (showWordSetting)}">

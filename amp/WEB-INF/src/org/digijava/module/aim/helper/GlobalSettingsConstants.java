@@ -206,6 +206,9 @@ public class GlobalSettingsConstants {
     public static final String AMP_OFFLINE_ENABLED = "AMP Offline Enabled";
     
     public static final String AMP_SERVER_ID = "AMP Server ID";
+    
+    // TODO will be removed once the new activity preview is finished
+    public static final String USE_NEW_ACTIVITY_PREVIEW = "Use new activity preview";
 
     /**
      * fields which, although existing in the database, should be rendered with a display: none on the GlobalSettings form so that the user never has a chance of changing their value

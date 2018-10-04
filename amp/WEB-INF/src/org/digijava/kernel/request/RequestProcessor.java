@@ -311,7 +311,6 @@ public class RequestProcessor
     public boolean processPreprocess(HttpServletRequest request, HttpServletResponse response)
     {
         TLSUtils.populate(request);
-        DocumentManagerUtil.initJCRSessions(request);
         TranslatorUtil.insertAvailableLanguages(request);
         request.setAttribute("currentLocale", TLSUtils.getEffectiveLangCode());
         return true;

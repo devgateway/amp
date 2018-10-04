@@ -216,8 +216,21 @@ public class ReportsUtil {
         String errMsg = "";
         
         logger.debug("Database sanity check - in progress...");
-        List<?> res = session.createSQLQuery("select DISTINCT(amp_report_id) from amp_report_column arc WHERE " + 
-                "(SELECT count(*) from amp_report_column arc2 WHERE arc2.amp_report_id = arc.amp_report_id AND arc2.columnid = arc.columnid) > 1").list();
+        
+        List<?> res = session.createSQLQuery("SELECT amp_activity_id FROM amp_activity "
+                + "WHERE amp_id IN (SELECT amp_id FROM (SELECT amp_id, "
+                + "ROW_NUMBER() OVER(PARTITION BY amp_id ORDER BY amp_activity_id asc) AS Row "
+                + "FROM amp_activity) dups WHERE dups.row > 1)")
+                .list();
+        
+        if (!res.isEmpty()) {
+            errMsg += "Duplicate activities are found in amp_activity table: " + Util.toCSString(res) 
+            + System.lineSeparator();
+        }
+        
+        res = session.createSQLQuery("select DISTINCT(amp_report_id) from amp_report_column arc WHERE "
+                + "(SELECT count(*) from amp_report_column arc2 WHERE arc2.amp_report_id = arc.amp_report_id "
+                + "AND arc2.columnid = arc.columnid) > 1").list();
         if (!res.isEmpty())
             errMsg += "The following reports have a column repeated at least twice each: amp_report_id IN (" + Util.toCSString(res) + ")" + System.lineSeparator();
         

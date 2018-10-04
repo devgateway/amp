@@ -43,6 +43,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 /**
  * This class should have all end point related to the configuration of amp
  * @author Diego Dimunzio
@@ -155,7 +156,7 @@ public class AmpConfiguration implements ErrorReportingEndpoint {
                 release = AmpOfflineRelease.fromUserAgent(userAgent);
             } catch (IllegalArgumentException e) {
                 JsonBean error = ApiError.toError(AmpConfigurationErrors.INVALID_INPUT.withDetails(e.getMessage()));
-                throw new ApiRuntimeException(Response.Status.BAD_REQUEST, error);
+                throw new ApiRuntimeException(error);
             }
         }
         return release;

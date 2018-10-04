@@ -1,5 +1,6 @@
 package org.digijava.module.contentrepository.action;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -13,6 +14,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.contentrepository.form.SelectDocumentForm;
+import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.helper.DocumentData;
 import org.digijava.module.contentrepository.helper.TeamInformationBeanDM;
 import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
@@ -104,7 +106,7 @@ public class SelectDocumentDM extends Action {
                     } 
                 }
             }
-            TemporaryDocumentData.refreshTemporaryUuids(request);
+            refreshTemporaryUuids(request);
             
             if(request.getParameter("reloadOrgDocs")!=null){    //get organization documents from db or not         
                 request.getSession().setAttribute("reloadOrgDocsFromDb", new Boolean(false));
@@ -126,5 +128,14 @@ public class SelectDocumentDM extends Action {
         myForm.setSelectedDocs(null);
         myForm.setTeamInformationBeanDM(null);
         myForm.setHasAddRights(false);
+    }
+    
+    private void refreshTemporaryUuids(HttpServletRequest request) {
+        ArrayList<DocumentData> list = DocumentManagerUtil.retrieveTemporaryDocDataList(request);
+        Iterator<DocumentData> iter = list.iterator();
+        int i = 0;
+        while (iter.hasNext()) {
+            iter.next().setUuid(CrConstants.TEMPORARY_UUID + (i++));
+        }
     }
 }

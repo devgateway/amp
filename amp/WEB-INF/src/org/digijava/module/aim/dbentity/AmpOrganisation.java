@@ -147,10 +147,10 @@ public class AmpOrganisation implements Comparable<AmpOrganisation>, Identifiabl
      *this field is saved in Organization Dashboard and not from organization manager in admin
      * don't confuse it with Description field
      */
-    @Interchangeable(fieldTitle="Organization Description Dashboard")
+    @Interchangeable(fieldTitle = "Organization Description Dashboard", label = "Organization Description (Dashboard)")
     private String orgDescription;
     // this field is saved in Organization Dashboard and not from organization manager in admin
-    @Interchangeable(fieldTitle="Organization Key Areas Dashboard")
+    @Interchangeable(fieldTitle = "Organization Key Areas Dashboard", label = "Organization Key Areas (Dashboard)")
     private String orgKeyAreas;
     
     //Budget fields

@@ -176,44 +176,26 @@ define([ 'numeral', 'jquery', 'jqueryui', 'jqgrid' ], function(Numeral, jQuery) 
 			maxDecimalDigits : 0,
 			groupSize : 0
 		};
-		// Extract the values we need to format numbers from tab's settings.
-		_.each(settings, function(item, i) {
-			if (item.get('id') === "amountFormat") {
-				_.each(item.get('value').models, function(item2, j) {
-					switch (item2.get('id')) {
-					case "decimalSymbol":
-						var decimalSymbolName = item2.get('value').get('defaultId');
-						options.currentDecimalSeparator = _.find(item2.get('value').get('options').models, function(item3) {
-							return item3.get('id') === decimalSymbolName;
-						});
-						options.currentDecimalSeparator = options.currentDecimalSeparator.get('value');
-						break;
-					case "maxFracDigits":
-						var maxDecimalDigitsName = item2.get('value').get('defaultId');
-						options.maxDecimalDigits = _.find(item2.get('value').get('options').models, function(item3) {
-							return item3.get('id') === maxDecimalDigitsName;
-						});
-						options.maxDecimalDigits = parseInt(options.maxDecimalDigits.get('value'));
-						break;
-					case "useGrouping":
-						options.useGrouping = item2.get('value');
-						break;
-					case "groupSize":
-						options.groupSize = item2.get('value');
-						break;
-					case "groupSeparator":
-						var currentThousandSeparatorName = item2.get('value').get('defaultId');
-						options.currentThousandSeparator = _.find(item2.get('value').get('options').models, function(item3) {
-							return item3.get('id') === currentThousandSeparatorName;
-						});
-						options.currentThousandSeparator = options.currentThousandSeparator.get('value');
-						break;
-					}
-					;
-				});
+		
+		var amountFormat = settings['amount-format'];
+		if (amountFormat) {
+			if (amountFormat.get('decimal-symbol')) {
+				options.currentDecimalSeparator = amountFormat.get('decimal-symbol');
 			}
-			;
-		});
+			if (amountFormat.get('max-frac-digits')) {
+				options.maxDecimalDigits = amountFormat.get('max-frac-digits');
+			}
+			if (amountFormat.get('use-grouping')) {
+				options.useGrouping = amountFormat.get('use-grouping');
+			}
+			if (amountFormat.get('group-size')) {
+				options.groupSize = amountFormat.get('group-size');
+			}
+			if (amountFormat.get('group-separator')) {
+				options.currentThousandSeparator = amountFormat.get('group-separator');
+			}
+		}
+
 		return options;
 	}
 

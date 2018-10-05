@@ -24,7 +24,6 @@
 		<property name="passQuestion" column="PASS_QUESTION" type="java.lang.String" />
 		<property name="passAnswer" column="PASS_ANSWER" type="java.lang.String" />
 		<property name="url" column="URL" type="java.lang.String" />
-		<property name="active" column="ACTIVE" type="boolean" />
 		<property name="banned" column="BANNED" type="boolean" />
 		<property name="referral" column="REFERRAL" type="java.lang.String" />
 		<property column="ORGANIZATION_TYPE_OTHER" name="organizationTypeOther" type="text" />

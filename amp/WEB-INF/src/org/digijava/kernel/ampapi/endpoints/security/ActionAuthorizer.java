@@ -53,6 +53,11 @@ public class ActionAuthorizer {
 
         Collection<AuthRule> authRules = ruleHierarchy.getEffectiveRules(apiMethod.authTypes());
         
+        if (authRules.contains(AuthRule.AUTHENTICATED) && TeamUtil.getCurrentUser() == null) {
+            ApiErrorResponse.reportUnauthorisedAccess(SecurityErrors.NOT_AUTHENTICATED);
+            return;
+        }
+        
         if (authRules.contains(AuthRule.AMP_OFFLINE) 
                 || (authRules.contains(AuthRule.AMP_OFFLINE_OPTIONAL) && AmpOfflineModeHolder.isAmpOfflineMode())) {
             
@@ -73,15 +78,10 @@ public class ActionAuthorizer {
             AmpVersionService ampVersionService = SpringUtil.getBean(AmpVersionService.class);
             
             if (!ampVersionService.isAmpOfflineCompatible(clientRelease)) {
-                ApiErrorResponse.reportUnauthorisedAccess(SecurityErrors.NOT_ALLOWED
+                ApiErrorResponse.reportForbiddenAccess(SecurityErrors.NOT_ALLOWED
                         .withDetails("AMP Offline is not compatible"));
                 return;
             }
-        }
-        
-        if (authRules.contains(AuthRule.AUTHENTICATED) && TeamUtil.getCurrentUser() == null) {
-            ApiErrorResponse.reportUnauthorisedAccess(SecurityErrors.NOT_AUTHENTICATED);
-            return;
         }
         
         if (authRules.contains(AuthRule.IN_WORKSPACE) && !TeamUtil.isUserInWorkspace()) {
@@ -103,6 +103,13 @@ public class ActionAuthorizer {
 
         if (authRules.contains(AuthRule.VIEW_ACTIVITY) && !InterchangeUtils.isViewableActivity(containerReq)) {
             addError(methodInfo, errors, SecurityErrors.INVALID_REQUEST, "Activity doesn't exist or is not the latest version");
+        }
+        if (authRules.contains(AuthRule.PUBLIC_VIEW_ACTIVITY) && !InterchangeUtils.
+                canViewActivityIfCreatedInPrivateWs(containerReq)) {
+            ApiErrorMessage errorMessage = SecurityErrors.NOT_ALLOWED.withDetails("You must be logged-in in the "
+                    + "workspace where the activity was created");
+            ApiErrorResponse.reportForbiddenAccess(errorMessage);
+            return;
         }
 
         if (!errors.isEmpty()) {

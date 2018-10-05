@@ -140,7 +140,7 @@ public class ResourceEndpoint implements ErrorReportingEndpoint {
     @GET
     @Path("{uuid}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getResource", ui = false)
+    @ApiMethod(id = "getResource", ui = false)
     public JsonBean getResource(@PathParam("uuid") String uuid) {
         return ResourceUtil.getResource(uuid);
     }
@@ -172,7 +172,7 @@ public class ResourceEndpoint implements ErrorReportingEndpoint {
      */
     @POST
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getAllResourcesByIds", ui = false)
+    @ApiMethod(id = "getAllResourcesByIds", ui = false)
     public List<JsonBean> getAllResources(List<String> uuids) {
         return ResourceUtil.getAllResources(uuids);
     }

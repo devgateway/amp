@@ -8,7 +8,10 @@ import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.CON
 import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.EXCHANGE_RATES;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.FEATURE_MANAGER;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.GLOBAL_SETTINGS;
+import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.LOCATORS;
+import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.MAP_TILES;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.RESOURCE;
+import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.CALENDAR;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.TRANSLATION;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.WORKSPACES;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.WORKSPACE_FILTER_DATA;
@@ -56,12 +59,12 @@ import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.ampapi.endpoints.currency.CurrencyService;
 import org.digijava.kernel.ampapi.endpoints.currency.dto.ExchangeRatesForPair;
+import org.digijava.kernel.ampapi.endpoints.gis.services.MapTilesService;
 import org.digijava.kernel.ampapi.endpoints.resource.ResourceUtil;
 import org.digijava.kernel.ampapi.endpoints.sync.SyncRequest;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.services.sync.model.ActivityChange;
-import org.digijava.module.aim.dbentity.AmpOfflineChangelog;
 import org.digijava.kernel.services.sync.model.ExchangeRatesDiff;
 import org.digijava.kernel.services.sync.model.ListDiff;
 import org.digijava.kernel.services.sync.model.ResourceChange;
@@ -69,6 +72,7 @@ import org.digijava.kernel.services.sync.model.SystemDiff;
 import org.digijava.kernel.services.sync.model.Translation;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.ar.util.FilterUtil;
+import org.digijava.module.aim.dbentity.AmpOfflineChangelog;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.repository.AmpOfflineChangelogRepository;
@@ -142,12 +146,15 @@ public class SyncService implements InitializingBean {
         updateDiffsForActivities(systemDiff, syncRequest);
         updateDiffsForContacts(systemDiff, syncRequest);
         updateDiffsForResources(systemDiff, syncRequest);
+        updateDiffsForMapTilesAndLocators(systemDiff, lastSyncTime);
+        updateDiffsForCalendars(systemDiff, syncRequest);
 
         systemDiff.setTranslations(shouldSyncTranslations(systemDiff, lastSyncTime));
 
         systemDiff.setActivityPossibleValuesFields(findChangedPossibleValuesFields(systemDiff, lastSyncTime));
         systemDiff.setContactPossibleValuesFields(findChangedContactPossibleValuesFields(systemDiff, lastSyncTime));
         systemDiff.setResourcePossibleValuesFields(findChangedResourcePossibleValuesFields(systemDiff, lastSyncTime));
+        systemDiff.setCommonPossibleValuesFields(findChangedCommonPossibleValuesFields(systemDiff, lastSyncTime));
 
         systemDiff.setExchangeRates(shouldSyncExchangeRates(lastSyncTime));
 
@@ -213,6 +220,11 @@ public class SyncService implements InitializingBean {
     private List<String> findChangedResourcePossibleValuesFields(SystemDiff systemDiff, Date lastSyncTime) {
         Predicate<Field> fieldFilter = getChangedFields(systemDiff, lastSyncTime);
         return fieldsEnumerator.findResourceFieldPaths(fieldFilter);
+    }
+    
+    private List<String> findChangedCommonPossibleValuesFields(SystemDiff systemDiff, Date lastSyncTime) {
+        Predicate<Field> fieldFilter = getChangedFields(systemDiff, lastSyncTime);
+        return fieldsEnumerator.findCommonFieldPaths(fieldFilter);
     }
 
     private Predicate<Field> getChangedFields(SystemDiff systemDiff, Date lastSyncTime) {
@@ -354,6 +366,15 @@ public class SyncService implements InitializingBean {
             systemDiff.setContacts(toListDiffWithLongs(changeLogs, systemDiff));
         }
     }
+
+    private void updateDiffsForCalendars(SystemDiff systemDiff, SyncRequest syncRequest) {
+        if (syncRequest.getLastSyncTime() == null) {
+            systemDiff.setCalendars(new ListDiff<>(emptyList(), findAllCalendarIds()));
+        } else {
+            List<AmpOfflineChangelog> changeLogs = loadChangeLog(syncRequest.getLastSyncTime(), asList(CALENDAR));
+            systemDiff.setCalendars(toListDiffWithLongs(changeLogs, systemDiff));
+        }
+    }
     
     private void updateDiffsForResources(SystemDiff systemDiff, SyncRequest syncRequest) {
         if (syncRequest.getLastSyncTime() == null) {
@@ -380,7 +401,7 @@ public class SyncService implements InitializingBean {
             systemDiff.setResources(new ListDiff<>(removed, updated));
         }
     }
-
+    
     private boolean resourcesChanged(Date lastSyncTime) {
         return !loadChangeLog(lastSyncTime, asList(RESOURCE)).isEmpty();
     }
@@ -403,6 +424,10 @@ public class SyncService implements InitializingBean {
 
     private List<Long> findAllUserIds() {
         return jdbcTemplate.query("select id from dg_user", emptyMap(), ID_MAPPER);
+    }
+    
+    private List<Long> findAllCalendarIds() {
+        return jdbcTemplate.query("select amp_fiscal_cal_id from amp_fiscal_calendar", emptyMap(), ID_MAPPER);
     }
 
     private List<AmpOfflineChangelog> findChangedUsers(Date lastSyncTime) {
@@ -444,13 +469,37 @@ public class SyncService implements InitializingBean {
             systemDiff.setWorkspaceSettings(true);
         }
     }
+    
+    private void updateDiffsForMapTilesAndLocators(SystemDiff systemDiff, Date lastSyncTime) {
+        boolean isMapTilesPublished = MapTilesService.getInstance().getMapTilesNodeWrapper() != null;
+        if (lastSyncTime != null) {
+            List<AmpOfflineChangelog> changelogs = findChangedMapTilesAndLocators(lastSyncTime);
+
+            for (AmpOfflineChangelog changelog : changelogs) {
+                if (changelog.getEntityName().equals(MAP_TILES)) {
+                    systemDiff.setMapTiles(isMapTilesPublished);
+                }
+                if (changelog.getEntityName().equals(LOCATORS)) {
+                    systemDiff.setLocators(true);
+                }
+                systemDiff.updateTimestamp(changelog.getOperationTime());
+            }
+        } else {
+            systemDiff.setMapTiles(isMapTilesPublished);
+            systemDiff.setLocators(true);
+        }
+    }
 
     private List<AmpOfflineChangelog> findChangedWsAndGs(Date lastSyncTime) {
         return loadChangeLog(lastSyncTime,
                 asList(GLOBAL_SETTINGS, WORKSPACES, WORKSPACE_SETTINGS, WORKSPACE_FILTER_DATA, 
                         WORKSPACE_ORGANIZATIONS));
     }
-
+    
+    private List<AmpOfflineChangelog> findChangedMapTilesAndLocators(Date lastSyncTime) {
+        return loadChangeLog(lastSyncTime, asList(MAP_TILES, LOCATORS));
+    }
+    
     private void updateDiffForWorkspaceMembers(SystemDiff systemDiff, Date lastSyncTime) {
         if (lastSyncTime == null) {
             List<Long> workspaceMemberIds = findWorkspaceMembers();

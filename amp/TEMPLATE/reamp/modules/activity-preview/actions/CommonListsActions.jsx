@@ -99,7 +99,7 @@ export function getSettingsAndActivity(activityId){
                         commonListsApi.getFields().then(fields => {
                             dispatch(getFieldsSuccess(fields));
                             _addLabelAndType(hydratedActivity, fields);
-                            _addRealValue(hydratedActivity, lang).then(response => {
+                            _addRealValue(hydratedActivity, fields, lang).then(response => {
                                 let docs = hydratedActivity[AC.ACTIVITY_DOCUMENTS].value;
                                 if (docs && docs.length > 0) {
                                     let res = [];
@@ -182,10 +182,10 @@ function _addLabelAndType(hydratedActivity, fields) {
     }
 }
 
-function _addRealValue(hydratedActivity, lang) {
+function _addRealValue(hydratedActivity, fields, lang) {
     return new Promise((resolve, reject) => {
         let requestData = {};
-        _createRequestDataHelper(requestData, hydratedActivity);
+        _createRequestDataHelper(requestData, hydratedActivity, fields);
         commonListsApi.fetchFieldsData(requestData).then(fields => {
             let keys = Object.keys(fields);
             for(var key in keys) {
@@ -247,23 +247,27 @@ function _addRealValueHelper(fieldParam, path, values, lang) {
 }
 
 
-function _createRequestDataHelper(requestData, hydratedActivity, parentName) {
+function _createRequestDataHelper(requestData, hydratedActivity, fieldsInfo, parentName) {
     let keys = Object.keys(hydratedActivity);
     for(var key in keys) {
         let fieldObj = hydratedActivity[keys[key]];
         if(fieldObj.field_type === 'long') {
             if(fieldObj.value !== undefined && fieldObj.value !== null) {
-                let _parentName = parentName ? parentName + '~' + keys[key] : keys[key];
-                if (requestData[_parentName]) {
-                    requestData[_parentName].push(fieldObj.value);
-                } else {
-                    requestData[_parentName] = [fieldObj.value];
+                let newFieldsInfo = fieldsInfo.find(f => f[AC.FIELD_NAME] === keys[key]);
+                if (newFieldsInfo[AC.ID_ONLY]) {
+                    let _parentName = parentName ? parentName + '~' + keys[key] : keys[key];
+                    if (requestData[_parentName]) {
+                        requestData[_parentName].push(fieldObj.value);
+                    } else {
+                        requestData[_parentName] = [fieldObj.value];
+                    }
                 }
             }
         } else if (fieldObj.field_type === 'list' && fieldObj.value && fieldObj.value.length > 0) {
             let _parentName = parentName ? parentName + '~' + keys[key] : keys[key];
             for(var pos in fieldObj.value) {
-                _createRequestDataHelper(requestData, fieldObj.value[pos], _parentName);
+                let newFieldsInfo = fieldsInfo.find(f => f[AC.FIELD_NAME] === keys[key]);
+                _createRequestDataHelper(requestData, fieldObj.value[pos], newFieldsInfo[AC.CHILDREN], _parentName);
             }
         }
     }

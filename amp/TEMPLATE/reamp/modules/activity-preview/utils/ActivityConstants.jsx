@@ -174,6 +174,9 @@ export const TRANSLATED_VALUE = 'translated-value';
 export const TEAM_ID = 'team-id';
 export const PUBLIC_VERSION_HISTORY = 'public-version-history';
 export const PUBLIC_CHANGE_SUMMARY = 'public-change-summary';
+export const FIELD_NAME = 'field_name';
+export const CHILDREN = 'children';
+export const ID_ONLY = 'id_only';
 
 //INFO
 export const INFO_EDIT = 'edit';

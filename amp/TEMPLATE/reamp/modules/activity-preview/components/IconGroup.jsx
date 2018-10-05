@@ -11,8 +11,6 @@ export default class IconGroup extends Component {
     render() {
         const { activity, translations, settings, activityInfo }  = this.props; 
         let activityId = '' + activity[AC.INTERNAL_ID].value;
-        console.log(activity);
-        console.log('activityId: ' + activityId);
         let showHistory = settings[AC.TEAM_ID] || settings[AC.PUBLIC_VERSION_HISTORY];
         let history = (
             <SimpleModal activityInfo={activityInfo} translations={translations} settings={settings}/>

@@ -37,6 +37,7 @@ import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpComponentType;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRole;
@@ -83,6 +84,7 @@ public class PossibleValuesEnumerator {
                 .putAll(AmpTeam.class, Entities.WORKSPACES)
                 .putAll(User.class, Entities.USER)
                 .putAll(AmpComponentType.class, Entities.COMPONENT_TYPE)
+                .putAll(AmpFiscalCalendar.class, Entities.CALENDAR)
                 .build();
 
     private PossibleValuesDAO possibleValuesDAO;
@@ -303,6 +305,9 @@ public class PossibleValuesEnumerator {
             return getComponentTypes();
         if (clazz.isAssignableFrom(AmpContact.class)) {
             return getPossibleContacts();
+        }
+        if (clazz.isAssignableFrom(AmpOrganisation.class)) {
+            return getPossibleValuesGenericCase(clazz, () -> possibleValuesDAO.getOrganisations());
         }
         return getPossibleValuesGenericCase(clazz, () -> possibleValuesDAO.getGenericValues(clazz));
     }

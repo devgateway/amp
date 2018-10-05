@@ -95,13 +95,29 @@ public class ActivityEPConstants {
     private static final String FUNDING_ITEM_FM_PATH = "/Activity Form/Funding/Funding Group/Funding Item";
 
     // some FM paths
-    public static final String COMMITMENTS_DISASTER_RESPONSE_FM_PATH = FUNDING_ITEM_FM_PATH + "/Commitments/Commitments Table/Disaster Response";
-    public static final String DISBURSEMENTS_DISASTER_RESPONSE_FM_PATH = FUNDING_ITEM_FM_PATH + "/Disbursements/Disbursements Table/Disaster Response";
+    public static final String COMMITMENTS_TABLE_FM_PATH = FUNDING_ITEM_FM_PATH + "/Commitments/Commitments Table";
+    public static final String DISB_TABLE_FM_PATH = FUNDING_ITEM_FM_PATH + "/Disbursements/Disbursements Table";
+    public static final String EST_DISB_TABLE_FM_PATH = FUNDING_ITEM_FM_PATH 
+            + "/Estimated Disbursements/Estimated Disbursements Table";
+    public static final String RELEASE_FUNDS_TABLE_FM_PATH = FUNDING_ITEM_FM_PATH 
+            + "/Release of Funds/Release of Funds Table";
+    
+    public static final String COMMITMENTS_DISASTER_RESPONSE_FM_PATH = COMMITMENTS_TABLE_FM_PATH + "/Disaster Response";
+    public static final String DISBURSEMENTS_DISASTER_RESPONSE_FM_PATH = DISB_TABLE_FM_PATH + "/Disaster Response";
+    
+    public static final String DISB_RECIPIENT_ROLE_FM_PATH = DISB_TABLE_FM_PATH 
+            + "/Funding Flows OrgRole Selector/Recipient Org Role";
+    public static final String COMMITMENTS_RECIPIENT_ROLE_FM_PATH = COMMITMENTS_TABLE_FM_PATH 
+            + "/Funding Flows OrgRole Selector/Recipient Org Role";
+    public static final String DISB_RECIPIENT_ORG_FM_PATH = DISB_TABLE_FM_PATH 
+            + "/Funding Flows OrgRole Selector/Recipient Organization";
+    public static final String COMMITMENTS_RECIPIENT_ORG_FM_PATH = COMMITMENTS_TABLE_FM_PATH 
+            + "/Funding Flows OrgRole Selector/Recipient Organization";
 
-    public static final String COMMITMENTS_PLEDGES_FM_PATH = FUNDING_ITEM_FM_PATH + "/Commitments/Commitments Table/Pledges";
-    public static final String DISBURSEMENTS_PLEDGES_FM_PATH = FUNDING_ITEM_FM_PATH + "/Disbursements/Disbursements Table/Pledges";
-    public static final String ESTIMATED_DISBURSEMENTS_PLEDGES_FM_PATH = FUNDING_ITEM_FM_PATH + "/Estimated Disbursements/Estimated Disbursements Table/Pledges";
-    public static final String RELEASE_OF_FUNDS_PLEDGES_FM_PATH = FUNDING_ITEM_FM_PATH + "/Release of Funds/Release of Funds Table/Pledges";
+    public static final String COMMITMENTS_PLEDGES_FM_PATH = COMMITMENTS_TABLE_FM_PATH + "/Pledges";
+    public static final String DISBURSEMENTS_PLEDGES_FM_PATH = DISB_TABLE_FM_PATH + "/Pledges";
+    public static final String ESTIMATED_DISBURSEMENTS_PLEDGES_FM_PATH = EST_DISB_TABLE_FM_PATH + "/Pledges";
+    public static final String RELEASE_OF_FUNDS_PLEDGES_FM_PATH = RELEASE_FUNDS_TABLE_FM_PATH + "/Pledges";
 
     public static final String AF_ID_FM_PATH = "/Activity Form/Identification";
     public static final String DONOR_PROJECT_CODE_FM_PATH = AF_ID_FM_PATH + "/Donor Project Code";

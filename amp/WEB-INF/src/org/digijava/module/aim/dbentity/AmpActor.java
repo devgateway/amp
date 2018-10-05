@@ -12,7 +12,7 @@ public class AmpActor  implements Serializable, Cloneable
     //IATI-check: not used in IATI
     private Long ampActorId ;
 
-    @Interchangeable(fieldTitle = "Name", importable = true)
+    @Interchangeable(fieldTitle = "Name", label = "Actor", importable = true)
     @TranslatableField
     private String name;
 

@@ -11,6 +11,7 @@ import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.GLO
 import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.LOCATORS;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.MAP_TILES;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.RESOURCE;
+import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.CALENDAR;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.TRANSLATION;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.WORKSPACES;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.WORKSPACE_FILTER_DATA;
@@ -146,12 +147,14 @@ public class SyncService implements InitializingBean {
         updateDiffsForContacts(systemDiff, syncRequest);
         updateDiffsForResources(systemDiff, syncRequest);
         updateDiffsForMapTilesAndLocators(systemDiff, lastSyncTime);
+        updateDiffsForCalendars(systemDiff, syncRequest);
 
         systemDiff.setTranslations(shouldSyncTranslations(systemDiff, lastSyncTime));
 
         systemDiff.setActivityPossibleValuesFields(findChangedPossibleValuesFields(systemDiff, lastSyncTime));
         systemDiff.setContactPossibleValuesFields(findChangedContactPossibleValuesFields(systemDiff, lastSyncTime));
         systemDiff.setResourcePossibleValuesFields(findChangedResourcePossibleValuesFields(systemDiff, lastSyncTime));
+        systemDiff.setCommonPossibleValuesFields(findChangedCommonPossibleValuesFields(systemDiff, lastSyncTime));
 
         systemDiff.setExchangeRates(shouldSyncExchangeRates(lastSyncTime));
 
@@ -217,6 +220,11 @@ public class SyncService implements InitializingBean {
     private List<String> findChangedResourcePossibleValuesFields(SystemDiff systemDiff, Date lastSyncTime) {
         Predicate<Field> fieldFilter = getChangedFields(systemDiff, lastSyncTime);
         return fieldsEnumerator.findResourceFieldPaths(fieldFilter);
+    }
+    
+    private List<String> findChangedCommonPossibleValuesFields(SystemDiff systemDiff, Date lastSyncTime) {
+        Predicate<Field> fieldFilter = getChangedFields(systemDiff, lastSyncTime);
+        return fieldsEnumerator.findCommonFieldPaths(fieldFilter);
     }
 
     private Predicate<Field> getChangedFields(SystemDiff systemDiff, Date lastSyncTime) {
@@ -358,6 +366,15 @@ public class SyncService implements InitializingBean {
             systemDiff.setContacts(toListDiffWithLongs(changeLogs, systemDiff));
         }
     }
+
+    private void updateDiffsForCalendars(SystemDiff systemDiff, SyncRequest syncRequest) {
+        if (syncRequest.getLastSyncTime() == null) {
+            systemDiff.setCalendars(new ListDiff<>(emptyList(), findAllCalendarIds()));
+        } else {
+            List<AmpOfflineChangelog> changeLogs = loadChangeLog(syncRequest.getLastSyncTime(), asList(CALENDAR));
+            systemDiff.setCalendars(toListDiffWithLongs(changeLogs, systemDiff));
+        }
+    }
     
     private void updateDiffsForResources(SystemDiff systemDiff, SyncRequest syncRequest) {
         if (syncRequest.getLastSyncTime() == null) {
@@ -407,6 +424,10 @@ public class SyncService implements InitializingBean {
 
     private List<Long> findAllUserIds() {
         return jdbcTemplate.query("select id from dg_user", emptyMap(), ID_MAPPER);
+    }
+    
+    private List<Long> findAllCalendarIds() {
+        return jdbcTemplate.query("select amp_fiscal_cal_id from amp_fiscal_calendar", emptyMap(), ID_MAPPER);
     }
 
     private List<AmpOfflineChangelog> findChangedUsers(Date lastSyncTime) {

@@ -24,6 +24,7 @@ export const ACTIVITY_SECTION_IDS =
     { key: 'AcFunding', hash: 'AcFunding', value: 'Funding', translationKey: 'Funding' },
     { key: 'AcRelatedOrganizations', hash: 'AcRelatedOrganizations', value: 'Related Organizations', translationKey: 'RelatedOrganizations' },
     { key: 'AcIssues', hash: 'AcIssues', value: 'Issues', translationKey: 'Issues' },
+    { key: 'AcRelatedDocuments', hash: 'AcRelatedDocuments', value: 'Related Documents', translationKey: 'RelatedDocuments' },
     { key: 'AcContacts', hash: 'AcContacts', value: 'Contacts', translationKey: 'Contacts' },
     { key: 'AcFundingSummary', hash: 'AcFundingSummary', value: 'Funding Summary', translationKey: 'FundingInformation' },
     { key: 'AcAdditionalInfo', hash: 'AdditionalInfo', value: 'Additional Info', translationKey: 'AdditionalInfo' }
@@ -170,6 +171,12 @@ export const CURRENCY_CODE = 'code';
 export const CURRENCY_ID = 'id';
 export const LANGUAGE = 'language';
 export const TRANSLATED_VALUE = 'translated-value';
+export const TEAM_ID = 'team-id';
+export const PUBLIC_VERSION_HISTORY = 'public-version-history';
+export const PUBLIC_CHANGE_SUMMARY = 'public-change-summary';
+export const FIELD_NAME = 'field_name';
+export const CHILDREN = 'children';
+export const ID_ONLY = 'id_only';
 
 //INFO
 export const INFO_EDIT = 'edit';
@@ -184,6 +191,10 @@ export const CANNOT_BE_VALIDATE = 'CANNOT_BE_VALIDATED';
 export const INFO_LAST_VERSION = 'amp-activity-last-version-id';
 export const INFO_ACTIVITY_ID = 'amp-activity-id';
 export const ANCESTOR_VALUES = 'ancestor-values';
+export const VERSION_HISTORY = 'version-history';
+export const MODIFIED_BY_INFO = 'modified-by';
+export const MODIFIED_DATE = 'modified-date';
+export const UPDATE_CURRENT_VERSION = 'update-current-version';
 
 //FUNDING
 export const FUNDING_INFORMATION = 'funding_information';
@@ -199,6 +210,18 @@ export const TRX_TYPE_PATH = 'fundings~funding_details~transaction_type';
 export const ADJ_TYPE_PATH = 'fundings~funding_details~adjustment_type';
 export const AMOUNT = 'amount';
 export const REORDER_TRX = 'reorder-funding-item';
+
+//RELATED DOCUMENTS
+export const ACTIVITY_DOCUMENTS = 'activity_documents';
+export const DOC_UUID = 'uuid';
+export const DOC_TITLE = 'title';
+export const DOC_DESC = 'description';
+export const DOC_WEB_LINK = 'web_link';
+export const DOC_URL = 'url';
+export const DOC_DATE = 'adding_date';
+export const FILE_NAME = 'file_name';
+
+
 
 
 

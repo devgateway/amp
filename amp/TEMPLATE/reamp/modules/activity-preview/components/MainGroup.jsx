@@ -10,6 +10,7 @@ import RelatedOrganizations from './sections/RelatedOrganizations'
 import Issues from './sections/issues/Issues'
 import Contacts from './sections/Contacts'
 import Structures from './sections/Structures'
+import RelatedDocuments from './sections/RelatedDocuments'
 require('../styles/ActivityView.css');
 
 /**
@@ -52,6 +53,8 @@ export default class MainGroup extends Component {
       <RelatedOrganizations params={params} styles={styles} />
 
       <Issues params={params} styles={styles}  />
+
+      <RelatedDocuments params={params} styles={styles}  />
 
       <Contacts params={params} styles={styles}  />
 

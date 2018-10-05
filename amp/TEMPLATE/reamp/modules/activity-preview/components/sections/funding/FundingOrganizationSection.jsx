@@ -18,6 +18,7 @@ class FundingOrganizationSection extends Component {
     const content = [];
     const columnsNumber = 2;
     const { buildSimpleField, funding, settings } = this.props;
+    content.push(buildSimpleField(funding, AC.SOURCE_ROLE, settings, true, null, false));
     content.push(buildSimpleField(funding, AC.FUNDING_DONOR_ORG_ID, settings, true, null, false));
     content.push(buildSimpleField(funding, AC.FUNDING_STATUS, settings, true, null, false));
     content.push(buildSimpleField(funding, AC.TYPE_OF_ASSISTANCE, settings, true, null, false));

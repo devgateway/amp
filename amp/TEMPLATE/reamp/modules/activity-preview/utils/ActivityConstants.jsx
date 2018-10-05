@@ -219,6 +219,7 @@ export const DOC_DESC = 'description';
 export const DOC_WEB_LINK = 'web_link';
 export const DOC_URL = 'url';
 export const DOC_DATE = 'adding_date';
+export const FILE_NAME = 'file_name';
 
 
 

@@ -385,8 +385,8 @@
 }
 
 .linkDocument {
-  color: #000;
-  font-weight: 200;
+  color: #83CB00;
+  font-weight: 800;
   font-size: 14px;
 }
 
@@ -517,6 +517,18 @@
 .contact_title {
   background-color: #f4f4f4;
   color: #3a84b3;
+  border: 1px solid #ebebeb;
+  padding: 8px;
+  margin-bottom: 15px;
+  font-size: 1.1em;
+  font-weight: bold;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+.document_title {
+  background-color: #f4f4f4;
+  color: #000;
   border: 1px solid #ebebeb;
   padding: 8px;
   margin-bottom: 15px;

@@ -106,11 +106,19 @@ public class ResourceImporter extends ObjectImporter {
             teamMemberCreator = TeamMemberUtil.getLoggedInTeamMember();
         }
 
-        if (formFile == null && StringUtils.isBlank(String.valueOf(newJson.get(ResourceEPConstants.WEB_LINK)))) {
-            return singletonList(ResourceErrors.FIELD_REQUIRED.withDetails(ResourceEPConstants.WEB_LINK));
+        if (formFile == null && ResourceEPConstants.FILE.equals(
+                String.valueOf(newJson.get(ResourceEPConstants.RESOURCE_TYPE)))) {
+            return singletonList(ResourceErrors.FILE_NOT_FOUND);
         }
         
         if (formFile != null) {
+            if (ResourceEPConstants.LINK.equals(String.valueOf(newJson.get(ResourceEPConstants.RESOURCE_TYPE)))) {
+                String details = String.format("%s '%s'. %s '%s'", TranslatorWorker.translateText("Resource type is"), 
+                        ResourceEPConstants.LINK, TranslatorWorker.translateText("Resource type should be"), 
+                        ResourceEPConstants.FILE);
+                return singletonList(ResourceErrors.RESOURCE_TYPE_INVALID.withDetails(details));
+            }
+            
             long maxSizeInMB = FeaturesUtil.getGlobalSettingValueInteger(GlobalSettingsConstants.CR_MAX_FILE_SIZE);
             long maxFileSizeInBytes = maxSizeInMB * FileUtils.ONE_MB;
             if (formFile.getFileSize() > maxFileSizeInBytes) {
@@ -124,9 +132,15 @@ public class ResourceImporter extends ObjectImporter {
         try {
             resource = new AmpResource();
             resource = (AmpResource) validateAndImport(resource, null, fieldsDef, newJson.any(), null, null);
-
+            
             if (resource == null) {
                 throw new ObjectConversionException();
+            }
+            
+            if (ResourceEPConstants.LINK.equals(resource.getResourceType())) {
+                resource.setFileName(null);
+            } else {
+                resource.setWebLink(null);
             }
             
             resource.setCreatorEmail(teamMemberCreator.getEmail());
@@ -187,9 +201,10 @@ public class ResourceImporter extends ObjectImporter {
         tdd.setDate(calendar.getTime());
         tdd.setYearofPublication(String.valueOf(calendar.get(Calendar.YEAR)));
         
-        if (StringUtils.isNotBlank(resource.getWebLink())) {
+        if (ResourceEPConstants.LINK.equals(resource.getResourceType())) {
             tdd.setWebLink(resource.getWebLink());
         } else {
+            tdd.setWebLink(null);
             tdd.setFileSize(formFile.getFileSize());
             tdd.setFormFile(formFile);
         }

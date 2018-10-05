@@ -132,9 +132,11 @@ public class DocumentFromTemplateActions extends DispatchAction {
                 }
                 //last approved version only for Team Document,not Private !
                 if(myForm.getDocOwnerType().equals("team")){
-                    String lastApprovedNodeVersionUUID=DocumentManagerUtil.getNodeOfLastVersion(nodeuuid, request).getUUID();
-                     NodeLastApprovedVersion lastAppVersion=new NodeLastApprovedVersion(nodeuuid, lastApprovedNodeVersionUUID);
-                     DbUtil.saveOrUpdateObject(lastAppVersion);
+                    String lastApprovedNodeVersionUUID = DocumentManagerUtil.getNodeOfLastVersion(nodeuuid, request)
+                            .getIdentifier();
+                    NodeLastApprovedVersion lastAppVersion = new NodeLastApprovedVersion(nodeuuid,
+                            lastApprovedNodeVersionUUID);
+                    DbUtil.saveOrUpdateObject(lastAppVersion);
                 }                                
             }           
             

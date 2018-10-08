@@ -1,92 +1,23 @@
+var config = require('./webpack.dev.config.js');
 var webpack = require('webpack');
-var path = require('path');
-module.exports = {
-    entry: {
-        "admin/currency/deflator/script": [
-            'webpack-dev-server/client?http://localhost:3000',
-            'webpack/hot/only-dev-server',
-            "./modules/admin/currency/deflator/script.es6"
-        ],
-        "admin/dashboard/script": [
-            'webpack-dev-server/client?http://localhost:3000',
-            'webpack/hot/only-dev-server',
-            './modules/admin/dashboard/script.es6'
-        ],
-        "gpi-data/script": [
-            'webpack-dev-server/client?http://localhost:3000',
-            'webpack/hot/only-dev-server',
-            './modules/gpi-data/script.es6'
-        ],
-        "activity-preview/script": [
-            'webpack-dev-server/client?http://localhost:3000',
-            'webpack/hot/only-dev-server',
-            './modules/activity-preview/script.es6'
-        ],
-        "gpi-reports/script": [
-            'webpack-dev-server/client?http://localhost:3000',
-            'webpack/hot/only-dev-server',
-            './modules/gpi-reports/script.es6'
-        ],
-        "admin/resource-manager-admin/script": [
-            'webpack-dev-server/client?http://localhost:3000',
-            'webpack/hot/only-dev-server',
-            './modules/admin/resource-manager-admin/script.es6'
-        ],
-        "admin/data-freeze-manager/script": [
-            'webpack-dev-server/client?http://localhost:3000',
-            'webpack/hot/only-dev-server',
-            './modules/admin/data-freeze-manager/script.es6'
-        ],
-        "admin/performance-alert-manager/script": [
-            'webpack-dev-server/client?http://localhost:3000',
-            'webpack/hot/only-dev-server',
-            './modules/admin/performance-alert-manager/script.es6'
-        ],
-        "ampoffline/download/script": [
-            'webpack-dev-server/client?http://localhost:3000',
-            'webpack/hot/only-dev-server',
-            './modules/ampoffline/download/script.es6'
-        ]
-        //"filters/script": [
-        //  'webpack-dev-server/client?http://localhost:3000',
-        //  'webpack/hot/only-dev-server',
-        //  "./modules/filters/script.es6"
-        //],
-        //"filters/index": [
-        //  'webpack-dev-server/client?http://localhost:3000',
-        //  'webpack/hot/only-dev-server',
-        //  "./modules/filters/index.jsx"
-        //]
-    },
-    output: {
-        path: __dirname,
-        filename: "modules/[name].js",
-        publicPath: "http://localhost:3000/"
-    },
-    module: {
-        loaders: [
-            { test: /\.jsx$/, loaders:['react-hot', 'babel'], exclude: /node_modules/ },
-            { test: /\.es6$/, loaders:['react-hot', 'babel'], exclude: /node_modules/ },
-            { test: /\.json$/, loader: 'json' },
-            { test: /\.css$/, exclude: /\.useable\.css$/, loader: "style!css" },
-            { test: /\.less$/, loader: "style!css!less" }
-        ]
-    },
-    devtool: 'source-map',
-    resolve: {
-        extensions: ['', '.js', '.es6', '.jsx'],
-        alias: {
-            "amp/tools": __dirname + "/tools",
-            "amp/modules": __dirname + "/modules",
-            "amp/apps": __dirname + "/apps",
-            "amp/architecture": __dirname + "/architecture",
-            "amp/config": __dirname + "/config"
-        }
-    },
-    plugins: [
-        new webpack.HotModuleReplacementPlugin(),
-        new webpack.ProvidePlugin({
-            fetch: 'imports?this=>global!exports?global.fetch!whatwg-fetch'
-        })
-    ]
-};
+config.entry["admin/currency/deflator/script"] = "./modules/admin/currency/deflator/script.es6";
+config.entry["admin/dashboard/script"] = "./modules/admin/dashboard/script.es6";
+config.entry["gpi-data/script"] = "./modules/gpi-data/script.es6";
+config.entry["gpi-reports/script"] = "./modules/gpi-reports/script.es6";
+config.entry["admin/resource-manager-admin/script"] = "./modules/admin/resource-manager-admin/script.es6";
+config.entry["admin/data-freeze-manager/script"] = "./modules/admin/data-freeze-manager/script.es6";
+config.entry["admin/performance-alert-manager/script"] = "./modules/admin/performance-alert-manager/script.es6";
+config.entry["ampoffline/download/script"] = "./modules/ampoffline/download/script.es6";
+config.entry["activity-preview/script"] = "./modules/activity-preview/script.es6";
+config.output.filename = "modules/[name].min.js";
+delete config.output.publicPath;
+delete config.devtool;
+config.plugins.push(new webpack.optimize.UglifyJsPlugin({sourceMap: false, compress: false}));
+config.plugins.push(new webpack.optimize.DedupePlugin());
+config.plugins.push(new webpack.DefinePlugin({
+    'process.env': {
+        'NODE_ENV': JSON.stringify('production')
+    }
+}));
+
+module.exports = config;

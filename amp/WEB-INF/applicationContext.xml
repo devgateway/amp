@@ -66,8 +66,10 @@
 	<http pattern="/aim/exportActToWord.do**" security="none"  />
   
 	<http pattern="/aim/default/previewActivity.do**" security="none" />
-	
-	<!-- report wizard --> 
+
+	<http pattern="/showPrinterFriendlyPage.do**" security="none"  />
+
+	<!-- report wizard -->
 	<http pattern="/reportWizard.do**" security="none" />
 	<http pattern="/aim/reportWizard.do**" security="none" />
   	<!-- 

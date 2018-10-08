@@ -107,8 +107,7 @@ public class SearchUser
     }
 
     private boolean isSuitableUser(User user, SearchUserForm searchForm) {
-        if ( (searchForm.isHideNonAlertable() && !user.isActivate()) ||
-            searchForm.isHideBanned() && user.isBanned()) {
+        if (searchForm.isHideBanned() && user.isBanned()) {
             return false;
         }
 

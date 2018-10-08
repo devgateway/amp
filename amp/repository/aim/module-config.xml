@@ -64,6 +64,7 @@
 		<action login-required="false" pattern="/showRegisterUser" />
 		<action login-required="false" pattern="/viewActivityHistory" />
 		<action login-required="false" pattern="/viewActivityPreview" />
+		<action login-required="false" pattern="/showPrinterFriendlyPage" />
 		<action login-required="false" pattern="/viewNewAdvancedReport" />
 		<action login-required="false" pattern="/viewTeamReports" />
 		<action login-required="false" pattern="/xlsExport" />

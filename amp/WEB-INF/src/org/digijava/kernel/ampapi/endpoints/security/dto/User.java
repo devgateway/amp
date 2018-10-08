@@ -36,9 +36,6 @@ public class User {
     @JsonProperty(SecurityConstants.IS_BANNED)
     private boolean isBanned;
     
-    @JsonProperty(SecurityConstants.IS_ACTIVE)
-    private boolean isActive;
-    
     @JsonProperty(SecurityConstants.IS_PLEDGER)
     private boolean isPledger;
     
@@ -146,20 +143,6 @@ public class User {
      */
     public void setBanned(boolean isBanned) {
         this.isBanned = isBanned;
-    }
-    
-    /**
-     * @return the isActive
-     */
-    public boolean getIsActive() {
-        return isActive;
-    }
-    
-    /**
-     * @param isActive the isActive to set
-     */
-    public void setActive(boolean isActive) {
-        this.isActive = isActive;
     }
     
     /**

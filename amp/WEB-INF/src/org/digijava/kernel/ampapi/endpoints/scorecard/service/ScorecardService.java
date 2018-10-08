@@ -19,6 +19,8 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.view.xls.IntWrapper;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.scorecard.model.ActivityUpdate;
 import org.digijava.kernel.ampapi.endpoints.scorecard.model.ColoredCell;
 import org.digijava.kernel.ampapi.endpoints.scorecard.model.ColoredCell.Colors;
@@ -693,10 +695,12 @@ public class ScorecardService {
                         orgCount.inc(rs.getInt("count"));
                     }
                     rsi.close();
-                    
-                }  catch (Exception e) {
-                    logger.error("Exception while getting org types amount:" + e.getMessage());
+                } catch (SQLException e) {
+                    throw new ApiRuntimeException(
+                            ApiError.toError("Exception while getting org types amount: " + e.getMessage()));
                 }
+                throw new ApiRuntimeException(
+                        ApiError.toError("Exception while getting org types amount: "));
             }
         });
         
@@ -750,8 +754,9 @@ public class ScorecardService {
                     }
                     rsi.close();
                     
-                }  catch (Exception e) {
-                    logger.error("Exception while getting past quarter objects:" + e.getMessage());
+                }  catch (SQLException e) {
+                    throw new ApiRuntimeException(
+                            ApiError.toError("Exception while getting past quarter objects: " + e.getMessage()));
                 }
             }
         });

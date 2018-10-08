@@ -1,5 +1,6 @@
 import { postJson, delay, fetchJson } from 'amp/tools';
 
+const FM_END_POINT = '/rest/common/fm';
 /**
  *    
  */
@@ -89,6 +90,15 @@ class CommonListsApi {
 
             }).catch(error => {
                 reject(error );
+        });
+    });
+}
+    static fetchFeatureManager(requestData){
+        return new Promise((resolve,reject)=>{
+            postJson(FM_END_POINT,requestData).then(response=>{
+                resolve(response.json());
+            }).catch(error =>{
+               reject(error);
             });
         });
     }

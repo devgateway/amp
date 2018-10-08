@@ -23,10 +23,12 @@ export default class MainGroup extends Component {
   }
 
   render() {
-    const params = {
-      activity: this.props.params.activity,
-      translations : this.props.params.translations,
-      settings : this.props.params.settings
+      const params = {
+        activity: this.props.params.activity,
+        translations: this.props.params.translations,
+        settings: this.props.params.settings,
+        activityFieldsManager : this.props.params.activityFieldsManager,
+        featureManager : this.props.params.featureManager
     }
     const styles = {
       fieldNameClass : 'section_field_name',

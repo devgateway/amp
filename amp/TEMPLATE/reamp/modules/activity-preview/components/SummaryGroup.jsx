@@ -15,10 +15,12 @@ export default class SummaryGroup extends Component {
 
   render() {
     const params = {
-      activity: this.props.params.activity,
-      translations : this.props.params.translations,
-      settings : this.props.params.settings,
-      activityInfo : this.props.params.activityInfo
+        activity: this.props.params.activity,
+        translations: this.props.params.translations,
+        settings: this.props.params.settings,
+        activityInfo: this.props.params.activityInfo,
+        activityFieldsManager: this.props.params.activityFieldsManager,
+        featureManager : this.props.params.featureManager
     }
     const currency = this.props.params.settings[EFFECTIVE_CURRENCY].code;
     const styles = {

@@ -16,7 +16,7 @@ class RelatedDocuments extends Component {
         const url = document[AC.DOC_WEB_LINK] ? document[AC.DOC_WEB_LINK] : document[AC.DOC_URL];
         const icon = document[AC.DOC_WEB_LINK] ? '/TEMPLATE/reamp/modules/activity-preview/styles/images/goto_url.svg' :
             '/TEMPLATE/reamp/modules/activity-preview/styles/images/download.svg';
-        const docName = document[AC.DOC_WEB_LINK] ? document[AC.DOC_WEB_LINK] + '...' : document[AC.FILE_NAME];
+        const docName = document[AC.DOC_WEB_LINK] ? document[AC.DOC_WEB_LINK] : document[AC.FILE_NAME];
         const date = createFormattedDate(document[AC.DOC_DATE], settings);
         return (
             <div key={document.uuid} className={'box_table'}>
@@ -24,7 +24,7 @@ class RelatedDocuments extends Component {
                     <span key="header" className={'section_subtitle_class'}>
                         <span><b>{document[AC.DOC_TITLE]}</b></span>
                         <span>&nbsp;&nbsp;-&nbsp;&nbsp;</span>
-                        <span className={'linkDocument'} title={docName}>{docName.substring(0, 45)}</span>
+                        <span className={'linkDocument'} title={docName}>{docName.substring(0, 45) + '...'}</span>
                     </span>
                     {url &&
                         <span key="download" className={'iconDocument'}>

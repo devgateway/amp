@@ -70,6 +70,18 @@ class FundingTransactionTypeItem extends Component {
     return <table className={'funding_table'} >{content}</table>;
   }
 
+  _drawRecipient() { 
+    if (this.props.group[AC.RECIPIENT_ORG].value && this.props.group[AC.RECIPIENT_ROLE].value) {
+      const label = `${this.props.translations['recipient']}: <b>${this.props.group[AC.RECIPIENT_ORG].value}</b>
+        ${this.props.translations['as_the']} <b>${this.props.group[AC.RECIPIENT_ROLE].value}</b>`;
+      const key = 'TTRecipient_' + Math.random();
+    
+      return (<div><Label label={label} useInnerHTML={true} labelClass={'normal'} key={key} /></div>);
+    } else {
+      return (<div></div>);
+    }
+  }
+
   _drawSubTotalFooter() {
     let subtotal = this.props.group[AC.SUBTOTAL].value;
     const measure = `${this.props.group.adjustment_type.value} ${this.props.group.transaction_type.value}`;
@@ -88,6 +100,7 @@ class FundingTransactionTypeItem extends Component {
     return (<div className={'table_container'} >
       <div>{this._drawHeader()}</div>
       <div>{this._drawDetail()}</div>
+      <div>{this._drawRecipient()}</div>
       <div>{this._drawSubTotalFooter()}</div>
     </div>);
   }

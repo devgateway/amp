@@ -210,6 +210,8 @@ export const TRX_TYPE_PATH = 'fundings~funding_details~transaction_type';
 export const ADJ_TYPE_PATH = 'fundings~funding_details~adjustment_type';
 export const AMOUNT = 'amount';
 export const REORDER_TRX = 'reorder-funding-item';
+export const RECIPIENT_ORG = 'recipient_organization';
+export const RECIPIENT_ROLE = 'recipient_role';
 
 //RELATED DOCUMENTS
 export const ACTIVITY_DOCUMENTS = 'activity_documents';

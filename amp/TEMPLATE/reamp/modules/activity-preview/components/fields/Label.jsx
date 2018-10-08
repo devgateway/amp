@@ -11,7 +11,11 @@ export default class Label extends Component {
   getContent() {
     const { label }  = this.props;
     const labelClass = (this.props.labelClass ? this.props.labelClass : '');
-    return (<div className={labelClass} ><span>{label}</span>{this.props.separator ? <hr /> : ''}</div>);
+    if (this.props.useInnerHTML) {
+      return (<div className={labelClass} ><span dangerouslySetInnerHTML={{ __html: label }} /> {this.props.separator ? <hr /> : ''}</div>);
+    } else {
+      return (<div className={labelClass} ><span>{label}</span>{this.props.separator ? <hr /> : ''}</div>);
+    }
   }
 
   tooltip() {

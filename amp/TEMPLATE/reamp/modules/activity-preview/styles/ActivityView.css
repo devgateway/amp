@@ -627,6 +627,13 @@
   float: left;
 }
 
+.normal {
+  padding-left: 20px;
+  font-size: 1em;
+  font-weight: 300;
+  float: left;
+}
+
 .header_total {
   font-size: 1.10em;
   font-weight: bold;

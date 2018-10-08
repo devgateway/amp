@@ -1,6 +1,14 @@
 import commonListsApi from '../api/CommonListsApi';
 import * as AC from '../utils/ActivityConstants'
+import FieldsManager from '../common/fieldsManager';
+import FeatureManager from '../common/FeatureManager';
 
+import { ACTIVITY_FORM_FM_ENTRY } from '../common/FeatureManager';
+
+export const CREATE_ACTIVITY_FIELDS_MANAGER_SUCCESS =  'CREATE_ACTIVITY_FIELDS_MANAGER_SUCCESS';
+export const CREATE_ACTIVITY_FIELDS_MANAGER_LOADING =  'CREATE_ACTIVITY_FIELDS_MANAGER_LOADING';
+export const CREATE_FM_MANAGER_SUCCESS =  'CREATE_FM_MANAGER_SUCCESS';
+export const CREATE_FM_MANAGER_LOADING =  'CREATE_FM_MANAGER_LOADING'
 
 /**
  *    
@@ -58,6 +66,21 @@ export function getFundingInfoSuccess(fundingInfo){
     return {type: 'LOAD_FUNDING_INFO_SUCCESS', fundingInfo: fundingInfo}
 }
 
+export function createActivityFieldsManagerSuccess(activityFieldsManager){
+    return {type: CREATE_ACTIVITY_FIELDS_MANAGER_SUCCESS, activityFieldsManager: activityFieldsManager}
+}
+export function createActivityFieldsManagerLoading() {
+    return {type: CREATE_ACTIVITY_FIELDS_MANAGER_LOADING};
+}
+//TODO try to decouple api calls so the form starts loading
+// TODO before all calls are resolved probably we can
+export function createFmSettingsLoading() {
+    return {type:CREATE_FM_MANAGER_LOADING};
+}
+export function createFmSettingsSuccess(featureManager) {
+    return {type: CREATE_FM_MANAGER_SUCCESS, featureManager: featureManager};
+}
+// call settings activity and FM
 export function getSettingsAndActivity(activityId){
     return function(dispatch) {
         dispatch(getSettingsLoading());
@@ -103,6 +126,8 @@ export function getSettingsAndActivity(activityId){
                         dispatch(getHydratedActivityLoading(hydratedActivity));
                         commonListsApi.getFields().then(fields => {
                             dispatch(getFieldsSuccess(fields));
+                            dispatch(createActivityFieldsManagerLoading());
+                            dispatch(createActivityFieldsManagerSuccess(new FieldsManager(fields)));
                             _addLabelAndType(hydratedActivity, fields);
                             _addRealValue(hydratedActivity, fields, lang).then(response => {
                                 let docs = hydratedActivity[AC.ACTIVITY_DOCUMENTS].value;
@@ -127,6 +152,17 @@ export function getSettingsAndActivity(activityId){
                         }).catch(error => {
                             throw(error);
                         });
+
+                        // TODO we call here the FM endpoints. This should probably be call in tandem with settings
+                        // and process them accordingly since they are all required
+                        // TODO leave to a later refactoring not to spend more time now
+                        dispatch(createFmSettingsLoading());
+                        commonListsApi.fetchFeatureManager(getFeatureManagerRequestData()).then(fm=>{
+                        const featureManager = new FeatureManager(fm);
+                        dispatch(createFmSettingsSuccess(featureManager));
+                        }).catch(error=> {
+                            dispatch(getActivityError(error));
+                        });
                     } else {
                         let errorMsg = '';
                         let keys = Object.keys(activity.error);
@@ -149,7 +185,7 @@ export function getSettingsAndActivity(activityId){
         });
     }
 }
-
+// TODO move this to a helper file
 function _createHydratedActivity(keys, obj) {
     let ret = {}
     for(var key in keys) {
@@ -167,7 +203,7 @@ function _createHydratedActivity(keys, obj) {
     }
     return ret;
 }
-
+// TODO move this to a helper class
 function _addLabelAndType(hydratedActivity, fields) {
     for(var field in fields) {
         let fieldObj = fields[field];
@@ -201,8 +237,14 @@ function _addRealValue(hydratedActivity, fields, lang) {
             }
             if(hydratedActivity[AC.FUNDING_TOTALS] && hydratedActivity[AC.FUNDING_TOTALS].value && hydratedActivity[AC.FUNDING_TOTALS].value[AC.TOTALS].length > 0) {
                 hydratedActivity[AC.FUNDING_TOTALS].value[AC.TOTALS].forEach(t => {
-                    t[AC.TRANSACTION_TYPE] = fields[AC.TRX_TYPE_PATH].find(x => x.id === t[AC.TRANSACTION_TYPE]).value;
-                    t[AC.ADJUSTMENT_TYPE] = fields[AC.ADJ_TYPE_PATH].find(x => x.id === t[AC.ADJUSTMENT_TYPE]).value;
+                    // it can be the case that we have a transaction type or an adjustement type
+                    // that is no longer valid
+                    const transactionType = fields[AC.TRX_TYPE_PATH].find(x => x.id === t[AC.TRANSACTION_TYPE]);
+                    const adjustementType = fields[AC.ADJ_TYPE_PATH].find(x => x.id === t[AC.ADJUSTMENT_TYPE]);
+                    if(transactionType && adjustementType) {
+                        t[AC.TRANSACTION_TYPE] = transactionType.value;
+                        t[AC.ADJUSTMENT_TYPE] = adjustementType.value;
+                    }
                 });
             }
             resolve(hydratedActivity);
@@ -307,4 +349,15 @@ export function getFieldSubList(parentName, childrenName){
             throw(error);
         });
     }
+}
+// TODO move to helper class. Move to constants
+function getFeatureManagerRequestData() {
+    const featureManagerRequestData = {};
+    featureManagerRequestData['reporting-fields'] = false;
+    featureManagerRequestData['enabled-modules'] = false;
+    featureManagerRequestData['detail-modules'] = [];
+    featureManagerRequestData['detail-modules'].push(ACTIVITY_FORM_FM_ENTRY);
+    featureManagerRequestData['detail-flat'] = true;
+    featureManagerRequestData['full-enabled-paths'] = true;
+    return featureManagerRequestData;
 }

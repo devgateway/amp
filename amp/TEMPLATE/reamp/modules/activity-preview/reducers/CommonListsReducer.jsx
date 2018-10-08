@@ -1,3 +1,10 @@
+import {
+    CREATE_ACTIVITY_FIELDS_MANAGER_LOADING,
+    CREATE_ACTIVITY_FIELDS_MANAGER_SUCCESS,
+    CREATE_FM_MANAGER_SUCCESS,
+    CREATE_FM_MANAGER_LOADING
+} from '../actions/CommonListsActions';
+
 /**
  *    
  */
@@ -14,6 +21,12 @@ const defaultState = {
     isActivityHydrated: false,    
     isFundingInfoLoading: false,
     isFundingInfoLoaded: false,
+    isActivityFieldsManagerLoading:false,
+    isActivityFieldsManagerLoaded:false,
+    activityFieldsManager:undefined,
+    isFMManagerLoading:false,
+    isFMManagerLoaded:false,
+    featureManager:undefined,
     settings: undefined, 
     activity: undefined, 
     activityInfo: undefined, 
@@ -92,8 +105,32 @@ export default function commonListsReducer(state: Object = defaultState, action:
             newState.fundingInfo = action.fundingInfo;
             newState.isFundingInfoLoading = false;
             newState.isFundingInfoLoaded = true;
-            return  newState; 
-        default:            
+            return  newState;
+            //currently we are not displaying a loading, but in case we add this functionality
+            // I add the loading states
+        case CREATE_ACTIVITY_FIELDS_MANAGER_LOADING:
+            return {...state, isActivityFieldsManagerLoading: true, isActivityFieldsManagerLoaded: false};
+        case CREATE_ACTIVITY_FIELDS_MANAGER_SUCCESS:
+            return {
+                ...state,
+                isActivityFieldsManagerLoading: false,
+                isActivityFieldsManagerLoaded: true,
+                activityFieldsManager: action.activityFieldsManager
+            };
+        case CREATE_FM_MANAGER_LOADING:
+            return {
+                ...state,
+                isFMManagerLoading : true,
+                isFMManagerLoaded : false
+            };
+        case CREATE_FM_MANAGER_SUCCESS:
+            return {
+                ...state,
+                isFMManagerLoading: false,
+                isFMManagerLoaded: true,
+                featureManager: action.featureManager
+            };
+        default:
             return state;
     }
 }

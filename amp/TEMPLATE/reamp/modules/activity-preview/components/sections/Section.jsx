@@ -3,6 +3,9 @@ import SimpleField from '../fields/SimpleField';
 import * as AC from '../../utils/ActivityConstants';
 import DateUtils from '../../utils/DateUtils';
 import ActivityUtils from '../../utils/ActivityUtils';
+import { ACTIVITY_FIELDS_FM_PATH } from '../../utils/FieldPathConstants';
+import FeatureManager from '../../common/FeatureManager';
+
 require('../../styles/ActivityView.css');
 
 /**
@@ -11,11 +14,37 @@ require('../../styles/ActivityView.css');
 const Section = (ComposedSection, SectionTitle = null ,useEncapsulateHeader = true, sID) => class extends Component {
 
 
-  buildSimpleField(activity, fieldPath, settings, showIfNotAvailable, noDataValue, inline = false, title) {
+  buildSimpleField(activity, fieldPath, settings, showIfNotAvailable, noDataValue, inline = false, title = null,
+                   activityFieldsManager, featureManager) {
+      if (!featureManager) {
+          console.log('feature manager is null ');
+          debugger;
+      }
+
+      if (activityFieldsManager) {
+          // TODO once completed move to only work if its found so we avoid returning null
+          const fmPath = ACTIVITY_FIELDS_FM_PATH[fieldPath];
+          const isFieldPathEnabled = activityFieldsManager.isFieldPathEnabled(fieldPath);
+          const isFieldFmEnabled = !fmPath || featureManager.isFMSettingEnabled(fmPath);
+          if (!isFieldPathEnabled || !isFieldFmEnabled) {
+              return null;
+          }
+      }else {
+          //TODO this will be moved, leaving only for debugging purposese during implementation
+          console.log('Activity manager should not be null ' + fieldPath);
+          debugger;
+      }
+
     let title_ = title;
     let value_ = '';
     if (!Array.isArray(activity)) {
-      const field = activity[fieldPath];   
+      const field = activity[fieldPath];
+      if(!field){
+          //TODO to remove debugger once fixed
+        console.log(fieldPath + ' should not be nothing since its enabled check whats wrong');
+        debugger;
+        return null;
+      }
       title_ = title ? title : ActivityUtils.getTitle(field, settings);
       value_ = field.value;
       if (field.field_type === 'date') {

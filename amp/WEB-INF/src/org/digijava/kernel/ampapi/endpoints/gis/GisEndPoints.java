@@ -492,29 +492,21 @@ public class GisEndPoints implements ErrorReportingEndpoint {
         return !PerformanceRuleManager.getInstance().getPerformanceRuleMatchers().isEmpty();
     }
     
-    
-    /**
-     * Gets the map-tiles file from content repository.
-     * 
-     * @return archived file with map-tiles
-     */
     @GET
     @Path("/map-tiles")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE}, id = "mapTiles", ui = false)
+    @ApiOperation(value = "Gets the map-tiles file from content repository.",
+    notes = "Return archived file with map-tiles.")
     public Response getMapTiles() {
         return MapTilesService.getInstance().getArchivedMapTiles();
     }
     
-    /**
-     * Gets the amp locator objects.
-     * 
-     * @return locators
-     */
     @GET
     @Path("/locators")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE}, id = "locators", ui = false)
+    @ApiOperation("Gets the amp locator objects.")
     public List<AmpLocator> getLocators() {
         return GisUtils.getLocators();
     }

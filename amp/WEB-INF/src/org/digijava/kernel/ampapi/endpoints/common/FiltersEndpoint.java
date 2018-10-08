@@ -487,17 +487,13 @@ public class FiltersEndpoint implements AmpEndpoint {
         return getCategoryValue(CategoryConstants.PERFORMANCE_ALERT_LEVEL_KEY, ColumnConstants.PERFORMANCE_ALERT_LEVEL);
     }
 
-    /**
-     * Performance Alert Type filter
-     *
-     * @return
-     */
     @GET
     @Path("/performanceAlertType")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, id = FiltersConstants.PERFORMANCE_ALERT_TYPE,
             columns = ColumnConstants.PERFORMANCE_ALERT_TYPE, name = ColumnConstants.PERFORMANCE_ALERT_TYPE,
             tab = EPConstants.TAB_ACTIVITY)
+    @ApiOperation("Performance Alert Type filter")
     public JsonBean getPerformanceAlertType() {
         JsonBean pt = new JsonBean();
 

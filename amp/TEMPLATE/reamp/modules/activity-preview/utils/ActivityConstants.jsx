@@ -213,6 +213,12 @@ export const REORDER_TRX = 'reorder-funding-item';
 export const RECIPIENT_ORG = 'recipient_organization';
 export const RECIPIENT_ROLE = 'recipient_role';
 
+export const COMMITMENT_RECIPIENT_ORG = 'commitments_recipient_organization';
+export const COMMITMENT_RECIPIENT_ROLE = 'commitments_recipient_role';
+
+export const DISBURSEMENT_RECIPIENT_ORG = 'disbursements_recipient_organization';
+export const DISBURSEMENT_RECIPIENT_ROLE = 'disbursements_recipient_role';
+
 //RELATED DOCUMENTS
 export const ACTIVITY_DOCUMENTS = 'activity_documents';
 export const DOC_UUID = 'uuid';

@@ -61,6 +61,7 @@ import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingAmount;
+import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
 import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponse;
 import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponseDocument;
@@ -230,6 +231,15 @@ public class ActivityUtil {
                 }
             }
 
+            for (AmpFunding f : af) {
+                for (AmpFundingDetail afd : f.getFundingDetails()) {
+                    afd.setAmpFundingId(f);
+                }
+
+                for (AmpFundingMTEFProjection mtef : f.getMtefProjections()) {
+                    mtef.setAmpFunding(f);
+                }
+            }
         }
 
         if (ContentTranslationUtil.multilingualIsEnabled())

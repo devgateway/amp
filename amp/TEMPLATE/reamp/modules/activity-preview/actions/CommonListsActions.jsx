@@ -153,7 +153,7 @@ export function getSettingsAndActivity(activityId){
                         // TODO leave to a later refactoring not to spend more time now
                         dispatch(createFmSettingsLoading());
                         commonListsApi.fetchFeatureManager(getFeatureManagerRequestData()).then(fm=>{
-                        const featureManager = new FeatureManager();
+                        const featureManager = new FeatureManager(fm);
                         dispatch(createFmSettingsSuccess(featureManager));
                         }).catch(error=> {
                             dispatch(getActivityError(error));

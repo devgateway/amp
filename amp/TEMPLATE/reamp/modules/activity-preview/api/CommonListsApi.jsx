@@ -96,7 +96,7 @@ class CommonListsApi {
     static fetchFeatureManager(requestData){
         return new Promise((resolve,reject)=>{
             postJson(FM_END_POINT,requestData).then(response=>{
-                resolve(response);
+                resolve(response.json());
             }).catch(error =>{
                reject(error);
             });

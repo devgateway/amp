@@ -6,7 +6,7 @@
 
 //const logger = new Logger('Fields manager');
 
-/**
+/** Once I finish ill clean up what is not used from offline.
  * This is a helper class for checking fields status,
  * base taken from AMP-offline FieldManager.js
  * revision 6567ae13218497a51c028ec90b0f4f281db20341

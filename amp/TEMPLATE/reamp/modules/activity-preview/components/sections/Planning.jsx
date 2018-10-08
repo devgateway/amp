@@ -17,7 +17,7 @@ class Planning extends Component {
 
   render() {
     const columnNumber = 3;
-    const { activity, translations, settings } = this.props.params;
+    const { activity, translations, settings, activityFieldsManager, featureManager } = this.props.params;
     const inline = this.props.styles.inline;
     let content = [];
     const fieldPaths = [
@@ -39,6 +39,7 @@ class Planning extends Component {
     if (startDate && endDate) {
       duration = DateUtils.durationImproved(startDate, endDate, settings) + ' ' + translations['months'];
     }
+    //TODO duration should go checking if enabled
     content.push(
       <SimpleField key={'Duration'} 
       title={translations['Duration']} value={duration} inline={inline} separator={false}
@@ -47,7 +48,8 @@ class Planning extends Component {
     );
     
     content = content.concat(fieldPaths.map(fieldPath =>
-      this.props.buildSimpleField(activity, fieldPath, settings, showIfNotAvailable.has(fieldPath), inline, false)
+      this.props.buildSimpleField(activity, fieldPath, settings, showIfNotAvailable.has(fieldPath), inline, false, null,
+          activityFieldsManager, featureManager)
     ).filter(data => data !== undefined));
 
     const tableContent = Tablify.addRows('Planning', content, columnNumber);

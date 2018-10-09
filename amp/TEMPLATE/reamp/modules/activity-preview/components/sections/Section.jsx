@@ -4,8 +4,6 @@ import * as AC from '../../utils/ActivityConstants';
 import DateUtils from '../../utils/DateUtils';
 import ActivityUtils from '../../utils/ActivityUtils';
 import { ACTIVITY_FIELDS_FM_PATH } from '../../utils/FieldPathConstants';
-import FeatureManager from '../../common/FeatureManager';
-
 require('../../styles/ActivityView.css');
 
 /**
@@ -72,6 +70,13 @@ const Section = (ComposedSection, SectionTitle = null ,useEncapsulateHeader = tr
   }
 
   render() {
+      const { activityFieldsManager, featureManager } = this.props.params;
+      if (this.props.sectionPath && !activityFieldsManager.isFieldPathEnabled(this.props.sectionPath)) {
+          return null;
+      }
+      if (this.props.fmPath && !featureManager.isFMSettingEnabled(this.props.fmPath)) {
+          return null;
+      }
     const translations = this.props.params.translations;
     const sectionKey = SectionTitle + '-Section';
     const composedSection = (<ComposedSection key={sectionKey}

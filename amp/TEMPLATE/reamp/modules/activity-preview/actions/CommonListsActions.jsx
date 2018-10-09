@@ -3,16 +3,13 @@ import * as AC from '../utils/ActivityConstants'
 import FieldsManager from '../common/fieldsManager';
 import FeatureManager from '../common/FeatureManager';
 
-import { ACTIVITY_FORM_FM_ENTRY } from '../common/FeatureManager';
+import { prepareData, getFeatureManagerRequestData } from '../utils/FeatureManagerUtil';
 
 export const CREATE_ACTIVITY_FIELDS_MANAGER_SUCCESS =  'CREATE_ACTIVITY_FIELDS_MANAGER_SUCCESS';
 export const CREATE_ACTIVITY_FIELDS_MANAGER_LOADING =  'CREATE_ACTIVITY_FIELDS_MANAGER_LOADING';
 export const CREATE_FM_MANAGER_SUCCESS =  'CREATE_FM_MANAGER_SUCCESS';
 export const CREATE_FM_MANAGER_LOADING =  'CREATE_FM_MANAGER_LOADING'
 
-/**
- *    
- */
 
 export function getSettingsLoading(){
     return {type: 'LOADING_SETTINGS'}
@@ -161,7 +158,8 @@ export function getSettingsAndActivity(activityId){
                         // TODO leave to a later refactoring not to spend more time now
                         dispatch(createFmSettingsLoading());
                         commonListsApi.fetchFeatureManager(getFeatureManagerRequestData()).then(fm=>{
-                        const featureManager = new FeatureManager(fm);
+                            const newFMTree = prepareData(fm);
+                            const featureManager = new FeatureManager(newFMTree.fmTree);
                         dispatch(createFmSettingsSuccess(featureManager));
                         }).catch(error=> {
                             dispatch(getActivityError(error));
@@ -354,15 +352,4 @@ export function getFieldSubList(parentName, childrenName){
             throw(error);
         });
     }
-}
-// TODO move to helper class. Move to constants
-function getFeatureManagerRequestData() {
-    const featureManagerRequestData = {};
-    featureManagerRequestData['reporting-fields'] = false;
-    featureManagerRequestData['enabled-modules'] = false;
-    featureManagerRequestData['detail-modules'] = [];
-    featureManagerRequestData['detail-modules'].push(ACTIVITY_FORM_FM_ENTRY);
-    featureManagerRequestData['detail-flat'] = true;
-    featureManagerRequestData['full-enabled-paths'] = true;
-    return featureManagerRequestData;
 }

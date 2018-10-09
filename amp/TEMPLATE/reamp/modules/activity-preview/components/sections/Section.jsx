@@ -18,7 +18,6 @@ const Section = (ComposedSection, SectionTitle = null ,useEncapsulateHeader = tr
                    activityFieldsManager, featureManager) {
       if (!featureManager) {
           console.log('feature manager is null ');
-          debugger;
       }
 
       if (activityFieldsManager) {

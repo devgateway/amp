@@ -50,6 +50,9 @@ export const PLANNED = 'Planned';
 export const PIPELINE = 'Pipeline';
 export const COMMITMENTS = 'Commitments';
 export const DISBURSEMENTS = 'Disbursements';
+export const MTEF_PROJECTIONS = 'MTEF Projections';
+export const MTEF_PROJECTIONS_FIELD = 'mtef_projections';
+export const PROJECTION = 'projection';
 export const ADJUSTMENT_TYPES = [PLANNED, ACTUAL];
 export const TRANSACTION_TYPES = [COMMITMENTS, DISBURSEMENTS];
 

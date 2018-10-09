@@ -100,9 +100,12 @@ export function getSettingsAndActivity(activityId){
                             activity[AC.FUNDINGS].forEach(funding => {
                                 let details = fundingInfo[AC.FUNDING_INFORMATION][AC.FUNDINGS].find(f => f[AC.FUNDING_ID] === funding[AC.FUNDING_ID]);
                                 details[AC.FUNDING_DETAILS].forEach(f => {
-                                    let detail = funding["funding_details"].find(d => f['transaction_type'] === d['transaction_type'] && f['adjustment_type'] === d['adjustment_type']);
-                                    f[AC.RECIPIENT_ORG] = detail[AC.RECIPIENT_ORG];
-                                    f[AC.RECIPIENT_ROLE] = detail[AC.RECIPIENT_ROLE];
+                                    let detail = funding[AC.FUNDING_DETAILS].find(d => f[AC.TRANSACTION_TYPE] === d[AC.TRANSACTION_TYPE] 
+                                        && f[AC.ADJUSTMENT_TYPE] === d[AC.ADJUSTMENT_TYPE]);
+                                    if (detail) {
+                                        f[AC.RECIPIENT_ORG] = detail[AC.RECIPIENT_ORG];
+                                        f[AC.RECIPIENT_ROLE] = detail[AC.RECIPIENT_ROLE];
+                                    } 
                                 });
                                 funding[AC.FUNDING_DETAILS] = details[AC.FUNDING_DETAILS];
                                 funding[AC.UNDISBURSED_BALANCE] = details[AC.UNDISBURSED_BALANCE];
@@ -263,19 +266,21 @@ function _addRealValueHelper(fieldParam, path, values, lang) {
                 _addRealValueHelper(fieldParam.value[field][pathName], newPath, values);                
             } else {        
                 let valueId = fieldParam.value[field][pathName];
-                let valueObj = values.find(c => c.id === valueId.value);
-                if (valueObj) {
-                    if (valueObj[AC.ANCESTOR_VALUES]) {
-                        valueId.value = '';
-                        for(var id in valueObj[AC.ANCESTOR_VALUES]) {
-                            valueId.value += '[' + valueObj[AC.ANCESTOR_VALUES][id] + ']';
-                        }
-                    } else {
-                        valueId.value = valueObj.value;
-                        if (lang !== 'en' && valueObj && valueObj[AC.TRANSLATED_VALUE] && valueObj[AC.TRANSLATED_VALUE][lang]) {
-                            valueId.value = valueObj[AC.TRANSLATED_VALUE][lang];
-                        }
-                    }                    
+                if (valueId) {
+                    let valueObj = values.find(c => c.id === valueId.value);
+                    if (valueObj) {
+                        if (valueObj[AC.ANCESTOR_VALUES]) {
+                            valueId.value = '';
+                            for(var id in valueObj[AC.ANCESTOR_VALUES]) {
+                                valueId.value += '[' + valueObj[AC.ANCESTOR_VALUES][id] + ']';
+                            }
+                        } else {
+                            valueId.value = valueObj.value;
+                            if (lang !== 'en' && valueObj && valueObj[AC.TRANSLATED_VALUE] && valueObj[AC.TRANSLATED_VALUE][lang]) {
+                                valueId.value = valueObj[AC.TRANSLATED_VALUE][lang];
+                            }
+                        }                    
+                    }
                 }
             }
         }

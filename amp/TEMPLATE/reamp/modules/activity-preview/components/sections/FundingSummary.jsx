@@ -31,13 +31,18 @@ class FundingSummary extends Component {
         let trx = activity[AC.FUNDING_TOTALS].value[AC.TOTALS].find(t => 
           t[AC.TRANSACTION_TYPE] === trnType && t[AC.ADJUSTMENT_TYPE] === adjType);
         let value = trx ? trx[AC.AMOUNT] : 0;
-        measuresTotals[`${adjType} ${trnType}`] = NumberUtils.rawNumberToFormattedString(value, false, this.props.params.settings);
+        measuresTotals[`${adjType} ${trnType}`] = NumberUtils.rawNumberToFormattedString(value, false, settings);
       });      
     });
     
+    //MTEF
+    let trx = activity[AC.FUNDING_TOTALS].value[AC.TOTALS].find(t => t[AC.TRANSACTION_TYPE] === AC.MTEF_PROJECTIONS);
+    let value = trx ? trx[AC.AMOUNT] : 0;
+    measuresTotals[AC.MTEF_PROJECTIONS] = NumberUtils.rawNumberToFormattedString(value, false, settings);
+
     // Other measures
     let undisbursed = activity[AC.FUNDING_TOTALS].value[AC.UNDISBURSED_BALANCE];
-    measuresTotals[translations['undisbursed_balance']] = NumberUtils.rawNumberToFormattedString(undisbursed, false, this.props.params.settings);
+    measuresTotals[translations['undisbursed_balance']] = NumberUtils.rawNumberToFormattedString(undisbursed, false, settings);
     let rate = activity[AC.FUNDING_TOTALS].value[AC.DELIVERY_RATE_PROP] ? activity[AC.FUNDING_TOTALS].value[AC.DELIVERY_RATE_PROP] + '%' : '0%';
     measuresTotals[translations['delivery_rate']] = rate;
     
@@ -60,6 +65,7 @@ class FundingSummary extends Component {
       { trn: AC.ACTUAL_COMMITMENTS, total: true },
       { trn: AC.PLANNED_DISBURSEMENTS, total: true },
       { trn: AC.ACTUAL_DISBURSEMENTS, total: true },
+      { trn: AC.MTEF_PROJECTIONS, total: true },
       { trn: translations['undisbursed_balance'], total: false },
       { trn: translations['delivery_rate'], total: false },
       { trn: translations['Duration'], total: false }];

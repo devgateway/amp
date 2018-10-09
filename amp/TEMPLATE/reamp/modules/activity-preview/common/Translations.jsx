@@ -90,6 +90,8 @@ export const initialTranslations = {
         'adding_date' : 'Adding Date',
         'clickToDownload' : 'Click to Download',
         'recipient' : 'Recipient',
-        'as_the' : 'as the'
+        'as_the' : 'as the',
+        'amp.activity-preview:totalMTEFProjections': 'Total MTEF Projection'
+
         
 };

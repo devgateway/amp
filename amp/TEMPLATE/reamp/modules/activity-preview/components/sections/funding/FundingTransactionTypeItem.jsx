@@ -78,8 +78,11 @@ class FundingTransactionTypeItem extends Component {
     const recipientRole = this.props.group[AC.TRANSACTION_TYPE].value.toLowerCase() + '_' + AC.RECIPIENT_ROLE;
     const fmPath1 = ACTIVITY_FIELDS_FM_PATH[recipientOrg];
     const fmPath2 = ACTIVITY_FIELDS_FM_PATH[recipientRole];
-    if (this.props.featureManager.isFMSettingEnabled(fmPath1) && this.props.featureManager.isFMSettingEnabled(fmPath2) 
-      && this.props.group[AC.RECIPIENT_ORG].value && this.props.group[AC.RECIPIENT_ROLE].value) {
+    if (fmPath1 && fmPath2 
+      && this.props.featureManager.isFMSettingEnabled(fmPath1) 
+      && this.props.featureManager.isFMSettingEnabled(fmPath2) 
+      && this.props.group[AC.RECIPIENT_ORG].value 
+      && this.props.group[AC.RECIPIENT_ROLE].value) {
       const label = `${this.props.translations['recipient']}: <b>${this.props.group[AC.RECIPIENT_ORG].value}</b>
         ${this.props.translations['as_the']} <b>${this.props.group[AC.RECIPIENT_ROLE].value}</b>`;
       const key = 'TTRecipient_' + Math.random();

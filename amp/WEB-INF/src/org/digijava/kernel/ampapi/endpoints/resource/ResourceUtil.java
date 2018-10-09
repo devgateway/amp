@@ -12,6 +12,7 @@ import javax.jcr.Session;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
@@ -73,7 +74,12 @@ public final class ResourceUtil {
             if (resource.getType() != null) {
                 result.set(ResourceEPConstants.TYPE, resource.getType().getId());
             }
-            result.set(ResourceEPConstants.WEB_LINK, resource.getWebLink());
+            if (ResourceEPConstants.LINK.equals(resource.getResourceType())) {
+                result.set(ResourceEPConstants.WEB_LINK, resource.getWebLink());
+            } else {
+                result.set(ResourceEPConstants.FILE_NAME, resource.getFileName());
+            }
+            result.set(ResourceEPConstants.RESOURCE_TYPE, resource.getResourceType());
             result.set(ResourceEPConstants.ADDING_DATE, 
                     DateFormatUtils.ISO_DATETIME_TIME_ZONE_FORMAT.format(resource.getAddingDate()));
             result.set(ResourceEPConstants.TEAM, resource.getTeam());
@@ -96,15 +102,21 @@ public final class ResourceUtil {
         resource.setTitle(nodeWrapper.getTitle());
         resource.setDescription(nodeWrapper.getDescription());
         resource.setNote(nodeWrapper.getNotes());
-        resource.setFileName(nodeWrapper.getName());
         resource.setType(CategoryManagerUtil.getAmpCategoryValueFromDb(nodeWrapper.getCmDocTypeId()));
-        resource.setWebLink(nodeWrapper.getWebLink());
         resource.setAddingDate(nodeWrapper.getCalendarDate() == null ? null : nodeWrapper.getCalendarDate().getTime());
         resource.setUrl("/contentrepository/downloadFile.do?uuid=" + uuid);
-        resource.setFileSize(nodeWrapper.getFileSizeInMegabytes());
         resource.setCreatorEmail(nodeWrapper.getCreator());
         resource.setYearOfPublication(nodeWrapper.getYearOfPublication());
         resource.setPublic(getPublicResources().contains(uuid));
+        
+        if (StringUtils.isNotBlank(nodeWrapper.getWebLink())) {
+            resource.setWebLink(nodeWrapper.getWebLink());
+            resource.setResourceType(ResourceEPConstants.LINK);
+        } else {
+            resource.setFileName(nodeWrapper.getName());
+            resource.setFileSize(nodeWrapper.getFileSizeInMegabytes());
+            resource.setResourceType(ResourceEPConstants.FILE);
+        }
         
         if (ContentTranslationUtil.multilingualIsEnabled()) {
             resource.setTranslatedTitles(nodeWrapper.getTranslatedTitle());

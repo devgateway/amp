@@ -96,6 +96,11 @@ export function getSettingsAndActivity(activityId){
                         if(fundingInfo) {
                             activity[AC.FUNDINGS].forEach(funding => {
                                 let details = fundingInfo[AC.FUNDING_INFORMATION][AC.FUNDINGS].find(f => f[AC.FUNDING_ID] === funding[AC.FUNDING_ID]);
+                                details[AC.FUNDING_DETAILS].forEach(f => {
+                                    let detail = funding["funding_details"].find(d => f['transaction_type'] === d['transaction_type'] && f['adjustment_type'] === d['adjustment_type']);
+                                    f[AC.RECIPIENT_ORG] = detail[AC.RECIPIENT_ORG];
+                                    f[AC.RECIPIENT_ROLE] = detail[AC.RECIPIENT_ROLE];
+                                });
                                 funding[AC.FUNDING_DETAILS] = details[AC.FUNDING_DETAILS];
                                 funding[AC.UNDISBURSED_BALANCE] = details[AC.UNDISBURSED_BALANCE];
                             });

@@ -1,7 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.exception;
 
-import java.util.Optional;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
@@ -38,9 +36,18 @@ public class ApiExceptionMapper implements ExceptionMapper<Exception> {
             return ((WebApplicationException) e).getResponse();
         }
 
-        String mediaType = Optional.ofNullable(httpRequest.getHeader(HttpHeaders.ACCEPT))
-                .orElse(MediaType.APPLICATION_JSON);
-
+        String accept = httpRequest.getHeader(HttpHeaders.ACCEPT);
+        String contentType = httpRequest.getHeader(HttpHeaders.CONTENT_TYPE);
+        
+        String mediaType = accept;
+        if (accept == null || accept.equals(MediaType.WILDCARD)) {
+            if (contentType != null && contentType.equals(MediaType.APPLICATION_XML)) {
+                mediaType = MediaType.APPLICATION_XML;
+            } else {
+                mediaType = MediaType.APPLICATION_JSON;
+            }
+        }
+        
         logger.error("ApiExceptionMapper: ", e);
 
         if (e instanceof ApiRuntimeException) {

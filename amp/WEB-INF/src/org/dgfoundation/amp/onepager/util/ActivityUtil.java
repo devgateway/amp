@@ -173,19 +173,14 @@ public class ActivityUtil {
         } catch (Exception exception) {
             logger.error("Error saving activity:", exception); // Log the exception
             throw new RuntimeException("Can't save activity:", exception);
-
-        } finally {
-
-            if (Constants.ACTIVITY_NEEDS_APPROVAL_STATUS.contains(a.getApprovalStatus())) {
-                new ActivityValidationWorkflowTrigger(a);
-            }
-
-            try {
-                LuceneUtil.addUpdateActivity(rootRealPath, !newActivity, site, locale, a, oldA);
-            } catch (Exception e) {
-                logger.error("error while trying to update lucene logs:", e);
-            }
         }
+        
+        if (Constants.ACTIVITY_NEEDS_APPROVAL_STATUS.contains(a.getApprovalStatus())) {
+            new ActivityValidationWorkflowTrigger(a);
+        }
+        
+        LuceneUtil.addUpdateActivity(rootRealPath, !newActivity, site, locale, a, oldA, new ArrayList<>(values));
+        
         return a;
     }
 

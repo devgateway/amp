@@ -38,6 +38,13 @@ export default class ActivityView extends Component {
         const featureManager = this.props.featureManager;
         // TODO map only Sections enabled
         const sections = AC.ACTIVITY_SECTION_IDS.map((section) => {
+            if (section.sectionPath
+                && !activityFieldsManager.isFieldPathEnabled(section.sectionPath)) {
+                return null;
+            }
+            if (section.fmPath && !featureManager.isFMSettingEnabled(section.fmPath)) {
+                return null;
+            }
             return <li key={section.key}><a href={'javascript:openSection("'+section.hash+'")'}> 
                 {translations[section.translationKey]} </a></li>;
           });

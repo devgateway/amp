@@ -3,6 +3,7 @@ import Section from './Section';
 import SimpleField from '../fields/SimpleField';
 import Tablify from '../fields/Tablify';
 import * as AC from '../../utils/ActivityConstants';
+import * as FMC from '../../utils/FeatureManagerConstants';
 import DateUtils from '../../utils/DateUtils';
 require('../../styles/ActivityView.css');
 
@@ -40,12 +41,15 @@ class Planning extends Component {
       duration = DateUtils.durationImproved(startDate, endDate, settings) + ' ' + translations['months'];
     }
     //TODO duration should go checking if enabled
-    content.push(
-      <SimpleField key={'Duration'} 
-      title={translations['Duration']} value={duration} inline={inline} separator={false}
-      fieldNameClass={this.props.styles.fieldNameClass || ''}
-      fieldValueClass={this.props.styles.fieldValueClass || ''} />
-    );
+      debugger;
+      if(featureManager.isFMSettingEnabled(FMC.ACTIVITY_DURATION_OF_PROJECT)) {
+          content.push(
+              <SimpleField key={'Duration'}
+                           title={translations['Duration']} value={duration} inline={inline} separator={false}
+                           fieldNameClass={this.props.styles.fieldNameClass || ''}
+                           fieldValueClass={this.props.styles.fieldValueClass || ''}/>
+          );
+      }
     
     content = content.concat(fieldPaths.map(fieldPath =>
       this.props.buildSimpleField(activity, fieldPath, settings, showIfNotAvailable.has(fieldPath), inline, false, null,

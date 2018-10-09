@@ -8,7 +8,9 @@
  * @author from offline : Nadejda Mandrescu
  *
  */
+//TODO move to FM Constants
 export const ACTIVITY_FORM_FM_ENTRY = 'ACTIVITY FORM';
+export const PROJECT_MANAGEMENT_FM_ENTRY = 'PROJECT MANAGEMENT';
 
 export default class FeatureManager {
 

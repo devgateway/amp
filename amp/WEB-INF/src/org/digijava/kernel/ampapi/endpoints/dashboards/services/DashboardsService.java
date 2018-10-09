@@ -436,22 +436,22 @@ public class DashboardsService {
             if (filterRules != null) {
                 spec.setFilters(filterRules);
             }
+            FilterUtils.updateAllDateFilters(spec);
         } else {
             spec.addColumn(new ReportColumn(ColumnConstants.COUNTRY));
             spec.getHierarchies().add(new ReportColumn(ColumnConstants.COUNTRY));
             spec.addMeasure(new ReportMeasure(MeasureConstants.PLANNED_DISBURSEMENTS));
             spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
             spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
-        }
-        
-        if (filters != null) {
-            AmpReportFilters filterRules = FilterUtils.getFilterRules(filters, null);
-            if (filterRules != null) {
-                spec.setFilters(filterRules);
+
+            if (filters != null) {
+                AmpReportFilters filterRules = FilterUtils.getFilterRules(filters, null);
+                if (filterRules != null) {
+                    spec.setFilters(filterRules);
+                }
             }
-            FilterUtils.updateAllDateFilters(spec);
         }
-        
+
         // AMP-18740: For dashboards we need to use the default number formatting and leave the rest of the settings
         // configurable (calendar, currency, etc).
         setCustomSettings(config, spec);
@@ -547,26 +547,24 @@ public class DashboardsService {
             if (filterRules != null) {
                 spec.setFilters(filterRules);
             }
+            FilterUtils.updateAllDateFilters(spec);
+            
             spec.addSorter(new SortingInfo(new ReportColumn(ColumnConstants.ACTIVITY_UPDATED_ON), false));
         } else {
             spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
             spec.addColumn(new ReportColumn(MoConstants.TYPE_OF_ASSISTANCE));
             spec.getHierarchies().addAll(spec.getColumns());
             spec.setSummaryReport(true);
-
-        }
-       
-        spec.addSorter(new SortingInfo(spec.getMeasures().iterator().next(), false));
-        
-        if (filters != null) {
-            AmpReportFilters filterRules = FilterUtils.getFilterRules(filters, null);
-            if (filterRules != null) {
-                spec.setFilters(filterRules);
-            }
             
-            FilterUtils.updateAllDateFilters(spec);
+            if (filters != null) {
+                AmpReportFilters filterRules = FilterUtils.getFilterRules(filters, null);
+                if (filterRules != null) {
+                    spec.setFilters(filterRules);
+                }
+            }
         }
-        
+        spec.addSorter(new SortingInfo(spec.getMeasures().iterator().next(), false));
+       
         // AMP-18740: For dashboards we need to use the default number formatting and leave the rest of the settings
         // configurable (calendar, currency, etc).
         setCustomSettings(config, spec);

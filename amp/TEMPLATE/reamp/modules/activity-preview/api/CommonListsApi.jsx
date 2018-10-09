@@ -71,15 +71,27 @@ class CommonListsApi {
     } 
 
     static fetchFieldsData(requestData) {
-        return new Promise(( resolve, reject ) => {
+        return new Promise((resolve, reject ) => {
             postJson('/rest/activity/field/id-values', requestData).then(response => {
                 resolve(response.json() );
 
             }).catch(error => {
                 reject(error );
+            });
         });
-    });
-}
+    }
+
+
+    static fetchResources(requestData) {
+        return new Promise((resolve, reject ) => {
+            postJson('/rest/resource', requestData).then(response => {
+                resolve(response.json() );
+
+            }).catch(error => {
+                reject(error );
+            });
+        });
+    }
    
 }
 

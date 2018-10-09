@@ -1,7 +1,7 @@
 
 //TODO  Move to constants
 import * as FMPaths from "./FeatureManagerConstants";
-import {ACTIVITY_FORM_FM_ENTRY} from "../common/FeatureManager";
+import {ACTIVITY_FORM_FM_ENTRY, PROJECT_MANAGEMENT_FM_ENTRY} from "../common/FeatureManager";
 import FeatureManager from "../common/FeatureManager";
 
 export function getFeatureManagerRequestData() {
@@ -11,9 +11,11 @@ export function getFeatureManagerRequestData() {
     featureManagerRequestData['enabled-modules'] = false;
     featureManagerRequestData['detail-modules'] = [];
     featureManagerRequestData['detail-modules'].push(ACTIVITY_FORM_FM_ENTRY);
+    featureManagerRequestData['detail-modules'].push(PROJECT_MANAGEMENT_FM_ENTRY);
     featureManagerRequestData['detail-flat'] = false;
     featureManagerRequestData['full-enabled-paths'] = false;
     featureManagerRequestData['fm-paths'] = fmPaths;
+    debugger;
     return featureManagerRequestData;
 }
 

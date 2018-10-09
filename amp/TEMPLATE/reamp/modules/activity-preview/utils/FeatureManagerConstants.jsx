@@ -1,4 +1,6 @@
 
+
+export const ACTIVITY_DURATION_OF_PROJECT = '/PROJECT MANAGEMENT/Project ID and Planning/Planning/Duration of Project';
 export const ACTIVITY_LAST_UPDATED_BY = '/Activity Form/Identification/Activity Last Updated by';
 export const ACTIVITY_LAST_UPDATED_ON = '/Activity Form/Identification/Activity Updated On';
 export const ACTIVITY_IDENTIFICATION = '/Activity Form/Identification';

@@ -29,7 +29,7 @@ const InternalIds = (isSeparateSection) => class extends Component {
     let orgIds;
     debugger;
       if (this.props.params.activityFieldsManager.isFieldPathEnabled(AC.ACTIVITY_INTERNAL_IDS)) {
-          const showInternalId = this.props.params.internal_id",activityFieldsManager.isFieldPathEnabled(
+          const showInternalId = this.props.params.activityFieldsManager.isFieldPathEnabled(
               AC.ACTIVITY_INTERNAL_IDS_INTERNAL_ID_PATH);
           const activity = this.props.params.activity;
           orgIds = [];

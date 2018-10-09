@@ -268,7 +268,6 @@ body {background:none;}
 									</tr> 
 									</module:display>
 									   	<module:display name="/Activity Form/Identification/Objective Comments" parentModule="/Activity Form/Identification">
-											<logic:present name="currentMember" scope="session">
 											<tr>
 												<td class="field_name" >
 													<b><digi:trn key="aim:objectiveComments">Objective Comments</digi:trn></b>	
@@ -307,7 +306,6 @@ body {background:none;}
 												</logic:iterate>
 												</td>
 											</tr>
-											</logic:present>
 										</module:display>
 									<module:display name="/Activity Form/Identification/Description" parentModule="/Activity Form/Identification">
 									<tr>
@@ -1404,7 +1402,7 @@ body {background:none;}
 									  </td>
 									</tr>
 								  </c:if>
-                                  <logic:present name="currentMember" scope="session">
+
 									<module:display name="Funding" parentModule="PROJECT MANAGEMENT">
 									<tr>
 										<td class="field_name" >
@@ -1701,8 +1699,9 @@ body {background:none;}
                                                                   	<td>
                                                                     <table width="100%" border="0" align="center" cellpadding="2" cellspacing="0">
                                                                         <bean:define id="funding" name="funding" scope="page"
-                                                                            toScope="request"
-                                                                            type="org.digijava.module.aim.helper.Funding"></bean:define>
+                                                                                     toScope="request"
+                                                                                     type="org.digijava.module.aim.helper.Funding">
+                                                                        </bean:define>
                                                                         <jsp:include page="activitypreview/previewActivityFundingCommitments.jsp" />
 
                                                                         <feature:display module="Funding" name="Disbursement">
@@ -1922,7 +1921,6 @@ body {background:none;}
 									  </td>
 									</tr>
 									</module:display>
-								  </logic:present>
 
                                     <module:display name="/Activity Form/Aid Effectivenes" parentModule="/Activity Form">
                                         <logic:notEmpty name="aimEditActivityForm" property="selectedEffectivenessIndicatorOptions">
@@ -3287,7 +3285,7 @@ body {background:none;}
 									  <digi:trn key="aim:proposedPrjectCost">Budget Structure</digi:trn></b>
 									  </td>
 									<td bgcolor="#ffffff">
-											<c:if test="${aimEditActivityForm.budgetStructure != null}">
+											<c:if test="${aimEditActivityForm.budgetStructure != null} && ${not empty aimEditActivityForm.budgetStructure}">
                                                   <table cellspacing="1" cellPadding="3" bgcolor="#aaaaaa" width="100%">
                                                       	<tr bgcolor="#ffffff">
 															<td>
@@ -3314,26 +3312,24 @@ body {background:none;}
 								  </module:display>
 
 
-                                 <logic:present name="currentMember" scope="session">
-									 <module:display name="Activity Costing" parentModule="PROJECT MANAGEMENT">
-										<tr>
-										<td class="field_name" >
-												<b>
-												<digi:trn key="aim:costing"> Costing</digi:trn>
-										  </b>
+								 <module:display name="Activity Costing" parentModule="PROJECT MANAGEMENT">
+									<tr>
+									<td class="field_name" >
+											<b>
+											<digi:trn key="aim:costing"> Costing</digi:trn>
+									  </b>
+									</td>
+										<td bgcolor="#ffffff"><table width="100%">
+										  <tr>
+											<td>
+												<bean:define id="mode" value="preview" type="java.lang.String" toScope="request" />
+												<jsp:include page="viewCostsSummary.jsp" flush="" />
+											</td>
+										  </tr>
+										</table>
 										</td>
-											<td bgcolor="#ffffff"><table width="100%">
-                                              <tr>
-                                                <td>
-                                                	<bean:define id="mode" value="preview" type="java.lang.String" toScope="request" />
-                                                    <jsp:include page="viewCostsSummary.jsp" flush="" />
-                                                </td>
-                                              </tr>
-                                            </table>
-                                            </td>
-                                      </tr>
-									</module:display>
-								  </logic:present>
+								  </tr>
+								</module:display>
 
 									<!-- GPI -->
 									<module:display name="/Activity Form/GPI" parentModule="/Activity Form">

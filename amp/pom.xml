@@ -8,7 +8,7 @@
     <name>Aid Management Platform</name>
     <properties>
         <wicketVersion>6.18.0</wicketVersion>
-        <tomcatVersion>7.0.91</tomcatVersion>
+        <tomcatVersion>7.0.54</tomcatVersion>
         <springSecurityVersion>3.1.4.RELEASE</springSecurityVersion>
         <springVersion>3.0.7.RELEASE</springVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -127,7 +127,6 @@
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat-juli</artifactId>
             <version>${tomcatVersion}</version>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>

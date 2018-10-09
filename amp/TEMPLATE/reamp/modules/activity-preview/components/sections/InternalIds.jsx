@@ -15,7 +15,7 @@ const InternalIds = (isSeparateSection) => class extends Component {
 
   _getActInternalIdContent(actIntId, showInternalId) {
     let intId;
-    if (actIntId[AC.INTERNAL_ID] && actIntId[AC.INTERNAL_ID].value ) {
+    if (showInternalId && actIntId[AC.INTERNAL_ID] && actIntId[AC.INTERNAL_ID].value ) {
       intId = <span className={'tableValue'}>{actIntId[AC.INTERNAL_ID].value}</span>;
     }
     return (
@@ -26,11 +26,17 @@ const InternalIds = (isSeparateSection) => class extends Component {
   }
 
   buildContent() {
-    const activity = this.props.params.activity;
-    let orgIds = [];
-    if (activity[AC.ACTIVITY_INTERNAL_IDS] && activity[AC.ACTIVITY_INTERNAL_IDS].value && activity[AC.ACTIVITY_INTERNAL_IDS].value.length > 0) {
-      activity[AC.ACTIVITY_INTERNAL_IDS].value.forEach(actIntId => orgIds.push(this._getActInternalIdContent(actIntId)));
-    }
+    let orgIds;
+    debugger;
+      if (this.props.params.activityFieldsManager.isFieldPathEnabled(AC.ACTIVITY_INTERNAL_IDS)) {
+          const showInternalId = this.props.params.internal_id",activityFieldsManager.isFieldPathEnabled(
+              AC.ACTIVITY_INTERNAL_IDS_INTERNAL_ID_PATH);
+          const activity = this.props.params.activity;
+          orgIds = [];
+          if (activity[AC.ACTIVITY_INTERNAL_IDS] && activity[AC.ACTIVITY_INTERNAL_IDS].value && activity[AC.ACTIVITY_INTERNAL_IDS].value.length > 0) {
+              activity[AC.ACTIVITY_INTERNAL_IDS].value.forEach(actIntId => orgIds.push(this._getActInternalIdContent(actIntId, showInternalId)));
+          }
+      }
     return orgIds.length > 0 ? orgIds : null;
   }
 

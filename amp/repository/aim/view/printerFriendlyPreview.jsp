@@ -268,7 +268,6 @@ body {background:none;}
 									</tr> 
 									</module:display>
 									   	<module:display name="/Activity Form/Identification/Objective Comments" parentModule="/Activity Form/Identification">
-											<logic:present name="currentMember" scope="session">
 											<tr>
 												<td class="field_name" >
 													<b><digi:trn key="aim:objectiveComments">Objective Comments</digi:trn></b>	
@@ -307,7 +306,6 @@ body {background:none;}
 												</logic:iterate>
 												</td>
 											</tr>
-											</logic:present>
 										</module:display>
 									<module:display name="/Activity Form/Identification/Description" parentModule="/Activity Form/Identification">
 									<tr>
@@ -1424,7 +1422,6 @@ body {background:none;}
 									  </td>
 									</tr>
 								  </c:if>
-                                  <logic:present name="currentMember" scope="session">
 									<module:display name="Funding" parentModule="PROJECT MANAGEMENT">
 									<tr>
 										<td class="field_name" >
@@ -1942,7 +1939,6 @@ body {background:none;}
 									  </td>
 									</tr>
 									</module:display>
-								  </logic:present>
 
                                     <module:display name="/Activity Form/Aid Effectivenes" parentModule="/Activity Form">
                                         <logic:notEmpty name="aimEditActivityForm" property="selectedEffectivenessIndicatorOptions">
@@ -3334,7 +3330,6 @@ body {background:none;}
 								  </module:display>
 
 
-                                 <logic:present name="currentMember" scope="session">
 									 <module:display name="Activity Costing" parentModule="PROJECT MANAGEMENT">
 										<tr>
 										<td class="field_name" >
@@ -3353,7 +3348,6 @@ body {background:none;}
                                             </td>
                                       </tr>
 									</module:display>
-								  </logic:present>
 
 									<!-- GPI -->
 									<module:display name="/Activity Form/GPI" parentModule="/Activity Form">

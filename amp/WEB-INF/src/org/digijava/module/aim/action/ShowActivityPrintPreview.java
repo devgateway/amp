@@ -15,6 +15,7 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.aim.dbentity.AmpActivityBudgetStructure;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
@@ -40,6 +41,7 @@ import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.ProposedProjCost;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.ApplicationSettings;
+import org.digijava.module.aim.helper.BudgetStructure;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyWorker;
@@ -255,6 +257,8 @@ public class ShowActivityPrintPreview
                     eaForm.setCurrName(currName);
                 }
 
+                eaForm.setInternalIds(activity.getInternalIds());
+
                 // loading organizations and thier project ids.                
                 Collection orgProjIdsSet = DbUtil.getActivityInternalId(activity.getAmpActivityId());
                 if(orgProjIdsSet != null) {
@@ -432,6 +436,17 @@ public class ShowActivityPrintPreview
                 } else {
                     toCurrCode = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
                 }
+
+                eaForm.getFunding().setShowActual(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.isActiveInDatabase());
+                eaForm.getFunding().setShowPlanned(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.isActiveInDatabase());
+                eaForm.getFunding().setShowPipeline(CategoryConstants.ADJUSTMENT_TYPE_PIPELINE.isActiveInDatabase());
+                eaForm.getFunding().setShowOfficialDevelopmentAid(
+                        CategoryConstants.ADJUSTMENT_TYPE_ODA_SSC.isActiveInDatabase());
+                eaForm.getFunding().setShowBilateralSsc(
+                        CategoryConstants.ADJUSTMENT_TYPE_BILATERAL_SSC.isActiveInDatabase());
+                eaForm.getFunding().setShowTriangularSsc(
+                        CategoryConstants.ADJUSTMENT_TYPE_TRIANGULAR_SSC.isActiveInDatabase());
+                eaForm.getFunding().populateFromFundings(activity, toCurrCode, tm, false);
 
                 eaForm.getFunding().populateFromFundings(activity, toCurrCode, tm, false); // alternative to activity.getFunding(): DbUtil.getAmpFunding(activity.getAmpActivityId());
         
@@ -847,8 +862,13 @@ public class ShowActivityPrintPreview
                     eaForm.getIdentification().setPurpose(activity.getPurpose().trim());
                   if (activity.getResults() != null)
                     eaForm.getIdentification().setResults(activity.getResults());
-                  
 
+                List<AmpActivityBudgetStructure> budgetStructure = DbUtil.getBudgetStructure(eaForm.getActivityId());
+                List<BudgetStructure> pojoBS = new ArrayList<BudgetStructure>();
+                for (AmpActivityBudgetStructure aabs : budgetStructure) {
+                    pojoBS.add(new BudgetStructure(aabs.getBudgetStructureName(), aabs.getBudgetStructurePercentage()));
+                }
+                eaForm.setBudgetStructure(pojoBS);
                 
                 if(activity.getFY()!=null)
                     eaForm.getIdentification().setFY(activity.getFY().trim());

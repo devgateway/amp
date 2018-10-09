@@ -14,7 +14,7 @@ import org.digijava.module.common.util.DateTimeUtil;
  * @author George Khakhanashvili
  *
  */
-public class AmpIndicatorValue implements Serializable, Cloneable{
+public class AmpIndicatorValue extends AbstractAuditLogger implements Serializable, Cloneable {
     private static final Logger logger = Logger.getLogger(AmpIndicatorValue.class);
     /*
      * NOTICE

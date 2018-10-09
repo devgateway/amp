@@ -7,7 +7,7 @@ import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 
 @TranslatableClass (displayName = "Actor")
-public class AmpActor  implements Serializable, Cloneable
+public class AmpActor  extends AbstractAuditLogger implements Serializable, Cloneable
 {
     //IATI-check: not used in IATI
 //  @Interchangeable(fieldTitle="ID", importable = true)

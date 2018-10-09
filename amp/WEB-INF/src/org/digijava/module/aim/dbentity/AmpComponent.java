@@ -23,7 +23,8 @@ import org.digijava.module.aim.util.Output;
  * @author Priyajith
  */
 @TranslatableClass (displayName = "Component")
-public class AmpComponent implements Serializable,Comparable<AmpComponent>, Versionable, Cloneable {
+public class AmpComponent extends AbstractAuditLogger implements Serializable, Comparable<AmpComponent>, Versionable,
+        Cloneable {
     
     //IATI-check: to be ignored
     
@@ -263,6 +264,7 @@ public class AmpComponent implements Serializable,Comparable<AmpComponent>, Vers
         AmpComponent auxComponent = (AmpComponent) clone();
         auxComponent.setActivities(new HashSet<AmpActivityVersion>());
         auxComponent.getActivities().add(newActivity);
+        auxComponent.setPreviousObjectId(auxComponent.getAmpComponentId());
         auxComponent.setAmpComponentId(null);
         
         if (auxComponent.getFundings() != null && auxComponent.getFundings().size() > 0) {
@@ -271,6 +273,7 @@ public class AmpComponent implements Serializable,Comparable<AmpComponent>, Vers
             while (it.hasNext()) {
                 AmpComponentFunding auxComponentFunding = it.next();
                 AmpComponentFunding newComponentFunding = (AmpComponentFunding) auxComponentFunding.clone();
+                newComponentFunding.setPreviousObjectId(newComponentFunding.getAmpComponentFundingId());
                 newComponentFunding.setAmpComponentFundingId(null);
                 newComponentFunding.setComponent(auxComponent);
                 auxSetFundings.add(newComponentFunding);

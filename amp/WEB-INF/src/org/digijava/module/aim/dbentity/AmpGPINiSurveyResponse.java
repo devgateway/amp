@@ -6,7 +6,7 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 
-public class AmpGPINiSurveyResponse implements Serializable, Cloneable {
+public class AmpGPINiSurveyResponse extends AbstractAuditLogger implements Serializable, Cloneable {
 
     private static final long serialVersionUID = -6656563271238273140L;
     

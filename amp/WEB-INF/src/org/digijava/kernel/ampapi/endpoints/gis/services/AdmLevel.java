@@ -10,7 +10,8 @@ public enum AdmLevel {
     @JsonProperty(GisConstants.ADM0) COUNTRY(GisConstants.ADM0),
     @JsonProperty(GisConstants.ADM1) REGION(GisConstants.ADM1),
     @JsonProperty(GisConstants.ADM2) ZONE(GisConstants.ADM2),
-    @JsonProperty(GisConstants.ADM3) DISTRICT(GisConstants.ADM3);
+    @JsonProperty(GisConstants.ADM3) DISTRICT(GisConstants.ADM3),
+    @JsonProperty(GisConstants.ADM4) ADM4(GisConstants.ADM4);
 
     private String label;
 

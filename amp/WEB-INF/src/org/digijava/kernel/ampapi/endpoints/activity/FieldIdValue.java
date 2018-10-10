@@ -18,6 +18,10 @@ public class FieldIdValue {
     @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
     @JsonProperty("ancestor-values")
     private List<String> ancestorValues;
+    
+    public FieldIdValue(Long id) {
+        this.id = id;
+    }
 
     public FieldIdValue(Long id, String value, Map<String, String> translatedValue, List<String> ancestorPath) {
         this.id = id;

@@ -32,7 +32,7 @@ const Section = (ComposedSection, SectionTitle = null ,useEncapsulateHeader = tr
 
     if (showIfNotAvailable === true || (value_ !== undefined && value_ !== null)) {
       const useInnerHTML = AC.RICH_TEXT_FIELDS.has(fieldPath);
-      return (<SimpleField key={title_ + fieldPath} 
+      return (<SimpleField key={title_ + Math.random()} 
         title={title_} value={value_} 
         useInnerHTML={useInnerHTML}
         inline={inline}

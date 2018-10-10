@@ -20,6 +20,8 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.scorecard.model.Quarter;
 import org.digijava.kernel.ampapi.endpoints.scorecard.service.ScorecardExcelExporter;
 import org.digijava.kernel.ampapi.endpoints.scorecard.service.ScorecardNoUpdateDonor;
@@ -190,7 +192,8 @@ public class DonorScorecard {
         try {
             DbUtil.saveOrUpdateObject(settings);
         } catch (Exception e) {
-            message = e.getLocalizedMessage();
+            throw new ApiRuntimeException(
+                    ApiError.toError("Exception while saving settings object: " + e.getMessage()));
         }
         
         return message;
@@ -236,7 +239,8 @@ public class DonorScorecard {
                 try {
                     DbUtil.saveOrUpdateObject(org);
                 } catch (Exception e) {
-                    message = e.getLocalizedMessage();
+                    throw new ApiRuntimeException(
+                            ApiError.toError("Exception while saving settings object: " + e.getMessage()));
                 }
             }
         }
@@ -308,8 +312,8 @@ public class DonorScorecard {
             try {
                 DbUtil.saveOrUpdateObject(org);
             } catch (Exception e) {
-                // todo think of the exception type we're throwing here
-                throw new RuntimeException("Failed to load donor list");
+                throw new ApiRuntimeException(
+                        ApiError.toError("Exception while saving scorecard organization object: " + e.getMessage()));
             }
             
             donorIds.add(donorId);

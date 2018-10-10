@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import Section from './Section';
 import * as AC from '../../utils/ActivityConstants';
+import * as FMC from '../../utils/FeatureManagerConstants';
 import NumberUtils from '../../utils/NumberUtils'
-import DateUtils from '../../utils/DateUtils'
 import SimpleField from '../fields/SimpleField';
-
+import ActivityUtils from '../../utils/ActivityUtils';
 /**
  *    
  */
@@ -20,7 +20,7 @@ class FundingSummary extends Component {
    * @private
    */
   _buildFundingInformation() {
-    const { activity, translations, settings } = this.props.params;
+    const { activity, translations, settings, activityFieldsManager, featureManager } = this.props.params;
     if (!activity[AC.FUNDING_TOTALS]) {
       return (<div></div>);
     }
@@ -40,16 +40,13 @@ class FundingSummary extends Component {
     measuresTotals[translations['undisbursed_balance']] = NumberUtils.rawNumberToFormattedString(undisbursed, false, this.props.params.settings);
     let rate = activity[AC.FUNDING_TOTALS].value[AC.DELIVERY_RATE_PROP] ? activity[AC.FUNDING_TOTALS].value[AC.DELIVERY_RATE_PROP] + '%' : '0%';
     measuresTotals[translations['delivery_rate']] = rate;
-    
-    let endDateHelper = activity[AC.ACTUAL_COMPLETION_DATE].value ? activity[AC.ACTUAL_COMPLETION_DATE].value : activity[AC.PROPOSED_COMPLETION_DATE].value;
-    let startDate = DateUtils.createFormattedDate(activity[AC.ACTUAL_START_DATE].value, settings);
-    let endDate = DateUtils.createFormattedDate(endDateHelper, settings);
-    let duration = translations['amp.activity-preview:noData'];
-    if (startDate && endDate) {
-      duration = DateUtils.durationImproved(startDate, endDate, settings) + ' ' + translations['months'];
-    }
-    measuresTotals[translations['Duration']] = duration;
 
+    const __ret = ActivityUtils.calculateDurationOfProjects(activityFieldsManager, activity, settings, translations);
+    const showIfNotAvailable = __ret.showIfNotAvailable;
+    let duration = __ret.duration;
+    if(featureManager.isFMSettingEnabled(FMC.ACTIVITY_DURATION_OF_PROJECT)) {
+      measuresTotals[translations['Duration']] = duration;
+    }
     return this._buildTotalFields(measuresTotals);
   }
 

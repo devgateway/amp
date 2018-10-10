@@ -15,7 +15,6 @@ export function getFeatureManagerRequestData() {
     featureManagerRequestData['detail-flat'] = false;
     featureManagerRequestData['full-enabled-paths'] = false;
     featureManagerRequestData['fm-paths'] = fmPaths;
-    debugger;
     return featureManagerRequestData;
 }
 

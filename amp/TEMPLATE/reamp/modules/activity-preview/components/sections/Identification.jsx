@@ -28,8 +28,9 @@ class Identification extends Component {
             {fieldPaths.map(fieldPath => buildSimpleField(activity, fieldPath, settings, true, noDataValue, inline,
                 undefined, activityFieldsManager , featureManager))}
 
-            {(activity[AC.ACTIVITY_BUDGET].value === 'On Budget' || activity[AC.ACTIVITY_BUDGET].value
-                === 'Dans le Budget') && budgetPaths.map(fieldPath =>
+            {( activityFieldsManager.isFieldPathEnabled(AC.ACTIVITY_BUDGET)
+                && (activity[AC.ACTIVITY_BUDGET].value === 'On Budget' || activity[AC.ACTIVITY_BUDGET].value
+                === 'Dans le Budget')) && budgetPaths.map(fieldPath =>
                 buildSimpleField(activity, fieldPath, settings, true, noDataValue, inline,undefined,
                     activityFieldsManager, featureManager))
             }

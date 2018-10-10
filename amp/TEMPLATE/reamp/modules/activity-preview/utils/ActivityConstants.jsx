@@ -52,7 +52,7 @@ export const TRANSACTION_AMOUNT = "transaction_amount";
 
 //Activity Internal Ids
 export const ACTIVITY_INTERNAL_IDS = "activity_internal_ids";
-export const ACTIVITY_INTERNAL_IDS_INTERNAL_ID_PATH = 'activity_internal_ids~internal_Fid';
+export const ACTIVITY_INTERNAL_IDS_INTERNAL_ID_PATH = 'activity_internal_ids~internal_id';
 export const INTERNAL_ID = "internal_id";
 
 //Planning

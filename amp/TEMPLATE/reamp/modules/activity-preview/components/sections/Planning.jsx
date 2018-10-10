@@ -3,6 +3,7 @@ import Section from './Section';
 import SimpleField from '../fields/SimpleField';
 import Tablify from '../fields/Tablify';
 import * as AC from '../../utils/ActivityConstants';
+import * as FMC from '../../utils/FeatureManagerConstants';
 import DateUtils from '../../utils/DateUtils';
 require('../../styles/ActivityView.css');
 
@@ -17,7 +18,7 @@ class Planning extends Component {
 
   render() {
     const columnNumber = 3;
-    const { activity, translations, settings } = this.props.params;
+    const { activity, translations, settings, activityFieldsManager, featureManager } = this.props.params;
     const inline = this.props.styles.inline;
     let content = [];
     const fieldPaths = [
@@ -39,15 +40,20 @@ class Planning extends Component {
     if (startDate && endDate) {
       duration = DateUtils.durationImproved(startDate, endDate, settings) + ' ' + translations['months'];
     }
-    content.push(
-      <SimpleField key={'Duration'} 
-      title={translations['Duration']} value={duration} inline={inline} separator={false}
-      fieldNameClass={this.props.styles.fieldNameClass || ''}
-      fieldValueClass={this.props.styles.fieldValueClass || ''} />
-    );
+    //TODO duration should go checking if enabled
+      debugger;
+      if(featureManager.isFMSettingEnabled(FMC.ACTIVITY_DURATION_OF_PROJECT)) {
+          content.push(
+              <SimpleField key={'Duration'}
+                           title={translations['Duration']} value={duration} inline={inline} separator={false}
+                           fieldNameClass={this.props.styles.fieldNameClass || ''}
+                           fieldValueClass={this.props.styles.fieldValueClass || ''}/>
+          );
+      }
     
     content = content.concat(fieldPaths.map(fieldPath =>
-      this.props.buildSimpleField(activity, fieldPath, settings, showIfNotAvailable.has(fieldPath), inline, false)
+      this.props.buildSimpleField(activity, fieldPath, settings, showIfNotAvailable.has(fieldPath), inline, false, null,
+          activityFieldsManager, featureManager)
     ).filter(data => data !== undefined));
 
     const tableContent = Tablify.addRows('Planning', content, columnNumber);

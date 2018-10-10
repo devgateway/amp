@@ -11,6 +11,8 @@ import Issues from './sections/issues/Issues'
 import Contacts from './sections/Contacts'
 import Structures from './sections/Structures'
 import RelatedDocuments from './sections/RelatedDocuments'
+import * as FMC from '../utils/FeatureManagerConstants';
+import * as AC from '../utils/ActivityConstants';
 require('../styles/ActivityView.css');
 
 /**
@@ -23,10 +25,13 @@ export default class MainGroup extends Component {
   }
 
   render() {
-    const params = {
-      activity: this.props.params.activity,
-      translations : this.props.params.translations,
-      settings : this.props.params.settings
+    // TOOD check everywhere what can be taken from context so we dont pass around as props the same object
+      const params = {
+        activity: this.props.params.activity,
+        translations: this.props.params.translations,
+        settings: this.props.params.settings,
+        activityFieldsManager : this.props.params.activityFieldsManager,
+        featureManager : this.props.params.featureManager
     }
     const styles = {
       fieldNameClass : 'section_field_name',
@@ -36,29 +41,29 @@ export default class MainGroup extends Component {
     }
     
     return (<div className={'main_group_container'}>
-      <Identification params={params} styles={styles} />
+      <Identification params={params} styles={styles} fmPath={FMC.ACTIVITY_IDENTIFICATION}/>
 
-      <InternalIds params={params} styles={styles}/>
+      <InternalIds params={params} styles={styles} sectionPath={AC.ACTIVITY_INTERNAL_IDS} />
 
-      <Planning params={params} styles={this._getBoxStyles()} />
+      <Planning params={params} styles={this._getBoxStyles()} fmPath={FMC.ACTIVITY_PLANNING} />
 
-      <Location params={params} tablify styles={this._getBoxStyles()} />
+      <Location params={params} tablify styles={this._getBoxStyles()} sectionPath={AC.LOCATIONS}/>
 
-      <Program params={params} styles={this._getPercentageStyles()} />
+      <Program params={params} styles={this._getPercentageStyles()} fmPath={FMC.ACTIVITY_PROGRAM}/>
 
-      <Sector params={params} styles={this._getPercentageStyles()} />
+      <Sector params={params} styles={this._getPercentageStyles()} fmPath={FMC.ACTIVITY_SECTORS}/>
 
-      <FundingSection params={params} styles={this._getBoxStyles()}/>
+      <FundingSection params={params} styles={this._getBoxStyles()} sectionPath={AC.FUNDINGS} />
 
-      <RelatedOrganizations params={params} styles={styles} />
+      <RelatedOrganizations params={params} styles={styles} fmPath={FMC.ACTIVITY_ORGANIZATIONS}/>
 
-      <Issues params={params} styles={styles}  />
+      <Issues params={params} styles={styles}  sectionPath={AC.ISSUES} />
 
-      <RelatedDocuments params={params} styles={styles}  />
+      <RelatedDocuments params={params} styles={styles}  sectionPath={AC.ACTIVITY_DOCUMENTS}/>
 
-      <Contacts params={params} styles={styles}  />
+      <Contacts params={params} styles={styles}  fmPath={FMC.ACTIVITY_CONTACT}/>
 
-      <Structures params={params} styles={styles}  />
+      <Structures params={params} styles={styles}  sectionPath={AC.STRUCTURES}/>
     </div>);
   }
 

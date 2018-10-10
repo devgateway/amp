@@ -34,7 +34,17 @@ export default class ActivityView extends Component {
         const activityInfo = this.props.activityInfo;
         const settings = this.props.settings;
         const translations = this.props.translations;
+        const activityFieldsManager = this.props.activityFieldsManager;
+        const featureManager = this.props.featureManager;
+        // TODO map only Sections enabled
         const sections = AC.ACTIVITY_SECTION_IDS.map((section) => {
+            if (section.sectionPath
+                && !activityFieldsManager.isFieldPathEnabled(section.sectionPath)) {
+                return null;
+            }
+            if (section.fmPath && !featureManager.isFMSettingEnabled(section.fmPath)) {
+                return null;
+            }
             return <li key={section.key}><a href={'javascript:openSection("'+section.hash+'")'}> 
                 {translations[section.translationKey]} </a></li>;
           });
@@ -43,7 +53,9 @@ export default class ActivityView extends Component {
             activity: activity,
             translations: translations,
             settings: settings,
-            activityInfo: activityInfo
+            activityInfo: activityInfo,
+            activityFieldsManager : activityFieldsManager,
+            featureManager : featureManager
         }
         const statusBarStyles = {
             inline : true,         
@@ -96,7 +108,7 @@ export default class ActivityView extends Component {
         );
     }
 
-	_hasSettings() {
+    _hasSettings() {
         return this.props.isSettingsLoaded && this.props.settings;
     }
 	
@@ -106,6 +118,12 @@ export default class ActivityView extends Component {
 	
 	_hasActivityInfo() {
         return this.props.isActivityInfoLoaded && this.props.activityInfo;
+    }
+    _isFmManagerLoaded(){
+        return this.props.isFMManagerLoaded && this.props.featureManager;
+    }
+    _isActivityFieldsManagerLoaded(){
+        return this.props.isActivityFieldsManagerLoaded && this.props.activityFieldsManager;
     }
     
     _getMessage() {
@@ -202,7 +220,8 @@ export default class ActivityView extends Component {
     }
     
     render() {
-        const activityPreview = this._hasActivity() && this._hasSettings() && this._hasActivityInfo() ? this._renderData() : '';
+        const activityPreview = this._hasActivity() && this._hasSettings() && this._hasActivityInfo()
+        && this._isFmManagerLoaded() && this._isActivityFieldsManagerLoaded() ? this._renderData() : '';
         return (
             <div>
                 {this._getMessage()}
@@ -224,8 +243,14 @@ function mapStateToProps( state, ownProps ) {
         isActivityError: state.commonLists.isActivityError,
         isActivityHydratedLoading: state.commonLists.isActivityHydratedLoading,
         isActivityHydrated: state.commonLists.isActivityHydrated,
+        isActivityFieldsManagerLoading: state.commonLists.isActivityFieldsManagerLoading,
+        isActivityFieldsManagerLoaded: state.commonLists.isActivityFieldsManagerLoaded,
+        activityFieldsManager: state.commonLists.activityFieldsManager,
         translations: state.startUp.translations,
-        translate: state.startUp.translate
+        translate: state.startUp.translate,
+        isFMManagerLoading: state.commonLists.isFMManagerLoading,
+        isFMManagerLoaded: state.commonLists.isFMManagerLoaded,
+        featureManager: state.commonLists.featureManager
     }
 }
 

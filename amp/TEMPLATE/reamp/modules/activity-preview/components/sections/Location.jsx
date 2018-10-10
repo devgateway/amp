@@ -22,17 +22,20 @@ class Location extends Component {
 
   render() {
     const columnNumber = 3;
-    const { activity, settings } = this.props.params;
+    const { activity, settings, activityFieldsManager, featureManager } = this.props.params;
     const noDataValue = this.props.params.translations['amp.activity-preview:noData'];
     let content = [<LocationsList key="locations-list"  {...this.props} 
       listField={LOCATIONS} percentageField={LOCATION_PERCENTAGE} 
       percentTitleClass={'percent_field_name'} percentValueClass={'percent_field_value'} 
       tablify={false} columns={columnNumber}/>];
     const topContent = [];
-    topContent.push(<td key={IMPLEMENTATION_LEVEL}>{this.props.buildSimpleField(activity, IMPLEMENTATION_LEVEL, settings, noDataValue, true)} </td>);
-    topContent.push(<td key={IMPLEMENTATION_LOCATION}>{this.props.buildSimpleField(activity, IMPLEMENTATION_LOCATION, settings, noDataValue, true)} </td>);
+    topContent.push(<td key={IMPLEMENTATION_LEVEL}>{this.props.buildSimpleField(activity, IMPLEMENTATION_LEVEL,
+        settings,true, noDataValue, true, null, activityFieldsManager, featureManager)} </td>);
+    topContent.push(<td key={IMPLEMENTATION_LOCATION}>{this.props.buildSimpleField(activity, IMPLEMENTATION_LOCATION,
+        settings, true, noDataValue, true, null, activityFieldsManager, featureManager)} </td>);
     content = content.filter(el => el !== undefined);
     let table = null;
+    //check why is hardcoded
     if ((activity[IMPLEMENTATION_LEVEL] && activity[IMPLEMENTATION_LEVEL].value !== 'National')
       || (activity[IMPLEMENTATION_LOCATION] && activity[IMPLEMENTATION_LOCATION].value !== 'Country')) {
       table = (<table className={'box_table2'}>

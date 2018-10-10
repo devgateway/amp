@@ -27,10 +27,14 @@ class FundingTotalsSection extends Component {
       });      
     });
 
+    let trx = activity[AC.FUNDING_TOTALS].value[AC.TOTALS].find(t => t[AC.TRANSACTION_TYPE] === AC.MTEF_PROJECTIONS);
+    measuresTotals[AC.MTEF_PROJECTIONS] = trx ? trx[AC.AMOUNT] : 0;
+
     const actualCommitments = measuresTotals[AC.ACTUAL_COMMITMENTS];
     const plannedCommitments = measuresTotals[AC.PLANNED_COMMITMENTS];
     const actualDisbursements = measuresTotals[AC.ACTUAL_DISBURSEMENTS];
     const plannedDisbursements = measuresTotals[AC.PLANNED_DISBURSEMENTS];
+    const mtef = measuresTotals[AC.MTEF_PROJECTIONS];
     const undisbursed = activity[AC.FUNDING_TOTALS].value[AC.UNDISBURSED_BALANCE];
     const rate = activity[AC.FUNDING_TOTALS].value[AC.DELIVERY_RATE_PROP] ? activity[AC.FUNDING_TOTALS].value[AC.DELIVERY_RATE_PROP] : 0;
     const options = [
@@ -38,6 +42,7 @@ class FundingTotalsSection extends Component {
       { label: translations['amp.activity-preview:totalActualCommitments'], value: actualCommitments, format: true, isPercentage: false, showIfZero: false },
       { label: translations['amp.activity-preview:totalPlannedDisbursements'], value: plannedDisbursements, format: true, isPercentage: false, showIfZero: false },
       { label: translations['amp.activity-preview:totalActualDisbursements'], value: actualDisbursements, format: true, isPercentage: false, showIfZero: false },
+      { label: translations['amp.activity-preview:totalMTEFProjections'], value: mtef, format: true, isPercentage: false, showIfZero: false },
       { label: translations['total_undisbursed_balance'], value: undisbursed, format: true, isPercentage: false, showIfZero: true},
       { label: translations['delivery_rate'], value: rate, format: false, isPercentage: true, showIfZero: true }
     ];

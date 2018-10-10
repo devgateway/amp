@@ -1,6 +1,7 @@
 /**
- *    
+ *
  */
+import * as FMC from '../utils/FeatureManagerConstants';
 
 export const DEFAULT_CURRENCY = 'XOF';
 
@@ -13,22 +14,6 @@ export const VOTE = 'vote';
 export const SUB_VOTE = 'sub_vote';
 export const SUB_PROGRAM = 'sub_program';
 export const PROJECT_CODE = 'project_code';
-export const ACTIVITY_SECTION_IDS =
-  [
-    { key: 'AcIdentification', hash: 'AcIdentification', value: 'Identification', translationKey: 'amp.activity-preview:sectionIdentification'},
-    { key: 'AcInternalIds', hash: 'AcInternalIds', value: 'Agency Internal IDs', translationKey: 'amp.activity-preview:sectionInternalIds' },
-    { key: 'AcPlanning', hash: 'AcPlanning', value: 'Planning', translationKey: 'Planning' },
-    { key: 'AcLocation', hash: 'AcLocation', value: 'Location', translationKey: 'Location' },
-    { key: 'AcProgram', hash: 'AcProgram', value: 'Program', translationKey: 'Program' },
-    { key: 'AcSector', hash: 'AcSector', value: 'Sectors', translationKey: 'SectorsLabel' },
-    { key: 'AcFunding', hash: 'AcFunding', value: 'Funding', translationKey: 'Funding' },
-    { key: 'AcRelatedOrganizations', hash: 'AcRelatedOrganizations', value: 'Related Organizations', translationKey: 'RelatedOrganizations' },
-    { key: 'AcIssues', hash: 'AcIssues', value: 'Issues', translationKey: 'Issues' },
-    { key: 'AcRelatedDocuments', hash: 'AcRelatedDocuments', value: 'Related Documents', translationKey: 'RelatedDocuments' },
-    { key: 'AcContacts', hash: 'AcContacts', value: 'Contacts', translationKey: 'Contacts' },
-    { key: 'AcFundingSummary', hash: 'AcFundingSummary', value: 'Funding Summary', translationKey: 'FundingInformation' },
-    { key: 'AcAdditionalInfo', hash: 'AdditionalInfo', value: 'Additional Info', translationKey: 'AdditionalInfo' }
-  ];
 
 export const STATUS_REASON = 'status_reason';
 export const OBJECTIVE = 'objective';
@@ -50,6 +35,9 @@ export const PLANNED = 'Planned';
 export const PIPELINE = 'Pipeline';
 export const COMMITMENTS = 'Commitments';
 export const DISBURSEMENTS = 'Disbursements';
+export const MTEF_PROJECTIONS = 'MTEF Projections';
+export const MTEF_PROJECTIONS_FIELD = 'mtef_projections';
+export const PROJECTION = 'projection';
 export const ADJUSTMENT_TYPES = [PLANNED, ACTUAL];
 export const TRANSACTION_TYPES = [COMMITMENTS, DISBURSEMENTS];
 
@@ -67,6 +55,7 @@ export const TRANSACTION_AMOUNT = "transaction_amount";
 
 //Activity Internal Ids
 export const ACTIVITY_INTERNAL_IDS = "activity_internal_ids";
+export const ACTIVITY_INTERNAL_IDS_INTERNAL_ID_PATH = 'activity_internal_ids~internal_Fid';
 export const INTERNAL_ID = "internal_id";
 
 //Planning
@@ -210,6 +199,14 @@ export const TRX_TYPE_PATH = 'fundings~funding_details~transaction_type';
 export const ADJ_TYPE_PATH = 'fundings~funding_details~adjustment_type';
 export const AMOUNT = 'amount';
 export const REORDER_TRX = 'reorder-funding-item';
+export const RECIPIENT_ORG = 'recipient_organization';
+export const RECIPIENT_ROLE = 'recipient_role';
+
+export const COMMITMENT_RECIPIENT_ORG = 'commitments_recipient_organization';
+export const COMMITMENT_RECIPIENT_ROLE = 'commitments_recipient_role';
+
+export const DISBURSEMENT_RECIPIENT_ORG = 'disbursements_recipient_organization';
+export const DISBURSEMENT_RECIPIENT_ROLE = 'disbursements_recipient_role';
 
 //RELATED DOCUMENTS
 export const ACTIVITY_DOCUMENTS = 'activity_documents';
@@ -220,6 +217,37 @@ export const DOC_WEB_LINK = 'web_link';
 export const DOC_URL = 'url';
 export const DOC_DATE = 'adding_date';
 export const FILE_NAME = 'file_name';
+
+export const ACTIVITY_SECTION_IDS =
+    [
+        { key: 'AcIdentification', hash: 'AcIdentification', value: 'Identification',
+            translationKey: 'amp.activity-preview:sectionIdentification', fmPath: FMC.ACTIVITY_IDENTIFICATION},
+        { key: 'AcInternalIds', hash: 'AcInternalIds', value: 'Agency Internal IDs',
+            translationKey: 'amp.activity-preview:sectionInternalIds',sectionPath: ACTIVITY_INTERNAL_IDS },
+        { key: 'AcPlanning', hash: 'AcPlanning', value: 'Planning', translationKey: 'Planning',
+            fmPath: FMC.ACTIVITY_PLANNING },
+        { key: 'AcLocation', hash: 'AcLocation', value: 'Location', translationKey: 'Location',
+            sectionPath: LOCATIONS },
+        { key: 'AcProgram', hash: 'AcProgram', value: 'Program', translationKey: 'Program',
+            fmPath: FMC.ACTIVITY_PROGRAM},
+        { key: 'AcSector', hash: 'AcSector', value: 'Sectors', translationKey: 'SectorsLabel',
+            fmPath: FMC.ACTIVITY_SECTORS},
+        { key: 'AcFunding', hash: 'AcFunding', value: 'Funding', translationKey: 'Funding', sectionPath: FUNDINGS },
+        { key: 'AcRelatedOrganizations', hash: 'AcRelatedOrganizations', value: 'Related Organizations',
+            translationKey: 'RelatedOrganizations', fmPath: FMC.ACTIVITY_ORGANIZATIONS },
+        { key: 'AcIssues', hash: 'AcIssues', value: 'Issues', translationKey: 'Issues', sectionPath: ISSUES },
+        { key: 'AcContacts', hash: 'AcContacts', value: 'Contacts', translationKey: 'Contacts',
+            fmPath: FMC.ACTIVITY_CONTACT },
+        { key: 'ACStructures', hash: 'AcStructures', value: 'Structures', translationKey:'Structures',
+            sectionPath: STRUCTURES },
+        { key: 'AcRelatedDocuments', hash: 'AcRelatedDocuments', value: 'Related Documents',
+            translationKey: 'RelatedDocuments',sectionPath: ACTIVITY_DOCUMENTS },
+        { key: 'AcFundingSummary', hash: 'AcFundingSummary', value: 'Funding Summary',
+            translationKey: 'FundingInformation' },
+        { key: 'AcAdditionalInfo', hash: 'AcAdditionalInfo', value: 'Additional Info',
+            translationKey: 'AdditionalInfo' }
+    ];
+
 
 
 

@@ -101,7 +101,8 @@ class FundingSection extends Component {
         counter += 1;
       });
     }
-    const totals = (<FundingTotalsSection activity={activity} translations={translations} settings={settings}/>);
+    const totals = (<FundingTotalsSection key={'FundingTotalsSection'} activity={activity} 
+      translations={translations} settings={settings}/>);
     fundingList.push(totals);
 
     return (

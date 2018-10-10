@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.AmpARFilterParams;
 import org.dgfoundation.amp.ar.FilterParam;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
@@ -2196,8 +2197,9 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
      */
     public static List<Long> getEditableActivityIdsNoSession(TeamMember tm) {
         AmpTeamMember ampTeamMember = TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
-        AmpARFilter ampARFilter = FilterUtil.buildFilter(ampTeamMember.getAmpTeam(), null);
-        ampARFilter.generateFilterQuery(TLSUtils.getRequest(), true);
+        AmpARFilter ampARFilter = FilterUtil.buildFilterFromSource(ampTeamMember.getAmpTeam());
+        AmpARFilterParams params = AmpARFilterParams.getParamsForWorkspaceFilter(ampTeamMember.toTeamMember(), null);
+        ampARFilter.generateFilterQuery(params);
         String query = ampARFilter.getGeneratedFilterQuery();
         return ActivityUtil.getEditableActivityIds(tm, query);
     }

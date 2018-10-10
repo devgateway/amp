@@ -13,7 +13,7 @@ class StatusBar extends Component {
 
   render() {
     const { buildSimpleField } = this.props;
-    const { activity, translations, settings } = this.props.params;
+    const { activity, translations, settings, activityFieldsManager, featureManager } = this.props.params;
     const noDataValue = translations['amp.activity-preview:noData'];
     const fieldPaths = [AC.AMP_ID, AC.ACTIVITY_STATUS, AC.ACTIVITY_BUDGET];
     const inline = this.props.styles.inline;
@@ -31,7 +31,8 @@ class StatusBar extends Component {
     }
     return (
       <div>
-        {fieldPaths.map(fieldPath => buildSimpleField(activity, fieldPath, settings, true, noDataValue, inline))}
+        {fieldPaths.map(fieldPath => buildSimpleField(activity, fieldPath, settings, true, noDataValue, inline,
+            undefined, activityFieldsManager, featureManager))}
         <SimpleField key={'UnitKey'} 
         title={translations['unit']} value={unitLabel} 
         useInnerHTML={false}

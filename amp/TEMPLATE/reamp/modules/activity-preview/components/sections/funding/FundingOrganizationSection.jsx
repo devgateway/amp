@@ -17,13 +17,19 @@ class FundingOrganizationSection extends Component {
   _buildDonorInfo() {
     const content = [];
     const columnsNumber = 2;
-    const { buildSimpleField, funding, settings } = this.props;
-    content.push(buildSimpleField(funding, AC.SOURCE_ROLE, settings, true, null, false));
-    content.push(buildSimpleField(funding, AC.FUNDING_DONOR_ORG_ID, settings, true, null, false));
-    content.push(buildSimpleField(funding, AC.FUNDING_STATUS, settings, true, null, false));
-    content.push(buildSimpleField(funding, AC.TYPE_OF_ASSISTANCE, settings, true, null, false));
-    content.push(buildSimpleField(funding, AC.FINANCING_INSTRUMENT, settings, true, null, false));
-    content.push(buildSimpleField(funding, AC.FINANCING_ID, settings, true, null, false));
+    const { buildSimpleField, funding, settings, activityFieldsManager, featureManager } = this.props;
+    content.push(buildSimpleField(funding, AC.SOURCE_ROLE, settings, true, null, false, null,
+        activityFieldsManager, featureManager));
+    content.push(buildSimpleField(funding, AC.FUNDING_DONOR_ORG_ID, settings, true, null, false, null,
+        activityFieldsManager, featureManager));
+    content.push(buildSimpleField(funding, AC.FUNDING_STATUS, settings, true, null, false, null,
+        activityFieldsManager, featureManager));
+    content.push(buildSimpleField(funding, AC.TYPE_OF_ASSISTANCE, settings, true, null, false, null,
+        activityFieldsManager, featureManager));
+    content.push(buildSimpleField(funding, AC.FINANCING_INSTRUMENT, settings, true, null, false, null,
+        activityFieldsManager, featureManager));
+    content.push(buildSimpleField(funding, AC.FINANCING_ID, settings, true, null, false, null,
+        activityFieldsManager, featureManager));
     
     const tableContent = Tablify.addRows('fundingOrganizationSection', content, columnsNumber);
     return tableContent;

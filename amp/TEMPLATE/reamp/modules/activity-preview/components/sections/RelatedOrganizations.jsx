@@ -13,7 +13,7 @@ class RelatedOrganizations extends Component {
   }
 
   _buildRelatedOrganizations() {
-    const { activity, translations, settings } = this.props.params;
+    const { activity, translations, settings, activityFieldsManager, featureManager } = this.props.params;
     const dOrg = activity[AC.DONOR_ORGANIZATION] && activity[AC.DONOR_ORGANIZATION].value ? 
       activity[AC.DONOR_ORGANIZATION].value : undefined;
     const rOrg = activity[AC.RESPONSIBLE_ORGANIZATION] && activity[AC.RESPONSIBLE_ORGANIZATION] ? 
@@ -24,13 +24,16 @@ class RelatedOrganizations extends Component {
     const relatedOrganizations = [];
     if (dOrg) {
       for(var id in activity[AC.DONOR_ORGANIZATION].value)
-      relatedOrganizations.push(this.props.buildSimpleField(dOrg, AC.ORGANIZATION, settings, true, false, false, translations ['DonorOrganization']));
+      relatedOrganizations.push(this.props.buildSimpleField(dOrg, AC.ORGANIZATION,
+          settings, true, false, false, translations ['DonorOrganization'], activityFieldsManager, featureManager));
     }
     if (rOrg) {
-      relatedOrganizations.push(this.props.buildSimpleField(rOrg, AC.ORGANIZATION, settings, true, false, false, translations ['ResponsibleOrganization']));
+      relatedOrganizations.push(this.props.buildSimpleField(rOrg, AC.ORGANIZATION, settings, true, false, false,
+          translations ['ResponsibleOrganization'], activityFieldsManager, featureManager));
     }
     if (eAge) {
-      relatedOrganizations.push(this.props.buildSimpleField(eAge, AC.ORGANIZATION, settings, true, false, false, translations ['ExecutingAgency']));
+      relatedOrganizations.push(this.props.buildSimpleField(eAge, AC.ORGANIZATION, settings, true, false, false,
+          translations ['ExecutingAgency'], activityFieldsManager, featureManager));
     }
     if (!dOrg && !rOrg && !eAge){
       relatedOrganizations.push(<div key={'relatedOrgNodata'} 

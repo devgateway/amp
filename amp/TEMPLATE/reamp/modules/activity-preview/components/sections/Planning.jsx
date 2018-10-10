@@ -3,8 +3,9 @@ import Section from './Section';
 import SimpleField from '../fields/SimpleField';
 import Tablify from '../fields/Tablify';
 import * as AC from '../../utils/ActivityConstants';
-import DateUtils from '../../utils/DateUtils';
+import * as FMC from '../../utils/FeatureManagerConstants';
 require('../../styles/ActivityView.css');
+import ActivityUtils from '../../utils/ActivityUtils';
 
 /**
  *    
@@ -17,7 +18,7 @@ class Planning extends Component {
 
   render() {
     const columnNumber = 3;
-    const { activity, translations, settings } = this.props.params;
+    const { activity, translations, settings, activityFieldsManager, featureManager } = this.props.params;
     const inline = this.props.styles.inline;
     let content = [];
     const fieldPaths = [
@@ -28,26 +29,22 @@ class Planning extends Component {
       AC.ACTUAL_APPROVAL_DATE, 
       AC.PROPOSED_START_DATE,
       AC.ACTUAL_START_DATE];
+      const __ret = ActivityUtils.calculateDurationOfProjects(activityFieldsManager, activity, settings, translations);
+      const showIfNotAvailable = __ret.showIfNotAvailable;
+      let duration = __ret.duration;
 
-    const showIfNotAvailable = new Set([AC.PROPOSED_PROJECT_LIFE, AC.PROPOSED_APPROVAL_DATE, AC.ACTUAL_APPROVAL_DATE, 
-      AC.PROPOSED_START_DATE, AC.ACTUAL_START_DATE, AC.PROPOSED_COMPLETION_DATE, AC.ACTUAL_COMPLETION_DATE]);
-
-    let endDateHelper = activity[AC.ACTUAL_COMPLETION_DATE].value ? activity[AC.ACTUAL_COMPLETION_DATE].value : activity[AC.PROPOSED_COMPLETION_DATE].value;
-    let startDate = DateUtils.createFormattedDate(activity[AC.ACTUAL_START_DATE].value, settings);
-    let endDate = DateUtils.createFormattedDate(endDateHelper, settings);
-    let duration = translations['amp.activity-preview:noData'];
-    if (startDate && endDate) {
-      duration = DateUtils.durationImproved(startDate, endDate, settings) + ' ' + translations['months'];
-    }
-    content.push(
-      <SimpleField key={'Duration'} 
-      title={translations['Duration']} value={duration} inline={inline} separator={false}
-      fieldNameClass={this.props.styles.fieldNameClass || ''}
-      fieldValueClass={this.props.styles.fieldValueClass || ''} />
-    );
+      if(featureManager.isFMSettingEnabled(FMC.ACTIVITY_DURATION_OF_PROJECT)) {
+          content.push(
+              <SimpleField key={'Duration'}
+                           title={translations['Duration']} value={duration} inline={inline} separator={false}
+                           fieldNameClass={this.props.styles.fieldNameClass || ''}
+                           fieldValueClass={this.props.styles.fieldValueClass || ''}/>
+          );
+      }
     
     content = content.concat(fieldPaths.map(fieldPath =>
-      this.props.buildSimpleField(activity, fieldPath, settings, showIfNotAvailable.has(fieldPath), inline, false)
+      this.props.buildSimpleField(activity, fieldPath, settings, showIfNotAvailable.has(fieldPath), inline, false, null,
+          activityFieldsManager, featureManager)
     ).filter(data => data !== undefined));
 
     const tableContent = Tablify.addRows('Planning', content, columnNumber);

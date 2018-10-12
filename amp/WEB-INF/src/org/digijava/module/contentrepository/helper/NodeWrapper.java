@@ -74,8 +74,9 @@ public class NodeWrapper{
             Node newNode = null;
             long docType = 0;
             if (isANewVersion) {
-                Property docTypeProp = parentNode.getProperty(CrConstants.PROPERTY_CM_DOCUMENT_TYPE);
-                docType = docTypeProp.getLong();
+                Property docTypeProp = DocumentManagerUtil.getPropertyFromNode(parentNode,
+                        CrConstants.PROPERTY_CM_DOCUMENT_TYPE);
+                docType = docTypeProp != null ? docTypeProp.getLong() : docType;
                 newNode = parentNode;
                 newNode.checkout();
             } else {
@@ -248,20 +249,22 @@ public class NodeWrapper{
             TeamMember teamMember       = (TeamMember)myRequest.getSession().getAttribute(Constants.CURRENT_MEMBER);
             Node newNode    = null;
             String docTitle=originalNode.getProperty(CrConstants.PROPERTY_TITLE).getString();
-            long docType = 0;
+            Property docTypeProp = null;
             
             if (isANewVersion){
-                Property docTypeProp = parentNode.getProperty(CrConstants.PROPERTY_CM_DOCUMENT_TYPE);
-                docType = docTypeProp.getLong();
-                newNode     = parentNode;
+                docTypeProp = DocumentManagerUtil.getPropertyFromNode(parentNode,
+                        CrConstants.PROPERTY_CM_DOCUMENT_TYPE);
+                newNode = parentNode;
                 newNode.checkout();
             }
-            else{               
-                docType = originalNode.getProperty(CrConstants.PROPERTY_CM_DOCUMENT_TYPE).getLong();
+            else {
+                docTypeProp = DocumentManagerUtil.getPropertyFromNode(originalNode,
+                        CrConstants.PROPERTY_CM_DOCUMENT_TYPE);
                 newNode = parentNode.addNode( docTitle );
                 newNode.addMixin("mix:versionable");
-            }           
-            
+            }
+            long docType = docTypeProp != null ? docTypeProp.getLong() : 0;
+
             if (isANewVersion){
                 int vernum  = DocumentManagerUtil.getNextVersionNumber(newNode.getIdentifier(), myRequest);
                 newNode.setProperty(CrConstants.PROPERTY_VERSION_NUMBER, (double)vernum);

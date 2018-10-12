@@ -17,7 +17,8 @@ class FundingTotalItem extends Component {
         rawNumberToFormattedString(this.props.value, false, this.props.settings);
         
     val = this.props.isPercentage ? val + '%' : val + ' ' + this.props.settings[AC.EFFECTIVE_CURRENCY][AC.CURRENCY_CODE];
-    return (<div>
+    return (
+    <div>
       <div key={'Total_Item_Label_' + Math.random()} className={'subtotal_footer_legend'}>
         {`${this.props.label}:`}
       </div>

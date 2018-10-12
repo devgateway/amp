@@ -308,11 +308,10 @@ public class RequestProcessor
     }
 
     @Override
-    public boolean processPreprocess(HttpServletRequest request, HttpServletResponse response)
-    {
-        TLSUtils.populate(request);
+    public boolean processPreprocess(HttpServletRequest request, HttpServletResponse response) {
         TranslatorUtil.insertAvailableLanguages(request);
         request.setAttribute("currentLocale", TLSUtils.getEffectiveLangCode());
+        
         return true;
     }
         

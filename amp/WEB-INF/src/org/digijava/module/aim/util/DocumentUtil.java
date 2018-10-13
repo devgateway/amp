@@ -2,7 +2,6 @@ package org.digijava.module.aim.util;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.jcr.Node;
@@ -20,11 +19,11 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.service.ServiceManager;
 import org.digijava.kernel.services.JCRRepositoryService;
-import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponseDocument;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.ManagedDocument;
+import org.digijava.module.contentrepository.dbentity.CrDocumentNodeAttributes;
 
 public class DocumentUtil {
 
@@ -201,7 +200,7 @@ public class DocumentUtil {
         if(nameProperty != null) {
             contentItem.setFileName(nameProperty.getString());
         } else {
-            contentItem.setFileName("Item #" + childItem.getUUID());
+            contentItem.setFileName("Item #" + childItem.getIdentifier());
         }
 
         contentItem.setId(contentItem.getFileName());
@@ -241,6 +240,10 @@ public class DocumentUtil {
                 + AmpGPINiSurveyResponseDocument.class.getName() + " d").list();
         
         return supportiveDocumentsUUID;
+    }
+    
+    public static List<CrDocumentNodeAttributes> getAllPublicDocuments() {
+        return PersistenceManager.getSession().createCriteria(CrDocumentNodeAttributes.class).list();
     }
 
 }

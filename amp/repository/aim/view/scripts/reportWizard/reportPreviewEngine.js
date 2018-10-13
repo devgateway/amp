@@ -8,6 +8,7 @@ function ReportPreviewSettings() {
 	this.endYear	= new Date().getFullYear();
 	this.summary	= false;
 	this.totalsOnly	= false;
+	this.showOriginalCurrency = false;
 	
 	this.columns		= ["Project Title","Donor Agency"];
 	this.measures		= ["Commitments", "Disbursements"];
@@ -28,6 +29,7 @@ function ReportPreviewEngine (rpSettings) {
 		"recordsPerPage": 10,
 		"page": 1,
 		"show_empty_rows": true,
+		"show_original_currency" : rpSettings.showOriginalCurrency,
 		"settings": {
 			"year-range": {
 				"from": rpSettings.startYear + "",

@@ -3,9 +3,9 @@ package org.digijava.module.fundingpledges.dbentity;
 
 import java.io.Serializable;
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
@@ -16,29 +16,33 @@ import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
+import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.LoggerIdentifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.hibernate.jdbc.Work;
 
 /**
  * @author Diego Dimunzio
  */
-public class FundingPledges implements Comparable<FundingPledges>, Serializable {
+public class FundingPledges implements Comparable<FundingPledges>, Serializable, LoggerIdentifiable {
     
     private static final long serialVersionUID = 1L;
-    @Interchangeable(fieldTitle="ID")
+    
+    @Interchangeable(fieldTitle = "ID", id = true)
     private Long id;
-    @Interchangeable(fieldTitle="Title")
+    private Date createdDate;
+    @Interchangeable(fieldTitle = "Title")
     private AmpCategoryValue title;
-    @Interchangeable(fieldTitle="Status")
+    @Interchangeable(fieldTitle = "Status")
     private AmpCategoryValue status;
-    @Interchangeable(fieldTitle="Title Free Text")
+    
+    @Interchangeable(fieldTitle = "Title Free Text", value = true)
     private String titleFreeText;
+    
     @Interchangeable(fieldTitle="Additional Information")
     private String additionalInformation;
     @Interchangeable(fieldTitle="Who Authorized Pledge")
@@ -47,8 +51,10 @@ public class FundingPledges implements Comparable<FundingPledges>, Serializable 
     private String furtherApprovalNedded;
     @Deprecated
     private AmpOrganisation organization;
-    @Interchangeable(fieldTitle="Organization Group")
+    
+    @Interchangeable(fieldTitle = "Organization Group")
     private AmpOrgGroup organizationGroup;
+    
     @Interchangeable(fieldTitle="Sector List")
     private Set<FundingPledgesSector> sectorlist;
     @Interchangeable(fieldTitle="Location List")
@@ -142,7 +148,15 @@ public class FundingPledges implements Comparable<FundingPledges>, Serializable 
     public Long getId() {
         return this.id;
     }
-    
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+    }
+
     @java.lang.SuppressWarnings("all")
     public AmpCategoryValue getTitle() {
         return this.title;
@@ -542,5 +556,24 @@ public class FundingPledges implements Comparable<FundingPledges>, Serializable 
             }
         });     
         return uuids;
+    }
+
+    @Override
+    public Object getObjectType() {
+        return this.getClass().getName();
+    }
+
+    public String getObjectName() {
+        return this.getId() + " " + this.getEffectiveName();
+    }
+
+    @Override
+    public String getObjectFilteredName() {
+        return DbUtil.filter(getObjectName());
+    }
+
+    @Override
+    public Object getIdentifier() {
+        return this.id;
     }
 }

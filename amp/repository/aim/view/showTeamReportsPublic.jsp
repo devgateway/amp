@@ -112,10 +112,11 @@ function submitForm(action){
 											</li>
 										</ul>
 										<div id="Tab_Name"
-											class="ui-tabs-panel ui-widget-content ui-corner-bottom" style="margin-top:-1px;padding: 5px; border: 1px solid rgb(208, 208, 208);">
+											class="ui-tabs-panel ui-widget-content ui-corner-bottom reports-tab-name-public-container content-direction">
 
 											<table bgcolor="#FFFFFF"
-												style="width: 970px; border-left: 1px solid #CCCCCC; border-top: 1px solid #CCCCCC; border-bottom: 1px solid #CCCCCC; border-right: 2px solid #CCCCCC;">
+												style="width: 970px; border-left: 1px solid #CCCCCC; border-top: 1px
+												solid #CCCCCC; border-bottom: 1px solid #CCCCCC; border-right: 1px solid #CCCCCC;">
 												<tr>
 													<td>
 													<div style="float:right; margin-right:15px; margin-top:8px;">
@@ -460,10 +461,10 @@ function submitForm(action){
 
 																						<a href="${reportLink}"
 						                                								onclick="return popup(this,'');" style="padding-right: 5px;" title="<digi:trn>Click here to view the report</digi:trn>">
-						                                								<img src= "/TEMPLATE/ampTemplate/saikuui_nireports/images/saiku.png" border="0" /></a>
+						                                								<img src= "/TEMPLATE/ampTemplate/saikuui_reports/images/saiku.png" border="0" /></a>
 																						
 																						<c:set var="showExportExcelSetting" scope="page" value="true"/>
-																						<%if(!FeaturesUtil.isVisibleModule("Show Editable Export Formats")){ %> 
+																						<%if(!FeaturesUtil.showEditableExportFormats()){ %>
 																							<c:set var="showExportExcelSetting" scope="page" value="false"/>
 																						<%}%>
 																						
@@ -479,6 +480,7 @@ function submitForm(action){
 																							</a>
 																						</c:if>
 																						&nbsp;
+																						<!--
 																						<c:set var="translation">
 																							<digi:trn>Get report in PDF format</digi:trn>&nbsp;
 																						</c:set>
@@ -490,6 +492,7 @@ function submitForm(action){
 																								src="/TEMPLATE/ampTemplate/images/icons/pdf.gif"
 																								border="0" />
 																						</a>
+																						-->
 																						<!-- Show Printer Friendly icon removed with AMP-22055 -->
 																						<!--  
 																						<feature:display

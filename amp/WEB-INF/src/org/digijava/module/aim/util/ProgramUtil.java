@@ -62,13 +62,16 @@ import org.hibernate.type.StringType;
 
 import com.tonbeller.wcf.utils.SqlUtils;
 
+import clover.com.google.common.collect.ImmutableList;
+
 
 public class ProgramUtil {
     private static Logger logger = Logger.getLogger(ProgramUtil.class);
 
     @Deprecated
     public static final int YAERS_LIST_START = 2000;
-    public static final String NATIONAL_PLAN_OBJECTIVE ="National Plan Objective";
+    public static final String NATIONAL_PLANNING_OBJECTIVES = "National Planning Objectives";
+    public static final String NATIONAL_PLAN_OBJECTIVE = "National Plan Objective";
     public static final String PRIMARY_PROGRAM = "Primary Program";
     public static final String SECONDARY_PROGRAM = "Secondary Program";
     public static final String TERTIARY_PROGRAM = "Tertiary Program";
@@ -78,11 +81,14 @@ public class ProgramUtil {
                 
     @SuppressWarnings("serial")
     public static final Map<String, String> NAME_TO_COLUMN_MAP = new HashMap<String, String>() {{
-        put(NATIONAL_PLAN_OBJECTIVE, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES);
-        put(PRIMARY_PROGRAM, ColumnConstants.PRIMARY_PROGRAM);
-        put(SECONDARY_PROGRAM, ColumnConstants.SECONDARY_PROGRAM);
-        put(TERTIARY_PROGRAM, ColumnConstants.TERTIARY_PROGRAM);
+        put(NATIONAL_PLAN_OBJECTIVE, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1);
+        put(PRIMARY_PROGRAM, ColumnConstants.PRIMARY_PROGRAM_LEVEL_1);
+        put(SECONDARY_PROGRAM, ColumnConstants.SECONDARY_PROGRAM_LEVEL_1);
+        put(TERTIARY_PROGRAM, ColumnConstants.TERTIARY_PROGRAM_LEVEL_1);
     }};
+    
+    public static final ImmutableList<String> PROGRAM_NAMES = ImmutableList.of(NATIONAL_PLANNING_OBJECTIVES, 
+            PRIMARY_PROGRAM, SECONDARY_PROGRAM, TERTIARY_PROGRAM);
     
 
         public static Collection getAllIndicatorsFromPrograms(Collection programs) throws AimException{
@@ -1449,7 +1455,7 @@ public class ProgramUtil {
     }
 
 
-      public static List<AmpActivityProgramSettings> getAmpActivityProgramSettingsList() throws DgException {
+      public static List<AmpActivityProgramSettings> getAmpActivityProgramSettingsList() {
           String queryString = "select ap from " + AmpActivityProgramSettings.class.getName() + " ap";
           Query qry = PersistenceManager.getSession().createQuery(queryString);
           List<AmpActivityProgramSettings> programSettings = qry.list();
@@ -1460,7 +1466,7 @@ public class ProgramUtil {
     }
 
 
-    public static List createDefaultAmpActivityProgramSettingsList() throws DgException {
+    public static List createDefaultAmpActivityProgramSettingsList() {
         Session session = PersistenceManager.getSession();
 
         AmpActivityProgramSettings settingNPO=new AmpActivityProgramSettings("National Plan Objective");
@@ -1906,7 +1912,7 @@ public class ProgramUtil {
 
         public static List<String> getAllProgramColumnNames() {
             List<String> cNames = new ArrayList<String>();
-            for (String base : NAME_TO_COLUMN_MAP.values()) {
+            for (String base : PROGRAM_NAMES) {
                 for (int i = 1; i < 9; i++)
                     cNames.add(String.format("%s Level %d", base, i));
             }

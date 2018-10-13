@@ -42,7 +42,6 @@ public class ReportEnvironment {
     }
     
     public static ReportEnvironment buildFor(HttpServletRequest request) {
-        TLSUtils.populate(request);
         IdsGeneratorSource workspaceFilter;
         if (request != null && request.getAttribute(OVERRIDDEN_WORKSPACE_FILTER) != null)
             workspaceFilter = (IdsGeneratorSource) request.getAttribute(OVERRIDDEN_WORKSPACE_FILTER);

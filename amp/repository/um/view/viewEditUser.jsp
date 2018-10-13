@@ -9,6 +9,8 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
+<jsp:include page="/repository/aim/view/strongPassword.jsp"  />
+
 <digi:instance property="umViewEditUserForm" />
 <digi:context name="digiContext" property="context" />
 
@@ -88,6 +90,16 @@ function validate(str,value){
   else{
     goAction(value);
   }
+}
+function checkPledgeSuperUser(){
+    if(!$('#pledger').is(':checked')){
+        $('#pledgeSuperUser').prop('checked', false);
+        $('#pledgeSuperUser').attr('disabled', true);
+
+    }
+	else{
+        $('#pledgeSuperUser').removeAttr('disabled');
+	}
 }
 
 function validateUserInfo(){
@@ -211,6 +223,7 @@ function validateUserInfo(){
 			          </digi:trn>
 			        </span>
                     <digi:errors/>
+					<jsp:include page="/repository/aim/view/strongPasswordRulesLegend.jsp"  />
 					        &nbsp;
 					        <br/>
 					        <logic:equal name="umViewEditUserForm" property="displaySuccessMessage" value="true" >
@@ -272,7 +285,8 @@ function validateUserInfo(){
 																	        <font color="red">*</font>
 																		</td>
 																		<td width="190" height="30">
-																           <html:text name="umViewEditUserForm" property="email"  style="background-color: #FFFFFF;border: 1px solid #D0D0D0;color: #767676;font-size: 11px;margin: 5px;padding: 2px; width:180px;" styleId="userMail"/>
+																           <html:text name="umViewEditUserForm"
+																					  property="email" styleClass="pwd_username" style="background-color: #FFFFFF;border: 1px solid #D0D0D0;color: #767676;font-size: 11px;margin: 5px;padding: 2px; width:180px;" styleId="userMail"/>
 																		</td>
 																	</tr>
 																	<tr>
@@ -491,9 +505,38 @@ function validateUserInfo(){
                                                                      		 <digi:trn key="um:pledgesUser">Pledges User</digi:trn>
 																		</td>
 																	    <td width="380" height="30" colspan="2">
-          																	<html:checkbox property="pledger" style="margin: 5px" styleClass="inp-text"/>
+          																	<html:checkbox property="pledger"
+																						   style="margin: 5px"
+																						   styleClass="inp-text"
+
+																			styleId="pledger"/>
 																		</td>
 																	</tr>
+																		<tr>
+																			<td width="169" align="right" height="30"style="font-size: 11px;
+    font-weight: bold; color:#000;">
+																				<digi:trn key="um:pledgesSuperUser">Pledges Super User</digi:trn>
+																			</td>
+																			<td width="380" height="30" colspan="2">
+																				<c:if
+																						test="${umViewEditUserForm.pledger}">
+																				<html:checkbox
+																						property="pledgeSuperUser"
+																							   style="margin: 5px"
+																						styleClass="inp-text"
+																						styleId="pledgeSuperUser"/>
+																				</c:if>
+																				<c:if
+																						test="${!umViewEditUserForm.pledger}">
+																					<html:checkbox
+																							property="pledgeSuperUser"
+																							style="margin: 5px"
+																							styleClass="inp-text"
+																							styleId="pledgeSuperUser"
+																							disabled="true"/>
+																				</c:if>
+																			</td>
+																		</tr>
 																	</module:display>																	
 																		<tr>
 																		<td width="169" align="right" height="30"style="font-size: 11px;font-weight: bold; color:#000;">
@@ -552,12 +595,23 @@ function validateUserInfo(){
 																		<c:set var="translation">
 															              <digi:trn key="aim:viewEditUser:changePasswordButton">Change password</digi:trn>
 															            </c:set>
-																		<td width="169" align="right" height="30"style="font-size: 11px;
+																		<td width="169" valign="top" align="right"
+																			height="30" style="font-size: 11px;
     font-weight: bold; color:#000;">
+																			<div style="margin-top: 10px;">
                                                                    			<digi:trn key="aim:viewEditUser:password">Password:</digi:trn>
+																			</div>
 																		</td>
-																	    <td width="380" height="30" colspan="2" class="inputcontainer">
-                                                                    		<html:password name="umViewEditUserForm" property="newPassword" redisplay="false"/>
+																	    <td width="380" valign="top" height="30" colspan="2" class="inputcontainer">
+                                                                    		<html:password name="umViewEditUserForm"
+																						   property="newPassword"
+																						   redisplay="false"/>
+																			<div style="padding-left: 2px; margin: 5px">
+																				<div style="display: none" class="pwd_container" id="pwd_container">
+																					<span class="pwstrength_viewport_verdict">&nbsp;</span>
+																					<span class="pwstrength_viewport_progress"></span>
+																				</div>
+																			</div>
                                                                			</td>
 																	</tr>
 																	<tr>

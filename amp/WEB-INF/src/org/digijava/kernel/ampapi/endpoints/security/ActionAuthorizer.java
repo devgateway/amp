@@ -1,25 +1,24 @@
-/**
- * 
- */
 package org.digijava.kernel.ampapi.endpoints.security;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 import java.util.TreeMap;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
+import org.digijava.kernel.ampapi.endpoints.common.AmpConfiguration;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
-import org.digijava.kernel.ampapi.endpoints.util.AmpApiToken;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
-import org.digijava.kernel.ampapi.endpoints.util.SecurityUtil;
+import org.digijava.kernel.ampapi.filters.AmpOfflineModeHolder;
+import org.digijava.kernel.security.RuleHierarchy;
+import org.digijava.kernel.services.AmpVersionService;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.kernel.util.SpringUtil;
+import org.digijava.module.aim.dbentity.AmpOfflineRelease;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
@@ -31,8 +30,15 @@ import com.sun.jersey.spi.container.ContainerRequest;
  * @author Nadejda Mandrescu
  */
 public class ActionAuthorizer {
+
     protected static final Logger logger = Logger.getLogger(ActionAuthorizer.class);
     
+    private static RuleHierarchy<AuthRule> ruleHierarchy = new RuleHierarchy.Builder<AuthRule>()
+            .addRuleDependency(AuthRule.IN_WORKSPACE, AuthRule.AUTHENTICATED)
+            .addRuleDependency(AuthRule.IN_ADMIN, AuthRule.AUTHENTICATED)
+            .addRuleDependency(AuthRule.VIEW_ACTIVITY, AuthRule.IN_WORKSPACE)
+            .build();
+
     /**
      * Main process to give authorization to call current method based on its authorization rules 
      * @param method the method to authorize
@@ -40,102 +46,85 @@ public class ActionAuthorizer {
      * @param containerReq general container request to be used for additional information 
      */
     public static void authorize(Method method, ApiMethod apiMethod, ContainerRequest containerReq) {
-        if (apiMethod.authTypes().length == 0 
-                || apiMethod.authTypes().length == 1 && AuthRule.NONE.equals(apiMethod.authTypes()[0])) {
+        if (apiMethod.authTypes().length == 0) {
             // no authorization -> nothing to check, skip immediately
             return;
         }
+
+        Collection<AuthRule> authRules = ruleHierarchy.getEffectiveRules(apiMethod.authTypes());
+        
+        if (authRules.contains(AuthRule.AUTHENTICATED) && TeamUtil.getCurrentUser() == null) {
+            ApiErrorResponse.reportUnauthorisedAccess(SecurityErrors.NOT_AUTHENTICATED);
+            return;
+        }
+        
+        if (authRules.contains(AuthRule.AMP_OFFLINE) 
+                || (authRules.contains(AuthRule.AMP_OFFLINE_OPTIONAL) && AmpOfflineModeHolder.isAmpOfflineMode())) {
             
-        String methodInfo = String.format("%s %s.%s, authType = %s", containerReq.getMethod(),
-                method.getDeclaringClass().getSimpleName(), method.getName(), apiMethod.authTypes());
-        
-        Map<Integer, ApiErrorMessage> errors = new TreeMap<Integer, ApiErrorMessage>();
-        
-        for (AuthRule authType : apiMethod.authTypes()) {
-            switch (authType) {
-            case NONE:
-                addError(methodInfo, errors, SecurityErrors.INVALID_API_METHOD, "Mixed authorization with NO authorization");
-                break;
-            case TOKEN:
-                /* AMP-20664: we'll need to refactor so that token authentication done in same place as other authorization actions 
-                verifyTokenMatch(containerReq);
-                */
-                break;
-            case IN_WORKSPACE:
-                if (!TeamUtil.isUserInWorkspace()) {
-                    addError(methodInfo, errors, SecurityErrors.NOT_ALLOWED, "No workspace selected");
-                }
-                break;
-            case IN_ADMIN:
-                if (!TeamUtil.isCurrentMemberAdmin()) {
-                    addError(methodInfo, errors, SecurityErrors.NOT_ALLOWED, "You must be logged-in as admin");
-                }
-                break;
-            case ADD_ACTIVITY:
-                if (!addActivityAllowed()) {
-                    addError(methodInfo, errors, SecurityErrors.NOT_ALLOWED, "Adding activity is not allowed");
-                }
-                break;
-            case EDIT_ACTIVITY:
-                if (!InterchangeUtils.isEditableActivity(containerReq)) {
-                    addError(methodInfo, errors, SecurityErrors.NOT_ALLOWED, "No right to edit this activity");
-                }
-                break;
-            case VIEW_ACTIVITY:
-                if (!InterchangeUtils.isViewableActivity(containerReq)) {
-                    addError(methodInfo, errors, SecurityErrors.INVALID_REQUEST, "Activity doesn't exist or is not the latest version");
-                }
-                break;
+            if (!FeaturesUtil.isAmpOfflineEnabled()) {
+                ApiErrorMessage errorMessage = SecurityErrors.NOT_ALLOWED.withDetails("AMP Offline is not enabled");
+                ApiErrorResponse.reportForbiddenAccess(errorMessage);
+                return;
+            }
+            
+            if (!AmpOfflineModeHolder.isAmpOfflineMode()) {
+                ApiErrorMessage errorMessage = SecurityErrors.NOT_ALLOWED
+                        .withDetails("AMP Offline User-Agent is not present in request headers");
+                ApiErrorResponse.reportForbiddenAccess(errorMessage);
+                return;
+            }
+            
+            AmpOfflineRelease clientRelease = AmpConfiguration.detectClientRelease();
+            AmpVersionService ampVersionService = SpringUtil.getBean(AmpVersionService.class);
+            
+            if (!ampVersionService.isAmpOfflineCompatible(clientRelease)) {
+                ApiErrorResponse.reportForbiddenAccess(SecurityErrors.NOT_ALLOWED
+                        .withDetails("AMP Offline is not compatible"));
+                return;
             }
         }
+        
+        if (authRules.contains(AuthRule.IN_WORKSPACE) && !TeamUtil.isUserInWorkspace()) {
+            ApiErrorMessage errorMessage = SecurityErrors.NOT_ALLOWED.withDetails("No workspace selected");
+            ApiErrorResponse.reportForbiddenAccess(errorMessage);
+            return;
+        }
+        
+        if (authRules.contains(AuthRule.IN_ADMIN) && !TeamUtil.isCurrentMemberAdmin()) {
+            ApiErrorMessage errorMessage = SecurityErrors.NOT_ALLOWED.withDetails("You must be logged-in as admin");
+            ApiErrorResponse.reportForbiddenAccess(errorMessage);
+            return;
+        }
+
+        String methodInfo = String.format("%s %s.%s, authType = %s", containerReq.getMethod(),
+                method.getDeclaringClass().getSimpleName(), method.getName(), authRules);
+
+        Map<Integer, ApiErrorMessage> errors = new TreeMap<>();
+
+        if (authRules.contains(AuthRule.VIEW_ACTIVITY) && !InterchangeUtils.isViewableActivity(containerReq)) {
+            addError(methodInfo, errors, SecurityErrors.INVALID_REQUEST, "Activity doesn't exist or is not the latest version");
+        }
+        if (authRules.contains(AuthRule.PUBLIC_VIEW_ACTIVITY) && !InterchangeUtils.
+                canViewActivityIfCreatedInPrivateWs(containerReq)) {
+            ApiErrorMessage errorMessage = SecurityErrors.NOT_ALLOWED.withDetails("You must be logged-in in the "
+                    + "workspace where the activity was created");
+            ApiErrorResponse.reportForbiddenAccess(errorMessage);
+            return;
+        }
+
         if (!errors.isEmpty()) {
             ApiErrorResponse.reportForbiddenAccess(ApiError.toError(errors.values()));
         }
     }
     
     /**
-     * Verifies that a valid token is used
-     */
-    private static void verifyTokenMatch(ContainerRequest containerReq) {
-        ApiErrorMessage error = null;
-        AmpApiToken sessionToken = SecurityUtil.getTokenFromSession();
-        if (sessionToken == null) {
-            error = SecurityErrors.NO_SESSION_TOKEN;
-        } else {
-            String token = containerReq.getHeaderValue("X-Auth-Token");
-            List<ApiErrorMessage>errors = new ArrayList<ApiErrorMessage>();
-
-            SecurityUtil.getAmpApiTokenFromApplication(token, errors);
-            
-            if (errors.size()>0) {
-                error = errors.get(0);
-            } else if (!token.equals(sessionToken.getToken())) {
-                error = SecurityErrors.INVALID_TOKEN;
-            }
-        }
-        if (error != null) {
-            logger.error(error.description);
-            ApiErrorResponse.reportUnauthorisedAccess(error);
-        }
-    }
-    
-    /**
-     * @return true if add activity is allowed
-     */
-    public static boolean addActivityAllowed() {
-        TeamMember tm = TeamUtil.getCurrentMember();
-        return !TeamUtil.isCurrentMemberAdmin() && tm != null && Boolean.TRUE.equals(tm.getAddActivity()) && 
-                (FeaturesUtil.isVisibleField("Add Activity Button") || FeaturesUtil.isVisibleField("Add SSC Button"));
-    }
-    
-    /**
      * Merges errors of the same type
-     * @param errors current set of errors
-     * @param error  new error
-     * @param value  new error additional details
+     * @param errors  current set of errors
+     * @param error   new error
+     * @param details new error additional details
      */
     private static void addError(String methodInfo, Map<Integer, ApiErrorMessage> errors, ApiErrorMessage error, String details) {
-        logger.error(methodInfo + ". " + error.toString() + details == null ? "" : " : " + details);
+        logger.error(methodInfo + ". " + error.toString() + (details == null ? "" : " : " + details));
         if (errors.containsKey(error.id)) {
             error = errors.get(error.id); 
         }
@@ -144,5 +133,4 @@ public class ActionAuthorizer {
         }
         errors.put(error.id, error);
     }
-    
 }

@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.digijava.kernel.startup;
 
 import java.io.IOException;
@@ -16,43 +13,61 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
-import org.hibernate.StaleObjectStateException;
 
 /**
  * @author mihai
  * {@link http://community.jboss.org/wiki/OpenSessionInView}
  */
 public class HibernateSessionRequestFilter implements Filter {
-    private static Logger log = Logger.getLogger(HibernateSessionRequestFilter.class);
+
+    private static Logger logger = Logger.getLogger(HibernateSessionRequestFilter.class);
 
     @Override
-    public void destroy() {
-        // do nothing
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+            throws IOException, ServletException {
+
+        try {
+            executeInJcrWrapper(request, response, chain);
+        } catch (Exception e) {
+            if (response.isCommitted()) {
+                logger.error("Error occurred while processing the request but response was already committed. "
+                        + "Could not send the error to client.", e);
+            } else {
+                throw e;
+            }
+        }
     }
 
-    @Override
-    public void doFilter(ServletRequest request, ServletResponse response,
-            FilterChain chain) throws IOException, ServletException {
-        
-        // Call the next filter (continue request processing)
+    private void executeInJcrWrapper(ServletRequest request, ServletResponse response, FilterChain chain)
+            throws IOException, ServletException {
+        try {
+            executeInHibernateWrapper(request, response, chain);
+        } finally {
+            if (request instanceof HttpServletRequest) {
+                DocumentManagerUtil.logoutJcrSessions((HttpServletRequest) request);
+            }
+        }
+    }
+
+    private void executeInHibernateWrapper(ServletRequest request, ServletResponse response, FilterChain chain)
+            throws IOException, ServletException {
         try {
             chain.doFilter(request, response);
-        }
-        catch(Throwable ex) {
-            log.error("error occured during request processing", ex); 
-            PersistenceManager.rollbackCurrentSessionTx(); // rollback
+        } catch (Throwable ex) {
+            // log exception because this/finally block may throw another exception
+            logger.error("Error occurred during request processing.", ex);
+            PersistenceManager.rollbackCurrentSessionTx();
             throw ex;
-        }
-        finally {
-            // Commit and cleanup
+        } finally {
             PersistenceManager.endSessionLifecycle();
-            if (request instanceof HttpServletRequest)
-                DocumentManagerUtil.closeJCRSessions((HttpServletRequest)request);          
         }
     }
 
     @Override
     public void init(FilterConfig arg0) throws ServletException {
-        // nothing
+    }
+
+    @Override
+    public void destroy() {
     }
 }

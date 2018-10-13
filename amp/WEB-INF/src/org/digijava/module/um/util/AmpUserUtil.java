@@ -2,8 +2,12 @@ package org.digijava.module.um.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
@@ -17,13 +21,13 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.SiteCache;
-import org.digijava.kernel.util.SiteUtils;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpAuditLogger;
 import org.digijava.module.aim.dbentity.AmpUserExtension;
 import org.digijava.module.aim.dbentity.AmpUserExtensionPK;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.hibernate.criterion.Restrictions;
 
 /**
  * Methods for working with User related tasks.
@@ -67,10 +71,9 @@ public class AmpUserUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
             String queryString = "select u from " + User.class.getName() + " u"
-                    + " where u.emailVerified=:emailVerified and u.banned=:banned and u.active=:active order by u.email";
+                    + " where u.emailVerified=:emailVerified and u.banned=:banned order by u.email";
             qry = session.createQuery(queryString);
             qry.setBoolean("emailVerified", false);
-            qry.setBoolean("active", false);
             qry.setBoolean("banned", true);
             users = qry.list();
         } catch (Exception e) {
@@ -161,6 +164,25 @@ public class AmpUserUtil {
         }
         return result;
         
+    }
+
+    /**
+     * Bulk version of user extensions retrieval.
+     */
+    public static Map<Long, AmpUserExtension> getAmpUserExtensions(List<User> users) {
+        if (users.isEmpty()) {
+            return Collections.emptyMap();
+        }
+        List<Long> usersIds = users.stream().map(User::getId).collect(Collectors.toList());
+        Session session = PersistenceManager.getRequestDBSession();
+        List<AmpUserExtension> extensions = session
+                .createCriteria(AmpUserExtension.class)
+                .add(Restrictions.in("ampUserExtId.user.id", usersIds))
+                .list();
+
+        Map<Long, AmpUserExtension> result = new HashMap<>();
+        extensions.forEach(e -> result.put(e.getAmpUserExtId().getUser().getId(), e));
+        return result;
     }
     
     /**

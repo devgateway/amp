@@ -23,7 +23,6 @@ public class ColumnConstants {
     public static final String ACTORS = "Actors";
     public static final String ACTUAL_APPROVAL_DATE = "Actual Approval Date";
     public static final String ACTUAL_COMPLETION_DATE = "Actual Completion Date";
-    public static final String CURRENT_COMPLETION_DATE = "Current Completion Date";
     public static final String ACTUAL_START_DATE = "Actual Start Date";
     public static final String AGE_OF_PROJECT_MONTHS = "Age of Project (Months)";
     public static final String AGREEMENT_CLOSE_DATE = "Agreement Close Date";
@@ -55,7 +54,7 @@ public class ColumnConstants {
     public static final String BUDGET_SECTOR = "Budget Sector";
     public static final String BUDGET_STRUCTURE = "Budget Structure";
     public static final String CALCULATED_PROJECT_LIFE = "Calculated Project Life";
-    public static final String CAPITAL___EXPENDITURE = "Capital - Expenditure";
+    public static final String CAPITAL_EXPENDITURE = "Capital Expenditure";
     public static final String COMPONENT_DESCRIPTION = "Component description";
     public static final String COMPONENT_FUNDING_ORGANIZATION = "Component Funding Organization";
     public static final String COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION = "Component Second Responsible Organization";
@@ -155,7 +154,6 @@ public class ColumnConstants {
     public static final String MINORITIES = "Minorities";
     public static final String MODE_OF_PAYMENT = "Mode of Payment";
     public static final String MULTI_DONOR = "Multi Donor";
-    public static final String NATIONAL_PLANNING_OBJECTIVES = "National Planning Objectives";
     public static final String NATIONAL_PLANNING_OBJECTIVES_LEVEL_1 = "National Planning Objectives Level 1";
     public static final String NATIONAL_PLANNING_OBJECTIVES_LEVEL_2 = "National Planning Objectives Level 2";
     public static final String NATIONAL_PLANNING_OBJECTIVES_LEVEL_3 = "National Planning Objectives Level 3";
@@ -175,6 +173,7 @@ public class ColumnConstants {
     public static final String OVERAGE_PROJECT = "Overage Project";
     public static final String PAYMENT_CAPITAL___RECURRENT = "Payment Capital - Recurrent";
     public static final String PERFORMANCE_ALERT_LEVEL = "Performance Alert Level";
+    public static final String PERFORMANCE_ALERT_TYPE = "Performance Alert Type";
     public static final String PLEDGE_CONTACT_1___ADDRESS = "Pledge Contact 1 - Address";
     public static final String PLEDGE_CONTACT_1___ALTERNATE_CONTACT = "Pledge Contact 1 - Alternate Contact";
     public static final String PLEDGE_CONTACT_1___ALTERNATE_EMAIL = "Pledge Contact 1 - Alternate Email";
@@ -247,7 +246,6 @@ public class ColumnConstants {
     public static final String PLEDGES_TITLES = "Pledges Titles";
     public static final String PLEDGES_TYPE_OF_ASSISTANCE = "Pledges Type Of Assistance";
     public static final String RELATED_PROJECTS = "Related Projects";
-    public static final String PRIMARY_PROGRAM = "Primary Program";
     public static final String PRIMARY_PROGRAM_LEVEL_1 = "Primary Program Level 1";
     public static final String PRIMARY_PROGRAM_LEVEL_2 = "Primary Program Level 2";
     public static final String PRIMARY_PROGRAM_LEVEL_3 = "Primary Program Level 3";
@@ -298,7 +296,6 @@ public class ColumnConstants {
     public static final String RESPONSIBLE_ORGANIZATION_GROUPS = "Responsible Organization Groups";
     public static final String RESULTS = "Results";
     public static final String REVISED_PROJECT_AMOUNT = "Revised Project Amount";
-    public static final String SECONDARY_PROGRAM = "Secondary Program";
     public static final String SECONDARY_PROGRAM_LEVEL_1 = "Secondary Program Level 1";
     public static final String SECONDARY_PROGRAM_LEVEL_2 = "Secondary Program Level 2";
     public static final String SECONDARY_PROGRAM_LEVEL_3 = "Secondary Program Level 3";
@@ -328,7 +325,6 @@ public class ColumnConstants {
     public static final String SUB_PROGRAM = "Sub-Program";
     public static final String SUB_VOTE = "Sub-Vote";
     public static final String TEAM = "Team";
-    public static final String TERTIARY_PROGRAM = "Tertiary Program";
     public static final String TERTIARY_PROGRAM_LEVEL_1 = "Tertiary Program Level 1";
     public static final String TERTIARY_PROGRAM_LEVEL_2 = "Tertiary Program Level 2";
     public static final String TERTIARY_PROGRAM_LEVEL_3 = "Tertiary Program Level 3";

@@ -10,6 +10,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessages;
 import org.digijava.kernel.Constants;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.UserLangPreferences;
@@ -32,6 +33,7 @@ import org.digijava.module.message.triggers.UserRegistrationTrigger;
 import org.digijava.module.um.form.UserRegisterForm;
 import org.digijava.module.um.util.AmpUserUtil;
 import org.digijava.module.um.util.DbUtil;
+import org.digijava.kernel.security.PasswordPolicyValidator;
 
 public class RegisterUser extends Action {
 
@@ -55,7 +57,12 @@ public class RegisterUser extends Action {
 
             // set client IP address
             user.setModifyingIP(RequestUtils.getRemoteAddress(request));
-
+            ActionMessages errors = new ActionMessages();
+            if (!PasswordPolicyValidator.isValid(userRegisterForm.getPassword(), userRegisterForm.getEmail())) {
+                userRegisterForm.addError("error.strong.validation", "Please enter a password which meets the minimum password requirements");
+                request.setAttribute(PasswordPolicyValidator.SHOW_PASSWORD_POLICY_RULES, true);
+                return (mapping.getInputForward());
+            }
             // set password
             user.setPassword(userRegisterForm.getPassword().trim());
             user.setSalt(userRegisterForm.getPassword().trim());
@@ -91,7 +98,6 @@ public class RegisterUser extends Action {
             user.setRegisterLanguage(RequestUtils
                     .getNavigationLanguage(request));
                         user.setEmailVerified(false);
-                        user.setActive(false);
                         user.setBanned(true);
 
             SiteDomain siteDomain = (SiteDomain) request

@@ -1,26 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.reports;
 
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
-import javax.servlet.http.HttpSession;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
-
 import net.sf.json.JSONObject;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
@@ -72,6 +52,24 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;
+
+import javax.servlet.http.HttpSession;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 /**
  * Reports API utility classes
@@ -182,6 +180,12 @@ public class ReportsUtil {
         result.set("page", new JSONReportPage(pageArea, recordsPerPage, page, totalPageCount, cachedReportData.paginationInfo.getRecordsCount()));
         result.set(EPConstants.SETTINGS, cachedReportData != null ? 
                 SettingsUtils.getReportSettings(cachedReportData.report.spec) : null);
+
+        boolean showRowTotals = cachedReportData.report.reportContents.getContents().values().stream()
+                .map(rc -> rc.displayedValue)
+                .anyMatch(StringUtils::isNotEmpty);
+
+        result.set(EPConstants.SHOW_ROW_TOTALS, showRowTotals);
         
         processRawValues(formParams);
         result.set("reportWarnings", cachedReportData.report.reportWarnings);
@@ -723,6 +727,11 @@ public class ReportsUtil {
             spec.setSummaryReport(summary);
         }
         
+        Boolean showOriginalCurrency = (Boolean) formParams.get(EPConstants.SHOW_ORIGINAL_CURRENCY);
+        if (showOriginalCurrency != null) {
+            spec.setShowOriginalCurrency(showOriginalCurrency);
+        }
+        
     }
     
     /**
@@ -881,6 +890,6 @@ public class ReportsUtil {
     
 
     public static String getUrl(AmpReports report) {
-        return "/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/open/" + report.getAmpReportId();
+        return "/TEMPLATE/ampTemplate/saikuui_reports/index_reports.html#report/open/" + report.getAmpReportId();
     }
 }

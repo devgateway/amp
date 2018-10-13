@@ -21,6 +21,7 @@
 
 <jsp:include page="activityHistoryUtil.jsp" flush="true" />
 <%@page import="java.math.BigDecimal"%>
+<%@ page import="org.digijava.module.aim.util.TeamUtil" %>
 <style type="text/css">
 	.legend_label a.trnClass { color:yellow;}
 </style>
@@ -268,18 +269,25 @@ function collapseAll() {
 	
 
 <!-- MAIN CONTENT PART START -->
-<logic:present scope="request" parameter="editError">
+<div class="content-dir">
+<logic:present scope="request" parameter="editingUserId">
 	<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center style="margin-top:15px;">
 	     <tr>
 		     <td align="center">
 		        <font color="red" size="3">
-		                <digi:trn key="aim:activityIsBeeingEdited">Current activity is being edited by:</digi:trn> <%= TeamMemberUtil.getTeamMember(Long.valueOf(request.getParameter("editError"))).getMemberName() %>
+					<%
+					if (request.getParameter("editingUserId").equals(TeamUtil.getCurrentMember().getMemberId().toString())) {
+					%>
+					<digi:trn key="aim:activityEditLocked">You may only edit one activity at a time.</digi:trn>
+					<%} else {%>
+					<digi:trn key="aim:activityIsBeeingEdited">Current activity is being edited by:</digi:trn> <%= TeamMemberUtil.getTeamMember(Long.valueOf(request.getParameter("editingUserId"))).getMemberName() %>
+					<%}%>
 		        </font>
 		     </td>
-	     </tr>           
+	     </tr>
 	     <tr>
 	         <td>&nbsp;
-	             
+
 	         </td>
 	     </tr>
 	</table>
@@ -319,7 +327,7 @@ function collapseAll() {
 	</table>
 </logic:present>
 
-<c:if test="${aimEditActivityForm.activityExists=='no'}">
+<c:if test="${aimEditActivityForm.activityExists=='no' && aimEditActivityForm.activityId > 0}">
 	<div class="activity_preview_header" style="font-size: 12px;text-align: center;color:red">
 		<ul style="padding-top: 5px;font-size: 12px">
 			<li><digi:trn>Couldn't find activity! It may have been deleted from the system</digi:trn></li>
@@ -346,32 +354,39 @@ function collapseAll() {
 	    </td>
 		
 	    
-	    <td align=right width=40%>
-	    	<c:set var="trn">
-				<digi:trn>Export To PDF</digi:trn>
-			</c:set> 
-			<a onclick="javascript:exportToPdf(${actId})" class="l_sm" style="cursor: pointer; color:#376091;" title="${trn}">
-				<img src="img_2/ico_pdf.gif" />${trn}
-			</a>
-
-			<c:set var="showWordSetting" scope="page" value="false"/>
-			
-			<%if(FeaturesUtil.isVisibleModule("Show Editable Export Formats")){ %> 
-				<c:set var="showWordSetting" scope="page" value="true"/>
-			<%}%>
-			
-			<c:if test="${(sessionScope.currentMember != null) || (showWordSetting)}">
-				<a onclick="javascript:exportToWord(${actId})" class="l_sm" style="cursor: pointer; color:#376091;">
-					<img src="img_2/ico_word.gif" />
-						<digi:trn>Export to Word</digi:trn>
-				</a>
-			</c:if>
-			<logic:present name="currentMember" scope="session">
-	    	<a onclick="window.open('/showPrinterFriendlyPage.do?edit=true', '_blank', '');" class="l_sm" style="cursor: pointer; color:#376091;" title="<digi:trn key="aim:print">Print</digi:trn>">
-	    		<img src="img_2/ico_print.gif" width="15" height="18" />
-	    		<digi:trn key="aim:print">Print</digi:trn>
-	    	</a>
-	    	</logic:present>
+	    <td class="preview-align" width=40%>
+			<table width="100%" cellspacing="2" cellpadding="2" border="0" class="preview-buttons-align">
+				<tr>
+					<td>
+						<c:set var="trn">
+							<digi:trn>Export To PDF</digi:trn>
+						</c:set>
+						<a onclick="javascript:exportToPdf(${actId})" class="l_sm" style="cursor: pointer; color:#376091;" title="${trn}">
+							<img hspace="2" src="img_2/ico_pdf.gif" />${trn}
+						</a>
+					</td>
+					<td>
+						<c:set var="showWordSetting" scope="page" value="false"/>
+						<%if(FeaturesUtil.showEditableExportFormats()){ %>
+							<c:set var="showWordSetting" scope="page" value="true"/>
+						<%}%>
+						<c:if test="${(sessionScope.currentMember != null) || (showWordSetting)}">
+							<a onclick="javascript:exportToWord(${actId})" class="l_sm" style="cursor: pointer; color:#376091;">
+								<img hspace="2" src="img_2/ico_word.gif" />
+									<digi:trn>Export to Word</digi:trn>
+							</a>
+						</c:if>
+					</td>
+					<td>
+						<logic:present name="currentMember" scope="session">
+						<a onclick="window.open('/showPrinterFriendlyPage.do?edit=true', '_blank', '');" class="l_sm" style="cursor: pointer; color:#376091;" title="<digi:trn key="aim:print">Print</digi:trn>">
+							<img hspace="2" src="img_2/ico_print.gif" width="15" height="18" />
+							<digi:trn key="aim:print">Print</digi:trn>
+						</a>
+						</logic:present>
+					</td>
+				</tr>
+			</table>
 	    </td>
 	  </tr>
 	</table>
@@ -395,7 +410,7 @@ function collapseAll() {
 			<digi:trn>Total Actual Commitments</digi:trn>:<br/> 
 				<c:if test="${not empty aimEditActivityForm.funding.totalCommitments}">
 					<b>
-		                 <bean:write name="aimEditActivityForm" property="funding.totalCommitments" /> 
+		                 <span dir="ltr"><bean:write name="aimEditActivityForm" property="funding.totalCommitments" /></span> 
 		                 ${aimEditActivityForm.currCode}
 					</b>
 		         </c:if>
@@ -411,7 +426,7 @@ function collapseAll() {
 			<digi:trn>Total Planned Commitment</digi:trn>:<br/>
 				<c:if test="${not empty aimEditActivityForm.funding.totalPlannedCommitments}">
 					<b>
-					 <bean:write name="aimEditActivityForm" property="funding.totalPlannedCommitments" /> 
+					 <span dir="ltr"><bean:write name="aimEditActivityForm" property="funding.totalPlannedCommitments" /></span> 
                      ${aimEditActivityForm.currCode}
 	     	      	</b>
                 </c:if>
@@ -431,7 +446,7 @@ function collapseAll() {
 			<digi:trn>Total Actual Disbursements</digi:trn>:<br/>
 				<c:if test="${not empty aimEditActivityForm.funding.totalDisbursements}">
 	                <b>
-	                 <bean:write name="aimEditActivityForm" property="funding.totalDisbursements" /> 
+	                 <span dir="ltr"><bean:write name="aimEditActivityForm" property="funding.totalDisbursements" /></span> 
                       ${aimEditActivityForm.currCode}
 	           
 	                </b>		          
@@ -448,7 +463,7 @@ function collapseAll() {
 			<digi:trn>Total Planned Disbursements</digi:trn>:<br/>
 				<c:if test="${not empty aimEditActivityForm.funding.totalPlannedDisbursements}">
 	                <b>
-	                 <bean:write name="aimEditActivityForm" property="funding.totalPlannedDisbursements" /> 
+	                 <span dir="ltr"><bean:write name="aimEditActivityForm" property="funding.totalPlannedDisbursements" /></span> 
 	                 ${aimEditActivityForm.currCode}
 	                </b>		          
 		         </c:if>
@@ -467,7 +482,7 @@ function collapseAll() {
 			<digi:trn>Total Expenditures</digi:trn>:<br/>
 			<c:if test="${not empty aimEditActivityForm.funding.totalExpenditures}">
 				<b>
-				<bean:write name="aimEditActivityForm" property="funding.totalExpenditures" /> 
+				<span dir="ltr"><bean:write name="aimEditActivityForm" property="funding.totalExpenditures" /></span> 
 					${aimEditActivityForm.currCode}
 				</b>
 			</c:if>
@@ -483,7 +498,7 @@ function collapseAll() {
 			<digi:trn>Unallocated Disbursements</digi:trn>:<br/>
 				<c:if test="${not empty aimEditActivityForm.funding.unDisbursementsBalance}">
 	                <b>
-	                 <bean:write name="aimEditActivityForm" property="funding.unDisbursementsBalance" /> 
+	                 <span dir="ltr"><bean:write name="aimEditActivityForm" property="funding.unDisbursementsBalance" /></span> 
 	                 ${aimEditActivityForm.currCode}
 	                </b>
 		         </c:if>
@@ -499,7 +514,7 @@ function collapseAll() {
 			<digi:trn>Total Planned Expenditures</digi:trn>:<br/>
 				<c:if test="${not empty aimEditActivityForm.funding.totalPlannedExpenditures}">
 	                <b>
-	                 <bean:write name="aimEditActivityForm" property="funding.totalPlannedExpenditures" /> 
+	                 <span dir="ltr"><bean:write name="aimEditActivityForm" property="funding.totalPlannedExpenditures" /></span> 
 	                 ${aimEditActivityForm.currCode}
 	                </b>		          
 		         </c:if>
@@ -515,7 +530,7 @@ function collapseAll() {
 			<c:if test="${not empty aimEditActivityForm.funding.totalMtefProjections}">
 					<digi:trn>Total MTEF Projections</digi:trn>:<br/>
 					<b>
-		                 <bean:write name="aimEditActivityForm" property="funding.totalMtefProjections" /> 
+		                 <span dir="ltr"><bean:write name="aimEditActivityForm" property="funding.totalMtefProjections" /></span> 
 		                 ${aimEditActivityForm.currCode}
 	            	</b>	
 				<hr/>
@@ -549,7 +564,7 @@ function collapseAll() {
 		<digi:trn>Activity created on</digi:trn>:<br/>
 		<b><c:out value="${aimEditActivityForm.identification.createdDate}"/></b>
 		<hr/>
-		<field:display name="Activity Last Updated by" feature="Identification">
+		<module:display name="/Activity Form/Identification/Activity Last Updated by" parentModule="/Activity Form/Identification">
 			<logic:notEmpty name="aimEditActivityForm" property="identification.modifiedBy">
 				<digi:trn>Activity last updated by</digi:trn>: <br/>
 				<b>
@@ -557,14 +572,14 @@ function collapseAll() {
 					<c:out value="${aimEditActivityForm.identification.modifiedBy.user.lastName}"/>
 				</b>
 			</logic:notEmpty>
-		</field:display>
+		</module:display>
 		<hr/>
-		<field:display name="Activity Updated On" feature="Identification">
+		<module:display name="/Activity Form/Identification/Activity Updated On" parentModule="/Activity Form/Identification">
 			<logic:notEmpty name="aimEditActivityForm" property="identification.updatedDate">
 				<digi:trn>Activity updated on</digi:trn>: <br/>
 				<b><c:out value="${aimEditActivityForm.identification.updatedDate}"/></b>
 			</logic:notEmpty>
-		</field:display>
+		</module:display>
 		<hr/>
 
 		<digi:trn>Created in workspace</digi:trn>: <br/>
@@ -701,7 +716,7 @@ function collapseAll() {
 				</c:if>
 			</module:display>
 
-
+			
 			<module:display name="/Activity Form/Identification/Objective" parentModule="/Activity Form/Identification">
 				<digi:trn key="aim:objectives">Objectives</digi:trn>:&nbsp;<br />
 				<c:if test="${aimEditActivityForm.identification.objectives!=null}">
@@ -1035,7 +1050,7 @@ function collapseAll() {
 					<hr />
 				</c:if>
 			</module:display>
-
+						 
 			<!-- MISSING FIELD IN THE NEW FM STRUCTURE -->
 			<module:display name="/Activity Form/Identification/Government Agreement Number" parentModule="/Activity Form/Identification">
 				<c:if test="${not empty aimEditActivityForm.identification.govAgreementNumber}">
@@ -1083,7 +1098,7 @@ function collapseAll() {
 		</c:if>
 		</module:display>
 			<c:if test="${aimEditActivityForm.identification.budgetCV==aimEditActivityForm.identification.budgetCVOn}">
-				<module:display name="/Activity Form/Identification/Budget Extras/FY" parentModule="/Activity Form/Identification">
+				<module:display name="/Activity Form/Identification/Budget Extras/FY" parentModule="/Activity Form/Identification/Budget Extras">
 					<digi:trn>FY</digi:trn>:&nbsp;
 					<b><bean:write name="aimEditActivityForm" property="identification.FY"/></b>
 					<br />
@@ -1280,53 +1295,55 @@ function collapseAll() {
 	<div id="planningdiv" class="toggleDiv">
 		<module:display name="/Activity Form/Planning/Line Ministry Rank" parentModule="/Activity Form/Planning">
 			<br>
-			<digi:trn>Line Ministry Rank</digi:trn>:&nbsp;
+			<div class="planning-line"><digi:trn>Line Ministry Rank</digi:trn>:&nbsp;</div>
 				<c:if test="${aimEditActivityForm.planning.lineMinRank == -1}"></c:if> 
 				<c:if test="${aimEditActivityForm.planning.lineMinRank != -1}">
-					<b>${aimEditActivityForm.planning.lineMinRank}</b>				</c:if>
+					<div class="planning-line"><b>${aimEditActivityForm.planning.lineMinRank}</b></div>				</c:if>
 		</module:display>
 		
 		
 		<module:display name="/Activity Form/Planning/Proposed Approval Date" parentModule="/Activity Form/Planning">
 			<hr>
-			<digi:trn>Proposed Approval Date</digi:trn>:&nbsp;
-			<b>${aimEditActivityForm.planning.originalAppDate}</b>		</module:display>
+			<div class="planning-line"><digi:trn>Proposed Approval Date</digi:trn>:&nbsp;</div>
+			<div class="planning-line"><b>${aimEditActivityForm.planning.originalAppDate}</b></div>
+		</module:display>
 		
 		<!-- MISSING FIELD IN THE NEW FM STRUCTURE -->
 		<module:display name="/Activity Form/Planning/Actual Approval Date" parentModule="/Activity Form/Planning">
 			<hr>
-				<digi:trn>Actual Approval Date</digi:trn>:&nbsp;
-				<b>${aimEditActivityForm.planning.revisedAppDate}</b>
+			<div class="planning-line"><digi:trn>Actual Approval Date</digi:trn>:&nbsp;</div>
+			<div class="planning-line"><b>${aimEditActivityForm.planning.revisedAppDate}</b></div>
 		</module:display>
 
 		<module:display name="/Activity Form/Planning/Proposed Start Date" parentModule="/Activity Form/Planning">
 			<hr>
-			<digi:trn>Proposed Start Date</digi:trn>:&nbsp;
-			<b>${aimEditActivityForm.planning.originalStartDate}</b>
+			<div class="planning-line"><digi:trn>Proposed Start Date</digi:trn>:&nbsp;</div>
+			<div class="planning-line"><b>${aimEditActivityForm.planning.originalStartDate}</b></div>
 		</module:display>
 							
 		<module:display name="/Activity Form/Planning/Actual Start Date" parentModule="/Activity Form/Planning">
 			<hr>
-			<digi:trn>Actual Start Date </digi:trn>:&nbsp;
-			<b>${aimEditActivityForm.planning.revisedStartDate}</b>
+			<div class="planning-line"><digi:trn>Actual Start Date </digi:trn>:&nbsp;</div>
+			<div class="planning-line"><b>${aimEditActivityForm.planning.revisedStartDate}</b></div>
 		</module:display>
 		
 		<module:display name="/Activity Form/Planning/Original Completion Date" parentModule="/Activity Form/Planning">
 			<hr>
-			<digi:trn>Original Completion Date</digi:trn>:&nbsp;
-			<b>${aimEditActivityForm.planning.originalCompDate}</b>
+			<div class="planning-line"><digi:trn>Original Completion Date</digi:trn>:&nbsp;</div>
+			<div class="planning-line"><b>${aimEditActivityForm.planning.originalCompDate}</b></div>
 		</module:display>
 		
 		<module:display name="/Activity Form/Planning/Proposed Completion Date" parentModule="/Activity Form/Planning">
 			<hr>
-			<digi:trn>Proposed Completion Date</digi:trn>:&nbsp;
-			<b>${aimEditActivityForm.planning.proposedCompDate}</b>
+			<div class="planning-line"><digi:trn>Proposed Completion Date</digi:trn>:&nbsp;</div>
+			<div class="planning-line"><b>${aimEditActivityForm.planning.proposedCompDate}</b></div>
 		</module:display>
 		<module:display name="Project ID and Planning" parentModule="PROJECT MANAGEMENT">
 			<feature:display name="Planning" module="Project ID and Planning">
 				<field:display name="Final Date for Disbursements Comments" feature="Planning">
-					<hr> 																   
-					<digi:trn>Final Date for Disbursements comments</digi:trn>:&nbsp;
+					<hr>
+					<div class="planning-line"><digi:trn>Final Date for Disbursements comments</digi:trn>:&nbsp;</div>
+					<div class="planning-line">
 					<ul>
 						<logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
 								<logic:equal name="comments" property="key" value="Final Date for Disbursements">
@@ -1341,21 +1358,23 @@ function collapseAll() {
 								</logic:equal>
 						</logic:iterate>
 					</ul>
+					</div>
 				</field:display>
 			</feature:display>
 		</module:display>
 		
 		<module:display name="/Activity Form/Planning/Actual Completion Date" parentModule="/Activity Form/Planning">
 			<hr>
-			<digi:trn>Actual Completion Date</digi:trn>:&nbsp;
-			<b><c:out value="${aimEditActivityForm.planning.currentCompDate}"/></b>		
+			<div class="planning-line"><digi:trn>Actual Completion Date</digi:trn>:&nbsp;</div>
+			<div class="planning-line"><b><c:out value="${aimEditActivityForm.planning.currentCompDate}"/></b></div>
 		</module:display> 
 							
 		<module:display name="Project ID and Planning" parentModule="PROJECT MANAGEMENT">
 			<feature:display name="Planning" module="Project ID and Planning">
 				<field:display name="Current Completion Date Comments" feature="Planning">
-					<hr> 																   
-					<digi:trn>Current Completion Date comments</digi:trn>:&nbsp;
+					<hr>
+					<div class="planning-line"><digi:trn>Current Completion Date comments</digi:trn>:&nbsp;</div>
+					<div class="planning-line">
 					<ul>
 						<logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
 								<logic:equal name="comments" property="key" value="current completion date">
@@ -1369,40 +1388,43 @@ function collapseAll() {
 									</logic:iterate>
 								</logic:equal>
 						</logic:iterate>
-					</ul>		
+					</ul>
+					</div>
 				</field:display>
 			</feature:display>
 		</module:display>
 		
 		<module:display name="/Activity Form/Planning/Project Implementation Delay" parentModule="/Activity Form/Planning">
 			<hr>
-			<digi:trn>Project Implementation Delay</digi:trn>:&nbsp;
-			<b>${aimEditActivityForm.planning.projectImplementationDelay}</b>
+			<div class="planning-line"><digi:trn>Project Implementation Delay</digi:trn>:&nbsp;</div>
+			<div class="planning-line"><b>${aimEditActivityForm.planning.projectImplementationDelay}</b></div>
 		</module:display>
 							
 		<module:display name="/Activity Form/Planning/Final Date for Contracting" parentModule="/Activity Form/Planning">
 			<hr>
-			<digi:trn>Final Date for Contracting</digi:trn>:&nbsp;
-			<b><c:out value="${aimEditActivityForm.planning.contractingDate}"/></b>
+			<div class="planning-line"><digi:trn>Final Date for Contracting</digi:trn>:&nbsp;</div>
+			<div class="planning-line"><b><c:out value="${aimEditActivityForm.planning.contractingDate}"/></b></div>
 		</module:display>
 					
 		<module:display name="/Activity Form/Planning/Final Date for Disbursements" parentModule="/Activity Form/Planning">
 			<hr>
-			<digi:trn>Final Date for Disbursements</digi:trn>:&nbsp;
-			<b><c:out value="${aimEditActivityForm.planning.disbursementsDate}"/></b>
+			<div class="planning-line"><digi:trn>Final Date for Disbursements</digi:trn>:&nbsp;</div>
+			<div class="planning-line"><b><c:out value="${aimEditActivityForm.planning.disbursementsDate}"/></b></div>
 		</module:display>
 
 		<module:display name="/Activity Form/Planning/Proposed Project Life" parentModule="/Activity Form/Planning">
 			<hr>
-			<digi:trn>Proposed Project Life</digi:trn>:&nbsp;
-			<b>${aimEditActivityForm.planning.proposedProjectLife}</b>
+			<div class="planning-line"><digi:trn>Proposed Project Life</digi:trn>:&nbsp;</div>
+			<div class="planning-line"><b>${aimEditActivityForm.planning.proposedProjectLife}</b></div>
 		</module:display>
 
 		<field:display name="Duration of Project" feature="Planning">
 			<hr>
-			<digi:trn>Duration of project</digi:trn>:&nbsp;
+			<div class="planning-line"><digi:trn>Duration of project</digi:trn>:&nbsp;</div>
 			<c:if test="${not empty aimEditActivityForm.planning.projectPeriod}">
-			    <b>${aimEditActivityForm.planning.projectPeriod}</b>&nbsp;<digi:trn>Months</digi:trn>
+				<div class="planning-line">
+					<b>${aimEditActivityForm.planning.projectPeriod}</b>&nbsp;<digi:trn>Months</digi:trn>
+				</div>
 			</c:if>
 		</field:display>
 		</div>
@@ -1456,7 +1478,7 @@ function collapseAll() {
 						<td width="15%" align="right" valign=top>
 							<field:display name="Regional Percentage" feature="Location">
 								<c:if test="${selectedLocs.showPercent}">
-									<b><c:out value="${selectedLocs.percent}"/>%</b>
+									<b><c:out value="${selectedLocs.percent}"/> %</b>
 								</c:if>
 							</field:display>
 						</td>
@@ -1516,18 +1538,6 @@ function collapseAll() {
 </module:display>
 
 <!-- LOCATIONS SECTION -->
-<module:display name="/Activity Form/Program/National Plan Objective" parentModule="/Activity Form/Program">
-	<c:set var="programs_list" value="${aimEditActivityForm.programs.nationalPlanObjectivePrograms}" />
-	<c:set var="programs_name"></c:set>
-	<fieldset>
-		<legend>
-			<span class="legend_label" style="cursor: pointer;"><digi:trn>National Plan</digi:trn></span>
-		</legend>
-		<div class="toggleDiv">
-		<%@include file="activitypreview/programs.jspf" %>
-		</div>
-	</fieldset>
-</module:display>
 
 <!-- PROGRAM SECTION -->
 <module:display name="/Activity Form/Program" parentModule="/Activity Form">
@@ -1536,6 +1546,11 @@ function collapseAll() {
 		<span class="legend_label" style="cursor: pointer;"><digi:trn>Program</digi:trn></span>
 	</legend>
 	<div class="toggleDiv">
+	    <module:display name="/Activity Form/Program/National Plan Objective" parentModule="/Activity Form/Program">
+            <c:set var="programs_list" value="${aimEditActivityForm.programs.nationalPlanObjectivePrograms}" />
+            <c:set var="programs_name"><digi:trn>National Plan Objective</digi:trn></c:set>
+            <%@include file="activitypreview/programs.jspf" %>
+        </module:display>
 		<module:display name="/Activity Form/Program/Primary Programs" parentModule="/Activity Form">
 			<c:set var="programs_list" value="${aimEditActivityForm.programs.primaryPrograms}" />
 			<c:set var="programs_name"><digi:trn>Primary Programs</digi:trn></c:set>
@@ -1619,9 +1634,10 @@ function collapseAll() {
 									</c:if>
 								</td>
 							<td width=15% align=right valign=top>
-								<c:if test="${sectors.sectorPercentage!='' && sectors.sectorPercentage!='0'}">
-									<span class="word_break bold">(<c:out value="${sectors.sectorPercentage}"/>)%</span>
-								</c:if>
+                                <c:if test="${sectors.sectorPercentage!='' && sectors.sectorPercentage!='0'}">
+									<span class="word_break bold">(<c:out value="${sectors.sectorPercentage}"/>)
+                                        %</span>
+                                </c:if>
 							</td>
 							</tr>
 							</table>
@@ -1638,7 +1654,7 @@ function collapseAll() {
 			<c:forEach var="compo" items="${aimEditActivityForm.components.activityComponentes}">
 			<tr>
 				<td width="100%"><span class="word_break">${compo.sectorName}</span></td>
-				<td align="right"><span class="word_break">${compo.sectorPercentage}%</span></td>
+				<td align="right"><span class="word_break">${compo.sectorPercentage} %</span></td>
 			</tr>
 			</c:forEach>
 		</table>
@@ -1655,7 +1671,7 @@ function collapseAll() {
 	<fieldset>
 		<legend>
 			<span class=legend_label id="melink" style="cursor: pointer;">
-				<digi:trn>M &amp; E</digi:trn>
+				<digi:trn>M&E</digi:trn>
 			</span>	
 		</legend>
 
@@ -2040,7 +2056,7 @@ function collapseAll() {
 												</td>
 												<td class="prv_right">
 													<c:forEach var="fd" items="${comp.commitments}">
-													<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee" class="component-funding-table">
+													<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee" class="component-funding-table">												
 														<tr>
 															<module:display name="/Activity Form/Components/Component/Components Commitments" 
 																parentModule="/Activity Form/Components/Component">
@@ -2108,7 +2124,7 @@ function collapseAll() {
 																</td>
 															</tr>
 														</module:display>
-														</table>
+														</table> 
 														<hr />
 													</c:forEach>
 												</td>
@@ -2489,7 +2505,7 @@ function collapseAll() {
 							<td>
 								<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
 									<tr>
-										<td vAlign="center" align="left">&nbsp;
+										<td vAlign="center">&nbsp;
 											<span class="word_break bold"><c:out value="${docs.title}"/></span>&nbsp;&nbsp;-&nbsp;&nbsp;<i>
 											<c:out value="${docs.fileName}"/></i> 
 											<logic:notEqual name="docs" property="docDescription" value=" ">
@@ -2522,7 +2538,7 @@ function collapseAll() {
 						<logic:iterate name="aimEditActivityForm" property="documents.crDocuments" id="crDoc">
 						<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
 								<tr>
-									<td vAlign="center" align="left">
+									<td vAlign="center">
 										&nbsp;<b><c:out value="${crDoc.title}"/></b>&nbsp;&nbsp;-&nbsp;&nbsp;
 										<i><c:out value="${crDoc.name}"/></i>
 										<c:set var="translation">
@@ -3483,6 +3499,7 @@ function collapseAll() {
   </tr>
 </table>
 </c:if>
+</div>
 <module:display name="/Activity Form/Map Options/Show Map In Activity Preview" parentModule="/Activity Form/Map Options">
  <div id="locationPopupMap" style="visibility:hidden;width:4px; height:3px;position:relative;"></div>
 </module:display>

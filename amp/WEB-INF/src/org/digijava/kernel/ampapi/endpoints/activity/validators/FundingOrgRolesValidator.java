@@ -1,18 +1,22 @@
 package org.digijava.kernel.ampapi.endpoints.activity.validators;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.digijava.kernel.ampapi.endpoints.activity.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
+import org.digijava.module.aim.dbentity.AmpRole;
+import org.digijava.module.aim.util.OrganisationUtil;
 
 /**
  * Check if organization roles used in activity.funding and activity.funding.fundingDetails match organization roles
@@ -23,7 +27,6 @@ import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 public class FundingOrgRolesValidator extends InputValidator {
 
     private final static String ORG_ROLE_ORG = "organization";
-    private final static String ORG_ROLE_ROLE = "role";
 
     private final static String FUNDING = "fundings";
     private static final String SRC_ORG = "donor_organization_id";
@@ -39,8 +42,8 @@ public class FundingOrgRolesValidator extends InputValidator {
     private Set<Pair<Long, Long>> orgRoleDefinitions;
 
     @Override
-    public boolean isValid(ActivityImporter importer, Map<String, Object> newFieldParent,
-                           Map<String, Object> oldFieldParent, JsonBean fieldDescription, String fieldPath) {
+    public boolean isValid(ObjectImporter importer, Map<String, Object> newFieldParent,
+                           Map<String, Object> oldFieldParent, APIField fieldDescription, String fieldPath) {
 
         if (fieldPath.equals(FUNDING)) {
             return areOrgRolesValid(importer, newFieldParent, FUNDING, SRC_ORG, SRC_ROLE);
@@ -56,7 +59,7 @@ public class FundingOrgRolesValidator extends InputValidator {
     /**
      * Check if all objects from collection use only allowed/defined organization roles.
      */
-    private boolean areOrgRolesValid(ActivityImporter importer, Map<String, Object> root, String collectionField,
+    private boolean areOrgRolesValid(ObjectImporter importer, Map<String, Object> root, String collectionField,
                                      String orgField, String roleField) {
         if (orgRoleDefinitions == null) {
             JsonBean activity = importer.getNewJson();
@@ -85,7 +88,9 @@ public class FundingOrgRolesValidator extends InputValidator {
      * Get defined organization roles for activity.
      */
     private Set<Pair<Long, Long>> getOrgRoleDefinitions(JsonBean activity) {
-        Set<Pair<Long, Long>> orgRolesNormale = new HashSet<>();
+        Set<Pair<Long, Long>> orgRoles = new HashSet<>();
+
+        Map<String, Long> roleIdsByCode = getOrgRoleIdsByCode();
 
         List<String> orgRoleFields = InterchangeUtils.discriminatedFieldsByFieldTitle.get(ActivityFieldsConstants.ORG_ROLE);
 
@@ -96,16 +101,28 @@ public class FundingOrgRolesValidator extends InputValidator {
                 for (Object orgRoleObj : orgRolesColl) {
                     if (orgRoleObj != null && orgRoleObj instanceof Map) {
                         Map orgRoleMap = (Map) orgRoleObj;
-                        Pair<Long, Long> orgRole = getOrgRole(orgRoleMap, ORG_ROLE_ORG, ORG_ROLE_ROLE);
-                        if (orgRole != null) {
-                            orgRolesNormale.add(orgRole);
+
+                        Long orgId = getLong(orgRoleMap.get(ORG_ROLE_ORG));
+                        String roleCode = ActivityFieldsConstants.ORG_ROLE_CODES.get(field);
+                        Long roleId = roleIdsByCode.get(roleCode);
+
+                        if (orgId != null) {
+                            orgRoles.add(Pair.of(orgId, roleId));
                         }
                     }
                 }
             }
         }
 
-        return orgRolesNormale;
+        return orgRoles;
+    }
+
+    private Map<String, Long> getOrgRoleIdsByCode() {
+        Map<String, Long> roles = new HashMap<>();
+        for (AmpRole role : OrganisationUtil.getOrgRoles()) {
+            roles.put(role.getRoleCode(), role.getAmpRoleId());
+        }
+        return roles;
     }
 
     /**
@@ -120,10 +137,6 @@ public class FundingOrgRolesValidator extends InputValidator {
         } else {
             return null;
         }
-    }
-
-    private Long getLong(Object o) {
-        return o instanceof Number ? ((Number) o).longValue() : null;
     }
 
     @Override

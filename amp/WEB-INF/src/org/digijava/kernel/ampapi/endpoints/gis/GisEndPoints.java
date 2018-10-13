@@ -22,6 +22,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.PathSegment;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 
 import org.apache.log4j.Logger;
@@ -38,29 +39,29 @@ import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityService;
 import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityStructuresExporter;
 import org.digijava.kernel.ampapi.endpoints.gis.services.BoundariesService;
 import org.digijava.kernel.ampapi.endpoints.gis.services.GapAnalysis;
+import org.digijava.kernel.ampapi.endpoints.gis.services.GisUtils;
 import org.digijava.kernel.ampapi.endpoints.gis.services.LocationService;
+import org.digijava.kernel.ampapi.endpoints.gis.services.MapTilesService;
 import org.digijava.kernel.ampapi.endpoints.gis.services.PublicGapAnalysis;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorEPConstants;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorUtils;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleConstants;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
+import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
-import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.helpers.geojson.FeatureCollectionGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.FeatureGeoJSON;
-import org.digijava.kernel.ampapi.helpers.geojson.LineStringGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.PointGeoJSON;
-import org.digijava.kernel.ampapi.helpers.geojson.PolygonGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.objects.ClusteredPoints;
+import org.digijava.kernel.ampapi.postgis.entity.AmpLocator;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
 import org.digijava.module.aim.dbentity.AmpIndicatorColor;
 import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
 import org.digijava.module.aim.dbentity.AmpStructure;
-import org.digijava.module.aim.dbentity.AmpStructureCoordinate;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.util.ColorRampUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -156,7 +157,11 @@ public class GisEndPoints implements ErrorReportingEndpoint {
         
         for (; start <= end; start++) {
             AmpStructure structure = al.get(start);
-            f.features.add(LocationService.buildFeatureGeoJSON(structure));
+            FeatureGeoJSON fgj = LocationService.buildFeatureGeoJSON(structure);
+            if (fgj != null) {
+                f.features.add(fgj);
+            }
+
         }
         return f;
     }
@@ -207,6 +212,7 @@ public class GisEndPoints implements ErrorReportingEndpoint {
             i.setId(ampMapConfig.getId());
             i.setTitle(ampMapConfig.getConfigName());
             i.setLink(ampMapConfig.getMapUrl());
+            i.setLegendNotes(ampMapConfig.getLegendNotes());
             String type = MapConstants.mapTypeNames.get(ampMapConfig
                     .getMapType());
             i.setType(type);
@@ -348,6 +354,7 @@ public class GisEndPoints implements ErrorReportingEndpoint {
             json.set(IndicatorEPConstants.ACCESS_TYPE_ID, indicator.getAccessType().getValue());
             json.set(IndicatorEPConstants.INDICATOR_TYPE_ID, indicator.getIndicatorType() == null ? null : indicator.getIndicatorType().getId());
             json.set(IndicatorEPConstants.CAN_DO_GAP_ANALYSIS, gapAnalysis.canDoGapAnalysis(indicator));
+            json.set(IndicatorEPConstants.FIELD_ZERO_CATEGORY_ENABLED, indicator.getZeroCategoryEnabled());
             
             json.set(IndicatorEPConstants.CREATED_ON, FormatHelper.formatDate(indicator.getCreatedOn()));
             json.set(IndicatorEPConstants.UPDATED_ON, FormatHelper.formatDate(indicator.getUpdatedOn()));
@@ -582,6 +589,33 @@ public class GisEndPoints implements ErrorReportingEndpoint {
                 !PerformanceRuleManager.getInstance().getPerformanceRuleMatchers().isEmpty());
         
         return result;
+    }
+    
+    
+    /**
+     * Gets the map-tiles file from content repository.
+     * 
+     * @return archived file with map-tiles
+     */
+    @GET
+    @Path("/map-tiles")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE}, id = "mapTiles", ui = false)
+    public Response getMapTiles() {
+        return MapTilesService.getInstance().getArchivedMapTiles();
+    }
+    
+    /**
+     * Gets the amp locator objects.
+     * 
+     * @return locators
+     */
+    @GET
+    @Path("/locators")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE}, id = "locators", ui = false)
+    public List<AmpLocator> getLocators() {
+        return GisUtils.getLocators();
     }
 
     /**

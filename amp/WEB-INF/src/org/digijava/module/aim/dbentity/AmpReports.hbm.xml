@@ -22,6 +22,9 @@
 		<property name="budgetExporter" column="budget_exporter" type="java.lang.Boolean" />
 		<property name="allowEmptyFundingColumns" column="allow_empty_fund_cols" type="java.lang.Boolean" />
 		<property name="alsoShowPledges" column="also_show_pledges" type="java.lang.Boolean" />
+		<property name="showOriginalCurrency" type="java.lang.Boolean">
+		    <column name="show_original_currency" default="false" />
+		</property>
 		<property name="splitByFunding" type="java.lang.Boolean" not-null="true">
 			<column name="split_by_funding" default="false" not-null="true" />
 		</property>

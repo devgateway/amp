@@ -28,13 +28,13 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpUserExtension;
 import org.digijava.module.aim.dbentity.AmpUserExtensionPK;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.um.form.AddUserForm;
 import org.digijava.module.um.util.AmpUserUtil;
 import org.digijava.module.um.util.DbUtil;
 
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.security.PasswordPolicyValidator;
 
 public class RegisterUser extends Action {
 
@@ -71,6 +71,11 @@ public class RegisterUser extends Action {
             // set client IP address
             user.setModifyingIP(RequestUtils.getRemoteAddress(request));
 
+            if (!PasswordPolicyValidator.isValid(userRegisterForm.getPassword(), userRegisterForm.getEmail())) {
+                userRegisterForm.addError("error.strong.validation", "Please enter a password which meets the minimum password requirements");
+                request.setAttribute(PasswordPolicyValidator.SHOW_PASSWORD_POLICY_RULES, true);
+                return (mapping.getInputForward());
+            }
             // set password
             user.setPassword(userRegisterForm.getPassword().trim());
             user.setSalt(userRegisterForm.getPassword().trim());
@@ -88,6 +93,8 @@ public class RegisterUser extends Action {
             user.setOrganizationName(userRegisterForm.getOrganizationName());
 
             user.setPledger(userRegisterForm.getPledger());
+            //only if its a pledge user it can be a super user
+            user.setPledgeSuperUser(userRegisterForm.getPledger() && userRegisterForm.getPledgeSuperUser());
             user.setExemptFromDataFreezing(userRegisterForm.getExemptFromDataFreezing());
             
             user.setNotificationEmailEnabled(userRegisterForm.getNotificationEmailEnabled());
@@ -108,7 +115,6 @@ public class RegisterUser extends Action {
             user.setRegisterLanguage(RequestUtils
                     .getNavigationLanguage(request));
                         user.setEmailVerified(false);
-                        user.setActive(false);
                         user.setBanned(false);
 
             SiteDomain siteDomain = (SiteDomain) request

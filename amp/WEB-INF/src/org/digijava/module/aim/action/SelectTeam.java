@@ -110,6 +110,9 @@ public class SelectTeam extends Action {
             AmpTemplatesVisibility currentTemplate = currentTeam.getFmTemplate();
             if (currentTemplate == null) {
                 currentTemplate = FeaturesUtil.getDefaultAmpTemplateVisibility();
+            } else {
+                currentTemplate = FeaturesUtil.getTemplateById(currentTemplate.getId());
+
             }
             AmpTreeVisibility ampTreeVisibility = new AmpTreeVisibility();
             ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);

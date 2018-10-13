@@ -50,9 +50,11 @@
 
 	.draglist ul.nodragul li, #DHTMLSuite_treeNode1 {
 		cursor: auto;
+		margin-left: 0px;
 	}
 	.draglist ul.nodragul ul li {
 		cursor: move;
+		margin-left: 0px;
 	}
 	
 	.draglist li {
@@ -314,4 +316,14 @@ button.toolbar-dis {
 	width: 25px;
 	padding-left: 2px;
 	padding-right: 2px;
+}
+
+.wizard-body-container {
+	width: 100%;
+	margin-bottom: 5px;
+	margin-top: 5px;
+	height: 180px;
+	overflow: auto;
+	overflow-x: scroll;
+	white-space: nowrap;
 }

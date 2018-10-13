@@ -723,6 +723,11 @@ public class ReportsUtil {
             spec.setSummaryReport(summary);
         }
         
+        Boolean showOriginalCurrency = (Boolean) formParams.get(EPConstants.SHOW_ORIGINAL_CURRENCY);
+        if (showOriginalCurrency != null) {
+            spec.setShowOriginalCurrency(showOriginalCurrency);
+        }
+        
     }
     
     /**
@@ -881,6 +886,6 @@ public class ReportsUtil {
     
 
     public static String getUrl(AmpReports report) {
-        return "/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/open/" + report.getAmpReportId();
+        return "/TEMPLATE/ampTemplate/saikuui_reports/index_reports.html#report/open/" + report.getAmpReportId();
     }
 }

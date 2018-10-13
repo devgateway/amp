@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -36,6 +37,10 @@ public class GisConstants {
     public static final String GIS_STRUCTURE_POLYGON = "Polygon";
     public static final String GIS_STRUCTURE_POINT = "Point";
     public static final String GIS_STRUCTURE_POLYLINE = "Polyline";
+    
+    public static final String GIS_STRUCTURE_COLOR_DELIMITER = ":";
+    public static final String HEX_PATTERN_REGEX = "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$";
+    public static final Pattern HEX_PATTERN = Pattern.compile(GisConstants.HEX_PATTERN_REGEX);
     
     /**
      * The order is important - this is the priority order between measures, 

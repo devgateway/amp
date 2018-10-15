@@ -549,6 +549,8 @@ public class AmpARFilter extends PropertyListable {
     private Integer groupingsize;
     private Boolean customusegroupings;
     private Integer maximumFractionDigits;
+
+    private TeamMember teamMember;
     
     
     /**
@@ -878,19 +880,19 @@ public class AmpARFilter extends PropertyListable {
         this.initFilterQuery();
 
         getEffectiveSettings(); // do not remove call - also writes into the caches
-        
-        TeamMember tm = null;
-        
-        if (request != null)
-            tm = (TeamMember) request.getSession().getAttribute(Constants.CURRENT_MEMBER);
-        
-        if (tm == null || tm.getTeamId() == null )
-            tm  = null;
 
-        if (tm != null) {
+        if (teamMember == null && request != null) {
+            teamMember = (TeamMember) request.getSession().getAttribute(Constants.CURRENT_MEMBER);
+        }
+
+        if (teamMember != null && teamMember.getTeamId() == null) {
+            teamMember = null;
+        }
+
+        if (teamMember != null) {
             this.setNeedsTeamFilter(false);
-            this.setAccessType(tm.getTeamAccessType());
-            teamMemberId = tm.getMemberId();
+            this.setAccessType(teamMember.getTeamAccessType());
+            teamMemberId = teamMember.getMemberId();
         }
         else {
             // public view
@@ -1151,6 +1153,11 @@ public class AmpARFilter extends PropertyListable {
         FilterUtil.postprocessFilterPrograms(this);
         
         buildCustomFormat();
+    }
+
+    public AmpARFilter(TeamMember teamMember) {
+        this();
+        this.teamMember = teamMember;
     }
     
     public AmpARFilter() {
@@ -1823,7 +1830,8 @@ public class AmpARFilter extends PropertyListable {
      */
     protected void buildDatesFilterStatements() {
         // build transaction date filtering statements
-        boolean dateFilterHidesProjects = "true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DATE_FILTER_HIDES_PROJECTS));
+        String removeEmptyRows = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.REPORTS_REMOVE_EMPTY_ROWS);
+        boolean dateFilterHidesProjects = "true".equalsIgnoreCase(removeEmptyRows);
         
         String[] dates = this.calculateDateFilters(fromDate, toDate, dynDateFilterCurrentPeriod, dynDateFilterAmount, dynDateFilterOperator, dynDateFilterXPeriod);
         String fromDate = dates[0];

@@ -637,7 +637,6 @@ public class SectorUtil {
                 Iterator<AmpSector> iter = dbReturnSet.iterator();
                 while (iter.hasNext()) {
                     AmpSector ampSector = iter.next();
-                    ampSector.setName(ampSector.getName().toUpperCase());
                     ret.add(ampSector);
                     Collection<AmpSector> dbChildReturnSet = SectorUtil
                             .getAllChildSectors(ampSector.getAmpSectorId());

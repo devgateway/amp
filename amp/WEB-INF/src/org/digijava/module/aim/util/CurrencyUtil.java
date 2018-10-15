@@ -576,6 +576,26 @@ public class CurrencyUtil {
         return currency;
     }
 
+    public static List<AmpCurrency> getAllAmpCurrencies() {
+        String queryString = null;
+        ArrayList<AmpCurrency> currency = new ArrayList<AmpCurrency>();
+        try {
+            queryString = " select c from " + AmpCurrency.class.getName()
+                    + " c order by c.currencyCode";
+            List<AmpCurrency> temp = PersistenceManager.getSession().createQuery(queryString).setCacheable(true).list();
+            List<AmpCurrency> res = new ArrayList<>();
+            for (AmpCurrency c : temp) {
+                if (!c.isVirtual()) {
+                    res.add(c);
+                }
+            }
+            return res;
+        } catch (Exception ex) {
+            logger.error("Unable to get currency " + ex);
+        }
+        return currency;
+    }
+
     public static double getExchangeRate(String currencyCode) {
 
         try {

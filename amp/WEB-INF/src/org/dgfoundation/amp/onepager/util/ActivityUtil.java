@@ -61,6 +61,7 @@ import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingAmount;
+import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
 import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponse;
 import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponseDocument;
@@ -215,21 +216,7 @@ public class ActivityUtil {
         //check if we have funding items with null in ammount
         //this is not a valid use case but a possible due to the flexibility of the configurations in FM mode
         if (af != null && Hibernate.isInitialized(af)) {
-            Iterator<AmpFunding> fundingIterator = af.iterator();
-            while (fundingIterator.hasNext()) {
-                AmpFunding ampFunding = fundingIterator.next();
-
-                if (Hibernate.isInitialized(ampFunding.getFundingDetails())) {
-                    Iterator ampFundingDetailsIterator = ampFunding.getFundingDetails().iterator();
-                    updateFundingDetails(ampFundingDetailsIterator);
-                }
-                if (ampFunding.getMtefProjections() != null && Hibernate.isInitialized(ampFunding.getMtefProjections())) {
-                    Iterator<AmpFundingMTEFProjection> ampFundingMTEFProjectionIterator = ampFunding
-                            .getMtefProjections().iterator();
-                    updateFundingDetails(ampFundingMTEFProjectionIterator);
-                }
-            }
-
+            updateFundingDetails(af);
         }
 
         if (ContentTranslationUtil.multilingualIsEnabled())
@@ -433,21 +420,32 @@ private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityV
 
     /**
      * Remove funding items with null amount (that means that the form is missconfigured)
-     * set updateDate for modified records
-     * @param ampFundingDetailsIterator
+     * Set updateDate for modified records. Set the parent funding for funding details
+     *
+     * @param fundings
      */
-    private static void updateFundingDetails(Iterator ampFundingDetailsIterator) {
-        while (ampFundingDetailsIterator.hasNext()) {
-            FundingInformationItem ampFundingDetail = (FundingInformationItem) ampFundingDetailsIterator.next();
-            if (ampFundingDetail.getTransactionAmount() == null) {
-                // this shouldnt be null, so we remove it
-                ampFundingDetailsIterator.remove();
-            }else{
-                if(ampFundingDetail.getCheckSum()!= null && !ampFundingDetail.getCheckSum().equals(calculateFundingDetailCheckSum(ampFundingDetail))){
-                    ampFundingDetail.setUpdatedDate(new Date());
+    private static void updateFundingDetails(Set<AmpFunding> fundings) {
+        Date updatedDate = new Date();
+        for (AmpFunding ampFunding : fundings) {
+            if (ampFunding.getFundingDetails() != null && Hibernate.isInitialized(ampFunding.getFundingDetails())) {
+                ampFunding.getFundingDetails().removeIf(afd -> afd.getTransactionAmount() == null);
+                for (AmpFundingDetail afd : ampFunding.getFundingDetails()) {
+                    if (calculateFundingDetailCheckSum(afd).equals(afd.getCheckSum())) {
+                        afd.setUpdatedDate(updatedDate);
+                    }
+                    afd.setAmpFundingId(ampFunding);
                 }
             }
 
+            if (ampFunding.getMtefProjections() != null && Hibernate.isInitialized(ampFunding.getMtefProjections())) {
+                ampFunding.getMtefProjections().removeIf(afm -> afm.getTransactionAmount() == null);
+                for (AmpFundingMTEFProjection afm : ampFunding.getMtefProjections()) {
+                    if (calculateFundingDetailCheckSum(afm).equals(afm.getCheckSum())) {
+                        afm.setUpdatedDate(updatedDate);
+                    }
+                    afm.setAmpFunding(ampFunding);
+                }
+            }
         }
     }
 

@@ -4,15 +4,11 @@
  */
 package org.digijava.module.aim.util;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -43,8 +39,6 @@ import org.hibernate.type.LongType;
 import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.type.StringType;
 
-import bsh.org.objectweb.asm.Constants;
-
 public class CurrencyUtil {
 
     private static Logger logger = Logger.getLogger(CurrencyUtil.class);
@@ -60,19 +54,20 @@ public class CurrencyUtil {
     public static final String BASE_CODE = "USD";
 
 
-    public static Collection<CurrencyRates> getAllActiveRates() {
-        return getActiveRates(null, null, Collections.emptyList());
+    public static Collection<CurrencyRates> getAllCurrencyRates() {
+        return getCurrencyRates(null, null, Collections.emptyList(), false);
     }
 
-    public static Collection<CurrencyRates> getActiveRates(Date fromDate, Date toDate) {
-        return getActiveRates(fromDate, toDate, Collections.emptyList());
+    public static Collection<CurrencyRates> getActiveCurrencyRates(Date fromDate, Date toDate) {
+        return getCurrencyRates(fromDate, toDate, Collections.emptyList(), true);
     }
 
-    public static Collection<CurrencyRates> getActiveRates(List<Date> days) {
-        return getActiveRates(null, null, days);
+    public static Collection<CurrencyRates> getCurrencyRates(List<Date> days, boolean onlyActive) {
+        return getCurrencyRates(null, null, days, onlyActive);
     }
 
-    private static Collection<CurrencyRates> getActiveRates(Date fromDate, Date toDate, List<Date> days) {
+    private static Collection<CurrencyRates> getCurrencyRates(Date fromDate, Date toDate, List<Date> days,
+                                                              boolean onlyActive) {
         if ((fromDate == null && toDate != null) || (fromDate != null && toDate == null)) {
             throw new IllegalArgumentException("fromDate and toDate must be both either null or non null");
         }
@@ -83,8 +78,10 @@ public class CurrencyUtil {
 
         try {
             session = PersistenceManager.getSession();
-            qryStr = "select currency from " + AmpCurrency.class.getName() + "" +
-                    " currency where (currency.activeFlag='1') ";
+            qryStr = "select currency from " + AmpCurrency.class.getName() + " currency";
+            if (onlyActive) {
+                qryStr += " where (currency.activeFlag = '1') ";
+            }
             qry = session.createQuery(qryStr);
             Collection res = qry.list();
             if (res.size() > 0) {
@@ -146,7 +143,7 @@ public class CurrencyUtil {
             }
 
         } catch (Exception e) {
-            logger.error("Exception from getAllActiveRates");
+            logger.error("Exception from getAllCurrencyRates");
             e.printStackTrace(System.out);
         }
 

@@ -75,6 +75,7 @@ import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpOfflineChangelog;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.repository.AmpOfflineChangelogRepository;
 import org.digijava.module.aim.util.ContactInfoUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
@@ -348,9 +349,10 @@ public class SyncService implements InitializingBean {
         StringJoiner sql = new StringJoiner(" UNION ");
         for (AmpTeamMember teamMember : teamMembers) {
 
-            AmpARFilter computedWsFilter = FilterUtil.buildFilterFromSource(teamMember.getAmpTeam());
+            TeamMember tm = teamMember.toTeamMember();
+            AmpARFilter computedWsFilter = FilterUtil.buildFilterFromSource(teamMember.getAmpTeam(), tm);
 
-            AmpARFilterParams params = AmpARFilterParams.getParamsForWorkspaceFilter(teamMember.toTeamMember(), null);
+            AmpARFilterParams params = AmpARFilterParams.getParamsForWorkspaceFilter(tm, null);
             computedWsFilter.generateFilterQuery(params);
 
             sql.add(computedWsFilter.getGeneratedFilterQuery());

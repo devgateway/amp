@@ -167,7 +167,7 @@ public class AmpFundingAmountComponent<T> extends Panel {
 
         currency = new AmpStyledSelectFieldPanel<AmpCurrency>("currency",
                 new PropertyModel<AmpCurrency>(model, propertyCurrency),
-                currencyList, fmCurrency, hideLabel, false, new IOptionRenderer<AmpCurrency>() {
+                currencyList, fmCurrency, hideLabel, new IOptionRenderer<AmpCurrency>() {
             @Override
             public String getDisplayValue(AmpCurrency object) {
                 return object.getCurrencyCode();

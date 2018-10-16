@@ -38,6 +38,13 @@ public class AmpStyledSelectFieldPanel<T> extends AmpFieldPanel<T> {
         addFormComponent(selectComponent);
     }
 
+    /**
+     * Set a specific option to be enabled or not based on the model object
+     * The method is similar to {@link AmpSelectFieldPanel#dropDownChoiceIsDisabled(Object, int, String)}
+     * 
+     * @param model
+     * @return boolean isEnabled
+     */
     public boolean optionIsEnabled(IModel<? extends T> model) {
         return true;
     }

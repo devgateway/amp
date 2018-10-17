@@ -9,14 +9,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
-import org.digijava.kernel.ampapi.endpoints.activity.discriminators.TransactionTypeDiscriminator;
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
-import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
-public class AmpRegionalFunding extends AbstractAuditLogger implements Versionable, Serializable, Cloneable {
+public class AmpRegionalFunding extends AuditedEntity implements Versionable, Serializable, Cloneable {
     //IATI-check: to be ignored
 //  @Interchangeable(fieldTitle = "ID", id = true)
     private Long ampRegionalFundingId;
@@ -241,7 +238,9 @@ public class AmpRegionalFunding extends AbstractAuditLogger implements Versionab
     public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
         AmpRegionalFunding aux = (AmpRegionalFunding) clone();
         aux.activity = newActivity;
-        aux.setPreviousObjectId(aux.getAmpRegionalFundingId());
+        if (aux.getOriginalObjectId() == null) {
+            aux.setOriginalObjectId(aux.getAmpRegionalFundingId());
+        }
         aux.ampRegionalFundingId = null;
         return aux;
     }

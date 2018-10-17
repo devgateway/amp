@@ -46,6 +46,6 @@
 			class="org.digijava.module.aim.dbentity.AmpRole" cascade="none" />	
 	
 		<many-to-one name="fixedRateBaseCurrency" column="fixed_base_currency_id" class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" not-found="ignore" not-null="false"  />
-		<property name="previousObjectId" column="previous_object_id" type="java.lang.Long" />
+		<property name="originalObjectId" column="original_object_id" type="java.lang.Long" />
 	</class>
 </hibernate-mapping>

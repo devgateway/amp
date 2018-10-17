@@ -14,7 +14,7 @@ import org.digijava.module.aim.util.Output;
  * @author Irakli Kobiashvili
  *
  */
-public class AmpActivityLocation extends AbstractAuditLogger implements Versionable, Serializable, Cloneable {
+public class AmpActivityLocation extends AuditedEntity implements Versionable, Serializable, Cloneable {
     //IATI-check: should be exported.
 //  @Interchangeable(fieldTitle="ID", id=true)
     private Long id;
@@ -99,7 +99,9 @@ public class AmpActivityLocation extends AbstractAuditLogger implements Versiona
     public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
         AmpActivityLocation aux = (AmpActivityLocation) clone(); 
         aux.activity = newActivity;
-        this.setPreviousObjectId(aux.id);
+        if (aux.getOriginalObjectId() == null) {
+            aux.setOriginalObjectId(aux.id);
+        }
         aux.id = null;
         return aux;
     }

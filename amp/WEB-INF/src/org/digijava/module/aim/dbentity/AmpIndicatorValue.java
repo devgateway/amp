@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.common.util.DateTimeUtil;
 
@@ -14,7 +13,7 @@ import org.digijava.module.common.util.DateTimeUtil;
  * @author George Khakhanashvili
  *
  */
-public class AmpIndicatorValue extends AbstractAuditLogger implements Serializable, Cloneable {
+public class AmpIndicatorValue extends AuditedEntity implements Serializable, Cloneable {
     private static final Logger logger = Logger.getLogger(AmpIndicatorValue.class);
     /*
      * NOTICE

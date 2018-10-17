@@ -23,7 +23,7 @@ import org.digijava.module.aim.util.Output;
  * @author Priyajith
  */
 @TranslatableClass (displayName = "Component")
-public class AmpComponent extends AbstractAuditLogger implements Serializable, Comparable<AmpComponent>, Versionable,
+public class AmpComponent extends AuditedEntity implements Serializable, Comparable<AmpComponent>, Versionable,
         Cloneable {
     
     //IATI-check: to be ignored
@@ -264,7 +264,9 @@ public class AmpComponent extends AbstractAuditLogger implements Serializable, C
         AmpComponent auxComponent = (AmpComponent) clone();
         auxComponent.setActivities(new HashSet<AmpActivityVersion>());
         auxComponent.getActivities().add(newActivity);
-        auxComponent.setPreviousObjectId(auxComponent.getAmpComponentId());
+        if (auxComponent.getOriginalObjectId() == null) {
+            auxComponent.setOriginalObjectId(auxComponent.getAmpComponentId());
+        }
         auxComponent.setAmpComponentId(null);
         
         if (auxComponent.getFundings() != null && auxComponent.getFundings().size() > 0) {
@@ -273,7 +275,9 @@ public class AmpComponent extends AbstractAuditLogger implements Serializable, C
             while (it.hasNext()) {
                 AmpComponentFunding auxComponentFunding = it.next();
                 AmpComponentFunding newComponentFunding = (AmpComponentFunding) auxComponentFunding.clone();
-                newComponentFunding.setPreviousObjectId(newComponentFunding.getAmpComponentFundingId());
+                if (newComponentFunding.getOriginalObjectId() == null) {
+                    newComponentFunding.setOriginalObjectId(newComponentFunding.getAmpComponentFundingId());
+                }
                 newComponentFunding.setAmpComponentFundingId(null);
                 newComponentFunding.setComponent(auxComponent);
                 auxSetFundings.add(newComponentFunding);

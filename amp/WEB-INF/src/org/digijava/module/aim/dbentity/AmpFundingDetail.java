@@ -16,7 +16,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 
-public class AmpFundingDetail extends AbstractAuditLogger implements Serializable, Cloneable, FundingInformationItem {
+public class AmpFundingDetail extends AuditedEntity implements Serializable, Cloneable, FundingInformationItem {
 
     //IATI-check: not to be ignored!
     public static class FundingDetailComparator implements Comparator<AmpFundingDetail>, Serializable {

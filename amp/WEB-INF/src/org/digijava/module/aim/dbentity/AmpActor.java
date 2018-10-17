@@ -2,12 +2,11 @@ package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
 
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 
 @TranslatableClass (displayName = "Actor")
-public class AmpActor  extends AbstractAuditLogger implements Serializable, Cloneable
+public class AmpActor  extends AuditedEntity implements Serializable, Cloneable
 {
     //IATI-check: not used in IATI
 //  @Interchangeable(fieldTitle="ID", importable = true)

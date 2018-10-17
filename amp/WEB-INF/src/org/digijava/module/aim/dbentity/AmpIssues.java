@@ -7,10 +7,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.util.Output;
 
-public class AmpIssues extends AbstractAuditLogger implements Serializable, Versionable, Cloneable
+public class AmpIssues extends AuditedEntity implements Serializable, Versionable, Cloneable
 {
 
     //IATI-check: to be ignored
@@ -155,14 +154,18 @@ public class AmpIssues extends AbstractAuditLogger implements Serializable, Vers
     public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
         AmpIssues aux = (AmpIssues) clone();
         aux.activity = newActivity;
-        aux.setPreviousObjectId(aux.getAmpIssueId());
+        if (aux.getOriginalObjectId() == null) {
+            aux.setOriginalObjectId(aux.getAmpIssueId());
+        }
         aux.ampIssueId = null;
         if (aux.measures != null && aux.measures.size() > 0) {
             Set<AmpMeasure> setMeasures = new HashSet<AmpMeasure>();
             Iterator<AmpMeasure> i = aux.measures.iterator();
             while (i.hasNext()) {
                 AmpMeasure newMeasure = (AmpMeasure) i.next().clone();
-                newMeasure.setPreviousObjectId(newMeasure.getAmpMeasureId());
+                if (newMeasure.getOriginalObjectId() == null) {
+                    newMeasure.setOriginalObjectId(newMeasure.getAmpMeasureId());
+                }
                 newMeasure.setAmpMeasureId(null);
                 newMeasure.setIssue(aux);
                 if (newMeasure.getActors() != null && newMeasure.getActors().size() > 0) {
@@ -170,7 +173,9 @@ public class AmpIssues extends AbstractAuditLogger implements Serializable, Vers
                     Iterator<AmpActor> j = newMeasure.getActors().iterator();
                     while (j.hasNext()) {
                         AmpActor newActor = (AmpActor) j.next().clone();
-                        newActor.setPreviousObjectId(newActor.getAmpActorId());
+                        if (newActor.getOriginalObjectId() == null) {
+                            newActor.setOriginalObjectId(newActor.getAmpActorId());
+                        }
                         newActor.setAmpActorId(null);
                         newActor.setMeasure(newMeasure);
                         setActors.add(newActor);

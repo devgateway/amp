@@ -11,7 +11,7 @@ import java.util.Date;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
-public class AmpComponentFunding extends AbstractAuditLogger  implements Cloneable, Serializable {
+public class AmpComponentFunding extends AuditedEntity implements Cloneable, Serializable {
     // IATI-check: to be ignored
 
     // @Interchangeable(fieldTitle="ID")

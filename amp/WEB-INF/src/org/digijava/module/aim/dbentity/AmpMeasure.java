@@ -4,12 +4,11 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 
 @TranslatableClass (displayName = "Measure")
-public class AmpMeasure extends AbstractAuditLogger implements Serializable, Cloneable
+public class AmpMeasure extends AuditedEntity implements Serializable, Cloneable
 {
     //IATI-check: seems used only in issues -- commenting out (to be ignored).
     

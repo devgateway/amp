@@ -32,6 +32,6 @@
 
 		<many-to-one name="indicatorSource" column="indicator_source"
 			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
-		<property name="previousObjectId" column="previous_object_id" type="java.lang.Long" />
+		<property name="originalObjectId" column="original_object_id" type="java.lang.Long" />
 	</class>
 </hibernate-mapping>

@@ -3,15 +3,8 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import javax.jcr.Node;
-
-import org.apache.jackrabbit.core.persistence.PersistenceManager;
-import org.dgfoundation.amp.onepager.models.AmpActivityModel;
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.util.Output;
-import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.helper.ObjectReferringDocument;
-import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 
 /**
  * 
@@ -95,7 +88,9 @@ public class AmpActivityDocument extends ObjectReferringDocument implements Seri
     @Override
     public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
         AmpActivityDocument aux = (AmpActivityDocument) clone();
-        aux.setPreviousObjectId(aux.getId());
+        if (aux.getOriginalObjectId() == null) {
+            aux.setOriginalObjectId(aux.getId());
+        }
         aux.id = null;
         aux.ampActivity = newActivity;
         return aux;

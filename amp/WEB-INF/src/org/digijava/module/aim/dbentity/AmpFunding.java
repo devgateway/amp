@@ -22,7 +22,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
 @TranslatableClass(displayName = "Funding")
-public class AmpFunding extends AbstractAuditLogger implements Serializable, Versionable, Cloneable {
+public class AmpFunding extends AuditedEntity implements Serializable, Versionable, Cloneable {
     //IATI-check: not ignored!
     private static final long serialVersionUID = 1L;
     @Interchangeable(fieldTitle="AMP Funding ID")
@@ -379,7 +379,9 @@ public class AmpFunding extends AbstractAuditLogger implements Serializable, Ver
     public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
         AmpFunding aux = (AmpFunding)clone();
         aux.ampActivityId = newActivity;
-        aux.setPreviousObjectId(aux.getAmpFundingId());
+        if (aux.getOriginalObjectId() == null) {
+            aux.setOriginalObjectId(aux.getAmpFundingId());
+        }
         aux.ampFundingId = null;
         if (aux.fundingDetails != null && aux.fundingDetails.size() > 0) {
             Set<AmpFundingDetail> auxSetFD = new HashSet<AmpFundingDetail>();
@@ -387,7 +389,9 @@ public class AmpFunding extends AbstractAuditLogger implements Serializable, Ver
             while (iF.hasNext()) {
                 AmpFundingDetail auxFD = iF.next();
                 AmpFundingDetail newFD = (AmpFundingDetail)auxFD.clone();
-                newFD.setPreviousObjectId(newFD.getAmpFundDetailId());
+                if (newFD.getOriginalObjectId() == null) {
+                    newFD.setOriginalObjectId(newFD.getAmpFundDetailId());
+                }
                 newFD.setAmpFundDetailId(null);
                 newFD.setAmpFundingId(aux);
                 auxSetFD.add(newFD);
@@ -402,7 +406,9 @@ public class AmpFunding extends AbstractAuditLogger implements Serializable, Ver
             while (iMTEF.hasNext()) {
                 AmpFundingMTEFProjection auxMTEF = iMTEF.next();
                 AmpFundingMTEFProjection newMTEF = (AmpFundingMTEFProjection)auxMTEF.clone();
-                newMTEF.setPreviousObjectId(newMTEF.getAmpFundingMTEFProjectionId());
+                if (newMTEF.getOriginalObjectId() == null) {
+                    newMTEF.setOriginalObjectId(newMTEF.getAmpFundingMTEFProjectionId());
+                }
                 newMTEF.setAmpFundingMTEFProjectionId(null);
                 newMTEF.setAmpFunding(aux);
                 auxSetMTEF.add(newMTEF);

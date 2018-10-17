@@ -5,11 +5,10 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 @TranslatableClass (displayName = "Regional Observation Measure")
-public class AmpRegionalObservationMeasure extends AbstractAuditLogger implements Serializable, Cloneable {
+public class AmpRegionalObservationMeasure extends AuditedEntity implements Serializable, Cloneable {
     //IATI-check: to be ignored
 //  @Interchangeable(fieldTitle="ID")
     private Long ampRegionalObservationMeasureId;

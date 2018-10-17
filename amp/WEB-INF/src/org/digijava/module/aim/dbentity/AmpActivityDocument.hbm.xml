@@ -13,6 +13,6 @@
 		<property name="documentType" column="document_type" type="java.lang.String" />
 		<many-to-one name="ampActivity" column="amp_activity_id"
 			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" not-null="true" />
-		<property name="previousObjectId" column="previous_object_id" type="java.lang.Long" />
+		<property name="originalObjectId" column="original_object_id" type="java.lang.Long" />
 	</class>
 </hibernate-mapping>

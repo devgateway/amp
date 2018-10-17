@@ -8,7 +8,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.util.Output;
 
-public class AmpActivitySector extends AbstractAuditLogger implements Versionable, Serializable, Cloneable {
+public class AmpActivitySector extends AuditedEntity implements Versionable, Serializable, Cloneable {
 
     private Long ampActivitySectorId;
     
@@ -111,7 +111,9 @@ public class AmpActivitySector extends AbstractAuditLogger implements Versionabl
     public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
         AmpActivitySector aux = (AmpActivitySector) clone();
         aux.activityId = newActivity;
-        aux.setPreviousObjectId(aux.ampActivitySectorId);
+        if (aux.getOriginalObjectId() == null) {
+            aux.setOriginalObjectId(aux.ampActivitySectorId);
+        }
         aux.ampActivitySectorId = null;
         return aux;
     }

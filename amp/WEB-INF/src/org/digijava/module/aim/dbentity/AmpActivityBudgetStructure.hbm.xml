@@ -17,7 +17,7 @@
 		<property name="budgetStructureName" column="budget_structure_name" type="java.lang.String" />
 
 		<property name="budgetStructurePercentage" column="budget_structure_percentage" type="java.lang.Float" />
-		<property name="previousObjectId" column="previous_object_id" type="java.lang.Long" />
+		<property name="originalObjectId" column="original_object_id" type="java.lang.Long" />
 	</class>
 
 </hibernate-mapping>

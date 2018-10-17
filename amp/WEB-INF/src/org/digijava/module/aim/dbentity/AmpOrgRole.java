@@ -14,7 +14,7 @@ import org.digijava.module.aim.util.Output;
 import org.digijava.module.aim.util.SerializableComparator;
 
 
-public class AmpOrgRole extends AbstractAuditLogger implements Comparable<AmpOrgRole>, Serializable, Versionable,
+public class AmpOrgRole extends AuditedEntity implements Comparable<AmpOrgRole>, Serializable, Versionable,
         Cloneable
 {
     //IATI-check: not to be ignored
@@ -166,7 +166,9 @@ public class AmpOrgRole extends AbstractAuditLogger implements Comparable<AmpOrg
                 clonedSurvey.getResponses().forEach(r -> {
                     try {
                         AmpGPINiSurveyResponse clonedResponse = (AmpGPINiSurveyResponse) r.clone();
-                        clonedResponse.setPreviousObjectId(clonedResponse.getAmpGPINiSurveyResponseId());
+                        if (clonedResponse.getOriginalObjectId() == null) {
+                            clonedResponse.setOriginalObjectId(clonedResponse.getAmpGPINiSurveyResponseId());
+                        }
                         clonedResponse.setAmpGPINiSurveyResponseId(null);
                         clonedResponse.setAmpGPINiSurvey(clonedSurvey);
                         clonedSurveyResponses.add(clonedResponse);

@@ -8,7 +8,7 @@ import java.util.Set;
  * @author Irakli Kobiashvili
  *
  */
-public class IndicatorConnection  extends AbstractAuditLogger implements Serializable, Comparable<IndicatorTheme> {
+public class IndicatorConnection  extends AuditedEntity implements Serializable, Comparable<IndicatorTheme> {
 
     private static final long serialVersionUID = 1L;
     

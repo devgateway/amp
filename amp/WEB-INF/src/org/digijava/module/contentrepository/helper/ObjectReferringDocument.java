@@ -3,7 +3,7 @@
  */
 package org.digijava.module.contentrepository.helper;
 
-import org.digijava.module.aim.dbentity.AbstractAuditLogger;
+import org.digijava.module.aim.dbentity.AuditedEntity;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 
@@ -14,7 +14,7 @@ import org.hibernate.Session;
  * If a class Inheriting ObjectReferringDocument needs to track previous object id will have to
  * define its in own mapping file the said database column
  */
-public abstract class ObjectReferringDocument extends AbstractAuditLogger {
+public abstract class ObjectReferringDocument extends AuditedEntity {
     private String uuid;
     public ObjectReferringDocument() {
         uuid    = null;

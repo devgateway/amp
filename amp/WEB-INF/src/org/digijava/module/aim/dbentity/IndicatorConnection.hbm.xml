@@ -18,7 +18,7 @@
 			<key column="ind_connect_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpIndicatorValue" />
 		</set>
-		<property name="previousObjectId" column="previous_object_id" type="java.lang.Long" />
+		<property name="originalObjectId" column="original_object_id" type="java.lang.Long" />
 		<subclass name="org.digijava.module.aim.dbentity.IndicatorTheme" discriminator-value="p" lazy="false">
 			<many-to-one name="theme" column="theme_id"
 				class="org.digijava.module.aim.dbentity.AmpTheme" cascade="none" />

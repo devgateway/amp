@@ -19,6 +19,6 @@
 
 		<property name="internalId" column="internal_id" type="java.lang.String" />
 
-		<property name="previousObjectId" column="previous_object_id" type="java.lang.Long" />
+		<property name="originalObjectId" column="original_object_id" type="java.lang.Long" />
 	</class>
 </hibernate-mapping>

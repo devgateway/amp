@@ -4,14 +4,13 @@ import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Date;
 
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 
-public class AmpFundingMTEFProjection extends AbstractAuditLogger implements Cloneable, Serializable,
+public class AmpFundingMTEFProjection extends AuditedEntity implements Cloneable, Serializable,
         Comparable<AmpFundingMTEFProjection>,
         FundingInformationItem {
     //IATI-check: to be ignored 

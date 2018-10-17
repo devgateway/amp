@@ -18,6 +18,6 @@
 			<key column="amp_measure_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpActor" />
 		</set>
-		<property name="previousObjectId" column="previous_object_id" type="java.lang.Long" />
+		<property name="originalObjectId" column="original_object_id" type="java.lang.Long" />
 	</class>
 </hibernate-mapping>

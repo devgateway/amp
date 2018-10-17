@@ -29,6 +29,6 @@
 			
 		<many-to-one name="recipientRole" column="recipient_role_id"
 			class="org.digijava.module.aim.dbentity.AmpRole" cascade="none" />
-		<property name="previousObjectId" column="previous_object_id" type="java.lang.Long" />
+		<property name="originalObjectId" column="original_object_id" type="java.lang.Long" />
 	</class>
 </hibernate-mapping>

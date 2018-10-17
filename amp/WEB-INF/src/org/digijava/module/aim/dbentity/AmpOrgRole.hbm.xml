@@ -29,7 +29,7 @@
 			<key column="amp_org_role_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpGPINiSurvey" />
 		</set>
-		<property name="previousObjectId" column="previous_object_id" type="java.lang.Long" />
+		<property name="originalObjectId" column="original_object_id" type="java.lang.Long" />
 	</class>
 </hibernate-mapping>
 

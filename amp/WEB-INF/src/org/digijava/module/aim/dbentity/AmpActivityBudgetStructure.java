@@ -3,10 +3,9 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.util.Output;
 
-public class AmpActivityBudgetStructure extends AbstractAuditLogger implements Versionable, Serializable, Cloneable {
+public class AmpActivityBudgetStructure extends AuditedEntity implements Versionable, Serializable, Cloneable {
     
     //TODO: not expected to be used in IATI. commenting for now
     private Long ampActivityBudgetStructureId;
@@ -74,7 +73,9 @@ public class AmpActivityBudgetStructure extends AbstractAuditLogger implements V
     public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
         AmpActivityBudgetStructure aux = (AmpActivityBudgetStructure) clone();
         aux.activity = newActivity;
-        aux.setPreviousObjectId(aux.getAmpActivityBudgetStructureId());
+        if (aux.getOriginalObjectId() == null) {
+            aux.setOriginalObjectId(aux.getAmpActivityBudgetStructureId());
+        }
         aux.ampActivityBudgetStructureId = null;
         
         return aux;

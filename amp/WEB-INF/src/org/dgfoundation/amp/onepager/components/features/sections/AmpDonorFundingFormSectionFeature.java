@@ -352,16 +352,18 @@ public class AmpDonorFundingFormSectionFeature extends
                 FundingOrganization fo = new FundingOrganization();
                 fo.setAmpOrgId(orgRole.getOrganisation().getAmpOrgId());
                 //TODO We should probably need to find another way to pass the current organisation and to test
-                // if we shouldn't pass wht current role instead of FUNDING_AGENCY hardcoded
-                // this hardcoded value will probably affect funding flow, but this code is old, from permission first
-                // implementation AMP-28443 is the followup ticket for this
+                //TODO if we shouldn't pass wht current role instead of FUNDING_AGENCY hardcoded
+                //TODO this hardcoded value will probably affect funding flow, but this code is old,
+                //TODO from permission first implementation AMP-28443 is the followup ticket for this
+                //TODO Everything nested under AmpDonorFundingFormSectionFeature needs the current organisation
+                //TODO to be able to test the gates
+                //TODO Putting the scope here we guarantee that every object underneath receives the proper information
+                //TODO and we avoid duplicate code
                 PermissionUtil.putInScope(((AmpAuthWebSession) getSession()).getHttpSession(),
                         GatePermConst.ScopeKeys.CURRENT_ORG, fo);
                 PermissionUtil.putInScope(((AmpAuthWebSession) getSession()).getHttpSession(),
                         GatePermConst.ScopeKeys.CURRENT_ORG_ROLE, Constants.FUNDING_AGENCY);
-
                 item.add(fg);
-
                 AmpAuthWebSession session = (AmpAuthWebSession) getSession();
                 PermissionUtil.removeFromScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG);
                 PermissionUtil.removeFromScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG_ROLE);

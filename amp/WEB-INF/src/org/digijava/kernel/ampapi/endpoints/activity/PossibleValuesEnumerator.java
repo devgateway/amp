@@ -21,6 +21,7 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.log4j.Logger;
+import org.digijava.kernel.ampapi.endpoints.activity.discriminators.CurrencyCommonPossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.common.AMPTranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.valueproviders.GenericInterchangeableValueProvider;
@@ -309,6 +310,9 @@ public class PossibleValuesEnumerator {
         if (clazz.isAssignableFrom(AmpOrganisation.class)) {
             return getPossibleValuesGenericCase(clazz, () -> possibleValuesDAO.getOrganisations());
         }
+        if (clazz.isAssignableFrom(AmpCurrency.class)) {
+            return getPossibleCurrencies();
+        }
         return getPossibleValuesGenericCase(clazz, () -> possibleValuesDAO.getGenericValues(clazz));
     }
 
@@ -437,6 +441,11 @@ public class PossibleValuesEnumerator {
     private List<PossibleValue> getPossibleThemes(Field field, String configValue) {
         List<Object[]> items = possibleValuesDAO.getThemes(configValue);
         return setProperties(items, false, this::getThemeExtraInfo);
+    }
+
+    private List<PossibleValue> getPossibleCurrencies() {
+        CurrencyCommonPossibleValuesProvider provider = new CurrencyCommonPossibleValuesProvider();
+        return provider.getPossibleValues(translatorService);
     }
 
     private Long getLongOrNull(Number number) {

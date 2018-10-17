@@ -41,7 +41,18 @@
          <param-value>utf-8</param-value>
       </init-param>
    </filter>
-
+   
+   <filter>
+        <filter-name>populateTLSRequestFilter</filter-name>
+        <filter-class>org.digijava.kernel.request.PopulateTLSRequestFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>populateTLSRequestFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>ERROR</dispatcher>
+    </filter-mapping>
+   
 	<filter>
 		<filter-name>HibernateFilter</filter-name>
 		<filter-class>org.digijava.kernel.startup.HibernateSessionRequestFilter</filter-class>

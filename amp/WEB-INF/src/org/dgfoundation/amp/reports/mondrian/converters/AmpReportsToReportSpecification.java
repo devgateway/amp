@@ -149,7 +149,8 @@ public class AmpReportsToReportSpecification {
         
         //detect if we should display empty rows or not
         //the existing logic rules are applied here from old reports generation mechanism
-        boolean dateFilterHidesProjects = "true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DATE_FILTER_HIDES_PROJECTS));
+        String removeEmptyRows = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.REPORTS_REMOVE_EMPTY_ROWS);
+        boolean dateFilterHidesProjects = "true".equalsIgnoreCase(removeEmptyRows);
         if (dateFilterHidesProjects && !report.getDrilldownTab() && 
                 (arFilter.wasDateFilterUsed() || (report.getHierarchies().size() > 0))
                 )

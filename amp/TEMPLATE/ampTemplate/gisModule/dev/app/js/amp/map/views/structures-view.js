@@ -203,10 +203,14 @@ module.exports = Backbone.View
         }
       }
     }
-    
-    var icon = this.structureMenuModel.iconMappings[sectorCode] || this.structureMenuModel.iconMappings[this.structureMenuModel.DEFAULT_ICON_CODE];    
-    var pointIcon = L.icon({
-      iconUrl: 'img/map-icons/' + icon,
+
+    var sectorSvgCode = this.structureMenuModel.DEFAULT_ICON_CODE;
+      if (this.structureMenuModel.iconMappings[sectorCode]) {
+        sectorSvgCode = sectorCode;
+    }
+
+    var pointIcon = L.divIcon({
+      className: 'svg-map-icon svg-map-icon-' + sectorSvgCode,
       iconSize:     [25, 25], // size of the icon
       iconAnchor:   [12, 25], // point of the icon which will correspond to marker's location
       popupAnchor:  [-3, -6]  // point from which the popup should open relative to the iconAnchor

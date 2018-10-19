@@ -17,6 +17,9 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
@@ -46,7 +49,15 @@ public class PossibleValuesEnumeratorTest {
     @Before
     public void setup() {
         MockHttpServletRequest mockRequest = new MockHttpServletRequest(new MockHttpSession());
-        TLSUtils.populate(mockRequest);
+        
+        Site site = new Site("Test Site", "1");
+        site.setDefaultLanguage(new Locale("en", "English"));
+
+        SiteDomain siteDomain = new SiteDomain();
+        siteDomain.setSite(site);
+        siteDomain.setDefaultDomain(true);
+        
+        TLSUtils.populate(mockRequest, siteDomain);
     }
 
     @Test(expected = NullPointerException.class)

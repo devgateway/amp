@@ -86,13 +86,11 @@ module.exports = {
       }
 
       //icons need to be abit bigger than plain circles, so bump up by 2
-      var iconStyleCode = this.structureMenuModel.DEFAULT_ICON_CODE;
-      if (this.structureMenuModel.iconMappings[sectorCode]) {
-          iconStyleCode = sectorCode;
-      }
+      var iconStyleCode = this.structureMenuModel.getSelectedIconStyleCode(sectorCode);
+
       marker = new L.circleDivIcon(Math.max(18, size + 2), {
         className: 'marker-cluster ',
-        html: '<div class="leaflet-marker-icon"><div class="cluster-svg-map-icon svg-map-icon svg-map-icon-' + iconStyleCode + '"></div><div class="text">' + markers.length + '</div>',
+        html: '<div class="leaflet-marker-icon"><div class="cluster-svg-map-icon svg-map-icon ' + iconStyleCode + '"></div><div class="text">' + markers.length + '</div>',
         color: '#444',
         fillColor: '#fff',
         weight: 0

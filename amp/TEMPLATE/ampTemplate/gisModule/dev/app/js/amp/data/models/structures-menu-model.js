@@ -136,6 +136,15 @@ module.exports = Backbone.Model
     998: '998'
   },
   
-  DEFAULT_ICON_CODE: '998' //if no icon can be found using the sector code in the activity, default to unspecified
+  DEFAULT_ICON_CODE: '998', //if no icon can be found using the sector code in the activity, default to unspecified
+
+  getSelectedIconStyleCode: function(sectorCode) {
+      var iconStyleCode = this.DEFAULT_ICON_CODE;
+      if (this.iconMappings[sectorCode]) {
+          iconStyleCode = sectorCode;
+      }
+
+      return 'svg-map-icon-' + iconStyleCode;
+  }
 
 });

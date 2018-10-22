@@ -204,13 +204,10 @@ module.exports = Backbone.View
       }
     }
 
-    var sectorSvgCode = this.structureMenuModel.DEFAULT_ICON_CODE;
-      if (this.structureMenuModel.iconMappings[sectorCode]) {
-        sectorSvgCode = sectorCode;
-    }
+    var sectorIconStyleCode = this.structureMenuModel.getSelectedIconStyleCode(sectorCode);
 
     var pointIcon = L.divIcon({
-      className: 'svg-map-icon svg-map-icon-' + sectorSvgCode,
+      className: 'svg-map-icon ' + sectorIconStyleCode,
       iconSize:     [25, 25], // size of the icon
       iconAnchor:   [12, 25], // point of the icon which will correspond to marker's location
       popupAnchor:  [-3, -6]  // point from which the popup should open relative to the iconAnchor

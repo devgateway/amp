@@ -92,50 +92,59 @@ module.exports = Backbone.Model
   },
 
   iconMappings: {
-	0: 'Multiple2.svg',  // used for 'various'
-	1: 'None.svg',
-    100: 'Social.svg',
-    110: 'Education.svg',
-    111: 'Education.svg',
-    112: 'Education.svg',
-    113: 'Education.svg',
-    114: 'Education.svg',
-    120: 'Health.svg',
-    121: 'Health.svg',
-    122: 'Health.svg',
-    130: 'Population.svg',
-    140: 'Water.svg',
-    150: 'Gov.svg',
-    160: 'OtherSocial.svg',
-    210: 'Transport.svg',
-    220: 'Communication.svg',
-    230: 'Energy.svg',
-    240: 'Banking.svg',
-    250: 'Business.svg',
-    311: 'Agriculture.svg',
-    312: 'Forestry.svg',
-    313: 'Fishing.svg',
-    321: 'Industry.svg',
-    322: 'MineralResources.svg',
-    323: 'Construction.svg',
-    331: 'Trade.svg',
-    332: 'Tourism.svg',
-    400: 'Multisector.svg',
-    500: 'GeneralSupport.svg',
-    600: 'Debt.svg',
-    700: 'Humanitarian.svg',
-    910: 'CostDonor.svg',
-    920: 'NGO_Support.svg',
-    930: 'Refugees.svg',
-    410: 'Environmental_Protection.svg',
-    520: 'Food_Security.svg',
-    530: 'Other_Commodity.svg',
-    720: 'Emergency_Response.svg',
-    730: 'Reconstruction.svg',
-    740: 'Disaster_Prevention.svg',
-    998: 'Unspecified.svg'
+    0: '0',  // used for 'various'
+    1: '1',  // None
+    100: '100',
+    110: '110',
+    111: '111',
+    112: '112',
+    113: '113',
+    114: '114',
+    120: '120',
+    121: '121',
+    122: '122',
+    130: '130',
+    140: '140',
+    150: '150',
+    160: '160',
+    210: '210',
+    220: '220',
+    230: '230',
+    240: '240',
+    250: '250',
+    311: '311',
+    312: '312',
+    313: '313',
+    321: '321',
+    322: '322',
+    323: '323',
+    331: '331',
+    332: '332',
+    400: '400',
+    500: '500',
+    600: '600',
+    700: '700',
+    910: '910',
+    920: '920',
+    930: '930',
+    410: '410',
+    520: '520',
+    530: '530',
+    720: '720',
+    730: '730',
+    740: '740',
+    998: '998'
   },
   
-  DEFAULT_ICON_CODE: '998' //if no icon can be found using the sector code in the activity, default to unspecified
+  DEFAULT_ICON_CODE: '998', //if no icon can be found using the sector code in the activity, default to unspecified
+
+  getSelectedIconStyleCode: function(sectorCode) {
+      var iconStyleCode = this.DEFAULT_ICON_CODE;
+      if (this.iconMappings[sectorCode]) {
+          iconStyleCode = sectorCode;
+      }
+
+      return 'svg-map-icon-' + iconStyleCode;
+  }
 
 });

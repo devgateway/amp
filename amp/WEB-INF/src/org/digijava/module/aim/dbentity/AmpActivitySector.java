@@ -8,7 +8,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.util.Output;
 
-public class AmpActivitySector implements Versionable, Serializable, Cloneable {
+public class AmpActivitySector implements Versionable, Serializable, Cloneable, AuditableEntity {
 
     private Long ampActivitySectorId;
     
@@ -122,4 +122,12 @@ public class AmpActivitySector implements Versionable, Serializable, Cloneable {
         // TODO Auto-generated method stub
         return super.clone();
     }
+
+    @Override
+    public void touch() {
+        if (activityId != null) {
+            activityId.touch();
+        }
+    }
+
 }

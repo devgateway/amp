@@ -1,4 +1,8 @@
-package org.digijava.module.translation.hibernate;
+package org.digijava.kernel.persistence.interceptors;
+
+import java.io.Serializable;
+import java.util.Iterator;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
@@ -6,9 +10,7 @@ import org.dgfoundation.amp.ar.viewfetcher.InternationalizedPropertyDescription;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
-import org.digijava.module.aim.dbentity.AmpStructure;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.dbentity.AuditableEntity;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.digijava.module.translation.util.FieldTranslationPack;
 import org.digijava.module.translation.util.TranslationStore;
@@ -16,16 +18,12 @@ import org.hibernate.EmptyInterceptor;
 import org.hibernate.Hibernate;
 import org.hibernate.type.Type;
 
-import java.io.Serializable;
-import java.util.Iterator;
-import java.util.List;
-
 /**
- * Hibernate interceptor to translate all AMP entities
+ * Hibernate interceptor to translate all AMP entities and to touch Auditable entities
  * @author aartimon@developmentgateway.org
  */
-public class TranslatorInterceptor extends EmptyInterceptor{
-    private static Logger logger = Logger.getLogger(TranslatorInterceptor.class);
+public class AmpEntityInterceptor extends EmptyInterceptor {
+    private static Logger logger = Logger.getLogger(AmpEntityInterceptor.class);
 
     
     /**
@@ -110,12 +108,16 @@ public class TranslatorInterceptor extends EmptyInterceptor{
     }
 
     /**
-     * We need to delete the associated translations for entities that are being
-     * deleted from the database
+     * Touch AuditableEntity objects.
+     * Delete the associated translations for entities that are being deleted from the database.
      * @see org.hibernate.Interceptor onDelete
      */
     @Override
     public void onDelete(Object entity, Serializable id, Object[] state, String[] propertyNames, Type[] types) {
+        if (entity instanceof AuditableEntity) {
+            ((AuditableEntity) entity).touch();
+        }
+
         if (!ContentTranslationUtil.multilingualIsEnabled())
             return;
 
@@ -129,6 +131,7 @@ public class TranslatorInterceptor extends EmptyInterceptor{
 
 
     /**
+     * Touch AuditableEntity objects.
      * COPY-PASTED WITH {@link #onFlushDirty(Object, Serializable, Object[], Object[], String[], Type[])}
      * We need to insert into the translation store the initial translation for
      * the current entity
@@ -141,6 +144,11 @@ public class TranslatorInterceptor extends EmptyInterceptor{
      */
     @Override
     public boolean onSave(Object entity, Serializable id, Object[] state, String[] propertyNames, Type[] types) {
+
+        if (entity instanceof AuditableEntity) {
+            ((AuditableEntity) entity).touch();
+        }
+
         if (!ContentTranslationUtil.multilingualIsEnabled())
             return false;
 

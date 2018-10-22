@@ -4,7 +4,8 @@ import java.io.Serializable;
 
 import org.digijava.module.contentrepository.helper.ObjectReferringDocument;
 
-public class AmpGPINiSurveyResponseDocument extends ObjectReferringDocument implements Serializable, Cloneable {
+public class AmpGPINiSurveyResponseDocument extends ObjectReferringDocument implements Serializable, Cloneable,
+        AuditableEntity {
 
     private static final long serialVersionUID = 1515092862391006968L;
 
@@ -36,5 +37,12 @@ public class AmpGPINiSurveyResponseDocument extends ObjectReferringDocument impl
     @Override
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
+    }
+
+    @Override
+    public void touch() {
+        if (surveyResponse != null) {
+            surveyResponse.touch();
+        }
     }
 }

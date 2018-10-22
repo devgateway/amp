@@ -655,10 +655,7 @@ public class CompareActivityVersions extends DispatchAction {
             
             Date updatedTime = Calendar.getInstance().getTime();
             auxActivity.setAmpActivityGroup(auxActivityGroup);
-            auxActivity.setModifiedDate(updatedTime);
-            auxActivity.setUpdatedDate(updatedTime);
-            auxActivity.setModifiedBy(member);
-            
+
             auxActivity.setMergedActivity(true);
             auxActivity.setMergeSource1(vForm.getActivityOne());
             auxActivity.setMergeSource2(vForm.getActivityTwo());

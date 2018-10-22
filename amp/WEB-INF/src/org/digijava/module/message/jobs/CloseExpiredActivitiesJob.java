@@ -51,9 +51,8 @@ public class CloseExpiredActivitiesJob extends ConnectionCleaningJob implements 
     {       
         AmpActivityVersion prevVersion = oldActivity.getAmpActivityGroup().getAmpActivityLastVersion();
         oldActivity.getAmpActivityGroup().setAutoClosedOnExpiration(true);
-        oldActivity.setModifiedDate(Calendar.getInstance().getTime());
         oldActivity.setModifiedBy(member);
-        
+
         oldActivity.setApprovalStatus(newStatus);
         oldActivity.getCategories().remove(CategoryManagerUtil.getAmpCategoryValueFromList(CategoryConstants.ACTIVITY_STATUS_NAME, oldActivity.getCategories()));
         oldActivity.getCategories().add(CategoryManagerUtil.getAmpCategoryValueFromDb(closedProjectStatusCategoryValue));

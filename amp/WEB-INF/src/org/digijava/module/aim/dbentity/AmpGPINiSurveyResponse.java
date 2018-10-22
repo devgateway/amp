@@ -6,7 +6,7 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 
-public class AmpGPINiSurveyResponse implements Serializable, Cloneable {
+public class AmpGPINiSurveyResponse implements Serializable, Cloneable, AuditableEntity {
 
     private static final long serialVersionUID = -6656563271238273140L;
     
@@ -134,5 +134,12 @@ public class AmpGPINiSurveyResponse implements Serializable, Cloneable {
         }
         
         return false;
+    }
+
+    @Override
+    public void touch() {
+        if (ampGPINiSurvey != null) {
+            ampGPINiSurvey.touch();
+        }
     }
 }

@@ -13,7 +13,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
-public class AmpRegionalFunding implements Versionable, Serializable, Cloneable {
+public class AmpRegionalFunding implements Versionable, Serializable, Cloneable, AuditableEntity {
     //IATI-check: to be ignored
 //  @Interchangeable(fieldTitle = "ID", id = true)
     private Long ampRegionalFundingId;
@@ -245,5 +245,12 @@ public class AmpRegionalFunding implements Versionable, Serializable, Cloneable 
     public Object clone() throws CloneNotSupportedException {
         // TODO Auto-generated method stub
         return super.clone();
+    }
+
+    @Override
+    public void touch() {
+        if (activity != null) {
+            activity.touch();
+        }
     }
 }

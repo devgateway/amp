@@ -14,7 +14,7 @@ import org.digijava.module.aim.util.Output;
  * @author Irakli Kobiashvili
  *
  */
-public class AmpActivityLocation implements Versionable,Serializable, Cloneable {
+public class AmpActivityLocation implements Versionable, Serializable, Cloneable, AuditableEntity {
     //IATI-check: should be exported.
 //  @Interchangeable(fieldTitle="ID", id=true)
     private Long id;
@@ -120,5 +120,12 @@ public class AmpActivityLocation implements Versionable,Serializable, Cloneable 
     @Override
     protected Object clone() throws CloneNotSupportedException {
         return super.clone();
+    }
+
+    @Override
+    public void touch() {
+        if (activity != null) {
+            activity.touch();
+        }
     }
 }

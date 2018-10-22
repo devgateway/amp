@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.util.Output;
 
-public class AmpActivityBudgetStructure implements Versionable, Serializable, Cloneable{
+public class AmpActivityBudgetStructure implements Versionable, Serializable, Cloneable, AuditableEntity {
     
     //TODO: not expected to be used in IATI. commenting for now
     private Long ampActivityBudgetStructureId;
@@ -109,7 +109,12 @@ public class AmpActivityBudgetStructure implements Versionable, Serializable, Cl
             return false;
         return true;
     }
-    
-    
 
+
+    @Override
+    public void touch() {
+        if (activity != null) {
+            activity.touch();
+        }
+    }
 }

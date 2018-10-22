@@ -20,7 +20,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 
-public class AmpFundingDetail implements Serializable, Cloneable, FundingInformationItem {
+public class AmpFundingDetail implements Serializable, Cloneable, FundingInformationItem, AuditableEntity {
 
     public static class FundingDetailComparatorByTransactionDateAsc implements Comparator<AmpFundingDetail>, Serializable {
 
@@ -657,5 +657,12 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
 
     public void setCheckSum(Long checkSum) {
         this.checkSum = checkSum;
+    }
+
+    @Override
+    public void touch() {
+        if (ampFundingId != null) {
+            ampFundingId.touch();
+        }
     }
 }

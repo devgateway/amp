@@ -8,7 +8,7 @@ import org.apache.log4j.Logger;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.util.Output;
 
-public class AmpAnnualProjectBudget implements Serializable, Versionable, Cloneable, Comparable {
+public class AmpAnnualProjectBudget implements Serializable, Versionable, Cloneable, Comparable, AuditableEntity {
 
     //IATI-check: to be ignored
     private static final Logger logger = Logger.getLogger(AmpAnnualProjectBudget.class);
@@ -129,5 +129,12 @@ public class AmpAnnualProjectBudget implements Serializable, Versionable, Clonea
 
     public void setAmpCurrencyId(AmpCurrency ampCurrencyId) {
         this.ampCurrencyId = ampCurrencyId;
+    }
+
+    @Override
+    public void touch() {
+        if (activity != null) {
+            activity.touch();
+        }
     }
 }

@@ -11,7 +11,7 @@ import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.util.Output;
 
 @TranslatableClass (displayName="ActivityContact")
-public class AmpActivityContact implements Versionable, Comparable, Serializable, Cloneable {
+public class AmpActivityContact implements Versionable, Comparable, Serializable, Cloneable, AuditableEntity {
     
     private Long id;
     
@@ -122,5 +122,12 @@ public class AmpActivityContact implements Versionable, Comparable, Serializable
     @Override
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
+    }
+
+    @Override
+    public void touch() {
+        if (activity != null) {
+            activity.touch();
+        }
     }
 }

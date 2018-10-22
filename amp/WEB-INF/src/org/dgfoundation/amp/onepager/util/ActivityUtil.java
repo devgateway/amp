@@ -279,9 +279,6 @@ public class ActivityUtil {
         Date updatedDate = Calendar.getInstance().getTime();
         if (a.getCreatedDate() == null)
             a.setCreatedDate(updatedDate);
-        a.setUpdatedDate(updatedDate);
-        a.setModifiedDate(updatedDate);
-        a.setModifiedBy(ampCurrentMember);
 
         if (context.isUpdateActivityStatus()) {
             setActivityStatus(ampCurrentMember, draft, a, oldA, newActivity, context.isRejected());

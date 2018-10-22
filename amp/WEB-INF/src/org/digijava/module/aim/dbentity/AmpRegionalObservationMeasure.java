@@ -9,7 +9,7 @@ import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 @TranslatableClass (displayName = "Regional Observation Measure")
-public class AmpRegionalObservationMeasure implements Serializable, Cloneable {
+public class AmpRegionalObservationMeasure implements Serializable, Cloneable, AuditableEntity {
     //IATI-check: to be ignored
 //  @Interchangeable(fieldTitle="ID")
     private Long ampRegionalObservationMeasureId;
@@ -73,5 +73,12 @@ public class AmpRegionalObservationMeasure implements Serializable, Cloneable {
             aux.actors = null;
         
         return aux;
+    }
+
+    @Override
+    public void touch() {
+        if (regionalObservation != null) {
+            regionalObservation.touch();
+        }
     }
 }

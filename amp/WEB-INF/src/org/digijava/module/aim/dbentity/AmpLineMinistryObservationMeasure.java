@@ -9,7 +9,7 @@ import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 @TranslatableClass (displayName = "Line Ministry Observation Measure")
-public class AmpLineMinistryObservationMeasure implements Serializable, Cloneable {
+public class AmpLineMinistryObservationMeasure implements Serializable, Cloneable, AuditableEntity {
     //IATI-check: to be ignored
 //  @Interchangeable(fieldTitle="ID")
     private Long ampLineMinistryObservationMeasureId;
@@ -74,5 +74,12 @@ public class AmpLineMinistryObservationMeasure implements Serializable, Cloneabl
             aux.actors = null;
         
         return aux;
+    }
+
+    @Override
+    public void touch() {
+        if (lineMinistryObservation != null) {
+            lineMinistryObservation.touch();
+        }
     }
 }

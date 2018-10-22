@@ -270,8 +270,6 @@ public class EditActivity extends Action {
                         String strDateUpdated = request.getParameter("simulateUpdateDate");
                         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                         Date dateUpdated = format.parse(strDateUpdated);
-                        activity.setUpdatedDate(dateUpdated);
-                        activity.setModifiedDate(dateUpdated);
                         if (tm != null && tm.getMemberId() != null) {
                             AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMemberCached(tm.getMemberId());
                             activity.setModifiedBy(teamMember);

@@ -14,7 +14,7 @@ import java.util.List;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.Output;
 
-public class AmpComments implements Serializable, Cloneable, Versionable {
+public class AmpComments implements Serializable, Cloneable, Versionable, AuditableEntity {
     
     private Long ampCommentId;
     private AmpActivityVersion ampActivityId;
@@ -178,5 +178,12 @@ public class AmpComments implements Serializable, Cloneable, Versionable {
         aux.ampActivityId = newActivity;
         aux.ampCommentId = null;
         return aux;
+    }
+
+    @Override
+    public void touch() {
+        if (ampActivityId != null) {
+            ampActivityId.touch();
+        }
     }
 }

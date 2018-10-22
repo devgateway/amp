@@ -884,11 +884,7 @@ public class IndicatorUtil {
                 tmpGroup.setAmpActivityLastVersion(act);
                 session.saveOrUpdate(tmpGroup);
                 act.setAmpActivityGroup(tmpGroup);
-                Date updatedDate = Calendar.getInstance().getTime();
-                act.setUpdatedDate(updatedDate);
-                act.setModifiedDate(updatedDate);
-                act.setModifiedBy(member);
-                
+
                 org.dgfoundation.amp.onepager.util.ActivityUtil.saveContacts(act, session,false);
                 Set<IndicatorActivity> indicators=act.getIndicators();
                 session.save(act);

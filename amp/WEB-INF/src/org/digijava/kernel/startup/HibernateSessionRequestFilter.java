@@ -44,7 +44,7 @@ public class HibernateSessionRequestFilter implements Filter {
             executeInHibernateWrapper(request, response, chain);
         } finally {
             if (request instanceof HttpServletRequest) {
-                DocumentManagerUtil.closeJCRSessions((HttpServletRequest) request);
+                DocumentManagerUtil.logoutJcrSessions((HttpServletRequest) request);
             }
         }
     }

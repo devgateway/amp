@@ -157,7 +157,11 @@ public class GisEndPoints implements ErrorReportingEndpoint {
         
         for (; start <= end; start++) {
             AmpStructure structure = al.get(start);
-            f.features.add(LocationService.buildFeatureGeoJSON(structure));
+            FeatureGeoJSON fgj = LocationService.buildFeatureGeoJSON(structure);
+            if (fgj != null) {
+                f.features.add(fgj);
+            }
+
         }
         return f;
     }

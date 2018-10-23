@@ -261,15 +261,15 @@ public class AmpARFilterConverter {
     
     /** adds programs and national objectives filters */
     private void addProgramAndNationalObjectivesFilters() {
-        addMultiLevelFilter(arFilter.getSelectedPrimaryPrograms(), ColumnConstants.PRIMARY_PROGRAM);
+        addMultiLevelFilter(arFilter.getSelectedPrimaryPrograms(), ColumnConstants.PRIMARY_PROGRAM_LEVEL_1);
 
-        addMultiLevelFilter(arFilter.getSelectedSecondaryPrograms(), ColumnConstants.SECONDARY_PROGRAM);
+        addMultiLevelFilter(arFilter.getSelectedSecondaryPrograms(), ColumnConstants.SECONDARY_PROGRAM_LEVEL_1);
 
         //TODO: how to detect tertiary programs
         //addFilter(arFilter.get(), 
         //      (arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_TERTIARY_PROGRAMS : ColumnConstants.TERTIARY_PROGRAM), entityType);
 
-        addMultiLevelFilter(arFilter.getSelectedNatPlanObj(), ColumnConstants.NATIONAL_PLANNING_OBJECTIVES);
+        addMultiLevelFilter(arFilter.getSelectedNatPlanObj(), ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1);
         
         if (!arFilter.isPledgeFilter()) {
             //TBD national plan objectives levels 1-8?
@@ -285,17 +285,11 @@ public class AmpARFilterConverter {
     }
 
     private String findLevelColumnName(String columnName, AmpTheme ampTheme) {
-        AmpTheme current = ampTheme;
-        int depth = 0;
-        while (current.getParentThemeId() != null) {
-            current = current.getParentThemeId();
-            depth++;
-        }
-        String levelColumnName = columnName + " Level " + depth;
         if (arFilter.isPledgeFilter()) {
-            levelColumnName = AmpFiltersConverter.DONOR_COLUMNS_TO_PLEDGE_COLUMNS.getOrDefault(levelColumnName, levelColumnName);
+            return AmpFiltersConverter.DONOR_COLUMNS_TO_PLEDGE_COLUMNS.getOrDefault(columnName, columnName);
         }
-        return levelColumnName;
+        
+        return columnName;
     }
     
     private void addLocationFilters() {

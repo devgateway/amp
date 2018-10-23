@@ -7,13 +7,17 @@ package org.dgfoundation.amp.onepager.components;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.event.Broadcast;
+import org.apache.wicket.extensions.markup.html.form.select.IOptionRenderer;
+import org.apache.wicket.extensions.markup.html.form.select.SelectOption;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
@@ -29,6 +33,7 @@ import org.dgfoundation.amp.onepager.components.features.tables.AmpComponentForm
 import org.dgfoundation.amp.onepager.components.fields.AmpCollectionValidatorField;
 import org.dgfoundation.amp.onepager.components.fields.AmpComponentField;
 import org.dgfoundation.amp.onepager.components.fields.AmpDatePickerFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpStyledSelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpSimpleValidatorField;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
@@ -52,7 +57,7 @@ public class AmpFundingAmountComponent<T> extends Panel {
 
     private AmpTextFieldPanel<Double> amount;
     Boolean isMTEFProjection;
-    private AmpSelectFieldPanel<AmpCurrency> currency;
+    private AmpStyledSelectFieldPanel<AmpCurrency> currency;
     private Component date;
     private final IModel<List<KeyValue>> mtefYearsChoices = new AbstractReadOnlyModel<List<KeyValue>>() {
         private List<KeyValue> list = null;
@@ -139,28 +144,61 @@ public class AmpFundingAmountComponent<T> extends Panel {
             amount.getTextContainer().add(new AttributeModifier("size", new Model<String>("9")));
         else
             amount.getTextContainer().add(new AttributeModifier("size", new Model<String>(amountSize)));
-        
+
         add(amount);
-        
-        
+
+
+        PropertyModel<AmpCurrency> currentCurrency = new PropertyModel<AmpCurrency>(model, propertyCurrency);
+        List<AmpCurrency> activeCurrencies = CurrencyUtil.getUsableNonVirtualCurrencies();
+        boolean isCurrencyPresentInList = activeCurrencies.stream()
+                .anyMatch(curr -> curr.getAmpCurrencyId().equals(currentCurrency.getObject().getAmpCurrencyId()));
+
+        if (!isCurrencyPresentInList) {
+            activeCurrencies.add(currentCurrency.getObject());
+            activeCurrencies.sort(Comparator.comparing(AmpCurrency::getCurrencyCode));
+        }
+
         AbstractReadOnlyModel<List<AmpCurrency>> currencyList = new AbstractReadOnlyModel<List<AmpCurrency>>() {
             @Override
             public List<AmpCurrency> getObject() {
-                return (List<AmpCurrency>) CurrencyUtil.getUsableNonVirtualCurrencies() ;
+                return activeCurrencies;
             }
         };
-        
-        currency = new AmpSelectFieldPanel<AmpCurrency>("currency",
+
+        currency = new AmpStyledSelectFieldPanel<AmpCurrency>("currency",
                 new PropertyModel<AmpCurrency>(model, propertyCurrency),
-                currencyList, fmCurrency, hideLabel, false, null, hideNewLine) {
+                currencyList, fmCurrency, hideLabel, new IOptionRenderer<AmpCurrency>() {
+            @Override
+            public String getDisplayValue(AmpCurrency object) {
+                return object.getCurrencyCode();
+            }
+
+            @Override
+            public IModel<AmpCurrency> getModel(AmpCurrency value) {
+                return Model.of(value);
+            }
+        }, hideNewLine) {
+
             @Override
             protected void onAjaxOnUpdate(AjaxRequestTarget target) {
                 onFundingDetailChanged(target);
             }
+
+            @Override
+            protected void customizeOption(SelectOption option, String text, IModel<? extends AmpCurrency> model) {
+                super.customizeOption(option, text, model);
+
+                if (!model.getObject().isActive()) {
+                    option.add(new AttributeAppender("style", "color: gray;"));
+                }
+            }
         };
-        currency.getChoiceContainer().setRequired(true);
-        currency.getChoiceContainer().add(new AttributeModifier("class", "dropdwn_currency"));
+
+        currency.getSelectComponent().setRequired(true);
+        currency.getSelectComponent().add(new AttributeModifier("class", "dropdwn_currency"));
         add(currency);
+
+
         if (!isMTEFProjection) {
             AmpDatePickerFieldPanel datetmp = new AmpDatePickerFieldPanel(
                     "date", new PropertyModel<Date>(model, propertyDate),
@@ -236,7 +274,7 @@ public class AmpFundingAmountComponent<T> extends Panel {
         return amount;
     }
 
-    public AmpSelectFieldPanel<AmpCurrency> getCurrency() {
+    public AmpStyledSelectFieldPanel<AmpCurrency> getCurrency() {
         return currency;
     }
 

@@ -1,19 +1,14 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import org.dgfoundation.amp.algo.AmpCollections;
-import org.digijava.kernel.ampapi.endpoints.activity.preview.PreviewActivityFunding;
-import org.digijava.kernel.ampapi.endpoints.activity.preview.PreviewActivityService;
-import org.digijava.kernel.ampapi.endpoints.activity.utils.AmpMediaType;
-import org.digijava.kernel.ampapi.endpoints.activity.utils.ApiCompat;
-import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
-import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
-import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
-import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.dbentity.AmpActivityFields;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.TeamMember;
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.toMap;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -25,18 +20,20 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
-import static java.util.function.Function.identity;
-import static java.util.stream.Collectors.toMap;
+import org.dgfoundation.amp.algo.AmpCollections;
+import org.digijava.kernel.ampapi.endpoints.activity.preview.PreviewActivityFunding;
+import org.digijava.kernel.ampapi.endpoints.activity.preview.PreviewActivityService;
+import org.digijava.kernel.ampapi.endpoints.activity.utils.AmpMediaType;
+import org.digijava.kernel.ampapi.endpoints.activity.utils.ApiCompat;
+import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
+import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
+import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
+import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.request.TLSUtils;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.TeamMember;
 
 
 /**
@@ -136,7 +133,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8", AmpMediaType.POSSIBLE_VALUES_V2_JSON})
     @ApiMethod(authTypes = AuthRule.IN_WORKSPACE, id = "getValues", ui = false)
     public Response getPossibleValuesFlat(@PathParam("fieldName") String fieldName) {
-        List<PossibleValue> possibleValues = possibleValuesFor(fieldName);
+        List<PossibleValue> possibleValues = InterchangeUtils.possibleValuesFor(fieldName);
         MediaType responseType = MediaType.APPLICATION_JSON_TYPE;
         if (AmpMediaType.POSSIBLE_VALUES_V2_JSON.equals(ApiCompat.getRequestedMediaType())) {
             responseType = AmpMediaType.POSSIBLE_VALUES_V2_JSON_TYPE;
@@ -232,7 +229,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
             response = fields.stream()
                     .filter(Objects::nonNull)
                     .distinct()
-                    .collect(toMap(identity(), this::possibleValuesFor));
+                    .collect(toMap(identity(), InterchangeUtils::possibleValuesFor));
         }
         MediaType responseType = MediaType.APPLICATION_JSON_TYPE;
         if (AmpMediaType.POSSIBLE_VALUES_V2_JSON.equals(ApiCompat.getRequestedMediaType())) {
@@ -292,54 +289,10 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "getIdValues", ui = false)
     public Response getFieldValuesById(Map<String, List<Long>> fieldIds) {
-        Map<String, List<FieldIdValue>> response = new HashMap<>();
-        
-        if (fieldIds != null) {
-            for (Entry<String, List<Long>> field : fieldIds.entrySet()) {
-                String fieldName = field.getKey();
-                List<PossibleValue> allValues = possibleValuesFor(fieldName).stream()
-                        .map(PossibleValue::flattenPossibleValues)
-                        .flatMap(List::stream)
-                        .collect(Collectors.toList());
-                
-                Map<Object, PossibleValue> allValuesMap = allValues.stream()
-                        .collect(Collectors.toMap(PossibleValue::getId, identity()));
-                
-                List<PossibleValue> possibleValue = allValues.stream()
-                        .filter(pv -> field.getValue().contains(pv.getId()))
-                        .collect(Collectors.toList());
-                
-                List<FieldIdValue> idValues = possibleValue.stream()
-                        .map(pv -> new FieldIdValue((Long) pv.getId(), pv.getValue(), pv.getTranslatedValues(),
-                                getAncestorValues(allValuesMap, pv.getId(), new ArrayList<>())))
-                        .collect(Collectors.toList());
-                
-                response.put(fieldName, idValues);
-            }
-        }
-        
+        Map<String, List<FieldIdValue>> response = InterchangeUtils.getIdValues(fieldIds);
         return Response.ok(response, MediaType.APPLICATION_JSON_TYPE).build();
     }
 
-    private List<String> getAncestorValues(Map<Object, PossibleValue> allValuesMap, Object id, List<String> values) {
-        PossibleValue obj = allValuesMap.get(id);
-        List<String> ancestorValues = new ArrayList<>(values);
-        if (obj.getExtraInfo() instanceof ParentExtraInfo) {
-            ParentExtraInfo parentExtraInfo = (ParentExtraInfo) obj.getExtraInfo();
-            if (parentExtraInfo.getParentId() != null) {
-                ancestorValues.addAll(getAncestorValues(allValuesMap, parentExtraInfo.getParentId(), ancestorValues));
-            }
-            ancestorValues.add(obj.getValue());
-            return ancestorValues;
-        } 
-        
-        return null;
-    }
-
-    private List<PossibleValue> possibleValuesFor(String fieldName) {
-        return PossibleValuesEnumerator.INSTANCE.getPossibleValuesForField(fieldName, AmpActivityFields.class, null);
-    }
-    
     /**
      * Provides full set of available fields and their settings/rules in a hierarchical structure.
      * @return JSON with fields information

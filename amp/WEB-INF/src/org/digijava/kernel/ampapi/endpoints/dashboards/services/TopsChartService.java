@@ -140,8 +140,8 @@ public class TopsChartService {
                 name = DashboardConstants.TOP_DONOR_GROUPS;
                 break;
             case "NDD":
-                setColumn(ColumnConstants.SECONDARY_PROGRAM);
-                applyFilter(FilterUtils.INSTANCE.idFromColumnName(ColumnConstants.SECONDARY_PROGRAM));
+                setColumn(ColumnConstants.SECONDARY_PROGRAM_LEVEL_1);
+                applyFilter(FilterUtils.INSTANCE.idFromColumnName(ColumnConstants.SECONDARY_PROGRAM_LEVEL_1));
                 name = DashboardConstants.PEACE_BUILDING_AND_STATE_BUILDING_GOALS;
                 title = TranslatorWorker.translateText(DashboardConstants.PEACE_BUILDING_AND_STATE_BUILDING_GOALS);
                 this.limit = 99999; // This chart has no limit of categories (no 'Others').

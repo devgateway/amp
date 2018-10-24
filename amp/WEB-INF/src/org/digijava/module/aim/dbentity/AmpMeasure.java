@@ -62,5 +62,9 @@ public class AmpMeasure extends AuditedEntity implements Serializable, Cloneable
         // TODO Auto-generated method stub
         return super.clone();
     }
-    
+
+    @Override
+    public Long getId() {
+        return ampMeasureId;
+    }
 }

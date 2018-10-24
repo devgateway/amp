@@ -91,5 +91,9 @@ public class CrDocumentNodeAttributes extends ObjectReferringDocument {
         
         return docNodeAtt;
     }
-    
+
+    @Override
+    public Long getId() {
+        throw new IllegalStateException("Cannot be used until CrDocumentNodeAttributes uses Long as id.");
+    }
 }

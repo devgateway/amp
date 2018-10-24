@@ -73,4 +73,9 @@ public class AmpRegionalObservationMeasure extends AuditedEntity implements Seri
         
         return aux;
     }
+
+    @Override
+    public Long getId() {
+        return ampRegionalObservationMeasureId;
+    }
 }

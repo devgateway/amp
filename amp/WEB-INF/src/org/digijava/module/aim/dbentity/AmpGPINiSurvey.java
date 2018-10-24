@@ -61,4 +61,8 @@ public class AmpGPINiSurvey extends AuditedEntity implements Serializable, Clone
         return super.clone();
     }
 
+    @Override
+    public Long getId() {
+        return ampGPINiSurveyId;
+    }
 }

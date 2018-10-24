@@ -116,6 +116,8 @@ import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
+import org.dgfoundation.amp.metamodel.AmpMetaModel;
+import org.dgfoundation.amp.metamodel.MetaModelPrinter;
 import org.digijava.module.aim.util.AuditLoggerUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -1181,6 +1183,11 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         
         AmpActivityModel a = (AmpActivityModel) am;
         AmpActivityVersion activity = am.getObject();
+
+        System.out.println("-----------------------------------------");
+        new MetaModelPrinter().print(activity, new AmpMetaModel().activity());
+        System.out.println("-----------------------------------------");
+
         Long oldId = activity.getAmpActivityId();
         Boolean wasDraft = activity.getDraft();
         AmpTeamMember modifiedBy = activity.getModifiedBy();

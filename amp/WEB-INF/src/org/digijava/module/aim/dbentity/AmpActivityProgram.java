@@ -112,4 +112,9 @@ public class AmpActivityProgram extends AuditedEntity implements Versionable, Se
     protected Object clone() throws CloneNotSupportedException {
     return super.clone();
     }
+
+    @Override
+    public Long getId() {
+        return ampActivityProgramId;
+    }
 }

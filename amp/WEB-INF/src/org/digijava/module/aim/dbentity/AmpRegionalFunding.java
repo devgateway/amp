@@ -250,4 +250,9 @@ public class AmpRegionalFunding extends AuditedEntity implements Versionable, Se
         // TODO Auto-generated method stub
         return super.clone();
     }
+
+    @Override
+    public Long getId() {
+        return ampRegionalFundingId;
+    }
 }

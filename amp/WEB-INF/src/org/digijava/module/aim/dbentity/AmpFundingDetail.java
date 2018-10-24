@@ -596,4 +596,9 @@ public class AmpFundingDetail extends AuditedEntity implements Serializable, Clo
     public void setCheckSum(Long checkSum) {
         this.checkSum = checkSum;
     }
+
+    @Override
+    public Long getId() {
+        return ampFundDetailId;
+    }
 }

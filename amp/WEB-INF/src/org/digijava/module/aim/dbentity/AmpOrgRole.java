@@ -272,5 +272,9 @@ public class AmpOrgRole extends AuditedEntity implements Comparable<AmpOrgRole>,
     public void setGpiNiSurveys(Set<AmpGPINiSurvey> gpiNiSurveys) {
         this.gpiNiSurveys = gpiNiSurveys;
     }
-    
-}   
+
+    @Override
+    public Long getId() {
+        return ampOrgRoleId;
+    }
+}

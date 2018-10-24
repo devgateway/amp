@@ -135,4 +135,9 @@ public class AmpGPINiSurveyResponse extends AuditedEntity implements Serializabl
         
         return false;
     }
+
+    @Override
+    public Long getId() {
+        return ampGPINiSurveyResponseId;
+    }
 }

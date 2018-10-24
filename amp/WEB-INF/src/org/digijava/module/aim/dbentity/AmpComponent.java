@@ -300,4 +300,9 @@ public class AmpComponent extends AuditedEntity implements Serializable, Compara
     public String toString() {
         return title;
     }
+
+    @Override
+    public Long getId() {
+        return ampComponentId;
+    }
 }

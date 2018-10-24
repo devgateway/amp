@@ -271,5 +271,9 @@ public class AmpFundingMTEFProjection extends AuditedEntity implements Cloneable
         public void setCheckSum(Long checkSum) {
             this.checkSum = checkSum;
         }
-        
+
+    @Override
+    public Long getId() {
+        return ampFundingMTEFProjectionId;
+    }
 }

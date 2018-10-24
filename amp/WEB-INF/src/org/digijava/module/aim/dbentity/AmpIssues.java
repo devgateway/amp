@@ -198,4 +198,9 @@ public class AmpIssues extends AuditedEntity implements Serializable, Versionabl
         // TODO Auto-generated method stub
         return super.clone();
     }
+
+    @Override
+    public Long getId() {
+        return ampIssueId;
+    }
 }

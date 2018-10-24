@@ -111,7 +111,9 @@ public class AmpActivityBudgetStructure extends AuditedEntity implements Version
             return false;
         return true;
     }
-    
-    
 
+    @Override
+    public Long getId() {
+        return ampActivityBudgetStructureId;
+    }
 }

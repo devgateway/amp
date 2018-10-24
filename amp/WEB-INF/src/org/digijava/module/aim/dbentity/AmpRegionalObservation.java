@@ -205,4 +205,9 @@ public class AmpRegionalObservation extends AuditedEntity implements Serializabl
         }
         
     }
+
+    @Override
+    public Long getId() {
+        return ampRegionalObservationId;
+    }
 }

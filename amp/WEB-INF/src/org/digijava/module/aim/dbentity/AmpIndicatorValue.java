@@ -233,5 +233,9 @@ public class AmpIndicatorValue extends AuditedEntity implements Serializable, Cl
         //r.setSubgroup(subgroup);
     }
 
+    @Override
+    public Long getId() {
+        return indValId;
+    }
 }
 

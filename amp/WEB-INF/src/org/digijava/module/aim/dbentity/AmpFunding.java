@@ -883,4 +883,9 @@ public class AmpFunding extends AuditedEntity implements Serializable, Versionab
     public AmpCategoryValue getConcessionalityLevel() {
         return this.concessionalityLevel;
     }
+
+    @Override
+    public Long getId() {
+        return ampFundingId;
+    }
 }

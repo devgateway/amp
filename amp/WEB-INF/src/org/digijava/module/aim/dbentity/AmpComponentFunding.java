@@ -247,4 +247,8 @@ public class AmpComponentFunding extends AuditedEntity implements Cloneable, Ser
         return super.clone();
     }
 
+    @Override
+    public Long getId() {
+        return ampComponentFundingId;
+    }
 }

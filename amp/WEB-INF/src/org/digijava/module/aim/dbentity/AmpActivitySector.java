@@ -123,4 +123,9 @@ public class AmpActivitySector extends AuditedEntity implements Versionable, Ser
         // TODO Auto-generated method stub
         return super.clone();
     }
+
+    @Override
+    public Long getId() {
+        return ampActivitySectorId;
+    }
 }

@@ -327,7 +327,7 @@ public class SettingsDefinitionsEndpoint implements ErrorReportingEndpoint {
      * Returns definitions for the following settings: resource manager.
      * </p>
      * <h3>Sample Output:</h3> 
-     * 
+     *
      * <pre>
      *  [
      *      {
@@ -365,8 +365,8 @@ public class SettingsDefinitionsEndpoint implements ErrorReportingEndpoint {
      *              }
      *      }
      *  ]
-     * 
-     * 
+     *
+     *
      * </pre>
      * 
      * @return a list of setting definitions
@@ -464,7 +464,7 @@ public class SettingsDefinitionsEndpoint implements ErrorReportingEndpoint {
     public final List<SettingField> getSettingDefinitionsForGPIReports() {
         return Arrays.asList(getCurrencyField(true), getCalendarField(), getCalendarCurrenciesField());
     }
-    
+
     @Override
     public Class getErrorsClass() {
         return SettingsDefinitionsErrors.class;

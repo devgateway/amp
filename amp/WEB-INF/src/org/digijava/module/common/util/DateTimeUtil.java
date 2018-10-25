@@ -236,5 +236,9 @@ public class DateTimeUtil {
         sdf.setLenient(false);
         return sdf;
     }
+    
+    public static LocalDate getLocalDate(Date date) {
+        return (new java.sql.Date(date.getTime())).toLocalDate();
+    }
 
 }

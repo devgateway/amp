@@ -199,6 +199,9 @@ font-weight : bold;
 <c:set var="keywordstrn">
 	<digi:trn jsFriendly="true">Keywords</digi:trn>
 </c:set>
+<c:set var="keywordModetrn">
+    <digi:trn jsFriendly="true">Keyword Mode</digi:trn>
+</c:set>
 
 
 <script type="text/javascript">
@@ -287,6 +290,10 @@ font-weight : bold;
 	function getkeywordsext(){
 		return '${labelstrn}';
 	}
+	
+	function getkeywordModeext(){
+        return '${keywordModetrn}';
+    }
 </script>
 <c:set var="translation1">
 	<digi:trn jsFriendly="true">Are you sure you want to delete this document ?</digi:trn>
@@ -315,9 +322,6 @@ font-weight : bold;
 </c:set>
 <c:set var="translation_upload_failed_too_big">
 	<digi:trn>${uploadFailedTooBigMsg}</digi:trn>
-</c:set>
-<c:set var="translation_url_format">
-			<digi:trn>Please specify correct Url !</digi:trn>
 </c:set>
 
 <c:set var="translation_validation_title_chars">
@@ -1433,7 +1437,7 @@ function validateAddDocument() {
 	// This code was commented. See https://jira.dgfoundation.org/browse/AMP-15171 for details
 	// var regexp	= new RegExp("[a-zA-Z0-9_��������������������������������������%&' ()]+");
 	var regexp	= new RegExp("[a-zA-Z0-9_��������������������������������������!@#$%^&' ()]+");
-	var urlFormat = new RegExp('(http|ftp|https)://[a-z0-9\-_]+(\.[a-z0-9\-_]+)+([a-z0-9\-\.,@\?^=%&;:/~\+#]*[a-z0-9\-@\?^=%&;/~\+#])?', 'i');
+
 	var msg	= '';	
 	if (document.forms['crDocumentManagerForm'].docTitle.value == '') {
 		msg = msg + "${translation_validation_title}"+'<br>';
@@ -1459,12 +1463,6 @@ function validateAddDocument() {
 		}
 	} else if(document.forms['crDocumentManagerForm'].webLink.value == '') { //adding url
 		msg = msg + "${translation_validation_url}"+'<br>' ;
-	} else {
-		var enteredWebLink = document.forms['crDocumentManagerForm'].webLink.value;
-		var found	= urlFormat.test(enteredWebLink); //urlFormat.exec(enteredWebLink);//		
-		if (found == false) {
-			msg = msg + "${translation_url_format}"+'<br>' ;
-		}
 	}
     var fileData = document.forms['crDocumentManagerForm'].fileData;
     if (fileData && fileData.value != '' && fileData.files[0].size > ${uploadMaxFileSize}) {
@@ -1792,6 +1790,7 @@ function getTemplateLabelsCb(formName, infoDivId) {
 			labels: "<digi:trn>Labels</digi:trn>",
 			filters: "<digi:trn>Filters</digi:trn>",
 			keywords: "<digi:trn>Keywords</digi:trn>",
+			mode: "<digi:trn>Mode</digi:trn>",
 			apply: "<digi:trn>Apply</digi:trn>",
 			close: "<digi:trn>Close</digi:trn>"
 	};

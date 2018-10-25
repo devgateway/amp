@@ -199,14 +199,6 @@ public class Reports implements ErrorReportingEndpoint {
         return AmpReportsSchema.getRenderedReport(spec);
     }
     
-    @GET
-    @Path("/report/{report_id}/result")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    public final GeneratedReport getReportResult(@PathParam("report_id") Long reportId) {
-        ReportSpecificationImpl spec = ReportsUtil.getReport(reportId);
-        return EndpointUtils.runReport(spec);
-    }
-
     /**
      * Provides a report preview.
      * </br>

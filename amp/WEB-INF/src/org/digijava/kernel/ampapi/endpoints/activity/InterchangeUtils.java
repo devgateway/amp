@@ -49,6 +49,9 @@ import org.hibernate.FlushMode;
 import org.hibernate.Session;
 
 import javax.ws.rs.core.PathSegment;
+
+import static java.util.function.Function.identity;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
@@ -64,6 +67,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 /**
  * Activity Import/Export Utility methods 
@@ -891,4 +896,67 @@ public class InterchangeUtils {
         return !(project.getTeam().getIsolated() && (tm == null || !tm.getTeamId().equals(project.getTeam().
                 getAmpTeamId())));
     }
+
+    /**
+     * Get values for requested ids of fields
+     * 
+     * @param fieldIds
+     * @return
+     */
+    public static Map<String, List<FieldIdValue>> getIdValues(Map<String, List<Long>> fieldIds) {
+        Map<String, List<FieldIdValue>> response = new HashMap<>();
+        
+        if (fieldIds != null) {
+            for (Entry<String, List<Long>> field : fieldIds.entrySet()) {
+                String fieldName = field.getKey();
+                List<Long> ids = field.getValue();
+                
+                List<PossibleValue> allValues = possibleValuesFor(fieldName).stream()
+                        .map(PossibleValue::flattenPossibleValues)
+                        .flatMap(List::stream)
+                        .collect(Collectors.toList());
+                
+                Map<Object, PossibleValue> allValuesMap = allValues.stream()
+                        .collect(Collectors.toMap(PossibleValue::getId, identity()));
+                               
+                List<FieldIdValue> idValues = ids.stream()
+                        .map(id -> getIdValue(id, allValuesMap))
+                        .collect(Collectors.toList());
+                
+                response.put(fieldName, idValues);
+            }
+        }
+        return response;
+    }
+    
+    private static FieldIdValue getIdValue(Long id, Map<Object, PossibleValue> allValuesMap) {
+        if (allValuesMap.containsKey(id)) {
+            PossibleValue pv = allValuesMap.get(id);
+            return new FieldIdValue((Long) pv.getId(), pv.getValue(), pv.getTranslatedValues(),
+                    getAncestorValues(allValuesMap, pv.getId(), new ArrayList<>()));
+        }
+        
+        return new FieldIdValue(id);
+    }
+
+    private static List<String> getAncestorValues(Map<Object, PossibleValue> allValuesMap, Object id, 
+            List<String> values) {
+        PossibleValue obj = allValuesMap.get(id);
+        List<String> ancestorValues = new ArrayList<>(values);
+        if (obj.getExtraInfo() instanceof ParentExtraInfo) {
+            ParentExtraInfo parentExtraInfo = (ParentExtraInfo) obj.getExtraInfo();
+            if (parentExtraInfo.getParentId() != null) {
+                ancestorValues.addAll(getAncestorValues(allValuesMap, parentExtraInfo.getParentId(), ancestorValues));
+            }
+            ancestorValues.add(obj.getValue());
+            return ancestorValues;
+        } 
+        
+        return null;
+    }
+    
+    public static List<PossibleValue> possibleValuesFor(String fieldName) {
+        return PossibleValuesEnumerator.INSTANCE.getPossibleValuesForField(fieldName, AmpActivityFields.class, null);
+    }
+    
 }

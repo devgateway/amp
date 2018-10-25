@@ -171,6 +171,10 @@ public class AmpCurrency implements Serializable, Comparable<AmpCurrency>, Ident
             throw new RuntimeException("Error retriving currency exchange rate for "+ currencyCode,ex);
         }
     }
+
+    public boolean isActive() {
+        return this.getActiveFlag() != 0;
+    }
     /**
      * @return the calendar
      */

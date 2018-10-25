@@ -6,7 +6,6 @@ package org.dgfoundation.amp.onepager.components.features.sections;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -31,14 +30,11 @@ import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.dbentity.AmpStructureCoordinate;
 import org.digijava.module.aim.dbentity.AmpStructureType;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.StructuresUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -219,8 +215,10 @@ public class AmpStructuresFormSectionFeature extends
                             value.set("value", v.getValue());
                             structureColors.add(value);
                         }
-                        
+
                         data.set("structureColors", structureColors);
+                        data.set("structure", getJsonBeanFromStructureModel(structureModel));
+
                         target.appendJavaScript("gisPopup($('#" + this.getMarkupId() + "')[0], '" + data.asJsonString()
                                 + "'); return false;");
                     }
@@ -319,6 +317,30 @@ public class AmpStructuresFormSectionFeature extends
        add(addbutton);
         
         
+    }
+
+    public JsonBean getJsonBeanFromStructureModel(IModel<AmpStructure> structureModel) {
+        JsonBean structureData = new JsonBean();
+        AmpStructure structure = structureModel.getObject();
+
+        List<JsonBean> coordinates = new ArrayList<>();
+        if (structure.getCoordinates() != null) {
+            for (AmpStructureCoordinate coord : structure.getCoordinates()) {
+                JsonBean coordinate = new JsonBean();
+                coordinate.set("latitude", coord.getLatitude());
+                coordinate.set("longitude", coord.getLongitude());
+                coordinates.add(coordinate);
+            }
+        }
+
+        structureData.set("latitude", structure.getLatitude() != null ? structure.getLatitude() : "");
+        structureData.set("longitude", structure.getLongitude() != null ? structure.getLongitude() : "");
+        structureData.set("shape", structure.getShape() != null ? structure.getShape() : "");
+        structureData.set("title", structure.getTitle());
+        structureData.set("coordinates", coordinates);
+        structureData.set("color-id", structure.getStructureColorId());
+
+        return structureData;
     }
 
     private boolean hasCoordinates(IModel<AmpStructure> structureModel) {

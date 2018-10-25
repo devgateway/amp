@@ -1,6 +1,6 @@
 # Common dependencies
 
-This samll javascript library contains common dependencies extracted for amp.
+This small javascript library contains common dependencies extracted for amp.
 # build
  In order to build it you need to run
  - npm run build

@@ -44,6 +44,8 @@ public class AmpStructuresFormSectionFeature extends
         AmpFormSectionFeaturePanel {
 
     private static final long serialVersionUID = -6654390083754446344L;
+
+    private static final int COLOR_OFFSET_CATEGORY_VALUE = 7;
     
     protected Collection<AmpStructureType> structureTypes;
 
@@ -333,12 +335,15 @@ public class AmpStructuresFormSectionFeature extends
             }
         }
 
+        String colorValue = structure.getStructureColor() != null
+                ? structure.getStructureColor().getValue().substring(0, COLOR_OFFSET_CATEGORY_VALUE) : null;
+
         structureData.set("latitude", structure.getLatitude() != null ? structure.getLatitude() : "");
         structureData.set("longitude", structure.getLongitude() != null ? structure.getLongitude() : "");
         structureData.set("shape", structure.getShape() != null ? structure.getShape() : "");
         structureData.set("title", structure.getTitle());
         structureData.set("coordinates", coordinates);
-        structureData.set("color-id", structure.getStructureColorId());
+        structureData.set("color-value", colorValue);
 
         return structureData;
     }

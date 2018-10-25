@@ -113,8 +113,20 @@ function loadBaseMap() {
 
 function drawStructure(structure) {
     var structureImage;
+    var labelLatLng;
+
     if (structure.shape === MapConstants.SHAPE.POINT) {
         structureImage = generatePointStructureImage(structure);
+        labelLatLng = L.latLng(structure.latitude, structure.longitude);
+    } else {
+        var colorValue = structure["color-value"];
+        if (structure.shape === MapConstants.SHAPE.POLYLINE) {
+            structureImage = generatePolylineStructureImage(structure, colorValue);
+            labelLatLng = structureImage.getBounds().getCenter();
+        } else if (structure.shape == MapConstants.SHAPE.POLYGON) {
+            structureImage = generatePolygonStructureImage(structure, colorValue);
+            labelLatLng = structureImage.getBounds().getCenter();
+        }
     }
 
     if (structureImage) {
@@ -123,13 +135,46 @@ function drawStructure(structure) {
         if (!structureImage.tempId) {
             structureImage.tempId = tempId++;
         }
-        drawLabel(structureImage, structure);
-        map.addLayer(structureImage);
+
+        structureImage.addTo(map);
+        drawLabel(structureImage, labelLatLng, structure.title);
     }
 }
 
 function generatePointStructureImage(structure) {
     return L.marker([structure.latitude, structure.longitude]);
+}
+
+function generatePolylineStructureImage(structure, colorValue) {
+    return new L.Polyline(getPointList(structure), {color : colorValue});
+}
+
+function generatePolygonStructureImage(structure, colorValue) {
+    return new L.Polygon(getPointList(structure), {color : colorValue});
+}
+
+function getPointList(structure) {
+    var pointList = [];
+
+    structure.coordinates.forEach(function(coordinate) {
+        pointList.push(new L.LatLng(coordinate.latitude, coordinate.longitude));
+    });
+
+    return pointList;
+}
+
+function drawLabel(graphic, latLng, title) {
+    if (latLng) {
+        var label = L.marker(latLng, {
+            icon: L.divIcon({
+                iconSize: null,
+                className: 'label',
+                html: '<div>' + title + '</div>'
+            })
+        }).addTo(map);
+
+        labels[graphic.tempId] = label;
+    }
 }
 
 function onMapClick(e) {
@@ -336,18 +381,6 @@ function fireChangeEvent(element) {
 	}
 }
 
-function drawLabel(graphic, structure) {
-    var label = L.marker([structure.latitude, structure.longitude], {
-            icon : L.divIcon({
-                iconSize : null,
-                className : 'label',
-                html : '<div>' + structure.title + '</div>'
-            })
-        }).addTo(map);
-
-    labels[graphic.tempId] = label;
-}
-
 function updateStructure(selectedGraphic, title) {
 	var label = labels[selectedGraphic.target.tempId];	
 	if (label) {
@@ -538,7 +571,7 @@ function filterLocation(value) {
 
 function appendColor(categoryValue) {
 	var colorHTML = getColorHTMLTemplate();	
-	colorHTML = colorHTML.replace('{value}', categoryValue.id);	
+	colorHTML = colorHTML.replace('{value}', categoryValue.id);
 	var translatedValue = TranslationManager.getTranslated(categoryValue.value);
 	var splits = translatedValue.split(":");
 	if (splits.length == 2) {

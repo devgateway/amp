@@ -382,8 +382,8 @@ public class LocationService {
     public static List<AmpStructure> getStructures(JsonBean config) throws AmpApiException{
         List<AmpStructure> al = null;
         Set<Long> activitiesId = getActivitiesForFiltering( config,null);
-        String queryString = "select s from " + AmpStructure.class.getName() + " s inner join s.activities a where"
-                    + " a.ampActivityId in (" + Util.toCSStringForIN(activitiesId) + " )";
+        String queryString = "select s from " + AmpStructure.class.getName() + " s where"
+                    + " s.activity in (" + Util.toCSStringForIN(activitiesId) + " )";
         Query q = PersistenceManager.getSession().createQuery(queryString);
         al = q.list();
         return al;
@@ -409,14 +409,7 @@ public class LocationService {
                 }                
             }            
             
-            Set<AmpActivityVersion> av = structure.getActivities();
-            List<Long> actIds = new ArrayList<Long>();
-
-            for (AmpActivityVersion ampActivity : av) {
-                actIds.add(ampActivity.getAmpActivityId());
-            }
-
-            fgj.properties.put("activity", new POJONode(actIds));
+            fgj.properties.put("activity", new POJONode(structure.getActivity()));
         } catch (NumberFormatException e) {
             logger.warn("Couldn't get parse latitude/longitude for structure with latitude: "
                     + structure.getLatitude() + " longitude: " + structure.getLongitude() + " and title: "

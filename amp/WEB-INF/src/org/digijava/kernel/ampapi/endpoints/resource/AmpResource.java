@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.Map;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
+import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
 import org.digijava.module.aim.annotations.activityversioning.ResourceTextField;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
@@ -23,10 +24,12 @@ public class AmpResource {
     @ResourceTextField(fieldTitle = "Title", translationsField = "translatedTitles")
     private String title;
     
-    @Interchangeable(fieldTitle = "File Name")
+    @Interchangeable(fieldTitle = "File Name", importable = true, required = ActivityEPConstants.REQUIRED_ALWAYS,
+            dependencies = InterchangeDependencyResolver.RESOURCE_TYPE_FILE_VALID_KEY)
     private String fileName;
     
-    @Interchangeable(fieldTitle = "Web Link", importable = true)
+    @Interchangeable(fieldTitle = "Web Link", importable = true, required = ActivityEPConstants.REQUIRED_ALWAYS,
+            dependencies = InterchangeDependencyResolver.RESOURCE_TYPE_LINK_VALID_KEY)
     private String webLink;
     
     @Interchangeable(fieldTitle = "Description", importable = true)
@@ -37,7 +40,7 @@ public class AmpResource {
     @ResourceTextField(fieldTitle = "Note", translationsField = "translatedNotes")
     private String note;
     
-    @PossibleValues(ResourceTypePossibleValuesProvider.class)
+    @PossibleValues(DocumentTypePossibleValuesProvider.class)
     @Interchangeable(fieldTitle = "Type", importable = true, pickIdOnly = true)
     private AmpCategoryValue type;
     
@@ -64,6 +67,10 @@ public class AmpResource {
     
     @Interchangeable(fieldTitle = "Team", importable = true, required = ActivityEPConstants.REQUIRED_ALWAYS)
     private Long team;
+    
+    @PossibleValues(ResourceTypePossibleValuesProvider.class)
+    @Interchangeable(fieldTitle = "Resource Type", importable = true, required = ActivityEPConstants.REQUIRED_ALWAYS)
+    private String resourceType;
     
     private Map<String, String> translatedTitles;
     private Map<String, String> translatedDescriptions;
@@ -187,6 +194,14 @@ public class AmpResource {
 
     public void setTeam(Long team) {
         this.team = team;
+    }
+    
+    public String getResourceType() {
+        return resourceType;
+    }
+
+    public void setResourceType(String resourceType) {
+        this.resourceType = resourceType;
     }
 
     public Map<String, String> getTranslatedTitles() {

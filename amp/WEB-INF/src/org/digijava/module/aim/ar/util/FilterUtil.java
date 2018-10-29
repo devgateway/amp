@@ -20,6 +20,7 @@ import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.form.ReportsFilterPickerForm;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.ProgramUtil;
@@ -81,9 +82,13 @@ public class FilterUtil {
         arf.postprocess();
         return arf;
     }
-    
+
     public static AmpARFilter buildFilterFromSource(FilterDataSetInterface source) {
-        AmpARFilter arf = new AmpARFilter();
+        return buildFilterFromSource(source, null);
+    }
+
+    public static AmpARFilter buildFilterFromSource(FilterDataSetInterface source, TeamMember tm) {
+        AmpARFilter arf = new AmpARFilter(tm);
         arf.fillWithDefaultsSettings();
         
         if (source instanceof AmpReports && source != null) {

@@ -22,6 +22,8 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import org.dgfoundation.amp.algo.AmpCollections;
+import org.digijava.kernel.ampapi.endpoints.activity.preview.PreviewActivityFunding;
+import org.digijava.kernel.ampapi.endpoints.activity.preview.PreviewActivityService;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.AmpMediaType;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.ApiCompat;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
@@ -30,7 +32,6 @@ import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 
@@ -132,7 +133,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8", AmpMediaType.POSSIBLE_VALUES_V2_JSON})
     @ApiMethod(authTypes = AuthRule.IN_WORKSPACE, id = "getValues", ui = false)
     public Response getPossibleValuesFlat(@PathParam("fieldName") String fieldName) {
-        List<PossibleValue> possibleValues = possibleValuesFor(fieldName);
+        List<PossibleValue> possibleValues = InterchangeUtils.possibleValuesFor(fieldName);
         MediaType responseType = MediaType.APPLICATION_JSON_TYPE;
         if (AmpMediaType.POSSIBLE_VALUES_V2_JSON.equals(ApiCompat.getRequestedMediaType())) {
             responseType = AmpMediaType.POSSIBLE_VALUES_V2_JSON_TYPE;
@@ -228,7 +229,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
             response = fields.stream()
                     .filter(Objects::nonNull)
                     .distinct()
-                    .collect(toMap(identity(), this::possibleValuesFor));
+                    .collect(toMap(identity(), InterchangeUtils::possibleValuesFor));
         }
         MediaType responseType = MediaType.APPLICATION_JSON_TYPE;
         if (AmpMediaType.POSSIBLE_VALUES_V2_JSON.equals(ApiCompat.getRequestedMediaType())) {
@@ -238,11 +239,60 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
         }
         return Response.ok(response, responseType).build();
     }
-
-    private List<PossibleValue> possibleValuesFor(String fieldName) {
-        return PossibleValuesEnumerator.INSTANCE.getPossibleValuesForField(fieldName, AmpActivityFields.class, null);
-    }
     
+    /**
+     * Returns a list of values for all id of requested fields.
+     * 
+     * For fields like locations, sectors, programs the object contains the ancestor values.
+     * <h3>Sample request:</h3><pre>
+     * {
+     *   "locations~location": [534, 126],
+     *   "national_plan_objective~program": [123],
+     *   "primary_sectors~sector": [297]
+     * }
+     * </pre>
+     * <h3>Sample response:</h3><pre>
+     * {
+     *   "locations~location": [
+     *     {
+     *       "id": 534,
+     *       "value": "2ème Section Bois Neuf",
+     *       "ancestor-values": ["Haiti", "Artibonite", "Gros Morne Arrondissement", "Terre-Neuve", "Bois Neuf"]
+     *     },
+     *     {
+     *       "id": 126,
+     *       "value": "Grande Rivière du Nord",
+     *       "ancestor-values": ["Haiti", "Nord", "Grand Rivière du Nord", "Grande Rivière du Nord"]
+     *     }
+     *   ],
+     *   "national_plan_objective~program": [
+     *     {
+     *       "id": "123",
+     *       "value": "1.3.1 : Protéger les bassins versants",
+     *       "ancestor-values": ["Plan stratégique de développement d'Haiti (2030), "1 : REFONDATION TERRITORIALE", 
+     *           "1.3 : GÉRER LES BASSINS VERSANTS", "1.3.1 : Protéger les bassins versants"]
+     *     }
+     *   ],
+     *   "activity_status": [
+     *     {
+     *       "id": 263,
+     *       "value": "Ongoing"
+     *     }
+     *   ]
+     * }
+     * </pre>
+     * @param fieldIds list of fully qualified activity fields with list of ids
+     * @return list of values grouped by id and field
+     */
+    @POST
+    @Path("field/id-values")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "getIdValues", ui = false)
+    public Response getFieldValuesById(Map<String, List<Long>> fieldIds) {
+        Map<String, List<FieldIdValue>> response = InterchangeUtils.getIdValues(fieldIds);
+        return Response.ok(response, MediaType.APPLICATION_JSON_TYPE).build();
+    }
+
     /**
      * Provides full set of available fields and their settings/rules in a hierarchical structure.
      * @return JSON with fields information
@@ -251,7 +301,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
     @GET
     @Path("fields")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(authTypes = AuthRule.IN_WORKSPACE, id = "getFields", ui = false)
+    @ApiMethod(id = "getFields", ui = false)
     public List<APIField> getAvailableFields() {
         return AmpFieldsEnumerator.PUBLIC_ENUMERATOR.getAllAvailableFields();
     }
@@ -305,7 +355,7 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
     @GET
     @Path("/projects/{projectId}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(authTypes = AuthRule.VIEW_ACTIVITY, id = "getProject", ui = false)
+    @ApiMethod(id = "getProject", ui = false)
     public JsonBean getProject(@PathParam("projectId") Long projectId) {
         return InterchangeUtils.getActivity(projectId);
     }
@@ -322,6 +372,16 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
     @ApiMethod(authTypes = AuthRule.VIEW_ACTIVITY, id = "getProjectsFilter", ui = false)
     public JsonBean getProject(@PathParam("projectId") Long projectId, JsonBean filter) {
         return InterchangeUtils.getActivity(projectId, filter);
+    }
+
+    @GET
+    @Path("/info/{projectId}")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = AuthRule.PUBLIC_VIEW_ACTIVITY, id = "getProjectsFilter", ui = false)
+    public Response getProjectInfo(@PathParam("projectId") Long projectId) {
+        ActivityInformation response =
+        InterchangeUtils.getActivityInformation(projectId);
+        return Response.ok(response, MediaType.APPLICATION_JSON_TYPE).build();
     }
 
     /**
@@ -401,6 +461,66 @@ public class InterchangeEndpoints implements ErrorReportingEndpoint {
         }
 
         return InterchangeUtils.importActivity(newJson, true, uri.getBaseUri() + "activity");
+    }
+    
+    /**
+     * Retrieve activity fundings with converted amounts and totals.
+     * 
+     * <p>This endpoint is used for fetching information about activity fundings.
+     * The transactions are grouped by transaction type and adjustment type.
+     * All the transactions amounts are converted in the specified currency.
+     * The response includes subtotals and totals</p>
+     * 
+     *  <h3>Sample Output:</h3><pre>
+     *  {
+     *      "currency": 21,
+     *      "funding_information": {
+     *          "fundings": [
+     *                {
+     *                       "donor_organization_id": 1409,
+     *                       "funding_id": 66552,
+     *                       "funding_details": [
+     *                         {
+     *                           "transactions": [
+     *                            {
+     *                               "transaction_id": 167257,
+     *                               "transaction_amount": "60000",
+     *                               "transaction_date": "2018-09-18T00:00:00.000+0300"
+     *                            }
+     *                         ]
+     *                           "subtotal": "60000",
+     *                           "transaction_type": 0,
+     *                           "adjustment_type": 326
+     *                         }
+     *                      ],
+     *                      "undisbursed_balance": "60000"
+     *                 }
+     *          ],
+     *          "totals": [
+     *            {
+     *              "amount": "1500000",
+     *              "transaction_type": 0,
+     *              "adjustment_type": 326
+     *            }
+     *          ],
+     *          "undisbursed_balance": "60000",
+     *          "delivery_rate": "100"
+     *     },
+     *     "ppc_amount": "389610",
+     *     "rpc_amount": "321027"
+     * }
+     * 
+     * @param projectId the id of the activity
+     * @param currencyId the currency id in which the amount should be converted
+     * @return activity fundings with converted amounts
+     */
+    @GET
+    @Path("/{project-id}/preview/fundings")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "getPreviewFundings", ui = false)
+    public PreviewActivityFunding getPreviewFundingInformation(@PathParam("project-id") Long projectId, 
+            @QueryParam(ActivityEPConstants.PREVIEW_CURRENCY_ID) Long currencyId) {
+        return PreviewActivityService.getInstance().getPreviewActivityFunding(projectId, currencyId);
     }
 
     /**

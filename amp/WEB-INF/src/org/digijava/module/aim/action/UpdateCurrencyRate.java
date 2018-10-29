@@ -8,7 +8,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -196,7 +195,7 @@ public class UpdateCurrencyRate extends Action {
                             long stDt = toDate.getTime();
                             stDt -= SEVEN_DAYS;
                             Date fromDate = new Date(stDt);
-                            crForm.setAllRates(CurrencyUtil.getActiveRates(fromDate,toDate));
+                            crForm.setAllRates(CurrencyUtil.getActiveCurrencyRates(fromDate, toDate));
         
                     //return mapping.findForward("fileload");
                     } catch (Exception e) {

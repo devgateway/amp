@@ -274,8 +274,10 @@ public class AmpLocationFormTableFeature extends
                 // toggleHeading(target, setModel.getObject());
                 target.add(list.getParent());
                 regionalFundingFeature.getList().removeAll();
-                target.add(regionalFundingFeature);
-                target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(regionalFundingFeature));
+                if (regionalFundingFeature.isVisibleInHierarchy()) {
+                    target.add(regionalFundingFeature);
+                    target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(regionalFundingFeature));
+                }
                 percentageValidationField.reloadValidationField(target);
                 uniqueCollectionValidationField.reloadValidationField(target);
                 minSizeCollectionValidationField.reloadValidationField(target);

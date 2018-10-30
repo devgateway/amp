@@ -8,7 +8,7 @@
     <apply>
         <script>
             <lang delimiter=";" type="postgres">
-                update amp_menu_entry set url = '/importer/' where name = 'IATI Importer';
+                UPDATE amp_menu_entry SET url = '/importer/' WHERE name = 'IATI Importer';
             </lang>
         </script>
     </apply>

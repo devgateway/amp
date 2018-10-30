@@ -33,7 +33,7 @@ import java.util.Calendar;
  * @since 04 Feb 2013
  */
 public class QuarterInformationPanel extends AmpFieldPanel {
-    private static final JavaScriptResourceReference JS_FILE = new JavaScriptResourceReference(
+    public static final JavaScriptResourceReference JS_FILE = new JavaScriptResourceReference(
             QuarterInformationPanel.class, "QuarterInformationPanel.js");
 
     @Override

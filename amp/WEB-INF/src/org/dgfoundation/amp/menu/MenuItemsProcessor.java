@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.dgfoundation.amp.menu.dynamic.DynamicMenu;
 import org.dgfoundation.amp.menu.dynamic.EmailMenu;
 import org.dgfoundation.amp.menu.dynamic.LanguageMenu;
@@ -103,9 +104,11 @@ public class MenuItemsProcessor {
             visible = TranslatorWorker.isTranslationMode(TLSUtils.getRequest());
             break;
         case MenuConstants.ADD_ACTIVITY:
-        case MenuConstants.IATI_IMPORTER:
         case MenuConstants.ADD_SSC_ACTIVITY:
-            visible = tm != null && Boolean.TRUE.equals(tm.getAddActivity());
+            visible = canAddActivity();
+            break;
+        case MenuConstants.IATI_IMPORTER:
+            visible = canAddActivity() || MenuUtils.isAmpAdmin();
             break;
         case MenuConstants.GPI_DATA:
             visible = FeaturesUtil.isVisibleModule(MenuConstants.GPI_DATA_ENTRY);
@@ -116,10 +119,14 @@ public class MenuItemsProcessor {
         
         return visible;
     }
-    
+
+    private boolean canAddActivity() {
+        return tm != null && Boolean.TRUE.equals(tm.getAddActivity());
+    }
+
     private boolean isAllowedUserGroup(MenuItem mi) {
         if (mi.groupKeys == null || mi.groupKeys.size() == 0 
-                || AmpView.ADMIN == view && mi.groupKeys.contains(Group.ADMINISTRATORS)) {
+                || AmpView.ADMIN == view && CollectionUtils.containsAny(mi.groupKeys, Group.ADMIN_GROUPS)) {
             return true;
         }
         

@@ -48,7 +48,7 @@ public class MondrianETLQuartzJob extends ConnectionCleaningJob implements State
         jobForm.setName(jobClass.getName());
 //      jobForm.setTriggerGroupName(triggerGroupName);
 //      jobForm.setTriggerName(triggerName);
-        jobForm.setTriggerType(5); // TODO-CONSTANTIN: 1 = MINUTELY, 2 = HOURLY, 3 = daily, 4 = weekly, 5 = monthly. Please see QuartzJobUtils.addJob
+        jobForm.setTriggerType(QuartzJobForm.MONTHLY);
         jobForm.setExeTimeH("1");
         jobForm.setExeTimeM("1");
         jobForm.setExeTimeS("1");

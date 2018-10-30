@@ -20,6 +20,7 @@ import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
@@ -65,6 +66,7 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.AmpARFilterHelper;
 import org.digijava.module.aim.logic.Logic;
+import org.digijava.module.aim.startup.AMPStartupListener;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
@@ -107,12 +109,25 @@ public class AmpARFilter extends PropertyListable {
     public final static String SDF_OUT_FORMAT_STRING = "yyyy-MM-dd";
     public final static String SDF_IN_FORMAT_STRING = "dd/MM/yyyy";
     
+    public static final Set<String> DATE_PROPERTIES = new HashSet<>(Arrays.asList("fromDate", "toDate", 
+            "fromActivityActualCompletionDate", "toActivityActualCompletionDate",
+            "fromActivityFinalContractingDate", "toActivityFinalContractingDate",
+            "fromActivityStartDate", "toActivityStartDate",
+            "fromProposedStartDate", "toProposedStartDate",
+            "fromEffectiveFundingDate", "toEffectiveFundingDate",
+            "fromFundingClosingDate", "toFundingClosingDate",
+            "fromProposedApprovalDate", "toProposedApprovalDate"));
+    
     public final static Long TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES = -997L;
     
     /**
      * holding my nose while writing this. This id should behave like "a pledge report without any filters whatsoever"
      */
     public final static long DUMMY_SUPPLEMENTARY_PLEDGE_FETCHING_REPORT_ID = -996L;
+    
+    public static final Set<String> SETTINGS_PROPERTIES = new HashSet<>(Arrays.asList("amountinthousand", "calendarType", 
+            "customusegroupings", "decimalseparator", "groupingsize", "maximumFractionDigits", "renderEndYear", 
+            "renderStartYear", "sortByAsc", "sortBy"));
     
     public final static Map<String, Integer> activityApprovalStatus = Collections.unmodifiableMap(new HashMap<String, Integer>(){{
         this.put("Existing Unvalidated", 0);
@@ -1579,7 +1594,8 @@ public class AmpARFilter extends PropertyListable {
             String LUCENE_ID_LIST = "";
             searchMode = params.getLuceneSearchModeParam();
 
-            Document[] docs = LuceneUtil.search(params.getLuceneRealPath() + LuceneUtil.ACTIVITY_INDEX_DIRECTORY, "all", indexText, searchMode);
+            String index = AMPStartupListener.SERVLET_CONTEXT_ROOT_REAL_PATH + LuceneUtil.ACTIVITY_INDEX_DIRECTORY;
+            Document[] docs = LuceneUtil.search(index, "all", indexText, searchMode);
             logger.info("New lucene search !");
 
             for (Document doc : docs) {

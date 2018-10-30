@@ -11,10 +11,13 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
@@ -25,6 +28,7 @@ public class FMVisibility {
     
     public static final String PARENT_FM = "_PARENT_FM_";
     public static final String ANY_FM = "_ANY_FM_";
+    public static final String ALWAYS_VISIBLE_FM = "_ALWAYS_VISIBLE_FM_";
 
     private final static Map<String, Boolean> visibilityMap = new HashMap<String, Boolean>();
     private static Date lastTreeVisibilityUpdate;
@@ -116,12 +120,29 @@ public class FMVisibility {
         HttpSession session = TLSUtils.getRequest().getSession();
         checkTreeVisibilityUpdate(session);
         boolean isVisible = false;
-        if (fmPath.equals("")) {
+        if (fmPath.equals(FMVisibility.ALWAYS_VISIBLE_FM) || fmPath.equals("")) {
             isVisible = true;
         } else {
             isVisible = isFmPathEnabled(fmPath, intchStack);
         }
-        return isVisible;
+
+        return isVisible && isFieldVisibleInPublicView(fmPath);
+    }
+
+    /**
+     * Check if the field is visible in public view or not.
+     * Usually all the fields are visible by default. There are few exceptions, like Contacts field from Activity
+     *
+     * @param fmPath
+     * @return
+     */
+    private static boolean isFieldVisibleInPublicView(String fmPath) {
+        TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
+        if (tm == null && ActivityEPConstants.CONTACTS_PATH.equals(fmPath)) {
+            return FeaturesUtil.isVisibleFeature("Contacts");
+        }
+
+        return true;
     }
 
     /**

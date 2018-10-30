@@ -48,6 +48,7 @@ import org.digijava.module.aim.helper.DecimalToText;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingValidator;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.ManagedDocument;
 import org.digijava.module.aim.helper.OrgProjectId;
@@ -426,8 +427,11 @@ public class ShowActivityPrintPreview
                 }
                 
                 String toCurrCode=null;
-                if (tm != null)
+                if (tm != null) {
                     toCurrCode = CurrencyUtil.getAmpcurrency(tm.getAppSettings().getCurrencyId()).getCurrencyCode();
+                } else {
+                    toCurrCode = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
+                }
 
                 eaForm.getFunding().populateFromFundings(activity, toCurrCode, tm, false); // alternative to activity.getFunding(): DbUtil.getAmpFunding(activity.getAmpActivityId());
         
@@ -532,8 +536,8 @@ public class ShowActivityPrintPreview
 
                 eaForm.getComponents().setSelectedComponents(null);
                 eaForm.getComponents().setCompTotalDisb(0);
-                
-                Collection comp = ActivityUtil.getComponents(activity.getAmpActivityId());
+
+                Collection comp = activity.getComponents();
                 if (comp != null && comp.size() > 0) {
                     getComponents(comp, activity.getAmpActivityId(), eaForm);
                 }

@@ -13,6 +13,8 @@ import java.util.Set;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
@@ -20,14 +22,16 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.REQUIRED_ALWAYS;
 
 @TranslatableClass(displayName = "Funding")
 public class AmpFunding implements Serializable, Versionable, Cloneable {
     //IATI-check: not ignored!
     private static final long serialVersionUID = 1L;
-    @Interchangeable(fieldTitle="AMP Funding ID")
+    @Interchangeable(fieldTitle = "Funding ID")
     private Long ampFundingId;
-    @Interchangeable(fieldTitle="Donor Organization ID", pickIdOnly=true, importable=true)
+    @Interchangeable(fieldTitle = "Donor Organization ID", pickIdOnly = true, importable = true,
+            required = ActivityEPConstants.REQUIRED_ALWAYS)
     private AmpOrganisation ampDonorOrgId;
     @Interchangeable(fieldTitle="Activity ID", pickIdOnly = true, importable = false)
     private AmpActivityVersion ampActivityId;
@@ -69,7 +73,7 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
     private String comments;
     @Interchangeable(fieldTitle="Signature Date", importable=true)
     private Date signatureDate;
-    @Interchangeable(fieldTitle="Funding Details", importable=true)
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.FUNDING_DETAILS, importable = true)
     private Set<AmpFundingDetail> fundingDetails;
 
     
@@ -91,12 +95,17 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
     private ArrayList<Boolean> activeList;
     // private AmpModality modalityId;
     
-    @Interchangeable(fieldTitle="Type of Assistance", fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Type of Assistence", 
-                     discriminatorOption = CategoryConstants.TYPE_OF_ASSISTENCE_KEY, importable=true, pickIdOnly=true)
+    @Interchangeable(fieldTitle = "Type of Assistance", required = REQUIRED_ALWAYS, 
+            fmPath = "/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Type of Assistence", 
+                     discriminatorOption = CategoryConstants.TYPE_OF_ASSISTENCE_KEY, importable = true,
+                     pickIdOnly = true, 
+                     dependencies = {InterchangeDependencyResolver.TRANSACTION_PRESENT_KEY})
     private AmpCategoryValue typeOfAssistance;
     
-    @Interchangeable(fieldTitle="Financing Instrument",  
-                     discriminatorOption = CategoryConstants.FINANCING_INSTRUMENT_KEY, importable=true, pickIdOnly=true)
+    @Interchangeable(fieldTitle = "Financing Instrument", required = REQUIRED_ALWAYS,
+            fmPath = "/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Financing Instrument", 
+                     discriminatorOption = CategoryConstants.FINANCING_INSTRUMENT_KEY, importable = true,
+                     pickIdOnly = true, dependencies = {InterchangeDependencyResolver.TRANSACTION_PRESENT_KEY})
     private AmpCategoryValue financingInstrument;
     
     @Interchangeable(fieldTitle="Funding Status", fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Status", 
@@ -123,7 +132,8 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
             InterchangeDependencyResolver.AGREEMENT_TITLE_PRESENT_KEY})
     private AmpAgreement agreement;
     
-    @Interchangeable(fieldTitle="Source Role",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Source Role", importable=true, pickIdOnly=true, required = ActivityEPConstants.REQUIRED_ALWAYS)
+    @Interchangeable(fieldTitle = "Source Role", importable = true, pickIdOnly = true,
+            required = ActivityEPConstants.REQUIRED_ALWAYS)
     private AmpRole sourceRole;
     @Interchangeable(fieldTitle="Funding Classification Date",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Classification Date", importable=true)
     private Date fundingClassificationDate;
@@ -228,7 +238,15 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
     public Output getOutput() {
         Output out = new Output();
         out.setOutputs(new ArrayList<Output>());
-        out.getOutputs().add(new Output(null, new String[]{"Organization"}, new Object[]{this.ampDonorOrgId.getName()}));
+        
+        String orgName = this.ampDonorOrgId.getName();
+        if (this.ampDonorOrgId != null 
+                && this.ampDonorOrgId.getDeleted() != null && this.ampDonorOrgId.getDeleted()) {
+            orgName += " (" + TranslatorWorker.translateText("deleted") + ")";
+            out.setDeletedValues(true);
+        }
+        out.getOutputs().add(new Output(null, new String[]{"Organization"}, new Object[]{orgName}));
+
         if (this.typeOfAssistance != null) {
             out.getOutputs().add(new Output(null, new String[]{"Type of Assistance"}, new Object[]{this.typeOfAssistance.getValue()}));
         }

@@ -152,7 +152,9 @@ function createColorCheckboxes(selectedGraphic) {
 		});
 	}	
 }
-
+function isBlank(str) {
+    return (!str || /^\s*$/.test(str));
+}
 function selectLocationCallerShape(selectedGraphic) {	
 	$("#errorMsg").html("");
 	var callerButton = window.opener.callerGisObject;
@@ -163,7 +165,7 @@ function selectLocationCallerShape(selectedGraphic) {
 		selectedGraphic.target.tempId = tempId++;
 	}
 	
-	if (selectedGraphic.target instanceof L.Marker) {
+	if (selectedGraphic.target instanceof L.Marker || selectedGraphic.target instanceof L.CircleMarker) {
 		$("#colors-section").hide();
 	} else {
 		$("#colors-section").show();
@@ -191,7 +193,7 @@ function selectLocationCallerShape(selectedGraphic) {
 		}, {
 			text : TranslationManager.getTranslated('Submit'),
 			click : function() {
-				if ($("#locationTitle").val() == '') {
+				if (isBlank($("#locationTitle").val()) ) {
 					$("#errorMsg").html(TranslationManager.getTranslated('Title is a required field'));
 					return;
 				}

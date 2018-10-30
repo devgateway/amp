@@ -6,14 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
@@ -23,7 +19,6 @@ import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
@@ -82,7 +77,7 @@ public class ProjectList {
         List<JsonBean> editableActivities = new ArrayList<JsonBean>();
         
         final List<Long> viewableIds = getViewableActivityIds(tm);
-        List<Long> editableIds = ActivityUtil.getEditableActivityIds(tm);
+        List<Long> editableIds = ActivityUtil.getEditableActivityIdsNoSession(tm);
         
         // get list of the workspaces where the user is member of and can edit each activity
         Map<Long, Set<String>> activitiesWs = getEditableWorkspacesForActivities(tm);
@@ -179,7 +174,7 @@ public class ProjectList {
         final List<JsonBean> activitiesList = new ArrayList<JsonBean>();
         
         String iatiIdAmpField = InterchangeUtils.getAmpIatiIdentifierFieldName();
-        
+
         PersistenceManager.getSession().doWork(new Work() {
             public void execute(Connection conn) throws SQLException {
                 String ids = StringUtils.join(activityIds, ",");
@@ -189,13 +184,13 @@ public class ProjectList {
                         + "act.%s as %s, act.date_updated as date_updated, at.name as team_name "
                         + "FROM amp_activity act "
                         + "JOIN amp_team at ON act.amp_team_id = at.amp_team_id ";
-                
+
                 if (activityIds.size() > 0) {
                     query += " WHERE act.amp_activity_id " + negate + " in (" + ids + ")";
                 }
-                
+
                 String allActivitiesQuery = String.format(query, iatiIdAmpField, iatiIdAmpField);
-                
+
                 try (RsInfo rsi = SQLUtils.rawRunQuery(conn, allActivitiesQuery, null)) {
                     ResultSet rs = rsi.rs;
                     while (rs.next()) {
@@ -244,7 +239,7 @@ public class ProjectList {
     }
 
     private static String getIatiIdentifierValue(AmpActivityVersion a, String iatiIdAmpField) {
-        Field field = InterchangeUtils.getFieldByLongName(iatiIdAmpField, false);
+        Field field = InterchangeUtils.getFieldByLongName(iatiIdAmpField);
         try {
             return (String) PropertyUtils.getProperty(a, field.getName());
         } catch (Exception e) {

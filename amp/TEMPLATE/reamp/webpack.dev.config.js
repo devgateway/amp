@@ -17,6 +17,11 @@ module.exports = {
         'webpack/hot/only-dev-server',
         './modules/gpi-data/script.es6'
      ],
+     "activity-preview/script": [
+         'webpack-dev-server/client?http://localhost:3000',
+         'webpack/hot/only-dev-server',
+         './modules/activity-preview/script.es6'
+      ],
      "gpi-reports/script": [
          'webpack-dev-server/client?http://localhost:3000',
          'webpack/hot/only-dev-server',
@@ -36,7 +41,12 @@ module.exports = {
           'webpack-dev-server/client?http://localhost:3000',
           'webpack/hot/only-dev-server',
           './modules/admin/performance-alert-manager/script.es6'
-      ]
+      ],
+      "ampoffline/download/script": [
+          'webpack-dev-server/client?http://localhost:3000',
+          'webpack/hot/only-dev-server',
+          './modules/ampoffline/download/script.es6'
+       ]
     //"filters/script": [
     //  'webpack-dev-server/client?http://localhost:3000',
     //  'webpack/hot/only-dev-server',

@@ -12,6 +12,7 @@ import java.util.TreeSet;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.event.Broadcast;
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -31,13 +32,13 @@ import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPan
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.events.ContactChangedEvent;
-import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.validators.ContactEmailValidator;
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
+import org.digijava.kernel.ampapi.endpoints.contact.ContactEPConstants;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.util.ContactInfoUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -54,8 +55,6 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
      * @throws Exception
      */
     
-    final String  EXPRESSION = "^\\+?\\d?(\\([\\d]{1,3}\\))?[\\s\\d\\-\\/]*\\d+[\\s\\d\\-\\/]*";
-    
     private WebMarkupContainer detailFeedbackContainer;
     private Label detailFeedbackLabel;
     
@@ -65,39 +64,6 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
 //  private WebMarkupContainer faxesFeedbackContainer;
 //  private Label faxesFeedbackLabel;
     
-
-    
-    public AmpContactDetailFeaturePanel(String id, String fmName)
-            throws Exception {
-        super(id, fmName);
-        // TODO Auto-generated constructor stub
-    }
-
-    /**
-     * @param id
-     * @param model
-     * @param fmName
-     * @throws Exception
-     */
-    public AmpContactDetailFeaturePanel(String id, IModel<AmpContact> model, String fmName)
-            throws Exception {
-        super(id, model, fmName);
-        // TODO Auto-generated constructor stub
-    }
-
-    /**
-     * @param id
-     * @param model
-     * @param fmName
-     * @param hideLabel
-     * @throws Exception
-     */
-    public AmpContactDetailFeaturePanel(String id, IModel<AmpContact> model, String fmName, boolean hideLabel) throws Exception {
-        super(id, model, fmName, hideLabel);
-        // TODO Auto-generated constructor stub
-        
-    }
-
     public AmpContactDetailFeaturePanel(String id,final IModel<AmpContact> model,final String fmName, boolean hideLabel,final String contactProperty) throws Exception {
           
         super(id, model, fmName, hideLabel);
@@ -115,17 +81,6 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
                 if(setModel.getObject()!=null){
                     for (AmpContactProperty detail : setModel.getObject()) {
                         if(detail.getName().equals(contactProperty)){
-                            if(detail.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE)){
-                                if(detail.getActualValue()==null){
-                                    detail.setActualValue(detail.getActualPhoneNumber());
-                                    if(detail.getCategoryValue()==null)
-                                    detail.setCategoryValue(ContactInfoUtil.getPhoneCategoryValue(detail.getValue()));
-                                }
-                                else{
-                                    String prefix=(detail.getCategoryValue()==null)?"0":detail.getCategoryValue().getId().toString();
-                                    detail.setValue(prefix+" "+detail.getActualValue());
-                                }
-                            }
                             specificContacts.add(detail);
                         }
                     }
@@ -196,7 +151,7 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
                         else{
                             TextField<String> detailTextField=detailField.getTextContainer();
                             detailTextField.add(new AttributeModifier("size", "20"));
-                            detailTextField.add(new PatternValidator(EXPRESSION));
+                            detailTextField.add(new PatternValidator(ActivityEPConstants.REGEX_PATTERN_PHONE));
                             detailTextField.setRequired(true);
                         }
                         frg1.add(detailField);
@@ -204,9 +159,9 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
                         item.add(frg1);
                     } else {
                         try {
-                            IModel<String> valueModel = new PropertyModel<String>(item.getModel(), "actualValue");
+                            IModel<String> valueModel = new PropertyModel<>(item.getModel(), "value");
                             IModel<String> extensionValueModel = new PropertyModel<String>(item.getModel(),"extensionValue");
-                            IModel<AmpCategoryValue> catValueModel = new PropertyModel<AmpCategoryValue>(item.getModel(), "categoryValue");
+                            IModel<AmpCategoryValue> typeModel = new PropertyModel<>(item.getModel(), "type");
                             Fragment frg2 = new Fragment("detailPanel", "frag2",this);
                             final AmpTextFieldPanel<String> phn = new AmpTextFieldPanel<String>("phone", valueModel, fmName, true,true);
                             phn.getTextContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
@@ -220,7 +175,7 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
                       
                             TextField<String> detailTextField=phn.getTextContainer();
                             detailTextField.setRequired(true);
-                            detailTextField.add(new PatternValidator(EXPRESSION));
+                            detailTextField.add(new PatternValidator(ActivityEPConstants.REGEX_PATTERN_PHONE));
                             detailTextField.add(new AttributeModifier("size", "20"));
                             final AmpTextFieldPanel<String> phnExt = new AmpTextFieldPanel<String>("phoneExt", extensionValueModel, fmName, true,true);
                             phnExt.getTextContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
@@ -234,10 +189,12 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
                       
                             TextField<String> detailTextFieldExt=phnExt.getTextContainer();
                             detailTextFieldExt.setRequired(false);
-                            detailTextFieldExt.add(new PatternValidator(EXPRESSION));
+                            detailTextFieldExt.add(new PatternValidator(ActivityEPConstants.REGEX_PATTERN_PHONE));
                             detailTextFieldExt.add(new AttributeModifier("size", "5"));
-                            final AmpCategorySelectFieldPanel phoneTitle = new AmpCategorySelectFieldPanel("categoryValue", CategoryConstants.CONTACT_PHONE_TYPE_KEY, catValueModel, CategoryConstants.CONTACT_PHONE_TYPE_NAME, true, true, true,null,true);
-                            phoneTitle.getChoiceContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
+                            final AmpCategorySelectFieldPanel typeField = new AmpCategorySelectFieldPanel("type",
+                                    CategoryConstants.CONTACT_PHONE_TYPE_KEY, typeModel,
+                                    CategoryConstants.CONTACT_PHONE_TYPE_NAME, true, true, true, null, true);
+                            typeField.getChoiceContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
                                 @Override
                                 protected void onUpdate(AjaxRequestTarget target) {
                                     send(getPage(), Broadcast.BREADTH,
@@ -246,12 +203,11 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
                                 }
                             });
                       
-                            AbstractChoice<?, AmpCategoryValue> choiceContainer = phoneTitle.getChoiceContainer();
                             List<AmpCategoryValue> collectionByKey = new ArrayList<AmpCategoryValue>();
                             collectionByKey.addAll(CategoryManagerUtil
                                     .getAmpCategoryValueCollectionByKey(CategoryConstants.CONTACT_PHONE_TYPE_KEY));
                             //choiceContainer.setRequired(true);
-                            frg2.add(phoneTitle);
+                            frg2.add(typeField);
                             frg2.add(phn);
                             frg2.add(phnExt);
                             frg2.add(propertyDeleteLink);
@@ -275,13 +231,20 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
         AmpAddLinkField addLink = new AmpAddLinkField("addDetailButton","Add Detail Button") {
             @Override
             protected void onClick(AjaxRequestTarget target) {
-                if(detailsList.getModelObject().size() >= 3) {
-                    if(contactProperty.equals(Constants.CONTACT_PROPERTY_NAME_EMAIL)){
-                        detailFeedbackLabel.setDefaultModelObject("*" + TranslatorUtil.getTranslatedText("Max limit for emails is 3"));                     
-                    }else if(contactProperty.equals(Constants.CONTACT_PROPERTY_NAME_PHONE)){
-                        detailFeedbackLabel.setDefaultModelObject("*" + TranslatorUtil.getTranslatedText("Max limit for phones is 3"));
-                    }else if(contactProperty.equals(Constants.CONTACT_PROPERTY_NAME_FAX)){
-                        detailFeedbackLabel.setDefaultModelObject("*" + TranslatorUtil.getTranslatedText("Max limit for faxes is 3"));
+                if (detailsList.getModelObject().size() >= ContactEPConstants.CONTACT_PROPERTY_MAX_SIZE) {
+                    String property = "";
+                    if (contactProperty.equals(Constants.CONTACT_PROPERTY_NAME_EMAIL)) {
+                        property = "emails";
+                    } else if (contactProperty.equals(Constants.CONTACT_PROPERTY_NAME_PHONE)) {
+                        property = "phones";
+                    } else if (contactProperty.equals(Constants.CONTACT_PROPERTY_NAME_FAX)) {
+                        property = "faxes";
+                    }
+                    
+                    if (StringUtils.isNotBlank(property)) {
+                        detailFeedbackLabel.setDefaultModelObject("*" 
+                                   + TranslatorUtil.getTranslatedText(String.format("Max limit for %s is %s", property, 
+                            ContactEPConstants.CONTACT_PROPERTY_MAX_SIZE)));
                     }
                     detailFeedbackContainer.setVisible(true);
                     target.add(detailFeedbackContainer);

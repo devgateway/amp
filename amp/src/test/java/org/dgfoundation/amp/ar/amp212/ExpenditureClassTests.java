@@ -3,20 +3,15 @@ package org.dgfoundation.amp.ar.amp212;
 import java.util.Arrays;
 import java.util.List;
 
-import org.dgfoundation.amp.ar.AllTests_amp212;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.mondrian.ReportAreaForTests;
 import org.dgfoundation.amp.mondrian.ReportingTestCase;
 import org.dgfoundation.amp.newreports.AreaOwner;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
-import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
-import org.dgfoundation.amp.nireports.GrandTotalsDigest;
 import org.dgfoundation.amp.nireports.output.NiReportExecutor;
 import org.dgfoundation.amp.nireports.testcases.NiReportModel;
-import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
-import org.dgfoundation.amp.testutils.ReportTestingUtils;
 import org.junit.Test;
 
 /**
@@ -81,10 +76,6 @@ public class ExpenditureClassTests extends ReportingTestCase {
             ColumnConstants.EXPENDITURE_CLASS);
 
     final static String correctTotals = "{RAW / Funding / 2006 / Actual Expenditures=0, RAW / Funding / 2006 / Actual Commitments=96840.576201, RAW / Funding / 2006 / Actual Disbursements=0, RAW / Funding / 2006 / Planned Expenditures=0, RAW / Funding / 2009 / Actual Expenditures=0, RAW / Funding / 2009 / Actual Commitments=100000, RAW / Funding / 2009 / Actual Disbursements=0, RAW / Funding / 2009 / Planned Expenditures=0, RAW / Funding / 2010 / Actual Expenditures=0, RAW / Funding / 2010 / Actual Commitments=0, RAW / Funding / 2010 / Actual Disbursements=656990, RAW / Funding / 2010 / Planned Expenditures=0, RAW / Funding / 2011 / Actual Expenditures=0, RAW / Funding / 2011 / Actual Commitments=999888, RAW / Funding / 2011 / Actual Disbursements=0, RAW / Funding / 2011 / Planned Expenditures=0, RAW / Funding / 2012 / Actual Expenditures=0, RAW / Funding / 2012 / Actual Commitments=25000, RAW / Funding / 2012 / Actual Disbursements=12000, RAW / Funding / 2012 / Planned Expenditures=0, RAW / Funding / 2013 / Actual Expenditures=0, RAW / Funding / 2013 / Actual Commitments=4493332, RAW / Funding / 2013 / Actual Disbursements=580000, RAW / Funding / 2013 / Planned Expenditures=0, RAW / Funding / 2014 / Actual Expenditures=0, RAW / Funding / 2014 / Actual Commitments=3697813.768451, RAW / Funding / 2014 / Actual Disbursements=260200, RAW / Funding / 2014 / Planned Expenditures=0, RAW / Funding / 2015 / Actual Expenditures=0, RAW / Funding / 2015 / Actual Commitments=1515042.841736, RAW / Funding / 2015 / Actual Disbursements=115570, RAW / Funding / 2015 / Planned Expenditures=0, RAW / Funding / 2016 / Actual Expenditures=72000, RAW / Funding / 2016 / Actual Commitments=62000, RAW / Funding / 2016 / Actual Disbursements=253700, RAW / Funding / 2016 / Planned Expenditures=230000, RAW / Funding / 2016 / Actual Classified Expenditures / Capital Expenditure=22000, RAW / Funding / 2016 / Actual Classified Expenditures / Compensation / Salaries=24000, RAW / Funding / 2016 / Actual Classified Expenditures / Unassigned=26000, RAW / Funding / 2016 / Planned Classified Expenditures / Capital Expenditure=42000, RAW / Funding / 2016 / Planned Classified Expenditures / Compensation / Salaries=44000, RAW / Funding / 2016 / Planned Classified Expenditures / Goods and Services=46000, RAW / Funding / 2016 / Planned Classified Expenditures / Others=48000, RAW / Funding / 2016 / Planned Classified Expenditures / Unassigned=50000, RAW / Totals / Actual Expenditures=72000, RAW / Totals / Actual Commitments=10989917.186388, RAW / Totals / Actual Disbursements=1878460, RAW / Totals / Planned Expenditures=230000, RAW / Totals / Total Actual Classified Expenditures / Capital Expenditure=22000, RAW / Totals / Total Actual Classified Expenditures / Compensation / Salaries=24000, RAW / Totals / Total Actual Classified Expenditures / Unassigned=26000, RAW / Totals / Total Planned Classified Expenditures / Capital Expenditure=42000, RAW / Totals / Total Planned Classified Expenditures / Compensation / Salaries=44000, RAW / Totals / Total Planned Classified Expenditures / Goods and Services=46000, RAW / Totals / Total Planned Classified Expenditures / Others=48000, RAW / Totals / Total Planned Classified Expenditures / Unassigned=50000}";
-    
-    public ExpenditureClassTests() {
-        super("ExpenditureClass tests");
-    }
     
     @Override
     protected NiReportExecutor getNiExecutor(List<String> activityNames) {
@@ -288,9 +279,4 @@ public class ExpenditureClassTests extends ReportingTestCase {
     }
     
     */
-    
-    @Override
-    public void setUp() {
-        AllTests_amp212.setUp();
-    }
 }

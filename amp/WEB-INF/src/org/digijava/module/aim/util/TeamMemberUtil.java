@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
@@ -847,12 +848,20 @@ public class TeamMemberUtil {
         return role;
     }
 
+    public static List<AmpTeamMember> getNonManagementTeamMembers(Collection<Long> userIds) {
+        return getTeamMembersByUserId(userIds).values()
+                .stream()
+                .flatMap(Collection::stream)
+                .filter(tm -> !tm.getAmpTeam().getAccessType().equals(Constants.ACCESS_TYPE_MNGMT))
+                .collect(Collectors.toList());
+    }
+
     /**
      * Map<User.id, List<AmpTeamMember>>
      *
      * @return
      */
-    public static Map<Long, List<AmpTeamMember>> getTeamMembersByUserId(Set<Long> userIds) {
+    public static Map<Long, List<AmpTeamMember>> getTeamMembersByUserId(Collection<Long> userIds) {
         Map<Long, List<AmpTeamMember>> res = new HashMap<>();
 
         if (userIds != null && !userIds.isEmpty()) {
@@ -1479,8 +1488,7 @@ public class TeamMemberUtil {
 
     public static void getActivitiesWsByTeamMember(Map<Long, Set<String>> activitiesWs, AmpTeamMember atm) {
         TeamMember teamMember = new TeamMember(atm);
-        String wsFilterQuery = WorkspaceFilter.generateWorkspaceFilterQuery(teamMember);
-        List<Long> editableIds = ActivityUtil.getEditableActivityIds(teamMember, wsFilterQuery);
+        List<Long> editableIds = ActivityUtil.getEditableActivityIdsNoSession(teamMember);
         processActivitiesId(activitiesWs, teamMember, Optional.ofNullable(editableIds).orElse(Collections.emptyList()
         ).stream());
 

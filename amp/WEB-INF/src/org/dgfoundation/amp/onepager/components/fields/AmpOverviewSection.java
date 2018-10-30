@@ -111,6 +111,7 @@ public class AmpOverviewSection extends AmpComponentPanel<Void> implements AmpRe
                 new AmpCategoryValueByKeyModel(new PropertyModel<Set<AmpCategoryValue>>(am, "categories"),
                         CategoryConstants.MODALITIES_KEY),
                 CategoryConstants.MODALITIES_NAME, true, false, null, AmpFMTypes.MODULE);
+        modalities.getChoiceContainer().add(new AttributeModifier("style", "max-width: 250px;"));
 
         AmpTextAreaFieldPanel modalitiesOtherInfo = new AmpTextAreaFieldPanel("modalitiesOtherInfo",
                 new PropertyModel<String>(am, "modalitiesOtherInfo"), "Modalities Other Info",

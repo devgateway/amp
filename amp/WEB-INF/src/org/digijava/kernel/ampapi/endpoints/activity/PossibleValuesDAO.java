@@ -5,6 +5,7 @@ import java.util.List;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpComponentType;
 import org.digijava.module.aim.dbentity.AmpContact;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 
 /**
  * @author Octavian Ciubotaru
@@ -38,5 +39,7 @@ public interface PossibleValuesDAO {
     List<AmpComponentType> getComponentTypes();
     
     List<AmpContact> getContacts();
+    
+    List<AmpOrganisation> getOrganisations();
     
 }

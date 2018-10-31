@@ -189,15 +189,94 @@ public class Reports implements ErrorReportingEndpoint {
         ReportSpecificationImpl spec = ReportsUtil.getReport(reportId);
         return AmpReportsSchema.getRenderedReport(spec);
     }
-
-    @GET
-    @Path("/report/{report_id}/result")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    public final GeneratedReport getReportResult(@PathParam("report_id") Long reportId) {
-        ReportSpecificationImpl spec = ReportsUtil.getReport(reportId);
-        return EndpointUtils.runReport(spec);
-    }
-
+    
+    /**
+     * Provides a report preview.
+     * </br>
+     * <dl>
+     * The JSON object holds information regarding:
+     * <dt><b>groupingOption</b><dd> - the timeframe by which to group funding data in the report
+     * <dt><b>add_columns</b><dd> - a list of columns names to be added to the report configuration
+     * <dt><b>add_hierarchies</b><dd> - a list of hierarchies to be added to the report configuration
+     * <dt><b>add_measures</b><dd> - a list of measures to be added to the report configuration
+     * <dt><b>filters</b><dd> - Report filters
+     * <dt><b>settings</b><dd> - Report settings
+     * </dl></br></br>
+     *
+     * </br>
+     * <h3>Sample Input:</h3><pre>
+     * {
+     *  "groupingOption": "A",
+     *  "add_columns": ["Activity Id",
+     *  "Project Title",
+     *  "Donor Agency",
+     *  "Status",
+     *  "AMP ID"],
+     *  "add_hierarchies": ["Project Title"],
+     *  "add_measures": ["Actual Commitments"],
+     *  "filters": {
+     *      "date": {
+     *          "start": "2010-01-01",
+     *          "end": "2015-12-31"
+     *      }
+     *  },
+     *  "settings": {
+     *      "funding-type": ["Actual Commitments",
+     *      "Actual Disbursements"],
+     *      "currency-code": "USD",
+     *      "calendar-id": "123",
+     *      "year-range": {
+     *          "from": "2012",
+     *          "to": "2014"
+     *      }
+     *  }
+     *}</pre>
+     * <h3>Sample Output:</h3><pre>
+     * <table class='nireport_table inside' cellpadding='0' cellspacing='0' width='100%'>
+     *   <thead>
+     *     <tr class='nireport_header'>
+     *       <td class='nireport_header' rowSpan='3' colSpan='1'>Project Title<br /><font class='headermeta'>#ni#column -> Project Title</font></td>
+     *       <td class='nireport_header' rowSpan='3' colSpan='1'>Activity Id<br /><font class='headermeta'>#ni#column -> Activity Id</font></td>
+     *       <td class='nireport_header' rowSpan='3' colSpan='1'>Donor Agency<br /><font class='headermeta'>#ni#column -> Donor Agency</font></td>
+     *       <td class='nireport_header' rowSpan='3' colSpan='1'>Status<br /><font class='headermeta'>#ni#column -> Status</font></td>
+     *       <td class='nireport_header' rowSpan='3' colSpan='1'>AMP ID<br /><font class='headermeta'>#ni#column -> AMP ID</font></td>
+     *       <td class='nireport_header' rowSpan='2' colSpan='1'>Totals</td>
+     *     </tr>
+     *     <tr class='nireport_header'></tr>
+     *     <tr class='nireport_header'>
+     *       <td class='nireport_header' rowSpan='1' colSpan='1'>Actual Commitments<br /><font class='headermeta'>#ni#measure -> Actual Commitments</font></td>
+     *     </tr>
+     *   </thead>
+     *   <tbody>
+     *     <tr>
+     *       <td class='ni_hierarchyCell ni_hierarchyLevel1' rowspan='2'>2008.2077.9 Sustainable Land Management Program (SLM I) and 2004.2060.4 SUN Program (GIZ)</td>
+     *       <td class='nireport_data_cell'>105656</td>
+     *       <td class='nireport_data_cell'>Germany</td>
+     *       <td class='nireport_data_cell'>Ongoing</td>
+     *       <td class='nireport_data_cell'>AMP-100411</td>
+     *       <td class='nireport_data_cell'>11497999.622859</td>
+     *     </tr>
+     *     <td class='nireport_data_cell ni_hierarchyLevel2 ni_trailcell'></td>
+     *     <td class='nireport_data_cell ni_hierarchyLevel2 ni_trailcell'></td>
+     *     <td class='nireport_data_cell ni_hierarchyLevel2 ni_trailcell'></td>
+     *     <td class='nireport_data_cell ni_hierarchyLevel2 ni_trailcell'></td>
+     *     <td class='nireport_data_cell ni_hierarchyLevel2 ni_trailcell'>11497999.622859</td>
+     *     </tr>
+     *     <td class='ni_hierarchyCell ni_hierarchyLevel1' rowspan='2'>2010.9002.6 Technical College in Holeta/ETH (GIZ)</td>
+     *     <td class='nireport_data_cell'>103936</td>
+     *     <td class='nireport_data_cell'>Germany</td>
+     *     <td class='nireport_data_cell'>Ongoing</td>
+     *     <td class='nireport_data_cell'>87143122101223</td>
+     *     <td class='nireport_data_cell'>1892441.860465</td>
+     *     </tr>
+     *  ....
+     *   </tbody>
+     * </table></pre>
+     *
+     * @param formParams a JSON object with the report's parameters
+     *
+     * @return a HTML with the report preview
+     */
     @POST
     @Path("/report/preview")
     @Produces(MediaType.TEXT_HTML)

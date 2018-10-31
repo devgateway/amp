@@ -119,19 +119,21 @@ public class LocationService {
             // If the admin level is country we filter only to show projects at
             // the country of the current installation
             final ValueWrapper<String> countryId = new ValueWrapper<String>("");
-            final ValueWrapper<String> countryGeoCode = new ValueWrapper<String>("");
-            final ValueWrapper<String> countryName = new ValueWrapper<String>("");
-            PersistenceManager.getSession().doWork(new Work() {
-                public void execute(Connection conn) throws SQLException {
-                    String countryIdQuery = "select acvl.id,acvl.location_name from amp_category_value_location acvl,amp_global_settings gs "
-                            + " where acvl.iso=gs.settingsvalue  " + " and gs.settingsname ='Default Country'";
-                    RsInfo rsi = SQLUtils.rawRunQuery(conn, countryIdQuery, null);
-                    if (rsi.rs.next()) {
-                        countryId.value = rsi.rs.getString(1);
-                        countryName.value = rsi.rs.getString(2);
-                    }
-                    rsi.close();
+            final ValueWrapper<String> countryName = new ValueWrapper<>("");
+            PersistenceManager.getSession().doWork(conn -> {
+                String countryIdQuery = "select acvl.id,acvl.location_name from amp_category_value_location acvl,"
+                        + "amp_global_settings gs  ,amp_category_value acv "
+                        + "where acvl.iso=gs.settingsvalue and gs.settingsname ='%s' "
+                        + "and acvl.parent_category_value=acv.id "
+                        + "and acv.category_value = 'Country' ";
+                RsInfo rsi = SQLUtils.rawRunQuery(conn, String.format(countryIdQuery,
+                        GlobalSettingsConstants.DEFAULT_COUNTRY),
+                        null);
+                if (rsi.rs.next()) {
+                    countryId.value = rsi.rs.getString(1);
+                    countryName.value = rsi.rs.getString(2);
                 }
+                rsi.close();
             });
 
             filterRules.addFilterRule(new ReportColumn(ColumnConstants.COUNTRY), new FilterRule(countryId.value, true));

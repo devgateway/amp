@@ -31,7 +31,6 @@ var EnabledChartsCollection = Backbone.Collection.extend({
                 console.error('error loading charts.');
             },
             success: function (collection, response) {
-                // console.log(response);
             }
         });
     }

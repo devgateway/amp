@@ -16,12 +16,15 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ErrorReportingEndpoint;
+import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
+import org.digijava.kernel.ampapi.endpoints.util.PublicConstants;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.util.DbUtil;
 
@@ -80,7 +83,7 @@ public class SettingsDefinitionsEndpoint implements ErrorReportingEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     public final List<SettingField> getSettingDefinitionsForDashboards() {
         return Arrays.asList(getCurrencyField(true), getCalendarField(), getCalendarCurrenciesField(),
-                getFundingTypeField());
+                getFundingTypeField(new LinkedHashSet<>(GisConstants.FUNDING_TYPES)));
     }
 
     /**
@@ -126,7 +129,7 @@ public class SettingsDefinitionsEndpoint implements ErrorReportingEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     public final List<SettingField> getSettingDefinitionsForGisModule() {
         return Arrays.asList(getCurrencyField(true), getCalendarField(), getCalendarCurrenciesField(),
-                getFundingTypeField());
+                getFundingTypeField(new LinkedHashSet<>(GisConstants.FUNDING_TYPES)));
     }
 
     /**
@@ -170,7 +173,8 @@ public class SettingsDefinitionsEndpoint implements ErrorReportingEndpoint {
     @Path("/public")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     public final List<SettingField> getSettingDefinitionsForPublicPortal() {
-        return Arrays.asList(getReportAmountFormatField(), getCurrencyField(true));
+        return Arrays.asList(getReportAmountFormatField(), getCurrencyField(true), getFundingTypeField(new
+                LinkedHashSet<>(PublicConstants.FUNDING_TYPES)));
     }
 
     /**
@@ -323,7 +327,7 @@ public class SettingsDefinitionsEndpoint implements ErrorReportingEndpoint {
      * Returns definitions for the following settings: resource manager.
      * </p>
      * <h3>Sample Output:</h3> 
-     * 
+     *
      * <pre>
      *  [
      *      {
@@ -361,8 +365,8 @@ public class SettingsDefinitionsEndpoint implements ErrorReportingEndpoint {
      *              }
      *      }
      *  ]
-     * 
-     * 
+     *
+     *
      * </pre>
      * 
      * @return a list of setting definitions
@@ -460,7 +464,7 @@ public class SettingsDefinitionsEndpoint implements ErrorReportingEndpoint {
     public final List<SettingField> getSettingDefinitionsForGPIReports() {
         return Arrays.asList(getCurrencyField(true), getCalendarField(), getCalendarCurrenciesField());
     }
-    
+
     @Override
     public Class getErrorsClass() {
         return SettingsDefinitionsErrors.class;

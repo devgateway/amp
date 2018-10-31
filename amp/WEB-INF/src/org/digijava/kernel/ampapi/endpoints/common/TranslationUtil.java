@@ -13,6 +13,7 @@ import org.digijava.kernel.services.sync.model.Translation;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.SiteUtils;
+import org.digijava.module.aim.annotations.activityversioning.ResourceTextField;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
@@ -157,6 +158,9 @@ public class TranslationUtil {
         }
         if (field.isAnnotationPresent(VersionableFieldTextEditor.class)) {
             return TranslationSettings.TranslationType.TEXT;
+        }
+        if (field.isAnnotationPresent(ResourceTextField.class)) {
+            return TranslationSettings.TranslationType.RESOURCE;
         }
         return TranslationSettings.TranslationType.NONE;
     }

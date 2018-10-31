@@ -64,9 +64,9 @@ public class User
     private String passQuestion;
     private String passAnswer;
     private String url;
-    private boolean active;
     private boolean banned;
     private Boolean pledger;
+    private Boolean pledgeSuperUser;
     private Site registeredThrough;
     private Set interests;
     private java.sql.Clob bio;
@@ -89,6 +89,9 @@ public class User
     private Set contacts;
     private AmpUserExtension userExtension;
     private Boolean exemptFromDataFreezing;
+    private Boolean notificationEmailEnabled = false;
+    private String notificationEmail;
+
     private Set<AmpOrganisation> assignedOrgs;
     private Date passwordChangedAt;
 
@@ -110,7 +113,6 @@ public class User
         //this.passQuestion = passQuestion;
         //this.passAnswer = passAnswer;
         //this.url = url;
-        this.active = false;
         //this.registeredThrough = Session.site;
 
     }
@@ -218,14 +220,6 @@ public class User
         this.url = url;
     }
 
-    public void setActivate(boolean a) {
-        this.active = a;
-    }
-
-    public boolean isActivate() {
-        return this.active;
-    }
-
     public boolean isRegistrationComplete() {
         return false;
     }
@@ -305,14 +299,6 @@ public class User
 
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
     }
 
     public boolean isEmailVerified() {
@@ -433,6 +419,14 @@ public class User
         this.pledger = pledger;
     }
 
+    public Boolean getPledgeSuperUser() {
+        return pledgeSuperUser;
+    }
+
+    public void setPledgeSuperUser(Boolean pledgeSuperUser) {
+        this.pledgeSuperUser = pledgeSuperUser;
+    }
+
     @Override
     public int compareTo(Object o) {
         // TODO Auto-generated method stub
@@ -529,6 +523,37 @@ public class User
 
     public void setExemptFromDataFreezing(Boolean exemptFromDataFreezing) {
         this.exemptFromDataFreezing = exemptFromDataFreezing;
+    }
+
+    public Boolean isNotificationEmailEnabled() {
+        return notificationEmailEnabled;
+    }
+
+    public void setNotificationEmailEnabled(Boolean notificationEmailEnabled) {
+        this.notificationEmailEnabled = notificationEmailEnabled;
+    }
+
+    public String getNotificationEmail() {
+        return notificationEmail;
+    }
+
+    public void setNotificationEmail(String notificationEmail) {
+        this.notificationEmail = notificationEmail;
+    }
+    
+    /**
+     * Get the email used for notification. 
+     * If {@link #notificationEmailEnabled} is true, the {@link #notificationEmail} is returned.
+     * Else, the #{@link #email}.
+     * 
+     * @return email address used for notification
+     */
+    public String getEmailUsedForNotification() {
+        if (notificationEmailEnabled != null && notificationEmailEnabled) {
+            return notificationEmail;
+        }
+        
+        return email;
     }
 
 }

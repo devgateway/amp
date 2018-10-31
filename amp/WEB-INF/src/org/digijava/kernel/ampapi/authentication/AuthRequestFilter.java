@@ -45,7 +45,6 @@ public class AuthRequestFilter implements ContainerRequestFilter {
         //yet to strip the mainPath dynamically, committed hardcoded for testing purposes
         String mainPath="/rest";
         siteDomain = SiteCache.getInstance().getSiteDomain(httpRequest.getServerName(), mainPath);
-        httpRequest.setAttribute(org.digijava.kernel.Constants.CURRENT_SITE, siteDomain);
 
         // configure requested language
         addLanguage(siteDomain);
@@ -53,16 +52,12 @@ public class AuthRequestFilter implements ContainerRequestFilter {
         // configure translastions if exist
         addTranslations(siteDomain);
         
-        TLSUtils.populate(httpRequest);
-        
         addDefaultTreeVisibility();
 
         String token = containerReq.getHeaderValue("X-Auth-Token");
         if (token != null) {
             SecurityUtil.validateTokenAndRestoreSession(token);
         }
-
-        Security.authorize(containerReq);
 
         return containerReq;
     }

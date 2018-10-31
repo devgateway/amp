@@ -9,6 +9,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.ws.rs.GET;
@@ -16,7 +17,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
@@ -25,9 +25,9 @@ import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.digijava.kernel.ampapi.endpoints.dto.SimpleJsonBean;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersBuilder;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
+import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingField;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
@@ -331,10 +331,7 @@ public class FiltersEndpoint {
     @GET
     @Path("/programs")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = true, name = "Programs", id = "Programs", 
-    columns={ColumnConstants.PRIMARY_PROGRAM, ColumnConstants.SECONDARY_PROGRAM, 
-            ColumnConstants.NATIONAL_PLANNING_OBJECTIVES, ColumnConstants.TERTIARY_PROGRAM},
-            tab = EPConstants.TAB_PROGRAMS)
+    @ApiMethod(ui = true, name = "Programs", id = "Programs", tab = EPConstants.TAB_PROGRAMS)
     public List<SimpleJsonBean> getPrograms() {
         List<SimpleJsonBean> programs = new ArrayList<SimpleJsonBean>();
         try {
@@ -461,9 +458,7 @@ public class FiltersEndpoint {
     @GET
     @Path("/programs/{programId}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(ui = false, id = "ProgramsByProgramName", 
-    columns={ColumnConstants.PRIMARY_PROGRAM, ColumnConstants.SECONDARY_PROGRAM, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES, ColumnConstants.TERTIARY_PROGRAM}, 
-    tab=EPConstants.TAB_PROGRAMS)
+    @ApiMethod(ui = false, id = "ProgramsByProgramName", tab = EPConstants.TAB_PROGRAMS)
     public SimpleJsonBean getPrograms(@PathParam("programId") Long programId) {
         try {
             Object[] idname = (Object[]) PersistenceManager.getSession().createSQLQuery("select default_hierarchy, name from amp_program_settings where amp_program_settings_id = " + programId).uniqueResult();
@@ -471,9 +466,10 @@ public class FiltersEndpoint {
             if (rootAmpThemeId != null) {
                 String schemeName = String.valueOf(idname[1]);
                 Map<Long, AmpThemeSkeleton> themes = AmpThemeSkeleton.populateThemesTree(rootAmpThemeId);
-                String programName = schemeName.equals(ProgramUtil.NATIONAL_PLAN_OBJECTIVE) ? ColumnConstants.NATIONAL_PLANNING_OBJECTIVES : schemeName;
+                String programName = schemeName.equals(ProgramUtil.NATIONAL_PLAN_OBJECTIVE)
+                        ? ProgramUtil.NATIONAL_PLANNING_OBJECTIVES : schemeName;
                 SimpleJsonBean bean = buildProgramsJsonBean(themes.get(rootAmpThemeId), programName, 0);
-                bean.setFilterId(FilterUtils.INSTANCE.idFromColumnName(programName));
+                bean.setFilterId(FilterUtils.INSTANCE.idFromColumnName(programName + " Level 1"));
                 return bean;
             } else {
                 return new SimpleJsonBean();
@@ -586,7 +582,7 @@ public class FiltersEndpoint {
     }
 
     /**
-     * Funding status filter information
+     * Performance Alert Level filter
      *
      * @return
      */
@@ -598,6 +594,38 @@ public class FiltersEndpoint {
             tab = EPConstants.TAB_ACTIVITY)
     public JsonBean getPerformanceAlertLevel() {
         return getCategoryValue(CategoryConstants.PERFORMANCE_ALERT_LEVEL_KEY, ColumnConstants.PERFORMANCE_ALERT_LEVEL);
+    }
+    
+    /**
+     * Performance Alert Type filter
+     *
+     * @return
+     */
+    @GET
+    @Path("/performanceAlertType")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = true, id = FiltersConstants.PERFORMANCE_ALERT_TYPE,
+            columns = ColumnConstants.PERFORMANCE_ALERT_TYPE, name = ColumnConstants.PERFORMANCE_ALERT_TYPE,
+            tab = EPConstants.TAB_ACTIVITY)
+    public JsonBean getPerformanceAlertType() {
+        JsonBean pt = new JsonBean();
+        
+        List<SimpleJsonBean> performanceAlertTypes = new ArrayList<SimpleJsonBean>();
+        
+        for (Entry<String, Long> entry : PerformanceRuleManager.PERF_ALERT_TYPE_TO_ID.entrySet()) {
+            SimpleJsonBean sjb = new SimpleJsonBean();
+            sjb.setId(entry.getValue());
+            sjb.setName(TranslatorWorker.translateText(
+                    PerformanceRuleManager.PERF_ALERT_TYPE_TO_DESCRIPTION.get(entry.getKey())));
+            performanceAlertTypes.add(sjb);
+        }
+        
+        performanceAlertTypes = orderByProperty(performanceAlertTypes, NAME_PROPERTY);
+        pt.set("filterId", FiltersConstants.PERFORMANCE_ALERT_TYPE);
+        pt.set("name", TranslatorWorker.translateText(ColumnConstants.PERFORMANCE_ALERT_TYPE));
+        pt.set("values", performanceAlertTypes);
+        
+        return pt;
     }
 
     /**
@@ -718,18 +746,18 @@ public class FiltersEndpoint {
         p.setName(t.getName());
         p.setChildren(new ArrayList<SimpleJsonBean>());
         String columnName=null;
-        if(level>0){
-            if(programName.equals(ProgramUtil.NATIONAL_PLAN_OBJECTIVE)){
-                columnName=ColumnConstants.NATIONAL_PLANNING_OBJECTIVES +" Level " +level;
-            }else{
-                if(programName.equals(ProgramUtil.PRIMARY_PROGRAM)){
-                    columnName=ColumnConstants.PRIMARY_PROGRAM +" Level " +level;
-                }else{
-                    if(programName.equals(ProgramUtil.SECONDARY_PROGRAM)){
-                        columnName=ColumnConstants.SECONDARY_PROGRAM +" Level " +level;
-                    }else{
-                        if(programName.equals(ProgramUtil.TERTIARY_PROGRAM)){
-                            columnName=ColumnConstants.TERTIARY_PROGRAM +" Level " +level;
+        if (level > 0) {
+            if (programName.equals(ProgramUtil.NATIONAL_PLAN_OBJECTIVE)) {
+                columnName = ProgramUtil.NATIONAL_PLANNING_OBJECTIVES + " Level " + level;
+            } else {
+                if (programName.equals(ProgramUtil.PRIMARY_PROGRAM)) {
+                    columnName = ProgramUtil.PRIMARY_PROGRAM + " Level " + level;
+                } else {
+                    if (programName.equals(ProgramUtil.SECONDARY_PROGRAM)) {
+                        columnName = ProgramUtil.SECONDARY_PROGRAM + " Level " + level;
+                    } else {
+                        if (programName.equals(ProgramUtil.TERTIARY_PROGRAM)) {
+                            columnName = ProgramUtil.TERTIARY_PROGRAM + " Level " + level;
                         }
                     }
                 }

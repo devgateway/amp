@@ -22,14 +22,16 @@ public class PrimaryOrganisationContactValidator extends InputValidator {
         boolean found = false;
         if (fieldPath.equals(ContactEPConstants.ORGANISATION_CONTACTS)) {
             Collection orgContacts = (Collection) newFieldParent.get(ContactEPConstants.ORGANISATION_CONTACTS);
-            for (Object contact : orgContacts) {
-                Map contactMap = (Map) contact;
-                boolean primary = Boolean.TRUE.equals(contactMap.get(ContactEPConstants.PRIMARY_CONTACT));
-                if (primary) {
-                    if (found) {
-                        return false;
-                    } else {
-                        found = true;
+            if (orgContacts != null) {
+                for (Object contact : orgContacts) {
+                    Map contactMap = (Map) contact;
+                    boolean primary = Boolean.TRUE.equals(contactMap.get(ContactEPConstants.PRIMARY_CONTACT));
+                    if (primary) {
+                        if (found) {
+                            return false;
+                        } else {
+                            found = true;
+                        }
                     }
                 }
             }

@@ -62,7 +62,18 @@
          <param-value>utf-8</param-value>
       </init-param>
    </filter>
-
+   
+   <filter>
+        <filter-name>populateTLSRequestFilter</filter-name>
+        <filter-class>org.digijava.kernel.request.PopulateTLSRequestFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>populateTLSRequestFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>ERROR</dispatcher>
+    </filter-mapping>
+   
 	<filter>
 		<filter-name>HibernateFilter</filter-name>
 		<filter-class>org.digijava.kernel.startup.HibernateSessionRequestFilter</filter-class>
@@ -151,28 +162,17 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 	
-	<!-- Quartz Listener -->
-     <context-param>
-         <param-name>shutdown-on-unload</param-name>
-         <param-value>true</param-value>
-     </context-param>
-     <context-param>
-         <param-name>start-scheduler-on-load</param-name>
-         <param-value>false</param-value>
-     </context-param>
-     <listener>
-         <listener-class>
-             org.quartz.ee.servlet.QuartzInitializerListener
-         </listener-class>
-     </listener>
-	
-	
-
 	<listener>
 		<listener-class>
 			org.digijava.module.aim.startup.AMPStartupListener
 		</listener-class>
 	</listener>
+
+	<!-- Quartz Listener -->
+	<listener>
+		<listener-class>org.digijava.module.aim.startup.QuartzStartupListener</listener-class>
+	</listener>
+
 	<listener>
 		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
 	</listener>
@@ -226,6 +226,10 @@
     	 <init-param>
 			<param-name>com.sun.jersey.spi.container.ContainerResponseFilters</param-name>
 			<param-value>org.digijava.kernel.ampapi.endpoints.common.ApiResponseFilter</param-value>
+		</init-param>
+		<init-param>
+			<param-name>com.sun.jersey.spi.container.ResourceFilters</param-name>
+			<param-value>org.digijava.kernel.ampapi.endpoints.security.AuthorizerResourceFilterFactory</param-value>
 		</init-param>
 		 
     	<init-param>
@@ -313,7 +317,6 @@
 				/repository/contentrepository/struts-config.xml, /repository/categorymanager/struts-config.xml,
 				/repository/sdm/struts-config.xml,
 				/repository/message/struts-config.xml,				
-				/repository/dataExchange/struts-config.xml,
 				/repository/parisindicator/struts-config.xml,
 				/repository/search/struts-config.xml,
 				/repository/content/struts-config.xml,

@@ -70,6 +70,7 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, /*Versi
     private AmpTemplatesVisibility fmTemplate;
     private AmpCategoryValue workspacePrefix;
     private Boolean crossteamvalidation;
+    private AmpSummaryNotificationSettings sumaryNotificationSettings;
 
     @Override
     public AmpFilterData newAmpFilterData(FilterDataSetInterface filterRelObj,
@@ -333,11 +334,18 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, /*Versi
     }
 
     public void setIsolated(Boolean isolated) {
-        if (isolated == null)
+        if (isolated == null) {
             this.isolated = false;
-        else
+        } else {
             this.isolated = isolated;
+        }
     }
-    
-    
+
+    public AmpSummaryNotificationSettings getSumaryNotificationSettings() {
+        return sumaryNotificationSettings;
+    }
+
+    public void setSumaryNotificationSettings(AmpSummaryNotificationSettings sumaryNotificationSettings) {
+        this.sumaryNotificationSettings = sumaryNotificationSettings;
+    }
 }

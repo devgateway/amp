@@ -19,6 +19,11 @@ module.exports = BackboneDash.View.extend({
   initialize: function(options) {
 	var self = this;
     this.app = options.app;
+      if (app && app.generalSettings && app.generalSettings.attributes && app.generalSettings.attributes['rtl-direction']) {
+          this.isRtl = true;
+      } else {
+          this.isRtl = false;
+      }
     var valuesLength = this.model.get('values') ? this.model.get('values').length : 0;
     var height = util.calculateChartHeight(valuesLength, true);
     this.dashChartOptions = _({}).extend(options.chartOptions, {
@@ -68,6 +73,12 @@ module.exports = BackboneDash.View.extend({
 			        nv.tooltip.cleanup();
 			        if (rendered === false) {
 			        	rendered = true;
+                        if (self.model.get('chartType') === 'fragmentation') {
+                            var svg = $($($(self.chart)[0].el).find("svg"))[0].getBBox();
+                            self.dashChartOptions.height = svg.height + 100;
+                            self.dashChartOptions.width = svg.width + 80;
+                        }
+
 			        	self.renderChart(self.$('.preview-area .svg-wrap').removeClass('hidden'),
 			        		self.$('.preview-area .canvas-wrap'), self.chart);
 			        }
@@ -75,7 +86,6 @@ module.exports = BackboneDash.View.extend({
 			});
 		}
     }, 100);
-    
     return this;
   },
 
@@ -85,11 +95,7 @@ module.exports = BackboneDash.View.extend({
       this.app.viewFail(this, 'Chart export requires a modern web browser');
     }
     
-    if (self.model.get('chartType') === 'fragmentation') {
-    	var svg = $($($(chart)[0].el).find("svg"))[0].getBBox();
-	    this.dashChartOptions.height = svg.height + 100;
-	    this.dashChartOptions.width = svg.width + 80;
-    }
+
         
     var view = this.model.get('view'),
         data = this.model.get('processed'),
@@ -98,11 +104,11 @@ module.exports = BackboneDash.View.extend({
           _({}).extend(this.dashChartOptions, { height: this.dashChartOptions.height - 42 })).el;
 
     svgContainer.html(chartEl);
-
     this.prepareCanvas(canvas, this.dashChartOptions.height, this.dashChartOptions.width);
+    svgContainer.hide();
 
     this.chartToCanvas(chartEl, canvas, function() {
-      svgContainer.hide();
+
       var img = new Image();
       img.src = canvas.toDataURL('image/png');
       canvasContainer.html(img);
@@ -125,48 +131,84 @@ module.exports = BackboneDash.View.extend({
     }
   },
 
-  prepareCanvas: function(canvas, h, w) {
-	var self = this;
-	var currency = app.settingsWidget.definitions.findCurrencyById(self.model.get('currency'));
-    var currencyName = currency !== undefined ? currency.value : '';
-    var ctx = canvas.getContext('2d'),
-    	moneyContext = (this.model.get('sumarizedTotal') !== undefined ? ': ' + util.translateLanguage(this.model.get('sumarizedTotal')) + ' ': ' ') + currencyName,
-        adjType = this.model.get('adjtype');    
-    if (adjType) {
-        var trnAdjType = this.chart.$el.find('.ftype-options option:selected').text();
-        moneyContext = trnAdjType + moneyContext;
-    }
+    prepareCanvas: function(canvas, h, w) {
+        var self = this;
+        var currency = app.settingsWidget.definitions.findCurrencyById(self.model.get('currency'));
+        var currencyName = currency !== undefined ? currency.value : '';
 
-    // size the canvas
-    canvas.setAttribute('width', w);
-    canvas.setAttribute('height', h);
+        var moneyContext ='';
+        var  adjType = this.model.get('adjtype');
+        var trnAdjType ='';
+        if (adjType) {
+            trnAdjType = this.chart.$el.find('.ftype-options option:selected').text();
+        }
+        if (self.isRtl) {
+            moneyContext = currencyName + ' ' + ( this.model.get('sumarizedTotal') !== undefined ?
+                util.translateLanguage(this.model.get('sumarizedTotal')) +' : ' +  ' ': ' ')  ;
+            moneyContext = moneyContext + trnAdjType ;
+        }else{
+            moneyContext = (this.model.get('sumarizedTotal') !== undefined ? ': '
+                + util.translateLanguage(this.model.get('sumarizedTotal')) + ' ': ' ') + currencyName;
+            moneyContext = trnAdjType + moneyContext;
+        }
 
-    // make the background opaque white
-    ctx.beginPath();
-    ctx.rect(0, 0, w, h);
-    ctx.fillStyle = '#fff';
-    ctx.fill();
+        // size the canvas
+        canvas.setAttribute('width', w);
+        canvas.setAttribute('height', h);
 
-    // Add the chart title
-    ctx.fillStyle = '#163f66';
-    ctx.font = 'bold 22px "Open Sans"';
-    ctx.fillText(this.model.get('title').toUpperCase(), 10, 10 + 22);
-    // what money are we talking about?
-    ctx.fillStyle = '#333';
-    if (self.model.get('chartType') === 'fragmentation') {
-    	ctx.font = 'normal 14px "Open Sans"';
-    	ctx.textAlign = 'left';
-    	ctx.fillText(trnAdjType, 10, 50);	    
-    } else {    
-    	ctx.textAlign = 'right';
-	    ctx.fillText(moneyContext, w - 10, 10 + 22);
-	    ctx.textAlign = 'left';  // reset it
-    }    
-    // reset font to something normal (nvd3 uses css ugh...)
-    ctx.font = 'normal 12px "sans-serif"';
-    
-    $('.modal.in .modal-dialog').width(w + 60);
-  },
+        var ctx = canvas.getContext('2d');
+        // make the background opaque white
+        ctx.beginPath();
+        ctx.rect(0, 0, w, h);
+        ctx.fillStyle = '#fff';
+        ctx.fill();
+
+        // Add the chart title
+        ctx.fillStyle = '#163f66';
+        ctx.font = 'bold 22px "Open Sans"';
+        var strTitle = this.model.get('title');
+        var titleX = 10;
+        var titleAlig='';
+        var trnAdustTypeX = 10;
+        var trnAdjustTypeAl='left';
+        var moneyContextX = w - 10;
+        var moneyContextTextAlign='right';
+        var moneyContextTextAlignReset='left';
+        if (self.isRtl) {
+            //for title
+            titleX = w - strTitle.length;
+            ctx.textAlign = 'right';
+            //for adjustment type
+            trnAdustTypeX = w - 10;
+            //for currency
+            moneyContextX = 10;
+            moneyContextTextAlign='left';
+            moneyContextTextAlignReset='left';
+        }
+        trnAdjustTypeAl = titleAlig;
+        ctx.fillText(strTitle.toUpperCase(), titleX, 10 + 22);
+
+
+
+        // what money are we talking about?
+        ctx.fillStyle = '#333';
+        if (self.model.get('chartType') === 'fragmentation') {
+            ctx.font = 'normal 14px "Open Sans"';
+            ctx.textAlign = trnAdjustTypeAl;
+            ctx.fillText(trnAdjType, trnAdustTypeX, 50);
+        } else {
+            ctx.textAlign = moneyContextTextAlign;
+            ctx.fillText(moneyContext, moneyContextX, 10 + 22);
+            ctx.textAlign = moneyContextTextAlignReset;// reset it
+        }
+        // reset font to something normal (nvd3 uses css ugh...)
+        ctx.font = 'normal 12px "sans-serif"';
+
+
+        ctx.textAlign='start';
+
+        $('.modal.in .modal-dialog').width(w + 60);
+    },
 
   chartToCanvas: function(svg, canvas, cb) {
 	var self = this;
@@ -179,118 +221,155 @@ module.exports = BackboneDash.View.extend({
 	    s.innerHTML = "<![CDATA[\n" + css + "\n]]>";
 	    svg.getElementsByTagName("defs")[0].appendChild(s);
 	}
-	
     var boundCB = _(cb).bind(this);
     window.setTimeout(function() {
       this.app.tryTo(function() {
-        canvg(canvas, svg.parentNode.innerHTML, { // note: svg.outerHTML breaks IE
-          offsetY: ((self.model.get('chartType') !== 'fragmentation') ? 42 : 65),
-          ignoreDimensions: true,
-          ignoreClear: true,
-          ignoreMouse: true,
-          renderCallback: boundCB
-        });
+          //before calling canvas we adjust the text if in rtl mode
+
+          if (this.isRtl) {
+              $('.preview-area .svg-wrap .nv-group .nv-bar text').each(function (index, element) {
+
+                  var NUMERIC_REGEXP = /[-]{0,1}[\d]*[\.]{0,1}[\d]+/;
+                  var STRING_REGEXP = /[^0-9.]/;
+                  if (this.textContent.match(NUMERIC_REGEXP) && this.textContent.match(STRING_REGEXP)) {
+                      var newText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                      newText.setAttributeNS(null, "x", parseFloat(element.getAttributeNS(null, "x")) - 20);
+                      newText.setAttributeNS(null, "y", element.getAttributeNS(null, "y"));
+                      var textNode = document.createTextNode(this.textContent.match(STRING_REGEXP)[0]);
+                      newText.appendChild(textNode);
+                      this.parentNode.appendChild(newText);
+                      this.textContent = this.textContent.match(NUMERIC_REGEXP)[0];
+                  }
+
+              });
+          }
+          canvg(canvas, svg.parentNode.innerHTML, { // note: svg.outerHTML breaks IE
+              offsetY: ((self.model.get('chartType') !== 'fragmentation') ? 42 : 65),
+              ignoreDimensions: true,
+              ignoreClear: true,
+              ignoreMouse: true,
+              renderCallback: boundCB
+          });
       }, this);
-    }.bind(this), 1500);  // we have to wait for stupid nvd3...
+    }.bind(this), 1500);  // we have to wait for nvd3 to load
   },
 
   renderCSV: function(csvContainer) {
-	var self = this;
-	var currencyName = app.settingsWidget.definitions.findCurrencyById(self.model.get('currency')).value;
-    var data = this.model.get('processed'),
-        currency = currencyName,
-        adjtype = this.model.get('adjtype') || false,
-        csvTransformed,
-        headerRow,
-        textContent,
-        preview;
+      var self = this;
+      var currencyName = app.settingsWidget.definitions.findCurrencyById(self.model.get('currency')).value;
+      var data = this.model.get('processed'),
+          currency = currencyName,
+          adjtype = this.model.get('adjtype') || false,
+          csvTransformed,
+          headerRow,
+          textContent,
+          preview;
 
-    var self = this;
-    var keys = _(data).pluck('key');
-    
-    if (self.model.get('chartType') !== 'fragmentation') {
-	    // table of all the data
-	    csvTransformed = _(data)
-	      .chain()
-	      .pluck('values')
-	      .transpose()
-	      .map(function(row) {
-	        return _(row).reduce(function(csvRow, cell) {
-	          csvRow.push(cell.y);
-	          return csvRow;
-	        }, [row[0].x]);
-	      })
-	      .map(function(row) {
-	        row.push(currency || '');
-	        if (adjtype) {
-				var trnAdjType = self.chart.$el.find('.ftype-options option:selected').text();
-	            row.push(trnAdjType);
-	        }
-	        return row;
-	      })
-	      .value();
-    } else {
-        csvTransformed = _.map(self.model.get("matrix"), function(itemY, i) {
-			return _.map(itemY, function(itemX, j) {
-				return [self.model.get("yDataSet")[i],
-					self.model.get("xDataSet")[j],
-					self.model.get("matrix")[i][j] ? self.model.get("matrix")[i][j].dv : '',
-					self.model.get("matrix")[i][j] ? self.model.get("matrix")[i][j].p : ''
-				]
-			})
-		});
-	    csvTransformed = [].concat.apply([], csvTransformed);
-	    csvTransformed = _.each(csvTransformed, function(item) { 
-	        item.push(currency);
-	        if (adjtype) {
-				var trnAdjType = self.chart.$el.find('.ftype-options option:selected').text();
-	            item.push(trnAdjType);
-	        }	        
-	    });
-    }
+      var self = this;
+      var keys = _(data).pluck('key');
 
-    // prepend a header row
-    headerRow = [];
-    var amountTrn = this.app.translator.translateSync('amp.dashboard:download-amount', 'Amount');
-    var currencyTrn = this.app.translator.translateSync('amp.dashboard:currency', 'Currency');
-    var percentageTrn = this.app.translator.translateSync('amp.dashboard:percentage', 'Percentage');
-    var typeTrn = this.app.translator.translateSync('amp.dashboard:type', 'Type');
-    var yearTrn = this.app.translator.translateSync('amp.dashboard:year', 'Year');
+      if (self.model.get('chartType') !== 'fragmentation') {
+          // table of all the data
+          csvTransformed = _(data)
+              .chain()
+              .pluck('values')
+              .transpose()
+              .map(function (row) {
+                  return _(row).reduce(function (csvRow, cell) {
+                      csvRow.push(cell.y);
+                      return csvRow;
+                  }, [row[0].x]);
+              })
+              .map(function (row) {
+                  var trnAdjType = '';
+                  row.push(currency || '');
+                  if (adjtype) {
+                      trnAdjType = self.chart.$el.find('.ftype-options option:selected').text();
+                      row.push(trnAdjType);
+                  }
+                  return row;
+              })
+              .value();
+      } else {
+          csvTransformed = _.map(self.model.get("matrix"), function (itemY, i) {
+              return _.map(itemY, function (itemX, j) {
+                  return [self.model.get("yDataSet")[i],
+                      self.model.get("xDataSet")[j],
+                      self.model.get("matrix")[i][j] ? self.model.get("matrix")[i][j].dv : '',
+                      self.model.get("matrix")[i][j] ? self.model.get("matrix")[i][j].p : ''
+                  ]
+              })
+          });
+          csvTransformed = [].concat.apply([], csvTransformed);
+          csvTransformed = _.each(csvTransformed, function (item) {
+              item.push(currency);
+              if (adjtype) {
+                  var trnAdjType = self.chart.$el.find('.ftype-options option:selected').text();
+                  item.push(trnAdjType);
+              }
+          });
+      }
 
-	if (this.model.url.indexOf('/tops') > -1) {
-	    headerRow.push(this.model.get('title'));
-	    headerRow.push(amountTrn);
-	    headerRow.push(currencyTrn);
-	    headerRow.push(typeTrn);
-	} else if (this.model.url.indexOf('/aid-predictability') > -1) {
-	    headerRow.push(yearTrn);
-	    _.each(keys, function(item) {
-	    	headerRow.push(item);
-	    });
-	    headerRow.push(currencyTrn);
-	} else if (this.model.url.indexOf('/ftype') > -1) {
-		headerRow.push(yearTrn);
-	    _.each(keys, function(item) {
-	    	headerRow.push(item);
-	    });
-	    headerRow.push(currencyTrn);
-	    headerRow.push(typeTrn);
-	} else if (this.model.get('chartType') === 'fragmentation') {
-		// For AMP-23582: we dont want the name from "summary" because thats the origName and not always the same name than the X axis combo selector. 
-		var firstColumnName = _.find(self.model.get('heatmap_config').models[0].get('columns'), function(item) {
-			return item.origName === self.model.get('summary')[0];
-		}).name; 
-		var secondColumnName = _.find(self.model.get('heatmap_config').models[0].get('columns'), function(item) {
-			return item.origName === self.model.get('summary')[1];
-		}).name;
-		headerRow.push(firstColumnName);
-		headerRow.push(secondColumnName);
-	    headerRow.push(amountTrn);
-	    headerRow.push(percentageTrn);
-	    headerRow.push(currencyTrn);
-	    headerRow.push(typeTrn);
-	}
+      // prepend a header row
+      headerRow = [];
+      var amountTrn = this.app.translator.translateSync('amp.dashboard:download-amount', 'Amount');
+      var currencyTrn = this.app.translator.translateSync('amp.dashboard:currency', 'Currency');
+      var percentageTrn = this.app.translator.translateSync('amp.dashboard:percentage', 'Percentage');
+      var typeTrn = this.app.translator.translateSync('amp.dashboard:type', 'Type');
+      var yearTrn = this.app.translator.translateSync('amp.dashboard:year', 'Year');
 
+      if (this.model.url.indexOf('/tops') > -1) {
+          if (self.isRtl) {
+              headerRow.push(typeTrn);
+              headerRow.push(currencyTrn);
+              headerRow.push(amountTrn);
+              headerRow.push(this.model.get('title'));
+          } else {
+              headerRow.push(this.model.get('title'));
+              headerRow.push(amountTrn);
+              headerRow.push(currencyTrn);
+              headerRow.push(typeTrn);
+          }
+
+      } else {
+          if (this.model.url.indexOf('/aid-predictability') > -1) {
+              headerRow.push(yearTrn);
+              _.each(keys, function (item) {
+                  headerRow.push(item);
+              });
+              headerRow.push(currencyTrn);
+          } else if (this.model.url.indexOf('/ftype') > -1) {
+              headerRow.push(yearTrn);
+              _.each(keys, function (item) {
+                  headerRow.push(item);
+              });
+              headerRow.push(currencyTrn);
+              headerRow.push(typeTrn);
+          } else if (this.model.get('chartType') === 'fragmentation') {
+              // For AMP-23582: we dont want the name from "summary" because thats the origName and not always the same name than the X axis combo selector.
+              var firstColumnName = _.find(self.model.get('heatmap_config').models[0].get('columns'), function (item) {
+                  return item.origName === self.model.get('summary')[0];
+              }).name;
+              var secondColumnName = _.find(self.model.get('heatmap_config').models[0].get('columns'), function (item) {
+                  return item.origName === self.model.get('summary')[1];
+              }).name;
+              headerRow.push(firstColumnName);
+              headerRow.push(secondColumnName);
+              headerRow.push(amountTrn);
+              headerRow.push(percentageTrn);
+              headerRow.push(currencyTrn);
+              headerRow.push(typeTrn);
+          }
+          if(self.isRtl) {
+              headerRow.reverse();
+          }
+      }
+    //if we are in RTL we reverse each element of the array
+      if (self.isRtl) {
+          csvTransformed.forEach(function (row) {
+              row.reverse();
+          });
+      }
     csvTransformed.unshift(headerRow);
     /* Add sep=, for automatic Excel support at the very top of the file works but breaks BOM unicode.
      * Let us use tab-delimited instead.

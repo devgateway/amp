@@ -42,7 +42,7 @@ public class InputValidatorProcessor {
                 new AgreementCodeValidator(),
                 new AgreementTitleValidator(),
                 new FundingOrgRolesValidator(),
-                new ComponentFundingOrgsValidator());
+                new RegexPatternValidator());
     }
 
     public static List<InputValidator> getContactValidators() {
@@ -51,8 +51,18 @@ public class InputValidatorProcessor {
                 new InputTypeValidator(),
                 new RequiredValidator(),
                 new MultipleEntriesValidator(),
+                new UniqueValidator(),
                 new ValueValidator(),
-                new PrimaryOrganisationContactValidator());
+                new PrimaryOrganisationContactValidator(),
+                new RegexPatternValidator());
+    }
+    
+    public static List<InputValidator> getResourceValidators() {
+        return Arrays.asList(
+                new ValidFieldValidator(),
+                new InputTypeValidator(),
+                new RequiredValidator(),
+                new ValueValidator());
     }
 
     private final List<InputValidator> validators;

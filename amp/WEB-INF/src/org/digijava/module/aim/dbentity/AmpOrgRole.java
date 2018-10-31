@@ -26,13 +26,14 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
     @Interchangeable(fieldTitle = "Percentage", importable = true, percentageConstraint = true,
             fmPath = FMVisibility.PARENT_FM + "/percentage", required = ActivityEPConstants.REQUIRED_ALWAYS)
     private Float   percentage;
-    @Interchangeable(fieldTitle="Budgets", importable=true)
+    @Interchangeable(fieldTitle = "Budgets", importable = true, fmPath = FMVisibility.PARENT_FM + "/Budget Code")
     private Set <AmpOrgRoleBudget> budgets;
-    @Interchangeable(fieldTitle="Additional Info", importable=true)
+    
+    @Interchangeable(fieldTitle = "Additional Info", importable = true, label = "Department/Division",
+            fmPath = FMVisibility.PARENT_FM + "/relOrgadditionalInfo")
     private String additionalInfo;
 
-    @Interchangeable(fieldTitle = "GPI Ni Survey", fmPath = "/Activity Form/GPI 2017/GPI NI Survey")
-    private Set<AmpGPINiSurvey> gpiNiSurveys;       
+    private Set<AmpGPINiSurvey> gpiNiSurveys;
     
     public Float getPercentage() {
         return percentage;
@@ -118,8 +119,15 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
     public Output getOutput() {
         Output out = new Output();
         out.setOutputs(new ArrayList<Output>());
-        out.getOutputs().add(
-                new Output(null, new String[] { "Organization" }, new Object[] { this.organisation.getName() }));
+        
+        String orgName = this.organisation.getName();
+        if (this.organisation != null 
+                && this.organisation.getDeleted() != null && this.organisation.getDeleted()) {
+            out.setDeletedValues(true);
+            orgName += " (" + TranslatorWorker.translateText("deleted") + ")";
+        }
+        out.getOutputs().add(new Output(null, new String[] {"Organization"}, new Object[] {orgName}));
+        
         out.getOutputs().add(new Output(null, new String[] { "Role" }, new Object[] { TranslatorWorker.translateText(this.role.getName()) }));
         if (this.percentage != null) {
             out.getOutputs().add(new Output(null, new String[] { "Percentage" }, new Object[] { this.percentage }));
@@ -135,6 +143,7 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
                 out.getOutputs().add(new Output(null, new String[] {"Budget Code"}, new Object[] {budgetCode.substring(0,budgetCode.length()-1)}));
             }
         }
+        
         return out;
     }
 

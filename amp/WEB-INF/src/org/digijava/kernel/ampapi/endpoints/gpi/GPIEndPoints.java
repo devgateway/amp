@@ -23,13 +23,15 @@ import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+import org.digijava.module.aim.util.FiscalCalendarUtil;
 
 
 @Path("gpi")
 public class GPIEndPoints implements ErrorReportingEndpoint {
 
     /**
-     * Retrieves a list of aid on budget objects </br>
+     * Retrieve the list of aid on budget objects.
      * <dl>
      * </br>
      * The JSON object holds information regarding:
@@ -92,7 +94,7 @@ public class GPIEndPoints implements ErrorReportingEndpoint {
     }
 
     /**
-     * Retrieves object aid on budget by id
+     * Retrieve aid on budget object by id.
      * </br>
      * <dl>
      * </br>
@@ -126,7 +128,7 @@ public class GPIEndPoints implements ErrorReportingEndpoint {
     }
 
     /**
-     * saves an aid on budget object to the database
+     * Save aid on budget object to the database.
      * </br>
      * <dl>
      * </br>
@@ -171,7 +173,7 @@ public class GPIEndPoints implements ErrorReportingEndpoint {
     }
 
     /**
-     * Saves a list of aid on budget objects to the database
+     * Save a list of aid on budget objects to the database.
      * </br>
      * <dl>
      * </br>
@@ -233,7 +235,7 @@ public class GPIEndPoints implements ErrorReportingEndpoint {
     }
 
     /**
-     *  Deletes the aid on budget row on the database
+     *  Delete aid on budget object in the database.
      * </br>
      * <dl>
      * </br>
@@ -258,7 +260,7 @@ public class GPIEndPoints implements ErrorReportingEndpoint {
     }
 
     /**
-     * saves a donorNotes object to the database
+     * Save donor notes objects to the database.
      * </br>
      * <dl>
      * </br>
@@ -301,7 +303,7 @@ public class GPIEndPoints implements ErrorReportingEndpoint {
     }
 
     /**
-     * saves a list donorNotes objects to the database
+     * Save a list donorNotes objects to the database.
      * </br>
      * <dl>
      * </br>
@@ -360,7 +362,7 @@ public class GPIEndPoints implements ErrorReportingEndpoint {
     }
 
     /**
-     * Retrieves a list of donor notes
+     * Retrieve a list of donor notes.
      * </br>
      * <dl>
      * </br>
@@ -402,7 +404,7 @@ public class GPIEndPoints implements ErrorReportingEndpoint {
     }
 
     /**
-     * Deletes the donor notes object from the database
+     * Delete the donor note object from the database.
      * </br>
      * <dl>
      * </br>
@@ -427,7 +429,7 @@ public class GPIEndPoints implements ErrorReportingEndpoint {
     }
 
     /**
-     * Retrieves a list of verified organizations associated with the logged in user
+     * Retrieve a list of verified organizations associated with the logged in user.
      * </br>
      * <dl>
      * </br>
@@ -440,7 +442,8 @@ public class GPIEndPoints implements ErrorReportingEndpoint {
      *[{
      *    "id" : 3443,
      *    "name" : "African Development Bank"
-     * },{
+     * },
+     * {
      *     "id" : 3444,
      *     "name" : "World Bank Group"
      * }
@@ -457,11 +460,40 @@ public class GPIEndPoints implements ErrorReportingEndpoint {
     }
     
     /**
-     * Retrieves the gpi report for specified indicator.
+     * Retrieve gpi report for the specified indicator.
      * 
-     * @param indicatorCode
-     * @param formParams
-     * @return
+     *  The form parameters is a JSON objects containing the following fields:<br/>
+     *   <dt><b>settings</b></dt> - Report settings. Contains "currency-code" and "calendar-id" fields.
+     *   <dt><b>filters</b></dt> - Report filters.
+     *   <dt><b>hierarchy</b></dt> - The hierarchy used. Donor Agency or Donor Group (donor-agency|donor-group).
+     *   <dt><b>page</b></dt> - optional, page number, starting from 1. Use 0 to retrieve only pagination information, 
+     *                          without any records. Default to 0</dd>
+     *   <dt><b>recordsPerPage</b></dt> - optional, the number of records per page to return. The default value will 
+     *   be set to the number configured in AMP. Set it to -1 to get the unlimited records (all records).
+     *   <dt><b>output</b></dt> - The output. Used for indicator 1. Possible values: (1|2).
+     * <br>
+     * <h3>Sample Input:</h3>
+     * <pre>
+     * {  
+     *   "settings": {
+     *     "currency-code": "USD",
+     *     "calendar-id": "4"
+     *   },
+     *   "filters": {
+     *     "actual-approval-date": {
+     *       "start": "2017-01-01",
+     *       "end": "2018-01-01"
+     *     }
+     *   },
+     *   "hierarchy" : "donor-agency",
+     *   "output" : 1
+     * }
+     * </pre>
+     * 
+     * @param indicatorCode indicatorCode (1|5a|5b|6|9)
+     * @param formParams formParmas
+     * 
+     * @return gpi report in JSON format
      */
     @POST
     @Path("/report/{indicatorCode}")
@@ -473,8 +505,12 @@ public class GPIEndPoints implements ErrorReportingEndpoint {
     
     /**
      * 
-     * @param indicatorCode
-     * @param formParams
+     * Retrieve gpi report in XLSX format.
+     * 
+     * See /rest/report/{indicatorCode} endpoint for formParams description.
+     * 
+     * @param indicatorCode indicatorCode (1|5a|5b|6|9)
+     * @param formParams form Params
      * @return response containing the XLSX file of the GPI Report
      */
     @POST
@@ -485,9 +521,13 @@ public class GPIEndPoints implements ErrorReportingEndpoint {
     }
     
     /**
+     * Retrieve gpi report in PDF format.
      * 
-     * @param indicatorCode
-     * @param formParams
+     * See /rest/report/{indicatorCode} endpoint for formParams description.
+     * 
+     * 
+     * @param indicatorCode indicatorCode (1|5a|5b|6|9)
+     * @param formParams formParams
      * @return response containing the PDF file of the GPI Report
      */
     @POST
@@ -498,15 +538,26 @@ public class GPIEndPoints implements ErrorReportingEndpoint {
     }
     
     /**
-     * Retrieves the remarks for the specified indicator code, donor agency/group and between the specified dates.
+     * Retrieve remarks for the specified indicator code, donor agency/group and between the specified dates.
      * 
-     * @param indicatorCode
-     * @param donorIds - list of donors
-     * @param donorType (donor-agency|donor-group)
-     * @param from
-     * @param to
+     * <h3>Sample Output:</h3>
+     * <pre>
+     * [
+     *  {
+     *    "donorAgency": "France",
+     *    "date": "07/07/2016",
+     *    "remark": "fdsafdsafas" 
+     *  }
+     * ]     
+     * </pre>
      * 
-     * @return
+     * @param indicatorCode indicatorCode (1|5a|5b|6|9)
+     * @param donorIds list of donors
+     * @param donorType donorType (donor-agency|donor-group)
+     * @param from Julian date number
+     * @param to Julian date number
+     * 
+     * @return list of remarks
      */
     @GET
     @Path("/report/remarks/")
@@ -520,9 +571,56 @@ public class GPIEndPoints implements ErrorReportingEndpoint {
     }
     
     /**
-     * Retrieves the documents for the specified donor agency/group and activity.
+     * Retrieve documents for the specified donor agency/group and activity.
      * 
-     * @param activitydonors - list of donors with activities
+     * Supportive documents endpoint is used for retrieving URLS of the survey requested by the parameters 
+     * donor ID + activity ID. 
+     * 
+     * <h3>Sample Input:</h3>
+     * <pre>
+     * [
+     *  {
+     *    "donorId" : 40,
+     *    "activityId" : 1232
+     *  },
+     *  {
+     *    "donorId" : 40,
+     *    "activityId" : 1233
+     *  },
+     *  {
+     *    "donorId" : 50,
+     *    "activityId" : 1233
+     *  }
+     * ]
+     * </pre>
+     * <br>
+     * <h3>Sample Output:</h3>
+     * <pre>
+     * [
+     *  {
+     *    "donorId" : 40,
+     *    "activityId" : 1232,
+     *    "documents" : [
+     *       {
+     *         "title" :  "Governement link",
+     *         "question" : "11a",
+     *         "description" : "Electronic link to project document",
+     *         "type" : "link",
+     *         "url" : "http://eth.amp.org/contentrepository/downloadFile.do?uuid=62d3bba9-d997-4411-b54b-659eb4c3aeb7"
+     *       },
+     *       {
+     *         "title" :  "Gov. document M&E",
+     *         "question" : "11c",
+     *         "description" : "Electronic link to gov. existing data source",
+     *         "type" : "document",
+     *         "url" : "http://eth.amp.org/contentrepository/downloadFile.do?uuid=62d3bba9-a897-5555-b54b-659eb4c3aeb9"
+     *       }
+     *    ]
+     *  }
+     * ]
+     * </pre>
+     * 
+     * @param activityDonors - list of donors with activities
      * 
      * @return list of activity donors with documents
      */
@@ -535,6 +633,22 @@ public class GPIEndPoints implements ErrorReportingEndpoint {
         return GPIDataService.getGPIDocuments(activityDonors);
     }
 
+    /**
+     * Retrieve gpi report visibility for each indicator.
+     * <h3>Sample Output:</h3>
+     * 
+     * <pre>
+     * {
+     *  "1": true,
+     *  "6": true,
+     *  "5a": true,
+     *  "5b": true,
+     *  "9b": true
+     * }
+     * </pre>
+     * 
+     * @return list of visibility for each indicator
+     */
     @GET
     @Path("/report/visibility/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -555,6 +669,57 @@ public class GPIEndPoints implements ErrorReportingEndpoint {
     @ApiMethod(authTypes = { AuthRule.IN_WORKSPACE }, id = "getYears", ui = false)
     public List<JsonBean> getYears() {       
          return GPIDataService.getYears();
+    }
+
+    @GET
+    @Path("/report/donors/")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = { AuthRule.IN_WORKSPACE }, id = "getDonors", ui = false)
+    public List<JsonBean> getDonors() {       
+        return GPIDataService.getDonors(); 
+
+    }
+    
+    @GET
+    @Path("/report/calendars/")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = { AuthRule.IN_WORKSPACE }, id = "getCalendars", ui = false)
+    public List<AmpFiscalCalendar> getCalendars() {
+        return FiscalCalendarUtil.getAllAmpFiscalCalendars();
+    }
+
+    /**
+     * Retrieves a converted date between two calendars </br>
+     * <dl>
+     * </br>
+     * The JSON object holds information regarding:
+     * <dt><b>converted-date</b><dd> - the converted date in the format yyyy-MM-dd
+     * </dl></br></br>
+     * 
+     * <h3>Sample Output:</h3>
+     * <pre>
+     * 
+     * {
+     *   "converted-date": "2006-11-20"
+     * } 
+     * </pre>
+     * 
+     * @param fromCalId form Calendar Id
+     * @param toCalId to Calendar Id
+     * @param date sourceDate in the format yyyy-MM-dd
+     * @return converted date in the format yyyy-MM-dd
+     */
+    @GET
+    @Path("/calendar/convert/")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = { AuthRule.IN_WORKSPACE }, id = "getConvertedDate", ui = false)
+    public JsonBean getConvertedDate(@QueryParam("fromCalId") Long fromCalId, @QueryParam("toCalId") Long toCalId,
+            @QueryParam("date") String date) {
+        
+        JsonBean convertedDateMap = new JsonBean();
+        convertedDateMap.set("converted-date", GPIDataService.getConvertedDate(fromCalId, toCalId, date));
+        
+        return convertedDateMap;
     }
     
     /**

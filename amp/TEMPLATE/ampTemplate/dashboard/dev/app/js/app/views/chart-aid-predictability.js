@@ -1,6 +1,8 @@
 var d3 = require('d3');
 var ChartViewBase = require('./chart-view-base');
 var _ = require('underscore');
+var util = require('../../ugly/util');
+
 var ProjectsListModalView = require('./chart-detail-info-modal');
 
 module.exports = ChartViewBase.extend({
@@ -62,16 +64,14 @@ module.exports = ChartViewBase.extend({
     var header = context.x.raw + ' ' +
           app.translator.translateSync('amp.dashboard:aid-predictability-' +
           context.data[index].originalKey + '-' + this.model.get('measure'), '');
+    var ofTotal = of + ' '  + context.x.raw + ' ' + total;
 
     var otherSeries = context.data[1 - index];  // WARNING: assumes only 2 series
     var otherHere = otherSeries.values[context.x.index];
-    var line2Amount = 0;
-    if (otherHere.y > 0) {
-      line2Amount = context.y.raw / otherHere.y;
-    }
-    var line2 = '<b>' + d3.format('%')(line2Amount) +
-        '</b>&nbsp<span>' + of + '</span>&nbsp' + context.x.raw +
-        '&nbsp<span>' + total + '</span>';
+
+    var line2 = util.formatOfTotal(context.y.raw, otherHere.y, ofTotal);
+
+
     var self = this;
     var currencyName = app.settingsWidget.definitions.findCurrencyById(self.model.get('currency')).value; 
     return {tt: {

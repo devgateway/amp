@@ -60,7 +60,6 @@ import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.SiteCache;
 import org.digijava.kernel.viewmanager.ViewConfigFactory;
-import org.digijava.module.translation.util.HashKeyPatch;
 import org.digijava.module.xmlpatcher.core.SimpleSQLPatcher;
 
 /**
@@ -159,7 +158,6 @@ public class ConfigLoaderListener
             ViewConfigFactory.initialize(sce.getServletContext());
             
             // patches translations to hash code keys if this is not already done. 
-            HashKeyPatch.patchTranslationsIfNecessary();
             tats = new TrnAccesTimeSaver();
             exec = Executors.newSingleThreadExecutor();
             exec.execute(tats);
@@ -323,7 +321,9 @@ public class ConfigLoaderListener
     public void contextDestroyed(ServletContextEvent sce) {     
         
         //shut down translation thread
-        tats.shutdown();         
+        if (tats != null) {
+            tats.shutdown();
+        }
         
         ServiceManager.getInstance().shutdown(1);
         try {
@@ -353,7 +353,9 @@ public class ConfigLoaderListener
             PersistenceManager.cleanup();
             // Custom cache manager must be shut after all other cleanup stuff
             DigiCacheManager.shutdown();
-            exec.shutdownNow();
+            if (exec != null) {
+                exec.shutdownNow();
+            }
             ServiceManager.getInstance().shutdown(0);
         }
     }

@@ -1,7 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import static java.util.stream.Collectors.toList;
-
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,7 +12,9 @@ import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpComponentType;
+import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpLocation;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.util.ComponentsUtil;
@@ -31,7 +31,8 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
 
     @Override
     public List<Object[]> getCategoryValues(String discriminatorOption) {
-        String queryString = "SELECT acv.id, acv.value, acv.deleted from " + AmpCategoryValue.class.getName() + " acv "
+        String queryString = "SELECT acv.id, acv.value, acv.deleted, acv.index from "
+                + AmpCategoryValue.class.getName() + " acv "
                 + "WHERE acv.ampCategoryClass.keyName ='" + discriminatorOption + "' ORDER BY acv.id";
         return query(queryString);
     }
@@ -102,10 +103,8 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
 
     @Override
     public List<Object[]> getPossibleLocations() {
-        // FIXME location once added in admin is saved only in AmpCategoryValueLocations
-        // FIXME who is responsible for creating missing entries in AmpLocation?
         String queryString = "SELECT loc.id, acvl.id, acvl.name, acvlParent.id, acvlParent.name, "
-                + "parentCat.id, parentCat.value "
+                + "parentCat.id, parentCat.value, acvl.iso "
                 + " FROM " + AmpLocation.class.getName() + " loc "
                 + " LEFT JOIN loc.location AS acvl"
                 + " LEFT JOIN acvl.parentLocation AS acvlParent"
@@ -133,6 +132,27 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
     public List<AmpComponentType> getComponentTypes() {
         return ComponentsUtil.getAmpComponentTypes(true);
     }
-
+    
+    @Override
+    public List<AmpContact> getContacts() {
+        return InterchangeUtils.getSessionWithPendingChanges()
+                .createCriteria(AmpContact.class)
+                .setCacheable(true)
+                .setCacheRegion(CACHE)
+                .list();
+    }
+    
+    @Override
+    public List<AmpOrganisation> getOrganisations() {
+        return InterchangeUtils.getSessionWithPendingChanges()
+                .createCriteria(AmpOrganisation.class)
+                .add(Restrictions.or(
+                        Restrictions.eq("deleted", false),
+                        Restrictions.isNull("deleted")
+                    ))
+                .setCacheable(true)
+                .setCacheRegion(CACHE)
+                .list();
+    }
 
 }

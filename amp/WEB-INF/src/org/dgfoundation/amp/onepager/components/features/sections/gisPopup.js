@@ -1,7 +1,16 @@
 var callerGisObject;
-function gisPopup(caller){
+var structuresData;
+function gisPopup(caller, data){
 	var param = "width=780, height=500, scrollbars=yes,modal=yes, resizable, status";
 	callerGisObject = caller;
+	if (data) {
+	    try {
+	    	structuresData = JSON.parse(data);	    	
+	    } catch(e) {
+	        console.log('invalid json string');
+	    }
+	}
+	
 	window.open("/esrigis/mainmap.do?popup=true", "", param);
 }
 
@@ -9,8 +18,8 @@ function gisPopup(caller){
 
 function postvaluesx(element){
 	element.focus();
-	setTimeout(function(){element.select();}, 1000);
-	setTimeout(function(){element.blur();}, 1000);
+	setTimeout(function(){element.select();}, 500);
+	setTimeout(function(){element.blur();}, 500);
 }
 function postvaluesy(element){
 	setTimeout(function(){element.focus();}, 3000);

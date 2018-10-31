@@ -17,8 +17,21 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 		}
 	}
 
+	function getDirection() {
+        var rtlDirection = app.TabsApp.generalSettings.get('rtl-direction');
+        var direction = 'ltr';
+        if (rtlDirection) {
+            direction = 'rtl';
+        }
+        return direction;
+	}
+
 	function getURL(id) {
 		return '/rest/data/report/' + id + '/result/jqGrid';
+	}
+
+	function getPreviewPageURL(id) {
+		return '/aim/viewActivityPreview.do~activityId=' + id;
 	}
 
 	GridManager.prototype = {
@@ -98,8 +111,8 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 			var na = TranslationManager.getTranslated('N/A');
 			jQuery(grid).jqGrid(
 					{
+                        direction: getDirection(),
 						caption : false,
-						/* url : '/rest/data/report/' + id + '/result/', */
 						url : getURL(id),
 						datatype : 'json',
 						mtype : 'POST',
@@ -145,6 +158,10 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 						forceFit : false,
 						viewrecords : true,
 						loadtext : "<span data-i18n='tabs.common:loading'>Loading...</span>",
+                        recordtext: "<div class='tabs-grid-pager-info'><span data-i18n='tabs.common:view'>View</span></div> {0} - {1}" +
+						" <div class='tabs-grid-pager-info'><span data-i18n='tabs.common:of'>of</span></div> {2}",
+                        pgtext : "<div class='tabs-grid-pager-info'><span" +
+						" data-i18n='tabs.common:page'>Page</span></div> {0} <div class='tabs-grid-pager-info'><span data-i18n='tabs.common:of'>of</span></div> {1}",
 						headertitles : true,
 						gridview : true,
 						rownumbers : false,
@@ -191,9 +208,9 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 
 							if(app.TabsApp.settings.teamId){
 								teamid = app.TabsApp.settings.teamId;
-								crossTeamValidation = (app.TabsApp.settings.crossTeamEnable === 'true');
-								teamlead = (app.TabsApp.settings.teamLead === 'true');
-								validator = (app.TabsApp.settings.validator === 'true');
+								crossTeamValidation = app.TabsApp.settings.crossTeamEnable;
+								teamlead = app.TabsApp.settings.teamLead;
+								validator = app.TabsApp.settings.validator;
 								teamtype = app.TabsApp.settings.accessType;
 							}
 							if(app.TabsApp.settings.workspacePrefix){
@@ -234,9 +251,9 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 								if(!teamid) continue;
 								
 								teamid = app.TabsApp.settings.teamId;
-								crossTeamValidation = (app.TabsApp.settings.crossTeamEnable === 'true');
-								teamlead = (app.TabsApp.settings.teamLead === 'true');
-								validator = (app.TabsApp.settings.validator === 'true');
+								crossTeamValidation = app.TabsApp.settings.crossTeamEnable;
+								teamlead = app.TabsApp.settings.teamLead;
+								validator = app.TabsApp.settings.validator;
 								teamtype = app.TabsApp.settings.accessType;
 								
 								// Set font color according to status.
@@ -298,9 +315,10 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 								};
 
 								// Assign colors for each row for loggued users.
+								var statusClass = '';
 								var x = getApprovalStatus(draft, approvalStatus);
 								if (x === statusMapping.Approved) {
-									row.className = className + ' status_1';
+									statusClass = ' status_1';
 									// Create link to edit activity.
 									if (teamtype !== app.TabsApp.MANAGER_TYPE) {
 										jQuery(row.cells[0]).html(iconedit + link);
@@ -309,11 +327,11 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 									}
 
 								} else if (x === statusMapping.Existing_Draft || x === statusMapping.New_Draft) {
-									row.className = className + ' status_2';
+									statusClass = ' status_2';
 									jQuery(row.cells[0]).html(iconedit);
 
 								} else if (x === statusMapping.Existing_Unvalidated || x === statusMapping.New_Unvalidated) {
-									row.className = className + ' status_3';
+									statusClass = ' status_3';
 									// Cross team enable team lead and validators able to validate show icon.
 									if (crossTeamValidation && (teamlead || validator)) {
 										if (teamtype !== app.TabsApp.MANAGER_TYPE) {
@@ -329,6 +347,7 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 										jQuery(row.cells[0]).html(iconedit);
 									}
 								}
+								row.className = className + statusClass;
 
 								// Create link to preview activity on first not grouped column.
 								var colIndex = -1;
@@ -337,8 +356,8 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 										colIndex = i;
 									}
 								});
-								var newContent = "<span style='cursor: pointer;' onclick = \x22openPreviewPage(" + id + ")\x22>"
-										+ jQuery(row.cells[colIndex]).html() + "</span>";
+                                var newContent = "<a class='preview-cell" + statusClass + "' href='" + getPreviewPageURL(id) + "'>"
+									+ jQuery(row.cells[colIndex]).html() + "</a>";
 								jQuery(row.cells[colIndex]).html(newContent);
 							}
 							
@@ -376,7 +395,7 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 							// (not natively supported by jqgrid).
 							jQuery("#grand_total_row_" + id).empty();
 							jQuery("#grand_total_row_" + id).remove();
-							var pageFooterRow = jQuery("#main-dynamic-content-region_" + id + " .ui-jqgrid-ftable .footrow-ltr");
+							var pageFooterRow = jQuery("#main-dynamic-content-region_" + id + " .ui-jqgrid-ftable .footrow-" + getDirection());
 							var grandTotalFooterRow = jQuery(pageFooterRow).clone();
 							jQuery(grandTotalFooterRow).find("[aria-describedby^='tab_grid_" + id + "']").text("").attr("title", "");
 							jQuery(grandTotalFooterRow).attr("id", "grand_total_row_" + id);
@@ -398,7 +417,7 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 								jQuery.each(groupRows, function(i, item) {
 									jQuery(item.firstChild).attr("colspan", numberOfColumns);
 									jQuery.each(tableStructure.measures.models, function(j, measure) {
-										var auxTD = jQuery(item.firstChild).clone().html("").attr("colspan", 0).css("text-align", "right");
+										var auxTD = jQuery(item.firstChild).clone().html("").attr("colspan", 1).css("text-align", "right");
 										var content = na;
 										if (partialTotals[i].contents[app.TabsApp.TOTAL_COLUMNS_NAME_SUFIX + "[" + measure.get('measureName') + "]"] !== undefined) {
 											// This check is needed for Funding Flow columns because their name is different than expected, ie: "[Totals][Real Disbursements][DN-IMPL]". 
@@ -497,7 +516,7 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 				var row = {
 					id : 0
 				};
-				// To match the changes on NiReports we iterate the headers, not obj.contents
+				// To match the changes on reports we iterate the headers, not obj.contents
 				jQuery.each(headers, function(i, column) {
 					var element = obj.contents[column.hierarchicalName];
 					if (element !== undefined) {
@@ -517,6 +536,11 @@ define([ 'business/grid/columnsMapping', 'translationManager', 'util/tabUtils','
 					// Property entityId replaced column AMP_ID on NiReports.
 					if (column.hierarchicalName === "[" + app.TabsApp.COLUMNS_WITH_IDS[0] + "]" && element && element.entityId !== undefined) {
 						row[app.TabsApp.COLUMN_ACTIVITY_ID] = element.entityId;
+					}
+					
+					// for team column it is needed to fetch the entityId
+					if (column.hierarchicalName === "[" + app.TabsApp.COLUMNS_WITH_IDS[1] + "]" && element && element.entityId !== undefined) {
+						row[column.columnName] = element.entityId;
 					}
 				});
 				

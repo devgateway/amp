@@ -83,6 +83,7 @@ public class Security implements ErrorReportingEndpoint {
     @GET
     @Path("/user/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "user", ui = false)
     public JsonBean user() {
         AmpApiToken apiToken = SecurityUtil.getTokenFromSession();
 
@@ -515,14 +516,6 @@ public class Security implements ErrorReportingEndpoint {
         return SecurityService.getWorkspaces();
     }
 
-    /**
-     * Authorizes Container Request
-     * @param containerReq
-     */
-    public static void authorize(ContainerRequest containerReq) {
-        ApiAuthorization.authorize(containerReq);
-    }
-    
     /**
      * THIS IS FOR DEBUG ONLY. Must be disabled on production.
      * @param token

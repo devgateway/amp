@@ -1,5 +1,17 @@
 package org.dgfoundation.amp.gpi.reports;
 
+import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.ar.MeasureConstants;
+import org.dgfoundation.amp.newreports.AmountCell;
+import org.dgfoundation.amp.newreports.GeneratedReport;
+import org.dgfoundation.amp.newreports.ReportArea;
+import org.dgfoundation.amp.newreports.ReportCell;
+import org.dgfoundation.amp.newreports.ReportOutputColumn;
+import org.dgfoundation.amp.newreports.TextCell;
+import org.dgfoundation.amp.nireports.formulas.NiFormula;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
@@ -12,16 +24,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.newreports.AmountCell;
-import org.dgfoundation.amp.newreports.GeneratedReport;
-import org.dgfoundation.amp.newreports.ReportArea;
-import org.dgfoundation.amp.newreports.ReportCell;
-import org.dgfoundation.amp.newreports.ReportOutputColumn;
-import org.dgfoundation.amp.newreports.TextCell;
-import org.dgfoundation.amp.nireports.formulas.NiFormula;
-
 /**
  * A utility class to transform a GeneratedReport to GPI Report 5b
  * 
@@ -32,11 +34,14 @@ public class GPIReport5bOutputBuilder extends GPIReportOutputBuilder {
 
     private static final String MTEF_FUNDINGS_YES = "1";
     private static final String MTEF_FUNDINGS_NO = "0";
+    private static final int MTEF_COLUMN_1 = 1;
+    private static final int MTEF_COLUMN_2 = 2;
+    private static final int MTEF_COLUMN_3 = 3;
 
     private static final String MTEF_NAME = "MTEF";
 
     private List<GPIIndicator5bItem> gpiItems = new ArrayList<>();
-
+    private Integer pivotyear;
     public GPIReport5bOutputBuilder() {
         addColumn(new GPIReportOutputColumn(GPIReportConstants.COLUMN_INDICATOR_5B,
                 GPIReportConstants.REPORT_5B_TOOLTIP.get(GPIReportConstants.COLUMN_INDICATOR_5B)));
@@ -58,20 +63,28 @@ public class GPIReport5bOutputBuilder extends GPIReportOutputBuilder {
         List<GPIReportOutputColumn> headers = new ArrayList<>();
 
         String donorColumnName = isDonorAgency ? ColumnConstants.DONOR_AGENCY : ColumnConstants.DONOR_GROUP;
-
-        int year = GPIReportUtils.getPivoteYear(generatedReport.spec);
-
+        // at this point we need to take the pivot year from formparams. the proper fix is to provide the correct start
+        // and dates in /report/years endpoint. for instance in a leap year in eth calendar year does not start in
+        // 1/1 it starts 9/1 and in leap year it starts in 9/12 AMP-27540 is the followup ticket
+        pivotyear = GPIReportUtils.getPivotYearFromFormParams(this.getOriginalFormParams());
+        if (pivotyear == null) {
+            //this shouldn't be null at this point since it has already been checked but we are
+            //defensive until the proper fix is introduced in AMP-27540
+            pivotyear = GPIReportUtils.getPivoteYear(generatedReport.spec);
+        }
         headers.add(getColumns().get(donorColumnName));
-        headers.add(new GPIReportOutputColumn(String.valueOf(year + 1), String.valueOf(year + 1),
-                GPIReportConstants.REPORT_5B_TOOLTIP.get(GPIReportConstants.YEAR_1)));
-        headers.add(new GPIReportOutputColumn(String.valueOf(year + 2), String.valueOf(year + 2),
-                GPIReportConstants.REPORT_5B_TOOLTIP.get(GPIReportConstants.YEAR_2)));
-        headers.add(new GPIReportOutputColumn(String.valueOf(year + 3), String.valueOf(year + 3),
-                GPIReportConstants.REPORT_5B_TOOLTIP.get(GPIReportConstants.YEAR_3)));
+        headers.add(new GPIReportOutputColumn(String.valueOf(pivotyear + MTEF_COLUMN_1), String.valueOf(pivotyear
+                + MTEF_COLUMN_1), GPIReportConstants.REPORT_5B_TOOLTIP.get(GPIReportConstants.YEAR_1)));
+        headers.add(new GPIReportOutputColumn(String.valueOf(pivotyear + MTEF_COLUMN_2), String.valueOf(pivotyear
+                + MTEF_COLUMN_2), GPIReportConstants.REPORT_5B_TOOLTIP.get(GPIReportConstants.YEAR_2)));
+        headers.add(new GPIReportOutputColumn(String.valueOf(pivotyear + MTEF_COLUMN_3), String.valueOf(pivotyear
+                + MTEF_COLUMN_3),  GPIReportConstants.REPORT_5B_TOOLTIP.get(GPIReportConstants.YEAR_3)));
         headers.add(getColumns().get(GPIReportConstants.COLUMN_INDICATOR_5B));
 
         return headers;
     }
+
+
 
     /**
      * build the contents of the report
@@ -106,7 +119,11 @@ public class GPIReport5bOutputBuilder extends GPIReportOutputBuilder {
     private List<GPIIndicator5bItem> fetchGPIItemsFromReport(GeneratedReport generatedReport, String donorColumnName) {
 
         List<GPIIndicator5bItem> allGpiItems = new ArrayList<>();
-        int year = GPIReportUtils.getPivoteYear(generatedReport.spec);
+        int year = pivotyear;
+        String calendarPrefix = "";
+        if (generatedReport.spec.getSettings().getCalendar().getIsFiscal()) {
+            calendarPrefix = generatedReport.spec.getSettings().getCalendar().getDefaultFiscalYearPrefix() + " ";
+        }
 
         if (generatedReport.reportContents.getChildren() != null) {
             for (ReportArea reportArea : generatedReport.reportContents.getChildren()) {
@@ -115,24 +132,47 @@ public class GPIReport5bOutputBuilder extends GPIReportOutputBuilder {
                     ReportCell rc = reportArea.getContents().get(roc);
                     rc = rc != null ? rc : TextCell.EMPTY;
 
-                    if (roc.originalColumnName.equals(String.format("%s %s", MTEF_NAME, (year + 1)))) {
-                        if (((AmountCell) rc).extractValue() > 0) {
-                            gpiItem.setYear1(true);
+                    if (FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.MTEF_ANNUAL_DATE_FORMAT)) {
+                        if (roc.originalColumnName.equals(String.format("%s %s", MTEF_NAME, (year + MTEF_COLUMN_1)))) {
+                            if (((AmountCell) rc).extractValue() > 0) {
+                                gpiItem.setYear1(true);
+                            }
+                        }
+    
+                        if (roc.originalColumnName.equals(String.format("%s %s", MTEF_NAME, (year + MTEF_COLUMN_2)))) {
+                            if (((AmountCell) rc).extractValue() > 0) {
+                                gpiItem.setYear2(true);
+                            }
+                        }
+    
+                        if (roc.originalColumnName.equals(String.format("%s %s", MTEF_NAME, (year + MTEF_COLUMN_3)))) {
+                            if (((AmountCell) rc).extractValue() > 0) {
+                                gpiItem.setYear3(true);
+                            }
+                        }
+                    } else if (roc.originalColumnName.equals(MeasureConstants.MTEF)) {
+                        if (roc.parentColumn.originalColumnName.equals(String.format("%s", calendarPrefix + (year
+                                + MTEF_COLUMN_1)))) {
+                            if (((AmountCell) rc).extractValue() > 0) {
+                                gpiItem.setYear1(true);
+                            }
+                        }
+
+                        if (roc.parentColumn.originalColumnName.equals(String.format("%s", calendarPrefix + (year
+                                + MTEF_COLUMN_2)))) {
+                            if (((AmountCell) rc).extractValue() > 0) {
+                                gpiItem.setYear2(true);
+                            }
+                        }
+                        
+                        if (roc.parentColumn.originalColumnName.equals(String.format("%s", calendarPrefix + (year
+                                + MTEF_COLUMN_3)))) {
+                            if (((AmountCell) rc).extractValue() > 0) {
+                                gpiItem.setYear3(true);
+                            }
                         }
                     }
-
-                    if (roc.originalColumnName.equals(String.format("%s %s", MTEF_NAME, (year + 2)))) {
-                        if (((AmountCell) rc).extractValue() > 0) {
-                            gpiItem.setYear2(true);
-                        }
-                    }
-
-                    if (roc.originalColumnName.equals(String.format("%s %s", MTEF_NAME, (year + 3)))) {
-                        if (((AmountCell) rc).extractValue() > 0) {
-                            gpiItem.setYear3(true);
-                        }
-                    }
-
+                    
                     if (roc.originalColumnName.equals(donorColumnName)) {
                         gpiItem.setDonorAgency(rc.displayedValue);
                     }

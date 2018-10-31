@@ -167,6 +167,14 @@
 		var address2 = document.umAddUserForm.emailConfirmation.value;
         if(! validateEmails(address, address2))
             return false;
+        
+        var notificationEmail = $('#notificationEmail').val();
+        if ($('#notificationEmailEnabled').is(":checked")) {
+        	if (!validateNotificationEmail(notificationEmail) || !validateMailWithNotificationMail(address, notificationEmail)) {
+        	    return false;
+        	}
+        }
+        
         if (isPassVoid(password)||isPassVoid(passwordConfirmation))
         {
 			<c:set var="translation">
@@ -220,7 +228,13 @@
 		var u = document.getElementById('userPasswordConfirmation');
 		u.setAttribute("autocomplete", "off");
 		
+		$('#notificationEmailEnabled').bind("click", function() {
+	        $('#notificationEmailRow') [this.checked ? "show" : "hide"]();
+	      });
+		
+		$('#notificationEmailRow')[$('#notificationEmailEnabled').is(":checked") ? "show" : "hide"]();
 	}
+	
 	YAHOOAmp.util.Event.addListener(window, "load", init) ;
 </script>
 <digi:instance property="umAddUserForm" />
@@ -381,6 +395,23 @@
 													<html:password styleId="userPasswordConfirmation" property="passwordConfirmation" size="20" />
 												</td>
 											</tr>
+											<tr>
+                                                <td  width="3%">&nbsp;</td>
+                                                <td align="right" class="formCheckContainer">
+                                                    <digi:trn>Use different email for email notifications</digi:trn>
+                                                </td>
+                                                <td class=f-names align="left">
+                                                    <html:checkbox property="notificationEmailEnabled" styleClass="inp-text" styleId="notificationEmailEnabled"/>
+                                                </td>
+                                            </tr>
+											<tr id="notificationEmailRow">
+                                                <td width="3%">&nbsp;</td>
+                                                <td align=right class=f-names noWrap>
+                                                    <font color=red>*</font>
+                                                    <digi:trn>Notification Email</digi:trn></td>
+                                                <td align="left">
+                                                    <html:text property="notificationEmail" size="20" styleClass="inp-text" styleId="notificationEmail"/></td>
+                                            </tr>
 											<tr>
 												<td width="3%">&nbsp;</td>
 												<td align=right class=f-names noWrap>

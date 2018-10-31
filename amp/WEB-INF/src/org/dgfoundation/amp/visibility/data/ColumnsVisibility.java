@@ -5,8 +5,11 @@ package org.dgfoundation.amp.visibility.data;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.dgfoundation.amp.utils.ConstantsUtil;
+import org.digijava.module.aim.dbentity.AmpColumns;
+import org.digijava.module.aim.util.AdvancedReportUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
@@ -31,6 +34,8 @@ import java.util.stream.Collectors;
 public class ColumnsVisibility extends DataVisibility implements FMSettings {
     protected static final Logger logger = Logger.getLogger(ColumnsVisibility.class);
     
+    public static final int PROGRAM_LEVEL_COUNT = 8;
+
     private static final Set<String> columnsSet = ConstantsUtil.getConstantsSet(ColumnConstants.class);
 
     /*
@@ -97,7 +102,7 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
         switch(dataMapType) {
         case MODULES: return modulesToColumnsMap; 
         case FEATURES: return featuresToColumnsMap;
-        case FIELDS: return fieldsToColumnsMap;
+        case FIELDS: return FIELDS_TO_COLUMNS_MAP;
         case DEPENDENCY: return dependencyMap;
         default: return null; //shouldn't come here
         }
@@ -194,11 +199,7 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
         put("/Activity Form/Planning/Proposed Start Date", ColumnConstants.PROPOSED_START_DATE);
         put("/Activity Form/Planning/Original Completion Date", ColumnConstants.ORIGINAL_COMPLETION_DATE);
         put("/Activity Form/Planning/Project Implementation Delay", ColumnConstants.PROJECT_IMPLEMENTATION_DELAY);
-        put("/Activity Form/Program/National Plan Objective", ColumnConstants.NATIONAL_PLANNING_OBJECTIVES);
-        put("/Activity Form/Program/Primary Programs", ColumnConstants.PRIMARY_PROGRAM);
         put("/Activity Form/Program/Program Description", ColumnConstants.PROGRAM_DESCRIPTION);
-        put("/Activity Form/Program/Secondary Programs", ColumnConstants.SECONDARY_PROGRAM);
-        put("/Activity Form/Program/Tertiary Programs", ColumnConstants.TERTIARY_PROGRAM);
         put("/Activity Form/Regional Observations", ColumnConstants.REGIONAL_OBSERVATIONS);
         put("/Activity Form/Organizations/Beneficiary Agency", ColumnConstants.BENEFICIARY_AGENCY);
         put("/Activity Form/Organizations/Contracting Agency", ColumnConstants.CONTRACTING_AGENCY);
@@ -229,6 +230,7 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
         put(ColumnConstants.DONOR_ID, ColumnConstants.DONOR_AGENCY);
         put(ColumnConstants.DONOR_GROUP, ColumnConstants.DONOR_AGENCY);
         put(ColumnConstants.DONOR_TYPE, ColumnConstants.DONOR_AGENCY);
+        put(ColumnConstants.DONOR_BUDGET_CODE, ColumnConstants.DONOR_AGENCY);
         put(ColumnConstants.DONOR_COMMITMENT_DATE, ColumnConstants.DONOR_AGENCY);
         put(ColumnConstants.RESPONSIBLE_ORGANIZATION_DEPARTMENT_DIVISION, ColumnConstants.RESPONSIBLE_ORGANIZATION);
         put(ColumnConstants.RESPONSIBLE_ORGANIZATION_GROUPS, ColumnConstants.RESPONSIBLE_ORGANIZATION);
@@ -279,105 +281,125 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
     }};
     
     @SuppressWarnings("serial")
-    protected static final Map<String, String> fieldsToColumnsMap = new HashMap<String, String>() {{
-        put("AMP ID", ColumnConstants.AMP_ID);
-        put("Activity Approved By", ColumnConstants.ACTIVITY_APPROVED_BY);
-        put("Activity Created By", ColumnConstants.ACTIVITY_CREATED_BY);
-        put("Activity Created On", ColumnConstants.ACTIVITY_CREATED_ON);
-        put("Activity Pledges Title", ColumnConstants.ACTIVITY_PLEDGES_TITLE);
-        put("Activity Updated By", ColumnConstants.ACTIVITY_UPDATED_BY);
-        put("Activity Updated On", ColumnConstants.ACTIVITY_UPDATED_ON);
-        put("Actors", ColumnConstants.ACTORS);
-        put("Age of Project (Months)", ColumnConstants.AGE_OF_PROJECT_MONTHS);
-        put("Archived", ColumnConstants.ARCHIVED);
-        put("Average Size of Disbursements", ColumnConstants.AVERAGE_SIZE_OF_DISBURSEMENTS);
-        put("Average Size of Projects", ColumnConstants.AVERAGE_SIZE_OF_PROJECTS);
-        put("Budget Department", ColumnConstants.BUDGET_DEPARTMENT);
-        put("Budget Organization", ColumnConstants.BUDGET_ORGANIZATION);
-        put("Budget Program", ColumnConstants.BUDGET_PROGRAM);
-        put("Budget Sector", ColumnConstants.BUDGET_SECTOR);
-        put("Calculated Project Life", ColumnConstants.CALCULATED_PROJECT_LIFE);
-        put("Capital - Expenditure", ColumnConstants.CAPITAL___EXPENDITURE);
-        put("Component Name", ColumnConstants.COMPONENT_NAME);
-        put("Component description", ColumnConstants.COMPONENT_DESCRIPTION);
-        put("Component Funding Organization", ColumnConstants.COMPONENT_FUNDING_ORGANIZATION);
-        put("Component Second Responsible Organization", ColumnConstants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION);
-        put("Component Type", ColumnConstants.COMPONENT_TYPE);
-        put("Costing Total Contribution", ColumnConstants.COSTING_DONOR);
-        put("Credit/Donation", ColumnConstants.CREDIT_DONATION);
-        put("Current Completion Date Comments", ColumnConstants.CURRENT_COMPLETION_DATE_COMMENTS);
-        put("Description of Component Funding", ColumnConstants.DESCRIPTION_OF_COMPONENT_FUNDING);
-        put("Draft", ColumnConstants.DRAFT);
-        put("Execution Rate", ColumnConstants.EXECUTION_RATE);
-//      put("Expenditure Class", ColumnConstants.EXPENDITURE_CLASS);
-        put("Final Date for Disbursements Comments", ColumnConstants.FINAL_DATE_FOR_DISBURSEMENTS_COMMENTS);
-        put("Funding end date", ColumnConstants.FUNDING_END_DATE);
-        put("Funding start date", ColumnConstants.FUNDING_START_DATE);
-        put("Grand Total Cost", ColumnConstants.GRAND_TOTAL_COST);
-        put("Loan Interest Rate", ColumnConstants.INTEREST_RATE);
-        put("Loan Grace Period", ColumnConstants.GRACE_PERIOD);
-        put("Loan Maturity Date", ColumnConstants.MATURITY);
-        put("Loan Ratification Date", ColumnConstants.RATIFICATION_DATE);
-        put("Measures Taken", ColumnConstants.MEASURES_TAKEN);
-        put("Ministry Of Finance Contact Organization", ColumnConstants.MINISTRY_OF_FINANCE_CONTACT_ORGANIZATION);
-        put("Multi Donor", ColumnConstants.MULTI_DONOR);
-        put("Organizations and Project ID", ColumnConstants.ORGANIZATIONS_AND_PROJECT_ID);
-        put("Overage Project", ColumnConstants.OVERAGE_PROJECT);
-        put("Payment Capital - Recurrent", ColumnConstants.PAYMENT_CAPITAL___RECURRENT);
-        put("Performance Alert Level", ColumnConstants.PERFORMANCE_ALERT_LEVEL);
-        put("Pledges sectors", ColumnConstants.PLEDGES_SECTORS);
-        put("Pledges Aid Modality", ColumnConstants.PLEDGES_AID_MODALITY);
-        put("Pledge Contact 1 - Organization", ColumnConstants.PLEDGE_CONTACT_1___MINISTRY);
-        put("Pledge Contact 2 - Organization", ColumnConstants.PLEDGE_CONTACT_2___MINISTRY);
-        put("Pledge Status", ColumnConstants.PLEDGE_STATUS);
-        put("Pledges Detail Date Range", ColumnConstants.PLEDGES_DETAIL_DATE_RANGE);
-        put("Pledges Detail End Date", ColumnConstants.PLEDGES_DETAIL_END_DATE);
-        put("Pledges Detail Start Date", ColumnConstants.PLEDGES_DETAIL_START_DATE);
-        put("Pledges Districts", ColumnConstants.PLEDGES_DISTRICTS);
-        put("Pledges Donor Group", ColumnConstants.PLEDGES_DONOR_GROUP);
-        put("Pledges National Plan Objectives", ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES);
-        put("Pledges Programs", ColumnConstants.PLEDGES_PROGRAMS);
-        put("Pledges Regions", ColumnConstants.PLEDGES_REGIONS);
-        put("Pledges Secondary Programs", ColumnConstants.PLEDGES_SECONDARY_PROGRAMS);
-        put("Pledges Secondary Sectors", ColumnConstants.PLEDGES_SECONDARY_SECTORS);
-        put("Pledges Sectors", ColumnConstants.PLEDGES_SECTORS);
-        put("Pledges Tertiary Programs", ColumnConstants.PLEDGES_TERTIARY_PROGRAMS);
-        put("Pledges Tertiary Sectors", ColumnConstants.PLEDGES_TERTIARY_SECTORS);
-        put("Pledges Type Of Assistance", ColumnConstants.PLEDGES_TYPE_OF_ASSISTANCE);
-        put("Pledges Titles", ColumnConstants.PLEDGES_TITLES);
-        put("Pledges Zones", ColumnConstants.PLEDGES_ZONES);
-        put("Project Age Ratio", ColumnConstants.PROJECT_AGE_RATIO);
-        put("Project Implementation Delay", ColumnConstants.PROJECT_IMPLEMENTATION_DELAY);
-        put("Project Description", ColumnConstants.PROJECT_DESCRIPTION);
-        put("Project Period", ColumnConstants.PROJECT_PERIOD);
-        put("Related Projects", ColumnConstants.RELATED_PROJECTS);
-        put("Related Pledges", ColumnConstants.RELATED_PLEDGES);
-        put("Sector Tag", ColumnConstants.SECTOR_TAG);
-        put("Sector Tag Sub-Sector", ColumnConstants.SECTOR_TAG_SUB_SECTOR);
-        put("Sector Tag Sub-Sub-Sector", ColumnConstants.SECTOR_TAG_SUB_SUB_SECTOR);
-        put("SSC Modalities", ColumnConstants.SSC_MODALITIES);
-        put("Variance Of Commitments", ColumnConstants.VARIANCE_OF_COMMITMENTS);
-        put("Variance Of Disbursements", ColumnConstants.VARIANCE_OF_DISBURSEMENTS);
-        put("Disaster Response Marker", ColumnConstants.DISASTER_RESPONSE_MARKER);
-        
-        // replicating the same approach as in the ReportWizard (until AMP-20480 is considered)
-        String[] colPrefixList = new String[] {"National Planning Objectives Level ", "Primary Program Level ", 
-                "Secondary Program Level ", "Tertiary Program Level "};
-        for (String colPrefix : colPrefixList) {
-            for (int i = 1; i < 9 ; i++) {
-                String level = colPrefix + i; 
-                put(level, level);
+    protected static final Map<String, String> FIELDS_TO_COLUMNS_MAP = new HashMap<String, String>() {
+        {
+            put("AMP ID", ColumnConstants.AMP_ID);
+            put("Activity Approved By", ColumnConstants.ACTIVITY_APPROVED_BY);
+            put("Activity Created By", ColumnConstants.ACTIVITY_CREATED_BY);
+            put("Activity Created On", ColumnConstants.ACTIVITY_CREATED_ON);
+            put("Activity Pledges Title", ColumnConstants.ACTIVITY_PLEDGES_TITLE);
+            put("Activity Updated By", ColumnConstants.ACTIVITY_UPDATED_BY);
+            put("Activity Updated On", ColumnConstants.ACTIVITY_UPDATED_ON);
+            put("Actors", ColumnConstants.ACTORS);
+            put("Age of Project (Months)", ColumnConstants.AGE_OF_PROJECT_MONTHS);
+            put("Archived", ColumnConstants.ARCHIVED);
+            put("Average Size of Disbursements", ColumnConstants.AVERAGE_SIZE_OF_DISBURSEMENTS);
+            put("Average Size of Projects", ColumnConstants.AVERAGE_SIZE_OF_PROJECTS);
+            put("Budget Department", ColumnConstants.BUDGET_DEPARTMENT);
+            put("Budget Organization", ColumnConstants.BUDGET_ORGANIZATION);
+            put("Budget Program", ColumnConstants.BUDGET_PROGRAM);
+            put("Budget Sector", ColumnConstants.BUDGET_SECTOR);
+            put("Calculated Project Life", ColumnConstants.CALCULATED_PROJECT_LIFE);
+            put("Capital Expenditure", ColumnConstants.CAPITAL_EXPENDITURE);
+            put("Component Name", ColumnConstants.COMPONENT_NAME);
+            put("Component description", ColumnConstants.COMPONENT_DESCRIPTION);
+            put("Component Funding Organization", ColumnConstants.COMPONENT_FUNDING_ORGANIZATION);
+            put("Component Second Responsible Organization", ColumnConstants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION);
+            put("Component Type", ColumnConstants.COMPONENT_TYPE);
+            put("Costing Total Contribution", ColumnConstants.COSTING_DONOR);
+            put("Credit/Donation", ColumnConstants.CREDIT_DONATION);
+            put("Current Completion Date Comments", ColumnConstants.CURRENT_COMPLETION_DATE_COMMENTS);
+            put("Description of Component Funding", ColumnConstants.DESCRIPTION_OF_COMPONENT_FUNDING);
+            put("Draft", ColumnConstants.DRAFT);
+            put("Execution Rate", ColumnConstants.EXECUTION_RATE);
+            put("Final Date for Disbursements Comments", ColumnConstants.FINAL_DATE_FOR_DISBURSEMENTS_COMMENTS);
+            put("Funding end date", ColumnConstants.FUNDING_END_DATE);
+            put("Funding start date", ColumnConstants.FUNDING_START_DATE);
+            put("Grand Total Cost", ColumnConstants.GRAND_TOTAL_COST);
+            put("Loan Interest Rate", ColumnConstants.INTEREST_RATE);
+            put("Loan Grace Period", ColumnConstants.GRACE_PERIOD);
+            put("Loan Maturity Date", ColumnConstants.MATURITY);
+            put("Loan Ratification Date", ColumnConstants.RATIFICATION_DATE);
+            put("Measures Taken", ColumnConstants.MEASURES_TAKEN);
+            put("Ministry Of Finance Contact Organization", ColumnConstants.MINISTRY_OF_FINANCE_CONTACT_ORGANIZATION);
+            put("Multi Donor", ColumnConstants.MULTI_DONOR);
+            put("Organizations and Project ID", ColumnConstants.ORGANIZATIONS_AND_PROJECT_ID);
+            put("Overage Project", ColumnConstants.OVERAGE_PROJECT);
+            put("Payment Capital - Recurrent", ColumnConstants.PAYMENT_CAPITAL___RECURRENT);
+            put("Performance Alert Level", ColumnConstants.PERFORMANCE_ALERT_LEVEL);
+            put("Performance Alert Type", ColumnConstants.PERFORMANCE_ALERT_TYPE);
+            put("Pledges sectors", ColumnConstants.PLEDGES_SECTORS);
+            put("Pledges Aid Modality", ColumnConstants.PLEDGES_AID_MODALITY);
+            put("Pledge Contact 1 - Organization", ColumnConstants.PLEDGE_CONTACT_1___MINISTRY);
+            put("Pledge Contact 2 - Organization", ColumnConstants.PLEDGE_CONTACT_2___MINISTRY);
+            put("Pledge Status", ColumnConstants.PLEDGE_STATUS);
+            put("Pledges Detail Date Range", ColumnConstants.PLEDGES_DETAIL_DATE_RANGE);
+            put("Pledges Detail End Date", ColumnConstants.PLEDGES_DETAIL_END_DATE);
+            put("Pledges Detail Start Date", ColumnConstants.PLEDGES_DETAIL_START_DATE);
+            put("Pledges Districts", ColumnConstants.PLEDGES_DISTRICTS);
+            put("Pledges Donor Group", ColumnConstants.PLEDGES_DONOR_GROUP);
+            put("Pledges National Plan Objectives", ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES);
+            put("Pledges Programs", ColumnConstants.PLEDGES_PROGRAMS);
+            put("Pledges Regions", ColumnConstants.PLEDGES_REGIONS);
+            put("Pledges Secondary Programs", ColumnConstants.PLEDGES_SECONDARY_PROGRAMS);
+            put("Pledges Secondary Sectors", ColumnConstants.PLEDGES_SECONDARY_SECTORS);
+            put("Pledges Sectors", ColumnConstants.PLEDGES_SECTORS);
+            put("Pledges Tertiary Programs", ColumnConstants.PLEDGES_TERTIARY_PROGRAMS);
+            put("Pledges Tertiary Sectors", ColumnConstants.PLEDGES_TERTIARY_SECTORS);
+            put("Pledges Type Of Assistance", ColumnConstants.PLEDGES_TYPE_OF_ASSISTANCE);
+            put("Pledges Titles", ColumnConstants.PLEDGES_TITLES);
+            put("Pledges Zones", ColumnConstants.PLEDGES_ZONES);
+            put("Primary Sector Code Official", ColumnConstants.PRIMARY_SECTOR_CODE_OFFICIAL);
+            put("Project Age Ratio", ColumnConstants.PROJECT_AGE_RATIO);
+            put("Project Implementation Delay", ColumnConstants.PROJECT_IMPLEMENTATION_DELAY);
+            put("Project Description", ColumnConstants.PROJECT_DESCRIPTION);
+            put("Project Period", ColumnConstants.PROJECT_PERIOD);
+            put("Related Projects", ColumnConstants.RELATED_PROJECTS);
+            put("Related Pledges", ColumnConstants.RELATED_PLEDGES);
+            put("Sector Tag", ColumnConstants.SECTOR_TAG);
+            put("Sector Tag Sub-Sector", ColumnConstants.SECTOR_TAG_SUB_SECTOR);
+            put("Sector Tag Sub-Sub-Sector", ColumnConstants.SECTOR_TAG_SUB_SUB_SECTOR);
+            put("SSC Modalities", ColumnConstants.SSC_MODALITIES);
+            put("Variance Of Commitments", ColumnConstants.VARIANCE_OF_COMMITMENTS);
+            put("Variance Of Disbursements", ColumnConstants.VARIANCE_OF_DISBURSEMENTS);
+            put("Disaster Response Marker", ColumnConstants.DISASTER_RESPONSE_MARKER);
+
+            // replicating the same approach as in the ReportWizard (until AMP-20480 is considered)
+            String[] colPrefixList = new String[] {"National Planning Objectives Level ", "Primary Program Level ",
+                    "Secondary Program Level ", "Tertiary Program Level "};
+            for (String colPrefix : colPrefixList) {
+                for (int i = 1; i <= PROGRAM_LEVEL_COUNT; i++) {
+                    String level = colPrefix + i;
+                    put(level, level);
+                }
             }
+
+            put(ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR, ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR);
+            put(ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR, ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR);
+            put(ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR, ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR);
+            put(ColumnConstants.SECONDARY_SECTOR_SUB_SUB_SECTOR, ColumnConstants.SECONDARY_SECTOR_SUB_SUB_SECTOR);
+            put(ColumnConstants.TERTIARY_SECTOR_SUB_SECTOR, ColumnConstants.TERTIARY_SECTOR_SUB_SECTOR);
+            put(ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR, ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR);
+            put(ColumnConstants.EFFECTIVE_FUNDING_DATE, ColumnConstants.EFFECTIVE_FUNDING_DATE);
+            put(ColumnConstants.FUNDING_CLOSING_DATE, ColumnConstants.FUNDING_CLOSING_DATE);
+
+            putAll(getMtefColumns());
         }
-        put(ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR, ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR);
-        put(ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR, ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR);
-        put(ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR, ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR);
-        put(ColumnConstants.SECONDARY_SECTOR_SUB_SUB_SECTOR, ColumnConstants.SECONDARY_SECTOR_SUB_SUB_SECTOR);
-        put(ColumnConstants.TERTIARY_SECTOR_SUB_SECTOR, ColumnConstants.TERTIARY_SECTOR_SUB_SECTOR);
-        put(ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR, ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR);
-        put(ColumnConstants.EFFECTIVE_FUNDING_DATE, ColumnConstants.EFFECTIVE_FUNDING_DATE);
-        put(ColumnConstants.FUNDING_CLOSING_DATE, ColumnConstants.FUNDING_CLOSING_DATE);
-    }};
+
+        private Map<String, String> getMtefColumns() {
+            String regex = "^(MTEF|Real MTEF"
+                    + "|" + MeasureConstants.MTEF_PROJECTIONS
+                    + "|" + MeasureConstants.PIPELINE_MTEF_PROJECTIONS
+                    + "|" + MeasureConstants.PROJECTION_MTEF_PROJECTIONS
+                    + ").*$";
+
+            Map<String, String> mtefColumns = AdvancedReportUtil.getColumnList().stream()
+                    .filter(col -> col.getColumnName().matches(regex))
+                    .collect(Collectors.toMap(AmpColumns::getColumnName, AmpColumns::getColumnName));
+
+            return mtefColumns;
+        }
+    };
     
     protected static final List<String> visibleByDefault = Arrays.asList(
             ColumnConstants.ACTIVITY_COUNT,

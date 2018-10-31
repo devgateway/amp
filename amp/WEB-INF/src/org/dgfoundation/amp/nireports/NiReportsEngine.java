@@ -1,5 +1,7 @@
 package org.dgfoundation.amp.nireports;
 
+import static java.util.stream.Collectors.toList;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -22,7 +24,6 @@ import java.util.stream.Collectors;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.algo.timing.RunNode;
 import org.dgfoundation.amp.nireports.output.NiReportFilterResult;
-import org.digijava.kernel.translator.LocalizableLabel;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.algo.Graph;
@@ -45,9 +46,9 @@ import org.dgfoundation.amp.nireports.runtime.ColumnContents;
 import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
 import org.dgfoundation.amp.nireports.runtime.GroupColumn;
 import org.dgfoundation.amp.nireports.runtime.GroupReportData;
+import org.dgfoundation.amp.nireports.runtime.HierarchiesTracker;
 import org.dgfoundation.amp.nireports.runtime.IdsAcceptorsBuilder;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
-import org.dgfoundation.amp.nireports.runtime.HierarchiesTracker;
 import org.dgfoundation.amp.nireports.runtime.NiColSplitCell;
 import org.dgfoundation.amp.nireports.runtime.PostMeasureVHiersVisitor;
 import org.dgfoundation.amp.nireports.runtime.ReportData;
@@ -65,8 +66,7 @@ import org.dgfoundation.amp.nireports.schema.NiReportedEntity;
 import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
 import org.dgfoundation.amp.nireports.schema.SchemaSpecificScratchpad;
 import org.dgfoundation.amp.nireports.schema.TimeRange;
-
-import static java.util.stream.Collectors.toList;
+import org.digijava.kernel.translator.LocalizableLabel;
 
 /**
  * The NiReports engine API-independent entrypoint. A single report should be run per instance <br />
@@ -179,7 +179,8 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
     public LinkedHashSet<String> actualMeasures;
 
     /**
-     * the measures which should be run in the report (e.g. ones requested by the spec + the ones requested by NiReportMeasure.getPrecursorMeasures[value = true])
+     * the measures which should be run in the report
+     * (e.g. ones requested by the spec + the ones requested by NiReportMeasure.getPrecursorMeasures[value = true])
      */
     public LinkedHashSet<String> reportRunMeasures;
 
@@ -266,7 +267,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
                     () -> this.mainIds = Collections.unmodifiableSet(this.filters.getActivityIds()));
             timer.run("exec", this::runReportAndCleanup);
             //printReportWarnings();
-            NiReportRunResult runResult = new NiReportRunResult(this.reportOutput, timer.getCurrentState(), timer.getWallclockTime(), this.headers, reportWarnings);
+            NiReportRunResult runResult = new NiReportRunResult(this.reportOutput, timer.getCurrentState(), timer.getWallclockTime(), this.headers, reportWarnings, this.calendar);
 //          logger.warn("JsonBean structure of RunNode:" + timingInfo.asJsonBean());
             logger.warn(String.format("it took %d millies to generate report, the breakdown is:\n%s",
                     runResult.wallclockTime, runResult.timings.asUserString(RunNode.DEFAULT_INDENT)));
@@ -672,7 +673,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
         });
 
         //step3: create the Ni columns based on the collected cells
-        GroupColumn totalsColumn = new GroupColumn(columnName, columnLabel, null, parentColumn, null);
+        GroupColumn totalsColumn = new GroupColumn(columnName, columnLabel, null, parentColumn, null, true);
         totalsColumnsContents.forEach((name, cont) -> {
             totalsColumn.addColumn(new CellColumn(name, new LocalizableLabel(name), cont.v, totalsColumn, cont.k, cont.k.getBehaviour(), new NiColSplitCell(PSEUDOCOLUMN_MEASURE, new ComparableValue<String>(name, name))));
         });
@@ -795,4 +796,5 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
         DimensionSnapshot snapshot = getDimensionSnapshot(dimUsage.dimension);
         return snapshot.getCachingIdsAcceptor(coos);
     }
+
 }

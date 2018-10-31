@@ -115,7 +115,7 @@ public class AmpBackgroundActivitiesUtil
         user.setOrganizationName("Development Gateway");
 
         user.setPledger(false);
-
+        user.setPledgeSuperUser(false);
         user.setOrganizationTypeOther(" ");
 
         // set country
@@ -124,7 +124,6 @@ public class AmpBackgroundActivitiesUtil
         // set default language
         user.setRegisterLanguage(site.getDefaultLanguage());
         user.setEmailVerified(false);
-        user.setActive(false);
         user.setBanned(false);
 
         // ------------- SET USER LANGUAGES

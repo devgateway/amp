@@ -140,8 +140,8 @@ public class TopsChartService {
                 name = DashboardConstants.TOP_DONOR_GROUPS;
                 break;
             case "NDD":
-                setColumn(ColumnConstants.SECONDARY_PROGRAM);
-                applyFilter(FilterUtils.INSTANCE.idFromColumnName(ColumnConstants.SECONDARY_PROGRAM));
+                setColumn(ColumnConstants.SECONDARY_PROGRAM_LEVEL_1);
+                applyFilter(FilterUtils.INSTANCE.idFromColumnName(ColumnConstants.SECONDARY_PROGRAM_LEVEL_1));
                 name = DashboardConstants.PEACE_BUILDING_AND_STATE_BUILDING_GOALS;
                 title = TranslatorWorker.translateText(DashboardConstants.PEACE_BUILDING_AND_STATE_BUILDING_GOALS);
                 this.limit = 99999; // This chart has no limit of categories (no 'Others').
@@ -261,7 +261,7 @@ public class TopsChartService {
         if (report != null && report.reportContents != null && report.reportContents.getContents() != null
                 && report.reportContents.getContents().size() > 0) {
             totals = (ReportCell) report.reportContents.getContents().get(valueCol);
-            rawTotal = ((BigDecimal) totals.value).doubleValue() * unitsOption.divider; // Save total in units.
+            rawTotal = ((BigDecimal) totals.value).doubleValue();
             DashboardsService.postProcess(this.report, this.spec, outSettings, this.type);
         } else {
             rawTotal = new Double("0");
@@ -275,7 +275,7 @@ public class TopsChartService {
         for (ReportArea reportArea : report.reportContents.getChildren()) {
             Map<ReportOutputColumn, ReportCell> content = reportArea.getContents();
             AmountCell ac = (AmountCell) content.get(valueCol);
-            double amount = ((BigDecimal) ac.value).doubleValue() * unitsOption.divider;
+            double amount = ((BigDecimal) ac.value).doubleValue();
             if (values.size() < this.limit) {
                 JsonBean row = new JsonBean();
                 row.set("name", content.get(criteriaCol).displayedValue);

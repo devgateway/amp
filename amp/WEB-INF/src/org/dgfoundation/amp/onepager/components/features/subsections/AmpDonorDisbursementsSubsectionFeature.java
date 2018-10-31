@@ -15,6 +15,8 @@ import org.dgfoundation.amp.onepager.components.QuarterInformationPanel;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpDonorDisbursementsFormTableFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
+import org.dgfoundation.amp.onepager.events.FreezingUpdateEvent;
+import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -43,18 +45,7 @@ public class AmpDonorDisbursementsSubsectionFeature extends
     
     @Override
     protected void onConfigure() {
-        AmpAuthWebSession session = (AmpAuthWebSession) getSession();
-        if (fundingOrgModel != null && fundingOrgModel.getObject() != null){
-            FundingOrganization fo = new FundingOrganization();
-            fo.setAmpOrgId(fundingOrgModel.getObject().getAmpOrgId());
-            PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG, fo);
-            PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG_ROLE, Constants.FUNDING_AGENCY);
-        }
         super.onConfigure();
-        if (fundingOrgModel != null && fundingOrgModel.getObject() != null){
-            PermissionUtil.removeFromScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG);
-            PermissionUtil.removeFromScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG_ROLE);
-        }
     }
 
 
@@ -69,8 +60,7 @@ public class AmpDonorDisbursementsSubsectionFeature extends
         super(id, AmpFundingItemFeaturePanel.FM_NAME_BY_TRANSACTION_TYPE.get(transactionType), model, transactionType);
         disbursementsTableFeature = new AmpDonorDisbursementsFormTableFeature("disbursementsTableFeature", model, "Disbursements Table", transactionType);
         add(disbursementsTableFeature);
-        fundingOrgModel = new PropertyModel<AmpOrganisation>(model,"ampDonorOrgId");
-        
+        fundingOrgModel = new PropertyModel<AmpOrganisation>(model, "ampDonorOrgId");              
         AmpAjaxLinkField addDisbursement=new AmpAjaxLinkField("addDisbursement","Add Disbursement","Add Disbursement") {
             @Override
             public void onClick(AjaxRequestTarget target) {
@@ -86,7 +76,7 @@ public class AmpDonorDisbursementsSubsectionFeature extends
                 disbursementsTableFeature.getEditorList().updateModel();
                 target.add(disbursementsTableFeature);
                 AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
-                parent.getFundingInfo().checkChoicesRequired(disbursementsTableFeature.getEditorList().getCount());
+                parent.getFundingInfo().configureRequiredFields();
                 target.add(parent.getFundingInfo());
                 target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
                 target.appendJavaScript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));

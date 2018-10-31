@@ -168,6 +168,8 @@ public class ViewEditUser extends Action {
             uForm.setLastName(null);
             uForm.setName(null);
             uForm.setUrl(null);
+            uForm.setNotificationEmailEnabled(false);
+            uForm.setNotificationEmail(null);
             uForm.setSelectedCountryIso(null);
             uForm.setSelectedRegionId(null);
             uForm.setSelectedLanguageCode(null);
@@ -179,6 +181,7 @@ public class ViewEditUser extends Action {
             uForm.setAssignedOrgId(null);
             uForm.setAssignedOrgs(new TreeSet<AmpOrganisation>());
             uForm.setPledger(false);
+            uForm.setPledgeSuperUser(false);
             uForm.setId(null);
             uForm.setEmail(null);
             uForm.setConfirmNewPassword(null);
@@ -188,6 +191,7 @@ public class ViewEditUser extends Action {
             uForm.setEmailerror(false);
             uForm.setExemptFromDataFreezing(false);
             uForm.setNationalCoordinator(false);
+            
             if (user != null) {
                 uForm.setMailingAddress(user.getAddress());
                 AmpUserExtension userExt = AmpUserUtil.getAmpUserExtension(user);
@@ -208,8 +212,12 @@ public class ViewEditUser extends Action {
                 uForm.setUrl(user.getUrl());
                 uForm.getAssignedOrgs().addAll(user.getAssignedOrgs());
                 uForm.setPledger(user.getPledger());
+                uForm.setPledgeSuperUser(user.getPledgeSuperUser());
                 uForm.setBanReadOnly(user.isBanned());
                 uForm.setExemptFromDataFreezing(user.getExemptFromDataFreezing());
+                
+                uForm.setNotificationEmailEnabled(user.isNotificationEmailEnabled());
+                uForm.setNotificationEmail(user.getNotificationEmail());
 
                 Locale language = null;
                 if (langPref == null) {
@@ -335,7 +343,17 @@ public class ViewEditUser extends Action {
 
                     user.setUserLangPreferences(userLangPreferences);
                     user.setPledger(uForm.getPledger());
+                    user.setPledgeSuperUser(uForm.getPledger() && uForm.getPledgeSuperUser());
                     user.setExemptFromDataFreezing(uForm.getExemptFromDataFreezing());
+                    
+                    user.setNotificationEmailEnabled(uForm.getNotificationEmailEnabled());
+                    
+                    if (uForm.getNotificationEmailEnabled()) {
+                        user.setNotificationEmail(uForm.getNotificationEmail());
+                    } else {
+                        user.setNotificationEmail(null);
+                    }
+                    
 
                     if (uForm.getNationalCoordinator()) {
                         user.getGroups().add(org.digijava.module.admin.util.DbUtil.getGroupByKey(Group.NATIONAL_COORDINATORS));

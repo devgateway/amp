@@ -118,7 +118,6 @@ public class Documents {
     @Path("/getTopDocuments")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     public final String getDocuments() throws IOException {
-        long start = System.currentTimeMillis();
         DesktopDocumentsUtil desktopDocumentsUtil = new DesktopDocumentsUtil();
         Collection<DocumentData> documents = desktopDocumentsUtil.getLatestDesktopLinks(httpRequest, MAX_NUMBER_OF_DOCS);
 
@@ -132,9 +131,6 @@ public class Documents {
                         getDefaultVisibilityChecker().
                         withFieldVisibility(JsonAutoDetect.Visibility.ANY).
                         withGetterVisibility(JsonAutoDetect.Visibility.NONE));
-
-        long end = System.currentTimeMillis();
-        logger.info("getTopDocuments. execution time is: " + (end - start));
 
         return mapper.writeValueAsString(documents);
     }

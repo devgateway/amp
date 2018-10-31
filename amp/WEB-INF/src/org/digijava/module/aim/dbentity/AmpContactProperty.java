@@ -3,10 +3,12 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
+import org.digijava.kernel.ampapi.endpoints.contact.ContactEPConstants;
 import org.digijava.kernel.ampapi.endpoints.contact.ContactPhoneTypePossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.contact.PhoneDiscriminatorContextMatcher;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
+import org.digijava.module.aim.annotations.interchange.RegexDiscriminator;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.util.ContactInfoUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -19,11 +21,20 @@ public class AmpContactProperty  implements Comparable, Serializable {
 
     private String name;
     
-    @Interchangeable(fieldTitle = "Value", required = ActivityEPConstants.REQUIRED_ALWAYS, importable = true)
+    @Interchangeable(fieldTitle = "Value", required = ActivityEPConstants.REQUIRED_ALWAYS, importable = true, 
+            regexPatterns = {
+                    @RegexDiscriminator(parent = ContactEPConstants.EMAIL, 
+                            regexPattern = ActivityEPConstants.REGEX_PATTERN_EMAIL),
+                    @RegexDiscriminator(parent = ContactEPConstants.PHONE, 
+                            regexPattern = ActivityEPConstants.REGEX_PATTERN_PHONE),
+                    @RegexDiscriminator(parent = ContactEPConstants.FAX, 
+                            regexPattern = ActivityEPConstants.REGEX_PATTERN_PHONE)
+                    })
     private String value;
     
-    @Interchangeable(fieldTitle = "Extension Value", importable = true,
-            context = PhoneDiscriminatorContextMatcher.class)
+    @Interchangeable(fieldTitle = "Extension Value", importable = true, 
+            context = PhoneDiscriminatorContextMatcher.class, 
+            regexPattern = ActivityEPConstants.REGEX_PATTERN_PHONE_EXTENSION)
     private String extensionValue;
 
     @PossibleValues(ContactPhoneTypePossibleValuesProvider.class)
@@ -124,10 +135,8 @@ public class AmpContactProperty  implements Comparable, Serializable {
         if (!(o instanceof AmpContactProperty)) return false;
 
         AmpContactProperty that = (AmpContactProperty) o;
-
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-
-        return true;
+        
+        return id != null && id.equals(that.id);
     }
 
     @Override

@@ -43,6 +43,7 @@ import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.dbentity.AmpSummaryNotificationSettings;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamReports;
@@ -464,6 +465,13 @@ public class TeamUtil {
                 workspace.setWorkspacePrefix(team.getWorkspacePrefix());
                 workspace.setCrossteamvalidation(team.getCrossteamvalidation());
                 workspace.setIsolated(team.getIsolated());
+                if (team.getSumaryNotificationSettings() == null) {
+                    workspace.setSendSummaryChangesApprover(false);
+                    workspace.setSendSummaryChangesManager(false);
+                } else {
+                    workspace.setSendSummaryChangesApprover(team.getSumaryNotificationSettings().getNotifyApprover());
+                    workspace.setSendSummaryChangesManager(team.getSumaryNotificationSettings().getNotifyManager());
+                }
                 if (team.getParentTeamId() != null){
                     workspace.setParentTeamId(team.getParentTeamId().getAmpTeamId());
                     workspace.setParentTeamName(team.getParentTeamId().getName());
@@ -471,7 +479,7 @@ public class TeamUtil {
                 else {
                     workspace.setParentTeamId(null);
                     workspace.setParentTeamName(null);
-                    
+
                 }
                 if(null == team.getRelatedTeamId())
                     workspace.setRelatedTeam(null);
@@ -580,6 +588,18 @@ public class TeamUtil {
                 updTeam.setComputation(team.getComputation());
                 updTeam.setCrossteamvalidation(team.getCrossteamvalidation());
                 updTeam.setIsolated(team.getIsolated());
+
+                if (updTeam.getSumaryNotificationSettings() != null) {
+                    updTeam.getSumaryNotificationSettings().setNotifyManager(team.getSumaryNotificationSettings()
+                            .getNotifyManager());
+                    updTeam.getSumaryNotificationSettings().setNotifyApprover(team.getSumaryNotificationSettings()
+                            .getNotifyApprover());
+                } else {
+                    updTeam.setSumaryNotificationSettings(team.getSumaryNotificationSettings());
+                    updTeam.getSumaryNotificationSettings().setAmpTeam(updTeam);
+                }
+
+
                 updTeam.setUseFilter(team.getUseFilter());
                 updTeam.setHideDraftActivities(team.getHideDraftActivities() );
                 updTeam.setWorkspaceGroup(team.getWorkspaceGroup());
@@ -592,6 +612,8 @@ public class TeamUtil {
                 if (team.getFilterDataSet() != null){
                     updTeam.getFilterDataSet().addAll(team.getFilterDataSet());
                 }
+
+               // removeAmpSummaryNotificationSettiongs(updTeam.getAmpTeamId());
                 session.saveOrUpdate(updTeam);
 
                 qryStr = "select t from " + AmpTeam.class.getName() + " t "
@@ -729,7 +751,6 @@ public class TeamUtil {
             RepairDbUtil.repairDb();
             
             session = PersistenceManager.getRequestDBSession();
-//beginTransaction();
 
             AmpTeam team = (AmpTeam) session.load(AmpTeam.class, teamId);
 
@@ -797,7 +818,9 @@ public class TeamUtil {
             qryStr = "delete from " + CrSharedDoc.class.getName() +" c where c.team="+teamId;
             qry = session.createQuery(qryStr);
             qry.executeUpdate();
-            
+
+            removeAmpSummaryNotificationSettiongs(teamId, session);
+
             session.delete(team);
             
             //remove related permissions
@@ -822,6 +845,17 @@ public class TeamUtil {
             ex.printStackTrace();
             throw new RuntimeException(ex);
         }
+    }
+    private static void removeAmpSummaryNotificationSettiongs(Long teamId) {
+        Session session = PersistenceManager.getRequestDBSession();
+
+        removeAmpSummaryNotificationSettiongs(teamId, null);
+    }
+
+    private static void removeAmpSummaryNotificationSettiongs(Long teamId, Session session) {
+        String qryDeleteSummaryNotificationSettings = "delete from " + AmpSummaryNotificationSettings.class
+                .getName() + " sns where sns.ampTeam.ampTeamId = :teamId";
+        session.createQuery(qryDeleteSummaryNotificationSettings).setParameter("teamId", teamId).executeUpdate();
     }
 
     /**
@@ -848,6 +882,16 @@ public class TeamUtil {
         return team;
     }
 
+    public static List<AmpTeamMember> getAmpTeamMembers(List<Long> teamMemberIds) {
+        Session session = null;
+        session = PersistenceManager.getRequestDBSession();
+        String qryStr = "select tm from " + AmpTeamMember.class.getName() + " tm"
+                + " where tm.ampTeamMemId in (:ids)";
+
+        Query qry = session.createQuery(qryStr);
+        qry.setParameterList("ids", teamMemberIds);
+        return qry.list();
+    }
     /**
      * Return an AmpTeamMember object corresponding to the id
      *
@@ -1864,7 +1908,9 @@ public class TeamUtil {
         AmpTeam currentAmpTeam = TeamMemberUtil.getCurrentAmpTeamMember(request).getAmpTeam();
         return currentAmpTeam;
     }
-   
+
+
+
     public static class HelperAmpTeamNameComparatorTrimmed
     implements Comparator {
     public int compare(Object obj1, Object obj2) {
@@ -1994,5 +2040,7 @@ public class TeamUtil {
                 getTeams(tm, teams);
             }
         }
+    }
+    public static void deteleSummaryChangesForTeam(Long ampTeamId) {
     }
 }

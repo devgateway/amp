@@ -113,7 +113,7 @@ public class SecurityService {
         jsonItem.set(EPConstants.SITE_ID, siteId);
         jsonItem.set(EPConstants.TRACKING_URL, trackingUrl);
         jsonItem.set(EPConstants.FOOTER_TEXT, TranslatorWorker
-                .translateText("Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and DGF"));
+                .translateText("Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and DG"));
         if (isAdmin) {
             List<JsonBean> links = new ArrayList<JsonBean>();
             JsonBean adminLink = new JsonBean();

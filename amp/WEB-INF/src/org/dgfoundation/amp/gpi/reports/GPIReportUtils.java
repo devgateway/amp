@@ -14,6 +14,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
@@ -33,15 +34,25 @@ import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
 import org.digijava.kernel.ampapi.endpoints.gpi.GPIDataService;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
+import org.digijava.kernel.ampapi.endpoints.util.DateFilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.ampapi.exception.AmpApiException;
+import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
+import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.common.util.DateTimeUtil;
+import org.joda.time.DateTime;
 
 public class GPIReportUtils {
+    
+    private static final int MTEF_YEARS_SIZE = 3;
 
     /**
      * 
@@ -125,6 +136,7 @@ public class GPIReportUtils {
         applyAppovalStatusFilter(formParams, spec);
         removeDonorAgencyFilterRule(spec);
         applySettings(formParams, spec);
+        FilterUtils.updateAllDateFilters(spec);
         clearYearRangeSettings(spec);
 
         GeneratedReport generatedReport = EndpointUtils.runReport(spec, ReportAreaImpl.class, null);
@@ -169,6 +181,7 @@ public class GPIReportUtils {
         
         applyAppovalStatusFilter(formParams, spec);
         applySettings(formParams, spec);
+        FilterUtils.updateAllDateFilters(spec);
         clearYearRangeSettings(spec);
 
         GeneratedReport generatedReport = EndpointUtils.runReport(spec, ReportAreaImpl.class, null);
@@ -210,6 +223,7 @@ public class GPIReportUtils {
 
         applyAppovalStatusFilter(formParams, spec);
         applySettings(formParams, spec);
+        FilterUtils.updateAllDateFilters(spec);
         clearYearRangeSettings(spec);
 
         GeneratedReport generatedReport = EndpointUtils.runReport(spec, ReportAreaImpl.class, null);
@@ -241,9 +255,28 @@ public class GPIReportUtils {
         applyAppovalStatusFilter(formParams, spec);
         applySettings(formParams, spec);
         clearYearRangeSettings(spec);
-
-        for (String mtefColumn : getMTEFColumnsForIndicator5b(spec)) {
-            spec.addColumn(new ReportColumn(mtefColumn));
+        
+        if (FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.MTEF_ANNUAL_DATE_FORMAT)) {
+            for (String mtefColumn : getMTEFColumnsForIndicator5b(spec)) {
+                spec.addColumn(new ReportColumn(mtefColumn));
+            }
+        } else {
+            spec.addMeasure(new ReportMeasure(MeasureConstants.MTEF));
+            spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
+            spec.addMeasure(new ReportMeasure(MeasureConstants.PLANNED_COMMITMENTS));
+            spec.addMeasure(new ReportMeasure(MeasureConstants.PIPELINE_COMMITMENTS));
+            spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
+            spec.addMeasure(new ReportMeasure(MeasureConstants.PLANNED_DISBURSEMENTS));
+            spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_EXPENDITURES));
+            spec.addMeasure(new ReportMeasure(MeasureConstants.PLANNED_EXPENDITURES));
+            spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENT_ORDERS));
+            spec.addMeasure(new ReportMeasure(MeasureConstants.PLANNED_DISBURSEMENT_ORDERS));
+            spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_ESTIMATED_DISBURSEMENTS));
+            spec.addMeasure(new ReportMeasure(MeasureConstants.PLANNED_ESTIMATED_DISBURSEMENTS));
+            spec.addMeasure(new ReportMeasure(MeasureConstants.ANNUAL_PROPOSED_PROJECT_COST));
+            spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
+            updateDateFilterForMTEFYears(spec);
+            FilterUtils.updateAllDateFilters(spec);
         }
 
         GeneratedReport generatedReport = EndpointUtils.runReport(spec, ReportAreaImpl.class, null);
@@ -288,6 +321,10 @@ public class GPIReportUtils {
         applyAppovalStatusFilter(formParams, spec);
         applySettings(formParams, spec);
         clearYearRangeSettings(spec);
+        
+        if (!FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.MTEF_ANNUAL_DATE_FORMAT)) {
+            FilterUtils.updateAllDateFilters(spec);
+        }
 
         GeneratedReport generatedReport = EndpointUtils.runReport(spec, ReportAreaImpl.class, null);
 
@@ -318,6 +355,7 @@ public class GPIReportUtils {
 
         applyAppovalStatusFilter(formParams, spec);
         applySettings(formParams, spec);
+        FilterUtils.updateAllDateFilters(spec);
         clearYearRangeSettings(spec);
         
         GeneratedReport generatedReport = EndpointUtils.runReport(spec, ReportAreaImpl.class, null);
@@ -352,6 +390,7 @@ public class GPIReportUtils {
 
         applyAppovalStatusFilter(formParams, spec);
         applySettings(formParams, spec);
+        FilterUtils.updateAllDateFilters(spec);
         clearYearRangeSettings(spec);
 
         GeneratedReport generatedReport = EndpointUtils.runReport(spec, ReportAreaImpl.class, null);
@@ -398,6 +437,52 @@ public class GPIReportUtils {
     }
     
     /**
+     * Update date filter in order to retrieve data from the other MTEF years
+     * @param spec
+     */
+    private static void updateDateFilterForMTEFYears(ReportSpecificationImpl spec) {
+            // update date filter
+            Optional<Entry<ReportElement, FilterRule>> dateRuleEntry = spec.getFilters()
+                    .getFilterRules().entrySet().stream()
+                    .filter(entry -> entry.getKey().type.equals(ElementType.DATE))
+                    .filter(entry -> entry.getKey().entity == null)
+                    .findAny();
+            
+            if (dateRuleEntry.isPresent() && dateRuleEntry.get().getValue() != null) {
+                FilterRule dateFilterRule = dateRuleEntry.get().getValue();
+                FilterRule mtefDateFilterRule = addYearsToDateFilterRule(dateFilterRule, MTEF_YEARS_SIZE);
+                dateRuleEntry.get().setValue(mtefDateFilterRule);
+            }
+    }
+
+    /**
+     * 
+     * @param gregFilterRule
+     * @param years
+     * @return
+     */
+    private static FilterRule addYearsToDateFilterRule(FilterRule gregFilterRule, int years) {
+        FilterRule mtefYearRule = null;
+
+        Date gregStart = gregFilterRule.min == null ? null : DateTimeUtil.fromJulianNumberToDate(gregFilterRule.min);
+        Date gregEnd = gregFilterRule.max == null ? null : DateTimeUtil.fromJulianNumberToDate(gregFilterRule.max);
+        
+        Calendar c = Calendar.getInstance();
+        c.setTime(gregEnd);
+        c.add(Calendar.YEAR, years);
+        
+        try {
+            mtefYearRule = DateFilterUtils.getDatesRangeFilterRule(ElementType.DATE,
+                    DateTimeUtil.toJulianDayNumber(gregStart), DateTimeUtil.toJulianDayNumber(c.getTime()),
+                    DateTimeUtil.formatDateOrNull(gregStart), DateTimeUtil.formatDateOrNull(c.getTime()), false);
+        } catch (AmpApiException e) {
+            throw new RuntimeException(e);
+        }
+
+        return mtefYearRule;
+    }
+
+    /**
      * Apply settings on report specifications
      * 
      * @param formParams
@@ -427,9 +512,7 @@ public class GPIReportUtils {
         }
         
         Date fromJulianNumberToDate = DateTimeUtil.fromJulianNumberToDate(dateFilterRule.min);
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(fromJulianNumberToDate);
-        int year = cal.get(Calendar.YEAR);
+        int year = FilterUtils.getYearFromDate(fromJulianNumberToDate);
 
         List<String> mtefColumns = new ArrayList<>();
         for (int i = 1; i <= 3; i++) {
@@ -438,20 +521,42 @@ public class GPIReportUtils {
 
         return mtefColumns;
     }
-    
+
+    /**
+     * we get the pivot year from filters until AMP-27540 is fixed
+     * @param formParams
+     * @return
+     */
+    public static Integer getPivotYearFromFormParams(JsonBean formParams) {
+        Integer pivotYear = null;
+        Map<String, Object> filters = (Map<String, Object>) formParams.get(EPConstants.FILTERS);
+        if (filters != null) {
+            Map<String, Object> date = (Map<String, Object>) filters.get(FiltersConstants.DATE);
+            if (date != null) {
+                String start = String.valueOf(date.get("start"));
+                SimpleDateFormat sdf = new SimpleDateFormat(MoConstants.DATE_FORMAT);
+                try {
+                    Date startDate = start == null ? null : sdf.parse(start);
+                    pivotYear = FilterUtils.getYearFromDate(startDate);
+                } catch (java.text.ParseException ex) {
+                    throw new RuntimeException("No year selected. Please specify the date filter");
+                }
+            }
+        }
+        return pivotYear;
+    }
+
     public static int getPivoteYear(ReportSpecification spec) {
         
         FilterRule dateFilterRule = getDateFilterRule(spec);
+        Date fromJulianNumberToDate;
+        
         if (dateFilterRule == null || StringUtils.isBlank(dateFilterRule.min)) {
             throw new RuntimeException("No year selected. Please specify the date filter");
+        }  else {
+            fromJulianNumberToDate = DateTimeUtil.fromJulianNumberToDate(dateFilterRule.min);
         }
-        
-        Date fromJulianNumberToDate = DateTimeUtil.fromJulianNumberToDate(dateFilterRule.min);
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(fromJulianNumberToDate);
-        int year = cal.get(Calendar.YEAR);
-
-        return year;
+        return getYearOfCustomCalendar(spec, fromJulianNumberToDate);
     }
 
     public static FilterRule getDateFilterRule(ReportSpecification spec) {
@@ -505,6 +610,31 @@ public class GPIReportUtils {
         return reportElement;
     }
     
+    /**
+     * Get the converted year of the julidanDateNumber using the calendar from the report spec
+     *
+     * @param spec
+     * @param julianDateNumber
+     * @return
+     */
+    public static int getYearOfCustomCalendar(ReportSpecification spec, long julianDateNumber) {
+        Date date = DateTimeUtil.fromJulianNumberToDate(Long.toString(julianDateNumber));
+
+        return getYearOfCustomCalendar(spec, date);
+    }
+    public static int getYearOfCustomCalendar(ReportSpecification spec, Date date) {
+
+        CalendarConverter calendarConverter = spec.getSettings().getCalendar();
+        if (calendarConverter != null && calendarConverter instanceof AmpFiscalCalendar) {
+            AmpFiscalCalendar calendar = (AmpFiscalCalendar) calendarConverter;
+            DateTime convDate = FiscalCalendarUtil.convertFromGregorianDate(date, calendar);
+            
+            return convDate.getYear();
+        }
+        return FilterUtils.getYearFromDate(date);
+        
+    }
+
     /**
      * Get GPI Remarks for indicator 5a exports (pdf and xlsx)
      * 
@@ -568,6 +698,7 @@ public class GPIReportUtils {
         Long max = aprDateRule == null ? 0L : aprDateRule.max != null ? Long.parseLong(aprDateRule.max) : 0L;
         
         List<GPIRemark> remarks = GPIDataService.getGPIRemarks(GPIReportConstants.REPORT_1, ids, donorType, min, max);
+        
         return remarks;
     }
     

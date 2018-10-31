@@ -25,6 +25,10 @@ public class AmpTrivialMeasure extends NiTransactionMeasure {
     public AmpTrivialMeasure(String measureName, long transactionType, String adjustmentTypeName, boolean directed) {
         this(measureName, transactionType, adjustmentTypeName, directed, false);
     }
+    
+    public AmpTrivialMeasure(String measureName, long transactionType, boolean directed) {
+        this(measureName, transactionType, null, directed, false);
+    }
 
     public AmpTrivialMeasure(String measureName, long transactionType, String adjustmentTypeName, boolean directed,
             boolean anySource) {
@@ -98,8 +102,9 @@ public class AmpTrivialMeasure extends NiTransactionMeasure {
                 cac -> 
                     or.test(cac) || (
                         cac.metaInfo.containsMeta(MetaCategory.TRANSACTION_TYPE.category, Long.valueOf(transactionType)) &&
-                        cac.metaInfo.containsMeta(MetaCategory.ADJUSTMENT_TYPE.category, adjustmentTypeName) &&
-                        (directed ? isDirected(cac) : anySource || isDonorSourced(cac))
+                        (adjustmentTypeName == null 
+                            || cac.metaInfo.containsMeta(MetaCategory.ADJUSTMENT_TYPE.category, adjustmentTypeName)) 
+                        && (directed ? isDirected(cac) : anySource || isDonorSourced(cac))
                     ),
                 ignoreFilters,
                 getBehaviour(overridingBehaviour, directed),

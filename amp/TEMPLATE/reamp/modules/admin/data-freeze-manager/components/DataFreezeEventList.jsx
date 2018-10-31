@@ -19,6 +19,8 @@ import * as dataFreezeActions from '../actions/DataFreezeActions';
 import * as commonListsActions from '../actions/CommonListsActions';
 import DataFreezeEventRow from '../components/DataFreezeEventRow';
 import * as Constants from '../common/Constants';
+import Processing from './common/Processing'
+
 require('../styles/less/main.less');
 
 export default class DataFreezeEventList extends Component {
@@ -63,7 +65,13 @@ export default class DataFreezeEventList extends Component {
     }
 
     addNew() {
-        this.props.actions.addNewDataFreezeEvent();
+        this.props.actions.getUserInfo().then(function() {         
+            if (this.props.user['is-admin'] == true) {              
+                this.props.actions.addNewDataFreezeEvent();
+            } else {
+                window.location.href = '/';
+            }
+          }.bind(this));      
     }
 
     goToClickedPage(event) {
@@ -201,20 +209,14 @@ export default class DataFreezeEventList extends Component {
         )
     }
     
-    render() {        
+    render() {
         const pages = ([...Array(this.props.paging.totalPageCount + 1).keys()]).slice(1);
         return (
-                <div>                
-                {this.state.waiting &&
-                   <div className="processing">                
-                    <div className="processing_inner">
-                        <div className="processing_content">
-                            <span className="processing_image">&nbsp;</span>
-                            <span className="processing_message">{this.props.translations['amp.data-freezing:loading-message']}</span>
-                        </div>
-                    </div>
-                   </div>
-                }
+                <div>
+                    <Processing show = {this.state.waiting}
+                            message={ this.props.translations['amp.data-freezing:loading-message']}/>
+                    <Processing show={this.props.saving}
+                    message = { this.props.translations['amp.data-freezing:saving-message'] +'...'}/>
                 <div id="filter-popup" ref="filterPopup"> </div>                              
                 <div >                
                 <div className="row">                
@@ -268,8 +270,8 @@ export default class DataFreezeEventList extends Component {
                         }
                       </thead>
                       <tbody>
-                        {this.props.dataFreezeEventList.map((dataFreezeEvent, i) => 
-                          <DataFreezeEventRow dataFreezeEvent={dataFreezeEvent} key={i} filter={this.filter} setFilterElement={this.setFilterElement} showFilterElement={this.showFilterElement} hideFilterElement={this.hideFilterElement} {...this.props}/>                      
+                        {this.props.dataFreezeEventList.map((dataFreezeEvent, i) =>
+                          <DataFreezeEventRow saving={this.props.saving} dataFreezeEvent={dataFreezeEvent} key={i} filter={this.filter} setFilterElement={this.setFilterElement} showFilterElement={this.showFilterElement} hideFilterElement={this.hideFilterElement} {...this.props}/>
                         )}                  
                       
                       </tbody>
@@ -334,6 +336,7 @@ export default class DataFreezeEventList extends Component {
 
 function mapStateToProps(state, ownProps) {
     return {
+        saving:state.dataFreeze.saving,
         translations: state.startUp.translations,
         translate: state.startUp.translate,
         paging: state.dataFreeze.paging,
@@ -341,7 +344,8 @@ function mapStateToProps(state, ownProps) {
         errors: state.dataFreeze.errors || [],
         infoMessages: state.dataFreeze.infoMessages || [],
         settings: state.commonLists.settings || {},
-        dataFreezeEventList: state.dataFreeze.dataFreezeEventList
+        dataFreezeEventList: state.dataFreeze.dataFreezeEventList,
+        user: state.commonLists.user || {}
     }
 }
 

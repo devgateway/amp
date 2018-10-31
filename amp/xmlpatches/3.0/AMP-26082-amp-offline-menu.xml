@@ -30,15 +30,15 @@
 
 				INSERT INTO amp_visibility_rule(SELECT nextval('amp_visibility_rule_seq'), null, 1);
 				INSERT INTO amp_visibility_rule_amp_modules_visibility(SELECT currval('amp_visibility_rule_seq'), (SELECT id FROM amp_modules_visibility WHERE name = 'Public AMP Offline' AND parent IN (SELECT id FROM amp_modules_visibility WHERE name = 'PUBLIC VIEW')));
-				INSERT INTO amp_menu_entry_view(select currval('amp_menu_entry_seq'), (SELECT currval('amp_visibility_rule_seq')), 0, '/public-amp-offline');
+				INSERT INTO amp_menu_entry_view(select currval('amp_menu_entry_seq'), (SELECT currval('amp_visibility_rule_seq')), 0, '/TEMPLATE/reamp/modules/ampoffline/download/index.html');
 
 				INSERT INTO amp_visibility_rule(SELECT nextval('amp_visibility_rule_seq'), null, 1);
 				INSERT INTO amp_visibility_rule_amp_modules_visibility(SELECT currval('amp_visibility_rule_seq'), (SELECT id FROM amp_modules_visibility WHERE name = 'AMP Offline' AND parent IN (SELECT id FROM amp_modules_visibility WHERE name = 'PROJECT MANAGEMENT')));
-				INSERT INTO amp_menu_entry_view(select currval('amp_menu_entry_seq'), (SELECT currval('amp_visibility_rule_seq')), 1, '/amp-offline');
+				INSERT INTO amp_menu_entry_view(select currval('amp_menu_entry_seq'), (SELECT currval('amp_visibility_rule_seq')), 1, '/TEMPLATE/reamp/modules/ampoffline/download/index.html');
 
 				INSERT INTO amp_visibility_rule(SELECT nextval('amp_visibility_rule_seq'), null, 1);
 				INSERT INTO amp_visibility_rule_amp_modules_visibility(SELECT currval('amp_visibility_rule_seq'), (SELECT id FROM amp_modules_visibility WHERE name = 'AMP Offline' AND parent IN (SELECT id FROM amp_modules_visibility WHERE name = 'PROJECT MANAGEMENT')));
-				INSERT INTO amp_menu_entry_view(select currval('amp_menu_entry_seq'), (SELECT currval('amp_visibility_rule_seq')), 2, '/amp-offline');
+				INSERT INTO amp_menu_entry_view(select currval('amp_menu_entry_seq'), (SELECT currval('amp_visibility_rule_seq')), 2, '/TEMPLATE/reamp/modules/ampoffline/download/index.html');
 
 				INSERT INTO amp_menu_entry_view SELECT id, null, 0, null FROM amp_menu_entry WHERE name='Tools' and parent_id is null;
 

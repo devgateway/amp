@@ -1235,8 +1235,9 @@ public class AmpReportGenerator extends ReportGenerator {
         rawColumns.getItems().clear();
         rawColumns = null;
         report.removeEmptyChildren();
-        
-        boolean dateFilterHidesProjects = "true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DATE_FILTER_HIDES_PROJECTS));
+
+        String removeEmptyRows = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.REPORTS_REMOVE_EMPTY_ROWS);
+        boolean dateFilterHidesProjects = "true".equalsIgnoreCase(removeEmptyRows);
                                 
         if (dateFilterHidesProjects && !reportMetadata.getDrilldownTab() && 
                 (this.getFilter().wasDateFilterUsed() || (reportMetadata.getHierarchies().size() > 0))

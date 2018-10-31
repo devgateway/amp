@@ -29,6 +29,7 @@ public class FiltersConstants {
     public static final String PROPOSED_COMPLETION_DATE = "proposed-completion-date";
     public static final String PROPOSED_START_DATE = "proposed-start-date";
 
+    public static final String ACTIVITY_ID = "activity-id";
     public static final String APPROVAL_STATUS = "approval-status";
     public static final String ARCHIVED = "archived";
     public static final String BENEFICIARY_AGENCY = "beneficiary-agency";
@@ -54,7 +55,6 @@ public class FiltersConstants {
     public static final String JOINT_CRITERIA = "joint-criteria";
     public static final String LOCATION = "location";
     public static final String MODE_OF_PAYMENT = "mode-of-payment";
-    public static final String NATIONAL_PLANNING_OBJECTIVES = "national-planning-objectives";
     public static final String NATIONAL_PLANNING_OBJECTIVES_LEVEL_1 = "national-planning-objectives-level-1";
     public static final String NATIONAL_PLANNING_OBJECTIVES_LEVEL_2 = "national-planning-objectives-level-2";
     public static final String NATIONAL_PLANNING_OBJECTIVES_LEVEL_3 = "national-planning-objectives-level-3";
@@ -65,6 +65,7 @@ public class FiltersConstants {
     public static final String NATIONAL_PLANNING_OBJECTIVES_LEVEL_8 = "national-planning-objectives-level-8";
     public static final String ON_OFF_TREASURY_BUDGET = "on-off-treasury-budget";
     public static final String PERFORMANCE_ALERT_LEVEL = "performance-alert-level";
+    public static final String PERFORMANCE_ALERT_TYPE = "performance-alert-type";
     public static final String PLEDGES_AID_MODALITY = "pledges-aid-modality";
     public static final String PLEDGES_DONOR_GROUP = "pledges-donor-group";
     public static final String PLEDGES_NATIONAL_PLAN_OBJECTIVES = "pledges-national-plan-objectives";
@@ -76,7 +77,6 @@ public class FiltersConstants {
     public static final String PLEDGES_QUATERNARY_SECTORS = "pledges-quaternary-sectors";
     public static final String PLEDGES_QUINARY_SECTORS = "pledges-quinary-sectors";
     public static final String PLEDGES_TITLES = "pledges-titles";
-    public static final String PRIMARY_PROGRAM = "primary-program";
     public static final String PRIMARY_PROGRAM_LEVEL_1 = "primary-program-level-1";
     public static final String PRIMARY_PROGRAM_LEVEL_2 = "primary-program-level-2";
     public static final String PRIMARY_PROGRAM_LEVEL_3 = "primary-program-level-3";
@@ -92,7 +92,6 @@ public class FiltersConstants {
     public static final String PROJECT_IMPLEMENTING_UNIT = "project-implementing-unit";
     public static final String REGION = "region";
     public static final String RESPONSIBLE_ORGANIZATION = "responsible-organization";
-    public static final String SECONDARY_PROGRAM = "secondary-program";
     public static final String SECONDARY_PROGRAM_LEVEL_1 = "secondary-program-level-1";
     public static final String SECONDARY_PROGRAM_LEVEL_2 = "secondary-program-level-2";
     public static final String SECONDARY_PROGRAM_LEVEL_3 = "secondary-program-level-3";
@@ -107,7 +106,6 @@ public class FiltersConstants {
     public static final String SECTOR_TAG = "sector-tag";
     public static final String STATUS = "status";
     public static final String TEAM = "team";
-    public static final String TERTIARY_PROGRAM = "tertiary-program";
     public static final String TERTIARY_PROGRAM_LEVEL_1 = "tertiary-program-level-1";
     public static final String TERTIARY_PROGRAM_LEVEL_2 = "tertiary-program-level-2";
     public static final String TERTIARY_PROGRAM_LEVEL_3 = "tertiary-program-level-3";

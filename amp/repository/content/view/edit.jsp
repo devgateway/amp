@@ -499,13 +499,15 @@ function cancel()
 function setStripsTable(tableId, classOdd, classEven) {
 	var tableElement = document.getElementById(tableId);
 	rows = tableElement.getElementsByTagName('tr');
-	for(var i = 0, n = rows.length; i < n; ++i) {
-		if(i%2 == 0)
-			rows[i].className = classEven;
-		else
-			rows[i].className = classOdd;
+	if (tableElement) {
+		for(var i = 0, n = rows.length; i < n; ++i) {
+			if(i%2 == 0)
+				rows[i].className = classEven;
+			else
+				rows[i].className = classOdd;
+		}
+		rows = null;
 	}
-	rows = null;
 }
 function setHoveredTable(tableId, hasHeaders) {
 

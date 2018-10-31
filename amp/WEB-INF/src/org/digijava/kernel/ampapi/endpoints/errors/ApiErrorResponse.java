@@ -41,15 +41,12 @@ public class ApiErrorResponse {
      * @param mediaType the MediaType
      */
     public static Response buildGenericError(Status status, JsonBean errorBean, String mediaType) {
-
-        String responseMediaType = Optional.ofNullable(mediaType).orElse(MediaType.APPLICATION_JSON);
-
-        Object formattedMessage = responseMediaType.equals(MediaType.APPLICATION_XML)
+        Object formattedMessage = mediaType.equals(MediaType.APPLICATION_XML)
                 ? ApiError.toXmlErrorString(errorBean) : errorBean;
 
         ResponseBuilder builder = Response.status(status)
                 .entity(formattedMessage)
-                .type(responseMediaType);
+                .type(mediaType);
         
         return builder.build();
     }
@@ -60,13 +57,7 @@ public class ApiErrorResponse {
      * @param msg the API Error
      */
     public static Response buildGenericError(Status status, ApiErrorMessage msg, String mediaType) {
-        
         return buildGenericError(status, ApiError.toError(msg), mediaType);
-    }
-    
-    public static Response buildGenericError(Status status, ApiErrorMessage msg, Throwable e, String mediaType) {
-        
-        return buildGenericError(status, ApiError.toError(msg, e), mediaType);
     }
     
     /**
@@ -98,6 +89,14 @@ public class ApiErrorResponse {
      */
     public static void reportForbiddenAccess(JsonBean msg) {
         reportError(Response.Status.FORBIDDEN, msg);
+    }
+    
+    /**
+     * Reports that the resource is not found (HTTP 404)
+     * @param msg API error message
+     */
+    public static void reportResourceNotFound(ApiErrorMessage msg) {
+        reportError(Response.Status.NOT_FOUND, msg);
     }
     
     /**

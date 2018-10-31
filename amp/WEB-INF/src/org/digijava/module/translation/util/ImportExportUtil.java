@@ -451,7 +451,7 @@ public class ImportExportUtil {
         try {
             Session session = PersistenceManager.getRequestDBSession();
             Criteria criteria = session.createCriteria(Message.class);
-            if (languagesToLoad != null) {
+            if (languagesToLoad!=null){
                 criteria.add(in("locale", languagesToLoad));
             }
             if (exportAmpOfflineTranslationsOnly) {
@@ -534,9 +534,8 @@ public class ImportExportUtil {
             
             for (int i = 1; i < physicalNumberOfRows; i++) {
                 Row hssfRow = hssfSheet.getRow(i);
-                String key = (hssfRow.getCell(0).getCellType() == HSSFCell.CELL_TYPE_NUMERIC) ? hssfRow
-                        .getCell(0).getNumericCellValue() + ""
-                        : hssfRow.getCell(0).getStringCellValue();
+                hssfRow.getCell(0).setCellType(HSSFCell.CELL_TYPE_STRING);
+                String key = hssfRow.getCell(0).getStringCellValue();
                 // We need to discard those keys that are not numbers or the whole process will fail when trying to make insert
                 // in table amp_etl_changelog(entity_name, entity_id).
                 try {
@@ -546,7 +545,8 @@ public class ImportExportUtil {
                     errors.add(TranslatorWorker.translateText("Can not import key: " + key));
                     continue;
                 }
-                
+
+                hssfRow.getCell(1).setCellType(HSSFCell.CELL_TYPE_STRING);
                 String englishText = (hssfRow.getCell(1) == null) ? ""
                         : hssfRow.getCell(1).getStringCellValue();
                 //for AMP-16681 when the cell content is #N/A on third column you are getting an erro if getStringCellValue is called

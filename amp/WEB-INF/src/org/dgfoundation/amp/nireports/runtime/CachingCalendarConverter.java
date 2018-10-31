@@ -5,9 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 import org.dgfoundation.amp.newreports.CalendarConverter;
-import org.dgfoundation.amp.nireports.ComparableValue;
 import org.dgfoundation.amp.nireports.TranslatedDate;
-import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 
 /**
  * a wrapper for a {@link CalendarConverter} which caches the result of calling an underlying {@link CalendarConverter}.<br />
@@ -86,5 +84,14 @@ public class CachingCalendarConverter implements CalendarConverter {
     public String getDefaultFiscalYearPrefix() {
         return fiscalYearPrefix;
     }
-
+    
+    public int parseYear(String year) {
+        return inner.parseYear(year, fiscalYearPrefix);
+    }
+    
+    @Override
+    public int parseYear(String year, String prefix) {
+        return inner.parseYear(year, prefix);
+    }
+    
 }

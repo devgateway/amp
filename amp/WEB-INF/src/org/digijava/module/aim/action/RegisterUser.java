@@ -72,6 +72,12 @@ public class RegisterUser extends Action {
 
             // register through
             user.setRegisteredThrough(RequestUtils.getSite(request));
+            
+            user.setNotificationEmailEnabled(userRegisterForm.getNotificationEmailEnabled());
+            
+            if (userRegisterForm.getNotificationEmailEnabled()) {
+                user.setNotificationEmail(userRegisterForm.getNotificationEmail());
+            }
 
             // set mailing address
             user.setAddress(userRegisterForm.getMailingAddress());
@@ -92,7 +98,6 @@ public class RegisterUser extends Action {
             user.setRegisterLanguage(RequestUtils
                     .getNavigationLanguage(request));
                         user.setEmailVerified(false);
-                        user.setActive(false);
                         user.setBanned(true);
 
             SiteDomain siteDomain = (SiteDomain) request

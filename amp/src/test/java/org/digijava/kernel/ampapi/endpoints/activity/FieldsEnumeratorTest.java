@@ -44,6 +44,7 @@ import org.mockito.junit.MockitoRule;
 public class FieldsEnumeratorTest {
 
     private static final int MAX_STR_LEN = 10;
+    private static final int SIZE_LIMIT = 3;
 
     @Rule public MockitoRule rule = MockitoJUnit.rule();
 
@@ -331,6 +332,9 @@ public class FieldsEnumeratorTest {
         @Interchangeable(fieldTitle = "6", validators =
                 @Validators(percentage = "percentageFmName", unique = "uniqueFmName"))
         private Collection<Object> field6;
+        
+        @Interchangeable(fieldTitle = "7", sizeLimit = SIZE_LIMIT)
+        private Collection<Object> field7;
     }
 
     private static class PercentageConstrained {
@@ -386,8 +390,15 @@ public class FieldsEnumeratorTest {
         expected6.setFieldName("6");
         expected6.setFieldLabel(fieldLabelFor("6"));
         expected6.setMultipleValues(true);
+        
+        APIField expected7 = newListField();
+        expected7.setFieldName("7");
+        expected7.setFieldLabel(fieldLabelFor("7"));
+        expected7.setMultipleValues(true);
+        expected7.setSizeLimit(SIZE_LIMIT);
 
-        assertEqualsDigest(Arrays.asList(expected1, expected2, expected3, expected4, expected5, expected6), actual);
+        assertEqualsDigest(Arrays.asList(expected1, expected2, expected3, expected4, expected5, expected6, expected7), 
+                actual);
     }
 
     @Test

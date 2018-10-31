@@ -32,7 +32,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
  * @author Dolghier Constantin
  *
  */
-public class PercentageTextColumn extends AmpDifferentialColumn<PercentageTextCell, String> {
+public class PercentageTextColumn extends AmpDifferentialColumn<PercentageTextCell> {
     
     public final static BigDecimal ONE_HUNDRED = BigDecimal.valueOf(100);
     public PercentageTextColumn(String columnName, NiDimension.LevelColumn levelColumn, String viewName) {

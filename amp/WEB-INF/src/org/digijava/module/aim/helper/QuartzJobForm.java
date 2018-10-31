@@ -1,6 +1,14 @@
 package org.digijava.module.aim.helper;
 
 public class QuartzJobForm {
+
+    public static final int EVERY_SECOND = 0;
+    public static final int MINUTELY = 1;
+    public static final int HOURLY = 2;
+    public static final int DAILY = 3;
+    public static final int WEEKLY = 4;
+    public static final int MONTHLY = 5;
+
     private String name;
     private String startDateTime;
     private String endDateTime;

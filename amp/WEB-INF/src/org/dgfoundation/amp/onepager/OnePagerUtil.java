@@ -228,5 +228,9 @@ public final class OnePagerUtil {
     public interface SerializablePredicate<T> extends Predicate<T>, Serializable {
         
     }
+    
+    public static String createJSAlert(String message) {
+        return "alert ('" + message + "')";
+    }
 
 }

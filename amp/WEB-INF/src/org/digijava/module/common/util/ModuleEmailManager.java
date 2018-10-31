@@ -171,7 +171,7 @@ public class ModuleEmailManager {
 
                 message = DgUtil.fillPattern(message, hMap);
 
-                DgEmailManager.sendMail(currAdmin.getEmail(), from,
+                DgEmailManager.sendMail(currAdmin.getEmailUsedForNotification(), from,
                                         subject, message,
                                         locale, true);
 
@@ -265,7 +265,7 @@ public class ModuleEmailManager {
 
         message = DgUtil.fillPattern(message, hMap);
 
-        DgEmailManager.sendMail(user.getEmail(), from,
+        DgEmailManager.sendMail(user.getEmailUsedForNotification(), from,
                                 subject, message,
                                 locale, true);
 

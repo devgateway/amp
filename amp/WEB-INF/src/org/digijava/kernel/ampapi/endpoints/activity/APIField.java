@@ -1,7 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
 import java.util.List;
-import java.util.Objects;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
@@ -15,7 +14,7 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 @JsonPropertyOrder({ "field_name", "id", "field_type", "field_label", "required", "importable", "dependencies",
         "id_only", "multiple_values", "percentage_constraint", "unique_constraint", "tree_collection", "translatable",
-        "field_length" })
+        "regex_pattern", "regex_constraint", "field_length", "size_limit" })
 public class APIField {
 
     @JsonProperty(ActivityEPConstants.FIELD_NAME)
@@ -68,9 +67,15 @@ public class APIField {
 
     @JsonProperty(ActivityEPConstants.DEPENDENCIES)
     private List<String> dependencies;
-
+    
+    @JsonProperty(ActivityEPConstants.REGEX_PATTERN)
+    private String regexPattern;
+    
     @JsonProperty(ActivityEPConstants.PERCENTAGE)
     private Boolean percentage;
+    
+    @JsonProperty(ActivityEPConstants.SIZE_LIMIT)
+    private Integer sizeLimit;
 
     @JsonIgnore
     private String discriminator;
@@ -194,6 +199,14 @@ public class APIField {
     public void setFieldLength(Integer fieldLength) {
         this.fieldLength = fieldLength;
     }
+    
+    public Integer getSizeLimit() {
+        return sizeLimit;
+    }
+
+    public void setSizeLimit(Integer sizeLimit) {
+        this.sizeLimit = sizeLimit;
+    }
 
     public List<APIField> getChildren() {
         return children;
@@ -210,7 +223,15 @@ public class APIField {
     public void setDependencies(List<String> dependencies) {
         this.dependencies = dependencies;
     }
+    
+    public String getRegexPattern() {
+        return regexPattern;
+    }
 
+    public void setRegexPattern(String regexPattern) {
+        this.regexPattern = regexPattern;
+    }
+    
     public Boolean getPercentage() {
         return percentage;
     }
@@ -235,6 +256,7 @@ public class APIField {
                 + translatable + ", multipleValues=" + multipleValues + ", activity=" + activity
                 + ", uniqueConstraint='" + uniqueConstraint + '\'' + ", percentageConstraint='" + percentageConstraint
                 + '\'' + ", treeCollectionConstraint=" + treeCollectionConstraint + ", fieldLength=" + fieldLength
-                + ", children=" + children + ", dependencies=" + dependencies + ", percentage=" + percentage + '}';
+                + ", children=" + children + ", dependencies=" + dependencies + ", percentage=" + percentage 
+                + ", regex_pattern=" + regexPattern + "}";
     }
 }

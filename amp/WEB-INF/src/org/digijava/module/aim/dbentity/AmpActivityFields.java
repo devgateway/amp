@@ -208,7 +208,7 @@ LoggerIdentifiable, Cloneable {
     //TTIL
     @Interchangeable(fieldTitle = "Locations", importable = true, fmPath = "/Activity Form/Location", required = "/Activity Form/Location/Locations/Location required validator",
                     validators = @Validators (unique = "/Activity Form/Location/Locations/uniqueLocationsValidator", treeCollection = "/Activity Form/Location/Locations/Tree Validator"))
-    @VersionableCollection(fieldTitle = "Locations")
+    @VersionableCollection(fieldTitle = ActivityFieldsConstants.LOCATIONS)
     protected Set<AmpActivityLocation> locations ;
     
     @Interchangeable(fieldTitle = ActivityFieldsConstants.ORG_ROLE, importable = true, fmPath = "/Activity Form/Organizations")
@@ -384,23 +384,24 @@ LoggerIdentifiable, Cloneable {
 //  @Interchangeable(fieldTitle = "Sector Ministry Contact Fax Number",fmPath="/Activity Form/Contacts/Sector Ministry Contact Information/Add Contact Fax")
     protected String secMiCntFaxNumber;
 
-    @Interchangeable(fieldTitle = "Activity Contacts", importable = true, fmPath = "/Activity Form/Contacts")
+    @Interchangeable(fieldTitle = "Activity Contacts", importable = true, fmPath = ActivityEPConstants.CONTACTS_PATH)
     @VersionableCollection(fieldTitle = "Activity Contacts")
     @InterchangeableDiscriminator(discriminatorField = "contactType", settings = {
             @Interchangeable(fieldTitle = ActivityFieldsConstants.DONOR_CONTACT, importable = true, discriminatorOption = Constants.DONOR_CONTACT, 
-                            fmPath = "/Activity Form/Contacts/Donor Contact Information", 
+                            fmPath = "/Activity Form/Contacts/Donor Contact Information",
                             validators = @Validators(unique = "/Activity Form/Contacts/Donor Contact Information")),
             @Interchangeable(fieldTitle = ActivityFieldsConstants.PROJECT_COORDINATOR_CONTACT, importable = true, discriminatorOption = Constants.PROJECT_COORDINATOR_CONTACT, 
-                            fmPath = "/Activity Form/Contacts/Project Coordinator Contact Information", 
+                            fmPath = "/Activity Form/Contacts/Project Coordinator Contact Information",
                             validators = @Validators(unique = "/Activity Form/Contacts/Project Coordinator Contact Information")),
             @Interchangeable(fieldTitle = ActivityFieldsConstants.SECTOR_MINISTRY_CONTACT, importable = true, discriminatorOption = Constants.SECTOR_MINISTRY_CONTACT, 
-                            fmPath = "/Activity Form/Contacts/Sector Ministry Contact Information", 
+                            fmPath = "/Activity Form/Contacts/Sector Ministry Contact Information",
                             validators = @Validators(unique = "/Activity Form/Contacts/Sector Ministry Contact Information")),
             @Interchangeable(fieldTitle = ActivityFieldsConstants.MOFED_CONTACT, importable = true, discriminatorOption = Constants.MOFED_CONTACT, 
-                            fmPath = "/Activity Form/Contacts/Mofed Contact Information", 
+                            fmPath = "/Activity Form/Contacts/Mofed Contact Information",
                             validators = @Validators(unique = "/Activity Form/Contacts/Mofed Contact Information")),
-            @Interchangeable(fieldTitle = ActivityFieldsConstants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT, importable = true, discriminatorOption = Constants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT, 
-                            fmPath = "/Activity Form/Contacts/Implementing Executing Agency Contact Information", 
+            @Interchangeable(fieldTitle = ActivityFieldsConstants.IMPL_EXECUTING_AGENCY_CONTACT, importable = true, 
+                            discriminatorOption = Constants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT, 
+                            fmPath = "/Activity Form/Contacts/Implementing Executing Agency Contact Information",
                             validators = @Validators(unique = "/Activity Form/Contacts/Implementing Executing Agency Contact Information"))
     })
     protected Set<AmpActivityContact> activityContacts;
@@ -413,8 +414,7 @@ LoggerIdentifiable, Cloneable {
     @VersionableCollection(fieldTitle = ActivityFieldsConstants.COMPONENTS)
     protected Set<AmpComponent> components;
 
-    //TTIL
-//  @Interchangeable(fieldTitle = "Structures", importable = true, fmPath = "/Activity Form/Structures")
+    @Interchangeable(fieldTitle = "Structures", importable = true, fmPath = "/Activity Form/Structures")
     @VersionableCollection(fieldTitle = "Structures")
     protected Set<AmpStructure> structures;
 
@@ -520,9 +520,9 @@ LoggerIdentifiable, Cloneable {
 //  @Validators (unique="/Activity Form/M&E/Unique MEs Validator")
     protected Set<IndicatorActivity> indicators;
 
-//  @Interchangeable(fieldTitle = "Activity Documents",fmPath="/Activity Form/Related Documents")
+    @Interchangeable(fieldTitle = "Activity Documents", fmPath = "/Activity Form/Related Documents", importable = true)
     @VersionableCollection(fieldTitle = "Activity Documents")
-    protected Set<AmpActivityDocument> activityDocuments    = null;
+    protected Set<AmpActivityDocument> activityDocuments = null;
     
     /* Categories */
     @Interchangeable(fieldTitle = "Categories", importable = true)
@@ -548,7 +548,7 @@ LoggerIdentifiable, Cloneable {
                  * also confirmed via AMP-20899
                  */
                 discriminatorOption = CategoryConstants.MODALITIES_KEY, fmPath="/Activity Form/Funding/Overview Section/Modalities", pickIdOnly=true),
-        @Interchangeable(fieldTitle = "A C Chapter", importable=true, multipleValues=false,
+        @Interchangeable(fieldTitle = "A C Chapter", label = "A.C. Chapter", importable = true, multipleValues = false,
                 discriminatorOption = CategoryConstants.ACCHAPTER_KEY, fmPath="/Activity Form/Identification/A.C. Chapter", pickIdOnly=true), 
         @Interchangeable(fieldTitle = "Activity Budget", importable=true, multipleValues=false, required = "/Activity Form/Identification/Required Validator for Activity Budget", 
                 discriminatorOption = CategoryConstants.ACTIVITY_BUDGET_KEY, fmPath="/Activity Form/Identification/Activity Budget", pickIdOnly=true), 
@@ -593,34 +593,50 @@ LoggerIdentifiable, Cloneable {
     @VersionableFieldSimple(fieldTitle = "Indirect On Budget")
     protected Boolean indirectOnBudget;
     
-    @Interchangeable(fieldTitle = "FY", importable = true, fmPath = "/Activity Form/Identification/Budget Extras/FY", required = "/Activity Form/Identification/Budget Extras/Required Validator for fy")
     @VersionableFieldSimple(fieldTitle = "FY")
     protected String FY;
     
-    @Interchangeable(fieldTitle = "Vote", importable = true, fmPath = "/Activity Form/Identification/Budget Extras/Vote", 
+    /*
+     * This field is used for API only. The values are stored in database as a string using FY field
+     */
+    @Interchangeable(fieldTitle = "FY", importable = true, fmPath = "/Activity Form/Identification/Budget Extras/FY", 
+            required = "/Activity Form/Identification/Budget Extras/Required Validator for fy",
+            dependencies = {InterchangeDependencyResolver.ON_BUDGET_KEY}, 
+            validators = @Validators (unique = "/Activity Form/Identification/Budget Extras/FY"))
+    protected Set<AmpAPIFiscalYear> fiscalYears;
+    
+    @Interchangeable(fieldTitle = "Vote", importable = true, 
+            fmPath = "/Activity Form/Identification/Budget Extras/Vote",
+            required = ActivityEPConstants.REQUIRED_ND,
             dependencies={InterchangeDependencyResolver.ON_BUDGET_KEY})
     @VersionableFieldSimple(fieldTitle = "Vote")
     protected String vote;
     
-    @Interchangeable(fieldTitle = "Sub Vote", importable = true, fmPath = "/Activity Form/Identification/Budget Extras/Sub-Vote", 
+    @Interchangeable(fieldTitle = "Sub Vote", label = "Sub-Vote", importable = true,
+            fmPath = "/Activity Form/Identification/Budget Extras/Sub-Vote",
+            required = ActivityEPConstants.REQUIRED_ND,
             dependencies={InterchangeDependencyResolver.ON_BUDGET_KEY})
     @VersionableFieldSimple(fieldTitle = "Sub Vote")
     protected String subVote;
     
-    @Interchangeable(fieldTitle = "Sub Program", importable = true, fmPath = "/Activity Form/Identification/Budget Extras/Sub-Program", 
+    @Interchangeable(fieldTitle = "Sub Program", label = "Sub-Program", importable = true,
+            fmPath = "/Activity Form/Identification/Budget Extras/Sub-Program",
+            required = ActivityEPConstants.REQUIRED_ND,
             dependencies={InterchangeDependencyResolver.ON_BUDGET_KEY})
     @VersionableFieldSimple(fieldTitle = "Sub Program")
     protected String subProgram;
 
     @Interchangeable(fieldTitle = ActivityFieldsConstants.PROJECT_CODE, importable = true,
-            required = ActivityEPConstants.BUDGET_EXTRAS_PROJECT_CODE_FM_PATH,
-            dependencies = InterchangeDependencyResolver.PROJECT_CODE_ON_BUDGET_KEY,
+            required = ActivityEPConstants.REQUIRED_ND,
+            dependencies = InterchangeDependencyResolver.ON_BUDGET_KEY,
             fmPath = FMVisibility.ANY_FM + ActivityEPConstants.DONOR_PROJECT_CODE_FM_PATH
                     + "|" + ActivityEPConstants.BUDGET_EXTRAS_PROJECT_CODE_FM_PATH)
     @VersionableFieldSimple(fieldTitle = "Project Code")
     protected String projectCode;
 
-    @Interchangeable(fieldTitle = "Ministry Code", importable = true, fmPath = "/Activity Form/Identification/Budget Extras/Ministry Code",
+    @Interchangeable(fieldTitle = "Ministry Code", importable = true, 
+            fmPath = "/Activity Form/Identification/Budget Extras/Ministry Code",
+            required = ActivityEPConstants.REQUIRED_ND,
             dependencies={InterchangeDependencyResolver.ON_BUDGET_KEY})
     @VersionableFieldSimple(fieldTitle = "Ministry Code")
     protected String ministryCode;
@@ -706,8 +722,7 @@ LoggerIdentifiable, Cloneable {
     @Interchangeable(fieldTitle = "PPC Annual Budgets", importable = true, fmPath = "/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost")
     @VersionableCollection(fieldTitle = "PPC Annual Budgets")
     protected Set<AmpAnnualProjectBudget> annualProjectBudgets;
-    //protected Set <AmpActivityContact> activityContacts;
-
+    
         public Boolean getMergedActivity() {
             return mergedActivity;
         }
@@ -2108,6 +2123,14 @@ LoggerIdentifiable, Cloneable {
         public void setDeleted(Boolean deleted) {
             this.deleted = deleted;
         }
+        
+        public Set<AmpAPIFiscalYear> getFiscalYears() {
+            return fiscalYears;
+        }
+
+        public void setFiscalYears(Set<AmpAPIFiscalYear> fiscalYears) {
+            this.fiscalYears = fiscalYears;
+        }
 
         public Set<AmpAidEffectivenessIndicatorOption> getSelectedEffectivenessIndicatorOptions() {
             return selectedEffectivenessIndicatorOptions;
@@ -2148,5 +2171,6 @@ LoggerIdentifiable, Cloneable {
             }
             this.costAmounts.add(costAmount);
         }
+
 }
 

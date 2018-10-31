@@ -77,6 +77,7 @@ public class AddUserForm  extends ValidatorForm {
     private boolean newsLetterRadio;
     private boolean membersProfile;
     private Boolean pledger;
+    private Boolean pledgeSuperUser;
     private Collection contentLanguages;
     private Collection navigationLanguages;
     private String selectedLanguage;
@@ -97,6 +98,9 @@ public class AddUserForm  extends ValidatorForm {
     private Boolean exemptFromDataFreezing;
     
     private boolean nationalCoordinator = false;
+    
+    private Boolean notificationEmailEnabled;
+    private String notificationEmail;
     
     public String[] getSelectedItems() {
         return this.selectedItems;
@@ -416,6 +420,10 @@ public class AddUserForm  extends ValidatorForm {
         selectedOrgType=null;
         setOrgGrp(null);
         setOrgType(null);
+        setNotificationEmailEnabled(false);
+        setNotificationEmail(null);
+        setPledger(false);
+        setPledgeSuperUser(false);
  //       setWebSite(null);
 
         organizationTypeOther = null;
@@ -603,6 +611,14 @@ public class AddUserForm  extends ValidatorForm {
         this.pledger = pledger;
     }
 
+    public Boolean getPledgeSuperUser() {
+        return pledgeSuperUser;
+    }
+
+    public void setPledgeSuperUser(Boolean pledgeSuperUser) {
+        this.pledgeSuperUser = pledgeSuperUser;
+    }
+
     public boolean isRegistrationByEmail() {
         return registrationByEmail;
     }
@@ -625,6 +641,22 @@ public class AddUserForm  extends ValidatorForm {
 
     public void setNationalCoordinator(boolean nationalCoordinator) {
         this.nationalCoordinator = nationalCoordinator;
+    }
+
+    public Boolean getNotificationEmailEnabled() {
+        return notificationEmailEnabled;
+    }
+
+    public void setNotificationEmailEnabled(Boolean notificationEmailEnabled) {
+        this.notificationEmailEnabled = notificationEmailEnabled;
+    }
+
+    public String getNotificationEmail() {
+        return notificationEmail;
+    }
+
+    public void setNotificationEmail(String notificationEmail) {
+        this.notificationEmail = notificationEmail;
     }
     
 }

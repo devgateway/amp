@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 
-import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.newreports.CalendarConverter;
 import org.dgfoundation.amp.newreports.ReportSettings;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
@@ -24,9 +23,9 @@ public class NiReportDateFormatter {
     final protected AmpDateFormatter ampDateFormatter;
     final protected CalendarConverter calendarConverter;
     
-    public NiReportDateFormatter(ReportSettings settings, String dateDisplayFormat) {
+    public NiReportDateFormatter(ReportSettings settings, String dateDisplayFormat, CalendarConverter defaultCalendar) {
         this.calendarConverter = (settings != null && settings.getCalendar() != null) ? settings.getCalendar() : 
-            AmpARFilter.getDefaultCalendar();
+            defaultCalendar;
         this.ampDateFormatter = AmpDateFormatterFactory.getLocalizedFormatter(dateDisplayFormat);
     }
     

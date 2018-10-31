@@ -32,7 +32,7 @@ public class WorkspaceMemberService {
         } else {
             restrictions = " WHERE atm.amp_team_mem_id in (" + Util.toCSStringForIN(ids) + ")";
         }
-        String sqlQuery = "SELECT atm.amp_team_mem_id, atm.user_, atm.amp_team_id, atmr.role "
+        String sqlQuery = "SELECT atm.amp_team_mem_id, atm.user_, atm.amp_team_id, atmr.role, atm.deleted "
                 + "FROM amp_team_member atm "
                 + "LEFT JOIN amp_team_member_roles atmr ON atmr.amp_team_mem_role_id = atm.amp_member_role_id"
                 + restrictions;
@@ -45,6 +45,7 @@ public class WorkspaceMemberService {
                     wsMember.setUserId(rs.getLong("user_"));
                     wsMember.setWorkspaceId(rs.getLong("amp_team_id"));
                     wsMember.setRoleId(WorkspaceMemberRoleConstants.ROLE_ID_MAP.get(rs.getString("role")));
+                    wsMember.setDeleted(rs.getBoolean("deleted"));
                 } catch (SQLException e) {
                     logger.error(e.getMessage());
                     throw new RuntimeException(e);

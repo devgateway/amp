@@ -35,7 +35,8 @@ public class ActivityErrors {
     public static final ApiErrorMessage FIELD_PARENT_CHILDREN_NOT_ALLOWED = new ApiErrorMessage(20, "Parent and child cannot be in the same collection");
     public static final ApiErrorMessage DEPENDENCY_NOT_MET = new ApiErrorMessage(21, "Dependency not met");
     public static final ApiErrorMessage UNIQUE_PRIMARY_CONTACT = new ApiErrorMessage(22, "Multiple primary contacts not allowed");
-    public static final ApiErrorMessage ACTIVITY_IS_LOCKED = new ApiErrorMessage(23, "Cannot aquire lock for the activity");
+    public static final ApiErrorMessage ACTIVITY_IS_BEING_EDITED =
+            new ApiErrorMessage(23, "Current activity is being edited by:");
     public static final ApiErrorMessage ACTIVITY_NOT_LOADED = new ApiErrorMessage(24, "Cannot load the activity");
     public static final ApiErrorMessage FIELD_INVALID_PERCENTAGE = new ApiErrorMessage(25, "Percentage fields have to be >0, <=100");
     public static final ApiErrorMessage AGREEMENT_CODE_REQUIRED = new ApiErrorMessage(26, "Agreement code is required");
@@ -44,5 +45,11 @@ public class ActivityErrors {
     public static final ApiErrorMessage ORGANIZATION_ROLE_PAIR_NOT_DECLARED = new ApiErrorMessage(27, "The organization and role pair is not declared");
     public static final ApiErrorMessage ORGANIZATION_NOT_DECLARED = new ApiErrorMessage(28, "The organization is not declared");
     public static final ApiErrorMessage ACTIVITY_IS_STALE = new ApiErrorMessage(29, "The activity is stale");
+    public static final ApiErrorMessage FUNDING_PLEDGE_ORG_GROUP_MISMATCH = new ApiErrorMessage(30, 
+            "The organization group of the pledge doesn't match with funding donor organization group");
+    public static final ApiErrorMessage FIELD_TOO_MANY_VALUES_NOT_ALLOWED = new ApiErrorMessage(31, "Too many values");
+    public static final ApiErrorMessage ACTIVITY_NOT_FOUND = new ApiErrorMessage(32,
+            "Activity not found");
+
 
 }

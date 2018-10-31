@@ -14,6 +14,7 @@ if (BRANCH_NAME ==~ /feature\/AMP-\d+.*/) {
 // Record original branch or pull request for cleanup jobs
 def branch = env.CHANGE_ID == null ? BRANCH_NAME : null
 def pr = env.CHANGE_ID
+def registryKey = env.AMP_REGISTRY_PRIVATE_KEY
 
 println "Branch: ${branch}"
 println "Pull request: ${pr}"
@@ -78,7 +79,8 @@ stage('Build') {
         sh(returnStatus: true, script: "docker rmi phosphorus:5000/amp-webapp:${tag} > /dev/null")
 
         // Find AMP version
-        codeVersion = (readFile('amp/TEMPLATE/ampTemplate/site-config.xml') =~ /(?s).*<\!ENTITY ampVersion "([\d\.]+)">.*/)[0][1]
+        codeVersion = readMavenPom(file: 'amp/pom.xml').version
+        println "AMP Version: ${codeVersion}"
 
         if (imageIds.equals("")) {
             withEnv(["PATH+MAVEN=${tool 'M339'}/bin"]) {
@@ -86,10 +88,10 @@ stage('Build') {
                     sh returnStatus: true, script: 'tar -xf ../amp-node-cache.tar'
 
                     // Build AMP
-                    sh "cd amp && mvn -T 4 clean compile war:exploded -Djdbc.user=amp -Djdbc.password=amp122006 -Djdbc.db=amp -Djdbc.host=db -Djdbc.port=5432 -DdbName=postgresql -Djdbc.driverClassName=org.postgresql.Driver -Dmaven.test.skip=true -Dapidocs=true -DbuildVersion=AMP -DbuildSource=${tag} -e"
+                    sh "cd amp && mvn -T 4 clean compile war:exploded -Djdbc.user=amp -Djdbc.password=amp122006 -Djdbc.db=amp -Djdbc.host=db -Djdbc.port=5432 -DdbName=postgresql -Djdbc.driverClassName=org.postgresql.Driver -Dmaven.test.skip=true -Dapidocs=true -DbuildSource=${tag} -e"
 
                     // Build Docker images & push it
-                    sh "docker build -q -t phosphorus:5000/amp-webapp:${tag} --build-arg AMP_EXPLODED_WAR=target/amp-AMP --build-arg AMP_PULL_REQUEST='${pr}' --build-arg AMP_BRANCH='${branch}' --label git-hash='${hash}' amp"
+                    sh "docker build -q -t phosphorus:5000/amp-webapp:${tag} --build-arg AMP_EXPLODED_WAR=target/amp --build-arg AMP_PULL_REQUEST='${pr}' --build-arg AMP_BRANCH='${branch}' --build-arg AMP_REGISTRY_PRIVATE_KEY='${registryKey}' --label git-hash='${hash}' amp"
                     sh "docker push phosphorus:5000/amp-webapp:${tag} > /dev/null"
                 } finally {
                     // Cleanup after Docker & Maven

@@ -88,7 +88,7 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
      * {@link #getName()} in case this column is used to fetch "Component Funding"
      */
     public final static String ENTITY_COMPONENT_FUNDING = "Component Funding";
-    
+
     /**
      * {@link #getName()} in case this column is used to fetch GPI Funding"
      */
@@ -193,7 +193,13 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
     protected synchronized FundingFetcherContext resetCache(NiReportsEngine engine) {
         engine.timer.putMetaInNode("resetCache", true);
         //Map<Long, String> adjTypeValue = SQLUtils.collectKeyValue(AmpReportsScratchpad.get(engine).connection, String.format("select acv_id, acv_name from v_ni_category_values where acc_keyname IN ('%s', '%s')", CategoryConstants.ADJUSTMENT_TYPE_KEY, CategoryConstants.SSC_ADJUSTMENT_TYPE_KEY));
-        Map<Long, String> acvs = SQLUtils.collectKeyValue(AmpReportsScratchpad.get(engine).connection, String.format("select acv_id, acv_name from v_ni_category_values where acc_keyname IN('%s', '%s', '%s', '%s', '%s', '%s')", CategoryConstants.EXPENDITURE_CLASS_KEY, CategoryConstants.TYPE_OF_ASSISTENCE_KEY, CategoryConstants.MODE_OF_PAYMENT_KEY, CategoryConstants.ADJUSTMENT_TYPE_KEY, CategoryConstants.SSC_ADJUSTMENT_TYPE_KEY, CategoryConstants.CONCESSIONALITY_LEVEL_KEY));
+        Map<Long, String> acvs = SQLUtils.collectKeyValue(AmpReportsScratchpad.get(engine).connection,
+                String.format("select acv_id, acv_name from v_ni_category_values where acc_keyname "
+                        + "IN('%s', '%s', '%s', '%s', '%s', '%s', '%s')",
+                CategoryConstants.EXPENDITURE_CLASS_KEY, CategoryConstants.TYPE_OF_ASSISTENCE_KEY,
+                CategoryConstants.MODE_OF_PAYMENT_KEY, CategoryConstants.ADJUSTMENT_TYPE_KEY,
+                CategoryConstants.SSC_ADJUSTMENT_TYPE_KEY, CategoryConstants.CONCESSIONALITY_LEVEL_KEY,
+                CategoryConstants.MTEF_PROJECTION_KEY));
         Map<Long, String> roles = SQLUtils.collectKeyValue(AmpReportsScratchpad.get(engine).connection, String.format("SELECT amp_role_id, role_code FROM amp_role", CategoryConstants.ADJUSTMENT_TYPE_KEY));
         
         return new FundingFetcherContext(new DifferentialCache<CategAmountCellProto>(invalidationDetector.getLastProcessedFullEtl()), roles, acvs);
@@ -204,23 +210,38 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
         AmpReportsScratchpad scratchpad = AmpReportsScratchpad.get(engine);
         AmpReportsSchema schema = (AmpReportsSchema) engine.schema;
         boolean enableDiffing = schema.ENABLE_CACHING;
-        AmpCurrency usedCurrency = scratchpad.getUsedCurrency();
 
         List<CategAmountCellProto> protos;
         if (enableDiffing) {
             long start = System.currentTimeMillis();
             synchronized(CACHE_SYNC_OBJ) {
                 FundingFetcherContext cache = cacher.buildOrGetValue(true, engine);
-                Set<Long> deltas = scratchpad.differentiallyImportCells(engine.timer, mainColumn, cache.cache, ids -> fetchSkeleton(engine, ids, cache));
+
+                scratchpad.differentiallyImportCells(engine.timer, mainColumn, cache.cache,
+                        ids -> fetchSkeleton(engine, ids, cache));
+
                 protos = cache.cache.getCells(scratchpad.getMainIds(engine, this));
                 long delta = System.currentTimeMillis() - start;
                 engine.timer.putMetaInNode("hot_time", delta);
             }
-        }
-        else {
+        } else {
             protos = fetchSkeleton(engine, scratchpad.getMainIds(engine, this), resetCache(engine));
         }
 
+        return materialize(engine, scratchpad, schema, protos);
+    }
+
+    /**
+     * @param engine
+     * @param scratchpad
+     * @param schema
+     * @param protos
+     * @return
+     */
+    private List<CategAmountCell> materialize(NiReportsEngine engine, AmpReportsScratchpad scratchpad,
+            AmpReportsSchema schema, List<CategAmountCellProto> protos) {
+
+        // cmp begin
         long start = System.currentTimeMillis();
         CachingCalendarConverter calendar = engine.calendar;
         CurrencyConvertor currencyConvertor = schema.currencyConvertor;
@@ -230,8 +251,25 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
                 .collect(toList());
         long delta = System.currentTimeMillis() - start;
         engine.timer.putMetaInNode("materialize_time", delta);
+        // cmp end Ș return cells;
 
-        return cells;
+        List<CategAmountCell> res = new ArrayList<>();
+        AmpCurrency usedCurrency = scratchpad.getUsedCurrency();
+        res.addAll(protos.stream().map(cacp -> cacp.materialize(usedCurrency, engine.calendar,
+                schema.currencyConvertor, scratchpad.getPrecisionSetting(), false)).collect(toList()));
+
+        /*
+         * AMP-27571
+         * if canSplittingStrategyBeAdded is true we need to duplicate cells in original currency
+        */
+        if (engine.spec.isShowOriginalCurrency()) {
+            // generate cells for original currency only (except used currency)
+            res.addAll(protos.stream()
+                    .map(cacp -> cacp.materialize(usedCurrency, engine.calendar,
+                            schema.currencyConvertor, scratchpad.getPrecisionSetting(), true))
+                    .collect(toList()));
+        }
+        return res;
     }
 
     protected String buildSupplementalCondition(NiReportsEngine engine, Set<Long> ids, FundingFetcherContext context) {
@@ -284,7 +322,7 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
                 if (this.name.equals(ENTITY_COMPONENT_FUNDING)) {
                     metaSet.add(MetaCategory.SOURCE_ROLE.category, Constants.FUNDING_AGENCY);
                 }
-                
+
                 if (this.name.equals(ENTITY_REGIONAL_FUNDING)) {
                     metaSet.add(MetaCategory.SOURCE_ROLE.category, Constants.FUNDING_AGENCY);
                 }
@@ -307,7 +345,7 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
                 addMetaIfIdValueExists(metaSet, "terms_assist_id", MetaCategory.TYPE_OF_ASSISTANCE, rs.rs, context.acvs);
                 addMetaIfIdValueExists(metaSet, "mode_of_payment_id", MetaCategory.MODE_OF_PAYMENT, rs.rs, context.acvs);
                 addMetaIfIdValueExists(metaSet, "concessionality_level_id", MetaCategory.CONCESSIONALITY_LEVEL, rs.rs, context.acvs);
-                
+
                 // add the directed-transactions meta, if appliable
                 if (metaSet.hasMetaInfo(MetaCategory.SOURCE_ROLE.category) && metaSet.hasMetaInfo(MetaCategory.RECIPIENT_ROLE.category)
                     && metaSet.hasMetaInfo(MetaCategory.SOURCE_ORG.category) && metaSet.hasMetaInfo(MetaCategory.RECIPIENT_ORG.category)) 

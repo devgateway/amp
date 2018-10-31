@@ -85,6 +85,7 @@ import org.dgfoundation.amp.onepager.components.fields.AmpOverviewSection;
 import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
 import org.dgfoundation.amp.onepager.components.fields.AmpProjectCost;
 import org.dgfoundation.amp.onepager.components.fields.AmpSemanticValidatorField;
+import org.dgfoundation.amp.onepager.components.fields.AmpSimpleValidatorField;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.dgfoundation.amp.onepager.models.TranslationDecoratorModel;
@@ -195,7 +196,10 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                     @Override
                     public void component(AmpSemanticValidatorField<?> ifs,
                             IVisit<Void> visit) {
-                        ifs.getSemanticValidator().setEnabled(enabled);
+                         //do not toggle if we should validate drafts too
+                        if (!ifs.isShouldValidateDrafts()) {
+                            ifs.getSemanticValidator().setEnabled(enabled);
+                        }
                         if (ifs.isVisibleInHierarchy())
                             target.add(ifs);
                         visit.dontGoDeeper();
@@ -358,14 +362,14 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
             }
         };
         activityForm.setOutputMarkupId(true);
-
+        
         String actNameStr = am.getObject().getName();
         if (actNameStr != null && !actNameStr.trim().isEmpty()) {
             actNameStr = "(" + actNameStr + ")";
         }
         Label activityName = new Label("activityName", actNameStr);
         add(activityName);
-
+        
         final FeedbackPanel feedbackPanel = new FeedbackPanel("feedbackPanel");
         feedbackPanel.setOutputMarkupPlaceholderTag(true);
         feedbackPanel.setOutputMarkupId(true);
@@ -532,7 +536,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         AttributePrepender clickMonEval = new AttributePrepender("onclick", new Model<String>("$('.mon_eval_button:visible').click();"), "");
         AttributePrepender closeDialogs = new AttributePrepender("onclick", new Model<String>(
                 "$('.ui-dialog-content').dialog('close');"), "");
-
+        
         saveAndSubmit.getButton().add(new AttributeModifier("class", new Model<String>("sideMenuButtons")));
         saveAndSubmit.getButton().add(updateEditors);
         saveAndSubmit.getButton().add(closeEditors);
@@ -842,7 +846,9 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                         target.appendJavaScript("alert('" + TranslatorUtil.getTranslatedText("You need to save this activity before being able to preview it!") + "');");
                     }
                     else{
-                        target.appendJavaScript("window.location.replace(\"/aim/viewActivityPreview.do~pageId=2~activityId=" + am.getObject().getAmpActivityId() + "~isPreview=1\");");
+                        target.appendJavaScript(
+                                "window.location.replace(\"/aim/viewActivityPreview.do~activityId="
+                                        + am.getObject().getAmpActivityId() + "~isPreview=1\");");
                     }
             }
             
@@ -861,9 +867,11 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         //disable on click preview
         preview.getButton().add(new AttributeModifier("class", new Model("sideMenuButtons")));
         preview.getButton().add(new AttributePrepender("onclick", new Model<String>( " disableButton();"), ""));
-        if (am.getObject().getAmpActivityId() == null)
+        if (am.getObject().getAmpActivityId() == null) {
             preview.setVisible(false);
+        }
         preview.getButton().add(isSubmit);
+        preview.setAffectedByFreezing(false);
         activityForm.add(preview);
         
         featureList = new ListView<AmpComponentPanel>("featureList", listModel) {
@@ -1116,44 +1124,56 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         // visit form children and add to the ajax request the invalid ones
         
         
-        form.visitChildren(FormComponent.class,
-                new IVisitor<FormComponent, Void>() {
-                    @Override
-                    public void component(FormComponent component,
-                            IVisit<Void> visit) {
-                        if (!component.isValid()) {
-                            target.appendJavaScript("$('#"+ component.getMarkupId() +"').parents().show();");
-                            target.appendJavaScript("$(window).scrollTop($('#"+component.getParent().getMarkupId()+"').position().top)");
-                            if (component.getLabel() != null) {
-                                logger.error("Component is invalid, adding to target: " + component.getLabel().getObject());
-                            }
-                            
-                            target.add(component);
-                            
-                            //some of the fields that need to show errors are HiddenFieldS. These are cumulative error fields, that show error for groups of other fields
-                            //like for example a list of sectors with percentages
-                            //when these AmpCollectionValidatorFieldS are detected, their validation is revisited
-                            if (component instanceof HiddenField) {                                 
-                                if(component.getParent() instanceof AmpCollectionValidatorField<?, ?>) 
-                                    ((AmpCollectionValidatorField)component.getParent()).reloadValidationField(target);                                 
-                            } else {
-                                target.focusComponent(component);
-                                String js = null;
-                                
-                                //we simulate onClick over AmpGroupFieldS because radiochoices are treated differently they can't receive onChange.
-                                //For the rest of the components we use onChange
-                                if(component instanceof RadioChoice<?> || component instanceof CheckBoxMultipleChoice
-                                        || component  instanceof RadioGroup<?> || component instanceof CheckGroup) 
-                                    js=String.format("$('#%s').click();",component.getMarkupId());                                      
-                                else                                            
-                                    js=String.format("$('#%s').change();",component.getMarkupId());
-                                
-                                target.appendJavaScript(js);
-                                target.add(component);
+        form.visitChildren(FormComponent.class, new IVisitor<FormComponent, Void>() {
+            @Override
+            public void component(FormComponent component, IVisit<Void> visit) {
+                if (!component.isValid()) {
+                    target.appendJavaScript("$('#" + component.getMarkupId() + "').parents().show();");
+                    target.appendJavaScript(
+                            "$(window).scrollTop($('#" + component.getParent().getMarkupId() + "').position().top)");
+                    if (component.getLabel() != null) {
+                        logger.error("Component is invalid, adding to target: " + component.getLabel().getObject());
+                    }
+
+                    target.add(component);
+
+                    // some of the fields that need to show errors are
+                    // HiddenFieldS. These are cumulative error fields,
+                    // that show error for groups of other fields
+                    // like for example a list of sectors with
+                    // percentages
+                    // when these AmpCollectionValidatorFieldS are
+                    // detected, their validation is revisited
+                    if (component instanceof HiddenField) {
+                        if (component.getParent() instanceof AmpCollectionValidatorField<?, ?>) {
+                            ((AmpCollectionValidatorField<?, ?>) component.getParent()).reloadValidationField(target);
+                        } else {
+                            if (component.getParent() instanceof AmpSimpleValidatorField<?, ?>) {
+                                ((AmpSimpleValidatorField<?, ?>) component.getParent()).reloadValidationField(target);
                             }
                         }
+                    } else {
+                        target.focusComponent(component);
+                        String js = null;
+
+                        // we simulate onClick over AmpGroupFieldS
+                        // because radiochoices are treated
+                        // differently they can't receive onChange.
+                        // For the rest of the components we use
+                        // onChange
+                        if (component instanceof RadioChoice<?> || component instanceof CheckBoxMultipleChoice
+                                || component instanceof RadioGroup<?> || component instanceof CheckGroup) {
+                            js = String.format("$('#%s').click();", component.getMarkupId());
+                        } else {
+                            js = String.format("$('#%s').change();", component.getMarkupId());
+                        }
+                        target.appendJavaScript(js);
+                        target.add(component);
                     }
-                });
+                }
+
+            }
+        });
         target.add(feedbackPanel);
     }
 
@@ -1192,62 +1212,28 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                 && newActivity.getDraft() != null && !newActivity.getDraft()) {
             new ActivitySaveTrigger(newActivity);
         }
-        String additionalDetails="approved";
         //if validation is off in team setup no messages should be generated
 
         String validation = DbUtil.getValidationFromTeamAppSettings(ampCurrentMember.getAmpTeam().getAmpTeamId());
         
         if (activity.getDraft() != null&& !activity.getDraft()&&!("validationOff".equals(validation))) {
-            String approvalStatus = newActivity.getApprovalStatus();
-            if(approvalStatus != null && (approvalStatus.equals(Constants.APPROVED_STATUS)||approvalStatus.equals(Constants.STARTED_APPROVED_STATUS))){
-                if(modifiedBy!=null){
-                    AmpTeamMemberRoles role=modifiedBy.getAmpMemberRole();
-                    boolean isTeamHead=false;
-                    if(role.getTeamHead()!=null&&role.getTeamHead()){
-                        isTeamHead=true;
-                    }
+            if (isApproved(newActivity)) {
+                if (modifiedBy != null) {
+                    AmpTeamMemberRoles role = modifiedBy.getAmpMemberRole();
                     if(!role.isApprover()){
                         if(oldId==null||("allEdits".equals(validation))){
                             new ApprovedActivityTrigger(newActivity,modifiedBy); //if TL or approver created activity, then no Trigger is needed
                         }
                     }
                 }
-                
             }else{
                 if("allEdits".equals(validation)||oldId==null){
                     new NotApprovedActivityTrigger(newActivity);
-                    additionalDetails="pending approval";
                 }
-            }
-        }
-        else{
-            if (newActivity.getDraft() != null&& newActivity.getDraft()){
-                additionalDetails="draft";
-            }
-        }
-        
-        HttpServletRequest hsRequest = (HttpServletRequest) getRequest().getContainerRequest();
-
-        if (oldId != null) {
-            List<String> details=new ArrayList<String>();
-            details.add(additionalDetails);
-            AuditLoggerUtil.logActivityUpdate(hsRequest, newActivity,details);
-        } else {
-            try {
-                AuditLoggerUtil.logObject(hsRequest, newActivity, "add",additionalDetails);
-            } catch (DgException e) {
-                e.printStackTrace();
             }
         }
 
         Long actId = am.getObject().getAmpActivityId();//getAmpActivityGroup().getAmpActivityGroupId();
-        String replaceStr;
-        if (oldId == null) {
-            replaceStr = "new";
-        }
-        else {
-            replaceStr = String.valueOf(oldId);
-        }
         if(draft && redirected.getObject().equals(STAY_ON_PAGE)){
 
                 AmpAuthWebSession session = (AmpAuthWebSession) org.apache.wicket.Session.get();
@@ -1272,6 +1258,12 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
             target.appendJavaScript("window.onbeforeunload = null; window.location.replace('/aim/');");
             target.add(feedbackPanel);
         }
+    }
+
+    private boolean isApproved(AmpActivityVersion activity) {
+        String approvalStatus = activity.getApprovalStatus();
+        return Constants.APPROVED_STATUS.equals(approvalStatus)
+                || Constants.STARTED_APPROVED_STATUS.equals(approvalStatus);
     }
 
     private void quickMenu(IModel<AmpActivityVersion> am, AbstractReadOnlyModel<List<AmpComponentPanel>> listModel) {
@@ -1390,13 +1382,14 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         message.setSenderType(MessageConstants.SENDER_TYPE_USER);
         message.setSenderId(tmFrom.getMemberId());
         
-        senderName=user.getFirstNames()+" "+user.getLastName()+"<"+user.getEmail()+">;"+tmFrom.getTeamName();
+        senderName = user.getFirstNames() + " " + user.getLastName() + "<" + user.getEmailUsedForNotification() + ">;"
+                    + tmFrom.getTeamName();
         message.setSenderName(senderName);
         
         message.setRelatedActivityId(activityId);
         
         /*String fullModuleURL=RequestUtils.getFullModuleUrl(request);*/
-        String objUrl="/aim/viewActivityPreview.do~public=true~pageId=2~activityId="+activityId;
+        String objUrl = "/aim/viewActivityPreview.do~activityId=" + activityId;
         message.setObjectURL(objUrl);
         
         
@@ -1417,10 +1410,11 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         state.setSender(tmFrom.getMemberName()+";"+tmFrom.getTeamName());
         AmpMessageUtil.saveOrUpdateMessageState(state);
         try{ 
-        AmpMessageUtil.createMessageState(message, tmTo);
-        }catch(Exception e){
+            AmpMessageUtil.createMessageState(message, tmTo);
+        } catch (Exception e) {
             throw new AimException("cannot create message state",e);
         }
+        message.addMessageReceiver(tmTo);
         AmpMessageUtil.saveOrUpdateMessage(message);
 
     }

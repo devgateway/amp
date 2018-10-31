@@ -395,6 +395,8 @@ public class AmpARFilter extends PropertyListable {
 
     private Set<AmpCategoryValue> performanceAlertLevel = null;
 
+    private Set<String> performanceAlertType = null;
+
     // private Long ampModalityId=null;
 
     private AmpCurrency currency = null;
@@ -451,8 +453,8 @@ public class AmpARFilter extends PropertyListable {
     private String dynIssueFilterOperator;
     private String dynIssueFilterXPeriod;
 
-    private String fromActivityActualCompletionDate; // view: v_actual_completion_date, column name: Current Completion Date
-    private String toActivityActualCompletionDate;  // view: v_actual_completion_date, column name: Current Completion Date
+    private String fromActivityActualCompletionDate;
+    private String toActivityActualCompletionDate;
     private String dynActivityActualCompletionFilterCurrentPeriod;
     private Integer dynActivityActualCompletionFilterAmount;
     private String dynActivityActualCompletionFilterOperator;
@@ -538,7 +540,9 @@ public class AmpARFilter extends PropertyListable {
     private Boolean customusegroupings;
     private Integer maximumFractionDigits;
 
+    private TeamMember teamMember;
 
+    
     /**
      * @return the maximumFractionDigits
      */
@@ -865,18 +869,18 @@ public class AmpARFilter extends PropertyListable {
 
         getEffectiveSettings(); // do not remove call - also writes into the caches
 
-        TeamMember tm = null;
+        if (teamMember == null && request != null) {
+            teamMember = (TeamMember) request.getSession().getAttribute(Constants.CURRENT_MEMBER);
+        }
 
-        if (request != null)
-            tm = (TeamMember) request.getSession().getAttribute(Constants.CURRENT_MEMBER);
+        if (teamMember != null && teamMember.getTeamId() == null) {
+            teamMember = null;
+        }
 
-        if (tm == null || tm.getTeamId() == null )
-            tm  = null;
-
-        if (tm != null) {
+        if (teamMember != null) {
             this.setNeedsTeamFilter(false);
-            this.setAccessType(tm.getTeamAccessType());
-            teamMemberId = tm.getMemberId();
+            this.setAccessType(teamMember.getTeamAccessType());
+            teamMemberId = teamMember.getMemberId();
         }
         else {
             // public view
@@ -1137,6 +1141,11 @@ public class AmpARFilter extends PropertyListable {
         FilterUtil.postprocessFilterPrograms(this);
 
         buildCustomFormat();
+    }
+
+    public AmpARFilter(TeamMember teamMember) {
+        this();
+        this.teamMember = teamMember;
     }
 
     public AmpARFilter() {
@@ -3095,6 +3104,14 @@ public class AmpARFilter extends PropertyListable {
                 .stream()
                 .map(AmpCategoryValue::getId)
                 .collect(toSet());
+    }
+
+    public Set<String> getPerformanceAlertType() {
+        return performanceAlertType;
+    }
+
+    public void setPerformanceAlertType(final Set<String> performanceAlertLevel) {
+        this.performanceAlertType = performanceAlertLevel;
     }
 
     public static boolean isTrue(Boolean b) {

@@ -40,7 +40,6 @@ public class ReportEnvironment {
     }
 
     public static ReportEnvironment buildFor(HttpServletRequest request) {
-        TLSUtils.populate(request);
         IdsGeneratorSource workspaceFilter;
         if (TLSUtils.isFilterGlobally()) {
             workspaceFilter = GLOBAL_ACTIVITY_IDS_GENERATOR;

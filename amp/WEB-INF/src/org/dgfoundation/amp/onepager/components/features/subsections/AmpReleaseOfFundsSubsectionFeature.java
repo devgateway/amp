@@ -15,6 +15,8 @@ import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFea
 import org.dgfoundation.amp.onepager.components.features.tables.AmpEstimatedDonorDisbursementsFormTableFeature;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpReleaseOfFundsFormTableFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
+import org.dgfoundation.amp.onepager.events.FreezingUpdateEvent;
+import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -43,18 +45,7 @@ public class AmpReleaseOfFundsSubsectionFeature extends
     
     @Override
     protected void onConfigure() {
-        AmpAuthWebSession session = (AmpAuthWebSession) getSession();
-        if (fundingOrgModel != null && fundingOrgModel.getObject() != null){
-            FundingOrganization fo = new FundingOrganization();
-            fo.setAmpOrgId(fundingOrgModel.getObject().getAmpOrgId());
-            PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG, fo);
-            PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG_ROLE, Constants.FUNDING_AGENCY);
-        }
         super.onConfigure();
-        if (fundingOrgModel != null && fundingOrgModel.getObject() != null){
-            PermissionUtil.removeFromScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG);
-            PermissionUtil.removeFromScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG_ROLE);
-        }
     }
 
 
@@ -70,7 +61,7 @@ public class AmpReleaseOfFundsSubsectionFeature extends
         
         disbursementsTableFeature = new AmpReleaseOfFundsFormTableFeature("disbursementsTableFeature", model, "Release of Funds Table", transactionType);
         add(disbursementsTableFeature);
-        fundingOrgModel = new PropertyModel<AmpOrganisation>(model,"ampDonorOrgId");
+        fundingOrgModel = new PropertyModel<AmpOrganisation>(model, "ampDonorOrgId");
         
         AmpAjaxLinkField addReleaseOfFunds=new AmpAjaxLinkField("addDisbursement","Add RoF","Add RoF") {
             @Override
@@ -88,7 +79,7 @@ public class AmpReleaseOfFundsSubsectionFeature extends
                 disbursementsTableFeature.getEditorList().updateModel();
                 target.add(disbursementsTableFeature);
                 AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
-                parent.getFundingInfo().checkChoicesRequired(disbursementsTableFeature.getEditorList().getCount());
+                parent.getFundingInfo().configureRequiredFields();
                 target.add(parent.getFundingInfo());
                 target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
                 target.appendJavaScript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));

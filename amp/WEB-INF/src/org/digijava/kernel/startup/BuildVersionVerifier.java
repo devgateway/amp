@@ -50,6 +50,7 @@ public class BuildVersionVerifier {
          * 2.2     would become   2020000
          * 2.2.1.1 would become   2020101 */
         private Long encodeVersion(String version) {
+            version = version.replace("-SNAPSHOT", "");
             String[] tokens = version.split("\\.");
             Long result = 0L;
             /* 

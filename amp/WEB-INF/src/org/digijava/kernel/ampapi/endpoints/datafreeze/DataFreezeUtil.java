@@ -3,10 +3,12 @@ package org.digijava.kernel.ampapi.endpoints.datafreeze;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
@@ -18,6 +20,7 @@ import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpActivityFrozen;
 import org.digijava.module.aim.dbentity.AmpDataFreezeExclusion;
 import org.digijava.module.aim.dbentity.AmpDataFreezeSettings;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.util.AmpDateUtils;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -108,7 +111,6 @@ public final class DataFreezeUtil {
      * frozen activities
      */
     public static void disablePreviousFrozenActivities() {
-
         PersistenceManager.getSession().doWork(new Work() {
             public void execute(Connection conn) throws SQLException {
                 SQLUtils.executeQuery(conn, String.format("UPDATE AMP_ACTIVITY_FROZEN SET DELETED = %s", "TRUE"));
@@ -173,7 +175,7 @@ public final class DataFreezeUtil {
      * @return
      */
     public static AmpDataFreezeSettings getCurrentFreezingEvent() {
-        Long ampDataFreezeSettingsId = getTodaysFreezingEvent();
+        Long ampDataFreezeSettingsId = getLastNonExecutedFreezingEvent();
         if (ampDataFreezeSettingsId.equals(0L)) {
             return null;
         } else {
@@ -181,18 +183,21 @@ public final class DataFreezeUtil {
         }
     }
 
-    private static Long getTodaysFreezingEvent() {
+    private static Long getLastNonExecutedFreezingEvent() {
         final ValueWrapper<Long> freezingEventId = new ValueWrapper<Long>(0L);
 
         PersistenceManager.getSession().doWork(new Work() {
             public void execute(Connection conn) throws SQLException {
-                String todaysFreezingEventQuery = "select id from amp_data_freeze_settings "
-                        + " where (freezing_date::date  + coalesce(grace_period, 0) )= current_date "
-                        + " and executed = false and enabled = true";
+                String todaysFreezingEventQuery = "SELECT max(id) FROM  amp_data_freeze_settings "
+                        + " WHERE CURRENT_DATE >=(freezing_date::date + coalesce(grace_period, 0)) "
+                        + " AND executed = FALSE AND enabled = TRUE "
+                        + "  AND (freezing_date::date + coalesce(grace_period, 0)) = "
+                        + " (SELECT min((freezing_date::date + coalesce(grace_period, 0))) "
+                        + " FROM amp_data_freeze_settings WHERE executed = FALSE AND enabled = TRUE "
+                        + " and CURRENT_DATE <=(freezing_date::date + coalesce(grace_period, 0)))";
                 RsInfo rsi = SQLUtils.rawRunQuery(conn, todaysFreezingEventQuery, null);
                 if (rsi.rs.next()) {
                     freezingEventId.value = rsi.rs.getLong(1);
-
                 }
                 rsi.close();
             }
@@ -219,15 +224,23 @@ public final class DataFreezeUtil {
     }
 
     /**
-     * Get list of active users
+     * Get list of active users and assigned to workspaces
      * 
-     * @return
+     * @return List<User> users
      */
     public static List<User> getUsers() {
         Session session = PersistenceManager.getRequestDBSession();
-        String queryString = "from " + User.class.getName() + " user where user.banned = false and user.active = true";
-        Query query = session.createQuery(queryString);
-        return query.list();
+        String teamMembersQuery = "select team from " + AmpTeamMember.class.getName() + " team "
+                + "join team.user user "
+                + "where user.banned = false";
+        Query query = session.createQuery(teamMembersQuery);
+        List<AmpTeamMember> teamMembers = query.list();
+        
+        Set<User> users = teamMembers.stream()
+                .map(AmpTeamMember::getUser)
+                .collect(Collectors.toSet());
+        
+        return new ArrayList<User>(users);
     }
 
     public static AmpDataFreezeExclusion findDataFreezeExclusion(Long activityId, Long dataFreezeEventId) {

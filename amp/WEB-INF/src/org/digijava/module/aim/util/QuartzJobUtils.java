@@ -1,6 +1,5 @@
 package org.digijava.module.aim.util;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
@@ -10,7 +9,6 @@ import org.digijava.module.aim.helper.QuartzJobForm;
 import org.quartz.CronTrigger;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
 import org.quartz.SchedulerFactory;
 import org.quartz.SimpleTrigger;
 import org.quartz.Trigger;
@@ -75,14 +73,14 @@ public class QuartzJobUtils {
                                 }
                                 if (!dates[3].equals("?")) {
                                     // the month day is selected
-                                    job.setTriggerType(5);
+                                    job.setTriggerType(QuartzJobForm.MONTHLY);
                                     job.setExeTimeH(hour);
                                     job.setExeTimeM(minute);
                                     job.setDayOfMonth(Integer.parseInt(dates[3]));
                                 } else {
                                     if (!dates[5].equals("?") && !dates[5].equals("*")) {
                                         // week day is selected
-                                        job.setTriggerType(4);
+                                        job.setTriggerType(QuartzJobForm.WEEKLY);
                                         job.setDayOfWeek(Integer.parseInt(dates[5]));
                                         job.setExeTimeH(hour);
                                         job.setExeTimeM(minute);
@@ -104,15 +102,15 @@ public class QuartzJobUtils {
                                     if (hours > 0) {
                                         job.setExeTimeH(hours.toString());
 
-                                        job.setTriggerType(2);
+                                        job.setTriggerType(QuartzJobForm.HOURLY);
                                     } else {
                                         Long minutes = dif / 60;
                                         if (minutes > 0) {
-                                            job.setTriggerType(1);
+                                            job.setTriggerType(QuartzJobForm.MINUTELY);
                                             job.setExeTimeM(minutes.toString());
                                         } else {
                                             Long seconds = dif;
-                                            job.setTriggerType(0);
+                                            job.setTriggerType(QuartzJobForm.EVERY_SECOND);
                                             job.setExeTimeS(seconds.toString());
                                         }
                                     }
@@ -185,15 +183,15 @@ public class QuartzJobUtils {
             JobDetail newJob = new JobDetail(job.getName(), null, cls);
             Trigger trg;
             switch (job.getTriggerType()) {
-            case 0:
+            case QuartzJobForm.EVERY_SECOND:
                 trg = TriggerUtils.makeSecondlyTrigger(Integer.valueOf(job.getExeTimeS()));
                 break;
 
-            case 1:
+            case QuartzJobForm.MINUTELY:
                 trg = TriggerUtils.makeMinutelyTrigger(Integer.valueOf(job.getExeTimeM()));
                 break;
 
-            case 2:
+            case QuartzJobForm.HOURLY:
                 trg = TriggerUtils.makeHourlyTrigger(Integer.valueOf(job.getExeTimeH()));
                 break;
 
@@ -203,14 +201,14 @@ public class QuartzJobUtils {
                 int m = Integer.valueOf(job.getExeTimeM());
 
                 switch (job.getTriggerType()) {
-                case 3:
+                case QuartzJobForm.DAILY:
                     trg = TriggerUtils.makeDailyTrigger(h, m);
                     break;
 
-                case 4:
+                case QuartzJobForm.WEEKLY:
                     trg = TriggerUtils.makeWeeklyTrigger(job.getDayOfWeek(), h, m);
                     break;
-                case 5:
+                case QuartzJobForm.MONTHLY:
                     trg = TriggerUtils.makeMonthlyTrigger(job.getDayOfMonth(), h, m);
                     break;
                 default:
@@ -227,9 +225,6 @@ public class QuartzJobUtils {
                 trg.setEndTime(sdf.parse(job.getEndDateTime() + " " + job.getEndH() + ":" + job.getEndM() + ":00"));
             }
             sched.scheduleJob(newJob, trg);
-
-            sched.start();
-    
     }
 
     public static void pauseAll() {
@@ -262,6 +257,13 @@ public class QuartzJobUtils {
             sched.pauseTrigger(job.getTriggerGroupName(), job.getTriggerGroupName());
         } catch (Exception ex) {
             throw new RuntimeException(ex);
+        }
+    }
+
+    public static void runJobIfNotPaused(String name) {
+        QuartzJobForm job = getJobByName(name);
+        if (!job.isPaused()) {
+            runJob(job);
         }
     }
 

@@ -18,7 +18,6 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
 				,'Status', 'Region', 'Country', 'District','Zone'
 				,'Type Of Assistance'
 				,'Financing Instrument'
-				,'National Planning Objectives'
 				,'National Planning Objectives Level 1'
 				,'National Planning Objectives Level 2'
 				,'National Planning Objectives Level 3'
@@ -27,7 +26,6 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
 				,'National Planning Objectives Level 6'
 				,'National Planning Objectives Level 7'
 				,'National Planning Objectives Level 8'
-				,'Primary Program'
 				,'Primary Program Level 1'
 				,'Primary Program Level 2'
 				,'Primary Program Level 3'
@@ -37,7 +35,6 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
 				,'Primary Program Level 7'
 				,'Primary Program Level 8'
 				,'Componente'
-				,'Secondary Program'
 				,'Secondary Program Level 1'
 				,'Secondary Program Level 2'
 				,'Secondary Program Level 3'
@@ -46,7 +43,6 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
 				,'Secondary Program Level 6'
 				,'Secondary Program Level 7'
 				,'Secondary Program Level 8'
-				,'Tertiary Program'
 				,'Tertiary Program Level 1'
 				,'Tertiary Program Level 2'
 				,'Tertiary Program Level 3'
@@ -83,7 +79,7 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
                 ,'Joint Criteria'
                 , 'On/Off/Treasury Budget'
                 , 'Multi Donor'
-                , 'Capital - Expenditure'  
+                , 'Capital Expenditure'
                 , 'Sector Tag'
                 , 'Sector Tag Sub-Sector'
                 , 'Sector Tag Sub-Sub-Sector'
@@ -115,14 +111,14 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
 			);
 
 YAHOO.amp.reportwizard.fundingGroups["regional"]		= new Array(
-				'Status','Primary Sector','Primary Sector Sub-Sector','National Planning Objectives','Regional Region'
+				'Status','Primary Sector','Primary Sector Sub-Sector','National Planning Objectives Level 1','Regional Region'
 			);
 YAHOO.amp.reportwizard.fundingGroups["component"]		= new Array(
-				 'Component Type','Region','Status','Primary Sector','National Planning Objectives','District','Zone','Component Name','Project Title','Component Funding Organization','Component Second Responsible Organization'
+				 'Component Type','Region','Status','Primary Sector','National Planning Objectives Level 1','District','Zone','Component Name','Project Title','Component Funding Organization','Component Second Responsible Organization'
 			);
 YAHOO.amp.reportwizard.fundingGroups["contribution"]	= new Array(
-				'Costing Donor','Parent National Planning Objectives', 'National Planning Objectives', 'Primary Program', 
-				'Secondary Program', 'Primary Sector Sub-Sector',
+				'Costing Donor','Parent National Planning Objectives', 'National Planning Objectives Level 1', 'Primary Program Level 1', 
+				'Secondary Program Level 1', 'Primary Sector Sub-Sector',
 				'Status', 'Primary Sector', 'A.C. Chapter',
 				'Accession Instrument', 'Donor', 'Secondary Sector', 'Secondary Sector Sub-Sector', 'Activity Created By' ,'Tertiary Sector'
 				,'Tertiary Sector Sub-Sector'
@@ -250,12 +246,6 @@ function generateHierarchies(e) {
 		colId	= (items[i].getElementsByTagName("input")[0]).value;
 		if ( checkIfColIsHierarchy(colId) && (document.getElementById('hier_li_'+colId)==null) ) {
 			var childNodes				= items[i].childNodes;
-				//var startHtml				= "<input type='checkbox' name='selectedColumns' id='hier_chk_"+colId+"' value='"+colId+"' />  ";
-				//var newObj					= document.createElement("li");
-				//newObj.innerHTML			= startHtml + childNodes[childNodes.length-1].data;
-				//newObj.setAttribute('class','list1');
-				//newObj.setAttribute('id', 'hier_li_'+colId);
-				//rotten code!
 			var itemData;
 			hasDescription = childNodes.length > 2;
 			if (hasDescription) {
@@ -264,7 +254,7 @@ function generateHierarchies(e) {
 				itemData = childNodes[childNodes.length-1].data;
 			}
 			var newObj = ColumnsDragAndDropObject.generateLi("hier_li_"+colId, 
-					"list1", "hier_chk_"+colId, colId, "selectedHierarchies", itemData);
+					"list1 text-align", "hier_chk_"+colId, colId, "selectedHierarchies", itemData);
 			hierUlEl.appendChild( newObj );
 			var newDDProxy				= new YAHOO.util.DDProxy( newObj.id );
 			newDDObj.addActions( newDDProxy );

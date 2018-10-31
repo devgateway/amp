@@ -59,7 +59,7 @@ public class PrintImageService {
             final String scriptPath = tmpJsFile != null ? tmpJsFile.getAbsolutePath(): "";
             PhantomService.createImage(tmpContentFile.toURI().toString(), tmpImageFile.getAbsolutePath(), width, height, scriptPath);
             Files.copy(tmpImageFile.toPath(), output);
-            return createResponse(output);
+            return createImageBase64Response(output); // this also should change for PDF
         } catch (final Exception e) {
             LOGGER.error(errorMessage, e);
             errorMessage = e.getMessage();
@@ -71,7 +71,7 @@ public class PrintImageService {
         return Response.serverError().entity(errorMessage).build();
     }
 
-    private static Response createResponse(final ByteArrayOutputStream output) {
+    private static Response createImageBase64Response(final ByteArrayOutputStream output) {
         return Response.ok(Base64.encodeBase64String(output.toByteArray()))
                 .type(new MediaType(IMAGE, PNG))
                 .header(CONTENT_DISPOSITION, ATTACHMENT_FILENAME_GIS_IMAGE_PNG)

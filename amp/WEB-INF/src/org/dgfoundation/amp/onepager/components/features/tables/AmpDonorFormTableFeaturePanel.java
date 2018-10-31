@@ -5,10 +5,14 @@
 package org.dgfoundation.amp.onepager.components.features.tables;
 
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -18,6 +22,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.convert.IConverter;
+import org.apache.wicket.util.convert.converter.DoubleConverter;
 import org.apache.wicket.validation.validator.RangeValidator;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
@@ -26,12 +31,14 @@ import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFea
 import org.dgfoundation.amp.onepager.components.fields.AmpBooleanChoiceField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpCheckBoxFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpFreezingValidatorTransactionDateField;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.converters.CustomDoubleConverter;
 import org.dgfoundation.amp.onepager.models.AbstractMixedSetModel;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.FundingDetailReportingDateComparator;
 import org.digijava.module.aim.helper.FundingDetailTransactionDateComparator;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -46,6 +53,9 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
  */
 public abstract class AmpDonorFormTableFeaturePanel extends
     AmpFundingFormTableFeaturePanel<AmpFunding, AmpFundingDetail> {
+
+    private static final int CURRENCY_RATE_MAXIMUM_FRACTION_DIGITS = 10;
+    private static final int CURENCY_RATE_MINIMUM_INTEGER_DIGITS = 1;
 
     private static Logger logger = Logger.getLogger(AmpDonorFormTableFeaturePanel.class);
     
@@ -179,10 +189,27 @@ public abstract class AmpDonorFormTableFeaturePanel extends
         final AmpTextFieldPanel<Double> exchangeRate = new AmpTextFieldPanel<Double>("fixedExchangeRate",
                 fixedExchangeRateModel, "Exchange Rate", false, false) {
             public IConverter getInternalConverter(java.lang.Class<?> type) {
-                return CustomDoubleConverter.INSTANCE;
+                return new DoubleConverter() {
+                    
+                    @Override
+                    public NumberFormat getNumberFormat(Locale locale) {
+                        DecimalFormat format = FormatHelper.getDecimalFormat();
+                        format.setMaximumFractionDigits(CURRENCY_RATE_MAXIMUM_FRACTION_DIGITS);
+                        format.setMinimumIntegerDigits(CURENCY_RATE_MINIMUM_INTEGER_DIGITS);
+                        DecimalFormatSymbols decimalFormatSymbols = format.getDecimalFormatSymbols();
+                        
+                        // org.apache.wicket.util.convert.converter.AbstractDecimalConverter.parse() 
+                        // replace spaces with '\u00A0'. If the grouping separator is space ' ', the parse would fail.
+                        if (decimalFormatSymbols.getGroupingSeparator() == ' ') {
+                            decimalFormatSymbols.setGroupingSeparator('\u00A0');
+                            format.setDecimalFormatSymbols(decimalFormatSymbols);
+                        }
+                        
+                        return format;
+                    }
+                };
             }
-
-
+            
             @Override
             protected void onAjaxOnUpdate(final AjaxRequestTarget target) {
                 exchangeRateOnAjaxOnUpdate(target);
@@ -226,5 +253,10 @@ public abstract class AmpDonorFormTableFeaturePanel extends
 
     protected void exchangeRateOnAjaxOnUpdate(AjaxRequestTarget target) {
 
+    }
+
+    protected void addFreezingvalidator(ListItem<AmpFundingDetail> item) {
+        item.add(new AmpFreezingValidatorTransactionDateField("freezingDateValidator", item.getModel(),
+                "freezingDateValidator"));
     }
 }

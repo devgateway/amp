@@ -7,7 +7,6 @@ package org.dgfoundation.amp.onepager.components.features.items;
 import java.util.Map;
 import java.util.TreeSet;
 
-
 import com.google.common.collect.ImmutableMap;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -18,6 +17,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.dgfoundation.amp.onepager.OnePagerMessages;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpOrgRoleSelectorComponent;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
@@ -31,7 +31,6 @@ import org.dgfoundation.amp.onepager.components.features.subsections.AmpDonorDis
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpDonorExpendituresSubsectionFeature;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpDonorFundingInfoSubsectionFeature;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpEstimatedDonorDisbursementsSubsectionFeature;
-import org.dgfoundation.amp.onepager.components.features.subsections.AmpLoanDetailsSubsectionFeature;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpMTEFProjectionSubsectionFeature;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpReleaseOfFundsSubsectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
@@ -43,6 +42,7 @@ import org.dgfoundation.amp.onepager.events.FundingSectionSummaryEvent;
 import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.translation.TrnLabel;
+import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.dgfoundation.amp.onepager.util.AttributePrepender;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
@@ -138,12 +138,22 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 
             @Override
             protected void onClick(AjaxRequestTarget target) {
+                AmpActivityVersion activity = am.getObject();
                 AmpOrganisation org = fundingModel.getObject().getAmpDonorOrgId();
                 AmpRole role = fundingModel.getObject().getSourceRole();
+                if (getItem().getParent().size() == 1) {
+                    boolean hasComponentFundings = ActivityUtil.hasOrgComponentFundingsInActivity(activity, org);
+                    if (hasComponentFundings) {
+                        String message = TranslatorUtil.getTranslation(OnePagerMessages.HAS_COMP_FUNDINGS_ALERT_MSG);
+                        target.appendJavaScript(OnePagerUtil.createJSAlert(message));
+                        return;
+                    }
+                }
+                
                 super.onClick(target);
                 parent.updateFundingGroups(parent.findAmpOrgRole(org, role), target);
                 target.add(parent);
-                if(isTabView){
+                if (isTabView) {
                     target.appendJavaScript("switchTabs();");
                 }
                 target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent));

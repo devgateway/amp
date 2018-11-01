@@ -6,8 +6,6 @@ import java.util.Date;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 
-import clover.org.apache.log4j.Logger;
-
 /**
  * Representation of a quarter (3 month period)
  * 
@@ -16,7 +14,6 @@ import clover.org.apache.log4j.Logger;
  */
 public class Quarter {
 
-    private Logger logger = Logger.getLogger(Quarter.class);
     private Integer year;
     private String yearCode;
     private Integer quarterNumber;

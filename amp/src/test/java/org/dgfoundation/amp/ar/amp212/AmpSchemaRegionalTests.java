@@ -13,6 +13,7 @@ import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.output.NiReportExecutor;
 import org.dgfoundation.amp.nireports.testcases.NiReportModel;
+import org.junit.Test;
 
 /**
  * @author Octavian Ciubotaru
@@ -31,6 +32,7 @@ public class AmpSchemaRegionalTests extends ReportingTestCase {
     private static final String CORRECT_TOTALS =
             "{RAW / Funding / 2017 / Actual Commitments=660, RAW / Totals / Actual Commitments=660}";
 
+    @Test
     public void testSingleHierarchyDoesNotChangeTotals() {
         assertTotalsWithoutHierarchy();
 
@@ -53,6 +55,7 @@ public class AmpSchemaRegionalTests extends ReportingTestCase {
         assertEquals(spec.getReportName(), CORRECT_TOTALS, totals);
     }
 
+    @Test
     public void testDoubleHierarchyDoesNotChangeTotals() {
         assertTotalsWithoutHierarchy();
 
@@ -79,6 +82,7 @@ public class AmpSchemaRegionalTests extends ReportingTestCase {
         assertEquals(spec.getReportName(), CORRECT_TOTALS, totals);
     }
 
+    @Test
     public void testTripleHierarchyDoesNotChangeTotals() {
         assertTotalsWithoutHierarchy();
 
@@ -121,6 +125,7 @@ public class AmpSchemaRegionalTests extends ReportingTestCase {
         assertEquals(CORRECT_TOTALS, initTotal);
     }
 
+    @Test
     public void testPlainReport() {
         NiReportModel cor = new NiReportModel("testPlainReport")
                 .withHeaders(Arrays.asList(
@@ -146,6 +151,7 @@ public class AmpSchemaRegionalTests extends ReportingTestCase {
         runNiTestCase(cor, spec, ACTS);
     }
 
+    @Test
     public void testHierarchyByRegion() {
         NiReportModel cor = new NiReportModel("testHierarchyByRegion")
                 .withHeaders(Arrays.asList(

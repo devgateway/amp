@@ -443,7 +443,11 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         addIndicatorColumns();
 
         degenerate_dimension(ColumnConstants.PROJECT_IMPLEMENTING_UNIT, "v_project_impl_unit", catsDimension);
+        no_entity(ColumnConstants.PROJECT_MANAGEMENT, "v_project_management", DG_EDITOR_POSTPROCESSOR);
         no_dimension(ColumnConstants.REGIONAL_OBSERVATIONS, "v_regional_observations");
+        no_dimension(ColumnConstants.REGIONAL_OBSERVATIONS_ACTORS, "v_regional_observations_actors");
+        date_column(ColumnConstants.REGIONAL_OBSERVATIONS_DATE, "v_regional_observations_date");
+        no_dimension(ColumnConstants.REGIONAL_OBSERVATIONS_MEASURES, "v_regional_observations_measures");
         
         single_dimension(ColumnConstants.RELATED_PLEDGES, "v_related_pledges", PLEDGES_LEVEL_COLUMN);
         

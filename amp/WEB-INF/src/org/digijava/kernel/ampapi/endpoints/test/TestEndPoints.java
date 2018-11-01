@@ -8,6 +8,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+
+import io.swagger.annotations.Api;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 
@@ -18,6 +20,7 @@ import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
  */
 
 @Path("test")
+@Api("test")
 public class TestEndPoints {
 
     private ServletContext context;

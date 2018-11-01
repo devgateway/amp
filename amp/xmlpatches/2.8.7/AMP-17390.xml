@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tns:patch closeOnSuccess="false" retryOnFail="true"
+<tns:patch closeOnSuccess="true" retryOnFail="true"
            xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
     <jira>AMP-17390</jira>
     <keyword>GPI</keyword>
     <author>gkvizhinadze</author>
     <description>regional funding processing. Set initial value for new "nonnull" field is_regional_funding</description>
+    <trigger type="all">
+        <condition type="tableOrViewExists">de_source_setting</condition>
+    </trigger>
     <apply>
         <script>
             <lang delimiter=";" type="postgres">

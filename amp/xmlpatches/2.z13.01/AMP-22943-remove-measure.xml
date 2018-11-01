@@ -9,6 +9,7 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
+				DELETE from amp_report_measures where measureid in (select measureid from amp_measures where measurename like 'Proposed Project Cost Amount Per Project');
 				DELETE from amp_measures where measurename like 'Proposed Project Cost Amount Per Project';
 				DELETE from amp_features_visibility where name = 'Proposed Project Cost Amount Per Project';
 			</lang>

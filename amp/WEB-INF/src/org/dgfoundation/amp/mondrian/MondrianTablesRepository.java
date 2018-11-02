@@ -16,7 +16,6 @@ import org.dgfoundation.amp.mondrian.jobs.Fingerprint;
 import org.dgfoundation.amp.mondrian.jobs.MondrianTableLogue;
 import org.dgfoundation.amp.mondrian.monet.DatabaseTableColumn;
 import org.dgfoundation.amp.mondrian.monet.DatabaseTableDescription;
-import org.dgfoundation.amp.mondrian.monet.MonetConnection;
 import org.dgfoundation.amp.mondrian.monet.OlapDbConnection;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;

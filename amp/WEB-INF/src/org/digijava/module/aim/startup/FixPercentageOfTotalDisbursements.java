@@ -1,14 +1,12 @@
 package org.digijava.module.aim.startup;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import mondrian.util.Pair;
-
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
@@ -20,9 +18,11 @@ public class FixPercentageOfTotalDisbursements {
     /**
      * Map<measure_to_replace, Pair<measure_with_which_to_replace, measure_expression>>
      */
-    protected final Map<String, Pair<String, String>> measuresToReplace = Collections.unmodifiableMap(new HashMap<String, Pair<String, String>>() {{
-        put("Percentage of Total Disbursements", new Pair<>(MeasureConstants.PERCENTAGE_OF_TOTAL_DISBURSEMENTS, "percentageDisbursements"));
-    }});
+    protected final Map<String, Pair<String, String>> measuresToReplace =
+            Collections.unmodifiableMap(new HashMap<String, Pair<String, String>>() {{
+                put("Percentage of Total Disbursements",
+                        Pair.of(MeasureConstants.PERCENTAGE_OF_TOTAL_DISBURSEMENTS, "percentageDisbursements"));
+            }});
     
     private static Logger logger = Logger.getLogger(FixPercentageOfTotalDisbursements.class);
     
@@ -32,9 +32,10 @@ public class FixPercentageOfTotalDisbursements {
     public void work() {
         for(String fromMeasure:measuresToReplace.keySet()) {
             Pair<String, String> toMeasure = measuresToReplace.get(fromMeasure);
-            if (fromMeasure.equals(toMeasure.left))
+            if (fromMeasure.equals(toMeasure.getLeft())) {
                 throw new RuntimeException(String.format("cannot replace references to one measure with references to oneself: <%s>", fromMeasure));
-            long measId = ensureMeasureExists(toMeasure.left, toMeasure.right);
+            }
+            long measId = ensureMeasureExists(toMeasure.getLeft(), toMeasure.getRight());
             long oldMeasId = getMeasureId(fromMeasure);
             if (measId == oldMeasId)
                 throw new Error("huge bug: fromMeasure != toMeasure, but oldMeasId == measId");

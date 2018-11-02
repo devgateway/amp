@@ -17,9 +17,12 @@
                 FROM (SELECT amp_activity_id, amp_component_id FROM amp_activity_components) AS sub
                 WHERE sub.amp_component_id = amp_components.amp_component_id;
 
-                DROP TABLE amp_activity_components CASCADE;
+				DELETE FROM amp_component_funding
+					WHERE amp_component_id in (SELECT amp_component_id from amp_components WHERE amp_activity_id IS NULL);
 
-                DELETE FROM amp_components WHERE amp_activity_id IS NULL;
+				DELETE FROM amp_components WHERE amp_activity_id IS NULL;
+
+				DROP TABLE amp_activity_components CASCADE;
 
                 ALTER TABLE amp_components ALTER amp_activity_id SET NOT NULL;
 

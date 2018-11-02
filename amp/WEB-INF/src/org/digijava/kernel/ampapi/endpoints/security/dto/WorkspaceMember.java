@@ -3,7 +3,7 @@
  */
 package org.digijava.kernel.ampapi.endpoints.security.dto;
 
-import org.codehaus.jackson.annotate.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.security.SecurityConstants;
 

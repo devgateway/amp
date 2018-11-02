@@ -121,6 +121,11 @@
 				<documentation>Defaults to true. If false, this patch will be re-applied even if it succeeded. This is needed in order to produce "cleanup" patches. In such case, the trigger will kick in
 whenever some re-occurring garbage data has been found using condition entities, and that requires immediate correction</documentation>
 			</annotation></attribute>
+		<attribute name="failOnError" type="boolean" default="true">
+			<annotation>
+				<documentation>Should the migration fail if an error occurs while executing this patch?</documentation>
+			</annotation>
+		</attribute>
 	</complexType>
 
 	<complexType name="trigger">

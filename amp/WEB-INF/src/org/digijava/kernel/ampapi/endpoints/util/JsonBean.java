@@ -4,12 +4,12 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.log4j.Logger;
-import org.codehaus.jackson.annotate.JsonAnyGetter;
-import org.codehaus.jackson.annotate.JsonAnySetter;
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.map.DeserializationConfig;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.dgfoundation.amp.algo.AlgoUtils;
 
 /**
@@ -68,13 +68,10 @@ public class JsonBean {
             if (jb == null) {
                 return null;
             }
-            ObjectMapper mapper11 = new ObjectMapper();
-            mapper11.configure(
-                    org.codehaus.jackson.map.DeserializationConfig.Feature.UNWRAP_ROOT_VALUE,false);
-            mapper11.configure(
-                    org.codehaus.jackson.map.DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES,false);
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-            return mapper11.readValue(jb, JsonBean.class);
+            return mapper.readValue(jb, JsonBean.class);
         } catch (IOException e) {
             logger.error("Cannot deserialize json bean", e);
             return null;
@@ -86,7 +83,7 @@ public class JsonBean {
      */
     public String asJsonString() {
         try {
-            return new ObjectMapper().configure(DeserializationConfig.Feature.UNWRAP_ROOT_VALUE, true).writer().writeValueAsString(this);
+            return new ObjectMapper().writer().writeValueAsString(this);
         }
         catch(Exception e) {
             throw AlgoUtils.translateException(e);

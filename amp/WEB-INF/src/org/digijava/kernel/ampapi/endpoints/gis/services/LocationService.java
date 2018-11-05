@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 
+import com.google.common.collect.ImmutableSet;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -55,7 +56,6 @@ import org.digijava.kernel.ampapi.helpers.geojson.objects.ClusteredPoints;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpStructure;
@@ -409,7 +409,7 @@ public class LocationService {
                 }                
             }            
             
-            fgj.properties.put("activity", new POJONode(structure.getActivity()));
+            fgj.properties.put("activity", new POJONode(ImmutableSet.of(structure.getActivity().getAmpActivityId())));
         } catch (NumberFormatException e) {
             logger.warn("Couldn't get parse latitude/longitude for structure with latitude: "
                     + structure.getLatitude() + " longitude: " + structure.getLongitude() + " and title: "

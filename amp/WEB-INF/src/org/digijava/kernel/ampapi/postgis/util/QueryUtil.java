@@ -14,6 +14,7 @@ import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.ar.viewfetcher.ViewFetcher;
 import org.digijava.kernel.ampapi.endpoints.dto.SimpleJsonBean;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
+import org.digijava.kernel.ampapi.endpoints.gis.services.AdmLevel;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorAccessType;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.postgis.entity.AmpLocator;
@@ -75,10 +76,9 @@ public class QueryUtil {
      * return a list of saved maps.
      * 
      * @return
-     * @throws DgException
      */
     @SuppressWarnings("unchecked")
-    public static List<AmpApiState> getMapList(String type) throws DgException {
+    public static List<AmpApiState> getMapList(String type) {
         Criteria mapsCriteria = PersistenceManager.getRequestDBSession().createCriteria(AmpApiState.class);
         mapsCriteria.add(Restrictions.eq("type", type));
         return mapsCriteria.list();
@@ -296,8 +296,7 @@ public class QueryUtil {
                             + " SELECT DISTINCT org.amp_org_id orgId, org.name, org.acronym, org.org_grp_id "
                             + " grpId, (select amp_role_id from amp_role where role_code = '"
                             + Constants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION + "') roleId "
-                            + " FROM amp_activity_components aac "
-                            + " JOIN amp_components c ON (c.amp_component_id = aac.amp_component_id) "
+                            + " FROM amp_components c "
                             + " JOIN amp_component_funding f ON (c.amp_component_id = f.amp_component_id) "
                             + " JOIN amp_organisation org ON org.amp_org_id = f.component_second_rep_org_id ";
                 }
@@ -306,8 +305,7 @@ public class QueryUtil {
                             + " SELECT DISTINCT org.amp_org_id orgId, org.name, org.acronym, org.org_grp_id grpId, "
                             + " (select amp_role_id from amp_role where role_code = '"
                             + Constants.COMPONENT_FUNDING_ORGANIZATION + "') roleId "
-                            + " FROM amp_activity_components aac "
-                            + " JOIN amp_components c ON (c.amp_component_id = aac.amp_component_id) "
+                            + " FROM amp_components c "
                             + " JOIN amp_component_funding f ON (f.amp_component_id = c.amp_component_id)"
                             + " JOIN amp_organisation org ON org.amp_org_id = f.rep_organization_id ";
                 }
@@ -404,7 +402,7 @@ public class QueryUtil {
         return getIndicatorByCategoryValue(null);
  }
 
-    public static List <AmpIndicatorLayer> getIndicatorByCategoryValue (String admLevel) {
+    public static List<AmpIndicatorLayer> getIndicatorByCategoryValue(AdmLevel admLevel) {
             Session dbSession = PersistenceManager.getSession();
             String queryString = "select ind from "
                     + AmpIndicatorLayer.class.getName() + " ind "
@@ -428,7 +426,7 @@ public class QueryUtil {
             Query qry = dbSession.createQuery(queryString);
             qry.setCacheable(true);
             if (admLevel != null)
-                qry.setString("admLevel", admLevel.toUpperCase());
+                qry.setString("admLevel", admLevel.getLabel().toUpperCase());
             return qry.list();
          
      }

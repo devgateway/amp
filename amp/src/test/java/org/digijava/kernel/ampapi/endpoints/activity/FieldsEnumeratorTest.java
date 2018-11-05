@@ -22,7 +22,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.entity.Message;
@@ -149,6 +149,7 @@ public class FieldsEnumeratorTest {
         List<APIField> actual = fieldsFor(Composition.class);
 
         APIField expected = newListField();
+        expected.setMultipleValues(false);
         APIField nestedField = newLongField();
 //        nestedField.setFieldLabel(fieldLabelFor(nestedField.getFieldName()));
         expected.setChildren(Arrays.asList(nestedField));

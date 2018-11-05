@@ -51,28 +51,28 @@ public class AmpOrganisation implements Comparable<AmpOrganisation>, Identifiabl
     private AmpSectorScheme ampSecSchemeId;
     private String fundingorgid;
     private Boolean deleted;
-    
+
     private String budgetOrgCode;
-    
+
     private String acronymAndName;
     /**
      * @deprecated
      */
     private String orgTypeCode; // defunct
-    
+
     private AmpOrgGroup orgGrpId;
     private String address;
     private Country countryId;
     private String orgUrl;
     private String acronym;
-    
+
     private AmpCategoryValueLocations region;
     private AmpCategoryValue implemLocationLevel;
     private Set<AmpOrgLocation> locations;
     private Set<AmpOrgStaffInformation> staffInfos;
     private AmpCategoryValueLocations country;
     private Set<AmpOrgRecipient> recipients;
-    
+
     private String addressAbroad;
     private String taxNumber;
     private String primaryPurpose;
@@ -86,7 +86,7 @@ public class AmpOrganisation implements Comparable<AmpOrganisation>, Identifiabl
 
     private String segmentCode;
     private Set<AmpSector> sectors;
-    
+
     private Set<AmpOrganisationDocument> documents;
 
     private String otherInformation;

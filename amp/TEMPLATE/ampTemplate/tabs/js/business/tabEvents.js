@@ -79,7 +79,7 @@ define([ 'marionette', 'models/content', 'models/legend', 'views/dynamicContentV
 				});
 
 				app.TabsApp.settingsWidget.restoreFromSaved(firstContent.get('reportMetadata').get('settings').toJSON());			
-				app.TabsApp.numericFormatOptions = firstContent.get('reportMetadata').get('settings').models;
+				app.TabsApp.numericFormatOptions = firstContent.get('reportMetadata').get('settings').attributes;
 
 				// Render views.
 				var dynamicLayoutView = new DynamicContentView({
@@ -127,7 +127,14 @@ define([ 'marionette', 'models/content', 'models/legend', 'views/dynamicContentV
 				
 				
 				var currencyCode = firstContent.get('reportMetadata').get('settings').get(app.TabsApp.settingsWidget.Constants.CURRENCY_ID) || app.TabsApp.settingsWidget.definitions.getDefaultCurrencyId();
-				var currencyValue = app.TabsApp.settingsWidget.definitions.findCurrencyById(currencyCode).value;
+				var currency  = app.TabsApp.settingsWidget.definitions.findCurrencyById(currencyCode);
+                var currencyValue = currencyCode;
+                //TODO this is a work around in case we disable a currency that we have active in a tab.
+				//TODO nevertheless we have in value the same as in code, it does not use the currency label.
+				//TODO we will provide the proper fix in AMP-28464
+                if(currency){
+					currencyValue = currency.value;
+				}
 				
 				var legend = new Legend({
 					currencyCode : currencyCode,

@@ -5,15 +5,18 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.codehaus.jackson.JsonGenerator;
-import org.codehaus.jackson.map.JsonSerializer;
-import org.codehaus.jackson.map.SerializerProvider;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import io.swagger.models.properties.DateProperty;
+import io.swagger.models.properties.Property;
+import org.digijava.kernel.ampapi.swagger.converters.PropertyDescriber;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 
 /**
  * @author Octavian Ciubotaru
  */
-public class ISO8601DateSerializer extends JsonSerializer<Date> {
+public class ISO8601DateSerializer extends JsonSerializer<Date> implements PropertyDescriber {
 
     private DateFormat dateFormat = new SimpleDateFormat(EPConstants.ISO8601_DATE_FORMAT);
 
@@ -25,5 +28,10 @@ public class ISO8601DateSerializer extends JsonSerializer<Date> {
         } else {
             jgen.writeString(dateFormat.format(value));
         }
+    }
+
+    @Override
+    public Property describe() {
+        return new DateProperty();
     }
 }

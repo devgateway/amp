@@ -17,6 +17,7 @@ import java.util.Set;
 
 import javax.ws.rs.core.PathSegment;
 
+import com.sun.jersey.spi.container.ContainerRequest;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.log4j.Logger;
@@ -26,11 +27,13 @@ import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.resource.AmpResource;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.annotations.activityversioning.ResourceTextField;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
@@ -44,20 +47,28 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.Identifiable;
+import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.aim.util.ValidationStatus;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.editor.exception.EditorException;
 import org.hibernate.FlushMode;
 import org.hibernate.Session;
 
-import com.sun.jersey.spi.container.ContainerRequest;
+import static java.util.function.Function.identity;
+
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 /**
  * Activity Import/Export Utility methods 
@@ -320,7 +331,21 @@ public class InterchangeUtils {
     public static JsonBean getActivity(Long projectId) {
         return getActivity(projectId, null);
     }
-    
+
+    public static AmpActivityVersion loadActivity(Long projectId) {
+        AmpActivityVersion activity = null;
+        try {
+            activity = ActivityUtil.loadActivity(projectId);
+            if (activity == null) {
+                //so far project will never be null since an exception will be thrown
+                //I leave the code prepared to throw the appropriate response code
+                ApiErrorResponse.reportResourceNotFound(ActivityErrors.ACTIVITY_NOT_FOUND);
+            }
+        } catch (DgException e) {
+            throw new RuntimeException(e);
+        }
+        return activity;
+    }
     /**
      * Activity Export as JSON 
      * 
@@ -329,14 +354,7 @@ public class InterchangeUtils {
      * @return
      */
     public static JsonBean getActivity(Long projectId, JsonBean filter) {
-        try {
-            AmpActivityVersion activity = ActivityUtil.loadActivity(projectId);
-            
-            return getActivity(activity, filter);
-        } catch (DgException e) {
-            LOGGER.error("Coudn't load activity with id: " + projectId + ". " + e.getMessage());
-            throw new RuntimeException(e);
-        }
+        return getActivity(loadActivity(projectId), filter);
     }
     
     /**
@@ -456,7 +474,7 @@ public class InterchangeUtils {
             return null;
         }
     }   
-    
+
     /**
      * Gets the ID of an enumerable object (used in Possible Values EP)
      * @param obj
@@ -570,7 +588,7 @@ public class InterchangeUtils {
      */
     public static boolean isEditableActivity(TeamMember teamMember, Long activityId) {
         // we reuse the same approach as the one done by Project List EP
-        return activityId != null && ProjectList.getEditableActivityIdsNoSession(teamMember).contains(activityId);
+        return activityId != null && ActivityUtil.getEditableActivityIdsNoSession(teamMember).contains(activityId);
     }
 
     /**
@@ -799,4 +817,115 @@ public class InterchangeUtils {
         
         return null;
     }
+
+    public static ActivityInformation getActivityInformation(Long projectId) {
+        AmpActivityVersion project = loadActivity(projectId);
+
+        ActivityInformation activityInformation = new ActivityInformation(projectId);
+        TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
+        activityInformation.setActivityTeam(project.getTeam());
+        if (tm != null) {
+            activityInformation.setEdit(isEditableActivity(tm, projectId));
+            if (activityInformation.isEdit()) {
+                activityInformation.setValidate(ActivityUtil.canValidateAcitivty(project, tm));
+            }
+            activityInformation.setValidationStatus(ActivityUtil.getValidationStatus(project, tm));
+            if (activityInformation.getValidationStatus() == ValidationStatus.AUTOMATIC_VALIDATION) {
+                activityInformation.setDaysForAutomaticValidation(ActivityUtil.daysToValidation(project));
+            }
+
+            AmpTeamMember ampCurrentMember = TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
+
+            boolean isCurrentWorkspaceManager = ampCurrentMember.getAmpMemberRole().getTeamHead();
+            boolean isPartOfMamanagetmentWorkspace = ampCurrentMember.getAmpTeam().getAccessType()
+                    .equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT);
+
+            activityInformation.setUpdateCurrentVersion(isCurrentWorkspaceManager && !isPartOfMamanagetmentWorkspace);
+            activityInformation.setVersionHistory(ActivityUtil.getActivityHistories(projectId));
+        } else {
+            // if not logged in but the show version history in public preview is on, then we should show
+            // version history information
+            if (FeaturesUtil.isVisibleFeature("Version History")) {
+                activityInformation.setVersionHistory(ActivityUtil.getActivityHistories(projectId));
+                activityInformation.setUpdateCurrentVersion(false);
+            }
+        }
+
+        activityInformation.setAmpActiviylastVersionId(ActivityVersionUtil.getLastVersionForVersion(projectId));
+
+        return activityInformation;
+    }
+
+    public static boolean canViewActivityIfCreatedInPrivateWs(ContainerRequest containerReq) {
+        Long id = getRequestId(containerReq);
+        AmpActivityVersion project = InterchangeUtils.loadActivity(id);
+        TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
+        return !(project.getTeam().getIsolated() && (tm == null || !tm.getTeamId().equals(project.getTeam().
+                getAmpTeamId())));
+    }
+
+    /**
+     * Get values for requested ids of fields
+     *
+     * @param fieldIds
+     * @param apiFields
+     * @return
+     */
+    public static Map<String, List<FieldIdValue>> getIdValues(Map<String, List<Long>> fieldIds,
+            List<APIField> apiFields) {
+        Map<String, List<FieldIdValue>> response = new HashMap<>();
+
+        if (fieldIds != null) {
+            for (Entry<String, List<Long>> field : fieldIds.entrySet()) {
+                String fieldName = field.getKey();
+                List<Long> ids = field.getValue();
+
+                List<PossibleValue> allValues = possibleValuesFor(fieldName, apiFields).stream()
+                        .map(PossibleValue::flattenPossibleValues)
+                        .flatMap(List::stream)
+                        .collect(Collectors.toList());
+
+                Map<Object, PossibleValue> allValuesMap = allValues.stream()
+                        .collect(Collectors.toMap(PossibleValue::getId, identity()));
+
+                List<FieldIdValue> idValues = ids.stream()
+                        .map(id -> getIdValue(id, allValuesMap))
+                        .collect(Collectors.toList());
+
+                response.put(fieldName, idValues);
+            }
+        }
+        return response;
+    }
+
+    private static FieldIdValue getIdValue(Long id, Map<Object, PossibleValue> allValuesMap) {
+        if (allValuesMap.containsKey(id)) {
+            PossibleValue pv = allValuesMap.get(id);
+            return new FieldIdValue((Long) pv.getId(), pv.getValue(), pv.getTranslatedValues(),
+                    getAncestorValues(allValuesMap, pv.getId(), new ArrayList<>()));
+        }
+
+        return new FieldIdValue(id);
+    }
+
+    private static List<String> getAncestorValues(Map<Object, PossibleValue> allValuesMap, Object id,
+            List<String> values) {
+        PossibleValue obj = allValuesMap.get(id);
+        List<String> ancestorValues = new ArrayList<>(values);
+        if (obj.getExtraInfo() instanceof ParentExtraInfo) {
+            ParentExtraInfo parentExtraInfo = (ParentExtraInfo) obj.getExtraInfo();
+            if (parentExtraInfo.getParentId() != null) {
+                ancestorValues.addAll(getAncestorValues(allValuesMap, parentExtraInfo.getParentId(), ancestorValues));
+            }
+            ancestorValues.add(obj.getValue());
+            return ancestorValues;
+        }
+
+        return null;
+    }
+
+    public static List<PossibleValue> possibleValuesFor(String fieldName, List<APIField> apiFields) {
+        return PossibleValuesEnumerator.INSTANCE.getPossibleValuesForField(fieldName, apiFields);
+    }
+
 }

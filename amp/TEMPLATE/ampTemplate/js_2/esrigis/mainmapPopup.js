@@ -165,7 +165,7 @@ function selectLocationCallerShape(selectedGraphic) {
 		selectedGraphic.target.tempId = tempId++;
 	}
 	
-	if (selectedGraphic.target instanceof L.Marker) {
+	if (selectedGraphic.target instanceof L.Marker || selectedGraphic.target instanceof L.CircleMarker) {
 		$("#colors-section").hide();
 	} else {
 		$("#colors-section").show();

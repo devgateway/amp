@@ -29,6 +29,8 @@ import org.dgfoundation.amp.mondrian.MondrianETL;
 import org.dgfoundation.amp.mondrian.MondrianUtils;
 import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
+import org.digijava.kernel.ampapi.swagger.SwaggerConfigurer;
+import org.digijava.kernel.content.ContentRepositoryManager;
 import org.digijava.kernel.job.cachedtables.PublicViewColumnsUtil;
 import org.digijava.kernel.lucene.LuceneModules;
 import org.digijava.kernel.lucene.LuceneWorker;
@@ -184,22 +186,15 @@ public class AMPStartupListener extends HttpServlet implements
             
             PersistenceManager.getSession().getTransaction().commit();
             
-            logger.info("Starting up JackRabbit repository...");
-            javax.jcr.Session jrSession = DocumentManagerUtil.getSession(ampContext, null);
-            if (jrSession != null)
-            {
-                DocumentManagerUtil.closeSession(jrSession);
-                logger.info("\t... JackRabbit startup ok!");
-            }
-            else 
-                logger.info("\t... JackRabbit startup failed!");
+            ContentRepositoryManager.initialize();
             
             checkDatabaseSanity();
             checkMondrianETLSanity();
-            //doMonetETL();
             initNiReports();
             importGazeteer();
             registerEhCacheMBeans();
+
+            new SwaggerConfigurer().configure();
         } catch (Throwable e) {
             logger.error("Exception while initialising AMP :" + e.getMessage(), e);
             throw new Error(e);

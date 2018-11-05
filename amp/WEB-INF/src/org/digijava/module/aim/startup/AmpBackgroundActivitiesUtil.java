@@ -124,7 +124,6 @@ public class AmpBackgroundActivitiesUtil
         // set default language
         user.setRegisterLanguage(site.getDefaultLanguage());
         user.setEmailVerified(false);
-        user.setActive(false);
         user.setBanned(false);
 
         // ------------- SET USER LANGUAGES

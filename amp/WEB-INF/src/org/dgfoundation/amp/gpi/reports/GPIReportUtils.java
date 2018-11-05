@@ -32,14 +32,13 @@ import org.dgfoundation.amp.newreports.ReportSettingsImpl;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
-import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
 import org.digijava.kernel.ampapi.endpoints.gpi.GPIDataService;
+import org.digijava.kernel.ampapi.endpoints.gpi.GpiFormParameters;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.DateFilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
@@ -60,7 +59,8 @@ public class GPIReportUtils {
      * @param formParams
      * @return generatedRerport {@link GeneratedReport}
      */
-    public static GeneratedReport getGeneratedReportForIndicator(String indicatorCode, JsonBean formParams) {
+    public static GeneratedReport getGeneratedReportForIndicator(String indicatorCode,
+            GpiFormParameters formParams) {
 
         switch (indicatorCode) {
             case GPIReportConstants.REPORT_1:
@@ -84,8 +84,8 @@ public class GPIReportUtils {
      * @param formParams
      * @return generatedReport 
      */
-    public static GeneratedReport getGeneratedReportForIndicator1(JsonBean formParams) {
-        if (EndpointUtils.getSingleValue(formParams, "output", 1) == 2) {
+    public static GeneratedReport getGeneratedReportForIndicator1(GpiFormParameters formParams) {
+        if (EndpointUtils.getSingleValue(formParams.getOutput(), 1) == 2) {
             return getGeneratedReportForIndicator1Output2(formParams);
         }
         
@@ -98,7 +98,7 @@ public class GPIReportUtils {
      * @param formParams
      * @return generatedReport 
      */
-    public static GeneratedReport getGeneratedReportForIndicator1Output1(JsonBean formParams) {
+    public static GeneratedReport getGeneratedReportForIndicator1Output1(GpiFormParameters formParams) {
 
         ReportSpecificationImpl spec = new ReportSpecificationImpl(GPIReportConstants.REPORT_1, ArConstants.DONOR_TYPE);
 
@@ -136,7 +136,7 @@ public class GPIReportUtils {
         applyAppovalStatusFilter(formParams, spec);
         removeDonorAgencyFilterRule(spec);
         applySettings(formParams, spec);
-        updateAllDateFilters(spec);
+        FilterUtils.updateAllDateFilters(spec);
         clearYearRangeSettings(spec);
 
         GeneratedReport generatedReport = EndpointUtils.runReport(spec, ReportAreaImpl.class, null);
@@ -150,7 +150,7 @@ public class GPIReportUtils {
      * @param formParams
      * @return generatedReport 
      */
-    public static GeneratedReport getGeneratedReportForIndicator1Output2(JsonBean formParams) {
+    public static GeneratedReport getGeneratedReportForIndicator1Output2(GpiFormParameters formParams) {
 
         ReportSpecificationImpl spec = new ReportSpecificationImpl(GPIReportConstants.REPORT_1, ArConstants.DONOR_TYPE);
 
@@ -181,7 +181,7 @@ public class GPIReportUtils {
         
         applyAppovalStatusFilter(formParams, spec);
         applySettings(formParams, spec);
-        updateAllDateFilters(spec);
+        FilterUtils.updateAllDateFilters(spec);
         clearYearRangeSettings(spec);
 
         GeneratedReport generatedReport = EndpointUtils.runReport(spec, ReportAreaImpl.class, null);
@@ -195,7 +195,7 @@ public class GPIReportUtils {
      * @param formParams
      * @return generatedReport 
      */
-    public static GeneratedReport getGeneratedReportForIndicator5a(JsonBean formParams) {
+    public static GeneratedReport getGeneratedReportForIndicator5a(GpiFormParameters formParams) {
 
         ReportSpecificationImpl spec = new ReportSpecificationImpl(GPIReportConstants.REPORT_5a,
                 ArConstants.DONOR_TYPE);
@@ -223,7 +223,7 @@ public class GPIReportUtils {
 
         applyAppovalStatusFilter(formParams, spec);
         applySettings(formParams, spec);
-        updateAllDateFilters(spec);
+        FilterUtils.updateAllDateFilters(spec);
         clearYearRangeSettings(spec);
 
         GeneratedReport generatedReport = EndpointUtils.runReport(spec, ReportAreaImpl.class, null);
@@ -237,7 +237,7 @@ public class GPIReportUtils {
      * @param formParams
      * @return generatedReport 
      */
-    public static GeneratedReport getGeneratedReportForIndicator5b(JsonBean formParams) {
+    public static GeneratedReport getGeneratedReportForIndicator5b(GpiFormParameters formParams) {
 
         ReportSpecificationImpl spec = new ReportSpecificationImpl(GPIReportConstants.REPORT_5b,
                 ArConstants.DONOR_TYPE);
@@ -276,7 +276,7 @@ public class GPIReportUtils {
             spec.addMeasure(new ReportMeasure(MeasureConstants.ANNUAL_PROPOSED_PROJECT_COST));
             spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
             updateDateFilterForMTEFYears(spec);
-            updateAllDateFilters(spec);
+            FilterUtils.updateAllDateFilters(spec);
         }
 
         GeneratedReport generatedReport = EndpointUtils.runReport(spec, ReportAreaImpl.class, null);
@@ -290,7 +290,7 @@ public class GPIReportUtils {
      * @param formParams
      * @return generatedReport 
      */
-    public static GeneratedReport getGeneratedReportForIndicator5bActDisb(JsonBean formParams) {
+    public static GeneratedReport getGeneratedReportForIndicator5bActDisb(GpiFormParameters formParams) {
 
         ReportSpecificationImpl spec = new ReportSpecificationImpl(GPIReportConstants.REPORT_5b + " measures",
                 ArConstants.DONOR_TYPE);
@@ -323,7 +323,7 @@ public class GPIReportUtils {
         clearYearRangeSettings(spec);
         
         if (!FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.MTEF_ANNUAL_DATE_FORMAT)) {
-            updateAllDateFilters(spec);
+            FilterUtils.updateAllDateFilters(spec);
         }
 
         GeneratedReport generatedReport = EndpointUtils.runReport(spec, ReportAreaImpl.class, null);
@@ -337,7 +337,7 @@ public class GPIReportUtils {
      * @param formParams
      * @return generatedReport 
      */
-    public static GeneratedReport getGeneratedReportForIndicator6(JsonBean formParams) {
+    public static GeneratedReport getGeneratedReportForIndicator6(GpiFormParameters formParams) {
 
         ReportSpecificationImpl spec = new ReportSpecificationImpl(GPIReportConstants.REPORT_6, ArConstants.DONOR_TYPE);
 
@@ -355,7 +355,7 @@ public class GPIReportUtils {
 
         applyAppovalStatusFilter(formParams, spec);
         applySettings(formParams, spec);
-        updateAllDateFilters(spec);
+        FilterUtils.updateAllDateFilters(spec);
         clearYearRangeSettings(spec);
         
         GeneratedReport generatedReport = EndpointUtils.runReport(spec, ReportAreaImpl.class, null);
@@ -369,7 +369,7 @@ public class GPIReportUtils {
      * @param formParams
      * @return generatedReport 
      */
-    public static GeneratedReport getGeneratedReportForIndicator9b(JsonBean formParams) {
+    public static GeneratedReport getGeneratedReportForIndicator9b(GpiFormParameters formParams) {
 
         ReportSpecificationImpl spec = new ReportSpecificationImpl(GPIReportConstants.REPORT_9b, ArConstants.GPI_TYPE);
 
@@ -390,7 +390,7 @@ public class GPIReportUtils {
 
         applyAppovalStatusFilter(formParams, spec);
         applySettings(formParams, spec);
-        updateAllDateFilters(spec);
+        FilterUtils.updateAllDateFilters(spec);
         clearYearRangeSettings(spec);
 
         GeneratedReport generatedReport = EndpointUtils.runReport(spec, ReportAreaImpl.class, null);
@@ -398,15 +398,15 @@ public class GPIReportUtils {
         return generatedReport;
     }
 
-    public static String getHierarchyColumn(JsonBean formParams) {
-        if (formParams.get(GPIReportConstants.HIERARCHY_PARAMETER) != null) {
-            return (String) formParams.get(GPIReportConstants.HIERARCHY_PARAMETER);
+    public static String getHierarchyColumn(GpiFormParameters formParams) {
+        if (formParams.getHierarchy() != null) {
+            return formParams.getHierarchy();
         }
 
         return GPIReportConstants.HIERARCHY_DONOR_AGENCY;
     }
     
-    public static boolean isDonorAgency(JsonBean formParams) {
+    public static boolean isDonorAgency(GpiFormParameters formParams) {
         String donorHierarchy = getHierarchyColumn(formParams);
         
         return !GPIReportConstants.HIERARCHY_DONOR_GROUP.equals(donorHierarchy);
@@ -416,9 +416,9 @@ public class GPIReportUtils {
      * @param formParams
      * @param spec
      */
-    public static void applyAppovalStatusFilter(JsonBean formParams, ReportSpecificationImpl spec) {
+    public static void applyAppovalStatusFilter(GpiFormParameters formParams, ReportSpecificationImpl spec) {
         if (formParams != null) {
-            Map<String, Object> filters = (Map<String, Object>) formParams.get(EPConstants.FILTERS);
+            Map<String, Object> filters = formParams.getFilters();
             
             AmpReportFilters filterRules = FilterUtils.getFilterRules(filters, null);
 
@@ -435,53 +435,7 @@ public class GPIReportUtils {
             spec.setFilters(filterRules);
         }
     }
-    
-    /**
-     * AMP-26444 When switching to ETH-CALENDAR, the selected year for
-     * date should be updated. Since filters are not working with other calendar
-     * than gregorian, we have to update explicitly the dates. E.g.: If in GPI
-     * was selected 2009 in ETH-Calendar, we have to update the date
-     * filter in Gregorian CAL 2009: "01/01/2009 to 31/12/2009" in ETH Calendar
-     * equals to "11/09/2016 to 10/09/2017" in GREG
-     * 
-     * @param formParams
-     * @param spec
-     */
-    public static void updateAllDateFilters(ReportSpecificationImpl spec) {
-        AmpReportFilters filters = (AmpReportFilters) spec.getFilters();
 
-        CalendarConverter calendarConverter = (spec.getSettings() != null && spec.getSettings().getCalendar() != null)
-                ? spec.getSettings().getCalendar() : AmpARFilter.getDefaultCalendar();
-        
-        if (FiscalCalendarUtil.isEthiopianCalendar(calendarConverter)) {
-            AmpFiscalCalendar ethCalendar = (AmpFiscalCalendar) calendarConverter;
-            
-            // update all date filter columns
-            if (filters.getDateFilterRules() != null && !filters.getDateFilterRules().isEmpty()) {
-                filters.getDateFilterRules().entrySet().forEach(entry -> {
-                    if (entry.getValue() != null) {
-                        FilterRule gregFilterRule = entry.getValue();
-                        FilterRule ethFilterRule = convertToEthDateFilterRule(ethCalendar, gregFilterRule);
-                        entry.setValue(ethFilterRule);
-                    }
-                });
-            }
-            
-            // update date filter
-            Optional<Entry<ReportElement, FilterRule>> dateRuleEntry = spec.getFilters()
-                    .getFilterRules().entrySet().stream()
-                    .filter(entry -> entry.getKey().type.equals(ElementType.DATE))
-                    .filter(entry -> entry.getKey().entity == null)
-                    .findAny();
-            
-            if (dateRuleEntry.isPresent() && dateRuleEntry.get().getValue() != null) {
-                FilterRule dateFilterRule = dateRuleEntry.get().getValue();
-                FilterRule ethDateFilterRule = convertToEthDateFilterRule(ethCalendar, dateFilterRule);
-                dateRuleEntry.get().setValue(ethDateFilterRule);
-            }
-        }
-    }
-    
     /**
      * Update date filter in order to retrieve data from the other MTEF years
      * @param spec
@@ -501,36 +455,6 @@ public class GPIReportUtils {
             }
     }
 
-    private int getYearFromFilerRuleStartDate(FilterRule gregFilterRule) {
-
-        Date gregStart = gregFilterRule.min == null ? null : DateTimeUtil.fromJulianNumberToDate(gregFilterRule.min);
-        return getYearFromDate(gregStart);
-    }
-    /**
-     * @param ethCalendar
-     * @param gregFilterRule
-     * @return
-     */
-    private static FilterRule convertToEthDateFilterRule(AmpFiscalCalendar ethCalendar, FilterRule gregFilterRule) {
-        FilterRule ethFilterRule = null;
-
-        Date gregStart = gregFilterRule.min == null ? null : DateTimeUtil.fromJulianNumberToDate(gregFilterRule.min);
-        Date gregEnd = gregFilterRule.max == null ? null : DateTimeUtil.fromJulianNumberToDate(gregFilterRule.max);
-
-        Date start = FiscalCalendarUtil.toGregorianDate(gregStart, ethCalendar);
-        Date end = FiscalCalendarUtil.toGregorianDate(gregEnd, ethCalendar);
-
-        try {
-            ethFilterRule = DateFilterUtils.getDatesRangeFilterRule(ElementType.DATE,
-                    DateTimeUtil.toJulianDayNumber(start), DateTimeUtil.toJulianDayNumber(end),
-                    DateTimeUtil.formatDateOrNull(start), DateTimeUtil.formatDateOrNull(end), false);
-        } catch (AmpApiException e) {
-            throw new RuntimeException(e);
-        }
-
-        return ethFilterRule;
-    }
-    
     /**
      * 
      * @param gregFilterRule
@@ -564,12 +488,12 @@ public class GPIReportUtils {
      * @param formParams
      * @param spec
      */
-    public static void applySettings(JsonBean formParams, ReportSpecificationImpl spec) {
+    public static void applySettings(GpiFormParameters formParams, ReportSpecificationImpl spec) {
         spec.setSettings(MondrianReportUtils.getCurrentUserDefaultSettings());
         spec.getSettings().getCurrencyFormat().setMinimumFractionDigits(0);
         spec.getSettings().getCurrencyFormat().setMinimumIntegerDigits(1);
         
-        SettingsUtils.applySettings(spec, formParams, true);
+        SettingsUtils.applySettings(spec, formParams.getSettings(), true);
     }
 
     /**
@@ -588,7 +512,7 @@ public class GPIReportUtils {
         }
         
         Date fromJulianNumberToDate = DateTimeUtil.fromJulianNumberToDate(dateFilterRule.min);
-        int year = getYearFromDate(fromJulianNumberToDate);
+        int year = FilterUtils.getYearFromDate(fromJulianNumberToDate);
 
         List<String> mtefColumns = new ArrayList<>();
         for (int i = 1; i <= 3; i++) {
@@ -603,9 +527,9 @@ public class GPIReportUtils {
      * @param formParams
      * @return
      */
-    public static Integer getPivotYearFromFormParams(JsonBean formParams) {
+    public static Integer getPivotYearFromFormParams(GpiFormParameters formParams) {
         Integer pivotYear = null;
-        Map<String, Object> filters = (Map<String, Object>) formParams.get(EPConstants.FILTERS);
+        Map<String, Object> filters = formParams.getFilters();
         if (filters != null) {
             Map<String, Object> date = (Map<String, Object>) filters.get(FiltersConstants.DATE);
             if (date != null) {
@@ -613,7 +537,7 @@ public class GPIReportUtils {
                 SimpleDateFormat sdf = new SimpleDateFormat(MoConstants.DATE_FORMAT);
                 try {
                     Date startDate = start == null ? null : sdf.parse(start);
-                    pivotYear = getYearFromDate(startDate);
+                    pivotYear = FilterUtils.getYearFromDate(startDate);
                 } catch (java.text.ParseException ex) {
                     throw new RuntimeException("No year selected. Please specify the date filter");
                 }
@@ -659,10 +583,10 @@ public class GPIReportUtils {
         }
     }
     
-    public static FilterRule getFilterRule(JsonBean formParams, String columnName) {
+    public static FilterRule getFilterRule(GpiFormParameters formParams, String columnName) {
         FilterRule filterRule = null;
         if (formParams != null) {
-            Map<String, Object> filters = (Map<String, Object>) formParams.get(EPConstants.FILTERS);
+            Map<String, Object> filters = formParams.getFilters();
 
             AmpReportFilters filterRules = FilterUtils.getFilterRules(filters, null);
             if (filterRules != null) {
@@ -707,26 +631,14 @@ public class GPIReportUtils {
             
             return convDate.getYear();
         }
-        return getYearFromDate(date);
-        
-    }
+        return FilterUtils.getYearFromDate(date);
 
-    /**
-     * Get year from date
-     * @param date
-     * @return
-     */
-    private static int getYearFromDate(Date date) {
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        return calendar.get(Calendar.YEAR);
     }
 
     /**
      * Get GPI Remarks for indicator 5a exports (pdf and xlsx)
      * 
-     * @param report
+     * @param rowData
      * @return remarks as string (joined by '\n')
      */ 
     public static String getRemarksForIndicator5a(Map<GPIReportOutputColumn, String> rowData) {

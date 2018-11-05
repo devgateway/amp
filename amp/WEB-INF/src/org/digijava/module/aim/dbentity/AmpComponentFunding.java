@@ -30,9 +30,6 @@ public class AmpComponentFunding implements Cloneable, Serializable {
 
     private Long ampComponentFundingId;
 
-    // @Interchangeable(fieldTitle="Activity")
-    // private AmpActivityVersion activity;
-
     @Interchangeable(fieldTitle = COMPONENT_FUNDING_TRANSACTION_TYPE, importable = true, required = REQUIRED_ALWAYS)
     @PossibleValues(ComponentTransactionTypePossibleValuesProvider.class)
     private Integer transactionType;
@@ -68,18 +65,6 @@ public class AmpComponentFunding implements Cloneable, Serializable {
     // @Interchangeable(fieldTitle="Exchange Rate")
     private Float exchangeRate;
 
-    // /**
-    // * @return Returns the activity.
-    // */
-    // public AmpActivityVersion getActivity() {
-    // return activity;
-    // }
-    // /**
-    // * @param activity The activity to set.
-    // */
-    // public void setActivity(AmpActivityVersion activity) {
-    // this.activity = activity;
-    // }
     /**
      * @return Returns the adjustmentType.
      */

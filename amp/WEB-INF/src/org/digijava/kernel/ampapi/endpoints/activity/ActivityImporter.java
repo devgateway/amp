@@ -37,6 +37,7 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.filters.AmpOfflineModeHolder;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
@@ -568,7 +569,7 @@ public class ActivityImporter extends ObjectImporter {
     }
 
     private void initComponent(AmpActivityVersion activity, AmpComponent component) {
-        component.setActivities(new HashSet<>(Arrays.asList(activity)));
+        component.setActivity(activity);
         if (component.getFundings() != null) {
             component.getFundings().forEach(f -> initComponentFunding(component, f));
         }
@@ -785,8 +786,10 @@ public class ActivityImporter extends ObjectImporter {
     }
 
     protected void postProcess() {
-        LuceneUtil.addUpdateActivity(TLSUtils.getRequest().getServletContext().getRealPath("/"), update,
-                TLSUtils.getSite(), Locale.forLanguageTag(trnSettings.getDefaultLangCode()), newActivity, oldActivity);
+        String rootPath = TLSUtils.getRequest().getServletContext().getRealPath("/");
+        Site site = TLSUtils.getSite();
+        Locale lang = Locale.forLanguageTag(trnSettings.getDefaultLangCode());
+        LuceneUtil.addUpdateActivity(rootPath, update, site, lang, newActivity, oldActivity, translations);
     }
 
     /**

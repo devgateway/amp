@@ -32,8 +32,8 @@ public final class AmpFieldsEnumerator {
         AmpFieldInfoProvider provider = new AmpFieldInfoProvider(AmpActivityVersion.class);
        
         AMPFMService fmService = new AMPFMService();
-        PUBLIC_ENUMERATOR = new FieldsEnumerator(provider, fmService, AMPTranslatorService.INSTANCE, false);
-        PRIVATE_ENUMERATOR = new FieldsEnumerator(provider, fmService, AMPTranslatorService.INSTANCE, true);
+        PUBLIC_ENUMERATOR = new ActivityFieldsEnumerator(provider, fmService, AMPTranslatorService.INSTANCE, false);
+        PRIVATE_ENUMERATOR = new ActivityFieldsEnumerator(provider, fmService, AMPTranslatorService.INSTANCE, true);
         
         AmpFieldInfoProvider contactFieldInfoProvider = new AmpFieldInfoProvider(AmpContact.class);
         PUBLIC_CONTACT_ENUMERATOR = 

@@ -1,14 +1,12 @@
 package org.digijava.kernel.ampapi.helpers.geojson;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.annotate.JsonPropertyOrder;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.databind.JsonNode;
 
 /**
  * A Bean representation of a GeoJSON Polygon geometry object.
@@ -18,7 +16,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
  * For type "Point", the "coordinates" member must be a single position.
  */
 @JsonPropertyOrder({"type","coordinates","properties"})
-@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class PointGeoJSON extends GeometryGeoJSON
 {
     public List<Double> coordinates;

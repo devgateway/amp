@@ -7,7 +7,6 @@ import org.dgfoundation.amp.reports.converters.GeneratedReportToXmlConverter;
 import org.dgfoundation.amp.reports.xml.Report;
 import org.dgfoundation.amp.reports.xml.ReportParameter;
 import org.dgfoundation.amp.reports.xml.XmlReportUtil;
-import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
@@ -24,7 +23,7 @@ public class ApiXMLService {
      * @return report JAXB XML Report
      */
     public static Report getXmlReport(ReportParameter reportParameter, Long reportId) {
-        JsonBean formParams = XmlReportUtil.convertXmlCustomReportToJsonObj(reportParameter);
+        ReportFormParameters formParams = XmlReportUtil.convertXmlCustomReportToJsonObj(reportParameter);
         
         if (reportId == null) {
             JsonBean errorValidJson = ReportsUtil.validateReportConfig(formParams, true);
@@ -33,8 +32,8 @@ public class ApiXMLService {
             }
             
             // we need reportId only to store the report result in cache
-            reportId = (long) formParams.getString(EPConstants.REPORT_NAME).hashCode();
-            formParams.set(EPConstants.IS_CUSTOM, true);
+            reportId = (long) formParams.getReportName().hashCode();
+            formParams.setCustom(true);
         }
         
         GeneratedReport generatedReport = ReportsUtil.getGeneratedReport(reportId, formParams);

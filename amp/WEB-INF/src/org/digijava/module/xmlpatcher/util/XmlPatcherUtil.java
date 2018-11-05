@@ -5,6 +5,7 @@
  */
 package org.digijava.module.xmlpatcher.util;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -74,6 +75,9 @@ public final class XmlPatcherUtil {
             if (f.isDirectory()){
                 if (f.getName().compareTo(".svn") != 0)
                     recordNewPatchesInDir(appPath,f,patchNames, patchesMap);
+                continue;
+            }
+            if (!FilenameUtils.getExtension(f.getName()).equalsIgnoreCase("xml")) {
                 continue;
             }
             if (patchNames.contains(f.getName())) {
@@ -392,7 +396,10 @@ public final class XmlPatcherUtil {
         Query query = session
                 .createQuery("from " + AmpXmlPatch.class.getName()
                         + " p WHERE p.state NOT IN ("
-                        + XmlPatcherConstants.PatchStates.CLOSED+","+XmlPatcherConstants.PatchStates.DEPRECATED+","+XmlPatcherConstants.PatchStates.DELETED+")");
+                        + XmlPatcherConstants.PatchStates.CLOSED + ","
+                        + XmlPatcherConstants.PatchStates.DEPRECATED + ","
+                        + XmlPatcherConstants.PatchStates.DELETED + ") "
+                        + "and p.patchId not like '%.class'");
         List<AmpXmlPatch> list = query.list();
         return list;
     }

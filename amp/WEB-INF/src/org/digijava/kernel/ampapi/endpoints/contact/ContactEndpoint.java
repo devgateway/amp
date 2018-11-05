@@ -23,7 +23,7 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.digijava.kernel.ampapi.endpoints.activity.APIField;
-import org.digijava.kernel.ampapi.endpoints.activity.AmpFieldsEnumerator;
+import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesEnumerator;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
@@ -47,7 +47,7 @@ public class ContactEndpoint implements ErrorReportingEndpoint {
             value = "Provides full set of available fields and their settings/rules in a hierarchical structure.",
             notes = "See [Fields Enumeration Wiki](https://wiki.dgfoundation.org/display/AMPDOC/Fields+enumeration).")
     public List<APIField> getAvailableFields() {
-        return AmpFieldsEnumerator.PUBLIC_CONTACT_ENUMERATOR.getContactFields();
+        return AmpFieldsEnumerator.getPublicContactEnumerator().getContactFields();
     }
 
     @POST
@@ -69,7 +69,7 @@ public class ContactEndpoint implements ErrorReportingEndpoint {
         if (fields == null) {
             response = emptyMap();
         } else {
-            List<APIField> apiFields = AmpFieldsEnumerator.PUBLIC_CONTACT_ENUMERATOR.getContactFields();
+            List<APIField> apiFields = AmpFieldsEnumerator.getPublicContactEnumerator().getContactFields();
             response = fields.stream()
                     .filter(Objects::nonNull)
                     .distinct()

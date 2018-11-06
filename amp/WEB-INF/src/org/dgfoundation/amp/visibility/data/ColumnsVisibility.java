@@ -188,6 +188,7 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
         put("/Activity Form/Funding/Overview Section/Revised Project Cost", ColumnConstants.REVISED_PROJECT_AMOUNT);
         put("/Activity Form/Location/Implementation Level", ColumnConstants.IMPLEMENTATION_LEVEL);
         put("/Activity Form/Location/Locations", ColumnConstants.LOCATION);
+        put("/Activity Form/Line Ministry Observations", ColumnConstants.LINE_MINISTRY_OBSERVATIONS);
         put("/Activity Form/Planning/Actual Approval Date", ColumnConstants.ACTUAL_APPROVAL_DATE);
         put("/Activity Form/Planning/Actual Completion Date", ColumnConstants.ACTUAL_COMPLETION_DATE);
         put("/Activity Form/Planning/Actual Start Date", ColumnConstants.ACTUAL_START_DATE);
@@ -320,6 +321,10 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
             put("Loan Grace Period", ColumnConstants.GRACE_PERIOD);
             put("Loan Maturity Date", ColumnConstants.MATURITY);
             put("Loan Ratification Date", ColumnConstants.RATIFICATION_DATE);
+            put("Line Ministry Observations Actors", ColumnConstants.LINE_MINISTRY_OBSERVATIONS_ACTORS);
+            put("Line Ministry Observations Date", ColumnConstants.LINE_MINISTRY_OBSERVATIONS_DATE);
+            put("Line Ministry Observations Measures", ColumnConstants.LINE_MINISTRY_OBSERVATIONS_MEASURES);
+            put("Actors", ColumnConstants.ACTORS);
             put("Measures Taken", ColumnConstants.MEASURES_TAKEN);
             put("Ministry Of Finance Contact Organization", ColumnConstants.MINISTRY_OF_FINANCE_CONTACT_ORGANIZATION);
             put("Multi Donor", ColumnConstants.MULTI_DONOR);

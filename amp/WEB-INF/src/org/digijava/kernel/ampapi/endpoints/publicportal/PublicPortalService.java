@@ -25,7 +25,6 @@ import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.reports.ActivityType;
-import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
@@ -52,8 +51,8 @@ public class PublicPortalService {
      * @return JsonBean object with results
      * 
      */
-    public static JsonBean getTopProjects(JsonBean config, Integer count, Integer months) {
-        JsonBean result = ReportsUtil.validateReportConfig(config, false);
+    public static JsonBean getTopProjects(PublicReportFormParameters config, Integer count, Integer months) {
+        JsonBean result = ReportsUtil.validateReportConfig(config);
         if (result != null) {
             return result;
         } else {
@@ -64,20 +63,21 @@ public class PublicPortalService {
         
         result.set("topprojects", content);
         
-        ReportSpecificationImpl spec = EndpointUtils.getReportSpecification(config, "PublicPortal_GetTopProjects");
+        ReportSpecificationImpl spec = EndpointUtils.getReportSpecification(config.getReportType(),
+                "PublicPortal_GetTopProjects");
         
-        SettingsUtils.applySettings(spec, config, true);
+        SettingsUtils.applySettings(spec, config.getSettings(), true);
 
         /*TODO: tbd if we need to filter out null dates from results
         MondrianReportUtils.filterOutNullDates(spec);
         */
         applyFilterRules(config, spec, months);
         // configure project types
-        ReportsUtil.configureProjectTypes(spec, config);
+        ReportsUtil.configureProjectTypes(spec, config.getProjectType());
         // do we need to include empty fundings in case no fundings are detected at all? 
         // normally, with healthy data, they are not visible due to the sorting rule
         spec.setDisplayEmptyFundingRows(true);
-        List<String> projectTypeOptions = (List<String>) config.get(EPConstants.PROJECT_TYPE);
+        List<String> projectTypeOptions = config.getProjectType();
         boolean isSSCActivitiesTop = projectTypeOptions != null && projectTypeOptions.contains(ActivityType.SSC_ACTIVITY.toString());
         Set<String> columnsToIgnore = new HashSet<String>();
         
@@ -148,7 +148,7 @@ public class PublicPortalService {
  * @param fundingType 1 for commitment 2 for disbursements
  * @return
  */
-    public static JsonBean getDonorFunding(JsonBean config, Integer count,
+    public static JsonBean getDonorFunding(PublicReportFormParameters config, Integer count,
             Integer months,Integer fundingType) {
         // TODO Auto-generated method stub
         JsonBean result = new JsonBean();
@@ -175,7 +175,7 @@ public class PublicPortalService {
 
         applyFilterRules(config, spec, months);
 
-        SettingsUtils.applySettings(spec, config, true);
+        SettingsUtils.applySettings(spec, config.getSettings(), true);
         getPublicReport(count, result, content, spec, true, measureName, null);
         return result;
 
@@ -248,7 +248,7 @@ public class PublicPortalService {
         result.set("count", count == null ? 0 : count);
     }
 
-    public static JsonBean getActivitiesPledgesCount(JsonBean config) {
+    public static JsonBean getActivitiesPledgesCount(PublicReportFormParameters config) {
         JsonBean activitiesPledgesCount = new JsonBean();
         ReportSpecificationImpl spec = new ReportSpecificationImpl("PublicPortal_activitiesPledgesCount",
                 ArConstants.DONOR_TYPE);
@@ -291,9 +291,10 @@ public class PublicPortalService {
      * @param spec report specification
      * @param months filter by last N months, may be null
      */
-    private static void applyFilterRules(JsonBean config, ReportSpecificationImpl spec, Integer months) {
+    private static void applyFilterRules(PublicReportFormParameters config, ReportSpecificationImpl spec,
+            Integer months) {
         if (config != null) {
-            FilterUtils.applyFilterRules((Map<String, Object>) config.get(EPConstants.FILTERS), spec, months);
+            FilterUtils.applyFilterRules(config.getFilters(), spec, months);
         }
     }
     

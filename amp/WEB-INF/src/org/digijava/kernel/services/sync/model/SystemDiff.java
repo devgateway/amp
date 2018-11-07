@@ -3,15 +3,16 @@ package org.digijava.kernel.services.sync.model;
 import java.util.Date;
 import java.util.List;
 
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  * @author Octavian Ciubotaru
  */
 public class SystemDiff {
 
-    @JsonProperty @JsonSerialize(using = ISO8601TimeStampSerializer.class)
+    @JsonProperty
+    @JsonSerialize(using = ISO8601TimeStampSerializer.class)
     private Date timestamp;
 
     @JsonProperty("global-settings")

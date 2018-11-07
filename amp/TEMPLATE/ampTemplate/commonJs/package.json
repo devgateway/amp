@@ -4,7 +4,8 @@
   "description": "Common libraries shared between AMP components",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "node build"
   },
   "keywords": [
     "shared",
@@ -22,7 +23,7 @@
   },
   "devDependencies": {
     "browserify": "6.2.0",
-    "uglify-js": "2.4.15",
+    "uglify-js": "2.6.0",
     "uglify-stream": "1.1.0"
   }
 }

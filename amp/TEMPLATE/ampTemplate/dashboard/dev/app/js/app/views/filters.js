@@ -111,12 +111,13 @@ module.exports = BackboneDash.View.extend({
   getAppliedDateObject: function(filterObject, filterKey){
 	  var filterField = filterObject.filters[filterKey];
 	  var dateRangeText = '';
+	  var filterName = filterField.filterName ? filterField.filterName : filterKey;
 	  if(filterKey === 'date') {
 		  dateRangeText = app.translator.translateSync("amp.dashboard:date-range", "Date Range");
 	  } else if(filterKey === 'computed-year') {
 		  dateRangeText = app.translator.translateSync("amp.dashboard:computedYear", "Computed Year");
 	  } else {
-		  dateRangeText = app.translator.translateSync("amp.dashboard:" + filterKey.replace(/[^\w]/g, '-'), filterKey);
+		  dateRangeText = app.translator.translateSync("amp.dashboard:" + filterName.replace(/[^\w]/g, '-'), filterName);
 	  }
 	  var detail = filterField.modelType === 'YEAR-SINGLE-VALUE'? filterField.year: this.app.filter.formatDate(filterField.start) + '&mdash;' + this.app.filter.formatDate(filterField.end)
 	  return {

@@ -18,12 +18,15 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
+import org.digijava.kernel.ampapi.endpoints.AmpEndpoint;
 import org.digijava.kernel.ampapi.endpoints.dto.SimpleJsonBean;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersBuilder;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
@@ -64,7 +67,8 @@ import org.hibernate.ObjectNotFoundException;
  * 
  */
 @Path("filters")
-public class FiltersEndpoint {
+@Api("filters")
+public class FiltersEndpoint implements AmpEndpoint {
     private static final String DISPLAY_NAME_PROPERTY = "DisplayName";
     private static final String NAME_PROPERTY = "Name";
     private static final String SECTORS_SUFFIX = " Sectors";
@@ -92,17 +96,13 @@ public class FiltersEndpoint {
         return EndpointUtils.getAvailableMethods(FiltersEndpoint.class.getName(),true);
     }
 
-    
-    /**
-     * Return activity status options
-     * 
-     * @return
-     */
+
     @GET
     @Path("/activityapprovalStatus")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, id = FiltersConstants.APPROVAL_STATUS, columns = ColumnConstants.APPROVAL_STATUS,
                 name = "Approval Status", visibilityCheck = "hasToShowActivityapprovalStatusFilter", tab=EPConstants.TAB_ACTIVITY)
+    @ApiOperation("Return activity status options")
     public JsonBean getActivityApprovalStatus() {
         JsonBean as=new JsonBean();
         AmpTeam ampTeam = getAmpTeam();
@@ -147,29 +147,21 @@ public class FiltersEndpoint {
         }
 
     }
-    
-    /**
-     * Return the adminlevels for filtering
-     * 
-     * @return
-     */
+
     @GET
     @Path("/boundaries")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false,  id = "Boundaries", tab=EPConstants.TAB_LOCATIONS)
+    @ApiOperation("Return the admin levels for filtering")
     public List<String> getBoundaries() {
         return QueryUtil.getImplementationLocationsInUse();
     }
 
-    /**
-     * Returns the sector schema lists
-     * 
-     * @return
-     */
     @GET
     @Path("/sectors")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, name = "Sectors", id = "Sectors", tab = EPConstants.TAB_SECTORS)
+    @ApiOperation("Returns the sector schema lists")
     public List<SimpleJsonBean> getSectorsSchemas() throws AmpApiException{
         List<SimpleJsonBean> sectorList = new ArrayList<SimpleJsonBean>();
         List<AmpClassificationConfiguration> schems = SectorUtil.getAllClassificationConfigs();
@@ -191,15 +183,11 @@ public class FiltersEndpoint {
         return sectorList;
     }
 
-    /**
-     * Return the sector filtered by the given sectorName
-     * 
-     * @return
-     */
     @GET
     @Path("/sectors/{sectorId}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "SectorsById", tab = EPConstants.TAB_SECTORS)
+    @ApiOperation("Return the sector filtered by the given sectorName")
     public SimpleJsonBean getSectors(@PathParam("sectorId") Long sectorId) {
 
         SimpleJsonBean sector = new SimpleJsonBean();
@@ -224,14 +212,12 @@ public class FiltersEndpoint {
         }
         return sector;
     }
-    /**
-     * Return the year range configure for GIS
-     * @return
-     */
+
     @GET
     @Path("/date/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, name = "Date", id = "date", tab = EPConstants.TAB_OTHER)
+    @ApiOperation("Return the year range configure for GIS")
     public JsonBean getDates(){
         JsonBean date = new JsonBean();
         date.set("startYear", 1985);
@@ -314,16 +300,12 @@ public class FiltersEndpoint {
     public JsonBean getActualApprovalDate() {
         return new JsonBean();
     }   
-        
-    /**
-     * Return the programs filtered by the given sectorName
-     * 
-     * @return
-     */
+
     @GET
     @Path("/programs")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, name = "Programs", id = "Programs", tab = EPConstants.TAB_PROGRAMS)
+    @ApiOperation("Return the programs filtered by the given sectorName")
     public List<SimpleJsonBean> getPrograms() {
         List<SimpleJsonBean> programs = new ArrayList<SimpleJsonBean>();
         try {
@@ -345,112 +327,53 @@ public class FiltersEndpoint {
             throw new RuntimeException(e);
         }
     }
-    
-    /**
-     * Return org types with its orgs groups
-     * 
-     * @return
-     *  [
-     *      {
-     *          "id": 39,
-     *          "groupIds": [43,67,46,33,49,66,21,64,41,63],
-     *          "name": "Multilateral"
-     *      },
-     *  ..
-     *  ]
-     */
+
     @GET
     @Path("/org-types")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, name = "Types of Organizations", id = "organizationTypesList")
-    
+    @ApiOperation("Return org types with its orgs groups")
     public List<JsonBean> getOrgTypes() {
         List <JsonBean> orgTypes = QueryUtil.getOrgTypes();
         return orderByName(orgTypes);
     }
 
-    /**
-     * Return org groups with its orgs ids
-     * 
-     * @return
-     *  [
-     *      {
-     *      id: 0,
-     *      name: "some org group",
-     *      typeId: :id,                  //id of parent type
-     *      orgIds: [:id, :id, :id]    //ids of child orgs
-     *      },
-     *  ....
-     *  ]
-     */
     @GET
     @Path("/org-groups")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, name = "Organization Groups", id = "orgGroupsList")
-    
+    @ApiOperation("Return org groups with its orgs ids")
     public List<JsonBean> getOrgGroups() {
         List <JsonBean> orgGroups = orderByName(QueryUtil.getOrgGroups());
         return orgGroups;
         
     }   
 
-    /**
-     *  List all available orgs
-
-     * @return
-     *  [
-     *      {
-     *      id: 0,
-     *      name: "some org",
-     *      groupId: :id,                  //id of parent group
-     *      roleIds: [:id, :id, :id]    //ids of all roles this org appears in ie. [0,2]
-     *      },
-     *  ...
-     *  ]
-     */
     @GET
     @Path("/orgs")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, id = "Organizations", name = "orgsList", tab=EPConstants.TAB_ORGANIZATIONS)
-    
+    @ApiOperation("List all available orgs")
     public List<JsonBean> getOrgs() { 
         List <JsonBean> orgs = QueryUtil.getOrgs();
         return orderByName(orgs);
     }   
 
-    /**
-     * List all available orgs roles
-     * 
-     * @return
-     *  [
-     *      {
-     *      id: 0,
-     *      name: "Donor"
-     *      },
-     *  ...
-     *  ]
-     */ 
-
     @GET
     @Path("/org-roles")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, name = "Organization Roles", id = "orgRolesList", tab=EPConstants.TAB_ALL_AGENCIES)
-    
+    @ApiOperation("List all available orgs roles")
     public List<SimpleJsonBean> getorgRoles() {
         List <SimpleJsonBean> orgRoles = QueryUtil.getOrgRoles();
         return orderByProperty(orgRoles,DISPLAY_NAME_PROPERTY);
-    }   
-    
+    }
 
-    /**
-     * Return the programs filtered by the given programSettingsId
-     * 
-     * @return
-     */
     @GET
     @Path("/programs/{programId}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "ProgramsByProgramName", tab = EPConstants.TAB_PROGRAMS)
+    @ApiOperation("Return the programs filtered by the given programSettingsId")
     public SimpleJsonBean getPrograms(@PathParam("programId") Long programId) {
         try {
             Object[] idname = (Object[]) PersistenceManager.getSession().createSQLQuery("select default_hierarchy, name from amp_program_settings where amp_program_settings_id = " + programId).uniqueResult();
@@ -474,136 +397,100 @@ public class FiltersEndpoint {
         }
     }
 
-
-    /**
-     * Return type of assistance 
-     * 
-     * @return
-     */
     @GET
     @Path("/typeOfAssistance/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, id = FiltersConstants.TYPE_OF_ASSISTANCE, columns = ColumnConstants.TYPE_OF_ASSISTANCE,
             name="Type of Assistance", tab=EPConstants.TAB_FINANCIALS)
+    @ApiOperation("Return type of assistance")
     public JsonBean getTypeOfAssistance() {
         return getCategoryValue(CategoryConstants.TYPE_OF_ASSISTENCE_KEY,ColumnConstants.TYPE_OF_ASSISTANCE);
     }
-    
-    /**
-     * Return mode of payment 
-     * 
-     * @return
-     */
+
     @GET
     @Path("/modeOfPayment/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, id = FiltersConstants.MODE_OF_PAYMENT, columns = ColumnConstants.MODE_OF_PAYMENT,
             name="Mode of Payment", tab=EPConstants.TAB_FINANCIALS)
+    @ApiOperation("Return mode of payment")
     public JsonBean getModeOfPayment() {
         return getCategoryValue(CategoryConstants.MODE_OF_PAYMENT_KEY,ColumnConstants.MODE_OF_PAYMENT);
     }
-    /**
-     * Return Activitystatus 
-     * 
-     * @return
-     */
+
     @GET
     @Path("/activityStatus/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, id = FiltersConstants.STATUS, columns = ColumnConstants.STATUS,name="Activity Status",
             tab=EPConstants.TAB_ACTIVITY)
+    @ApiOperation("Return Activitystatus")
     public JsonBean getActivityStatus() {
         return getCategoryValue(CategoryConstants.ACTIVITY_STATUS_KEY,
                 ColumnConstants.STATUS);
     }
 
-    /**
-     * Return Activity Budget
-     * 
-     * @return
-     */
     @GET
     @Path("/activityBudget/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, id = FiltersConstants.ON_OFF_TREASURY_BUDGET, columns = ColumnConstants.ON_OFF_TREASURY_BUDGET,
             name="Activity Budget", tab=EPConstants.TAB_FINANCIALS)
+    @ApiOperation("Return Activity Budget")
     public JsonBean getActivityBudget() {
         return getCategoryValue(CategoryConstants.ACTIVITY_BUDGET_KEY, ColumnConstants.ON_OFF_TREASURY_BUDGET);
     }   
-    
-    /**
-     * Funding status filter information 
-     * 
-     * @return
-     */
+
     @GET
     @Path("/fundingStatus/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, id = FiltersConstants.FUNDING_STATUS, columns = ColumnConstants.FUNDING_STATUS,
             name="Funding Status",tab=EPConstants.TAB_FINANCIALS)
+    @ApiOperation("Funding status filter information")
     public JsonBean getFundingStatus() {
         return getCategoryValue(CategoryConstants.FUNDING_STATUS_KEY,ColumnConstants.FUNDING_STATUS);
     }
-    
-    /**
-     * Funding status filter information 
-     * 
-     * @return
-     */
+
     @GET
     @Path("/expenditureClass/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, id = FiltersConstants.EXPENDITURE_CLASS, columns = ColumnConstants.EXPENDITURE_CLASS,
             name="Expenditure Class", tab=EPConstants.TAB_FINANCIALS)
+    @ApiOperation("Funding status filter information")
     public JsonBean getExpenditureClass() {
         return getCategoryValue(CategoryConstants.EXPENDITURE_CLASS_KEY, ColumnConstants.EXPENDITURE_CLASS);
     }
-    
-    /**
-     * Funding concessionality level information
-     * 
-     * @return
-     */
+
     @GET
     @Path("/concessionalityLevel/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, id = FiltersConstants.CONCESSIONALITY_LEVEL, columns = ColumnConstants.CONCESSIONALITY_LEVEL,
             name="Concessionality Level", tab=EPConstants.TAB_FINANCIALS)
+    @ApiOperation("Funding concessionality level information")
     public JsonBean getConcessionalityLevel() {
         return getCategoryValue(CategoryConstants.CONCESSIONALITY_LEVEL_KEY, ColumnConstants.CONCESSIONALITY_LEVEL);
     }
 
-    /**
-     * Performance Alert Level filter
-     *
-     * @return
-     */
     @GET
     @Path("/performanceAlertLevel")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, id = FiltersConstants.PERFORMANCE_ALERT_LEVEL,
             columns = ColumnConstants.PERFORMANCE_ALERT_LEVEL, name = ColumnConstants.PERFORMANCE_ALERT_LEVEL,
             tab = EPConstants.TAB_ACTIVITY)
+    @ApiOperation("Performance Alert Level filter")
     public JsonBean getPerformanceAlertLevel() {
         return getCategoryValue(CategoryConstants.PERFORMANCE_ALERT_LEVEL_KEY, ColumnConstants.PERFORMANCE_ALERT_LEVEL);
     }
-    
-    /**
-     * Performance Alert Type filter
-     *
-     * @return
-     */
+
     @GET
     @Path("/performanceAlertType")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, id = FiltersConstants.PERFORMANCE_ALERT_TYPE,
             columns = ColumnConstants.PERFORMANCE_ALERT_TYPE, name = ColumnConstants.PERFORMANCE_ALERT_TYPE,
             tab = EPConstants.TAB_ACTIVITY)
+    @ApiOperation("Performance Alert Type filter")
     public JsonBean getPerformanceAlertType() {
         JsonBean pt = new JsonBean();
-        
+
         List<SimpleJsonBean> performanceAlertTypes = new ArrayList<SimpleJsonBean>();
-        
+
         for (Entry<String, Long> entry : PerformanceRuleManager.PERF_ALERT_TYPE_TO_ID.entrySet()) {
             SimpleJsonBean sjb = new SimpleJsonBean();
             sjb.setId(entry.getValue());
@@ -611,25 +498,21 @@ public class FiltersEndpoint {
                     PerformanceRuleManager.PERF_ALERT_TYPE_TO_DESCRIPTION.get(entry.getKey())));
             performanceAlertTypes.add(sjb);
         }
-        
+
         performanceAlertTypes = orderByProperty(performanceAlertTypes, NAME_PROPERTY);
         pt.set("filterId", FiltersConstants.PERFORMANCE_ALERT_TYPE);
         pt.set("name", TranslatorWorker.translateText(ColumnConstants.PERFORMANCE_ALERT_TYPE));
         pt.set("values", performanceAlertTypes);
-        
+
         return pt;
     }
 
-    /**
-     * Return financing instruments 
-     * 
-     * @return
-     */
     @GET
     @Path("/financingInstruments/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, id = FiltersConstants.FINANCING_INSTRUMENT, columns = ColumnConstants.FINANCING_INSTRUMENT,
             name="Financing Instruments", tab=EPConstants.TAB_FINANCIALS)
+    @ApiOperation("Return financing instruments")
     public JsonBean getFinancingInstruments() {
         return getCategoryValue(CategoryConstants.FINANCING_INSTRUMENT_KEY, ColumnConstants.FINANCING_INSTRUMENT);
     }
@@ -650,18 +533,13 @@ public class FiltersEndpoint {
         return fi;
         
     }
-    
-    
-    /**
-     * Return locations
-     * 
-     * @return
-     */
+
     @GET
     @Path("/locations/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, id = FiltersConstants.LOCATION, columns = ColumnConstants.LOCATION, name="Locations",
             tab=EPConstants.TAB_LOCATIONS)
+    @ApiOperation("Return locations")
     public JsonBean getLocations() {
         return QueryUtil.getLocationsForFilter();
     }
@@ -788,17 +666,13 @@ public class FiltersEndpoint {
         return s;
     }
     
-    
-    /**
-     * Return all workspaces to be used for filtering
-     * 
-     * @return
-     */
+
     @GET
     @Path("/workspaces")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = true, name = "Workspaces", id = FiltersConstants.TEAM, columns = ColumnConstants.TEAM,
                 visibilityCheck = "hasToShowWorkspaceFilter", tab = EPConstants.TAB_OTHER)
+    @ApiOperation("Return all workspaces to be used for filtering")
     public JsonBean getWorkspaces() {
         List<SimpleJsonBean> teamsListJson = new ArrayList<SimpleJsonBean>();
         if (hasToShowWorkspaceFilter()) {

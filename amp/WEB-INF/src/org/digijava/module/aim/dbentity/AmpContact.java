@@ -77,7 +77,6 @@ public class AmpContact implements Comparable, Serializable, Cloneable, Versiona
             validators = @Validators(unique = FMVisibility.ALWAYS_VISIBLE_FM))
     private Set<AmpOrganisationContact> organizationContacts;
 
-    @Interchangeable(fieldTitle = "Properties")
     @InterchangeableDiscriminator(discriminatorField = "name", settings = {
             @Interchangeable(fieldTitle = ContactEPConstants.EMAIL, 
                     discriminatorOption = Constants.CONTACT_PROPERTY_NAME_EMAIL,
